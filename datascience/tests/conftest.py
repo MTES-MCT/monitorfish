@@ -202,39 +202,6 @@ def create_tables(set_environment_variables, start_remote_database_container):
             )
 
 
-# @pytest.fixture(scope="session")
-# def start_remote_database_container(create_docker_client):
-#     client = create_docker_client
-#     print("Starting database container")
-#     remote_database_container = client.containers.run(
-#         "timescale/timescaledb-postgis:1.7.4-pg11",
-#         environment={
-#             "POSTGRES_PASSWORD": os.environ["MONITORFISH_REMOTE_DB_PWD"],
-#             "POSTGRES_USER": os.environ["MONITORFISH_REMOTE_DB_USER"],
-#             "POSTGRES_DB": os.environ["MONITORFISH_REMOTE_DB_NAME"],
-#         },
-#         ports={"5432/tcp": 5434},
-#         detach=True,
-#     )
-#     sleep(3)
-#     yield
-#     print("Stopping database container")
-#     remote_database_container.stop()
-#     remote_database_container.remove(v=True)
-
-
-# @pytest.fixture(scope="session")
-# def create_tables(start_remote_database_container):
-#     e = create_engine("monitorfish_remote")
-#     migrations = get_migrations_in_folders(migrations_folders)
-#     print("Creating tables")
-#     with e.connect() as connection:
-#         for m in migrations:
-#             print(f"{m.major}.{m.minor}.{m.patch}: {m.path.name}")
-#             connection.execute(text("COMMIT"))
-#             connection.execute(text(m.script))
-
-
 @pytest.fixture()
 def reset_test_data(create_tables):
     e = create_engine("monitorfish_remote")
@@ -244,3 +211,9 @@ def reset_test_data(create_tables):
         for s in test_data_scripts:
             print(f"{s.major}.{s.minor}.{s.patch}: {s.path.name}")
             connection.execute(text(s.script))
+
+
+############################ Share fixtures between modules ############################
+pytest_plugins = [
+    "tests.test_pipeline.test_shared_tasks.test_segments",
+]

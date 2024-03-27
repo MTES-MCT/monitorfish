@@ -35,6 +35,7 @@ data class VesselEntity(
     val externalReferenceNumber: String? = null,
     @Column(name = "vessel_name")
     val vesselName: String? = null,
+    // ISO Alpha-2 country code
     @Column(name = "flag_state")
     val flagState: String? = null,
     @Column(name = "width")
@@ -62,7 +63,6 @@ data class VesselEntity(
     val declaredFishingGears: List<String>? = null,
     @Column(name = "nav_licence_expiration_date", columnDefinition = "date")
     val navigationLicenceExpirationDate: Date? = null,
-
     @Column(name = "operator_name")
     val operatorName: String? = null,
     @Column(name = "operator_phones", columnDefinition = "varchar(100)[]")
@@ -87,44 +87,44 @@ data class VesselEntity(
     @Column(name = "under_charter")
     val underCharter: Boolean? = null,
 ) {
-
-    fun toVessel() = Vessel(
-        id = id,
-        internalReferenceNumber = internalReferenceNumber,
-        ircs = ircs,
-        mmsi = mmsi,
-        externalReferenceNumber = externalReferenceNumber,
-        vesselName = vesselName,
-        flagState = flagState?.let {
-            try {
-                CountryCode.valueOf(flagState)
-            } catch (e: IllegalArgumentException) {
-                logger.warn(e.message)
-                CountryCode.UNDEFINED
-            }
-        } ?: CountryCode.UNDEFINED,
-        width = width,
-        length = length,
-        district = district,
-        districtCode = districtCode,
-        gauge = gauge,
-        registryPort = registryPort,
-        power = power,
-        vesselType = vesselType,
-        sailingCategory = sailingCategory,
-        sailingType = sailingType,
-        declaredFishingGears = declaredFishingGears,
-        navigationLicenceExpirationDate = navigationLicenceExpirationDate,
-        operatorName = operatorName,
-        operatorPhones = operatorPhones,
-        operatorEmail = operatorEmail,
-        proprietorName = proprietorName,
-        proprietorPhones = proprietorPhones,
-        proprietorEmails = proprietorEmails,
-        vesselPhones = vesselPhones,
-        vesselEmails = vesselEmails,
-        underCharter = underCharter,
-    )
+    fun toVessel() =
+        Vessel(
+            id = id,
+            internalReferenceNumber = internalReferenceNumber,
+            ircs = ircs,
+            mmsi = mmsi,
+            externalReferenceNumber = externalReferenceNumber,
+            vesselName = vesselName,
+            flagState = flagState?.let {
+                try {
+                    CountryCode.valueOf(flagState)
+                } catch (e: IllegalArgumentException) {
+                    logger.warn(e.message)
+                    CountryCode.UNDEFINED
+                }
+            } ?: CountryCode.UNDEFINED,
+            width = width,
+            length = length,
+            district = district,
+            districtCode = districtCode,
+            gauge = gauge,
+            registryPort = registryPort,
+            power = power,
+            vesselType = vesselType,
+            sailingCategory = sailingCategory,
+            sailingType = sailingType,
+            declaredFishingGears = declaredFishingGears,
+            navigationLicenceExpirationDate = navigationLicenceExpirationDate,
+            operatorName = operatorName,
+            operatorPhones = operatorPhones,
+            operatorEmail = operatorEmail,
+            proprietorName = proprietorName,
+            proprietorPhones = proprietorPhones,
+            proprietorEmails = proprietorEmails,
+            vesselPhones = vesselPhones,
+            vesselEmails = vesselEmails,
+            underCharter = underCharter,
+        )
 
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(VesselEntity::class.java)

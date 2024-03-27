@@ -50,11 +50,9 @@ export function VesselLabel({
   return previewFilteredVesselsMode ? (
     <>
       {text ? (
-        <>
-          <ZoneText data-cy="vessel-label-text" isLittle>
-            {text}
-          </ZoneText>
-        </>
+        <ZoneText data-cy="vessel-label-text" isLittle>
+          {text}
+        </ZoneText>
       ) : null}
     </>
   ) : (

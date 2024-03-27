@@ -1,0 +1,49 @@
+[
+    {
+        "table": "vessels",
+        "data": [
+            // - Vessel: VIVA ESPANA
+            // - Flag state: ES
+            {
+                "id": 101,
+                "cfr": "CFR101",
+                "mmsi": "MMSI101",
+                "ircs": "IRCS101",
+                "external_immatriculation": "EXTIMM101",
+                "vessel_name": "VIVA ESPANA",
+                "flag_state": "ES",
+                "length": 15,
+                "under_charter": false
+            },
+
+            // - Vessel: LEVE NEDERLAND
+            // - Flag state: NL
+            // - Under charter
+            {
+                "id": 102,
+                "cfr": "CFR102",
+                "mmsi": "MMSI102",
+                "ircs": "IRCS102",
+                "external_immatriculation": "EXTIMM102",
+                "vessel_name": "LEVE NEDERLAND",
+                "flag_state": "NL",
+                "length": 20,
+                "under_charter": true
+            },
+
+            // - Vessel: L'OM DU POISSON
+            // - Under charter
+            {
+                "id": 103,
+                "cfr": "CFR103",
+                "mmsi": "MMSI103",
+                "ircs": "IRCS103",
+                "external_immatriculation": "EXTIMM103",
+                "vessel_name": "L'OM DU POISSON",
+                "flag_state": "FR",
+                "length": 11.99,
+                "under_charter": true
+            }
+        ]
+    }
+]

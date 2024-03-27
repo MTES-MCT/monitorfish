@@ -93,7 +93,10 @@ interface DBLogbookReportRepository :
                 dc.transmission_format = 'FLUX'""",
         nativeQuery = true,
     )
-    fun findFirstAcknowledgedDateOfTrip(internalReferenceNumber: String, tripNumber: String): Instant
+    fun findFirstAcknowledgedDateOfTrip(
+        internalReferenceNumber: String,
+        tripNumber: String,
+    ): Instant
 
     @Query(
         """WITH dat_cor AS (
@@ -162,7 +165,10 @@ interface DBLogbookReportRepository :
         "update logbook_reports set analyzed_by_rules = array_append(analyzed_by_rules, :ruleType) where id in (:ids)",
         nativeQuery = true,
     )
-    fun updateERSMessagesAsProcessedByRule(ids: List<Long>, ruleType: String)
+    fun updateERSMessagesAsProcessedByRule(
+        ids: List<Long>,
+        ruleType: String,
+    )
 
     @Query(
         """SELECT distinct e.trip_number
@@ -176,4 +182,14 @@ interface DBLogbookReportRepository :
         nativeQuery = true,
     )
     fun findLastTwoYearsTripNumbers(internalReferenceNumber: String): List<String>
+
+    @Query(
+        """
+        SELECT DISTINCT jsonb_array_elements(value->'pnoTypes')->>'pnoTypeName' AS uniquePnoTypeName
+        FROM logbook_reports
+        ORDER BY uniquePnoTypeName
+        """,
+        nativeQuery = true,
+    )
+    fun findDistinctPriorNotificationType(): List<String>
 }

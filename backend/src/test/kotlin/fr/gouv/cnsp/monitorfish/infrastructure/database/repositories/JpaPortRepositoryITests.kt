@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.transaction.annotation.Transactional
 
 class JpaPortRepositoryITests : AbstractDBTests() {
-
     @Autowired
     private lateinit var jpaPortRepository: JpaPortRepository
 
@@ -14,10 +13,10 @@ class JpaPortRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllActive Should return all active ports`() {
         // When
-        val activePorts = jpaPortRepository.findAllActive()
+        val activePorts = jpaPortRepository.findAllActive().sortedBy { it.locode }
 
         // Then
-        assertThat(activePorts).hasSize(18)
+        assertThat(activePorts).hasSize(22)
         assertThat(activePorts.first().locode).isEqualTo("ADALV")
         assertThat(activePorts.first().name).isEqualTo("Andorra la Vella")
         assertThat(activePorts.first().faoAreas.first()).isEqualTo("27.8")

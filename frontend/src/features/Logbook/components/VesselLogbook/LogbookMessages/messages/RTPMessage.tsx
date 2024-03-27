@@ -1,15 +1,15 @@
+import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import styled from 'styled-components'
 
 import { getCodeWithNameOrDash, getDatetimeOrDash } from './utils'
 import { COLORS } from '../../../../../../constants/constants'
-import { LogbookMessagePNOPurposeType } from '../../../../constants'
 import { NoValue, Table, TableBody, TableKey, TableRow, TableValue, Zone } from '../styles'
 
 import type { RTPMessageValue } from '../../../../Logbook.types'
 
-type RTPMessageProps = {
+type RTPMessageProps = Readonly<{
   message: RTPMessageValue
-}
+}>
 export function RTPMessage({ message }: RTPMessageProps) {
   return (
     <>
@@ -31,7 +31,7 @@ export function RTPMessage({ message }: RTPMessageProps) {
                   <TableValue>
                     {message.reasonOfReturn ? (
                       <>
-                        {LogbookMessagePNOPurposeType[message.reasonOfReturn]} ({message.reasonOfReturn})
+                        {PriorNotification.PURPOSE_LABEL[message.reasonOfReturn]} ({message.reasonOfReturn})
                       </>
                     ) : (
                       <NoValue>-</NoValue>

@@ -30,13 +30,14 @@ data class PortEntity(
     @Column(name = "fao_areas")
     val faoAreas: List<String>? = listOf(),
 ) {
-
-    fun toPort() = Port(
-        locode = locode,
-        name = portName,
-        facade = facade?.let { Facade.from(it).toString() },
-        faoAreas = faoAreas ?: listOf(),
-        latitude = latitude,
-        longitude = longitude,
-    )
+    fun toPort() =
+        Port(
+            locode = locode,
+            name = portName,
+            facade = facade?.let { Facade.from(it).toString() },
+            faoAreas = faoAreas ?: listOf(),
+            latitude = latitude,
+            longitude = longitude,
+            region = region,
+        )
 }

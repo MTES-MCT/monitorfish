@@ -47,6 +47,9 @@ clean: docker-env
 check-clean-archi:
 	cd backend/tools && ./check-clean-architecture.sh
 
+update-test-data:
+	cd frontend && node ./scripts/generate_test_data_seeds.mjs
+
 ################################################################################
 # Testing
 

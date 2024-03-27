@@ -1,11 +1,13 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
+import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookRawMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
+import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
@@ -23,7 +25,6 @@ import java.time.ZonedDateTime
 @Import(MapperConfiguration::class)
 @SpringBootTest(properties = ["monitorfish.scheduling.enable=false"])
 class JpaLogbookReportRepositoryITests : AbstractDBTests() {
-
     @Autowired
     private lateinit var jpaLogbookReportRepository: JpaLogbookReportRepository
 
@@ -80,39 +81,42 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findLastTripBefore Should throw an exception When no parameter is given`() {
         // When
-        val throwable = catchThrowable {
-            jpaLogbookReportRepository.findLastTripBeforeDateTime("", ZonedDateTime.now())
-        }
+        val throwable =
+            catchThrowable {
+                jpaLogbookReportRepository.findLastTripBeforeDateTime("", ZonedDateTime.now())
+            }
 
         // Then
         assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
-        assertThat(throwable.message).contains("No trip found found for the vessel.")
+        assertThat(throwable.message).contains("No trip found for the vessel.")
     }
 
     @Test
     @Transactional
     fun `findLastTripBefore Should throw an exception When the vessel could not be found`() {
         // When
-        val throwable = catchThrowable {
-            jpaLogbookReportRepository.findLastTripBeforeDateTime(
-                "ARGH",
-                ZonedDateTime.now(),
-            )
-        }
+        val throwable =
+            catchThrowable {
+                jpaLogbookReportRepository.findLastTripBeforeDateTime(
+                    "ARGH",
+                    ZonedDateTime.now(),
+                )
+            }
 
         // Then
         assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
-        assertThat(throwable.message).contains("No trip found found for the vessel.")
+        assertThat(throwable.message).contains("No trip found for the vessel.")
     }
 
     @Test
     @Transactional
     fun `findTripBeforeTripNumber Should return the previous trip number When there is an overlap between the current and previous trip`() {
         // When
-        val secondTrip = jpaLogbookReportRepository.findTripBeforeTripNumber(
-            "FAK000999999",
-            "9463714",
-        )
+        val secondTrip =
+            jpaLogbookReportRepository.findTripBeforeTripNumber(
+                "FAK000999999",
+                "9463714",
+            )
 
         // Then
         assertThat(secondTrip.tripNumber).isEqualTo("9463713")
@@ -124,26 +128,28 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findTripBeforeTripNumber Should return an exception When the current trip number is invalid`() {
         // When
-        val throwable = catchThrowable {
-            jpaLogbookReportRepository.findTripBeforeTripNumber(
-                "FAK000999999",
-                "9463712",
-            )
-        }
+        val throwable =
+            catchThrowable {
+                jpaLogbookReportRepository.findTripBeforeTripNumber(
+                    "FAK000999999",
+                    "9463712",
+                )
+            }
 
         // Then
         assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
-        assertThat(throwable.message).contains("No trip found found for the vessel.")
+        assertThat(throwable.message).contains("No trip found for the vessel.")
     }
 
     @Test
     @Transactional
     fun `findTripBeforeTripNumber Should return the previous trip number When there is no overlap between the current and previous trip`() {
         // When
-        val secondTrip = jpaLogbookReportRepository.findTripBeforeTripNumber(
-            "FAK000999999",
-            "9463715",
-        )
+        val secondTrip =
+            jpaLogbookReportRepository.findTripBeforeTripNumber(
+                "FAK000999999",
+                "9463715",
+            )
 
         // Then
         assertThat(secondTrip.tripNumber).isEqualTo("9463714")
@@ -155,10 +161,11 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findTripAfterTripNumber Should return the next trip number When there is an overlap between the current and previous trip`() {
         // When
-        val secondTrip = jpaLogbookReportRepository.findTripAfterTripNumber(
-            "FAK000999999",
-            "9463713",
-        )
+        val secondTrip =
+            jpaLogbookReportRepository.findTripAfterTripNumber(
+                "FAK000999999",
+                "9463713",
+            )
 
         // Then
         assertThat(secondTrip.tripNumber).isEqualTo("9463714")
@@ -170,10 +177,11 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findTripAfterTripNumber Should return the next trip number When there is no overlap between the current and previous trip`() {
         // When
-        val secondTrip = jpaLogbookReportRepository.findTripAfterTripNumber(
-            "FAK000999999",
-            "9463714",
-        )
+        val secondTrip =
+            jpaLogbookReportRepository.findTripAfterTripNumber(
+                "FAK000999999",
+                "9463714",
+            )
 
         // Then
         assertThat(secondTrip.tripNumber).isEqualTo("9463715")
@@ -185,16 +193,17 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findTripAfterTripNumber Should throw an exception When there is no next trip found`() {
         // When
-        val throwable = catchThrowable {
-            jpaLogbookReportRepository.findTripAfterTripNumber(
-                "FAK000999999",
-                "9463715",
-            )
-        }
+        val throwable =
+            catchThrowable {
+                jpaLogbookReportRepository.findTripAfterTripNumber(
+                    "FAK000999999",
+                    "9463715",
+                )
+            }
 
         // Then
         assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
-        assertThat(throwable.message).contains("No trip found found for the vessel.")
+        assertThat(throwable.message).contains("No trip found for the vessel.")
     }
 
     @Test
@@ -205,8 +214,9 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val now = ZonedDateTime.now()
 
         // When
-        val messages = jpaLogbookReportRepository
-            .findAllMessagesByTripNumberBetweenDates("FAK000999999", lastDepartureDate, now, "9463715")
+        val messages =
+            jpaLogbookReportRepository
+                .findAllMessagesByTripNumberBetweenDates("FAK000999999", lastDepartureDate, now, "9463715")
 
         // Then
         assertThat(messages).hasSize(20)
@@ -237,7 +247,15 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(pnoMessage.catchOnboard.first().effortZone).isEqualTo("C")
         assertThat(pnoMessage.catchOnboard.first().economicZone).isEqualTo("FRA")
         assertThat(pnoMessage.catchOnboard.first().statisticalRectangle).isEqualTo("23E6")
-        assertThat(pnoMessage.tripStartDate.toString()).isEqualTo("2019-10-11T00:00Z")
+        assertThat(pnoMessage.catchToLand).hasSize(4)
+        assertThat(pnoMessage.catchToLand.first().weight).isEqualTo(15.0)
+        assertThat(pnoMessage.catchToLand.first().numberFish).isEqualTo(null)
+        assertThat(pnoMessage.catchToLand.first().species).isEqualTo("SLS")
+        assertThat(pnoMessage.catchToLand.first().faoZone).isEqualTo("27.8.a")
+        assertThat(pnoMessage.catchToLand.first().effortZone).isEqualTo("C")
+        assertThat(pnoMessage.catchToLand.first().economicZone).isEqualTo("FRA")
+        assertThat(pnoMessage.catchToLand.first().statisticalRectangle).isEqualTo("23E6")
+        assertThat(pnoMessage.tripStartDate).isAfter(ZonedDateTime.now().minusDays(5))
         assertThat(pnoMessage.predictedArrivalDateTime).isAfter(ZonedDateTime.now().minusDays(5))
 
         // EOF
@@ -382,8 +400,9 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val beforeDate = ZonedDateTime.of(2019, 10, 11, 9, 4, 0, 0, UTC)
 
         // When
-        val messages = jpaLogbookReportRepository
-            .findAllMessagesByTripNumberBetweenDates("FAK000999999", afterDate, beforeDate, "9463715")
+        val messages =
+            jpaLogbookReportRepository
+                .findAllMessagesByTripNumberBetweenDates("FAK000999999", afterDate, beforeDate, "9463715")
 
         // Then
         assertThat(messages).hasSize(2)
@@ -480,10 +499,11 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findFirstAcknowledgedDateOfTripBeforeDateTime Should return the last acknowledged message date When transmission format is ERS`() {
         // When
-        val lastTrip = jpaLogbookReportRepository.findFirstAcknowledgedDateOfTripBeforeDateTime(
-            "FAK000999999",
-            ZonedDateTime.now(),
-        )
+        val lastTrip =
+            jpaLogbookReportRepository.findFirstAcknowledgedDateOfTripBeforeDateTime(
+                "FAK000999999",
+                ZonedDateTime.now(),
+            )
 
         // Then
         assertThat(lastTrip.toString()).isEqualTo("2019-10-17T11:32Z")
@@ -493,10 +513,11 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findFirstAcknowledgedDateOfTripBeforeDateTime Should return the last acknowledged message date When transmission format is FLUX`() {
         // When
-        val lastTrip = jpaLogbookReportRepository.findFirstAcknowledgedDateOfTripBeforeDateTime(
-            "SOCR4T3",
-            ZonedDateTime.now(),
-        )
+        val lastTrip =
+            jpaLogbookReportRepository.findFirstAcknowledgedDateOfTripBeforeDateTime(
+                "SOCR4T3",
+                ZonedDateTime.now(),
+            )
 
         // Then
         assertThat(lastTrip.toString()).isEqualTo("2020-05-06T18:39:33Z")
@@ -506,25 +527,27 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findFirstAcknowledgedDateOfTripBeforeDateTime Should throw a custom exception When the findFirstAcknowledgedDateOfTrip request is empty`() {
         // When
-        val throwable = catchThrowable {
-            jpaLogbookReportRepository.findFirstAcknowledgedDateOfTripBeforeDateTime(
-                "UNKNOWN_VESS",
-                ZonedDateTime.parse("2018-02-17T01:06:00Z"),
-            )
-        }
+        val throwable =
+            catchThrowable {
+                jpaLogbookReportRepository.findFirstAcknowledgedDateOfTripBeforeDateTime(
+                    "UNKNOWN_VESS",
+                    ZonedDateTime.parse("2018-02-17T01:06:00Z"),
+                )
+            }
 
         // Then
         assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
-        assertThat(throwable.message).contains("No trip found found for the vessel.")
+        assertThat(throwable.message).contains("No trip found for the vessel.")
     }
 
     @Test
     @Transactional
     fun `findLastTwoYearsTripNumbers Should return an empty list When no trip is found`() {
         // When
-        val trips = jpaLogbookReportRepository.findLastTwoYearsTripNumbers(
-            "UNKNOWN_VESS",
-        )
+        val trips =
+            jpaLogbookReportRepository.findLastTwoYearsTripNumbers(
+                "UNKNOWN_VESS",
+            )
 
         // Then
         assertThat(trips).isEmpty()
@@ -534,10 +557,11 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findLastTwoYearsTripNumbers Should return the last trips`() {
         // Given
-        val rawMessages = listOf(
-            LogbookRawMessage("FPXE1546546114565"),
-            LogbookRawMessage("FPXE1546545654481"),
-        )
+        val rawMessages =
+            listOf(
+                LogbookRawMessage("FPXE1546546114565"),
+                LogbookRawMessage("FPXE1546545654481"),
+            )
         jpaLogbookRawMessageRepository.save(rawMessages.first())
         jpaLogbookRawMessageRepository.save(rawMessages.last())
 
@@ -564,11 +588,278 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         )
 
         // When
-        val trips = jpaLogbookReportRepository.findLastTwoYearsTripNumbers(
-            "FAK000999999",
-        )
+        val trips =
+            jpaLogbookReportRepository.findLastTwoYearsTripNumbers(
+                "FAK000999999",
+            )
 
         // Then
         assertThat(trips).isEqualTo(listOf("456", "123"))
+    }
+
+    @Test
+    @Transactional
+    fun `findAllPriorNotifications Should return PNO logbook reports from ESP & FRA vessels`() {
+        // Given
+        val filter = LogbookReportFilter(flagStates = listOf("ESP", "FRA"))
+
+        // When
+        val result = jpaLogbookReportRepository.findAllPriorNotifications(filter)
+
+        // Then
+        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(result.all { listOf(CountryCode.ES, CountryCode.FR).contains(it.vessel.flagState) }).isEqualTo(true)
+    }
+
+    @Test
+    @Transactional
+    fun `findAllPriorNotifications Should return PNO logbook reports for less than 12 meters long vessels`() {
+        // Given
+        val firstFilter = LogbookReportFilter(isLessThanTwelveMetersVessel = true)
+
+        // When
+        val firstResult = jpaLogbookReportRepository.findAllPriorNotifications(firstFilter)
+
+        // Then
+        assertThat(firstResult).hasSizeGreaterThan(0)
+        assertThat(firstResult.all { it.vessel.length!! < 12 }).isEqualTo(true)
+
+        // Given
+        val secondFilter = LogbookReportFilter(isLessThanTwelveMetersVessel = false)
+
+        // When
+        val secondResult = jpaLogbookReportRepository.findAllPriorNotifications(secondFilter)
+
+        // Then
+        assertThat(secondResult).hasSizeGreaterThan(0)
+        assertThat(secondResult.all { it.vessel.length!! >= 12 }).isEqualTo(true)
+    }
+
+    @Test
+    @Transactional
+    fun `findAllPriorNotifications Should return PNO logbook reports controlled after or before January 1st, 2024`() {
+        // Given
+        val firstFilter = LogbookReportFilter(lastControlledAfter = "2024-01-01T00:00:00Z")
+
+        // When
+        val firstResult = jpaLogbookReportRepository.findAllPriorNotifications(firstFilter)
+
+        // Then
+        assertThat(firstResult).hasSizeGreaterThan(0)
+        assertThat(
+            firstResult.all {
+                it.vesselRiskFactor!!.lastControlDatetime!!.isAfter(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
+            },
+        ).isEqualTo(true)
+
+        // Given
+        val secondFilter = LogbookReportFilter(lastControlledBefore = "2024-01-01T00:00:00Z")
+
+        // When
+        val secondResult = jpaLogbookReportRepository.findAllPriorNotifications(secondFilter)
+
+        // Then
+        assertThat(secondResult).hasSizeGreaterThan(0)
+        assertThat(
+            secondResult.all {
+                it.vesselRiskFactor!!.lastControlDatetime!!.isBefore(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
+            },
+        ).isEqualTo(true)
+    }
+
+    @Test
+    @Transactional
+    fun `findAllPriorNotifications Should return PNO logbook reports for FRSML & FRVNE ports`() {
+        // Given
+        val filter = LogbookReportFilter(portLocodes = listOf("FRSML", "FRVNE"))
+
+        // When
+        val result = jpaLogbookReportRepository.findAllPriorNotifications(filter)
+
+        // Then
+        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(
+            result.all {
+                val message = it.logbookMessage.message as PNO
+
+                listOf("FRSML", "FRVNE").contains(message.port)
+            },
+        ).isEqualTo(true)
+    }
+
+    @Test
+    @Transactional
+    fun `findAllPriorNotifications Should return PNO logbook reports for PHENOMENE vessel`() {
+        // Given
+        val firstFilter = LogbookReportFilter(searchQuery = "pheno")
+
+        // When
+        val firstResult = jpaLogbookReportRepository.findAllPriorNotifications(firstFilter)
+
+        // Then
+        assertThat(firstResult).hasSizeGreaterThan(0)
+        assertThat(firstResult.all { it.vessel.vesselName == "PHENOMENE" }).isEqualTo(true)
+
+        // Given
+        val secondFilter = LogbookReportFilter(searchQuery = "hénO")
+
+        // When
+        val secondResult = jpaLogbookReportRepository.findAllPriorNotifications(secondFilter)
+
+        // Then
+        assertThat(secondResult).hasSizeGreaterThan(0)
+        assertThat(secondResult.all { it.vessel.vesselName == "PHENOMENE" }).isEqualTo(true)
+    }
+
+    @Test
+    @Transactional
+    fun `findAllPriorNotifications Should return PNO logbook reports for COD & HKE species`() {
+        // Given
+        val filter = LogbookReportFilter(specyCodes = listOf("COD", "HKE"))
+
+        // When
+        val result = jpaLogbookReportRepository.findAllPriorNotifications(filter)
+
+        // Then
+        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(
+            result.all {
+                val message = it.logbookMessage.message as PNO
+
+                message.catchOnboard.any { catch -> listOf("COD", "HKE").contains(catch.species) }
+            },
+        ).isEqualTo(true)
+    }
+
+    @Test
+    @Transactional
+    fun `findAllPriorNotifications Should return PNO logbook reports for Préavis type A & Préavis type C types`() {
+        // Given
+        val filter = LogbookReportFilter(priorNotificationTypes = listOf("Préavis type A", "Préavis type C"))
+
+        // When
+        val result = jpaLogbookReportRepository.findAllPriorNotifications(filter)
+
+        // Then
+        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(
+            result.all {
+                val message = it.logbookMessage.message as PNO
+
+                message.pnoTypes.any { type -> listOf("Préavis type A", "Préavis type C").contains(type.name) }
+            },
+        ).isEqualTo(true)
+    }
+
+    @Test
+    @Transactional
+    fun `findAllPriorNotifications Should return PNO logbook reports for SWW06 & NWW03 segments`() {
+        // Given
+        val filter = LogbookReportFilter(tripSegmentSegments = listOf("SWW06", "NWW03"))
+
+        // When
+        val result = jpaLogbookReportRepository.findAllPriorNotifications(filter)
+
+        // Then
+        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(
+            result.all {
+                it.logbookMessage.tripSegments!!.any { tripSegment ->
+                    listOf("SWW06", "NWW03").contains(
+                        tripSegment.code,
+                    )
+                }
+            },
+        ).isEqualTo(true)
+    }
+
+    @Test
+    @Transactional
+    fun `findAllPriorNotifications Should return PNO logbook reports for OTT & TB gears`() {
+        // Given
+        val filter = LogbookReportFilter(tripGearCodes = listOf("OTT", "TB"))
+
+        // When
+        val result = jpaLogbookReportRepository.findAllPriorNotifications(filter)
+
+        // Then
+        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(
+            result.all {
+                it.logbookMessage.tripGears!!.any { tripGear -> listOf("OTT", "TB").contains(tripGear.gear) }
+            },
+        ).isEqualTo(true)
+    }
+
+    @Test
+    @Transactional
+    fun `findAllPriorNotifications Should return PNO logbook reports for vessels arriving after or before January 1st, 2024`() {
+        // Given
+        val firstFilter = LogbookReportFilter(willArriveAfter = "2024-01-01T00:00:00Z")
+
+        // When
+        val firstResult = jpaLogbookReportRepository.findAllPriorNotifications(firstFilter)
+
+        // Then
+        assertThat(firstResult).hasSizeGreaterThan(0)
+        assertThat(
+            firstResult.all {
+                val message = it.logbookMessage.message as PNO
+
+                message.predictedArrivalDateTime!!.isAfter(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
+            },
+        ).isEqualTo(true)
+
+        // Given
+        val secondFilter = LogbookReportFilter(willArriveBefore = "2024-01-01T00:00:00Z")
+
+        // When
+        val secondResult = jpaLogbookReportRepository.findAllPriorNotifications(secondFilter)
+
+        // Then
+        assertThat(secondResult).hasSizeGreaterThan(0)
+        assertThat(
+            secondResult.all {
+                val message = it.logbookMessage.message as PNO
+
+                message.predictedArrivalDateTime!!.isBefore(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
+            },
+        ).isEqualTo(true)
+    }
+
+    @Test
+    @Transactional
+    fun `findAllPriorNotifications Should return the expected PNO logbook reports with multiple filters`() {
+        // Given
+        val filter = LogbookReportFilter(
+            priorNotificationTypes = listOf("Préavis type A", "Préavis type C"),
+            tripGearCodes = listOf("OTT", "TB"),
+            willArriveAfter = "2024-01-01T00:00:00Z",
+        )
+
+        // When
+        val result = jpaLogbookReportRepository.findAllPriorNotifications(filter)
+
+        // Then
+        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(
+            result.all {
+                val message = it.logbookMessage.message as PNO
+
+                message.pnoTypes.any { type -> listOf("Préavis type A", "Préavis type C").contains(type.name) }
+            },
+        ).isEqualTo(true)
+        assertThat(
+            result.all {
+                it.logbookMessage.tripGears!!.any { tripGear -> listOf("OTT", "TB").contains(tripGear.gear) }
+            },
+        ).isEqualTo(true)
+        assertThat(
+            result.all {
+                val message = it.logbookMessage.message as PNO
+
+                message.predictedArrivalDateTime!!.isAfter(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
+            },
+        ).isEqualTo(true)
     }
 }

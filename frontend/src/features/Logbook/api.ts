@@ -33,9 +33,9 @@ export async function getVesselLogbookFromAPI(
   voyageRequest: NavigateTo | undefined,
   tripNumber: number | undefined
 ) {
-  const internalReferenceNumber = vesselIdentity.internalReferenceNumber || ''
-  const nextTripNumber = tripNumber || ''
-  const nextVoyageRequest = voyageRequest || ''
+  const internalReferenceNumber = vesselIdentity.internalReferenceNumber ?? ''
+  const nextTripNumber = tripNumber ?? ''
+  const nextVoyageRequest = voyageRequest ?? ''
 
   try {
     return await monitorfishApiKy

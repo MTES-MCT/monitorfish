@@ -6,7 +6,7 @@ import { isArray } from './isArray'
 import { isObject } from './isObject'
 import { FrontendError } from '../libs/FrontendError'
 
-import type { NativeAny, NativeArray, NativeObject } from '../types'
+import type { NativeAny, NativeArray, NativeObject } from '@mtes-mct/monitor-ui'
 
 type Nullify<T> = T extends undefined
   ? null

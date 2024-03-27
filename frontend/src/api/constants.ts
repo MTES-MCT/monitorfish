@@ -1,4 +1,8 @@
-import { FIVE_MINUTES } from '../constants'
+import { FIVE_MINUTES, ONE_MINUTE } from '../constants'
+
+export const RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS = {
+  pollingInterval: ONE_MINUTE
+}
 
 export const RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS = {
   pollingInterval: FIVE_MINUTES

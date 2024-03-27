@@ -2,8 +2,8 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
+import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional
 
 @Import(MapperConfiguration::class)
 class JpaLogbookRawMessageRepositoryITests : AbstractDBTests() {
-
     @Autowired
     private lateinit var jpaLogbookRawMessageRepository: JpaLogbookRawMessageRepository
 
@@ -114,7 +113,7 @@ class JpaLogbookRawMessageRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findRawMessage Should throw an exception When the message is not found`() {
         // When
-        val throwable = catchThrowable { jpaLogbookRawMessageRepository.findRawMessage("BAD_OP") }
+        val throwable = Assertions.catchThrowable { jpaLogbookRawMessageRepository.findRawMessage("BAD_OP") }
 
         // Then
         assertThat(throwable).isInstanceOf(NoERSMessagesFound::class.java)

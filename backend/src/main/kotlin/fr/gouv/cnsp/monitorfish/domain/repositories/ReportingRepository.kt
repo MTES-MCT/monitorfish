@@ -5,21 +5,37 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Observation
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
+import fr.gouv.cnsp.monitorfish.domain.filters.ReportingFilter
 import java.time.ZonedDateTime
 
 interface ReportingRepository {
-    fun save(alert: PendingAlert, validationDate: ZonedDateTime?)
+    fun save(
+        alert: PendingAlert,
+        validationDate: ZonedDateTime?,
+    )
+
     fun save(reporting: Reporting): Reporting
-    fun update(reportingId: Int, updatedInfractionSuspicion: InfractionSuspicion): Reporting
-    fun update(reportingId: Int, updatedObservation: Observation): Reporting
-    fun findAll(): List<Reporting>
+
+    fun update(
+        reportingId: Int,
+        updatedInfractionSuspicion: InfractionSuspicion,
+    ): Reporting
+
+    fun update(
+        reportingId: Int,
+        updatedObservation: Observation,
+    ): Reporting
+
+    fun findAll(filter: ReportingFilter? = null): List<Reporting>
+
     fun findById(reportingId: Int): Reporting
-    fun findAllCurrent(): List<Reporting>
+
     fun findCurrentAndArchivedByVesselIdentifierEquals(
         vesselIdentifier: VesselIdentifier,
         value: String,
         fromDate: ZonedDateTime,
     ): List<Reporting>
+
     fun findCurrentAndArchivedByVesselIdEquals(
         vesselId: Int,
         fromDate: ZonedDateTime,
@@ -33,5 +49,6 @@ interface ReportingRepository {
     ): List<Reporting>
 
     fun archive(id: Int)
+
     fun delete(id: Int)
 }

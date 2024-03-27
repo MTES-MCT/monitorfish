@@ -219,6 +219,10 @@ def parse_pno(pno):
     time = pno.get("PT")
     predicted_arrival_datetime_utc = make_datetime_json_serializable(date, time)
 
+    date = pno.get("DA")
+    time = pno.get("TI")
+    predicted_landing_datetime_utc = make_datetime_json_serializable(date, time)
+
     start_date = pno.get("DS")
     trip_start_date = make_datetime_json_serializable(start_date, None)
 
@@ -226,6 +230,7 @@ def parse_pno(pno):
 
     value = {
         "predictedArrivalDatetimeUtc": predicted_arrival_datetime_utc,
+        "predictedLandingDatetimeUtc": predicted_landing_datetime_utc,
         "port": pno.get("PO"),
         "purpose": pno.get("PC"),
         "tripStartDate": trip_start_date,
@@ -238,8 +243,12 @@ def parse_pno(pno):
         value = {**value, **ras_data}
 
     if "SPE" in children:
-        catches = [parse_spe(spe) for spe in children["SPE"]]
-        value["catchOnboard"] = catches
+        value["catchOnboard"] = [
+            parse_spe(spe, catch_to_land=False) for spe in children["SPE"]
+        ]
+        value["catchToLand"] = [
+            parse_spe(spe, catch_to_land=True) for spe in children["SPE"]
+        ]
 
     if "POS" in children:
         assert len(children["POS"]) == 1

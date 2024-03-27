@@ -27,7 +27,7 @@ export function getDatetimeOrDash(dateTimeUtc?: string) {
   )
 }
 
-export function getCodeWithNameOrDash(code?: string, codeName?: string) {
+export function getCodeWithNameOrDash(code?: string | null, codeName?: string | null) {
   if (!code && !codeName) {
     return <NoValue>-</NoValue>
   }

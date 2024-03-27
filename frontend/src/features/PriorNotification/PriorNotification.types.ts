@@ -15,7 +15,7 @@ export namespace PriorNotification {
     reportingsCount: number
     seaFront: SeaFront | undefined
     sentAt: string | undefined
-    tripGears: LogbookMessage.TripGear[]
+    tripGears: LogbookMessage.Gear[]
     tripSegments: LogbookMessage.TripSegment[]
     types: Type[]
     vesselExternalReferenceNumber: string | undefined

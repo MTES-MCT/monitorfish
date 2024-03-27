@@ -6,9 +6,9 @@ import { NoValue, Table, TableBody, TableKey, TableRow, TableValue, Zone } from 
 
 import type { DEPMessageValue } from '../../../../Logbook.types'
 
-type DEPMessageProps = {
+type DEPMessageProps = Readonly<{
   message: DEPMessageValue
-}
+}>
 export function DEPMessage({ message }: DEPMessageProps) {
   return (
     <>

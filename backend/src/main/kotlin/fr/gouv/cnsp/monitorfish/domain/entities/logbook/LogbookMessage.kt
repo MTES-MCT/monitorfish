@@ -34,6 +34,6 @@ data class LogbookMessage(
     val transmissionFormat: LogbookTransmissionFormat,
     val software: String? = null,
     var isSentByFailoverSoftware: Boolean = false,
-    val tripGears: List<LogbookTripGear>? = listOf(),
+    val tripGears: List<Gear>? = listOf(),
     val tripSegments: List<LogbookTripSegment>? = listOf(),
 )

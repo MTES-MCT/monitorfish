@@ -116,7 +116,14 @@ object TestUtils {
 
         return listOf(
             LogbookMessage(
-                id = 2, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "FAR", software = "TurboCatch (3.7-1)",
+                id = 2,
+                analyzedByRules = listOf(),
+                operationNumber = "",
+                tripNumber = "345",
+                reportId = "",
+                operationType = LogbookOperationType.DAT,
+                messageType = "FAR",
+                software = "TurboCatch (3.7-1)",
                 message = far,
                 reportDateTime = ZonedDateTime.of(
                     2020,
@@ -130,10 +137,18 @@ object TestUtils {
                 ).minusHours(12),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
+                isEnriched = false,
                 operationDateTime = ZonedDateTime.now(),
             ),
             LogbookMessage(
-                id = 1, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "DEP", software = "e-Sacapt Secours ERSV3 V 1.0.10",
+                id = 1,
+                analyzedByRules = listOf(),
+                operationNumber = "",
+                tripNumber = "345",
+                reportId = "",
+                operationType = LogbookOperationType.DAT,
+                messageType = "DEP",
+                software = "e-Sacapt Secours ERSV3 V 1.0.10",
                 message = dep,
                 reportDateTime = ZonedDateTime.of(
                     2020,
@@ -147,12 +162,21 @@ object TestUtils {
                 ).minusHours(24),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
+                isEnriched = false,
                 operationDateTime = ZonedDateTime.now(),
             ),
             LogbookMessage(
-                id = 3, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "PNO", software = "e-Sacapt Secours ERSV3 V 1.0.7",
+                id = 3,
+                analyzedByRules = listOf(),
+                operationNumber = "",
+                tripNumber = "345",
+                reportId = "",
+                operationType = LogbookOperationType.DAT,
+                messageType = "PNO",
+                software = "e-Sacapt Secours ERSV3 V 1.0.7",
                 message = pno,
-                reportDateTime = ZonedDateTime.of(
+                reportDateTime =
+                ZonedDateTime.of(
                     2020,
                     5,
                     5,
@@ -164,12 +188,21 @@ object TestUtils {
                 ).minusHours(0),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
+                isEnriched = false,
                 operationDateTime = ZonedDateTime.now(),
             ),
             LogbookMessage(
-                id = 3, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "COE", software = "e-Sacapt Secours ERSV3 V 1.0.7",
+                id = 3,
+                analyzedByRules = listOf(),
+                operationNumber = "",
+                tripNumber = "345",
+                reportId = "",
+                operationType = LogbookOperationType.DAT,
+                messageType = "COE",
+                software = "e-Sacapt Secours ERSV3 V 1.0.7",
                 message = coe,
-                reportDateTime = ZonedDateTime.of(
+                reportDateTime =
+                ZonedDateTime.of(
                     2020,
                     5,
                     5,
@@ -181,26 +214,45 @@ object TestUtils {
                 ).minusHours(3),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
+                isEnriched = false,
                 operationDateTime = ZonedDateTime.now(),
             ),
             LogbookMessage(
-                id = 4, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "COX", software = "e-Sacapt Secours ERSV3 V 1.0.7",
+                id = 4,
+                analyzedByRules = listOf(),
+                operationNumber = "",
+                tripNumber = "345",
+                reportId = "",
+                operationType = LogbookOperationType.DAT,
+                messageType = "COX",
+                software = "e-Sacapt Secours ERSV3 V 1.0.7",
                 message = cox,
-                reportDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(0).minusMinutes(
+                reportDateTime =
+                ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(0).minusMinutes(
                     20,
                 ),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
+                isEnriched = false,
                 operationDateTime = ZonedDateTime.now(),
             ),
             LogbookMessage(
-                id = 5, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "CPS", software = "",
+                id = 5,
+                analyzedByRules = listOf(),
+                operationNumber = "",
+                tripNumber = "345",
+                reportId = "",
+                operationType = LogbookOperationType.DAT,
+                messageType = "CPS",
+                software = "",
                 message = cpsMessage,
-                reportDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(0).minusMinutes(
+                reportDateTime =
+                ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(0).minusMinutes(
                     20,
                 ),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
+                isEnriched = false,
                 operationDateTime = ZonedDateTime.now(),
             ),
         )
@@ -237,9 +289,17 @@ object TestUtils {
 
         return listOf(
             LogbookMessage(
-                id = 1, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "DEP", software = "FT/VISIOCaptures V1.4.7",
+                id = 1,
+                analyzedByRules = listOf(),
+                operationNumber = "",
+                tripNumber = "345",
+                reportId = "",
+                operationType = LogbookOperationType.DAT,
+                messageType = "DEP",
+                software = "FT/VISIOCaptures V1.4.7",
                 message = dep,
-                reportDateTime = ZonedDateTime.of(
+                reportDateTime =
+                ZonedDateTime.of(
                     2020,
                     5,
                     5,
@@ -251,12 +311,21 @@ object TestUtils {
                 ).minusHours(24),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
+                isEnriched = false,
                 operationDateTime = ZonedDateTime.now(),
             ),
             LogbookMessage(
-                id = 2, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "FAR", software = "FP/VISIOCaptures V1.4.7",
+                id = 2,
+                analyzedByRules = listOf(),
+                operationNumber = "",
+                tripNumber = "345",
+                reportId = "",
+                operationType = LogbookOperationType.DAT,
+                messageType = "FAR",
+                software = "FP/VISIOCaptures V1.4.7",
                 message = far,
-                reportDateTime = ZonedDateTime.of(
+                reportDateTime =
+                ZonedDateTime.of(
                     2020,
                     5,
                     5,
@@ -268,12 +337,21 @@ object TestUtils {
                 ).minusHours(12),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
+                isEnriched = false,
                 operationDateTime = ZonedDateTime.now(),
             ),
             LogbookMessage(
-                id = 3, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "PNO", software = "TurboCatch (3.6-1)",
+                id = 3,
+                analyzedByRules = listOf(),
+                operationNumber = "",
+                tripNumber = "345",
+                reportId = "",
+                operationType = LogbookOperationType.DAT,
+                messageType = "PNO",
+                software = "TurboCatch (3.6-1)",
                 message = pno,
-                reportDateTime = ZonedDateTime.of(
+                reportDateTime =
+                ZonedDateTime.of(
                     2020,
                     5,
                     5,
@@ -285,6 +363,7 @@ object TestUtils {
                 ).minusHours(0),
                 transmissionFormat = LogbookTransmissionFormat.FLUX,
                 integrationDateTime = ZonedDateTime.now(),
+                isEnriched = false,
                 operationDateTime = ZonedDateTime.now(),
             ),
         )
@@ -314,9 +393,16 @@ object TestUtils {
 
         return listOf(
             LogbookMessage(
-                id = 1, analyzedByRules = listOf(), operationNumber = "9065646811", tripNumber = "345", reportId = "9065646811", operationType = LogbookOperationType.DAT, messageType = "FAR",
+                id = 1,
+                analyzedByRules = listOf(),
+                operationNumber = "9065646811",
+                tripNumber = "345",
+                reportId = "9065646811",
+                operationType = LogbookOperationType.DAT,
+                messageType = "FAR",
                 message = far,
-                reportDateTime = ZonedDateTime.of(
+                reportDateTime =
+                ZonedDateTime.of(
                     2020,
                     5,
                     5,
@@ -328,12 +414,21 @@ object TestUtils {
                 ).minusHours(12),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
+                isEnriched = false,
                 operationDateTime = ZonedDateTime.now(),
             ),
             LogbookMessage(
-                id = 2, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", referencedReportId = "9065646811", operationType = LogbookOperationType.COR, messageType = "FAR",
+                id = 2,
+                analyzedByRules = listOf(),
+                operationNumber = "",
+                tripNumber = "345",
+                reportId = "",
+                referencedReportId = "9065646811",
+                operationType = LogbookOperationType.COR,
+                messageType = "FAR",
                 message = correctedFar,
-                reportDateTime = ZonedDateTime.of(
+                reportDateTime =
+                ZonedDateTime.of(
                     2020,
                     5,
                     5,
@@ -345,6 +440,7 @@ object TestUtils {
                 ).minusHours(12),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
+                isEnriched = false,
                 operationDateTime = ZonedDateTime.now(),
             ),
         )
@@ -381,9 +477,16 @@ object TestUtils {
 
         return listOf(
             LogbookMessage(
-                id = 1, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "9065646811", operationType = LogbookOperationType.DAT, messageType = "FAR",
+                id = 1,
+                analyzedByRules = listOf(),
+                operationNumber = "",
+                tripNumber = "345",
+                reportId = "9065646811",
+                operationType = LogbookOperationType.DAT,
+                messageType = "FAR",
                 message = far,
-                reportDateTime = ZonedDateTime.of(
+                reportDateTime =
+                ZonedDateTime.of(
                     2020,
                     5,
                     5,
@@ -395,12 +498,20 @@ object TestUtils {
                 ).minusHours(12),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
+                isEnriched = false,
                 operationDateTime = ZonedDateTime.now(),
             ),
             LogbookMessage(
-                id = 2, analyzedByRules = listOf(), operationNumber = "", reportId = "9065646816", referencedReportId = "9065646811", operationType = LogbookOperationType.RET, messageType = "",
+                id = 2,
+                analyzedByRules = listOf(),
+                operationNumber = "",
+                reportId = "9065646816",
+                referencedReportId = "9065646811",
+                operationType = LogbookOperationType.RET,
+                messageType = "",
                 message = farBadAck,
-                reportDateTime = ZonedDateTime.of(
+                reportDateTime =
+                ZonedDateTime.of(
                     2020,
                     5,
                     5,
@@ -412,12 +523,20 @@ object TestUtils {
                 ).minusHours(12),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
+                isEnriched = false,
                 operationDateTime = ZonedDateTime.now(),
             ),
             LogbookMessage(
-                id = 3, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "9065646813", operationType = LogbookOperationType.DAT, messageType = "FAR",
+                id = 3,
+                analyzedByRules = listOf(),
+                operationNumber = "",
+                tripNumber = "345",
+                reportId = "9065646813",
+                operationType = LogbookOperationType.DAT,
+                messageType = "FAR",
                 message = farTwo,
-                reportDateTime = ZonedDateTime.of(
+                reportDateTime =
+                ZonedDateTime.of(
                     2020,
                     5,
                     5,
@@ -429,12 +548,20 @@ object TestUtils {
                 ).minusHours(12),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
+                isEnriched = false,
                 operationDateTime = ZonedDateTime.now(),
             ),
             LogbookMessage(
-                id = 4, analyzedByRules = listOf(), operationNumber = "", reportId = "9065646818", referencedReportId = "9065646813", operationType = LogbookOperationType.RET, messageType = "",
+                id = 4,
+                analyzedByRules = listOf(),
+                operationNumber = "",
+                reportId = "9065646818",
+                referencedReportId = "9065646813",
+                operationType = LogbookOperationType.RET,
+                messageType = "",
                 message = farAck,
-                reportDateTime = ZonedDateTime.of(
+                reportDateTime =
+                ZonedDateTime.of(
                     2020,
                     5,
                     5,
@@ -446,12 +573,19 @@ object TestUtils {
                 ).minusHours(12),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
+                isEnriched = false,
                 operationDateTime = ZonedDateTime.now(),
             ),
             LogbookMessage(
-                id = 5, analyzedByRules = listOf(), operationNumber = "", referencedReportId = "9065646813", operationType = LogbookOperationType.DEL, messageType = "",
+                id = 5,
+                analyzedByRules = listOf(),
+                operationNumber = "",
+                referencedReportId = "9065646813",
+                operationType = LogbookOperationType.DEL,
+                messageType = "",
                 message = farAck,
-                reportDateTime = ZonedDateTime.of(
+                reportDateTime =
+                ZonedDateTime.of(
                     2020,
                     5,
                     5,
@@ -463,12 +597,20 @@ object TestUtils {
                 ).minusHours(12),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
                 integrationDateTime = ZonedDateTime.now(),
+                isEnriched = false,
                 operationDateTime = ZonedDateTime.now(),
             ),
             LogbookMessage(
-                id = 6, analyzedByRules = listOf(), operationNumber = "5h499-erh5u7-pm3ae8c5trj78j67dfh", tripNumber = "SCR-TTT20200505030505", reportId = "zegj15-zeg56-errg569iezz3659g", operationType = LogbookOperationType.DAT, messageType = "FAR",
+                id = 6,
+                analyzedByRules = listOf(),
+                operationNumber = "5h499-erh5u7-pm3ae8c5trj78j67dfh",
+                tripNumber = "SCR-TTT20200505030505",
+                reportId = "zegj15-zeg56-errg569iezz3659g",
+                operationType = LogbookOperationType.DAT,
+                messageType = "FAR",
                 message = far,
-                reportDateTime = ZonedDateTime.of(
+                reportDateTime =
+                ZonedDateTime.of(
                     2020,
                     5,
                     5,
@@ -480,12 +622,16 @@ object TestUtils {
                 ).minusHours(12),
                 transmissionFormat = LogbookTransmissionFormat.FLUX,
                 integrationDateTime = ZonedDateTime.now(),
+                isEnriched = false,
                 operationDateTime = ZonedDateTime.now(),
             ),
         )
     }
 
-    fun getDummyPNOAndLANLogbookMessages(weightToAdd: Double = 0.0, addSpeciesToLAN: Boolean = false): List<Pair<LogbookMessage, LogbookMessage>> {
+    fun getDummyPNOAndLANLogbookMessages(
+        weightToAdd: Double = 0.0,
+        addSpeciesToLAN: Boolean = false,
+    ): List<Pair<LogbookMessage, LogbookMessage>> {
         val catchOne = Catch()
         catchOne.species = "TTV"
         catchOne.weight = 123.0
@@ -534,21 +680,23 @@ object TestUtils {
         // The weight is reduced because of the conversion factor
         // catchTwo: 788.11 = 961.5 / 1.22
         // catchTwo: 51.62 = 69.7 / 1.35
-        firstLan.catchLanded = listOf(
-            catchOne,
-            catchTwo.copy(weight = 788.11),
-            catchThree.copy(weight = 51.62),
-            catchFour,
-            catchNine,
-        )
+        firstLan.catchLanded =
+            listOf(
+                catchOne,
+                catchTwo.copy(weight = 788.11),
+                catchThree.copy(weight = 51.62),
+                catchFour,
+                catchNine,
+            )
 
         val firstPno = PNO()
-        firstPno.catchOnboard = listOf(
-            catchOne.copy(weight = catchOne.weight?.plus(weightToAdd)),
-            catchTwo.copy(weight = catchTwo.weight?.plus(0.5)),
-            catchThree.copy(weight = catchThree.weight?.plus(weightToAdd)),
-            catchFour,
-        )
+        firstPno.catchOnboard =
+            listOf(
+                catchOne.copy(weight = catchOne.weight?.plus(weightToAdd)),
+                catchTwo.copy(weight = catchTwo.weight?.plus(0.5)),
+                catchThree.copy(weight = catchThree.weight?.plus(weightToAdd)),
+                catchFour,
+            )
 
         val secondLan = LAN()
         if (addSpeciesToLAN) {
@@ -562,36 +710,71 @@ object TestUtils {
         return listOf(
             Pair(
                 LogbookMessage(
-                    id = 1, analyzedByRules = listOf(), operationNumber = "456846844658", tripNumber = "125345", reportId = "456846844658",
-                    operationType = LogbookOperationType.DAT, messageType = "LAN", message = firstLan, transmissionFormat = LogbookTransmissionFormat.ERS,
+                    id = 1,
+                    analyzedByRules = listOf(),
+                    operationNumber = "456846844658",
+                    tripNumber = "125345",
+                    reportId = "456846844658",
+                    operationType = LogbookOperationType.DAT,
+                    messageType = "LAN",
+                    message = firstLan,
+                    transmissionFormat = LogbookTransmissionFormat.ERS,
                     integrationDateTime = ZonedDateTime.now(),
+                    isEnriched = false,
                     operationDateTime = ZonedDateTime.now(),
                 ),
                 LogbookMessage(
-                    id = 2, analyzedByRules = listOf(), operationNumber = "47177857577", tripNumber = "125345", reportId = "47177857577",
-                    operationType = LogbookOperationType.DAT, messageType = "PNO", message = firstPno, transmissionFormat = LogbookTransmissionFormat.ERS,
+                    id = 2,
+                    analyzedByRules = listOf(),
+                    operationNumber = "47177857577",
+                    tripNumber = "125345",
+                    reportId = "47177857577",
+                    operationType = LogbookOperationType.DAT,
+                    messageType = "PNO",
+                    message = firstPno,
+                    transmissionFormat = LogbookTransmissionFormat.ERS,
                     integrationDateTime = ZonedDateTime.now(),
+                    isEnriched = false,
                     operationDateTime = ZonedDateTime.now(),
                 ),
             ),
             Pair(
                 LogbookMessage(
-                    id = 3, analyzedByRules = listOf(), operationNumber = "48545254254", tripNumber = "125345", reportId = "48545254254",
-                    operationType = LogbookOperationType.DAT, messageType = "LAN", message = secondLan, transmissionFormat = LogbookTransmissionFormat.ERS,
+                    id = 3,
+                    analyzedByRules = listOf(),
+                    operationNumber = "48545254254",
+                    tripNumber = "125345",
+                    reportId = "48545254254",
+                    operationType = LogbookOperationType.DAT,
+                    messageType = "LAN",
+                    message = secondLan,
+                    transmissionFormat = LogbookTransmissionFormat.ERS,
                     integrationDateTime = ZonedDateTime.now(),
+                    isEnriched = false,
                     operationDateTime = ZonedDateTime.now(),
                 ),
                 LogbookMessage(
-                    id = 4, analyzedByRules = listOf(), operationNumber = "004045204504", tripNumber = "125345", reportId = "004045204504",
-                    operationType = LogbookOperationType.DAT, messageType = "PNO", message = secondPno, transmissionFormat = LogbookTransmissionFormat.ERS,
+                    id = 4,
+                    analyzedByRules = listOf(),
+                    operationNumber = "004045204504",
+                    tripNumber = "125345",
+                    reportId = "004045204504",
+                    operationType = LogbookOperationType.DAT,
+                    messageType = "PNO",
+                    message = secondPno,
+                    transmissionFormat = LogbookTransmissionFormat.ERS,
                     integrationDateTime = ZonedDateTime.now(),
+                    isEnriched = false,
                     operationDateTime = ZonedDateTime.now(),
                 ),
             ),
         )
     }
 
-    fun getDummyPNOAndLANLogbookMessagesWithSpeciesInDouble(weightToAdd: Double = 0.0, addSpeciesToLAN: Boolean = false): List<Pair<LogbookMessage, LogbookMessage>> {
+    fun getDummyPNOAndLANLogbookMessagesWithSpeciesInDouble(
+        weightToAdd: Double = 0.0,
+        addSpeciesToLAN: Boolean = false,
+    ): List<Pair<LogbookMessage, LogbookMessage>> {
         val catchOne = Catch()
         catchOne.species = "TTV"
         catchOne.weight = 123.0
@@ -630,13 +813,14 @@ object TestUtils {
         firstLan.catchLanded = listOf(catchOne, catchTwo, catchTwo, catchTwo, catchThree, catchFour, catchNine)
 
         val firstPno = PNO()
-        firstPno.catchOnboard = listOf(
-            catchOne.copy(weight = catchOne.weight?.plus(weightToAdd)),
-            catchTwo.copy(weight = catchTwo.weight?.plus(0.5)),
-            catchTwo,
-            catchThree.copy(weight = catchThree.weight?.plus(weightToAdd)),
-            catchFour,
-        )
+        firstPno.catchOnboard =
+            listOf(
+                catchOne.copy(weight = catchOne.weight?.plus(weightToAdd)),
+                catchTwo.copy(weight = catchTwo.weight?.plus(0.5)),
+                catchTwo,
+                catchThree.copy(weight = catchThree.weight?.plus(weightToAdd)),
+                catchFour,
+            )
 
         val secondLan = LAN()
         if (addSpeciesToLAN) {
@@ -650,29 +834,61 @@ object TestUtils {
         return listOf(
             Pair(
                 LogbookMessage(
-                    id = 1, analyzedByRules = listOf(), operationNumber = "456846844658", tripNumber = "125345", reportId = "456846844658",
-                    operationType = LogbookOperationType.DAT, messageType = "LAN", message = firstLan, transmissionFormat = LogbookTransmissionFormat.ERS,
+                    id = 1,
+                    analyzedByRules = listOf(),
+                    operationNumber = "456846844658",
+                    tripNumber = "125345",
+                    reportId = "456846844658",
+                    operationType = LogbookOperationType.DAT,
+                    messageType = "LAN",
+                    message = firstLan,
+                    transmissionFormat = LogbookTransmissionFormat.ERS,
                     integrationDateTime = ZonedDateTime.now(),
+                    isEnriched = false,
                     operationDateTime = ZonedDateTime.now(),
                 ),
                 LogbookMessage(
-                    id = 2, analyzedByRules = listOf(), operationNumber = "47177857577", tripNumber = "125345", reportId = "47177857577",
-                    operationType = LogbookOperationType.DAT, messageType = "PNO", message = firstPno, transmissionFormat = LogbookTransmissionFormat.ERS,
+                    id = 2,
+                    analyzedByRules = listOf(),
+                    operationNumber = "47177857577",
+                    tripNumber = "125345",
+                    reportId = "47177857577",
+                    operationType = LogbookOperationType.DAT,
+                    messageType = "PNO",
+                    message = firstPno,
+                    transmissionFormat = LogbookTransmissionFormat.ERS,
                     integrationDateTime = ZonedDateTime.now(),
+                    isEnriched = false,
                     operationDateTime = ZonedDateTime.now(),
                 ),
             ),
             Pair(
                 LogbookMessage(
-                    id = 3, analyzedByRules = listOf(), operationNumber = "48545254254", tripNumber = "125345", reportId = "48545254254",
-                    operationType = LogbookOperationType.DAT, messageType = "LAN", message = secondLan, transmissionFormat = LogbookTransmissionFormat.ERS,
+                    id = 3,
+                    analyzedByRules = listOf(),
+                    operationNumber = "48545254254",
+                    tripNumber = "125345",
+                    reportId = "48545254254",
+                    operationType = LogbookOperationType.DAT,
+                    messageType = "LAN",
+                    message = secondLan,
+                    transmissionFormat = LogbookTransmissionFormat.ERS,
                     integrationDateTime = ZonedDateTime.now(),
+                    isEnriched = false,
                     operationDateTime = ZonedDateTime.now(),
                 ),
                 LogbookMessage(
-                    id = 4, analyzedByRules = listOf(), operationNumber = "004045204504", tripNumber = "125345", reportId = "004045204504",
-                    operationType = LogbookOperationType.DAT, messageType = "PNO", message = secondPno, transmissionFormat = LogbookTransmissionFormat.ERS,
+                    id = 4,
+                    analyzedByRules = listOf(),
+                    operationNumber = "004045204504",
+                    tripNumber = "125345",
+                    reportId = "004045204504",
+                    operationType = LogbookOperationType.DAT,
+                    messageType = "PNO",
+                    message = secondPno,
+                    transmissionFormat = LogbookTransmissionFormat.ERS,
                     integrationDateTime = ZonedDateTime.now(),
+                    isEnriched = false,
                     operationDateTime = ZonedDateTime.now(),
                 ),
             ),

@@ -46,6 +46,7 @@ services:
       - FRONTEND_SHOM_KEY=rg8ele7cft4ujkwjspsmtwas
       - FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED=true # Even if we inject this env var, the value is not used (see cypress.config.ts)
       - FRONTEND_MISSION_FORM_AUTO_UPDATE_ENABLED=true
+      - FRONTEND_PRIOR_NOTIFICATION_LIST_ENABLED=true
     ports:
       - 8880:8880
       - 8000:8000

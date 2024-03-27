@@ -11,16 +11,20 @@ data class LogbookMessage(
     val tripNumber: String? = null,
     val referencedReportId: String? = null,
     var isCorrected: Boolean? = false,
+    val isEnriched: Boolean,
     val operationType: LogbookOperationType,
     val operationDateTime: ZonedDateTime,
     val internalReferenceNumber: String? = null,
     val externalReferenceNumber: String? = null,
     val ircs: String? = null,
     val vesselName: String? = null,
+    // ISO Alpha-3 country code
     val flagState: String? = null,
     val imo: String? = null,
     val messageType: String? = null,
+    // Submission date of the report by the vessel
     val reportDateTime: ZonedDateTime? = null,
+    // Reception date of the report by the data center
     val integrationDateTime: ZonedDateTime,
     var acknowledge: Acknowledge? = null,
     var deleted: Boolean? = false,
@@ -30,4 +34,6 @@ data class LogbookMessage(
     val transmissionFormat: LogbookTransmissionFormat,
     val software: String? = null,
     var isSentByFailoverSoftware: Boolean = false,
+    val tripGears: List<Gear>? = listOf(),
+    val tripSegments: List<LogbookTripSegment>? = listOf(),
 )

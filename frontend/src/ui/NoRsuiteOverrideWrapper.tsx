@@ -27,15 +27,9 @@ import styled from 'styled-components'
 // TODO Fix these CSS issues.
 export const NoRsuiteOverrideWrapper = styled.div`
   box-sizing: border-box;
-  /*
-    This is the closest to as round 18px we can get because 13px can't produce round line heights (other than 1),
-    leading to regular cascaded height issues, especially on HD screens (2 or more real pixels per theoric pixel)
-  */
-  line-height: 1.3846;
 
-  * {
-    box-sizing: border-box;
-    line-height: 1.3846;
+  .Field-Checkbox * {
+    line-height: 18px;
   }
 
   h1,

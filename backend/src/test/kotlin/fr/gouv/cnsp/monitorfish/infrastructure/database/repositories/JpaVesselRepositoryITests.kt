@@ -9,7 +9,6 @@ import org.springframework.cache.CacheManager
 import org.springframework.transaction.annotation.Transactional
 
 class JpaVesselRepositoryITests : AbstractDBTests() {
-
     @Autowired
     private lateinit var jpaVesselRepository: JpaVesselRepository
 

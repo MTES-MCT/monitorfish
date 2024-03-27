@@ -18,7 +18,6 @@ import styled, { createGlobalStyle, StyleSheetManager } from 'styled-components'
 import { Alert } from './Alert'
 import { BeaconMalfunctionBoard } from './BeaconMalfunctionBoard'
 import { Menu } from './Menu'
-import { openSideWindowPath } from './useCases/openSideWindowPath'
 import { MissionEventContext } from '../../context/MissionEventContext'
 import { SideWindowMenuKey } from '../../domain/entities/sideWindow/constants'
 import { closeBeaconMalfunctionInKanban } from '../../domain/shared_slices/BeaconMalfunction'
@@ -32,6 +31,7 @@ import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { FrontendErrorBoundary } from '../../ui/FrontendErrorBoundary'
 import { Loader as MissionFormLoader } from '../Mission/components/MissionForm/Loader'
 import { MissionList } from '../Mission/components/MissionList'
+import { PriorNotificationList } from '../PriorNotification/components/PriorNotificationList'
 import { setEditedReportingInSideWindow } from '../Reporting/slice'
 import { getAllCurrentReportings } from '../Reporting/useCases/getAllCurrentReportings'
 
@@ -90,7 +90,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
   }, [])
 
   useEffect(() => {
-    if (editedReportingInSideWindow || openedBeaconMalfunctionInKanban) {
+    if (editedReportingInSideWindow ?? openedBeaconMalfunctionInKanban) {
       setIsOverlayed(true)
 
       return
@@ -100,16 +100,16 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
   }, [openedBeaconMalfunctionInKanban, editedReportingInSideWindow, selectedPath.menu])
 
   useEffect(() => {
-    if (isFromURL) {
-      dispatch(getOperationalAlerts())
-      dispatch(getAllBeaconMalfunctions())
-      dispatch(getSilencedAlerts())
-      dispatch(getAllCurrentReportings())
-      dispatch(getInfractions())
-      dispatch(getAllGearCodes())
-
-      dispatch(openSideWindowPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }))
+    if (!isFromURL) {
+      return
     }
+
+    dispatch(getOperationalAlerts())
+    dispatch(getAllBeaconMalfunctions())
+    dispatch(getSilencedAlerts())
+    dispatch(getAllCurrentReportings())
+    dispatch(getInfractions())
+    dispatch(getAllGearCodes())
   }, [dispatch, isFromURL])
 
   useEffect(() => {
@@ -117,7 +117,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
   }, [])
 
   return (
-    <StyleSheetManager target={wrapperRef.current || undefined}>
+    <StyleSheetManager target={wrapperRef.current ?? undefined}>
       <Wrapper ref={wrapperRef}>
         {!isFirstRender && (
           <NewWindowContext.Provider value={newWindowContextProviderValue}>
@@ -145,6 +145,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
                     <Alert baseRef={wrapperRef as MutableRefObject<HTMLDivElement>} />
                   )}
                   {selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD && <BeaconMalfunctionBoard />}
+                  {selectedPath.menu === SideWindowMenuKey.PRIOR_NOTIFICATION_LIST && <PriorNotificationList />}
                   {selectedPath.menu === SideWindowMenuKey.MISSION_LIST && <MissionList />}
 
                   {selectedPath.menu === SideWindowMenuKey.MISSION_FORM && (

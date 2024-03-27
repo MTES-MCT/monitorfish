@@ -7,20 +7,29 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Observation
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
+import fr.gouv.cnsp.monitorfish.domain.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ReportingEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBReportingRepository
+import jakarta.persistence.EntityManager
+import jakarta.persistence.criteria.CriteriaBuilder
+import jakarta.persistence.criteria.Predicate
+import jakarta.persistence.criteria.Root
 import jakarta.transaction.Transactional
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
 import java.time.ZonedDateTime
 
 @Repository
 class JpaReportingRepository(
     private val dbReportingRepository: DBReportingRepository,
+    @Autowired private val entityManager: EntityManager,
     private val mapper: ObjectMapper,
 ) : ReportingRepository {
-
-    override fun save(alert: PendingAlert, validationDate: ZonedDateTime?) {
+    override fun save(
+        alert: PendingAlert,
+        validationDate: ZonedDateTime?,
+    ) {
         dbReportingRepository.save(ReportingEntity.fromPendingAlert(alert, validationDate, mapper))
     }
 
@@ -29,7 +38,10 @@ class JpaReportingRepository(
     }
 
     @Transactional
-    override fun update(reportingId: Int, updatedInfractionSuspicion: InfractionSuspicion): Reporting {
+    override fun update(
+        reportingId: Int,
+        updatedInfractionSuspicion: InfractionSuspicion,
+    ): Reporting {
         dbReportingRepository.update(
             reportingId,
             mapper.writeValueAsString(updatedInfractionSuspicion),
@@ -40,7 +52,10 @@ class JpaReportingRepository(
     }
 
     @Transactional
-    override fun update(reportingId: Int, updatedObservation: Observation): Reporting {
+    override fun update(
+        reportingId: Int,
+        updatedObservation: Observation,
+    ): Reporting {
         dbReportingRepository.update(
             reportingId,
             mapper.writeValueAsString(updatedObservation),
@@ -50,16 +65,37 @@ class JpaReportingRepository(
         return dbReportingRepository.findById(reportingId).get().toReporting(mapper)
     }
 
-    override fun findAll(): List<Reporting> {
-        return dbReportingRepository.findAll().map { it.toReporting(mapper) }
+    override fun findAll(filter: ReportingFilter?): List<Reporting> {
+        val criteriaBuilder = entityManager.criteriaBuilder
+        val criteriaQuery = criteriaBuilder.createQuery(ReportingEntity::class.java)
+        val reportingEntity = criteriaQuery.from(ReportingEntity::class.java)
+
+        val predicates = mutableListOf(criteriaBuilder.isTrue(criteriaBuilder.literal(true)))
+
+        filter?.let {
+            it.isArchived?.let { isArchived ->
+                predicates.add(getIsArchivedPredicate(isArchived, reportingEntity, criteriaBuilder))
+            }
+            it.isDeleted?.let { isDeleted ->
+                predicates.add(getIsDeletedPredicate(isDeleted, reportingEntity, criteriaBuilder))
+            }
+            it.types?.let { types ->
+                predicates.add(getTypesPredicate(types, reportingEntity))
+            }
+            it.vesselInternalReferenceNumbers?.let { vesselInternalReferenceNumbers ->
+                predicates.add(
+                    getVesselInternalReferenceNumbersPredicate(vesselInternalReferenceNumbers, reportingEntity),
+                )
+            }
+        }
+
+        criteriaQuery.select(reportingEntity).where(*predicates.toTypedArray())
+
+        return entityManager.createQuery(criteriaQuery).resultList.map { it.toReporting(mapper) }
     }
 
     override fun findById(reportingId: Int): Reporting {
         return dbReportingRepository.findById(reportingId).get().toReporting(mapper)
-    }
-
-    override fun findAllCurrent(): List<Reporting> {
-        return dbReportingRepository.findAllCurrentReportings().map { it.toReporting(mapper) }
     }
 
     override fun findCurrentAndArchivedByVesselIdentifierEquals(
@@ -73,7 +109,10 @@ class JpaReportingRepository(
             }
     }
 
-    override fun findCurrentAndArchivedByVesselIdEquals(vesselId: Int, fromDate: ZonedDateTime): List<Reporting> {
+    override fun findCurrentAndArchivedByVesselIdEquals(
+        vesselId: Int,
+        fromDate: ZonedDateTime,
+    ): List<Reporting> {
         return dbReportingRepository
             .findCurrentAndArchivedByVesselId(vesselId, fromDate.toInstant()).map {
                 it.toReporting(mapper)
@@ -130,5 +169,37 @@ class JpaReportingRepository(
     @Transactional
     override fun delete(id: Int) {
         dbReportingRepository.deleteReporting(id)
+    }
+
+    private fun getIsArchivedPredicate(
+        isArchived: Boolean,
+        reportingEntity: Root<ReportingEntity>,
+        criteriaBuilder: CriteriaBuilder,
+    ): Predicate {
+        return criteriaBuilder.equal(reportingEntity.get<Boolean>("isArchived"), isArchived)
+    }
+
+    private fun getIsDeletedPredicate(
+        isDeleted: Boolean,
+        reportingEntity: Root<ReportingEntity>,
+        criteriaBuilder: CriteriaBuilder,
+    ): Predicate {
+        return criteriaBuilder.equal(reportingEntity.get<Boolean>("isDeleted"), isDeleted)
+    }
+
+    private fun getTypesPredicate(
+        types: List<ReportingType>,
+        reportingEntity: Root<ReportingEntity>,
+    ): Predicate {
+        return reportingEntity.get<ReportingType>("type").`in`(*types.toTypedArray())
+    }
+
+    private fun getVesselInternalReferenceNumbersPredicate(
+        vesselInternalReferenceNumbers: List<String>,
+        reportingEntity: Root<ReportingEntity>,
+    ): Predicate {
+        return reportingEntity.get<String>("internalReferenceNumber").`in`(
+            *vesselInternalReferenceNumbers.toTypedArray(),
+        )
     }
 }

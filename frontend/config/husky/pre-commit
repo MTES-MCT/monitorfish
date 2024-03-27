@@ -1,0 +1,2 @@
+make lint-back
+npx lint-staged --cwd ./frontend

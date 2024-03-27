@@ -9,7 +9,10 @@ export enum SeaFrontGroup {
   OUTREMEROI = 'OUTREMEROI',
   SA = 'SA'
 }
+export const NO_SEA_FRONT_GROUP = 'NO_SEA_FRONT_GROUP'
+export type NoSeaFrontGroup = typeof NO_SEA_FRONT_GROUP
 
+// TODO This should not be dedicated to Mission feature here.
 export enum SeaFrontGroupLabel {
   ALL = 'Toutes les missions',
   MED = 'MED',

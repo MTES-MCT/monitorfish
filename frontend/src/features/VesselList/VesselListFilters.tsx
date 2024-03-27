@@ -1,10 +1,9 @@
-import Countries from 'i18n-iso-countries'
-import COUNTRIES_FR from 'i18n-iso-countries/langs/fr.json'
 import React, { useCallback, useMemo, useState } from 'react'
 import { Checkbox, CheckboxGroup, MultiCascader, SelectPicker, Tag, TagPicker } from 'rsuite'
 import styled from 'styled-components'
 
 import { lastControlAfterLabels, lastPositionTimeAgoLabels } from './dataFormatting'
+import { COUNTRIES_AS_ALPHA2_OPTIONS } from '../../constants'
 import { COLORS } from '../../constants/constants'
 import { LayerType as LayersType } from '../../domain/entities/layers/constants'
 import { VesselLocation, vesselSize } from '../../domain/entities/vessel/vessel'
@@ -13,13 +12,6 @@ import { getZonesAndSubZonesPromises } from '../AdministrativeZone/useCases/getZ
 import PolygonFilterSVG from '../icons/Filtre_zone_polygone.svg?react'
 import BoxFilterSVG from '../icons/Filtre_zone_rectangle.svg?react'
 import FilterTag from '../MapButtons/VesselFilters/FilterTag'
-
-Countries.registerLocale(COUNTRIES_FR)
-
-const countriesField = Object.keys(Countries.getAlpha2Codes()).map(country => ({
-  label: Countries.getName(country, 'fr'),
-  value: country.toLowerCase()
-}))
 
 function renderTagPickerMenuItem(item) {
   return <Label data-cy={`select-picker-menu-item-${item.label}`}>{item.label}</Label>
@@ -146,7 +138,7 @@ function UnmemoizedVesselListFilters({
         />
       </SelectWrapper>
       <TagPicker
-        data={countriesField}
+        data={COUNTRIES_AS_ALPHA2_OPTIONS}
         data-cy="vessel-list-country-filter"
         onChange={countries.setCountriesFiltered}
         placeholder="Nationalité"

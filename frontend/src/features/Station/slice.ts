@@ -1,10 +1,10 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
-interface MainWindowState {
+interface StationState {
   highlightedStationIds: number[]
   selectedStationId: number | undefined
 }
-const INITIAL_STATE: MainWindowState = {
+const INITIAL_STATE: StationState = {
   highlightedStationIds: [],
   selectedStationId: undefined
 }

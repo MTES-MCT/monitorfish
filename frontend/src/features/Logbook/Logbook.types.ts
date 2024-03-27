@@ -15,6 +15,8 @@ export type FishingActivities = {
   logbookMessages: LogbookMessage[]
 }
 
+// TODO Replace with `LogbookMessage.LogbookMessage`.
+// Can be done after using RTK in `getVesselLogbookFromAPI()` since undefined !== null.
 export type LogbookMessage = {
   acknowledge: {
     dateTime: string | null
@@ -64,6 +66,8 @@ export type PNOAndLANWeightToleranceAlertValue = {
   type: 'PNO_LAN_WEIGHT_TOLERANCE_ALERT'
 }
 
+// TODO Replace this type with `LogbookMessage.Catch`.
+// Can be done after using RTK in `getVesselLogbookFromAPI()` since undefined !== null.
 export type LogbookCatch = {
   conversionFactor: number | null
   economicZone: string | null
@@ -80,11 +84,14 @@ export type LogbookCatch = {
   weight: number | null
 }
 
+// TODO Replace this type with `LogbookMessage.Gear`.
+// Can be done after using RTK in `getVesselLogbookFromAPI()` since undefined !== null.
 export type Gear = {
-  dimensions: string
-  gear: string
-  gearName: string
-  mesh: number
+  dimensions: string | null
+  /** Gear code. */
+  gear: string | null
+  gearName: string | null
+  mesh: number | null
 }
 
 export type PNOAndLANWeightToleranceAlertValueCatches = {

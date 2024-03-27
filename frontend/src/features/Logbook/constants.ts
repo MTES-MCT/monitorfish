@@ -187,11 +187,6 @@ export const LogbookMessageSender = {
   MAS: 'Capitaine'
 }
 
-export const LogbookMessagePNOPurposeType = {
-  LAN: 'Débarquement',
-  SHE: "Mise à l'abri"
-}
-
 export const LogbookSpeciesPreservationState = {
   ALI: 'Vivant',
   BOI: 'Ébouillanté',

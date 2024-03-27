@@ -1,8 +1,8 @@
 // TODO This should be moved to `entities/vessel/mission.types.ts`
 
-import type { RiskFactor } from './riskFactor/types'
 import type { ReportingType } from '../../types/reporting'
 import type { VesselTrackDepth } from '../vesselTrackDepth'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 import type Feature from 'ol/Feature'
 import type LineString from 'ol/geom/LineString'
 import type Point from 'ol/geom/Point'
@@ -59,42 +59,7 @@ export type VesselIdentity = {
   vesselName?: string | null
 }
 
-export type Vessel = {
-  beaconNumber: number | null
-  declaredFishingGears: string[]
-  district: string
-  districtCode: string
-  externalReferenceNumber: string
-  flagState: string
-  gauge: number
-  imo: string
-  internalReferenceNumber: string
-  ircs: string
-  length: number
-  mmsi: string
-  navigationLicenceExpirationDate: string
-  operatorEmails: string[]
-  operatorName: string
-  operatorPhones: string[]
-  pinger: boolean
-  power: number
-  proprietorEmails: string[]
-  proprietorName: string
-  proprietorPhones: string[]
-  registryPort: string
-  riskFactor: RiskFactor
-  sailingCategory: string
-  sailingType: string
-  underCharter: boolean
-  vesselEmails: string[]
-  vesselId: number
-  vesselName: string
-  vesselPhones: string[]
-  vesselType: string
-  width: number
-}
-
-export type SelectedVessel = VesselEnhancedObject & Vessel
+export type SelectedVessel = VesselEnhancedObject & Vessel.Vessel
 
 export type AugmentedSelectedVessel = SelectedVessel & {
   hasAlert: boolean
@@ -103,7 +68,7 @@ export type AugmentedSelectedVessel = SelectedVessel & {
 
 export type VesselAndPositions = {
   positions: VesselPosition[]
-  vessel: Vessel
+  vessel: Vessel.Vessel
 }
 
 export type VesselLastPosition = {

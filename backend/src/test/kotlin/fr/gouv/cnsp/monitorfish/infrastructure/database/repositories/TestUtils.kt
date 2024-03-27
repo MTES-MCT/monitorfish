@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import java.time.ZonedDateTime
 
 object TestUtils {
@@ -55,7 +56,8 @@ object TestUtils {
             isDeleted = false,
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
-            closedBy = "XYZ",
+            completedBy = "XYZ",
+            completion = Completion.TO_COMPLETE,
             isFromPoseidon = true,
             isAdministrativeControl = true,
             isComplianceWithWaterRegulationsControl = true,

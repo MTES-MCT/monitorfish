@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.input
 
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import java.time.ZonedDateTime
 
 data class AddMissionActionDataInput(
@@ -47,7 +48,8 @@ data class AddMissionActionDataInput(
     var vesselTargeted: ControlCheck? = null,
     var hasSomeGearsSeized: Boolean = false,
     var hasSomeSpeciesSeized: Boolean = false,
-    var closedBy: String? = null,
+    var completedBy: String? = null,
+    var completion: Completion,
     val isFromPoseidon: Boolean? = null,
     var isAdministrativeControl: Boolean? = null,
     var isComplianceWithWaterRegulationsControl: Boolean? = null,
@@ -99,7 +101,8 @@ data class AddMissionActionDataInput(
         isDeleted = false,
         hasSomeGearsSeized = hasSomeGearsSeized,
         hasSomeSpeciesSeized = hasSomeSpeciesSeized,
-        closedBy = closedBy,
+        completedBy = completedBy,
+        completion = completion,
         isFromPoseidon = isFromPoseidon ?: false,
         isAdministrativeControl = isAdministrativeControl,
         isComplianceWithWaterRegulationsControl = isComplianceWithWaterRegulationsControl,

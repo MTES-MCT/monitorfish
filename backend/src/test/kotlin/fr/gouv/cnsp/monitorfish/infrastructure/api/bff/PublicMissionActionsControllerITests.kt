@@ -8,6 +8,7 @@ import fr.gouv.cnsp.monitorfish.config.SecurityConfig
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.ActivityCode
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.JointDeploymentPlan
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
@@ -86,6 +87,7 @@ class PublicMissionActionsControllerITests {
                         hasSomeGearsSeized = false,
                         hasSomeSpeciesSeized = false,
                         isFromPoseidon = true,
+                        completion = Completion.TO_COMPLETE,
                     ),
                 ),
             ),
@@ -120,6 +122,7 @@ class PublicMissionActionsControllerITests {
                     hasSomeGearsSeized = false,
                     hasSomeSpeciesSeized = false,
                     isFromPoseidon = true,
+                    completion = Completion.TO_COMPLETE,
                 ),
             ),
         )
@@ -180,6 +183,7 @@ class PublicMissionActionsControllerITests {
                             isComplianceWithWaterRegulationsControl = true,
                             isSafetyEquipmentAndStandardsComplianceControl = true,
                             isSeafarersControl = true,
+                            completion = Completion.TO_COMPLETE,
                         ),
                     ),
                 )
@@ -256,6 +260,7 @@ class PublicMissionActionsControllerITests {
                             hasSomeGearsSeized = false,
                             hasSomeSpeciesSeized = false,
                             isFromPoseidon = true,
+                            completion = Completion.TO_COMPLETE,
                         ),
                     ),
                 )
@@ -312,6 +317,7 @@ class PublicMissionActionsControllerITests {
                             hasSomeGearsSeized = false,
                             hasSomeSpeciesSeized = false,
                             isFromPoseidon = true,
+                            completion = Completion.TO_COMPLETE,
                         ),
                         activityCode = ActivityCode.FIS,
                         vesselNationalIdentifier = "AYFR000654",

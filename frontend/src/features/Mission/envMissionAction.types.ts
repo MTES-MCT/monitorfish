@@ -2,7 +2,7 @@ import { Mission } from '@features/Mission/mission.types'
 
 export namespace EnvMissionAction {
   export interface MissionAction {
-    actionStartDateTimeUtc: string
+    actionStartDateTimeUtc?: string
     actionType: MissionActionType
     id: number
   }
@@ -23,7 +23,7 @@ export namespace EnvMissionAction {
   }
 
   export type MissionActionForTimeline = MissionAction & {
-    actionDatetimeUtc?: string
+    actionDatetimeUtc?: string | undefined
     index?: number
     source: Mission.MissionSource
   }

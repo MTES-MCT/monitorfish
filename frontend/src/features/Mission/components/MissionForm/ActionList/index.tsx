@@ -3,7 +3,7 @@ import { EnvActionCard } from '@features/Mission/components/MissionForm/ActionLi
 import { EnvMissionAction } from '@features/Mission/envMissionAction.types'
 import { Mission } from '@features/Mission/mission.types'
 import { MissionAction } from '@features/Mission/missionAction.types'
-import { useGetMissionQuery } from '@features/Mission/monitorenvMissionApi'
+import { useGetMissionQuery } from '@features/Mission/monitorfishMissionApi'
 import { Dropdown, Icon } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { useMemo } from 'react'
@@ -61,6 +61,10 @@ export function ActionList({
     return [...monitorEnvActions, ...monitorFishActions].sort((actionA, actionB) => {
       const dateA = actionA.actionDatetimeUtc
       const dateB = actionB.actionDatetimeUtc
+
+      if (!dateA || !dateB) {
+        return 1
+      }
 
       if (dateA < dateB) {
         return 1

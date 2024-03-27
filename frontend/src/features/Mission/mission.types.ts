@@ -127,8 +127,8 @@ export namespace Mission {
     numberOfInfractionsWithRecords: number
     vesselName: string | undefined
   }
-}
 
-export interface MissionWithActions extends Mission.Mission {
-  actions: MissionAction.MissionAction[]
+  export interface MissionWithActions extends Mission {
+    actions: MissionAction.MissionAction[]
+  }
 }

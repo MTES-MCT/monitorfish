@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.mission
 
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.env_mission_action.EnvMissionAction
 import java.time.ZonedDateTime
 
 /**
@@ -15,6 +16,9 @@ data class Mission(
     val observationsCnsp: String? = null,
     val facade: String? = null,
     val geom: MultiPolygon? = null,
+    val createdAtUtc: ZonedDateTime? = null,
+    val updatedAtUtc: ZonedDateTime? = null,
+    val envActions: List<EnvMissionAction>? = listOf(),
     val startDateTimeUtc: ZonedDateTime,
     val endDateTimeUtc: ZonedDateTime? = null,
     val isGeometryComputedFromControls: Boolean,

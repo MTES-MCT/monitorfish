@@ -1,3 +1,4 @@
+import { Mission } from '@features/Mission/mission.types'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 
@@ -9,15 +10,13 @@ import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import { useGetMissionsQuery } from '../../../monitorfishMissionApi'
 import { MissionDateRangeFilter, MissionFilterType } from '../types'
 
-import type { MissionWithActions } from '../../../mission.types'
-
 const TWO_MINUTES = 2 * 60 * 1000
 
 export const useGetFilteredMissionsQuery = (): {
   isError: boolean
   isLoading: boolean
-  missions: MissionWithActions[]
-  missionsSeaFrontFiltered: MissionWithActions[]
+  missions: Mission.MissionWithActions[]
+  missionsSeaFrontFiltered: Mission.MissionWithActions[]
 } => {
   const listFilterValues = useMainAppSelector(state => state.missionList.listFilterValues)
   const listSeaFront = useMainAppSelector(state => state.missionList.listSeaFront)
@@ -85,7 +84,7 @@ export const useGetFilteredMissionsQuery = (): {
     { pollingInterval: TWO_MINUTES }
   )
 
-  const missions: MissionWithActions[] = useMemo(() => {
+  const missions: Mission.MissionWithActions[] = useMemo(() => {
     if (!data) {
       return []
     }
@@ -98,7 +97,7 @@ export const useGetFilteredMissionsQuery = (): {
     )
   }, [data, listFilterValues])
 
-  const missionsSeaFrontFiltered: MissionWithActions[] = useMemo(() => {
+  const missionsSeaFrontFiltered: Mission.MissionWithActions[] = useMemo(() => {
     if (!missions) {
       return []
     }

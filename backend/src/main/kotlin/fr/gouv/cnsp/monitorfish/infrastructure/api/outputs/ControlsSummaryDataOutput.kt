@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.ControlsSummary
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlsSummary
 
 data class ControlsSummaryDataOutput(
     val vesselId: Int,

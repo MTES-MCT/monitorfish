@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.Mission
+import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotFindException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import java.time.ZonedDateTime
@@ -21,4 +22,7 @@ interface MissionRepository {
     fun findByIds(
         ids: List<Int>,
     ): List<Mission>
+
+    @Throws(CouldNotFindException::class)
+    fun findById(id: Int): Mission
 }

@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.Infraction
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.InfractionCategory
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionCategory
 import jakarta.persistence.*
 
 @Entity
@@ -22,7 +22,7 @@ data class InfractionEntity(
         natinfCode = natinfCode,
         regulation = regulation,
         infractionCategory = infractionCategory?.let { category ->
-            InfractionCategory.values().firstOrNull {
+            InfractionCategory.entries.firstOrNull {
                 it.value == category
             }
         },

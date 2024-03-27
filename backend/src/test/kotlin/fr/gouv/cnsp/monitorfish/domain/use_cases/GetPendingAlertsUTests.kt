@@ -6,8 +6,8 @@ import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.Infraction
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.InfractionCategory
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.InfractionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PendingAlertRepository
@@ -45,7 +45,10 @@ class GetPendingAlertsUTests {
             value = ThreeMilesTrawlingAlert(),
         )
         given(infractionRepository.findInfractionByNatinfCode(eq(7059))).willReturn(
-            Infraction(natinfCode = 7059, infractionCategory = InfractionCategory.FISHING),
+            Infraction(
+                natinfCode = 7059,
+                infractionCategory = InfractionCategory.FISHING,
+            ),
         )
         given(pendingAlertRepository.findAlertsOfTypes(any())).willReturn(listOf(pendingAlert))
 

@@ -84,7 +84,7 @@ export function App({ auth }: AppProps) {
         </FrontendErrorBoundary>
       </RsuiteCustomProvider>
       {/* This script is used to inject the chat */}
-      <script src="https://embed.small.chat/T0176BBUCEQC01SV3W4464.js" async/>
+      <script async src="https://embed.small.chat/T0176BBUCEQC01SV3W4464.js" />
     </ThemeProvider>
   )
 }

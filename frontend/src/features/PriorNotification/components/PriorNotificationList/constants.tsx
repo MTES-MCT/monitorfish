@@ -70,8 +70,7 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
 
       return (
         <VesselRiskFactor
-          // TODO Check if making it always `true` is a valid assumption.
-          hasSegments
+          hasVesselRiskFactorSegments={priorNotification.hasVesselRiskFactorSegments}
           isVesselUnderCharter={priorNotification.isVesselUnderCharter}
           vesselLastControlDate={priorNotification.vesselLastControlDate}
           vesselRiskFactor={priorNotification.vesselRiskFactor}

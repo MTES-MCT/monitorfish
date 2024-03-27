@@ -18,6 +18,7 @@
 
             // - Vessel: LEVE NEDERLAND
             // - Flag state: NL
+            // - Under charter
             {
                 "id": 102,
                 "cfr": "CFR102",
@@ -31,6 +32,7 @@
             },
 
             // - Vessel: L'OM DU POISSON
+            // - Under charter
             {
                 "id": 103,
                 "cfr": "CFR103",

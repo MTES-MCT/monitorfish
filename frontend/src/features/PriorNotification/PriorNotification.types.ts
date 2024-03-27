@@ -5,6 +5,7 @@ export namespace PriorNotification {
   export type PriorNotification = {
     expectedArrivalDate: string | undefined
     expectedLandingDate: string | undefined
+    hasVesselRiskFactorSegments: boolean | undefined
     id: number
     isVesselUnderCharter: boolean | undefined
     onBoardCatches: LogbookMessage.Catch[]

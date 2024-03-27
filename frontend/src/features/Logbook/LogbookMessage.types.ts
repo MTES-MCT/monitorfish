@@ -87,9 +87,8 @@ export namespace LogbookMessage {
     pnoTypeName: string
   }
 
-  export type TripGear = {
+  export type Gear = {
     dimensions: string
-    /** Gear code. */
     gear: string
     mesh: number
   }

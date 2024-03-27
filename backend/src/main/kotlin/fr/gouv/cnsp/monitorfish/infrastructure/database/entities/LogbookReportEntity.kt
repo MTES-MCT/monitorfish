@@ -113,7 +113,7 @@ data class LogbookReportEntity(
 
     fun toLogbookMessage(mapper: ObjectMapper): LogbookMessage {
         val message = getERSMessageValueFromJSON(mapper, message, messageType, operationType)
-        val tripGears = deserializeJSONList(mapper, tripGears, LogbookTripGear::class.java)
+        val tripGears = deserializeJSONList(mapper, tripGears, Gear::class.java)
         val tripSegments = deserializeJSONList(mapper, tripSegments, LogbookTripSegment::class.java)
 
         return LogbookMessage(

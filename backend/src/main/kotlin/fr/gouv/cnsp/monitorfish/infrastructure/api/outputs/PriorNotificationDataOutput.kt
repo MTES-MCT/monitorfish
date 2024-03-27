@@ -16,7 +16,7 @@ class PriorNotificationDataOutput(
     val reportingsCount: Int?,
     val seaFront: String?,
     val sentAt: String?,
-    val tripGears: List<LogbookMessageTripGearDataOutput>,
+    val tripGears: List<LogbookMessageGearDataOutput>,
     val tripSegments: List<LogbookMessageTripSegmentDataOutput>,
     val types: List<PriorNotificationTypeDataOutput>,
     val vesselId: Int?,
@@ -38,8 +38,8 @@ class PriorNotificationDataOutput(
             val message = priorNotification.logbookMessage.message as PNO
 
             val onBoardCatches = message.catchOnboard.map { LogbookMessageCatchDataOutput.fromCatch(it) }
-            val tripGears = priorNotification.logbookMessage.tripGears?.map {
-                LogbookMessageTripGearDataOutput.fromLogbookTripGear(it)
+            val tripGears = priorNotification.logbookMessage.tripGears?.mapNotNull {
+                LogbookMessageGearDataOutput.fromGear(it)
             } ?: emptyList()
             val tripSegments = priorNotification.logbookMessage.tripSegments?.map {
                 LogbookMessageTripSegmentDataOutput.fromLogbookTripSegment(it)

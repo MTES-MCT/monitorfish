@@ -9,14 +9,14 @@ import { LogbookMessageResumeHeader } from '../LogbookMessageResumeHeader'
 import type { DEPMessageValue } from '../../../../Logbook.types'
 import type { Promisable } from 'type-fest'
 
-type DEPMessageResumeProps = {
+type DEPMessageResumeProps = Readonly<{
   depMessage: DEPMessageValue
   hasNoMessage?: boolean
   isDeleted: boolean
   isNotAcknowledged: boolean
   rejectionCause: string | undefined
   showLogbookMessages: (messageType: string) => Promisable<void>
-}
+}>
 export function DEPMessageResume({
   depMessage,
   hasNoMessage = false,
@@ -48,69 +48,67 @@ export function DEPMessageResume({
   )
 
   return (
-    <>
-      <Wrapper>
-        <LogbookMessageResumeHeader
-          hasNoMessage={hasNoMessage}
-          isDeleted={isDeleted}
-          isNotAcknowledged={isNotAcknowledged}
-          isOpen={isOpen}
-          messageType={LogbookMessageTypeEnum.DEP.code.toString()}
-          onHoverText={hasNoMessage ? null : getDEPMessageResumeTitleText()}
-          rejectionCause={rejectionCause}
-          setIsOpen={setIsOpen}
-          showLogbookMessages={showLogbookMessages}
-          title={hasNoMessage ? null : getDEPMessageResumeTitle()}
-        />
-        {!hasNoMessage && (
-          <LogbookMessageContent
-            $gearOnboard={depMessage.gearOnboard ? depMessage.gearOnboard.length : 1}
-            $isOpen={isOpen}
-            speciesOnboard={depMessage.speciesOnboard?.length > 0 ? depMessage.speciesOnboard.length : 1}
-          >
-            <Zone>
-              {depMessage.gearOnboard?.length ? (
-                depMessage.gearOnboard.map((gear, index) => (
-                  // eslint-disable-next-line react/no-array-index-key
-                  <Gear key={gear.gear + index}>
-                    <SubKey>Engin à bord {index + 1}</SubKey>{' '}
-                    <SubValue>{getCodeWithNameOrDash(gear.gear, gear.gearName)}</SubValue>
-                    <br />
-                    <SubKey>Maillage</SubKey>
-                    <SubValue>{gear.mesh ? <>{gear.mesh} mm</> : <NoValue>-</NoValue>}</SubValue>
-                    <SubKey>Dimensions</SubKey>
-                    <SubValue>{gear.dimensions ? <>{gear.dimensions} m</> : <NoValue>-</NoValue>}</SubValue>
-                    <br />
-                  </Gear>
-                ))
-              ) : (
-                <NoValue>Pas d&apos;engins à bord</NoValue>
-              )}
-              <Fields>
-                <TableBody>
-                  <Field>
-                    <Key>Captures à bord</Key>
-                    <Value>
-                      {depMessage.speciesOnboard?.length ? (
-                        depMessage.speciesOnboard.map(speciesCatch => (
-                          <span key={speciesCatch.species}>
-                            {getCodeWithNameOrDash(speciesCatch.species, speciesCatch.speciesName)}-{' '}
-                            {speciesCatch.weight} kg
-                            <br />
-                          </span>
-                        ))
-                      ) : (
-                        <NoValue>aucune</NoValue>
-                      )}
-                    </Value>
-                  </Field>
-                </TableBody>
-              </Fields>
-            </Zone>
-          </LogbookMessageContent>
-        )}
-      </Wrapper>
-    </>
+    <Wrapper>
+      <LogbookMessageResumeHeader
+        hasNoMessage={hasNoMessage}
+        isDeleted={isDeleted}
+        isNotAcknowledged={isNotAcknowledged}
+        isOpen={isOpen}
+        messageType={LogbookMessageTypeEnum.DEP.code.toString()}
+        onHoverText={hasNoMessage ? null : getDEPMessageResumeTitleText()}
+        rejectionCause={rejectionCause}
+        setIsOpen={setIsOpen}
+        showLogbookMessages={showLogbookMessages}
+        title={hasNoMessage ? null : getDEPMessageResumeTitle()}
+      />
+      {!hasNoMessage && (
+        <LogbookMessageContent
+          $gearOnboard={depMessage.gearOnboard ? depMessage.gearOnboard.length : 1}
+          $isOpen={isOpen}
+          speciesOnboard={depMessage.speciesOnboard?.length > 0 ? depMessage.speciesOnboard.length : 1}
+        >
+          <Zone>
+            {depMessage.gearOnboard?.length ? (
+              depMessage.gearOnboard.map((gear, index) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <Gear key={`${gear.gear}-${index}`}>
+                  <SubKey>Engin à bord {index + 1}</SubKey>{' '}
+                  <SubValue>{getCodeWithNameOrDash(gear.gear, gear.gearName)}</SubValue>
+                  <br />
+                  <SubKey>Maillage</SubKey>
+                  <SubValue>{gear.mesh ? <>{gear.mesh} mm</> : <NoValue>-</NoValue>}</SubValue>
+                  <SubKey>Dimensions</SubKey>
+                  <SubValue>{gear.dimensions ? <>{gear.dimensions} m</> : <NoValue>-</NoValue>}</SubValue>
+                  <br />
+                </Gear>
+              ))
+            ) : (
+              <NoValue>Pas d&apos;engins à bord</NoValue>
+            )}
+            <Fields>
+              <TableBody>
+                <Field>
+                  <Key>Captures à bord</Key>
+                  <Value>
+                    {depMessage.speciesOnboard?.length ? (
+                      depMessage.speciesOnboard.map(speciesCatch => (
+                        <span key={speciesCatch.species}>
+                          {getCodeWithNameOrDash(speciesCatch.species, speciesCatch.speciesName)}- {speciesCatch.weight}{' '}
+                          kg
+                          <br />
+                        </span>
+                      ))
+                    ) : (
+                      <NoValue>aucune</NoValue>
+                    )}
+                  </Value>
+                </Field>
+              </TableBody>
+            </Fields>
+          </Zone>
+        </LogbookMessageContent>
+      )}
+    </Wrapper>
   )
 }
 

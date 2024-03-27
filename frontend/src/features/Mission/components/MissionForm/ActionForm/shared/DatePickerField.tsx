@@ -1,5 +1,5 @@
 import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
-import { FieldError, FormikDatePicker, useNewWindow } from '@mtes-mct/monitor-ui'
+import { FormikDatePicker, useNewWindow } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 
 import type { MissionActionFormValues } from '../../types'
@@ -11,18 +11,15 @@ export function DatePickerField() {
   const error = errors.actionDatetimeUtc
 
   return (
-    <>
-      <FormikDatePicker
-        baseContainer={newWindowContainerRef.current}
-        isErrorMessageHidden
-        isLight
-        isRequired
-        isStringDate
-        label="Date et heure du contrôle"
-        name="actionDatetimeUtc"
-        withTime
-      />
-      {error && error !== HIDDEN_ERROR && <FieldError>{error}</FieldError>}
-    </>
+    <FormikDatePicker
+      baseContainer={newWindowContainerRef.current}
+      isErrorMessageHidden={error === HIDDEN_ERROR}
+      isLight
+      isRequired
+      isStringDate
+      label="Date et heure du contrôle"
+      name="actionDatetimeUtc"
+      withTime
+    />
   )
 }

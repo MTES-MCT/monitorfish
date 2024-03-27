@@ -1,5 +1,6 @@
+import { DatePickerField } from '@features/Mission/components/MissionForm/ActionForm/shared/DatePickerField'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { FormikDatePicker, FormikEffect, FormikTextarea, Icon, useNewWindow } from '@mtes-mct/monitor-ui'
+import { FormikEffect, FormikTextarea, Icon } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash/fp'
 import { useMemo } from 'react'
@@ -25,8 +26,6 @@ type AirControlFormProps = Readonly<{
   onChange: (nextValues: MissionActionFormValues) => Promisable<void>
 }>
 export function AirControlForm({ initialValues, onChange }: AirControlFormProps) {
-  const { newWindowContainerRef } = useNewWindow()
-
   const isClosing = useMainAppSelector(store => store.missionForm.isClosing)
 
   const titleDate = useMemo(
@@ -55,16 +54,7 @@ export function AirControlForm({ initialValues, onChange }: AirControlFormProps)
           <FormBody>
             <VesselField />
 
-            <FormikDatePicker
-              baseContainer={newWindowContainerRef.current}
-              isErrorMessageHidden
-              isLight
-              isRequired
-              isStringDate
-              label="Date et heure du contrôle"
-              name="actionDatetimeUtc"
-              withTime
-            />
+            <DatePickerField />
 
             <FormikCoordinatesPicker />
 

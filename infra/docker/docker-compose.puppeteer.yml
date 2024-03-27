@@ -62,7 +62,6 @@ services:
       - FRONTEND_SHOM_KEY=rg8ele7cft4ujkwjspsmtwas
       - FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED=true
       - FRONTEND_MISSION_FORM_AUTO_UPDATE_ENABLED=true
-      - FRONTEND_SMALL_CHAT_SNIPPET=
     ports:
       - 8880:8880
       - 8000:8000

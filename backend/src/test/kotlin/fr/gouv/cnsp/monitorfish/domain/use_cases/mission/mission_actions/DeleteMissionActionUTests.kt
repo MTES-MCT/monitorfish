@@ -1,9 +1,9 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions
 
 import com.nhaarman.mockitokotlin2.*
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Facade
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import io.hypersistence.utils.hibernate.type.array.ListArrayType
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import jakarta.persistence.*

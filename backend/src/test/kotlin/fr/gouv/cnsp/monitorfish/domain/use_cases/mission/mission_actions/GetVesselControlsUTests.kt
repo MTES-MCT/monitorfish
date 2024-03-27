@@ -3,9 +3,9 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.GearControl
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesInfraction
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port

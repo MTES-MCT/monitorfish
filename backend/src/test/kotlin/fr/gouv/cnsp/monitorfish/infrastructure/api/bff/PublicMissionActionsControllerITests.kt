@@ -86,6 +86,7 @@ class PublicMissionActionsControllerITests {
                         hasSomeGearsSeized = false,
                         hasSomeSpeciesSeized = false,
                         isFromPoseidon = true,
+                        completion = Completion.TO_COMPLETE,
                     ),
                 ),
             ),
@@ -120,6 +121,7 @@ class PublicMissionActionsControllerITests {
                     hasSomeGearsSeized = false,
                     hasSomeSpeciesSeized = false,
                     isFromPoseidon = true,
+                    completion = Completion.TO_COMPLETE,
                 ),
             ),
         )
@@ -180,6 +182,7 @@ class PublicMissionActionsControllerITests {
                             isComplianceWithWaterRegulationsControl = true,
                             isSafetyEquipmentAndStandardsComplianceControl = true,
                             isSeafarersControl = true,
+                            completion = Completion.TO_COMPLETE,
                         ),
                     ),
                 )
@@ -256,6 +259,7 @@ class PublicMissionActionsControllerITests {
                             hasSomeGearsSeized = false,
                             hasSomeSpeciesSeized = false,
                             isFromPoseidon = true,
+                            completion = Completion.TO_COMPLETE,
                         ),
                     ),
                 )
@@ -312,6 +316,7 @@ class PublicMissionActionsControllerITests {
                             hasSomeGearsSeized = false,
                             hasSomeSpeciesSeized = false,
                             isFromPoseidon = true,
+                            completion = Completion.TO_COMPLETE,
                         ),
                         activityCode = ActivityCode.FIS,
                         vesselNationalIdentifier = "AYFR000654",

@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions
 import com.nhaarman.mockitokotlin2.*
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -10,7 +11,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
-import java.util.*
 
 @ExtendWith(SpringExtension::class)
 class DeleteMissionActionUTests {
@@ -33,8 +33,9 @@ class DeleteMissionActionUTests {
             isDeleted = false,
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
-            closedBy = "XYZ",
+            completedBy = "XYZ",
             isFromPoseidon = false,
+            completion = Completion.TO_COMPLETE,
         )
         given(missionActionsRepository.findById(any())).willReturn(action)
 

@@ -76,6 +76,7 @@ class MissionsControllerITests {
                             hasSomeGearsSeized = false,
                             hasSomeSpeciesSeized = false,
                             isFromPoseidon = false,
+                            completion = Completion.TO_COMPLETE,
                         ),
                     ),
                 ),

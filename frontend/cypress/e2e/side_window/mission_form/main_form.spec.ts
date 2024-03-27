@@ -562,7 +562,7 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.intercept(
       {
         method: 'GET',
-        path: '/api/v1/missions/6',
+        path: '/bff/v1/missions/6',
         times: 1
       },
       { statusCode: 400 }
@@ -570,7 +570,7 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.intercept(
       {
         method: 'GET',
-        path: '/api/v1/missions/6',
+        path: '/bff/v1/missions/6',
         times: 1
       },
       { statusCode: 400 }
@@ -578,7 +578,7 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.intercept(
       {
         method: 'GET',
-        path: '/api/v1/missions/6',
+        path: '/bff/v1/missions/6',
         times: 1
       },
       { statusCode: 400 }

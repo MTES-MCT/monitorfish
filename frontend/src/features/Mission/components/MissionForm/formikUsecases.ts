@@ -160,6 +160,7 @@ const updateMissionLocation =
           action.actionType === EnvMissionAction.MissionActionType.SURVEILLANCE
       )
       .map(action => action.actionStartDateTimeUtc)
+      .filter((actionStartDateTimeUtc): actionStartDateTimeUtc is string => actionStartDateTimeUtc !== null)
       .sort((a, b) => b.localeCompare(a))[0]
 
     if (lastEnvActionDate && lastEnvActionDate > missionAction.actionDatetimeUtc) {

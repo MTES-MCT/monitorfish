@@ -4,7 +4,7 @@ import { addOrEditControlCoordinates } from '@features/Mission/useCases/addOrEdi
 import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { FieldError, MultiZoneEditor, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
+import { MultiZoneEditor, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
 import { isCypress } from '@utils/isCypress'
 import { convertToGeoJSONGeometryObject } from 'domain/entities/layers'
 import { InteractionListener, OpenLayersGeometryType } from 'domain/entities/map/constants'
@@ -152,7 +152,7 @@ export function FormikCoordinatesPicker() {
           name: 'Nouvelle coordonnée'
         }}
         isAddButtonDisabled={!!coordinates.length || listener === InteractionListener.CONTROL_POINT}
-        isErrorMessageHidden
+        isErrorMessageHidden={error === HIDDEN_ERROR}
         isLight
         isRequired
         label="Lieu du contrôle"
@@ -164,7 +164,6 @@ export function FormikCoordinatesPicker() {
         onDelete={deleteCoordinates}
         onEdit={addOrEditCoordinates}
       />
-      {error && error !== HIDDEN_ERROR && <FieldError>{error}</FieldError>}
     </>
   )
 }

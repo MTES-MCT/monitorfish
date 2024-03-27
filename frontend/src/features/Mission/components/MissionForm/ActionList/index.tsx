@@ -62,6 +62,10 @@ export function ActionList({
       const dateA = actionA.actionDatetimeUtc
       const dateB = actionB.actionDatetimeUtc
 
+      if (!dateA || !dateB) {
+        return 1
+      }
+
       if (dateA < dateB) {
         return 1
       }

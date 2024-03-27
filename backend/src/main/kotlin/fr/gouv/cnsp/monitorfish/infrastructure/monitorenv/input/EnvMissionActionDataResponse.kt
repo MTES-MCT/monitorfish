@@ -15,12 +15,12 @@ import java.util.*
 data class EnvMissionActionDataResponse(
     @Serializable(with = UUIDSerializer::class)
     val id: UUID,
-    val actionStartDateTimeUtc: String,
+    val actionStartDateTimeUtc: String? = null,
     val actionType: EnvMissionActionType,
 ) {
     fun toEnvMissionAction() = EnvMissionAction(
         id = id,
-        actionStartDateTimeUtc = ZonedDateTime.parse(actionStartDateTimeUtc),
+        actionStartDateTimeUtc = actionStartDateTimeUtc?.let { ZonedDateTime.parse(it) },
         actionType = actionType,
     )
 }

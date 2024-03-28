@@ -1,3 +1,5 @@
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DateRangePicker, THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
@@ -7,13 +9,12 @@ import { ExportTrack } from './ExportTrack'
 import { PositionsTable } from './PositionsTable'
 import { VesselTrackDepth, getTrackRequestFromTrackDepth } from '../../../../domain/entities/vesselTrackDepth'
 import { updateSelectedVesselTrackRequest } from '../../../../domain/use_cases/vessel/updateSelectedVesselTrackRequest'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { MapComponent } from '../../../commonStyles/MapComponent'
 import VesselSVG from '../../../icons/Icone_navire.svg?react'
 import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
 
 import type { TrackRequestCustom, TrackRequestPredefined } from '../../../../domain/entities/vessel/types'
+import type { SelectableVesselTrackDepth } from '@features/VesselSidebar/actions/TrackRequest/types'
 import type { DateRange } from '@mtes-mct/monitor-ui'
 
 type TrackRequestProps = {
@@ -37,8 +38,8 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
   const isOpen = useMemo(() => isSidebarOpen && isOpenedFromClick, [isSidebarOpen, isOpenedFromClick])
 
   const handleDateRangeRadioChange = useCallback(
-    (nextTrackDepth: Exclude<VesselTrackDepth, VesselTrackDepth.CUSTOM>) => {
-      if (!selectedVesselIdentity) {
+    (nextTrackDepth: SelectableVesselTrackDepth | undefined) => {
+      if (!selectedVesselIdentity || !nextTrackDepth) {
         return
       }
 
@@ -95,7 +96,6 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
       <TrackRequestBody isOpen={isOpen} isRightMenuOpen={rightMenuIsOpen} isSidebarOpen={isSidebarOpen}>
         <Header>Paramétrer l&apos;affichage de la piste VMS</Header>
         <Section>
-          <p>Afficher la piste VMS du navire depuis :</p>
           <Field>
             <DateRangeRadio
               defaultValue={selectedVesselTrackRequest?.trackDepth ?? defaultVesselTrackDepth}

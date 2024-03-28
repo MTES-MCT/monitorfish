@@ -1,14 +1,17 @@
+import { SELECT_TRACK_DEPTH_OPTIONS } from '@features/VesselSidebar/actions/TrackRequest/constants'
+import { Label, Select } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
-import { Radio, RadioGroup } from 'rsuite'
 import styled from 'styled-components'
 
 import { VesselTrackDepth } from '../../../../domain/entities/vesselTrackDepth'
 
 import type { Promisable } from 'type-fest'
 
+type SelectableVesselTrackDepth = Exclude<VesselTrackDepth, VesselTrackDepth.CUSTOM>
+
 type DateRangeRadioProps = {
   defaultValue?: VesselTrackDepth
-  onChange: (nextTrackDepth: Exclude<VesselTrackDepth, 'CUSTOM'>) => Promisable<void>
+  onChange: (nextTrackDepth: SelectableVesselTrackDepth | undefined) => Promisable<void>
 }
 export function DateRangeRadio({ defaultValue, onChange }: DateRangeRadioProps) {
   const normalizedDefaultValue = useMemo(
@@ -17,28 +20,19 @@ export function DateRangeRadio({ defaultValue, onChange }: DateRangeRadioProps) 
   )
 
   return (
-    <RadioGroup key={defaultValue} defaultValue={normalizedDefaultValue as any} inline onChange={onChange as any}>
-      <ColumnsBox>
-        <Column>
-          <StyledRadio value={VesselTrackDepth.LAST_DEPARTURE}>le dernier DEP</StyledRadio>
-          <StyledRadio data-cy="vessel-track-depth-twelve-hours" value={VesselTrackDepth.TWELVE_HOURS}>
-            12 heures
-          </StyledRadio>
-          <StyledRadio value={VesselTrackDepth.ONE_DAY}>24 heures</StyledRadio>
-          <StyledRadio value={VesselTrackDepth.TWO_DAYS}>2 jours</StyledRadio>
-        </Column>
-        <Column>
-          <StyledRadio data-cy="vessel-track-depth-three-days" value={VesselTrackDepth.THREE_DAYS}>
-            3 jours
-          </StyledRadio>
-          <StyledRadio data-cy="vessel-track-depth-one-week" value={VesselTrackDepth.ONE_WEEK}>
-            1 semaine
-          </StyledRadio>
-          <StyledRadio value={VesselTrackDepth.TWO_WEEK}>2 semaines</StyledRadio>
-          <StyledRadio value={VesselTrackDepth.ONE_MONTH}>1 mois</StyledRadio>
-        </Column>
-      </ColumnsBox>
-    </RadioGroup>
+    <ColumnsBox>
+      <ShowFromLabel>Afficher la piste VMS depuis</ShowFromLabel>
+      <StyledSelect
+        isCleanable={false}
+        isErrorMessageHidden
+        isLabelHidden
+        label="Afficher la piste VMS depuis"
+        name="vessel-track-depth"
+        onChange={nextValue => onChange(nextValue as SelectableVesselTrackDepth | undefined)}
+        options={SELECT_TRACK_DEPTH_OPTIONS}
+        value={normalizedDefaultValue}
+      />
+    </ColumnsBox>
   )
 }
 
@@ -47,19 +41,12 @@ const ColumnsBox = styled.div`
   flex-grow: 1;
 `
 
-const Column = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 0.5;
+const ShowFromLabel = styled(Label)`
+  margin-right: 8px;
+  line-height: 27px;
+  margin-left: auto;
 `
 
-const StyledRadio = styled(Radio)`
-  margin-bottom: 4px;
-
-  .rs-radio-checker {
-    label {
-      padding-left: 8px;
-      vertical-align: -3px;
-    }
-  }
+const StyledSelect = styled(Select)`
+  margin-right: auto;
 `

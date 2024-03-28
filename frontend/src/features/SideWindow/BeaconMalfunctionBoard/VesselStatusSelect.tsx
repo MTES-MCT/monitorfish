@@ -14,7 +14,7 @@ type VesselStatusSelectProps = {
   isCleanable?: boolean
   marginTop?: number | undefined
   updateVesselStatus: (beaconMalfunction: BeaconMalfunction | undefined, status: string | null) => void
-  // TODO Type vesselStatus in constants.ts
+  // TODO Type vesselStatus in constants.tsx
   vesselStatus: { color: string; icon: JSX.Element; label: string; textColor: string; value: string } | undefined
 }
 export function VesselStatusSelect({

@@ -23,7 +23,6 @@ type ActionListProps = Readonly<{
   missionId: number | undefined
   missionTypes: Mission.MissionType[] | undefined
   onAdd: (actionType: MissionAction.MissionActionType) => Promisable<void>
-  onDuplicate: (actionIndex: number) => Promisable<void>
   onRemove: (actionIndex: number) => Promisable<void>
   onSelect: (actionIndex: number) => Promisable<void>
 }>
@@ -33,7 +32,6 @@ export function ActionList({
   missionId,
   missionTypes = [],
   onAdd,
-  onDuplicate,
   onRemove,
   onSelect
 }: ActionListProps) {
@@ -128,7 +126,6 @@ export function ActionList({
                       // eslint-disable-next-line react/no-array-index-key
                       key={index}
                       missionAction={action as MissionActionFormValues}
-                      onDuplicate={() => onDuplicate(action.index!!)}
                       onRemove={() => onRemove(action.index!!)}
                     />
                   </ActionCard>

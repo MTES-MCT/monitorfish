@@ -1,7 +1,7 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
 import { missionActionApi } from '@api/missionAction'
 import { missionFormActions } from '@features/Mission/components/MissionForm/slice'
-import { getMissionActionsDataFromMissionActionsFormValues } from '@features/Mission/components/MissionForm/utils'
+import { getMissionActionsToCreateUpdateOrDelete } from '@features/Mission/components/MissionForm/utils'
 import { monitorfishMissionApi } from '@features/Mission/monitorfishMissionApi'
 import { saveMission } from '@features/Mission/useCases/saveMission'
 import { logSoftError } from '@mtes-mct/monitor-ui'
@@ -25,7 +25,7 @@ export const saveMissionAndMissionActionsByDiff =
       const currentMissionWithActions = await dispatch(
         monitorfishMissionApi.endpoints.getMission.initiate(savedMission.id, RTK_FORCE_REFETCH_QUERY_OPTIONS)
       ).unwrap()
-      const { deletedMissionActionIds, updatedMissionActionDatas } = getMissionActionsDataFromMissionActionsFormValues(
+      const { createdOrUpdatedMissionActions, deletedMissionActionIds } = getMissionActionsToCreateUpdateOrDelete(
         savedMission.id,
         actionsFormValues,
         currentMissionWithActions.actions
@@ -35,7 +35,7 @@ export const saveMissionAndMissionActionsByDiff =
         ...deletedMissionActionIds.map(async missionActionId => {
           await dispatch(missionActionApi.endpoints.deleteMissionAction.initiate(missionActionId)).unwrap()
         }),
-        ...updatedMissionActionDatas.map(async missionActionData => {
+        ...createdOrUpdatedMissionActions.map(async missionActionData => {
           if (missionActionData.id === undefined) {
             await dispatch(missionActionApi.endpoints.createMissionAction.initiate(missionActionData)).unwrap()
           } else {

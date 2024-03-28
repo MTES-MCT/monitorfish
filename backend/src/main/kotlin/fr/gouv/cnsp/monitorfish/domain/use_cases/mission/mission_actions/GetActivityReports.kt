@@ -49,6 +49,7 @@ class GetActivityReports(
 
                     return@filter jdp.isLandControlApplicable(control.flagState, speciesOnboardCodes, tripFaoCodes)
                 }
+
                 MissionActionType.SEA_CONTROL -> {
                     val controlMission = missions.firstOrNull { mission -> mission.id == control.missionId }
                     if (controlMission == null) {
@@ -93,7 +94,7 @@ class GetActivityReports(
 
             control.portLocode?.let { port ->
                 try {
-                    control.portName = portRepository.find(port).name
+                    control.portName = portRepository.findByLocode(port).name
                 } catch (e: CodeNotFoundException) {
                     logger.warn(e.message)
                 }

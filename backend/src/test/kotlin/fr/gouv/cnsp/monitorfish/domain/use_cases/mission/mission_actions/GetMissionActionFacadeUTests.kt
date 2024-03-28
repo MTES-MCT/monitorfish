@@ -46,7 +46,7 @@ class GetMissionActionFacadeUTests {
             isFromPoseidon = false,
             completion = Completion.TO_COMPLETE,
         )
-        given(portRepository.find(any())).willReturn(Port("AEFAT", name = "Dummy name", facade = "NAMO"))
+        given(portRepository.findByLocode(any())).willReturn(Port("AEFAT", name = "Dummy name", facade = "NAMO"))
 
         // When
         val facade = GetMissionActionFacade(portRepository, facadeAreasRepository).execute(action)

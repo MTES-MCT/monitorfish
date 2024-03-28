@@ -58,7 +58,7 @@ class ComputeVesselFAOAreas(
 
         // Otherwise, fetch the fao zones from the portLocode if given
         if (!portLocode.isNullOrEmpty()) {
-            val port = portRepository.find(portLocode)
+            val port = portRepository.findByLocode(portLocode)
 
             return port.faoAreas
         }

@@ -38,7 +38,7 @@ class JpaSpeciesRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `find Should return a species`() {
         // When
-        val gear = jpaSpeciesRepository.find("OTB")
+        val gear = jpaSpeciesRepository.findByCode("OTB")
 
         assertThat(gear.name).isEqualTo("OTOLITHOIDES BIAURITUS")
     }
@@ -47,7 +47,7 @@ class JpaSpeciesRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `find Should throw an exception When there is no species found`() {
         // When
-        val throwable = catchThrowable { jpaSpeciesRepository.find("BAD_SPECIES") }
+        val throwable = catchThrowable { jpaSpeciesRepository.findByCode("BAD_SPECIES") }
 
         assertThat(throwable).isInstanceOf(CodeNotFoundException::class.java)
     }

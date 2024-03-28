@@ -26,11 +26,11 @@ class JpaPortRepository(private val dbPortRepository: DBPortRepository) : PortRe
     }
 
     @Cacheable(value = ["port"])
-    override fun find(code: String): Port {
+    override fun findByLocode(locode: String): Port {
         return try {
-            dbPortRepository.findByLocodeEquals(code).toPort()
+            dbPortRepository.findByLocodeEquals(locode).toPort()
         } catch (e: EmptyResultDataAccessException) {
-            throw CodeNotFoundException("Port: code $code not found")
+            throw CodeNotFoundException("Port: code $locode not found")
         }
     }
 }

@@ -6,7 +6,8 @@ export namespace PriorNotification {
     expectedArrivalDate: string | undefined
     expectedLandingDate: string | undefined
     hasVesselRiskFactorSegments: boolean | undefined
-    id: number
+    /** Logbook message `reportId`. */
+    id: string
     isVesselUnderCharter: boolean | undefined
     onBoardCatches: LogbookMessage.Catch[]
     portLocode: string | undefined
@@ -16,7 +17,7 @@ export namespace PriorNotification {
     seaFront: SeaFront | undefined
     sentAt: string | undefined
     tripGears: LogbookMessage.Gear[]
-    tripSegments: LogbookMessage.TripSegment[]
+    tripSegments: LogbookMessage.Segment[]
     types: Type[]
     vesselExternalReferenceNumber: string | undefined
     vesselFlagCountryCode: string | undefined
@@ -33,13 +34,19 @@ export namespace PriorNotification {
     vesselRiskFactorProbability: number | undefined
   }
 
+  export type PriorNotificationDetail = {
+    /** Logbook message `reportId`. */
+    id: string
+    isLessThanTwelveMetersVessel: boolean
+    logbookMessage: LogbookMessage.PnoLogbookMessage
+  }
+
   export type Type = {
     hasDesignatedPorts: number
     minimumNotificationPeriod: string
     name: string
   }
 
-  // TODO Fill all the possible case. Exiting labelled enum somewhere else?
   export enum PurposeCode {
     ECY = 'ECY',
     GRD = 'GRD',

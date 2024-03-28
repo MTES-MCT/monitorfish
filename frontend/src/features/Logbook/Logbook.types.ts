@@ -1,4 +1,5 @@
 import type { VesselIdentity } from '../../domain/entities/vessel/types'
+import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
 export type VesselVoyage = {
   endDate: string | null
@@ -159,7 +160,8 @@ export type PNOMessageValue = {
   port: string
   portName: string
   predictedArrivalDatetimeUtc: string
-  purpose: string
+  predictedLandingDatetimeUtc: string
+  purpose: PriorNotification.PurposeCode
   tripStartDate: string
 }
 

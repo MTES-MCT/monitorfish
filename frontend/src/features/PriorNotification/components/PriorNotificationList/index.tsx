@@ -29,6 +29,7 @@ import {
 import { useGetPriorNotificationsQuery } from '../../api'
 import { PriorNotification } from '../../PriorNotification.types'
 import { priorNotificationActions } from '../../slice'
+import { PriorNotificationCard } from '../PriorNotificationCard'
 
 import type { NoSeaFrontGroup, SeaFrontGroup } from '../../../../domain/entities/seaFront/constants'
 
@@ -51,6 +52,7 @@ export function PriorNotificationList() {
     [localFilters, priorNotifications]
   )
 
+  const [openLogbookMessageReportId, setOpenLogbookMessageReportId] = useState<string | undefined>(undefined)
   const [rowSelection, setRowSelection] = useState({})
   const [sorting, setSorting] = useState<SortingState>([
     {
@@ -59,17 +61,21 @@ export function PriorNotificationList() {
     }
   ])
 
-  const subMenuCounter = useCallback(
-    (seaFrontGroup: SeaFrontGroup | NoSeaFrontGroup): number =>
-      countPriorNotificationsForSeaFrontGroup(priorNotifications, seaFrontGroup),
-    [priorNotifications]
-  )
+  const close = useCallback(() => {
+    setOpenLogbookMessageReportId(undefined)
+  }, [])
 
   const handleSubMenuChange = useCallback(
     (nextSeaFrontGroup: SeaFrontGroup | NoSeaFrontGroup) => {
       dispatch(priorNotificationActions.setListFilterValues({ seaFrontGroup: nextSeaFrontGroup }))
     },
     [dispatch]
+  )
+
+  const subMenuCounter = useCallback(
+    (seaFrontGroup: SeaFrontGroup | NoSeaFrontGroup): number =>
+      countPriorNotificationsForSeaFrontGroup(priorNotifications, seaFrontGroup),
+    [priorNotifications]
   )
 
   const table = useReactTable({
@@ -261,7 +267,9 @@ export function PriorNotificationList() {
                               )}
                               <p>
                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                <Link>Voir plus de détail</Link>
+                                <Link onClick={() => setOpenLogbookMessageReportId(priorNotification.id)}>
+                                  Voir plus de détail
+                                </Link>
                               </p>
                             </ExpandedRowCell>
                             <ExpandedRowCell $width={60} />
@@ -277,6 +285,10 @@ export function PriorNotificationList() {
           </TableWrapper>
         </Body>
       </Page>
+
+      {!!openLogbookMessageReportId && (
+        <PriorNotificationCard logbookMessageReportId={openLogbookMessageReportId} onClose={close} />
+      )}
     </>
   )
 }

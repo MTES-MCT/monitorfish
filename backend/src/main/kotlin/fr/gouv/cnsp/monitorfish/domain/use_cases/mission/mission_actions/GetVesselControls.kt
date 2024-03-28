@@ -42,7 +42,7 @@ class GetVesselControls(
 
             control.portLocode?.let { port ->
                 try {
-                    control.portName = portRepository.find(port).name
+                    control.portName = portRepository.findByLocode(port).name
                 } catch (e: CodeNotFoundException) {
                     logger.warn(e.message)
                 }
@@ -51,7 +51,7 @@ class GetVesselControls(
             control.gearOnboard.forEach { gearControl ->
                 gearControl.gearCode?.let { gear ->
                     try {
-                        gearControl.gearName = gearRepository.find(gear).name
+                        gearControl.gearName = gearRepository.findByCode(gear).name
                     } catch (e: CodeNotFoundException) {
                         logger.warn(e.message)
                     }

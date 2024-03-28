@@ -48,7 +48,8 @@ function generateInsertStatement(row, table) {
       sqlColumns.push(sqlColumn)
       sqlValues.push(sqlValue)
     } else if (Array.isArray(value)) {
-      const valueAsSqlArray = `'{"${value.map(valueItem => valueItem.replace(/'/g, "''")).join('", "')}"}'`
+      const valueAsSqlArray =
+        value.length > 0 ? `'{"${value.map(valueItem => valueItem.replace(/'/g, "''")).join('", "')}"}'` : "'{}'"
 
       sqlColumns.push(sqlColumn)
       sqlValues.push(valueAsSqlArray)

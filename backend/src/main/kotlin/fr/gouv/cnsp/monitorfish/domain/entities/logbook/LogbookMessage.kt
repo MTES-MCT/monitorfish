@@ -1,7 +1,9 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.logbook
 
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledge
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.LogbookMessageValue
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
+import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
+import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
+import fr.gouv.cnsp.monitorfish.domain.exceptions.EntityConversionException
 import java.time.ZonedDateTime
 
 data class LogbookMessage(
@@ -10,7 +12,7 @@ data class LogbookMessage(
     val operationNumber: String,
     val tripNumber: String? = null,
     val referencedReportId: String? = null,
-    var isCorrected: Boolean? = false,
+    var isCorrected: Boolean = false,
     val isEnriched: Boolean,
     val operationType: LogbookOperationType,
     val operationDateTime: ZonedDateTime,
@@ -27,7 +29,7 @@ data class LogbookMessage(
     // Reception date of the report by the data center
     val integrationDateTime: ZonedDateTime,
     var acknowledge: Acknowledge? = null,
-    var deleted: Boolean? = false,
+    var deleted: Boolean = false,
     val message: LogbookMessageValue? = null,
     val analyzedByRules: List<String>,
     var rawMessage: String? = null,
@@ -36,4 +38,275 @@ data class LogbookMessage(
     var isSentByFailoverSoftware: Boolean = false,
     val tripGears: List<Gear>? = listOf(),
     val tripSegments: List<LogbookTripSegment>? = listOf(),
-)
+) {
+    fun <T : LogbookMessageValue> toConsolidatedLogbookMessage(
+        children: List<LogbookMessage>,
+        clazz: Class<T>,
+    ): ConsolidatedLogbookMessage<T> {
+        if (reportId == null) {
+            throw EntityConversionException(
+                "Logbook report $id has no `reportId`. You can only consolidate a DAT operation with a `reportId`.",
+            )
+        }
+        if (operationType != LogbookOperationType.DAT) {
+            throw EntityConversionException(
+                "Logbook report $id has operationType '$operationType'. You can only consolidate a DAT operation.",
+            )
+        }
+
+        val historicallyOrderedChildren = children.sortedBy { it.reportDateTime }
+        val maybeLastLogbookMessageAcknowledgement = historicallyOrderedChildren.lastOrNull {
+            it.operationType == LogbookOperationType.RET
+        }
+        val maybeLastLogbookMessageCorrection = historicallyOrderedChildren.lastOrNull {
+            it.operationType == LogbookOperationType.COR
+        }
+
+        val logbookMessageBase = maybeLastLogbookMessageCorrection ?: this
+
+        logbookMessageBase.let { logbookMessageWithConsolidatedProps ->
+            if (maybeLastLogbookMessageAcknowledgement != null) {
+                val lastLogbookMessageAcknowledgementMessage =
+                    maybeLastLogbookMessageAcknowledgement.message as Acknowledge
+
+                logbookMessageWithConsolidatedProps.apply {
+                    val isSuccess =
+                        lastLogbookMessageAcknowledgementMessage.returnStatus == RETReturnErrorCode.SUCCESS.number
+
+                    this.acknowledge = Acknowledge(
+                        dateTime = maybeLastLogbookMessageAcknowledgement.reportDateTime,
+                        isSuccess = isSuccess,
+                    )
+                }
+            }
+            if (logbookMessageWithConsolidatedProps.transmissionFormat == LogbookTransmissionFormat.FLUX) {
+                logbookMessageWithConsolidatedProps.apply {
+                    this.acknowledge = Acknowledge(isSuccess = true)
+                }
+            }
+
+            if (maybeLastLogbookMessageCorrection != null) {
+                logbookMessageWithConsolidatedProps.apply {
+                    logbookMessageWithConsolidatedProps.isCorrected = true
+                }
+            }
+
+            if (historicallyOrderedChildren.any { it.operationType == LogbookOperationType.DEL }) {
+                logbookMessageWithConsolidatedProps.apply {
+                    logbookMessageWithConsolidatedProps.deleted = true
+                }
+            }
+
+            return ConsolidatedLogbookMessage(
+                reportId = reportId,
+                logbookMessage = logbookMessageWithConsolidatedProps,
+                clazz = clazz,
+            )
+        }
+    }
+
+    fun setGearPortAndSpeciesNames(
+        allGears: List<fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear>,
+        allPorts: List<Port>,
+        allSpecies: List<Species>,
+    ) {
+        when (messageType) {
+            LogbookMessageTypeMapping.FAR.name -> {
+                setNamesFromCodes(message as FAR, allGears, allSpecies)
+            }
+
+            LogbookMessageTypeMapping.CPS.name -> {
+                setNamesFromCodes(message as CPS, allSpecies)
+            }
+
+            LogbookMessageTypeMapping.DEP.name -> {
+                setNamesFromCodes(message as DEP, allGears, allPorts, allSpecies)
+            }
+
+            LogbookMessageTypeMapping.DIS.name -> {
+                setNamesFromCodes(message as DIS, allSpecies)
+            }
+
+            LogbookMessageTypeMapping.COE.name -> {
+                setNamesFromCodes(message as COE, allSpecies)
+            }
+
+            LogbookMessageTypeMapping.COX.name -> {
+                setNamesFromCodes(message as COX, allSpecies)
+            }
+
+            LogbookMessageTypeMapping.CRO.name -> {
+                setNamesFromCodes(message as CRO, allSpecies)
+            }
+
+            LogbookMessageTypeMapping.LAN.name -> {
+                setNamesFromCodes(message as LAN, allPorts, allSpecies)
+            }
+
+            LogbookMessageTypeMapping.PNO.name -> {
+                setNamesFromCodes(message as PNO, allPorts, allSpecies)
+            }
+
+            LogbookMessageTypeMapping.RTP.name -> {
+                setNamesFromCodes(message as RTP, allGears, allPorts)
+            }
+        }
+    }
+
+    private fun setNamesFromCodes(message: COE, allSpecies: List<Species>) {
+        message.targetSpeciesOnEntry?.let { targetSpeciesOnEntry ->
+            message.targetSpeciesNameOnEntry = EffortTargetSpeciesGroup.entries.find {
+                it.name == targetSpeciesOnEntry
+            }?.value
+
+            if (message.targetSpeciesNameOnEntry == null) {
+                message.targetSpeciesNameOnEntry = allSpecies.find { it.code == targetSpeciesOnEntry }?.name
+            }
+        }
+    }
+
+    private fun setNamesFromCodes(message: COX, allSpecies: List<Species>) {
+        message.targetSpeciesOnExit?.let { targetSpeciesOnExit ->
+            message.targetSpeciesNameOnExit = EffortTargetSpeciesGroup.entries.find {
+                it.name == targetSpeciesOnExit
+            }?.value
+
+            if (message.targetSpeciesNameOnExit == null) {
+                message.targetSpeciesNameOnExit = allSpecies.find { it.code == targetSpeciesOnExit }?.name
+            }
+        }
+    }
+
+    private fun setNamesFromCodes(message: CRO, allSpecies: List<Species>) {
+        message.targetSpeciesOnExit?.let { targetSpeciesOnExit ->
+            message.targetSpeciesNameOnExit = EffortTargetSpeciesGroup.entries.find {
+                it.name == targetSpeciesOnExit
+            }?.value
+
+            if (message.targetSpeciesNameOnExit == null) {
+                message.targetSpeciesNameOnExit = allSpecies.find { it.code == targetSpeciesOnExit }?.name
+            }
+        }
+
+        message.targetSpeciesOnEntry?.let { targetSpeciesOnEntry ->
+            message.targetSpeciesNameOnEntry = EffortTargetSpeciesGroup.entries.find {
+                it.name == targetSpeciesOnEntry
+            }?.value
+
+            if (message.targetSpeciesNameOnEntry == null) {
+                message.targetSpeciesNameOnEntry = allSpecies.find { it.code == targetSpeciesOnEntry }?.name
+            }
+        }
+    }
+
+    private fun setNamesFromCodes(
+        message: FAR,
+        allGears: List<fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear>,
+        allSpecies: List<Species>,
+    ) {
+        message.hauls.forEach { haul ->
+            haul.gear?.let { gear ->
+                haul.gearName = allGears.find { it.code == gear }?.name
+            }
+
+            haul.catches.forEach { catch ->
+                catch.species?.let { species ->
+                    addSpeciesName(catch, species, allSpecies)
+                }
+            }
+        }
+    }
+
+    private fun setNamesFromCodes(message: CPS, allSpecies: List<Species>) {
+        message.catches.forEach { catch ->
+            addSpeciesName(catch, catch.species, allSpecies)
+        }
+    }
+
+    private fun setNamesFromCodes(
+        message: DEP,
+        allGears: List<fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear>,
+        allPorts: List<Port>,
+        allSpecies: List<Species>,
+    ) {
+        message.gearOnboard.forEach { gear ->
+            gear.gear?.let { gearCode ->
+                addGearName(gear, gearCode, allGears)
+            }
+        }
+
+        message.departurePort?.let { departurePortLocode ->
+            message.departurePortName = allPorts.find { it.locode === departurePortLocode }?.name
+        }
+
+        message.speciesOnboard.forEach { catch ->
+            catch.species?.let { species ->
+                addSpeciesName(catch, species, allSpecies)
+            }
+        }
+    }
+
+    private fun setNamesFromCodes(message: DIS, allSpecies: List<Species>) {
+        message.catches.forEach { catch ->
+            catch.species?.let { species ->
+                addSpeciesName(catch, species, allSpecies)
+            }
+        }
+    }
+
+    private fun setNamesFromCodes(message: LAN, allPorts: List<Port>, allSpecies: List<Species>) {
+        message.port?.let { portLocode ->
+            message.portName = allPorts.find { it.locode == portLocode }?.name
+        }
+
+        message.catchLanded.forEach { catch ->
+            catch.species?.let { species ->
+                addSpeciesName(catch, species, allSpecies)
+            }
+        }
+    }
+
+    private fun setNamesFromCodes(message: PNO, allPorts: List<Port>, allSpecies: List<Species>) {
+        message.port?.let { arrivalPortLocode ->
+            message.portName = allPorts.find { it.locode == arrivalPortLocode }?.name
+        }
+
+        message.catchOnboard.forEach { catch ->
+            catch.species?.let { species ->
+                addSpeciesName(catch, species, allSpecies)
+            }
+        }
+    }
+
+    private fun setNamesFromCodes(
+        message: RTP,
+        allGears: List<fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear>,
+        allPorts: List<Port>,
+    ) {
+        message.port?.let { portLocode ->
+            message.portName = allPorts.find { it.locode == portLocode }?.name
+        }
+
+        message.gearOnboard.forEach { gear ->
+            gear.gear?.let { gearCode ->
+                addGearName(gear, gearCode, allGears)
+            }
+        }
+    }
+
+    private fun addSpeciesName(catch: Catch, species: String, allSpecies: List<Species>) {
+        catch.speciesName = allSpecies.find { it.code == species }?.name
+    }
+
+    private fun addSpeciesName(catch: ProtectedSpeciesCatch, species: String, allSpecies: List<Species>) {
+        catch.speciesName = allSpecies.find { it.code == species }?.name
+    }
+
+    private fun addGearName(
+        gear: Gear,
+        gearCode: String,
+        allGears: List<fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear>,
+    ) {
+        gear.gearName = allGears.find { it.code == gearCode }?.name
+    }
+}

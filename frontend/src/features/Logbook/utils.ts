@@ -8,6 +8,7 @@ import { getFishingActivityCircleStyle } from '../map/layers/styles/vesselTrack.
 
 import type { CatchProperty, CatchWithProperties, ProtectedCatchWithProperties } from './components/VesselLogbook/types'
 import type { LogbookCatch, LogbookMessage, PNOMessageValue, ProtectedSpeciesCatch } from './Logbook.types'
+import type { LogbookMessage as LogbookMessageNamespace } from './LogbookMessage.types'
 import type { SpeciesInsight, SpeciesToSpeciesInsight, SpeciesToSpeciesInsightList } from './types'
 import type { DeclaredLogbookSpecies, FishingActivityShowedOnMap } from '../../domain/entities/vessel/types'
 
@@ -323,31 +324,35 @@ function getSpeciesAndPresentationToWeightObject(
     return
   }
 
-  if (
-    speciesToWeightObject[speciesCatch.species] &&
-    speciesToWeightObject[speciesCatch.species]?.length &&
-    speciesToWeightObject[speciesCatch.species]?.find(species => species.presentation === speciesCatch.presentation)
-  ) {
-    // eslint-disable-next-line no-param-reassign
-    speciesToWeightObject[speciesCatch.species] =
-      speciesToWeightObject[speciesCatch.species]?.map(speciesAndPresentation => {
-        if (speciesAndPresentation.presentation === speciesCatch.presentation) {
-          // eslint-disable-next-line no-param-reassign
-          speciesAndPresentation.weight = parseFloat(
-            (speciesAndPresentation.weight + (speciesCatch.weight || 0)).toFixed(1)
-          )
-        }
+  const specyWeights = speciesToWeightObject[speciesCatch.species]
 
-        return speciesAndPresentation
-      }) || []
-  } else if (speciesToWeightObject[speciesCatch.species] && speciesToWeightObject[speciesCatch.species]?.length) {
+  if (!!specyWeights && specyWeights.length > 0) {
+    if (specyWeights.find(species => species.presentation === speciesCatch.presentation)) {
+      // eslint-disable-next-line no-param-reassign
+      speciesToWeightObject[speciesCatch.species] =
+        specyWeights.map(speciesAndPresentation => {
+          if (speciesAndPresentation.presentation === speciesCatch.presentation) {
+            // eslint-disable-next-line no-param-reassign
+            speciesAndPresentation.weight = parseFloat(
+              (speciesAndPresentation.weight + (speciesCatch.weight ?? 0)).toFixed(1)
+            )
+          }
+
+          return speciesAndPresentation
+        }) || []
+
+      return
+    }
+
     // eslint-disable-next-line no-param-reassign
     // @ts-ignore
     speciesToWeightObject[speciesCatch.species].push(getSpeciesInsight(speciesCatch))
-  } else {
-    // eslint-disable-next-line no-param-reassign
-    speciesToWeightObject[speciesCatch.species] = [getSpeciesInsight(speciesCatch)]
+
+    return
   }
+
+  // eslint-disable-next-line no-param-reassign
+  speciesToWeightObject[speciesCatch.species] = [getSpeciesInsight(speciesCatch)]
 }
 
 export const getFARSpeciesInsightRecord = (
@@ -546,7 +551,7 @@ export const getFishingActivityFeatureOnTrackLine = (
 /**
  * Get the logbook message type - used to handle the specific DIM message type case
  */
-export const getLogbookMessageType = (message: LogbookMessage): string => {
+export const getLogbookMessageType = (message: LogbookMessage | LogbookMessageNamespace.LogbookMessage): string => {
   if (
     message.messageType === LogbookMessageType.DIS.code &&
     message.message.catches.some(aCatch => aCatch.presentation === LogbookMessageType.DIM.code)
@@ -566,7 +571,7 @@ export function getSummedSpeciesOnBoard(speciesOnBoard: DeclaredLogbookSpecies[]
     if (previousSpecyIndex !== NOT_FOUND && accumulator[previousSpecyIndex]) {
       const nextSpecy = { ...accumulator[previousSpecyIndex] }
       // @ts-ignore
-      nextSpecy.weight = (nextSpecy.weight || 0) + specy.weight
+      nextSpecy.weight = (nextSpecy.weight ?? 0) + specy.weight
       accumulator[previousSpecyIndex] = nextSpecy as DeclaredLogbookSpecies
 
       return accumulator

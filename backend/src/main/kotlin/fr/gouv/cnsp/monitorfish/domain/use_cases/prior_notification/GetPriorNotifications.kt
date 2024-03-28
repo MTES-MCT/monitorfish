@@ -1,7 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
@@ -11,17 +10,25 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.*
 
 @UseCase
 class GetPriorNotifications(
-    private val facadeAreasRepository: FacadeAreasRepository,
+    private val gearRepository: GearRepository,
     private val logbookReportRepository: LogbookReportRepository,
     private val portRepository: PortRepository,
     private val reportingRepository: ReportingRepository,
+    private val speciesRepository: SpeciesRepository,
 ) {
     fun execute(filter: LogbookReportFilter): List<PriorNotification> {
+        val allGears = gearRepository.findAll()
+        val allPorts = portRepository.findAll()
+        val allSpecies = speciesRepository.findAll()
+
         val priorNotificationsWithoutReportingsCount =
             logbookReportRepository.findAllPriorNotifications(filter).map { priorNotification ->
+                priorNotification.consolidatedLogbookMessage.logbookMessage
+                    .setGearPortAndSpeciesNames(allGears, allPorts, allSpecies)
+
                 val port = try {
-                    (priorNotification.logbookMessage.message as PNO).port?.let {
-                        portRepository.find(it)
+                    priorNotification.consolidatedLogbookMessage.typedMessage?.port?.let { portLocode ->
+                        allPorts.find { it.locode == portLocode }
                     }
                 } catch (e: CodeNotFoundException) {
                     null

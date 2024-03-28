@@ -1,5 +1,7 @@
 export namespace LogbookMessage {
-  export type LogbookMessage = {
+  export type LogbookMessage = PnoLogbookMessage | RetOperationLogbookMessage
+
+  interface LogbookMessageBase {
     acknowledge: Acknowledge | undefined
     deleted: boolean
     externalReferenceNumber: string
@@ -10,17 +12,31 @@ export namespace LogbookMessage {
     ircs: string
     isCorrected: boolean
     isSentByFailoverSoftware: boolean
-    message: Message
-    messageType: string
+    message: MessageBase | undefined
+    messageType: MessageType
     operationDateTime: string
     operationNumber: string
-    operationType: string
+    operationType: OperationType
     rawMessage: string
     referencedReportId: string | undefined
     reportDateTime: string
     reportId: string
-    tripNumber: string
+    tripGears: Gear[] | undefined
+    tripNumber: string | undefined
+    tripSegments: Segment[] | undefined
     vesselName: string
+  }
+  export interface PnoLogbookMessage extends LogbookMessageBase {
+    acknowledge: undefined
+    message: PnoMessage
+    messageType: MessageType.PNO
+    operationType: OperationType.COR | OperationType.DAT
+  }
+  export interface RetOperationLogbookMessage extends LogbookMessageBase {
+    acknowledge: Acknowledge
+    message: undefined
+    messageType: MessageType
+    operationType: OperationType.RET
   }
 
   export type Acknowledge = {
@@ -46,8 +62,15 @@ export namespace LogbookMessage {
     weight: number | undefined
   }
 
-  export type Message = {
-    catchOnboard: MessageCatchOnboard[] | undefined
+  export type Gear = {
+    dimensions: string
+    gear: string
+    mesh: number
+  }
+
+  interface MessageBase {}
+  export interface PnoMessage extends MessageBase {
+    catchOnboard: Catch[] | undefined
     economicZone: string | undefined
     effortZone: string | undefined
     faoZone: string | undefined
@@ -64,36 +87,157 @@ export namespace LogbookMessage {
     tripStartDate: string | undefined
   }
 
-  export type MessageCatchOnboard = {
-    conversionFactor: number
-    economicZone: string
-    effortZone: string
-    faoZone: string
-    freshness: string
-    nbFish: number
-    packaging: string
-    presentation: string
-    preservationState: string
-    species: string
-    speciesName: string
-    statisticalRectangle: string
-    weight: number
-  }
-
   export type MessagePnoType = {
     hasDesignatedPorts: boolean
     minimumNotificationPeriod: number
-    // TODO Replace that with an enum.
     pnoTypeName: string
   }
 
-  export type Gear = {
-    dimensions: string
-    gear: string
-    mesh: number
+  /* eslint-disable typescript-sort-keys/string-enum */
+  /** @see https://faolex.fao.org/docs/pdf/eur97393.pdf */
+  export enum MessageType {
+    /**
+     * Entry in zone declaration.
+     *
+     * @description
+     * Required for vessels entering fishing zones, particularly those with conservation measures.
+     */
+    COE = 'COE',
+
+    /**
+     * Exit from zone declaration.
+     *
+     * @description
+     * Required for vessels exiting fishing zones, particularly those with conservation measures.
+     */
+    COX = 'COX',
+
+    /** Dolphins capture declaration (specific to France). */
+    CPS = 'CPS',
+
+    /**
+     * Crossing of zone declaration.
+     *
+     * @description
+     * Indicates a vessel has crossed a specific zone, potentially subject to regulations.
+     */
+    CRO = 'CRO',
+
+    /**
+     * Departure declaration.
+     *
+     * @description
+     * Must be transmitted every time a vessel departs from port.
+     * Required on every departure from port, to be sent in next message.
+     */
+    DEP = 'DEP',
+
+    /**
+     * Discard declaration.
+     *
+     * @description
+     * Details of fish discarded during fishing operations.
+     */
+    DIS = 'DIS',
+
+    /**
+     * End of fishing declaration.
+     *
+     * @description
+     * Transmitted immediately after the last fishing operation before returning to port.
+     */
+    EOF = 'EOF',
+
+    /**
+     * Fishing Activity Report.
+     *
+     * @description
+     * Required daily or upon request, detailing fishing activities.
+     * Required by midnight on each day at sea or in response to a request from the flag state.
+     */
+    FAR = 'FAR',
+
+    /**
+     * Landing declaration.
+     *
+     * @description
+     * To be transmitted after landing of catch.
+     */
+    LAN = 'LAN',
+
+    /**
+     * Prior notification of return declaration.
+     *
+     * @description
+     * Transmitted prior to returning to port or as required by regulations.
+     */
+    PNO = 'PNO',
+
+    /** Return to port declaration.
+     *
+     * @description
+     * To be transmitted upon entry into port, after any prior notification and before landing fish.
+     */
+    RTP = 'RTP',
+
+    // -------------------------------------------------------------------------
+    // Not implemented
+
+    /**
+     * Inspection declaration.
+     *
+     * @description
+     * To be provided by the authorities, but not the master.
+     */
+    INS = 'INS',
+
+    /**
+     * Relocation of Catch.
+     *
+     * @description
+     * Used when catch (all or parts thereof) is transferred or moved from shared fishing gear to a vessel or from a
+     * vessel’s hold or its fishing gear to a keep net, container or cage (outside the vessel) in which the live catch
+     * is kept until landing.
+     */
+    RLC = 'RLC',
+
+    /**
+     * Transhipment.
+     *
+     * @description
+     * For every transhipment of catch, declaration required from both donor and recipient.
+     */
+    TRA = 'TRA',
+
+    /**
+     * Trans-zonal fishing declaration.
+     *
+     * @description
+     * If carrying out Trans-zonal fishing.
+     */
+    TRZ = 'TRZ'
+  }
+  /* eslint-enable typescript-sort-keys/string-enum */
+
+  /**
+   * @description
+   * Operations element: this is the top level envelope of all operations sent to the web service operation.
+   * OPS element must contain one of the sub-elements DAT, RET, DEL, COR, QUE, RSP.
+   *
+   * @see https://faolex.fao.org/docs/pdf/eur97393.pdf
+   */
+  export enum OperationType {
+    /** Correction operation to ask another MS to correct previously sent data. */
+    COR = 'COR',
+    /** Data operation to push log book or sales note information to another MS. */
+    DAT = 'DAT',
+    /** Delete operation to ask receiving MS to delete previously sent data */
+    DEL = 'DEL',
+    /** Acknowledgement operation to reply to DAT, DEL or COR operation. */
+    RET = 'RET'
   }
 
-  export type TripSegment = {
+  export type Segment = {
     code: string
     name: string
   }

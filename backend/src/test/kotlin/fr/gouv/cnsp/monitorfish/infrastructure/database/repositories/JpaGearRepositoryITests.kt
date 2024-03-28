@@ -39,7 +39,7 @@ class JpaGearRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `find Should return a gear`() {
         // When
-        val gear = jpaGearRepository.find("OTB")
+        val gear = jpaGearRepository.findByCode("OTB")
 
         assertThat(gear.name).isEqualTo("Chaluts de fond à panneaux")
     }
@@ -48,7 +48,7 @@ class JpaGearRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `find Should throw an exception When there is no gear found`() {
         // When
-        val throwable = catchThrowable { jpaGearRepository.find("BAD_GEAR") }
+        val throwable = catchThrowable { jpaGearRepository.findByCode("BAD_GEAR") }
 
         assertThat(throwable).isInstanceOf(CodeNotFoundException::class.java)
     }

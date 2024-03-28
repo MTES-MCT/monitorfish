@@ -256,7 +256,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(pnoMessage.catchToLand.first().economicZone).isEqualTo("FRA")
         assertThat(pnoMessage.catchToLand.first().statisticalRectangle).isEqualTo("23E6")
         assertThat(pnoMessage.tripStartDate).isAfter(ZonedDateTime.now().minusDays(5))
-        assertThat(pnoMessage.predictedArrivalDateTime).isAfter(ZonedDateTime.now().minusDays(5))
+        assertThat(pnoMessage.predictedArrivalDatetimeUtc).isAfter(ZonedDateTime.now().minusDays(5))
 
         // EOF
         assertThat(messages[3].message).isInstanceOf(EOF::class.java)
@@ -680,9 +680,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(
             result.all {
-                val message = it.logbookMessage.message as PNO
-
-                listOf("FRSML", "FRVNE").contains(message.port)
+                listOf("FRSML", "FRVNE").contains(it.consolidatedLogbookMessage.typedMessage.port)
             },
         ).isEqualTo(true)
     }
@@ -724,9 +722,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(
             result.all {
-                val message = it.logbookMessage.message as PNO
-
-                message.catchOnboard.any { catch -> listOf("COD", "HKE").contains(catch.species) }
+                it.consolidatedLogbookMessage.typedMessage.catchOnboard
+                    .any { catch -> listOf("COD", "HKE").contains(catch.species) }
             },
         ).isEqualTo(true)
     }
@@ -744,9 +741,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(
             result.all {
-                val message = it.logbookMessage.message as PNO
-
-                message.pnoTypes.any { type -> listOf("Préavis type A", "Préavis type C").contains(type.name) }
+                it.consolidatedLogbookMessage.typedMessage.pnoTypes
+                    .any { type -> listOf("Préavis type A", "Préavis type C").contains(type.name) }
             },
         ).isEqualTo(true)
     }
@@ -764,11 +760,12 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(
             result.all {
-                it.logbookMessage.tripSegments!!.any { tripSegment ->
-                    listOf("SWW06", "NWW03").contains(
-                        tripSegment.code,
-                    )
-                }
+                it.consolidatedLogbookMessage.logbookMessage.tripSegments!!
+                    .any { tripSegment ->
+                        listOf("SWW06", "NWW03").contains(
+                            tripSegment.code,
+                        )
+                    }
             },
         ).isEqualTo(true)
     }
@@ -786,7 +783,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(
             result.all {
-                it.logbookMessage.tripGears!!.any { tripGear -> listOf("OTT", "TB").contains(tripGear.gear) }
+                it.consolidatedLogbookMessage.logbookMessage.tripGears!!
+                    .any { tripGear -> listOf("OTT", "TB").contains(tripGear.gear) }
             },
         ).isEqualTo(true)
     }
@@ -804,9 +802,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(firstResult).hasSizeGreaterThan(0)
         assertThat(
             firstResult.all {
-                val message = it.logbookMessage.message as PNO
-
-                message.predictedArrivalDateTime!!.isAfter(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
+                it.consolidatedLogbookMessage.typedMessage.predictedArrivalDatetimeUtc!!
+                    .isAfter(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
             },
         ).isEqualTo(true)
 
@@ -820,9 +817,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(secondResult).hasSizeGreaterThan(0)
         assertThat(
             secondResult.all {
-                val message = it.logbookMessage.message as PNO
-
-                message.predictedArrivalDateTime!!.isBefore(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
+                it.consolidatedLogbookMessage.typedMessage.predictedArrivalDatetimeUtc!!
+                    .isBefore(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
             },
         ).isEqualTo(true)
     }
@@ -844,22 +840,35 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(
             result.all {
-                val message = it.logbookMessage.message as PNO
-
-                message.pnoTypes.any { type -> listOf("Préavis type A", "Préavis type C").contains(type.name) }
+                it.consolidatedLogbookMessage.typedMessage.pnoTypes
+                    .any { type -> listOf("Préavis type A", "Préavis type C").contains(type.name) }
             },
         ).isEqualTo(true)
         assertThat(
             result.all {
-                it.logbookMessage.tripGears!!.any { tripGear -> listOf("OTT", "TB").contains(tripGear.gear) }
+                it.consolidatedLogbookMessage.logbookMessage.tripGears!!
+                    .any { tripGear -> listOf("OTT", "TB").contains(tripGear.gear) }
             },
         ).isEqualTo(true)
         assertThat(
             result.all {
-                val message = it.logbookMessage.message as PNO
-
-                message.predictedArrivalDateTime!!.isAfter(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
+                it.consolidatedLogbookMessage.typedMessage.predictedArrivalDatetimeUtc!!
+                    .isAfter(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
             },
         ).isEqualTo(true)
+    }
+
+    @Test
+    @Transactional
+    fun `findById Should return the expected PNO logbook report`() {
+        // Given
+        val id = 101L
+
+        // When
+        val result = jpaLogbookReportRepository.findById(id)
+
+        // Then
+        assertThat(result.id).isEqualTo(101)
+        assertThat(result.messageType).isEqualTo("PNO")
     }
 }

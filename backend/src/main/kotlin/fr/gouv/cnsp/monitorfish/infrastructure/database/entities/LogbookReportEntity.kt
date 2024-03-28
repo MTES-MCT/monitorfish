@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.mappers.ERSMapper.getERSMessageValueFromJSON
@@ -143,13 +144,18 @@ data class LogbookReportEntity(
         )
     }
 
-    fun toPriorNotification(mapper: ObjectMapper): PriorNotification {
+    fun toPriorNotification(mapper: ObjectMapper, childrenModels: List<LogbookReportEntity>): PriorNotification {
         val logbookMessage = toLogbookMessage(mapper)
+        val logbookMessageChildren = childrenModels.map { it.toLogbookMessage(mapper) }
+        val consolidatedLogbookMessage = logbookMessage
+            .toConsolidatedLogbookMessage(logbookMessageChildren, PNO::class.java)
+        // Default to UNKNOWN vessel when null or not found
+        val vessel = vessel?.toVessel() ?: Vessel(id = -1, flagState = CountryCode.UNDEFINED)
 
         return PriorNotification(
-            id = id!!,
-            logbookMessage = logbookMessage,
-            vessel = vessel?.toVessel() ?: Vessel(id = -1, flagState = CountryCode.UNDEFINED),
+            reportId = consolidatedLogbookMessage.reportId,
+            consolidatedLogbookMessage = consolidatedLogbookMessage,
+            vessel = vessel,
             vesselRiskFactor = vesselRiskFactor?.toVesselRiskFactor(mapper),
         )
     }

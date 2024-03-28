@@ -13,6 +13,18 @@ import java.time.Instant
 interface DBLogbookReportRepository :
     CrudRepository<LogbookReportEntity, Long>, JpaSpecificationExecutor<LogbookReportEntity> {
     @Query(
+        """
+        SELECT *
+        FROM logbook_reports
+        WHERE ((report_id = ?1 AND log_type = 'PNO' AND operation_type = 'DAT') OR referenced_report_id = ?1)
+        AND enriched = true
+        ORDER BY report_datetime_utc ASC
+        """,
+        nativeQuery = true,
+    )
+    fun findEnrichedPnoParentAndChildrenByReportId(reportId: String): List<LogbookReportEntity>
+
+    @Query(
         """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDate(e.tripNumber, MIN(e.operationDateTime))
         FROM LogbookReportEntity e
         WHERE e.internalReferenceNumber = ?1

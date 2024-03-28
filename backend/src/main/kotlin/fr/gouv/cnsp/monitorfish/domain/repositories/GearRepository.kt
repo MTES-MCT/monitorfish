@@ -7,5 +7,5 @@ interface GearRepository {
     fun findAll(): List<Gear>
 
     @Throws(CodeNotFoundException::class)
-    fun find(code: String): Gear
+    fun findByCode(code: String): Gear
 }

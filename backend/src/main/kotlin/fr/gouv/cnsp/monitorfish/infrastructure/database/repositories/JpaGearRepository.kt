@@ -19,7 +19,7 @@ class JpaGearRepository(private val dbGearRepository: DBGearRepository) : GearRe
     }
 
     @Cacheable(value = ["gear"])
-    override fun find(code: String): Gear {
+    override fun findByCode(code: String): Gear {
         return try {
             dbGearRepository.findByCodeEquals(code).toGear()
         } catch (e: EmptyResultDataAccessException) {

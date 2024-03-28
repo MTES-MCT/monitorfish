@@ -102,8 +102,8 @@ class GetVesselControlsUTests {
         given(missionActionsRepository.findVesselMissionActionsAfterDateTime(any(), any())).willReturn(
             expectedControls,
         )
-        given(portRepository.find(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
-        given(gearRepository.find(eq("OTB"))).willReturn(Gear("OTB", "Chalut de fond"))
+        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
+        given(gearRepository.findByCode(eq("OTB"))).willReturn(Gear("OTB", "Chalut de fond"))
 
         // When
         val controlResumeAndControls = GetVesselControls(

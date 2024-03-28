@@ -13,8 +13,12 @@ import { RTPMessage } from './RTPMessage'
 import { LogbookMessageType } from '../../../../constants'
 
 import type { LogbookMessage } from '../../../../Logbook.types'
+import type { LogbookMessage as LogbookMessageNamespace } from '../../../../LogbookMessage.types'
 
-export function getComponentFromMessageType({ message, messageType }: LogbookMessage) {
+export function getComponentFromMessageType({
+  message,
+  messageType
+}: LogbookMessage | LogbookMessageNamespace.LogbookMessage) {
   switch (messageType) {
     case LogbookMessageType.DEP.code:
       return <DEPMessage message={message} />

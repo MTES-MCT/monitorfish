@@ -61,30 +61,39 @@ class GetLogbookMessages(
             LogbookMessageTypeMapping.FAR.name -> {
                 setNamesFromCodes(it.message as FAR)
             }
+
             LogbookMessageTypeMapping.CPS.name -> {
                 setNamesFromCodes(it.message as CPS)
             }
+
             LogbookMessageTypeMapping.DEP.name -> {
                 setNamesFromCodes(it.message as DEP)
             }
+
             LogbookMessageTypeMapping.DIS.name -> {
                 setNamesFromCodes(it.message as DIS)
             }
+
             LogbookMessageTypeMapping.COE.name -> {
                 setNamesFromCodes(it.message as COE)
             }
+
             LogbookMessageTypeMapping.COX.name -> {
                 setNamesFromCodes(it.message as COX)
             }
+
             LogbookMessageTypeMapping.CRO.name -> {
                 setNamesFromCodes(it.message as CRO)
             }
+
             LogbookMessageTypeMapping.LAN.name -> {
                 setNamesFromCodes(it.message as LAN)
             }
+
             LogbookMessageTypeMapping.PNO.name -> {
                 setNamesFromCodes(it.message as PNO)
             }
+
             LogbookMessageTypeMapping.RTP.name -> {
                 setNamesFromCodes(it.message as RTP)
             }
@@ -162,7 +171,7 @@ class GetLogbookMessages(
 
             if (message.targetSpeciesNameOnEntry == null) {
                 try {
-                    message.targetSpeciesNameOnEntry = speciesRepository.find(targetSpeciesOnEntry).name
+                    message.targetSpeciesNameOnEntry = speciesRepository.findByCode(targetSpeciesOnEntry).name
                 } catch (e: CodeNotFoundException) {
                     logger.warn(e.message)
                 }
@@ -178,7 +187,7 @@ class GetLogbookMessages(
 
             if (message.targetSpeciesNameOnExit == null) {
                 try {
-                    message.targetSpeciesNameOnExit = speciesRepository.find(targetSpeciesOnExit).name
+                    message.targetSpeciesNameOnExit = speciesRepository.findByCode(targetSpeciesOnExit).name
                 } catch (e: CodeNotFoundException) {
                     logger.warn(e.message)
                 }
@@ -194,7 +203,7 @@ class GetLogbookMessages(
 
             if (message.targetSpeciesNameOnExit == null) {
                 try {
-                    message.targetSpeciesNameOnExit = speciesRepository.find(targetSpeciesOnExit).name
+                    message.targetSpeciesNameOnExit = speciesRepository.findByCode(targetSpeciesOnExit).name
                 } catch (e: CodeNotFoundException) {
                     logger.warn(e.message)
                 }
@@ -208,7 +217,7 @@ class GetLogbookMessages(
 
             if (message.targetSpeciesNameOnEntry == null) {
                 try {
-                    message.targetSpeciesNameOnEntry = speciesRepository.find(targetSpeciesOnEntry).name
+                    message.targetSpeciesNameOnEntry = speciesRepository.findByCode(targetSpeciesOnEntry).name
                 } catch (e: CodeNotFoundException) {
                     logger.warn(e.message)
                 }
@@ -220,7 +229,7 @@ class GetLogbookMessages(
         message.hauls.forEach { haul ->
             haul.gear?.let { gear ->
                 try {
-                    haul.gearName = gearRepository.find(gear).name
+                    haul.gearName = gearRepository.findByCode(gear).name
                 } catch (e: CodeNotFoundException) {
                     logger.warn(e.message)
                 }
@@ -249,7 +258,7 @@ class GetLogbookMessages(
 
         message.departurePort?.let { departurePort ->
             try {
-                message.departurePortName = portRepository.find(departurePort).name
+                message.departurePortName = portRepository.findByLocode(departurePort).name
             } catch (e: CodeNotFoundException) {
                 logger.warn(e.message)
             }
@@ -273,7 +282,7 @@ class GetLogbookMessages(
     private fun setNamesFromCodes(message: LAN) {
         message.port?.let { port ->
             try {
-                message.portName = portRepository.find(port).name
+                message.portName = portRepository.findByLocode(port).name
             } catch (e: CodeNotFoundException) {
                 logger.warn(e.message)
             }
@@ -289,7 +298,7 @@ class GetLogbookMessages(
     private fun setNamesFromCodes(message: PNO) {
         message.port?.let { port ->
             try {
-                message.portName = portRepository.find(port).name
+                message.portName = portRepository.findByLocode(port).name
             } catch (e: CodeNotFoundException) {
                 logger.warn(e.message)
             }
@@ -305,7 +314,7 @@ class GetLogbookMessages(
     private fun setNamesFromCodes(message: RTP) {
         message.port?.let { port ->
             try {
-                message.portName = portRepository.find(port).name
+                message.portName = portRepository.findByLocode(port).name
             } catch (e: CodeNotFoundException) {
                 logger.warn(e.message)
             }
@@ -320,7 +329,7 @@ class GetLogbookMessages(
 
     private fun addSpeciesName(catch: Catch, species: String) {
         try {
-            catch.speciesName = speciesRepository.find(species).name
+            catch.speciesName = speciesRepository.findByCode(species).name
         } catch (e: CodeNotFoundException) {
             logger.warn(e.message)
         }
@@ -328,7 +337,7 @@ class GetLogbookMessages(
 
     private fun addSpeciesName(catch: ProtectedSpeciesCatch, species: String) {
         try {
-            catch.speciesName = speciesRepository.find(species).name
+            catch.speciesName = speciesRepository.findByCode(species).name
         } catch (e: CodeNotFoundException) {
             logger.warn(e.message)
         }
@@ -336,7 +345,7 @@ class GetLogbookMessages(
 
     private fun addGearName(gear: Gear, gearCode: String) {
         try {
-            gear.gearName = gearRepository.find(gearCode).name
+            gear.gearName = gearRepository.findByCode(gearCode).name
         } catch (e: CodeNotFoundException) {
             logger.warn(e.message)
         }

@@ -8,10 +8,10 @@ import { getCountryName, getCountryNameOrDash, getValueOrDash } from '../utils'
 
 import type { CatchProperty } from '../../../types'
 
-export type CatchDetailsProps = {
+export type CatchDetailsProps = Readonly<{
   specyCatch: CatchProperty
   weightType: WeightType
-}
+}>
 export function CatchDetails({
   specyCatch: {
     conversionFactor,

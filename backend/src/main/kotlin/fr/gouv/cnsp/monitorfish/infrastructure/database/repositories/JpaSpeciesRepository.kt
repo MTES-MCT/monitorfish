@@ -19,7 +19,7 @@ class JpaSpeciesRepository(private val dbSpeciesRepository: DBSpeciesRepository)
     }
 
     @Cacheable(value = ["species"])
-    override fun find(code: String): Species {
+    override fun findByCode(code: String): Species {
         return try {
             dbSpeciesRepository.findByCodeEquals(code).toSpecies()
         } catch (e: EmptyResultDataAccessException) {

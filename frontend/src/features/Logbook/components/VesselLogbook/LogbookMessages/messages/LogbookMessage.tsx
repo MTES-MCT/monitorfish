@@ -15,32 +15,33 @@ import { logbookActions } from '../../../../slice'
 import { getLogbookMessageType } from '../../../../utils'
 
 import type { LogbookMessage as LogbookMessageType } from '../../../../Logbook.types'
+import type { LogbookMessage as LogbookMessageNamespace } from '../../../../LogbookMessage.types'
 import type { HTMLProps } from 'react'
 
-type LogbookMessageComponentProps = {
+type LogbookMessageComponentProps = Readonly<{
   isFirst: boolean
-  message: LogbookMessageType
-}
-export function LogbookMessage({ isFirst, message }: LogbookMessageComponentProps) {
+  logbookMessage: LogbookMessageType | LogbookMessageNamespace.LogbookMessage
+}>
+export function LogbookMessage({ isFirst, logbookMessage }: LogbookMessageComponentProps) {
   const dispatch = useMainAppDispatch()
   const fishingActivitiesShowedOnMap = useMainAppSelector(state => state.fishingActivities.fishingActivitiesShowedOnMap)
 
   const logbookHeaderTitle = useMemo(() => {
-    switch (message.messageType) {
+    switch (logbookMessage.messageType) {
       case LogbookMessageTypeEnum.DEP.code.toString(): {
         return (
           <>
-            <LogbookMessageName>{LogbookMessageTypeEnum[message.messageType].name}</LogbookMessageName>
-            {message.message.departurePortName || message.message.departurePort} le{' '}
-            {getDateTime(message.message.departureDatetimeUtc, true)} <Gray>(UTC)</Gray>
+            <LogbookMessageName>{LogbookMessageTypeEnum[logbookMessage.messageType].name}</LogbookMessageName>
+            {logbookMessage.message.departurePortName || logbookMessage.message.departurePort} le{' '}
+            {getDateTime(logbookMessage.message.departureDatetimeUtc, true)} <Gray>(UTC)</Gray>
           </>
         )
       }
       default: {
-        return LogbookMessageTypeEnum[message.messageType].fullName
+        return LogbookMessageTypeEnum[logbookMessage.messageType].fullName
       }
     }
-  }, [message])
+  }, [logbookMessage])
 
   const openXML = xml => {
     const blob = new Blob([xml], { type: 'text/xml' })
@@ -49,63 +50,63 @@ export function LogbookMessage({ isFirst, message }: LogbookMessageComponentProp
     URL.revokeObjectURL(url)
   }
 
-  const logbookMessageComponent = useMemo(() => getComponentFromMessageType(message), [message])
+  const logbookMessageComponent = useMemo(() => getComponentFromMessageType(logbookMessage), [logbookMessage])
 
   return (
-    <Wrapper id={message.operationNumber} isFirst={isFirst}>
+    <Wrapper id={logbookMessage.operationNumber} isFirst={isFirst}>
       <Header>
-        <LogbookMessageTypeText>{getLogbookMessageType(message)}</LogbookMessageTypeText>
+        <LogbookMessageTypeText>{getLogbookMessageType(logbookMessage)}</LogbookMessageTypeText>
         <LogbookMessageHeaderText
           data-cy="vessel-fishing-message"
-          isShortcut={message.isCorrected || message.deleted || !!message.referencedReportId}
+          isShortcut={logbookMessage.isCorrected || logbookMessage.deleted || !!logbookMessage.referencedReportId}
           title={logbookHeaderTitle}
         >
           {logbookHeaderTitle}
         </LogbookMessageHeaderText>
-        {message.isCorrected && (
+        {logbookMessage.isCorrected && (
           <CorrectedMessage>
             <MessageCorrected />
             <MessageText>ANCIEN MESSAGE</MessageText>
           </CorrectedMessage>
         )}
-        {message.deleted && (
+        {logbookMessage.deleted && (
           <CorrectedMessage>
             <MessageCorrected />
             <MessageText>MESSAGE SUPPRIMÉ</MessageText>
           </CorrectedMessage>
         )}
-        {message.referencedReportId && (
+        {logbookMessage.referencedReportId && (
           <CorrectedMessage>
             <MessageOK />
             <MessageText>MESSAGE CORRIGÉ</MessageText>
           </CorrectedMessage>
         )}
-        {message.rawMessage ? (
+        {logbookMessage.rawMessage ? (
           <Xml
-            onClick={() => openXML(message.rawMessage)}
+            onClick={() => openXML(logbookMessage.rawMessage)}
             style={{ cursor: 'pointer' }}
             title="Ouvrir le message XML brut"
           />
         ) : (
           <Xml />
         )}
-        {!message.isCorrected &&
-          (fishingActivitiesShowedOnMap.find(showed => showed.id === message.operationNumber) ? (
+        {!logbookMessage.isCorrected &&
+          (fishingActivitiesShowedOnMap.find(showed => showed.id === logbookMessage.operationNumber) ? (
             <HideActivity
               data-cy="hide-fishing-activity"
-              onClick={() => dispatch(logbookActions.removeFromMap(message.operationNumber))}
+              onClick={() => dispatch(logbookActions.removeFromMap(logbookMessage.operationNumber))}
               title="Cacher le message sur la piste"
             />
           ) : (
             <ShowActivity
               data-cy="show-fishing-activity"
-              onClick={() => dispatch(logbookActions.showOnMap(message.operationNumber))}
+              onClick={() => dispatch(logbookActions.showOnMap(logbookMessage.operationNumber))}
               title="Afficher le message sur la piste"
             />
           ))}
       </Header>
       <Body data-cy="vessel-fishing-message-body">
-        {message.isSentByFailoverSoftware && (
+        {logbookMessage.isSentByFailoverSoftware && (
           <SoftwareFailover>
             <MessageSentByFailoverSoftwareIcon />
             Message envoyé via e-sacapt
@@ -113,26 +114,28 @@ export function LogbookMessage({ isFirst, message }: LogbookMessageComponentProp
         )}
         <LogbookMessageMetadata>
           <EmissionDateTime>
-            <Key>Date de saisie</Key>
+            <Key>Date d’émission</Key>
             <br />
-            {getDateTime(message.reportDateTime, true)}
+            {getDateTime(logbookMessage.reportDateTime, true)}
           </EmissionDateTime>
           <ReceptionDateTime>
             <Key>Date de réception</Key>
             <br />
-            {getDateTime(message.integrationDateTime, true)}
+            {getDateTime(logbookMessage.integrationDateTime, true)}
           </ReceptionDateTime>
-          <VoyageNumber title={message.tripNumber.toString()}>
+          <VoyageNumber title={logbookMessage.tripNumber?.toString()}>
             <Key>N° de marée</Key>
             <br />
-            {message.tripNumber || <Gray>-</Gray>}
+            {logbookMessage.tripNumber ?? <Gray>-</Gray>}
           </VoyageNumber>
           <Acknowledge>
             <Key>Acq.</Key>
             <br />
-            {!message.acknowledge || (message.acknowledge.isSuccess === null && <Gray>-</Gray>)}
-            {message.acknowledge?.isSuccess === true && <AckOk />}
-            {message.acknowledge?.isSuccess === false && <AckNOk title={message.acknowledge?.rejectionCause || ''} />}
+            {!logbookMessage.acknowledge || (logbookMessage.acknowledge.isSuccess === null && <Gray>-</Gray>)}
+            {logbookMessage.acknowledge?.isSuccess === true && <AckOk />}
+            {logbookMessage.acknowledge?.isSuccess === false && (
+              <AckNOk title={logbookMessage.acknowledge?.rejectionCause ?? ''} />
+            )}
           </Acknowledge>
         </LogbookMessageMetadata>
         {logbookMessageComponent}

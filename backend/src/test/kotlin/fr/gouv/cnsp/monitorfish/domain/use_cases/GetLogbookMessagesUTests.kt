@@ -49,13 +49,13 @@ class GetLogbookMessagesUTests {
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
             getDummyLogbookMessages(),
         )
-        given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
-        given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
-        given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
-        given(gearRepository.find(eq("OTB"))).willReturn(Gear("OTB", "Chaluts de fond à panneaux"))
-        given(gearRepository.find(eq("DRB"))).willReturn(Gear("DRB", "Dragues remorquées par bateau"))
-        given(portRepository.find(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
-        given(portRepository.find(eq("AEJAZ"))).willReturn(Port("AEJAZ", "Arzanah Island"))
+        given(speciesRepository.findByCode(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
+        given(speciesRepository.findByCode(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
+        given(speciesRepository.findByCode(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
+        given(gearRepository.findByCode(eq("OTB"))).willReturn(Gear("OTB", "Chaluts de fond à panneaux"))
+        given(gearRepository.findByCode(eq("DRB"))).willReturn(Gear("DRB", "Dragues remorquées par bateau"))
+        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
+        given(portRepository.findByLocode(eq("AEJAZ"))).willReturn(Port("AEJAZ", "Arzanah Island"))
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
 
         // When
@@ -132,13 +132,13 @@ class GetLogbookMessagesUTests {
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
             getDummyCorrectedLogbookMessages(),
         )
-        given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
-        given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
-        given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
-        given(gearRepository.find(eq("OTB"))).willReturn(Gear("OTB", "Chaluts de fond à panneaux"))
-        given(gearRepository.find(eq("DRB"))).willReturn(Gear("DRB", "Dragues remorquées par bateau"))
-        given(portRepository.find(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
-        given(portRepository.find(eq("AEJAZ"))).willReturn(Port("AEJAZ", "Arzanah Island"))
+        given(speciesRepository.findByCode(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
+        given(speciesRepository.findByCode(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
+        given(speciesRepository.findByCode(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
+        given(gearRepository.findByCode(eq("OTB"))).willReturn(Gear("OTB", "Chaluts de fond à panneaux"))
+        given(gearRepository.findByCode(eq("DRB"))).willReturn(Gear("DRB", "Dragues remorquées par bateau"))
+        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
+        given(portRepository.findByLocode(eq("AEJAZ"))).willReturn(Port("AEJAZ", "Arzanah Island"))
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
 
         // When
@@ -179,13 +179,13 @@ class GetLogbookMessagesUTests {
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
             getDummyRETLogbookMessages(),
         )
-        given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
-        given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
-        given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
-        given(gearRepository.find(eq("OTB"))).willReturn(Gear("OTB", "Chaluts de fond à panneaux"))
-        given(gearRepository.find(eq("DRB"))).willReturn(Gear("DRB", "Dragues remorquées par bateau"))
-        given(portRepository.find(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
-        given(portRepository.find(eq("AEJAZ"))).willReturn(Port("AEJAZ", "Arzanah Island"))
+        given(speciesRepository.findByCode(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
+        given(speciesRepository.findByCode(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
+        given(speciesRepository.findByCode(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
+        given(gearRepository.findByCode(eq("OTB"))).willReturn(Gear("OTB", "Chaluts de fond à panneaux"))
+        given(gearRepository.findByCode(eq("DRB"))).willReturn(Gear("DRB", "Dragues remorquées par bateau"))
+        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
+        given(portRepository.findByLocode(eq("AEJAZ"))).willReturn(Port("AEJAZ", "Arzanah Island"))
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
 
         // When
@@ -262,9 +262,9 @@ class GetLogbookMessagesUTests {
                         operationDateTime = ZonedDateTime.now(),
                     ),
             )
-        given(speciesRepository.find(any())).willThrow(CodeNotFoundException("not found"))
-        given(gearRepository.find(any())).willThrow(CodeNotFoundException("not found"))
-        given(portRepository.find(any())).willThrow(CodeNotFoundException("not found"))
+        given(speciesRepository.findByCode(any())).willThrow(CodeNotFoundException("not found"))
+        given(gearRepository.findByCode(any())).willThrow(CodeNotFoundException("not found"))
+        given(portRepository.findByLocode(any())).willThrow(CodeNotFoundException("not found"))
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
 
         // When
@@ -296,13 +296,13 @@ class GetLogbookMessagesUTests {
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
             getDummyRETLogbookMessages(),
         )
-        given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
-        given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
-        given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
-        given(gearRepository.find(eq("OTB"))).willReturn(Gear("OTB", "Chaluts de fond à panneaux"))
-        given(gearRepository.find(eq("DRB"))).willReturn(Gear("DRB", "Dragues remorquées par bateau"))
-        given(portRepository.find(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
-        given(portRepository.find(eq("AEJAZ"))).willReturn(Port("AEJAZ", "Arzanah Island"))
+        given(speciesRepository.findByCode(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
+        given(speciesRepository.findByCode(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
+        given(speciesRepository.findByCode(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
+        given(gearRepository.findByCode(eq("OTB"))).willReturn(Gear("OTB", "Chaluts de fond à panneaux"))
+        given(gearRepository.findByCode(eq("DRB"))).willReturn(Gear("DRB", "Dragues remorquées par bateau"))
+        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
+        given(portRepository.findByLocode(eq("AEJAZ"))).willReturn(Port("AEJAZ", "Arzanah Island"))
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
 
         // When
@@ -331,13 +331,13 @@ class GetLogbookMessagesUTests {
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
             getDummyFluxAndVisioCaptureLogbookMessages(),
         )
-        given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
-        given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
-        given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
-        given(gearRepository.find(eq("OTB"))).willReturn(Gear("OTB", "Chaluts de fond à panneaux"))
-        given(gearRepository.find(eq("DRB"))).willReturn(Gear("DRB", "Dragues remorquées par bateau"))
-        given(portRepository.find(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
-        given(portRepository.find(eq("AEJAZ"))).willReturn(Port("AEJAZ", "Arzanah Island"))
+        given(speciesRepository.findByCode(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
+        given(speciesRepository.findByCode(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
+        given(speciesRepository.findByCode(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
+        given(gearRepository.findByCode(eq("OTB"))).willReturn(Gear("OTB", "Chaluts de fond à panneaux"))
+        given(gearRepository.findByCode(eq("DRB"))).willReturn(Gear("DRB", "Dragues remorquées par bateau"))
+        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
+        given(portRepository.findByLocode(eq("AEJAZ"))).willReturn(Port("AEJAZ", "Arzanah Island"))
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
 
         // When
@@ -368,13 +368,13 @@ class GetLogbookMessagesUTests {
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
             getDummyLogbookMessages(),
         )
-        given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
-        given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
-        given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
-        given(gearRepository.find(eq("OTB"))).willReturn(Gear("OTB", "Chaluts de fond à panneaux"))
-        given(gearRepository.find(eq("DRB"))).willReturn(Gear("DRB", "Dragues remorquées par bateau"))
-        given(portRepository.find(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
-        given(portRepository.find(eq("AEJAZ"))).willReturn(Port("AEJAZ", "Arzanah Island"))
+        given(speciesRepository.findByCode(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
+        given(speciesRepository.findByCode(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
+        given(speciesRepository.findByCode(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
+        given(gearRepository.findByCode(eq("OTB"))).willReturn(Gear("OTB", "Chaluts de fond à panneaux"))
+        given(gearRepository.findByCode(eq("DRB"))).willReturn(Gear("DRB", "Dragues remorquées par bateau"))
+        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
+        given(portRepository.findByLocode(eq("AEJAZ"))).willReturn(Port("AEJAZ", "Arzanah Island"))
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
 
         // When

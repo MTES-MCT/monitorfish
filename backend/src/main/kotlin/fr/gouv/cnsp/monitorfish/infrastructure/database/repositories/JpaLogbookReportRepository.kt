@@ -44,10 +44,16 @@ class JpaLogbookReportRepository(
 
         val predicates = mutableListOf(criteriaBuilder.isTrue(criteriaBuilder.literal(true)))
 
-        // Only enriched PNO messages
+        // ---------------------------------------------------------------------
+        // First we get all the enriched PNO message DAT operations:
+
         predicates.add(
             criteriaBuilder.and(
                 criteriaBuilder.equal(logbookReportEntity.get<String>("messageType"), "PNO"),
+                criteriaBuilder.equal(
+                    logbookReportEntity.get<LogbookOperationType>("operationType"),
+                    LogbookOperationType.DAT,
+                ),
                 criteriaBuilder.equal(logbookReportEntity.get<Boolean>("isEnriched"), true),
             ),
         )
@@ -97,7 +103,53 @@ class JpaLogbookReportRepository(
 
         criteriaQuery.select(logbookReportEntity).where(*predicates.toTypedArray())
 
-        return entityManager.createQuery(criteriaQuery).resultList.map { it.toPriorNotification(mapper) }
+        val pnoParentLogbookReportModels = entityManager.createQuery(criteriaQuery).resultList
+
+        // ---------------------------------------------------------------------
+        // Then we get all their related enriched COR, DEL and RET operations:
+
+        val uniqueLogbookReportReportIds = pnoParentLogbookReportModels.mapNotNull { it.reportId }.distinct()
+        val delAndRetPredicates = mutableListOf(criteriaBuilder.isTrue(criteriaBuilder.literal(true)))
+        delAndRetPredicates.add(
+            criteriaBuilder.and(
+                logbookReportEntity.get<String>("referencedReportId").`in`(uniqueLogbookReportReportIds),
+                logbookReportEntity.get<LogbookOperationType>("operationType")
+                    .`in`(listOf(LogbookOperationType.COR, LogbookOperationType.DEL, LogbookOperationType.RET)),
+                criteriaBuilder.equal(logbookReportEntity.get<Boolean>("isEnriched"), true),
+            ),
+        )
+        criteriaQuery.select(logbookReportEntity).where(*predicates.toTypedArray())
+
+        val pnoChildLogbookReportModels = entityManager.createQuery(criteriaQuery).resultList
+
+        return pnoParentLogbookReportModels.map { pnoParentLogbookReportModel ->
+            pnoParentLogbookReportModel.toPriorNotification(mapper, pnoChildLogbookReportModels)
+        }
+    }
+
+    override fun findPriorNotificationByReportId(reportId: String): PriorNotification {
+        val pnoParentAndChildrenLogbookReportModels = dbERSRepository.findEnrichedPnoParentAndChildrenByReportId(
+            reportId,
+        )
+
+        // Parent (DAT) operation
+        val pnoParentLogbookReportModel = pnoParentAndChildrenLogbookReportModels.firstOrNull()
+            ?: throw NoERSMessagesFound("No logbook report found for the given reportId: $reportId.")
+        if (pnoParentLogbookReportModel.operationType != LogbookOperationType.DAT) {
+            throw NoERSMessagesFound(
+                "The first logbook report found is not a DAT operation for the given reportId: $reportId.",
+            )
+        }
+
+        // Children (COR, DEL and RET) operations
+        val pnoChildrenLogbookReportModels = pnoParentAndChildrenLogbookReportModels.drop(1)
+        if (pnoChildrenLogbookReportModels.any { it.operationType == LogbookOperationType.DAT }) {
+            throw NoERSMessagesFound(
+                "The children logbook reports contain a DAT operation for the given reportId: $reportId.",
+            )
+        }
+
+        return pnoParentLogbookReportModel.toPriorNotification(mapper, pnoChildrenLogbookReportModels)
     }
 
     override fun findLastTripBeforeDateTime(
@@ -298,8 +350,7 @@ class JpaLogbookReportRepository(
     }
 
     override fun findById(id: Long): LogbookMessage {
-        return dbERSRepository.findById(id)
-            .get().toLogbookMessage(mapper)
+        return dbERSRepository.findById(id).get().toLogbookMessage(mapper)
     }
 
     override fun findLastMessageDate(): ZonedDateTime {

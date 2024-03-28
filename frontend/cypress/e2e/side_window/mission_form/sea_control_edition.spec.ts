@@ -266,6 +266,82 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
     }
   )
 
+  /**
+   * Non-regression test to prevent mission actions IDs to be modified instead of update the right ID.
+   *
+   * Bug case:
+   *  1. The first control in this test has the id `4`
+   *  2. A new control is added
+   *  3. We save the form
+   *  3. The bug was sending :
+   *    - 1 POST request with the data of the first control (instead of an update of the id `4`)
+   *    - 1 PUT request with the date of the new control (instead of a creation with a POST request)
+   */
+  it(
+    'Should update actions and keep existing actions ids',
+    {
+      env: {
+        FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED: false
+      }
+    },
+    () => {
+      cy.intercept('PUT', '/bff/v1/mission_actions/4', {
+        body: {
+          id: 4
+        },
+        statusCode: 201
+      }).as('updateMissionAction')
+      cy.intercept('POST', '/bff/v1/mission_actions', {
+        body: {
+          id: 5
+        },
+        statusCode: 201
+      }).as('createMissionAction')
+
+      // -------------------------------------------------------------------------
+      // Form
+      const endDate = getUtcDateInMultipleFormats(customDayjs().utc().add(7, 'day').toISOString())
+      cy.fill('Fin de mission', endDate.utcDateTupleWithTime)
+
+      // Add another control
+      cy.clickButton('Ajouter')
+      cy.clickButton('Ajouter un contrôle en mer')
+
+      // Navire
+      // TODO Handle Automplete in custom `cy.fill()` command once it's used via monitor-ui.
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      cy.get('input[placeholder="Rechercher un navire..."]').type('FR263418260').wait(250)
+      cy.contains('mark', 'FR263418260').click()
+
+      // Date et heure du contrôle
+      cy.fill('Date et heure du contrôle', endDate.utcDateTupleWithTime)
+
+      // Saisi par
+      cy.fill('Saisi par', 'Marlin')
+
+      // We need to wait for some time because there is a throttle on the form
+      cy.wait(500)
+      cy.clickButton('Enregistrer')
+
+      // -------------------------------------------------------------------------
+      // Request
+
+      cy.waitForLastRequest(
+        '@updateMissionAction',
+        {
+          body: {
+            internalReferenceNumber: 'U_W0NTFINDME',
+            vesselName: 'MALOTRU'
+          }
+        },
+        5
+      )
+        .its('response.statusCode')
+        .should('eq', 201)
+      cy.wait('@createMissionAction')
+    }
+  )
+
   it('Should not update the mission zone When a CACEM control is newer', () => {
     editSideWindowMissionListMissionWithId(34, SeaFrontGroup.MEMN)
 

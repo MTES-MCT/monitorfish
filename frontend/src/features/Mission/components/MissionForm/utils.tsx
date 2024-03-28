@@ -18,35 +18,33 @@ import MissionActionType = MissionAction.MissionActionType
  * @param actionsFormValues
  * @param originalMissionActions Mission actions as they were previous to the mission edition
  */
-export function getMissionActionsDataFromMissionActionsFormValues(
+export function getMissionActionsToCreateUpdateOrDelete(
   missionId: MissionAction.MissionAction['missionId'],
   actionsFormValues: MissionActionFormValues[],
   originalMissionActions: MissionAction.MissionAction[] = []
 ): {
+  createdOrUpdatedMissionActions: MissionAction.MissionActionData[]
   deletedMissionActionIds: number[]
-  updatedMissionActionDatas: MissionAction.MissionActionData[]
 } {
-  const updatedMissionActionDatas = actionsFormValues.map((missionActionFormValues, index) =>
-    getMissionActionDataFromFormValues(missionActionFormValues, missionId, originalMissionActions, index)
+  const createdOrUpdatedMissionActions = actionsFormValues.map(missionActionFormValues =>
+    getMissionActionDataFromFormValues(missionActionFormValues, missionId)
   )
 
   const originalMissionActionIds = originalMissionActions.map(({ id }) => id)
-  const updatedMissionActionIds = updatedMissionActionDatas
+  const updatedMissionActionIds = createdOrUpdatedMissionActions
     .filter(({ id }) => typeof id === 'number')
     .map(({ id }) => id as number)
   const deletedMissionActionIds = difference(originalMissionActionIds, updatedMissionActionIds)
 
   return {
-    deletedMissionActionIds,
-    updatedMissionActionDatas
+    createdOrUpdatedMissionActions,
+    deletedMissionActionIds
   }
 }
 
 export function getMissionActionDataFromFormValues(
   missionActionFormValues: MissionActionFormValues,
-  missionId: MissionAction.MissionAction['missionId'],
-  originalMissionActions: MissionAction.MissionAction[] = [],
-  index?: number
+  missionId: MissionAction.MissionAction['missionId']
 ) {
   const missionActionFormValuesWithAllProps = {
     ...MISSION_ACTION_FORM_VALUES_SKELETON,
@@ -56,12 +54,8 @@ export function getMissionActionDataFromFormValues(
   const maybeValidMissionActionData = omit(missionActionFormValuesWithAllProps, ['isValid', 'isVesselUnknown'])
   const validMissionActionData = getValidMissionActionData(maybeValidMissionActionData as MissionActionFormValues)
 
-  // We get the action `id` to know if the action is an update
-  const id = index !== undefined ? originalMissionActions[index]?.id : missionActionFormValues.id
-
   return {
     ...validMissionActionData,
-    id,
     missionId
   }
 }

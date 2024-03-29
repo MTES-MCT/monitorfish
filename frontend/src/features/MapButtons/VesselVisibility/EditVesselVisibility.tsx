@@ -1,9 +1,12 @@
+import { Header, Content } from '@features/MapButtons/shared/styles'
+import { TrackDepthSelection } from '@features/VesselSidebar/actions/TrackRequest/TrackDepthSelection'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { THEME } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { LastPositionsSlider } from './LastPositionsSlider'
-import TrackDepthRadio from './TrackDepthRadio'
-import { COLORS } from '../../../constants/constants'
 import { MapToolType } from '../../../domain/entities/map/constants'
 import {
   setHideVesselsAtPort,
@@ -11,8 +14,7 @@ import {
   showVesselsEstimatedPositions
 } from '../../../domain/shared_slices/Map'
 import { setHideNonSelectedVessels } from '../../../domain/shared_slices/Vessel'
-import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
+import { updateDefaultVesselTrackDepth } from '../../../domain/use_cases/vessel/updateDefaultVesselTrackDepth'
 import { MapPropertyTrigger } from '../../commonComponents/MapPropertyTrigger'
 import HidingOtherTracksSVG from '../../icons/Bouton_masquer_pistes_actif.svg?react'
 import ShowingOtherTracksSVG from '../../icons/Bouton_masquer_pistes_inactif.svg?react'
@@ -25,6 +27,7 @@ export function EditVesselVisibility() {
   const hideNonSelectedVessels = useMainAppSelector(state => state.vessel.hideNonSelectedVessels)
   const mapToolOpened = useMainAppSelector(state => state.global.mapToolOpened)
   const hideVesselsAtPort = useMainAppSelector(state => state.map.hideVesselsAtPort)
+  const defaultVesselTrackDepth = useMainAppSelector(state => state.map.defaultVesselTrackDepth)
   const showingVesselsEstimatedPositions = useMainAppSelector(state => state.map.showingVesselsEstimatedPositions)
   const vesselsLastPositionVisibility = useMainAppSelector(state => state.map.vesselsLastPositionVisibility)
 
@@ -42,19 +45,28 @@ export function EditVesselVisibility() {
   return (
     <Wrapper isOpen={isOpen}>
       <Header isFirst>Gérer l&apos;affichage des dernières positions</Header>
-      <LastPositionInfo>
-        <VesselHidden /> navires masqués <VesselAlmostHidden /> navires estompés <VesselShowed /> navires normaux
-      </LastPositionInfo>
-      <LastPositionsSlider
-        updateVesselsLastPositionVisibility={updateVesselsLastPositionVisibility}
-        vesselsLastPositionVisibility={vesselsLastPositionVisibility}
-      />
-      <LastPositionLegend>
-        Ces seuils permettent de régler l&apos;affichage, l&apos;estompage et le masquage des dernières positions des
-        navires.
-      </LastPositionLegend>
+      <Content>
+        <LastPositionInfo>
+          <VesselHidden /> navires masqués <VesselAlmostHidden /> navires estompés <VesselShowed /> navires normaux
+        </LastPositionInfo>
+        <LastPositionsSlider
+          updateVesselsLastPositionVisibility={updateVesselsLastPositionVisibility}
+          vesselsLastPositionVisibility={vesselsLastPositionVisibility}
+        />
+        <LastPositionLegend>
+          Ces seuils permettent de régler l&apos;affichage, l&apos;estompage et le masquage des dernières positions des
+          navires.
+        </LastPositionLegend>
+      </Content>
       <Header isFirst={false}>Paramétrer la longueur par défaut des pistes</Header>
-      <TrackDepthRadio />
+      <Content hasMargin>
+        <TrackDepthSelection
+          defaultValue={defaultVesselTrackDepth}
+          label="Afficher depuis"
+          name="global-track-depth"
+          onChange={nextValue => dispatch(updateDefaultVesselTrackDepth(nextValue))}
+        />
+      </Content>
       <MapPropertyTrigger
         booleanProperty={showingVesselsEstimatedPositions}
         Icon={EstimatedPosition}
@@ -84,7 +96,7 @@ const EstimatedPosition = styled(EstimatedPositionSVG)`
 `
 
 const LastPositionLegend = styled.div`
-  color: ${COLORS.slateGray};
+  color: ${THEME.color.slateGray};
   font-size: 13px;
   margin: 5px 5px 15px 25px;
   text-align: left;
@@ -112,7 +124,7 @@ const VesselAlmostHidden = styled.span`
 `
 
 const VesselShowed = styled.span`
-  background: ${COLORS.charcoal};
+  background: ${THEME.color.charcoal};
   border: unset;
   display: inline-block;
   height: 3px;
@@ -123,21 +135,9 @@ const VesselShowed = styled.span`
 `
 
 const LastPositionInfo = styled.div`
-  color: ${COLORS.gunMetal};
+  color: ${THEME.color.gunMetal};
   font-size: 10px;
-  margin: 15px;
-`
-
-const Header = styled.div<{
-  isFirst: boolean
-}>`
-  background: ${COLORS.charcoal};
-  border-top-left-radius: ${p => (p.isFirst ? '2px' : '0')};
-  border-top-right-radius: ${p => (p.isFirst ? '2px' : '0')};
-  color: ${COLORS.gainsboro};
-  font-size: 16px;
-  padding: 9px 0 7px 15px;
-  text-align: left;
+  margin: 16px;
 `
 
 const Wrapper = styled(MapToolBox)<{

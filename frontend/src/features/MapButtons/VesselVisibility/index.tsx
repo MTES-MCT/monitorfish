@@ -1,14 +1,14 @@
+import { useClickOutsideWhenOpenedAndExecute } from '@hooks/useClickOutsideWhenOpenedAndExecute'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
 import { EditVesselVisibility } from './EditVesselVisibility'
 import { MapToolType } from '../../../domain/entities/map/constants'
 import { setMapToolOpened } from '../../../domain/shared_slices/Global'
-import { useClickOutsideWhenOpenedAndExecute } from '../../../hooks/useClickOutsideWhenOpenedAndExecute'
-import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import VesselSVG from '../../icons/standardized/Vessel.svg?react'
-import { MapToolButton as VesselVisibilityButton } from '../shared/MapToolButton'
+import { MapToolButton } from '../shared/MapToolButton'
 
 export function VesselVisibilityMapButton() {
   const dispatch = useMainAppDispatch()
@@ -32,15 +32,15 @@ export function VesselVisibilityMapButton() {
 
   return (
     <Wrapper ref={wrapperRef}>
-      <VesselVisibilityButton
+      <MapToolButton
         data-cy="vessel-visibility"
         isActive={isOpen}
         onClick={openOrCloseVesselVisibility}
         style={{ top: 152 }}
         title="Affichage des dernières positions"
       >
-        <VesselIcon $isRightMenuShrinked={isRightMenuShrinked} />
-      </VesselVisibilityButton>
+        <Icon.Vessel color={isRightMenuShrinked ? THEME.color.charcoal : THEME.color.gainsboro} size={26} />
+      </MapToolButton>
       <EditVesselVisibility />
     </Wrapper>
   )
@@ -49,17 +49,4 @@ export function VesselVisibilityMapButton() {
 const Wrapper = styled.div`
   transition: all 0.2s;
   z-index: 1000;
-`
-
-const VesselIcon = styled(VesselSVG)<{
-  $isRightMenuShrinked: boolean
-}>`
-  height: 25px;
-  opacity: ${p => (p.$isRightMenuShrinked ? '0' : '1')};
-  transition: all 0.2s;
-  width: 25px;
-
-  path {
-    fill: ${p => p.theme.color.gainsboro};
-  }
 `

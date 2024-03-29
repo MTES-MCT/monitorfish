@@ -386,6 +386,10 @@ const TextValue = styled.div<{
     min-width: 120px !important;
     width: 120px !important;
   }
+
+  .rs-stack {
+    min-width: 125px;
+  }
 `
 
 const Body = styled.div`

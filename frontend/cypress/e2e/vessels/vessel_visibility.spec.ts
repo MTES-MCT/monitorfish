@@ -22,7 +22,7 @@ context('Vessel visibility', () => {
   it('Vessels default track depth Should be taken into account', () => {
     // Given
     cy.get('*[data-cy="vessel-visibility"]').click()
-    cy.get('[data-cy="global-vessel-track-depth-one-week"] input').click()
+    cy.fill('Afficher depuis', '1 semaine')
     cy.get('*[data-cy="vessel-visibility"]').click()
 
     // When
@@ -33,6 +33,6 @@ context('Vessel visibility', () => {
 
     // Then
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click()
-    cy.get('*[data-cy^="vessel-track-depth-one-week"]').should('have.class', 'rs-radio-checked')
+    cy.get('[name="vessel-track-depth"]').should('have.value', 'ONE_WEEK')
   })
 })

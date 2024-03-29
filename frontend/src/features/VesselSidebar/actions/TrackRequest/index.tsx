@@ -99,6 +99,7 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
           <Field>
             <TrackDepthSelection
               defaultValue={selectedVesselTrackRequest?.trackDepth ?? defaultVesselTrackDepth}
+              label="Afficher la piste VMS depuis"
               name="vessel-track-depth"
               onChange={handleDateRangeRadioChange}
             />

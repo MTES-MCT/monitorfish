@@ -147,7 +147,8 @@ export function EditInterestPoint({ close, isOpen }: EditInterestPointProps) {
             )}
             value={
               INTEREST_POINTS_OPTIONS.find(
-                option => option.value.name === interestPointBeingDrawed?.type || InterestPointType.OTHER
+                option =>
+                  option.value.name === interestPointBeingDrawed?.type || option.value.name === InterestPointType.OTHER
               )?.value
             }
           />

@@ -22,7 +22,7 @@ context('Vessel visibility', () => {
   it('Vessels default track depth Should be taken into account', () => {
     // Given
     cy.get('*[data-cy="vessel-visibility"]').click()
-    cy.fill('Afficher la piste VMS depuis', '1 semaine')
+    cy.fill('Afficher depuis', '1 semaine')
     cy.get('*[data-cy="vessel-visibility"]').click()
 
     // When

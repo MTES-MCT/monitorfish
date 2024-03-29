@@ -35,11 +35,11 @@ context('Map menu tools', () => {
     cy.get('*[data-cy="map-property-trigger"]', { timeout: 10000 })
       .filter(':contains("étiquettes des navires")')
       .should('not.be.visible')
-    cy.get('body').contains('Afficher la piste VMS depuis').should('be.visible')
+    cy.get('body').contains('Afficher depuis').should('be.visible')
 
     // Vessel filters
     cy.get('*[data-cy="vessel-filters"]').click({ timeout: 10000 })
-    cy.get('body').contains('Afficher la piste VMS depuis').should('not.be.visible')
+    cy.get('body').contains('Afficher depuis').should('not.be.visible')
     cy.get('*[data-cy="vessel-filters-create-new-filter"]').should('be.visible')
 
     // Press on ESC should close the tool and shrink the menu

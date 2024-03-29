@@ -62,6 +62,7 @@ export function EditVesselVisibility() {
       <Content hasMargin>
         <TrackDepthSelection
           defaultValue={defaultVesselTrackDepth}
+          label="Afficher depuis"
           name="global-track-depth"
           onChange={nextValue => dispatch(updateDefaultVesselTrackDepth(nextValue))}
         />

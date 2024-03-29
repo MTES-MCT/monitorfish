@@ -1,5 +1,5 @@
 import { SELECT_TRACK_DEPTH_OPTIONS } from '@features/VesselSidebar/actions/TrackRequest/constants'
-import { Label, Select } from '@mtes-mct/monitor-ui'
+import { Select } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -11,9 +11,10 @@ type SelectableVesselTrackDepth = Exclude<VesselTrackDepth, VesselTrackDepth.CUS
 
 type DateRangeRadioProps = {
   defaultValue?: VesselTrackDepth
+  name: string
   onChange: (nextTrackDepth: SelectableVesselTrackDepth | undefined) => Promisable<void>
 }
-export function DateRangeRadio({ defaultValue, onChange }: DateRangeRadioProps) {
+export function TrackDepthSelection({ defaultValue, name, onChange }: DateRangeRadioProps) {
   const normalizedDefaultValue = useMemo(
     () => (defaultValue !== VesselTrackDepth.CUSTOM ? defaultValue : undefined),
     [defaultValue]
@@ -21,13 +22,11 @@ export function DateRangeRadio({ defaultValue, onChange }: DateRangeRadioProps) 
 
   return (
     <ColumnsBox>
-      <ShowFromLabel>Afficher la piste VMS depuis</ShowFromLabel>
       <StyledSelect
         isCleanable={false}
         isErrorMessageHidden
-        isLabelHidden
         label="Afficher la piste VMS depuis"
-        name="vessel-track-depth"
+        name={name}
         onChange={nextValue => onChange(nextValue as SelectableVesselTrackDepth | undefined)}
         options={SELECT_TRACK_DEPTH_OPTIONS}
         value={normalizedDefaultValue}
@@ -41,12 +40,15 @@ const ColumnsBox = styled.div`
   flex-grow: 1;
 `
 
-const ShowFromLabel = styled(Label)`
-  margin-right: 8px;
-  line-height: 27px;
-  margin-left: auto;
-`
-
 const StyledSelect = styled(Select)`
+  display: flex;
   margin-right: auto;
+  margin-left: auto;
+  flex-direction: row;
+
+  .Element-Label {
+    margin-right: 8px;
+    line-height: 27px;
+    flex-shrink: 0;
+  }
 `

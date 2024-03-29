@@ -1,22 +1,20 @@
+import { INTEREST_POINTS_OPTIONS } from '@features/MapButtons/InterestPoints/constants'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { MultiRadio, THEME } from '@mtes-mct/monitor-ui'
 import { transform } from 'ol/proj'
 import { useCallback, useMemo } from 'react'
-import { Radio, RadioGroup } from 'rsuite'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
-import { COLORS } from '../../../constants/constants'
 import { coordinatesAreDistinct, getCoordinates } from '../../../coordinates'
 import { InterestPointType } from '../../../domain/entities/interestPoints'
 import { CoordinatesFormat, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map/constants'
 import { addInterestPoint, updateInterestPointKeyBeingDrawed } from '../../../domain/shared_slices/InterestPoint'
 import saveInterestPointFeature from '../../../domain/use_cases/interestPoint/saveInterestPointFeature'
-import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { SetCoordinates } from '../../coordinates/SetCoordinates'
-import ControlSVG from '../../icons/Label_controle.svg?react'
-import GearSVG from '../../icons/Label_engin_de_peche.svg?react'
-import VesselSVG from '../../icons/Label_segment_de_flotte.svg?react'
-import OtherSVG from '../../icons/Point_interet_autre.svg?react'
 import { MapToolBox } from '../shared/MapToolBox'
+
+import type { InterestPointOptionValueType } from '@features/MapButtons/InterestPoints/constants'
 
 // TODO Refactor this component
 // - Move the state logic to the reducer
@@ -134,30 +132,25 @@ export function EditInterestPoint({ close, isOpen }: EditInterestPointProps) {
       <Body>
         <p>Coordonnées</p>
         {isOpen && <SetCoordinates coordinates={coordinates} updateCoordinates={updateCoordinates} />}
-        <p>Type de point</p>
         <RadioWrapper>
-          <RadioGroup
-            defaultValue={interestPointBeingDrawed?.type || InterestPointType.OTHER}
-            name="interestTypeRadio"
-            onChange={updateType}
-          >
-            <Radio value={InterestPointType.CONTROL_ENTITY}>
-              <Control />
-              Moyen de contrôle
-            </Radio>
-            <Radio value={InterestPointType.FISHING_VESSEL}>
-              <Vessel />
-              Navire de pêche
-            </Radio>
-            <Radio value={InterestPointType.FISHING_GEAR}>
-              <Gear />
-              Engin de pêche
-            </Radio>
-            <Radio data-cy="interest-point-type-radio-input" value={InterestPointType.OTHER}>
-              <Other />
-              Autre point
-            </Radio>
-          </RadioGroup>
+          <MultiRadio<InterestPointOptionValueType>
+            label="Type de point"
+            name="interest-point-type-radio"
+            onChange={nextValue => updateType(nextValue?.name)}
+            options={INTEREST_POINTS_OPTIONS}
+            optionValueKey="name"
+            renderMenuItem={(label, value) => (
+              <>
+                <value.Icon />
+                {label}
+              </>
+            )}
+            value={
+              INTEREST_POINTS_OPTIONS.find(
+                option => option.value.name === interestPointBeingDrawed?.type ?? InterestPointType.OTHER
+              )?.value
+            }
+          />
         </RadioWrapper>
         <p>Libellé du point</p>
         <Name
@@ -188,26 +181,27 @@ const Name = styled.input`
 `
 
 const RadioWrapper = styled.div`
-  margin-top: 10px;
+  margin-top: 12px;
+  margin-bottom: 12px;
 `
 
 const CancelButton = styled.button`
-  border: 1px solid ${COLORS.lightGray};
-  color: ${COLORS.gunMetal};
+  border: 1px solid ${THEME.color.lightGray};
+  color: ${THEME.color.gunMetal};
   font-size: 13px;
   margin: 15px 0 0 15px;
   padding: 5px 12px;
   width: 130px;
 
   :disabled {
-    border: 1px solid ${COLORS.lightGray};
-    color: ${COLORS.slateGray};
+    border: 1px solid ${THEME.color.lightGray};
+    color: ${THEME.color.slateGray};
   }
 `
 
 const OkButton = styled.button`
-  background: ${COLORS.charcoal};
-  color: ${COLORS.gainsboro};
+  background: ${THEME.color.charcoal};
+  color: ${THEME.color.gainsboro};
   font-size: 13px;
   margin: 15px 0 0;
   padding: 5px 12px;
@@ -215,12 +209,12 @@ const OkButton = styled.button`
 
   :hover,
   :focus {
-    background: ${COLORS.charcoal};
+    background: ${THEME.color.charcoal};
   }
 `
 
 const Body = styled.div`
-  color: ${COLORS.slateGray};
+  color: ${THEME.color.slateGray};
   font-size: 13px;
   margin: 10px 15px;
   text-align: left;
@@ -246,18 +240,18 @@ const Body = styled.div`
   }
 
   input {
-    background: ${COLORS.gainsboro};
+    background: ${THEME.color.gainsboro};
     border: none;
-    color: ${COLORS.gunMetal};
+    color: ${THEME.color.gunMetal};
     height: 27px;
     margin-top: 7px;
     padding-left: 8px;
   }
 
   textarea {
-    background: ${COLORS.gainsboro};
+    background: ${THEME.color.gainsboro};
     border: none;
-    color: ${COLORS.gunMetal};
+    color: ${THEME.color.gunMetal};
     margin-top: 7px;
     min-height: 50px;
     padding-left: 8px;
@@ -268,10 +262,10 @@ const Body = styled.div`
 `
 
 const Header = styled.div`
-  background: ${COLORS.charcoal};
+  background: ${THEME.color.charcoal};
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
-  color: ${COLORS.gainsboro};
+  color: ${THEME.color.gainsboro};
   font-size: 16px;
   padding: 9px 0 7px 15px;
   text-align: left;
@@ -280,27 +274,4 @@ const Header = styled.div`
 const Wrapper = styled(MapToolBox)`
   top: 333px;
   width: 306px;
-`
-
-const iconStyle = css`
-  margin-left: 3px;
-  margin-right: 7px;
-  vertical-align: sub;
-  width: 14px;
-`
-
-const Gear = styled(GearSVG)`
-  ${iconStyle}
-`
-
-const Control = styled(ControlSVG)`
-  ${iconStyle}
-`
-
-const Vessel = styled(VesselSVG)`
-  ${iconStyle}
-`
-
-const Other = styled(OtherSVG)`
-  ${iconStyle}
 `

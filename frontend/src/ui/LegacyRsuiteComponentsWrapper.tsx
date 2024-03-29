@@ -74,69 +74,6 @@ export const LegacyRsuiteComponentsWrapper = styled.div<{
     z-index: 99;
   }
 
-  .rs-radio-wrapper::before {
-    background: #e5e5eb 0% 0% no-repeat padding-box;
-    border: 2px solid #cccfd6;
-  }
-
-  .rs-radio-checked .rs-radio-wrapper .rs-radio-inner::before {
-    background: #e5e5eb 0% 0% no-repeat padding-box;
-    border: 2px solid #707785;
-  }
-
-  .rs-radio-wrapper .rs-radio-inner::after {
-    background: #707785;
-    width: 6px;
-    height: 6px;
-    margin-top: 4px;
-    margin-left: 4px;
-  }
-
-  .rs-radio-wrapper .rs-radio-inner::before {
-    background: #e5e5eb 0% 0% no-repeat padding-box;
-    border: 2px solid #cccfd6;
-  }
-
-  .rs-radio-checker > label {
-    font-size: 13px;
-    color: #3b4559;
-    padding: 0 0 0 2px;
-    font-weight: 500;
-    line-height: 17px;
-  }
-
-  .rs-radio-checker {
-    padding-top: 2px;
-    padding-bottom: 0;
-    padding-left: 29px;
-    min-height: 0;
-    line-height: 1;
-    position: relative;
-  }
-
-  .rs-radio-inline > .rs-radio-checker {
-    padding-top: 2px;
-    margin-right: 6px;
-  }
-
-  .rs-radio-group {
-    text-align: left;
-    margin-right: 0;
-  }
-
-  .rs-radio-inline {
-    margin: 0;
-  }
-
-  .rs-radio-group[role='button'] {
-    padding: unset;
-    margin-top: 0;
-  }
-
-  .rs-radio-wrapper {
-    top: 5px;
-  }
-
   .rs-picker-menu {
     z-index: 9999 !important;
   }

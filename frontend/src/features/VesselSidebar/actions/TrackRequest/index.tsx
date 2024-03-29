@@ -4,9 +4,9 @@ import { DateRangePicker, THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { DateRangeRadio } from './DateRangeRadio'
 import { ExportTrack } from './ExportTrack'
 import { PositionsTable } from './PositionsTable'
+import { TrackDepthSelection } from './TrackDepthSelection'
 import { VesselTrackDepth, getTrackRequestFromTrackDepth } from '../../../../domain/entities/vesselTrackDepth'
 import { updateSelectedVesselTrackRequest } from '../../../../domain/use_cases/vessel/updateSelectedVesselTrackRequest'
 import { MapComponent } from '../../../commonStyles/MapComponent'
@@ -97,8 +97,9 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
         <Header>Paramétrer l&apos;affichage de la piste VMS</Header>
         <Section>
           <Field>
-            <DateRangeRadio
+            <TrackDepthSelection
               defaultValue={selectedVesselTrackRequest?.trackDepth ?? defaultVesselTrackDepth}
+              name="vessel-track-depth"
               onChange={handleDateRangeRadioChange}
             />
           </Field>

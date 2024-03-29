@@ -1,4 +1,6 @@
 import { INTEREST_POINTS_OPTIONS } from '@features/MapButtons/InterestPoints/constants'
+import { MapToolBox } from '@features/MapButtons/shared/MapToolBox'
+import { Header } from '@features/MapButtons/shared/styles'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { MultiRadio, THEME } from '@mtes-mct/monitor-ui'
@@ -12,9 +14,6 @@ import { CoordinatesFormat, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../.
 import { addInterestPoint, updateInterestPointKeyBeingDrawed } from '../../../domain/shared_slices/InterestPoint'
 import saveInterestPointFeature from '../../../domain/use_cases/interestPoint/saveInterestPointFeature'
 import { SetCoordinates } from '../../coordinates/SetCoordinates'
-import { MapToolBox } from '../shared/MapToolBox'
-
-import type { InterestPointOptionValueType } from '@features/MapButtons/InterestPoints/constants'
 
 // TODO Refactor this component
 // - Move the state logic to the reducer
@@ -133,22 +132,14 @@ export function EditInterestPoint({ close, isOpen }: EditInterestPointProps) {
         <p>Coordonnées</p>
         {isOpen && <SetCoordinates coordinates={coordinates} updateCoordinates={updateCoordinates} />}
         <RadioWrapper>
-          <MultiRadio<InterestPointOptionValueType>
+          <MultiRadio
             label="Type de point"
             name="interest-point-type-radio"
-            onChange={nextValue => updateType(nextValue?.name)}
+            onChange={nextValue => updateType(nextValue)}
             options={INTEREST_POINTS_OPTIONS}
-            optionValueKey="name"
-            renderMenuItem={(label, value) => (
-              <>
-                <value.Icon />
-                {label}
-              </>
-            )}
             value={
               INTEREST_POINTS_OPTIONS.find(
-                option =>
-                  option.value.name === interestPointBeingDrawed?.type || option.value.name === InterestPointType.OTHER
+                option => option.value === interestPointBeingDrawed?.type || option.value === InterestPointType.OTHER
               )?.value
             }
           />
@@ -260,16 +251,6 @@ const Body = styled.div`
     resize: vertical;
     width: 100% !important;
   }
-`
-
-const Header = styled.div`
-  background: ${THEME.color.charcoal};
-  border-top-left-radius: 2px;
-  border-top-right-radius: 2px;
-  color: ${THEME.color.gainsboro};
-  font-size: 16px;
-  padding: 9px 0 7px 15px;
-  text-align: left;
 `
 
 const Wrapper = styled(MapToolBox)`

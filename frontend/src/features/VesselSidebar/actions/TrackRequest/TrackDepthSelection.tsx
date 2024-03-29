@@ -11,10 +11,11 @@ type SelectableVesselTrackDepth = Exclude<VesselTrackDepth, VesselTrackDepth.CUS
 
 type DateRangeRadioProps = {
   defaultValue?: VesselTrackDepth
+  label: string
   name: string
   onChange: (nextTrackDepth: SelectableVesselTrackDepth | undefined) => Promisable<void>
 }
-export function TrackDepthSelection({ defaultValue, name, onChange }: DateRangeRadioProps) {
+export function TrackDepthSelection({ defaultValue, label, name, onChange }: DateRangeRadioProps) {
   const normalizedDefaultValue = useMemo(
     () => (defaultValue !== VesselTrackDepth.CUSTOM ? defaultValue : undefined),
     [defaultValue]
@@ -25,7 +26,7 @@ export function TrackDepthSelection({ defaultValue, name, onChange }: DateRangeR
       <StyledSelect
         isCleanable={false}
         isErrorMessageHidden
-        label="Afficher la piste VMS depuis"
+        label={label}
         name={name}
         onChange={nextValue => onChange(nextValue as SelectableVesselTrackDepth | undefined)}
         options={SELECT_TRACK_DEPTH_OPTIONS}

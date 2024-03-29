@@ -74,9 +74,6 @@ context('VesselSearch', () => {
 
     // Then
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 10000 })
-    cy.get('[aria-rowindex="2"] > .rs-table-cell-group > [aria-colindex="2"] > .rs-table-cell-content').contains(
-      '14 nds',
-      { timeout: 10000 }
-    )
+    cy.get('[data-id="2"] > td').eq(2).contains('14 nds')
   })
 })

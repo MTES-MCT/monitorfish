@@ -137,7 +137,7 @@ context('Vessel sidebar logbook tab', () => {
     cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ force: true, timeout: 10000 })
-    cy.get('[data-cy="vessel-track-depth-three-days"] input').click({ timeout: 10000 })
+    cy.fill('Afficher la piste VMS depuis', '3 jours')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ force: true, timeout: 10000 })
     cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 10000 })
 
@@ -183,7 +183,7 @@ context('Vessel sidebar logbook tab', () => {
     cy.get('*[data-cy="custom-dates-show-last-positions"]').click()
     cy.get('*[data-cy="custom-dates-showed-text"]').should('not.exist')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ force: true, timeout: 10000 })
-    cy.get('[data-cy="vessel-track-depth-twelve-hours"]').should('have.class', 'rs-radio-checked')
+    cy.get('[name="vessel-track-depth"]').should('have.value', 'TWELVE_HOURS')
   })
 
   it('Single fishing activity Should be seen on map When clicking on the position icon', () => {
@@ -192,7 +192,7 @@ context('Vessel sidebar logbook tab', () => {
     cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ force: true, timeout: 10000 })
-    cy.get('[data-cy="vessel-track-depth-three-days"] input').click({ timeout: 10000 })
+    cy.fill('Afficher la piste VMS depuis', '3 jours')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ force: true, timeout: 10000 })
 
     // When

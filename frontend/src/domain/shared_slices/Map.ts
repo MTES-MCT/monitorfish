@@ -7,6 +7,7 @@ import { VesselLabel } from '../entities/vessel/label/types'
 import { VesselTrackDepth } from '../entities/vesselTrackDepth'
 
 import type { LastPositionVisibility } from '../types/map'
+import type { SelectableVesselTrackDepth } from '@features/VesselSidebar/actions/TrackRequest/types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import type { Extent } from 'ol/extent'
 
@@ -28,7 +29,7 @@ export type MapState = {
   animateToExtent: boolean
   animateToRegulatoryLayer: { center?: [number, number]; extent?: [number, number] } | undefined
   coordinatesFormat: CoordinatesFormat
-  defaultVesselTrackDepth: VesselTrackDepth
+  defaultVesselTrackDepth: SelectableVesselTrackDepth
   doNotAnimate: boolean
   extent: null
   fitToExtent: Extent | undefined
@@ -159,7 +160,7 @@ const mapSlice = createSlice({
       state.riskFactorShowedOnMap = action.payload
     },
 
-    setVesselLabel(state, action) {
+    setVesselLabel(state, action: PayloadAction<string>) {
       window.localStorage.setItem(vesselLabelLocalStorageKey, JSON.stringify(action.payload))
       state.vesselLabel = action.payload
     },

@@ -103,7 +103,8 @@ context('InterestPoint', () => {
     cy.get('#root').click(159, 1000, { timeout: 10000 })
     cy.get('*[data-cy="interest-point"]').click({ timeout: 10000 })
     cy.get('#root').click(490, 580, { timeout: 10000 })
-    cy.get('*[data-cy="interest-point-type-radio-input"]').click({ timeout: 10000 })
+    cy.fill('Type de point', 'Autre point')
+
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 10000 })
     cy.get('[data-cy="interest-point-edit"]').click({ timeout: 10000 })
     // The interest point is moved to the East side
@@ -119,7 +120,7 @@ context('InterestPoint', () => {
     cy.get('*[data-cy="dms-coordinates-input"]', { timeout: 10000 })
       .eq(1)
       .should('have.value', '47° 45′ 31″ N 007° 54′ 51″ E')
-    cy.get('*[data-cy="interest-point-type-radio-input"]').should('have.class', 'rs-radio-checked')
+    cy.get('.Field-MultiRadio').contains('Type de point').get('[aria-checked="true"]').contains('Autre point')
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 10000 })
 
     cy.get('*[data-cy^="interest-point-coordinates"]').first().contains('47° 45′', { timeout: 10000 })

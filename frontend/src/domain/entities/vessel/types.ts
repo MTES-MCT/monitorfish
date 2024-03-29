@@ -3,6 +3,7 @@
 import type { ReportingType } from '../../types/reporting'
 import type { VesselTrackDepth } from '../vesselTrackDepth'
 import type { Vessel } from '@features/Vessel/Vessel.types'
+import type { SelectableVesselTrackDepth } from '@features/VesselSidebar/actions/TrackRequest/types'
 import type Feature from 'ol/Feature'
 import type LineString from 'ol/geom/LineString'
 import type Point from 'ol/geom/Point'
@@ -190,7 +191,7 @@ export type TrackRequestCustom = {
 export type TrackRequestPredefined = {
   afterDateTime: null
   beforeDateTime: null
-  trackDepth: Exclude<VesselTrackDepth, 'CUSTOM'>
+  trackDepth: SelectableVesselTrackDepth
 }
 
 export interface VesselPointFeature extends Feature<Point> {

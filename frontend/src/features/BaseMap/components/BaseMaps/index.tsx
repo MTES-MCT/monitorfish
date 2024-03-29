@@ -1,15 +1,15 @@
+import { useIsInLightMode } from '@hooks/authorization/useIsInLightMode'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useMemo } from 'react'
 import { RadioGroup } from 'rsuite'
 import styled from 'styled-components'
 
 import { BaseMap } from './BaseMap'
-import { COLORS } from '../../../../constants/constants'
 import { BaseLayers, LayerType } from '../../../../domain/entities/layers/constants'
 import LayerSlice from '../../../../domain/shared_slices/Layer'
 import { selectBaseLayer } from '../../../../domain/shared_slices/Map'
-import { useIsInLightMode } from '../../../../hooks/authorization/useIsInLightMode'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { ChevronIcon } from '../../../commonStyles/icons/ChevronIcon.style'
 import { closeRegulatoryZoneMetadata } from '../../../Regulation/useCases/closeRegulatoryZoneMetadata'
 
@@ -58,7 +58,7 @@ export function BaseMaps({ namespace }) {
       <RadioGroup onChange={showLayer} value={selectedBaseLayer}>
         <List isShowed={isBaseLayersShowed} layersLength={baseLayers.length}>
           {baseLayers.map(layer => (
-            <BaseMap key={layer} layer={layer} />
+            <BaseMap key={layer} layer={layer} onChange={showLayer} selectedBaseLayer={selectedBaseLayer} />
           ))}
         </List>
       </RadioGroup>
@@ -71,8 +71,8 @@ const Title = styled.div<{
 }>`
   height: 30px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  background: ${COLORS.charcoal};
-  color: ${COLORS.gainsboro};
+  background: ${THEME.color.charcoal};
+  color: ${THEME.color.gainsboro};
   font-size: 16px;
   padding-top: 5px;
   cursor: pointer;

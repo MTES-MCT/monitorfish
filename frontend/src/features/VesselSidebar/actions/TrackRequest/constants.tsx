@@ -10,9 +10,7 @@ import type { ColumnDef } from '@tanstack/react-table'
 export const POSITION_TABLE_COLUMNS: Array<ColumnDef<VesselPosition & { id: number }>> = [
   {
     accessorKey: 'id',
-    cell: info => (
-      <HighlightPositionCell isManualPositionMarkerShowed row={info.row.original} value={info.getValue()} />
-    ),
+    cell: info => <HighlightPositionCell row={info.row.original} value={info.getValue()} />,
     enableSorting: false,
     header: '#',
     size: 0

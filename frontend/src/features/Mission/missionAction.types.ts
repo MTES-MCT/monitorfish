@@ -5,6 +5,7 @@ export namespace MissionAction {
     actionDatetimeUtc: string
     actionType: MissionActionType
     closedBy: string | undefined
+    completion: CompletionStatus
     controlQualityComments: string | undefined
     controlUnits: LegacyControlUnit.LegacyControlUnit[]
     districtCode: string | undefined
@@ -158,5 +159,17 @@ export namespace MissionAction {
     nbFish: number | undefined
     speciesCode: string
     underSized: boolean | undefined
+  }
+
+  export enum CompletionStatus {
+    COMPLETED = 'COMPLETED',
+    TO_COMPLETE = 'TO_COMPLETE'
+  }
+
+  export enum FrontCompletionStatus {
+    COMPLETED = 'COMPLETED',
+    TO_COMPLETE = 'TO_COMPLETE',
+    TO_COMPLETE_MISSION_ENDED = 'TO_COMPLETE_MISSION_ENDED',
+    UP_TO_DATE = 'UP_TO_DATE'
   }
 }

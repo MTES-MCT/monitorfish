@@ -44,7 +44,18 @@ export const getInterestPointStyle = (feature, resolution) => {
   }
 
   const style = interestPointStylesCache.get(type)
-  style[0].getImage().setScale(1 / resolution ** (1 / 8) + 0.3)
+
+  const SCALE_BASE = 1 / 8 // Scale factor to reduce the size of the icon when dezooming
+  const SCALE_ADDITION = 0.3 // Minimum scale number
+  const VERTICAL_ICON_OFFSET = 18
+
+  const scale = 1 / resolution ** SCALE_BASE + SCALE_ADDITION
+  const verticalIconOffset = VERTICAL_ICON_OFFSET
+
+  const iconImage = style[0].getImage()
+
+  iconImage.setScale(scale)
+  iconImage.setDisplacement([0, verticalIconOffset * scale])
 
   return style
 }

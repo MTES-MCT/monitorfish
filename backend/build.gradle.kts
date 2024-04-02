@@ -70,7 +70,7 @@ dependencies {
     api("io.sentry:sentry:6.31.0")
     api("io.sentry:sentry-log4j2:7.5.0")
     runtimeOnly("org.postgresql:postgresql:42.6.0")
-    testImplementation("io.ktor:ktor-client-mock-jvm:2.3.3")
+    testImplementation("io.ktor:ktor-client-mock-jvm:2.3.9")
     testImplementation("org.assertj:assertj-core:3.25.0")
     testImplementation("org.testcontainers:postgresql:1.19.4")
     testImplementation("org.testcontainers:testcontainers:1.19.4")

@@ -418,7 +418,8 @@ def extract_enrich_load_logbook(
         pno_emission_period=period, trips_period=trips_period
     )
     logger.info(
-        f"Extracted {len(pnos_species_and_gears)} PNO species from {pnos_species_and_gears.logbook_reports_pno_id.nunique()} PNOs."
+        f"Extracted {len(pnos_species_and_gears)} PNO species from "
+        f"{pnos_species_and_gears.logbook_reports_pno_id.nunique()} PNOs."
     )
 
     logger.info("Computing PNO segments...")

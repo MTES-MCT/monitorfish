@@ -44,7 +44,10 @@ export const getInterestPointStyle = (feature, resolution) => {
   }
 
   const style = interestPointStylesCache.get(type)
-  style[0].getImage().setScale(1 / resolution ** (1 / 8) + 0.3)
+  const scale = 1 / resolution ** (1 / 8) + 0.3
+  const verticalIconOffset = 18
+  style[0].getImage().setScale(scale)
+  style[0].getImage().setDisplacement([0, verticalIconOffset * scale])
 
   return style
 }

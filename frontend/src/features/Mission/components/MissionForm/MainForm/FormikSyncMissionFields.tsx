@@ -37,6 +37,8 @@ export function FormikSyncMissionFields({ missionId }: FormikSyncMissionFormProp
         logInDev(`SSE: setting form key "${key}" to ${JSON.stringify(missionEvent[key])}`)
         setFieldValue(key, missionEvent[key])
       })
+
+      // TODO Set draft as not dirty
     },
 
     // We don't want to trigger infinite re-renders since `setFieldValue` changes after each rendering

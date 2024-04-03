@@ -235,17 +235,21 @@ def compute_pno_types(
                     {...}
                 ]```
     """
+    trip_gear_codes = (  # noqa: F841
+        pno_species_and_gears[["logbook_reports_pno_id", "trip_gears"]]
+        .explode("trip_gears")
+        .dropna()
+        .assign(trip_gear_codes=lambda x: x.trip_gears.map(lambda d: d["gear"]))
+        .groupby("logbook_reports_pno_id")[["trip_gear_codes"]]
+        .agg({"trip_gear_codes": "unique"})
+        .reset_index()
+    )
+
     db = duckdb.connect()
 
     res = db.sql(
         """
-        WITH trip_gear_codes AS (
-            SELECT logbook_reports_pno_id, ARRAY_AGG(DISTINCT gear->>'gear') AS trip_gear_codes
-            FROM pno_species_and_gears, unnest(trip_gears) AS t(gear)
-            GROUP BY logbook_reports_pno_id
-        ),
-
-        pnos_pno_types_tmp AS (
+        WITH pnos_pno_types_tmp AS (
             SELECT
                 sg.logbook_reports_pno_id,
                 t.pno_type_name,

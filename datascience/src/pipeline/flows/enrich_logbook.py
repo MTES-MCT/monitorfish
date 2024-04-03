@@ -248,6 +248,10 @@ def compute_pno_types(
         .reset_index()
     )
 
+    pnos_trip_gears = pno_species_and_gears.drop_duplicates(  # noqa: F841
+        subset=["logbook_reports_pno_id"]
+    )[["logbook_reports_pno_id", "trip_gears"]]
+
     db = duckdb.connect()
 
     res = db.sql(
@@ -282,14 +286,6 @@ def compute_pno_types(
             FROM pnos_pno_types_tmp
             WHERE pno_quantity_kg >= minimum_quantity_kg
             GROUP BY logbook_reports_pno_id
-        ),
-
-        pnos_trip_gears AS (
-            SELECT DISTINCT ON (logbook_reports_pno_id)
-                logbook_reports_pno_id,
-                LIST_SORT(trip_gears) AS trip_gears
-            FROM pno_species_and_gears
-            ORDER BY logbook_reports_pno_id
         )
 
         SELECT

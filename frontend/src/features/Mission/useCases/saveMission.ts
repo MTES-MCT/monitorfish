@@ -24,6 +24,8 @@ export const saveMission =
           monitorenvMissionApi.endpoints.createMission.initiate(newMission)
         ).unwrap()
 
+        initIsDraftDirtyAndListenToEvents()
+
         return {
           ...nextMainFormValues,
           createdAtUtc: createdMission.createdAtUtc,
@@ -35,10 +37,7 @@ export const saveMission =
       const nextMission = getUpdatedMissionFromMissionMainFormValues(missionId, nextMainFormValues)
       const updatedMission = await dispatch(monitorenvMissionApi.endpoints.updateMission.initiate(nextMission)).unwrap()
 
-      dispatch(missionFormActions.setIsDraftDirty(false))
-      setTimeout(() => {
-        dispatch(missionFormActions.setIsListeningToEvents(true))
-      }, 500)
+      initIsDraftDirtyAndListenToEvents()
 
       return {
         ...nextMainFormValues,
@@ -53,5 +52,12 @@ export const saveMission =
       })
 
       return nextMainFormValues
+    }
+
+    function initIsDraftDirtyAndListenToEvents() {
+      dispatch(missionFormActions.setIsDraftDirty(false))
+      setTimeout(() => {
+        dispatch(missionFormActions.setIsListeningToEvents(true))
+      }, 500)
     }
   }

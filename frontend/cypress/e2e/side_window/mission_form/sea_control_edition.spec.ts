@@ -369,4 +369,52 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
     cy.wait(250)
     cy.get('.Toastify__toast--success').should('not.exist')
   })
+
+  /**
+   * Non-regression test to prevent the modal to be showed when an action is created.
+   * The `isDirty` field was not reset after a POST request.
+   */
+  it('Should not show an unsaved modal confirmation When an action is created', () => {
+    // Given
+    editSideWindowMissionListMissionWithId(34, SeaFrontGroup.MEMN)
+    cy.intercept('POST', '/api/v1/missions/34', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    })
+    cy.intercept('DELETE', '/bff/v1/mission_actions/*', {
+      body: {
+        id: 2
+      },
+      statusCode: 200
+    })
+    cy.intercept('POST', '/bff/v1/mission_actions', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('updateAction')
+    cy.clickButton('Supprimer l’action')
+    cy.wait(500)
+
+    // When
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle à la débarque')
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    cy.get('input[placeholder="Rechercher un navire..."]').type('pheno').wait(250)
+    cy.contains('mark', 'PHENO').click()
+    cy.get('#port').parent().click({ force: true })
+    cy.get('.rs-search-box-input').type('saintmalo{enter}', { force: true })
+    // Should select the right port
+    cy.get('.Field-Select').contains('Saint-Malo (FRSML)')
+    cy.fill('Saisi par', 'Marlin')
+    cy.wait('@updateAction')
+    cy.wait(500)
+
+    // Then
+    cy.clickButton('Fermer')
+    cy.get('.Component-Dialog').should('not.exist')
+  })
 })

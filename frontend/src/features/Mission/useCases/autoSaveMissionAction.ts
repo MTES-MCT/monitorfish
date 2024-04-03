@@ -35,6 +35,8 @@ export const autoSaveMissionAction =
           missionActionApi.endpoints.createMissionAction.initiate(missionActionData)
         ).unwrap()
 
+        dispatch(missionFormActions.setIsDraftDirty(false))
+
         return id
       }
 

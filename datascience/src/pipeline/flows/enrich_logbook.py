@@ -254,7 +254,7 @@ def compute_pno_types(
 
     db = duckdb.connect()
 
-    res = db.sql(
+    pnos_pno_types = db.sql(
         """
         WITH pnos_pno_types_tmp AS (
             SELECT
@@ -273,31 +273,24 @@ def compute_pno_types(
                 (list_has_any(tgc.trip_gear_codes, t.gears) OR t.gears = '[]'::VARCHAR[]) AND
                 (length(filter(t.fao_areas, a -> sg.fao_area LIKE a || '%')) > 0 OR t.fao_areas = '[]'::VARCHAR[]) AND
                 (sg.flag_state = ANY(t.flag_states) OR t.flag_states = '[]'::VARCHAR[])
-        ),
-
-        pnos_pno_types AS (
-            SELECT
-                logbook_reports_pno_id,
-                LIST_SORT(ARRAY_AGG(DISTINCT {
-                    'pno_type_name': pno_type_name,
-                    'minimum_notification_period': minimum_notification_period,
-                    'has_designated_ports': has_designated_ports
-                })) AS pno_types
-            FROM pnos_pno_types_tmp
-            WHERE pno_quantity_kg >= minimum_quantity_kg
-            GROUP BY logbook_reports_pno_id
         )
 
         SELECT
-            g.logbook_reports_pno_id,
-            g.trip_gears,
-            t.pno_types
-        FROM pnos_trip_gears g
-        LEFT JOIN pnos_pno_types t
-        ON g.logbook_reports_pno_id = t.logbook_reports_pno_id
-        ORDER BY g.logbook_reports_pno_id
+            logbook_reports_pno_id,
+            LIST_SORT(ARRAY_AGG(DISTINCT {
+                'pno_type_name': pno_type_name,
+                'minimum_notification_period': minimum_notification_period,
+                'has_designated_ports': has_designated_ports
+            })) AS pno_types
+        FROM pnos_pno_types_tmp
+        WHERE pno_quantity_kg >= minimum_quantity_kg
+        GROUP BY logbook_reports_pno_id
     """
     ).to_df()
+
+    res = pd.merge(
+        pnos_trip_gears, pnos_pno_types, how="left", on="logbook_reports_pno_id"
+    ).sort_values("logbook_reports_pno_id")
 
     return res
 

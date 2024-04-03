@@ -246,8 +246,8 @@ def expected_computed_pno_types() -> pd.DataFrame:
             "logbook_reports_pno_id": [1, 2, 3, 4, 5, 6, 7, 8],
             "trip_gears": [
                 [
-                    {"gear": "OTT", "mesh": 120, "dimensions": "250.0"},
                     {"gear": "OTT", "mesh": 140, "dimensions": "250.0"},
+                    {"gear": "OTT", "mesh": 120, "dimensions": "250.0"},
                 ],
                 [{"gear": "TBB", "mesh": 140, "dimensions": "250.0"}],
                 [],
@@ -436,8 +436,8 @@ def expected_merged_pnos() -> pd.DataFrame:
             "logbook_reports_pno_id": [1, 2, 3, 4, 5, 6, 7, 8],
             "trip_gears": [
                 [
-                    {"gear": "OTT", "mesh": 120, "dimensions": "250.0"},
                     {"gear": "OTT", "mesh": 140, "dimensions": "250.0"},
+                    {"gear": "OTT", "mesh": 120, "dimensions": "250.0"},
                 ],
                 [{"gear": "TBB", "mesh": 140, "dimensions": "250.0"}],
                 [],

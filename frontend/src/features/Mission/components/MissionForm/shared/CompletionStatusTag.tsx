@@ -1,12 +1,16 @@
-import {ExclamationPoint, Icon, Tag, THEME} from '@mtes-mct/monitor-ui'
+import { useGetMissionCompletion } from '@features/Mission/components/MissionForm/hooks/useGetMissionCompletion'
+import { MissionAction } from '@features/Mission/missionAction.types'
+import { ExclamationPoint, Icon, Tag, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
-import {MissionAction} from "@features/Mission/missionAction.types";
-import FrontCompletionStatus = MissionAction.FrontCompletionStatus;
 
-export function CompletionStatusTag({ completion = undefined }: { completion?: FrontCompletionStatus }) {
+import FrontCompletionStatus = MissionAction.FrontCompletionStatus
+
+export function CompletionStatusTag() {
+  const completion = useGetMissionCompletion()
   if (!completion) {
     return null
   }
+
   switch (completion) {
     case FrontCompletionStatus.COMPLETED:
       return (
@@ -16,7 +20,7 @@ export function CompletionStatusTag({ completion = undefined }: { completion?: F
           Icon={Icon.Confirm}
           iconColor={THEME.color.mediumSeaGreen}
         >
-          Complétées
+          Complétée
         </StyledTag>
       )
     case FrontCompletionStatus.UP_TO_DATE:

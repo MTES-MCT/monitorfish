@@ -14,7 +14,7 @@ export function FormikAuthor() {
     <Wrapper>
       <div>
         <FormikTextInput isErrorMessageHidden isLight isRequired label="Saisi par" name="userTrigram" />
-        <FormikTextInput isErrorMessageHidden isLight label="Clôturé par" name="closedBy" />
+        <FormikTextInput isErrorMessageHidden isLight isRequired label="Clôturé par" name="closedBy" />
       </div>
       {error && error !== HIDDEN_ERROR && <FieldError>{error}</FieldError>}
     </Wrapper>

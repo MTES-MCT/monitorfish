@@ -1,3 +1,4 @@
+import { MainFormLiveSchema } from '@features/Mission/components/MissionForm/MainForm/schemas'
 import { FormError, FormErrorCode } from '@libs/FormError'
 import { validateRequiredFormValues } from '@utils/validateRequiredFormValues'
 import { difference, omit } from 'lodash'
@@ -7,10 +8,13 @@ import { Mission } from '../../mission.types'
 import { MissionAction } from '../../missionAction.types'
 
 import type { MissionActionFormValues, MissionMainFormValues } from './types'
+import type { MissionWithActionsDraft } from '@features/Mission/types'
 import type { Undefine } from '@mtes-mct/monitor-ui'
 import type { LegacyControlUnit } from 'domain/types/legacyControlUnit'
 
 import MissionActionType = MissionAction.MissionActionType
+import CompletionStatus = MissionAction.CompletionStatus
+import FrontCompletionStatus = MissionAction.FrontCompletionStatus
 
 /**
  *
@@ -159,4 +163,43 @@ export function getValidMissionDataControlUnit(
   }
 
   return validMissionDataControlUnit
+}
+
+export function getMissionCompletion(draft: MissionWithActionsDraft | undefined): CompletionStatus {
+  if (!draft) {
+    return CompletionStatus.TO_COMPLETE
+  }
+
+  const hasAtLeastOnUncompletedAction = draft.actionsFormValues.find(
+    action => !action.completion || action.completion === CompletionStatus.TO_COMPLETE
+  )
+
+  if (hasAtLeastOnUncompletedAction || !MainFormLiveSchema.isValidSync(draft.mainFormValues)) {
+    return CompletionStatus.TO_COMPLETE
+  }
+
+  return CompletionStatus.COMPLETED
+}
+
+export function getMissionCompletionFrontStatus(
+  missionStatus: Mission.MissionStatus | undefined,
+  missionCompletion: CompletionStatus
+): FrontCompletionStatus {
+  if (missionStatus === Mission.MissionStatus.IN_PROGRESS && missionCompletion === CompletionStatus.COMPLETED) {
+    return FrontCompletionStatus.UP_TO_DATE
+  }
+
+  if (missionStatus === Mission.MissionStatus.IN_PROGRESS && missionCompletion === CompletionStatus.TO_COMPLETE) {
+    return FrontCompletionStatus.TO_COMPLETE
+  }
+
+  if (missionStatus === Mission.MissionStatus.DONE && missionCompletion === CompletionStatus.COMPLETED) {
+    return FrontCompletionStatus.COMPLETED
+  }
+
+  if (missionStatus === Mission.MissionStatus.DONE && missionCompletion === CompletionStatus.TO_COMPLETE) {
+    return FrontCompletionStatus.TO_COMPLETE_MISSION_ENDED
+  }
+
+  return FrontCompletionStatus.TO_COMPLETE
 }

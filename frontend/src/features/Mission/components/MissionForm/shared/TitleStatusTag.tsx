@@ -1,5 +1,5 @@
 import { Mission } from '@features/Mission/mission.types'
-import { Tag, THEME } from '@mtes-mct/monitor-ui'
+import { Tag, THEME, Accent, Icon } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import MissionStatus = Mission.MissionStatus
@@ -11,29 +11,31 @@ export function TitleStatusTag({ status }: TitleStatusTagProps) {
   switch (status) {
     case Mission.MissionStatus.UPCOMING:
       return (
-        <MissionStatusTag background={THEME.color.yellowGreen} color={THEME.color.white}>
+        <MissionStatusTag accent={Accent.PRIMARY} Icon={Icon.Clock} iconColor={THEME.color.blueNcs}>
           {Mission.MissionStatusLabel.UPCOMING}
         </MissionStatusTag>
       )
     case Mission.MissionStatus.IN_PROGRESS:
       return (
-        <MissionStatusTag background={THEME.color.mediumSeaGreen} color={THEME.color.white}>
+        <MissionStatusTag
+          accent={Accent.PRIMARY}
+          color={THEME.color.charcoal}
+          Icon={Icon.Clock}
+          iconColor={THEME.color.blueGray}
+        >
           {Mission.MissionStatusLabel.IN_PROGRESS}
         </MissionStatusTag>
       )
+    // TODO: remove this line when the CLOSED status is removed
     case Mission.MissionStatus.CLOSED:
       return (
-        <MissionStatusTag
-          background={THEME.color.white}
-          borderColor={THEME.color.slateGray}
-          color={THEME.color.slateGray}
-        >
+        <MissionStatusTag accent={Accent.PRIMARY} Icon={Icon.Confirm} iconColor={THEME.color.charcoal}>
           {Mission.MissionStatusLabel.CLOSED}
         </MissionStatusTag>
       )
     case Mission.MissionStatus.DONE:
       return (
-        <MissionStatusTag background={THEME.color.charcoal} color={THEME.color.white}>
+        <MissionStatusTag accent={Accent.PRIMARY} Icon={Icon.Confirm} iconColor={THEME.color.charcoal}>
           {Mission.MissionStatusLabel.DONE}
         </MissionStatusTag>
       )
@@ -43,14 +45,7 @@ export function TitleStatusTag({ status }: TitleStatusTagProps) {
   }
 }
 
-const MissionStatusTag = styled(Tag)<{
-  background: string
-  borderColor?: string | undefined
-  color: string
-}>`
-  background: ${p => p.background};
-  color: ${p => p.color};
-  border: ${p => (p.borderColor ? `1px solid ${p.borderColor}` : 'unset')};
-  margin-left: 16px;
-  vertical-align: middle;
+const MissionStatusTag = styled(Tag)`
+  align-self: end;
+  padding: 1px 8px 3px 3px;
 `

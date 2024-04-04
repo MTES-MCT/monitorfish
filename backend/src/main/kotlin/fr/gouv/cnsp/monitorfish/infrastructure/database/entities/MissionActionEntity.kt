@@ -3,8 +3,8 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Facade
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import io.hypersistence.utils.hibernate.type.array.ListArrayType
+import io.hypersistence.utils.hibernate.type.basic.PostgreSQLEnumType
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import jakarta.persistence.*
 import org.hibernate.annotations.Type
@@ -129,6 +129,7 @@ class MissionActionEntity(
     @Column(name = "completed_by")
     val completedBy: String? = null,
     @Enumerated(EnumType.STRING)
+    @Type(PostgreSQLEnumType::class)
     @Column(name = "completion", columnDefinition = "mission_action_completion")
     val completion: Completion,
     @Column(name = "is_administrative_control")

@@ -2,8 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
-import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledge
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import org.slf4j.LoggerFactory
@@ -25,6 +24,10 @@ class GetLogbookMessages(
         beforeDepartureDate: ZonedDateTime,
         tripNumber: String,
     ): List<LogbookMessage> {
+        val allGears = gearRepository.findAll()
+        val allPorts = portRepository.findAll()
+        val allSpecies = speciesRepository.findAll()
+
         val messages = logbookReportRepository
             .findAllMessagesByTripNumberBetweenDates(
                 internalReferenceNumber,
@@ -42,7 +45,7 @@ class GetLogbookMessages(
                 }
 
                 if (it.operationType == LogbookOperationType.DAT || it.operationType == LogbookOperationType.COR) {
-                    setGearPortAndSpeciesNames(it)
+                    it.setGearPortAndSpeciesNames(allGears, allPorts, allSpecies)
                 }
 
                 it
@@ -53,50 +56,6 @@ class GetLogbookMessages(
         return messages.filter {
             it.operationType == LogbookOperationType.DAT ||
                 it.operationType == LogbookOperationType.COR
-        }
-    }
-
-    private fun setGearPortAndSpeciesNames(it: LogbookMessage) {
-        when (it.messageType) {
-            LogbookMessageTypeMapping.FAR.name -> {
-                setNamesFromCodes(it.message as FAR)
-            }
-
-            LogbookMessageTypeMapping.CPS.name -> {
-                setNamesFromCodes(it.message as CPS)
-            }
-
-            LogbookMessageTypeMapping.DEP.name -> {
-                setNamesFromCodes(it.message as DEP)
-            }
-
-            LogbookMessageTypeMapping.DIS.name -> {
-                setNamesFromCodes(it.message as DIS)
-            }
-
-            LogbookMessageTypeMapping.COE.name -> {
-                setNamesFromCodes(it.message as COE)
-            }
-
-            LogbookMessageTypeMapping.COX.name -> {
-                setNamesFromCodes(it.message as COX)
-            }
-
-            LogbookMessageTypeMapping.CRO.name -> {
-                setNamesFromCodes(it.message as CRO)
-            }
-
-            LogbookMessageTypeMapping.LAN.name -> {
-                setNamesFromCodes(it.message as LAN)
-            }
-
-            LogbookMessageTypeMapping.PNO.name -> {
-                setNamesFromCodes(it.message as PNO)
-            }
-
-            LogbookMessageTypeMapping.RTP.name -> {
-                setNamesFromCodes(it.message as RTP)
-            }
         }
     }
 
@@ -160,194 +119,6 @@ class GetLogbookMessages(
             logger.warn(
                 "Original message ${logbookMessage.referencedReportId} corrected by message COR ${logbookMessage.operationNumber} is not found.",
             )
-        }
-    }
-
-    private fun setNamesFromCodes(message: COE) {
-        message.targetSpeciesOnEntry?.let { targetSpeciesOnEntry ->
-            message.targetSpeciesNameOnEntry = EffortTargetSpeciesGroup.values().find {
-                it.name == targetSpeciesOnEntry
-            }?.value
-
-            if (message.targetSpeciesNameOnEntry == null) {
-                try {
-                    message.targetSpeciesNameOnEntry = speciesRepository.findByCode(targetSpeciesOnEntry).name
-                } catch (e: CodeNotFoundException) {
-                    logger.warn(e.message)
-                }
-            }
-        }
-    }
-
-    private fun setNamesFromCodes(message: COX) {
-        message.targetSpeciesOnExit?.let { targetSpeciesOnExit ->
-            message.targetSpeciesNameOnExit = EffortTargetSpeciesGroup.values().find {
-                it.name == targetSpeciesOnExit
-            }?.value
-
-            if (message.targetSpeciesNameOnExit == null) {
-                try {
-                    message.targetSpeciesNameOnExit = speciesRepository.findByCode(targetSpeciesOnExit).name
-                } catch (e: CodeNotFoundException) {
-                    logger.warn(e.message)
-                }
-            }
-        }
-    }
-
-    private fun setNamesFromCodes(message: CRO) {
-        message.targetSpeciesOnExit?.let { targetSpeciesOnExit ->
-            message.targetSpeciesNameOnExit = EffortTargetSpeciesGroup.values().find {
-                it.name == targetSpeciesOnExit
-            }?.value
-
-            if (message.targetSpeciesNameOnExit == null) {
-                try {
-                    message.targetSpeciesNameOnExit = speciesRepository.findByCode(targetSpeciesOnExit).name
-                } catch (e: CodeNotFoundException) {
-                    logger.warn(e.message)
-                }
-            }
-        }
-
-        message.targetSpeciesOnEntry?.let { targetSpeciesOnEntry ->
-            message.targetSpeciesNameOnEntry = EffortTargetSpeciesGroup.values().find {
-                it.name == targetSpeciesOnEntry
-            }?.value
-
-            if (message.targetSpeciesNameOnEntry == null) {
-                try {
-                    message.targetSpeciesNameOnEntry = speciesRepository.findByCode(targetSpeciesOnEntry).name
-                } catch (e: CodeNotFoundException) {
-                    logger.warn(e.message)
-                }
-            }
-        }
-    }
-
-    private fun setNamesFromCodes(message: FAR) {
-        message.hauls.forEach { haul ->
-            haul.gear?.let { gear ->
-                try {
-                    haul.gearName = gearRepository.findByCode(gear).name
-                } catch (e: CodeNotFoundException) {
-                    logger.warn(e.message)
-                }
-            }
-
-            haul.catches.forEach { catch ->
-                catch.species?.let { species ->
-                    addSpeciesName(catch, species)
-                }
-            }
-        }
-    }
-
-    private fun setNamesFromCodes(message: CPS) {
-        message.catches.forEach { catch ->
-            addSpeciesName(catch, catch.species)
-        }
-    }
-
-    private fun setNamesFromCodes(message: DEP) {
-        message.gearOnboard.forEach { gear ->
-            gear.gear?.let { gearCode ->
-                addGearName(gear, gearCode)
-            }
-        }
-
-        message.departurePort?.let { departurePort ->
-            try {
-                message.departurePortName = portRepository.findByLocode(departurePort).name
-            } catch (e: CodeNotFoundException) {
-                logger.warn(e.message)
-            }
-        }
-
-        message.speciesOnboard.forEach { catch ->
-            catch.species?.let { species ->
-                addSpeciesName(catch, species)
-            }
-        }
-    }
-
-    private fun setNamesFromCodes(message: DIS) {
-        message.catches.forEach { catch ->
-            catch.species?.let { species ->
-                addSpeciesName(catch, species)
-            }
-        }
-    }
-
-    private fun setNamesFromCodes(message: LAN) {
-        message.port?.let { port ->
-            try {
-                message.portName = portRepository.findByLocode(port).name
-            } catch (e: CodeNotFoundException) {
-                logger.warn(e.message)
-            }
-        }
-
-        message.catchLanded.forEach { catch ->
-            catch.species?.let { species ->
-                addSpeciesName(catch, species)
-            }
-        }
-    }
-
-    private fun setNamesFromCodes(message: PNO) {
-        message.port?.let { port ->
-            try {
-                message.portName = portRepository.findByLocode(port).name
-            } catch (e: CodeNotFoundException) {
-                logger.warn(e.message)
-            }
-        }
-
-        message.catchOnboard.forEach { catch ->
-            catch.species?.let { species ->
-                addSpeciesName(catch, species)
-            }
-        }
-    }
-
-    private fun setNamesFromCodes(message: RTP) {
-        message.port?.let { port ->
-            try {
-                message.portName = portRepository.findByLocode(port).name
-            } catch (e: CodeNotFoundException) {
-                logger.warn(e.message)
-            }
-        }
-
-        message.gearOnboard.forEach { gear ->
-            gear.gear?.let { gearCode ->
-                addGearName(gear, gearCode)
-            }
-        }
-    }
-
-    private fun addSpeciesName(catch: Catch, species: String) {
-        try {
-            catch.speciesName = speciesRepository.findByCode(species).name
-        } catch (e: CodeNotFoundException) {
-            logger.warn(e.message)
-        }
-    }
-
-    private fun addSpeciesName(catch: ProtectedSpeciesCatch, species: String) {
-        try {
-            catch.speciesName = speciesRepository.findByCode(species).name
-        } catch (e: CodeNotFoundException) {
-            logger.warn(e.message)
-        }
-    }
-
-    private fun addGearName(gear: Gear, gearCode: String) {
-        try {
-            gear.gearName = gearRepository.findByCode(gearCode).name
-        } catch (e: CodeNotFoundException) {
-            logger.warn(e.message)
         }
     }
 }

@@ -30,7 +30,7 @@ export function FishActionCard({ missionAction, onRemove }: FishActionCardProps)
 
     switch (missionAction.actionType) {
       case MissionAction.MissionActionType.AIR_CONTROL:
-        return [getActionTitle('Contrôle aérien', vesselName, '- Navire inconnu'), Icon.Plane]
+        return [getActionTitle('Contrôle aérien', vesselName, 'Navire inconnu'), Icon.Plane]
 
       case MissionAction.MissionActionType.AIR_SURVEILLANCE:
         return [

@@ -4,6 +4,7 @@ import {
   useDeleteMissionActionMutation,
   useUpdateMissionActionMutation
 } from '@api/missionAction'
+import { CompletionStatusTag } from '@features/Mission/components/MissionForm/shared/CompletionStatusTag'
 import { Mission } from '@features/Mission/mission.types'
 import { autoSaveMission } from '@features/Mission/useCases/autoSaveMission'
 import { autoSaveMissionAction } from '@features/Mission/useCases/autoSaveMissionAction'
@@ -43,7 +44,6 @@ import { AutoSaveTag } from './shared/AutoSaveTag'
 import { DeletionConfirmationDialog } from './shared/DeletionConfirmationDialog'
 import { DraftCancellationConfirmationDialog } from './shared/DraftCancellationConfirmationDialog'
 import { ExternalActionsDialog } from './shared/ExternalActionsDialog'
-import { TitleSourceTag } from './shared/TitleSourceTag'
 import { TitleStatusTag } from './shared/TitleStatusTag'
 import { missionFormActions } from './slice'
 import { getTitleFromMissionMainFormValues } from './utils'
@@ -435,8 +435,8 @@ export function MissionForm() {
           <BackToListIcon onClick={goToMissionList} />
 
           <HeaderTitle>{title}</HeaderTitle>
-          <TitleSourceTag missionId={missionIdRef.current} missionSource={mainFormValues.missionSource} />
           {mainFormValues && <TitleStatusTag status={getMissionStatus(mainFormValues)} />}
+          <CompletionStatusTag />
         </Header>
 
         <Body>
@@ -585,7 +585,8 @@ export const Wrapper = styled(NoRsuiteOverrideWrapper)`
 export const Header = styled.div`
   align-items: center;
   background-color: ${p => p.theme.color.white};
-  border-bottom: solid 2px ${p => p.theme.color.gainsboro};
+  box-shadow: 0px 3px 4px #7077854d;
+  z-index: 1;
   display: flex;
   max-height: 62px;
   min-height: 62px;
@@ -597,6 +598,11 @@ export const Header = styled.div`
 
   .Element-Tag {
     align-self: auto !important;
+    margin-left: 8px;
+  }
+
+  .Element-Tag:nth-of-type(1) {
+    margin-left: 33px;
   }
 `
 

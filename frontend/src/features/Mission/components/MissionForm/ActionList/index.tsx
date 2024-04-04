@@ -1,5 +1,6 @@
 import { ActionCard } from '@features/Mission/components/MissionForm/ActionList/ActionCard'
 import { EnvActionCard } from '@features/Mission/components/MissionForm/ActionList/EnvActionCard'
+import { FormHead } from '@features/Mission/components/MissionForm/shared/FormHead'
 import { EnvMissionAction } from '@features/Mission/envMissionAction.types'
 import { Mission } from '@features/Mission/mission.types'
 import { MissionAction } from '@features/Mission/missionAction.types'
@@ -12,7 +13,6 @@ import { FrontendErrorBoundary } from 'ui/FrontendErrorBoundary'
 
 import { FishActionCard } from './FishActionCard'
 import { FormBody } from '../shared/FormBody'
-import { FormHead } from '../shared/FormHead'
 
 import type { MissionActionFormValues, MissionActionForTimeline } from '../types'
 import type { Promisable } from 'type-fest'

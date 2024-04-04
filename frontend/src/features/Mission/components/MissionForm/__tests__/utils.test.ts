@@ -4,6 +4,7 @@ import { MissionAction } from '../../../missionAction.types'
 import { getMissionActionsToCreateUpdateOrDelete } from '../utils'
 
 import MissionActionType = MissionAction.MissionActionType
+import CompletionStatus = MissionAction.CompletionStatus
 
 describe('features/Mission/components/MissionForm/utils.getMissionActionsDataFromMissionActionsFormValues()', () => {
   it('Should delete a previous action delete from the list and create a new action', () => {
@@ -93,6 +94,7 @@ describe('features/Mission/components/MissionForm/utils.getMissionActionsDataFro
         actionDatetimeUtc: '2023-12-08T08:27:00Z',
         actionType: MissionActionType.SEA_CONTROL,
         closedBy: undefined,
+        completion: CompletionStatus.TO_COMPLETE,
         controlQualityComments: undefined,
         controlUnits: [],
         districtCode: 'AY',
@@ -274,6 +276,7 @@ describe('features/Mission/components/MissionForm/utils.getMissionActionsDataFro
         actionDatetimeUtc: '2023-12-08T08:27:00Z',
         actionType: MissionActionType.SEA_CONTROL,
         closedBy: undefined,
+        completion: CompletionStatus.TO_COMPLETE,
         controlQualityComments: undefined,
         controlUnits: [],
         districtCode: 'AY',

@@ -33,7 +33,6 @@ pno_species AS (
         AND operation_datetime_utc < :max_pno_date
         AND log_type = 'PNO'
         AND NOT enriched
-        AND report_id NOT IN (SELECT referenced_report_id FROM deleted_corrected_or_rejected_messages)
 ),
 
 pno_trips AS (

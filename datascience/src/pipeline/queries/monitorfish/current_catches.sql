@@ -13,7 +13,6 @@ ordered_deps AS (
         ircs,
         external_identification,
         trip_number,
-        value->'gearOnboard' AS gear_onboard,
         (value->>'departureDatetimeUtc')::timestamptz AS departure_datetime_utc,
         ROW_NUMBER() OVER(PARTITION BY cfr ORDER BY (value->>'departureDatetimeUtc')::timestamptz DESC) as rk
     FROM public.logbook_reports
@@ -30,8 +29,7 @@ last_deps AS (
         ircs,
         external_identification,
         departure_datetime_utc,
-        trip_number,
-        gear_onboard
+        trip_number
     FROM ordered_deps
     WHERE rk=1
 ),
@@ -53,6 +51,8 @@ catches AS (
         r.cfr,
         r.report_id,
         (jsonb_array_elements(r.value -> 'hauls'))->>'gear' as gear,
+        ((jsonb_array_elements(r.value -> 'hauls'))->>'mesh')::DOUBLE PRECISION as mesh,
+        (jsonb_array_elements(r.value -> 'hauls'))->>'dimensions' as dimensions,
         jsonb_array_elements((jsonb_array_elements(r.value -> 'hauls'))->'catches')->>'species' as species,
         (jsonb_array_elements((jsonb_array_elements(r.value -> 'hauls'))->'catches')->>'weight')::DOUBLE PRECISION as weight,
         jsonb_array_elements((jsonb_array_elements(r.value -> 'hauls'))->'catches')->>'faoZone' as fao_area
@@ -76,6 +76,20 @@ summed_catches AS (
         SUM(weight) as weight
     FROM catches
     GROUP BY cfr, species, gear, fao_area
+),
+
+gear_onboard AS (
+    SELECT
+        cfr,
+        jsonb_agg(DISTINCT 
+            jsonb_build_object(
+                'gear', gear,
+                'mesh', mesh,
+                'dimensions', dimensions
+            )
+        ) AS gear_onboard
+    FROM catches
+    GROUP BY cfr
 )
 
 SELECT
@@ -85,7 +99,7 @@ SELECT
     last_logbook_reports.last_logbook_message_datetime_utc,
     departure_datetime_utc,
     trip_number,
-    gear_onboard,
+    go.gear_onboard,
     species,
     gear,
     fao_area,
@@ -95,3 +109,5 @@ FULL OUTER JOIN last_deps
 ON last_logbook_reports.cfr = last_deps.cfr
 LEFT JOIN summed_catches
 ON last_logbook_reports.cfr = summed_catches.cfr
+LEFT JOIN gear_onboard go
+ON last_logbook_reports.cfr = go.cfr

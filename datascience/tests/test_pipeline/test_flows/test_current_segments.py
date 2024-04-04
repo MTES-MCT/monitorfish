@@ -38,8 +38,8 @@ def current_segments() -> pd.DataFrame:
             ],
             "trip_number": ["20210001", "20210002"],
             "gear_onboard": [
-                [{"gear": "OTM", "mesh": 80.0}],
-                [{"gear": "OTB", "mesh": 80.0}],
+                [{"gear": "OTM", "mesh": 80.0, "dimensions": None}],
+                [{"gear": "OTB", "mesh": 80.0, "dimensions": None}],
             ],
             "species_onboard": [
                 [

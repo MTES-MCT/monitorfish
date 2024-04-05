@@ -1,4 +1,6 @@
 import { LogbookMessage } from '@features/Logbook/components/VesselLogbook/LogbookMessages/messages/LogbookMessage'
+import { priorNotificationActions } from '@features/PriorNotification/slice'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Button } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
@@ -6,11 +8,15 @@ import { Header } from './Header'
 import { useGetPriorNotificationQuery } from '../../api'
 
 type PriorNotificationCardProps = Readonly<{
-  logbookMessageReportId: string
-  onClose: () => void
+  priorNotificationId: string
 }>
-export function PriorNotificationCard({ logbookMessageReportId, onClose }: PriorNotificationCardProps) {
-  const { data: priorNotificationDetail, error, isLoading } = useGetPriorNotificationQuery(logbookMessageReportId)
+export function PriorNotificationCard({ priorNotificationId }: PriorNotificationCardProps) {
+  const dispatch = useMainAppDispatch()
+  const { data: priorNotificationDetail, error, isLoading } = useGetPriorNotificationQuery(priorNotificationId)
+
+  const close = () => {
+    dispatch(priorNotificationActions.closePriorNotificationDetail())
+  }
 
   if (isLoading) {
     return <Wrapper>Chargement en cours...</Wrapper>
@@ -22,17 +28,17 @@ export function PriorNotificationCard({ logbookMessageReportId, onClose }: Prior
 
   return (
     <Wrapper>
-      <Background onClick={onClose} />
+      <Background onClick={close} />
 
       <Card>
-        <Header onClose={onClose} priorNotificationDetail={priorNotificationDetail} />
+        <Header onClose={close} priorNotificationDetail={priorNotificationDetail} />
 
         <Body>
           <LogbookMessage isFirst logbookMessage={priorNotificationDetail.logbookMessage} />
         </Body>
 
         <Footer>
-          <Button accent={Accent.TERTIARY} onClick={onClose}>
+          <Button accent={Accent.TERTIARY} onClick={close}>
             Fermer
           </Button>
         </Footer>

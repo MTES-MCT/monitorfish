@@ -39,6 +39,7 @@ export function PriorNotificationList() {
 
   const dispatch = useMainAppDispatch()
   const listFilter = useMainAppSelector(state => state.priorNotification.listFilterValues)
+  const openedPriorNotificationId = useMainAppSelector(state => state.priorNotification.openedPriorNotificationId)
   const apiFilter = useMemo(() => getApiFilterFromListFilter(listFilter), [listFilter])
   const localFilters = useMemo(() => getLocalFilterFromListFilter(listFilter), [listFilter])
   const selectedSeaFrontGroup = useMainAppSelector(state => state.priorNotification.listFilterValues.seaFrontGroup)
@@ -52,7 +53,6 @@ export function PriorNotificationList() {
     [localFilters, priorNotifications]
   )
 
-  const [openLogbookMessageReportId, setOpenLogbookMessageReportId] = useState<string | undefined>(undefined)
   const [rowSelection, setRowSelection] = useState({})
   const [sorting, setSorting] = useState<SortingState>([
     {
@@ -60,10 +60,6 @@ export function PriorNotificationList() {
       id: 'estimatedTimeOfArrival'
     }
   ])
-
-  const close = useCallback(() => {
-    setOpenLogbookMessageReportId(undefined)
-  }, [])
 
   const handleSubMenuChange = useCallback(
     (nextSeaFrontGroup: SeaFrontGroup | NoSeaFrontGroup) => {
@@ -267,7 +263,11 @@ export function PriorNotificationList() {
                               )}
                               <p>
                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                <Link onClick={() => setOpenLogbookMessageReportId(priorNotification.id)}>
+                                <Link
+                                  onClick={() =>
+                                    dispatch(priorNotificationActions.openPriorNotificationDetail(priorNotification.id))
+                                  }
+                                >
                                   Voir plus de détail
                                 </Link>
                               </p>
@@ -286,9 +286,7 @@ export function PriorNotificationList() {
         </Body>
       </Page>
 
-      {!!openLogbookMessageReportId && (
-        <PriorNotificationCard logbookMessageReportId={openLogbookMessageReportId} onClose={close} />
-      )}
+      {!!openedPriorNotificationId && <PriorNotificationCard priorNotificationId={openedPriorNotificationId} />}
     </>
   )
 }

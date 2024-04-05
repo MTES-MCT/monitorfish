@@ -56,7 +56,6 @@ const Wrapper = styled.div`
 
   * {
     font-size: 16px;
-    line-height: 1;
   }
 `
 
@@ -65,7 +64,7 @@ const Title = styled.div`
   flex-direction: column;
   flex-grow: 1;
 
-  > p {
+  > div {
     &:nth-child(1) {
       color: ${p => p.theme.color.slateGray};
       font-weight: 700;
@@ -77,16 +76,19 @@ const Title = styled.div`
   }
 `
 
-const TitleRow = styled.p`
+const TitleRow = styled.div`
   align-items: flex-start;
   display: flex;
   line-height: 22px;
-  margin: 0;
 `
 
 const TitleRowIconBox = styled.span`
   margin-right: 8px;
   width: 24px;
+
+  > .Element-IconBox {
+    vertical-align: -4px;
+  }
 
   > img {
     vertical-align: -2px;

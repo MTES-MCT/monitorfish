@@ -6,6 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTypeMappin
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
+import fr.gouv.cnsp.monitorfish.domain.exceptions.EntityConversionException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
@@ -19,6 +20,7 @@ import jakarta.persistence.criteria.Join
 import jakarta.persistence.criteria.Predicate
 import jakarta.persistence.criteria.Root
 import jakarta.transaction.Transactional
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.dao.EmptyResultDataAccessException
@@ -35,6 +37,7 @@ class JpaLogbookReportRepository(
     @Autowired private val entityManager: EntityManager,
     private val mapper: ObjectMapper,
 ) : LogbookReportRepository {
+    private val logger = LoggerFactory.getLogger(JpaLogbookReportRepository::class.java)
     private val postgresChunkSize = 5000
 
     override fun findAllPriorNotifications(filter: LogbookReportFilter): List<PriorNotification> {
@@ -122,8 +125,14 @@ class JpaLogbookReportRepository(
 
         val pnoChildLogbookReportModels = entityManager.createQuery(criteriaQuery).resultList
 
-        return pnoParentLogbookReportModels.map { pnoParentLogbookReportModel ->
-            pnoParentLogbookReportModel.toPriorNotification(mapper, pnoChildLogbookReportModels)
+        return pnoParentLogbookReportModels.mapNotNull { pnoParentLogbookReportModel ->
+            try {
+                pnoParentLogbookReportModel.toPriorNotification(mapper, pnoChildLogbookReportModels)
+            } catch (e: EntityConversionException) {
+                logger.warn(e.message)
+
+                null
+            }
         }
     }
 

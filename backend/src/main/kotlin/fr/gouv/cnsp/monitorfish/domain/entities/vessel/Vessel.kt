@@ -37,6 +37,10 @@ data class Vessel(
     val beaconNumber: String? = null,
     val underCharter: Boolean? = null,
 ) {
+    fun getIsLessThanTwelveMetersVessel(): Boolean {
+        return length?.let { it < 12.0 } ?: false
+    }
+
     fun getNationalIdentifier(): String {
         val internalReferenceNumberCountryCode =
             LIKELY_CONTROLLED_COUNTRY_CODES.find { countryAlpha3 ->

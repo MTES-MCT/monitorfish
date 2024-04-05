@@ -12,7 +12,7 @@ class PriorNotificationDetailDataOutput(
         fun fromPriorNotification(priorNotification: PriorNotification): PriorNotificationDetailDataOutput {
             return PriorNotificationDetailDataOutput(
                 id = priorNotification.reportId,
-                isLessThanTwelveMetersVessel = priorNotification.vessel.length?.let { it < 12.0 } ?: false,
+                isLessThanTwelveMetersVessel = priorNotification.vessel.getIsLessThanTwelveMetersVessel(),
                 logbookMessage = LogbookMessageDataOutput
                     .fromLogbookMessage(priorNotification.consolidatedLogbookMessage.logbookMessage),
             )

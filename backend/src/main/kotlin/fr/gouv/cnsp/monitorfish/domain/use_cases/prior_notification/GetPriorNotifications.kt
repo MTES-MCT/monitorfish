@@ -21,13 +21,13 @@ class GetPriorNotifications(
         val allPorts = portRepository.findAll()
         val allSpecies = speciesRepository.findAll()
 
-        val priorNotificationsWithoutReportingsCount =
-            logbookReportRepository.findAllPriorNotifications(filter).map { priorNotification ->
+        val priorNotificationsWithoutReportingsCount = logbookReportRepository.findAllPriorNotifications(filter)
+            .map { priorNotification ->
                 priorNotification.consolidatedLogbookMessage.logbookMessage
-                    .setGearPortAndSpeciesNames(allGears, allPorts, allSpecies)
+                    .generateGearPortAndSpecyNames(allGears, allPorts, allSpecies)
 
                 val port = try {
-                    priorNotification.consolidatedLogbookMessage.typedMessage?.port?.let { portLocode ->
+                    priorNotification.consolidatedLogbookMessage.typedMessage.port?.let { portLocode ->
                         allPorts.find { it.locode == portLocode }
                     }
                 } catch (e: CodeNotFoundException) {

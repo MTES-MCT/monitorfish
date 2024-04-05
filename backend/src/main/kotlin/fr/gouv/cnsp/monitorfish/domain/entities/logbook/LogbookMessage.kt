@@ -105,7 +105,24 @@ data class LogbookMessage(
         }
     }
 
-    fun setGearPortAndSpeciesNames(
+    fun setAcknowledge(acknowledgeLogbookMessage: LogbookMessage) {
+        val acknowledgeDateTime = this.acknowledge?.dateTime
+        if (acknowledgeDateTime != null && acknowledgeDateTime > acknowledgeLogbookMessage.reportDateTime) {
+            return
+        }
+
+        this.acknowledge = acknowledgeLogbookMessage.message as Acknowledge
+        this.acknowledge?.let {
+            it.isSuccess = it.returnStatus == RETReturnErrorCode.SUCCESS.number
+            it.dateTime = acknowledgeLogbookMessage.reportDateTime
+        }
+    }
+
+    fun setAcknowledgeAsSuccessful() {
+        this.acknowledge = Acknowledge(isSuccess = true)
+    }
+
+    fun generateGearPortAndSpecyNames(
         allGears: List<fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear>,
         allPorts: List<Port>,
         allSpecies: List<Species>,

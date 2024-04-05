@@ -1,8 +1,10 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledge
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookSoftware
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import org.slf4j.LoggerFactory
@@ -45,7 +47,7 @@ class GetLogbookMessages(
                 }
 
                 if (it.operationType == LogbookOperationType.DAT || it.operationType == LogbookOperationType.COR) {
-                    it.setGearPortAndSpeciesNames(allGears, allPorts, allSpecies)
+                    it.generateGearPortAndSpecyNames(allGears, allPorts, allSpecies)
                 }
 
                 it
@@ -61,64 +63,36 @@ class GetLogbookMessages(
 
     private fun flagCorrectedAcknowledgedAndDeletedMessages(messages: List<LogbookMessage>) {
         messages.forEach { logbookMessage ->
+            val referencedLogbookMessage = if (!logbookMessage.referencedReportId.isNullOrEmpty()) {
+                messages.find { it.reportId == logbookMessage.referencedReportId }
+            } else {
+                null
+            }
+
             if (logbookMessage.operationType == LogbookOperationType.COR && !logbookMessage.referencedReportId.isNullOrEmpty()) {
-                flagMessageAsCorrected(messages, logbookMessage)
+                if (referencedLogbookMessage == null) {
+                    logger.warn(
+                        "Original message ${logbookMessage.referencedReportId} corrected by message COR ${logbookMessage.operationNumber} is not found.",
+                    )
+                }
+
+                referencedLogbookMessage?.isCorrected = true
             } else if (logbookMessage.operationType == LogbookOperationType.RET && !logbookMessage.referencedReportId.isNullOrEmpty()) {
-                flagMessageAsAcknowledged(messages, logbookMessage)
+                referencedLogbookMessage?.setAcknowledge(logbookMessage)
             } else if (logbookMessage.transmissionFormat == LogbookTransmissionFormat.FLUX) {
-                flagMessageAsSuccess(logbookMessage)
-            } else if (logbookMessage.software !== null && logbookMessage.software.contains(
-                    LogbookSoftware.VISIOCAPTURE.software,
-                )
+                logbookMessage.setAcknowledgeAsSuccessful()
+            } else if (
+                logbookMessage.software !== null &&
+                logbookMessage.software.contains(LogbookSoftware.VISIOCAPTURE.software)
             ) {
-                flagMessageAsSuccess(logbookMessage)
+                logbookMessage.setAcknowledgeAsSuccessful()
             } else if (logbookMessage.operationType == LogbookOperationType.DEL && !logbookMessage.referencedReportId.isNullOrEmpty()) {
-                flagMessageAsDeleted(messages, logbookMessage)
+                referencedLogbookMessage?.deleted = true
             }
 
             if (logbookMessage.software !== null && logbookMessage.software.contains(LogbookSoftware.E_SACAPT.software)) {
                 logbookMessage.isSentByFailoverSoftware = true
             }
-        }
-    }
-
-    private fun flagMessageAsSuccess(logbookMessage: LogbookMessage) {
-        logbookMessage.acknowledge = Acknowledge()
-        logbookMessage.acknowledge?.let {
-            it.isSuccess = true
-        }
-    }
-
-    private fun flagMessageAsDeleted(messages: List<LogbookMessage>, logbookMessage: LogbookMessage) {
-        val deletedMessage = messages.find { message -> message.reportId == logbookMessage.referencedReportId }
-
-        deletedMessage?.deleted = true
-    }
-
-    private fun flagMessageAsAcknowledged(messages: List<LogbookMessage>, acknowledgeLogbookMessage: LogbookMessage) {
-        val acknowledgedOrNotMessage = messages.find { message -> message.reportId == acknowledgeLogbookMessage.referencedReportId }
-
-        val acknowledgeDateTime = acknowledgedOrNotMessage?.acknowledge?.dateTime
-        if (acknowledgeDateTime != null && acknowledgeDateTime > acknowledgeLogbookMessage.reportDateTime) {
-            return
-        }
-
-        acknowledgedOrNotMessage?.acknowledge = acknowledgeLogbookMessage.message as Acknowledge
-        acknowledgedOrNotMessage?.acknowledge?.let {
-            it.isSuccess = it.returnStatus == RETReturnErrorCode.SUCCESS.number
-            it.dateTime = acknowledgeLogbookMessage.reportDateTime
-        }
-    }
-
-    private fun flagMessageAsCorrected(messages: List<LogbookMessage>, logbookMessage: LogbookMessage) {
-        val correctedMessage = messages.find { message -> message.reportId == logbookMessage.referencedReportId }
-
-        if (correctedMessage != null) {
-            correctedMessage.isCorrected = true
-        } else {
-            logger.warn(
-                "Original message ${logbookMessage.referencedReportId} corrected by message COR ${logbookMessage.operationNumber} is not found.",
-            )
         }
     }
 }

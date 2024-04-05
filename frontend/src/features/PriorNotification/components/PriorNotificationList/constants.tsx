@@ -133,7 +133,9 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
   },
   {
     accessorFn: row => row.id,
-    cell: (info: CellContext<PriorNotification.PriorNotification, number>) => <ButtonsGroupRow id={info.getValue()} />,
+    cell: (info: CellContext<PriorNotification.PriorNotification, string>) => (
+      <ButtonsGroupRow priorNotification={info.row.original} />
+    ),
     enableSorting: false,
     header: () => '',
     id: 'actions',

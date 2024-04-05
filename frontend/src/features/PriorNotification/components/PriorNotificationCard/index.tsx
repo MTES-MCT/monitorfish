@@ -19,11 +19,25 @@ export function PriorNotificationCard({ priorNotificationId }: PriorNotification
   }
 
   if (isLoading) {
-    return <Wrapper>Chargement en cours...</Wrapper>
+    return (
+      <Wrapper>
+        <Background onClick={close} />
+        <Card>
+          <Body>Chargement en cours...</Body>
+        </Card>
+      </Wrapper>
+    )
   }
 
   if (!!error || !priorNotificationDetail) {
-    return <Wrapper>Une erreur est survenue pendant le chargement du préavis.</Wrapper>
+    return (
+      <Wrapper>
+        <Background onClick={close} />
+        <Card>
+          <Body>Une erreur est survenue pendant le chargement du préavis.</Body>
+        </Card>
+      </Wrapper>
+    )
   }
 
   return (

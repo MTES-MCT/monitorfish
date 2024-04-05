@@ -399,8 +399,7 @@
                 "trip_segments": null,
                 "vessel_name": "MALOTRU",
                 "value:jsonb": {
-                    "dateTime:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '9 minutes', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
-                    "isSuccess": true
+                    "returnStatus": "000"
                 }
             },
 
@@ -468,8 +467,6 @@
                 "trip_gears": null,
                 "trip_segments": null,
                 "value:jsonb": {
-                    "dateTime:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '9 minutes', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
-                    "isSuccess": false,
                     "rejectionCause": "002 MGEN02 Message incorrect : la date/heure de l'événement RTP n° OOF20201105037001 est postérieure à la date/heure courante. Veuillez vérifier la date/heure de l'événement déclaré et renvoyer votre message.",
                     "returnStatus": "002"
                 }
@@ -506,7 +503,7 @@
             },
             {
                 "id": 1109,
-                "report_id": null,
+                "report_id": "FAKE_OPERATION_109_COR",
                 "referenced_report_id": "FAKE_OPERATION_109",
                 "cfr": "FR263418260",
                 "enriched": true,

@@ -1,13 +1,11 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
-import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyCorrectedLogbookMessages
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyFluxAndVisioCaptureLogbookMessages
@@ -49,14 +47,26 @@ class GetLogbookMessagesUTests {
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
             getDummyLogbookMessages(),
         )
-        given(speciesRepository.findByCode(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
-        given(speciesRepository.findByCode(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
-        given(speciesRepository.findByCode(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
-        given(gearRepository.findByCode(eq("OTB"))).willReturn(Gear("OTB", "Chaluts de fond à panneaux"))
-        given(gearRepository.findByCode(eq("DRB"))).willReturn(Gear("DRB", "Dragues remorquées par bateau"))
-        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
-        given(portRepository.findByLocode(eq("AEJAZ"))).willReturn(Port("AEJAZ", "Arzanah Island"))
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
+        given(gearRepository.findAll()).willReturn(
+            listOf(
+                Gear("OTB", "Chaluts de fond à panneaux"),
+                Gear("DRB", "Dragues remorquées par bateau"),
+            ),
+        )
+        given(portRepository.findAll()).willReturn(
+            listOf(
+                Port("AEFAT", "Al Jazeera Port"),
+                Port("AEJAZ", "Arzanah Island"),
+            ),
+        )
+        given(speciesRepository.findAll()).willReturn(
+            listOf(
+                Species("TTV", "TORPILLE OCELLÉE"),
+                Species("SMV", "STOMIAS BREVIBARBATUS"),
+                Species("PNB", "CREVETTE ROYALE ROSE"),
+            ),
+        )
 
         // When
         val ersMessages =
@@ -132,14 +142,26 @@ class GetLogbookMessagesUTests {
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
             getDummyCorrectedLogbookMessages(),
         )
-        given(speciesRepository.findByCode(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
-        given(speciesRepository.findByCode(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
-        given(speciesRepository.findByCode(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
-        given(gearRepository.findByCode(eq("OTB"))).willReturn(Gear("OTB", "Chaluts de fond à panneaux"))
-        given(gearRepository.findByCode(eq("DRB"))).willReturn(Gear("DRB", "Dragues remorquées par bateau"))
-        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
-        given(portRepository.findByLocode(eq("AEJAZ"))).willReturn(Port("AEJAZ", "Arzanah Island"))
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
+        given(gearRepository.findAll()).willReturn(
+            listOf(
+                Gear("OTB", "Chaluts de fond à panneaux"),
+                Gear("DRB", "Dragues remorquées par bateau"),
+            ),
+        )
+        given(portRepository.findAll()).willReturn(
+            listOf(
+                Port("AEFAT", "Al Jazeera Port"),
+                Port("AEJAZ", "Arzanah Island"),
+            ),
+        )
+        given(speciesRepository.findAll()).willReturn(
+            listOf(
+                Species("TTV", "TORPILLE OCELLÉE"),
+                Species("SMV", "STOMIAS BREVIBARBATUS"),
+                Species("PNB", "CREVETTE ROYALE ROSE"),
+            ),
+        )
 
         // When
         val ersMessages =
@@ -179,14 +201,26 @@ class GetLogbookMessagesUTests {
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
             getDummyRETLogbookMessages(),
         )
-        given(speciesRepository.findByCode(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
-        given(speciesRepository.findByCode(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
-        given(speciesRepository.findByCode(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
-        given(gearRepository.findByCode(eq("OTB"))).willReturn(Gear("OTB", "Chaluts de fond à panneaux"))
-        given(gearRepository.findByCode(eq("DRB"))).willReturn(Gear("DRB", "Dragues remorquées par bateau"))
-        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
-        given(portRepository.findByLocode(eq("AEJAZ"))).willReturn(Port("AEJAZ", "Arzanah Island"))
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
+        given(gearRepository.findAll()).willReturn(
+            listOf(
+                Gear("OTB", "Chaluts de fond à panneaux"),
+                Gear("DRB", "Dragues remorquées par bateau"),
+            ),
+        )
+        given(portRepository.findAll()).willReturn(
+            listOf(
+                Port("AEFAT", "Al Jazeera Port"),
+                Port("AEJAZ", "Arzanah Island"),
+            ),
+        )
+        given(speciesRepository.findAll()).willReturn(
+            listOf(
+                Species("TTV", "TORPILLE OCELLÉE"),
+                Species("SMV", "STOMIAS BREVIBARBATUS"),
+                Species("PNB", "CREVETTE ROYALE ROSE"),
+            ),
+        )
 
         // When
         val ersMessages =
@@ -262,10 +296,10 @@ class GetLogbookMessagesUTests {
                         operationDateTime = ZonedDateTime.now(),
                     ),
             )
-        given(speciesRepository.findByCode(any())).willThrow(CodeNotFoundException("not found"))
-        given(gearRepository.findByCode(any())).willThrow(CodeNotFoundException("not found"))
-        given(portRepository.findByLocode(any())).willThrow(CodeNotFoundException("not found"))
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
+        given(gearRepository.findAll()).willReturn(emptyList())
+        given(portRepository.findAll()).willReturn(emptyList())
+        given(speciesRepository.findAll()).willReturn(emptyList())
 
         // When
         val ersMessages =
@@ -296,14 +330,26 @@ class GetLogbookMessagesUTests {
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
             getDummyRETLogbookMessages(),
         )
-        given(speciesRepository.findByCode(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
-        given(speciesRepository.findByCode(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
-        given(speciesRepository.findByCode(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
-        given(gearRepository.findByCode(eq("OTB"))).willReturn(Gear("OTB", "Chaluts de fond à panneaux"))
-        given(gearRepository.findByCode(eq("DRB"))).willReturn(Gear("DRB", "Dragues remorquées par bateau"))
-        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
-        given(portRepository.findByLocode(eq("AEJAZ"))).willReturn(Port("AEJAZ", "Arzanah Island"))
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
+        given(gearRepository.findAll()).willReturn(
+            listOf(
+                Gear("OTB", "Chaluts de fond à panneaux"),
+                Gear("DRB", "Dragues remorquées par bateau"),
+            ),
+        )
+        given(portRepository.findAll()).willReturn(
+            listOf(
+                Port("AEFAT", "Al Jazeera Port"),
+                Port("AEJAZ", "Arzanah Island"),
+            ),
+        )
+        given(speciesRepository.findAll()).willReturn(
+            listOf(
+                Species("TTV", "TORPILLE OCELLÉE"),
+                Species("SMV", "STOMIAS BREVIBARBATUS"),
+                Species("PNB", "CREVETTE ROYALE ROSE"),
+            ),
+        )
 
         // When
         val ersMessages =
@@ -331,14 +377,26 @@ class GetLogbookMessagesUTests {
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
             getDummyFluxAndVisioCaptureLogbookMessages(),
         )
-        given(speciesRepository.findByCode(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
-        given(speciesRepository.findByCode(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
-        given(speciesRepository.findByCode(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
-        given(gearRepository.findByCode(eq("OTB"))).willReturn(Gear("OTB", "Chaluts de fond à panneaux"))
-        given(gearRepository.findByCode(eq("DRB"))).willReturn(Gear("DRB", "Dragues remorquées par bateau"))
-        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
-        given(portRepository.findByLocode(eq("AEJAZ"))).willReturn(Port("AEJAZ", "Arzanah Island"))
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
+        given(gearRepository.findAll()).willReturn(
+            listOf(
+                Gear("OTB", "Chaluts de fond à panneaux"),
+                Gear("DRB", "Dragues remorquées par bateau"),
+            ),
+        )
+        given(portRepository.findAll()).willReturn(
+            listOf(
+                Port("AEFAT", "Al Jazeera Port"),
+                Port("AEJAZ", "Arzanah Island"),
+            ),
+        )
+        given(speciesRepository.findAll()).willReturn(
+            listOf(
+                Species("TTV", "TORPILLE OCELLÉE"),
+                Species("SMV", "STOMIAS BREVIBARBATUS"),
+                Species("PNB", "CREVETTE ROYALE ROSE"),
+            ),
+        )
 
         // When
         val ersMessages =
@@ -368,14 +426,26 @@ class GetLogbookMessagesUTests {
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
             getDummyLogbookMessages(),
         )
-        given(speciesRepository.findByCode(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
-        given(speciesRepository.findByCode(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
-        given(speciesRepository.findByCode(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
-        given(gearRepository.findByCode(eq("OTB"))).willReturn(Gear("OTB", "Chaluts de fond à panneaux"))
-        given(gearRepository.findByCode(eq("DRB"))).willReturn(Gear("DRB", "Dragues remorquées par bateau"))
-        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
-        given(portRepository.findByLocode(eq("AEJAZ"))).willReturn(Port("AEJAZ", "Arzanah Island"))
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
+        given(gearRepository.findAll()).willReturn(
+            listOf(
+                Gear("OTB", "Chaluts de fond à panneaux"),
+                Gear("DRB", "Dragues remorquées par bateau"),
+            ),
+        )
+        given(portRepository.findAll()).willReturn(
+            listOf(
+                Port("AEFAT", "Al Jazeera Port"),
+                Port("AEJAZ", "Arzanah Island"),
+            ),
+        )
+        given(speciesRepository.findAll()).willReturn(
+            listOf(
+                Species("TTV", "TORPILLE OCELLÉE"),
+                Species("SMV", "STOMIAS BREVIBARBATUS"),
+                Species("PNB", "CREVETTE ROYALE ROSE"),
+            ),
+        )
 
         // When
         val ersMessages =

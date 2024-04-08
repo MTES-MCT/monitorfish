@@ -277,7 +277,7 @@ data class LogbookMessage(
         }
 
         message.departurePort?.let { departurePortLocode ->
-            message.departurePortName = allPorts.find { it.locode === departurePortLocode }?.name
+            message.departurePortName = allPorts.find { it.locode == departurePortLocode }?.name
         }
 
         message.speciesOnboard.forEach { catch ->

@@ -27,14 +27,14 @@ import { getLogbookTripSummary, getUniqueGears } from '../utils'
 import type { LogbookTripSummary } from '../types'
 import type { Promisable } from 'type-fest'
 
-type LogbookSummaryProps = {
+type LogbookSummaryProps = Readonly<{
   navigation: {
     goToLastTrip: () => Promisable<void>
     goToNextTrip: () => Promisable<void>
     goToPreviousTrip: () => Promisable<void>
   }
   showLogbookMessages: (messageType?: string) => Promisable<void>
-}
+}>
 export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSummaryProps) {
   const dispatch = useMainAppDispatch()
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
@@ -43,7 +43,7 @@ export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSumma
   const isLastVoyage = useMainAppSelector(state => state.fishingActivities.isLastVoyage)
   const tripNumber = useMainAppSelector(state => state.fishingActivities.tripNumber)
 
-  const { data: lastLogbookTrips } = useGetLastLogbookTripsQuery(selectedVessel?.internalReferenceNumber || skipToken)
+  const { data: lastLogbookTrips } = useGetLastLogbookTripsQuery(selectedVessel?.internalReferenceNumber ?? skipToken)
 
   const getVesselLogbook = useGetLogbookUseCase()
 
@@ -59,7 +59,7 @@ export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSumma
       lastLogbookTrips?.map(trip => ({
         label: `Marée n°${trip}`,
         value: trip
-      })) || [],
+      })) ?? [],
     [lastLogbookTrips]
   )
 
@@ -156,7 +156,7 @@ export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSumma
                   onChange={getLogbookTrip}
                   options={lastLogbookTripsOptions}
                   searchable
-                  value={tripNumber || undefined}
+                  value={tripNumber ?? undefined}
                 />
                 <NextTrip
                   data-cy="vessel-fishing-next-trip"
@@ -186,7 +186,7 @@ export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSumma
                     isNotAcknowledged={
                       !!logbookTrip.dep.log.acknowledge && logbookTrip.dep.log.acknowledge?.isSuccess === false
                     }
-                    rejectionCause={logbookTrip.dep.log.acknowledge?.rejectionCause || undefined}
+                    rejectionCause={logbookTrip.dep.log.acknowledge?.rejectionCause ?? undefined}
                     showLogbookMessages={showLogbookMessages}
                   />
                 ) : (

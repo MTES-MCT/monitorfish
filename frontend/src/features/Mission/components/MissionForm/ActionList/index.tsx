@@ -35,7 +35,7 @@ export function ActionList({
   onRemove,
   onSelect
 }: ActionListProps) {
-  const getMissionApiQuery = useGetMissionQuery(missionId || skipToken)
+  const getMissionApiQuery = useGetMissionQuery(missionId ?? skipToken)
 
   const allSortedMissionActionsForTimeline: Array<
     MissionActionForTimeline | EnvMissionAction.MissionActionForTimeline
@@ -118,13 +118,13 @@ export function ActionList({
               if (action.source === Mission.MissionSource.MONITORFISH) {
                 return (
                   <ActionCard
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={index}
                     isSelected={action.index === currentIndex}
                     missionAction={action}
                     onSelect={() => onSelect(action.index!!)}
                   >
                     <FishActionCard
-                      // eslint-disable-next-line react/no-array-index-key
-                      key={index}
                       missionAction={action as MissionActionFormValues}
                       onRemove={() => onRemove(action.index!!)}
                     />
@@ -134,12 +134,13 @@ export function ActionList({
 
               if (action.source === Mission.MissionSource.MONITORENV) {
                 return (
-                  <ActionCard isSelected={false} missionAction={action}>
-                    <EnvActionCard
-                      // eslint-disable-next-line react/no-array-index-key
-                      key={index}
-                      missionAction={action as EnvMissionAction.MissionAction}
-                    />
+                  <ActionCard
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={index}
+                    isSelected={false}
+                    missionAction={action}
+                  >
+                    <EnvActionCard missionAction={action as EnvMissionAction.MissionAction} />
                   </ActionCard>
                 )
               }

@@ -43,6 +43,59 @@
                 "flag_state": "FR",
                 "length": 11.99,
                 "under_charter": true
+            },
+
+            // - Vessel: DES BARS
+            // - Flag state: UNKNOWN
+            {
+                "id": 104,
+                "cfr": "CFR104",
+                "mmsi": "MMSI104",
+                "ircs": "IRCS104",
+                "external_immatriculation": "EXTIMM104",
+                "vessel_name": "DES BARS",
+                "flag_state": null,
+                "length": 15,
+                "under_charter": false
+            },
+
+            // - Vessel: CALAMARO
+            {
+                "id": 105,
+                "cfr": "CFR105",
+                "mmsi": "MMSI105",
+                "ircs": "IRCS105",
+                "external_immatriculation": "EXTIMM105",
+                "vessel_name": "CALAMARO",
+                "flag_state": "FR",
+                "length": 16,
+                "under_charter": true
+            },
+
+            // - Vessel: L'ANCRE SÈCHE
+            {
+                "id": 106,
+                "cfr": "CFR106",
+                "mmsi": "MMSI106",
+                "ircs": "IRCS106",
+                "external_immatriculation": "EXTIMM106",
+                "vessel_name": "L'ANCRE SÈCHE",
+                "flag_state": "FR",
+                "length": 17,
+                "under_charter": false
+            },
+
+            // - Vessel: MERLU L'ENCHANTEUR
+            {
+                "id": 107,
+                "cfr": "CFR107",
+                "mmsi": "MMSI107",
+                "ircs": "IRCS107",
+                "external_immatriculation": "EXTIMM107",
+                "vessel_name": "MERLU L'ENCHANTEUR",
+                "flag_state": "FR",
+                "length": 17,
+                "under_charter": true
             }
         ]
     }

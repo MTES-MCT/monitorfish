@@ -165,7 +165,7 @@ export function MissionForm() {
   }, [dispatch])
 
   const handleDelete = useCallback(async () => {
-    const isDeleted = dispatch(deleteMission(missionIdRef.current))
+    const isDeleted = await dispatch(deleteMission(missionIdRef.current))
     if (!isDeleted) {
       setIsDeletionConfirmationDialogOpen(false)
     }

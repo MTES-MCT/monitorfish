@@ -1,3 +1,4 @@
+import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { Feature } from 'ol'
 import { useState } from 'react'
 
@@ -27,7 +28,6 @@ import VesselTrackOverlay from './overlays/VesselTrackOverlay'
 import { useIsSuperUser } from '../../hooks/authorization/useIsSuperUser'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { FeatureWithCodeAndEntityId } from '../../libs/FeatureWithCodeAndEntityId'
-import { FrontendErrorBoundary } from '../../ui/FrontendErrorBoundary'
 import { AdministrativeLayers } from '../AdministrativeZone/layers/AdministrativeLayers'
 import { BaseLayer } from '../BaseMap/layers/BaseLayer'
 import { DrawLayer } from '../Draw/layer'

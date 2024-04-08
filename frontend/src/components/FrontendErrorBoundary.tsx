@@ -1,8 +1,7 @@
 /* eslint-disable no-console */
 
+import { FrontendError } from '@libs/FrontendError'
 import { Component } from 'react'
-
-import { FrontendError } from '../libs/FrontendError'
 
 import type { ErrorInfo, ReactNode } from 'react'
 

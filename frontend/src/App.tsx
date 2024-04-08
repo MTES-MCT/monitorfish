@@ -1,4 +1,5 @@
 import { CustomGlobalStyle } from '@components/CustomGlobalStyle'
+import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { useGetUserAuthorization } from '@hooks/authorization/useGetUserAuthorization'
 import { GlobalStyle, THEME, ThemeProvider } from '@mtes-mct/monitor-ui'
 import { LandingPage } from '@pages/LandingPage'
@@ -14,15 +15,14 @@ import rsuiteFrFr from 'rsuite/locales/fr_FR'
 
 import { AuthorizationContext } from './context/AuthorizationContext'
 import { router } from './router'
-import { FrontendErrorBoundary } from './ui/FrontendErrorBoundary'
 
 import type { AuthContextProps } from 'react-oidc-context'
 
 countries.registerLocale(COUNTRIES_FR)
 
-type AppProps = {
+type AppProps = Readonly<{
   auth?: AuthContextProps | undefined
-}
+}>
 export function App({ auth }: AppProps) {
   const userAuthorization = useGetUserAuthorization()
 

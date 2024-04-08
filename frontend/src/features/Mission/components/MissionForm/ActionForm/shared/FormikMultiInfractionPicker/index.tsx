@@ -1,3 +1,4 @@
+import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { FrontendError } from '@libs/FrontendError'
 import { Accent, Button, Icon } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
@@ -5,7 +6,6 @@ import { find } from 'lodash'
 import { remove as ramdaRemove, update as ramdaUpdate } from 'ramda'
 import { Fragment, useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
-import { FrontendErrorBoundary } from 'ui/FrontendErrorBoundary'
 
 import { Infraction } from './Infraction'
 import { InfractionForm } from './InfractionForm'

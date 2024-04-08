@@ -1,5 +1,5 @@
+import { CountryFlag } from '@components/CountryFlag'
 import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
-import countries from 'i18n-iso-countries'
 import styled from 'styled-components'
 
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
@@ -27,13 +27,7 @@ export function Header({ onClose, priorNotificationDetail }: HeaderProps) {
 
         <TitleRow>
           <TitleRowIconBox>
-            <img
-              alt={priorNotificationDetail.logbookMessage.flagState}
-              src={`/flags/${countries
-                .alpha3ToAlpha2(priorNotificationDetail.logbookMessage.flagState)
-                .toLowerCase()}.png`}
-              title={priorNotificationDetail.logbookMessage.flagState}
-            />
+            <CountryFlag countryCode={priorNotificationDetail.logbookMessage.flagState} size={[24, 18]} />
           </TitleRowIconBox>
 
           <span>
@@ -91,7 +85,7 @@ const TitleRowIconBox = styled.span`
   }
 
   > img {
-    vertical-align: -2px;
+    vertical-align: -3.5px;
   }
 `
 

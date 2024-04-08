@@ -5,7 +5,7 @@ export namespace LogbookMessage {
     acknowledge: Acknowledge | undefined
     deleted: boolean
     externalReferenceNumber: string
-    flagState: string
+    flagState: string | undefined
     imo: string | undefined
     integrationDateTime: string
     internalReferenceNumber: string

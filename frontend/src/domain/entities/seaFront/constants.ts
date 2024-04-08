@@ -14,13 +14,13 @@ export type NoSeaFrontGroup = typeof NO_SEA_FRONT_GROUP
 
 // TODO This should not be dedicated to Mission feature here.
 export enum SeaFrontGroupLabel {
-  ALL = 'Toutes les missions',
+  ALL = 'TOUT',
   MED = 'MED',
   MEMN = 'MEMN',
   NAMO = 'NAMO',
   SA = 'SA',
-  OUTREMEROA = 'OUTRE-MER OA',
-  OUTREMEROI = 'OUTRE-MER OI'
+  OUTREMEROA = 'O-M OA',
+  OUTREMEROI = 'O-M OI'
 }
 
 export enum SeaFront {

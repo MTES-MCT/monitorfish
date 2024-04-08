@@ -1,3 +1,4 @@
+import { Bold } from '@components/style'
 import { CompletionStatusTag } from '@features/Mission/components/MissionForm/shared/CompletionStatusTag'
 import { MissionStatusTag } from '@features/Mission/components/MissionForm/shared/MissionStatusTag'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -91,7 +92,7 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
           </Title>
           <Details>
             <MissionStatusTag status={mission.missionStatus} />
-            <StyledCompletionStatusTag completion={mission.missionCompletion} />
+            <CompletionStatusTag completion={mission.missionCompletion} />
             <Text>
               <Line>
                 Mission {mission.missionTypes.map(missionType => Mission.MissionTypeLabel[missionType]).join(' / ')} –{' '}
@@ -127,10 +128,6 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
   )
 }
 
-const Bold = styled.span`
-  font-weight: 500;
-`
-
 const Line = styled.span`
   display: block;
 `
@@ -138,10 +135,6 @@ const Line = styled.span`
 const Text = styled.div`
   margin-top: 12px;
   line-height: 18px;
-`
-
-const StyledCompletionStatusTag = styled(CompletionStatusTag)`
-  margin-left: 8px;
 `
 
 const TextWithEllipsis = styled.div`

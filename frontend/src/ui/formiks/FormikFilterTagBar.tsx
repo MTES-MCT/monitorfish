@@ -98,7 +98,7 @@ const Row = styled.div`
   align-items: flex-end;
   display: flex;
   flex-wrap: wrap;
-  margin-top: 12px;
+  margin-top: 16px;
 
   > div,
   > .Field-DateRangePicker {

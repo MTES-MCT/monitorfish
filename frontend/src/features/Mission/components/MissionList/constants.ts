@@ -1,8 +1,8 @@
+import { getMissionCompletionFrontStatus, getMissionStatus } from '@features/Mission/utils'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 import { getOptionsFromLabelledEnum } from '@utils/getOptionsFromLabelledEnum'
 
 import { MissionDateRangeFilterLabel, MissionFilterType } from './types'
-import { getMissionStatus } from '../../../../domain/entities/mission/utils'
 import { SeaFrontGroup, SeaFrontGroupLabel } from '../../../../domain/entities/seaFront/constants'
 import { UNKNOWN_VESSEL } from '../../../../domain/entities/vessel/vessel'
 import { Mission } from '../../mission.types'
@@ -17,6 +17,8 @@ export const MISSION_FILTER_LABEL_ENUMS: Record<MissionFilterType, Record<string
   [MissionFilterType.DATE_RANGE]: MissionDateRangeFilterLabel,
   [MissionFilterType.SOURCE]: Mission.MissionSourceLabel,
   [MissionFilterType.STATUS]: Mission.MissionStatusLabel,
+  [MissionFilterType.COMPLETION_STATUS]: MissionAction.FrontCompletionStatusLabel,
+  [MissionFilterType.WITH_ACTIONS]: undefined,
   [MissionFilterType.TYPE]: Mission.MissionTypeLabel,
   [MissionFilterType.UNIT]: undefined
 }
@@ -27,7 +29,9 @@ export const MISSION_FILTER_OPTIONS: Record<MissionFilterType, Option<any>[]> = 
   [MissionFilterType.DATE_RANGE]: getOptionsFromLabelledEnum(MissionDateRangeFilterLabel),
   [MissionFilterType.SOURCE]: getOptionsFromLabelledEnum(Mission.MissionSourceLabelWithoutPoseidon),
   [MissionFilterType.STATUS]: getOptionsFromLabelledEnum(Mission.MissionStatusLabel),
+  [MissionFilterType.COMPLETION_STATUS]: getOptionsFromLabelledEnum(MissionAction.FrontCompletionStatusLabel),
   [MissionFilterType.TYPE]: getOptionsFromLabelledEnum(Mission.MissionTypeLabel),
+  [MissionFilterType.WITH_ACTIONS]: [],
   [MissionFilterType.UNIT]: []
 }
 
@@ -42,14 +46,14 @@ const MISSION_ACTION_CONTROL_TYPES = [
 export const MISSION_LIST_TABLE_OPTIONS: TableOptions<Mission.MissionWithActions> = {
   columns: [
     {
-      fixedWidth: 136,
+      fixedWidth: 130,
       isSortable: true,
       key: 'startDateTimeUtc',
       label: 'Début',
       labelTransform: mission => customDayjs(mission.startDateTimeUtc).utc().format('D MMM YY, HH:mm')
     },
     {
-      fixedWidth: 136,
+      fixedWidth: 130,
       isSortable: true,
       key: 'endDateTimeUtc',
       label: 'Fin',
@@ -57,18 +61,11 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<Mission.MissionWithActions
         mission.endDateTimeUtc ? customDayjs(mission.endDateTimeUtc).utc().format('D MMM YY, HH:mm') : ''
     },
     {
-      fixedWidth: 90,
+      fixedWidth: 100,
       isSortable: true,
       key: 'missionTypes',
       label: 'Type',
       transform: mission => mission.missionTypes.map(missionType => MISSION_TYPE_LABEL[missionType]).join(', ')
-    },
-    {
-      fixedWidth: 80,
-      isSortable: true,
-      key: 'missionSource',
-      label: 'Origine',
-      labelTransform: mission => MISSION_SOURCE_LABEL[mission.missionSource]
     },
     {
       fixedWidth: 280,
@@ -79,7 +76,7 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<Mission.MissionWithActions
         mission.controlUnits.map(controlUnit => `${controlUnit.name} (${controlUnit.administration})`).join(', ')
     },
     {
-      fixedWidth: 300,
+      fixedWidth: 380,
       isSortable: false,
       key: 'inspectedVessels',
       label: 'Navires contrôlés',
@@ -108,6 +105,17 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<Mission.MissionWithActions
       key: 'status',
       label: 'Statut',
       transform: getMissionStatus
+    },
+    {
+      fixedWidth: 120,
+      isSortable: true,
+      key: 'completion',
+      label: 'État données',
+      labelTransform: mission => {
+        const actionsCompletion = mission.actions.map(action => action.completion)
+
+        return getMissionCompletionFrontStatus(mission, actionsCompletion)
+      }
     },
     {
       fixedWidth: 50,

@@ -1,5 +1,5 @@
-import { getMissionCompletionFrontStatus } from '@features/Mission/components/MissionForm/utils'
 import { MissionAction } from '@features/Mission/missionAction.types'
+import { getMissionCompletionFrontStatus } from '@features/Mission/utils'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 
 import FrontCompletionStatus = MissionAction.FrontCompletionStatus

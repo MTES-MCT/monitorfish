@@ -4,11 +4,11 @@ import { validateRequiredFormValues } from '@utils/validateRequiredFormValues'
 import { difference, omit } from 'lodash'
 
 import { MISSION_ACTION_FORM_VALUES_SKELETON } from './constants'
+import { getMissionStatus } from '../../../../domain/entities/mission/utils'
 import { Mission } from '../../mission.types'
 import { MissionAction } from '../../missionAction.types'
 
 import type { MissionActionFormValues, MissionMainFormValues } from './types'
-import type { MissionWithActionsDraft } from '@features/Mission/types'
 import type { Undefine } from '@mtes-mct/monitor-ui'
 import type { LegacyControlUnit } from 'domain/types/legacyControlUnit'
 
@@ -165,16 +165,19 @@ export function getValidMissionDataControlUnit(
   return validMissionDataControlUnit
 }
 
-export function getMissionCompletion(draft: MissionWithActionsDraft | undefined): CompletionStatus {
-  if (!draft) {
+export function getMissionCompletion(
+  mission: Partial<MissionMainFormValues> | Mission.Mission | undefined,
+  actionsCompletion: (CompletionStatus | undefined)[] | undefined
+): CompletionStatus {
+  if (!mission || !actionsCompletion) {
     return CompletionStatus.TO_COMPLETE
   }
 
-  const hasAtLeastOnUncompletedAction = draft.actionsFormValues.find(
-    action => !action.completion || action.completion === CompletionStatus.TO_COMPLETE
+  const hasAtLeastOnUncompletedAction = actionsCompletion.find(
+    completion => !completion || completion === CompletionStatus.TO_COMPLETE
   )
 
-  if (hasAtLeastOnUncompletedAction || !MainFormLiveSchema.isValidSync(draft.mainFormValues)) {
+  if (hasAtLeastOnUncompletedAction || !MainFormLiveSchema.isValidSync(mission)) {
     return CompletionStatus.TO_COMPLETE
   }
 
@@ -182,9 +185,17 @@ export function getMissionCompletion(draft: MissionWithActionsDraft | undefined)
 }
 
 export function getMissionCompletionFrontStatus(
-  missionStatus: Mission.MissionStatus | undefined,
-  missionCompletion: CompletionStatus
+  mission: Partial<MissionMainFormValues> | Mission.Mission | undefined,
+  actionsCompletion: (CompletionStatus | undefined)[] | undefined
 ): FrontCompletionStatus {
+  const missionCompletion = getMissionCompletion(mission, actionsCompletion)
+
+  if (!mission) {
+    return FrontCompletionStatus.TO_COMPLETE
+  }
+
+  const missionStatus = getMissionStatus(mission)
+
   if (missionStatus === Mission.MissionStatus.IN_PROGRESS && missionCompletion === CompletionStatus.COMPLETED) {
     return FrontCompletionStatus.UP_TO_DATE
   }

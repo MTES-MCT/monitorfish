@@ -2,7 +2,6 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.GetAllMissions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.GetMission
-import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.FullMissionWithActionsDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.MissionWithActionsDataOutput
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -70,11 +69,11 @@ class MissionController(
         @PathParam("Id")
         @PathVariable(name = "id")
         id: Int,
-    ): FullMissionWithActionsDataOutput {
+    ): MissionWithActionsDataOutput {
         return runBlocking {
             val missionAndActions = getMission.execute(id)
 
-            return@runBlocking FullMissionWithActionsDataOutput.fromMissionAndActions(missionAndActions)
+            return@runBlocking MissionWithActionsDataOutput.fromMissionAndActions(missionAndActions)
         }
     }
 }

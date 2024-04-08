@@ -1,3 +1,5 @@
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { useMoveOverlayWhenDragging } from '@hooks/useMoveOverlayWhenDragging'
 import GeoJSON from 'ol/format/GeoJSON'
 import Overlay from 'ol/Overlay'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -7,13 +9,11 @@ import { margins } from './constants'
 import { MissionDetails } from './MissionDetails'
 import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
 import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { useMoveOverlayWhenDragging } from '../../../../hooks/useMoveOverlayWhenDragging'
-import { monitorfishMap } from '../../monitorfishMap'
-import { getMapResolution } from '../../utils'
-import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from '../Overlay'
+import { monitorfishMap } from '../../../map/monitorfishMap'
+import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from '../../../map/overlays/Overlay'
+import { getMapResolution } from '../../../map/utils'
 
-import type { Mission } from '../../../Mission/mission.types'
+import type { Mission } from '../../mission.types'
 
 const overlayHeight = 200
 const INITIAL_OFFSET_VALUE = [0, 0]

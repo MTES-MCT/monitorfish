@@ -1,4 +1,6 @@
 import { getMissionActionInfractionsFromMissionActionFormValues } from '@features/Mission/components/MissionForm/ActionList/utils'
+import { getMissionCompletionFrontStatus } from '@features/Mission/components/MissionForm/utils'
+import { EnvMissionAction } from '@features/Mission/envMissionAction.types'
 import { Mission } from '@features/Mission/mission.types'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { isLandControl } from '@features/Mission/useCases/getLastControlCircleGeometry'
@@ -32,6 +34,7 @@ export function getMissionFeaturePointId(id: number) {
 
 export const getMissionFeaturePoint = ({
   actions,
+  envActions,
   ...mission
 }: Mission.MissionWithActions): Feature<Point> | undefined => {
   const geoJSON = new GeoJSON()
@@ -59,12 +62,15 @@ export const getMissionFeaturePoint = ({
       action.actionType === MissionActionType.SEA_CONTROL
   ).length
   const numberOfSurveillance = actions.filter(action => action.actionType === MissionActionType.AIR_SURVEILLANCE).length
+  const actionsCompletion = actions.map(action => action.completion)
 
   const feature = new Feature({
     color: getMissionColor(missionStatus),
     controlUnits: mission.controlUnits,
     endDateTimeUtc: mission.endDateTimeUtc,
     geometry: new Point(point),
+    hasEnvActions: envActions.length > 0,
+    hasFishActions: actions.length > 0,
     isAirMission: mission.missionTypes.length === 1 && mission.missionTypes.includes(MissionType.AIR),
     isClosed: booleanToInt(missionStatus === MissionStatus.CLOSED),
     isDone: booleanToInt(missionStatus === MissionStatus.DONE),
@@ -73,8 +79,9 @@ export const getMissionFeaturePoint = ({
     isMultiMission: mission.missionTypes.length > 1,
     isSeaMission: mission.missionTypes.length === 1 && mission.missionTypes.includes(MissionType.SEA),
     isUpcoming: booleanToInt(missionStatus === MissionStatus.UPCOMING),
+    missionCompletion: getMissionCompletionFrontStatus(mission, actionsCompletion),
     missionId: mission.id,
-    missionSource: mission.missionSource,
+    missionSources: getMissionSources(actions, envActions),
     missionStatus,
     missionTypes: mission.missionTypes,
     numberOfControls,
@@ -182,4 +189,23 @@ export function getMissionSourceTagText(missionSource: MissionSource | undefined
     default:
       return 'Origine inconnue'
   }
+}
+
+function getMissionSources(
+  actions: MissionAction.MissionAction[],
+  envActions: EnvMissionAction.MissionAction[]
+): MissionSource[] {
+  let sources: MissionSource[] = []
+
+  const hasMonitorFishActions = actions.length > 0
+  if (hasMonitorFishActions) {
+    sources = sources.concat(MissionSource.MONITORFISH)
+  }
+
+  const hasMonitorEnvActions = envActions.length > 0
+  if (hasMonitorEnvActions) {
+    sources = sources.concat(MissionSource.MONITORENV)
+  }
+
+  return sources
 }

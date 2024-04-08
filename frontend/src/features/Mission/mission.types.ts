@@ -21,8 +21,6 @@ export namespace Mission {
     isClosed: boolean
     isGeometryComputedFromControls: boolean
     isUnderJdp?: boolean | undefined
-    // For internal Formik validation purpose
-    isValid?: boolean | undefined
     missionSource: MissionSource
     missionTypes: MissionType[]
     observationsCacem?: string
@@ -91,6 +89,8 @@ export namespace Mission {
     color: string
     controlUnits: LegacyControlUnit.LegacyControlUnit[]
     endDateTimeUtc: string
+    hasEnvActions: boolean
+    hasFishActions: boolean
     // A 0 ou 1 number is required for WebGL to understand boolean
     isAirMission: number
     isClosed: number
@@ -106,6 +106,7 @@ export namespace Mission {
     isSeaMission: number
     // A 0 ou 1 number is required for WebGL to understand boolean
     isUpcoming: number
+    missionCompletion: MissionAction.FrontCompletionStatus
     missionId: number
     missionSource: MissionSource
     missionStatus: MissionStatus | undefined

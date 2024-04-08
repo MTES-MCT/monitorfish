@@ -1,16 +1,13 @@
-import { useGetMissionCompletion } from '@features/Mission/components/MissionForm/hooks/useGetMissionCompletion'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { ExclamationPoint, Icon, Tag, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import FrontCompletionStatus = MissionAction.FrontCompletionStatus
 
-export function CompletionStatusTag() {
-  const completion = useGetMissionCompletion()
-  if (!completion) {
-    return null
-  }
-
+type CompletionStatusTagProps = {
+  completion: FrontCompletionStatus
+}
+export function CompletionStatusTag({ completion }: CompletionStatusTagProps) {
   switch (completion) {
     case FrontCompletionStatus.COMPLETED:
       return (

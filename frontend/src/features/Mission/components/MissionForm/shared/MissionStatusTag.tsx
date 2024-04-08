@@ -4,40 +4,40 @@ import styled from 'styled-components'
 
 import MissionStatus = Mission.MissionStatus
 
-type TitleStatusTagProps = Readonly<{
+type MissionStatusTagProps = Readonly<{
   status: MissionStatus | undefined
 }>
-export function TitleStatusTag({ status }: TitleStatusTagProps) {
+export function MissionStatusTag({ status }: MissionStatusTagProps) {
   switch (status) {
     case Mission.MissionStatus.UPCOMING:
       return (
-        <MissionStatusTag accent={Accent.PRIMARY} Icon={Icon.Clock} iconColor={THEME.color.blueNcs}>
+        <StyledTag accent={Accent.PRIMARY} Icon={Icon.Clock} iconColor={THEME.color.blueNcs}>
           {Mission.MissionStatusLabel.UPCOMING}
-        </MissionStatusTag>
+        </StyledTag>
       )
     case Mission.MissionStatus.IN_PROGRESS:
       return (
-        <MissionStatusTag
+        <StyledTag
           accent={Accent.PRIMARY}
           color={THEME.color.charcoal}
           Icon={Icon.Clock}
           iconColor={THEME.color.blueGray}
         >
           {Mission.MissionStatusLabel.IN_PROGRESS}
-        </MissionStatusTag>
+        </StyledTag>
       )
     // TODO: remove this line when the CLOSED status is removed
     case Mission.MissionStatus.CLOSED:
       return (
-        <MissionStatusTag accent={Accent.PRIMARY} Icon={Icon.Confirm} iconColor={THEME.color.charcoal}>
+        <StyledTag accent={Accent.PRIMARY} Icon={Icon.Confirm} iconColor={THEME.color.charcoal}>
           {Mission.MissionStatusLabel.CLOSED}
-        </MissionStatusTag>
+        </StyledTag>
       )
     case Mission.MissionStatus.DONE:
       return (
-        <MissionStatusTag accent={Accent.PRIMARY} Icon={Icon.Confirm} iconColor={THEME.color.charcoal}>
+        <StyledTag accent={Accent.PRIMARY} Icon={Icon.Confirm} iconColor={THEME.color.charcoal}>
           {Mission.MissionStatusLabel.DONE}
-        </MissionStatusTag>
+        </StyledTag>
       )
 
     default:
@@ -45,7 +45,7 @@ export function TitleStatusTag({ status }: TitleStatusTagProps) {
   }
 }
 
-const MissionStatusTag = styled(Tag)`
+const StyledTag = styled(Tag)`
   align-self: end;
   padding: 1px 8px 3px 3px;
 `

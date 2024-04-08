@@ -4,6 +4,7 @@ import {
   useDeleteMissionActionMutation,
   useUpdateMissionActionMutation
 } from '@api/missionAction'
+import { useGetMissionCompletion } from '@features/Mission/components/MissionForm/hooks/useGetMissionCompletion'
 import { CompletionStatusTag } from '@features/Mission/components/MissionForm/shared/CompletionStatusTag'
 import { Mission } from '@features/Mission/mission.types'
 import { autoSaveMission } from '@features/Mission/useCases/autoSaveMission'
@@ -44,7 +45,7 @@ import { AutoSaveTag } from './shared/AutoSaveTag'
 import { DeletionConfirmationDialog } from './shared/DeletionConfirmationDialog'
 import { DraftCancellationConfirmationDialog } from './shared/DraftCancellationConfirmationDialog'
 import { ExternalActionsDialog } from './shared/ExternalActionsDialog'
-import { TitleStatusTag } from './shared/TitleStatusTag'
+import { MissionStatusTag } from './shared/MissionStatusTag'
 import { missionFormActions } from './slice'
 import { getTitleFromMissionMainFormValues } from './utils'
 import { areMissionFormsValuesValid } from './utils/areMissionFormsValuesValid'
@@ -69,6 +70,7 @@ export function MissionForm() {
   const hasEngagedControlUnit = useMainAppSelector(state => !!state.missionForm.engagedControlUnit)
   assertNotNullish(draft)
 
+  const completion = useGetMissionCompletion()
   const missionIdRef = useRef<number | undefined>(missionIdFromPath)
 
   const [, { isLoading: isCreatingMission }] = useCreateMissionMutation()
@@ -435,8 +437,8 @@ export function MissionForm() {
           <BackToListIcon onClick={goToMissionList} />
 
           <HeaderTitle>{title}</HeaderTitle>
-          {mainFormValues && <TitleStatusTag status={getMissionStatus(mainFormValues)} />}
-          <CompletionStatusTag />
+          {mainFormValues && <MissionStatusTag status={getMissionStatus(mainFormValues)} />}
+          <CompletionStatusTag completion={completion} />
         </Header>
 
         <Body>

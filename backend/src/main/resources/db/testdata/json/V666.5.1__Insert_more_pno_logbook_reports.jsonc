@@ -330,22 +330,22 @@
                 }
             },
 
-            // - Vessel: MALOTRU (unknown flag state)
+            // - Vessel: DES BARS (Unknown Flag State)
             // - With RET
             // - Aknowledged
             {
                 "id": 107,
                 "report_id": "FAKE_OPERATION_107",
                 "referenced_report_id": null,
-                "cfr": "U_W0NTFINDME",
+                "cfr": "CFR104",
                 "enriched": true,
                 "flag_state": null,
-                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '10 minutes'",
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "log_type": "PNO",
-                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '10 minutes'",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "operation_number": "FAKE_OPERATION_107",
                 "operation_type": "DAT",
-                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '10 minutes'",
+                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "transmission_format": "ERS",
                 "trip_gears:jsonb": [
                     { "gear": "DHB", "mesh": 20.25, "dimensions": "500;500" },
@@ -354,7 +354,7 @@
                 "trip_segments:jsonb": [
                     { "segment": "NWW03", "segmentName": "Chalut de fond en eau profonde ≥100 mm" }
                 ],
-                "vessel_name": "MALOTRU",
+                "vessel_name": "DES BARS",
                 "value:jsonb": {
                     "catchOnboard": [
                         {
@@ -385,44 +385,44 @@
                 "id": 1107,
                 "report_id": null,
                 "referenced_report_id": "FAKE_OPERATION_107",
-                "cfr": "U_W0NTFINDME",
-                "enriched": true,
-                "flag_state": "FRA",
-                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '9 minutes'",
+                "cfr": "CFR104",
+                "enriched": false,
+                "flag_state": null,
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "log_type": null,
-                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '9 minutes'",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "operation_number": "FAKE_OPERATION_107_RET",
                 "operation_type": "RET",
-                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '9 minutes'",
+                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "transmission_format": "ERS",
                 "trip_gears": null,
                 "trip_segments": null,
-                "vessel_name": "MALOTRU",
+                "vessel_name": null,
                 "value:jsonb": {
                     "returnStatus": "000"
                 }
             },
 
-            // - Vessel: LE b@TO
+            // - Vessel: CALAMARO
             // - With RET
             // - NOT Aknowledged
             {
                 "id": 108,
                 "report_id": "FAKE_OPERATION_108",
                 "referenced_report_id": null,
-                "cfr": "FR263418260",
+                "cfr": "CFR105",
                 "enriched": true,
                 "flag_state": "FRA",
-                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '10 minutes'",
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "log_type": "PNO",
-                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '10 minutes'",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "operation_number": "FAKE_OPERATION_108",
                 "operation_type": "DAT",
-                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '10 minutes'",
+                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "transmission_format": "ERS",
                 "trip_gears": null,
                 "trip_segments": null,
-                "vessel_name": "LE b@TO",
+                "vessel_name": "CALAMARO",
                 "value:jsonb": {
                     "catchOnboard": [
                         {
@@ -453,15 +453,15 @@
                 "id": 1108,
                 "report_id": null,
                 "referenced_report_id": "FAKE_OPERATION_108",
-                "cfr": "FR263418260",
-                "enriched": true,
-                "flag_state": "FRA",
-                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '9 minutes'",
+                "cfr": "CFR105",
+                "enriched": false,
+                "flag_state": null,
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "log_type": null,
-                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '9 minutes'",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "operation_number": "FAKE_OPERATION_108_RET",
                 "operation_type": "RET",
-                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '9 minutes'",
+                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "transmission_format": "ERS",
                 "vessel_name": null,
                 "trip_gears": null,
@@ -472,25 +472,25 @@
                 }
             },
 
-            // - Vessel: LE b@TO
+            // - Vessel: L'ANCRE SÈCHE
             // - With COR
             {
                 "id": 109,
                 "report_id": "FAKE_OPERATION_109",
                 "referenced_report_id": null,
-                "cfr": "FR263418260",
+                "cfr": "CFR106",
                 "enriched": true,
                 "flag_state": "FRA",
-                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '10 minutes'",
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "log_type": "PNO",
-                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '10 minutes'",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "operation_number": "FAKE_OPERATION_109",
                 "operation_type": "DAT",
-                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '10 minutes'",
+                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "transmission_format": "ERS",
                 "trip_gears": null,
                 "trip_segments": null,
-                "vessel_name": "LE b@TO",
+                "vessel_name": "L'ANCRE SÈCHE",
                 "value:jsonb": {
                     "catchOnboard": [],
                     "pnoTypes": [],
@@ -505,15 +505,15 @@
                 "id": 1109,
                 "report_id": "FAKE_OPERATION_109_COR",
                 "referenced_report_id": "FAKE_OPERATION_109",
-                "cfr": "FR263418260",
+                "cfr": "CFR106",
                 "enriched": true,
-                "flag_state": "FRA",
-                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '9 minutes'",
+                "flag_state": null,
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "log_type": "PNO",
-                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '9 minutes'",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "operation_number": "FAKE_OPERATION_109_COR",
                 "operation_type": "COR",
-                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '9 minutes'",
+                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "transmission_format": "ERS",
                 "vessel_name": null,
                 "trip_gears": null,
@@ -545,25 +545,25 @@
                 }
             },
 
-            // - Vessel: LE b@TO
+            // - Vessel: MERLU L'ENCHANTEUR
             // - With DEL
             {
                 "id": 110,
                 "report_id": "FAKE_OPERATION_110",
                 "referenced_report_id": null,
-                "cfr": "FR263418260",
+                "cfr": "CFR107",
                 "enriched": true,
                 "flag_state": "FRA",
-                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '10 minutes'",
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "log_type": "PNO",
-                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '10 minutes'",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "operation_number": "FAKE_OPERATION_110",
                 "operation_type": "DAT",
-                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '10 minutes'",
+                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "transmission_format": "ERS",
                 "trip_gears": null,
                 "trip_segments": null,
-                "vessel_name": "LE b@TO",
+                "vessel_name": "MERLU L'ENCHANTEUR",
                 "value:jsonb": {
                     "catchOnboard": [
                         {
@@ -595,14 +595,14 @@
                 "report_id": null,
                 "referenced_report_id": "FAKE_OPERATION_110",
                 "cfr": "FR263418260",
-                "enriched": true,
-                "flag_state": "FRA",
-                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '9 minutes'",
+                "enriched": false,
+                "flag_state": null,
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "log_type": null,
-                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '9 minutes'",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "operation_number": "FAKE_OPERATION_110_DEL",
                 "operation_type": "DEL",
-                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '9 minutes'",
+                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "transmission_format": "ERS",
                 "vessel_name": null,
                 "trip_gears": null,
@@ -617,12 +617,12 @@
                 "cfr": null,
                 "enriched": false,
                 "flag_state": null,
-                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '1 minute'",
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "log_type": "PNO",
-                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '1 minute'",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "operation_number": "FAKE_OPERATION_109",
                 "operation_type": "DAT",
-                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '1 minute'",
+                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "transmission_format": "ERS",
                 "vessel_name": null,
                 "trip_gears": null,

@@ -3,7 +3,6 @@ import { Fill, Stroke, Style } from 'ol/style'
 
 import { getColorWithAlpha } from '../../../map/layers/styles/utils'
 import { featureHas } from '../../../map/layers/styles/utils/webgl'
-import { Mission } from '../../mission.types'
 
 import type { WebGLStyle } from 'ol/style/webgl'
 
@@ -18,21 +17,6 @@ export const missionZoneStyle = new Style({
     width: 4
   })
 })
-
-export const getMissionColor = (missionStatus: Mission.MissionStatus | undefined, isText?: boolean | undefined) => {
-  switch (missionStatus) {
-    case Mission.MissionStatus.UPCOMING:
-      return THEME.color.yellowGreen
-    case Mission.MissionStatus.IN_PROGRESS:
-      return THEME.color.mediumSeaGreen
-    case Mission.MissionStatus.DONE:
-      return THEME.color.charcoal
-    case Mission.MissionStatus.CLOSED:
-      return isText ? THEME.color.slateGray : THEME.color.white
-    default:
-      return THEME.color.yellowGreen
-  }
-}
 
 export const missionPointWebGLStyle: WebGLStyle = {
   'icon-displacement': [0, 19.5],

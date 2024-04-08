@@ -2,7 +2,7 @@ import { Mission } from '@features/Mission/mission.types'
 import { expect } from '@jest/globals'
 import { getUtcizedDayjs } from '@mtes-mct/monitor-ui'
 
-import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFront } from '../../../seaFront/constants'
+import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFront } from '../../../../domain/entities/seaFront/constants'
 import { seaFrontFilterFunction } from '../seaFrontFilterFunction'
 
 import MissionSource = Mission.MissionSource

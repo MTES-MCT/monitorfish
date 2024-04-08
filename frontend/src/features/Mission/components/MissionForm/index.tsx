@@ -12,6 +12,7 @@ import { autoSaveMissionAction } from '@features/Mission/useCases/autoSaveMissio
 import { deleteMission } from '@features/Mission/useCases/deleteMission'
 import { deleteMissionAction } from '@features/Mission/useCases/deleteMissionAction'
 import { saveMissionAndMissionActionsByDiff } from '@features/Mission/useCases/saveMissionAndMissionActionsByDiff'
+import { getMissionStatus } from '@features/Mission/utils'
 import { cleanMissionForm } from '@features/SideWindow/useCases/cleanMissionForm'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -26,7 +27,6 @@ import {
   NotificationEvent
 } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
-import { getMissionStatus } from 'domain/entities/mission/utils'
 import { SideWindowMenuKey } from 'domain/entities/sideWindow/constants'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'

@@ -172,4 +172,10 @@ export namespace MissionAction {
     TO_COMPLETE_MISSION_ENDED = 'TO_COMPLETE_MISSION_ENDED',
     UP_TO_DATE = 'UP_TO_DATE'
   }
+
+  export enum FrontCompletionStatusLabel {
+    COMPLETED = 'Complétées',
+    TO_COMPLETE = 'À compléter',
+    UP_TO_DATE = 'À jour'
+  }
 }

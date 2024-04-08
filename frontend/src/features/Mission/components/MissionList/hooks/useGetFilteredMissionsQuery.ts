@@ -1,12 +1,14 @@
+import { completionStatusFilterFunction } from '@features/Mission/filters/completionStatusFilterFunction'
+import { missionActionsFilterFunction } from '@features/Mission/filters/missionActionsFilterFunction'
 import { Mission } from '@features/Mission/mission.types'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 
-import { administrationFilterFunction } from '../../../../../domain/entities/mission/filters/administrationFilterFunction'
-import { seaFrontFilterFunction } from '../../../../../domain/entities/mission/filters/seaFrontFilterFunction'
-import { unitFilterFunction } from '../../../../../domain/entities/mission/filters/unitFilterFunction'
 import { SEA_FRONT_GROUP_SEA_FRONTS } from '../../../../../domain/entities/seaFront/constants'
-import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { administrationFilterFunction } from '../../../filters/administrationFilterFunction'
+import { seaFrontFilterFunction } from '../../../filters/seaFrontFilterFunction'
+import { unitFilterFunction } from '../../../filters/unitFilterFunction'
 import { useGetMissionsQuery } from '../../../monitorfishMissionApi'
 import { MissionDateRangeFilter, MissionFilterType } from '../types'
 
@@ -91,9 +93,15 @@ export const useGetFilteredMissionsQuery = (): {
 
     const administrationFilter = listFilterValues[MissionFilterType.ADMINISTRATION] || []
     const unitFilter = listFilterValues[MissionFilterType.UNIT] || []
+    const frontCompletionStatusFilter = listFilterValues[MissionFilterType.COMPLETION_STATUS] || []
+    const withActionsFilter = listFilterValues[MissionFilterType.WITH_ACTIONS] || false
 
     return data.filter(
-      mission => administrationFilterFunction(mission, administrationFilter) && unitFilterFunction(mission, unitFilter)
+      mission =>
+        administrationFilterFunction(mission, administrationFilter) &&
+        unitFilterFunction(mission, unitFilter) &&
+        completionStatusFilterFunction(mission, frontCompletionStatusFilter) &&
+        missionActionsFilterFunction(mission, withActionsFilter)
     )
   }, [data, listFilterValues])
 

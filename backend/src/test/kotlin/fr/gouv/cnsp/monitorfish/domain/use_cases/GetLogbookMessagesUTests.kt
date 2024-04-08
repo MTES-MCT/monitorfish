@@ -268,7 +268,7 @@ class GetLogbookMessagesUTests {
     }
 
     @Test
-    fun `execute Should add only the last received acknowledge message`() {
+    fun `execute Should only add the latest acknowledge message`() {
         // Given
         val lastAck = Acknowledge()
         lastAck.returnStatus = "000"

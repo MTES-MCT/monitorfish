@@ -27,7 +27,7 @@ class GetPriorNotification(
         val priorNotificationWithoutReportingsCount = logbookReportRepository
             .findPriorNotificationByReportId(logbookMessageReportId)
             .let { priorNotification ->
-                logger.info("Prior notification found: $priorNotification")
+                logger.info("Prior notification found: ${priorNotification.consolidatedLogbookMessage.logbookMessage}")
 
                 priorNotification.consolidatedLogbookMessage.logbookMessage
                     .generateGearPortAndSpecyNames(allGears, allPorts, allSpecies)

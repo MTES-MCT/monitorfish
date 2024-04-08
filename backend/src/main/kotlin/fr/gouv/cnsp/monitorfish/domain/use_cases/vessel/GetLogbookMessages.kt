@@ -63,22 +63,22 @@ class GetLogbookMessages(
 
     private fun flagCorrectedAcknowledgedAndDeletedMessages(messages: List<LogbookMessage>) {
         messages.forEach { logbookMessage ->
-            val referencedLogbookMessage = if (!logbookMessage.referencedReportId.isNullOrEmpty()) {
+            val referenceLogbookMessage = if (!logbookMessage.referencedReportId.isNullOrEmpty()) {
                 messages.find { it.reportId == logbookMessage.referencedReportId }
             } else {
                 null
             }
 
             if (logbookMessage.operationType == LogbookOperationType.COR && !logbookMessage.referencedReportId.isNullOrEmpty()) {
-                if (referencedLogbookMessage == null) {
+                if (referenceLogbookMessage == null) {
                     logger.warn(
                         "Original message ${logbookMessage.referencedReportId} corrected by message COR ${logbookMessage.operationNumber} is not found.",
                     )
                 }
 
-                referencedLogbookMessage?.isCorrected = true
+                referenceLogbookMessage?.isCorrected = true
             } else if (logbookMessage.operationType == LogbookOperationType.RET && !logbookMessage.referencedReportId.isNullOrEmpty()) {
-                referencedLogbookMessage?.setAcknowledge(logbookMessage)
+                referenceLogbookMessage?.setAcknowledge(logbookMessage)
             } else if (logbookMessage.transmissionFormat == LogbookTransmissionFormat.FLUX) {
                 logbookMessage.setAcknowledgeAsSuccessful()
             } else if (
@@ -87,7 +87,7 @@ class GetLogbookMessages(
             ) {
                 logbookMessage.setAcknowledgeAsSuccessful()
             } else if (logbookMessage.operationType == LogbookOperationType.DEL && !logbookMessage.referencedReportId.isNullOrEmpty()) {
-                referencedLogbookMessage?.deleted = true
+                referenceLogbookMessage?.deleted = true
             }
 
             if (logbookMessage.software !== null && logbookMessage.software.contains(LogbookSoftware.E_SACAPT.software)) {

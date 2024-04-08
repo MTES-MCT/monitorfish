@@ -40,81 +40,105 @@ data class LogbookMessage(
     val tripSegments: List<LogbookTripSegment>? = listOf(),
 ) {
     fun <T : LogbookMessageValue> toConsolidatedLogbookMessage(
-        children: List<LogbookMessage>,
+        relatedLogbookMessages: List<LogbookMessage>,
         clazz: Class<T>,
     ): ConsolidatedLogbookMessage<T> {
         if (reportId == null) {
             throw EntityConversionException(
-                "Logbook report $id has no `reportId`. You can only consolidate a DAT operation with a `reportId`.",
+                "Logbook report $id has no `reportId`. You can only consolidate a DAT or an orphan COR operation with a `reportId`.",
             )
         }
-        if (operationType != LogbookOperationType.DAT) {
+        if (operationType !in listOf(LogbookOperationType.DAT, LogbookOperationType.COR)) {
             throw EntityConversionException(
-                "Logbook report $id has operationType '$operationType'. You can only consolidate a DAT operation.",
+                "Logbook report $id has operationType '$operationType'. You can only consolidate a DAT or an orphan COR operation.",
             )
         }
 
-        val historicallyOrderedChildren = children.sortedBy { it.reportDateTime }
-        val maybeLastLogbookMessageAcknowledgement = historicallyOrderedChildren.lastOrNull {
-            it.operationType == LogbookOperationType.RET
-        }
-        val maybeLastLogbookMessageCorrection = historicallyOrderedChildren.lastOrNull {
-            it.operationType == LogbookOperationType.COR
-        }
+        val historicallyOrderedRelatedLogbookMessages = relatedLogbookMessages.sortedBy { it.reportDateTime }
+        val maybeLastLogbookMessageCorrection = historicallyOrderedRelatedLogbookMessages
+            .lastOrNull { it.operationType == LogbookOperationType.COR }
 
         val logbookMessageBase = maybeLastLogbookMessageCorrection ?: this
+        logbookMessageBase.consolidateAcknowledge(relatedLogbookMessages)
+        val finalLogbookMessage = logbookMessageBase.copy(
+            // We need to restore the `reportId` and `referencedReportId` to the original values
+            // in case it has been consolidated from a COR operation rather than a DAT one
+            reportId = reportId,
+            referencedReportId = null,
+            // /!\ `logbookMessageBase` might be a COR, which happens when there is no DAT at all.
+            isCorrected = logbookMessageBase.operationType == LogbookOperationType.COR,
+            deleted = historicallyOrderedRelatedLogbookMessages.any { it.operationType == LogbookOperationType.DEL },
+        )
 
-        logbookMessageBase.let { logbookMessageWithConsolidatedProps ->
-            if (maybeLastLogbookMessageAcknowledgement != null) {
-                val lastLogbookMessageAcknowledgementMessage =
-                    maybeLastLogbookMessageAcknowledgement.message as Acknowledge
-
-                logbookMessageWithConsolidatedProps.apply {
-                    val isSuccess =
-                        lastLogbookMessageAcknowledgementMessage.returnStatus == RETReturnErrorCode.SUCCESS.number
-
-                    this.acknowledge = Acknowledge(
-                        dateTime = maybeLastLogbookMessageAcknowledgement.reportDateTime,
-                        isSuccess = isSuccess,
-                    )
-                }
-            }
-            if (logbookMessageWithConsolidatedProps.transmissionFormat == LogbookTransmissionFormat.FLUX) {
-                logbookMessageWithConsolidatedProps.apply {
-                    this.acknowledge = Acknowledge(isSuccess = true)
-                }
-            }
-
-            if (maybeLastLogbookMessageCorrection != null) {
-                logbookMessageWithConsolidatedProps.apply {
-                    logbookMessageWithConsolidatedProps.isCorrected = true
-                }
-            }
-
-            if (historicallyOrderedChildren.any { it.operationType == LogbookOperationType.DEL }) {
-                logbookMessageWithConsolidatedProps.apply {
-                    logbookMessageWithConsolidatedProps.deleted = true
-                }
-            }
-
-            return ConsolidatedLogbookMessage(
-                reportId = reportId,
-                logbookMessage = logbookMessageWithConsolidatedProps,
-                clazz = clazz,
-            )
-        }
+        return ConsolidatedLogbookMessage(
+            reportId = reportId,
+            logbookMessage = finalLogbookMessage,
+            clazz = clazz,
+        )
     }
 
-    fun setAcknowledge(acknowledgeLogbookMessage: LogbookMessage) {
-        val acknowledgeDateTime = this.acknowledge?.dateTime
-        if (acknowledgeDateTime != null && acknowledgeDateTime > acknowledgeLogbookMessage.reportDateTime) {
+    private fun consolidateAcknowledge(relatedLogbookMessages: List<LogbookMessage>) {
+        if (this.transmissionFormat == LogbookTransmissionFormat.FLUX ||
+            software !== null && software.contains(LogbookSoftware.VISIOCAPTURE.software)
+        ) {
+            this.setAcknowledgeAsSuccessful()
+
             return
         }
 
-        this.acknowledge = acknowledgeLogbookMessage.message as Acknowledge
-        this.acknowledge?.let {
-            it.isSuccess = it.returnStatus == RETReturnErrorCode.SUCCESS.number
-            it.dateTime = acknowledgeLogbookMessage.reportDateTime
+        val historycallyOrderedRetLogbookMessages = relatedLogbookMessages
+            .filter { it.operationType == LogbookOperationType.RET && it.referencedReportId == reportId }
+            .sortedBy { it.reportDateTime }
+
+        val maybeLastSuccessfulRetLogbookMessage = historycallyOrderedRetLogbookMessages.lastOrNull {
+            val message = it.message as Acknowledge
+
+            message.returnStatus == RETReturnErrorCode.SUCCESS.number
+        }
+        if (maybeLastSuccessfulRetLogbookMessage != null) {
+            val lastSucessfulRetMessage = maybeLastSuccessfulRetLogbookMessage.message as Acknowledge
+            this.acknowledge = lastSucessfulRetMessage.also {
+                it.dateTime = maybeLastSuccessfulRetLogbookMessage.reportDateTime
+                it.isSuccess = true
+            }
+
+            return
+        }
+
+        val maybeLastRetLogbookMessage = historycallyOrderedRetLogbookMessages.lastOrNull()
+        if (maybeLastRetLogbookMessage != null) {
+            val lastRetMessage = maybeLastRetLogbookMessage.message as Acknowledge
+            this.acknowledge = lastRetMessage.also {
+                it.dateTime = maybeLastRetLogbookMessage.reportDateTime
+                it.isSuccess = lastRetMessage.returnStatus == RETReturnErrorCode.SUCCESS.number
+            }
+        }
+    }
+
+    fun setAcknowledge(newLogbookMessageAcknowledgement: LogbookMessage) {
+        val currentAcknowledgement = this.acknowledge
+        val newAcknowledgement = newLogbookMessageAcknowledgement.message as Acknowledge
+
+        val isCurrentAcknowledgementSuccessful = currentAcknowledgement?.isSuccess ?: false
+        val isNewAcknowledgementSuccessful = newAcknowledgement.returnStatus == RETReturnErrorCode.SUCCESS.number
+
+        val shouldUpdate = when {
+            // If there is no currently calculated acknowledgement yet, create it
+            currentAcknowledgement?.dateTime == null || currentAcknowledgement.isSuccess == null -> true
+            // If the new acknowledgement message is successful while the currently calculated one is not, replace it
+            isNewAcknowledgementSuccessful && currentAcknowledgement.isSuccess != true -> true
+            // TODO How to handle that? Check time rules with Vincent.
+            newLogbookMessageAcknowledgement.reportDateTime == null -> false
+            // If the new acknowledgement message is more recent than the currently calculated one, replace it
+            newLogbookMessageAcknowledgement.reportDateTime > currentAcknowledgement.dateTime -> true
+
+            else -> false
+        }
+        if (shouldUpdate) {
+            this.acknowledge = newAcknowledgement.also {
+                it.isSuccess = isCurrentAcknowledgementSuccessful || isNewAcknowledgementSuccessful
+                it.dateTime = newLogbookMessageAcknowledgement.reportDateTime
+            }
         }
     }
 

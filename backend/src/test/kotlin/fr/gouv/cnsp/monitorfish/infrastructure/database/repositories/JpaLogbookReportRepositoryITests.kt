@@ -5,10 +5,12 @@ import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookRawMessage
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LogbookReportEntity
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.AfterEach
@@ -21,6 +23,7 @@ import org.springframework.context.annotation.Import
 import org.springframework.transaction.annotation.Transactional
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
+import java.util.*
 
 @Import(MapperConfiguration::class)
 @SpringBootTest(properties = ["monitorfish.scheduling.enable=false"])
@@ -870,5 +873,114 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // Then
         assertThat(result.id).isEqualTo(101)
         assertThat(result.messageType).isEqualTo("PNO")
+    }
+
+    @Test
+    fun `mapToReferenceWithRelatedModels should correctly map models`() {
+        // Given
+
+        val firstLogbookReportGroupDatOperation = getFakeLogbookReportModel(LogbookOperationType.DAT)
+        val firstLogbookReportGroup = listOf(
+            firstLogbookReportGroupDatOperation,
+        )
+
+        val secondLogbookReportGroupDatOperation = getFakeLogbookReportModel(LogbookOperationType.DAT)
+        val secondLogbookReportGroup = listOf(
+            secondLogbookReportGroupDatOperation,
+            getFakeLogbookReportModel(LogbookOperationType.RET, secondLogbookReportGroupDatOperation.reportId),
+        )
+
+        val thirdLogbookReportGroupDatOperation = getFakeLogbookReportModel(LogbookOperationType.DAT)
+        val thirdLogbookReportGroupCorOperation = getFakeLogbookReportModel(
+            LogbookOperationType.COR,
+            thirdLogbookReportGroupDatOperation.reportId,
+        )
+        val thirdLogbookReportGroup = listOf(
+            thirdLogbookReportGroupDatOperation,
+            getFakeLogbookReportModel(LogbookOperationType.RET, thirdLogbookReportGroupDatOperation.reportId),
+            thirdLogbookReportGroupCorOperation,
+            getFakeLogbookReportModel(LogbookOperationType.RET, thirdLogbookReportGroupCorOperation.reportId),
+            getFakeLogbookReportModel(LogbookOperationType.DEL, thirdLogbookReportGroupDatOperation.reportId),
+        )
+
+        val fourthLogbookReportGroupDatOperation = getFakeLogbookReportModel(LogbookOperationType.COR)
+        val fourthLogbookReportGroup = listOf(
+            fourthLogbookReportGroupDatOperation,
+            getFakeLogbookReportModel(LogbookOperationType.RET, fourthLogbookReportGroupDatOperation.reportId),
+        )
+
+        val fifthLogbookReportGroupDatOperation = getFakeLogbookReportModel(
+            LogbookOperationType.COR,
+            "NONEXISTENT_REPORT_ID",
+        )
+        val fifthLogbookReportGroup = listOf(
+            fifthLogbookReportGroupDatOperation,
+            getFakeLogbookReportModel(LogbookOperationType.RET, fifthLogbookReportGroupDatOperation.reportId),
+        )
+
+        val logbookReportModels = listOf(
+            firstLogbookReportGroup,
+            secondLogbookReportGroup,
+            thirdLogbookReportGroup,
+            fourthLogbookReportGroup,
+            fifthLogbookReportGroup,
+        ).flatten()
+
+        // When
+        val result = JpaLogbookReportRepository.mapToReferenceWithRelatedModels(logbookReportModels)
+
+        // Then
+
+        assertThat(result).hasSize(5)
+
+        val (firstReferenceLogbookReportModel, firstRelatedLogbookReportModels) = result[0]
+        assertThat(firstReferenceLogbookReportModel.reportId).isEqualTo(firstLogbookReportGroupDatOperation.reportId)
+        assertThat(firstReferenceLogbookReportModel.operationType).isEqualTo(LogbookOperationType.DAT)
+        assertThat(firstRelatedLogbookReportModels).isEmpty()
+
+        val (secondReferenceLogbookReportModel, secondRelatedLogbookReportModels) = result[1]
+        assertThat(secondReferenceLogbookReportModel.reportId).isEqualTo(secondLogbookReportGroupDatOperation.reportId)
+        assertThat(secondReferenceLogbookReportModel.operationType).isEqualTo(LogbookOperationType.DAT)
+        assertThat(secondRelatedLogbookReportModels).hasSize(1)
+        assertThat(secondRelatedLogbookReportModels.count { it.operationType == LogbookOperationType.RET }).isEqualTo(1)
+
+        val (thirdReferenceLogbookReportModel, thirdRelatedLogbookReportModels) = result[2]
+        assertThat(thirdReferenceLogbookReportModel.reportId).isEqualTo(thirdLogbookReportGroupDatOperation.reportId)
+        assertThat(thirdReferenceLogbookReportModel.operationType).isEqualTo(LogbookOperationType.DAT)
+        assertThat(thirdRelatedLogbookReportModels).hasSize(4)
+        assertThat(thirdRelatedLogbookReportModels.count { it.operationType == LogbookOperationType.COR }).isEqualTo(1)
+        assertThat(thirdRelatedLogbookReportModels.count { it.operationType == LogbookOperationType.DEL }).isEqualTo(1)
+        assertThat(thirdRelatedLogbookReportModels.count { it.operationType == LogbookOperationType.RET }).isEqualTo(2)
+
+        val (fourthReferenceLogbookReportModel, fourthRelatedLogbookReportModels) = result[3]
+        assertThat(fourthReferenceLogbookReportModel.reportId).isEqualTo(fourthLogbookReportGroupDatOperation.reportId)
+        assertThat(fourthReferenceLogbookReportModel.operationType).isEqualTo(LogbookOperationType.COR)
+        assertThat(fourthRelatedLogbookReportModels).hasSize(1)
+        assertThat(fourthRelatedLogbookReportModels.count { it.operationType == LogbookOperationType.RET }).isEqualTo(1)
+
+        val (fifthReferenceLogbookReportModel, fifthRelatedLogbookReportModels) = result[4]
+        assertThat(fifthReferenceLogbookReportModel.reportId).isEqualTo(fifthLogbookReportGroupDatOperation.reportId)
+        assertThat(fifthReferenceLogbookReportModel.operationType).isEqualTo(LogbookOperationType.COR)
+        assertThat(fifthRelatedLogbookReportModels).hasSize(1)
+        assertThat(fifthRelatedLogbookReportModels.count { it.operationType == LogbookOperationType.RET }).isEqualTo(1)
+    }
+
+    companion object {
+        private fun getFakeLogbookReportModel(
+            operationType: LogbookOperationType,
+            referenceReportId: String? = null,
+        ): LogbookReportEntity {
+            val reportId = UUID.randomUUID().toString()
+
+            return LogbookReportEntity(
+                reportId = reportId,
+                referencedReportId = referenceReportId,
+                integrationDateTime = ZonedDateTime.now().toInstant(),
+                operationDateTime = ZonedDateTime.now().toInstant(),
+                operationNumber = "FAKE_OPERATION_NUMBER_$reportId",
+                operationType = operationType,
+                transmissionFormat = LogbookTransmissionFormat.ERS,
+            )
+        }
     }
 }

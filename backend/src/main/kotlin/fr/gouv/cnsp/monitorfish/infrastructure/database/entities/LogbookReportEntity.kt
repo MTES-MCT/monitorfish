@@ -70,7 +70,7 @@ data class LogbookReportEntity(
     @Column(name = "software")
     val software: String? = null,
     @Column(name = "enriched")
-    val isEnriched: Boolean,
+    val isEnriched: Boolean = false,
     @Type(JsonBinaryType::class)
     @Column(name = "trip_gears", nullable = true, columnDefinition = "jsonb")
     val tripGears: String? = null,
@@ -144,11 +144,12 @@ data class LogbookReportEntity(
         )
     }
 
-    fun toPriorNotification(mapper: ObjectMapper, childrenModels: List<LogbookReportEntity>): PriorNotification {
-        val logbookMessage = toLogbookMessage(mapper)
-        val logbookMessageChildren = childrenModels.map { it.toLogbookMessage(mapper) }
-        val consolidatedLogbookMessage = logbookMessage
-            .toConsolidatedLogbookMessage(logbookMessageChildren, PNO::class.java)
+    fun toPriorNotification(mapper: ObjectMapper, relatedModels: List<LogbookReportEntity>): PriorNotification {
+        val referenceLogbookMessage = toLogbookMessage(mapper)
+        val relatedLogbookMessages = relatedModels.map { it.toLogbookMessage(mapper) }
+        println("relatedLogbookMessages: $relatedLogbookMessages")
+        val consolidatedLogbookMessage = referenceLogbookMessage
+            .toConsolidatedLogbookMessage(relatedLogbookMessages, PNO::class.java)
         // Default to UNKNOWN vessel when null or not found
         val vessel = vessel?.toVessel() ?: Vessel(id = -1, flagState = CountryCode.UNDEFINED)
 

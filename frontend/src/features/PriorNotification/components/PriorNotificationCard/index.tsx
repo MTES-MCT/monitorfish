@@ -1,3 +1,4 @@
+import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { LogbookMessage } from '@features/Logbook/components/VesselLogbook/LogbookMessages/messages/LogbookMessage'
 import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -45,17 +46,19 @@ export function PriorNotificationCard({ priorNotificationId }: PriorNotification
       <Background onClick={close} />
 
       <Card>
-        <Header onClose={close} priorNotificationDetail={priorNotificationDetail} />
+        <FrontendErrorBoundary>
+          <Header onClose={close} priorNotificationDetail={priorNotificationDetail} />
 
-        <Body>
-          <LogbookMessage isFirst logbookMessage={priorNotificationDetail.logbookMessage} />
-        </Body>
+          <Body>
+            <LogbookMessage isFirst logbookMessage={priorNotificationDetail.logbookMessage} />
+          </Body>
 
-        <Footer>
-          <Button accent={Accent.TERTIARY} onClick={close}>
-            Fermer
-          </Button>
-        </Footer>
+          <Footer>
+            <Button accent={Accent.TERTIARY} onClick={close}>
+              Fermer
+            </Button>
+          </Footer>
+        </FrontendErrorBoundary>
       </Card>
     </Wrapper>
   )

@@ -1,3 +1,4 @@
+import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { ActionCard } from '@features/Mission/components/MissionForm/ActionList/ActionCard'
 import { EnvActionCard } from '@features/Mission/components/MissionForm/ActionList/EnvActionCard'
 import { FormHead } from '@features/Mission/components/MissionForm/shared/FormHead'
@@ -9,7 +10,6 @@ import { Dropdown, Icon } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { useMemo } from 'react'
 import styled from 'styled-components'
-import { FrontendErrorBoundary } from 'ui/FrontendErrorBoundary'
 
 import { FishActionCard } from './FishActionCard'
 import { FormBody } from '../shared/FormBody'

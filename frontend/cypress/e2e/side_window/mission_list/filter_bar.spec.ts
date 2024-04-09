@@ -35,16 +35,16 @@ context('Side Window > Mission List > Filter Bar', () => {
     cy.fill('Etat des données', ['Complétées'])
 
     cy.getDataCy('mission-list-filter-tags').contains('Données complétées')
-    cy.get('.TableBodyRow').should('have.length', 0)
+    cy.get('.TableBodyRow').should('have.length.to.be.greaterThan', 0)
   })
 
   it('Should filter missions by status', () => {
     // Default status
     cy.get('[data-cy="mission-list-filter-tags"]').contains('En cours')
     cy.intercept('GET', `*missionStatus=ENDED&*`).as('getMissions')
-    cy.fill('Statut', undefined)
+    cy.fill('Statut de mission', undefined)
     cy.wait(500)
-    cy.fill('Statut', ['Terminée'])
+    cy.fill('Statut de mission', ['Terminée'])
     cy.wait('@getMissions')
 
     cy.get('[data-cy="mission-list-filter-tags"]').contains('Terminée')

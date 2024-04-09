@@ -598,13 +598,12 @@ def make_missions_actions_and_missions_control_units(
         "facade",
         "mission_order",
         "mission_types",
-        "closed_by",
+        "completed_by",
     ]
 
     missions = controls[missions_columns].copy(deep=True)
     missions["deleted"] = False
     missions["mission_source"] = MissionOrigin.POSEIDON_CNSP
-    missions["closed"] = missions.closed_by.notnull()
     missions["start_datetime_utc"] = missions["action_datetime_utc"]
     missions["end_datetime_utc"] = missions["action_datetime_utc"]
     missions = missions.drop(columns=["action_datetime_utc"])
@@ -640,7 +639,7 @@ def make_missions_actions_and_missions_control_units(
         "other_comments",
         "vessel_targeted",
         "open_by",
-        "closed_by",
+        "completed_by",
     ]
 
     mission_actions = controls[mission_actions_columns].copy(deep=True)

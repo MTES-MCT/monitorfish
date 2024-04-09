@@ -45,7 +45,7 @@ SELECT
     rc.maillage_controle2 as controlled_mesh_2,
     rc.maillage_controle3 as controlled_mesh_3,
     c.trigramme_utilisateur AS open_by,
-    rc.trigramme_utilisateur AS closed_by
+    rc.trigramme_utilisateur AS completed_by
 FROM FMC2.FMC_BC_CONTROLE c
 LEFT JOIN NAVPROFMC.NAV_FLOTTEUR f
 ON c.id_nav_flotteur = f.id_nav_flotteur

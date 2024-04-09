@@ -4,7 +4,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.LogbookMessageV
 import fr.gouv.cnsp.monitorfish.domain.exceptions.EntityConversionException
 
 class ConsolidatedLogbookMessage<T : LogbookMessageValue>(
-    val reportId: String,
     /** Logbook report DAT operation, or last COR one if any, consolidated with RET & DEL information if any. */
     val logbookMessage: LogbookMessage,
     private val clazz: Class<T>,
@@ -13,6 +12,8 @@ class ConsolidatedLogbookMessage<T : LogbookMessageValue>(
         get() = if (clazz.isInstance(logbookMessage.message)) {
             clazz.cast(logbookMessage.message)
         } else {
-            throw EntityConversionException("Logbook message is not of type $clazz (reportId: $reportId).")
+            throw EntityConversionException(
+                "Logbook message is not of type $clazz (reportId: ${logbookMessage.reportId}).",
+            )
         }
 }

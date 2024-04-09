@@ -7,8 +7,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 
 data class PriorNotification(
-    /** Logbook report `reportId`. */
-    val reportId: String,
     val consolidatedLogbookMessage: ConsolidatedLogbookMessage<PNO>,
     val port: Port? = null,
     val reportingsCount: Int? = null,

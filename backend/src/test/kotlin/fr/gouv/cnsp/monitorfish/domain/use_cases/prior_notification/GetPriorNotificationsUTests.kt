@@ -41,10 +41,8 @@ class GetPriorNotificationsUTests {
         given(logbookReportRepository.findAllPriorNotifications(LogbookReportFilter())).willReturn(
             listOf(
                 PriorNotification(
-                    reportId = "FAKE_REPORT_ID_1",
                     consolidatedLogbookMessage = ConsolidatedLogbookMessage(
                         clazz = PNO::class.java,
-                        reportId = "FAKE_REPORT_ID_1",
                         logbookMessage = LogbookMessage(
                             id = 1,
                             reportId = "FAKE_REPORT_ID_1",
@@ -76,10 +74,8 @@ class GetPriorNotificationsUTests {
                 ),
 
                 PriorNotification(
-                    reportId = "FAKE_REPORT_ID_2",
                     consolidatedLogbookMessage = ConsolidatedLogbookMessage(
                         clazz = PNO::class.java,
-                        reportId = "FAKE_REPORT_ID_2",
                         logbookMessage = LogbookMessage(
                             id = 1,
                             reportId = null,
@@ -123,7 +119,11 @@ class GetPriorNotificationsUTests {
 
         // Then
         Assertions.assertThat(result).hasSize(2)
-        Assertions.assertThat(result[0].reportId).isEqualTo("FAKE_REPORT_ID_1")
-        Assertions.assertThat(result[1].reportId).isEqualTo("FAKE_REPORT_ID_2")
+        Assertions.assertThat(result[0].consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(
+            "FAKE_REPORT_ID_1",
+        )
+        Assertions.assertThat(result[1].consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(
+            "FAKE_REPORT_ID_2",
+        )
     }
 }

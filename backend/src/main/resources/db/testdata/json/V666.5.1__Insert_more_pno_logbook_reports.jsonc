@@ -16,7 +16,7 @@
             { "operation_number": "FAKE_OPERATION_109_COR" },
             { "operation_number": "FAKE_OPERATION_110" },
             { "operation_number": "FAKE_OPERATION_110_DEL" },
-            { "operation_number": "FAKE_OPERATION_111" },
+            { "operation_number": "FAKE_OPERATION_111_COR_ORPHAN" },
             { "operation_number": "FAKE_OPERATION_112" }
         ]
     },
@@ -537,7 +537,7 @@
                             "hasDesignatedPorts": false
                         }
                     ],
-                    "port": "FRSML",
+                    "port": "FRVNE",
                     "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '1 hour', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '2 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
@@ -583,7 +583,7 @@
                             "hasDesignatedPorts": false
                         }
                     ],
-                    "port": "FRSML",
+                    "port": "FRBES",
                     "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '1 hour', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '2 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
@@ -611,6 +611,53 @@
             },
 
             // - Vessel: UNKNOWN
+            // - Orphan COR (no DAT)
+            {
+                "id": 1111,
+                "report_id": "FAKE_OPERATION_111_COR_ORPHAN",
+                // This `referenced_report_id` doesn't exist, this is intentional
+                "referenced_report_id": "FAKE_OPERATION_111",
+                "cfr": "CFR108",
+                "enriched": true,
+                "flag_state": "FRA",
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
+                "log_type": "PNO",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
+                "operation_number": "FAKE_OPERATION_111_COR_ORPHAN",
+                "operation_type": "COR",
+                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
+                "transmission_format": "ERS",
+                "vessel_name": "LE POISSON AMBULANT",
+                "trip_gears": null,
+                "trip_segments": null,
+                "value:jsonb": {
+                    "catchOnboard": [
+                        {
+                            "economicZone": "FRA",
+                            "effortZone": "C",
+                            "faoZone": "27.8.a",
+                            "nbFish": null,
+                            "species": "COD",
+                            "statisticalRectangle": "23E6",
+                            "weight": 25.0
+                        }
+                    ],
+                    "pnoTypes": [
+                        {
+                            "pnoTypeName": "Préavis type Z",
+                            "minimumNotificationPeriod": 4.0,
+                            "hasDesignatedPorts": false
+                        }
+                    ],
+                    "port": "FRNCE",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '1 hour', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '2 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "purpose": "LAN",
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                }
+            },
+
+            // - Vessel: UNKNOWN
             // - NOT Enriched
             {
                 "id": 111,
@@ -620,7 +667,7 @@
                 "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "log_type": "PNO",
                 "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
-                "operation_number": "FAKE_OPERATION_109",
+                "operation_number": "FAKE_OPERATION_112",
                 "operation_type": "DAT",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "transmission_format": "ERS",

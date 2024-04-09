@@ -61,7 +61,6 @@ class LogbookMessageUTests {
             .toConsolidatedLogbookMessage(relatedLogbookMessages, PNO::class.java)
 
         // Then
-        assertThat(consolidatedLogbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.acknowledge?.isSuccess).isTrue()
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isFalse()
@@ -101,7 +100,6 @@ class LogbookMessageUTests {
             .toConsolidatedLogbookMessage(relatedLogbookMessages, PNO::class.java)
 
         // Then
-        assertThat(consolidatedLogbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.acknowledge?.isSuccess).isTrue()
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isFalse()
@@ -129,7 +127,6 @@ class LogbookMessageUTests {
             .toConsolidatedLogbookMessage(relatedLogbookMessages, PNO::class.java)
 
         // Then
-        assertThat(consolidatedLogbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.acknowledge?.isSuccess).isFalse()
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isFalse()
@@ -163,7 +160,6 @@ class LogbookMessageUTests {
             .toConsolidatedLogbookMessage(relatedLogbookMessages, PNO::class.java)
 
         // Then
-        assertThat(consolidatedLogbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.acknowledge?.isSuccess).isFalse()
         assertThat(consolidatedLogbookMessage.logbookMessage.acknowledge?.dateTime)
@@ -176,7 +172,6 @@ class LogbookMessageUTests {
             .toConsolidatedLogbookMessage(relatedLogbookMessages.reversed(), PNO::class.java)
 
         // Then
-        assertThat(consolidatedLogbookMessageReversed.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessageReversed.logbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessageReversed.logbookMessage.acknowledge?.isSuccess).isFalse()
         assertThat(consolidatedLogbookMessageReversed.logbookMessage.acknowledge?.dateTime)
@@ -200,7 +195,6 @@ class LogbookMessageUTests {
             .toConsolidatedLogbookMessage(emptyList(), PNO::class.java)
 
         // Then
-        assertThat(consolidatedLogbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.acknowledge?.isSuccess).isTrue()
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isFalse()
@@ -222,7 +216,6 @@ class LogbookMessageUTests {
             .toConsolidatedLogbookMessage(emptyList(), PNO::class.java)
 
         // Then
-        assertThat(consolidatedLogbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.acknowledge?.isSuccess).isTrue()
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isFalse()
@@ -242,7 +235,6 @@ class LogbookMessageUTests {
             .toConsolidatedLogbookMessage(emptyList(), PNO::class.java)
 
         // Then
-        assertThat(consolidatedLogbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.reportDateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC))
@@ -280,7 +272,6 @@ class LogbookMessageUTests {
             .toConsolidatedLogbookMessage(relatedLogbookMessages, PNO::class.java)
 
         // Then
-        assertThat(consolidatedLogbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.reportDateTime).isEqualTo(
             ZonedDateTime.of(2024, 1, 1, 0, 0, 3, 0, ZoneOffset.UTC),
@@ -293,7 +284,6 @@ class LogbookMessageUTests {
             .toConsolidatedLogbookMessage(relatedLogbookMessages.reversed(), PNO::class.java)
 
         // Then
-        assertThat(consolidatedLogbookMessageReversed.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessageReversed.logbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessageReversed.logbookMessage.reportDateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 3, 0, ZoneOffset.UTC))
@@ -321,7 +311,6 @@ class LogbookMessageUTests {
             .toConsolidatedLogbookMessage(relatedLogbookMessages, PNO::class.java)
 
         // Then
-        assertThat(consolidatedLogbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.reportDateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC))
@@ -349,7 +338,6 @@ class LogbookMessageUTests {
             .toConsolidatedLogbookMessage(relatedLogbookMessages, PNO::class.java)
 
         // Then
-        assertThat(consolidatedLogbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.reportDateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC))
@@ -387,7 +375,6 @@ class LogbookMessageUTests {
             .toConsolidatedLogbookMessage(relatedLogbookMessages, PNO::class.java)
 
         // Then
-        assertThat(consolidatedLogbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.reportDateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC))
@@ -444,7 +431,6 @@ class LogbookMessageUTests {
             .toConsolidatedLogbookMessage(relatedLogbookMessages, PNO::class.java)
 
         // Then
-        assertThat(consolidatedLogbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.reportDateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC))
@@ -483,7 +469,6 @@ class LogbookMessageUTests {
             .toConsolidatedLogbookMessage(relatedLogbookMessages, PNO::class.java)
 
         // Then
-        assertThat(consolidatedLogbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.reportDateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC))

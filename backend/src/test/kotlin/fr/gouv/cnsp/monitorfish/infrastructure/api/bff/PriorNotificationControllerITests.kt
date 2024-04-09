@@ -49,10 +49,8 @@ class PriorNotificationControllerITests {
         given(this.getPriorNotifications.execute(LogbookReportFilter())).willReturn(
             listOf(
                 PriorNotification(
-                    reportId = "FAKE_REPORT_ID_1",
                     consolidatedLogbookMessage = ConsolidatedLogbookMessage(
                         clazz = PNO::class.java,
-                        reportId = "FAKE_REPORT_ID_1",
                         logbookMessage = LogbookMessage(
                             id = 1,
                             reportId = "FAKE_REPORT_ID_1",
@@ -84,10 +82,8 @@ class PriorNotificationControllerITests {
                 ),
 
                 PriorNotification(
-                    reportId = "FAKE_REPORT_ID_2",
                     consolidatedLogbookMessage = ConsolidatedLogbookMessage(
                         clazz = PNO::class.java,
-                        reportId = "FAKE_REPORT_ID_2",
                         logbookMessage = LogbookMessage(
                             id = 1,
                             reportId = null,
@@ -148,10 +144,8 @@ class PriorNotificationControllerITests {
         // Given
         given(this.getPriorNotification.execute("FAKE_REPORT_ID_1")).willReturn(
             PriorNotification(
-                reportId = "FAKE_REPORT_ID_1",
                 consolidatedLogbookMessage = ConsolidatedLogbookMessage(
                     clazz = PNO::class.java,
-                    reportId = "FAKE_REPORT_ID_1",
                     logbookMessage = LogbookMessage(
                         id = 1,
                         reportId = "FAKE_REPORT_ID_1",

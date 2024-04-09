@@ -144,7 +144,7 @@ export function PriorNotificationList() {
                           }}
                         >
                           {header.isPlaceholder ? undefined : (
-                            <TableWithSelectableRows.SortContainer
+                            <StyledHeadCellInerBox
                               className={header.column.getCanSort() ? 'cursor-pointer' : ''}
                               onClick={header.column.getToggleSortingHandler()}
                             >
@@ -154,7 +154,7 @@ export function PriorNotificationList() {
                                   asc: <div>▲</div>,
                                   desc: <div>▼</div>
                                 }[header.column.getIsSorted() as string] ?? <Icon.SortingArrows size={14} />)}
-                            </TableWithSelectableRows.SortContainer>
+                            </StyledHeadCellInerBox>
                           )}
                         </TableWithSelectableRows.Th>
                       ))}
@@ -187,7 +187,7 @@ export function PriorNotificationList() {
 
                         {row.getIsExpanded() && (
                           <ExpandedRow>
-                            <ExpandedRowCell $width={50} />
+                            <ExpandedRowCell $width={40} />
                             <ExpandedRowCell $width={130}>
                               <p>
                                 <ExpandedRowLabel>PNO émis :</ExpandedRowLabel>
@@ -206,7 +206,7 @@ export function PriorNotificationList() {
                                 </ExpandedRowValue>
                               </p>
                             </ExpandedRowCell>
-                            <ExpandedRowCell $width={180} />
+                            <ExpandedRowCell $width={140} />
                             <ExpandedRowCell $width={50} />
                             <ExpandedRowCell $width={160}>
                               <p>
@@ -272,8 +272,8 @@ export function PriorNotificationList() {
                                 </Link>
                               </p>
                             </ExpandedRowCell>
-                            <ExpandedRowCell $width={60} />
-                            <ExpandedRowCell $width={56} />
+                            <ExpandedRowCell $width={72} />
+                            <ExpandedRowCell $width={64} />
                           </ExpandedRow>
                         )}
                       </Fragment>
@@ -292,8 +292,27 @@ export function PriorNotificationList() {
 }
 
 const TableWrapper = styled.div`
+  box-sizing: border-box;
   flex-grow: 1;
   width: 1440px;
+
+  * {
+    box-sizing: border-box;
+  }
+`
+
+// TODO Update monitor-ui?
+const StyledHeadCellInerBox = styled(TableWithSelectableRows.SortContainer)`
+  > div {
+    &.Element-IconBox {
+      margin-top: 4px;
+    }
+
+    // Caret down/up
+    &:not(.Element-IconBox) {
+      margin-top: -2px;
+    }
+  }
 `
 
 // TODO Update monitor-ui?

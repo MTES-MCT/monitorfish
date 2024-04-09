@@ -43,8 +43,18 @@ export function ButtonsGroupRow({ priorNotification }: ButtonsGroupRowProps) {
 
   return (
     <ButtonsGroup>
-      <IconButton accent={Accent.TERTIARY} Icon={Icon.ViewOnMap} onClick={selectMainMapVessel} />
-      <IconButton accent={Accent.TERTIARY} Icon={Icon.Display} onClick={openPriorNotificationDetail} />
+      <IconButton
+        accent={Accent.TERTIARY}
+        Icon={Icon.ViewOnMap}
+        onClick={selectMainMapVessel}
+        title="Centrer le navire sur la carte"
+      />
+      <IconButton
+        accent={Accent.TERTIARY}
+        Icon={Icon.Display}
+        onClick={openPriorNotificationDetail}
+        title="Consulter le préavis"
+      />
     </ButtonsGroup>
   )
 }

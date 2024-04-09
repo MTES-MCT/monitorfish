@@ -4,6 +4,7 @@ import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Button } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
+import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
 
 import { Header } from './Header'
 import { useGetPriorNotificationQuery } from '../../api'
@@ -23,8 +24,9 @@ export function PriorNotificationCard({ priorNotificationId }: PriorNotification
     return (
       <Wrapper>
         <Background onClick={close} />
+
         <Card>
-          <Body>Chargement en cours...</Body>
+          <LoadingSpinnerWall />
         </Card>
       </Wrapper>
     )
@@ -34,6 +36,7 @@ export function PriorNotificationCard({ priorNotificationId }: PriorNotification
     return (
       <Wrapper>
         <Background onClick={close} />
+
         <Card>
           <Body>Une erreur est survenue pendant le chargement du préavis.</Body>
         </Card>

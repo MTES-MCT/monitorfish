@@ -876,6 +876,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     }
 
     @Test
+    @Transactional
     fun `mapToReferenceWithRelatedModels should correctly map models`() {
         // Given
 

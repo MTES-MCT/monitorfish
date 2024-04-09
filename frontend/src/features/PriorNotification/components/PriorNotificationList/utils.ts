@@ -126,7 +126,7 @@ export function getApiFilterFromListFilter(listFilter: ListFilter): LogbookMessa
     flagStates: listFilter.countryCodes,
     isLessThanTwelveMetersVessel: getMaybeBooleanFromRichBoolean(listFilter.isLessThanTwelveMetersVessel),
     portLocodes: listFilter.portLocodes,
-    priorNotificationTypesAsOptions: listFilter.priorNotificationTypes,
+    priorNotificationTypes: listFilter.priorNotificationTypes,
     searchQuery: listFilter.searchQuery,
     specyCodes: listFilter.specyCodes,
     tripGearCodes: listFilter.gearCodes,

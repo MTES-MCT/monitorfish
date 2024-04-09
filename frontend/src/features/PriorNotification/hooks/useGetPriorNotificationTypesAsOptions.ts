@@ -5,7 +5,7 @@ import { useGetPriorNotificationTypesQuery } from '../api'
 import type { Option } from '@mtes-mct/monitor-ui'
 
 /**
- * Fetches gears and returns them as tree options with their `code` property as option value.
+ * Fetches prior notification tyoes and returns them as options.
  */
 export function useGetPriorNotificationTypesAsOptions() {
   const { data: types, error, isLoading } = useGetPriorNotificationTypesQuery()

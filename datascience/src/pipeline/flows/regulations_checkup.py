@@ -86,6 +86,8 @@ def extract_monitorfish_regulations() -> pd.DataFrame:
         pd.DataFrame: DataFrame of regulatory references
     """
 
+    logger = prefect.context.get("logger")
+
     monitorfish_regulations = extract(
         "monitorfish_remote",
         query_filepath="monitorfish/regulations_references.sql",
@@ -105,23 +107,24 @@ def extract_monitorfish_regulations() -> pd.DataFrame:
         try_get_factory("reference", error_value=None)
     )
 
-    # range of possible values with python datetime timestamps
-    timestamp_max = 253402210800  # 9999, December 31st
-    timestamp_min = -62135510961  # 0001, January 2nd
+    def parse_datetime_string(s):
+        if s == "infinite":
+            res = datetime.datetime(9999, 12, 31)
+        else:
+            try:
+                res = datetime.datetime.fromisoformat(s).replace(tzinfo=None)
+            except (ValueError, TypeError) as error:
+                logger.error(error)
+                logger.error(f"Could not parse datetime string {s}, returning `None`")
+                res = None
+        return res
 
     monitorfish_regulations[
         "end_date"
     ] = monitorfish_regulations.regulatory_references.map(
         try_get_factory("endDate", error_value=None)
     ).map(
-        lambda x: (
-            datetime.datetime(9999, 12, 31)
-            if x == "infinite" or x / 1000 > timestamp_max
-            else datetime.datetime(1, 1, 2)
-            if x / 1000 < timestamp_min
-            else datetime.datetime.utcfromtimestamp(x / 1000)
-        ),
-        na_action="ignore",
+        parse_datetime_string, na_action="ignore"
     )
 
     monitorfish_regulations = monitorfish_regulations.drop(

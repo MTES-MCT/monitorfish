@@ -22,7 +22,7 @@ interface DBLogbookReportRepository :
         """,
         nativeQuery = true,
     )
-    fun findEnrichedPnoParentAndChildrenByReportId(reportId: String): List<LogbookReportEntity>
+    fun findEnrichedPnoReferenceWithRelatedMessagesByReportId(reportId: String): List<LogbookReportEntity>
 
     @Query(
         """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDate(e.tripNumber, MIN(e.operationDateTime))

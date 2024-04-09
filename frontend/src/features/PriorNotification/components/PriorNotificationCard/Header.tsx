@@ -2,6 +2,8 @@ import { CountryFlag } from '@components/CountryFlag'
 import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
+import { getFirstTitleRowText } from './utils'
+
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
 type HeaderProps = Readonly<{
@@ -9,6 +11,11 @@ type HeaderProps = Readonly<{
   priorNotificationDetail: PriorNotification.PriorNotificationDetail
 }>
 export function Header({ onClose, priorNotificationDetail }: HeaderProps) {
+  const firstTitleRowText = getFirstTitleRowText(
+    priorNotificationDetail.isLessThanTwelveMetersVessel,
+    priorNotificationDetail.logbookMessage.tripSegments
+  )
+
   return (
     <Wrapper>
       <Title>
@@ -17,12 +24,7 @@ export function Header({ onClose, priorNotificationDetail }: HeaderProps) {
             <Icon.Fishery />
           </TitleRowIconBox>
 
-          <span>
-            PNO {priorNotificationDetail.isLessThanTwelveMetersVessel ? '< 12 M' : '≥ 12 M'} -{' '}
-            {priorNotificationDetail.logbookMessage.tripSegments
-              ?.map(tripSegment => tripSegment.name.toUpperCase())
-              .join(', ') ?? 'SEGMENT(S) INCONNU(S)'}
-          </span>
+          <span>{firstTitleRowText}</span>
         </TitleRow>
 
         <TitleRow>

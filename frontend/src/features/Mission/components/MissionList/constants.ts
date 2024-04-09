@@ -107,7 +107,7 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<Mission.MissionWithActions
       transform: getMissionStatus
     },
     {
-      fixedWidth: 120,
+      fixedWidth: 125,
       isSortable: true,
       key: 'completion',
       label: 'État données',

@@ -1,5 +1,5 @@
 import { useGetMissionActionMissingFields } from '@features/Mission/components/MissionForm/hooks/useGetMissionActionMissingFields'
-import { ExclamationPoint, Icon, pluralize, THEME } from '@mtes-mct/monitor-ui'
+import { Icon, pluralize, THEME } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import styled from 'styled-components'
 
@@ -20,11 +20,7 @@ export function MissingFieldsText() {
 
   return (
     <CompletionStatus>
-      <ExclamationPoint
-        backgroundColor={isMissionEnded ? THEME.color.maximumRed : THEME.color.charcoal}
-        color={THEME.color.white}
-        size={17}
-      />
+      <Icon.AttentionFilled color={isMissionEnded ? THEME.color.maximumRed : THEME.color.charcoal} />
       <Text $color={isMissionEnded ? THEME.color.maximumRed : THEME.color.charcoal}>
         {missingFields} {pluralize('champ', missingFields)} {pluralize('nécessaire', missingFields)} aux statistiques à
         compléter

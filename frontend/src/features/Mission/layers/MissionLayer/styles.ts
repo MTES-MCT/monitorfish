@@ -23,7 +23,7 @@ export const missionPointWebGLStyle: WebGLStyle = {
   'icon-height': 312,
   'icon-offset': [
     'case',
-    featureHas('isClosed'),
+    featureHas('isDone'),
     [
       'case',
       featureHas('isSeaMission'),
@@ -36,7 +36,7 @@ export const missionPointWebGLStyle: WebGLStyle = {
       [0, 234],
       [0, 234]
     ],
-    featureHas('isDone'),
+    featureHas('isInProgress'),
     [
       'case',
       featureHas('isSeaMission'),
@@ -49,7 +49,7 @@ export const missionPointWebGLStyle: WebGLStyle = {
       [68, 234],
       [68, 234]
     ],
-    featureHas('isInProgress'),
+    featureHas('isUpcoming'),
     [
       'case',
       featureHas('isSeaMission'),
@@ -62,19 +62,6 @@ export const missionPointWebGLStyle: WebGLStyle = {
       [136, 234],
       [136, 234]
     ],
-    featureHas('isUpcoming'),
-    [
-      'case',
-      featureHas('isSeaMission'),
-      [204, 0],
-      featureHas('isLandMission'),
-      [204, 78],
-      featureHas('isAirMission'),
-      [204, 156],
-      featureHas('isMultiMission'),
-      [204, 234],
-      [204, 234]
-    ],
     [0, 0]
   ],
   'icon-scale': 0.5,
@@ -83,5 +70,5 @@ export const missionPointWebGLStyle: WebGLStyle = {
   'icon-size': [68, 78],
 
   'icon-src': 'map-icons/icon_mission_sprite.png',
-  'icon-width': 272
+  'icon-width': 204
 }

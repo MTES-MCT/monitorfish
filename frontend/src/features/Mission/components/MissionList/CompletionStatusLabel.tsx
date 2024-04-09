@@ -1,5 +1,5 @@
 import { MissionAction } from '@features/Mission/missionAction.types'
-import { ExclamationPoint, Icon, THEME } from '@mtes-mct/monitor-ui'
+import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import FrontCompletionStatus = MissionAction.FrontCompletionStatus
@@ -28,7 +28,7 @@ export function CompletionStatusLabel({ completion = undefined }: { completion?:
     case FrontCompletionStatus.TO_COMPLETE_MISSION_ENDED:
       return (
         <CompletionStatusContainer>
-          <ExclamationPoint backgroundColor={THEME.color.maximumRed} color={THEME.color.white} size={15} />
+          <Icon.AttentionFilled color={THEME.color.maximumRed} />
           <Text $color={THEME.color.maximumRed}>{FrontCompletionStatusLabel.TO_COMPLETE}</Text>
         </CompletionStatusContainer>
       )
@@ -36,7 +36,7 @@ export function CompletionStatusLabel({ completion = undefined }: { completion?:
     case FrontCompletionStatus.TO_COMPLETE:
       return (
         <CompletionStatusContainer>
-          <ExclamationPoint backgroundColor={THEME.color.charcoal} color={THEME.color.white} size={15} />
+          <Icon.AttentionFilled color={THEME.color.charcoal} />
           <Text $color={THEME.color.charcoal}>{FrontCompletionStatusLabel.TO_COMPLETE}</Text>
         </CompletionStatusContainer>
       )

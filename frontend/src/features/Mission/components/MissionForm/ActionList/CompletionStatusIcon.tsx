@@ -1,5 +1,5 @@
 import { useGetMissionActionMissingFields } from '@features/Mission/components/MissionForm/hooks/useGetMissionActionMissingFields'
-import { ExclamationPoint, Icon, THEME } from '@mtes-mct/monitor-ui'
+import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import type { MissionActionForTimeline } from '@features/Mission/components/MissionForm/types'
@@ -20,11 +20,7 @@ export function CompletionStatusIcon({ missionAction }: MissingFieldsText) {
 
   return (
     <Wrapper>
-      <ExclamationPoint
-        backgroundColor={isMissionEnded ? THEME.color.maximumRed : THEME.color.charcoal}
-        color={THEME.color.white}
-        size={17}
-      />
+      <Icon.AttentionFilled color={isMissionEnded ? THEME.color.maximumRed : THEME.color.charcoal} />
     </Wrapper>
   )
 }

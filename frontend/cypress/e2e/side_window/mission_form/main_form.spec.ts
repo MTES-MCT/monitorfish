@@ -164,7 +164,7 @@ context('Side Window > Mission Form > Main Form', () => {
         })
       })
 
-      cy.get('h1').should('contain.text', 'Missions et contrôles')
+      cy.get('h1').should('contain.text', 'Missions en MED')
     }
   )
 
@@ -196,7 +196,8 @@ context('Side Window > Mission Form > Main Form', () => {
     })
 
     cy.fill('Début de mission', [2023, 2, 1, 12, 34])
-    cy.fill('Fin de mission', [2023, 2, 1, 13, 45])
+    const endDate = getUtcDateInMultipleFormats(customDayjs().utc().add(7, 'day').toISOString())
+    cy.fill('Fin de mission', endDate.utcDateTupleWithTime)
 
     cy.fill('Types de mission', ['Air'])
     cy.fill('Mission sous JDP', true)
@@ -264,7 +265,6 @@ context('Side Window > Mission Form > Main Form', () => {
               ]
             }
           ],
-          endDateTimeUtc: '2023-02-01T13:45:00.000Z',
           hasMissionOrder: true,
           isGeometryComputedFromControls: true,
           isUnderJdp: true,
@@ -334,7 +334,7 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.clickButton(SideWindowMenuLabel.MISSION_LIST)
 
-    cy.get('h1').should('contain.text', 'Missions et contrôles')
+    cy.get('h1').should('contain.text', 'Missions en MEMN')
 
     editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
 
@@ -354,7 +354,7 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.clickButton(SideWindowMenuLabel.MISSION_LIST)
     cy.clickButton('Quitter sans enregistrer')
 
-    cy.get('h1').should('contain.text', 'Missions et contrôles')
+    cy.get('h1').should('contain.text', 'Missions en MEMN')
   })
 
   it('A mission should not be deleted if actions have been created in MonitorEnv', () => {
@@ -418,7 +418,7 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.wait('@deleteMission')
 
-    cy.get('h1').should('contain.text', 'Missions et contrôles')
+    cy.get('h1').should('contain.text', 'Missions en MEMN')
   })
 
   it('Should display an error message When a mission could not be fetched', () => {

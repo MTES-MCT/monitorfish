@@ -284,6 +284,8 @@ context('Side Window > Mission Form > Main Form', () => {
 
   it('Should send the expected data to the API when editing an existing mission', () => {
     editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
+    const endDate = customDayjs().utc().add(7, 'day')
+    cy.fill('Fin de mission', getUtcDateInMultipleFormats(endDate.toISOString()).utcDateTupleWithTime)
 
     cy.intercept('POST', '/api/v1/missions/2', {
       body: {
@@ -503,6 +505,7 @@ context('Side Window > Mission Form > Main Form', () => {
 
   it('Should update the form When receiving a mission update', () => {
     editSideWindowMissionListMissionWithId(43, SeaFrontGroup.MED)
+
     cy.wait(200)
     cy.intercept('POST', '/api/v1/missions/43', {
       body: {
@@ -539,7 +542,7 @@ context('Side Window > Mission Form > Main Form', () => {
                 }
               ],
               // MODIFIED FIELD
-              endDateTimeUtc: '2024-02-13T09:49:40.350661Z',
+              endDateTimeUtc: '2070-02-13T09:49:40.350661Z',
               envActions: [],
               facade: 'MED',
               geom: {
@@ -575,9 +578,6 @@ context('Side Window > Mission Form > Main Form', () => {
       })
     cy.wait(500)
 
-    // We modify the comment
-    cy.fill('CNSP : orientations, observations', 'Une autre note.')
-
     cy.clickButton('Supprimer l’action')
     // We stub the response as the DELETE request was mocked
     cy.intercept('GET', '/bff/v1/mission_actions?missionId=43', {
@@ -585,11 +585,16 @@ context('Side Window > Mission Form > Main Form', () => {
       statusCode: 200
     })
 
+    // We modify the comment
+    cy.wait(250)
+    cy.fill('CNSP : orientations, observations', '')
+    cy.fill('CNSP : orientations, observations', 'Une autre note.')
+
     cy.waitForLastRequest(
       '@updateMission',
       {
         body: {
-          endDateTimeUtc: '2024-02-13T09:49:40.350661Z',
+          endDateTimeUtc: '2070-02-13T09:49:40.350661Z',
           isUnderJdp: true,
           observationsCnsp: 'Une autre note.'
         }
@@ -658,7 +663,7 @@ context('Side Window > Mission Form > Main Form', () => {
                 }
               ],
               // MODIFIED FIELD
-              endDateTimeUtc: '2024-02-13T09:49:40.350661Z',
+              endDateTimeUtc: '2070-02-13T09:49:40.350661Z',
               envActions: [],
               facade: 'MED',
               geom: {
@@ -694,16 +699,17 @@ context('Side Window > Mission Form > Main Form', () => {
       })
     cy.wait(500)
 
-    // We modify the comment
-    cy.fill('CNSP : orientations, observations', 'Une autre note.')
-
     cy.clickButton('Supprimer l’action')
     // We stub the response as the DELETE request was mocked
     cy.intercept('GET', '/bff/v1/mission_actions?missionId=43', {
       body: [],
       statusCode: 200
     })
-    cy.wait(500)
+
+    // We modify the comment
+    cy.wait(250)
+    cy.fill('CNSP : orientations, observations', '')
+    cy.fill('CNSP : orientations, observations', 'Une autre note.')
 
     cy.window()
       .its('mockEventSources' as any)
@@ -726,7 +732,7 @@ context('Side Window > Mission Form > Main Form', () => {
                   resources: []
                 }
               ],
-              endDateTimeUtc: '2024-02-13T09:49:40.350661Z',
+              endDateTimeUtc: '2070-02-13T09:49:40.350661Z',
               envActions: [],
               facade: 'MED',
               geom: {

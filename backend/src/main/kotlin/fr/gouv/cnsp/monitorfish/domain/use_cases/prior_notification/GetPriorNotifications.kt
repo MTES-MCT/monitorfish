@@ -42,7 +42,7 @@ class GetPriorNotifications(
 
         val priorNotifications = enrichPriorNotificationsWithReportingCount(priorNotificationsWithoutReportingsCount)
 
-        return priorNotifications
+        return priorNotifications.filter { !it.consolidatedLogbookMessage.logbookMessage.isDeleted }
     }
 
     private fun enrichPriorNotificationsWithReportingCount(

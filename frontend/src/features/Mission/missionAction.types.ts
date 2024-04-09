@@ -4,7 +4,7 @@ export namespace MissionAction {
   export interface MissionAction {
     actionDatetimeUtc: string
     actionType: MissionActionType
-    closedBy: string | undefined
+    completedBy: string | undefined
     completion: CompletionStatus
     controlQualityComments: string | undefined
     controlUnits: LegacyControlUnit.LegacyControlUnit[]

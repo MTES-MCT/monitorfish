@@ -8,7 +8,7 @@ import type { MissionMainFormValues } from '@features/Mission/components/Mission
 import CompletionStatus = MissionAction.CompletionStatus
 import FrontCompletionStatus = MissionAction.FrontCompletionStatus
 
-export const getMissionColor = (missionStatus: Mission.MissionStatus | undefined, isText?: boolean | undefined) => {
+export const getMissionColor = (missionStatus: Mission.MissionStatus | undefined) => {
   switch (missionStatus) {
     case Mission.MissionStatus.UPCOMING:
       return THEME.color.mayaBlue
@@ -16,25 +16,17 @@ export const getMissionColor = (missionStatus: Mission.MissionStatus | undefined
       return THEME.color.blueGray
     case Mission.MissionStatus.DONE:
       return THEME.color.charcoal
-    case Mission.MissionStatus.CLOSED:
-      return isText ? THEME.color.gunMetal : THEME.color.white
     default:
       return THEME.color.blueGray
   }
 }
 export const getMissionStatus = ({
   endDateTimeUtc,
-  isClosed,
   startDateTimeUtc
 }: {
   endDateTimeUtc?: string
-  isClosed?: Boolean
   startDateTimeUtc?: string
 }): Mission.MissionStatus | undefined => {
-  if (isClosed) {
-    return Mission.MissionStatus.CLOSED
-  }
-
   if (!startDateTimeUtc) {
     return undefined
   }

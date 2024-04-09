@@ -59,9 +59,9 @@ export const AirControlFormLiveSchema = object({
   userTrigram: string().trim().required(HIDDEN_ERROR)
 })
 
-export const AirControlFormClosureSchema = AirControlFormLiveSchema.concat(
+export const AirControlFormCompletionSchema = AirControlFormLiveSchema.concat(
   object({
-    closedBy: string().trim().required(HIDDEN_ERROR)
+    completedBy: string().trim().required(HIDDEN_ERROR)
   })
 )
 
@@ -72,9 +72,9 @@ export const AirSurveillanceFormLiveSchema = object({
   userTrigram: string().trim().required(HIDDEN_ERROR)
 })
 
-export const AirSurveillanceFormClosureSchema = AirSurveillanceFormLiveSchema.concat(
+export const AirSurveillanceFormCompletionSchema = AirSurveillanceFormLiveSchema.concat(
   object({
-    closedBy: string().trim().required(HIDDEN_ERROR)
+    completedBy: string().trim().required(HIDDEN_ERROR)
   })
 )
 
@@ -95,7 +95,7 @@ export const LandControlFormLiveSchema = object({
   userTrigram: string().trim().required(HIDDEN_ERROR)
 })
 
-export const LandControlFormClosureSchema = LandControlFormLiveSchema.concat(
+export const LandControlFormCompletionSchema = LandControlFormLiveSchema.concat(
   object({
     // Obligations déclaratives et autorisations de pêche
     emitsVms: string().required(HIDDEN_ERROR),
@@ -115,7 +115,7 @@ export const LandControlFormClosureSchema = LandControlFormLiveSchema.concat(
     vesselTargeted: string().required(HIDDEN_ERROR),
 
     // Saisi par / Clôturé par
-    closedBy: string().trim().required(HIDDEN_ERROR)
+    completedBy: string().trim().required(HIDDEN_ERROR)
   })
 )
 
@@ -130,7 +130,7 @@ export const SeaControlFormLiveSchema = object({
   userTrigram: string().required(HIDDEN_ERROR)
 })
 
-export const SeaControlFormClosureSchema = SeaControlFormLiveSchema.concat(
+export const SeaControlFormCompletionSchema = SeaControlFormLiveSchema.concat(
   object({
     // Obligations déclaratives et autorisations de pêche
     emitsVms: string().required(HIDDEN_ERROR),
@@ -150,7 +150,7 @@ export const SeaControlFormClosureSchema = SeaControlFormLiveSchema.concat(
     vesselTargeted: string().required(HIDDEN_ERROR),
 
     // Saisi par / Clôturé par
-    closedBy: string().trim().required(HIDDEN_ERROR)
+    completedBy: string().trim().required(HIDDEN_ERROR)
   })
 )
 

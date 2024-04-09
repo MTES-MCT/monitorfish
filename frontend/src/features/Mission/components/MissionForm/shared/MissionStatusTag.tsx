@@ -26,13 +26,6 @@ export function MissionStatusTag({ status }: MissionStatusTagProps) {
           {Mission.MissionStatusLabel.IN_PROGRESS}
         </Tag>
       )
-    // TODO: remove this line when the CLOSED status is removed
-    case Mission.MissionStatus.CLOSED:
-      return (
-        <Tag accent={Accent.PRIMARY} Icon={Icon.Confirm} iconColor={THEME.color.charcoal} withCircleIcon>
-          {Mission.MissionStatusLabel.CLOSED}
-        </Tag>
-      )
     case Mission.MissionStatus.DONE:
       return (
         <Tag accent={Accent.PRIMARY} Icon={Icon.Confirm} iconColor={THEME.color.charcoal} withCircleIcon>

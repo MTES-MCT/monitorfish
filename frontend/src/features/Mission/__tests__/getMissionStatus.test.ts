@@ -7,7 +7,6 @@ import { customDayjs } from '@mtes-mct/monitor-ui'
 describe('domain/entities/mission/utils.getMissionStatus()', () => {
   it('should return a first-letter-capitalized string', () => {
     const mission = {
-      isClosed: false,
       startDateTimeUtc: customDayjs().toISOString()
     }
 

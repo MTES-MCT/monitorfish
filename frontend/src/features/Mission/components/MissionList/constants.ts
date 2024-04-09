@@ -11,13 +11,19 @@ import { MissionAction } from '../../missionAction.types'
 import type { TableOptions } from '@hooks/useTable/types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
+enum TagFrontCompletionStatusLabel {
+  COMPLETED = 'Données complétées',
+  TO_COMPLETE = 'Données à compléter',
+  UP_TO_DATE = 'Données à jour'
+}
+
 export const MISSION_FILTER_LABEL_ENUMS: Record<MissionFilterType, Record<string, string> | undefined> = {
   [MissionFilterType.ADMINISTRATION]: undefined,
   [MissionFilterType.CUSTOM_DATE_RANGE]: undefined,
   [MissionFilterType.DATE_RANGE]: MissionDateRangeFilterLabel,
   [MissionFilterType.SOURCE]: Mission.MissionSourceLabel,
   [MissionFilterType.STATUS]: Mission.MissionStatusLabel,
-  [MissionFilterType.COMPLETION_STATUS]: MissionAction.FrontCompletionStatusLabel,
+  [MissionFilterType.COMPLETION_STATUS]: TagFrontCompletionStatusLabel,
   [MissionFilterType.WITH_ACTIONS]: undefined,
   [MissionFilterType.TYPE]: Mission.MissionTypeLabel,
   [MissionFilterType.UNIT]: undefined

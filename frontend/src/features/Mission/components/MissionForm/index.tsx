@@ -17,15 +17,7 @@ import { cleanMissionForm } from '@features/SideWindow/useCases/cleanMissionForm
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import {
-  Accent,
-  Button,
-  customDayjs,
-  humanizePastDate,
-  Icon,
-  logSoftError,
-  NotificationEvent
-} from '@mtes-mct/monitor-ui'
+import { Accent, Button, customDayjs, humanizePastDate, Icon, logSoftError } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { SideWindowMenuKey } from 'domain/entities/sideWindow/constants'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -49,7 +41,6 @@ import { MissionStatusTag } from './shared/MissionStatusTag'
 import { missionFormActions } from './slice'
 import { getTitleFromMissionMainFormValues } from './utils'
 import { areMissionFormsValuesValid } from './utils/areMissionFormsValuesValid'
-import { validateMissionForms } from './utils/validateMissionForms'
 import {
   monitorenvMissionApi,
   useCreateMissionMutation,
@@ -122,7 +113,7 @@ export function MissionForm() {
     }
 
     const now = customDayjs()
-    if (mainFormValues.endDateTimeUtc && now.isAfter(mainFormValues.endDateTimeUtc) && mainFormValues.isClosed) {
+    if (mainFormValues.endDateTimeUtc && now.isAfter(mainFormValues.endDateTimeUtc)) {
       return false
     }
 
@@ -180,59 +171,6 @@ export function MissionForm() {
     }
   }, [dispatch])
 
-  const reopen = useCallback(() => {
-    const nextMainFormValues = {
-      ...mainFormValues,
-      isClosed: false
-    }
-    setMainFormValues(nextMainFormValues)
-    updateReduxSliceDraft()
-    window.document.dispatchEvent(new NotificationEvent('La mission a bien été réouverte', 'success', true))
-
-    if (!areMissionFormsValuesValid(nextMainFormValues, actionsFormValues)) {
-      dispatch(missionFormActions.setIsDraftDirty(true))
-
-      return
-    }
-
-    createOrUpdate({
-      actionsFormValues,
-      mainFormValues: nextMainFormValues
-    })
-  }, [dispatch, updateReduxSliceDraft, createOrUpdate, mainFormValues, actionsFormValues])
-
-  const close = useCallback(async () => {
-    const [canClose, { nextActionsFormValues, nextMainFormValues }] = validateMissionForms(
-      mainFormValues,
-      actionsFormValues,
-      true
-    )
-    // Stop creation or update there in case there are closure validation error
-    if (!canClose) {
-      setMainFormValues(nextMainFormValues)
-      setActionsFormValues(nextActionsFormValues)
-
-      dispatch(missionFormActions.setIsDraftDirty(true))
-      dispatch(missionFormActions.setIsClosing(true))
-
-      return
-    }
-
-    const mainFormValuesWithIsClosed = {
-      ...mainFormValues,
-      isClosed: true
-    }
-    setMainFormValues(mainFormValuesWithIsClosed)
-    updateReduxSliceDraft()
-
-    await createOrUpdate({
-      actionsFormValues,
-      mainFormValues: mainFormValuesWithIsClosed
-    })
-
-    dispatch(openSideWindowPath({ menu: SideWindowMenuKey.MISSION_LIST }))
-  }, [dispatch, updateReduxSliceDraft, createOrUpdate, mainFormValues, actionsFormValues])
-
   const updateEditedActionFormValuesCallback = useCallback(
     async (nextActionFormValues: MissionActionFormValues) => {
       if (editedActionIndex === undefined) {
@@ -243,12 +181,7 @@ export function MissionForm() {
       const nextActionFormValuesWithId = { ...nextActionFormValues, id }
 
       const createdId = await dispatch(
-        autoSaveMissionAction(
-          nextActionFormValuesWithId,
-          missionIdRef.current,
-          mainFormValues.isClosed,
-          isAutoSaveEnabled
-        )
+        autoSaveMissionAction(nextActionFormValuesWithId, missionIdRef.current, isAutoSaveEnabled)
       )
       const nextActionsFormValuesWithCreatedId = actionsFormValues.map((action, index) =>
         index === editedActionIndex ? { ...nextActionFormValues, id: createdId } : action
@@ -256,7 +189,7 @@ export function MissionForm() {
       setActionsFormValues(nextActionsFormValuesWithCreatedId)
       updateReduxSliceDraft()
     },
-    [dispatch, updateReduxSliceDraft, editedActionIndex, actionsFormValues, mainFormValues.isClosed, isAutoSaveEnabled]
+    [dispatch, updateReduxSliceDraft, editedActionIndex, actionsFormValues, isAutoSaveEnabled]
   )
 
   const updateEditedActionFormValues = useDebouncedCallback(
@@ -318,21 +251,14 @@ export function MissionForm() {
       setEditedActionIndex(0)
 
       const createdId = await dispatch(
-        autoSaveMissionAction(newActionFormValues, missionIdRef.current, mainFormValues.isClosed, isAutoSaveEnabled)
+        autoSaveMissionAction(newActionFormValues, missionIdRef.current, isAutoSaveEnabled)
       )
 
       const nextActionsWithIdFormValues = [{ ...newActionFormValues, id: createdId }, ...actionsFormValues]
       setActionsFormValues(nextActionsWithIdFormValues)
       updateReduxSliceDraft()
     },
-    [
-      dispatch,
-      updateEditedActionFormValues,
-      updateReduxSliceDraft,
-      actionsFormValues,
-      mainFormValues.isClosed,
-      isAutoSaveEnabled
-    ]
+    [dispatch, updateEditedActionFormValues, updateReduxSliceDraft, actionsFormValues, isAutoSaveEnabled]
   )
 
   const updateEditedActionIndex = useCallback(
@@ -416,7 +342,6 @@ export function MissionForm() {
 
     setMainFormValues(previousMainFormValues => ({
       ...previousMainFormValues,
-      isClosed: missionEvent.isClosed,
       updatedAtUtc: missionEvent.updatedAtUtc
     }))
   }, [missionEvent])
@@ -433,7 +358,7 @@ export function MissionForm() {
   return (
     <>
       <Wrapper>
-        <Header>
+        <Header data-cy="mission-form-header">
           <BackToListIcon onClick={goToMissionList} />
 
           <HeaderTitle>{title}</HeaderTitle>
@@ -495,28 +420,6 @@ export function MissionForm() {
 
           <RightButtonsContainer>
             <AutoSaveTag isAutoSaveEnabled={isAutoSaveEnabled} />
-            {!mainFormValues.isClosed && (
-              <Button
-                accent={Accent.SECONDARY}
-                data-cy="close-mission"
-                disabled={isSaving || !isMissionFormValid}
-                onClick={close}
-              >
-                Clôturer
-              </Button>
-            )}
-            {mainFormValues.isClosed && (
-              <Button
-                accent={Accent.SECONDARY}
-                data-cy="reopen-mission"
-                disabled={isSaving}
-                Icon={Icon.Unlock}
-                onClick={reopen}
-                type="button"
-              >
-                Rouvrir la mission
-              </Button>
-            )}
             <Button
               accent={isAutoSaveEnabled ? Accent.PRIMARY : Accent.SECONDARY}
               disabled={isSaving}

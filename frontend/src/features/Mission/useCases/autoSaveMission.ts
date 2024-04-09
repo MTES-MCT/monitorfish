@@ -18,16 +18,11 @@ export const autoSaveMission =
       return undefined
     }
 
-    const mainFormValuesWithUpdatedIsClosedProperty = {
-      ...nextMainFormValues,
-      isClosed: !!previousMainFormValues.isClosed
-    }
-
-    if (!MainFormLiveSchema.isValidSync(mainFormValuesWithUpdatedIsClosedProperty) || !isAutoSaveEnabled) {
+    if (!MainFormLiveSchema.isValidSync(nextMainFormValues) || !isAutoSaveEnabled) {
       dispatch(missionFormActions.setIsDraftDirty(true))
 
-      return mainFormValuesWithUpdatedIsClosedProperty
+      return nextMainFormValues
     }
 
-    return dispatch(saveMission(mainFormValuesWithUpdatedIsClosedProperty, missionId))
+    return dispatch(saveMission(nextMainFormValues, missionId))
   }

@@ -31,12 +31,11 @@ context('Side Window > Mission List > Filter Bar', () => {
     cy.wait('@getMissions')
   })
 
-  it('Should filter missions by source', () => {
-    cy.intercept('GET', `*missionSource=MONITORENV*`).as('getMissions')
-    cy.fill('Origine', 'CACEM')
-    cy.wait('@getMissions')
+  it('Should filter missions by completion status', () => {
+    cy.fill('Etat des données', ['Complétées'])
 
-    cy.get('.TableBodyRow').should('have.length.to.be.greaterThan', 0)
+    cy.getDataCy('mission-list-filter-tags').contains('Données complétées')
+    cy.get('.TableBodyRow').should('have.length', 0)
   })
 
   it('Should filter missions by status', () => {
@@ -85,5 +84,12 @@ context('Side Window > Mission List > Filter Bar', () => {
 
     cy.get('[data-cy="mission-list-filter-tags"]').contains('Terre')
     cy.get('.TableBodyRow').should('have.length.to.be.greaterThan', 0)
+  })
+
+  it('Should filter missions with actions', () => {
+    cy.fill('Missions avec actions CNSP', true)
+
+    cy.get('.TableBodyRow').should('have.length.to.be.greaterThan', 0)
+    cy.fill('Missions avec actions CNSP', false)
   })
 })

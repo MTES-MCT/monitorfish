@@ -1,5 +1,4 @@
 import { UpdateMissionActionCompletionEffect } from '@features/Mission/components/MissionForm/ActionForm/shared/UpdateMissionActionCompletionEffect'
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import {
   FormikCheckbox,
   FormikEffect,
@@ -10,10 +9,9 @@ import {
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash/fp'
-import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { AirSurveillanceFormClosureSchema, AirSurveillanceFormLiveSchema } from './schemas'
+import { AirSurveillanceFormLiveSchema } from './schemas'
 import { ActionFormHeader } from './shared/ActionFormHeader'
 import { FLIGHT_GOALS_AS_OPTIONS } from './shared/constants'
 import { FleetSegmentsField } from './shared/FleetSegmentsField'
@@ -31,15 +29,8 @@ type AirSurveillanceFormProps = Readonly<{
   onChange: (nextValues: MissionActionFormValues) => Promisable<void>
 }>
 export function AirSurveillanceForm({ initialValues, onChange }: AirSurveillanceFormProps) {
-  const isClosing = useMainAppSelector(store => store.missionForm.isClosing)
-
-  const validationSchema = useMemo(
-    () => (isClosing ? AirSurveillanceFormClosureSchema : AirSurveillanceFormLiveSchema),
-    [isClosing]
-  )
-
   return (
-    <Formik initialValues={initialValues} onSubmit={noop} validationSchema={validationSchema}>
+    <Formik initialValues={initialValues} onSubmit={noop} validationSchema={AirSurveillanceFormLiveSchema}>
       {({ validateForm, values }) => (
         <>
           <FormikEffect onChange={validateBeforeOnChange(initialValues, validateForm, onChange)} />
@@ -49,7 +40,7 @@ export function AirSurveillanceForm({ initialValues, onChange }: AirSurveillance
           <ActionFormHeader>
             <Icon.Observation />
             Surveillance aérienne{' '}
-            {values.numberOfVesselsFlownOver ?? `– ${values.numberOfVesselsFlownOver} pistes survolées`}
+            {values.numberOfVesselsFlownOver ? `– ${values.numberOfVesselsFlownOver} pistes survolées` : ''}
           </ActionFormHeader>
 
           <FormBody>

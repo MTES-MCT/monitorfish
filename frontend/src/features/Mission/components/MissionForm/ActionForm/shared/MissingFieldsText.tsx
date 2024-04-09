@@ -11,7 +11,7 @@ export function MissingFieldsText() {
 
   if (missingFields === 0) {
     return (
-      <CompletionStatus isCompleted>
+      <CompletionStatus data-cy="action-completion-status" isCompleted>
         <Icon.Confirm color={THEME.color.mediumSeaGreen} size={20} />
         Les champs nécessaires aux statistiques sont complétés.
       </CompletionStatus>
@@ -19,7 +19,7 @@ export function MissingFieldsText() {
   }
 
   return (
-    <CompletionStatus>
+    <CompletionStatus data-cy="action-completion-status">
       <Icon.AttentionFilled color={isMissionEnded ? THEME.color.maximumRed : THEME.color.charcoal} />
       <Text $color={isMissionEnded ? THEME.color.maximumRed : THEME.color.charcoal}>
         {missingFields} {pluralize('champ', missingFields)} {pluralize('nécessaire', missingFields)} aux statistiques à

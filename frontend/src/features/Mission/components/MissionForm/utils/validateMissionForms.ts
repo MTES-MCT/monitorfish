@@ -33,7 +33,7 @@ export function validateMissionForms(
           ...actionFormValues,
           // There is no closure validation schema for the air control action form
           isValid: isClosureValidation
-            ? ActionSchemas.AirControlFormClosureSchema.isValidSync(actionFormValues)
+            ? ActionSchemas.AirControlFormCompletionSchema.isValidSync(actionFormValues)
             : ActionSchemas.AirControlFormLiveSchema.isValidSync(actionFormValues)
         }
 
@@ -42,7 +42,7 @@ export function validateMissionForms(
           ...actionFormValues,
           // There is no closure validation schema for the air control action form
           isValid: isClosureValidation
-            ? ActionSchemas.AirSurveillanceFormClosureSchema.isValidSync(actionFormValues)
+            ? ActionSchemas.AirSurveillanceFormCompletionSchema.isValidSync(actionFormValues)
             : ActionSchemas.AirSurveillanceFormLiveSchema.isValidSync(actionFormValues)
         }
 
@@ -50,7 +50,7 @@ export function validateMissionForms(
         return {
           ...actionFormValues,
           isValid: isClosureValidation
-            ? ActionSchemas.LandControlFormClosureSchema.isValidSync(actionFormValues)
+            ? ActionSchemas.LandControlFormCompletionSchema.isValidSync(actionFormValues)
             : ActionSchemas.LandControlFormLiveSchema.isValidSync(actionFormValues)
         }
 
@@ -65,7 +65,7 @@ export function validateMissionForms(
         return {
           ...actionFormValues,
           isValid: isClosureValidation
-            ? ActionSchemas.SeaControlFormClosureSchema.isValidSync(actionFormValues)
+            ? ActionSchemas.SeaControlFormCompletionSchema.isValidSync(actionFormValues)
             : ActionSchemas.SeaControlFormLiveSchema.isValidSync(actionFormValues)
         }
 

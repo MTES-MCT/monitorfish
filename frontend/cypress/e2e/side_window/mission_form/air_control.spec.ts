@@ -14,6 +14,9 @@ context('Side Window > Mission Form > Air Control', () => {
   })
 
   it('Should fill the form and send the expected data to the API', () => {
+    cy.getDataCy('action-completion-status').contains('3 champs nécessaires aux statistiques à compléter')
+    cy.getDataCy('action-contains-missing-fields').should('exist')
+
     const now = getUtcDateInMultipleFormats()
     cy.intercept('POST', '/bff/v1/mission_actions', {
       body: {
@@ -55,9 +58,8 @@ context('Side Window > Mission Form > Air Control', () => {
     // Saisi par
     cy.fill('Saisi par', 'Marlin')
 
-    // Clôturé par
-    // TODO Handle multiple inputs with same label via an `index` in monitor-ui.
-    cy.get('[name="closedBy"]').eq(1).type('Alice')
+    // Complété par
+    cy.fill('Complété par', 'Alice')
 
     cy.wait(500)
 
@@ -69,7 +71,7 @@ context('Side Window > Mission Form > Air Control', () => {
       {
         body: {
           actionType: 'AIR_CONTROL',
-          closedBy: 'Alice',
+          completedBy: 'Alice',
           controlQualityComments: null,
           controlUnits: [],
           districtCode: 'AY',
@@ -117,47 +119,8 @@ context('Side Window > Mission Form > Air Control', () => {
     )
       .its('response.statusCode')
       .should('eq', 201)
-  })
 
-  it('Should only close mission once the form closure validation has passed', () => {
-    const getCloseButton = () => cy.get('button').contains('Clôturer').parent()
-
-    // -------------------------------------------------------------------------
-    // Form Live Validation
-    cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('exist')
-
-    getCloseButton().should('be.disabled')
-
-    // Navire
-    cy.get('input[placeholder="Rechercher un navire..."]').type('mal')
-    cy.contains('mark', 'MAL').click()
-
-    // Saisi par
-    cy.fill('Saisi par', 'Gaumont')
-    cy.wait(500)
-
-    // Mission is now valid for saving (but not for closure)
-    cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')
-
-    getCloseButton().should('be.enabled')
-
-    cy.clickButton('Clôturer').wait(500)
-
-    // -------------------------------------------------------------------------
-    // Form Closure Validation
-
-    cy.contains('Rouvrir la mission').should('not.exist')
-
-    // Clôturé par
-    // TODO Handle multiple inputs with same label via an `index` in monitor-ui.
-    cy.get('[name="closedBy"]').eq(1).type('Alice')
-
-    // Mission is now valid for closure
-    cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')
-
-    cy.wait(500)
-    cy.clickButton('Clôturer')
-
-    cy.get('h1').should('contain.text', 'Missions et contrôles')
+    cy.getDataCy('action-completion-status').contains('Les champs nécessaires aux statistiques sont complétés.')
+    cy.getDataCy('action-all-fields-completed').should('exist')
   })
 })

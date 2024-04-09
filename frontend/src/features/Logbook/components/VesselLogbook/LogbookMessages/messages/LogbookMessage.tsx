@@ -63,25 +63,27 @@ export function LogbookMessage({ isFirst, logbookMessage }: LogbookMessageCompon
         >
           {logbookHeaderTitle}
         </LogbookMessageHeaderText>
+
         {!logbookMessage.isConsolidated && logbookMessage.isCorrected && (
-          <CorrectedMessage>
-            <MessageCorrected />
-            <MessageText>ANCIEN MESSAGE</MessageText>
-          </CorrectedMessage>
+          <OperationTag>
+            <OperationTagDangerBullet />
+            <OperationTagLabel>ANCIEN MESSAGE</OperationTagLabel>
+          </OperationTag>
         )}
         {logbookMessage.isDeleted && (
-          <CorrectedMessage>
-            <MessageCorrected />
-            <MessageText>MESSAGE SUPPRIMÉ</MessageText>
-          </CorrectedMessage>
+          <OperationTag>
+            <OperationTagDangerBullet />
+            <OperationTagLabel>MESSAGE SUPPRIMÉ</OperationTagLabel>
+          </OperationTag>
         )}
         {((!logbookMessage.isConsolidated && !!logbookMessage.referencedReportId) ||
           (logbookMessage.isConsolidated && logbookMessage.isCorrected)) && (
-          <CorrectedMessage>
-            <MessageOK />
-            <MessageText>MESSAGE CORRIGÉ</MessageText>
-          </CorrectedMessage>
+          <OperationTag>
+            <OperationTagWarningBullet />
+            <OperationTagLabel>MESSAGE CORRIGÉ</OperationTagLabel>
+          </OperationTag>
         )}
+
         {logbookMessage.rawMessage ? (
           <Xml
             onClick={() => openXML(logbookMessage.rawMessage)}
@@ -91,6 +93,7 @@ export function LogbookMessage({ isFirst, logbookMessage }: LogbookMessageCompon
         ) : (
           <Xml />
         )}
+
         {!logbookMessage.isCorrected &&
           (fishingActivitiesShowedOnMap.find(showed => showed.id === logbookMessage.operationNumber) ? (
             <HideActivity
@@ -163,14 +166,17 @@ const MessageSentByFailoverSoftwareIcon = styled.span`
   display: inline-block;
 `
 
-const MessageText = styled.span`
-  vertical-align: text-top;
-  line-height: 11px;
-  margin: 0 3px 0 3px;
+const OperationTag = styled.span`
+  background: ${p => p.theme.color.gainsboro};
+  border-radius: 11px;
+  color: ${p => p.theme.color.gunMetal};
   font-size: 11px;
+  height: 17px;
+  margin: 7px 7px 7px 3px;
+  padding: 3.5px 5px 0.5px 2px;
+  white-space: nowrap;
 `
-
-const MessageCorrected = styled.span`
+const OperationTagDangerBullet = styled.span`
   height: 14px;
   margin-left: 3px;
   width: 14px;
@@ -179,8 +185,7 @@ const MessageCorrected = styled.span`
   border-radius: 50%;
   display: inline-block;
 `
-
-const MessageOK = styled.span`
+const OperationTagWarningBullet = styled.span`
   height: 14px;
   margin-left: 3px;
   width: 14px;
@@ -188,15 +193,12 @@ const MessageOK = styled.span`
   border-radius: 50%;
   display: inline-block;
 `
-
-const CorrectedMessage = styled.span`
-  border-radius: 11px;
-  background: ${p => p.theme.color.gainsboro};
+const OperationTagLabel = styled.span`
   font-size: 11px;
-  color: ${p => p.theme.color.gunMetal};
-  margin: 7px 7px 7px 3px;
-  height: 17px;
-  padding: 3px 5px 0px 2px;
+  line-height: 11px;
+  margin: 0 4px;
+  vertical-align: 2.5px;
+  white-space: nowrap;
 `
 
 const Gray = styled.span`

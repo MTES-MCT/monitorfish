@@ -136,9 +136,14 @@ export function LogbookMessage({ isFirst, logbookMessage }: LogbookMessageCompon
             <Key>Acq.</Key>
             <br />
             {!logbookMessage.acknowledge || (logbookMessage.acknowledge.isSuccess === null && <Gray>-</Gray>)}
-            {logbookMessage.acknowledge?.isSuccess === true && <AckOk />}
+            {logbookMessage.acknowledge?.isSuccess === true && (
+              <AckOk data-cy="LogbookMessage-successful-acknowledgement-icon" />
+            )}
             {logbookMessage.acknowledge?.isSuccess === false && (
-              <AckNOk title={logbookMessage.acknowledge?.rejectionCause ?? ''} />
+              <AckNOk
+                data-cy="LogbookMessage-failed-acknowledgement-icon"
+                title={logbookMessage.acknowledge?.rejectionCause ?? ''}
+              />
             )}
           </Acknowledge>
         </LogbookMessageMetadata>

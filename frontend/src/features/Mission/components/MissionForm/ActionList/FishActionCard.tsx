@@ -1,12 +1,12 @@
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { FrontendError } from '@libs/FrontendError'
-import { Accent, Icon, IconButton, Tag, TagBullet, TagGroup, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, Tag, TagGroup, THEME } from '@mtes-mct/monitor-ui'
 import { UNKNOWN_VESSEL } from 'domain/entities/vessel/vessel'
 import { find } from 'lodash'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { Head, ActionLabel } from './styles'
+import { ActionLabel, Head } from './styles'
 import { getActionTitle, getMissionActionInfractionsFromMissionActionFormValues } from './utils'
 import { useGetNatinfsAsOptions } from '../hooks/useGetNatinfsAsOptions'
 
@@ -103,7 +103,13 @@ export function FishActionCard({ missionAction, onRemove }: FishActionCardProps)
         ...(missionAction.hasSomeSpeciesSeized ? ['Appréhension espèce'] : []),
         ...(missionAction.seizureAndDiversion ? ['Appréhension navire'] : [])
       ].map(label => (
-        <Tag key={label} accent={Accent.PRIMARY} bullet={TagBullet.DISK} bulletColor={THEME.color.maximumRed}>
+        <Tag
+          key={label}
+          accent={Accent.PRIMARY}
+          Icon={Icon.CircleFilled}
+          iconColor={THEME.color.maximumRed}
+          withCircleIcon
+        >
           {label}
         </Tag>
       )),

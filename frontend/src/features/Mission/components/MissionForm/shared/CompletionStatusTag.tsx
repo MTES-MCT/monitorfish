@@ -1,6 +1,5 @@
 import { MissionAction } from '@features/Mission/missionAction.types'
-import { ExclamationPoint, Icon, Tag, THEME } from '@mtes-mct/monitor-ui'
-import styled from 'styled-components'
+import { Icon, Tag, THEME } from '@mtes-mct/monitor-ui'
 
 import FrontCompletionStatus = MissionAction.FrontCompletionStatus
 import FrontCompletionStatusLabel = MissionAction.FrontCompletionStatusLabel
@@ -12,47 +11,54 @@ export function CompletionStatusTag({ completion }: CompletionStatusTagProps) {
   switch (completion) {
     case FrontCompletionStatus.COMPLETED:
       return (
-        <StyledTag
+        <Tag
           backgroundColor={THEME.color.gainsboro}
           color={THEME.color.mediumSeaGreen}
           Icon={Icon.Confirm}
           iconColor={THEME.color.mediumSeaGreen}
+          withCircleIcon
         >
           {FrontCompletionStatusLabel.COMPLETED}
-        </StyledTag>
+        </Tag>
       )
     case FrontCompletionStatus.UP_TO_DATE:
       return (
-        <StyledTag
+        <Tag
           backgroundColor={THEME.color.gainsboro}
           color={THEME.color.mediumSeaGreen}
           Icon={Icon.Confirm}
           iconColor={THEME.color.mediumSeaGreen}
+          withCircleIcon
         >
           {FrontCompletionStatusLabel.UP_TO_DATE}
-        </StyledTag>
+        </Tag>
       )
     case FrontCompletionStatus.TO_COMPLETE_MISSION_ENDED:
       return (
-        <StyledTag backgroundColor={THEME.color.gainsboro} color={THEME.color.maximumRed}>
-          <ExclamationPoint backgroundColor={THEME.color.maximumRed} color={THEME.color.white} size={15} />
+        <Tag
+          backgroundColor={THEME.color.gainsboro}
+          color={THEME.color.maximumRed}
+          Icon={Icon.AttentionFilled}
+          iconColor={THEME.color.maximumRed}
+          withCircleIcon
+        >
           {FrontCompletionStatusLabel.TO_COMPLETE}
-        </StyledTag>
+        </Tag>
       )
 
     case FrontCompletionStatus.TO_COMPLETE:
       return (
-        <StyledTag backgroundColor={THEME.color.gainsboro} color={THEME.color.charcoal}>
-          <ExclamationPoint backgroundColor={THEME.color.charcoal} color={THEME.color.white} size={15} />
+        <Tag
+          backgroundColor={THEME.color.gainsboro}
+          color={THEME.color.charcoal}
+          Icon={Icon.AttentionFilled}
+          iconColor={THEME.color.charcoal}
+          withCircleIcon
+        >
           {FrontCompletionStatusLabel.TO_COMPLETE}
-        </StyledTag>
+        </Tag>
       )
     default:
       return null
   }
 }
-
-const StyledTag = styled(Tag)`
-  align-self: end;
-  padding: 1px 8px 3px 3px;
-`

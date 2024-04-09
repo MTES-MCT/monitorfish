@@ -11,7 +11,7 @@ import FrontCompletionStatus = MissionAction.FrontCompletionStatus
 export const getMissionColor = (missionStatus: Mission.MissionStatus | undefined, isText?: boolean | undefined) => {
   switch (missionStatus) {
     case Mission.MissionStatus.UPCOMING:
-      return '#7CBEF4'
+      return THEME.color.mayaBlue
     case Mission.MissionStatus.IN_PROGRESS:
       return THEME.color.blueGray
     case Mission.MissionStatus.DONE:

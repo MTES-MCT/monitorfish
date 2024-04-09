@@ -1,6 +1,5 @@
 import { Mission } from '@features/Mission/mission.types'
-import { Tag, THEME, Accent, Icon } from '@mtes-mct/monitor-ui'
-import styled from 'styled-components'
+import { Accent, Icon, Tag, THEME } from '@mtes-mct/monitor-ui'
 
 import MissionStatus = Mission.MissionStatus
 
@@ -11,41 +10,37 @@ export function MissionStatusTag({ status }: MissionStatusTagProps) {
   switch (status) {
     case Mission.MissionStatus.UPCOMING:
       return (
-        <StyledTag accent={Accent.PRIMARY} Icon={Icon.Clock} iconColor={THEME.color.blueNcs}>
+        <Tag accent={Accent.PRIMARY} Icon={Icon.Clock} iconColor={THEME.color.mayaBlue} withCircleIcon>
           {Mission.MissionStatusLabel.UPCOMING}
-        </StyledTag>
+        </Tag>
       )
     case Mission.MissionStatus.IN_PROGRESS:
       return (
-        <StyledTag
+        <Tag
           accent={Accent.PRIMARY}
           color={THEME.color.charcoal}
           Icon={Icon.Clock}
           iconColor={THEME.color.blueGray}
+          withCircleIcon
         >
           {Mission.MissionStatusLabel.IN_PROGRESS}
-        </StyledTag>
+        </Tag>
       )
     // TODO: remove this line when the CLOSED status is removed
     case Mission.MissionStatus.CLOSED:
       return (
-        <StyledTag accent={Accent.PRIMARY} Icon={Icon.Confirm} iconColor={THEME.color.charcoal}>
+        <Tag accent={Accent.PRIMARY} Icon={Icon.Confirm} iconColor={THEME.color.charcoal} withCircleIcon>
           {Mission.MissionStatusLabel.CLOSED}
-        </StyledTag>
+        </Tag>
       )
     case Mission.MissionStatus.DONE:
       return (
-        <StyledTag accent={Accent.PRIMARY} Icon={Icon.Confirm} iconColor={THEME.color.charcoal}>
+        <Tag accent={Accent.PRIMARY} Icon={Icon.Confirm} iconColor={THEME.color.charcoal} withCircleIcon>
           {Mission.MissionStatusLabel.DONE}
-        </StyledTag>
+        </Tag>
       )
 
     default:
       return null
   }
 }
-
-const StyledTag = styled(Tag)`
-  align-self: end;
-  padding: 1px 8px 3px 3px;
-`

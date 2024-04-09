@@ -1,7 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotification
-import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotificationTypes
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotifications
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.LogbookReportFilterDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PriorNotificationDataOutput
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.*
 class PriorNotificationController(
     private val getPriorNotification: GetPriorNotification,
     private val getPriorNotifications: GetPriorNotifications,
-    private val getPriorNotificationTypes: GetPriorNotificationTypes,
 ) {
     @GetMapping("")
     @Operation(summary = "Get all prior notifications")
@@ -39,11 +37,5 @@ class PriorNotificationController(
         return PriorNotificationDetailDataOutput.fromPriorNotification(
             getPriorNotification.execute(logbookMessageReportId),
         )
-    }
-
-    @GetMapping("/types")
-    @Operation(summary = "Get all prior notification types")
-    fun getAllTypes(): List<String> {
-        return getPriorNotificationTypes.execute()
     }
 }

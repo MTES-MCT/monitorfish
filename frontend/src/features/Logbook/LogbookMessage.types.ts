@@ -249,7 +249,7 @@ export namespace LogbookMessage {
     lastControlledAfter: string | undefined
     lastControlledBefore: string | undefined
     portLocodes: string[] | undefined
-    priorNotificationTypesAsOptions: string[] | undefined
+    priorNotificationTypes: string[] | undefined
     searchQuery: string | undefined
     specyCodes: string[] | undefined
     tripGearCodes: string[] | undefined

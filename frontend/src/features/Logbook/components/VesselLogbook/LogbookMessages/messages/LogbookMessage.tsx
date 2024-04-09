@@ -58,29 +58,30 @@ export function LogbookMessage({ isFirst, logbookMessage }: LogbookMessageCompon
         <LogbookMessageTypeText>{getLogbookMessageType(logbookMessage)}</LogbookMessageTypeText>
         <LogbookMessageHeaderText
           data-cy="vessel-fishing-message"
-          isShortcut={logbookMessage.isCorrected || logbookMessage.deleted || !!logbookMessage.referencedReportId}
+          isShortcut={logbookMessage.isCorrected || logbookMessage.isDeleted || !!logbookMessage.referencedReportId}
           title={logbookHeaderTitle}
         >
           {logbookHeaderTitle}
         </LogbookMessageHeaderText>
-        {logbookMessage.isCorrected && (
+        {!logbookMessage.isConsolidated && logbookMessage.isCorrected && (
           <CorrectedMessage>
             <MessageCorrected />
             <MessageText>ANCIEN MESSAGE</MessageText>
           </CorrectedMessage>
         )}
-        {logbookMessage.deleted && (
+        {logbookMessage.isDeleted && (
           <CorrectedMessage>
             <MessageCorrected />
             <MessageText>MESSAGE SUPPRIMÉ</MessageText>
           </CorrectedMessage>
         )}
-        {logbookMessage.referencedReportId && (
-          <CorrectedMessage>
-            <MessageOK />
-            <MessageText>MESSAGE CORRIGÉ</MessageText>
-          </CorrectedMessage>
-        )}
+        {(!logbookMessage.isConsolidated && !!logbookMessage.referencedReportId) ||
+          (logbookMessage.isConsolidated && logbookMessage.isCorrected && (
+            <CorrectedMessage>
+              <MessageOK />
+              <MessageText>MESSAGE CORRIGÉ</MessageText>
+            </CorrectedMessage>
+          ))}
         {logbookMessage.rawMessage ? (
           <Xml
             onClick={() => openXML(logbookMessage.rawMessage)}
@@ -269,27 +270,28 @@ const Wrapper = styled.div<{
 `
 
 const Header = styled.div`
-  height: 35px;
-  width: inherit;
-  padding: 0 0 0 10px;
   background: ${p => p.theme.color.charcoal};
   display: flex;
+  height: 35px;
+  padding: 0 0 0 10px;
+  width: inherit;
 `
 
 const LogbookMessageHeaderText = styled.span<{
   isShortcut: boolean
 }>`
   color: ${p => p.theme.color.white};
+  flex-grow: 1;
+  font-size: 13px;
   font-weight: 500;
   margin: 5px 5px 5px 5px;
+  /* max-width: ${p => (p.isShortcut ? '185px' : '330px')}; */
+  overflow: hidden !important;
   padding: 3px 4px 2px 0;
-  font-size: 13px;
+  text-overflow: ellipsis;
   vertical-align: -moz-middle-with-baseline;
   vertical-align: -webkit-baseline-middle;
   white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden !important;
-  max-width: ${p => (p.isShortcut ? '185px' : '330px')};
 `
 
 const LogbookMessageName = styled.span`

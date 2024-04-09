@@ -37,7 +37,7 @@ data class LogbookMessageDataOutput(
             ircs = logbookMessage.ircs,
             isCorrected = logbookMessage.isCorrected,
             acknowledge = logbookMessage.acknowledge,
-            deleted = logbookMessage.deleted,
+            deleted = logbookMessage.isDeleted,
             operationDateTime = logbookMessage.operationDateTime,
             reportDateTime = logbookMessage.reportDateTime,
             integrationDateTime = logbookMessage.integrationDateTime,

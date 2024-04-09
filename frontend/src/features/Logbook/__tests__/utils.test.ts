@@ -31,7 +31,7 @@ describe('Logbook/utils.tsx', () => {
     expect(pno?.internalReferenceNumber).toEqual('FAK000999999')
     expect(pno?.messageType).toEqual('PNO')
     expect(pno?.isCorrected).toBeFalsy()
-    expect(pno?.deleted).toBeFalsy()
+    expect(pno?.isDeleted).toBeFalsy()
   })
 
   it('getLANMessage Should get the first valid LAN message', async () => {
@@ -44,7 +44,7 @@ describe('Logbook/utils.tsx', () => {
     expect(lan?.internalReferenceNumber).toEqual('FAK000999999')
     expect(lan?.messageType).toEqual('LAN')
     expect(lan?.isCorrected).toBeFalsy()
-    expect(lan?.deleted).toBeFalsy()
+    expect(lan?.isDeleted).toBeFalsy()
   })
 
   it('getTotalFARWeight Should get the total weight of FAR messages', async () => {

@@ -182,7 +182,7 @@ export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSumma
                 {logbookTrip.dep.log ? (
                   <DEPMessageResume
                     depMessage={logbookTrip.dep.log.message}
-                    isDeleted={logbookTrip.dep.log.deleted}
+                    isDeleted={logbookTrip.dep.log.isDeleted}
                     isNotAcknowledged={
                       !!logbookTrip.dep.log.acknowledge && logbookTrip.dep.log.acknowledge?.isSuccess === false
                     }
@@ -238,7 +238,7 @@ export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSumma
                 {logbookTrip.pno.log ? (
                   <PNOMessageResume
                     id={logbookTrip.pno.log.reportId}
-                    isDeleted={logbookTrip.pno.log.deleted}
+                    isDeleted={logbookTrip.pno.log.isDeleted}
                     isNotAcknowledged={!!logbookTrip.pno.log.acknowledge && !logbookTrip.pno.log.acknowledge.isSuccess}
                     pnoMessage={logbookTrip.pno.log}
                     showLogbookMessages={showLogbookMessages}
@@ -254,7 +254,7 @@ export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSumma
                 {logbookTrip.lan.log ? (
                   <LANMessageResume
                     catchesOverToleranceAlert={catchesOverToleranceAlert}
-                    isDeleted={logbookTrip.lan.log.deleted}
+                    isDeleted={logbookTrip.lan.log.isDeleted}
                     isNotAcknowledged={!!logbookTrip.lan.log.acknowledge && !logbookTrip.lan.log.acknowledge.isSuccess}
                     lanMessage={logbookTrip.lan.log.message}
                     showLogbookMessages={showLogbookMessages}

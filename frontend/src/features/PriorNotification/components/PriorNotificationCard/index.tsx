@@ -86,7 +86,7 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  width: 640px;
+  width: 544px;
 `
 
 const Body = styled.div`

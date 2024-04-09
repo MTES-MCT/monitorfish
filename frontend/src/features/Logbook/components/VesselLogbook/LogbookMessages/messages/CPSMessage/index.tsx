@@ -9,9 +9,9 @@ import { SpecyCatch } from '../common/SpecyCatch'
 
 import type { CPSMessageValue } from '../../../../../Logbook.types'
 
-type CPSMessageProps = {
+type CPSMessageProps = Readonly<{
   message: CPSMessageValue
-}
+}>
 export function CPSMessage({ message }: CPSMessageProps) {
   const catchesWithProperties = useMemo(() => {
     if (!message?.catches) {
@@ -37,8 +37,7 @@ export function CPSMessage({ message }: CPSMessageProps) {
           <SpecyCatch
             // eslint-disable-next-line react/no-array-index-key
             key={index}
-            isLast={catchesWithProperties.length === index + 1}
-            isProtectedSpecies
+            isProtectedSpecy
             specyCatch={speciesCatch}
             weightType={WeightType.LIVE}
           >

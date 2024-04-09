@@ -365,7 +365,7 @@ class GetLogbookMessagesUTests {
         // Then
         assertThat(ersMessages).hasSize(3)
 
-        assertThat(ersMessages[1].deleted).isTrue
+        assertThat(ersMessages[1].isDeleted).isTrue
     }
 
     @Test

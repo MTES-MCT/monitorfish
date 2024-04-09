@@ -75,13 +75,13 @@ export function LogbookMessage({ isFirst, logbookMessage }: LogbookMessageCompon
             <MessageText>MESSAGE SUPPRIMÉ</MessageText>
           </CorrectedMessage>
         )}
-        {(!logbookMessage.isConsolidated && !!logbookMessage.referencedReportId) ||
-          (logbookMessage.isConsolidated && logbookMessage.isCorrected && (
-            <CorrectedMessage>
-              <MessageOK />
-              <MessageText>MESSAGE CORRIGÉ</MessageText>
-            </CorrectedMessage>
-          ))}
+        {((!logbookMessage.isConsolidated && !!logbookMessage.referencedReportId) ||
+          (logbookMessage.isConsolidated && logbookMessage.isCorrected)) && (
+          <CorrectedMessage>
+            <MessageOK />
+            <MessageText>MESSAGE CORRIGÉ</MessageText>
+          </CorrectedMessage>
+        )}
         {logbookMessage.rawMessage ? (
           <Xml
             onClick={() => openXML(logbookMessage.rawMessage)}

@@ -36,6 +36,9 @@ class PriorNotificationDataOutput(
     companion object {
         fun fromPriorNotification(priorNotification: PriorNotification): PriorNotificationDataOutput? {
             val logbookMessage = priorNotification.consolidatedLogbookMessage.logbookMessage
+            if (logbookMessage.reportId == null) {
+                return null
+            }
             val message = priorNotification.consolidatedLogbookMessage.typedMessage
 
             val onBoardCatches = message.catchOnboard.map { LogbookMessageCatchDataOutput.fromCatch(it) }
@@ -48,7 +51,7 @@ class PriorNotificationDataOutput(
             val types = message.pnoTypes.map { PriorNotificationTypeDataOutput.fromPriorNotificationType(it) }
 
             return PriorNotificationDataOutput(
-                id = priorNotification.reportId,
+                id = logbookMessage.reportId,
                 expectedArrivalDate = message.predictedArrivalDatetimeUtc?.toString(),
                 expectedLandingDate = message.predictedLandingDatetimeUtc?.toString(),
                 hasVesselRiskFactorSegments = priorNotification.vesselRiskFactor?.segments?.isNotEmpty(),

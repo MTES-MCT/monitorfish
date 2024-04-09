@@ -69,7 +69,7 @@
                 "vessel_name": "CALAMARO",
                 "flag_state": "FR",
                 "length": 16,
-                "under_charter": true
+                "under_charter": false
             },
 
             // - Vessel: L'ANCRE SÈCHE
@@ -94,8 +94,21 @@
                 "external_immatriculation": "EXTIMM107",
                 "vessel_name": "MERLU L'ENCHANTEUR",
                 "flag_state": "FR",
-                "length": 17,
-                "under_charter": true
+                "length": 18,
+                "under_charter": false
+            },
+
+            // - Vessel: LE POISSON AMBULANT
+            {
+                "id": 108,
+                "cfr": "CFR108",
+                "mmsi": "MMSI108",
+                "ircs": "IRCS108",
+                "external_immatriculation": "EXTIMM108",
+                "vessel_name": "LE POISSON AMBULANT",
+                "flag_state": "FR",
+                "length": 9,
+                "under_charter": false
             }
         ]
     }

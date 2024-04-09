@@ -151,7 +151,7 @@ class JpaLogbookReportRepository(
     }
 
     override fun findPriorNotificationByReportId(reportId: String): PriorNotification {
-        val allLogbookReportModels = dbERSRepository.findEnrichedPnoReferenceWithRelatedMessagesByReportId(
+        val allLogbookReportModels = dbERSRepository.findEnrichedPnoReferenceAndRelatedOperationsByReportId(
             reportId,
         )
         if (allLogbookReportModels.isEmpty()) {

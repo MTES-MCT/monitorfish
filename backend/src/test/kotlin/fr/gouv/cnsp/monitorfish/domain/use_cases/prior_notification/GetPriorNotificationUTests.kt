@@ -39,10 +39,8 @@ class GetPriorNotificationUTests {
         // Given
         given(logbookReportRepository.findPriorNotificationByReportId("FAKE_REPORT_ID_1")).willReturn(
             PriorNotification(
-                reportId = "FAKE_REPORT_ID_1",
                 consolidatedLogbookMessage = ConsolidatedLogbookMessage(
                     clazz = PNO::class.java,
-                    reportId = "FAKE_REPORT_ID_1",
                     logbookMessage = LogbookMessage(
                         id = 1,
                         reportId = "FAKE_REPORT_ID_1",
@@ -87,8 +85,6 @@ class GetPriorNotificationUTests {
         ).execute("FAKE_REPORT_ID_1")
 
         // Then
-        Assertions.assertThat(result.reportId).isEqualTo("FAKE_REPORT_ID_1")
-        Assertions.assertThat(result.consolidatedLogbookMessage.reportId).isEqualTo("FAKE_REPORT_ID_1")
         Assertions.assertThat(result.consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo("FAKE_REPORT_ID_1")
         Assertions.assertThat(result.consolidatedLogbookMessage.logbookMessage.referencedReportId).isNull()
     }
@@ -98,10 +94,8 @@ class GetPriorNotificationUTests {
         // Given
         given(logbookReportRepository.findPriorNotificationByReportId("FAKE_REPORT_ID_2")).willReturn(
             PriorNotification(
-                reportId = "FAKE_REPORT_ID_2",
                 consolidatedLogbookMessage = ConsolidatedLogbookMessage(
                     clazz = PNO::class.java,
-                    reportId = "FAKE_REPORT_ID_2",
                     logbookMessage = LogbookMessage(
                         id = 2,
                         reportId = null,
@@ -146,8 +140,6 @@ class GetPriorNotificationUTests {
         ).execute("FAKE_REPORT_ID_2")
 
         // Then
-        Assertions.assertThat(result.reportId).isEqualTo("FAKE_REPORT_ID_2")
-        Assertions.assertThat(result.consolidatedLogbookMessage.reportId).isEqualTo("FAKE_REPORT_ID_2")
         Assertions.assertThat(result.consolidatedLogbookMessage.logbookMessage.reportId).isNull()
         Assertions.assertThat(result.consolidatedLogbookMessage.logbookMessage.referencedReportId)
             .isEqualTo("FAKE_REPORT_ID_2")

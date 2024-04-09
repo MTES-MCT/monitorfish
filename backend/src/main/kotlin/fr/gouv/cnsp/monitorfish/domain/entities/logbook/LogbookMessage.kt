@@ -62,16 +62,19 @@ data class LogbookMessage(
         logbookMessageBase.consolidateAcknowledge(relatedLogbookMessages)
         val finalLogbookMessage = logbookMessageBase.copy(
             // We need to restore the `reportId` and `referencedReportId` to the original values
-            // in case it has been consolidated from a COR operation rather than a DAT one
-            reportId = reportId,
+            // in case it has been consolidated from a COR operation rather than a DAT one.
+            // /!\ And this COR operation can be orphan.
+            reportId = if (operationType == LogbookOperationType.COR) {
+                referencedReportId
+            } else {
+                reportId
+            },
             referencedReportId = null,
-            // /!\ `logbookMessageBase` might be a COR, which happens when there is no DAT at all.
-            isCorrected = logbookMessageBase.operationType == LogbookOperationType.COR,
+            isCorrected = operationType == LogbookOperationType.COR,
             deleted = historicallyOrderedRelatedLogbookMessages.any { it.operationType == LogbookOperationType.DEL },
         )
 
         return ConsolidatedLogbookMessage(
-            reportId = reportId,
             logbookMessage = finalLogbookMessage,
             clazz = clazz,
         )

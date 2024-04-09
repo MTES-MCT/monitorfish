@@ -25,14 +25,15 @@ export type LogbookMessage = {
     rejectionCause: string | null
     returnStatus: string | null
   } | null
-  deleted: boolean
   externalReferenceNumber: string
   flagState: string
   imo: string | null
   integrationDateTime: string
   internalReferenceNumber: string
   ircs: string
+  isConsolidated: boolean
   isCorrected: boolean
+  isDeleted: boolean
   isSentByFailoverSoftware: boolean
   message: any
   messageType: string

@@ -95,7 +95,7 @@ export const getCPSMessages = (logbookMessages: LogbookMessage[]): LogbookMessag
  */
 export const getPNOMessage = (logbookMessages: LogbookMessage[]): LogbookMessage | undefined => {
   const validPNOs = logbookMessages.filter(
-    message => message.messageType === LogbookMessageType.PNO.code && !message.isCorrected && !message.deleted
+    message => message.messageType === LogbookMessageType.PNO.code && !message.isCorrected && !message.isDeleted
   )
 
   if (validPNOs.length === 1) {
@@ -113,7 +113,7 @@ export const getFARMessages = (logbookMessages: LogbookMessage[]): LogbookMessag
  */
 export const getLANMessage = (logbookMessages: LogbookMessage[]): LogbookMessage | undefined => {
   const validLANs = logbookMessages.filter(
-    message => message.messageType === LogbookMessageType.LAN.code && !message.isCorrected && !message.deleted
+    message => message.messageType === LogbookMessageType.LAN.code && !message.isCorrected && !message.isDeleted
   )
 
   if (validLANs.length === 1) {

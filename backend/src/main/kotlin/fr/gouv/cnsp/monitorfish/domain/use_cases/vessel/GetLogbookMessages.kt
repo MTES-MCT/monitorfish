@@ -87,7 +87,7 @@ class GetLogbookMessages(
             ) {
                 logbookMessage.setAcknowledgeAsSuccessful()
             } else if (logbookMessage.operationType == LogbookOperationType.DEL && !logbookMessage.referencedReportId.isNullOrEmpty()) {
-                referenceLogbookMessage?.deleted = true
+                referenceLogbookMessage?.isDeleted = true
             }
 
             if (logbookMessage.software !== null && logbookMessage.software.contains(LogbookSoftware.E_SACAPT.software)) {

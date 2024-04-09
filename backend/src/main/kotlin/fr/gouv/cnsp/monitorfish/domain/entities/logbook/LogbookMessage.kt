@@ -12,9 +12,6 @@ data class LogbookMessage(
     val operationNumber: String,
     val tripNumber: String? = null,
     val referencedReportId: String? = null,
-    var isCorrected: Boolean = false,
-    val isEnriched: Boolean,
-    val operationType: LogbookOperationType,
     val operationDateTime: ZonedDateTime,
     val internalReferenceNumber: String? = null,
     val externalReferenceNumber: String? = null,
@@ -23,21 +20,26 @@ data class LogbookMessage(
     // ISO Alpha-3 country code
     val flagState: String? = null,
     val imo: String? = null,
-    val messageType: String? = null,
     // Submission date of the report by the vessel
     val reportDateTime: ZonedDateTime? = null,
     // Reception date of the report by the data center
     val integrationDateTime: ZonedDateTime,
-    var acknowledge: Acknowledge? = null,
-    var deleted: Boolean = false,
-    val message: LogbookMessageValue? = null,
     val analyzedByRules: List<String>,
     var rawMessage: String? = null,
     val transmissionFormat: LogbookTransmissionFormat,
     val software: String? = null,
+
+    var acknowledge: Acknowledge? = null,
+    var isCorrected: Boolean = false,
+    var isDeleted: Boolean = false,
+    val isEnriched: Boolean = false,
+    val isConsolidated: Boolean = false,
     var isSentByFailoverSoftware: Boolean = false,
-    val tripGears: List<Gear>? = listOf(),
-    val tripSegments: List<LogbookTripSegment>? = listOf(),
+    val message: LogbookMessageValue? = null,
+    val messageType: String? = null,
+    val operationType: LogbookOperationType,
+    val tripGears: List<Gear>? = emptyList(),
+    val tripSegments: List<LogbookTripSegment>? = emptyList(),
 ) {
     fun <T : LogbookMessageValue> toConsolidatedLogbookMessage(
         relatedLogbookMessages: List<LogbookMessage>,
@@ -64,14 +66,15 @@ data class LogbookMessage(
             // We need to restore the `reportId` and `referencedReportId` to the original values
             // in case it has been consolidated from a COR operation rather than a DAT one.
             // /!\ And this COR operation can be orphan.
-            reportId = if (operationType == LogbookOperationType.COR) {
-                referencedReportId
+            reportId = if (logbookMessageBase.operationType == LogbookOperationType.COR) {
+                logbookMessageBase.referencedReportId
             } else {
-                reportId
+                logbookMessageBase.reportId
             },
             referencedReportId = null,
-            isCorrected = operationType == LogbookOperationType.COR,
-            deleted = historicallyOrderedRelatedLogbookMessages.any { it.operationType == LogbookOperationType.DEL },
+            isConsolidated = true,
+            isCorrected = logbookMessageBase.operationType == LogbookOperationType.COR,
+            isDeleted = historicallyOrderedRelatedLogbookMessages.any { it.operationType == LogbookOperationType.DEL },
         )
 
         return ConsolidatedLogbookMessage(

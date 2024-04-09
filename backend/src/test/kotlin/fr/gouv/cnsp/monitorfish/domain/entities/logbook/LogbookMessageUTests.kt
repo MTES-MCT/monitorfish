@@ -64,7 +64,7 @@ class LogbookMessageUTests {
         assertThat(consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.acknowledge?.isSuccess).isTrue()
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isFalse()
-        assertThat(consolidatedLogbookMessage.logbookMessage.deleted).isFalse()
+        assertThat(consolidatedLogbookMessage.logbookMessage.isDeleted).isFalse()
     }
 
     @Test
@@ -103,7 +103,7 @@ class LogbookMessageUTests {
         assertThat(consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.acknowledge?.isSuccess).isTrue()
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isFalse()
-        assertThat(consolidatedLogbookMessage.logbookMessage.deleted).isFalse()
+        assertThat(consolidatedLogbookMessage.logbookMessage.isDeleted).isFalse()
     }
 
     @Test
@@ -130,7 +130,7 @@ class LogbookMessageUTests {
         assertThat(consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.acknowledge?.isSuccess).isFalse()
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isFalse()
-        assertThat(consolidatedLogbookMessage.logbookMessage.deleted).isFalse()
+        assertThat(consolidatedLogbookMessage.logbookMessage.isDeleted).isFalse()
     }
 
     @Test
@@ -165,7 +165,7 @@ class LogbookMessageUTests {
         assertThat(consolidatedLogbookMessage.logbookMessage.acknowledge?.dateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC))
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isFalse()
-        assertThat(consolidatedLogbookMessage.logbookMessage.deleted).isFalse()
+        assertThat(consolidatedLogbookMessage.logbookMessage.isDeleted).isFalse()
 
         // When
         val consolidatedLogbookMessageReversed = refenceLogbookMessage
@@ -177,7 +177,7 @@ class LogbookMessageUTests {
         assertThat(consolidatedLogbookMessageReversed.logbookMessage.acknowledge?.dateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC))
         assertThat(consolidatedLogbookMessageReversed.logbookMessage.isCorrected).isFalse()
-        assertThat(consolidatedLogbookMessageReversed.logbookMessage.deleted).isFalse()
+        assertThat(consolidatedLogbookMessageReversed.logbookMessage.isDeleted).isFalse()
     }
 
     @Test
@@ -198,7 +198,7 @@ class LogbookMessageUTests {
         assertThat(consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.acknowledge?.isSuccess).isTrue()
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isFalse()
-        assertThat(consolidatedLogbookMessage.logbookMessage.deleted).isFalse()
+        assertThat(consolidatedLogbookMessage.logbookMessage.isDeleted).isFalse()
     }
 
     @Test
@@ -219,7 +219,7 @@ class LogbookMessageUTests {
         assertThat(consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.acknowledge?.isSuccess).isTrue()
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isFalse()
-        assertThat(consolidatedLogbookMessage.logbookMessage.deleted).isFalse()
+        assertThat(consolidatedLogbookMessage.logbookMessage.isDeleted).isFalse()
     }
 
     @Test
@@ -239,7 +239,7 @@ class LogbookMessageUTests {
         assertThat(consolidatedLogbookMessage.logbookMessage.reportDateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC))
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isTrue()
-        assertThat(consolidatedLogbookMessage.logbookMessage.deleted).isFalse()
+        assertThat(consolidatedLogbookMessage.logbookMessage.isDeleted).isFalse()
     }
 
     @Test
@@ -277,7 +277,7 @@ class LogbookMessageUTests {
             ZonedDateTime.of(2024, 1, 1, 0, 0, 3, 0, ZoneOffset.UTC),
         )
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isTrue()
-        assertThat(consolidatedLogbookMessage.logbookMessage.deleted).isFalse()
+        assertThat(consolidatedLogbookMessage.logbookMessage.isDeleted).isFalse()
 
         // When
         val consolidatedLogbookMessageReversed = refenceLogbookMessage
@@ -288,7 +288,7 @@ class LogbookMessageUTests {
         assertThat(consolidatedLogbookMessageReversed.logbookMessage.reportDateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 3, 0, ZoneOffset.UTC))
         assertThat(consolidatedLogbookMessageReversed.logbookMessage.isCorrected).isTrue()
-        assertThat(consolidatedLogbookMessageReversed.logbookMessage.deleted).isFalse()
+        assertThat(consolidatedLogbookMessageReversed.logbookMessage.isDeleted).isFalse()
     }
 
     @Test
@@ -315,7 +315,7 @@ class LogbookMessageUTests {
         assertThat(consolidatedLogbookMessage.logbookMessage.reportDateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC))
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isFalse()
-        assertThat(consolidatedLogbookMessage.logbookMessage.deleted).isTrue()
+        assertThat(consolidatedLogbookMessage.logbookMessage.isDeleted).isTrue()
     }
 
     @Test
@@ -342,7 +342,7 @@ class LogbookMessageUTests {
         assertThat(consolidatedLogbookMessage.logbookMessage.reportDateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC))
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isTrue()
-        assertThat(consolidatedLogbookMessage.logbookMessage.deleted).isTrue()
+        assertThat(consolidatedLogbookMessage.logbookMessage.isDeleted).isTrue()
     }
 
     @Test
@@ -379,7 +379,7 @@ class LogbookMessageUTests {
         assertThat(consolidatedLogbookMessage.logbookMessage.reportDateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC))
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isTrue()
-        assertThat(consolidatedLogbookMessage.logbookMessage.deleted).isTrue()
+        assertThat(consolidatedLogbookMessage.logbookMessage.isDeleted).isTrue()
     }
 
     @Test
@@ -439,7 +439,7 @@ class LogbookMessageUTests {
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 4, 0, ZoneOffset.UTC))
         assertThat(consolidatedLogbookMessage.logbookMessage.acknowledge?.returnStatus).isEqualTo("001")
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isTrue()
-        assertThat(consolidatedLogbookMessage.logbookMessage.deleted).isFalse()
+        assertThat(consolidatedLogbookMessage.logbookMessage.isDeleted).isFalse()
     }
 
     @Test
@@ -474,7 +474,7 @@ class LogbookMessageUTests {
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC))
         assertThat(consolidatedLogbookMessage.logbookMessage.acknowledge).isNull()
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isTrue()
-        assertThat(consolidatedLogbookMessage.logbookMessage.deleted).isFalse()
+        assertThat(consolidatedLogbookMessage.logbookMessage.isDeleted).isFalse()
     }
 
     @Test

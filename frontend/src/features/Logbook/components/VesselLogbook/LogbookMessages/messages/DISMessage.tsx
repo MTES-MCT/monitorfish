@@ -21,9 +21,9 @@ import {
 
 import type { DISMessageValue } from '../../../../Logbook.types'
 
-type DISMessageProps = {
+type DISMessageProps = Readonly<{
   message: DISMessageValue
-}
+}>
 export function DISMessage({ message }: DISMessageProps) {
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
 
@@ -63,7 +63,6 @@ export function DISMessage({ message }: DISMessageProps) {
               <SpecyCatch
                 // eslint-disable-next-line react/no-array-index-key
                 key={index}
-                isLast={catchesWithProperties.length === index + 1}
                 specyCatch={speciesCatch}
                 weightType={WeightType.LIVE}
               >

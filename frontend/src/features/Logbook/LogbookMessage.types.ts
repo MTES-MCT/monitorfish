@@ -3,14 +3,15 @@ export namespace LogbookMessage {
 
   interface LogbookMessageBase {
     acknowledge: Acknowledge | undefined
-    deleted: boolean
     externalReferenceNumber: string
     flagState: string | undefined
     imo: string | undefined
     integrationDateTime: string
     internalReferenceNumber: string
     ircs: string
+    isConsolidated: boolean
     isCorrected: boolean
+    isDeleted: boolean
     isSentByFailoverSoftware: boolean
     message: MessageBase | undefined
     messageType: MessageType

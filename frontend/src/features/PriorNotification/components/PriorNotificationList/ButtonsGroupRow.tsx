@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
 
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
+import type { MouseEvent } from 'react'
 
 type ButtonsGroupRowProps = Readonly<{
   priorNotification: PriorNotification.PriorNotification
@@ -14,11 +15,15 @@ type ButtonsGroupRowProps = Readonly<{
 export function ButtonsGroupRow({ priorNotification }: ButtonsGroupRowProps) {
   const dispatch = useMainAppDispatch()
 
-  const openPriorNotificationDetail = () => {
+  const openPriorNotificationDetail = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation()
+
     dispatch(priorNotificationActions.openPriorNotificationDetail(priorNotification.id))
   }
 
-  const selectMainMapVessel = () => {
+  const selectMainMapVessel = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation()
+
     const vesselIdentity: VesselIdentity = {
       beaconNumber: null,
       districtCode: null,

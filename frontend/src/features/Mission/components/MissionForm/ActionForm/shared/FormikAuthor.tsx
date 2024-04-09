@@ -8,13 +8,13 @@ import type { MissionActionFormValues } from '../../types'
 export function FormikAuthor() {
   const { errors } = useFormikContext<MissionActionFormValues>()
 
-  const error = errors.userTrigram ?? errors.closedBy
+  const error = errors.userTrigram ?? errors.completedBy
 
   return (
     <Wrapper>
       <div>
         <FormikTextInput isErrorMessageHidden isLight isRequired label="Saisi par" name="userTrigram" />
-        <FormikTextInput isErrorMessageHidden isLight isRequired label="Clôturé par" name="closedBy" />
+        <FormikTextInput isErrorMessageHidden isLight isRequired label="Complété par" name="completedBy" />
       </div>
       {error && error !== HIDDEN_ERROR && <FieldError>{error}</FieldError>}
     </Wrapper>

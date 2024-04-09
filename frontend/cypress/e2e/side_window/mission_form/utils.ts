@@ -52,21 +52,18 @@ export const editSideWindowMission = (vesselName: string) => {
 
 export const fillSideWindowMissionFormBase = (
   missionTypeLabel: Mission.MissionTypeLabel,
-  isReturningClosed: boolean = false,
   hasExistingActions: boolean = true
 ) => {
   cy.intercept('POST', '/api/v1/missions', {
     body: {
-      id: 1,
-      isClosed: isReturningClosed
+      id: 1
     },
     statusCode: 201
   }).as('createMission')
   cy.intercept('GET', '/api/v1/missions/1', {
     body: {
       envActions: [],
-      id: 1,
-      isClosed: isReturningClosed
+      id: 1
     },
     statusCode: 201
   }).as('getCreatedMission')

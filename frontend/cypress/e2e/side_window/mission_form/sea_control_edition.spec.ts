@@ -42,7 +42,8 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
       {
         body: {
           actionType: 'SEA_CONTROL',
-          closedBy: null,
+          completedBy: null,
+          completion: 'TO_COMPLETE',
           controlQualityComments: null,
           controlUnits: [],
           districtCode: null,
@@ -103,6 +104,8 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
     )
       .its('response.statusCode')
       .should('eq', 201)
+
+    cy.getDataCy('action-completion-status').contains('5 champs nécessaires aux statistiques à compléter')
   })
 
   it('Should modify the controlled vessel and updated the gears, species, faoAreas and segments fields', () => {

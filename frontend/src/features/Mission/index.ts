@@ -70,7 +70,6 @@ export const getMissionFeaturePoint = ({
     hasEnvActions: envActions.length > 0,
     hasFishActions: actions.length > 0,
     isAirMission: mission.missionTypes.length === 1 && mission.missionTypes.includes(MissionType.AIR),
-    isClosed: booleanToInt(missionStatus === MissionStatus.CLOSED),
     isDone: booleanToInt(missionStatus === MissionStatus.DONE),
     isInProgress: booleanToInt(missionStatus === MissionStatus.IN_PROGRESS),
     isLandMission: mission.missionTypes.length === 1 && mission.missionTypes.includes(MissionType.LAND),

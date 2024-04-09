@@ -13,14 +13,17 @@ export function CompletionStatusIcon({ missionAction }: MissingFieldsText) {
   if (missingFields === 0) {
     return (
       <Wrapper>
-        <Icon.Confirm color={THEME.color.mediumSeaGreen} size={20} />
+        <Icon.Confirm color={THEME.color.mediumSeaGreen} data-cy="action-all-fields-completed" size={20} />
       </Wrapper>
     )
   }
 
   return (
     <Wrapper>
-      <Icon.AttentionFilled color={isMissionEnded ? THEME.color.maximumRed : THEME.color.charcoal} />
+      <Icon.AttentionFilled
+        color={isMissionEnded ? THEME.color.maximumRed : THEME.color.charcoal}
+        data-cy="action-contains-missing-fields"
+      />
     </Wrapper>
   )
 }

@@ -1,6 +1,6 @@
 import { Mission } from '@features/Mission/mission.types'
 
-import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
+import { openSideWindowNewMission } from './utils'
 import { SeaFrontGroup } from '../../../../src/domain/entities/seaFront/constants'
 import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
 import { FAKE_MISSION_WITH_EXTERNAL_ACTIONS, FAKE_MISSION_WITHOUT_EXTERNAL_ACTIONS } from '../../constants'
@@ -76,7 +76,6 @@ context('Side Window > Mission Form > Main Form', () => {
             resources: []
           }
         ],
-        isClosed: false,
         isGeometryComputedFromControls: true,
         isUnderJdp: false,
         missionSource: 'MONITORFISH',
@@ -158,7 +157,6 @@ context('Side Window > Mission Form > Main Form', () => {
               resources: []
             }
           ],
-          isClosed: false,
           isGeometryComputedFromControls: true,
           isUnderJdp: false,
           missionSource: 'MONITORFISH',
@@ -268,7 +266,6 @@ context('Side Window > Mission Form > Main Form', () => {
           ],
           endDateTimeUtc: '2023-02-01T13:45:00.000Z',
           hasMissionOrder: true,
-          isClosed: false,
           isGeometryComputedFromControls: true,
           isUnderJdp: true,
           missionSource: 'MONITORFISH',
@@ -319,7 +316,6 @@ context('Side Window > Mission Form > Main Form', () => {
         facade: 'MEMN',
         geom: null,
         id: 2,
-        isClosed: false,
         isGeometryComputedFromControls: false,
         missionSource: 'POSEIDON_CNSP',
         missionTypes: ['SEA'],
@@ -331,85 +327,6 @@ context('Side Window > Mission Form > Main Form', () => {
     })
 
     cy.get('h1').should('contain.text', 'Mission Mer – BGC Lorient - DF 36 Kan An Avel')
-  })
-
-  it('Should close a new mission', () => {
-    cy.intercept('DELETE', '/bff/v1/mission_actions/2', {
-      body: {
-        id: 2
-      },
-      statusCode: 200
-    }).as('updateMissionAction')
-    cy.intercept('POST', '/api/v1/missions/1', {
-      body: {
-        id: 1,
-        isClosed: true
-      },
-      statusCode: 201
-    }).as('updateMission')
-    openSideWindowNewMission()
-    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA, false)
-
-    cy.fill('Clôturé par', 'Doris')
-
-    cy.wait(500)
-
-    cy.clickButton('Clôturer')
-
-    cy.waitForLastRequest(
-      '@updateMission',
-      {
-        body: {
-          // We check this prop to be sure all the data is there (this is the last field to be filled)
-          closedBy: 'Doris',
-          isClosed: true,
-          isGeometryComputedFromControls: true
-        }
-      },
-      10
-    )
-      .its('response.statusCode')
-      .should('eq', 201)
-  })
-
-  it('Should close an existing mission', () => {
-    editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
-    cy.intercept('DELETE', '/bff/v1/mission_actions/2', {
-      body: {
-        id: 2
-      },
-      statusCode: 200
-    }).as('deleteMissionAction')
-    cy.intercept('POST', '/api/v1/missions/2', {
-      body: {
-        id: 2
-      },
-      statusCode: 201
-    }).as('updateMission')
-
-    cy.fill('Clôturé par', 'Doris')
-
-    cy.wait('@updateMission')
-
-    cy.clickButton('Supprimer l’action')
-
-    cy.wait('@deleteMissionAction')
-
-    cy.wait(250)
-    cy.clickButton('Clôturer')
-
-    cy.wait('@updateMission').then(interception => {
-      if (!interception.response) {
-        assert.fail('`interception.response` is undefined.')
-      }
-
-      assert.deepInclude(interception.request.body, {
-        // We check this prop to be sure all the data is there (this is the last field to be filled)
-        closedBy: 'Doris',
-        id: 2,
-        isClosed: true
-      })
-    })
   })
 
   it('Should show the cancellation confirmation dialog when switching to another menu while a draft is dirty', () => {
@@ -438,60 +355,6 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.clickButton('Quitter sans enregistrer')
 
     cy.get('h1').should('contain.text', 'Missions et contrôles')
-  })
-
-  it('Should reopen a closed mission', () => {
-    editSideWindowMissionListMissionWithId(6, SeaFrontGroup.MED)
-
-    cy.intercept('POST', '/api/v1/missions/6', {
-      body: {
-        id: 1
-      },
-      statusCode: 200
-    }).as('updateMission')
-
-    cy.clickButton('Rouvrir la mission')
-    cy.wait(200)
-
-    cy.fill('Contact de l’unité 1', 'Bob')
-
-    cy.waitForLastRequest(
-      '@updateMission',
-      {
-        body: {
-          closedBy: 'Cynthia Phillips',
-          controlUnits: [
-            {
-              administration: 'Gendarmerie Maritime',
-              contact: 'Bob',
-              id: 10336,
-              isArchived: false,
-              name: 'BSL Lorient',
-              resources: [
-                {
-                  id: 90,
-                  name: 'Voiture'
-                }
-              ]
-            }
-          ],
-          envActions: [],
-          facade: 'MED',
-          geom: null,
-          id: 6,
-          isClosed: false,
-          isGeometryComputedFromControls: false,
-          missionSource: 'POSEIDON_CNSP',
-          missionTypes: ['AIR'],
-          observationsCacem: 'Toward agency blue now hand. Meet answer someone stand.',
-          observationsCnsp: null,
-          openBy: 'Kevin Torres'
-        }
-      },
-      5
-    )
-      .its('response.statusCode')
-      .should('eq', 200)
   })
 
   it('A mission should not be deleted if actions have been created in MonitorEnv', () => {

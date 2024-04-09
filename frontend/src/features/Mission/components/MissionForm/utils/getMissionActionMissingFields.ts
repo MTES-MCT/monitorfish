@@ -11,19 +11,19 @@ export function getMissionActionMissingFields(
   try {
     switch (actionFormValues.actionType) {
       case MissionAction.MissionActionType.AIR_CONTROL: {
-        ActionSchemas.AirControlFormClosureSchema.validateSync(actionFormValues, { abortEarly: false })
+        ActionSchemas.AirControlFormCompletionSchema.validateSync(actionFormValues, { abortEarly: false })
 
         return 0
       }
 
       case MissionAction.MissionActionType.AIR_SURVEILLANCE: {
-        ActionSchemas.AirSurveillanceFormClosureSchema.validateSync(actionFormValues, { abortEarly: false })
+        ActionSchemas.AirSurveillanceFormCompletionSchema.validateSync(actionFormValues, { abortEarly: false })
 
         return 0
       }
 
       case MissionAction.MissionActionType.LAND_CONTROL: {
-        ActionSchemas.LandControlFormClosureSchema.validateSync(actionFormValues, { abortEarly: false })
+        ActionSchemas.LandControlFormCompletionSchema.validateSync(actionFormValues, { abortEarly: false })
 
         return 0
       }
@@ -36,7 +36,7 @@ export function getMissionActionMissingFields(
       }
 
       case MissionAction.MissionActionType.SEA_CONTROL: {
-        ActionSchemas.SeaControlFormClosureSchema.validateSync(actionFormValues, { abortEarly: false })
+        ActionSchemas.SeaControlFormCompletionSchema.validateSync(actionFormValues, { abortEarly: false })
 
         return 0
       }

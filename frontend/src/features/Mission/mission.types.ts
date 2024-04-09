@@ -18,7 +18,8 @@ export namespace Mission {
     geom?: GeoJSON.MultiPolygon
     hasMissionOrder?: boolean | undefined
     id: number
-    isClosed: boolean
+    // TODO To remove when `isClosed` is removed
+    isClosed?: boolean | undefined
     isGeometryComputedFromControls: boolean
     isUnderJdp?: boolean | undefined
     missionSource: MissionSource
@@ -54,14 +55,12 @@ export namespace Mission {
   export enum MissionStatus {
     UPCOMING = 'UPCOMING',
     IN_PROGRESS = 'IN_PROGRESS',
-    DONE = 'DONE',
-    CLOSED = 'CLOSED'
+    DONE = 'DONE'
   }
   export enum MissionStatusLabel {
     UPCOMING = 'À venir',
     IN_PROGRESS = 'En cours',
-    DONE = 'Terminée',
-    CLOSED = 'Clôturée'
+    DONE = 'Terminée'
   }
   /* eslint-enable typescript-sort-keys/string-enum */
 
@@ -93,7 +92,6 @@ export namespace Mission {
     hasFishActions: boolean
     // A 0 ou 1 number is required for WebGL to understand boolean
     isAirMission: number
-    isClosed: number
     // A 0 ou 1 number is required for WebGL to understand boolean
     isDone: number
     // A 0 ou 1 number is required for WebGL to understand boolean

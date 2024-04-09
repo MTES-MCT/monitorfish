@@ -7,22 +7,22 @@ import type { MissionActionFormValues } from '../types'
 
 export function isMissionActionFormValid(
   actionFormValues: MissionActionFormValues | MissionAction.MissionAction,
-  isClosureValidation: boolean
+  isCompletionValidation: boolean
 ): boolean {
   switch (actionFormValues.actionType) {
     case MissionAction.MissionActionType.AIR_CONTROL:
-      return isClosureValidation
-        ? ActionSchemas.AirControlFormClosureSchema.isValidSync(actionFormValues)
+      return isCompletionValidation
+        ? ActionSchemas.AirControlFormCompletionSchema.isValidSync(actionFormValues)
         : ActionSchemas.AirControlFormLiveSchema.isValidSync(actionFormValues)
 
     case MissionAction.MissionActionType.AIR_SURVEILLANCE:
-      return isClosureValidation
-        ? ActionSchemas.AirSurveillanceFormClosureSchema.isValidSync(actionFormValues)
+      return isCompletionValidation
+        ? ActionSchemas.AirSurveillanceFormCompletionSchema.isValidSync(actionFormValues)
         : ActionSchemas.AirSurveillanceFormLiveSchema.isValidSync(actionFormValues)
 
     case MissionAction.MissionActionType.LAND_CONTROL:
-      return isClosureValidation
-        ? ActionSchemas.LandControlFormClosureSchema.isValidSync(actionFormValues)
+      return isCompletionValidation
+        ? ActionSchemas.LandControlFormCompletionSchema.isValidSync(actionFormValues)
         : ActionSchemas.LandControlFormLiveSchema.isValidSync(actionFormValues)
 
     case MissionAction.MissionActionType.OBSERVATION:
@@ -30,8 +30,8 @@ export function isMissionActionFormValid(
       return ActionSchemas.ObservationFormLiveSchema.isValidSync(actionFormValues)
 
     case MissionAction.MissionActionType.SEA_CONTROL:
-      return isClosureValidation
-        ? ActionSchemas.SeaControlFormClosureSchema.isValidSync(actionFormValues)
+      return isCompletionValidation
+        ? ActionSchemas.SeaControlFormCompletionSchema.isValidSync(actionFormValues)
         : ActionSchemas.SeaControlFormLiveSchema.isValidSync(actionFormValues)
 
     default:

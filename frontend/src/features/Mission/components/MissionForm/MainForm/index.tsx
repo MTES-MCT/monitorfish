@@ -117,8 +117,8 @@ function UnmemoizedMainForm({ initialValues, missionId, onChange }: MainFormProp
               </RelatedFieldGroupWrapper>
 
               <InlineFieldGroupWrapper>
-                <FormikTextInput isRequired label="Ouvert par" name="openBy" />
-                <FormikTextInput isRequired label="Clôturé par" name="closedBy" />
+                <FormikTextInput label="Ouvert par" name="openBy" />
+                <FormikTextInput label="Clôturé par" name="closedBy" />
               </InlineFieldGroupWrapper>
             </CustomFormBodyInnerWrapper>
           </FormBody>

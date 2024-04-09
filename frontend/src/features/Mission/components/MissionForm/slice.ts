@@ -11,13 +11,6 @@ export interface MissionFormState {
   draft: MissionWithActionsDraft | undefined
   engagedControlUnit: ControlUnit.EngagedControlUnit | undefined
   geometryComputedFromControls: MissionMainFormValues['geom']
-  /**
-   * Is the mission being closed?
-   *
-   * @description
-   * Used to switch validation schemas from `Live` ones to 'Closure' ones when closing a mission.
-   */
-  isClosing: boolean
   isDraftDirty: boolean
   isListeningToEvents: boolean
   mustResetOtherControlsCheckboxes: boolean | undefined
@@ -28,7 +21,6 @@ const INITIAL_STATE: MissionFormState = {
   draft: undefined,
   engagedControlUnit: undefined,
   geometryComputedFromControls: undefined,
-  isClosing: false,
   isDraftDirty: false,
   isListeningToEvents: false,
   mustResetOtherControlsCheckboxes: undefined,
@@ -46,7 +38,6 @@ const missionFormSlice = createSlice({
     initializeDraft(state, action: PayloadAction<MissionWithActionsDraft>) {
       state.draft = action.payload
       state.geometryComputedFromControls = undefined
-      state.isClosing = false
       state.isDraftDirty = false
     },
 
@@ -65,7 +56,6 @@ const missionFormSlice = createSlice({
     resetMissionForm(state) {
       state.draft = undefined
       state.geometryComputedFromControls = undefined
-      state.isClosing = false
       state.isDraftDirty = false
     },
 
@@ -87,13 +77,6 @@ const missionFormSlice = createSlice({
       }
 
       state.geometryComputedFromControls = action.payload
-    },
-
-    /**
-     * Set mission closure state
-     */
-    setIsClosing(state, action: PayloadAction<boolean>) {
-      state.isClosing = action.payload
     },
 
     /**

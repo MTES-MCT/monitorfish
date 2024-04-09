@@ -14,7 +14,7 @@ describe('features/Mission/components/MissionForm/utils.getMissionActionsDataFro
       {
         actionDatetimeUtc: '2023-12-08T08:27:00Z',
         actionType: MissionActionType.SEA_CONTROL,
-        closedBy: undefined,
+        completedBy: undefined,
         controlQualityComments: undefined,
         controlUnits: [],
         districtCode: 'AY',
@@ -93,7 +93,7 @@ describe('features/Mission/components/MissionForm/utils.getMissionActionsDataFro
       {
         actionDatetimeUtc: '2023-12-08T08:27:00Z',
         actionType: MissionActionType.SEA_CONTROL,
-        closedBy: undefined,
+        completedBy: undefined,
         completion: CompletionStatus.TO_COMPLETE,
         controlQualityComments: undefined,
         controlUnits: [],
@@ -193,7 +193,7 @@ describe('features/Mission/components/MissionForm/utils.getMissionActionsDataFro
       {
         actionDatetimeUtc: '2023-12-08T08:27:00Z',
         actionType: MissionActionType.SEA_CONTROL,
-        closedBy: undefined,
+        completedBy: undefined,
         controlQualityComments: undefined,
         controlUnits: [],
         districtCode: 'AY',
@@ -275,7 +275,7 @@ describe('features/Mission/components/MissionForm/utils.getMissionActionsDataFro
       {
         actionDatetimeUtc: '2023-12-08T08:27:00Z',
         actionType: MissionActionType.SEA_CONTROL,
-        closedBy: undefined,
+        completedBy: undefined,
         completion: CompletionStatus.TO_COMPLETE,
         controlQualityComments: undefined,
         controlUnits: [],

@@ -7,7 +7,7 @@ type MissionStatusLabelProps = {
   status: Mission.MissionStatus
 }
 export function MissionStatusLabel({ status }: MissionStatusLabelProps) {
-  const color = getMissionColor(status, true)
+  const color = getMissionColor(status)
 
   switch (status) {
     case Mission.MissionStatus.IN_PROGRESS:
@@ -33,7 +33,7 @@ export function MissionStatusLabel({ status }: MissionStatusLabelProps) {
       )
 
     default:
-      return <StatusWrapper color={getMissionColor(Mission.MissionStatus.DONE, true)}>Aucun statut</StatusWrapper>
+      return <StatusWrapper color={getMissionColor(Mission.MissionStatus.DONE)}>Aucun statut</StatusWrapper>
   }
 }
 const StatusWrapper = styled.div<{ color: string; smallMargin?: boolean }>`

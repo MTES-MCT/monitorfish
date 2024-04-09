@@ -41,29 +41,30 @@ class JpaLogbookReportRepository(
     private val postgresChunkSize = 5000
 
     override fun findAllPriorNotifications(filter: LogbookReportFilter): List<PriorNotification> {
-        val criteriaBuilder = entityManager.criteriaBuilder
-        val criteriaQuery = criteriaBuilder.createQuery(LogbookReportEntity::class.java)
-        val logbookReportEntity = criteriaQuery.from(LogbookReportEntity::class.java)
-
         // ---------------------------------------------------------------------
         // First we get all the enriched PNO message DAT & COR operations:
 
-        val datAndCorPredicates = mutableListOf(criteriaBuilder.isTrue(criteriaBuilder.literal(true)))
+        val datAndCorCriteriaBuilder = entityManager.criteriaBuilder
+        val datAndCorCriteriaQuery = datAndCorCriteriaBuilder.createQuery(LogbookReportEntity::class.java)
+        var logbookReportEntity = datAndCorCriteriaQuery.from(LogbookReportEntity::class.java)
+
+        val datAndCorPredicates = mutableListOf(datAndCorCriteriaBuilder.isTrue(datAndCorCriteriaBuilder.literal(true)))
         datAndCorPredicates.add(
-            criteriaBuilder.and(
-                criteriaBuilder.equal(logbookReportEntity.get<String>("messageType"), "PNO"),
+            datAndCorCriteriaBuilder.and(
+                datAndCorCriteriaBuilder.equal(logbookReportEntity.get<String>("messageType"), "PNO"),
                 logbookReportEntity.get<LogbookOperationType>("operationType")
                     .`in`(listOf(LogbookOperationType.DAT, LogbookOperationType.COR)),
-                criteriaBuilder.equal(logbookReportEntity.get<Boolean>("isEnriched"), true),
+                datAndCorCriteriaBuilder.equal(logbookReportEntity.get<Boolean>("isEnriched"), true),
             ),
         )
-
         filter.willArriveAfter?.let { willArriveAfter ->
-            datAndCorPredicates.add(getWillArriveAfterPredicate(willArriveAfter, criteriaBuilder, logbookReportEntity))
+            datAndCorPredicates.add(
+                getWillArriveAfterPredicate(willArriveAfter, datAndCorCriteriaBuilder, logbookReportEntity),
+            )
         }
         filter.willArriveBefore?.let { willArriveBefore ->
             datAndCorPredicates.add(
-                getWillArriveBeforePredicate(willArriveBefore, criteriaBuilder, logbookReportEntity),
+                getWillArriveBeforePredicate(willArriveBefore, datAndCorCriteriaBuilder, logbookReportEntity),
             )
         }
         filter.flagStates?.let { flagStates ->
@@ -73,62 +74,68 @@ class JpaLogbookReportRepository(
             datAndCorPredicates.add(
                 getIsLessThanTwelveMetersVesselPredicate(
                     isLessThanTwelveMetersVessel,
-                    criteriaBuilder,
+                    datAndCorCriteriaBuilder,
                     logbookReportEntity,
                 ),
             )
         }
         filter.lastControlledAfter?.let { lastControlledAfter ->
             datAndCorPredicates.add(
-                getLastControlledAfterPredicate(lastControlledAfter, criteriaBuilder, logbookReportEntity),
+                getLastControlledAfterPredicate(lastControlledAfter, datAndCorCriteriaBuilder, logbookReportEntity),
             )
         }
         filter.lastControlledBefore?.let { lastControlledBefore ->
             datAndCorPredicates.add(
-                getLastControlledBeforePredicate(lastControlledBefore, criteriaBuilder, logbookReportEntity),
+                getLastControlledBeforePredicate(lastControlledBefore, datAndCorCriteriaBuilder, logbookReportEntity),
             )
         }
         filter.portLocodes?.let { portLocodes ->
-            datAndCorPredicates.add(getPortLocodesPredicate(portLocodes, criteriaBuilder, logbookReportEntity))
+            datAndCorPredicates.add(getPortLocodesPredicate(portLocodes, datAndCorCriteriaBuilder, logbookReportEntity))
         }
         filter.priorNotificationTypes?.let { types ->
-            datAndCorPredicates.add(getPriorNotificationTypesPredicate(types, criteriaBuilder, logbookReportEntity))
+            datAndCorPredicates.add(
+                getPriorNotificationTypesPredicate(types, datAndCorCriteriaBuilder, logbookReportEntity),
+            )
         }
         filter.searchQuery?.let { searchQuery ->
-            datAndCorPredicates.add(getSearchQueryPredicate(searchQuery, criteriaBuilder, logbookReportEntity))
+            datAndCorPredicates.add(getSearchQueryPredicate(searchQuery, datAndCorCriteriaBuilder, logbookReportEntity))
         }
         filter.specyCodes?.let { specyCodes ->
-            datAndCorPredicates.add(getSpecyCodesPredicate(specyCodes, criteriaBuilder, logbookReportEntity))
+            datAndCorPredicates.add(getSpecyCodesPredicate(specyCodes, datAndCorCriteriaBuilder, logbookReportEntity))
         }
         filter.tripGearCodes?.let { tripGearCodes ->
-            datAndCorPredicates.add(getTripGearCodesPredicate(tripGearCodes, criteriaBuilder, logbookReportEntity))
+            datAndCorPredicates.add(
+                getTripGearCodesPredicate(tripGearCodes, datAndCorCriteriaBuilder, logbookReportEntity),
+            )
         }
         filter.tripSegmentSegments?.let { tripSegmentSegments ->
             datAndCorPredicates.add(
-                getTripSegmentSegmentsPredicate(tripSegmentSegments, criteriaBuilder, logbookReportEntity),
+                getTripSegmentSegmentsPredicate(tripSegmentSegments, datAndCorCriteriaBuilder, logbookReportEntity),
             )
         }
 
-        criteriaQuery.select(logbookReportEntity).where(*datAndCorPredicates.toTypedArray())
-
-        val datAndCorLogbookReportModels = entityManager.createQuery(criteriaQuery).resultList
+        datAndCorCriteriaQuery.select(logbookReportEntity).where(*datAndCorPredicates.toTypedArray())
+        val datAndCorLogbookReportModels = entityManager.createQuery(datAndCorCriteriaQuery).resultList
 
         // ---------------------------------------------------------------------
         // Then we get all their related DEL and RET operations:
 
-        val delAndRetPredicates = mutableListOf(criteriaBuilder.isTrue(criteriaBuilder.literal(true)))
+        val delAndRetCriteriaBuilder = entityManager.criteriaBuilder
+        val delAndRetCriteriaQuery = delAndRetCriteriaBuilder.createQuery(LogbookReportEntity::class.java)
+        logbookReportEntity = delAndRetCriteriaQuery.from(LogbookReportEntity::class.java)
+
+        val delAndRetPredicates = mutableListOf(delAndRetCriteriaBuilder.isTrue(delAndRetCriteriaBuilder.literal(true)))
         val uniqueLogbookReportReportIds = datAndCorLogbookReportModels.mapNotNull { it.reportId }.distinct()
         delAndRetPredicates.add(
-            criteriaBuilder.and(
+            delAndRetCriteriaBuilder.and(
                 logbookReportEntity.get<String>("referencedReportId").`in`(uniqueLogbookReportReportIds),
                 logbookReportEntity.get<LogbookOperationType>("operationType")
                     .`in`(listOf(LogbookOperationType.DEL, LogbookOperationType.RET)),
             ),
         )
 
-        criteriaQuery.select(logbookReportEntity).where(*datAndCorPredicates.toTypedArray())
-
-        val delAndRetLogbookReportModels = entityManager.createQuery(criteriaQuery).resultList
+        delAndRetCriteriaQuery.select(logbookReportEntity).where(*delAndRetPredicates.toTypedArray())
+        val delAndRetLogbookReportModels = entityManager.createQuery(delAndRetCriteriaQuery).resultList
 
         val allLogbookReportModels = datAndCorLogbookReportModels + delAndRetLogbookReportModels
         val logbookReportModelPairs = mapToReferenceWithRelatedModels(allLogbookReportModels)
@@ -144,28 +151,22 @@ class JpaLogbookReportRepository(
     }
 
     override fun findPriorNotificationByReportId(reportId: String): PriorNotification {
-        val pnoParentAndChildrenLogbookReportModels = dbERSRepository.findEnrichedPnoParentAndChildrenByReportId(
+        val allLogbookReportModels = dbERSRepository.findEnrichedPnoReferenceWithRelatedMessagesByReportId(
             reportId,
         )
-
-        // Parent (DAT) operation
-        val pnoParentLogbookReportModel = pnoParentAndChildrenLogbookReportModels.firstOrNull()
-            ?: throw NoERSMessagesFound("No logbook report found for the given reportId: $reportId.")
-        if (pnoParentLogbookReportModel.operationType != LogbookOperationType.DAT) {
-            throw NoERSMessagesFound(
-                "The first logbook report found is not a DAT operation for the given reportId: $reportId.",
-            )
+        if (allLogbookReportModels.isEmpty()) {
+            throw NoERSMessagesFound("No logbook report found for the given reportId: $reportId.")
         }
 
-        // Children (COR, DEL and RET) operations
-        val pnoChildrenLogbookReportModels = pnoParentAndChildrenLogbookReportModels.drop(1)
-        if (pnoChildrenLogbookReportModels.any { it.operationType == LogbookOperationType.DAT }) {
-            throw NoERSMessagesFound(
-                "The children logbook reports contain a DAT operation for the given reportId: $reportId.",
-            )
-        }
+        try {
+            val (referenceLogbookReportModel, relatedLogbookReportModels) =
+                mapToReferenceWithRelatedModels(allLogbookReportModels).first()
 
-        return pnoParentLogbookReportModel.toPriorNotification(mapper, pnoChildrenLogbookReportModels)
+            return referenceLogbookReportModel.toPriorNotification(mapper, relatedLogbookReportModels)
+        } catch (e: EntityConversionException) {
+            logger.error("Error while converting logbook report entity to prior notification.", e)
+            throw NoERSMessagesFound("Error while converting logbook report entity to prior notification.", e)
+        }
     }
 
     override fun findLastTripBeforeDateTime(
@@ -647,7 +648,8 @@ class JpaLogbookReportRepository(
             val orphanCorLogbookReportModels = allLogbookReportModels
                 .filter { it.operationType == LogbookOperationType.COR }
                 .filter { corOperation ->
-                    corOperation.referencedReportId == null || allLogbookReportModels.none { it.reportId == corOperation.referencedReportId }
+                    corOperation.referencedReportId == null ||
+                        datLogbookReportModels.none { it.reportId == corOperation.referencedReportId }
                 }
             val referenceLogbookReportModels = datLogbookReportModels + orphanCorLogbookReportModels
 

@@ -1,5 +1,6 @@
 import { COUNTRIES_AS_ALPHA3_OPTIONS } from '@constants/index'
 import { useGetFleetSegmentsAsOptions } from '@features/FleetSegment/hooks/useGetFleetSegmentsAsOptions'
+import { DEFAULT_LIST_FILTER_VALUES } from '@features/PriorNotification/constants'
 import { useGetPriorNotificationTypesAsOptions } from '@features/PriorNotification/hooks/useGetPriorNotificationTypesAsOptions'
 import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { useGetGearsAsTreeOptions } from '@hooks/useGetGearsAsTreeOptions'
@@ -8,6 +9,7 @@ import { useGetSpeciesAsOptions } from '@hooks/useGetSpeciesAsOptions'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { SingleTag, getSelectedOptionFromOptionValueInTree } from '@mtes-mct/monitor-ui'
+import { isEqual } from 'lodash'
 import styled from 'styled-components'
 
 import type { ListFilter } from './types'
@@ -21,6 +23,8 @@ export function FilterTags() {
   const { portsAsTreeOptions } = useGetPortsAsTreeOptions()
   const { speciesAsOptions } = useGetSpeciesAsOptions()
   const { priorNotificationTypesAsOptions } = useGetPriorNotificationTypesAsOptions()
+
+  const areListFilterValuesEqualToDefaultOnes = isEqual(listFilterValues, DEFAULT_LIST_FILTER_VALUES)
 
   const remove = (key: keyof ListFilter, value: string) => {
     const filterValue = listFilterValues[key]
@@ -37,7 +41,7 @@ export function FilterTags() {
     dispatch(priorNotificationActions.setListFilterValues(nextListFilterValues))
   }
 
-  const removeAll = () => {
+  const reset = () => {
     dispatch(priorNotificationActions.resetListFilterValues())
   }
 
@@ -98,10 +102,12 @@ export function FilterTags() {
           ))}
       </Row>
 
-      <Row>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <Link onClick={removeAll}>Réinitialiser les filtres</Link>
-      </Row>
+      {!areListFilterValuesEqualToDefaultOnes && (
+        <Row>
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+          <Link onClick={reset}>Réinitialiser les filtres</Link>
+        </Row>
+      )}
     </Wrapper>
   )
 }

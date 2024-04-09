@@ -426,9 +426,9 @@
                 "value:jsonb": {
                     "catchOnboard": [
                         {
-                            "weight": 25.0,
+                            "weight": 150.0,
                             "nbFish": null,
-                            "species": "COD",
+                            "species": "ANF",
                             "faoZone": "27.8.a",
                             "effortZone": "C",
                             "economicZone": "FRA",
@@ -507,7 +507,7 @@
                 "referenced_report_id": "FAKE_OPERATION_109",
                 "cfr": "CFR106",
                 "enriched": true,
-                "flag_state": null,
+                "flag_state": "FRA",
                 "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "log_type": "PNO",
                 "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
@@ -515,7 +515,7 @@
                 "operation_type": "COR",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "transmission_format": "ERS",
-                "vessel_name": null,
+                "vessel_name": "L'ANCRE SÈCHE",
                 "trip_gears": null,
                 "trip_segments": null,
                 "value:jsonb": {
@@ -525,9 +525,9 @@
                             "effortZone": "C",
                             "faoZone": "27.8.a",
                             "nbFish": null,
-                            "species": "COD",
+                            "species": "BHX",
                             "statisticalRectangle": "23E6",
-                            "weight": 25.0
+                            "weight": 32.5
                         }
                     ],
                     "pnoTypes": [

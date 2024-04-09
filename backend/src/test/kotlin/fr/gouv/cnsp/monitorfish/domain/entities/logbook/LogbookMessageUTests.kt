@@ -41,7 +41,7 @@ class LogbookMessageUTests {
     }
 
     @Test
-    fun `consolidateAcknowledge should set acknowledge to successful with one successful RET message`() {
+    fun `consolidateAcknowledge Should set acknowledge to successful with one successful RET message`() {
         // Given
         val refenceLogbookMessage = getFakeLogbookMessage(
             LogbookOperationType.DAT,
@@ -63,12 +63,13 @@ class LogbookMessageUTests {
         // Then
         assertThat(consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.acknowledge?.isSuccess).isTrue()
+        assertThat(consolidatedLogbookMessage.logbookMessage.isConsolidated).isTrue()
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isFalse()
         assertThat(consolidatedLogbookMessage.logbookMessage.isDeleted).isFalse()
     }
 
     @Test
-    fun `consolidateAcknowledge should set acknowledge to successful with multiple RET messages of which one is successful, no matter the (historical) order`() {
+    fun `consolidateAcknowledge Should set acknowledge to successful with multiple RET messages of which one is successful, no matter the (historical) order`() {
         // Given
         val refenceLogbookMessage = getFakeLogbookMessage(
             LogbookOperationType.DAT,
@@ -102,12 +103,13 @@ class LogbookMessageUTests {
         // Then
         assertThat(consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.acknowledge?.isSuccess).isTrue()
+        assertThat(consolidatedLogbookMessage.logbookMessage.isConsolidated).isTrue()
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isFalse()
         assertThat(consolidatedLogbookMessage.logbookMessage.isDeleted).isFalse()
     }
 
     @Test
-    fun `consolidateAcknowledge should set acknowledge to not successful with one unsuccessful RET message`() {
+    fun `consolidateAcknowledge Should set acknowledge to not successful with one unsuccessful RET message`() {
         // Given
         val refenceLogbookMessage = getFakeLogbookMessage(
             LogbookOperationType.DAT,
@@ -129,12 +131,13 @@ class LogbookMessageUTests {
         // Then
         assertThat(consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.acknowledge?.isSuccess).isFalse()
+        assertThat(consolidatedLogbookMessage.logbookMessage.isConsolidated).isTrue()
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isFalse()
         assertThat(consolidatedLogbookMessage.logbookMessage.isDeleted).isFalse()
     }
 
     @Test
-    fun `consolidateAcknowledge should set acknowledge to (most recent) not successful with multiple unsucessful RET message`() {
+    fun `consolidateAcknowledge Should set acknowledge to (most recent) not successful with multiple unsucessful RET message`() {
         // Given
         val refenceLogbookMessage = getFakeLogbookMessage(
             LogbookOperationType.DAT,
@@ -164,6 +167,7 @@ class LogbookMessageUTests {
         assertThat(consolidatedLogbookMessage.logbookMessage.acknowledge?.isSuccess).isFalse()
         assertThat(consolidatedLogbookMessage.logbookMessage.acknowledge?.dateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC))
+        assertThat(consolidatedLogbookMessage.logbookMessage.isConsolidated).isTrue()
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isFalse()
         assertThat(consolidatedLogbookMessage.logbookMessage.isDeleted).isFalse()
 
@@ -176,12 +180,13 @@ class LogbookMessageUTests {
         assertThat(consolidatedLogbookMessageReversed.logbookMessage.acknowledge?.isSuccess).isFalse()
         assertThat(consolidatedLogbookMessageReversed.logbookMessage.acknowledge?.dateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC))
+        assertThat(consolidatedLogbookMessageReversed.logbookMessage.isConsolidated).isTrue()
         assertThat(consolidatedLogbookMessageReversed.logbookMessage.isCorrected).isFalse()
         assertThat(consolidatedLogbookMessageReversed.logbookMessage.isDeleted).isFalse()
     }
 
     @Test
-    fun `consolidateAcknowledge should set acknowledge to successful when it comes from FLUX flow`() {
+    fun `consolidateAcknowledge Should set acknowledge to successful when it comes from FLUX flow`() {
         // Given
         val refenceLogbookMessage = getFakeLogbookMessage(
             LogbookOperationType.DAT,
@@ -202,7 +207,7 @@ class LogbookMessageUTests {
     }
 
     @Test
-    fun `consolidateAcknowledge should set acknowledge to successful when it was generated via VISIOCaptures app`() {
+    fun `consolidateAcknowledge Should set acknowledge to successful when it was generated via VISIOCaptures app`() {
         // Given
         val refenceLogbookMessage = getFakeLogbookMessage(
             LogbookOperationType.DAT,
@@ -223,11 +228,13 @@ class LogbookMessageUTests {
     }
 
     @Test
-    fun `consolidateAcknowledge should flag it as corrected from a COR message`() {
+    fun `consolidateAcknowledge Should flag it as corrected from an orphan COR message`() {
         // Given
+        val missingDatLogbookMessageReportId = UUID.randomUUID().toString()
         val refenceLogbookMessage = getFakeLogbookMessage(
             LogbookOperationType.COR,
             ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC),
+            missingDatLogbookMessageReportId,
         )
 
         // When
@@ -235,7 +242,7 @@ class LogbookMessageUTests {
             .toConsolidatedLogbookMessage(emptyList(), PNO::class.java)
 
         // Then
-        assertThat(consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
+        assertThat(consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(missingDatLogbookMessageReportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.reportDateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC))
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isTrue()
@@ -243,7 +250,7 @@ class LogbookMessageUTests {
     }
 
     @Test
-    fun `consolidateAcknowledge should use the most recent COR message as base and flag it corrected from a DAT with multiple COR messages`() {
+    fun `consolidateAcknowledge Should use the most recent COR message as base and flag it corrected from a DAT with multiple COR messages`() {
         // Given
         val refenceLogbookMessage = getFakeLogbookMessage(
             LogbookOperationType.DAT,
@@ -276,6 +283,7 @@ class LogbookMessageUTests {
         assertThat(consolidatedLogbookMessage.logbookMessage.reportDateTime).isEqualTo(
             ZonedDateTime.of(2024, 1, 1, 0, 0, 3, 0, ZoneOffset.UTC),
         )
+        assertThat(consolidatedLogbookMessage.logbookMessage.isConsolidated).isTrue()
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isTrue()
         assertThat(consolidatedLogbookMessage.logbookMessage.isDeleted).isFalse()
 
@@ -287,12 +295,13 @@ class LogbookMessageUTests {
         assertThat(consolidatedLogbookMessageReversed.logbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessageReversed.logbookMessage.reportDateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 3, 0, ZoneOffset.UTC))
+        assertThat(consolidatedLogbookMessageReversed.logbookMessage.isConsolidated).isTrue()
         assertThat(consolidatedLogbookMessageReversed.logbookMessage.isCorrected).isTrue()
         assertThat(consolidatedLogbookMessageReversed.logbookMessage.isDeleted).isFalse()
     }
 
     @Test
-    fun `consolidateAcknowledge should flag it as deleted from a DAT with a DEL message`() {
+    fun `consolidateAcknowledge Should flag it as deleted from a DAT with a DEL message`() {
         // Given
         val refenceLogbookMessage = getFakeLogbookMessage(
             LogbookOperationType.DAT,
@@ -314,16 +323,19 @@ class LogbookMessageUTests {
         assertThat(consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.reportDateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC))
+        assertThat(consolidatedLogbookMessage.logbookMessage.isConsolidated).isTrue()
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isFalse()
         assertThat(consolidatedLogbookMessage.logbookMessage.isDeleted).isTrue()
     }
 
     @Test
-    fun `consolidateAcknowledge should flag it as corrected and deleted from a COR with a DEL message`() {
+    fun `consolidateAcknowledge Should flag it as corrected and deleted from an orphan COR with a DEL message`() {
         // Given
+        val missingDatLogbookMessageReportId = UUID.randomUUID().toString()
         val refenceLogbookMessage = getFakeLogbookMessage(
             LogbookOperationType.COR,
             ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC),
+            missingDatLogbookMessageReportId,
         )
         val relatedLogbookMessages = listOf(
             getFakeLogbookMessage(
@@ -338,15 +350,16 @@ class LogbookMessageUTests {
             .toConsolidatedLogbookMessage(relatedLogbookMessages, PNO::class.java)
 
         // Then
-        assertThat(consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
+        assertThat(consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(missingDatLogbookMessageReportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.reportDateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC))
+        assertThat(consolidatedLogbookMessage.logbookMessage.isConsolidated).isTrue()
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isTrue()
         assertThat(consolidatedLogbookMessage.logbookMessage.isDeleted).isTrue()
     }
 
     @Test
-    fun `consolidateAcknowledge should use the most recent COR message as base and flag it corrected and deleted from a DAT with COR and DEL messages`() {
+    fun `consolidateAcknowledge Should use the most recent COR message as base and flag it corrected and deleted from a DAT with COR and DEL messages`() {
         // Given
         val refenceLogbookMessage = getFakeLogbookMessage(
             LogbookOperationType.DAT,
@@ -378,12 +391,13 @@ class LogbookMessageUTests {
         assertThat(consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(refenceLogbookMessage.reportId)
         assertThat(consolidatedLogbookMessage.logbookMessage.reportDateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC))
+        assertThat(consolidatedLogbookMessage.logbookMessage.isConsolidated).isTrue()
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isTrue()
         assertThat(consolidatedLogbookMessage.logbookMessage.isDeleted).isTrue()
     }
 
     @Test
-    fun `consolidateAcknowledge should use the most recent COR message as base and associate its RET from a DAT, even with a later DAT-RET message`() {
+    fun `consolidateAcknowledge Should use the most recent COR message as base and associate its RET from a DAT, even with a later DAT-RET message`() {
         // Given
         val refenceLogbookMessage = getFakeLogbookMessage(
             LogbookOperationType.DAT,
@@ -438,12 +452,13 @@ class LogbookMessageUTests {
         assertThat(consolidatedLogbookMessage.logbookMessage.acknowledge?.dateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 4, 0, ZoneOffset.UTC))
         assertThat(consolidatedLogbookMessage.logbookMessage.acknowledge?.returnStatus).isEqualTo("001")
+        assertThat(consolidatedLogbookMessage.logbookMessage.isConsolidated).isTrue()
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isTrue()
         assertThat(consolidatedLogbookMessage.logbookMessage.isDeleted).isFalse()
     }
 
     @Test
-    fun `consolidateAcknowledge should use the most recent COR message as base and skip acknowledgement flagging without a COR-related RET`() {
+    fun `consolidateAcknowledge Should use the most recent COR message as base and skip acknowledgement flagging without a COR-related RET`() {
         // Given
         val refenceLogbookMessage = getFakeLogbookMessage(
             LogbookOperationType.DAT,
@@ -473,6 +488,7 @@ class LogbookMessageUTests {
         assertThat(consolidatedLogbookMessage.logbookMessage.reportDateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC))
         assertThat(consolidatedLogbookMessage.logbookMessage.acknowledge).isNull()
+        assertThat(consolidatedLogbookMessage.logbookMessage.isConsolidated).isTrue()
         assertThat(consolidatedLogbookMessage.logbookMessage.isCorrected).isTrue()
         assertThat(consolidatedLogbookMessage.logbookMessage.isDeleted).isFalse()
     }

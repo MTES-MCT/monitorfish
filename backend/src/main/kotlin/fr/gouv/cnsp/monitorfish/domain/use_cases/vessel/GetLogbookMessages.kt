@@ -3,8 +3,6 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookSoftware
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import org.slf4j.LoggerFactory
@@ -53,46 +51,11 @@ class GetLogbookMessages(
                 it
             }
 
-        flagCorrectedAcknowledgedAndDeletedMessages(messages)
+        messages.forEach { it.enrichAknowledgeCorrectionAndDeletion(messages) }
 
         return messages.filter {
             it.operationType == LogbookOperationType.DAT ||
                 it.operationType == LogbookOperationType.COR
-        }
-    }
-
-    private fun flagCorrectedAcknowledgedAndDeletedMessages(messages: List<LogbookMessage>) {
-        messages.forEach { logbookMessage ->
-            val referenceLogbookMessage = if (!logbookMessage.referencedReportId.isNullOrEmpty()) {
-                messages.find { it.reportId == logbookMessage.referencedReportId }
-            } else {
-                null
-            }
-
-            if (logbookMessage.operationType == LogbookOperationType.COR && !logbookMessage.referencedReportId.isNullOrEmpty()) {
-                if (referenceLogbookMessage == null) {
-                    logger.warn(
-                        "Original message ${logbookMessage.referencedReportId} corrected by message COR ${logbookMessage.operationNumber} is not found.",
-                    )
-                }
-
-                referenceLogbookMessage?.isCorrectedByNewerMessage = true
-            } else if (logbookMessage.operationType == LogbookOperationType.RET && !logbookMessage.referencedReportId.isNullOrEmpty()) {
-                referenceLogbookMessage?.setAcknowledge(logbookMessage)
-            } else if (logbookMessage.transmissionFormat == LogbookTransmissionFormat.FLUX) {
-                logbookMessage.setAcknowledgeAsSuccessful()
-            } else if (
-                logbookMessage.software !== null &&
-                logbookMessage.software.contains(LogbookSoftware.VISIOCAPTURE.software)
-            ) {
-                logbookMessage.setAcknowledgeAsSuccessful()
-            } else if (logbookMessage.operationType == LogbookOperationType.DEL && !logbookMessage.referencedReportId.isNullOrEmpty()) {
-                referenceLogbookMessage?.isDeleted = true
-            }
-
-            if (logbookMessage.software !== null && logbookMessage.software.contains(LogbookSoftware.E_SACAPT.software)) {
-                logbookMessage.isSentByFailoverSoftware = true
-            }
         }
     }
 }

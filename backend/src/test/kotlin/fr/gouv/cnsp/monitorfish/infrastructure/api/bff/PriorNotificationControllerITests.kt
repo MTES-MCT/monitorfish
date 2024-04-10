@@ -13,6 +13,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotifica
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotification
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotificationTypes
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotifications
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -38,6 +39,9 @@ class PriorNotificationControllerITests {
 
     @MockBean
     private lateinit var getPriorNotifications: GetPriorNotifications
+
+    @MockBean
+    private lateinit var getPriorNotificationTypes: GetPriorNotificationTypes
 
     @Test
     fun `Should get a list of prior notifications`() {
@@ -125,6 +129,20 @@ class PriorNotificationControllerITests {
             .andExpect(jsonPath("$.length()", equalTo(2)))
             .andExpect(jsonPath("$[0].id", equalTo("FAKE_REPORT_ID_1")))
             .andExpect(jsonPath("$[1].id", equalTo("FAKE_REPORT_ID_2")))
+    }
+
+    @Test
+    fun `Should get a list of prior notification types`() {
+        // Given
+        given(this.getPriorNotificationTypes.execute()).willReturn(listOf("Préavis de Type A", "Préavis de Type B"))
+
+        // When
+        api.perform(get("/bff/v1/prior_notifications/types"))
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()", equalTo(2)))
+            .andExpect(jsonPath("$[0]", equalTo("Préavis de Type A")))
+            .andExpect(jsonPath("$[1]", equalTo("Préavis de Type B")))
     }
 
     @Test

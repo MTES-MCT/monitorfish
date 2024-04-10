@@ -140,12 +140,16 @@ class JpaLogbookReportRepository(
         val allLogbookReportModels = datAndCorLogbookReportModels + delAndRetLogbookReportModels
         val logbookReportModelPairs = mapToReferenceWithRelatedModels(allLogbookReportModels)
 
-        return logbookReportModelPairs.map { (referenceLogbookReportModel, relatedLogbookReportModels) ->
+        return logbookReportModelPairs.mapNotNull { (referenceLogbookReportModel, relatedLogbookReportModels) ->
             try {
                 referenceLogbookReportModel.toPriorNotification(mapper, relatedLogbookReportModels)
-            } catch (e: EntityConversionException) {
-                logger.error("Error while converting logbook report entity to prior notification.", e)
-                throw NoERSMessagesFound("Error while converting logbook report entity to prior notification.", e)
+            } catch (e: Exception) {
+                logger.warn(
+                    "Error while converting logbook report models to prior notifications (reoportId = ${referenceLogbookReportModel.reportId}).",
+                    e,
+                )
+
+                null
             }
         }
     }
@@ -163,9 +167,11 @@ class JpaLogbookReportRepository(
                 mapToReferenceWithRelatedModels(allLogbookReportModels).first()
 
             return referenceLogbookReportModel.toPriorNotification(mapper, relatedLogbookReportModels)
-        } catch (e: EntityConversionException) {
-            logger.error("Error while converting logbook report entity to prior notification.", e)
-            throw NoERSMessagesFound("Error while converting logbook report entity to prior notification.", e)
+        } catch (e: Exception) {
+            throw EntityConversionException(
+                "Error while converting logbook report models to prior notification (reoportId = $reportId).",
+                e,
+            )
         }
     }
 

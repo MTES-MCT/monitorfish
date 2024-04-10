@@ -869,7 +869,7 @@ expected_missions_df = pd.DataFrame(
             ["SEA"],
             ["LAND"],
         ],
-        "completed_by": [
+        "closed_by": [
             "DEF",
             "DEF",
             "DEF",

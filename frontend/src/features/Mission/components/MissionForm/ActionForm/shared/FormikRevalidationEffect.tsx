@@ -11,7 +11,6 @@ import { useDebouncedCallback } from 'use-debounce'
  */
 export function FormikRevalidationEffect() {
   const { validateForm } = useFormikContext()
-  const isClosing = useMainAppSelector(store => store.missionForm.isClosing)
   const draft = useMainAppSelector(state => state.missionForm.draft)
 
   const debouncedValidateForm = useDebouncedCallback(validateForm, 250)
@@ -23,7 +22,7 @@ export function FormikRevalidationEffect() {
 
     // We don't want to trigger infinite re-renders since `validateForm` changes after each rendering
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [draft?.mainFormValues.endDateTimeUtc, draft?.mainFormValues.startDateTimeUtc, isClosing]
+    [draft?.mainFormValues.endDateTimeUtc, draft?.mainFormValues.startDateTimeUtc]
   )
 
   return <></>

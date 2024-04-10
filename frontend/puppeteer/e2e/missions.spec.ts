@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from '@jest/globals'
 import { platform } from 'os'
 import { Page } from 'puppeteer'
 
-import { assertContains, getFirstTab, getInputContent, listenToConsole, wait, waitForSelectorWithText } from './utils'
+import { getFirstTab, getInputContent, listenToConsole, wait, waitForSelectorWithText } from './utils'
 import { SeaFrontGroup } from '../../src/domain/entities/seaFront/constants'
 
 const TIMEOUT = 120 * 1000
@@ -35,7 +35,7 @@ describe('Missions Form', () => {
 
       await page.waitForSelector(`[data-cy="side-window-sub-menu-${SeaFrontGroup.NAMO}"]`)
       await page.click(`[data-cy="side-window-sub-menu-${SeaFrontGroup.NAMO}"]`)
-      await waitForSelectorWithText(page, 'h1', 'Missions et contrôles')
+      await waitForSelectorWithText(page, 'h1', 'Missions en NAMO')
 
       // Remove default mission filter "En cours"
       await page.waitForSelector('.Component-SingleTag')
@@ -125,47 +125,6 @@ describe('Missions Form', () => {
       await openBy.click({ clickCount: 3 })
       await openBy.type('FDJ', { delay: 50 })
       await wait(2000)
-
-      /**
-       * User B close mission
-       */
-      const close = await pageB.waitForSelector('[data-cy="close-mission"]')
-      await close.click()
-      await wait(2000)
-      await pageA.waitForSelector('.Element-Tag')
-      await assertContains(pageA, '.Element-Tag', 'Clôturée')
-      await wait(2000)
-
-      /**
-       * User A reopen mission
-       */
-      const reopen = await pageA.waitForSelector('[data-cy="reopen-mission"]')
-      await reopen.click()
-      await wait(2000)
-      await pageB.waitForSelector('.TableBodyRow[data-id="29"] > div > [title="Éditer la mission"]')
-      await pageB.click('.TableBodyRow[data-id="29"] > div > [title="Éditer la mission"]')
-      await wait(250)
-      await pageB.waitForSelector('.Element-Tag')
-      await assertContains(pageB, '.Element-Tag', 'En cours')
-      await wait(2000)
-
-      /**
-       * User B re-close mission
-       */
-      await wait(1000)
-      const secondClose = await pageB.waitForSelector('[data-cy="close-mission"]')
-      await secondClose.click()
-      await wait(2000)
-      await pageA.waitForSelector('.Element-Tag')
-      await assertContains(pageA, '.Element-Tag', 'Clôturée')
-      await wait(2000)
-
-      /**
-       * User A reopen mission
-       */
-      const finalReopen = await pageA.waitForSelector('[data-cy="reopen-mission"]')
-      await finalReopen.click()
-      await wait(5000)
     },
     TIMEOUT
   )

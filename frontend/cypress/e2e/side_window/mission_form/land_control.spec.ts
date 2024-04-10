@@ -14,6 +14,9 @@ context('Side Window > Mission Form > Land Control', () => {
   })
 
   it('Should fill the form and send the expected data to the API', () => {
+    cy.getDataCy('action-completion-status').contains('13 champs nécessaires aux statistiques à compléter')
+    cy.getDataCy('action-contains-missing-fields').should('exist')
+
     const now = getUtcDateInMultipleFormats()
     cy.intercept('POST', '/bff/v1/mission_actions', {
       body: {
@@ -62,6 +65,8 @@ context('Side Window > Mission Form > Land Control', () => {
 
     // Engins à bord
     cy.fill('Ajouter un engin', 'MIS')
+    cy.fill('Engin contrôlé', 'Oui')
+    cy.get('[name="gearOnboard[1].gearWasControlled"]').eq(1).click()
 
     // Espèces à bord
     cy.fill('Ajouter une espèce', 'COD')
@@ -111,9 +116,8 @@ context('Side Window > Mission Form > Land Control', () => {
     // Saisi par
     cy.fill('Saisi par', 'Marlin')
 
-    // Clôturé par
-    // TODO Handle multiple inputs with same label via an `index` in monitor-ui.
-    cy.get('[name="closedBy"]').eq(1).type('Alice')
+    // Complété par
+    cy.get('[name="completedBy"]').type('Alice')
 
     cy.wait(500)
 
@@ -125,7 +129,8 @@ context('Side Window > Mission Form > Land Control', () => {
       {
         body: {
           actionType: 'LAND_CONTROL',
-          closedBy: 'Alice',
+          completedBy: 'Alice',
+          completion: 'COMPLETED',
           controlQualityComments: 'Une observation sur le déroulé du contrôle.',
           controlUnits: [],
           districtCode: 'AY',
@@ -144,7 +149,7 @@ context('Side Window > Mission Form > Land Control', () => {
               declaredMesh: 70,
               gearCode: 'OTB',
               gearName: 'Chaluts de fond à panneaux',
-              gearWasControlled: null,
+              gearWasControlled: true,
               hasUncontrolledMesh: false
             },
             {
@@ -153,7 +158,7 @@ context('Side Window > Mission Form > Land Control', () => {
               declaredMesh: null,
               gearCode: 'MIS',
               gearName: 'Engin divers',
-              gearWasControlled: null,
+              gearWasControlled: false,
               hasUncontrolledMesh: false
             }
           ],
@@ -207,71 +212,9 @@ context('Side Window > Mission Form > Land Control', () => {
     )
       .its('response.statusCode')
       .should('eq', 201)
-  })
 
-  it('Should only close mission once the form closure validation has passed', () => {
-    const getCloseButton = () => cy.get('button').contains('Clôturer').parent()
-
-    // -------------------------------------------------------------------------
-    // Form Live Validation
-
-    cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('exist')
-
-    getCloseButton().should('be.disabled')
-
-    // Navire
-    cy.get('input[placeholder="Rechercher un navire..."]').type('mal')
-    cy.contains('mark', 'MAL').click().wait(500)
-
-    // Port de contrôle
-    cy.fill('Port de contrôle', 'Auray')
-
-    // Saisi par
-    cy.fill('Saisi par', 'Gaumont')
-    cy.wait(500)
-
-    // Mission is now valid for saving (but not for closure)
-    cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')
-
-    getCloseButton().should('be.enabled')
-
-    cy.clickButton('Clôturer').wait(500)
-
-    // -------------------------------------------------------------------------
-    // Form Closure Validation
-
-    cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('exist')
-
-    cy.contains('Rouvrir la mission').should('not.exist')
-
-    // Obligations déclaratives et autorisations de pêche
-    cy.fill('Bonne émission VMS', 'Oui')
-    cy.fill('Bonne émission AIS', 'Non')
-    cy.fill('Déclarations journal de pêche conformes à l’activité du navire', 'Non concerné')
-    cy.fill('Autorisations de pêche conformes à l’activité du navire (zone, engins, espèces)', 'Non')
-
-    // Engins à bord
-    cy.fill('Ajouter un engin', 'MIS')
-    cy.fill('Engin contrôlé', 'Oui')
-
-    // Espèces à bord
-    cy.fill('Poids des espèces vérifiés', 'Oui')
-    cy.fill('Taille des espèces vérifiées', 'Non')
-    cy.fill('Arrimage séparé des espèces soumises à plan', 'Oui')
-
-    // Qualité du contrôle
-    cy.fill('Navire ciblé par le CNSP', 'Non')
-
-    // Clôturé par
-    // TODO Handle multiple inputs with same label via an `index` in monitor-ui.
-    cy.get('[name="closedBy"]').eq(1).type('Alice')
-
-    // Mission is now valid for closure
-    cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')
-    cy.wait(500)
-    cy.clickButton('Clôturer')
-
-    cy.get('h1').should('contain.text', 'Missions et contrôles')
+    cy.getDataCy('action-completion-status').contains('Les champs nécessaires aux statistiques sont complétés.')
+    cy.getDataCy('action-all-fields-completed').should('exist')
   })
 
   it('Should fill the mission zone from the last land control added', () => {
@@ -454,7 +397,6 @@ context('Side Window > Mission Form > Land Control', () => {
             ],
             type: 'MultiPolygon'
           },
-          isClosed: false,
           isGeometryComputedFromControls: true,
           isUnderJdp: true,
           missionSource: 'MONITORFISH',

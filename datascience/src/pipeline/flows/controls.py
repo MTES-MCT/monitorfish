@@ -584,7 +584,7 @@ def compute_controls_segments(
 def make_missions_actions_and_missions_control_units(
     controls: pd.DataFrame,
 ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    # Posedion control ids are shifted to avoid any overlap the the ids of missions
+    # Poseidon control ids are shifted to avoid any overlap the the ids of missions
     # created in Monitorenv.
     # The resulting shifted index is used both as the mission_action id in Monitorfish
     # and as mission id in Monitorenv.
@@ -647,6 +647,7 @@ def make_missions_actions_and_missions_control_units(
     mission_actions["mission_id"] = mission_actions["id"]
     mission_actions["is_from_poseidon"] = True
     mission_actions = mission_actions.rename(columns={"open_by": "user_trigram"})
+    mission_actions = mission_actions.rename(columns={"closed_by": "completed_by"})
     mission_actions["feedback_sheet_required"] = False
 
     # Create missions_control_units

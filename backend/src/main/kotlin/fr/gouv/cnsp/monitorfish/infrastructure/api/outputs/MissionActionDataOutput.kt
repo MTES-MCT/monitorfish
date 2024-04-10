@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import java.time.ZonedDateTime
 
 data class MissionActionDataOutput(
@@ -51,7 +52,8 @@ data class MissionActionDataOutput(
     val vesselTargeted: ControlCheck? = null,
     val hasSomeGearsSeized: Boolean,
     val hasSomeSpeciesSeized: Boolean,
-    val closedBy: String? = null,
+    val completedBy: String? = null,
+    val completion: Completion,
     val isFromPoseidon: Boolean,
     val isAdministrativeControl: Boolean? = null,
     val isComplianceWithWaterRegulationsControl: Boolean? = null,
@@ -106,7 +108,8 @@ data class MissionActionDataOutput(
             vesselTargeted = missionAction.vesselTargeted,
             hasSomeGearsSeized = missionAction.hasSomeGearsSeized,
             hasSomeSpeciesSeized = missionAction.hasSomeSpeciesSeized,
-            closedBy = missionAction.closedBy,
+            completedBy = missionAction.completedBy,
+            completion = missionAction.completion,
             isFromPoseidon = missionAction.isFromPoseidon,
             isAdministrativeControl = missionAction.isAdministrativeControl,
             isComplianceWithWaterRegulationsControl = missionAction.isComplianceWithWaterRegulationsControl,

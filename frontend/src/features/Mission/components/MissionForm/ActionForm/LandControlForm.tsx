@@ -1,12 +1,12 @@
 import { DatePickerField } from '@features/Mission/components/MissionForm/ActionForm/shared/DatePickerField'
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { UpdateMissionActionCompletionEffect } from '@features/Mission/components/MissionForm/ActionForm/shared/UpdateMissionActionCompletionEffect'
 import { FormikCheckbox, FormikEffect, FormikTextarea, Icon } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash/fp'
-import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { LandControlFormClosureSchema, LandControlFormLiveSchema } from './schemas'
+import { LandControlFormLiveSchema } from './schemas'
+import { ActionFormHeader } from './shared/ActionFormHeader'
 import { ControlQualityField } from './shared/ControlQualityField'
 import { FormikAuthor } from './shared/FormikAuthor'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
@@ -16,13 +16,11 @@ import { FormikRevalidationEffect } from './shared/FormikRevalidationEffect'
 import { GearsField } from './shared/GearsField'
 import { LicencesAndLogbookField } from './shared/LicencesAndLogbookField'
 import { SpeciesField } from './shared/SpeciesField'
-import { getTitleDateFromUtcStringDate } from './shared/utils'
 import { VesselField } from './shared/VesselField'
 import { VesselFleetSegmentsField } from './shared/VesselFleetSegmentsField'
-import { validateBeforeOnChange } from './utils'
+import { getVesselName, validateBeforeOnChange } from './utils'
 import { FieldsetGroup } from '../shared/FieldsetGroup'
 import { FormBody } from '../shared/FormBody'
-import { FormHead } from '../shared/FormHead'
 
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
@@ -32,30 +30,18 @@ type LandControlFormProps = Readonly<{
   onChange: (nextValues: MissionActionFormValues) => Promisable<void>
 }>
 export function LandControlForm({ initialValues, onChange }: LandControlFormProps) {
-  const isClosing = useMainAppSelector(store => store.missionForm.isClosing)
-
-  const titleDate = useMemo(
-    () => initialValues.actionDatetimeUtc && getTitleDateFromUtcStringDate(initialValues.actionDatetimeUtc),
-    [initialValues.actionDatetimeUtc]
-  )
-  const validationSchema = useMemo(
-    () => (isClosing ? LandControlFormClosureSchema : LandControlFormLiveSchema),
-    [isClosing]
-  )
-
   return (
-    <Formik initialValues={initialValues} onSubmit={noop} validationSchema={validationSchema}>
-      {({ validateForm }) => (
+    <Formik initialValues={initialValues} onSubmit={noop} validationSchema={LandControlFormLiveSchema}>
+      {({ validateForm, values }) => (
         <>
           <FormikEffect onChange={validateBeforeOnChange(initialValues, validateForm, onChange)} />
           <FormikRevalidationEffect />
+          <UpdateMissionActionCompletionEffect />
 
-          <FormHead>
-            <h2>
-              <Icon.Anchor />
-              Contrôle à la débarque ({titleDate})
-            </h2>
-          </FormHead>
+          <ActionFormHeader>
+            <Icon.Anchor />
+            Contrôle à la débarque {values.vesselName && `– ${getVesselName(values.vesselName)}`}
+          </ActionFormHeader>
 
           <FormBody>
             <VesselField />

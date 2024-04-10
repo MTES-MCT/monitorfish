@@ -15,12 +15,13 @@ export enum MissionDateRangeFilterLabel {
 
 export enum MissionFilterType {
   ADMINISTRATION = 'ADMINISTRATION',
+  COMPLETION_STATUS = 'COMPLETION_STATUS',
   CUSTOM_DATE_RANGE = 'CUSTOM_DATE_RANGE',
   DATE_RANGE = 'DATE_RANGE',
-  SOURCE = 'SOURCE',
   STATUS = 'STATUS',
   TYPE = 'TYPE',
-  UNIT = 'UNIT'
+  UNIT = 'UNIT',
+  WITH_ACTIONS = 'WITH_ACTIONS'
 }
 
 export type FilterValues = Partial<Record<MissionFilterType, any>>

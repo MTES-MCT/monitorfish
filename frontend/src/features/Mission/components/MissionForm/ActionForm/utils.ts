@@ -2,6 +2,8 @@ import { logSoftError } from '@mtes-mct/monitor-ui'
 import { isEqual } from 'lodash'
 import { isEmpty } from 'lodash/fp'
 
+import { UNKNOWN_VESSEL } from '../../../../../domain/entities/vessel/vessel'
+
 import type { MissionActionFormValues } from '../types'
 import type { FormikErrors } from 'formik'
 import type { Promisable } from 'type-fest'
@@ -48,4 +50,16 @@ export function validateBeforeOnChange(
 
     onChange({ ...nextValues, isValid })
   }
+}
+
+export function getVesselName(vesselName: string | undefined) {
+  if (!vesselName) {
+    return 'Aucun navire'
+  }
+
+  if (vesselName === UNKNOWN_VESSEL.vesselName) {
+    return 'Nom inconnu'
+  }
+
+  return vesselName
 }

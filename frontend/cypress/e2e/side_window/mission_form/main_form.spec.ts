@@ -1,6 +1,6 @@
 import { Mission } from '@features/Mission/mission.types'
 
-import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
+import { openSideWindowNewMission } from './utils'
 import { SeaFrontGroup } from '../../../../src/domain/entities/seaFront/constants'
 import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
 import { FAKE_MISSION_WITH_EXTERNAL_ACTIONS, FAKE_MISSION_WITHOUT_EXTERNAL_ACTIONS } from '../../constants'
@@ -76,7 +76,6 @@ context('Side Window > Mission Form > Main Form', () => {
             resources: []
           }
         ],
-        isClosed: false,
         isGeometryComputedFromControls: true,
         isUnderJdp: false,
         missionSource: 'MONITORFISH',
@@ -158,7 +157,6 @@ context('Side Window > Mission Form > Main Form', () => {
               resources: []
             }
           ],
-          isClosed: false,
           isGeometryComputedFromControls: true,
           isUnderJdp: false,
           missionSource: 'MONITORFISH',
@@ -166,7 +164,7 @@ context('Side Window > Mission Form > Main Form', () => {
         })
       })
 
-      cy.get('h1').should('contain.text', 'Missions et contrôles')
+      cy.get('h1').should('contain.text', 'Missions en MED')
     }
   )
 
@@ -198,7 +196,8 @@ context('Side Window > Mission Form > Main Form', () => {
     })
 
     cy.fill('Début de mission', [2023, 2, 1, 12, 34])
-    cy.fill('Fin de mission', [2023, 2, 1, 13, 45])
+    const endDate = getUtcDateInMultipleFormats(customDayjs().utc().add(7, 'day').toISOString())
+    cy.fill('Fin de mission', endDate.utcDateTupleWithTime)
 
     cy.fill('Types de mission', ['Air'])
     cy.fill('Mission sous JDP', true)
@@ -225,7 +224,7 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.fill('CNSP : orientations, observations', 'Une autre note.')
     cy.wait(250)
     cy.fill('Ouvert par', 'Nemo')
-    cy.fill('Clôturé par', 'Doris')
+    cy.fill('Complété par', 'Doris')
 
     cy.wait(500)
 
@@ -266,9 +265,7 @@ context('Side Window > Mission Form > Main Form', () => {
               ]
             }
           ],
-          endDateTimeUtc: '2023-02-01T13:45:00.000Z',
           hasMissionOrder: true,
-          isClosed: false,
           isGeometryComputedFromControls: true,
           isUnderJdp: true,
           missionSource: 'MONITORFISH',
@@ -287,6 +284,8 @@ context('Side Window > Mission Form > Main Form', () => {
 
   it('Should send the expected data to the API when editing an existing mission', () => {
     editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
+    const endDate = customDayjs().utc().add(7, 'day')
+    cy.fill('Fin de mission', getUtcDateInMultipleFormats(endDate.toISOString()).utcDateTupleWithTime)
 
     cy.intercept('POST', '/api/v1/missions/2', {
       body: {
@@ -319,7 +318,6 @@ context('Side Window > Mission Form > Main Form', () => {
         facade: 'MEMN',
         geom: null,
         id: 2,
-        isClosed: false,
         isGeometryComputedFromControls: false,
         missionSource: 'POSEIDON_CNSP',
         missionTypes: ['SEA'],
@@ -333,91 +331,12 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.get('h1').should('contain.text', 'Mission Mer – BGC Lorient - DF 36 Kan An Avel')
   })
 
-  it('Should close a new mission', () => {
-    cy.intercept('DELETE', '/bff/v1/mission_actions/2', {
-      body: {
-        id: 2
-      },
-      statusCode: 200
-    }).as('updateMissionAction')
-    cy.intercept('POST', '/api/v1/missions/1', {
-      body: {
-        id: 1,
-        isClosed: true
-      },
-      statusCode: 201
-    }).as('updateMission')
-    openSideWindowNewMission()
-    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA, false)
-
-    cy.fill('Clôturé par', 'Doris')
-
-    cy.wait(500)
-
-    cy.clickButton('Clôturer')
-
-    cy.waitForLastRequest(
-      '@updateMission',
-      {
-        body: {
-          // We check this prop to be sure all the data is there (this is the last field to be filled)
-          closedBy: 'Doris',
-          isClosed: true,
-          isGeometryComputedFromControls: true
-        }
-      },
-      10
-    )
-      .its('response.statusCode')
-      .should('eq', 201)
-  })
-
-  it('Should close an existing mission', () => {
-    editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
-    cy.intercept('DELETE', '/bff/v1/mission_actions/2', {
-      body: {
-        id: 2
-      },
-      statusCode: 200
-    }).as('deleteMissionAction')
-    cy.intercept('POST', '/api/v1/missions/2', {
-      body: {
-        id: 2
-      },
-      statusCode: 201
-    }).as('updateMission')
-
-    cy.fill('Clôturé par', 'Doris')
-
-    cy.wait('@updateMission')
-
-    cy.clickButton('Supprimer l’action')
-
-    cy.wait('@deleteMissionAction')
-
-    cy.wait(250)
-    cy.clickButton('Clôturer')
-
-    cy.wait('@updateMission').then(interception => {
-      if (!interception.response) {
-        assert.fail('`interception.response` is undefined.')
-      }
-
-      assert.deepInclude(interception.request.body, {
-        // We check this prop to be sure all the data is there (this is the last field to be filled)
-        closedBy: 'Doris',
-        id: 2,
-        isClosed: true
-      })
-    })
-  })
-
   it('Should show the cancellation confirmation dialog when switching to another menu while a draft is dirty', () => {
     editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
 
     cy.clickButton(SideWindowMenuLabel.MISSION_LIST)
 
-    cy.get('h1').should('contain.text', 'Missions et contrôles')
+    cy.get('h1').should('contain.text', 'Missions en MEMN')
 
     editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
 
@@ -437,61 +356,7 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.clickButton(SideWindowMenuLabel.MISSION_LIST)
     cy.clickButton('Quitter sans enregistrer')
 
-    cy.get('h1').should('contain.text', 'Missions et contrôles')
-  })
-
-  it('Should reopen a closed mission', () => {
-    editSideWindowMissionListMissionWithId(6, SeaFrontGroup.MED)
-
-    cy.intercept('POST', '/api/v1/missions/6', {
-      body: {
-        id: 1
-      },
-      statusCode: 200
-    }).as('updateMission')
-
-    cy.clickButton('Rouvrir la mission')
-    cy.wait(200)
-
-    cy.fill('Contact de l’unité 1', 'Bob')
-
-    cy.waitForLastRequest(
-      '@updateMission',
-      {
-        body: {
-          closedBy: 'Cynthia Phillips',
-          controlUnits: [
-            {
-              administration: 'Gendarmerie Maritime',
-              contact: 'Bob',
-              id: 10336,
-              isArchived: false,
-              name: 'BSL Lorient',
-              resources: [
-                {
-                  id: 90,
-                  name: 'Voiture'
-                }
-              ]
-            }
-          ],
-          envActions: [],
-          facade: 'MED',
-          geom: null,
-          id: 6,
-          isClosed: false,
-          isGeometryComputedFromControls: false,
-          missionSource: 'POSEIDON_CNSP',
-          missionTypes: ['AIR'],
-          observationsCacem: 'Toward agency blue now hand. Meet answer someone stand.',
-          observationsCnsp: null,
-          openBy: 'Kevin Torres'
-        }
-      },
-      5
-    )
-      .its('response.statusCode')
-      .should('eq', 200)
+    cy.get('h1').should('contain.text', 'Missions en MEMN')
   })
 
   it('A mission should not be deleted if actions have been created in MonitorEnv', () => {
@@ -555,7 +420,7 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.wait('@deleteMission')
 
-    cy.get('h1').should('contain.text', 'Missions et contrôles')
+    cy.get('h1').should('contain.text', 'Missions en MEMN')
   })
 
   it('Should display an error message When a mission could not be fetched', () => {
@@ -640,6 +505,7 @@ context('Side Window > Mission Form > Main Form', () => {
 
   it('Should update the form When receiving a mission update', () => {
     editSideWindowMissionListMissionWithId(43, SeaFrontGroup.MED)
+
     cy.wait(200)
     cy.intercept('POST', '/api/v1/missions/43', {
       body: {
@@ -676,7 +542,7 @@ context('Side Window > Mission Form > Main Form', () => {
                 }
               ],
               // MODIFIED FIELD
-              endDateTimeUtc: '2024-02-13T09:49:40.350661Z',
+              endDateTimeUtc: '2070-02-13T09:49:40.350661Z',
               envActions: [],
               facade: 'MED',
               geom: {
@@ -712,9 +578,6 @@ context('Side Window > Mission Form > Main Form', () => {
       })
     cy.wait(500)
 
-    // We modify the comment
-    cy.fill('CNSP : orientations, observations', 'Une autre note.')
-
     cy.clickButton('Supprimer l’action')
     // We stub the response as the DELETE request was mocked
     cy.intercept('GET', '/bff/v1/mission_actions?missionId=43', {
@@ -722,11 +585,16 @@ context('Side Window > Mission Form > Main Form', () => {
       statusCode: 200
     })
 
+    // We modify the comment
+    cy.wait(250)
+    cy.fill('CNSP : orientations, observations', '')
+    cy.fill('CNSP : orientations, observations', 'Une autre note.')
+
     cy.waitForLastRequest(
       '@updateMission',
       {
         body: {
-          endDateTimeUtc: '2024-02-13T09:49:40.350661Z',
+          endDateTimeUtc: '2070-02-13T09:49:40.350661Z',
           isUnderJdp: true,
           observationsCnsp: 'Une autre note.'
         }
@@ -795,7 +663,7 @@ context('Side Window > Mission Form > Main Form', () => {
                 }
               ],
               // MODIFIED FIELD
-              endDateTimeUtc: '2024-02-13T09:49:40.350661Z',
+              endDateTimeUtc: '2070-02-13T09:49:40.350661Z',
               envActions: [],
               facade: 'MED',
               geom: {
@@ -831,16 +699,17 @@ context('Side Window > Mission Form > Main Form', () => {
       })
     cy.wait(500)
 
-    // We modify the comment
-    cy.fill('CNSP : orientations, observations', 'Une autre note.')
-
     cy.clickButton('Supprimer l’action')
     // We stub the response as the DELETE request was mocked
     cy.intercept('GET', '/bff/v1/mission_actions?missionId=43', {
       body: [],
       statusCode: 200
     })
-    cy.wait(500)
+
+    // We modify the comment
+    cy.wait(250)
+    cy.fill('CNSP : orientations, observations', '')
+    cy.fill('CNSP : orientations, observations', 'Une autre note.')
 
     cy.window()
       .its('mockEventSources' as any)
@@ -863,7 +732,7 @@ context('Side Window > Mission Form > Main Form', () => {
                   resources: []
                 }
               ],
-              endDateTimeUtc: '2024-02-13T09:49:40.350661Z',
+              endDateTimeUtc: '2070-02-13T09:49:40.350661Z',
               envActions: [],
               facade: 'MED',
               geom: {

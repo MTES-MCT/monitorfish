@@ -11,7 +11,7 @@ import type { MissionActionFormValues, MissionMainFormValues } from '../types'
 export function validateMissionForms(
   mainFormValues: MissionMainFormValues | Mission.Mission,
   actionsFormValues: MissionActionFormValues[] | MissionAction.MissionAction[],
-  isClosureValidation: boolean
+  isCompletionValidation: boolean
 ): [
   boolean,
   {
@@ -31,41 +31,39 @@ export function validateMissionForms(
       case MissionAction.MissionActionType.AIR_CONTROL:
         return {
           ...actionFormValues,
-          // There is no closure validation schema for the air control action form
-          isValid: isClosureValidation
-            ? ActionSchemas.AirControlFormClosureSchema.isValidSync(actionFormValues)
+          isValid: isCompletionValidation
+            ? ActionSchemas.AirControlFormCompletionSchema.isValidSync(actionFormValues)
             : ActionSchemas.AirControlFormLiveSchema.isValidSync(actionFormValues)
         }
 
       case MissionAction.MissionActionType.AIR_SURVEILLANCE:
         return {
           ...actionFormValues,
-          // There is no closure validation schema for the air control action form
-          isValid: isClosureValidation
-            ? ActionSchemas.AirSurveillanceFormClosureSchema.isValidSync(actionFormValues)
+          isValid: isCompletionValidation
+            ? ActionSchemas.AirSurveillanceFormCompletionSchema.isValidSync(actionFormValues)
             : ActionSchemas.AirSurveillanceFormLiveSchema.isValidSync(actionFormValues)
         }
 
       case MissionAction.MissionActionType.LAND_CONTROL:
         return {
           ...actionFormValues,
-          isValid: isClosureValidation
-            ? ActionSchemas.LandControlFormClosureSchema.isValidSync(actionFormValues)
+          isValid: isCompletionValidation
+            ? ActionSchemas.LandControlFormCompletionSchema.isValidSync(actionFormValues)
             : ActionSchemas.LandControlFormLiveSchema.isValidSync(actionFormValues)
         }
 
       case MissionAction.MissionActionType.OBSERVATION:
         return {
           ...actionFormValues,
-          // There is no closure validation schema for observation form
+          // There is no completion validation schema for observation form
           isValid: ActionSchemas.ObservationFormLiveSchema.isValidSync(actionFormValues)
         }
 
       case MissionAction.MissionActionType.SEA_CONTROL:
         return {
           ...actionFormValues,
-          isValid: isClosureValidation
-            ? ActionSchemas.SeaControlFormClosureSchema.isValidSync(actionFormValues)
+          isValid: isCompletionValidation
+            ? ActionSchemas.SeaControlFormCompletionSchema.isValidSync(actionFormValues)
             : ActionSchemas.SeaControlFormLiveSchema.isValidSync(actionFormValues)
         }
 

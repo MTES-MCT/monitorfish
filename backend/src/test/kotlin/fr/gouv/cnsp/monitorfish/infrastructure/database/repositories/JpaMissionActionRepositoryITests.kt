@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
@@ -255,8 +256,9 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
             isDeleted = false,
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
-            closedBy = "XYZ",
+            completedBy = "XYZ",
             isFromPoseidon = false,
+            completion = Completion.TO_COMPLETE,
         )
 
         // When

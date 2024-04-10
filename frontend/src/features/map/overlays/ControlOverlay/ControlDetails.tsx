@@ -1,4 +1,4 @@
-import { Accent, Icon, IconButton, Tag, TagBullet, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, Tag, THEME } from '@mtes-mct/monitor-ui'
 import countries from 'i18n-iso-countries'
 import { useMemo } from 'react'
 import styled from 'styled-components'
@@ -86,18 +86,18 @@ export function ControlDetails({ control, isSelected, overlayPosition }: Control
           <Details>{control.dateTime}</Details>
           <SeizureOrInfractions>
             {!control.hasGearSeized && control.hasSpeciesSeized && (
-              <Tag accent={Accent.PRIMARY} bullet={TagBullet.DISK} bulletColor={THEME.color.maximumRed}>
+              <Tag accent={Accent.PRIMARY} Icon={Icon.CircleFilled} iconColor={THEME.color.maximumRed} withCircleIcon>
                 Appréhension espèce
               </Tag>
             )}
             {control.hasGearSeized && !control.hasSpeciesSeized && (
-              <Tag accent={Accent.PRIMARY} bullet={TagBullet.DISK} bulletColor={THEME.color.maximumRed}>
+              <Tag accent={Accent.PRIMARY} Icon={Icon.CircleFilled} iconColor={THEME.color.maximumRed} withCircleIcon>
                 Appréhension engin
               </Tag>
             )}
             {control.hasSpeciesSeized && control.hasGearSeized && (
               <>
-                <Tag accent={Accent.PRIMARY} bullet={TagBullet.DISK} bulletColor={THEME.color.maximumRed}>
+                <Tag accent={Accent.PRIMARY} Icon={Icon.CircleFilled} iconColor={THEME.color.maximumRed} withCircleIcon>
                   Appréhension engin
                 </Tag>{' '}
                 et 1 autre

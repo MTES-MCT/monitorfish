@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Facade
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
 import io.hypersistence.utils.hibernate.type.array.ListArrayType
+import io.hypersistence.utils.hibernate.type.basic.PostgreSQLEnumType
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import jakarta.persistence.*
 import org.hibernate.annotations.Type
@@ -122,11 +123,15 @@ class MissionActionEntity(
     @Column(name = "is_deleted")
     val isDeleted: Boolean,
     @Column(name = "has_some_gears_seized")
-    var hasSomeGearsSeized: Boolean,
+    val hasSomeGearsSeized: Boolean,
     @Column(name = "has_some_species_seized")
-    var hasSomeSpeciesSeized: Boolean,
-    @Column(name = "closed_by")
-    var closedBy: String? = null,
+    val hasSomeSpeciesSeized: Boolean,
+    @Column(name = "completed_by")
+    val completedBy: String? = null,
+    @Enumerated(EnumType.STRING)
+    @Type(PostgreSQLEnumType::class)
+    @Column(name = "completion", columnDefinition = "mission_action_completion")
+    val completion: Completion,
     @Column(name = "is_administrative_control")
     val isAdministrativeControl: Boolean? = null,
     @Column(name = "is_compliance_with_water_regulations_control")
@@ -189,7 +194,8 @@ class MissionActionEntity(
                 isDeleted = missionAction.isDeleted,
                 hasSomeGearsSeized = missionAction.hasSomeGearsSeized,
                 hasSomeSpeciesSeized = missionAction.hasSomeSpeciesSeized,
-                closedBy = missionAction.closedBy,
+                completedBy = missionAction.completedBy,
+                completion = missionAction.completion,
                 isAdministrativeControl = missionAction.isAdministrativeControl,
                 isComplianceWithWaterRegulationsControl = missionAction.isComplianceWithWaterRegulationsControl,
                 isSafetyEquipmentAndStandardsComplianceControl = missionAction.isSafetyEquipmentAndStandardsComplianceControl,
@@ -264,7 +270,8 @@ class MissionActionEntity(
             isDeleted = isDeleted,
             hasSomeGearsSeized = hasSomeGearsSeized,
             hasSomeSpeciesSeized = hasSomeSpeciesSeized,
-            closedBy = closedBy,
+            completedBy = completedBy,
+            completion = completion,
             isFromPoseidon = isFromPoseidon,
             isAdministrativeControl = isAdministrativeControl,
             isComplianceWithWaterRegulationsControl = isComplianceWithWaterRegulationsControl,

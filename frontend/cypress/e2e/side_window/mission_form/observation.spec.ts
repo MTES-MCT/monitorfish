@@ -13,6 +13,9 @@ context('Side Window > Mission Form > Observation', () => {
   })
 
   it('Should fill the form and send the expected data to the API', () => {
+    cy.getDataCy('action-completion-status').contains('1 champ nécessaire aux statistiques à compléter')
+    cy.getDataCy('action-contains-missing-fields').should('exist')
+
     cy.intercept('POST', '/bff/v1/mission_actions', {
       body: {
         id: 2
@@ -79,44 +82,8 @@ context('Side Window > Mission Form > Observation', () => {
     )
       .its('response.statusCode')
       .should('eq', 201)
-  })
 
-  it('Should only close mission once the form closure validation has passed', () => {
-    const getCloseButton = () => cy.get('button').contains('Clôturer').parent()
-    cy.intercept('POST', '/bff/v1/mission_actions', {
-      body: {
-        id: 2
-      },
-      statusCode: 201
-    }).as('createMissionAction')
-    cy.intercept('PUT', '/bff/v1/mission_actions/2', {
-      body: {
-        id: 2
-      },
-      statusCode: 201
-    }).as('updateMissionAction')
-
-    // -------------------------------------------------------------------------
-    // Form Live Validation
-
-    cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('exist')
-
-    getCloseButton().should('be.disabled')
-
-    // Saisi par
-    cy.fill('Saisi par', 'Gaumont')
-    cy.wait(500)
-
-    // Mission is now valid for saving (but not for closure)
-    cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')
-
-    getCloseButton().should('be.enabled')
-
-    // -------------------------------------------------------------------------
-    // Request
-
-    cy.clickButton('Clôturer')
-
-    cy.get('h1').should('contain.text', 'Missions et contrôles')
+    cy.getDataCy('action-completion-status').contains('Les champs nécessaires aux statistiques sont complétés.')
+    cy.getDataCy('action-all-fields-completed').should('exist')
   })
 })

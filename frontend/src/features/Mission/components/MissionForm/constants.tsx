@@ -6,6 +6,8 @@ import type { MissionActionFormValues } from './types'
 import type { LegacyControlUnit } from '../../../../domain/types/legacyControlUnit'
 import type { Option, Undefine } from '@mtes-mct/monitor-ui'
 
+import CompletionStatus = MissionAction.CompletionStatus
+
 export const INITIAL_MISSION_CONTROL_UNIT: LegacyControlUnit.LegacyControlUnitDraft = {
   administration: undefined,
   contact: undefined,
@@ -18,6 +20,7 @@ export const INITIAL_MISSION_CONTROL_UNIT: LegacyControlUnit.LegacyControlUnitDr
 export const MISSION_ACTION_FORM_VALUES_SKELETON: Undefine<MissionActionFormValues> = {
   actionDatetimeUtc: undefined,
   actionType: undefined,
+  completion: CompletionStatus.TO_COMPLETE,
   controlQualityComments: undefined,
   controlUnits: [],
   emitsAis: undefined,

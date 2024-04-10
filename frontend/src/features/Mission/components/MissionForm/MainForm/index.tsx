@@ -1,4 +1,5 @@
 import { BOOLEAN_AS_OPTIONS } from '@constants/index'
+import { FormHead } from '@features/Mission/components/MissionForm/shared/FormHead'
 import { MISSION_EVENT_UNSYNCHRONIZED_PROPERTIES_IN_FORM } from '@features/Mission/components/MissionForm/sse'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import {
@@ -23,7 +24,6 @@ import { FormikSyncMissionFields } from './FormikSyncMissionFields'
 import { MainFormLiveSchema } from './schemas'
 import { useListenToMissionEventUpdatesById } from '../hooks/useListenToMissionEventUpdatesById'
 import { FormBody, FormBodyInnerWrapper } from '../shared/FormBody'
-import { FormHead } from '../shared/FormHead'
 
 import type { MissionMainFormValues } from '../types'
 import type { Promisable } from 'type-fest'
@@ -117,8 +117,8 @@ function UnmemoizedMainForm({ initialValues, missionId, onChange }: MainFormProp
               </RelatedFieldGroupWrapper>
 
               <InlineFieldGroupWrapper>
-                <FormikTextInput isRequired label="Ouvert par" name="openBy" />
-                <FormikTextInput isRequired label="Clôturé par" name="closedBy" />
+                <FormikTextInput label="Ouvert par" name="openBy" />
+                <FormikTextInput label="Complété par" name="closedBy" />
               </InlineFieldGroupWrapper>
             </CustomFormBodyInnerWrapper>
           </FormBody>

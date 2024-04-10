@@ -799,10 +799,22 @@ expected_loaded_mission_actions_df = pd.merge(
             "is_compliance_with_water_regulations_control": [None] * 10,
             "is_safety_equipment_and_standards_compliance_control": [None] * 10,
             "is_seafarers_control": [None] * 10,
+            "completion": [
+                "TO_COMPLETE",
+                "TO_COMPLETE",
+                "TO_COMPLETE",
+                "TO_COMPLETE",
+                "TO_COMPLETE",
+                "TO_COMPLETE",
+                "TO_COMPLETE",
+                "TO_COMPLETE",
+                "TO_COMPLETE",
+                "TO_COMPLETE",
+            ],
         }
     ),
     on="id",
-).rename(columns={"open_by": "user_trigram"})
+).rename(columns={"open_by": "user_trigram"}).rename(columns={"closed_by": "completed_by"})
 expected_loaded_mission_actions_df[
     "action_datetime_utc"
 ] = expected_loaded_mission_actions_df.action_datetime_utc.map(pytz.utc.localize)

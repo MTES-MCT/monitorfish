@@ -9,9 +9,10 @@ context('Missions overlay', () => {
     cy.get('*[data-cy="mission-overlay"]').contains('BGC LORIENT')
     cy.get('*[data-cy="mission-overlay"]').contains('Mission Air / Terre')
     cy.get('*[data-cy="mission-overlay"]').contains('Aucun contact renseigné')
-    cy.get('*[data-cy="mission-overlay"]').contains('Ouverte par le CACEM')
+    cy.get('*[data-cy="mission-overlay"]').contains('Terminée')
+    cy.get('*[data-cy="mission-overlay"]').contains('À compléter')
     cy.get('*[data-cy="mission-overlay"]').contains('0 contrôle réalisé')
-    cy.get('*[data-cy="mission-overlay"]').contains('Clôturée')
+    cy.get('*[data-cy="mission-overlay"]').contains('Actions CACEM')
 
     cy.get('*[data-cy="mission-overlay-close"]').click()
     cy.get('*[data-cy="mission-overlay"]').should('not.exist')

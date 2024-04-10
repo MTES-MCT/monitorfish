@@ -5,9 +5,9 @@ import { memo, useCallback, useEffect, useRef } from 'react'
 import { missionZoneStyle } from './MissionLayer/styles'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../domain/entities/layers/types'
-import { getMissionFeatureZone } from '../../../domain/entities/mission'
 import { monitorfishMap } from '../../map/monitorfishMap'
 import { useGetFilteredMissionsQuery } from '../components/MissionList/hooks/useGetFilteredMissionsQuery'
+import { getMissionFeatureZone } from '../index'
 
 import type { VectorLayerWithName } from '../../../domain/types/layer'
 

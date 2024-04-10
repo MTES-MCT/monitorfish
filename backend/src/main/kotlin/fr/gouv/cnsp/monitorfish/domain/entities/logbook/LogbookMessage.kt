@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
 import fr.gouv.cnsp.monitorfish.domain.exceptions.EntityConversionException
+import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Gear as LogbookGear
 
@@ -42,6 +43,8 @@ data class LogbookMessage(
     val tripGears: List<LogbookGear>? = emptyList(),
     val tripSegments: List<LogbookTripSegment>? = emptyList(),
 ) {
+    private val logger = LoggerFactory.getLogger(LogbookMessage::class.java)
+
     /**
      * Returns the reference logbook message `reportId` (= the original DAT operation `reportId`).
      */
@@ -109,10 +112,6 @@ data class LogbookMessage(
         }
     }
 
-    fun setAcknowledgeAsSuccessful() {
-        this.acknowledge = Acknowledge(isSuccess = true)
-    }
-
     fun enrichGearPortAndSpecyNames(
         allGears: List<Gear>,
         allPorts: List<Port>,
@@ -161,6 +160,37 @@ data class LogbookMessage(
         }
     }
 
+    fun enrichAknowledgeCorrectionAndDeletion(contextMessages: List<LogbookMessage>) {
+        val referenceLogbookMessage = findReferencedLogbookMessage(contextMessages)
+        val relatedLogbookMessages = filterRelatedLogbookMessages(contextMessages)
+
+        if (operationType == LogbookOperationType.COR) {
+            if (referenceLogbookMessage == null) {
+                logger.warn(
+                    "Original message $referencedReportId corrected by message COR $operationNumber is not found.",
+                )
+            }
+
+            referenceLogbookMessage?.isCorrectedByNewerMessage = true
+            setIsCorrectedByNewerMessage(relatedLogbookMessages)
+        } else if (operationType == LogbookOperationType.RET && !referencedReportId.isNullOrEmpty()) {
+            referenceLogbookMessage?.setAcknowledge(this.copy())
+        } else if (transmissionFormat == LogbookTransmissionFormat.FLUX) {
+            setAcknowledgeAsSuccessful()
+        } else if (
+            software !== null &&
+            software.contains(LogbookSoftware.VISIOCAPTURE.software)
+        ) {
+            setAcknowledgeAsSuccessful()
+        } else if (operationType == LogbookOperationType.DEL && !referencedReportId.isNullOrEmpty()) {
+            referenceLogbookMessage?.isDeleted = true
+        }
+
+        if (software !== null && software.contains(LogbookSoftware.E_SACAPT.software)) {
+            isSentByFailoverSoftware = true
+        }
+    }
+
     private fun enrichAcnkowledge(relatedLogbookMessages: List<LogbookMessage>) {
         if (this.transmissionFormat == LogbookTransmissionFormat.FLUX ||
             software !== null && software.contains(LogbookSoftware.VISIOCAPTURE.software)
@@ -198,6 +228,35 @@ data class LogbookMessage(
                 it.dateTime = maybeLastRetLogbookMessage.reportDateTime
                 it.isSuccess = lastRetMessage.returnStatus == RETReturnErrorCode.SUCCESS.number
             }
+        }
+    }
+
+    private fun filterRelatedLogbookMessages(messages: List<LogbookMessage>): List<LogbookMessage> {
+        return messages.filter {
+            it.messageType == messageType && (
+                (reportId.isNullOrEmpty() && it.referencedReportId == reportId) ||
+                    (referencedReportId.isNullOrEmpty() && it.referencedReportId == referencedReportId)
+                )
+        }
+    }
+
+    private fun findReferencedLogbookMessage(messages: List<LogbookMessage>): LogbookMessage? {
+        return if (!referencedReportId.isNullOrEmpty()) {
+            messages.find { it.reportId == referencedReportId }
+        } else {
+            null
+        }
+    }
+
+    private fun setAcknowledgeAsSuccessful() {
+        this.acknowledge = Acknowledge(isSuccess = true)
+    }
+
+    private fun setIsCorrectedByNewerMessage(relatedMessages: List<LogbookMessage>) {
+        isCorrectedByNewerMessage = relatedMessages.any {
+            operationType == LogbookOperationType.COR &&
+                it.reportDateTime != null &&
+                it.reportDateTime > reportDateTime
         }
     }
 

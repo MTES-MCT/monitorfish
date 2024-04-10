@@ -92,7 +92,8 @@ export function LogbookMessage({ isFirst, logbookMessage }: LogbookMessageCompon
           <Xml />
         )}
 
-        {!logbookMessage.isCorrected &&
+        {!logbookMessage.isConsolidated &&
+          !logbookMessage.isCorrected &&
           (fishingActivitiesShowedOnMap.find(showed => showed.id === logbookMessage.operationNumber) ? (
             <HideActivity
               data-cy="hide-fishing-activity"

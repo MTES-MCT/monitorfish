@@ -2,8 +2,8 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.given
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.ConsolidatedLogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTyped
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
@@ -41,7 +41,7 @@ class GetPriorNotificationsUTests {
         given(logbookReportRepository.findAllPriorNotifications(LogbookReportFilter())).willReturn(
             listOf(
                 PriorNotification(
-                    consolidatedLogbookMessage = ConsolidatedLogbookMessage(
+                    logbookMessageTyped = LogbookMessageTyped(
                         clazz = PNO::class.java,
                         logbookMessage = LogbookMessage(
                             id = 1,
@@ -49,8 +49,7 @@ class GetPriorNotificationsUTests {
                             referencedReportId = null,
                             analyzedByRules = emptyList(),
                             integrationDateTime = ZonedDateTime.now(),
-                            isConsolidated = true,
-                            isCorrected = false,
+                            isCorrectedByNewerMessage = false,
                             isDeleted = false,
                             isEnriched = false,
                             message = PNO(),
@@ -77,16 +76,15 @@ class GetPriorNotificationsUTests {
                 ),
 
                 PriorNotification(
-                    consolidatedLogbookMessage = ConsolidatedLogbookMessage(
+                    logbookMessageTyped = LogbookMessageTyped(
                         clazz = PNO::class.java,
                         logbookMessage = LogbookMessage(
                             id = 1,
-                            reportId = "FAKE_REPORT_ID_2",
-                            referencedReportId = null,
+                            reportId = "FAKE_REPORT_ID_2_COR",
+                            referencedReportId = "FAKE_NONEXISTENT_REPORT_ID_2",
                             analyzedByRules = emptyList(),
                             integrationDateTime = ZonedDateTime.now(),
-                            isConsolidated = true,
-                            isCorrected = true,
+                            isCorrectedByNewerMessage = false,
                             isDeleted = false,
                             isEnriched = false,
                             message = PNO(),
@@ -125,11 +123,11 @@ class GetPriorNotificationsUTests {
 
         // Then
         Assertions.assertThat(result).hasSize(2)
-        Assertions.assertThat(result[0].consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(
+        Assertions.assertThat(result[0].logbookMessageTyped.logbookMessage.reportId).isEqualTo(
             "FAKE_REPORT_ID_1",
         )
-        Assertions.assertThat(result[1].consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo(
-            "FAKE_REPORT_ID_2",
+        Assertions.assertThat(result[1].logbookMessageTyped.logbookMessage.reportId).isEqualTo(
+            "FAKE_REPORT_ID_2_COR",
         )
     }
 }

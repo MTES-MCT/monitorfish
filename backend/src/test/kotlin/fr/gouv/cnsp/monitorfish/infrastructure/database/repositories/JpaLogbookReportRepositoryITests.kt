@@ -683,7 +683,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(
             result.all {
-                listOf("FRSML", "FRVNE").contains(it.consolidatedLogbookMessage.typedMessage.port)
+                listOf("FRSML", "FRVNE").contains(it.logbookMessageTyped.typedMessage.port)
             },
         ).isEqualTo(true)
     }
@@ -725,7 +725,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(
             result.all {
-                it.consolidatedLogbookMessage.typedMessage.catchOnboard
+                it.logbookMessageTyped.typedMessage.catchOnboard
                     .any { catch -> listOf("COD", "HKE").contains(catch.species) }
             },
         ).isEqualTo(true)
@@ -744,7 +744,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(
             result.all {
-                it.consolidatedLogbookMessage.typedMessage.pnoTypes
+                it.logbookMessageTyped.typedMessage.pnoTypes
                     .any { type -> listOf("Préavis type A", "Préavis type C").contains(type.name) }
             },
         ).isEqualTo(true)
@@ -763,7 +763,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(
             result.all {
-                it.consolidatedLogbookMessage.logbookMessage.tripSegments!!
+                it.logbookMessageTyped.logbookMessage.tripSegments!!
                     .any { tripSegment ->
                         listOf("SWW06", "NWW03").contains(
                             tripSegment.code,
@@ -786,7 +786,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(
             result.all {
-                it.consolidatedLogbookMessage.logbookMessage.tripGears!!
+                it.logbookMessageTyped.logbookMessage.tripGears!!
                     .any { tripGear -> listOf("OTT", "TB").contains(tripGear.gear) }
             },
         ).isEqualTo(true)
@@ -805,7 +805,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(firstResult).hasSizeGreaterThan(0)
         assertThat(
             firstResult.all {
-                it.consolidatedLogbookMessage.typedMessage.predictedArrivalDatetimeUtc!!
+                it.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc!!
                     .isAfter(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
             },
         ).isEqualTo(true)
@@ -820,7 +820,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(secondResult).hasSizeGreaterThan(0)
         assertThat(
             secondResult.all {
-                it.consolidatedLogbookMessage.typedMessage.predictedArrivalDatetimeUtc!!
+                it.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc!!
                     .isBefore(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
             },
         ).isEqualTo(true)
@@ -843,19 +843,19 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(
             result.all {
-                it.consolidatedLogbookMessage.typedMessage.pnoTypes
+                it.logbookMessageTyped.typedMessage.pnoTypes
                     .any { type -> listOf("Préavis type A", "Préavis type C").contains(type.name) }
             },
         ).isEqualTo(true)
         assertThat(
             result.all {
-                it.consolidatedLogbookMessage.logbookMessage.tripGears!!
+                it.logbookMessageTyped.logbookMessage.tripGears!!
                     .any { tripGear -> listOf("OTT", "TB").contains(tripGear.gear) }
             },
         ).isEqualTo(true)
         assertThat(
             result.all {
-                it.consolidatedLogbookMessage.typedMessage.predictedArrivalDatetimeUtc!!
+                it.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc!!
                     .isAfter(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
             },
         ).isEqualTo(true)

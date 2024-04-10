@@ -24,7 +24,7 @@ interface DBLogbookReportRepository :
 
                 UNION
 
-                -- Get the logbook report corrections which may be used as base for the consolidated report
+                -- Get the logbook report corrections which may be used as base for the "final" report
                 SELECT report_id
                 FROM logbook_reports
                 WHERE referenced_report_id = ?1 AND log_type = 'PNO' AND operation_type = 'COR' AND enriched = TRUE

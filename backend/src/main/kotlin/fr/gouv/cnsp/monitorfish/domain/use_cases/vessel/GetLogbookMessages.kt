@@ -76,7 +76,7 @@ class GetLogbookMessages(
                     )
                 }
 
-                referenceLogbookMessage?.isCorrected = true
+                referenceLogbookMessage?.isCorrectedByNewerMessage = true
             } else if (logbookMessage.operationType == LogbookOperationType.RET && !logbookMessage.referencedReportId.isNullOrEmpty()) {
                 referenceLogbookMessage?.setAcknowledge(logbookMessage)
             } else if (logbookMessage.transmissionFormat == LogbookTransmissionFormat.FLUX) {

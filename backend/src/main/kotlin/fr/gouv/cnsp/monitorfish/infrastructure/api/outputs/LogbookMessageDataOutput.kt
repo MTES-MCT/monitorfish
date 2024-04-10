@@ -24,9 +24,8 @@ data class LogbookMessageDataOutput(
     var rawMessage: String?,
 
     var acknowledge: Acknowledge?,
-    val isConsolidated: Boolean,
+    var isCorrectedByNewerMessage: Boolean,
     var isDeleted: Boolean,
-    var isCorrected: Boolean,
     val isSentByFailoverSoftware: Boolean,
     val message: LogbookMessageValue?,
     val messageType: String?,
@@ -61,8 +60,7 @@ data class LogbookMessageDataOutput(
                 rawMessage = logbookMessage.rawMessage,
 
                 acknowledge = logbookMessage.acknowledge,
-                isConsolidated = logbookMessage.isConsolidated,
-                isCorrected = logbookMessage.isCorrected,
+                isCorrectedByNewerMessage = logbookMessage.isCorrectedByNewerMessage,
                 isDeleted = logbookMessage.isDeleted,
                 isSentByFailoverSoftware = logbookMessage.isSentByFailoverSoftware,
                 message = logbookMessage.message,

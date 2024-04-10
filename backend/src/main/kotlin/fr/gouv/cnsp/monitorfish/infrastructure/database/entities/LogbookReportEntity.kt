@@ -149,13 +149,13 @@ data class LogbookReportEntity(
     fun toPriorNotification(mapper: ObjectMapper, relatedModels: List<LogbookReportEntity>): PriorNotification {
         val referenceLogbookMessage = toLogbookMessage(mapper)
         val relatedLogbookMessages = relatedModels.map { it.toLogbookMessage(mapper) }
-        val consolidatedLogbookMessage = referenceLogbookMessage
-            .toConsolidatedLogbookMessage(relatedLogbookMessages, PNO::class.java)
+        val enrichedLogbookMessageTyped = referenceLogbookMessage
+            .toEnrichedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
         // Default to UNKNOWN vessel when null or not found
         val vessel = vessel?.toVessel() ?: Vessel(id = -1, flagState = CountryCode.UNDEFINED)
 
         return PriorNotification(
-            consolidatedLogbookMessage = consolidatedLogbookMessage,
+            logbookMessageTyped = enrichedLogbookMessageTyped,
             vessel = vessel,
             vesselRiskFactor = vesselRiskFactor?.toVesselRiskFactor(mapper),
         )

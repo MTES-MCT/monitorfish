@@ -23,11 +23,11 @@ class GetPriorNotifications(
 
         val priorNotificationsWithoutReportingsCount = logbookReportRepository.findAllPriorNotifications(filter)
             .map { priorNotification ->
-                priorNotification.consolidatedLogbookMessage.logbookMessage
+                priorNotification.logbookMessageTyped.logbookMessage
                     .enrichGearPortAndSpecyNames(allGears, allPorts, allSpecies)
 
                 val port = try {
-                    priorNotification.consolidatedLogbookMessage.typedMessage.port?.let { portLocode ->
+                    priorNotification.logbookMessageTyped.typedMessage.port?.let { portLocode ->
                         allPorts.find { it.locode == portLocode }
                     }
                 } catch (e: CodeNotFoundException) {
@@ -42,7 +42,7 @@ class GetPriorNotifications(
 
         val priorNotifications = enrichPriorNotificationsWithReportingCount(priorNotificationsWithoutReportingsCount)
 
-        return priorNotifications.filter { !it.consolidatedLogbookMessage.logbookMessage.isDeleted }
+        return priorNotifications.filter { it.logbookMessageTyped.logbookMessage.isDeleted != true }
     }
 
     private fun enrichPriorNotificationsWithReportingCount(

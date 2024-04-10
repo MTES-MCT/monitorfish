@@ -119,7 +119,7 @@ export function LogbookMessages({ messageTypeFilter, navigation }: LogbookMessag
       </CustomDatesShowedInfoWithMargin>
       {filteredAndSortedLogbookMessages.length ? (
         filteredAndSortedLogbookMessages.map((message, index) => (
-          <LogbookMessage key={message.reportId} isFirst={index === 0} logbookMessage={message} />
+          <LogbookMessage key={message.reportId} isFirst={index === 0} logbookMessage={message} withMapControls />
         ))
       ) : (
         <NoMessage>Aucun message reçu</NoMessage>

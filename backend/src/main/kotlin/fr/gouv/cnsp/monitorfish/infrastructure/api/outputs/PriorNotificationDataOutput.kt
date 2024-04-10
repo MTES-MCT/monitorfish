@@ -1,9 +1,11 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class PriorNotificationDataOutput(
-    /** Logbook report `reportId`. */
+    /** Reference logbook message (report) `reportId`. */
     val id: String,
     val expectedArrivalDate: String?,
     val expectedLandingDate: String?,
@@ -34,12 +36,17 @@ class PriorNotificationDataOutput(
     val vesselRiskFactorDetectability: Double?,
 ) {
     companion object {
+        val logger: Logger = LoggerFactory.getLogger(PriorNotificationDataOutput::class.java)
+
         fun fromPriorNotification(priorNotification: PriorNotification): PriorNotificationDataOutput? {
-            val logbookMessage = priorNotification.consolidatedLogbookMessage.logbookMessage
-            if (logbookMessage.reportId == null) {
+            val logbookMessage = priorNotification.logbookMessageTyped.logbookMessage
+            val referenceReportId = logbookMessage.getReferenceReportId()
+            if (referenceReportId == null) {
+                logger.warn("Prior notification has neither `reportId` nor `referencedReportId`: $priorNotification.")
+
                 return null
             }
-            val message = priorNotification.consolidatedLogbookMessage.typedMessage
+            val message = priorNotification.logbookMessageTyped.typedMessage
 
             val onBoardCatches = message.catchOnboard.map { LogbookMessageCatchDataOutput.fromCatch(it) }
             val tripGears = logbookMessage.tripGears?.mapNotNull {
@@ -51,7 +58,7 @@ class PriorNotificationDataOutput(
             val types = message.pnoTypes.map { PriorNotificationTypeDataOutput.fromPriorNotificationType(it) }
 
             return PriorNotificationDataOutput(
-                id = logbookMessage.reportId,
+                id = referenceReportId,
                 expectedArrivalDate = message.predictedArrivalDatetimeUtc?.toString(),
                 expectedLandingDate = message.predictedLandingDatetimeUtc?.toString(),
                 hasVesselRiskFactorSegments = priorNotification.vesselRiskFactor?.segments?.isNotEmpty(),

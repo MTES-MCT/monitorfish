@@ -27,13 +27,13 @@ class GetPriorNotification(
         val priorNotificationWithoutReportingsCount = logbookReportRepository
             .findPriorNotificationByReportId(logbookMessageReportId)
             .let { priorNotification ->
-                logger.info("Prior notification found: ${priorNotification.consolidatedLogbookMessage.logbookMessage}")
+                logger.info("Prior notification found: ${priorNotification.logbookMessageTyped.logbookMessage}")
 
-                priorNotification.consolidatedLogbookMessage.logbookMessage
+                priorNotification.logbookMessageTyped.logbookMessage
                     .enrichGearPortAndSpecyNames(allGears, allPorts, allSpecies)
 
                 val port = try {
-                    priorNotification.consolidatedLogbookMessage.typedMessage.port?.let { portLocode ->
+                    priorNotification.logbookMessageTyped.typedMessage.port?.let { portLocode ->
                         allPorts.find { it.locode == portLocode }
                     }
                 } catch (e: CodeNotFoundException) {

@@ -29,7 +29,7 @@ export function ButtonsGroupRow({ priorNotification }: ButtonsGroupRowProps) {
       districtCode: null,
       externalReferenceNumber: priorNotification.vesselExternalReferenceNumber ?? null,
       // TODO Check that.
-      flagState: priorNotification.vesselFlagCountryCode ?? 'X',
+      flagState: priorNotification.vesselFlagCountryCode ?? 'UNDEFINED',
       internalReferenceNumber: priorNotification.vesselInternalReferenceNumber ?? null,
       ircs: priorNotification.vesselIrcs ?? null,
       mmsi: priorNotification.vesselMmsi ?? null,

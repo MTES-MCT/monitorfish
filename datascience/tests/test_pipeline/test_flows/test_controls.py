@@ -799,6 +799,18 @@ expected_loaded_mission_actions_df = pd.merge(
             "is_compliance_with_water_regulations_control": [None] * 10,
             "is_safety_equipment_and_standards_compliance_control": [None] * 10,
             "is_seafarers_control": [None] * 10,
+            "completion": [
+                "TO_COMPLETE",
+                "TO_COMPLETE",
+                "TO_COMPLETE",
+                "TO_COMPLETE",
+                "TO_COMPLETE",
+                "TO_COMPLETE",
+                "TO_COMPLETE",
+                "TO_COMPLETE",
+                "TO_COMPLETE",
+                "TO_COMPLETE",
+            ],
         }
     ),
     on="id",

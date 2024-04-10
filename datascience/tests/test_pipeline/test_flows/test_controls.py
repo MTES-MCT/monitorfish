@@ -273,7 +273,7 @@ controls_df = pd.DataFrame(
             "ABC",
             "ABC",
         ],
-        "completed_by": [
+        "closed_by": [
             "DEF",
             "DEF",
             "DEF",
@@ -313,7 +313,7 @@ unchanged_columns = [
     "seizure_and_diversion_comments",
     "other_comments",
     "open_by",
-    "completed_by",
+    "closed_by",
 ]
 
 expected_loaded_mission_actions_df = pd.merge(
@@ -802,7 +802,7 @@ expected_loaded_mission_actions_df = pd.merge(
         }
     ),
     on="id",
-).rename(columns={"open_by": "user_trigram"})
+).rename(columns={"open_by": "user_trigram"}).rename(columns={"closed_by": "completed_by"})
 expected_loaded_mission_actions_df[
     "action_datetime_utc"
 ] = expected_loaded_mission_actions_df.action_datetime_utc.map(pytz.utc.localize)

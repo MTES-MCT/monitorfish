@@ -50,6 +50,10 @@ check-clean-archi:
 update-test-data:
 	cd frontend && node ./scripts/generate_test_data_seeds.mjs
 
+dev-restore-db:
+	@export CONFIG_FILE_PATH=$$(pwd)/infra/remote/backup/pg_backup.config MONITORFISH_BACKUPS_FOLDER=$$(pwd)/.backups/; \
+		./infra/remote/backup/pg_restore.sh -t "$(TAG)"
+
 ################################################################################
 # Testing
 

@@ -47,7 +47,7 @@ class GetLogbookMessages(
                 }
 
                 if (it.operationType == LogbookOperationType.DAT || it.operationType == LogbookOperationType.COR) {
-                    it.generateGearPortAndSpecyNames(allGears, allPorts, allSpecies)
+                    it.enrichGearPortAndSpecyNames(allGears, allPorts, allSpecies)
                 }
 
                 it

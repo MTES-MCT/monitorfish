@@ -598,7 +598,7 @@ def make_missions_actions_and_missions_control_units(
         "facade",
         "mission_order",
         "mission_types",
-        "completed_by",
+        "closed_by",
     ]
 
     missions = controls[missions_columns].copy(deep=True)

@@ -1,4 +1,4 @@
-import { Accent, Button, Tag, TagGroup, THEME, Icon } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Icon, Tag, TagGroup, THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 

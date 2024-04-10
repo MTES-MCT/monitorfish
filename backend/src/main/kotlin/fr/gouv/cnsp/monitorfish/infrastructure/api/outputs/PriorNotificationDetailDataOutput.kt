@@ -19,7 +19,7 @@ class PriorNotificationDetailDataOutput(
 
             return PriorNotificationDetailDataOutput(
                 id = logbookMessage.reportId,
-                isLessThanTwelveMetersVessel = priorNotification.vessel.getIsLessThanTwelveMetersVessel(),
+                isLessThanTwelveMetersVessel = priorNotification.vessel.isLessThanTwelveMetersVessel(),
                 logbookMessage = logbookMessage,
             )
         }

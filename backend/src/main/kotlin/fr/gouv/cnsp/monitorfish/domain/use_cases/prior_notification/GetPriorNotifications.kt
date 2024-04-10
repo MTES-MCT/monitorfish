@@ -24,7 +24,7 @@ class GetPriorNotifications(
         val priorNotificationsWithoutReportingsCount = logbookReportRepository.findAllPriorNotifications(filter)
             .map { priorNotification ->
                 priorNotification.consolidatedLogbookMessage.logbookMessage
-                    .generateGearPortAndSpecyNames(allGears, allPorts, allSpecies)
+                    .enrichGearPortAndSpecyNames(allGears, allPorts, allSpecies)
 
                 val port = try {
                     priorNotification.consolidatedLogbookMessage.typedMessage.port?.let { portLocode ->

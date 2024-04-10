@@ -30,7 +30,7 @@ class GetPriorNotification(
                 logger.info("Prior notification found: ${priorNotification.consolidatedLogbookMessage.logbookMessage}")
 
                 priorNotification.consolidatedLogbookMessage.logbookMessage
-                    .generateGearPortAndSpecyNames(allGears, allPorts, allSpecies)
+                    .enrichGearPortAndSpecyNames(allGears, allPorts, allSpecies)
 
                 val port = try {
                     priorNotification.consolidatedLogbookMessage.typedMessage.port?.let { portLocode ->

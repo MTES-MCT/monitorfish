@@ -1,10 +1,12 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.logbook
 
+import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
 import fr.gouv.cnsp.monitorfish.domain.exceptions.EntityConversionException
 import java.time.ZonedDateTime
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Gear as LogbookGear
 
 data class LogbookMessage(
     val id: Long,
@@ -38,7 +40,7 @@ data class LogbookMessage(
     val message: LogbookMessageValue? = null,
     val messageType: String? = null,
     val operationType: LogbookOperationType,
-    val tripGears: List<Gear>? = emptyList(),
+    val tripGears: List<LogbookGear>? = emptyList(),
     val tripSegments: List<LogbookTripSegment>? = emptyList(),
 ) {
     fun <T : LogbookMessageValue> toConsolidatedLogbookMessage(
@@ -83,44 +85,6 @@ data class LogbookMessage(
         )
     }
 
-    private fun consolidateAcknowledge(relatedLogbookMessages: List<LogbookMessage>) {
-        if (this.transmissionFormat == LogbookTransmissionFormat.FLUX ||
-            software !== null && software.contains(LogbookSoftware.VISIOCAPTURE.software)
-        ) {
-            this.setAcknowledgeAsSuccessful()
-
-            return
-        }
-
-        val historycallyOrderedRetLogbookMessages = relatedLogbookMessages
-            .filter { it.operationType == LogbookOperationType.RET && it.referencedReportId == reportId }
-            .sortedBy { it.reportDateTime }
-
-        val maybeLastSuccessfulRetLogbookMessage = historycallyOrderedRetLogbookMessages.lastOrNull {
-            val message = it.message as Acknowledge
-
-            message.returnStatus == RETReturnErrorCode.SUCCESS.number
-        }
-        if (maybeLastSuccessfulRetLogbookMessage != null) {
-            val lastSucessfulRetMessage = maybeLastSuccessfulRetLogbookMessage.message as Acknowledge
-            this.acknowledge = lastSucessfulRetMessage.also {
-                it.dateTime = maybeLastSuccessfulRetLogbookMessage.reportDateTime
-                it.isSuccess = true
-            }
-
-            return
-        }
-
-        val maybeLastRetLogbookMessage = historycallyOrderedRetLogbookMessages.lastOrNull()
-        if (maybeLastRetLogbookMessage != null) {
-            val lastRetMessage = maybeLastRetLogbookMessage.message as Acknowledge
-            this.acknowledge = lastRetMessage.also {
-                it.dateTime = maybeLastRetLogbookMessage.reportDateTime
-                it.isSuccess = lastRetMessage.returnStatus == RETReturnErrorCode.SUCCESS.number
-            }
-        }
-    }
-
     fun setAcknowledge(newLogbookMessageAcknowledgement: LogbookMessage) {
         val currentAcknowledgement = this.acknowledge
         val newAcknowledgement = newLogbookMessageAcknowledgement.message as Acknowledge
@@ -152,8 +116,8 @@ data class LogbookMessage(
         this.acknowledge = Acknowledge(isSuccess = true)
     }
 
-    fun generateGearPortAndSpecyNames(
-        allGears: List<fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear>,
+    fun enrichGearPortAndSpecyNames(
+        allGears: List<Gear>,
         allPorts: List<Port>,
         allSpecies: List<Species>,
     ) {
@@ -196,6 +160,44 @@ data class LogbookMessage(
 
             LogbookMessageTypeMapping.RTP.name -> {
                 setNamesFromCodes(message as RTP, allGears, allPorts)
+            }
+        }
+    }
+
+    private fun consolidateAcknowledge(relatedLogbookMessages: List<LogbookMessage>) {
+        if (this.transmissionFormat == LogbookTransmissionFormat.FLUX ||
+            software !== null && software.contains(LogbookSoftware.VISIOCAPTURE.software)
+        ) {
+            this.setAcknowledgeAsSuccessful()
+
+            return
+        }
+
+        val historycallyOrderedRetLogbookMessages = relatedLogbookMessages
+            .filter { it.operationType == LogbookOperationType.RET && it.referencedReportId == reportId }
+            .sortedBy { it.reportDateTime }
+
+        val maybeLastSuccessfulRetLogbookMessage = historycallyOrderedRetLogbookMessages.lastOrNull {
+            val message = it.message as Acknowledge
+
+            message.returnStatus == RETReturnErrorCode.SUCCESS.number
+        }
+        if (maybeLastSuccessfulRetLogbookMessage != null) {
+            val lastSucessfulRetMessage = maybeLastSuccessfulRetLogbookMessage.message as Acknowledge
+            this.acknowledge = lastSucessfulRetMessage.also {
+                it.dateTime = maybeLastSuccessfulRetLogbookMessage.reportDateTime
+                it.isSuccess = true
+            }
+
+            return
+        }
+
+        val maybeLastRetLogbookMessage = historycallyOrderedRetLogbookMessages.lastOrNull()
+        if (maybeLastRetLogbookMessage != null) {
+            val lastRetMessage = maybeLastRetLogbookMessage.message as Acknowledge
+            this.acknowledge = lastRetMessage.also {
+                it.dateTime = maybeLastRetLogbookMessage.reportDateTime
+                it.isSuccess = lastRetMessage.returnStatus == RETReturnErrorCode.SUCCESS.number
             }
         }
     }
@@ -248,7 +250,7 @@ data class LogbookMessage(
 
     private fun setNamesFromCodes(
         message: FAR,
-        allGears: List<fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear>,
+        allGears: List<Gear>,
         allSpecies: List<Species>,
     ) {
         message.hauls.forEach { haul ->
@@ -272,7 +274,7 @@ data class LogbookMessage(
 
     private fun setNamesFromCodes(
         message: DEP,
-        allGears: List<fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear>,
+        allGears: List<Gear>,
         allPorts: List<Port>,
         allSpecies: List<Species>,
     ) {
@@ -327,7 +329,7 @@ data class LogbookMessage(
 
     private fun setNamesFromCodes(
         message: RTP,
-        allGears: List<fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear>,
+        allGears: List<Gear>,
         allPorts: List<Port>,
     ) {
         message.port?.let { portLocode ->
@@ -350,9 +352,9 @@ data class LogbookMessage(
     }
 
     private fun addGearName(
-        gear: Gear,
+        gear: LogbookGear,
         gearCode: String,
-        allGears: List<fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear>,
+        allGears: List<Gear>,
     ) {
         gear.gearName = allGears.find { it.code == gearCode }?.name
     }

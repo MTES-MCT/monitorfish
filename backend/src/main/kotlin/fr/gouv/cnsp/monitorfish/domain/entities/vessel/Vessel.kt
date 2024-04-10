@@ -41,7 +41,7 @@ data class Vessel(
     val beaconNumber: String? = null,
     val underCharter: Boolean? = null,
 ) {
-    fun getIsLessThanTwelveMetersVessel(): Boolean {
+    fun isLessThanTwelveMetersVessel(): Boolean {
         return length?.let { it < 12.0 } ?: false
     }
 

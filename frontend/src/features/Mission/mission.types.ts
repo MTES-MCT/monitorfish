@@ -46,10 +46,6 @@ export namespace Mission {
     POSEIDON_CACEM = 'CACEM (Poseidon)',
     POSEIDON_CNSP = 'CNSP (Poseidon)'
   }
-  export enum MissionSourceLabelWithoutPoseidon {
-    MONITORENV = 'CACEM',
-    MONITORFISH = 'CNSP'
-  }
 
   /* eslint-disable typescript-sort-keys/string-enum */
   export enum MissionStatus {
@@ -104,9 +100,8 @@ export namespace Mission {
     isSeaMission: number
     // A 0 ou 1 number is required for WebGL to understand boolean
     isUpcoming: number
-    missionCompletion: MissionAction.FrontCompletionStatus
+    missionCompletion: MissionAction.FrontCompletionStatus | undefined
     missionId: number
-    missionSource: MissionSource
     missionStatus: MissionStatus | undefined
     missionTypes: MissionType[]
     numberOfControls: number

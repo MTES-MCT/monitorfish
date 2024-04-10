@@ -224,7 +224,7 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.fill('CNSP : orientations, observations', 'Une autre note.')
     cy.wait(250)
     cy.fill('Ouvert par', 'Nemo')
-    cy.fill('Clôturé par', 'Doris')
+    cy.fill('Complété par', 'Doris')
 
     cy.wait(500)
 

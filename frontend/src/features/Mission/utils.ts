@@ -65,7 +65,7 @@ export function getMissionCompletionStatus(
 export function getMissionCompletionFrontStatus(
   mission: Partial<MissionMainFormValues> | Mission.Mission | undefined,
   actionsCompletion: (CompletionStatus | undefined)[] | undefined
-): FrontCompletionStatus {
+): FrontCompletionStatus | undefined {
   const missionCompletion = getMissionCompletionStatus(mission, actionsCompletion)
 
   if (!mission) {
@@ -90,5 +90,5 @@ export function getMissionCompletionFrontStatus(
     return FrontCompletionStatus.TO_COMPLETE_MISSION_ENDED
   }
 
-  return FrontCompletionStatus.TO_COMPLETE
+  return undefined
 }

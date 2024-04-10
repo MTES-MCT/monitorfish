@@ -174,7 +174,7 @@ export function MissionList() {
                       </TableBodyCell>
                       <TableBodyCell $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[7]?.fixedWidth}>
                         <CompletionStatusLabel
-                          completion={augmentedMission.$labelled.completion as FrontCompletionStatus}
+                          completion={augmentedMission.$labelled.completion as FrontCompletionStatus | undefined}
                         />
                       </TableBodyCell>
                       <TableBodyCell

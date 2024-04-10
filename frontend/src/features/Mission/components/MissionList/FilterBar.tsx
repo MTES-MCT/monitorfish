@@ -186,7 +186,6 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
           ignoredFilterKeys={[
             MissionFilterType.CUSTOM_DATE_RANGE,
             MissionFilterType.DATE_RANGE,
-            MissionFilterType.SOURCE,
             MissionFilterType.WITH_ACTIONS
           ]}
         >

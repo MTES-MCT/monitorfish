@@ -5,9 +5,13 @@ import FrontCompletionStatus = MissionAction.FrontCompletionStatus
 import FrontCompletionStatusLabel = MissionAction.FrontCompletionStatusLabel
 
 type CompletionStatusTagProps = {
-  completion: FrontCompletionStatus
+  completion: FrontCompletionStatus | undefined
 }
 export function CompletionStatusTag({ completion }: CompletionStatusTagProps) {
+  if (!completion) {
+    return null
+  }
+
   switch (completion) {
     case FrontCompletionStatus.COMPLETED:
       return (

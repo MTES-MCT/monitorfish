@@ -540,7 +540,7 @@ class LogbookMessageUTests {
     }
 
     @Test
-    fun `setAcknowledge should update to a new successful acknowledgment when current is unsuccesful, whenever it happened`() {
+    fun `setAcknowledge should update to a new acknowledgment when it's a SUCCESSFUL one while the current is a FAILED one, whenever it happened`() {
         // Given
         val firstLogbookMessage = getFakeLogbookMessage(
             LogbookOperationType.DAT,
@@ -593,7 +593,54 @@ class LogbookMessageUTests {
     }
 
     @Test
-    fun `setAcknowledge should only update to a new acknowledgement when it's more recent than the current one (but is not a positive success switch)`() {
+    fun `setAcknowledge should update to a new acknowledgement when it's more recent FAILED one than the current FAILED one`() {
+        // Given
+        val logbookMessage = getFakeLogbookMessage(
+            LogbookOperationType.DAT,
+            ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC),
+        ).copy(
+            acknowledge = Acknowledge(
+                isSuccess = false,
+                dateTime = ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC),
+                returnStatus = "001",
+            ),
+        )
+        val firstNewAcknowledgeMessage = getFakeLogbookMessage(
+            LogbookOperationType.RET,
+            ZonedDateTime.of(2024, 1, 1, 0, 0, 3, 0, ZoneOffset.UTC),
+            logbookMessage.reportId,
+            Acknowledge(returnStatus = "002"),
+        )
+
+        // When
+        logbookMessage.setAcknowledge(firstNewAcknowledgeMessage)
+
+        // Then
+        assertThat(logbookMessage.acknowledge?.isSuccess).isFalse()
+        assertThat(logbookMessage.acknowledge?.dateTime)
+            .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 3, 0, ZoneOffset.UTC))
+        assertThat(logbookMessage.acknowledge?.returnStatus).isEqualTo("002")
+
+        // Given
+        val secondNewAcknowledgeMessage = getFakeLogbookMessage(
+            LogbookOperationType.RET,
+            ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC),
+            logbookMessage.reportId,
+            Acknowledge(returnStatus = "001"),
+        )
+
+        // When
+        logbookMessage.setAcknowledge(secondNewAcknowledgeMessage)
+
+        // Then
+        assertThat(logbookMessage.acknowledge?.isSuccess).isFalse()
+        assertThat(logbookMessage.acknowledge?.dateTime)
+            .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 3, 0, ZoneOffset.UTC))
+        assertThat(logbookMessage.acknowledge?.returnStatus).isEqualTo("002")
+    }
+
+    @Test
+    fun `setAcknowledge should NOT update to a new acknowledgement when it's more recent SUCCESSFUL one than the current SUCCESSFUL one`() {
         // Given
         val logbookMessage = getFakeLogbookMessage(
             LogbookOperationType.DAT,
@@ -602,25 +649,10 @@ class LogbookMessageUTests {
             acknowledge = Acknowledge(
                 isSuccess = true,
                 dateTime = ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC),
+                returnStatus = "000",
             ),
         )
-        val firstNewAcknowledgeMessage = getFakeLogbookMessage(
-            LogbookOperationType.RET,
-            ZonedDateTime.of(2024, 1, 1, 0, 0, 3, 0, ZoneOffset.UTC),
-            logbookMessage.reportId,
-            Acknowledge(returnStatus = "000"),
-        )
-
-        // When
-        logbookMessage.setAcknowledge(firstNewAcknowledgeMessage)
-
-        // Then
-        assertThat(logbookMessage.acknowledge?.isSuccess).isTrue()
-        assertThat(logbookMessage.acknowledge?.dateTime)
-            .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 3, 0, ZoneOffset.UTC))
-
-        // Given
-        val secondNewAcknowledgeMessage = getFakeLogbookMessage(
+        val newAcknowledgeMessage = getFakeLogbookMessage(
             LogbookOperationType.RET,
             ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC),
             logbookMessage.reportId,
@@ -628,11 +660,12 @@ class LogbookMessageUTests {
         )
 
         // When
-        logbookMessage.setAcknowledge(secondNewAcknowledgeMessage)
+        logbookMessage.setAcknowledge(newAcknowledgeMessage)
 
         // Then
         assertThat(logbookMessage.acknowledge?.isSuccess).isTrue()
         assertThat(logbookMessage.acknowledge?.dateTime)
-            .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 3, 0, ZoneOffset.UTC))
+            .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC))
+        assertThat(logbookMessage.acknowledge?.returnStatus).isEqualTo("000")
     }
 }

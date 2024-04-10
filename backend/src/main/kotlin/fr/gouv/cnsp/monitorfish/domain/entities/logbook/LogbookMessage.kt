@@ -58,8 +58,8 @@ data class LogbookMessage(
             )
         }
 
-        val historicallyOrderedRelatedLogbookMessages = relatedLogbookMessages.sortedBy { it.reportDateTime }
-        val maybeLastLogbookMessageCorrection = historicallyOrderedRelatedLogbookMessages
+        val historicallySortedRelatedLogbookMessages = relatedLogbookMessages.sortedBy { it.reportDateTime }
+        val maybeLastLogbookMessageCorrection = historicallySortedRelatedLogbookMessages
             .lastOrNull { it.operationType == LogbookOperationType.COR }
 
         val logbookMessageBase = maybeLastLogbookMessageCorrection ?: this
@@ -76,7 +76,7 @@ data class LogbookMessage(
             referencedReportId = null,
             isConsolidated = true,
             isCorrected = logbookMessageBase.operationType == LogbookOperationType.COR,
-            isDeleted = historicallyOrderedRelatedLogbookMessages.any { it.operationType == LogbookOperationType.DEL },
+            isDeleted = historicallySortedRelatedLogbookMessages.any { it.operationType == LogbookOperationType.DEL },
         )
 
         return ConsolidatedLogbookMessage(
@@ -95,12 +95,13 @@ data class LogbookMessage(
         val shouldUpdate = when {
             // If there is no currently calculated acknowledgement yet, create it
             currentAcknowledgement?.dateTime == null || currentAcknowledgement.isSuccess == null -> true
-            // If the new acknowledgement message is successful while the currently calculated one is not, replace it
+            // Else, if the new acknowledgement message is successful while the currently calculated one is not, replace it
             isNewAcknowledgementSuccessful && currentAcknowledgement.isSuccess != true -> true
-            // TODO How to handle that? Check time rules with Vincent.
-            newLogbookMessageAcknowledgement.reportDateTime == null -> false
-            // If the new acknowledgement message is more recent than the currently calculated one, replace it
-            newLogbookMessageAcknowledgement.reportDateTime > currentAcknowledgement.dateTime -> true
+            // Else, if the new failure acknowledgement message is more recent
+            // than the currently calculated one (also a failure in this case), replace it
+            !isNewAcknowledgementSuccessful &&
+                newLogbookMessageAcknowledgement.reportDateTime != null &&
+                newLogbookMessageAcknowledgement.reportDateTime > currentAcknowledgement.dateTime -> true
 
             else -> false
         }
@@ -182,6 +183,7 @@ data class LogbookMessage(
 
             message.returnStatus == RETReturnErrorCode.SUCCESS.number
         }
+        // If there is at least one successful RET message, we consider the report as acknowledged
         if (maybeLastSuccessfulRetLogbookMessage != null) {
             val lastSucessfulRetMessage = maybeLastSuccessfulRetLogbookMessage.message as Acknowledge
             this.acknowledge = lastSucessfulRetMessage.also {
@@ -192,6 +194,7 @@ data class LogbookMessage(
             return
         }
 
+        // Else we consider the last (failure) RET message as the final acknowledgement
         val maybeLastRetLogbookMessage = historycallyOrderedRetLogbookMessages.lastOrNull()
         if (maybeLastRetLogbookMessage != null) {
             val lastRetMessage = maybeLastRetLogbookMessage.message as Acknowledge

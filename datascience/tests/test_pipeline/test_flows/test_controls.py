@@ -905,6 +905,7 @@ expected_missions_df = pd.DataFrame(
             MissionOrigin.POSEIDON_CNSP,
             MissionOrigin.POSEIDON_CNSP,
         ],
+        "closed": [True, True, True, True, True, True, True, True, True, True],
         "start_datetime_utc": [
             datetime(2021, 3, 31, 7, 12, 0),
             datetime(2021, 2, 12, 12, 11, 0),

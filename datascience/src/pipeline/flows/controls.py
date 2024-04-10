@@ -604,6 +604,7 @@ def make_missions_actions_and_missions_control_units(
     missions = controls[missions_columns].copy(deep=True)
     missions["deleted"] = False
     missions["mission_source"] = MissionOrigin.POSEIDON_CNSP
+    missions["closed"] = missions.closed_by.notnull()
     missions["start_datetime_utc"] = missions["action_datetime_utc"]
     missions["end_datetime_utc"] = missions["action_datetime_utc"]
     missions = missions.drop(columns=["action_datetime_utc"])

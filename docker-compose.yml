@@ -1,6 +1,7 @@
 version: "3"
 services:
   db:
+    container_name: monitorfish_database
     image: timescale/timescaledb-postgis:1.7.4-pg11
     environment:
       - POSTGRES_USER=postgres

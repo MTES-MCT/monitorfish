@@ -126,7 +126,7 @@ class PriorNotificationControllerITests {
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(2)))
             .andExpect(jsonPath("$[0].id", equalTo("FAKE_REPORT_ID_1")))
-            .andExpect(jsonPath("$[1].id", equalTo("FAKE_REPORT_ID_2_COR")))
+            .andExpect(jsonPath("$[1].id", equalTo("FAKE_NONEXISTENT_REPORT_ID_2")))
     }
 
     @Test

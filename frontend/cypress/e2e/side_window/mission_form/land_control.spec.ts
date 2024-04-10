@@ -117,7 +117,7 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.fill('Saisi par', 'Marlin')
 
     // Complété par
-    cy.fill('Complété par', 'Alice')
+    cy.get('[name="completedBy"]').type('Alice')
 
     cy.wait(500)
 

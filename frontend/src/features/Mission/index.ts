@@ -1,5 +1,4 @@
 import { getMissionActionInfractionsFromMissionActionFormValues } from '@features/Mission/components/MissionForm/ActionList/utils'
-import { EnvMissionAction } from '@features/Mission/envMissionAction.types'
 import { Mission } from '@features/Mission/mission.types'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { isLandControl } from '@features/Mission/useCases/getLastControlCircleGeometry'
@@ -24,7 +23,6 @@ import type { MultiPolygon } from 'ol/geom'
 import MissionStatus = Mission.MissionStatus
 import MissionActionType = MissionAction.MissionActionType
 import MissionType = Mission.MissionType
-import MissionSource = Mission.MissionSource
 
 export function getMissionFeaturePointId(id: number) {
   return `${MonitorFishLayer.MISSION_PIN_POINT}:${id}`
@@ -78,7 +76,6 @@ export const getMissionFeaturePoint = ({
     isUpcoming: booleanToInt(missionStatus === MissionStatus.UPCOMING),
     missionCompletion: getMissionCompletionFrontStatus(mission, actionsCompletion),
     missionId: mission.id,
-    missionSources: getMissionSources(actions, envActions),
     missionStatus,
     missionTypes: mission.missionTypes,
     numberOfControls,
@@ -171,38 +168,4 @@ export const getMissionActionFeatureZone = (
   feature.setId(`MISSION_ACTION_ZONE:${actionId}`)
 
   return feature
-}
-
-export function getMissionSourceTagText(missionSource: MissionSource | undefined) {
-  switch (missionSource) {
-    case Mission.MissionSource.MONITORFISH:
-      return 'Ouverte par le CNSP'
-    case Mission.MissionSource.POSEIDON_CACEM:
-      return 'Ouverte par le CACEM (POSEIDON)'
-    case Mission.MissionSource.POSEIDON_CNSP:
-      return 'Ouverte par le CNSP (POSEIDON)'
-    case Mission.MissionSource.MONITORENV:
-      return 'Ouverte par le CACEM'
-    default:
-      return 'Origine inconnue'
-  }
-}
-
-function getMissionSources(
-  actions: MissionAction.MissionAction[],
-  envActions: EnvMissionAction.MissionAction[]
-): MissionSource[] {
-  let sources: MissionSource[] = []
-
-  const hasMonitorFishActions = actions.length > 0
-  if (hasMonitorFishActions) {
-    sources = sources.concat(MissionSource.MONITORFISH)
-  }
-
-  const hasMonitorEnvActions = envActions.length > 0
-  if (hasMonitorEnvActions) {
-    sources = sources.concat(MissionSource.MONITORENV)
-  }
-
-  return sources
 }

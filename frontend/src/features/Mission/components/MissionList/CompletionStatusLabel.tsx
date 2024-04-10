@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import FrontCompletionStatus = MissionAction.FrontCompletionStatus
 import FrontCompletionStatusLabel = MissionAction.FrontCompletionStatusLabel
 
-export function CompletionStatusLabel({ completion = undefined }: { completion?: FrontCompletionStatus }) {
+export function CompletionStatusLabel({ completion }: { completion: FrontCompletionStatus | undefined }) {
   if (!completion) {
     return <>-</>
   }

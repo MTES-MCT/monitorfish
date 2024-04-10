@@ -4,7 +4,7 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 
 import FrontCompletionStatus = MissionAction.FrontCompletionStatus
 
-export function useGetMissionCompletion(): FrontCompletionStatus {
+export function useGetMissionCompletion(): FrontCompletionStatus | undefined {
   const draft = useMainAppSelector(state => state.missionForm.draft)
   const actionsCompletion = draft?.actionsFormValues?.map(action => action.completion)
 

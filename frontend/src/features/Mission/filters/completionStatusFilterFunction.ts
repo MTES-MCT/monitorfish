@@ -14,6 +14,9 @@ export function completionStatusFilterFunction(
 
   const actionsCompletion = mission.actions.map(action => action.completion)
   const frontCompletionStatus = getMissionCompletionFrontStatus(mission, actionsCompletion)
+  if (!frontCompletionStatus) {
+    return false
+  }
 
   // we don't make difference between TO_COMPLETE and TO_COMPLETE_MISSION_ENDED in filters
   if (frontCompletionStatus === FrontCompletionStatus.TO_COMPLETE_MISSION_ENDED) {

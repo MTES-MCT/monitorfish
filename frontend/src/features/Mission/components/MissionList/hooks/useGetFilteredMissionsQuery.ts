@@ -75,7 +75,6 @@ export const useGetFilteredMissionsQuery = (): {
 
   const { data, isError, isFetching } = useGetMissionsQuery(
     {
-      missionSource: listFilterValues[MissionFilterType.SOURCE],
       missionStatus: listFilterValues[MissionFilterType.STATUS],
       missionTypes: [listFilterValues[MissionFilterType.TYPE]],
       // seaFronts are filtered in memory

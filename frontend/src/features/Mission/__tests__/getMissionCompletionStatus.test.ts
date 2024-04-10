@@ -1,17 +1,38 @@
-import { Mission } from '@features/Mission/mission.types'
-import { getMissionStatus } from '@features/Mission/utils'
-import { expect } from '@jest/globals'
-import { customDayjs } from '@mtes-mct/monitor-ui'
+import {
+  DUMMY_MISSION_DONE,
+  DUMMY_MISSION_IN_PROGRESS,
+  DUMMY_MISSION_UPCOMING
+} from '@features/Mission/__tests__/__mocks__/dummyMissions'
+import { MissionAction } from '@features/Mission/missionAction.types'
+import { getMissionCompletionFrontStatus } from '@features/Mission/utils'
+import { describe, expect, it } from '@jest/globals'
 
-// TODO Test all mission statuses.
-describe('domain/entities/mission/utils.getMissionStatus()', () => {
-  it('should return a first-letter-capitalized string', () => {
-    const mission = {
-      startDateTimeUtc: customDayjs().toISOString()
-    }
+import FrontCompletionStatus = MissionAction.FrontCompletionStatus
+import CompletionStatus = MissionAction.CompletionStatus
 
-    const result = getMissionStatus(mission)
+describe('domain/entities/mission/utils.getMissionCompletionFrontStatus()', () => {
+  it('should return the mission completion front status', async () => {
+    const missionCompletionUpToDate = getMissionCompletionFrontStatus(DUMMY_MISSION_IN_PROGRESS, [
+      CompletionStatus.COMPLETED
+    ])
+    expect(missionCompletionUpToDate).toBe(FrontCompletionStatus.UP_TO_DATE)
 
-    expect(result).toStrictEqual(Mission.MissionStatus.IN_PROGRESS)
+    const missionCompletionCompleted = getMissionCompletionFrontStatus(DUMMY_MISSION_DONE, [CompletionStatus.COMPLETED])
+    expect(missionCompletionCompleted).toBe(FrontCompletionStatus.COMPLETED)
+
+    const missionCompletionToComplete = getMissionCompletionFrontStatus(DUMMY_MISSION_IN_PROGRESS, [
+      CompletionStatus.TO_COMPLETE
+    ])
+    expect(missionCompletionToComplete).toBe(FrontCompletionStatus.TO_COMPLETE)
+
+    const missionCompletionToCompleteEnded = getMissionCompletionFrontStatus(DUMMY_MISSION_DONE, [
+      CompletionStatus.TO_COMPLETE
+    ])
+    expect(missionCompletionToCompleteEnded).toBe(FrontCompletionStatus.TO_COMPLETE_MISSION_ENDED)
+
+    const missionCompletionUpcoming = getMissionCompletionFrontStatus(DUMMY_MISSION_UPCOMING, [
+      CompletionStatus.TO_COMPLETE
+    ])
+    expect(missionCompletionUpcoming).toBe(FrontCompletionStatus.TO_COMPLETE)
   })
 })

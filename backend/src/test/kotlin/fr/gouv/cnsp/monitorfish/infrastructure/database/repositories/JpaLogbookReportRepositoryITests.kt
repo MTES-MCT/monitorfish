@@ -275,7 +275,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(disMessage.catches.first().species).isEqualTo("NEP")
 
         // INS
-        assertThat(messages[5].operationType).isEqualTo(LogbookOperationType.DAT)
+        assertThat(messages[5].operationType).isEqualTo(LogbookOperationType.COR)
         assertThat(messages[5].referencedReportId).isNotNull
         assertThat(messages[5].message).isNull()
 

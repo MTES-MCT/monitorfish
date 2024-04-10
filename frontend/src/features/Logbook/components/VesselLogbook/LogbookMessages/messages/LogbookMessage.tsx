@@ -1,3 +1,4 @@
+import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -5,8 +6,6 @@ import { getComponentFromMessageType } from './constants'
 import { useMainAppDispatch } from '../../../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
 import { getDateTime } from '../../../../../../utils'
-import AckNOkSVG from '../../../../../icons/Icon_not_OK.svg?react'
-import AckOkSVG from '../../../../../icons/Message_JPE_acquitté.svg?react'
 import XMLSVG from '../../../../../icons/Picto_XML.svg?react'
 import ShowActivitySVG from '../../../../../icons/Position_message_JPE_Pin_gris_clair.svg?react'
 import HideActivitySVG from '../../../../../icons/Position_message_JPE_Pin_masquer.svg?react'
@@ -16,7 +15,6 @@ import { getLogbookMessageType } from '../../../../utils'
 
 import type { LogbookMessage as LogbookMessageType } from '../../../../Logbook.types'
 import type { LogbookMessage as LogbookMessageNamespace } from '../../../../LogbookMessage.types'
-import type { HTMLProps } from 'react'
 
 type LogbookMessageComponentProps = Readonly<{
   isFirst: boolean
@@ -137,10 +135,14 @@ export function LogbookMessage({ isFirst, logbookMessage }: LogbookMessageCompon
             <br />
             {!logbookMessage.acknowledge || (logbookMessage.acknowledge.isSuccess === null && <Gray>-</Gray>)}
             {logbookMessage.acknowledge?.isSuccess === true && (
-              <AckOk data-cy="LogbookMessage-successful-acknowledgement-icon" />
+              <Icon.Confirm
+                color={THEME.color.mediumSeaGreen}
+                data-cy="LogbookMessage-successful-acknowledgement-icon"
+              />
             )}
             {logbookMessage.acknowledge?.isSuccess === false && (
-              <AckNOk
+              <Icon.Reject
+                color={THEME.color.maximumRed}
                 data-cy="LogbookMessage-failed-acknowledgement-icon"
                 title={logbookMessage.acknowledge?.rejectionCause ?? ''}
               />
@@ -185,8 +187,7 @@ const OperationTagDangerBullet = styled.span`
   height: 14px;
   margin-left: 3px;
   width: 14px;
-  /* TODO Replace with theme color. */
-  background-color: #e1000f;
+  background-color: ${p => p.theme.color.maximumRed};
   border-radius: 50%;
   display: inline-block;
 `
@@ -194,7 +195,7 @@ const OperationTagWarningBullet = styled.span`
   height: 14px;
   margin-left: 3px;
   width: 14px;
-  background-color: #8cc61f;
+  background-color: ${p => p.theme.color.mediumSeaGreen};
   border-radius: 50%;
   display: inline-block;
 `
@@ -213,49 +214,45 @@ const Gray = styled.span`
 
 const Key = styled.span`
   color: ${p => p.theme.color.slateGray};
+  line-height: 18px;
+  margin-bottom: 2px;
 `
 
-const Acknowledge = styled.div`
-  text-align: center;
-  background: ${p => p.theme.color.white};
-  padding: 5px 9px 9px 9px;
-  margin-left: 10px;
-  font-size: 13px;
-  color: ${p => p.theme.color.gunMetal};
-  flex-grow: 4;
-`
+// Body Header
 
-const VoyageNumber = styled.div<HTMLProps<HTMLDivElement>>`
-  text-align: center;
-  background: ${p => p.theme.color.white};
-  padding: 5px 9px 9px 9px;
-  margin-left: 10px;
+const BodyHeaderBlock = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
   font-size: 13px;
+  padding: 10px;
+`
+const EmissionDateTime = styled(BodyHeaderBlock)`
+  background: ${p => p.theme.color.white};
   color: ${p => p.theme.color.gunMetal};
   flex-grow: 3;
+`
+const ReceptionDateTime = styled(BodyHeaderBlock)`
+  background: ${p => p.theme.color.white};
+  color: ${p => p.theme.color.gunMetal};
+  flex-grow: 3;
+  margin-left: 10px;
+`
+const VoyageNumber = styled(BodyHeaderBlock)`
+  background: ${p => p.theme.color.white};
+  color: ${p => p.theme.color.gunMetal};
+  flex-grow: 3;
+  margin-left: 10px;
   max-width: 80px;
   overflow: clip;
-  white-space: nowrap;
   text-overflow: ellipsis;
+  white-space: nowrap;
 `
-
-const ReceptionDateTime = styled.div`
-  text-align: center;
+const Acknowledge = styled(BodyHeaderBlock)`
   background: ${p => p.theme.color.white};
-  padding: 5px 8px 9px 8px;
+  color: ${p => p.theme.color.gunMetal};
+  flex-grow: 4;
   margin-left: 10px;
-  font-size: 13px;
-  color: ${p => p.theme.color.gunMetal};
-  flex-grow: 3;
-`
-
-const EmissionDateTime = styled.div`
-  text-align: center;
-  background: ${p => p.theme.color.white};
-  padding: 5px 8px 9px 8px;
-  font-size: 13px;
-  color: ${p => p.theme.color.gunMetal};
-  flex-grow: 3;
 `
 
 const LogbookMessageMetadata = styled.div`
@@ -331,14 +328,6 @@ const Xml = styled(XMLSVG)`
   tspan {
     font-size: 9px;
   }
-`
-
-const AckNOk = styled(AckNOkSVG)`
-  margin-top: 3px;
-`
-
-const AckOk = styled(AckOkSVG)`
-  margin-top: 3px;
 `
 
 const ShowActivity = styled(ShowActivitySVG)`

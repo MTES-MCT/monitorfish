@@ -11,11 +11,10 @@ export const autoSaveMissionAction =
   (
     actionFormValues: MissionActionFormValues,
     missionId: number | undefined,
-    isMissionClosed: boolean | undefined,
     isAutoSaveEnabled: boolean
   ): MainAppThunk<Promise<number | undefined>> =>
   async dispatch => {
-    if (!isMissionActionFormValid(actionFormValues, isMissionClosed ?? false) || !isAutoSaveEnabled) {
+    if (!isMissionActionFormValid(actionFormValues, false) || !isAutoSaveEnabled) {
       dispatch(missionFormActions.setIsDraftDirty(true))
 
       return actionFormValues.id

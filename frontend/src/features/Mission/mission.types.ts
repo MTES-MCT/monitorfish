@@ -18,11 +18,10 @@ export namespace Mission {
     geom?: GeoJSON.MultiPolygon
     hasMissionOrder?: boolean | undefined
     id: number
-    isClosed: boolean
+    // TODO To remove when `isClosed` is removed
+    isClosed?: boolean | undefined
     isGeometryComputedFromControls: boolean
     isUnderJdp?: boolean | undefined
-    // For internal Formik validation purpose
-    isValid?: boolean | undefined
     missionSource: MissionSource
     missionTypes: MissionType[]
     observationsCacem?: string
@@ -47,23 +46,17 @@ export namespace Mission {
     POSEIDON_CACEM = 'CACEM (Poseidon)',
     POSEIDON_CNSP = 'CNSP (Poseidon)'
   }
-  export enum MissionSourceLabelWithoutPoseidon {
-    MONITORENV = 'CACEM',
-    MONITORFISH = 'CNSP'
-  }
 
   /* eslint-disable typescript-sort-keys/string-enum */
   export enum MissionStatus {
     UPCOMING = 'UPCOMING',
     IN_PROGRESS = 'IN_PROGRESS',
-    DONE = 'DONE',
-    CLOSED = 'CLOSED'
+    DONE = 'DONE'
   }
   export enum MissionStatusLabel {
     UPCOMING = 'À venir',
     IN_PROGRESS = 'En cours',
-    DONE = 'Terminée',
-    CLOSED = 'Clôturée'
+    DONE = 'Terminée'
   }
   /* eslint-enable typescript-sort-keys/string-enum */
 
@@ -91,9 +84,10 @@ export namespace Mission {
     color: string
     controlUnits: LegacyControlUnit.LegacyControlUnit[]
     endDateTimeUtc: string
+    hasEnvActions: boolean
+    hasFishActions: boolean
     // A 0 ou 1 number is required for WebGL to understand boolean
     isAirMission: number
-    isClosed: number
     // A 0 ou 1 number is required for WebGL to understand boolean
     isDone: number
     // A 0 ou 1 number is required for WebGL to understand boolean
@@ -106,8 +100,8 @@ export namespace Mission {
     isSeaMission: number
     // A 0 ou 1 number is required for WebGL to understand boolean
     isUpcoming: number
+    missionCompletion: MissionAction.FrontCompletionStatus | undefined
     missionId: number
-    missionSource: MissionSource
     missionStatus: MissionStatus | undefined
     missionTypes: MissionType[]
     numberOfControls: number

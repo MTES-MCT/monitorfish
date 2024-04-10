@@ -2,7 +2,7 @@ import { Mission } from '@features/Mission/mission.types'
 import { expect } from '@jest/globals'
 import { getUtcizedDayjs } from '@mtes-mct/monitor-ui'
 
-import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFront } from '../../../seaFront/constants'
+import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFront } from '../../../../domain/entities/seaFront/constants'
 import { seaFrontFilterFunction } from '../seaFrontFilterFunction'
 
 import MissionSource = Mission.MissionSource
@@ -15,7 +15,6 @@ describe('domain/entities/mission/filters/seaFrontFilterFunction.ts()', () => {
       envActions: [],
       facade: SeaFront.MED,
       id: 123,
-      isClosed: false,
       isGeometryComputedFromControls: false,
       isValid: false,
       missionSource: MissionSource.MONITORFISH,
@@ -34,7 +33,6 @@ describe('domain/entities/mission/filters/seaFrontFilterFunction.ts()', () => {
       envActions: [],
       facade: SeaFront.SA,
       id: 123,
-      isClosed: false,
       isGeometryComputedFromControls: false,
       isValid: false,
       missionSource: MissionSource.MONITORFISH,
@@ -53,7 +51,6 @@ describe('domain/entities/mission/filters/seaFrontFilterFunction.ts()', () => {
       envActions: [],
       facade: SeaFront.SA,
       id: 123,
-      isClosed: false,
       isGeometryComputedFromControls: false,
       isValid: false,
       missionSource: MissionSource.MONITORFISH,
@@ -72,7 +69,6 @@ describe('domain/entities/mission/filters/seaFrontFilterFunction.ts()', () => {
       envActions: [],
       facade: SeaFront.GUADELOUPE,
       id: 123,
-      isClosed: false,
       isGeometryComputedFromControls: false,
       isValid: false,
       missionSource: MissionSource.MONITORFISH,

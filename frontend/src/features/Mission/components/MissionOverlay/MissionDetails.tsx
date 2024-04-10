@@ -1,16 +1,17 @@
-import { Accent, Button, Icon, IconButton, Size, Tag } from '@mtes-mct/monitor-ui'
+import { Bold } from '@components/style'
+import { CompletionStatusTag } from '@features/Mission/components/MissionForm/shared/CompletionStatusTag'
+import { MissionStatusTag } from '@features/Mission/components/MissionForm/shared/MissionStatusTag'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { Accent, Button, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
+import { pluralize } from '@utils/pluralize'
 import { Fragment } from 'react'
 import styled from 'styled-components'
 
 import { margins } from './constants'
-import { MissionStatusLabel } from './MissionStatusLabel'
-import { getMissionSourceTagText } from '../../../../domain/entities/mission'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { pluralize } from '../../../../utils/pluralize'
-import { missionFormActions } from '../../../Mission/components/MissionForm/slice'
-import { Mission } from '../../../Mission/mission.types'
-import { editMission } from '../../../Mission/useCases/editMission'
-import { OverlayPosition } from '../Overlay'
+import { OverlayPosition } from '../../../map/overlays/Overlay'
+import { Mission } from '../../mission.types'
+import { editMission } from '../../useCases/editMission'
+import { missionFormActions } from '../MissionForm/slice'
 
 import type { LegacyControlUnit } from '../../../../domain/types/legacyControlUnit'
 
@@ -26,6 +27,34 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
     dispatch(editMission(mission.missionId))
   }
 
+  function getActions() {
+    let actions: string[] = ['CACEM']
+    if (mission.hasEnvActions) {
+      actions = actions.concat('CACEM')
+    }
+    if (mission.hasFishActions) {
+      actions = actions.concat('CNSP')
+    }
+
+    if (actions.length === 0) {
+      return 'Aucune action'
+    }
+
+    if (actions.length === 1) {
+      return (
+        <>
+          Actions <Bold>{actions[0]}</Bold>
+        </>
+      )
+    }
+
+    return (
+      <>
+        Actions <Bold>CACEM</Bold> et <Bold>CNSP</Bold>
+      </>
+    )
+  }
+
   return (
     <>
       <Wrapper data-cy="mission-overlay">
@@ -38,7 +67,7 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
             onClick={() => dispatch(missionFormActions.unsetSelectedMissionGeoJSON())}
           />
         )}
-        <ZoneText>
+        <Body>
           <Title isSelected={isSelected}>
             {mission.controlUnits.length === 1 &&
               mission.controlUnits.map((controlUnit: LegacyControlUnit.LegacyControlUnit) => (
@@ -62,25 +91,21 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
             )}
           </Title>
           <Details>
-            <MissionSourceTag
-              isFromCacem={
-                mission.missionSource === Mission.MissionSource.POSEIDON_CACEM ||
-                mission.missionSource === Mission.MissionSource.MONITORENV
-              }
-            >
-              {getMissionSourceTagText(mission.missionSource)}
-            </MissionSourceTag>
-            <div>
-              Mission {mission.missionTypes.map(missionType => Mission.MissionTypeLabel[missionType]).join(' / ')} –{' '}
-              {mission.startDateTimeUtc}
-            </div>
-            <div>
-              {mission.numberOfControls} {pluralize('contrôle', mission.numberOfControls)}{' '}
-              {pluralize('réalisé', mission.numberOfControls)}
-            </div>
-            <MissionStatusLabel missionStatus={mission.missionStatus} />
+            <MissionStatusTag status={mission.missionStatus} />
+            <CompletionStatusTag completion={mission.missionCompletion} />
+            <Text>
+              <Line>
+                Mission {mission.missionTypes.map(missionType => Mission.MissionTypeLabel[missionType]).join(' / ')} –{' '}
+                {mission.startDateTimeUtc}
+              </Line>
+              <Line>
+                {mission.numberOfControls} {pluralize('contrôle', mission.numberOfControls)}{' '}
+                {pluralize('réalisé', mission.numberOfControls)}
+              </Line>
+              <Line>{getActions()}</Line>
+            </Text>
           </Details>
-        </ZoneText>
+        </Body>
         <EditButton
           accent={Accent.PRIMARY}
           disabled={!isSelected}
@@ -103,19 +128,19 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
   )
 }
 
+const Line = styled.span`
+  display: block;
+`
+
+const Text = styled.div`
+  margin-top: 12px;
+  line-height: 18px;
+`
+
 const TextWithEllipsis = styled.div`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-`
-
-const MissionSourceTag = styled(Tag)<{
-  isFromCacem: boolean
-}>`
-  background: ${p => (p.isFromCacem ? p.theme.color.mediumSeaGreen : p.theme.color.blueGray)};
-  color: ${p => p.theme.color.white};
-  margin-bottom: 8px;
-  margin-top: 4px;
 `
 
 const NoContact = styled.div`
@@ -142,6 +167,12 @@ const CloseButton = styled(IconButton)`
 const Details = styled.div`
   margin-top: 8px;
   color: ${p => p.theme.color.slateGray};
+  display: flex;
+  flex-wrap: wrap;
+
+  .Element-Tag {
+    margin-right: 8px;
+  }
 `
 
 const Title = styled.div<{
@@ -164,8 +195,8 @@ const Wrapper = styled.div`
   background-color: ${p => p.theme.color.white};
 `
 
-const ZoneText = styled.div`
-  margin: 11px 12px 0px 12px;
+const Body = styled.div`
+  margin: 12px 12px 0px 12px;
   font-size: 13px;
   white-space: nowrap;
   text-overflow: ellipsis;

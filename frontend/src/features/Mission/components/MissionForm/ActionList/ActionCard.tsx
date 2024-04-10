@@ -1,10 +1,10 @@
+import { CompletionStatusIcon } from '@features/Mission/components/MissionForm/ActionList/CompletionStatusIcon'
 import { EnvMissionAction } from '@features/Mission/envMissionAction.types'
 import { Mission } from '@features/Mission/mission.types'
 import { MissionAction } from '@features/Mission/missionAction.types'
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { FieldError, getLocalizedDayjs, THEME } from '@mtes-mct/monitor-ui'
+import { getLocalizedDayjs, THEME } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 import { formatDateLabel } from './utils'
 
@@ -19,24 +19,10 @@ type ActionCardProps = Readonly<{
   onSelect?: () => Promisable<void>
 }>
 export function ActionCard({ children, isSelected, missionAction, onSelect }: ActionCardProps) {
-  const draft = useMainAppSelector(state => state.missionForm.draft)
-
-  const isControlAction =
-    missionAction.source === Mission.MissionSource.MONITORFISH &&
-    (missionAction.actionType === MissionAction.MissionActionType.AIR_CONTROL ||
-      missionAction.actionType === MissionAction.MissionActionType.LAND_CONTROL ||
-      missionAction.actionType === MissionAction.MissionActionType.SEA_CONTROL)
-
   const startDateAsDayjs = useMemo(
     () => missionAction.actionDatetimeUtc && getLocalizedDayjs(missionAction.actionDatetimeUtc),
     [missionAction]
   )
-
-  const isOpen =
-    isControlAction &&
-    draft?.mainFormValues &&
-    !draft?.mainFormValues.isClosed &&
-    !(missionAction as MissionActionForTimeline).closedBy
 
   return (
     <>
@@ -44,27 +30,23 @@ export function ActionCard({ children, isSelected, missionAction, onSelect }: Ac
         {startDateAsDayjs && (
           <DateLabel title={missionAction.actionDatetimeUtc}>
             <b>{formatDateLabel(startDateAsDayjs.format('DD MMM'))}</b> à {startDateAsDayjs.format('HH:mm')}
+            {missionAction.source === Mission.MissionSource.MONITORFISH && (
+              <CompletionStatusIcon missionAction={missionAction as MissionActionForTimeline} />
+            )}
           </DateLabel>
         )}
 
         <InnerWrapper
-          $isOpen={isOpen}
           $isSelectable={!!onSelect}
           $isSelected={isSelected}
           $type={missionAction.actionType}
           data-cy="action-list-item"
           onClick={onSelect}
-          title={isOpen ? 'Contrôle en cours' : undefined}
         >
           {children}
         </InnerWrapper>
       </Wrapper>
       {missionAction.source === Mission.MissionSource.MONITORENV && <SourceAction>Action CACEM</SourceAction>}
-
-      {missionAction.source === Mission.MissionSource.MONITORFISH &&
-        !(missionAction as MissionActionForTimeline).isValid && (
-          <StyledFieldError>Veuillez compléter les champs manquants dans cette action de contrôle.</StyledFieldError>
-        )}
     </>
   )
 }
@@ -93,7 +75,6 @@ const DateLabel = styled.div`
 `
 
 const InnerWrapper = styled.div<{
-  $isOpen: boolean | undefined
   $isSelectable: boolean
   $isSelected: boolean
   $type: MissionAction.MissionActionType | EnvMissionAction.MissionActionType
@@ -112,15 +93,4 @@ const InnerWrapper = styled.div<{
   flex-direction: column;
   flex-grow: 1;
   padding: 18px 16px 14px 16px;
-
-  ${p =>
-    p.$isOpen &&
-    css`
-      border-left: solid 5px ${p.theme.color.blueGray};
-      padding-left: 12px;
-    `}
-`
-
-const StyledFieldError = styled(FieldError)`
-  padding-left: 70px;
 `

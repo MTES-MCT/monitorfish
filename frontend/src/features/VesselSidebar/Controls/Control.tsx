@@ -1,4 +1,4 @@
-import { Accent, Button, Tag, TagBullet, TagGroup, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Tag, TagGroup, THEME, Icon } from '@mtes-mct/monitor-ui'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -85,12 +85,12 @@ export function Control({ control, isLastItem }: ControlProps) {
         {(control.hasSomeGearsSeized || control.hasSomeSpeciesSeized) && (
           <StyledTagGroup>
             {control.hasSomeGearsSeized && (
-              <Tag bullet={TagBullet.DISK} bulletColor={THEME.color.maximumRed} isLight>
+              <Tag Icon={Icon.CircleFilled} iconColor={THEME.color.maximumRed} isLight withCircleIcon>
                 Appréhension engin
               </Tag>
             )}
             {control.hasSomeSpeciesSeized && (
-              <Tag bullet={TagBullet.DISK} bulletColor={THEME.color.maximumRed} isLight>
+              <Tag Icon={Icon.CircleFilled} iconColor={THEME.color.maximumRed} isLight withCircleIcon>
                 Appréhension espèce
               </Tag>
             )}

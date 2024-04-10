@@ -632,12 +632,12 @@ export const getRegulatoryLayersWithoutTerritory = (
 /**
  * Convert an array of word to a sentence.
  * Each word or separated with a coma,
- * exept the second last word is fellowed by 'et'
+ * except the second last word is followed by 'et'
  * and the last word with nothing
  * @param {string[]} array
  * @returns {string}
  */
-const toArrayString = array => {
+export const toArrayString = array => {
   if (array?.length) {
     if (array.length === 1) {
       return array[0]

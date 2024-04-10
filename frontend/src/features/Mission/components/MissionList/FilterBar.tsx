@@ -2,9 +2,10 @@ import { useGetLegacyControlUnitsQuery } from '@api/legacyControlUnit'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import {
+  FormikCheckbox,
+  FormikCheckPicker,
   FormikDateRangePicker,
   FormikEffect,
-  FormikMultiSelect,
   FormikSelect,
   Icon,
   Size,
@@ -116,24 +117,19 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             options={MISSION_FILTER_OPTIONS[MissionFilterType.DATE_RANGE]}
             placeholder="Période"
           />
-          <FormikSelect
+          <FormikCheckPicker
             isLabelHidden
             isTransparent
-            label="Origine"
-            name={MissionFilterType.SOURCE}
-            options={MISSION_FILTER_OPTIONS[MissionFilterType.SOURCE]}
-            placeholder="Origine"
+            label="Type de mission"
+            name={MissionFilterType.TYPE}
+            options={MISSION_FILTER_OPTIONS[MissionFilterType.TYPE]}
+            placeholder="Type de mission"
+            renderValue={(_, items) =>
+              items.length > 0 ? <OptionValue>Type de mission ({items.length}) </OptionValue> : <></>
+            }
+            style={tagPickerStyle}
           />
-          <FormikMultiSelect
-            isLabelHidden
-            isTransparent
-            label="Statut"
-            name={MissionFilterType.STATUS}
-            options={MISSION_FILTER_OPTIONS[MissionFilterType.STATUS]}
-            placeholder="Statut"
-            renderValue={(_, items) => (items.length > 0 ? <OptionValue>Statut ({items.length}) </OptionValue> : <></>)}
-          />
-          <FormikMultiSelect
+          <FormikCheckPicker
             disabled={administrationsAsOptions.length === 0}
             isLabelHidden
             isTransparent
@@ -145,9 +141,9 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
               items.length > 0 ? <OptionValue>Administration ({items.length}) </OptionValue> : <></>
             }
             searchable
-            style={{ minWidth: 200 }}
+            style={tagPickerStyle}
           />
-          <FormikMultiSelect
+          <FormikCheckPicker
             key={unitMultiSelectKey}
             disabled={activeAndFilteredUnitsAsOptions.length === 0}
             isLabelHidden
@@ -158,19 +154,31 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             placeholder="Unité"
             renderValue={(_, items) => (items.length > 0 ? <OptionValue>Unité ({items.length}) </OptionValue> : <></>)}
             searchable
-            style={{ minWidth: 200 }}
+            style={tagPickerStyle}
           />
-          <FormikMultiSelect
+          <FormikCheckPicker
             isLabelHidden
             isTransparent
-            label="Type de mission"
-            name={MissionFilterType.TYPE}
-            options={MISSION_FILTER_OPTIONS[MissionFilterType.TYPE]}
-            placeholder="Type de mission"
-            renderValue={(_, items) =>
-              items.length > 0 ? <OptionValue>Type de mission ({items.length}) </OptionValue> : <></>
-            }
+            label="Statut de mission"
+            name={MissionFilterType.STATUS}
+            options={MISSION_FILTER_OPTIONS[MissionFilterType.STATUS]}
+            placeholder="Statut de mission"
+            renderValue={(_, items) => (items.length > 0 ? <OptionValue>Statut ({items.length}) </OptionValue> : <></>)}
+            style={tagPickerStyle}
           />
+          <FormikCheckPicker
+            isLabelHidden
+            isTransparent
+            label="Etat des données"
+            name={MissionFilterType.COMPLETION_STATUS}
+            options={MISSION_FILTER_OPTIONS[MissionFilterType.COMPLETION_STATUS]}
+            placeholder="Etat des données"
+            renderValue={(_, items) =>
+              items.length > 0 ? <OptionValue>Etat des données ({items.length}) </OptionValue> : <></>
+            }
+            style={tagPickerStyle}
+          />
+          <FormikCheckbox label="Missions avec actions CNSP" name={MissionFilterType.WITH_ACTIONS} />
         </Row>
 
         <FormikFilterTagBar
@@ -178,7 +186,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
           ignoredFilterKeys={[
             MissionFilterType.CUSTOM_DATE_RANGE,
             MissionFilterType.DATE_RANGE,
-            MissionFilterType.SOURCE
+            MissionFilterType.WITH_ACTIONS
           ]}
         >
           {isCustomDateRangeOpen && (
@@ -202,6 +210,7 @@ const Wrapper = styled.div`
 
 const Row = styled.div`
   display: flex;
+  align-items: center;
 
   > div {
     min-width: 200px;
@@ -223,11 +232,11 @@ const Row = styled.div`
   }
 `
 
+const tagPickerStyle = { width: 184 }
+
 export const OptionValue = styled.span`
   display: flex;
   overflow: hidden;
-  padding: 4px 0 0 8px;
-  pointer-events: none;
   text-overflow: ellipsis;
   white-space: nowrap;
 `

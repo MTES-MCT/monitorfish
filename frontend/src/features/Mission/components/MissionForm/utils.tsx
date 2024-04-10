@@ -73,7 +73,6 @@ export function getMissionDataFromMissionFormValues(mainFormValues: MissionMainF
   return {
     ...missionBaseValues,
     controlUnits: validControlUnits,
-    isClosed: !!missionBaseValues.isClosed,
     missionSource: mainFormValues.missionSource ?? Mission.MissionSource.MONITORFISH,
     missionTypes
   }

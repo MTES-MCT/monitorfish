@@ -10,11 +10,18 @@ type SubMenuProps<T extends string = string> = {
   onChange: (nextSubMenuItem: T) => Promisable<void>
   options: Option<T>[]
   value: T
+  width?: number
 }
-export function SubMenu<T extends string = string>({ counter, onChange, options, value }: SubMenuProps<T>) {
+export function SubMenu<T extends string = string>({
+  counter,
+  onChange,
+  options,
+  value,
+  width = 222
+}: SubMenuProps<T>) {
   return (
-    <Wrapper>
-      <Menu>
+    <Wrapper width={width}>
+      <Menu width={width}>
         {options.map(option => (
           <Item
             key={JSON.stringify(option.value)}
@@ -22,6 +29,7 @@ export function SubMenu<T extends string = string>({ counter, onChange, options,
             isSelected={option.value === value}
             onClick={onChange}
             option={option}
+            width={width}
           />
         ))}
       </Menu>
@@ -29,8 +37,10 @@ export function SubMenu<T extends string = string>({ counter, onChange, options,
   )
 }
 
-const Wrapper = styled.div`
-  min-width: 222px;
+const Wrapper = styled.div<{
+  width: number
+}>`
+  min-width: ${p => p.width}px;
   user-select: none;
 
   * {
@@ -38,7 +48,9 @@ const Wrapper = styled.div`
   }
 `
 
-const Menu = styled.div`
+const Menu = styled.div<{
+  width: number
+}>`
   background: ${p => p.theme.color.gainsboro};
   border-right: 1px solid ${p => p.theme.color.lightGray};
   color: ${p => p.theme.color.slateGray};
@@ -47,6 +59,6 @@ const Menu = styled.div`
   font-weight: 500;
   height: 100%;
   transition: 'width 0.5s';
-  width: 222px;
+  width: ${p => p.width}px;
   z-index: 999;
 `

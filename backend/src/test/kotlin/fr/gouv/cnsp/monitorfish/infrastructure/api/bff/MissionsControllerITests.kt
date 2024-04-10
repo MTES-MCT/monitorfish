@@ -8,6 +8,7 @@ import fr.gouv.cnsp.monitorfish.config.SecurityConfig
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.*
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.GetAllMissions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.GetMission
 import kotlinx.coroutines.runBlocking
@@ -76,6 +77,7 @@ class MissionsControllerITests {
                             hasSomeGearsSeized = false,
                             hasSomeSpeciesSeized = false,
                             isFromPoseidon = false,
+                            completion = Completion.TO_COMPLETE,
                         ),
                     ),
                 ),
@@ -145,6 +147,7 @@ class MissionsControllerITests {
                         hasSomeGearsSeized = false,
                         hasSomeSpeciesSeized = false,
                         isFromPoseidon = false,
+                        completion = Completion.TO_COMPLETE,
                     ),
                 ),
             ),

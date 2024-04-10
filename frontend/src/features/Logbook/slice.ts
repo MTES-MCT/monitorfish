@@ -189,7 +189,7 @@ const logbookSlice = createSlice({
       }
 
       state.fishingActivitiesShowedOnMap = state.fishingActivities.logbookMessages
-        .filter(fishingActivity => !fishingActivity.isCorrected)
+        .filter(fishingActivity => !fishingActivity.isCorrectedByNewerMessage)
         .map(fishingActivity => ({
           date: getEffectiveDateTimeFromMessage(fishingActivity),
           id: fishingActivity.operationNumber,

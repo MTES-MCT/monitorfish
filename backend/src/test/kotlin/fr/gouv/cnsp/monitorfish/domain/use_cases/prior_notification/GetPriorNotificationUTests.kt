@@ -2,8 +2,8 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.given
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.ConsolidatedLogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTyped
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
@@ -39,7 +39,7 @@ class GetPriorNotificationUTests {
         // Given
         given(logbookReportRepository.findPriorNotificationByReportId("FAKE_REPORT_ID_1")).willReturn(
             PriorNotification(
-                consolidatedLogbookMessage = ConsolidatedLogbookMessage(
+                logbookMessageTyped = LogbookMessageTyped(
                     clazz = PNO::class.java,
                     logbookMessage = LogbookMessage(
                         id = 1,
@@ -48,7 +48,7 @@ class GetPriorNotificationUTests {
                         analyzedByRules = emptyList(),
                         isDeleted = false,
                         integrationDateTime = ZonedDateTime.now(),
-                        isCorrected = false,
+                        isCorrectedByNewerMessage = false,
                         isEnriched = true,
                         message = PNO(),
                         messageType = "PNO",
@@ -85,8 +85,8 @@ class GetPriorNotificationUTests {
         ).execute("FAKE_REPORT_ID_1")
 
         // Then
-        Assertions.assertThat(result.consolidatedLogbookMessage.logbookMessage.reportId).isEqualTo("FAKE_REPORT_ID_1")
-        Assertions.assertThat(result.consolidatedLogbookMessage.logbookMessage.referencedReportId).isNull()
+        Assertions.assertThat(result.logbookMessageTyped.logbookMessage.reportId).isEqualTo("FAKE_REPORT_ID_1")
+        Assertions.assertThat(result.logbookMessageTyped.logbookMessage.referencedReportId).isNull()
     }
 
     @Test
@@ -94,7 +94,7 @@ class GetPriorNotificationUTests {
         // Given
         given(logbookReportRepository.findPriorNotificationByReportId("FAKE_REPORT_ID_2")).willReturn(
             PriorNotification(
-                consolidatedLogbookMessage = ConsolidatedLogbookMessage(
+                logbookMessageTyped = LogbookMessageTyped(
                     clazz = PNO::class.java,
                     logbookMessage = LogbookMessage(
                         id = 2,
@@ -103,7 +103,7 @@ class GetPriorNotificationUTests {
                         analyzedByRules = emptyList(),
                         isDeleted = false,
                         integrationDateTime = ZonedDateTime.now(),
-                        isCorrected = true,
+                        isCorrectedByNewerMessage = true,
                         isEnriched = true,
                         message = PNO(),
                         messageType = "PNO",
@@ -140,8 +140,8 @@ class GetPriorNotificationUTests {
         ).execute("FAKE_REPORT_ID_2")
 
         // Then
-        Assertions.assertThat(result.consolidatedLogbookMessage.logbookMessage.reportId).isNull()
-        Assertions.assertThat(result.consolidatedLogbookMessage.logbookMessage.referencedReportId)
+        Assertions.assertThat(result.logbookMessageTyped.logbookMessage.reportId).isNull()
+        Assertions.assertThat(result.logbookMessageTyped.logbookMessage.referencedReportId)
             .isEqualTo("FAKE_REPORT_ID_2")
     }
 }

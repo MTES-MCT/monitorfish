@@ -35,7 +35,7 @@ data class LogbookMessageDataOutput(
             referencedReportId = logbookMessage.referencedReportId,
             externalReferenceNumber = logbookMessage.externalReferenceNumber,
             ircs = logbookMessage.ircs,
-            isCorrected = logbookMessage.isCorrected,
+            isCorrected = logbookMessage.isCorrectedByNewerMessage,
             acknowledge = logbookMessage.acknowledge,
             deleted = logbookMessage.isDeleted,
             operationDateTime = logbookMessage.operationDateTime,

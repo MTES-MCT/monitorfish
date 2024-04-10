@@ -4,8 +4,8 @@ import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.SecurityConfig
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.ConsolidatedLogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTyped
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
@@ -49,7 +49,7 @@ class PriorNotificationControllerITests {
         given(this.getPriorNotifications.execute(LogbookReportFilter())).willReturn(
             listOf(
                 PriorNotification(
-                    consolidatedLogbookMessage = ConsolidatedLogbookMessage(
+                    logbookMessageTyped = LogbookMessageTyped(
                         clazz = PNO::class.java,
                         logbookMessage = LogbookMessage(
                             id = 1,
@@ -57,8 +57,7 @@ class PriorNotificationControllerITests {
                             referencedReportId = null,
                             analyzedByRules = emptyList(),
                             integrationDateTime = ZonedDateTime.now(),
-                            isConsolidated = true,
-                            isCorrected = false,
+                            isCorrectedByNewerMessage = false,
                             isDeleted = false,
                             isEnriched = false,
                             message = PNO(),
@@ -85,16 +84,15 @@ class PriorNotificationControllerITests {
                 ),
 
                 PriorNotification(
-                    consolidatedLogbookMessage = ConsolidatedLogbookMessage(
+                    logbookMessageTyped = LogbookMessageTyped(
                         clazz = PNO::class.java,
                         logbookMessage = LogbookMessage(
                             id = 1,
-                            reportId = "FAKE_REPORT_ID_2",
-                            referencedReportId = null,
+                            reportId = "FAKE_REPORT_ID_2_COR",
+                            referencedReportId = "FAKE_NONEXISTENT_REPORT_ID_2",
                             analyzedByRules = emptyList(),
                             integrationDateTime = ZonedDateTime.now(),
-                            isConsolidated = true,
-                            isCorrected = true,
+                            isCorrectedByNewerMessage = false,
                             isDeleted = false,
                             isEnriched = false,
                             message = PNO(),
@@ -128,7 +126,7 @@ class PriorNotificationControllerITests {
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(2)))
             .andExpect(jsonPath("$[0].id", equalTo("FAKE_REPORT_ID_1")))
-            .andExpect(jsonPath("$[1].id", equalTo("FAKE_REPORT_ID_2")))
+            .andExpect(jsonPath("$[1].id", equalTo("FAKE_REPORT_ID_2_COR")))
     }
 
     @Test
@@ -150,7 +148,7 @@ class PriorNotificationControllerITests {
         // Given
         given(this.getPriorNotification.execute("FAKE_REPORT_ID_1")).willReturn(
             PriorNotification(
-                consolidatedLogbookMessage = ConsolidatedLogbookMessage(
+                logbookMessageTyped = LogbookMessageTyped(
                     clazz = PNO::class.java,
                     logbookMessage = LogbookMessage(
                         id = 1,
@@ -158,8 +156,7 @@ class PriorNotificationControllerITests {
                         referencedReportId = null,
                         analyzedByRules = emptyList(),
                         integrationDateTime = ZonedDateTime.now(),
-                        isConsolidated = true,
-                        isCorrected = false,
+                        isCorrectedByNewerMessage = false,
                         isDeleted = false,
                         isEnriched = true,
                         message = PNO(),

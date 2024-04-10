@@ -179,14 +179,14 @@ class GetLogbookMessagesUTests {
 
         assertThat(ersMessages[0].message).isInstanceOf(FAR::class.java)
         assertThat(ersMessages[0].operationType).isEqualTo(LogbookOperationType.DAT)
-        assertThat(ersMessages[0].isCorrected).isEqualTo(true)
+        assertThat(ersMessages[0].isCorrectedByNewerMessage).isEqualTo(true)
         val correctedFar = ersMessages[0].message as FAR
         assertThat(correctedFar.hauls.size).isEqualTo(1)
         assertThat(correctedFar.hauls.first().catches).hasSize(2)
 
         assertThat(ersMessages[1].message).isInstanceOf(FAR::class.java)
         assertThat(ersMessages[1].operationType).isEqualTo(LogbookOperationType.COR)
-        assertThat(ersMessages[1].isCorrected).isEqualTo(false)
+        assertThat(ersMessages[1].isCorrectedByNewerMessage).isEqualTo(false)
         val far = ersMessages[1].message as FAR
         assertThat(far.hauls.size).isEqualTo(1)
         assertThat(far.hauls.first().catches).hasSize(3)
@@ -239,7 +239,7 @@ class GetLogbookMessagesUTests {
         assertThat(ersMessages[0].message).isInstanceOf(FAR::class.java)
         assertThat(ersMessages[0].acknowledge).isInstanceOf(Acknowledge::class.java)
         assertThat(ersMessages[0].operationType).isEqualTo(LogbookOperationType.DAT)
-        assertThat(ersMessages[0].isCorrected).isEqualTo(false)
+        assertThat(ersMessages[0].isCorrectedByNewerMessage).isEqualTo(false)
         val ack = ersMessages[0].acknowledge as Acknowledge
         assertThat(ack.rejectionCause).isEqualTo("Oops")
         assertThat(ack.returnStatus).isEqualTo("002")
@@ -250,7 +250,7 @@ class GetLogbookMessagesUTests {
 
         assertThat(ersMessages[1].message).isInstanceOf(FAR::class.java)
         assertThat(ersMessages[1].operationType).isEqualTo(LogbookOperationType.DAT)
-        assertThat(ersMessages[1].isCorrected).isEqualTo(false)
+        assertThat(ersMessages[1].isCorrectedByNewerMessage).isEqualTo(false)
         val ackTwo = ersMessages[1].acknowledge as Acknowledge
         assertThat(ackTwo.rejectionCause).isNull()
         assertThat(ackTwo.returnStatus).isEqualTo("000")

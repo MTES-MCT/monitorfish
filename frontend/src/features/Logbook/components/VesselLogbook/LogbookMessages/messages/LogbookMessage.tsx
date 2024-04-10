@@ -10,17 +10,18 @@ import XMLSVG from '../../../../../icons/Picto_XML.svg?react'
 import ShowActivitySVG from '../../../../../icons/Position_message_JPE_Pin_gris_clair.svg?react'
 import HideActivitySVG from '../../../../../icons/Position_message_JPE_Pin_masquer.svg?react'
 import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../constants'
+import { LogbookMessage as LogbookMessageNamespace } from '../../../../LogbookMessage.types'
 import { logbookActions } from '../../../../slice'
 import { getLogbookMessageType } from '../../../../utils'
 
 import type { LogbookMessage as LogbookMessageType } from '../../../../Logbook.types'
-import type { LogbookMessage as LogbookMessageNamespace } from '../../../../LogbookMessage.types'
 
 type LogbookMessageComponentProps = Readonly<{
   isFirst: boolean
   logbookMessage: LogbookMessageType | LogbookMessageNamespace.LogbookMessage
+  withMapControls?: boolean
 }>
-export function LogbookMessage({ isFirst, logbookMessage }: LogbookMessageComponentProps) {
+export function LogbookMessage({ isFirst, logbookMessage, withMapControls = false }: LogbookMessageComponentProps) {
   const dispatch = useMainAppDispatch()
   const fishingActivitiesShowedOnMap = useMainAppSelector(state => state.fishingActivities.fishingActivitiesShowedOnMap)
 
@@ -56,13 +57,15 @@ export function LogbookMessage({ isFirst, logbookMessage }: LogbookMessageCompon
         <LogbookMessageTypeText>{getLogbookMessageType(logbookMessage)}</LogbookMessageTypeText>
         <LogbookMessageHeaderText
           data-cy="vessel-fishing-message"
-          isShortcut={logbookMessage.isCorrected || logbookMessage.isDeleted || !!logbookMessage.referencedReportId}
+          isShortcut={
+            logbookMessage.isCorrectedByNewerMessage || logbookMessage.isDeleted || !!logbookMessage.referencedReportId
+          }
           title={logbookHeaderTitle}
         >
           {logbookHeaderTitle}
         </LogbookMessageHeaderText>
 
-        {!logbookMessage.isConsolidated && logbookMessage.isCorrected && (
+        {logbookMessage.isCorrectedByNewerMessage && (
           <OperationTag>
             <OperationTagDangerBullet />
             <OperationTagLabel>ANCIEN MESSAGE</OperationTagLabel>
@@ -74,8 +77,7 @@ export function LogbookMessage({ isFirst, logbookMessage }: LogbookMessageCompon
             <OperationTagLabel>MESSAGE SUPPRIMÉ</OperationTagLabel>
           </OperationTag>
         )}
-        {((!logbookMessage.isConsolidated && !!logbookMessage.referencedReportId) ||
-          (logbookMessage.isConsolidated && logbookMessage.isCorrected)) && (
+        {logbookMessage.operationType === LogbookMessageNamespace.OperationType.COR && (
           <OperationTag>
             <OperationTagWarningBullet />
             <OperationTagLabel>MESSAGE CORRIGÉ</OperationTagLabel>
@@ -92,8 +94,8 @@ export function LogbookMessage({ isFirst, logbookMessage }: LogbookMessageCompon
           <Xml />
         )}
 
-        {!logbookMessage.isConsolidated &&
-          !logbookMessage.isCorrected &&
+        {withMapControls &&
+          !logbookMessage.isCorrectedByNewerMessage &&
           (fishingActivitiesShowedOnMap.find(showed => showed.id === logbookMessage.operationNumber) ? (
             <HideActivity
               data-cy="hide-fishing-activity"

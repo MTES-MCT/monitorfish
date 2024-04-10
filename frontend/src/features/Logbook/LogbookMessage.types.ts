@@ -9,8 +9,7 @@ export namespace LogbookMessage {
     integrationDateTime: string
     internalReferenceNumber: string
     ircs: string
-    isConsolidated: boolean
-    isCorrected: boolean
+    isCorrectedByNewerMessage: boolean
     isDeleted: boolean
     isSentByFailoverSoftware: boolean
     message: MessageBase | undefined

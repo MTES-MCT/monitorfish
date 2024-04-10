@@ -32,10 +32,9 @@ data class LogbookMessage(
     val software: String? = null,
 
     var acknowledge: Acknowledge? = null,
-    var isCorrected: Boolean = false,
+    var isCorrectedByNewerMessage: Boolean = false,
     var isDeleted: Boolean = false,
     val isEnriched: Boolean = false,
-    val isConsolidated: Boolean = false,
     var isSentByFailoverSoftware: Boolean = false,
     val message: LogbookMessageValue? = null,
     val messageType: String? = null,
@@ -43,18 +42,25 @@ data class LogbookMessage(
     val tripGears: List<LogbookGear>? = emptyList(),
     val tripSegments: List<LogbookTripSegment>? = emptyList(),
 ) {
-    fun <T : LogbookMessageValue> toConsolidatedLogbookMessage(
+    /**
+     * Returns the reference logbook message `reportId` (= the original DAT operation `reportId`).
+     */
+    fun getReferenceReportId(): String? {
+        return referencedReportId ?: reportId
+    }
+
+    fun <T : LogbookMessageValue> toEnrichedLogbookMessageTyped(
         relatedLogbookMessages: List<LogbookMessage>,
         clazz: Class<T>,
-    ): ConsolidatedLogbookMessage<T> {
+    ): LogbookMessageTyped<T> {
         if (reportId == null) {
             throw EntityConversionException(
-                "Logbook report $id has no `reportId`. You can only consolidate a DAT or an orphan COR operation with a `reportId`.",
+                "Logbook report $id has no `reportId`. You can only enrich a DAT or an orphan COR operation with a `reportId`.",
             )
         }
         if (operationType !in listOf(LogbookOperationType.DAT, LogbookOperationType.COR)) {
             throw EntityConversionException(
-                "Logbook report $id has operationType '$operationType'. You can only consolidate a DAT or an orphan COR operation.",
+                "Logbook report $id has operationType '$operationType'. You can only enrich a DAT or an orphan COR operation.",
             )
         }
 
@@ -63,23 +69,13 @@ data class LogbookMessage(
             .lastOrNull { it.operationType == LogbookOperationType.COR }
 
         val logbookMessageBase = maybeLastLogbookMessageCorrection ?: this
-        logbookMessageBase.consolidateAcknowledge(relatedLogbookMessages)
+        logbookMessageBase.enrichAcnkowledge(relatedLogbookMessages)
         val finalLogbookMessage = logbookMessageBase.copy(
-            // We need to restore the `reportId` and `referencedReportId` to the original values
-            // in case it has been consolidated from a COR operation rather than a DAT one.
-            // /!\ And this COR operation can be orphan.
-            reportId = if (logbookMessageBase.operationType == LogbookOperationType.COR) {
-                logbookMessageBase.referencedReportId
-            } else {
-                logbookMessageBase.reportId
-            },
-            referencedReportId = null,
-            isConsolidated = true,
-            isCorrected = logbookMessageBase.operationType == LogbookOperationType.COR,
+            isCorrectedByNewerMessage = false,
             isDeleted = historicallySortedRelatedLogbookMessages.any { it.operationType == LogbookOperationType.DEL },
         )
 
-        return ConsolidatedLogbookMessage(
+        return LogbookMessageTyped(
             logbookMessage = finalLogbookMessage,
             clazz = clazz,
         )
@@ -165,7 +161,7 @@ data class LogbookMessage(
         }
     }
 
-    private fun consolidateAcknowledge(relatedLogbookMessages: List<LogbookMessage>) {
+    private fun enrichAcnkowledge(relatedLogbookMessages: List<LogbookMessage>) {
         if (this.transmissionFormat == LogbookTransmissionFormat.FLUX ||
             software !== null && software.contains(LogbookSoftware.VISIOCAPTURE.software)
         ) {

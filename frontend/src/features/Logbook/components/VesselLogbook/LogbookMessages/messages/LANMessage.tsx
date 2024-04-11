@@ -10,9 +10,9 @@ import { NoValue, Table, TableBody, TableKey, TableRow, TableValue, Zone, Specie
 
 import type { LANMessageValue } from '@features/Logbook/Logbook.types'
 
-type LANMessageProps = {
+type LANMessageProps = Readonly<{
   message: LANMessageValue
-}
+}>
 export function LANMessage({ message }: LANMessageProps) {
   const catchesWithProperties = useMemo(() => {
     if (!message?.catchLanded) {
@@ -53,13 +53,8 @@ export function LANMessage({ message }: LANMessageProps) {
             </Table>
           </Zone>
           <SpeciesList $hasCatches={!!catchesWithProperties.length}>
-            {catchesWithProperties.map((speciesCatch, index) => (
-              <SpecyCatch
-                key={`LAN${speciesCatch.species}`}
-                isLast={catchesWithProperties.length === index + 1}
-                specyCatch={speciesCatch}
-                weightType={WeightType.NET}
-              >
+            {catchesWithProperties.map(speciesCatch => (
+              <SpecyCatch key={`LAN${speciesCatch.species}`} specyCatch={speciesCatch} weightType={WeightType.NET}>
                 {speciesCatch.properties.map((specyCatch, specyIndex) => (
                   // eslint-disable-next-line react/no-array-index-key
                   <CatchDetails key={specyIndex} specyCatch={specyCatch} weightType={WeightType.NET} />

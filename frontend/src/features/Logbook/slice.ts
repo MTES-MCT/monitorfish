@@ -189,11 +189,11 @@ const logbookSlice = createSlice({
       }
 
       state.fishingActivitiesShowedOnMap = state.fishingActivities.logbookMessages
-        .filter(fishingActivity => !fishingActivity.isCorrected)
+        .filter(fishingActivity => !fishingActivity.isCorrectedByNewerMessage)
         .map(fishingActivity => ({
           date: getEffectiveDateTimeFromMessage(fishingActivity),
           id: fishingActivity.operationNumber,
-          isDeleted: fishingActivity.deleted,
+          isDeleted: fishingActivity.isDeleted,
           isNotAcknowledged: !fishingActivity.acknowledge?.isSuccess,
           name: getLogbookMessageType(fishingActivity)
         })) as any
@@ -220,7 +220,7 @@ const logbookSlice = createSlice({
         // TODO This date is not a Date but a string.
         date: getEffectiveDateTimeFromMessage(fishingActivityToShow),
         id: fishingActivityToShow.operationNumber,
-        isDeleted: fishingActivityToShow.deleted,
+        isDeleted: fishingActivityToShow.isDeleted,
         isNotAcknowledged: !fishingActivityToShow.acknowledge?.isSuccess,
         name: getLogbookMessageType(fishingActivityToShow)
       })

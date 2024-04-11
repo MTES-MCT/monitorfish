@@ -38,15 +38,19 @@ export function PNOMessage({ message }: PNOMessageProps) {
             <Table>
               <TableBody>
                 <TableRow>
-                  <TableKey>Date prévue d&apos;arrivée</TableKey>
+                  <TableKey>Date estimée d’arrivée</TableKey>
                   <TableValue>{getDatetimeOrDash(message.predictedArrivalDatetimeUtc)}</TableValue>
+                </TableRow>
+                <TableRow>
+                  <TableKey>Date prévue de débarque</TableKey>
+                  <TableValue>{getDatetimeOrDash(message.predictedLandingDatetimeUtc)}</TableValue>
                 </TableRow>
                 <TableRow>
                   <TableKey>Date de début de la marée</TableKey>
                   <TableValue>{getDatetimeOrDash(message.tripStartDate)}</TableValue>
                 </TableRow>
                 <TableRow>
-                  <TableKey>Port d&apos;arrivée</TableKey>
+                  <TableKey>Port d’arrivée</TableKey>
                   <TableValue>{getCodeWithNameOrDash(message.port, message.portName)}</TableValue>
                 </TableRow>
                 <TableRow>
@@ -73,7 +77,6 @@ export function PNOMessage({ message }: PNOMessageProps) {
               <SpecyCatch
                 // eslint-disable-next-line react/no-array-index-key
                 key={index}
-                isLast={catchesWithProperties.length === index + 1}
                 specyCatch={speciesCatch}
                 weightType={WeightType.LIVE}
               >

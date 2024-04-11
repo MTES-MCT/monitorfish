@@ -29,6 +29,7 @@ import {
 import { useGetPriorNotificationsQuery } from '../../api'
 import { PriorNotification } from '../../PriorNotification.types'
 import { priorNotificationActions } from '../../slice'
+import { PriorNotificationCard } from '../PriorNotificationCard'
 
 import type { NoSeaFrontGroup, SeaFrontGroup } from '../../../../domain/entities/seaFront/constants'
 
@@ -38,6 +39,7 @@ export function PriorNotificationList() {
 
   const dispatch = useMainAppDispatch()
   const listFilter = useMainAppSelector(state => state.priorNotification.listFilterValues)
+  const openedPriorNotificationId = useMainAppSelector(state => state.priorNotification.openedPriorNotificationId)
   const apiFilter = useMemo(() => getApiFilterFromListFilter(listFilter), [listFilter])
   const localFilters = useMemo(() => getLocalFilterFromListFilter(listFilter), [listFilter])
   const selectedSeaFrontGroup = useMainAppSelector(state => state.priorNotification.listFilterValues.seaFrontGroup)
@@ -59,17 +61,17 @@ export function PriorNotificationList() {
     }
   ])
 
-  const subMenuCounter = useCallback(
-    (seaFrontGroup: SeaFrontGroup | NoSeaFrontGroup): number =>
-      countPriorNotificationsForSeaFrontGroup(priorNotifications, seaFrontGroup),
-    [priorNotifications]
-  )
-
   const handleSubMenuChange = useCallback(
     (nextSeaFrontGroup: SeaFrontGroup | NoSeaFrontGroup) => {
       dispatch(priorNotificationActions.setListFilterValues({ seaFrontGroup: nextSeaFrontGroup }))
     },
     [dispatch]
+  )
+
+  const subMenuCounter = useCallback(
+    (seaFrontGroup: SeaFrontGroup | NoSeaFrontGroup): number =>
+      countPriorNotificationsForSeaFrontGroup(priorNotifications, seaFrontGroup),
+    [priorNotifications]
   )
 
   const table = useReactTable({
@@ -142,7 +144,7 @@ export function PriorNotificationList() {
                           }}
                         >
                           {header.isPlaceholder ? undefined : (
-                            <TableWithSelectableRows.SortContainer
+                            <StyledHeadCellInerBox
                               className={header.column.getCanSort() ? 'cursor-pointer' : ''}
                               onClick={header.column.getToggleSortingHandler()}
                             >
@@ -152,7 +154,7 @@ export function PriorNotificationList() {
                                   asc: <div>▲</div>,
                                   desc: <div>▼</div>
                                 }[header.column.getIsSorted() as string] ?? <Icon.SortingArrows size={14} />)}
-                            </TableWithSelectableRows.SortContainer>
+                            </StyledHeadCellInerBox>
                           )}
                         </TableWithSelectableRows.Th>
                       ))}
@@ -185,7 +187,7 @@ export function PriorNotificationList() {
 
                         {row.getIsExpanded() && (
                           <ExpandedRow>
-                            <ExpandedRowCell $width={50} />
+                            <ExpandedRowCell $width={40} />
                             <ExpandedRowCell $width={130}>
                               <p>
                                 <ExpandedRowLabel>PNO émis :</ExpandedRowLabel>
@@ -204,7 +206,7 @@ export function PriorNotificationList() {
                                 </ExpandedRowValue>
                               </p>
                             </ExpandedRowCell>
-                            <ExpandedRowCell $width={180} />
+                            <ExpandedRowCell $width={140} />
                             <ExpandedRowCell $width={50} />
                             <ExpandedRowCell $width={160}>
                               <p>
@@ -261,11 +263,17 @@ export function PriorNotificationList() {
                               )}
                               <p>
                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                <Link>Voir plus de détail</Link>
+                                <Link
+                                  onClick={() =>
+                                    dispatch(priorNotificationActions.openPriorNotificationDetail(priorNotification.id))
+                                  }
+                                >
+                                  Voir plus de détail
+                                </Link>
                               </p>
                             </ExpandedRowCell>
-                            <ExpandedRowCell $width={60} />
-                            <ExpandedRowCell $width={56} />
+                            <ExpandedRowCell $width={72} />
+                            <ExpandedRowCell $width={64} />
                           </ExpandedRow>
                         )}
                       </Fragment>
@@ -277,13 +285,34 @@ export function PriorNotificationList() {
           </TableWrapper>
         </Body>
       </Page>
+
+      {!!openedPriorNotificationId && <PriorNotificationCard priorNotificationId={openedPriorNotificationId} />}
     </>
   )
 }
 
 const TableWrapper = styled.div`
+  box-sizing: border-box;
   flex-grow: 1;
   width: 1440px;
+
+  * {
+    box-sizing: border-box;
+  }
+`
+
+// TODO Update monitor-ui?
+const StyledHeadCellInerBox = styled(TableWithSelectableRows.SortContainer)`
+  > div {
+    &.Element-IconBox {
+      margin-top: 4px;
+    }
+
+    // Caret down/up
+    &:not(.Element-IconBox) {
+      margin-top: -2px;
+    }
+  }
 `
 
 // TODO Update monitor-ui?

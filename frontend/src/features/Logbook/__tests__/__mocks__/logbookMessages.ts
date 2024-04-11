@@ -1,20 +1,20 @@
 import type { LogbookMessage } from '../../Logbook.types'
 
-export const correctedLANMessage = {
+export const correctedLANMessage: LogbookMessage = {
   acknowledge: {
     dateTime: '2019-10-30T11:32:00Z',
     isSuccess: true,
     rejectionCause: null,
     returnStatus: '000'
   },
-  deleted: true,
   externalReferenceNumber: 'DONTSINK',
   flagState: 'FRA',
   imo: null,
   integrationDateTime: '2021-01-18T07:17:28.2717Z',
   internalReferenceNumber: 'FAK000999999',
   ircs: 'CALLME',
-  isCorrected: true,
+  isCorrectedByNewerMessage: true,
+  isDeleted: true,
   isSentByFailoverSoftware: false,
   message: {
     catchLanded: [],
@@ -35,21 +35,21 @@ export const correctedLANMessage = {
   vesselName: 'PHENOMENE'
 }
 
-export const correctedPNOMessage = {
+export const correctedPNOMessage: LogbookMessage = {
   acknowledge: {
     dateTime: '2019-10-30T11:32:00Z',
     isSuccess: true,
     rejectionCause: null,
     returnStatus: '000'
   },
-  deleted: false,
   externalReferenceNumber: 'DONTSINK',
   flagState: 'FRA',
   imo: null,
   integrationDateTime: '2021-01-18T07:17:19.04244Z',
   internalReferenceNumber: 'FAK000999999',
   ircs: 'CALLME',
-  isCorrected: true,
+  isCorrectedByNewerMessage: true,
+  isDeleted: false,
   isSentByFailoverSoftware: false,
   message: {
     catchOnboard: [
@@ -145,14 +145,14 @@ export const dummyCpsMessage: LogbookMessage = {
     rejectionCause: null,
     returnStatus: '000'
   },
-  deleted: false,
   externalReferenceNumber: 'DONTSINK',
   flagState: 'FRA',
   imo: null,
   integrationDateTime: '2019-10-11T01:17:28.2717Z',
   internalReferenceNumber: 'FAK000999999',
   ircs: 'CALLME',
-  isCorrected: false,
+  isCorrectedByNewerMessage: false,
+  isDeleted: false,
   isSentByFailoverSoftware: false,
   message: {
     catches: [
@@ -211,14 +211,14 @@ export const dummyCpsMessage: LogbookMessage = {
 export const dummyLogbookMessages: LogbookMessage[] = [
   {
     acknowledge: null,
-    deleted: false,
     externalReferenceNumber: 'DONTSINK',
     flagState: 'FRA',
     imo: null,
     integrationDateTime: '2021-01-18T07:17:28.888437Z',
     internalReferenceNumber: 'FAK000999999',
     ircs: 'CALLME',
-    isCorrected: false,
+    isCorrectedByNewerMessage: false,
+    isDeleted: false,
     isSentByFailoverSoftware: false,
     message: {
       anticipatedActivity: 'FSH',
@@ -264,14 +264,14 @@ export const dummyLogbookMessages: LogbookMessage[] = [
   },
   {
     acknowledge: null,
-    deleted: false,
     externalReferenceNumber: 'DONTSINK',
     flagState: 'FRA',
     imo: null,
     integrationDateTime: '2021-01-18T07:17:18.98256Z',
     internalReferenceNumber: 'FAK000999999',
     ircs: 'CALLME',
-    isCorrected: false,
+    isCorrectedByNewerMessage: false,
+    isDeleted: false,
     isSentByFailoverSoftware: true,
     message: {
       economicZoneExited: 'FRA',
@@ -297,14 +297,14 @@ export const dummyLogbookMessages: LogbookMessage[] = [
   },
   {
     acknowledge: null,
-    deleted: false,
     externalReferenceNumber: 'DONTSINK',
     flagState: 'FRA',
     imo: null,
     integrationDateTime: '2021-01-18T07:17:18.324128Z',
     internalReferenceNumber: 'FAK000999999',
     ircs: 'CALLME',
-    isCorrected: false,
+    isCorrectedByNewerMessage: false,
+    isDeleted: false,
     isSentByFailoverSoftware: false,
     message: {
       economicZoneEntered: 'FRA',
@@ -344,14 +344,14 @@ export const dummyLogbookMessages: LogbookMessage[] = [
       rejectionCause: null,
       returnStatus: null
     },
-    deleted: false,
     externalReferenceNumber: 'DONTSINK',
     flagState: 'FRA',
     imo: null,
     integrationDateTime: '2021-01-18T07:17:18.324128Z',
     internalReferenceNumber: 'FAK000999999',
     ircs: 'CALLME',
-    isCorrected: false,
+    isCorrectedByNewerMessage: false,
+    isDeleted: false,
     isSentByFailoverSoftware: false,
     message: {
       economicZoneEntered: 'FRA',
@@ -382,14 +382,14 @@ export const dummyLogbookMessages: LogbookMessage[] = [
       rejectionCause: null,
       returnStatus: '000'
     },
-    deleted: false,
     externalReferenceNumber: 'DONTSINK',
     flagState: 'FRA',
     imo: null,
     integrationDateTime: '2021-01-18T07:17:27.384921Z',
     internalReferenceNumber: 'FAK000999999',
     ircs: 'CALLME',
-    isCorrected: true,
+    isCorrectedByNewerMessage: true,
+    isDeleted: false,
     isSentByFailoverSoftware: false,
     message: {
       hauls: [
@@ -483,14 +483,14 @@ export const dummyLogbookMessages: LogbookMessage[] = [
       rejectionCause: null,
       returnStatus: null
     },
-    deleted: false,
     externalReferenceNumber: 'DONTSINK',
     flagState: 'FRA',
     imo: null,
     integrationDateTime: '2021-01-18T07:19:27.384921Z',
     internalReferenceNumber: 'FAK000999999',
     ircs: 'CALLME',
-    isCorrected: false,
+    isCorrectedByNewerMessage: false,
+    isDeleted: false,
     isSentByFailoverSoftware: false,
     message: null,
     messageType: 'INS',
@@ -506,14 +506,14 @@ export const dummyLogbookMessages: LogbookMessage[] = [
   },
   {
     acknowledge: null,
-    deleted: false,
     externalReferenceNumber: 'DONTSINK',
     flagState: 'FRA',
     imo: null,
     integrationDateTime: '2021-01-18T07:17:26.736456Z',
     internalReferenceNumber: 'FAK000999999',
     ircs: 'CALLME',
-    isCorrected: false,
+    isCorrectedByNewerMessage: false,
+    isDeleted: false,
     isSentByFailoverSoftware: false,
     message: {
       endOfFishingDatetimeUtc: '2019-10-20T12:16:00Z'
@@ -536,14 +536,14 @@ export const dummyLogbookMessages: LogbookMessage[] = [
       rejectionCause: null,
       returnStatus: '000'
     },
-    deleted: false,
     externalReferenceNumber: 'DONTSINK',
     flagState: 'FRA',
     imo: null,
     integrationDateTime: '2021-01-18T07:17:19.04244Z',
     internalReferenceNumber: 'FAK000999999',
     ircs: 'CALLME',
-    isCorrected: false,
+    isCorrectedByNewerMessage: false,
+    isDeleted: false,
     isSentByFailoverSoftware: false,
     message: {
       catchOnboard: [
@@ -639,14 +639,14 @@ export const dummyLogbookMessages: LogbookMessage[] = [
         '002 MGEN02 Message incorrect : la date/heure de l’événement RTP n° OOF20201105037001 est postérieure à la date/heure courante. Veuillez vérifier la date/heure de l’événement déclaré et renvoyer votre message.',
       returnStatus: '002'
     },
-    deleted: false,
     externalReferenceNumber: 'DONTSINK',
     flagState: 'FRA',
     imo: null,
     integrationDateTime: '2021-01-18T07:17:20.007244Z',
     internalReferenceNumber: 'FAK000999999',
     ircs: 'CALLME',
-    isCorrected: false,
+    isCorrectedByNewerMessage: false,
+    isDeleted: false,
     isSentByFailoverSoftware: false,
     message: {
       gearOnboard: [
@@ -680,14 +680,14 @@ export const dummyLogbookMessages: LogbookMessage[] = [
       rejectionCause: null,
       returnStatus: '000'
     },
-    deleted: false,
     externalReferenceNumber: 'DONTSINK',
     flagState: 'FRA',
     imo: null,
     integrationDateTime: '2021-01-18T07:19:27.384921Z',
     internalReferenceNumber: 'FAK000999999',
     ircs: 'CALLME',
-    isCorrected: false,
+    isCorrectedByNewerMessage: false,
+    isDeleted: false,
     isSentByFailoverSoftware: true,
     message: {
       hauls: [
@@ -1016,14 +1016,14 @@ export const dummyLogbookMessages: LogbookMessage[] = [
   },
   {
     acknowledge: null,
-    deleted: false,
     externalReferenceNumber: 'DONTSINK',
     flagState: 'FRA',
     imo: null,
     integrationDateTime: '2021-01-18T07:17:27.384921Z',
     internalReferenceNumber: 'FAK000999999',
     ircs: 'CALLME',
-    isCorrected: false,
+    isCorrectedByNewerMessage: false,
+    isDeleted: false,
     isSentByFailoverSoftware: false,
     message: {
       catches: [
@@ -1078,14 +1078,14 @@ export const dummyLogbookMessages: LogbookMessage[] = [
       rejectionCause: null,
       returnStatus: '000'
     },
-    deleted: false,
     externalReferenceNumber: 'DONTSINK',
     flagState: 'FRA',
     imo: null,
     integrationDateTime: '2021-01-18T07:17:28.2717Z',
     internalReferenceNumber: 'FAK000999999',
     ircs: 'CALLME',
-    isCorrected: false,
+    isCorrectedByNewerMessage: false,
+    isDeleted: false,
     isSentByFailoverSoftware: false,
     message: {
       catchLanded: [

@@ -27,7 +27,7 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
       />
     ),
     id: 'select',
-    size: 50
+    size: 40
   },
   {
     accessorFn: row => row.expectedArrivalDate,
@@ -61,7 +61,7 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
     enableSorting: true,
     header: () => "Port d'arrivée",
     id: 'port',
-    size: 180
+    size: 140
   },
   {
     accessorFn: row => row.vesselRiskFactor,
@@ -124,20 +124,26 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
         return null
       }
 
-      return <Tag backgroundColor={THEME.color.maximumRed15} style={{ marginTop: 1 }}>{`${info.getValue()} sign.`}</Tag>
+      return (
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Tag backgroundColor={THEME.color.maximumRed15} style={{ marginTop: 1 }}>{`${info.getValue()} sign.`}</Tag>
+        </div>
+      )
     },
     enableSorting: false,
     header: () => '',
     id: 'alertCount',
-    size: 60
+    size: 72
   },
   {
     accessorFn: row => row.id,
-    cell: (info: CellContext<PriorNotification.PriorNotification, number>) => <ButtonsGroupRow id={info.getValue()} />,
+    cell: (info: CellContext<PriorNotification.PriorNotification, string>) => (
+      <ButtonsGroupRow priorNotification={info.row.original} />
+    ),
     enableSorting: false,
     header: () => '',
     id: 'actions',
-    size: 56
+    size: 64
   }
 ]
 

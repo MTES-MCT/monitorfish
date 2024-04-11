@@ -108,7 +108,7 @@ class ComputeVesselFAOAreasUTests {
 
     @Test
     fun `execute Should return the computed fao areas When the port Locode given`() {
-        given(portRepository.find(any())).willReturn(
+        given(portRepository.findByLocode(any())).willReturn(
             Port("AEFAT", "Al Jazeera Port", faoAreas = listOf("27.8.c", "27.8")),
         )
 
@@ -122,7 +122,7 @@ class ComputeVesselFAOAreasUTests {
 
     @Test
     fun `execute Should return the computed fao areas When the CFR and the port Locode are given`() {
-        given(portRepository.find(any())).willReturn(
+        given(portRepository.findByLocode(any())).willReturn(
             Port("AEFAT", "Al Jazeera Port", faoAreas = listOf("27.8.c", "27.8")),
         )
 

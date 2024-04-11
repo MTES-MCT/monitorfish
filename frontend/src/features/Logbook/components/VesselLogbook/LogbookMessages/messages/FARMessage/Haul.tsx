@@ -36,7 +36,6 @@ export function Haul({ hasManyHauls, haul, haulNumber }) {
               <SpecyCatch
                 // eslint-disable-next-line react/no-array-index-key
                 key={index}
-                isLast={catchesWithProperties.length === index + 1}
                 specyCatch={speciesCatch}
                 weightType={WeightType.LIVE}
               >

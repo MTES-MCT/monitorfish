@@ -7,5 +7,5 @@ interface SpeciesRepository {
     fun findAll(): List<Species>
 
     @Throws(CodeNotFoundException::class)
-    fun find(code: String): Species
+    fun findByCode(code: String): Species
 }

@@ -1,10 +1,12 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class PriorNotificationDataOutput(
-    val id: Long,
+    /** Reference logbook message (report) `reportId`. */
+    val id: String,
     val expectedArrivalDate: String?,
     val expectedLandingDate: String?,
     val hasVesselRiskFactorSegments: Boolean?,
@@ -34,22 +36,31 @@ class PriorNotificationDataOutput(
     val vesselRiskFactorDetectability: Double?,
 ) {
     companion object {
-        fun fromPriorNotification(priorNotification: PriorNotification): PriorNotificationDataOutput {
-            val message = priorNotification.logbookMessage.message as PNO
+        val logger: Logger = LoggerFactory.getLogger(PriorNotificationDataOutput::class.java)
+
+        fun fromPriorNotification(priorNotification: PriorNotification): PriorNotificationDataOutput? {
+            val logbookMessage = priorNotification.logbookMessageTyped.logbookMessage
+            val referenceReportId = logbookMessage.getReferenceReportId()
+            if (referenceReportId == null) {
+                logger.warn("Prior notification has neither `reportId` nor `referencedReportId`: $priorNotification.")
+
+                return null
+            }
+            val message = priorNotification.logbookMessageTyped.typedMessage
 
             val onBoardCatches = message.catchOnboard.map { LogbookMessageCatchDataOutput.fromCatch(it) }
-            val tripGears = priorNotification.logbookMessage.tripGears?.mapNotNull {
+            val tripGears = logbookMessage.tripGears?.mapNotNull {
                 LogbookMessageGearDataOutput.fromGear(it)
             } ?: emptyList()
-            val tripSegments = priorNotification.logbookMessage.tripSegments?.map {
+            val tripSegments = logbookMessage.tripSegments?.map {
                 LogbookMessageTripSegmentDataOutput.fromLogbookTripSegment(it)
             } ?: emptyList()
             val types = message.pnoTypes.map { PriorNotificationTypeDataOutput.fromPriorNotificationType(it) }
 
             return PriorNotificationDataOutput(
-                id = priorNotification.id,
-                expectedArrivalDate = message.predictedArrivalDateTime?.toString(),
-                expectedLandingDate = message.predictedLandingDatetime?.toString(),
+                id = referenceReportId,
+                expectedArrivalDate = message.predictedArrivalDatetimeUtc?.toString(),
+                expectedLandingDate = message.predictedLandingDatetimeUtc?.toString(),
                 hasVesselRiskFactorSegments = priorNotification.vesselRiskFactor?.segments?.isNotEmpty(),
                 isVesselUnderCharter = priorNotification.vessel.underCharter,
                 onBoardCatches,
@@ -58,7 +69,7 @@ class PriorNotificationDataOutput(
                 purposeCode = message.purpose,
                 reportingsCount = priorNotification.reportingsCount,
                 seaFront = priorNotification.seaFront,
-                sentAt = priorNotification.logbookMessage.reportDateTime?.toString(),
+                sentAt = logbookMessage.reportDateTime?.toString(),
                 tripGears,
                 tripSegments,
                 types,

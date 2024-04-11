@@ -1,7 +1,7 @@
+import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { memo } from 'react'
 import styled from 'styled-components'
-import { FrontendErrorBoundary } from 'ui/FrontendErrorBoundary'
 
 import { AirControlForm } from './AirControlForm'
 import { AirSurveillanceForm } from './AirSurveillanceForm'

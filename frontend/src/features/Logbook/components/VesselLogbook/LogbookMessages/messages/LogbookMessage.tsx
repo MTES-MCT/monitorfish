@@ -1,3 +1,4 @@
+import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -5,42 +6,41 @@ import { getComponentFromMessageType } from './constants'
 import { useMainAppDispatch } from '../../../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
 import { getDateTime } from '../../../../../../utils'
-import AckNOkSVG from '../../../../../icons/Icon_not_OK.svg?react'
-import AckOkSVG from '../../../../../icons/Message_JPE_acquitté.svg?react'
 import XMLSVG from '../../../../../icons/Picto_XML.svg?react'
 import ShowActivitySVG from '../../../../../icons/Position_message_JPE_Pin_gris_clair.svg?react'
 import HideActivitySVG from '../../../../../icons/Position_message_JPE_Pin_masquer.svg?react'
 import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../constants'
+import { LogbookMessage as LogbookMessageNamespace } from '../../../../LogbookMessage.types'
 import { logbookActions } from '../../../../slice'
 import { getLogbookMessageType } from '../../../../utils'
 
 import type { LogbookMessage as LogbookMessageType } from '../../../../Logbook.types'
-import type { HTMLProps } from 'react'
 
-type LogbookMessageComponentProps = {
+type LogbookMessageComponentProps = Readonly<{
   isFirst: boolean
-  message: LogbookMessageType
-}
-export function LogbookMessage({ isFirst, message }: LogbookMessageComponentProps) {
+  logbookMessage: LogbookMessageType | LogbookMessageNamespace.LogbookMessage
+  withMapControls?: boolean
+}>
+export function LogbookMessage({ isFirst, logbookMessage, withMapControls = false }: LogbookMessageComponentProps) {
   const dispatch = useMainAppDispatch()
   const fishingActivitiesShowedOnMap = useMainAppSelector(state => state.fishingActivities.fishingActivitiesShowedOnMap)
 
   const logbookHeaderTitle = useMemo(() => {
-    switch (message.messageType) {
+    switch (logbookMessage.messageType) {
       case LogbookMessageTypeEnum.DEP.code.toString(): {
         return (
           <>
-            <LogbookMessageName>{LogbookMessageTypeEnum[message.messageType].name}</LogbookMessageName>
-            {message.message.departurePortName || message.message.departurePort} le{' '}
-            {getDateTime(message.message.departureDatetimeUtc, true)} <Gray>(UTC)</Gray>
+            <LogbookMessageName>{LogbookMessageTypeEnum[logbookMessage.messageType].name}</LogbookMessageName>
+            {logbookMessage.message.departurePortName || logbookMessage.message.departurePort} le{' '}
+            {getDateTime(logbookMessage.message.departureDatetimeUtc, true)} <Gray>(UTC)</Gray>
           </>
         )
       }
       default: {
-        return LogbookMessageTypeEnum[message.messageType].fullName
+        return LogbookMessageTypeEnum[logbookMessage.messageType].fullName
       }
     }
-  }, [message])
+  }, [logbookMessage])
 
   const openXML = xml => {
     const blob = new Blob([xml], { type: 'text/xml' })
@@ -49,63 +49,69 @@ export function LogbookMessage({ isFirst, message }: LogbookMessageComponentProp
     URL.revokeObjectURL(url)
   }
 
-  const logbookMessageComponent = useMemo(() => getComponentFromMessageType(message), [message])
+  const logbookMessageComponent = useMemo(() => getComponentFromMessageType(logbookMessage), [logbookMessage])
 
   return (
-    <Wrapper id={message.operationNumber} isFirst={isFirst}>
+    <Wrapper id={logbookMessage.operationNumber} isFirst={isFirst}>
       <Header>
-        <LogbookMessageTypeText>{getLogbookMessageType(message)}</LogbookMessageTypeText>
+        <LogbookMessageTypeText>{getLogbookMessageType(logbookMessage)}</LogbookMessageTypeText>
         <LogbookMessageHeaderText
           data-cy="vessel-fishing-message"
-          isShortcut={message.isCorrected || message.deleted || !!message.referencedReportId}
+          isShortcut={
+            logbookMessage.isCorrectedByNewerMessage || logbookMessage.isDeleted || !!logbookMessage.referencedReportId
+          }
           title={logbookHeaderTitle}
         >
           {logbookHeaderTitle}
         </LogbookMessageHeaderText>
-        {message.isCorrected && (
-          <CorrectedMessage>
-            <MessageCorrected />
-            <MessageText>ANCIEN MESSAGE</MessageText>
-          </CorrectedMessage>
+
+        {logbookMessage.isCorrectedByNewerMessage && (
+          <OperationTag>
+            <OperationTagDangerBullet />
+            <OperationTagLabel>ANCIEN MESSAGE</OperationTagLabel>
+          </OperationTag>
         )}
-        {message.deleted && (
-          <CorrectedMessage>
-            <MessageCorrected />
-            <MessageText>MESSAGE SUPPRIMÉ</MessageText>
-          </CorrectedMessage>
+        {logbookMessage.isDeleted && (
+          <OperationTag>
+            <OperationTagDangerBullet />
+            <OperationTagLabel>MESSAGE SUPPRIMÉ</OperationTagLabel>
+          </OperationTag>
         )}
-        {message.referencedReportId && (
-          <CorrectedMessage>
-            <MessageOK />
-            <MessageText>MESSAGE CORRIGÉ</MessageText>
-          </CorrectedMessage>
+        {logbookMessage.operationType === LogbookMessageNamespace.OperationType.COR && (
+          <OperationTag>
+            <OperationTagWarningBullet />
+            <OperationTagLabel>MESSAGE CORRIGÉ</OperationTagLabel>
+          </OperationTag>
         )}
-        {message.rawMessage ? (
+
+        {logbookMessage.rawMessage ? (
           <Xml
-            onClick={() => openXML(message.rawMessage)}
+            onClick={() => openXML(logbookMessage.rawMessage)}
             style={{ cursor: 'pointer' }}
             title="Ouvrir le message XML brut"
           />
         ) : (
           <Xml />
         )}
-        {!message.isCorrected &&
-          (fishingActivitiesShowedOnMap.find(showed => showed.id === message.operationNumber) ? (
+
+        {withMapControls &&
+          !logbookMessage.isCorrectedByNewerMessage &&
+          (fishingActivitiesShowedOnMap.find(showed => showed.id === logbookMessage.operationNumber) ? (
             <HideActivity
               data-cy="hide-fishing-activity"
-              onClick={() => dispatch(logbookActions.removeFromMap(message.operationNumber))}
+              onClick={() => dispatch(logbookActions.removeFromMap(logbookMessage.operationNumber))}
               title="Cacher le message sur la piste"
             />
           ) : (
             <ShowActivity
               data-cy="show-fishing-activity"
-              onClick={() => dispatch(logbookActions.showOnMap(message.operationNumber))}
+              onClick={() => dispatch(logbookActions.showOnMap(logbookMessage.operationNumber))}
               title="Afficher le message sur la piste"
             />
           ))}
       </Header>
       <Body data-cy="vessel-fishing-message-body">
-        {message.isSentByFailoverSoftware && (
+        {logbookMessage.isSentByFailoverSoftware && (
           <SoftwareFailover>
             <MessageSentByFailoverSoftwareIcon />
             Message envoyé via e-sacapt
@@ -113,26 +119,37 @@ export function LogbookMessage({ isFirst, message }: LogbookMessageComponentProp
         )}
         <LogbookMessageMetadata>
           <EmissionDateTime>
-            <Key>Date de saisie</Key>
+            <Key>Date d’émission</Key>
             <br />
-            {getDateTime(message.reportDateTime, true)}
+            {getDateTime(logbookMessage.reportDateTime, true)}
           </EmissionDateTime>
           <ReceptionDateTime>
             <Key>Date de réception</Key>
             <br />
-            {getDateTime(message.integrationDateTime, true)}
+            {getDateTime(logbookMessage.integrationDateTime, true)}
           </ReceptionDateTime>
-          <VoyageNumber title={message.tripNumber.toString()}>
+          <VoyageNumber title={logbookMessage.tripNumber?.toString()}>
             <Key>N° de marée</Key>
             <br />
-            {message.tripNumber || <Gray>-</Gray>}
+            {logbookMessage.tripNumber ?? <Gray>-</Gray>}
           </VoyageNumber>
           <Acknowledge>
             <Key>Acq.</Key>
             <br />
-            {!message.acknowledge || (message.acknowledge.isSuccess === null && <Gray>-</Gray>)}
-            {message.acknowledge?.isSuccess === true && <AckOk />}
-            {message.acknowledge?.isSuccess === false && <AckNOk title={message.acknowledge?.rejectionCause || ''} />}
+            {!logbookMessage.acknowledge || (logbookMessage.acknowledge.isSuccess === null && <Gray>-</Gray>)}
+            {logbookMessage.acknowledge?.isSuccess === true && (
+              <Icon.Confirm
+                color={THEME.color.mediumSeaGreen}
+                data-cy="LogbookMessage-successful-acknowledgement-icon"
+              />
+            )}
+            {logbookMessage.acknowledge?.isSuccess === false && (
+              <Icon.Reject
+                color={THEME.color.maximumRed}
+                data-cy="LogbookMessage-failed-acknowledgement-icon"
+                title={logbookMessage.acknowledge?.rejectionCause ?? ''}
+              />
+            )}
           </Acknowledge>
         </LogbookMessageMetadata>
         {logbookMessageComponent}
@@ -159,40 +176,38 @@ const MessageSentByFailoverSoftwareIcon = styled.span`
   display: inline-block;
 `
 
-const MessageText = styled.span`
-  vertical-align: text-top;
-  line-height: 11px;
-  margin: 0 3px 0 3px;
-  font-size: 11px;
-`
-
-const MessageCorrected = styled.span`
-  height: 14px;
-  margin-left: 3px;
-  width: 14px;
-  /* TODO Replace with theme color. */
-  background-color: #e1000f;
-  border-radius: 50%;
-  display: inline-block;
-`
-
-const MessageOK = styled.span`
-  height: 14px;
-  margin-left: 3px;
-  width: 14px;
-  background-color: #8cc61f;
-  border-radius: 50%;
-  display: inline-block;
-`
-
-const CorrectedMessage = styled.span`
-  border-radius: 11px;
+const OperationTag = styled.span`
   background: ${p => p.theme.color.gainsboro};
-  font-size: 11px;
+  border-radius: 11px;
   color: ${p => p.theme.color.gunMetal};
-  margin: 7px 7px 7px 3px;
+  font-size: 11px;
   height: 17px;
-  padding: 3px 5px 0px 2px;
+  margin: 7px 7px 7px 3px;
+  padding: 3.5px 5px 0.5px 2px;
+  white-space: nowrap;
+`
+const OperationTagDangerBullet = styled.span`
+  height: 14px;
+  margin-left: 3px;
+  width: 14px;
+  background-color: ${p => p.theme.color.maximumRed};
+  border-radius: 50%;
+  display: inline-block;
+`
+const OperationTagWarningBullet = styled.span`
+  height: 14px;
+  margin-left: 3px;
+  width: 14px;
+  background-color: ${p => p.theme.color.mediumSeaGreen};
+  border-radius: 50%;
+  display: inline-block;
+`
+const OperationTagLabel = styled.span`
+  font-size: 11px;
+  line-height: 11px;
+  margin: 0 4px;
+  vertical-align: 2.5px;
+  white-space: nowrap;
 `
 
 const Gray = styled.span`
@@ -202,49 +217,45 @@ const Gray = styled.span`
 
 const Key = styled.span`
   color: ${p => p.theme.color.slateGray};
+  line-height: 18px;
+  margin-bottom: 2px;
 `
 
-const Acknowledge = styled.div`
-  text-align: center;
-  background: ${p => p.theme.color.white};
-  padding: 5px 9px 9px 9px;
-  margin-left: 10px;
-  font-size: 13px;
-  color: ${p => p.theme.color.gunMetal};
-  flex-grow: 4;
-`
+// Body Header
 
-const VoyageNumber = styled.div<HTMLProps<HTMLDivElement>>`
-  text-align: center;
-  background: ${p => p.theme.color.white};
-  padding: 5px 9px 9px 9px;
-  margin-left: 10px;
+const BodyHeaderBlock = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
   font-size: 13px;
+  padding: 10px;
+`
+const EmissionDateTime = styled(BodyHeaderBlock)`
+  background: ${p => p.theme.color.white};
   color: ${p => p.theme.color.gunMetal};
   flex-grow: 3;
+`
+const ReceptionDateTime = styled(BodyHeaderBlock)`
+  background: ${p => p.theme.color.white};
+  color: ${p => p.theme.color.gunMetal};
+  flex-grow: 3;
+  margin-left: 10px;
+`
+const VoyageNumber = styled(BodyHeaderBlock)`
+  background: ${p => p.theme.color.white};
+  color: ${p => p.theme.color.gunMetal};
+  flex-grow: 3;
+  margin-left: 10px;
   max-width: 80px;
   overflow: clip;
-  white-space: nowrap;
   text-overflow: ellipsis;
+  white-space: nowrap;
 `
-
-const ReceptionDateTime = styled.div`
-  text-align: center;
+const Acknowledge = styled(BodyHeaderBlock)`
   background: ${p => p.theme.color.white};
-  padding: 5px 8px 9px 8px;
+  color: ${p => p.theme.color.gunMetal};
+  flex-grow: 4;
   margin-left: 10px;
-  font-size: 13px;
-  color: ${p => p.theme.color.gunMetal};
-  flex-grow: 3;
-`
-
-const EmissionDateTime = styled.div`
-  text-align: center;
-  background: ${p => p.theme.color.white};
-  padding: 5px 8px 9px 8px;
-  font-size: 13px;
-  color: ${p => p.theme.color.gunMetal};
-  flex-grow: 3;
 `
 
 const LogbookMessageMetadata = styled.div`
@@ -266,27 +277,28 @@ const Wrapper = styled.div<{
 `
 
 const Header = styled.div`
-  height: 35px;
-  width: inherit;
-  padding: 0 0 0 10px;
   background: ${p => p.theme.color.charcoal};
   display: flex;
+  height: 35px;
+  padding: 0 0 0 10px;
+  width: inherit;
 `
 
 const LogbookMessageHeaderText = styled.span<{
   isShortcut: boolean
 }>`
   color: ${p => p.theme.color.white};
+  flex-grow: 1;
+  font-size: 13px;
   font-weight: 500;
   margin: 5px 5px 5px 5px;
+  /* max-width: ${p => (p.isShortcut ? '185px' : '330px')}; */
+  overflow: hidden !important;
   padding: 3px 4px 2px 0;
-  font-size: 13px;
+  text-overflow: ellipsis;
   vertical-align: -moz-middle-with-baseline;
   vertical-align: -webkit-baseline-middle;
   white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden !important;
-  max-width: ${p => (p.isShortcut ? '185px' : '330px')};
 `
 
 const LogbookMessageName = styled.span`
@@ -319,14 +331,6 @@ const Xml = styled(XMLSVG)`
   tspan {
     font-size: 9px;
   }
-`
-
-const AckNOk = styled(AckNOkSVG)`
-  margin-top: 3px;
-`
-
-const AckOk = styled(AckOkSVG)`
-  margin-top: 3px;
 `
 
 const ShowActivity = styled(ShowActivitySVG)`

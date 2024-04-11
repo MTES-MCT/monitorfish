@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.mappers.ERSMapper.getERSMessageValueFromJSON
@@ -69,7 +70,7 @@ data class LogbookReportEntity(
     @Column(name = "software")
     val software: String? = null,
     @Column(name = "enriched")
-    val isEnriched: Boolean,
+    val isEnriched: Boolean = false,
     @Type(JsonBinaryType::class)
     @Column(name = "trip_gears", nullable = true, columnDefinition = "jsonb")
     val tripGears: String? = null,
@@ -96,18 +97,19 @@ data class LogbookReportEntity(
             reportDateTime = logbookMessage.reportDateTime?.toInstant(),
             integrationDateTime = logbookMessage.integrationDateTime.toInstant(),
             vesselName = logbookMessage.vesselName,
-            operationType = logbookMessage.operationType,
             reportId = logbookMessage.reportId,
             operationNumber = logbookMessage.operationNumber,
             tripNumber = logbookMessage.tripNumber,
             flagState = logbookMessage.flagState,
             imo = logbookMessage.imo,
-            messageType = logbookMessage.messageType,
             analyzedByRules = logbookMessage.analyzedByRules,
-            message = mapper.writeValueAsString(logbookMessage.message),
             software = logbookMessage.software,
             transmissionFormat = logbookMessage.transmissionFormat,
+
             isEnriched = logbookMessage.isEnriched,
+            message = mapper.writeValueAsString(logbookMessage.message),
+            messageType = logbookMessage.messageType,
+            operationType = logbookMessage.operationType,
         )
     }
 
@@ -126,30 +128,35 @@ data class LogbookReportEntity(
             reportDateTime = reportDateTime?.atZone(UTC),
             integrationDateTime = integrationDateTime.atZone(UTC),
             vesselName = vesselName,
-            operationType = operationType,
             reportId = reportId,
             operationNumber = operationNumber,
             tripNumber = tripNumber,
             flagState = flagState,
             imo = imo,
-            messageType = messageType,
             analyzedByRules = analyzedByRules ?: listOf(),
-            message = message,
             software = software,
             transmissionFormat = transmissionFormat,
+
             isEnriched = isEnriched,
+            message = message,
+            messageType = messageType,
+            operationType = operationType,
             tripGears = tripGears,
             tripSegments = tripSegments,
         )
     }
 
-    fun toPriorNotification(mapper: ObjectMapper): PriorNotification {
-        val logbookMessage = toLogbookMessage(mapper)
+    fun toPriorNotification(mapper: ObjectMapper, relatedModels: List<LogbookReportEntity>): PriorNotification {
+        val referenceLogbookMessage = toLogbookMessage(mapper)
+        val relatedLogbookMessages = relatedModels.map { it.toLogbookMessage(mapper) }
+        val enrichedLogbookMessageTyped = referenceLogbookMessage
+            .toEnrichedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
+        // Default to UNKNOWN vessel when null or not found
+        val vessel = vessel?.toVessel() ?: Vessel(id = -1, flagState = CountryCode.UNDEFINED)
 
         return PriorNotification(
-            id = id!!,
-            logbookMessage = logbookMessage,
-            vessel = vessel?.toVessel() ?: Vessel(id = -1, flagState = CountryCode.UNDEFINED),
+            logbookMessageTyped = enrichedLogbookMessageTyped,
+            vessel = vessel,
             vesselRiskFactor = vesselRiskFactor?.toVesselRiskFactor(mapper),
         )
     }

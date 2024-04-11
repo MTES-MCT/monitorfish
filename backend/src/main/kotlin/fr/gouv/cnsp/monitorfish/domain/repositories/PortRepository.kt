@@ -8,5 +8,5 @@ interface PortRepository {
     fun findAllActive(): List<Port>
 
     @Throws(CodeNotFoundException::class)
-    fun find(code: String): Port
+    fun findByLocode(locode: String): Port
 }

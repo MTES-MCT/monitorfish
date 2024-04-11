@@ -1,4 +1,5 @@
 import type { VesselIdentity } from '../../domain/entities/vessel/types'
+import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
 export type VesselVoyage = {
   endDate: string | null
@@ -24,14 +25,14 @@ export type LogbookMessage = {
     rejectionCause: string | null
     returnStatus: string | null
   } | null
-  deleted: boolean
   externalReferenceNumber: string
   flagState: string
   imo: string | null
   integrationDateTime: string
   internalReferenceNumber: string
   ircs: string
-  isCorrected: boolean
+  isCorrectedByNewerMessage: boolean
+  isDeleted: boolean
   isSentByFailoverSoftware: boolean
   message: any
   messageType: string
@@ -159,7 +160,8 @@ export type PNOMessageValue = {
   port: string
   portName: string
   predictedArrivalDatetimeUtc: string
-  purpose: string
+  predictedLandingDatetimeUtc: string
+  purpose: PriorNotification.PurposeCode
   tripStartDate: string
 }
 

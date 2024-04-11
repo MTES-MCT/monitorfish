@@ -44,14 +44,10 @@ class GetLogbookMessages(
                     logger.warn(e.message)
                 }
 
-                if (it.operationType == LogbookOperationType.DAT || it.operationType == LogbookOperationType.COR) {
-                    it.enrichGearPortAndSpecyNames(allGears, allPorts, allSpecies)
-                }
-
                 it
             }
 
-        messages.forEach { it.enrichAknowledgeCorrectionAndDeletion(messages) }
+        messages.forEach { it.enrich(messages, allGears, allPorts, allSpecies) }
 
         return messages.filter {
             it.operationType == LogbookOperationType.DAT ||

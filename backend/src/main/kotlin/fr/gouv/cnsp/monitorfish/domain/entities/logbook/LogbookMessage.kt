@@ -112,6 +112,19 @@ data class LogbookMessage(
         }
     }
 
+    fun enrich(
+        contextMessages: List<LogbookMessage>,
+        allGears: List<Gear>,
+        allPorts: List<Port>,
+        allSpecies: List<Species>,
+    ) {
+        if (operationType == LogbookOperationType.DAT || operationType == LogbookOperationType.COR) {
+            enrichGearPortAndSpecyNames(allGears, allPorts, allSpecies)
+        }
+
+        enrichAknowledgeCorrectionAndDeletion(contextMessages)
+    }
+
     fun enrichGearPortAndSpecyNames(
         allGears: List<Gear>,
         allPorts: List<Port>,
@@ -160,37 +173,6 @@ data class LogbookMessage(
         }
     }
 
-    fun enrichAknowledgeCorrectionAndDeletion(contextMessages: List<LogbookMessage>) {
-        val referenceLogbookMessage = findReferencedLogbookMessage(contextMessages)
-        val relatedLogbookMessages = filterRelatedLogbookMessages(contextMessages)
-
-        if (operationType == LogbookOperationType.COR) {
-            if (referenceLogbookMessage == null) {
-                logger.warn(
-                    "Original message $referencedReportId corrected by message COR $operationNumber is not found.",
-                )
-            }
-
-            referenceLogbookMessage?.isCorrectedByNewerMessage = true
-            setIsCorrectedByNewerMessage(relatedLogbookMessages)
-        } else if (operationType == LogbookOperationType.RET && !referencedReportId.isNullOrEmpty()) {
-            referenceLogbookMessage?.setAcknowledge(this.copy())
-        } else if (transmissionFormat == LogbookTransmissionFormat.FLUX) {
-            setAcknowledgeAsSuccessful()
-        } else if (
-            software !== null &&
-            software.contains(LogbookSoftware.VISIOCAPTURE.software)
-        ) {
-            setAcknowledgeAsSuccessful()
-        } else if (operationType == LogbookOperationType.DEL && !referencedReportId.isNullOrEmpty()) {
-            referenceLogbookMessage?.isDeleted = true
-        }
-
-        if (software !== null && software.contains(LogbookSoftware.E_SACAPT.software)) {
-            isSentByFailoverSoftware = true
-        }
-    }
-
     private fun enrichAcnkowledge(relatedLogbookMessages: List<LogbookMessage>) {
         if (this.transmissionFormat == LogbookTransmissionFormat.FLUX ||
             software !== null && software.contains(LogbookSoftware.VISIOCAPTURE.software)
@@ -228,6 +210,48 @@ data class LogbookMessage(
                 it.dateTime = maybeLastRetLogbookMessage.reportDateTime
                 it.isSuccess = lastRetMessage.returnStatus == RETReturnErrorCode.SUCCESS.number
             }
+        }
+    }
+
+    private fun enrichAknowledgeCorrectionAndDeletion(contextLogbookMessages: List<LogbookMessage>) {
+        val referenceLogbookMessage = findReferencedLogbookMessage(contextLogbookMessages)
+        val relatedLogbookMessages = filterRelatedLogbookMessages(contextLogbookMessages)
+
+        when (true) {
+            (operationType == LogbookOperationType.COR) -> {
+                if (referenceLogbookMessage == null) {
+                    logger.warn(
+                        "Original message $referencedReportId corrected by message COR $operationNumber is not found.",
+                    )
+                }
+
+                referenceLogbookMessage?.isCorrectedByNewerMessage = true
+                setIsCorrectedByNewerMessage(relatedLogbookMessages)
+            }
+
+            (operationType == LogbookOperationType.RET && !referencedReportId.isNullOrEmpty()) -> {
+                referenceLogbookMessage?.setAcknowledge(this.copy())
+            }
+
+            (transmissionFormat == LogbookTransmissionFormat.FLUX),
+            (software !== null && software.contains(LogbookSoftware.VISIOCAPTURE.software)),
+            -> {
+                setAcknowledgeAsSuccessful()
+            }
+
+            (operationType == LogbookOperationType.DEL && !referencedReportId.isNullOrEmpty()) -> {
+                referenceLogbookMessage?.isDeleted = true
+            }
+
+            else -> {}
+        }
+
+        enrichIsSentByFailoverSoftware()
+    }
+
+    private fun enrichIsSentByFailoverSoftware() {
+        if (software !== null && software.contains(LogbookSoftware.E_SACAPT.software)) {
+            isSentByFailoverSoftware = true
         }
     }
 

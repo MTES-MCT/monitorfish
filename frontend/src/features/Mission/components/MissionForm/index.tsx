@@ -4,6 +4,7 @@ import {
   useDeleteMissionActionMutation,
   useUpdateMissionActionMutation
 } from '@api/missionAction'
+import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { useGetMissionCompletion } from '@features/Mission/components/MissionForm/hooks/useGetMissionCompletion'
 import { CompletionStatusTag } from '@features/Mission/components/MissionForm/shared/CompletionStatusTag'
 import { Mission } from '@features/Mission/mission.types'
@@ -22,7 +23,6 @@ import { assertNotNullish } from '@utils/assertNotNullish'
 import { SideWindowMenuKey } from 'domain/entities/sideWindow/constants'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { FrontendErrorBoundary } from 'ui/FrontendErrorBoundary'
 import { NoRsuiteOverrideWrapper } from 'ui/NoRsuiteOverrideWrapper'
 import { useDebouncedCallback } from 'use-debounce'
 
@@ -165,7 +165,7 @@ export function MissionForm() {
   }, [dispatch])
 
   const handleDelete = useCallback(async () => {
-    const isDeleted = dispatch(deleteMission(missionIdRef.current))
+    const isDeleted = await dispatch(deleteMission(missionIdRef.current))
     if (!isDeleted) {
       setIsDeletionConfirmationDialogOpen(false)
     }

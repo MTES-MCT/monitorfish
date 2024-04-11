@@ -485,8 +485,7 @@ object TestUtils {
                 operationType = LogbookOperationType.DAT,
                 messageType = "FAR",
                 message = far,
-                reportDateTime =
-                ZonedDateTime.of(
+                reportDateTime = ZonedDateTime.of(
                     2020,
                     5,
                     5,
@@ -510,8 +509,7 @@ object TestUtils {
                 operationType = LogbookOperationType.RET,
                 messageType = "",
                 message = farBadAck,
-                reportDateTime =
-                ZonedDateTime.of(
+                reportDateTime = ZonedDateTime.of(
                     2020,
                     5,
                     5,
@@ -535,8 +533,7 @@ object TestUtils {
                 operationType = LogbookOperationType.DAT,
                 messageType = "FAR",
                 message = farTwo,
-                reportDateTime =
-                ZonedDateTime.of(
+                reportDateTime = ZonedDateTime.of(
                     2020,
                     5,
                     5,
@@ -560,8 +557,7 @@ object TestUtils {
                 operationType = LogbookOperationType.RET,
                 messageType = "",
                 message = farAck,
-                reportDateTime =
-                ZonedDateTime.of(
+                reportDateTime = ZonedDateTime.of(
                     2020,
                     5,
                     5,
@@ -584,8 +580,7 @@ object TestUtils {
                 operationType = LogbookOperationType.DEL,
                 messageType = "",
                 message = farAck,
-                reportDateTime =
-                ZonedDateTime.of(
+                reportDateTime = ZonedDateTime.of(
                     2020,
                     5,
                     5,
@@ -609,8 +604,7 @@ object TestUtils {
                 operationType = LogbookOperationType.DAT,
                 messageType = "FAR",
                 message = far,
-                reportDateTime =
-                ZonedDateTime.of(
+                reportDateTime = ZonedDateTime.of(
                     2020,
                     5,
                     5,

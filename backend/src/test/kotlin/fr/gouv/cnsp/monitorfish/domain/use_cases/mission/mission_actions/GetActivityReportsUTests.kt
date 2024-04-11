@@ -149,7 +149,7 @@ class GetActivityReportsUTests {
             ),
         )
         given(missionRepository.findByIds(listOf(1, 2, 3))).willReturn(missions)
-        given(portRepository.find(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
+        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
 
         // When
         val activityReports = GetActivityReports(
@@ -273,7 +273,7 @@ class GetActivityReportsUTests {
         )
         // The mission id 2 is not returned
         given(missionRepository.findByIds(listOf(1, 2, 3))).willReturn(missions)
-        given(portRepository.find(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
+        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
 
         // When
         val activityReports = GetActivityReports(
@@ -371,7 +371,7 @@ class GetActivityReportsUTests {
         )
         // The mission id 1 is not returned
         given(missionRepository.findByIds(listOf(1, 3))).willReturn(missions)
-        given(portRepository.find(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
+        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
 
         // When
         val activityReports = GetActivityReports(

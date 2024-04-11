@@ -5,13 +5,17 @@ import java.util.*
 
 data class Vessel(
     val id: Int,
+    /** CFR (Community Fleet Register Number). */
     val internalReferenceNumber: String? = null,
+    /** IMO (International Maritime Organization). IMO is one of multiple UVI (Unique Vessel Identifier) types. */
     val imo: String? = null,
+    /** MMSI (Maritime Mobile Service Identity). */
     val mmsi: String? = null,
+    /** IRCS (International Radio Call Sign). */
     val ircs: String? = null,
     val externalReferenceNumber: String? = null,
     val vesselName: String? = null,
-    // ISO Alpha-2 country code
+    /** ISO Alpha-2 country code */
     val flagState: CountryCode,
     val width: Double? = null,
     val length: Double? = null,
@@ -37,6 +41,10 @@ data class Vessel(
     val beaconNumber: String? = null,
     val underCharter: Boolean? = null,
 ) {
+    fun isLessThanTwelveMetersVessel(): Boolean {
+        return length?.let { it < 12.0 } ?: false
+    }
+
     fun getNationalIdentifier(): String {
         val internalReferenceNumberCountryCode =
             LIKELY_CONTROLLED_COUNTRY_CODES.find { countryAlpha3 ->

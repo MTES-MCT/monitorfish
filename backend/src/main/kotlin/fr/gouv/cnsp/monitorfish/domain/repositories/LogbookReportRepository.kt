@@ -48,7 +48,10 @@ interface LogbookReportRepository {
         ruleType: String,
     )
 
+    // Only used in tests
     fun findById(id: Long): LogbookMessage
+
+    fun findPriorNotificationByReportId(reportId: String): PriorNotification
 
     fun findLastMessageDate(): ZonedDateTime
 

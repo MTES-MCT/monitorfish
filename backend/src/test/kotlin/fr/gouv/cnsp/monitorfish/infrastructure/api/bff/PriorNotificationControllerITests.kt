@@ -5,12 +5,14 @@ import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.SecurityConfig
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTyped
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotification
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotificationTypes
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotifications
 import org.hamcrest.Matchers.equalTo
@@ -33,6 +35,9 @@ class PriorNotificationControllerITests {
     private lateinit var api: MockMvc
 
     @MockBean
+    private lateinit var getPriorNotification: GetPriorNotification
+
+    @MockBean
     private lateinit var getPriorNotifications: GetPriorNotifications
 
     @MockBean
@@ -44,17 +49,23 @@ class PriorNotificationControllerITests {
         given(this.getPriorNotifications.execute(LogbookReportFilter())).willReturn(
             listOf(
                 PriorNotification(
-                    id = 1,
-                    logbookMessage = LogbookMessage(
-                        id = 1,
-                        analyzedByRules = emptyList(),
-                        integrationDateTime = ZonedDateTime.now(),
-                        isEnriched = false,
-                        message = PNO(),
-                        operationDateTime = ZonedDateTime.now(),
-                        operationNumber = "1",
-                        operationType = LogbookOperationType.COR,
-                        transmissionFormat = LogbookTransmissionFormat.ERS,
+                    logbookMessageTyped = LogbookMessageTyped(
+                        clazz = PNO::class.java,
+                        logbookMessage = LogbookMessage(
+                            id = 1,
+                            reportId = "FAKE_REPORT_ID_1",
+                            referencedReportId = null,
+                            analyzedByRules = emptyList(),
+                            integrationDateTime = ZonedDateTime.now(),
+                            isCorrectedByNewerMessage = false,
+                            isDeleted = false,
+                            isEnriched = false,
+                            message = PNO(),
+                            operationDateTime = ZonedDateTime.now(),
+                            operationNumber = "1",
+                            operationType = LogbookOperationType.DAT,
+                            transmissionFormat = LogbookTransmissionFormat.ERS,
+                        ),
                     ),
                     reportingsCount = null,
                     seaFront = null,
@@ -73,17 +84,23 @@ class PriorNotificationControllerITests {
                 ),
 
                 PriorNotification(
-                    id = 2,
-                    logbookMessage = LogbookMessage(
-                        id = 2,
-                        analyzedByRules = emptyList(),
-                        integrationDateTime = ZonedDateTime.now(),
-                        isEnriched = false,
-                        message = PNO(),
-                        operationDateTime = ZonedDateTime.now(),
-                        operationNumber = "2",
-                        operationType = LogbookOperationType.DAT,
-                        transmissionFormat = LogbookTransmissionFormat.FLUX,
+                    logbookMessageTyped = LogbookMessageTyped(
+                        clazz = PNO::class.java,
+                        logbookMessage = LogbookMessage(
+                            id = 1,
+                            reportId = "FAKE_REPORT_ID_2_COR",
+                            referencedReportId = "FAKE_NONEXISTENT_REPORT_ID_2",
+                            analyzedByRules = emptyList(),
+                            integrationDateTime = ZonedDateTime.now(),
+                            isCorrectedByNewerMessage = false,
+                            isDeleted = false,
+                            isEnriched = false,
+                            message = PNO(),
+                            operationDateTime = ZonedDateTime.now(),
+                            operationNumber = "1",
+                            operationType = LogbookOperationType.COR,
+                            transmissionFormat = LogbookTransmissionFormat.ERS,
+                        ),
                     ),
                     reportingsCount = null,
                     seaFront = null,
@@ -108,8 +125,8 @@ class PriorNotificationControllerITests {
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(2)))
-            .andExpect(jsonPath("$[0].id", equalTo(1)))
-            .andExpect(jsonPath("$[1].id", equalTo(2)))
+            .andExpect(jsonPath("$[0].id", equalTo("FAKE_REPORT_ID_1")))
+            .andExpect(jsonPath("$[1].id", equalTo("FAKE_NONEXISTENT_REPORT_ID_2")))
     }
 
     @Test
@@ -124,5 +141,53 @@ class PriorNotificationControllerITests {
             .andExpect(jsonPath("$.length()", equalTo(2)))
             .andExpect(jsonPath("$[0]", equalTo("Préavis de Type A")))
             .andExpect(jsonPath("$[1]", equalTo("Préavis de Type B")))
+    }
+
+    @Test
+    fun `Should get a prior notification by its (logbook report) ID`() {
+        // Given
+        given(this.getPriorNotification.execute("FAKE_REPORT_ID_1")).willReturn(
+            PriorNotification(
+                logbookMessageTyped = LogbookMessageTyped(
+                    clazz = PNO::class.java,
+                    logbookMessage = LogbookMessage(
+                        id = 1,
+                        reportId = "FAKE_REPORT_ID_1",
+                        referencedReportId = null,
+                        analyzedByRules = emptyList(),
+                        integrationDateTime = ZonedDateTime.now(),
+                        isCorrectedByNewerMessage = false,
+                        isDeleted = false,
+                        isEnriched = true,
+                        message = PNO(),
+                        operationDateTime = ZonedDateTime.now(),
+                        operationNumber = "1",
+                        operationType = LogbookOperationType.DAT,
+                        transmissionFormat = LogbookTransmissionFormat.ERS,
+                    ),
+                ),
+                reportingsCount = null,
+                seaFront = null,
+                vessel = Vessel(
+                    id = 1,
+                    externalReferenceNumber = null,
+                    flagState = CountryCode.FR,
+                    internalReferenceNumber = null,
+                    ircs = null,
+                    length = 10.0,
+                    mmsi = null,
+                    underCharter = null,
+                    vesselName = null,
+                ),
+                vesselRiskFactor = null,
+            ),
+        )
+
+        // When
+        api.perform(get("/bff/v1/prior_notifications/FAKE_REPORT_ID_1"))
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.id", equalTo("FAKE_REPORT_ID_1")))
+            .andExpect(jsonPath("$.isLessThanTwelveMetersVessel", equalTo(true)))
     }
 }

@@ -27,14 +27,14 @@ import { getLogbookTripSummary, getUniqueGears } from '../utils'
 import type { LogbookTripSummary } from '../types'
 import type { Promisable } from 'type-fest'
 
-type LogbookSummaryProps = {
+type LogbookSummaryProps = Readonly<{
   navigation: {
     goToLastTrip: () => Promisable<void>
     goToNextTrip: () => Promisable<void>
     goToPreviousTrip: () => Promisable<void>
   }
   showLogbookMessages: (messageType?: string) => Promisable<void>
-}
+}>
 export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSummaryProps) {
   const dispatch = useMainAppDispatch()
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
@@ -43,7 +43,7 @@ export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSumma
   const isLastVoyage = useMainAppSelector(state => state.fishingActivities.isLastVoyage)
   const tripNumber = useMainAppSelector(state => state.fishingActivities.tripNumber)
 
-  const { data: lastLogbookTrips } = useGetLastLogbookTripsQuery(selectedVessel?.internalReferenceNumber || skipToken)
+  const { data: lastLogbookTrips } = useGetLastLogbookTripsQuery(selectedVessel?.internalReferenceNumber ?? skipToken)
 
   const getVesselLogbook = useGetLogbookUseCase()
 
@@ -59,7 +59,7 @@ export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSumma
       lastLogbookTrips?.map(trip => ({
         label: `Marée n°${trip}`,
         value: trip
-      })) || [],
+      })) ?? [],
     [lastLogbookTrips]
   )
 
@@ -156,7 +156,7 @@ export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSumma
                   onChange={getLogbookTrip}
                   options={lastLogbookTripsOptions}
                   searchable
-                  value={tripNumber || undefined}
+                  value={tripNumber ?? undefined}
                 />
                 <NextTrip
                   data-cy="vessel-fishing-next-trip"
@@ -182,11 +182,11 @@ export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSumma
                 {logbookTrip.dep.log ? (
                   <DEPMessageResume
                     depMessage={logbookTrip.dep.log.message}
-                    isDeleted={logbookTrip.dep.log.deleted}
+                    isDeleted={logbookTrip.dep.log.isDeleted}
                     isNotAcknowledged={
                       !!logbookTrip.dep.log.acknowledge && logbookTrip.dep.log.acknowledge?.isSuccess === false
                     }
-                    rejectionCause={logbookTrip.dep.log.acknowledge?.rejectionCause || undefined}
+                    rejectionCause={logbookTrip.dep.log.acknowledge?.rejectionCause ?? undefined}
                     showLogbookMessages={showLogbookMessages}
                   />
                 ) : (
@@ -238,7 +238,7 @@ export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSumma
                 {logbookTrip.pno.log ? (
                   <PNOMessageResume
                     id={logbookTrip.pno.log.reportId}
-                    isDeleted={logbookTrip.pno.log.deleted}
+                    isDeleted={logbookTrip.pno.log.isDeleted}
                     isNotAcknowledged={!!logbookTrip.pno.log.acknowledge && !logbookTrip.pno.log.acknowledge.isSuccess}
                     pnoMessage={logbookTrip.pno.log}
                     showLogbookMessages={showLogbookMessages}
@@ -254,7 +254,7 @@ export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSumma
                 {logbookTrip.lan.log ? (
                   <LANMessageResume
                     catchesOverToleranceAlert={catchesOverToleranceAlert}
-                    isDeleted={logbookTrip.lan.log.deleted}
+                    isDeleted={logbookTrip.lan.log.isDeleted}
                     isNotAcknowledged={!!logbookTrip.lan.log.acknowledge && !logbookTrip.lan.log.acknowledge.isSuccess}
                     lanMessage={logbookTrip.lan.log.message}
                     showLogbookMessages={showLogbookMessages}

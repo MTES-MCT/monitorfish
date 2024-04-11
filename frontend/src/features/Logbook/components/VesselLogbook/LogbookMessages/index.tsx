@@ -23,14 +23,14 @@ import type { Promisable } from 'type-fest'
 
 const animatedComponents = makeAnimated()
 
-type LogbookMessagesProps = {
+type LogbookMessagesProps = Readonly<{
   messageTypeFilter: string | undefined
   navigation: {
     goToLastTrip: () => Promisable<void>
     goToNextTrip: () => Promisable<void>
     goToPreviousTrip: () => Promisable<void>
   }
-}
+}>
 export function LogbookMessages({ messageTypeFilter, navigation }: LogbookMessagesProps) {
   const dispatch = useMainAppDispatch()
   const fishingActivities = useMainAppSelector(state => state.fishingActivities.fishingActivities)
@@ -119,7 +119,7 @@ export function LogbookMessages({ messageTypeFilter, navigation }: LogbookMessag
       </CustomDatesShowedInfoWithMargin>
       {filteredAndSortedLogbookMessages.length ? (
         filteredAndSortedLogbookMessages.map((message, index) => (
-          <LogbookMessage key={message.reportId} isFirst={index === 0} message={message} />
+          <LogbookMessage key={message.reportId} isFirst={index === 0} logbookMessage={message} withMapControls />
         ))
       ) : (
         <NoMessage>Aucun message reçu</NoMessage>

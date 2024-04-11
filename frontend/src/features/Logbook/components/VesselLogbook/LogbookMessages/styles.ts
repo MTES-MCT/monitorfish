@@ -1,55 +1,52 @@
 import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../../../constants/constants'
-
 export const TableBody = styled.tbody``
 
 export const Zone = styled.div`
-  padding: 10px 10px 10px 10px;
-  margin-top: 10px;
-  text-align: left;
+  background: ${p => p.theme.color.white};
   display: flex;
   flex-wrap: wrap;
-  background: ${p => p.theme.color.white};
+  margin-top: 10px;
+  padding: 10px 16px;
+  text-align: left;
 `
 
 export const Table = styled.table`
-  padding: 0px 5px 0 5px;
-  width: inherit;
   display: table;
   margin: 0;
   min-width: 40%;
+  width: inherit;
 `
 
 export const TableRow = styled.tr`
-  line-height: 21px;
   font-size: 13px;
+  line-height: 21px;
 `
 
 export const NoValue = styled.span`
   color: ${p => p.theme.color.slateGray};
+  display: inline-block;
   font-weight: 300;
   line-height: normal;
-  display: inline-block;
 `
 
 export const TableKey = styled.th`
+  background: none;
+  border: none;
   color: ${p => p.theme.color.slateGray};
   display: inline-block;
-  border: none;
-  background: none;
-  padding-right: 5px;
   font-weight: normal;
+  max-width: 180px;
+  min-width: 180px;
 `
 
 export const TableValue = styled.td`
-  color: ${p => p.theme.color.gunMetal};
-  text-align: left;
-  padding-right: 5px;
-  padding-left: 5px;
   background: none;
   border: none;
+  color: ${p => p.theme.color.gunMetal};
+  padding-left: 12px;
+  text-align: left;
 `
 
 export const Gray = styled.span`
@@ -87,18 +84,24 @@ export const FilterMessagesStyle = {
     width: '-moz-available',
     zIndex: 4
   }),
-  control: base => ({ ...base, borderColor: COLORS.lightGray, borderRadius: 'unset', fontSize: 13, minHeight: 26 }),
+  control: base => ({
+    ...base,
+    borderColor: THEME.color.lightGray,
+    borderRadius: 'unset',
+    fontSize: 13,
+    minHeight: 26
+  }),
   dropdownIndicator: base => ({ ...base, padding: 1, width: 18 }),
   input: () => ({ margin: 0, padding: 0 }),
   menu: base => ({ ...base, margin: 0, maxHeight: 360, padding: 0 }),
   menuList: base => ({ ...base, maxHeight: 360 }),
   menuPortal: base => ({ ...base, zIndex: 9999 }),
-  multiValue: base => ({ ...base, background: COLORS.gainsboro, borderRadius: 12, fontSize: 13 }),
+  multiValue: base => ({ ...base, background: THEME.color.gainsboro, borderRadius: 12, fontSize: 13 }),
   multiValueLabel: base => ({
     ...base,
-    background: COLORS.gainsboro,
+    background: THEME.color.gainsboro,
     borderRadius: 12,
-    color: COLORS.slateGray,
+    color: THEME.color.slateGray,
     paddingBottom: 1,
     paddingTop: 2
   }),
@@ -108,7 +111,7 @@ export const FilterMessagesStyle = {
       backgroundColor: THEME.color.blueYonder25,
       color: THEME.color.blueYonder
     },
-    background: COLORS.gainsboro,
+    background: THEME.color.gainsboro,
     borderRadius: 12,
     color: THEME.color.slateGray
   }),

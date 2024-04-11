@@ -40,7 +40,7 @@ class GetMissionActionFacade(
             return null
         }
 
-        val facade = portsRepository.find(action.portLocode).facade ?: return null
+        val facade = portsRepository.findByLocode(action.portLocode).facade ?: return null
 
         return Facade.from(facade)
     }

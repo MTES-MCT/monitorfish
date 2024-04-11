@@ -13,6 +13,36 @@ import java.time.Instant
 interface DBLogbookReportRepository :
     CrudRepository<LogbookReportEntity, Long>, JpaSpecificationExecutor<LogbookReportEntity> {
     @Query(
+        """
+       WITH
+           dat_and_cor_logbook_report_report_ids AS (
+                -- Get the logbook report reference (DAT operation)
+                -- It may not exist while a COR operation would still exist (orphan COR case)
+                SELECT report_id
+                FROM logbook_reports
+                WHERE report_id = ?1 AND log_type = 'PNO' AND operation_type = 'DAT' AND enriched = TRUE
+
+                UNION
+
+                -- Get the logbook report corrections which may be used as base for the "final" report
+                SELECT report_id
+                FROM logbook_reports
+                WHERE referenced_report_id = ?1 AND log_type = 'PNO' AND operation_type = 'COR' AND enriched = TRUE
+            )
+
+        SELECT *
+        FROM logbook_reports
+        WHERE
+            report_id IN (SELECT * FROM dat_and_cor_logbook_report_report_ids)
+            OR referenced_report_id IN (SELECT * FROM dat_and_cor_logbook_report_report_ids)
+        ORDER BY
+            report_datetime_utc
+        """,
+        nativeQuery = true,
+    )
+    fun findEnrichedPnoReferenceAndRelatedOperationsByReportId(reportId: String): List<LogbookReportEntity>
+
+    @Query(
         """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDate(e.tripNumber, MIN(e.operationDateTime))
         FROM LogbookReportEntity e
         WHERE e.internalReferenceNumber = ?1

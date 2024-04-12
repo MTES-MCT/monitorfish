@@ -6,5 +6,5 @@ data class PriorNotificationType(
     val hasDesignatedPorts: Boolean,
     val minimumNotificationPeriod: Double,
     @JsonProperty("pnoTypeName")
-    val name: String,
+    val name: String?,
 )

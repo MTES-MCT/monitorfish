@@ -260,61 +260,61 @@ def expected_computed_pno_types() -> pd.DataFrame:
             "pno_types": [
                 [
                     {
-                        "pno_type_name": "Préavis type 1",
-                        "minimum_notification_period": 4.0,
-                        "has_designated_ports": True,
+                        "pnoTypeName": "Préavis type 1",
+                        "minimumNotificationPeriod": 4.0,
+                        "hasDesignatedPorts": True,
                     }
                 ],
                 [
                     {
-                        "pno_type_name": "Préavis type 1",
-                        "minimum_notification_period": 4.0,
-                        "has_designated_ports": True,
+                        "pnoTypeName": "Préavis type 1",
+                        "minimumNotificationPeriod": 4.0,
+                        "hasDesignatedPorts": True,
                     },
                     {
-                        "pno_type_name": "Préavis type 2",
-                        "minimum_notification_period": 4.0,
-                        "has_designated_ports": True,
-                    },
-                ],
-                [
-                    {
-                        "pno_type_name": "Préavis par pavillon",
-                        "minimum_notification_period": 4.0,
-                        "has_designated_ports": True,
-                    },
-                    {
-                        "pno_type_name": "Préavis type 1",
-                        "minimum_notification_period": 4.0,
-                        "has_designated_ports": True,
+                        "pnoTypeName": "Préavis type 2",
+                        "minimumNotificationPeriod": 4.0,
+                        "hasDesignatedPorts": True,
                     },
                 ],
                 [
                     {
-                        "pno_type_name": "Préavis type 1",
-                        "minimum_notification_period": 4.0,
-                        "has_designated_ports": True,
+                        "pnoTypeName": "Préavis par pavillon",
+                        "minimumNotificationPeriod": 4.0,
+                        "hasDesignatedPorts": True,
+                    },
+                    {
+                        "pnoTypeName": "Préavis type 1",
+                        "minimumNotificationPeriod": 4.0,
+                        "hasDesignatedPorts": True,
+                    },
+                ],
+                [
+                    {
+                        "pnoTypeName": "Préavis type 1",
+                        "minimumNotificationPeriod": 4.0,
+                        "hasDesignatedPorts": True,
                     }
                 ],
                 [
                     {
-                        "pno_type_name": "Préavis type 1",
-                        "minimum_notification_period": 4.0,
-                        "has_designated_ports": True,
+                        "pnoTypeName": "Préavis type 1",
+                        "minimumNotificationPeriod": 4.0,
+                        "hasDesignatedPorts": True,
                     },
                     {
-                        "pno_type_name": "Préavis type 2",
-                        "minimum_notification_period": 4.0,
-                        "has_designated_ports": True,
+                        "pnoTypeName": "Préavis type 2",
+                        "minimumNotificationPeriod": 4.0,
+                        "hasDesignatedPorts": True,
                     },
                 ],
                 None,
                 None,
                 [
                     {
-                        "pno_type_name": "Préavis par engin",
-                        "minimum_notification_period": 4.0,
-                        "has_designated_ports": True,
+                        "pnoTypeName": "Préavis par engin",
+                        "minimumNotificationPeriod": 4.0,
+                        "hasDesignatedPorts": True,
                     }
                 ],
             ],
@@ -364,14 +364,14 @@ def pnos_to_load() -> pd.DataFrame:
             "pno_types": [
                 [
                     {
-                        "pno_type_name": "Préavis type 1",
-                        "minimum_notification_period": 4.0,
-                        "has_designated_ports": True,
+                        "pnoTypeName": "Préavis type 1",
+                        "minimumNotificationPeriod": 4.0,
+                        "hasDesignatedPorts": True,
                     },
                     {
-                        "pno_type_name": "Préavis type 2",
-                        "minimum_notification_period": 4.0,
-                        "has_designated_ports": True,
+                        "pnoTypeName": "Préavis type 2",
+                        "minimumNotificationPeriod": 4.0,
+                        "hasDesignatedPorts": True,
                     },
                 ],
                 None,
@@ -405,14 +405,14 @@ def expected_loaded_pnos() -> pd.DataFrame:
                 None,
                 [
                     {
-                        "pno_type_name": "Préavis type 1",
-                        "has_designated_ports": True,
-                        "minimum_notification_period": 4.0,
+                        "pnoTypeName": "Préavis type 1",
+                        "hasDesignatedPorts": True,
+                        "minimumNotificationPeriod": 4.0,
                     },
                     {
-                        "pno_type_name": "Préavis type 2",
-                        "has_designated_ports": True,
-                        "minimum_notification_period": 4.0,
+                        "pnoTypeName": "Préavis type 2",
+                        "hasDesignatedPorts": True,
+                        "minimumNotificationPeriod": 4.0,
                     },
                 ],
                 [],
@@ -450,61 +450,61 @@ def expected_merged_pnos() -> pd.DataFrame:
             "pno_types": [
                 [
                     {
-                        "pno_type_name": "Préavis type 1",
-                        "minimum_notification_period": 4.0,
-                        "has_designated_ports": True,
+                        "pnoTypeName": "Préavis type 1",
+                        "minimumNotificationPeriod": 4.0,
+                        "hasDesignatedPorts": True,
                     }
                 ],
                 [
                     {
-                        "pno_type_name": "Préavis type 1",
-                        "minimum_notification_period": 4.0,
-                        "has_designated_ports": True,
+                        "pnoTypeName": "Préavis type 1",
+                        "minimumNotificationPeriod": 4.0,
+                        "hasDesignatedPorts": True,
                     },
                     {
-                        "pno_type_name": "Préavis type 2",
-                        "minimum_notification_period": 4.0,
-                        "has_designated_ports": True,
-                    },
-                ],
-                [
-                    {
-                        "pno_type_name": "Préavis par pavillon",
-                        "minimum_notification_period": 4.0,
-                        "has_designated_ports": True,
-                    },
-                    {
-                        "pno_type_name": "Préavis type 1",
-                        "minimum_notification_period": 4.0,
-                        "has_designated_ports": True,
+                        "pnoTypeName": "Préavis type 2",
+                        "minimumNotificationPeriod": 4.0,
+                        "hasDesignatedPorts": True,
                     },
                 ],
                 [
                     {
-                        "pno_type_name": "Préavis type 1",
-                        "minimum_notification_period": 4.0,
-                        "has_designated_ports": True,
+                        "pnoTypeName": "Préavis par pavillon",
+                        "minimumNotificationPeriod": 4.0,
+                        "hasDesignatedPorts": True,
+                    },
+                    {
+                        "pnoTypeName": "Préavis type 1",
+                        "minimumNotificationPeriod": 4.0,
+                        "hasDesignatedPorts": True,
+                    },
+                ],
+                [
+                    {
+                        "pnoTypeName": "Préavis type 1",
+                        "minimumNotificationPeriod": 4.0,
+                        "hasDesignatedPorts": True,
                     }
                 ],
                 [
                     {
-                        "pno_type_name": "Préavis type 1",
-                        "minimum_notification_period": 4.0,
-                        "has_designated_ports": True,
+                        "pnoTypeName": "Préavis type 1",
+                        "minimumNotificationPeriod": 4.0,
+                        "hasDesignatedPorts": True,
                     },
                     {
-                        "pno_type_name": "Préavis type 2",
-                        "minimum_notification_period": 4.0,
-                        "has_designated_ports": True,
+                        "pnoTypeName": "Préavis type 2",
+                        "minimumNotificationPeriod": 4.0,
+                        "hasDesignatedPorts": True,
                     },
                 ],
                 None,
                 None,
                 [
                     {
-                        "pno_type_name": "Préavis par engin",
-                        "minimum_notification_period": 4.0,
-                        "has_designated_ports": True,
+                        "pnoTypeName": "Préavis par engin",
+                        "minimumNotificationPeriod": 4.0,
+                        "hasDesignatedPorts": True,
                     }
                 ],
             ],

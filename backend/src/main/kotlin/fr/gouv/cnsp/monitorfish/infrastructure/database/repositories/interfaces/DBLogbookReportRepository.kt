@@ -67,7 +67,7 @@ interface DBLogbookReportRepository :
             ),
 
             del_and_ret_logbook_reports AS (
-                SELECT lr.*make
+                SELECT lr.*
                 FROM logbook_reports lr
                 JOIN dat_and_cor_logbook_reports daclr ON lr.referenced_report_id = daclr.report_id
                 WHERE lr.operation_type IN ('DEL', 'RET')

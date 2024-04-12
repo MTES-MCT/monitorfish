@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.exceptions.EntityConversionException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
@@ -12,13 +13,8 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LogbookReportEntity
-import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.RiskFactorsEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBLogbookReportRepository
 import jakarta.persistence.EntityManager
-import jakarta.persistence.criteria.CriteriaBuilder
-import jakarta.persistence.criteria.Join
-import jakarta.persistence.criteria.Predicate
-import jakarta.persistence.criteria.Root
 import jakarta.transaction.Transactional
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -29,7 +25,6 @@ import org.springframework.data.jpa.repository.Modifying
 import org.springframework.stereotype.Repository
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 
 @Repository
 class JpaLogbookReportRepository(
@@ -41,104 +36,92 @@ class JpaLogbookReportRepository(
     private val postgresChunkSize = 5000
 
     override fun findAllPriorNotifications(filter: LogbookReportFilter): List<PriorNotification> {
-        // ---------------------------------------------------------------------
-        // First we get all the enriched PNO message DAT & COR operations:
-
-        val datAndCorCriteriaBuilder = entityManager.criteriaBuilder
-        val datAndCorCriteriaQuery = datAndCorCriteriaBuilder.createQuery(LogbookReportEntity::class.java)
-        var logbookReportEntity = datAndCorCriteriaQuery.from(LogbookReportEntity::class.java)
-
-        val datAndCorPredicates = mutableListOf(datAndCorCriteriaBuilder.isTrue(datAndCorCriteriaBuilder.literal(true)))
-        datAndCorPredicates.add(
-            datAndCorCriteriaBuilder.and(
-                datAndCorCriteriaBuilder.equal(logbookReportEntity.get<String>("messageType"), "PNO"),
-                logbookReportEntity.get<LogbookOperationType>("operationType")
-                    .`in`(listOf(LogbookOperationType.DAT, LogbookOperationType.COR)),
-                datAndCorCriteriaBuilder.equal(logbookReportEntity.get<Boolean>("isEnriched"), true),
-            ),
-        )
-        filter.willArriveAfter?.let { willArriveAfter ->
-            datAndCorPredicates.add(
-                getWillArriveAfterPredicate(willArriveAfter, datAndCorCriteriaBuilder, logbookReportEntity),
-            )
-        }
-        filter.willArriveBefore?.let { willArriveBefore ->
-            datAndCorPredicates.add(
-                getWillArriveBeforePredicate(willArriveBefore, datAndCorCriteriaBuilder, logbookReportEntity),
-            )
-        }
-        filter.flagStates?.let { flagStates ->
-            datAndCorPredicates.add(getFlagStatesPredicate(flagStates, logbookReportEntity))
-        }
-        filter.isLessThanTwelveMetersVessel?.let { isLessThanTwelveMetersVessel ->
-            datAndCorPredicates.add(
-                getIsLessThanTwelveMetersVesselPredicate(
-                    isLessThanTwelveMetersVessel,
-                    datAndCorCriteriaBuilder,
-                    logbookReportEntity,
-                ),
-            )
-        }
-        filter.lastControlledAfter?.let { lastControlledAfter ->
-            datAndCorPredicates.add(
-                getLastControlledAfterPredicate(lastControlledAfter, datAndCorCriteriaBuilder, logbookReportEntity),
-            )
-        }
-        filter.lastControlledBefore?.let { lastControlledBefore ->
-            datAndCorPredicates.add(
-                getLastControlledBeforePredicate(lastControlledBefore, datAndCorCriteriaBuilder, logbookReportEntity),
-            )
-        }
-        filter.portLocodes?.let { portLocodes ->
-            datAndCorPredicates.add(getPortLocodesPredicate(portLocodes, datAndCorCriteriaBuilder, logbookReportEntity))
-        }
-        filter.priorNotificationTypes?.let { types ->
-            datAndCorPredicates.add(
-                getPriorNotificationTypesPredicate(types, datAndCorCriteriaBuilder, logbookReportEntity),
-            )
-        }
-        filter.searchQuery?.let { searchQuery ->
-            datAndCorPredicates.add(getSearchQueryPredicate(searchQuery, datAndCorCriteriaBuilder, logbookReportEntity))
-        }
-        filter.specyCodes?.let { specyCodes ->
-            datAndCorPredicates.add(getSpecyCodesPredicate(specyCodes, datAndCorCriteriaBuilder, logbookReportEntity))
-        }
-        filter.tripGearCodes?.let { tripGearCodes ->
-            datAndCorPredicates.add(
-                getTripGearCodesPredicate(tripGearCodes, datAndCorCriteriaBuilder, logbookReportEntity),
-            )
-        }
-        filter.tripSegmentSegments?.let { tripSegmentSegments ->
-            datAndCorPredicates.add(
-                getTripSegmentSegmentsPredicate(tripSegmentSegments, datAndCorCriteriaBuilder, logbookReportEntity),
-            )
-        }
-
-        datAndCorCriteriaQuery.select(logbookReportEntity).where(*datAndCorPredicates.toTypedArray())
-        val datAndCorLogbookReportModels = entityManager.createQuery(datAndCorCriteriaQuery).resultList
-
-        // ---------------------------------------------------------------------
-        // Then we get all their related DEL and RET operations:
-
-        val delAndRetCriteriaBuilder = entityManager.criteriaBuilder
-        val delAndRetCriteriaQuery = delAndRetCriteriaBuilder.createQuery(LogbookReportEntity::class.java)
-        logbookReportEntity = delAndRetCriteriaQuery.from(LogbookReportEntity::class.java)
-
-        val delAndRetPredicates = mutableListOf(delAndRetCriteriaBuilder.isTrue(delAndRetCriteriaBuilder.literal(true)))
-        val uniqueLogbookReportReportIds = datAndCorLogbookReportModels.mapNotNull { it.reportId }.distinct()
-        delAndRetPredicates.add(
-            delAndRetCriteriaBuilder.and(
-                logbookReportEntity.get<String>("referencedReportId").`in`(uniqueLogbookReportReportIds),
-                logbookReportEntity.get<LogbookOperationType>("operationType")
-                    .`in`(listOf(LogbookOperationType.DEL, LogbookOperationType.RET)),
-            ),
+        val allLogbookReportModels = dbERSRepository.findAllEnrichedPnoReferencesAndRelatedOperations(
+            flagStates = filter.flagStates ?: emptyList(),
+            isLessThanTwelveMetersVessel = filter.isLessThanTwelveMetersVessel,
+            lastControlledAfter = filter.lastControlledAfter,
+            lastControlledBefore = filter.lastControlledBefore,
+            portLocodes = filter.portLocodes ?: emptyList(),
+            // priorNotificationTypes = filter.priorNotificationTypes ?: emptyList(),
+            searchQuery = filter.searchQuery,
+            // specyCodes = filter.specyCodes ?: emptyList(),
+            // tripGearCodes = filter.tripGearCodes ?: emptyList(),
+            // tripSegmentCodes = filter.tripSegmentCodes ?: emptyList(),
+            willArriveAfter = filter.willArriveAfter,
+            willArriveBefore = filter.willArriveBefore,
         )
 
-        delAndRetCriteriaQuery.select(logbookReportEntity).where(*delAndRetPredicates.toTypedArray())
-        val delAndRetLogbookReportModels = entityManager.createQuery(delAndRetCriteriaQuery).resultList
+        val filteredDatAndCorLogbookReportModels = allLogbookReportModels
+            .filter { anyLogbookReportModel ->
+                anyLogbookReportModel.operationType in listOf(LogbookOperationType.DAT, LogbookOperationType.COR)
+            }
+            .filter { datOrCorLogbookReportModel ->
+                val logbookMessage = datOrCorLogbookReportModel.toLogbookMessage(mapper)
+                val message = logbookMessage.message as PNO
 
-        val allLogbookReportModels = datAndCorLogbookReportModels + delAndRetLogbookReportModels
-        val logbookReportModelPairs = mapToReferenceWithRelatedModels(allLogbookReportModels)
+                if (
+                    filter.priorNotificationTypes != null &&
+                    message.pnoTypes.none { pnoType -> pnoType.name in filter.priorNotificationTypes }
+                ) {
+                    println()
+
+                    return@filter false
+                }
+
+                true
+            }
+            .filter { datOrCorLogbookReportModel ->
+                val logbookMessage = datOrCorLogbookReportModel.toLogbookMessage(mapper)
+                val message = logbookMessage.message as PNO
+
+                if (
+                    filter.specyCodes != null &&
+                    message.catchOnboard.none { catch -> catch.species in filter.specyCodes }
+                ) {
+                    return@filter false
+                }
+
+                true
+            }
+            .filter { datOrCorLogbookReportModel ->
+                val logbookMessage = datOrCorLogbookReportModel.toLogbookMessage(mapper)
+
+                if (
+                    filter.tripGearCodes != null && (
+                        logbookMessage.tripGears == null ||
+                            logbookMessage.tripGears.none { tripGear -> tripGear.gear in filter.tripGearCodes }
+                        )
+                ) {
+                    return@filter false
+                }
+
+                true
+            }
+            .filter { datOrCorLogbookReportModel ->
+                val logbookMessage = datOrCorLogbookReportModel.toLogbookMessage(mapper)
+
+                if (
+                    filter.tripSegmentCodes != null && (
+                        logbookMessage.tripSegments == null ||
+                            logbookMessage.tripSegments.none { tripSegment -> tripSegment.code in filter.tripSegmentCodes }
+                        )
+                ) {
+                    return@filter false
+                }
+
+                true
+            }
+        val filteredDatAndCorLogbookReportModelReportIds = filteredDatAndCorLogbookReportModels
+            .mapNotNull { it.reportId }
+            .distinct()
+        val filteredDelAndRetLogbookReportModels = allLogbookReportModels
+            .filter { anyLogbookReportModel ->
+                anyLogbookReportModel.operationType in listOf(LogbookOperationType.DEL, LogbookOperationType.RET) &&
+                    anyLogbookReportModel.referencedReportId in filteredDatAndCorLogbookReportModelReportIds
+            }
+        val filteredLogbookReportModels = filteredDatAndCorLogbookReportModels + filteredDelAndRetLogbookReportModels
+
+        val logbookReportModelPairs = mapToReferenceWithRelatedModels(filteredLogbookReportModels)
 
         return logbookReportModelPairs.mapNotNull { (referenceLogbookReportModel, relatedLogbookReportModels) ->
             try {
@@ -360,7 +343,7 @@ class JpaLogbookReportRepository(
     }
 
     override fun findDistinctPriorNotificationTypes(): List<String> {
-        return dbERSRepository.findDistinctPriorNotificationType()
+        return dbERSRepository.findDistinctPriorNotificationType() ?: emptyList()
     }
 
     override fun updateLogbookMessagesAsProcessedByRule(
@@ -443,205 +426,6 @@ class JpaLogbookReportRepository(
 
     private fun getAllMessagesExceptionMessage(internalReferenceNumber: String) =
         "No messages found for the vessel. (internalReferenceNumber: \"$internalReferenceNumber\")"
-
-    private fun getFlagStatesPredicate(
-        flagStates: List<String>,
-        logbookReportEntity: Root<LogbookReportEntity>,
-    ): Predicate {
-        return logbookReportEntity.get<String>("flagState").`in`(flagStates)
-    }
-
-    private fun getIsLessThanTwelveMetersVesselPredicate(
-        isLessThanTwelveMetersVessel: Boolean,
-        criteriaBuilder: CriteriaBuilder,
-        logbookReportEntity: Root<LogbookReportEntity>,
-    ): Predicate {
-        val vessel: Join<LogbookReportEntity, RiskFactorsEntity> = logbookReportEntity.join("vessel")
-
-        return if (isLessThanTwelveMetersVessel) {
-            criteriaBuilder.lessThan(vessel.get("length"), 12)
-        } else {
-            criteriaBuilder.greaterThanOrEqualTo(vessel.get("length"), 12)
-        }
-    }
-
-    private fun getLastControlledAfterPredicate(
-        lastControlledAfter: String,
-        criteriaBuilder: CriteriaBuilder,
-        logbookReportEntity: Root<LogbookReportEntity>,
-    ): Predicate {
-        val vesselRiskFactor: Join<LogbookReportEntity, RiskFactorsEntity> = logbookReportEntity.join(
-            "vesselRiskFactor",
-        )
-
-        return criteriaBuilder.greaterThanOrEqualTo(
-            vesselRiskFactor.get("lastControlDatetime"),
-            ZonedDateTime.parse(lastControlledAfter, DateTimeFormatter.ISO_ZONED_DATE_TIME),
-        )
-    }
-
-    private fun getLastControlledBeforePredicate(
-        lastControlledBefore: String,
-        criteriaBuilder: CriteriaBuilder,
-        logbookReportEntity: Root<LogbookReportEntity>,
-    ): Predicate {
-        val vesselRiskFactor: Join<LogbookReportEntity, RiskFactorsEntity> = logbookReportEntity.join(
-            "vesselRiskFactor",
-        )
-
-        return criteriaBuilder.lessThanOrEqualTo(
-            vesselRiskFactor.get("lastControlDatetime"),
-            ZonedDateTime.parse(lastControlledBefore, DateTimeFormatter.ISO_ZONED_DATE_TIME),
-        )
-    }
-
-    private fun getPortLocodesPredicate(
-        portLocodes: List<String>,
-        criteriaBuilder: CriteriaBuilder,
-        logbookReportEntity: Root<LogbookReportEntity>,
-    ): Predicate {
-        return criteriaBuilder.function(
-            "jsonb_extract_path_text",
-            String::class.java,
-            logbookReportEntity.get<String>("message"),
-            criteriaBuilder.literal("port"),
-        ).`in`(portLocodes)
-    }
-
-    private fun getPriorNotificationTypesPredicate(
-        types: List<String>,
-        criteriaBuilder: CriteriaBuilder,
-        logbookReportEntity: Root<LogbookReportEntity>,
-    ): Predicate {
-        return criteriaBuilder.isTrue(
-            criteriaBuilder.function(
-                "jsonb_contains_any",
-                Boolean::class.java,
-                logbookReportEntity.get<String>("message"),
-                criteriaBuilder.literal(arrayOf("pnoTypes")),
-                criteriaBuilder.literal("pnoTypeName"),
-                criteriaBuilder.literal(types.toTypedArray()),
-            ),
-        )
-    }
-
-    private fun getSearchQueryPredicate(
-        searchQuery: String,
-        criteriaBuilder: CriteriaBuilder,
-        logbookReportEntity: Root<LogbookReportEntity>,
-    ): Predicate {
-        val normalizedPath =
-            criteriaBuilder.lower(
-                criteriaBuilder.function(
-                    "unaccent",
-                    String::class.java,
-                    logbookReportEntity.get<String>("vesselName"),
-                ),
-            )
-        val searchQueryPattern = "%${searchQuery.trim()}%"
-        val normalizedSearchQuery =
-            criteriaBuilder.lower(
-                criteriaBuilder.function(
-                    "unaccent",
-                    String::class.java,
-                    criteriaBuilder.literal(searchQueryPattern),
-                ),
-            )
-
-        return criteriaBuilder.like(
-            normalizedPath,
-            normalizedSearchQuery,
-        )
-    }
-
-    private fun getSpecyCodesPredicate(
-        specyCodes: List<String>,
-        criteriaBuilder: CriteriaBuilder,
-        logbookReportEntity: Root<LogbookReportEntity>,
-    ): Predicate {
-        return criteriaBuilder.isTrue(
-            criteriaBuilder.function(
-                "jsonb_contains_any",
-                Boolean::class.java,
-                logbookReportEntity.get<String>("message"),
-                criteriaBuilder.literal(arrayOf("catchOnboard")),
-                criteriaBuilder.literal("species"),
-                criteriaBuilder.literal(specyCodes.toTypedArray()),
-            ),
-        )
-    }
-
-    private fun getTripGearCodesPredicate(
-        tripGearCodes: List<String>,
-        criteriaBuilder: CriteriaBuilder,
-        logbookReportEntity: Root<LogbookReportEntity>,
-    ): Predicate {
-        return criteriaBuilder.isTrue(
-            criteriaBuilder.function(
-                "jsonb_contains_any",
-                Boolean::class.java,
-                logbookReportEntity.get<String>("tripGears"),
-                criteriaBuilder.literal(emptyArray<String>()),
-                criteriaBuilder.literal("gear"),
-                criteriaBuilder.literal(tripGearCodes.toTypedArray()),
-            ),
-        )
-    }
-
-    private fun getTripSegmentSegmentsPredicate(
-        tripSegmentSegments: List<String>,
-        criteriaBuilder: CriteriaBuilder,
-        logbookReportEntity: Root<LogbookReportEntity>,
-    ): Predicate {
-        return criteriaBuilder.isTrue(
-            criteriaBuilder.function(
-                "jsonb_contains_any",
-                Boolean::class.java,
-                logbookReportEntity.get<String>("tripSegments"),
-                criteriaBuilder.literal(emptyArray<String>()),
-                criteriaBuilder.literal("segment"),
-                criteriaBuilder.literal(tripSegmentSegments.toTypedArray()),
-            ),
-        )
-    }
-
-    private fun getWillArriveAfterPredicate(
-        willArriveAfter: String,
-        criteriaBuilder: CriteriaBuilder,
-        logbookReportEntity: Root<LogbookReportEntity>,
-    ): Predicate {
-        val predictedArrivalDatetimeUtcAsTimestamp =
-            criteriaBuilder.function(
-                "jsonb_to_timestamp",
-                ZonedDateTime::class.java,
-                logbookReportEntity.get<String>("message"),
-                criteriaBuilder.literal("predictedArrivalDatetimeUtc"),
-            )
-
-        return criteriaBuilder.greaterThanOrEqualTo(
-            predictedArrivalDatetimeUtcAsTimestamp,
-            ZonedDateTime.parse(willArriveAfter).withZoneSameInstant(UTC),
-        )
-    }
-
-    private fun getWillArriveBeforePredicate(
-        willArriveBefore: String,
-        criteriaBuilder: CriteriaBuilder,
-        logbookReportEntity: Root<LogbookReportEntity>,
-    ): Predicate {
-        val predictedArrivalDatetimeUtcAsTimestamp =
-            criteriaBuilder.function(
-                "jsonb_to_timestamp",
-                ZonedDateTime::class.java,
-                logbookReportEntity.get<String>("message"),
-                criteriaBuilder.literal("predictedArrivalDatetimeUtc"),
-            )
-
-        return criteriaBuilder.lessThanOrEqualTo(
-            predictedArrivalDatetimeUtcAsTimestamp,
-            ZonedDateTime.parse(willArriveBefore).withZoneSameInstant(UTC),
-        )
-    }
 
     companion object {
         fun mapToReferenceWithRelatedModels(

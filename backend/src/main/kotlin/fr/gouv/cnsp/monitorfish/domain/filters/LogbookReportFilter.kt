@@ -9,8 +9,8 @@ data class LogbookReportFilter(
     val priorNotificationTypes: List<String>? = null,
     val searchQuery: String? = null,
     val specyCodes: List<String>? = null,
-    val tripSegmentSegments: List<String>? = null,
     val tripGearCodes: List<String>? = null,
+    val tripSegmentCodes: List<String>? = null,
     val willArriveAfter: String? = null,
     val willArriveBefore: String? = null,
 )

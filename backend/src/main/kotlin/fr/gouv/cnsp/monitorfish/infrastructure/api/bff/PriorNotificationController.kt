@@ -47,12 +47,12 @@ class PriorNotificationController(
         @Parameter(description = "Caught species codes.")
         @RequestParam(name = "specyCodes")
         specyCodes: List<String>? = null,
-        @Parameter(description = "Trip segment segments.")
-        @RequestParam(name = "tripSegmentSegments")
-        tripSegmentSegments: List<String>? = null,
         @Parameter(description = "Trip gear codes.")
         @RequestParam(name = "tripGearCodes")
         tripGearCodes: List<String>? = null,
+        @Parameter(description = "Trip segment segments.")
+        @RequestParam(name = "tripSegmentCodes")
+        tripSegmentCodes: List<String>? = null,
         @Parameter(description = "Vessels that will arrive after the given date.")
         @RequestParam(name = "willArriveAfter")
         willArriveAfter: String? = null,
@@ -69,8 +69,8 @@ class PriorNotificationController(
             priorNotificationTypes = priorNotificationTypes,
             searchQuery = searchQuery,
             specyCodes = specyCodes,
-            tripSegmentSegments = tripSegmentSegments,
             tripGearCodes = tripGearCodes,
+            tripSegmentCodes = tripSegmentCodes,
             willArriveAfter = willArriveAfter,
             willArriveBefore = willArriveBefore,
         )

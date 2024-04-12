@@ -343,7 +343,7 @@ class JpaLogbookReportRepository(
     }
 
     override fun findDistinctPriorNotificationTypes(): List<String> {
-        return dbERSRepository.findDistinctPriorNotificationType()
+        return dbERSRepository.findDistinctPriorNotificationType() ?: emptyList()
     }
 
     override fun updateLogbookMessagesAsProcessedByRule(

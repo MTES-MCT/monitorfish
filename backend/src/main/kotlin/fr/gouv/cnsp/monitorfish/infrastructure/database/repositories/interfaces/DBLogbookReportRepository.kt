@@ -307,5 +307,5 @@ interface DBLogbookReportRepository :
         """,
         nativeQuery = true,
     )
-    fun findDistinctPriorNotificationType(): List<String>
+    fun findDistinctPriorNotificationType(): List<String>?
 }

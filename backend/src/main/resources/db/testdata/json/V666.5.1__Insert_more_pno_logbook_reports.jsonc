@@ -163,7 +163,7 @@
                     "catchOnboard": [],
                     "pnoTypes": [],
                     "port": "AEHZP",
-                    "predictedArrivalDatetimeUtc": "2023-12-31T23:59:59Z",
+                    "predictedArrivalDatetimeUtc": "2023-12-31T23:59:00Z",
                     "purpose": "GRD",
                     "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
                 }

@@ -248,11 +248,11 @@ export namespace LogbookMessage {
     lastControlledAfter: string | undefined
     lastControlledBefore: string | undefined
     portLocodes: string[] | undefined
-    priorNotificationTypesAsOptions: string[] | undefined
+    priorNotificationTypes: string[] | undefined
     searchQuery: string | undefined
     specyCodes: string[] | undefined
     tripGearCodes: string[] | undefined
-    tripSegmentSegments: string[] | undefined
+    tripSegmentCodes: string[] | undefined
     vesselLength: number | undefined
     willArriveAfter: string | undefined
     willArriveBefore: string | undefined

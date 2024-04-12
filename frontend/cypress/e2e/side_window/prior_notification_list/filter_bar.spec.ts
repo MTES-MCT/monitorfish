@@ -26,7 +26,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
   it('Should filter prior notifications by fleet segments', () => {
     openSideWindowPriorNotificationList()
 
-    cy.intercept('GET', `${apiPathBase}*tripSegmentSegments=NWW03,SWW06*`).as('getPriorNotifications')
+    cy.intercept('GET', `${apiPathBase}*tripSegmentCodes=NWW03,SWW06*`).as('getPriorNotifications')
 
     cy.fill('Segments de flotte', ['NWW03', 'SWW06'])
 

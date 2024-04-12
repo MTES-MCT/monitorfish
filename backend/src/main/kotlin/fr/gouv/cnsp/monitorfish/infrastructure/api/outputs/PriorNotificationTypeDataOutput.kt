@@ -12,7 +12,7 @@ class PriorNotificationTypeDataOutput(
             return PriorNotificationTypeDataOutput(
                 hasDesignatedPorts = priorNotificationType.hasDesignatedPorts,
                 minimumNotificationPeriod = priorNotificationType.minimumNotificationPeriod,
-                name = priorNotificationType.name,
+                name = priorNotificationType.name ?: "Type de préavis inconnu",
             )
         }
     }

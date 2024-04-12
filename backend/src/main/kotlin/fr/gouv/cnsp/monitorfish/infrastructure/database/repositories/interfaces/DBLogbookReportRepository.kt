@@ -14,7 +14,93 @@ interface DBLogbookReportRepository :
     CrudRepository<LogbookReportEntity, Long>, JpaSpecificationExecutor<LogbookReportEntity> {
     @Query(
         """
-       WITH
+        WITH
+            dat_and_cor_logbook_reports AS (
+                SELECT lr.*
+                FROM logbook_reports lr
+                LEFT JOIN vessels v ON lr.cfr = v.cfr
+                LEFT JOIN risk_factors rf ON lr.cfr = rf.cfr
+                WHERE
+                    lr.log_type = 'PNO'
+                    AND lr.operation_type IN ('DAT', 'COR')
+                    AND lr.enriched = TRUE
+
+                    -- Flag States
+                    AND (:flagStates IS NULL OR lr.flag_state IN (:flagStates))
+
+                    -- Is Less Than Twelve Meters Vessel
+                    AND (
+                        :isLessThanTwelveMetersVessel IS NULL
+                        OR (:isLessThanTwelveMetersVessel = TRUE AND v.length < 12)
+                        OR (:isLessThanTwelveMetersVessel = FALSE AND v.length >= 12)
+                    )
+
+                    -- Last Controlled After
+                    AND (:lastControlledAfter IS NULL OR rf.last_control_datetime_utc >= CAST(:lastControlledAfter AS TIMESTAMP))
+
+                    -- Last Controlled Before
+                    AND (:lastControlledBefore IS NULL OR rf.last_control_datetime_utc <= CAST(:lastControlledBefore AS TIMESTAMP))
+
+                    -- Port Locodes
+                    AND (:portLocodes IS NULL OR lr.value->>'port' IN (:portLocodes))
+
+                    -- Prior Notification Types
+                    -- AND jsonb_contains_any(lr.value, ARRAY['pnoTypes'], CAST('pnoTypeName' AS TEXT), :priorNotificationTypes)
+
+                    -- Search Query
+                    AND (:searchQuery IS NULL OR unaccent(lower(lr.vessel_name)) ILIKE CONCAT('%', unaccent(lower(:searchQuery)), '%'))
+
+                    -- Specy Codes
+                    -- AND jsonb_contains_any(lr.value, ARRAY['catchOnboard'], CAST('species' AS TEXT), :specyCodes)
+
+                    -- Trip Gear Codes
+                    -- AND jsonb_contains_any(lr.trip_gears, CAST('{}' AS TEXT[]), CAST('gear' AS TEXT), :tripGearCodes)
+
+                    -- Trip Segment Segments
+                    -- AND jsonb_contains_any(lr.trip_segments, CAST('{}' AS TEXT[]), CAST('segment' AS TEXT), :tripSegmentCodes)
+
+                    -- Will Arrive After
+                    AND (:willArriveAfter IS NULL OR lr.value->>'predictedArrivalDatetimeUtc' >= :willArriveAfter)
+
+                    -- Will Arrive Before
+                    AND (:willArriveBefore IS NULL OR lr.value->>'predictedArrivalDatetimeUtc' <= :willArriveBefore)
+            ),
+
+            del_and_ret_logbook_reports AS (
+                SELECT lr.*make
+                FROM logbook_reports lr
+                JOIN dat_and_cor_logbook_reports daclr ON lr.referenced_report_id = daclr.report_id
+                WHERE lr.operation_type IN ('DEL', 'RET')
+            )
+
+        SELECT *
+        FROM dat_and_cor_logbook_reports
+
+        UNION
+
+        SELECT *
+        FROM del_and_ret_logbook_reports;
+        """,
+        nativeQuery = true,
+    )
+    fun findAllEnrichedPnoReferencesAndRelatedOperations(
+        flagStates: List<String>,
+        isLessThanTwelveMetersVessel: Boolean?,
+        lastControlledAfter: String?,
+        lastControlledBefore: String?,
+        portLocodes: List<String>,
+        // priorNotificationTypes: List<String>,
+        searchQuery: String?,
+        // specyCodes: List<String>,
+        // tripGearCodes: List<String>,
+        // tripSegmentCodes: List<String>,
+        willArriveAfter: String?,
+        willArriveBefore: String?,
+    ): List<LogbookReportEntity>
+
+    @Query(
+        """
+        WITH
            dat_and_cor_logbook_report_report_ids AS (
                 -- Get the logbook report reference (DAT operation)
                 -- It may not exist while a COR operation would still exist (orphan COR case)

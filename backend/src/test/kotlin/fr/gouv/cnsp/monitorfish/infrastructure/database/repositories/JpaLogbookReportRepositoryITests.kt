@@ -754,7 +754,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports for SWW06 & NWW03 segments`() {
         // Given
-        val filter = LogbookReportFilter(tripSegmentSegments = listOf("SWW06", "NWW03"))
+        val filter = LogbookReportFilter(tripSegmentCodes = listOf("SWW06", "NWW03"))
 
         // When
         val result = jpaLogbookReportRepository.findAllPriorNotifications(filter)

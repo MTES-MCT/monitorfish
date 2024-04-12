@@ -15,7 +15,7 @@ class ParseAndSavePosition(private val positionRepository: PositionRepository) {
     fun execute(naf: String) {
         val position = NAFMessageMapper(naf).toPosition()
         if (position.internalReferenceNumber == null) {
-            logger.warn("No internal reference number for position $position")
+            logger.debug("No internal reference number for position $position")
         }
         positionRepository.save(position)
 

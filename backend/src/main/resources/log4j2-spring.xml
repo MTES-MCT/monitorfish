@@ -8,18 +8,18 @@
     <Appenders>
         <Console name="dev" target="SYSTEM_OUT">
             <PatternLayout
-                pattern="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} %highlight{${LOG_LEVEL_PATTERN:-%5p}}{FATAL=red blink, ERROR=red, WARN=yellow bold, INFO=green, DEBUG=green bold, TRACE=blue} %style{${sys:PID}}{magenta} [%15.15t] %style{%-40.40C{1.}}{cyan} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+                pattern="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} %highlight{${LOG_LEVEL_PATTERN:-%5p}}{FATAL=red blink, ERROR=red, WARN=yellow bold, INFO=green, DEBUG=green bold, TRACE=blue} %style{${sys:PID}}{magenta} [%15.15t] %style{%-40.40C{1.}}{cyan} : %X{correlationId} - %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
         </Console>
         <Console name="uat" target="SYSTEM_OUT">
             <PatternLayout
-                pattern="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} %highlight{${LOG_LEVEL_PATTERN:-%5p}}{FATAL=red blink, ERROR=red, WARN=yellow bold, INFO=green, DEBUG=green bold, TRACE=blue} %style{${sys:PID}}{magenta} [%15.15t] %style{%-40.40C{1.}}{cyan} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+                pattern="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} %highlight{${LOG_LEVEL_PATTERN:-%5p}}{FATAL=red blink, ERROR=red, WARN=yellow bold, INFO=green, DEBUG=green bold, TRACE=blue} %style{${sys:PID}}{magenta} [%15.15t] %style{%-40.40C{1.}}{cyan} : %X{correlationId} - %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
         </Console>
         <Console name="prod" target="SYSTEM_OUT">
             <JsonLayout compact="true" eventEol="true"/>
         </Console>
         <Console name="local" target="SYSTEM_OUT" follow="true">
             <PatternLayout
-                pattern="%d{${LOG_DATEFORMAT_PATTERN:-yy-MM-dd HH:mm:ss.SSS}} %highlight{${LOG_LEVEL_PATTERN:-%5p}}{FATAL=red blink, ERROR=red, WARN=yellow bold, INFO=green, DEBUG=green bold, TRACE=blue} %style{%-40.40C{1.}}{cyan} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+                pattern="%d{${LOG_DATEFORMAT_PATTERN:-yy-MM-dd HH:mm:ss.SSS}} %highlight{${LOG_LEVEL_PATTERN:-%5p}}{FATAL=red blink, ERROR=red, WARN=yellow bold, INFO=green, DEBUG=green bold, TRACE=blue} %style{%-40.40C{1.}}{cyan} : %X{correlationId} - %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
         </Console>
         <Console name="local-isoprod" target="SYSTEM_OUT" follow="true">
             <PatternLayout
@@ -29,7 +29,7 @@
         <!-- This path is the path within the docker image -->
         <RollingFile name="Kibana" fileName="/home/monitorfish/logs/kibana.log"
                      filePattern="/home/monitorfish/logs/${date:yyyy-MM}/kibana-%d{yyyy-MM-dd}-%i.log.gz">
-            <PatternLayout pattern="%d{ISO8601} | %-5.5p | %-16.16t | %-32.32c{1} | %-32.32C %4L | %m%n"/>
+            <PatternLayout pattern="%d{ISO8601} | %-5.5p | %-16.16t | %-32.32c{1} | %-32.32C %4L | %X{correlationId} - %m%n"/>
             <Policies>
                 <SizeBasedTriggeringPolicy size="10MB"/>
             </Policies>
@@ -43,19 +43,5 @@
             <AppenderRef ref="Kibana"/>
             <AppenderRef ref="Sentry" level="ERROR" />
         </Root>
-        <!-- This <logger> is used to log HTTP requests -->
-        <logger name="org.springframework.web.filter.CommonsRequestLoggingFilter"
-                level="DEBUG"
-                additivity="false">
-            <Filters>
-                <!-- Exclude the "Before" part of the HTTP request -->
-                <RegexFilter regex=".*Before request.*" onMatch="DENY" onMismatch="NEUTRAL"/>
-                <!-- Exclude the static files -->
-                <RegexFilter regex=".*(\.svg+|\.png+|\.jpg+|\.js+|\.html+|\.woff2|\.ico).*" onMatch="DENY"
-                             onMismatch="ACCEPT"/>
-            </Filters>
-            <AppenderRef ref="${ENV}"/>
-            <AppenderRef ref="Kibana"/>
-        </logger>
     </Loggers>
 </Configuration>

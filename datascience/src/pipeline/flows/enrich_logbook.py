@@ -231,9 +231,9 @@ def compute_pno_types(
             - pno_types `List[dict]`
               ```[
                     {
-                        "pno_type_name": "Type 1",
-                        "minimum_notification_period": 4.0,
-                        "has_designated_ports": True
+                        "pnoTypeName": "Type 1",
+                        "minimumNotificationPeriod": 4.0,
+                        "hasDesignatedPorts": True
                     },
                     {...}
                 ]```
@@ -278,9 +278,9 @@ def compute_pno_types(
         SELECT
             logbook_reports_pno_id,
             LIST_SORT(ARRAY_AGG(DISTINCT {
-                'pno_type_name': pno_type_name,
-                'minimum_notification_period': minimum_notification_period,
-                'has_designated_ports': has_designated_ports
+                'pnoTypeName': pno_type_name,
+                'minimumNotificationPeriod': minimum_notification_period,
+                'hasDesignatedPorts': has_designated_ports
             })) AS pno_types
         FROM pnos_pno_types_tmp
         WHERE pno_quantity_kg >= minimum_quantity_kg

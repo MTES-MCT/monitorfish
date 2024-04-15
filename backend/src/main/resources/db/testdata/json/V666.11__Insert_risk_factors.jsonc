@@ -228,11 +228,11 @@
                 "control_rate_risk_factor": 5,
                 "departure_datetime_utc": "2024-03-31 14:00:00",
                 "detectability_risk_factor": 5,
-                "external_immatriculation": "EXTIMM109_DUPLICATE",
+                "external_immatriculation": "EXTIMM109",
                 "impact_risk_factor": 4,
                 "infraction_rate_risk_factor": 3,
                 "infraction_score": null,
-                "ircs": "IRCS109_DUPLICATE",
+                "ircs": "IRCS109",
                 "last_control_datetime_utc": "2024-04-01 00:00:00",
                 "last_control_infraction": true,
                 "last_logbook_message_datetime_utc:sql": "NOW()",
@@ -251,7 +251,7 @@
                 "segments": ["NWW10", "PEL 03"],
                 "total_weight_onboard": 12345.67,
                 "trip_number": 123109,
-                "vessel_id": 1109,
+                "vessel_id": 109,
                 "gear_onboard:jsonb": [],
                 "species_onboard:jsonb": []
             }

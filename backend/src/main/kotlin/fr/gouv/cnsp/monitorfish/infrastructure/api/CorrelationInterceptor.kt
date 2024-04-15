@@ -1,3 +1,5 @@
+package fr.gouv.cnsp.monitorfish.infrastructure.api
+
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.MDC

@@ -5,6 +5,6 @@ import org.hibernate.annotations.DynamicUpdate
 import org.springframework.data.jpa.repository.JpaRepository
 
 @DynamicUpdate
-interface DBRiskFactorsRepository : JpaRepository<RiskFactorsEntity, Int> {
-    fun findByCfrEquals(cfr: String): RiskFactorsEntity
+interface DBRiskFactorRepository : JpaRepository<RiskFactorsEntity, Int> {
+    fun findByCfr(cfr: String): RiskFactorsEntity
 }

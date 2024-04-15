@@ -32,6 +32,9 @@ class GetPriorNotificationUTests {
     private lateinit var reportingRepository: ReportingRepository
 
     @MockBean
+    private lateinit var riskFactorRepository: RiskFactorRepository
+
+    @MockBean
     private lateinit var speciesRepository: SpeciesRepository
 
     @Test
@@ -81,6 +84,7 @@ class GetPriorNotificationUTests {
             logbookReportRepository,
             portRepository,
             reportingRepository,
+            riskFactorRepository,
             speciesRepository,
         ).execute("FAKE_REPORT_ID_1")
 
@@ -136,6 +140,7 @@ class GetPriorNotificationUTests {
             logbookReportRepository,
             portRepository,
             reportingRepository,
+            riskFactorRepository,
             speciesRepository,
         ).execute("FAKE_REPORT_ID_2")
 

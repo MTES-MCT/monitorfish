@@ -18,6 +18,17 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
     @BeforeEach
     fun setup() {
         cacheManager.getCache("vessel")?.clear()
+        cacheManager.getCache("vessels")?.clear()
+    }
+
+    @Test
+    @Transactional
+    fun `findAll Should all the vessels`() {
+        // When
+        val vessel = jpaVesselRepository.findVessel("DUMMY", "", "")
+
+        // Then
+        assertThat(vessel).isNull()
     }
 
     @Test
@@ -26,6 +37,7 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
         // When
         val vessel = jpaVesselRepository.findVessel("DUMMY", "", "")
 
+        // Then
         assertThat(vessel).isNull()
     }
 
@@ -35,6 +47,7 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
         // When
         val vessel = jpaVesselRepository.findVessel("FAK000999999", "", "")
 
+        // Then
         assertThat(vessel).isNotNull
         assertThat(vessel!!.internalReferenceNumber).isEqualTo("FAK000999999")
     }
@@ -45,6 +58,7 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
         // When
         val vessel = jpaVesselRepository.findVessel("BAD_IDEA", "TALK2ME", "")
 
+        // Then
         assertThat(vessel).isNotNull
         assertThat(vessel!!.internalReferenceNumber).isEqualTo("U_W0NTFINDME")
     }
@@ -55,6 +69,7 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
         // When
         val vessels = jpaVesselRepository.search("FAK0")
 
+        // Then
         assertThat(vessels).hasSize(1)
         assertThat(vessels.first().internalReferenceNumber).isEqualTo("FAK000999999")
         assertThat(vessels.first().districtCode).isEqualTo("AY")
@@ -66,6 +81,7 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
         // When
         val vessels = jpaVesselRepository.search("")
 
+        // Then
         assertThat(vessels).hasSize(0)
     }
 
@@ -75,6 +91,7 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
         // When
         val vessels = jpaVesselRepository.search("LE b")
 
+        // Then
         assertThat(vessels).hasSize(2)
         assertThat(vessels.first().internalReferenceNumber).isEqualTo("FR263418260")
     }
@@ -85,6 +102,7 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
         // When
         val vessels = jpaVesselRepository.search("U_W0NTFINDME")
 
+        // Then
         assertThat(vessels).hasSize(1)
         assertThat(vessels.first().flagState).isEqualTo(CountryCode.UNDEFINED)
     }
@@ -95,6 +113,7 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
         // When
         val vessels = jpaVesselRepository.findVesselsByIds(listOf(1, 2, 3, 4, 66666666))
 
+        // Then
         assertThat(vessels).hasSize(4)
         assertThat(vessels.first().internalReferenceNumber).isEqualTo("FAK000999999")
         assertThat(vessels.first().vesselName).isEqualTo("PHENOMENE")

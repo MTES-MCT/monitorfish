@@ -8,24 +8,37 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.CacheManager
 import org.springframework.transaction.annotation.Transactional
 
-class JpaRiskFactorsRepositoryITests : AbstractDBTests() {
+class JpaRiskFactorRepositoryITests : AbstractDBTests() {
 
     @Autowired
-    private lateinit var jpaRiskFactorsRepository: JpaRiskFactorsRepository
+    private lateinit var jpaRiskFactorRepository: JpaRiskFactorRepository
 
     @Autowired
     lateinit var cacheManager: CacheManager
 
     @BeforeEach
     fun setup() {
+        cacheManager.getCache("risk_factor")?.clear()
         cacheManager.getCache("risk_factors")?.clear()
+    }
+
+    @Test
+    @Transactional
+    fun `findAll Should return all risk factors`() {
+        // When
+        val result = jpaRiskFactorRepository.findAll()
+
+        // Then
+        assertThat(result.size).isGreaterThan(0)
     }
 
     @Test
     @Transactional
     fun `findVesselRiskFactors Should return the vessel's risk factor`() {
         // When
-        val vesselRiskFactor = jpaRiskFactorsRepository.findVesselRiskFactors("FAK000999999")
+        val vesselRiskFactor = jpaRiskFactorRepository.findByInternalReferenceNumber("FAK000999999")
+
+        // Then
         assertThat(vesselRiskFactor).isInstanceOf(VesselRiskFactor::class.java)
         assertThat(vesselRiskFactor?.numberGearSeizuresLastFiveYears).isEqualTo(4)
         assertThat(vesselRiskFactor?.numberSpeciesSeizuresLastFiveYears).isEqualTo(3)

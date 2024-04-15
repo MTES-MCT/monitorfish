@@ -15,14 +15,18 @@ class GetPriorNotification(
     private val logbookReportRepository: LogbookReportRepository,
     private val portRepository: PortRepository,
     private val reportingRepository: ReportingRepository,
+    private val riskFactorRepository: RiskFactorRepository,
     private val speciesRepository: SpeciesRepository,
+//    private val vesselRepository: VesselRepository,
 ) {
     private val logger = LoggerFactory.getLogger(GetLogbookMessages::class.java)
 
     fun execute(logbookMessageReportId: String): PriorNotification {
         val allGears = gearRepository.findAll()
         val allPorts = portRepository.findAll()
+        val allRiskFactors = riskFactorRepository.findAll()
         val allSpecies = speciesRepository.findAll()
+//        val allVessels = vesselRepository.findAll()
 
         val priorNotificationWithoutReportingsCount = logbookReportRepository
             .findPriorNotificationByReportId(logbookMessageReportId)
@@ -40,9 +44,15 @@ class GetPriorNotification(
                     null
                 }
 
+                val vesselRiskFactor =
+                    priorNotification.vessel.internalReferenceNumber?.let { vesselInternalReferenceNumber ->
+                        allRiskFactors.find { it.internalReferenceNumber == vesselInternalReferenceNumber }
+                    }
+
                 priorNotification.copy(
                     port = port,
                     seaFront = port?.facade,
+                    vesselRiskFactor = vesselRiskFactor,
                 )
             }
 

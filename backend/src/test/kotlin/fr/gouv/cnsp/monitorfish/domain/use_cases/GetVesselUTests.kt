@@ -32,7 +32,7 @@ class GetVesselUTests {
     private lateinit var logbookReportRepository: LogbookReportRepository
 
     @MockBean
-    private lateinit var riskFactorsRepository: RiskFactorsRepository
+    private lateinit var riskFactorRepository: RiskFactorRepository
 
     @MockBean
     private lateinit var beaconRepository: BeaconRepository
@@ -125,7 +125,9 @@ class GetVesselUTests {
             listOf(firstPosition, fourthPosition, secondPosition, thirdPosition),
         )
         given(vesselRepository.findVesselById(any())).willReturn(Vessel(id = 123, flagState = CountryCode.FR))
-        given(riskFactorsRepository.findVesselRiskFactors(any())).willReturn(VesselRiskFactor(2.3, 2.0, 1.9, 3.2))
+        given(riskFactorRepository.findByInternalReferenceNumber(any())).willReturn(
+            VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
+        )
         given(beaconRepository.findBeaconNumberByVesselId(eq(123))).willReturn("A_BEACON_NUMBER")
 
         // When
@@ -135,7 +137,7 @@ class GetVesselUTests {
                     vesselRepository,
                     positionRepository,
                     logbookReportRepository,
-                    riskFactorsRepository,
+                    riskFactorRepository,
                     beaconRepository,
                 )
                     .execute(
@@ -167,7 +169,7 @@ class GetVesselUTests {
             listOf(),
         )
         given(vesselRepository.findVesselById(any())).willReturn(null)
-        given(riskFactorsRepository.findVesselRiskFactors(any())).willReturn(VesselRiskFactor())
+        given(riskFactorRepository.findByInternalReferenceNumber(any())).willReturn(VesselRiskFactor())
 
         // When
         val pair =
@@ -176,7 +178,7 @@ class GetVesselUTests {
                     vesselRepository,
                     positionRepository,
                     logbookReportRepository,
-                    riskFactorsRepository,
+                    riskFactorRepository,
                     beaconRepository,
                 )
                     .execute(
@@ -203,7 +205,7 @@ class GetVesselUTests {
             listOf(),
         )
         given(vesselRepository.findVesselById(any())).willReturn(null)
-        given(riskFactorsRepository.findVesselRiskFactors(any())).willReturn(VesselRiskFactor())
+        given(riskFactorRepository.findByInternalReferenceNumber(any())).willReturn(VesselRiskFactor())
         given(beaconRepository.findBeaconNumberByVesselId(eq(123))).willReturn(null)
 
         // When
@@ -213,7 +215,7 @@ class GetVesselUTests {
                     vesselRepository,
                     positionRepository,
                     logbookReportRepository,
-                    riskFactorsRepository,
+                    riskFactorRepository,
                     beaconRepository,
                 )
                     .execute(

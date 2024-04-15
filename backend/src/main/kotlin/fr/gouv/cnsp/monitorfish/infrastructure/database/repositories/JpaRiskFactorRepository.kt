@@ -19,7 +19,8 @@ class JpaRiskFactorRepository(
 
     @Cacheable(value = ["risk_factors"])
     override fun findAll(): List<VesselRiskFactor> {
-        return dbRiskFactorRepository.findAll().map { it.toVesselRiskFactor(mapper) }
+        // TODO For some reason, `it` can be null here with staging data. Investigate why.
+        return dbRiskFactorRepository.findAll().mapNotNull { it?.toVesselRiskFactor(mapper) }
     }
 
     @Cacheable(value = ["risk_factor"])

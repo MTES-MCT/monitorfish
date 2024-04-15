@@ -77,12 +77,12 @@ data class LogbookReportEntity(
     @Type(JsonBinaryType::class)
     @Column(name = "trip_segments", nullable = true, columnDefinition = "jsonb")
     val tripSegments: String? = null,
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "cfr", referencedColumnName = "cfr", nullable = true, insertable = false, updatable = false)
-    val vessel: VesselEntity? = null,
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    val vessels: List<VesselEntity>? = null,
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "cfr", referencedColumnName = "cfr", nullable = true, insertable = false, updatable = false)
-    val vesselRiskFactor: RiskFactorsEntity? = null,
+    val vesselRiskFactors: List<RiskFactorsEntity>? = null,
 ) {
     companion object {
         fun fromLogbookMessage(
@@ -152,12 +152,19 @@ data class LogbookReportEntity(
         val enrichedLogbookMessageTyped = referenceLogbookMessage
             .toEnrichedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
         // Default to UNKNOWN vessel when null or not found
-        val vessel = vessel?.toVessel() ?: Vessel(id = -1, flagState = CountryCode.UNDEFINED)
+        val vessel = if (vessels.isNullOrEmpty()) {
+            Vessel(id = -1, flagState = CountryCode.UNDEFINED)
+        } else {
+            vessels.maxByOrNull { it.id }!!.toVessel()
+        }
+        val vesselRiskFactor = vesselRiskFactors?.sortedBy { it.lastControlDatetime }?.last()?.toVesselRiskFactor(
+            mapper,
+        )
 
         return PriorNotification(
             logbookMessageTyped = enrichedLogbookMessageTyped,
             vessel = vessel,
-            vesselRiskFactor = vesselRiskFactor?.toVesselRiskFactor(mapper),
+            vesselRiskFactor = vesselRiskFactor,
         )
     }
 

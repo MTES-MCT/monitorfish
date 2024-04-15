@@ -183,6 +183,77 @@
                         "weight": 235.6
                     }
                 ]
+            },
+
+            // - Vessel: LE POISSON D'AVRIL
+            // - Last control date: 2024-01-01
+            // - DUPLICATE CFR (= 2 rows with the same `cfr` value)
+            {
+                "cfr": "CFR109",
+                "control_priority_level": 4,
+                "control_rate_risk_factor": 5,
+                "departure_datetime_utc": "2023-12-31 14:00:00",
+                "detectability_risk_factor": 5,
+                "external_immatriculation": "EXTIMM109",
+                "impact_risk_factor": 4,
+                "infraction_rate_risk_factor": 3,
+                "infraction_score": null,
+                "ircs": "IRCS109",
+                "last_control_datetime_utc": "2024-01-01 00:00:00",
+                "last_control_infraction": true,
+                "last_logbook_message_datetime_utc:sql": "NOW()",
+                "number_controls_last_3_years": 0,
+                "number_controls_last_5_years": 0,
+                "number_gear_seizures_last_5_years": 4,
+                "number_infractions_last_5_years": 5,
+                "number_recent_controls": 0,
+                "number_species_seizures_last_5_years": 3,
+                "number_vessel_seizures_last_5_years": 2,
+                "post_control_comments": "",
+                "probability_risk_factor": 4,
+                "risk_factor": 4,
+                "segment_highest_impact": "NWW10",
+                "segment_highest_priority": "PEL 03",
+                "segments": ["NWW10", "PEL 03"],
+                "total_weight_onboard": 12345.67,
+                "trip_number": 123109,
+                "vessel_id": 109,
+                "gear_onboard:jsonb": [],
+                "species_onboard:jsonb": []
+            },
+            // - Last control date: 2024-04-01
+            {
+                "cfr": "CFR109",
+                "control_priority_level": 4,
+                "control_rate_risk_factor": 5,
+                "departure_datetime_utc": "2024-03-31 14:00:00",
+                "detectability_risk_factor": 5,
+                "external_immatriculation": "EXTIMM109_DUPLICATE",
+                "impact_risk_factor": 4,
+                "infraction_rate_risk_factor": 3,
+                "infraction_score": null,
+                "ircs": "IRCS109_DUPLICATE",
+                "last_control_datetime_utc": "2024-04-01 00:00:00",
+                "last_control_infraction": true,
+                "last_logbook_message_datetime_utc:sql": "NOW()",
+                "number_controls_last_3_years": 0,
+                "number_controls_last_5_years": 0,
+                "number_gear_seizures_last_5_years": 4,
+                "number_infractions_last_5_years": 5,
+                "number_recent_controls": 0,
+                "number_species_seizures_last_5_years": 3,
+                "number_vessel_seizures_last_5_years": 2,
+                "post_control_comments": "",
+                "probability_risk_factor": 4,
+                "risk_factor": 4,
+                "segment_highest_impact": "NWW10",
+                "segment_highest_priority": "PEL 03",
+                "segments": ["NWW10", "PEL 03"],
+                "total_weight_onboard": 12345.67,
+                "trip_number": 123109,
+                "vessel_id": 1109,
+                "gear_onboard:jsonb": [],
+                "species_onboard:jsonb": []
             }
         ]
     }

@@ -24,7 +24,7 @@ class HttpResponseLogging : ResponseBodyAdvice<Any> {
         selectedContentType: MediaType,
         selectedConverterType: Class<out HttpMessageConverter<*>>,
         request: ServerHttpRequest,
-        response: ServerHttpResponse
+        response: ServerHttpResponse,
     ): Any? {
         println(request.method)
         if (request.method != HttpMethod.PUT && request.method != HttpMethod.POST) {

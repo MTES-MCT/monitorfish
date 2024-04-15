@@ -18,7 +18,7 @@ class HttpUpdateLogging : RequestBodyAdviceAdapter() {
     override fun supports(
         methodParameter: MethodParameter,
         targetType: Type,
-        aClass: Class<out HttpMessageConverter<*>>
+        aClass: Class<out HttpMessageConverter<*>>,
     ): Boolean {
         return true
     }
@@ -28,7 +28,7 @@ class HttpUpdateLogging : RequestBodyAdviceAdapter() {
         inputMessage: HttpInputMessage,
         parameter: MethodParameter,
         targetType: Type,
-        converterType: Class<out HttpMessageConverter<*>>
+        converterType: Class<out HttpMessageConverter<*>>,
     ): Any {
         println(httpServletRequest!!.method)
         if (httpServletRequest?.method != HttpMethod.PUT.name() && httpServletRequest?.method != HttpMethod.POST.name()) {

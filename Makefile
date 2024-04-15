@@ -51,6 +51,10 @@ update-test-data:
 	cd frontend && node ./scripts/generate_test_data_seeds.mjs
 
 dev-restore-db:
+	docker compose down -v
+	docker compose up -d --quiet-pull --wait db
+	sleep 5
+	# docker exec -i monitorfish_database psql -c "CREATE SCHEMA IF NOT EXISTS _timescaledb_internal AUTHORIZATION postgres;" -U postgres
 	@export CONFIG_FILE_PATH=$$(pwd)/infra/remote/backup/pg_backup.config MONITORFISH_BACKUPS_FOLDER=$$(pwd)/.backups/; \
 		./infra/remote/backup/pg_restore.sh -t "$(TAG)"
 

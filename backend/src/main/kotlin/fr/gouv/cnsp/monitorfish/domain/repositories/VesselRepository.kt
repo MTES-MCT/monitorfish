@@ -11,6 +11,8 @@ interface VesselRepository {
         ircs: String? = null,
     ): Vessel?
 
+    fun findFirstByInternalReferenceNumber(internalReferenceNumber: String): Vessel?
+
     fun findVesselsByIds(ids: List<Int>): List<Vessel>
 
     fun findVesselById(vesselId: Int): Vessel?

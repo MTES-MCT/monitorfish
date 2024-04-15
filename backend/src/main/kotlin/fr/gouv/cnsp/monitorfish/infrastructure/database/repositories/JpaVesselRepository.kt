@@ -53,6 +53,11 @@ class JpaVesselRepository(private val dbVesselRepository: DBVesselRepository) : 
         return null
     }
 
+    // Only used in tests
+    override fun findFirstByInternalReferenceNumber(internalReferenceNumber: String): Vessel? {
+        return dbVesselRepository.findFirstByCfr(internalReferenceNumber)?.toVessel()
+    }
+
     override fun findVesselsByIds(ids: List<Int>): List<Vessel> {
         return dbVesselRepository.findAllByIds(ids).map { it.toVessel() }
     }

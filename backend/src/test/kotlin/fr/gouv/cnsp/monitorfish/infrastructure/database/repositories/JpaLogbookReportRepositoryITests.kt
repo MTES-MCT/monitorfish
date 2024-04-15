@@ -35,6 +35,12 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     private lateinit var jpaLogbookRawMessageRepository: JpaLogbookRawMessageRepository
 
     @Autowired
+    private lateinit var jpaRiskFactorRepository: JpaRiskFactorRepository
+
+    @Autowired
+    private lateinit var jpaVesselRepository: JpaVesselRepository
+
+    @Autowired
     lateinit var cacheManager: CacheManager
 
     @BeforeEach
@@ -611,12 +617,18 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(result).hasSizeGreaterThan(0)
-        assertThat(result.all { listOf(CountryCode.ES, CountryCode.FR).contains(it.vessel.flagState) }).isEqualTo(true)
+        val resultVessels = result.mapNotNull {
+            jpaVesselRepository.findFirstByInternalReferenceNumber(
+                it.logbookMessageTyped.logbookMessage.internalReferenceNumber!!,
+            )
+        }
+        assertThat(resultVessels).hasSize(result.size)
+        assertThat(resultVessels.all { listOf(CountryCode.ES, CountryCode.FR).contains(it.flagState) }).isEqualTo(true)
     }
 
     @Test
     @Transactional
-    fun `findAllPriorNotifications Should return PNO logbook reports for less than 12 meters long vessels`() {
+    fun `findAllPriorNotifications Should return PNO logbook reports for less or more than 12 meters long vessels`() {
         // Given
         val firstFilter = LogbookReportFilter(isLessThanTwelveMetersVessel = true)
 
@@ -625,7 +637,13 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(firstResult).hasSizeGreaterThan(0)
-        assertThat(firstResult.all { it.vessel.length!! < 12 }).isEqualTo(true)
+        val firstResultVessels = firstResult.mapNotNull {
+            jpaVesselRepository.findFirstByInternalReferenceNumber(
+                it.logbookMessageTyped.logbookMessage.internalReferenceNumber!!,
+            )
+        }
+        assertThat(firstResultVessels).hasSize(firstResult.size)
+        assertThat(firstResultVessels.all { it.length!! < 12 }).isEqualTo(true)
 
         // Given
         val secondFilter = LogbookReportFilter(isLessThanTwelveMetersVessel = false)
@@ -635,7 +653,13 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(secondResult).hasSizeGreaterThan(0)
-        assertThat(secondResult.all { it.vessel.length!! >= 12 }).isEqualTo(true)
+        val secondResultVessels = secondResult.mapNotNull {
+            jpaVesselRepository.findFirstByInternalReferenceNumber(
+                it.logbookMessageTyped.logbookMessage.internalReferenceNumber!!,
+            )
+        }
+        assertThat(secondResultVessels).hasSize(secondResult.size)
+        assertThat(secondResultVessels.all { it.length!! >= 12 }).isEqualTo(true)
     }
 
     @Test
@@ -649,9 +673,15 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(firstResult).hasSizeGreaterThan(0)
+        val firstResultRiskFactors = firstResult.mapNotNull {
+            jpaRiskFactorRepository.findFirstByInternalReferenceNumber(
+                it.logbookMessageTyped.logbookMessage.internalReferenceNumber!!,
+            )
+        }
+        assertThat(firstResultRiskFactors).hasSize(firstResult.size)
         assertThat(
-            firstResult.all {
-                it.vesselRiskFactor!!.lastControlDatetime!!.isAfter(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
+            firstResultRiskFactors.all {
+                it.lastControlDatetime!!.isAfter(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
             },
         ).isEqualTo(true)
 
@@ -663,9 +693,15 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(secondResult).hasSizeGreaterThan(0)
+        val secondResultRiskFactors = secondResult.mapNotNull {
+            jpaRiskFactorRepository.findFirstByInternalReferenceNumber(
+                it.logbookMessageTyped.logbookMessage.internalReferenceNumber!!,
+            )
+        }
+        assertThat(secondResultRiskFactors).hasSize(secondResult.size)
         assertThat(
-            secondResult.all {
-                it.vesselRiskFactor!!.lastControlDatetime!!.isBefore(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
+            secondResultRiskFactors.all {
+                it.lastControlDatetime!!.isBefore(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
             },
         ).isEqualTo(true)
     }
@@ -699,7 +735,13 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(firstResult).hasSizeGreaterThan(0)
-        assertThat(firstResult.all { it.vessel.vesselName == "PHENOMENE" }).isEqualTo(true)
+        val firstResultVessels = firstResult.mapNotNull {
+            jpaVesselRepository.findFirstByInternalReferenceNumber(
+                it.logbookMessageTyped.logbookMessage.internalReferenceNumber!!,
+            )
+        }
+        assertThat(firstResultVessels).hasSize(firstResult.size)
+        assertThat(firstResultVessels.all { it.vesselName == "PHENOMENE" }).isEqualTo(true)
 
         // Given
         val secondFilter = LogbookReportFilter(searchQuery = "hénO")
@@ -709,7 +751,13 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(secondResult).hasSizeGreaterThan(0)
-        assertThat(secondResult.all { it.vessel.vesselName == "PHENOMENE" }).isEqualTo(true)
+        val secondResultVessels = secondResult.mapNotNull {
+            jpaVesselRepository.findFirstByInternalReferenceNumber(
+                it.logbookMessageTyped.logbookMessage.internalReferenceNumber!!,
+            )
+        }
+        assertThat(secondResultVessels).hasSize(secondResult.size)
+        assertThat(secondResultVessels.all { it.vesselName == "PHENOMENE" }).isEqualTo(true)
     }
 
     @Test

@@ -27,9 +27,20 @@ class JpaRiskFactorRepository(
         try {
             return dbRiskFactorRepository.findByCfr(internalReferenceNumber).toVesselRiskFactor(mapper)
         } catch (e: EmptyResultDataAccessException) {
-            logger.warn("No current risk factor found for CFR $internalReferenceNumber", e.message)
+            logger.warn("No current risk factor found for CFR $internalReferenceNumber.", e.message)
         }
 
         return null
+    }
+
+    // Only used in tests
+    override fun findFirstByInternalReferenceNumber(internalReferenceNumber: String): VesselRiskFactor? {
+        val riskFactor = dbRiskFactorRepository.findFirstByCfr(internalReferenceNumber)
+        if (riskFactor === null) {
+            logger.warn("No current risk factor found for CFR $internalReferenceNumber.")
+            return null
+        }
+
+        return riskFactor.toVesselRiskFactor(mapper)
     }
 }

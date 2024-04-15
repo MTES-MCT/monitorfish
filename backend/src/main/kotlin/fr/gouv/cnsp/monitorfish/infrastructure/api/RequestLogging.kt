@@ -62,7 +62,7 @@ class RequestLogging {
                 parameterBuilder.append("$key=$value")
             }
 
-            return "?${parameterBuilder}"
+            return "?$parameterBuilder"
         }
 
         private fun buildHeadersMap(request: HttpServletRequest): Map<String, String> {

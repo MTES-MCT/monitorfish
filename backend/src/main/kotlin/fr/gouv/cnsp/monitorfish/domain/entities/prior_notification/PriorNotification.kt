@@ -12,5 +12,5 @@ data class PriorNotification(
     val reportingsCount: Int? = null,
     val seaFront: String? = null,
     val vessel: Vessel,
-    val vesselRiskFactor: VesselRiskFactor?,
+    val vesselRiskFactor: VesselRiskFactor? = null,
 )

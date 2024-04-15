@@ -15,10 +15,17 @@ interface DBVesselRepository : CrudRepository<VesselEntity, Int> {
         nativeQuery = true,
     )
     fun searchBy(@Param("searched") searched: String): List<VesselEntity>
+
+    // Only used in tests
+    @Query(value = "SELECT * FROM vessels WHERE cfr = :cfr LIMIT 1", nativeQuery = true)
+    fun findFirstByCfr(@Param("cfr") cfr: String): VesselEntity?
+
     fun findByInternalReferenceNumber(internalReferenceNumber: String): VesselEntity
+
     fun findByExternalReferenceNumberIgnoreCaseContaining(externalReferenceNumber: String): VesselEntity
+
     fun findByIrcs(ircs: String): VesselEntity
 
-    @Query("SELECT * FROM vessels WHERE id in (:ids)", nativeQuery = true)
+    @Query(value = "SELECT * FROM vessels WHERE id in (:ids)", nativeQuery = true)
     fun findAllByIds(ids: List<Int>): List<VesselEntity>
 }

@@ -32,7 +32,13 @@ class GetPriorNotificationUTests {
     private lateinit var reportingRepository: ReportingRepository
 
     @MockBean
+    private lateinit var riskFactorRepository: RiskFactorRepository
+
+    @MockBean
     private lateinit var speciesRepository: SpeciesRepository
+
+    @MockBean
+    private lateinit var vesselRepository: VesselRepository
 
     @Test
     fun `execute Should return a prior notification with a non-corrected logbook report operation`() {
@@ -81,7 +87,9 @@ class GetPriorNotificationUTests {
             logbookReportRepository,
             portRepository,
             reportingRepository,
+            riskFactorRepository,
             speciesRepository,
+            vesselRepository,
         ).execute("FAKE_REPORT_ID_1")
 
         // Then
@@ -136,7 +144,9 @@ class GetPriorNotificationUTests {
             logbookReportRepository,
             portRepository,
             reportingRepository,
+            riskFactorRepository,
             speciesRepository,
+            vesselRepository,
         ).execute("FAKE_REPORT_ID_2")
 
         // Then

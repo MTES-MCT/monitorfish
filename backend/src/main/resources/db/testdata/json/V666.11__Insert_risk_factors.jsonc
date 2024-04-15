@@ -186,7 +186,7 @@
             },
 
             // - Vessel: LE POISSON D'AVRIL
-            // - Last control date: 2024-01-01
+            // - Last control date: 2024-02-01
             // - DUPLICATE CFR (= 2 rows with the same `cfr` value)
             {
                 "cfr": "CFR109",
@@ -199,7 +199,7 @@
                 "infraction_rate_risk_factor": 3,
                 "infraction_score": null,
                 "ircs": "IRCS109",
-                "last_control_datetime_utc": "2024-01-01 00:00:00",
+                "last_control_datetime_utc": "2024-02-01 00:00:00",
                 "last_control_infraction": true,
                 "last_logbook_message_datetime_utc:sql": "NOW()",
                 "number_controls_last_3_years": 0,

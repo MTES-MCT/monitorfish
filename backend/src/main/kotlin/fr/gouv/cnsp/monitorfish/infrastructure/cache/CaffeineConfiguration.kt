@@ -48,6 +48,7 @@ class CaffeineConfiguration {
     val ports = "ports"
 
     // Risk Factors
+    val riskFactor = "risk_factor"
     val riskFactors = "risk_factors"
 
     // Segments
@@ -61,7 +62,8 @@ class CaffeineConfiguration {
     // Vessels
     val searchVessels = "search_vessels"
     val vesselTrack = "vessel_track"
-    val vessels = "vessel"
+    val vessel = "vessel"
+    val vessels = "vessels"
     val vesselsAllPositions = "vessels_all_position"
     val vesselsPositions = "vessels_positions"
     val vesselsPositionsWithBeaconMalfunctions = "vessels_positions_with_beacon_malfunctions"
@@ -112,6 +114,7 @@ class CaffeineConfiguration {
         val portCache = buildMinutesCache(port, ticker, oneWeek)
 
         // Risk Factors
+        val riskFactorCache = buildMinutesCache(riskFactor, ticker, 1)
         val riskFactorsCache = buildMinutesCache(riskFactors, ticker, 1)
 
         // Segments
@@ -125,7 +128,8 @@ class CaffeineConfiguration {
         // Vessels
         val searchVesselsCache = buildMinutesCache(searchVessels, ticker, 60)
         val vesselTrackCache = buildMinutesCache(vesselTrack, ticker, 1)
-        val vesselCache = buildMinutesCache(vessels, ticker, 60)
+        val vesselCache = buildMinutesCache(vessel, ticker, 60)
+        val vesselsCache = buildMinutesCache(vessels, ticker, 60)
         val vesselsAllPositionsCache = buildSecondsCache(vesselsAllPositions, ticker, 30)
         val vesselsPositionsCache = buildSecondsCache(vesselsPositions, ticker, 30)
         val vesselsPositionsWithBeaconMalfunctionsCache = buildMinutesCache(
@@ -166,12 +170,14 @@ class CaffeineConfiguration {
                 portCache,
                 portsCache,
                 previousLogbookCache,
+                riskFactorCache,
                 riskFactorsCache,
                 searchBeaconsCache,
                 searchVesselsCache,
                 speciesCache,
                 userAuthorizationCache,
                 vesselCache,
+                vesselsCache,
                 vesselTrackCache,
                 vesselsAllPositionsCache,
                 vesselsPositionsCache,

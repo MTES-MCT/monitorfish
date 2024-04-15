@@ -33,7 +33,13 @@ class GetPriorNotificationsUTests {
     private lateinit var reportingRepository: ReportingRepository
 
     @MockBean
+    private lateinit var riskFactorRepository: RiskFactorRepository
+
+    @MockBean
     private lateinit var speciesRepository: SpeciesRepository
+
+    @MockBean
+    private lateinit var vesselRepository: VesselRepository
 
     @Test
     fun `execute Should return a list of prior notifications`() {
@@ -118,7 +124,9 @@ class GetPriorNotificationsUTests {
             logbookReportRepository,
             portRepository,
             reportingRepository,
+            riskFactorRepository,
             speciesRepository,
+            vesselRepository,
         ).execute(LogbookReportFilter())
 
         // Then

@@ -16,3 +16,7 @@ INSERT INTO vessels (id, cfr, mmsi, ircs, external_immatriculation, vessel_name,
 INSERT INTO vessels (id, cfr, mmsi, ircs, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (107, 'CFR107', 'MMSI107', 'IRCS107', 'EXTIMM107', 'MERLU L''ENCHANTEUR', 'FR', 18, false);
 
 INSERT INTO vessels (id, cfr, mmsi, ircs, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (108, 'CFR108', 'MMSI108', 'IRCS108', 'EXTIMM108', 'LE POISSON AMBULANT', 'FR', 9, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (109, 'CFR109', 'MMSI109', 'IRCS109', 'EXTIMM109', 'LE POISSON D''AVRIL', 'FR', 25, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (1109, 'CFR109', 'MMSI109_DUPLICATE', 'IRCS109_DUPLICATE', 'EXTIMM109_DUPLICATE', 'LE POISSON D''AVRIL DUPLIQUÉ', 'FR', 50, true);

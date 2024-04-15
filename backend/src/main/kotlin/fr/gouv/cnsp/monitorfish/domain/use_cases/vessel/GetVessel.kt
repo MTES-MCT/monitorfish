@@ -17,7 +17,7 @@ class GetVessel(
     private val vesselRepository: VesselRepository,
     private val positionRepository: PositionRepository,
     private val logbookReportRepository: LogbookReportRepository,
-    private val riskFactorsRepository: RiskFactorsRepository,
+    private val riskFactorRepository: RiskFactorRepository,
     private val beaconRepository: BeaconRepository,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(GetVessel::class.java)
@@ -54,7 +54,7 @@ class GetVessel(
 
             val vesselRiskFactorsFuture =
                 async {
-                    riskFactorsRepository.findVesselRiskFactors(internalReferenceNumber)
+                    riskFactorRepository.findByInternalReferenceNumber(internalReferenceNumber)
                 }
 
             val vessel = vesselFuture.await()

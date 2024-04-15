@@ -109,6 +109,31 @@
                 "flag_state": "FR",
                 "length": 9,
                 "under_charter": false
+            },
+
+            // - Vessel: LE POISSON D'AVRIL
+            // - DUPLICATE CFR (= 2 rows with same `cfr` value)
+            {
+                "id": 109,
+                "cfr": "CFR109",
+                "mmsi": "MMSI109",
+                "ircs": "IRCS109",
+                "external_immatriculation": "EXTIMM109",
+                "vessel_name": "LE POISSON D'AVRIL",
+                "flag_state": "FR",
+                "length": 25,
+                "under_charter": false
+            },
+            {
+                "id": 1109,
+                "cfr": "CFR109",
+                "mmsi": "MMSI109_DUPLICATE",
+                "ircs": "IRCS109_DUPLICATE",
+                "external_immatriculation": "EXTIMM109_DUPLICATE",
+                "vessel_name": "LE POISSON D'AVRIL DUPLIQUÉ",
+                "flag_state": "FR",
+                "length": 50,
+                "under_charter": true
             }
         ]
     }

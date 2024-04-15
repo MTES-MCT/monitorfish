@@ -17,7 +17,8 @@
             { "operation_number": "FAKE_OPERATION_110" },
             { "operation_number": "FAKE_OPERATION_110_DEL" },
             { "operation_number": "FAKE_OPERATION_111_COR_ORPHAN" },
-            { "operation_number": "FAKE_OPERATION_112" }
+            { "operation_number": "FAKE_OPERATION_112" },
+            { "operation_number": "FAKE_OPERATION_113" }
         ]
     },
     {
@@ -660,7 +661,9 @@
             // - Vessel: UNKNOWN
             // - NOT Enriched
             {
-                "id": 111,
+                "id": 112,
+                "report_id": "FAKE_OPERATION_112",
+                "referenced_report_id": null,
                 "cfr": null,
                 "enriched": false,
                 "flag_state": null,
@@ -675,6 +678,85 @@
                 "trip_gears": null,
                 "trip_segments": null,
                 "value": null
+            },
+
+            // - Vessel: LE POISSON D'AVRIL
+            // - DUPLICATE Risk Factor CFR (= 2 `risk_factors` table rows with the same `cfr` value)
+            // - DUPLICATE Vessel CFR (= 2 `vessels` table rows with the same `cfr` value)
+            {
+                "id": 113,
+                "report_id": "FAKE_OPERATION_113",
+                "referenced_report_id": null,
+                "cfr": "CFR109",
+                "enriched": true,
+                "flag_state": "FRA",
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "log_type": "PNO",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "operation_number": "FAKE_OPERATION_113",
+                "operation_type": "DAT",
+                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "transmission_format": "FLUX",
+                "trip_gears:jsonb": [{ "gear": "DRB", "mesh": null, "dimensions": null }],
+                "trip_segments:jsonb": [{ "segment": "FR_SCE", "segmentName": "Scallop fisheries" }],
+                "vessel_name": "LE POISSON AMBULANT",
+                "value:jsonb": {
+                    "catchOnboard": [
+                        {
+                            "nbFish": null,
+                            "weight": 40.0,
+                            "faoZone": "27.7.d",
+                            "species": "ANF",
+                            "effortZone": null,
+                            "economicZone": "FRA",
+                            "statisticalRectangle": null
+                        },
+                        {
+                            "nbFish": null,
+                            "weight": 3.0,
+                            "faoZone": "27.7.d",
+                            "species": "SOL",
+                            "effortZone": null,
+                            "economicZone": "FRA",
+                            "statisticalRectangle": null
+                        },
+                        {
+                            "nbFish": null,
+                            "weight": 16.0,
+                            "faoZone": "27.7.d",
+                            "species": "TUR",
+                            "effortZone": null,
+                            "economicZone": "FRA",
+                            "statisticalRectangle": null
+                        },
+                        {
+                            "nbFish": null,
+                            "weight": 27150.0,
+                            "faoZone": "27.7.d",
+                            "species": "SCE",
+                            "effortZone": null,
+                            "economicZone": "FRA",
+                            "statisticalRectangle": null
+                        }
+                    ],
+                    "pnoTypes": [
+                        {
+                            "pnoTypeName": "Espèces soumises à préavis",
+                            "hasDesignatedPorts": true,
+                            "minimumNotificationPeriod": 4.0
+                        },
+                        {
+                            "pnoTypeName": "Préavis navire tiers",
+                            "hasDesignatedPorts": true,
+                            "minimumNotificationPeriod": 4.0
+                        }
+                    ],
+                    "port": "FRVNE",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '1 hour', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '2 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "purpose": "LAN",
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                }
             }
         ]
     }

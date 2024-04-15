@@ -8,11 +8,15 @@ import org.slf4j.LoggerFactory
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Repository
-import java.util.NoSuchElementException
 
 @Repository
 class JpaVesselRepository(private val dbVesselRepository: DBVesselRepository) : VesselRepository {
     private val logger: Logger = LoggerFactory.getLogger(JpaVesselRepository::class.java)
+
+    @Cacheable(value = ["vessels"])
+    override fun findAll(): List<Vessel> {
+        return dbVesselRepository.findAll().map { it.toVessel() }
+    }
 
     @Cacheable(value = ["vessel"])
     override fun findVessel(
@@ -47,6 +51,11 @@ class JpaVesselRepository(private val dbVesselRepository: DBVesselRepository) : 
         }
 
         return null
+    }
+
+    // Only used in tests
+    override fun findFirstByInternalReferenceNumber(internalReferenceNumber: String): Vessel? {
+        return dbVesselRepository.findFirstByCfr(internalReferenceNumber)?.toVessel()
     }
 
     override fun findVesselsByIds(ids: List<Int>): List<Vessel> {

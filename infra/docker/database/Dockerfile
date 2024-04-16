@@ -11,7 +11,7 @@ RUN set -eux \
         openssl \
         tar \
     \
-    && wget -O postgis.tar.gz "https://github.com/postgis/postgis/archive/${POSTGIS_VERSION}.tar.gz" \
+    && wget --max-redirect=0 -O postgis.tar.gz "https://github.com/postgis/postgis/archive/${POSTGIS_VERSION}.tar.gz" \
     && mkdir -p /usr/src/postgis \
     && tar \
         --extract \

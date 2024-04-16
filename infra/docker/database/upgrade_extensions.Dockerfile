@@ -15,7 +15,7 @@ RUN set -ex && \
         clang-dev \
         build-base && \
     cd /tmp && \
-    wget https://download.osgeo.org/postgis/source/postgis-$POSTGIS_VERSION.tar.gz -O - | tar -xz && \
+    wget --max-redirect=0 https://download.osgeo.org/postgis/source/postgis-$POSTGIS_VERSION.tar.gz -O - | tar -xz && \
     cd postgis-$POSTGIS_VERSION && \
     ./configure && \
     make -s && \

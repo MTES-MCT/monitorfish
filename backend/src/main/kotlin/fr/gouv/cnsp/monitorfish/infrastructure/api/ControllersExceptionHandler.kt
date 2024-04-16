@@ -7,7 +7,7 @@ import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.MissingParameterApiEr
 import io.sentry.Sentry
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.core.Ordered.HIGHEST_PRECEDENCE
+import org.springframework.core.Ordered.LOWEST_PRECEDENCE
 import org.springframework.core.annotation.Order
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.MissingServletRequestParameterException
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
-@Order(HIGHEST_PRECEDENCE)
+@Order(LOWEST_PRECEDENCE)
 class ControllersExceptionHandler(val sentryConfig: SentryConfig) {
     private val logger: Logger = LoggerFactory.getLogger(ControllersExceptionHandler::class.java)
 

@@ -6,13 +6,11 @@ import io.ktor.client.request.*
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.springframework.core.annotation.Order
 import org.springframework.web.filter.OncePerRequestFilter
 
 /**
  * This filter check the api key header
  */
-@Order(1)
 class ApiKeyCheckFilter(
     private val protectedPathsAPIProperties: ProtectedPathsAPIProperties,
 ) : OncePerRequestFilter() {

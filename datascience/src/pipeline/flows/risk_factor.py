@@ -34,7 +34,11 @@ def compute_risk_factors(
     risk_factors = join_on_multiple_keys(
         control_anteriority,
         current_segments,
-        or_join_keys=["vessel_id"],
+        # Matching on CFR is required for vessels that no longer reside in the
+        # `vessels` table and therefore have no `vessel_id` in the `current_segments`
+        # DataFrame but have a control history and therefore have a non null
+        # `vessel_id` in the `control_anteriority` DataFrame.
+        or_join_keys=["vessel_id", "cfr"],
         how="outer",
         coalesce_common_columns=True,
     )
@@ -117,10 +121,8 @@ def load_risk_factors(risk_factors: pd.DataFrame):
 
 
 with Flow("Risk factor", executor=LocalDaskExecutor()) as flow:
-
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
-
         current_segments = extract_current_segments()
         control_anteriority = extract_control_anteriority()
         risk_factors = compute_risk_factors(current_segments, control_anteriority)

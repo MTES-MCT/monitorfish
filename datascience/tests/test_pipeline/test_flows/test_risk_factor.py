@@ -29,6 +29,7 @@ def risk_factors() -> pd.DataFrame:
             [2, "ABC000542519", None, None, 2.0, 2.000000, 2.168944],
             [3, "ABC000055481", "IL2468", "AS761555", 1.0, 1.322876, 1.150163],
             [4, "CFR_OF_LOGBK", "OLY7853", "SB125334", 1.0, 1.322876, 1.334146],
+            [5, "OLD_VESSEL_1", "SOMEID", "HG987654", 1.0, 1.322876, 1.150163],
             [None, "UNKONWN_VESS", None, None, 2.0, 2.0, 1.741101],
         ],
     )
@@ -70,15 +71,16 @@ def test_risk_factor_flow(reset_test_data, risk_factors):
     # control_anteriority, so if we have two vessels in current_segments, two vessels
     # in control_anteriority, one of which is in both tables, then there me be three
     # vessels in risk_factors.
-    assert len(current_segments) == 4
+    assert len(current_segments) == 5
     assert set(current_segments.cfr) == {
         "ABC000542519",
         "ABC000306959",
         "UNKONWN_VESS",
         "CFR_OF_LOGBK",
+        "OLD_VESSEL_1",
     }
 
-    assert len(control_anteriority) == 3
-    assert set(control_anteriority.ircs) == {"LLUK", "OLY7853", "IL2468"}
+    assert len(control_anteriority) == 4
+    assert set(control_anteriority.ircs) == {"LLUK", "OLY7853", "IL2468", "SOMEID"}
 
     pd.testing.assert_frame_equal(loaded_risk_factors, risk_factors)

@@ -13,14 +13,12 @@ import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import kotlinx.coroutines.runBlocking
-import org.springframework.core.annotation.Order
 import org.springframework.web.filter.OncePerRequestFilter
 
 /**
  * This filter only check user authorization.
  * The JWT issuer public key signature is checked in WebSecurityConfig.kt
  */
-@Order(1)
 class UserAuthorizationCheckFilter(
     private val oidcProperties: OIDCProperties,
     private val protectedPathsAPIProperties: ProtectedPathsAPIProperties,

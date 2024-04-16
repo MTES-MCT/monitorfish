@@ -1,19 +1,15 @@
-package fr.gouv.cnsp.monitorfish.infrastructure.api
+package fr.gouv.cnsp.monitorfish.infrastructure.api.log
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.slf4j.LoggerFactory
 import java.util.*
 
-class RequestLogging {
+class LoggingFormatter {
     companion object {
-        private val logger = LoggerFactory.getLogger(RequestLogging::class.java)
-        private val mapper = ObjectMapper()
-
-        fun logRequest(httpServletRequest: HttpServletRequest?, body: Any?) {
+        fun formatRequest(mapper: ObjectMapper, httpServletRequest: HttpServletRequest?, body: Any? = null): String? {
             if (httpServletRequest == null) {
-                return
+                return null
             }
 
             val stringBuilder = StringBuilder()
@@ -24,32 +20,45 @@ class RequestLogging {
             stringBuilder.append(httpServletRequest.requestURI)
             if (parameters.isNotEmpty()) {
                 stringBuilder.append(parameters).append(" ")
+            } else {
+                stringBuilder.append(" ")
             }
             stringBuilder.append(buildHeadersMap(httpServletRequest)).append(" ")
 
             if (body != null) {
-                println(body)
-                println(mapper.writeValueAsString(body))
                 stringBuilder.append(mapper.writeValueAsString(body))
             }
 
-            logger.info(stringBuilder.toString())
+            return stringBuilder.toString()
         }
 
-        fun logResponse(httpServletRequest: HttpServletRequest, httpServletResponse: HttpServletResponse, body: Any?) {
+        fun formatResponse(
+            mapper: ObjectMapper,
+            httpServletRequest: HttpServletRequest,
+            httpServletResponse: HttpServletResponse,
+            body: Any?,
+        ): String {
             val stringBuilder = StringBuilder()
 
             stringBuilder.append("RESPONSE ")
             stringBuilder.append(httpServletRequest.method).append(" ")
+            stringBuilder.append(httpServletResponse.status).append(" ")
             stringBuilder.append(httpServletRequest.requestURI).append(" ")
-            stringBuilder.append(mapper.writeValueAsString(body)).append(" ")
 
-            logger.info(stringBuilder.toString())
+            if (body != null) {
+                stringBuilder.append(mapper.writeValueAsString(body))
+            }
+
+            return stringBuilder.toString()
         }
 
         private fun buildParametersString(httpServletRequest: HttpServletRequest): String {
             val parameterBuilder = StringBuilder()
             val parameterNames = httpServletRequest.parameterNames
+
+            if (!parameterNames.hasMoreElements()) {
+                return ""
+            }
 
             while (parameterNames.hasMoreElements()) {
                 val key = parameterNames.nextElement()

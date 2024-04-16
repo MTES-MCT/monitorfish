@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.infrastructure.api
+package fr.gouv.cnsp.monitorfish.infrastructure.api.log
 
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse

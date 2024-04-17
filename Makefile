@@ -52,9 +52,6 @@ update-test-data:
 	cd frontend && node ./scripts/generate_test_data_seeds.mjs
 
 dev-backup-db:
-	docker compose down -v
-	docker compose up -d --quiet-pull --wait db
-	sleep 5
 	@export CONFIG_FILE_PATH=$$(pwd)/infra/dev/database/pg_backup.config; \
 		./infra/remote/backup/pg_backup_rotated.sh
 dev-restore-db:

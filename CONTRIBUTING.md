@@ -22,6 +22,12 @@
     - [Start uplifter props name with `on`](#start-uplifter-props-name-with-on)
 - [Visual Studio Code](#visual-studio-code)
   - [`.vscode/settings.json`](#vscodesettingsjson)
+- [Development](#development)
+  - [Database](#database)
+  - [Backup and restore database](#backup-and-restore-database)
+    - [Local development](#local-development)
+    - [Remote deployment](#remote-deployment)
+    - [Restoring a remote dump locally (for debugging purposes)](#restoring-a-remote-dump-locally-for-debugging-purposes)
 
 ## File Structure
 
@@ -127,7 +133,7 @@ should be dispatched.
 Example:
 
 ```ts
-import * as domainActions from '...'
+import * as domainActions from "...";
 ```
 
 ## Naming Conventions
@@ -153,7 +159,7 @@ expecting a callback. React native uplifter props follow this convention themsel
 
 ```json
 {
-   "editor.codeActionsOnSave": {
+  "editor.codeActionsOnSave": {
     "source.fixAll": true
   },
   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
@@ -166,4 +172,82 @@ expecting a callback. React native uplifter props follow this convention themsel
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }
+```
+
+## Development
+
+### Database
+
+### Backup and restore database
+
+#### Local development
+
+In local development, the backup config file is already set up [there](infra/dev/database/pg_backup.config).
+
+You can just run the following commands:
+
+Backup:
+
+```sh
+make dev-backup-db
+```
+
+Restore:
+
+```sh
+make dev-restore-db TAG=YYYY-MM-DD-[daily|weekly]
+```
+
+Example, to restore a dump directory from `./.backups/2024-04-13-daily`:
+
+```
+make dev-restore-db TAG=2024-04-13-daily
+```
+
+#### Remote deployment
+
+In a remote deployment, if not done already, you need to copy and customize the backup config file:
+
+```sh
+cp infra/remote/backup/pg_backup.config.example infra/remote/backup/pg_backup.config
+```
+
+The remote server database is automatically backed up using [this crontab file](infra/remote/backup/crontab.txt).
+This generates daily and weekly dumps in the backup directory defined via the `BACKUP_DIR` var declared in
+`infra/remote/backup/pg_backup.config` (ex: `2024-04-12-weekly`, `2024-04-13-daily`, etc).
+
+Backup:
+
+```sh
+make backup-db
+```
+
+Restore:
+
+```sh
+make restore-db TAG=YYYY-MM-DD-[daily|weekly]
+```
+
+Example, to restore a dump directory from `[YOUR_CONFIG_BACKUP_PATH]/2024-04-13-daily`:
+
+```
+make dev-restore-db TAG=2024-04-13-daily
+```
+
+#### Restoring a remote dump locally (for debugging purposes)
+
+On the remote server:
+
+```sh
+# Dump the databases:
+make backup-db
+# Compress the dump directory:
+tar -cvzf [YOUR_CONFIG_BACKUP_PATH]/TAG=YYYY-MM-DD-[daily|weekly].tar.gz [YOUR_CONFIG_BACKUP_PATH]/TAG=YYYY-MM-DD-[daily|weekly]
+```
+
+Then use SCP to download the dump locally into the `.backups` directory and restore it on your local machine:
+
+```sh
+tar -xvzf ./.backups/TAG=YYYY-MM-DD-[daily|weekly].tar.gz -C ./.backups
+make dev-restore-db TAG=YYYY-MM-DD-[daily|weekly]
 ```

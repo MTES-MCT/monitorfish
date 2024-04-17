@@ -3,7 +3,6 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.security
 import fr.gouv.cnsp.monitorfish.config.ApiClient
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.ProtectedPathsAPIProperties
-import fr.gouv.cnsp.monitorfish.domain.hash
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
 import fr.gouv.cnsp.monitorfish.infrastructure.api.security.input.UserInfo
 import io.ktor.client.call.*
@@ -95,10 +94,10 @@ class UserAuthorizationCheckFilter(
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, INSUFFICIENT_AUTHORIZATION_MESSAGE)
             }
 
-            logger.debug(
+            logger.info(
                 LoggedMessage(
                     "HTTP request: access granted.",
-                    hash(userInfoResponse.email),
+                    userInfoResponse.email,
                     request.requestURI!!,
                 ).toString(),
             )

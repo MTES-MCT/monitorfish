@@ -3,7 +3,6 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.security
 import fr.gouv.cnsp.monitorfish.config.ApiClient
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.ProtectedPathsAPIProperties
-import fr.gouv.cnsp.monitorfish.domain.hash
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
 import fr.gouv.cnsp.monitorfish.infrastructure.api.security.input.UserInfo
 import io.ktor.client.call.*
@@ -13,14 +12,12 @@ import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import kotlinx.coroutines.runBlocking
-import org.springframework.core.annotation.Order
 import org.springframework.web.filter.OncePerRequestFilter
 
 /**
  * This filter only check user authorization.
  * The JWT issuer public key signature is checked in WebSecurityConfig.kt
  */
-@Order(1)
 class UserAuthorizationCheckFilter(
     private val oidcProperties: OIDCProperties,
     private val protectedPathsAPIProperties: ProtectedPathsAPIProperties,
@@ -97,10 +94,10 @@ class UserAuthorizationCheckFilter(
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, INSUFFICIENT_AUTHORIZATION_MESSAGE)
             }
 
-            logger.debug(
+            logger.info(
                 LoggedMessage(
                     "HTTP request: access granted.",
-                    hash(userInfoResponse.email),
+                    userInfoResponse.email,
                     request.requestURI!!,
                 ).toString(),
             )

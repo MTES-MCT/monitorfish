@@ -186,7 +186,7 @@ const Placeholder = styled.div`
   justify-content: center;
 `
 
-const VerticalLine = styled.div<{ $height?: number }>`
+const VerticalLine = styled.div<{ $height?: number | undefined }>`
   border-left: 1px solid ${p => p.theme.color.slateGray};
   height: ${p => p.$height ?? '0'};
   left: 21px;

@@ -65,6 +65,7 @@ const Wrapper = styled.div`
   max-width: 70px;
   padding: 70px 0 0;
   user-select: none;
+  margin-right: 1px;
 
   * {
     box-sizing: border-box;

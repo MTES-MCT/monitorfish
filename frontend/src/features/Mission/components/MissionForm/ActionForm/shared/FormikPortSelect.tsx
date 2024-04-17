@@ -3,6 +3,7 @@ import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants
 import { FrontendError } from '@libs/FrontendError'
 import { CustomSearch, FieldError, Select } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
+import { sortBy } from 'lodash'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -23,7 +24,9 @@ export function FormikPortSelect() {
       return []
     }
 
-    return getPortsApiQuery.data.map(({ locode, name }) => ({
+    const sortedPorts = sortBy(getPortsApiQuery.data, ['name'])
+
+    return sortedPorts.map(({ locode, name }) => ({
       label: `${name} (${locode})`,
       value: locode
     }))

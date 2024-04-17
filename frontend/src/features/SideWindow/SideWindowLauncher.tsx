@@ -1,3 +1,4 @@
+import { cleanMissionForm } from '@features/SideWindow/useCases/cleanMissionForm'
 import { NewWindow } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect } from 'react'
 
@@ -27,6 +28,7 @@ export function SideWindowLauncher() {
   const handleUnload = useCallback(() => {
     dispatch(sideWindowActions.close())
     dispatch(resetFocusOnPendingAlert())
+    dispatch(cleanMissionForm())
   }, [dispatch])
 
   useEffect(() => {

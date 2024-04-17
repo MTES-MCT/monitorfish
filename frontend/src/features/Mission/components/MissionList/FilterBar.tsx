@@ -116,6 +116,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             name={MissionFilterType.DATE_RANGE}
             options={MISSION_FILTER_OPTIONS[MissionFilterType.DATE_RANGE]}
             placeholder="Période"
+            style={{ width: 176 }}
           />
           <FormikCheckPicker
             isLabelHidden
@@ -127,7 +128,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             renderValue={(_, items) =>
               items.length > 0 ? <OptionValue>Type de mission ({items.length}) </OptionValue> : <></>
             }
-            style={tagPickerStyle}
+            style={{ width: 176 }}
           />
           <FormikCheckPicker
             disabled={administrationsAsOptions.length === 0}
@@ -141,7 +142,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
               items.length > 0 ? <OptionValue>Administration ({items.length}) </OptionValue> : <></>
             }
             searchable
-            style={tagPickerStyle}
+            style={{ width: 200 }}
           />
           <FormikCheckPicker
             key={unitMultiSelectKey}
@@ -154,7 +155,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             placeholder="Unité"
             renderValue={(_, items) => (items.length > 0 ? <OptionValue>Unité ({items.length}) </OptionValue> : <></>)}
             searchable
-            style={tagPickerStyle}
+            style={{ width: 200 }}
           />
           <FormikCheckPicker
             isLabelHidden
@@ -164,7 +165,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             options={MISSION_FILTER_OPTIONS[MissionFilterType.STATUS]}
             placeholder="Statut de mission"
             renderValue={(_, items) => (items.length > 0 ? <OptionValue>Statut ({items.length}) </OptionValue> : <></>)}
-            style={tagPickerStyle}
+            style={{ width: 176 }}
           />
           <FormikCheckPicker
             isLabelHidden
@@ -176,9 +177,13 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             renderValue={(_, items) =>
               items.length > 0 ? <OptionValue>Etat des données ({items.length}) </OptionValue> : <></>
             }
-            style={tagPickerStyle}
+            style={{ width: 176 }}
           />
-          <FormikCheckbox label="Missions avec actions CNSP" name={MissionFilterType.WITH_ACTIONS} />
+          <FormikCheckbox
+            label="Missions avec actions CNSP"
+            name={MissionFilterType.WITH_ACTIONS}
+            style={{ width: 200 }}
+          />
         </Row>
 
         <FormikFilterTagBar
@@ -213,7 +218,7 @@ const Row = styled.div`
   align-items: center;
 
   > div {
-    min-width: 200px;
+    min-width: 176px;
   }
   > div:not(:first-child) {
     margin-left: 16px;
@@ -231,8 +236,6 @@ const Row = styled.div`
     }
   }
 `
-
-const tagPickerStyle = { width: 184 }
 
 export const OptionValue = styled.span`
   display: flex;

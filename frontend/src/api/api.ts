@@ -2,6 +2,7 @@
 // https://redux-toolkit.js.org/rtk-query/usage/automated-refetching#cache-tags
 
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react'
+import { sha256 } from '@utils/sha256'
 import ky from 'ky'
 
 import { getOIDCUser } from '../auth/getOIDCUser'
@@ -49,13 +50,22 @@ export const monitorenvApi = createApi({
 // =============================================================================
 // Monitorfish API
 
-const setAuthorizationHeader = headers => {
+const AUTHORIZATION_HEADER = 'authorization'
+const CORRELATION_HEADER = 'X-Correlation-Id'
+
+const setAuthorizationHeader = async headers => {
   const user = getOIDCUser()
   const token = user?.access_token
 
   // If we have a token set in state, we pass it.
   if (token) {
-    headers.set('authorization', `Bearer ${token}`)
+    headers.set(AUTHORIZATION_HEADER, `Bearer ${token}`)
+
+    if (crypto.subtle) {
+      const hashedToken = await sha256(token)
+
+      headers.set(CORRELATION_HEADER, hashedToken)
+    }
   }
 
   return headers
@@ -144,13 +154,19 @@ export const monitorfishPublicApi = createApi({
 export const monitorfishApiKy = ky.extend({
   hooks: {
     beforeRequest: [
-      request => {
+      async request => {
         const user = getOIDCUser()
         const token = user?.access_token
 
         // If we have a token set in state, we pass it.
         if (token) {
-          request.headers.set('authorization', `Bearer ${token}`)
+          request.headers.set(AUTHORIZATION_HEADER, `Bearer ${token}`)
+
+          if (crypto.subtle) {
+            const hashedToken = await sha256(token)
+
+            request.headers.set(CORRELATION_HEADER, hashedToken)
+          }
         }
       }
     ],
@@ -161,7 +177,13 @@ export const monitorfishApiKy = ky.extend({
 
         // If we have a token set in state, we pass it.
         if (token) {
-          request.headers.set('authorization', `Bearer ${token}`)
+          request.headers.set(AUTHORIZATION_HEADER, `Bearer ${token}`)
+
+          if (crypto.subtle) {
+            const hashedToken = await sha256(token)
+
+            request.headers.set(CORRELATION_HEADER, hashedToken)
+          }
         }
       }
     ]

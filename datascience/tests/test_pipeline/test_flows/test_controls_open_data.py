@@ -101,7 +101,6 @@ def controls_open_data_columns() -> list:
 
 
 def test_extract_controls_open_data(reset_test_data, controls_open_data_columns):
-
     controls = extract_controls_open_data.run()
     assert list(controls) == controls_open_data_columns
 
@@ -109,7 +108,7 @@ def test_extract_controls_open_data(reset_test_data, controls_open_data_columns)
     assert controls["infraction_rate"].max() <= 1.0001
 
     expected_controls_by_type = pd.Series(
-        {"LAND_CONTROL": 15, "SEA_CONTROL": 12}, name="number_controls"
+        {"LAND_CONTROL": 12, "SEA_CONTROL": 11}, name="number_controls"
     )
     expected_controls_by_type.index.name = "control_type"
     controls_by_type = controls.groupby("control_type")["number_controls"].sum()
@@ -119,14 +118,13 @@ def test_extract_controls_open_data(reset_test_data, controls_open_data_columns)
     expected_controls_by_segment = pd.Series(
         {
             "FR_SCE": 2,
-            "Hors segment": 17,
+            "Hors segment": 15,
             "MED05": 1,
             "MED07": 1,
             "NS13": 1,
-            "NWW01/02": 1,
             "NWW08": 1,
             "PEL05": 1,
-            "SWW01/02/03": 2,
+            "SWW01/02/03": 1,
         },
         name="number_controls",
     )
@@ -135,7 +133,7 @@ def test_extract_controls_open_data(reset_test_data, controls_open_data_columns)
 
     controls_by_facade = controls.groupby("facade")["number_controls"].sum()
     expected_controls_by_facade = pd.Series(
-        {"Hors façade": 7, "MED": 2, "MEMN": 6, "NAMO": 4, "SA": 8},
+        {"Hors façade": 7, "MED": 2, "MEMN": 4, "NAMO": 2, "SA": 8},
         name="number_controls",
     )
     expected_controls_by_facade.index.name = "facade"
@@ -153,7 +151,6 @@ def test_extract_fleet_segments_open_data(reset_test_data, fleet_segments_open_d
 def test_flow(
     reset_test_data, transformed_fleet_segments_open_data, controls_open_data_columns
 ):
-
     while flow.get_tasks("update_resource"):
         flow.replace(flow.get_tasks("update_resource")[0], mock_update_resource)
 

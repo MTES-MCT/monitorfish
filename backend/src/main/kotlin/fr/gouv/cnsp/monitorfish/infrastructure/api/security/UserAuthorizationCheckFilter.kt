@@ -16,7 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 
 /**
  * This filter only check user authorization.
- * The JWT issuer public key signature is checked in WebSecurityConfig.kt
+ * The JWT issuer public key signature is checked in SecurityConfig.kt
  */
 class UserAuthorizationCheckFilter(
     private val oidcProperties: OIDCProperties,
@@ -87,10 +87,10 @@ class UserAuthorizationCheckFilter(
                 request.requestURI.contains(
                     it,
                 )
-            }!!
+            } ?: false
             val isAuthorized = getIsAuthorizedUser.execute(userInfoResponse.email, isContainingSuperUserPath)
             if (!isAuthorized) {
-                logger.debug(INSUFFICIENT_AUTHORIZATION_MESSAGE)
+                logger.info("$INSUFFICIENT_AUTHORIZATION_MESSAGE: ${request.requestURI!!} (${userInfoResponse.email})")
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, INSUFFICIENT_AUTHORIZATION_MESSAGE)
             }
 

@@ -14,6 +14,11 @@ jobs:
       matrix:
         include:
           - pg_major: "11"
+            timescaledb_version: "1.7.4"
+            postgis_version: "2.5.5"
+            dockerfile: "pg11.Dockerfile"
+            image_tag: "pg11-ts1.7.4-postgis2.5.5"
+          - pg_major: "11"
             timescaledb_version: "2.3.1"
             postgis_version: "3.3.6"
             dockerfile: "pg11.Dockerfile"

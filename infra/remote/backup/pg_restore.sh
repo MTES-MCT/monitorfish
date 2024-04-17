@@ -61,7 +61,7 @@ fi
 ###########################
 
 function restore_databases() {
-    echo "Starting restore from backups in $RESTORE_DIR"
+    echo "Starting restore from backups in $RESTORE_DIR..."
 
     ###############################
     ### RESTORE GLOBALS BACKUPS ###
@@ -70,7 +70,7 @@ function restore_databases() {
     GLOBALS_BACKUP="$RESTORE_DIR/globals.sql.gz"
 
     if [ -f "$GLOBALS_BACKUP" ]; then
-        echo "Restoring globals from $GLOBALS_BACKUP"
+        echo "Restoring globals from $GLOBALS_BACKUP..."
         if ! gunzip -c "$GLOBALS_BACKUP" | docker exec -i monitorfish_database sh -c "psql -h $HOSTNAME -U $USERNAME"; then
             echo "Failed to restore globals"
             exit 1
@@ -86,16 +86,15 @@ function restore_databases() {
     for BACKUP_FILE in "$RESTORE_DIR"/*.custom; do
         DATABASE_NAME=$(basename "$BACKUP_FILE" .custom)
 
-        echo "Restoring $DATABASE_NAME from $BACKUP_FILE"
+        echo "Restoring $DATABASE_NAME from $BACKUP_FILE..."
 
         if ! docker exec -i monitorfish_database sh -c "pg_restore -v -d $DATABASE_NAME -h $HOSTNAME -U $USERNAME" < "$BACKUP_FILE"; then
-            echo "Failed to restore database $DATABASE_NAME"
+            echo "Error: Failed to restore database $DATABASE_NAME."
             exit 1
         fi
-
     done
 
-    echo "Database restoration complete!"
+    echo "Databases restoration complete!"
 }
 
 restore_databases

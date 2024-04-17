@@ -195,6 +195,7 @@ make dev-backup-db
 Restore:
 
 ```sh
+# This will recreate the database container and its volume before restoring the dump:
 make dev-restore-db TAG=YYYY-MM-DD-[daily|weekly]
 ```
 
@@ -224,11 +225,16 @@ make backup-db
 
 Restore:
 
+> [!IMPORTANT]
+>
+> - Stop all applications from connecting to the dababases.
+> - The database container and its volume must be cleared (removed and recreated) before restoring a dump.
+
 ```sh
 make restore-db TAG=YYYY-MM-DD-[daily|weekly]
 ```
 
-Example, to restore a dump directory from `[YOUR_CONFIG_BACKUP_PATH]/2024-04-13-daily`:
+Example, to restore a dump directory from `[YOUR_CONFIG_BACKUP_PATH]/2024-04-13-daily/`:
 
 ```
 make dev-restore-db TAG=2024-04-13-daily
@@ -242,12 +248,13 @@ On the remote server:
 # Dump the databases:
 make backup-db
 # Compress the dump directory:
-tar -cvzf [YOUR_CONFIG_BACKUP_PATH]/TAG=YYYY-MM-DD-[daily|weekly].tar.gz [YOUR_CONFIG_BACKUP_PATH]/TAG=YYYY-MM-DD-[daily|weekly]
+cd YOUR_CONFIG_BACKUP_PATH
+tar -cvzf YYYY-MM-DD-[daily|weekly].tar.gz YYYY-MM-DD-[daily|weekly]
 ```
 
-Then use SCP to download the dump locally into the `.backups` directory and restore it on your local machine:
+Then use SCP to download the dump locally into the `.backups/` directory and restore it on your local machine:
 
 ```sh
-tar -xvzf ./.backups/TAG=YYYY-MM-DD-[daily|weekly].tar.gz -C ./.backups
+tar -xvzf ./.backups/YYYY-MM-DD-[daily|weekly].tar.gz -C ./.backups
 make dev-restore-db TAG=YYYY-MM-DD-[daily|weekly]
 ```

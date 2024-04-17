@@ -2,8 +2,8 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.security
 
 import fr.gouv.cnsp.monitorfish.config.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
-import fr.gouv.cnsp.monitorfish.infrastructure.api.API_KEY_FILTER_PRECEDANCE
-import fr.gouv.cnsp.monitorfish.infrastructure.api.USER_AUTH_FILTER_PRECEDANCE
+import fr.gouv.cnsp.monitorfish.infrastructure.api.API_KEY_FILTER_PRECEDENCE
+import fr.gouv.cnsp.monitorfish.infrastructure.api.USER_AUTH_FILTER_PRECEDENCE
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.web.servlet.FilterRegistrationBean
@@ -23,7 +23,7 @@ class BffFilterConfig(
     fun userAuthorizationCheckFilter(): FilterRegistrationBean<UserAuthorizationCheckFilter> {
         val registrationBean = FilterRegistrationBean<UserAuthorizationCheckFilter>()
 
-        registrationBean.order = USER_AUTH_FILTER_PRECEDANCE
+        registrationBean.order = USER_AUTH_FILTER_PRECEDENCE
         registrationBean.filter = UserAuthorizationCheckFilter(
             oidcProperties,
             protectedPathsAPIProperties,
@@ -49,7 +49,7 @@ class BffFilterConfig(
     fun publicPathsApiKeyCheckFilter(): FilterRegistrationBean<ApiKeyCheckFilter> {
         val registrationBean = FilterRegistrationBean<ApiKeyCheckFilter>()
 
-        registrationBean.order = API_KEY_FILTER_PRECEDANCE
+        registrationBean.order = API_KEY_FILTER_PRECEDENCE
         registrationBean.filter = ApiKeyCheckFilter(
             protectedPathsAPIProperties,
         )

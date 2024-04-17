@@ -61,7 +61,7 @@ const setAuthorizationHeader = async headers => {
   if (token) {
     headers.set(AUTHORIZATION_HEADER, `Bearer ${token}`)
 
-    if (crypto.subtle) {
+    if (crypto?.subtle) {
       const hashedToken = await sha256(token)
 
       headers.set(CORRELATION_HEADER, hashedToken)
@@ -162,7 +162,7 @@ export const monitorfishApiKy = ky.extend({
         if (token) {
           request.headers.set(AUTHORIZATION_HEADER, `Bearer ${token}`)
 
-          if (crypto.subtle) {
+          if (crypto?.subtle) {
             const hashedToken = await sha256(token)
 
             request.headers.set(CORRELATION_HEADER, hashedToken)
@@ -179,7 +179,7 @@ export const monitorfishApiKy = ky.extend({
         if (token) {
           request.headers.set(AUTHORIZATION_HEADER, `Bearer ${token}`)
 
-          if (crypto.subtle) {
+          if (crypto?.subtle) {
             const hashedToken = await sha256(token)
 
             request.headers.set(CORRELATION_HEADER, hashedToken)

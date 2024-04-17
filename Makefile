@@ -6,6 +6,7 @@ HOST_MIGRATIONS_FOLDER=$(shell pwd)/backend/src/main/resources/db/migration
 docker-env:
 	cd ./infra/docker && ../../frontend/node_modules/.bin/import-meta-env-prepare -u -x ./.env.local.defaults\
 
+
 ################################################################################
 # Local Development
 
@@ -50,13 +51,19 @@ check-clean-archi:
 update-test-data:
 	cd frontend && node ./scripts/generate_test_data_seeds.mjs
 
+dev-backup-db:
+	docker compose down -v
+	docker compose up -d --quiet-pull --wait db
+	sleep 5
+	@export CONFIG_FILE_PATH=$$(pwd)/infra/dev/database/pg_backup.config; \
+		./infra/remote/backup/pg_backup_rotated.sh
 dev-restore-db:
 	docker compose down -v
 	docker compose up -d --quiet-pull --wait db
 	sleep 5
-	# docker exec -i monitorfish_database psql -c "CREATE SCHEMA IF NOT EXISTS _timescaledb_internal AUTHORIZATION postgres;" -U postgres
-	@export CONFIG_FILE_PATH=$$(pwd)/infra/remote/backup/pg_backup.config MONITORFISH_BACKUPS_FOLDER=$$(pwd)/.backups/; \
+	@export CONFIG_FILE_PATH=$$(pwd)/infra/dev/database/pg_backup.config; \
 		./infra/remote/backup/pg_restore.sh -t "$(TAG)"
+
 
 ################################################################################
 # Testing
@@ -81,7 +88,13 @@ run-back-for-puppeteer: docker-env run-stubbed-apis
 run-front-for-puppeteer:
 	cd ./frontend && npm run dev-puppeteer
 
-# CI commands - app
+
+################################################################################
+# CI
+
+# ----------------------------------------------------------
+# CI: App Commands
+
 docker-build:
 	docker build --no-cache -f infra/docker/app/Dockerfile . -t monitorfish-app:$(VERSION) \
 		--build-arg VERSION=$(VERSION) \
@@ -112,7 +125,9 @@ docker-compose-puppeteer-up: docker-env
 	@printf 'Waiting for MonitorFish app to be ready'
 	@until curl --output /dev/null --silent --fail "http://localhost:8880/bff/v1/healthcheck"; do printf '.' && sleep 1; done
 
-# CI commands - data pipeline
+# ----------------------------------------------------------
+# CI: Pipeline Commands
+
 docker-build-pipeline:
 	docker build -f ./infra/docker/datapipeline/Dockerfile . -t monitorfish-pipeline:$(VERSION)
 docker-test-pipeline:
@@ -123,7 +138,12 @@ docker-push-pipeline:
 	docker push docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(VERSION)
 
 
-# RUN commands
+################################################################################
+# Remote (Integration / Production)
+
+# ----------------------------------------------------------
+# Remote: Run commands
+
 init-local-sig:
 	./infra/local/postgis_insert_layers.sh && ./infra/init/geoserver_init_layers.sh
 init-remote-sig:
@@ -142,13 +162,25 @@ register-pipeline-flows-int:
 	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH_VERSION) && \
 	infra/remote/data-pipeline/register-flows-int.sh
 
-# DATA commands
+# ----------------------------------------------------------
+# Remote: Pipeline commands
+
 install-pipeline:
 	cd datascience && poetry install
 test-pipeline:
 	cd datascience && export TEST_LOCAL=True && poetry run coverage run -m pytest --pdb tests/ && poetry run coverage report && poetry run coverage html
 
-# DOC commands
+# ----------------------------------------------------------
+# Remote: Database commands
+
+backup-db:
+	./infra/remote/backup/pg_backup_rotated.sh
+restore-db:
+	./infra/remote/backup/pg_restore.sh
+
+# ----------------------------------------------------------
+# ???: Documentation commands
+
 push-docs-to-transifex:
 	cd datascience/docs && \
 	poetry run sphinx-build -b gettext -D extensions="sphinx.ext.viewcode","sphinx.ext.napoleon" source pot && \
@@ -161,6 +193,7 @@ build-docs-locally:
 	cd datascience/docs && \
 	poetry run sphinx-build -b html source build/html/en && \
 	poetry run sphinx-build -b html -D language=fr source build/html/fr
+
 
 ################################################################################
 # Alias commands

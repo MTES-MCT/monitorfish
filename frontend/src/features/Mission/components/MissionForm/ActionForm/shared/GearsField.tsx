@@ -159,7 +159,7 @@ export function GearsField() {
         key={String(input.value?.length)}
         error={typeof meta.error === 'string' ? meta.error : undefined}
         isErrorMessageHidden
-        isRequired
+        isRequired={!input.value?.length}
         label="Ajouter un engin"
         name="newGear"
         onChange={add}

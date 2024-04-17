@@ -1,11 +1,12 @@
 import { DatePickerField } from '@features/Mission/components/MissionForm/ActionForm/shared/DatePickerField'
 import { UpdateMissionActionCompletionEffect } from '@features/Mission/components/MissionForm/ActionForm/shared/UpdateMissionActionCompletionEffect'
+import { useIsMissionEnded } from '@features/Mission/components/MissionForm/hooks/useIsMissionEnded'
 import { FormikCheckbox, FormikEffect, FormikTextarea, Icon } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash/fp'
 import styled from 'styled-components'
 
-import { LandControlFormLiveSchema } from './schemas'
+import { LandControlFormCompletionSchema, LandControlFormLiveSchema } from './schemas'
 import { ActionFormHeader } from './shared/ActionFormHeader'
 import { ControlQualityField } from './shared/ControlQualityField'
 import { FormikAuthor } from './shared/FormikAuthor'
@@ -30,8 +31,11 @@ type LandControlFormProps = Readonly<{
   onChange: (nextValues: MissionActionFormValues) => Promisable<void>
 }>
 export function LandControlForm({ initialValues, onChange }: LandControlFormProps) {
+  const isMissionEnded = useIsMissionEnded()
+  const validationSchema = isMissionEnded ? LandControlFormCompletionSchema : LandControlFormLiveSchema
+
   return (
-    <Formik initialValues={initialValues} onSubmit={noop} validationSchema={LandControlFormLiveSchema}>
+    <Formik initialValues={initialValues} onSubmit={noop} validationSchema={validationSchema}>
       {({ validateForm, values }) => (
         <>
           <FormikEffect onChange={validateBeforeOnChange(initialValues, validateForm, onChange)} />

@@ -80,7 +80,7 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<Mission.MissionWithActions
         mission.controlUnits.map(controlUnit => `${controlUnit.name} (${controlUnit.administration})`).join(', ')
     },
     {
-      fixedWidth: 380,
+      fixedWidth: 320,
       isSortable: false,
       key: 'inspectedVessels',
       label: 'Navires contrôlés',

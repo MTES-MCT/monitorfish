@@ -1,12 +1,13 @@
 import { ActionFormHeader } from '@features/Mission/components/MissionForm/ActionForm/shared/ActionFormHeader'
 import { DatePickerField } from '@features/Mission/components/MissionForm/ActionForm/shared/DatePickerField'
 import { UpdateMissionActionCompletionEffect } from '@features/Mission/components/MissionForm/ActionForm/shared/UpdateMissionActionCompletionEffect'
+import { useIsMissionEnded } from '@features/Mission/components/MissionForm/hooks/useIsMissionEnded'
 import { FormikCheckbox, FormikEffect, FormikTextarea, Icon } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash/fp'
 import styled from 'styled-components'
 
-import { SeaControlFormLiveSchema } from './schemas'
+import { SeaControlFormCompletionSchema, SeaControlFormLiveSchema } from './schemas'
 import { ControlQualityField } from './shared/ControlQualityField'
 import { FormikAuthor } from './shared/FormikAuthor'
 import { FormikCoordinatesPicker } from './shared/FormikCoordinatesPicker'
@@ -30,8 +31,11 @@ type SeaControlFormProps = Readonly<{
   onChange: (nextValues: MissionActionFormValues) => Promisable<void>
 }>
 export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps) {
+  const isMissionEnded = useIsMissionEnded()
+  const validationSchema = isMissionEnded ? SeaControlFormCompletionSchema : SeaControlFormLiveSchema
+
   return (
-    <Formik initialValues={initialValues} onSubmit={noop} validationSchema={SeaControlFormLiveSchema}>
+    <Formik initialValues={initialValues} onSubmit={noop} validationSchema={validationSchema}>
       {({ validateForm, values }) => (
         <>
           <FormikEffect onChange={validateBeforeOnChange(initialValues, validateForm, onChange)} />

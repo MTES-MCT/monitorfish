@@ -8,7 +8,7 @@ import { MissionAction } from '@features/Mission/missionAction.types'
 import { useGetMissionQuery } from '@features/Mission/monitorfishMissionApi'
 import { Dropdown, Icon } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
 import { FishActionCard } from './FishActionCard'
@@ -72,6 +72,9 @@ export function ActionList({
     })
   }, [actionsFormValues, getMissionApiQuery.data])
 
+  const actionTimelineRef = useRef<HTMLDivElement>(null)
+  const actionTimelineHeight = Number(actionTimelineRef.current?.clientHeight) - 40 || undefined
+
   return (
     <Wrapper>
       <FormHead>
@@ -109,49 +112,61 @@ export function ActionList({
 
       <FormBody data-cy="mission-form-action-list">
         <FrontendErrorBoundary>
-          {!allSortedMissionActionsForTimeline.length && (
-            <Placeholder>Aucune action n’est ajoutée pour le moment.</Placeholder>
-          )}
+          <Timeline ref={actionTimelineRef}>
+            {!allSortedMissionActionsForTimeline.length && (
+              <Placeholder>Aucune action n’est ajoutée pour le moment.</Placeholder>
+            )}
 
-          {allSortedMissionActionsForTimeline.length > 0 &&
-            allSortedMissionActionsForTimeline.map((action, index) => {
-              if (action.source === Mission.MissionSource.MONITORFISH) {
-                return (
-                  <ActionCard
-                    // eslint-disable-next-line react/no-array-index-key
-                    key={index}
-                    isSelected={action.index === currentIndex}
-                    missionAction={action}
-                    onSelect={() => onSelect(action.index!!)}
-                  >
-                    <FishActionCard
-                      missionAction={action as MissionActionFormValues}
-                      onRemove={() => onRemove(action.index!!)}
-                    />
-                  </ActionCard>
-                )
-              }
+            {allSortedMissionActionsForTimeline.length > 1 && <VerticalLine $height={actionTimelineHeight} />}
+            {allSortedMissionActionsForTimeline.length > 0 &&
+              allSortedMissionActionsForTimeline.map((action, index) => {
+                if (action.source === Mission.MissionSource.MONITORFISH) {
+                  return (
+                    <ActionCard
+                      // eslint-disable-next-line react/no-array-index-key
+                      key={index}
+                      isSelected={action.index === currentIndex}
+                      missionAction={action}
+                      onSelect={() => onSelect(action.index!!)}
+                    >
+                      <FishActionCard
+                        missionAction={action as MissionActionFormValues}
+                        onRemove={() => onRemove(action.index!!)}
+                      />
+                    </ActionCard>
+                  )
+                }
 
-              if (action.source === Mission.MissionSource.MONITORENV) {
-                return (
-                  <ActionCard
-                    // eslint-disable-next-line react/no-array-index-key
-                    key={index}
-                    isSelected={false}
-                    missionAction={action}
-                  >
-                    <EnvActionCard missionAction={action as EnvMissionAction.MissionAction} />
-                  </ActionCard>
-                )
-              }
+                if (action.source === Mission.MissionSource.MONITORENV) {
+                  return (
+                    <ActionCard
+                      // eslint-disable-next-line react/no-array-index-key
+                      key={index}
+                      isSelected={false}
+                      missionAction={action}
+                    >
+                      <EnvActionCard missionAction={action as EnvMissionAction.MissionAction} />
+                    </ActionCard>
+                  )
+                }
 
-              return null
-            })}
+                return null
+              })}
+          </Timeline>
         </FrontendErrorBoundary>
       </FormBody>
     </Wrapper>
   )
 }
+
+const Timeline = styled.div`
+  position: relative;
+
+  > div:not(:nth-of-type(2)),
+  > fieldset:not(:first-child) {
+    margin-top: 16px;
+  }
+`
 
 const Wrapper = styled.div`
   background-color: ${p => p.theme.color.cultured};
@@ -169,4 +184,13 @@ const Placeholder = styled.div`
   font-size: 13px;
   font-style: italic;
   justify-content: center;
+`
+
+const VerticalLine = styled.div<{ $height?: number }>`
+  border-left: 1px solid ${p => p.theme.color.slateGray};
+  height: ${p => p.$height ?? '0'};
+  left: 21px;
+  margin-top: 16px;
+  position: absolute;
+  width: 1px;
 `

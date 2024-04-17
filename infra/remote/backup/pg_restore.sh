@@ -22,7 +22,7 @@ while [ $# -gt 0 ]; do
 done
 
 if [ -z "$CONFIG_FILE_PATH" ]; then
-    SCRIPTPATH=$(cd ${0%/*} && pwd -P)
+    SCRIPTPATH=$(cd "${0%/*}" && pwd -P)
     CONFIG_FILE_PATH="${SCRIPTPATH}/pg_backup.config"
 fi
 
@@ -51,7 +51,7 @@ fi
 ###########################
 
 # Make sure we're running as the required backup user
-if [ "$BACKUP_USER" != "" -a "$(id -un)" != "$BACKUP_USER" ]; then
+if [ "$BACKUP_USER" != "" ] && [ "$(id -un)" != "$BACKUP_USER" ]; then
 	echo "This script must be run as $BACKUP_USER. Exiting." 1>&2
 	exit 1
 fi
@@ -83,7 +83,7 @@ function restore_databases() {
     ##### RESTORE FULL BACKUPS ######
     #################################
 
-    for BACKUP_FILE in $RESTORE_DIR/*.custom; do
+    for BACKUP_FILE in "$RESTORE_DIR"/*.custom; do
         DATABASE_NAME=$(basename "$BACKUP_FILE" .custom)
 
         echo "Restoring $DATABASE_NAME from $BACKUP_FILE"

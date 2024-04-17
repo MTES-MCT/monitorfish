@@ -4,14 +4,12 @@ import com.nhaarman.mockitokotlin2.any
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.UserAuthorization
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.JpaUserAuthorizationRepository
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import java.util.*
 
 @ExtendWith(SpringExtension::class)
 class GetIsAuthorizedUserUTests {
@@ -52,11 +50,7 @@ class GetIsAuthorizedUserUTests {
     }
 
     @Test
-    fun `execute Should return true When the user is found When the path is not super-user protected`() {
-        given(userAuthorizationRepository.findByHashedEmail(any())).willReturn(
-            UserAuthorization("58GE5S8VXE871FGGd2", false),
-        )
-
+    fun `execute Should return true  When the path is not super-user protected`() {
         // When
         val isAuthorized = GetIsAuthorizedUser(userAuthorizationRepository).execute(
             "test",
@@ -65,22 +59,6 @@ class GetIsAuthorizedUserUTests {
 
         // Then
         assertThat(isAuthorized).isTrue()
-    }
-
-    @Test
-    fun `execute Should return false When the user is not found When the path is not super-user protected`() {
-        given(userAuthorizationRepository.findByHashedEmail(any())).willThrow(
-            EmptyResultDataAccessException("User not found", 1),
-        )
-
-        // When
-        val isAuthorized = GetIsAuthorizedUser(userAuthorizationRepository).execute(
-            "test",
-            false,
-        )
-
-        // Then
-        assertThat(isAuthorized).isFalse()
     }
 
     @Test

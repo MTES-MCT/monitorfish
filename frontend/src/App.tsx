@@ -7,13 +7,14 @@ import { UnsupportedBrowserPage } from '@pages/UnsupportedBrowserPage'
 import { isBrowserSupported } from '@utils/isBrowserSupported'
 import countries from 'i18n-iso-countries'
 import COUNTRIES_FR from 'i18n-iso-countries/langs/fr.json'
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { hasAuthParams } from 'react-oidc-context'
 import { RouterProvider } from 'react-router-dom'
 import { CustomProvider as RsuiteCustomProvider } from 'rsuite'
 import rsuiteFrFr from 'rsuite/locales/fr_FR'
 
 import { AuthorizationContext } from './context/AuthorizationContext'
+import { LogoutContext } from './context/LogoutContext'
 import { router } from './router'
 
 import type { AuthContextProps } from 'react-oidc-context'
@@ -25,6 +26,11 @@ type AppProps = Readonly<{
 }>
 export function App({ auth }: AppProps) {
   const userAuthorization = useGetUserAuthorization()
+
+  const logout = useCallback(() => {
+    auth?.removeUser()
+    auth?.signoutRedirect()
+  }, [auth])
 
   useEffect(() => {
     if (!auth) {
@@ -78,9 +84,11 @@ export function App({ auth }: AppProps) {
 
       <RsuiteCustomProvider locale={rsuiteFrFr}>
         <FrontendErrorBoundary>
-          <AuthorizationContext.Provider value={userAuthorization.isSuperUser}>
-            <RouterProvider router={router} />
-          </AuthorizationContext.Provider>
+          <LogoutContext.Provider value={logout}>
+            <AuthorizationContext.Provider value={userAuthorization.isSuperUser}>
+              <RouterProvider router={router} />
+            </AuthorizationContext.Provider>
+          </LogoutContext.Provider>
         </FrontendErrorBoundary>
       </RsuiteCustomProvider>
     </ThemeProvider>

@@ -60,9 +60,9 @@ jobs:
           push: false
           tags: ${{ env.IMAGE_TAG }}
           build-args: |
-            PG_MAJOR=pg_major
-            TIMESCALEDB_VERSION=timescaledb_version
-            POSTGIS_VERSION=postgis_version
+            PG_MAJOR=${{ matrix.pg_major }}
+            TIMESCALEDB_VERSION=${{ matrix.timescaledb_version }}
+            POSTGIS_VERSION=${{ matrix.postgis_version }}
           # cache-from: type=local,src=/tmp/.buildx-cache-database
           # cache-to: type=local,dest=/tmp/.buildx-cache-database-new
 

@@ -146,7 +146,7 @@ init-local-sig:
 init-remote-sig:
 	./infra/remote/postgis_insert_layers.sh && ./infra/init/geoserver_init_layers.sh
 restart-remote-app:
-	cd infra/remote && docker compose pull && docker compose up -d --build app
+	cd infra/remote && docker compose pull && docker compose up -d --build --wait app
 restart-remote-app-dev:
 	export POSTGRES_USER=postgres && export POSTGRES_PASSWORD=postgres && export POSTGRES_DB=monitorfishdb && cd infra/remote && docker compose pull && docker compose up -d --build app
 

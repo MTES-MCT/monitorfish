@@ -1,6 +1,9 @@
-FROM timescale/timescaledb:2.3.1-pg11
+ARG PG_MAJOR
+ARG TIMESCALEDB_VERSION
+ARG POSTGIS_VERSION
 
-ENV POSTGIS_VERSION 3.3.6
+FROM timescale/timescaledb:${TIMESCALEDB_VERSION}-pg${PG_MAJOR}
+ARG POSTGIS_VERSION
 
 RUN set -ex && \
     apk add --no-cache --virtual .build-deps \
@@ -15,7 +18,7 @@ RUN set -ex && \
         clang-dev \
         build-base && \
     cd /tmp && \
-    wget --max-redirect=0 https://download.osgeo.org/postgis/source/postgis-$POSTGIS_VERSION.tar.gz -O - | tar -xz && \
+    wget https://download.osgeo.org/postgis/source/postgis-$POSTGIS_VERSION.tar.gz -O - | tar -xz && \
     cd postgis-$POSTGIS_VERSION && \
     ./configure && \
     make -s && \

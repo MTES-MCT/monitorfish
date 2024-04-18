@@ -113,7 +113,7 @@ export function MissionForm() {
     }
 
     const now = customDayjs()
-    if (mainFormValues.endDateTimeUtc && now.isAfter(mainFormValues.endDateTimeUtc)) {
+    if (mainFormValues.endDateTimeUtc && now.subtract(48, 'hours').isAfter(mainFormValues.endDateTimeUtc)) {
       return false
     }
 

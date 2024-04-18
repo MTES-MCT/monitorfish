@@ -1,9 +1,9 @@
 import { useContext } from 'react'
 
-import { AuthorizationContext } from '../../context/AuthorizationContext'
+import { UserAccountContext } from '../../context/UserAccountContext'
 
 export function useIsSuperUser(): boolean {
-  const isSuperUser = useContext(AuthorizationContext)
+  const userAccount = useContext(UserAccountContext)
 
-  return isSuperUser
+  return userAccount.isSuperUser
 }

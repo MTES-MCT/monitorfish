@@ -1,4 +1,4 @@
-import { Logout } from '@features/Logout/components/Logout'
+import { Account } from '@features/Logout/components/Account'
 import { LegacyRsuiteComponentsWrapper } from 'ui/LegacyRsuiteComponentsWrapper'
 
 import { AlertsMapButton } from './AlertsMapButton'
@@ -51,7 +51,7 @@ export function MapButtons() {
         {isVesselLabelsMapButtonDisplayed && <VesselLabelsMapButton />}
         {isFavoriteVesselsMapButtonDisplayed && <FavoriteVessels />}
         {isSuperUser && isFavoriteVesselsMapButtonDisplayed && <MissionsMenu />}
-        <Logout />
+        <Account />
       </LegacyRsuiteComponentsWrapper>
 
       {isSuperUser && <ControlUnitListDialogButton />}

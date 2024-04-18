@@ -6,27 +6,28 @@ import { useCallback, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
 import { EditVesselVisibility } from './EditVesselVisibility'
-import { MapToolType } from '../../../domain/entities/map/constants'
-import { setMapToolOpened } from '../../../domain/shared_slices/Global'
+import { MapBox } from '../../../domain/entities/map/constants'
+import { setRightBoxOpened } from '../../../domain/shared_slices/Global'
 import { MapToolButton } from '../shared/MapToolButton'
 
 export function VesselVisibilityMapButton() {
   const dispatch = useMainAppDispatch()
-  const { mapToolOpened, rightMenuIsOpen } = useMainAppSelector(state => state.global)
+  const rightBoxOpened = useMainAppSelector(state => state.global.rightBoxOpened)
+  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
 
   const isRightMenuShrinked = !rightMenuIsOpen
-  const isOpen = useMemo(() => mapToolOpened === MapToolType.VESSEL_VISIBILITY, [mapToolOpened])
+  const isOpen = useMemo(() => rightBoxOpened === MapBox.VESSEL_VISIBILITY, [rightBoxOpened])
   const wrapperRef = useRef(null)
 
   useClickOutsideWhenOpenedAndExecute(wrapperRef, isOpen, () => {
-    dispatch(setMapToolOpened(undefined))
+    dispatch(setRightBoxOpened(undefined))
   })
 
   const openOrCloseVesselVisibility = useCallback(() => {
     if (isOpen) {
-      dispatch(setMapToolOpened(undefined))
+      dispatch(setRightBoxOpened(undefined))
     } else {
-      dispatch(setMapToolOpened(MapToolType.VESSEL_VISIBILITY))
+      dispatch(setRightBoxOpened(MapBox.VESSEL_VISIBILITY))
     }
   }, [dispatch, isOpen])
 

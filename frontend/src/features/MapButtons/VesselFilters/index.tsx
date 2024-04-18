@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import Filters from './Filters'
 import { COLORS } from '../../../constants/constants'
 import { MapBox } from '../../../domain/entities/map/constants'
-import { setRightBoxOpened } from '../../../domain/shared_slices/Global'
+import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
 import { useClickOutsideWhenOpenedAndExecute } from '../../../hooks/useClickOutsideWhenOpenedAndExecute'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
@@ -16,22 +16,22 @@ export function VesselFiltersMapButton() {
   const dispatch = useMainAppDispatch()
   const filters = useMainAppSelector(state => state.filter.filters)
   const previousFilters = usePrevious(filters)
-  const rightBoxOpened = useMainAppSelector(state => state.global.rightBoxOpened)
+  const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
   const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
 
   const isRightMenuShrinked = !rightMenuIsOpen
-  const isOpen = useMemo(() => rightBoxOpened === MapBox.FILTERS, [rightBoxOpened])
+  const isOpen = useMemo(() => rightMapBoxOpened === MapBox.FILTERS, [rightMapBoxOpened])
   const wrapperRef = useRef(null)
 
   useClickOutsideWhenOpenedAndExecute(wrapperRef, isOpen, () => {
-    dispatch(setRightBoxOpened(undefined))
+    dispatch(setRightMapBoxOpened(undefined))
   })
 
   const openOrCloseVesselFilters = useCallback(() => {
     if (isOpen) {
-      dispatch(setRightBoxOpened(undefined))
+      dispatch(setRightMapBoxOpened(undefined))
     } else {
-      dispatch(setRightBoxOpened(MapBox.FILTERS))
+      dispatch(setRightMapBoxOpened(MapBox.FILTERS))
     }
   }, [dispatch, isOpen])
 

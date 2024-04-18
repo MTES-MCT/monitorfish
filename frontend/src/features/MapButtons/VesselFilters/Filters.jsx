@@ -21,10 +21,10 @@ const Filters = () => {
     nonFilteredVesselsAreHidden
   } = useSelector(state => state.filter)
   const {
-    rightBoxOpened
+    rightMapBoxOpened
   } = useSelector(state => state.global)
 
-  const isOpen = useMemo(() => rightBoxOpened === MapBox.FILTERS, [rightBoxOpened])
+  const isOpen = useMemo(() => rightMapBoxOpened === MapBox.FILTERS, [rightMapBoxOpened])
 
   const removeFilterCallback = useCallback(filterUUID => {
     dispatch(removeFilter(filterUUID))

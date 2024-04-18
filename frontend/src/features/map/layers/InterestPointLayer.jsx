@@ -29,7 +29,7 @@ import LineString from 'ol/geom/LineString'
 import { InterestPointLine } from '../../../domain/entities/interestPointLine'
 import { getLength } from 'ol/sphere'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
-import { setRightBoxOpened } from '../../../domain/shared_slices/Global'
+import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
 import { monitorfishMap } from '../monitorfishMap'
 
 const DRAW_START_EVENT = 'drawstart'
@@ -188,7 +188,7 @@ const InterestPointLayer = ({ mapMovingAndZoomEvent }) => {
         drawObject.once(DRAW_ABORT_EVENT, () => {
           dispatch(endInterestPointDraw())
           dispatch(deleteInterestPointBeingDrawed())
-          dispatch(setRightBoxOpened(undefined))
+          dispatch(setRightMapBoxOpened(undefined))
         })
 
         drawObject.once(DRAW_END_EVENT, event => {
@@ -318,12 +318,12 @@ const InterestPointLayer = ({ mapMovingAndZoomEvent }) => {
 
   function modifyInterestPoint (uuid) {
     dispatch(editInterestPoint(uuid))
-    dispatch(setRightBoxOpened(MapBox.INTEREST_POINT))
+    dispatch(setRightMapBoxOpened(MapBox.INTEREST_POINT))
   }
 
   function deleteInterestPointBeingDrawedAndCloseTool () {
     dispatch(endInterestPointDraw())
-    dispatch(setRightBoxOpened(undefined))
+    dispatch(setRightMapBoxOpened(undefined))
     dispatch(deleteInterestPointBeingDrawed())
   }
 

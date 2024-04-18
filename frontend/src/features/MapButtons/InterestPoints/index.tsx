@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { EditInterestPoint } from './EditInterestPoint'
 import { MapBox } from '../../../domain/entities/map/constants'
-import { setRightBoxOpened } from '../../../domain/shared_slices/Global'
+import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
 import {
   deleteInterestPointBeingDrawed,
   drawInterestPoint,
@@ -17,13 +17,13 @@ import { MapToolButton } from '../shared/MapToolButton'
 
 export function InterestPointMapButton() {
   const dispatch = useMainAppDispatch()
-  const { rightBoxOpened, rightMenuIsOpen } = useMainAppSelector(state => state.global)
+  const { rightMapBoxOpened, rightMenuIsOpen } = useMainAppSelector(state => state.global)
   const isRightMenuShrinked = !rightMenuIsOpen
-  const isOpen = useMemo(() => rightBoxOpened === MapBox.INTEREST_POINT, [rightBoxOpened])
+  const isOpen = useMemo(() => rightMapBoxOpened === MapBox.INTEREST_POINT, [rightMapBoxOpened])
   const wrapperRef = useRef(null)
 
   const close = useCallback(() => {
-    dispatch(setRightBoxOpened(undefined))
+    dispatch(setRightMapBoxOpened(undefined))
   }, [dispatch])
 
   useEscapeFromKeyboardAndExecute(close)
@@ -38,7 +38,7 @@ export function InterestPointMapButton() {
   const openOrCloseInterestPoint = useCallback(() => {
     if (!isOpen) {
       dispatch(drawInterestPoint())
-      dispatch(setRightBoxOpened(MapBox.INTEREST_POINT))
+      dispatch(setRightMapBoxOpened(MapBox.INTEREST_POINT))
     } else {
       close()
     }

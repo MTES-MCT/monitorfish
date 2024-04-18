@@ -4,7 +4,7 @@ import { fromCircle } from 'ol/geom/Polygon'
 import { batch } from 'react-redux'
 
 import { OPENLAYERS_PROJECTION } from '../../entities/map/constants'
-import { setRightBoxOpened } from '../../shared_slices/Global'
+import { setRightMapBoxOpened } from '../../shared_slices/Global'
 import { addMeasurementDrawed, resetCircleMeasurementInDrawing } from '../../shared_slices/Measurement'
 
 const saveMeasurement = (feature, measurement) => dispatch => {
@@ -26,7 +26,7 @@ const saveMeasurement = (feature, measurement) => dispatch => {
       })
     )
     dispatch(resetCircleMeasurementInDrawing())
-    dispatch(setRightBoxOpened(undefined))
+    dispatch(setRightMapBoxOpened(undefined))
   })
 }
 

@@ -10,7 +10,7 @@ import {
   OPENLAYERS_PROJECTION,
   WSG84_PROJECTION
 } from '../../../domain/entities/map/constants'
-import { setRightBoxOpened } from '../../../domain/shared_slices/Global'
+import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
 import {
   resetCircleMeasurementInDrawing,
   setCircleMeasurementInDrawing,
@@ -96,7 +96,7 @@ export function CustomCircleRange() {
   const cancelAddCircleRange = useCallback(() => {
     dispatch(setMeasurementTypeToAdd(null))
     dispatch(resetCircleMeasurementInDrawing())
-    dispatch(setRightBoxOpened(undefined))
+    dispatch(setRightMapBoxOpened(undefined))
   }, [dispatch])
 
   return (

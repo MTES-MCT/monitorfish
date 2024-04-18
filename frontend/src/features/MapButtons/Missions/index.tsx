@@ -3,10 +3,9 @@ import { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import { LeftBoxOpened } from '../../../domain/entities/global'
+import { MapBox } from '../../../domain/entities/map/constants'
 import { SideWindowMenuKey, SideWindowStatus } from '../../../domain/entities/sideWindow/constants'
 import { setDisplayedComponents } from '../../../domain/shared_slices/DisplayedComponent'
-import { setLeftBoxOpened } from '../../../domain/shared_slices/Global'
 import { sideWindowActions } from '../../../domain/shared_slices/SideWindow'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
@@ -18,7 +17,7 @@ import { MapToolButton } from '../shared/MapToolButton'
 export function MissionsMenu() {
   const dispatch = useMainAppDispatch()
   const sideWindow = useMainAppSelector(state => state.sideWindow)
-  const leftBoxOpened = useMainAppSelector(state => state.global.leftBoxOpened)
+  const setLeftMapBoxOpened = useMainAppSelector(state => state.global.setLeftMapBoxOpened)
   const isMissionsLayerDisplayed = useMainAppSelector(state => state.displayedComponent.isMissionsLayerDisplayed)
 
   const isActive =
@@ -39,7 +38,7 @@ export function MissionsMenu() {
   }
 
   const toggleMissionsMenu = () => {
-    dispatch(setLeftBoxOpened(leftBoxOpened === LeftBoxOpened.MISSIONS ? null : LeftBoxOpened.MISSIONS))
+    dispatch(setLeftMapBoxOpened(setLeftMapBoxOpened === MapBox.MISSIONS ? null : MapBox.MISSIONS))
   }
 
   const toggleMissionsLayer = () => {
@@ -48,7 +47,7 @@ export function MissionsMenu() {
 
   return (
     <Wrapper>
-      <MissionMenuBox data-cy="missions-menu-box" isLeftBox isOpen={leftBoxOpened === LeftBoxOpened.MISSIONS}>
+      <MissionMenuBox data-cy="missions-menu-box" isLeftBox isOpen={setLeftMapBoxOpened === MapBox.MISSIONS}>
         <MissionsMenuWrapper>
           <MissionsMenuHeader>
             <ToggleMissionMenuButton Icon={Icon.Close} onClick={toggleMissionsMenu} size={Size.NORMAL} />
@@ -78,7 +77,7 @@ export function MissionsMenu() {
       </MissionMenuBox>
       <MissionMenuButton
         data-cy="missions-map-button"
-        isActive={leftBoxOpened === LeftBoxOpened.MISSIONS}
+        isActive={setLeftMapBoxOpened === MapBox.MISSIONS}
         isLeftButton
         onClick={toggleMissionsMenu}
         style={{ color: THEME.color.gainsboro, top: 120 }}

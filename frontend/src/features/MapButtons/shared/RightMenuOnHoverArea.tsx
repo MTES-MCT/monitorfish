@@ -9,20 +9,20 @@ import { contractRightMenu, expandRightMenu } from '../../../domain/shared_slice
 export function RightMenuOnHoverArea() {
   const dispatch = useMainAppDispatch()
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
-  const rightBoxOpened = useMainAppSelector(state => state.global.rightBoxOpened)
+  const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
 
   const areaRef = useRef(null)
   const clickedOutsideComponent = useClickOutsideWhenOpened(areaRef, !!selectedVessel)
 
   useEffect(() => {
-    if (!selectedVessel || rightBoxOpened) {
+    if (!selectedVessel || rightMapBoxOpened) {
       dispatch(expandRightMenu())
 
       return
     }
 
     dispatch(contractRightMenu())
-  }, [dispatch, clickedOutsideComponent, rightBoxOpened, selectedVessel])
+  }, [dispatch, clickedOutsideComponent, rightMapBoxOpened, selectedVessel])
 
   return selectedVessel && <Area ref={areaRef} onMouseEnter={() => dispatch(expandRightMenu())} />
 }

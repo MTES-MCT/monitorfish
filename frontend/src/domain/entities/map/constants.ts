@@ -30,7 +30,8 @@ export enum CoordinatesFormat {
   DEGREES_MINUTES_SECONDS = 'DMS'
 }
 
-export enum MapToolType {
+export enum MapBox {
+  ACCOUNT = 'ACCOUNT',
   FILTERS = 'FILTERS',
   INTEREST_POINT = 'INTEREST_POINT',
   MEASUREMENT = 'MEASUREMENT',

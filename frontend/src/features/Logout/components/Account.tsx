@@ -1,0 +1,69 @@
+import { MapToolBox } from '@features/MapButtons/shared/MapToolBox'
+import { MapToolButton } from '@features/MapButtons/shared/MapToolButton'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { Accent, Button, Icon, MapMenuDialog, THEME } from '@mtes-mct/monitor-ui'
+import { useContext } from 'react'
+import styled from 'styled-components'
+
+import { UserAccountContext } from '../../../context/UserAccountContext'
+import { MapBox } from '../../../domain/entities/map/constants'
+import { setRightBoxOpened } from '../../../domain/shared_slices/Global'
+
+const MARGIN_TOP = 388
+
+export function Account() {
+  const dispatch = useMainAppDispatch()
+  const userAccount = useContext(UserAccountContext)
+  const rightBoxOpened = useMainAppSelector(state => state.global.rightBoxOpened)
+
+  const openOrClose = () => {
+    dispatch(setRightBoxOpened(rightBoxOpened === MapBox.ACCOUNT ? undefined : MapBox.ACCOUNT))
+  }
+
+  return (
+    <Wrapper>
+      <MissionMenuBox data-cy="map-account-box" isOpen={rightBoxOpened === MapBox.ACCOUNT}>
+        <StyledContainer>
+          <MapMenuDialog.Header>
+            <MapMenuDialog.Title>Déconnexion</MapMenuDialog.Title>
+          </MapMenuDialog.Header>
+          <MapMenuDialog.Body>{userAccount.email ?? 'Vous n’êtes pas connecté avec Cerbère'}</MapMenuDialog.Body>
+          {userAccount.email && (
+            <MapMenuDialog.Footer>
+              <Button accent={Accent.SECONDARY} Icon={Icon.Logout} isFullWidth onClick={userAccount.logout}>
+                Se déconnecter
+              </Button>
+            </MapMenuDialog.Footer>
+          )}
+        </StyledContainer>
+      </MissionMenuBox>
+      <MapToolButton
+        isActive={false}
+        onClick={openOrClose}
+        style={{ color: THEME.color.gainsboro, cursor: 'pointer', top: MARGIN_TOP, zIndex: 99999 }}
+        title="Mon compte"
+      >
+        <Icon.Account size={20} />
+      </MapToolButton>
+    </Wrapper>
+  )
+}
+
+const StyledContainer = styled(MapMenuDialog.Container)`
+  margin-right: unset;
+`
+
+const Wrapper = styled.div`
+  transition: all 0.2s;
+  z-index: 98;
+  left: 10px;
+
+  * {
+    box-sizing: border-box;
+  }
+`
+
+const MissionMenuBox = styled(MapToolBox)`
+  top: ${MARGIN_TOP}px;
+`

@@ -11,7 +11,7 @@ import {
   showFilter
 } from '../../../domain/shared_slices/Filter'
 import FilterParameters from './FilterParameters'
-import { MapToolType } from '../../../domain/entities/map/constants'
+import { MapBox } from '../../../domain/entities/map/constants'
 import { MapToolBox } from '../shared/MapToolBox'
 
 const Filters = () => {
@@ -21,10 +21,10 @@ const Filters = () => {
     nonFilteredVesselsAreHidden
   } = useSelector(state => state.filter)
   const {
-    mapToolOpened
+    rightBoxOpened
   } = useSelector(state => state.global)
 
-  const isOpen = useMemo(() => mapToolOpened === MapToolType.FILTERS, [mapToolOpened])
+  const isOpen = useMemo(() => rightBoxOpened === MapBox.FILTERS, [rightBoxOpened])
 
   const removeFilterCallback = useCallback(filterUUID => {
     dispatch(removeFilter(filterUUID))

@@ -61,40 +61,46 @@ fi
 ###########################
 
 function restore_databases() {
-    echo "Starting restore from backups in $RESTORE_DIR..."
+    echo "[infra/remote/backup/pg_restore.sh] Starting restore from backups in $RESTORE_DIR..."
 
-    ###############################
-    ### RESTORE GLOBALS BACKUPS ###
-    ###############################
+    #-----------------------------------------------------------
+    # Restore globals
 
     GLOBALS_BACKUP="$RESTORE_DIR/globals.sql.gz"
 
     if [ -f "$GLOBALS_BACKUP" ]; then
-        echo "Restoring globals from $GLOBALS_BACKUP..."
+        echo "[infra/remote/backup/pg_restore.sh] Restoring globals from $GLOBALS_BACKUP..."
         if ! gunzip -c "$GLOBALS_BACKUP" | docker exec -i monitorfish_database sh -c "psql -h $HOSTNAME -U $USERNAME"; then
             echo "Failed to restore globals"
             exit 1
         fi
     else
-        echo "No globals backup file found"
+        echo "[infra/remote/backup/pg_restore.sh] No globals backup file found"
     fi
 
-    #################################
-    ##### RESTORE FULL BACKUPS ######
-    #################################
+    #-----------------------------------------------------------
+    # Restore databases
 
     for BACKUP_FILE in "$RESTORE_DIR"/*.custom; do
         DATABASE_NAME=$(basename "$BACKUP_FILE" .custom)
 
-        echo "Restoring $DATABASE_NAME from $BACKUP_FILE..."
+        # https://docs.timescale.com/self-hosted/latest/troubleshooting/#errors-occur-after-restoring-from-file-dump
+        echo "[infra/remote/backup/pg_restore.sh] Enabling TimescaleDB restoring flag for $DATABASE_NAME..."
+        docker exec -i monitorfish_database \
+            psql -U $USERNAME -c "ALTER DATABASE $DATABASE_NAME SET timescaledb.restoring = 'on';"
 
+        echo "[infra/remote/backup/pg_restore.sh] Restoring $DATABASE_NAME from $BACKUP_FILE..."
         if ! docker exec -i monitorfish_database sh -c "pg_restore -v -d $DATABASE_NAME -h $HOSTNAME -U $USERNAME" < "$BACKUP_FILE"; then
-            echo "Error: Failed to restore database $DATABASE_NAME."
+            echo "[infra/remote/backup/pg_restore.sh] Error: Failed to restore database $DATABASE_NAME."
             exit 1
         fi
+
+        echo "[infra/remote/backup/pg_restore.sh] Disabling TimescaleDB restoring flag for $DATABASE_NAME..."
+        docker exec -i monitorfish_database \
+            psql -U $USERNAME -c "ALTER DATABASE $DATABASE_NAME SET timescaledb.restoring = 'off';"
     done
 
-    echo "Databases restoration complete!"
+    echo "[infra/remote/backup/pg_restore.sh] Databases restoration done."
 }
 
 restore_databases

@@ -26,7 +26,7 @@ export function ActionCard({ children, isSelected, missionAction, onSelect }: Ac
 
   return (
     <>
-      <Wrapper>
+      <Wrapper $isEnvAction={missionAction.source === Mission.MissionSource.MONITORENV}>
         {startDateAsDayjs && (
           <DateLabel title={missionAction.actionDatetimeUtc}>
             <b>{formatDateLabel(startDateAsDayjs.format('DD MMM'))}</b> à {startDateAsDayjs.format('HH:mm')}
@@ -52,19 +52,23 @@ export function ActionCard({ children, isSelected, missionAction, onSelect }: Ac
 }
 
 const SourceAction = styled.span`
-  margin-left: auto;
+  margin-top: -30px;
+  float: right;
   font-style: italic;
   color: ${THEME.color.slateGray};
 `
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{
+  $isEnvAction: boolean
+}>`
   align-items: center;
   color: ${p => p.theme.color.slateGray};
   display: flex;
   font-size: 13px;
-  /* This padding allows the top 2px outline to be visible in InnerWrapper */
-  padding-top: 2px;
   user-select: none;
+  z-index: 1;
+  position: relative;
+  margin-bottom: ${p => (p.$isEnvAction ? 30 : 0)}px;
 `
 
 const DateLabel = styled.div`
@@ -72,6 +76,7 @@ const DateLabel = styled.div`
   flex-direction: column;
   min-width: 65px;
   padding: 4px 16px 4px 0;
+  background: ${p => p.theme.color.cultured};
 `
 
 const InnerWrapper = styled.div<{

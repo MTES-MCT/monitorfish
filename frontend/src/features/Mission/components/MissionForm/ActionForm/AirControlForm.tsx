@@ -1,10 +1,11 @@
 import { DatePickerField } from '@features/Mission/components/MissionForm/ActionForm/shared/DatePickerField'
 import { UpdateMissionActionCompletionEffect } from '@features/Mission/components/MissionForm/ActionForm/shared/UpdateMissionActionCompletionEffect'
+import { useIsMissionEnded } from '@features/Mission/components/MissionForm/hooks/useIsMissionEnded'
 import { FormikEffect, FormikTextarea, Icon } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash/fp'
 
-import { AirControlFormLiveSchema } from './schemas'
+import { AirControlFormCompletionSchema, AirControlFormLiveSchema } from './schemas'
 import { ActionFormHeader } from './shared/ActionFormHeader'
 import { FormikAuthor } from './shared/FormikAuthor'
 import { FormikCoordinatesPicker } from './shared/FormikCoordinatesPicker'
@@ -24,8 +25,11 @@ type AirControlFormProps = Readonly<{
   onChange: (nextValues: MissionActionFormValues) => Promisable<void>
 }>
 export function AirControlForm({ initialValues, onChange }: AirControlFormProps) {
+  const isMissionEnded = useIsMissionEnded()
+  const validationSchema = isMissionEnded ? AirControlFormCompletionSchema : AirControlFormLiveSchema
+
   return (
-    <Formik initialValues={initialValues} onSubmit={noop} validationSchema={AirControlFormLiveSchema}>
+    <Formik initialValues={initialValues} onSubmit={noop} validationSchema={validationSchema}>
       {({ validateForm, values }) => (
         <>
           <FormikEffect onChange={validateBeforeOnChange(initialValues, validateForm, onChange)} />

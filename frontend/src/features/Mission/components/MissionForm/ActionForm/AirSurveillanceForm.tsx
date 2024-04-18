@@ -1,4 +1,5 @@
 import { UpdateMissionActionCompletionEffect } from '@features/Mission/components/MissionForm/ActionForm/shared/UpdateMissionActionCompletionEffect'
+import { useIsMissionEnded } from '@features/Mission/components/MissionForm/hooks/useIsMissionEnded'
 import {
   FormikCheckbox,
   FormikEffect,
@@ -11,7 +12,7 @@ import { Formik } from 'formik'
 import { noop } from 'lodash/fp'
 import styled from 'styled-components'
 
-import { AirSurveillanceFormLiveSchema } from './schemas'
+import { AirSurveillanceFormCompletionSchema, AirSurveillanceFormLiveSchema } from './schemas'
 import { ActionFormHeader } from './shared/ActionFormHeader'
 import { FLIGHT_GOALS_AS_OPTIONS } from './shared/constants'
 import { FleetSegmentsField } from './shared/FleetSegmentsField'
@@ -29,8 +30,11 @@ type AirSurveillanceFormProps = Readonly<{
   onChange: (nextValues: MissionActionFormValues) => Promisable<void>
 }>
 export function AirSurveillanceForm({ initialValues, onChange }: AirSurveillanceFormProps) {
+  const isMissionEnded = useIsMissionEnded()
+  const validationSchema = isMissionEnded ? AirSurveillanceFormCompletionSchema : AirSurveillanceFormLiveSchema
+
   return (
-    <Formik initialValues={initialValues} onSubmit={noop} validationSchema={AirSurveillanceFormLiveSchema}>
+    <Formik initialValues={initialValues} onSubmit={noop} validationSchema={validationSchema}>
       {({ validateForm, values }) => (
         <>
           <FormikEffect onChange={validateBeforeOnChange(initialValues, validateForm, onChange)} />

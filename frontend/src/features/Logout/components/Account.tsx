@@ -16,6 +16,7 @@ export function Account() {
   const dispatch = useMainAppDispatch()
   const userAccount = useContext(UserAccountContext)
   const rightBoxOpened = useMainAppSelector(state => state.global.rightBoxOpened)
+  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
 
   const openOrClose = () => {
     dispatch(setRightBoxOpened(rightBoxOpened === MapBox.ACCOUNT ? undefined : MapBox.ACCOUNT))
@@ -44,7 +45,7 @@ export function Account() {
         style={{ color: THEME.color.gainsboro, cursor: 'pointer', top: MARGIN_TOP, zIndex: 99999 }}
         title="Mon compte"
       >
-        <Icon.Account size={20} />
+        <Icon.Account color={rightMenuIsOpen ? THEME.color.gainsboro : THEME.color.charcoal} size={20} />
       </MapToolButton>
     </Wrapper>
   )

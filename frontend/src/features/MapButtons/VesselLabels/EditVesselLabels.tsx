@@ -20,9 +20,9 @@ export function EditVesselLabels() {
   const vesselLabel = useMainAppSelector(state => state.map.vesselLabel)
   const riskFactorShowedOnMap = useMainAppSelector(state => state.map.riskFactorShowedOnMap)
   const vesselLabelsShowedOnMap = useMainAppSelector(state => state.map.vesselLabelsShowedOnMap)
-  const rightBoxOpened = useMainAppSelector(state => state.global.rightBoxOpened)
+  const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
 
-  const isOpen = useMemo(() => rightBoxOpened === MapBox.VESSEL_LABELS, [rightBoxOpened])
+  const isOpen = useMemo(() => rightMapBoxOpened === MapBox.VESSEL_LABELS, [rightMapBoxOpened])
 
   return (
     <Wrapper isOpen={isOpen}>

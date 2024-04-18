@@ -8,23 +8,23 @@ import styled from 'styled-components'
 
 import { UserAccountContext } from '../../../context/UserAccountContext'
 import { MapBox } from '../../../domain/entities/map/constants'
-import { setRightBoxOpened } from '../../../domain/shared_slices/Global'
+import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
 
 const MARGIN_TOP = 388
 
 export function Account() {
   const dispatch = useMainAppDispatch()
   const userAccount = useContext(UserAccountContext)
-  const rightBoxOpened = useMainAppSelector(state => state.global.rightBoxOpened)
+  const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
   const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
 
   const openOrClose = () => {
-    dispatch(setRightBoxOpened(rightBoxOpened === MapBox.ACCOUNT ? undefined : MapBox.ACCOUNT))
+    dispatch(setRightMapBoxOpened(rightMapBoxOpened === MapBox.ACCOUNT ? undefined : MapBox.ACCOUNT))
   }
 
   return (
     <Wrapper>
-      <MissionMenuBox data-cy="map-account-box" isOpen={rightBoxOpened === MapBox.ACCOUNT}>
+      <MissionMenuBox data-cy="map-account-box" isOpen={rightMapBoxOpened === MapBox.ACCOUNT}>
         <StyledContainer>
           <MapMenuDialog.Header>
             <MapMenuDialog.Title>Déconnexion</MapMenuDialog.Title>

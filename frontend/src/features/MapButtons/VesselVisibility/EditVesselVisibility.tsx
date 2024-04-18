@@ -25,13 +25,13 @@ import { MapToolBox } from '../shared/MapToolBox'
 export function EditVesselVisibility() {
   const dispatch = useMainAppDispatch()
   const hideNonSelectedVessels = useMainAppSelector(state => state.vessel.hideNonSelectedVessels)
-  const rightBoxOpened = useMainAppSelector(state => state.global.rightBoxOpened)
+  const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
   const hideVesselsAtPort = useMainAppSelector(state => state.map.hideVesselsAtPort)
   const defaultVesselTrackDepth = useMainAppSelector(state => state.map.defaultVesselTrackDepth)
   const showingVesselsEstimatedPositions = useMainAppSelector(state => state.map.showingVesselsEstimatedPositions)
   const vesselsLastPositionVisibility = useMainAppSelector(state => state.map.vesselsLastPositionVisibility)
 
-  const isOpen = useMemo(() => rightBoxOpened === MapBox.VESSEL_VISIBILITY, [rightBoxOpened])
+  const isOpen = useMemo(() => rightMapBoxOpened === MapBox.VESSEL_VISIBILITY, [rightMapBoxOpened])
 
   const updateVesselsLastPositionVisibility = (hidden, opacityReduced) => {
     dispatch(

@@ -3,8 +3,8 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
 import { NamespaceContext } from '../../../context/NamespaceContext'
-import { LeftBoxOpened } from '../../../domain/entities/global'
-import { setLeftBoxOpened } from '../../../domain/shared_slices/Global'
+import { MapBox } from '../../../domain/entities/map/constants'
+import { setLeftMapBoxOpened } from '../../../domain/shared_slices/Global'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { AdministrativeZones } from '../../AdministrativeZone/components/AdministrativeZones'
@@ -24,16 +24,16 @@ export function LayersSidebar() {
     state => state.regulatory.regulatoryZoneMetadataPanelIsOpen
   )
   const healthcheckTextWarning = useMainAppSelector(state => state.global.healthcheckTextWarning)
-  const leftBoxOpened = useMainAppSelector(state => state.global.leftBoxOpened)
+  const leftMapBoxOpened = useMainAppSelector(state => state.global.leftMapBoxOpened)
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
 
   const [numberOfRegulatoryLayersSaved, setNumberOfRegulatoryLayersSaved] = useState(0)
 
   useEffect(() => {
-    if (leftBoxOpened !== LeftBoxOpened.REGULATIONS) {
+    if (leftMapBoxOpened !== MapBox.REGULATIONS) {
       dispatch(closeRegulatoryZoneMetadata())
     }
-  }, [dispatch, leftBoxOpened])
+  }, [dispatch, leftMapBoxOpened])
 
   return (
     <NamespaceContext.Consumer>
@@ -42,9 +42,9 @@ export function LayersSidebar() {
           <Button
             data-cy="layers-sidebar"
             isHidden={!!previewFilteredVesselsMode}
-            isVisible={leftBoxOpened === LeftBoxOpened.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
+            isVisible={leftMapBoxOpened === MapBox.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
             onClick={() =>
-              dispatch(setLeftBoxOpened(leftBoxOpened === LeftBoxOpened.REGULATIONS ? null : LeftBoxOpened.REGULATIONS))
+              dispatch(setLeftMapBoxOpened(leftMapBoxOpened === MapBox.REGULATIONS ? null : MapBox.REGULATIONS))
             }
             title="Couches réglementaires"
           >
@@ -52,8 +52,8 @@ export function LayersSidebar() {
           </Button>
           <Sidebar
             data-cy="layers-sidebar-box"
-            isOpen={leftBoxOpened === LeftBoxOpened.REGULATIONS}
-            isVisible={leftBoxOpened === LeftBoxOpened.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
+            isOpen={leftMapBoxOpened === MapBox.REGULATIONS}
+            isVisible={leftMapBoxOpened === MapBox.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
           >
             <RegulationSearch
               namespace={namespace}
@@ -69,7 +69,10 @@ export function LayersSidebar() {
               <AdministrativeZones namespace={namespace} />
               <BaseMaps namespace={namespace} />
             </Layers>
-            <RegulatoryZoneMetadataShifter isLeftBoxOpened={!!leftBoxOpened} isOpen={regulatoryZoneMetadataPanelIsOpen}>
+            <RegulatoryZoneMetadataShifter
+              isLeftMapBoxOpened={!!leftMapBoxOpened}
+              isOpen={regulatoryZoneMetadataPanelIsOpen}
+            >
               <RegulatoryZoneMetadata />
             </RegulatoryZoneMetadataShifter>
           </Sidebar>
@@ -80,7 +83,7 @@ export function LayersSidebar() {
 }
 
 const RegulatoryZoneMetadataShifter = styled.div<{
-  isLeftBoxOpened: boolean
+  isLeftMapBoxOpened: boolean
   isOpen: boolean
 }>`
   position: absolute;
@@ -89,7 +92,7 @@ const RegulatoryZoneMetadataShifter = styled.div<{
       return -455
     }
 
-    return p.isLeftBoxOpened ? 355 : 371
+    return p.isLeftMapBoxOpened ? 355 : 371
   }}px;
   margin-top: 45px;
   top: 0px;

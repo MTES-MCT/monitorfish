@@ -3,9 +3,9 @@ import styled from 'styled-components'
 
 import { FavoriteVessel } from './FavoriteVessel'
 import { COLORS } from '../../../constants/constants'
-import { LeftBoxOpened } from '../../../domain/entities/global'
+import { MapBox } from '../../../domain/entities/map/constants'
 import { getVesselCompositeIdentifier } from '../../../domain/entities/vessel/vessel'
-import { setLeftBoxOpened } from '../../../domain/shared_slices/Global'
+import { setLeftMapBoxOpened } from '../../../domain/shared_slices/Global'
 import { setHideNonSelectedVessels } from '../../../domain/shared_slices/Vessel'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
@@ -22,7 +22,8 @@ export function FavoriteVessels() {
   const { hideNonSelectedVessels, selectedVesselIdentity, vesselsTracksShowed } = useMainAppSelector(
     state => state.vessel
   )
-  const { leftBoxOpened, previewFilteredVesselsMode } = useMainAppSelector(state => state.global)
+  const leftMapBoxOpened = useMainAppSelector(state => state.global.leftMapBoxOpened)
+  const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
 
   const wrapperRef = useRef(null)
 
@@ -32,18 +33,16 @@ export function FavoriteVessels() {
         <FavoriteVesselsNumber
           data-cy="favorite-vessels-number"
           isHidden={previewFilteredVesselsMode}
-          isOpen={leftBoxOpened === LeftBoxOpened.FAVORITE_VESSELS}
+          isOpen={leftMapBoxOpened === MapBox.FAVORITE_VESSELS}
         >
           {favorites?.length || 0}
         </FavoriteVesselsNumber>
         <FavoriteVesselsIcon
           data-cy="favorite-vessels"
           isHidden={!!previewFilteredVesselsMode}
-          isOpen={leftBoxOpened === LeftBoxOpened.FAVORITE_VESSELS}
+          isOpen={leftMapBoxOpened === MapBox.FAVORITE_VESSELS}
           onClick={() =>
-            dispatch(
-              setLeftBoxOpened(leftBoxOpened === LeftBoxOpened.FAVORITE_VESSELS ? null : LeftBoxOpened.FAVORITE_VESSELS)
-            )
+            dispatch(setLeftMapBoxOpened(leftMapBoxOpened === MapBox.FAVORITE_VESSELS ? null : MapBox.FAVORITE_VESSELS))
           }
           title="Mes navires suivis"
         >
@@ -52,7 +51,7 @@ export function FavoriteVessels() {
         <FavoriteVesselsBox
           data-cy="favorite-vessels-box"
           isHidden={previewFilteredVesselsMode}
-          isOpen={leftBoxOpened === LeftBoxOpened.FAVORITE_VESSELS}
+          isOpen={leftMapBoxOpened === MapBox.FAVORITE_VESSELS}
         >
           <Header isFirst>Mes navires suivis</Header>
           {favorites?.length ? (

@@ -19,11 +19,11 @@ export type GlobalState = {
   isBackoffice: boolean
   isUpdatingVessels: boolean
   lastSearchedVessels: any[]
-  leftBoxOpened: any
+  leftMapBoxOpened: MapBox | undefined
   // TODO Rename this prop.
   // TODO Investigate that. Should be a defined boolean.
   previewFilteredVesselsMode: boolean | undefined
-  rightBoxOpened: MapBox | undefined
+  rightMapBoxOpened: MapBox | undefined
   rightMenuIsOpen: boolean
   userType: string
   vesselListModalIsOpen: boolean
@@ -35,9 +35,9 @@ const INITIAL_STATE: GlobalState = {
   isBackoffice: false,
   isUpdatingVessels: false,
   lastSearchedVessels: getLocalStorageState([], lastSearchedVesselsLocalStorageKey),
-  leftBoxOpened: null,
+  leftMapBoxOpened: undefined,
   previewFilteredVesselsMode: undefined,
-  rightBoxOpened: undefined,
+  rightMapBoxOpened: undefined,
   rightMenuIsOpen: false,
   userType: getLocalStorageState(UserType.SIP, userTypeLocalStorageKey),
   vesselListModalIsOpen: false
@@ -89,7 +89,7 @@ export const globalSlice = createSlice({
 
     openVesselListModal(state) {
       state.vesselListModalIsOpen = true
-      state.rightBoxOpened = undefined
+      state.rightMapBoxOpened = undefined
     },
 
     removeError(state) {
@@ -137,10 +137,10 @@ export const globalSlice = createSlice({
     },
 
     /**
-     * Set the left box opened as LeftBoxOpened, so the other boxes can close
+     * Set the left box, so the other boxes can close
      */
-    setLeftBoxOpened(state, action: PayloadAction<any>) {
-      state.leftBoxOpened = action.payload
+    setLeftMapBoxOpened(state, action: PayloadAction<MapBox | undefined>) {
+      state.leftMapBoxOpened = action.payload
     },
 
     /**
@@ -153,10 +153,10 @@ export const globalSlice = createSlice({
     },
 
     /**
-     * Set the map tool opened
+     * Set the right map box
      */
-    setRightBoxOpened(state, action: PayloadAction<MapBox | undefined>) {
-      state.rightBoxOpened = action.payload
+    setRightMapBoxOpened(state, action: PayloadAction<MapBox | undefined>) {
+      state.rightMapBoxOpened = action.payload
     },
 
     /**
@@ -189,8 +189,8 @@ export const {
   setHealthcheckTextWarning,
   setIsBackoffice,
   setIsUpdatingVessels,
-  setLeftBoxOpened,
+  setLeftMapBoxOpened,
   setPreviewFilteredVesselsMode,
-  setRightBoxOpened,
+  setRightMapBoxOpened,
   setUserType
 } = globalSlice.actions

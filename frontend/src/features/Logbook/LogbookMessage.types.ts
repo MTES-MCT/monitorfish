@@ -254,7 +254,7 @@ export namespace LogbookMessage {
     tripGearCodes: string[] | undefined
     tripSegmentCodes: string[] | undefined
     vesselLength: number | undefined
-    willArriveAfter: string | undefined
-    willArriveBefore: string | undefined
+    willArriveAfter: string
+    willArriveBefore: string
   }>
 }

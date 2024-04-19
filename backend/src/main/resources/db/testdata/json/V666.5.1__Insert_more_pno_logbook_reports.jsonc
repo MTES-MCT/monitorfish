@@ -150,12 +150,12 @@
                 "cfr": null,
                 "enriched": true,
                 "flag_state": null,
-                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "integration_datetime_utc": "2023-12-31 17:00:00",
                 "log_type": "PNO",
-                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "operation_datetime_utc": "2023-12-31 17:00:00",
                 "operation_number": "FAKE_OPERATION_103",
                 "operation_type": "DAT",
-                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "report_datetime_utc": "2023-12-31 17:00:00",
                 "transmission_format": "ERS",
                 "vessel_name": null,
                 "trip_gears:jsonb": [],
@@ -166,7 +166,7 @@
                     "port": "AEHZP",
                     "predictedArrivalDatetimeUtc": "2023-12-31T23:59:00Z",
                     "purpose": "GRD",
-                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                    "tripStartDate": "2023-12-31T06:00:00Z"
                 }
             },
 

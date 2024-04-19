@@ -44,7 +44,14 @@ class GetPriorNotificationsUTests {
     @Test
     fun `execute Should return a list of prior notifications`() {
         // Given
-        given(logbookReportRepository.findAllPriorNotifications(LogbookReportFilter())).willReturn(
+        given(
+            logbookReportRepository.findAllPriorNotifications(
+                LogbookReportFilter(
+                    willArriveAfter = "2000-01-01T00:00:00Z",
+                    willArriveBefore = "2100-01-01T00:00:00Z",
+                ),
+            ),
+        ).willReturn(
             listOf(
                 PriorNotification(
                     logbookMessageTyped = LogbookMessageTyped(
@@ -127,7 +134,12 @@ class GetPriorNotificationsUTests {
             riskFactorRepository,
             speciesRepository,
             vesselRepository,
-        ).execute(LogbookReportFilter())
+        ).execute(
+            LogbookReportFilter(
+                willArriveAfter = "2000-01-01T00:00:00Z",
+                willArriveBefore = "2100-01-01T00:00:00Z",
+            ),
+        )
 
         // Then
         Assertions.assertThat(result).hasSize(2)

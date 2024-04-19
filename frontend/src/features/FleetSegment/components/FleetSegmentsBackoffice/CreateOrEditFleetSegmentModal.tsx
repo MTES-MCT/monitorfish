@@ -6,18 +6,18 @@ import { useMemo } from 'react'
 import { Footer, Modal } from 'rsuite'
 import styled from 'styled-components'
 
-import StyledModalHeader from '../../../commonComponents/StyledModalHeader'
+import { StyledModalHeader } from '../../../commonComponents/StyledModalHeader'
 
 import type { FleetSegment, UpdateFleetSegment } from '../../types'
 
-type CreateOrEditFleetSegmentModalProps = {
+type CreateOrEditFleetSegmentModalProps = Readonly<{
   faoAreasList: any
   onCancel: () => void
   onCreate: (nextFleetSegment: UpdateFleetSegment) => void
   onUpdate: (segment: string, year: number, nextFleetSegment: UpdateFleetSegment) => Promise<void>
   updatedFleetSegment: FleetSegment | undefined
   year: number
-}
+}>
 export function CreateOrEditFleetSegmentModal({
   faoAreasList,
   onCancel,

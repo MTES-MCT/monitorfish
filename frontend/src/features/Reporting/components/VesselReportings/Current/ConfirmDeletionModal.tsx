@@ -2,7 +2,7 @@ import { Modal } from 'rsuite'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../../constants/constants'
-import StyledModalHeader from '../../../../commonComponents/StyledModalHeader'
+import { StyledModalHeader } from '../../../../commonComponents/StyledModalHeader'
 import { CancelButton, ValidateButton } from '../../../../commonStyles/Buttons.style'
 
 export function ConfirmDeletionModal({ closeModal, isOpened, validateCallback }) {

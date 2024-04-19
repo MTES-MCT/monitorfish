@@ -1,3 +1,4 @@
+import { FilterTag } from '@features/MainWindow/components/MapButtons/VesselFilters/FilterTag'
 import { Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
@@ -22,7 +23,6 @@ import PolygonFilterSelectedSVG from '../../../icons/Filtre_zone_polygone_select
 import BoxFilterSVG from '../../../icons/Filtre_zone_rectangle.svg?react'
 import BoxFilterSelectedSVG from '../../../icons/Filtre_zone_rectangle_selected.svg?react'
 import SearchIconSVG from '../../../icons/Loupe_dark.svg?react'
-import FilterTag from '../../../MapButtons/VesselFilters/FilterTag'
 import { closeRegulatoryZoneMetadataPanel } from '../../slice'
 import { MINIMUM_SEARCH_CHARACTERS_NUMBER, searchRegulatoryLayers } from '../../useCases/searchRegulatoryLayers'
 
@@ -78,7 +78,7 @@ export function SearchInput() {
       setZoneSelected({
         code: LayersType.FREE_DRAW,
         feature: drawedGeometry,
-        name: interactionType?.toString() || ''
+        name: interactionType?.toString() ?? ''
       })
     )
     dispatch(resetInteraction())

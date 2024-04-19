@@ -11,11 +11,11 @@ class GetIsAuthorizedUser(
 ) {
     private val logger = LoggerFactory.getLogger(GetIsAuthorizedUser::class.java)
 
-    fun execute(email: String, isContainingSuperUserPath: Boolean): Boolean {
+    fun execute(email: String, isSuperUserPath: Boolean): Boolean {
         /**
          * If the path is not super-user protected, authorize any logged user
          */
-        if (!isContainingSuperUserPath) {
+        if (!isSuperUserPath) {
             return true
         }
 

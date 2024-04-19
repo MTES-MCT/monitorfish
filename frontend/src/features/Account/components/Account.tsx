@@ -40,7 +40,7 @@ export function Account() {
         </StyledContainer>
       </MissionMenuBox>
       <MapToolButton
-        isActive={false}
+        isActive={rightMapBoxOpened === MapBox.ACCOUNT}
         onClick={openOrClose}
         style={{ color: THEME.color.gainsboro, cursor: 'pointer', top: MARGIN_TOP, zIndex: 99999 }}
         title="Mon compte"

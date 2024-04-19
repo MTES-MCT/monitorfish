@@ -42,7 +42,9 @@ export function FavoriteVessels() {
           isHidden={!!previewFilteredVesselsMode}
           isOpen={leftMapBoxOpened === MapBox.FAVORITE_VESSELS}
           onClick={() =>
-            dispatch(setLeftMapBoxOpened(leftMapBoxOpened === MapBox.FAVORITE_VESSELS ? null : MapBox.FAVORITE_VESSELS))
+            dispatch(
+              setLeftMapBoxOpened(leftMapBoxOpened === MapBox.FAVORITE_VESSELS ? undefined : MapBox.FAVORITE_VESSELS)
+            )
           }
           title="Mes navires suivis"
         >

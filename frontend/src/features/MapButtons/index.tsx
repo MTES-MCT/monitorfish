@@ -1,4 +1,4 @@
-import { Account } from '@features/Logout/components/Account'
+import { Account } from '@features/Account/components/Account'
 import { LegacyRsuiteComponentsWrapper } from 'ui/LegacyRsuiteComponentsWrapper'
 
 import { AlertsMapButton } from './AlertsMapButton'

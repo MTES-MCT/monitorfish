@@ -44,7 +44,7 @@ export function LayersSidebar() {
             isHidden={!!previewFilteredVesselsMode}
             isVisible={leftMapBoxOpened === MapBox.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
             onClick={() =>
-              dispatch(setLeftMapBoxOpened(leftMapBoxOpened === MapBox.REGULATIONS ? null : MapBox.REGULATIONS))
+              dispatch(setLeftMapBoxOpened(leftMapBoxOpened === MapBox.REGULATIONS ? undefined : MapBox.REGULATIONS))
             }
             title="Couches réglementaires"
           >

@@ -11,6 +11,6 @@ data class LogbookReportFilter(
     val specyCodes: List<String>? = null,
     val tripGearCodes: List<String>? = null,
     val tripSegmentCodes: List<String>? = null,
-    val willArriveAfter: String? = null,
-    val willArriveBefore: String? = null,
+    val willArriveAfter: String,
+    val willArriveBefore: String,
 )

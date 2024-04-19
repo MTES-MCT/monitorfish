@@ -7,7 +7,7 @@ import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { LastPositionsSlider } from './LastPositionsSlider'
-import { MapToolType } from '../../../domain/entities/map/constants'
+import { MapBox } from '../../../domain/entities/map/constants'
 import {
   setHideVesselsAtPort,
   setVesselsLastPositionVisibility,
@@ -25,13 +25,13 @@ import { MapToolBox } from '../shared/MapToolBox'
 export function EditVesselVisibility() {
   const dispatch = useMainAppDispatch()
   const hideNonSelectedVessels = useMainAppSelector(state => state.vessel.hideNonSelectedVessels)
-  const mapToolOpened = useMainAppSelector(state => state.global.mapToolOpened)
+  const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
   const hideVesselsAtPort = useMainAppSelector(state => state.map.hideVesselsAtPort)
   const defaultVesselTrackDepth = useMainAppSelector(state => state.map.defaultVesselTrackDepth)
   const showingVesselsEstimatedPositions = useMainAppSelector(state => state.map.showingVesselsEstimatedPositions)
   const vesselsLastPositionVisibility = useMainAppSelector(state => state.map.vesselsLastPositionVisibility)
 
-  const isOpen = useMemo(() => mapToolOpened === MapToolType.VESSEL_VISIBILITY, [mapToolOpened])
+  const isOpen = useMemo(() => rightMapBoxOpened === MapBox.VESSEL_VISIBILITY, [rightMapBoxOpened])
 
   const updateVesselsLastPositionVisibility = (hidden, opacityReduced) => {
     dispatch(

@@ -1,12 +1,12 @@
 import styled from 'styled-components'
 
-import FilterControlSVG from '../../icons/Label_controle.svg?react'
-import FilterGearSVG from '../../icons/Label_engin_de_peche.svg?react'
-import FilterSpeciesSVG from '../../icons/Label_poisson.svg?react'
-import FilterDistrictSVG from '../../icons/Label_quartier.svg?react'
-import FilterFleetSegmentSVG from '../../icons/Label_segment_de_flotte.svg?react'
-import FilterLengthSVG from '../../icons/Label_taille_navire.svg?react'
-import FilterZoneSVG from '../../icons/Label_zone.svg?react'
+import FilterControlSVG from '../../../../icons/Label_controle.svg?react'
+import FilterGearSVG from '../../../../icons/Label_engin_de_peche.svg?react'
+import FilterSpeciesSVG from '../../../../icons/Label_poisson.svg?react'
+import FilterDistrictSVG from '../../../../icons/Label_quartier.svg?react'
+import FilterFleetSegmentSVG from '../../../../icons/Label_segment_de_flotte.svg?react'
+import FilterLengthSVG from '../../../../icons/Label_taille_navire.svg?react'
+import FilterZoneSVG from '../../../../icons/Label_zone.svg?react'
 
 const Zone = styled(FilterZoneSVG)`
   height: 13px;

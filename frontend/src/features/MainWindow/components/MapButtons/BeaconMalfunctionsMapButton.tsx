@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { MapButton } from './MapButton'
 import { SideWindowMenuKey, SideWindowStatus } from '../../../../domain/entities/sideWindow/constants'
 import { sideWindowActions } from '../../../../domain/shared_slices/SideWindow'
-import BeaconMalfunctionsSVG from '../icons/Icone_VMS.svg?react'
+import BeaconMalfunctionsSVG from '../../../icons/Icone_VMS.svg?react'
 
 export function BeaconMalfunctionsMapButton() {
   const dispatch = useMainAppDispatch()

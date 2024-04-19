@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { MapButton } from './MapButton'
 import { SideWindowMenuKey, SideWindowStatus } from '../../../../domain/entities/sideWindow/constants'
 import { sideWindowActions } from '../../../../domain/shared_slices/SideWindow'
-import AlertsSVG from '../icons/Icone_alertes.svg?react'
+import AlertsSVG from '../../../icons/Icone_alertes.svg?react'
 
 export function AlertsMapButton() {
   const dispatch = useMainAppDispatch()

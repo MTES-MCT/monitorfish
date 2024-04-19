@@ -7,7 +7,7 @@ import { MultiRadio } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { MapToolType } from '../../../domain/entities/map/constants'
+import { MapBox } from '../../../domain/entities/map/constants'
 import { setRiskFactorShowedOnMap, setVesselLabel, setVesselLabelsShowedOnMap } from '../../../domain/shared_slices/Map'
 import { MapPropertyTrigger } from '../../commonComponents/MapPropertyTrigger'
 import RiskFactorSVG from '../../icons/Bouton_afficher_note_de_risque.svg?react'
@@ -20,9 +20,9 @@ export function EditVesselLabels() {
   const vesselLabel = useMainAppSelector(state => state.map.vesselLabel)
   const riskFactorShowedOnMap = useMainAppSelector(state => state.map.riskFactorShowedOnMap)
   const vesselLabelsShowedOnMap = useMainAppSelector(state => state.map.vesselLabelsShowedOnMap)
-  const mapToolOpened = useMainAppSelector(state => state.global.mapToolOpened)
+  const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
 
-  const isOpen = useMemo(() => mapToolOpened === MapToolType.VESSEL_LABELS, [mapToolOpened])
+  const isOpen = useMemo(() => rightMapBoxOpened === MapBox.VESSEL_LABELS, [rightMapBoxOpened])
 
   return (
     <Wrapper isOpen={isOpen}>

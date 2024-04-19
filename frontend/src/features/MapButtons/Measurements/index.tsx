@@ -2,8 +2,8 @@ import { useCallback, useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
 import { CustomCircleRange } from './CustomCircleRange'
-import { MapToolType, MeasurementType } from '../../../domain/entities/map/constants'
-import { setMapToolOpened } from '../../../domain/shared_slices/Global'
+import { MapBox, MeasurementType } from '../../../domain/entities/map/constants'
+import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
 import { setMeasurementTypeToAdd } from '../../../domain/shared_slices/Measurement'
 import { useClickOutsideWhenOpenedAndExecute } from '../../../hooks/useClickOutsideWhenOpenedAndExecute'
 import { useEscapeFromKeyboardAndExecute } from '../../../hooks/useEscapeFromKeyboardAndExecute'
@@ -18,20 +18,20 @@ import { MapToolButton } from '../shared/MapToolButton'
 export function MeasurementMapButton() {
   const dispatch = useMainAppDispatch()
   const measurementTypeToAdd = useMainAppSelector(state => state.measurement.measurementTypeToAdd)
-  const mapToolOpened = useMainAppSelector(state => state.global.mapToolOpened)
+  const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
   const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
 
   const isRightMenuShrinked = !rightMenuIsOpen
-  const isOpen = useMemo(() => mapToolOpened === MapToolType.MEASUREMENT_MENU, [mapToolOpened])
-  const isMeasurementToolOpen = useMemo(() => mapToolOpened === MapToolType.MEASUREMENT, [mapToolOpened])
+  const isOpen = useMemo(() => rightMapBoxOpened === MapBox.MEASUREMENT_MENU, [rightMapBoxOpened])
+  const isMeasurementToolOpen = useMemo(() => rightMapBoxOpened === MapBox.MEASUREMENT, [rightMapBoxOpened])
   const wrapperRef = useRef(null)
 
   useClickOutsideWhenOpenedAndExecute(wrapperRef, isOpen, () => {
-    dispatch(setMapToolOpened(undefined))
+    dispatch(setRightMapBoxOpened(undefined))
   })
   useEscapeFromKeyboardAndExecute(() => {
     dispatch(setMeasurementTypeToAdd(null))
-    dispatch(setMapToolOpened(undefined))
+    dispatch(setRightMapBoxOpened(undefined))
   })
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export function MeasurementMapButton() {
 
   const makeMeasurement = nextMeasurementTypeToAdd => {
     dispatch(setMeasurementTypeToAdd(nextMeasurementTypeToAdd))
-    dispatch(setMapToolOpened(MapToolType.MEASUREMENT))
+    dispatch(setRightMapBoxOpened(MapBox.MEASUREMENT))
   }
 
   const measurementIcon = useMemo(() => {
@@ -59,9 +59,9 @@ export function MeasurementMapButton() {
   const openOrCloseMeasurementMenu = useCallback(() => {
     if (measurementTypeToAdd) {
       dispatch(setMeasurementTypeToAdd(null))
-      dispatch(setMapToolOpened(undefined))
+      dispatch(setRightMapBoxOpened(undefined))
     } else {
-      dispatch(setMapToolOpened(MapToolType.MEASUREMENT_MENU))
+      dispatch(setRightMapBoxOpened(MapBox.MEASUREMENT_MENU))
     }
   }, [dispatch, measurementTypeToAdd])
 

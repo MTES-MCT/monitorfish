@@ -4,7 +4,7 @@ import { getLocalStorageState } from '../../utils'
 import { UserType } from '../entities/beaconMalfunction/constants'
 import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../entities/vessel/vessel'
 
-import type { MapToolType } from '../entities/map/constants'
+import type { MapBox } from '../entities/map/constants'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 const userTypeLocalStorageKey = 'userType'
@@ -19,11 +19,11 @@ export type GlobalState = {
   isBackoffice: boolean
   isUpdatingVessels: boolean
   lastSearchedVessels: any[]
-  leftBoxOpened: any
-  mapToolOpened: MapToolType | undefined
+  leftMapBoxOpened: MapBox | undefined
   // TODO Rename this prop.
   // TODO Investigate that. Should be a defined boolean.
   previewFilteredVesselsMode: boolean | undefined
+  rightMapBoxOpened: MapBox | undefined
   rightMenuIsOpen: boolean
   userType: string
   vesselListModalIsOpen: boolean
@@ -35,9 +35,9 @@ const INITIAL_STATE: GlobalState = {
   isBackoffice: false,
   isUpdatingVessels: false,
   lastSearchedVessels: getLocalStorageState([], lastSearchedVesselsLocalStorageKey),
-  leftBoxOpened: null,
-  mapToolOpened: undefined,
+  leftMapBoxOpened: undefined,
   previewFilteredVesselsMode: undefined,
+  rightMapBoxOpened: undefined,
   rightMenuIsOpen: false,
   userType: getLocalStorageState(UserType.SIP, userTypeLocalStorageKey),
   vesselListModalIsOpen: false
@@ -89,7 +89,7 @@ export const globalSlice = createSlice({
 
     openVesselListModal(state) {
       state.vesselListModalIsOpen = true
-      state.mapToolOpened = undefined
+      state.rightMapBoxOpened = undefined
     },
 
     removeError(state) {
@@ -137,17 +137,10 @@ export const globalSlice = createSlice({
     },
 
     /**
-     * Set the left box opened as LeftBoxOpened, so the other boxes can close
+     * Set the left box, so the other boxes can close
      */
-    setLeftBoxOpened(state, action: PayloadAction<any>) {
-      state.leftBoxOpened = action.payload
-    },
-
-    /**
-     * Set the map tool opened
-     */
-    setMapToolOpened(state, action: PayloadAction<MapToolType | undefined>) {
-      state.mapToolOpened = action.payload
+    setLeftMapBoxOpened(state, action: PayloadAction<MapBox | undefined>) {
+      state.leftMapBoxOpened = action.payload
     },
 
     /**
@@ -157,6 +150,13 @@ export const globalSlice = createSlice({
     setPreviewFilteredVesselsMode(state, action: PayloadAction<boolean>) {
       state.previewFilteredVesselsMode = action.payload
       state.blockVesselsUpdate = action.payload
+    },
+
+    /**
+     * Set the right map box
+     */
+    setRightMapBoxOpened(state, action: PayloadAction<MapBox | undefined>) {
+      state.rightMapBoxOpened = action.payload
     },
 
     /**
@@ -189,8 +189,8 @@ export const {
   setHealthcheckTextWarning,
   setIsBackoffice,
   setIsUpdatingVessels,
-  setLeftBoxOpened,
-  setMapToolOpened,
+  setLeftMapBoxOpened,
   setPreviewFilteredVesselsMode,
+  setRightMapBoxOpened,
   setUserType
 } = globalSlice.actions

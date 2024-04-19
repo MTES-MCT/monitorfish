@@ -5,6 +5,7 @@ import VectorSource from 'ol/source/Vector'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
+import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
 import { drawMovedLabelLineIfFoundAndReturnOffset } from '../../../../domain/entities/vessel/label'
 import {
   getVesselCompositeIdentifier,
@@ -196,7 +197,7 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
       .getLayers()
       .getArray()
       // @ts-ignore
-      ?.find(olLayer => olLayer.name === LayerProperties.VESSELS_POINTS.code)
+      ?.find(olLayer => olLayer.name === MonitorFishLayer.VESSELS)
       // @ts-ignore
       ?.getSource()
     vesselsLayer?.current?.forEachFeatureInExtent(monitorfishMap.getView().calculateExtent(), vesselFeature => {
@@ -295,7 +296,7 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
         .getLayers()
         .getArray()
         // @ts-ignore
-        ?.find(olLayer => olLayer.name === LayerProperties.VESSELS_POINTS.code)
+        ?.find(olLayer => olLayer.name === MonitorFishLayer.VESSELS)
         // @ts-ignore
         ?.getSource()
       const featuresInExtent = vesselsLayer?.getFeaturesInExtent(monitorfishMap.getView().calculateExtent()) || []

@@ -60,10 +60,10 @@ interface DBLogbookReportRepository :
                     -- AND jsonb_contains_any(lr.trip_segments, CAST('{}' AS TEXT[]), CAST('segment' AS TEXT), :tripSegmentCodes)
 
                     -- Will Arrive After
-                    AND (:willArriveAfter IS NULL OR lr.value->>'predictedArrivalDatetimeUtc' >= :willArriveAfter)
+                    AND lr.value->>'predictedArrivalDatetimeUtc' >= :willArriveAfter
 
                     -- Will Arrive Before
-                    AND (:willArriveBefore IS NULL OR lr.value->>'predictedArrivalDatetimeUtc' <= :willArriveBefore)
+                    AND lr.value->>'predictedArrivalDatetimeUtc' <= :willArriveBefore
             ),
 
             del_and_ret_logbook_reports AS (
@@ -94,8 +94,8 @@ interface DBLogbookReportRepository :
         // specyCodes: List<String>,
         // tripGearCodes: List<String>,
         // tripSegmentCodes: List<String>,
-        willArriveAfter: String?,
-        willArriveBefore: String?,
+        willArriveAfter: String,
+        willArriveBefore: String,
     ): List<LogbookReportEntity>
 
     @Query(

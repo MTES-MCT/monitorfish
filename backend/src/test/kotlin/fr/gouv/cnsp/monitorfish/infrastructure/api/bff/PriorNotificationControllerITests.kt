@@ -46,7 +46,14 @@ class PriorNotificationControllerITests {
     @Test
     fun `Should get a list of prior notifications`() {
         // Given
-        given(this.getPriorNotifications.execute(LogbookReportFilter())).willReturn(
+        given(
+            this.getPriorNotifications.execute(
+                LogbookReportFilter(
+                    willArriveAfter = "2000-01-01T00:00:00Z",
+                    willArriveBefore = "2100-01-01T00:00:00Z",
+                ),
+            ),
+        ).willReturn(
             listOf(
                 PriorNotification(
                     logbookMessageTyped = LogbookMessageTyped(

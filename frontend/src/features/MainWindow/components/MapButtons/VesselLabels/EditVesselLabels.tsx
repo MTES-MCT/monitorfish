@@ -13,8 +13,8 @@ import {
   setVesselLabelsShowedOnMap
 } from '../../../../../domain/shared_slices/Map'
 import { MapPropertyTrigger } from '../../../../commonComponents/MapPropertyTrigger'
-import RiskFactorSVG from '../../icons/Bouton_afficher_note_de_risque.svg?react'
-import LabelSVG from '../../icons/Menu_etiquettes_navires.svg?react'
+import RiskFactorSVG from '../../../../icons/Bouton_afficher_note_de_risque.svg?react'
+import LabelSVG from '../../../../icons/Menu_etiquettes_navires.svg?react'
 import { MapToolBox } from '../shared/MapToolBox'
 import { Content, Header } from '../shared/styles'
 

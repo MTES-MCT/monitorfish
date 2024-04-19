@@ -11,9 +11,9 @@ import { getVesselCompositeIdentifier } from '../../../../../domain/entities/ves
 import { setHideNonSelectedVessels } from '../../../../../domain/shared_slices/Vessel'
 import { MapPropertyTrigger } from '../../../../commonComponents/MapPropertyTrigger'
 import { MapComponent } from '../../../../commonStyles/MapComponent'
-import HidingOtherTracksSVG from '../../icons/Bouton_masquer_pistes_actif.svg?react'
-import ShowingOtherTracksSVG from '../../icons/Bouton_masquer_pistes_inactif.svg?react'
-import FavoriteSVG from '../../icons/favorite.svg?react'
+import HidingOtherTracksSVG from '../../../../icons/Bouton_masquer_pistes_actif.svg?react'
+import ShowingOtherTracksSVG from '../../../../icons/Bouton_masquer_pistes_inactif.svg?react'
+import FavoriteSVG from '../../../../icons/favorite.svg?react'
 import { MapButton } from '../MapButton'
 
 export function FavoriteVessels() {

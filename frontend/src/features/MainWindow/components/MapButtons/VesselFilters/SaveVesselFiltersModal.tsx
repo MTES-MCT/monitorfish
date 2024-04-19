@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { TagList } from './TagList'
 import { StyledModalHeader } from '../../../../commonComponents/StyledModalHeader'
-import FilterSVG from '../../icons/Icone_filtres_dark.svg?react'
+import FilterSVG from '../../../../icons/Icone_filtres_dark.svg?react'
 
 const styles = {
   marginBottom: 20,

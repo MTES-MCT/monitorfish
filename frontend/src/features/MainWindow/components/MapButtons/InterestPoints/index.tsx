@@ -12,7 +12,7 @@ import {
   drawInterestPoint,
   endInterestPointDraw
 } from '../../../../../domain/shared_slices/InterestPoint'
-import InterestPointSVG from '../../icons/standardized/Landmark.svg?react'
+import InterestPointSVG from '../../../../icons/standardized/Landmark.svg?react'
 import { MapToolButton } from '../shared/MapToolButton'
 
 export function InterestPointMapButton() {

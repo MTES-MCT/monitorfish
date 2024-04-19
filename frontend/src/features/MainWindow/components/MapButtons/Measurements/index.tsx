@@ -10,9 +10,9 @@ import { MapBox, MeasurementType } from '../../../../../domain/entities/map/cons
 import { setRightMapBoxOpened } from '../../../../../domain/shared_slices/Global'
 import { setMeasurementTypeToAdd } from '../../../../../domain/shared_slices/Measurement'
 import { MapComponent } from '../../../../commonStyles/MapComponent'
-import MultiLineSVG from '../../icons/standardized/Measure_broken_line.svg?react'
-import CircleRangeSVG from '../../icons/standardized/Measure_circle.svg?react'
-import MeasurementSVG from '../../icons/standardized/Measure_line.svg?react'
+import MultiLineSVG from '../../../../icons/standardized/Measure_broken_line.svg?react'
+import CircleRangeSVG from '../../../../icons/standardized/Measure_circle.svg?react'
+import MeasurementSVG from '../../../../icons/standardized/Measure_line.svg?react'
 import { MapToolButton } from '../shared/MapToolButton'
 
 export function MeasurementMapButton() {

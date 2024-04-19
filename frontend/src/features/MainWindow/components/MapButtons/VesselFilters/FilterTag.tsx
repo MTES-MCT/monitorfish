@@ -1,7 +1,7 @@
 import { COLORS } from '@constants/constants'
 import styled from 'styled-components'
 
-import CloseIconSVG from '../../icons/Croix_grise.svg?react'
+import CloseIconSVG from '../../../../icons/Croix_grise.svg?react'
 
 type FilterTagProps = Readonly<{
   iconElement: JSX.Element | undefined

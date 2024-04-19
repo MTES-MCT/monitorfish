@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import { Filters } from './Filters'
 import { MapBox } from '../../../../../domain/entities/map/constants'
 import { setRightMapBoxOpened } from '../../../../../domain/shared_slices/Global'
-import FilterSVG from '../../icons/standardized/Filter.svg?react'
+import FilterSVG from '../../../../icons/standardized/Filter.svg?react'
 import { MapToolButton } from '../shared/MapToolButton'
 
 export function VesselFiltersMapButton() {

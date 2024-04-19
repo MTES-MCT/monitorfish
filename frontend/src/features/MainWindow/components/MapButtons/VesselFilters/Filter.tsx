@@ -3,11 +3,11 @@ import { useState } from 'react'
 import styled from 'styled-components'
 
 import { TagList } from './TagList'
-import ChevronIconSVG from '../../icons/Chevron_simple_gris.svg?react'
-import CloseIconSVG from '../../icons/Croix_grise.svg?react'
-import FilterSVG from '../../icons/Icone_filtres_dark.svg?react'
-import ShowIconSVG from '../../icons/oeil_affiche.svg?react'
-import HideIconSVG from '../../icons/oeil_masque.svg?react'
+import ChevronIconSVG from '../../../../icons/Chevron_simple_gris.svg?react'
+import CloseIconSVG from '../../../../icons/Croix_grise.svg?react'
+import FilterSVG from '../../../../icons/Icone_filtres_dark.svg?react'
+import ShowIconSVG from '../../../../icons/oeil_affiche.svg?react'
+import HideIconSVG from '../../../../icons/oeil_masque.svg?react'
 
 import type { VesselFilter } from 'domain/types/filter'
 

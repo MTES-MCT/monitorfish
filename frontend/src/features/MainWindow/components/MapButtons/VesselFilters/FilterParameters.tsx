@@ -3,8 +3,8 @@ import styled from 'styled-components'
 
 import { setDisplayedComponents } from '../../../../../domain/shared_slices/DisplayedComponent'
 import { MapPropertyTrigger } from '../../../../commonComponents/MapPropertyTrigger'
-import HidingOtherVesselsSVG from '../../icons/Bouton_masquer_pistes_actif.svg?react'
-import ShowingOtherVesselsSVG from '../../icons/Bouton_masquer_pistes_inactif.svg?react'
+import HidingOtherVesselsSVG from '../../../../icons/Bouton_masquer_pistes_actif.svg?react'
+import ShowingOtherVesselsSVG from '../../../../icons/Bouton_masquer_pistes_inactif.svg?react'
 
 type FilterParametersProps = Readonly<{
   nonFilteredVesselsAreHidden: boolean

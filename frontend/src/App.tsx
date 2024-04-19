@@ -27,8 +27,10 @@ export function App({ auth }: AppProps) {
   const userAuthorization = useGetUserAuthorization()
 
   const logout = useCallback(() => {
+    const idTokenHint = auth?.user?.id_token
+
     auth?.removeUser()
-    auth?.signoutRedirect()
+    auth?.signoutRedirect({ id_token_hint: idTokenHint })
   }, [auth])
 
   const userAccount = useMemo(

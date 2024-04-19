@@ -14,6 +14,16 @@ export function Menu({ selectedMenu }: MenuProps) {
   return (
     <Wrapper role="menu">
       <MenuButton
+        aria-label={SideWindowMenuKey.MISSION_LIST}
+        data-cy="side-window-menu-mission-list"
+        Icon={Icon.MissionAction}
+        iconSize={26}
+        onClick={() => dispatch(openSideWindowPath({ menu: SideWindowMenuKey.MISSION_LIST }))}
+        role="menuitem"
+        selected={selectedMenu === SideWindowMenuKey.MISSION_LIST}
+        title={SideWindowMenuLabel.MISSION_LIST}
+      />
+      <MenuButton
         data-cy="side-window-menu-alerts"
         Icon={Icon.Alert}
         iconSize={26}
@@ -33,16 +43,6 @@ export function Menu({ selectedMenu }: MenuProps) {
           title={SideWindowMenuLabel.PRIOR_NOTIFICATION_LIST}
         />
       )}
-      <MenuButton
-        aria-label={SideWindowMenuKey.MISSION_LIST}
-        data-cy="side-window-menu-mission-list"
-        Icon={Icon.MissionAction}
-        iconSize={26}
-        onClick={() => dispatch(openSideWindowPath({ menu: SideWindowMenuKey.MISSION_LIST }))}
-        role="menuitem"
-        selected={selectedMenu === SideWindowMenuKey.MISSION_LIST}
-        title={SideWindowMenuLabel.MISSION_LIST}
-      />
       <MenuButton
         data-cy="side-window-menu-beacon-malfunctions"
         Icon={Icon.Vms}

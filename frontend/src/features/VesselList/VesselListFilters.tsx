@@ -1,3 +1,4 @@
+import { FilterTag } from '@features/MainWindow/components/MapButtons/VesselFilters/FilterTag'
 import React, { useCallback, useMemo, useState } from 'react'
 import { Checkbox, CheckboxGroup, MultiCascader, SelectPicker, Tag, TagPicker } from 'rsuite'
 import styled from 'styled-components'
@@ -11,7 +12,6 @@ import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { getZonesAndSubZonesPromises } from '../AdministrativeZone/useCases/getZonesAndSubZonesPromises'
 import PolygonFilterSVG from '../icons/Filtre_zone_polygone.svg?react'
 import BoxFilterSVG from '../icons/Filtre_zone_rectangle.svg?react'
-import FilterTag from '../MapButtons/VesselFilters/FilterTag'
 
 function renderTagPickerMenuItem(item) {
   return <Label data-cy={`select-picker-menu-item-${item.label}`}>{item.label}</Label>
@@ -23,6 +23,20 @@ function renderTagPickerValue(items) {
 
 const tagPickerStyle = { margin: '3px 10px 10px 0', verticalAlign: 'top', width: 160 }
 
+type VesselListFiltersProps = Readonly<{
+  controls: any
+  countries: any
+  districts: any
+  fleetSegments: any
+  gears: any
+  geometrySelection: any
+  lastPositionTimeAgo: any
+  location: any
+  seeMore: any
+  size: any
+  species: any
+  zones: any
+}>
 function UnmemoizedVesselListFilters({
   controls,
   countries,
@@ -36,7 +50,7 @@ function UnmemoizedVesselListFilters({
   size,
   species,
   zones
-}) {
+}: VesselListFiltersProps) {
   const dispatch = useMainAppDispatch()
   const [zoneGroups, setZoneGroups] = useState<string[]>([])
 
@@ -74,7 +88,7 @@ function UnmemoizedVesselListFilters({
   }, [species.species])
 
   const districtsField = useMemo(() => {
-    if (!districts.districts || !districts.districts.length) {
+    if (!districts.districts || districts.districts.length === 0) {
       return []
     }
 

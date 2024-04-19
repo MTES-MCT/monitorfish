@@ -9,7 +9,7 @@ import {
   getProbabilityRiskFactorText,
   getRiskFactorColor
 } from '../../../domain/entities/vessel/riskFactor'
-import StyledModalHeader from '../../commonComponents/StyledModalHeader'
+import { StyledModalHeader } from '../../commonComponents/StyledModalHeader'
 import { basePrimaryButton, SecondaryButton } from '../../commonStyles/Buttons.style'
 import RiskFactorControlSVG from '../../icons/Note_de_controle_gyrophare.svg?react'
 import RiskFactorImpactSVG from '../../icons/Note_impact_poisson.svg?react'
@@ -17,10 +17,10 @@ import RiskFactorInfractionsSVG from '../../icons/Note_infraction_stop.svg?react
 
 import type { Promisable } from 'type-fest'
 
-type RiskFactorExplanationModalProps = {
+type RiskFactorExplanationModalProps = Readonly<{
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => Promisable<void>
-}
+}>
 export function RiskFactorExplanationModal({ isOpen, setIsOpen }: RiskFactorExplanationModalProps) {
   return (
     <Modal backdrop onClose={() => setIsOpen(false)} open={isOpen} size="lg" style={{ marginTop: 50 }}>

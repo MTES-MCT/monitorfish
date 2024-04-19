@@ -22,6 +22,7 @@ export function getOIDCConfig() {
     authority: String(OIDC_AUTHORITY),
     client_id: String(OIDC_CLIENT_ID),
     onSigninCallback,
+    post_logout_redirect_uri: 'https://www.mer.gouv.fr',
     redirect_uri: String(OIDC_REDIRECT_URI),
     scope: 'openid email',
     userStore: new WebStorageStateStore({ store: window.localStorage })

@@ -48,7 +48,7 @@ const BeaconMalfunctionsButton = styled(MapButton)<{
   display: inline-block;
   background: ${p => (p.$isActive ? p.theme.color.blueGray : p.theme.color.charcoal)};
   padding: 2px 2px 2px 2px;
-  top: 204px;
+  top: 246px;
   left: 10px;
   border-radius: 2px;
   height: 40px;

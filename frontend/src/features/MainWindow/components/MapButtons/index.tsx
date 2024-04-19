@@ -10,6 +10,7 @@ import { FavoriteVessels } from './FavoriteVessels'
 import { InterestPointMapButton } from './InterestPoints'
 import { MeasurementMapButton } from './Measurements'
 import { MissionsMenu } from './Missions'
+import { PriorNotificationListButton } from './PriorNotificationListButton'
 import { VesselFiltersMapButton } from './VesselFilters'
 import { VesselLabelsMapButton } from './VesselLabels'
 import { VesselVisibilityMapButton } from './VesselVisibility'
@@ -42,15 +43,17 @@ export function MapButtons() {
   return (
     <>
       <LegacyRsuiteComponentsWrapper>
+        {isFavoriteVesselsMapButtonDisplayed && <FavoriteVessels />}
+        {isSuperUser && isFavoriteVesselsMapButtonDisplayed && <MissionsMenu />}
         {isSuperUser && isAlertsMapButtonDisplayed && <AlertsMapButton />}
+        {isSuperUser && <PriorNotificationListButton />}
         {isSuperUser && isBeaconMalfunctionsMapButtonDisplayed && <BeaconMalfunctionsMapButton />}
+
         {isVesselFiltersMapButtonDisplayed && <VesselFiltersMapButton />}
         {isVesselVisibilityMapButtonDisplayed && <VesselVisibilityMapButton />}
         {isMeasurementMapButtonDisplayed && <MeasurementMapButton />}
         {isInterestPointMapButtonDisplayed && <InterestPointMapButton />}
         {isVesselLabelsMapButtonDisplayed && <VesselLabelsMapButton />}
-        {isFavoriteVesselsMapButtonDisplayed && <FavoriteVessels />}
-        {isSuperUser && isFavoriteVesselsMapButtonDisplayed && <MissionsMenu />}
         <Account />
       </LegacyRsuiteComponentsWrapper>
 

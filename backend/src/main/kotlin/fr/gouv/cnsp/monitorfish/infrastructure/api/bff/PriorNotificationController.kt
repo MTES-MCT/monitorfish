@@ -55,10 +55,10 @@ class PriorNotificationController(
         tripSegmentCodes: List<String>? = null,
         @Parameter(description = "Vessels that will arrive after the given date.")
         @RequestParam(name = "willArriveAfter")
-        willArriveAfter: String? = null,
+        willArriveAfter: String,
         @Parameter(description = "Vessels that will arrive before the given date.")
         @RequestParam(name = "willArriveBefore")
-        willArriveBefore: String? = null,
+        willArriveBefore: String,
     ): List<PriorNotificationDataOutput> {
         val logbookReportFilter = LogbookReportFilter(
             flagStates = flagStates,

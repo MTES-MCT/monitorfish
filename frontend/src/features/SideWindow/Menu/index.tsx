@@ -5,9 +5,9 @@ import { SideWindowMenuKey, SideWindowMenuLabel } from '../../../domain/entities
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { openSideWindowPath } from '../useCases/openSideWindowPath'
 
-export type MenuProps = {
+export type MenuProps = Readonly<{
   selectedMenu: string | undefined
-}
+}>
 export function Menu({ selectedMenu }: MenuProps) {
   const dispatch = useMainAppDispatch()
 

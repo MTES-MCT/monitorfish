@@ -1,7 +1,8 @@
 import countries from 'i18n-iso-countries'
 
 import { VesselLabel } from './label/types'
-import { BaseLayers, LayerProperties } from '../layers/constants'
+import { BaseLayers } from '../layers/constants'
+import { MonitorFishLayer } from '../layers/types'
 
 import type {
   SelectedVessel,
@@ -26,7 +27,7 @@ export class Vessel {
   static vesselIsMovingSpeed = 0.1
 
   static getVesselFeatureId(vessel) {
-    return `${LayerProperties.VESSELS_POINTS.code}:${getVesselCompositeIdentifier(vessel)}`
+    return `${MonitorFishLayer.VESSELS}:${getVesselCompositeIdentifier(vessel)}`
   }
 
   static getVesselOpacity(dateTime, vesselIsHidden, vesselIsOpacityReduced) {
@@ -157,7 +158,9 @@ export const getOnlyVesselIdentityProperties = (
 })
 
 export const getVesselCompositeIdentifier: (vessel) => VesselCompositeIdentifier = vessel =>
-  `${vessel.internalReferenceNumber}/${vessel.ircs}/${vessel.externalReferenceNumber}`
+  `${vessel.internalReferenceNumber ?? 'UNKNOWN'}/${vessel.ircs ?? 'UNKNOWN'}/${
+    vessel.externalReferenceNumber ?? 'UNKNOWN'
+  }`
 
 /**
  * Returns true if there is at least one vessel track or vessel selected

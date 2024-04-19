@@ -3,6 +3,7 @@
 import { createGenericSlice, getLocalStorageState } from '../../utils'
 import { getLayerNameNormalized } from '../entities/layers'
 import { LayerProperties } from '../entities/layers/constants'
+import { MonitorFishLayer } from '../entities/layers/types'
 
 import type { LayerSliceNamespace, ShowedLayer } from '../entities/layers/types'
 import type { AdministrativeOrRegulatoryLayerIdentity } from '../types/layer'
@@ -60,7 +61,7 @@ const reducers = {
   addShowedLayer(state, action: PayloadAction<ShowedLayer>) {
     const { id, namespace, topic, type, zone } = action.payload
 
-    if (type !== LayerProperties.VESSELS_POINTS.code) {
+    if (type !== MonitorFishLayer.VESSELS) {
       const searchedLayerName = getLayerNameNormalized({ topic, type, zone })
       const found = !!state.showedLayers.find(layer => getLayerNameNormalized(layer) === searchedLayerName)
 
@@ -109,7 +110,7 @@ const reducers = {
   removeShowedLayer(state, action: PayloadAction<AdministrativeOrRegulatoryLayerIdentity>) {
     const { namespace, topic, type, zone } = action.payload
 
-    if (type === LayerProperties.VESSELS_POINTS.code) {
+    if (type === MonitorFishLayer.VESSELS) {
       return
     }
 

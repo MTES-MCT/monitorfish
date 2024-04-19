@@ -30,7 +30,8 @@ export function App({ auth }: AppProps) {
     const idTokenHint = auth?.user?.id_token
 
     auth?.removeUser()
-    auth?.signoutRedirect({ id_token_hint: idTokenHint })
+    auth?.removeUser()
+    auth?.signoutRedirect({ id_token_hint: idTokenHint ?? '' })
   }, [auth])
 
   const userAccount = useMemo(

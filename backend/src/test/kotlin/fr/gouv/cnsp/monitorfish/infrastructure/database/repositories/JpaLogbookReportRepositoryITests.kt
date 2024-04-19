@@ -911,7 +911,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // Given
         val secondFilter = LogbookReportFilter(
-            willArriveAfter = "2000-01-01T0:00:00Z",
+            willArriveAfter = "2000-01-01T00:00:00Z",
             willArriveBefore = "2024-01-01T00:00:00Z",
         )
 

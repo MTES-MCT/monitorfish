@@ -128,7 +128,11 @@ class PriorNotificationControllerITests {
         )
 
         // When
-        api.perform(get("/bff/v1/prior_notifications"))
+        api.perform(
+            get(
+                "/bff/v1/prior_notifications?willArriveAfter=2000-01-01T00:00:00Z&willArriveBefore=2100-01-01T00:00:00Z",
+            ),
+        )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(2)))

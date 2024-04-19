@@ -24,7 +24,7 @@ interface DBLogbookReportRepository :
                     -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
                     lr.operation_datetime_utc BETWEEN
                         CAST(:willArriveAfter AS TIMESTAMP) - INTERVAL '48 hours'
-                        AND CAST(:willArriveBefore AS TIMESTAMP) + INTERVAL '24 hours'
+                        AND CAST(:willArriveBefore AS TIMESTAMP) + INTERVAL '48 hours'
 
                     AND lr.log_type = 'PNO'
                     AND lr.operation_type IN ('DAT', 'COR')
@@ -79,7 +79,7 @@ interface DBLogbookReportRepository :
                     -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
                     lr.operation_datetime_utc BETWEEN
                         CAST(:willArriveAfter AS TIMESTAMP) - INTERVAL '48 hours'
-                        AND CAST(:willArriveBefore AS TIMESTAMP) + INTERVAL '24 hours'
+                        AND CAST(:willArriveBefore AS TIMESTAMP) + INTERVAL '48 hours'
 
                     AND lr.operation_type IN ('DEL', 'RET')
             )

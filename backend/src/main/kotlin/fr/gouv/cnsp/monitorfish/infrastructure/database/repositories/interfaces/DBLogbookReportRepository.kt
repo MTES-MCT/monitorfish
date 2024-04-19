@@ -21,7 +21,12 @@ interface DBLogbookReportRepository :
                 LEFT JOIN vessels v ON lr.cfr = v.cfr
                 LEFT JOIN risk_factors rf ON lr.cfr = rf.cfr
                 WHERE
-                    lr.log_type = 'PNO'
+                    -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
+                    lr.operation_datetime_utc BETWEEN
+                        CAST(:willArriveAfter AS TIMESTAMP) - INTERVAL '48 hours'
+                        AND CAST(:willArriveBefore AS TIMESTAMP) + INTERVAL '24 hours'
+
+                    AND lr.log_type = 'PNO'
                     AND lr.operation_type IN ('DAT', 'COR')
                     AND lr.enriched = TRUE
 
@@ -70,7 +75,13 @@ interface DBLogbookReportRepository :
                 SELECT lr.*
                 FROM logbook_reports lr
                 JOIN dat_and_cor_logbook_reports daclr ON lr.referenced_report_id = daclr.report_id
-                WHERE lr.operation_type IN ('DEL', 'RET')
+                WHERE
+                    -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
+                    lr.operation_datetime_utc BETWEEN
+                        CAST(:willArriveAfter AS TIMESTAMP) - INTERVAL '48 hours'
+                        AND CAST(:willArriveBefore AS TIMESTAMP) + INTERVAL '24 hours'
+
+                    AND lr.operation_type IN ('DEL', 'RET')
             )
 
         SELECT *

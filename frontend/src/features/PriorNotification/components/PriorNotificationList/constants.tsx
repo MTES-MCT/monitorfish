@@ -1,5 +1,6 @@
 import { CountryFlag } from '@components/CountryFlag'
 import { Ellipsised } from '@components/Ellipsised'
+import { Titled } from '@components/Titled'
 import { SeaFrontGroup, type AllSeaFrontGroup, type NoSeaFrontGroup } from '@constants/seaFront'
 import { customDayjs, THEME, Tag, getOptionsFromLabelledEnum, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
@@ -95,7 +96,7 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
       return (
         <Ellipsised>
           <StyledCountryFlag countryCode={priorNotification.vesselFlagCountryCode} size={[20, 14]} />
-          {info.getValue()}
+          <Titled>{info.getValue()}</Titled>
         </Ellipsised>
       )
     },
@@ -135,7 +136,11 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
 
       return (
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Tag backgroundColor={THEME.color.maximumRed15} style={{ marginTop: 1 }}>{`${info.getValue()} sign.`}</Tag>
+          <Tag
+            backgroundColor={THEME.color.maximumRed15}
+            style={{ marginTop: 1 }}
+            title={`${info.getValue()} signalements`}
+          >{`${info.getValue()} sign.`}</Tag>
         </div>
       )
     },

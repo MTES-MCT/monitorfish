@@ -1,0 +1,66 @@
+name: Database Healthcheck
+
+on:
+  schedule:
+    # Every day at 7am UTC
+    - cron: "0 7 * * *"
+  workflow_dispatch:
+
+jobs:
+  backup_and_restore_database:
+    name: Backup and restore database
+    runs-on: ubuntu-latest
+    env:
+      MONITORFISH_BACKUPS_FOLDER: /opt/monitorfish_backups
+      MONITORFISH_GEOSERVER_REMOTE_URL: ""
+      MONITORFISH_GEOSERVER_LOCAL_URL: ""
+      MONITORFISH_MONITORENV_PUBLIC_URL: ""
+      MONITORFISH_MONITORENV_URL: ""
+      MONITORFISH_MAPBOX_KEY: ""
+      MONITORFISH_SHOM_KEY: ""
+      MONITORFISH_OIDC_ENABLED: ""
+      MONITORFISH_OIDC_REDIRECT_URI: ""
+      MONITORFISH_OIDC_AUTHORITY: ""
+      MONITORFISH_OIDC_CLIENT: ""
+      MONITORFISH_API_PROTECTED_API_KEY: ${{ secrets.MONITORFISH_API_KEY }}
+      MONITORFISH_API_PROTECTED_PATHS: ""
+      MONITORFISH_API_PROTECTED_PUBLIC_PATHS: ""
+      MONITORFISH_SENTRY_ENV: "prod"
+      MONITORFISH_SENTRY_DSN: ""
+      MONITORFISH_SENTRY_TRACING_ORIGINS: ""
+      # MONITORFISH_VERSION: "0.0.0"
+      MONITORFISH_MISSION_FORM_AUTO_SAVE_ENABLED: "true"
+      MONITORFISH_MISSION_FORM_AUTO_UPDATE_ENABLED: "true"
+      MONITORFISH_PRIOR_NOTIFICATION_LIST_ENABLED: "true"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get last release version
+        id: get-last-release-version
+        uses: pozetroninc/github-action-get-latest-release@master
+        with:
+          repository: mtes-mct/monitorfish
+
+      - name: Set `MONITORFISH_VERSION` & `VERSION` env vars to the latest release version
+        run: |
+          echo "MONITORFISH_VERSION=${{ steps.get-last-release-version.outputs.release }}" >> $GITHUB_ENV
+          # echo "VERSION=${{ steps.get-last-release-version.outputs.release }}" >> $GITHUB_ENV
+
+      - name: Pull and run application
+        run: |
+          # docker compose up -d --quiet-pull --build db
+          make restart-remote-app
+        working-directory: ./infra/remote
+
+      - name: Backup database
+        run: |
+          echo "MONITORFISH_BACKUPS_FOLDER=${MONITORFISH_BACKUPS_FOLDER}" >> ~/.monitorfish
+          cp ./infra/remote/backup/pg_backup.config.template ./infra/remote/backup/pg_backup.config
+          make db-backup
+
+      - name: Restore database
+        run: |
+          make db-restore TAG="$(date +"%Y-%m-%d")-daily"

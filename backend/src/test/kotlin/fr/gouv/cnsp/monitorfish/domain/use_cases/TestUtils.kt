@@ -468,10 +468,10 @@ object TestUtils {
         haulTwo.mesh = 120.0
         farTwo.hauls = listOf(haulTwo)
 
-        val farAck = Acknowledge()
+        val farAck = Acknowledgment()
         farAck.returnStatus = "000"
 
-        val farBadAck = Acknowledge()
+        val farBadAck = Acknowledgment()
         farBadAck.returnStatus = "002"
         farBadAck.rejectionCause = "Oops"
 

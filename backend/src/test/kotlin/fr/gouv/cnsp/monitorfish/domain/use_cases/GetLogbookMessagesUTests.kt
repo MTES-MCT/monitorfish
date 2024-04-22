@@ -237,10 +237,10 @@ class GetLogbookMessagesUTests {
         assertThat(ersMessages).hasSize(3)
 
         assertThat(ersMessages[0].message).isInstanceOf(FAR::class.java)
-        assertThat(ersMessages[0].acknowledge).isInstanceOf(Acknowledge::class.java)
+        assertThat(ersMessages[0].acknowledgment).isInstanceOf(Acknowledgment::class.java)
         assertThat(ersMessages[0].operationType).isEqualTo(LogbookOperationType.DAT)
         assertThat(ersMessages[0].isCorrectedByNewerMessage).isEqualTo(false)
-        val ack = ersMessages[0].acknowledge as Acknowledge
+        val ack = ersMessages[0].acknowledgment as Acknowledgment
         assertThat(ack.rejectionCause).isEqualTo("Oops")
         assertThat(ack.returnStatus).isEqualTo("002")
         assertThat(ack.isSuccess).isFalse
@@ -251,7 +251,7 @@ class GetLogbookMessagesUTests {
         assertThat(ersMessages[1].message).isInstanceOf(FAR::class.java)
         assertThat(ersMessages[1].operationType).isEqualTo(LogbookOperationType.DAT)
         assertThat(ersMessages[1].isCorrectedByNewerMessage).isEqualTo(false)
-        val ackTwo = ersMessages[1].acknowledge as Acknowledge
+        val ackTwo = ersMessages[1].acknowledgment as Acknowledgment
         assertThat(ackTwo.rejectionCause).isNull()
         assertThat(ackTwo.returnStatus).isEqualTo("000")
         assertThat(ackTwo.isSuccess).isTrue
@@ -261,7 +261,7 @@ class GetLogbookMessagesUTests {
 
         assertThat(ersMessages[2].operationNumber).isEqualTo("5h499-erh5u7-pm3ae8c5trj78j67dfh")
         assertThat(ersMessages[2].transmissionFormat).isEqualTo(LogbookTransmissionFormat.FLUX)
-        val ackThree = ersMessages[2].acknowledge as Acknowledge
+        val ackThree = ersMessages[2].acknowledgment as Acknowledgment
         assertThat(ackThree.isSuccess).isTrue
         assertThat(ackThree.rejectionCause).isNull()
         assertThat(ackThree.returnStatus).isNull()
@@ -270,7 +270,7 @@ class GetLogbookMessagesUTests {
     @Test
     fun `execute Should only add the latest acknowledge message`() {
         // Given
-        val lastAck = Acknowledge()
+        val lastAck = Acknowledgment()
         lastAck.returnStatus = "000"
 
         given(logbookReportRepository.findLastTripBeforeDateTime(any(), any()))
@@ -316,7 +316,7 @@ class GetLogbookMessagesUTests {
         assertThat(ersMessages).hasSize(3)
 
         // The last ACK message by date time is saved in the acknowledge property
-        val ack = ersMessages[0].acknowledge as Acknowledge
+        val ack = ersMessages[0].acknowledgment as Acknowledgment
         assertThat(ack.returnStatus).isEqualTo("000")
         assertThat(ack.isSuccess).isTrue
     }
@@ -412,9 +412,9 @@ class GetLogbookMessagesUTests {
         // Then
         assertThat(ersMessages).hasSize(3)
 
-        assertThat(ersMessages[0].acknowledge?.isSuccess).isTrue
-        assertThat(ersMessages[1].acknowledge?.isSuccess).isTrue
-        assertThat(ersMessages[2].acknowledge?.isSuccess).isTrue
+        assertThat(ersMessages[0].acknowledgment?.isSuccess).isTrue
+        assertThat(ersMessages[1].acknowledgment?.isSuccess).isTrue
+        assertThat(ersMessages[2].acknowledgment?.isSuccess).isTrue
     }
 
     @Test

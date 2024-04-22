@@ -1,3 +1,4 @@
+import { SeaFront } from '@constants/seaFront'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { last } from 'ramda'
@@ -7,7 +8,6 @@ import styled from 'styled-components'
 
 import { SeaFrontControlObjectives } from './SeaFrontControlObjectives'
 import { COLORS } from '../../../../constants/constants'
-import { SeaFront } from '../../../../domain/entities/seaFront/constants'
 import { LoadingSpinnerWall } from '../../../../ui/LoadingSpinnerWall'
 import {
   useAddControlObjectiveYearMutation,

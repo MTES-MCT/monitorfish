@@ -2,7 +2,7 @@
 // https://glebbahmutov.com/blog/dependent-test/
 
 import { openSideWindowNewMission } from './utils'
-import { SeaFrontGroup } from '../../../../src/domain/entities/seaFront/constants'
+import { SeaFrontGroup } from '../../../../src/constants/seaFront'
 import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
 
 context('Side Window > Mission Form > Action List', () => {

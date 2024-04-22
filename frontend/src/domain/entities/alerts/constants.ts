@@ -1,7 +1,14 @@
 // TODO This is a bit shady to mix up pending/silenced alerts with PNO ones here.
 
+import {
+  ALL_SEA_FRONT_GROUP,
+  SEA_FRONT_GROUP_SEA_FRONTS,
+  SeaFront,
+  SeaFrontGroup,
+  type AllSeaFrontGroup
+} from '@constants/seaFront'
+
 import { PendingAlertValueType } from './types'
-import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFront, SeaFrontGroup } from '../seaFront/constants'
 
 import type { MenuItem } from '../../../types'
 
@@ -48,39 +55,50 @@ export const COMMON_ALERT_TYPE_OPTION: Record<
 
 // TODO Rename the `seaFronts` prop to clarify the difference. They don't look like seas fronts.
 export const ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS: Record<
-  SeaFrontGroup,
+  SeaFrontGroup | AllSeaFrontGroup,
   {
-    menuSeaFront: SeaFrontGroup
+    menuSeaFront: SeaFrontGroup | AllSeaFrontGroup
     seaFronts: SeaFront[]
   }
 > = {
-  ALL: {
-    menuSeaFront: SeaFrontGroup.ALL,
-    seaFronts: SEA_FRONT_GROUP_SEA_FRONTS[SeaFrontGroup.ALL]
+  ALL_SEA_FRONT_GROUP: {
+    menuSeaFront: ALL_SEA_FRONT_GROUP,
+    seaFronts: [
+      SeaFront.CORSE,
+      SeaFront.GUADELOUPE,
+      SeaFront.GUYANE,
+      SeaFront.MARTINIQUE,
+      SeaFront.MAYOTTE,
+      SeaFront.MED,
+      SeaFront.MEMN,
+      SeaFront.NAMO,
+      SeaFront.SA,
+      SeaFront.SUD_OCEAN_INDIEN
+    ]
   },
   MED: {
     menuSeaFront: SeaFrontGroup.MED,
-    seaFronts: SEA_FRONT_GROUP_SEA_FRONTS[SeaFrontGroup.MED]
+    seaFronts: SEA_FRONT_GROUP_SEA_FRONTS.MED
   },
   MEMN: {
     menuSeaFront: SeaFrontGroup.MEMN,
-    seaFronts: SEA_FRONT_GROUP_SEA_FRONTS[SeaFrontGroup.MEMN]
+    seaFronts: SEA_FRONT_GROUP_SEA_FRONTS.MEMN
   },
   NAMO: {
     menuSeaFront: SeaFrontGroup.NAMO,
-    seaFronts: SEA_FRONT_GROUP_SEA_FRONTS[SeaFrontGroup.NAMO]
+    seaFronts: SEA_FRONT_GROUP_SEA_FRONTS.NAMO
   },
   OUTREMEROA: {
     menuSeaFront: SeaFrontGroup.OUTREMEROA,
-    seaFronts: SEA_FRONT_GROUP_SEA_FRONTS[SeaFrontGroup.OUTREMEROA]
+    seaFronts: SEA_FRONT_GROUP_SEA_FRONTS.OUTREMEROA
   },
   OUTREMEROI: {
     menuSeaFront: SeaFrontGroup.OUTREMEROI,
-    seaFronts: SEA_FRONT_GROUP_SEA_FRONTS[SeaFrontGroup.OUTREMEROI]
+    seaFronts: SEA_FRONT_GROUP_SEA_FRONTS.OUTREMEROI
   },
   SA: {
     menuSeaFront: SeaFrontGroup.SA,
-    seaFronts: SEA_FRONT_GROUP_SEA_FRONTS[SeaFrontGroup.SA]
+    seaFronts: SEA_FRONT_GROUP_SEA_FRONTS.SA
   }
 }
 

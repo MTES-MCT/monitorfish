@@ -1,4 +1,4 @@
-import { SeaFront } from '../seaFront/constants'
+import { SeaFront } from '@constants/seaFront'
 
 import type { VesselIdentifier, VesselIdentity } from '../vessel/types'
 import type { MissionAction } from '@features/Mission/missionAction.types'

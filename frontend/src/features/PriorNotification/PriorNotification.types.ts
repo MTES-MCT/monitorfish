@@ -1,5 +1,5 @@
+import type { SeaFront } from '@constants/seaFront'
 import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
-import type { SeaFront } from 'domain/entities/seaFront/constants'
 
 export namespace PriorNotification {
   export type PriorNotification = {

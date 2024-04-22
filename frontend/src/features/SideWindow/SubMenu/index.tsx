@@ -5,13 +5,13 @@ import { Item } from './Item'
 import type { Option } from '@mtes-mct/monitor-ui'
 import type { Promisable } from 'type-fest'
 
-type SubMenuProps<T extends string = string> = {
+type SubMenuProps<T extends string = string> = Readonly<{
   counter: ((subMenu: T) => number) | undefined
   onChange: (nextSubMenuItem: T) => Promisable<void>
   options: Option<T>[]
   value: T
   width?: number
-}
+}>
 export function SubMenu<T extends string = string>({
   counter,
   onChange,

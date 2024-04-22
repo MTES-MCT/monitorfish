@@ -1,6 +1,5 @@
+import { SeaFront } from '@constants/seaFront'
 import { EnvMissionAction } from '@features/Mission/envMissionAction.types'
-
-import { SeaFront } from '../../domain/entities/seaFront/constants'
 
 import type { GeoJSON } from '../../domain/types/GeoJSON'
 import type { LegacyControlUnit } from '../../domain/types/legacyControlUnit'

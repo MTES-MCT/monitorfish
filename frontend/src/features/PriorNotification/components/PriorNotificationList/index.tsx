@@ -31,7 +31,7 @@ import { PriorNotification } from '../../PriorNotification.types'
 import { priorNotificationActions } from '../../slice'
 import { PriorNotificationCard } from '../PriorNotificationCard'
 
-import type { NoSeaFrontGroup, SeaFrontGroup } from '../../../../domain/entities/seaFront/constants'
+import type { AllSeaFrontGroup, NoSeaFrontGroup, SeaFrontGroup } from '@constants/seaFront'
 
 export function PriorNotificationList() {
   // eslint-disable-next-line no-null/no-null
@@ -62,14 +62,14 @@ export function PriorNotificationList() {
   ])
 
   const handleSubMenuChange = useCallback(
-    (nextSeaFrontGroup: SeaFrontGroup | NoSeaFrontGroup) => {
+    (nextSeaFrontGroup: SeaFrontGroup | AllSeaFrontGroup | NoSeaFrontGroup) => {
       dispatch(priorNotificationActions.setListFilterValues({ seaFrontGroup: nextSeaFrontGroup }))
     },
     [dispatch]
   )
 
   const subMenuCounter = useCallback(
-    (seaFrontGroup: SeaFrontGroup | NoSeaFrontGroup): number =>
+    (seaFrontGroup: SeaFrontGroup | AllSeaFrontGroup | NoSeaFrontGroup): number =>
       countPriorNotificationsForSeaFrontGroup(priorNotifications, seaFrontGroup),
     [priorNotifications]
   )

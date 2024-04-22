@@ -1,3 +1,4 @@
+import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFrontGroup } from '@constants/seaFront'
 import { useCallback, useState } from 'react'
 
 import { AlertListAndReportingList } from './AlertListAndReportingList'
@@ -5,7 +6,6 @@ import { AlertAndReportingTab } from './AlertListAndReportingList/constants'
 import { AdditionalSubMenu, ALERT_SUB_MENU_OPTIONS } from './constants'
 import { SilencedAlerts } from './SilencedAlerts'
 import { setSubMenu } from './slice'
-import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFrontGroup } from '../../../domain/entities/seaFront/constants'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { SubMenu } from '../SubMenu'
@@ -13,9 +13,9 @@ import { SubMenu } from '../SubMenu'
 import type { AlertSubMenu } from './constants'
 import type { MutableRefObject, RefObject } from 'react'
 
-type AlertProps = {
+type AlertProps = Readonly<{
   baseRef: RefObject<HTMLDivElement>
-}
+}>
 export function Alert({ baseRef }: AlertProps) {
   const dispatch = useMainAppDispatch()
   const { pendingAlerts, subMenu } = useMainAppSelector(state => state.alert)

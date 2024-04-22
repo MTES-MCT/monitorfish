@@ -1,3 +1,4 @@
+import { SEA_FRONT_GROUP_SEA_FRONTS } from '@constants/seaFront'
 import { completionStatusFilterFunction } from '@features/Mission/filters/completionStatusFilterFunction'
 import { missionActionsFilterFunction } from '@features/Mission/filters/missionActionsFilterFunction'
 import { Mission } from '@features/Mission/mission.types'
@@ -5,7 +6,6 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 
-import { SEA_FRONT_GROUP_SEA_FRONTS } from '../../../../../domain/entities/seaFront/constants'
 import { administrationFilterFunction } from '../../../filters/administrationFilterFunction'
 import { seaFrontFilterFunction } from '../../../filters/seaFrontFilterFunction'
 import { unitFilterFunction } from '../../../filters/unitFilterFunction'

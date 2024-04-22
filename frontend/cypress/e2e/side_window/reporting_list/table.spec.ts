@@ -1,5 +1,5 @@
 import { openSideWindowReportingList } from './utils'
-import { SeaFrontGroup } from '../../../../src/domain/entities/seaFront/constants'
+import { SeaFrontGroup } from '../../../../src/constants/seaFront'
 
 context('Side Window > Reporting List > Table', () => {
   beforeEach(() => {

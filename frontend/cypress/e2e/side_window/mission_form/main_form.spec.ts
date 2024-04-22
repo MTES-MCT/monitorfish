@@ -1,7 +1,7 @@
 import { Mission } from '@features/Mission/mission.types'
 
 import { openSideWindowNewMission } from './utils'
-import { SeaFrontGroup } from '../../../../src/domain/entities/seaFront/constants'
+import { SeaFrontGroup } from '../../../../src/constants/seaFront'
 import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
 import { FAKE_MISSION_WITH_EXTERNAL_ACTIONS, FAKE_MISSION_WITHOUT_EXTERNAL_ACTIONS } from '../../constants'
 import { customDayjs } from '../../utils/customDayjs'

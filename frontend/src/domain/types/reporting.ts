@@ -1,6 +1,5 @@
+import { SeaFront } from '@constants/seaFront'
 import { ReportingOriginActor } from '@features/Reporting/types'
-
-import { SeaFront } from '../entities/seaFront/constants'
 
 import type { Infraction } from './infraction'
 import type { LegacyControlUnit } from './legacyControlUnit'

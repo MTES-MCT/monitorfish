@@ -1,8 +1,8 @@
 import { Ellipsised } from '@components/Ellipsised'
+import { SeaFrontGroup, type AllSeaFrontGroup, type NoSeaFrontGroup } from '@constants/seaFront'
 import { customDayjs, THEME, Tag, getOptionsFromLabelledEnum, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
 
 import { ButtonsGroupRow } from './ButtonsGroupRow'
-import { SeaFrontGroup, type NoSeaFrontGroup } from '../../../../domain/entities/seaFront/constants'
 import { VesselRiskFactor } from '../../../Vessel/components/VesselRiskFactor'
 import { PriorNotification } from '../../PriorNotification.types'
 
@@ -148,8 +148,8 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
 ]
 
 /* eslint-disable sort-keys-fix/sort-keys-fix, typescript-sort-keys/string-enum */
-export const SUB_MENU_LABEL: Record<SeaFrontGroup | NoSeaFrontGroup, string> = {
-  ALL: 'Vue d’ensemble',
+export const SUB_MENU_LABEL: Record<SeaFrontGroup | AllSeaFrontGroup | NoSeaFrontGroup, string> = {
+  ALL_SEA_FRONT_GROUP: 'Vue d’ensemble',
   MED: 'MED',
   MEMN: 'MEMN',
   NAMO: 'NAMO',

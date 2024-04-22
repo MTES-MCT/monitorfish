@@ -1,6 +1,8 @@
+import { CountryFlag } from '@components/CountryFlag'
 import { Ellipsised } from '@components/Ellipsised'
 import { SeaFrontGroup, type AllSeaFrontGroup, type NoSeaFrontGroup } from '@constants/seaFront'
 import { customDayjs, THEME, Tag, getOptionsFromLabelledEnum, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
+import styled from 'styled-components'
 
 import { ButtonsGroupRow } from './ButtonsGroupRow'
 import { VesselRiskFactor } from '../../../Vessel/components/VesselRiskFactor'
@@ -87,9 +89,16 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
   },
   {
     accessorFn: row => row.vesselName ?? (row.vesselId === -1 ? 'Navire inconnu' : '-'),
-    cell: (info: CellContext<PriorNotification.PriorNotification, string>) => (
-      <Ellipsised>{info.getValue()}</Ellipsised>
-    ),
+    cell: (info: CellContext<PriorNotification.PriorNotification, string>) => {
+      const priorNotification = info.row.original
+
+      return (
+        <Ellipsised>
+          <StyledCountryFlag countryCode={priorNotification.vesselFlagCountryCode} size={[20, 14]} />
+          {info.getValue()}
+        </Ellipsised>
+      )
+    },
     enableSorting: true,
     header: () => 'Nom',
     id: 'vessel.vesselName',
@@ -196,3 +205,8 @@ export const EXPECTED_ARRIVAL_PERIOD_LABEL: Record<ExpectedArrivalPeriod, string
 }
 export const EXPECTED_ARRIVAL_PERIODS_AS_OPTIONS = getOptionsFromLabelledEnum(EXPECTED_ARRIVAL_PERIOD_LABEL)
 /* eslint-enable sort-keys-fix/sort-keys-fix, typescript-sort-keys/string-enum */
+
+const StyledCountryFlag = styled(CountryFlag)`
+  margin-right: 8px;
+  vertical-align: -2px;
+`

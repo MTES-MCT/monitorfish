@@ -2,17 +2,21 @@ import styled from 'styled-components'
 
 import { getAlpha2CodeFromAlpha2or3Code } from './utils'
 
+import type { CSSProperties } from 'react'
+
 type CountryFlagProps = Readonly<{
+  className?: string | undefined
   countryCode: string | undefined
   size: [number, number]
+  style?: CSSProperties | undefined
 }>
-export function CountryFlag({ countryCode, size }: CountryFlagProps) {
+export function CountryFlag({ countryCode, size, ...nativeProps }: CountryFlagProps) {
   const countryAlpha2Code = getAlpha2CodeFromAlpha2or3Code(countryCode)
   const [width, height] = size
 
   const url = countryAlpha2Code ? `/flags/${countryAlpha2Code}.svg` : `https://placehold.co/${width}x${height}?text=%3F`
 
-  return <Img $height={height} $width={width} alt={String(countryCode)} src={url} title={url} />
+  return <Img $height={height} $width={width} alt={String(countryCode)} src={url} title={url} {...nativeProps} />
 }
 
 const Img = styled.img<{

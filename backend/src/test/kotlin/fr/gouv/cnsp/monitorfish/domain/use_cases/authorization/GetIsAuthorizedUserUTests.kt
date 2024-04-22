@@ -50,7 +50,7 @@ class GetIsAuthorizedUserUTests {
     }
 
     @Test
-    fun `execute Should return true  When the path is not super-user protected`() {
+    fun `execute Should return true When the path is not super-user protected`() {
         // When
         val isAuthorized = GetIsAuthorizedUser(userAuthorizationRepository).execute(
             "test",

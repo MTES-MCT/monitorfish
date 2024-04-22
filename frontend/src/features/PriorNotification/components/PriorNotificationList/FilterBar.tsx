@@ -197,10 +197,10 @@ export function FilterBar() {
           onChange={updateLastControlPeriod}
           options={LAST_CONTROL_PERIODS_AS_OPTIONS}
           placeholder="Date du dernier contrôle"
-          popupWidth={240}
-          style={{ minWidth: 240 }}
+          popupWidth={224}
+          // TODO Allow width control in monitor-ui.
+          style={{ minWidth: 224 }}
           value={listFilterValues.lastControlPeriod}
-          virtualized
         />
         <RichBooleanCheckbox
           falseOptionLabel="Sans signalement"
@@ -224,6 +224,7 @@ export function FilterBar() {
           onChange={updateExpectedArrivalPeriod}
           options={EXPECTED_ARRIVAL_PERIODS_AS_OPTIONS}
           placeholder="Date d’arrivée estimée"
+          // TODO Allow width control in monitor-ui.
           style={{ minWidth: 265 }}
           value={listFilterValues.expectedArrivalPeriod}
         />
@@ -258,7 +259,6 @@ export function FilterBar() {
           }
           searchable
           value={listFilterValues.priorNotificationTypes}
-          virtualized
         />
         <RichBooleanCheckbox
           falseOptionLabel="Navires ≥ 12 m"

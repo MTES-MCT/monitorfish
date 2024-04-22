@@ -1,4 +1,4 @@
-import { SEA_FRONT_GROUP_SEA_FRONTS } from '@constants/seaFront'
+import { ALL_SEA_FRONT_GROUP, SEA_FRONT_GROUP_SEA_FRONTS } from '@constants/seaFront'
 import { completionStatusFilterFunction } from '@features/Mission/filters/completionStatusFilterFunction'
 import { missionActionsFilterFunction } from '@features/Mission/filters/missionActionsFilterFunction'
 import { Mission } from '@features/Mission/mission.types'
@@ -21,9 +21,7 @@ export const useGetFilteredMissionsQuery = (): {
   missionsSeaFrontFiltered: Mission.MissionWithActions[]
 } => {
   const listFilterValues = useMainAppSelector(state => state.missionList.listFilterValues)
-  const listSeaFront = useMainAppSelector(state => state.missionList.listSeaFront)
-
-  const filteredSeaFronts = useMemo(() => SEA_FRONT_GROUP_SEA_FRONTS[listSeaFront], [listSeaFront])
+  const listSeaFrontGroup = useMainAppSelector(state => state.missionList.listSeaFrontGroup)
 
   const startedAfterDateTime = () => {
     const isCustom = listFilterValues[MissionFilterType.CUSTOM_DATE_RANGE]?.length
@@ -109,8 +107,14 @@ export const useGetFilteredMissionsQuery = (): {
       return []
     }
 
+    if (listSeaFrontGroup === ALL_SEA_FRONT_GROUP) {
+      return missions
+    }
+
+    const filteredSeaFronts = SEA_FRONT_GROUP_SEA_FRONTS[listSeaFrontGroup]
+
     return missions.filter(mission => seaFrontFilterFunction(mission, filteredSeaFronts))
-  }, [missions, filteredSeaFronts])
+  }, [listSeaFrontGroup, missions])
 
   return {
     isError,

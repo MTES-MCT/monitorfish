@@ -34,10 +34,7 @@ export function VesselFiltersMapButton() {
     }
   }, [dispatch, isOpen])
 
-  const hasOneFilterAdded = useCallback(
-    () => !!(previousFilters && filters.length && filters.length > previousFilters.length),
-    [previousFilters, filters]
-  )
+  const hasOneFilterAdded = !!(previousFilters && filters.length && filters.length > previousFilters.length)
 
   return (
     <>
@@ -53,7 +50,7 @@ export function VesselFiltersMapButton() {
         </VesselFiltersButton>
         <Filters />
       </Wrapper>
-      <NewFilterAdded $hasOneFilterAdded={hasOneFilterAdded()}>1 filtre ajouté</NewFilterAdded>
+      <NewFilterAdded $hasOneFilterAdded={hasOneFilterAdded}>1 filtre ajouté</NewFilterAdded>
     </>
   )
 }

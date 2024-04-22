@@ -135,156 +135,162 @@ export function PriorNotificationList() {
             {isError && <div>Une erreur est survenue.</div>}
             {isLoading && <div>Chargement en cours...</div>}
             {!!priorNotifications && (
-              <TableWithSelectableRows.Table>
-                <TableWithSelectableRows.Head>
-                  {table.getHeaderGroups().map(headerGroup => (
-                    <tr key={headerGroup.id}>
-                      {headerGroup.headers.map(header => (
-                        <TableWithSelectableRows.Th
-                          key={header.id}
-                          $width={header.column.getSize()}
-                          style={{
-                            height: 42
-                          }}
-                        >
-                          {header.isPlaceholder ? undefined : (
-                            <StyledHeadCellInerBox
-                              className={header.column.getCanSort() ? 'cursor-pointer' : ''}
-                              onClick={header.column.getToggleSortingHandler()}
-                            >
-                              {flexRender(header.column.columnDef.header, header.getContext())}
-                              {header.column.getCanSort() &&
-                                ({
-                                  asc: <div>▲</div>,
-                                  desc: <div>▼</div>
-                                }[header.column.getIsSorted() as string] ?? <Icon.SortingArrows size={14} />)}
-                            </StyledHeadCellInerBox>
+              <>
+                <TableLegend>{`${priorNotifications.length} préavis (tous les horaires sont en UTC)`}</TableLegend>
+
+                <TableWithSelectableRows.Table>
+                  <TableWithSelectableRows.Head>
+                    {table.getHeaderGroups().map(headerGroup => (
+                      <tr key={headerGroup.id}>
+                        {headerGroup.headers.map(header => (
+                          <TableWithSelectableRows.Th
+                            key={header.id}
+                            $width={header.column.getSize()}
+                            style={{
+                              height: 42
+                            }}
+                          >
+                            {header.isPlaceholder ? undefined : (
+                              <StyledHeadCellInerBox
+                                className={header.column.getCanSort() ? 'cursor-pointer' : ''}
+                                onClick={header.column.getToggleSortingHandler()}
+                              >
+                                {flexRender(header.column.columnDef.header, header.getContext())}
+                                {header.column.getCanSort() &&
+                                  ({
+                                    asc: <div>▲</div>,
+                                    desc: <div>▼</div>
+                                  }[header.column.getIsSorted() as string] ?? <Icon.SortingArrows size={14} />)}
+                              </StyledHeadCellInerBox>
+                            )}
+                          </TableWithSelectableRows.Th>
+                        ))}
+                      </tr>
+                    ))}
+                  </TableWithSelectableRows.Head>
+                  <tbody>
+                    {virtualRows.map(virtualRow => {
+                      const row = rows[virtualRow.index]
+                      if (!row) {
+                        throw new Error('Row not found')
+                      }
+
+                      const priorNotification = row.original
+
+                      return (
+                        <Fragment key={virtualRow.key}>
+                          <TableWithSelectableRows.BodyTr>
+                            {row?.getVisibleCells().map(cell => (
+                              <ExpandableRow
+                                key={cell.id}
+                                $hasRightBorder={cell.column.id === 'alertCount'}
+                                $width={cell.column.getSize()}
+                                onClick={() => row.toggleExpanded()}
+                              >
+                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                              </ExpandableRow>
+                            ))}
+                          </TableWithSelectableRows.BodyTr>
+
+                          {row.getIsExpanded() && (
+                            <ExpandedRow>
+                              <ExpandedRowCell $width={40} />
+                              <ExpandedRowCell $width={130}>
+                                <p>
+                                  <ExpandedRowLabel>PNO émis :</ExpandedRowLabel>
+                                  <ExpandedRowValue>
+                                    {customDayjs(priorNotification.sentAt).utc().format('DD/MM/YYYY [à] HH[h]mm')}
+                                  </ExpandedRowValue>
+                                </p>
+                              </ExpandedRowCell>
+                              <ExpandedRowCell $width={120}>
+                                <p>
+                                  <ExpandedRowLabel>Raison du PNO :</ExpandedRowLabel>
+                                  <ExpandedRowValue>
+                                    {priorNotification.purposeCode
+                                      ? PriorNotification.PURPOSE_LABEL[priorNotification.purposeCode]
+                                      : '-'}
+                                  </ExpandedRowValue>
+                                </p>
+                              </ExpandedRowCell>
+                              <ExpandedRowCell $width={140} />
+                              <ExpandedRowCell $width={50} />
+                              <ExpandedRowCell $width={160}>
+                                <p>
+                                  {!!priorNotification.vesselInternalReferenceNumber && (
+                                    <ExpandedRowValue $isLight>
+                                      {priorNotification.vesselInternalReferenceNumber} (CFR)
+                                    </ExpandedRowValue>
+                                  )}
+                                  {!!priorNotification.vesselIrcs && (
+                                    <ExpandedRowValue $isLight>
+                                      {priorNotification.vesselIrcs} (Call sign)
+                                    </ExpandedRowValue>
+                                  )}
+                                  {!!priorNotification.vesselExternalReferenceNumber && (
+                                    <ExpandedRowValue $isLight>
+                                      {priorNotification.vesselExternalReferenceNumber} (Marq. ext.)
+                                    </ExpandedRowValue>
+                                  )}
+                                  {!!priorNotification.vesselMmsi && (
+                                    <ExpandedRowValue $isLight>{priorNotification.vesselMmsi} (MMSI)</ExpandedRowValue>
+                                  )}
+                                </p>
+                                <p>
+                                  <ExpandedRowLabel>Taille du navire :</ExpandedRowLabel>
+                                  <ExpandedRowValue>{priorNotification.vesselLength ?? '-'}</ExpandedRowValue>
+                                </p>
+                                <p>
+                                  <ExpandedRowLabel>Dernier contrôle :</ExpandedRowLabel>
+                                  <ExpandedRowValue>
+                                    {priorNotification.vesselLastControlDate
+                                      ? customDayjs(priorNotification.vesselLastControlDate)
+                                          .utc()
+                                          .format('[Le] DD/MM/YYYY')
+                                      : '-'}
+                                  </ExpandedRowValue>
+                                </p>
+                              </ExpandedRowCell>
+                              <ExpandedRowCell $width={130}>
+                                <ExpandedRowLabel>Nom des segments :</ExpandedRowLabel>
+                                <span>
+                                  {priorNotification.tripSegments.map(tripSegment => tripSegment.name).join(', ')}
+                                </span>
+                              </ExpandedRowCell>
+                              <ExpandedRowCell $width={180}>
+                                <ExpandedRowLabel>Principales espèces à bord :</ExpandedRowLabel>
+                                {priorNotification.onBoardCatches.length > 0 ? (
+                                  <ExpandedRowList>
+                                    {priorNotification.onBoardCatches.map(({ species, speciesName, weight }) => (
+                                      <li key={species}>{`${speciesName} (${species}) – ${weight} kg`}</li>
+                                    ))}
+                                  </ExpandedRowList>
+                                ) : (
+                                  <ExpandedRowValue>Aucune capture à bord.</ExpandedRowValue>
+                                )}
+                                <p>
+                                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                  <Link
+                                    onClick={() =>
+                                      dispatch(
+                                        priorNotificationActions.openPriorNotificationDetail(priorNotification.id)
+                                      )
+                                    }
+                                  >
+                                    Voir plus de détail
+                                  </Link>
+                                </p>
+                              </ExpandedRowCell>
+                              <ExpandedRowCell $width={72} />
+                              <ExpandedRowCell $width={64} />
+                            </ExpandedRow>
                           )}
-                        </TableWithSelectableRows.Th>
-                      ))}
-                    </tr>
-                  ))}
-                </TableWithSelectableRows.Head>
-                <tbody>
-                  {virtualRows.map(virtualRow => {
-                    const row = rows[virtualRow.index]
-                    if (!row) {
-                      throw new Error('Row not found')
-                    }
-
-                    const priorNotification = row.original
-
-                    return (
-                      <Fragment key={virtualRow.key}>
-                        <TableWithSelectableRows.BodyTr>
-                          {row?.getVisibleCells().map(cell => (
-                            <ExpandableRow
-                              key={cell.id}
-                              $hasRightBorder={cell.column.id === 'alertCount'}
-                              $width={cell.column.getSize()}
-                              onClick={() => row.toggleExpanded()}
-                            >
-                              {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                            </ExpandableRow>
-                          ))}
-                        </TableWithSelectableRows.BodyTr>
-
-                        {row.getIsExpanded() && (
-                          <ExpandedRow>
-                            <ExpandedRowCell $width={40} />
-                            <ExpandedRowCell $width={130}>
-                              <p>
-                                <ExpandedRowLabel>PNO émis :</ExpandedRowLabel>
-                                <ExpandedRowValue>
-                                  {customDayjs(priorNotification.sentAt).utc().format('DD/MM/YYYY [à] HH[h]mm')}
-                                </ExpandedRowValue>
-                              </p>
-                            </ExpandedRowCell>
-                            <ExpandedRowCell $width={120}>
-                              <p>
-                                <ExpandedRowLabel>Raison du PNO :</ExpandedRowLabel>
-                                <ExpandedRowValue>
-                                  {priorNotification.purposeCode
-                                    ? PriorNotification.PURPOSE_LABEL[priorNotification.purposeCode]
-                                    : '-'}
-                                </ExpandedRowValue>
-                              </p>
-                            </ExpandedRowCell>
-                            <ExpandedRowCell $width={140} />
-                            <ExpandedRowCell $width={50} />
-                            <ExpandedRowCell $width={160}>
-                              <p>
-                                {!!priorNotification.vesselInternalReferenceNumber && (
-                                  <ExpandedRowValue $isLight>
-                                    {priorNotification.vesselInternalReferenceNumber} (CFR)
-                                  </ExpandedRowValue>
-                                )}
-                                {!!priorNotification.vesselIrcs && (
-                                  <ExpandedRowValue $isLight>
-                                    {priorNotification.vesselIrcs} (Call sign)
-                                  </ExpandedRowValue>
-                                )}
-                                {!!priorNotification.vesselExternalReferenceNumber && (
-                                  <ExpandedRowValue $isLight>
-                                    {priorNotification.vesselExternalReferenceNumber} (Marq. ext.)
-                                  </ExpandedRowValue>
-                                )}
-                                {!!priorNotification.vesselMmsi && (
-                                  <ExpandedRowValue $isLight>{priorNotification.vesselMmsi} (MMSI)</ExpandedRowValue>
-                                )}
-                              </p>
-                              <p>
-                                <ExpandedRowLabel>Taille du navire :</ExpandedRowLabel>
-                                <ExpandedRowValue>{priorNotification.vesselLength ?? '-'}</ExpandedRowValue>
-                              </p>
-                              <p>
-                                <ExpandedRowLabel>Dernier contrôle :</ExpandedRowLabel>
-                                <ExpandedRowValue>
-                                  {priorNotification.vesselLastControlDate
-                                    ? customDayjs(priorNotification.vesselLastControlDate)
-                                        .utc()
-                                        .format('[Le] DD/MM/YYYY')
-                                    : '-'}
-                                </ExpandedRowValue>
-                              </p>
-                            </ExpandedRowCell>
-                            <ExpandedRowCell $width={130}>
-                              <ExpandedRowLabel>Nom des segments :</ExpandedRowLabel>
-                              <span>
-                                {priorNotification.tripSegments.map(tripSegment => tripSegment.name).join(', ')}
-                              </span>
-                            </ExpandedRowCell>
-                            <ExpandedRowCell $width={180}>
-                              <ExpandedRowLabel>Principales espèces à bord :</ExpandedRowLabel>
-                              {priorNotification.onBoardCatches.length > 0 ? (
-                                <ExpandedRowList>
-                                  {priorNotification.onBoardCatches.map(({ species, speciesName, weight }) => (
-                                    <li key={species}>{`${speciesName} (${species}) – ${weight} kg`}</li>
-                                  ))}
-                                </ExpandedRowList>
-                              ) : (
-                                <ExpandedRowValue>Aucune capture à bord.</ExpandedRowValue>
-                              )}
-                              <p>
-                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                <Link
-                                  onClick={() =>
-                                    dispatch(priorNotificationActions.openPriorNotificationDetail(priorNotification.id))
-                                  }
-                                >
-                                  Voir plus de détail
-                                </Link>
-                              </p>
-                            </ExpandedRowCell>
-                            <ExpandedRowCell $width={72} />
-                            <ExpandedRowCell $width={64} />
-                          </ExpandedRow>
-                        )}
-                      </Fragment>
-                    )
-                  })}
-                </tbody>
-              </TableWithSelectableRows.Table>
+                        </Fragment>
+                      )
+                    })}
+                  </tbody>
+                </TableWithSelectableRows.Table>
+              </>
             )}
           </TableWrapper>
         </Body>
@@ -297,12 +303,19 @@ export function PriorNotificationList() {
 
 const TableWrapper = styled.div`
   box-sizing: border-box;
+  flex-direction: column;
   flex-grow: 1;
   width: 1440px;
 
   * {
     box-sizing: border-box;
   }
+`
+
+const TableLegend = styled.p`
+  color: ${p => p.theme.color.slateGray};
+  line-height: 1;
+  margin: 0 0 8px;
 `
 
 // TODO Update monitor-ui?

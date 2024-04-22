@@ -8,7 +8,7 @@ import {
 } from '@constants/seaFront'
 import { customDayjs, getMaybeBooleanFromRichBoolean, type DateAsStringRange, type Filter } from '@mtes-mct/monitor-ui'
 
-import { ExpectedArrivalPeriod, LastControlPeriod } from './constants'
+import { ExpectedArrivalPeriod, LastControlPeriod, SUB_MENU_LABEL } from './constants'
 
 import type { ListFilter } from './types'
 import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
@@ -163,4 +163,17 @@ export function getLocalFilterFromListFilter(listFilter: ListFilter) {
   }
 
   return filters
+}
+
+export function getTitle(seaFrontGroup: SeaFrontGroup | AllSeaFrontGroup | NoSeaFrontGroup) {
+  switch (seaFrontGroup) {
+    case ALL_SEA_FRONT_GROUP:
+      return 'Tous les préavis'
+
+    case NO_SEA_FRONT_GROUP:
+      return 'Préavis hors façade'
+
+    default:
+      return `Préavis en ${SUB_MENU_LABEL[seaFrontGroup]}`
+  }
 }

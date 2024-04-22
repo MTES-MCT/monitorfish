@@ -149,14 +149,14 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
 
 /* eslint-disable sort-keys-fix/sort-keys-fix, typescript-sort-keys/string-enum */
 export const SUB_MENU_LABEL: Record<SeaFrontGroup | AllSeaFrontGroup | NoSeaFrontGroup, string> = {
-  ALL_SEA_FRONT_GROUP: 'Vue d’ensemble',
+  ALL_SEA_FRONT_GROUP: 'TOUT',
   MED: 'MED',
   MEMN: 'MEMN',
   NAMO: 'NAMO',
   SA: 'SA',
-  OUTREMEROA: 'OUTRE-MER OA',
-  OUTREMEROI: 'OUTRE-MER OI',
-  NO_SEA_FRONT_GROUP: 'HORS FAÇADE'
+  OUTREMEROA: 'O-M OA',
+  OUTREMEROI: 'O-M OI',
+  NO_SEA_FRONT_GROUP: 'HORS'
 }
 export const SUB_MENUS_AS_OPTIONS = getOptionsFromLabelledEnum(SUB_MENU_LABEL)
 

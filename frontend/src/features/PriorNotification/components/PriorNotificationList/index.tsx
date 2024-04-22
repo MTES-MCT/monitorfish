@@ -24,7 +24,8 @@ import { FilterTags } from './FilterTags'
 import {
   countPriorNotificationsForSeaFrontGroup,
   getApiFilterFromListFilter,
-  getLocalFilterFromListFilter
+  getLocalFilterFromListFilter,
+  getTitle
 } from './utils'
 import { useGetPriorNotificationsQuery } from '../../api'
 import { PriorNotification } from '../../PriorNotification.types'
@@ -60,6 +61,8 @@ export function PriorNotificationList() {
       id: 'estimatedTimeOfArrival'
     }
   ])
+
+  const title = getTitle(listFilter.seaFrontGroup)
 
   const handleSubMenuChange = useCallback(
     (nextSeaFrontGroup: SeaFrontGroup | AllSeaFrontGroup | NoSeaFrontGroup) => {
@@ -116,11 +119,12 @@ export function PriorNotificationList() {
         onChange={handleSubMenuChange}
         options={SUB_MENUS_AS_OPTIONS}
         value={selectedSeaFrontGroup}
+        width={127}
       />
 
       <Page>
         <Header>
-          <Header.Title>Préavis</Header.Title>
+          <Header.Title>{title}</Header.Title>
         </Header>
 
         <Body>

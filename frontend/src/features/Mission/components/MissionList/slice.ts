@@ -9,14 +9,14 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 
 export interface MissionListState {
   listFilterValues: FilterValues
-  listSeaFront: SeaFrontGroup | AllSeaFrontGroup
+  listSeaFrontGroup: SeaFrontGroup | AllSeaFrontGroup
 }
 const INITIAL_STATE: MissionListState = {
   listFilterValues: {
     [MissionFilterType.DATE_RANGE]: MissionDateRangeFilter.WEEK,
     [MissionFilterType.STATUS]: [Mission.MissionStatus.IN_PROGRESS]
   },
-  listSeaFront: SeaFrontGroup.MED
+  listSeaFrontGroup: SeaFrontGroup.MED
 }
 
 const missionListSlice = createSlice({
@@ -34,7 +34,7 @@ const missionListSlice = createSlice({
      * Set sea front filter in missions list
      */
     setListSeaFront(state, action: PayloadAction<SeaFrontGroup | AllSeaFrontGroup>) {
-      state.listSeaFront = action.payload
+      state.listSeaFrontGroup = action.payload
     }
   }
 })

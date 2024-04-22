@@ -27,10 +27,10 @@ export enum SeaFront {
 }
 
 export const SEA_FRONT_GROUP_SEA_FRONTS: Record<SeaFrontGroup, SeaFront[]> = {
-  [SeaFrontGroup.MED]: [SeaFront.CORSE, SeaFront.MED],
-  [SeaFrontGroup.MEMN]: [SeaFront.MEMN],
-  [SeaFrontGroup.NAMO]: [SeaFront.NAMO],
-  [SeaFrontGroup.OUTREMEROA]: [SeaFront.GUADELOUPE, SeaFront.GUYANE, SeaFront.MARTINIQUE],
-  [SeaFrontGroup.OUTREMEROI]: [SeaFront.MAYOTTE, SeaFront.SUD_OCEAN_INDIEN],
-  [SeaFrontGroup.SA]: [SeaFront.SA]
+  MED: [SeaFront.CORSE, SeaFront.MED],
+  MEMN: [SeaFront.MEMN],
+  NAMO: [SeaFront.NAMO],
+  OUTREMEROA: [SeaFront.GUADELOUPE, SeaFront.GUYANE, SeaFront.MARTINIQUE],
+  OUTREMEROI: [SeaFront.MAYOTTE, SeaFront.SUD_OCEAN_INDIEN],
+  SA: [SeaFront.SA]
 }

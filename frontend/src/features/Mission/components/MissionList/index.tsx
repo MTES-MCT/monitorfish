@@ -33,7 +33,7 @@ import type { GeoJSON as GeoJSONType } from '../../../../domain/types/GeoJSON'
 import FrontCompletionStatus = MissionAction.FrontCompletionStatus
 
 export function MissionList() {
-  const listSeaFront = useMainAppSelector(store => store.missionList.listSeaFront)
+  const listSeaFrontGroup = useMainAppSelector(store => store.missionList.listSeaFrontGroup)
 
   const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
   const [isExportActivityReportsModalOpen, setIsExportActivityReportsModalOpen] = useState<boolean | undefined>(
@@ -102,15 +102,15 @@ export function MissionList() {
         counter={countMissionsForSeaFrontGroup}
         onChange={handleSubMenuChange}
         options={MISSION_LIST_SUB_MENU_OPTIONS}
-        value={listSeaFront}
+        value={listSeaFrontGroup}
         width={127}
       />
 
       <Wrapper>
         <Header>
           <HeaderTitle>
-            {listSeaFront === ALL_SEA_FRONT_GROUP && <>Toutes les missions</>}
-            {listSeaFront !== ALL_SEA_FRONT_GROUP && <>Missions en {SUB_MENU_LABEL[listSeaFront]}</>}
+            {listSeaFrontGroup === ALL_SEA_FRONT_GROUP && <>Toutes les missions</>}
+            {listSeaFrontGroup !== ALL_SEA_FRONT_GROUP && <>Missions en {SUB_MENU_LABEL[listSeaFrontGroup]}</>}
           </HeaderTitle>
           <HeaderButtonGroup>
             <Button Icon={Icon.Plus} onClick={() => goToMissionForm()}>

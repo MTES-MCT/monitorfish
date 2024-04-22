@@ -107,9 +107,9 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
   },
   {
     accessorFn: row =>
-      row.tripSegments.length > 0 ? row.tripSegments.map(tripSegment => tripSegment.code).join('/') : '-',
-    cell: (info: CellContext<PriorNotification.PriorNotification, string>) => (
-      <Ellipsised>{info.getValue()}</Ellipsised>
+      row.tripSegments.length > 0 ? row.tripSegments.map(tripSegment => tripSegment.code).join('/') : undefined,
+    cell: (info: CellContext<PriorNotification.PriorNotification, string | undefined>) => (
+      <Ellipsised>{info.getValue() ?? 'Pas de segment'}</Ellipsised>
     ),
     enableSorting: true,
     header: () => 'Segments',

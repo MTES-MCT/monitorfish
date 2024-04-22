@@ -1,3 +1,4 @@
+import { SeaFrontGroup } from '@constants/seaFront'
 import { CustomSearch, ExclamationPoint } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { FlexboxGrid, List } from 'rsuite'
@@ -8,23 +9,22 @@ import { SilenceAlertMenu } from './SilenceAlertMenu'
 import { getAlertNameFromType } from './utils'
 import { COLORS } from '../../../../constants/constants'
 import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS } from '../../../../domain/entities/alerts/constants'
-import { SeaFrontGroup } from '../../../../domain/entities/seaFront/constants'
 import { silenceAlert } from '../../../../domain/use_cases/alert/silenceAlert'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import SearchIconSVG from '../../../icons/Loupe_dark.svg?react'
 import { sortArrayByColumn, SortType } from '../../../VesselList/tableSort'
-import { AlertSubMenuLabel } from '../constants'
+import { SUB_MENU_LABEL } from '../constants'
 import { resetFocusOnPendingAlert } from '../slice'
 
 import type { SilencedAlertPeriodRequest } from '../../../../domain/entities/alerts/types'
 import type { CSSProperties, MutableRefObject, RefObject } from 'react'
 
-export type PendingAlertsListProps = {
+export type PendingAlertsListProps = Readonly<{
   baseRef: RefObject<HTMLDivElement>
   numberOfSilencedAlerts: number
   selectedSeaFrontGroup: SeaFrontGroup
-}
+}>
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
  */
@@ -33,12 +33,13 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
   const focusedPendingAlertId = useMainAppSelector(state => state.alert.focusedPendingAlertId)
   const pendingAlerts = useMainAppSelector(state => state.alert.pendingAlerts)
   const baseUrl = window.location.origin
-  const [sortColumn] = useState('creationDate')
-  const [sortType] = useState(SortType.DESC)
   const [searchQuery, setSearchQuery] = useState<string>()
   const [showSilencedAlertForIndex, setShowSilencedAlertForIndex] = useState<number>()
   const [silencedAlertId, setSilencedAlertId] = useState<string>()
   const scrollableContainerRef = useRef() as MutableRefObject<HTMLDivElement>
+
+  const sortColumn = 'creationDate'
+  const sortType = SortType.DESC
 
   const currentSeaFrontAlerts = useMemo(
     () =>
@@ -54,7 +55,7 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
   const numberOfAlertsMessage = useMemo(
     () =>
       `Suspension d’alerte sur ${numberOfSilencedAlerts} navire${numberOfSilencedAlerts > 1 ? 's' : ''} en ${
-        AlertSubMenuLabel[selectedSeaFrontGroup]
+        SUB_MENU_LABEL[selectedSeaFrontGroup]
       }`,
     [numberOfSilencedAlerts, selectedSeaFrontGroup]
   )
@@ -140,7 +141,7 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
         placeholder="Rechercher un navire ou une alerte"
         style={searchVesselInputStyle(baseUrl)}
         type="text"
-        value={searchQuery || ''}
+        value={searchQuery ?? ''}
       />
       <List
         data-cy="side-window-alerts-list"

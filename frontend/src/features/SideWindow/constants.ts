@@ -1,4 +1,4 @@
-import { SeaFrontGroup } from '../../domain/entities/seaFront/constants'
+import { SeaFrontGroup } from '@constants/seaFront'
 
 export enum AdditionalSubMenu {
   SUSPENDED_ALERTS = 'SUSPENDED_ALERTS'

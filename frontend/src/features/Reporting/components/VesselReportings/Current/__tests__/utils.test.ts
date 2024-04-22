@@ -1,7 +1,7 @@
+import { SeaFront } from '@constants/seaFront'
 import { expect } from '@jest/globals'
 
 import { PendingAlertValueType } from '../../../../../../domain/entities/alerts/types'
-import { SeaFront } from '../../../../../../domain/entities/seaFront/constants'
 import { VesselIdentifier } from '../../../../../../domain/entities/vessel/types'
 import { ReportingType } from '../../../../../../domain/types/reporting'
 import { sortByValidationOrCreationDateDesc } from '../utils'

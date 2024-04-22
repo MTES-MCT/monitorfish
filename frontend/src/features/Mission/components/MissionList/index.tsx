@@ -1,3 +1,9 @@
+import {
+  ALL_SEA_FRONT_GROUP,
+  SEA_FRONT_GROUP_SEA_FRONTS,
+  SeaFrontGroup,
+  type AllSeaFrontGroup
+} from '@constants/seaFront'
 import { CompletionStatusLabel } from '@features/Mission/components/MissionList/CompletionStatusLabel'
 import { MissionStatusLabel } from '@features/Mission/components/MissionList/MissionStatusLabel'
 import { MissionAction } from '@features/Mission/missionAction.types'
@@ -9,15 +15,10 @@ import { GeoJSON } from 'ol/format'
 import { useCallback, useState } from 'react'
 import styled from 'styled-components'
 
-import { MISSION_LIST_SUB_MENU_OPTIONS, MISSION_LIST_TABLE_OPTIONS } from './constants'
+import { MISSION_LIST_SUB_MENU_OPTIONS, MISSION_LIST_TABLE_OPTIONS, SUB_MENU_LABEL } from './constants'
 import { FilterBar } from './FilterBar'
 import { useGetFilteredMissionsQuery } from './hooks/useGetFilteredMissionsQuery'
 import { missionListActions } from './slice'
-import {
-  SEA_FRONT_GROUP_SEA_FRONTS,
-  SeaFrontGroup,
-  SeaFrontGroupLabel
-} from '../../../../domain/entities/seaFront/constants'
 import { fitToExtent } from '../../../../domain/shared_slices/Map'
 import { EmptyCardTable } from '../../../../ui/card-table/EmptyCardTable'
 import { NoRsuiteOverrideWrapper } from '../../../../ui/NoRsuiteOverrideWrapper'
@@ -51,9 +52,9 @@ export function MissionList() {
   )
 
   const countMissionsForSeaFrontGroup = useCallback(
-    (seaFrontGroup: SeaFrontGroup): number =>
+    (seaFrontGroup: SeaFrontGroup | AllSeaFrontGroup): number =>
       missions.filter(({ facade }) => {
-        if (seaFrontGroup === SeaFrontGroup.ALL) {
+        if (seaFrontGroup === ALL_SEA_FRONT_GROUP) {
           return true
         }
 
@@ -72,7 +73,7 @@ export function MissionList() {
   )
 
   const handleSubMenuChange = useCallback(
-    (nextSeaFrontGroup: SeaFrontGroup) => {
+    (nextSeaFrontGroup: SeaFrontGroup | AllSeaFrontGroup) => {
       dispatch(missionListActions.setListSeaFront(nextSeaFrontGroup))
     },
     [dispatch]
@@ -108,8 +109,8 @@ export function MissionList() {
       <Wrapper>
         <Header>
           <HeaderTitle>
-            {listSeaFront === SeaFrontGroup.ALL && <>Toutes les missions</>}
-            {listSeaFront !== SeaFrontGroup.ALL && <>Missions en {SeaFrontGroupLabel[listSeaFront]}</>}
+            {listSeaFront === ALL_SEA_FRONT_GROUP && <>Toutes les missions</>}
+            {listSeaFront !== ALL_SEA_FRONT_GROUP && <>Missions en {SUB_MENU_LABEL[listSeaFront]}</>}
           </HeaderTitle>
           <HeaderButtonGroup>
             <Button Icon={Icon.Plus} onClick={() => goToMissionForm()}>

@@ -1,7 +1,6 @@
 /* eslint-disable typescript-sort-keys/string-enum */
 
 export enum SeaFrontGroup {
-  ALL = 'ALL',
   MED = 'MED',
   MEMN = 'MEMN',
   NAMO = 'NAMO',
@@ -9,19 +8,10 @@ export enum SeaFrontGroup {
   OUTREMEROI = 'OUTREMEROI',
   SA = 'SA'
 }
+export const ALL_SEA_FRONT_GROUP = 'ALL_SEA_FRONT_GROUP'
+export type AllSeaFrontGroup = typeof ALL_SEA_FRONT_GROUP
 export const NO_SEA_FRONT_GROUP = 'NO_SEA_FRONT_GROUP'
 export type NoSeaFrontGroup = typeof NO_SEA_FRONT_GROUP
-
-// TODO This should not be dedicated to Mission feature here.
-export enum SeaFrontGroupLabel {
-  ALL = 'TOUT',
-  MED = 'MED',
-  MEMN = 'MEMN',
-  NAMO = 'NAMO',
-  SA = 'SA',
-  OUTREMEROA = 'O-M OA',
-  OUTREMEROI = 'O-M OI'
-}
 
 export enum SeaFront {
   CORSE = 'Corse',
@@ -37,7 +27,6 @@ export enum SeaFront {
 }
 
 export const SEA_FRONT_GROUP_SEA_FRONTS: Record<SeaFrontGroup, SeaFront[]> = {
-  [SeaFrontGroup.ALL]: [],
   [SeaFrontGroup.MED]: [SeaFront.CORSE, SeaFront.MED],
   [SeaFrontGroup.MEMN]: [SeaFront.MEMN],
   [SeaFrontGroup.NAMO]: [SeaFront.NAMO],

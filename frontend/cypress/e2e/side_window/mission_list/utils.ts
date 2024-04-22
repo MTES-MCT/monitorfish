@@ -1,6 +1,6 @@
 import EventSource, { sources } from 'eventsourcemock'
 
-import { SeaFrontGroup } from '../../../../src/domain/entities/seaFront/constants'
+import { SeaFrontGroup } from '../../../../src/constants/seaFront'
 import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
 
 export const openSideWindowMissionList = () => {

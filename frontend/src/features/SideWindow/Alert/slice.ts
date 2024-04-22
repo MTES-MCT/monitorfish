@@ -1,7 +1,7 @@
+import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFrontGroup } from '@constants/seaFront'
 import { createSlice } from '@reduxjs/toolkit'
 import { propEq } from 'ramda'
 
-import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFrontGroup } from '../../../domain/entities/seaFront/constants'
 import { deleteListItems } from '../../../utils/deleteListItems'
 
 import type { AlertSubMenu } from './constants'

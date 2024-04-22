@@ -1,7 +1,5 @@
-import { SeaFrontGroup } from '../../../domain/entities/seaFront/constants'
-import { getOptionsFromLabelledEnum } from '../../../utils/getOptionsFromLabelledEnum'
-
-import type { Option } from '@mtes-mct/monitor-ui'
+import { SeaFrontGroup } from '@constants/seaFront'
+import { getOptionsFromLabelledEnum } from '@mtes-mct/monitor-ui'
 
 export enum AdditionalSubMenu {
   SUSPENDED_ALERTS = 'SUSPENDED_ALERTS'
@@ -9,16 +7,16 @@ export enum AdditionalSubMenu {
 
 export type AlertSubMenu = SeaFrontGroup | AdditionalSubMenu
 
-/* eslint-disable typescript-sort-keys/string-enum */
-export enum AlertSubMenuLabel {
-  MEMN = 'MEMN',
-  NAMO = 'NAMO',
-  SA = 'SA',
-  MED = 'MED',
-  OUTREMEROA = 'OUTRE-MER OA',
-  OUTREMEROI = 'OUTRE-MER OI',
-  SUSPENDED_ALERTS = 'Suspension d’alertes'
+/* eslint-disable sort-keys-fix/sort-keys-fix */
+export const SUB_MENU_LABEL: Record<AlertSubMenu, string> = {
+  MEMN: 'MEMN',
+  NAMO: 'NAMO',
+  SA: 'SA',
+  MED: 'MED',
+  OUTREMEROA: 'OUTRE-MER OA',
+  OUTREMEROI: 'OUTRE-MER OI',
+  SUSPENDED_ALERTS: 'Suspension d’alertes'
 }
-/* eslint-enable typescript-sort-keys/string-enum */
+/* eslint-enable sort-keys-fix/sort-keys-fix */
 
-export const ALERT_SUB_MENU_OPTIONS = getOptionsFromLabelledEnum(AlertSubMenuLabel) as Option<AlertSubMenu>[]
+export const ALERT_SUB_MENU_OPTIONS = getOptionsFromLabelledEnum(SUB_MENU_LABEL)

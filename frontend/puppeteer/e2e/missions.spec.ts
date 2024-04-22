@@ -3,7 +3,7 @@ import { platform } from 'os'
 import { Page } from 'puppeteer'
 
 import { getFirstTab, getInputContent, listenToConsole, wait, waitForSelectorWithText } from './utils'
-import { SeaFrontGroup } from '../../src/domain/entities/seaFront/constants'
+import { SeaFrontGroup } from '../../src/constants/seaFront'
 
 const TIMEOUT = 120 * 1000
 

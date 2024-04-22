@@ -1,10 +1,12 @@
-import { customDayjs, getMaybeBooleanFromRichBoolean, type DateAsStringRange, type Filter } from '@mtes-mct/monitor-ui'
 import {
   SEA_FRONT_GROUP_SEA_FRONTS,
   SeaFrontGroup,
   type NoSeaFrontGroup,
-  NO_SEA_FRONT_GROUP
-} from 'domain/entities/seaFront/constants'
+  NO_SEA_FRONT_GROUP,
+  ALL_SEA_FRONT_GROUP,
+  type AllSeaFrontGroup
+} from '@constants/seaFront'
+import { customDayjs, getMaybeBooleanFromRichBoolean, type DateAsStringRange, type Filter } from '@mtes-mct/monitor-ui'
 
 import { ExpectedArrivalPeriod, LastControlPeriod } from './constants'
 
@@ -14,14 +16,14 @@ import type { PriorNotification } from '@features/PriorNotification/PriorNotific
 
 export function countPriorNotificationsForSeaFrontGroup(
   priorNotifications: PriorNotification.PriorNotification[] | undefined,
-  seaFrontGroup: SeaFrontGroup | NoSeaFrontGroup
+  seaFrontGroup: SeaFrontGroup | AllSeaFrontGroup | NoSeaFrontGroup
 ): number {
   if (!priorNotifications) {
     return 0
   }
 
   return priorNotifications.filter(({ seaFront }) => {
-    if (seaFrontGroup === SeaFrontGroup.ALL) {
+    if (seaFrontGroup === ALL_SEA_FRONT_GROUP) {
       return true
     }
 
@@ -148,7 +150,7 @@ export function getLocalFilterFromListFilter(listFilter: ListFilter) {
     filters.push(filter)
   }
 
-  if (!!listFilter.seaFrontGroup && listFilter.seaFrontGroup !== SeaFrontGroup.ALL) {
+  if (!!listFilter.seaFrontGroup && listFilter.seaFrontGroup !== ALL_SEA_FRONT_GROUP) {
     const filter: Filter<PriorNotification.PriorNotification> =
       listFilter.seaFrontGroup === NO_SEA_FRONT_GROUP
         ? priorNotifications => priorNotifications.filter(priorNotification => !priorNotification.seaFront)

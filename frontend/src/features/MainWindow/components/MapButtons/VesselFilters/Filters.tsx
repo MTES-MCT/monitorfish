@@ -19,9 +19,9 @@ import { MapToolBox } from '../shared/MapToolBox'
 export function Filters() {
   const dispatch = useMainAppDispatch()
   const { filters, nonFilteredVesselsAreHidden } = useMainAppSelector(state => state.filter)
-  const { leftMapBoxOpened } = useMainAppSelector(state => state.global)
+  const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
 
-  const isOpen = useMemo(() => leftMapBoxOpened === MapBox.FILTERS, [leftMapBoxOpened])
+  const isOpen = useMemo(() => rightMapBoxOpened === MapBox.FILTERS, [rightMapBoxOpened])
 
   const removeFilterCallback = useCallback(
     filterUUID => {

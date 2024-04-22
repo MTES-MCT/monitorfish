@@ -8,9 +8,9 @@ import { setIsFocusedOnVesselSearch } from '../../../domain/shared_slices/Vessel
 import { showVessel } from '../../../domain/use_cases/vessel/showVessel'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { MapButton } from '../../commonStyles/MapButton'
 import { MapComponent } from '../../commonStyles/MapComponent'
 import SearchIconSVG from '../../icons/Loupe.svg?react'
+import { MapButton } from '../../MainWindow/components/MapButtons/MapButton'
 import { VesselSearch } from '../../VesselSearch'
 
 import type { VesselIdentity } from '../../../domain/entities/vessel/types'

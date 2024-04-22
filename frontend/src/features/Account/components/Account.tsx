@@ -1,5 +1,5 @@
-import { MapToolBox } from '@features/MapButtons/shared/MapToolBox'
-import { MapToolButton } from '@features/MapButtons/shared/MapToolButton'
+import { MapToolBox } from '@features/MainWindow/components/MapButtons/shared/MapToolBox'
+import { MapToolButton } from '@features/MainWindow/components/MapButtons/shared/MapToolButton'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Button, Icon, MapMenuDialog, THEME } from '@mtes-mct/monitor-ui'

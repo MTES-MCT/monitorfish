@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { Modal } from 'rsuite'
 import { DateRange } from '../../../VesselSidebar/actions/TrackRequest/DateRange'
-import StyledModalHeader from '../../../commonComponents/StyledModalHeader'
+import { StyledModalHeader } from '../../../commonComponents/StyledModalHeader'
 
 /**
  * @typedef {object} TrackRangeModalProps

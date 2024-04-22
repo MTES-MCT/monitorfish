@@ -33,12 +33,14 @@ export const showVessel =
         })
       )
 
-      const vesselFeatureId = Vessel.getVesselFeatureId(vesselIdentity)
+      const vesselIdentifyWithVesselIdentifier = enrichWithVesselIdentifierIfNotFound(vesselIdentity)
+
+      const vesselFeatureId = Vessel.getVesselFeatureId(vesselIdentifyWithVesselIdentifier)
       const selectedVesselLastPosition: VesselEnhancedObject | undefined = vessels.find(
         lastPosition => lastPosition.vesselFeatureId === vesselFeatureId
       )?.vesselProperties
 
-      dispatchLoadingVessel(dispatch, isFromUserAction, vesselIdentity)
+      dispatchLoadingVessel(dispatch, isFromUserAction, vesselIdentifyWithVesselIdentifier)
       const nextTrackRequest = getCustomOrDefaultTrackRequest(
         selectedVesselTrackRequest,
         defaultVesselTrackDepth,
@@ -49,10 +51,13 @@ export const showVessel =
       }
 
       if (isFromSearch) {
-        dispatch(addSearchedVessel(vesselIdentity))
+        dispatch(addSearchedVessel(vesselIdentifyWithVesselIdentifier))
       }
 
-      const { isTrackDepthModified, vesselAndPositions } = await getVesselFromAPI(vesselIdentity, nextTrackRequest)
+      const { isTrackDepthModified, vesselAndPositions } = await getVesselFromAPI(
+        vesselIdentifyWithVesselIdentifier,
+        nextTrackRequest
+      )
       try {
         throwCustomErrorFromAPIFeedback(vesselAndPositions.positions, isTrackDepthModified, isFromUserAction)
       } catch (error) {
@@ -63,21 +68,18 @@ export const showVessel =
         captureMessage('Aucune dernière position trouvée pour un navire inconnu dans la table navires.', {
           extra: {
             vesselFeatureId,
-            vesselIdentity
+            vesselIdentity: vesselIdentifyWithVesselIdentifier
           }
         })
       }
 
       const selectedVessel = {
         // As a safeguard, the VesselIdentity is added as a base object (in case no last position and no vessel are found)
-        ...vesselIdentity,
+        ...vesselIdentifyWithVesselIdentifier,
         // If we found a last position, we enrich the vessel
         ...selectedVesselLastPosition,
         // If we found a vessel from the vessels table, we enrich the vessel
-        ...vesselAndPositions?.vessel,
-        // We take the `vesselIdentifier` computed by a Prefect flow in last_positions, if not found, we create one
-        vesselIdentifier: enrichWithVesselIdentifierIfNotFound(selectedVesselLastPosition ?? vesselIdentity)
-          .vesselIdentifier
+        ...vesselAndPositions?.vessel
       }
 
       dispatch(displayedErrorActions.unset(DisplayedErrorKey.VESSEL_SIDEBAR_ERROR))

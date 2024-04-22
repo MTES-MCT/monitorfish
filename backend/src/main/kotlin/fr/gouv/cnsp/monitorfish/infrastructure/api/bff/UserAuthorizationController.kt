@@ -23,8 +23,7 @@ class UserAuthorizationController(
      * This controller will
      *   - return 200 with the UserAuthorization object if the user authorization is found
      *     (it passes the filter `UserAuthorizationCheckFilter` - the endpoint is not super-user protected)
-     *   - return an 401 if the user authorization is not found
-     * Hence, no use-case is required
+     *   - return an 200 with `isSuperUser=false` if the user authorization is not found
      */
     @GetMapping("current")
     @Operation(summary = "Get current logged user authorization")
@@ -35,6 +34,7 @@ class UserAuthorizationController(
         val email: String? = response.getHeader(UserAuthorizationCheckFilter.EMAIL_HEADER)
         if (email == null) {
             response.status = HttpServletResponse.SC_UNAUTHORIZED
+
             return null
         }
 

@@ -13,12 +13,18 @@ class GetAuthorizedUser(
     private val logger = LoggerFactory.getLogger(GetAuthorizedUser::class.java)
 
     fun execute(email: String): UserAuthorization {
-        return try {
-            val hashedEmail = hash(email)
+        val hashedEmail = hash(email)
 
+        return try {
             userAuthorizationRepository.findByHashedEmail(hashedEmail)
         } catch (e: Throwable) {
-            throw IllegalArgumentException("User $email not authorized.", e)
+            logger.info("User $hashedEmail not found, defaulting to super-user=false")
+
+            // By default, a user not found is not super-user
+            UserAuthorization(
+                hashedEmail = hashedEmail,
+                isSuperUser = false,
+            )
         }
     }
 }

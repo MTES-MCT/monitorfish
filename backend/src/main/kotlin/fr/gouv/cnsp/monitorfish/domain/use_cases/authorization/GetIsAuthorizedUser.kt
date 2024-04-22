@@ -25,7 +25,8 @@ class GetIsAuthorizedUser(
             userAuthorizationRepository.findByHashedEmail(hashedEmail)
         } catch (e: Throwable) {
             /**
-             * If the user is not found in the `UserAuthorizationRepository`, reject
+             * If the user is not found in the `UserAuthorizationRepository` and the path
+             * is super-user protected, reject
              */
             return false
         }

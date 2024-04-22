@@ -80,7 +80,7 @@ class UserAuthorizationControllerITests {
     }
 
     @Test
-    fun `Should return 401 if the user is not found`() {
+    fun `Should return 401 if the user is not authorized`() {
         // Given
         given(getIsAuthorizedUser.execute(any(), any())).willReturn(false)
         given(getAuthorizedUser.execute(any())).willReturn(UserAuthorization("email", true))
@@ -92,5 +92,27 @@ class UserAuthorizationControllerITests {
         )
             // Then
             .andExpect(status().isUnauthorized)
+    }
+
+    @Test
+    fun `Should return 200 if the user is not found`() {
+        // Given
+        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
+        given(getAuthorizedUser.execute(any())).willReturn(
+            UserAuthorization(
+                hashedEmail = "d44b8b1163276cb22a02d462de5883ceb60b461e20c4e27e905b72ec8b649807",
+                isSuperUser = false,
+            ),
+        )
+
+        // When
+        api.perform(
+            get("/bff/v1/authorization/current")
+                .header("Authorization", "Bearer $VALID_JWT"),
+        )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(header().string("EMAIL", "d44b8b1163276cb22a02d462de5883ceb60b461e20c4e27e905b72ec8b649807"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.isSuperUser", equalTo(false)))
     }
 }

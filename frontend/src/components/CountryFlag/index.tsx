@@ -18,6 +18,10 @@ export function CountryFlag({ countryCode, size, ...nativeProps }: CountryFlagPr
 
   const url = countryAlpha2Code ? `/flags/${countryAlpha2Code}.svg` : `https://placehold.co/${width}x${height}?text=%3F`
 
+  if (!countryAlpha2Code || countryAlpha2Code === 'undefined') {
+    return <Unknown $height={height} $width={width} title="Inconnu" {...nativeProps} />
+  }
+
   return (
     <Img $height={height} $width={width} alt={String(countryCode)} src={url} title={countryName} {...nativeProps} />
   )
@@ -27,6 +31,16 @@ const Img = styled.img<{
   $height: number
   $width: number
 }>`
+  height: ${p => p.$height}px;
+  width: ${p => p.$width}px;
+`
+
+const Unknown = styled.span<{
+  $height: number
+  $width: number
+}>`
+  background-color: black;
+  display: inline-block;
   height: ${p => p.$height}px;
   width: ${p => p.$width}px;
 `

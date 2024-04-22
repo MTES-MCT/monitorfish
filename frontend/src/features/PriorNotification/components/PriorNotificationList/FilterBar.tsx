@@ -16,7 +16,8 @@ import {
   Size,
   TextInput,
   type DateAsStringRange,
-  CheckPicker
+  CheckPicker,
+  useNewWindow
 } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { useCallback } from 'react'
@@ -37,6 +38,7 @@ export type FilterBarProps = {
   searchQuery: string | undefined
 }
 export function FilterBar() {
+  const { newWindowContainerRef } = useNewWindow()
   const listFilterValues = useMainAppSelector(store => store.priorNotification.listFilterValues)
   const dispatch = useMainAppDispatch()
 
@@ -275,6 +277,7 @@ export function FilterBar() {
       {listFilterValues.expectedArrivalPeriod === ExpectedArrivalPeriod.CUSTOM && (
         <Row>
           <DateRangePicker
+            baseContainer={newWindowContainerRef.current}
             defaultValue={listFilterValues.expectedArrivalCustomPeriod}
             isHistorical
             isStringDate

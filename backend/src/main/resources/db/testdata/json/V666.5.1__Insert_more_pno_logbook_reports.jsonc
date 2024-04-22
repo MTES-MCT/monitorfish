@@ -204,6 +204,60 @@
                             "effortZone": "C",
                             "economicZone": "FRA",
                             "statisticalRectangle": "23E6"
+                        },
+                        {
+                            "weight": 150.0,
+                            "nbFish": null,
+                            "species": "AFH",
+                            "faoZone": "27.8.a",
+                            "effortZone": "C",
+                            "economicZone": "FRA",
+                            "statisticalRectangle": "23E6"
+                        },
+                        {
+                            "weight": 250.0,
+                            "nbFish": null,
+                            "species": "AFI",
+                            "faoZone": "27.8.a",
+                            "effortZone": "C",
+                            "economicZone": "FRA",
+                            "statisticalRectangle": "23E6"
+                        },
+                        {
+                            "weight": 75.0,
+                            "nbFish": null,
+                            "species": "AFT",
+                            "faoZone": "27.8.a",
+                            "effortZone": "C",
+                            "economicZone": "FRA",
+                            "statisticalRectangle": "23E6"
+                        },
+                        {
+                            "weight": 10.0,
+                            "nbFish": null,
+                            "species": "AFU",
+                            "faoZone": "27.8.a",
+                            "effortZone": "C",
+                            "economicZone": "FRA",
+                            "statisticalRectangle": "23E6"
+                        },
+                        {
+                            "weight": 430.0,
+                            "nbFish": null,
+                            "species": "APX",
+                            "faoZone": "27.8.a",
+                            "effortZone": "C",
+                            "economicZone": "FRA",
+                            "statisticalRectangle": "23E6"
+                        },
+                        {
+                            "weight": 90.0,
+                            "nbFish": null,
+                            "species": "AQD",
+                            "faoZone": "27.8.a",
+                            "effortZone": "C",
+                            "economicZone": "FRA",
+                            "statisticalRectangle": "23E6"
                         }
                     ],
                     "pnoTypes": [

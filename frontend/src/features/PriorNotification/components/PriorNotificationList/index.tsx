@@ -176,6 +176,11 @@ export function PriorNotificationList() {
                       }
 
                       const priorNotification = row.original
+                      const firstFiveOnBoardCatchesByWeight = [...priorNotification.onBoardCatches]
+                        .sort(
+                          (onBoardCatchA, onBoardCatchB) => (onBoardCatchB.weight ?? 0) - (onBoardCatchA.weight ?? 0)
+                        )
+                        .slice(0, 5)
 
                       return (
                         <Fragment key={virtualRow.key}>
@@ -261,7 +266,7 @@ export function PriorNotificationList() {
                                 <ExpandedRowLabel>Principales espèces à bord :</ExpandedRowLabel>
                                 {priorNotification.onBoardCatches.length > 0 ? (
                                   <ExpandedRowList>
-                                    {priorNotification.onBoardCatches.map(({ species, speciesName, weight }) => (
+                                    {firstFiveOnBoardCatchesByWeight.map(({ species, speciesName, weight }) => (
                                       <li key={species}>{`${speciesName} (${species}) – ${weight} kg`}</li>
                                     ))}
                                   </ExpandedRowList>

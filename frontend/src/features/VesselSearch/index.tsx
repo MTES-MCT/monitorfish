@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { VESSEL_SEARCH_OPTIONS } from './constants'
-import { removeDuplicatedFoundVessels } from './utils'
+import { enrichWithVesselIdentifierIfNotFound, removeDuplicatedFoundVessels } from './utils'
 import { VesselSearchResult } from './VesselSearchResult'
 import { COLORS } from '../../constants/constants'
 import { getOnlyVesselIdentityProperties } from '../../domain/entities/vessel/vessel'
@@ -87,11 +87,13 @@ export function VesselSearch({
 
   const selectVessel = useCallback(
     vesselIdentity => {
+      const vesselIdentifyWithVesselIdentifier = enrichWithVesselIdentifierIfNotFound(vesselIdentity)
+
       setShowLastSearchedVessels(false)
       setFoundVessels([])
-      setSelectedVessel(vesselIdentity)
+      setSelectedVessel(vesselIdentifyWithVesselIdentifier)
 
-      onChange(vesselIdentity)
+      onChange(vesselIdentifyWithVesselIdentifier)
     },
     [onChange]
   )

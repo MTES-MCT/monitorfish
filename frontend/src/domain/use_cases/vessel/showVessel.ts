@@ -3,7 +3,6 @@ import { captureMessage } from '@sentry/react'
 
 import { getVesselFromAPI } from '../../../api/vessel'
 import { logbookActions } from '../../../features/Logbook/slice'
-import { enrichWithVesselIdentifierIfNotFound } from '../../../features/VesselSearch/utils'
 import { Vessel } from '../../entities/vessel/vessel'
 import { getCustomOrDefaultTrackRequest, throwCustomErrorFromAPIFeedback } from '../../entities/vesselTrackDepth'
 import { displayedComponentActions } from '../../shared_slices/DisplayedComponent'
@@ -33,14 +32,12 @@ export const showVessel =
         })
       )
 
-      const vesselIdentifyWithVesselIdentifier = enrichWithVesselIdentifierIfNotFound(vesselIdentity)
-
-      const vesselFeatureId = Vessel.getVesselFeatureId(vesselIdentifyWithVesselIdentifier)
+      const vesselFeatureId = Vessel.getVesselFeatureId(vesselIdentity)
       const selectedVesselLastPosition: VesselEnhancedObject | undefined = vessels.find(
         lastPosition => lastPosition.vesselFeatureId === vesselFeatureId
       )?.vesselProperties
 
-      dispatchLoadingVessel(dispatch, isFromUserAction, vesselIdentifyWithVesselIdentifier)
+      dispatchLoadingVessel(dispatch, isFromUserAction, vesselIdentity)
       const nextTrackRequest = getCustomOrDefaultTrackRequest(
         selectedVesselTrackRequest,
         defaultVesselTrackDepth,
@@ -51,13 +48,10 @@ export const showVessel =
       }
 
       if (isFromSearch) {
-        dispatch(addSearchedVessel(vesselIdentifyWithVesselIdentifier))
+        dispatch(addSearchedVessel(vesselIdentity))
       }
 
-      const { isTrackDepthModified, vesselAndPositions } = await getVesselFromAPI(
-        vesselIdentifyWithVesselIdentifier,
-        nextTrackRequest
-      )
+      const { isTrackDepthModified, vesselAndPositions } = await getVesselFromAPI(vesselIdentity, nextTrackRequest)
       try {
         throwCustomErrorFromAPIFeedback(vesselAndPositions.positions, isTrackDepthModified, isFromUserAction)
       } catch (error) {
@@ -68,14 +62,14 @@ export const showVessel =
         captureMessage('Aucune dernière position trouvée pour un navire inconnu dans la table navires.', {
           extra: {
             vesselFeatureId,
-            vesselIdentity: vesselIdentifyWithVesselIdentifier
+            vesselIdentity
           }
         })
       }
 
       const selectedVessel = {
         // As a safeguard, the VesselIdentity is added as a base object (in case no last position and no vessel are found)
-        ...vesselIdentifyWithVesselIdentifier,
+        ...vesselIdentity,
         // If we found a last position, we enrich the vessel
         ...selectedVesselLastPosition,
         // If we found a vessel from the vessels table, we enrich the vessel

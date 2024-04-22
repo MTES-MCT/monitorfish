@@ -144,7 +144,7 @@ export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSumma
               <TextValue data-cy="vessel-fishing-trip-number" hasTwoLines={false}>
                 <PreviousTrip
                   data-cy="vessel-fishing-previous-trip"
-                  disabled={isFirstVoyage}
+                  disabled={!!isFirstVoyage}
                   onClick={!isFirstVoyage ? navigation.goToPreviousTrip : undefined}
                   title="Marée précédente"
                 />
@@ -160,13 +160,13 @@ export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSumma
                 />
                 <NextTrip
                   data-cy="vessel-fishing-next-trip"
-                  disabled={isLastVoyage}
+                  disabled={!!isLastVoyage}
                   onClick={!isLastVoyage ? navigation.goToNextTrip : undefined}
                   title="Marée suivante"
                 />
                 <LastTrip
                   data-cy="vessel-fishing-last-trip"
-                  disabled={isLastVoyage}
+                  disabled={!!isLastVoyage}
                   onClick={!isLastVoyage ? navigation.goToLastTrip : undefined}
                   title="Dernière marée"
                 />
@@ -184,9 +184,9 @@ export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSumma
                     depMessage={logbookTrip.dep.log.message}
                     isDeleted={logbookTrip.dep.log.isDeleted}
                     isNotAcknowledged={
-                      !!logbookTrip.dep.log.acknowledge && logbookTrip.dep.log.acknowledge?.isSuccess === false
+                      !!logbookTrip.dep.log.acknowledgment && logbookTrip.dep.log.acknowledgment?.isSuccess === false
                     }
-                    rejectionCause={logbookTrip.dep.log.acknowledge?.rejectionCause ?? undefined}
+                    rejectionCause={logbookTrip.dep.log.acknowledgment?.rejectionCause ?? undefined}
                     showLogbookMessages={showLogbookMessages}
                   />
                 ) : (
@@ -239,7 +239,9 @@ export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSumma
                   <PNOMessageResume
                     id={logbookTrip.pno.log.reportId}
                     isDeleted={logbookTrip.pno.log.isDeleted}
-                    isNotAcknowledged={!!logbookTrip.pno.log.acknowledge && !logbookTrip.pno.log.acknowledge.isSuccess}
+                    isNotAcknowledged={
+                      !!logbookTrip.pno.log.acknowledgment && !logbookTrip.pno.log.acknowledgment.isSuccess
+                    }
                     pnoMessage={logbookTrip.pno.log}
                     showLogbookMessages={showLogbookMessages}
                     speciesToWeightOfFAR={logbookTrip.far.speciesToWeight}
@@ -255,7 +257,9 @@ export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSumma
                   <LANMessageResume
                     catchesOverToleranceAlert={catchesOverToleranceAlert}
                     isDeleted={logbookTrip.lan.log.isDeleted}
-                    isNotAcknowledged={!!logbookTrip.lan.log.acknowledge && !logbookTrip.lan.log.acknowledge.isSuccess}
+                    isNotAcknowledged={
+                      !!logbookTrip.lan.log.acknowledgment && !logbookTrip.lan.log.acknowledgment.isSuccess
+                    }
                     lanMessage={logbookTrip.lan.log.message}
                     showLogbookMessages={showLogbookMessages}
                     speciesToWeightOfFAR={logbookTrip.far.speciesToWeight}

@@ -1,10 +1,10 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.logbook
 
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledge
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledgment
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.LogbookMessageValue
 
 enum class LogbookOperationTypeMapping(private val clazz: Class<out LogbookMessageValue>) : IHasImplementation {
-    RET(Acknowledge::class.java),
+    RET(Acknowledgment::class.java),
 
     ;
 

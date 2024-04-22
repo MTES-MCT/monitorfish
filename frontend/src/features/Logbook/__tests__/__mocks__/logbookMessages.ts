@@ -1,7 +1,7 @@
 import type { LogbookMessage } from '../../Logbook.types'
 
 export const correctedLANMessage: LogbookMessage = {
-  acknowledge: {
+  acknowledgment: {
     dateTime: '2019-10-30T11:32:00Z',
     isSuccess: true,
     rejectionCause: null,
@@ -36,7 +36,7 @@ export const correctedLANMessage: LogbookMessage = {
 }
 
 export const correctedPNOMessage: LogbookMessage = {
-  acknowledge: {
+  acknowledgment: {
     dateTime: '2019-10-30T11:32:00Z',
     isSuccess: true,
     rejectionCause: null,
@@ -139,7 +139,7 @@ export const correctedPNOMessage: LogbookMessage = {
 }
 
 export const dummyCpsMessage: LogbookMessage = {
-  acknowledge: {
+  acknowledgment: {
     dateTime: '2019-10-30T11:32:00Z',
     isSuccess: true,
     rejectionCause: null,
@@ -210,7 +210,7 @@ export const dummyCpsMessage: LogbookMessage = {
 
 export const dummyLogbookMessages: LogbookMessage[] = [
   {
-    acknowledge: null,
+    acknowledgment: null,
     externalReferenceNumber: 'DONTSINK',
     flagState: 'FRA',
     imo: null,
@@ -263,7 +263,7 @@ export const dummyLogbookMessages: LogbookMessage[] = [
     vesselName: 'PHENOMENE'
   },
   {
-    acknowledge: null,
+    acknowledgment: null,
     externalReferenceNumber: 'DONTSINK',
     flagState: 'FRA',
     imo: null,
@@ -296,7 +296,7 @@ export const dummyLogbookMessages: LogbookMessage[] = [
     vesselName: 'PHENOMENE'
   },
   {
-    acknowledge: null,
+    acknowledgment: null,
     externalReferenceNumber: 'DONTSINK',
     flagState: 'FRA',
     imo: null,
@@ -338,7 +338,7 @@ export const dummyLogbookMessages: LogbookMessage[] = [
     vesselName: 'PHENOMENE'
   },
   {
-    acknowledge: {
+    acknowledgment: {
       dateTime: null,
       isSuccess: true,
       rejectionCause: null,
@@ -376,7 +376,7 @@ export const dummyLogbookMessages: LogbookMessage[] = [
     vesselName: 'PHENOMENE'
   },
   {
-    acknowledge: {
+    acknowledgment: {
       dateTime: '2019-10-30T11:32:00Z',
       isSuccess: true,
       rejectionCause: null,
@@ -477,7 +477,7 @@ export const dummyLogbookMessages: LogbookMessage[] = [
     vesselName: 'PHENOMENE'
   },
   {
-    acknowledge: {
+    acknowledgment: {
       dateTime: null,
       isSuccess: true,
       rejectionCause: null,
@@ -505,7 +505,7 @@ export const dummyLogbookMessages: LogbookMessage[] = [
     vesselName: 'PHENOMENE'
   },
   {
-    acknowledge: null,
+    acknowledgment: null,
     externalReferenceNumber: 'DONTSINK',
     flagState: 'FRA',
     imo: null,
@@ -530,7 +530,7 @@ export const dummyLogbookMessages: LogbookMessage[] = [
     vesselName: 'PHENOMENE'
   },
   {
-    acknowledge: {
+    acknowledgment: {
       dateTime: '2019-10-30T11:32:00Z',
       isSuccess: true,
       rejectionCause: null,
@@ -632,7 +632,7 @@ export const dummyLogbookMessages: LogbookMessage[] = [
     vesselName: 'PHENOMENE'
   },
   {
-    acknowledge: {
+    acknowledgment: {
       dateTime: '2019-08-30T11:12:00Z',
       isSuccess: false,
       rejectionCause:
@@ -674,7 +674,7 @@ export const dummyLogbookMessages: LogbookMessage[] = [
     vesselName: 'PHENOMENE'
   },
   {
-    acknowledge: {
+    acknowledgment: {
       dateTime: '2019-10-30T11:32:00Z',
       isSuccess: true,
       rejectionCause: null,
@@ -1015,7 +1015,7 @@ export const dummyLogbookMessages: LogbookMessage[] = [
     vesselName: 'PHENOMENE'
   },
   {
-    acknowledge: null,
+    acknowledgment: null,
     externalReferenceNumber: 'DONTSINK',
     flagState: 'FRA',
     imo: null,
@@ -1072,7 +1072,7 @@ export const dummyLogbookMessages: LogbookMessage[] = [
     vesselName: 'PHENOMENE'
   },
   {
-    acknowledge: {
+    acknowledgment: {
       dateTime: '2019-10-30T11:32:00Z',
       isSuccess: true,
       rejectionCause: null,

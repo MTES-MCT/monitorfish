@@ -358,41 +358,41 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // RET
         assertThat(messages[13].reportDateTime.toString()).isEqualTo("2021-01-18T07:19:29.384921Z")
-        assertThat(messages[13].message).isInstanceOf(Acknowledge::class.java)
+        assertThat(messages[13].message).isInstanceOf(Acknowledgment::class.java)
         assertThat(messages[13].operationType).isEqualTo(LogbookOperationType.RET)
-        val ackMessage1 = messages[13].message as Acknowledge
+        val ackMessage1 = messages[13].message as Acknowledgment
         assertThat(ackMessage1.returnStatus).isEqualTo("000")
 
         // RET
         assertThat(messages[14].reportDateTime.toString()).isEqualTo("2019-08-30T11:12Z")
-        assertThat(messages[14].message).isInstanceOf(Acknowledge::class.java)
+        assertThat(messages[14].message).isInstanceOf(Acknowledgment::class.java)
         assertThat(messages[14].operationType).isEqualTo(LogbookOperationType.RET)
-        val ackMessage2 = messages[14].message as Acknowledge
+        val ackMessage2 = messages[14].message as Acknowledgment
         assertThat(ackMessage2.returnStatus).isEqualTo("002")
 
         // RET
-        assertThat(messages[15].message).isInstanceOf(Acknowledge::class.java)
+        assertThat(messages[15].message).isInstanceOf(Acknowledgment::class.java)
         assertThat(messages[15].operationType).isEqualTo(LogbookOperationType.RET)
-        val ackMessage3 = messages[15].message as Acknowledge
+        val ackMessage3 = messages[15].message as Acknowledgment
         assertThat(ackMessage3.returnStatus).isEqualTo("000")
 
         // RET
-        assertThat(messages[16].message).isInstanceOf(Acknowledge::class.java)
+        assertThat(messages[16].message).isInstanceOf(Acknowledgment::class.java)
         assertThat(messages[16].operationType).isEqualTo(LogbookOperationType.RET)
-        val ackMessage4 = messages[16].message as Acknowledge
+        val ackMessage4 = messages[16].message as Acknowledgment
         assertThat(ackMessage4.returnStatus).isEqualTo("000")
 
         // RET
-        assertThat(messages[17].message).isInstanceOf(Acknowledge::class.java)
+        assertThat(messages[17].message).isInstanceOf(Acknowledgment::class.java)
         assertThat(messages[17].operationType).isEqualTo(LogbookOperationType.RET)
-        val ackMessage5 = messages[17].message as Acknowledge
+        val ackMessage5 = messages[17].message as Acknowledgment
         assertThat(ackMessage5.returnStatus).isEqualTo("000")
 
         // DEL
         assertThat(messages[18].reportDateTime.toString()).isEqualTo("2019-10-30T11:32Z")
         assertThat(messages[18].operationType).isEqualTo(LogbookOperationType.RET)
-        assertThat(messages[18].message).isInstanceOf(Acknowledge::class.java)
-        val ackMessage6 = messages[18].message as Acknowledge
+        assertThat(messages[18].message).isInstanceOf(Acknowledgment::class.java)
+        val ackMessage6 = messages[18].message as Acknowledgment
         assertThat(ackMessage6.returnStatus).isEqualTo("000")
 
         // RET

@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages
 
 import java.time.ZonedDateTime
 
-class Acknowledge(
+class Acknowledgment(
     /** Not in database, only created on the fly. */
     var isSuccess: Boolean? = null,
     var returnStatus: String? = null,

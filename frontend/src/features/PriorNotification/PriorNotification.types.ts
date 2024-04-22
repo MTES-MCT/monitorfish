@@ -3,11 +3,13 @@ import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 
 export namespace PriorNotification {
   export type PriorNotification = {
+    acknowledgment: LogbookMessage.Acknowledgment | undefined
     expectedArrivalDate: string | undefined
     expectedLandingDate: string | undefined
     hasVesselRiskFactorSegments: boolean | undefined
     /** Logbook message `reportId`. */
     id: string
+    isCorrection: boolean
     isVesselUnderCharter: boolean | undefined
     onBoardCatches: LogbookMessage.Catch[]
     portLocode: string | undefined

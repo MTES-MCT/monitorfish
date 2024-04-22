@@ -35,9 +35,7 @@ export function VesselFiltersMapButton() {
   }, [dispatch, isOpen])
 
   const hasOneFilterAdded = useCallback(
-    () =>
-      // @ts-ignore
-      !!(previousFilters && filters.length && filters.length > previousFilters.length),
+    () => !!(previousFilters && filters.length && filters.length > previousFilters.length),
     [previousFilters, filters]
   )
 

@@ -2,18 +2,16 @@ import { THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../../constants/constants'
-
 import type { FunctionComponent, SVGProps } from 'react'
 
-type MapPropertyTriggerProps = {
+type MapPropertyTriggerProps = Readonly<{
   Icon: FunctionComponent<SVGProps<SVGSVGElement> & { title?: string }>
   booleanProperty: boolean
   disabled?: boolean
   inverse?: boolean
   text: string
   updateBooleanProperty: (isChecked) => void
-}
+}>
 export function MapPropertyTrigger({
   booleanProperty,
   disabled,
@@ -57,10 +55,10 @@ export function MapPropertyTrigger({
 const Wrapper = styled.div<{
   disabled: boolean | undefined
 }>`
-  background: ${COLORS.gainsboro};
+  background: ${p => p.theme.color.gainsboro};
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
-  border-top: 1px solid ${COLORS.lightGray};
+  border-top: 1px solid ${p => p.theme.color.lightGray};
   text-align: left;
   height: 36px;
   cursor: ${p => (p.disabled ? 'not-allowed' : 'pointer')};
@@ -68,7 +66,7 @@ const Wrapper = styled.div<{
 
 const ShowLabelText = styled.span`
   margin-left: 0;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   padding: 8.5px 10px;
   vertical-align: top;
   display: inline-block;

@@ -179,7 +179,7 @@ export function PriorNotificationList() {
 
                       return (
                         <Fragment key={virtualRow.key}>
-                          <TableWithSelectableRows.BodyTr>
+                          <StyledRow>
                             {row?.getVisibleCells().map(cell => (
                               <ExpandableRow
                                 key={cell.id}
@@ -190,7 +190,7 @@ export function PriorNotificationList() {
                                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
                               </ExpandableRow>
                             ))}
-                          </TableWithSelectableRows.BodyTr>
+                          </StyledRow>
 
                           {row.getIsExpanded() && (
                             <ExpandedRow>
@@ -332,15 +332,21 @@ const StyledHeadCellInerBox = styled(TableWithSelectableRows.SortContainer)`
   }
 `
 
-// TODO Update monitor-ui?
+// TODO Update in monitor-ui.
+const StyledRow = styled(TableWithSelectableRows.BodyTr)`
+  font-weight: 400;
+`
+
+// TODO Update in monitor-ui.
 const ExpandableRow = styled(TableWithSelectableRows.Td)`
   cursor: pointer;
+  font-weight: 400;
   padding: 0 16px 1px;
   user-select: none;
   vertical-align: middle;
 `
 
-// TODO Add this feature in monitor-ui?
+// TODO Add this feature in monitor-ui.
 const ExpandedRow = TableWithSelectableRows.BodyTr
 
 const ExpandedRowCell = styled(TableWithSelectableRows.Td).attrs(props => ({

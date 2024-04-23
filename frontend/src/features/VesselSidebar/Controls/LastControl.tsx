@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { Green, Red } from './Controls.style'
+import { getControlUnitsLabel } from './utils'
 import { getNumberOfInfractions } from '../../../domain/entities/controls'
 
 import type { MissionAction } from '../../Mission/missionAction.types'
@@ -12,9 +13,7 @@ type LastControlProps = Readonly<{
 }>
 export function LastControl({ field }: LastControlProps) {
   const { control, text } = field
-  const controlUnits =
-    control?.controlUnits.map(controlUnit => controlUnit.name.replace('(historique)', '')).join(', ') ??
-    'Unité manquante'
+  const controlUnitsLabel = getControlUnitsLabel(control)
 
   const numberOfInfractions = useMemo(() => getNumberOfInfractions(control), [control])
 
@@ -26,7 +25,7 @@ export function LastControl({ field }: LastControlProps) {
       </Row>
       {control && (
         <Row $isGrey={false} $isStrong>
-          Le {getDate(control.actionDatetimeUtc)} ({controlUnits}),{' '}
+          Le {getDate(control.actionDatetimeUtc)} ({controlUnitsLabel}),{' '}
           {numberOfInfractions ? (
             <>
               {' '}

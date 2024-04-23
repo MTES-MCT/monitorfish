@@ -278,7 +278,7 @@ export function Identity() {
               <Key>Contact navire</Key>
               <Value>
                 <PersonalData>
-                  {selectedVessel?.vesselPhones ?? selectedVessel?.vesselEmails ? (
+                  {!!selectedVessel?.vesselPhones || !!selectedVessel?.vesselEmails ? (
                     <>
                       {selectedVessel?.vesselPhones ? (
                         <>

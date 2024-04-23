@@ -2,6 +2,7 @@ import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { getVesselControlsFromAPI } from '../../../api/missionAction'
 import NoControlsFoundError from '../../../errors/NoControlsFoundError'
+import { removeError, setError } from '../../../features/MainWindow/slice'
 import {
   loadControls,
   resetLoadControls,
@@ -10,7 +11,6 @@ import {
   unsetControlSummary
 } from '../../shared_slices/Control'
 import { displayedErrorActions } from '../../shared_slices/DisplayedError'
-import { removeError, setError } from '../../shared_slices/Global'
 import { displayOrLogError } from '../error/displayOrLogError'
 
 export const getVesselControls = (isFromUserAction: boolean) => async (dispatch, getState) => {

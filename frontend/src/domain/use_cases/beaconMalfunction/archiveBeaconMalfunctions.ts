@@ -1,11 +1,11 @@
 import { archiveBeaconMalfunctionsFromAPI } from '../../../api/beaconMalfunction'
+import { setError } from '../../../features/MainWindow/slice'
 import {
   setBeaconMalfunctions,
   setOpenedBeaconMalfunction,
   updateLocalBeaconMalfunctions,
   updateVesselBeaconMalfunctionsResumeAndHistory
 } from '../../shared_slices/BeaconMalfunction'
-import { setError } from '../../shared_slices/Global'
 
 /**
  * Archive multiple beacon malfunctions

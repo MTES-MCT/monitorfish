@@ -2,8 +2,8 @@ import { batch } from 'react-redux'
 
 import { archiveReportingFromAPI } from '../../../api/reporting'
 import { Vessel } from '../../../domain/entities/vessel/vessel'
-import { removeError, setError } from '../../../domain/shared_slices/Global'
 import { removeVesselReporting } from '../../../domain/shared_slices/Vessel'
+import { removeError, setError } from '../../MainWindow/slice'
 import { removeReportingsIdsFromCurrentReportings, setCurrentAndArchivedReportingsOfSelectedVessel } from '../slice'
 
 const archiveReporting = id => (dispatch, getState) => {

@@ -1,7 +1,9 @@
+import { logSoftError } from '@mtes-mct/monitor-ui'
+
 import { addReportingFromAPI } from '../../../api/reporting'
 import { Vessel } from '../../../domain/entities/vessel/vessel'
-import { removeError, setError } from '../../../domain/shared_slices/Global'
 import { addVesselReporting } from '../../../domain/shared_slices/Vessel'
+import { removeError, setError } from '../../MainWindow/slice'
 import { addReportingToCurrentReportings, setCurrentAndArchivedReportingsOfSelectedVessel } from '../slice'
 
 import type { ReportingCreation } from '../../../domain/types/reporting'
@@ -11,6 +13,15 @@ export const addReporting =
   (newReporting: ReportingCreation): MainAppThunk<Promise<void>> =>
   (dispatch, getState) => {
     const { selectedVesselIdentity } = getState().vessel
+    // TODO Can this case happen? Is it the right way to handle it?
+    if (!selectedVesselIdentity) {
+      logSoftError({
+        message: '`selectedVesselIdentity` is null.',
+        userMessage: 'Aucun navire sélectionné pour ajouter un signalement.'
+      })
+
+      return Promise.resolve()
+    }
     const { currentAndArchivedReportingsOfSelectedVessel } = getState().reporting
 
     return addReportingFromAPI(newReporting)

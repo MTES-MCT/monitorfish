@@ -11,7 +11,7 @@ import BeaconMalfunctionsSVG from '../../../icons/Icone_VMS.svg?react'
 
 export function BeaconMalfunctionsMapButton() {
   const dispatch = useMainAppDispatch()
-  const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
+  const previewFilteredVesselsMode = useMainAppSelector(state => state.mainWindow.previewFilteredVesselsMode)
   const sideWindow = useMainAppSelector(state => state.sideWindow)
 
   const isActive =

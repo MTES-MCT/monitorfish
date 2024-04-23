@@ -1,6 +1,6 @@
 import { sendNotificationFromAPI } from '../../../api/beaconMalfunction'
+import { setError } from '../../../features/MainWindow/slice'
 import { NOTIFICATION_TYPE } from '../../entities/beaconMalfunction/constants'
-import { setError } from '../../shared_slices/Global'
 
 /**
  * Send a notification message

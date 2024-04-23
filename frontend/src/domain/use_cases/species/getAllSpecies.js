@@ -1,5 +1,5 @@
 import { getAllSpeciesFromAPI } from '../../../api/species'
-import { setError } from '../../shared_slices/Global'
+import { setError } from '../../../features/MainWindow/slice'
 import { setSpeciesAndSpeciesGroups } from '../../shared_slices/Species'
 
 const getAllSpecies = () => async (dispatch, getState) => {

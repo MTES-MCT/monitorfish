@@ -30,7 +30,7 @@ function UnmemoizedVesselsLayer() {
   const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
   const vesselsLastPositionVisibility = useMainAppSelector(state => state.map.vesselsLastPositionVisibility)
 
-  const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
+  const previewFilteredVesselsMode = useMainAppSelector(state => state.mainWindow.previewFilteredVesselsMode)
 
   const { filterColor, filters, nonFilteredVesselsAreHidden, showedFilter } = useMainAppSelector(state => {
     const nextShowedFilter = state.filter?.filters?.find(filter => filter.showed)
@@ -60,7 +60,7 @@ function UnmemoizedVesselsLayer() {
     const isLight = Vessel.iconIsLight(selectedBaseLayer)
     const { vesselIsHidden, vesselIsOpacityReduced } =
       getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
-    const filterColorRGBArray = customHexToRGB(filterColor || isLight ? theme.color.lightGray : COLORS.charcoal)
+    const filterColorRGBArray = customHexToRGB(filterColor ?? isLight ? theme.color.lightGray : COLORS.charcoal)
     const initStyles = {
       filterColorBlue: filterColorRGBArray[2],
       filterColorGreen: filterColorRGBArray[1],

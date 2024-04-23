@@ -1,4 +1,5 @@
 import { silenceAlertFromAPI } from '../../../api/alert'
+import { setError } from '../../../features/MainWindow/slice'
 import {
   addToPendingAlertsBeingSilenced,
   removeFromSilencedAlertsQueue,
@@ -7,7 +8,6 @@ import {
 } from '../../../features/SideWindow/Alert/slice'
 import { deleteListItems } from '../../../utils/deleteListItems'
 import { Vessel } from '../../entities/vessel/vessel'
-import { setError } from '../../shared_slices/Global'
 import { removeVesselAlertAndUpdateReporting } from '../../shared_slices/Vessel'
 
 import type { MainAppThunk } from '../../../store'

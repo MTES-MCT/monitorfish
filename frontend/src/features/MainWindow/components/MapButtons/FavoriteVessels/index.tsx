@@ -2,7 +2,6 @@ import { COLORS } from '@constants/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { MapBox } from 'domain/entities/map/constants'
-import { setLeftMapBoxOpened } from 'domain/shared_slices/Global'
 import { useRef } from 'react'
 import styled from 'styled-components'
 
@@ -14,6 +13,7 @@ import { MapComponent } from '../../../../commonStyles/MapComponent'
 import HidingOtherTracksSVG from '../../../../icons/Bouton_masquer_pistes_actif.svg?react'
 import ShowingOtherTracksSVG from '../../../../icons/Bouton_masquer_pistes_inactif.svg?react'
 import FavoriteSVG from '../../../../icons/favorite.svg?react'
+import { setLeftMapBoxOpened } from '../../../slice'
 import { MapButton } from '../MapButton'
 
 export function FavoriteVessels() {
@@ -22,8 +22,8 @@ export function FavoriteVessels() {
   const { hideNonSelectedVessels, selectedVesselIdentity, vesselsTracksShowed } = useMainAppSelector(
     state => state.vessel
   )
-  const leftMapBoxOpened = useMainAppSelector(state => state.global.leftMapBoxOpened)
-  const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
+  const leftMapBoxOpened = useMainAppSelector(state => state.mainWindow.leftMapBoxOpened)
+  const previewFilteredVesselsMode = useMainAppSelector(state => state.mainWindow.previewFilteredVesselsMode)
 
   const wrapperRef = useRef(null)
 

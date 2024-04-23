@@ -1,3 +1,4 @@
+import { logSoftError } from '@mtes-mct/monitor-ui'
 import countries from 'i18n-iso-countries'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
@@ -29,6 +30,15 @@ export function VesselName({ focusOnVesselSearchInput }) {
   const addOrRemoveToFavorites = useCallback(
     e => {
       e.stopPropagation()
+      // TODO Can this case happen? Is it the right way to handle it?
+      if (!selectedVesselIdentity) {
+        logSoftError({
+          message: '`selectedVesselIdentity` is null.',
+          userMessage: 'Aucun navire sélectionné à ajouter ou supprimer des favoris.'
+        })
+
+        return
+      }
 
       if (isFavorite) {
         dispatch(removeVesselFromFavorites(getVesselCompositeIdentifier(selectedVesselIdentity)))
@@ -66,7 +76,7 @@ export function VesselName({ focusOnVesselSearchInput }) {
         data-cy="sidebar-add-vessel-to-favorites"
         onClick={addOrRemoveToFavorites}
       />
-      <Name title={selectedVesselIdentity?.vesselName || undefined}>{getVesselName(selectedVesselIdentity)}</Name>
+      <Name title={selectedVesselIdentity?.vesselName ?? undefined}>{getVesselName(selectedVesselIdentity)}</Name>
       <CloseIcon data-cy="vessel-search-selected-vessel-close-title" onClick={close} />
     </Wrapper>
   )

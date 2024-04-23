@@ -8,6 +8,7 @@ import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './map/constants'
 import { Vessel } from './vessel/vessel'
 import { COLORS } from '../../constants/constants'
 import { theme } from '../../ui/theme'
+import { MonitorFishLayer } from './layers/types'
 
 class EstimatedPosition {
   static colorProperty = 'color'
@@ -40,7 +41,7 @@ class EstimatedPosition {
       WSG84_PROJECTION,
       OPENLAYERS_PROJECTION
     )
-    const vesselCompositeIdentifier = vessel.vesselFeatureId.replace(`${LayerProperties.VESSELS_POINTS.code}:`, '')
+    const vesselCompositeIdentifier = vessel.vesselFeatureId.replace(`${MonitorFishLayer.VESSELS}:`, '')
 
     const estimatedPositionObject = {
       dateTime,

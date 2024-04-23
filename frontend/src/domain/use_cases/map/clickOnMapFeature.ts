@@ -72,7 +72,7 @@ export const clickOnMapFeature =
       return
     }
 
-    if (clickedFeatureId.includes(LayerProperties.VESSELS_POINTS.code)) {
+    if (clickedFeatureId.includes(MonitorFishLayer.VESSELS)) {
       const clickedVessel = (mapClick.feature as VesselLastPositionFeature).vesselProperties
 
       if (mapClick.ctrlKeyPressed) {

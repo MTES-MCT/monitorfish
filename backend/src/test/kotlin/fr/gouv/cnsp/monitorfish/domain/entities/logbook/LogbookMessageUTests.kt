@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.logbook
 
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledge
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledgment
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.LogbookMessageValue
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import org.assertj.core.api.Assertions.assertThat
@@ -52,7 +52,7 @@ class LogbookMessageUTests {
                 LogbookOperationType.RET,
                 ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC),
                 refenceLogbookMessage.reportId,
-                Acknowledge(returnStatus = "000"),
+                Acknowledgment(returnStatus = "000"),
             ),
         )
 
@@ -61,7 +61,7 @@ class LogbookMessageUTests {
             .toEnrichedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
 
         // Then
-        assertThat(enrichedLogbookMessage.logbookMessage.acknowledge?.isSuccess).isTrue()
+        assertThat(enrichedLogbookMessage.logbookMessage.acknowledgment?.isSuccess).isTrue()
         assertThat(enrichedLogbookMessage.logbookMessage.isCorrectedByNewerMessage).isFalse()
         assertThat(enrichedLogbookMessage.logbookMessage.isDeleted).isFalse()
     }
@@ -78,19 +78,19 @@ class LogbookMessageUTests {
                 LogbookOperationType.RET,
                 ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC),
                 refenceLogbookMessage.reportId,
-                Acknowledge(returnStatus = "002"),
+                Acknowledgment(returnStatus = "002"),
             ),
             getFakeLogbookMessage(
                 LogbookOperationType.RET,
                 ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC),
                 refenceLogbookMessage.reportId,
-                Acknowledge(returnStatus = "000"),
+                Acknowledgment(returnStatus = "000"),
             ),
             getFakeLogbookMessage(
                 LogbookOperationType.RET,
                 ZonedDateTime.of(2024, 1, 1, 0, 0, 3, 0, ZoneOffset.UTC),
                 refenceLogbookMessage.reportId,
-                Acknowledge(returnStatus = "001"),
+                Acknowledgment(returnStatus = "001"),
             ),
         )
 
@@ -99,7 +99,7 @@ class LogbookMessageUTests {
             .toEnrichedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
 
         // Then
-        assertThat(enrichedLogbookMessage.logbookMessage.acknowledge?.isSuccess).isTrue()
+        assertThat(enrichedLogbookMessage.logbookMessage.acknowledgment?.isSuccess).isTrue()
         assertThat(enrichedLogbookMessage.logbookMessage.isCorrectedByNewerMessage).isFalse()
         assertThat(enrichedLogbookMessage.logbookMessage.isDeleted).isFalse()
     }
@@ -116,7 +116,7 @@ class LogbookMessageUTests {
                 LogbookOperationType.RET,
                 ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC),
                 refenceLogbookMessage.reportId,
-                Acknowledge(returnStatus = "001"),
+                Acknowledgment(returnStatus = "001"),
             ),
         )
 
@@ -125,7 +125,7 @@ class LogbookMessageUTests {
             .toEnrichedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
 
         // Then
-        assertThat(enrichedLogbookMessage.logbookMessage.acknowledge?.isSuccess).isFalse()
+        assertThat(enrichedLogbookMessage.logbookMessage.acknowledgment?.isSuccess).isFalse()
         assertThat(enrichedLogbookMessage.logbookMessage.isCorrectedByNewerMessage).isFalse()
         assertThat(enrichedLogbookMessage.logbookMessage.isDeleted).isFalse()
     }
@@ -142,13 +142,13 @@ class LogbookMessageUTests {
                 LogbookOperationType.RET,
                 ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC),
                 refenceLogbookMessage.reportId,
-                Acknowledge(returnStatus = "001"),
+                Acknowledgment(returnStatus = "001"),
             ),
             getFakeLogbookMessage(
                 LogbookOperationType.RET,
                 ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC),
                 refenceLogbookMessage.reportId,
-                Acknowledge(returnStatus = "002"),
+                Acknowledgment(returnStatus = "002"),
             ),
         )
 
@@ -157,8 +157,8 @@ class LogbookMessageUTests {
             .toEnrichedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
 
         // Then
-        assertThat(enrichedLogbookMessage.logbookMessage.acknowledge?.isSuccess).isFalse()
-        assertThat(enrichedLogbookMessage.logbookMessage.acknowledge?.dateTime)
+        assertThat(enrichedLogbookMessage.logbookMessage.acknowledgment?.isSuccess).isFalse()
+        assertThat(enrichedLogbookMessage.logbookMessage.acknowledgment?.dateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC))
         assertThat(enrichedLogbookMessage.logbookMessage.isCorrectedByNewerMessage).isFalse()
         assertThat(enrichedLogbookMessage.logbookMessage.isDeleted).isFalse()
@@ -168,8 +168,8 @@ class LogbookMessageUTests {
             .toEnrichedLogbookMessageTyped(relatedLogbookMessages.reversed(), PNO::class.java)
 
         // Then
-        assertThat(enrichedLogbookMessageReversed.logbookMessage.acknowledge?.isSuccess).isFalse()
-        assertThat(enrichedLogbookMessageReversed.logbookMessage.acknowledge?.dateTime)
+        assertThat(enrichedLogbookMessageReversed.logbookMessage.acknowledgment?.isSuccess).isFalse()
+        assertThat(enrichedLogbookMessageReversed.logbookMessage.acknowledgment?.dateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC))
         assertThat(enrichedLogbookMessageReversed.logbookMessage.isCorrectedByNewerMessage).isFalse()
         assertThat(enrichedLogbookMessageReversed.logbookMessage.isDeleted).isFalse()
@@ -190,7 +190,7 @@ class LogbookMessageUTests {
             .toEnrichedLogbookMessageTyped(emptyList(), PNO::class.java)
 
         // Then
-        assertThat(enrichedLogbookMessage.logbookMessage.acknowledge?.isSuccess).isTrue()
+        assertThat(enrichedLogbookMessage.logbookMessage.acknowledgment?.isSuccess).isTrue()
         assertThat(enrichedLogbookMessage.logbookMessage.isCorrectedByNewerMessage).isFalse()
         assertThat(enrichedLogbookMessage.logbookMessage.isDeleted).isFalse()
     }
@@ -210,7 +210,7 @@ class LogbookMessageUTests {
             .toEnrichedLogbookMessageTyped(emptyList(), PNO::class.java)
 
         // Then
-        assertThat(enrichedLogbookMessage.logbookMessage.acknowledge?.isSuccess).isTrue()
+        assertThat(enrichedLogbookMessage.logbookMessage.acknowledgment?.isSuccess).isTrue()
         assertThat(enrichedLogbookMessage.logbookMessage.isCorrectedByNewerMessage).isFalse()
         assertThat(enrichedLogbookMessage.logbookMessage.isDeleted).isFalse()
     }
@@ -391,7 +391,7 @@ class LogbookMessageUTests {
                 ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC),
                 // This first RET message is related to the DAT message.
                 refenceLogbookMessage.reportId,
-                Acknowledge(returnStatus = "000"),
+                Acknowledgment(returnStatus = "000"),
             ),
             corLogbookMessage,
             getFakeLogbookMessage(
@@ -399,21 +399,21 @@ class LogbookMessageUTests {
                 ZonedDateTime.of(2024, 1, 1, 0, 0, 3, 0, ZoneOffset.UTC),
                 // This second RET message is related to the COR and not DAT message.
                 corLogbookMessage.reportId,
-                Acknowledge(returnStatus = "002"),
+                Acknowledgment(returnStatus = "002"),
             ),
             getFakeLogbookMessage(
                 LogbookOperationType.RET,
                 ZonedDateTime.of(2024, 1, 1, 0, 0, 4, 0, ZoneOffset.UTC),
                 // This third RET message is related to the COR and not DAT message.
                 corLogbookMessage.reportId,
-                Acknowledge(returnStatus = "001"),
+                Acknowledgment(returnStatus = "001"),
             ),
             getFakeLogbookMessage(
                 LogbookOperationType.RET,
                 ZonedDateTime.of(2024, 1, 1, 0, 0, 5, 0, ZoneOffset.UTC),
                 // This fourth RET message is related to the DAT message.
                 refenceLogbookMessage.reportId,
-                Acknowledge(returnStatus = "000"),
+                Acknowledgment(returnStatus = "000"),
             ),
         )
 
@@ -424,10 +424,10 @@ class LogbookMessageUTests {
         // Then
         assertThat(enrichedLogbookMessage.logbookMessage.reportDateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC))
-        assertThat(enrichedLogbookMessage.logbookMessage.acknowledge?.isSuccess).isFalse()
-        assertThat(enrichedLogbookMessage.logbookMessage.acknowledge?.dateTime)
+        assertThat(enrichedLogbookMessage.logbookMessage.acknowledgment?.isSuccess).isFalse()
+        assertThat(enrichedLogbookMessage.logbookMessage.acknowledgment?.dateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 4, 0, ZoneOffset.UTC))
-        assertThat(enrichedLogbookMessage.logbookMessage.acknowledge?.returnStatus).isEqualTo("001")
+        assertThat(enrichedLogbookMessage.logbookMessage.acknowledgment?.returnStatus).isEqualTo("001")
         assertThat(enrichedLogbookMessage.logbookMessage.isCorrectedByNewerMessage).isFalse()
         assertThat(enrichedLogbookMessage.logbookMessage.isDeleted).isFalse()
     }
@@ -445,7 +445,7 @@ class LogbookMessageUTests {
                 ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC),
                 // This first RET message is related to the DAT message.
                 refenceLogbookMessage.reportId,
-                Acknowledge(returnStatus = "000"),
+                Acknowledgment(returnStatus = "000"),
             ),
             getFakeLogbookMessage(
                 LogbookOperationType.COR,
@@ -461,7 +461,7 @@ class LogbookMessageUTests {
         // Then
         assertThat(enrichedLogbookMessage.logbookMessage.reportDateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC))
-        assertThat(enrichedLogbookMessage.logbookMessage.acknowledge).isNull()
+        assertThat(enrichedLogbookMessage.logbookMessage.acknowledgment).isNull()
         assertThat(enrichedLogbookMessage.logbookMessage.isCorrectedByNewerMessage).isFalse()
         assertThat(enrichedLogbookMessage.logbookMessage.isDeleted).isFalse()
     }
@@ -473,19 +473,19 @@ class LogbookMessageUTests {
             LogbookOperationType.DAT,
             ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC),
         )
-        val newAcknowledgeMessage = getFakeLogbookMessage(
+        val newAcknowledgmentMessage = getFakeLogbookMessage(
             LogbookOperationType.RET,
             ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC),
             logbookMessage.reportId,
-            Acknowledge(returnStatus = "000"),
+            Acknowledgment(returnStatus = "000"),
         )
 
         // When
-        logbookMessage.setAcknowledge(newAcknowledgeMessage)
+        logbookMessage.setAcknowledge(newAcknowledgmentMessage)
 
         // Then
-        assertThat(logbookMessage.acknowledge?.isSuccess).isTrue()
-        assertThat(logbookMessage.acknowledge?.dateTime)
+        assertThat(logbookMessage.acknowledgment?.isSuccess).isTrue()
+        assertThat(logbookMessage.acknowledgment?.dateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC))
     }
 
@@ -496,19 +496,19 @@ class LogbookMessageUTests {
             LogbookOperationType.DAT,
             ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC),
         )
-        val newAcknowledgeMessage = getFakeLogbookMessage(
+        val newAcknowledgmentMessage = getFakeLogbookMessage(
             LogbookOperationType.RET,
             ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC),
             logbookMessage.reportId,
-            Acknowledge(returnStatus = "001"),
+            Acknowledgment(returnStatus = "001"),
         )
 
         // When
-        logbookMessage.setAcknowledge(newAcknowledgeMessage)
+        logbookMessage.setAcknowledge(newAcknowledgmentMessage)
 
         // Then
-        assertThat(logbookMessage.acknowledge?.isSuccess).isFalse()
-        assertThat(logbookMessage.acknowledge?.dateTime)
+        assertThat(logbookMessage.acknowledgment?.isSuccess).isFalse()
+        assertThat(logbookMessage.acknowledgment?.dateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC))
     }
 
@@ -519,24 +519,24 @@ class LogbookMessageUTests {
             LogbookOperationType.DAT,
             ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC),
         ).copy(
-            acknowledge = Acknowledge(
+            acknowledgment = Acknowledgment(
                 isSuccess = false,
                 dateTime = ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC),
             ),
         )
-        val firstNewAcknowledgeMessage = getFakeLogbookMessage(
+        val firstNewAcknowledgmentMessage = getFakeLogbookMessage(
             LogbookOperationType.RET,
             ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC),
             firstLogbookMessage.reportId,
-            Acknowledge(returnStatus = "000"),
+            Acknowledgment(returnStatus = "000"),
         )
 
         // When
-        firstLogbookMessage.setAcknowledge(firstNewAcknowledgeMessage)
+        firstLogbookMessage.setAcknowledge(firstNewAcknowledgmentMessage)
 
         // Then
-        assertThat(firstLogbookMessage.acknowledge?.isSuccess).isTrue()
-        assertThat(firstLogbookMessage.acknowledge?.dateTime)
+        assertThat(firstLogbookMessage.acknowledgment?.isSuccess).isTrue()
+        assertThat(firstLogbookMessage.acknowledgment?.dateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC))
 
         // Given
@@ -544,24 +544,24 @@ class LogbookMessageUTests {
             LogbookOperationType.DAT,
             ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC),
         ).copy(
-            acknowledge = Acknowledge(
+            acknowledgment = Acknowledgment(
                 isSuccess = false,
                 dateTime = ZonedDateTime.of(2024, 1, 1, 0, 0, 3, 0, ZoneOffset.UTC),
             ),
         )
-        val secondNewAcknowledgeMessage = getFakeLogbookMessage(
+        val secondNewAcknowledgmentMessage = getFakeLogbookMessage(
             LogbookOperationType.RET,
             ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC),
             secondLogbookMessage.reportId,
-            Acknowledge(returnStatus = "000"),
+            Acknowledgment(returnStatus = "000"),
         )
 
         // When
-        secondLogbookMessage.setAcknowledge(secondNewAcknowledgeMessage)
+        secondLogbookMessage.setAcknowledge(secondNewAcknowledgmentMessage)
 
         // Then
-        assertThat(secondLogbookMessage.acknowledge?.isSuccess).isTrue()
-        assertThat(secondLogbookMessage.acknowledge?.dateTime)
+        assertThat(secondLogbookMessage.acknowledgment?.isSuccess).isTrue()
+        assertThat(secondLogbookMessage.acknowledgment?.dateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC))
     }
 
@@ -572,44 +572,44 @@ class LogbookMessageUTests {
             LogbookOperationType.DAT,
             ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC),
         ).copy(
-            acknowledge = Acknowledge(
+            acknowledgment = Acknowledgment(
                 isSuccess = false,
                 dateTime = ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC),
                 returnStatus = "001",
             ),
         )
-        val firstNewAcknowledgeMessage = getFakeLogbookMessage(
+        val firstNewAcknowledgmentMessage = getFakeLogbookMessage(
             LogbookOperationType.RET,
             ZonedDateTime.of(2024, 1, 1, 0, 0, 3, 0, ZoneOffset.UTC),
             logbookMessage.reportId,
-            Acknowledge(returnStatus = "002"),
+            Acknowledgment(returnStatus = "002"),
         )
 
         // When
-        logbookMessage.setAcknowledge(firstNewAcknowledgeMessage)
+        logbookMessage.setAcknowledge(firstNewAcknowledgmentMessage)
 
         // Then
-        assertThat(logbookMessage.acknowledge?.isSuccess).isFalse()
-        assertThat(logbookMessage.acknowledge?.dateTime)
+        assertThat(logbookMessage.acknowledgment?.isSuccess).isFalse()
+        assertThat(logbookMessage.acknowledgment?.dateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 3, 0, ZoneOffset.UTC))
-        assertThat(logbookMessage.acknowledge?.returnStatus).isEqualTo("002")
+        assertThat(logbookMessage.acknowledgment?.returnStatus).isEqualTo("002")
 
         // Given
-        val secondNewAcknowledgeMessage = getFakeLogbookMessage(
+        val secondNewAcknowledgmentMessage = getFakeLogbookMessage(
             LogbookOperationType.RET,
             ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC),
             logbookMessage.reportId,
-            Acknowledge(returnStatus = "001"),
+            Acknowledgment(returnStatus = "001"),
         )
 
         // When
-        logbookMessage.setAcknowledge(secondNewAcknowledgeMessage)
+        logbookMessage.setAcknowledge(secondNewAcknowledgmentMessage)
 
         // Then
-        assertThat(logbookMessage.acknowledge?.isSuccess).isFalse()
-        assertThat(logbookMessage.acknowledge?.dateTime)
+        assertThat(logbookMessage.acknowledgment?.isSuccess).isFalse()
+        assertThat(logbookMessage.acknowledgment?.dateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 3, 0, ZoneOffset.UTC))
-        assertThat(logbookMessage.acknowledge?.returnStatus).isEqualTo("002")
+        assertThat(logbookMessage.acknowledgment?.returnStatus).isEqualTo("002")
     }
 
     @Test
@@ -619,26 +619,26 @@ class LogbookMessageUTests {
             LogbookOperationType.DAT,
             ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC),
         ).copy(
-            acknowledge = Acknowledge(
+            acknowledgment = Acknowledgment(
                 isSuccess = true,
                 dateTime = ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC),
                 returnStatus = "000",
             ),
         )
-        val newAcknowledgeMessage = getFakeLogbookMessage(
+        val newAcknowledgmentMessage = getFakeLogbookMessage(
             LogbookOperationType.RET,
             ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC),
             logbookMessage.reportId,
-            Acknowledge(returnStatus = "000"),
+            Acknowledgment(returnStatus = "000"),
         )
 
         // When
-        logbookMessage.setAcknowledge(newAcknowledgeMessage)
+        logbookMessage.setAcknowledge(newAcknowledgmentMessage)
 
         // Then
-        assertThat(logbookMessage.acknowledge?.isSuccess).isTrue()
-        assertThat(logbookMessage.acknowledge?.dateTime)
+        assertThat(logbookMessage.acknowledgment?.isSuccess).isTrue()
+        assertThat(logbookMessage.acknowledgment?.dateTime)
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC))
-        assertThat(logbookMessage.acknowledge?.returnStatus).isEqualTo("000")
+        assertThat(logbookMessage.acknowledgment?.returnStatus).isEqualTo("000")
     }
 }

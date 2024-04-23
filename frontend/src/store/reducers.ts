@@ -88,7 +88,10 @@ export const mainReducer = {
   missionForm: missionFormReducer,
   missionList: persistReducerTyped(
     {
-      ...getCommonPersistReducerConfig<MissionListState>('mainPersistorMission', ['listFilterValues', 'listSeaFront'])
+      ...getCommonPersistReducerConfig<MissionListState>('mainPersistorMission', [
+        'listFilterValues',
+        'listSeafrontGroup'
+      ])
     },
     missionListReducer
   ),

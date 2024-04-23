@@ -19,7 +19,7 @@ export type FishingActivities = {
 // TODO Replace with `LogbookMessage.LogbookMessage`.
 // Can be done after using RTK in `getVesselLogbookFromAPI()` since undefined !== null.
 export type LogbookMessage = {
-  acknowledge: {
+  acknowledgment: {
     dateTime: string | null
     isSuccess: boolean
     rejectionCause: string | null

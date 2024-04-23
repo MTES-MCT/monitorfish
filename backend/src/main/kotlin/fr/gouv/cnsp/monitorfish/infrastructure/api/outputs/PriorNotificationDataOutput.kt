@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -7,16 +8,18 @@ import org.slf4j.LoggerFactory
 class PriorNotificationDataOutput(
     /** Reference logbook message (report) `reportId`. */
     val id: String,
+    val acknowledgment: AcknowledgmentDataOutput?,
     val expectedArrivalDate: String?,
     val expectedLandingDate: String?,
     val hasVesselRiskFactorSegments: Boolean?,
+    val isCorrection: Boolean,
     val isVesselUnderCharter: Boolean?,
     val onBoardCatches: List<LogbookMessageCatchDataOutput>,
     val portLocode: String?,
     val portName: String?,
     val purposeCode: String?,
     val reportingsCount: Int?,
-    val seaFront: String?,
+    val seafront: String?,
     val sentAt: String?,
     val tripGears: List<LogbookMessageGearDataOutput>,
     val tripSegments: List<LogbookMessageTripSegmentDataOutput>,
@@ -48,6 +51,7 @@ class PriorNotificationDataOutput(
             }
             val message = priorNotification.logbookMessageTyped.typedMessage
 
+            val acknowledgment = logbookMessage.acknowledgment?.let { AcknowledgmentDataOutput.fromAcknowledgment(it) }
             val onBoardCatches = message.catchOnboard.map { LogbookMessageCatchDataOutput.fromCatch(it) }
             val tripGears = logbookMessage.tripGears?.mapNotNull {
                 LogbookMessageGearDataOutput.fromGear(it)
@@ -59,16 +63,18 @@ class PriorNotificationDataOutput(
 
             return PriorNotificationDataOutput(
                 id = referenceReportId,
+                acknowledgment = acknowledgment,
                 expectedArrivalDate = message.predictedArrivalDatetimeUtc?.toString(),
                 expectedLandingDate = message.predictedLandingDatetimeUtc?.toString(),
                 hasVesselRiskFactorSegments = priorNotification.vesselRiskFactor?.segments?.isNotEmpty(),
+                isCorrection = logbookMessage.operationType === LogbookOperationType.COR,
                 isVesselUnderCharter = priorNotification.vessel.underCharter,
                 onBoardCatches,
                 portLocode = priorNotification.port?.locode,
                 portName = priorNotification.port?.name,
                 purposeCode = message.purpose,
                 reportingsCount = priorNotification.reportingsCount,
-                seaFront = priorNotification.seaFront,
+                seafront = priorNotification.seafront,
                 sentAt = logbookMessage.reportDateTime?.toString(),
                 tripGears,
                 tripSegments,

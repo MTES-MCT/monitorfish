@@ -1,8 +1,11 @@
+import { CountryFlag } from '@components/CountryFlag'
 import { Ellipsised } from '@components/Ellipsised'
+import { Titled } from '@components/Titled'
+import { SeafrontGroup, type AllSeafrontGroup, type NoSeafrontGroup } from '@constants/seafront'
 import { customDayjs, THEME, Tag, getOptionsFromLabelledEnum, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
+import styled from 'styled-components'
 
 import { ButtonsGroupRow } from './ButtonsGroupRow'
-import { SeaFrontGroup, type NoSeaFrontGroup } from '../../../../domain/entities/seaFront/constants'
 import { VesselRiskFactor } from '../../../Vessel/components/VesselRiskFactor'
 import { PriorNotification } from '../../PriorNotification.types'
 
@@ -87,9 +90,16 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
   },
   {
     accessorFn: row => row.vesselName ?? (row.vesselId === -1 ? 'Navire inconnu' : '-'),
-    cell: (info: CellContext<PriorNotification.PriorNotification, string>) => (
-      <Ellipsised>{info.getValue()}</Ellipsised>
-    ),
+    cell: (info: CellContext<PriorNotification.PriorNotification, string>) => {
+      const priorNotification = info.row.original
+
+      return (
+        <Ellipsised>
+          <StyledCountryFlag countryCode={priorNotification.vesselFlagCountryCode} size={[20, 14]} />
+          <Titled>{info.getValue()}</Titled>
+        </Ellipsised>
+      )
+    },
     enableSorting: true,
     header: () => 'Nom',
     id: 'vessel.vesselName',
@@ -97,9 +107,9 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
   },
   {
     accessorFn: row =>
-      row.tripSegments.length > 0 ? row.tripSegments.map(tripSegment => tripSegment.code).join('/') : '-',
-    cell: (info: CellContext<PriorNotification.PriorNotification, string>) => (
-      <Ellipsised>{info.getValue()}</Ellipsised>
+      row.tripSegments.length > 0 ? row.tripSegments.map(tripSegment => tripSegment.code).join('/') : undefined,
+    cell: (info: CellContext<PriorNotification.PriorNotification, string | undefined>) => (
+      <Ellipsised>{info.getValue() ?? 'Pas de segment'}</Ellipsised>
     ),
     enableSorting: true,
     header: () => 'Segments',
@@ -126,7 +136,11 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
 
       return (
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Tag backgroundColor={THEME.color.maximumRed15} style={{ marginTop: 1 }}>{`${info.getValue()} sign.`}</Tag>
+          <Tag
+            backgroundColor={THEME.color.maximumRed15}
+            style={{ marginTop: 1 }}
+            title={`${info.getValue()} signalements`}
+          >{`${info.getValue()} sign.`}</Tag>
         </div>
       )
     },
@@ -148,15 +162,15 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
 ]
 
 /* eslint-disable sort-keys-fix/sort-keys-fix, typescript-sort-keys/string-enum */
-export const SUB_MENU_LABEL: Record<SeaFrontGroup | NoSeaFrontGroup, string> = {
-  ALL: 'Vue d’ensemble',
+export const SUB_MENU_LABEL: Record<SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup, string> = {
+  ALL_SEAFRONT_GROUP: 'TOUT',
   MED: 'MED',
   MEMN: 'MEMN',
   NAMO: 'NAMO',
   SA: 'SA',
-  OUTREMEROA: 'OUTRE-MER OA',
-  OUTREMEROI: 'OUTRE-MER OI',
-  NO_SEA_FRONT_GROUP: 'HORS FAÇADE'
+  OUTREMEROA: 'O-M OA',
+  OUTREMEROI: 'O-M OI',
+  NO_SEAFRONT_GROUP: 'HORS'
 }
 export const SUB_MENUS_AS_OPTIONS = getOptionsFromLabelledEnum(SUB_MENU_LABEL)
 
@@ -196,3 +210,8 @@ export const EXPECTED_ARRIVAL_PERIOD_LABEL: Record<ExpectedArrivalPeriod, string
 }
 export const EXPECTED_ARRIVAL_PERIODS_AS_OPTIONS = getOptionsFromLabelledEnum(EXPECTED_ARRIVAL_PERIOD_LABEL)
 /* eslint-enable sort-keys-fix/sort-keys-fix, typescript-sort-keys/string-enum */
+
+const StyledCountryFlag = styled(CountryFlag)`
+  margin-right: 8px;
+  vertical-align: -2px;
+`

@@ -1,6 +1,6 @@
 import EventSource, { sources } from 'eventsourcemock'
 
-import { SeaFrontGroup } from '../../../../src/domain/entities/seaFront/constants'
+import { SeafrontGroup } from '../../../../src/constants/seafront'
 import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
 
 export const openSideWindowMissionList = () => {
@@ -26,11 +26,11 @@ export const openSideWindowMissionList = () => {
   cy.wait(500)
 }
 
-export const editSideWindowMissionListMissionWithId = (missionId: number, seaFrontGroup?: SeaFrontGroup) => {
+export const editSideWindowMissionListMissionWithId = (missionId: number, seafrontGroup?: SeafrontGroup) => {
   openSideWindowMissionList()
 
-  if (seaFrontGroup) {
-    cy.getDataCy(`side-window-sub-menu-${seaFrontGroup}`).click()
+  if (seafrontGroup) {
+    cy.getDataCy(`side-window-sub-menu-${seafrontGroup}`).click()
   }
 
   cy.get('.Table').find(`.TableBodyRow[data-id="${missionId}"]`).clickButton('Éditer la mission')

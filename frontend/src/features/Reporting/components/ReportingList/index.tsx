@@ -1,3 +1,4 @@
+import { SeafrontGroup } from '@constants/seafront'
 import { Accent, Icon, IconButton, THEME } from '@mtes-mct/monitor-ui'
 import dayjs from 'dayjs'
 import countries from 'i18n-iso-countries'
@@ -8,8 +9,7 @@ import * as timeago from 'timeago.js'
 
 import { REPORTING_LIST_TABLE_OPTIONS } from './constants'
 import { getReportingOrigin, getReportingTitle } from './utils'
-import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS } from '../../../../domain/entities/alerts/constants'
-import { SeaFrontGroup } from '../../../../domain/entities/seaFront/constants'
+import { ALERTS_MENU_SEAFRONT_TO_SEAFRONTS } from '../../../../domain/entities/alerts/constants'
 import { ReportingType } from '../../../../domain/types/reporting'
 import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
 import { useForceUpdate } from '../../../../hooks/useForceUpdate'
@@ -36,10 +36,10 @@ import type {
 } from '../../../../domain/types/reporting'
 import type { CSSProperties, MutableRefObject } from 'react'
 
-type ReportingListProps = {
-  selectedSeaFrontGroup: SeaFrontGroup
-}
-export function ReportingList({ selectedSeaFrontGroup }: ReportingListProps) {
+type ReportingListProps = Readonly<{
+  selectedSeafrontGroup: SeafrontGroup
+}>
+export function ReportingList({ selectedSeafrontGroup }: ReportingListProps) {
   const dispatch = useMainAppDispatch()
   const searchInputRef = useRef() as MutableRefObject<HTMLInputElement>
   const currentReportings = useMainAppSelector(state => state.reporting.currentReportings)
@@ -47,20 +47,20 @@ export function ReportingList({ selectedSeaFrontGroup }: ReportingListProps) {
 
   const baseUrl = useMemo(() => window.location.origin, [])
 
-  const currentSeaFrontReportings = useMemo(
+  const currentSeafrontReportings = useMemo(
     () =>
       currentReportings.filter(
         reporting =>
-          ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFrontGroup] &&
+          ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup] &&
           reporting.value.seaFront &&
-          ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFrontGroup].seaFronts.includes(reporting.value.seaFront)
+          ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup].seafronts.includes(reporting.value.seaFront)
       ),
-    [currentReportings, selectedSeaFrontGroup]
+    [currentReportings, selectedSeafrontGroup]
   )
 
   const { getTableCheckedData, renderTableHead, tableCheckedIds, tableData, toggleTableCheckForId } = useTable<
     InfractionSuspicionReporting | PendingAlertReporting
-  >(currentSeaFrontReportings, REPORTING_LIST_TABLE_OPTIONS, [], searchInputRef.current?.value)
+  >(currentSeafrontReportings, REPORTING_LIST_TABLE_OPTIONS, [], searchInputRef.current?.value)
 
   const archive = useCallback(async () => {
     if (!tableCheckedIds.length) {
@@ -71,11 +71,11 @@ export function ReportingList({ selectedSeaFrontGroup }: ReportingListProps) {
   }, [dispatch, tableCheckedIds])
 
   const download = useCallback(() => {
-    const checkedCurrentSeaFrontReportings = getTableCheckedData()
-    const fileName = `${checkedCurrentSeaFrontReportings.length}-signalements-${dayjs().format('DD-MM-YYYY')}`
+    const checkedCurrentSeafrontReportings = getTableCheckedData()
+    const fileName = `${checkedCurrentSeafrontReportings.length}-signalements-${dayjs().format('DD-MM-YYYY')}`
 
     /* eslint-disable sort-keys-fix/sort-keys-fix */
-    downloadAsCsv(fileName, checkedCurrentSeaFrontReportings, {
+    downloadAsCsv(fileName, checkedCurrentSeafrontReportings, {
       creationDate: 'Ouvert le',
       'value.dml': 'DML concernée',
       type: {
@@ -181,28 +181,28 @@ MMSI: ${reporting.mmsi || ''}`
         <CardTableBody>
           {tableData.map((reporting, index) => {
             const editingIsDisabled = reporting.type === ReportingType.ALERT
-            const reportingDate = reporting.validationDate || reporting.creationDate
+            const reportingDate = reporting.validationDate ?? reporting.creationDate
 
             return (
               <CardTableRow key={reporting.id} data-cy="side-window-current-reportings" index={index + 1} style={{}}>
                 <FlexboxGrid>
-                  <Cell style={columnStyles[0] || {}}>
+                  <Cell style={columnStyles[0] ?? {}}>
                     <StyledCheckbox
                       checked={reporting.$isChecked}
                       onChange={() => toggleTableCheckForId(reporting.id)}
                     />
                   </Cell>
-                  <Cell style={columnStyles[1] || {}} title={reportingDate}>
+                  <Cell style={columnStyles[1] ?? {}} title={reportingDate}>
                     {timeago.format(reportingDate, 'fr')}
                   </Cell>
-                  <Cell style={columnStyles[2] || {}} title={getReportingOrigin(reporting, true)}>
+                  <Cell style={columnStyles[2] ?? {}} title={getReportingOrigin(reporting, true)}>
                     {getReportingOrigin(reporting)}
                   </Cell>
-                  <Cell style={columnStyles[3] || {}} title={getReportingTitle(reporting, true)}>
+                  <Cell style={columnStyles[3] ?? {}} title={getReportingTitle(reporting, true)}>
                     {getReportingTitle(reporting)}
                   </Cell>
-                  <Cell style={columnStyles[4] || {}}>{reporting.value.natinfCode}</Cell>
-                  <Cell style={columnStyles[5] || {}} title={getVesselNameTitle(reporting)}>
+                  <Cell style={columnStyles[4] ?? {}}>{reporting.value.natinfCode}</Cell>
+                  <Cell style={columnStyles[5] ?? {}} title={getVesselNameTitle(reporting)}>
                     <Flag
                       rel="preload"
                       src={`${baseUrl ? `${baseUrl}/` : ''}flags/${reporting.flagState.toLowerCase()}.svg`}
@@ -211,12 +211,12 @@ MMSI: ${reporting.mmsi || ''}`
                     />
                     {reporting.vesselName}
                   </Cell>
-                  <Cell style={columnStyles[6] || {}}>{reporting.value.dml}</Cell>
-                  <Cell style={columnStyles[7] || {}}>
+                  <Cell style={columnStyles[6] ?? {}}>{reporting.value.dml}</Cell>
+                  <Cell style={columnStyles[7] ?? {}}>
                     {reporting.underCharter && <UnderCharter>Navire sous charte</UnderCharter>}
                   </Cell>
                   <Separator />
-                  <Cell style={columnStyles[8] || {}}>
+                  <Cell style={columnStyles[8] ?? {}}>
                     <IconButton
                       accent={Accent.TERTIARY}
                       data-cy="side-window-silenced-alerts-show-vessel"
@@ -226,7 +226,7 @@ MMSI: ${reporting.mmsi || ''}`
                       title="Voir sur la carte"
                     />
                   </Cell>
-                  <Cell style={columnStyles[9] || {}}>
+                  <Cell style={columnStyles[9] ?? {}}>
                     <IconButton
                       accent={Accent.TERTIARY}
                       data-cy="side-window-edit-reporting"

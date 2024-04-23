@@ -1,8 +1,7 @@
+import { Seafront } from '@constants/seafront'
 import { Mission } from '@features/Mission/mission.types'
 
-import { SeaFront } from '../../../domain/entities/seaFront/constants'
-
-export function seaFrontFilterFunction(mission: Mission.Mission, filter: SeaFront[]) {
+export function seafrontFilterFunction(mission: Mission.Mission, filter: Seafront[]) {
   if (filter.length === 0) {
     return true
   }

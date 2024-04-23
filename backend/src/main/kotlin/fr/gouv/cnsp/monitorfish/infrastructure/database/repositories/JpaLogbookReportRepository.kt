@@ -63,8 +63,6 @@ class JpaLogbookReportRepository(
                     filter.priorNotificationTypes != null &&
                     message.pnoTypes.none { pnoType -> pnoType.name in filter.priorNotificationTypes }
                 ) {
-                    println()
-
                     return@filter false
                 }
 

@@ -156,7 +156,7 @@ export const getTotalDISWeight = (logbookMessages: LogbookMessage[]): number => 
       }
 
       const isMessageNotCorrectedAndAcknowledged =
-        !correctedMessagesReferencedIds.includes(logbookMessage.reportId) && logbookMessage.acknowledge?.isSuccess
+        !correctedMessagesReferencedIds.includes(logbookMessage.reportId) && logbookMessage.acknowledgment?.isSuccess
       const sumOfCatches = isMessageNotCorrectedAndAcknowledged
         ? getSumOfCatches(logbookMessage.message.catches, false)
         : 0
@@ -184,7 +184,7 @@ export const getCPSDistinctSpecies = (logbookMessages: LogbookMessage[]): number
       }
 
       const isMessageNotCorrectedAndAcknowledged =
-        !correctedMessagesReferencedIds.includes(logbookMessage.reportId) && logbookMessage.acknowledge?.isSuccess
+        !correctedMessagesReferencedIds.includes(logbookMessage.reportId) && logbookMessage.acknowledgment?.isSuccess
 
       if (!isMessageNotCorrectedAndAcknowledged) {
         return accumulator
@@ -197,7 +197,7 @@ export const getCPSDistinctSpecies = (logbookMessages: LogbookMessage[]): number
 }
 
 export const areAllMessagesNotAcknowledged = (logbookMessages: LogbookMessage[]) =>
-  logbookMessages.length === logbookMessages.filter(logbookMessage => !logbookMessage?.acknowledge?.isSuccess).length
+  logbookMessages.length === logbookMessages.filter(logbookMessage => !logbookMessage?.acknowledgment?.isSuccess).length
 
 /**
  * Notes :
@@ -221,7 +221,7 @@ export const getTotalFARWeight = (logbookMessages: LogbookMessage[]): number => 
       }
 
       const isMessageNotCorrectedAndAcknowledged =
-        !correctedMessagesReferencedIds.includes(logbookMessage.reportId) && logbookMessage.acknowledge?.isSuccess
+        !correctedMessagesReferencedIds.includes(logbookMessage.reportId) && logbookMessage.acknowledgment?.isSuccess
       const sumOfCatches = isMessageNotCorrectedAndAcknowledged
         ? logbookMessage.message.hauls.reduce(
             (subAccumulator, haul) => subAccumulator + getSumOfCatches(haul.catches, false),
@@ -371,8 +371,8 @@ export const getFARSpeciesInsightRecord = (
 
     if (
       !correctedMessagesReferencedIds.includes(message.reportId) &&
-      message.acknowledge &&
-      message.acknowledge.isSuccess
+      message.acknowledgment &&
+      message.acknowledgment.isSuccess
     ) {
       message.message.hauls.forEach(haul => {
         haul.catches.forEach(speciesCatch =>
@@ -399,8 +399,8 @@ export const getDISSpeciesInsightRecord = (
 
     if (
       !correctedMessagesReferencedIds.includes(message.reportId) &&
-      message.acknowledge &&
-      message.acknowledge.isSuccess
+      message.acknowledgment &&
+      message.acknowledgment.isSuccess
     ) {
       message.message.catches.forEach(speciesCatch => {
         setSpeciesToWeightObject(speciesToWeightObject, speciesCatch, totalWeight, false)
@@ -428,8 +428,8 @@ export const getFARSpeciesInsightListRecord = (
 
     if (
       !correctedMessagesReferencedIds.includes(message.reportId) &&
-      message.acknowledge &&
-      message.acknowledge.isSuccess
+      message.acknowledgment &&
+      message.acknowledgment.isSuccess
     ) {
       message.message.hauls.forEach(haul => {
         haul.catches.forEach(speciesCatch => {

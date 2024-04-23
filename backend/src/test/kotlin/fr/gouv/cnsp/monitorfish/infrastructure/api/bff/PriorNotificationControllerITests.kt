@@ -75,7 +75,7 @@ class PriorNotificationControllerITests {
                         ),
                     ),
                     reportingsCount = null,
-                    seaFront = null,
+                    seafront = null,
                     vessel = Vessel(
                         id = 1,
                         externalReferenceNumber = null,
@@ -110,7 +110,7 @@ class PriorNotificationControllerITests {
                         ),
                     ),
                     reportingsCount = null,
-                    seaFront = null,
+                    seafront = null,
                     vessel = Vessel(
                         id = 1,
                         externalReferenceNumber = null,
@@ -178,7 +178,7 @@ class PriorNotificationControllerITests {
                     ),
                 ),
                 reportingsCount = null,
-                seaFront = null,
+                seafront = null,
                 vessel = Vessel(
                     id = 1,
                     externalReferenceNumber = null,

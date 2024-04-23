@@ -1,9 +1,8 @@
+import { SeafrontGroup, type AllSeafrontGroup } from '@constants/seafront'
 import { getMissionCompletionFrontStatus, getMissionStatus } from '@features/Mission/utils'
-import { customDayjs } from '@mtes-mct/monitor-ui'
-import { getOptionsFromLabelledEnum } from '@utils/getOptionsFromLabelledEnum'
+import { customDayjs, getOptionsFromLabelledEnum } from '@mtes-mct/monitor-ui'
 
 import { MissionDateRangeFilterLabel, MissionFilterType } from './types'
-import { SeaFrontGroup, SeaFrontGroupLabel } from '../../../../domain/entities/seaFront/constants'
 import { UNKNOWN_VESSEL } from '../../../../domain/entities/vessel/vessel'
 import { Mission } from '../../mission.types'
 import { MissionAction } from '../../missionAction.types'
@@ -39,7 +38,19 @@ export const MISSION_FILTER_OPTIONS: Record<MissionFilterType, Option<any>[]> = 
   [MissionFilterType.UNIT]: []
 }
 
-export const MISSION_LIST_SUB_MENU_OPTIONS = getOptionsFromLabelledEnum(SeaFrontGroupLabel) as Option<SeaFrontGroup>[]
+/* eslint-disable sort-keys-fix/sort-keys-fix */
+export const SUB_MENU_LABEL: Record<SeafrontGroup | AllSeafrontGroup, string> = {
+  ALL_SEAFRONT_GROUP: 'TOUT',
+  MED: 'MED',
+  MEMN: 'MEMN',
+  NAMO: 'NAMO',
+  SA: 'SA',
+  OUTREMEROA: 'O-M OA',
+  OUTREMEROI: 'O-M OI'
+}
+/* eslint-enable sort-keys-fix/sort-keys-fix */
+
+export const MISSION_LIST_SUB_MENU_OPTIONS = getOptionsFromLabelledEnum(SUB_MENU_LABEL)
 
 const MISSION_ACTION_CONTROL_TYPES = [
   MissionAction.MissionActionType.AIR_CONTROL,

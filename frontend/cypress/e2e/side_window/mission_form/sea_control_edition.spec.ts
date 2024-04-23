@@ -1,5 +1,5 @@
 import { editSideWindowMission } from './utils'
-import { SeaFrontGroup } from '../../../../src/domain/entities/seaFront/constants'
+import { SeafrontGroup } from '../../../../src/constants/seafront'
 import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
@@ -346,7 +346,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
   )
 
   it('Should not update the mission zone When a CACEM control is newer', () => {
-    editSideWindowMissionListMissionWithId(34, SeaFrontGroup.MEMN)
+    editSideWindowMissionListMissionWithId(34, SeafrontGroup.MEMN)
 
     cy.intercept('POST', '/api/v1/missions/34', {
       body: {
@@ -379,7 +379,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
    */
   it('Should not show an unsaved modal confirmation When an action is created', () => {
     // Given
-    editSideWindowMissionListMissionWithId(34, SeaFrontGroup.MEMN)
+    editSideWindowMissionListMissionWithId(34, SeafrontGroup.MEMN)
     cy.intercept('POST', '/api/v1/missions/34', {
       body: {
         id: 1

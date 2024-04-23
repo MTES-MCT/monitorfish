@@ -1,7 +1,14 @@
 // TODO This is a bit shady to mix up pending/silenced alerts with PNO ones here.
 
+import {
+  ALL_SEAFRONT_GROUP,
+  SEAFRONT_GROUP_SEAFRONTS,
+  Seafront,
+  SeafrontGroup,
+  type AllSeafrontGroup
+} from '@constants/seafront'
+
 import { PendingAlertValueType } from './types'
-import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFront, SeaFrontGroup } from '../seaFront/constants'
 
 import type { MenuItem } from '../../../types'
 
@@ -46,41 +53,52 @@ export const COMMON_ALERT_TYPE_OPTION: Record<
   }
 }
 
-// TODO Rename the `seaFronts` prop to clarify the difference. They don't look like seas fronts.
-export const ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS: Record<
-  SeaFrontGroup,
+// TODO Rename the `seafronts` prop to clarify the difference. They don't look like seas fronts.
+export const ALERTS_MENU_SEAFRONT_TO_SEAFRONTS: Record<
+  SeafrontGroup | AllSeafrontGroup,
   {
-    menuSeaFront: SeaFrontGroup
-    seaFronts: SeaFront[]
+    menuSeafront: SeafrontGroup | AllSeafrontGroup
+    seafronts: Seafront[]
   }
 > = {
-  ALL: {
-    menuSeaFront: SeaFrontGroup.ALL,
-    seaFronts: SEA_FRONT_GROUP_SEA_FRONTS[SeaFrontGroup.ALL]
+  ALL_SEAFRONT_GROUP: {
+    menuSeafront: ALL_SEAFRONT_GROUP,
+    seafronts: [
+      Seafront.CORSE,
+      Seafront.GUADELOUPE,
+      Seafront.GUYANE,
+      Seafront.MARTINIQUE,
+      Seafront.MAYOTTE,
+      Seafront.MED,
+      Seafront.MEMN,
+      Seafront.NAMO,
+      Seafront.SA,
+      Seafront.SUD_OCEAN_INDIEN
+    ]
   },
   MED: {
-    menuSeaFront: SeaFrontGroup.MED,
-    seaFronts: SEA_FRONT_GROUP_SEA_FRONTS[SeaFrontGroup.MED]
+    menuSeafront: SeafrontGroup.MED,
+    seafronts: SEAFRONT_GROUP_SEAFRONTS.MED
   },
   MEMN: {
-    menuSeaFront: SeaFrontGroup.MEMN,
-    seaFronts: SEA_FRONT_GROUP_SEA_FRONTS[SeaFrontGroup.MEMN]
+    menuSeafront: SeafrontGroup.MEMN,
+    seafronts: SEAFRONT_GROUP_SEAFRONTS.MEMN
   },
   NAMO: {
-    menuSeaFront: SeaFrontGroup.NAMO,
-    seaFronts: SEA_FRONT_GROUP_SEA_FRONTS[SeaFrontGroup.NAMO]
+    menuSeafront: SeafrontGroup.NAMO,
+    seafronts: SEAFRONT_GROUP_SEAFRONTS.NAMO
   },
   OUTREMEROA: {
-    menuSeaFront: SeaFrontGroup.OUTREMEROA,
-    seaFronts: SEA_FRONT_GROUP_SEA_FRONTS[SeaFrontGroup.OUTREMEROA]
+    menuSeafront: SeafrontGroup.OUTREMEROA,
+    seafronts: SEAFRONT_GROUP_SEAFRONTS.OUTREMEROA
   },
   OUTREMEROI: {
-    menuSeaFront: SeaFrontGroup.OUTREMEROI,
-    seaFronts: SEA_FRONT_GROUP_SEA_FRONTS[SeaFrontGroup.OUTREMEROI]
+    menuSeafront: SeafrontGroup.OUTREMEROI,
+    seafronts: SEAFRONT_GROUP_SEAFRONTS.OUTREMEROI
   },
   SA: {
-    menuSeaFront: SeaFrontGroup.SA,
-    seaFronts: SEA_FRONT_GROUP_SEA_FRONTS[SeaFrontGroup.SA]
+    menuSeafront: SeafrontGroup.SA,
+    seafronts: SEAFRONT_GROUP_SEAFRONTS.SA
   }
 }
 

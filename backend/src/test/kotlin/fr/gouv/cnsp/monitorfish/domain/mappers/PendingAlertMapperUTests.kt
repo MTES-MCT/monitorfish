@@ -36,7 +36,8 @@ class PendingAlertMapperUTests {
     @Test
     fun `getReportingValueFromJSON Should deserialize a THREE_MILES_TRAWLING_ALERT When a legacy flagState property is found`() {
         // Given
-        val alert = "{\"type\": \"THREE_MILES_TRAWLING_ALERT\", \"seaFront\": \"MEMN\", \"flagState\": \"FR\", \"riskFactor\": 1.2311444133}"
+        val alert =
+            "{\"type\": \"THREE_MILES_TRAWLING_ALERT\", \"seaFront\": \"MEMN\", \"flagState\": \"FR\", \"riskFactor\": 1.2311444133}"
 
         // When
         val parsedAlert = mapper.readValue(alert, AlertType::class.java)

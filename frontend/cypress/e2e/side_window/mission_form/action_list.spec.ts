@@ -2,7 +2,7 @@
 // https://glebbahmutov.com/blog/dependent-test/
 
 import { openSideWindowNewMission } from './utils'
-import { SeaFrontGroup } from '../../../../src/domain/entities/seaFront/constants'
+import { SeafrontGroup } from '../../../../src/constants/seafront'
 import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
 
 context('Side Window > Mission Form > Action List', () => {
@@ -40,7 +40,7 @@ context('Side Window > Mission Form > Action List', () => {
   })
 
   it('Should send the expected data to the API when deleting a mission action', () => {
-    editSideWindowMissionListMissionWithId(34, SeaFrontGroup.MEMN)
+    editSideWindowMissionListMissionWithId(34, SeafrontGroup.MEMN)
 
     cy.intercept('POST', '/api/v1/missions/34', {
       body: {
@@ -109,7 +109,7 @@ context('Side Window > Mission Form > Action List', () => {
   })
 
   it('Should re-compute or delete the mission geometry when the action is the last one', () => {
-    editSideWindowMissionListMissionWithId(34, SeaFrontGroup.MEMN)
+    editSideWindowMissionListMissionWithId(34, SeafrontGroup.MEMN)
 
     cy.intercept('POST', '/api/v1/missions/34', {
       body: {
@@ -166,7 +166,7 @@ context('Side Window > Mission Form > Action List', () => {
   })
 
   it('Should show Env actions on the actions timeline', () => {
-    editSideWindowMissionListMissionWithId(34, SeaFrontGroup.MEMN)
+    editSideWindowMissionListMissionWithId(34, SeafrontGroup.MEMN)
 
     cy.get('[data-cy="mission-form-action-list"] > div').children().eq(1).contains('28 Nov à 13:59')
     cy.get('[data-cy="mission-form-action-list"] > div').children().eq(1).contains('Surveillance')

@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.mappers
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledge
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledgment
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.CPS
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.DEP
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.FAR
@@ -136,8 +136,8 @@ class ERSMapperUTests {
         val parsedRETMessage = ERSMapper.getERSMessageValueFromJSON(mapper, retMessage, "", LogbookOperationType.RET)
 
         // Then
-        assertThat(parsedRETMessage).isInstanceOf(Acknowledge::class.java)
-        parsedRETMessage as Acknowledge
+        assertThat(parsedRETMessage).isInstanceOf(Acknowledgment::class.java)
+        parsedRETMessage as Acknowledgment
 
         assertThat(parsedRETMessage.rejectionCause).isNotNull
         assertThat(parsedRETMessage.returnStatus).isEqualTo("002")
@@ -146,7 +146,8 @@ class ERSMapperUTests {
     @Test
     fun `getERSMessageValueFromJSON Should deserialize an example DEP message`() {
         // Given
-        val depMessage = "{\"gearOnboard\": [{\"gear\": \"GTR\", \"mesh\": 100.0}], \"departurePort\": \"AEJAZ\", \"anticipatedActivity\": \"FSH\", \"tripStartDate\": \"2018-02-17T00:00Z\", \"departureDatetimeUtc\": \"2018-02-17T01:05Z\"}"
+        val depMessage =
+            "{\"gearOnboard\": [{\"gear\": \"GTR\", \"mesh\": 100.0}], \"departurePort\": \"AEJAZ\", \"anticipatedActivity\": \"FSH\", \"tripStartDate\": \"2018-02-17T00:00Z\", \"departureDatetimeUtc\": \"2018-02-17T01:05Z\"}"
 
         // When
         val parsedDEPMessage = ERSMapper.getERSMessageValueFromJSON(mapper, depMessage, "DEP", LogbookOperationType.DAT)

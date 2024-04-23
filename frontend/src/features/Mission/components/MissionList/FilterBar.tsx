@@ -11,6 +11,7 @@ import {
   Size,
   TextInput,
   useKey,
+  useNewWindow,
   usePrevious
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
@@ -34,6 +35,8 @@ export type FilterBarProps = Readonly<{
   searchQuery: string | undefined
 }>
 export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
+  const { newWindowContainerRef } = useNewWindow()
+
   const listFilterValues = useMainAppSelector(store => store.missionList.listFilterValues)
 
   const [isCustomDateRangeOpen, setIsCustomDateRangeOpen] = useState(false)
@@ -195,7 +198,11 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
           ]}
         >
           {isCustomDateRangeOpen && (
-            <FormikDateRangePicker label="Période spécifique" name={MissionFilterType.CUSTOM_DATE_RANGE} />
+            <FormikDateRangePicker
+              baseContainer={newWindowContainerRef.current}
+              label="Période spécifique"
+              name={MissionFilterType.CUSTOM_DATE_RANGE}
+            />
           )}
         </FormikFilterTagBar>
       </Wrapper>

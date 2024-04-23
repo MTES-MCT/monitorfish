@@ -1,20 +1,22 @@
+import type { Seafront } from '@constants/seafront'
 import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
-import type { SeaFront } from 'domain/entities/seaFront/constants'
 
 export namespace PriorNotification {
   export type PriorNotification = {
+    acknowledgment: LogbookMessage.Acknowledgment | undefined
     expectedArrivalDate: string | undefined
     expectedLandingDate: string | undefined
     hasVesselRiskFactorSegments: boolean | undefined
     /** Logbook message `reportId`. */
     id: string
+    isCorrection: boolean
     isVesselUnderCharter: boolean | undefined
     onBoardCatches: LogbookMessage.Catch[]
     portLocode: string | undefined
     portName: string | undefined
     purposeCode: PurposeCode | undefined
     reportingsCount: number
-    seaFront: SeaFront | undefined
+    seafront: Seafront | undefined
     sentAt: string | undefined
     tripGears: LogbookMessage.Gear[]
     tripSegments: LogbookMessage.Segment[]

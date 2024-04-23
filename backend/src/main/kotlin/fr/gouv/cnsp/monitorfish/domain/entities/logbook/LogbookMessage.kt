@@ -32,7 +32,7 @@ data class LogbookMessage(
     val transmissionFormat: LogbookTransmissionFormat,
     val software: String? = null,
 
-    var acknowledge: Acknowledge? = null,
+    var acknowledgment: Acknowledgment? = null,
     var isCorrectedByNewerMessage: Boolean = false,
     var isDeleted: Boolean = false,
     val isEnriched: Boolean = false,
@@ -85,8 +85,8 @@ data class LogbookMessage(
     }
 
     fun setAcknowledge(newLogbookMessageAcknowledgement: LogbookMessage) {
-        val currentAcknowledgement = this.acknowledge
-        val newAcknowledgement = newLogbookMessageAcknowledgement.message as Acknowledge
+        val currentAcknowledgement = this.acknowledgment
+        val newAcknowledgement = newLogbookMessageAcknowledgement.message as Acknowledgment
 
         val isCurrentAcknowledgementSuccessful = currentAcknowledgement?.isSuccess ?: false
         val isNewAcknowledgementSuccessful = newAcknowledgement.returnStatus == RETReturnErrorCode.SUCCESS.number
@@ -105,7 +105,7 @@ data class LogbookMessage(
             else -> false
         }
         if (shouldUpdate) {
-            this.acknowledge = newAcknowledgement.also {
+            this.acknowledgment = newAcknowledgement.also {
                 it.isSuccess = isCurrentAcknowledgementSuccessful || isNewAcknowledgementSuccessful
                 it.dateTime = newLogbookMessageAcknowledgement.reportDateTime
             }
@@ -187,14 +187,14 @@ data class LogbookMessage(
             .sortedBy { it.reportDateTime }
 
         val maybeLastSuccessfulRetLogbookMessage = historycallyOrderedRetLogbookMessages.lastOrNull {
-            val message = it.message as Acknowledge
+            val message = it.message as Acknowledgment
 
             message.returnStatus == RETReturnErrorCode.SUCCESS.number
         }
         // If there is at least one successful RET message, we consider the report as acknowledged
         if (maybeLastSuccessfulRetLogbookMessage != null) {
-            val lastSucessfulRetMessage = maybeLastSuccessfulRetLogbookMessage.message as Acknowledge
-            this.acknowledge = lastSucessfulRetMessage.also {
+            val lastSucessfulRetMessage = maybeLastSuccessfulRetLogbookMessage.message as Acknowledgment
+            this.acknowledgment = lastSucessfulRetMessage.also {
                 it.dateTime = maybeLastSuccessfulRetLogbookMessage.reportDateTime
                 it.isSuccess = true
             }
@@ -205,8 +205,8 @@ data class LogbookMessage(
         // Else we consider the last (failure) RET message as the final acknowledgement
         val maybeLastRetLogbookMessage = historycallyOrderedRetLogbookMessages.lastOrNull()
         if (maybeLastRetLogbookMessage != null) {
-            val lastRetMessage = maybeLastRetLogbookMessage.message as Acknowledge
-            this.acknowledge = lastRetMessage.also {
+            val lastRetMessage = maybeLastRetLogbookMessage.message as Acknowledgment
+            this.acknowledgment = lastRetMessage.also {
                 it.dateTime = maybeLastRetLogbookMessage.reportDateTime
                 it.isSuccess = lastRetMessage.returnStatus == RETReturnErrorCode.SUCCESS.number
             }
@@ -273,7 +273,7 @@ data class LogbookMessage(
     }
 
     private fun setAcknowledgeAsSuccessful() {
-        this.acknowledge = Acknowledge(isSuccess = true)
+        this.acknowledgment = Acknowledgment(isSuccess = true)
     }
 
     private fun setIsCorrectedByNewerMessage(relatedMessages: List<LogbookMessage>) {

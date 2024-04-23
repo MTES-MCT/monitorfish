@@ -88,18 +88,18 @@ export function LogbookMessages({ messageTypeFilter, navigation }: LogbookMessag
         />
         <Navigation>
           <PreviousTrip
-            disabled={isFirstVoyage}
+            disabled={!!isFirstVoyage}
             onClick={!isFirstVoyage ? navigation.goToPreviousTrip : undefined}
             title="Marée précédente"
           />
           {tripNumber ? `Marée n°${tripNumber}` : '-'}
           <LastTrip
-            disabled={isLastVoyage}
+            disabled={!!isLastVoyage}
             onClick={!isLastVoyage ? navigation.goToNextTrip : undefined}
             title="Dernière marée"
           />
           <NextTrip
-            disabled={isLastVoyage}
+            disabled={!!isLastVoyage}
             onClick={!isLastVoyage ? navigation.goToNextTrip : undefined}
             title="Marée suivante"
           />

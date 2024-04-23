@@ -2,7 +2,7 @@ export namespace LogbookMessage {
   export type LogbookMessage = PnoLogbookMessage | RetOperationLogbookMessage
 
   interface LogbookMessageBase {
-    acknowledge: Acknowledge | undefined
+    acknowledgment: Acknowledgment | undefined
     externalReferenceNumber: string
     flagState: string | undefined
     imo: string | undefined
@@ -27,19 +27,19 @@ export namespace LogbookMessage {
     vesselName: string
   }
   export interface PnoLogbookMessage extends LogbookMessageBase {
-    acknowledge: undefined
+    acknowledgment: undefined
     message: PnoMessage
     messageType: MessageType.PNO
     operationType: OperationType.COR | OperationType.DAT
   }
   export interface RetOperationLogbookMessage extends LogbookMessageBase {
-    acknowledge: Acknowledge
+    acknowledgment: Acknowledgment
     message: undefined
     messageType: MessageType
     operationType: OperationType.RET
   }
 
-  export type Acknowledge = {
+  export type Acknowledgment = {
     dateTime: string | undefined
     isSuccess: boolean
     rejectionCause: string | undefined

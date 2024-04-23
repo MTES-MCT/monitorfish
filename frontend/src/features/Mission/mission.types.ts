@@ -1,6 +1,5 @@
+import { Seafront } from '@constants/seafront'
 import { EnvMissionAction } from '@features/Mission/envMissionAction.types'
-
-import { SeaFront } from '../../domain/entities/seaFront/constants'
 
 import type { GeoJSON } from '../../domain/types/GeoJSON'
 import type { LegacyControlUnit } from '../../domain/types/legacyControlUnit'
@@ -14,7 +13,7 @@ export namespace Mission {
     createdAtUtc?: string | undefined
     endDateTimeUtc?: string
     envActions: EnvMissionAction.MissionAction[]
-    facade?: SeaFront
+    facade?: Seafront
     geom?: GeoJSON.MultiPolygon
     hasMissionOrder?: boolean | undefined
     id: number

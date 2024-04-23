@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledge
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledgment
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.LogbookMessageValue
 import java.time.ZonedDateTime
 
@@ -23,7 +23,7 @@ data class LogbookMessageDataOutput(
     val imo: String?,
     var rawMessage: String?,
 
-    var acknowledge: Acknowledge?,
+    var acknowledgment: Acknowledgment?,
     var isCorrectedByNewerMessage: Boolean,
     var isDeleted: Boolean,
     val isSentByFailoverSoftware: Boolean,
@@ -59,7 +59,7 @@ data class LogbookMessageDataOutput(
                 imo = logbookMessage.imo,
                 rawMessage = logbookMessage.rawMessage,
 
-                acknowledge = logbookMessage.acknowledge,
+                acknowledgment = logbookMessage.acknowledgment,
                 isCorrectedByNewerMessage = logbookMessage.isCorrectedByNewerMessage,
                 isDeleted = logbookMessage.isDeleted,
                 isSentByFailoverSoftware = logbookMessage.isSentByFailoverSoftware,

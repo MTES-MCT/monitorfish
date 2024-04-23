@@ -136,18 +136,18 @@ export function LogbookMessage({ isFirst, logbookMessage, withMapControls = fals
           <Acknowledge>
             <Key>Acq.</Key>
             <br />
-            {!logbookMessage.acknowledge || (logbookMessage.acknowledge.isSuccess === null && <Gray>-</Gray>)}
-            {logbookMessage.acknowledge?.isSuccess === true && (
+            {!logbookMessage.acknowledgment || (logbookMessage.acknowledgment.isSuccess === null && <Gray>-</Gray>)}
+            {logbookMessage.acknowledgment?.isSuccess === true && (
               <Icon.Confirm
                 color={THEME.color.mediumSeaGreen}
                 data-cy="LogbookMessage-successful-acknowledgement-icon"
               />
             )}
-            {logbookMessage.acknowledge?.isSuccess === false && (
+            {logbookMessage.acknowledgment?.isSuccess === false && (
               <Icon.Reject
                 color={THEME.color.maximumRed}
                 data-cy="LogbookMessage-failed-acknowledgement-icon"
-                title={logbookMessage.acknowledge?.rejectionCause ?? ''}
+                title={logbookMessage.acknowledgment?.rejectionCause ?? ''}
               />
             )}
           </Acknowledge>

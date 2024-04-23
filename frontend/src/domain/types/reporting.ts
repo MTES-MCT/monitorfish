@@ -1,6 +1,5 @@
+import { Seafront } from '@constants/seafront'
 import { ReportingOriginActor } from '@features/Reporting/types'
-
-import { SeaFront } from '../entities/seaFront/constants'
 
 import type { Infraction } from './infraction'
 import type { LegacyControlUnit } from './legacyControlUnit'
@@ -84,7 +83,7 @@ export type InfractionSuspicion = {
   dml: string
   natinfCode: number
   reportingActor: keyof typeof ReportingOriginActor
-  seaFront: SeaFront
+  seaFront: Seafront
   title: string
   type: ReportingType.INFRACTION_SUSPICION
 }

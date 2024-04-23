@@ -1,3 +1,4 @@
+import { ALL_SEAFRONT_GROUP, SEAFRONT_GROUP_SEAFRONTS, SeafrontGroup, type AllSeafrontGroup } from '@constants/seafront'
 import { CompletionStatusLabel } from '@features/Mission/components/MissionList/CompletionStatusLabel'
 import { MissionStatusLabel } from '@features/Mission/components/MissionList/MissionStatusLabel'
 import { MissionAction } from '@features/Mission/missionAction.types'
@@ -9,15 +10,10 @@ import { GeoJSON } from 'ol/format'
 import { useCallback, useState } from 'react'
 import styled from 'styled-components'
 
-import { MISSION_LIST_SUB_MENU_OPTIONS, MISSION_LIST_TABLE_OPTIONS } from './constants'
+import { MISSION_LIST_SUB_MENU_OPTIONS, MISSION_LIST_TABLE_OPTIONS, SUB_MENU_LABEL } from './constants'
 import { FilterBar } from './FilterBar'
 import { useGetFilteredMissionsQuery } from './hooks/useGetFilteredMissionsQuery'
 import { missionListActions } from './slice'
-import {
-  SEA_FRONT_GROUP_SEA_FRONTS,
-  SeaFrontGroup,
-  SeaFrontGroupLabel
-} from '../../../../domain/entities/seaFront/constants'
 import { fitToExtent } from '../../../../domain/shared_slices/Map'
 import { EmptyCardTable } from '../../../../ui/card-table/EmptyCardTable'
 import { NoRsuiteOverrideWrapper } from '../../../../ui/NoRsuiteOverrideWrapper'
@@ -32,7 +28,7 @@ import type { GeoJSON as GeoJSONType } from '../../../../domain/types/GeoJSON'
 import FrontCompletionStatus = MissionAction.FrontCompletionStatus
 
 export function MissionList() {
-  const listSeaFront = useMainAppSelector(store => store.missionList.listSeaFront)
+  const listSeafrontGroup = useMainAppSelector(store => store.missionList.listSeafrontGroup)
 
   const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
   const [isExportActivityReportsModalOpen, setIsExportActivityReportsModalOpen] = useState<boolean | undefined>(
@@ -41,24 +37,24 @@ export function MissionList() {
 
   const dispatch = useMainAppDispatch()
 
-  const { isError, isLoading, missions, missionsSeaFrontFiltered } = useGetFilteredMissionsQuery()
+  const { isError, isLoading, missions, missionsSeafrontFiltered } = useGetFilteredMissionsQuery()
 
   const { renderTableHead, tableData } = useTable<Mission.MissionWithActions>(
-    missionsSeaFrontFiltered,
+    missionsSeafrontFiltered,
     MISSION_LIST_TABLE_OPTIONS,
     [],
     searchQuery
   )
 
-  const countMissionsForSeaFrontGroup = useCallback(
-    (seaFrontGroup: SeaFrontGroup): number =>
+  const countMissionsForSeafrontGroup = useCallback(
+    (seafrontGroup: SeafrontGroup | AllSeafrontGroup): number =>
       missions.filter(({ facade }) => {
-        if (seaFrontGroup === SeaFrontGroup.ALL) {
+        if (seafrontGroup === ALL_SEAFRONT_GROUP) {
           return true
         }
 
-        return facade && SEA_FRONT_GROUP_SEA_FRONTS[seaFrontGroup]
-          ? SEA_FRONT_GROUP_SEA_FRONTS[seaFrontGroup].includes(facade as any)
+        return facade && SEAFRONT_GROUP_SEAFRONTS[seafrontGroup]
+          ? SEAFRONT_GROUP_SEAFRONTS[seafrontGroup].includes(facade as any)
           : false
       }).length,
     [missions]
@@ -72,8 +68,8 @@ export function MissionList() {
   )
 
   const handleSubMenuChange = useCallback(
-    (nextSeaFrontGroup: SeaFrontGroup) => {
-      dispatch(missionListActions.setListSeaFront(nextSeaFrontGroup))
+    (nextSeafrontGroup: SeafrontGroup | AllSeafrontGroup) => {
+      dispatch(missionListActions.setListSeafront(nextSeafrontGroup))
     },
     [dispatch]
   )
@@ -98,18 +94,18 @@ export function MissionList() {
   return (
     <>
       <SubMenu
-        counter={countMissionsForSeaFrontGroup}
+        counter={countMissionsForSeafrontGroup}
         onChange={handleSubMenuChange}
         options={MISSION_LIST_SUB_MENU_OPTIONS}
-        value={listSeaFront}
+        value={listSeafrontGroup}
         width={127}
       />
 
       <Wrapper>
         <Header>
           <HeaderTitle>
-            {listSeaFront === SeaFrontGroup.ALL && <>Toutes les missions</>}
-            {listSeaFront !== SeaFrontGroup.ALL && <>Missions en {SeaFrontGroupLabel[listSeaFront]}</>}
+            {listSeafrontGroup === ALL_SEAFRONT_GROUP && <>Toutes les missions</>}
+            {listSeafrontGroup !== ALL_SEAFRONT_GROUP && <>Missions en {SUB_MENU_LABEL[listSeafrontGroup]}</>}
           </HeaderTitle>
           <HeaderButtonGroup>
             <Button Icon={Icon.Plus} onClick={() => goToMissionForm()}>

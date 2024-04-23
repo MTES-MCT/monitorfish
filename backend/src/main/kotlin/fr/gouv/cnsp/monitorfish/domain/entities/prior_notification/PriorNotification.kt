@@ -10,7 +10,7 @@ data class PriorNotification(
     val logbookMessageTyped: LogbookMessageTyped<PNO>,
     val port: Port? = null,
     val reportingsCount: Int? = null,
-    val seaFront: String? = null,
+    val seafront: String? = null,
     val vessel: Vessel,
     val vesselRiskFactor: VesselRiskFactor? = null,
 )

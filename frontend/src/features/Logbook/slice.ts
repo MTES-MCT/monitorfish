@@ -13,8 +13,8 @@ export type LogbookState = {
   fishingActivities: FishingActivities | undefined
   fishingActivitiesShowedOnMap: FishingActivityShowedOnMap[]
   fishingActivitiesTab: FishingActivitiesTab
-  isFirstVoyage: any | null
-  isLastVoyage: any | null
+  isFirstVoyage: boolean | null
+  isLastVoyage: boolean | null
   lastFishingActivities: FishingActivities
   loadingFishingActivities: boolean
   nextFishingActivities: FishingActivities | null
@@ -194,7 +194,7 @@ const logbookSlice = createSlice({
           date: getEffectiveDateTimeFromMessage(fishingActivity),
           id: fishingActivity.operationNumber,
           isDeleted: fishingActivity.isDeleted,
-          isNotAcknowledged: !fishingActivity.acknowledge?.isSuccess,
+          isNotAcknowledged: !fishingActivity.acknowledgment?.isSuccess,
           name: getLogbookMessageType(fishingActivity)
         })) as any
 
@@ -221,7 +221,7 @@ const logbookSlice = createSlice({
         date: getEffectiveDateTimeFromMessage(fishingActivityToShow),
         id: fishingActivityToShow.operationNumber,
         isDeleted: fishingActivityToShow.isDeleted,
-        isNotAcknowledged: !fishingActivityToShow.acknowledge?.isSuccess,
+        isNotAcknowledged: !fishingActivityToShow.acknowledgment?.isSuccess,
         name: getLogbookMessageType(fishingActivityToShow)
       })
     },

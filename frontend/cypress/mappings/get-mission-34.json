@@ -115,6 +115,14 @@
           "hasSomeGearsSeized": false,
           "hasSomeSpeciesSeized": false,
           "closedBy": null
+        },
+        {
+          "actionStartDateTimeUtc": "2022-11-03T13:59:20.176Z",
+          "actionType": "NOTE",
+          "geom": null,
+          "closedBy": null,
+          "id": "88713755-3966-4ca4-ae18-10cab6249483",
+          "observations": "Une note avec des informations sur la mission."
         }
       ],
       "missionSource": "MONITORENV",

@@ -7,4 +7,5 @@ data class EnvMissionAction(
     val id: UUID,
     val actionStartDateTimeUtc: ZonedDateTime? = null,
     val actionType: EnvMissionActionType,
+    val observations: String? = null,
 )

@@ -5,6 +5,7 @@ export namespace EnvMissionAction {
     actionStartDateTimeUtc?: string
     actionType: MissionActionType
     id: number
+    observations: string | undefined
   }
 
   // ---------------------------------------------------------------------------

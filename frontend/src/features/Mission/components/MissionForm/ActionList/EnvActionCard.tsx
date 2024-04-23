@@ -26,7 +26,7 @@ export function EnvActionCard({ missionAction }: EnvActionCardProps) {
         return [
           getActionTitle(
             EnvMissionAction.MISSION_ACTION_TYPE_LABEL[EnvMissionAction.MissionActionType.NOTE],
-            undefined,
+            missionAction.observations,
             ''
           ),
           Icon.Note

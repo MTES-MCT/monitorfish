@@ -21,7 +21,7 @@ export const getRiskFactorColor = (riskFactor: number) => {
 export const getImpactRiskFactorText = (riskFactor: number, hasSegment: boolean = false) => {
   if (riskFactor >= 1 && riskFactor < 1.75) {
     if (!hasSegment) {
-      return 'Pas de segment'
+      return 'Aucun segment'
     }
 
     return 'Impact faible'

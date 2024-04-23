@@ -1,6 +1,7 @@
 import { MapToolButton } from '@features/MainWindow/components/MapButtons/shared/MapToolButton'
 import { SaveVesselFiltersModal } from '@features/MainWindow/components/MapButtons/VesselFilters/SaveVesselFiltersModal'
 import { THEME } from '@mtes-mct/monitor-ui'
+import { getExtentFromGeoJSON } from '@utils/getExtentFromGeoJSON'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { batch } from 'react-redux'
 import { Modal } from 'rsuite'

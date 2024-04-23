@@ -14,7 +14,7 @@ export function ErrorToastNotification() {
     | (Error & {
         type: ErrorType
       })
-    | null = useMainAppSelector(state => state.global.error)
+    | null = useMainAppSelector(state => state.mainWindow.error)
 
   useEffect(() => {
     if (!error || (error.type && error.type === ErrorType.INFO_AND_HIDDEN)) {

@@ -6,7 +6,7 @@ context('Missions Map Button', () => {
   it('Mission layer Should be showed and hidden', () => {
     // Given
     cy.get('.MISSION_PIN_POINT').should('exist')
-    cy.get('*[data-cy^="missions-menu-box"]').should('not.be.visible')
+    cy.get('*[data-cy^="missions-menu-box"]').should('not.exist')
     cy.get('*[data-cy="mission-label-text"]').should('have.length', 1)
 
     // When

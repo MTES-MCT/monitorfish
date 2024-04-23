@@ -68,7 +68,7 @@ export const clickOnMapFeature =
       return
     }
 
-    if (getState().global.previewFilteredVesselsMode) {
+    if (getState().mainWindow.previewFilteredVesselsMode) {
       return
     }
 

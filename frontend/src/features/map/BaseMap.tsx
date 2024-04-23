@@ -43,16 +43,15 @@ export function BaseMap({
   showAttributions,
   showCoordinates
 }: BaseMapProps) {
-  const { animateToRegulatoryLayer } = useMainAppSelector(state => state.map)
-
-  const { healthcheckTextWarning, previewFilteredVesselsMode } = useMainAppSelector(state => state.global)
-  const dispatch = useMainAppDispatch()
-
   const isAnimating = useRef(false)
   const isInitRenderDone = useRef(false)
-  const [cursorCoordinates, setCursorCoordinates] = useState<Coordinates | undefined>(undefined)
+  const mapElement = useRef<HTMLDivElement | null>(null)
 
-  const mapElement = useRef()
+  const dispatch = useMainAppDispatch()
+  const animateToRegulatoryLayer = useMainAppSelector(state => state.map.animateToRegulatoryLayer)
+  const previewFilteredVesselsMode = useMainAppSelector(state => state.mainWindow.previewFilteredVesselsMode)
+
+  const [cursorCoordinates, setCursorCoordinates] = useState<Coordinates | undefined>(undefined)
 
   const handleMapClick = useCallback(
     (event, _map: OpenLayerMap) => {
@@ -151,7 +150,7 @@ export function BaseMap({
   )
 
   useEffect(() => {
-    monitorfishMap.setTarget(mapElement.current)
+    monitorfishMap.setTarget(mapElement.current ?? undefined)
 
     monitorfishMap.on('click', event => handleMapClick(event, monitorfishMap))
     monitorfishMap.on('pointermove', event => throttleAndHandlePointerMove(event, monitorfishMap))
@@ -223,12 +222,7 @@ export function BaseMap({
 
   return (
     <MapWrapper>
-      <MapContainer
-        // @ts-ignore
-        ref={mapElement}
-        hasHealthcheckTextWarning={!!healthcheckTextWarning.length}
-        isPreviewFilteredVesselsMode={!!previewFilteredVesselsMode}
-      />
+      <MapContainer ref={mapElement} isPreviewFilteredVesselsMode={!!previewFilteredVesselsMode} />
       {showCoordinates && <MapCoordinatesBox coordinates={cursorCoordinates} />}
       {showAttributions && <MapAttributionsBox />}
       {Children.map(children, child => child)}
@@ -238,16 +232,15 @@ export function BaseMap({
 
 const MapWrapper = styled.div`
   display: flex;
-  flex: 1;
+  height: 100%;
 `
 
 const MapContainer = styled.div<
   {
-    hasHealthcheckTextWarning: boolean
     isPreviewFilteredVesselsMode: boolean
   } & HTMLProps<HTMLDivElement>
 >`
-  height: ${p => (p.hasHealthcheckTextWarning || p.isPreviewFilteredVesselsMode ? 'calc(100vh - 50px)' : '100vh')};
+  height: ${p => (p.isPreviewFilteredVesselsMode ? 'calc(100vh - 50px)' : '100%')};
   width: 100%;
   overflow-y: hidden;
   overflow-x: hidden;

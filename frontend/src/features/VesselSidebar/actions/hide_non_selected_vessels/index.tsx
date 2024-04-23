@@ -10,7 +10,7 @@ import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
 
 export function HideNonSelectedVessels({ isSidebarOpen }) {
   const dispatch = useMainAppDispatch()
-  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
+  const rightMenuIsOpen = useMainAppSelector(state => state.mainWindow.rightMenuIsOpen)
   const hideNonSelectedVessels = useMainAppSelector(state => state.vessel.hideNonSelectedVessels)
   const selectedVesselPositions = useMainAppSelector(state => state.vessel.selectedVesselPositions)
 

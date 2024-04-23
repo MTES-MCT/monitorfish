@@ -1,6 +1,6 @@
 import { getBeaconMalfunctionFromAPI } from '../../../api/beaconMalfunction'
+import { setError } from '../../../features/MainWindow/slice'
 import { setOpenedBeaconMalfunctionsInKanban } from '../../shared_slices/BeaconMalfunction'
-import { setError } from '../../shared_slices/Global'
 
 /**
  * Open a single beacon malfunction

@@ -11,8 +11,8 @@ export function ControlUnitListDialogButton() {
   const wrapperRef = useRef(null)
 
   const dispatch = useMainAppDispatch()
-  // const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
-  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
+  // const previewFilteredVesselsMode = useMainAppSelector(state => state.mainWindow.previewFilteredVesselsMode)
+  const rightMenuIsOpen = useMainAppSelector(state => state.mainWindow.rightMenuIsOpen)
   const isControlUnitDialogDisplayed = useMainAppSelector(
     state => state.displayedComponent.isControlUnitDialogDisplayed
   )
@@ -41,7 +41,7 @@ export function ControlUnitListDialogButton() {
       <MapToolButton
         isActive={isControlUnitListDialogDisplayed || isControlUnitDialogDisplayed}
         onClick={toggle}
-        style={{ top: 236 }}
+        style={{ top: 238 }}
         title="Liste des unités de contrôle"
       >
         <Icon.ControlUnit size={28} />

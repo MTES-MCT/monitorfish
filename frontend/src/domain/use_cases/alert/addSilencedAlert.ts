@@ -1,6 +1,6 @@
 import { alertApi } from '../../../api/alert'
+import { setError } from '../../../features/MainWindow/slice'
 import { setSilencedAlerts } from '../../../features/SideWindow/Alert/slice'
-import { setError } from '../../shared_slices/Global'
 
 import type { MainAppThunk } from '../../../store'
 import type { SilencedAlertData } from '../../entities/alerts/types'

@@ -1,6 +1,6 @@
 import { createFleetSegmentFromAPI } from '@features/FleetSegment/apis'
 
-import { setError } from '../../../domain/shared_slices/Global'
+import { setError } from '../../MainWindow/slice'
 
 import type { FleetSegment, UpdateFleetSegment } from '../types'
 

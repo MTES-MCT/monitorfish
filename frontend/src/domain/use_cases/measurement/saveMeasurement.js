@@ -3,8 +3,8 @@ import Circle from 'ol/geom/Circle'
 import { fromCircle } from 'ol/geom/Polygon'
 import { batch } from 'react-redux'
 
+import { setRightMapBoxOpened } from '../../../features/MainWindow/slice'
 import { OPENLAYERS_PROJECTION } from '../../entities/map/constants'
-import { setRightMapBoxOpened } from '../../shared_slices/Global'
 import { addMeasurementDrawed, resetCircleMeasurementInDrawing } from '../../shared_slices/Measurement'
 
 const saveMeasurement = (feature, measurement) => dispatch => {

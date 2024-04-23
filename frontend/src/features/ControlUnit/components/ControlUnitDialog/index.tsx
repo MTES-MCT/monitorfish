@@ -25,7 +25,7 @@ export function ControlUnitDialog() {
   if (!controlUnitId) {
     throw new FrontendError('`store.controlUnitDialog.controlUnitId` is undefined.')
   }
-  const healthcheckTextWarning = useMainAppSelector(store => store.global.healthcheckTextWarning)
+  const healthcheckTextWarning = useMainAppSelector(store => store.mainWindow.healthcheckTextWarning)
 
   const { data: controlUnit, error: getControlControlUnitError } = useGetControlUnitQuery(
     controlUnitId,

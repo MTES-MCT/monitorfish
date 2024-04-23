@@ -1,5 +1,5 @@
 import { getInfractionsFromAPI } from '../../../api/infraction'
-import { setError } from '../../shared_slices/Global'
+import { setError } from '../../../features/MainWindow/slice'
 import { setInfractions } from '../../shared_slices/Infraction'
 
 export const getInfractions = () => dispatch => {

@@ -1,5 +1,5 @@
 import { getAllCurrentReportingsFromAPI } from '../../../api/reporting'
-import { removeError, setError } from '../../../domain/shared_slices/Global'
+import { removeError, setError } from '../../MainWindow/slice'
 import { setCurrentReportings } from '../slice'
 
 export const getAllCurrentReportings = () => dispatch =>

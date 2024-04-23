@@ -1,7 +1,7 @@
 import { getVesselPositionsFromAPI } from '../../../api/vessel'
 import { logbookActions } from '../../../features/Logbook/slice'
+import { removeError, setError } from '../../../features/MainWindow/slice'
 import { throwCustomErrorFromAPIFeedback } from '../../entities/vesselTrackDepth'
-import { removeError, setError } from '../../shared_slices/Global'
 import { animateToExtent, doNotAnimate } from '../../shared_slices/Map'
 import {
   resetLoadingVessel,

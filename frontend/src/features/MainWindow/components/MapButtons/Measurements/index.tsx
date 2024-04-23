@@ -7,19 +7,19 @@ import styled from 'styled-components'
 
 import { CustomCircleRange } from './CustomCircleRange'
 import { MapBox, MeasurementType } from '../../../../../domain/entities/map/constants'
-import { setRightMapBoxOpened } from '../../../../../domain/shared_slices/Global'
 import { setMeasurementTypeToAdd } from '../../../../../domain/shared_slices/Measurement'
 import { MapComponent } from '../../../../commonStyles/MapComponent'
 import MultiLineSVG from '../../../../icons/standardized/Measure_broken_line.svg?react'
 import CircleRangeSVG from '../../../../icons/standardized/Measure_circle.svg?react'
 import MeasurementSVG from '../../../../icons/standardized/Measure_line.svg?react'
+import { setRightMapBoxOpened } from '../../../slice'
 import { MapToolButton } from '../shared/MapToolButton'
 
 export function MeasurementMapButton() {
   const dispatch = useMainAppDispatch()
   const measurementTypeToAdd = useMainAppSelector(state => state.measurement.measurementTypeToAdd)
-  const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
-  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
+  const rightMapBoxOpened = useMainAppSelector(state => state.mainWindow.rightMapBoxOpened)
+  const rightMenuIsOpen = useMainAppSelector(state => state.mainWindow.rightMenuIsOpen)
 
   const isRightMenuShrinked = !rightMenuIsOpen
   const isOpen = useMemo(() => rightMapBoxOpened === MapBox.MEASUREMENT_MENU, [rightMapBoxOpened])
@@ -71,7 +71,7 @@ export function MeasurementMapButton() {
         data-cy="measurement"
         isActive={isOpen || !!measurementTypeToAdd}
         onClick={openOrCloseMeasurementMenu}
-        style={{ top: 291 }}
+        style={{ top: 293 }}
         title="Mesurer une distance"
       >
         {measurementIcon}
@@ -149,7 +149,7 @@ const MeasurementOptions = styled(MapComponent)<{
   opacity: ${p => (p.isOpen ? '1' : '0')};
   position: absolute;
   right: 10px;
-  top: 291px;
+  top: 293px;
   transition: all 0.5s;
   width: 135px;
   z-index: 1000;

@@ -1,9 +1,9 @@
 import { batch } from 'react-redux'
 
 import { getAllRegulatoryLayersFromAPI } from '../../../api/geoserver'
-import { setError } from '../../../domain/shared_slices/Global'
 import layer from '../../../domain/shared_slices/Layer'
 import { MonitorFishWorker } from '../../../workers/MonitorFishWorker'
+import { setError } from '../../MainWindow/slice'
 import {
   setLayersTopicsByRegTerritory,
   setRegulatoryLayerLawTypes,
@@ -16,7 +16,7 @@ const getAllRegulatoryLayers = () => async (dispatch, getState) => {
   const { setShowedLayersWithLocalStorageValues } = layer.homepage.actions
   const { speciesByCode } = getState().species
 
-  return getAllRegulatoryLayersFromAPI(getState().global.isBackoffice)
+  return getAllRegulatoryLayersFromAPI(getState().mainWindow.isBackoffice)
     .then(features => {
       monitorFishWorker.mapGeoserverToRegulatoryZones(features, speciesByCode).then(regulatoryZones => {
         dispatch(setRegulatoryZones(regulatoryZones))

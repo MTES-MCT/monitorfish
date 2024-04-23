@@ -7,7 +7,7 @@ import ShowTrackSVG from '../../../icons/Bouton_afficher_toute_la_piste.svg?reac
 import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
 
 export function AnimateToTrack({ isSidebarOpen }) {
-  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
+  const rightMenuIsOpen = useMainAppSelector(state => state.mainWindow.rightMenuIsOpen)
   const selectedVesselPositions = useMainAppSelector(state => state.vessel.selectedVesselPositions)
   const dispatch = useMainAppDispatch()
 

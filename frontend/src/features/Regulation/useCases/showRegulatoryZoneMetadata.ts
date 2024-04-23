@@ -1,5 +1,5 @@
 import { getRegulatoryFeatureMetadataFromAPI } from '../../../api/geoserver'
-import { setError } from '../../../domain/shared_slices/Global'
+import { setError } from '../../MainWindow/slice'
 import {
   closeRegulatoryZoneMetadataPanel,
   resetLoadingRegulatoryZoneMetadata,
@@ -19,7 +19,7 @@ export const showRegulatoryZoneMetadata =
     dispatch(setLoadingRegulatoryZoneMetadata())
     const { speciesByCode } = getState().species
 
-    getRegulatoryFeatureMetadataFromAPI(partialRegulatoryZone, getState().global.isBackoffice)
+    getRegulatoryFeatureMetadataFromAPI(partialRegulatoryZone, getState().mainWindow.isBackoffice)
       .then(feature => {
         const parsedRegulatoryZone = mapToRegulatoryZone(feature, speciesByCode)
         dispatch(setRegulatoryZoneMetadata(parsedRegulatoryZone))

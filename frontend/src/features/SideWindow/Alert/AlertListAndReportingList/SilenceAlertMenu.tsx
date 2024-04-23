@@ -34,7 +34,7 @@ export function SilenceAlertMenu({
   silenceAlert
 }: SilenceAlertMenuProps) {
   const silencedAlertRef = useRef() as MutableRefObject<HTMLDivElement>
-  const clickedOutside = useClickOutsideWhenOpenedWithinRef(silencedAlertRef, showSilencedAlertForIndex, baseRef)
+  const clickedOutside = useClickOutsideWhenOpenedWithinRef(silencedAlertRef, showSilencedAlertForIndex > 0, baseRef)
   const { forceUpdate } = useForceUpdate()
 
   useEffect(() => {

@@ -5,12 +5,12 @@ import styled from 'styled-components'
 
 import { FIVE_MINUTES, TWENTY_MINUTES } from '../../../api/APIWorker'
 import { COLORS } from '../../../constants/constants'
-import { setError } from '../../../domain/shared_slices/Global'
 import { useIsInLightMode } from '../../../hooks/authorization/useIsInLightMode'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { MapComponent } from '../../commonStyles/MapComponent'
 import VesselSVG from '../../icons/Icone_navire.svg?react'
+import { setError } from '../../MainWindow/slice'
 import { useGetVesselsLastPositionsApi } from '../hooks/useGetVesselsLastPositionsApi'
 import { showVesselsLastPosition } from '../useCases/showVesselsLastPosition'
 
@@ -19,7 +19,7 @@ export function VesselLoader() {
   const isInLightMode = useIsInLightMode()
   const dispatch = useMainAppDispatch()
 
-  const blockVesselsUpdate = useMainAppSelector(state => state.global.blockVesselsUpdate)
+  const blockVesselsUpdate = useMainAppSelector(state => state.mainWindow.blockVesselsUpdate)
   const loadingPositions = useMainAppSelector(state => state.vessel.loadingPositions)
   const vesselSidebarIsOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
 

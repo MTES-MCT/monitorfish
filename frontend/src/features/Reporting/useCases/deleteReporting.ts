@@ -1,17 +1,27 @@
+import { logSoftError } from '@mtes-mct/monitor-ui'
 import { batch } from 'react-redux'
 
 import { deleteReportingFromAPI } from '../../../api/reporting'
 import { Vessel } from '../../../domain/entities/vessel/vessel'
-import { removeError, setError } from '../../../domain/shared_slices/Global'
 import { removeVesselReporting } from '../../../domain/shared_slices/Vessel'
+import { removeError, setError } from '../../MainWindow/slice'
 import { removeReportingsIdsFromCurrentReportings, setCurrentAndArchivedReportingsOfSelectedVessel } from '../slice'
 
 import type { MainAppThunk } from '../../../store'
 
 export const deleteReporting =
-  (id: number): MainAppThunk =>
+  (id: number): MainAppThunk<void> =>
   (dispatch, getState) => {
     const { selectedVesselIdentity } = getState().vessel
+    // TODO Can this case happen? Is it the right way to handle it?
+    if (!selectedVesselIdentity) {
+      logSoftError({
+        message: '`selectedVesselIdentity` is null.',
+        userMessage: 'Aucun navire sélectionné pour supprimer un signalement.'
+      })
+
+      return
+    }
     const { currentAndArchivedReportingsOfSelectedVessel } = getState().reporting
 
     const deletedReporting = currentAndArchivedReportingsOfSelectedVessel?.current.find(

@@ -7,13 +7,13 @@ import styled from 'styled-components'
 
 import { EditVesselLabels } from './EditVesselLabels'
 import { MapBox } from '../../../../../domain/entities/map/constants'
-import { setRightMapBoxOpened } from '../../../../../domain/shared_slices/Global'
+import { setRightMapBoxOpened } from '../../../slice'
 import { MapToolButton } from '../shared/MapToolButton'
 
 export function VesselLabelsMapButton() {
   const dispatch = useMainAppDispatch()
-  const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
-  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
+  const rightMapBoxOpened = useMainAppSelector(state => state.mainWindow.rightMapBoxOpened)
+  const rightMenuIsOpen = useMainAppSelector(state => state.mainWindow.rightMenuIsOpen)
 
   const isRightMenuShrinked = !rightMenuIsOpen
   const isOpen = useMemo(() => rightMapBoxOpened === MapBox.VESSEL_LABELS, [rightMapBoxOpened])
@@ -37,7 +37,7 @@ export function VesselLabelsMapButton() {
         data-cy="vessel-labels"
         isActive={isOpen}
         onClick={openOrCloseVesselLabels}
-        style={{ top: 194 }}
+        style={{ top: 196 }}
         title="Affichage des dernières positions"
       >
         <Icon.Tag color={isRightMenuShrinked ? THEME.color.charcoal : THEME.color.gainsboro} size={26} />

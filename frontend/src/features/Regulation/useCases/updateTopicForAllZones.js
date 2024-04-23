@@ -1,7 +1,7 @@
 import { Feature } from 'ol'
 
 import { sendRegulationTransaction } from '../../../api/geoserver'
-import { setError } from '../../../domain/shared_slices/Global'
+import { setError } from '../../MainWindow/slice'
 import { setLayersTopicsByRegTerritory, setRegulatoryLayerLawTypes } from '../slice'
 import { getRegulatoryFeatureId, mapToRegulatoryFeatureObject, REGULATION_ACTION_TYPE } from '../utils'
 

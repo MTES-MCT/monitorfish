@@ -1,4 +1,4 @@
-import { SeaFront } from '@constants/seaFront'
+import { Seafront } from '@constants/seafront'
 import { ReportingOriginActor } from '@features/Reporting/types'
 
 import type { Infraction } from './infraction'
@@ -83,7 +83,7 @@ export type InfractionSuspicion = {
   dml: string
   natinfCode: number
   reportingActor: keyof typeof ReportingOriginActor
-  seaFront: SeaFront
+  seaFront: Seafront
   title: string
   type: ReportingType.INFRACTION_SUSPICION
 }

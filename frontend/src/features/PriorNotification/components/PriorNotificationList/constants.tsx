@@ -1,7 +1,7 @@
 import { CountryFlag } from '@components/CountryFlag'
 import { Ellipsised } from '@components/Ellipsised'
 import { Titled } from '@components/Titled'
-import { SeaFrontGroup, type AllSeaFrontGroup, type NoSeaFrontGroup } from '@constants/seaFront'
+import { SeafrontGroup, type AllSeafrontGroup, type NoSeafrontGroup } from '@constants/seafront'
 import { customDayjs, THEME, Tag, getOptionsFromLabelledEnum, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
@@ -162,15 +162,15 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
 ]
 
 /* eslint-disable sort-keys-fix/sort-keys-fix, typescript-sort-keys/string-enum */
-export const SUB_MENU_LABEL: Record<SeaFrontGroup | AllSeaFrontGroup | NoSeaFrontGroup, string> = {
-  ALL_SEA_FRONT_GROUP: 'TOUT',
+export const SUB_MENU_LABEL: Record<SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup, string> = {
+  ALL_SEAFRONT_GROUP: 'TOUT',
   MED: 'MED',
   MEMN: 'MEMN',
   NAMO: 'NAMO',
   SA: 'SA',
   OUTREMEROA: 'O-M OA',
   OUTREMEROI: 'O-M OI',
-  NO_SEA_FRONT_GROUP: 'HORS'
+  NO_SEAFRONT_GROUP: 'HORS'
 }
 export const SUB_MENUS_AS_OPTIONS = getOptionsFromLabelledEnum(SUB_MENU_LABEL)
 

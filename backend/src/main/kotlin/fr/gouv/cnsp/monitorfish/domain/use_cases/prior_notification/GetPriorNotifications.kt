@@ -49,7 +49,7 @@ class GetPriorNotifications(
 
                 val finalPriorNotification = priorNotification.copy(
                     port = port,
-                    seaFront = port?.facade,
+                    seafront = port?.facade,
                     vessel = vessel,
                     vesselRiskFactor = vesselRiskFactor,
                 )

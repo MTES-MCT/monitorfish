@@ -22,7 +22,7 @@ import { FilterBar } from './FilterBar'
 import { FilterTags } from './FilterTags'
 import { Row } from './Row'
 import {
-  countPriorNotificationsForSeaFrontGroup,
+  countPriorNotificationsForSeafrontGroup,
   getApiFilterFromListFilter,
   getLocalFilterFromListFilter,
   getTitle
@@ -31,7 +31,7 @@ import { useGetPriorNotificationsQuery } from '../../api'
 import { priorNotificationActions } from '../../slice'
 import { PriorNotificationCard } from '../PriorNotificationCard'
 
-import type { AllSeaFrontGroup, NoSeaFrontGroup, SeaFrontGroup } from '@constants/seaFront'
+import type { AllSeafrontGroup, NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 
 export function PriorNotificationList() {
   const dispatch = useMainAppDispatch()
@@ -39,7 +39,7 @@ export function PriorNotificationList() {
   const openedPriorNotificationId = useMainAppSelector(state => state.priorNotification.openedPriorNotificationId)
   const apiFilter = useMemo(() => getApiFilterFromListFilter(listFilter), [listFilter])
   const localFilters = useMemo(() => getLocalFilterFromListFilter(listFilter), [listFilter])
-  const selectedSeaFrontGroup = useMainAppSelector(state => state.priorNotification.listFilterValues.seaFrontGroup)
+  const selectedSeafrontGroup = useMainAppSelector(state => state.priorNotification.listFilterValues.seafrontGroup)
   const {
     data: priorNotifications,
     isError,
@@ -58,18 +58,18 @@ export function PriorNotificationList() {
     }
   ])
 
-  const title = getTitle(listFilter.seaFrontGroup)
+  const title = getTitle(listFilter.seafrontGroup)
 
   const handleSubMenuChange = useCallback(
-    (nextSeaFrontGroup: SeaFrontGroup | AllSeaFrontGroup | NoSeaFrontGroup) => {
-      dispatch(priorNotificationActions.setListFilterValues({ seaFrontGroup: nextSeaFrontGroup }))
+    (nextSeafrontGroup: SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup) => {
+      dispatch(priorNotificationActions.setListFilterValues({ seafrontGroup: nextSeafrontGroup }))
     },
     [dispatch]
   )
 
   const subMenuCounter = useCallback(
-    (seaFrontGroup: SeaFrontGroup | AllSeaFrontGroup | NoSeaFrontGroup): number =>
-      countPriorNotificationsForSeaFrontGroup(priorNotifications, seaFrontGroup),
+    (seafrontGroup: SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup): number =>
+      countPriorNotificationsForSeafrontGroup(priorNotifications, seafrontGroup),
     [priorNotifications]
   )
 
@@ -101,7 +101,7 @@ export function PriorNotificationList() {
         counter={subMenuCounter}
         onChange={handleSubMenuChange}
         options={SUB_MENUS_AS_OPTIONS}
-        value={selectedSeaFrontGroup}
+        value={selectedSeafrontGroup}
         width={127}
       />
 

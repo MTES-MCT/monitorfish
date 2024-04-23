@@ -1,19 +1,19 @@
-import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFront } from '@constants/seaFront'
+import { SEAFRONT_GROUP_SEAFRONTS, Seafront } from '@constants/seafront'
 import { Mission } from '@features/Mission/mission.types'
 import { expect } from '@jest/globals'
 import { getUtcizedDayjs } from '@mtes-mct/monitor-ui'
 
-import { seaFrontFilterFunction } from '../seaFrontFilterFunction'
+import { seafrontFilterFunction } from '../seafrontFilterFunction'
 
 import MissionSource = Mission.MissionSource
 import MissionType = Mission.MissionType
 
-describe('domain/entities/mission/filters/seaFrontFilterFunction.ts()', () => {
+describe('domain/entities/mission/filters/seafrontFilterFunction.ts()', () => {
   it('should return true when the facade is included in the mission facade', () => {
     const mission = {
       controlUnits: [],
       envActions: [],
-      facade: SeaFront.MED,
+      facade: Seafront.MED,
       id: 123,
       isGeometryComputedFromControls: false,
       isValid: false,
@@ -22,7 +22,7 @@ describe('domain/entities/mission/filters/seaFrontFilterFunction.ts()', () => {
       startDateTimeUtc: getUtcizedDayjs().toISOString()
     }
 
-    const result = seaFrontFilterFunction(mission, [SeaFront.MED])
+    const result = seafrontFilterFunction(mission, [Seafront.MED])
 
     expect(result).toBeTruthy()
   })
@@ -31,7 +31,7 @@ describe('domain/entities/mission/filters/seaFrontFilterFunction.ts()', () => {
     const mission = {
       controlUnits: [],
       envActions: [],
-      facade: SeaFront.SA,
+      facade: Seafront.SA,
       id: 123,
       isGeometryComputedFromControls: false,
       isValid: false,
@@ -40,7 +40,7 @@ describe('domain/entities/mission/filters/seaFrontFilterFunction.ts()', () => {
       startDateTimeUtc: getUtcizedDayjs().toISOString()
     }
 
-    const result = seaFrontFilterFunction(mission, [SeaFront.MED])
+    const result = seafrontFilterFunction(mission, [Seafront.MED])
 
     expect(result).toBeFalsy()
   })
@@ -49,7 +49,7 @@ describe('domain/entities/mission/filters/seaFrontFilterFunction.ts()', () => {
     const mission = {
       controlUnits: [],
       envActions: [],
-      facade: SeaFront.SA,
+      facade: Seafront.SA,
       id: 123,
       isGeometryComputedFromControls: false,
       isValid: false,
@@ -58,7 +58,7 @@ describe('domain/entities/mission/filters/seaFrontFilterFunction.ts()', () => {
       startDateTimeUtc: getUtcizedDayjs().toISOString()
     }
 
-    const result = seaFrontFilterFunction(mission, [])
+    const result = seafrontFilterFunction(mission, [])
 
     expect(result).toBeTruthy()
   })
@@ -67,7 +67,7 @@ describe('domain/entities/mission/filters/seaFrontFilterFunction.ts()', () => {
     const mission = {
       controlUnits: [],
       envActions: [],
-      facade: SeaFront.GUADELOUPE,
+      facade: Seafront.GUADELOUPE,
       id: 123,
       isGeometryComputedFromControls: false,
       isValid: false,
@@ -76,8 +76,8 @@ describe('domain/entities/mission/filters/seaFrontFilterFunction.ts()', () => {
       startDateTimeUtc: getUtcizedDayjs().toISOString()
     }
 
-    const filteredGroup = SEA_FRONT_GROUP_SEA_FRONTS.OUTREMEROA
-    const result = seaFrontFilterFunction(mission, filteredGroup)
+    const filteredGroup = SEAFRONT_GROUP_SEAFRONTS.OUTREMEROA
+    const result = seafrontFilterFunction(mission, filteredGroup)
 
     expect(result).toBeTruthy()
   })

@@ -1,4 +1,4 @@
-import type { SeaFront } from '@constants/seaFront'
+import type { Seafront } from '@constants/seafront'
 import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 
 export namespace PriorNotification {
@@ -16,7 +16,7 @@ export namespace PriorNotification {
     portName: string | undefined
     purposeCode: PurposeCode | undefined
     reportingsCount: number
-    seaFront: SeaFront | undefined
+    seafront: Seafront | undefined
     sentAt: string | undefined
     tripGears: LogbookMessage.Gear[]
     tripSegments: LogbookMessage.Segment[]

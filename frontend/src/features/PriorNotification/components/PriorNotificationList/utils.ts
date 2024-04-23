@@ -1,11 +1,11 @@
 import {
-  SEA_FRONT_GROUP_SEA_FRONTS,
-  SeaFrontGroup,
-  type NoSeaFrontGroup,
-  NO_SEA_FRONT_GROUP,
-  ALL_SEA_FRONT_GROUP,
-  type AllSeaFrontGroup
-} from '@constants/seaFront'
+  SEAFRONT_GROUP_SEAFRONTS,
+  SeafrontGroup,
+  type NoSeafrontGroup,
+  NO_SEAFRONT_GROUP,
+  ALL_SEAFRONT_GROUP,
+  type AllSeafrontGroup
+} from '@constants/seafront'
 import { customDayjs, getMaybeBooleanFromRichBoolean, type DateAsStringRange, type Filter } from '@mtes-mct/monitor-ui'
 
 import { ExpectedArrivalPeriod, LastControlPeriod, SUB_MENU_LABEL } from './constants'
@@ -14,25 +14,25 @@ import type { ListFilter } from './types'
 import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
-export function countPriorNotificationsForSeaFrontGroup(
+export function countPriorNotificationsForSeafrontGroup(
   priorNotifications: PriorNotification.PriorNotification[] | undefined,
-  seaFrontGroup: SeaFrontGroup | AllSeaFrontGroup | NoSeaFrontGroup
+  seafrontGroup: SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup
 ): number {
   if (!priorNotifications) {
     return 0
   }
 
-  return priorNotifications.filter(({ seaFront }) => {
-    if (seaFrontGroup === ALL_SEA_FRONT_GROUP) {
+  return priorNotifications.filter(({ seafront }) => {
+    if (seafrontGroup === ALL_SEAFRONT_GROUP) {
       return true
     }
 
-    if (seaFrontGroup === NO_SEA_FRONT_GROUP) {
-      return !seaFront
+    if (seafrontGroup === NO_SEAFRONT_GROUP) {
+      return !seafront
     }
 
-    return !!seaFront && !!SEA_FRONT_GROUP_SEA_FRONTS[seaFrontGroup]
-      ? SEA_FRONT_GROUP_SEA_FRONTS[seaFrontGroup].includes(seaFront)
+    return !!seafront && !!SEAFRONT_GROUP_SEAFRONTS[seafrontGroup]
+      ? SEAFRONT_GROUP_SEAFRONTS[seafrontGroup].includes(seafront)
       : false
   }).length
 }
@@ -150,13 +150,13 @@ export function getLocalFilterFromListFilter(listFilter: ListFilter) {
     filters.push(filter)
   }
 
-  if (!!listFilter.seaFrontGroup && listFilter.seaFrontGroup !== ALL_SEA_FRONT_GROUP) {
+  if (!!listFilter.seafrontGroup && listFilter.seafrontGroup !== ALL_SEAFRONT_GROUP) {
     const filter: Filter<PriorNotification.PriorNotification> =
-      listFilter.seaFrontGroup === NO_SEA_FRONT_GROUP
-        ? priorNotifications => priorNotifications.filter(priorNotification => !priorNotification.seaFront)
+      listFilter.seafrontGroup === NO_SEAFRONT_GROUP
+        ? priorNotifications => priorNotifications.filter(priorNotification => !priorNotification.seafront)
         : priorNotifications =>
             priorNotifications.filter(priorNotification =>
-              SEA_FRONT_GROUP_SEA_FRONTS[listFilter.seaFrontGroup].includes(priorNotification.seaFront)
+              SEAFRONT_GROUP_SEAFRONTS[listFilter.seafrontGroup].includes(priorNotification.seafront)
             )
 
     filters.push(filter)
@@ -165,15 +165,15 @@ export function getLocalFilterFromListFilter(listFilter: ListFilter) {
   return filters
 }
 
-export function getTitle(seaFrontGroup: SeaFrontGroup | AllSeaFrontGroup | NoSeaFrontGroup) {
-  switch (seaFrontGroup) {
-    case ALL_SEA_FRONT_GROUP:
+export function getTitle(seafrontGroup: SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup) {
+  switch (seafrontGroup) {
+    case ALL_SEAFRONT_GROUP:
       return 'Tous les préavis'
 
-    case NO_SEA_FRONT_GROUP:
+    case NO_SEAFRONT_GROUP:
       return 'Préavis hors façade'
 
     default:
-      return `Préavis en ${SUB_MENU_LABEL[seaFrontGroup]}`
+      return `Préavis en ${SUB_MENU_LABEL[seafrontGroup]}`
   }
 }

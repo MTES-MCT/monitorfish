@@ -90,7 +90,7 @@ export const mainReducer = {
     {
       ...getCommonPersistReducerConfig<MissionListState>('mainPersistorMission', [
         'listFilterValues',
-        'listSeaFrontGroup'
+        'listSeafrontGroup'
       ])
     },
     missionListReducer

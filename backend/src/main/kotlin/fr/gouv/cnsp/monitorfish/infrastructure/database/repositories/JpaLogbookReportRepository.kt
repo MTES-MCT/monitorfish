@@ -63,8 +63,6 @@ class JpaLogbookReportRepository(
                     filter.priorNotificationTypes != null &&
                     message.pnoTypes.none { pnoType -> pnoType.name in filter.priorNotificationTypes }
                 ) {
-                    println()
-
                     return@filter false
                 }
 
@@ -433,7 +431,6 @@ class JpaLogbookReportRepository(
         ): List<Pair<LogbookReportEntity, List<LogbookReportEntity>>> {
             // DAT operations are references by definition
             val datLogbookReportModels = allLogbookReportModels.filter { it.operationType == LogbookOperationType.DAT }
-            datLogbookReportModels.forEach { println("DAT reportId=${it.reportId}") }
             // Orphan COR operations are also considered as references for lack of anything better
             // They can be orphan for various reasons, like an error along the external JPE flow.
             val orphanCorLogbookReportModels = allLogbookReportModels
@@ -442,34 +439,17 @@ class JpaLogbookReportRepository(
                     corOperation.referencedReportId == null ||
                         datLogbookReportModels.none { it.reportId == corOperation.referencedReportId }
                 }
-            orphanCorLogbookReportModels.forEach {
-                println(
-                    "ORPHAN COR reportId=${it.reportId} referencedReportId=${it.referencedReportId}",
-                )
-            }
             val referenceLogbookReportModels = datLogbookReportModels + orphanCorLogbookReportModels
 
             return referenceLogbookReportModels.map { referenceLogbookReportModel ->
-                println("=======================================================================")
-                println("REPORT ID: ${referenceLogbookReportModel.reportId}")
                 val directlyAssociatedLogbookReportModels = allLogbookReportModels.filter {
                     it.referencedReportId == referenceLogbookReportModel.reportId
-                }
-                directlyAssociatedLogbookReportModels.forEach {
-                    println(
-                        "DIRECT ${it.operationType} reportId=${it.reportId} referencedReportId=${it.referencedReportId}",
-                    )
                 }
                 // COR operation also have their own `reportId` which can also be associated to their own operations
                 // For example, a RET (aknlowledgement) operation can be associated to a COR operation.
                 val directlyAssociatedReportIds = directlyAssociatedLogbookReportModels.mapNotNull { it.reportId }
                 val indirectlyAssociatedLogbookReportModels = allLogbookReportModels.filter {
                     it.referencedReportId in directlyAssociatedReportIds
-                }
-                indirectlyAssociatedLogbookReportModels.forEach {
-                    println(
-                        "INDIRECT ${it.operationType} reportId=${it.reportId} referencedReportId=${it.referencedReportId}",
-                    )
                 }
                 val associatedLogbookReportModels = directlyAssociatedLogbookReportModels +
                     indirectlyAssociatedLogbookReportModels

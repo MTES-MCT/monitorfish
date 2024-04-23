@@ -7,9 +7,9 @@ export function getTextForSearch(text) {
 
   return removeAccents(text)
     .toLowerCase()
-    .replace(/[ ]/g, '')
-    .replace(/[_]/g, '')
-    .replace(/[-]/g, '')
-    .replace(/[']/g, '')
-    .replace(/["]/g, '')
+    .replace(/ /g, '')
+    .replace(/_/g, '')
+    .replace(/-/g, '')
+    .replace(/'/g, '')
+    .replace(/"/g, '')
 }

@@ -1,4 +1,5 @@
 import { getDateTime } from '@utils/getDateTime'
+import { timeagoFrenchLocale } from '@utils/timeagoFrenchLocale'
 import { useEffect, useState } from 'react'
 import { FingerprintSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'

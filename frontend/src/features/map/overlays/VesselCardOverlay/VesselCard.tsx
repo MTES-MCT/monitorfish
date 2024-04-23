@@ -1,5 +1,6 @@
 /* eslint-disable no-nested-ternary */
 
+import { timeagoFrenchLocale } from '@utils/timeagoFrenchLocale'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 

@@ -1,9 +1,9 @@
+import { getTime } from '@utils/getTime'
 import styled from 'styled-components'
 
 import { BeaconMalfunctionDetailsType } from './beaconMalfunctions'
 import { COLORS } from '../../../constants/constants'
 import { UserType } from '../../../domain/entities/beaconMalfunction/constants'
-import { getTime } from '../../../utils'
 
 export function BeaconMalfunctionDetailsFollowUpItem({ contentText, isLast, isLastDate, item, scrollToRef }) {
   return (

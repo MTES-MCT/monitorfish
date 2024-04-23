@@ -1,3 +1,4 @@
+import { getDateTime } from '@utils/getDateTime'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
@@ -6,15 +7,14 @@ import { BeaconMalfunctionsTab } from '../../../../domain/entities/beaconMalfunc
 import { setBeaconMalfunctionsTab } from '../../../../domain/shared_slices/BeaconMalfunction'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { getDateTime } from '../../../../utils'
 import ArrowSVG from '../../../icons/Picto_fleche-pleine-droite.svg?react'
 import { BeaconMalfunctionDetailsFollowUp } from '../../../SideWindow/BeaconMalfunctionBoard/BeaconMalfunctionDetailsFollowUp'
 import { BeaconMalfunctionBody } from '../resume/BeaconMalfunctionBody'
 import { CurrentBeaconMalfunctionBody } from '../resume/CurrentBeaconMalfunctionBody'
 
-type BeaconMalfunctionDetailsProps = {
+type BeaconMalfunctionDetailsProps = Readonly<{
   isCurrentBeaconMalfunctionDetails: boolean
-}
+}>
 export function BeaconMalfunctionDetails({ isCurrentBeaconMalfunctionDetails }: BeaconMalfunctionDetailsProps) {
   const openedBeaconMalfunction = useMainAppSelector(state => state.beaconMalfunction.openedBeaconMalfunction)
   const dispatch = useMainAppDispatch()

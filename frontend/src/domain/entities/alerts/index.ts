@@ -1,5 +1,6 @@
+import { getDate } from '@utils/getDate'
+
 import { SilencedAlertPeriod } from './constants'
-import { getDate } from '../../../utils'
 
 import type { SilencedAlertPeriodRequest } from './types'
 

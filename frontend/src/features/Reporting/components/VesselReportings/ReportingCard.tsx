@@ -1,11 +1,11 @@
 import { getReportingActor } from '@features/Reporting/components/VesselReportings/utils'
+import { getDateTime } from '@utils/getDateTime'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
 import { ReportingType } from '../../../../domain/types/reporting'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { getDateTime } from '../../../../utils'
 import ArchiveIconSVG from '../../../icons/Bouton_archiver.svg?react'
 import EditIconSVG from '../../../icons/Bouton_editer.svg?react'
 import DeleteIconSVG from '../../../icons/Bouton_supprimer.svg?react'

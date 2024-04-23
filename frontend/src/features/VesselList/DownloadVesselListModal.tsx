@@ -1,4 +1,5 @@
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { getDate } from '@utils/getDate'
 import { ExportToCsv } from 'export-to-csv'
 import countries from 'i18n-iso-countries'
 import { useEffect, useState } from 'react'
@@ -9,7 +10,6 @@ import { CSVOptions } from './dataFormatting'
 import { COLORS } from '../../constants/constants'
 import { getCoordinates } from '../../coordinates'
 import { OPENLAYERS_PROJECTION } from '../../domain/entities/map/constants'
-import { getDate } from '../../utils'
 import { formatAsCSVColumns } from '../../utils/formatAsCSVColumns'
 import { StyledModalHeader } from '../commonComponents/StyledModalHeader'
 

@@ -26,7 +26,6 @@ import { unselectVessel } from '../../domain/use_cases/vessel/unselectVessel'
 import { useListenForDrawedGeometry } from '../../hooks/useListenForDrawing'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
-import { getExtentFromGeoJSON } from '../../utils'
 import { isNumeric } from '../../utils/isNumeric'
 import getAdministrativeZoneGeometry from '../AdministrativeZone/useCases/getAdministrativeZoneGeometry'
 import { StyledModalHeader } from '../commonComponents/StyledModalHeader'
@@ -398,7 +397,7 @@ export function VesselList({ namespace }) {
                   setDistrictsFiltered
                 }}
                 fleetSegments={{
-                  fleetSegments: getFleetSegmentsQuery.data || [],
+                  fleetSegments: getFleetSegmentsQuery.data ?? [],
                   fleetSegmentsFiltered,
                   setFleetSegmentsFiltered
                 }}

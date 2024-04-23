@@ -1,7 +1,7 @@
+import { getDateTime } from '@utils/getDateTime'
 import styled from 'styled-components'
 
 import { VESSEL_STATUS } from '../../../../domain/entities/beaconMalfunction/constants'
-import { getDateTime } from '../../../../utils'
 import { NoValue, Header, Zone } from '../../common_styles/common.style'
 
 import type { VesselBeaconMalfunctionsResume } from '../../../../domain/entities/beaconMalfunction/types'

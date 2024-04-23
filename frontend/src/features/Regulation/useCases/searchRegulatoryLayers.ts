@@ -1,7 +1,7 @@
+import { getExtentFromGeoJSON } from '@utils/getExtentFromGeoJSON'
 import Fuse from 'fuse.js'
 
 import { getRegulatoryZonesInExtentFromAPI } from '../../../api/geoserver'
-import { getExtentFromGeoJSON } from '../../../utils'
 import { MonitorFishWorker } from '../../../workers/MonitorFishWorker'
 import { REGULATION_SEARCH_OPTIONS } from '../components/RegulationSearch/constants'
 

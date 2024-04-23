@@ -1,6 +1,7 @@
 // TODO Rethink Regulatory naming? Regulatory (an adjective rather than an object name), Regulation difference.
 
 import { createSlice } from '@reduxjs/toolkit'
+import { getLocalStorageState } from '@utils/getLocalStorageState'
 import { fromPairs } from 'lodash/fp'
 
 import { getRegulatoryLayersWithoutTerritory } from './utils'
@@ -8,7 +9,6 @@ import {
   SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY,
   SELECTED_REG_ZONES_LOCAL_STORAGE_KEY
 } from '../../domain/entities/layers/constants'
-import { getLocalStorageState } from '../../utils'
 
 import type { RegulatoryLawTypes, RegulatoryZone } from './types'
 import type { PayloadAction } from '@reduxjs/toolkit'

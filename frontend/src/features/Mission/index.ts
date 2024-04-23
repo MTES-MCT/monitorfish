@@ -4,6 +4,9 @@ import { MissionAction } from '@features/Mission/missionAction.types'
 import { isLandControl } from '@features/Mission/useCases/getLastControlCircleGeometry'
 import { getMissionColor, getMissionCompletionFrontStatus, getMissionStatus } from '@features/Mission/utils'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
+import { booleanToInt } from '@utils/booleanToInt'
+import { getDate } from '@utils/getDate'
+import { getDateTime } from '@utils/getDateTime'
 import { random } from 'lodash'
 import { Feature } from 'ol'
 import { GeoJSON } from 'ol/format'
@@ -15,7 +18,6 @@ import { LAND_CONTROL_ZONE_RADIUS, SEA_CONTROL_ZONE_RADIUS } from './constants'
 import { getNumberOfInfractions, getNumberOfInfractionsWithRecord } from '../../domain/entities/controls'
 import { MonitorFishLayer } from '../../domain/entities/layers/types'
 import { OpenLayersGeometryType } from '../../domain/entities/map/constants'
-import { booleanToInt, getDate, getDateTime } from '../../utils'
 
 import type { MissionActionFormValues, MissionMainFormValues } from '@features/Mission/components/MissionForm/types'
 import type { MultiPolygon } from 'ol/geom'
@@ -126,7 +128,7 @@ export const getMissionActionFeature = (
   const infractions = getMissionActionInfractionsFromMissionActionFormValues(action)
   const infractionsNatinfs = infractions.map(({ natinf }) => natinf)
 
-  const actionId = action.id || random(1000)
+  const actionId = action.id ?? random(1000)
   const feature = new Feature({
     actionType: action.actionType,
     dateTime: getDateTime(action.actionDatetimeUtc, true),
@@ -154,7 +156,7 @@ export const getMissionActionFeatureZone = (
 
   const radius = isLandControl(action) ? LAND_CONTROL_ZONE_RADIUS : SEA_CONTROL_ZONE_RADIUS
 
-  const actionId = action.id || random(1000)
+  const actionId = action.id ?? random(1000)
   const feature = new Feature({
     actionType: action.actionType,
     dateTime: getDateTime(action.actionDatetimeUtc, true),

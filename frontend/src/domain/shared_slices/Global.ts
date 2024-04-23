@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { getLocalStorageState } from '@utils/getLocalStorageState'
 
-import { getLocalStorageState } from '../../utils'
 import { UserType } from '../entities/beaconMalfunction/constants'
 import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../entities/vessel/vessel'
 

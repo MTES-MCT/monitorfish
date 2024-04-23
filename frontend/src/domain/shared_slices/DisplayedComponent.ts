@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { getLocalStorageState } from '@utils/getLocalStorageState'
 
-import { getLocalStorageState } from '../../utils'
 import { getLocalstorageProperty } from '../../utils/getLocalstorageProperty'
 
 import type { PayloadAction } from '@reduxjs/toolkit'

@@ -1,3 +1,4 @@
+import { getDateTime } from '@utils/getDateTime'
 import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
@@ -12,7 +13,6 @@ import { VESSEL_STATUS } from '../../../domain/entities/beaconMalfunction/consta
 import { closeBeaconMalfunctionInKanban } from '../../../domain/shared_slices/BeaconMalfunction'
 import { showVesselFromBeaconMalfunctionsKanban } from '../../../domain/use_cases/vessel/showVesselFromBeaconMalfunctionsKanban'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
-import { getDateTime } from '../../../utils'
 import CloseIconSVG from '../../icons/Croix_grise.svg?react'
 import AlertsSVG from '../../icons/Icone_alertes_gris.svg?react'
 import TimeAgoSVG from '../../icons/Label_horaire_VMS.svg?react'
@@ -322,7 +322,7 @@ const closeIconStyle = {
 const Row = styled.div``
 const rowStyle: (topMargin?: number) => CSSProperties = (topMargin?: number) => ({
   display: 'flex',
-  marginTop: topMargin || 0
+  marginTop: topMargin ?? 0
 })
 
 const FirstHeader = styled.div``

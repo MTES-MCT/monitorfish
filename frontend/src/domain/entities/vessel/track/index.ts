@@ -1,4 +1,6 @@
 import { customDayjs } from '@mtes-mct/monitor-ui'
+import { calculatePointsDistance } from '@utils/calculatePointsDistance'
+import { calculateSplitPointCoordinates } from '@utils/calculateSplitPointCoordinates'
 import { uniqWith, isEqual } from 'lodash'
 import { extend } from 'ol/extent'
 import Feature from 'ol/Feature'
@@ -8,7 +10,6 @@ import { transform } from 'ol/proj'
 
 import { TRACK_TYPE_RECORD } from './constants'
 import { getArrowStyle, getCircleStyle, getLineStyle } from '../../../../features/map/layers/styles/vesselTrack.style'
-import { calculatePointsDistance, calculateSplitPointCoordinates } from '../../../../utils'
 import { LayerProperties } from '../../layers/constants'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../map/constants'
 

@@ -1,7 +1,7 @@
+import { getDate } from '@utils/getDate'
 import { ExportToCsv } from 'export-to-csv'
 
 import { DOWNLOAD_LOGBOOK_MESSAGES_COLUMNS, DOWNLOAD_LOGBOOK_MESSAGES_OPTIONS } from './constants'
-import { getDate } from '../../../../../utils'
 import { formatAsCSVColumns } from '../../../../../utils/formatAsCSVColumns'
 
 import type { LogbookMessage } from '../../../Logbook.types'

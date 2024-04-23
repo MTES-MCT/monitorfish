@@ -1,3 +1,4 @@
+import { getDate } from '@utils/getDate'
 import dayjs from 'dayjs'
 import countries from 'i18n-iso-countries'
 import { useCallback, useMemo } from 'react'
@@ -6,7 +7,6 @@ import styled from 'styled-components'
 import { getCoordinates } from '../../../../coordinates'
 import { WSG84_PROJECTION } from '../../../../domain/entities/map/constants'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { getDate } from '../../../../utils'
 import { downloadAsCsv } from '../../../../utils/downloadAsCsv'
 import { PrimaryButton } from '../../../commonStyles/Buttons.style'
 import ExportSVG from '../../../icons/Bouton_exporter_piste_navire.svg?react'
@@ -44,7 +44,7 @@ export function ExportTrack() {
             longitude: coordinates[1]
           }
         })
-        ?.filter((position): position is VesselPositionWithId => position !== undefined) || [],
+        ?.filter((position): position is VesselPositionWithId => position !== undefined) ?? [],
     [selectedVesselPositions, coordinatesFormat]
   )
 

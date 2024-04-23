@@ -1,8 +1,8 @@
 // TODO Move that into Vessel slice, or into a User slice if there are other per-user customizable data.
 
 import { createSlice } from '@reduxjs/toolkit'
+import { getLocalStorageState } from '@utils/getLocalStorageState'
 
-import { getLocalStorageState } from '../../utils'
 import {
   getOnlyVesselIdentityProperties,
   getVesselCompositeIdentifier,

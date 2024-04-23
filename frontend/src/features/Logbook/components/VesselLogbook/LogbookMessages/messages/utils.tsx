@@ -1,8 +1,8 @@
+import { getDateTime } from '@utils/getDateTime'
 import countries from 'i18n-iso-countries'
 
 import { getCoordinates } from '../../../../../../coordinates'
 import { WSG84_PROJECTION } from '../../../../../../domain/entities/map/constants'
-import { getDateTime } from '../../../../../../utils'
 import { Gray, NoValue } from '../styles'
 
 import type { CoordinatesFormat } from '@mtes-mct/monitor-ui'

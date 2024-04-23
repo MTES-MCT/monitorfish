@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { getLocalStorageState } from '@utils/getLocalStorageState'
 
-import { getLocalStorageState } from '../../utils'
 import { BaseLayers } from '../entities/layers/constants'
 import { CoordinatesFormat } from '../entities/map/constants'
 import { VesselLabel } from '../entities/vessel/label/types'

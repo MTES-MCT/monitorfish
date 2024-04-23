@@ -1,4 +1,5 @@
 import { Button, CustomSearch, Icon } from '@mtes-mct/monitor-ui'
+import { getDateTime } from '@utils/getDateTime'
 import countries from 'i18n-iso-countries'
 import { useCallback, useMemo, useState } from 'react'
 import { FlexboxGrid, List } from 'rsuite'
@@ -12,7 +13,6 @@ import { reactivateSilencedAlert } from '../../../../domain/use_cases/alert/reac
 import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { getDateTime } from '../../../../utils'
 import SearchIconSVG from '../../../icons/Loupe_dark.svg?react'
 import { Flag } from '../../../VesselList/tableCells'
 import { sortArrayByColumn, SortType } from '../../../VesselList/tableSort'
@@ -112,7 +112,7 @@ export function SilencedAlerts() {
             <Row
               key={alert.id}
               $isFocused={alert.id === focusedPendingAlertId}
-              $toClose={alert.isReactivated || false}
+              $toClose={alert.isReactivated ?? false}
               index={index + 1}
             >
               {alert.isReactivated && <AlertTransition>L’alerte est réactivée</AlertTransition>}

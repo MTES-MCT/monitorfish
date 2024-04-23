@@ -1,6 +1,8 @@
 // TODO Review that "double" logic for Layer slice.
 
-import { createGenericSlice, getLocalStorageState } from '../../utils'
+import { createGenericSlice } from '@utils/createGenericSlice'
+import { getLocalStorageState } from '@utils/getLocalStorageState'
+
 import { getLayerNameNormalized } from '../entities/layers'
 import { LayerProperties } from '../entities/layers/constants'
 import { MonitorFishLayer } from '../entities/layers/types'

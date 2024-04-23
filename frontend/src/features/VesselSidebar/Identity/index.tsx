@@ -1,3 +1,4 @@
+import { getDate } from '@utils/getDate'
 import countries from 'i18n-iso-countries'
 import { useEffect, useMemo } from 'react'
 import { FingerprintSpinner } from 'react-epic-spinners'
@@ -7,7 +8,6 @@ import { COLORS } from '../../../constants/constants'
 import { showVessel } from '../../../domain/use_cases/vessel/showVessel'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { getDate } from '../../../utils'
 
 export function Identity() {
   const dispatch = useMainAppDispatch()
@@ -278,7 +278,7 @@ export function Identity() {
               <Key>Contact navire</Key>
               <Value>
                 <PersonalData>
-                  {selectedVessel?.vesselPhones || selectedVessel?.vesselEmails ? (
+                  {selectedVessel?.vesselPhones ?? selectedVessel?.vesselEmails ? (
                     <>
                       {selectedVessel?.vesselPhones ? (
                         <>

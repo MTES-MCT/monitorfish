@@ -1,4 +1,6 @@
 import { customDayjs } from '@mtes-mct/monitor-ui'
+import { getDate } from '@utils/getDate'
+import { mergeObjects } from '@utils/mergeObjects'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Toggle } from 'rsuite'
 import styled from 'styled-components'
@@ -13,7 +15,6 @@ import saveBeaconMalfunctionCommentFromKanban from '../../../domain/use_cases/be
 import { useListenForScroll } from '../../../hooks/useListenForScroll'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { getDate, mergeObjects } from '../../../utils'
 import { pushToObjectAtIndex } from '../../../utils/pushToObjectAtIndex'
 import CommentsSVG from '../../icons/Commentaires.svg?react'
 
@@ -146,7 +147,7 @@ export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails,
     } else if (textareaRef.current) {
       textareaRef.current.style.height = '50px'
     }
-    setTextareaHeight(parseInt(textareaRef.current?.style?.height.replace('px', '') || '', 10))
+    setTextareaHeight(parseInt(textareaRef.current?.style?.height.replace('px', '') ?? '', 10))
   }, [comment])
 
   const saveComment = () => {

@@ -1,3 +1,5 @@
+import { booleanToInt } from '@utils/booleanToInt'
+import { customHexToRGB } from '@utils/customHexToRGB'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 import WebGLPointsLayer from 'ol/layer/WebGLPoints'
@@ -11,7 +13,6 @@ import { getVesselLastPositionVisibilityDates, Vessel } from '../../../../../dom
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import { theme } from '../../../../../ui/theme'
-import { booleanToInt, customHexToRGB } from '../../../../../utils'
 import { applyFilterToVessels } from '../../../../Vessel/useCases/applyFilterToVessels'
 import { monitorfishMap } from '../../../monitorfishMap'
 import { getWebGLVesselStyle } from '../style'
@@ -60,7 +61,7 @@ function UnmemoizedVesselsLayer() {
     const isLight = Vessel.iconIsLight(selectedBaseLayer)
     const { vesselIsHidden, vesselIsOpacityReduced } =
       getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
-    const filterColorRGBArray = customHexToRGB(filterColor || isLight ? theme.color.lightGray : COLORS.charcoal)
+    const filterColorRGBArray = customHexToRGB(filterColor ?? isLight ? theme.color.lightGray : COLORS.charcoal)
     const initStyles = {
       filterColorBlue: filterColorRGBArray[2],
       filterColorGreen: filterColorRGBArray[1],

@@ -1,3 +1,6 @@
+import { getDate } from '@utils/getDate'
+import { getTextForSearch } from '@utils/getTextForSearch'
+import { getTime } from '@utils/getTime'
 import * as timeago from 'timeago.js'
 
 import { BeaconMalfunctionsDetailsFollowUpNotification } from './BeaconMalfunctionsDetailsFollowUpNotification'
@@ -10,7 +13,6 @@ import {
   STAGE_RECORD,
   VESSEL_STATUS
 } from '../../../domain/entities/beaconMalfunction/constants'
-import { getDate, getTextForSearch, getTime } from '../../../utils'
 
 import type {
   BeaconMalfunction,

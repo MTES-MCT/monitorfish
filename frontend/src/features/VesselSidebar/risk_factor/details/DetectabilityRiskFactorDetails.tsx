@@ -1,3 +1,4 @@
+import { getDate } from '@utils/getDate'
 import styled from 'styled-components'
 
 import {
@@ -6,12 +7,11 @@ import {
   getRiskFactorColor
 } from '../../../../domain/entities/vessel/riskFactor'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { getDate } from '../../../../utils'
 import { RiskFactorCursor } from '../RiskFactorCursor'
 
-type DetectabilityRiskFactorDetailsProps = {
+type DetectabilityRiskFactorDetailsProps = Readonly<{
   isOpen: boolean
-}
+}>
 export function DetectabilityRiskFactorDetails({ isOpen }: DetectabilityRiskFactorDetailsProps) {
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
 

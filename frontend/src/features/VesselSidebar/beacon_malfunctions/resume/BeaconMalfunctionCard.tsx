@@ -1,3 +1,4 @@
+import { getDateTime } from '@utils/getDateTime'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -9,7 +10,6 @@ import {
 } from '../../../../domain/entities/beaconMalfunction/constants'
 import { setOpenedBeaconMalfunction } from '../../../../domain/shared_slices/BeaconMalfunction'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { getDateTime } from '../../../../utils'
 import AtSeaSVG from '../../../icons/Icone_avarie_mer.svg?react'
 import AtPortSVG from '../../../icons/Icone_avarie_quai.svg?react'
 

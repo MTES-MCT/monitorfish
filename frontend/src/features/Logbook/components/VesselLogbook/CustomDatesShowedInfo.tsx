@@ -1,3 +1,4 @@
+import { getDate } from '@utils/getDate'
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
@@ -6,7 +7,6 @@ import { getTrackRequestFromTrackDepth } from '../../../../domain/entities/vesse
 import { updateSelectedVesselTrackRequest } from '../../../../domain/use_cases/vessel/updateSelectedVesselTrackRequest'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { getDate } from '../../../../utils'
 
 type CustomDatesShowedInfoProps = {
   width?: number | undefined

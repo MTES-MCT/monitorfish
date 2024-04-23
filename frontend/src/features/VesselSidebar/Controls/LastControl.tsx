@@ -1,19 +1,19 @@
+import { getDate } from '@utils/getDate'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { Green, Red } from './Controls.style'
 import { getNumberOfInfractions } from '../../../domain/entities/controls'
-import { getDate } from '../../../utils'
 
 import type { MissionAction } from '../../Mission/missionAction.types'
 
-type LastControlProps = {
+type LastControlProps = Readonly<{
   field: MissionAction.ControlAndText
-}
+}>
 export function LastControl({ field }: LastControlProps) {
   const { control, text } = field
   const controlUnits =
-    control?.controlUnits.map(controlUnit => controlUnit.name.replace('(historique)', '')).join(', ') ||
+    control?.controlUnits.map(controlUnit => controlUnit.name.replace('(historique)', '')).join(', ') ??
     'Unité manquante'
 
   const numberOfInfractions = useMemo(() => getNumberOfInfractions(control), [control])

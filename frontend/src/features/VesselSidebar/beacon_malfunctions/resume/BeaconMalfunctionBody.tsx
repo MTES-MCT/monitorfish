@@ -1,3 +1,4 @@
+import { getDateTime } from '@utils/getDateTime'
 import styled from 'styled-components'
 
 import { getFirstVesselStatus } from '../../../../domain/entities/beaconMalfunction'
@@ -7,7 +8,6 @@ import {
   END_OF_MALFUNCTION_REASON_RECORD,
   VESSEL_STATUS
 } from '../../../../domain/entities/beaconMalfunction/constants'
-import { getDateTime } from '../../../../utils'
 
 import type { BeaconMalfunctionResumeAndDetails } from '../../../../domain/entities/beaconMalfunction/types'
 

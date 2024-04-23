@@ -1,7 +1,7 @@
+import { getDateTime } from '@utils/getDateTime'
 import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { getDateTime } from '../../../../../../utils'
 import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../constants'
 import { getCodeWithNameOrDash } from '../../LogbookMessages/messages/utils'
 import { LogbookMessageResumeHeader } from '../LogbookMessageResumeHeader'

@@ -1,11 +1,11 @@
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
+import { getDateTime } from '@utils/getDateTime'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { getComponentFromMessageType } from './constants'
 import { useMainAppDispatch } from '../../../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
-import { getDateTime } from '../../../../../../utils'
 import XMLSVG from '../../../../../icons/Picto_XML.svg?react'
 import ShowActivitySVG from '../../../../../icons/Position_message_JPE_Pin_gris_clair.svg?react'
 import HideActivitySVG from '../../../../../icons/Position_message_JPE_Pin_masquer.svg?react'

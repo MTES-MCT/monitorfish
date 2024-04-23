@@ -1,8 +1,7 @@
 /* eslint-disable no-undef */
 
+import { getDate } from '@utils/getDate'
 import dayjs from 'dayjs'
-
-import { getDate } from '../../../src/utils'
 
 context('Vessel sidebar controls tab', () => {
   beforeEach(() => {

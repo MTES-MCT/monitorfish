@@ -1,7 +1,7 @@
+import { getDate } from '@utils/getDate'
 import dayjs from 'dayjs'
 
 import { openSideWindowBeaconMalfunctionBoard } from './utils'
-import { getDate } from '../../../../src/utils'
 import { getUtcizedDayjs } from '../../utils/getUtcizedDayjs'
 
 context('Side Window > Beacon Malfunction Board', () => {

@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-
-import { getLocalStorageState } from '../../utils'
+import { getLocalStorageState } from '@utils/getLocalStorageState'
 
 import type { VesselFilter } from '../types/filter'
 import type { PayloadAction } from '@reduxjs/toolkit'

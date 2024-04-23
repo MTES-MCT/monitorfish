@@ -1,3 +1,4 @@
+import { getDateMonthsBefore } from '@utils/getDateMonthsBefore'
 import * as Comlink from 'comlink'
 
 import { VesselLocation, vesselSize } from '../domain/entities/vessel/vessel'
@@ -7,7 +8,6 @@ import {
   LAWTYPES_TO_TERRITORY,
   mapToRegulatoryZone
 } from '../features/Regulation/utils'
-import { getDateMonthsBefore } from '../utils'
 
 import type { GeoJSON } from '../domain/types/GeoJSON'
 
@@ -21,7 +21,7 @@ export class MonitorFishWebWorker {
     return getRegulatoryLawTypesFromZones(regulatoryZones)
   }
 
-  static getLayerTopicList = (features, speciesByCode) => {
+  static readonly getLayerTopicList = (features, speciesByCode) => {
     const featuresWithoutGeometry = features.features.map(feature => mapToRegulatoryZone(feature, speciesByCode))
 
     const uniqueFeaturesWithoutGeometry = featuresWithoutGeometry.reduce((acc, current) => {
@@ -43,10 +43,10 @@ export class MonitorFishWebWorker {
     }
   }
 
-  static mapGeoserverToRegulatoryZones = (geoJSON, speciesByCode) =>
+  static readonly mapGeoserverToRegulatoryZones = (geoJSON, speciesByCode) =>
     geoJSON.features.map(feature => mapToRegulatoryZone(feature, speciesByCode))
 
-  static getGeometryIdFromFeatureId = (feature: GeoJSON.Feature): number | string => {
+  static readonly getGeometryIdFromFeatureId = (feature: GeoJSON.Feature): number | string => {
     const idFromProperties = feature.properties?.id as number | undefined
     if (idFromProperties) {
       return idFromProperties

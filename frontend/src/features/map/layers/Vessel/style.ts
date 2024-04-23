@@ -1,3 +1,4 @@
+import { booleanToInt } from '@utils/booleanToInt'
 import { Icon, Style } from 'ol/style'
 import Circle from 'ol/style/Circle'
 import Stroke from 'ol/style/Stroke'
@@ -11,7 +12,6 @@ import {
   VESSEL_SELECTOR_STYLE
 } from '../../../../domain/entities/vessel/vessel'
 import { theme } from '../../../../ui/theme'
-import { booleanToInt } from '../../../../utils'
 import { featureHas, featureHasNot, stateIs } from '../styles/utils/webgl'
 
 import type { WebGLStyle } from 'ol/style/webgl'

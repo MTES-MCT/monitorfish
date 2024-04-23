@@ -1,5 +1,6 @@
+import { setError } from '@features/MainWindow/slice'
+
 import { sendRegulationTransaction } from '../../../api/geoserver'
-import { setError } from '../../../domain/shared_slices/Global'
 import { setProcessingRegulationSaved, setProcessingRegulationDeleted } from '../../BackOffice/slice'
 import { REGULATION_ACTION_TYPE } from '../utils'
 

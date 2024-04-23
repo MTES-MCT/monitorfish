@@ -8,15 +8,15 @@ import styled from 'styled-components'
 
 import { UserAccountContext } from '../../../context/UserAccountContext'
 import { MapBox } from '../../../domain/entities/map/constants'
-import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
+import { setRightMapBoxOpened } from '../../MainWindow/slice'
 
 const MARGIN_TOP = 428
 
 export function Account() {
   const dispatch = useMainAppDispatch()
   const userAccount = useContext(UserAccountContext)
-  const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
-  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
+  const rightMapBoxOpened = useMainAppSelector(state => state.mainWindow.rightMapBoxOpened)
+  const rightMenuIsOpen = useMainAppSelector(state => state.mainWindow.rightMenuIsOpen)
 
   const openOrClose = () => {
     dispatch(setRightMapBoxOpened(rightMapBoxOpened === MapBox.ACCOUNT ? undefined : MapBox.ACCOUNT))

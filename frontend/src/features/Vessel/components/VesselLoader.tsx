@@ -1,4 +1,7 @@
+import { setError } from '@features/MainWindow/slice'
 import { useIsInLightMode } from '@hooks/useIsInLightMode'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useEffect, useState } from 'react'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
@@ -6,9 +9,6 @@ import styled from 'styled-components'
 
 import { FIVE_MINUTES, TWENTY_MINUTES } from '../../../api/APIWorker'
 import { COLORS } from '../../../constants/constants'
-import { setError } from '../../../domain/shared_slices/Global'
-import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { MapComponent } from '../../commonStyles/MapComponent'
 import VesselSVG from '../../icons/Icone_navire.svg?react'
 import { useGetVesselsLastPositionsApi } from '../hooks/useGetVesselsLastPositionsApi'
@@ -19,7 +19,7 @@ export function VesselLoader() {
   const isInLightMode = useIsInLightMode()
   const dispatch = useMainAppDispatch()
 
-  const blockVesselsUpdate = useMainAppSelector(state => state.global.blockVesselsUpdate)
+  const blockVesselsUpdate = useMainAppSelector(state => state.mainWindow.blockVesselsUpdate)
   const loadingPositions = useMainAppSelector(state => state.vessel.loadingPositions)
   const vesselSidebarIsOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
 

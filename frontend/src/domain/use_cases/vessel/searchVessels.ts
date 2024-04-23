@@ -1,5 +1,5 @@
 import { searchVesselsFromAPI } from '../../../api/vessel'
-import { setError } from '../../shared_slices/Global'
+import { setError } from '../../../features/MainWindow/slice'
 
 export const searchVessels = searched => dispatch =>
   searchVesselsFromAPI(searched).catch(error => {

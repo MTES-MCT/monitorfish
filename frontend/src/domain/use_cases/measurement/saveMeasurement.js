@@ -1,11 +1,11 @@
+import { addMeasurementDrawed, resetCircleMeasurementInDrawing } from '@features/Measurement/slice'
 import GeoJSON from 'ol/format/GeoJSON'
 import Circle from 'ol/geom/Circle'
 import { fromCircle } from 'ol/geom/Polygon'
 import { batch } from 'react-redux'
 
+import { setRightMapBoxOpened } from '../../../features/MainWindow/slice'
 import { OPENLAYERS_PROJECTION } from '../../entities/map/constants'
-import { setRightMapBoxOpened } from '../../shared_slices/Global'
-import { addMeasurementDrawed, resetCircleMeasurementInDrawing } from '@features/Measurement/slice'
 
 const saveMeasurement = (feature, measurement) => dispatch => {
   feature.setId(feature.ol_uid)

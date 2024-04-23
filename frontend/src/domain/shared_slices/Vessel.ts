@@ -195,7 +195,13 @@ const vesselSlice = createSlice({
       state.highlightedVesselTrackPosition = action.payload
     },
 
-    loadingVessel(state, action) {
+    loadingVessel(
+      state,
+      action: PayloadAction<{
+        calledFromCron: boolean
+        vesselIdentity: VesselIdentity
+      }>
+    ) {
       state.selectedVesselIdentity = action.payload.vesselIdentity
       state.vesselSidebarIsOpen = true
       if (!action.payload.calledFromCron) {
@@ -303,7 +309,8 @@ const vesselSlice = createSlice({
       })
 
       if (
-        state.selectedVessel &&
+        !!state.selectedVessel &&
+        !!state.selectedVesselIdentity &&
         Vessel.getVesselFeatureId(state.selectedVesselIdentity) === action.payload.vesselFeatureId
       ) {
         const vesselReportingWithoutFirstFoundReportingType = state.selectedVessel.reportings?.reduce(

@@ -36,14 +36,14 @@ export const getAdministrativeZones =
       .filter(zone => zone.type === LayerType.ADMINISTRATIVE)
       .filter(zone => zone.hasFetchableZones)
       .map(zone =>
-        getAdministrativeSubZonesFromAPI(zone.code, getState().global.isBackoffice).then(
+        getAdministrativeSubZonesFromAPI(zone.code, getState().mainWindow.isBackoffice).then(
           (fetchedZones: GeoJSON.FeatureCollection) => {
             const nextZones: ShowableLayer[] = fetchedZones.features.map(feature => ({
               code: feature.id!.toString(),
               group: zone.group,
               hasFetchableZones: zone.hasFetchableZones!,
               name:
-                (zone.zoneNamePropertyKey && feature.properties?.[zone.zoneNamePropertyKey]?.toString()) || 'Aucun nom',
+                (zone.zoneNamePropertyKey && feature.properties?.[zone.zoneNamePropertyKey]?.toString()) ?? 'Aucun nom',
               type: LayerType.ADMINISTRATIVE
             }))
 

@@ -2,6 +2,7 @@ import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import openBeaconMalfunction from './openBeaconMalfunction'
 import { getVesselBeaconsMalfunctionsFromAPI } from '../../../api/beaconMalfunction'
+import { removeError } from '../../../features/MainWindow/slice'
 import { getOnlyVesselIdentityProperties } from '../../entities/vessel/vessel'
 import {
   loadVesselBeaconMalfunctions,
@@ -9,7 +10,6 @@ import {
   setVesselBeaconMalfunctionsResumeAndHistory
 } from '../../shared_slices/BeaconMalfunction'
 import { displayedErrorActions } from '../../shared_slices/DisplayedError'
-import { removeError } from '../../shared_slices/Global'
 import { displayOrLogError } from '../error/displayOrLogError'
 
 export const getVesselBeaconMalfunctions = (isFromUserAction: boolean) => async (dispatch, getState) => {

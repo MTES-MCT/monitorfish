@@ -25,7 +25,7 @@ import { Header, Content } from '../shared/styles'
 export function EditVesselVisibility() {
   const dispatch = useMainAppDispatch()
   const hideNonSelectedVessels = useMainAppSelector(state => state.vessel.hideNonSelectedVessels)
-  const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
+  const rightMapBoxOpened = useMainAppSelector(state => state.mainWindow.rightMapBoxOpened)
   const hideVesselsAtPort = useMainAppSelector(state => state.map.hideVesselsAtPort)
   const defaultVesselTrackDepth = useMainAppSelector(state => state.map.defaultVesselTrackDepth)
   const showingVesselsEstimatedPositions = useMainAppSelector(state => state.map.showingVesselsEstimatedPositions)

@@ -1,6 +1,6 @@
+import { setError } from '../../../features/MainWindow/slice'
 import { DisplayedError } from '../../../libs/DisplayedError'
 import { INITIAL_STATE, type DisplayedErrorState, displayedErrorActions } from '../../shared_slices/DisplayedError'
-import { setError } from '../../shared_slices/Global'
 
 import type { MainAppUseCase } from '@store'
 

@@ -26,7 +26,7 @@ export const VESSEL_SELECTOR_STYLE = 200
 export class Vessel {
   static vesselIsMovingSpeed = 0.1
 
-  static getVesselFeatureId(vessel) {
+  static getVesselFeatureId(vessel: VesselIdentity) {
     return `${MonitorFishLayer.VESSELS}:${getVesselCompositeIdentifier(vessel)}`
   }
 
@@ -157,7 +157,7 @@ export const getOnlyVesselIdentityProperties = (
   vesselName: vessel.vesselName ?? null
 })
 
-export const getVesselCompositeIdentifier: (vessel) => VesselCompositeIdentifier = vessel =>
+export const getVesselCompositeIdentifier: (vessel: VesselIdentity) => VesselCompositeIdentifier = vessel =>
   `${vessel.internalReferenceNumber ?? 'UNKNOWN'}/${vessel.ircs ?? 'UNKNOWN'}/${
     vessel.externalReferenceNumber ?? 'UNKNOWN'
   }`

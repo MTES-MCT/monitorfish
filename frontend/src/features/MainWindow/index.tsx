@@ -1,8 +1,11 @@
+import { MissionMenuDialog } from '@features/Mission/components/MissionMenuDialog'
+import { MapBox } from 'domain/entities/map/constants'
 import { useCallback } from 'react'
 import { useBeforeUnload } from 'react-router-dom'
 import styled from 'styled-components'
 import { LegacyRsuiteComponentsWrapper } from 'ui/LegacyRsuiteComponentsWrapper'
 
+import { LeftMenu } from './components/LeftMenu'
 import { MapButtons } from './components/MapButtons'
 import { APIWorker } from '../../api/APIWorker'
 import { Notifier } from '../../components/Notifier'
@@ -35,6 +38,7 @@ export function MainWindow() {
   const isVesselSearchDisplayed = useMainAppSelector(state => state.displayedComponent.isVesselSearchDisplayed)
   const isVesselSidebarOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
   const isDraftDirty = useMainAppSelector(state => state.missionForm.isDraftDirty)
+  const leftDialog = useMainAppSelector(state => state.mainWindow.leftDialog)
   const status = useMainAppSelector(state => state.sideWindow.status)
 
   const warnOnUnload = useCallback(
@@ -53,13 +57,15 @@ export function MainWindow() {
   useBeforeUnload(warnOnUnload)
 
   return (
-    <>
+    <Wrapper id="mainWindowWrapper">
       <HealthcheckHeadband />
 
-      <PreviewFilteredVessels />
+      <MapWrapper>
+        <PreviewFilteredVessels />
 
-      <Wrapper id="mainWindowWrapper">
         <Map />
+
+        <LeftMenu />
 
         <LegacyRsuiteComponentsWrapper>
           <LayersSidebar />
@@ -80,13 +86,24 @@ export function MainWindow() {
 
         {status !== SideWindowStatus.CLOSED && <SideWindowLauncher />}
         {isDrawLayerModalDisplayed && <DrawLayerModal />}
-      </Wrapper>
-    </>
+      </MapWrapper>
+
+      {leftDialog?.key === MapBox.MISSIONS && <MissionMenuDialog />}
+    </Wrapper>
   )
 }
 
 const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+`
+
+const MapWrapper = styled.div`
+  box-sizing: border-box;
+  flex-grow: 1;
   font-size: 13px;
   overflow: hidden;
-  width: 100vw;
+  position: relative;
 `

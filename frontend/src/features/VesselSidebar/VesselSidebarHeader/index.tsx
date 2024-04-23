@@ -5,12 +5,12 @@ import styled from 'styled-components'
 
 import { VesselName } from './VesselName'
 import { vesselsAreEquals } from '../../../domain/entities/vessel/vessel'
-import { expandRightMenu } from '../../../domain/shared_slices/Global'
 import { setIsFocusedOnVesselSearch } from '../../../domain/shared_slices/Vessel'
 import { showVessel } from '../../../domain/use_cases/vessel/showVessel'
 import { MapComponent } from '../../commonStyles/MapComponent'
 import SearchIconSVG from '../../icons/Loupe.svg?react'
 import { MapButton } from '../../MainWindow/components/MapButtons/MapButton'
+import { expandRightMenu } from '../../MainWindow/slice'
 import { VesselSearch } from '../../VesselSearch'
 
 import type { VesselIdentity } from '../../../domain/entities/vessel/types'
@@ -22,8 +22,8 @@ export function VesselSidebarHeader() {
     state => state.vessel
   )
 
-  const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
-  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
+  const previewFilteredVesselsMode = useMainAppSelector(state => state.mainWindow.previewFilteredVesselsMode)
+  const rightMenuIsOpen = useMainAppSelector(state => state.mainWindow.rightMenuIsOpen)
 
   const isVesselNameShown = !isFocusedOnVesselSearch && selectedVesselIdentity
   const isRightMenuShrinked = vesselSidebarIsOpen && !rightMenuIsOpen
@@ -113,7 +113,7 @@ const SearchButton = styled(MapButton)<{
   width: 40px;
   height: 40px;
   right: 10px;
-  top: 10px;
+  top: 12px;
   z-index: 99;
   cursor: pointer;
   border-radius: 2px;

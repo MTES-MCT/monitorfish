@@ -6,12 +6,12 @@ import styled from 'styled-components'
 
 import { NamespaceContext } from '../../../context/NamespaceContext'
 import { MapBox } from '../../../domain/entities/map/constants'
-import { setLeftMapBoxOpened } from '../../../domain/shared_slices/Global'
 import { AdministrativeZones } from '../../AdministrativeZone/components/AdministrativeZones'
 import { BaseMaps } from '../../BaseMap/components/BaseMaps'
 import { MapComponent } from '../../commonStyles/MapComponent'
 import { CustomZones } from '../../CustomZone/components/CustomZones'
 import { MapButton } from '../../MainWindow/components/MapButtons/MapButton'
+import { setLeftMapBoxOpened } from '../../MainWindow/slice'
 import { RegulationSearch } from '../../Regulation/components/RegulationSearch'
 import { RegulatoryZoneMetadata } from '../../Regulation/components/RegulatoryZoneMetadata'
 import { RegulatoryZones } from '../../Regulation/components/RegulatoryZones'
@@ -22,9 +22,9 @@ export function LayersSidebar() {
   const regulatoryZoneMetadataPanelIsOpen = useMainAppSelector(
     state => state.regulatory.regulatoryZoneMetadataPanelIsOpen
   )
-  const healthcheckTextWarning = useMainAppSelector(state => state.global.healthcheckTextWarning)
-  const leftMapBoxOpened = useMainAppSelector(state => state.global.leftMapBoxOpened)
-  const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
+  const healthcheckTextWarning = useMainAppSelector(state => state.mainWindow.healthcheckTextWarning)
+  const leftMapBoxOpened = useMainAppSelector(state => state.mainWindow.leftMapBoxOpened)
+  const previewFilteredVesselsMode = useMainAppSelector(state => state.mainWindow.previewFilteredVesselsMode)
 
   useEffect(() => {
     if (leftMapBoxOpened !== MapBox.REGULATIONS) {

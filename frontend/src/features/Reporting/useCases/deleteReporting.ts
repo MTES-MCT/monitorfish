@@ -2,6 +2,7 @@ import { deleteReportingFromAPI } from '@api/reporting'
 import { ReportingType } from '@features/Reporting/types'
 import { getVesselReportings } from '@features/Reporting/useCases/getVesselReportings'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
+import { logSoftError } from '@mtes-mct/monitor-ui'
 
 import { Vessel } from '../../../domain/entities/vessel/vessel'
 import { removeVesselReporting } from '../../../domain/shared_slices/Vessel'
@@ -14,6 +15,15 @@ export const deleteReporting =
   (id: number, reportingType: ReportingType): MainAppThunk =>
   async (dispatch, getState) => {
     const { selectedVesselIdentity } = getState().vessel
+    // TODO Can this case happen? Is it the right way to handle it?
+    if (!selectedVesselIdentity) {
+      logSoftError({
+        message: '`selectedVesselIdentity` is null.',
+        userMessage: 'Aucun navire sélectionné pour supprimer un signalement.'
+      })
+
+      return
+    }
 
     try {
       await deleteReportingFromAPI(id)

@@ -3,11 +3,11 @@ import { captureMessage } from '@sentry/react'
 
 import { getVesselFromAPI } from '../../../api/vessel'
 import { logbookActions } from '../../../features/Logbook/slice'
+import { addSearchedVessel, removeError, setError } from '../../../features/MainWindow/slice'
 import { Vessel } from '../../entities/vessel/vessel'
 import { getCustomOrDefaultTrackRequest, throwCustomErrorFromAPIFeedback } from '../../entities/vesselTrackDepth'
 import { displayedComponentActions } from '../../shared_slices/DisplayedComponent'
 import { displayedErrorActions } from '../../shared_slices/DisplayedError'
-import { addSearchedVessel, removeError, setError } from '../../shared_slices/Global'
 import { doNotAnimate } from '../../shared_slices/Map'
 import { loadingVessel, resetLoadingVessel, setSelectedVessel } from '../../shared_slices/Vessel'
 import { displayOrLogError } from '../error/displayOrLogError'
@@ -96,7 +96,7 @@ export const showVessel =
     }
   }
 
-function dispatchLoadingVessel(dispatch, isFromUserAction: boolean, vesselIdentity) {
+function dispatchLoadingVessel(dispatch, isFromUserAction: boolean, vesselIdentity: VesselIdentity) {
   dispatch(doNotAnimate(!isFromUserAction))
   dispatch(removeError())
   dispatch(

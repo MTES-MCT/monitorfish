@@ -20,6 +20,7 @@ import type { ChangeEvent, InputHTMLAttributes, MutableRefObject } from 'react'
 import type { Promisable } from 'type-fest'
 
 type VesselSearchProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'defaultValue' | 'onChange'> & {
+  // TODO Should be `MutableRefObject<HTMLDivElement | null> | undefined`.
   baseRef?: MutableRefObject<HTMLDivElement | undefined> | undefined
   defaultValue?: VesselIdentity | undefined
   extendedWidth?: number | undefined
@@ -53,7 +54,7 @@ export function VesselSearch({
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
   const vessels = useMainAppSelector(state => state.vessel.vessels)
   const searchQueryRef = useRef('')
-  const wrapperRef = useRef(null)
+  const wrapperRef = useRef<HTMLDivElement | null>(null)
 
   const [selectedVessel, setSelectedVessel] = useState<VesselIdentity | undefined>(undefined)
   const [foundVessels, setFoundVessels] = useState<VesselIdentity[]>([])

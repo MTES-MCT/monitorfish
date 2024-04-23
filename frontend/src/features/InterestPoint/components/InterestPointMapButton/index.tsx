@@ -1,3 +1,4 @@
+import { setRightMapBoxOpened } from '@features/MainWindow/slice'
 import { useEscapeFromKeyboardAndExecute } from '@hooks/useEscapeFromKeyboardAndExecute'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -6,14 +7,13 @@ import styled from 'styled-components'
 
 import { EditInterestPoint } from './EditInterestPoint'
 import { MapBox } from '../../../../domain/entities/map/constants'
-import { setRightMapBoxOpened } from '../../../../domain/shared_slices/Global'
 import InterestPointSVG from '../../../icons/standardized/Landmark.svg?react'
 import { MapToolButton } from '../../../MainWindow/components/MapButtons/shared/MapToolButton'
 import { deleteInterestPointBeingDrawed, drawInterestPoint, endInterestPointDraw } from '../../slice'
 
 export function InterestPointMapButton() {
   const dispatch = useMainAppDispatch()
-  const { rightMapBoxOpened, rightMenuIsOpen } = useMainAppSelector(state => state.global)
+  const { rightMapBoxOpened, rightMenuIsOpen } = useMainAppSelector(state => state.mainWindow)
   const isRightMenuShrinked = !rightMenuIsOpen
   const isOpen = useMemo(() => rightMapBoxOpened === MapBox.INTEREST_POINT, [rightMapBoxOpened])
   const wrapperRef = useRef(null)

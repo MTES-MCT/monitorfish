@@ -198,7 +198,6 @@ context('Vessel sidebar logbook tab', () => {
     // When
     cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 10000 })
     cy.get('*[data-cy^="vessel-fishing-see-all"]').click({ timeout: 10000 })
-    cy.scrollTo(0, 380)
     cy.get('*[data-cy^="show-fishing-activity"]').eq(8).parent().contains('Retour au port')
     cy.get('*[data-cy^="show-fishing-activity"]').eq(8).scrollIntoView().click({ timeout: 20000 })
 

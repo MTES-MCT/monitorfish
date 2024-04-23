@@ -2,6 +2,7 @@ export type FeatureAndLabel = {
   color: string
   coordinates: [number, number]
   featureId: string
-  label: Record<string, any>
+  isDoneAndIncomplete: boolean
+  label: string
   offset: number[] | null
 }

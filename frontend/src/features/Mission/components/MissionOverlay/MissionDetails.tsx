@@ -109,7 +109,7 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
         <EditButton
           accent={Accent.PRIMARY}
           disabled={!isSelected}
-          Icon={Icon.Edit}
+          Icon={Icon.EditUnbordered}
           onClick={openMissionInSideWindow}
           size={Size.SMALL}
         >

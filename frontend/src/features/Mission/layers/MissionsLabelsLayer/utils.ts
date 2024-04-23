@@ -1,8 +1,12 @@
+import { MissionAction } from '@features/Mission/missionAction.types'
+
 import { MissionLabelLine } from '../../../../domain/entities/missionLabelLine'
 import { drawMovedLabelLine } from '../../../../domain/entities/vessel/label'
 
 import type { FeatureAndLabel } from './types'
 import type { LegacyControlUnit } from '../../../../domain/types/legacyControlUnit'
+
+import FrontCompletionStatus = MissionAction.FrontCompletionStatus
 
 const NOT_FOUND = -1
 const MAX_MISSIONS_LABELS_DISPLAYED = 13
@@ -11,11 +15,13 @@ export function getFeaturesAndLabels(featureIdToCoordinates, feature, labelLineF
   const controlUnits = feature.get('controlUnits') as LegacyControlUnit.LegacyControlUnit[]
   const label = controlUnits.map(controlUnit => controlUnit.name).join(', ')
   const offset = featureIdToCoordinates.get(labelLineFeatureId)?.offset
+  const missionCompletion = feature.get('missionCompletion')
 
   return {
     color: feature.get('color'),
     coordinates: feature.getGeometry().getCoordinates(),
     featureId: labelLineFeatureId,
+    isDoneAndIncomplete: missionCompletion === FrontCompletionStatus.TO_COMPLETE_MISSION_ENDED,
     label,
     offset
   }

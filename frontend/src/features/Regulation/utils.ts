@@ -1,6 +1,5 @@
-import { getTextForSearch } from '@utils/getTextForSearch'
-
 import { LayerProperties } from '../../domain/entities/layers/constants'
+import { getTextForSearch } from '../../utils/getTextForSearch'
 import { formatDataForSelectPicker } from '../Backoffice/utils'
 
 import type {

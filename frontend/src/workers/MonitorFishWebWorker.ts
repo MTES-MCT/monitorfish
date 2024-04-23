@@ -1,4 +1,3 @@
-import { getDateMonthsBefore } from '@utils/getDateMonthsBefore'
 import * as Comlink from 'comlink'
 
 import { VesselLocation, vesselSize } from '../domain/entities/vessel/vessel'
@@ -8,6 +7,7 @@ import {
   LAWTYPES_TO_TERRITORY,
   mapToRegulatoryZone
 } from '../features/Regulation/utils'
+import { getDateMonthsBefore } from '../utils/getDateMonthsBefore'
 
 import type { GeoJSON } from '../domain/types/GeoJSON'
 

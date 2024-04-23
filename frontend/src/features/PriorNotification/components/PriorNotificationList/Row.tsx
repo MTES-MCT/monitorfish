@@ -1,6 +1,7 @@
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Icon, THEME, TableWithSelectableRows, Tag, customDayjs } from '@mtes-mct/monitor-ui'
 import { flexRender, type Row as RowType } from '@tanstack/react-table'
+import { orderBy } from 'lodash'
 import styled from 'styled-components'
 
 import { PriorNotification } from '../../PriorNotification.types'
@@ -13,9 +14,7 @@ export function Row({ row }: RowProps) {
   const dispatch = useMainAppDispatch()
 
   const priorNotification = row.original
-  const firstFiveOnBoardCatchesByWeight = [...priorNotification.onBoardCatches]
-    .sort((onBoardCatchA, onBoardCatchB) => (onBoardCatchB.weight ?? 0) - (onBoardCatchA.weight ?? 0))
-    .slice(0, 5)
+  const firstFiveOnBoardCatchesByWeight = orderBy(priorNotification.onBoardCatches, ['weight'], ['desc']).slice(0, 5)
 
   return (
     <>

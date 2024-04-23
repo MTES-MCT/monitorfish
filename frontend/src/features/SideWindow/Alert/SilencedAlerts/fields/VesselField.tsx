@@ -63,7 +63,7 @@ export function VesselField() {
       internalReferenceNumber: nextVessel.internalReferenceNumber || null,
       ircs: nextVessel.ircs || null,
       vesselId: nextVessel.vesselId || null,
-      vesselIdentifier: nextVessel.vesselIdentifier,
+      vesselIdentifier: nextVessel.vesselIdentifier ?? undefined,
       vesselName: nextVessel.vesselName
     })
   }

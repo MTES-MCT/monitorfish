@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { marginsWithOneWarning, marginsWithoutAlert, marginsWithThreeWarning, marginsWithTwoWarning } from './constants'
 import { VesselCard } from './VesselCard'
 import { COLORS } from '../../../../constants/constants'
-import { LayerProperties } from '../../../../domain/entities/layers/constants'
+import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
 import { useIsSuperUser } from '../../../../hooks/authorization/useIsSuperUser'
 import { monitorfishMap } from '../../monitorfishMap'
 import { getMapResolution } from '../../utils'
@@ -65,7 +65,7 @@ export function VesselCardOverlay({ feature }) {
       return
     }
 
-    if (!feature?.getId()?.toString()?.includes(LayerProperties.VESSELS_POINTS.code)) {
+    if (!feature?.getId()?.toString()?.includes(MonitorFishLayer.VESSELS)) {
       overlayRef.current.style.display = 'none'
       setVesselFeatureToShowOnCard(null)
 

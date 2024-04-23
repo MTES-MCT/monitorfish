@@ -6,6 +6,7 @@ import { memo, useEffect, useRef } from 'react'
 
 import { COLORS } from '../../../../../constants/constants'
 import { LayerProperties } from '../../../../../domain/entities/layers/constants'
+import { MonitorFishLayer } from '../../../../../domain/entities/layers/types'
 import { getVesselLastPositionVisibilityDates, Vessel } from '../../../../../domain/entities/vessel/vessel'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
@@ -75,12 +76,12 @@ function UnmemoizedVesselsLayer() {
     style.current = getWebGLVesselStyle(initStyles)
 
     const vesselsVectorLayer = new WebGLPointsLayer({
-      className: LayerProperties.VESSELS_POINTS.code,
+      className: LayerProperties[MonitorFishLayer.VESSELS].code,
       source: getVesselsVectorSource(),
       style: style.current,
-      zIndex: LayerProperties.VESSELS_POINTS.zIndex
+      zIndex: LayerProperties[MonitorFishLayer.VESSELS].zIndex
     }) as WebGLPointsLayerWithName
-    vesselsVectorLayer.name = LayerProperties.VESSELS_POINTS.code
+    vesselsVectorLayer.name = MonitorFishLayer.VESSELS
     vesselWebGLPointsLayerRef.current = vesselsVectorLayer
 
     monitorfishMap.getLayers().push(vesselsVectorLayer)

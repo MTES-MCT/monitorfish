@@ -4,6 +4,18 @@ import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFor
 context('Side Window > Alert List', () => {
   beforeEach(() => {
     openSideWindowAlertList()
+
+    /**
+     * /!\ We need to use `function` and not arrow functions
+     * https://docs.cypress.io/guides/core-concepts/variables-and-aliases#Avoiding-the-use-of-this
+     */
+
+    cy.get('*[data-cy="side-window-sub-menu-SUSPENDED_ALERTS"]').click()
+    // https://docs.cypress.io/guides/core-concepts/variables-and-aliases#Sharing-Context
+    cy.get('*[data-cy="side-window-silenced-alerts-list"]').children().eq(1).children().as('previousSilencedAlerts')
+    cy.get('[data-cy="side-window-sub-menu-NAMO"]').click()
+    // https://docs.cypress.io/guides/core-concepts/variables-and-aliases#Sharing-Context
+    cy.get('*[data-cy="side-window-alerts-list"]').children().eq(1).children().as('previousAlerts')
   })
 
   it('Going to beacon malfunction then back in alerts Should not throw an exception', () => {
@@ -55,13 +67,13 @@ context('Side Window > Alert List', () => {
     cy.get('*[data-cy^="side-window-alerts-list"]').children().should('have.length', 2)
   })
 
-  it('An alert Should be validated', () => {
+  it('An alert Should be validated', function () {
     // Given
-    cy.get('*[data-cy="side-window-sub-menu-SUSPENDED_ALERTS"]').click()
-    cy.get('*[data-cy^="side-window-silenced-alerts-list"]').children().eq(1).children().should('have.length', 4)
+    cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
+    const expectedAlerts = this.previousAlerts.length - 1
+    const previousSilencedAlerts = this.previousSilencedAlerts.length
 
     // When
-    cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
     cy.intercept('PUT', '/bff/v1/operational_alerts/1/validate').as('validateAlert')
     cy.get('*[data-cy="side-window-alerts-validate-alert"]').first().click({ force: true })
     cy.get('*[data-cy="side-window-alerts-is-validated-transition"]').should('be.visible')
@@ -70,26 +82,33 @@ context('Side Window > Alert List', () => {
     // The value is saved in database when I refresh the page
     cy.visit('/side_window')
     cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
-    cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 8)
+    cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', expectedAlerts)
     // As the alert is validated, it will be silenced for 4 hours but not shown in the silenced alerts table
     cy.get('*[data-cy="side-window-sub-menu-SUSPENDED_ALERTS"]').click()
-    cy.get('*[data-cy^="side-window-silenced-alerts-list"]').children().eq(1).children().should('have.length', 4)
+    cy.get('*[data-cy^="side-window-silenced-alerts-list"]')
+      .children()
+      .eq(1)
+      .children()
+      .should('have.length', previousSilencedAlerts)
   })
 
-  it('An alert Should be silenced', () => {
+  it('An alert Should be silenced', function () {
     // Given
-    cy.get('*[data-cy="side-window-sub-menu-SUSPENDED_ALERTS"]').click()
-    cy.get('*[data-cy^="side-window-silenced-alerts-list"]').children().eq(1).children().should('have.length', 4)
+    cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
+    const expectedSilencedAlerts = this.previousSilencedAlerts.length + 1
 
     // When
-    cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
     cy.intercept('PUT', '/bff/v1/operational_alerts/2/silence').as('silenceAlert')
     cy.get('*[data-cy="side-window-alerts-silence-alert"]').first().click({ force: true })
     cy.get('*[data-cy="side-window-silence-alert-one-hour"]').first().click({ force: true })
     cy.get('*[data-cy="side-window-alerts-is-silenced-transition"]').should('be.visible')
     cy.wait('@silenceAlert').then(({ response }) => expect(response && response.statusCode).equal(200))
     cy.get('*[data-cy="side-window-sub-menu-SUSPENDED_ALERTS"]').click()
-    cy.get('*[data-cy^="side-window-silenced-alerts-list"]').children().eq(1).children().should('have.length', 5)
+    cy.get('*[data-cy^="side-window-silenced-alerts-list"]')
+      .children()
+      .eq(1)
+      .children()
+      .should('have.length', expectedSilencedAlerts)
 
     // The value is saved in database when I refresh the page
     cy.visit('/side_window')
@@ -97,14 +116,19 @@ context('Side Window > Alert List', () => {
     cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
     cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 7)
     cy.get('*[data-cy="side-window-sub-menu-SUSPENDED_ALERTS"]').click()
-    cy.get('*[data-cy^="side-window-silenced-alerts-list"]').children().eq(1).children().should('have.length', 5)
+    cy.get('*[data-cy^="side-window-silenced-alerts-list"]')
+      .children()
+      .eq(1)
+      .children()
+      .should('have.length', expectedSilencedAlerts)
   })
 
-  it('A silenced alert Should be created', () => {
+  it('A silenced alert Should be created', function () {
     // Given
     cy.get('*[data-cy="side-window-sub-menu-SUSPENDED_ALERTS"]').click()
     const now = getUtcDateInMultipleFormats('2066-06-08T13:54')
-    cy.get('*[data-cy^="side-window-silenced-alerts-list"]').children().eq(1).children().should('have.length', 5)
+    const expectedSilencedAlerts = this.previousSilencedAlerts.length + 1
+
     cy.intercept('POST', '/bff/v1/operational_alerts/silenced').as('createSilenceAlert')
 
     // When
@@ -136,12 +160,20 @@ context('Side Window > Alert List', () => {
         vesselName: 'PHENOMENE'
       })
     })
-    cy.get('*[data-cy^="side-window-silenced-alerts-list"]').children().eq(1).children().should('have.length', 6)
+    cy.get('*[data-cy^="side-window-silenced-alerts-list"]')
+      .children()
+      .eq(1)
+      .children()
+      .should('have.length', expectedSilencedAlerts)
 
     // The value is saved in database when I refresh the page
     cy.visit('/side_window')
     cy.wait(200)
     cy.get('*[data-cy="side-window-sub-menu-SUSPENDED_ALERTS"]').click()
-    cy.get('*[data-cy^="side-window-silenced-alerts-list"]').children().eq(1).children().should('have.length', 6)
+    cy.get('*[data-cy^="side-window-silenced-alerts-list"]')
+      .children()
+      .eq(1)
+      .children()
+      .should('have.length', expectedSilencedAlerts)
   })
 })

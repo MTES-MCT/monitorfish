@@ -43,8 +43,6 @@ const ColumnsBox = styled.div`
 
 const StyledSelect = styled(Select)`
   display: flex;
-  margin-right: auto;
-  margin-left: auto;
   flex-direction: row;
 
   .Element-Label {

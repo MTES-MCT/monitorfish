@@ -65,7 +65,7 @@ class GetPriorNotificationUTests {
                     ),
                 ),
                 reportingsCount = null,
-                seaFront = null,
+                seafront = null,
                 vessel = Vessel(
                     id = 1,
                     externalReferenceNumber = null,
@@ -122,7 +122,7 @@ class GetPriorNotificationUTests {
                     ),
                 ),
                 reportingsCount = null,
-                seaFront = null,
+                seafront = null,
                 vessel = Vessel(
                     id = 2,
                     externalReferenceNumber = null,

@@ -1,4 +1,4 @@
-import { SeaFrontGroup } from '@constants/seaFront'
+import { SeafrontGroup } from '@constants/seafront'
 import { propEq } from 'ramda'
 import { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { AlertAndReportingTab } from './constants'
 import { PendingAlertsList } from './PendingAlertsList'
 import { COLORS } from '../../../../constants/constants'
-import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS } from '../../../../domain/entities/alerts/constants'
+import { ALERTS_MENU_SEAFRONT_TO_SEAFRONTS } from '../../../../domain/entities/alerts/constants'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { ReportingList } from '../../../Reporting/components/ReportingList'
@@ -16,13 +16,13 @@ import type { RefObject } from 'react'
 
 type AlertsAndReportingsProps = {
   baseRef: RefObject<HTMLDivElement>
-  selectedSeaFrontGroup: SeaFrontGroup
+  selectedSeafrontGroup: SeafrontGroup
   selectedTab: any
   setSelectedTab: any
 }
 export function AlertListAndReportingList({
   baseRef,
-  selectedSeaFrontGroup,
+  selectedSeafrontGroup,
   selectedTab,
   setSelectedTab
 }: AlertsAndReportingsProps) {
@@ -34,13 +34,13 @@ export function AlertListAndReportingList({
   const filteredSilencedAlerts = useMemo(
     () =>
       silencedAlerts.filter(silencedAlert => {
-        const seaFronts = ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFrontGroup]
-          ? ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFrontGroup].seaFronts
+        const seafronts = ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup]
+          ? ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup].seafronts
           : []
 
-        return silencedAlert.value.seaFront && seaFronts.includes(silencedAlert.value.seaFront)
+        return silencedAlert.value.seaFront && seafronts.includes(silencedAlert.value.seaFront)
       }),
-    [silencedAlerts, selectedSeaFrontGroup]
+    [silencedAlerts, selectedSeafrontGroup]
   )
 
   useEffect(() => {
@@ -52,15 +52,14 @@ export function AlertListAndReportingList({
     if (!focusedPendingAlert) {
       return
     }
-    // TODO Remove the `as` as soon as the discriminator is added.
     const { seaFront } = focusedPendingAlert.value
 
-    const menuSeaFrontName = Object.keys(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS)
-      .map(menuSeaFrontKey => ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[menuSeaFrontKey])
-      .find(item => item.seaFronts.includes(seaFront))
+    const menuSeafrontName = Object.keys(ALERTS_MENU_SEAFRONT_TO_SEAFRONTS)
+      .map(menuSeafrontKey => ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[menuSeafrontKey])
+      .find(item => item.seafronts.includes(seaFront))
 
-    if (menuSeaFrontName) {
-      dispatch(setSubMenu(menuSeaFrontName.menuSeaFront))
+    if (menuSeafrontName) {
+      dispatch(setSubMenu(menuSeafrontName.menuSeafront))
     }
   }, [dispatch, focusedPendingAlertId, pendingAlerts])
 
@@ -84,12 +83,12 @@ export function AlertListAndReportingList({
           <PendingAlertsList
             baseRef={baseRef}
             numberOfSilencedAlerts={filteredSilencedAlerts.length}
-            selectedSeaFrontGroup={selectedSeaFrontGroup}
+            selectedSeafrontGroup={selectedSeafrontGroup}
           />
         </>
       )}
       {selectedTab === AlertAndReportingTab.REPORTING && (
-        <ReportingList selectedSeaFrontGroup={selectedSeaFrontGroup} />
+        <ReportingList selectedSeafrontGroup={selectedSeafrontGroup} />
       )}
     </Wrapper>
   )

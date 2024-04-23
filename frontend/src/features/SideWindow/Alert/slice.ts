@@ -1,4 +1,4 @@
-import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFrontGroup } from '@constants/seaFront'
+import { SEAFRONT_GROUP_SEAFRONTS, SeafrontGroup } from '@constants/seafront'
 import { createSlice } from '@reduxjs/toolkit'
 import { propEq } from 'ramda'
 
@@ -25,7 +25,7 @@ const INITIAL_STATE: AlertState = {
   pendingAlerts: [],
   silencedAlerts: [],
   silencedAlertsQueue: [],
-  subMenu: SeaFrontGroup.MEMN
+  subMenu: SeafrontGroup.MEMN
 }
 
 const slice = createSlice({
@@ -59,10 +59,10 @@ const slice = createSlice({
         return
       }
 
-      const seaFrontGroup = (Object.keys(SEA_FRONT_GROUP_SEA_FRONTS) as SeaFrontGroup[]).find(group => {
+      const seafrontGroup = (Object.keys(SEAFRONT_GROUP_SEAFRONTS) as SeafrontGroup[]).find(group => {
         if (
           focusedPendingAlert.value.seaFront &&
-          SEA_FRONT_GROUP_SEA_FRONTS[group].includes(focusedPendingAlert.value.seaFront)
+          SEAFRONT_GROUP_SEAFRONTS[group].includes(focusedPendingAlert.value.seaFront)
         ) {
           return group
         }
@@ -70,7 +70,7 @@ const slice = createSlice({
         return undefined
       })
 
-      state.subMenu = seaFrontGroup || SeaFrontGroup.MEMN
+      state.subMenu = seafrontGroup ?? SeafrontGroup.MEMN
     },
 
     /**

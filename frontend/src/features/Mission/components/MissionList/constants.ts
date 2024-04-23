@@ -1,4 +1,4 @@
-import { SeaFrontGroup, type AllSeaFrontGroup } from '@constants/seaFront'
+import { SeafrontGroup, type AllSeafrontGroup } from '@constants/seafront'
 import { getMissionCompletionFrontStatus, getMissionStatus } from '@features/Mission/utils'
 import { customDayjs, getOptionsFromLabelledEnum } from '@mtes-mct/monitor-ui'
 
@@ -39,8 +39,8 @@ export const MISSION_FILTER_OPTIONS: Record<MissionFilterType, Option<any>[]> = 
 }
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */
-export const SUB_MENU_LABEL: Record<SeaFrontGroup | AllSeaFrontGroup, string> = {
-  ALL_SEA_FRONT_GROUP: 'TOUT',
+export const SUB_MENU_LABEL: Record<SeafrontGroup | AllSeafrontGroup, string> = {
+  ALL_SEAFRONT_GROUP: 'TOUT',
   MED: 'MED',
   MEMN: 'MEMN',
   NAMO: 'NAMO',

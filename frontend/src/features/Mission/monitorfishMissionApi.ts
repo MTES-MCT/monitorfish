@@ -23,7 +23,7 @@ const getMissionStatusFilter = missionStatus =>
   missionStatus?.length > 0 && `missionStatus=${encodeURIComponent(missionStatus)}`
 const getMissionTypesFilter = missionTypes =>
   missionTypes?.length > 0 && `missionTypes=${encodeURIComponent(missionTypes)}`
-const getSeaFrontsFilter = seaFronts => seaFronts?.length > 0 && `seaFronts=${encodeURIComponent(seaFronts)}`
+const getSeafrontsFilter = seafronts => seafronts?.length > 0 && `seaFronts=${encodeURIComponent(seafronts)}`
 
 enum MonitorenvStatusMapping {
   CLOSED = 'CLOSED',
@@ -50,7 +50,7 @@ export const monitorfishMissionApi = monitorfishApi.injectEndpoints({
           getMissionSourceFilter(filter.missionSource),
           getMissionStatusFilter(filter.missionStatus?.map(status => MonitorenvStatusMapping[status])),
           getMissionTypesFilter(filter.missionTypes),
-          getSeaFrontsFilter(filter.seaFronts)
+          getSeafrontsFilter(filter.seaFronts)
         ]
           .filter(v => v)
           .join('&')

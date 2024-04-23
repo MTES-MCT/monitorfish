@@ -1,7 +1,7 @@
 import { Mission } from '@features/Mission/mission.types'
 
 import { openSideWindowNewMission } from './utils'
-import { SeaFrontGroup } from '../../../../src/constants/seaFront'
+import { SeafrontGroup } from '../../../../src/constants/seafront'
 import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
 import { FAKE_MISSION_WITH_EXTERNAL_ACTIONS, FAKE_MISSION_WITHOUT_EXTERNAL_ACTIONS } from '../../constants'
 import { customDayjs } from '../../utils/customDayjs'
@@ -283,7 +283,7 @@ context('Side Window > Mission Form > Main Form', () => {
   })
 
   it('Should send the expected data to the API when editing an existing mission', () => {
-    editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
+    editSideWindowMissionListMissionWithId(2, SeafrontGroup.MEMN)
     const endDate = customDayjs().utc().add(7, 'day')
     cy.fill('Fin de mission', getUtcDateInMultipleFormats(endDate.toISOString()).utcDateTupleWithTime)
 
@@ -332,13 +332,13 @@ context('Side Window > Mission Form > Main Form', () => {
   })
 
   it('Should show the cancellation confirmation dialog when switching to another menu while a draft is dirty', () => {
-    editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
+    editSideWindowMissionListMissionWithId(2, SeafrontGroup.MEMN)
 
     cy.clickButton(SideWindowMenuLabel.MISSION_LIST)
 
     cy.get('h1').should('contain.text', 'Missions en MEMN')
 
-    editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
+    editSideWindowMissionListMissionWithId(2, SeafrontGroup.MEMN)
 
     // We remove a required field
     cy.fill('Unité 1', '')
@@ -361,7 +361,7 @@ context('Side Window > Mission Form > Main Form', () => {
 
   it('A mission should not be deleted if actions have been created in MonitorEnv', () => {
     const missionId = 4
-    editSideWindowMissionListMissionWithId(missionId, SeaFrontGroup.MEMN)
+    editSideWindowMissionListMissionWithId(missionId, SeafrontGroup.MEMN)
 
     cy.intercept(
       { method: 'GET', url: `/api/v1/missions/${missionId}/can_delete?source=${Mission.MissionSource.MONITORFISH}` },
@@ -383,12 +383,12 @@ context('Side Window > Mission Form > Main Form', () => {
 
   it('Should delete a mission if no action created in MonitorEnv', () => {
     // We shouldn't be able to delete a CACEM mission:
-    editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
+    editSideWindowMissionListMissionWithId(2, SeafrontGroup.MEMN)
     cy.contains('Supprimer la mission').should('be.disabled')
 
     // But we should be able to delete a CNSP one:
     const missionId = 4
-    editSideWindowMissionListMissionWithId(missionId, SeaFrontGroup.MEMN)
+    editSideWindowMissionListMissionWithId(missionId, SeafrontGroup.MEMN)
 
     cy.intercept(
       { method: 'GET', url: `/api/v1/missions/${missionId}/can_delete?source=${Mission.MissionSource.MONITORFISH}` },
@@ -448,21 +448,21 @@ context('Side Window > Mission Form > Main Form', () => {
       },
       { statusCode: 400 }
     ).as('getMissionStubbed')
-    editSideWindowMissionListMissionWithId(6, SeaFrontGroup.MED)
+    editSideWindowMissionListMissionWithId(6, SeafrontGroup.MED)
     cy.wait(200)
     cy.get('@getMissionStubbed.all').should('have.length', 3)
     cy.get('*[data-cy="mission-form-error"]').contains("Nous n'avons pas pu récupérer la mission")
   })
 
   it('Should not show a warning indicating that a control unit is already engaged in a mission When editing', () => {
-    editSideWindowMissionListMissionWithId(43, SeaFrontGroup.MED)
+    editSideWindowMissionListMissionWithId(43, SeafrontGroup.MED)
 
     cy.get('body').should(
       'not.contain',
       'Cette unité est actuellement sélectionnée dans une autre mission en cours ouverte par le CNSP.'
     )
 
-    editSideWindowMissionListMissionWithId(4, SeaFrontGroup.MEMN)
+    editSideWindowMissionListMissionWithId(4, SeafrontGroup.MEMN)
 
     cy.get('body').should(
       'not.contain',
@@ -504,7 +504,7 @@ context('Side Window > Mission Form > Main Form', () => {
   })
 
   it('Should update the form When receiving a mission update', () => {
-    editSideWindowMissionListMissionWithId(43, SeaFrontGroup.MED)
+    editSideWindowMissionListMissionWithId(43, SeafrontGroup.MED)
 
     cy.wait(200)
     cy.intercept('POST', '/api/v1/missions/43', {
@@ -626,7 +626,7 @@ context('Side Window > Mission Form > Main Form', () => {
   })
 
   it('Should update the form When receiving a mission update and doing modification right after', () => {
-    editSideWindowMissionListMissionWithId(43, SeaFrontGroup.MED)
+    editSideWindowMissionListMissionWithId(43, SeafrontGroup.MED)
     cy.wait(200)
     cy.intercept('POST', '/api/v1/missions/43', {
       body: {

@@ -1,4 +1,4 @@
-import { ALL_SEA_FRONT_GROUP, SEA_FRONT_GROUP_SEA_FRONTS } from '@constants/seaFront'
+import { ALL_SEAFRONT_GROUP, SEAFRONT_GROUP_SEAFRONTS } from '@constants/seafront'
 import { completionStatusFilterFunction } from '@features/Mission/filters/completionStatusFilterFunction'
 import { missionActionsFilterFunction } from '@features/Mission/filters/missionActionsFilterFunction'
 import { Mission } from '@features/Mission/mission.types'
@@ -7,7 +7,7 @@ import { customDayjs } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 
 import { administrationFilterFunction } from '../../../filters/administrationFilterFunction'
-import { seaFrontFilterFunction } from '../../../filters/seaFrontFilterFunction'
+import { seafrontFilterFunction } from '../../../filters/seafrontFilterFunction'
 import { unitFilterFunction } from '../../../filters/unitFilterFunction'
 import { useGetMissionsQuery } from '../../../monitorfishMissionApi'
 import { MissionDateRangeFilter, MissionFilterType } from '../types'
@@ -18,10 +18,10 @@ export const useGetFilteredMissionsQuery = (): {
   isError: boolean
   isLoading: boolean
   missions: Mission.MissionWithActions[]
-  missionsSeaFrontFiltered: Mission.MissionWithActions[]
+  missionsSeafrontFiltered: Mission.MissionWithActions[]
 } => {
   const listFilterValues = useMainAppSelector(state => state.missionList.listFilterValues)
-  const listSeaFrontGroup = useMainAppSelector(state => state.missionList.listSeaFrontGroup)
+  const listSeafrontGroup = useMainAppSelector(state => state.missionList.listSeafrontGroup)
 
   const startedAfterDateTime = () => {
     const isCustom = listFilterValues[MissionFilterType.CUSTOM_DATE_RANGE]?.length
@@ -75,7 +75,7 @@ export const useGetFilteredMissionsQuery = (): {
     {
       missionStatus: listFilterValues[MissionFilterType.STATUS],
       missionTypes: [listFilterValues[MissionFilterType.TYPE]],
-      // seaFronts are filtered in memory
+      // seafronts are filtered in memory
       seaFronts: [],
       startedAfterDateTime: startedAfterDateTime(),
       startedBeforeDateTime: startedBeforeDateTime()
@@ -102,24 +102,24 @@ export const useGetFilteredMissionsQuery = (): {
     )
   }, [data, listFilterValues])
 
-  const missionsSeaFrontFiltered: Mission.MissionWithActions[] = useMemo(() => {
+  const missionsSeafrontFiltered: Mission.MissionWithActions[] = useMemo(() => {
     if (!missions) {
       return []
     }
 
-    if (listSeaFrontGroup === ALL_SEA_FRONT_GROUP) {
+    if (listSeafrontGroup === ALL_SEAFRONT_GROUP) {
       return missions
     }
 
-    const filteredSeaFronts = SEA_FRONT_GROUP_SEA_FRONTS[listSeaFrontGroup]
+    const filteredSeafronts = SEAFRONT_GROUP_SEAFRONTS[listSeafrontGroup]
 
-    return missions.filter(mission => seaFrontFilterFunction(mission, filteredSeaFronts))
-  }, [listSeaFrontGroup, missions])
+    return missions.filter(mission => seafrontFilterFunction(mission, filteredSeafronts))
+  }, [listSeafrontGroup, missions])
 
   return {
     isError,
     isLoading: isFetching,
     missions,
-    missionsSeaFrontFiltered
+    missionsSeafrontFiltered
   }
 }

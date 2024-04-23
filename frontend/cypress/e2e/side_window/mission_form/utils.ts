@@ -38,7 +38,7 @@ export const editSideWindowMission = (vesselName: string) => {
     cy.getDataCy('first-loader').should('not.be.visible')
   }
 
-  cy.get('[data-cy="side-window-sub-menu-ALL_SEA_FRONT_GROUP"]').click()
+  cy.get('[data-cy="side-window-sub-menu-ALL_SEAFRONT_GROUP"]').click()
   cy.fill('Rechercher un navire', vesselName)
 
   cy.clickButton('Éditer la mission')

@@ -1,11 +1,11 @@
 import { openSideWindowReportingList } from './utils'
-import { SeaFrontGroup } from '../../../../src/constants/seaFront'
+import { SeafrontGroup } from '../../../../src/constants/seafront'
 
 context('Side Window > Reporting List > Table', () => {
   beforeEach(() => {
     openSideWindowReportingList()
 
-    cy.getDataCy(`side-window-sub-menu-${SeaFrontGroup.NAMO}`).click()
+    cy.getDataCy(`side-window-sub-menu-${SeafrontGroup.NAMO}`).click()
   })
 
   it('Should sort reportings by title', () => {

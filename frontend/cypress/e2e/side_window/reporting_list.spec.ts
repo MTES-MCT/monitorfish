@@ -216,8 +216,8 @@ context('Reportings', () => {
     })
   })
 
-  function downloadReporting(seaFront, csvValues) {
-    cy.get(`[data-cy="side-window-sub-menu-${seaFront}"]`).click()
+  function downloadReporting(seafront, csvValues) {
+    cy.get(`[data-cy="side-window-sub-menu-${seafront}"]`).click()
     cy.get('.rs-checkbox-checker').eq(0).click({ timeout: 10000 })
 
     // When

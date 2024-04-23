@@ -1,4 +1,4 @@
-import { SeaFront } from '@constants/seaFront'
+import { Seafront } from '@constants/seafront'
 import { expect } from '@jest/globals'
 
 import { PendingAlertValueType } from '../../../../../../domain/entities/alerts/types'
@@ -33,7 +33,7 @@ describe('Reportings/Current/utils.sortByValidationOrCreationDateDesc()', () => 
       value: {
         dml: null,
         natinfCode: 2610,
-        seaFront: SeaFront.NAMO,
+        seaFront: Seafront.NAMO,
         type: PendingAlertValueType.TWELVE_MILES_FISHING_ALERT
       },
       vesselId: 1234568,

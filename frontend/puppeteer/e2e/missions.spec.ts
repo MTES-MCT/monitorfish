@@ -3,7 +3,7 @@ import { platform } from 'os'
 import { Page } from 'puppeteer'
 
 import { getFirstTab, getInputContent, listenToConsole, wait, waitForSelectorWithText } from './utils'
-import { SeaFrontGroup } from '../../src/constants/seaFront'
+import { SeafrontGroup } from '../../src/constants/seafront'
 
 const TIMEOUT = 120 * 1000
 
@@ -33,8 +33,8 @@ describe('Missions Form', () => {
       await page.waitForSelector('[title="Missions et contrôles"]')
       await page.click('[title="Missions et contrôles"]')
 
-      await page.waitForSelector(`[data-cy="side-window-sub-menu-${SeaFrontGroup.NAMO}"]`)
-      await page.click(`[data-cy="side-window-sub-menu-${SeaFrontGroup.NAMO}"]`)
+      await page.waitForSelector(`[data-cy="side-window-sub-menu-${SeafrontGroup.NAMO}"]`)
+      await page.click(`[data-cy="side-window-sub-menu-${SeafrontGroup.NAMO}"]`)
       await waitForSelectorWithText(page, 'h1', 'Missions en NAMO')
 
       // Remove default mission filter "En cours"

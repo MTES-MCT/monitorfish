@@ -1,4 +1,4 @@
-import { ALL_SEA_FRONT_GROUP } from '@constants/seaFront'
+import { ALL_SEAFRONT_GROUP } from '@constants/seafront'
 import { RichBoolean } from '@mtes-mct/monitor-ui'
 
 import { ExpectedArrivalPeriod } from './components/PriorNotificationList/constants'
@@ -17,7 +17,7 @@ export const DEFAULT_LIST_FILTER_VALUES: ListFilter = {
   lastControlPeriod: undefined,
   portLocodes: undefined,
   priorNotificationTypes: undefined,
-  seaFrontGroup: ALL_SEA_FRONT_GROUP,
+  seafrontGroup: ALL_SEAFRONT_GROUP,
   searchQuery: undefined,
   specyCodes: undefined
 }

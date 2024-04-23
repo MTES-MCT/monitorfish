@@ -31,13 +31,13 @@ type ControlObjectiveWithMaybeFleetSegment = ControlObjective &
     controlPriorityLevel?: number
   }
 
-export type SeaFrontControlObjectivesProps = {
+export type SeafrontControlObjectivesProps = Readonly<{
   data: ControlObjective[]
   facade: string
   title: string
   year: number
-}
-export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFrontControlObjectivesProps) {
+}>
+export function SeafrontControlObjectives({ data, facade, title, year }: SeafrontControlObjectivesProps) {
   const [expandedRowKeys, setExpandedRowKeys] = useState<number[]>([])
   const [controlObjectivesWithMaybeFleetSegment, setControlObjectivesWithMaybeFleetSegment] = useState<
     ControlObjectiveWithMaybeFleetSegment[]
@@ -84,7 +84,7 @@ export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFron
           targetNumberOfControlsAtPort: 0,
           targetNumberOfControlsAtSea: 0,
           year,
-          ...(foundFleetSegment || {})
+          ...(foundFleetSegment ?? {})
         } as unknown as ControlObjectiveWithMaybeFleetSegment
       ]
 
@@ -204,11 +204,11 @@ export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFron
 
     const nextControlObjectivesWithMaybeFleetSegment = data
       .map(controlledObjective => {
-        const foundFleetSegment = (getFleetSegmentsQuery.data || []).find(
+        const foundFleetSegment = (getFleetSegmentsQuery.data ?? []).find(
           fleetSegment => fleetSegment.segment === controlledObjective.segment
         )
 
-        return { ...controlledObjective, ...(foundFleetSegment || {}) } as ControlObjectiveWithMaybeFleetSegment
+        return { ...controlledObjective, ...(foundFleetSegment ?? {}) } as ControlObjectiveWithMaybeFleetSegment
       })
       .slice()
       .sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType))
@@ -322,7 +322,7 @@ export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFron
             )
             .sort((a, b) => sortArrayByColumn(a, b, 'label', 'asc'))}
           data-cy="add-control-objective"
-          onChange={segment => setSegmentToAddToFacade(segment || undefined)}
+          onChange={segment => setSegmentToAddToFacade(segment ?? undefined)}
           placeholder="segment"
           placement="auto"
           searchable

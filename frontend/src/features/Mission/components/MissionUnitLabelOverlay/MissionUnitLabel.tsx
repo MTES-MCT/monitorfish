@@ -1,7 +1,13 @@
 import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-export function MissionUnitLabel({ color, showed, text }) {
+type MissionUnitLabelProps = {
+  color: string
+  isDoneAndIncomplete: boolean
+  showed: boolean
+  text: string
+}
+export function MissionUnitLabel({ color, isDoneAndIncomplete, showed, text }: MissionUnitLabelProps) {
   if (!showed || !text) {
     return null
   }
@@ -11,6 +17,7 @@ export function MissionUnitLabel({ color, showed, text }) {
       <ZoneText data-cy="mission-label-text" isWhiteBackground={color === THEME.color.white}>
         {text.toUpperCase()}
       </ZoneText>
+      {isDoneAndIncomplete && <IncompleteMission title="Mission à compléter" />}
     </Wrapper>
   )
 }
@@ -41,4 +48,15 @@ const ZoneText = styled.span<{
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+`
+
+const IncompleteMission = styled.span`
+  border-radius: 6px;
+  border: 1px ${THEME.color.lightGray} solid;
+  width: 10px;
+  height: 10px;
+  background: ${THEME.color.maximumRed} 0% 0% no-repeat padding-box;
+  margin-top: -6px;
+  margin-right: -6px;
+  display: inline-block;
 `

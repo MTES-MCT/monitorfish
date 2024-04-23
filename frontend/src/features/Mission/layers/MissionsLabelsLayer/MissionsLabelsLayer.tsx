@@ -12,7 +12,7 @@ import { useGetLineFeatureIdToCoordinates } from '../../../map/layers/hooks/useG
 import { useIsZooming } from '../../../map/layers/hooks/useIsZooming'
 import { getLabelLineStyle } from '../../../map/layers/styles/labelLine.style'
 import { monitorfishMap } from '../../../map/monitorfishMap'
-import { MissionLabelOverlay } from '../../../map/overlays/MissionUnitLabelOverlay'
+import { MissionLabelOverlay } from '../../components/MissionUnitLabelOverlay'
 
 import type { FeatureAndLabel } from './types'
 import type { VectorLayerWithName } from '../../../../domain/types/layer'
@@ -22,15 +22,7 @@ const MIN_ZOOM = 7
 export function MissionsLabelsLayer({ mapMovingAndZoomEvent }) {
   const isSuperUser = useIsSuperUser()
   const isMissionsLayerDisplayed = useMainAppSelector(state => state.displayedComponent.isMissionsLayerDisplayed)
-  const [featuresAndLabels, setFeaturesAndLabels] = useState<
-    {
-      color: string
-      coordinates: [number, number]
-      featureId: string
-      label: Record<string, any>
-      offset: number[] | null
-    }[]
-  >([])
+  const [featuresAndLabels, setFeaturesAndLabels] = useState<FeatureAndLabel[]>([])
   const isZooming = useIsZooming(monitorfishMap, mapMovingAndZoomEvent)
   const previousFeaturesAndLabels = usePrevious(featuresAndLabels)
   const currentZoom = Number(monitorfishMap.getView()?.getZoom()?.toFixed(2))
@@ -147,12 +139,13 @@ export function MissionsLabelsLayer({ mapMovingAndZoomEvent }) {
 
   return (
     <>
-      {featuresAndLabels.map(({ color, coordinates, featureId, label, offset }) => (
+      {featuresAndLabels.map(({ color, coordinates, featureId, isDoneAndIncomplete, label, offset }) => (
         <MissionLabelOverlay
           key={featureId}
           color={color}
           coordinates={coordinates}
           featureId={featureId}
+          isDoneAndIncomplete={isDoneAndIncomplete}
           moveLine={moveVesselLabelLine}
           offset={offset}
           text={label}

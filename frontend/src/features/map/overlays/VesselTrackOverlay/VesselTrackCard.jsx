@@ -1,78 +1,67 @@
+import { getDateTime } from '@utils/getDateTime'
+import { timeagoFrenchLocale } from '@utils/timeagoFrenchLocale'
 import React from 'react'
-import styled from 'styled-components'
-import { getCoordinates } from '../../../../coordinates'
-import { getDateTime, timeagoFrenchLocale } from '../../../../utils'
-import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
-import { COLORS } from '../../../../constants/constants'
-import * as timeago from 'timeago.js'
 import { useSelector } from 'react-redux'
+import styled from 'styled-components'
+import * as timeago from 'timeago.js'
+
+import { COLORS } from '../../../../constants/constants'
+import { getCoordinates } from '../../../../coordinates'
+import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
 import { OverlayPosition } from '../Overlay'
 
 timeago.register('fr', timeagoFrenchLocale)
 
-const VesselTrackCard = ({ feature, overlayPosition }) => {
+function VesselTrackCard({ feature, overlayPosition }) {
   const { coordinatesFormat } = useSelector(state => state.map)
 
   return (
     <>
       <VesselCardHeader>
         <VesselCardTitle>POSITION</VesselCardTitle>
-        <TimeAgo>
-          {
-            feature.dateTime
-              ? <>
-                {timeago.format(feature.dateTime, 'fr')}</>
-              : <NoValue>-</NoValue>
-          }
-        </TimeAgo>
+        <TimeAgo>{feature.dateTime ? <>{timeago.format(feature.dateTime, 'fr')}</> : <NoValue>-</NoValue>}</TimeAgo>
       </VesselCardHeader>
       <VesselCardBody>
         <LatLon>
           <FieldName>Latitude</FieldName>
-          <FieldValue data-cy={'vessel-track-card-latitude'}>{getCoordinates(feature.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION, coordinatesFormat)[0]}</FieldValue>
+          <FieldValue data-cy="vessel-track-card-latitude">
+            {getCoordinates(feature.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION, coordinatesFormat)[0]}
+          </FieldValue>
           <FieldName>Longitude</FieldName>
-          <FieldValue data-cy={'vessel-track-card-longitude'}>{getCoordinates(feature.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION, coordinatesFormat)[1]}</FieldValue>
+          <FieldValue data-cy="vessel-track-card-longitude">
+            {getCoordinates(feature.getGeometry().getCoordinates(), OPENLAYERS_PROJECTION, coordinatesFormat)[1]}
+          </FieldValue>
         </LatLon>
         <Course>
           <FieldName>Route</FieldName>
-          <FieldValue data-cy={'vessel-track-card-course'}>{feature.course === 0 || feature.course
-            ? <>{feature.course}°</>
-            : <NoValue>-</NoValue>}</FieldValue>
+          <FieldValue data-cy="vessel-track-card-course">
+            {feature.course === 0 || feature.course ? <>{feature.course}°</> : <NoValue>-</NoValue>}
+          </FieldValue>
           <FieldName>Vitesse</FieldName>
-          <FieldValue data-cy={'vessel-track-card-speed'}>{feature.speed === 0 || feature.speed
-            ? <>{feature.speed} Nds</>
-            : <NoValue>-</NoValue>}</FieldValue>
+          <FieldValue data-cy="vessel-track-card-speed">
+            {feature.speed === 0 || feature.speed ? <>{feature.speed} Nds</> : <NoValue>-</NoValue>}
+          </FieldValue>
         </Course>
         <Position>
           <FieldName>Type de signal</FieldName>
-          <FieldValue>{feature.positionType
-            ? feature.positionType
-            : <NoValue>-</NoValue>}</FieldValue>
+          <FieldValue>{feature.positionType ? feature.positionType : <NoValue>-</NoValue>}</FieldValue>
           <FieldName>Signal</FieldName>
           <FieldValue>
-            {
-              feature.dateTime
-                ? <>
-                  {getDateTime(feature.dateTime, true)}{' '}
-                  <Gray>(UTC)</Gray></>
-                : <NoValue>-</NoValue>
-            }
+            {feature.dateTime ? (
+              <>
+                {getDateTime(feature.dateTime, true)} <Gray>(UTC)</Gray>
+              </>
+            ) : (
+              <NoValue>-</NoValue>
+            )}
           </FieldValue>
         </Position>
       </VesselCardBody>
       <TrianglePointer>
-        {
-          overlayPosition === OverlayPosition.BOTTOM ? <BottomTriangleShadow/> : null
-        }
-        {
-          overlayPosition === OverlayPosition.TOP ? <TopTriangleShadow/> : null
-        }
-        {
-          overlayPosition === OverlayPosition.RIGHT ? <RightTriangleShadow/> : null
-        }
-        {
-          overlayPosition === OverlayPosition.LEFT ? <LeftTriangleShadow/> : null
-        }
+        {overlayPosition === OverlayPosition.BOTTOM ? <BottomTriangleShadow /> : null}
+        {overlayPosition === OverlayPosition.TOP ? <TopTriangleShadow /> : null}
+        {overlayPosition === OverlayPosition.RIGHT ? <RightTriangleShadow /> : null}
+        {overlayPosition === OverlayPosition.LEFT ? <LeftTriangleShadow /> : null}
       </TrianglePointer>
     </>
   )
@@ -107,9 +96,9 @@ const TopTriangleShadow = styled.div`
   width: 0;
   height: 0;
   border-top: transparent;
-  border-right : 6px solid transparent;
-  border-bottom : 11px solid ${COLORS.gainsboro};
-  border-left : 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 11px solid ${COLORS.gainsboro};
+  border-left: 6px solid transparent;
   margin-left: 170px;
   margin-top: -166px;
   clear: top;
@@ -120,9 +109,9 @@ const RightTriangleShadow = styled.div`
   width: 0;
   height: 0;
   border-right: transparent;
-  border-top : 6px solid transparent;
-  border-bottom : 6px solid transparent;
-  border-left : 11px solid ${COLORS.gainsboro};
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 11px solid ${COLORS.gainsboro};
   margin-left: 387px;
   margin-top: -134px;
   clear: top;

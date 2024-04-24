@@ -1,7 +1,7 @@
 version: "3"
 services:
   db:
-    image: timescale/timescaledb-postgis:1.7.4-pg11
+    image: docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-database:$DATABASE_VERSION
     container_name: monitorfish_database
     user: ":${MONITORFISH_LOGS_AND_BACKUPS_GID}"
     environment:
@@ -90,6 +90,6 @@ networks:
 
 volumes:
   db-data:
-    driver: local
+    name: $DB_DATA_VOLUME_NAME
   geoserver-data:
     driver: local

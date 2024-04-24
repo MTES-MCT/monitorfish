@@ -63,6 +63,45 @@ dev-restore-db:
 
 
 ################################################################################
+# Database upgrade
+check-database-extensions-versions:
+	docker exec -i monitorfish_database bash < infra/remote/database_upgrade/check_extensions_versions.sh
+
+update-database-extensions:
+	docker exec -i monitorfish_database bash < infra/remote/database_upgrade/update_timescaledb.sh && \
+	docker exec -i monitorfish_database bash < infra/remote/database_upgrade/update_postgis.sh
+
+upgrade-postgres-11-to-13:
+	docker run --rm \
+		-v $(PG_11_DATA_VOLUME_NAME):/var/lib/postgresql/11/data \
+		-v $(PG_13_DATA_VOLUME_NAME):/var/lib/postgresql/13/data \
+		ghcr.io/mtes-mct/monitorfish/monitorfish-database-upgrade:pg11_to_pg13-ts2.3.1-postgis3.3.4 -O "-c timescaledb.restoring='on'" -O "-c shared_preload_libraries=timescaledb";
+
+upgrade-postgres-13-to-16-dev:
+	docker run --rm \
+		-v $(PG_13_DATA_VOLUME_NAME):/var/lib/postgresql/13/data \
+		-v $(PG_16_DATA_VOLUME_NAME):/var/lib/postgresql/16/data \
+		ghcr.io/mtes-mct/monitorfish/monitorfish-database-upgrade:pg13_to_pg16-ts2.14.2-postgis3.4.2 -O "-c timescaledb.restoring='on'" -O "-c shared_preload_libraries=timescaledb";
+
+print_pg_conf_files:
+	docker run --rm -i \
+		-v $(DB_DATA_VOLUME_NAME):/var/lib/postgresql/data \
+		debian:buster \
+		bash < infra/remote/database_upgrade/print_pg_conf_files.sh;
+
+fix_pg_hba:
+	docker run --rm \
+		-v $(DB_DATA_VOLUME_NAME):/var/lib/postgresql/data \
+		debian:buster \
+		bash -c 'echo "host all all all md5" >> /var/lib/postgresql/data/pg_hba.conf';
+
+add_timescaledb_to_shared_preload_libraries:
+	docker run --rm \
+		-v $(DB_DATA_VOLUME_NAME):/var/lib/postgresql/data \
+		debian:buster \
+		bash -c "echo \"shared_preload_libraries = 'timescaledb'\" >> /var/lib/postgresql/data/postgresql.conf";
+
+################################################################################
 # Testing
 
 test: test-back

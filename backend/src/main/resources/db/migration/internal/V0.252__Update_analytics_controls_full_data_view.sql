@@ -54,7 +54,8 @@ controls_infractions_details AS (
     SELECT
         id,
         mission_infraction->>'natinf' AS infraction_natinf,
-        mission_infraction->>'infractionType' AS infraction_type
+        mission_infraction->>'infractionType' AS infraction_type,
+        mission_infraction->>'comments' AS infraction_comments
     FROM action_infractions
 ),
 
@@ -72,9 +73,10 @@ controls_infraction_natinfs_array AS (
         id,
         true AS infraction,
         'Pêche' = ANY(ARRAY_AGG(infraction_category)) AS fishing_infraction,
-       ARRAY_AGG(DISTINCT infraction_category) FILTER (WHERE infraction_category IS NOT NULL) AS infraction_categories,
-       ARRAY_AGG(DISTINCT infraction_natinf) FILTER (WHERE infraction_natinf IS NOT NULL) AS infraction_natinfs,
-       ARRAY_AGG(DISTINCT infraction_type) FILTER (WHERE infraction_type IS NOT NULL) AS infraction_types
+        ARRAY_AGG(DISTINCT infraction_category) FILTER (WHERE infraction_category IS NOT NULL) AS infraction_categories,
+        ARRAY_AGG(DISTINCT infraction_natinf) FILTER (WHERE infraction_natinf IS NOT NULL) AS infraction_natinfs,
+        ARRAY_AGG(DISTINCT infraction_type) FILTER (WHERE infraction_type IS NOT NULL) AS infraction_types,
+        STRING_AGG(NULLIF(infraction_comments, ''), ' - ') AS infraction_comments
     FROM controls_infraction_natinf_category
     GROUP BY id
 )
@@ -110,7 +112,16 @@ SELECT
     species,
     gears, 
     CASE WHEN a.fao_areas = '{}' THEN '{Aucune zone FAO}' ELSE a.fao_areas END AS fao_areas, 
-    COALESCE(segment->>'segment', 'Hors segment') AS segment
+    COALESCE(segment->>'segment', 'Hors segment') AS segment,
+    NULLIF(
+        (
+            CASE WHEN inf.infraction_comments IS NOT NULL THEN inf.infraction_comments || ' - ' ELSE '' END ||
+            CASE WHEN licences_and_logbook_observations IS NOT NULL THEN licences_and_logbook_observations || ' - ' ELSE '' END ||
+            CASE WHEN species_observations IS NOT NULL THEN species_observations || ' - ' ELSE '' END ||
+            CASE WHEN other_comments IS NOT NULL THEN other_comments ELSE '' END
+        ),
+        ''
+    ) as comments
 FROM mission_actions a
 LEFT JOIN LATERAL jsonb_array_elements(CASE WHEN jsonb_typeof(segments) = 'array' THEN segments ELSE '[]' END) AS segment on true
 LEFT JOIN controls_infraction_natinfs_array inf ON inf.id = a.id

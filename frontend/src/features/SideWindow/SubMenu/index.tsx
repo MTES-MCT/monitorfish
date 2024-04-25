@@ -42,6 +42,7 @@ const Wrapper = styled.div<{
 }>`
   min-width: ${p => p.width}px;
   user-select: none;
+  margin-right: 1px;
 
   * {
     user-select: none;

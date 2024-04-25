@@ -1,11 +1,11 @@
+import { useMoveOverlayWhenDragging } from '@hooks/useMoveOverlayWhenDragging'
+import { useMoveOverlayWhenZooming } from '@hooks/useMoveOverlayWhenZooming'
 import Overlay from 'ol/Overlay'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { MissionUnitLabel } from './MissionUnitLabel'
-import { useMoveOverlayWhenDragging } from '../../../../hooks/useMoveOverlayWhenDragging'
-import { useMoveOverlayWhenZooming } from '../../../../hooks/useMoveOverlayWhenZooming'
-import { monitorfishMap } from '../../monitorfishMap'
+import { monitorfishMap } from '../../../map/monitorfishMap'
 
 import type { MutableRefObject } from 'react'
 
@@ -13,7 +13,26 @@ const X = 0
 const Y = 1
 const INITIAL_OFFSET_VALUE = [23, -34]
 
-export function MissionLabelOverlay({ color, coordinates, featureId, moveLine, offset, text, zoomHasChanged }) {
+type MissionLabelOverlayProps = {
+  color: string
+  coordinates: [number, number]
+  featureId: string
+  isDoneAndIncomplete: boolean
+  moveLine: (featureId: any, fromCoordinates: any, toCoordinates: any, offset: any, opacity: any) => void
+  offset: number[] | null
+  text: string
+  zoomHasChanged: any
+}
+export function MissionLabelOverlay({
+  color,
+  coordinates,
+  featureId,
+  isDoneAndIncomplete,
+  moveLine,
+  offset,
+  text,
+  zoomHasChanged
+}: MissionLabelOverlayProps) {
   const overlayElementRef = useRef<HTMLDivElement>() as MutableRefObject<HTMLDivElement>
 
   const currentOffsetRef = useRef(INITIAL_OFFSET_VALUE)
@@ -97,7 +116,7 @@ export function MissionLabelOverlay({ color, coordinates, featureId, moveLine, o
           }
         }}
       >
-        <MissionUnitLabel color={color} showed={showed} text={text} />
+        <MissionUnitLabel color={color} isDoneAndIncomplete={isDoneAndIncomplete} showed={showed} text={text} />
       </Wrapper>
     </WrapperToBeKeptForDOMManagement>
   )

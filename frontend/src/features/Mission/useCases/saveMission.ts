@@ -3,10 +3,11 @@ import {
   getMissionDataFromMissionFormValues,
   getUpdatedMissionFromMissionMainFormValues
 } from '@features/Mission/components/MissionForm/utils'
+import { validateMissionForms } from '@features/Mission/components/MissionForm/utils/validateMissionForms'
 import { monitorenvMissionApi } from '@features/Mission/monitorenvMissionApi'
 import { logSoftError } from '@mtes-mct/monitor-ui'
 
-import type { MissionMainFormValues } from '@features/Mission/components/MissionForm/types'
+import type { MissionMainFormValues, MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 import type { MainAppThunk } from '@store'
 
 export const saveMission =
@@ -14,7 +15,8 @@ export const saveMission =
     nextMainFormValues: MissionMainFormValues,
     missionId: number | undefined
   ): MainAppThunk<Promise<MissionMainFormValues>> =>
-  async dispatch => {
+  async (dispatch, getState) => {
+    const actionsFormValuesFromDraft = getState().missionForm.draft?.actionsFormValues ?? []
     dispatch(missionFormActions.setIsListeningToEvents(false))
 
     try {
@@ -24,7 +26,12 @@ export const saveMission =
           monitorenvMissionApi.endpoints.createMission.initiate(newMission)
         ).unwrap()
 
-        initIsDraftDirtyAndListenToEvents()
+        initIsDraftDirtyAndListenToEvents(nextMainFormValues, actionsFormValuesFromDraft)
+
+        // Wait for the mission to be updated in the form before displaying the banner
+        setTimeout(async () => {
+          await dispatch(missionFormActions.setIsMissionCreatedBannerDisplayed(true))
+        }, 250)
 
         return {
           ...nextMainFormValues,
@@ -37,7 +44,7 @@ export const saveMission =
       const nextMission = getUpdatedMissionFromMissionMainFormValues(missionId, nextMainFormValues)
       const updatedMission = await dispatch(monitorenvMissionApi.endpoints.updateMission.initiate(nextMission)).unwrap()
 
-      initIsDraftDirtyAndListenToEvents()
+      initIsDraftDirtyAndListenToEvents(nextMainFormValues, actionsFormValuesFromDraft)
 
       return {
         ...nextMainFormValues,
@@ -54,8 +61,15 @@ export const saveMission =
       return nextMainFormValues
     }
 
-    function initIsDraftDirtyAndListenToEvents() {
-      dispatch(missionFormActions.setIsDraftDirty(false))
+    function initIsDraftDirtyAndListenToEvents(
+      mainFormValues: MissionMainFormValues,
+      actionsFormValues: MissionActionFormValues[]
+    ) {
+      const [areFormsValid] = validateMissionForms(mainFormValues, actionsFormValues, false)
+      if (areFormsValid) {
+        dispatch(missionFormActions.setIsDraftDirty(false))
+      }
+
       setTimeout(() => {
         dispatch(missionFormActions.setIsListeningToEvents(true))
       }, 500)

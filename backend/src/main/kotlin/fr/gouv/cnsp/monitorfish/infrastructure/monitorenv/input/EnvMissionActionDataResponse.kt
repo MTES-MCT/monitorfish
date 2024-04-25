@@ -17,11 +17,13 @@ data class EnvMissionActionDataResponse(
     val id: UUID,
     val actionStartDateTimeUtc: String? = null,
     val actionType: EnvMissionActionType,
+    val observations: String? = null,
 ) {
     fun toEnvMissionAction() = EnvMissionAction(
         id = id,
         actionStartDateTimeUtc = actionStartDateTimeUtc?.let { ZonedDateTime.parse(it) },
         actionType = actionType,
+        observations = observations,
     )
 }
 

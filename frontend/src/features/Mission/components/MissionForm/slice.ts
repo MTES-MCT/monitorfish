@@ -13,6 +13,7 @@ export interface MissionFormState {
   geometryComputedFromControls: MissionMainFormValues['geom']
   isDraftDirty: boolean
   isListeningToEvents: boolean
+  isMissionCreatedBannerDisplayed: boolean
   mustResetOtherControlsCheckboxes: boolean | undefined
   selectedMissionActionGeoJSON: GeoJSON.GeoJson | undefined
   selectedMissionGeoJSON: GeoJSON.GeoJson | undefined
@@ -23,6 +24,7 @@ const INITIAL_STATE: MissionFormState = {
   geometryComputedFromControls: undefined,
   isDraftDirty: false,
   isListeningToEvents: false,
+  isMissionCreatedBannerDisplayed: false,
   mustResetOtherControlsCheckboxes: undefined,
   selectedMissionActionGeoJSON: undefined,
   selectedMissionGeoJSON: undefined
@@ -39,6 +41,7 @@ const missionFormSlice = createSlice({
       state.draft = action.payload
       state.geometryComputedFromControls = undefined
       state.isDraftDirty = false
+      state.isMissionCreatedBannerDisplayed = false
     },
 
     mustResetOtherControlsCheckboxes(state, action: PayloadAction<boolean>) {
@@ -57,6 +60,7 @@ const missionFormSlice = createSlice({
       state.draft = undefined
       state.geometryComputedFromControls = undefined
       state.isDraftDirty = false
+      state.isMissionCreatedBannerDisplayed = false
     },
 
     /**
@@ -65,9 +69,11 @@ const missionFormSlice = createSlice({
     setDraft(state, action: PayloadAction<MissionWithActionsDraft>) {
       state.draft = action.payload
     },
+
     setEngagedControlUnit(state, action: PayloadAction<ControlUnit.EngagedControlUnit | undefined>) {
       state.engagedControlUnit = action.payload
     },
+
     /**
      * Update mission geometry computed from controls
      */
@@ -88,6 +94,10 @@ const missionFormSlice = createSlice({
 
     setIsListeningToEvents(state, action: PayloadAction<boolean>) {
       state.isListeningToEvents = action.payload
+    },
+
+    setIsMissionCreatedBannerDisplayed(state, action: PayloadAction<boolean>) {
+      state.isMissionCreatedBannerDisplayed = action.payload
     },
 
     /**

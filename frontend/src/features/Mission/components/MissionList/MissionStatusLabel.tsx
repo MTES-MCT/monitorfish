@@ -27,7 +27,7 @@ export function MissionStatusLabel({ status }: MissionStatusLabelProps) {
     case Mission.MissionStatus.UPCOMING:
       return (
         <StatusWrapper color={color}>
-          <Icon.Clock color={color} />
+          <Icon.ClockDashed color={color} />
           {Mission.MissionStatusLabel.UPCOMING}
         </StatusWrapper>
       )

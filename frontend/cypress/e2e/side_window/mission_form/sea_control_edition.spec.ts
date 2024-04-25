@@ -361,7 +361,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
       statusCode: 200
     })
 
-    cy.get('*[data-cy="action-list-item"]').eq(2).click()
+    cy.get('*[data-cy="action-list-item"]').eq(3).click()
     cy.wait(500)
 
     cy.get('input[placeholder="Rechercher un navire..."]').clear().type('phe')

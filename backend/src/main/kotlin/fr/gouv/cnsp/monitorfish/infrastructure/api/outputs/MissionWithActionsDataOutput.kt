@@ -1,7 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.*
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.env_mission_action.EnvMissionAction
 import java.time.ZonedDateTime
 
 /**
@@ -19,7 +18,7 @@ data class MissionWithActionsDataOutput(
     val geom: MultiPolygon? = null,
     val createdAtUtc: ZonedDateTime? = null,
     val updatedAtUtc: ZonedDateTime? = null,
-    val envActions: List<EnvMissionAction>? = listOf(),
+    val envActions: List<EnvMissionActionDataOutput>,
     val startDateTimeUtc: ZonedDateTime,
     val endDateTimeUtc: ZonedDateTime? = null,
     val isGeometryComputedFromControls: Boolean,
@@ -42,7 +41,8 @@ data class MissionWithActionsDataOutput(
             geom = missionAndActions.mission.geom,
             createdAtUtc = missionAndActions.mission.createdAtUtc,
             updatedAtUtc = missionAndActions.mission.updatedAtUtc,
-            envActions = missionAndActions.mission.envActions,
+            envActions = missionAndActions.mission.envActions
+                ?.map { EnvMissionActionDataOutput.fromEnvMissionAction(it) } ?: listOf(),
             startDateTimeUtc = missionAndActions.mission.startDateTimeUtc,
             endDateTimeUtc = missionAndActions.mission.endDateTimeUtc,
             isGeometryComputedFromControls = missionAndActions.mission.isGeometryComputedFromControls,

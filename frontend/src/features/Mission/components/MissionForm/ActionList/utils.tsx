@@ -19,7 +19,7 @@ export function getActionTitle(
 ): ReactNode {
   if (details) {
     return (
-      <StyledSpan>
+      <StyledSpan title={details}>
         {!!subject && <>{subject}</>}
         <Strong>{details}</Strong>
       </StyledSpan>
@@ -37,6 +37,9 @@ const Strong = styled.div`
   display: block;
   font-weight: 700;
   margin-top: 4px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 `
 
 /**
@@ -71,9 +74,6 @@ const Placeholder = styled.span`
 `
 
 const StyledSpan = styled.span`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 188px;
+  max-width: 210px;
   display: inline-block;
 `

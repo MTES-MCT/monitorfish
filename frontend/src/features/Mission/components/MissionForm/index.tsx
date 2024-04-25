@@ -5,9 +5,10 @@ import {
   useUpdateMissionActionMutation
 } from '@api/missionAction'
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
-import { useGetMissionCompletion } from '@features/Mission/components/MissionForm/hooks/useGetMissionCompletion'
+import { useGetMissionFrontCompletion } from '@features/Mission/components/MissionForm/hooks/useGetMissionFrontCompletion'
 import { CompletionStatusTag } from '@features/Mission/components/MissionForm/shared/CompletionStatusTag'
 import { Mission } from '@features/Mission/mission.types'
+import { MissionAction } from '@features/Mission/missionAction.types'
 import { autoSaveMission } from '@features/Mission/useCases/autoSaveMission'
 import { autoSaveMissionAction } from '@features/Mission/useCases/autoSaveMissionAction'
 import { deleteMission } from '@features/Mission/useCases/deleteMission'
@@ -18,7 +19,17 @@ import { cleanMissionForm } from '@features/SideWindow/useCases/cleanMissionForm
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, customDayjs, humanizePastDate, Icon, logSoftError } from '@mtes-mct/monitor-ui'
+import {
+  Accent,
+  Banner,
+  Button,
+  customDayjs,
+  humanizePastDate,
+  Icon,
+  Level,
+  logSoftError,
+  THEME
+} from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { SideWindowMenuKey } from 'domain/entities/sideWindow/constants'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -50,7 +61,6 @@ import {
 
 import type { MissionActionFormValues, MissionMainFormValues } from './types'
 import type { MissionWithActionsDraft } from '../../types'
-import type { MissionAction } from '@features/Mission/missionAction.types'
 
 const DEBOUNCE_DELAY = 500
 
@@ -59,9 +69,10 @@ export function MissionForm() {
   const missionIdFromPath = useMainAppSelector(store => store.sideWindow.selectedPath.id)
   const draft = useMainAppSelector(store => store.missionForm.draft)
   const hasEngagedControlUnit = useMainAppSelector(state => !!state.missionForm.engagedControlUnit)
+  const isMissionCreatedBannerDisplayed = useMainAppSelector(state => state.missionForm.isMissionCreatedBannerDisplayed)
   assertNotNullish(draft)
 
-  const completion = useGetMissionCompletion()
+  const missionCompletion = useGetMissionFrontCompletion()
   const missionIdRef = useRef<number | undefined>(missionIdFromPath)
 
   const [, { isLoading: isCreatingMission }] = useCreateMissionMutation()
@@ -358,12 +369,43 @@ export function MissionForm() {
   return (
     <>
       <Wrapper>
+        {isMissionCreatedBannerDisplayed && (
+          <Banner
+            isClosable
+            isCollapsible={false}
+            isHiddenByDefault={false}
+            level={Level.SUCCESS}
+            top="62"
+            withAutomaticClosing
+          >
+            <MissionCreatedText>
+              <Icon.Confirm color={THEME.color.mediumSeaGreen} />
+              La mission a bien été créée
+            </MissionCreatedText>
+          </Banner>
+        )}
+        {missionCompletion === MissionAction.FrontCompletionStatus.TO_COMPLETE_MISSION_ENDED && (
+          <Banner
+            closingDelay={5000}
+            isClosable={false}
+            isCollapsible
+            isHiddenByDefault={false}
+            level={Level.ERROR}
+            top="62"
+            withAutomaticClosing
+          >
+            <MissionEndedText>
+              <Icon.AttentionFilled color={THEME.color.maximumRed} />
+              Veuillez compléter ou corriger les éléments en rouge
+            </MissionEndedText>
+          </Banner>
+        )}
         <Header data-cy="mission-form-header">
           <BackToListIcon onClick={goToMissionList} />
 
           <HeaderTitle>{title}</HeaderTitle>
           {mainFormValues && <MissionStatusTag status={getMissionStatus(mainFormValues)} />}
-          <CompletionStatusTag completion={completion} />
+          <CompletionStatusTag completion={missionCompletion} />
         </Header>
 
         <Body>
@@ -464,6 +506,20 @@ export function MissionForm() {
     </>
   )
 }
+
+const MissionCreatedText = styled.div`
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+`
+
+const MissionEndedText = styled.div`
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+`
 
 const DisabledMissionBackground = styled.div`
   position: absolute;

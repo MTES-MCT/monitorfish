@@ -31,10 +31,10 @@ export function DraftCancellationConfirmationDialog({ isAutoSaveEnabled }: Draft
       </Dialog.Body>
 
       <Dialog.Action>
-        <Button accent={Accent.SECONDARY} onClick={cancel}>
+        <Button accent={Accent.PRIMARY} onClick={cancel}>
           Retourner à l’édition
         </Button>
-        <Button accent={Accent.TERTIARY} onClick={confirm}>
+        <Button accent={Accent.SECONDARY} onClick={confirm}>
           Quitter sans enregistrer
         </Button>
       </Dialog.Action>

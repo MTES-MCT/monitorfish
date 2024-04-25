@@ -785,14 +785,14 @@ context('Side Window > Mission Form > Main Form', () => {
   })
 
   it('Should display missing fields banner if mission is ended and has missing fields', () => {
-    editSideWindowMissionListMissionWithId(43, SeaFrontGroup.MED)
+    editSideWindowMissionListMissionWithId(43, SeafrontGroup.MED)
 
     cy.get('.Component-Banner').contains('Veuillez compléter ou corriger les éléments en rouge')
   })
 
   it('Should not erase the isDirty flag When a Mission has been created and a mission action is still unvalidated', () => {
     // Given
-    editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
+    editSideWindowMissionListMissionWithId(2, SeafrontGroup.MEMN)
     const endDate = customDayjs().utc().add(7, 'day')
     cy.fill('Fin de mission', getUtcDateInMultipleFormats(endDate.toISOString()).utcDateTupleWithTime)
     cy.get('*[data-cy="action-list-item"]').click()

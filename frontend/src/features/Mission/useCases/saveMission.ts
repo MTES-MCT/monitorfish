@@ -26,6 +26,11 @@ export const saveMission =
 
         initIsDraftDirtyAndListenToEvents()
 
+        // Wait for the mission to be updated in the form before displaying the banner
+        setTimeout(async () => {
+          await dispatch(missionFormActions.setIsMissionCreatedBannerDisplayed(true))
+        }, 250)
+
         return {
           ...nextMainFormValues,
           createdAtUtc: createdMission.createdAtUtc,

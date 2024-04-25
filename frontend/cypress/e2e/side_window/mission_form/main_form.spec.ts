@@ -783,4 +783,10 @@ context('Side Window > Mission Form > Main Form', () => {
       .its('response.statusCode')
       .should('eq', 201)
   })
+
+  it('Should display missing fields banner if mission is ended and has missing fields', () => {
+    editSideWindowMissionListMissionWithId(43, SeaFrontGroup.MED)
+
+    cy.get('.Component-Banner').contains('Veuillez compléter ou corriger les éléments en rouge')
+  })
 })

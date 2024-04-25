@@ -10,7 +10,7 @@ export function MissionStatusTag({ status }: MissionStatusTagProps) {
   switch (status) {
     case Mission.MissionStatus.UPCOMING:
       return (
-        <Tag accent={Accent.PRIMARY} Icon={Icon.Clock} iconColor={THEME.color.mayaBlue} withCircleIcon>
+        <Tag accent={Accent.PRIMARY} Icon={Icon.ClockDashed} iconColor={THEME.color.mayaBlue} withCircleIcon>
           {Mission.MissionStatusLabel.UPCOMING}
         </Tag>
       )

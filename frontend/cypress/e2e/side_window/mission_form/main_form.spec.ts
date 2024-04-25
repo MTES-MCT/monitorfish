@@ -789,4 +789,26 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.get('.Component-Banner').contains('Veuillez compléter ou corriger les éléments en rouge')
   })
+
+  it('Should not erase the isDirty flag When a Mission has been created and a mission action is still unvalidated', () => {
+    // Given
+    editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
+    const endDate = customDayjs().utc().add(7, 'day')
+    cy.fill('Fin de mission', getUtcDateInMultipleFormats(endDate.toISOString()).utcDateTupleWithTime)
+    cy.get('*[data-cy="action-list-item"]').click()
+
+    // When
+    // We remove one required field
+    cy.fill('Saisi par', '')
+    cy.wait(500)
+
+    // We modify the main form, which is valid
+    cy.fill('Contact de l’unité 1', 'Bob')
+    cy.wait(500)
+
+    cy.clickButton(SideWindowMenuLabel.MISSION_LIST)
+
+    // Then dialog should be open
+    cy.get('.Component-Dialog').should('be.visible')
+  })
 })

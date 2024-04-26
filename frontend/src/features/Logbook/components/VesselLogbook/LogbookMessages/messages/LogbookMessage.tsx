@@ -251,6 +251,7 @@ const VoyageNumber = styled(BodyHeaderBlock)`
 `
 const Acknowledge = styled(BodyHeaderBlock)`
   flex-grow: 4;
+  width: 25px;
   margin-left: 10px;
 `
 

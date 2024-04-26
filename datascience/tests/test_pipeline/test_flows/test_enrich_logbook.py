@@ -13,9 +13,10 @@ from src.pipeline.flows.enrich_logbook import (
     extract_pno_species_and_gears,
     extract_pno_trips_period,
     extract_pno_types,
+    flag_pnos_to_distribute,
     flow,
     load_enriched_pnos,
-    merge_segments_and_types,
+    merge_pnos_data,
     reset_pnos,
 )
 from src.pipeline.helpers.dates import Period
@@ -92,6 +93,20 @@ def sample_pno_species_and_gears() -> pd.DataFrame:
     return pd.DataFrame(
         {
             "logbook_reports_pno_id": [1, 2, 3, 4, 4, 4, 5, 5, 5, 6, 7, 8],
+            "predicted_arrival_datetime_utc": [
+                datetime(2021, 5, 2),
+                datetime(2022, 5, 2),
+                datetime(2023, 5, 2),
+                datetime(2023, 5, 3),
+                datetime(2023, 5, 4),
+                datetime(2023, 5, 5),
+                datetime(2023, 5, 6),
+                datetime(2023, 5, 7),
+                datetime(2023, 5, 8),
+                datetime(2023, 5, 9),
+                datetime(2023, 5, 10),
+                datetime(2023, 5, 11),
+            ],
             "year": [
                 2021,
                 2022,
@@ -188,6 +203,10 @@ def expected_pno_species_and_gears() -> pd.DataFrame:
     return pd.DataFrame(
         {
             "logbook_reports_pno_id": [12, 13],
+            "predicted_arrival_datetime_utc": [
+                datetime(2020, 5, 6, 20, 41, 3, 340000),
+                datetime(2020, 5, 6, 20, 41, 9, 200000),
+            ],
             "year": [2020, 2020],
             "species": ["GHL", None],
             "trip_gears": [
@@ -350,6 +369,25 @@ def expected_computed_pno_segments() -> pd.DataFrame:
 
 
 @pytest.fixture
+def expected_pnos_to_distribute() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "logbook_reports_pno_id": [1, 2, 3, 4, 5, 6, 7, 8],
+            "is_pno_to_distribute": [
+                False,
+                False,
+                False,
+                False,
+                True,
+                True,
+                True,
+                True,
+            ],
+        }
+    )
+
+
+@pytest.fixture
 def pnos_to_load() -> pd.DataFrame:
     return pd.DataFrame(
         {
@@ -383,6 +421,7 @@ def pnos_to_load() -> pd.DataFrame:
                     {"segment": "SOTM", "segmentName": "Chaluts pélagiques"},
                 ],
             ],
+            "is_pno_to_distribute": [True, False],
         }
     )
 
@@ -417,6 +456,7 @@ def expected_loaded_pnos() -> pd.DataFrame:
                 ],
                 [],
             ],
+            "is_pno_to_distribute": [None, True, False],
             "trip_segments": [
                 None,
                 [],
@@ -526,6 +566,16 @@ def expected_merged_pnos() -> pd.DataFrame:
                 [{"segment": "SOTM", "segmentName": "Chaluts pélagiques"}],
                 [{"segment": "SSB", "segmentName": "Senne de plage"}],
             ],
+            "is_pno_to_distribute": [
+                False,
+                False,
+                False,
+                False,
+                True,
+                True,
+                True,
+                True,
+            ],
         }
     )
 
@@ -583,6 +633,16 @@ def test_compute_pno_types_with_empty_gears_list_only(
     )
 
 
+def test_flag_pnos_to_distribute(
+    sample_pno_species_and_gears, expected_pnos_to_distribute
+):
+    res = flag_pnos_to_distribute(
+        pno_species_and_gears=sample_pno_species_and_gears,
+        predicted_arrival_threshold=datetime(2023, 5, 4, 14, 12, 25),
+    )
+    pd.testing.assert_frame_equal(res, expected_pnos_to_distribute)
+
+
 def test_compute_pno_segments(
     reset_test_data,
     sample_pno_species_and_gears,
@@ -607,17 +667,28 @@ def test_compute_pno_segments_with_empty_gears_only(
 
 
 def test_merge_segments_and_types(
-    expected_computed_pno_types, expected_computed_pno_segments, expected_merged_pnos
+    expected_computed_pno_types,
+    expected_computed_pno_segments,
+    expected_pnos_to_distribute,
+    expected_merged_pnos,
 ):
-    res = merge_segments_and_types(
-        expected_computed_pno_types, expected_computed_pno_segments
+    res = merge_pnos_data(
+        expected_computed_pno_types,
+        expected_computed_pno_segments,
+        expected_pnos_to_distribute,
     )
     pd.testing.assert_frame_equal(res, expected_merged_pnos)
 
 
 def test_load_then_reset_logbook(reset_test_data, pnos_to_load, expected_loaded_pnos):
     query = (
-        "SELECT id, enriched, trip_gears, value->'pnoTypes' AS pno_types, trip_segments "
+        "SELECT "
+        "id, "
+        "enriched, "
+        "trip_gears, "
+        "value->'pnoTypes' AS pno_types, "
+        "(value->>'isPnoToDistribute')::BOOLEAN AS is_pno_to_distribute, "
+        "trip_segments "
         "FROM logbook_reports WHERE log_type = 'PNO' ORDER BY id"
     )
     initial_pnos = read_query(query, db="monitorfish_remote")

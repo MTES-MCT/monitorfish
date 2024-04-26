@@ -77,6 +77,10 @@ data class MissionAction(
                 "A control must specify a vessel: the `vesselId` must be given."
             }
 
+            require(this.userTrigram.isNotEmpty()) {
+                "A control must specify a user trigram: the `userTrigram` must be given."
+            }
+
             when (this.actionType) {
                 MissionActionType.AIR_CONTROL -> checkControlPosition()
                 MissionActionType.SEA_CONTROL -> checkControlPosition()

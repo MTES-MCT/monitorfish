@@ -92,6 +92,7 @@ dep_gears AS (
 
 SELECT
     s.id AS logbook_reports_pno_id,
+    predicted_arrival_datetime_utc AT TIME ZONE 'UTC' AS predicted_arrival_datetime_utc,
     EXTRACT('YEAR' FROM predicted_arrival_datetime_utc)::INTEGER AS year,
     s.species,
     COALESCE(fg.far_gears, dg.dep_gears, '[]'::jsonb) AS trip_gears,

@@ -1,3 +1,4 @@
+from datetime import datetime
 from logging import Logger
 from pathlib import Path
 
@@ -12,7 +13,7 @@ from src.pipeline.generic_tasks import extract
 from src.pipeline.helpers.dates import Period
 from src.pipeline.processing import prepare_df_for_loading
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
-from src.pipeline.shared_tasks.dates import make_periods
+from src.pipeline.shared_tasks.dates import get_utcnow, make_periods
 from src.pipeline.shared_tasks.segments import extract_all_segments
 from src.pipeline.utils import psql_insert_copy
 
@@ -42,7 +43,7 @@ def reset_pnos(period: Period):
                 "SET "
                 "    enriched = false,"
                 "    trip_gears = NULL,"
-                "    value = value - 'pnoTypes',"
+                "    value = value - 'pnoTypes' - 'isPnoToDistribute',"
                 "    trip_segments = NULL "
                 "WHERE p.operation_datetime_utc >= :start "
                 "AND p.operation_datetime_utc <= :end "
@@ -295,8 +296,30 @@ def compute_pno_types(
     return res
 
 
-def merge_segments_and_types(
-    pnos_with_types: pd.DataFrame, pnos_with_segments: pd.DataFrame
+def flag_pnos_to_distribute(
+    pno_species_and_gears: pd.DataFrame, predicted_arrival_threshold: datetime
+):
+    pnos_arrival_dates = (
+        pno_species_and_gears[
+            ["logbook_reports_pno_id", "predicted_arrival_datetime_utc"]
+        ]
+        .drop_duplicates(subset=["logbook_reports_pno_id"])
+        .sort_values("logbook_reports_pno_id")
+        .reset_index(drop=True)
+    )
+
+    pnos_arrival_dates["is_pno_to_distribute"] = (
+        pnos_arrival_dates["predicted_arrival_datetime_utc"]
+        >= predicted_arrival_threshold
+    )
+
+    return pnos_arrival_dates[["logbook_reports_pno_id", "is_pno_to_distribute"]]
+
+
+def merge_pnos_data(
+    pnos_with_types: pd.DataFrame,
+    pnos_with_segments: pd.DataFrame,
+    pnos_to_distribute: pd.DataFrame,
 ) -> pd.DataFrame:
     """
     Merges the input DataFrames on `logbook_reports_pno_id`
@@ -304,18 +327,30 @@ def merge_segments_and_types(
     Args:
         pnos_with_types (pd.DataFrame): DataFrame of PNOs with their types
         pnos_with_segments (pd.DataFrame): DataFrame of PNOs with their segments
+        pnos_to_distribute (pd.DataFrame): DataFrame of PNOs with a boolean attribute
+          indicating whether they should be distributed
 
     Returns:
-        pd.DataFrame: DataFrame of PNOs with their types and segments
+        pd.DataFrame: DataFrame of PNOs with their types, segments and disbution info
     """
 
-    return pd.merge(
+    res = pd.merge(
         pnos_with_types,
         pnos_with_segments,
         on="logbook_reports_pno_id",
         validate="1:1",
         how="inner",
     )
+
+    res = pd.merge(
+        res,
+        pnos_to_distribute,
+        on="logbook_reports_pno_id",
+        validate="1:1",
+        how="inner",
+    )
+
+    return res
 
 
 def load_enriched_pnos(enriched_pnos: pd.DataFrame, period: Period, logger: Logger):
@@ -330,7 +365,8 @@ def load_enriched_pnos(enriched_pnos: pd.DataFrame, period: Period, logger: Logg
                 "    enriched BOOLEAN,"
                 "    trip_gears JSONB,"
                 "    pno_types JSONB,"
-                "    trip_segments JSONB"
+                "    trip_segments JSONB, "
+                "    is_pno_to_distribute BOOLEAN"
                 ")"
                 "ON COMMIT DROP;"
             )
@@ -347,6 +383,7 @@ def load_enriched_pnos(enriched_pnos: pd.DataFrame, period: Period, logger: Logg
             "trip_gears",
             "pno_types",
             "trip_segments",
+            "is_pno_to_distribute",
         ]
 
         logger.info("Loading to temporary table")
@@ -368,14 +405,18 @@ def load_enriched_pnos(enriched_pnos: pd.DataFrame, period: Period, logger: Logg
                 "    trip_gears = CASE "
                 "       WHEN ep.trip_gears = 'null' THEN '[]'::jsonb "
                 "       ELSE ep.trip_gears END, "
-                "    value = jsonb_set("
-                "       value, "
-                "       '{pnoTypes}', "
-                "       CASE "
-                "           WHEN ep.pno_types = 'null' THEN '[]'::jsonb "
-                "           ELSE ep.pno_types "
-                "       END"
-                "    ), "
+                "    value = jsonb_set( "
+                "       jsonb_set( "
+                "          value, "
+                "          '{pnoTypes}', "
+                "          CASE "
+                "              WHEN ep.pno_types = 'null' THEN '[]'::jsonb "
+                "              ELSE ep.pno_types "
+                "          END"
+                "       ), "
+                "       '{isPnoToDistribute}', "
+                "        is_pno_to_distribute::text::jsonb "
+                "   ), "
                 "    trip_segments = CASE "
                 "       WHEN ep.trip_segments = 'null' THEN '[]'::jsonb "
                 "       ELSE ep.trip_segments END "
@@ -394,7 +435,7 @@ def load_enriched_pnos(enriched_pnos: pd.DataFrame, period: Period, logger: Logg
 
 @task(checkpoint=False)
 def extract_enrich_load_logbook(
-    period: Period, segments: pd.DataFrame, pno_types: pd.DataFrame
+    period: Period, segments: pd.DataFrame, pno_types: pd.DataFrame, utcnow: datetime
 ):
     """Extract pnos for the given `Period`, enrich and update the `logbook` table.
 
@@ -428,8 +469,13 @@ def extract_enrich_load_logbook(
         pno_species_and_gears=pnos_species_and_gears, pno_types=pno_types
     )
 
+    logger.info("Flagging PNOs to distribute...")
+    pnos_to_distribute = flag_pnos_to_distribute(
+        pno_species_and_gears=pnos_species_and_gears, predicted_arrival_threshold=utcnow
+    )
+
     logger.info("Merging PNO types and segments...")
-    pnos = merge_segments_and_types(pnos_with_types, pnos_with_segments)
+    pnos = merge_pnos_data(pnos_with_types, pnos_with_segments, pnos_to_distribute)
 
     logger.info("Loading")
     load_enriched_pnos(pnos, period, logger)
@@ -443,6 +489,7 @@ with Flow("Enrich Logbook") as flow:
         minutes_per_chunk = Parameter("minutes_per_chunk")
         recompute_all = Parameter("recompute_all")
 
+        utcnow = get_utcnow()
         periods = make_periods(
             start_hours_ago,
             end_hours_ago,
@@ -459,6 +506,7 @@ with Flow("Enrich Logbook") as flow:
                 periods,
                 segments=unmapped(segments),
                 pno_types=unmapped(pno_types),
+                utcnow=unmapped(utcnow),
                 upstream_tasks=[reset],
             )
 
@@ -467,6 +515,7 @@ with Flow("Enrich Logbook") as flow:
                 periods,
                 segments=unmapped(segments),
                 pno_types=unmapped(pno_types),
+                utcnow=unmapped(utcnow),
             )
 
 flow.file_name = Path(__file__).name

@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
-import com.nhaarman.mockitokotlin2.any
 import com.neovisionaries.i18n.CountryCode
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
@@ -153,6 +153,8 @@ class MissionsControllerITests {
                         hasSomeSpeciesSeized = false,
                         isFromPoseidon = false,
                         completion = Completion.TO_COMPLETE,
+                        flagState = CountryCode.FR,
+                        userTrigram = "LTH",
                     ),
                 ),
             ),

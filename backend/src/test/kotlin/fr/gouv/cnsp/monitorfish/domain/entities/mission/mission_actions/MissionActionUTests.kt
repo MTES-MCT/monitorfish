@@ -56,14 +56,14 @@ class MissionActionUTests {
             gearOnboard = listOf(),
             seizureAndDiversion = true,
             isDeleted = false,
-            userTrigram = null,
+            userTrigram = "",
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
             completedBy = "XYZ",
             isFromPoseidon = false,
             completion = Completion.TO_COMPLETE,
             flagState = CountryCode.FR,
-            )
+        )
 
         // When
         val throwable = catchThrowable { action.verify() }

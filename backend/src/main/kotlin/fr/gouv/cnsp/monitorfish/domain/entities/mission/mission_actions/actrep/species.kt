@@ -1,5 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep
 
+import com.neovisionaries.i18n.CountryCode
+
 typealias FaoZones = List<String>
 typealias FaoZonesAndSpecy = Pair<FaoZones, String>
 
@@ -156,7 +158,7 @@ val WESTERN_WATERS_SPECIES: List<FaoZonesAndSpecy> = listOf(
     ),
 )
 
-val EU_THIRD_COUNTRIES = listOf("GB")
+val EU_THIRD_COUNTRIES = listOf(CountryCode.GB)
 
 /**
  * See species detailed in p.26 ("CARTES DES ESPÈCES SOUMISES A QUOTAS")

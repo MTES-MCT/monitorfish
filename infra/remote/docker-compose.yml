@@ -73,6 +73,8 @@ services:
     container_name: monitorfish_geoserver
     image: kartoza/geoserver:2.18.0
     restart: on-failure:5
+    environment:
+      - USE_CORS=1
     ports:
       - 8001:8080
     volumes:

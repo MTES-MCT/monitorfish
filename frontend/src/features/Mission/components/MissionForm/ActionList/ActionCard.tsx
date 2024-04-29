@@ -98,4 +98,5 @@ const InnerWrapper = styled.div<{
   flex-direction: column;
   flex-grow: 1;
   padding: 18px 16px 14px 16px;
+  overflow: hidden;
 `

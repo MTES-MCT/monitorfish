@@ -99,7 +99,7 @@ export namespace Mission {
     isSeaMission: number
     // A 0 ou 1 number is required for WebGL to understand boolean
     isUpcoming: number
-    missionCompletion: MissionAction.FrontCompletionStatus | undefined
+    missionCompletion: MissionAction.FrontCompletionStatus
     missionId: number
     missionStatus: MissionStatus | undefined
     missionTypes: MissionType[]

@@ -28,7 +28,7 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
   }
 
   function getActions() {
-    let actions: string[] = ['CACEM']
+    let actions: string[] = []
     if (mission.hasEnvActions) {
       actions = actions.concat('CACEM')
     }

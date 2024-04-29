@@ -11,7 +11,7 @@ import Point from 'ol/geom/Point'
 import { circular } from 'ol/geom/Polygon'
 import { transform } from 'ol/proj'
 
-import { LAND_CONTROL_ZONE_RADIUS, SEA_CONTROL_ZONE_RADIUS } from './constants'
+import { LAND_CONTROL_ZONE_RADIUS, MISSION_ACTION_ZONE_FEATURE_ID, SEA_CONTROL_ZONE_RADIUS } from './constants'
 import { getNumberOfInfractions, getNumberOfInfractionsWithRecord } from '../../domain/entities/controls'
 import { MonitorFishLayer } from '../../domain/entities/layers/types'
 import { OpenLayersGeometryType } from '../../domain/entities/map/constants'
@@ -145,6 +145,9 @@ export const getMissionActionFeature = (
   return feature
 }
 
+/**
+ * A feature to display a zone around a control.
+ */
 export const getMissionActionFeatureZone = (
   action: MissionAction.MissionAction | MissionActionFormValues
 ): Feature | undefined => {
@@ -156,16 +159,12 @@ export const getMissionActionFeatureZone = (
 
   const actionId = action.id || random(1000)
   const feature = new Feature({
-    actionType: action.actionType,
-    dateTime: getDateTime(action.actionDatetimeUtc, true),
     geometry: circular([action.longitude, action.latitude], radius, 64).transform(
       WSG84_PROJECTION,
       OPENLAYERS_PROJECTION
-    ),
-    isGeometryComputedFromControls: true,
-    missionId: action.missionId
+    )
   })
-  feature.setId(`MISSION_ACTION_ZONE:${actionId}`)
+  feature.setId(`${MISSION_ACTION_ZONE_FEATURE_ID}:${actionId}`)
 
   return feature
 }

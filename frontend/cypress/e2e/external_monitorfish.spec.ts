@@ -27,6 +27,7 @@ context('External MonitorFish', () => {
 
     // Vessel sidebar menus
     cy.get('*[data-cy="vessel-menu-identity"]').should('be.visible')
+    cy.get('*[data-cy="vessel-menu-summary"]').should('be.visible')
     cy.get('*[data-cy="vessel-menu-fishing"]').should('be.visible')
     cy.get('*[data-cy="vessel-menu-controls"]').should('be.visible')
 
@@ -39,7 +40,6 @@ context('External MonitorFish', () => {
       .click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-control"]').should('not.contain', 'Ouvrir le contrôle')
 
-    cy.get('*[data-cy="vessel-menu-resume"]').should('not.exist')
     cy.get('*[data-cy="vessel-menu-reporting"]').should('not.exist')
     cy.get('*[data-cy="vessel-menu-ers-vms"]').should('not.exist')
 

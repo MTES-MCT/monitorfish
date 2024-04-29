@@ -37,15 +37,13 @@ export function Tabs() {
 
   return (
     <TabList>
-      {isSuperUser && (
-        <Tab
-          data-cy="vessel-menu-resume"
-          isActive={vesselSidebarTab === VesselSidebarTab.SUMMARY}
-          onClick={() => showTab(VesselSidebarTab.SUMMARY)}
-        >
-          <SummaryIcon /> <br /> Résumé
-        </Tab>
-      )}
+      <Tab
+        data-cy="vessel-menu-summary"
+        isActive={vesselSidebarTab === VesselSidebarTab.SUMMARY}
+        onClick={() => showTab(VesselSidebarTab.SUMMARY)}
+      >
+        <SummaryIcon /> <br /> Résumé
+      </Tab>
       <Tab
         data-cy="vessel-menu-identity"
         isActive={vesselSidebarTab === VesselSidebarTab.IDENTITY}

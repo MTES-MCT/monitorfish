@@ -1,3 +1,4 @@
+import { MISSION_ACTION_ZONE_FEATURE_ID } from '@features/Mission/constants'
 import { missionZoneStyle } from '@features/Mission/layers/MissionLayer/styles'
 import { THEME } from '@mtes-mct/monitor-ui'
 import { getCenter } from 'ol/extent'
@@ -80,7 +81,7 @@ export const selectedMissionActionsStyles = [
   new Style({
     fill: missionZoneStyle.getFill() ?? undefined,
     geometry: feature => {
-      if (!feature.get('isGeometryComputedFromControls')) {
+      if (!feature.getId()?.toString()?.includes(MISSION_ACTION_ZONE_FEATURE_ID)) {
         return undefined
       }
 

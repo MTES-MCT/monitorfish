@@ -12,7 +12,7 @@ context('Missions overlay', () => {
     cy.get('*[data-cy="mission-overlay"]').contains('Terminée')
     cy.get('*[data-cy="mission-overlay"]').contains('À compléter')
     cy.get('*[data-cy="mission-overlay"]').contains('0 contrôle réalisé')
-    cy.get('*[data-cy="mission-overlay"]').contains('Actions CACEM')
+    cy.get('*[data-cy="mission-overlay"]').contains('Aucune action')
 
     cy.get('*[data-cy="mission-overlay-close"]').click()
     cy.get('*[data-cy="mission-overlay"]').should('not.exist')

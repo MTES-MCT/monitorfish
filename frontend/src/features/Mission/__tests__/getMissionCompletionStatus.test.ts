@@ -33,6 +33,6 @@ describe('domain/entities/mission/utils.getMissionCompletionFrontStatus()', () =
     const missionCompletionUpcoming = getMissionCompletionFrontStatus(DUMMY_MISSION_UPCOMING, [
       CompletionStatus.TO_COMPLETE
     ])
-    expect(missionCompletionUpcoming).toBeUndefined()
+    expect(missionCompletionUpcoming).toBe(FrontCompletionStatus.TO_COMPLETE)
   })
 })

@@ -24,7 +24,7 @@ context('Offline management', () => {
     cy.get('*[data-cy="vessel-sidebar-error"]').contains("Nous n'avons pas pu récupérer les informations du navire")
 
     // When clicking on Resume tab
-    cy.get('*[data-cy="vessel-menu-resume"').click()
+    cy.get('*[data-cy="vessel-menu-summary"').click()
     cy.wait('@openVessel')
     cy.get('*[data-cy="vessel-sidebar-error"]').contains("Nous n'avons pas pu récupérer les informations du navire")
     cy.clickButton('Réessayer')
@@ -107,7 +107,7 @@ context('Offline management', () => {
         '&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=TWELVE_HOURS&afterDateTime=&beforeDateTime=',
       cy.spy().as('openVesselSpyed')
     )
-    cy.get('*[data-cy="vessel-menu-resume"').click()
+    cy.get('*[data-cy="vessel-menu-summary"').click()
     cy.get('@openVesselSpyed').should('not.have.been.called')
     cy.get('*[data-cy="vessel-sidebar-error"]').should('not.exist')
 

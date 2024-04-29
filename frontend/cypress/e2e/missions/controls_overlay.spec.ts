@@ -18,7 +18,7 @@ context('Controls overlay', () => {
     cy.get('*[data-cy="mission-overlay"]').contains('À compléter')
     cy.get('*[data-cy="mission-overlay"]').contains('Mission Terre / Mer')
     cy.get('*[data-cy="mission-overlay"]').contains('1 contrôle réalisé')
-    cy.get('*[data-cy="mission-overlay"]').contains('Actions CACEM et CNSP')
+    cy.get('*[data-cy="mission-overlay"]').contains('Actions CNSP')
 
     // Open the control overlay
     cy.get('#root').click(405, 624)

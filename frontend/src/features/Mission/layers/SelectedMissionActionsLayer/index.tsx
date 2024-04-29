@@ -38,6 +38,10 @@ export function UnmemoizedSelectedMissionActionsLayer() {
     )
   }, [selectedMissionGeoJSON, missions])
 
+  /**
+   * If the mission geometry is defined from actions, we create new OpenLayers Features
+   * to create and display the zones around the controls.
+   */
   const selectedMissionActionsZones = useMemo(() => {
     if (!selectedMissionGeoJSON) {
       return []
@@ -110,9 +114,13 @@ export function UnmemoizedSelectedMissionActionsLayer() {
       .map(action => getMissionActionFeature({ ...action, missionId: missionId || NEW_MISSION_ID }))
       .filter((action): action is Feature => !!action)
 
+    /**
+     * If the mission geometry is defined from actions, we create new OpenLayers Features
+     * to create and display the zones around the controls.
+     */
     const actionZonesFeatures = draft?.mainFormValues?.isGeometryComputedFromControls
       ? draft.actionsFormValues
-          .map(action => getMissionActionFeatureZone({ ...action, missionId: missionId || NEW_MISSION_ID }))
+          .map(action => getMissionActionFeatureZone({ ...action }))
           .filter((action): action is Feature => !!action)
       : []
 

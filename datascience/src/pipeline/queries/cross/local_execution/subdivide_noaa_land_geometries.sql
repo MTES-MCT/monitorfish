@@ -1,4 +1,4 @@
-CREATE TABLE prod.subdivided_noaa_land AS
+CREATE MATERIALIZED VIEW prod.subdivided_noaa_land AS
 WITH sub AS (
 	SELECT id AS source_id, ST_Subdivide(geometry) AS geometry
 	FROM prod.noaa_land
@@ -10,5 +10,3 @@ SELECT
 	ST_Area(geometry::geography) /1000000 AS area,
 	geometry
 FROM sub;
-
-ALTER TABLE prod.subdivided_noaa_land ADD PRIMARY KEY (id);

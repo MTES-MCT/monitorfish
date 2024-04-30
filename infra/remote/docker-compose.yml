@@ -1,7 +1,7 @@
 version: "3"
 services:
   db:
-    image: timescale/timescaledb-postgis:1.7.4-pg11
+    image: ghcr.io/mtes-mct/monitorfish/monitorfish-database:$DATABASE_VERSION
     container_name: monitorfish_database
     user: ":${MONITORFISH_LOGS_AND_BACKUPS_GID}"
     environment:
@@ -73,6 +73,8 @@ services:
     container_name: monitorfish_geoserver
     image: kartoza/geoserver:2.18.0
     restart: on-failure:5
+    environment:
+      - USE_CORS=1
     ports:
       - 8001:8080
     volumes:
@@ -90,6 +92,6 @@ networks:
 
 volumes:
   db-data:
-    driver: local
+    name: $DB_DATA_VOLUME_NAME
   geoserver-data:
     driver: local

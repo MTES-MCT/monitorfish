@@ -80,9 +80,9 @@ context('Vessel sidebar logbook tab', () => {
     cy.get('*[data-cy="vessel-fishing-message"]').eq(2).contains("Sortie d'une zone d'effort")
     cy.get('*[data-cy="vessel-fishing-message-body"]').eq(2).contains('Message envoyé via e-sacapt')
 
-    cy.get('*[data-cy="vessel-fishing-message"]').eq(3).contains("Traversée d'une zone d'effort")
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(3).contains("Entrée dans une zone d'effort")
 
-    cy.get('*[data-cy="vessel-fishing-message"]').eq(4).contains("Entrée dans une zone d'effort")
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(4).contains("Traversée d'une zone d'effort")
 
     cy.get('*[data-cy="vessel-fishing-message"]').eq(5).contains('Déclaration de capture')
     cy.get('*[data-cy="vessel-fishing-message"]').eq(5).siblings().eq(1).contains('ANCIEN MESSAGE')

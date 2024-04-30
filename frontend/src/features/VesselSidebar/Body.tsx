@@ -46,7 +46,7 @@ export function Body() {
     <Wrapper hasHealthcheckTextWarning={!!healthcheckTextWarning.length}>
       {isSuperUser && <AlertWarning selectedVessel={selectedVessel} />}
       {isSuperUser && <BeaconMalfunctionWarning selectedVessel={selectedVessel} />}
-      {isSuperUser && vesselSidebarTab === VesselSidebarTab.SUMMARY && <VesselSummary />}
+      {vesselSidebarTab === VesselSidebarTab.SUMMARY && <VesselSummary />}
       {vesselSidebarTab === VesselSidebarTab.IDENTITY && <Identity />}
       {vesselSidebarTab === VesselSidebarTab.VOYAGES && <VesselLogbook />}
       {vesselSidebarTab === VesselSidebarTab.CONTROLS && <Controls />}

@@ -1,3 +1,6 @@
+import { useIsSuperUser } from '@hooks/authorization/useIsSuperUser'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useEffect, useState } from 'react'
 import { FingerprintSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
@@ -7,8 +10,6 @@ import { COLORS } from '../../../constants/constants'
 import { getCoordinates } from '../../../coordinates'
 import { WSG84_PROJECTION } from '../../../domain/entities/map/constants'
 import { showVessel } from '../../../domain/use_cases/vessel/showVessel'
-import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { getDateTime, timeagoFrenchLocale } from '../../../utils'
 import InfoSVG from '../../icons/Information.svg?react'
 import NoVesselSVG from '../../icons/Picto_photo_navire_manquante.svg?react'
@@ -19,6 +20,7 @@ timeago.register('fr', timeagoFrenchLocale)
 
 export function VesselSummary() {
   const dispatch = useMainAppDispatch()
+  const isSuperUser = useIsSuperUser()
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
   const { loadingVessel, selectedVessel, selectedVesselIdentity, selectedVesselPositions } = useMainAppSelector(
     state => state.vessel
@@ -149,7 +151,7 @@ export function VesselSummary() {
           </FieldValue>
         </Position>
       </ZoneWithoutBackground>
-      <RiskFactorResume />
+      {isSuperUser && <RiskFactorResume />}
     </Body>
   ) : (
     <FingerprintSpinner className="radar" color={COLORS.charcoal} size={100} />

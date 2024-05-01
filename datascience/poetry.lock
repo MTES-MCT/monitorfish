@@ -1619,17 +1619,18 @@ shapely = ["Shapely (>=1.7)"]
 
 [[package]]
 name = "geopandas"
-version = "0.14.0"
+version = "0.14.4"
 description = "Geographic pandas extensions"
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "geopandas-0.14.0-py3-none-any.whl", hash = "sha256:a402a565e727642cb44a500c911f226eea26c1b1247c6586827031e3d7a9403a"},
-    {file = "geopandas-0.14.0.tar.gz", hash = "sha256:ea6c031889e1e1888aecaa6e182ca620d78f63551c49b3002a998bcbb280531f"},
+    {file = "geopandas-0.14.4-py3-none-any.whl", hash = "sha256:3bb6473cb59d51e1a7fe2dbc24a1a063fb0ebdeddf3ce08ddbf8c7ddc99689aa"},
+    {file = "geopandas-0.14.4.tar.gz", hash = "sha256:56765be9d58e2c743078085db3bd07dc6be7719f0dbe1dfdc1d705cb80be7c25"},
 ]
 
 [package.dependencies]
 fiona = ">=1.8.21"
+numpy = ">=1.22"
 packaging = "*"
 pandas = ">=1.4.0"
 pyproj = ">=3.3.0"
@@ -6199,4 +6200,4 @@ test = ["pytest"]
 [metadata]
 lock-version = "2.0"
 python-versions = "3.11.6"
-content-hash = "d116a10dfc1f451085e0061b436bd19c02342ea45596b58f8b96fda4b49f536a"
+content-hash = "def4c8ee2527e91476643ed43fec52c072fe7ad8e48ea469e5ede1097aa63858"

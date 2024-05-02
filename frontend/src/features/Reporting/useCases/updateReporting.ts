@@ -1,9 +1,9 @@
 import { updateReportingFromAPI } from '@api/reporting'
 
 import { Vessel } from '../../../domain/entities/vessel/vessel'
-import { removeError, setError } from '../../../domain/shared_slices/Global'
 import { addVesselReporting, removeVesselReporting } from '../../../domain/shared_slices/Vessel'
 import { ReportingType } from '../../../domain/types/reporting'
+import { removeError, setError } from '../../MainWindow/slice'
 import {
   removeCurrentReporting,
   setCurrentAndArchivedReportingsOfSelectedVessel,

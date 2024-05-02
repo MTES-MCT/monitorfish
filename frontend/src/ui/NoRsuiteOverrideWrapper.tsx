@@ -28,6 +28,10 @@ import styled from 'styled-components'
 export const NoRsuiteOverrideWrapper = styled.div`
   box-sizing: border-box;
 
+  * {
+    box-sizing: border-box;
+  }
+
   .Field-Checkbox * {
     line-height: 18px;
   }

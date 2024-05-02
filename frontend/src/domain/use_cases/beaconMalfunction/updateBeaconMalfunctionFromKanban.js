@@ -1,4 +1,5 @@
 import { updateBeaconMalfunctionFromAPI } from '../../../api/beaconMalfunction'
+import { setError } from '../../../features/MainWindow/slice'
 import {
   setBeaconMalfunctions,
   updateLocalBeaconMalfunction,
@@ -6,7 +7,6 @@ import {
   setOpenedBeaconMalfunction,
   updateVesselBeaconMalfunctionsResumeAndHistory
 } from '../../shared_slices/BeaconMalfunction'
-import { setError } from '../../shared_slices/Global'
 
 /**
  * Update a beacon malfunction

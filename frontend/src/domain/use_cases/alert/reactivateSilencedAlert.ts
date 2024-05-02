@@ -1,8 +1,8 @@
 import { deleteSilencedAlertFromAPI } from '../../../api/alert'
+import { setError } from '../../../features/MainWindow/slice'
 import { setSilencedAlerts } from '../../../features/SideWindow/Alert/slice'
 import { deleteListItems } from '../../../utils/deleteListItems'
 import { updateListItemsProp } from '../../../utils/updateListItemsProp'
-import { setError } from '../../shared_slices/Global'
 
 import type { MainAppThunk } from '../../../store'
 import type { LEGACY_SilencedAlert } from '../../entities/alerts/types'

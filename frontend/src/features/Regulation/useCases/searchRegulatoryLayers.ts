@@ -23,7 +23,7 @@ export const searchRegulatoryLayers = searchQuery => async (_, getState) => {
     const extent = getExtentFromGeoJSON(zoneSelected.feature)
 
     if (extent?.length === 4) {
-      return getRegulatoryZonesInExtentFromAPI(extent, state.global.isBackoffice)
+      return getRegulatoryZonesInExtentFromAPI(extent, state.mainWindow.isBackoffice)
         .then(features => monitorFishWorker.mapGeoserverToRegulatoryZones(features, speciesByCode))
         .then(filteredRegulatoryZones => {
           if (searchQuery?.length < MINIMUM_SEARCH_CHARACTERS_NUMBER) {

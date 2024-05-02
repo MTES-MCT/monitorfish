@@ -12,7 +12,6 @@ import {
   OPENLAYERS_PROJECTION,
   WSG84_PROJECTION
 } from '../../../../../domain/entities/map/constants'
-import { setRightMapBoxOpened } from '../../../../../domain/shared_slices/Global'
 import {
   resetCircleMeasurementInDrawing,
   setCircleMeasurementInDrawing,
@@ -20,6 +19,7 @@ import {
   setMeasurementTypeToAdd
 } from '../../../../../domain/shared_slices/Measurement'
 import { SetCoordinates } from '../../../../coordinates/SetCoordinates'
+import { setRightMapBoxOpened } from '../../../slice'
 import { MapToolBox } from '../shared/MapToolBox'
 
 export function CustomCircleRange() {

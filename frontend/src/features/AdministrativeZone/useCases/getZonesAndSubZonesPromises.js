@@ -8,7 +8,7 @@ export const getZonesAndSubZonesPromises = () => (dispatch, getState) =>
     .filter(layer => layer.isIntersectable)
     .map(zone => {
       if (zone.hasSearchableZones) {
-        return getAdministrativeSubZonesFromAPI(zone.code, getState().global.isBackoffice)
+        return getAdministrativeSubZonesFromAPI(zone.code, getState().mainWindow.isBackoffice)
           .then(subZonesFeatures =>
             subZonesFeatures.features.map(subZone => ({
               code: subZone.id,

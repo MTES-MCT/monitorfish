@@ -1,6 +1,6 @@
 import { getAllRegulatoryLayersFromAPI } from '../../../api/geoserver'
-import { setError } from '../../../domain/shared_slices/Global'
 import { MonitorFishWorker } from '../../../workers/MonitorFishWorker'
+import { setError } from '../../MainWindow/slice'
 import { setLayersTopicsByRegTerritory, setRegulatoryLayerLawTypes } from '../slice'
 
 export const getAllRegulatoryLayersByRegTerritory = () => async (dispatch, getState) => {
@@ -13,7 +13,7 @@ export const getAllRegulatoryLayersByRegTerritory = () => async (dispatch, getSt
   }
 
   try {
-    const features = await getAllRegulatoryLayersFromAPI(getState().global.isBackoffice)
+    const features = await getAllRegulatoryLayersFromAPI(getState().mainWindow.isBackoffice)
     const { layersTopicsByRegulatoryTerritory } =
       await monitorFishWorker.convertGeoJSONFeaturesToStructuredRegulatoryObject(features, speciesByCode)
 

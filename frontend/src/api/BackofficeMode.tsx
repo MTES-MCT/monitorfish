@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { setIsBackoffice } from '../domain/shared_slices/Global'
+import { setIsBackoffice } from '../features/MainWindow/slice'
 import { useMainAppDispatch } from '../hooks/useMainAppDispatch'
 
 export type BackofficeModeProps = {

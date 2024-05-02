@@ -1,13 +1,13 @@
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { getVesselReportingsFromAPI } from '../../../api/vessel'
+import { removeError } from '../../../features/MainWindow/slice'
 import {
   loadReporting,
   resetCurrentAndArchivedReportingsOfSelectedVessel,
   setCurrentAndArchivedReportingsOfSelectedVessel
 } from '../../../features/Reporting/slice'
 import { displayedErrorActions } from '../../shared_slices/DisplayedError'
-import { removeError } from '../../shared_slices/Global'
 import { displayOrLogError } from '../error/displayOrLogError'
 
 export const getVesselReportings = (isFromUserAction: boolean) => async (dispatch, getState) => {

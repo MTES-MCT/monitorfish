@@ -1,6 +1,6 @@
 import { deleteFleetSegmentFromAPI } from '@features/FleetSegment/apis'
 
-import { setError } from '../../../domain/shared_slices/Global'
+import { setError } from '../../MainWindow/slice'
 
 import type { FleetSegment } from '../types'
 

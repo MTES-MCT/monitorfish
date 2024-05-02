@@ -19,7 +19,7 @@ import { MapToolBox } from '../shared/MapToolBox'
 export function Filters() {
   const dispatch = useMainAppDispatch()
   const { filters, nonFilteredVesselsAreHidden } = useMainAppSelector(state => state.filter)
-  const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
+  const rightMapBoxOpened = useMainAppSelector(state => state.mainWindow.rightMapBoxOpened)
 
   const isOpen = useMemo(() => rightMapBoxOpened === MapBox.FILTERS, [rightMapBoxOpened])
 

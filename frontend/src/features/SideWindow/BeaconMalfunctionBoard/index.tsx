@@ -21,12 +21,12 @@ import { StageColumn } from './StageColumn'
 import { VesselStatusSelect } from './VesselStatusSelect'
 import { COLORS } from '../../../constants/constants'
 import { STAGE_RECORD, VESSEL_STATUS } from '../../../domain/entities/beaconMalfunction/constants'
-import { setError } from '../../../domain/shared_slices/Global'
 import getAllBeaconMalfunctions from '../../../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
 import updateBeaconMalfunctionFromKanban from '../../../domain/use_cases/beaconMalfunction/updateBeaconMalfunctionFromKanban'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import SearchIconSVG from '../../icons/Loupe_dark.svg?react'
+import { setError } from '../../MainWindow/slice'
 
 import type {
   BeaconMalfunction,

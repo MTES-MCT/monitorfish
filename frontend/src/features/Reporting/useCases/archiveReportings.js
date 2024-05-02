@@ -1,7 +1,7 @@
 import { archiveReportingsFromAPI } from '../../../api/reporting'
 import { Vessel } from '../../../domain/entities/vessel/vessel'
-import { removeError, setError } from '../../../domain/shared_slices/Global'
 import { removeVesselReportings } from '../../../domain/shared_slices/Vessel'
+import { removeError, setError } from '../../MainWindow/slice'
 import { removeReportingsIdsFromCurrentReportings, setCurrentAndArchivedReportingsOfSelectedVessel } from '../slice'
 
 /**

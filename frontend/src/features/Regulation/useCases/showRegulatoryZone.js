@@ -67,7 +67,7 @@ const getRegulatoryVectorSource = (dispatch, getState) => regulatoryZoneProperti
       getRegulatoryZoneFromAPI(
         LayerProperties.REGULATORY.code,
         regulatoryZoneProperties,
-        getState().global.isBackoffice
+        getState().mainWindow.isBackoffice
       )
         .then(regulatoryZone => {
           if (!regulatoryZone.geometry) {

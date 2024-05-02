@@ -6,18 +6,18 @@ import styled from 'styled-components'
 
 import { EditInterestPoint } from './EditInterestPoint'
 import { MapBox } from '../../../../../domain/entities/map/constants'
-import { setRightMapBoxOpened } from '../../../../../domain/shared_slices/Global'
 import {
   deleteInterestPointBeingDrawed,
   drawInterestPoint,
   endInterestPointDraw
 } from '../../../../../domain/shared_slices/InterestPoint'
 import InterestPointSVG from '../../../../icons/standardized/Landmark.svg?react'
+import { setRightMapBoxOpened } from '../../../slice'
 import { MapToolButton } from '../shared/MapToolButton'
 
 export function InterestPointMapButton() {
   const dispatch = useMainAppDispatch()
-  const { rightMapBoxOpened, rightMenuIsOpen } = useMainAppSelector(state => state.global)
+  const { rightMapBoxOpened, rightMenuIsOpen } = useMainAppSelector(state => state.mainWindow)
   const isRightMenuShrinked = !rightMenuIsOpen
   const isOpen = useMemo(() => rightMapBoxOpened === MapBox.INTEREST_POINT, [rightMapBoxOpened])
   const wrapperRef = useRef(null)
@@ -50,7 +50,7 @@ export function InterestPointMapButton() {
         data-cy="interest-point"
         isActive={isOpen}
         onClick={openOrCloseInterestPoint}
-        style={{ top: 333 }}
+        style={{ top: 335 }}
         title={"Créer un point d'intérêt"}
       >
         <InterestPointIcon $isRightMenuShrinked={isRightMenuShrinked} />

@@ -1,10 +1,10 @@
 import { batch } from 'react-redux'
 
 import { getAllGearsFromAPI } from '../../../api/gearCode'
+import { setError } from '../../../features/MainWindow/slice'
 import { setIsReadyToShowRegulatoryZones } from '../../../features/Regulation/slice'
 import { REGULATED_GEARS_KEYS } from '../../entities/backoffice'
 import { setCategoriesToGears, setGears, setGroupsToCategories, setGearsByCode } from '../../shared_slices/Gear'
-import { setError } from '../../shared_slices/Global'
 
 /** *
  * Get gear group name, see SQL init of table fishing_gear_groups:

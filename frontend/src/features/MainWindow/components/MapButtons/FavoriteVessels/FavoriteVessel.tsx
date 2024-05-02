@@ -60,7 +60,6 @@ export function FavoriteVessel({
             /* eslint-disable-next-line react/jsx-no-bind */
             onClick={() => dispatch(unselectVessel())}
             size={20}
-            style={iconStyle}
             title="Fermer la fiche navire"
           />
         ) : (
@@ -70,7 +69,6 @@ export function FavoriteVessel({
             /* eslint-disable-next-line react/jsx-no-bind */
             onClick={showVesselSidebar}
             size={20}
-            style={iconStyle}
             title="Afficher la fiche navire"
           />
         )}
@@ -80,7 +78,6 @@ export function FavoriteVessel({
             /* eslint-disable-next-line react/jsx-no-bind */
             onClick={hideVesselTrackOrSidebar}
             size={20}
-            style={iconStyle}
           />
         ) : (
           <Icon.Hide
@@ -88,7 +85,6 @@ export function FavoriteVessel({
             data-cy="favorite-vessel-show-vessel-track"
             onClick={() => dispatch(showVesselTrack(favorite, true, null, true))}
             size={20}
-            style={iconStyle}
           />
         )}
         <Icon.Close
@@ -96,7 +92,6 @@ export function FavoriteVessel({
           data-cy="favorite-vessel-delete-vessel"
           onClick={() => dispatch(removeVesselFromFavorites(vesselCompositeIdentifier))}
           size={14}
-          style={iconStyle}
           title="Supprimer le navire de mes navires suivis"
         />
       </Icons>
@@ -112,12 +107,12 @@ const Icons = styled.div`
   height: 36px;
   align-items: center;
   cursor: pointer;
-`
 
-const iconStyle = {
-  left: 'auto',
-  paddingLeft: 6
-}
+  .Element-IconBox {
+    left: auto;
+    padding-left: 6px;
+  }
+`
 
 const VesselName = styled.span`
   font-size: 13px;

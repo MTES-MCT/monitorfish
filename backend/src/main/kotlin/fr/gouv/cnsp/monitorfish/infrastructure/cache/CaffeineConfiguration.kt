@@ -120,7 +120,7 @@ class CaffeineConfiguration {
 
         // Segments
         val currentSegmentsCache = buildMinutesCache(currentSegments, ticker, 1)
-        val segmentsByYearCache = buildMinutesCache(segmentsByYear, ticker, 2)
+        val segmentsByYearCache = buildSecondsCache(segmentsByYear, ticker, 10)
 
         // Species
         val allSpeciesCache = buildMinutesCache(allSpecies, ticker, oneWeek)

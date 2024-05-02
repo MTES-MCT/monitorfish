@@ -22,6 +22,7 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
+import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment as FullFleetSegment
 
 @ExtendWith(SpringExtension::class)
 class GetActivityReportsUTests {
@@ -192,6 +193,101 @@ class GetActivityReportsUTests {
             assertThat(seaReport.vesselNationalIdentifier).isEqualTo("AYFR00022680")
             assertThat(seaReport.faoArea).isEqualTo("27.7.b")
             assertThat(seaReport.segment).isNull()
+        }
+    }
+
+    @Test
+    fun `execute Should add the fao area for a LAND control`() {
+        // Given
+        val species = SpeciesControl()
+        species.speciesCode = "HKE"
+
+        given(fleetSegmentRepository.findAllByYear(any())).willReturn(
+            listOf(
+                FullFleetSegment(
+                    "NS01/03",
+                    "Otter trawls/Seines",
+                    gears = listOf("OTB", "OTT", "TBN", "PTB", "SDN", "SSC", "SPR", "OT", "TBS", "OTM", "PTM", "TMS", "TM", "TX", "TB", "SX", "SV"),
+                    targetSpecies = listOf("COD", "HAD", "WHG", "POK", "SOL", "PLE", "NEP", "HKE"),
+                    faoAreas = listOf("27.2.a", "27.4.a", "27.4.b", "27.4.c"),
+                    year = ZonedDateTime.now().year,
+                    impactRiskFactor = 2.56,
+                ),
+            ),
+        )
+
+        val controls = listOf(
+            MissionAction(
+                id = 1,
+                vesselId = 1,
+                missionId = 1,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                portLocode = "AEFAT",
+                faoAreas = listOf("27.4.a"),
+                segments = listOf(
+                    FleetSegment("NS01/03", "North Sea"),
+                ),
+                actionType = MissionActionType.LAND_CONTROL,
+                gearOnboard = listOf(),
+                speciesOnboard = listOf(species),
+                seizureAndDiversion = true,
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
+            ),
+        )
+        given(missionActionsRepository.findControlsInDates(any(), any())).willReturn(controls)
+
+        val vessels = listOf(
+            Vessel(
+                id = 1,
+                internalReferenceNumber = "FR00022680",
+                vesselName = "MY AWESOME VESSEL",
+                flagState = CountryCode.FR,
+                declaredFishingGears = listOf("Trémails"),
+                vesselType = "Fishing",
+                districtCode = "AY",
+            ),
+        )
+        given(vesselRepository.findVesselsByIds(eq(listOf(1)))).willReturn(vessels)
+
+        val missions = listOf(
+            Mission(
+                1,
+                missionTypes = listOf(MissionType.LAND),
+                missionSource = MissionSource.MONITORFISH,
+                isClosed = false,
+                isUnderJdp = false,
+                isGeometryComputedFromControls = false,
+                startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+            ),
+        )
+        given(missionRepository.findByIds(eq(listOf(1)))).willReturn(missions)
+        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
+
+        // When
+        val activityReports = GetActivityReports(
+            missionActionsRepository,
+            portRepository,
+            vesselRepository,
+            fleetSegmentRepository,
+            missionRepository,
+        ).execute(
+            ZonedDateTime.now(),
+            ZonedDateTime.now().minusDays(1),
+            JointDeploymentPlan.NORTH_SEA,
+        )
+
+        // Then
+        assertThat(activityReports.activityReports).hasSize(1)
+
+        activityReports.activityReports.first().let { landReport ->
+            assertThat(landReport.activityCode).isEqualTo(ActivityCode.LAN)
+            assertThat(landReport.action.portName).isEqualTo("Al Jazeera Port")
+            assertThat(landReport.faoArea).isEqualTo("27.4.a")
+            assertThat(landReport.segment).isEqualTo("NS01/03")
         }
     }
 

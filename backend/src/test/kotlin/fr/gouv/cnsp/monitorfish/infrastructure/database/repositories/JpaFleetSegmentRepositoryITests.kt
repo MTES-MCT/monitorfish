@@ -29,6 +29,8 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
     @BeforeEach
     fun setup() {
         cacheManager.getCache("fleet_segments")?.clear()
+        cacheManager.getCache("current_segments")?.clear()
+        cacheManager.getCache("segments_by_year")?.clear()
     }
 
     @Test
@@ -187,6 +189,7 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
         jpaFleetSegmentRepository.delete(segmentToDelete.segment, currentYear - 1)
 
         // Then
+        cacheManager.getCache("segments_by_year")?.clear()
         val expectedFleetSegment = jpaFleetSegmentRepository.findAllByYear(currentYear - 1)
         assertThat(expectedFleetSegment).hasSize(22)
         assertThat(expectedFleetSegment).doesNotContain(segmentToDelete)
@@ -228,6 +231,7 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
         jpaFleetSegmentRepository.addYear(currentYear - 1, currentYear + 1)
 
         // Then
+        cacheManager.getCache("segments_by_year")?.clear()
         assertThat(jpaFleetSegmentRepository.findAllByYear(currentYear - 1)).hasSize(23)
         val updatedFleetSegments = jpaFleetSegmentRepository.findAllByYear(currentYear + 1).sortedBy { it.segment }
         assertThat(updatedFleetSegments).hasSize(23)

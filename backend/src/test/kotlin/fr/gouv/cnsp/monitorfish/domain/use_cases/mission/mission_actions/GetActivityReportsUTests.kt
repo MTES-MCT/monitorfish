@@ -8,18 +8,13 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.Mission
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionSource
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionType
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesControl
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.ActivityCode
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.JointDeploymentPlan
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
-import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.*
+import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.TestUtils
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -41,11 +36,18 @@ class GetActivityReportsUTests {
     private lateinit var vesselRepository: VesselRepository
 
     @MockBean
+    private lateinit var fleetSegmentRepository: FleetSegmentRepository
+
+    @MockBean
     private lateinit var missionRepository: MissionRepository
 
     @Test
     fun `execute Should return the activity report of a JDP control`() {
         // Given
+        given(fleetSegmentRepository.findAllByYear(any())).willReturn(
+            TestUtils.getDummyFleetSegments(),
+        )
+
         val species = SpeciesControl()
         species.speciesCode = "HKE"
 
@@ -56,7 +58,11 @@ class GetActivityReportsUTests {
                 missionId = 1,
                 actionDatetimeUtc = ZonedDateTime.now(),
                 portLocode = "AEFAT",
-                faoAreas = listOf("27.4.b", "27.4.c"),
+                faoAreas = listOf("27.7.b", "27.4.c"),
+                segments = listOf(
+                    FleetSegment("NWW01/02", "Trawl"),
+                    FleetSegment("NS01/03", "North sea"),
+                ),
                 actionType = MissionActionType.LAND_CONTROL,
                 gearOnboard = listOf(),
                 speciesOnboard = listOf(species),
@@ -75,6 +81,7 @@ class GetActivityReportsUTests {
                 missionId = 2,
                 actionDatetimeUtc = ZonedDateTime.now(),
                 actionType = MissionActionType.SEA_CONTROL,
+                faoAreas = listOf("27.7.b", "27.4.c"),
                 seizureAndDiversion = false,
                 speciesInfractions = listOf(),
                 isDeleted = false,
@@ -91,6 +98,7 @@ class GetActivityReportsUTests {
                 missionId = 3,
                 actionDatetimeUtc = ZonedDateTime.now(),
                 actionType = MissionActionType.SEA_CONTROL,
+                faoAreas = listOf("27.7.b", "27.4.c"),
                 seizureAndDiversion = false,
                 speciesInfractions = listOf(),
                 isDeleted = false,
@@ -160,27 +168,186 @@ class GetActivityReportsUTests {
             missionActionsRepository,
             portRepository,
             vesselRepository,
+            fleetSegmentRepository,
             missionRepository,
         ).execute(
             ZonedDateTime.now(),
             ZonedDateTime.now().minusDays(1),
-            JointDeploymentPlan.NORTH_SEA,
+            JointDeploymentPlan.WESTERN_WATERS,
         )
 
         // Then
-        assertThat(activityReports.jdpSpecies).hasSize(38)
+        assertThat(activityReports.jdpSpecies).hasSize(35)
         assertThat(activityReports.activityReports).hasSize(2)
-        val landReport = activityReports.activityReports.first()
-        assertThat(landReport.activityCode).isEqualTo(ActivityCode.LAN)
-        assertThat(landReport.action.portName).isEqualTo("Al Jazeera Port")
-        val seaReport = activityReports.activityReports.last()
-        assertThat(seaReport.activityCode).isEqualTo(ActivityCode.FIS)
-        assertThat(landReport.vesselNationalIdentifier).isEqualTo("AYFR00022680")
+
+        activityReports.activityReports.first().let { landReport ->
+            assertThat(landReport.activityCode).isEqualTo(ActivityCode.LAN)
+            assertThat(landReport.action.portName).isEqualTo("Al Jazeera Port")
+            assertThat(landReport.faoArea).isEqualTo("27.7.b")
+            assertThat(landReport.segment).isEqualTo("NWW01/02")
+        }
+
+        activityReports.activityReports.last().let { seaReport ->
+            assertThat(seaReport.activityCode).isEqualTo(ActivityCode.FIS)
+            assertThat(seaReport.vesselNationalIdentifier).isEqualTo("AYFR00022680")
+            assertThat(seaReport.faoArea).isEqualTo("27.7.b")
+            assertThat(seaReport.segment).isNull()
+        }
+    }
+
+    @Test
+    fun `execute Should filter a control done outside the JDP FAO area`() {
+        // Given
+        given(fleetSegmentRepository.findAllByYear(any())).willReturn(
+            TestUtils.getDummyFleetSegments(),
+        )
+
+        val species = SpeciesControl()
+        species.speciesCode = "HKE"
+
+        val controls = listOf(
+            MissionAction(
+                id = 2,
+                vesselId = 1,
+                missionId = 2,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                actionType = MissionActionType.SEA_CONTROL,
+                // These fao areas are outside WESTERN WATERS
+                faoAreas = listOf("27.4.c", "27.4.b"),
+                seizureAndDiversion = false,
+                speciesInfractions = listOf(),
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
+            ),
+        )
+        given(missionActionsRepository.findControlsInDates(any(), any())).willReturn(controls)
+
+        val vessels = listOf(
+            Vessel(
+                id = 1,
+                internalReferenceNumber = "FR00022680",
+                vesselName = "MY AWESOME VESSEL",
+                flagState = CountryCode.FR,
+                declaredFishingGears = listOf("Trémails"),
+                vesselType = "Fishing",
+                districtCode = "AY",
+            ),
+        )
+        given(vesselRepository.findVesselsByIds(eq(listOf(1)))).willReturn(vessels)
+
+        val missions = listOf(
+            Mission(
+                2,
+                missionTypes = listOf(MissionType.SEA),
+                missionSource = MissionSource.MONITORFISH,
+                isClosed = false,
+                isUnderJdp = true,
+                isGeometryComputedFromControls = false,
+                startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+            ),
+        )
+        given(missionRepository.findByIds(listOf(2))).willReturn(missions)
+
+        // When
+        val activityReports = GetActivityReports(
+            missionActionsRepository,
+            portRepository,
+            vesselRepository,
+            fleetSegmentRepository,
+            missionRepository,
+        ).execute(
+            ZonedDateTime.now(),
+            ZonedDateTime.now().minusDays(1),
+            JointDeploymentPlan.WESTERN_WATERS,
+        )
+
+        // Then
+        assertThat(activityReports.activityReports).hasSize(0)
+    }
+
+    @Test
+    fun `execute Should include a control done within the JDP FAO area`() {
+        // Given
+        given(fleetSegmentRepository.findAllByYear(any())).willReturn(
+            TestUtils.getDummyFleetSegments(),
+        )
+
+        val species = SpeciesControl()
+        species.speciesCode = "HKE"
+
+        val controls = listOf(
+            MissionAction(
+                id = 2,
+                vesselId = 1,
+                missionId = 2,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                actionType = MissionActionType.SEA_CONTROL,
+                // The first fao area "27.7.c" is within WESTERN WATERS
+                faoAreas = listOf("27.7.c", "27.4.b"),
+                seizureAndDiversion = false,
+                speciesInfractions = listOf(),
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
+            ),
+        )
+        given(missionActionsRepository.findControlsInDates(any(), any())).willReturn(controls)
+
+        val vessels = listOf(
+            Vessel(
+                id = 1,
+                internalReferenceNumber = "FR00022680",
+                vesselName = "MY AWESOME VESSEL",
+                flagState = CountryCode.FR,
+                declaredFishingGears = listOf("Trémails"),
+                vesselType = "Fishing",
+                districtCode = "AY",
+            ),
+        )
+        given(vesselRepository.findVesselsByIds(eq(listOf(1)))).willReturn(vessels)
+
+        val missions = listOf(
+            Mission(
+                2,
+                missionTypes = listOf(MissionType.SEA),
+                missionSource = MissionSource.MONITORFISH,
+                isClosed = false,
+                isUnderJdp = true,
+                isGeometryComputedFromControls = false,
+                startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+            ),
+        )
+        given(missionRepository.findByIds(listOf(2))).willReturn(missions)
+
+        // When
+        val activityReports = GetActivityReports(
+            missionActionsRepository,
+            portRepository,
+            vesselRepository,
+            fleetSegmentRepository,
+            missionRepository,
+        ).execute(
+            ZonedDateTime.now(),
+            ZonedDateTime.now().minusDays(1),
+            JointDeploymentPlan.WESTERN_WATERS,
+        )
+
+        // Then
+        assertThat(activityReports.activityReports).hasSize(1)
     }
 
     @Test
     fun `execute Should not throw When a SEA mission is not found in the mission repository`() {
         // Given
+        given(fleetSegmentRepository.findAllByYear(any())).willReturn(
+            TestUtils.getDummyFleetSegments(),
+        )
+
         val species = SpeciesControl()
         species.speciesCode = "HKE"
 
@@ -288,6 +455,7 @@ class GetActivityReportsUTests {
             missionActionsRepository,
             portRepository,
             vesselRepository,
+            fleetSegmentRepository,
             missionRepository,
         ).execute(
             ZonedDateTime.now(),
@@ -306,6 +474,10 @@ class GetActivityReportsUTests {
     @Test
     fun `execute Should not throw When a LAND mission is not found in the mission repository`() {
         // Given
+        given(fleetSegmentRepository.findAllByYear(any())).willReturn(
+            TestUtils.getDummyFleetSegments(),
+        )
+
         val species = SpeciesControl()
         species.speciesCode = "HKE"
 
@@ -389,6 +561,7 @@ class GetActivityReportsUTests {
             missionActionsRepository,
             portRepository,
             vesselRepository,
+            fleetSegmentRepository,
             missionRepository,
         ).execute(
             ZonedDateTime.now(),

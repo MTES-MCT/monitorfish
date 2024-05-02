@@ -1,19 +1,42 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep
 
-import com.neovisionaries.i18n.CountryCode
+/**
+ * JDP MED / EASTERN ATLANTIC operational zones
+ *
+ * cf. https://extranet.legipeche.metier.developpement-durable.gouv.fr/fichier/pdf/med_jdp_2024_med_sg_final_fr_cle5197c6.pdf?arg=25289&cle=c065370e6727cc3f839e254fcc19c4b24e36dc9d&file=pdf%2Fmed_jdp_2024_med_sg_final_fr_cle5197c6.pdf
+ */
+val MEDITERRANEAN_OPERATIONAL_ZONES = listOf("37.1", "37.2", "37.3")
+val EASTERN_ATLANTIC_OPERATIONAL_ZONES = listOf("34.1.2", "27.7", "27.8", "27.9", "27.10")
 
-enum class JointDeploymentPlan(private val species: List<FaoZonesAndSpecy>) {
-    MEDITERRANEAN_AND_EASTERN_ATLANTIC(MEDITERRANEAN_AND_EASTERN_ATLANTIC_SPECIES),
-    NORTH_SEA(NORTH_SEA_SPECIES),
-    WESTERN_WATERS(WESTERN_WATERS_SPECIES),
+/**
+ * JDP NORTH SEA operational zones
+ *
+ * cf. https://extranet.legipeche.metier.developpement-durable.gouv.fr/fichier/pdf/ed_decision_2023-24_-_ns_jdp_2024_planning_-_adoption_fr_cle11191a.pdf?arg=25287&cle=a5d3eecb0e2bdd9a229e8b34bf5ae11f96e89118&file=pdf%2Fed_decision_2023-24_-_ns_jdp_2024_planning_-_adoption_fr_cle11191a.pdf
+ */
+val NORTH_SEA_OPERATIONAL_ZONES = listOf("27.4", "27.3.a")
+
+/**
+ * JDP WESTERN WATERS operational zones
+ *
+ * cf. https://extranet.legipeche.metier.developpement-durable.gouv.fr/fichier/pdf/ed_decision_2023-25_-_ww_jdp_2024_planning_-_adoption_fr_cle128883.pdf?arg=25288&cle=9a2d7705425e766258f0d648353a05aa04249faf&file=pdf%2Fed_decision_2023-25_-_ww_jdp_2024_planning_-_adoption_fr_cle128883.pdf
+ */
+val WESTERN_WATERS_OPERATIONAL_ZONES = listOf("27.5", "27.6", "27.7", "27.8", "27.9", "27.10", "34.1.1", "34.1.2", "34.2.0")
+
+enum class JointDeploymentPlan(private val species: List<FaoZonesAndSpecy>, private val operationalZones: List<String>) {
+    MEDITERRANEAN_AND_EASTERN_ATLANTIC(
+        MEDITERRANEAN_AND_EASTERN_ATLANTIC_SPECIES,
+        MEDITERRANEAN_OPERATIONAL_ZONES + EASTERN_ATLANTIC_OPERATIONAL_ZONES,
+    ),
+    NORTH_SEA(NORTH_SEA_SPECIES, NORTH_SEA_OPERATIONAL_ZONES),
+    WESTERN_WATERS(WESTERN_WATERS_SPECIES, WESTERN_WATERS_OPERATIONAL_ZONES),
     ;
-
-    fun getFaoZonesAndSpeciesCodes(): List<FaoZonesAndSpecy> {
-        return this.species
-    }
 
     fun getSpeciesCodes(): List<String> {
         return this.species.map { it.second }.distinct()
+    }
+
+    fun getOperationalZones(): List<String> {
+        return this.operationalZones
     }
 
     /**

@@ -6,7 +6,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.ActivityCode
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.JDP_TO_FAO_AREAS
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.JointDeploymentPlan
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
@@ -27,7 +26,7 @@ class GetActivityReports(
     private val logger = LoggerFactory.getLogger(GetActivityReports::class.java)
 
     fun execute(beforeDateTime: ZonedDateTime, afterDateTime: ZonedDateTime, jdp: JointDeploymentPlan): ActivityReports {
-        val jdpFaoAreas = JDP_TO_FAO_AREAS[jdp]
+        val jdpFaoAreas = jdp.getOperationalZones()
         val controls = missionActionsRepository.findControlsInDates(beforeDateTime, afterDateTime)
         logger.info("Found ${controls.size} controls between dates [$afterDateTime, $beforeDateTime].")
 

@@ -8,6 +8,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.CreateOrUpdateFleetSegment
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.FleetSegmentEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBFleetSegmentRepository
 import jakarta.transaction.Transactional
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -21,6 +22,7 @@ class JpaFleetSegmentRepository(
         }
     }
 
+    @Cacheable(value = ["segments_by_year"])
     override fun findAllByYear(year: Int): List<FleetSegment> {
         return dbFleetSegmentRepository.findAllByYearEquals(year).map {
             it.toFleetSegment()

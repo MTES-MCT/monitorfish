@@ -456,7 +456,7 @@ def expected_loaded_pnos() -> pd.DataFrame:
                 ],
                 [],
             ],
-            "is_pno_to_distribute": [None, True, False],
+            "is_pno_to_distribute": [True, True, False],
             "trip_segments": [
                 None,
                 [],
@@ -706,10 +706,18 @@ def test_load_then_reset_logbook(reset_test_data, pnos_to_load, expected_loaded_
     pd.testing.assert_frame_equal(final_pnos, expected_loaded_pnos)
 
     # Reset logbook and check that the logbook_reports table is back to its original
-    # state.
+    # state, except for the `is_pno_to_distribute` attribute, which is reset to null
+    # and may not match its original state.
     reset_pnos.run(pno_period)
     pnos_after_reset = read_query(query, db="monitorfish_remote")
-    pd.testing.assert_frame_equal(pnos_after_reset, initial_pnos)
+    pd.testing.assert_frame_equal(
+        pnos_after_reset.drop(columns=["is_pno_to_distribute"]),
+        initial_pnos.drop(columns=["is_pno_to_distribute"]),
+    )
+    pd.testing.assert_series_equal(
+        pnos_after_reset.is_pno_to_distribute,
+        pd.Series([True, None, None], name="is_pno_to_distribute"),
+    )
 
 
 def test_flow(reset_test_data):

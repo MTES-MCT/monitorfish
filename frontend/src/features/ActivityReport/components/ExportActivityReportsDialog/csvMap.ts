@@ -32,7 +32,7 @@ export const JDP_CSV_MAP_BASE: DownloadAsCsvMap<ActivityReportWithId> = {
     transform: activity => {
       const dateTime = customDayjs(activity.action.actionDatetimeUtc)
 
-      return `${dateTime.year()}${dateTime.month()}${dateTime.date()}`
+      return dateTime.format('YYYYMMDD')
     }
   },
   eventTime: {
@@ -40,7 +40,7 @@ export const JDP_CSV_MAP_BASE: DownloadAsCsvMap<ActivityReportWithId> = {
     transform: activity => {
       const dateTime = customDayjs(activity.action.actionDatetimeUtc)
 
-      return `${dateTime.hour()}:${dateTime.minute()}`
+      return dateTime.format('HH:mm')
     }
   },
   // See MED JDP Decision 2018/030 (3.6.1.1)
@@ -49,7 +49,7 @@ export const JDP_CSV_MAP_BASE: DownloadAsCsvMap<ActivityReportWithId> = {
     transform: activity => {
       const dateTime = customDayjs(activity.action.actionDatetimeUtc)
 
-      return `${dateTime.hour()}:${dateTime.minute()}`
+      return dateTime.format('HH:mm')
     }
   },
   leadingState: {
@@ -89,11 +89,11 @@ export const JDP_CSV_MAP_BASE: DownloadAsCsvMap<ActivityReportWithId> = {
   },
   faoArea: {
     label: 'FAO_AREA_CODE',
-    transform: activity => activity.action.faoAreas[0] ?? ''
+    transform: activity => activity.faoCode ?? ''
   },
   fleetSegment: {
     label: 'FLEET_SEGMENT',
-    transform: activity => activity.action.segments[0]?.segment ?? ''
+    transform: activity => activity.segment ?? ''
   },
   latitude: {
     label: 'LA',

@@ -2,12 +2,14 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import fr.gouv.cnsp.monitorfish.domain.hash
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselReportings
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.UserAuthorizationDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.security.UserAuthorizationCheckFilter
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController
 class UserAuthorizationController(
     private val getAuthorizedUser: GetAuthorizedUser,
 ) {
+    private val logger = LoggerFactory.getLogger(UserAuthorizationController::class.java)
 
     /**
      * This controller will
@@ -33,6 +36,8 @@ class UserAuthorizationController(
     ): UserAuthorizationDataOutput? {
         val email: String? = response.getHeader(UserAuthorizationCheckFilter.EMAIL_HEADER)
         if (email == null) {
+            logger.error("Email not found. Rejecting authentication.")
+
             response.status = HttpServletResponse.SC_UNAUTHORIZED
 
             return null

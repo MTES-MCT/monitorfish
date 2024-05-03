@@ -15,9 +15,16 @@ export async function getCurrentUserAuthorizationFromAPI(): Promise<UserAuthoriz
       isSuperUser: userAuthorization.isSuperUser
     }
   } catch (err) {
+    if (err?.response?.status === 401) {
+      return {
+        isLogged: false,
+        isSuperUser: false
+      }
+    }
+
     return {
-      isLogged: false,
-      isSuperUser: false
+      isLogged: undefined,
+      isSuperUser: undefined
     }
   }
 }

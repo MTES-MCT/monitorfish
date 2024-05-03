@@ -21,6 +21,7 @@ export function useGetUserAuthorization(): UserAuthorization | undefined {
       const isExtPage = window.location.pathname === '/ext' || window.location.pathname === '/light'
 
       setUserAuthorization({
+        isLogged: true,
         isSuperUser: !isExtPage
       })
 

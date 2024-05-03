@@ -1,7 +1,8 @@
+import { HTTPError } from 'ky'
+
 import { monitorfishApiKy } from './api'
 
 import type { UserAuthorization } from '../domain/entities/authorization/types'
-import { HTTPError } from 'ky'
 
 /**
  * Get the user authorization

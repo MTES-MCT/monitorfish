@@ -1,6 +1,7 @@
 import { monitorfishApiKy } from './api'
 
 import type { UserAuthorization } from '../domain/entities/authorization/types'
+import { HTTPError } from 'ky'
 
 /**
  * Get the user authorization
@@ -15,7 +16,7 @@ export async function getCurrentUserAuthorizationFromAPI(): Promise<UserAuthoriz
       isSuperUser: userAuthorization.isSuperUser
     }
   } catch (err) {
-    if (err?.response?.status === 401) {
+    if ((err as HTTPError).response.status === 401) {
       return {
         isLogged: false,
         isSuperUser: false

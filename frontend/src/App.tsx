@@ -53,28 +53,8 @@ export function App({ auth }: AppProps) {
       // eslint-disable-next-line no-console
       console.log('Redirect after Cerbère sign-in.')
       auth?.signinRedirect()
-
-      return
     }
-
-    if (!auth.isLoading && auth?.isAuthenticated && userAuthorization?.isLogged === false) {
-      // eslint-disable-next-line no-console
-      console.log('Authenticated.')
-      // eslint-disable-next-line no-restricted-globals
-      location.reload()
-    }
-  }, [
-    auth,
-    auth?.isAuthenticated,
-    auth?.activeNavigator,
-    auth?.isLoading,
-    auth?.signinRedirect,
-    userAuthorization?.isLogged
-  ])
-
-  if (auth && !auth.isLoading && auth.isAuthenticated && userAuthorization?.isLogged === false) {
-    return <LandingPage />
-  }
+  }, [auth, auth?.isAuthenticated, auth?.activeNavigator, auth?.isLoading, auth?.signinRedirect])
 
   if (auth && !auth.isLoading && !auth.isAuthenticated) {
     return <LandingPage hasInsufficientRights />

@@ -1,6 +1,5 @@
+import { isCypress } from '@utils/isCypress'
 import { WebStorageStateStore } from 'oidc-client-ts'
-
-import { isCypress } from '../utils/isCypress'
 
 const IS_CYPRESS = isCypress()
 

@@ -1,7 +1,7 @@
+import { isCypress } from '@utils/isCypress'
 import { useEffect, useState } from 'react'
 
 import { getCurrentUserAuthorization } from '../../domain/use_cases/authorization/getCurrentUserAuthorization'
-import { isCypress } from '../../utils/isCypress'
 
 import type { UserAuthorization } from '../../domain/entities/authorization/types'
 
@@ -21,7 +21,6 @@ export function useGetUserAuthorization(): UserAuthorization | undefined {
       const isExtPage = window.location.pathname === '/ext' || window.location.pathname === '/light'
 
       setUserAuthorization({
-        isLogged: true,
         isSuperUser: !isExtPage
       })
 

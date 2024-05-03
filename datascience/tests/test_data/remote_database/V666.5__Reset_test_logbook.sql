@@ -13,6 +13,7 @@ INSERT INTO logbook_raw_messages (operation_number, xml_message) VALUES
     ('7', '<ERS>Message ERS xml</ERS>'),
     ('8', '<ERS>Message ERS xml</ERS>'),
     ('9', '<ERS>Message ERS xml</ERS>'),
+    ('10', '<ERS>Message ERS xml</ERS>'),
     ('cc7ee632-e515-460f-a1c1-f82222a6d419', '<Flux>Message FLUX xml</Flux>'),
     ('a3c52754-97e1-4a21-ba2e-d8f16f4544e9', '<Flux>Message FLUX xml</Flux>'),
     ('d5c3b039-aaee-4cca-bcae-637fa8effe14', '<Flux>Message FLUX xml</Flux>'),
@@ -108,6 +109,13 @@ VALUES
     'ABC000542519', 'FQ7058', 'RO237719', 'DEVINER FIGURE CONSCIENCE', 'FRA', null, 'LAN',
     '{"port": "LAN_PORT", "sender": null, "catchLanded": [{"nbFish": null, "weight": 100.0, "faoZone": "27.9.b.2", "species": "HAD", "freshness": null, "packaging": "BOX", "effortZone": null, "economicZone": "ESP", "presentation": "GUT", "conversionFactor": 1.2, "preservationState": "FRO", "statisticalRectangle": null}], "landingDatetimeUtc": "2020-05-05T19:41:26.516Z"}',
     ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 3 days 23 hours 48 minutes')::TIMESTAMP, '20210000', 'ERS'
+),
+(
+    '10', 'OOE', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 year 3 days')::TIMESTAMP, 'RET',
+    NULL, '8', NULL,
+    NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+    '{"returnStatus": "000"}',
+    ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 3 days 23 hours 48 minutes')::TIMESTAMP, NULL, 'ERS'
 );
 
 UPDATE logbook_reports

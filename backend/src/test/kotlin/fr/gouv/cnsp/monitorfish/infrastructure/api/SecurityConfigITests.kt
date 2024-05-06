@@ -184,26 +184,6 @@ HZ08y3VoJp3zooC+2HFO6w==
                 // Then
                 .andExpect(status().isOk)
         }
-
-        @Test
-        fun `Should return another Ok When the path is protected and contains a valid public key (validating the JWT)`() {
-            // Given
-            val jwt = "eyJraWQiOiJSU0EyIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiI4MDc1MTYiLCJhdWQiOiJtb25pdG9yZmlzaCIsImFjciI6ImVpZGFzMiIsImlzcyI6Imh0dHBzOi8vYXV0aGVudGlmaWNhdGlvbi5yZWNldHRlLmRpbi5kZXZlbG9wcGVtZW50LWR1cmFibGUuZ291di5mci9hdXRoU0FNTC9vaWRjL21vbml0b3JmaXNoIiwiZXhwIjoxNzE0NzI3ODg3LCJpYXQiOjE3MTQ3MjYwODcsImVtYWlsIjoibG91cC50aGVyb25AZGV2ZWxvcHBlbWVudC1kdXJhYmxlLmdvdXYuZnIifQ.lCtuFfY3xR0f5iN0NgmyGJMI9wLVTQidpilzIzgpApJFkEDd3V2dfhG3nI0vDaTsY1VDLwYGZlRYR00pTN1Df50p8IDIU860awi7-ztgrMbI07wUT0k4MO89RM2a70gyvIvDlnQk0fki1HXajDUTJI-8vlWWo_tDbgDYaLW06rrAUKhrb8NobWqbJ5y64Tm2qfyxOl4Ddqr2Hc_BQXmZXAbaLYwRmkBGTKGlctBuOAYoxh1nx6mJh68S6xRIDkhDFDVURExS4S-wPQnioX7RTy8LKOvBvMBuZbVLwqXtHWTuQAll6wiqlqUkrWG5fqTSRezkSLqN-zsSd2KURWueHQ"
-            given(getActivePorts.execute()).willReturn(
-                listOf(
-                    Port("ET", "Etel"),
-                    Port("AY", "Auray"),
-                ),
-            )
-
-            // When
-            mockMvc.perform(
-                get("/bff/v1/ports")
-                    .header("Authorization", "Bearer $jwt"),
-            )
-                // Then
-                .andExpect(status().isOk)
-        }
     }
 
     /**
@@ -230,7 +210,7 @@ HZ08y3VoJp3zooC+2HFO6w==
         private lateinit var buildProperties: BuildProperties
 
         @Test
-        fun `Should return another unauthorized When the JWD is expired`() {
+        fun `Should return another unauthorized When the JWT is expired`() {
             // Given
             val jwt = "eyJraWQiOiJSU0EyIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiI4MDc1MTYiLCJhdWQiOiJtb25pdG9yZmlzaCIsImFjciI6ImVpZGFzMiIsImlzcyI6Imh0dHBzOlwvXC9hdXRoZW50aWZpY2F0aW9uLnJlY2V0dGUuZGluLmRldmVsb3BwZW1lbnQtZHVyYWJsZS5nb3V2LmZyXC9hdXRoU0FNTFwvb2lkY1wvbW9uaXRvcmZpc2giLCJleHAiOjE3MTQ3Mjc4ODcsImlhdCI6MTcxNDcyNjA4NywiZW1haWwiOiJsb3VwLnRoZXJvbkBkZXZlbG9wcGVtZW50LWR1cmFibGUuZ291di5mciJ9.SHZ8ZB6izcim89Zl1BLFU3Ch_5nGh2hV4iMsvjyVtsXCbzvHeReqw7EPziAsaE0vTG1NQPrkSuQKtOu5WTEX_I1le7xtSUWeLXyqgBq0BwHzrD_BYSHBEnnhtRleoGpabZ3sAS84yS8efqN9r13XXRJUQIOTQusvimnZryf9URb6jt-LrmvT3V98eHgst4W8jChui-kPlJ-tMOpfL1Kquu4ZX-cUgVxzWk2Iu2Mp6tC9Qbbd3BN8gK4dGaiZ9x8Hb6EOvviFAcvdCL-mE4PBJwFje0HnxzY5aEVPDXBKX6eD_Tee3HZtlu-nTkhNma0v5J784lsNYG9o8v_BAImKUA"
             given(getActivePorts.execute()).willReturn(

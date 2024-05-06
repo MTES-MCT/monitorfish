@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.*
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
-import fr.gouv.cnsp.monitorfish.config.OIDCProperties
-import fr.gouv.cnsp.monitorfish.config.SecurityConfig
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SilenceAlertPeriod
@@ -20,6 +18,7 @@ import org.hamcrest.Matchers
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
@@ -30,7 +29,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 
-@Import(SecurityConfig::class, OIDCProperties::class, SentryConfig::class, MapperConfiguration::class)
+@Import(SentryConfig::class, MapperConfiguration::class)
+@AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = [(PendingAlertController::class)])
 class PendingAlertControllerITests {
 

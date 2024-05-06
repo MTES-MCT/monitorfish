@@ -22,7 +22,8 @@ export function useGetUserAuthorization(): UserAuthorization | undefined {
 
       setUserAuthorization({
         isLogged: true,
-        isSuperUser: !isExtPage
+        isSuperUser: !isExtPage,
+        mustReload: false
       })
 
       return

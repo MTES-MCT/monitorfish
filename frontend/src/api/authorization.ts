@@ -14,19 +14,38 @@ export async function getCurrentUserAuthorizationFromAPI(): Promise<UserAuthoriz
     // An OK HTTP code mean the user is known
     return {
       isLogged: true,
-      isSuperUser: userAuthorization.isSuperUser
+      isSuperUser: userAuthorization.isSuperUser,
+      mustReload: false
     }
   } catch (err) {
     if ((err as HTTPError).response.status === 401) {
-      return {
-        isLogged: false,
-        isSuperUser: false
+      const authenticateResponse = (err as HTTPError).response.headers.get('WWW-Authenticate')
+
+      // eslint-disable-next-line no-console
+      console.error(`Could not authenticate: ${authenticateResponse}`)
+
+      /**
+       * We need to reload the app if the WWW-Authenticate header contains:
+       * - "Bearer" : The access_token is missing from the request header.
+       *              The user just login but the request did not include the access_token just saved in LocalStorage,
+       *              there is a race condition.
+       * - "expired": The access_token sent to the backend is expired.
+       *              The user juste re-login, but the request did include the previous access_token found in LocalStorage,
+       *              there is a race condition.
+       */
+      if (authenticateResponse?.includes('Bearer') || authenticateResponse?.includes('expired')) {
+        return {
+          isLogged: false,
+          isSuperUser: false,
+          mustReload: true
+        }
       }
     }
 
     return {
-      isLogged: undefined,
-      isSuperUser: undefined
+      isLogged: false,
+      isSuperUser: false,
+      mustReload: false
     }
   }
 }

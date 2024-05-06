@@ -1,4 +1,4 @@
-import { getCurrentUserAuthorizationFromAPI } from '../../../api/authorization'
+import { getCurrentUserAuthorizationFromAPI } from '@api/authorization'
 
 import type { UserAuthorization } from '../../entities/authorization/types'
 

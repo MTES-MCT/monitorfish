@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.config
 
+import fr.gouv.cnsp.monitorfish.infrastructure.api.log.CustomAuthenticationEntryPoint
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
@@ -14,7 +15,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig(val oidcProperties: OIDCProperties) {
+class SecurityConfig(
+    val oidcProperties: OIDCProperties,
+    val authenticationEntryPoint: CustomAuthenticationEntryPoint,
+) {
     private val logger: Logger = LoggerFactory.getLogger(SecurityConfig::class.java)
 
     @Bean
@@ -66,7 +70,9 @@ class SecurityConfig(val oidcProperties: OIDCProperties) {
                 }
             }.oauth2ResourceServer {
                     oauth2ResourceServer ->
-                oauth2ResourceServer.jwt(Customizer.withDefaults())
+                oauth2ResourceServer
+                    .jwt(Customizer.withDefaults())
+                    .authenticationEntryPoint(authenticationEntryPoint)
             }
 
         return http.build()

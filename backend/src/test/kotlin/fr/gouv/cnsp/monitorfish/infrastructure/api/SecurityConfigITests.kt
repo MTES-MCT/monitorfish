@@ -6,6 +6,7 @@ import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.use_cases.port.GetActivePorts
 import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.PortController
+import fr.gouv.cnsp.monitorfish.infrastructure.api.log.CustomAuthenticationEntryPoint
 import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.SpaController
 import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.VersionController
 import org.junit.jupiter.api.Nested
@@ -191,7 +192,7 @@ HZ08y3VoJp3zooC+2HFO6w==
      * only for this test case using the public key `another-oidc-issuer.pub`
      */
     @Nested
-    @Import(SecurityConfig::class, OIDCProperties::class, SentryConfig::class)
+    @Import(SecurityConfig::class, OIDCProperties::class, SentryConfig::class, CustomAuthenticationEntryPoint::class)
     @WebMvcTest(
         value = [PortController::class, VersionController::class, SpaController::class],
         properties = [
@@ -226,7 +227,7 @@ HZ08y3VoJp3zooC+2HFO6w==
                     .header("Authorization", "Bearer $jwt"),
             )
                 // Then
-                .andExpect(status().isUnauthorized)
+                .andExpect(status().isOk)
                 .andExpect(
                     header().string(
                         "WWW-Authenticate",

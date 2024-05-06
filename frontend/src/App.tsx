@@ -53,8 +53,24 @@ export function App({ auth }: AppProps) {
       // eslint-disable-next-line no-console
       console.log('Redirect after Cerbère sign-in.')
       auth?.signinRedirect()
+
+      return
     }
-  }, [auth, auth?.isAuthenticated, auth?.activeNavigator, auth?.isLoading, auth?.signinRedirect])
+
+    if (!auth.isLoading && auth?.isAuthenticated && userAuthorization?.mustReload) {
+      // eslint-disable-next-line no-console
+      console.log('Reloading the app...')
+      // eslint-disable-next-line no-restricted-globals
+      location.reload()
+    }
+  }, [
+    auth,
+    auth?.isAuthenticated,
+    auth?.activeNavigator,
+    auth?.isLoading,
+    auth?.signinRedirect,
+    userAuthorization?.mustReload
+  ])
 
   if (auth && !auth.isLoading && !auth.isAuthenticated) {
     return <LandingPage hasInsufficientRights />
@@ -64,7 +80,7 @@ export function App({ auth }: AppProps) {
     return <UnsupportedBrowserPage />
   }
 
-  if (userAuthorization === undefined) {
+  if (!userAuthorization || userAuthorization?.isLogged === undefined) {
     return <LandingPage />
   }
 

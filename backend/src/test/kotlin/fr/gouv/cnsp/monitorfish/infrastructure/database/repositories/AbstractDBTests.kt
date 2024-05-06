@@ -1,6 +1,8 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.context.TestPropertySource
@@ -17,6 +19,9 @@ import java.time.temporal.ChronoUnit
 @TestPropertySource("classpath:/application.properties")
 @SpringBootTest
 abstract class AbstractDBTests {
+
+    @MockBean
+    private lateinit var jwtDecoder: JwtDecoder
 
     companion object {
         @JvmStatic

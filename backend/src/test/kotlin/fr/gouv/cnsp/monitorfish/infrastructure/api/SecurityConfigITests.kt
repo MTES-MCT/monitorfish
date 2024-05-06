@@ -29,7 +29,7 @@ class SecurityConfigITests {
      * only for this test case using the public key `bad-oidc-issuer.pub`
      */
     @Nested
-    @Import(SecurityConfig::class, OIDCProperties::class, SentryConfig::class)
+    @Import(SecurityConfig::class, OIDCProperties::class, SentryConfig::class, CustomAuthenticationEntryPoint::class)
     @WebMvcTest(
         value = [PortController::class, VersionController::class],
         properties = [
@@ -68,7 +68,7 @@ class SecurityConfigITests {
                 .andExpect(
                     header().string(
                         "WWW-Authenticate",
-                        "Bearer error=\"invalid_token\", error_description=\"An error occurred while attempting to decode the Jwt: Signed JWT rejected: Invalid signature\", error_uri=\"https://tools.ietf.org/html/rfc6750#section-3.1\"",
+                        "An error occurred while attempting to decode the Jwt: Signed JWT rejected: Invalid signature",
                     ),
                 )
         }
@@ -79,7 +79,7 @@ class SecurityConfigITests {
      * only for this test case using the public key `oidc-issuer.pub`
      */
     @Nested
-    @Import(SecurityConfig::class, OIDCProperties::class, SentryConfig::class)
+    @Import(SecurityConfig::class, OIDCProperties::class, SentryConfig::class, CustomAuthenticationEntryPoint::class)
     @WebMvcTest(
         value = [PortController::class, VersionController::class, SpaController::class],
         properties = [
@@ -227,11 +227,11 @@ HZ08y3VoJp3zooC+2HFO6w==
                     .header("Authorization", "Bearer $jwt"),
             )
                 // Then
-                .andExpect(status().isOk)
+                .andExpect(status().isUnauthorized)
                 .andExpect(
                     header().string(
                         "WWW-Authenticate",
-                        "Bearer error=\"invalid_token\", error_description=\"An error occurred while attempting to decode the Jwt: Jwt expired at 2024-05-03T09:18:07Z\", error_uri=\"https://tools.ietf.org/html/rfc6750#section-3.1\"",
+                        "An error occurred while attempting to decode the Jwt: Jwt expired at 2024-05-03T09:18:07Z",
                     ),
                 )
         }

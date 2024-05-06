@@ -266,7 +266,7 @@ class UserAuthorizationCheckFilterUTests {
         val mockApi = getMockApiClient()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(false)
+        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
 
         // When
         val request = MockHttpServletRequest()
@@ -280,5 +280,6 @@ class UserAuthorizationCheckFilterUTests {
 
         // Then
         verify(getIsAuthorizedUser).execute(any(), eq(false))
+        assertThat(response.status).isEqualTo(200)
     }
 }

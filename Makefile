@@ -16,6 +16,9 @@ install:
 run-front:
 	cd ./frontend && npm run dev
 
+init-local-sig:
+	./infra/local/postgis_insert_layers.sh && ./infra/init/geoserver_init_layers.sh
+
 run-back: run-stubbed-apis
 	docker compose up -d --quiet-pull --wait db
 	cd backend && ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
@@ -180,17 +183,11 @@ docker-push-pipeline:
 # ----------------------------------------------------------
 # Remote: Run commands
 
-init-local-sig:
-	./infra/local/postgis_insert_layers.sh && ./infra/init/geoserver_init_layers.sh
 init-remote-sig:
 	./infra/remote/postgis_insert_layers.sh && ./infra/init/geoserver_init_layers.sh
 restart-remote-app:
 	cd infra/remote && docker compose pull && docker compose up -d --build app --force-recreate
-restart-remote-app-dev:
-	export POSTGRES_USER=postgres && export POSTGRES_PASSWORD=postgres && export POSTGRES_DB=monitorfishdb && cd infra/remote && docker compose pull && docker compose up -d --build app
 
-run-local-app:
-	cd infra/local && docker compose up -d
 register-pipeline-flows-prod:
 	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH_VERSION) && \
 	infra/remote/data-pipeline/register-flows-prod.sh

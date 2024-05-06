@@ -2,7 +2,6 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import fr.gouv.cnsp.monitorfish.domain.hash
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselReportings
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.UserAuthorizationDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.security.UserAuthorizationCheckFilter
 import io.swagger.v3.oas.annotations.Operation

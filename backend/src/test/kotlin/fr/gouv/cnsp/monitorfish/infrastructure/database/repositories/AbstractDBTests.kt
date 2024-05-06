@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
+import fr.gouv.cnsp.monitorfish.infrastructure.api.log.CustomAuthenticationEntryPoint
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.security.oauth2.jwt.JwtDecoder
@@ -22,6 +23,9 @@ abstract class AbstractDBTests {
 
     @MockBean
     private lateinit var jwtDecoder: JwtDecoder
+
+    @MockBean
+    private lateinit var customAuthenticationEntryPoint: CustomAuthenticationEntryPoint
 
     companion object {
         @JvmStatic

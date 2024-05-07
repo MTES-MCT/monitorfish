@@ -8,7 +8,11 @@ import { getCurrentUserAuthorization } from '../domain/use_cases/authorization/g
 import type { UserAuthorization } from '../domain/entities/authorization/types'
 import type { AuthContextProps } from 'react-oidc-context'
 
-export function AppWithAuth(App: React.ComponentType, auth?: AuthContextProps | undefined) {
+type AppWithAuthProps = {
+  App: React.ComponentType
+  auth?: AuthContextProps | undefined
+}
+export function AppWithAuth({ App, auth }: AppWithAuthProps) {
   const [userAuthorization, setUserAuthorization] = useState<UserAuthorization | undefined>(undefined)
 
   useEffect(() => {
@@ -70,27 +74,16 @@ export function AppWithAuth(App: React.ComponentType, auth?: AuthContextProps | 
   ])
 
   if (!userAuthorization || userAuthorization?.isLogged === undefined) {
-    return function () {
-      return <LandingPage />
-    }
+    return <LandingPage />
   }
 
   if (auth && !auth.isLoading && !auth.isAuthenticated) {
-    return function () {
-      return <LandingPage hasInsufficientRights />
-    }
+    return <LandingPage hasInsufficientRights />
   }
 
-  return function () {
-    return (
-      <UserAccountContext.Provider value={userAccount}>
-        <App />
-      </UserAccountContext.Provider>
-    )
-  }
-}
-
-// Curried function for withAppAuth, as `withAuth` will inject `auth`
-export function withAppAuthCurried(auth?: AuthContextProps | undefined) {
-  return (App: React.ComponentType) => AppWithAuth(App, auth)
+  return (
+    <UserAccountContext.Provider value={userAccount}>
+      <App />
+    </UserAccountContext.Provider>
+  )
 }

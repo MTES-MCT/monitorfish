@@ -1,6 +1,5 @@
 import { Account } from '@features/Account/components/Account'
 import { ControlUnitListDialogButton } from '@features/ControlUnit/components/ControlUnitListDialogButton'
-import { useIsSuperUser } from '@hooks/authorization/useIsSuperUser'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { LegacyRsuiteComponentsWrapper } from 'ui/LegacyRsuiteComponentsWrapper'
 
@@ -14,6 +13,7 @@ import { PriorNotificationListButton } from './PriorNotificationListButton'
 import { VesselFiltersMapButton } from './VesselFilters'
 import { VesselLabelsMapButton } from './VesselLabels'
 import { VesselVisibilityMapButton } from './VesselVisibility'
+import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 
 export function MapButtons() {
   const isSuperUser = useIsSuperUser()

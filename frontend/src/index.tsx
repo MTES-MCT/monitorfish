@@ -1,10 +1,9 @@
 import { BrowserTracing } from '@sentry/browser'
 import { init } from '@sentry/react'
 import { createRoot } from 'react-dom/client'
-import { AuthProvider, withAuth } from 'react-oidc-context'
+import { AuthProvider } from 'react-oidc-context'
 
 import { App } from './App'
-import { AppWithAuth } from './auth/AppWithAuth'
 import { getOIDCConfig } from './auth/getOIDCConfig'
 
 import 'rsuite/dist/rsuite.min.css'
@@ -38,14 +37,12 @@ const root = createRoot(container)
 const { IS_OIDC_ENABLED, oidcConfig } = getOIDCConfig()
 
 if (IS_OIDC_ENABLED) {
-  const AppWithAuthInjected = withAuth(AppWithAuth)
-
   root.render(
     // eslint-disable-next-line react/jsx-props-no-spreading
     <AuthProvider {...oidcConfig}>
-      <AppWithAuthInjected App={App} />
+      <App />
     </AuthProvider>
   )
 } else {
-  root.render(<AppWithAuth App={App} />)
+  root.render(<App />)
 }

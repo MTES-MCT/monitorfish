@@ -1,4 +1,3 @@
-import { useIsSuperUser } from '@hooks/authorization/useIsSuperUser'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { usePrevious } from '@mtes-mct/monitor-ui'
 import { Vector } from 'ol/layer'
@@ -7,6 +6,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { clearPreviousLineFeatures, getLabelsOfFeaturesInExtent } from './utils'
+import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { useGetLineFeatureIdToCoordinates } from '../../../map/layers/hooks/useGetLineFeatureIdToCoordinates'
 import { useIsZooming } from '../../../map/layers/hooks/useIsZooming'

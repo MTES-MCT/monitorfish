@@ -1,4 +1,4 @@
-import { useIsInLightMode } from '@hooks/authorization/useIsInLightMode'
+import { useIsInLightMode } from '@hooks/useIsInLightMode'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME } from '@mtes-mct/monitor-ui'

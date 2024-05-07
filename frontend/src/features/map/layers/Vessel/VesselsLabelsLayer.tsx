@@ -4,6 +4,7 @@ import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
+import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
 import { drawMovedLabelLineIfFoundAndReturnOffset } from '../../../../domain/entities/vessel/label'
@@ -13,7 +14,6 @@ import {
   Vessel
 } from '../../../../domain/entities/vessel/vessel'
 import { VesselLabelLine } from '../../../../domain/entities/vesselLabelLine'
-import { useIsSuperUser } from '../../../../hooks/authorization/useIsSuperUser'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { monitorfishMap } from '../../monitorfishMap'
 import { VesselLabelOverlay } from '../../overlays/VesselLabelOverlay'

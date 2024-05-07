@@ -279,7 +279,7 @@ export enum RegulatoryTextType {
 }
 
 const regulatoryZoneTextType = (type: RegulatoryTextType) =>
-  type === RegulatoryTextType.CREATION ? 'création' : 'réglementation'
+  type === RegulatoryTextType.CREATION ? 'Création' : 'Réglementation'
 
 export const getRegulatoryZoneTextTypeAsText = textTypeList =>
   `${

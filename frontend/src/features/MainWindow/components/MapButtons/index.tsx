@@ -1,5 +1,5 @@
 import { Account } from '@features/Account/components/Account'
-import { ControlUnitListDialogButton } from '@features/ControlUnit/components/ControlUnitListDialogButton'
+import { ControlUnitListMapButton } from '@features/ControlUnit/components/ControlUnitListMapButton'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { LegacyRsuiteComponentsWrapper } from 'ui/LegacyRsuiteComponentsWrapper'
 
@@ -18,6 +18,13 @@ import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 export function MapButtons() {
   const isSuperUser = useIsSuperUser()
   const isAlertsMapButtonDisplayed = useMainAppSelector(state => state.displayedComponent.isAlertsMapButtonDisplayed)
+  const isAccountMapButtonDisplayed = useMainAppSelector(state => state.displayedComponent.isAccountMapButtonDisplayed)
+  const isPriorNotificationMapButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isPriorNotificationMapButtonDisplayed
+  )
+  const isControlUnitListMapButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isControlUnitListMapButtonDisplayed
+  )
   const isBeaconMalfunctionsMapButtonDisplayed = useMainAppSelector(
     state => state.displayedComponent.isBeaconMalfunctionsMapButtonDisplayed
   )
@@ -46,7 +53,8 @@ export function MapButtons() {
         {isFavoriteVesselsMapButtonDisplayed && <FavoriteVessels />}
         {isSuperUser && isFavoriteVesselsMapButtonDisplayed && <MissionsMenu />}
         {isSuperUser && isAlertsMapButtonDisplayed && <AlertsMapButton />}
-        {import.meta.env.FRONTEND_PRIOR_NOTIFICATION_LIST_ENABLED === 'true' && <PriorNotificationListButton />}
+        {import.meta.env.FRONTEND_PRIOR_NOTIFICATION_LIST_ENABLED === 'true' &&
+          isPriorNotificationMapButtonDisplayed && <PriorNotificationListButton />}
         {isSuperUser && isBeaconMalfunctionsMapButtonDisplayed && <BeaconMalfunctionsMapButton />}
 
         {isVesselFiltersMapButtonDisplayed && <VesselFiltersMapButton />}
@@ -54,10 +62,10 @@ export function MapButtons() {
         {isMeasurementMapButtonDisplayed && <MeasurementMapButton />}
         {isInterestPointMapButtonDisplayed && <InterestPointMapButton />}
         {isVesselLabelsMapButtonDisplayed && <VesselLabelsMapButton />}
-        <Account />
+        {isAccountMapButtonDisplayed && <Account />}
       </LegacyRsuiteComponentsWrapper>
 
-      {isSuperUser && <ControlUnitListDialogButton />}
+      {isSuperUser && isControlUnitListMapButtonDisplayed && <ControlUnitListMapButton />}
     </>
   )
 }

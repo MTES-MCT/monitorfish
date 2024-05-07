@@ -9,16 +9,19 @@ const displayedComponentsLocalstorageKey = 'displayedComponents'
 
 export type DisplayedComponentState = {
   areVesselsDisplayed: boolean
+  isAccountMapButtonDisplayed: boolean
   isAlertsMapButtonDisplayed: boolean
   isBeaconMalfunctionsMapButtonDisplayed: boolean
   isControlUnitDialogDisplayed: boolean
   isControlUnitListDialogDisplayed: boolean
+  isControlUnitListMapButtonDisplayed: boolean
   isDrawLayerModalDisplayed: boolean
   isFavoriteVesselsMapButtonDisplayed: boolean
   isInterestPointMapButtonDisplayed: boolean
   isMeasurementMapButtonDisplayed: boolean
   isMissionsLayerDisplayed: boolean
   isMissionsMapButtonDisplayed: boolean
+  isPriorNotificationMapButtonDisplayed: boolean
   isStationLayerDisplayed: boolean
   isVesselFiltersMapButtonDisplayed: boolean
   isVesselLabelsMapButtonDisplayed: boolean
@@ -29,10 +32,12 @@ export type DisplayedComponentState = {
 }
 const INITIAL_STATE: DisplayedComponentState = {
   areVesselsDisplayed: true,
+  isAccountMapButtonDisplayed: true,
   isAlertsMapButtonDisplayed: true,
   isBeaconMalfunctionsMapButtonDisplayed: true,
   isControlUnitDialogDisplayed: false,
   isControlUnitListDialogDisplayed: false,
+  isControlUnitListMapButtonDisplayed: true,
   isDrawLayerModalDisplayed: false,
   isFavoriteVesselsMapButtonDisplayed: true,
   isInterestPointMapButtonDisplayed: true,
@@ -43,6 +48,7 @@ const INITIAL_STATE: DisplayedComponentState = {
     'isMissionsLayerDisplayed'
   ),
   isMissionsMapButtonDisplayed: true,
+  isPriorNotificationMapButtonDisplayed: true,
   isStationLayerDisplayed: false,
   isVesselFiltersMapButtonDisplayed: true,
   isVesselLabelsMapButtonDisplayed: true,

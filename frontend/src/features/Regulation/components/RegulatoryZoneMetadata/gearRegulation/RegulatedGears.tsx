@@ -60,7 +60,7 @@ export function RegulatedGears({
   const dataCyTarget = authorized ? 'authorized' : 'unauthorized'
 
   return (
-    <div data-cy={`${dataCyTarget}-regulatory-layers-metadata-gears`}>
+    <Wrapper data-cy={`${dataCyTarget}-regulatory-layers-metadata-gears`}>
       <SectionTitle $hasPreviousRegulatedGearsBloc={hasPreviousRegulatedGearsBloc}>
         {authorized ? <GreenCircle margin="0 5px 0 0" /> : <RedCircle margin="0 5px 0 0" />}
         Engins {authorized ? 'réglementés' : 'interdits'}
@@ -102,9 +102,11 @@ export function RegulatedGears({
         </Derogation>
       )}
       {otherInfo && <ReactMarkdown>{otherInfo}</ReactMarkdown>}
-    </div>
+    </Wrapper>
   )
 }
+
+const Wrapper = styled.div``
 
 const Derogation = styled.span`
   display: flex;

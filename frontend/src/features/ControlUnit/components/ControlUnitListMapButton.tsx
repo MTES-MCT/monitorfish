@@ -1,13 +1,13 @@
 import { MapToolButton } from '@features/MainWindow/components/MapButtons/shared/MapToolButton'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon } from '@mtes-mct/monitor-ui'
 import { useCallback, useRef } from 'react'
 import styled from 'styled-components'
 
 import { displayedComponentActions } from '../../../domain/shared_slices/DisplayedComponent'
-import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 
-export function ControlUnitListDialogButton() {
+export function ControlUnitListMapButton() {
   const wrapperRef = useRef(null)
 
   const dispatch = useMainAppDispatch()

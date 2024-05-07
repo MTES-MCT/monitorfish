@@ -1,8 +1,6 @@
 import styled from 'styled-components'
 
-export const LegacyRsuiteComponentsWrapper = styled.div<{
-  overrideCheckbox?: boolean
-}>`
+export const LegacyRsuiteComponentsWrapper = styled.div`
   height: 100%;
   width: 100%;
 
@@ -366,36 +364,6 @@ export const LegacyRsuiteComponentsWrapper = styled.div<{
       font-size: 11px;
     }
   }
-
-  ${p =>
-    p.overrideCheckbox
-      ? `.rs-checkbox {
-    .rs-checkbox-checker {
-      min-height: 0;
-
-      .rs-checkbox-wrapper {
-        .rs-checkbox-inner {
-          &:before {
-            background-color: ${p.theme.color.gainsboro} !important;
-            border: solid 2px ${p.theme.color.lightGray} !important;
-            border-radius: 0;
-          }
-        }
-      }
-
-      &.rs-checkbox-checked {
-        .rs-checkbox-wrapper {
-          .rs-checkbox-inner {
-            &:before {
-              background-color: ${p.theme.color.charcoal} !important;
-              border: solid 2px ${p.theme.color.charcoal} !important;
-            }
-          }
-        }
-      }
-    }
-  }`
-      : ''}
 
   .rs-picker {
     width: auto;

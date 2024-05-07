@@ -1,13 +1,11 @@
-import { logSoftError, stopMouseEventPropagation } from '@mtes-mct/monitor-ui'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { Checkbox, logSoftError, THEME } from '@mtes-mct/monitor-ui'
 import { memo, useMemo, useState } from 'react'
-import { Checkbox, CheckboxGroup } from 'rsuite'
 import styled from 'styled-components'
 
 import { ResultZones } from './ResultZones'
 import { checkRegulatoryZones, uncheckRegulatoryZones } from './slice'
-import { COLORS } from '../../../../constants/constants'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 
 import type { RegulatoryZone } from '../../types'
 
@@ -76,14 +74,14 @@ function UnmemoizedRegulatoryLayerSearchResultTopic({
     return regulatoryTopics[regulatoryLayerTopic]?.length || 0
   }, [regulatoryLayerLawType, regulatoryLayerTopic, regulatoryLayerLawTypes])
 
-  const allZonesAreAlreadySelected =
+  const areAllZonesAlreadySelected =
     selectedRegulatoryLayers && regulatoryLayerTopic
       ? selectedRegulatoryLayers[regulatoryLayerTopic]?.length === searchResultZonesLength
       : false
 
   const [zonesAreOpen, setZonesAreOpen] = useState(false)
 
-  const allTopicZonesAreChecked = useMemo(() => {
+  const areAllTopicZonesChecked = useMemo(() => {
     if (!regulatoryZonesChecked || !regulatoryLayerTopic) {
       return false
     }
@@ -98,47 +96,40 @@ function UnmemoizedRegulatoryLayerSearchResultTopic({
   }, [regulatoryZonesChecked, regulatoryLayerTopic, topicDetails])
 
   const handleCheckAllZones = () => {
-    if (allTopicZonesAreChecked) {
+    if (areAllZonesAlreadySelected) {
+      return
+    }
+
+    if (areAllTopicZonesChecked) {
       dispatch(uncheckRegulatoryZones(searchResultZones))
     } else {
       dispatch(checkRegulatoryZones(searchResultZones))
     }
   }
 
+  const areAllSearchedZonesChecked =
+    !!selectedRegulatoryLayers &&
+    !!regulatoryLayerTopic &&
+    selectedRegulatoryLayers[regulatoryLayerTopic]?.length === searchResultZonesLength
+
   return (
     <>
-      <LayerTopic onClick={() => setZonesAreOpen(!zonesAreOpen)}>
-        <TopicName data-cy="regulatory-layer-topic" title={regulatoryLayerTopic}>
+      <LayerTopic>
+        <TopicName
+          data-cy="regulatory-layer-topic"
+          onClick={() => setZonesAreOpen(!zonesAreOpen)}
+          title={regulatoryLayerTopic}
+        >
           {regulatoryLayerTopic}
         </TopicName>
         <ZonesNumber data-cy="regulatory-layer-topic-count">{`${topicDetails?.length}/${numberOfTotalZones}`}</ZonesNumber>
-        <CheckboxGroup
-          inline
-          name="checkboxList"
-          onChange={handleCheckAllZones}
-          onClick={stopMouseEventPropagation}
-          style={{ height: 20, marginLeft: 0 }}
-          value={
-            (allTopicZonesAreChecked || allZonesAreAlreadySelected) && regulatoryLayerTopic
-              ? [regulatoryLayerTopic]
-              : []
-          }
-        >
-          {/* TODO This is strange: a single checkbox in a group? */}
-          {[
-            <Checkbox
-              key={regulatoryLayerTopic}
-              disabled={
-                (selectedRegulatoryLayers &&
-                  regulatoryLayerTopic &&
-                  selectedRegulatoryLayers[regulatoryLayerTopic]?.length === searchResultZonesLength) ||
-                false
-              }
-              title={allZonesAreAlreadySelected ? 'zones déjà ajoutées à mes zones réglementaires' : ''}
-              value={String(regulatoryLayerTopic)}
-            />
-          ]}
-        </CheckboxGroup>
+        <StyledCheckbox
+          checked={!!((areAllTopicZonesChecked || areAllZonesAlreadySelected) && regulatoryLayerTopic)}
+          disabled={areAllSearchedZonesChecked || false}
+          label=""
+          name={`${regulatoryLayerTopic}-checkbox`}
+          onClick={handleCheckAllZones}
+        />
       </LayerTopic>
       <ResultZones
         regulatoryLayerLawType={regulatoryLayerLawType}
@@ -149,9 +140,13 @@ function UnmemoizedRegulatoryLayerSearchResultTopic({
   )
 }
 
+const StyledCheckbox = styled(Checkbox)`
+  margin: 8px 2px 8px 8px;
+`
+
 const ZonesNumber = styled.span`
   font-size: 13px;
-  color: ${COLORS.slateGray};
+  color: ${THEME.color.slateGray};
   margin-left: auto;
   line-height: 34px;
   font-weight: 400;
@@ -161,11 +156,9 @@ const TopicName = styled.span`
   user-select: none;
   text-overflow: ellipsis;
   overflow-x: hidden !important;
-  display: block;
-  font-size: 13px;
   font-weight: 700;
-  color: ${COLORS.gunMetal};
-  max-width: 300px;
+  color: ${THEME.color.gunMetal};
+  width: 300px;
   line-height: 33px;
 `
 
@@ -174,24 +167,13 @@ const LayerTopic = styled.div`
   user-select: none;
   text-overflow: ellipsis;
   overflow: hidden !important;
-  padding-right: 0;
   height: 35px;
-  font-size: 13px;
   padding-left: 18px;
-  font-weight: 700;
   color: ${p => p.theme.color.gunMetal};
   border-bottom: 1px solid ${p => p.theme.color.lightGray};
 
   :hover {
     background: ${p => p.theme.color.blueGray25};
-  }
-
-  .rs-checkbox-checker {
-    padding-top: 24px;
-  }
-
-  .rs-checkbox {
-    margin-left: 0;
   }
 `
 

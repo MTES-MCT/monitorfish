@@ -6,8 +6,9 @@ import { getColorWithAlpha, getHashDigitsFromString, getStyle } from '../../../m
 
 import type { BaseRegulatoryZone } from '../../types'
 import type Feature from 'ol/Feature'
+import type { Style } from 'ol/style'
 
-export function getRegulatoryLayerStyle(feature: Feature | undefined, regulation: BaseRegulatoryZone | null) {
+export function getRegulatoryLayerStyle(feature: Feature | undefined, regulation: BaseRegulatoryZone | null): Style {
   const randomDigits = getHashDigitsFromString(`${regulation?.topic}:${regulation?.zone}`)
   const currentDate = customDayjs().utc()
   const isForbidden = isForbiddenPeriod(feature, currentDate)

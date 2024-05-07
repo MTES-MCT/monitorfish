@@ -4,7 +4,7 @@ import { createRoot } from 'react-dom/client'
 import { AuthProvider, withAuth } from 'react-oidc-context'
 
 import { App } from './App'
-import { withAppAuthCurried } from './auth/appWithAuth'
+import { AppWithAuth } from './auth/appWithAuth'
 import { getOIDCConfig } from './auth/getOIDCConfig'
 
 import 'rsuite/dist/rsuite.min.css'
@@ -38,14 +38,14 @@ const root = createRoot(container)
 const { IS_OIDC_ENABLED, oidcConfig } = getOIDCConfig()
 
 if (IS_OIDC_ENABLED) {
-  const AppWithAuth = withAuth(withAppAuthCurried()(App))
+  const AppWithAuthInjected = withAuth(AppWithAuth)
 
   root.render(
     // eslint-disable-next-line react/jsx-props-no-spreading
     <AuthProvider {...oidcConfig}>
-      <AppWithAuth />
+      <AppWithAuthInjected App={App} />
     </AuthProvider>
   )
 } else {
-  root.render(<App />)
+  root.render(<AppWithAuth App={App} />)
 }

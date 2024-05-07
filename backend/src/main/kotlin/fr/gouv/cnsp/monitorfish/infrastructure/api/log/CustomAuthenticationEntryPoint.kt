@@ -19,7 +19,7 @@ class CustomAuthenticationEntryPoint : AuthenticationEntryPoint {
         response: HttpServletResponse,
         authException: AuthenticationException,
     ) {
-        logger.info("Authentication failure during JWT verification: ${authException.message}.")
+        logger.warn("Authentication failure during JWT verification: ${authException.message}.")
 
         response.setHeader("WWW-Authenticate", authException.message)
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.message)

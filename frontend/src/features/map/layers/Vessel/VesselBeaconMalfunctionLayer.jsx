@@ -8,7 +8,7 @@ import { LayerProperties } from '../../../../domain/entities/layers/constants'
 
 import { getVesselBeaconMalfunctionStyle } from './style'
 import { getVesselCompositeIdentifier, vesselIsShowed } from '../../../../domain/entities/vessel/vessel'
-import { useIsSuperUser } from '../../../../hooks/authorization/useIsSuperUser'
+import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { monitorfishMap } from '../../monitorfishMap'
 
 const VesselBeaconMalfunctionLayer = () => {

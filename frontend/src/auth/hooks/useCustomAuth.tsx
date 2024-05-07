@@ -1,18 +1,17 @@
-import { LandingPage } from '@pages/LandingPage'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { hasAuthParams } from 'react-oidc-context'
+import { hasAuthParams, useAuth } from 'react-oidc-context'
 
-import { UserAccountContext } from '../context/UserAccountContext'
-import { getCurrentUserAuthorization } from '../domain/use_cases/authorization/getCurrentUserAuthorization'
+import { getCurrentUserAuthorization } from '../../domain/use_cases/authorization/getCurrentUserAuthorization'
 
-import type { UserAuthorization } from '../domain/entities/authorization/types'
-import type { AuthContextProps } from 'react-oidc-context'
+import type { UserAccountContextType } from '../../context/UserAccountContext'
+import type { UserAuthorization } from '../../domain/entities/authorization/types'
 
-type AppWithAuthProps = {
-  App: React.ComponentType
-  auth?: AuthContextProps | undefined
-}
-export function AppWithAuth({ App, auth }: AppWithAuthProps) {
+export function useCustomAuth(): {
+  isAuthorized: boolean
+  isLoading: boolean
+  userAccount: UserAccountContextType | undefined
+} {
+  const auth = useAuth()
   const [userAuthorization, setUserAuthorization] = useState<UserAuthorization | undefined>(undefined)
 
   useEffect(() => {
@@ -74,16 +73,12 @@ export function AppWithAuth({ App, auth }: AppWithAuthProps) {
   ])
 
   if (!userAuthorization || userAuthorization?.isLogged === undefined) {
-    return <LandingPage />
+    return { isAuthorized: false, isLoading: true, userAccount: undefined }
   }
 
   if (auth && !auth.isLoading && !auth.isAuthenticated) {
-    return <LandingPage hasInsufficientRights />
+    return { isAuthorized: false, isLoading: false, userAccount: undefined }
   }
 
-  return (
-    <UserAccountContext.Provider value={userAccount}>
-      <App />
-    </UserAccountContext.Provider>
-  )
+  return { isAuthorized: true, isLoading: false, userAccount }
 }

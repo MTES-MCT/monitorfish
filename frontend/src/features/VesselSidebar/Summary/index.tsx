@@ -1,4 +1,3 @@
-import { useIsSuperUser } from '@hooks/authorization/useIsSuperUser'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useEffect, useState } from 'react'
@@ -6,6 +5,7 @@ import { FingerprintSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
+import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser'
 import { COLORS } from '../../../constants/constants'
 import { getCoordinates } from '../../../coordinates'
 import { WSG84_PROJECTION } from '../../../domain/entities/map/constants'

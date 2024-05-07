@@ -1,6 +1,6 @@
+import { useIsInLightMode } from '@hooks/useIsInLightMode'
 import { useMemo } from 'react'
 
-import { useIsInLightMode } from '../../../hooks/authorization/useIsInLightMode'
 import { useGetVesselsLastPositionsNavQuery, useGetVesselsLastPositionsQuery } from '../apis'
 
 export function useGetVesselsLastPositionsApi() {

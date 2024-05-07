@@ -1,4 +1,3 @@
-import { useIsSuperUser } from '@hooks/authorization/useIsSuperUser'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { MultiRadio } from '@mtes-mct/monitor-ui'
@@ -6,6 +5,7 @@ import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { SUPER_USER_VESSEL_LABEL_OPTION, VESSEL_LABEL_OPTIONS } from './constants'
+import { useIsSuperUser } from '../../../../../auth/hooks/useIsSuperUser'
 import { MapBox } from '../../../../../domain/entities/map/constants'
 import {
   setRiskFactorShowedOnMap,

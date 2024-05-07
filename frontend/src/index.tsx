@@ -4,7 +4,7 @@ import { createRoot } from 'react-dom/client'
 import { AuthProvider, withAuth } from 'react-oidc-context'
 
 import { App } from './App'
-import { AppWithAuth } from './auth/appWithAuth'
+import { AppWithAuth } from './auth/AppWithAuth'
 import { getOIDCConfig } from './auth/getOIDCConfig'
 
 import 'rsuite/dist/rsuite.min.css'

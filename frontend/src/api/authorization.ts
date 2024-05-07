@@ -26,14 +26,14 @@ export async function getCurrentUserAuthorizationFromAPI(): Promise<UserAuthoriz
 
       /**
        * We need to reload the app if the WWW-Authenticate header contains:
-       * - "Bearer" : The access_token is missing from the request header.
+       * - "authentication is required" : The access_token is missing from the request header.
        *              The user just login but the request did not include the access_token just saved in LocalStorage,
        *              there is a race condition.
        * - "expired": The access_token sent to the backend is expired.
        *              The user juste re-login, but the request did include the previous access_token found in LocalStorage,
        *              there is a race condition.
        */
-      if (authenticateResponse?.includes('Bearer') || authenticateResponse?.includes('expired')) {
+      if (authenticateResponse?.includes('authentication is required') || authenticateResponse?.includes('expired')) {
         return {
           isLogged: false,
           isSuperUser: false,

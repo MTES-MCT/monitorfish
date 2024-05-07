@@ -42,7 +42,7 @@ export function Account() {
       <MapToolButton
         isActive={rightMapBoxOpened === MapBox.ACCOUNT}
         onClick={openOrClose}
-        style={{ color: THEME.color.gainsboro, cursor: 'pointer', top: MARGIN_TOP, zIndex: 99999 }}
+        style={{ color: THEME.color.gainsboro, cursor: 'pointer', top: MARGIN_TOP }}
         title="Mon compte"
       >
         <Icon.Account color={rightMenuIsOpen ? THEME.color.gainsboro : THEME.color.charcoal} size={20} />

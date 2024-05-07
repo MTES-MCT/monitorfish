@@ -1,7 +1,5 @@
-import { COLORS } from '@constants/constants'
+import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
-
-import CloseIconSVG from '../../../../icons/Croix_grise.svg?react'
 
 type FilterTagProps = Readonly<{
   iconElement: JSX.Element | undefined
@@ -26,49 +24,46 @@ export function FilterTag({ iconElement, removeTagFromFilter, text, type, uuid, 
 
   return (
     <TagWrapper>
-      {iconElement ? <TagIcon>{iconElement}</TagIcon> : null}
+      {iconElement && <TagIcon>{iconElement}</TagIcon>}
       <TagName data-cy="vessel-filter-tag">{text}</TagName>
-      <CloseIcon data-cy="vessel-filter-remove-tag" onClick={callRemoveTagFromFilter} />
+      <CloseIcon
+        color={THEME.color.gunMetal}
+        data-cy="vessel-filter-remove-tag"
+        onClick={callRemoveTagFromFilter}
+        size={10}
+      />
     </TagWrapper>
   )
 }
 
 const TagIcon = styled.span`
-  padding-bottom: 5px;
-  vertical-align: middle;
-  height: 30px;
-  display: inline-block;
+  vertical-align: top;
 `
 
 const TagName = styled.span`
-  padding-bottom: 5px;
-  vertical-align: middle;
-  height: 30px;
-  display: inline-block;
-  color: ${COLORS.gunMetal};
+  vertical-align: top;
+  color: ${THEME.color.gunMetal};
   font-weight: 500;
+  margin-right: 5px;
 `
 
 const TagWrapper = styled.span`
-  background: ${COLORS.gainsboro};
+  background: ${THEME.color.gainsboro};
   border-radius: 2px;
-  color: ${COLORS.slateGray};
-  margin-left: 0;
   margin-right: 10px;
   margin-bottom: 8px;
   font-size: 13px;
   padding: 0px 3px 0px 7px;
-  vertical-align: top;
-  height: 30px;
+  height: 26px;
   float: left;
+
+  .Element-IconBox {
+    padding: 3px 2px 3px 2px;
+    border-left: 1px solid white;
+  }
 `
 
-const CloseIcon = styled(CloseIconSVG)`
-  width: 13px;
-  vertical-align: text-bottom;
+const CloseIcon = styled(Icon.Close)`
   cursor: pointer;
-  border-left: 1px solid white;
-  height: 30px;
-  margin: 0 6px 0 7px;
-  padding-left: 7px;
+  margin: 5px;
 `

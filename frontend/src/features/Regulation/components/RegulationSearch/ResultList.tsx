@@ -42,7 +42,7 @@ export function ResultList({ namespace }: RegulatoryLayerSearchResultListProps) 
             dispatch(setLayersSideBarOpenedLayerType(undefined))
           }}
         >
-          Afficher les résultats
+          Afficher les résultats de la recherche
         </ShowResultList>
       )}
       {!hasOneLayerTypeOpen && (

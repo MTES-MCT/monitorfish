@@ -1,5 +1,4 @@
-import { FilterTag } from '@features/MainWindow/components/MapButtons/VesselFilters/FilterTag'
-import { Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
+import { Icon, IconButton, SingleTag, Size } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 
@@ -146,15 +145,13 @@ export function SearchInput() {
           )}
           {zoneSelected && (
             <InlineTagWrapper>
-              <FilterTag
-                key={zoneSelected.code}
-                iconElement={undefined}
-                removeTagFromFilter={() => dispatch(resetZoneSelected())}
-                text="Effacer la zone définie"
-                type={undefined}
-                uuid={undefined}
-                value="Effacer la zone définie"
-              />
+              <SingleTag
+                onDelete={() => {
+                  dispatch(resetZoneSelected())
+                }}
+              >
+                Effacer la zone définie
+              </SingleTag>
             </InlineTagWrapper>
           )}
         </SearchByGeometry>
@@ -166,7 +163,7 @@ export function SearchInput() {
 const InlineTagWrapper = styled.div`
   display: inline-block;
   margin-left: 5px;
-  margin-top: 2px;
+  margin-top: 4px;
   vertical-align: top;
 `
 
@@ -227,6 +224,8 @@ const PrincipalSearchInput = styled.div`
   display: flex;
   height: 40px;
   width: 100%;
+  position: relative;
+  box-shadow: 0px 3px 6px #70778540;
 `
 
 const SearchBoxInput = styled.input`
@@ -236,7 +235,7 @@ const SearchBoxInput = styled.input`
   border-radius: 0;
   color: ${p => p.theme.color.gunMetal};
   font-size: 13px;
-  height: 40px;
+  height: 39px;
   margin: 0;
   padding: 0 5px 0 10px;
   vertical-align: bottom;
@@ -251,7 +250,7 @@ const SearchBoxInput = styled.input`
 const SearchIcon = styled(SearchIconSVG)`
   background: ${p => p.theme.color.white};
   border-bottom: 1px ${p => p.theme.color.lightGray} solid;
-  height: 30px;
+  height: 29px;
   padding-left: 10px;
   padding-top: 10px;
   vertical-align: top;

@@ -7,11 +7,11 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.mappers.ERSMapper.getERSMessageValueFromJSON
-import io.hypersistence.utils.hibernate.type.array.ListArrayType
-import io.hypersistence.utils.hibernate.type.basic.PostgreSQLEnumType
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import jakarta.persistence.*
+import org.hibernate.annotations.JdbcType
 import org.hibernate.annotations.Type
+import org.hibernate.dialect.PostgreSQLEnumJdbcType
 import java.time.Instant
 import java.time.ZoneOffset.UTC
 
@@ -55,7 +55,6 @@ data class LogbookReportEntity(
     val imo: String? = null,
     @Column(name = "log_type")
     val messageType: String? = null,
-    @Type(ListArrayType::class)
     @Column(name = "analyzed_by_rules", columnDefinition = "varchar(100)[]")
     val analyzedByRules: List<String>? = listOf(),
     @Type(JsonBinaryType::class)
@@ -63,7 +62,7 @@ data class LogbookReportEntity(
     val message: String? = null,
     @Column(name = "integration_datetime_utc")
     val integrationDateTime: Instant,
-    @Type(PostgreSQLEnumType::class)
+    @JdbcType(PostgreSQLEnumJdbcType::class)
     @Column(name = "transmission_format", columnDefinition = "logbook_message_transmission_format")
     @Enumerated(EnumType.STRING)
     val transmissionFormat: LogbookTransmissionFormat,

@@ -6,10 +6,11 @@ import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SilencedAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
-import io.hypersistence.utils.hibernate.type.basic.PostgreSQLEnumType
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import jakarta.persistence.*
+import org.hibernate.annotations.JdbcType
 import org.hibernate.annotations.Type
+import org.hibernate.dialect.PostgreSQLEnumJdbcType
 import java.time.ZonedDateTime
 
 @Entity
@@ -31,7 +32,7 @@ data class SilencedAlertEntity(
     @Column(name = "ircs")
     val ircs: String? = null,
     @Enumerated(EnumType.STRING)
-    @Type(PostgreSQLEnumType::class)
+    @JdbcType(PostgreSQLEnumJdbcType::class)
     @Column(name = "vessel_identifier", columnDefinition = "vessel_identifier")
     val vesselIdentifier: VesselIdentifier,
     @Column(name = "flag_state")

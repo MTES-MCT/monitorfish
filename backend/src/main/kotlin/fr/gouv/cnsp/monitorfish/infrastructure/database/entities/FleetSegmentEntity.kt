@@ -1,12 +1,10 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
-import io.hypersistence.utils.hibernate.type.array.ListArrayType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
-import org.hibernate.annotations.Type
 
 @Entity
 @Table(name = "fleet_segments")
@@ -16,19 +14,14 @@ data class FleetSegmentEntity(
     val segment: String,
     @Column(name = "segment_name")
     val segmentName: String,
-    @Type(ListArrayType::class)
     @Column(name = "dirm", columnDefinition = "varchar(10)[]")
     val dirm: List<String>,
-    @Type(ListArrayType::class)
     @Column(name = "gears", columnDefinition = "varchar(3)[]")
     val gears: List<String>,
-    @Type(ListArrayType::class)
     @Column(name = "fao_areas", columnDefinition = "varchar(15)[]")
     val faoAreas: List<String>,
-    @Type(ListArrayType::class)
     @Column(name = "target_species", columnDefinition = "varchar(3)[]")
     val targetSpecies: List<String>,
-    @Type(ListArrayType::class)
     @Column(name = "bycatch_species", columnDefinition = "varchar(3)[]")
     val bycatchSpecies: List<String>,
     @Column(name = "impact_risk_factor")

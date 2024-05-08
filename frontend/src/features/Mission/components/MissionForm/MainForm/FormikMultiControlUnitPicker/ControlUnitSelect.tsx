@@ -1,18 +1,14 @@
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Icon, IconButton, MultiSelect, Select, TextInput } from '@mtes-mct/monitor-ui'
+import { Accent, getOptionsFromIdAndName, Icon, IconButton, MultiSelect, Select, TextInput } from '@mtes-mct/monitor-ui'
 import { isNotArchived } from '@utils/isNotArchived'
 import { useField } from 'formik'
-import { uniqBy } from 'lodash'
+import { sortBy, uniqBy } from 'lodash'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { ControlUnitWarningMessage } from './ControlUnitWarningMessage'
-import {
-  findControlUnitByname,
-  mapControlUnitsToUniqueSortedNamesAsOptions,
-  mapToSortedResourcesAsOptions
-} from './utils'
+import { mapToSortedResourcesAsOptions } from './utils'
 import { useGetEngagedControlUnitsQuery } from '../../../../monitorenvMissionApi'
 import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'
 import { missionFormActions } from '../../slice'
@@ -67,16 +63,16 @@ export function ControlUnitSelect({
     skip: !!isEdition
   })
 
-  const filteredNamesAsOptions = useMemo((): Option[] => {
+  const filteredUnitsAsOptions = useMemo(() => {
     if (!value.administration) {
-      return mapControlUnitsToUniqueSortedNamesAsOptions(activeAndSelectedControlUnits)
+      return sortBy(getOptionsFromIdAndName(activeAndSelectedControlUnits), ({ name }) => name)
     }
 
     const selectedAdministrationControlUnits = activeAndSelectedControlUnits.filter(
       ({ administration }) => administration === value.administration
     )
 
-    return mapControlUnitsToUniqueSortedNamesAsOptions(selectedAdministrationControlUnits)
+    return sortBy(getOptionsFromIdAndName(selectedAdministrationControlUnits), ({ name }) => name)
   }, [activeAndSelectedControlUnits, value])
 
   // Include archived resources if they're already selected
@@ -113,12 +109,14 @@ export function ControlUnitSelect({
   )
 
   const handleNameChange = useCallback(
-    (nextName: string | undefined) => {
+    (nextId: number | undefined) => {
       if (isLoading) {
         return
       }
 
-      const nextSelectedControlUnit = nextName ? findControlUnitByname(allControlUnits, nextName) : undefined
+      const nextSelectedControlUnit = nextId
+        ? allControlUnits.find(controlUnit => controlUnit.id === nextId)
+        : undefined
       const nextControlUnit: LegacyControlUnit.LegacyControlUnit | LegacyControlUnit.LegacyControlUnitDraft =
         nextSelectedControlUnit
           ? {
@@ -193,7 +191,7 @@ export function ControlUnitSelect({
         />
         <Select
           // TODO Investigate why updating `filteredNamesAsOptions` doesn't re-render the Select.
-          key={JSON.stringify(filteredNamesAsOptions)}
+          key={JSON.stringify(filteredUnitsAsOptions)}
           disabled={isLoading}
           error={error?.name}
           isErrorMessageHidden
@@ -201,9 +199,9 @@ export function ControlUnitSelect({
           label={`Unité ${index + 1}`}
           name={`name_${index}`}
           onChange={handleNameChange}
-          options={filteredNamesAsOptions}
+          options={filteredUnitsAsOptions}
           searchable
-          value={value.name}
+          value={value.id}
         />
         {!isEdition && <ControlUnitWarningMessage controlUnitIndex={index} missionId={missionId} />}
         <MultiSelect

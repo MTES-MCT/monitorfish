@@ -30,7 +30,7 @@ export function FormikMultiControlUnitPicker({
   const previousEngagedControlUnit = usePrevious(engagedControlUnit)
 
   const { updateMissionActionOtherControlsCheckboxes } = useGetMainFormFormikUsecases()
-  const previousIsControlUnitPAM = !!usePrevious(
+  const isPreviousControlUnitPAM = !!usePrevious(
     values.controlUnits?.some(controlUnit => controlUnit.id && PAMControlUnitIds.includes(controlUnit.id))
   )
 
@@ -63,12 +63,12 @@ export function FormikMultiControlUnitPicker({
     (index: number) => {
       const nextControlUnits = remove(index, 1, values[name])
 
-      updateMissionActionOtherControlsCheckboxes(values, previousIsControlUnitPAM)
+      updateMissionActionOtherControlsCheckboxes(values, isPreviousControlUnitPAM)
       setFieldValue(name, nextControlUnits)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [values[name], previousIsControlUnitPAM]
+    [values[name], isPreviousControlUnitPAM]
   )
 
   const handleChange = useCallback(
@@ -78,13 +78,13 @@ export function FormikMultiControlUnitPicker({
     ) => {
       const nextControlUnits = update(index, nextControlUnit, values[name])
 
-      updateMissionActionOtherControlsCheckboxes(values, previousIsControlUnitPAM)
+      updateMissionActionOtherControlsCheckboxes(values, isPreviousControlUnitPAM)
       setFieldValue(name, nextControlUnits)
       forceUpdate()
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [values[name], previousIsControlUnitPAM]
+    [values[name], isPreviousControlUnitPAM]
   )
 
   useEffect(() => {

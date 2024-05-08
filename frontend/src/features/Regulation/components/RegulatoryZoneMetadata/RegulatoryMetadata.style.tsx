@@ -15,7 +15,8 @@ export const List = styled.ul<{
   flex-direction: column;
   font-size: 13px;
   color: ${p => p.theme.color.gunMetal};
-  padding-bottom: ${p => (p.$isLast ? 0 : 20)}px;
+  padding-bottom: 8px;
+  padding-left: 0px;
   margin: 0;
 `
 
@@ -52,6 +53,7 @@ export const Value = styled.td<{
   }
   ul {
     margin: 0;
+    padding-left: 10px;
   }
 `
 
@@ -82,6 +84,7 @@ export const SectionTitle = styled.span<{
   font-size: 13px;
   align-items: center;
   margin-top: ${p => (p.$hasPreviousRegulatedGearsBloc ? 20 : 0)}px;
+  margin-bottom: 8px;
 `
 
 export const Fields = styled.table`

@@ -1,11 +1,11 @@
-import { logSoftError } from '@mtes-mct/monitor-ui'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { Button, logSoftError, Size } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { ResultLawType } from './ResultLawType'
 import layer from '../../../../domain/shared_slices/Layer'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 
 import type { LayerSliceNamespace } from '../../../../domain/entities/layers/types'
 
@@ -15,8 +15,9 @@ export type RegulatoryLayerSearchResultListProps = {
 export function ResultList({ namespace }: RegulatoryLayerSearchResultListProps) {
   const dispatch = useMainAppDispatch()
   const { setLayersSideBarOpenedLayerType } = layer[namespace].actions
-  const { advancedSearchIsOpen, regulatoryLayersSearchResult } = useMainAppSelector(
-    state => state.regulatoryLayerSearch
+  const advancedSearchIsOpen = useMainAppSelector(state => state.regulatoryLayerSearch.advancedSearchIsOpen)
+  const regulatoryLayersSearchResult = useMainAppSelector(
+    state => state.regulatoryLayerSearch.regulatoryLayersSearchResult
   )
   const layersSidebarOpenedLayerType = useMainAppSelector(state => state.layer.layersSidebarOpenedLayerType)
   const hasOneLayerTypeOpen = useMemo(() => layersSidebarOpenedLayerType !== undefined, [layersSidebarOpenedLayerType])
@@ -28,8 +29,8 @@ export function ResultList({ namespace }: RegulatoryLayerSearchResultListProps) 
   return (
     <>
       {hasOneLayerTypeOpen && hasSearchResults && (
-        <ShowResultList
-          data-cy="regulatory-search-show-results"
+        <ShowResultButton
+          isFullWidth
           onClick={() => {
             if (!setLayersSideBarOpenedLayerType) {
               logSoftError({
@@ -41,37 +42,26 @@ export function ResultList({ namespace }: RegulatoryLayerSearchResultListProps) 
 
             dispatch(setLayersSideBarOpenedLayerType(undefined))
           }}
+          size={Size.LARGE}
         >
-          Afficher les résultats
-        </ShowResultList>
+          Afficher les résultats de la recherche
+        </ShowResultButton>
       )}
       {!hasOneLayerTypeOpen && (
         <List $advancedSearchIsOpen={advancedSearchIsOpen}>
-          {hasSearchResults && regulatoryLayersSearchResult
-            ? Object.entries(regulatoryLayersSearchResult)?.map(([lawType, topic]) => (
-                <ResultLawType key={lawType} regulatoryLayerLawType={lawType} topic={topic} />
-              ))
-            : null}
+          {hasSearchResults &&
+            regulatoryLayersSearchResult &&
+            Object.entries(regulatoryLayersSearchResult)?.map(([lawType, topic]) => (
+              <ResultLawType key={lawType} regulatoryLayerLawType={lawType} topic={topic} />
+            ))}
         </List>
       )}
     </>
   )
 }
 
-const ShowResultList = styled.div`
-  background: ${p => p.theme.color.charcoal};
-  color: ${p => p.theme.color.gainsboro};
-  cursor: pointer;
-  height: 0;
+const ShowResultButton = styled(Button)`
   height: 36px;
-  line-height: 2.5em;
-  margin: 0;
-  overflow: hidden;
-  padding: 0;
-  text-align: center;
-  transition: 0.5s all;
-  user-select: none;
-  width: 100%;
 `
 
 const List = styled.ul<{

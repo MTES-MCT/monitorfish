@@ -381,7 +381,7 @@ export function VesselList({ namespace }) {
             </Modal.Title>
           </StyledModalHeader>
           <Modal.Body>
-            <LegacyRsuiteComponentsWrapper overrideCheckbox>
+            <LegacyRsuiteComponentsWrapper>
               <Title>FILTRER LA LISTE</Title>
               <VesselListFilters
                 controls={{

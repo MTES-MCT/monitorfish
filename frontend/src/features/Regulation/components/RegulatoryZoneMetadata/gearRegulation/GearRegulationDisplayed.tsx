@@ -1,9 +1,9 @@
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { FrontendError } from '@libs/FrontendError'
 import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
 
 import { RegulatedGears } from './RegulatedGears'
-import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
-import { FrontendError } from '../../../../../libs/FrontendError'
 import { DEFAULT_AUTHORIZED_REGULATED_GEARS, DEFAULT_UNAUTHORIZED_REGULATED_GEARS } from '../../../utils'
 import { Section } from '../RegulatoryMetadata.style'
 
@@ -22,18 +22,18 @@ export function GearRegulationDisplayed() {
 
   return (
     <>
-      {gearRegulationIsNotEmpty ? (
+      {gearRegulationIsNotEmpty && (
         <Section>
-          {hasAuthorizedContent ? (
+          {hasAuthorizedContent && (
             <RegulatedGears authorized regulatedGearsObject={authorized || DEFAULT_AUTHORIZED_REGULATED_GEARS} />
-          ) : null}
-          {hasUnauthorizedContent ? (
+          )}
+          {hasUnauthorizedContent && (
             <RegulatedGears
               authorized={false}
               hasPreviousRegulatedGearsBloc={hasAuthorizedContent}
               regulatedGearsObject={unauthorized || DEFAULT_UNAUTHORIZED_REGULATED_GEARS}
             />
-          ) : null}
+          )}
           {otherInfo && (
             <MarkdownWithMargin
               $hasMargin={hasAuthorizedContent || hasUnauthorizedContent}
@@ -43,7 +43,7 @@ export function GearRegulationDisplayed() {
             </MarkdownWithMargin>
           )}
         </Section>
-      ) : null}
+      )}
     </>
   )
 }

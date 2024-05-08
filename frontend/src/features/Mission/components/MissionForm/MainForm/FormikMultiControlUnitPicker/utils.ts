@@ -4,13 +4,6 @@ import { sortBy, uniq } from 'lodash'
 import type { Option } from '@mtes-mct/monitor-ui'
 import type { LegacyControlUnit } from 'domain/types/legacyControlUnit'
 
-export function findControlUnitByname(
-  controlUnits: LegacyControlUnit.LegacyControlUnit[],
-  name: LegacyControlUnit.LegacyControlUnit['name']
-): LegacyControlUnit.LegacyControlUnit | undefined {
-  return controlUnits.find(controlUnit => controlUnit.name === name)
-}
-
 export function mapControlUnitsToUniqueSortedNamesAsOptions(
   controlUnits: LegacyControlUnit.LegacyControlUnit[]
 ): Option[] {

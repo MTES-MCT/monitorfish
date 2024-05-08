@@ -1,7 +1,7 @@
 plugins {
     `java-library`
     `maven-publish`
-    id("org.springframework.boot") version "3.1.7"
+    id("org.springframework.boot") version "3.2.5"
     id("org.jetbrains.kotlin.plugin.spring") version "1.9.23"
     kotlin("jvm") version "1.9.23"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.9.22"
@@ -36,17 +36,17 @@ tasks.named("compileKotlin", org.jetbrains.kotlin.gradle.tasks.KotlinCompilation
 }
 
 dependencies {
-    api("org.springframework.boot:spring-boot-starter-web:3.1.7")
+    api("org.springframework.boot:spring-boot-starter-web:3.2.5")
     api("org.springframework.security:spring-security-oauth2-resource-server:6.1.5")
     api("org.springframework.security:spring-security-oauth2-jose:6.1.5")
-    api("org.springframework.boot:spring-boot-starter-actuator:3.1.7")
-    api("org.springframework.boot:spring-boot-starter-json:3.1.7")
-    api("org.springframework.boot:spring-boot-starter-security:3.1.7")
-    api("org.springframework.boot:spring-boot-starter-data-jpa:3.1.7")
-    api("org.springframework.boot:spring-boot-configuration-processor:3.1.7")
-    api("org.springframework.boot:spring-boot-starter-cache:3.1.7")
-    api("org.springframework.boot:spring-boot-starter-log4j2:3.1.7")
-    runtimeOnly("org.springframework.boot:spring-boot-devtools:3.1.7")
+    api("org.springframework.boot:spring-boot-starter-actuator:3.2.5")
+    api("org.springframework.boot:spring-boot-starter-json:3.2.5")
+    api("org.springframework.boot:spring-boot-starter-security:3.2.5")
+    api("org.springframework.boot:spring-boot-starter-data-jpa:3.2.5")
+    api("org.springframework.boot:spring-boot-configuration-processor:3.2.5")
+    api("org.springframework.boot:spring-boot-starter-cache:3.2.5")
+    api("org.springframework.boot:spring-boot-starter-log4j2:3.2.5")
+    runtimeOnly("org.springframework.boot:spring-boot-devtools:3.2.5")
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
     api("io.ktor:ktor-client-core-jvm:2.3.6")
     api("io.ktor:ktor-client-java-jvm:2.3.3")
@@ -64,7 +64,7 @@ dependencies {
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     api("com.neovisionaries:nv-i18n:1.29")
     api("com.github.ben-manes.caffeine:caffeine:3.1.8")
-    api("io.hypersistence:hypersistence-utils-hibernate-62:3.7.1")
+    api("io.hypersistence:hypersistence-utils-hibernate-63:3.7.5")
     api("org.locationtech.jts:jts-core:1.19.0")
     api("org.hibernate:hibernate-spatial:6.1.7.Final")
     api("io.sentry:sentry:6.31.0")
@@ -77,7 +77,7 @@ dependencies {
     testImplementation("org.testcontainers:junit-jupiter:1.19.4")
     testImplementation("jakarta.servlet:jakarta.servlet-api:6.0.0")
     testImplementation("com.squareup.okhttp3:mockwebserver:4.11.0")
-    testImplementation("org.springframework.boot:spring-boot-starter-test:3.1.7")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:3.2.5")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc:3.0.1")
 }
 

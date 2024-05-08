@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Species
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
-import io.hypersistence.utils.hibernate.type.array.ListArrayType
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -34,7 +33,6 @@ data class RiskFactorsEntity(
     @Type(JsonBinaryType::class)
     @Column(name = "species_onboard", columnDefinition = "jsonb")
     val speciesOnboard: String?,
-    @Type(ListArrayType::class)
     @Column(name = "segments", columnDefinition = "varchar(50)[]")
     val segments: List<String>,
     @Column(name = "segment_highest_impact")

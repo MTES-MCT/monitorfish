@@ -33,7 +33,7 @@ jobs:
 
       - name: Check Unit Tests status
         id: check_unit_tests_status
-        uses: LASER-Yi/workflow-status@v0.0.2
+        uses: LASER-Yi/workflow-status@v0.1.0
         with:
           branch: ${{ github.event.workflow_run.head_branch }}
           token: ${{ secrets.GITHUB_TOKEN }}

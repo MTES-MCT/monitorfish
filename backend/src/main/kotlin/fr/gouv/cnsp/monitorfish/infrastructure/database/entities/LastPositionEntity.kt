@@ -7,7 +7,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Species
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
-import io.hypersistence.utils.hibernate.type.array.ListArrayType
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import jakarta.persistence.*
 import org.hibernate.annotations.Type
@@ -72,7 +71,6 @@ data class LastPositionEntity(
     @Type(JsonBinaryType::class)
     @Column(name = "gear_onboard", columnDefinition = "jsonb")
     val gearOnboard: String? = null,
-    @Type(ListArrayType::class)
     @Column(name = "segments", columnDefinition = "varchar(50)[]")
     val segments: List<String>? = listOf(),
     @Type(JsonBinaryType::class)
@@ -101,12 +99,10 @@ data class LastPositionEntity(
     val underCharter: Boolean? = null,
     @Column(name = "is_at_port")
     val isAtPort: Boolean? = null,
-    @Type(ListArrayType::class)
     @Column(name = "alerts", columnDefinition = "varchar(200)[]")
     val alerts: List<String>? = listOf(),
     @Column(name = "beacon_malfunction_id")
     val beaconMalfunctionId: Int?,
-    @Type(ListArrayType::class)
     @Column(name = "reportings", columnDefinition = "varchar(200)[]")
     val reportings: List<String>? = listOf(),
 ) : Serializable {

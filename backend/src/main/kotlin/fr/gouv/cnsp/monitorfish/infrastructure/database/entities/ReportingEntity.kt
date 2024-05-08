@@ -7,10 +7,11 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.mappers.ReportingMapper
-import io.hypersistence.utils.hibernate.type.basic.PostgreSQLEnumType
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import jakarta.persistence.*
+import org.hibernate.annotations.JdbcType
 import org.hibernate.annotations.Type
+import org.hibernate.dialect.PostgreSQLEnumJdbcType
 import java.time.ZonedDateTime
 
 @Entity
@@ -24,7 +25,7 @@ data class ReportingEntity(
     @Column(name = "vessel_id")
     val vesselId: Int? = null,
     @Enumerated(EnumType.STRING)
-    @Type(PostgreSQLEnumType::class)
+    @JdbcType(PostgreSQLEnumJdbcType::class)
     @Column(name = "type", nullable = false, columnDefinition = "reporting_type")
     val type: ReportingType,
     @Column(name = "vessel_name")
@@ -36,7 +37,7 @@ data class ReportingEntity(
     @Column(name = "ircs")
     val ircs: String? = null,
     @Enumerated(EnumType.STRING)
-    @Type(PostgreSQLEnumType::class)
+    @JdbcType(PostgreSQLEnumJdbcType::class)
     @Column(name = "vessel_identifier", columnDefinition = "vessel_identifier")
     val vesselIdentifier: VesselIdentifier? = null,
     @Column(name = "flag_state")

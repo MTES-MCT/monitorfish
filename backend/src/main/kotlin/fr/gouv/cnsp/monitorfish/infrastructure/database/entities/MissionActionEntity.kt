@@ -3,11 +3,11 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Facade
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
-import io.hypersistence.utils.hibernate.type.array.ListArrayType
-import io.hypersistence.utils.hibernate.type.basic.PostgreSQLEnumType
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import jakarta.persistence.*
+import org.hibernate.annotations.JdbcType
 import org.hibernate.annotations.Type
+import org.hibernate.dialect.PostgreSQLEnumJdbcType
 import java.time.Instant
 import java.time.ZoneOffset
 
@@ -34,10 +34,8 @@ class MissionActionEntity(
     val flagState: String? = null,
     @Column(name = "district_code")
     val districtCode: String? = null,
-    @Type(ListArrayType::class)
     @Column(name = "flight_goals", columnDefinition = "varchar(100)[]")
     val flightGoals: List<String>? = listOf(),
-    @Type(ListArrayType::class)
     @Column(name = "fao_areas", columnDefinition = "varchar(100)[]")
     val faoAreas: List<String>? = listOf(),
     @Column(name = "mission_id")
@@ -129,7 +127,7 @@ class MissionActionEntity(
     @Column(name = "completed_by")
     val completedBy: String? = null,
     @Enumerated(EnumType.STRING)
-    @Type(PostgreSQLEnumType::class)
+    @JdbcType(PostgreSQLEnumJdbcType::class)
     @Column(name = "completion", columnDefinition = "mission_action_completion")
     val completion: Completion,
     @Column(name = "is_administrative_control")

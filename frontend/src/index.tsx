@@ -12,7 +12,6 @@ import 'ol/ol.css'
 import '@mtes-mct/monitor-ui/assets/stylesheets/rsuite-override.css'
 
 if (import.meta.env.PROD) {
-  // https://docs.sentry.io/platforms/javascript/performance/#configure-the-sample-rate
   init({
     dsn: import.meta.env.FRONTEND_SENTRY_DSN ?? '',
     environment: import.meta.env.FRONTEND_SENTRY_ENV ?? '',

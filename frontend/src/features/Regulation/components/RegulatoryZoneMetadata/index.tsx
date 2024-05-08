@@ -110,4 +110,5 @@ const Content = styled.div`
   background: ${THEME.color.white};
   overflow-y: auto;
   max-height: 72vh;
+  border: 1px solid ${THEME.color.gainsboro};
 `

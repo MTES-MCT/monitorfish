@@ -125,10 +125,10 @@ function UnmemoizedRegulatoryLayerSearchResultTopic({
         <ZonesNumber data-cy="regulatory-layer-topic-count">{`${topicDetails?.length}/${numberOfTotalZones}`}</ZonesNumber>
         <StyledCheckbox
           checked={!!((areAllTopicZonesChecked || areAllZonesAlreadySelected) && regulatoryLayerTopic)}
-          disabled={areAllSearchedZonesChecked || false}
           label=""
           name={`${regulatoryLayerTopic}-checkbox`}
           onClick={handleCheckAllZones}
+          readOnly={areAllSearchedZonesChecked}
         />
       </LayerTopic>
       <ResultZones

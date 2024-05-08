@@ -89,11 +89,11 @@ export function ResultZone({ isOpen, regulatoryZone }: RegulatoryLayerSearchResu
           <StyledCheckbox
             checked={zoneIsChecked || isZoneAlreadySelected}
             data-cy="regulatory-zone-check"
-            disabled={isZoneAlreadySelected}
             label=""
             name={`${regulatoryZone.id}-checkbox`}
             /* eslint-disable-next-line react/jsx-no-bind */
             onClick={toggleCheckZone}
+            readOnly={isZoneAlreadySelected}
             title={isZoneAlreadySelected ? 'zone déjà ajoutée à mes zones réglementaires' : ''}
           />
         </>

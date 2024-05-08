@@ -13,7 +13,7 @@ import {
   Vessel,
   vesselIsShowed
 } from '../../../../domain/entities/vessel/vessel'
-import { useIsSuperUser } from '../../../../hooks/authorization/useIsSuperUser'
+import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { monitorfishMap } from '../../monitorfishMap'
 
 const VesselAlertLayer = () => {

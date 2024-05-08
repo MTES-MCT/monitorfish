@@ -12,10 +12,10 @@ import {
   TimeAgoCell
 } from './tableCells'
 import { sortVesselsByProperty } from './tableSort'
+import { useIsSuperUser } from '../../auth/hooks/useIsSuperUser'
 import { COLORS } from '../../constants/constants'
 import { getCoordinates } from '../../coordinates'
 import { OPENLAYERS_PROJECTION } from '../../domain/entities/map/constants'
-import { useIsSuperUser } from '../../hooks/authorization/useIsSuperUser'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import FlagSVG from '../icons/flag.svg?react'
 

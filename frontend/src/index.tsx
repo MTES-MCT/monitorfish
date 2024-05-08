@@ -1,7 +1,7 @@
 import { BrowserTracing } from '@sentry/browser'
 import { init } from '@sentry/react'
 import { createRoot } from 'react-dom/client'
-import { AuthProvider, withAuth } from 'react-oidc-context'
+import { AuthProvider } from 'react-oidc-context'
 
 import { App } from './App'
 import { getOIDCConfig } from './auth/getOIDCConfig'
@@ -37,12 +37,10 @@ const root = createRoot(container)
 const { IS_OIDC_ENABLED, oidcConfig } = getOIDCConfig()
 
 if (IS_OIDC_ENABLED) {
-  const AppWithAuth = withAuth(App)
-
   root.render(
     // eslint-disable-next-line react/jsx-props-no-spreading
     <AuthProvider {...oidcConfig}>
-      <AppWithAuth />
+      <App />
     </AuthProvider>
   )
 } else {

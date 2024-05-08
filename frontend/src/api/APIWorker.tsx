@@ -1,6 +1,7 @@
 import { fleetSegmentApi } from '@features/FleetSegment/apis'
 import { useEffect, useRef, useState } from 'react'
 
+import { useIsSuperUser } from '../auth/hooks/useIsSuperUser'
 import { SideWindowStatus } from '../domain/entities/sideWindow/constants'
 import { VesselSidebarTab } from '../domain/entities/vessel/vessel'
 import { setIsUpdatingVessels } from '../domain/shared_slices/Global'
@@ -17,7 +18,6 @@ import { getVesselReportings } from '../domain/use_cases/vessel/getVesselReporti
 import { updateVesselTracks } from '../domain/use_cases/vessel/updateVesselTracks'
 import getAllRegulatoryLayers from '../features/Regulation/useCases/getAllRegulatoryLayers'
 import { getAllCurrentReportings } from '../features/Reporting/useCases/getAllCurrentReportings'
-import { useIsSuperUser } from '../hooks/authorization/useIsSuperUser'
 import { useMainAppDispatch } from '../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../hooks/useMainAppSelector'
 

@@ -1,14 +1,14 @@
-import { memo, useEffect, useState, type Dispatch, type SetStateAction } from 'react'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { Icon, THEME } from '@mtes-mct/monitor-ui'
+import { memo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { CloseIcon } from '../../../commonStyles/icons/CloseIcon.style'
 import { EditIcon } from '../../../commonStyles/icons/EditIcon.style'
 import { HideIcon } from '../../../commonStyles/icons/HideIcon.style'
-import { PaperDarkIcon, PaperIcon } from '../../../commonStyles/icons/REGPaperIcon.style'
 import { ShowIcon } from '../../../commonStyles/icons/ShowIcon.style'
 import { hideLayer } from '../../../LayersSidebar/useCases/hideLayer'
 import zoomInLayer from '../../../LayersSidebar/useCases/zoomInLayer'
@@ -22,33 +22,6 @@ import { showRegulatoryZoneMetadata } from '../../useCases/showRegulatoryZoneMet
 import type { LayerSliceNamespace } from '../../../../domain/entities/layers/types'
 import type { RegulatoryZone as RegulatoryZoneType } from '../../types'
 import type { Promisable } from 'type-fest'
-
-export function showOrHideMetadataIcon(
-  regulatoryZoneMetadata: RegulatoryZoneType | undefined,
-  regulatoryZone: RegulatoryZoneType,
-  setMetadataIsShown: Dispatch<SetStateAction<boolean>>
-) {
-  if (
-    regulatoryZoneMetadata &&
-    (regulatoryZone.topic !== regulatoryZoneMetadata.topic || regulatoryZone.zone !== regulatoryZoneMetadata.zone)
-  ) {
-    setMetadataIsShown(false)
-
-    return
-  }
-
-  if (
-    regulatoryZoneMetadata &&
-    regulatoryZone.topic === regulatoryZoneMetadata.topic &&
-    regulatoryZone.zone === regulatoryZoneMetadata.zone
-  ) {
-    setMetadataIsShown(true)
-
-    return
-  }
-
-  setMetadataIsShown(false)
-}
 
 export type RegulatoryZoneProps = {
   allowRemoveZone: boolean
@@ -76,23 +49,17 @@ function UnmemoizedRegulatoryZone({
     state.layer.showedLayers.some(layer => layer.id === regulatoryZone.id)
   )
 
-  const [metadataIsShown, setMetadataIsShown] = useState(false)
+  const isMetadataShown = regulatoryZoneMetadata?.id === regulatoryZone.id
   const [isOver, setIsOver] = useState(false)
   const vectorLayerStyle = getRegulatoryLayerStyle(undefined, regulatoryZone)
 
   const callShowRegulatoryZoneMetadata = (zone: RegulatoryZoneType) => {
-    if (!metadataIsShown) {
+    if (!isMetadataShown) {
       dispatch(showRegulatoryZoneMetadata(zone))
-      setMetadataIsShown(true)
     } else {
       dispatch(closeRegulatoryZoneMetadata())
-      setMetadataIsShown(false)
     }
   }
-
-  useEffect(() => {
-    showOrHideMetadataIcon(regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown)
-  }, [regulatoryZoneMetadata, regulatoryZone])
 
   const triggerShowRegulatoryZone = () => {
     if (!zoneIsShown && isReadyToShowRegulatoryLayers) {
@@ -148,15 +115,18 @@ function UnmemoizedRegulatoryZone({
             title="Editer la réglementation"
           />
         )}
-        {metadataIsShown ? (
-          <PaperDarkIcon
+        {isMetadataShown ? (
+          <StyledIconSummary
             onClick={() => callShowRegulatoryZoneMetadata(regulatoryZone)}
+            size={20}
             title="Fermer la réglementation"
           />
         ) : (
-          <PaperIcon
+          <StyledIconSummary
+            color={THEME.color.lightGray}
             data-cy="regulatory-layers-show-metadata"
             onClick={() => callShowRegulatoryZoneMetadata(regulatoryZone)}
+            size={20}
             title="Afficher la réglementation"
           />
         )}
@@ -189,6 +159,11 @@ function UnmemoizedRegulatoryZone({
     </Zone>
   )
 }
+
+const StyledIconSummary = styled(Icon.Summary)`
+  margin-right: 6px;
+  margin-top: 2px;
+`
 
 const Rectangle = styled.div<{
   // TODO I don't understand this `ol/Style` type. Properly type that.
@@ -242,6 +217,8 @@ const Name = styled.span`
   padding-right: 6px;
   overflow-x: hidden !important;
   text-overflow: ellipsis;
+  padding-top: 5px;
+  padding-bottom: 5px;
 `
 
 export const RegulatoryZone = memo(UnmemoizedRegulatoryZone)

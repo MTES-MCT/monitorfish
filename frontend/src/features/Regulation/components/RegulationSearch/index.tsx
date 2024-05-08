@@ -1,4 +1,7 @@
-import { logSoftError } from '@mtes-mct/monitor-ui'
+import { useEscapeFromKeyboard } from '@hooks/useEscapeFromKeyboard'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { Button, Icon, logSoftError, Size } from '@mtes-mct/monitor-ui'
 import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
@@ -6,9 +9,6 @@ import { ResultList } from './ResultList'
 import { SearchInput } from './SearchInput'
 import { resetRegulatoryZonesChecked, setRegulatoryLayersSearchResult } from './slice'
 import layer from '../../../../domain/shared_slices/Layer'
-import { useEscapeFromKeyboard } from '../../../../hooks/useEscapeFromKeyboard'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import {
   addRegulatoryZonesToMyLayers,
   closeRegulatoryZoneMetadataPanel,
@@ -46,7 +46,6 @@ export function RegulationSearch({
 
     dispatch(resetRegulatoryGeometriesToPreview())
     dispatch(resetRegulatoryZonesChecked())
-    // dispatch(setRegulatoryLayersSearchResult(null))
   }, [dispatch, layersSidebarOpenedLayerType])
 
   useEffect(() => {
@@ -88,11 +87,13 @@ export function RegulationSearch({
     <Search ref={wrapperRef}>
       <SearchInput />
       <ResultList namespace={namespace} />
-      {/* TODO Use monitor-ui `<Button />` here. */}
       <AddRegulatoryLayer
-        $isShown={!!regulatoryZonesChecked?.length}
+        $isShown={!!regulatoryZonesChecked?.length || !!numberOfRegulatoryLayersSaved}
         data-cy="regulatory-search-add-zones-button"
+        Icon={regulatoryZonesChecked.length ? Icon.Save : undefined}
+        isFullWidth
         onClick={() => saveRegulatoryLayers(regulatoryZonesChecked)}
+        size={Size.LARGE}
       >
         {numberOfRegulatoryLayersSaved
           ? `${numberOfRegulatoryLayersSaved} zones ajoutées`
@@ -106,23 +107,14 @@ const Search = styled.div`
   width: 350px;
 `
 
-const AddRegulatoryLayer = styled.div<{
+const AddRegulatoryLayer = styled(Button)<{
   $isShown: boolean
 }>`
-  cursor: pointer;
-  border-radius: 0;
-  font-size: 13px;
-  background: ${p => p.theme.color.charcoal};
-  color: ${p => p.theme.color.gainsboro};
-  padding: 0;
-  line-height: 2.5em;
-  margin: 0;
-  height: 0;
-  width: 100%;
-  overflow: hidden;
-  user-select: none;
+  display: flex;
+  opacity: ${p => (p.$isShown ? 1 : 0)};
   height: ${p => (p.$isShown ? '36' : '0')}px;
-  max-height: 600px;
-  text-align: center;
+  padding: ${p => (p.$isShown ? 'inherit' : '0')}px;
+  border: ${p => (p.$isShown ? 'inherit' : '0')}px;
   transition: 0.5s all;
+  overflow: hidden;
 `

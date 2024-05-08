@@ -1,13 +1,12 @@
+import { ZonePreview } from '@features/Regulation/components/ZonePreview'
+import { THEME } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../constants/constants'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
-import { getRegulatoryLayerStyle } from '../../Regulation/layers/styles/regulatoryLayer.style'
 
-import type { BaseRegulatoryZone } from '../../Regulation/types'
+import type { RegulatoryZone } from '../../Regulation/types'
 import type Feature from 'ol/Feature'
-import type Style from 'ol/style/Style'
 
 type LayerDetailsBoxProps = {
   feature: Feature
@@ -21,15 +20,10 @@ export function LayerDetailsBox({ feature }: LayerDetailsBoxProps) {
     return feature.getProperties()
   }, [feature])
 
-  const vectorLayerStyle = useMemo(
-    () => getRegulatoryLayerStyle(undefined, regulatoryFeatureProperties as BaseRegulatoryZone),
-    [regulatoryFeatureProperties]
-  )
-
   return (
     regulatoryFeatureProperties && (
       <RegulationDetails>
-        <Rectangle vectorLayerStyle={vectorLayerStyle} />
+        <StyledZonePreview regulatoryZone={regulatoryFeatureProperties as RegulatoryZone} />
         <Text>
           {regulatoryFeatureProperties?.topic}
           {regulatoryFeatureProperties?.zone && <ZoneName>{regulatoryFeatureProperties?.zone}</ZoneName>}
@@ -39,19 +33,7 @@ export function LayerDetailsBox({ feature }: LayerDetailsBoxProps) {
   )
 }
 
-const Rectangle = styled.div<{
-  vectorLayerStyle: Style
-}>`
-  width: 14px;
-  height: 14px;
-  background: ${p =>
-    p.vectorLayerStyle?.getFill() ? p.vectorLayerStyle.getFill()?.getColor()?.toString() : p.theme.color.lightGray};
-  border: 1px solid
-    ${p =>
-      p.vectorLayerStyle?.getStroke()
-        ? p.vectorLayerStyle.getStroke()?.getColor().toString()
-        : p.theme.color.slateGray};
-  margin-right: 7px;
+const StyledZonePreview = styled(ZonePreview)`
   margin-top: 5px;
 `
 
@@ -62,6 +44,7 @@ const Text = styled.span`
 
 const RegulationDetails = styled.span`
   position: absolute;
+  vertical-align: center;
   bottom: 10px;
   left: 420px;
   display: flex;
@@ -72,10 +55,10 @@ const RegulationDetails = styled.span`
   height: 21px;
   border: none;
   border-radius: 2px;
-  background: ${COLORS.gainsboro};
+  background: ${THEME.color.gainsboro};
   font-size: 13px;
   font-weight: 500;
-  color: ${COLORS.charcoal};
+  color: ${THEME.color.charcoal};
 `
 
 const ZoneName = styled.span`

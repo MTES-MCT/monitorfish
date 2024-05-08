@@ -217,6 +217,20 @@
             "name": "Voiture"
           }
         ]
+      },
+      {
+        "id": 10452,
+        "administration": "Conservatoire du Littoral",
+        "isArchived": false,
+        "name": "Autre",
+        "resources": []
+      },
+      {
+        "id": 10451,
+        "administration": "Autre",
+        "isArchived": false,
+        "name": "Autre",
+        "resources": []
       }
     ]
   }

@@ -14,7 +14,7 @@ export function RegulatoryReferencesDisplayed() {
       {regulatoryReferences && (
         <Section>
           <SectionTitle>Références réglementaires</SectionTitle>
-          <List>
+          <StyledList>
             {regulatoryReferences.map(regulatoryReference => (
               <Reference
                 key={`${regulatoryReference?.url}${regulatoryReference?.reference}`}
@@ -28,12 +28,18 @@ export function RegulatoryReferencesDisplayed() {
                 </Link>
               </Reference>
             ))}
-          </List>
+          </StyledList>
         </Section>
       )}
     </>
   )
 }
+
+const StyledList = styled(List)`
+  li {
+    margin-left: 16px;
+  }
+`
 
 const Reference = styled.li`
   list-style-type: '→';

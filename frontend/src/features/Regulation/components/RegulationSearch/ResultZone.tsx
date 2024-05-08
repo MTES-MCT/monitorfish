@@ -1,15 +1,13 @@
-import { useEffect, useMemo, useState } from 'react'
-import { Checkbox, CheckboxGroup } from 'rsuite'
-import styled, { css } from 'styled-components'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { Checkbox, Icon, THEME } from '@mtes-mct/monitor-ui'
+import { useMemo } from 'react'
+import styled from 'styled-components'
 
 import { checkRegulatoryZones, uncheckRegulatoryZones } from './slice'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { PaperDarkIcon, PaperIcon } from '../../../commonStyles/icons/REGPaperIcon.style'
-import { getRegulatoryLayerStyle } from '../../layers/styles/regulatoryLayer.style'
 import { closeRegulatoryZoneMetadata } from '../../useCases/closeRegulatoryZoneMetadata'
 import { showRegulatoryZoneMetadata } from '../../useCases/showRegulatoryZoneMetadata'
-import { showOrHideMetadataIcon } from '../RegulatoryZones/RegulatoryZone'
+import { ZonePreview } from '../ZonePreview'
 
 import type { RegulatoryZone } from '../../types'
 
@@ -19,14 +17,14 @@ export type RegulatoryLayerSearchResultZoneProps = {
 }
 export function ResultZone({ isOpen, regulatoryZone }: RegulatoryLayerSearchResultZoneProps) {
   const dispatch = useMainAppDispatch()
-
-  const { regulatoryZoneMetadata } = useMainAppSelector(state => state.regulatory)
+  const regulatoryZoneMetadata = useMainAppSelector(state => state.regulatory.regulatoryZoneMetadata)
   const zoneIsChecked = useMainAppSelector(
     state => !!state.regulatoryLayerSearch.regulatoryZonesChecked?.find(zone => zone.id === regulatoryZone.id)
   )
   const selectedRegulatoryLayers = useMainAppSelector(state => state.regulatory.selectedRegulatoryLayers)
+  const isMetadataShown = regulatoryZoneMetadata?.id === regulatoryZone.id
 
-  const zoneIsAlreadySelected = useMemo(() => {
+  const isZoneAlreadySelected = useMemo(() => {
     if (!selectedRegulatoryLayers) {
       return false
     }
@@ -36,76 +34,79 @@ export function ResultZone({ isOpen, regulatoryZone }: RegulatoryLayerSearchResu
       return false
     }
 
-    return selectedRegulatoryLayersZone.find(zone => zone.id === regulatoryZone.id)
+    return !!selectedRegulatoryLayersZone.find(zone => zone.id === regulatoryZone.id)
   }, [regulatoryZone.id, regulatoryZone.topic, selectedRegulatoryLayers])
 
-  const zoneStyle = getRegulatoryLayerStyle(undefined, regulatoryZone)
-  const [metadataIsShown, setMetadataIsShown] = useState(false)
-
   const showOrHideRegulatoryZoneMetadata = (partialRegulatoryZone: Pick<RegulatoryZone, 'topic' | 'zone'>) => {
-    if (!metadataIsShown) {
+    if (!isMetadataShown) {
       dispatch(showRegulatoryZoneMetadata(partialRegulatoryZone, true))
-      setMetadataIsShown(true)
     } else {
       dispatch(closeRegulatoryZoneMetadata())
-      setMetadataIsShown(false)
     }
   }
 
-  useEffect(() => {
-    showOrHideMetadataIcon(regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown)
-  }, [regulatoryZoneMetadata, regulatoryZone])
+  function toggleCheckZone() {
+    if (isZoneAlreadySelected) {
+      return
+    }
+
+    if (!zoneIsChecked) {
+      dispatch(checkRegulatoryZones([regulatoryZone]))
+
+      return
+    }
+
+    dispatch(uncheckRegulatoryZones([regulatoryZone]))
+  }
 
   return (
     <Zone>
-      <Rectangle vectorLayerStyle={zoneStyle} />
+      <ZonePreview regulatoryZone={regulatoryZone} />
       <Name
-        onClick={() =>
-          zoneIsChecked
-            ? dispatch(uncheckRegulatoryZones([regulatoryZone]))
-            : dispatch(checkRegulatoryZones([regulatoryZone]))
-        }
+        /* eslint-disable-next-line react/jsx-no-bind */
+        onClick={toggleCheckZone}
       >
-        {regulatoryZone?.zone ? regulatoryZone.zone : 'AUCUN NOM'}
+        {regulatoryZone?.zone ?? 'AUCUN NOM'}
       </Name>
-      {isOpen ? (
+      {isOpen && (
         <>
-          {metadataIsShown ? (
-            <CustomREGPaperDarkIcon
+          {isMetadataShown ? (
+            <Icon.Summary
+              /* eslint-disable-next-line react/jsx-no-bind */
               onClick={() => showOrHideRegulatoryZoneMetadata(regulatoryZone)}
+              size={20}
               title="Fermer la réglementation"
             />
           ) : (
-            <CustomREGPaperIcon
+            <Icon.Summary
+              color={THEME.color.lightGray}
+              /* eslint-disable-next-line react/jsx-no-bind */
               onClick={() => showOrHideRegulatoryZoneMetadata(regulatoryZone)}
+              size={20}
               title="Afficher la réglementation"
             />
           )}
-          <CheckboxGroup
-            inline
-            name="checkboxList"
-            onChange={() =>
-              zoneIsChecked
-                ? dispatch(uncheckRegulatoryZones([regulatoryZone]))
-                : dispatch(checkRegulatoryZones([regulatoryZone]))
-            }
-            value={zoneIsChecked || zoneIsAlreadySelected ? [regulatoryZone.id] : []}
-          >
-            {[
-              <Checkbox
-                key={regulatoryZone.id}
-                data-cy="regulatory-zone-check"
-                disabled={!!zoneIsAlreadySelected}
-                title={zoneIsAlreadySelected ? 'zone déjà ajoutée à mes zones réglementaires' : ''}
-                value={regulatoryZone.id}
-              />
-            ]}
-          </CheckboxGroup>
+          <StyledCheckbox
+            checked={zoneIsChecked || isZoneAlreadySelected}
+            data-cy="regulatory-zone-check"
+            label=""
+            name={`${regulatoryZone.id}-checkbox`}
+            /* eslint-disable-next-line react/jsx-no-bind */
+            onClick={toggleCheckZone}
+            readOnly={isZoneAlreadySelected}
+            title={isZoneAlreadySelected ? 'zone déjà ajoutée à mes zones réglementaires' : ''}
+          />
         </>
-      ) : null}
+      )}
     </Zone>
   )
 }
+
+const StyledCheckbox = styled(Checkbox)`
+  height: 20px;
+  margin-right: 2px;
+  margin-left: 8px;
+`
 
 const Name = styled.span`
   flex-grow: 1;
@@ -114,25 +115,8 @@ const Name = styled.span`
   padding-right: 6px;
   overflow-x: hidden !important;
   text-overflow: ellipsis;
-`
-
-const Rectangle = styled.div<{
-  vectorLayerStyle: any
-}>`
-  width: 14px;
-  height: 14px;
-  background: ${p =>
-    p.vectorLayerStyle && p.vectorLayerStyle.getFill()
-      ? p.vectorLayerStyle.getFill().getColor()
-      : p.theme.color.lightGray};
-  border: 1px solid
-    ${p =>
-      p.vectorLayerStyle && p.vectorLayerStyle.getStroke()
-        ? p.vectorLayerStyle.getStroke().getColor()
-        : p.theme.color.lightGray};
-  display: inline-block;
-  margin-right: 10px;
-  flex-shrink: 0;
+  padding-bottom: 5px;
+  padding-top: 5px;
 `
 
 const Zone = styled.span<{
@@ -147,20 +131,6 @@ const Zone = styled.span<{
   padding: 6px 0 6px 20px;
   user-select: none;
 
-  .rs-checkbox-wrapper {
-    top: 2px !important;
-  }
-
-  .rs-checkbox-checker {
-    padding-top: 24px;
-    margin-left: 0;
-  }
-
-  .rs-checkbox-inline {
-    width: 36px;
-    margin-left: 0px;
-  }
-
   :hover {
     background: ${p => p.theme.color.blueGray25};
   }
@@ -168,16 +138,4 @@ const Zone = styled.span<{
   > svg {
     margin: 0;
   }
-`
-
-const CustomPaperStyle = css`
-  width: 21px;
-  height: 23px;
-`
-
-const CustomREGPaperIcon = styled(PaperIcon)`
-  ${CustomPaperStyle}
-`
-const CustomREGPaperDarkIcon = styled(PaperDarkIcon)`
-  ${CustomPaperStyle}
 `

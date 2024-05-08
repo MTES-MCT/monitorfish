@@ -8,11 +8,11 @@ import { LegacyRsuiteComponentsWrapper } from 'ui/LegacyRsuiteComponentsWrapper'
 
 import { LandingPage } from './LandingPage'
 import { BackofficeMode } from '../api/BackofficeMode'
+import { useGetUserAuthorization } from '../auth/hooks/useGetUserAuthorization'
 import { NamespaceContext } from '../context/NamespaceContext'
 import { LayerSliceNamespace } from '../domain/entities/layers/types'
 import { BackOfficeMenu } from '../features/BackOffice/components/BackofficeMenu'
 import { ErrorToastNotification } from '../features/commonComponents/ErrorToastNotification'
-import { useGetUserAuthorization } from '../hooks/authorization/useGetUserAuthorization'
 import { backofficeStore, backofficeStorePersistor } from '../store'
 
 countries.registerLocale(COUNTRIES_FR)

@@ -1,6 +1,6 @@
 import React from 'react'
 
-type UserAccountContextType = {
+export type UserAccountContextType = {
   email: undefined | string
   isSuperUser: boolean
   logout: () => void

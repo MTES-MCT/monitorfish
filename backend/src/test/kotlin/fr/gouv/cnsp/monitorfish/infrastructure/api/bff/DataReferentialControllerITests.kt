@@ -1,8 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import fr.gouv.cnsp.monitorfish.config.OIDCProperties
-import fr.gouv.cnsp.monitorfish.config.SecurityConfig
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
@@ -14,6 +12,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
@@ -22,7 +21,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@Import(SecurityConfig::class, OIDCProperties::class, SentryConfig::class)
+@Import(SentryConfig::class)
+@AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = [(DataReferentialController::class)])
 class DataReferentialControllerITests {
 

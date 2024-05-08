@@ -1,4 +1,5 @@
 export type UserAuthorization = {
-  isLogged: boolean
-  isSuperUser: boolean
+  isLogged: boolean | undefined
+  isSuperUser: boolean | undefined
+  mustReload: boolean | undefined
 }

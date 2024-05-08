@@ -34,7 +34,7 @@ context('Sidebars > Regulatory Layers', () => {
 
     // Add the layer to My Zones
     cy.get('*[data-cy="regulatory-search-input"]').type('Cotentin biva')
-    cy.contains('Ouest Contentin Bivalves').click()
+    cy.contains('Ouest Cotentin Bivalves').click()
     cy.get('*[data-cy="regulatory-layer-topic-count"]').contains('1/1')
     cy.contains('Praires Ouest cotentin').parent().find('.Field-Checkbox > div').forceClick()
     cy.clickButton('Ajouter 1 zone')
@@ -452,8 +452,8 @@ context('Sidebars > Regulatory Layers', () => {
     // Select the removed zone again
     cy.contains('Afficher les résultats').click()
     cy.contains('Corse - Chaluts').first().click()
-    cy.contains('Interdiction temporaire').first().parent().find('input[type="checkbox"]').forceClick()
-    cy.contains('Ajouter 1 zone').click()
+    cy.contains('Interdiction temporaire').parent().find('.Field-Checkbox > div').forceClick()
+    cy.clickButton('Ajouter 1 zone')
 
     cy.contains('Mes zones réglementaires').parent().contains('Interdiction temporaire').should('be.visible')
     cy.contains('Mes zones réglementaires').parent().contains('6 MN').should('be.visible')

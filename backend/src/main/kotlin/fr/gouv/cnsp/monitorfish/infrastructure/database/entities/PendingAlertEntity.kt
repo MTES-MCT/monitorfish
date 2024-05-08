@@ -5,10 +5,11 @@ import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
-import io.hypersistence.utils.hibernate.type.basic.PostgreSQLEnumType
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import jakarta.persistence.*
+import org.hibernate.annotations.JdbcType
 import org.hibernate.annotations.Type
+import org.hibernate.dialect.PostgreSQLEnumJdbcType
 import java.time.ZonedDateTime
 
 @Entity
@@ -31,7 +32,7 @@ data class PendingAlertEntity(
     val vesselId: Int? = null,
     @Column(name = "vessel_identifier", columnDefinition = "vessel_identifier")
     @Enumerated(EnumType.STRING)
-    @Type(PostgreSQLEnumType::class)
+    @JdbcType(PostgreSQLEnumJdbcType::class)
     val vesselIdentifier: VesselIdentifier,
     @Column(name = "flag_state")
     @Enumerated(EnumType.STRING)

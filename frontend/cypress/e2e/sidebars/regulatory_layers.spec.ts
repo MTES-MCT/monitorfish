@@ -491,16 +491,9 @@ context('Sidebars > Regulatory Layers', () => {
     cy.clickButton('Ajouter 1 zone')
 
     // Show metadata the only "Armor CSJ Dragues" regulation zone
+    cy.getDataCy('regulatory-search-clean-input').click()
     cy.contains('Mes zones réglementaires').parent().contains('Armor CSJ Dragues').click()
-    cy.contains('Mes zones réglementaires')
-      .parent()
-      .contains('Secteur 3')
-      .parent()
-      .find('span')
-      .last()
-      .find('svg')
-      .first()
-      .click()
+    cy.contains('Secteur 3').parent().find('[title="Afficher la réglementation"]').click()
 
     // Check a few of its metadata values
     cy.contains('Reg. MEMN').should('be.visible')

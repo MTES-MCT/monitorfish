@@ -144,6 +144,10 @@ const Header = styled.div`
 
 const Field = styled.div`
   margin-bottom: 16px;
+
+  .rs-picker-popup {
+    width: max-content;
+  }
 `
 
 const TrackRequestBody = styled(MapComponent)<{

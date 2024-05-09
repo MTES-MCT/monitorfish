@@ -1,5 +1,6 @@
 import { HighlightPositionCell } from '@features/VesselSidebar/actions/TrackRequest/HighlightPositionCell'
 import { getLocalizedDayjs } from '@mtes-mct/monitor-ui'
+import { isNumeric } from '@utils/isNumeric'
 
 import { VesselTrackDepth } from '../../../../domain/entities/vesselTrackDepth'
 
@@ -26,7 +27,7 @@ export const POSITION_TABLE_COLUMNS: Array<ColumnDef<VesselPosition & { id: numb
     size: 160
   },
   {
-    accessorFn: row => `${row.speed} nds`,
+    accessorFn: row => (isNumeric(row.speed) ? `${row.speed} nds` : '-'),
     cell: info => <HighlightPositionCell row={info.row.original} value={info.getValue()} />,
     enableSorting: true,
     header: 'Vit.',
@@ -34,7 +35,7 @@ export const POSITION_TABLE_COLUMNS: Array<ColumnDef<VesselPosition & { id: numb
     size: 50
   },
   {
-    accessorFn: row => `${row.course} °`,
+    accessorFn: row => (isNumeric(row.course) ? `${row.course} °` : '-'),
     cell: info => <HighlightPositionCell row={info.row.original} value={info.getValue()} />,
     enableSorting: true,
     header: 'Cap',

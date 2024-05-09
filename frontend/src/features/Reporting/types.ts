@@ -1,7 +1,5 @@
 import { ReportingType } from '../../domain/types/reporting'
 
-import type { Reporting } from '../../domain/types/reporting'
-
 type ReportingTypeCharacteristic = {
   // TODO It should be useless now that types are discriminated.
   code: ReportingType
@@ -62,46 +60,4 @@ export const ReportingOriginActor = {
     name: 'Autre'
   }
 }
-
-// TODO This should be named differently to avoid confusion with `ReportingType.INFRACTION_SUSPICION` type.
-export const infractionSuspicionReportingTypes = Object.values(ReportingTypeCharacteristics)
-  .filter(type => type.isInfractionSuspicion)
-  .map(type => type.code)
-
-// TODO This should be named differently to avoid confusion with `ReportingType.INFRACTION_SUSPICION` type.
-export const reportingIsAnInfractionSuspicion = (reportingType: ReportingType): boolean =>
-  infractionSuspicionReportingTypes.indexOf(reportingType) >= 0
-
-/**
- * Get reporting for each years : Years are keys and reporting are values
- */
-// TODO Make that functional.
-// TODO Use an object with string keys instead of number ones.
-export const getYearsToReportingList = (
-  archivedReportingsFromDate: Date,
-  reportings: Reporting[]
-): Record<number, Reporting> => {
-  const nextYearsToReporting = {}
-  if (archivedReportingsFromDate) {
-    let fromYear = archivedReportingsFromDate.getUTCFullYear() + 1
-    const toYear = new Date().getUTCFullYear()
-    while (fromYear <= toYear) {
-      nextYearsToReporting[fromYear] = []
-      fromYear += 1
-    }
-  }
-
-  reportings.forEach(reporting => {
-    if (reporting?.creationDate) {
-      const year = new Date(reporting.validationDate || reporting.creationDate).getUTCFullYear()
-
-      if (nextYearsToReporting[year] && nextYearsToReporting[year].length) {
-        nextYearsToReporting[year] = nextYearsToReporting[year].concat(reporting)
-      } else {
-        nextYearsToReporting[year] = [reporting]
-      }
-    }
-  })
-
-  return nextYearsToReporting
-}
+/* eslint-enable sort-keys-fix/sort-keys-fix */

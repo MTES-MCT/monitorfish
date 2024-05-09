@@ -14,7 +14,7 @@ class TestUtils {
                     "resources":[],
                     "contact":null}],
                     "openBy":null,
-                    "closedBy":null,
+                    "completedBy":null,
                     "observationsCacem":null,
                     "observationsCnsp":null,
                     "facade":"NAMO",
@@ -37,8 +37,7 @@ class TestUtils {
                     }
                     ],
                     "isGeometryComputedFromControls":false,
-                    "missionSource":"MONITORFISH",
-                    "isClosed":false
+                    "missionSource":"MONITORFISH"
                 }
             """.trimIndent()
         }
@@ -55,7 +54,7 @@ class TestUtils {
                     "resources":[],
                     "contact":null}],
                     "openBy":null,
-                    "closedBy":null,
+                    "completedBy":null,
                     "observationsCacem":null,
                     "observationsCnsp":null,
                     "facade":"NAMO",
@@ -77,8 +76,7 @@ class TestUtils {
                     }
                     ],
                     "isGeometryComputedFromControls":false,
-                    "missionSource":"MONITORFISH",
-                    "isClosed":false
+                    "missionSource":"MONITORFISH"
                 },
                 {
                     "id":264,
@@ -90,7 +88,7 @@ class TestUtils {
                     "resources":[],
                     "contact":null}],
                     "openBy":"ADE",
-                    "closedBy":"",
+                    "completedBy":"",
                     "observationsCacem":"",
                     "observationsCnsp":"",
                     "facade":"MEMN",
@@ -99,8 +97,7 @@ class TestUtils {
                     "endDateTimeUtc":"2023-04-21T00:00:00Z",
                     "envActions":[],
                     "isGeometryComputedFromControls":false,
-                    "missionSource":"MONITORENV",
-                    "isClosed":true
+                    "missionSource":"MONITORENV"
                 },
                 {
                     "id":262,
@@ -112,7 +109,7 @@ class TestUtils {
                     "resources":[],
                     "contact":"0101010101"}],
                     "openBy":"ADE",
-                    "closedBy":null,
+                    "completedBy":null,
                     "observationsCacem":null,
                     "observationsCnsp":null,
                     "facade":"MEMN",
@@ -121,8 +118,7 @@ class TestUtils {
                     "endDateTimeUtc":"2023-04-18T15:15:08.43Z",
                     "envActions":[],
                     "isGeometryComputedFromControls":false,
-                    "missionSource":"MONITORFISH",
-                    "isClosed":false
+                    "missionSource":"MONITORFISH"
                 },
                 {
                     "id":257,
@@ -134,7 +130,7 @@ class TestUtils {
                     "resources":[],
                     "contact":null}],
                     "openBy":"",
-                    "closedBy":"",
+                    "completedBy":"",
                     "observationsCacem":"",
                     "observationsCnsp":"",
                     "facade":"MED",
@@ -143,8 +139,7 @@ class TestUtils {
                     "endDateTimeUtc":"2023-04-19T00:00:00Z",
                     "envActions":[],
                     "isGeometryComputedFromControls":false,
-                    "missionSource":"MONITORFISH",
-                    "isClosed":false
+                    "missionSource":"MONITORFISH"
                 },
                 {
                     "id":261,
@@ -156,7 +151,7 @@ class TestUtils {
                     "resources":[],
                     "contact":null}],
                     "openBy":null,
-                    "closedBy":null,
+                    "completedBy":null,
                     "observationsCacem":null,
                     "observationsCnsp":null,
                     "facade":"NAMO",
@@ -183,8 +178,7 @@ class TestUtils {
                     "endDateTimeUtc":"2023-04-18T11:07:08.941Z",
                     "envActions":[],
                     "isGeometryComputedFromControls":false,
-                    "missionSource":"MONITORFISH",
-                    "isClosed":false
+                    "missionSource":"MONITORFISH"
                 },
                 {
                     "id":258,
@@ -196,7 +190,7 @@ class TestUtils {
                     "resources":[],
                     "contact":null}],
                     "openBy":null,
-                    "closedBy":null,
+                    "completedBy":null,
                     "observationsCacem":null,
                     "observationsCnsp":null,
                     "facade":null,
@@ -205,8 +199,7 @@ class TestUtils {
                     "endDateTimeUtc":"2023-04-18T10:38:20.178Z",
                     "envActions":[],
                     "isGeometryComputedFromControls":false,
-                    "missionSource":"MONITORFISH",
-                    "isClosed":false
+                    "missionSource":"MONITORFISH"
                 },
                 {
                     "id":259,
@@ -218,7 +211,7 @@ class TestUtils {
                     "resources":[],
                     "contact":null}],
                     "openBy":null,
-                    "closedBy":null,
+                    "completedBy":null,
                     "observationsCacem":null,
                     "observationsCnsp":null,
                     "facade":"NAMO",
@@ -233,8 +226,7 @@ class TestUtils {
                     "endDateTimeUtc":"2023-04-18T18:00:59Z",
                     "envActions":[],
                     "isGeometryComputedFromControls":false,
-                    "missionSource":"MONITORFISH",
-                    "isClosed":false
+                    "missionSource":"MONITORFISH"
                 },
                 {
                     "id":260,
@@ -246,7 +238,7 @@ class TestUtils {
                     "resources":[],
                     "contact":"154785263"}],
                     "openBy":"",
-                    "closedBy":"",
+                    "completedBy":"",
                     "observationsCacem":"",
                     "observationsCnsp":"",
                     "facade":"MED",
@@ -255,8 +247,7 @@ class TestUtils {
                     "endDateTimeUtc":"2023-04-18T09:09:59.578Z",
                     "envActions":[],
                     "isGeometryComputedFromControls":false,
-                    "missionSource":"MONITORFISH",
-                    "isClosed":false
+                    "missionSource":"MONITORFISH"
                 },
                 {
                     "id":250,
@@ -268,15 +259,14 @@ class TestUtils {
                     "resources":[],
                     "contact":"080012654"}],
                     "openBy":"ADE",
-                    "closedBy":"",
+                    "completedBy":"",
                     "observationsCacem":"",
                     "observationsCnsp":"",
                     "facade":"MED",
                     "geom":{"type":"MultiPolygon","coordinates":[[[[51.49119758,  -18.10424171],[53.53854137,-22.2000453],[59.22261425,-22.89666373],[61.86261019,-19.04903036],[51.49119758,-18.10424171]]]]},"startDateTimeUtc":"2023-04-16T08:00:00Z","endDateTimeUtc":"2023-04-20T18:00:00Z",
                     "envActions":[],
                     "isGeometryComputedFromControls":false,
-                    "missionSource":"MONITORFISH",
-                    "isClosed":false
+                    "missionSource":"MONITORFISH"
                 },
                 {
                     "id":256,
@@ -289,7 +279,7 @@ class TestUtils {
                     "name":"Voiture"}],
                     "contact":null}],
                     "openBy":"ADE",
-                    "closedBy":"",
+                    "completedBy":"",
                     "observationsCacem":"TEST 2",
                     "observationsCnsp":"TEST",
                     "facade":null,
@@ -298,8 +288,7 @@ class TestUtils {
                     "endDateTimeUtc":"2023-04-13T17:48:53.005Z",
                     "envActions":[],
                     "isGeometryComputedFromControls":false,
-                    "missionSource":"MONITORFISH",
-                    "isClosed":false
+                    "missionSource":"MONITORFISH"
                 },
                 {
                     "id":254,
@@ -312,15 +301,14 @@ class TestUtils {
                     "resources":[],
                     "contact":null}],
                     "openBy":"ASE",
-                    "closedBy":"",
+                    "completedBy":"",
                     "observationsCacem":"",
                     "observationsCnsp":"",
                     "facade":"MED",
                     "geom":{"type":"MultiPolygon","coordinates":[[[[3.70244841, 43.39883986],[3.69556248,43.39696361],[3.69470173,43.39321095],[3.70876052,43.39300246],[3.70244841,43.39883986]]]]},"startDateTimeUtc":"2023-04-13T16:40:17.766Z","endDateTimeUtc":null,
                     "envActions":[],
                     "isGeometryComputedFromControls":false,
-                    "missionSource":"MONITORENV",
-                    "isClosed":false
+                    "missionSource":"MONITORENV"
                 },
                 {
                     "id":253,
@@ -332,7 +320,7 @@ class TestUtils {
                     "resources":[],
                     "contact":"qsdf"}],
                     "openBy":"qs",
-                    "closedBy":"dd",
+                    "completedBy":"dd",
                     "observationsCacem":"qsdf",
                     "observationsCnsp":"sqdf",
                     "facade":"NAMO",
@@ -341,8 +329,7 @@ class TestUtils {
                     "endDateTimeUtc":"2023-04-13T13:14:59.149Z",
                     "envActions":[],
                     "isGeometryComputedFromControls":false,
-                    "missionSource":"MONITORFISH",
-                    "isClosed":false
+                    "missionSource":"MONITORFISH"
                 }]
             """.trimIndent()
         }

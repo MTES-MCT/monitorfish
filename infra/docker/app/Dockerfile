@@ -68,15 +68,13 @@ COPY --from=buildFront /tmp/frontend/build /tmp/frontend/build
 
 # Upload sourcemaps to sentry
 RUN sentry-cli sourcemaps inject /tmp/frontend
-RUN if [ "IS_RELEASE" = true ]; then sentry-cli \
+RUN sentry-cli \
   --url ${SENTRY_URL} \
   --auth-token ${SENTRY_AUTH_TOKEN} \
   sourcemaps upload /tmp/frontend \
   --release ${VERSION} \
   --org ${SENTRY_ORG} \
-  --project ${SENTRY_PROJECT} ; \
-  else echo "Not sending sourcemap to sentry" ; \
-  fi
+  --project ${SENTRY_PROJECT}
 
 ######################
 # Create final image #

@@ -370,7 +370,7 @@ export function MissionForm() {
     <>
       <Wrapper>
         {isMissionCreatedBannerDisplayed && (
-          <Banner
+          <StyledBanner
             isClosable
             isCollapsible={false}
             isHiddenByDefault={false}
@@ -382,10 +382,10 @@ export function MissionForm() {
               <Icon.Confirm color={THEME.color.mediumSeaGreen} />
               La mission a bien été créée
             </MissionCreatedText>
-          </Banner>
+          </StyledBanner>
         )}
         {missionCompletion === MissionAction.FrontCompletionStatus.TO_COMPLETE_MISSION_ENDED && (
-          <Banner
+          <StyledBanner
             closingDelay={5000}
             isClosable={false}
             isCollapsible
@@ -398,7 +398,7 @@ export function MissionForm() {
               <Icon.AttentionFilled color={THEME.color.maximumRed} />
               Veuillez compléter ou corriger les éléments en rouge
             </MissionEndedText>
-          </Banner>
+          </StyledBanner>
         )}
         <Header data-cy="mission-form-header">
           <BackToListIcon onClick={goToMissionList} />
@@ -506,6 +506,10 @@ export function MissionForm() {
     </>
   )
 }
+
+const StyledBanner = styled(Banner)`
+  left: unset;
+`
 
 const MissionCreatedText = styled.div`
   align-items: center;

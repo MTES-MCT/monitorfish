@@ -33,7 +33,7 @@ export function HighlightPositionCell({ isManualPositionMarkerShowed, row, value
       style={{ cursor: 'pointer' }}
       title={row && coordinates ? `${coordinates[0]} ${coordinates[1]}` : ''}
     >
-      {value as string}
+      {(value ?? '') as string}
       {isManualPositionMarkerShowed && row.isManual ? <ManualPosition title="Position manuelle (4h-report)" /> : ''}
     </span>
   )

@@ -24,7 +24,7 @@
         }
       ],
       "openBy": "Michael Wilson",
-      "closedBy": "Michael Brooks",
+      "completedBy": "Michael Brooks",
       "observationsCacem": "Check environment role actually whether majority blood. And action section bag middle. Somebody main stage sense.",
       "observationsCnsp": null,
       "facade": null,
@@ -38,7 +38,6 @@
       "updatedAtUtc": "2021-01-20T08:29:11.923703Z",
       "envActions": [],
       "missionSource": "MONITORENV",
-      "isClosed": true,
       "isUnderJdp": false,
       "isGeometryComputedFromControls": false
     }

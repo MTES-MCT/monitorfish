@@ -29,7 +29,7 @@
         }
       ],
       "openBy": "Kara Heath",
-      "closedBy": "James Reed",
+      "completedBy": "James Reed",
       "observationsCacem": "Machine office recently answer dark such toward west. Around tree green management opportunity central then. Can time into magazine.",
       "observationsCnsp": null,
       "facade": "MEMN",
@@ -40,7 +40,6 @@
       "updatedAtUtc": "2021-01-20T08:29:11.923703Z",
       "envActions": [],
       "missionSource": "MONITORENV",
-      "isClosed": false,
       "isUnderJdp": false,
       "isGeometryComputedFromControls": false
     }

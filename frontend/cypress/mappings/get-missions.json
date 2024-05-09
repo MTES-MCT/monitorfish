@@ -30,7 +30,7 @@
           }
         ],
         "openBy": "Brittany Graham",
-        "closedBy": "Samantha Jones",
+        "completedBy": "Samantha Jones",
         "observationsCacem": "Maybe own each college away likely major. Former space technology million cell. Outside body my drop require.",
         "observationsCnsp": null,
         "facade": "MEMN",
@@ -40,7 +40,6 @@
         "endDateTimeUtc": "2024-01-23T02:49:25.923703Z",
         "envActions": [],
         "missionSource": "POSEIDON_CNSP",
-        "isClosed": false,
         "isUnderJdp": false
       },
       {
@@ -57,7 +56,7 @@
           }
         ],
         "openBy": "Brian Gibbs",
-        "closedBy": "Mary Rogers",
+        "completedBy": "Mary Rogers",
         "observationsCacem": "Magazine more morning we career born. Language notice site next history.",
         "observationsCnsp": null,
         "facade": "MEMN",
@@ -67,7 +66,6 @@
         "endDateTimeUtc": null,
         "envActions": [],
         "missionSource": "MONITORFISH",
-        "isClosed": false,
         "isUnderJdp": false
       },
       {
@@ -89,7 +87,7 @@
           }
         ],
         "openBy": "Kevin Torres",
-        "closedBy": "Cynthia Phillips",
+        "completedBy": "Cynthia Phillips",
         "observationsCacem": "Toward agency blue now hand. Meet answer someone stand.",
         "observationsCnsp": null,
         "facade": "MED",
@@ -99,7 +97,6 @@
         "endDateTimeUtc": "2023-02-14T17:45:28.923703Z",
         "envActions": [],
         "missionSource": "POSEIDON_CNSP",
-        "isClosed": true,
         "isUnderJdp": false
       },
       {
@@ -121,7 +118,7 @@
           }
         ],
         "openBy": "Kara Heath",
-        "closedBy": "James Reed",
+        "completedBy": "James Reed",
         "observationsCacem": "Machine office recently answer dark such toward west. Around tree green management opportunity central then. Can time into magazine.",
         "observationsCnsp": null,
         "facade": "MEMN",
@@ -131,7 +128,6 @@
         "endDateTimeUtc": "2023-02-17T13:30:50.923703Z",
         "envActions": [],
         "missionSource": "MONITORENV",
-        "isClosed": false,
         "isUnderJdp": false
       },
       {
@@ -153,7 +149,7 @@
           }
         ],
         "openBy": "Kevin Torres",
-        "closedBy": "Cynthia Phillips",
+        "completedBy": "Cynthia Phillips",
         "observationsCacem": "Toward agency blue now hand. Meet answer someone stand.",
         "observationsCnsp": null,
         "facade": "MED",
@@ -163,7 +159,6 @@
         "endDateTimeUtc": "2023-02-14T17:45:28.923703Z",
         "envActions": [],
         "missionSource": "POSEIDON_CNSP",
-        "isClosed": true,
         "isUnderJdp": false
       },
       {
@@ -196,7 +191,7 @@
           }
         ],
         "openBy": "Steve Snyder",
-        "closedBy": "Jacob Martin",
+        "completedBy": "Jacob Martin",
         "observationsCacem": "Surface different shoulder interview. Job together area probably. Of alone class capital determine machine always.",
         "observationsCnsp": null,
         "facade": "MEMN",
@@ -236,7 +231,7 @@
             "coverMissionZone": true,
             "hasSomeGearsSeized": false,
             "hasSomeSpeciesSeized": false,
-            "closedBy": null
+            "completedBy": null
           },
           {
             "actionType": "CONTROL",
@@ -271,11 +266,10 @@
             ],
             "hasSomeGearsSeized": false,
             "hasSomeSpeciesSeized": false,
-            "closedBy": null
+            "completedBy": null
           }
         ],
         "missionSource": "MONITORENV",
-        "isClosed": false,
         "isUnderJdp": false
       },
       {
@@ -292,7 +286,7 @@
           }
         ],
         "openBy": "Brittany Graham",
-        "closedBy": "Samantha Jones",
+        "completedBy": "Samantha Jones",
         "observationsCacem": "Maybe own each college away likely major. Former space technology million cell. Outside body my drop require.",
         "observationsCnsp": null,
         "facade": "MEMN",
@@ -302,7 +296,6 @@
         "endDateTimeUtc": null,
         "envActions": [],
         "missionSource": "POSEIDON_CNSP",
-        "isClosed": false,
         "isUnderJdp": false
       },
       {
@@ -319,7 +312,7 @@
           }
         ],
         "openBy": "Brittany Graham",
-        "closedBy": "Samantha Jones",
+        "completedBy": "Samantha Jones",
         "observationsCacem": "Maybe own each college away likely major. Former space technology million cell. Outside body my drop require.",
         "observationsCnsp": null,
         "facade": "Guadeloupe",
@@ -329,7 +322,6 @@
         "endDateTimeUtc": null,
         "envActions": [],
         "missionSource": "POSEIDON_CNSP",
-        "isClosed": false,
         "isUnderJdp": false
       },
       {
@@ -346,7 +338,7 @@
           }
         ],
         "openBy": "Randy Woodward",
-        "closedBy": "Timothy Patrick",
+        "completedBy": "Timothy Patrick",
         "observationsCacem": "Black bit sell. House relate policy once. White member worker east even anyone detail professor.",
         "observationsCnsp": null,
         "facade": null,
@@ -408,7 +400,6 @@
           }
         ],
         "missionSource": "MONITORENV",
-        "isClosed": true,
         "isUnderJdp": false
       },
       {
@@ -425,7 +416,7 @@
           }
         ],
         "openBy": "Darren Clark",
-        "closedBy": "Heidi Silva",
+        "completedBy": "Heidi Silva",
         "observationsCacem": "Anything box film quality. Lot series agent out rule end young pressure.",
         "observationsCnsp": null,
         "facade": "MED",
@@ -449,7 +440,6 @@
         "endDateTimeUtc": "2023-03-13T09:49:40.350661Z",
         "envActions": [],
         "missionSource": "MONITORENV",
-        "isClosed": false,
         "isUnderJdp": false
       },
       {
@@ -466,7 +456,7 @@
           }
         ],
         "openBy": "Brittany Graham",
-        "closedBy": "Samantha Jones",
+        "completedBy": "Samantha Jones",
         "observationsCacem": "Maybe own each college away likely major. Former space technology million cell. Outside body my drop require.",
         "observationsCnsp": null,
         "facade": "MEMN",
@@ -476,7 +466,6 @@
         "endDateTimeUtc": "2023-01-23T02:49:25.923703Z",
         "envActions": [],
         "missionSource": "POSEIDON_CNSP",
-        "isClosed": false,
         "isUnderJdp": false
       },
       {
@@ -493,7 +482,7 @@
           }
         ],
         "openBy": "Christina Thomas",
-        "closedBy": "Amanda Smith",
+        "completedBy": "Amanda Smith",
         "observationsCacem": "Decision about effect sport hour field. Care finally minute stop.",
         "observationsCnsp": null,
         "facade": "SA",
@@ -503,7 +492,6 @@
         "endDateTimeUtc": "2022-12-28T17:14:45.923703Z",
         "envActions": [],
         "missionSource": "POSEIDON_CNSP",
-        "isClosed": true,
         "isUnderJdp": false
       },
       {
@@ -520,7 +508,7 @@
           }
         ],
         "openBy": "Chase Hernandez",
-        "closedBy": "Matthew Buckley",
+        "completedBy": "Matthew Buckley",
         "observationsCacem": "Fly chance record lawyer those. Once position indicate war medical through. Interest read possible.",
         "observationsCnsp": null,
         "facade": "SA",
@@ -530,7 +518,6 @@
         "endDateTimeUtc": null,
         "envActions": [],
         "missionSource": "MONITORENV",
-        "isClosed": false,
         "isUnderJdp": false
       },
       {
@@ -547,7 +534,7 @@
           }
         ],
         "openBy": "Michael Wilson",
-        "closedBy": "Michael Brooks",
+        "completedBy": "Michael Brooks",
         "observationsCacem": "Check environment role actually whether majority blood. And action section bag middle. Somebody main stage sense.",
         "observationsCnsp": null,
         "facade": null,
@@ -560,7 +547,6 @@
         "endDateTimeUtc": "2023-03-20T11:14:02.923703Z",
         "envActions": [],
         "missionSource": "MONITORENV",
-        "isClosed": true,
         "isUnderJdp": false
       }
     ]

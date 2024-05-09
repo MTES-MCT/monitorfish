@@ -30,7 +30,7 @@
           }
         ],
         "openBy": "Chase Hernandez",
-        "closedBy": "Matthew Buckley",
+        "completedBy": "Matthew Buckley",
         "observationsCacem": "Fly chance record lawyer those. Once position indicate war medical through. Interest read possible.",
         "observationsCnsp": null,
         "facade": "SA",
@@ -40,7 +40,6 @@
         "endDateTimeUtc": null,
         "envActions": [],
         "missionSource": "MONITORENV",
-        "isClosed": false,
         "isUnderJdp": false
       }
     ]

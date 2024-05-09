@@ -171,7 +171,7 @@ const RegulatoryLayersTitle = styled.div<{
     }
   }
 
-  > div {
+  .Element-IconBox {
     float: right;
     margin-top: 4px;
   }

@@ -441,7 +441,7 @@ context('Sidebars > Regulatory Layers', () => {
 
     // Unselect one of the "Corse - Chaluts" regulation zones
     cy.contains('Corse - Chaluts').click()
-    cy.contains('Interdiction temporaire').parent().find('span').last().find('svg').last().click()
+    cy.contains('Interdiction temporaire').parent().find('[title="Supprimer la zone de ma sélection"]').click()
 
     cy.get('.regulatory').toMatchImageSnapshot({
       screenshotConfig: {
@@ -482,7 +482,7 @@ context('Sidebars > Regulatory Layers', () => {
     cy.contains('Création et Réglementation de zone').should('be.visible')
 
     // Unselect one of the "Corse - Chaluts" regulation zones
-    cy.contains('Interdiction temporaire').parent().find('span').last().find('svg').last().click()
+    cy.contains('Interdiction temporaire').parent().find('[title="Supprimer la zone de ma sélection"]').click()
 
     // Select all the "Armor CSJ Dragues" regulation zones (there is only 1)
     cy.getDataCy('regulatory-search-clean-input').click()

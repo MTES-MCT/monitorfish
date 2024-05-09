@@ -1,4 +1,4 @@
-import { logSoftError } from '@mtes-mct/monitor-ui'
+import { assertNotNullish } from '@utils/assertNotNullish'
 import { batch } from 'react-redux'
 
 import { deleteReportingFromAPI } from '../../../api/reporting'
@@ -13,15 +13,7 @@ export const deleteReporting =
   (id: number): MainAppThunk<void> =>
   (dispatch, getState) => {
     const { selectedVesselIdentity } = getState().vessel
-    // TODO Can this case happen? Is it the right way to handle it?
-    if (!selectedVesselIdentity) {
-      logSoftError({
-        message: '`selectedVesselIdentity` is null.',
-        userMessage: 'Aucun navire sélectionné pour supprimer un signalement.'
-      })
-
-      return
-    }
+    assertNotNullish(selectedVesselIdentity)
     const { currentAndArchivedReportingsOfSelectedVessel } = getState().reporting
 
     const deletedReporting = currentAndArchivedReportingsOfSelectedVessel?.current.find(

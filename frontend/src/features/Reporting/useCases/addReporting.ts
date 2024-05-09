@@ -1,4 +1,4 @@
-import { logSoftError } from '@mtes-mct/monitor-ui'
+import { assertNotNullish } from '@utils/assertNotNullish'
 
 import { addReportingFromAPI } from '../../../api/reporting'
 import { Vessel } from '../../../domain/entities/vessel/vessel'
@@ -13,15 +13,7 @@ export const addReporting =
   (newReporting: ReportingCreation): MainAppThunk<Promise<void>> =>
   (dispatch, getState) => {
     const { selectedVesselIdentity } = getState().vessel
-    // TODO Can this case happen? Is it the right way to handle it?
-    if (!selectedVesselIdentity) {
-      logSoftError({
-        message: '`selectedVesselIdentity` is null.',
-        userMessage: 'Aucun navire sélectionné pour ajouter un signalement.'
-      })
-
-      return Promise.resolve()
-    }
+    assertNotNullish(selectedVesselIdentity)
     const { currentAndArchivedReportingsOfSelectedVessel } = getState().reporting
 
     return addReportingFromAPI(newReporting)

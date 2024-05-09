@@ -24,7 +24,7 @@
         }
       ],
       "openBy": "Brian Gibbs",
-      "closedBy": "Mary Rogers",
+      "completedBy": "Mary Rogers",
       "observationsCacem": "Magazine more morning we career born. Language notice site next history.",
       "observationsCnsp": null,
       "facade": "MEMN",
@@ -35,7 +35,6 @@
       "updatedAtUtc": "2022-02-15T13:11:59.923703Z",
       "envActions": [],
       "missionSource": "MONITORFISH",
-      "isClosed": false,
       "isUnderJdp": false,
       "isGeometryComputedFromControls": false
     }

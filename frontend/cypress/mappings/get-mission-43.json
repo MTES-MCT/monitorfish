@@ -24,7 +24,7 @@
         }
       ],
       "openBy": "Darren Clark",
-      "closedBy": "Heidi Silva",
+      "completedBy": "Heidi Silva",
       "observationsCacem": "Anything box film quality. Lot series agent out rule end young pressure.",
       "observationsCnsp": null,
       "facade": "MED",
@@ -49,7 +49,6 @@
       "updatedAtUtc": "2021-01-20T08:29:11.923703Z",
       "envActions": [],
       "missionSource": "MONITORENV",
-      "isClosed": false,
       "isUnderJdp": false,
       "isGeometryComputedFromControls": false
     }

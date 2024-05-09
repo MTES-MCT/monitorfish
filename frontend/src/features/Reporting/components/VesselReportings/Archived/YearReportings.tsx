@@ -1,14 +1,14 @@
-import { useMemo, useState } from 'react'
-import styled from 'styled-components'
-
-import { COLORS } from '../../../../../constants/constants'
+import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
 import {
   YearListChevronIcon,
   YearListContent,
   YearListTitle,
   YearListTitleText
-} from '../../../../VesselSidebar/common_styles/YearList.style'
-import { reportingIsAnInfractionSuspicion } from '../../../types'
+} from '@features/VesselSidebar/common_styles/YearList.style'
+import { THEME } from '@mtes-mct/monitor-ui'
+import { useMemo, useState } from 'react'
+import styled from 'styled-components'
+
 import { ReportingCard } from '../ReportingCard'
 
 import type { Reporting } from '../../../../../domain/types/reporting'
@@ -105,18 +105,18 @@ const Opal = styled.span`
   height: 8px;
   width: 8px;
   margin-left: 5px;
-  background-color: ${COLORS.opal};
+  background-color: ${THEME.color.opal};
   border-radius: 50%;
   display: inline-block;
 `
 
 const Year = styled.span`
-  color: ${COLORS.slateGray};
+  color: ${THEME.color.slateGray};
   font-size: 16px;
 `
 
 const YearResume = styled.span`
-  color: ${COLORS.gunMetal};
+  color: ${THEME.color.gunMetal};
   font-size: 13px;
   margin-left: 15px;
   vertical-align: text-bottom;

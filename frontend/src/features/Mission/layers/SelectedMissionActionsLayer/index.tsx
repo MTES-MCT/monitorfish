@@ -8,7 +8,7 @@ import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
 import { monitorfishMap } from '../../../map/monitorfishMap'
 import { useGetFilteredMissionsQuery } from '../../components/MissionList/hooks/useGetFilteredMissionsQuery'
-import { getMissionActionFeature, getMissionActionFeatureZone } from '../../index'
+import { getMissionActionFeature, getMissionActionFeatureZone } from '../../features'
 import { NEW_MISSION_ID } from '../constants'
 
 import type { GeoJSON } from '../../../../domain/types/GeoJSON'

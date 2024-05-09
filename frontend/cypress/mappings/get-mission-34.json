@@ -40,7 +40,7 @@
         }
       ],
       "openBy": "Steve Snyder",
-      "closedBy": "Jacob Martin",
+      "completedBy": "Jacob Martin",
       "observationsCacem": "Surface different shoulder interview. Job together area probably. Of alone class capital determine machine always.",
       "observationsCnsp": null,
       "facade": "MEMN",
@@ -77,7 +77,7 @@
           "geom": null,
           "hasSomeGearsSeized": false,
           "hasSomeSpeciesSeized": false,
-          "closedBy": null,
+          "completedBy": null,
           "id": "88713755-3966-4ca4-ae18-10cab6249485",
           "observations": "Surveillance ok",
           "protectedSpecies": []
@@ -114,19 +114,18 @@
           ],
           "hasSomeGearsSeized": false,
           "hasSomeSpeciesSeized": false,
-          "closedBy": null
+          "completedBy": null
         },
         {
           "actionStartDateTimeUtc": "2022-11-03T13:59:20.176Z",
           "actionType": "NOTE",
           "geom": null,
-          "closedBy": null,
+          "completedBy": null,
           "id": "88713755-3966-4ca4-ae18-10cab6249483",
           "observations": "Une note avec des informations sur la mission."
         }
       ],
       "missionSource": "MONITORENV",
-      "isClosed": false,
       "isUnderJdp": false,
       "isGeometryComputedFromControls": true
     }

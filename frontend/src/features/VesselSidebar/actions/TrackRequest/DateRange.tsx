@@ -42,7 +42,6 @@ export function DateRange({
   placeholder,
   width
 }: DateRangeProps) {
-  /** @type {[Date, Date] | undefined} */
   const normalizedDefaultValue = useMemo(
     () =>
       defaultValue ? [getLocalizedDayjs(defaultValue[0]).toDate(), getLocalizedDayjs(defaultValue[1]).toDate()] : null,
@@ -59,7 +58,7 @@ export function DateRange({
   const handleChange = useCallback(
     ([localStartDate, localEndDate]) => {
       const utcizedStartDate = getUtcizedDayjs(localStartDate).startOf('day').toDate()
-      // TODO For some reason the API can't handle miliseconds in date.
+      // TODO For some reason the API can't handle milliseconds in date.
       const utcizedEndDate = getUtcizedDayjs(localEndDate).endOf('day').millisecond(0).toDate()
 
       onChange([utcizedStartDate, utcizedEndDate])

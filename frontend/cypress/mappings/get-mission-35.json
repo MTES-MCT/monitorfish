@@ -24,7 +24,7 @@
         }
       ],
       "openBy": "Brittany Graham",
-      "closedBy": "Samantha Jones",
+      "completedBy": "Samantha Jones",
       "observationsCacem": "Maybe own each college away likely major. Former space technology million cell. Outside body my drop require.",
       "observationsCnsp": null,
       "facade": "MEMN",
@@ -35,7 +35,6 @@
       "updatedAtUtc": "2021-01-20T08:29:11.923703Z",
       "envActions": [],
       "missionSource": "POSEIDON_CNSP",
-      "isClosed": false,
       "isUnderJdp": false,
       "isGeometryComputedFromControls": false
     }

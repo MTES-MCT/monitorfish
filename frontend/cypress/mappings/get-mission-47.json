@@ -24,7 +24,7 @@
         }
       ],
       "openBy": "Christina Thomas",
-      "closedBy": "Amanda Smith",
+      "completedBy": "Amanda Smith",
       "observationsCacem": "Decision about effect sport hour field. Care finally minute stop.",
       "observationsCnsp": null,
       "facade": "SA",
@@ -35,7 +35,6 @@
       "updatedAtUtc": "2021-01-20T08:29:11.923703Z",
       "envActions": [],
       "missionSource": "POSEIDON_CNSP",
-      "isClosed": true,
       "isUnderJdp": false,
       "isGeometryComputedFromControls": false
     }

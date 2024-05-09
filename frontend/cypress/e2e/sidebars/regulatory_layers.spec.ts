@@ -441,7 +441,7 @@ context('Sidebars > Regulatory Layers', () => {
 
     // Unselect one of the "Corse - Chaluts" regulation zones
     cy.contains('Corse - Chaluts').click()
-    cy.contains('Interdiction temporaire').parent().find('span').last().find('svg').last().click()
+    cy.contains('Interdiction temporaire').parent().find('[title="Supprimer la zone de ma sélection"]').click()
 
     cy.get('.regulatory').toMatchImageSnapshot({
       screenshotConfig: {
@@ -474,7 +474,7 @@ context('Sidebars > Regulatory Layers', () => {
 
     // Show metadata for one of the "Corse - Chaluts" regulation zones
     cy.contains('Corse - Chaluts').click()
-    cy.contains('6 MN').parent().find('span').last().find('svg').first().click()
+    cy.contains('6 MN').parent().find('[title="Afficher la réglementation"]').click()
 
     // Check a few of its metadata values
     cy.contains('Reg. MED').should('be.visible')
@@ -482,7 +482,7 @@ context('Sidebars > Regulatory Layers', () => {
     cy.contains('Création et Réglementation de zone').should('be.visible')
 
     // Unselect one of the "Corse - Chaluts" regulation zones
-    cy.contains('Interdiction temporaire').parent().find('span').last().find('svg').last().click()
+    cy.contains('Interdiction temporaire').parent().find('[title="Supprimer la zone de ma sélection"]').click()
 
     // Select all the "Armor CSJ Dragues" regulation zones (there is only 1)
     cy.getDataCy('regulatory-search-clean-input').click()
@@ -491,16 +491,9 @@ context('Sidebars > Regulatory Layers', () => {
     cy.clickButton('Ajouter 1 zone')
 
     // Show metadata the only "Armor CSJ Dragues" regulation zone
+    cy.getDataCy('regulatory-search-clean-input').click()
     cy.contains('Mes zones réglementaires').parent().contains('Armor CSJ Dragues').click()
-    cy.contains('Mes zones réglementaires')
-      .parent()
-      .contains('Secteur 3')
-      .parent()
-      .find('span')
-      .last()
-      .find('svg')
-      .first()
-      .click()
+    cy.contains('Secteur 3').parent().find('[title="Afficher la réglementation"]').click()
 
     // Check a few of its metadata values
     cy.contains('Reg. MEMN').should('be.visible')

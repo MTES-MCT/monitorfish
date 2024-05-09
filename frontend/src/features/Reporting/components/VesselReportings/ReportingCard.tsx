@@ -1,4 +1,5 @@
 import { getReportingActor } from '@features/Reporting/components/VesselReportings/utils'
+import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -13,7 +14,7 @@ import InfractionSuspicionIconSVG from '../../../icons/Icone_alerte_signalement_
 import ObservationIconSVG from '../../../icons/Icone_observations.svg?react'
 import { getAlertNameFromType } from '../../../SideWindow/Alert/AlertListAndReportingList/utils'
 import { setEditedReporting } from '../../slice'
-import { reportingIsAnInfractionSuspicion, ReportingTypeCharacteristics } from '../../types'
+import { ReportingTypeCharacteristics } from '../../types'
 import archiveReporting from '../../useCases/archiveReporting'
 
 import type { Reporting } from '../../../../domain/types/reporting'

@@ -38,7 +38,7 @@ export function MainWindow() {
   const isVesselSearchDisplayed = useMainAppSelector(state => state.displayedComponent.isVesselSearchDisplayed)
   const isVesselSidebarOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
   const isDraftDirty = useMainAppSelector(state => state.missionForm.isDraftDirty)
-  const leftDialog = useMainAppSelector(state => state.mainWindow.leftDialog)
+  const openedLeftDialog = useMainAppSelector(state => state.mainWindow.openedLeftDialog)
   const status = useMainAppSelector(state => state.sideWindow.status)
 
   const warnOnUnload = useCallback(
@@ -88,7 +88,7 @@ export function MainWindow() {
         {isDrawLayerModalDisplayed && <DrawLayerModal />}
       </MapWrapper>
 
-      {leftDialog?.key === MapBox.MISSIONS && <MissionMenuDialog />}
+      {openedLeftDialog?.key === MapBox.MISSIONS && <MissionMenuDialog />}
     </Wrapper>
   )
 }

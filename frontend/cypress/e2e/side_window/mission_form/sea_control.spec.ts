@@ -167,7 +167,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Saisi par', 'Marlin')
 
     // Complété par
-    cy.get('[name="completedBy"]').type('Alice')
+    cy.fill('Complété par', 'Alice', { index: 1 })
 
     cy.wait(500)
 
@@ -300,7 +300,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.wait(500)
 
     /// Complété par
-    cy.get('[name="completedBy"]').type('Alice')
+    cy.fill('Complété par', 'Alice', { index: 1 })
 
     cy.wait(500)
 

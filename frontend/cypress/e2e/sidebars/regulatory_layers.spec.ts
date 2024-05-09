@@ -474,7 +474,7 @@ context('Sidebars > Regulatory Layers', () => {
 
     // Show metadata for one of the "Corse - Chaluts" regulation zones
     cy.contains('Corse - Chaluts').click()
-    cy.contains('6 MN').parent().find('span').last().find('svg').first().click()
+    cy.contains('6 MN').parent().find('[title="Afficher la réglementation"]').click()
 
     // Check a few of its metadata values
     cy.contains('Reg. MED').should('be.visible')

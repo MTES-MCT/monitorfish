@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import type { MissionActionFormValues } from '../types'
 import type { ReactNode } from 'react'
 
+import CompletionStatus = MissionAction.CompletionStatus
+
 export function formatDateLabel(dateLabel: string) {
   return dateLabel.replace(
     /([a-z])([a-zéû]+)\.?$/,
@@ -65,6 +67,7 @@ export function getMissionActionFormInitialValues(type: MissionAction.MissionAct
   return {
     actionDatetimeUtc,
     actionType: type,
+    completion: CompletionStatus.TO_COMPLETE,
     isValid: false
   }
 }

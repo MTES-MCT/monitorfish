@@ -20,7 +20,6 @@ object TestUtils {
                 startDateTimeUtc = ZonedDateTime.now(),
                 isGeometryComputedFromControls = false,
                 missionSource = MissionSource.MONITORFISH,
-                isClosed = false,
             )
         }
     }

@@ -14,7 +14,7 @@ data class MissionDataResponse(
     val controlUnits: List<ControlUnit> = listOf(),
     val missionTypes: List<MissionType>,
     val openBy: String? = null,
-    val closedBy: String? = null,
+    val completedBy: String? = null,
     val observationsCacem: String? = null,
     val observationsCnsp: String? = null,
     val facade: String? = null,
@@ -26,7 +26,6 @@ data class MissionDataResponse(
     val endDateTimeUtc: String? = null,
     val isGeometryComputedFromControls: Boolean,
     val missionSource: MissionSource,
-    val isClosed: Boolean,
     val hasMissionOrder: Boolean? = false,
     val isUnderJdp: Boolean? = false,
 ) {
@@ -35,7 +34,7 @@ data class MissionDataResponse(
         controlUnits = controlUnits,
         missionTypes = missionTypes,
         openBy = openBy,
-        closedBy = closedBy,
+        completedBy = completedBy,
         observationsCacem = observationsCacem,
         observationsCnsp = observationsCnsp,
         facade = facade,
@@ -44,7 +43,6 @@ data class MissionDataResponse(
         endDateTimeUtc = endDateTimeUtc?.let { ZonedDateTime.parse(endDateTimeUtc) },
         isGeometryComputedFromControls = isGeometryComputedFromControls,
         missionSource = missionSource,
-        isClosed = isClosed,
         hasMissionOrder = hasMissionOrder,
         isUnderJdp = isUnderJdp,
     )

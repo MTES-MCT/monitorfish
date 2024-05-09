@@ -17,7 +17,7 @@ export function LeftMenu() {
 
   const dispatch = useMainAppDispatch()
   const { favorites } = useMainAppSelector(state => state.favoriteVessel)
-  const leftDialog = useMainAppSelector(state => state.mainWindow.leftDialog)
+  const openedLeftDialog = useMainAppSelector(state => state.mainWindow.openedLeftDialog)
   const isAlertsMapButtonDisplayed = useMainAppSelector(state => state.displayedComponent.isAlertsMapButtonDisplayed)
   const isBeaconMalfunctionsMapButtonDisplayed = useMainAppSelector(
     state => state.displayedComponent.isBeaconMalfunctionsMapButtonDisplayed
@@ -65,7 +65,7 @@ export function LeftMenu() {
       {isFavoriteVesselsMapButtonDisplayed && (
         <Block>
           <IconButtonWrapper>
-            <IconButtonBadge $isActive={leftDialog?.key === 'FAVORITE_VESSELS'}>
+            <IconButtonBadge $isActive={openedLeftDialog?.key === 'FAVORITE_VESSELS'}>
               {favorites?.length || 0}
             </IconButtonBadge>
             <IconButton Icon={Icon.Favorite} size={Size.LARGE} />
@@ -78,7 +78,7 @@ export function LeftMenu() {
           <IconButtonWrapper ref={missionButtonRef}>
             <IconButton
               data-cy="missions-map-button"
-              data-isActive={leftDialog?.key === MapBox.MISSIONS}
+              data-isActive={openedLeftDialog?.key === MapBox.MISSIONS}
               Icon={Icon.MissionAction}
               onClick={toggleMissionMenuDialog}
               size={Size.LARGE}

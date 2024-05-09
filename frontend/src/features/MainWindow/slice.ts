@@ -19,13 +19,13 @@ export type MainWindowState = {
   isBackoffice: boolean
   isUpdatingVessels: boolean
   lastSearchedVessels: any[]
-  leftDialog:
+  leftMapBoxOpened: MapBox | undefined
+  openedLeftDialog:
     | {
         key: MapBox
         topPosition: number
       }
     | undefined
-  leftMapBoxOpened: MapBox | undefined
   // TODO Rename this prop.
   // TODO Investigate that. Should be a defined boolean.
   previewFilteredVesselsMode: boolean | undefined
@@ -41,8 +41,8 @@ const INITIAL_STATE: MainWindowState = {
   isBackoffice: false,
   isUpdatingVessels: false,
   lastSearchedVessels: getLocalStorageState([], lastSearchedVesselsLocalStorageKey),
-  leftDialog: undefined,
   leftMapBoxOpened: undefined,
+  openedLeftDialog: undefined,
   previewFilteredVesselsMode: undefined,
   rightMapBoxOpened: undefined,
   rightMenuIsOpen: false,
@@ -82,7 +82,7 @@ export const mainWindowSlice = createSlice({
      * Close the left dialog.
      */
     closeLeftDialog(state) {
-      state.leftDialog = undefined
+      state.openedLeftDialog = undefined
     },
 
     closeVesselListModal(state) {
@@ -185,7 +185,7 @@ export const mainWindowSlice = createSlice({
         topPosition: number
       }>
     ) {
-      state.leftDialog = action.payload.key === state.leftDialog?.key ? undefined : action.payload
+      state.openedLeftDialog = action.payload.key === state.openedLeftDialog?.key ? undefined : action.payload
     }
   }
 })

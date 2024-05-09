@@ -16,8 +16,8 @@ export function MissionMenuDialog() {
   const dispatch = useMainAppDispatch()
   const sideWindow = useMainAppSelector(state => state.sideWindow)
   const isMissionsLayerDisplayed = useMainAppSelector(state => state.displayedComponent.isMissionsLayerDisplayed)
-  const leftDialog = useMainAppSelector(state => state.mainWindow.leftDialog)
-  assertNotNullish(leftDialog)
+  const openedLeftDialog = useMainAppSelector(state => state.mainWindow.openedLeftDialog)
+  assertNotNullish(openedLeftDialog)
 
   const isActive =
     sideWindow.status !== SideWindowStatus.CLOSED && sideWindow.selectedPath.menu === SideWindowMenuKey.MISSION_LIST
@@ -45,7 +45,7 @@ export function MissionMenuDialog() {
   }
 
   return (
-    <Wrapper data-cy="missions-menu-box" style={{ top: leftDialog?.topPosition }}>
+    <Wrapper data-cy="missions-menu-box" style={{ top: openedLeftDialog?.topPosition }}>
       <MissionsMenuHeader>
         <ToggleMissionMenuButton Icon={Icon.Close} onClick={close} size={Size.NORMAL} />
         <Title>Missions et contrôles</Title>

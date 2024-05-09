@@ -1,4 +1,4 @@
-import { logSoftError } from '@mtes-mct/monitor-ui'
+import { assertNotNullish } from '@utils/assertNotNullish'
 import countries from 'i18n-iso-countries'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
@@ -30,15 +30,7 @@ export function VesselName({ focusOnVesselSearchInput }) {
   const addOrRemoveToFavorites = useCallback(
     e => {
       e.stopPropagation()
-      // TODO Can this case happen? Is it the right way to handle it?
-      if (!selectedVesselIdentity) {
-        logSoftError({
-          message: '`selectedVesselIdentity` is null.',
-          userMessage: 'Aucun navire sélectionné à ajouter ou supprimer des favoris.'
-        })
-
-        return
-      }
+      assertNotNullish(selectedVesselIdentity)
 
       if (isFavorite) {
         dispatch(removeVesselFromFavorites(getVesselCompositeIdentifier(selectedVesselIdentity)))

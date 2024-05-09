@@ -28,7 +28,7 @@
             }
           ],
           "openBy": "Randy Woodward",
-          "closedBy": "Timothy Patrick",
+          "completedBy": "Timothy Patrick",
           "observationsCacem": "Black bit sell. House relate policy once. White member worker east even anyone detail professor.",
           "observationsCnsp": null,
           "facade": null,
@@ -89,11 +89,10 @@
               "infractions": [],
               "hasSomeGearsSeized": false,
               "hasSomeSpeciesSeized": false,
-              "closedBy": null
+              "completedBy": null
             }
           ],
           "missionSource": "MONITORENV",
-          "isClosed": true,
           "isUnderJdp": false,
           "isGeometryComputedFromControls": false
         }
@@ -128,7 +127,7 @@
             }
           ],
           "openBy": "Randy Woodward",
-          "closedBy": "Timothy Patrick",
+          "completedBy": "Timothy Patrick",
           "observationsCacem": "Black bit sell. House relate policy once. White member worker east even anyone detail professor.",
           "observationsCnsp": null,
           "facade": null,
@@ -189,11 +188,10 @@
               "infractions": [],
               "hasSomeGearsSeized": false,
               "hasSomeSpeciesSeized": false,
-              "closedBy": null
+              "completedBy": null
             }
           ],
           "missionSource": "MONITORENV",
-          "isClosed": true,
           "isUnderJdp": false,
           "isGeometryComputedFromControls": false
         }
@@ -227,7 +225,7 @@
             }
           ],
           "openBy": "Randy Woodward",
-          "closedBy": "Timothy Patrick",
+          "completedBy": "Timothy Patrick",
           "observationsCacem": "Black bit sell. House relate policy once. White member worker east even anyone detail professor.",
           "observationsCnsp": null,
           "facade": null,
@@ -288,11 +286,10 @@
               "infractions": [],
               "hasSomeGearsSeized": false,
               "hasSomeSpeciesSeized": false,
-              "closedBy": null
+              "completedBy": null
             }
           ],
           "missionSource": "MONITORENV",
-          "isClosed": true,
           "isUnderJdp": false,
           "isGeometryComputedFromControls": false
         }

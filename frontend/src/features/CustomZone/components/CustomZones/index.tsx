@@ -128,7 +128,7 @@ const Title = styled.div<{
   border-bottom-left-radius: ${p => (p.isOpened ? '0' : '2px')};
   border-bottom-right-radius: ${p => (p.isOpened ? '0' : '2px')};
 
-  > div {
+  .Element-IconBox {
     float: right;
     margin-top: 4px;
   }

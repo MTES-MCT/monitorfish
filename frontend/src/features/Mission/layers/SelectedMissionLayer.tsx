@@ -11,7 +11,7 @@ import { MonitorFishLayer } from '../../../domain/entities/layers/types'
 import { OPENLAYERS_PROJECTION } from '../../../domain/entities/map/constants'
 import { monitorfishMap } from '../../map/monitorfishMap'
 import { useGetFilteredMissionsQuery } from '../components/MissionList/hooks/useGetFilteredMissionsQuery'
-import { getMissionFeatureZone } from '../index'
+import { getMissionFeatureZone } from '../features'
 
 import type { VectorLayerWithName } from '../../../domain/types/layer'
 

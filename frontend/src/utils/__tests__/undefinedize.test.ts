@@ -95,7 +95,7 @@ describe('utils/undefinedize()', () => {
 
   it('should return the expected result with a geometry object', () => {
     const value = {
-      closedBy: null,
+      completedBy: null,
       controlUnits: [
         {
           administration: 'DIRM / DM',
@@ -140,7 +140,7 @@ describe('utils/undefinedize()', () => {
     const result = undefinedize(value)
 
     expect(result).toStrictEqual({
-      closedBy: undefined,
+      completedBy: undefined,
       controlUnits: [
         {
           administration: 'DIRM / DM',

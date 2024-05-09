@@ -1,19 +1,22 @@
+import { getYearsToReportings } from '@features/Reporting/utils'
+import { Header, Zone } from '@features/VesselSidebar/common_styles/common.style'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { THEME } from '@mtes-mct/monitor-ui'
 import dayjs from 'dayjs'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { YearReportings } from './YearReportings'
-import { COLORS } from '../../../../../constants/constants'
-import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
-import { Header, Zone } from '../../../../VesselSidebar/common_styles/common.style'
 import { setArchivedReportingsFromDate } from '../../../slice'
-import { getYearsToReportingList } from '../../../types'
+
+import type { Reporting } from '../../../../../domain/types/reporting'
 
 export function Archived() {
   const dispatch = useMainAppDispatch()
-  const { archivedReportingsFromDate, currentAndArchivedReportingsOfSelectedVessel } = useMainAppSelector(
-    state => state.reporting
+  const archivedReportingsFromDate = useMainAppSelector(state => state.reporting.archivedReportingsFromDate)
+  const currentAndArchivedReportingsOfSelectedVessel = useMainAppSelector(
+    state => state.reporting.currentAndArchivedReportingsOfSelectedVessel
   )
 
   const yearsToReportings = useMemo(() => {
@@ -21,14 +24,14 @@ export function Archived() {
       return {}
     }
 
-    return getYearsToReportingList(archivedReportingsFromDate, currentAndArchivedReportingsOfSelectedVessel.archived)
+    return getYearsToReportings(archivedReportingsFromDate, currentAndArchivedReportingsOfSelectedVessel.archived)
   }, [currentAndArchivedReportingsOfSelectedVessel, archivedReportingsFromDate])
 
-  const seeMore = useCallback(() => {
-    const nextDate = dayjs(archivedReportingsFromDate).subtract(1, 'year')
+  function seeMore() {
+    const nextDate = dayjs(archivedReportingsFromDate).subtract(1, 'year').toDate()
 
     dispatch(setArchivedReportingsFromDate(nextDate))
-  }, [dispatch, archivedReportingsFromDate])
+  }
 
   return (
     <Zone data-cy="vessel-sidebar-reporting-tab-history">
@@ -37,9 +40,16 @@ export function Archived() {
         <List>
           {Object.keys(yearsToReportings)
             .sort((a, b) => Number(b) - Number(a))
-            .map(year => (
-              <YearReportings key={year} year={Number(year)} yearReportings={yearsToReportings[year]} />
-            ))}
+            .map(
+              year =>
+                yearsToReportings[year] && (
+                  <YearReportings
+                    key={year}
+                    year={Number(year)}
+                    yearReportings={yearsToReportings[year] as Reporting[]}
+                  />
+                )
+            )}
         </List>
       ) : (
         <NoReporting>
@@ -48,7 +58,12 @@ export function Archived() {
         </NoReporting>
       )}
       <SeeMoreBackground>
-        <SeeMore onClick={seeMore}>Afficher plus de signalements</SeeMore>
+        <SeeMore
+          /* eslint-disable-next-line react/jsx-no-bind */
+          onClick={seeMore}
+        >
+          Afficher plus de signalements
+        </SeeMore>
       </SeeMoreBackground>
     </Zone>
   )
@@ -63,13 +78,13 @@ const List = styled.ul`
 const NoReporting = styled.div`
   text-align: center;
   padding: 10px 0 10px 0;
-  color: ${COLORS.gunMetal};
+  color: ${THEME.color.gunMetal};
   font-size: 13px;
   width: 100%;
 `
 
 const SeeMoreBackground = styled.div`
-  background: ${COLORS.white};
+  background: ${THEME.color.white};
   margin: 0px 5px 5px 5px;
   padding: 10px 0 5px 0;
   text-align: center;
@@ -77,8 +92,8 @@ const SeeMoreBackground = styled.div`
 `
 
 const SeeMore = styled.div`
-  border: 1px solid ${COLORS.charcoal};
-  color: ${COLORS.gunMetal};
+  border: 1px solid ${THEME.color.charcoal};
+  color: ${THEME.color.gunMetal};
   padding: 5px 10px 5px 10px;
   width: max-content;
   font-size: 13px;
@@ -86,5 +101,5 @@ const SeeMore = styled.div`
   margin-left: auto;
   margin-right: auto;
   user-select: none;
-  background: ${COLORS.white};
+  background: ${THEME.color.white};
 `

@@ -8,7 +8,7 @@ import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
 import { monitorfishMap } from '../../../map/monitorfishMap'
 import { useGetFilteredMissionsQuery } from '../../components/MissionList/hooks/useGetFilteredMissionsQuery'
-import { getMissionFeaturePoint } from '../../index'
+import { getMissionFeaturePoint } from '../../features'
 
 import type { WebGLPointsLayerWithName } from '../../../../domain/types/layer'
 import type { Feature } from 'ol'

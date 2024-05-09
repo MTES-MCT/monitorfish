@@ -54,7 +54,7 @@ class APIMissionRepositoryITest {
                         }
                       ],
                       "openBy": "Steve Snyder",
-                      "closedBy": "Jacob Martin",
+                      "completedBy": "Jacob Martin",
                       "observationsCacem": "Surface different shoulder interview. Job together area probably. Of alone class capital determine machine always.",
                       "observationsCnsp": null,
                       "facade": "MEMN",
@@ -129,7 +129,6 @@ class APIMissionRepositoryITest {
                       ],
                       "isGeometryComputedFromControls": false,
                       "missionSource": "MONITORENV",
-                      "isClosed": false,
                       "isUnderJdp": false
                     }""",
                     ),

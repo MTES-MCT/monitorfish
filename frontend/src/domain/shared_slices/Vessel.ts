@@ -1,7 +1,8 @@
+import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
 import { createSlice } from '@reduxjs/toolkit'
 import { transform } from 'ol/proj'
 
-import { reportingIsAnInfractionSuspicion, ReportingTypeCharacteristics } from '../../features/Reporting/types'
+import { ReportingTypeCharacteristics } from '../../features/Reporting/types'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map/constants'
 import {
   atLeastOneVesselSelected,

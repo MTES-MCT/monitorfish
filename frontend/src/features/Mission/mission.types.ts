@@ -8,7 +8,7 @@ import type { Except } from 'type-fest'
 
 export namespace Mission {
   export interface Mission {
-    closedBy?: string
+    completedBy?: string
     controlUnits: LegacyControlUnit.LegacyControlUnit[]
     createdAtUtc?: string | undefined
     endDateTimeUtc?: string
@@ -17,8 +17,6 @@ export namespace Mission {
     geom?: GeoJSON.MultiPolygon
     hasMissionOrder?: boolean | undefined
     id: number
-    // TODO To remove when `isClosed` is removed
-    isClosed?: boolean | undefined
     isGeometryComputedFromControls: boolean
     isUnderJdp?: boolean | undefined
     missionSource: MissionSource

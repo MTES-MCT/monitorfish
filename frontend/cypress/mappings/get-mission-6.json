@@ -29,7 +29,7 @@
         }
       ],
       "openBy": "Kevin Torres",
-      "closedBy": "Cynthia Phillips",
+      "completedBy": "Cynthia Phillips",
       "observationsCacem": "Toward agency blue now hand. Meet answer someone stand.",
       "observationsCnsp": null,
       "facade": "MED",
@@ -40,7 +40,6 @@
       "updatedAtUtc": "2021-01-20T08:29:11.923703Z",
       "envActions": [],
       "missionSource": "POSEIDON_CNSP",
-      "isClosed": true,
       "isUnderJdp": false,
       "isGeometryComputedFromControls": false
     }

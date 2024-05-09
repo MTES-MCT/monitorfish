@@ -41,7 +41,6 @@ class GetMissionUTests {
                 startDateTimeUtc = ZonedDateTime.now(),
                 isGeometryComputedFromControls = false,
                 missionSource = MissionSource.MONITORFISH,
-                isClosed = false,
                 envActions = listOf(
                     EnvMissionAction(
                         id = UUID.randomUUID(),

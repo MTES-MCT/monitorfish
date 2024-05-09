@@ -7,7 +7,7 @@ import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../domain/entities/layers/types'
 import { monitorfishMap } from '../../map/monitorfishMap'
 import { useGetFilteredMissionsQuery } from '../components/MissionList/hooks/useGetFilteredMissionsQuery'
-import { getMissionFeatureZone } from '../index'
+import { getMissionFeatureZone } from '../features'
 
 import type { VectorLayerWithName } from '../../../domain/types/layer'
 

@@ -16,47 +16,47 @@ import { PriorNotificationListButton } from '../../../PriorNotification/componen
 export function MapButtons() {
   const isSuperUser = useIsSuperUser()
   const isAccountMapButtonDisplayed = useMainAppSelector(state => state.displayedComponent.isAccountMapButtonDisplayed)
-  const isPriorNotificationMapButtonDisplayed = useMainAppSelector(
-    state => state.displayedComponent.isPriorNotificationMapButtonDisplayed
+  const isBeaconMalfunctionsLeftMenuButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isBeaconMalfunctionsLeftMenuButtonDisplayed
   )
   const isControlUnitListMapButtonDisplayed = useMainAppSelector(
     state => state.displayedComponent.isControlUnitListMapButtonDisplayed
   )
-  const isBeaconMalfunctionsMapButtonDisplayed = useMainAppSelector(
-    state => state.displayedComponent.isBeaconMalfunctionsMapButtonDisplayed
+  const isFavoriteVesselsLeftMenuButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isFavoriteVesselsLeftMenuButtonDisplayed
   )
-  const isFavoriteVesselsMapButtonDisplayed = useMainAppSelector(
-    state => state.displayedComponent.isFavoriteVesselsMapButtonDisplayed
+  const isInterestPointRightMenuButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isInterestPointRightMenuButtonDisplayed
   )
-  const isInterestPointMapButtonDisplayed = useMainAppSelector(
-    state => state.displayedComponent.isInterestPointMapButtonDisplayed
+  const isMeasurementRightMenuButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isMeasurementRightMenuButtonDisplayed
   )
-  const isMeasurementMapButtonDisplayed = useMainAppSelector(
-    state => state.displayedComponent.isMeasurementMapButtonDisplayed
+  const isPriorNotificationLeftMenuButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isPriorNotificationLeftMenuButtonDisplayed
   )
-  const isVesselFiltersMapButtonDisplayed = useMainAppSelector(
-    state => state.displayedComponent.isVesselFiltersMapButtonDisplayed
+  const isVesselFiltersRightMenuButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isVesselFiltersRightMenuButtonDisplayed
   )
-  const isVesselLabelsMapButtonDisplayed = useMainAppSelector(
-    state => state.displayedComponent.isVesselLabelsMapButtonDisplayed
+  const isVesselLabelsRightMenuButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isVesselLabelsRightMenuButtonDisplayed
   )
-  const isVesselVisibilityMapButtonDisplayed = useMainAppSelector(
-    state => state.displayedComponent.isVesselVisibilityMapButtonDisplayed
+  const isVesselVisibilityRightMenuButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isVesselVisibilityRightMenuButtonDisplayed
   )
 
   return (
     <>
       <LegacyRsuiteComponentsWrapper>
-        {isFavoriteVesselsMapButtonDisplayed && <FavoriteVessels />}
+        {isFavoriteVesselsLeftMenuButtonDisplayed && <FavoriteVessels />}
         {(isSuperUser || import.meta.env.FRONTEND_PRIOR_NOTIFICATION_LIST_ENABLED === 'true') &&
-          isPriorNotificationMapButtonDisplayed && <PriorNotificationListButton />}
-        {isSuperUser && isBeaconMalfunctionsMapButtonDisplayed && <BeaconMalfunctionsMapButton />}
+          isPriorNotificationLeftMenuButtonDisplayed && <PriorNotificationListButton />}
+        {isSuperUser && isBeaconMalfunctionsLeftMenuButtonDisplayed && <BeaconMalfunctionsMapButton />}
 
-        {isVesselFiltersMapButtonDisplayed && <VesselFiltersMapButton />}
-        {isVesselVisibilityMapButtonDisplayed && <VesselVisibilityMapButton />}
-        {isMeasurementMapButtonDisplayed && <MeasurementMapButton />}
-        {isInterestPointMapButtonDisplayed && <InterestPointMapButton />}
-        {isVesselLabelsMapButtonDisplayed && <VesselLabelsMapButton />}
+        {isVesselFiltersRightMenuButtonDisplayed && <VesselFiltersMapButton />}
+        {isVesselVisibilityRightMenuButtonDisplayed && <VesselVisibilityMapButton />}
+        {isMeasurementRightMenuButtonDisplayed && <MeasurementMapButton />}
+        {isInterestPointRightMenuButtonDisplayed && <InterestPointMapButton />}
+        {isVesselLabelsRightMenuButtonDisplayed && <VesselLabelsMapButton />}
         {isAccountMapButtonDisplayed && <Account />}
       </LegacyRsuiteComponentsWrapper>
 

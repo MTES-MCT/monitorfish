@@ -31,21 +31,21 @@ export const openDrawLayerModal = dispatch => {
     setDisplayedComponents({
       areVesselsDisplayed: false,
       isAccountMapButtonDisplayed: false,
-      isAlertsMapButtonDisplayed: false,
-      isBeaconMalfunctionsMapButtonDisplayed: false,
+      isAlertsLeftMenuButtonDisplayed: false,
+      isBeaconMalfunctionsLeftMenuButtonDisplayed: false,
       isControlUnitListMapButtonDisplayed: false,
       isDrawLayerModalDisplayed: true,
-      isFavoriteVesselsMapButtonDisplayed: false,
-      isInterestPointMapButtonDisplayed: false,
-      isMeasurementMapButtonDisplayed: false,
+      isFavoriteVesselsLeftMenuButtonDisplayed: false,
+      isInterestPointRightMenuButtonDisplayed: false,
+      isMeasurementRightMenuButtonDisplayed: false,
       isMissionsLayerDisplayed: false,
-      isMissionsMapButtonDisplayed: false,
-      isPriorNotificationMapButtonDisplayed: false,
-      isVesselFiltersMapButtonDisplayed: false,
-      isVesselLabelsMapButtonDisplayed: false,
+      isMissionsLeftMenuButtonDisplayed: false,
+      isPriorNotificationLeftMenuButtonDisplayed: false,
+      isVesselFiltersRightMenuButtonDisplayed: false,
+      isVesselLabelsRightMenuButtonDisplayed: false,
       isVesselListDisplayed: false,
       isVesselSearchDisplayed: false,
-      isVesselVisibilityMapButtonDisplayed: false
+      isVesselVisibilityRightMenuButtonDisplayed: false
     })
   )
 }
@@ -55,21 +55,21 @@ export const closeDrawLayerModal = dispatch => {
     setDisplayedComponents({
       areVesselsDisplayed: true,
       isAccountMapButtonDisplayed: true,
-      isAlertsMapButtonDisplayed: true,
-      isBeaconMalfunctionsMapButtonDisplayed: true,
+      isAlertsLeftMenuButtonDisplayed: true,
+      isBeaconMalfunctionsLeftMenuButtonDisplayed: true,
       isControlUnitListMapButtonDisplayed: true,
       isDrawLayerModalDisplayed: false,
-      isFavoriteVesselsMapButtonDisplayed: true,
-      isInterestPointMapButtonDisplayed: true,
-      isMeasurementMapButtonDisplayed: true,
+      isFavoriteVesselsLeftMenuButtonDisplayed: true,
+      isInterestPointRightMenuButtonDisplayed: true,
+      isMeasurementRightMenuButtonDisplayed: true,
       isMissionsLayerDisplayed: true,
-      isMissionsMapButtonDisplayed: true,
-      isPriorNotificationMapButtonDisplayed: true,
-      isVesselFiltersMapButtonDisplayed: true,
-      isVesselLabelsMapButtonDisplayed: true,
+      isMissionsLeftMenuButtonDisplayed: true,
+      isPriorNotificationLeftMenuButtonDisplayed: true,
+      isVesselFiltersRightMenuButtonDisplayed: true,
+      isVesselLabelsRightMenuButtonDisplayed: true,
       isVesselListDisplayed: true,
       isVesselSearchDisplayed: true,
-      isVesselVisibilityMapButtonDisplayed: true
+      isVesselVisibilityRightMenuButtonDisplayed: true
     })
   )
 }

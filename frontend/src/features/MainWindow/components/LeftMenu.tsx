@@ -16,17 +16,22 @@ export function LeftMenu() {
   const missionButtonRef = useRef<HTMLDivElement | null>(null)
 
   const dispatch = useMainAppDispatch()
-  const { favorites } = useMainAppSelector(state => state.favoriteVessel)
+  const favorites = useMainAppSelector(state => state.favoriteVessel.favorites)
   const openedLeftDialog = useMainAppSelector(state => state.mainWindow.openedLeftDialog)
-  const isAlertsMapButtonDisplayed = useMainAppSelector(state => state.displayedComponent.isAlertsMapButtonDisplayed)
-  const isBeaconMalfunctionsMapButtonDisplayed = useMainAppSelector(
-    state => state.displayedComponent.isBeaconMalfunctionsMapButtonDisplayed
+  const isAlertsLeftMenuButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isAlertsLeftMenuButtonDisplayed
   )
-  const isFavoriteVesselsMapButtonDisplayed = useMainAppSelector(
-    state => state.displayedComponent.isFavoriteVesselsMapButtonDisplayed
+  const isBeaconMalfunctionsLeftMenuButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isBeaconMalfunctionsLeftMenuButtonDisplayed
   )
-  const isMissionsMapButtonDisplayed = useMainAppSelector(
-    state => state.displayedComponent.isMissionsMapButtonDisplayed
+  const isFavoriteVesselsLeftMenuButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isFavoriteVesselsLeftMenuButtonDisplayed
+  )
+  const isMissionsLeftMenuButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isMissionsLeftMenuButtonDisplayed
+  )
+  const isPriorNotificationLeftMenuButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isPriorNotificationLeftMenuButtonDisplayed
   )
   const isSuperUser = useIsSuperUser()
   // const previewFilteredVesselsMode = useMainAppSelector(state => state.mainWindow.previewFilteredVesselsMode)
@@ -62,7 +67,7 @@ export function LeftMenu() {
         <IconButton Icon={Icon.MapLayers} size={Size.LARGE} />
       </Block>
 
-      {isFavoriteVesselsMapButtonDisplayed && (
+      {isFavoriteVesselsLeftMenuButtonDisplayed && (
         <Block>
           <IconButtonWrapper>
             <IconButtonBadge $isActive={openedLeftDialog?.key === 'FAVORITE_VESSELS'}>
@@ -74,7 +79,7 @@ export function LeftMenu() {
       )}
 
       <Block>
-        {isSuperUser && isMissionsMapButtonDisplayed && (
+        {isSuperUser && isMissionsLeftMenuButtonDisplayed && (
           <IconButtonWrapper ref={missionButtonRef}>
             <IconButton
               data-cy="missions-map-button"
@@ -87,7 +92,7 @@ export function LeftMenu() {
           </IconButtonWrapper>
         )}
 
-        {isSuperUser && isAlertsMapButtonDisplayed && (
+        {isSuperUser && isAlertsLeftMenuButtonDisplayed && (
           <IconButton
             data-cy="alerts-button"
             data-isActive={
@@ -101,11 +106,10 @@ export function LeftMenu() {
           />
         )}
 
-        {import.meta.env.FRONTEND_PRIOR_NOTIFICATION_LIST_ENABLED === 'true' && (
-          <IconButton Icon={Icon.Fishery} size={Size.LARGE} />
-        )}
+        {import.meta.env.FRONTEND_PRIOR_NOTIFICATION_LIST_ENABLED === 'true' &&
+          isPriorNotificationLeftMenuButtonDisplayed && <IconButton Icon={Icon.Fishery} size={Size.LARGE} />}
 
-        {isSuperUser && isBeaconMalfunctionsMapButtonDisplayed && <IconButton Icon={Icon.Vms} size={Size.LARGE} />}
+        {isSuperUser && isBeaconMalfunctionsLeftMenuButtonDisplayed && <IconButton Icon={Icon.Vms} size={Size.LARGE} />}
       </Block>
     </Wrapper>
   )

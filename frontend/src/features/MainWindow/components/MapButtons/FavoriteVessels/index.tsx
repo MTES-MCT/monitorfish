@@ -18,7 +18,7 @@ import { MapButton } from '../MapButton'
 
 export function FavoriteVessels() {
   const dispatch = useMainAppDispatch()
-  const { favorites } = useMainAppSelector(state => state.favoriteVessel)
+  const favorites = useMainAppSelector(state => state.favoriteVessel.favorites)
   const { hideNonSelectedVessels, selectedVesselIdentity, vesselsTracksShowed } = useMainAppSelector(
     state => state.vessel
   )

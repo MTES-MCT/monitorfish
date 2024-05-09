@@ -7,49 +7,52 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 
 const displayedComponentsLocalstorageKey = 'displayedComponents'
 
+// TODO Move this slice either into `MainWindow` slice, or create related feature components slices (LeftMenu, RightMenu, etc.).
 export type DisplayedComponentState = {
   areVesselsDisplayed: boolean
-  isAlertsMapButtonDisplayed: boolean
-  isBeaconMalfunctionsMapButtonDisplayed: boolean
+  isAlertsLeftMenuButtonDisplayed: boolean
+  isBeaconMalfunctionsLeftMenuButtonDisplayed: boolean
   isControlUnitDialogDisplayed: boolean
   isControlUnitListDialogDisplayed: boolean
   isDrawLayerModalDisplayed: boolean
-  isFavoriteVesselsMapButtonDisplayed: boolean
-  isInterestPointMapButtonDisplayed: boolean
-  isMeasurementMapButtonDisplayed: boolean
+  isFavoriteVesselsLeftMenuButtonDisplayed: boolean
+  isInterestPointRightMenuButtonDisplayed: boolean
+  isMeasurementRightMenuButtonDisplayed: boolean
   isMissionsLayerDisplayed: boolean
-  isMissionsMapButtonDisplayed: boolean
+  isMissionsLeftMenuButtonDisplayed: boolean
+  isPriorNotificationLeftMenuButtonDisplayed: boolean
   isStationLayerDisplayed: boolean
-  isVesselFiltersMapButtonDisplayed: boolean
-  isVesselLabelsMapButtonDisplayed: boolean
+  isVesselFiltersRightMenuButtonDisplayed: boolean
+  isVesselLabelsRightMenuButtonDisplayed: boolean
   isVesselListDisplayed: boolean
   isVesselListModalDisplayed: boolean
   isVesselSearchDisplayed: boolean
-  isVesselVisibilityMapButtonDisplayed: boolean
+  isVesselVisibilityRightMenuButtonDisplayed: boolean
 }
 const INITIAL_STATE: DisplayedComponentState = {
   areVesselsDisplayed: true,
-  isAlertsMapButtonDisplayed: true,
-  isBeaconMalfunctionsMapButtonDisplayed: true,
+  isAlertsLeftMenuButtonDisplayed: true,
+  isBeaconMalfunctionsLeftMenuButtonDisplayed: true,
   isControlUnitDialogDisplayed: false,
   isControlUnitListDialogDisplayed: false,
   isDrawLayerModalDisplayed: false,
-  isFavoriteVesselsMapButtonDisplayed: true,
-  isInterestPointMapButtonDisplayed: true,
-  isMeasurementMapButtonDisplayed: true,
+  isFavoriteVesselsLeftMenuButtonDisplayed: true,
+  isInterestPointRightMenuButtonDisplayed: true,
+  isMeasurementRightMenuButtonDisplayed: true,
   isMissionsLayerDisplayed: getLocalstorageProperty(
     true,
     displayedComponentsLocalstorageKey,
     'isMissionsLayerDisplayed'
   ),
-  isMissionsMapButtonDisplayed: true,
+  isMissionsLeftMenuButtonDisplayed: true,
+  isPriorNotificationLeftMenuButtonDisplayed: true,
   isStationLayerDisplayed: false,
-  isVesselFiltersMapButtonDisplayed: true,
-  isVesselLabelsMapButtonDisplayed: true,
+  isVesselFiltersRightMenuButtonDisplayed: true,
+  isVesselLabelsRightMenuButtonDisplayed: true,
   isVesselListDisplayed: true,
   isVesselListModalDisplayed: false,
   isVesselSearchDisplayed: true,
-  isVesselVisibilityMapButtonDisplayed: true
+  isVesselVisibilityRightMenuButtonDisplayed: true
 }
 
 /**

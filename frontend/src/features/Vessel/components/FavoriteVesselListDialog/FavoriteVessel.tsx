@@ -1,15 +1,14 @@
 import { CountryFlag } from '@components/CountryFlag'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
+import { removeVesselFromFavorites } from 'domain/shared_slices/FavoriteVessel'
+import { hideVesselTrack } from 'domain/use_cases/vessel/hideVesselTrack'
+import { showVessel } from 'domain/use_cases/vessel/showVessel'
+import { showVesselTrack } from 'domain/use_cases/vessel/showVesselTrack'
+import { unselectVessel } from 'domain/use_cases/vessel/unselectVessel'
 import styled from 'styled-components'
 
-import { removeVesselFromFavorites } from '../../../../../domain/shared_slices/FavoriteVessel'
-import { hideVesselTrack } from '../../../../../domain/use_cases/vessel/hideVesselTrack'
-import { showVessel } from '../../../../../domain/use_cases/vessel/showVessel'
-import { showVesselTrack } from '../../../../../domain/use_cases/vessel/showVesselTrack'
-import { unselectVessel } from '../../../../../domain/use_cases/vessel/unselectVessel'
-
-import type { VesselCompositeIdentifier, VesselIdentity } from '../../../../../domain/entities/vessel/types'
+import type { VesselCompositeIdentifier, VesselIdentity } from '../../../../domain/entities/vessel/types'
 
 type FavoriteVesselProps = Readonly<{
   favorite: VesselIdentity

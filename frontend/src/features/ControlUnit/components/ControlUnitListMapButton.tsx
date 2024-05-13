@@ -11,7 +11,6 @@ export function ControlUnitListMapButton() {
   const wrapperRef = useRef(null)
 
   const dispatch = useMainAppDispatch()
-  // const previewFilteredVesselsMode = useMainAppSelector(state => state.mainWindow.previewFilteredVesselsMode)
   const rightMenuIsOpen = useMainAppSelector(state => state.mainWindow.rightMenuIsOpen)
   const isControlUnitDialogDisplayed = useMainAppSelector(
     state => state.displayedComponent.isControlUnitDialogDisplayed

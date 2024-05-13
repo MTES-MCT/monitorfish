@@ -1,4 +1,5 @@
 import { MissionMenuDialog } from '@features/Mission/components/MissionMenuDialog'
+import { FavoriteVesselListDialog } from '@features/Vessel/components/FavoriteVesselListDialog'
 import { MapBox } from 'domain/entities/map/constants'
 import { useCallback } from 'react'
 import { useBeforeUnload } from 'react-router-dom'
@@ -19,7 +20,7 @@ import { DrawLayerModal } from '../Draw/components/DrawModal'
 import { HealthcheckHeadband } from '../Healthcheck/components/HealthcheckHeadband'
 import { LayersSidebar } from '../LayersSidebar/components'
 import { Map } from '../map/Map'
-import PreviewFilteredVessels from '../preview_filtered_vessels/PreviewFilteredVessels'
+import { PreviewFilteredVessels } from '../preview_filtered_vessels/PreviewFilteredVessels'
 import { SideWindowLauncher } from '../SideWindow/SideWindowLauncher'
 import { VesselLoader } from '../Vessel/components/VesselLoader'
 import { VesselList } from '../VesselList'
@@ -34,6 +35,12 @@ export function MainWindow() {
     state => state.displayedComponent.isControlUnitListDialogDisplayed
   )
   const isDrawLayerModalDisplayed = useMainAppSelector(state => state.displayedComponent.isDrawLayerModalDisplayed)
+  const isFavoriteVesselsLeftMenuButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isFavoriteVesselsLeftMenuButtonDisplayed
+  )
+  const isMissionsLeftMenuButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isMissionsLeftMenuButtonDisplayed
+  )
   const isVesselListDisplayed = useMainAppSelector(state => state.displayedComponent.isVesselListDisplayed)
   const isVesselSearchDisplayed = useMainAppSelector(state => state.displayedComponent.isVesselSearchDisplayed)
   const isVesselSidebarOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
@@ -88,7 +95,10 @@ export function MainWindow() {
         {isDrawLayerModalDisplayed && <DrawLayerModal />}
       </MapWrapper>
 
-      {openedLeftDialog?.key === MapBox.MISSIONS && <MissionMenuDialog />}
+      {openedLeftDialog?.key === MapBox.FAVORITE_VESSELS && isFavoriteVesselsLeftMenuButtonDisplayed && (
+        <FavoriteVesselListDialog />
+      )}
+      {openedLeftDialog?.key === MapBox.MISSIONS && isMissionsLeftMenuButtonDisplayed && <MissionMenuDialog />}
     </Wrapper>
   )
 }

@@ -1,3 +1,4 @@
+import { assertNotNullish } from '@utils/assertNotNullish'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
@@ -10,9 +11,6 @@ import { AdministrativeZones } from '../../AdministrativeZone/components/Adminis
 import { BaseMaps } from '../../BaseMap/components/BaseMaps'
 import { MapComponent } from '../../commonStyles/MapComponent'
 import { CustomZones } from '../../CustomZone/components/CustomZones'
-import LayersSVG from '../../icons/Couches.svg?react'
-import { MapButton } from '../../MainWindow/components/MapButtons/MapButton'
-import { setLeftMapBoxOpened } from '../../MainWindow/slice'
 import { RegulationSearch } from '../../Regulation/components/RegulationSearch'
 import { RegulatoryZoneMetadata } from '../../Regulation/components/RegulatoryZoneMetadata'
 import { RegulatoryZones } from '../../Regulation/components/RegulatoryZones'
@@ -23,9 +21,10 @@ export function LayersSidebar() {
   const regulatoryZoneMetadataPanelIsOpen = useMainAppSelector(
     state => state.regulatory.regulatoryZoneMetadataPanelIsOpen
   )
+  const openedLeftDialog = useMainAppSelector(state => state.mainWindow.openedLeftDialog)
+  assertNotNullish(openedLeftDialog)
   const healthcheckTextWarning = useMainAppSelector(state => state.mainWindow.healthcheckTextWarning)
   const leftMapBoxOpened = useMainAppSelector(state => state.mainWindow.leftMapBoxOpened)
-  const previewFilteredVesselsMode = useMainAppSelector(state => state.mainWindow.previewFilteredVesselsMode)
 
   const [numberOfRegulatoryLayersSaved, setNumberOfRegulatoryLayersSaved] = useState(0)
 
@@ -38,49 +37,38 @@ export function LayersSidebar() {
   return (
     <NamespaceContext.Consumer>
       {namespace => (
-        <>
-          <Button
-            data-cy="layers-sidebar"
-            isHidden={!!previewFilteredVesselsMode}
-            isVisible={leftMapBoxOpened === MapBox.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
-            onClick={() =>
-              dispatch(setLeftMapBoxOpened(leftMapBoxOpened === MapBox.REGULATIONS ? undefined : MapBox.REGULATIONS))
-            }
-            title="Couches réglementaires"
+        <Wrapper data-cy="layers-sidebar-box" style={{ top: openedLeftDialog.topPosition }}>
+          <RegulationSearch
+            namespace={namespace}
+            numberOfRegulatoryLayersSaved={numberOfRegulatoryLayersSaved}
+            setNumberOfRegulatoryLayersSaved={setNumberOfRegulatoryLayersSaved}
+          />
+          <Layers hasHealthcheckTextWarning={!!healthcheckTextWarning.length}>
+            <RegulatoryZones namespace={namespace} regulatoryLayersAddedToMySelection={numberOfRegulatoryLayersSaved} />
+            <CustomZones namespace={namespace} />
+            <AdministrativeZones namespace={namespace} />
+            <BaseMaps namespace={namespace} />
+          </Layers>
+          <RegulatoryZoneMetadataShifter
+            isLeftMapBoxOpened={!!leftMapBoxOpened}
+            isOpen={regulatoryZoneMetadataPanelIsOpen}
           >
-            <LayersIcon />
-          </Button>
-          <Sidebar
-            data-cy="layers-sidebar-box"
-            isOpen={leftMapBoxOpened === MapBox.REGULATIONS}
-            isVisible={leftMapBoxOpened === MapBox.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
-          >
-            <RegulationSearch
-              namespace={namespace}
-              numberOfRegulatoryLayersSaved={numberOfRegulatoryLayersSaved}
-              setNumberOfRegulatoryLayersSaved={setNumberOfRegulatoryLayersSaved}
-            />
-            <Layers hasHealthcheckTextWarning={!!healthcheckTextWarning.length}>
-              <RegulatoryZones
-                namespace={namespace}
-                regulatoryLayersAddedToMySelection={numberOfRegulatoryLayersSaved}
-              />
-              <CustomZones namespace={namespace} />
-              <AdministrativeZones namespace={namespace} />
-              <BaseMaps namespace={namespace} />
-            </Layers>
-            <RegulatoryZoneMetadataShifter
-              isLeftMapBoxOpened={!!leftMapBoxOpened}
-              isOpen={regulatoryZoneMetadataPanelIsOpen}
-            >
-              <RegulatoryZoneMetadata />
-            </RegulatoryZoneMetadataShifter>
-          </Sidebar>
-        </>
+            <RegulatoryZoneMetadata />
+          </RegulatoryZoneMetadataShifter>
+        </Wrapper>
       )}
     </NamespaceContext.Consumer>
   )
 }
+
+const Wrapper = styled(MapComponent)`
+  border-radius: 2px;
+  background-color: ${p => p.theme.color.white};
+  left: 160px;
+  position: absolute;
+  transition: all 0.5s;
+  width: 320px;
+`
 
 const RegulatoryZoneMetadataShifter = styled.div<{
   isLeftMapBoxOpened: boolean
@@ -102,50 +90,10 @@ const RegulatoryZoneMetadataShifter = styled.div<{
   transition: all 0.5s;
 `
 
-const Sidebar = styled(MapComponent)<{
-  isOpen: boolean
-  isVisible: boolean
-}>`
-  margin-left: ${p => (p.isOpen ? 0 : '-418px')};
-  opacity: ${p => (p.isVisible ? 1 : 0)};
-  top: 10px;
-  left: 57px;
-  z-index: 999;
-  border-radius: 2px;
-  position: absolute;
-  display: inline-block;
-  transition: 0.5s all;
-`
-
 const Layers = styled.div<{
   hasHealthcheckTextWarning: boolean
 }>`
   margin-top: 5px;
   width: 350px;
   max-height: calc(100vh - ${p => (p.hasHealthcheckTextWarning ? '210px' : '160px')});
-`
-
-const Button = styled(MapButton)<{
-  isVisible: boolean
-}>`
-  position: absolute;
-  display: inline-block;
-  color: ${COLORS.blue};
-  background: ${p => (p.isVisible ? p.theme.color.blueGray : p.theme.color.charcoal)};
-  padding: 2px 2px 2px 2px;
-  top: 10px;
-  left: 10px;
-  border-radius: 2px;
-  height: 40px;
-  width: 40px;
-
-  :hover,
-  :focus {
-    background: ${p => (p.isVisible ? p.theme.color.blueGray : p.theme.color.charcoal)};
-  }
-`
-
-const LayersIcon = styled(LayersSVG)`
-  width: 35px;
-  height: 35px;
 `

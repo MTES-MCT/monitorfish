@@ -15,6 +15,7 @@ import { mainWindowActions } from '../slice'
 export function LeftMenu() {
   const favoriteVesselsButtonRef = useRef<HTMLDivElement | null>(null)
   const missionsButtonRef = useRef<HTMLDivElement | null>(null)
+  const regulationsButtonRef = useRef<HTMLDivElement | null>(null)
 
   const dispatch = useMainAppDispatch()
   const favorites = useMainAppSelector(state => state.favoriteVessel.favorites)
@@ -36,6 +37,9 @@ export function LeftMenu() {
   )
   const isPriorNotificationLeftMenuButtonDisplayed = useMainAppSelector(
     state => state.displayedComponent.isPriorNotificationLeftMenuButtonDisplayed
+  )
+  const isRegulationsLeftMenuButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isRegulationsLeftMenuButtonDisplayed
   )
 
   const isSideWindowAlertsActive =
@@ -74,6 +78,17 @@ export function LeftMenu() {
     )
   }
 
+  const toggleRegulationDialog = () => {
+    assertNotNullish(regulationsButtonRef.current)
+
+    dispatch(
+      mainWindowActions.toggleLeftDialog({
+        key: MapBox.REGULATIONS,
+        topPosition: regulationsButtonRef.current.getBoundingClientRect().top
+      })
+    )
+  }
+
   const toggleSideWindowAlertList = () => {
     if (isSideWindowAlertsActive) {
       dispatch(sideWindowActions.close())
@@ -96,9 +111,20 @@ export function LeftMenu() {
 
   return (
     <Wrapper>
-      <Block>
-        <IconButton Icon={Icon.MapLayers} size={Size.LARGE} />
-      </Block>
+      {isRegulationsLeftMenuButtonDisplayed && (
+        <Block>
+          <IconButtonWrapper ref={regulationsButtonRef}>
+            <IconButton
+              className={openedLeftDialog?.key === MapBox.REGULATIONS ? '_active' : undefined}
+              data-cy="layers-sidebar"
+              Icon={Icon.MapLayers}
+              onClick={toggleRegulationDialog}
+              size={Size.LARGE}
+              title="Couches réglementaires"
+            />
+          </IconButtonWrapper>
+        </Block>
+      )}
 
       {isFavoriteVesselsLeftMenuButtonDisplayed && (
         <Block>

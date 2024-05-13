@@ -41,6 +41,9 @@ export function MainWindow() {
   const isMissionsLeftMenuButtonDisplayed = useMainAppSelector(
     state => state.displayedComponent.isMissionsLeftMenuButtonDisplayed
   )
+  const isRegulationsLeftMenuButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isRegulationsLeftMenuButtonDisplayed
+  )
   const isVesselListDisplayed = useMainAppSelector(state => state.displayedComponent.isVesselListDisplayed)
   const isVesselSearchDisplayed = useMainAppSelector(state => state.displayedComponent.isVesselSearchDisplayed)
   const isVesselSidebarOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
@@ -75,7 +78,6 @@ export function MainWindow() {
         <LeftMenu />
 
         <LegacyRsuiteComponentsWrapper>
-          <LayersSidebar />
           {isVesselSearchDisplayed && <VesselSidebarHeader />}
           <MapButtons />
           <RightMenuOnHoverArea />
@@ -95,6 +97,7 @@ export function MainWindow() {
         {isDrawLayerModalDisplayed && <DrawLayerModal />}
       </MapWrapper>
 
+      {openedLeftDialog?.key === MapBox.REGULATIONS && isRegulationsLeftMenuButtonDisplayed && <LayersSidebar />}
       {openedLeftDialog?.key === MapBox.FAVORITE_VESSELS && isFavoriteVesselsLeftMenuButtonDisplayed && (
         <FavoriteVesselListDialog />
       )}

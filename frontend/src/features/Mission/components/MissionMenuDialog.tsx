@@ -45,7 +45,7 @@ export function MissionMenuDialog() {
   }
 
   return (
-    <Wrapper data-cy="missions-menu-box" style={{ top: openedLeftDialog?.topPosition }}>
+    <Wrapper data-cy="missions-menu-box" style={{ top: openedLeftDialog.topPosition }}>
       <MissionsMenuHeader>
         <ToggleMissionMenuButton Icon={Icon.Close} onClick={close} size={Size.NORMAL} />
         <Title>Missions et contrôles</Title>
@@ -74,12 +74,13 @@ export function MissionMenuDialog() {
   )
 }
 
+// TODO Check with Adeline if we plan on keeping the animation (disabled for now).
 const Wrapper = styled.div`
   box-sizing: border-box;
   background-color: ${p => p.theme.color.white};
   left: 160px;
   position: absolute;
-  transition: all 0.2s;
+  transition: all 0.5s;
   width: 320px;
 
   * {

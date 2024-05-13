@@ -4,17 +4,17 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
-import { removeVesselFromFavorites } from '../../../../../domain/shared_slices/FavoriteVessel'
-import { hideVesselTrack } from '../../../../../domain/use_cases/vessel/hideVesselTrack'
-import { showVessel } from '../../../../../domain/use_cases/vessel/showVessel'
-import { showVesselTrack } from '../../../../../domain/use_cases/vessel/showVesselTrack'
-import { unselectVessel } from '../../../../../domain/use_cases/vessel/unselectVessel'
-import { CloseIcon } from '../../../../commonStyles/icons/CloseIcon.style'
-import { HideIcon } from '../../../../commonStyles/icons/HideIcon.style'
-import { PaperDarkIcon, PaperIcon } from '../../../../commonStyles/icons/REGPaperIcon.style'
-import { ShowIcon } from '../../../../commonStyles/icons/ShowIcon.style'
+import { removeVesselFromFavorites } from '../../../../domain/shared_slices/FavoriteVessel'
+import { hideVesselTrack } from '../../../../domain/use_cases/vessel/hideVesselTrack'
+import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
+import { showVesselTrack } from '../../../../domain/use_cases/vessel/showVesselTrack'
+import { unselectVessel } from '../../../../domain/use_cases/vessel/unselectVessel'
+import { CloseIcon } from '../../../commonStyles/icons/CloseIcon.style'
+import { HideIcon } from '../../../commonStyles/icons/HideIcon.style'
+import { PaperDarkIcon, PaperIcon } from '../../../commonStyles/icons/REGPaperIcon.style'
+import { ShowIcon } from '../../../commonStyles/icons/ShowIcon.style'
 
-import type { VesselCompositeIdentifier, VesselIdentity } from '../../../../../domain/entities/vessel/types'
+import type { VesselCompositeIdentifier, VesselIdentity } from '../../../../domain/entities/vessel/types'
 
 type FavoriteVesselProps = Readonly<{
   favorite: VesselIdentity

@@ -4,23 +4,14 @@ import { useIsSuperUser } from '@hooks/authorization/useIsSuperUser'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { LegacyRsuiteComponentsWrapper } from 'ui/LegacyRsuiteComponentsWrapper'
 
-import { BeaconMalfunctionsMapButton } from './BeaconMalfunctionsMapButton'
-import { FavoriteVessels } from './FavoriteVessels'
 import { InterestPointMapButton } from './InterestPoints'
 import { MeasurementMapButton } from './Measurements'
-import { PriorNotificationListButton } from './PriorNotificationListButton'
 import { VesselFiltersMapButton } from './VesselFilters'
 import { VesselLabelsMapButton } from './VesselLabels'
 import { VesselVisibilityMapButton } from './VesselVisibility'
 
 export function MapButtons() {
   const isSuperUser = useIsSuperUser()
-  const isBeaconMalfunctionsLeftMenuButtonDisplayed = useMainAppSelector(
-    state => state.displayedComponent.isBeaconMalfunctionsLeftMenuButtonDisplayed
-  )
-  const isFavoriteVesselsLeftMenuButtonDisplayed = useMainAppSelector(
-    state => state.displayedComponent.isFavoriteVesselsLeftMenuButtonDisplayed
-  )
   const isInterestPointRightMenuButtonDisplayed = useMainAppSelector(
     state => state.displayedComponent.isInterestPointRightMenuButtonDisplayed
   )
@@ -40,10 +31,6 @@ export function MapButtons() {
   return (
     <>
       <LegacyRsuiteComponentsWrapper>
-        {isFavoriteVesselsLeftMenuButtonDisplayed && <FavoriteVessels />}
-        {import.meta.env.FRONTEND_PRIOR_NOTIFICATION_LIST_ENABLED === 'true' && <PriorNotificationListButton />}
-        {isSuperUser && isBeaconMalfunctionsLeftMenuButtonDisplayed && <BeaconMalfunctionsMapButton />}
-
         {isVesselFiltersRightMenuButtonDisplayed && <VesselFiltersMapButton />}
         {isVesselVisibilityRightMenuButtonDisplayed && <VesselVisibilityMapButton />}
         {isMeasurementRightMenuButtonDisplayed && <MeasurementMapButton />}

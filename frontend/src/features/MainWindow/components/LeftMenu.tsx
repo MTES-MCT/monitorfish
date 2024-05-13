@@ -200,7 +200,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   position: absolute;
-  left: 112px;
+  left: 12px;
   top: 12px;
 
   * {

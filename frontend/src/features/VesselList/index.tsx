@@ -1,5 +1,6 @@
 import { MapToolButton } from '@features/MainWindow/components/MapButtons/shared/MapToolButton'
 import { SaveVesselFiltersModal } from '@features/MainWindow/components/MapButtons/VesselFilters/SaveVesselFiltersModal'
+import { hideAllMainWindowComponentsAndSaveDisplayState } from '@features/MainWindow/useCases/hideAllMainWindowComponentsAndSaveDisplayState'
 import { THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { batch } from 'react-redux'
@@ -278,6 +279,7 @@ export function VesselList({ namespace }) {
     if (vesselFeatureIds?.length) {
       dispatch(setPreviewFilteredVesselsFeatures(vesselFeatureIds))
       dispatch(setPreviewFilteredVesselsMode(true))
+      dispatch(hideAllMainWindowComponentsAndSaveDisplayState())
 
       if (zonesSelected?.length) {
         // TODO Finish that

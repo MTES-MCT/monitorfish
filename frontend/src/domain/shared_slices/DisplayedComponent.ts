@@ -29,7 +29,7 @@ export type DisplayedComponentState = {
   isVesselSearchDisplayed: boolean
   isVesselVisibilityRightMenuButtonDisplayed: boolean
 }
-const INITIAL_STATE: DisplayedComponentState = {
+export const INITIAL_STATE: DisplayedComponentState = {
   areVesselsDisplayed: true,
   isAlertsLeftMenuButtonDisplayed: true,
   isBeaconMalfunctionsLeftMenuButtonDisplayed: true,
@@ -64,6 +64,12 @@ const displayedComponentSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'displayedComponent',
   reducers: {
+    hideAll(state) {
+      Object.keys(INITIAL_STATE).forEach(propertyKey => {
+        state[propertyKey] = false
+      })
+    },
+
     setDisplayedComponents(state, action: PayloadAction<Partial<DisplayedComponentState>>) {
       Object.keys(INITIAL_STATE).forEach(propertyKey => {
         const value = getValueOrDefault(action.payload[propertyKey], state[propertyKey])

@@ -1,4 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
+import {
+  type DisplayedComponentState,
+  INITIAL_STATE as DISPLAYED_COMPONENT_INITIAL_STATE
+} from 'domain/shared_slices/DisplayedComponent'
 
 import { UserType } from '../../domain/entities/beaconMalfunction/constants'
 import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../../domain/entities/vessel/vessel'
@@ -18,6 +22,7 @@ export type MainWindowState = {
   healthcheckTextWarning: string[]
   isBackoffice: boolean
   isUpdatingVessels: boolean
+  lastDisplayState: DisplayedComponentState
   lastSearchedVessels: any[]
   leftMapBoxOpened: MapBox | undefined
   openedLeftDialog:
@@ -40,6 +45,7 @@ const INITIAL_STATE: MainWindowState = {
   healthcheckTextWarning: [],
   isBackoffice: false,
   isUpdatingVessels: false,
+  lastDisplayState: DISPLAYED_COMPONENT_INITIAL_STATE,
   lastSearchedVessels: getLocalStorageState([], lastSearchedVesselsLocalStorageKey),
   leftMapBoxOpened: undefined,
   openedLeftDialog: undefined,
@@ -142,6 +148,13 @@ export const mainWindowSlice = createSlice({
 
     setIsUpdatingVessels(state) {
       state.isUpdatingVessels = true
+    },
+
+    /**
+     * @internal Don't use this action directly. Use `hideAllMainWindowComponentsAndSaveDisplayState` dispatcher.
+     */
+    setLastDisplayState(state, action: PayloadAction<DisplayedComponentState>) {
+      state.lastDisplayState = action.payload
     },
 
     /**

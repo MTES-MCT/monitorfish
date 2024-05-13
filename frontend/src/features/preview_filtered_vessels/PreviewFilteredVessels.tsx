@@ -1,15 +1,15 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { setPreviewFilteredVesselsMode } from '@features/MainWindow/slice'
+import { restoreMainWindowDisplayState } from '@features/MainWindow/useCases/restoreMainWindowDisplayState'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import styled from 'styled-components'
 
-import { COLORS } from '../../constants/constants'
 import BackToVesselsListSVG from '../icons/Fleche_navigation_marees_gainsboro.svg?react'
-import { setPreviewFilteredVesselsMode } from '../MainWindow/slice'
 
-function PreviewFilteredVessels() {
-  const dispatch = useDispatch()
+export function PreviewFilteredVessels() {
+  const dispatch = useMainAppDispatch()
 
-  const { previewFilteredVesselsMode } = useSelector(state => state.mainWindow)
+  const { previewFilteredVesselsMode } = useMainAppSelector(state => state.mainWindow)
 
   return (
     <>
@@ -18,6 +18,7 @@ function PreviewFilteredVessels() {
           data-cy="back-to-vessels-list"
           onClick={() => {
             dispatch(setPreviewFilteredVesselsMode(false))
+            dispatch(restoreMainWindowDisplayState())
           }}
         >
           <Text>
@@ -39,17 +40,15 @@ const BackToVesselsList = styled(BackToVesselsListSVG)`
 
 const Text = styled.div`
   font: normal normal normal 22px/31px Marianne;
-  color: ${COLORS.gainsboro};
+  color: ${p => p.theme.color.gainsboro};
 `
 
 const Preview = styled.div`
-  background: ${COLORS.charcoal} 0% 0% no-repeat padding-box;
-  width 100%;
+  background: ${p => p.theme.color.charcoal} 0% 0% no-repeat padding-box;
+  width: 100%;
   height: 24px;
   text-align: center;
   padding: 17px;
   padding-top: 9px;
   cursor: pointer;
 `
-
-export default PreviewFilteredVessels

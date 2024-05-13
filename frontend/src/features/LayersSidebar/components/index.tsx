@@ -1,6 +1,7 @@
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Icon, IconButton, Size, THEME } from '@mtes-mct/monitor-ui'
+import { assertNotNullish } from '@utils/assertNotNullish'
 import { useEffect } from 'react'
 import styled from 'styled-components'
 
@@ -22,9 +23,10 @@ export function LayersSidebar() {
   const regulatoryZoneMetadataPanelIsOpen = useMainAppSelector(
     state => state.regulatory.regulatoryZoneMetadataPanelIsOpen
   )
+  const openedLeftDialog = useMainAppSelector(state => state.mainWindow.openedLeftDialog)
+  assertNotNullish(openedLeftDialog)
   const healthcheckTextWarning = useMainAppSelector(state => state.mainWindow.healthcheckTextWarning)
   const leftMapBoxOpened = useMainAppSelector(state => state.mainWindow.leftMapBoxOpened)
-  const previewFilteredVesselsMode = useMainAppSelector(state => state.mainWindow.previewFilteredVesselsMode)
 
   useEffect(() => {
     if (leftMapBoxOpened !== MapBox.REGULATIONS) {
@@ -36,7 +38,7 @@ export function LayersSidebar() {
     <NamespaceContext.Consumer>
       {namespace => (
         <>
-          <SidebarLayersButton isHidden={!!previewFilteredVesselsMode}>
+          <SidebarLayersButton>
             <SidebarLayersIcon
               $isActive={leftMapBoxOpened === MapBox.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
               accent={Accent.PRIMARY}

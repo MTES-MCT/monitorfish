@@ -23,6 +23,7 @@ export type DisplayedComponentState = {
   isMissionsLayerDisplayed: boolean
   isMissionsLeftMenuButtonDisplayed: boolean
   isPriorNotificationLeftMenuButtonDisplayed: boolean
+  isRegulationsLeftMenuButtonDisplayed: boolean
   isStationLayerDisplayed: boolean
   isVesselFiltersRightMenuButtonDisplayed: boolean
   isVesselLabelsRightMenuButtonDisplayed: boolean
@@ -50,6 +51,7 @@ export const INITIAL_STATE: DisplayedComponentState = {
   ),
   isMissionsLeftMenuButtonDisplayed: true,
   isPriorNotificationLeftMenuButtonDisplayed: true,
+  isRegulationsLeftMenuButtonDisplayed: true,
   isStationLayerDisplayed: false,
   isVesselFiltersRightMenuButtonDisplayed: true,
   isVesselLabelsRightMenuButtonDisplayed: true,

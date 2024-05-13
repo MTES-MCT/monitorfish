@@ -66,7 +66,7 @@ const Wrapper = styled.div`
   box-sizing: border-box;
   background-color: ${p => p.theme.color.white};
   border-radius: 2px;
-  left: 160px;
+  left: 64px;
   position: absolute;
   transition: all 0.5s;
   width: 305px;

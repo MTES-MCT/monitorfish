@@ -64,7 +64,7 @@ export function LayersSidebar() {
 const Wrapper = styled(MapComponent)`
   border-radius: 2px;
   background-color: ${p => p.theme.color.white};
-  left: 160px;
+  left: 64px;
   position: absolute;
   transition: all 0.5s;
   width: 320px;

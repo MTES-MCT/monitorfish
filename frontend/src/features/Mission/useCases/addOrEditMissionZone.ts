@@ -1,5 +1,7 @@
+import { hideAllMainWindowComponentsAndSaveDisplayState } from '@features/MainWindow/useCases/hideAllMainWindowComponentsAndSaveDisplayState'
+import { restoreMainWindowDisplayState } from '@features/MainWindow/useCases/restoreMainWindowDisplayState'
+
 import { InteractionListener, InteractionType } from '../../../domain/entities/map/constants'
-import { setDisplayedComponents } from '../../../domain/shared_slices/DisplayedComponent'
 import { fitMultiPolygonToExtent } from '../../../domain/use_cases/map/fitMultiPolygonToExtent'
 import { unselectVessel } from '../../../domain/use_cases/vessel/unselectVessel'
 import { setInitialGeometry, setInteractionTypeAndListener } from '../../Draw/slice'
@@ -27,49 +29,9 @@ export const addOrEditMissionZone =
   }
 
 export const openDrawLayerModal = dispatch => {
-  dispatch(
-    setDisplayedComponents({
-      areVesselsDisplayed: false,
-      isAccountMapButtonDisplayed: false,
-      isAlertsLeftMenuButtonDisplayed: false,
-      isBeaconMalfunctionsLeftMenuButtonDisplayed: false,
-      isControlUnitListMapButtonDisplayed: false,
-      isDrawLayerModalDisplayed: true,
-      isFavoriteVesselsLeftMenuButtonDisplayed: false,
-      isInterestPointRightMenuButtonDisplayed: false,
-      isMeasurementRightMenuButtonDisplayed: false,
-      isMissionsLayerDisplayed: false,
-      isMissionsLeftMenuButtonDisplayed: false,
-      isPriorNotificationLeftMenuButtonDisplayed: false,
-      isVesselFiltersRightMenuButtonDisplayed: false,
-      isVesselLabelsRightMenuButtonDisplayed: false,
-      isVesselListDisplayed: false,
-      isVesselSearchDisplayed: false,
-      isVesselVisibilityRightMenuButtonDisplayed: false
-    })
-  )
+  dispatch(hideAllMainWindowComponentsAndSaveDisplayState())
 }
 
 export const closeDrawLayerModal = dispatch => {
-  dispatch(
-    setDisplayedComponents({
-      areVesselsDisplayed: true,
-      isAccountMapButtonDisplayed: true,
-      isAlertsLeftMenuButtonDisplayed: true,
-      isBeaconMalfunctionsLeftMenuButtonDisplayed: true,
-      isControlUnitListMapButtonDisplayed: true,
-      isDrawLayerModalDisplayed: false,
-      isFavoriteVesselsLeftMenuButtonDisplayed: true,
-      isInterestPointRightMenuButtonDisplayed: true,
-      isMeasurementRightMenuButtonDisplayed: true,
-      isMissionsLayerDisplayed: true,
-      isMissionsLeftMenuButtonDisplayed: true,
-      isPriorNotificationLeftMenuButtonDisplayed: true,
-      isVesselFiltersRightMenuButtonDisplayed: true,
-      isVesselLabelsRightMenuButtonDisplayed: true,
-      isVesselListDisplayed: true,
-      isVesselSearchDisplayed: true,
-      isVesselVisibilityRightMenuButtonDisplayed: true
-    })
-  )
+  dispatch(restoreMainWindowDisplayState())
 }

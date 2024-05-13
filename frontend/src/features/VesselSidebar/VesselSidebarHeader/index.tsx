@@ -45,9 +45,9 @@ export function VesselSidebarHeader() {
   return (
     <>
       <VesselNameOrInput
+        $isHidden={previewFilteredVesselsMode}
         $isRightMenuShrinked={isRightMenuShrinked}
         data-cy="vessel-name"
-        isHidden={previewFilteredVesselsMode}
       >
         {isVesselNameShown && (
           <VesselName focusOnVesselSearchInput={() => dispatch(setIsFocusedOnVesselSearch(true))} />

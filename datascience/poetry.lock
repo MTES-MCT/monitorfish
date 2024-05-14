@@ -4880,18 +4880,19 @@ test = ["asv", "gmpy2", "mpmath", "pooch", "pytest", "pytest-cov", "pytest-timeo
 
 [[package]]
 name = "scrapy"
-version = "2.11.0"
+version = "2.11.2"
 description = "A high-level Web Crawling and Web Scraping framework"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "Scrapy-2.11.0-py2.py3-none-any.whl", hash = "sha256:a7f36544d1f5ceb13cff9b7bc904bd7c0fc43a3af0fbe5aa2034fd937cf092d1"},
-    {file = "Scrapy-2.11.0.tar.gz", hash = "sha256:3cbdedce0c3f0e0482d61be2d7458683be7cd7cf14b0ee6adfbaddb80f5b36a5"},
+    {file = "Scrapy-2.11.2-py2.py3-none-any.whl", hash = "sha256:4be353d6abbb942a9f7e7614ca8b5f3d9037381176ac8d8859c8cac676e74fa0"},
+    {file = "scrapy-2.11.2.tar.gz", hash = "sha256:dfbd565384fc3fffeba121f5a3a2d0899ac1f756d41432ca0879933fbfb3401d"},
 ]
 
 [package.dependencies]
 cryptography = ">=36.0.0"
 cssselect = ">=0.9.1"
+defusedxml = ">=0.7.1"
 itemadapter = ">=0.1.0"
 itemloaders = ">=1.0.1"
 lxml = ">=4.4.1"
@@ -4905,7 +4906,7 @@ queuelib = ">=1.4.2"
 service-identity = ">=18.1.0"
 setuptools = "*"
 tldextract = "*"
-Twisted = ">=18.9.0,<23.8.0"
+Twisted = ">=18.9.0"
 w3lib = ">=1.17.0"
 "zope.interface" = ">=5.1.0"
 
@@ -6199,4 +6200,4 @@ test = ["pytest"]
 [metadata]
 lock-version = "2.0"
 python-versions = "3.11.6"
-content-hash = "d116a10dfc1f451085e0061b436bd19c02342ea45596b58f8b96fda4b49f536a"
+content-hash = "31fb6df014e87a509b84a32e244e0ee9dfc10e2a269da010fa2f0ab056e1af02"

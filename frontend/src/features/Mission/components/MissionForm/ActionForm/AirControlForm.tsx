@@ -44,7 +44,7 @@ export function AirControlForm({ initialValues, onChange }: AirControlFormProps)
           <FormBody>
             <VesselField />
 
-            <DatePickerField isActionContainingLocation />
+            <DatePickerField />
 
             <FormikCoordinatesPicker />
 

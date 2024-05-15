@@ -22,7 +22,7 @@ function UnmemoizedMissionLayer() {
   const missionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
   const { missions } = useGetFilteredMissionsQuery()
 
-  const editedMission = useMemo(() => {
+  const editedMissionFeaturePoint = useMemo(() => {
     if (!draft?.mainFormValues) {
       return undefined
     }
@@ -66,13 +66,13 @@ function UnmemoizedMissionLayer() {
 
         return feature !== undefined
       })
-      .concat((editedMission as Feature<Point>) ?? [])
+      .concat(editedMissionFeaturePoint ?? [])
     if (!features?.length) {
       return
     }
 
     getVectorSource().addFeatures(features)
-  }, [dispatch, missions, missionId, editedMission])
+  }, [dispatch, missions, missionId, editedMissionFeaturePoint])
 
   useEffect(() => {
     getLayer().name = LayerProperties.MISSION_PIN_POINT.code

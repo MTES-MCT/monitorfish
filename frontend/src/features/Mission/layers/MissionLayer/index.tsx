@@ -1,7 +1,9 @@
+import { NEW_MISSION_ID } from '@features/Mission/layers/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import WebGLPointsLayer from 'ol/layer/WebGLPoints'
 import VectorSource from 'ol/source/Vector'
-import { memo, useCallback, useEffect, useRef } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { missionPointWebGLStyle } from './styles'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
@@ -16,7 +18,17 @@ import type { Point } from 'ol/geom'
 
 function UnmemoizedMissionLayer() {
   const dispatch = useMainAppDispatch()
+  const draft = useMainAppSelector(store => store.missionForm.draft)
+  const missionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
   const { missions } = useGetFilteredMissionsQuery()
+
+  const editedMissionFeaturePoint = useMemo(() => {
+    if (!draft?.mainFormValues) {
+      return undefined
+    }
+
+    return getMissionFeaturePoint({ ...draft?.mainFormValues, id: missionId ?? NEW_MISSION_ID })
+  }, [draft?.mainFormValues, missionId])
 
   const vectorSourceRef = useRef<VectorSource<Feature<Point>>>()
   const layerRef = useRef<WebGLPointsLayerWithName>()
@@ -47,13 +59,20 @@ function UnmemoizedMissionLayer() {
 
     const features = missions
       .map(getMissionFeaturePoint)
-      .filter((feature): feature is Feature<Point> => feature !== undefined)
+      .filter((feature): feature is Feature<Point> => {
+        if (missionId) {
+          return feature !== undefined && !feature.getId()?.toString().includes(missionId.toString())
+        }
+
+        return feature !== undefined
+      })
+      .concat(editedMissionFeaturePoint ?? [])
     if (!features?.length) {
       return
     }
 
     getVectorSource().addFeatures(features)
-  }, [dispatch, missions])
+  }, [dispatch, missions, missionId, editedMissionFeaturePoint])
 
   useEffect(() => {
     getLayer().name = LayerProperties.MISSION_PIN_POINT.code

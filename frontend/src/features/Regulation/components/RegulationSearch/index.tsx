@@ -1,7 +1,7 @@
 import { useEscapeFromKeyboard } from '@hooks/useEscapeFromKeyboard'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Button, Icon, logSoftError, Size } from '@mtes-mct/monitor-ui'
+import { Button, logSoftError, Size } from '@mtes-mct/monitor-ui'
 import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
@@ -90,7 +90,6 @@ export function RegulationSearch({
       <AddRegulatoryLayer
         $isShown={!!regulatoryZonesChecked?.length || !!numberOfRegulatoryLayersSaved}
         data-cy="regulatory-search-add-zones-button"
-        Icon={regulatoryZonesChecked.length ? Icon.Save : undefined}
         isFullWidth
         onClick={() => saveRegulatoryLayers(regulatoryZonesChecked)}
         size={Size.LARGE}

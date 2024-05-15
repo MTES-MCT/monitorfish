@@ -371,6 +371,7 @@ export function MissionForm() {
       <Wrapper>
         {isMissionCreatedBannerDisplayed && (
           <StyledBanner
+            closingDelay={10000}
             isClosable
             isCollapsible={false}
             isHiddenByDefault={false}
@@ -509,6 +510,8 @@ export function MissionForm() {
 
 const StyledBanner = styled(Banner)`
   left: unset;
+  width: calc(100% - 122px);
+  min-width: calc(100% - 122px);
 `
 
 const MissionCreatedText = styled.div`

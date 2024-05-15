@@ -1,7 +1,6 @@
 import { getMissionActionInfractionsFromMissionActionFormValues } from '@features/Mission/components/MissionForm/ActionList/utils'
 import { Mission } from '@features/Mission/mission.types'
 import { MissionAction } from '@features/Mission/missionAction.types'
-import { isLandControl } from '@features/Mission/useCases/getLastControlCircleGeometry'
 import { getMissionColor, getMissionCompletionFrontStatus, getMissionStatus } from '@features/Mission/utils'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
 import { random } from 'lodash'
@@ -11,7 +10,7 @@ import Point from 'ol/geom/Point'
 import { circular } from 'ol/geom/Polygon'
 import { transform } from 'ol/proj'
 
-import { LAND_CONTROL_ZONE_RADIUS, MISSION_ACTION_ZONE_FEATURE_ID, SEA_CONTROL_ZONE_RADIUS } from './constants'
+import { CONTROL_ZONE_RADIUS, MISSION_ACTION_ZONE_FEATURE_ID } from './constants'
 import { getNumberOfInfractions, getNumberOfInfractionsWithRecord } from '../../domain/entities/controls'
 import { MonitorFishLayer } from '../../domain/entities/layers/types'
 import { OpenLayersGeometryType } from '../../domain/entities/map/constants'
@@ -28,11 +27,13 @@ export function getMissionFeaturePointId(id: number) {
   return `${MonitorFishLayer.MISSION_PIN_POINT}:${id}`
 }
 
-export const getMissionFeaturePoint = ({
-  actions,
-  envActions,
-  ...mission
-}: Mission.MissionWithActions): Feature<Point> | undefined => {
+export const getMissionFeaturePoint = (
+  mission: Mission.MissionWithActions | MissionMainFormValuesWithId
+): Feature<Point> | undefined => {
+  const actions = (mission as Mission.MissionWithActions).actions ?? []
+  const envActions = (mission as Mission.MissionWithActions).envActions ?? []
+  const missionTypes = mission.missionTypes ?? []
+
   const geoJSON = new GeoJSON()
 
   if (!mission.geom?.coordinates.length) {
@@ -67,12 +68,12 @@ export const getMissionFeaturePoint = ({
     geometry: new Point(point),
     hasEnvActions: envActions.length > 0,
     hasFishActions: actions.length > 0,
-    isAirMission: mission.missionTypes.length === 1 && mission.missionTypes.includes(MissionType.AIR),
+    isAirMission: missionTypes.length === 1 && missionTypes.includes(MissionType.AIR),
     isDone: booleanToInt(missionStatus === MissionStatus.DONE),
     isInProgress: booleanToInt(missionStatus === MissionStatus.IN_PROGRESS),
-    isLandMission: mission.missionTypes.length === 1 && mission.missionTypes.includes(MissionType.LAND),
-    isMultiMission: mission.missionTypes.length > 1,
-    isSeaMission: mission.missionTypes.length === 1 && mission.missionTypes.includes(MissionType.SEA),
+    isLandMission: missionTypes.length === 1 && missionTypes.includes(MissionType.LAND),
+    isMultiMission: missionTypes.length > 1,
+    isSeaMission: missionTypes.length === 1 && missionTypes.includes(MissionType.SEA),
     isUpcoming: booleanToInt(missionStatus === MissionStatus.UPCOMING),
     missionCompletion: getMissionCompletionFrontStatus(mission, actionsCompletion),
     missionId: mission.id,
@@ -91,7 +92,10 @@ export type MissionMainFormValuesWithId = MissionMainFormValues & {
   id: number
 }
 
-export const getMissionFeatureZone = (mission: Mission.Mission | MissionMainFormValuesWithId): Feature => {
+export const getMissionFeatureZone = (
+  mission: Mission.Mission | MissionMainFormValuesWithId,
+  type: MonitorFishLayer
+): Feature => {
   const geoJSON = new GeoJSON()
   const geometry = geoJSON.readGeometry(mission.geom, {
     dataProjection: WSG84_PROJECTION,
@@ -108,7 +112,7 @@ export const getMissionFeatureZone = (mission: Mission.Mission | MissionMainForm
     missionTypes: mission.missionTypes,
     startDateTimeUtc: mission.startDateTimeUtc
   })
-  feature.setId(`${MonitorFishLayer.MISSION_HOVER}:${mission.id}`)
+  feature.setId(`${type}:${mission.id}`)
 
   return feature
 }
@@ -155,11 +159,9 @@ export const getMissionActionFeatureZone = (
     return undefined
   }
 
-  const radius = isLandControl(action) ? LAND_CONTROL_ZONE_RADIUS : SEA_CONTROL_ZONE_RADIUS
-
   const actionId = action.id || random(1000)
   const feature = new Feature({
-    geometry: circular([action.longitude, action.latitude], radius, 64).transform(
+    geometry: circular([action.longitude, action.latitude], CONTROL_ZONE_RADIUS, 64).transform(
       WSG84_PROJECTION,
       OPENLAYERS_PROJECTION
     )

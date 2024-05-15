@@ -4,7 +4,7 @@ import { circular } from 'ol/geom/Polygon'
 
 import { convertToGeoJSONGeometryObject } from '../../../domain/entities/layers'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map/constants'
-import { LAND_CONTROL_ZONE_RADIUS, SEA_CONTROL_ZONE_RADIUS } from '../constants'
+import { CONTROL_ZONE_RADIUS } from '../constants'
 import { MissionAction } from '../missionAction.types'
 
 import type { GeoJSON as GeoJSONType } from '../../../domain/types/GeoJSON'
@@ -23,9 +23,8 @@ export const getLastControlCircleGeometry =
       return undefined
     }
 
-    const radius = isLandControl(actionFormValues) ? LAND_CONTROL_ZONE_RADIUS : SEA_CONTROL_ZONE_RADIUS
     const circleGeometry = new Feature({
-      geometry: circular(coordinates, radius, 64).transform(WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+      geometry: circular(coordinates, CONTROL_ZONE_RADIUS, 64).transform(WSG84_PROJECTION, OPENLAYERS_PROJECTION)
     }).getGeometry()
 
     // @ts-ignore

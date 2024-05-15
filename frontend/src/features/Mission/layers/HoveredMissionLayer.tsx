@@ -1,3 +1,4 @@
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import { memo, useCallback, useEffect, useRef } from 'react'
@@ -13,6 +14,7 @@ import type { VectorLayerWithName } from '../../../domain/types/layer'
 
 export function UnmemoizedMissionHoveredLayer({ feature }) {
   const { missions } = useGetFilteredMissionsQuery()
+  const draft = useMainAppSelector(store => store.missionForm.draft)
 
   const vectorSourceRef = useRef<VectorSource>()
   const getVectorSource = useCallback(() => {
@@ -50,6 +52,11 @@ export function UnmemoizedMissionHoveredLayer({ feature }) {
   }, [getVectorLayer])
 
   useEffect(() => {
+    // If a mission is opened in the form, we can't display another selected mission
+    if (draft?.mainFormValues) {
+      return
+    }
+
     getVectorSource().clear(true)
 
     if (!feature?.getId()?.toString()?.includes(MonitorFishLayer.MISSION_PIN_POINT)) {
@@ -63,9 +70,9 @@ export function UnmemoizedMissionHoveredLayer({ feature }) {
       return
     }
 
-    const missionFeature = getMissionFeatureZone(hoveredMissionWithActions)
+    const missionFeature = getMissionFeatureZone(hoveredMissionWithActions, MonitorFishLayer.MISSION_HOVER)
     getVectorSource().addFeature(missionFeature)
-  }, [feature, getVectorSource, missions])
+  }, [feature, getVectorSource, draft?.mainFormValues, missions])
 
   return null
 }

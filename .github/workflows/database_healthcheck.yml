@@ -53,7 +53,7 @@ jobs:
         run: |
           # docker compose up -d --quiet-pull --build db
           make restart-remote-app
-        working-directory: ./infra/remote
+        working-directory: .
 
       - name: Backup database
         run: |

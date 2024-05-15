@@ -78,14 +78,14 @@ export function UnmemoizedSelectedMissionLayer() {
       return
     }
 
-    const hoveredMissionWithActions = missions.find(
+    const selectedMissionWithActions = missions.find(
       missionWithAction => missionWithAction.id === selectedMission.get('missionId')
     )
-    if (!hoveredMissionWithActions) {
+    if (!selectedMissionWithActions) {
       return
     }
 
-    const missionFeature = getMissionFeatureZone(hoveredMissionWithActions)
+    const missionFeature = getMissionFeatureZone(selectedMissionWithActions, MonitorFishLayer.MISSION_SELECTED)
     getVectorSource().addFeature(missionFeature)
   }, [selectedMission, missions, draft?.mainFormValues, getVectorSource])
 
@@ -97,7 +97,10 @@ export function UnmemoizedSelectedMissionLayer() {
     }
 
     // When creating a new mission, dummy NEW_MISSION_ID is used
-    const missionFeature = getMissionFeatureZone({ ...draft.mainFormValues, id: missionId ?? NEW_MISSION_ID })
+    const missionFeature = getMissionFeatureZone(
+      { ...draft.mainFormValues, id: missionId ?? NEW_MISSION_ID },
+      MonitorFishLayer.MISSION_SELECTED
+    )
     getVectorSource().addFeature(missionFeature)
   }, [getVectorSource, draft?.mainFormValues, missionId])
 

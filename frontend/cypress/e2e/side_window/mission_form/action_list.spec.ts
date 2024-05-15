@@ -177,7 +177,6 @@ context('Side Window > Mission Form > Action List', () => {
     cy.get('[data-cy="mission-form-action-list"] > div').children().eq(4).contains('Action CACEM')
 
     cy.get('[data-cy="mission-form-action-list"] > div').children().eq(5).contains('03 Nov à 13:59')
-    cy.get('[data-cy="mission-form-action-list"] > div').children().eq(5).contains('Note')
     cy.get('[data-cy="mission-form-action-list"] > div').children().eq(5).contains('Une note avec des informations')
     cy.get('[data-cy="mission-form-action-list"] > div').children().eq(6).contains('Action CACEM')
   })

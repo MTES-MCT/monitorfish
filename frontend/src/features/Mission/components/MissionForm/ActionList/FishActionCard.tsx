@@ -6,7 +6,7 @@ import { find } from 'lodash'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { ActionLabel, Head } from './styles'
+import { ActionLabel, Head, NoteContent } from './styles'
 import { getActionTitle, getMissionActionInfractionsFromMissionActionFormValues } from './utils'
 import { useGetNatinfsAsOptions } from '../hooks/useGetNatinfsAsOptions'
 
@@ -48,7 +48,7 @@ export function FishActionCard({ missionAction, onRemove }: FishActionCardProps)
         return [getActionTitle('Contrôle à la débarque', vesselName, 'Navire inconnu'), Icon.Anchor]
 
       case MissionAction.MissionActionType.OBSERVATION:
-        return [getActionTitle('', missionAction.otherComments, 'Note libre à renseigner'), Icon.Note]
+        return [<NoteContent>{missionAction.otherComments ?? 'Note libre à renseigner'}</NoteContent>, Icon.Note]
 
       case MissionAction.MissionActionType.SEA_CONTROL:
         return [getActionTitle('Contrôle en mer', vesselName, 'Navire inconnu'), Icon.FleetSegment]

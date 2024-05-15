@@ -3,7 +3,7 @@ import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { ActionLabel, Head } from './styles'
+import { ActionLabel, Head, NoteContent } from './styles'
 import { getActionTitle } from './utils'
 
 type EnvActionCardProps = Readonly<{
@@ -23,14 +23,7 @@ export function EnvActionCard({ missionAction }: EnvActionCardProps) {
         ]
 
       case EnvMissionAction.MissionActionType.NOTE:
-        return [
-          getActionTitle(
-            EnvMissionAction.MISSION_ACTION_TYPE_LABEL[EnvMissionAction.MissionActionType.NOTE],
-            missionAction.observations,
-            ''
-          ),
-          Icon.Note
-        ]
+        return [<NoteContent>{missionAction.observations}</NoteContent>, Icon.Note]
 
       case EnvMissionAction.MissionActionType.SURVEILLANCE:
         return [

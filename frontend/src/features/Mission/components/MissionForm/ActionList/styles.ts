@@ -25,3 +25,13 @@ export const Head = styled.div`
     padding: 0;
   }
 `
+
+export const NoteContent = styled.div`
+  color: ${p => p.theme.color.gunMetal};
+  font: normal normal normal 14px/20px Marianne;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  flex: 1;
+`

@@ -5,13 +5,7 @@ import { Accent, Icon, IconButton, SingleTag, Size, TextInput, THEME } from '@mt
 import { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 
-import {
-  resetRegulatoryZonesChecked,
-  resetZoneSelected,
-  setAdvancedSearchIsOpen,
-  setRegulatoryLayersSearchResult,
-  setZoneSelected
-} from './slice'
+import { resetZoneSelected, setAdvancedSearchIsOpen, setRegulatoryLayersSearchResult, setZoneSelected } from './slice'
 import { LayerType as LayersType } from '../../../../domain/entities/layers/constants'
 import { InteractionListener, InteractionType } from '../../../../domain/entities/map/constants'
 import { resetInteraction, setInteractionTypeAndListener } from '../../../Draw/slice'
@@ -51,14 +45,12 @@ export function SearchInput() {
   )
 
   useEffect(() => {
-    if (!searchQuery || (searchQuery?.length < MINIMUM_SEARCH_CHARACTERS_NUMBER && !zoneSelected)) {
+    if ((!searchQuery || searchQuery?.length < MINIMUM_SEARCH_CHARACTERS_NUMBER) && !zoneSelected) {
       dispatch(setRegulatoryLayersSearchResult({}))
-      dispatch(resetRegulatoryZonesChecked())
 
       return
     }
 
-    dispatch(resetRegulatoryZonesChecked())
     dispatch(searchRegulatoryLayers(searchQuery)).then(foundRegulatoryLayers => {
       dispatch(setRegulatoryLayersSearchResult(foundRegulatoryLayers))
     })

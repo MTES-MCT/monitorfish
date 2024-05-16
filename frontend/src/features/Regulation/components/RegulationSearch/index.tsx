@@ -7,7 +7,7 @@ import styled from 'styled-components'
 
 import { ResultList } from './ResultList'
 import { SearchInput } from './SearchInput'
-import { resetRegulatoryZonesChecked, setRegulatoryLayersSearchResult } from './slice'
+import { setRegulatoryLayersSearchResult } from './slice'
 import layer from '../../../../domain/shared_slices/Layer'
 import { closeRegulatoryZoneMetadataPanel, resetRegulatoryGeometriesToPreview } from '../../slice'
 
@@ -33,7 +33,6 @@ export function RegulationSearch({ namespace }: RegulatoryLayerSearchProps) {
     }
 
     dispatch(resetRegulatoryGeometriesToPreview())
-    dispatch(resetRegulatoryZonesChecked())
   }, [dispatch, layersSidebarOpenedLayerType])
 
   useEffect(() => {
@@ -43,7 +42,6 @@ export function RegulationSearch({ namespace }: RegulatoryLayerSearchProps) {
 
     dispatch(resetRegulatoryGeometriesToPreview())
     dispatch(setRegulatoryLayersSearchResult(undefined))
-    dispatch(resetRegulatoryZonesChecked())
     dispatch(closeRegulatoryZoneMetadataPanel())
   }, [dispatch, escape])
 

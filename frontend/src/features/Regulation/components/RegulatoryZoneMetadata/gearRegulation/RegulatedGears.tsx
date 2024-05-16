@@ -24,7 +24,8 @@ export function RegulatedGears({
   hasPreviousRegulatedGearsBloc = false,
   regulatedGearsObject
 }: RegulatedGearsProps) {
-  const { categoriesToGears, groupsToCategories } = useMainAppSelector(state => state.gear)
+  const categoriesToGears = useMainAppSelector(state => state.gear.categoriesToGears)
+  const groupsToCategories = useMainAppSelector(state => state.gear.groupsToCategories)
 
   const { allGears, allPassiveGears, allTowedGears, derogation, otherInfo, regulatedGearCategories, regulatedGears } =
     regulatedGearsObject

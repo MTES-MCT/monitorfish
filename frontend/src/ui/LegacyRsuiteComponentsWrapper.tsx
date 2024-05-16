@@ -143,10 +143,6 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
     padding: 8px 13px 8px 11px;
   }
 
-  .rs-input {
-    color: #707785;
-  }
-
   .rs-modal-body {
     padding: 20px 25px 0 25px !important;
   }

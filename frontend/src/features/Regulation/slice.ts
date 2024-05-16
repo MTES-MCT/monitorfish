@@ -60,7 +60,6 @@ const updateSelectedRegulatoryLayers = (
 }
 
 export type RegulatoryState = {
-  isReadyToShowRegulatoryLayers: boolean
   // TODO Type this prop.
   lawTypeOpened: Record<string, any> | null
   // TODO Type this prop.
@@ -79,7 +78,6 @@ export type RegulatoryState = {
   simplifiedGeometries: boolean
 }
 const INITIAL_STATE: RegulatoryState = {
-  isReadyToShowRegulatoryLayers: false,
   lawTypeOpened: null,
   layersTopicsByRegTerritory: {},
   loadingRegulatoryZoneMetadata: false,
@@ -205,10 +203,6 @@ const regulatorySlice = createSlice({
 
     resetRegulatoryGeometriesToPreview(state) {
       state.regulatoryZonesToPreview = []
-    },
-
-    setIsReadyToShowRegulatoryZones(state) {
-      state.isReadyToShowRegulatoryLayers = true
     },
 
     setLawTypeOpened(state, action) {
@@ -378,7 +372,6 @@ export const {
   removeSelectedZonesByTopic,
   resetLoadingRegulatoryZoneMetadata,
   resetRegulatoryGeometriesToPreview,
-  setIsReadyToShowRegulatoryZones,
   setLawTypeOpened,
   setLayersTopicsByRegTerritory,
   setLoadingRegulatoryZoneMetadata,

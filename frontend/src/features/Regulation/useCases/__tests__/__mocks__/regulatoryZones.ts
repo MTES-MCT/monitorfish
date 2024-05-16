@@ -24,7 +24,7 @@ export const regulatoryZones: RegulatoryZone[] = [
         otherInfo: undefined,
         regulatedGearCategories: {},
         regulatedGears: {},
-        selectedCategoriesAndGears: ['Chalut']
+        selectedCategoriesAndGears: ['Chaluts']
       },
       otherInfo: undefined,
       unauthorized: {
@@ -273,7 +273,7 @@ export const regulatoryZones: RegulatoryZone[] = [
         otherInfo: undefined,
         regulatedGearCategories: {},
         regulatedGears: {},
-        selectedCategoriesAndGears: []
+        selectedCategoriesAndGears: ['OTB']
       },
       otherInfo: undefined,
       unauthorized: {

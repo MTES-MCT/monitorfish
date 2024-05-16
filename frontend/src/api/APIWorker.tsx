@@ -1,4 +1,5 @@
 import { fleetSegmentApi } from '@features/FleetSegment/apis'
+import { getAllRegulatoryLayers } from '@features/Regulation/useCases/getAllRegulatoryLayers'
 import { useEffect, useRef, useState } from 'react'
 
 import { useIsSuperUser } from '../auth/hooks/useIsSuperUser'
@@ -16,7 +17,6 @@ import { getVesselControls } from '../domain/use_cases/mission/getVesselControls
 import getAllSpecies from '../domain/use_cases/species/getAllSpecies'
 import { getVesselReportings } from '../domain/use_cases/vessel/getVesselReportings'
 import { updateVesselTracks } from '../domain/use_cases/vessel/updateVesselTracks'
-import getAllRegulatoryLayers from '../features/Regulation/useCases/getAllRegulatoryLayers'
 import { getAllCurrentReportings } from '../features/Reporting/useCases/getAllCurrentReportings'
 import { useMainAppDispatch } from '../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../hooks/useMainAppSelector'

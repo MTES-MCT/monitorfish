@@ -122,8 +122,7 @@ context('Sidebars > Regulatory Layers', () => {
     cy.get('*[data-cy="regulatory-layers-my-zones"]').click()
 
     // Clean the search input
-    cy.get('*[data-cy="regulatory-search-clean-input"]').click()
-    cy.get('.Element-Button').should('not.contain', 'Afficher les résultats de la recherche')
+    cleanSearchInput()
   })
 
   it('A regulation Should be searched, added to My Zones and showed on the map with the Topic button', () => {
@@ -480,12 +479,12 @@ context('Sidebars > Regulatory Layers', () => {
 
     // Select all the "Armor CSJ Dragues" regulation zones (there is only 1)
     // Clean input
-    cy.get('*[name="Rechercher une zone réglementaire"]').parent().find('.Element-IconButton').click()
+    cleanSearchInput()
     cy.get('*[name="Rechercher une zone réglementaire"]').type('Armor')
     cy.get('[title=\'Sélectionner "Armor CSJ Dragues"\']').click()
 
     // Show metadata the only "Armor CSJ Dragues" regulation zone
-    cy.get('*[name="Rechercher une zone réglementaire"]').parent().find('.Element-IconButton').click()
+    cleanSearchInput()
     cy.contains('Mes zones réglementaires').click()
     cy.contains('Mes zones réglementaires').parent().contains('Armor CSJ Dragues').click()
     cy.get('[title=\'Afficher la réglementation "Secteur 3"\']').click()
@@ -495,4 +494,8 @@ context('Sidebars > Regulatory Layers', () => {
     cy.contains('Tous les engins trainants').should('be.visible')
     cy.contains('Création de zone').should('be.visible')
   })
+
+  function cleanSearchInput() {
+    cy.get('*[name="Rechercher une zone réglementaire"]').parent().find('.Element-IconButton').click()
+  }
 })

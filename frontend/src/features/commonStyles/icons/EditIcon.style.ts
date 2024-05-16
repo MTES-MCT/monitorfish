@@ -9,5 +9,5 @@ export const EditIcon = styled(EditSVG)<{
   width: ${p => (p.width ? p.width : '16px')};
   flex-shrink: 0;
   align-self: center;
-  margin-right: 7px;
+  margin-right: 4px;
 `

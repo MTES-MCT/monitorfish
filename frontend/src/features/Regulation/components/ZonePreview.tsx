@@ -6,14 +6,15 @@ import type { RegulatoryZone } from '@features/Regulation/types'
 
 export type ZonePreviewProps = {
   className?: string | undefined
+  onClick?: () => void
   regulatoryZone: RegulatoryZone
 }
-export function ZonePreview({ className, regulatoryZone }: ZonePreviewProps) {
+export function ZonePreview({ className, onClick, regulatoryZone }: ZonePreviewProps) {
   const zoneStyle = getRegulatoryLayerStyle(undefined, regulatoryZone)
   const fillColor = zoneStyle?.getFill()?.getColor()?.toString() ?? THEME.color.lightGray
   const strokeColor = zoneStyle?.getStroke()?.getColor()?.toString() ?? THEME.color.lightGray
 
-  return <Square className={className} fillColor={fillColor} strokeColor={strokeColor} />
+  return <Square className={className} fillColor={fillColor} onClick={onClick} strokeColor={strokeColor} />
 }
 
 export const Square = styled.div<{
@@ -25,6 +26,6 @@ export const Square = styled.div<{
   background: ${p => p.fillColor};
   border: 1px solid ${p => p.strokeColor};
   display: inline-block;
-  margin-right: 10px;
+  margin-right: 8px;
   flex-shrink: 0;
 `

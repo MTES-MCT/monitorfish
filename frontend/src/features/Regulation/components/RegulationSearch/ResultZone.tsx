@@ -1,10 +1,12 @@
+import { addRegulatoryZonesToMyLayers, regulatoryActions } from '@features/Regulation/slice'
+import { hideRegulatoryZoneLayerById } from '@features/Regulation/useCases/hideRegulatoryZoneLayerById'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Checkbox, Icon, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, THEME } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { checkRegulatoryZones, uncheckRegulatoryZones } from './slice'
+import { LayerSliceNamespace } from '../../../../domain/entities/layers/types'
 import { closeRegulatoryZoneMetadata } from '../../useCases/closeRegulatoryZoneMetadata'
 import { showRegulatoryZoneMetadata } from '../../useCases/showRegulatoryZoneMetadata'
 import { ZonePreview } from '../ZonePreview'
@@ -18,9 +20,6 @@ export type RegulatoryLayerSearchResultZoneProps = {
 export function ResultZone({ isOpen, regulatoryZone }: RegulatoryLayerSearchResultZoneProps) {
   const dispatch = useMainAppDispatch()
   const regulatoryZoneMetadata = useMainAppSelector(state => state.regulatory.regulatoryZoneMetadata)
-  const zoneIsChecked = useMainAppSelector(
-    state => !!state.regulatoryLayerSearch.regulatoryZonesChecked?.find(zone => zone.id === regulatoryZone.id)
-  )
   const selectedRegulatoryLayers = useMainAppSelector(state => state.regulatory.selectedRegulatoryLayers)
   const isMetadataShown = regulatoryZoneMetadata?.id === regulatoryZone.id
 
@@ -47,16 +46,13 @@ export function ResultZone({ isOpen, regulatoryZone }: RegulatoryLayerSearchResu
 
   function toggleCheckZone() {
     if (isZoneAlreadySelected) {
-      return
-    }
-
-    if (!zoneIsChecked) {
-      dispatch(checkRegulatoryZones([regulatoryZone]))
+      dispatch(hideRegulatoryZoneLayerById(regulatoryZone.id, LayerSliceNamespace.homepage))
+      dispatch(regulatoryActions.removeSelectedZoneById(regulatoryZone.id))
 
       return
     }
 
-    dispatch(uncheckRegulatoryZones([regulatoryZone]))
+    dispatch(addRegulatoryZonesToMyLayers([regulatoryZone]))
   }
 
   return (
@@ -66,7 +62,7 @@ export function ResultZone({ isOpen, regulatoryZone }: RegulatoryLayerSearchResu
         /* eslint-disable-next-line react/jsx-no-bind */
         onClick={toggleCheckZone}
       >
-        {regulatoryZone?.zone ?? 'AUCUN NOM'}
+        {regulatoryZone.zone ?? 'AUCUN NOM'}
       </Name>
       {isOpen && (
         <>
@@ -75,7 +71,7 @@ export function ResultZone({ isOpen, regulatoryZone }: RegulatoryLayerSearchResu
               /* eslint-disable-next-line react/jsx-no-bind */
               onClick={() => showOrHideRegulatoryZoneMetadata(regulatoryZone)}
               size={20}
-              title="Fermer la réglementation"
+              title={`Fermer la réglementation "${regulatoryZone.zone}"`}
             />
           ) : (
             <Icon.Summary
@@ -83,18 +79,17 @@ export function ResultZone({ isOpen, regulatoryZone }: RegulatoryLayerSearchResu
               /* eslint-disable-next-line react/jsx-no-bind */
               onClick={() => showOrHideRegulatoryZoneMetadata(regulatoryZone)}
               size={20}
-              title="Afficher la réglementation"
+              title={`Afficher la réglementation "${regulatoryZone.zone}"`}
             />
           )}
-          <StyledCheckbox
-            checked={zoneIsChecked || isZoneAlreadySelected}
-            data-cy="regulatory-zone-check"
-            label=""
-            name={`${regulatoryZone.id}-checkbox`}
+          <StyledIconButton
+            accent={Accent.TERTIARY}
+            aria-label={`Sélectionner "${regulatoryZone.zone}"`}
+            color={isZoneAlreadySelected ? THEME.color.blueGray : THEME.color.gunMetal}
+            Icon={isZoneAlreadySelected ? Icon.PinFilled : Icon.Pin}
             /* eslint-disable-next-line react/jsx-no-bind */
             onClick={toggleCheckZone}
-            readOnly={isZoneAlreadySelected}
-            title={isZoneAlreadySelected ? 'zone déjà ajoutée à mes zones réglementaires' : ''}
+            title={`Sélectionner "${regulatoryZone.zone}"`}
           />
         </>
       )}
@@ -102,10 +97,10 @@ export function ResultZone({ isOpen, regulatoryZone }: RegulatoryLayerSearchResu
   )
 }
 
-const StyledCheckbox = styled(Checkbox)`
+const StyledIconButton = styled(IconButton)`
   height: 20px;
   margin-right: 2px;
-  margin-left: 8px;
+  margin-left: 2px;
 `
 
 const Name = styled.span`

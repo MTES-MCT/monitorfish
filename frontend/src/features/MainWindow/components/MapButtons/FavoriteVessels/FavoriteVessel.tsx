@@ -91,7 +91,7 @@ export function FavoriteVessel({
           color={THEME.color.slateGray}
           data-cy="favorite-vessel-delete-vessel"
           onClick={() => dispatch(removeVesselFromFavorites(vesselCompositeIdentifier))}
-          size={14}
+          size={15}
           title="Supprimer le navire de mes navires suivis"
         />
       </Icons>
@@ -110,7 +110,7 @@ const Icons = styled.div`
 
   .Element-IconBox {
     left: auto;
-    padding-left: 6px;
+    padding-left: 8px;
   }
 `
 

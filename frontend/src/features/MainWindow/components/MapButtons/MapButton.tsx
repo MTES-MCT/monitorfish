@@ -1,7 +1,7 @@
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import styled from 'styled-components'
 
-import type { ReactNode, HTMLProps } from 'react'
+import type { HTMLProps, ReactNode } from 'react'
 
 type MapButtonType = {
   children: ReactNode

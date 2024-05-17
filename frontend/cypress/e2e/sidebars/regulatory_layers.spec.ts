@@ -12,8 +12,8 @@ context('Sidebars > Regulatory Layers', () => {
     })
 
     // When
-    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
-    cy.get('*[data-cy="regulatory-search-input"]').type('interdiction')
+    cy.get('[title="Arbre des couches"]').click()
+    cy.get('*[name="Rechercher une zone réglementaire"]').type('interdiction')
 
     // Then, 2 zones are showed
     cy.get('*[data-cy="regulatory-layer-topic-count"]').contains('2/4')
@@ -30,14 +30,13 @@ context('Sidebars > Regulatory Layers', () => {
     })
 
     // When
-    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
+    cy.get('[title="Arbre des couches"]').click()
 
     // Add the layer to My Zones
-    cy.get('*[data-cy="regulatory-search-input"]').type('Cotentin biva')
+    cy.get('*[name="Rechercher une zone réglementaire"]').type('Cotentin biva')
     cy.contains('Ouest Cotentin Bivalves').click()
     cy.get('*[data-cy="regulatory-layer-topic-count"]').contains('1/1')
-    cy.contains('Praires Ouest cotentin').parent().find('.Field-Checkbox > div').forceClick()
-    cy.clickButton('Ajouter 1 zone')
+    cy.get('[title=\'Sélectionner "Praires Ouest cotentin"\']').click()
 
     // Then it is in "My Zones"
     cy.get('*[data-cy="regulatory-layers-my-zones"]').click()
@@ -68,7 +67,7 @@ context('Sidebars > Regulatory Layers', () => {
     //     true
     //   )
     // ).as('getRegulation')
-    cy.get('*[data-cy="regulatory-layers-my-zones-zone-show"]').eq(0).click({ timeout: 10000 })
+    cy.get('[title=\'Afficher la zone "Praires Ouest cotentin"\']').click()
     cy.wait('@getRegulation').then(({ response }) => expect(response && response.statusCode).equal(200))
     cy.wait(200)
 
@@ -84,10 +83,10 @@ context('Sidebars > Regulatory Layers', () => {
 
     // Close the metadata modal and hide the zone
     cy.get('*[data-cy="regulatory-layers-metadata-close"]').click()
-    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
+    cy.get('[title="Arbre des couches"]').click()
     cy.get('*[data-cy="regulatory-layers-my-zones"]').click()
     cy.get('*[data-cy="regulatory-layers-my-zones-topic"]').click()
-    cy.get('*[data-cy="regulatory-layers-my-zones-zone-hide"]').eq(0).click({ timeout: 10000 })
+    cy.get('[title=\'Cacher la zone "Praires Ouest cotentin"\']').click()
 
     // The layer is hidden, the metadata modal should not be opened
     cy.get('.regulatory', { timeout: 10000 }).should('not.exist')
@@ -105,10 +104,10 @@ context('Sidebars > Regulatory Layers', () => {
     })
 
     // When
-    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
+    cy.get('[title="Arbre des couches"]').click()
 
     // Add the layer to My Zones
-    cy.get('*[data-cy="regulatory-search-input"]').type('Cotentin biva')
+    cy.get('*[name="Rechercher une zone réglementaire"]').type('Cotentin biva')
     cy.get('*[data-cy="regulatory-layer-topic"]').should('have.length', 1)
 
     // Then go to "My Zones"
@@ -123,8 +122,7 @@ context('Sidebars > Regulatory Layers', () => {
     cy.get('*[data-cy="regulatory-layers-my-zones"]').click()
 
     // Clean the search input
-    cy.get('*[data-cy="regulatory-search-clean-input"]').click()
-    cy.get('.Element-Button').should('not.contain', 'Afficher les résultats de la recherche')
+    cleanSearchInput()
   })
 
   it('A regulation Should be searched, added to My Zones and showed on the map with the Topic button', () => {
@@ -138,13 +136,12 @@ context('Sidebars > Regulatory Layers', () => {
     })
 
     // When
-    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
+    cy.get('[title="Arbre des couches"]').click()
 
     // Add the layer to My Zones
-    cy.get('*[data-cy="regulatory-search-input"]').type('Cotentin')
+    cy.get('*[name="Rechercher une zone réglementaire"]').type('Cotentin')
     cy.get('*[data-cy="regulatory-layer-topic"]').eq(0).click()
-    cy.contains('Praires Ouest cotentin').parent().find('.Field-Checkbox > div').forceClick()
-    cy.clickButton('Ajouter 1 zone')
+    cy.get('[title=\'Sélectionner "Praires Ouest cotentin"\']').click()
 
     // Then it is in "My Zones"
     cy.get('*[data-cy="regulatory-layers-my-zones"]').click()
@@ -154,7 +151,7 @@ context('Sidebars > Regulatory Layers', () => {
 
     // Show a zone with the topic button
     cy.log('Show a zone with the topic button')
-    cy.get('*[data-cy="regulatory-layers-my-zones-topic-show"]').eq(0).click({ timeout: 10000 })
+    cy.get('[title=\'Afficher la thématique "Ouest Cotentin Bivalves"\']').click()
     cy.wait(200)
 
     cy.get('canvas').eq(0).click(490, 580, { force: true, timeout: 10000 })
@@ -162,15 +159,15 @@ context('Sidebars > Regulatory Layers', () => {
     cy.get('*[data-cy="regulatory-layers-metadata-close"]').click()
 
     // Delete the zone
-    cy.get('*[data-cy="regulatory-layers-my-zones-zone-delete"]').click()
-    cy.get('*[data-cy="regulatory-layers-my-zones-topic"]', { timeout: 10000 }).should('not.exist')
+    cy.get('[title=\'Supprimer la zone "Praires Ouest cotentin" de ma sélection\']').click()
+    cy.get('*[data-cy="regulatory-layers-my-zones-topic"]').should('not.exist')
 
     // The layer is hidden, the metadata modal should not be opened
     cy.get('canvas').eq(0).click(490, 580, { force: true, timeout: 10000 })
     cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]', { timeout: 10000 }).should('not.exist')
 
     // Close the layers sidebar
-    cy.get('*[data-cy="layers-sidebar"]', { timeout: 10000 }).click({ timeout: 10000 })
+    cy.get('[title="Arbre des couches"]').click()
   })
 
   it('The Cotentin regulation metadata Should be opened', () => {
@@ -184,17 +181,16 @@ context('Sidebars > Regulatory Layers', () => {
     })
 
     // When
-    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
+    cy.get('[title="Arbre des couches"]').click()
 
-    cy.get('*[data-cy="regulatory-search-input"]').type('Cotentin')
+    cy.get('*[name="Rechercher une zone réglementaire"]').type('Cotentin')
     cy.get('*[data-cy="regulatory-layer-topic"]').eq(0).click({ timeout: 10000 })
-    cy.get('.Field-Checkbox').eq(1).click()
-    cy.clickButton('Ajouter 1 zone')
+    cy.get('[title=\'Sélectionner "Praires Ouest cotentin"\']').click()
     cy.get('*[data-cy="regulatory-layers-my-zones"]').click()
     cy.get('*[data-cy="regulatory-layers-my-zones-topic"]').click()
 
     // Then show the metadata
-    cy.get('*[data-cy="regulatory-layers-show-metadata"]').click()
+    cy.get('[title=\'Afficher la réglementation "Praires Ouest cotentin"\']').click()
     cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]').contains('Reg. MEMN')
     cy.get('*[data-cy="regulatory-layers-metadata-topic"]').contains('Ouest Cotentin Bivalves')
     cy.get('*[data-cy="regulatory-layers-metadata-zone"]').contains('Praires Ouest cotentin')
@@ -246,17 +242,16 @@ context('Sidebars > Regulatory Layers', () => {
     })
 
     // When
-    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
+    cy.get('[title="Arbre des couches"]').click()
 
-    cy.get('*[data-cy="regulatory-search-input"]').type('Armor')
+    cy.get('*[name="Rechercher une zone réglementaire"]').type('Armor')
     cy.get('*[data-cy="regulatory-layer-topic"]').eq(0).click({ timeout: 10000 })
-    cy.get('.Field-Checkbox').eq(1).click()
-    cy.clickButton('Ajouter 1 zone')
+    cy.get('[title=\'Sélectionner "Secteur 3"\']').click()
     cy.get('*[data-cy="regulatory-layers-my-zones"]').click()
     cy.get('*[data-cy="regulatory-layers-my-zones-topic"]').click()
 
     // Then show the metadata
-    cy.get('*[data-cy="regulatory-layers-show-metadata"]').click()
+    cy.get('[title=\'Afficher la réglementation "Secteur 3"\']').click()
     cy.get('*[data-cy="regulatory-layers-metadata-region"]').should('exist')
     cy.get('*[data-cy="regulatory-layers-metadata-fishing-period"]').contains('Vraiment, regarde Légipêche!')
 
@@ -302,7 +297,7 @@ context('Sidebars > Regulatory Layers', () => {
       'GET',
       `http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&srsname=EPSG:4326&bbox=-378334.88336741074,6256373.869989776,-280465.66220758925,6275194.874058974,EPSG:3857&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region`
     ).as('getFeature')
-    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
+    cy.get('[title="Arbre des couches"]').click()
 
     cy.get('*[data-cy="regulatory-layers-advanced-search"]').click()
     cy.get('*[data-cy="regulation-search-box-filter"]').click()
@@ -321,7 +316,7 @@ context('Sidebars > Regulatory Layers', () => {
     cy.get('*[data-cy="regulatory-layer-topic"]').first().click()
     cy.get('*[data-cy="regulatory-layer-topic"]').contains('Armor CSJ')
 
-    cy.get('[title="Afficher la réglementation"]').click()
+    cy.get('[title=\'Afficher la réglementation "Praires Ouest cotentin"\']').click()
     // No zoom is triggered when drawing a zone
     cy.url().should('include', '/#@-224002.65,6302673.54,8.70')
 
@@ -341,7 +336,7 @@ context('Sidebars > Regulatory Layers', () => {
     })
 
     // When
-    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
+    cy.get('[title="Arbre des couches"]').click()
 
     cy.get('*[data-cy="regulatory-layers-advanced-search"]').click()
     cy.get('*[data-cy="regulation-search-polygon-filter"]').click()
@@ -382,7 +377,7 @@ context('Sidebars > Regulatory Layers', () => {
     })
 
     // When
-    cy.get('*[data-cy="layers-sidebar"]').click({ force: true, timeout: 10000 })
+    cy.get('[title="Arbre des couches"]').click()
     cy.get('*[data-cy="administrative-zones-open"]').click({ force: true, timeout: 10000 })
     cy.get('*[data-cy="administrative-layer-toggle"]')
       .eq(0)
@@ -410,7 +405,7 @@ context('Sidebars > Regulatory Layers', () => {
     // Refresh and check the item in local storage is not deleted
     cy.loadPath('/#@-224002.65,6302673.54,8.70')
     cy.wait(500)
-    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
+    cy.get('[title="Arbre des couches"]').click()
     cy.get('*[data-cy="administrative-zones-open"]')
       .click({ force: true, timeout: 10000 })
       .then(() => {
@@ -430,18 +425,17 @@ context('Sidebars > Regulatory Layers', () => {
     // cy.clickButton('Affichage des dernières positions')
 
     // Select all the "Corse - Chaluts" regulation zones
-    cy.getDataCy('layers-sidebar').click()
-    cy.getDataCy('regulatory-search-input').type('Corse')
-    cy.contains('Corse - Chaluts').parent().find('.Field-Checkbox > div').forceClick()
-    cy.clickButton('Ajouter 4 zones')
+    cy.get('[title="Arbre des couches"]').click()
+    cy.get('*[name="Rechercher une zone réglementaire"]').type('Corse')
+    cy.get('[title=\'Sélectionner "Corse - Chaluts"\']').click()
     cy.contains('Mes zones réglementaires').click()
 
     // Show all the "Corse - Chaluts" regulation zone layers
-    cy.contains('Corse - Chaluts').parent().parent().find('svg').first().click()
+    cy.get('[title=\'Afficher la thématique "Corse - Chaluts"\']').click()
 
     // Unselect one of the "Corse - Chaluts" regulation zones
     cy.contains('Corse - Chaluts').click()
-    cy.contains('Interdiction temporaire').parent().find('[title="Supprimer la zone de ma sélection"]').click()
+    cy.get('[title=\'Supprimer la zone "Interdiction temporaire - Chalut à panneaux" de ma sélection\']').click()
 
     cy.get('.regulatory').toMatchImageSnapshot({
       screenshotConfig: {
@@ -452,9 +446,9 @@ context('Sidebars > Regulatory Layers', () => {
     // Select the removed zone again
     cy.contains('Afficher les résultats').click()
     cy.contains('Corse - Chaluts').first().click()
-    cy.contains('Interdiction temporaire').parent().find('.Field-Checkbox > div').forceClick()
-    cy.clickButton('Ajouter 1 zone')
+    cy.get('[title=\'Sélectionner "Interdiction temporaire - Chalut à panneaux"\']').click()
 
+    cy.contains('Mes zones réglementaires').click()
     cy.contains('Mes zones réglementaires').parent().contains('Interdiction temporaire').should('be.visible')
     cy.contains('Mes zones réglementaires').parent().contains('6 MN').should('be.visible')
     cy.contains('Mes zones réglementaires').parent().contains('1,5 - 3 MN').should('be.visible')
@@ -466,15 +460,14 @@ context('Sidebars > Regulatory Layers', () => {
     cy.loadPath('/#@997505.75,5180266.24,8.70')
 
     // Select all the "Corse - Chaluts" regulation zones
-    cy.getDataCy('layers-sidebar').click()
-    cy.getDataCy('regulatory-search-input').type('Corse')
-    cy.contains('Corse - Chaluts').parent().find('.Field-Checkbox > div').forceClick()
-    cy.clickButton('Ajouter 4 zones')
+    cy.get('[title="Arbre des couches"]').click()
+    cy.get('*[name="Rechercher une zone réglementaire"]').type('Corse')
+    cy.get('[title=\'Sélectionner "Corse - Chaluts"\']').click()
     cy.contains('Mes zones réglementaires').click()
 
     // Show metadata for one of the "Corse - Chaluts" regulation zones
     cy.contains('Corse - Chaluts').click()
-    cy.contains('6 MN').parent().find('[title="Afficher la réglementation"]').click()
+    cy.get('[title=\'Afficher la réglementation "6 MN : Interdiction du chalut de fond"\']').click()
 
     // Check a few of its metadata values
     cy.contains('Reg. MED').should('be.visible')
@@ -482,22 +475,27 @@ context('Sidebars > Regulatory Layers', () => {
     cy.contains('Création et Réglementation de zone').should('be.visible')
 
     // Unselect one of the "Corse - Chaluts" regulation zones
-    cy.contains('Interdiction temporaire').parent().find('[title="Supprimer la zone de ma sélection"]').click()
+    cy.get('[title=\'Supprimer la zone "Interdiction temporaire - Chalut à panneaux" de ma sélection\']').click()
 
     // Select all the "Armor CSJ Dragues" regulation zones (there is only 1)
-    cy.getDataCy('regulatory-search-clean-input').click()
-    cy.getDataCy('regulatory-search-input').type('Armor')
-    cy.contains('Armor CSJ Dragues').parent().find('.Field-Checkbox > div').forceClick()
-    cy.clickButton('Ajouter 1 zone')
+    // Clean input
+    cleanSearchInput()
+    cy.get('*[name="Rechercher une zone réglementaire"]').type('Armor')
+    cy.get('[title=\'Sélectionner "Armor CSJ Dragues"\']').click()
 
     // Show metadata the only "Armor CSJ Dragues" regulation zone
-    cy.getDataCy('regulatory-search-clean-input').click()
+    cleanSearchInput()
+    cy.contains('Mes zones réglementaires').click()
     cy.contains('Mes zones réglementaires').parent().contains('Armor CSJ Dragues').click()
-    cy.contains('Secteur 3').parent().find('[title="Afficher la réglementation"]').click()
+    cy.get('[title=\'Afficher la réglementation "Secteur 3"\']').click()
 
     // Check a few of its metadata values
     cy.contains('Reg. MEMN').should('be.visible')
     cy.contains('Tous les engins trainants').should('be.visible')
     cy.contains('Création de zone').should('be.visible')
   })
+
+  function cleanSearchInput() {
+    cy.get('*[name="Rechercher une zone réglementaire"]').parent().find('.Element-IconButton').click()
+  }
 })

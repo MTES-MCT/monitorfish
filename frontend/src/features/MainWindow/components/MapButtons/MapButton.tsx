@@ -1,7 +1,7 @@
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import styled from 'styled-components'
 
-import type { ReactNode, HTMLProps } from 'react'
+import type { HTMLProps, ReactNode } from 'react'
 
 type MapButtonType = {
   children: ReactNode
@@ -30,9 +30,5 @@ const Wrapper = styled.button<{
   isHidden?: boolean | undefined
 }>`
   margin-top: ${p => (p.hasHealthcheckTextWarning ? 50 : 0)}px;
-
-  > button {
-    margin-top: ${p => (p.hasHealthcheckTextWarning ? 50 : 0)}px;
-  }
   visibility: ${p => (p.isHidden ? 'hidden' : 'visible')};
 `

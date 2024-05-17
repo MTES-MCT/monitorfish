@@ -54,10 +54,6 @@ function UnmemoizedVesselListFilters({
   const dispatch = useMainAppDispatch()
   const [zoneGroups, setZoneGroups] = useState<string[]>([])
 
-  useEffect(() => {
-    getZones()
-  }, [getZones])
-
   const fleetSegmentsField = useMemo(() => {
     if (!fleetSegments.fleetSegments?.length) {
       return []
@@ -142,6 +138,10 @@ function UnmemoizedVesselListFilters({
 
     zones.setZonesFilter(nextZonesWithoutNulls)
   }, [dispatch, zones])
+
+  useEffect(() => {
+    getZones()
+  }, [getZones])
 
   return (
     <Filters>

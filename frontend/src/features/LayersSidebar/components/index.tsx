@@ -36,7 +36,7 @@ export function LayersSidebar() {
     <NamespaceContext.Consumer>
       {namespace => (
         <>
-          <MapButton isHidden={!!previewFilteredVesselsMode}>
+          <SidebarLayersButton isHidden={!!previewFilteredVesselsMode}>
             <SidebarLayersIcon
               $isActive={leftMapBoxOpened === MapBox.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
               accent={Accent.PRIMARY}
@@ -49,7 +49,7 @@ export function LayersSidebar() {
               size={Size.LARGE}
               title="Arbre des couches"
             />
-          </MapButton>
+          </SidebarLayersButton>
           <Sidebar
             data-cy="layers-sidebar-box"
             isOpen={leftMapBoxOpened === MapBox.REGULATIONS}
@@ -118,13 +118,16 @@ const Layers = styled.div<{
   max-height: calc(100vh - ${p => (p.hasHealthcheckTextWarning ? '210px' : '160px')});
 `
 
-const SidebarLayersIcon = styled(IconButton)<{ $isActive: boolean }>`
+const SidebarLayersButton = styled(MapButton)`
   position: absolute;
+  top: 10px;
+  left: 10px;
+`
+
+const SidebarLayersIcon = styled(IconButton)<{ $isActive: boolean }>`
   border-radius: 2px;
   width: 40px;
   height: 40px;
-  top: 10px;
-  left: 10px;
   ${p => (p.$isActive ? `background: ${p.theme.color.blueGray};` : '')}
   ${p => (p.$isActive ? `border-color: ${p.theme.color.blueGray};` : '')}
 `

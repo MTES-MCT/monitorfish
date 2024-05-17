@@ -1,5 +1,5 @@
 import { FilterTag } from '@features/MainWindow/components/MapButtons/VesselFilters/FilterTag'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Checkbox, CheckboxGroup, MultiCascader, SelectPicker, Tag, TagPicker } from 'rsuite'
 import styled from 'styled-components'
 
@@ -139,6 +139,10 @@ function UnmemoizedVesselListFilters({
     zones.setZonesFilter(nextZonesWithoutNulls)
   }, [dispatch, zones])
 
+  useEffect(() => {
+    getZones()
+  }, [getZones])
+
   return (
     <Filters>
       <FilterDesc>Dernières positions depuis </FilterDesc>
@@ -195,7 +199,6 @@ function UnmemoizedVesselListFilters({
           menuWidth={250}
           onChange={zones.setAdministrativeZonesFiltered}
           onClean={() => zones.setAdministrativeZonesFiltered([])}
-          onEnter={() => getZones()}
           placeholder="Filtrer avec une zone existante"
           style={{ margin: '0 10px 10px -10px', verticalAlign: 'top', width: 200 }}
           uncheckableItemValues={zoneGroups}

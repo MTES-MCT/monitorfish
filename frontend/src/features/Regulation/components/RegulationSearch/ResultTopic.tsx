@@ -1,11 +1,14 @@
+import { hideLayer } from '@features/LayersSidebar/useCases/hideLayer'
+import { addRegulatoryZonesToMyLayers, regulatoryActions } from '@features/Regulation/slice'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Checkbox, logSoftError, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, logSoftError, THEME } from '@mtes-mct/monitor-ui'
 import { memo, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { ResultZones } from './ResultZones'
-import { checkRegulatoryZones, uncheckRegulatoryZones } from './slice'
+import { LayerProperties } from '../../../../domain/entities/layers/constants'
+import { LayerSliceNamespace } from '../../../../domain/entities/layers/types'
 
 import type { RegulatoryZone } from '../../types'
 
@@ -26,7 +29,7 @@ function UnmemoizedRegulatoryLayerSearchResultTopic({
   const regulatoryLayersSearchResult = useMainAppSelector(
     state => state.regulatoryLayerSearch.regulatoryLayersSearchResult
   )
-  const regulatoryZonesChecked = useMainAppSelector(state => state.regulatoryLayerSearch.regulatoryZonesChecked)
+  const [areZonesOpened, setAreZonesOpened] = useState(false)
 
   const { searchResultZones, searchResultZonesLength } = useMemo<{
     searchResultZones: any[]
@@ -79,69 +82,54 @@ function UnmemoizedRegulatoryLayerSearchResultTopic({
       ? selectedRegulatoryLayers[regulatoryLayerTopic]?.length === searchResultZonesLength
       : false
 
-  const [zonesAreOpen, setZonesAreOpen] = useState(false)
+  const toggleCheckAllZones = () => {
+    if (areAllZonesAlreadySelected && regulatoryLayerTopic) {
+      dispatch(
+        hideLayer({
+          namespace: LayerSliceNamespace.homepage,
+          topic: regulatoryLayerTopic,
+          type: LayerProperties.REGULATORY.code
+        })
+      )
+      dispatch(regulatoryActions.removeSelectedZonesByTopic(regulatoryLayerTopic))
 
-  const areAllTopicZonesChecked = useMemo(() => {
-    if (!regulatoryZonesChecked || !regulatoryLayerTopic) {
-      return false
-    }
-
-    const zonesCheckedLength = regulatoryZonesChecked.filter(zone => zone.topic === regulatoryLayerTopic).length
-    const allZonesLength = topicDetails.length
-    if (!zonesCheckedLength || !allZonesLength) {
-      return false
-    }
-
-    return zonesCheckedLength === allZonesLength
-  }, [regulatoryZonesChecked, regulatoryLayerTopic, topicDetails])
-
-  const handleCheckAllZones = () => {
-    if (areAllZonesAlreadySelected) {
       return
     }
 
-    if (areAllTopicZonesChecked) {
-      dispatch(uncheckRegulatoryZones(searchResultZones))
-    } else {
-      dispatch(checkRegulatoryZones(searchResultZones))
-    }
+    dispatch(addRegulatoryZonesToMyLayers(searchResultZones))
   }
-
-  const areAllSearchedZonesChecked =
-    !!selectedRegulatoryLayers &&
-    !!regulatoryLayerTopic &&
-    selectedRegulatoryLayers[regulatoryLayerTopic]?.length === searchResultZonesLength
 
   return (
     <>
       <LayerTopic>
         <TopicName
           data-cy="regulatory-layer-topic"
-          onClick={() => setZonesAreOpen(!zonesAreOpen)}
+          onClick={() => setAreZonesOpened(!areZonesOpened)}
           title={regulatoryLayerTopic}
         >
           {regulatoryLayerTopic}
         </TopicName>
         <ZonesNumber data-cy="regulatory-layer-topic-count">{`${topicDetails?.length}/${numberOfTotalZones}`}</ZonesNumber>
-        <StyledCheckbox
-          checked={!!((areAllTopicZonesChecked || areAllZonesAlreadySelected) && regulatoryLayerTopic)}
-          label=""
-          name={`${regulatoryLayerTopic}-checkbox`}
-          onClick={handleCheckAllZones}
-          readOnly={areAllSearchedZonesChecked}
+        <StyledIconButton
+          accent={Accent.TERTIARY}
+          aria-label={`Sélectionner "${regulatoryLayerTopic}"`}
+          color={areAllZonesAlreadySelected ? THEME.color.blueGray : THEME.color.gunMetal}
+          Icon={areAllZonesAlreadySelected ? Icon.PinFilled : Icon.Pin}
+          onClick={toggleCheckAllZones}
+          title={`Sélectionner "${regulatoryLayerTopic}"`}
         />
       </LayerTopic>
       <ResultZones
         regulatoryLayerLawType={regulatoryLayerLawType}
         regulatoryLayerTopic={regulatoryLayerTopic}
-        zonesAreOpen={zonesAreOpen}
+        zonesAreOpen={areZonesOpened}
       />
     </>
   )
 }
 
-const StyledCheckbox = styled(Checkbox)`
-  margin: 8px 2px 8px 8px;
+const StyledIconButton = styled(IconButton)`
+  margin: 8px 2px 8px 2px;
 `
 
 const ZonesNumber = styled.span`

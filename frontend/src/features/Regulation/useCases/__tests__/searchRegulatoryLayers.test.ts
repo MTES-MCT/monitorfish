@@ -84,4 +84,14 @@ describe('searchRegulatoryLayers()', () => {
     expect(items).toHaveLength(1)
     expect(items[0]?.zone).toEqual('Praires Ouest cotentin')
   })
+
+  it('should search with the gear code', () => {
+    // @ts-ignore
+    const fuse = new Fuse(regulatoryZones, REGULATION_SEARCH_OPTIONS)
+
+    const items = fuse.search<RegulatoryZone>('otb').map(result => result.item)
+
+    expect(items).toHaveLength(1)
+    expect(items[0]?.zone).toEqual('Interdiction Merlu')
+  })
 })

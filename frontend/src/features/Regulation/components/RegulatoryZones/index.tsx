@@ -1,14 +1,15 @@
 // TODO Remove temporary `any`/`as any` (fresh migration to TS).
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { FrontendError } from '@libs/FrontendError'
+import { Icon } from '@mtes-mct/monitor-ui'
+import { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { RegulatoryTopic } from './RegulatoryTopic'
 import { LayerProperties, LayerType } from '../../../../domain/entities/layers/constants'
 import layer from '../../../../domain/shared_slices/Layer'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { FrontendError } from '../../../../libs/FrontendError'
 import { ChevronIcon } from '../../../commonStyles/icons/ChevronIcon.style'
 import { hideLayer } from '../../../LayersSidebar/useCases/hideLayer'
 import { regulatoryActions } from '../../slice'
@@ -18,30 +19,17 @@ import { hideRegulatoryZoneLayerById } from '../../useCases/hideRegulatoryZoneLa
 import type { LayerSliceNamespace } from '../../../../domain/entities/layers/types'
 
 export type RegulatoryZonesProps = {
-  hideLayersListWhenSearching?: boolean
   namespace: LayerSliceNamespace
-  regulatoryLayersAddedToMySelection: any
 }
-export function RegulatoryZones({
-  hideLayersListWhenSearching = false,
-  namespace,
-  regulatoryLayersAddedToMySelection
-}: RegulatoryZonesProps) {
+export function RegulatoryZones({ namespace }: RegulatoryZonesProps) {
   const dispatch = useMainAppDispatch()
   const { setLayersSideBarOpenedLayerType } = layer[namespace].actions
 
   const selectedRegulatoryLayers = useMainAppSelector(state => state.regulatory.selectedRegulatoryLayers)
   const advancedSearchIsOpen = useMainAppSelector(state => state.regulatoryLayerSearch.advancedSearchIsOpen)
-
   const { layersSidebarOpenedLayerType } = useMainAppSelector(state => state.layer)
 
-  const [isOpen, setIsOpen] = useState(false)
-  const [showRegulatoryLayers, setShowRegulatoryLayers] = useState(false)
-  const firstUpdate = useRef(true)
-
-  useEffect(() => {
-    setShowRegulatoryLayers(layersSidebarOpenedLayerType === LayerType.REGULATORY)
-  }, [layersSidebarOpenedLayerType, setShowRegulatoryLayers])
+  const isOpen = layersSidebarOpenedLayerType === LayerType.REGULATORY
 
   const removeById = useCallback(
     (id: number | string) => {
@@ -65,24 +53,12 @@ export function RegulatoryZones({
     [dispatch, namespace]
   )
 
-  useEffect(() => {
-    if (firstUpdate) {
-      firstUpdate.current = false
-    } else if (hideLayersListWhenSearching) {
-      setShowRegulatoryLayers(false)
-    } else {
-      setShowRegulatoryLayers(true)
-    }
-  }, [hideLayersListWhenSearching])
-
   const onTitleClicked = () => {
     if (!setLayersSideBarOpenedLayerType) {
       throw new FrontendError('`setLayersSideBarOpenedLayerType` is undefined.')
     }
 
-    setIsOpen(!isOpen)
-
-    if (showRegulatoryLayers) {
+    if (isOpen) {
       dispatch(setLayersSideBarOpenedLayerType(undefined))
     } else {
       dispatch(setLayersSideBarOpenedLayerType(LayerType.REGULATORY))
@@ -92,13 +68,8 @@ export function RegulatoryZones({
 
   return (
     <>
-      <RegulatoryLayersTitle
-        $regulatoryLayersAddedToMySelection={regulatoryLayersAddedToMySelection}
-        $showRegulatoryLayers={showRegulatoryLayers}
-        data-cy="regulatory-layers-my-zones"
-        onClick={() => onTitleClicked()}
-      >
-        Mes zones réglementaires <ChevronIcon $isOpen={showRegulatoryLayers} />
+      <RegulatoryLayersTitle $isOpen={isOpen} data-cy="regulatory-layers-my-zones" onClick={onTitleClicked}>
+        <Pin /> Mes zones réglementaires <ChevronIcon $isOpen={isOpen} />
       </RegulatoryLayersTitle>
       {selectedRegulatoryLayers && isOpen && (
         <RegulatoryLayersList $advancedSearchIsOpen={advancedSearchIsOpen} className="smooth-scroll">
@@ -124,6 +95,10 @@ export function RegulatoryZones({
   )
 }
 
+const Pin = styled(Icon.Pin)`
+  margin-right: 4px;
+`
+
 const NoLayerSelected = styled.div`
   color: ${p => p.theme.color.slateGray};
   margin: 10px;
@@ -131,14 +106,12 @@ const NoLayerSelected = styled.div`
 `
 
 const RegulatoryLayersTitle = styled.div<{
-  $regulatoryLayersAddedToMySelection: boolean
-  $showRegulatoryLayers: boolean
+  $isOpen: boolean
 }>`
-  animation: ${p => (p.$regulatoryLayersAddedToMySelection ? 'blink' : '')} 0.3s ease forwards;
   background: ${p => p.theme.color.charcoal};
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  border-bottom-left-radius: ${p => (p.$showRegulatoryLayers ? '0' : '2px')};
-  border-bottom-right-radius: ${p => (p.$showRegulatoryLayers ? '0' : '2px')};
+  border-bottom-left-radius: ${p => (p.$isOpen ? '0' : '2px')};
+  border-bottom-right-radius: ${p => (p.$isOpen ? '0' : '2px')};
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
   color: ${p => p.theme.color.gainsboro};
@@ -150,30 +123,13 @@ const RegulatoryLayersTitle = styled.div<{
   text-align: left;
   user-select: none;
 
-  @keyframes blink {
-    0% {
-      background: ${p => p.theme.color.lightGray};
-    }
-    20% {
-      background: ${p => p.theme.color.charcoal};
-    }
-    40% {
-      background: ${p => p.theme.color.charcoal};
-    }
-    60% {
-      background: ${p => p.theme.color.lightGray};
-    }
-    80% {
-      background: ${p => p.theme.color.lightGray};
-    }
-    100% {
-      background: ${p => p.theme.color.charcoal};
-    }
-  }
-
-  .Element-IconBox {
+  .Element-IconBox:last-child {
     float: right;
     margin-top: 4px;
+  }
+
+  .Element-IconBox:first-child {
+    vertical-align: bottom;
   }
 `
 

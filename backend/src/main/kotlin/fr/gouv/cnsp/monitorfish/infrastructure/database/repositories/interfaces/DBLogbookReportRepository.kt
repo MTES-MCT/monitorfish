@@ -15,23 +15,17 @@ interface DBLogbookReportRepository :
     @Query(
         """
         WITH
-            logbook_reports_with_extra_columns AS (
+            dat_and_cor_logbook_reports_with_extra_columns AS (
                 SELECT
-                    *,
-                    (SELECT array_agg(pnoTypes->>'pnoTypeName') FROM jsonb_array_elements(value->'pnoTypes') AS pnoTypes) AS prior_notification_type_names,
-                    (SELECT array_agg(catchOnboard->>'species') FROM jsonb_array_elements(value->'catchOnboard') AS catchOnboard) AS specy_codes,
-                    (SELECT array_agg(tripGears->>'gear') FROM jsonb_array_elements(trip_gears) AS tripGears) AS trip_gear_codes,
-                    (SELECT array_agg(tripSegments->>'segment') FROM jsonb_array_elements(trip_segments) AS tripSegments) AS trip_segment_codes
-                FROM logbook_reports
-            ),
-
-            dat_and_cor_logbook_reports AS (
-                SELECT
-                    lr.*
-                FROM logbook_reports_with_extra_columns lr
-                LEFT JOIN vessels v ON lr.cfr = v.cfr
+                    lr.*,
+                    (SELECT array_agg(pnoTypes->>'pnoTypeName') FROM jsonb_array_elements(lr.value->'pnoTypes') AS pnoTypes) AS prior_notification_type_names,
+                    (SELECT array_agg(catchOnboard->>'species') FROM jsonb_array_elements(lr.value->'catchOnboard') AS catchOnboard) AS specy_codes,
+                    (SELECT array_agg(tripGears->>'gear') FROM jsonb_array_elements(lr.trip_gears) AS tripGears) AS trip_gear_codes,
+                    (SELECT array_agg(tripSegments->>'segment') FROM jsonb_array_elements(lr.trip_segments) AS tripSegments) AS trip_segment_codes
+                FROM logbook_reports lr
                 LEFT JOIN ports p ON lr.value->>'port' = p.locode
                 LEFT JOIN risk_factors rf ON lr.cfr = rf.cfr
+                LEFT JOIN vessels v ON lr.cfr = v.cfr
                 WHERE
                     -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
                     lr.operation_datetime_utc BETWEEN
@@ -61,26 +55,31 @@ interface DBLogbookReportRepository :
                     -- Port Locodes
                     AND (:portLocodes IS NULL OR lr.value->>'port' IN (:portLocodes))
 
-                    -- Prior Notification Types
-                    AND (:priorNotificationTypesAsSqlArrayString IS NULL OR lr.prior_notification_type_names && CAST(:priorNotificationTypesAsSqlArrayString AS TEXT[]))
-
                     -- Search Query
                     AND (:searchQuery IS NULL OR unaccent(lower(lr.vessel_name)) ILIKE CONCAT('%', unaccent(lower(:searchQuery)), '%'))
-
-                    -- Specy Codes
-                    AND (:specyCodesAsSqlArrayString IS NULL OR lr.specy_codes && CAST(:specyCodesAsSqlArrayString AS TEXT[]))
-
-                    -- Trip Gear Codes
-                    AND (:tripGearCodesAsSqlArrayString IS NULL OR lr.trip_gear_codes && CAST(:tripGearCodesAsSqlArrayString AS TEXT[]))
-
-                    -- Trip Segment Codes
-                    AND (:tripSegmentCodesAsSqlArrayString IS NULL OR lr.trip_segment_codes && CAST(:tripSegmentCodesAsSqlArrayString AS TEXT[]))
 
                     -- Will Arrive After
                     AND lr.value->>'predictedArrivalDatetimeUtc' >= :willArriveAfter
 
                     -- Will Arrive Before
                     AND lr.value->>'predictedArrivalDatetimeUtc' <= :willArriveBefore
+            ),
+
+            dat_and_cor_logbook_reports AS (
+                SELECT *
+                FROM dat_and_cor_logbook_reports_with_extra_columns
+                WHERE
+                    -- Prior Notification Types
+                    (:priorNotificationTypesAsSqlArrayString IS NULL OR prior_notification_type_names && CAST(:priorNotificationTypesAsSqlArrayString AS TEXT[]))
+
+                    -- Specy Codes
+                    AND (:specyCodesAsSqlArrayString IS NULL OR specy_codes && CAST(:specyCodesAsSqlArrayString AS TEXT[]))
+
+                    -- Trip Gear Codes
+                    AND (:tripGearCodesAsSqlArrayString IS NULL OR trip_gear_codes && CAST(:tripGearCodesAsSqlArrayString AS TEXT[]))
+
+                    -- Trip Segment Codes
+                    AND (:tripSegmentCodesAsSqlArrayString IS NULL OR trip_segment_codes && CAST(:tripSegmentCodesAsSqlArrayString AS TEXT[]))
             ),
 
             del_and_ret_logbook_reports AS (

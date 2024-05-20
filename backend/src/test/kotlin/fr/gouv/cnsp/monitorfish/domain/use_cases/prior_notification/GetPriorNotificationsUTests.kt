@@ -11,10 +11,12 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotifica
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
-import org.assertj.core.api.Assertions
+import fr.gouv.cnsp.monitorfish.domain.sorters.LogbookReportSortColumn
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.data.domain.Sort
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
 
@@ -41,17 +43,19 @@ class GetPriorNotificationsUTests {
     @MockBean
     private lateinit var vesselRepository: VesselRepository
 
+    private val defaultFilter = LogbookReportFilter(
+        willArriveAfter = "2000-01-01T00:00:00Z",
+        willArriveBefore = "2099-12-31T00:00:00Z",
+    )
+    private val defaultSortColumn = LogbookReportSortColumn.EXPECTED_ARRIVAL_DATE
+    private val defaultSortDirection = Sort.Direction.ASC
+    private val defaultPageSize = 10
+    private val defaultPageNumber = 0
+
     @Test
-    fun `execute Should return a list of prior notifications`() {
+    fun `execute Should return a list of prior notifications with their total length`() {
         // Given
-        given(
-            logbookReportRepository.findAllPriorNotifications(
-                LogbookReportFilter(
-                    willArriveAfter = "2000-01-01T00:00:00Z",
-                    willArriveBefore = "2100-01-01T00:00:00Z",
-                ),
-            ),
-        ).willReturn(
+        given(logbookReportRepository.findAllPriorNotifications(defaultFilter)).willReturn(
             listOf(
                 PriorNotification(
                     logbookMessageTyped = LogbookMessageTyped(
@@ -134,20 +138,17 @@ class GetPriorNotificationsUTests {
             riskFactorRepository,
             speciesRepository,
             vesselRepository,
-        ).execute(
-            LogbookReportFilter(
-                willArriveAfter = "2000-01-01T00:00:00Z",
-                willArriveBefore = "2100-01-01T00:00:00Z",
-            ),
-        )
+        ).execute(defaultFilter, defaultSortColumn, defaultSortDirection, defaultPageSize, defaultPageNumber)
 
         // Then
-        Assertions.assertThat(result).hasSize(2)
-        Assertions.assertThat(result[0].logbookMessageTyped.logbookMessage.reportId).isEqualTo(
+        val (priorNotifications, totalLength) = result
+        assertThat(priorNotifications).hasSize(2)
+        assertThat(priorNotifications[0].logbookMessageTyped.logbookMessage.reportId).isEqualTo(
             "FAKE_REPORT_ID_1",
         )
-        Assertions.assertThat(result[1].logbookMessageTyped.logbookMessage.reportId).isEqualTo(
+        assertThat(priorNotifications[1].logbookMessageTyped.logbookMessage.reportId).isEqualTo(
             "FAKE_REPORT_ID_2_COR",
         )
+        assertThat(totalLength).isEqualTo(2)
     }
 }

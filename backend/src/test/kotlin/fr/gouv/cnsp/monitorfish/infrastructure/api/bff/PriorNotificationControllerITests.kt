@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.neovisionaries.i18n.CountryCode
+import com.nhaarman.mockitokotlin2.any
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTyped
@@ -9,7 +10,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionForma
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
-import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotification
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotificationTypes
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotifications
@@ -46,98 +46,98 @@ class PriorNotificationControllerITests {
     @Test
     fun `Should get a list of prior notifications`() {
         // Given
-        given(
-            this.getPriorNotifications.execute(
-                LogbookReportFilter(
-                    willArriveAfter = "2000-01-01T00:00:00Z",
-                    willArriveBefore = "2100-01-01T00:00:00Z",
-                ),
-            ),
-        ).willReturn(
-            listOf(
-                PriorNotification(
-                    logbookMessageTyped = LogbookMessageTyped(
-                        clazz = PNO::class.java,
-                        logbookMessage = LogbookMessage(
-                            id = 1,
-                            reportId = "FAKE_REPORT_ID_1",
-                            referencedReportId = null,
-                            analyzedByRules = emptyList(),
-                            integrationDateTime = ZonedDateTime.now(),
-                            isCorrectedByNewerMessage = false,
-                            isDeleted = false,
-                            isEnriched = false,
-                            message = PNO(),
-                            operationDateTime = ZonedDateTime.now(),
-                            operationNumber = "1",
-                            operationType = LogbookOperationType.DAT,
-                            transmissionFormat = LogbookTransmissionFormat.ERS,
+        given(this.getPriorNotifications.execute(any(), any(), any(), any(), any())).willReturn(
+            Pair(
+                listOf(
+                    PriorNotification(
+                        logbookMessageTyped = LogbookMessageTyped(
+                            clazz = PNO::class.java,
+                            logbookMessage = LogbookMessage(
+                                id = 1,
+                                reportId = "FAKE_REPORT_ID_1",
+                                referencedReportId = null,
+                                analyzedByRules = emptyList(),
+                                integrationDateTime = ZonedDateTime.now(),
+                                isCorrectedByNewerMessage = false,
+                                isDeleted = false,
+                                isEnriched = false,
+                                message = PNO(),
+                                operationDateTime = ZonedDateTime.now(),
+                                operationNumber = "1",
+                                operationType = LogbookOperationType.DAT,
+                                transmissionFormat = LogbookTransmissionFormat.ERS,
+                            ),
                         ),
+                        reportingsCount = null,
+                        seafront = null,
+                        vessel = Vessel(
+                            id = 1,
+                            externalReferenceNumber = null,
+                            flagState = CountryCode.FR,
+                            internalReferenceNumber = null,
+                            ircs = null,
+                            length = null,
+                            mmsi = null,
+                            underCharter = null,
+                            vesselName = null,
+                        ),
+                        vesselRiskFactor = null,
                     ),
-                    reportingsCount = null,
-                    seafront = null,
-                    vessel = Vessel(
-                        id = 1,
-                        externalReferenceNumber = null,
-                        flagState = CountryCode.FR,
-                        internalReferenceNumber = null,
-                        ircs = null,
-                        length = null,
-                        mmsi = null,
-                        underCharter = null,
-                        vesselName = null,
-                    ),
-                    vesselRiskFactor = null,
-                ),
 
-                PriorNotification(
-                    logbookMessageTyped = LogbookMessageTyped(
-                        clazz = PNO::class.java,
-                        logbookMessage = LogbookMessage(
-                            id = 1,
-                            reportId = "FAKE_REPORT_ID_2_COR",
-                            referencedReportId = "FAKE_NONEXISTENT_REPORT_ID_2",
-                            analyzedByRules = emptyList(),
-                            integrationDateTime = ZonedDateTime.now(),
-                            isCorrectedByNewerMessage = false,
-                            isDeleted = false,
-                            isEnriched = false,
-                            message = PNO(),
-                            operationDateTime = ZonedDateTime.now(),
-                            operationNumber = "1",
-                            operationType = LogbookOperationType.COR,
-                            transmissionFormat = LogbookTransmissionFormat.ERS,
+                    PriorNotification(
+                        logbookMessageTyped = LogbookMessageTyped(
+                            clazz = PNO::class.java,
+                            logbookMessage = LogbookMessage(
+                                id = 1,
+                                reportId = "FAKE_REPORT_ID_2_COR",
+                                referencedReportId = "FAKE_NONEXISTENT_REPORT_ID_2",
+                                analyzedByRules = emptyList(),
+                                integrationDateTime = ZonedDateTime.now(),
+                                isCorrectedByNewerMessage = false,
+                                isDeleted = false,
+                                isEnriched = false,
+                                message = PNO(),
+                                operationDateTime = ZonedDateTime.now(),
+                                operationNumber = "1",
+                                operationType = LogbookOperationType.COR,
+                                transmissionFormat = LogbookTransmissionFormat.ERS,
+                            ),
                         ),
+                        reportingsCount = null,
+                        seafront = null,
+                        vessel = Vessel(
+                            id = 1,
+                            externalReferenceNumber = null,
+                            flagState = CountryCode.UK,
+                            internalReferenceNumber = null,
+                            ircs = null,
+                            length = null,
+                            mmsi = null,
+                            underCharter = null,
+                            vesselName = null,
+                        ),
+                        vesselRiskFactor = null,
                     ),
-                    reportingsCount = null,
-                    seafront = null,
-                    vessel = Vessel(
-                        id = 1,
-                        externalReferenceNumber = null,
-                        flagState = CountryCode.UK,
-                        internalReferenceNumber = null,
-                        ircs = null,
-                        length = null,
-                        mmsi = null,
-                        underCharter = null,
-                        vesselName = null,
-                    ),
-                    vesselRiskFactor = null,
                 ),
+                2,
             ),
         )
 
         // When
         api.perform(
             get(
-                "/bff/v1/prior_notifications?willArriveAfter=2000-01-01T00:00:00Z&willArriveBefore=2100-01-01T00:00:00Z",
+                "/bff/v1/prior_notifications?willArriveAfter=2000-01-01T00:00:00Z&willArriveBefore=2100-01-01T00:00:00Z&sortColumn=EXPECTED_ARRIVAL_DATE&sortDirection=DESC&pageNumber=0&pageSize=10",
             ),
         )
             // Then
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.length()", equalTo(2)))
-            .andExpect(jsonPath("$[0].id", equalTo("FAKE_REPORT_ID_1")))
-            .andExpect(jsonPath("$[1].id", equalTo("FAKE_NONEXISTENT_REPORT_ID_2")))
+            .andExpect(jsonPath("$.data.length()", equalTo(2)))
+            .andExpect(jsonPath("$.data[0].id", equalTo("FAKE_REPORT_ID_1")))
+            .andExpect(jsonPath("$.data[1].id", equalTo("FAKE_NONEXISTENT_REPORT_ID_2")))
+            .andExpect(jsonPath("$.lastPageNumber", equalTo(0)))
+            .andExpect(jsonPath("$.pageNumber", equalTo(0)))
+            .andExpect(jsonPath("$.pageSize", equalTo(10)))
+            .andExpect(jsonPath("$.totalLength", equalTo(2)))
     }
 
     @Test

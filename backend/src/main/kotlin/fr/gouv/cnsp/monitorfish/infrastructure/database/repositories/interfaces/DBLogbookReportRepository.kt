@@ -15,10 +15,22 @@ interface DBLogbookReportRepository :
     @Query(
         """
         WITH
+            logbook_reports_with_extra_columns AS (
+                SELECT
+                    *,
+                    (SELECT array_agg(pnoTypes->>'pnoTypeName') FROM jsonb_array_elements(value->'pnoTypes') AS pnoTypes) AS prior_notification_type_names,
+                    (SELECT array_agg(catchOnboard->>'species') FROM jsonb_array_elements(value->'catchOnboard') AS catchOnboard) AS specy_codes,
+                    (SELECT array_agg(tripGears->>'gear') FROM jsonb_array_elements(trip_gears) AS tripGears) AS trip_gear_codes,
+                    (SELECT array_agg(tripSegments->>'segment') FROM jsonb_array_elements(trip_segments) AS tripSegments) AS trip_segment_codes
+                FROM logbook_reports
+            ),
+
             dat_and_cor_logbook_reports AS (
-                SELECT lr.*
-                FROM logbook_reports lr
+                SELECT
+                    lr.*
+                FROM logbook_reports_with_extra_columns lr
                 LEFT JOIN vessels v ON lr.cfr = v.cfr
+                LEFT JOIN ports p ON lr.value->>'port' = p.locode
                 LEFT JOIN risk_factors rf ON lr.cfr = rf.cfr
                 WHERE
                     -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
@@ -50,19 +62,19 @@ interface DBLogbookReportRepository :
                     AND (:portLocodes IS NULL OR lr.value->>'port' IN (:portLocodes))
 
                     -- Prior Notification Types
-                    -- AND jsonb_contains_any(lr.value, ARRAY['pnoTypes'], CAST('pnoTypeName' AS TEXT), :priorNotificationTypes)
+                    AND (:priorNotificationTypesAsSqlArrayString IS NULL OR lr.prior_notification_type_names && CAST(:priorNotificationTypesAsSqlArrayString AS TEXT[]))
 
                     -- Search Query
                     AND (:searchQuery IS NULL OR unaccent(lower(lr.vessel_name)) ILIKE CONCAT('%', unaccent(lower(:searchQuery)), '%'))
 
                     -- Specy Codes
-                    -- AND jsonb_contains_any(lr.value, ARRAY['catchOnboard'], CAST('species' AS TEXT), :specyCodes)
+                    AND (:specyCodesAsSqlArrayString IS NULL OR lr.specy_codes && CAST(:specyCodesAsSqlArrayString AS TEXT[]))
 
                     -- Trip Gear Codes
-                    -- AND jsonb_contains_any(lr.trip_gears, CAST('{}' AS TEXT[]), CAST('gear' AS TEXT), :tripGearCodes)
+                    AND (:tripGearCodesAsSqlArrayString IS NULL OR lr.trip_gear_codes && CAST(:tripGearCodesAsSqlArrayString AS TEXT[]))
 
-                    -- Trip Segment Segments
-                    -- AND jsonb_contains_any(lr.trip_segments, CAST('{}' AS TEXT[]), CAST('segment' AS TEXT), :tripSegmentCodes)
+                    -- Trip Segment Codes
+                    AND (:tripSegmentCodesAsSqlArrayString IS NULL OR lr.trip_segment_codes && CAST(:tripSegmentCodesAsSqlArrayString AS TEXT[]))
 
                     -- Will Arrive After
                     AND lr.value->>'predictedArrivalDatetimeUtc' >= :willArriveAfter
@@ -72,7 +84,12 @@ interface DBLogbookReportRepository :
             ),
 
             del_and_ret_logbook_reports AS (
-                SELECT lr.*
+                SELECT
+                    lr.*,
+                    CAST(NULL AS text[]) AS prior_notification_type_names,
+                    CAST(NULL AS text[]) AS specy_codes,
+                    CAST(NULL AS text[]) AS trip_gear_codes,
+                    CAST(NULL AS text[]) AS trip_segment_codes
                 FROM logbook_reports lr
                 JOIN dat_and_cor_logbook_reports daclr ON lr.referenced_report_id = daclr.report_id
                 WHERE
@@ -100,11 +117,11 @@ interface DBLogbookReportRepository :
         lastControlledAfter: String?,
         lastControlledBefore: String?,
         portLocodes: List<String>,
-        // priorNotificationTypes: List<String>,
+        priorNotificationTypesAsSqlArrayString: String?,
         searchQuery: String?,
-        // specyCodes: List<String>,
-        // tripGearCodes: List<String>,
-        // tripSegmentCodes: List<String>,
+        specyCodesAsSqlArrayString: String?,
+        tripGearCodesAsSqlArrayString: String?,
+        tripSegmentCodesAsSqlArrayString: String?,
         willArriveAfter: String,
         willArriveBefore: String,
     ): List<LogbookReportEntity>

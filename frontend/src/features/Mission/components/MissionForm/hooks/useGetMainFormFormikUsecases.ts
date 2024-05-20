@@ -6,7 +6,7 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { sortBy } from 'lodash'
 
-import { formikUsecase } from '../formikUsecases'
+import { formUsecase } from '../useCases'
 
 import type { MissionMainFormValues } from '../types'
 
@@ -22,7 +22,7 @@ export function useGetMainFormFormikUsecases() {
      * When updating a control unit, we must reset the "Other controls" field checkboxes
      */
     updateMissionActionOtherControlsCheckboxes: (mission: MissionMainFormValues, previousIsControlUnitPAM: boolean) =>
-      formikUsecase.updateOtherControlsCheckboxes(dispatch)(mission, previousIsControlUnitPAM),
+      formUsecase.updateOtherControlsCheckboxes(dispatch)(mission, previousIsControlUnitPAM),
 
     /**
      * When updating the mission location from the mission, we use the `RTK-Query` cache object to access the `missionAction` form.
@@ -53,10 +53,11 @@ export function useGetMainFormFormikUsecases() {
         return false
       }
 
-      await formikUsecase.updateMissionLocation(
+      await formUsecase.updateMissionLocation(
         dispatch,
         getPortsApiQuery.data,
-        getMissionApiQuery.data?.envActions ?? []
+        getMissionApiQuery.data?.envActions ?? [],
+        getMissionApiQuery.data?.actions ?? []
       )(isGeometryComputedFromControls, lastControl)
 
       return true

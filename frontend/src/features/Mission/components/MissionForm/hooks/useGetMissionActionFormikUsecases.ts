@@ -9,7 +9,7 @@ import { useFormikContext } from 'formik'
 import { useMemo } from 'react'
 
 import { getFleetSegmentsAsOption } from '../ActionForm/shared/utils'
-import { formikUsecase } from '../formikUsecases'
+import { formUsecase } from '../useCases'
 
 import type { MissionActionFormValues } from '../types'
 import type { Option } from '@mtes-mct/monitor-ui'
@@ -32,15 +32,15 @@ export function useGetMissionActionFormikUsecases() {
   )
 
   const updateSegments = (missionActionValues: MissionActionFormValues) =>
-    formikUsecase.updateSegments(dispatch, setMissionActionFieldValue, fleetSegmentsAsOptions)(missionActionValues)
+    formUsecase.updateSegments(dispatch, setMissionActionFieldValue, fleetSegmentsAsOptions)(missionActionValues)
 
   /**
    * Update FAO Areas and segments from the control coordinates or port input
    */
   async function updateFAOAreasAndSegments(missionActionValues: MissionActionFormValues) {
-    const faoAreas = await formikUsecase.updateFAOAreas(dispatch, setMissionActionFieldValue)(missionActionValues)
+    const faoAreas = await formUsecase.updateFAOAreas(dispatch, setMissionActionFieldValue)(missionActionValues)
 
-    await formikUsecase.updateSegments(
+    await formUsecase.updateSegments(
       dispatch,
       setMissionActionFieldValue,
       fleetSegmentsAsOptions
@@ -62,20 +62,20 @@ export function useGetMissionActionFormikUsecases() {
       return
     }
 
-    const gearOnboard = await formikUsecase.updateGearsOnboard(
+    const gearOnboard = await formUsecase.updateGearsOnboard(
       dispatch,
       setMissionActionFieldValue,
       gearsByCode
     )(missionActionValues)
 
-    const speciesOnboard = await formikUsecase.updateSpeciesOnboard(
+    const speciesOnboard = await formUsecase.updateSpeciesOnboard(
       dispatch,
       setMissionActionFieldValue
     )(missionActionValues)
 
-    const faoAreas = await formikUsecase.updateFAOAreas(dispatch, setMissionActionFieldValue)(missionActionValues)
+    const faoAreas = await formUsecase.updateFAOAreas(dispatch, setMissionActionFieldValue)(missionActionValues)
 
-    await formikUsecase.updateSegments(
+    await formUsecase.updateSegments(
       dispatch,
       setMissionActionFieldValue,
       fleetSegmentsAsOptions
@@ -92,17 +92,18 @@ export function useGetMissionActionFormikUsecases() {
    * The mission location is equal to the current action geometry modified.
    */
   const updateMissionLocation = (missionActionValues: MissionActionFormValues) =>
-    formikUsecase.updateMissionLocation(
+    formUsecase.updateMissionLocation(
       dispatch,
       getPortsApiQuery.data,
-      getMissionApiQuery.data?.envActions ?? []
+      getMissionApiQuery.data?.envActions ?? [],
+      getMissionApiQuery.data?.actions ?? []
     )(draft?.mainFormValues.isGeometryComputedFromControls, missionActionValues)
 
   /**
    * When updating the mission location from an action, we use the `RTK-Query` cache object to access the `mission` form.
    */
   const initMissionLocation = () =>
-    formikUsecase.initMissionLocation(dispatch)(draft?.mainFormValues.isGeometryComputedFromControls)
+    formUsecase.initMissionLocation(dispatch)(draft?.mainFormValues.isGeometryComputedFromControls)
 
   return {
     initMissionLocation,

@@ -9,6 +9,8 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
 import fr.gouv.cnsp.monitorfish.domain.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
+import fr.gouv.cnsp.monitorfish.domain.sorters.LogbookReportSortColumn
+import org.springframework.data.domain.Sort
 
 @UseCase
 class GetPriorNotifications(
@@ -20,14 +22,21 @@ class GetPriorNotifications(
     private val speciesRepository: SpeciesRepository,
     private val vesselRepository: VesselRepository,
 ) {
-    fun execute(filter: LogbookReportFilter): List<PriorNotification> {
+    fun execute(
+        filter: LogbookReportFilter,
+        sortColumn: LogbookReportSortColumn,
+        sortDirection: Sort.Direction,
+        pageSize: Int,
+        pageNumber: Int,
+    ): Pair<List<PriorNotification>, Int> {
         val allGears = gearRepository.findAll()
         val allPorts = portRepository.findAll()
         val allRiskFactors = riskFactorRepository.findAll()
         val allSpecies = speciesRepository.findAll()
         val allVessels = vesselRepository.findAll()
 
-        val priorNotificationsWithoutReportingsCount = logbookReportRepository.findAllPriorNotifications(filter)
+        val incompletePriorNotifications = logbookReportRepository.findAllPriorNotifications(filter)
+        val priorNotificationsWithoutReportingsCount = incompletePriorNotifications
             .map { priorNotification ->
                 val port = try {
                     priorNotification.logbookMessageTyped.typedMessage.port?.let { portLocode ->
@@ -59,10 +68,40 @@ class GetPriorNotifications(
 
                 finalPriorNotification
             }
-
         val priorNotifications = enrichPriorNotificationsWithReportingCount(priorNotificationsWithoutReportingsCount)
 
-        return priorNotifications.filter { !it.logbookMessageTyped.logbookMessage.isDeleted }
+        val ascendingSortedPriorNotifications = priorNotifications.sortedWith(
+            compareBy { priorNotification ->
+                val segmentCodes = priorNotification.logbookMessageTyped.logbookMessage
+                    .tripSegments?.joinToString(", ") { it.code }
+                val priorNotificationTypeNames = priorNotification.logbookMessageTyped.typedMessage
+                    .pnoTypes.map { it.name }.joinToString(", ")
+
+                when (sortColumn) {
+                    LogbookReportSortColumn.EXPECTED_ARRIVAL_DATE -> priorNotification.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc
+                    LogbookReportSortColumn.EXPECTED_LANDING_DATE -> priorNotification.logbookMessageTyped.typedMessage.predictedLandingDatetimeUtc
+                    LogbookReportSortColumn.PORT_NAME -> priorNotification.port?.name
+                    LogbookReportSortColumn.PRIOR_NOTIFICATION_TYPES -> priorNotificationTypeNames
+                    LogbookReportSortColumn.TRIP_SEGMENT_CODES -> segmentCodes
+                    LogbookReportSortColumn.VESSEL_NAME -> priorNotification.logbookMessageTyped.logbookMessage.vesselName
+                    LogbookReportSortColumn.VESSEL_RISK_FACTOR -> priorNotification.vesselRiskFactor?.riskFactor
+                }
+            },
+        )
+        val sortedPriorNotifications = if (sortDirection == Sort.Direction.ASC) {
+            ascendingSortedPriorNotifications
+        } else {
+            ascendingSortedPriorNotifications.reversed()
+        }
+        val sortedPriorNotificationsWithoutDeletedOnes = sortedPriorNotifications
+            .filter { !it.logbookMessageTyped.logbookMessage.isDeleted }
+
+        return Pair(
+            sortedPriorNotificationsWithoutDeletedOnes
+                .drop(pageNumber * pageSize)
+                .take(pageSize),
+            sortedPriorNotificationsWithoutDeletedOnes.size,
+        )
     }
 
     private fun enrichPriorNotificationsWithReportingCount(

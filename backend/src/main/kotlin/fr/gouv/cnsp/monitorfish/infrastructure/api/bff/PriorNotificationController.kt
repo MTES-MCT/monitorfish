@@ -1,16 +1,20 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
+import fr.gouv.cnsp.monitorfish.domain.sorters.LogbookReportSortColumn
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotification
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotificationTypes
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotifications
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PriorNotificationDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PriorNotificationDetailDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PriorNotificationListDataOutput
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.websocket.server.PathParam
+import org.springframework.data.domain.Sort
 import org.springframework.web.bind.annotation.*
+import kotlin.math.floor
 
 @RestController
 @RequestMapping("/bff/v1/prior_notifications")
@@ -59,7 +63,20 @@ class PriorNotificationController(
         @Parameter(description = "Vessels that will arrive before the given date.")
         @RequestParam(name = "willArriveBefore")
         willArriveBefore: String,
-    ): List<PriorNotificationDataOutput> {
+
+        @Parameter(description = "Sort column.")
+        @RequestParam(name = "sortColumn")
+        sortColumn: LogbookReportSortColumn,
+        @Parameter(description = "Sort order.")
+        @RequestParam(name = "sortDirection")
+        sortDirection: Sort.Direction,
+        @Parameter(description = "Number of items per page.")
+        @RequestParam(name = "pageSize")
+        pageSize: Int,
+        @Parameter(description = "Page number (0-indexed).")
+        @RequestParam(name = "pageNumber")
+        pageNumber: Int,
+    ): PriorNotificationListDataOutput {
         val logbookReportFilter = LogbookReportFilter(
             flagStates = flagStates,
             isLessThanTwelveMetersVessel = isLessThanTwelveMetersVessel,
@@ -75,9 +92,19 @@ class PriorNotificationController(
             willArriveBefore = willArriveBefore,
         )
 
-        return getPriorNotifications.execute(logbookReportFilter).mapNotNull {
-            PriorNotificationDataOutput.fromPriorNotification(it)
-        }
+        val (priorNotifications, totalLength) = getPriorNotifications
+            .execute(logbookReportFilter, sortColumn, sortDirection, pageSize, pageNumber)
+        val priorNotificationsDataOutput = priorNotifications
+            .mapNotNull { PriorNotificationDataOutput.fromPriorNotification(it) }
+        val lastPageNumber = floor((totalLength / pageSize).toDouble()).toInt()
+
+        return PriorNotificationListDataOutput(
+            data = priorNotificationsDataOutput,
+            lastPageNumber,
+            pageNumber,
+            pageSize,
+            totalLength,
+        )
     }
 
     @GetMapping("/{logbookMessageReportId}")

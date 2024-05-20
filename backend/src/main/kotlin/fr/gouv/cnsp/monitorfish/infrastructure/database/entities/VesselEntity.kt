@@ -34,6 +34,7 @@ data class VesselEntity(
     @Column(name = "vessel_name")
     val vesselName: String? = null,
     // ISO Alpha-2 country code
+    // TODO Fix warning `WARN f.g.c.m.i.d.e.VesselEntity: - No enum constant com.neovisionaries.i18n.CountryCode.X`.
     @Column(name = "flag_state")
     val flagState: String? = null,
     @Column(name = "width")

@@ -5,7 +5,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.exceptions.EntityConversionException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
@@ -14,10 +13,9 @@ import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LogbookReportEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBLogbookReportRepository
-import jakarta.persistence.EntityManager
+import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.utils.toSqlArrayString
 import jakarta.transaction.Transactional
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.data.domain.PageRequest
@@ -29,7 +27,6 @@ import java.time.ZonedDateTime
 @Repository
 class JpaLogbookReportRepository(
     private val dbERSRepository: DBLogbookReportRepository,
-    @Autowired private val entityManager: EntityManager,
     private val mapper: ObjectMapper,
 ) : LogbookReportRepository {
     private val logger = LoggerFactory.getLogger(JpaLogbookReportRepository::class.java)
@@ -42,86 +39,16 @@ class JpaLogbookReportRepository(
             lastControlledAfter = filter.lastControlledAfter,
             lastControlledBefore = filter.lastControlledBefore,
             portLocodes = filter.portLocodes ?: emptyList(),
-            // priorNotificationTypes = filter.priorNotificationTypes ?: emptyList(),
+            priorNotificationTypesAsSqlArrayString = toSqlArrayString(filter.priorNotificationTypes),
             searchQuery = filter.searchQuery,
-            // specyCodes = filter.specyCodes ?: emptyList(),
-            // tripGearCodes = filter.tripGearCodes ?: emptyList(),
-            // tripSegmentCodes = filter.tripSegmentCodes ?: emptyList(),
+            specyCodesAsSqlArrayString = toSqlArrayString(filter.specyCodes),
+            tripGearCodesAsSqlArrayString = toSqlArrayString(filter.tripGearCodes),
+            tripSegmentCodesAsSqlArrayString = toSqlArrayString(filter.tripSegmentCodes),
             willArriveAfter = filter.willArriveAfter,
             willArriveBefore = filter.willArriveBefore,
         )
 
-        val filteredDatAndCorLogbookReportModels = allLogbookReportModels
-            .filter { anyLogbookReportModel ->
-                anyLogbookReportModel.operationType in listOf(LogbookOperationType.DAT, LogbookOperationType.COR)
-            }
-            .filter { datOrCorLogbookReportModel ->
-                val logbookMessage = datOrCorLogbookReportModel.toLogbookMessage(mapper)
-                val message = logbookMessage.message as PNO
-
-                if (
-                    filter.priorNotificationTypes != null &&
-                    message.pnoTypes.none { pnoType -> pnoType.name in filter.priorNotificationTypes }
-                ) {
-                    return@filter false
-                }
-
-                true
-            }
-            .filter { datOrCorLogbookReportModel ->
-                val logbookMessage = datOrCorLogbookReportModel.toLogbookMessage(mapper)
-                val message = logbookMessage.message as PNO
-
-                if (
-                    filter.specyCodes != null &&
-                    message.catchOnboard.none { catch -> catch.species in filter.specyCodes }
-                ) {
-                    return@filter false
-                }
-
-                true
-            }
-            .filter { datOrCorLogbookReportModel ->
-                val logbookMessage = datOrCorLogbookReportModel.toLogbookMessage(mapper)
-
-                if (
-                    filter.tripGearCodes != null && (
-                        logbookMessage.tripGears == null ||
-                            logbookMessage.tripGears.none { tripGear -> tripGear.gear in filter.tripGearCodes }
-                        )
-                ) {
-                    return@filter false
-                }
-
-                true
-            }
-            .filter { datOrCorLogbookReportModel ->
-                val logbookMessage = datOrCorLogbookReportModel.toLogbookMessage(mapper)
-
-                if (
-                    filter.tripSegmentCodes != null && (
-                        logbookMessage.tripSegments == null ||
-                            logbookMessage.tripSegments.none { tripSegment -> tripSegment.code in filter.tripSegmentCodes }
-                        )
-                ) {
-                    return@filter false
-                }
-
-                true
-            }
-        val filteredDatAndCorLogbookReportModelReportIds = filteredDatAndCorLogbookReportModels
-            .mapNotNull { it.reportId }
-            .distinct()
-        val filteredDelAndRetLogbookReportModels = allLogbookReportModels
-            .filter { anyLogbookReportModel ->
-                anyLogbookReportModel.operationType in listOf(LogbookOperationType.DEL, LogbookOperationType.RET) &&
-                    anyLogbookReportModel.referencedReportId in filteredDatAndCorLogbookReportModelReportIds
-            }
-        val filteredLogbookReportModels = filteredDatAndCorLogbookReportModels + filteredDelAndRetLogbookReportModels
-
-        val logbookReportModelPairs = mapToReferenceWithRelatedModels(filteredLogbookReportModels)
-
-        return logbookReportModelPairs.mapNotNull { (referenceLogbookReportModel, relatedLogbookReportModels) ->
+        return mapToReferenceWithRelatedModels(allLogbookReportModels).mapNotNull { (referenceLogbookReportModel, relatedLogbookReportModels) ->
             try {
                 referenceLogbookReportModel.toPriorNotification(mapper, relatedLogbookReportModels)
             } catch (e: Exception) {

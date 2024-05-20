@@ -64,6 +64,10 @@ class GetActivityReports(
 
                 else -> throw IllegalArgumentException("Bad control type: ${control.actionType}")
             }
+        }.filter { control ->
+            // All AECP reports are excluded from the response
+            // see: https://github.com/MTES-MCT/monitorfish/issues/3194
+            return@filter !control.controlUnits.any { controlUnit -> controlUnit.administration == "AECP" }
         }
         logger.info("Found ${filteredControls.size} controls to report.")
 

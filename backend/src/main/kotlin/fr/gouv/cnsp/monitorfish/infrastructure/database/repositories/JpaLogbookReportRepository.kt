@@ -35,6 +35,7 @@ class JpaLogbookReportRepository(
     override fun findAllPriorNotifications(filter: LogbookReportFilter): List<PriorNotification> {
         val allLogbookReportModels = dbERSRepository.findAllEnrichedPnoReferencesAndRelatedOperations(
             flagStates = filter.flagStates ?: emptyList(),
+            hasOneOrMoreReportings = filter.hasOneOrMoreReportings,
             isLessThanTwelveMetersVessel = filter.isLessThanTwelveMetersVessel,
             lastControlledAfter = filter.lastControlledAfter,
             lastControlledBefore = filter.lastControlledBefore,

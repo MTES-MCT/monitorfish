@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.filters
 
 data class LogbookReportFilter(
     val flagStates: List<String>? = null,
+    val hasOneOrMoreReportings: Boolean? = null,
     val isLessThanTwelveMetersVessel: Boolean? = null,
     val lastControlledAfter: String? = null,
     val lastControlledBefore: String? = null,

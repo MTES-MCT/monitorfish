@@ -387,7 +387,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
         assertThat(
             secondPagePriorNotifications
                 .none { it.logbookMessageTyped.logbookMessage.id in firstPagePriorNotificationIds },
-        )
+        ).isTrue()
         assertThat(secondPageTotalLength).isEqualTo(14)
 
         // Given

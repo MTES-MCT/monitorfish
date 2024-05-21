@@ -627,7 +627,50 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
             )
         }
         assertThat(resultVessels).hasSize(result.size)
-        assertThat(resultVessels.all { listOf(CountryCode.ES, CountryCode.FR).contains(it.flagState) }).isEqualTo(true)
+        assertThat(resultVessels.all { listOf(CountryCode.ES, CountryCode.FR).contains(it.flagState) }).isTrue()
+    }
+
+    @Test
+    @Transactional
+    fun `findAllPriorNotifications Should return PNO logbook reports with or without reportings`() {
+        val expectedLogbookReportIdsWithOneOrMoreReportings = listOf(102L)
+
+        // Given
+        val firstFilter = LogbookReportFilter(
+            hasOneOrMoreReportings = true,
+            willArriveAfter = "2000-01-01T00:00:00Z",
+            willArriveBefore = "2100-01-01T00:00:00Z",
+        )
+
+        // When
+        val firstResult = jpaLogbookReportRepository.findAllPriorNotifications(firstFilter)
+
+        // Then
+        assertThat(firstResult).hasSizeGreaterThan(0)
+        assertThat(
+            firstResult.all {
+                it.logbookMessageTyped.logbookMessage.id in expectedLogbookReportIdsWithOneOrMoreReportings
+            },
+        ).isTrue()
+
+        // Given
+        val secondFilter = LogbookReportFilter(
+            hasOneOrMoreReportings = false,
+            willArriveAfter = "2000-01-01T00:00:00Z",
+            willArriveBefore = "2100-01-01T00:00:00Z",
+        )
+
+        // When
+        val secondResult = jpaLogbookReportRepository.findAllPriorNotifications(secondFilter)
+
+        // Then
+        assertThat(secondResult).hasSizeGreaterThan(0)
+        println(secondResult.map { it.logbookMessageTyped.logbookMessage.id })
+        assertThat(
+            secondResult.none {
+                it.logbookMessageTyped.logbookMessage.id in expectedLogbookReportIdsWithOneOrMoreReportings
+            },
+        ).isTrue()
     }
 
     @Test
@@ -651,7 +694,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
             )
         }
         assertThat(firstResultVessels).hasSize(firstResult.size)
-        assertThat(firstResultVessels.all { it.length!! < 12 }).isEqualTo(true)
+        assertThat(firstResultVessels.all { it.length!! < 12 }).isTrue()
 
         // Given
         val secondFilter = LogbookReportFilter(
@@ -671,7 +714,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
             )
         }
         assertThat(secondResultVessels).hasSize(secondResult.size)
-        assertThat(secondResultVessels.all { it.length!! >= 12 }).isEqualTo(true)
+        assertThat(secondResultVessels.all { it.length!! >= 12 }).isTrue()
     }
 
     @Test
@@ -699,7 +742,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
             firstResultRiskFactors.all {
                 it.lastControlDatetime!!.isAfter(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
             },
-        ).isEqualTo(true)
+        ).isTrue()
 
         // Given
         val secondFilter = LogbookReportFilter(
@@ -723,7 +766,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
             secondResultRiskFactors.all {
                 it.lastControlDatetime!!.isBefore(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
             },
-        ).isEqualTo(true)
+        ).isTrue()
     }
 
     @Test
@@ -745,7 +788,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
             result.all {
                 listOf("FRSML", "FRVNE").contains(it.logbookMessageTyped.typedMessage.port)
             },
-        ).isEqualTo(true)
+        ).isTrue()
     }
 
     @Test
@@ -769,7 +812,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
             )
         }
         assertThat(firstResultVessels).hasSize(firstResult.size)
-        assertThat(firstResultVessels.all { it.vesselName == "PHENOMENE" }).isEqualTo(true)
+        assertThat(firstResultVessels.all { it.vesselName == "PHENOMENE" }).isTrue()
 
         // Given
         val secondFilter = LogbookReportFilter(
@@ -789,7 +832,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
             )
         }
         assertThat(secondResultVessels).hasSize(secondResult.size)
-        assertThat(secondResultVessels.all { it.vesselName == "PHENOMENE" }).isEqualTo(true)
+        assertThat(secondResultVessels.all { it.vesselName == "PHENOMENE" }).isTrue()
     }
 
     @Test
@@ -812,7 +855,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
                 it.logbookMessageTyped.typedMessage.catchOnboard
                     .any { catch -> listOf("COD", "HKE").contains(catch.species) }
             },
-        ).isEqualTo(true)
+        ).isTrue()
     }
 
     @Test
@@ -835,7 +878,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
                 it.logbookMessageTyped.typedMessage.pnoTypes
                     .any { type -> listOf("Préavis type A", "Préavis type C").contains(type.name) }
             },
-        ).isEqualTo(true)
+        ).isTrue()
     }
 
     @Test
@@ -862,7 +905,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
                         )
                     }
             },
-        ).isEqualTo(true)
+        ).isTrue()
     }
 
     @Test
@@ -885,7 +928,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
                 it.logbookMessageTyped.logbookMessage.tripGears!!
                     .any { tripGear -> listOf("OTT", "TB").contains(tripGear.gear) }
             },
-        ).isEqualTo(true)
+        ).isTrue()
     }
 
     @Test
@@ -907,7 +950,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
                 it.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc!!
                     .isAfter(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
             },
-        ).isEqualTo(true)
+        ).isTrue()
 
         // Given
         val secondFilter = LogbookReportFilter(
@@ -925,7 +968,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
                 it.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc!!
                     .isBefore(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
             },
-        ).isEqualTo(true)
+        ).isTrue()
     }
 
     @Test
@@ -949,19 +992,19 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
                 it.logbookMessageTyped.typedMessage.pnoTypes
                     .any { type -> listOf("Préavis type A", "Préavis type C").contains(type.name) }
             },
-        ).isEqualTo(true)
+        ).isTrue()
         assertThat(
             result.all {
                 it.logbookMessageTyped.logbookMessage.tripGears!!
                     .any { tripGear -> listOf("OTT", "TB").contains(tripGear.gear) }
             },
-        ).isEqualTo(true)
+        ).isTrue()
         assertThat(
             result.all {
                 it.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc!!
                     .isAfter(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
             },
-        ).isEqualTo(true)
+        ).isTrue()
     }
 
     @Test

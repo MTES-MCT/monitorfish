@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
 
 import { Header } from './Header'
-import { useGetPriorNotificationQuery } from '../../api'
+import { useGetPriorNotificationQuery } from '../../priorNotificationApi'
 
 type PriorNotificationCardProps = Readonly<{
   priorNotificationId: string

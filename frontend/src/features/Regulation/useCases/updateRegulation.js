@@ -1,6 +1,6 @@
 import { sendRegulationTransaction } from '../../../api/geoserver'
 import { setError } from '../../../domain/shared_slices/Global'
-import { setProcessingRegulationSaved, setProcessingRegulationDeleted } from '../../Backoffice/slice'
+import { setProcessingRegulationSaved, setProcessingRegulationDeleted } from '../../BackOffice/slice'
 import { REGULATION_ACTION_TYPE } from '../utils'
 
 const updateRegulation = (feature, type) => dispatch =>

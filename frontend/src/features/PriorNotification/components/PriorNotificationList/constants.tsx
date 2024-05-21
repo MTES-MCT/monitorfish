@@ -2,6 +2,7 @@ import { CountryFlag } from '@components/CountryFlag'
 import { Ellipsised } from '@components/Ellipsised'
 import { Titled } from '@components/Titled'
 import { SeafrontGroup, type AllSeafrontGroup, type NoSeafrontGroup } from '@constants/seafront'
+import { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 import { customDayjs, THEME, Tag, getOptionsFromLabelledEnum, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
@@ -41,7 +42,7 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
     },
     enableSorting: true,
     header: () => 'Arrivée estimée',
-    id: 'estimatedTimeOfArrival',
+    id: LogbookMessage.ApiSortColumn.EXPECTED_ARRIVAL_DATE,
     size: 130
   },
   {
@@ -53,7 +54,7 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
     },
     enableSorting: true,
     header: () => 'Débarque prévue',
-    id: 'scheduledTimeOfLanding',
+    id: LogbookMessage.ApiSortColumn.EXPECTED_LANDING_DATE,
     size: 120
   },
   {
@@ -63,7 +64,7 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
     ),
     enableSorting: true,
     header: () => "Port d'arrivée",
-    id: 'port',
+    id: LogbookMessage.ApiSortColumn.PORT_NAME,
     size: 140
   },
   {
@@ -85,7 +86,7 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
     },
     enableSorting: true,
     header: () => 'Note',
-    id: 'riskFactor.riskFactor',
+    id: LogbookMessage.ApiSortColumn.VESSEL_RISK_FACTOR,
     size: 50
   },
   {
@@ -102,7 +103,7 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
     },
     enableSorting: true,
     header: () => 'Nom',
-    id: 'vessel.vesselName',
+    id: LogbookMessage.ApiSortColumn.VESSEL_NAME,
     size: 160
   },
   {
@@ -113,7 +114,7 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
     ),
     enableSorting: true,
     header: () => 'Segments',
-    id: 'fleetSegments',
+    id: LogbookMessage.ApiSortColumn.TRIP_SEGMENT_CODES,
     size: 130
   },
   {
@@ -123,7 +124,7 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
     ),
     enableSorting: true,
     header: () => 'Types de préavis',
-    id: 'types',
+    id: LogbookMessage.ApiSortColumn.PRIOR_NOTIFICATION_TYPES,
     size: 180
   },
   {

@@ -1,3 +1,4 @@
+import { BackendApi } from '@api/BackendApi.types'
 import { getUrlOrPathWithQueryParams } from '@utils/getUrlOrPathWithQueryParams'
 
 import { monitorfishApi } from '../../api/api'
@@ -12,9 +13,14 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       query: logbookMessageReportId => `/prior_notifications/${logbookMessageReportId}`
     }),
 
-    getPriorNotifications: builder.query<PriorNotification.PriorNotification[], LogbookMessage.ApiFilter>({
+    getPriorNotifications: builder.query<
+      BackendApi.ResponseBodyPaginatedList<PriorNotification.PriorNotification>,
+      BackendApi.RequestPaginationParams &
+        BackendApi.RequestSortingParams<LogbookMessage.ApiSortColumn> &
+        LogbookMessage.ApiFilter
+    >({
       providesTags: () => [{ type: 'PriorNotifications' }],
-      query: filter => getUrlOrPathWithQueryParams(`/prior_notifications`, filter)
+      query: params => getUrlOrPathWithQueryParams(`/prior_notifications`, params)
     }),
 
     getPriorNotificationTypes: builder.query<string[], void>({

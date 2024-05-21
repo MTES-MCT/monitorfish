@@ -1,19 +1,16 @@
+import { BackendApi } from '@api/BackendApi.types'
 import { RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS } from '@api/constants'
+import { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 import { Body } from '@features/SideWindow/components/Body'
 import { Header } from '@features/SideWindow/components/Header'
 import { Page } from '@features/SideWindow/components/Page'
 import { SubMenu } from '@features/SideWindow/SubMenu'
+import { useListPagination } from '@hooks/useListPagination'
+import { useListSorting } from '@hooks/useListSorting'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon, TableWithSelectableRows, getFilteredCollection } from '@mtes-mct/monitor-ui'
-import {
-  flexRender,
-  getCoreRowModel,
-  getSortedRowModel,
-  type SortingState,
-  useReactTable,
-  getExpandedRowModel
-} from '@tanstack/react-table'
+import { flexRender, getCoreRowModel, useReactTable, getExpandedRowModel } from '@tanstack/react-table'
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -27,7 +24,7 @@ import {
   getLocalFilterFromListFilter,
   getTitle
 } from './utils'
-import { useGetPriorNotificationsQuery } from '../../api'
+import { useGetPriorNotificationsQuery } from '../../priorNotificationApi'
 import { priorNotificationActions } from '../../slice'
 import { PriorNotificationCard } from '../PriorNotificationCard'
 
@@ -37,26 +34,26 @@ export function PriorNotificationList() {
   const dispatch = useMainAppDispatch()
   const listFilter = useMainAppSelector(state => state.priorNotification.listFilterValues)
   const openedPriorNotificationId = useMainAppSelector(state => state.priorNotification.openedPriorNotificationId)
-  const apiFilter = useMemo(() => getApiFilterFromListFilter(listFilter), [listFilter])
-  const localFilters = useMemo(() => getLocalFilterFromListFilter(listFilter), [listFilter])
   const selectedSeafrontGroup = useMainAppSelector(state => state.priorNotification.listFilterValues.seafrontGroup)
-  const {
-    data: priorNotifications,
-    isError,
-    isLoading
-  } = useGetPriorNotificationsQuery(apiFilter, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS)
+
+  const { apiPaginationParams, reactTablePaginationState, setReactTablePaginationState } = useListPagination()
+  const { apiSortingParams, reactTableSortingState, setReactTableSortingState } =
+    useListSorting<LogbookMessage.ApiSortColumn>(
+      LogbookMessage.ApiSortColumn.EXPECTED_ARRIVAL_DATE,
+      BackendApi.SortDirection.DESC
+    )
+  const apiFilterParams = useMemo(() => getApiFilterFromListFilter(listFilter), [listFilter])
+
+  const apiParams = { ...apiPaginationParams, ...apiSortingParams, ...apiFilterParams }
+  const { data, isError, isLoading } = useGetPriorNotificationsQuery(apiParams, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS)
+  const { data: apiFilteredPriorNotifications, totalLength } = data ?? {}
+  const localFilters = useMemo(() => getLocalFilterFromListFilter(listFilter), [listFilter])
   const filteredPriorNotifications = useMemo(
-    () => getFilteredCollection(priorNotifications, localFilters),
-    [localFilters, priorNotifications]
+    () => getFilteredCollection(apiFilteredPriorNotifications, localFilters),
+    [localFilters, apiFilteredPriorNotifications]
   )
 
   const [rowSelection, setRowSelection] = useState({})
-  const [sorting, setSorting] = useState<SortingState>([
-    {
-      desc: true,
-      id: 'estimatedTimeOfArrival'
-    }
-  ])
 
   const title = getTitle(listFilter.seafrontGroup)
 
@@ -69,8 +66,8 @@ export function PriorNotificationList() {
 
   const subMenuCounter = useCallback(
     (seafrontGroup: SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup): number =>
-      countPriorNotificationsForSeafrontGroup(priorNotifications, seafrontGroup),
-    [priorNotifications]
+      countPriorNotificationsForSeafrontGroup(apiFilteredPriorNotifications, seafrontGroup),
+    [apiFilteredPriorNotifications]
   )
 
   const table = useReactTable({
@@ -82,14 +79,17 @@ export function PriorNotificationList() {
     getCoreRowModel: getCoreRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
     getRowCanExpand: () => true,
-    getSortedRowModel: getSortedRowModel(),
+    manualPagination: true,
+    manualSorting: true,
+    onPaginationChange: setReactTablePaginationState,
     onRowSelectionChange: rowId => {
       setRowSelection(rowId)
     },
-    onSortingChange: setSorting,
+    onSortingChange: setReactTableSortingState,
     state: {
+      pagination: reactTablePaginationState,
       rowSelection,
-      sorting
+      sorting: reactTableSortingState
     }
   })
 
@@ -117,9 +117,9 @@ export function PriorNotificationList() {
           <TableWrapper>
             {isError && <div>Une erreur est survenue.</div>}
             {isLoading && <div>Chargement en cours...</div>}
-            {!!priorNotifications && (
+            {!!apiFilteredPriorNotifications && (
               <>
-                <TableLegend>{`${priorNotifications.length} préavis (tous les horaires sont en UTC)`}</TableLegend>
+                <TableLegend>{`${totalLength} préavis (tous les horaires sont en UTC)`}</TableLegend>
 
                 <TableWithSelectableRows.Table>
                   <TableWithSelectableRows.Head>

@@ -5,7 +5,7 @@ import { convertToGeoJSONGeometryObject } from '../../../../../domain/entities/l
 
 import type { GeoJSON } from '../../../../../domain/types/GeoJSON'
 
-export const initMissionLocation = dispatch => async (isGeometryComputedFromControls: boolean | undefined) => {
+export const initMissionGeometry = dispatch => async (isGeometryComputedFromControls: boolean | undefined) => {
   if (!isGeometryComputedFromControls) {
     return
   }

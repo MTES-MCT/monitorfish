@@ -8,7 +8,7 @@ import type { MainRootState } from '@store'
 import type { AnyAction } from 'redux'
 import type { ThunkDispatch } from 'redux-thunk'
 
-export const updateGearsOnboard =
+export const updateActionGearsOnboard =
   (
     dispatch: ThunkDispatch<MainRootState, undefined, AnyAction>,
     setFieldValue: (field: string, value: any) => void,

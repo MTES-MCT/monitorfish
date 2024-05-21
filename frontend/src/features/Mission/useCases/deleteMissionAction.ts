@@ -1,7 +1,8 @@
 import { missionActionApi } from '@api/missionAction'
 import { portApi } from '@api/port'
 import { missionFormActions } from '@features/Mission/components/MissionForm/slice'
-import { formUsecase } from '@features/Mission/components/MissionForm/useCases'
+import { initMissionGeometry } from '@features/Mission/components/MissionForm/useCases/initMissionGeometry'
+import { updateMissionGeometry } from '@features/Mission/components/MissionForm/useCases/updateMissionGeometry'
 import { validateMissionForms } from '@features/Mission/components/MissionForm/utils/validateMissionForms'
 import { EnvMissionAction } from '@features/Mission/envMissionAction.types'
 import { monitorfishMissionApi } from '@features/Mission/monitorfishMissionApi'
@@ -51,13 +52,13 @@ export const deleteMissionAction =
       )
 
     if (nextControlActionsWithGeometry.length === 0) {
-      await formUsecase.initMissionLocation(dispatch)(isGeometryComputedFromControls)
+      await initMissionGeometry(dispatch)(isGeometryComputedFromControls)
     } else {
       const { data: ports } = await dispatch(portApi.endpoints.getPorts.initiate())
       const missionId = getState().missionForm.draft?.mainFormValues?.id
-      const { actions, envActions } = await getActions(missionId)
+      const { actions, envActions } = await getMissionActions(missionId)
 
-      await formUsecase.updateMissionLocation(
+      await updateMissionGeometry(
         dispatch,
         ports,
         envActions,
@@ -78,7 +79,7 @@ export const deleteMissionAction =
       }
     }
 
-    async function getActions(missionId: number | undefined): Promise<{
+    async function getMissionActions(missionId: number | undefined): Promise<{
       actions: MissionAction.MissionAction[]
       envActions: EnvMissionAction.MissionAction[]
     }> {

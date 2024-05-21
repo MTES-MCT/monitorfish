@@ -5,7 +5,7 @@ import { getFleetSegments } from '../../../../../domain/use_cases/vessel/getFlee
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
-export const updateSegments =
+export const updateActionSegments =
   (
     dispatch,
     setFieldValue: (field: string, value: any) => void,

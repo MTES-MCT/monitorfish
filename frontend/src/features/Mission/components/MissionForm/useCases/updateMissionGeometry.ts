@@ -7,7 +7,7 @@ import { first, orderBy } from 'lodash'
 import type { Port } from '../../../../../domain/types/port'
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 
-export const updateMissionLocation =
+export const updateMissionGeometry =
   (
     dispatch,
     ports: Port.Port[] | undefined,

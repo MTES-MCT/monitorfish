@@ -46,7 +46,7 @@ export function PriorNotificationList() {
 
   const apiParams = { ...apiPaginationParams, ...apiSortingParams, ...apiFilterParams }
   const { data, isError, isLoading } = useGetPriorNotificationsQuery(apiParams, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS)
-  const { data: apiFilteredPriorNotifications, totalLength } = data ?? {}
+  const { data: apiFilteredPriorNotifications } = data ?? {}
   const localFilters = useMemo(() => getLocalFilterFromListFilter(listFilter), [listFilter])
   const filteredPriorNotifications = useMemo(
     () => getFilteredCollection(apiFilteredPriorNotifications, localFilters),
@@ -56,6 +56,7 @@ export function PriorNotificationList() {
   const [rowSelection, setRowSelection] = useState({})
 
   const title = getTitle(listFilter.seafrontGroup)
+  const totalLength = countPriorNotificationsForSeafrontGroup(apiFilteredPriorNotifications, selectedSeafrontGroup)
 
   const handleSubMenuChange = useCallback(
     (nextSeafrontGroup: SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup) => {

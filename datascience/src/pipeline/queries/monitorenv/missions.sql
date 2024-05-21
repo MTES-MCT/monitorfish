@@ -7,7 +7,6 @@ SELECT
     geom,
     deleted,
     mission_source,
-    closed,
     mission_order
 FROM missions
 WHERE 

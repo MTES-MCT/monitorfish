@@ -23,6 +23,9 @@ class GetPriorNotificationUTests {
     private lateinit var gearRepository: GearRepository
 
     @MockBean
+    private lateinit var logbookRawMessageRepository: LogbookRawMessageRepository
+
+    @MockBean
     private lateinit var logbookReportRepository: LogbookReportRepository
 
     @MockBean
@@ -84,6 +87,7 @@ class GetPriorNotificationUTests {
         // When
         val result = GetPriorNotification(
             gearRepository,
+            logbookRawMessageRepository,
             logbookReportRepository,
             portRepository,
             reportingRepository,
@@ -141,6 +145,7 @@ class GetPriorNotificationUTests {
         // When
         val result = GetPriorNotification(
             gearRepository,
+            logbookRawMessageRepository,
             logbookReportRepository,
             portRepository,
             reportingRepository,

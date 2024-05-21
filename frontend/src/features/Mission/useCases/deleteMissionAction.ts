@@ -1,8 +1,10 @@
 import { missionActionApi } from '@api/missionAction'
 import { portApi } from '@api/port'
-import { formikUsecase } from '@features/Mission/components/MissionForm/formikUsecases'
 import { missionFormActions } from '@features/Mission/components/MissionForm/slice'
+import { initMissionGeometry } from '@features/Mission/components/MissionForm/useCases/initMissionGeometry'
+import { updateMissionGeometry } from '@features/Mission/components/MissionForm/useCases/updateMissionGeometry'
 import { validateMissionForms } from '@features/Mission/components/MissionForm/utils/validateMissionForms'
+import { EnvMissionAction } from '@features/Mission/envMissionAction.types'
 import { monitorfishMissionApi } from '@features/Mission/monitorfishMissionApi'
 
 import { MissionAction } from '../missionAction.types'
@@ -50,16 +52,17 @@ export const deleteMissionAction =
       )
 
     if (nextControlActionsWithGeometry.length === 0) {
-      await formikUsecase.initMissionLocation(dispatch)(isGeometryComputedFromControls)
+      await initMissionGeometry(dispatch)(isGeometryComputedFromControls)
     } else {
       const { data: ports } = await dispatch(portApi.endpoints.getPorts.initiate())
       const missionId = getState().missionForm.draft?.mainFormValues?.id
-      const envActions = await getEnvActions(missionId)
+      const { actions, envActions } = await getMissionActions(missionId)
 
-      await formikUsecase.updateMissionLocation(
+      await updateMissionGeometry(
         dispatch,
         ports,
-        envActions
+        envActions,
+        actions
       )(isGeometryComputedFromControls, nextControlActionsWithGeometry[0])
     }
 
@@ -76,13 +79,22 @@ export const deleteMissionAction =
       }
     }
 
-    async function getEnvActions(missionId: number | undefined) {
+    async function getMissionActions(missionId: number | undefined): Promise<{
+      actions: MissionAction.MissionAction[]
+      envActions: EnvMissionAction.MissionAction[]
+    }> {
       if (!missionId) {
-        return []
+        return {
+          actions: [],
+          envActions: []
+        }
       }
 
       const { data: mission } = await dispatch(monitorfishMissionApi.endpoints.getMission.initiate(missionId))
 
-      return mission?.envActions ?? []
+      return {
+        actions: mission?.actions ?? [],
+        envActions: mission?.envActions ?? []
+      }
     }
   }

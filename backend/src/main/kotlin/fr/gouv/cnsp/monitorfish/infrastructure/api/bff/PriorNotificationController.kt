@@ -30,6 +30,9 @@ class PriorNotificationController(
         @Parameter(description = "Vessels flag states (countries Alpha3 codes).")
         @RequestParam(name = "flagStates")
         flagStates: List<String>? = null,
+        @Parameter(description = "Vessels that have one or more reportings.")
+        @RequestParam(name = "hasOneOrMoreReportings")
+        hasOneOrMoreReportings: Boolean? = null,
         @Parameter(description = "Vessels that are less than 12 meters in length.")
         @RequestParam(name = "isLessThanTwelveMetersVessel")
         isLessThanTwelveMetersVessel: Boolean? = null,
@@ -79,6 +82,7 @@ class PriorNotificationController(
     ): PriorNotificationListDataOutput {
         val logbookReportFilter = LogbookReportFilter(
             flagStates = flagStates,
+            hasOneOrMoreReportings = hasOneOrMoreReportings,
             isLessThanTwelveMetersVessel = isLessThanTwelveMetersVessel,
             lastControlledAfter = lastControlledAfter,
             lastControlledBefore = lastControlledBefore,

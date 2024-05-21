@@ -16,7 +16,9 @@ export function CountryFlag({ countryCode, size, ...nativeProps }: CountryFlagPr
   const countryName = countryAlpha2Code ? countries.getName(countryAlpha2Code, 'fr') : undefined
   const [width, height] = size
 
-  const url = countryAlpha2Code ? `/flags/${countryAlpha2Code}.svg` : `https://placehold.co/${width}x${height}?text=%3F`
+  const url = countryAlpha2Code
+    ? `${window.location.origin}/flags/${countryAlpha2Code}.svg`
+    : `https://placehold.co/${width}x${height}?text=%3F`
 
   if (!countryAlpha2Code || countryAlpha2Code === 'undefined') {
     return <Unknown $height={height} $width={width} title="Inconnu" {...nativeProps} />

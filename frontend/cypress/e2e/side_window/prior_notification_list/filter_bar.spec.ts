@@ -96,7 +96,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
     cy.clickButton(SideWindowMenuLabel.PRIOR_NOTIFICATION_LIST)
 
     cy.wait('@getPriorNotifications').then(interception => {
-      const priorNotifications: PriorNotification.PriorNotification[] = interception.response?.body
+      const priorNotifications: PriorNotification.PriorNotification[] = interception.response?.body.data
 
       assertNotNullish(priorNotifications)
       assert.isNotEmpty(priorNotifications)
@@ -121,7 +121,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
     cy.fill('Date d’arrivée estimée', 'Arrivée estimée dans moins de 2h')
 
     cy.wait('@getPriorNotifications').then(interception => {
-      const priorNotifications: PriorNotification.PriorNotification[] = interception.response?.body
+      const priorNotifications: PriorNotification.PriorNotification[] = interception.response?.body.data
 
       assertNotNullish(priorNotifications)
       assert.isNotEmpty(priorNotifications)
@@ -152,7 +152,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
     ])
 
     cy.wait('@getPriorNotifications').then(interception => {
-      const priorNotifications: PriorNotification.PriorNotification[] = interception.response?.body
+      const priorNotifications: PriorNotification.PriorNotification[] = interception.response?.body.data
 
       assertNotNullish(priorNotifications)
       assert.isNotEmpty(priorNotifications)

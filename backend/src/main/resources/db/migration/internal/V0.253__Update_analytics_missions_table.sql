@@ -1,0 +1,1 @@
+ALTER TABLE analytics_missions DROP COLUMN closed;

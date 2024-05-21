@@ -56,7 +56,6 @@ missions_df = pd.DataFrame(
             "MONITORENV",
             "MONITORFISH",
         ],
-        "closed": [True, True, True, False],
         "mission_order": [True, True, None, False],
     }
 )
@@ -103,7 +102,6 @@ def test_extract_missions_control_units(mock_extract):
 
 @pytest.mark.parametrize("loading_mode", ["replace", "upsert"])
 def test_flow(reset_test_data, loading_mode):
-
     missions_query = "SELECT * FROM analytics_missions ORDER BY id"
     missions_control_units_query = (
         "SELECT * FROM analytics_missions_control_units ORDER BY id"

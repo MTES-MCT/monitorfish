@@ -4,6 +4,7 @@ import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.given
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.Mission
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionSource
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionType
@@ -380,6 +381,76 @@ class GetActivityReportsUTests {
         )
 
         // Then
+        assertThat(activityReports.activityReports).hasSize(0)
+    }
+
+    @Test
+    fun `execute Should filter a control done by an AECP unit`() {
+        // Given
+        val controls = listOf(
+            MissionAction(
+                id = 1,
+                vesselId = 1,
+                missionId = 1,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                portLocode = "AEFAT",
+                faoAreas = listOf("27.4.b", "27.4.c"),
+                actionType = MissionActionType.LAND_CONTROL,
+                gearOnboard = listOf(),
+                controlUnits = listOf(ControlUnit(123, "AECP", false, "Unit AECP", listOf())),
+                speciesOnboard = listOf(),
+                seizureAndDiversion = true,
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
+            ),
+        )
+        given(missionActionsRepository.findControlsInDates(any(), any())).willReturn(controls)
+
+        val vessels = listOf(
+            Vessel(
+                id = 1,
+                internalReferenceNumber = "FR00022680",
+                vesselName = "MY AWESOME VESSEL",
+                flagState = CountryCode.FR,
+                declaredFishingGears = listOf("Trémails"),
+                vesselType = "Fishing",
+                districtCode = "AY",
+            ),
+        )
+        given(vesselRepository.findVesselsByIds(eq(listOf(1)))).willReturn(vessels)
+
+        val missions = listOf(
+            Mission(
+                1,
+                missionTypes = listOf(MissionType.LAND),
+                missionSource = MissionSource.MONITORFISH,
+                isUnderJdp = false,
+                isGeometryComputedFromControls = false,
+                startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+            ),
+
+        )
+        // The mission id 2 is not returned
+        given(missionRepository.findByIds(listOf(1))).willReturn(missions)
+        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
+
+        // When
+        val activityReports = GetActivityReports(
+            missionActionsRepository,
+            portRepository,
+            vesselRepository,
+            missionRepository,
+        ).execute(
+            ZonedDateTime.now(),
+            ZonedDateTime.now().minusDays(1),
+            JointDeploymentPlan.NORTH_SEA,
+        )
+
+        // Then
+        assertThat(activityReports.jdpSpecies).hasSize(38)
         assertThat(activityReports.activityReports).hasSize(0)
     }
 }

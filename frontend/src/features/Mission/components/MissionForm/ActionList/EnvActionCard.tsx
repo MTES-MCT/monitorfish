@@ -23,7 +23,7 @@ export function EnvActionCard({ missionAction }: EnvActionCardProps) {
         ]
 
       case EnvMissionAction.MissionActionType.NOTE:
-        return [<NoteContent>{missionAction.observations}</NoteContent>, Icon.Note]
+        return [<NoteContent title={missionAction.observations}>{missionAction.observations}</NoteContent>, Icon.Note]
 
       case EnvMissionAction.MissionActionType.SURVEILLANCE:
         return [

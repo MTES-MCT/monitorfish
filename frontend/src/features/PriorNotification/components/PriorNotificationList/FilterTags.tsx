@@ -9,7 +9,7 @@ import { useGetSpeciesAsOptions } from '@hooks/useGetSpeciesAsOptions'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { SingleTag, getSelectedOptionFromOptionValueInTree } from '@mtes-mct/monitor-ui'
-import { isEqual } from 'lodash'
+import { isEqual, omit } from 'lodash'
 import styled from 'styled-components'
 
 import type { ListFilter } from './types'
@@ -24,7 +24,10 @@ export function FilterTags() {
   const { speciesAsOptions } = useGetSpeciesAsOptions()
   const { priorNotificationTypesAsOptions } = useGetPriorNotificationTypesAsOptions()
 
-  const areListFilterValuesEqualToDefaultOnes = isEqual(listFilterValues, DEFAULT_LIST_FILTER_VALUES)
+  const areListFilterValuesEqualToDefaultOnes = isEqual(
+    omit(listFilterValues, ['seafrontGroup']),
+    omit(DEFAULT_LIST_FILTER_VALUES, ['seafrontGroup'])
+  )
 
   const remove = (key: keyof ListFilter, value: string) => {
     const filterValue = listFilterValues[key]

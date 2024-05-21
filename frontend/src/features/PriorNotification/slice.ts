@@ -26,7 +26,10 @@ const priorNotificationSlice = createSlice({
     },
 
     resetListFilterValues(state) {
-      state.listFilterValues = DEFAULT_LIST_FILTER_VALUES
+      state.listFilterValues = {
+        ...DEFAULT_LIST_FILTER_VALUES,
+        seafrontGroup: state.listFilterValues.seafrontGroup
+      }
     },
 
     setListFilterValues(state, action: PayloadAction<Partial<ListFilter>>) {

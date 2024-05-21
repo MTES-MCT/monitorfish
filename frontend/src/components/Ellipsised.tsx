@@ -20,7 +20,7 @@ export function Ellipsised({ children, maxWidth, ...props }: EllipsisedProps) {
 export const Box = styled.div<{
   $maxWidth: number | undefined
 }>`
-  max-width: ${p => `${p.$maxWidth}px` ?? '100%'};
+  max-width: ${p => (p.$maxWidth ? `${p.$maxWidth}px` : '100%')};
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

@@ -42,7 +42,7 @@ export function LogbookMessage({ isFirst, logbookMessage, withMapControls = fals
     }
   }, [logbookMessage])
 
-  const openXML = xml => {
+  const openXML = (xml: string) => {
     const blob = new Blob([xml], { type: 'text/xml' })
     const url = URL.createObjectURL(blob)
     window.open(url)

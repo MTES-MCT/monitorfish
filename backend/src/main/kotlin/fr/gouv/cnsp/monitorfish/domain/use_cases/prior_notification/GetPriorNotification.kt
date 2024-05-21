@@ -2,16 +2,21 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.config.UseCase
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTyped
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
+import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
 import fr.gouv.cnsp.monitorfish.domain.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
+import org.slf4j.LoggerFactory
 
 @UseCase
 class GetPriorNotification(
     private val gearRepository: GearRepository,
+    private val logbookRawMessageRepository: LogbookRawMessageRepository,
     private val logbookReportRepository: LogbookReportRepository,
     private val portRepository: PortRepository,
     private val reportingRepository: ReportingRepository,
@@ -19,6 +24,8 @@ class GetPriorNotification(
     private val speciesRepository: SpeciesRepository,
     private val vesselRepository: VesselRepository,
 ) {
+    private val logger = LoggerFactory.getLogger(GetPriorNotification::class.java)
+
     fun execute(logbookMessageReportId: String): PriorNotification {
         val allGears = gearRepository.findAll()
         val allPorts = portRepository.findAll()
@@ -29,6 +36,20 @@ class GetPriorNotification(
         val priorNotificationWithoutReportingsCount = logbookReportRepository
             .findPriorNotificationByReportId(logbookMessageReportId)
             .let { priorNotification ->
+                val logbookMessage = priorNotification.logbookMessageTyped.logbookMessage
+                println(logbookMessage.operationNumber)
+                println(logbookMessage.rawMessage)
+                val logbookMessageWithRawMessage = logbookMessage.copy(
+                    rawMessage = try {
+                        logbookRawMessageRepository.findRawMessage(logbookMessage.operationNumber)
+                    } catch (e: NoERSMessagesFound) {
+                        logger.warn(e.message)
+
+                        null
+                    },
+                )
+                println(logbookMessageWithRawMessage.rawMessage)
+
                 val port = try {
                     priorNotification.logbookMessageTyped.typedMessage.port?.let { portLocode ->
                         allPorts.find { it.locode == portLocode }
@@ -48,6 +69,7 @@ class GetPriorNotification(
                 }
 
                 val finalPriorNotification = priorNotification.copy(
+                    logbookMessageTyped = LogbookMessageTyped(logbookMessageWithRawMessage, PNO::class.java),
                     port = port,
                     seafront = port?.facade,
                     vessel = vessel,

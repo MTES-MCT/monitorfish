@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
-import { DEFAULT_LIST_FILTER_VALUES } from './constants'
+import { DEFAULT_LIST_FILTER_VALUES } from './components/PriorNotificationList/constants'
 
 import type { ListFilter } from './components/PriorNotificationList/types'
 

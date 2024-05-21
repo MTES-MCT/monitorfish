@@ -1,6 +1,5 @@
 import { COUNTRIES_AS_ALPHA3_OPTIONS } from '@constants/index'
 import { useGetFleetSegmentsAsOptions } from '@features/FleetSegment/hooks/useGetFleetSegmentsAsOptions'
-import { DEFAULT_LIST_FILTER_VALUES } from '@features/PriorNotification/constants'
 import { useGetPriorNotificationTypesAsOptions } from '@features/PriorNotification/hooks/useGetPriorNotificationTypesAsOptions'
 import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { useGetGearsAsTreeOptions } from '@hooks/useGetGearsAsTreeOptions'
@@ -11,6 +10,8 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { SingleTag, getSelectedOptionFromOptionValueInTree } from '@mtes-mct/monitor-ui'
 import { isEqual, omit } from 'lodash'
 import styled from 'styled-components'
+
+import { DEFAULT_LIST_FILTER_VALUES } from './constants'
 
 import type { ListFilter } from './types'
 
@@ -24,6 +25,13 @@ export function FilterTags() {
   const { speciesAsOptions } = useGetSpeciesAsOptions()
   const { priorNotificationTypesAsOptions } = useGetPriorNotificationTypesAsOptions()
 
+  const hasTags =
+    !!listFilterValues.countryCodes ||
+    !!listFilterValues.fleetSegmentSegments ||
+    !!listFilterValues.specyCodes ||
+    !!listFilterValues.gearCodes ||
+    !!listFilterValues.portLocodes ||
+    !!listFilterValues.priorNotificationTypes
   const areListFilterValuesEqualToDefaultOnes = isEqual(
     omit(listFilterValues, ['seafrontGroup']),
     omit(DEFAULT_LIST_FILTER_VALUES, ['seafrontGroup'])
@@ -49,61 +57,63 @@ export function FilterTags() {
   }
 
   return (
-    <Wrapper>
-      <Row>
-        {!!listFilterValues.countryCodes &&
-          listFilterValues.countryCodes.map(countryCode => (
-            <SingleTag key={`countryCodes-${countryCode}`} onDelete={() => remove('countryCodes', countryCode)}>
-              {String(COUNTRIES_AS_ALPHA3_OPTIONS.find(option => option.value === countryCode)?.label)}
-            </SingleTag>
-          ))}
+    <>
+      {hasTags && (
+        <Row>
+          {!!listFilterValues.countryCodes &&
+            listFilterValues.countryCodes.map(countryCode => (
+              <SingleTag key={`countryCodes-${countryCode}`} onDelete={() => remove('countryCodes', countryCode)}>
+                {String(COUNTRIES_AS_ALPHA3_OPTIONS.find(option => option.value === countryCode)?.label)}
+              </SingleTag>
+            ))}
 
-        {!!listFilterValues.fleetSegmentSegments &&
-          !!fleetSegmentsAsOptions &&
-          listFilterValues.fleetSegmentSegments.map(fleetSegmentSegment => (
-            <SingleTag
-              key={`fleetSegmentSegments-${fleetSegmentSegment}`}
-              onDelete={() => remove('fleetSegmentSegments', fleetSegmentSegment)}
-            >
-              {String(fleetSegmentsAsOptions.find(option => option.value === fleetSegmentSegment)?.label)}
-            </SingleTag>
-          ))}
+          {!!listFilterValues.fleetSegmentSegments &&
+            !!fleetSegmentsAsOptions &&
+            listFilterValues.fleetSegmentSegments.map(fleetSegmentSegment => (
+              <SingleTag
+                key={`fleetSegmentSegments-${fleetSegmentSegment}`}
+                onDelete={() => remove('fleetSegmentSegments', fleetSegmentSegment)}
+              >
+                {String(fleetSegmentsAsOptions.find(option => option.value === fleetSegmentSegment)?.label)}
+              </SingleTag>
+            ))}
 
-        {!!listFilterValues.specyCodes &&
-          !!speciesAsOptions &&
-          listFilterValues.specyCodes.map(specyCode => (
-            <SingleTag key={`specyCodes-${specyCode}`} onDelete={() => remove('specyCodes', specyCode)}>
-              {String(speciesAsOptions.find(option => option.value === specyCode)?.label)}
-            </SingleTag>
-          ))}
+          {!!listFilterValues.specyCodes &&
+            !!speciesAsOptions &&
+            listFilterValues.specyCodes.map(specyCode => (
+              <SingleTag key={`specyCodes-${specyCode}`} onDelete={() => remove('specyCodes', specyCode)}>
+                {String(speciesAsOptions.find(option => option.value === specyCode)?.label)}
+              </SingleTag>
+            ))}
 
-        {!!listFilterValues.gearCodes &&
-          !!gearsAsTreeOptions &&
-          listFilterValues.gearCodes.map(gearCode => (
-            <SingleTag key={`gearCodes-${gearCode}`} onDelete={() => remove('gearCodes', gearCode)}>
-              {getSelectedOptionFromOptionValueInTree(gearsAsTreeOptions, gearCode)?.label}
-            </SingleTag>
-          ))}
+          {!!listFilterValues.gearCodes &&
+            !!gearsAsTreeOptions &&
+            listFilterValues.gearCodes.map(gearCode => (
+              <SingleTag key={`gearCodes-${gearCode}`} onDelete={() => remove('gearCodes', gearCode)}>
+                {getSelectedOptionFromOptionValueInTree(gearsAsTreeOptions, gearCode)?.label}
+              </SingleTag>
+            ))}
 
-        {!!listFilterValues.portLocodes &&
-          !!portsAsTreeOptions &&
-          listFilterValues.portLocodes.map(portLocode => (
-            <SingleTag key={`portLocodes-${portLocode}`} onDelete={() => remove('portLocodes', portLocode)}>
-              {getSelectedOptionFromOptionValueInTree(portsAsTreeOptions, portLocode)?.label}
-            </SingleTag>
-          ))}
+          {!!listFilterValues.portLocodes &&
+            !!portsAsTreeOptions &&
+            listFilterValues.portLocodes.map(portLocode => (
+              <SingleTag key={`portLocodes-${portLocode}`} onDelete={() => remove('portLocodes', portLocode)}>
+                {getSelectedOptionFromOptionValueInTree(portsAsTreeOptions, portLocode)?.label}
+              </SingleTag>
+            ))}
 
-        {!!listFilterValues.priorNotificationTypes &&
-          !!priorNotificationTypesAsOptions &&
-          listFilterValues.priorNotificationTypes.map(priorNotificationType => (
-            <SingleTag
-              key={`priorNotificationTypes-${priorNotificationType}`}
-              onDelete={() => remove('priorNotificationTypes', priorNotificationType)}
-            >
-              {String(priorNotificationTypesAsOptions.find(option => option.value === priorNotificationType)?.label)}
-            </SingleTag>
-          ))}
-      </Row>
+          {!!listFilterValues.priorNotificationTypes &&
+            !!priorNotificationTypesAsOptions &&
+            listFilterValues.priorNotificationTypes.map(priorNotificationType => (
+              <SingleTag
+                key={`priorNotificationTypes-${priorNotificationType}`}
+                onDelete={() => remove('priorNotificationTypes', priorNotificationType)}
+              >
+                {String(priorNotificationTypesAsOptions.find(option => option.value === priorNotificationType)?.label)}
+              </SingleTag>
+            ))}
+        </Row>
+      )}
 
       {!areListFilterValuesEqualToDefaultOnes && (
         <Row>
@@ -111,25 +121,15 @@ export function FilterTags() {
           <Link onClick={reset}>Réinitialiser les filtres</Link>
         </Row>
       )}
-    </Wrapper>
+    </>
   )
 }
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  margin-bottom: 24px;
-
-  > div:not(:first-child) {
-    margin-top: 12px;
-  }
-`
 
 const Row = styled.div`
   align-items: center;
   display: flex;
   flex-wrap: wrap;
+  margin-bottom: 16px;
 
   > .Component-SingleTag {
     margin: 0 8px 8px 0;

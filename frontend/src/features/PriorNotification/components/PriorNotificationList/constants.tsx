@@ -1,166 +1,7 @@
-import { CountryFlag } from '@components/CountryFlag'
-import { Ellipsised } from '@components/Ellipsised'
-import { Titled } from '@components/Titled'
-import { SeafrontGroup, type AllSeafrontGroup, type NoSeafrontGroup } from '@constants/seafront'
-import { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
-import { customDayjs, THEME, Tag, getOptionsFromLabelledEnum, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
-import styled from 'styled-components'
+import { ALL_SEAFRONT_GROUP, SeafrontGroup, type AllSeafrontGroup, type NoSeafrontGroup } from '@constants/seafront'
+import { getOptionsFromLabelledEnum, RichBoolean } from '@mtes-mct/monitor-ui'
 
-import { ButtonsGroupRow } from './ButtonsGroupRow'
-import { VesselRiskFactor } from '../../../Vessel/components/VesselRiskFactor'
-import { PriorNotification } from '../../PriorNotification.types'
-
-import type { CellContext, ColumnDef } from '@tanstack/react-table'
-
-export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification.PriorNotification, any>> = [
-  {
-    accessorFn: row => row.id,
-    cell: ({ row }) => (
-      <TableWithSelectableRows.RowCheckbox
-        disabled={!row.getCanSelect()}
-        isChecked={row.getIsSelected()}
-        onChange={row.getToggleSelectedHandler()}
-      />
-    ),
-    enableSorting: false,
-    header: ({ table }) => (
-      <TableWithSelectableRows.RowCheckbox
-        isChecked={table.getIsAllRowsSelected()}
-        isIndeterminate={table.getIsSomeRowsSelected()}
-        onChange={table.getToggleAllRowsSelectedHandler()}
-      />
-    ),
-    id: 'select',
-    size: 40
-  },
-  {
-    accessorFn: row => row.expectedArrivalDate,
-    cell: (info: CellContext<PriorNotification.PriorNotification, string | undefined>) => {
-      const expectedArrivalDate = info.getValue()
-
-      return expectedArrivalDate ? customDayjs(expectedArrivalDate).utc().format('DD/MM/YYYY à HH[h]mm') : '-'
-    },
-    enableSorting: true,
-    header: () => 'Arrivée estimée',
-    id: LogbookMessage.ApiSortColumn.EXPECTED_ARRIVAL_DATE,
-    size: 130
-  },
-  {
-    accessorFn: row => row.expectedLandingDate,
-    cell: (info: CellContext<PriorNotification.PriorNotification, string | undefined>) => {
-      const expectedLandingDate = info.getValue()
-
-      return expectedLandingDate ? customDayjs(expectedLandingDate).utc().format('DD/MM/YYYY à HH[h]mm') : '-'
-    },
-    enableSorting: true,
-    header: () => 'Débarque prévue',
-    id: LogbookMessage.ApiSortColumn.EXPECTED_LANDING_DATE,
-    size: 120
-  },
-  {
-    accessorFn: row => (!!row.portLocode && !!row.portName ? `${row.portName} (${row.portLocode})` : '-'),
-    cell: (info: CellContext<PriorNotification.PriorNotification, string>) => (
-      <Ellipsised>{info.getValue()}</Ellipsised>
-    ),
-    enableSorting: true,
-    header: () => "Port d'arrivée",
-    id: LogbookMessage.ApiSortColumn.PORT_NAME,
-    size: 140
-  },
-  {
-    accessorFn: row => row.vesselRiskFactor,
-    cell: (info: CellContext<PriorNotification.PriorNotification, number | undefined>) => {
-      const priorNotification = info.row.original
-
-      return (
-        <VesselRiskFactor
-          hasVesselRiskFactorSegments={priorNotification.hasVesselRiskFactorSegments}
-          isVesselUnderCharter={priorNotification.isVesselUnderCharter}
-          vesselLastControlDate={priorNotification.vesselLastControlDate}
-          vesselRiskFactor={priorNotification.vesselRiskFactor}
-          vesselRiskFactorDetectability={priorNotification.vesselRiskFactorDetectability}
-          vesselRiskFactorImpact={priorNotification.vesselRiskFactorImpact}
-          vesselRiskFactorProbability={priorNotification.vesselRiskFactorProbability}
-        />
-      )
-    },
-    enableSorting: true,
-    header: () => 'Note',
-    id: LogbookMessage.ApiSortColumn.VESSEL_RISK_FACTOR,
-    size: 50
-  },
-  {
-    accessorFn: row => row.vesselName ?? (row.vesselId === -1 ? 'Navire inconnu' : '-'),
-    cell: (info: CellContext<PriorNotification.PriorNotification, string>) => {
-      const priorNotification = info.row.original
-
-      return (
-        <Ellipsised>
-          <StyledCountryFlag countryCode={priorNotification.vesselFlagCountryCode} size={[20, 14]} />
-          <Titled>{info.getValue()}</Titled>
-        </Ellipsised>
-      )
-    },
-    enableSorting: true,
-    header: () => 'Nom',
-    id: LogbookMessage.ApiSortColumn.VESSEL_NAME,
-    size: 160
-  },
-  {
-    accessorFn: row =>
-      row.tripSegments.length > 0 ? row.tripSegments.map(tripSegment => tripSegment.code).join('/') : undefined,
-    cell: (info: CellContext<PriorNotification.PriorNotification, string | undefined>) => (
-      <Ellipsised>{info.getValue() ?? 'Pas de segment'}</Ellipsised>
-    ),
-    enableSorting: true,
-    header: () => 'Segments',
-    id: LogbookMessage.ApiSortColumn.TRIP_SEGMENT_CODES,
-    size: 130
-  },
-  {
-    accessorFn: row => (row.types.length > 0 ? row.types.map(({ name }) => name).join(', ') : '-'),
-    cell: (info: CellContext<PriorNotification.PriorNotification, string>) => (
-      <Ellipsised>{info.getValue()}</Ellipsised>
-    ),
-    enableSorting: true,
-    header: () => 'Types de préavis',
-    id: LogbookMessage.ApiSortColumn.PRIOR_NOTIFICATION_TYPES,
-    size: 180
-  },
-  {
-    accessorFn: row => row.reportingsCount,
-    cell: (info: CellContext<PriorNotification.PriorNotification, number>) => {
-      const alertCount = info.getValue()
-      if (alertCount === 0) {
-        return null
-      }
-
-      return (
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Tag
-            backgroundColor={THEME.color.maximumRed15}
-            style={{ marginTop: 1 }}
-            title={`${info.getValue()} signalements`}
-          >{`${info.getValue()} sign.`}</Tag>
-        </div>
-      )
-    },
-    enableSorting: false,
-    header: () => '',
-    id: 'alertCount',
-    size: 72
-  },
-  {
-    accessorFn: row => row.id,
-    cell: (info: CellContext<PriorNotification.PriorNotification, string>) => (
-      <ButtonsGroupRow priorNotification={info.row.original} />
-    ),
-    enableSorting: false,
-    header: () => '',
-    id: 'actions',
-    size: 64
-  }
-]
+import type { ListFilter } from './types'
 
 /* eslint-disable sort-keys-fix/sort-keys-fix, typescript-sort-keys/string-enum */
 export const SUB_MENU_LABEL: Record<SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup, string> = {
@@ -212,7 +53,19 @@ export const EXPECTED_ARRIVAL_PERIOD_LABEL: Record<ExpectedArrivalPeriod, string
 export const EXPECTED_ARRIVAL_PERIODS_AS_OPTIONS = getOptionsFromLabelledEnum(EXPECTED_ARRIVAL_PERIOD_LABEL)
 /* eslint-enable sort-keys-fix/sort-keys-fix, typescript-sort-keys/string-enum */
 
-const StyledCountryFlag = styled(CountryFlag)`
-  margin-right: 8px;
-  vertical-align: -2px;
-`
+export const DEFAULT_LIST_FILTER_VALUES: ListFilter = {
+  countryCodes: undefined,
+  expectedArrivalCustomPeriod: undefined,
+  expectedArrivalPeriod: ExpectedArrivalPeriod.IN_LESS_THAN_FOUR_HOURS,
+  fleetSegmentSegments: undefined,
+  gearCodes: undefined,
+  hasOneOrMoreReportings: RichBoolean.BOTH,
+  isLessThanTwelveMetersVessel: RichBoolean.BOTH,
+  isSent: undefined,
+  lastControlPeriod: undefined,
+  portLocodes: undefined,
+  priorNotificationTypes: undefined,
+  seafrontGroup: ALL_SEAFRONT_GROUP,
+  searchQuery: undefined,
+  specyCodes: undefined
+}

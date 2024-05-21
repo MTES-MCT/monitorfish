@@ -54,6 +54,8 @@ export function PriorNotificationCard({ priorNotificationId }: PriorNotification
 
           <Body>
             <LogbookMessage isFirst logbookMessage={priorNotificationDetail.logbookMessage} />
+            <LogbookMessage isFirst logbookMessage={priorNotificationDetail.logbookMessage} />
+            <LogbookMessage isFirst logbookMessage={priorNotificationDetail.logbookMessage} />
           </Body>
 
           <Footer>
@@ -96,6 +98,7 @@ const Body = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  overflow-y: auto;
   padding: 32px;
 `
 

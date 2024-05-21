@@ -157,6 +157,26 @@ export function getLocalFilterFromListFilter(listFilter: ListFilter) {
   return filters
 }
 
+export function sortPriorNotificationTypesByPriority(priorNotificationTypes: string[]) {
+  const communityTypes: string[] = []
+  const designatedPortTypes: string[] = []
+
+  priorNotificationTypes.forEach(type => {
+    if (['Préavis communautaire', 'Préavis navire tiers'].includes(type)) {
+      communityTypes.push(type)
+    }
+    if (type.startsWith('Ports désignés')) {
+      designatedPortTypes.push(type)
+    }
+  })
+
+  const otherTypes = priorNotificationTypes
+    .filter(type => !communityTypes.includes(type) && !designatedPortTypes.includes(type))
+    .sort()
+
+  return [...communityTypes.sort(), ...designatedPortTypes.sort(), ...otherTypes]
+}
+
 export function getTitle(seafrontGroup: SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup) {
   switch (seafrontGroup) {
     case ALL_SEAFRONT_GROUP:

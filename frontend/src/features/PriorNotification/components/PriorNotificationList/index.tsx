@@ -14,7 +14,8 @@ import { flexRender, getCoreRowModel, useReactTable, getExpandedRowModel } from 
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { PRIOR_NOTIFICATION_TABLE_COLUMNS, SUB_MENUS_AS_OPTIONS } from './constants'
+import { TABLE_COLUMNS } from './columns'
+import { SUB_MENUS_AS_OPTIONS } from './constants'
 import { FilterBar } from './FilterBar'
 import { FilterTags } from './FilterTags'
 import { Row } from './Row'
@@ -72,7 +73,7 @@ export function PriorNotificationList() {
   )
 
   const table = useReactTable({
-    columns: PRIOR_NOTIFICATION_TABLE_COLUMNS,
+    columns: TABLE_COLUMNS,
     data: filteredPriorNotifications ?? [],
     enableColumnResizing: false,
     enableRowSelection: true,
@@ -183,7 +184,7 @@ const TableWrapper = styled.div`
 const TableLegend = styled.p`
   color: ${p => p.theme.color.slateGray};
   line-height: 1;
-  margin: 0 0 8px;
+  margin: 8px 0;
 `
 
 // TODO Update monitor-ui?

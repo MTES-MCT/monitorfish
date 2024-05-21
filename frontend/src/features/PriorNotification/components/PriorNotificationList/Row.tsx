@@ -4,6 +4,7 @@ import { flexRender, type Row as RowType } from '@tanstack/react-table'
 import { orderBy } from 'lodash'
 import styled from 'styled-components'
 
+import { None } from './styles'
 import { PriorNotification } from '../../PriorNotification.types'
 import { priorNotificationActions } from '../../slice'
 
@@ -18,18 +19,18 @@ export function Row({ row }: RowProps) {
 
   return (
     <>
-      <StyledRow>
+      <TableWithSelectableRows.BodyTr>
         {row?.getVisibleCells().map(cell => (
-          <ExpandableRow
+          <ExpandableRowCell
             key={cell.id}
             $hasRightBorder={cell.column.id === 'alertCount'}
             $width={cell.column.getSize()}
             onClick={() => row.toggleExpanded()}
           >
             {flexRender(cell.column.columnDef.cell, cell.getContext())}
-          </ExpandableRow>
+          </ExpandableRowCell>
         ))}
-      </StyledRow>
+      </TableWithSelectableRows.BodyTr>
 
       {row.getIsExpanded() && (
         <ExpandedRow>
@@ -120,9 +121,17 @@ export function Row({ row }: RowProps) {
           </ExpandedRowCell>
           <ExpandedRowCell $width={130}>
             <ExpandedRowLabel>Nom des segments :</ExpandedRowLabel>
-            <span>{priorNotification.tripSegments.map(tripSegment => tripSegment.name).join(', ')}</span>
+            {priorNotification.tripSegments.length > 0 ? (
+              <ExpandedRowList>
+                {priorNotification.tripSegments.map(tripSegment => (
+                  <li key={tripSegment.code}>{`${tripSegment.code} – ${tripSegment.name}`}</li>
+                ))}
+              </ExpandedRowList>
+            ) : (
+              <None>Aucun segment.</None>
+            )}
           </ExpandedRowCell>
-          <ExpandedRowCell $width={180}>
+          <ExpandedRowCell $width={200}>
             <ExpandedRowLabel>Principales espèces à bord :</ExpandedRowLabel>
             {priorNotification.onBoardCatches.length > 0 ? (
               <ExpandedRowList>
@@ -131,7 +140,7 @@ export function Row({ row }: RowProps) {
                 ))}
               </ExpandedRowList>
             ) : (
-              <ExpandedRowValue>Aucune capture à bord.</ExpandedRowValue>
+              <None>Aucune capture à bord.</None>
             )}
             <p>
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
@@ -151,21 +160,22 @@ export function Row({ row }: RowProps) {
 }
 
 // TODO Update in monitor-ui.
-const StyledRow = styled(TableWithSelectableRows.BodyTr)`
-  font-weight: 400;
-`
-
-// TODO Update in monitor-ui.
-const ExpandableRow = styled(TableWithSelectableRows.Td)`
+const ExpandableRowCell = styled(TableWithSelectableRows.Td)`
   cursor: pointer;
-  font-weight: 400;
   padding: 0 16px 1px;
   user-select: none;
   vertical-align: middle;
 `
 
 // TODO Add this feature in monitor-ui.
-const ExpandedRow = TableWithSelectableRows.BodyTr
+const ExpandedRow = styled(TableWithSelectableRows.BodyTr)`
+  &:hover {
+    > td {
+      /* Hack to disable hover background color in expanded rows */
+      background-color: ${p => p.theme.color.cultured};
+    }
+  }
+`
 
 const ExpandedRowCell = styled(TableWithSelectableRows.Td).attrs(props => ({
   ...props,
@@ -183,6 +193,7 @@ const ExpandedRowCell = styled(TableWithSelectableRows.Td).attrs(props => ({
 const ExpandedRowLabel = styled.span`
   color: ${p => p.theme.color.slateGray};
   display: block;
+  font-weight: 400;
   width: 100%;
 `
 const ExpandedRowValue = styled.span<{

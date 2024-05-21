@@ -5,7 +5,7 @@ import { vesselApi } from '@features/Vessel/apis'
 import type { RiskFactor } from '../../../../../domain/entities/vessel/riskFactor/types'
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 
-export const updateSpeciesOnboard =
+export const updateActionSpeciesOnboard =
   (dispatch, setFieldValue: (field: string, value: any) => void) =>
   async (missionAction: MissionActionFormValues): Promise<MissionAction.SpeciesControl[]> => {
     if (!missionAction.internalReferenceNumber) {

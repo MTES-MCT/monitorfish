@@ -2,7 +2,7 @@ import { faoAreasApi } from '@api/faoAreas'
 
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 
-export const updateFAOAreas =
+export const updateActionFAOAreas =
   (dispatch, setFieldValue: (field: string, value: any) => void) =>
   async (missionAction: MissionActionFormValues): Promise<string[]> => {
     const { data: computedVesselFaoAreas } = await dispatch(

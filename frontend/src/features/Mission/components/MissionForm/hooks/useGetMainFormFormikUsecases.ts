@@ -1,12 +1,12 @@
 import { useGetPortsQuery } from '@api/port'
+import { updateMissionGeometry } from '@features/Mission/components/MissionForm/useCases/updateMissionGeometry'
+import { updateOtherControlsCheckboxes } from '@features/Mission/components/MissionForm/useCases/updateOtherControlsCheckboxes'
 import { useGetMissionQuery } from '@features/Mission/monitorfishMissionApi'
 import { isAirOrSeaControl, isLandControl } from '@features/Mission/useCases/getLastControlCircleGeometry'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { sortBy } from 'lodash'
-
-import { formUsecase } from '../useCases'
 
 import type { MissionMainFormValues } from '../types'
 
@@ -22,7 +22,7 @@ export function useGetMainFormFormikUsecases() {
      * When updating a control unit, we must reset the "Other controls" field checkboxes
      */
     updateMissionActionOtherControlsCheckboxes: (mission: MissionMainFormValues, previousIsControlUnitPAM: boolean) =>
-      formUsecase.updateOtherControlsCheckboxes(dispatch)(mission, previousIsControlUnitPAM),
+      updateOtherControlsCheckboxes(dispatch)(mission, previousIsControlUnitPAM),
 
     /**
      * When updating the mission location from the mission, we use the `RTK-Query` cache object to access the `missionAction` form.
@@ -53,7 +53,7 @@ export function useGetMainFormFormikUsecases() {
         return false
       }
 
-      await formUsecase.updateMissionLocation(
+      await updateMissionGeometry(
         dispatch,
         getPortsApiQuery.data,
         getMissionApiQuery.data?.envActions ?? [],

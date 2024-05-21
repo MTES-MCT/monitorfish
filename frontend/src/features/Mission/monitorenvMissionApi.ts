@@ -1,5 +1,5 @@
 import { monitorenvApi } from '@api/api'
-import { ApiErrorCode } from '@api/types'
+import { BackendApi } from '@api/BackendApi.types'
 import { Mission } from '@features/Mission/mission.types'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { UsageError } from '@libs/UsageError'
@@ -38,7 +38,7 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
         url: `/v2/missions/${id}?source=${Mission.MissionSource.MONITORFISH}`
       }),
       transformErrorResponse: response => {
-        if (response.responseData.code === ApiErrorCode.EXISTING_MISSION_ACTION) {
+        if (response.responseData.code === BackendApi.ErrorCode.EXISTING_MISSION_ACTION) {
           return new UsageError(IMPOSSIBLE_MISSION_DELETION_ERROR_MESSAGE)
         }
 

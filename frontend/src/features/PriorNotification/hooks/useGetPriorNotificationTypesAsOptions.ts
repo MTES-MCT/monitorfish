@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import { useGetPriorNotificationTypesQuery } from '../api'
+import { useGetPriorNotificationTypesQuery } from '../priorNotificationApi'
 
 import type { Option } from '@mtes-mct/monitor-ui'
 

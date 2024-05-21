@@ -126,6 +126,7 @@ function getApiFilterFromLastControlPeriod(period: LastControlPeriod | undefined
 export function getApiFilterFromListFilter(listFilter: ListFilter): LogbookMessage.ApiFilter {
   return {
     flagStates: listFilter.countryCodes,
+    hasOneOrMoreReportings: getMaybeBooleanFromRichBoolean(listFilter.hasOneOrMoreReportings),
     isLessThanTwelveMetersVessel: getMaybeBooleanFromRichBoolean(listFilter.isLessThanTwelveMetersVessel),
     portLocodes: listFilter.portLocodes,
     priorNotificationTypes: listFilter.priorNotificationTypes,
@@ -140,15 +141,6 @@ export function getApiFilterFromListFilter(listFilter: ListFilter): LogbookMessa
 
 export function getLocalFilterFromListFilter(listFilter: ListFilter) {
   const filters: Filter<PriorNotification.PriorNotification>[] = []
-
-  const hasOneOrMoreReportings = getMaybeBooleanFromRichBoolean(listFilter.hasOneOrMoreReportings)
-  if (hasOneOrMoreReportings !== undefined) {
-    const filter: Filter<PriorNotification.PriorNotification> = hasOneOrMoreReportings
-      ? priorNotifications => priorNotifications.filter(priorNotification => priorNotification.reportingsCount > 0)
-      : priorNotifications => priorNotifications.filter(priorNotification => priorNotification.reportingsCount === 0)
-
-    filters.push(filter)
-  }
 
   if (!!listFilter.seafrontGroup && listFilter.seafrontGroup !== ALL_SEAFRONT_GROUP) {
     const filter: Filter<PriorNotification.PriorNotification> =

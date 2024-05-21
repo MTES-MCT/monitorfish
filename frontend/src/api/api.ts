@@ -8,7 +8,8 @@ import ky from 'ky'
 import { getOIDCUser } from '../auth/getOIDCUser'
 import { normalizeRtkBaseQuery } from '../utils/normalizeRtkBaseQuery'
 
-import type { BackendApiErrorResponse, CustomRTKResponseError, RTKBaseQueryArgs } from './types'
+import type { BackendApi } from './BackendApi.types'
+import type { CustomRTKResponseError, RTKBaseQueryArgs } from './types'
 
 const MAX_RETRIES = 2
 
@@ -33,7 +34,7 @@ export const monitorenvApi = createApi({
       const error: CustomRTKResponseError = {
         path: typeof args === 'string' ? args : args.url,
         requestData: typeof args === 'string' ? undefined : args.body,
-        responseData: result.error.data as BackendApiErrorResponse,
+        responseData: result.error.data as BackendApi.ResponseBodyError,
         status: result.error.status
       }
 
@@ -87,7 +88,7 @@ export const monitorfishApi = createApi({
       const error: CustomRTKResponseError = {
         path: typeof args === 'string' ? args : args.url,
         requestData: typeof args === 'string' ? undefined : args.body,
-        responseData: result.error.data as BackendApiErrorResponse,
+        responseData: result.error.data as BackendApi.ResponseBodyError,
         status: result.error.status
       }
 

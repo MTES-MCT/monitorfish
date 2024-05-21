@@ -1,5 +1,5 @@
-import { Backoffice } from '@features/Backoffice'
-import { EditRegulation } from '@features/Backoffice/edit_regulation/EditRegulation'
+import { Backoffice } from '@features/BackOffice'
+import { EditRegulation } from '@features/BackOffice/edit_regulation/EditRegulation'
 import { ControlObjectiveTable } from '@features/ControlObjective/components/ControlObjectiveTable'
 import { FleetSegmentsBackoffice } from '@features/FleetSegment/components/FleetSegmentsBackoffice'
 import { MainWindow } from '@features/MainWindow'

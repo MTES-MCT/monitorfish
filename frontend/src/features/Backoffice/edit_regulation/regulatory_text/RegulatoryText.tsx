@@ -1,4 +1,4 @@
-import { checkNameAndUrl, checkOtherRequiredValues } from '@features/Backoffice/edit_regulation/regulatory_text/utils'
+import { checkNameAndUrl, checkOtherRequiredValues } from '@features/BackOffice/edit_regulation/regulatory_text/utils'
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import { Accent, Button, Checkbox, DatePicker, MultiCheckbox, SingleTag, TextInput, THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useState } from 'react'

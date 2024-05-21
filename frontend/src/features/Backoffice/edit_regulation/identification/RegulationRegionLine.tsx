@@ -1,4 +1,4 @@
-import { formatDataForSelectPicker } from '@features/Backoffice/utils'
+import { formatDataForSelectPicker } from '@features/BackOffice/utils'
 import { OptionValue } from '@features/Mission/components/MissionList/FilterBar'
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'

@@ -244,6 +244,7 @@ export namespace LogbookMessage {
 
   export type ApiFilter = Partial<{
     flagStates: string[] | undefined
+    hasOneOrMoreReportings: boolean | undefined
     isLessThanTwelveMetersVessel: boolean | undefined
     lastControlledAfter: string | undefined
     lastControlledBefore: string | undefined
@@ -257,4 +258,13 @@ export namespace LogbookMessage {
     willArriveAfter: string
     willArriveBefore: string
   }>
+  export enum ApiSortColumn {
+    EXPECTED_ARRIVAL_DATE = 'EXPECTED_ARRIVAL_DATE',
+    EXPECTED_LANDING_DATE = 'EXPECTED_LANDING_DATE',
+    PORT_NAME = 'PORT_NAME',
+    PRIOR_NOTIFICATION_TYPES = 'PRIOR_NOTIFICATION_TYPES',
+    TRIP_SEGMENT_CODES = 'TRIP_SEGMENT_CODES',
+    VESSEL_NAME = 'VESSEL_NAME',
+    VESSEL_RISK_FACTOR = 'VESSEL_RISK_FACTOR'
+  }
 }

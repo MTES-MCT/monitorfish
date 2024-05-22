@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.domain.sorters
+package fr.gouv.cnsp.monitorfish.domain.entities.logbook.sorters
 
 enum class LogbookReportSortColumn {
     EXPECTED_ARRIVAL_DATE,

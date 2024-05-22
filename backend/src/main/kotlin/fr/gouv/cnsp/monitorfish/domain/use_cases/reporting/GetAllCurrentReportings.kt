@@ -5,8 +5,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionOrObservationType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
-import fr.gouv.cnsp.monitorfish.domain.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllControlUnits
@@ -45,12 +45,14 @@ class GetAllCurrentReportings(
                                 it.internalReferenceNumber,
                             )
                         }
+
                         VesselIdentifier.IRCS -> {
                             require(it.ircs != null) {
                                 "The fields 'ircs' must be not null when the vessel identifier is IRCS."
                             }
                             lastPositionRepository.findUnderCharterForVessel(it.vesselIdentifier, it.ircs)
                         }
+
                         VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> {
                             require(it.externalReferenceNumber != null) {
                                 "The fields 'externalReferenceNumber' must be not null when the vessel identifier is EXTERNAL_REFERENCE_NUMBER."
@@ -60,6 +62,7 @@ class GetAllCurrentReportings(
                                 it.externalReferenceNumber,
                             )
                         }
+
                         else -> null
                     }
                 } catch (e: Throwable) {

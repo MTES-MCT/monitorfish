@@ -54,8 +54,6 @@ export function PriorNotificationCard({ priorNotificationId }: PriorNotification
 
           <Body>
             <LogbookMessage isFirst logbookMessage={priorNotificationDetail.logbookMessage} />
-            <LogbookMessage isFirst logbookMessage={priorNotificationDetail.logbookMessage} />
-            <LogbookMessage isFirst logbookMessage={priorNotificationDetail.logbookMessage} />
           </Body>
 
           <Footer>

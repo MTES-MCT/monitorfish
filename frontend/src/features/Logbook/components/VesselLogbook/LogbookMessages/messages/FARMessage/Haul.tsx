@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { CatchDetails } from './CatchDetails'
 import { buildCatchArray } from '../../../../../utils'
 import { WeightType } from '../../constants'
 import { SpeciesList } from '../../styles'
+import { CatchDetails } from '../common/CatchDetails'
 import { CatchMessageZone } from '../common/CatchMessageZone'
 import { SpecyCatch } from '../common/SpecyCatch'
 

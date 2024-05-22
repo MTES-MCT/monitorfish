@@ -1,30 +1,11 @@
-ARG TO_PG_MAJOR
-ARG TIMESCALEDB_VERSION
-ARG POSTGIS_VERSION
-ARG DISTRIBUTION
-
-FROM postgres:$TO_PG_MAJOR-$DISTRIBUTION
-ARG TO_PG_MAJOR
+ARG PG_MAJOR
 ARG TIMESCALEDB_VERSION
 ARG POSTGIS_VERSION
 
-ENV PGBINNEW /usr/lib/postgresql/$TO_PG_MAJOR/bin
-
-ENV PGDATANEW /var/lib/postgresql/$TO_PG_MAJOR/data
-
-RUN set -eux; \
-	mkdir -p "$PGDATANEW"; \
-	chown -R postgres:postgres /var/lib/postgresql
-
-WORKDIR /var/lib/postgresql
-
-COPY infra/docker/database/docker-upgrade /usr/local/bin/
-
-ENTRYPOINT ["docker-upgrade"]
-
-# recommended: --link
-CMD ["pg_upgrade"]
-
+FROM postgres:$PG_MAJOR-bookworm
+ARG PG_MAJOR
+ARG TIMESCALEDB_VERSION
+ARG POSTGIS_VERSION
 
 # Install TimescaleDB extension in both versions of Postgres
 RUN apt-get update
@@ -36,16 +17,13 @@ RUN apt-get update
 
 RUN \
     TIMESCALEDB_MAJOR=$(echo $TIMESCALEDB_VERSION | cut -c1) && \
-    apt-get install -y timescaledb-$TIMESCALEDB_MAJOR-postgresql-$FROM_PG_MAJOR=$TIMESCALEDB_VERSION* timescaledb-$TIMESCALEDB_MAJOR-loader-postgresql-$FROM_PG_MAJOR=$TIMESCALEDB_VERSION* && \
-    apt-get install -y timescaledb-$TIMESCALEDB_MAJOR-postgresql-$TO_PG_MAJOR=$TIMESCALEDB_VERSION* timescaledb-$TIMESCALEDB_MAJOR-loader-postgresql-$TO_PG_MAJOR=$TIMESCALEDB_VERSION*
+    apt-get install -y timescaledb-$TIMESCALEDB_MAJOR-postgresql-$PG_MAJOR=$TIMESCALEDB_VERSION* timescaledb-$TIMESCALEDB_MAJOR-loader-postgresql-$PG_MAJOR=$TIMESCALEDB_VERSION*
 
 # Install PostGIS extension in both versions of Postgres
 RUN apt update
 RUN \
     POSTGIS_MAJOR=$(echo $POSTGIS_VERSION | cut -c1) && \
     apt install -y --no-install-recommends \
-        postgresql-$FROM_PG_MAJOR-postgis-$POSTGIS_MAJOR=$POSTGIS_VERSION* \
-        postgresql-$FROM_PG_MAJOR-postgis-$POSTGIS_MAJOR-scripts \
-        postgresql-$TO_PG_MAJOR-postgis-$POSTGIS_MAJOR=$POSTGIS_VERSION* \
-        postgresql-$TO_PG_MAJOR-postgis-$POSTGIS_MAJOR-scripts \
+        postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR=$POSTGIS_VERSION* \
+        postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR-scripts \
     && rm -rf /var/lib/apt/lists/*

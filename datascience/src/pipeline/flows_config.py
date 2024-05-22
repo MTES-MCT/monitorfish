@@ -64,6 +64,7 @@ from src.pipeline.helpers.country_codes import (
 )
 
 ################################ Define flow schedules ################################
+admin_areas.flow.schedule = CronSchedule("43 4 * * 1,2,3,4,5")
 beacons.flow.schedule = CronSchedule("4,14,24,34,44,54 * * * *")
 clean_flow_runs.flow.schedule = CronSchedule("8,18,28,38,48,58 * * * *")
 control_anteriority.flow.schedule = CronSchedule("5 * * * *")

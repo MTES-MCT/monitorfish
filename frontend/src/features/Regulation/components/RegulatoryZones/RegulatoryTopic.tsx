@@ -110,7 +110,6 @@ function UnmemoizedRegulatoryTopic({
   }
 
   useEffect(() => {
-    // TODO Double-check this simplification based on typings.
     if (
       (!!regulatoryZoneMetadata && regulatoryZoneMetadata.topic === regulatoryTopic) ||
       regulatoryTopicsOpened.includes(regulatoryTopic)

@@ -110,9 +110,9 @@ export const TABLE_COLUMNS: Array<ColumnDef<PriorNotification.PriorNotification,
       row.tripSegments.length > 0 ? row.tripSegments.map(tripSegment => tripSegment.code).join(', ') : undefined,
     cell: (info: CellContext<PriorNotification.PriorNotification, string | undefined>) =>
       info.getValue() ? <Ellipsised>{info.getValue()}</Ellipsised> : <None>Aucun segment</None>,
-    enableSorting: true,
+    enableSorting: false,
     header: () => 'Segments',
-    id: LogbookMessage.ApiSortColumn.TRIP_SEGMENT_CODES,
+    id: 'tripSegments',
     size: 130
   },
   {
@@ -122,9 +122,9 @@ export const TABLE_COLUMNS: Array<ColumnDef<PriorNotification.PriorNotification,
         : undefined,
     cell: (info: CellContext<PriorNotification.PriorNotification, string | undefined>) =>
       info.getValue() ? <Ellipsised>{info.getValue()}</Ellipsised> : <None>Aucun type</None>,
-    enableSorting: true,
+    enableSorting: false,
     header: () => 'Types de préavis',
-    id: LogbookMessage.ApiSortColumn.PRIOR_NOTIFICATION_TYPES,
+    id: 'types',
     size: 200
   },
   {

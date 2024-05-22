@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
+import { CatchDetails } from './common/CatchDetails'
 import { SpecyCatch } from './common/SpecyCatch'
-import { CatchDetails } from './FARMessage/CatchDetails'
 import { getLatitudeOrDash, getLongitudeOrDash } from './utils'
 import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
 import { getDateTime } from '../../../../../../utils'

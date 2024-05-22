@@ -7,7 +7,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.LogbookMessageV
 import java.time.ZonedDateTime
 
 data class LogbookMessageDataOutput(
-    val id: Long,
     val reportId: String?,
     val operationNumber: String,
     val tripNumber: String?,
@@ -43,7 +42,6 @@ data class LogbookMessageDataOutput(
             }
 
             return LogbookMessageDataOutput(
-                id = logbookMessage.id,
                 internalReferenceNumber = logbookMessage.internalReferenceNumber,
                 referencedReportId = logbookMessage.referencedReportId,
                 externalReferenceNumber = logbookMessage.externalReferenceNumber,

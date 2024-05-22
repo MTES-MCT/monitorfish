@@ -37,8 +37,7 @@ export const TableKey = styled.th`
   color: ${p => p.theme.color.slateGray};
   display: inline-block;
   font-weight: normal;
-  max-width: 180px;
-  min-width: 180px;
+  max-width: 190px;
 `
 
 export const TableValue = styled.td`

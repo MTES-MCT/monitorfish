@@ -1,4 +1,5 @@
 import type { VesselIdentity } from '../../domain/entities/vessel/types'
+import type { LogbookMessage as LogbookMessageNamespace } from '@features/Logbook/LogbookMessage.types'
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
 export type VesselVoyage = {
@@ -43,7 +44,9 @@ export type LogbookMessage = {
   referencedReportId: string | null
   reportDateTime: string
   reportId: string
+  tripGears: Gear[] | undefined
   tripNumber: string
+  tripSegments: LogbookMessageNamespace.Segment[] | undefined
   vesselName: string
 }
 

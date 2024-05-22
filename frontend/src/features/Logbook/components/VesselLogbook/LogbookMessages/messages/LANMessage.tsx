@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
+import { CatchDetails } from './common/CatchDetails'
 import { SpecyCatch } from './common/SpecyCatch'
-import { CatchDetails } from './FARMessage/CatchDetails'
 import { getCodeWithNameOrDash, getDatetimeOrDash } from './utils'
 import { LogbookMessageSender } from '../../../../constants'
 import { buildCatchArray } from '../../../../utils'

@@ -21,7 +21,7 @@ export function useListSorting<T extends AnyEnum = AnyEnum>(
   ])
   const [apiSortingParams, setApiSortingParams] = useState<BackendApi.RequestSortingParams<T>>({
     sortColumn: defaultColumn,
-    sortDirection: BackendApi.SortDirection.ASC
+    sortDirection: defaultDirection
   })
 
   useEffect(() => {

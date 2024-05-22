@@ -1,8 +1,8 @@
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { useMemo } from 'react'
 
+import { CatchDetails } from './common/CatchDetails'
 import { SpecyCatch } from './common/SpecyCatch'
-import { CatchDetails } from './FARMessage/CatchDetails'
 import { getCodeWithNameOrDash, getDatetimeOrDash } from './utils'
 import { buildCatchArray, getTotalPNOWeight } from '../../../../utils'
 import { WeightType } from '../constants'

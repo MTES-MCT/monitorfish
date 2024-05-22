@@ -4,15 +4,17 @@ import {
   correctedLANMessage,
   correctedPNOMessage,
   dummyCpsMessage,
-  dummyLogbookMessages
+  dummyLogbookMessages,
+  dummyLanMessageWithLVRCPresentationSpecies
 } from './__mocks__/logbookMessages'
 import {
+  buildCatchArray,
+  getCPSDistinctSpecies,
   getDEPMessage,
   getDISMessages,
   getFARMessages,
   getLANMessage,
   getPNOMessage,
-  getCPSDistinctSpecies,
   getTotalDEPWeight,
   getTotalDISWeight,
   getTotalFARWeight,
@@ -109,5 +111,66 @@ describe('Logbook/utils.tsx', () => {
 
     // Then
     expect(total).toEqual(2)
+  })
+
+  it('buildCatchArray Should get the an array of catches', async () => {
+    // When
+    const catches = buildCatchArray(dummyLanMessageWithLVRCPresentationSpecies.message.catchLanded)
+
+    // Then
+    expect(catches).toHaveLength(30)
+
+    const ANFSpecy = catches.find(specyCatch => specyCatch.species === 'ANF')
+    expect(ANFSpecy).toEqual({
+      properties: [
+        {
+          conversionFactor: 1.22,
+          economicZone: 'GBR',
+          effortZone: 'A',
+          faoZone: '27.6.a',
+          packaging: 'BOX',
+          presentation: 'GUT',
+          preservationState: 'FRE',
+          statisticalRectangle: '49E5',
+          weight: 8385.87
+        },
+        {
+          conversionFactor: 1.22,
+          economicZone: 'IRL',
+          effortZone: 'A',
+          faoZone: '27.6.a',
+          packaging: 'BOX',
+          presentation: 'GUT',
+          preservationState: 'FRE',
+          statisticalRectangle: '41E0',
+          weight: 2060.35
+        },
+        {
+          conversionFactor: 0,
+          economicZone: 'GBR',
+          effortZone: 'A',
+          faoZone: '27.6.a',
+          packaging: 'BOX',
+          presentation: 'LVR-C',
+          preservationState: 'FRE',
+          statisticalRectangle: '47E2',
+          weight: 385.11
+        },
+        {
+          conversionFactor: 0,
+          economicZone: 'IRL',
+          effortZone: 'A',
+          faoZone: '27.6.a',
+          packaging: 'BOX',
+          presentation: 'LVR-C',
+          preservationState: 'FRE',
+          statisticalRectangle: '41E0',
+          weight: 145.89
+        }
+      ],
+      species: 'ANF',
+      speciesName: 'Baudroies, etc. nca',
+      weight: 10977.220000000001
+    })
   })
 })

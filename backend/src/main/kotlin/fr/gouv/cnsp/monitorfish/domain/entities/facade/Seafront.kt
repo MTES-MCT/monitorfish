@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.entities.facade
 /**
  * This Facade enum is used as a type safeguard to prevent storing any string to a postgres `facade` column
  */
-enum class Facade(private val storedValue: String) {
+enum class Seafront(private val storedValue: String) {
     MARTINIQUE("Martinique"),
     SUD_OCEAN_INDIEN("Sud Océan Indien"),
     GUADELOUPE("Guadeloupe"),
@@ -19,9 +19,9 @@ enum class Facade(private val storedValue: String) {
     ;
 
     companion object {
-        infix fun from(storedValue: String): Facade {
+        infix fun from(storedValue: String): Seafront {
             return try {
-                Facade.values().first { it.storedValue == storedValue }
+                entries.first { it.storedValue == storedValue }
             } catch (e: NoSuchElementException) {
                 throw NoSuchElementException("Facade $storedValue not found.", e)
             }

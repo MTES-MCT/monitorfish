@@ -2,8 +2,8 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
-import fr.gouv.cnsp.monitorfish.domain.entities.facade.Facade
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.FacadeArea
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
@@ -20,7 +20,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
-class GetMissionActionFacadeUTests {
+class GetMissionActionSeafrontUTests {
 
     @MockBean
     private lateinit var facadeAreasRepository: FacadeAreasRepository
@@ -52,7 +52,7 @@ class GetMissionActionFacadeUTests {
         val facade = GetMissionActionFacade(portRepository, facadeAreasRepository).execute(action)
 
         // Then
-        assertThat(facade).isEqualTo(Facade.NAMO)
+        assertThat(facade).isEqualTo(Seafront.NAMO)
     }
 
     @Test
@@ -115,7 +115,7 @@ class GetMissionActionFacadeUTests {
         val facade = GetMissionActionFacade(portRepository, facadeAreasRepository).execute(action)
 
         // Then
-        assertThat(facade).isEqualTo(Facade.NAMO)
+        assertThat(facade).isEqualTo(Seafront.NAMO)
     }
 
     @Test

@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import fr.gouv.cnsp.monitorfish.domain.entities.control_objective.ControlObjective
-import fr.gouv.cnsp.monitorfish.domain.entities.facade.Facade
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
 import jakarta.persistence.*
 
 @Entity
@@ -28,7 +28,7 @@ data class ControlObjectivesEntity(
 
     fun toControlObjective() = ControlObjective(
         id = id,
-        facade = Facade.from(facade).toString(),
+        facade = Seafront.from(facade).toString(),
         segment = segment,
         year = year,
         targetNumberOfControlsAtSea = targetNumberOfControlsAtSea,
@@ -39,7 +39,7 @@ data class ControlObjectivesEntity(
     companion object {
         fun fromControlObjective(controlObjective: ControlObjective): ControlObjectivesEntity {
             return ControlObjectivesEntity(
-                facade = Facade.from(controlObjective.facade).toString(),
+                facade = Seafront.from(controlObjective.facade).toString(),
                 segment = controlObjective.segment,
                 year = controlObjective.year,
                 targetNumberOfControlsAtSea = controlObjective.targetNumberOfControlsAtSea,

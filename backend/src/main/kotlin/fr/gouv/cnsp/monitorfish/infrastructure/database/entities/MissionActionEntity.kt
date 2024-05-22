@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import fr.gouv.cnsp.monitorfish.domain.entities.facade.Facade
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import jakarta.persistence.*
@@ -179,7 +179,7 @@ class MissionActionEntity(
                 feedbackSheetRequired = missionAction.feedbackSheetRequired,
                 userTrigram = missionAction.userTrigram,
                 segments = mapper.writeValueAsString(missionAction.segments),
-                facade = missionAction.facade?.let { Facade.from(it).toString() },
+                facade = missionAction.facade?.let { Seafront.from(it).toString() },
                 longitude = missionAction.longitude,
                 latitude = missionAction.latitude,
                 portLocode = missionAction.portLocode,
@@ -252,7 +252,7 @@ class MissionActionEntity(
                 segments,
                 FleetSegment::class.java,
             ),
-            facade = facade?.let { Facade.from(it).toString() },
+            facade = facade?.let { Seafront.from(it).toString() },
             longitude = longitude,
             latitude = latitude,
             portLocode = portLocode,

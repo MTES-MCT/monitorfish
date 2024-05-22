@@ -69,3 +69,6 @@ export const DEFAULT_LIST_FILTER_VALUES: ListFilter = {
   searchQuery: undefined,
   specyCodes: undefined
 }
+
+export const COMMUNITY_PRIOR_NOTIFICATION_TYPES = ['Préavis communautaire', 'Préavis navire tiers']
+export const DESIGNATED_PORTS_PRIOR_NOTIFICATION_TYPE_PREFIX = 'Ports désignés'

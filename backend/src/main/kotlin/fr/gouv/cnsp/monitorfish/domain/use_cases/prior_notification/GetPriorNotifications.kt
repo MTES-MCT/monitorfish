@@ -2,14 +2,14 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.config.UseCase
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.filters.LogbookReportFilter
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.sorters.LogbookReportSortColumn
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
-import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
-import fr.gouv.cnsp.monitorfish.domain.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
-import fr.gouv.cnsp.monitorfish.domain.sorters.LogbookReportSortColumn
 import org.springframework.data.domain.Sort
 
 @UseCase
@@ -70,28 +70,9 @@ class GetPriorNotifications(
             }
         val priorNotifications = enrichPriorNotificationsWithReportingCount(priorNotificationsWithoutReportingsCount)
 
-        val ascendingSortedPriorNotifications = priorNotifications.sortedWith(
-            compareBy { priorNotification ->
-                val segmentCodes = priorNotification.logbookMessageTyped.logbookMessage
-                    .tripSegments?.joinToString(", ") { it.code }
-                val priorNotificationTypeNames = priorNotification.logbookMessageTyped.typedMessage
-                    .pnoTypes.map { it.name }.joinToString(", ")
-
-                when (sortColumn) {
-                    LogbookReportSortColumn.EXPECTED_ARRIVAL_DATE -> priorNotification.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc
-                    LogbookReportSortColumn.EXPECTED_LANDING_DATE -> priorNotification.logbookMessageTyped.typedMessage.predictedLandingDatetimeUtc
-                    LogbookReportSortColumn.PORT_NAME -> priorNotification.port?.name
-                    LogbookReportSortColumn.PRIOR_NOTIFICATION_TYPES -> priorNotificationTypeNames
-                    LogbookReportSortColumn.TRIP_SEGMENT_CODES -> segmentCodes
-                    LogbookReportSortColumn.VESSEL_NAME -> priorNotification.logbookMessageTyped.logbookMessage.vesselName
-                    LogbookReportSortColumn.VESSEL_RISK_FACTOR -> priorNotification.vesselRiskFactor?.riskFactor
-                }
-            },
-        )
-        val sortedPriorNotifications = if (sortDirection == Sort.Direction.ASC) {
-            ascendingSortedPriorNotifications
-        } else {
-            ascendingSortedPriorNotifications.reversed()
+        val sortedPriorNotifications = when (sortDirection) {
+            Sort.Direction.ASC -> priorNotifications.sortedWith(compareBy { getSortKey(it, sortColumn) })
+            Sort.Direction.DESC -> priorNotifications.sortedWith(compareByDescending { getSortKey(it, sortColumn) })
         }
         val sortedPriorNotificationsWithoutDeletedOnes = sortedPriorNotifications
             .filter { !it.logbookMessageTyped.logbookMessage.isDeleted }
@@ -125,5 +106,27 @@ class GetPriorNotifications(
         }
 
         return priorNotificationsWithReportingCount
+    }
+
+    companion object {
+        private fun getSortKey(
+            priorNotification: PriorNotification,
+            sortColumn: LogbookReportSortColumn,
+        ): Comparable<*>? {
+            val segmentCodes = priorNotification.logbookMessageTyped.logbookMessage
+                .tripSegments?.joinToString(", ") { it.code }
+            val priorNotificationTypeNames = priorNotification.logbookMessageTyped.typedMessage
+                .pnoTypes.map { it.name }.joinToString(", ")
+
+            return when (sortColumn) {
+                LogbookReportSortColumn.EXPECTED_ARRIVAL_DATE -> priorNotification.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc
+                LogbookReportSortColumn.EXPECTED_LANDING_DATE -> priorNotification.logbookMessageTyped.typedMessage.predictedLandingDatetimeUtc
+                LogbookReportSortColumn.PORT_NAME -> priorNotification.port?.name
+                LogbookReportSortColumn.PRIOR_NOTIFICATION_TYPES -> priorNotificationTypeNames
+                LogbookReportSortColumn.TRIP_SEGMENT_CODES -> segmentCodes
+                LogbookReportSortColumn.VESSEL_NAME -> priorNotification.logbookMessageTyped.logbookMessage.vesselName
+                LogbookReportSortColumn.VESSEL_RISK_FACTOR -> priorNotification.vesselRiskFactor?.riskFactor
+            }
+        }
     }
 }

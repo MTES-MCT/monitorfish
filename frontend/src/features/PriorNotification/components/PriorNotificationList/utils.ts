@@ -8,7 +8,13 @@ import {
 } from '@constants/seafront'
 import { customDayjs, getMaybeBooleanFromRichBoolean, type DateAsStringRange, type Filter } from '@mtes-mct/monitor-ui'
 
-import { ExpectedArrivalPeriod, LastControlPeriod, SUB_MENU_LABEL } from './constants'
+import {
+  COMMUNITY_PRIOR_NOTIFICATION_TYPES,
+  DESIGNATED_PORTS_PRIOR_NOTIFICATION_TYPE_PREFIX,
+  ExpectedArrivalPeriod,
+  LastControlPeriod,
+  SUB_MENU_LABEL
+} from './constants'
 
 import type { ListFilter } from './types'
 import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
@@ -159,22 +165,22 @@ export function getLocalFilterFromListFilter(listFilter: ListFilter) {
 
 export function sortPriorNotificationTypesByPriority(priorNotificationTypes: string[]) {
   const communityTypes: string[] = []
-  const designatedPortTypes: string[] = []
+  const designatedPortsTypes: string[] = []
 
   priorNotificationTypes.forEach(type => {
-    if (['Préavis communautaire', 'Préavis navire tiers'].includes(type)) {
+    if (COMMUNITY_PRIOR_NOTIFICATION_TYPES.includes(type)) {
       communityTypes.push(type)
     }
-    if (type.startsWith('Ports désignés')) {
-      designatedPortTypes.push(type)
+    if (type.startsWith(DESIGNATED_PORTS_PRIOR_NOTIFICATION_TYPE_PREFIX)) {
+      designatedPortsTypes.push(type)
     }
   })
 
   const otherTypes = priorNotificationTypes
-    .filter(type => !communityTypes.includes(type) && !designatedPortTypes.includes(type))
+    .filter(type => !communityTypes.includes(type) && !designatedPortsTypes.includes(type))
     .sort()
 
-  return [...communityTypes.sort(), ...designatedPortTypes.sort(), ...otherTypes]
+  return [...communityTypes.sort(), ...designatedPortsTypes.sort(), ...otherTypes]
 }
 
 export function getTitle(seafrontGroup: SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup) {

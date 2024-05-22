@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.domain.filters
+package fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters
 
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 

@@ -1,9 +1,9 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
-import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.filters.LogbookReportFilter
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.sorters.LogbookReportSortColumn
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
-import fr.gouv.cnsp.monitorfish.domain.sorters.LogbookReportSortColumn
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.AbstractDBTests
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

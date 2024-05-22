@@ -37,7 +37,6 @@ def extract_missions(number_of_months: int) -> pd.DataFrame:
         "facade": "category",
         "deleted": bool,
         "mission_source": "category",
-        "closed": bool,
     }
 
     try:

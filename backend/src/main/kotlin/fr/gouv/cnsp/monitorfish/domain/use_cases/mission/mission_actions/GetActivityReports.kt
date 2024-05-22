@@ -65,9 +65,10 @@ class GetActivityReports(
                 else -> throw IllegalArgumentException("Bad control type: ${control.actionType}")
             }
         }.filter { control ->
+            val controlMission = missions.firstOrNull { mission -> mission.id == control.missionId }
             // All AECP reports are excluded from the response
             // see: https://github.com/MTES-MCT/monitorfish/issues/3194
-            return@filter !control.controlUnits.any { controlUnit -> controlUnit.administration == "AECP" }
+            return@filter !(controlMission?.controlUnits?.any { controlUnit -> controlUnit.administration == "AECP" } ?: false)
         }
         logger.info("Found ${filteredControls.size} controls to report.")
 

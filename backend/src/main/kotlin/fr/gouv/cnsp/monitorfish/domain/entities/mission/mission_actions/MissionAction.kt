@@ -49,6 +49,10 @@ data class MissionAction(
     val gearOnboard: List<GearControl> = listOf(),
     val speciesOnboard: List<SpeciesControl> = listOf(),
     val isFromPoseidon: Boolean,
+    /**
+     * This field is only used by the `GetVesselControls` use-case.
+     * /!\ Do not use it to get `controlUnits` as the field will be empty be default.
+     */
     var controlUnits: List<ControlUnit> = listOf(),
     val isDeleted: Boolean,
     val hasSomeGearsSeized: Boolean,

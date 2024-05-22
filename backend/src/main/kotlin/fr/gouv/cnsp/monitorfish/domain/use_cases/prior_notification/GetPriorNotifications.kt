@@ -113,17 +113,10 @@ class GetPriorNotifications(
             priorNotification: PriorNotification,
             sortColumn: LogbookReportSortColumn,
         ): Comparable<*>? {
-            val segmentCodes = priorNotification.logbookMessageTyped.logbookMessage
-                .tripSegments?.joinToString(", ") { it.code }
-            val priorNotificationTypeNames = priorNotification.logbookMessageTyped.typedMessage
-                .pnoTypes.map { it.name }.joinToString(", ")
-
             return when (sortColumn) {
                 LogbookReportSortColumn.EXPECTED_ARRIVAL_DATE -> priorNotification.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc
                 LogbookReportSortColumn.EXPECTED_LANDING_DATE -> priorNotification.logbookMessageTyped.typedMessage.predictedLandingDatetimeUtc
                 LogbookReportSortColumn.PORT_NAME -> priorNotification.port?.name
-                LogbookReportSortColumn.PRIOR_NOTIFICATION_TYPES -> priorNotificationTypeNames
-                LogbookReportSortColumn.TRIP_SEGMENT_CODES -> segmentCodes
                 LogbookReportSortColumn.VESSEL_NAME -> priorNotification.logbookMessageTyped.logbookMessage.vesselName
                 LogbookReportSortColumn.VESSEL_RISK_FACTOR -> priorNotification.vesselRiskFactor?.riskFactor
             }

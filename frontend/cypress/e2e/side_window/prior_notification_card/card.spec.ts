@@ -24,7 +24,7 @@ context('Side Window > Prior Notification Card > Card', () => {
     editSideWindowPriorNotification(`BARS`)
 
     // Title
-    cy.contains(`PNO ≥ 12 M - CHALUT DE FOND EN EAU PROFONDE ≥100 MM`).should('be.visible')
+    cy.contains(`PNO ≥ 12 M - NWW03 (CHALUT DE FOND EN EAU PROFONDE ≥100 MM)`).should('be.visible')
     cy.contains(`DES BARS (CFR104)`).should('be.visible')
 
     // Message Header

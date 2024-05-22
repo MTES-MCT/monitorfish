@@ -8,7 +8,7 @@ import org.locationtech.jts.geom.GeometryFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.transaction.annotation.Transactional
 
-class JpaFacadeAreasRepositoryITests : AbstractDBTests() {
+class JpaSeafrontAreasRepositoryITests : AbstractDBTests() {
     @Autowired
     private lateinit var facadeAreasRepository: FacadeAreasRepository
 

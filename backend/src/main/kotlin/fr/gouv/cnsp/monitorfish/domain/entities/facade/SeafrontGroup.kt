@@ -13,20 +13,20 @@ enum class SeafrontGroup {
 
     companion object {
         private val groupToSeafronts = mapOf(
-            ALL to Facade.entries,
-            MED to listOf(Facade.CORSE, Facade.MED),
-            MEMN to listOf(Facade.MEMN),
-            NAMO to listOf(Facade.NAMO),
-            OUTREMEROA to listOf(Facade.GUADELOUPE, Facade.GUYANE, Facade.MARTINIQUE),
-            OUTREMEROI to listOf(Facade.MAYOTTE, Facade.SUD_OCEAN_INDIEN),
-            SA to listOf(Facade.SA),
+            ALL to Seafront.entries,
+            MED to listOf(Seafront.CORSE, Seafront.MED),
+            MEMN to listOf(Seafront.MEMN),
+            NAMO to listOf(Seafront.NAMO),
+            OUTREMEROA to listOf(Seafront.GUADELOUPE, Seafront.GUYANE, Seafront.MARTINIQUE),
+            OUTREMEROI to listOf(Seafront.MAYOTTE, Seafront.SUD_OCEAN_INDIEN),
+            SA to listOf(Seafront.SA),
             NONE to emptyList(),
         )
 
-        fun toSeafronts(seaFrontGroup: SeafrontGroup): List<Facade> {
+        fun toSeafronts(seaFrontGroup: SeafrontGroup): List<Seafront> {
             return groupToSeafronts[seaFrontGroup] ?: emptyList()
         }
     }
 }
 
-fun SeafrontGroup.toSeafronts(): List<Facade> = SeafrontGroup.toSeafronts(this)
+fun SeafrontGroup.toSeafronts(): List<Seafront> = SeafrontGroup.toSeafronts(this)

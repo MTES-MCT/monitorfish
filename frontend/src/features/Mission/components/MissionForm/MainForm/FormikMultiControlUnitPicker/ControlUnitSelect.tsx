@@ -56,9 +56,10 @@ export function ControlUnitSelect({
     const allActiveControlUnits =
       allControlUnits.filter(controlUnit => isNotArchived(controlUnit) || value.name === controlUnit.name) || []
 
-    const isControlUnitFound = allActiveControlUnits.find(controlUnit => controlUnit.name === value.name)
+    const isSelectedControlUnitFound =
+      value.name && allActiveControlUnits.find(controlUnit => controlUnit.name === value.name)
     // If the control unit is not found and the administration is set
-    if (!isControlUnitFound && value.administration) {
+    if (!isSelectedControlUnitFound && value.administration && value.name) {
       return allActiveControlUnits.concat(value as LegacyControlUnit.LegacyControlUnit)
     }
 

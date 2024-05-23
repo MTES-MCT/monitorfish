@@ -1,6 +1,7 @@
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, getOptionsFromIdAndName, Icon, IconButton, MultiSelect, Select, TextInput } from '@mtes-mct/monitor-ui'
+import { getOptionsFromStrings } from '@utils/getOptionsFromStrings'
 import { isNotArchived } from '@utils/isNotArchived'
 import { useField } from 'formik'
 import { sortBy, uniqBy } from 'lodash'
@@ -19,7 +20,7 @@ import type { LegacyControlUnit } from 'domain/types/legacyControlUnit'
 import type { Promisable } from 'type-fest'
 
 type ControlUnitSelectProps = Readonly<{
-  allAdministrationsAsOptions: Option[]
+  activeAdministrationsAsOptions: Option[]
   allControlUnits: LegacyControlUnit.LegacyControlUnit[]
   error:
     | {
@@ -36,7 +37,7 @@ type ControlUnitSelectProps = Readonly<{
   onDelete: (index: number) => Promisable<void>
 }>
 export function ControlUnitSelect({
-  allAdministrationsAsOptions,
+  activeAdministrationsAsOptions,
   allControlUnits,
   error,
   index,
@@ -50,11 +51,31 @@ export function ControlUnitSelect({
     `controlUnits.${index}`
   )
 
-  // Include archived control units (and administrations) if they're already selected
-  const activeAndSelectedControlUnits = useMemo(
-    () => allControlUnits.filter(controlUnit => isNotArchived(controlUnit) || value.name === controlUnit.name) || [],
-    [allControlUnits, value]
-  )
+  // Include archived control units (and administrations) of not found control units if they're already selected
+  const activeAndSelectedControlUnits = useMemo(() => {
+    const allActiveControlUnits =
+      allControlUnits.filter(controlUnit => isNotArchived(controlUnit) || value.name === controlUnit.name) || []
+
+    const isControlUnitFound = allActiveControlUnits.find(controlUnit => controlUnit.name === value.name)
+    // If the control unit is not found and the administration is set
+    if (!isControlUnitFound && value.administration) {
+      return allActiveControlUnits.concat(value as LegacyControlUnit.LegacyControlUnit)
+    }
+
+    return allActiveControlUnits
+  }, [allControlUnits, value])
+
+  // Include missing administration
+  const activeAndSelectedAdministrationAsOptions = useMemo(() => {
+    const isAdministrationFound = activeAdministrationsAsOptions.find(
+      administration => administration.value === value.administration
+    )
+    if (!isAdministrationFound && value.administration) {
+      return activeAdministrationsAsOptions.concat(getOptionsFromStrings([value.administration]))
+    }
+
+    return activeAdministrationsAsOptions
+  }, [activeAdministrationsAsOptions, value])
 
   const isLoading = !allControlUnits.length
   const isEdition = selectedPath.id
@@ -80,8 +101,6 @@ export function ControlUnitSelect({
     const activeControlUnitResources =
       activeAndSelectedControlUnits.find(unit => unit.administration === value.administration && unit.id === value.id)
         ?.resources ?? []
-    // TODO Remove LegacyControlUnitResource to filter archived resources :
-    //  .filter(isNotArchived)
 
     const resources = [...activeControlUnitResources, ...value.resources]
 
@@ -183,9 +202,9 @@ export function ControlUnitSelect({
           isErrorMessageHidden
           isRequired={index === 0}
           label={`Administration ${index + 1}`}
-          name={`administration_${index}`}
+          name={`mission_control_unit_administration_${index}`}
           onChange={handleAdministrationChange}
-          options={allAdministrationsAsOptions}
+          options={activeAndSelectedAdministrationAsOptions}
           searchable
           value={value.administration}
         />
@@ -197,7 +216,7 @@ export function ControlUnitSelect({
           isErrorMessageHidden
           isRequired={index === 0}
           label={`Unité ${index + 1}`}
-          name={`name_${index}`}
+          name={`mission_control_unit_name_${index}`}
           onChange={handleNameChange}
           options={filteredUnitsAsOptions}
           searchable
@@ -208,7 +227,7 @@ export function ControlUnitSelect({
           disabled={isLoading || !value.administration || !value.name}
           isUndefinedWhenDisabled
           label={`Moyen ${index + 1}`}
-          name={`resources_${index}`}
+          name={`mission_control_unit_resources_${index}`}
           onChange={handleResourcesChange}
           options={controlUnitResourcesAsOptions}
           optionValueKey="id"
@@ -217,7 +236,7 @@ export function ControlUnitSelect({
         <TextInput
           disabled={isLoading || !value.name}
           label={`Contact de l’unité ${index + 1}`}
-          name={`contact_${index}`}
+          name={`mission_control_unit_contact_${index}`}
           onChange={handleContactChange}
           value={value.contact}
         />

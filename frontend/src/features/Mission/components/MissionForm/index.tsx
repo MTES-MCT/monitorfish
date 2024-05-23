@@ -6,7 +6,9 @@ import {
 } from '@api/missionAction'
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { useGetMissionFrontCompletion } from '@features/Mission/components/MissionForm/hooks/useGetMissionFrontCompletion'
+import { MainFormLiveSchema } from '@features/Mission/components/MissionForm/MainForm/schemas'
 import { CompletionStatusTag } from '@features/Mission/components/MissionForm/shared/CompletionStatusTag'
+import { isMissionActionFormValid } from '@features/Mission/components/MissionForm/utils/isMissionActionFormValid'
 import { Mission } from '@features/Mission/mission.types'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { autoSaveMission } from '@features/Mission/useCases/autoSaveMission'
@@ -32,6 +34,7 @@ import {
 } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { SideWindowMenuKey } from 'domain/entities/sideWindow/constants'
+import { every } from 'lodash'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { NoRsuiteOverrideWrapper } from 'ui/NoRsuiteOverrideWrapper'
@@ -51,7 +54,6 @@ import { ExternalActionsDialog } from './shared/ExternalActionsDialog'
 import { MissionStatusTag } from './shared/MissionStatusTag'
 import { missionFormActions } from './slice'
 import { getTitleFromMissionMainFormValues } from './utils'
-import { areMissionFormsValuesValid } from './utils/areMissionFormsValuesValid'
 import {
   monitorenvMissionApi,
   useCreateMissionMutation,
@@ -131,7 +133,14 @@ export function MissionForm() {
     return true
   }, [mainFormValues])
 
-  const isMissionFormValid = areMissionFormsValuesValid(mainFormValues, actionsFormValues)
+  const isMissionFormValid = useMemo(() => {
+    const isMainFormValid = MainFormLiveSchema.isValidSync(mainFormValues)
+    const areAllActionsValid = every(actionsFormValues, actionFormValues =>
+      isMissionActionFormValid(actionFormValues, false)
+    )
+
+    return isMainFormValid && areAllActionsValid
+  }, [mainFormValues, actionsFormValues])
 
   const formattedUpdateDate = useMemo(
     () => mainFormValues.updatedAtUtc && humanizePastDate(mainFormValues.updatedAtUtc),

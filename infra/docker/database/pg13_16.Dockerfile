@@ -2,12 +2,28 @@ ARG PG_MAJOR
 ARG TIMESCALEDB_VERSION
 ARG POSTGIS_VERSION
 
+############################
+# Build tools binaries in separate image
+############################
+ARG GO_VERSION=1.18.7
+FROM golang:${GO_VERSION}-alpine AS tools
+
+ENV TOOLS_VERSION 0.8.1
+
+RUN apk update && apk add --no-cache git gcc musl-dev \
+    && go install github.com/timescale/timescaledb-tune/cmd/timescaledb-tune@latest \
+    && go install github.com/timescale/timescaledb-parallel-copy/cmd/timescaledb-parallel-copy@latest
+
+############################
+# Now build image and copy in tools
+############################
 FROM postgres:"$PG_MAJOR"-bookworm
 ARG PG_MAJOR
 ARG TIMESCALEDB_VERSION
 ARG POSTGIS_VERSION
 
 COPY infra/docker/database/docker-entrypoint-initdb.d/* /docker-entrypoint-initdb.d/
+COPY --from=tools /go/bin/* /usr/local/bin/
 
 RUN \
     apt-get update && \

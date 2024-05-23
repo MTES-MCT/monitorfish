@@ -203,7 +203,7 @@ upgrade-postgres-11-to-13:
 		-v $(PG_13_DATA_VOLUME_NAME):/var/lib/postgresql/13/data \
 		ghcr.io/mtes-mct/monitorfish/monitorfish-database-upgrade:pg11_to_pg13-ts2.3.1-postgis3.3.4 -O "-c timescaledb.restoring='on'" -O "-c shared_preload_libraries=timescaledb";
 
-upgrade-postgres-13-to-16-dev:
+upgrade-postgres-13-to-16:
 	docker run --rm \
 		-v $(PG_13_DATA_VOLUME_NAME):/var/lib/postgresql/13/data \
 		-v $(PG_16_DATA_VOLUME_NAME):/var/lib/postgresql/16/data \

@@ -54,17 +54,17 @@ describe('Missions Form', () => {
       /**
        * User A modify "Control unit contact"
        */
-      await pageB.focus('[name="contact_0"]')
-      await pageA.focus('[name="contact_0"]')
+      await pageB.focus('[name="mission_control_unit_contact_0"]')
+      await pageA.focus('[name="mission_control_unit_contact_0"]')
       await wait(2000)
-      const controlUnitContact = await pageA.waitForSelector('[name="contact_0"]')
+      const controlUnitContact = await pageA.waitForSelector('[name="mission_control_unit_contact_0"]')
       // Modify contact on first page
       await controlUnitContact.click({ clickCount: 3, delay: 50 })
       await controlUnitContact.type('A new tel. number', { delay: 50 })
       // Wait for the update to be sent
       await wait(1000)
       // Should send the update to the second page
-      expect(await getInputContent(pageB, '[name="contact_0"]')).toBe('A new tel. number')
+      expect(await getInputContent(pageB, '[name="mission_control_unit_contact_0"]')).toBe('A new tel. number')
       // Erase the value
       await controlUnitContact.click({ clickCount: 3, delay: 50 })
       await controlUnitContact.type('contact', { delay: 50 })

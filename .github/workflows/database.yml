@@ -33,11 +33,6 @@ jobs:
             postgis_version: "3.4.2"
             dockerfile: "pg13_16.Dockerfile"
             image_version: "pg16-ts2.14.2-postgis3.4.2"
-          - pg_major: "16"
-            timescaledb_version: "2.14.2"
-            postgis_version: "3.4.2"
-            dockerfile: "pg16_debian.Dockerfile"
-            image_version: "bookworm-pg16-ts2.14.2-postgis3.4.2"
     permissions:
       contents: read
       packages: write

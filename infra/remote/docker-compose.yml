@@ -1,4 +1,3 @@
-version: "3"
 services:
   db:
     image: ghcr.io/mtes-mct/monitorfish/monitorfish-database:$DATABASE_VERSION

@@ -7,6 +7,8 @@ ARG PG_MAJOR
 ARG TIMESCALEDB_VERSION
 ARG POSTGIS_VERSION
 
+COPY infra/docker/database/docker-entrypoint-initdb.d/* /docker-entrypoint-initdb.d/
+
 RUN \
     apt-get update && \
     apt-get install -y \

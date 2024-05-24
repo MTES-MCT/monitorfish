@@ -176,6 +176,9 @@ frontend/cypress/videos/
 
 # Local data
 /datascience/data
+/datascience/src/pipeline/data/non_commited_data/pno_ports_subscriptions.csv
+/datascience/src/pipeline/data/non_commited_data/pno_segments_subscriptions.csv
+/datascience/src/pipeline/data/non_commited_data/pno_vessels_subscriptions.csv
 
 # Python
 *.pyc

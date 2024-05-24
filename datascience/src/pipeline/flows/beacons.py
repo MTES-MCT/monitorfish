@@ -1,6 +1,5 @@
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 import prefect
 from prefect import Flow, case, task
@@ -8,6 +7,7 @@ from prefect.executors import LocalDaskExecutor
 
 from src.pipeline.entities.beacon_malfunctions import BeaconStatus
 from src.pipeline.generic_tasks import extract, load
+from src.pipeline.processing import zeros_ones_to_bools
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 
 
@@ -43,9 +43,7 @@ def transform_beacons(beacons: pd.DataFrame) -> pd.DataFrame:
         BeaconStatus.from_poseidon_status, na_action="ignore"
     ).map(lambda beacon_status: beacon_status.value, na_action="ignore")
 
-    beacons["is_coastal"] = beacons.is_coastal.map(
-        {1.0: True, 0.0: False, np.nan: None}
-    )
+    beacons["is_coastal"] = zeros_ones_to_bools(beacons.is_coastal)
 
     return beacons
 
@@ -61,7 +59,6 @@ def transform_satellite_operators(satellite_operators: pd.DataFrame) -> pd.DataF
 
 @task(checkpoint=False)
 def load_beacons(beacons):
-
     load(
         beacons,
         table_name="beacons",
@@ -87,10 +84,8 @@ def load_satellite_operators(satellite_operators):
 
 
 with Flow("Beacons", executor=LocalDaskExecutor()) as flow:
-
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
-
         # Extract
         beacons = extract_beacons()
         satellite_operators = extract_satellite_operators()

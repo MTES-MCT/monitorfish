@@ -421,6 +421,8 @@ class GetActivityReportsUTests {
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
                 completion = Completion.TO_COMPLETE,
+                flagState = CountryCode.FR,
+                userTrigram = "CPAMOI"
             ),
         )
         given(missionActionsRepository.findControlsInDates(any(), any())).willReturn(controls)

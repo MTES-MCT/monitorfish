@@ -19,13 +19,7 @@
             { "operation_number": "FAKE_OPERATION_111_COR_ORPHAN", "xml_message": "<Flux>Message FLUX xml</Flux>" },
             { "operation_number": "FAKE_OPERATION_112", "xml_message": "<Flux>Message FLUX xml</Flux>" },
             { "operation_number": "FAKE_OPERATION_113", "xml_message": "<Flux>Message FLUX xml</Flux>" },
-            { "operation_number": "FAKE_OPERATION_114", "xml_message": "<Flux>Message FLUX xml</Flux>" },
-            { "operation_number": "FAKE_OPERATION_115", "xml_message": "<Flux>Message FLUX xml</Flux>" },
-            { "operation_number": "FAKE_OPERATION_116", "xml_message": "<Flux>Message FLUX xml</Flux>" },
-            { "operation_number": "FAKE_OPERATION_117", "xml_message": "<Flux>Message FLUX xml</Flux>" },
-            { "operation_number": "FAKE_OPERATION_118", "xml_message": "<Flux>Message FLUX xml</Flux>" },
-            { "operation_number": "FAKE_OPERATION_119", "xml_message": "<Flux>Message FLUX xml</Flux>" },
-            { "operation_number": "FAKE_OPERATION_120", "xml_message": "<Flux>Message FLUX xml</Flux>" }
+            { "operation_number": "FAKE_OPERATION_114", "xml_message": "<Flux>Message FLUX xml</Flux>" }
         ]
     },
     {
@@ -45,7 +39,7 @@
                 "operation_number": "FAKE_OPERATION_101",
                 "operation_type": "DAT",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
-                "transmission_format": "ERS",
+                "transmission_format": "FLUX",
                 "vessel_name": "PHENOMENE",
                 "trip_gears:jsonb": [
                     { "gear": "TBN", "mesh": 100, "dimensions": "250;180" },
@@ -80,8 +74,8 @@
                         }
                     ],
                     "port": "FRSML",
-                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '1 hour', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
-                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '2 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
                     "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
                 }
@@ -102,7 +96,7 @@
                 "operation_number": "FAKE_OPERATION_102",
                 "operation_type": "DAT",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
-                "transmission_format": "ERS",
+                "transmission_format": "FLUX",
                 "vessel_name": "COURANT MAIN PROFESSEUR",
                 "trip_gears:jsonb": [
                     { "gear": "PT", "mesh": 100, "dimensions": "250;180" },
@@ -163,7 +157,7 @@
                 "operation_number": "FAKE_OPERATION_103",
                 "operation_type": "DAT",
                 "report_datetime_utc": "2023-12-31 17:00:00",
-                "transmission_format": "ERS",
+                "transmission_format": "FLUX",
                 "vessel_name": null,
                 "trip_gears:jsonb": [],
                 "trip_segments:jsonb": [],
@@ -191,7 +185,7 @@
                 "operation_number": "FAKE_OPERATION_104",
                 "operation_type": "DAT",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
-                "transmission_format": "ERS",
+                "transmission_format": "FLUX",
                 "vessel_name": "VIVA ESPANA",
                 "trip_gears:jsonb": [
                     { "gear": "TB", "mesh": 100, "dimensions": "250;180" },
@@ -301,7 +295,7 @@
                 "operation_number": "FAKE_OPERATION_105",
                 "operation_type": "DAT",
                 "report_datetime_utc": "2024-03-01 15:00:00",
-                "transmission_format": "ERS",
+                "transmission_format": "FLUX",
                 "vessel_name": "LEVE NEDERLAND",
                 "trip_gears:jsonb": [
                     { "gear": "DHB", "mesh": 20.25, "dimensions": "500;500" },
@@ -356,7 +350,7 @@
                 "operation_number": "FAKE_OPERATION_106",
                 "operation_type": "DAT",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
-                "transmission_format": "ERS",
+                "transmission_format": "FLUX",
                 "vessel_name": "L'OM DU POISSON",
                 "trip_gears:jsonb": [
                     { "gear": "DHB", "mesh": 20.25, "dimensions": "500;500" },
@@ -408,7 +402,7 @@
                 "operation_number": "FAKE_OPERATION_107",
                 "operation_type": "DAT",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
-                "transmission_format": "ERS",
+                "transmission_format": "FLUX",
                 "trip_gears:jsonb": [
                     { "gear": "DHB", "mesh": 20.25, "dimensions": "500;500" },
                     { "gear": "DRM", "mesh": 25.75, "dimensions": "1000;1000" }
@@ -437,8 +431,8 @@
                         }
                     ],
                     "port": "FRSML",
-                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '1 hour', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
-                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '2 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
                     "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
                 }
@@ -456,7 +450,7 @@
                 "operation_number": "FAKE_OPERATION_107_RET",
                 "operation_type": "RET",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
-                "transmission_format": "ERS",
+                "transmission_format": "FLUX",
                 "trip_gears": null,
                 "trip_segments": null,
                 "vessel_name": null,
@@ -481,7 +475,7 @@
                 "operation_number": "FAKE_OPERATION_108",
                 "operation_type": "DAT",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
-                "transmission_format": "ERS",
+                "transmission_format": "FLUX",
                 "trip_gears": null,
                 "trip_segments": null,
                 "vessel_name": "CALAMARO",
@@ -505,8 +499,8 @@
                         }
                     ],
                     "port": "FRSML",
-                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '1 hour', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
-                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '2 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
                     "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
                 }
@@ -524,7 +518,7 @@
                 "operation_number": "FAKE_OPERATION_108_RET",
                 "operation_type": "RET",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
-                "transmission_format": "ERS",
+                "transmission_format": "FLUX",
                 "vessel_name": null,
                 "trip_gears": null,
                 "trip_segments": null,
@@ -549,7 +543,7 @@
                 "operation_number": "FAKE_OPERATION_109",
                 "operation_type": "DAT",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
-                "transmission_format": "ERS",
+                "transmission_format": "FLUX",
                 "trip_gears": null,
                 "trip_segments": null,
                 "vessel_name": "L'ANCRE SÈCHE",
@@ -557,8 +551,8 @@
                     "catchOnboard": [],
                     "pnoTypes": [],
                     "port": "FRSML",
-                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '1 hour', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
-                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '2 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
                     "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
                 }
@@ -576,7 +570,7 @@
                 "operation_number": "FAKE_OPERATION_109_COR",
                 "operation_type": "COR",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
-                "transmission_format": "ERS",
+                "transmission_format": "FLUX",
                 "vessel_name": "L'ANCRE SÈCHE",
                 "trip_gears": null,
                 "trip_segments": null,
@@ -600,8 +594,8 @@
                         }
                     ],
                     "port": "FRVNE",
-                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '1 hour', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
-                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '2 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
                     "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
                 }
@@ -622,7 +616,7 @@
                 "operation_number": "FAKE_OPERATION_110",
                 "operation_type": "DAT",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
-                "transmission_format": "ERS",
+                "transmission_format": "FLUX",
                 "trip_gears": null,
                 "trip_segments": null,
                 "vessel_name": "MERLU L'ENCHANTEUR",
@@ -646,8 +640,8 @@
                         }
                     ],
                     "port": "FRBES",
-                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '1 hour', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
-                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '2 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
                     "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
                 }
@@ -665,7 +659,7 @@
                 "operation_number": "FAKE_OPERATION_110_DEL",
                 "operation_type": "DEL",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
-                "transmission_format": "ERS",
+                "transmission_format": "FLUX",
                 "vessel_name": null,
                 "trip_gears": null,
                 "trip_segments": null,
@@ -688,7 +682,7 @@
                 "operation_number": "FAKE_OPERATION_111_COR_ORPHAN",
                 "operation_type": "COR",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
-                "transmission_format": "ERS",
+                "transmission_format": "FLUX",
                 "vessel_name": "LE POISSON AMBULANT",
                 "trip_gears": null,
                 "trip_segments": null,
@@ -712,8 +706,8 @@
                         }
                     ],
                     "port": "FRNCE",
-                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '1 hour', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
-                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '2 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
                     "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
                 }
@@ -734,7 +728,7 @@
                 "operation_number": "FAKE_OPERATION_112",
                 "operation_type": "DAT",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
-                "transmission_format": "ERS",
+                "transmission_format": "FLUX",
                 "vessel_name": null,
                 "trip_gears": null,
                 "trip_segments": null,
@@ -813,20 +807,20 @@
                         }
                     ],
                     "port": "FRVNE",
-                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '1 hour', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
-                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '2 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
                     "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
                 }
             },
 
-            // - Vessel: PHENOMENE
+            // - Vessel: LA MER À BOIRE
             // - Without port (=> without seafront)
             {
                 "id": 114,
                 "report_id": "FAKE_OPERATION_114",
                 "referenced_report_id": null,
-                "cfr": "FAK000999999",
+                "cfr": "CFR110",
                 "enriched": true,
                 "flag_state": "FRA",
                 "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '6 hours'",
@@ -836,189 +830,15 @@
                 "operation_type": "DAT",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '6 hours'",
                 "transmission_format": "FLUX",
-                "vessel_name": "PHENOMENE",
+                "vessel_name": "LA MER À BOIRE",
                 "trip_gears:jsonb": [],
                 "trip_segments:jsonb": [],
                 "value:jsonb": {
                     "catchOnboard": [],
                     "pnoTypes": [],
                     "port": null,
-                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '1 hour', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
-                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '2 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
-                    "purpose": "LAN",
-                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '20 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
-                }
-            },
-
-            // - Vessel: PHENOMENE
-            {
-                "id": 115,
-                "report_id": "FAKE_OPERATION_115",
-                "referenced_report_id": null,
-                "cfr": "FAK000999999",
-                "enriched": true,
-                "flag_state": "FRA",
-                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '6 hours'",
-                "log_type": "PNO",
-                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '6 hours'",
-                "operation_number": "FAKE_OPERATION_115",
-                "operation_type": "DAT",
-                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '6 hours'",
-                "transmission_format": "FLUX",
-                "vessel_name": "PHENOMENE",
-                "trip_gears:jsonb": [],
-                "trip_segments:jsonb": [],
-                "value:jsonb": {
-                    "catchOnboard": [],
-                    "pnoTypes": [],
-                    "port": "FRSML",
-                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '1 hour', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
-                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '2 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
-                    "purpose": "LAN",
-                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '20 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
-                }
-            },
-
-            // - Vessel: PHENOMENE
-            {
-                "id": 116,
-                "report_id": "FAKE_OPERATION_116",
-                "referenced_report_id": null,
-                "cfr": "FAK000999999",
-                "enriched": true,
-                "flag_state": "FRA",
-                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '6 hours'",
-                "log_type": "PNO",
-                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '6 hours'",
-                "operation_number": "FAKE_OPERATION_116",
-                "operation_type": "DAT",
-                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '6 hours'",
-                "transmission_format": "FLUX",
-                "vessel_name": "PHENOMENE",
-                "trip_gears:jsonb": [],
-                "trip_segments:jsonb": [],
-                "value:jsonb": {
-                    "catchOnboard": [],
-                    "pnoTypes": [],
-                    "port": "FRSML",
-                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '1 hour', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
-                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '2 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
-                    "purpose": "LAN",
-                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '20 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
-                }
-            },
-
-            // - Vessel: PHENOMENE
-            {
-                "id": 117,
-                "report_id": "FAKE_OPERATION_117",
-                "referenced_report_id": null,
-                "cfr": "FAK000999999",
-                "enriched": true,
-                "flag_state": "FRA",
-                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '6 hours'",
-                "log_type": "PNO",
-                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '6 hours'",
-                "operation_number": "FAKE_OPERATION_117",
-                "operation_type": "DAT",
-                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '6 hours'",
-                "transmission_format": "FLUX",
-                "vessel_name": "PHENOMENE",
-                "trip_gears:jsonb": [],
-                "trip_segments:jsonb": [],
-                "value:jsonb": {
-                    "catchOnboard": [],
-                    "pnoTypes": [],
-                    "port": "FRSML",
-                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '1 hour', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
-                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '2 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
-                    "purpose": "LAN",
-                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '20 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
-                }
-            },
-
-            // - Vessel: PHENOMENE
-            {
-                "id": 118,
-                "report_id": "FAKE_OPERATION_118",
-                "referenced_report_id": null,
-                "cfr": "FAK000999999",
-                "enriched": true,
-                "flag_state": "FRA",
-                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '6 hours'",
-                "log_type": "PNO",
-                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '6 hours'",
-                "operation_number": "FAKE_OPERATION_118",
-                "operation_type": "DAT",
-                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '6 hours'",
-                "transmission_format": "FLUX",
-                "vessel_name": "PHENOMENE",
-                "trip_gears:jsonb": [],
-                "trip_segments:jsonb": [],
-                "value:jsonb": {
-                    "catchOnboard": [],
-                    "pnoTypes": [],
-                    "port": "FRSML",
-                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '1 hour', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
-                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '2 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
-                    "purpose": "LAN",
-                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '20 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
-                }
-            },
-
-            // - Vessel: PHENOMENE
-            {
-                "id": 119,
-                "report_id": "FAKE_OPERATION_119",
-                "referenced_report_id": null,
-                "cfr": "FAK000999999",
-                "enriched": true,
-                "flag_state": "FRA",
-                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '6 hours'",
-                "log_type": "PNO",
-                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '6 hours'",
-                "operation_number": "FAKE_OPERATION_119",
-                "operation_type": "DAT",
-                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '6 hours'",
-                "transmission_format": "FLUX",
-                "vessel_name": "PHENOMENE",
-                "trip_gears:jsonb": [],
-                "trip_segments:jsonb": [],
-                "value:jsonb": {
-                    "catchOnboard": [],
-                    "pnoTypes": [],
-                    "port": "FRSML",
-                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '1 hour', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
-                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '2 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
-                    "purpose": "LAN",
-                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '20 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
-                }
-            },
-
-            // - Vessel: PHENOMENE
-            {
-                "id": 120,
-                "report_id": "FAKE_OPERATION_120",
-                "referenced_report_id": null,
-                "cfr": "FAK000999999",
-                "enriched": true,
-                "flag_state": "FRA",
-                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '6 hours'",
-                "log_type": "PNO",
-                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '6 hours'",
-                "operation_number": "FAKE_OPERATION_120",
-                "operation_type": "DAT",
-                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '6 hours'",
-                "transmission_format": "FLUX",
-                "vessel_name": "PHENOMENE",
-                "trip_gears:jsonb": [],
-                "trip_segments:jsonb": [],
-                "value:jsonb": {
-                    "catchOnboard": [],
-                    "pnoTypes": [],
-                    "port": "FRSML",
-                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '1 hour', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
-                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '2 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
                     "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '20 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
                 }

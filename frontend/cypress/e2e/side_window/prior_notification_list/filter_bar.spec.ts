@@ -11,6 +11,38 @@ import type { PriorNotification } from '@features/PriorNotification/PriorNotific
 context('Side Window > Prior Notification List > Filter Bar', () => {
   const apiPathBase = '/bff/v1/prior_notifications?'
 
+  it('Should filter prior notifications by seafront group', () => {
+    openSideWindowPriorNotificationList()
+
+    cy.intercept('GET', `${apiPathBase}*seafrontGroup=MEMN*`).as('getPriorNotificationsForMEMN')
+
+    cy.getDataCy('side-window-sub-menu-MEMN').click()
+
+    cy.wait('@getPriorNotificationsForMEMN')
+
+    cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 0)
+
+    cy.intercept('GET', `${apiPathBase}*seafrontGroup=NONE*`).as('getPriorNotificationsForNONE')
+
+    cy.getDataCy('side-window-sub-menu-NONE').click()
+
+    cy.wait('@getPriorNotificationsForNONE')
+
+    cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 0)
+  })
+
+  it('Should filter prior notifications by vessel name (search input)', () => {
+    openSideWindowPriorNotificationList()
+
+    cy.intercept('GET', `${apiPathBase}*searchQuery=pheno*`).as('getPriorNotifications')
+
+    cy.fill('Rechercher un navire', 'pheno')
+
+    cy.wait('@getPriorNotifications')
+
+    cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 0)
+  })
+
   it('Should filter prior notifications by countries', () => {
     openSideWindowPriorNotificationList()
 
@@ -77,6 +109,27 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
     cy.fill('Date du dernier contrôle', 'Contrôlé il y a moins d’1 mois')
 
     cy.wait('@getPriorNotifications')
+
+    cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 0)
+  })
+
+  it('Should filter prior notifications with or without reportings', () => {
+    openSideWindowPriorNotificationList()
+
+    cy.intercept('GET', `${apiPathBase}*hasOneOrMoreReportings=true*`).as('getPriorNotificationsWithReportings')
+
+    cy.fill('Sans signalement', false)
+
+    cy.wait('@getPriorNotificationsWithReportings')
+
+    cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 0)
+
+    cy.intercept('GET', `${apiPathBase}*hasOneOrMoreReportings=false*`).as('getPriorNotificationsWithoutReportings')
+
+    cy.fill('Avec signalements', false)
+    cy.fill('Sans signalement', true)
+
+    cy.wait('@getPriorNotificationsWithoutReportings')
 
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 0)
   })
@@ -184,6 +237,31 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
     )
 
     cy.fill('Types de préavis', ['Préavis type A', 'Préavis type C'])
+
+    cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 0)
+  })
+
+  it('Should filter prior notifications for vessels with length < or >= 12 meters', () => {
+    openSideWindowPriorNotificationList()
+
+    cy.intercept('GET', `${apiPathBase}*isLessThanTwelveMetersVessel=true*`).as(
+      'getPriorNotificationsForVesselsWithLengthLessThanTwelveMeters'
+    )
+
+    cy.fill('Navires ≥ 12 m', false)
+
+    cy.wait('@getPriorNotificationsForVesselsWithLengthLessThanTwelveMeters')
+
+    cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 0)
+
+    cy.intercept('GET', `${apiPathBase}*isLessThanTwelveMetersVessel=false*`).as(
+      'getPriorNotificationsForVesselsWithLengthGreaterTwelveMeters'
+    )
+
+    cy.fill('Navires < 12 m', false)
+    cy.fill('Navires ≥ 12 m', true)
+
+    cy.wait('@getPriorNotificationsForVesselsWithLengthGreaterTwelveMeters')
 
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 0)
   })

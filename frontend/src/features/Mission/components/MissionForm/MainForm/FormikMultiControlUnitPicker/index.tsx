@@ -38,7 +38,7 @@ export function FormikMultiControlUnitPicker({
 
   const controlUnitsQuery = useGetLegacyControlUnitsQuery(undefined)
 
-  const { administrationsAsOptions: allAdministrationsAsOptions } = useMemo(
+  const { administrationsAsOptions: activeAdministrationsAsOptions } = useMemo(
     () => getControlUnitsOptionsFromControlUnits(controlUnitsQuery.data),
     [controlUnitsQuery.data]
   )
@@ -103,7 +103,7 @@ export function FormikMultiControlUnitPicker({
           <ControlUnitSelect
             // eslint-disable-next-line react/no-array-index-key
             key={`${controlUnit.id}-${index}`}
-            allAdministrationsAsOptions={allAdministrationsAsOptions}
+            activeAdministrationsAsOptions={activeAdministrationsAsOptions}
             allControlUnits={controlUnitsQuery.data ?? []}
             error={errors[index]}
             index={index}

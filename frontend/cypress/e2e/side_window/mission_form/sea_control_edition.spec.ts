@@ -2,7 +2,7 @@ import { editSideWindowMission } from './utils'
 import { SeafrontGroup } from '../../../../src/constants/seafront'
 import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
-import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
+import { editSideWindowMissionListMissionWithId, openSideWindowMissionList } from '../mission_list/utils'
 
 context('Side Window > Mission Form > Sea Control Edition', () => {
   beforeEach(() => {
@@ -419,5 +419,37 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
     // Then
     cy.clickButton('Fermer')
     cy.get('.Component-Dialog').should('not.exist')
+  })
+
+  it('Should not disable the "Enregistrer" button When the mission is valid but incomplete', () => {
+    // Given
+    openSideWindowMissionList()
+    cy.getDataCy(`side-window-sub-menu-${SeafrontGroup.MED}`).click()
+    cy.fill('Statut de mission', undefined)
+    cy.fill('Etat des données', ['À compléter'])
+    cy.get('.Table').find(`.TableBodyRow[data-id="43"]`).clickButton('Éditer la mission')
+
+    cy.get('[id="mission_control_unit_administration_0"]').contains('DREAL')
+    cy.get('[id="mission_control_unit_name_0"]').contains('DREAL Pays-de-La-Loire')
+    cy.clickButton('Supprimer l’action')
+    cy.wait(500)
+    cy.get('button:contains("Enregistrer")').should('not.be.disabled')
+
+    // When, we add an incomplete control
+    cy.fill('Types de mission', ['Air'])
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle aérien')
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    cy.get('input[placeholder="Rechercher un navire..."]').type('pheno')
+    cy.contains('mark', 'PHENO').click()
+    const dateTime = getUtcDateInMultipleFormats('2023-03-06T23:59:59Z')
+    cy.fill('Date et heure du contrôle', dateTime.utcDateTupleWithTime)
+
+    cy.get('button:contains("Enregistrer")').should('be.disabled')
+
+    cy.fill('Saisi par', 'Marlin')
+
+    // Then, the form is valid but incomplete (the completed by field is missing)
+    cy.get('button:contains("Enregistrer")').should('not.be.disabled')
   })
 })

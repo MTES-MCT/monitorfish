@@ -311,7 +311,7 @@ class MissionActionsControllerITests {
                         "internalReferenceNumber": "FRA000936666",
                         "externalReferenceNumber": "SEGESGES",
                         "ircs": "FEFGEGSGE",
-                        "flagState": null",
+                        "flagState": null,
                         "districtCode": "AD",
                         "faoAreas": [],
                         "flightGoals": [],

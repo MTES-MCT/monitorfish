@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.converters.CountryCodeConverter
 import jakarta.persistence.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -35,7 +36,8 @@ data class VesselEntity(
     val vesselName: String? = null,
     // ISO Alpha-2 country code
     @Column(name = "flag_state")
-    val flagState: String? = null,
+    @Convert(converter = CountryCodeConverter::class)
+    val flagState: CountryCode,
     @Column(name = "width")
     val width: Double? = null,
     @Column(name = "length")
@@ -87,14 +89,7 @@ data class VesselEntity(
             mmsi = mmsi,
             externalReferenceNumber = externalReferenceNumber,
             vesselName = vesselName,
-            flagState = flagState?.let {
-                try {
-                    CountryCode.valueOf(flagState)
-                } catch (e: IllegalArgumentException) {
-                    logger.warn(e.message)
-                    CountryCode.UNDEFINED
-                }
-            } ?: CountryCode.UNDEFINED,
+            flagState = flagState,
             width = width,
             length = length,
             district = district,

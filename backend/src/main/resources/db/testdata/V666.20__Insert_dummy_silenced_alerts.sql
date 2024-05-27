@@ -23,7 +23,7 @@ VALUES ('NATUREL NON FUIR', 'ABC000571489', 'IS726385', 'LRED', 'INTERNAL_REFERE
                                               '"natinfCode": 27689' ||
                                               '}')::jsonb),
        ('FORTUNE ARME ABATTRE', 'ABC000677933', 'IG415546', 'UTIG', 'INTERNAL_REFERENCE_NUMBER',
-        'FR', NOW() + ('24 HOURS')::interval, ('{' ||
+        'X', NOW() + ('24 HOURS')::interval, ('{' ||
                                                '"seaFront": "NAMO",' ||
                                                '"riskFactor": 3.6947,' ||
                                                '"type": "THREE_MILES_TRAWLING_ALERT",' ||

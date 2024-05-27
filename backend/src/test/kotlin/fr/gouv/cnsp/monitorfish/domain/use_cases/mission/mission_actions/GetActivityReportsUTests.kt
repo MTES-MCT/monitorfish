@@ -422,7 +422,7 @@ class GetActivityReportsUTests {
                 isFromPoseidon = false,
                 completion = Completion.TO_COMPLETE,
                 flagState = CountryCode.FR,
-                userTrigram = "CPAMOI"
+                userTrigram = "CPAMOI",
             ),
         )
         given(missionActionsRepository.findControlsInDates(any(), any())).willReturn(controls)

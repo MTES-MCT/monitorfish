@@ -2,7 +2,7 @@ import { useClickOutsideWhenOpenedWithinRef } from '@hooks/useClickOutsideWhenOp
 import { useEscapeFromKeyboard } from '@hooks/useEscapeFromKeyboard'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Icon, IconButton, Link, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, Link } from '@mtes-mct/monitor-ui'
 import { undefinedize } from '@utils/undefinedize'
 import Fuse from 'fuse.js'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -246,7 +246,7 @@ const Input = styled.input<{
   border: ${p => (p.hasError ? '1px solid red' : 'none')};
   border-radius: 0;
   border-radius: 2px;
-  color: ${THEME.color.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   font-size: 13px;
   font-weight: 500;
   height: 40px;

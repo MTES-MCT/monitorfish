@@ -109,13 +109,9 @@ class PriorNotificationController(
             .mapNotNull { PriorNotificationDataOutput.fromPriorNotification(it) }
 
         val extraDataOutput = PriorNotificationsExtraDataOutput(
-            perSeafrontGroupCount = SeafrontGroup.entries.associateWith { it ->
-                if (it == SeafrontGroup.ALL) {
-                    return@associateWith priorNotifications.size
-                }
-
+            perSeafrontGroupCount = SeafrontGroup.entries.associateWith { seafrontGroupEntry ->
                 priorNotifications.count { priorNotification ->
-                    SeafrontGroup.fromSeafront(priorNotification.seafront) == it
+                    seafrontGroupEntry.hasSeafront(priorNotification.seafront)
                 }
             },
         )

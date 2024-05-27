@@ -1,15 +1,17 @@
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, getOptionsFromIdAndName, Icon, IconButton, MultiSelect, Select, TextInput } from '@mtes-mct/monitor-ui'
-import { getOptionsFromStrings } from '@utils/getOptionsFromStrings'
-import { isNotArchived } from '@utils/isNotArchived'
 import { useField } from 'formik'
 import { sortBy, uniqBy } from 'lodash'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { ControlUnitWarningMessage } from './ControlUnitWarningMessage'
-import { mapToSortedResourcesAsOptions } from './utils'
+import {
+  getActiveAndSelectedAdministrationAsOptions,
+  getActiveAndSelectedControlUnits,
+  mapToSortedResourcesAsOptions
+} from './utils'
 import { useGetEngagedControlUnitsQuery } from '../../../../monitorenvMissionApi'
 import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'
 import { missionFormActions } from '../../slice'
@@ -52,31 +54,16 @@ export function ControlUnitSelect({
   )
 
   // Include archived control units (and administrations) of not found control units if they're already selected
-  const activeAndSelectedControlUnits = useMemo(() => {
-    const allActiveControlUnits =
-      allControlUnits.filter(controlUnit => isNotArchived(controlUnit) || value.name === controlUnit.name) || []
-
-    const isSelectedControlUnitFound =
-      value.name && allActiveControlUnits.find(controlUnit => controlUnit.name === value.name)
-    // If the control unit is not found and the administration is set
-    if (!isSelectedControlUnitFound && value.administration && value.name) {
-      return allActiveControlUnits.concat(value as LegacyControlUnit.LegacyControlUnit)
-    }
-
-    return allActiveControlUnits
-  }, [allControlUnits, value])
+  const activeAndSelectedControlUnits = useMemo(
+    () => getActiveAndSelectedControlUnits(allControlUnits, value),
+    [allControlUnits, value]
+  )
 
   // Include missing administration
-  const activeAndSelectedAdministrationAsOptions = useMemo(() => {
-    const isAdministrationFound = activeAdministrationsAsOptions.find(
-      administration => administration.value === value.administration
-    )
-    if (!isAdministrationFound && value.administration) {
-      return activeAdministrationsAsOptions.concat(getOptionsFromStrings([value.administration]))
-    }
-
-    return activeAdministrationsAsOptions
-  }, [activeAdministrationsAsOptions, value])
+  const activeAndSelectedAdministrationAsOptions = useMemo(
+    () => getActiveAndSelectedAdministrationAsOptions(activeAdministrationsAsOptions, value),
+    [activeAdministrationsAsOptions, value]
+  )
 
   const isLoading = !allControlUnits.length
   const isEdition = selectedPath.id

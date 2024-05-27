@@ -34,7 +34,6 @@ import {
 } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { SideWindowMenuKey } from 'domain/entities/sideWindow/constants'
-import { every } from 'lodash'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { NoRsuiteOverrideWrapper } from 'ui/NoRsuiteOverrideWrapper'
@@ -135,7 +134,7 @@ export function MissionForm() {
 
   const isMissionFormValid = useMemo(() => {
     const isMainFormValid = MainFormLiveSchema.isValidSync(mainFormValues)
-    const areAllActionsValid = every(actionsFormValues, actionFormValues =>
+    const areAllActionsValid = actionsFormValues.every(actionFormValues =>
       isMissionActionFormValid(actionFormValues, false)
     )
 

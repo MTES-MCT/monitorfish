@@ -79,8 +79,8 @@ export function VesselField() {
             disabled={values.vesselId === UNKNOWN_VESSEL.vesselId}
             extendedWidth={400}
             hasError={!!errors.vesselId}
-            hasVesselIdInResults
             isExtended
+            isVesselIdRequiredFromResults
             onChange={handleVesselSearchChange}
           />
         </Field>

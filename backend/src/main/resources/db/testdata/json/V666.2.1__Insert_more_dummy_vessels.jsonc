@@ -134,6 +134,19 @@
                 "flag_state": "FR",
                 "length": 50,
                 "under_charter": true
+            },
+
+            // - Vessel: LA MER À BOIRE
+            {
+                "id": 110,
+                "cfr": "CFR110",
+                "mmsi": "MMSI110",
+                "ircs": "IRCS110",
+                "external_immatriculation": "EXTIMM110",
+                "vessel_name": "LA MER À BOIRE",
+                "flag_state": "FR",
+                "length": 12.5,
+                "under_charter": false
             }
         ]
     }

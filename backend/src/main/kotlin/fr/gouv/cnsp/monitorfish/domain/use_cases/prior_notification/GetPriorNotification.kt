@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.config.UseCase
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTyped
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
@@ -55,6 +56,8 @@ class GetPriorNotification(
                     null
                 }
 
+                val seafront = port?.facade?.let { Seafront.valueOf(it) }
+
                 // Default to UNKNOWN vessel when null or not found
                 val vessel = priorNotification.logbookMessageTyped.logbookMessage
                     .internalReferenceNumber?.let { vesselInternalReferenceNumber ->
@@ -68,7 +71,7 @@ class GetPriorNotification(
                 val finalPriorNotification = priorNotification.copy(
                     logbookMessageTyped = LogbookMessageTyped(logbookMessageWithRawMessage, PNO::class.java),
                     port = port,
-                    seafront = port?.facade,
+                    seafront = seafront,
                     vessel = vessel,
                     vesselRiskFactor = vesselRiskFactor,
                 )

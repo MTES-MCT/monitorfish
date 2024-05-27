@@ -24,7 +24,6 @@ export function Row({ row }: RowProps) {
           <ExpandableRowCell
             key={cell.id}
             $hasRightBorder={cell.column.id === 'alertCount'}
-            $width={cell.column.getSize()}
             onClick={() => row.toggleExpanded()}
           >
             {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -34,8 +33,8 @@ export function Row({ row }: RowProps) {
 
       {row.getIsExpanded() && (
         <ExpandedRow>
-          <ExpandedRowCell $width={40} />
-          <ExpandedRowCell $width={130}>
+          <ExpandedRowCell />
+          <ExpandedRowCell>
             <p>
               <ExpandedRowLabel>PNO émis :</ExpandedRowLabel>
               <ExpandedRowValue>
@@ -79,7 +78,7 @@ export function Row({ row }: RowProps) {
               )}
             </TagGroup>
           </ExpandedRowCell>
-          <ExpandedRowCell $width={120}>
+          <ExpandedRowCell>
             <p>
               <ExpandedRowLabel>Raison du PNO :</ExpandedRowLabel>
               <ExpandedRowValue>
@@ -87,9 +86,9 @@ export function Row({ row }: RowProps) {
               </ExpandedRowValue>
             </p>
           </ExpandedRowCell>
-          <ExpandedRowCell $width={140} />
-          <ExpandedRowCell $width={50} />
-          <ExpandedRowCell $width={160}>
+          <ExpandedRowCell />
+          <ExpandedRowCell />
+          <ExpandedRowCell>
             <p>
               {!!priorNotification.vesselInternalReferenceNumber && (
                 <ExpandedRowValue $isLight>{priorNotification.vesselInternalReferenceNumber} (CFR)</ExpandedRowValue>
@@ -119,7 +118,7 @@ export function Row({ row }: RowProps) {
               </ExpandedRowValue>
             </p>
           </ExpandedRowCell>
-          <ExpandedRowCell $width={130}>
+          <ExpandedRowCell>
             <ExpandedRowLabel>Nom des segments :</ExpandedRowLabel>
             {priorNotification.tripSegments.length > 0 ? (
               <ExpandedRowList>
@@ -131,7 +130,7 @@ export function Row({ row }: RowProps) {
               <None>Aucun segment.</None>
             )}
           </ExpandedRowCell>
-          <ExpandedRowCell $width={200}>
+          <ExpandedRowCell>
             <ExpandedRowLabel>Principales espèces à bord :</ExpandedRowLabel>
             {priorNotification.onBoardCatches.length > 0 ? (
               <ExpandedRowList>
@@ -151,8 +150,8 @@ export function Row({ row }: RowProps) {
               </Link>
             </p>
           </ExpandedRowCell>
-          <ExpandedRowCell $width={72} />
-          <ExpandedRowCell $width={64} />
+          <ExpandedRowCell />
+          <ExpandedRowCell />
         </ExpandedRow>
       )}
     </>
@@ -162,9 +161,7 @@ export function Row({ row }: RowProps) {
 // TODO Update in monitor-ui.
 const ExpandableRowCell = styled(TableWithSelectableRows.Td)`
   cursor: pointer;
-  padding: 0 16px 1px;
   user-select: none;
-  vertical-align: middle;
 `
 
 // TODO Add this feature in monitor-ui.

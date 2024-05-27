@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.config.UseCase
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.filters.LogbookReportFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.sorters.LogbookReportSortColumn
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
@@ -28,7 +29,7 @@ class GetPriorNotifications(
         sortDirection: Sort.Direction,
         pageSize: Int,
         pageNumber: Int,
-    ): Pair<List<PriorNotification>, Int> {
+    ): List<PriorNotification> {
         val allGears = gearRepository.findAll()
         val allPorts = portRepository.findAll()
         val allRiskFactors = riskFactorRepository.findAll()
@@ -56,9 +57,11 @@ class GetPriorNotifications(
                     allRiskFactors.find { it.internalReferenceNumber == vesselInternalReferenceNumber }
                 }
 
+                val seafront: Seafront? = port?.facade?.let { Seafront.valueOf(it) }
+
                 val finalPriorNotification = priorNotification.copy(
                     port = port,
-                    seafront = port?.facade,
+                    seafront = seafront,
                     vessel = vessel,
                     vesselRiskFactor = vesselRiskFactor,
                 )
@@ -71,18 +74,23 @@ class GetPriorNotifications(
         val priorNotifications = enrichPriorNotificationsWithReportingCount(priorNotificationsWithoutReportingsCount)
 
         val sortedPriorNotifications = when (sortDirection) {
-            Sort.Direction.ASC -> priorNotifications.sortedWith(compareBy { getSortKey(it, sortColumn) })
-            Sort.Direction.DESC -> priorNotifications.sortedWith(compareByDescending { getSortKey(it, sortColumn) })
+            Sort.Direction.ASC -> priorNotifications.sortedWith(
+                compareBy(
+                    { getSortKey(it, sortColumn) },
+                    { it.logbookMessageTyped.logbookMessage.id },
+                ),
+            )
+
+            Sort.Direction.DESC -> priorNotifications.sortedWith(
+                // Only solution found to fix typing issues
+                compareByDescending<PriorNotification> { getSortKey(it, sortColumn) }
+                    .thenByDescending { it.logbookMessageTyped.logbookMessage.id }, // Tie-breaker
+            )
         }
         val sortedPriorNotificationsWithoutDeletedOnes = sortedPriorNotifications
             .filter { !it.logbookMessageTyped.logbookMessage.isDeleted }
 
-        return Pair(
-            sortedPriorNotificationsWithoutDeletedOnes
-                .drop(pageNumber * pageSize)
-                .take(pageSize),
-            sortedPriorNotificationsWithoutDeletedOnes.size,
-        )
+        return sortedPriorNotificationsWithoutDeletedOnes
     }
 
     private fun enrichPriorNotificationsWithReportingCount(

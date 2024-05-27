@@ -1,4 +1,5 @@
 import type { AnyEnum, CollectionItem } from '@mtes-mct/monitor-ui'
+import type { AnyObject } from 'yup'
 
 export namespace BackendApi {
   // ---------------------------------------------------------------------------
@@ -26,8 +27,13 @@ export namespace BackendApi {
     value: boolean
   }
 
-  export type ResponseBodyPaginatedList<T extends CollectionItem = CollectionItem> = {
-    data: T[]
+  export type ResponseBodyPaginatedList<
+    ItemData extends CollectionItem = CollectionItem,
+    ExtraData extends AnyObject | undefined = undefined
+  > = {
+    data: ItemData[]
+    /** Useful to pass custom extraneous data. */
+    extraData: ExtraData
     /** Last page index. */
     lastPageNumber: number
     /** Page index. */

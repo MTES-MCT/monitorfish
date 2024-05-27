@@ -16,21 +16,21 @@ export const TABLE_COLUMNS: Array<ColumnDef<PriorNotification.PriorNotification,
     accessorFn: row => row.id,
     cell: ({ row }) => (
       <TableWithSelectableRows.RowCheckbox
+        checked={row.getIsSelected()}
         disabled={!row.getCanSelect()}
-        isChecked={row.getIsSelected()}
         onChange={row.getToggleSelectedHandler()}
       />
     ),
     enableSorting: false,
     header: ({ table }) => (
       <TableWithSelectableRows.RowCheckbox
-        isChecked={table.getIsAllRowsSelected()}
-        isIndeterminate={table.getIsSomeRowsSelected()}
+        checked={table.getIsAllRowsSelected()}
+        indeterminate={table.getIsSomeRowsSelected()}
         onChange={table.getToggleAllRowsSelectedHandler()}
       />
     ),
     id: 'select',
-    size: 40
+    size: 25
   },
   {
     accessorFn: row => row.expectedArrivalDate,
@@ -42,7 +42,7 @@ export const TABLE_COLUMNS: Array<ColumnDef<PriorNotification.PriorNotification,
     enableSorting: true,
     header: () => 'Arrivée estimée',
     id: LogbookMessage.ApiSortColumn.EXPECTED_ARRIVAL_DATE,
-    size: 130
+    size: 160
   },
   {
     accessorFn: row => row.expectedLandingDate,
@@ -54,7 +54,7 @@ export const TABLE_COLUMNS: Array<ColumnDef<PriorNotification.PriorNotification,
     enableSorting: true,
     header: () => 'Débarque prévue',
     id: LogbookMessage.ApiSortColumn.EXPECTED_LANDING_DATE,
-    size: 120
+    size: 160
   },
   {
     accessorFn: row => (!!row.portLocode && !!row.portName ? `${row.portName} (${row.portLocode})` : '-'),
@@ -64,7 +64,7 @@ export const TABLE_COLUMNS: Array<ColumnDef<PriorNotification.PriorNotification,
     enableSorting: true,
     header: () => "Port d'arrivée",
     id: LogbookMessage.ApiSortColumn.PORT_NAME,
-    size: 140
+    size: 192
   },
   {
     accessorFn: row => row.vesselRiskFactor,
@@ -86,7 +86,7 @@ export const TABLE_COLUMNS: Array<ColumnDef<PriorNotification.PriorNotification,
     enableSorting: true,
     header: () => 'Note',
     id: LogbookMessage.ApiSortColumn.VESSEL_RISK_FACTOR,
-    size: 50
+    size: 95
   },
   {
     accessorFn: row => row.vesselName ?? (row.vesselId === -1 ? 'Navire inconnu' : '-'),
@@ -103,7 +103,7 @@ export const TABLE_COLUMNS: Array<ColumnDef<PriorNotification.PriorNotification,
     enableSorting: true,
     header: () => 'Nom',
     id: LogbookMessage.ApiSortColumn.VESSEL_NAME,
-    size: 160
+    size: 204
   },
   {
     accessorFn: row =>
@@ -113,7 +113,7 @@ export const TABLE_COLUMNS: Array<ColumnDef<PriorNotification.PriorNotification,
     enableSorting: false,
     header: () => 'Segments',
     id: 'tripSegments',
-    size: 130
+    size: 168
   },
   {
     accessorFn: row =>
@@ -125,7 +125,7 @@ export const TABLE_COLUMNS: Array<ColumnDef<PriorNotification.PriorNotification,
     enableSorting: false,
     header: () => 'Types de préavis',
     id: 'types',
-    size: 200
+    size: 224
   },
   {
     accessorFn: row => row.reportingsCount,
@@ -148,7 +148,7 @@ export const TABLE_COLUMNS: Array<ColumnDef<PriorNotification.PriorNotification,
     enableSorting: false,
     header: () => '',
     id: 'alertCount',
-    size: 72
+    size: 94
   },
   {
     accessorFn: row => row.id,
@@ -158,6 +158,6 @@ export const TABLE_COLUMNS: Array<ColumnDef<PriorNotification.PriorNotification,
     enableSorting: false,
     header: () => '',
     id: 'actions',
-    size: 64
+    size: 88
   }
 ]

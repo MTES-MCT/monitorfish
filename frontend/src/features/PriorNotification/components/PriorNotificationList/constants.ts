@@ -5,14 +5,14 @@ import type { ListFilter } from './types'
 
 /* eslint-disable sort-keys-fix/sort-keys-fix, typescript-sort-keys/string-enum */
 export const SUB_MENU_LABEL: Record<SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup, string> = {
-  ALL_SEAFRONT_GROUP: 'TOUT',
+  ALL: 'TOUT',
   MED: 'MED',
   MEMN: 'MEMN',
   NAMO: 'NAMO',
   SA: 'SA',
   OUTREMEROA: 'O-M OA',
   OUTREMEROI: 'O-M OI',
-  NO_SEAFRONT_GROUP: 'HORS'
+  NONE: 'HORS'
 }
 export const SUB_MENUS_AS_OPTIONS = getOptionsFromLabelledEnum(SUB_MENU_LABEL)
 
@@ -69,6 +69,8 @@ export const DEFAULT_LIST_FILTER_VALUES: ListFilter = {
   searchQuery: undefined,
   specyCodes: undefined
 }
+
+export const DEFAULT_PAGE_SIZE = 10
 
 export const COMMUNITY_PRIOR_NOTIFICATION_TYPES = ['Préavis communautaire', 'Préavis navire tiers']
 export const DESIGNATED_PORTS_PRIOR_NOTIFICATION_TYPE_PREFIX = 'Ports désignés'

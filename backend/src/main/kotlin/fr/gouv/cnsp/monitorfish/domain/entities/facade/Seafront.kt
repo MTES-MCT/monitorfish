@@ -23,7 +23,7 @@ enum class Seafront(private val storedValue: String) {
             return try {
                 entries.first { it.storedValue == storedValue }
             } catch (e: NoSuchElementException) {
-                throw NoSuchElementException("Facade $storedValue not found.", e)
+                throw NoSuchElementException("Seafront $storedValue not found.", e)
             }
         }
     }

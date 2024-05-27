@@ -8,9 +8,9 @@ export enum SeafrontGroup {
   OUTREMEROI = 'OUTREMEROI',
   SA = 'SA'
 }
-export const ALL_SEAFRONT_GROUP = 'ALL_SEAFRONT_GROUP'
+export const ALL_SEAFRONT_GROUP = 'ALL'
 export type AllSeafrontGroup = typeof ALL_SEAFRONT_GROUP
-export const NO_SEAFRONT_GROUP = 'NO_SEAFRONT_GROUP'
+export const NO_SEAFRONT_GROUP = 'NONE'
 export type NoSeafrontGroup = typeof NO_SEAFRONT_GROUP
 
 export enum Seafront {

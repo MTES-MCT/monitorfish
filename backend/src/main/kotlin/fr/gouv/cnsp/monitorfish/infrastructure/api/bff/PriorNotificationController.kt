@@ -1,20 +1,22 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.SeafrontGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.hasSeafront
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.filters.LogbookReportFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.sorters.LogbookReportSortColumn
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotification
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotificationTypes
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotifications
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PaginatedListDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PriorNotificationDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PriorNotificationDetailDataOutput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PriorNotificationListDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PriorNotificationsExtraDataOutput
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.websocket.server.PathParam
 import org.springframework.data.domain.Sort
 import org.springframework.web.bind.annotation.*
-import kotlin.math.floor
 
 @RestController
 @RequestMapping("/bff/v1/prior_notifications")
@@ -67,6 +69,10 @@ class PriorNotificationController(
         @RequestParam(name = "willArriveBefore")
         willArriveBefore: String,
 
+        @Parameter(description = "Seafront group.")
+        @RequestParam(name = "seafrontGroup")
+        seafrontGroup: SeafrontGroup,
+
         @Parameter(description = "Sort column.")
         @RequestParam(name = "sortColumn")
         sortColumn: LogbookReportSortColumn,
@@ -79,7 +85,7 @@ class PriorNotificationController(
         @Parameter(description = "Page number (0-indexed).")
         @RequestParam(name = "pageNumber")
         pageNumber: Int,
-    ): PriorNotificationListDataOutput {
+    ): PaginatedListDataOutput<PriorNotificationDataOutput, PriorNotificationsExtraDataOutput> {
         val logbookReportFilter = LogbookReportFilter(
             flagStates = flagStates,
             hasOneOrMoreReportings = hasOneOrMoreReportings,
@@ -96,18 +102,29 @@ class PriorNotificationController(
             willArriveBefore = willArriveBefore,
         )
 
-        val (priorNotifications, totalLength) = getPriorNotifications
+        val priorNotifications = getPriorNotifications
             .execute(logbookReportFilter, sortColumn, sortDirection, pageSize, pageNumber)
-        val priorNotificationsDataOutput = priorNotifications
+        val priorNotificationDataOutputsFilteredBySeafrontGroup = priorNotifications
+            .filter { seafrontGroup.hasSeafront(it.seafront) }
             .mapNotNull { PriorNotificationDataOutput.fromPriorNotification(it) }
-        val lastPageNumber = floor((totalLength / pageSize).toDouble()).toInt()
 
-        return PriorNotificationListDataOutput(
-            data = priorNotificationsDataOutput,
-            lastPageNumber,
+        val extraDataOutput = PriorNotificationsExtraDataOutput(
+            perSeafrontGroupCount = SeafrontGroup.entries.associateWith { it ->
+                if (it == SeafrontGroup.ALL) {
+                    return@associateWith priorNotifications.size
+                }
+
+                priorNotifications.count { priorNotification ->
+                    SeafrontGroup.fromSeafront(priorNotification.seafront) == it
+                }
+            },
+        )
+
+        return PaginatedListDataOutput.fromListDataOutput(
+            priorNotificationDataOutputsFilteredBySeafrontGroup,
             pageNumber,
             pageSize,
-            totalLength,
+            extraDataOutput,
         )
     }
 

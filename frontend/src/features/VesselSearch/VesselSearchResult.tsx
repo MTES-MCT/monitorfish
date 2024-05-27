@@ -1,5 +1,4 @@
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { THEME } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -57,8 +56,8 @@ export function VesselSearchResult({ foundVessels, searchQuery, selectVessel, sh
 
 const Results = styled.div`
   background: white;
-  color: ${THEME.color.gunMetal};
-  border-bottom: 1px solid ${THEME.color.gainsboro};
+  color: ${p => p.theme.color.gunMetal};
+  border-bottom: 1px solid ${p => p.theme.color.gainsboro};
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
   position: absolute;

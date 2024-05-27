@@ -90,6 +90,19 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.wait(500)
 
+    cy.intercept(
+      'GET',
+      '/bff/v1/vessels/find?vesselId=2&' +
+        'internalReferenceNumber=U_W0NTFINDME&' +
+        'externalReferenceNumber=TALK2ME&' +
+        'IRCS=QGDF&' +
+        'vesselIdentifier=&' +
+        'trackDepth=TWELVE_HOURS&' +
+        'afterDateTime=&beforeDateTime='
+    ).as('showVessel')
+    cy.get('a:contains("Voir la fiche")').click()
+    cy.wait('@showVessel')
+
     // Date et heure du contrôle
     cy.fill('Date et heure du contrôle', now.utcDateTupleWithTime)
 

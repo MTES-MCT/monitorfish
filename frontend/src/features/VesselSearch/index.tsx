@@ -1,4 +1,9 @@
-import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
+import { useClickOutsideWhenOpenedWithinRef } from '@hooks/useClickOutsideWhenOpenedWithinRef'
+import { useEscapeFromKeyboard } from '@hooks/useEscapeFromKeyboard'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { Accent, Icon, IconButton, Link, THEME } from '@mtes-mct/monitor-ui'
+import { undefinedize } from '@utils/undefinedize'
 import Fuse from 'fuse.js'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -6,14 +11,9 @@ import styled from 'styled-components'
 import { VESSEL_SEARCH_OPTIONS } from './constants'
 import { enrichWithVesselIdentifierIfNotFound, removeDuplicatedFoundVessels } from './utils'
 import { VesselSearchResult } from './VesselSearchResult'
-import { COLORS } from '../../constants/constants'
 import { getOnlyVesselIdentityProperties } from '../../domain/entities/vessel/vessel'
 import { searchVessels as searchVesselsAction } from '../../domain/use_cases/vessel/searchVessels'
-import { useClickOutsideWhenOpenedWithinRef } from '../../hooks/useClickOutsideWhenOpenedWithinRef'
-import { useEscapeFromKeyboard } from '../../hooks/useEscapeFromKeyboard'
-import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../hooks/useMainAppSelector'
-import { undefinedize } from '../../utils/undefinedize'
+import { showVessel } from '../../domain/use_cases/vessel/showVessel'
 
 import type { VesselIdentity } from '../../domain/entities/vessel/types'
 import type { ChangeEvent, InputHTMLAttributes, MutableRefObject } from 'react'
@@ -24,9 +24,10 @@ type VesselSearchProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'defaultVal
   defaultValue?: VesselIdentity | undefined
   extendedWidth: number
   hasError?: boolean | undefined
-  hasVesselIdInResults?: boolean
   isExtended: boolean
   isLastSearchedVesselsShowed?: boolean
+  isLinkToVesselSidebarDisplayed?: boolean
+  isVesselIdRequiredFromResults?: boolean
   onChange: (selectedVessel: VesselIdentity | undefined) => Promisable<void>
   onClickOutsideOrEscape?: () => Promisable<void>
   onInputClick?: () => Promisable<void>
@@ -37,26 +38,26 @@ export function VesselSearch({
   defaultValue,
   extendedWidth,
   hasError,
-  hasVesselIdInResults = false,
   isExtended = false,
   isLastSearchedVesselsShowed = false,
+  isLinkToVesselSidebarDisplayed = false,
+  isVesselIdRequiredFromResults = false,
   onChange,
   onClickOutsideOrEscape,
   onInputClick,
   style,
   ...inputNativeProps
 }: VesselSearchProps) {
+  const dispatch = useMainAppDispatch()
+  const baseUrl = useMemo(() => window.location.origin, [])
+  const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
+  const vessels = useMainAppSelector(state => state.vessel.vessels)
   const searchQueryRef = useRef('')
   const wrapperRef = useRef(null)
 
   const [selectedVessel, setSelectedVessel] = useState<VesselIdentity | undefined>(undefined)
   const [foundVessels, setFoundVessels] = useState<VesselIdentity[]>([])
   const [showLastSearchedVessels, setShowLastSearchedVessels] = useState(false)
-
-  const dispatch = useMainAppDispatch()
-  const baseUrl = useMemo(() => window.location.origin, [])
-  const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
-  const vessels = useMainAppSelector(state => state.vessel.vessels)
 
   const escapeFromKeyboard = useEscapeFromKeyboard()
   const clickedOutsideComponent = useClickOutsideWhenOpenedWithinRef(wrapperRef, isExtended, baseRef)
@@ -120,13 +121,13 @@ export function VesselSearch({
       }
 
       const nextFoundVessels = removeDuplicatedFoundVessels(nextFoundVesselsFromAPI, vesselsFromMap)
-      const filteredVessels = hasVesselIdInResults
+      const filteredVessels = isVesselIdRequiredFromResults
         ? nextFoundVessels.filter(_vessel => _vessel.vesselId)
         : nextFoundVessels
 
       return filteredVessels
     },
-    [dispatch, hasVesselIdInResults, fuse]
+    [dispatch, isVesselIdRequiredFromResults, fuse]
   )
 
   const handleChange = useCallback(
@@ -168,6 +169,14 @@ export function VesselSearch({
     }
   }, [clickedOutsideComponent, escapeFromKeyboard, onClickOutsideOrEscape])
 
+  function handleShowVessel() {
+    if (!selectedVessel) {
+      return
+    }
+
+    dispatch(showVessel(selectedVessel, false, true))
+  }
+
   return (
     <Wrapper ref={wrapperRef} className={className} extendedWidth={extendedWidth} isExtended={isExtended} style={style}>
       <InputWrapper>
@@ -190,6 +199,17 @@ export function VesselSearch({
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...inputNativeProps}
         />
+        {vesselName && isLinkToVesselSidebarDisplayed && (
+          <>
+            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+            <Link
+              /* eslint-disable-next-line react/jsx-no-bind */
+              onClick={handleShowVessel}
+            >
+              Voir la fiche
+            </Link>
+          </>
+        )}
         {vesselName && <IconButton accent={Accent.TERTIARY} Icon={Icon.Close} iconSize={14} onClick={clean} />}
       </InputWrapper>
       <VesselSearchResult
@@ -226,7 +246,7 @@ const Input = styled.input<{
   border: ${p => (p.hasError ? '1px solid red' : 'none')};
   border-radius: 0;
   border-radius: 2px;
-  color: ${COLORS.gunMetal};
+  color: ${THEME.color.gunMetal};
   font-size: 13px;
   font-weight: 500;
   height: 40px;
@@ -259,5 +279,13 @@ const InputWrapper = styled.div`
     position: absolute;
     right: 7.5px;
     top: 7.5px;
+  }
+
+  /* Open vessel sidebar link */
+  > a {
+    position: absolute;
+    right: 42px;
+    top: 11px;
+    cursor: pointer;
   }
 `

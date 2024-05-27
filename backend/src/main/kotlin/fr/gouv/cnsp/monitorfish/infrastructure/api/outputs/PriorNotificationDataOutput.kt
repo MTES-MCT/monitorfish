@@ -1,11 +1,12 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class PriorNotificationDataOutput(
+data class PriorNotificationDataOutput(
     /** Reference logbook message (report) `reportId`. */
     val id: String,
     val acknowledgment: AcknowledgmentDataOutput?,
@@ -19,7 +20,7 @@ class PriorNotificationDataOutput(
     val portName: String?,
     val purposeCode: String?,
     val reportingsCount: Int?,
-    val seafront: String?,
+    val seafront: Seafront?,
     val sentAt: String?,
     val tripGears: List<LogbookMessageGearDataOutput>,
     val tripSegments: List<LogbookMessageTripSegmentDataOutput>,

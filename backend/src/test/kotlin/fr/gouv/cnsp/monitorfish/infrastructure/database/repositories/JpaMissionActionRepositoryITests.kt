@@ -1,10 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionType
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils.getDummyMissionAction
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
@@ -176,7 +172,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(throwable).isNotNull()
-        assertThat(throwable.message).contains("Facade BAD_FACADE not found.")
+        assertThat(throwable.message).contains("Seafront BAD_FACADE not found.")
     }
 
     @Test

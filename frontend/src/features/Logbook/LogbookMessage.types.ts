@@ -1,3 +1,5 @@
+import type { AllSeafrontGroup, NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
+
 export namespace LogbookMessage {
   export type LogbookMessage = PnoLogbookMessage | RetOperationLogbookMessage
 
@@ -242,6 +244,10 @@ export namespace LogbookMessage {
     name: string
   }
 
+  export type ApiListExtraData = {
+    perSeafrontGroupCount: Record<SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup, number>
+  }
+
   export type ApiFilter = Partial<{
     flagStates: string[] | undefined
     hasOneOrMoreReportings: boolean | undefined
@@ -250,6 +256,7 @@ export namespace LogbookMessage {
     lastControlledBefore: string | undefined
     portLocodes: string[] | undefined
     priorNotificationTypes: string[] | undefined
+    seafrontGroup: SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup | undefined
     searchQuery: string | undefined
     specyCodes: string[] | undefined
     tripGearCodes: string[] | undefined

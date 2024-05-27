@@ -141,14 +141,12 @@ class GetPriorNotificationsUTests {
         ).execute(defaultFilter, defaultSortColumn, defaultSortDirection, defaultPageSize, defaultPageNumber)
 
         // Then
-        val (priorNotifications, totalLength) = result
-        assertThat(priorNotifications).hasSize(2)
-        assertThat(priorNotifications[0].logbookMessageTyped.logbookMessage.reportId).isEqualTo(
+        assertThat(result).hasSize(2)
+        assertThat(result[0].logbookMessageTyped.logbookMessage.reportId).isEqualTo(
             "FAKE_REPORT_ID_1",
         )
-        assertThat(priorNotifications[1].logbookMessageTyped.logbookMessage.reportId).isEqualTo(
+        assertThat(result[1].logbookMessageTyped.logbookMessage.reportId).isEqualTo(
             "FAKE_REPORT_ID_2_COR",
         )
-        assertThat(totalLength).isEqualTo(2)
     }
 }

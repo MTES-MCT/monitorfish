@@ -65,15 +65,13 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             .execute(defaultFilter, sortColumn, sortDirection, defaultPageSize, defaultPageNumber)
 
         // Then
-        val (priorNotifications, totalLength) = result
-        val firstPriorNotificationWithNonNullArrivalDate = priorNotifications
+        val firstPriorNotificationWithNonNullArrivalDate = result
             .first { it.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc != null }
         assertThat(
             firstPriorNotificationWithNonNullArrivalDate.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc,
         )
             .isBefore(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
-        assertThat(priorNotifications).hasSize(10)
-        assertThat(totalLength).isEqualTo(14)
+        assertThat(result).hasSize(21)
     }
 
     @Test
@@ -88,15 +86,13 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             .execute(defaultFilter, sortColumn, sortDirection, defaultPageSize, defaultPageNumber)
 
         // Then
-        val (priorNotifications, totalLength) = result
-        val firstPriorNotificationWithNonNullArrivalDate = priorNotifications
+        val firstPriorNotificationWithNonNullArrivalDate = result
             .first { it.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc != null }
         assertThat(
             firstPriorNotificationWithNonNullArrivalDate.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc,
         )
             .isAfter(ZonedDateTime.now().minusHours(1))
-        assertThat(priorNotifications).hasSize(10)
-        assertThat(totalLength).isEqualTo(14)
+        assertThat(result).hasSize(21)
     }
 
     @Test
@@ -111,15 +107,13 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             .execute(defaultFilter, sortColumn, sortDirection, defaultPageSize, defaultPageNumber)
 
         // Then
-        val (priorNotifications, totalLength) = result
-        val firstPriorNotificationWithNonNullLandingDate = priorNotifications
+        val firstPriorNotificationWithNonNullLandingDate = result
             .first { it.logbookMessageTyped.typedMessage.predictedLandingDatetimeUtc != null }
         assertThat(
             firstPriorNotificationWithNonNullLandingDate.logbookMessageTyped.typedMessage.predictedLandingDatetimeUtc,
         )
             .isEqualTo(ZonedDateTime.parse("2024-03-01T17:30:00Z"))
-        assertThat(priorNotifications).hasSize(10)
-        assertThat(totalLength).isEqualTo(14)
+        assertThat(result).hasSize(21)
     }
 
     @Test
@@ -134,15 +128,13 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             .execute(defaultFilter, sortColumn, sortDirection, defaultPageSize, defaultPageNumber)
 
         // Then
-        val (priorNotifications, totalLength) = result
-        val firstPriorNotificationWithNonNullLandingDate = priorNotifications
+        val firstPriorNotificationWithNonNullLandingDate = result
             .first { it.logbookMessageTyped.typedMessage.predictedLandingDatetimeUtc != null }
         assertThat(
             firstPriorNotificationWithNonNullLandingDate.logbookMessageTyped.typedMessage.predictedLandingDatetimeUtc,
         )
             .isAfter(ZonedDateTime.now().plusHours(4))
-        assertThat(priorNotifications).hasSize(10)
-        assertThat(totalLength).isEqualTo(14)
+        assertThat(result).hasSize(21)
     }
 
     @Test
@@ -157,12 +149,10 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             .execute(defaultFilter, sortColumn, sortDirection, defaultPageSize, defaultPageNumber)
 
         // Then
-        val (priorNotifications, totalLength) = result
-        val firstPriorNotificationWithNonNullPort = priorNotifications.first { it.port != null }
+        val firstPriorNotificationWithNonNullPort = result.first { it.port != null }
         assertThat(firstPriorNotificationWithNonNullPort.port!!.name).isEqualTo("Al Jazeera Port")
         assertThat(firstPriorNotificationWithNonNullPort.logbookMessageTyped.typedMessage.port).isEqualTo("AEJAZ")
-        assertThat(priorNotifications).hasSize(10)
-        assertThat(totalLength).isEqualTo(14)
+        assertThat(result).hasSize(21)
     }
 
     @Test
@@ -177,12 +167,10 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             .execute(defaultFilter, sortColumn, sortDirection, defaultPageSize, defaultPageNumber)
 
         // Then
-        val (priorNotifications, totalLength) = result
-        val firstPriorNotificationWithNonNullPort = priorNotifications.first { it.port != null }
+        val firstPriorNotificationWithNonNullPort = result.first { it.port != null }
         assertThat(firstPriorNotificationWithNonNullPort.port!!.name).isEqualTo("Vannes")
         assertThat(firstPriorNotificationWithNonNullPort.logbookMessageTyped.typedMessage.port).isEqualTo("FRVNE")
-        assertThat(priorNotifications).hasSize(10)
-        assertThat(totalLength).isEqualTo(14)
+        assertThat(result).hasSize(21)
     }
 
     @Test
@@ -197,8 +185,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             .execute(defaultFilter, sortColumn, sortDirection, defaultPageSize, defaultPageNumber)
 
         // Then
-        val (priorNotifications, totalLength) = result
-        val firstPriorNotificationWithKnownVessel = priorNotifications.first { it.vessel.id != -1 }
+        val firstPriorNotificationWithKnownVessel = result.first { it.vessel.id != -1 }
         // We don't test the `.vessel.VesselName` since in the real world,
         // the vessel name may have changed between the logbook message date and now
         assertThat(firstPriorNotificationWithKnownVessel.vessel.internalReferenceNumber).isEqualTo("CFR105")
@@ -206,8 +193,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             .isEqualTo("CFR105")
         assertThat(firstPriorNotificationWithKnownVessel.logbookMessageTyped.logbookMessage.vesselName)
             .isEqualTo("CALAMARO")
-        assertThat(priorNotifications).hasSize(10)
-        assertThat(totalLength).isEqualTo(14)
+        assertThat(result).hasSize(21)
     }
 
     @Test
@@ -222,8 +208,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             .execute(defaultFilter, sortColumn, sortDirection, defaultPageSize, defaultPageNumber)
 
         // Then
-        val (priorNotifications, totalLength) = result
-        val firstPriorNotificationWithKnownVessel = priorNotifications.first { it.vessel.id != -1 }
+        val firstPriorNotificationWithKnownVessel = result.first { it.vessel.id != -1 }
         // We don't test the `.vessel.VesselName` since in the real world,
         // the vessel name may have changed between the logbook message date and now
         assertThat(firstPriorNotificationWithKnownVessel.vessel.internalReferenceNumber).isEqualTo("CFR101")
@@ -231,8 +216,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             .isEqualTo("CFR101")
         assertThat(firstPriorNotificationWithKnownVessel.logbookMessageTyped.logbookMessage.vesselName)
             .isEqualTo("VIVA ESPANA")
-        assertThat(priorNotifications).hasSize(10)
-        assertThat(totalLength).isEqualTo(14)
+        assertThat(result).hasSize(21)
     }
 
     @Test
@@ -247,11 +231,9 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             .execute(defaultFilter, sortColumn, sortDirection, defaultPageSize, defaultPageNumber)
 
         // Then
-        val (priorNotifications, totalLength) = result
-        val firstPriorNotificationWithNonNullRiskFactor = priorNotifications.first { it.vesselRiskFactor != null }
+        val firstPriorNotificationWithNonNullRiskFactor = result.first { it.vesselRiskFactor != null }
         assertThat(firstPriorNotificationWithNonNullRiskFactor.vesselRiskFactor!!.riskFactor).isEqualTo(2.473)
-        assertThat(priorNotifications).hasSize(10)
-        assertThat(totalLength).isEqualTo(14)
+        assertThat(result).hasSize(21)
     }
 
     @Test
@@ -266,56 +248,8 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             .execute(defaultFilter, sortColumn, sortDirection, defaultPageSize, defaultPageNumber)
 
         // Then
-        val (priorNotifications, totalLength) = result
-        val firstPriorNotificationWithNonNullRiskFactor = priorNotifications.first { it.vesselRiskFactor != null }
+        val firstPriorNotificationWithNonNullRiskFactor = result.first { it.vesselRiskFactor != null }
         assertThat(firstPriorNotificationWithNonNullRiskFactor.vesselRiskFactor!!.riskFactor).isEqualTo(4.0)
-        assertThat(priorNotifications).hasSize(10)
-        assertThat(totalLength).isEqualTo(14)
-    }
-
-    @Test
-    @Transactional
-    fun `execute should return a paginated list of prior notifications`() {
-        // Given
-        val pageSize = 10
-        val firstPageNumber = 0
-
-        // When
-        val firstPageResult = getPriorNotifications
-            .execute(defaultFilter, defaultSortColumn, defaultSortDirection, pageSize, firstPageNumber)
-
-        // Then
-        val (firstPagePriorNotifications, firstPageTotalLength) = firstPageResult
-        assertThat(firstPagePriorNotifications).hasSize(10)
-        assertThat(firstPageTotalLength).isEqualTo(14)
-
-        // Given
-        val secondPageNumber = 1
-
-        // When
-        val secondPageResult = getPriorNotifications
-            .execute(defaultFilter, defaultSortColumn, defaultSortDirection, pageSize, secondPageNumber)
-
-        // Then
-        val (secondPagePriorNotifications, secondPageTotalLength) = secondPageResult
-        assertThat(secondPagePriorNotifications).hasSize(4)
-        val firstPagePriorNotificationIds = firstPagePriorNotifications.map { it.logbookMessageTyped.logbookMessage.id }
-        assertThat(
-            secondPagePriorNotifications
-                .none { it.logbookMessageTyped.logbookMessage.id in firstPagePriorNotificationIds },
-        ).isTrue()
-        assertThat(secondPageTotalLength).isEqualTo(14)
-
-        // Given
-        val thirdPageNumber = 2
-
-        // When
-        val thirdPageResult = getPriorNotifications
-            .execute(defaultFilter, defaultSortColumn, defaultSortDirection, pageSize, thirdPageNumber)
-
-        // Then
-        val (thirdPagePriorNotifications, thirdPageTotalLength) = thirdPageResult
-        assertThat(thirdPagePriorNotifications).isEmpty()
-        assertThat(thirdPageTotalLength).isEqualTo(14)
+        assertThat(result).hasSize(21)
     }
 }

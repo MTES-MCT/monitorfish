@@ -1,8 +1,8 @@
-import { editSideWindowPriorNotification } from './utils'
+import { openSideWindowPriorNotification } from './utils'
 
 context('Side Window > Prior Notification Card > Card', () => {
   it('Should display a corrected message as expected', () => {
-    editSideWindowPriorNotification(`L'ANCRE`)
+    openSideWindowPriorNotification(`L'ANCRE`)
 
     // Title
     cy.contains(`PNO < 12 M - SEGMENT(S) INCONNU(S)`).should('be.visible')
@@ -21,7 +21,7 @@ context('Side Window > Prior Notification Card > Card', () => {
   })
 
   it('Should display a successfully acknowledged message as expected', () => {
-    editSideWindowPriorNotification(`BARS`)
+    openSideWindowPriorNotification(`BARS`)
 
     // Title
     cy.contains(`PNO ≥ 12 M - NWW03 (CHALUT DE FOND EN EAU PROFONDE ≥100 MM)`).should('be.visible')
@@ -40,7 +40,7 @@ context('Side Window > Prior Notification Card > Card', () => {
   })
 
   it('Should display a failed acknowledged message as expected', () => {
-    editSideWindowPriorNotification(`CALAMARO`)
+    openSideWindowPriorNotification(`CALAMARO`)
 
     // Title
     cy.contains(`PNO ≥ 12 M - SEGMENT(S) INCONNU(S)`).should('be.visible')

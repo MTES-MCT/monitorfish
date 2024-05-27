@@ -1,12 +1,11 @@
 import {
-  SEAFRONT_GROUP_SEAFRONTS,
   SeafrontGroup,
   type NoSeafrontGroup,
   NO_SEAFRONT_GROUP,
   ALL_SEAFRONT_GROUP,
   type AllSeafrontGroup
 } from '@constants/seafront'
-import { customDayjs, getMaybeBooleanFromRichBoolean, type DateAsStringRange, type Filter } from '@mtes-mct/monitor-ui'
+import { customDayjs, getMaybeBooleanFromRichBoolean, type DateAsStringRange } from '@mtes-mct/monitor-ui'
 
 import {
   COMMUNITY_PRIOR_NOTIFICATION_TYPES,
@@ -18,30 +17,6 @@ import {
 
 import type { ListFilter } from './types'
 import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
-import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
-
-export function countPriorNotificationsForSeafrontGroup(
-  priorNotifications: PriorNotification.PriorNotification[] | undefined,
-  seafrontGroup: SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup
-): number {
-  if (!priorNotifications) {
-    return 0
-  }
-
-  return priorNotifications.filter(({ seafront }) => {
-    if (seafrontGroup === ALL_SEAFRONT_GROUP) {
-      return true
-    }
-
-    if (seafrontGroup === NO_SEAFRONT_GROUP) {
-      return !seafront
-    }
-
-    return !!seafront && !!SEAFRONT_GROUP_SEAFRONTS[seafrontGroup]
-      ? SEAFRONT_GROUP_SEAFRONTS[seafrontGroup].includes(seafront)
-      : false
-  }).length
-}
 
 function getApiFilterFromExpectedArrivalPeriod(
   period: ExpectedArrivalPeriod,
@@ -129,13 +104,14 @@ function getApiFilterFromLastControlPeriod(period: LastControlPeriod | undefined
   }
 }
 
-export function getApiFilterFromListFilter(listFilter: ListFilter): LogbookMessage.ApiFilter {
+export function getStaticApiFilterFromListFilter(listFilter: ListFilter): LogbookMessage.ApiFilter {
   return {
     flagStates: listFilter.countryCodes,
     hasOneOrMoreReportings: getMaybeBooleanFromRichBoolean(listFilter.hasOneOrMoreReportings),
     isLessThanTwelveMetersVessel: getMaybeBooleanFromRichBoolean(listFilter.isLessThanTwelveMetersVessel),
     portLocodes: listFilter.portLocodes,
     priorNotificationTypes: listFilter.priorNotificationTypes,
+    seafrontGroup: listFilter.seafrontGroup,
     searchQuery: listFilter.searchQuery,
     specyCodes: listFilter.specyCodes,
     tripGearCodes: listFilter.gearCodes,
@@ -143,24 +119,6 @@ export function getApiFilterFromListFilter(listFilter: ListFilter): LogbookMessa
     ...getApiFilterFromExpectedArrivalPeriod(listFilter.expectedArrivalPeriod, listFilter.expectedArrivalCustomPeriod),
     ...getApiFilterFromLastControlPeriod(listFilter.lastControlPeriod)
   }
-}
-
-export function getLocalFilterFromListFilter(listFilter: ListFilter) {
-  const filters: Filter<PriorNotification.PriorNotification>[] = []
-
-  if (!!listFilter.seafrontGroup && listFilter.seafrontGroup !== ALL_SEAFRONT_GROUP) {
-    const filter: Filter<PriorNotification.PriorNotification> =
-      listFilter.seafrontGroup === NO_SEAFRONT_GROUP
-        ? priorNotifications => priorNotifications.filter(priorNotification => !priorNotification.seafront)
-        : priorNotifications =>
-            priorNotifications.filter(priorNotification =>
-              SEAFRONT_GROUP_SEAFRONTS[listFilter.seafrontGroup].includes(priorNotification.seafront)
-            )
-
-    filters.push(filter)
-  }
-
-  return filters
 }
 
 export function sortPriorNotificationTypesByPriority(priorNotificationTypes: string[]) {

@@ -1,14 +1,19 @@
 import { FIVE_MINUTES, ONE_MINUTE } from '../constants'
 
-export const RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS = {
-  pollingInterval: ONE_MINUTE
+import type { RefetchConfigOptions } from '@reduxjs/toolkit/dist/query/core/apiState'
+import type { StartQueryActionCreatorOptions } from '@reduxjs/toolkit/dist/query/core/buildInitiate'
+import type { SubscriptionOptions } from '@reduxjs/toolkit/query'
+
+export const RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS: SubscriptionOptions & Partial<RefetchConfigOptions> = {
+  pollingInterval: ONE_MINUTE,
+  refetchOnMountOrArgChange: true
 }
 
-export const RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS = {
+export const RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS: SubscriptionOptions & Partial<RefetchConfigOptions> = {
   pollingInterval: FIVE_MINUTES
 }
 
-export const RTK_FORCE_REFETCH_QUERY_OPTIONS = {
+export const RTK_FORCE_REFETCH_QUERY_OPTIONS: StartQueryActionCreatorOptions = {
   forceRefetch: true
 }
 

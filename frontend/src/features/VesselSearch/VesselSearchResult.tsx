@@ -1,10 +1,9 @@
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { VesselSearchResultItem } from './VesselSearchResultItem'
-import { COLORS } from '../../constants/constants'
 import { getVesselCompositeIdentifier } from '../../domain/entities/vessel/vessel'
-import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 
 export function VesselSearchResult({ foundVessels, searchQuery, selectVessel, showLastSearchedVessels }) {
   const lastSearchedVessels = useMainAppSelector(state => state.global.lastSearchedVessels)
@@ -57,7 +56,8 @@ export function VesselSearchResult({ foundVessels, searchQuery, selectVessel, sh
 
 const Results = styled.div`
   background: white;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
+  border-bottom: 1px solid ${p => p.theme.color.gainsboro};
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
   position: absolute;

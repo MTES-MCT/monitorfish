@@ -7,7 +7,7 @@ from prefect.executors import LocalDaskExecutor
 
 from config import UNKNOWN_VESSEL_ID
 from src.pipeline.generic_tasks import extract, load
-from src.pipeline.processing import coalesce, concatenate_columns
+from src.pipeline.processing import coalesce, concatenate_columns, zeros_ones_to_bools
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 
 
@@ -57,6 +57,17 @@ def extract_vessels_operators() -> pd.DataFrame:
 
 
 @task(checkpoint=False)
+def extract_vessels_logbook_equipement() -> pd.DataFrame:
+    """
+    Extracts vessels logbook equipement data
+
+    Returns:
+        pd.DataFrame: Vessels logbook equipment data
+    """
+    return extract("fmc", "fmc/vessels_logbook_equipment.sql")
+
+
+@task(checkpoint=False)
 def extract_french_vessels_navigation_licences() -> pd.DataFrame:
     """
     Extracts the navigation licence sailing category and expiration date of french
@@ -85,6 +96,7 @@ def concat_merge_vessels(
     french_vessels: pd.DataFrame,
     eu_vessels: pd.DataFrame,
     non_eu_vessels: pd.DataFrame,
+    vessels_logbook_equipement: pd.DataFrame,
     vessels_operators: pd.DataFrame,
     licences: pd.DataFrame,
     control_charters: pd.DataFrame,
@@ -107,6 +119,7 @@ def concat_merge_vessels(
         french_vessels (pd.DataFrame): French vessels
         eu_vessels (pd.DataFrame): EU vessels
         non_eu_vessels (pd.DataFrame): non-EU vessels
+        vessels_logbook_equipement (pd.DataFrame): vessels logbook equipment data
         vessels_operators (pd.DataFrame): vessels' operators data
         licences (pd.DataFrame): french vessels navigation licences data
         control_charters (pd.DataFrame): vessels under_charter status
@@ -118,6 +131,8 @@ def concat_merge_vessels(
         pd.DataFrame: merged vessels data
     """
     all_vessels = pd.concat([french_vessels, eu_vessels, non_eu_vessels])
+
+    all_vessels = pd.merge(all_vessels, vessels_logbook_equipement, on="id", how="left")
 
     all_vessels = pd.merge(all_vessels, vessels_operators, on="id", how="left")
 
@@ -161,6 +176,7 @@ def concat_merge_vessels(
         "fishing_gear_main": "category",
         "fishing_gear_secondary": "category",
         "fishing_gear_third": "category",
+        "logbook_equipment_status": "category",
         "operator_email_1": "category",
         "operator_email_2": "category",
         "operator_phone_1": "category",
@@ -272,6 +288,10 @@ def clean_vessels(all_vessels: pd.DataFrame) -> pd.DataFrame:
         res.loc[:, col_name] = coalesce(res[cols_list])
     logger.info("Columns combined into single values.")
 
+    # Data conversions
+    logger.info("Converting data...")
+    res["has_esacapt"] = zeros_ones_to_bools(res.has_esacapt).fillna(False)
+
     # Sort columns
     logger.info("Sorting columns...")
 
@@ -310,6 +330,8 @@ def clean_vessels(all_vessels: pd.DataFrame) -> pd.DataFrame:
         "vessel_fax",
         "vessel_telex",
         "under_charter",
+        "logbook_equipment_status",
+        "has_esacapt",
     ]
     res = res[columns]
     logger.info("Columns sorted.")
@@ -337,7 +359,6 @@ def add_unknown_vessel(all_vessels: pd.DataFrame) -> pd.DataFrame:
     try:
         assert UNKNOWN_VESSEL_ID not in all_vessels.id.values
     except AssertionError:
-
         logger = prefect.context.get("logger")
         logger.error(
             f"Reserved unkwnown vessel id {UNKNOWN_VESSEL_ID} "
@@ -389,10 +410,8 @@ def load_vessels(all_vessels: pd.DataFrame):
 
 
 with Flow("Vessels", executor=LocalDaskExecutor()) as flow:
-
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
-
         # Extract
         french_vessels = extract_french_vessels()
         eu_vessels = extract_eu_vessels()
@@ -400,12 +419,14 @@ with Flow("Vessels", executor=LocalDaskExecutor()) as flow:
         vessels_operators = extract_vessels_operators()
         licences = extract_french_vessels_navigation_licences()
         control_charters = extract_control_charters()
+        vessels_logbook_equipement = extract_vessels_logbook_equipement()
 
         # Transform
         all_vessels = concat_merge_vessels(
             french_vessels,
             eu_vessels,
             non_eu_vessels,
+            vessels_logbook_equipement,
             vessels_operators,
             licences,
             control_charters,

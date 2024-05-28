@@ -55,7 +55,7 @@ class GetPriorNotifications(
                     allRiskFactors.find { it.internalReferenceNumber == vesselInternalReferenceNumber }
                 }
 
-                val seafront: Seafront? = port?.facade?.let { Seafront.valueOf(it) }
+                val seafront: Seafront? = port?.facade?.let { Seafront.from(it) }
 
                 val finalPriorNotification = priorNotification.copy(
                     port = port,

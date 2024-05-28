@@ -52,8 +52,7 @@ export function PriorNotificationList() {
   }
   const { data, error, isError, isFetching } = useGetPriorNotificationsQuery(rtkQueryParams, {
     ...RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS,
-    ...RTK_FORCE_REFETCH_QUERY_OPTIONS,
-    pollingInterval: 1000000
+    ...RTK_FORCE_REFETCH_QUERY_OPTIONS
   })
   useHandleFrontendApiError(
     DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_LIST_ERROR,
@@ -134,14 +133,7 @@ export function PriorNotificationList() {
                     {table.getHeaderGroups().map(headerGroup => (
                       <tr key={headerGroup.id}>
                         {headerGroup.headers.map(header => (
-                          <TableWithSelectableRows.Th
-                            key={header.id}
-                            $width={header.column.getSize()}
-                            style={{
-                              maxWidth: header.column.getSize(),
-                              minWidth: header.column.getSize()
-                            }}
-                          >
+                          <TableWithSelectableRows.Th key={header.id} $width={header.column.getSize()}>
                             {header.id === 'select' && flexRender(header.column.columnDef.header, header.getContext())}
                             {header.id !== 'select' && !header.isPlaceholder && (
                               <TableWithSelectableRows.SortContainer

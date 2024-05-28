@@ -21,11 +21,9 @@ interface DBLogbookReportRepository :
                     (SELECT array_agg(pnoTypes->>'pnoTypeName') FROM jsonb_array_elements(lr.value->'pnoTypes') AS pnoTypes) AS prior_notification_type_names,
                     (SELECT array_agg(catchOnboard->>'species') FROM jsonb_array_elements(lr.value->'catchOnboard') AS catchOnboard) AS specy_codes,
                     (SELECT array_agg(tripGears->>'gear') FROM jsonb_array_elements(lr.trip_gears) AS tripGears) AS trip_gear_codes,
-                    (SELECT array_agg(tripSegments->>'segment') FROM jsonb_array_elements(lr.trip_segments) AS tripSegments) AS trip_segment_codes,
-                    COUNT(r.id) OVER (PARTITION BY lr.cfr) AS reporting_count
+                    (SELECT array_agg(tripSegments->>'segment') FROM jsonb_array_elements(lr.trip_segments) AS tripSegments) AS trip_segment_codes
                 FROM logbook_reports lr
                 LEFT JOIN ports p ON lr.value->>'port' = p.locode
-                LEFT JOIN reportings r ON lr.cfr = r.internal_reference_number
                 LEFT JOIN risk_factors rf ON lr.cfr = rf.cfr
                 LEFT JOIN vessels v ON lr.cfr = v.cfr
                 WHERE
@@ -67,9 +65,31 @@ interface DBLogbookReportRepository :
                     AND lr.value->>'predictedArrivalDatetimeUtc' <= :willArriveBefore
             ),
 
+            distinct_cfrs AS (
+                SELECT DISTINCT cfr
+                FROM dat_and_cor_logbook_reports_with_extra_columns
+            ),
+
+            cfr_reporting_counts AS (
+                SELECT
+                    dc.cfr,
+                    COUNT(r.id) AS reporting_count
+                FROM distinct_cfrs dc
+                LEFT JOIN reportings r ON dc.cfr = r.internal_reference_number
+                GROUP BY cfr
+            ),
+
+            dat_and_cor_logbook_reports_with_extra_columns_and_reporting_count AS (
+                SELECT
+                    daclr.*,
+                    cfr_reporting_counts.reporting_count
+                FROM dat_and_cor_logbook_reports_with_extra_columns daclr
+                LEFT JOIN cfr_reporting_counts ON daclr.cfr = cfr_reporting_counts.cfr
+            ),
+
             dat_and_cor_logbook_reports AS (
                 SELECT *
-                FROM dat_and_cor_logbook_reports_with_extra_columns
+                FROM dat_and_cor_logbook_reports_with_extra_columns_and_reporting_count
                 WHERE
                     -- Has One Or More Reportings
                     (
@@ -91,7 +111,7 @@ interface DBLogbookReportRepository :
                     AND (:tripSegmentCodesAsSqlArrayString IS NULL OR trip_segment_codes && CAST(:tripSegmentCodesAsSqlArrayString AS TEXT[]))
             ),
 
-            del_and_ret_logbook_reports AS (
+            del_logbook_reports AS (
                 SELECT
                     lr.*,
                     CAST(NULL AS TEXT[]) AS prior_notification_type_names,
@@ -107,7 +127,26 @@ interface DBLogbookReportRepository :
                         BETWEEN CAST(:willArriveAfter AS TIMESTAMP) - INTERVAL '48 hours'
                         AND CAST(:willArriveBefore AS TIMESTAMP) + INTERVAL '48 hours'
 
-                    AND lr.operation_type IN ('DEL', 'RET')
+                    AND lr.operation_type = 'DEL'
+            ),
+
+            ret_logbook_reports AS (
+                SELECT
+                    lr.*,
+                    CAST(NULL AS TEXT[]) AS prior_notification_type_names,
+                    CAST(NULL AS TEXT[]) AS specy_codes,
+                    CAST(NULL AS TEXT[]) AS trip_gear_codes,
+                    CAST(NULL AS TEXT[]) AS trip_segment_codes,
+                    CAST(NULL AS INTEGER) AS reporting_count
+                FROM logbook_reports lr
+                JOIN dat_and_cor_logbook_reports daclr ON lr.referenced_report_id = daclr.report_id
+                WHERE
+                    -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
+                    lr.operation_datetime_utc
+                        BETWEEN CAST(:willArriveAfter AS TIMESTAMP) - INTERVAL '48 hours'
+                        AND CAST(:willArriveBefore AS TIMESTAMP) + INTERVAL '48 hours'
+
+                    AND lr.operation_type = 'RET'
             )
 
         SELECT *
@@ -116,7 +155,12 @@ interface DBLogbookReportRepository :
         UNION
 
         SELECT *
-        FROM del_and_ret_logbook_reports;
+        FROM del_logbook_reports
+
+        UNION
+
+        SELECT *
+        FROM ret_logbook_reports;
         """,
         nativeQuery = true,
     )

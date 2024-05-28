@@ -1,9 +1,9 @@
 import { UseCaseStore } from '@store/UseCaseStore'
 
-import { getFullPathFromPath } from '../../../domain/entities/sideWindow/utils'
-import { sideWindowActions } from '../../../domain/shared_slices/SideWindow'
+import { sideWindowActions } from '../slice'
+import { getFullPathFromPath } from '../utils'
 
-import type { SideWindow } from '../../../domain/entities/sideWindow/types'
+import type { SideWindow } from '../SideWindow.types'
 import type { MainAppThunk, MainAppUseCase } from '@store'
 
 export const askForSideWindowDraftCancellationConfirmation =

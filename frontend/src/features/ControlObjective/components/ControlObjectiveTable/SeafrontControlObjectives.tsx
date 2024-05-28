@@ -1,10 +1,10 @@
+import { BackOfficeTitle } from '@features/BackOffice/components/BackOfficeTitle'
 import { useCallback, useEffect, useState } from 'react'
 import { SelectPicker, Table } from 'rsuite'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { LoadingSpinnerWall } from '../../../../ui/LoadingSpinnerWall'
-import { BackOfficeTitle } from '../../../BackOffice/components/BackOfficeTitle'
 import {
   ControlPriorityCell,
   DeleteCell,
@@ -14,7 +14,7 @@ import {
   ModifiableCell,
   renderRowExpanded,
   SegmentCellWithTitle
-} from '../../../Backoffice/tableCells'
+} from '../../../BackOffice/tableCells'
 import { useGetFleetSegmentsQuery } from '../../../FleetSegment/apis'
 import { sortArrayByColumn, SortType } from '../../../VesselList/tableSort'
 import {

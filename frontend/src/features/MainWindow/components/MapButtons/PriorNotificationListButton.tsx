@@ -1,3 +1,4 @@
+import { sideWindowActions } from '@features/SideWindow/slice'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -6,7 +7,6 @@ import { useCallback } from 'react'
 
 import { MapToolButton } from './shared/MapToolButton'
 import { SideWindowMenuKey, SideWindowStatus } from '../../../../domain/entities/sideWindow/constants'
-import { sideWindowActions } from '../../../../domain/shared_slices/SideWindow'
 
 export function PriorNotificationListButton() {
   const dispatch = useMainAppDispatch()

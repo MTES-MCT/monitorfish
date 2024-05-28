@@ -1,3 +1,4 @@
+import { sideWindowActions } from '@features/SideWindow/slice'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -6,7 +7,6 @@ import styled from 'styled-components'
 
 import { MapButton } from './MapButton'
 import { SideWindowMenuKey, SideWindowStatus } from '../../../../domain/entities/sideWindow/constants'
-import { sideWindowActions } from '../../../../domain/shared_slices/SideWindow'
 import BeaconMalfunctionsSVG from '../../../icons/Icone_VMS.svg?react'
 
 export function BeaconMalfunctionsMapButton() {

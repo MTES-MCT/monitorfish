@@ -1,6 +1,6 @@
 import { SideWindowMenuLabel } from 'domain/entities/sideWindow/constants'
 
-export const editSideWindowPriorNotification = (vesselName: string) => {
+export const openSideWindowPriorNotification = (vesselName: string) => {
   cy.viewport(1920, 1080)
   cy.visit('/side_window')
   cy.wait(500)
@@ -12,16 +12,13 @@ export const editSideWindowPriorNotification = (vesselName: string) => {
   if (document.querySelector('[data-cy="first-loader"]')) {
     cy.getDataCy('first-loader').should('not.be.visible')
   }
+  cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 0)
 
-  cy.wait(1000)
-
-  cy.get('[data-cy="side-window-sub-menu-ALL_SEAFRONT_GROUP"]').click()
+  cy.get('[data-cy="side-window-sub-menu-ALL"]').click()
   cy.fill('Rechercher un navire', vesselName)
 
   cy.clickButton('Consulter le préavis')
   if (document.querySelector('[data-cy="first-loader"]')) {
     cy.getDataCy('first-loader').should('not.be.visible')
   }
-
-  cy.wait(1000)
 }

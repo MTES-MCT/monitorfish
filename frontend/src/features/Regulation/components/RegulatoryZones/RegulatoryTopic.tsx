@@ -1,3 +1,4 @@
+import RegulatoryTopicInput from '@features/BackOffice/list_regulation/RegulatoryTopicInput'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -9,7 +10,6 @@ import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { FrontendError } from '../../../../libs/FrontendError'
-import RegulatoryTopicInput from '../../../Backoffice/list_regulation/RegulatoryTopicInput'
 import { EditIcon } from '../../../commonStyles/icons/EditIcon.style'
 import { hideLayer } from '../../../LayersSidebar/useCases/hideLayer'
 import { addRegulatoryTopicOpened, closeRegulatoryZoneMetadataPanel, removeRegulatoryTopicOpened } from '../../slice'
@@ -111,9 +111,8 @@ function UnmemoizedRegulatoryTopic({
 
   useEffect(() => {
     if (
-      regulatoryTopic &&
-      ((regulatoryZoneMetadata && regulatoryZoneMetadata.topic === regulatoryTopic) ||
-        (regulatoryTopicsOpened && regulatoryTopicsOpened.includes(regulatoryTopic)))
+      (!!regulatoryZoneMetadata && regulatoryZoneMetadata.topic === regulatoryTopic) ||
+      regulatoryTopicsOpened.includes(regulatoryTopic)
     ) {
       setIsOpen(true)
     } else {

@@ -23,6 +23,9 @@ class GetPriorNotificationUTests {
     private lateinit var gearRepository: GearRepository
 
     @MockBean
+    private lateinit var logbookRawMessageRepository: LogbookRawMessageRepository
+
+    @MockBean
     private lateinit var logbookReportRepository: LogbookReportRepository
 
     @MockBean
@@ -45,6 +48,7 @@ class GetPriorNotificationUTests {
         // Given
         given(logbookReportRepository.findPriorNotificationByReportId("FAKE_REPORT_ID_1")).willReturn(
             PriorNotification(
+                fingerprint = "1",
                 logbookMessageTyped = LogbookMessageTyped(
                     clazz = PNO::class.java,
                     logbookMessage = LogbookMessage(
@@ -64,7 +68,7 @@ class GetPriorNotificationUTests {
                         transmissionFormat = LogbookTransmissionFormat.ERS,
                     ),
                 ),
-                reportingsCount = null,
+                reportingCount = null,
                 seafront = null,
                 vessel = Vessel(
                     id = 1,
@@ -84,6 +88,7 @@ class GetPriorNotificationUTests {
         // When
         val result = GetPriorNotification(
             gearRepository,
+            logbookRawMessageRepository,
             logbookReportRepository,
             portRepository,
             reportingRepository,
@@ -102,6 +107,7 @@ class GetPriorNotificationUTests {
         // Given
         given(logbookReportRepository.findPriorNotificationByReportId("FAKE_REPORT_ID_2")).willReturn(
             PriorNotification(
+                fingerprint = "2.3",
                 logbookMessageTyped = LogbookMessageTyped(
                     clazz = PNO::class.java,
                     logbookMessage = LogbookMessage(
@@ -121,7 +127,7 @@ class GetPriorNotificationUTests {
                         transmissionFormat = LogbookTransmissionFormat.ERS,
                     ),
                 ),
-                reportingsCount = null,
+                reportingCount = null,
                 seafront = null,
                 vessel = Vessel(
                     id = 2,
@@ -141,6 +147,7 @@ class GetPriorNotificationUTests {
         // When
         val result = GetPriorNotification(
             gearRepository,
+            logbookRawMessageRepository,
             logbookReportRepository,
             portRepository,
             reportingRepository,

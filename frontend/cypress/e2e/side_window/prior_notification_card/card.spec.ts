@@ -1,8 +1,11 @@
-import { editSideWindowPriorNotification } from './utils'
+import { openSideWindowPriorNotification } from './utils'
+import { openSideWindowPriorNotificationList } from '../prior_notification_list/utils'
+
+import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
 context('Side Window > Prior Notification Card > Card', () => {
   it('Should display a corrected message as expected', () => {
-    editSideWindowPriorNotification(`L'ANCRE`)
+    openSideWindowPriorNotification(`L'ANCRE`)
 
     // Title
     cy.contains(`PNO < 12 M - SEGMENT(S) INCONNU(S)`).should('be.visible')
@@ -21,10 +24,10 @@ context('Side Window > Prior Notification Card > Card', () => {
   })
 
   it('Should display a successfully acknowledged message as expected', () => {
-    editSideWindowPriorNotification(`BARS`)
+    openSideWindowPriorNotification(`BARS`)
 
     // Title
-    cy.contains(`PNO ≥ 12 M - CHALUT DE FOND EN EAU PROFONDE ≥100 MM`).should('be.visible')
+    cy.contains(`PNO ≥ 12 M - NWW03 (CHALUT DE FOND EN EAU PROFONDE ≥100 MM)`).should('be.visible')
     cy.contains(`DES BARS (CFR104)`).should('be.visible')
 
     // Message Header
@@ -40,7 +43,7 @@ context('Side Window > Prior Notification Card > Card', () => {
   })
 
   it('Should display a failed acknowledged message as expected', () => {
-    editSideWindowPriorNotification(`CALAMARO`)
+    openSideWindowPriorNotification(`CALAMARO`)
 
     // Title
     cy.contains(`PNO ≥ 12 M - SEGMENT(S) INCONNU(S)`).should('be.visible')
@@ -56,5 +59,78 @@ context('Side Window > Prior Notification Card > Card', () => {
     cy.contains(`Débarquement (LAN)`).should('be.visible')
     cy.contains(`BAUDROIE (ANF)`).should('be.visible')
     cy.contains(`150 kg`).should('be.visible')
+  })
+
+  it('Should refresh the list when the opened prior notification data differs from its entry in the current list', () => {
+    const url = '/bff/v1/prior_notifications/FAKE_OPERATION_109'
+
+    cy.intercept({
+      method: 'GET',
+      times: 1,
+      url
+    }).as('getOriginalPriorNotification')
+
+    openSideWindowPriorNotification(`L'ANCRE`)
+
+    cy.wait('@getOriginalPriorNotification').then(interception => {
+      const originalPriorNotificationDetail: PriorNotification.PriorNotificationDetail = interception.response!.body
+      const updatedPriorNotificationDetailStub: PriorNotification.PriorNotificationDetail = {
+        ...originalPriorNotificationDetail,
+        fingerprint: '109.1109.2109'
+      }
+
+      openSideWindowPriorNotificationList()
+      cy.fill('Rechercher un navire', `L'ANCRE`)
+
+      cy.intercept('GET', url, { body: updatedPriorNotificationDetailStub }).as('getUpdatedPriorNotification')
+      cy.intercept('GET', '/bff/v1/prior_notifications?*').as('getPriorNotifications')
+
+      cy.clickButton('Consulter le préavis')
+
+      cy.wait('@getUpdatedPriorNotification')
+      cy.wait('@getPriorNotifications')
+
+      cy.contains(`L'ANCRE SÈCHE (CFR106)`).should('be.visible')
+    })
+  })
+
+  it('Should display a warning banner and refresh the list when the opened prior notification has been deleted', () => {
+    const url = '/bff/v1/prior_notifications/FAKE_OPERATION_109'
+
+    cy.intercept({
+      method: 'GET',
+      times: 1,
+      url
+    }).as('getOriginalPriorNotification')
+
+    openSideWindowPriorNotification(`L'ANCRE`)
+
+    cy.wait('@getOriginalPriorNotification').then(interception => {
+      const originalPriorNotificationDetail: PriorNotification.PriorNotificationDetail = interception.response!.body
+      const deletedPriorNotificationDetailStub: PriorNotification.PriorNotificationDetail = {
+        ...originalPriorNotificationDetail,
+        fingerprint: '109.1109.2109',
+        logbookMessage: {
+          ...originalPriorNotificationDetail.logbookMessage,
+          isDeleted: true
+        }
+      }
+
+      openSideWindowPriorNotificationList()
+      cy.fill('Rechercher un navire', `L'ANCRE`)
+
+      cy.intercept('GET', url, { body: deletedPriorNotificationDetailStub }).as('getDeletedPriorNotification')
+      cy.intercept('GET', '/bff/v1/prior_notifications?*').as('getPriorNotifications')
+
+      cy.clickButton('Consulter le préavis')
+
+      cy.wait('@getDeletedPriorNotification')
+      cy.wait('@getPriorNotifications')
+
+      // The warning banner should be displayed
+      cy.contains(`Ce préavis a été supprimé (entre temps).`).should('be.visible')
+      // The card should be closed
+      cy.contains(`L'ANCRE SÈCHE (CFR106)`).should('not.exist')
+    })
   })
 })

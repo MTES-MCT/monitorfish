@@ -1,3 +1,5 @@
+import type { AllSeafrontGroup, NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
+
 export namespace LogbookMessage {
   export type LogbookMessage = PnoLogbookMessage | RetOperationLogbookMessage
 
@@ -242,13 +244,19 @@ export namespace LogbookMessage {
     name: string
   }
 
+  export type ApiListExtraData = {
+    perSeafrontGroupCount: Record<SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup, number>
+  }
+
   export type ApiFilter = Partial<{
     flagStates: string[] | undefined
+    hasOneOrMoreReportings: boolean | undefined
     isLessThanTwelveMetersVessel: boolean | undefined
     lastControlledAfter: string | undefined
     lastControlledBefore: string | undefined
     portLocodes: string[] | undefined
     priorNotificationTypes: string[] | undefined
+    seafrontGroup: SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup | undefined
     searchQuery: string | undefined
     specyCodes: string[] | undefined
     tripGearCodes: string[] | undefined
@@ -257,4 +265,11 @@ export namespace LogbookMessage {
     willArriveAfter: string
     willArriveBefore: string
   }>
+  export enum ApiSortColumn {
+    EXPECTED_ARRIVAL_DATE = 'EXPECTED_ARRIVAL_DATE',
+    EXPECTED_LANDING_DATE = 'EXPECTED_LANDING_DATE',
+    PORT_NAME = 'PORT_NAME',
+    VESSEL_NAME = 'VESSEL_NAME',
+    VESSEL_RISK_FACTOR = 'VESSEL_RISK_FACTOR'
+  }
 }

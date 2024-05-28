@@ -6,15 +6,17 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTyped
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.filters.LogbookReportFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.sorters.LogbookReportSortColumn
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
-import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.data.domain.Sort
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
 
@@ -41,19 +43,22 @@ class GetPriorNotificationsUTests {
     @MockBean
     private lateinit var vesselRepository: VesselRepository
 
+    private val defaultFilter = LogbookReportFilter(
+        willArriveAfter = "2000-01-01T00:00:00Z",
+        willArriveBefore = "2099-12-31T00:00:00Z",
+    )
+    private val defaultSortColumn = LogbookReportSortColumn.EXPECTED_ARRIVAL_DATE
+    private val defaultSortDirection = Sort.Direction.ASC
+    private val defaultPageSize = 10
+    private val defaultPageNumber = 0
+
     @Test
-    fun `execute Should return a list of prior notifications`() {
+    fun `execute Should return a list of prior notifications with their total length`() {
         // Given
-        given(
-            logbookReportRepository.findAllPriorNotifications(
-                LogbookReportFilter(
-                    willArriveAfter = "2000-01-01T00:00:00Z",
-                    willArriveBefore = "2100-01-01T00:00:00Z",
-                ),
-            ),
-        ).willReturn(
+        given(logbookReportRepository.findAllPriorNotifications(defaultFilter)).willReturn(
             listOf(
                 PriorNotification(
+                    fingerprint = "1",
                     logbookMessageTyped = LogbookMessageTyped(
                         clazz = PNO::class.java,
                         logbookMessage = LogbookMessage(
@@ -72,7 +77,7 @@ class GetPriorNotificationsUTests {
                             transmissionFormat = LogbookTransmissionFormat.ERS,
                         ),
                     ),
-                    reportingsCount = null,
+                    reportingCount = null,
                     seafront = null,
                     vessel = Vessel(
                         id = 1,
@@ -89,6 +94,7 @@ class GetPriorNotificationsUTests {
                 ),
 
                 PriorNotification(
+                    fingerprint = "1",
                     logbookMessageTyped = LogbookMessageTyped(
                         clazz = PNO::class.java,
                         logbookMessage = LogbookMessage(
@@ -107,7 +113,7 @@ class GetPriorNotificationsUTests {
                             transmissionFormat = LogbookTransmissionFormat.ERS,
                         ),
                     ),
-                    reportingsCount = null,
+                    reportingCount = null,
                     seafront = null,
                     vessel = Vessel(
                         id = 2,
@@ -134,19 +140,14 @@ class GetPriorNotificationsUTests {
             riskFactorRepository,
             speciesRepository,
             vesselRepository,
-        ).execute(
-            LogbookReportFilter(
-                willArriveAfter = "2000-01-01T00:00:00Z",
-                willArriveBefore = "2100-01-01T00:00:00Z",
-            ),
-        )
+        ).execute(defaultFilter, defaultSortColumn, defaultSortDirection)
 
         // Then
-        Assertions.assertThat(result).hasSize(2)
-        Assertions.assertThat(result[0].logbookMessageTyped.logbookMessage.reportId).isEqualTo(
+        assertThat(result).hasSize(2)
+        assertThat(result[0].logbookMessageTyped.logbookMessage.reportId).isEqualTo(
             "FAKE_REPORT_ID_1",
         )
-        Assertions.assertThat(result[1].logbookMessageTyped.logbookMessage.reportId).isEqualTo(
+        assertThat(result[1].logbookMessageTyped.logbookMessage.reportId).isEqualTo(
             "FAKE_REPORT_ID_2_COR",
         )
     }

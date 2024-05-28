@@ -1,6 +1,6 @@
 import { LayerProperties } from '../../domain/entities/layers/constants'
 import { getTextForSearch } from '../../utils'
-import { formatDataForSelectPicker } from '../Backoffice/utils'
+import { formatDataForSelectPicker } from '../BackOffice/utils'
 
 import type {
   EditedRegulatoryZone,

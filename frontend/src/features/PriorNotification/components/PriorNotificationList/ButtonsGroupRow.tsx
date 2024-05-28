@@ -1,12 +1,12 @@
-import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import { VesselIdentifier, type VesselIdentity } from 'domain/entities/vessel/types'
 import styled from 'styled-components'
 
 import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
+import { openPriorNotificationCard } from '../../useCases/openPriorNotificationCard'
 
-import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
+import type { PriorNotification } from '../../PriorNotification.types'
 import type { MouseEvent } from 'react'
 
 type ButtonsGroupRowProps = Readonly<{
@@ -18,7 +18,7 @@ export function ButtonsGroupRow({ priorNotification }: ButtonsGroupRowProps) {
   const openPriorNotificationDetail = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation()
 
-    dispatch(priorNotificationActions.openPriorNotificationDetail(priorNotification.id))
+    dispatch(openPriorNotificationCard(priorNotification.id, priorNotification.fingerprint))
   }
 
   const selectMainMapVessel = (event: MouseEvent<HTMLButtonElement>) => {
@@ -42,7 +42,7 @@ export function ButtonsGroupRow({ priorNotification }: ButtonsGroupRowProps) {
   }
 
   return (
-    <ButtonsGroup>
+    <Wrapper>
       <IconButton
         accent={Accent.TERTIARY}
         Icon={Icon.ViewOnMap}
@@ -55,16 +55,14 @@ export function ButtonsGroupRow({ priorNotification }: ButtonsGroupRowProps) {
         onClick={openPriorNotificationDetail}
         title="Consulter le préavis"
       />
-    </ButtonsGroup>
+    </Wrapper>
   )
 }
 
-const ButtonsGroup = styled.div`
+const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
   gap: 8px;
-  margin-top: 2px;
-  position: relative;
 
   > button {
     padding: 0px;

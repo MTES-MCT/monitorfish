@@ -2,7 +2,7 @@ import { cleanMissionForm } from '@features/SideWindow/useCases/cleanMissionForm
 import { UseCaseStore } from '@store/UseCaseStore'
 import { assertNotNullish } from '@utils/assertNotNullish'
 
-import { sideWindowActions } from '../../../domain/shared_slices/SideWindow'
+import { sideWindowActions } from '../slice'
 
 import type { MainAppThunk } from '@store'
 

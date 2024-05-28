@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.neovisionaries.i18n.CountryCode
+import com.nhaarman.mockitokotlin2.any
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTyped
@@ -9,7 +10,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionForma
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
-import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotification
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotificationTypes
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotifications
@@ -46,16 +46,10 @@ class PriorNotificationControllerITests {
     @Test
     fun `Should get a list of prior notifications`() {
         // Given
-        given(
-            this.getPriorNotifications.execute(
-                LogbookReportFilter(
-                    willArriveAfter = "2000-01-01T00:00:00Z",
-                    willArriveBefore = "2100-01-01T00:00:00Z",
-                ),
-            ),
-        ).willReturn(
+        given(this.getPriorNotifications.execute(any(), any(), any())).willReturn(
             listOf(
                 PriorNotification(
+                    fingerprint = "1",
                     logbookMessageTyped = LogbookMessageTyped(
                         clazz = PNO::class.java,
                         logbookMessage = LogbookMessage(
@@ -74,7 +68,7 @@ class PriorNotificationControllerITests {
                             transmissionFormat = LogbookTransmissionFormat.ERS,
                         ),
                     ),
-                    reportingsCount = null,
+                    reportingCount = null,
                     seafront = null,
                     vessel = Vessel(
                         id = 1,
@@ -91,15 +85,16 @@ class PriorNotificationControllerITests {
                 ),
 
                 PriorNotification(
+                    fingerprint = "3",
                     logbookMessageTyped = LogbookMessageTyped(
                         clazz = PNO::class.java,
                         logbookMessage = LogbookMessage(
-                            id = 1,
+                            id = 3,
                             reportId = "FAKE_REPORT_ID_2_COR",
                             referencedReportId = "FAKE_NONEXISTENT_REPORT_ID_2",
                             analyzedByRules = emptyList(),
                             integrationDateTime = ZonedDateTime.now(),
-                            isCorrectedByNewerMessage = false,
+                            isCorrectedByNewerMessage = true,
                             isDeleted = false,
                             isEnriched = false,
                             message = PNO(),
@@ -109,7 +104,7 @@ class PriorNotificationControllerITests {
                             transmissionFormat = LogbookTransmissionFormat.ERS,
                         ),
                     ),
-                    reportingsCount = null,
+                    reportingCount = null,
                     seafront = null,
                     vessel = Vessel(
                         id = 1,
@@ -130,14 +125,18 @@ class PriorNotificationControllerITests {
         // When
         api.perform(
             get(
-                "/bff/v1/prior_notifications?willArriveAfter=2000-01-01T00:00:00Z&willArriveBefore=2100-01-01T00:00:00Z",
+                "/bff/v1/prior_notifications?willArriveAfter=2000-01-01T00:00:00Z&willArriveBefore=2100-01-01T00:00:00Z&seafrontGroup=ALL&sortColumn=EXPECTED_ARRIVAL_DATE&sortDirection=DESC&pageNumber=0&pageSize=10",
             ),
         )
             // Then
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.length()", equalTo(2)))
-            .andExpect(jsonPath("$[0].id", equalTo("FAKE_REPORT_ID_1")))
-            .andExpect(jsonPath("$[1].id", equalTo("FAKE_NONEXISTENT_REPORT_ID_2")))
+            .andExpect(jsonPath("$.data.length()", equalTo(2)))
+            .andExpect(jsonPath("$.data[0].id", equalTo("FAKE_REPORT_ID_1")))
+            .andExpect(jsonPath("$.data[1].id", equalTo("FAKE_NONEXISTENT_REPORT_ID_2")))
+            .andExpect(jsonPath("$.lastPageNumber", equalTo(0)))
+            .andExpect(jsonPath("$.pageNumber", equalTo(0)))
+            .andExpect(jsonPath("$.pageSize", equalTo(10)))
+            .andExpect(jsonPath("$.totalLength", equalTo(2)))
     }
 
     @Test
@@ -159,6 +158,7 @@ class PriorNotificationControllerITests {
         // Given
         given(this.getPriorNotification.execute("FAKE_REPORT_ID_1")).willReturn(
             PriorNotification(
+                fingerprint = "1",
                 logbookMessageTyped = LogbookMessageTyped(
                     clazz = PNO::class.java,
                     logbookMessage = LogbookMessage(
@@ -177,7 +177,7 @@ class PriorNotificationControllerITests {
                         transmissionFormat = LogbookTransmissionFormat.ERS,
                     ),
                 ),
-                reportingsCount = null,
+                reportingCount = null,
                 seafront = null,
                 vessel = Vessel(
                     id = 1,

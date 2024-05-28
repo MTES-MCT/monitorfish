@@ -34,7 +34,7 @@ class GetPriorNotification(
         val allSpecies = speciesRepository.findAll()
         val allVessels = vesselRepository.findAll()
 
-        val priorNotificationWithoutReportingsCount = logbookReportRepository
+        val priorNotificationWithoutReportingCount = logbookReportRepository
             .findPriorNotificationByReportId(logbookMessageReportId)
             .let { priorNotification ->
                 val logbookMessage = priorNotification.logbookMessageTyped.logbookMessage
@@ -82,7 +82,7 @@ class GetPriorNotification(
                 finalPriorNotification
             }
 
-        val priorNotification = enrichPriorNotificationWithReportingCount(priorNotificationWithoutReportingsCount)
+        val priorNotification = enrichPriorNotificationWithReportingCount(priorNotificationWithoutReportingCount)
 
         return priorNotification
     }

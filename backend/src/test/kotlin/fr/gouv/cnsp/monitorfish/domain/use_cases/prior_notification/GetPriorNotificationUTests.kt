@@ -48,6 +48,7 @@ class GetPriorNotificationUTests {
         // Given
         given(logbookReportRepository.findPriorNotificationByReportId("FAKE_REPORT_ID_1")).willReturn(
             PriorNotification(
+                fingerprint = "1",
                 logbookMessageTyped = LogbookMessageTyped(
                     clazz = PNO::class.java,
                     logbookMessage = LogbookMessage(
@@ -106,6 +107,7 @@ class GetPriorNotificationUTests {
         // Given
         given(logbookReportRepository.findPriorNotificationByReportId("FAKE_REPORT_ID_2")).willReturn(
             PriorNotification(
+                fingerprint = "2.3",
                 logbookMessageTyped = LogbookMessageTyped(
                     clazz = PNO::class.java,
                     logbookMessage = LogbookMessage(

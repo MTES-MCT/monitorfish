@@ -5,13 +5,12 @@ import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react'
 import { sha256 } from '@utils/sha256'
 import ky from 'ky'
 
+import { RTK_MAX_RETRIES, RtkCacheTagType } from './constants'
 import { getOIDCUser } from '../auth/getOIDCUser'
 import { normalizeRtkBaseQuery } from '../utils/normalizeRtkBaseQuery'
 
 import type { BackendApi } from './BackendApi.types'
 import type { CustomRTKResponseError, RTKBaseQueryArgs } from './types'
-
-const MAX_RETRIES = 2
 
 // Using local MonitorEnv stubs:
 export const MONITORENV_API_URL = import.meta.env.FRONTEND_MONITORENV_URL
@@ -24,7 +23,7 @@ const monitorenvApiBaseQuery = retry(
   fetchBaseQuery({
     baseUrl: `${MONITORENV_API_URL}/api`
   }),
-  { maxRetries: MAX_RETRIES }
+  { maxRetries: RTK_MAX_RETRIES }
 )
 
 export const monitorenvApi = createApi({
@@ -78,7 +77,7 @@ const monitorfishBaseQuery = retry(
     baseUrl: `/bff/v1`,
     prepareHeaders: setAuthorizationHeader
   }),
-  { maxRetries: MAX_RETRIES }
+  { maxRetries: RTK_MAX_RETRIES }
 )
 
 export const monitorfishApi = createApi({
@@ -100,6 +99,7 @@ export const monitorfishApi = createApi({
   endpoints: () => ({}),
   reducerPath: 'monitorfishApi',
   tagTypes: [
+    ...Object.values(RtkCacheTagType),
     'ControlObjectives',
     'ControlObjectivesYears',
     'FleetSegments',
@@ -125,7 +125,7 @@ const monitorfishLightBaseQuery = retry(
     baseUrl: `/light`,
     prepareHeaders: setAuthorizationHeader
   }),
-  { maxRetries: MAX_RETRIES }
+  { maxRetries: RTK_MAX_RETRIES }
 )
 
 export const monitorfishLightApi = createApi({
@@ -142,7 +142,7 @@ const monitorfishPublicBaseQuery = retry(
   fetchBaseQuery({
     baseUrl: `/api`
   }),
-  { maxRetries: MAX_RETRIES }
+  { maxRetries: RTK_MAX_RETRIES }
 )
 
 export const monitorfishPublicApi = createApi({
@@ -189,5 +189,5 @@ export const monitorfishApiKy = ky.extend({
       }
     ]
   },
-  retry: MAX_RETRIES + 1
+  retry: RTK_MAX_RETRIES + 1
 })

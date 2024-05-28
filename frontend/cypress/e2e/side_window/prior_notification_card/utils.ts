@@ -12,8 +12,7 @@ export const openSideWindowPriorNotification = (vesselName: string) => {
   if (document.querySelector('[data-cy="first-loader"]')) {
     cy.getDataCy('first-loader').should('not.be.visible')
   }
-
-  cy.wait(1000)
+  cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 0)
 
   cy.get('[data-cy="side-window-sub-menu-ALL"]').click()
   cy.fill('Rechercher un navire', vesselName)
@@ -22,6 +21,4 @@ export const openSideWindowPriorNotification = (vesselName: string) => {
   if (document.querySelector('[data-cy="first-loader"]')) {
     cy.getDataCy('first-loader').should('not.be.visible')
   }
-
-  cy.wait(1000)
 }

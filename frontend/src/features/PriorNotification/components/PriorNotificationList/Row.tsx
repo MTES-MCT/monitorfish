@@ -6,7 +6,7 @@ import styled from 'styled-components'
 
 import { None } from './styles'
 import { PriorNotification } from '../../PriorNotification.types'
-import { priorNotificationActions } from '../../slice'
+import { openPriorNotificationCard } from '../../useCases/openPriorNotificationCard'
 
 type RowProps = Readonly<{
   row: RowType<PriorNotification.PriorNotification>
@@ -16,6 +16,10 @@ export function Row({ row }: RowProps) {
 
   const priorNotification = row.original
   const firstFiveOnBoardCatchesByWeight = orderBy(priorNotification.onBoardCatches, ['weight'], ['desc']).slice(0, 5)
+
+  const openCard = () => {
+    dispatch(openPriorNotificationCard(priorNotification.id, priorNotification.fingerprint))
+  }
 
   return (
     <>
@@ -143,11 +147,7 @@ export function Row({ row }: RowProps) {
             )}
             <p>
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <Link
-                onClick={() => dispatch(priorNotificationActions.openPriorNotificationDetail(priorNotification.id))}
-              >
-                Voir plus de détail
-              </Link>
+              <Link onClick={openCard}>Voir plus de détail</Link>
             </p>
           </ExpandedRowCell>
           <ExpandedRowCell />

@@ -1,6 +1,6 @@
 import { getPseudoRandomString } from '@mtes-mct/monitor-ui'
 
-import type { SideWindow } from './types'
+import type { SideWindow } from './SideWindow.types'
 
 export function getFullPathFromPath(path: SideWindow.Path): SideWindow.FullPath {
   if ('id' in path) {

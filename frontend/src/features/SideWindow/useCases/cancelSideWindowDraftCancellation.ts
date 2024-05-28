@@ -1,6 +1,6 @@
 import { UseCaseStore } from '@store/UseCaseStore'
 
-import { sideWindowActions } from '../../../domain/shared_slices/SideWindow'
+import { sideWindowActions } from '../slice'
 
 import type { MainAppThunk } from '@store'
 

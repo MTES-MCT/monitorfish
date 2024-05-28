@@ -58,6 +58,7 @@ class GetPriorNotificationsUTests {
         given(logbookReportRepository.findAllPriorNotifications(defaultFilter)).willReturn(
             listOf(
                 PriorNotification(
+                    fingerprint = "1",
                     logbookMessageTyped = LogbookMessageTyped(
                         clazz = PNO::class.java,
                         logbookMessage = LogbookMessage(
@@ -93,6 +94,7 @@ class GetPriorNotificationsUTests {
                 ),
 
                 PriorNotification(
+                    fingerprint = "1",
                     logbookMessageTyped = LogbookMessageTyped(
                         clazz = PNO::class.java,
                         logbookMessage = LogbookMessage(

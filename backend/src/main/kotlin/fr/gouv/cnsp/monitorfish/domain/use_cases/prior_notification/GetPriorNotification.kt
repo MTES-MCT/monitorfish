@@ -56,7 +56,7 @@ class GetPriorNotification(
                     null
                 }
 
-                val seafront = port?.facade?.let { Seafront.valueOf(it) }
+                val seafront: Seafront? = port?.facade?.let { Seafront.from(it) }
 
                 // Default to UNKNOWN vessel when null or not found
                 val vessel = priorNotification.logbookMessageTyped.logbookMessage

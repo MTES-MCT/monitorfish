@@ -128,26 +128,24 @@ export const TABLE_COLUMNS: Array<ColumnDef<PriorNotification.PriorNotification,
     size: 224
   },
   {
-    accessorFn: row => row.reportingsCount,
+    accessorFn: row => row.reportingCount,
     cell: (info: CellContext<PriorNotification.PriorNotification, number>) => {
-      const alertCount = info.getValue()
-      if (alertCount === 0) {
+      const reportingCount = info.getValue()
+      if (reportingCount === 0) {
         return null
       }
 
       return (
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Tag
-            backgroundColor={THEME.color.maximumRed15}
-            style={{ marginTop: 1 }}
-            title={`${info.getValue()} signalements`}
-          >{`${info.getValue()} sign.`}</Tag>
-        </div>
+        <Tag
+          backgroundColor={THEME.color.maximumRed15}
+          color={THEME.color.maximumRed}
+          title={`${reportingCount} signalement${reportingCount > 1 ? 's' : ''}`}
+        >{`${reportingCount} sign.`}</Tag>
       )
     },
     enableSorting: false,
     header: () => '',
-    id: 'alertCount',
+    id: 'reportingCount',
     size: 94
   },
   {

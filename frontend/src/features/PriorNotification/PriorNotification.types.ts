@@ -17,7 +17,7 @@ export namespace PriorNotification {
     portLocode: string | undefined
     portName: string | undefined
     purposeCode: PurposeCode | undefined
-    reportingsCount: number
+    reportingCount: number
     seafront: Seafront | undefined
     sentAt: string | undefined
     tripGears: LogbookMessage.Gear[]

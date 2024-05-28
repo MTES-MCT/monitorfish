@@ -106,11 +106,11 @@ class GetPriorNotifications(
         )
 
         val priorNotificationsWithReportingCount = priorNotifications.map { priorNotification ->
-            val reportingsCount = currentReportings.count { reporting ->
+            val reportingCount = currentReportings.count { reporting ->
                 reporting.internalReferenceNumber == priorNotification.vessel.internalReferenceNumber
             }
 
-            priorNotification.copy(reportingsCount = reportingsCount)
+            priorNotification.copy(reportingCount = reportingCount)
         }
 
         return priorNotificationsWithReportingCount

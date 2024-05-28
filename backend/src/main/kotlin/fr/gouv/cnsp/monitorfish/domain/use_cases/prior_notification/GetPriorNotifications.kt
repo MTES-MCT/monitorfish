@@ -37,7 +37,7 @@ class GetPriorNotifications(
         val allVessels = vesselRepository.findAll()
 
         val incompletePriorNotifications = logbookReportRepository.findAllPriorNotifications(filter)
-        val priorNotificationsWithoutReportingsCount = incompletePriorNotifications
+        val priorNotificationsWithoutReportingCount = incompletePriorNotifications
             .map { priorNotification ->
                 val port = try {
                     priorNotification.logbookMessageTyped.typedMessage.port?.let { portLocode ->
@@ -71,13 +71,13 @@ class GetPriorNotifications(
 
                 finalPriorNotification
             }
-        val priorNotifications = enrichPriorNotificationsWithReportingCount(priorNotificationsWithoutReportingsCount)
+        val priorNotifications = enrichPriorNotificationsWithReportingCount(priorNotificationsWithoutReportingCount)
 
         val sortedPriorNotifications = when (sortDirection) {
             Sort.Direction.ASC -> priorNotifications.sortedWith(
                 compareBy(
                     { getSortKey(it, sortColumn) },
-                    { it.logbookMessageTyped.logbookMessage.id },
+                    { it.logbookMessageTyped.logbookMessage.id }, // Tie-breaker
                 ),
             )
 

@@ -103,7 +103,7 @@ class PriorNotificationController(
         )
 
         val priorNotifications = getPriorNotifications
-            .execute(logbookReportFilter, sortColumn, sortDirection, pageSize, pageNumber)
+            .execute(logbookReportFilter, sortColumn, sortDirection)
         val priorNotificationDataOutputsFilteredBySeafrontGroup = priorNotifications
             .filter { seafrontGroup.hasSeafront(it.seafront) }
             .mapNotNull { PriorNotificationDataOutput.fromPriorNotification(it) }

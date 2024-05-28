@@ -27,8 +27,6 @@ class GetPriorNotifications(
         filter: LogbookReportFilter,
         sortColumn: LogbookReportSortColumn,
         sortDirection: Sort.Direction,
-        pageSize: Int,
-        pageNumber: Int,
     ): List<PriorNotification> {
         val allGears = gearRepository.findAll()
         val allPorts = portRepository.findAll()

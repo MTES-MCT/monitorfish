@@ -4,9 +4,10 @@ import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.verify
-import fr.gouv.cnsp.monitorfish.domain.entities.facade.Facade
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
@@ -82,7 +83,7 @@ class AddMissionActionUTests {
             completion = Completion.TO_COMPLETE,
         )
         given(missionActionsRepository.save(anyOrNull())).willReturn(action)
-        given(getMissionActionFacade.execute(anyOrNull())).willReturn(Facade.NAMO)
+        given(getMissionActionFacade.execute(anyOrNull())).willReturn(Seafront.NAMO)
 
         // When
         val returnedAction = AddMissionAction(missionActionsRepository, getMissionActionFacade).execute(action)

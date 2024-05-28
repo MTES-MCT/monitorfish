@@ -1,25 +1,28 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class PriorNotificationDataOutput(
+data class PriorNotificationDataOutput(
     /** Reference logbook message (report) `reportId`. */
     val id: String,
     val acknowledgment: AcknowledgmentDataOutput?,
     val expectedArrivalDate: String?,
     val expectedLandingDate: String?,
     val hasVesselRiskFactorSegments: Boolean?,
+    /** Unique identifier concatenating all the DAT, COR, RET & DEL operations `id` used for data consolidation. */
+    val fingerprint: String,
     val isCorrection: Boolean,
     val isVesselUnderCharter: Boolean?,
     val onBoardCatches: List<LogbookMessageCatchDataOutput>,
     val portLocode: String?,
     val portName: String?,
     val purposeCode: String?,
-    val reportingsCount: Int?,
-    val seafront: String?,
+    val reportingCount: Int?,
+    val seafront: Seafront?,
     val sentAt: String?,
     val tripGears: List<LogbookMessageGearDataOutput>,
     val tripSegments: List<LogbookMessageTripSegmentDataOutput>,
@@ -67,13 +70,14 @@ class PriorNotificationDataOutput(
                 expectedArrivalDate = message.predictedArrivalDatetimeUtc?.toString(),
                 expectedLandingDate = message.predictedLandingDatetimeUtc?.toString(),
                 hasVesselRiskFactorSegments = priorNotification.vesselRiskFactor?.segments?.isNotEmpty(),
+                fingerprint = priorNotification.fingerprint,
                 isCorrection = logbookMessage.operationType === LogbookOperationType.COR,
                 isVesselUnderCharter = priorNotification.vessel.underCharter,
                 onBoardCatches,
                 portLocode = priorNotification.port?.locode,
                 portName = priorNotification.port?.name,
                 purposeCode = message.purpose,
-                reportingsCount = priorNotification.reportingsCount,
+                reportingCount = priorNotification.reportingCount,
                 seafront = priorNotification.seafront,
                 sentAt = logbookMessage.reportDateTime?.toString(),
                 tripGears,

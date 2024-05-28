@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
-import fr.gouv.cnsp.monitorfish.domain.entities.facade.Facade
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.FacadeArea
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
@@ -21,7 +21,7 @@ data class FacadeAreaEntity(
 ) {
 
     fun toFacadeArea() = FacadeArea(
-        facade = Facade.from(facade).toString(),
+        facade = Seafront.from(facade).toString(),
         geometry = geometry,
     )
 }

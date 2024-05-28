@@ -1,18 +1,13 @@
-type QueryParamValue = number | string | boolean | Array<number | string> | null | undefined
+import type { AnyObject } from '@mtes-mct/monitor-ui'
 
-const sortByKey = (a: [string, QueryParamValue], b: [string, QueryParamValue]): number => {
+const sortByKey = (a: [string, any], b: [string, any]): number => {
   const [keyA] = a
   const [keyB] = b
 
   return keyA.localeCompare(keyB)
 }
 
-export function getUrlOrPathWithQueryParams(
-  urlOrPath: string,
-  queryParamsAsObject: {
-    [key: string]: QueryParamValue
-  }
-): string {
+export function getUrlOrPathWithQueryParams(urlOrPath: string, queryParamsAsObject: AnyObject): string {
   const queryParamsAsString = Object.entries(queryParamsAsObject)
     .sort(sortByKey)
     .reduce((queryParamsAsStringAcc, [key, value]) => {

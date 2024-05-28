@@ -1,3 +1,4 @@
+import { Ellipsised } from '@components/Ellipsised'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
@@ -42,7 +43,7 @@ export function LogbookMessage({ isFirst, logbookMessage, withMapControls = fals
     }
   }, [logbookMessage])
 
-  const openXML = xml => {
+  const openXML = (xml: string) => {
     const blob = new Blob([xml], { type: 'text/xml' })
     const url = URL.createObjectURL(blob)
     window.open(url)
@@ -120,22 +121,22 @@ export function LogbookMessage({ isFirst, logbookMessage, withMapControls = fals
         <LogbookMessageMetadata>
           <EmissionDateTime>
             <Key>Date d’émission</Key>
-            <br />
             {getDateTime(logbookMessage.reportDateTime, true)}
           </EmissionDateTime>
           <ReceptionDateTime>
             <Key>Date de réception</Key>
-            <br />
             {getDateTime(logbookMessage.integrationDateTime, true)}
           </ReceptionDateTime>
-          <VoyageNumber title={logbookMessage.tripNumber?.toString()}>
+          <VoyageNumber>
             <Key>N° de marée</Key>
-            <br />
-            {logbookMessage.tripNumber ?? <Gray>-</Gray>}
+            {logbookMessage.tripNumber ? (
+              <Ellipsised maxWidth={80}>{logbookMessage.tripNumber}</Ellipsised>
+            ) : (
+              <Gray>-</Gray>
+            )}
           </VoyageNumber>
           <Acknowledge>
             <Key>Acq.</Key>
-            <br />
             {!logbookMessage.acknowledgment || (logbookMessage.acknowledgment.isSuccess === null && <Gray>-</Gray>)}
             {logbookMessage.acknowledgment?.isSuccess === true && (
               <Icon.Confirm
@@ -225,35 +226,30 @@ const Key = styled.span`
 
 const BodyHeaderBlock = styled.div`
   align-items: center;
+  background: ${p => p.theme.color.white};
+  color: ${p => p.theme.color.gunMetal};
   display: flex;
   flex-direction: column;
   font-size: 13px;
   padding: 10px;
+
+  > span:first-child {
+    margin-bottom: 4px;
+  }
 `
 const EmissionDateTime = styled(BodyHeaderBlock)`
-  background: ${p => p.theme.color.white};
-  color: ${p => p.theme.color.gunMetal};
   flex-grow: 3;
 `
 const ReceptionDateTime = styled(BodyHeaderBlock)`
-  background: ${p => p.theme.color.white};
-  color: ${p => p.theme.color.gunMetal};
   flex-grow: 3;
   margin-left: 10px;
 `
 const VoyageNumber = styled(BodyHeaderBlock)`
-  background: ${p => p.theme.color.white};
-  color: ${p => p.theme.color.gunMetal};
   flex-grow: 3;
   margin-left: 10px;
   max-width: 80px;
-  overflow: clip;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 `
 const Acknowledge = styled(BodyHeaderBlock)`
-  background: ${p => p.theme.color.white};
-  color: ${p => p.theme.color.gunMetal};
   flex-grow: 4;
   margin-left: 10px;
 `

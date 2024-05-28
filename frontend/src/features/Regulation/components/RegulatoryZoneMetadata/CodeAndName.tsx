@@ -1,6 +1,7 @@
+import { COLORS } from '@constants/constants'
+import { InfoPoint } from '@features/BackOffice/edit_regulation/InfoPoint'
+
 import { Label } from './RegulatoryMetadata.style'
-import { COLORS } from '../../../../constants/constants'
-import { InfoPoint } from '../../../Backoffice/edit_regulation/InfoPoint'
 
 import type { Gear } from '../../../../domain/types/Gear'
 
@@ -12,7 +13,7 @@ export type CodeAndNameProps = {
 }
 export function CodeAndName({ categoriesToGears, code, isCategory = false, name }: CodeAndNameProps) {
   const title = categoriesToGears
-    ? (categoriesToGears[name] || [])
+    ? (categoriesToGears[name] ?? [])
         .map(gear => `${gear.code} - ${gear.name} \n`)
         .toString()
         .replace(/,/g, '')

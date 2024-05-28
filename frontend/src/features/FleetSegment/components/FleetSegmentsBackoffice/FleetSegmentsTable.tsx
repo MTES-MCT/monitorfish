@@ -6,7 +6,7 @@ import { Table } from 'rsuite'
 
 import getAllGearCodes from '../../../../domain/use_cases/gearCode/getAllGearCodes'
 import getAllSpecies from '../../../../domain/use_cases/species/getAllSpecies'
-import { EditAndDeleteCell, TagsCell } from '../../../Backoffice/tableCells'
+import { EditAndDeleteCell, TagsCell } from '../../../BackOffice/tableCells'
 
 const { Cell, Column, HeaderCell } = Table
 

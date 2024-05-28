@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
-import fr.gouv.cnsp.monitorfish.domain.entities.facade.Facade
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -34,7 +34,7 @@ data class PortEntity(
         Port(
             locode = locode,
             name = portName,
-            facade = facade?.let { Facade.from(it).toString() },
+            facade = facade?.let { Seafront.from(it).toString() },
             faoAreas = faoAreas ?: listOf(),
             latitude = latitude,
             longitude = longitude,

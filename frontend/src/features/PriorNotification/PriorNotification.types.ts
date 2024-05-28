@@ -6,6 +6,8 @@ export namespace PriorNotification {
     acknowledgment: LogbookMessage.Acknowledgment | undefined
     expectedArrivalDate: string | undefined
     expectedLandingDate: string | undefined
+    /** Unique identifier concatenating all the DAT, COR, RET & DEL operations `id` used for data consolidation. */
+    fingerprint: string
     hasVesselRiskFactorSegments: boolean | undefined
     /** Logbook message `reportId`. */
     id: string
@@ -15,7 +17,7 @@ export namespace PriorNotification {
     portLocode: string | undefined
     portName: string | undefined
     purposeCode: PurposeCode | undefined
-    reportingsCount: number
+    reportingCount: number
     seafront: Seafront | undefined
     sentAt: string | undefined
     tripGears: LogbookMessage.Gear[]
@@ -37,6 +39,8 @@ export namespace PriorNotification {
   }
 
   export type PriorNotificationDetail = {
+    /** Unique identifier concatenating all the DAT, COR, RET & DEL operations `id` used for data consolidation. */
+    fingerprint: string
     /** Logbook message `reportId`. */
     id: string
     isLessThanTwelveMetersVessel: boolean

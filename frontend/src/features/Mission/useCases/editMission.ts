@@ -1,15 +1,15 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
 import { monitorfishMissionApi } from '@features/Mission/monitorfishMissionApi'
+import { sideWindowActions } from '@features/SideWindow/slice'
+import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { SideWindowMenuKey, SideWindowStatus } from 'domain/entities/sideWindow/constants'
 import { displayedErrorActions } from 'domain/shared_slices/DisplayedError'
-import { sideWindowActions } from 'domain/shared_slices/SideWindow'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
 
 import { FrontendApiError } from '../../../libs/FrontendApiError'
 import { handleThunkError } from '../../../utils/handleThunkError'
 import { askForSideWindowDraftCancellationConfirmation } from '../../SideWindow/useCases/askForSideWindowDraftCancellationConfirmation'
-import { openSideWindowPath } from '../../SideWindow/useCases/openSideWindowPath'
 import { missionFormActions } from '../components/MissionForm/slice'
 import { getMissionDraftFromMissionWithActions } from '../components/MissionForm/utils/getMissionFormInitialValues'
 

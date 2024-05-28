@@ -53,7 +53,6 @@ export const COMMON_ALERT_TYPE_OPTION: Record<
   }
 }
 
-// TODO Rename the `seafronts` prop to clarify the difference. They don't look like seas fronts.
 export const ALERTS_MENU_SEAFRONT_TO_SEAFRONTS: Record<
   SeafrontGroup | AllSeafrontGroup,
   {
@@ -61,7 +60,7 @@ export const ALERTS_MENU_SEAFRONT_TO_SEAFRONTS: Record<
     seafronts: Seafront[]
   }
 > = {
-  ALL_SEAFRONT_GROUP: {
+  ALL: {
     menuSeafront: ALL_SEAFRONT_GROUP,
     seafronts: [
       Seafront.CORSE,

@@ -5,6 +5,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotifica
 class PriorNotificationDetailDataOutput(
     /** Reference logbook message (report) `reportId`. */
     val id: String,
+    /** Unique identifier concatenating all the DAT, COR, RET & DEL operations `id` used for data consolidation. */
+    val fingerprint: String,
     val isLessThanTwelveMetersVessel: Boolean,
     val logbookMessage: LogbookMessageDataOutput,
 ) {
@@ -16,6 +18,7 @@ class PriorNotificationDetailDataOutput(
 
             return PriorNotificationDetailDataOutput(
                 id = referenceReportId,
+                fingerprint = priorNotification.fingerprint,
                 isLessThanTwelveMetersVessel = priorNotification.vessel.isLessThanTwelveMetersVessel(),
                 logbookMessage = logbookMessageDataOutput,
             )

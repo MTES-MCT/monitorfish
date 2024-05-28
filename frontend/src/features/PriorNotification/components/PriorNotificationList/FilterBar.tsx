@@ -296,7 +296,7 @@ export function FilterBar() {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 
   > div:not(:first-child) {
     margin-top: 16px;

@@ -2,13 +2,16 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.config.UseCase
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.filters.LogbookReportFilter
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.sorters.LogbookReportSortColumn
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
-import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
-import fr.gouv.cnsp.monitorfish.domain.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
+import org.springframework.data.domain.Sort
 
 @UseCase
 class GetPriorNotifications(
@@ -20,14 +23,19 @@ class GetPriorNotifications(
     private val speciesRepository: SpeciesRepository,
     private val vesselRepository: VesselRepository,
 ) {
-    fun execute(filter: LogbookReportFilter): List<PriorNotification> {
+    fun execute(
+        filter: LogbookReportFilter,
+        sortColumn: LogbookReportSortColumn,
+        sortDirection: Sort.Direction,
+    ): List<PriorNotification> {
         val allGears = gearRepository.findAll()
         val allPorts = portRepository.findAll()
         val allRiskFactors = riskFactorRepository.findAll()
         val allSpecies = speciesRepository.findAll()
         val allVessels = vesselRepository.findAll()
 
-        val priorNotificationsWithoutReportingsCount = logbookReportRepository.findAllPriorNotifications(filter)
+        val incompletePriorNotifications = logbookReportRepository.findAllPriorNotifications(filter)
+        val priorNotificationsWithoutReportingCount = incompletePriorNotifications
             .map { priorNotification ->
                 val port = try {
                     priorNotification.logbookMessageTyped.typedMessage.port?.let { portLocode ->
@@ -47,9 +55,11 @@ class GetPriorNotifications(
                     allRiskFactors.find { it.internalReferenceNumber == vesselInternalReferenceNumber }
                 }
 
+                val seafront: Seafront? = port?.facade?.let { Seafront.valueOf(it) }
+
                 val finalPriorNotification = priorNotification.copy(
                     port = port,
-                    seafront = port?.facade,
+                    seafront = seafront,
                     vessel = vessel,
                     vesselRiskFactor = vesselRiskFactor,
                 )
@@ -59,10 +69,26 @@ class GetPriorNotifications(
 
                 finalPriorNotification
             }
+        val priorNotifications = enrichPriorNotificationsWithReportingCount(priorNotificationsWithoutReportingCount)
 
-        val priorNotifications = enrichPriorNotificationsWithReportingCount(priorNotificationsWithoutReportingsCount)
+        val sortedPriorNotifications = when (sortDirection) {
+            Sort.Direction.ASC -> priorNotifications.sortedWith(
+                compareBy(
+                    { getSortKey(it, sortColumn) },
+                    { it.logbookMessageTyped.logbookMessage.id }, // Tie-breaker
+                ),
+            )
 
-        return priorNotifications.filter { !it.logbookMessageTyped.logbookMessage.isDeleted }
+            Sort.Direction.DESC -> priorNotifications.sortedWith(
+                // Only solution found to fix typing issues
+                compareByDescending<PriorNotification> { getSortKey(it, sortColumn) }
+                    .thenByDescending { it.logbookMessageTyped.logbookMessage.id }, // Tie-breaker
+            )
+        }
+        val sortedPriorNotificationsWithoutDeletedOnes = sortedPriorNotifications
+            .filter { !it.logbookMessageTyped.logbookMessage.isDeleted }
+
+        return sortedPriorNotificationsWithoutDeletedOnes
     }
 
     private fun enrichPriorNotificationsWithReportingCount(
@@ -78,13 +104,28 @@ class GetPriorNotifications(
         )
 
         val priorNotificationsWithReportingCount = priorNotifications.map { priorNotification ->
-            val reportingsCount = currentReportings.count { reporting ->
+            val reportingCount = currentReportings.count { reporting ->
                 reporting.internalReferenceNumber == priorNotification.vessel.internalReferenceNumber
             }
 
-            priorNotification.copy(reportingsCount = reportingsCount)
+            priorNotification.copy(reportingCount = reportingCount)
         }
 
         return priorNotificationsWithReportingCount
+    }
+
+    companion object {
+        private fun getSortKey(
+            priorNotification: PriorNotification,
+            sortColumn: LogbookReportSortColumn,
+        ): Comparable<*>? {
+            return when (sortColumn) {
+                LogbookReportSortColumn.EXPECTED_ARRIVAL_DATE -> priorNotification.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc
+                LogbookReportSortColumn.EXPECTED_LANDING_DATE -> priorNotification.logbookMessageTyped.typedMessage.predictedLandingDatetimeUtc
+                LogbookReportSortColumn.PORT_NAME -> priorNotification.port?.name
+                LogbookReportSortColumn.VESSEL_NAME -> priorNotification.logbookMessageTyped.logbookMessage.vesselName
+                LogbookReportSortColumn.VESSEL_RISK_FACTOR -> priorNotification.vesselRiskFactor?.riskFactor
+            }
+        }
     }
 }

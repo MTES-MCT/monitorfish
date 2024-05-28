@@ -4,8 +4,9 @@ import { flexRender, type Row as RowType } from '@tanstack/react-table'
 import { orderBy } from 'lodash'
 import styled from 'styled-components'
 
+import { None } from './styles'
 import { PriorNotification } from '../../PriorNotification.types'
-import { priorNotificationActions } from '../../slice'
+import { openPriorNotificationCard } from '../../useCases/openPriorNotificationCard'
 
 type RowProps = Readonly<{
   row: RowType<PriorNotification.PriorNotification>
@@ -16,25 +17,29 @@ export function Row({ row }: RowProps) {
   const priorNotification = row.original
   const firstFiveOnBoardCatchesByWeight = orderBy(priorNotification.onBoardCatches, ['weight'], ['desc']).slice(0, 5)
 
+  const openCard = () => {
+    dispatch(openPriorNotificationCard(priorNotification.id, priorNotification.fingerprint))
+  }
+
   return (
     <>
-      <StyledRow>
+      <TableWithSelectableRows.BodyTr>
         {row?.getVisibleCells().map(cell => (
-          <ExpandableRow
+          <ExpandableRowCell
             key={cell.id}
-            $hasRightBorder={cell.column.id === 'alertCount'}
-            $width={cell.column.getSize()}
+            $hasRightBorder={cell.column.id === 'reportingCount'}
             onClick={() => row.toggleExpanded()}
+            style={cell.column.id === 'actions' ? { verticalAlign: 'bottom' } : undefined}
           >
             {flexRender(cell.column.columnDef.cell, cell.getContext())}
-          </ExpandableRow>
+          </ExpandableRowCell>
         ))}
-      </StyledRow>
+      </TableWithSelectableRows.BodyTr>
 
       {row.getIsExpanded() && (
         <ExpandedRow>
-          <ExpandedRowCell $width={40} />
-          <ExpandedRowCell $width={130}>
+          <ExpandedRowCell />
+          <ExpandedRowCell>
             <p>
               <ExpandedRowLabel>PNO émis :</ExpandedRowLabel>
               <ExpandedRowValue>
@@ -78,7 +83,7 @@ export function Row({ row }: RowProps) {
               )}
             </TagGroup>
           </ExpandedRowCell>
-          <ExpandedRowCell $width={120}>
+          <ExpandedRowCell>
             <p>
               <ExpandedRowLabel>Raison du PNO :</ExpandedRowLabel>
               <ExpandedRowValue>
@@ -86,9 +91,9 @@ export function Row({ row }: RowProps) {
               </ExpandedRowValue>
             </p>
           </ExpandedRowCell>
-          <ExpandedRowCell $width={140} />
-          <ExpandedRowCell $width={50} />
-          <ExpandedRowCell $width={160}>
+          <ExpandedRowCell />
+          <ExpandedRowCell />
+          <ExpandedRowCell>
             <p>
               {!!priorNotification.vesselInternalReferenceNumber && (
                 <ExpandedRowValue $isLight>{priorNotification.vesselInternalReferenceNumber} (CFR)</ExpandedRowValue>
@@ -118,11 +123,19 @@ export function Row({ row }: RowProps) {
               </ExpandedRowValue>
             </p>
           </ExpandedRowCell>
-          <ExpandedRowCell $width={130}>
+          <ExpandedRowCell>
             <ExpandedRowLabel>Nom des segments :</ExpandedRowLabel>
-            <span>{priorNotification.tripSegments.map(tripSegment => tripSegment.name).join(', ')}</span>
+            {priorNotification.tripSegments.length > 0 ? (
+              <ExpandedRowList>
+                {priorNotification.tripSegments.map(tripSegment => (
+                  <li key={tripSegment.code}>{`${tripSegment.code} – ${tripSegment.name}`}</li>
+                ))}
+              </ExpandedRowList>
+            ) : (
+              <None>Aucun segment.</None>
+            )}
           </ExpandedRowCell>
-          <ExpandedRowCell $width={180}>
+          <ExpandedRowCell>
             <ExpandedRowLabel>Principales espèces à bord :</ExpandedRowLabel>
             {priorNotification.onBoardCatches.length > 0 ? (
               <ExpandedRowList>
@@ -131,19 +144,15 @@ export function Row({ row }: RowProps) {
                 ))}
               </ExpandedRowList>
             ) : (
-              <ExpandedRowValue>Aucune capture à bord.</ExpandedRowValue>
+              <None>Aucune capture à bord.</None>
             )}
             <p>
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <Link
-                onClick={() => dispatch(priorNotificationActions.openPriorNotificationDetail(priorNotification.id))}
-              >
-                Voir plus de détail
-              </Link>
+              <Link onClick={openCard}>Voir plus de détail</Link>
             </p>
           </ExpandedRowCell>
-          <ExpandedRowCell $width={72} />
-          <ExpandedRowCell $width={64} />
+          <ExpandedRowCell />
+          <ExpandedRowCell />
         </ExpandedRow>
       )}
     </>
@@ -151,21 +160,20 @@ export function Row({ row }: RowProps) {
 }
 
 // TODO Update in monitor-ui.
-const StyledRow = styled(TableWithSelectableRows.BodyTr)`
-  font-weight: 400;
-`
-
-// TODO Update in monitor-ui.
-const ExpandableRow = styled(TableWithSelectableRows.Td)`
+const ExpandableRowCell = styled(TableWithSelectableRows.Td)`
   cursor: pointer;
-  font-weight: 400;
-  padding: 0 16px 1px;
   user-select: none;
-  vertical-align: middle;
 `
 
 // TODO Add this feature in monitor-ui.
-const ExpandedRow = TableWithSelectableRows.BodyTr
+const ExpandedRow = styled(TableWithSelectableRows.BodyTr)`
+  &:hover {
+    > td {
+      /* Hack to disable hover background color in expanded rows */
+      background-color: ${p => p.theme.color.cultured};
+    }
+  }
+`
 
 const ExpandedRowCell = styled(TableWithSelectableRows.Td).attrs(props => ({
   ...props,
@@ -183,6 +191,7 @@ const ExpandedRowCell = styled(TableWithSelectableRows.Td).attrs(props => ({
 const ExpandedRowLabel = styled.span`
   color: ${p => p.theme.color.slateGray};
   display: block;
+  font-weight: 400;
   width: 100%;
 `
 const ExpandedRowValue = styled.span<{

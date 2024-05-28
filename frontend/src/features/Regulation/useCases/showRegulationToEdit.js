@@ -1,8 +1,8 @@
 import { getRegulatoryZoneFromAPI, REGULATORY_ZONE_METADATA_ERROR_MESSAGE } from '../../../api/geoserver'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { setError } from '../../../domain/shared_slices/Global'
-import { STATUS } from '../../Backoffice/constants'
-import { setProcessingRegulation, setSelectedRegulatoryZoneId, setStatus } from '../../Backoffice/slice'
+import { STATUS } from '../../BackOffice/constants'
+import { setProcessingRegulation, setSelectedRegulatoryZoneId, setStatus } from '../../BackOffice/slice'
 import { mapToRegulatoryZone, DEFAULT_REGULATORY_TEXT } from '../utils'
 
 const showRegulationToEdit = regulatoryZone => async (dispatch, getState) => {

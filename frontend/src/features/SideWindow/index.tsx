@@ -14,7 +14,7 @@ import {
   Fragment
 } from 'react'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
-import styled, { createGlobalStyle, StyleSheetManager } from 'styled-components'
+import styled, { createGlobalStyle, css, StyleSheetManager } from 'styled-components'
 
 import { Alert } from './Alert'
 import { BeaconMalfunctionBoard } from './BeaconMalfunctionBoard'
@@ -122,7 +122,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
       <Wrapper ref={wrapperRef}>
         {!isFirstRender && (
           <NewWindowContext.Provider value={newWindowContextProviderValue}>
-            <GlobalStyle />
+            <GlobalStyle $isFromURL={isFromURL} />
 
             <BannerStack />
 
@@ -175,10 +175,66 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
   )
 }
 
-const GlobalStyle = createGlobalStyle`
+const GlobalStyle = createGlobalStyle<{
+  $isFromURL: boolean
+}>`
   html, body, #root {
     height: 100%;
   }
+
+  /*
+    Hack to fix the strange checkbox vertical position inconsistency
+    between the side window access via /side_window and the one opened as a new window.
+    The position is correct when accessed via /side_window (and not when opened as a new window).
+  */
+  ${p =>
+    !p.$isFromURL &&
+    css`
+      .rs-checkbox {
+        > .rs-checkbox-checker {
+          > label {
+            line-height: inherit;
+          }
+        }
+      }
+      .Table-SimpleTable {
+        > thead {
+          > tr {
+            > th:first-child {
+              > .rs-checkbox {
+                > .rs-checkbox-checker {
+                  > label {
+                    .rs-checkbox-wrapper {
+                      top: -8px;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        > tbody {
+          > tr {
+            > td {
+              > .Element-Tag {
+                vertical-align: middle;
+              }
+            }
+            > td:first-child {
+              > .rs-checkbox {
+                > .rs-checkbox-checker {
+                  > label {
+                    .rs-checkbox-wrapper {
+                      top: -13px;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    `}
 `
 
 // All containers within this SideWindow root wrapper should now only use flexboxes

@@ -165,7 +165,7 @@ export function PriorNotificationList() {
               )}
             </TableInnerWrapper>
 
-            {isLoadingNextPage && (
+            {isLoadingNextPage && table.getCanNextPage() && (
               <Button accent={Accent.SECONDARY} disabled isFullWidth>
                 Chargement en cours...
               </Button>
@@ -192,7 +192,6 @@ const TableOuterWrapper = styled.div`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  width: 100%;
 
   * {
     box-sizing: border-box;
@@ -208,7 +207,11 @@ const TableLegend = styled.p`
 const TableInnerWrapper = styled.div`
   align-items: flex-start;
   display: flex;
-  height: 522px; /* = table height */
+  height: 513px; /* = table height - 5px */
   overflow-y: auto;
   width: 100%;
+
+  > table {
+    margin-top: -5px;
+  }
 `

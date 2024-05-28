@@ -96,7 +96,7 @@ export function VesselRiskFactor({
   )
 }
 
-const Box = styled.span`
+const Box = styled.div`
   font-size: 13px;
   position: relative;
   width: auto;
@@ -115,14 +115,13 @@ const Score = styled.div<{
   border-radius: 1px;
   color: ${p => p.theme.color.white};
   cursor: ${p => (p.$isInteractive ? 'pointer' : 'default')};
-  display: flex;
   font-family: 'Open Sans', sans-serif;
   font-size: 13px;
   font-weight: 700;
   height: 22px;
   justify-content: center;
-  line-height: 1;
-  padding: 0 0 1px;
+  line-height: 22px;
+  text-align: center;
   width: 28px;
 `
 

@@ -3,26 +3,30 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { DEFAULT_LIST_FILTER_VALUES } from './components/PriorNotificationList/constants'
 
 import type { ListFilter } from './components/PriorNotificationList/types'
+import type { PriorNotification } from './PriorNotification.types'
 
 interface PriorNotificationState {
+  isPriorNotificationCardOpen: boolean
   listFilterValues: ListFilter
-  openedPriorNotificationId: string | undefined
+  priorNotificationCardDetail: PriorNotification.PriorNotificationDetail | undefined
 }
 const INITIAL_STATE: PriorNotificationState = {
+  isPriorNotificationCardOpen: false,
   listFilterValues: DEFAULT_LIST_FILTER_VALUES,
-  openedPriorNotificationId: undefined
+  priorNotificationCardDetail: undefined
 }
 
 const priorNotificationSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'priorNotification',
   reducers: {
-    closePriorNotificationDetail(state) {
-      state.openedPriorNotificationId = undefined
+    closePriorNotificationCard(state) {
+      state.isPriorNotificationCardOpen = false
+      state.priorNotificationCardDetail = undefined
     },
 
-    openPriorNotificationDetail(state, action: PayloadAction<string>) {
-      state.openedPriorNotificationId = action.payload
+    openPriorNotificationCard(state) {
+      state.isPriorNotificationCardOpen = true
     },
 
     resetListFilterValues(state) {
@@ -37,6 +41,10 @@ const priorNotificationSlice = createSlice({
         ...state.listFilterValues,
         ...action.payload
       }
+    },
+
+    setPriorNotificationCardDetail(state, action: PayloadAction<PriorNotification.PriorNotificationDetail>) {
+      state.priorNotificationCardDetail = action.payload
     }
   }
 })

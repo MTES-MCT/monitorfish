@@ -1,44 +1,46 @@
+import { ErrorWall } from '@components/ErrorWall'
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { LogbookMessage } from '@features/Logbook/components/VesselLogbook/LogbookMessages/messages/LogbookMessage'
-import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Accent, Button } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
 
 import { Header } from './Header'
-import { useGetPriorNotificationQuery } from '../../priorNotificationApi'
+import { priorNotificationActions } from '../../slice'
 
-type PriorNotificationCardProps = Readonly<{
-  priorNotificationId: string
-}>
-export function PriorNotificationCard({ priorNotificationId }: PriorNotificationCardProps) {
+export function PriorNotificationCard() {
   const dispatch = useMainAppDispatch()
-  const { data: priorNotificationDetail, error, isLoading } = useGetPriorNotificationQuery(priorNotificationId)
+  const priorNotificationDetail = useMainAppSelector(state => state.priorNotification.priorNotificationCardDetail)
+  const sideWindowPriorNotificationCardError = useMainAppSelector(
+    state => state.displayedError.sideWindowPriorNotificationCardError
+  )
 
   const close = () => {
-    dispatch(priorNotificationActions.closePriorNotificationDetail())
+    dispatch(priorNotificationActions.closePriorNotificationCard())
   }
 
-  if (isLoading) {
+  if (sideWindowPriorNotificationCardError) {
+    return (
+      <Wrapper>
+        <Background onClick={close} />
+
+        <Card>
+          <ErrorWall displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_CARD_ERROR} />
+        </Card>
+      </Wrapper>
+    )
+  }
+
+  if (!priorNotificationDetail) {
     return (
       <Wrapper>
         <Background onClick={close} />
 
         <Card>
           <LoadingSpinnerWall />
-        </Card>
-      </Wrapper>
-    )
-  }
-
-  if (!!error || !priorNotificationDetail) {
-    return (
-      <Wrapper>
-        <Background onClick={close} />
-
-        <Card>
-          <Body>Une erreur est survenue pendant le chargement du préavis.</Body>
         </Card>
       </Wrapper>
     )

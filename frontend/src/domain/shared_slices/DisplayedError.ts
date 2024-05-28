@@ -1,26 +1,30 @@
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { createSlice } from '@reduxjs/toolkit'
 import { UseCaseStore } from '@store/UseCaseStore'
 import { assertNotNullish } from '@utils/assertNotNullish'
 
 import type { DisplayedError } from '@libs/DisplayedError'
-import type { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
-type DisplayedErrorStateValue = {
+export type DisplayedErrorStateValue = {
   hasRetryableUseCase: boolean
   message: string
 }
 
 export type DisplayedErrorState = Record<DisplayedErrorKey, DisplayedErrorStateValue | undefined>
-export const INITIAL_STATE: DisplayedErrorState = {
-  missionFormError: undefined,
-  vesselSidebarError: undefined
-}
+export const INITIAL_STATE: DisplayedErrorState = Object.values(DisplayedErrorKey).reduce(
+  (acc, key) => ({ ...acc, [key]: undefined }),
+  {} as DisplayedErrorState
+)
 
 const displayedErrorSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'displayedError',
   reducers: {
+    /**
+     * @internal
+     * /!\ NEVER use this action directly, use `displayOrLogError()` use case instead.
+     */
     set(
       state,
       action: PayloadAction<

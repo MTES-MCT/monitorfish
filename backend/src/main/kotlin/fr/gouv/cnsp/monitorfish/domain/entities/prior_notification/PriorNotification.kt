@@ -8,6 +8,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 
 data class PriorNotification(
+    /** Unique identifier concatenating all the DAT, COR, RET & DEL operations `id` used for data consolidation. */
+    val fingerprint: String,
     val logbookMessageTyped: LogbookMessageTyped<PNO>,
     val port: Port? = null,
     val reportingsCount: Int? = null,

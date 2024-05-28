@@ -18,6 +18,7 @@ import styled, { createGlobalStyle, StyleSheetManager } from 'styled-components'
 
 import { Alert } from './Alert'
 import { BeaconMalfunctionBoard } from './BeaconMalfunctionBoard'
+import { BannerStack } from './components/BannerStack'
 import { Menu } from './Menu'
 import { MissionEventContext } from '../../context/MissionEventContext'
 import { SideWindowMenuKey } from '../../domain/entities/sideWindow/constants'
@@ -122,6 +123,8 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
         {!isFirstRender && (
           <NewWindowContext.Provider value={newWindowContextProviderValue}>
             <GlobalStyle />
+
+            <BannerStack />
 
             <Menu selectedMenu={selectedPath.menu} />
             {(selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD ||

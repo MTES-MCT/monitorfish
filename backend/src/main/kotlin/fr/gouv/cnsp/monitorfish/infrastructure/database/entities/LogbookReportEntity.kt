@@ -141,6 +141,10 @@ data class LogbookReportEntity(
 
     fun toPriorNotification(mapper: ObjectMapper, relatedModels: List<LogbookReportEntity>): PriorNotification {
         val referenceLogbookMessage = toLogbookMessage(mapper)
+        val fingerprint = listOf(referenceLogbookMessage.id)
+            .plus(relatedModels.mapNotNull { it.id })
+            .sorted()
+            .joinToString(separator = ".")
         val relatedLogbookMessages = relatedModels.map { it.toLogbookMessage(mapper) }
         val enrichedLogbookMessageTyped = referenceLogbookMessage
             .toEnrichedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
@@ -148,6 +152,7 @@ data class LogbookReportEntity(
         val vessel = Vessel(id = -1, flagState = CountryCode.UNDEFINED)
 
         return PriorNotification(
+            fingerprint,
             logbookMessageTyped = enrichedLogbookMessageTyped,
             vessel = vessel,
         )

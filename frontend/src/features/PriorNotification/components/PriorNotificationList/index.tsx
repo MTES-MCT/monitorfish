@@ -1,14 +1,17 @@
 import { BackendApi } from '@api/BackendApi.types'
-import { RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS } from '@api/constants'
+import { RTK_FORCE_REFETCH_QUERY_OPTIONS, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS, RtkCacheTagType } from '@api/constants'
+import { ErrorWall } from '@components/ErrorWall'
 import { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 import { Body } from '@features/SideWindow/components/Body'
 import { Header } from '@features/SideWindow/components/Header'
 import { Page } from '@features/SideWindow/components/Page'
 import { SubMenu } from '@features/SideWindow/SubMenu'
+import { useHandleFrontendApiError } from '@hooks/useHandleFrontendApiError'
 import { useListPagination } from '@hooks/useListPagination'
 import { useListSorting } from '@hooks/useListSorting'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Accent, Button, Icon, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
 import { flexRender, getCoreRowModel, useReactTable, getExpandedRowModel } from '@tanstack/react-table'
 import { useCallback, useState } from 'react'
@@ -30,7 +33,7 @@ import type { AllSeafrontGroup, NoSeafrontGroup, SeafrontGroup } from '@constant
 export function PriorNotificationList() {
   const dispatch = useMainAppDispatch()
   const listFilter = useMainAppSelector(state => state.priorNotification.listFilterValues)
-  const openedPriorNotificationId = useMainAppSelector(state => state.priorNotification.openedPriorNotificationId)
+  const isPriorNotificationCardOpen = useMainAppSelector(state => state.priorNotification.isPriorNotificationCardOpen)
 
   const [rowSelection, setRowSelection] = useState({})
 
@@ -47,9 +50,15 @@ export function PriorNotificationList() {
     apiSortingParams,
     listFilter
   }
-  const { data, isError, isFetching } = useGetPriorNotificationsQuery(rtkQueryParams, {
-    ...RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS
+  const { data, error, isError, isFetching } = useGetPriorNotificationsQuery(rtkQueryParams, {
+    ...RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS,
+    ...RTK_FORCE_REFETCH_QUERY_OPTIONS
   })
+  useHandleFrontendApiError(
+    DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_LIST_ERROR,
+    error,
+    RtkCacheTagType.PriorNotifications
+  )
   const { data: priorNotifications, extraData, totalLength } = data ?? {}
 
   const isLoadingNewPage = isNewPage && isFetching
@@ -112,66 +121,63 @@ export function PriorNotificationList() {
           <FilterTags />
 
           <TableOuterWrapper>
-            {isError && <div>Une erreur est survenue.</div>}
-            {!isError && (
-              <>
-                <TableLegend>{`${
-                  isLoadingNewPage ? '...' : totalLength
-                } préavis (tous les horaires sont en UTC)`}</TableLegend>
+            <TableLegend>{`${
+              isLoadingNewPage || totalLength === undefined ? '...' : totalLength
+            } préavis (tous les horaires sont en UTC)`}</TableLegend>
 
-                <TableInnerWrapper>
-                  <TableWithSelectableRows.Table $withRowCheckbox>
-                    <TableWithSelectableRows.Head>
-                      {table.getHeaderGroups().map(headerGroup => (
-                        <tr key={headerGroup.id}>
-                          {headerGroup.headers.map(header => (
-                            <TableWithSelectableRows.Th
-                              key={header.id}
-                              $width={header.column.getSize()}
-                              style={{
-                                maxWidth: header.column.getSize(),
-                                minWidth: header.column.getSize()
-                              }}
-                            >
-                              {header.id === 'select' &&
-                                flexRender(header.column.columnDef.header, header.getContext())}
-                              {header.id !== 'select' && !header.isPlaceholder && (
-                                <TableWithSelectableRows.SortContainer
-                                  className={header.column.getCanSort() ? 'cursor-pointer' : ''}
-                                  onClick={header.column.getToggleSortingHandler()}
-                                >
-                                  {flexRender(header.column.columnDef.header, header.getContext())}
-                                  {header.column.getCanSort() &&
-                                    ({
-                                      asc: <Icon.SortSelectedDown size={14} />,
-                                      desc: <Icon.SortSelectedUp size={14} />
-                                    }[header.column.getIsSorted() as string] ?? <Icon.SortingArrows size={14} />)}
-                                </TableWithSelectableRows.SortContainer>
-                              )}
-                            </TableWithSelectableRows.Th>
-                          ))}
-                        </tr>
-                      ))}
-                    </TableWithSelectableRows.Head>
-                    {isLoadingNewPage && <TableBodyLoader />}
-                    {!isLoadingNewPage && !!priorNotifications && (
-                      <tbody>
-                        {rows.map(row => (
-                          <Row key={row.id} row={row} />
+            <TableInnerWrapper>
+              {isError && <ErrorWall displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_LIST_ERROR} />}
+              {!isError && (
+                <TableWithSelectableRows.Table $withRowCheckbox>
+                  <TableWithSelectableRows.Head>
+                    {table.getHeaderGroups().map(headerGroup => (
+                      <tr key={headerGroup.id}>
+                        {headerGroup.headers.map(header => (
+                          <TableWithSelectableRows.Th
+                            key={header.id}
+                            $width={header.column.getSize()}
+                            style={{
+                              maxWidth: header.column.getSize(),
+                              minWidth: header.column.getSize()
+                            }}
+                          >
+                            {header.id === 'select' && flexRender(header.column.columnDef.header, header.getContext())}
+                            {header.id !== 'select' && !header.isPlaceholder && (
+                              <TableWithSelectableRows.SortContainer
+                                className={header.column.getCanSort() ? 'cursor-pointer' : ''}
+                                onClick={header.column.getToggleSortingHandler()}
+                              >
+                                {flexRender(header.column.columnDef.header, header.getContext())}
+                                {header.column.getCanSort() &&
+                                  ({
+                                    asc: <Icon.SortSelectedDown size={14} />,
+                                    desc: <Icon.SortSelectedUp size={14} />
+                                  }[header.column.getIsSorted() as string] ?? <Icon.SortingArrows size={14} />)}
+                              </TableWithSelectableRows.SortContainer>
+                            )}
+                          </TableWithSelectableRows.Th>
                         ))}
-                      </tbody>
-                    )}
-                  </TableWithSelectableRows.Table>
-                </TableInnerWrapper>
-              </>
-            )}
+                      </tr>
+                    ))}
+                  </TableWithSelectableRows.Head>
+                  {isLoadingNewPage && <TableBodyLoader />}
+                  {!isLoadingNewPage && !!priorNotifications && (
+                    <tbody>
+                      {rows.map(row => (
+                        <Row key={row.id} row={row} />
+                      ))}
+                    </tbody>
+                  )}
+                </TableWithSelectableRows.Table>
+              )}
+            </TableInnerWrapper>
 
             {isLoadingNextPage && (
               <Button accent={Accent.SECONDARY} disabled isFullWidth>
                 Chargement en cours...
               </Button>
             )}
-            {!isLoadingNewPage && !isLoadingNextPage && table.getCanNextPage() && (
+            {!isError && !isLoadingNewPage && !isLoadingNextPage && table.getCanNextPage() && (
               <Button accent={Accent.SECONDARY} isFullWidth onClick={table.nextPage}>
                 {`Charger les ${Math.min(
                   totalLength! - priorNotifications!.length,
@@ -183,7 +189,7 @@ export function PriorNotificationList() {
         </Body>
       </Page>
 
-      {!!openedPriorNotificationId && <PriorNotificationCard priorNotificationId={openedPriorNotificationId} />}
+      {isPriorNotificationCardOpen && <PriorNotificationCard />}
     </>
   )
 }
@@ -191,7 +197,9 @@ export function PriorNotificationList() {
 const TableOuterWrapper = styled.div`
   align-self: flex-start;
   box-sizing: border-box;
+  display: flex;
   flex-direction: column;
+  width: 100%;
 
   * {
     box-sizing: border-box;
@@ -205,6 +213,8 @@ const TableLegend = styled.p`
 `
 
 const TableInnerWrapper = styled.div`
-  height: 600;
+  height: 522px; /* = table height */
+  display: flex;
   overflow-y: auto;
+  width: 100%;
 `

@@ -13,6 +13,8 @@ data class PriorNotificationDataOutput(
     val expectedArrivalDate: String?,
     val expectedLandingDate: String?,
     val hasVesselRiskFactorSegments: Boolean?,
+    /** Unique identifier concatenating all the DAT, COR, RET & DEL operations `id` used for data consolidation. */
+    val fingerprint: String,
     val isCorrection: Boolean,
     val isVesselUnderCharter: Boolean?,
     val onBoardCatches: List<LogbookMessageCatchDataOutput>,
@@ -68,6 +70,7 @@ data class PriorNotificationDataOutput(
                 expectedArrivalDate = message.predictedArrivalDatetimeUtc?.toString(),
                 expectedLandingDate = message.predictedLandingDatetimeUtc?.toString(),
                 hasVesselRiskFactorSegments = priorNotification.vesselRiskFactor?.segments?.isNotEmpty(),
+                fingerprint = priorNotification.fingerprint,
                 isCorrection = logbookMessage.operationType === LogbookOperationType.COR,
                 isVesselUnderCharter = priorNotification.vessel.underCharter,
                 onBoardCatches,

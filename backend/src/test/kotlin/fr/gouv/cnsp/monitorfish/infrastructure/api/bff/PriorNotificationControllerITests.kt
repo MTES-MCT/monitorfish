@@ -49,6 +49,7 @@ class PriorNotificationControllerITests {
         given(this.getPriorNotifications.execute(any(), any(), any(), any(), any())).willReturn(
             listOf(
                 PriorNotification(
+                    fingerprint = "1",
                     logbookMessageTyped = LogbookMessageTyped(
                         clazz = PNO::class.java,
                         logbookMessage = LogbookMessage(
@@ -84,15 +85,16 @@ class PriorNotificationControllerITests {
                 ),
 
                 PriorNotification(
+                    fingerprint = "3",
                     logbookMessageTyped = LogbookMessageTyped(
                         clazz = PNO::class.java,
                         logbookMessage = LogbookMessage(
-                            id = 1,
+                            id = 3,
                             reportId = "FAKE_REPORT_ID_2_COR",
                             referencedReportId = "FAKE_NONEXISTENT_REPORT_ID_2",
                             analyzedByRules = emptyList(),
                             integrationDateTime = ZonedDateTime.now(),
-                            isCorrectedByNewerMessage = false,
+                            isCorrectedByNewerMessage = true,
                             isDeleted = false,
                             isEnriched = false,
                             message = PNO(),
@@ -156,6 +158,7 @@ class PriorNotificationControllerITests {
         // Given
         given(this.getPriorNotification.execute("FAKE_REPORT_ID_1")).willReturn(
             PriorNotification(
+                fingerprint = "1",
                 logbookMessageTyped = LogbookMessageTyped(
                     clazz = PNO::class.java,
                     logbookMessage = LogbookMessage(

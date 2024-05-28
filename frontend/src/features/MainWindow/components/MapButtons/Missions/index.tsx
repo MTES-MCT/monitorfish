@@ -11,7 +11,7 @@ import { MapBox } from '../../../../../domain/entities/map/constants'
 import { SideWindowMenuKey, SideWindowStatus } from '../../../../../domain/entities/sideWindow/constants'
 import { setDisplayedComponents } from '../../../../../domain/shared_slices/DisplayedComponent'
 import { setLeftMapBoxOpened } from '../../../../../domain/shared_slices/Global'
-import { sideWindowActions } from '../../../../../domain/shared_slices/SideWindow'
+import { sideWindowActions } from '../../../../SideWindow/slice'
 import { MapToolBox } from '../shared/MapToolBox'
 import { MapToolButton } from '../shared/MapToolButton'
 

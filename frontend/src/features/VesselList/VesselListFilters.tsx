@@ -137,7 +137,9 @@ function UnmemoizedVesselListFilters({
     }))
 
     zones.setZonesFilter(nextZonesWithoutNulls)
-  }, [dispatch, zones])
+    // Having a dependency on `zones` trigger an infinite re-render
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, zones.setZonesFilter])
 
   useEffect(() => {
     getZones()

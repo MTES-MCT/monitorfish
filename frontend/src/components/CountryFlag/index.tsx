@@ -38,3 +38,13 @@ const Img = styled.img<{
   height: ${p => p.$height}px;
   width: ${p => p.$width}px;
 `
+
+const Unknown = styled.span<{
+  $height: number
+  $width: number
+}>`
+  background-color: black;
+  display: inline-block;
+  height: ${p => p.$height}px;
+  width: ${p => p.$width}px;
+`

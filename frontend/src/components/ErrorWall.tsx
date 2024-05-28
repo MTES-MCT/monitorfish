@@ -6,10 +6,10 @@ import styled, { css } from 'styled-components'
 
 import type { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
-export type ErrorWallProps = {
+export type ErrorWallProps = Readonly<{
   displayedErrorKey: DisplayedErrorKey
   isAbsolute?: boolean | undefined
-}
+}>
 export function ErrorWall({ displayedErrorKey, isAbsolute = false }: ErrorWallProps) {
   const dispatch = useMainAppDispatch()
   const displayedErrorStateValue = useMainAppSelector(store => store.displayedError[displayedErrorKey])

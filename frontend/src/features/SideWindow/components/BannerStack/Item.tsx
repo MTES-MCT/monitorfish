@@ -4,11 +4,11 @@ import styled from 'styled-components'
 import type { SideWindow } from '../../SideWindow.types'
 import type { Promisable } from 'type-fest'
 
-type ItemProps = {
+type ItemProps = Readonly<{
   bannerProps: SideWindow.BannerStackItemProps
   bannerStackId: number
   onCloseOrAutoclose: (bannerStackKey: number) => Promisable<void>
-}
+}>
 export function Item({ bannerProps, bannerStackId, onCloseOrAutoclose }: ItemProps) {
   const controlledBannerProps: BannerProps = {
     ...bannerProps,

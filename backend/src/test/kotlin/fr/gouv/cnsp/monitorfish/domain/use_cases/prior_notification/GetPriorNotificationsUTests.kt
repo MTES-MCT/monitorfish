@@ -140,7 +140,7 @@ class GetPriorNotificationsUTests {
             riskFactorRepository,
             speciesRepository,
             vesselRepository,
-        ).execute(defaultFilter, defaultSortColumn, defaultSortDirection, defaultPageSize, defaultPageNumber)
+        ).execute(defaultFilter, defaultSortColumn, defaultSortDirection)
 
         // Then
         assertThat(result).hasSize(2)

@@ -46,7 +46,7 @@ class PriorNotificationControllerITests {
     @Test
     fun `Should get a list of prior notifications`() {
         // Given
-        given(this.getPriorNotifications.execute(any(), any(), any(), any(), any())).willReturn(
+        given(this.getPriorNotifications.execute(any(), any(), any())).willReturn(
             listOf(
                 PriorNotification(
                     fingerprint = "1",

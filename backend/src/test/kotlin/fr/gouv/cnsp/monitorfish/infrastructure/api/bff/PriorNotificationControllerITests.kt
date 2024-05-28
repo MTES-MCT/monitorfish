@@ -68,7 +68,7 @@ class PriorNotificationControllerITests {
                             transmissionFormat = LogbookTransmissionFormat.ERS,
                         ),
                     ),
-                    reportingsCount = null,
+                    reportingCount = null,
                     seafront = null,
                     vessel = Vessel(
                         id = 1,
@@ -104,7 +104,7 @@ class PriorNotificationControllerITests {
                             transmissionFormat = LogbookTransmissionFormat.ERS,
                         ),
                     ),
-                    reportingsCount = null,
+                    reportingCount = null,
                     seafront = null,
                     vessel = Vessel(
                         id = 1,
@@ -177,7 +177,7 @@ class PriorNotificationControllerITests {
                         transmissionFormat = LogbookTransmissionFormat.ERS,
                     ),
                 ),
-                reportingsCount = null,
+                reportingCount = null,
                 seafront = null,
                 vessel = Vessel(
                     id = 1,

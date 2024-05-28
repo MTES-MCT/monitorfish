@@ -52,7 +52,8 @@ export function PriorNotificationList() {
   }
   const { data, error, isError, isFetching } = useGetPriorNotificationsQuery(rtkQueryParams, {
     ...RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS,
-    ...RTK_FORCE_REFETCH_QUERY_OPTIONS
+    ...RTK_FORCE_REFETCH_QUERY_OPTIONS,
+    pollingInterval: 1000000
   })
   useHandleFrontendApiError(
     DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_LIST_ERROR,
@@ -213,8 +214,9 @@ const TableLegend = styled.p`
 `
 
 const TableInnerWrapper = styled.div`
-  height: 522px; /* = table height */
+  align-items: flex-start;
   display: flex;
+  height: 522px; /* = table height */
   overflow-y: auto;
   width: 100%;
 `

@@ -99,8 +99,8 @@ class GetPriorNotification(
             )
         }
 
-        val reportingsCount = currentReportings?.count() ?: 0
+        val reportingCount = currentReportings?.count() ?: 0
 
-        return priorNotification.copy(reportingsCount = reportingsCount)
+        return priorNotification.copy(reportingCount = reportingCount)
     }
 }

@@ -27,8 +27,9 @@ export function Row({ row }: RowProps) {
         {row?.getVisibleCells().map(cell => (
           <ExpandableRowCell
             key={cell.id}
-            $hasRightBorder={cell.column.id === 'alertCount'}
+            $hasRightBorder={cell.column.id === 'reportingCount'}
             onClick={() => row.toggleExpanded()}
+            style={cell.column.id === 'actions' ? { verticalAlign: 'bottom' } : undefined}
           >
             {flexRender(cell.column.columnDef.cell, cell.getContext())}
           </ExpandableRowCell>

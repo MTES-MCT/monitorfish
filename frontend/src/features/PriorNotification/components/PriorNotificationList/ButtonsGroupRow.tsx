@@ -42,7 +42,7 @@ export function ButtonsGroupRow({ priorNotification }: ButtonsGroupRowProps) {
   }
 
   return (
-    <ButtonsGroup>
+    <Wrapper>
       <IconButton
         accent={Accent.TERTIARY}
         Icon={Icon.ViewOnMap}
@@ -55,16 +55,14 @@ export function ButtonsGroupRow({ priorNotification }: ButtonsGroupRowProps) {
         onClick={openPriorNotificationDetail}
         title="Consulter le préavis"
       />
-    </ButtonsGroup>
+    </Wrapper>
   )
 }
 
-const ButtonsGroup = styled.div`
+const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
   gap: 8px;
-  margin-top: 2px;
-  position: relative;
 
   > button {
     padding: 0px;

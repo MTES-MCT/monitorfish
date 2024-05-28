@@ -77,7 +77,7 @@ class GetPriorNotificationsUTests {
                             transmissionFormat = LogbookTransmissionFormat.ERS,
                         ),
                     ),
-                    reportingsCount = null,
+                    reportingCount = null,
                     seafront = null,
                     vessel = Vessel(
                         id = 1,
@@ -113,7 +113,7 @@ class GetPriorNotificationsUTests {
                             transmissionFormat = LogbookTransmissionFormat.ERS,
                         ),
                     ),
-                    reportingsCount = null,
+                    reportingCount = null,
                     seafront = null,
                     vessel = Vessel(
                         id = 2,

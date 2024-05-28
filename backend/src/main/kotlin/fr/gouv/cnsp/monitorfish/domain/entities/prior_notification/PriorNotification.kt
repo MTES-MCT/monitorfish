@@ -12,7 +12,7 @@ data class PriorNotification(
     val fingerprint: String,
     val logbookMessageTyped: LogbookMessageTyped<PNO>,
     val port: Port? = null,
-    val reportingsCount: Int? = null,
+    val reportingCount: Int? = null,
     val seafront: Seafront? = null,
     val vessel: Vessel,
     val vesselRiskFactor: VesselRiskFactor? = null,

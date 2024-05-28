@@ -3,14 +3,14 @@ import { RTK_MAX_RETRIES } from '@api/constants'
 import { openSideWindowPriorNotificationList } from './utils'
 
 context('Side Window > Prior Notification List > Error Handling', () => {
-  const failedQueriesCount = RTK_MAX_RETRIES + 1
+  const failedQueryCount = RTK_MAX_RETRIES + 1
   const apiPathBase = '/bff/v1/prior_notifications?'
 
   it('Should handle fetching error as expected', () => {
     cy.intercept(
       {
         method: 'GET',
-        times: failedQueriesCount,
+        times: failedQueryCount,
         url: `${apiPathBase}*`
       },
       {
@@ -20,7 +20,7 @@ context('Side Window > Prior Notification List > Error Handling', () => {
 
     openSideWindowPriorNotificationList()
 
-    for (let i = 1; i <= failedQueriesCount; i += 1) {
+    for (let i = 1; i <= failedQueryCount; i += 1) {
       cy.wait('@getPriorNotificationsWithError')
     }
 

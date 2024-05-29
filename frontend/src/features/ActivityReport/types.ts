@@ -11,7 +11,7 @@ export type ActivityReport = {
   action: MissionAction.MissionAction
   activityCode: ActivityCode
   controlUnits: LegacyControlUnit.LegacyControlUnit[]
-  faoCode: string | undefined
+  faoArea: string | undefined
   segment: string | undefined
   vessel: Vessel.Vessel
   vesselNationalIdentifier: string

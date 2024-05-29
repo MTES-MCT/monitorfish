@@ -50,7 +50,7 @@ class JpaMissionActionsRepository(
         return dbMissionActionsRepository.findById(id).get().toMissionAction(mapper)
     }
 
-    override fun findControlsInDates(beforeDateTime: ZonedDateTime, afterDateTime: ZonedDateTime): List<MissionAction> {
+    override fun findSeaAndLandControlBetweenDates(beforeDateTime: ZonedDateTime, afterDateTime: ZonedDateTime): List<MissionAction> {
         return dbMissionActionsRepository.findAllByActionDatetimeUtcBeforeAndActionDatetimeUtcAfterAndIsDeletedIsFalseAndActionTypeIn(
             beforeDateTime.toInstant(),
             afterDateTime.toInstant(),

@@ -1,5 +1,10 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep
 
+import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FAOArea
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
+import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.hasFaoCodeIncludedIn
+
 /**
  * JDP MED / EASTERN ATLANTIC operational zones
  *
@@ -35,7 +40,7 @@ enum class JointDeploymentPlan(private val species: List<FaoZonesAndSpecy>, priv
         return this.species.map { it.second }.distinct()
     }
 
-    fun getOperationalZones(): List<String> {
+    private fun getOperationalZones(): List<String> {
         return this.operationalZones
     }
 
@@ -43,11 +48,19 @@ enum class JointDeploymentPlan(private val species: List<FaoZonesAndSpecy>, priv
      * See "DÉCISION D’EXÉCUTION (UE) 2023/2376 DE LA COMMISSION":
      *  https://extranet.legipeche.metier.developpement-durable.gouv.fr/fichier/pdf/oj_l_202302376_fr_txt_cle6b198e.pdf?arg=24774&cle=7d14626b709ff7e8c62586bcd8683e7e9fcaa348&file=pdf%2Foj_l_202302376_fr_txt_cle6b198e.pdf
      */
-    fun isLandControlApplicable(flagState: CountryCode, speciesOnboardCodes: List<String>, tripFaoCodes: List<String>): Boolean {
-        val isThirdCountryVessel = EU_THIRD_COUNTRIES.contains(flagState)
+    fun isLandControlApplicable(control: MissionAction): Boolean {
+        val speciesOnboardCodes = control.speciesOnboard.mapNotNull { it.speciesCode }
+        val tripFaoCodes = control.faoAreas
+
+        val isThirdCountryVessel = EU_THIRD_COUNTRIES.contains(control.flagState)
+
+        val isFirstJdpCurrentJdp = isFirstJdpFound(control)
+        if (!isFirstJdpCurrentJdp) {
+            return false
+        }
 
         val hasSpeciesInJdp = this.species.any { (jdpFaoZones, jdpSpecy) ->
-            val isSpecyFoundInJdpSPecies = speciesOnboardCodes.contains(jdpSpecy)
+            val isSpecyFoundInJdpSpecies = speciesOnboardCodes.contains(jdpSpecy)
 
             val isFaoZoneFoundInJdpFaoZones = jdpFaoZones
                 .any { jdpFaoCode ->
@@ -55,7 +68,7 @@ enum class JointDeploymentPlan(private val species: List<FaoZonesAndSpecy>, priv
                     tripFaoCodes.any { tripFaoCode -> tripFaoCode.contains(jdpFaoCode) }
                 }
 
-            return@any isSpecyFoundInJdpSPecies && isFaoZoneFoundInJdpFaoZones
+            return@any isSpecyFoundInJdpSpecies && isFaoZoneFoundInJdpFaoZones
         }
 
         val hasSpeciesInEUQuotas = if (isThirdCountryVessel) {
@@ -65,5 +78,68 @@ enum class JointDeploymentPlan(private val species: List<FaoZonesAndSpecy>, priv
         }
 
         return hasSpeciesInJdp || hasSpeciesInEUQuotas
+    }
+
+    fun getFirstFaoAreaIncludedInJdp(
+        control: MissionAction,
+    ): FAOArea? {
+        val jdpFaoAreas = this.getOperationalZones()
+
+        if (control.actionType == MissionActionType.SEA_CONTROL && !isFirstJdpFound(control)) {
+            return null
+        }
+
+        val firstFaoAreaIncludedInJdp = control.faoAreas
+            .map { FAOArea(it) }
+            .firstOrNull { controlFaoArea ->
+                jdpFaoAreas.any { controlFaoArea.hasFaoCodeIncludedIn(it) }
+            }
+
+        return firstFaoAreaIncludedInJdp
+    }
+
+    /**
+     * We use an arbitrary method to de-duplicated reporting of controls made in multiple fao areas,
+     * hence in multiple JDP.
+     * `JointDeploymentPlan.entries.firstOrNull` is the arbitrary rule to attach a control to only one JDP.
+     * see: https://github.com/MTES-MCT/monitorfish/issues/3157#issuecomment-2093036583
+     */
+    private fun isFirstJdpFound(
+        control: MissionAction,
+    ) = JointDeploymentPlan.entries
+        .firstOrNull { jdpEntry ->
+            /**
+             * There is an overlap between the `MEDITERRANEAN_AND_EASTERN_ATLANTIC` and the WESTERN_WATERS JDPs.
+             * We add a filter by species to avoid counting all controls done in
+             * `EASTERN_ATLANTIC_OPERATIONAL_ZONES without targeted species in catches.
+             */
+            if (control.actionType == MissionActionType.SEA_CONTROL && jdpEntry == MEDITERRANEAN_AND_EASTERN_ATLANTIC) {
+                return@firstOrNull isMedJdp(control)
+            }
+
+            return@firstOrNull jdpEntry.getOperationalZones().any { jdpFaoArea ->
+                control.faoAreas.any { controlFaoArea ->
+                    FAOArea(controlFaoArea).hasFaoCodeIncludedIn(jdpFaoArea)
+                }
+            }
+        } == this
+
+    private fun isMedJdp(
+        control: MissionAction,
+    ) = MEDITERRANEAN_AND_EASTERN_ATLANTIC.getOperationalZones().any { jdpFaoArea ->
+        /**
+         * Filter by FAO zone AND `EASTERN_ATLANTIC_SPECY`
+         * if the fao zone is included in the `EASTERN_ATLANTIC_OPERATIONAL_ZONES`
+         */
+        if (EASTERN_ATLANTIC_OPERATIONAL_ZONES.contains(jdpFaoArea)) {
+            return@any control.faoAreas.any { controlFaoArea ->
+                FAOArea(controlFaoArea).hasFaoCodeIncludedIn(jdpFaoArea) &&
+                    control.speciesOnboard.map { it.speciesCode }.contains(EASTERN_ATLANTIC_SPECY.second)
+            }
+        }
+
+        return@any control.faoAreas.any { controlFaoArea ->
+            FAOArea(controlFaoArea).hasFaoCodeIncludedIn(jdpFaoArea)
+        }
     }
 }

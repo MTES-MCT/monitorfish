@@ -147,6 +147,19 @@
                 "flag_state": "FR",
                 "length": 12.5,
                 "under_charter": false
+            },
+
+            // - Vessel: LE MARIN D'EAU DOUCE
+            {
+                "id": 111,
+                "cfr": "CFR111",
+                "mmsi": "MMSI111",
+                "ircs": "IRCS111",
+                "external_immatriculation": "EXTIMM111",
+                "vessel_name": "LE MARIN D'EAU DOUCE",
+                "flag_state": "FR",
+                "length": 9.5,
+                "under_charter": false
             }
         ]
     }

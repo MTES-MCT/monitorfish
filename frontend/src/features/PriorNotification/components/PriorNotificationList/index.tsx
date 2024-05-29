@@ -40,7 +40,6 @@ export function PriorNotificationList() {
 
   const { apiPaginationParams, reactTablePaginationState, setReactTablePaginationState } = useListPagination(
     DEFAULT_PAGE_SIZE,
-    true,
     listFilter
   )
   const { apiSortingParams, reactTableSortingState, setReactTableSortingState } =

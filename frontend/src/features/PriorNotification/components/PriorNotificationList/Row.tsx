@@ -1,3 +1,4 @@
+import { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Icon, THEME, TableWithSelectableRows, Tag, customDayjs } from '@mtes-mct/monitor-ui'
 import { flexRender, type Row as RowType } from '@tanstack/react-table'
@@ -29,7 +30,11 @@ export function Row({ row }: RowProps) {
             key={cell.id}
             $hasRightBorder={cell.column.id === 'reportingCount'}
             onClick={() => row.toggleExpanded()}
-            style={cell.column.id === 'actions' ? { verticalAlign: 'bottom' } : undefined}
+            style={
+              [LogbookMessage.ApiSortColumn.VESSEL_RISK_FACTOR, 'reportingCount', 'actions'].includes(cell.column.id)
+                ? { verticalAlign: 'bottom' }
+                : undefined
+            }
           >
             {flexRender(cell.column.columnDef.cell, cell.getContext())}
           </ExpandableRowCell>

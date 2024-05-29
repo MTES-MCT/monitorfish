@@ -7,17 +7,12 @@ import type { PaginationState } from '@tanstack/react-table'
 
 /**
  * Hook to manage `react-table` & Backend API pagination for a list.
- *
- * @param isInfinite - Whether the list is infinite or not (ex: infinite scrolling).
  */
 export function useListPagination(
   defaultPageSize: number,
-  isInfinite: boolean = false,
   resettingDataWhenUpdated: any = undefined
 ): {
   apiPaginationParams: BackendApi.RequestPaginationParams
-  isNewPage: boolean
-  isNextPage: boolean
   reactTablePaginationState: PaginationState
   setReactTablePaginationState: Dispatch<SetStateAction<PaginationState>>
 } {
@@ -37,20 +32,10 @@ export function useListPagination(
   const controlledReactTablePaginationState: PaginationState = shouldResetPagination
     ? defaultReactTablePaginationStateRef.current
     : reactTablePaginationState
-  const constrolledApiPaginationParams: BackendApi.RequestPaginationParams = isInfinite
-    ? {
-        pageNumber: 0,
-        pageSize: defaultPageSize * (reactTablePaginationState.pageIndex + 1)
-      }
-    : {
-        pageNumber: controlledReactTablePaginationState.pageIndex,
-        pageSize: controlledReactTablePaginationState.pageSize
-      }
-
-  const isNextPage = isInfinite
-    ? constrolledApiPaginationParams.pageSize > defaultPageSize
-    : constrolledApiPaginationParams.pageNumber > 0
-  const isNewPage = isInfinite ? !isNextPage : constrolledApiPaginationParams.pageNumber === 0
+  const apiPaginationParams: BackendApi.RequestPaginationParams = {
+    pageNumber: 0,
+    pageSize: defaultPageSize * (reactTablePaginationState.pageIndex + 1)
+  }
 
   useEffect(() => {
     if (!shouldResetPagination) {
@@ -61,9 +46,7 @@ export function useListPagination(
   }, [resettingDataWhenUpdated, shouldResetPagination])
 
   return {
-    apiPaginationParams: constrolledApiPaginationParams,
-    isNewPage,
-    isNextPage,
+    apiPaginationParams,
     reactTablePaginationState: controlledReactTablePaginationState,
     setReactTablePaginationState
   }

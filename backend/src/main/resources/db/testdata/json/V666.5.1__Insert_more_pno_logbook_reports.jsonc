@@ -845,13 +845,13 @@
                 }
             },
 
-            // - Vessel: LA MER À BOIRE
+            // - Vessel: LE MARIN D'EAU DOUCE
             // - Port: Saint-Denis De La Réunion (Sud Océan Indien)
             {
                 "id": 115,
                 "report_id": "FAKE_OPERATION_115",
                 "referenced_report_id": null,
-                "cfr": "CFR110",
+                "cfr": "CFR111",
                 "enriched": true,
                 "flag_state": "FRA",
                 "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '6 hours'",
@@ -861,7 +861,7 @@
                 "operation_type": "DAT",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '6 hours'",
                 "transmission_format": "ERS",
-                "vessel_name": "LA MER À BOIRE",
+                "vessel_name": "LE MARIN D'EAU DOUCE",
                 "trip_gears:jsonb": [],
                 "trip_segments:jsonb": [],
                 "value:jsonb": {

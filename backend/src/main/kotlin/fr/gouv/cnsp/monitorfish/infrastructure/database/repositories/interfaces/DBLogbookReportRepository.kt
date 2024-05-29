@@ -86,7 +86,7 @@ interface DBLogbookReportRepository :
             dat_and_cor_logbook_reports_with_extra_columns_and_reporting_count AS (
                 SELECT
                     daclr.*,
-                    crc.reporting_count
+                    COALESCE(crc.reporting_count, 0) AS reporting_count
                 FROM dat_and_cor_logbook_reports_with_extra_columns daclr
                 LEFT JOIN cfr_reporting_counts crc ON daclr.cfr = crc.cfr
             ),

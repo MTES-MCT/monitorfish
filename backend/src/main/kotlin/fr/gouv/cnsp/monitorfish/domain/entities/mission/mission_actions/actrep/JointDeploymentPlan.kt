@@ -54,7 +54,7 @@ enum class JointDeploymentPlan(private val species: List<FaoZonesAndSpecy>, priv
 
         val isThirdCountryVessel = EU_THIRD_COUNTRIES.contains(control.flagState)
 
-        val isFirstJdpCurrentJdp = isFirstJdpFound(control)
+        val isFirstJdpCurrentJdp = isAttributedJdp(control)
         if (!isFirstJdpCurrentJdp) {
             return false
         }
@@ -85,7 +85,7 @@ enum class JointDeploymentPlan(private val species: List<FaoZonesAndSpecy>, priv
     ): FAOArea? {
         val jdpFaoAreas = this.getOperationalZones()
 
-        if (control.actionType == MissionActionType.SEA_CONTROL && !isFirstJdpFound(control)) {
+        if (control.actionType == MissionActionType.SEA_CONTROL && !isAttributedJdp(control)) {
             return null
         }
 
@@ -104,7 +104,7 @@ enum class JointDeploymentPlan(private val species: List<FaoZonesAndSpecy>, priv
      * `JointDeploymentPlan.entries.firstOrNull` is the arbitrary rule to attach a control to only one JDP.
      * see: https://github.com/MTES-MCT/monitorfish/issues/3157#issuecomment-2093036583
      */
-    private fun isFirstJdpFound(
+    fun isAttributedJdp(
         control: MissionAction,
     ) = JointDeploymentPlan.entries
         .firstOrNull { jdpEntry ->
@@ -114,7 +114,7 @@ enum class JointDeploymentPlan(private val species: List<FaoZonesAndSpecy>, priv
              * `EASTERN_ATLANTIC_OPERATIONAL_ZONES without targeted species in catches.
              */
             if (control.actionType == MissionActionType.SEA_CONTROL && jdpEntry == MEDITERRANEAN_AND_EASTERN_ATLANTIC) {
-                return@firstOrNull isMedJdp(control)
+                return@firstOrNull isMedJdpAttributed(control)
             }
 
             return@firstOrNull jdpEntry.getOperationalZones().any { jdpFaoArea ->
@@ -124,7 +124,7 @@ enum class JointDeploymentPlan(private val species: List<FaoZonesAndSpecy>, priv
             }
         } == this
 
-    private fun isMedJdp(
+    private fun isMedJdpAttributed(
         control: MissionAction,
     ) = MEDITERRANEAN_AND_EASTERN_ATLANTIC.getOperationalZones().any { jdpFaoArea ->
         /**

@@ -77,7 +77,8 @@ interface DBLogbookReportRepository :
                 FROM distinct_cfrs dc
                 LEFT JOIN reportings r ON dc.cfr = r.internal_reference_number
                 WHERE
-                    r.archived = FALSE
+                    r.type = 'INFRACTION_SUSPICION'
+                    AND r.archived = FALSE
                     AND r.deleted = FALSE
                 GROUP BY cfr
             ),

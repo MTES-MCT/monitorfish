@@ -89,7 +89,7 @@ export const JDP_CSV_MAP_BASE: DownloadAsCsvMap<ActivityReportWithId> = {
   },
   faoArea: {
     label: 'FAO_AREA_CODE',
-    transform: activity => activity.faoCode ?? ''
+    transform: activity => activity.faoArea ?? ''
   },
   fleetSegment: {
     label: 'FLEET_SEGMENT',

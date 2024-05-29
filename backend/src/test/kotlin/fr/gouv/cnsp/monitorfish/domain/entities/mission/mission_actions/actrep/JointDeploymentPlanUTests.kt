@@ -345,6 +345,42 @@ class JointDeploymentPlanUTests {
         }
     }
 
+    @ParameterizedTest
+    @EnumSource(JointDeploymentPlan::class)
+    fun `getFirstFaoAreaIncludedInJdp Should return the fao area for a LAND control`(
+        jdp: JointDeploymentPlan,
+    ) {
+        // Given
+        val control = MissionAction(
+            id = 3,
+            vesselId = 2,
+            missionId = 3,
+            actionDatetimeUtc = ZonedDateTime.now(),
+            actionType = MissionActionType.LAND_CONTROL,
+            faoAreas = listOf("27.4.a"),
+            seizureAndDiversion = false,
+            speciesOnboard = getSpecies(listOf("JAX", "CRF")),
+            speciesInfractions = listOf(),
+            isDeleted = false,
+            hasSomeGearsSeized = false,
+            hasSomeSpeciesSeized = false,
+            isFromPoseidon = false,
+            completion = Completion.TO_COMPLETE,
+            flagState = CountryCode.GB,
+            userTrigram = "LTH",
+        )
+
+        // When
+        val faoArea = jdp.getFirstFaoAreaIncludedInJdp(control)
+
+        // Then
+        when (jdp) {
+            JointDeploymentPlan.MEDITERRANEAN_AND_EASTERN_ATLANTIC -> assertThat(faoArea?.faoCode).isNull()
+            JointDeploymentPlan.NORTH_SEA -> assertThat(faoArea?.faoCode).isEqualTo("27.4.a")
+            JointDeploymentPlan.WESTERN_WATERS -> assertThat(faoArea?.faoCode).isNull()
+        }
+    }
+
     private fun getSpecies(species: List<String>): List<SpeciesControl> {
         return species.map {
             val specy = SpeciesControl()

@@ -9,13 +9,14 @@ import { SubMenu } from '@features/SideWindow/SubMenu'
 import { useHandleFrontendApiError } from '@hooks/useHandleFrontendApiError'
 import { useListPagination } from '@hooks/useListPagination'
 import { useListSorting } from '@hooks/useListSorting'
+import { useLoadingState } from '@hooks/useLoadingState'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Accent, Button, Icon, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
 import { flexRender, getCoreRowModel, useReactTable, getExpandedRowModel } from '@tanstack/react-table'
 import { useCallback, useState } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { TABLE_COLUMNS } from './columns'
 import { DEFAULT_PAGE_SIZE, SUB_MENUS_AS_OPTIONS } from './constants'
@@ -37,8 +38,11 @@ export function PriorNotificationList() {
 
   const [rowSelection, setRowSelection] = useState({})
 
-  const { apiPaginationParams, isNewPage, isNextPage, reactTablePaginationState, setReactTablePaginationState } =
-    useListPagination(DEFAULT_PAGE_SIZE, true, listFilter)
+  const { apiPaginationParams, reactTablePaginationState, setReactTablePaginationState } = useListPagination(
+    DEFAULT_PAGE_SIZE,
+    true,
+    listFilter
+  )
   const { apiSortingParams, reactTableSortingState, setReactTableSortingState } =
     useListSorting<LogbookMessage.ApiSortColumn>(
       LogbookMessage.ApiSortColumn.EXPECTED_ARRIVAL_DATE,
@@ -61,8 +65,7 @@ export function PriorNotificationList() {
   )
   const { data: priorNotifications, extraData, totalLength } = data ?? {}
 
-  const isLoadingNewPage = isNewPage && isFetching
-  const isLoadingNextPage = isNextPage && isFetching
+  const loadingState = useLoadingState(isFetching, { apiSortingParams, listFilter }, apiPaginationParams)
   const title = getTitle(listFilter.seafrontGroup)
 
   const handleSubMenuChange = useCallback(
@@ -122,10 +125,10 @@ export function PriorNotificationList() {
 
           <TableOuterWrapper>
             <TableLegend>{`${
-              isLoadingNewPage || totalLength === undefined ? '...' : totalLength
+              loadingState.isLoadingNewPage || totalLength === undefined ? '...' : totalLength
             } préavis (tous les horaires sont en UTC)`}</TableLegend>
 
-            <TableInnerWrapper>
+            <TableInnerWrapper $hasError={isError}>
               {isError && <ErrorWall displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_LIST_ERROR} />}
               {!isError && (
                 <TableWithSelectableRows.Table $withRowCheckbox>
@@ -153,8 +156,8 @@ export function PriorNotificationList() {
                       </tr>
                     ))}
                   </TableWithSelectableRows.Head>
-                  {isLoadingNewPage && <TableBodyLoader />}
-                  {!isLoadingNewPage && !!priorNotifications && (
+                  {loadingState.isLoadingNewPage && <TableBodyLoader />}
+                  {!loadingState.isLoadingNewPage && !!priorNotifications && (
                     <tbody>
                       {rows.map(row => (
                         <Row key={row.id} row={row} />
@@ -165,19 +168,22 @@ export function PriorNotificationList() {
               )}
             </TableInnerWrapper>
 
-            {isLoadingNextPage && table.getCanNextPage() && (
+            {loadingState.isLoadingNextPage && (
               <Button accent={Accent.SECONDARY} disabled isFullWidth>
                 Chargement en cours...
               </Button>
             )}
-            {!isError && !isLoadingNewPage && !isLoadingNextPage && table.getCanNextPage() && (
-              <Button accent={Accent.SECONDARY} isFullWidth onClick={table.nextPage}>
-                {`Charger les ${Math.min(
-                  totalLength! - priorNotifications!.length,
-                  DEFAULT_PAGE_SIZE
-                )} préavis suivants`}
-              </Button>
-            )}
+            {!isError &&
+              !loadingState.isLoadingNewPage &&
+              !loadingState.isLoadingNextPage &&
+              table.getCanNextPage() && (
+                <Button accent={Accent.SECONDARY} isFullWidth onClick={table.nextPage}>
+                  {`Charger les ${Math.min(
+                    totalLength! - priorNotifications!.length,
+                    DEFAULT_PAGE_SIZE
+                  )} préavis suivants`}
+                </Button>
+              )}
           </TableOuterWrapper>
         </Body>
       </Page>
@@ -204,14 +210,23 @@ const TableLegend = styled.p`
   margin: 8px 0;
 `
 
-const TableInnerWrapper = styled.div`
+const TableInnerWrapper = styled.div<{
+  $hasError: boolean
+}>`
   align-items: flex-start;
-  display: flex;
   height: 513px; /* = table height - 5px */
   overflow-y: auto;
-  width: 100%;
+  width: 1410px /* = table width */;
 
   > table {
     margin-top: -5px;
   }
+
+  ${p =>
+    p.$hasError &&
+    css`
+      align-items: center;
+      display: flex;
+      justify-content: center;
+    `}
 `

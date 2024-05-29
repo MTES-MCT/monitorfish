@@ -24,7 +24,7 @@ class GetActivityReports(
     private val logger = LoggerFactory.getLogger(GetActivityReports::class.java)
 
     fun execute(beforeDateTime: ZonedDateTime, afterDateTime: ZonedDateTime, jdp: JointDeploymentPlan): ActivityReports {
-        val controls = missionActionsRepository.findControlsInDates(beforeDateTime, afterDateTime)
+        val controls = missionActionsRepository.findSeaAndLandControlBetweenDates(beforeDateTime, afterDateTime)
         logger.info("Found ${controls.size} controls between dates [$afterDateTime, $beforeDateTime].")
 
         if (controls.isEmpty()) {
@@ -44,22 +44,24 @@ class GetActivityReports(
         val filteredControls = controls.filter { control ->
             when (control.actionType) {
                 MissionActionType.LAND_CONTROL -> {
-                    val speciesOnboardCodes = control.speciesOnboard.mapNotNull { it.speciesCode }
-                    val tripFaoCodes = control.faoAreas
-
-                    return@filter jdp.isLandControlApplicable(control.flagState, speciesOnboardCodes, tripFaoCodes)
+                    return@filter jdp.isLandControlApplicable(control)
                 }
 
                 MissionActionType.SEA_CONTROL -> {
                     val controlMission = missions.firstOrNull { mission -> mission.id == control.missionId }
+                    val isUnderJdp = controlMission?.isUnderJdp == true
                     if (controlMission == null) {
                         logger.error(
                             "Mission id '${control.missionId}' linked to SEA control id '${control.id}' could not be found. Is this mission deleted ?",
                         )
                     }
 
+                    if (control.faoAreas.isNotEmpty()) {
+                        return@filter isUnderJdp && jdp.isAttributedJdp(control)
+                    }
+
                     // The mission must be under JDP
-                    return@filter controlMission?.isUnderJdp == true
+                    return@filter isUnderJdp
                 }
 
                 else -> throw IllegalArgumentException("Bad control type: ${control.actionType}")
@@ -104,11 +106,18 @@ class GetActivityReports(
                     logger.warn(e.message)
                 }
             }
+            val faoArea = jdp.getFirstFaoAreaIncludedInJdp(control)
 
             ActivityReport(
                 action = control,
                 activityCode = activityCode,
                 controlUnits = controlMission.controlUnits,
+                faoArea = faoArea?.faoCode,
+                /**
+                 * The fleet segment is set as null, as we need to integrate the EFCA segments referential
+                 * see: https://github.com/MTES-MCT/monitorfish/issues/3157#issuecomment-2093036583
+                 */
+                segment = null,
                 vesselNationalIdentifier = controlledVessel.getNationalIdentifier(),
                 vessel = controlledVessel,
             )

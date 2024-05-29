@@ -361,6 +361,8 @@ class MissionActionsControllerITests {
                         activityCode = ActivityCode.FIS,
                         vesselNationalIdentifier = "AYFR000654",
                         controlUnits = listOf(ControlUnit(1234, "DIRM", false, "Cross Etel", listOf())),
+                        faoArea = "27.7.c",
+                        segment = "NS01/03",
                         vessel = Vessel(
                             id = 1,
                             internalReferenceNumber = "FR00022680",

@@ -52,7 +52,8 @@ class CaffeineConfiguration {
     val riskFactors = "risk_factors"
 
     // Segments
-    val currentSegments = "current_segment"
+    val currentSegments = "current_segments"
+    val segmentsByYear = "segments_by_year"
 
     // Species
     val allSpecies = "all_species"
@@ -119,6 +120,7 @@ class CaffeineConfiguration {
 
         // Segments
         val currentSegmentsCache = buildMinutesCache(currentSegments, ticker, 1)
+        val segmentsByYearCache = buildSecondsCache(segmentsByYear, ticker, 10)
 
         // Species
         val allSpeciesCache = buildMinutesCache(allSpecies, ticker, oneWeek)
@@ -153,6 +155,7 @@ class CaffeineConfiguration {
                 controlAnteriorityCache,
                 controlUnitsCache,
                 currentSegmentsCache,
+                segmentsByYearCache,
                 districtCache,
                 faoAreasCache,
                 findBeaconCache,

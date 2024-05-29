@@ -57,9 +57,7 @@ class GetActivityReports(
                     }
 
                     if (control.faoAreas.isNotEmpty()) {
-                        val foundFaoAreaIncludedInJdp = jdp.getFirstFaoAreaIncludedInJdp(control)
-
-                        return@filter isUnderJdp && foundFaoAreaIncludedInJdp != null
+                        return@filter isUnderJdp && jdp.isAttributedJdp(control)
                     }
 
                     // The mission must be under JDP

@@ -3,11 +3,15 @@ import { isEqual } from 'lodash'
 import { useRef } from 'react'
 
 export type LoadingState = {
-  /** `true` if the data is been fetched with a new filter and sorting state. */
+  /**
+   * `true` if:
+   * - the data is been fetched for the first time,
+   * - the data is been fetched with a new filter/sorting state (irrespective of the pagination state).
+   */
   isLoadingNewPage: boolean
-  /** `true` if the data is been fetched with a new pagination state but with the same filter and sorting state. */
+  /** `true` if the data is been fetched with a new pagination state but the same filter/sorting state. */
   isLoadingNextPage: boolean
-  /** `true` if the data is been fetched with the same filter, sorting and pagination state. */
+  /** `true` if the data is been fetched with the same filter/sorting & pagination states. */
   isReloading: boolean
 }
 
@@ -62,10 +66,14 @@ export function useLoadingState(
       return lastLoadingStateRef.current
     }
 
+    const isLoadingNewPage = isFirstFetchRef.current || hasFilterAndSortingStateChanged
+    const isLoadingNextPage = !isLoadingNewPage && !hasFilterAndSortingStateChanged && hasPaginationStateChanged
+    const isReloading = !isFirstFetchRef.current && !hasFilterAndSortingStateChanged && !hasPaginationStateChanged
+
     lastLoadingStateRef.current = {
-      isLoadingNewPage: !!isFirstFetchRef.current || hasFilterAndSortingStateChanged,
-      isLoadingNextPage: !hasFilterAndSortingStateChanged && hasPaginationStateChanged,
-      isReloading: !isFirstFetchRef.current && !hasFilterAndSortingStateChanged && !hasPaginationStateChanged
+      isLoadingNewPage,
+      isLoadingNextPage,
+      isReloading
     }
   }
 

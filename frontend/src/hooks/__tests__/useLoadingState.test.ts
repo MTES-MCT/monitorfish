@@ -102,6 +102,44 @@ describe('hooks/useLoadingState()', () => {
     })
   })
 
+  it('should set `isLoadingNewPage` to TRUE but `isLoadingNextPage` to FALSE when both filter/sorting and pagination state changes', () => {
+    const { rerender, result } = renderHook(
+      ({ filterAndSortingState, isFetching, paginationState }) =>
+        useLoadingState(isFetching, filterAndSortingState, paginationState),
+      {
+        initialProps: {
+          filterAndSortingState: { filter: 'initial' },
+          isFetching: true,
+          paginationState: { pageIndex: 0, pageSize: 10 }
+        }
+      }
+    )
+
+    // First load fetch completes
+    act(() => {
+      rerender({
+        filterAndSortingState: { filter: 'initial' },
+        isFetching: false,
+        paginationState: { pageIndex: 0, pageSize: 10 }
+      })
+    })
+
+    // New page fetch starts
+    act(() => {
+      rerender({
+        filterAndSortingState: { filter: 'changed' },
+        isFetching: true,
+        paginationState: { pageIndex: 1, pageSize: 10 }
+      })
+    })
+
+    expect(result.current).toEqual({
+      isLoadingNewPage: true,
+      isLoadingNextPage: false,
+      isReloading: false
+    })
+  })
+
   it('should set `isReloading` to TRUE when neither filter/sorting state nor pagination state changes', () => {
     const { rerender, result } = renderHook(
       ({ filterAndSortingState, isFetching, paginationState }) =>

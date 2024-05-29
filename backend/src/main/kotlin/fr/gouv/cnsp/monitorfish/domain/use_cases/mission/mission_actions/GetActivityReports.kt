@@ -1,15 +1,14 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FAOArea
-import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.ActivityCode
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.JointDeploymentPlan
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
-import fr.gouv.cnsp.monitorfish.domain.repositories.*
-import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.hasFaoCodeIncludedIn
+import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.ActivityReport
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.ActivityReports
 import org.slf4j.LoggerFactory
@@ -20,14 +19,12 @@ class GetActivityReports(
     private val missionActionsRepository: MissionActionsRepository,
     private val portRepository: PortRepository,
     private val vesselRepository: VesselRepository,
-    private val segmentRepository: FleetSegmentRepository,
     private val missionRepository: MissionRepository,
 ) {
     private val logger = LoggerFactory.getLogger(GetActivityReports::class.java)
 
     fun execute(beforeDateTime: ZonedDateTime, afterDateTime: ZonedDateTime, jdp: JointDeploymentPlan): ActivityReports {
-        val jdpFaoAreas = jdp.getOperationalZones()
-        val controls = missionActionsRepository.findControlsInDates(beforeDateTime, afterDateTime)
+        val controls = missionActionsRepository.findSeaAndLandControlBetweenDates(beforeDateTime, afterDateTime)
         logger.info("Found ${controls.size} controls between dates [$afterDateTime, $beforeDateTime].")
 
         if (controls.isEmpty()) {
@@ -47,10 +44,7 @@ class GetActivityReports(
         val filteredControls = controls.filter { control ->
             when (control.actionType) {
                 MissionActionType.LAND_CONTROL -> {
-                    val speciesOnboardCodes = control.speciesOnboard.mapNotNull { it.speciesCode }
-                    val tripFaoCodes = control.faoAreas
-
-                    return@filter jdp.isLandControlApplicable(control.flagState, speciesOnboardCodes, tripFaoCodes)
+                    return@filter jdp.isLandControlApplicable(control)
                 }
 
                 MissionActionType.SEA_CONTROL -> {
@@ -63,7 +57,7 @@ class GetActivityReports(
                     }
 
                     if (control.faoAreas.isNotEmpty()) {
-                        val foundFaoAreaIncludedInJdp = getFirstFaoAreaIncludedInJdp(jdpFaoAreas, control.faoAreas)
+                        val foundFaoAreaIncludedInJdp = jdp.getFirstFaoAreaIncludedInJdp(control)
 
                         return@filter isUnderJdp && foundFaoAreaIncludedInJdp != null
                     }
@@ -114,15 +108,18 @@ class GetActivityReports(
                     logger.warn(e.message)
                 }
             }
-            val faoArea = getFirstFaoAreaIncludedInJdp(jdpFaoAreas, control.faoAreas)
-            val segment = getFirstFleetSegmentIncludedInFaoArea(control, faoArea)
+            val faoArea = jdp.getFirstFaoAreaIncludedInJdp(control)
 
             ActivityReport(
                 action = control,
                 activityCode = activityCode,
                 controlUnits = controlMission.controlUnits,
                 faoArea = faoArea?.faoCode,
-                segment = segment?.segment,
+                /**
+                 * The fleet segment is set as null, as we need to integrate the EFCA segments referential
+                 * see: https://github.com/MTES-MCT/monitorfish/issues/3157#issuecomment-2093036583
+                 */
+                segment = null,
                 vesselNationalIdentifier = controlledVessel.getNationalIdentifier(),
                 vessel = controlledVessel,
             )
@@ -132,37 +129,5 @@ class GetActivityReports(
             activityReports = activityReports,
             jdpSpecies = jdp.getSpeciesCodes(),
         )
-    }
-
-    private fun getFirstFleetSegmentIncludedInFaoArea(
-        control: MissionAction,
-        controlFaoArea: FAOArea?,
-    ): FleetSegment? {
-        val segment = segmentRepository.findAllByYear(control.actionDatetimeUtc.year)
-            .firstOrNull { yearSegment ->
-                control.segments.any { controlSegment ->
-                    yearSegment.segment === controlSegment.segment &&
-                        yearSegment.faoAreas.any { controlFaoArea?.hasFaoCodeIncludedIn(it) ?: false }
-                }
-            }
-
-        return segment
-    }
-
-    private fun getFirstFaoAreaIncludedInJdp(
-        jdpFaoAreas: List<String>?,
-        faoAreas: List<String>,
-    ): FAOArea? {
-        val foundFaoArea = jdpFaoAreas?.let { jdpFaoAreasNotNull ->
-            faoAreas
-                .map { controlFaoArea -> FAOArea(controlFaoArea) }
-                .firstOrNull { controlFaoArea ->
-                    jdpFaoAreasNotNull.any { jdpFaoArea ->
-                        controlFaoArea.hasFaoCodeIncludedIn(jdpFaoArea)
-                    }
-                }
-        }
-
-        return foundFaoArea
     }
 }

@@ -17,6 +17,7 @@ typealias FaoZonesAndSpecy = Pair<FaoZones, String>
  * * See issue: https://github.com/MTES-MCT/monitorfish/issues/1750
  */
 
+val EASTERN_ATLANTIC_SPECY = Pair(EASTERN_ATLANTIC_OPERATIONAL_ZONES, "BFT")
 val MEDITERRANEAN_AND_EASTERN_ATLANTIC_SPECIES: List<FaoZonesAndSpecy> = generateSpeciesWithFaoCode(
     MEDITERRANEAN_OPERATIONAL_ZONES,
     listOf(
@@ -67,7 +68,7 @@ val MEDITERRANEAN_AND_EASTERN_ATLANTIC_SPECIES: List<FaoZonesAndSpecy> = generat
     ),
 ) +
     // Eastern Atlantic part for BFT
-    listOf(Pair(listOf("27.7", "27.8", "27.9", "27.10"), "BFT"))
+    listOf(EASTERN_ATLANTIC_SPECY)
 
 val NORTH_SEA_SPECIES: List<FaoZonesAndSpecy> = generateSpeciesWithFaoCode(
     NORTH_SEA_OPERATIONAL_ZONES,

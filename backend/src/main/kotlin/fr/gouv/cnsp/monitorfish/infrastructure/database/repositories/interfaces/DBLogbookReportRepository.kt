@@ -76,15 +76,19 @@ interface DBLogbookReportRepository :
                     COUNT(r.id) AS reporting_count
                 FROM distinct_cfrs dc
                 LEFT JOIN reportings r ON dc.cfr = r.internal_reference_number
+                WHERE
+                    r.type = 'INFRACTION_SUSPICION'
+                    AND r.archived = FALSE
+                    AND r.deleted = FALSE
                 GROUP BY cfr
             ),
 
             dat_and_cor_logbook_reports_with_extra_columns_and_reporting_count AS (
                 SELECT
                     daclr.*,
-                    cfr_reporting_counts.reporting_count
+                    COALESCE(crc.reporting_count, 0) AS reporting_count
                 FROM dat_and_cor_logbook_reports_with_extra_columns daclr
-                LEFT JOIN cfr_reporting_counts ON daclr.cfr = cfr_reporting_counts.cfr
+                LEFT JOIN cfr_reporting_counts crc ON daclr.cfr = crc.cfr
             ),
 
             dat_and_cor_logbook_reports AS (

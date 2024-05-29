@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions
 
+import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
@@ -37,6 +38,8 @@ class UpdateMissionActionUTests {
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
             isFromPoseidon = false,
+            flagState = CountryCode.FR,
+            userTrigram = "LTH",
             completion = Completion.TO_COMPLETE,
         )
 

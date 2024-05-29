@@ -16,7 +16,7 @@ context('Vessel filters', () => {
 
     // When
     cy.get('*[data-cy^="save-filter-modal"]').click({ timeout: 10000 })
-    cy.get('*[class^="rs-input"]').last().type('Navires FR')
+    cy.get('[name="vessel-filter"]').type('Navires FR')
     cy.get('*[data-cy="save-filter"]').click({ timeout: 10000 })
 
     // Then

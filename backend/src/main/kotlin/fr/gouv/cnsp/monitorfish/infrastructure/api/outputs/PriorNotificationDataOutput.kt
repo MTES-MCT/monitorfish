@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
+import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
@@ -29,7 +30,7 @@ data class PriorNotificationDataOutput(
     val types: List<PriorNotificationTypeDataOutput>,
     val vesselId: Int?,
     val vesselExternalReferenceNumber: String?,
-    val vesselFlagCountryCode: String?,
+    val vesselFlagCountryCode: CountryCode,
     val vesselInternalReferenceNumber: String?,
     val vesselIrcs: String?,
     val vesselLastControlDate: String?,
@@ -85,7 +86,7 @@ data class PriorNotificationDataOutput(
                 types,
                 vesselId = priorNotification.vessel.id,
                 vesselExternalReferenceNumber = priorNotification.vessel.externalReferenceNumber,
-                vesselFlagCountryCode = priorNotification.vessel.flagState.toString(),
+                vesselFlagCountryCode = priorNotification.vessel.flagState,
                 vesselInternalReferenceNumber = priorNotification.vessel.internalReferenceNumber,
                 vesselIrcs = priorNotification.vessel.ircs,
                 vesselLastControlDate = priorNotification.vesselRiskFactor?.lastControlDatetime?.toString(),

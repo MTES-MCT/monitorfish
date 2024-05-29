@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep
 
+import com.neovisionaries.i18n.CountryCode
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -15,7 +16,7 @@ class JointDeploymentPlanUTests {
         val species = listOf("HKE", "ANN", "BOR")
 
         // When
-        val isLandControlConcerned = jdp.isLandControlApplicable("FR", species, faoCodes)
+        val isLandControlConcerned = jdp.isLandControlApplicable(CountryCode.FR, species, faoCodes)
 
         // Then
         assertThat(isLandControlConcerned).isTrue()
@@ -30,7 +31,7 @@ class JointDeploymentPlanUTests {
         val species = listOf("ANN", "BOR")
 
         // When
-        val isLandControlConcerned = jdp.isLandControlApplicable("FR", species, faoCodes)
+        val isLandControlConcerned = jdp.isLandControlApplicable(CountryCode.FR, species, faoCodes)
 
         // Then
         assertThat(isLandControlConcerned).isFalse()
@@ -45,7 +46,7 @@ class JointDeploymentPlanUTests {
         val species = listOf("HKE", "ANN", "BOR")
 
         // When
-        val isLandControlConcerned = jdp.isLandControlApplicable("FR", species, faoCodes)
+        val isLandControlConcerned = jdp.isLandControlApplicable(CountryCode.FR, species, faoCodes)
 
         // Then
         assertThat(isLandControlConcerned).isFalse()
@@ -60,7 +61,7 @@ class JointDeploymentPlanUTests {
         val species = listOf("HKE", "ANN", "BOR", "ALB")
 
         // When
-        val isLandControlConcerned = jdp.isLandControlApplicable("GB", species, faoCodes)
+        val isLandControlConcerned = jdp.isLandControlApplicable(CountryCode.GB, species, faoCodes)
 
         // Then
         assertThat(isLandControlConcerned).isTrue()
@@ -74,7 +75,7 @@ class JointDeploymentPlanUTests {
         val species = listOf("HKE", "ANN", "BOR")
 
         // When
-        val isLandControlConcerned = jdp.isLandControlApplicable("GB", species, faoCodes)
+        val isLandControlConcerned = jdp.isLandControlApplicable(CountryCode.GB, species, faoCodes)
 
         // Then
         assertThat(isLandControlConcerned).isFalse()

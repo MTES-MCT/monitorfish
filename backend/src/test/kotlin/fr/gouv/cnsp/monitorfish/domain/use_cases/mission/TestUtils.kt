@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.mission
 
+import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.Mission
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionSource
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionType
@@ -41,6 +42,8 @@ object TestUtils {
                     hasSomeSpeciesSeized = false,
                     isFromPoseidon = false,
                     completion = Completion.TO_COMPLETE,
+                    userTrigram = "LTH",
+                    flagState = CountryCode.FR,
                 )
             }
         }.flatten()

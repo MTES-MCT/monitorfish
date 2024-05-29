@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions
 
+import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.FacadeArea
@@ -44,6 +45,8 @@ class GetMissionActionSeafrontUTests {
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
             isFromPoseidon = false,
+            flagState = CountryCode.FR,
+            userTrigram = "LTH",
             completion = Completion.TO_COMPLETE,
         )
         given(portRepository.findByLocode(any())).willReturn(Port("AEFAT", name = "Dummy name", facade = "NAMO"))
@@ -71,6 +74,8 @@ class GetMissionActionSeafrontUTests {
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
             isFromPoseidon = false,
+            flagState = CountryCode.FR,
+            userTrigram = "LTH",
             completion = Completion.TO_COMPLETE,
         )
 
@@ -98,6 +103,8 @@ class GetMissionActionSeafrontUTests {
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
             isFromPoseidon = false,
+            flagState = CountryCode.FR,
+            userTrigram = "LTH",
             completion = Completion.TO_COMPLETE,
         )
         given(facadeAreasRepository.findByIncluding(any())).willReturn(
@@ -135,6 +142,8 @@ class GetMissionActionSeafrontUTests {
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
             isFromPoseidon = false,
+            flagState = CountryCode.FR,
+            userTrigram = "LTH",
             completion = Completion.TO_COMPLETE,
         )
 
@@ -162,6 +171,8 @@ class GetMissionActionSeafrontUTests {
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
             isFromPoseidon = false,
+            flagState = CountryCode.FR,
+            userTrigram = "LTH",
             completion = Completion.TO_COMPLETE,
         )
         given(facadeAreasRepository.findByIncluding(any())).willReturn(listOf())

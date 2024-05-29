@@ -178,7 +178,14 @@ export function VesselList({ namespace }) {
       }
       setTimeout(() => {
         dispatch(getFilteredVessels(checkedVessels, filters)).then(_filteredVessels => {
-          setFilteredVessels(_filteredVessels)
+          const nextVessels = _filteredVessels.map(vessel => ({
+            ...vessel,
+            vesselProperties: {
+              ...vessel.vesselProperties,
+              flagState: vessel.vesselProperties.flagState.toLowerCase()
+            }
+          }))
+          setFilteredVessels(nextVessels)
           setVesselsCountShowed(_filteredVessels.length)
         })
       }, 0)
@@ -344,6 +351,25 @@ export function VesselList({ namespace }) {
     [dispatch, namespace, zonesFilter, zonesSelected]
   )
 
+  const zones = useMemo(
+    () => ({
+      administrativeZonesFiltered,
+      callRemoveZoneSelected,
+      setAdministrativeZonesFiltered,
+      setZonesFilter: setZonesFilterCallback,
+      zonesFilter,
+      zonesSelected
+    }),
+    [
+      administrativeZonesFiltered,
+      callRemoveZoneSelected,
+      setAdministrativeZonesFiltered,
+      setZonesFilterCallback,
+      zonesFilter,
+      zonesSelected
+    ]
+  )
+
   const isRightMenuShrinked = !rightMenuIsOpen
 
   return (
@@ -432,14 +458,7 @@ export function VesselList({ namespace }) {
                   species,
                   speciesFiltered
                 }}
-                zones={{
-                  administrativeZonesFiltered,
-                  callRemoveZoneSelected,
-                  setAdministrativeZonesFiltered,
-                  setZonesFilter: setZonesFilterCallback,
-                  zonesFilter,
-                  zonesSelected
-                }}
+                zones={zones}
               />
               <VesselListTable
                 allVesselsChecked={allVesselsChecked}

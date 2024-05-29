@@ -36,7 +36,7 @@ class JointDeploymentPlanUTests {
             isFromPoseidon = false,
             completion = Completion.TO_COMPLETE,
             flagState = CountryCode.FR,
-            userTrigram = "LTH"
+            userTrigram = "LTH",
         )
 
         // When
@@ -73,7 +73,7 @@ class JointDeploymentPlanUTests {
             isFromPoseidon = false,
             completion = Completion.TO_COMPLETE,
             flagState = CountryCode.FR,
-            userTrigram = "LTH"
+            userTrigram = "LTH",
         )
 
         // When
@@ -110,7 +110,7 @@ class JointDeploymentPlanUTests {
             isFromPoseidon = false,
             completion = Completion.TO_COMPLETE,
             flagState = CountryCode.FR,
-            userTrigram = "LTH"
+            userTrigram = "LTH",
         )
 
         // When
@@ -147,7 +147,7 @@ class JointDeploymentPlanUTests {
             isFromPoseidon = false,
             completion = Completion.TO_COMPLETE,
             flagState = CountryCode.GB,
-            userTrigram = "LTH"
+            userTrigram = "LTH",
         )
 
         // When
@@ -183,7 +183,7 @@ class JointDeploymentPlanUTests {
             isFromPoseidon = false,
             completion = Completion.TO_COMPLETE,
             flagState = CountryCode.GB,
-            userTrigram = "LTH"
+            userTrigram = "LTH",
         )
 
         // When
@@ -218,7 +218,7 @@ class JointDeploymentPlanUTests {
             isFromPoseidon = false,
             completion = Completion.TO_COMPLETE,
             flagState = CountryCode.FR,
-            userTrigram = "LTH"
+            userTrigram = "LTH",
         )
 
         // When
@@ -253,7 +253,7 @@ class JointDeploymentPlanUTests {
             isFromPoseidon = false,
             completion = Completion.TO_COMPLETE,
             flagState = CountryCode.FR,
-            userTrigram = "LTH"
+            userTrigram = "LTH",
         )
 
         // When
@@ -293,7 +293,7 @@ class JointDeploymentPlanUTests {
             isFromPoseidon = false,
             completion = Completion.TO_COMPLETE,
             flagState = CountryCode.FR,
-            userTrigram = "LTH"
+            userTrigram = "LTH",
         )
 
         // When
@@ -331,7 +331,7 @@ class JointDeploymentPlanUTests {
             isFromPoseidon = false,
             completion = Completion.TO_COMPLETE,
             flagState = CountryCode.FR,
-            userTrigram = "LTH"
+            userTrigram = "LTH",
         )
 
         // When

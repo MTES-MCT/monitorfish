@@ -7,6 +7,8 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.Ac
 data class ActivityReportDataOutput(
     val action: MissionActionDataOutput,
     val activityCode: ActivityCode,
+    val faoArea: String?,
+    val segment: String?,
     val vesselNationalIdentifier: String,
     val controlUnits: List<ControlUnit>,
     val vessel: VesselDataOutput,
@@ -15,6 +17,8 @@ data class ActivityReportDataOutput(
         fun fromActivityReport(activityReport: ActivityReport) = ActivityReportDataOutput(
             action = MissionActionDataOutput.fromMissionAction(activityReport.action),
             activityCode = activityReport.activityCode,
+            faoArea = activityReport.faoArea,
+            segment = activityReport.segment,
             vesselNationalIdentifier = activityReport.vesselNationalIdentifier,
             controlUnits = activityReport.controlUnits,
             vessel = VesselDataOutput.fromVessel(activityReport.vessel),

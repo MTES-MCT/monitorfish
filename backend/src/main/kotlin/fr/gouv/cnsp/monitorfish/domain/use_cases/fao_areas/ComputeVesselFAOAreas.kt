@@ -13,7 +13,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.removeRedundantFa
  * return computed fao zones from the given coordinates/port.
  *
  * Priority :
- * 1. Fetch the fao zones from the `risk_factors` table
+ * 1. Fetch the fao zones from the `risk_factors` table to have the areas of the entire voyage
  * 2. Otherwise,
  *    - Fetch the fao zones from the latitude/longitude if given
  *    - Fetch the fao zones from the portLocode if given
@@ -34,7 +34,7 @@ class ComputeVesselFAOAreas(
             return listOf()
         }
 
-        // Fetch the fao zones from the `risk_factors` table
+        // Fetch the fao zones from the `risk_factors` table to have the areas of the entire voyage
         if (internalReferenceNumber != null) {
             // Get faoZones from speciesOnboard in risk factors table (updated by the pipeline)
             val vesselRiskFactor = riskFactorRepository.findByInternalReferenceNumber(internalReferenceNumber)

@@ -212,6 +212,8 @@ class GetActivityReportsUTests {
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
                 completion = Completion.TO_COMPLETE,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
             ),
             MissionAction(
                 id = 2,
@@ -227,6 +229,8 @@ class GetActivityReportsUTests {
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
                 completion = Completion.TO_COMPLETE,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
             ),
             MissionAction(
                 id = 3,
@@ -242,6 +246,8 @@ class GetActivityReportsUTests {
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
                 completion = Completion.TO_COMPLETE,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
             ),
         )
         given(missionActionsRepository.findSeaAndLandControlBetweenDates(any(), any())).willReturn(controls)
@@ -361,6 +367,8 @@ class GetActivityReportsUTests {
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
                 completion = Completion.TO_COMPLETE,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
             ),
         )
         given(missionActionsRepository.findSeaAndLandControlBetweenDates(any(), any())).willReturn(controls)
@@ -440,6 +448,8 @@ class GetActivityReportsUTests {
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
                 completion = Completion.TO_COMPLETE,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
             ),
         )
         given(missionActionsRepository.findSeaAndLandControlBetweenDates(any(), any())).willReturn(controls)
@@ -512,6 +522,8 @@ class GetActivityReportsUTests {
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
                 completion = Completion.TO_COMPLETE,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
             ),
         )
         given(missionActionsRepository.findSeaAndLandControlBetweenDates(any(), any())).willReturn(controls)

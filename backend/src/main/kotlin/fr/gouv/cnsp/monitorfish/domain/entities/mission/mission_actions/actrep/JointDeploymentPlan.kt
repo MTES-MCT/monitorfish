@@ -1,5 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep
 
+import com.neovisionaries.i18n.CountryCode
+
 enum class JointDeploymentPlan(private val species: List<FaoZonesAndSpecy>) {
     MEDITERRANEAN_AND_EASTERN_ATLANTIC(MEDITERRANEAN_AND_EASTERN_ATLANTIC_SPECIES),
     NORTH_SEA(NORTH_SEA_SPECIES),
@@ -18,7 +20,7 @@ enum class JointDeploymentPlan(private val species: List<FaoZonesAndSpecy>) {
      * See "DÉCISION D’EXÉCUTION (UE) 2023/2376 DE LA COMMISSION":
      *  https://extranet.legipeche.metier.developpement-durable.gouv.fr/fichier/pdf/oj_l_202302376_fr_txt_cle6b198e.pdf?arg=24774&cle=7d14626b709ff7e8c62586bcd8683e7e9fcaa348&file=pdf%2Foj_l_202302376_fr_txt_cle6b198e.pdf
      */
-    fun isLandControlApplicable(flagState: String?, speciesOnboardCodes: List<String>, tripFaoCodes: List<String>): Boolean {
+    fun isLandControlApplicable(flagState: CountryCode, speciesOnboardCodes: List<String>, tripFaoCodes: List<String>): Boolean {
         val isThirdCountryVessel = EU_THIRD_COUNTRIES.contains(flagState)
 
         val hasSpeciesInJdp = this.species.any { (jdpFaoZones, jdpSpecy) ->

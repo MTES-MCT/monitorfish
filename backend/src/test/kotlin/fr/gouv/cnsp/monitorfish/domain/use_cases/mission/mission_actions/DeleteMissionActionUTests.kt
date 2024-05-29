@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions
 
+import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.*
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
@@ -35,6 +36,8 @@ class DeleteMissionActionUTests {
             hasSomeSpeciesSeized = false,
             completedBy = "XYZ",
             isFromPoseidon = false,
+            flagState = CountryCode.FR,
+            userTrigram = "LTH",
             completion = Completion.TO_COMPLETE,
         )
         given(missionActionsRepository.findById(any())).willReturn(action)

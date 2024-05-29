@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions
 
+import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
@@ -68,6 +69,8 @@ class GetVesselControlsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
                 completion = Completion.TO_COMPLETE,
             ),
             MissionAction(
@@ -82,6 +85,8 @@ class GetVesselControlsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
                 completion = Completion.TO_COMPLETE,
             ),
             MissionAction(
@@ -96,6 +101,8 @@ class GetVesselControlsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
                 completion = Completion.TO_COMPLETE,
             ),
         )

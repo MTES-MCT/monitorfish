@@ -1,18 +1,13 @@
 import { COLORS } from '@constants/constants'
+import { StyledModalHeader } from '@features/commonComponents/StyledModalHeader'
+import { TextInput, Icon, Size } from '@mtes-mct/monitor-ui'
 import { useState } from 'react'
 import { CirclePicker } from 'react-color'
-import { Input, InputGroup, Modal } from 'rsuite'
+import { Modal } from 'rsuite'
 import styled from 'styled-components'
 import { v4 as uuidv4 } from 'uuid'
 
 import { TagList } from './TagList'
-import { StyledModalHeader } from '../../../../commonComponents/StyledModalHeader'
-import FilterSVG from '../../../../icons/Icone_filtres_dark.svg?react'
-
-const styles = {
-  marginBottom: 20,
-  width: 200
-}
 
 type SaveVesselFiltersModalProps = Readonly<{
   addFilter: (filter: { color: string; filters: any; name: string; showed: boolean; uuid: string }) => void
@@ -28,10 +23,14 @@ export function SaveVesselFiltersModal({
   isOpen,
   setIsOpen
 }: SaveVesselFiltersModalProps) {
-  const [filterName, setFilterName] = useState('')
+  const [filterName, setFilterName] = useState<string | undefined>(undefined)
   const [filterColor, setFilterColor] = useState('#2c6e49')
 
   const save = () => {
+    if (!filterName) {
+      return
+    }
+
     const filter = {
       color: filterColor,
       filters,
@@ -61,13 +60,17 @@ export function SaveVesselFiltersModal({
         </Modal.Title>
       </StyledModalHeader>
       <Modal.Body>
-        <InputGroup inside style={styles}>
-          <InputGroup.Addon>
-            <Filter fill={filterColor} />
-          </InputGroup.Addon>
-          <Input onChange={setFilterName} placeholder="FILTRE SANS NOM" />
-        </InputGroup>
-        <TagList filters={filters} />
+        <TextInput
+          Icon={Icon.Filter}
+          isLabelHidden
+          label="Nom du filtre"
+          name="vessel-filter"
+          onChange={setFilterName}
+          placeholder="FILTRE SANS NOM"
+          size={Size.LARGE}
+          value={filterName}
+        />
+        <StyledTagList filters={filters} />
         <SelectedFilterColor>
           <Square $backgroundColor={filterColor} />
           Couleur des navires du filtre
@@ -99,6 +102,10 @@ export function SaveVesselFiltersModal({
     </Modal>
   )
 }
+
+const StyledTagList = styled(TagList)`
+  margin-top: 12px;
+`
 
 const SelectedFilterColor = styled.div`
   margin: 10px 0 10px 0;
@@ -150,8 +157,4 @@ const CancelButton = styled.button`
     border: 1px solid ${COLORS.lightGray};
     color: ${COLORS.lightGray};
   }
-`
-
-const Filter = styled(FilterSVG)`
-  width: 16px;
 `

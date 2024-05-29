@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.converters.CountryCodeConverter
 import jakarta.persistence.*
 import java.time.ZonedDateTime
 
@@ -27,8 +28,8 @@ data class PositionEntity(
     @Column(name = "vessel_name")
     val vesselName: String? = null,
     @Column(name = "flag_state")
-    @Enumerated(EnumType.STRING)
-    val flagState: CountryCode? = null,
+    @Convert(converter = CountryCodeConverter::class)
+    val flagState: CountryCode,
     @Column(name = "from_country")
     @Enumerated(EnumType.STRING)
     val from: CountryCode? = null,
@@ -92,7 +93,7 @@ data class PositionEntity(
                 vesselName = position.vesselName,
                 speed = position.speed,
                 course = position.course,
-                flagState = position.flagState,
+                flagState = position.flagState ?: CountryCode.UNDEFINED,
                 destination = position.destination,
                 from = position.from,
                 tripNumber = position.tripNumber,

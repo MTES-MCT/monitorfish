@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions
 
+import com.neovisionaries.i18n.CountryCode
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
@@ -30,6 +31,7 @@ class MissionActionUTests {
             completedBy = "XYZ",
             isFromPoseidon = false,
             completion = Completion.TO_COMPLETE,
+            flagState = CountryCode.FR,
         )
 
         // When
@@ -54,12 +56,13 @@ class MissionActionUTests {
             gearOnboard = listOf(),
             seizureAndDiversion = true,
             isDeleted = false,
-            userTrigram = null,
+            userTrigram = "",
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
             completedBy = "XYZ",
             isFromPoseidon = false,
             completion = Completion.TO_COMPLETE,
+            flagState = CountryCode.FR,
         )
 
         // When
@@ -93,6 +96,7 @@ class MissionActionUTests {
             hasSomeSpeciesSeized = false,
             completedBy = "XYZ",
             isFromPoseidon = false,
+            flagState = CountryCode.FR,
             completion = Completion.TO_COMPLETE,
         )
 
@@ -124,6 +128,7 @@ class MissionActionUTests {
             hasSomeSpeciesSeized = false,
             completedBy = "XYZ",
             isFromPoseidon = false,
+            flagState = CountryCode.FR,
             completion = Completion.TO_COMPLETE,
         )
 
@@ -155,6 +160,7 @@ class MissionActionUTests {
             hasSomeSpeciesSeized = false,
             completedBy = "XYZ",
             isFromPoseidon = false,
+            flagState = CountryCode.FR,
             completion = Completion.TO_COMPLETE,
         )
 

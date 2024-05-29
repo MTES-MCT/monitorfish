@@ -66,6 +66,8 @@ class GetActivityReportsUTests {
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
                 completion = Completion.TO_COMPLETE,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
             ),
             MissionAction(
                 id = 2,
@@ -79,6 +81,8 @@ class GetActivityReportsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
                 completion = Completion.TO_COMPLETE,
             ),
             MissionAction(
@@ -93,6 +97,8 @@ class GetActivityReportsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
                 completion = Completion.TO_COMPLETE,
             ),
         )
@@ -194,6 +200,8 @@ class GetActivityReportsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
                 completion = Completion.TO_COMPLETE,
             ),
             MissionAction(
@@ -208,6 +216,8 @@ class GetActivityReportsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
                 completion = Completion.TO_COMPLETE,
             ),
             MissionAction(
@@ -222,6 +232,8 @@ class GetActivityReportsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
                 completion = Completion.TO_COMPLETE,
             ),
         )
@@ -313,6 +325,8 @@ class GetActivityReportsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
                 completion = Completion.TO_COMPLETE,
             ),
             MissionAction(
@@ -327,6 +341,8 @@ class GetActivityReportsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
                 completion = Completion.TO_COMPLETE,
             ),
         )
@@ -405,6 +421,8 @@ class GetActivityReportsUTests {
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
                 completion = Completion.TO_COMPLETE,
+                flagState = CountryCode.FR,
+                userTrigram = "CPAMOI",
             ),
         )
         given(missionActionsRepository.findControlsInDates(any(), any())).willReturn(controls)

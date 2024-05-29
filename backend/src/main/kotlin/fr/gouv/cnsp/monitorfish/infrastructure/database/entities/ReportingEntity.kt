@@ -7,6 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.mappers.ReportingMapper
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.converters.CountryCodeConverter
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import jakarta.persistence.*
 import org.hibernate.annotations.JdbcType
@@ -41,7 +42,7 @@ data class ReportingEntity(
     @Column(name = "vessel_identifier", columnDefinition = "vessel_identifier")
     val vesselIdentifier: VesselIdentifier? = null,
     @Column(name = "flag_state")
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = CountryCodeConverter::class)
     val flagState: CountryCode,
     @Column(name = "creation_date", nullable = false)
     val creationDate: ZonedDateTime,

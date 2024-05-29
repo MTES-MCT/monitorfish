@@ -6,7 +6,13 @@ SELECT
 	f.nom_navire AS vessel_name,
 	f.indicatif_radio AS ircs,
 	f.numero_mmsi AS mmsi,
-	cp.code_pays_iso2 AS flag_state,
+	COALESCE(
+        CASE
+            WHEN cp.code_pays_iso2 = 'X' THEN 'UNDEFINED'
+            ELSE cp.code_pays_iso2
+        END,
+        'UNDEFINED'
+    ) AS flag_state,
 	ne.longueur_hors_tout AS length,
     nep.jauge_ums AS gauge,
     nep.puissance_propulsion AS power,

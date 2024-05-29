@@ -42,7 +42,7 @@ context('Side Window > Mission Form > Sea Control', () => {
       {
         body: {
           externalReferenceNumber: 'UNKNOWN',
-          flagState: 'UNKNOWN',
+          flagState: 'UNDEFINED',
           internalReferenceNumber: 'UNKNOWN',
           ircs: 'UNKNOWN',
           vesselId: -1,

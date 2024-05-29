@@ -1,3 +1,4 @@
+import { CountryFlag } from '@components/CountryFlag'
 import { COLORS } from '@constants/constants'
 import countries from 'i18n-iso-countries'
 import { useEffect, useState } from 'react'
@@ -10,6 +11,7 @@ import { vesselSize } from '../../../../../domain/entities/vessel/vessel'
 import type { FilterValues } from 'domain/types/filter'
 
 type TagListProps = Readonly<{
+  className?: string | undefined
   filters: FilterValues
   removeTagFromFilter?: (removeObject: {
     type: string | undefined
@@ -18,7 +20,7 @@ type TagListProps = Readonly<{
   }) => void
   uuid?: string
 }>
-export function TagList({ filters, removeTagFromFilter, uuid }: TagListProps) {
+export function TagList({ className, filters, removeTagFromFilter, uuid }: TagListProps) {
   const [tags, setTags] = useState<
     Array<{
       iconElement: JSX.Element
@@ -38,7 +40,7 @@ export function TagList({ filters, removeTagFromFilter, uuid }: TagListProps) {
 
     if (filters.countriesFiltered?.length) {
       const countriesTags = filters.countriesFiltered.map(country => ({
-        iconElement: <Flag rel="preload" src={`flags/${country}.svg`} title={countries.getName(country, 'fr')} />,
+        iconElement: <StyledCountryFlag countryCode={country} size={[20, 14]} />,
         text: countries.getName(country, 'fr'),
         type: 'countriesFiltered',
         value: country
@@ -134,7 +136,7 @@ export function TagList({ filters, removeTagFromFilter, uuid }: TagListProps) {
   }, [filters])
 
   return (
-    <List>
+    <List className={className}>
       {tags?.length ? (
         <>
           {tags.map(tag => (
@@ -156,16 +158,16 @@ export function TagList({ filters, removeTagFromFilter, uuid }: TagListProps) {
   )
 }
 
+const StyledCountryFlag = styled(CountryFlag)`
+  margin-right: 8px;
+  vertical-align: -2px;
+`
+
 const List = styled.div`
   display: inline-block;
   width: 100%;
   text-align: center;
-`
-
-const Flag = styled.img`
-  height: 14px;
-  margin-bottom: 3px;
-  margin-right: 5px;
+  line-height: 24px;
 `
 
 const NoTag = styled.div`

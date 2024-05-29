@@ -1,8 +1,10 @@
 import { drawReducer } from '@features/Draw/slice'
+import createMigrate from 'redux-persist/es/createMigrate'
 import persistReducer from 'redux-persist/es/persistReducer'
 import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2'
 import storage from 'redux-persist/es/storage' // LocalStorage
 
+import { MAIN_PERSISTOR_MISSION_MIGRATIONS } from './migrations'
 import { monitorenvApi, monitorfishApi, monitorfishLightApi, monitorfishPublicApi } from '../api/api'
 import { beaconMalfunctionReducer } from '../domain/shared_slices/BeaconMalfunction'
 import { controlReducer } from '../domain/shared_slices/Control'
@@ -91,7 +93,9 @@ export const mainReducer = {
       ...getCommonPersistReducerConfig<MissionListState>('mainPersistorMission', [
         'listFilterValues',
         'listSeafrontGroup'
-      ])
+      ]),
+      migrate: createMigrate(MAIN_PERSISTOR_MISSION_MIGRATIONS),
+      version: 0
     },
     missionListReducer
   ),

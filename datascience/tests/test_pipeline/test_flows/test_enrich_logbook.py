@@ -13,7 +13,8 @@ from src.pipeline.flows.enrich_logbook import (
     extract_pno_species_and_gears,
     extract_pno_trips_period,
     extract_pno_types,
-    flag_pnos_to_distribute,
+    extract_risk_factors,
+    flag_pnos_to_verify_and_send,
     flow,
     load_enriched_pnos,
     merge_pnos_data,
@@ -24,6 +25,16 @@ from src.read_query import read_query
 from tests.mocks import mock_check_flow_not_running
 
 flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
+
+
+@pytest.fixture
+def risk_factors() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "cfr": ["ABC000306959", "ABC000542519"],
+            "risk_factor": [2.14443662414848, 2.09885592141872],
+        }
+    )
 
 
 @pytest.fixture
@@ -93,16 +104,30 @@ def sample_pno_species_and_gears() -> pd.DataFrame:
     return pd.DataFrame(
         {
             "logbook_reports_pno_id": [1, 2, 3, 4, 4, 4, 5, 5, 5, 6, 7, 8],
+            "cfr": [
+                "CFR000000001",
+                "CFR000000002",
+                "CFR000000003",
+                "CFR000000004",
+                "CFR000000004",
+                "CFR000000004",
+                "CFR000000005",
+                "CFR000000005",
+                "CFR000000005",
+                "CFR000000006",
+                "CFR000000001",  # The same vessel has two PNOs
+                "CFR000000008",
+            ],
             "predicted_arrival_datetime_utc": [
                 datetime(2021, 5, 2),
                 datetime(2022, 5, 2),
                 datetime(2023, 5, 2),
                 datetime(2023, 5, 3),
-                datetime(2023, 5, 4),
-                datetime(2023, 5, 5),
+                datetime(2023, 5, 3),
+                datetime(2023, 5, 3),
                 datetime(2023, 5, 6),
-                datetime(2023, 5, 7),
-                datetime(2023, 5, 8),
+                datetime(2023, 5, 6),
+                datetime(2023, 5, 6),
                 datetime(2023, 5, 9),
                 datetime(2023, 5, 10),
                 datetime(2023, 5, 11),
@@ -199,10 +224,21 @@ def sample_pno_species_and_gears() -> pd.DataFrame:
 
 
 @pytest.fixture
+def sample_risk_factors() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "cfr": ["CFR000000001", "CFR000000002", "CFR000000004", "CFR000000006"],
+            "risk_factor": [1.0, 3.5, 2.6, 2.8],
+        }
+    )
+
+
+@pytest.fixture
 def expected_pno_species_and_gears() -> pd.DataFrame:
     return pd.DataFrame(
         {
-            "logbook_reports_pno_id": [12, 13],
+            "logbook_reports_pno_id": [13, 14],
+            "cfr": ["SOCR4T3", "SOCR4T3"],
             "predicted_arrival_datetime_utc": [
                 datetime(2020, 5, 6, 20, 41, 3, 340000),
                 datetime(2020, 5, 6, 20, 41, 9, 200000),
@@ -263,6 +299,27 @@ def expected_computed_pno_types() -> pd.DataFrame:
     return pd.DataFrame(
         {
             "logbook_reports_pno_id": [1, 2, 3, 4, 5, 6, 7, 8],
+            "cfr": [
+                "CFR000000001",
+                "CFR000000002",
+                "CFR000000003",
+                "CFR000000004",
+                "CFR000000005",
+                "CFR000000006",
+                "CFR000000001",  # The same vessel has two PNOs
+                "CFR000000008",
+            ],
+            "flag_state": ["FRA", "FRA", "GBR", "FRA", "FRA", "FRA", "FRA", "FRA"],
+            "predicted_arrival_datetime_utc": [
+                datetime(2021, 5, 2),
+                datetime(2022, 5, 2),
+                datetime(2023, 5, 2),
+                datetime(2023, 5, 3),
+                datetime(2023, 5, 6),
+                datetime(2023, 5, 9),
+                datetime(2023, 5, 10),
+                datetime(2023, 5, 11),
+            ],
             "trip_gears": [
                 [
                     {"gear": "OTT", "mesh": 140, "dimensions": "250.0"},
@@ -369,29 +426,10 @@ def expected_computed_pno_segments() -> pd.DataFrame:
 
 
 @pytest.fixture
-def expected_pnos_to_distribute() -> pd.DataFrame:
-    return pd.DataFrame(
-        {
-            "logbook_reports_pno_id": [1, 2, 3, 4, 5, 6, 7, 8],
-            "is_pno_to_distribute": [
-                False,
-                False,
-                False,
-                False,
-                True,
-                True,
-                True,
-                True,
-            ],
-        }
-    )
-
-
-@pytest.fixture
 def pnos_to_load() -> pd.DataFrame:
     return pd.DataFrame(
         {
-            "logbook_reports_pno_id": [12, 13],
+            "logbook_reports_pno_id": [13, 14],
             "trip_gears": [
                 [
                     {"gear": "OTT", "mesh": 120, "dimensions": "250.0"},
@@ -421,7 +459,37 @@ def pnos_to_load() -> pd.DataFrame:
                     {"segment": "SOTM", "segmentName": "Chaluts pélagiques"},
                 ],
             ],
-            "is_pno_to_distribute": [True, False],
+            "is_in_verification_scope": [False, True],
+            "is_verified": [False, False],
+            "is_sent": [False, False],
+            "is_being_sent": [True, False],
+        }
+    )
+
+
+@pytest.fixture
+def pnos_to_load_bis(pnos_to_load) -> pd.DataFrame:
+    return pnos_to_load.assign(
+        is_in_verification_scope=~pnos_to_load.is_in_verification_scope,
+        is_verified=~pnos_to_load.is_verified,
+        is_sent=~pnos_to_load.is_sent,
+        is_being_sent=~pnos_to_load.is_being_sent,
+    )
+
+
+@pytest.fixture
+def pno_in_test_data() -> pd.Series:
+    return pd.Series(
+        {
+            "id": 8,
+            "enriched": False,
+            "trip_gears": None,
+            "pno_types": None,
+            "trip_segments": None,
+            "is_in_verification_scope": None,
+            "is_verified": None,
+            "is_sent": None,
+            "is_being_sent": None,
         }
     )
 
@@ -430,7 +498,7 @@ def pnos_to_load() -> pd.DataFrame:
 def expected_loaded_pnos() -> pd.DataFrame:
     return pd.DataFrame(
         {
-            "id": [8, 12, 13],
+            "id": [8, 13, 14],
             "enriched": [False, True, True],
             "trip_gears": [
                 None,
@@ -456,7 +524,6 @@ def expected_loaded_pnos() -> pd.DataFrame:
                 ],
                 [],
             ],
-            "is_pno_to_distribute": [True, True, False],
             "trip_segments": [
                 None,
                 [],
@@ -465,15 +532,86 @@ def expected_loaded_pnos() -> pd.DataFrame:
                     {"segment": "SOTM", "segmentName": "Chaluts pélagiques"},
                 ],
             ],
+            "is_in_verification_scope": [None, False, True],
+            "is_verified": [None, False, False],
+            "is_sent": [None, False, False],
+            "is_being_sent": [None, True, False],
         }
     )
 
 
 @pytest.fixture
-def expected_merged_pnos() -> pd.DataFrame:
+def expected_loaded_pnos_bis(pnos_to_load_bis, pno_in_test_data) -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "id": [8, 13, 14],
+            "enriched": [False, True, True],
+            "trip_gears": [
+                None,
+                [
+                    {"gear": "OTT", "mesh": 120, "dimensions": "250.0"},
+                    {"gear": "OTT", "mesh": 140, "dimensions": "250.0"},
+                ],
+                [],
+            ],
+            "pno_types": [
+                None,
+                [
+                    {
+                        "pnoTypeName": "Préavis type 1",
+                        "hasDesignatedPorts": True,
+                        "minimumNotificationPeriod": 4.0,
+                    },
+                    {
+                        "pnoTypeName": "Préavis type 2",
+                        "hasDesignatedPorts": True,
+                        "minimumNotificationPeriod": 4.0,
+                    },
+                ],
+                [],
+            ],
+            "trip_segments": [
+                None,
+                [],
+                [
+                    {"segment": "SHKE27", "segmentName": "Merlu en zone 27"},
+                    {"segment": "SOTM", "segmentName": "Chaluts pélagiques"},
+                ],
+            ],
+            "is_in_verification_scope": [None, False, True],
+            "is_verified": [None, False, False],
+            "is_sent": [None, False, False],
+            "is_being_sent": [None, True, False],
+        }
+    )
+
+
+@pytest.fixture
+def merged_pnos() -> pd.DataFrame:
     return pd.DataFrame(
         {
             "logbook_reports_pno_id": [1, 2, 3, 4, 5, 6, 7, 8],
+            "cfr": [
+                "CFR000000001",
+                "CFR000000002",
+                "CFR000000003",
+                "CFR000000004",
+                "CFR000000005",
+                "CFR000000006",
+                "CFR000000001",  # The same vessel has two PNOs
+                "CFR000000008",
+            ],
+            "flag_state": ["FRA", "FRA", "GBR", "FRA", "FRA", "FRA", "FRA", "FRA"],
+            "predicted_arrival_datetime_utc": [
+                datetime(2021, 5, 2),
+                datetime(2022, 5, 2),
+                datetime(2023, 5, 2),
+                datetime(2023, 5, 3),
+                datetime(2023, 5, 6),
+                datetime(2023, 5, 9),
+                datetime(2023, 5, 10),
+                datetime(2023, 5, 11),
+            ],
             "trip_gears": [
                 [
                     {"gear": "OTT", "mesh": 140, "dimensions": "250.0"},
@@ -566,17 +704,18 @@ def expected_merged_pnos() -> pd.DataFrame:
                 [{"segment": "SOTM", "segmentName": "Chaluts pélagiques"}],
                 [{"segment": "SSB", "segmentName": "Senne de plage"}],
             ],
-            "is_pno_to_distribute": [
-                False,
-                False,
-                False,
-                False,
-                True,
-                True,
-                True,
-                True,
-            ],
+            "risk_factor": [1.0, 3.5, None, 2.6, None, 2.8, 1.0, None],
         }
+    )
+
+
+@pytest.fixture
+def flagged_pnos(merged_pnos) -> pd.DataFrame:
+    return merged_pnos.assign(
+        is_in_verification_scope=[False, True, True, True, False, True, False, False],
+        is_verified=[False, False, False, False, False, False, False, False],
+        is_sent=[False, False, False, False, False, False, False, False],
+        is_being_sent=[False, False, False, False, True, False, True, True],
     )
 
 
@@ -616,6 +755,11 @@ def test_extract_pno_species_and_gears(reset_test_data, expected_pno_species_and
     )
 
 
+def test_extract_risk_factors(reset_test_data, risk_factors):
+    res = extract_risk_factors.run()
+    pd.testing.assert_frame_equal(res, risk_factors)
+
+
 def test_compute_pno_types(
     expected_pno_types, sample_pno_species_and_gears, expected_computed_pno_types
 ):
@@ -631,16 +775,6 @@ def test_compute_pno_types_with_empty_gears_list_only(
     pd.testing.assert_frame_equal(
         res, expected_computed_pno_types.loc[[2]].reset_index(drop=True)
     )
-
-
-def test_flag_pnos_to_distribute(
-    sample_pno_species_and_gears, expected_pnos_to_distribute
-):
-    res = flag_pnos_to_distribute(
-        pno_species_and_gears=sample_pno_species_and_gears,
-        predicted_arrival_threshold=datetime(2023, 5, 4, 14, 12, 25),
-    )
-    pd.testing.assert_frame_equal(res, expected_pnos_to_distribute)
 
 
 def test_compute_pno_segments(
@@ -666,29 +800,46 @@ def test_compute_pno_segments_with_empty_gears_only(
     )
 
 
-def test_merge_segments_and_types(
+def test_merge_pnos_data(
     expected_computed_pno_types,
     expected_computed_pno_segments,
-    expected_pnos_to_distribute,
-    expected_merged_pnos,
+    sample_risk_factors,
+    merged_pnos,
 ):
     res = merge_pnos_data(
         expected_computed_pno_types,
         expected_computed_pno_segments,
-        expected_pnos_to_distribute,
+        sample_risk_factors,
     )
-    pd.testing.assert_frame_equal(res, expected_merged_pnos)
+    pd.testing.assert_frame_equal(res, merged_pnos)
 
 
-def test_load_then_reset_logbook(reset_test_data, pnos_to_load, expected_loaded_pnos):
+def test_flag_pnos_to_verify_and_send(merged_pnos, flagged_pnos):
+    res = flag_pnos_to_verify_and_send(
+        pnos=merged_pnos,
+        predicted_arrival_threshold=datetime(2023, 5, 4, 14, 12, 25),
+    )
+    pd.testing.assert_frame_equal(res, flagged_pnos)
+
+
+def test_load_then_reset_logbook(
+    reset_test_data,
+    pnos_to_load,
+    pnos_to_load_bis,
+    expected_loaded_pnos,
+    expected_loaded_pnos_bis,
+):
     query = (
         "SELECT "
         "id, "
         "enriched, "
         "trip_gears, "
         "value->'pnoTypes' AS pno_types, "
-        "(value->>'isPnoToDistribute')::BOOLEAN AS is_pno_to_distribute, "
-        "trip_segments "
+        "trip_segments, "
+        "(value->>'isInVerificationScope')::BOOLEAN AS is_in_verification_scope, "
+        "(value->>'isVerified')::BOOLEAN AS is_verified, "
+        "(value->>'isSent')::BOOLEAN AS is_sent, "
+        "(value->>'isBeingSent')::BOOLEAN AS is_being_sent "
         "FROM logbook_reports WHERE log_type = 'PNO' ORDER BY id"
     )
     initial_pnos = read_query(query, db="monitorfish_remote")
@@ -701,23 +852,50 @@ def test_load_then_reset_logbook(reset_test_data, pnos_to_load, expected_loaded_
 
     assert not initial_pnos.enriched.any()
     assert not final_pnos.loc[final_pnos.id == 8, "enriched"].values[0]
-    assert final_pnos.loc[final_pnos.id.isin([12, 13]), "enriched"].all()
+    assert final_pnos.loc[final_pnos.id.isin([13, 14]), "enriched"].all()
 
     pd.testing.assert_frame_equal(final_pnos, expected_loaded_pnos)
 
     # Reset logbook and check that the logbook_reports table is back to its original
-    # state, except for the `is_pno_to_distribute` attribute, which is reset to null
-    # and may not match its original state.
+    # state, except for the distribution attributes, which are not reset.
     reset_pnos.run(pno_period)
+
+    distribution_attributes = [
+        "is_in_verification_scope",
+        "is_verified",
+        "is_sent",
+        "is_being_sent",
+    ]
+
     pnos_after_reset = read_query(query, db="monitorfish_remote")
+
     pd.testing.assert_frame_equal(
-        pnos_after_reset.drop(columns=["is_pno_to_distribute"]),
-        initial_pnos.drop(columns=["is_pno_to_distribute"]),
+        pnos_after_reset.drop(columns=distribution_attributes),
+        initial_pnos.drop(columns=distribution_attributes),
     )
-    pd.testing.assert_series_equal(
-        pnos_after_reset.is_pno_to_distribute,
-        pd.Series([True, None, None], name="is_pno_to_distribute"),
+
+    pd.testing.assert_frame_equal(
+        pnos_after_reset[distribution_attributes],
+        expected_loaded_pnos[distribution_attributes],
     )
+
+    # Loading enriched PNOs should update all attributes except ditribution
+    # attributes which should remain unchanged if not null.
+    load_enriched_pnos(enriched_pnos=pnos_to_load_bis, period=pno_period, logger=logger)
+
+    pnos_bis_loaded = read_query(query, db="monitorfish_remote")
+
+    pd.testing.assert_frame_equal(pnos_bis_loaded, expected_loaded_pnos_bis)
+
+    with pytest.raises(AssertionError):
+        pd.testing.assert_frame_equal(
+            pnos_bis_loaded.loc[
+                pnos_bis_loaded.id.isin(pnos_to_load_bis.logbook_reports_pno_id),
+                distribution_attributes,
+            ].reset_index(),
+            pnos_to_load_bis[distribution_attributes],
+            check_dtype=False,
+        )
 
 
 def test_flow(reset_test_data):
@@ -747,16 +925,16 @@ def test_flow(reset_test_data):
 
     pnos_after_first_run = read_query(query, db="monitorfish_remote")
 
-    # Manual update : reset PNO n°12, modify PNO n°13
+    # Manual update : reset PNO n°13, modify PNO n°14
     e = create_engine("monitorfish_remote")
     with e.begin() as conn:
-        conn.execute(text("UPDATE logbook_reports SET enriched = false WHERE id = 12;"))
+        conn.execute(text("UPDATE logbook_reports SET enriched = false WHERE id = 13;"))
 
         conn.execute(
             text(
                 "UPDATE logbook_reports "
                 """SET trip_gears = '[{"gear": "This was set manually"}]'::jsonb """
-                "WHERE id = 13;"
+                "WHERE id = 14;"
             )
         )
 
@@ -790,28 +968,28 @@ def test_flow(reset_test_data):
         .any()
     )
 
-    # After first run PNO with ids 12 and 13 should be enriched
+    # After first run PNO with ids 13 and 14 should be enriched
     assert set(pnos_after_first_run.loc[pnos_after_first_run.enriched, "id"]) == {
-        12,
         13,
+        14,
     }
-    assert pnos_after_first_run.loc[pnos_after_first_run.id == 12, "trip_gears"].iloc[
-        0
-    ] == [{"gear": "TBB", "mesh": 140, "dimensions": "250.0"}]
-
     assert pnos_after_first_run.loc[pnos_after_first_run.id == 13, "trip_gears"].iloc[
         0
     ] == [{"gear": "TBB", "mesh": 140, "dimensions": "250.0"}]
 
-    # After second run without reset, manual modifications on PNO n°13 should be
+    assert pnos_after_first_run.loc[pnos_after_first_run.id == 14, "trip_gears"].iloc[
+        0
+    ] == [{"gear": "TBB", "mesh": 140, "dimensions": "250.0"}]
+
+    # After second run without reset, manual modifications on PNO n°14 should be
     # preserved
     assert pnos_after_second_run_without_reset.loc[
-        pnos_after_second_run_without_reset.id == 12, "trip_gears"
+        pnos_after_second_run_without_reset.id == 13, "trip_gears"
     ].iloc[0] == [{"gear": "TBB", "mesh": 140, "dimensions": "250.0"}]
     assert pnos_after_second_run_without_reset.loc[
-        pnos_after_second_run_without_reset.id == 13, "trip_gears"
+        pnos_after_second_run_without_reset.id == 14, "trip_gears"
     ].iloc[0] == [{"gear": "This was set manually"}]
 
-    # After third run with reset, manual modifications on PNO n°13 should be erased and
+    # After third run with reset, manual modifications on PNO n°14 should be erased and
     # recomputed.
     pd.testing.assert_frame_equal(pnos_after_first_run, pnos_after_third_run_with_reset)

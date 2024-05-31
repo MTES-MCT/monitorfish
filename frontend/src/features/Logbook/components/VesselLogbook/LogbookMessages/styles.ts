@@ -38,7 +38,6 @@ export const TableKey = styled.th`
   display: inline-block;
   font-weight: normal;
   max-width: 190px;
-  min-width: 190px;
   text-align: left;
 `
 

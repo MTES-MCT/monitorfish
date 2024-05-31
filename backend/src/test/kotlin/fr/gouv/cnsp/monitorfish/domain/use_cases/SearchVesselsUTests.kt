@@ -60,8 +60,8 @@ class SearchVesselsUTests {
 
         // Then
         assertThat(vessels).hasSize(2)
-        assertThat(vessels.first().id).isEqualTo(1)
-        assertThat(vessels.last().id).isEqualTo(2)
+        assertThat(vessels.first().vessel.id).isEqualTo(1)
+        assertThat(vessels.last().vessel.id).isEqualTo(2)
     }
 
     @Test
@@ -90,8 +90,10 @@ class SearchVesselsUTests {
 
         // Then
         assertThat(vessels).hasSize(2)
-        assertThat(vessels.first().internalReferenceNumber).isEqualTo("1234")
-        assertThat(vessels.last().internalReferenceNumber).isEqualTo("5789")
+        assertThat(vessels.first().vessel.internalReferenceNumber).isEqualTo("1234")
+        assertThat(vessels.first().beacon?.beaconNumber).isEqualTo("123")
+        assertThat(vessels.last().vessel.internalReferenceNumber).isEqualTo("5789")
+        assertThat(vessels.last().beacon?.beaconNumber).isEqualTo("12456")
     }
 
     @Test
@@ -120,8 +122,8 @@ class SearchVesselsUTests {
 
         // Then
         assertThat(vessels).hasSize(3)
-        assertThat(vessels.first().internalReferenceNumber).isEqualTo("12345688415")
-        assertThat(vessels[1].internalReferenceNumber).isEqualTo("1234")
-        assertThat(vessels.last().internalReferenceNumber).isEqualTo("5789")
+        assertThat(vessels.first().vessel.internalReferenceNumber).isEqualTo("1234")
+        assertThat(vessels[1].vessel.internalReferenceNumber).isEqualTo("5789")
+        assertThat(vessels.last().vessel.internalReferenceNumber).isEqualTo("12345688415")
     }
 }

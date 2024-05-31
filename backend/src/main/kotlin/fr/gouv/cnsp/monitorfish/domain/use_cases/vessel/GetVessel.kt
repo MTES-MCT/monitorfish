@@ -58,19 +58,13 @@ class GetVessel(
                 }
 
             val vessel = vesselFuture.await()
-            val vesselWithBeaconNumber =
-                vessel?.id?.let { vesselId ->
-                    val beaconNumber = beaconRepository.findBeaconNumberByVesselId(vesselId)
-
-                    beaconNumber?.let {
-                        vessel.copy(beaconNumber = it)
-                    }
-                } ?: vessel
+            val beacon = vessel?.id?.let { vesselId -> beaconRepository.findBeaconByVesselId(vesselId) }
 
             Pair(
                 vesselTrackHasBeenModified,
                 VesselInformation(
-                    vesselWithBeaconNumber,
+                    vessel,
+                    beacon,
                     positions.await(),
                     vesselRiskFactorsFuture.await() ?: VesselRiskFactor(),
                 ),

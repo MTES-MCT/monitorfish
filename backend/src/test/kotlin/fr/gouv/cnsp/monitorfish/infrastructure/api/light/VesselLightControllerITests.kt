@@ -149,6 +149,7 @@ class VesselLightControllerITests {
                         vesselType = "Fishing",
                         underCharter = true,
                     ),
+                    null,
                     listOf(firstPosition, secondPosition, thirdPosition),
                     VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
                 ),

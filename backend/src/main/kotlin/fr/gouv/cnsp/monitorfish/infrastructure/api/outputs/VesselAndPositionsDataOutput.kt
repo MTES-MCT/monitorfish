@@ -7,10 +7,11 @@ data class VesselAndPositionsDataOutput(
     val vessel: VesselDataOutput?,
 ) {
     companion object {
-        fun fromVesselWithData(vesselInformation: VesselInformation): VesselAndPositionsDataOutput {
+        fun fromVesselInformation(vesselInformation: VesselInformation): VesselAndPositionsDataOutput {
             return VesselAndPositionsDataOutput(
-                vessel = VesselDataOutput.fromVesselAndRiskFactor(
+                vessel = VesselDataOutput.fromVesselAndRelatedDatas(
                     vesselInformation.vessel,
+                    vesselInformation.beacon,
                     vesselInformation.vesselRiskFactor,
                 ),
                 positions = vesselInformation.positions.map {

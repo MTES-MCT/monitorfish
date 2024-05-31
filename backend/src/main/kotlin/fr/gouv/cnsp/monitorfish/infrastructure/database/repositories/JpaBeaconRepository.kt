@@ -20,9 +20,9 @@ class JpaBeaconRepository(private val dbBeaconRepository: DBBeaconRepository) : 
     }
 
     @Cacheable(value = ["find_beacon"])
-    override fun findBeaconNumberByVesselId(vesselId: Int): String? {
+    override fun findBeaconByVesselId(vesselId: Int): Beacon? {
         return try {
-            dbBeaconRepository.findByVesselId(vesselId).beaconNumber
+            dbBeaconRepository.findByVesselId(vesselId).toBeacon()
         } catch (e: EmptyResultDataAccessException) {
             return null
         }

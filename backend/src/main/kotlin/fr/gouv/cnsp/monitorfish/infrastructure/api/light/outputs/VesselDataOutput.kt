@@ -1,7 +1,9 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.light.outputs
 
 import com.neovisionaries.i18n.CountryCode
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Beacon
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.BeaconDataOutput
 import java.util.*
 
 data class VesselDataOutput(
@@ -34,11 +36,11 @@ data class VesselDataOutput(
     val proprietorEmails: List<String>? = null,
     val vesselPhones: List<String>? = null,
     val vesselEmails: List<String>? = null,
-    val beaconNumber: String? = null,
+    val beacon: BeaconDataOutput? = null,
     val underCharter: Boolean? = null,
 ) {
     companion object {
-        fun fromVessel(vessel: Vessel?): VesselDataOutput? {
+        fun fromVessel(vessel: Vessel?, beacon: Beacon?): VesselDataOutput? {
             if (vessel == null) {
                 return null
             }
@@ -73,7 +75,7 @@ data class VesselDataOutput(
                 proprietorEmails = vessel.proprietorEmails,
                 vesselPhones = vessel.vesselPhones,
                 vesselEmails = vessel.vesselEmails,
-                beaconNumber = vessel.beaconNumber,
+                beacon = beacon?.let { BeaconDataOutput.fromBeacon(it) },
                 underCharter = vessel.underCharter,
             )
         }

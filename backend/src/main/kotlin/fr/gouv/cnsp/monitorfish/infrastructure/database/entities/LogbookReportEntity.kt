@@ -1,11 +1,10 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.UNKNOWN_VESSEL
 import fr.gouv.cnsp.monitorfish.domain.mappers.ERSMapper.getERSMessageValueFromJSON
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import jakarta.persistence.*
@@ -148,8 +147,8 @@ data class LogbookReportEntity(
         val relatedLogbookMessages = relatedModels.map { it.toLogbookMessage(mapper) }
         val enrichedLogbookMessageTyped = referenceLogbookMessage
             .toEnrichedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
-        // For pratical reasons `vessel` can't be `null`, so we temporarely set it to "Navire inconnu"
-        val vessel = Vessel(id = -1, flagState = CountryCode.UNDEFINED)
+        // For practical reasons `vessel` can't be `null`, so we temporarily set it to "Navire inconnu"
+        val vessel = UNKNOWN_VESSEL
 
         return PriorNotification(
             fingerprint,

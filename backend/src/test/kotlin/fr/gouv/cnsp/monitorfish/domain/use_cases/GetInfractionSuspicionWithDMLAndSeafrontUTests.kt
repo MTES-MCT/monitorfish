@@ -39,7 +39,7 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
             )
 
         given(vesselRepository.findVesselById(eq(123))).willReturn(
-            Vessel(id = 1, districtCode = "LO", flagState = CountryCode.FR),
+            Vessel(id = 1, districtCode = "LO", flagState = CountryCode.FR, hasLogbookEsacapt = false),
         )
         given(districtRepository.find(eq("LO")))
             .willReturn(District("LO", "Lorient", "56", "Morbihan", "DML 56", "NAMO"))
@@ -50,8 +50,8 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
                 vesselRepository,
                 districtRepository,
             ).execute(
-                expectedInfractionSuspicion,
-                123,
+                infractionSuspicion = expectedInfractionSuspicion,
+                vesselId = 123,
             )
 
         // Then
@@ -65,14 +65,14 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
         val throwable =
             catchThrowable {
                 GetInfractionSuspicionWithDMLAndSeaFront(vesselRepository, districtRepository).execute(
-                    InfractionSuspicion(
+                    infractionSuspicion = InfractionSuspicion(
                         reportingActor = ReportingActor.OPS,
                         dml = "",
                         natinfCode = 1235,
                         authorTrigram = "LTH",
                         title = "Chalut en boeuf illégal",
                     ),
-                    null,
+                    vesselId = null,
                 )
             }
 
@@ -89,14 +89,14 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
         val throwable =
             catchThrowable {
                 GetInfractionSuspicionWithDMLAndSeaFront(vesselRepository, districtRepository).execute(
-                    InfractionSuspicion(
+                    infractionSuspicion = InfractionSuspicion(
                         reportingActor = ReportingActor.OPS,
                         dml = "",
                         natinfCode = 1235,
                         authorTrigram = "LTH",
                         title = "Chalut en boeuf illégal",
                     ),
-                    123,
+                    vesselId = 123,
                 )
             }
 
@@ -108,7 +108,7 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
     fun `execute Should not throw an exception When the district is not found`() {
         // Given
         given(vesselRepository.findVesselById(eq(123))).willReturn(
-            Vessel(id = 1, flagState = CountryCode.FR, districtCode = "LO"),
+            Vessel(id = 1, flagState = CountryCode.FR, districtCode = "LO", hasLogbookEsacapt = false),
         )
         given(districtRepository.find(eq("LO")))
             .willThrow(CodeNotFoundException("oupsi"))
@@ -117,14 +117,14 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
         val throwable =
             catchThrowable {
                 GetInfractionSuspicionWithDMLAndSeaFront(vesselRepository, districtRepository).execute(
-                    InfractionSuspicion(
+                    infractionSuspicion = InfractionSuspicion(
                         reportingActor = ReportingActor.OPS,
                         dml = "",
                         natinfCode = 1235,
                         authorTrigram = "LTH",
                         title = "Chalut en boeuf illégal",
                     ),
-                    123,
+                    vesselId = 123,
                 )
             }
 

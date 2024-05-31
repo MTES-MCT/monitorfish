@@ -122,6 +122,7 @@ class GetActivityReportsUTests {
                 declaredFishingGears = listOf("Trémails"),
                 vesselType = "Fishing",
                 districtCode = "AY",
+                hasLogbookEsacapt = false,
             ),
             Vessel(
                 id = 2,
@@ -131,6 +132,7 @@ class GetActivityReportsUTests {
                 declaredFishingGears = listOf("Trémails"),
                 vesselType = "Fishing",
                 districtCode = "LO",
+                hasLogbookEsacapt = false,
             ),
         )
         given(vesselRepository.findVesselsByIds(eq(listOf(1, 2)))).willReturn(vessels)
@@ -261,6 +263,7 @@ class GetActivityReportsUTests {
                 declaredFishingGears = listOf("Trémails"),
                 vesselType = "Fishing",
                 districtCode = "AY",
+                hasLogbookEsacapt = false,
             ),
             Vessel(
                 id = 2,
@@ -270,6 +273,7 @@ class GetActivityReportsUTests {
                 declaredFishingGears = listOf("Trémails"),
                 vesselType = "Fishing",
                 districtCode = "LO",
+                hasLogbookEsacapt = false,
             ),
         )
         given(vesselRepository.findVesselsByIds(eq(listOf(1, 2)))).willReturn(vessels)
@@ -382,6 +386,7 @@ class GetActivityReportsUTests {
                 declaredFishingGears = listOf("Trémails"),
                 vesselType = "Fishing",
                 districtCode = "AY",
+                hasLogbookEsacapt = false,
             ),
         )
         given(vesselRepository.findVesselsByIds(eq(listOf(1)))).willReturn(vessels)
@@ -463,6 +468,7 @@ class GetActivityReportsUTests {
                 declaredFishingGears = listOf("Trémails"),
                 vesselType = "Fishing",
                 districtCode = "AY",
+                hasLogbookEsacapt = false,
             ),
         )
         given(vesselRepository.findVesselsByIds(eq(listOf(1)))).willReturn(vessels)
@@ -537,6 +543,7 @@ class GetActivityReportsUTests {
                 declaredFishingGears = listOf("Trémails"),
                 vesselType = "Fishing",
                 districtCode = "AY",
+                hasLogbookEsacapt = false,
             ),
         )
         given(vesselRepository.findVesselsByIds(eq(listOf(1)))).willReturn(vessels)
@@ -643,6 +650,7 @@ class GetActivityReportsUTests {
                 declaredFishingGears = listOf("Trémails"),
                 vesselType = "Fishing",
                 districtCode = "AY",
+                hasLogbookEsacapt = false,
             ),
             Vessel(
                 id = 2,
@@ -652,6 +660,7 @@ class GetActivityReportsUTests {
                 declaredFishingGears = listOf("Trémails"),
                 vesselType = "Fishing",
                 districtCode = "LO",
+                hasLogbookEsacapt = false,
             ),
         )
         given(vesselRepository.findVesselsByIds(eq(listOf(1, 2)))).willReturn(vessels)
@@ -756,6 +765,7 @@ class GetActivityReportsUTests {
                 declaredFishingGears = listOf("Trémails"),
                 vesselType = "Fishing",
                 districtCode = "AY",
+                hasLogbookEsacapt = false,
             ),
             Vessel(
                 id = 2,
@@ -765,6 +775,7 @@ class GetActivityReportsUTests {
                 declaredFishingGears = listOf("Trémails"),
                 vesselType = "Fishing",
                 districtCode = "LO",
+                hasLogbookEsacapt = false,
             ),
         )
         given(vesselRepository.findVesselsByIds(eq(listOf(1, 2)))).willReturn(vessels)
@@ -835,6 +846,7 @@ class GetActivityReportsUTests {
                 declaredFishingGears = listOf("Trémails"),
                 vesselType = "Fishing",
                 districtCode = "AY",
+                hasLogbookEsacapt = false,
             ),
         )
         given(vesselRepository.findVesselsByIds(eq(listOf(1)))).willReturn(vessels)

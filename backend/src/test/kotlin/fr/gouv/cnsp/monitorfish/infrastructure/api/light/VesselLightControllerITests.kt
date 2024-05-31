@@ -148,6 +148,7 @@ class VesselLightControllerITests {
                         declaredFishingGears = listOf("Trémails"),
                         vesselType = "Fishing",
                         underCharter = true,
+                        hasLogbookEsacapt = false,
                     ),
                     null,
                     listOf(firstPosition, secondPosition, thirdPosition),

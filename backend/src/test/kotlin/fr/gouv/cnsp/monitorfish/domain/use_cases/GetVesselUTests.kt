@@ -1,16 +1,15 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
-import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Beacon
 import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
+import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.DUMMY_VESSEL
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVessel
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
@@ -125,7 +124,7 @@ class GetVesselUTests {
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
             listOf(firstPosition, fourthPosition, secondPosition, thirdPosition),
         )
-        given(vesselRepository.findVesselById(any())).willReturn(Vessel(id = 123, flagState = CountryCode.FR))
+        given(vesselRepository.findVesselById(any())).willReturn(DUMMY_VESSEL)
         given(riskFactorRepository.findByInternalReferenceNumber(any())).willReturn(
             VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
         )

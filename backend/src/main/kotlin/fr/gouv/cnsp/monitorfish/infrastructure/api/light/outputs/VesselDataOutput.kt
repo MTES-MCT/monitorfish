@@ -38,6 +38,8 @@ data class VesselDataOutput(
     val vesselEmails: List<String>? = null,
     val beacon: BeaconDataOutput? = null,
     val underCharter: Boolean? = null,
+    val logbookEquipmentStatus: String? = null,
+    val hasLogbookEsacapt: Boolean,
 ) {
     companion object {
         fun fromVessel(vessel: Vessel?, beacon: Beacon?): VesselDataOutput? {
@@ -77,6 +79,8 @@ data class VesselDataOutput(
                 vesselEmails = vessel.vesselEmails,
                 beacon = beacon?.let { BeaconDataOutput.fromBeacon(it) },
                 underCharter = vessel.underCharter,
+                logbookEquipmentStatus = vessel.logbookEquipmentStatus,
+                hasLogbookEsacapt = vessel.hasLogbookEsacapt,
             )
         }
     }

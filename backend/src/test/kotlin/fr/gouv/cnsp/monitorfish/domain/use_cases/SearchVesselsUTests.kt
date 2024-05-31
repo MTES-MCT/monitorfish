@@ -27,7 +27,9 @@ class SearchVesselsUTests {
     @Test
     fun `execute Should return no vessel When there is no identification number`() {
         // Given
-        given(vesselRepository.search(any())).willReturn(listOf(Vessel(id = 1, flagState = CountryCode.FR)))
+        given(vesselRepository.search(any())).willReturn(
+            listOf(Vessel(id = 1, flagState = CountryCode.FR, hasLogbookEsacapt = false)),
+        )
 
         // When
         val vessels = SearchVessels(vesselRepository, beaconRepository).execute("DUMMY VESSEL")
@@ -39,11 +41,13 @@ class SearchVesselsUTests {
     @Test
     fun `execute Should return vessels When there is a match with a beacon`() {
         // Given
-        given(vesselRepository.search(any())).willReturn(listOf(Vessel(id = 1, flagState = CountryCode.FR)))
+        given(vesselRepository.search(any())).willReturn(
+            listOf(Vessel(id = 1, flagState = CountryCode.FR, hasLogbookEsacapt = false)),
+        )
         given(vesselRepository.findVesselsByIds(eq(listOf(1, 2)))).willReturn(
             listOf(
-                Vessel(1, internalReferenceNumber = "1234", flagState = CountryCode.FR),
-                Vessel(2, internalReferenceNumber = "5789", flagState = CountryCode.FR),
+                Vessel(1, internalReferenceNumber = "1234", flagState = CountryCode.FR, hasLogbookEsacapt = false),
+                Vessel(2, internalReferenceNumber = "5789", flagState = CountryCode.FR, hasLogbookEsacapt = false),
             ),
         )
         given(beaconRepository.search(any()))
@@ -68,7 +72,9 @@ class SearchVesselsUTests {
     fun `execute Should return vessels When there is a match with a beacon and the same vessel found in the vessel table`() {
         // Given
         given(vesselRepository.search(any())).willReturn(
-            listOf(Vessel(id = 1, internalReferenceNumber = "1234", flagState = CountryCode.FR)),
+            listOf(
+                Vessel(id = 1, internalReferenceNumber = "1234", flagState = CountryCode.FR, hasLogbookEsacapt = false),
+            ),
         )
         given(beaconRepository.search(any()))
             .willReturn(
@@ -80,8 +86,8 @@ class SearchVesselsUTests {
             )
         given(vesselRepository.findVesselsByIds(eq(listOf(1, 2)))).willReturn(
             listOf(
-                Vessel(1, internalReferenceNumber = "1234", flagState = CountryCode.FR),
-                Vessel(2, internalReferenceNumber = "5789", flagState = CountryCode.FR),
+                Vessel(1, internalReferenceNumber = "1234", flagState = CountryCode.FR, hasLogbookEsacapt = false),
+                Vessel(2, internalReferenceNumber = "5789", flagState = CountryCode.FR, hasLogbookEsacapt = false),
             ),
         )
 
@@ -100,7 +106,14 @@ class SearchVesselsUTests {
     fun `execute Should return vessels When there is a match with a beacon, the same vessel found in the vessel table and another vessel concatenated`() {
         // Given
         given(vesselRepository.search(any())).willReturn(
-            listOf(Vessel(id = 123456, internalReferenceNumber = "12345688415", flagState = CountryCode.FR)),
+            listOf(
+                Vessel(
+                    id = 123456,
+                    internalReferenceNumber = "12345688415",
+                    flagState = CountryCode.FR,
+                    hasLogbookEsacapt = false,
+                ),
+            ),
         )
         given(beaconRepository.search(any()))
             .willReturn(
@@ -112,8 +125,8 @@ class SearchVesselsUTests {
             )
         given(vesselRepository.findVesselsByIds(eq(listOf(1, 2)))).willReturn(
             listOf(
-                Vessel(1, internalReferenceNumber = "1234", flagState = CountryCode.FR),
-                Vessel(2, internalReferenceNumber = "5789", flagState = CountryCode.FR),
+                Vessel(1, internalReferenceNumber = "1234", flagState = CountryCode.FR, hasLogbookEsacapt = false),
+                Vessel(2, internalReferenceNumber = "5789", flagState = CountryCode.FR, hasLogbookEsacapt = false),
             ),
         )
 

@@ -51,7 +51,7 @@ dependencies {
     api("io.ktor:ktor-client-core-jvm:2.3.6")
     api("io.ktor:ktor-client-java-jvm:2.3.3")
     api("io.ktor:ktor-client-content-negotiation-jvm:2.3.3")
-    api("io.ktor:ktor-serialization-kotlinx-json-jvm:2.3.8")
+    api("io.ktor:ktor-serialization-kotlinx-json-jvm:2.3.11")
     api("org.hibernate.validator:hibernate-validator:8.0.1.Final")
     api("jakarta.validation:jakarta.validation-api:3.0.2")
     api("com.fasterxml.jackson.module:jackson-module-kotlin:2.16.1")

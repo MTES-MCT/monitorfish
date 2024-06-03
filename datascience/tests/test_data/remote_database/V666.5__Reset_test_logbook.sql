@@ -100,7 +100,7 @@ VALUES
     '8', 'OOF', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 year 3 days')::TIMESTAMP, 'DAT',
     '8', null, ((now() AT TIME ZONE 'UTC') - INTERVAL '1 year 3 days')::TIMESTAMP,
     'ABC000542519', 'FQ7058', 'RO237719', 'DEVINER FIGURE CONSCIENCE', 'FRA', null, 'PNO',
-    '{"port": "PNO_PORT", "purpose": "LAN", "catchOnboard": [{"nbFish": null, "weight": 1500.0, "species": "GHL"}], "tripStartDate": "2020-05-04T19:41:03.340Z", "predictedArrivalDatetimeUtc": "2020-05-06T11:41:03.340Z", "isPnoToDistribute": true}',
+    '{"port": "PNO_PORT", "purpose": "LAN", "catchOnboard": [{"nbFish": null, "weight": 1500.0, "species": "GHL"}], "tripStartDate": "2020-05-04T19:41:03.340Z", "predictedArrivalDatetimeUtc": "2020-05-06T11:41:03.340Z"}',
     ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 3 days 23 hours 48 minutes')::TIMESTAMP, '20210000', 'ERS'
 ),
 (
@@ -140,8 +140,8 @@ INSERT INTO logbook_reports (
                        operation_number, operation_country, operation_datetime_utc, operation_type,                              report_id, referenced_report_id,   report_datetime_utc,       cfr,    ircs, external_identification, vessel_name, flag_state,       imo,  log_type,                    trip_number, transmission_format,     integration_datetime_utc, value) VALUES
 ('cc7ee632-e515-460f-a1c1-f82222a6d419',              null,  '2020-05-06 18:40:51',          'DAT', 'f006a2e5-0fdd-48a0-9a9a-ccae00d052d8',                 null, '2020-05-06 15:40:51', 'SOCR4T3', 'IRCS6',                 'XR006',      'GOLF',      'CYP', '1234567', 'NOT_COX', 'SRC-TRP-TTT20200506194051795',             'FLUX' , '2022-03-31 09:21:19.378408', '{"faoZoneExited": null, "latitudeExited": 57.7258, "longitudeExited": 0.5983, "effortZoneExited": null, "economicZoneExited": null, "targetSpeciesOnExit": null, "effortZoneExitDatetimeUtc": "2020-05-06T11:40:51.795Z", "statisticalRectangleExited": null}'),
 ('a3c52754-97e1-4a21-ba2e-d8f16f4544e9',              null,  '2020-05-06 18:40:57',          'DAT', '9d1ddd34-1394-470e-b8a6-469b86150e1e',                 null, '2020-05-06 15:40:57', 'SOCR4T3',    null,                    null,        null,      'CYP',      null,     'COX', 'SRC-TRP-TTT20200506194051795',             'FLUX' , '2022-03-31 09:21:19.384086', '{"faoZoneExited": null, "latitudeExited": 46.678, "longitudeExited": -14.616, "effortZoneExited": "A", "economicZoneExited": null, "targetSpeciesOnExit": null, "effortZoneExitDatetimeUtc": "2020-05-06T11:40:57.580Z", "statisticalRectangleExited": null}'),
-('d5c3b039-aaee-4cca-bcae-637fa8effe14',              null,  '2020-05-06 18:41:03',          'DAT', '7ee30c6c-adf9-4f60-a4f1-f7f15ab92803',                 null, '2020-05-06 15:41:03', 'SOCR4T3',    null,                    null,        null,      'CYP',      null,     'PNO', 'SRC-TRP-TTT20200506194051795',             'FLUX' , '2022-03-31 09:21:19.38991' , '{"port": "GBPHD", "purpose": "LAN", "catchOnboard": [{"nbFish": null, "weight": 1500.0, "species": "GHL", "faoZone": "27.7.a"}], "tripStartDate": "2020-05-04T19:41:03.340Z", "predictedArrivalDatetimeUtc": "2020-05-06T20:41:03.340Z", "isPnoToDistribute": false}'),
-('7cfcdde3-286c-4713-8460-2ed82a59be34',              null,  '2020-05-06 18:41:09',          'DAT', 'fc16ea8a-3148-44b2-977f-de2a2ae550b9',                 null, '2020-05-06 15:41:09', 'SOCR4T3',    null,                    null,        null,      'CYP',      null,     'PNO', 'SRC-TRP-TTT20200506194051795',             'FLUX' , '2022-03-31 09:21:19.395805', '{"port": "GBPHD", "purpose": "SHE", "tripStartDate": "2020-05-04T19:41:09.200Z", "predictedArrivalDatetimeUtc": "2020-05-06T20:41:09.200Z", "isPnoToDistribute": true}'),
+('d5c3b039-aaee-4cca-bcae-637fa8effe14',              null,  '2020-05-06 18:41:03',          'DAT', '7ee30c6c-adf9-4f60-a4f1-f7f15ab92803',                 null, '2020-05-06 15:41:03', 'SOCR4T3',    null,                    null,        null,      'CYP',      null,     'PNO', 'SRC-TRP-TTT20200506194051795',             'FLUX' , '2022-03-31 09:21:19.38991' , '{"port": "GBPHD", "purpose": "LAN", "catchOnboard": [{"nbFish": null, "weight": 1500.0, "species": "GHL", "faoZone": "27.7.a"}], "tripStartDate": "2020-05-04T19:41:03.340Z", "predictedArrivalDatetimeUtc": "2020-05-06T20:41:03.340Z"}'),
+('7cfcdde3-286c-4713-8460-2ed82a59be34',              null,  '2020-05-06 18:41:09',          'DAT', 'fc16ea8a-3148-44b2-977f-de2a2ae550b9',                 null, '2020-05-06 15:41:09', 'SOCR4T3',    null,                    null,        null,      'CYP',      null,     'PNO', 'SRC-TRP-TTT20200506194051795',             'FLUX' , '2022-03-31 09:21:19.395805', '{"port": "GBPHD", "purpose": "SHE", "tripStartDate": "2020-05-04T19:41:09.200Z", "predictedArrivalDatetimeUtc": "2020-05-06T20:41:09.200Z"}'),
 ('4f971076-e6c6-48f6-b87e-deae90fe4705',              null,  '2020-05-06 18:41:15',          'DAT', 'cc45063f-2d3c-4cda-ac0c-8381e279e150',                 null, '2020-05-06 15:41:15', 'SOCR4T3',    null,                    null,      'GOLF',      'CYP',      null,     'RTP', 'SRC-TRP-TTT20200506194051795',             'FLUX' , '2022-03-31 09:21:19.401686', '{"port": "ESCAR", "reasonOfReturn": "REF", "returnDatetimeUtc": "2020-05-06T11:41:15.013Z"}'),
 ('8f06061e-e723-4b89-8577-3801a61582a2',              null,  '2020-05-06 18:41:20',          'DAT', 'dde5df56-24c2-4a2e-8afb-561f32113256',                 null, '2020-05-06 15:41:20', 'SOCR4T3', 'IRCS6',                 'XR006',        null,      'CYP',      null,     'RTP', 'SRC-TRP-TTT20200506194051795',             'FLUX' , '2022-03-31 09:21:19.407777', '{"port": "ESCAR", "gearOnboard": [{"gear": "GN", "mesh": 140.0, "dimensions": 1000.0}], "reasonOfReturn": "LAN", "returnDatetimeUtc": "2020-05-06T11:41:20.712Z"}'),
 ('8db132d1-68fc-4ae6-b12e-4af594351701',              null,  '2020-05-06 18:41:26',          'DAT', '83952732-ef89-4168-b2a1-df49d0aa1aff',                 null, '2020-05-06 15:41:26', 'SOCR4T3',    null,                    null,        null,      'CYP',      null,     'LAN', 'SRC-TRP-TTT20200506194051795',             'FLUX' , '2022-03-31 09:21:19.414081', '{"port": "ESCAR", "sender": null, "catchLanded": [{"nbFish": null, "weight": 100.0, "faoZone": "27.9.b.2", "species": "HAD", "freshness": null, "packaging": "BOX", "effortZone": null, "economicZone": "ESP", "presentation": "GUT", "conversionFactor": 1.2, "preservationState": "FRO", "statisticalRectangle": null}], "landingDatetimeUtc": "2020-05-05T19:41:26.516Z"}'),
@@ -163,3 +163,109 @@ INSERT INTO logbook_reports (
 ('7bf7401d-cbb1-4e6f-bad8-7e309ee004cf',              null,  '2020-05-06 18:40:45',          'DAT', 'ced42f65-a1ac-40e1-93c7-851d4933f770',                 null, '2020-05-06 15:40:45', 'SOCR4T3',    null,                    null,      'GOLF',      'CYP',      null,     'RLC', 'SRC-TRP-TTT20200506194051795',             'FLUX' , '2022-03-31 09:21:19.570417', 'null'),
 ('9376ccbd-be2f-4d3d-b4ac-3c559ac9586a',              null,  '2021-01-31 12:29:02',          'DAT', '8eec0190-c353-4147-8a65-fcc697fbadbc',                 null, '2021-01-22 09:02:47', 'SOCR4T3',  'OPUF',                 'Z.510',    'Dennis',      'BEL',      null,     'COE', 'SRC-TRP-TTT20200506194051795',             'FLUX' , '2022-03-31 09:21:19.496049', '{"latitudeEntered": 51.333333, "longitudeEntered": 3.2, "faoZoneEntered": "27.4.c", "effortZoneEntered": null, "economicZoneEntered": "BEL", "targetSpeciesOnEntry": "DEMERSAL", "effortZoneEntryDatetimeUtc": "2021-01-22T09:00:00Z", "statisticalRectangleEntered": "31F3"}');
 
+-- Add enriched PNOs for PNO distribution tests
+INSERT INTO logbook_raw_messages (operation_number, xml_message) VALUES 
+    ('11', '<ERS>Message ERS xml</ERS>'),
+    ('12', '<ERS>Message ERS xml</ERS>'),
+    ('13', '<ERS>Message ERS xml</ERS>'),
+    ('14', '<ERS>Message ERS xml</ERS>'),
+    ('15', '<ERS>Message ERS xml</ERS>'),
+    ('16', '<ERS>Message ERS xml</ERS>'),
+    ('17', '<ERS>Message ERS xml</ERS>'),
+    ('18', '<ERS>Message ERS xml</ERS>'),
+    ('19', '<ERS>Message ERS xml</ERS>'),
+    ('20', '<ERS>Message ERS xml</ERS>');
+
+INSERT INTO logbook_reports (
+    operation_number, operation_country, operation_datetime_utc, operation_type,
+    report_id, referenced_report_id, report_datetime_utc, 
+    cfr, ircs, external_identification, vessel_name, flag_state, imo, log_type, 
+    value, 
+    integration_datetime_utc, trip_number, transmission_format,
+    enriched, trip_gears, trip_segments) VALUES
+    -- Vessel FRA in verification scope --> will be distributed to all control unit who subscribed to port FRCQF
+(
+    '11', 'OOF', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 1 hour')::TIMESTAMP, 'DAT',
+    '11', null, ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 1 hour 2 minutes')::TIMESTAMP,
+    'ABC000542519', 'FQ7058', 'RO237719', 'DEVINER FIGURE CONSCIENCE', 'FRA', null, 'PNO',
+    '{"port": "FRCQF", "purpose": "LAN", "catchOnboard": [{"nbFish": null, "faoZone": "27.8.a", "weight": 150.0, "species": "GHL"}, {"nbFish": null, "faoZone": "27.8.a", "weight": 1450.0, "species": "HKE"}, {"nbFish": 2, "faoZone": "27.8.a", "weight": 150.0, "species": "BFT"}, {"nbFish": 2, "faoZone": "27.8.a", "weight": 70.0, "species": "SWO"}, {"nbFish": 2, "faoZone": "27.8.b", "weight": 150.0, "species": "BFT"}, {"nbFish": null, "faoZone": "27.8.b", "weight": 250.0, "species": "GHL"}], "tripStartDate": "2020-05-04T19:41:03.340Z", "predictedArrivalDatetimeUtc": "2020-05-06T11:41:03.340Z", "pnoTypes": [{"pnoTypeName": "Préavis type 1", "minimumNotificationPeriod": 4.0, "hasDesignatedPorts": true}, {"pnoTypeName": "Préavis type 2", "minimumNotificationPeriod": 4.0, "hasDesignatedPorts": true}], "isInVerificationScope": true, "isVerified": true, "isSent": false, "isBeingSent": true}',
+    ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 58 minutes')::TIMESTAMP, '20510000', 'ERS',
+    true, '[{"gear": "OTT", "mesh": 140, "dimensions": "250.0"}, {"gear": "OTT", "mesh": 120, "dimensions": "250.0"}]', '[{"segment": "SHKE27", "segmentName": "Merlu en zone 27"}, {"segment": "SOTM", "segmentName": "Chaluts pélagiques"}]'
+),
+    -- Foreign vessel (in verification scope)
+(
+    '12', 'OOF', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 25 minutes')::TIMESTAMP, 'DAT',
+    '12', null, ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 27 minutes')::TIMESTAMP,
+    'ABC000000000', 'ABCD', 'LEB@T0', 'CAPITAINE HADDOCK', 'POL', null, 'PNO',
+    '{"port": "FRZJZ", "purpose": "ACS", "tripStartDate": "2020-05-04T19:41:03.340Z", "predictedArrivalDatetimeUtc": "2020-05-06T11:41:03.340Z", "pnoTypes": [], "isInVerificationScope": true, "isVerified": true, "isSent": false, "isBeingSent": true}',
+    ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 23 minutes')::TIMESTAMP, '20510002', 'ERS',
+    true, '[]', '[]'
+),
+    -- Vessel FRA not in verification scope, no subscription parameter matching its segments / port / vessel -> will not be distributed
+(
+    '13', 'OOF', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 2 hours')::TIMESTAMP, 'DAT',
+    '13', null, ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 2 hour 2 minutes')::TIMESTAMP,
+    'ABC000306959', 'LLUK', 'RV348407', 'ÉTABLIR IMPRESSION LORSQUE', 'FRA', null, 'PNO',
+    '{"port": "FRDKK", "purpose": "OTH", "catchOnboard": [{"nbFish": null, "faoZone": "27.8.a", "weight": 150.0, "species": "GHL"}, {"nbFish": null, "faoZone": "27.8.a", "weight": 1450.0, "species": "HKE"}, {"nbFish": 2, "faoZone": "27.8.a", "weight": 150.0, "species": "BFT"}, {"nbFish": 2, "faoZone": "27.8.a", "weight": 70.0, "species": "SWO"}, {"nbFish": 2, "faoZone": "27.8.b", "weight": 150.0, "species": "BFT"}, {"nbFish": null, "faoZone": "27.8.b", "weight": 250.0, "species": "GHL"}], "tripStartDate": "2020-05-04T19:41:03.340Z", "predictedArrivalDatetimeUtc": "2020-05-06T11:41:03.340Z", "pnoTypes": [{"pnoTypeName": "Préavis type 1", "minimumNotificationPeriod": 4.0, "hasDesignatedPorts": true}, {"pnoTypeName": "Préavis type 2", "minimumNotificationPeriod": 4.0, "hasDesignatedPorts": true}], "isInVerificationScope": false, "isVerified": false, "isSent": false, "isBeingSent": true}',
+    ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 1 hour 58 minutes')::TIMESTAMP, '20510001', 'ERS',
+    true, '[{"gear": "OTT", "mesh": 140, "dimensions": "250.0"}]', '[{"segment": "SOTM", "segmentName": "Chaluts pélagiques"}]'
+),
+    -- Vessel FRA not in verification scope, will be sent to the control units who subscribed to segment SWW01/02/03 on port FRLEH
+(
+    '14', 'OOF', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 52 minutes')::TIMESTAMP, 'DAT',
+    '14', null, ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 54 minutes')::TIMESTAMP,
+    'ABC000306959', 'LLUK', 'RV348407', 'ÉTABLIR IMPRESSION LORSQUE', 'FRA', null, 'PNO',
+    '{"port": "FRLEH", "purpose": "LAN", "catchOnboard": [{"nbFish": null, "faoZone": "27.8.a", "weight": 150.0, "species": "GHL"}, {"nbFish": null, "faoZone": "27.8.a", "weight": 1450.0, "species": "HKE"}, {"nbFish": 2, "faoZone": "27.8.a", "weight": 150.0, "species": "BFT"}, {"nbFish": 2, "faoZone": "27.8.a", "weight": 70.0, "species": "SWO"}, {"nbFish": 2, "faoZone": "27.8.b", "weight": 150.0, "species": "BFT"}, {"nbFish": null, "faoZone": "27.8.b", "weight": 250.0, "species": "GHL"}], "tripStartDate": "2020-05-04T19:41:03.340Z", "predictedArrivalDatetimeUtc": "2020-05-06T11:41:03.340Z", "pnoTypes": [{"pnoTypeName": "Préavis type 1", "minimumNotificationPeriod": 4.0, "hasDesignatedPorts": true}, {"pnoTypeName": "Préavis type 2", "minimumNotificationPeriod": 4.0, "hasDesignatedPorts": true}], "isInVerificationScope": false, "isVerified": false, "isSent": false, "isBeingSent": true}',
+    ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 50 minutes')::TIMESTAMP, '20510003', 'ERS',
+    true, '[{"gear": "OTB", "mesh": 140, "dimensions": "250.0"}]', '[{"segment": "SWW01/02/03", "segmentName": "Segment ciblé par une unité"}]'
+),
+    -- Vessel FRA not in verification scope, will be sent to the control units who subscribed to vessel `___TARGET___` (even if they did not subscribe to port `FRDPE`) and control units who subscrubed to port `FRDPE`.
+(
+    '15', 'OOF', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 32 minutes')::TIMESTAMP, 'DAT',
+    '15', null, ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 34 minutes')::TIMESTAMP,
+    '___TARGET___', 'TRGT', 'TARGET', 'NAVIRE CIBLE', 'FRA', null, 'PNO',
+    '{"port": "FRDPE", "purpose": "LAN", "catchOnboard": [{"nbFish": null, "faoZone": "27.8.a", "weight": 150.0, "species": "GHL"}, {"nbFish": null, "faoZone": "27.8.a", "weight": 1450.0, "species": "HKE"}, {"nbFish": 2, "faoZone": "27.8.a", "weight": 150.0, "species": "BFT"}, {"nbFish": 2, "faoZone": "27.8.a", "weight": 70.0, "species": "SWO"}, {"nbFish": 2, "faoZone": "27.8.b", "weight": 150.0, "species": "BFT"}, {"nbFish": null, "faoZone": "27.8.b", "weight": 250.0, "species": "GHL"}], "tripStartDate": "2020-05-04T19:41:03.340Z", "predictedArrivalDatetimeUtc": "2020-05-06T11:41:03.340Z", "pnoTypes": [{"pnoTypeName": "Préavis type 1", "minimumNotificationPeriod": 4.0, "hasDesignatedPorts": true}, {"pnoTypeName": "Préavis type 2", "minimumNotificationPeriod": 4.0, "hasDesignatedPorts": true}], "isInVerificationScope": false, "isVerified": false, "isSent": false, "isBeingSent": true}',
+    ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 30 minutes')::TIMESTAMP, '20510003', 'ERS',
+    true, '[{"gear": "OTB", "mesh": 140, "dimensions": "250.0"}]', '[]'
+),
+(
+    '16', 'OOE', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 1 hour')::TIMESTAMP, 'RET',
+    NULL, '11', NULL,
+    NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+    '{"returnStatus": "000"}',
+    ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 1 hour 5 minutes')::TIMESTAMP, NULL, 'ERS',
+    false, NULL, NULL
+),
+(
+    '17', 'OOE', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 25 minutes')::TIMESTAMP, 'RET',
+    NULL, '12', NULL,
+    NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+    '{"returnStatus": "000"}',
+    ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 20 minutes')::TIMESTAMP, NULL, 'ERS',
+    false, NULL, NULL
+),
+(
+    '18', 'OOE', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 2 hours')::TIMESTAMP, 'RET',
+    NULL, '13', NULL,
+    NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+    '{"returnStatus": "000"}',
+    ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 2 hours 5 minutes')::TIMESTAMP, NULL, 'ERS',
+    false, NULL, NULL
+),
+(
+    '19', 'OOE', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 52 minutes')::TIMESTAMP, 'RET',
+    NULL, '14', NULL,
+    NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+    '{"returnStatus": "000"}',
+    ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 47 minutes')::TIMESTAMP, NULL, 'ERS',
+    false, NULL, NULL
+),
+(
+    '20', 'OOE', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 32 minutes')::TIMESTAMP, 'RET',
+    NULL, '15', NULL,
+    NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+    '{"returnStatus": "000"}',
+    ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 27 minutes')::TIMESTAMP, NULL, 'ERS',
+    false, NULL, NULL
+)
+;

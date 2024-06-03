@@ -840,7 +840,14 @@ def test_load_then_reset_logbook(
         "(value->>'isVerified')::BOOLEAN AS is_verified, "
         "(value->>'isSent')::BOOLEAN AS is_sent, "
         "(value->>'isBeingSent')::BOOLEAN AS is_being_sent "
-        "FROM logbook_reports WHERE log_type = 'PNO' ORDER BY id"
+        "FROM logbook_reports "
+        "WHERE "
+        "   log_type = 'PNO' AND "
+        "   operation_datetime_utc < ("
+        "       CURRENT_TIMESTAMP AT TIME ZONE 'UTC' "
+        "       - INTERVAL '2 months'"
+        "   ) "
+        "ORDER BY id "
     )
     initial_pnos = read_query(query, db="monitorfish_remote")
     pno_period = Period(
@@ -901,7 +908,14 @@ def test_load_then_reset_logbook(
 def test_flow(reset_test_data):
     query = (
         "SELECT id, enriched, trip_gears, value->'pnoTypes' AS pno_types, trip_segments "
-        "FROM logbook_reports WHERE log_type = 'PNO' ORDER BY id"
+        "FROM logbook_reports "
+        "WHERE "
+        "   log_type = 'PNO' AND "
+        "   operation_datetime_utc < ("
+        "       CURRENT_TIMESTAMP AT TIME ZONE 'UTC' "
+        "       - INTERVAL '2 months'"
+        "   ) "
+        "ORDER BY id "
     )
 
     initial_pnos = read_query(query, db="monitorfish_remote")

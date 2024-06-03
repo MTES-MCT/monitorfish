@@ -79,16 +79,14 @@ export function Tabs() {
       >
         <ControlsIcon /> <br /> Contrôles
       </Tab>
-      {isSuperUser && (
-        <Tab
-          data-cy="vessel-menu-ers-vms"
-          isActive={vesselSidebarTab === VesselSidebarTab.ERSVMS}
-          isLast
-          onClick={() => showTab(VesselSidebarTab.ERSVMS)}
-        >
-          <VMSIcon /> <br /> VMS
-        </Tab>
-      )}
+      <Tab
+        data-cy="vessel-menu-ers-vms"
+        isActive={vesselSidebarTab === VesselSidebarTab.ERSVMS}
+        isLast
+        onClick={() => showTab(VesselSidebarTab.ERSVMS)}
+      >
+        <VMSIcon /> <br /> VMS/JPE
+      </Tab>
     </TabList>
   )
 }

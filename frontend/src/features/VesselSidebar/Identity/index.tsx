@@ -1,3 +1,4 @@
+import { TwoColumnKeyValueTable } from '@features/VesselSidebar/common/TwoColumnKeyValueTable'
 import countries from 'i18n-iso-countries'
 import { useEffect, useMemo } from 'react'
 import { FingerprintSpinner } from 'react-epic-spinners'
@@ -60,94 +61,64 @@ export function Identity() {
 
   return !loadingVessel ? (
     <Body>
-      <Zone>
-        <Fields>
-          <TableBody>
-            <Field>
-              <Key>CFR</Key>
-              <Value>{getVesselOrLastPositionProperty('internalReferenceNumber')}</Value>
-            </Field>
-            <Field>
-              <Key>MMSI</Key>
-              <Value>{getVesselOrLastPositionProperty('mmsi')}</Value>
-            </Field>
-            <Field>
-              <Key>Balise n°</Key>
-              <Value>{getVesselOrLastPositionProperty('beaconNumber')}</Value>
-            </Field>
-          </TableBody>
-        </Fields>
-        <Fields>
-          <TableBody>
-            <Field>
-              <Key>Marquage ext.</Key>
-              <Value>{getVesselOrLastPositionProperty('externalReferenceNumber')}</Value>
-            </Field>
-            <Field>
-              <Key>Call Sign (IRCS)</Key>
-              <Value>{getVesselOrLastPositionProperty('ircs')}</Value>
-            </Field>
-            <Field>
-              <Key />
-              <Value />
-            </Field>
-          </TableBody>
-        </Fields>
-      </Zone>
-      <Zone>
-        <Fields>
-          <TableBody>
-            <Field>
-              <Key>Nationalité</Key>
-              <TrimmedValue>
-                {selectedVessel?.flagState && countries.getName(selectedVessel?.flagState, 'fr') ? (
-                  countries.getName(selectedVessel?.flagState, 'fr')
-                ) : (
-                  <NoValue>-</NoValue>
-                )}
-              </TrimmedValue>
-            </Field>
-            <Field>
-              <Key>Quartier</Key>
-              <TrimmedValue>
-                {selectedVessel?.district ? (
-                  <>
-                    {selectedVessel?.district}{' '}
-                    {selectedVessel?.districtCode ? <>({selectedVessel?.districtCode})</> : ''}
-                  </>
-                ) : (
-                  <NoValue>-</NoValue>
-                )}
-              </TrimmedValue>
-            </Field>
-            <Field>
-              <Key>Port d&apos;attache</Key>
-              <TrimmedValue>
-                {selectedVessel?.registryPort ? selectedVessel?.registryPort : <NoValue>-</NoValue>}
-              </TrimmedValue>
-            </Field>
-          </TableBody>
-        </Fields>
-        <Fields>
-          <TableBody>
-            <Field>
-              <Key>Taille</Key>
-              <Value>
-                {selectedVessel?.length ? selectedVessel?.length : <NoValue>-</NoValue>} x{' '}
-                {selectedVessel?.width ? selectedVessel?.width : <NoValue>-</NoValue>}
-              </Value>
-            </Field>
-            <Field>
-              <Key>Jauge</Key>
-              <Value>{selectedVessel?.gauge ? <>{selectedVessel?.gauge} GT</> : <NoValue>-</NoValue>}</Value>
-            </Field>
-            <Field>
-              <Key>Moteur</Key>
-              <Value>{selectedVessel?.power ? <>{selectedVessel?.power} kW</> : <NoValue>-</NoValue>}</Value>
-            </Field>
-          </TableBody>
-        </Fields>
-      </Zone>
+      <TwoColumnKeyValueTable
+        firstColumn={[
+          {
+            key: 'CFR',
+            value: getVesselOrLastPositionProperty('internalReferenceNumber')
+          },
+          {
+            key: 'MMSI',
+            value: getVesselOrLastPositionProperty('mmsi')
+          },
+          {
+            key: 'Balise n°',
+            value: getVesselOrLastPositionProperty('beaconNumber')
+          }
+        ]}
+        secondColumn={[
+          {
+            key: 'Marquage ext.',
+            value: getVesselOrLastPositionProperty('externalReferenceNumber')
+          },
+          {
+            key: 'Call Sign (IRCS)',
+            value: getVesselOrLastPositionProperty('ircs')
+          }
+        ]}
+      />
+      <TwoColumnKeyValueTable
+        firstColumn={[
+          {
+            key: 'Nationalité',
+            value: selectedVessel?.flagState ? countries.getName(selectedVessel?.flagState, 'fr') : undefined
+          },
+          {
+            key: 'Quartier',
+            value: selectedVessel?.district
+              ? `${selectedVessel?.district} ${!!selectedVessel?.districtCode && `(${selectedVessel?.districtCode})`}`
+              : undefined
+          },
+          {
+            key: "Port d'attache",
+            value: selectedVessel?.registryPort
+          }
+        ]}
+        secondColumn={[
+          {
+            key: 'Taille',
+            value: `${selectedVessel?.length || '-'} x ${selectedVessel?.width || '-'}`
+          },
+          {
+            key: 'Jauge',
+            value: selectedVessel?.gauge ? `${selectedVessel?.gauge} GT` : undefined
+          },
+          {
+            key: 'Moteur',
+            value: selectedVessel?.power ? `${selectedVessel?.power} kW` : undefined
+          }
+        ]}
+      />
       <Zone>
         <Fields>
           <TableBody>
@@ -376,21 +347,6 @@ const Key = styled.th`
   height: 0.5em;
   font-size: 13px;
   font-weight: normal;
-`
-
-const TrimmedValue = styled.td`
-  font-size: 13px;
-  color: ${p => p.theme.color.gunMetal};
-  text-align: left;
-  padding: 1px 5px 5px 5px;
-  background: none;
-  border: none;
-  line-height: normal;
-  text-overflow: ellipsis;
-  overflow: hidden !important;
-  white-space: nowrap;
-  max-width: 120px;
-  font-weight: 500;
 `
 
 const Value = styled.td`

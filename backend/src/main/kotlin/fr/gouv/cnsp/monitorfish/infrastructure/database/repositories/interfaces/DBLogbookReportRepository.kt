@@ -15,32 +15,103 @@ interface DBLogbookReportRepository :
     @Query(
         """
         WITH
-            dat_and_cor_logbook_reports_with_extra_columns AS (
-                SELECT
-                    lr.*,
-                    (SELECT array_agg(pnoTypes->>'pnoTypeName') FROM jsonb_array_elements(lr.value->'pnoTypes') AS pnoTypes) AS prior_notification_type_names,
-                    (SELECT array_agg(catchOnboard->>'species') FROM jsonb_array_elements(lr.value->'catchOnboard') AS catchOnboard) AS specy_codes,
-                    (SELECT array_agg(tripGears->>'gear') FROM jsonb_array_elements(lr.trip_gears) AS tripGears) AS trip_gear_codes,
-                    (SELECT array_agg(tripSegments->>'segment') FROM jsonb_array_elements(lr.trip_segments) AS tripSegments) AS trip_segment_codes
-                FROM logbook_reports lr
-                LEFT JOIN ports p ON lr.value->>'port' = p.locode
-                LEFT JOIN risk_factors rf ON lr.cfr = rf.cfr
-                LEFT JOIN vessels v ON lr.cfr = v.cfr
+            dat_and_cor_prior_notifications AS (
+                SELECT *
+                FROM logbook_reports
                 WHERE
                     -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
-                    lr.operation_datetime_utc
+                    operation_datetime_utc
                         BETWEEN CAST(:willArriveAfter AS TIMESTAMP) - INTERVAL '48 hours'
                         AND CAST(:willArriveBefore AS TIMESTAMP) + INTERVAL '48 hours'
 
-                    AND lr.log_type = 'PNO'
-                    AND lr.operation_type IN ('DAT', 'COR')
-                    AND lr.enriched = TRUE
+                    AND log_type = 'PNO'
+                    AND operation_type IN ('DAT', 'COR')
+                    AND enriched = TRUE
 
                     -- Flag States
-                    AND (:flagStates IS NULL OR lr.flag_state IN (:flagStates))
+                    AND (:flagStates IS NULL OR flag_state IN (:flagStates))
 
+                    -- Port Locodes
+                    AND (:portLocodes IS NULL OR value->>'port' IN (:portLocodes))
+
+                    -- Search Query
+                    AND (:searchQuery IS NULL OR unaccent(lower(vessel_name)) ILIKE CONCAT('%', unaccent(lower(:searchQuery)), '%'))
+
+                    -- Will Arrive After
+                    AND value->>'predictedArrivalDatetimeUtc' >= :willArriveAfter
+
+                    -- Will Arrive Before
+                    AND value->>'predictedArrivalDatetimeUtc' <= :willArriveBefore
+
+                UNION ALL
+
+                SELECT
+                    id,
+                    CAST(NULL AS TEXT) AS operation_number,
+                    CAST(NULL AS TEXT) AS operation_country,
+                    operation_datetime_utc,
+                    CAST('DAT' AS TEXT) AS operation_type,
+                    report_id,
+                    CAST(NULL AS TEXT) AS referenced_report_id,
+                    report_datetime_utc,
+                    cfr,
+                    CAST(NULL AS TEXT) AS ircs,
+                    CAST(NULL AS TEXT) AS external_identification,
+                    vessel_name,
+                    flag_state,
+                    CAST(NULL AS TEXT) AS imo,
+                    CAST('PNO' AS TEXT) AS log_type,
+                    value,
+                    integration_datetime_utc,
+                    CAST(NULL AS TEXT) AS trip_number,
+                    analyzed_by_rules,
+                    CAST(TRUE AS BOOLEAN) AS trip_number_was_computed,
+                    -- TODO /!\ CHECK IF THIS IS WHAT WE WANT /!\
+                    CAST(NULL AS public.logbook_message_transmission_format) AS transmission_format,
+                    CAST(NULL AS TEXT) AS software,
+                    CAST(TRUE AS BOOLEAN) AS enriched,
+                    trip_gears,
+                    trip_segments,
+                    is_manually_created,
+                    created_at,
+                    updated_at
+                FROM prior_notifications
+                WHERE
+                    -- TODO /!\ INDEX operation_datetime_utc WITH TIMESCALE /!\
+                    -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
+                    operation_datetime_utc
+                        BETWEEN CAST(:willArriveAfter AS TIMESTAMP) - INTERVAL '48 hours'
+                        AND CAST(:willArriveBefore AS TIMESTAMP) + INTERVAL '48 hours'
+
+                    -- Flag States
+                    AND (:flagStates IS NULL OR flag_state IN (:flagStates))
+
+                    -- Port Locodes
+                    AND (:portLocodes IS NULL OR value->>'port' IN (:portLocodes))
+
+                    -- Search Query
+                    AND (:searchQuery IS NULL OR unaccent(lower(vessel_name)) ILIKE CONCAT('%', unaccent(lower(:searchQuery)), '%'))
+
+                    -- Will Arrive After
+                    AND value->>'predictedArrivalDatetimeUtc' >= :willArriveAfter
+
+                    -- Will Arrive Before
+                    AND value->>'predictedArrivalDatetimeUtc' <= :willArriveBefore
+            ),
+
+            dat_and_cor_prior_notifications_with_extra_columns AS (
+                SELECT
+                    dacpn.*,
+                    (SELECT array_agg(pnoTypes->>'pnoTypeName') FROM jsonb_array_elements(dacpn.value->'pnoTypes') AS pnoTypes) AS prior_notification_type_names,
+                    (SELECT array_agg(catchOnboard->>'species') FROM jsonb_array_elements(dacpn.value->'catchOnboard') AS catchOnboard) AS specy_codes,
+                    (SELECT array_agg(tripGears->>'gear') FROM jsonb_array_elements(dacpn.trip_gears) AS tripGears) AS trip_gear_codes,
+                    (SELECT array_agg(tripSegments->>'segment') FROM jsonb_array_elements(dacpn.trip_segments) AS tripSegments) AS trip_segment_codes
+                FROM dat_and_cor_prior_notifications dacpn
+                LEFT JOIN risk_factors rf ON dacpn.cfr = rf.cfr
+                LEFT JOIN vessels v ON dacpn.cfr = v.cfr
+                WHERE
                     -- Is Less Than Twelve Meters Vessel
-                    AND (
+                    (
                         :isLessThanTwelveMetersVessel IS NULL
                         OR (:isLessThanTwelveMetersVessel = TRUE AND v.length < 12)
                         OR (:isLessThanTwelveMetersVessel = FALSE AND v.length >= 12)
@@ -51,23 +122,11 @@ interface DBLogbookReportRepository :
 
                     -- Last Controlled Before
                     AND (:lastControlledBefore IS NULL OR rf.last_control_datetime_utc <= CAST(:lastControlledBefore AS TIMESTAMP))
-
-                    -- Port Locodes
-                    AND (:portLocodes IS NULL OR lr.value->>'port' IN (:portLocodes))
-
-                    -- Search Query
-                    AND (:searchQuery IS NULL OR unaccent(lower(lr.vessel_name)) ILIKE CONCAT('%', unaccent(lower(:searchQuery)), '%'))
-
-                    -- Will Arrive After
-                    AND lr.value->>'predictedArrivalDatetimeUtc' >= :willArriveAfter
-
-                    -- Will Arrive Before
-                    AND lr.value->>'predictedArrivalDatetimeUtc' <= :willArriveBefore
             ),
 
             distinct_cfrs AS (
                 SELECT DISTINCT cfr
-                FROM dat_and_cor_logbook_reports_with_extra_columns
+                FROM dat_and_cor_prior_notifications_with_extra_columns
             ),
 
             cfr_reporting_counts AS (
@@ -83,17 +142,17 @@ interface DBLogbookReportRepository :
                 GROUP BY cfr
             ),
 
-            dat_and_cor_logbook_reports_with_extra_columns_and_reporting_count AS (
+            dat_and_cor_prior_notifications_with_extra_columns_and_reporting_count AS (
                 SELECT
-                    daclr.*,
+                    dacpnwecarc.*,
                     COALESCE(crc.reporting_count, 0) AS reporting_count
-                FROM dat_and_cor_logbook_reports_with_extra_columns daclr
-                LEFT JOIN cfr_reporting_counts crc ON daclr.cfr = crc.cfr
+                FROM dat_and_cor_prior_notifications_with_extra_columns dacpnwecarc
+                LEFT JOIN cfr_reporting_counts crc ON dacpnwecarc.cfr = crc.cfr
             ),
 
-            dat_and_cor_logbook_reports AS (
+            filtered_dat_and_cor_prior_notifications AS (
                 SELECT *
-                FROM dat_and_cor_logbook_reports_with_extra_columns_and_reporting_count
+                FROM dat_and_cor_prior_notifications_with_extra_columns_and_reporting_count
                 WHERE
                     -- Has One Or More Reportings
                     (
@@ -115,7 +174,7 @@ interface DBLogbookReportRepository :
                     AND (:tripSegmentCodesAsSqlArrayString IS NULL OR trip_segment_codes && CAST(:tripSegmentCodesAsSqlArrayString AS TEXT[]))
             ),
 
-            del_logbook_reports AS (
+            del_prior_notifications AS (
                 SELECT
                     lr.*,
                     CAST(NULL AS TEXT[]) AS prior_notification_type_names,
@@ -124,7 +183,7 @@ interface DBLogbookReportRepository :
                     CAST(NULL AS TEXT[]) AS trip_segment_codes,
                     CAST(NULL AS INTEGER) AS reporting_count
                 FROM logbook_reports lr
-                JOIN dat_and_cor_logbook_reports daclr ON lr.referenced_report_id = daclr.report_id
+                JOIN filtered_dat_and_cor_prior_notifications fdacpn ON lr.referenced_report_id = fdacpn.report_id
                 WHERE
                     -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
                     lr.operation_datetime_utc
@@ -134,7 +193,7 @@ interface DBLogbookReportRepository :
                     AND lr.operation_type = 'DEL'
             ),
 
-            ret_logbook_reports AS (
+            ret_prior_notifications AS (
                 SELECT
                     lr.*,
                     CAST(NULL AS TEXT[]) AS prior_notification_type_names,
@@ -143,7 +202,7 @@ interface DBLogbookReportRepository :
                     CAST(NULL AS TEXT[]) AS trip_segment_codes,
                     CAST(NULL AS INTEGER) AS reporting_count
                 FROM logbook_reports lr
-                JOIN dat_and_cor_logbook_reports daclr ON lr.referenced_report_id = daclr.report_id
+                JOIN filtered_dat_and_cor_prior_notifications fdacpn ON lr.referenced_report_id = fdacpn.report_id
                 WHERE
                     -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
                     lr.operation_datetime_utc
@@ -154,17 +213,17 @@ interface DBLogbookReportRepository :
             )
 
         SELECT *
-        FROM dat_and_cor_logbook_reports
+        FROM filtered_dat_and_cor_prior_notifications
 
         UNION
 
         SELECT *
-        FROM del_logbook_reports
+        FROM del_prior_notifications
 
         UNION
 
         SELECT *
-        FROM ret_logbook_reports;
+        FROM ret_prior_notifications;
         """,
         nativeQuery = true,
     )
@@ -192,23 +251,68 @@ interface DBLogbookReportRepository :
                 -- It may not exist while a COR operation would still exist (orphan COR case)
                 SELECT report_id
                 FROM logbook_reports
-                WHERE report_id = ?1 AND log_type = 'PNO' AND operation_type = 'DAT' AND enriched = TRUE
+                WHERE
+                    report_id = ?1
+                    AND log_type = 'PNO'
+                    AND operation_type = 'DAT'
+                    AND enriched = TRUE
 
                 UNION
 
                 -- Get the logbook report corrections which may be used as base for the "final" report
                 SELECT report_id
                 FROM logbook_reports
-                WHERE referenced_report_id = ?1 AND log_type = 'PNO' AND operation_type = 'COR' AND enriched = TRUE
-            )
+                WHERE
+                    referenced_report_id = ?1
+                    AND log_type = 'PNO'
+                    AND operation_type = 'COR'
+                    AND enriched = TRUE
+           )
 
         SELECT *
         FROM logbook_reports
         WHERE
             report_id IN (SELECT * FROM dat_and_cor_logbook_report_report_ids)
             OR referenced_report_id IN (SELECT * FROM dat_and_cor_logbook_report_report_ids)
+
+        UNION ALL
+
+        SELECT
+            id,
+            CAST(NULL AS TEXT) AS operation_number,
+            CAST(NULL AS TEXT) AS operation_country,
+            operation_datetime_utc,
+            CAST('DAT' AS TEXT) AS operation_type,
+            CAST(report_id AS TEXT) AS report_id,
+            CAST(NULL AS TEXT) AS referenced_report_id,
+            report_datetime_utc,
+            cfr,
+            CAST(NULL AS TEXT) AS ircs,
+            CAST(NULL AS TEXT) AS external_identification,
+            vessel_name,
+            flag_state,
+            CAST(NULL AS TEXT) AS imo,
+            CAST('PNO' AS TEXT) AS log_type,
+            value,
+            integration_datetime_utc,
+            CAST(NULL AS TEXT) AS trip_number,
+            analyzed_by_rules,
+            CAST(TRUE AS BOOLEAN) AS trip_number_was_computed,
+            -- TODO /!\ CHECK IF THIS IS WHAT WE WANT /!\
+            CAST(NULL AS public.logbook_message_transmission_format) AS transmission_format,
+            CAST(NULL AS TEXT) AS software,
+            CAST(TRUE AS BOOLEAN) AS enriched,
+            trip_gears,
+            trip_segments,
+            is_manually_created,
+            created_at,
+            updated_at
+        FROM prior_notifications
+        WHERE
+            report_id = ?1
+
         ORDER BY
-            report_datetime_utc
+            report_datetime_utc;
         """,
         nativeQuery = true,
     )

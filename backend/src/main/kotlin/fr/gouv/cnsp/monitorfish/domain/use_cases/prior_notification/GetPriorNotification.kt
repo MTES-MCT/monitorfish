@@ -37,15 +37,17 @@ class GetPriorNotification(
             .findPriorNotificationByReportId(logbookMessageReportId)
             .let { priorNotification ->
                 val logbookMessage = priorNotification.logbookMessageTyped.logbookMessage
-                val logbookMessageWithRawMessage = logbookMessage.copy(
-                    rawMessage = try {
-                        logbookRawMessageRepository.findRawMessage(logbookMessage.operationNumber)
-                    } catch (e: NoERSMessagesFound) {
-                        logger.warn(e.message)
+                val logbookMessageWithRawMessage = logbookMessage.operationNumber?.let { operationNumber ->
+                    logbookMessage.copy(
+                        rawMessage = try {
+                            logbookRawMessageRepository.findRawMessage(operationNumber)
+                        } catch (e: NoERSMessagesFound) {
+                            logger.warn(e.message)
 
-                        null
-                    },
-                )
+                            null
+                        },
+                    )
+                } ?: logbookMessage
 
                 val port = try {
                     priorNotification.logbookMessageTyped.typedMessage.port?.let { portLocode ->

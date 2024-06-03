@@ -1,0 +1,40 @@
+[
+    {
+        "table": "prior_notifications",
+        "data": [
+            {
+                "id": 116,
+                "report_id": "d2bd7d28-3130-4e3f-bf0d-5e919a5657be",
+                "cfr": "CFR112",
+                "flag_state": "FRA",
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "vessel_name": "POISSON PAS NET",
+                "trip_gears:jsonb": [{ "gear": "LNP", "mesh": 8, "dimensions": "50;200" }],
+                "trip_segments:jsonb": [{ "segment": "NWW09", "segmentName": "Lignes" }],
+                "value:jsonb": {
+                    "catchOnboard": [
+                        {
+                            "weight": 72.0,
+                            "nbFish": null,
+                            "species": "SOS"
+                        }
+                    ],
+                    "pnoTypes": [
+                        {
+                            "pnoTypeName": "Préavis type D",
+                            "minimumNotificationPeriod": 4.0,
+                            "hasDesignatedPorts": true
+                        }
+                    ],
+                    "port": "FRVNE",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "purpose": "LAN",
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                }
+            }
+        ]
+    }
+]

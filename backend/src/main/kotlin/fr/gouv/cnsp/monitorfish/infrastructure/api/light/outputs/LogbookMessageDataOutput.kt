@@ -8,7 +8,7 @@ import java.time.ZonedDateTime
 
 data class LogbookMessageDataOutput(
     val reportId: String? = null,
-    val operationNumber: String,
+    val operationNumber: String?,
     val tripNumber: String? = null,
     val referencedReportId: String? = null,
     var isCorrected: Boolean? = false,

@@ -13,6 +13,7 @@ import org.hibernate.annotations.Type
 import org.hibernate.dialect.PostgreSQLEnumJdbcType
 import java.time.Instant
 import java.time.ZoneOffset.UTC
+import java.time.ZonedDateTime
 
 @Entity
 @Table(name = "logbook_reports")
@@ -23,58 +24,64 @@ data class LogbookReportEntity(
     @Column(name = "id")
     val id: Long? = null,
     @Column(name = "operation_number")
-    val operationNumber: String,
+    val operationNumber: String?,
     @Column(name = "trip_number")
-    val tripNumber: String? = null,
+    val tripNumber: String?,
     @Column(name = "operation_country")
-    val operationCountry: String? = null,
+    val operationCountry: String?,
     @Column(name = "operation_datetime_utc")
     val operationDateTime: Instant,
     @Column(name = "operation_type")
     @Enumerated(EnumType.STRING)
     val operationType: LogbookOperationType,
     @Column(name = "report_id")
-    val reportId: String? = null,
+    val reportId: String?,
     @Column(name = "referenced_report_id")
-    val referencedReportId: String? = null,
+    val referencedReportId: String?,
     @Column(name = "report_datetime_utc")
-    val reportDateTime: Instant? = null,
+    val reportDateTime: Instant?,
     @Column(name = "cfr")
-    val internalReferenceNumber: String? = null,
+    val internalReferenceNumber: String?,
     @Column(name = "ircs")
-    val ircs: String? = null,
+    val ircs: String?,
     @Column(name = "external_identification")
-    val externalReferenceNumber: String? = null,
+    val externalReferenceNumber: String?,
     @Column(name = "vessel_name")
-    val vesselName: String? = null,
+    val vesselName: String?,
     // ISO Alpha-3 country code
     @Column(name = "flag_state")
-    val flagState: String? = null,
+    val flagState: String?,
     @Column(name = "imo")
-    val imo: String? = null,
+    val imo: String?,
     @Column(name = "log_type")
-    val messageType: String? = null,
+    val messageType: String?,
     @Column(name = "analyzed_by_rules", columnDefinition = "varchar(100)[]")
-    val analyzedByRules: List<String>? = listOf(),
+    val analyzedByRules: List<String>?,
     @Type(JsonBinaryType::class)
     @Column(name = "value", nullable = true, columnDefinition = "jsonb")
-    val message: String? = null,
+    val message: String?,
     @Column(name = "integration_datetime_utc")
     val integrationDateTime: Instant,
     @JdbcType(PostgreSQLEnumJdbcType::class)
     @Column(name = "transmission_format", columnDefinition = "logbook_message_transmission_format")
     @Enumerated(EnumType.STRING)
-    val transmissionFormat: LogbookTransmissionFormat,
+    val transmissionFormat: LogbookTransmissionFormat?,
     @Column(name = "software")
-    val software: String? = null,
+    val software: String?,
     @Column(name = "enriched")
     val isEnriched: Boolean = false,
     @Type(JsonBinaryType::class)
     @Column(name = "trip_gears", nullable = true, columnDefinition = "jsonb")
-    val tripGears: String? = null,
+    val tripGears: String?,
     @Type(JsonBinaryType::class)
     @Column(name = "trip_segments", nullable = true, columnDefinition = "jsonb")
-    val tripSegments: String? = null,
+    val tripSegments: String?,
+    @Column(name = "is_manually_created", nullable = false)
+    val isManuallyCreated: Boolean,
+    @Column(name = "created_at")
+    val createdAt: ZonedDateTime?,
+    @Column(name = "updated_at")
+    val updatedAt: ZonedDateTime?,
 ) {
     companion object {
         fun fromLogbookMessage(
@@ -98,10 +105,16 @@ data class LogbookReportEntity(
             software = logbookMessage.software,
             transmissionFormat = logbookMessage.transmissionFormat,
 
+            createdAt = logbookMessage.createdAt,
             isEnriched = logbookMessage.isEnriched,
+            isManuallyCreated = logbookMessage.isManuallyCreated,
             message = mapper.writeValueAsString(logbookMessage.message),
             messageType = logbookMessage.messageType,
+            operationCountry = null,
             operationType = logbookMessage.operationType,
+            tripGears = null,
+            tripSegments = null,
+            updatedAt = logbookMessage.updatedAt,
         )
     }
 
@@ -129,12 +142,15 @@ data class LogbookReportEntity(
             software = software,
             transmissionFormat = transmissionFormat,
 
+            createdAt = createdAt,
             isEnriched = isEnriched,
+            isManuallyCreated = isManuallyCreated,
             message = message,
             messageType = messageType,
             operationType = operationType,
             tripGears = tripGears,
             tripSegments = tripSegments,
+            updatedAt = updatedAt,
         )
     }
 

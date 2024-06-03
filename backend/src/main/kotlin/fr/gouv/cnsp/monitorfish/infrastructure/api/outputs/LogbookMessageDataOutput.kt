@@ -8,7 +8,7 @@ import java.time.ZonedDateTime
 
 data class LogbookMessageDataOutput(
     val reportId: String?,
-    val operationNumber: String,
+    val operationNumber: String?,
     val tripNumber: String?,
     val referencedReportId: String?,
     val operationDateTime: ZonedDateTime?,
@@ -20,17 +20,20 @@ data class LogbookMessageDataOutput(
     val vesselName: String?,
     val flagState: String?,
     val imo: String?,
-    var rawMessage: String?,
+    val rawMessage: String?,
 
-    var acknowledgment: Acknowledgment?,
-    var isCorrectedByNewerMessage: Boolean,
-    var isDeleted: Boolean,
+    val acknowledgment: Acknowledgment?,
+    val createdAt: ZonedDateTime?,
+    val isCorrectedByNewerMessage: Boolean,
+    val isDeleted: Boolean,
+    val isManuallyCreated: Boolean,
     val isSentByFailoverSoftware: Boolean,
     val message: LogbookMessageValue?,
     val messageType: String?,
     val operationType: LogbookOperationType,
     val tripGears: List<LogbookMessageGearDataOutput>?,
     val tripSegments: List<LogbookMessageTripSegmentDataOutput>?,
+    val updatedAt: ZonedDateTime?,
 ) {
     companion object {
         fun fromLogbookMessage(logbookMessage: LogbookMessage): LogbookMessageDataOutput {
@@ -58,14 +61,17 @@ data class LogbookMessageDataOutput(
                 rawMessage = logbookMessage.rawMessage,
 
                 acknowledgment = logbookMessage.acknowledgment,
+                createdAt = logbookMessage.createdAt,
                 isCorrectedByNewerMessage = logbookMessage.isCorrectedByNewerMessage,
                 isDeleted = logbookMessage.isDeleted,
+                isManuallyCreated = logbookMessage.isManuallyCreated,
                 isSentByFailoverSoftware = logbookMessage.isSentByFailoverSoftware,
                 message = logbookMessage.message,
                 messageType = logbookMessage.messageType,
                 operationType = logbookMessage.operationType,
                 tripGears = tripGears,
                 tripSegments = tripSegments,
+                updatedAt = logbookMessage.updatedAt,
             )
         }
     }

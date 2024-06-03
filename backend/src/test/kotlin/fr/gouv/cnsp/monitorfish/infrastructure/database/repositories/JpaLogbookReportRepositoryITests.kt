@@ -1112,6 +1112,26 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(fifthRelatedLogbookReportModels.count { it.operationType == LogbookOperationType.RET }).isEqualTo(1)
     }
 
+    @Test
+    @Transactional
+    fun `findLastReportSoftware Should return the software of the last message`() {
+        // When
+        val software = jpaLogbookReportRepository.findLastReportSoftware("U_W0NTFINDME")
+
+        // Then
+        assertThat(software).isEqualTo("TurboCatch (3.7-1)")
+    }
+
+    @Test
+    @Transactional
+    fun `findLastReportSoftware Should return null if no message found`() {
+        // When
+        val software = jpaLogbookReportRepository.findLastReportSoftware("UNKNOWN_CFR")
+
+        // Then
+        assertThat(software).isNull()
+    }
+
     companion object {
         private fun getFakeLogbookReportModel(
             operationType: LogbookOperationType,

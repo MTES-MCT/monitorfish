@@ -41,6 +41,7 @@ data class Vessel(
     val underCharter: Boolean? = null,
     val logbookEquipmentStatus: String? = null,
     val hasLogbookEsacapt: Boolean,
+    val hasVisioCaptures: Boolean? = null,
 ) {
     fun isLessThanTwelveMetersVessel(): Boolean {
         return length?.let { it < 12.0 } ?: false

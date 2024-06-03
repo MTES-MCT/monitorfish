@@ -1,19 +1,27 @@
 import type { RiskFactor } from '../../domain/entities/vessel/riskFactor/types'
 
 export namespace Vessel {
+  export type Beacon = {
+    beaconNumber: string
+    isCoastal: string | undefined
+    loggingDatetimeUtc: string | undefined
+  }
+
   export type Vessel = {
-    beaconNumber: number | undefined
+    beacon: Beacon
     declaredFishingGears: string[] | undefined
     district: string | undefined
     districtCode: string | undefined
     externalReferenceNumber: string | undefined
-    // TODO What's the value for "Navire inconnu"?
     flagState: string
     gauge: number | undefined
+    hasLogbookEsacapt: boolean
+    hasVisioCaptures: boolean | undefined
     imo: string | undefined
     internalReferenceNumber: string | undefined
     ircs: string | undefined
     length: number | undefined
+    logbookEquipmentStatus: string | undefined
     mmsi: string | undefined
     navigationLicenceExpirationDate: string | undefined
     operatorEmails: string[] | undefined

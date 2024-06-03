@@ -13,8 +13,8 @@ import type {
   EnfOfBeaconMalfunctionStatusValue
 } from './types'
 
-enum BeaconMalfunctionsTab {
-  DETAIL = 2,
+enum EquipmentTab {
+  BEACON_MALFUNCTION_DETAIL = 2,
   RESUME = 1
 }
 
@@ -294,7 +294,7 @@ export {
   BeaconMalfunctionPropertyName,
   BeaconMalfunctionVesselStatus,
   VESSEL_STATUS,
-  BeaconMalfunctionsTab,
+  EquipmentTab,
   END_OF_MALFUNCTION_REASON_RECORD,
   STAGE_RECORD,
   NOTIFICATION_TYPE,

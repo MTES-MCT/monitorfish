@@ -4,17 +4,19 @@ import { FingerprintSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
 import { BeaconMalfunctionDetails } from './details/BeaconMalfunctionDetails'
-import { BeaconMalfunctionsResumeAndHistory } from './resume/BeaconMalfunctionsResumeAndHistory'
+import { EquipmentResume } from './resume/EquipmentResume'
+import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser'
 import { COLORS } from '../../../constants/constants'
-import { BeaconMalfunctionsTab } from '../../../domain/entities/beaconMalfunction/constants'
+import { EquipmentTab } from '../../../domain/entities/beaconMalfunction/constants'
 import { vesselsAreEquals } from '../../../domain/entities/vessel/vessel'
 import { setBeaconMalfunctionsTab } from '../../../domain/shared_slices/BeaconMalfunction'
 import { getVesselBeaconMalfunctions } from '../../../domain/use_cases/beaconMalfunction/getVesselBeaconMalfunctions'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 
-export function VesselBeaconMalfunctions() {
+export function VesselEquipment() {
   const dispatch = useMainAppDispatch()
+  const isSuperUser = useIsSuperUser()
   const {
     beaconMalfunctionsTab,
     loadingVesselBeaconMalfunctions,
@@ -32,7 +34,7 @@ export function VesselBeaconMalfunctions() {
 
   useEffect(() => {
     if (!vesselsAreEquals(previousSelectedVesselIdentity, selectedVesselIdentity)) {
-      dispatch(setBeaconMalfunctionsTab(BeaconMalfunctionsTab.RESUME))
+      dispatch(setBeaconMalfunctionsTab(EquipmentTab.RESUME))
     }
   }, [dispatch, selectedVesselIdentity, vesselBeaconMalfunctionsFromDate, previousSelectedVesselIdentity])
 
@@ -48,12 +50,10 @@ export function VesselBeaconMalfunctions() {
 
   return (
     <Wrapper data-cy="vessel-beacon-malfunctions">
-      {beaconMalfunctionsTab === BeaconMalfunctionsTab.RESUME && (
-        <BeaconMalfunctionsResumeAndHistory
-          setIsCurrentBeaconMalfunctionDetails={setIsCurrentBeaconMalfunctionDetails}
-        />
+      {beaconMalfunctionsTab === EquipmentTab.RESUME && (
+        <EquipmentResume setIsCurrentBeaconMalfunctionDetails={setIsCurrentBeaconMalfunctionDetails} />
       )}
-      {beaconMalfunctionsTab === BeaconMalfunctionsTab.DETAIL && (
+      {isSuperUser && beaconMalfunctionsTab === EquipmentTab.BEACON_MALFUNCTION_DETAIL && (
         <BeaconMalfunctionDetails isCurrentBeaconMalfunctionDetails={isCurrentBeaconMalfunctionDetails} />
       )}
     </Wrapper>

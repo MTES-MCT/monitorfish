@@ -324,6 +324,10 @@ class JpaLogbookReportRepository(
         return dbERSRepository.findLastTwoYearsTripNumbers(internalReferenceNumber)
     }
 
+    override fun findLastReportSoftware(internalReferenceNumber: String): String? {
+        return dbERSRepository.findLastReportSoftware(internalReferenceNumber)
+    }
+
     // For test purpose
     @Modifying
     @Transactional

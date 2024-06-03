@@ -13,7 +13,12 @@ import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 
 object TestUtils {
-    val DUMMY_VESSEL = Vessel(id = 123, flagState = CountryCode.FR, hasLogbookEsacapt = false)
+    val DUMMY_VESSEL = Vessel(
+        id = 123,
+        internalReferenceNumber = "DUMMY_CFR",
+        flagState = CountryCode.FR,
+        hasLogbookEsacapt = false,
+    )
 
     fun getDummyReportings(): List<Reporting> {
         return listOf(

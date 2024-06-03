@@ -125,6 +125,7 @@ class GetVesselUTests {
             listOf(firstPosition, fourthPosition, secondPosition, thirdPosition),
         )
         given(vesselRepository.findVesselById(any())).willReturn(DUMMY_VESSEL)
+        given(logbookReportRepository.findLastReportSoftware(any())).willReturn("FT_E-Sacapt")
         given(riskFactorRepository.findByInternalReferenceNumber(any())).willReturn(
             VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
         )
@@ -155,6 +156,7 @@ class GetVesselUTests {
         // Then
         assertThat(pair.first).isFalse
         assertThat(pair.second.vessel?.id).isEqualTo(123)
+        assertThat(pair.second.vessel?.hasVisioCaptures).isTrue()
         assertThat(pair.second.beacon?.beaconNumber).isEqualTo("A_BEACON_NUMBER")
         assertThat(pair.second.positions.first().dateTime).isEqualTo(now.minusHours(4))
         assertThat(pair.second.positions.last().dateTime).isEqualTo(now.minusHours(1))

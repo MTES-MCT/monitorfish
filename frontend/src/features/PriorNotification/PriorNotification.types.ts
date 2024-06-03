@@ -4,6 +4,7 @@ import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 export namespace PriorNotification {
   export type PriorNotification = {
     acknowledgment: LogbookMessage.Acknowledgment | undefined
+    createdAt: string
     expectedArrivalDate: string | undefined
     expectedLandingDate: string | undefined
     /** Unique identifier concatenating all the DAT, COR, RET & DEL operations `id` used for data consolidation. */
@@ -12,6 +13,7 @@ export namespace PriorNotification {
     /** Logbook message `reportId`. */
     id: string
     isCorrection: boolean
+    isManuallyCreated: boolean
     isVesselUnderCharter: boolean | undefined
     onBoardCatches: LogbookMessage.Catch[]
     portLocode: string | undefined
@@ -23,6 +25,7 @@ export namespace PriorNotification {
     tripGears: LogbookMessage.Gear[]
     tripSegments: LogbookMessage.Segment[]
     types: Type[]
+    updatedAt: string
     vesselExternalReferenceNumber: string | undefined
     vesselFlagCountryCode: string | undefined
     vesselId: number

@@ -160,6 +160,32 @@
                 "flag_state": "FR",
                 "length": 9.5,
                 "under_charter": false
+            },
+
+            // - Vessel: POISSON PAS NET
+            {
+                "id": 112,
+                "cfr": "CFR112",
+                "mmsi": "MMSI112",
+                "ircs": "IRCS112",
+                "external_immatriculation": "EXTIMM112",
+                "vessel_name": "POISSON PAS NET",
+                "flag_state": "FR",
+                "length": 7.3,
+                "under_charter": false
+            },
+
+            // - Vessel: IN-ARÊTE-ABLE
+            {
+                "id": 113,
+                "cfr": "CFR113",
+                "mmsi": "MMSI113",
+                "ircs": "IRCS113",
+                "external_immatriculation": "EXTIMM113",
+                "vessel_name": "IN-ARÊTE-ABLE",
+                "flag_state": "FR",
+                "length": 8.5,
+                "under_charter": false
             }
         ]
     }

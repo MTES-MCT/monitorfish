@@ -12,7 +12,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Gear as LogbookGear
 data class LogbookMessage(
     val id: Long,
     val reportId: String? = null,
-    val operationNumber: String,
+    val operationNumber: String?,
     val tripNumber: String? = null,
     val referencedReportId: String? = null,
     val operationDateTime: ZonedDateTime,
@@ -29,19 +29,22 @@ data class LogbookMessage(
     val integrationDateTime: ZonedDateTime,
     val analyzedByRules: List<String>,
     var rawMessage: String? = null,
-    val transmissionFormat: LogbookTransmissionFormat,
+    val transmissionFormat: LogbookTransmissionFormat?,
     val software: String? = null,
 
     var acknowledgment: Acknowledgment? = null,
+    var createdAt: ZonedDateTime?,
     var isCorrectedByNewerMessage: Boolean = false,
     var isDeleted: Boolean = false,
     val isEnriched: Boolean = false,
+    val isManuallyCreated: Boolean,
     var isSentByFailoverSoftware: Boolean = false,
     val message: LogbookMessageValue? = null,
     val messageType: String? = null,
     val operationType: LogbookOperationType,
     val tripGears: List<LogbookGear>? = emptyList(),
     val tripSegments: List<LogbookTripSegment>? = emptyList(),
+    val updatedAt: ZonedDateTime?,
 ) {
     private val logger = LoggerFactory.getLogger(LogbookMessage::class.java)
 

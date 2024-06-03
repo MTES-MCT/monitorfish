@@ -5,6 +5,7 @@ export namespace LogbookMessage {
 
   interface LogbookMessageBase {
     acknowledgment: Acknowledgment | undefined
+    createdAt: string
     externalReferenceNumber: string
     flagState: string | undefined
     imo: string | undefined
@@ -13,11 +14,12 @@ export namespace LogbookMessage {
     ircs: string
     isCorrectedByNewerMessage: boolean
     isDeleted: boolean
+    isManuallyCreated: boolean
     isSentByFailoverSoftware: boolean
     message: MessageBase | undefined
     messageType: MessageType
     operationDateTime: string
-    operationNumber: string
+    operationNumber: string | undefined
     operationType: OperationType
     rawMessage: string
     referencedReportId: string | undefined
@@ -26,6 +28,7 @@ export namespace LogbookMessage {
     tripGears: Gear[] | undefined
     tripNumber: string | undefined
     tripSegments: Segment[] | undefined
+    updatedAt: string
     vesselName: string
   }
   export interface PnoLogbookMessage extends LogbookMessageBase {

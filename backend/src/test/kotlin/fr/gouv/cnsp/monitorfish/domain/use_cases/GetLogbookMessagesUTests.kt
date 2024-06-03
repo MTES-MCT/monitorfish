@@ -280,20 +280,23 @@ class GetLogbookMessagesUTests {
                 getDummyRETLogbookMessages() +
                     LogbookMessage(
                         id = 2,
-                        analyzedByRules = listOf(),
-                        operationNumber = "",
                         reportId = "9065646816",
                         referencedReportId = "9065646811",
-                        operationType = LogbookOperationType.RET,
-                        messageType = "",
+                        analyzedByRules = listOf(),
+                        createdAt = ZonedDateTime.now(),
+                        integrationDateTime = ZonedDateTime.now(),
+                        isEnriched = false,
+                        isManuallyCreated = false,
                         message = lastAck,
+                        messageType = "",
+                        operationDateTime = ZonedDateTime.now(),
+                        operationNumber = "",
+                        operationType = LogbookOperationType.RET,
                         reportDateTime = ZonedDateTime.of(2021, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC).minusHours(
                             12,
                         ),
                         transmissionFormat = LogbookTransmissionFormat.ERS,
-                        integrationDateTime = ZonedDateTime.now(),
-                        isEnriched = false,
-                        operationDateTime = ZonedDateTime.now(),
+                        updatedAt = ZonedDateTime.now(),
                     ),
             )
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")

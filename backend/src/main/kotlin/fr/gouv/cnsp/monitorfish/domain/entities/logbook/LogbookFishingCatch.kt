@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonTypeName
 
 @JsonTypeName("catch")
-data class Catch(
+data class LogbookFishingCatch(
     var weight: Double? = null,
     @JsonProperty("nbFish")
     var numberFish: Double? = null,

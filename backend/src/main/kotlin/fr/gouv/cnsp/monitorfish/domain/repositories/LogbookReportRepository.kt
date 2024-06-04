@@ -1,8 +1,10 @@
 package fr.gouv.cnsp.monitorfish.domain.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTyped
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.filters.LogbookReportFilter
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import java.time.ZonedDateTime
@@ -66,8 +68,11 @@ interface LogbookReportRepository {
 
     fun findLastReportSoftware(internalReferenceNumber: String): String?
 
+    // TODO Is it used?
+    fun save(message: LogbookMessage)
+
+    fun savePriorNotification(logbookMessageTyped: LogbookMessageTyped<PNO>): PriorNotification
+
     // For test purpose
     fun deleteAll()
-
-    fun save(message: LogbookMessage)
 }

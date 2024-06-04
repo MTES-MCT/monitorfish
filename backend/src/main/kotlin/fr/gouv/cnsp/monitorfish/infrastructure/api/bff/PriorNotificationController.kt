@@ -4,9 +4,11 @@ import fr.gouv.cnsp.monitorfish.domain.entities.facade.SeafrontGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.hasSeafront
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.filters.LogbookReportFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.sorters.LogbookReportSortColumn
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.CreateOrUpdatePriorNotification
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotification
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotificationTypes
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotifications
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.PriorNotificationDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PaginatedListDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PriorNotificationDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PriorNotificationDetailDataOutput
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/bff/v1/prior_notifications")
 @Tag(name = "Prior notifications endpoints")
 class PriorNotificationController(
+    private val createOrUpdatePriorNotification: CreateOrUpdatePriorNotification,
     private val getPriorNotification: GetPriorNotification,
     private val getPriorNotifications: GetPriorNotifications,
     private val getPriorNotificationTypes: GetPriorNotificationTypes,
@@ -140,5 +143,46 @@ class PriorNotificationController(
     @Operation(summary = "Get all prior notification types")
     fun getAllTypes(): List<String> {
         return getPriorNotificationTypes.execute()
+    }
+
+    @PostMapping("")
+    @Operation(summary = "Create a new prior notification")
+    fun create(
+        @RequestBody
+        priorNotificationDataInput: PriorNotificationDataInput,
+    ): PriorNotificationDetailDataOutput {
+        val logbookMessage = priorNotificationDataInput.logbookMessage.toPNO()
+        val tripGears = priorNotificationDataInput.tripGears.map { it.toLogbookTripGear() }
+
+        return PriorNotificationDetailDataOutput.fromPriorNotification(
+            createOrUpdatePriorNotification.execute(
+                null,
+                logbookMessage,
+                tripGears,
+                priorNotificationDataInput.vesselId,
+            ),
+        )
+    }
+
+    @PutMapping("/{logbookMessageReportId}")
+    @Operation(summary = "Update a prior notification by its (logbook message) `reportId`")
+    fun update(
+        @PathParam("Logbook message `reportId`")
+        @PathVariable(name = "logbookMessageReportId")
+        logbookMessageReportId: String,
+        @RequestBody
+        priorNotificationDataInput: PriorNotificationDataInput,
+    ): PriorNotificationDetailDataOutput {
+        val logbookMessage = priorNotificationDataInput.logbookMessage.toPNO()
+        val tripGears = priorNotificationDataInput.tripGears.map { it.toLogbookTripGear() }
+
+        return PriorNotificationDetailDataOutput.fromPriorNotification(
+            createOrUpdatePriorNotification.execute(
+                logbookMessageReportId,
+                logbookMessage,
+                tripGears,
+                priorNotificationDataInput.vesselId,
+            ),
+        )
     }
 }

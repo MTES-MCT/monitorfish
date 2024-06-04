@@ -120,7 +120,7 @@ data class LogbookReportEntity(
 
     fun toLogbookMessage(mapper: ObjectMapper): LogbookMessage {
         val message = getERSMessageValueFromJSON(mapper, message, messageType, operationType)
-        val tripGears = deserializeJSONList(mapper, tripGears, Gear::class.java)
+        val tripGears = deserializeJSONList(mapper, tripGears, LogbookTripGear::class.java)
         val tripSegments = deserializeJSONList(mapper, tripSegments, LogbookTripSegment::class.java)
 
         return LogbookMessage(
@@ -156,7 +156,7 @@ data class LogbookReportEntity(
 
     fun toPriorNotification(mapper: ObjectMapper, relatedModels: List<LogbookReportEntity>): PriorNotification {
         val referenceLogbookMessage = toLogbookMessage(mapper)
-        val fingerprint = listOf(referenceLogbookMessage.id)
+        val fingerprint = listOf(referenceLogbookMessage.id!!)
             .plus(relatedModels.mapNotNull { it.id })
             .sorted()
             .joinToString(separator = ".")

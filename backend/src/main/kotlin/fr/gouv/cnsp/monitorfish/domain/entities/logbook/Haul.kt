@@ -8,7 +8,7 @@ import java.time.ZonedDateTime
 class Haul() {
     var gear: String? = null
     var gearName: String? = null
-    var catches: List<Catch> = listOf()
+    var catches: List<LogbookFishingCatch> = listOf()
     var mesh: Double? = null
     var latitude: Double? = null
     var longitude: Double? = null

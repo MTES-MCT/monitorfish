@@ -1,7 +1,6 @@
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
-CREATE TABLE public.prior_notifications (
-    -- Is there a risk of racing condition with `logbook_report_id_seq`?
+CREATE TABLE public.manual_prior_notifications (
     id BIGINT DEFAULT nextval('public.logbook_report_id_seq'::regclass) NOT NULL,
     -- operation_number VARCHAR(100),
     -- operation_country VARCHAR(3),
@@ -20,7 +19,7 @@ CREATE TABLE public.prior_notifications (
     value JSONB,
     integration_datetime_utc TIMESTAMP WITHOUT TIME ZONE,
     -- trip_number VARCHAR(100),
-    analyzed_by_rules VARCHAR(100)[],
+    -- analyzed_by_rules VARCHAR(100)[],
     -- trip_number_was_computed BOOLEAN DEFAULT FALSE,
     -- transmission_format public.logbook_message_transmission_format NOT NULL,
     -- software VARCHAR(100),

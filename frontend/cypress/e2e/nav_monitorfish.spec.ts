@@ -21,6 +21,7 @@ context('Light MonitorFish', () => {
     cy.get('*[data-cy="vessel-menu-summary"]').should('be.visible')
     cy.get('*[data-cy="vessel-menu-fishing"]').should('be.visible')
     cy.get('*[data-cy="vessel-menu-controls"]').should('be.visible')
+    cy.get('*[data-cy="vessel-menu-ers-vms"]').should('be.visible')
 
     // Should not include the modify mission button
     cy.get('*[data-cy="vessel-menu-controls"]').click()
@@ -32,7 +33,6 @@ context('Light MonitorFish', () => {
     cy.get('*[data-cy="vessel-control"]').should('not.contain', 'Ouvrir le contrôle')
 
     cy.get('*[data-cy="vessel-menu-reporting"]').should('not.exist')
-    cy.get('*[data-cy="vessel-menu-ers-vms"]').should('not.exist')
 
     // Vessel list
     cy.get('*[data-cy="vessel-list"]').should('exist')

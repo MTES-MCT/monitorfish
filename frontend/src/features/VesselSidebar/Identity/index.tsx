@@ -1,4 +1,4 @@
-import { TwoColumnKeyValueTable } from '@features/VesselSidebar/common/TwoColumnKeyValueTable'
+import { FlatTwoColumnKeyValue } from '@features/VesselSidebar/common/FlatTwoColumnKeyValue'
 import countries from 'i18n-iso-countries'
 import { useEffect, useMemo } from 'react'
 import { FingerprintSpinner } from 'react-epic-spinners'
@@ -61,7 +61,7 @@ export function Identity() {
 
   return !loadingVessel ? (
     <Body>
-      <TwoColumnKeyValueTable
+      <FlatTwoColumnKeyValue
         firstColumn={[
           {
             key: 'CFR',
@@ -87,7 +87,7 @@ export function Identity() {
           }
         ]}
       />
-      <TwoColumnKeyValueTable
+      <FlatTwoColumnKeyValue
         firstColumn={[
           {
             key: 'Nationalité',

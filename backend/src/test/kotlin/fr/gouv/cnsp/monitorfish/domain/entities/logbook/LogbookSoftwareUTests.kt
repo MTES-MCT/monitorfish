@@ -7,7 +7,7 @@ class LogbookSoftwareUTests {
     @Test
     fun `isVisioCapture Should return False if the software is not under VisioCaptures`() {
         // When
-        val isVisioCapture = LogbookSoftware.isVisioCapture("e-Sacapt")
+        val isVisioCapture = LogbookSoftware.isVisioCaptureInRealTime("e-Sacapt")
 
         // Then
         assertThat(isVisioCapture).isFalse()
@@ -16,7 +16,7 @@ class LogbookSoftwareUTests {
     @Test
     fun `isVisioCapture Should return True if the software is under VisioCaptures`() {
         // When
-        val isVisioCapture = LogbookSoftware.isVisioCapture("FT-Visio...")
+        val isVisioCapture = LogbookSoftware.isVisioCaptureInRealTime("FT-Visio...")
 
         // Then
         assertThat(isVisioCapture).isTrue()

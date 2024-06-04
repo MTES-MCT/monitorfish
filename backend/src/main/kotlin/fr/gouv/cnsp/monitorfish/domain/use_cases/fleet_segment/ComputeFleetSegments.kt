@@ -28,9 +28,10 @@ class ComputeFleetSegments(
 
         val computedSegments = fleetSegments.filter { fleetSegment ->
             val isContainingGearFromList = fleetSegment.gears.isEmpty() || fleetSegment.gears.any { gears.contains(it) }
-            val isContainingSpecyFromList = (fleetSegment.targetSpecies.isEmpty() && fleetSegment.bycatchSpecies.isEmpty()) ||
-                fleetSegment.targetSpecies.any { species.contains(it) } ||
-                fleetSegment.bycatchSpecies.any { species.contains(it) }
+            val isContainingSpecyFromList =
+                (fleetSegment.targetSpecies.isEmpty() && fleetSegment.bycatchSpecies.isEmpty()) ||
+                    fleetSegment.targetSpecies.any { species.contains(it) } ||
+                    fleetSegment.bycatchSpecies.any { species.contains(it) }
             val isContainingFaoAreaFromList = fleetSegment.faoAreas.isEmpty() || fleetSegment.faoAreas.any { faoArea ->
                 faoAreas.map { FAOArea(it) }.any { it.hasFaoCodeIncludedIn(faoArea) }
             }

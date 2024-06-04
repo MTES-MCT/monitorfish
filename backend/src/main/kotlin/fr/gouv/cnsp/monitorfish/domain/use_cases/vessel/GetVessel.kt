@@ -80,6 +80,6 @@ class GetVessel(
             it,
         )
 
-        return@let LogbookSoftware.isVisioCapture(software)
+        return@let LogbookSoftware.isVisioCaptureInRealTime(software)
     } ?: false
 }

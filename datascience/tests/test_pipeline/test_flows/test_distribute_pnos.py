@@ -227,6 +227,13 @@ def expected_extracted_pnos() -> pd.DataFrame:
                 datetime(2020, 5, 6, 11, 41, 3, 340000),
                 datetime(2020, 5, 6, 11, 41, 3, 340000),
             ],
+            "predicted_landing_datetime_utc": [
+                datetime(2020, 5, 6, 16, 40, 0, 0),
+                pd.NaT,
+                pd.NaT,
+                pd.NaT,
+                pd.NaT,
+            ],
             "trip_gears": [
                 [
                     {"gear": "OTT", "mesh": 140, "dimensions": "250.0"},
@@ -249,6 +256,41 @@ def expected_extracted_pnos() -> pd.DataFrame:
                         "segment": "SWW01/02/03",
                         "segmentName": "Segment ciblé par une unité",
                     }
+                ],
+                [],
+            ],
+            "pno_types": [
+                [
+                    {
+                        "pnoTypeName": "Préavis type 1",
+                        "hasDesignatedPorts": True,
+                        "minimumNotificationPeriod": 4.0,
+                    },
+                    {
+                        "pnoTypeName": "Préavis type 2",
+                        "hasDesignatedPorts": False,
+                        "minimumNotificationPeriod": 4.0,
+                    },
+                ],
+                [],
+                [
+                    {
+                        "pnoTypeName": "Préavis type 2",
+                        "hasDesignatedPorts": True,
+                        "minimumNotificationPeriod": 4.0,
+                    }
+                ],
+                [
+                    {
+                        "pnoTypeName": "Préavis type 1",
+                        "hasDesignatedPorts": True,
+                        "minimumNotificationPeriod": 4.0,
+                    },
+                    {
+                        "pnoTypeName": "Préavis type 2",
+                        "hasDesignatedPorts": True,
+                        "minimumNotificationPeriod": 4.0,
+                    },
                 ],
                 [],
             ],

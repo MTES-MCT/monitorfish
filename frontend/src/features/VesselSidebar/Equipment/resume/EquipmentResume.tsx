@@ -1,4 +1,4 @@
-import { TwoColumnKeyValueTable } from '@features/VesselSidebar/common/TwoColumnKeyValueTable'
+import { FlatKeyValue } from '@features/VesselSidebar/common/FlatKeyValue'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME } from '@mtes-mct/monitor-ui'
@@ -55,39 +55,42 @@ export function EquipmentResume({ setIsCurrentBeaconMalfunctionDetails }: Beacon
   return (
     <>
       {!loadingVesselBeaconMalfunctions ? (
-        <Body data-cy="vessel-malfunctions-resume">
-          <StyledTwoColumnKeyValueTable
-            firstColumn={[
-              {
-                key: 'Type de balise',
-                value: selectedVessel?.beacon.isCoastal ? 'Côtier' : 'Satellitaire'
-              },
-              {
-                key: 'Balise n°',
-                value: selectedVessel?.beacon.beaconNumber
-              },
-              {
-                key: 'Date de loggage',
-                value:
-                  !!selectedVessel?.beacon.loggingDatetimeUtc && getDateTime(selectedVessel.beacon.loggingDatetimeUtc)
-              }
-            ]}
-            header="Equipement VMS et JPE"
-            secondColumn={[
-              {
-                key: 'Equipé e-Sacapt',
-                value: selectedVessel?.hasLogbookEsacapt ? 'Oui' : 'Non'
-              },
-              {
-                key: 'Statut Equip. JPE',
-                value: selectedVessel?.logbookEquipmentStatus
-              },
-              {
-                key: 'Equipé VisioCaptures',
-                value: selectedVessel?.hasVisioCaptures ? 'Oui' : 'Non'
-              }
-            ]}
-          />
+        <Body data-cy="vessel-equipments">
+          <Columns>
+            <StyledFlatKeyValue
+              column={[
+                {
+                  key: 'N° balise VMS',
+                  value: selectedVessel?.beacon.beaconNumber
+                },
+                {
+                  key: 'Type de balise',
+                  value: selectedVessel?.beacon.isCoastal ? 'Côtier' : 'Satellitaire'
+                },
+                {
+                  key: 'Date de loggage',
+                  value:
+                    !!selectedVessel?.beacon.loggingDatetimeUtc && getDateTime(selectedVessel.beacon.loggingDatetimeUtc)
+                }
+              ]}
+            />
+            <StyledFlatKeyValue
+              column={[
+                {
+                  key: 'Statut JPE',
+                  value: selectedVessel?.logbookEquipmentStatus
+                },
+                {
+                  key: 'Équipé e-Sacapt',
+                  value: selectedVessel?.hasLogbookEsacapt ? 'Oui' : 'Non'
+                },
+                {
+                  key: 'Équipé VisioCaptures',
+                  value: selectedVessel?.hasVisioCaptures ? 'Oui' : 'Non'
+                }
+              ]}
+            />
+          </Columns>
           {isSuperUser && (
             <>
               <CurrentBeaconMalfunction
@@ -115,8 +118,14 @@ export function EquipmentResume({ setIsCurrentBeaconMalfunctionDetails }: Beacon
   )
 }
 
-const StyledTwoColumnKeyValueTable = styled(TwoColumnKeyValueTable)`
+const Columns = styled.div`
+  display: flex;
+  margin-bottom: 10px;
+`
+
+const StyledFlatKeyValue = styled(FlatKeyValue)`
   margin-top: 10px;
+  width: 235px;
 `
 
 const SeeMoreBackground = styled.div`

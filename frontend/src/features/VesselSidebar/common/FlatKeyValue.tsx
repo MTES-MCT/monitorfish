@@ -1,5 +1,3 @@
-import { Header } from '@features/VesselSidebar/common_styles/common.style'
-import { range } from 'lodash'
 import styled from 'styled-components'
 
 type KeyValue = {
@@ -9,40 +7,19 @@ type KeyValue = {
 
 type KeyValueTableProps = {
   className?: string | undefined
-  firstColumn: Array<KeyValue>
-  header?: string | undefined
-  secondColumn: Array<KeyValue>
+  column: Array<KeyValue>
 }
-export function TwoColumnKeyValueTable({ className, firstColumn, header, secondColumn }: KeyValueTableProps) {
+export function FlatKeyValue({ className, column }: KeyValueTableProps) {
   return (
     <Zone className={className}>
-      {!!header && <Header>{header}</Header>}
       <Fields>
         <TableBody>
-          {firstColumn.map(({ key, value }) => (
+          {column.map(({ key, value }) => (
             <Field>
               <Key>{key}</Key>
               {value ? <Value title={value?.toString()}>{value}</Value> : <NoValue>-</NoValue>}
             </Field>
           ))}
-        </TableBody>
-      </Fields>
-      <Fields isSecondColumn>
-        <TableBody>
-          {secondColumn.map(({ key, value }) => (
-            <Field>
-              <Key>{key}</Key>
-              {value ? <Value title={value?.toString()}>{value}</Value> : <NoValue>-</NoValue>}
-            </Field>
-          ))}
-          {/** We add empty item in second column to to not break the first column */}
-          {secondColumn.length < firstColumn.length &&
-            range(firstColumn.length - secondColumn.length).map(() => (
-              <Field>
-                <Key />
-                <Value />
-              </Field>
-            ))}
         </TableBody>
       </Fields>
     </Zone>
@@ -53,22 +30,14 @@ const TableBody = styled.tbody``
 
 const Zone = styled.div`
   background: ${p => p.theme.color.white};
-  display: flex;
-  flex-wrap: wrap;
-  margin: 5px 5px 10px;
+  margin: 5px 5px 0px;
   text-align: left;
-
-  > table:not(:first-child) {
-    margin-left: 25px;
-  }
 `
 
 const Fields = styled.table<{
   isSecondColumn?: boolean
 }>`
-  padding: 10px 5px 5px 20px;
-  margin: 10px ${p => (p.isSecondColumn ? 20 : 0)}px 10px ${p => (p.isSecondColumn ? 0 : 20)}px;
-  width: inherit;
+  margin: 10px 0px 10px 16px;
   display: table;
   min-width: 40%;
 `

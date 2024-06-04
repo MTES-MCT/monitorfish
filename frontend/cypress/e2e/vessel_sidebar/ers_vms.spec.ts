@@ -5,6 +5,32 @@ context('Vessel sidebar ers/vms tab', () => {
     cy.loadPath('/#@-824534.42,6082993.21,8.70')
   })
 
+  it('ERS/VMS tab Should show information about vessel equipment', () => {
+    // Given
+    cy.get('input[placeholder="Rechercher un navire..."]').type('pheno')
+    cy.contains('mark', 'PHENO').click()
+    cy.wait(50)
+    cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
+    cy.intercept('GET', '/bff/v1/vessels/beacon_malfunctions*').as('vesselBeaconMalfunctions')
+
+    // When
+    cy.get('*[data-cy="vessel-menu-ers-vms"]').click({ timeout: 10000 })
+
+    // Then
+    cy.get('*[data-cy="vessel-equipments"]').contains('N° balise VMS')
+    cy.get('*[data-cy="vessel-equipments"]').contains('FGEDX85')
+    cy.get('*[data-cy="vessel-equipments"]').contains('Type de balise')
+    cy.get('*[data-cy="vessel-equipments"]').contains('Côtier')
+    cy.get('*[data-cy="vessel-equipments"]').contains('Date de loggage')
+    cy.get('*[data-cy="vessel-equipments"]').contains('12/05/2021 à 12h23:00')
+    cy.get('*[data-cy="vessel-equipments"]').contains('Statut JPE')
+    cy.get('*[data-cy="vessel-equipments"]').contains('Equipé')
+    cy.get('*[data-cy="vessel-equipments"]').contains('Équipé e-Sacapt')
+    cy.get('*[data-cy="vessel-equipments"]').contains('Non')
+    cy.get('*[data-cy="vessel-equipments"]').contains('Équipé VisioCaptures')
+    cy.get('*[data-cy="vessel-equipments"]').contains('Non')
+  })
+
   it('ERS/VMS tab Should contain history of beacon malfunctions and show a malfunction detail in history', () => {
     // Given
     cy.get('.VESSELS_POINTS').click(460, 460, { force: true, timeout: 10000 })
@@ -15,7 +41,7 @@ context('Vessel sidebar ers/vms tab', () => {
     // When
     cy.get('*[data-cy="vessel-menu-ers-vms"]').click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-beacon-malfunctions"]', { timeout: 10000 }).should('be.visible')
-    cy.get('*[data-cy="vessel-malfunctions-resume"]', { timeout: 10000 }).should('be.visible')
+    cy.get('*[data-cy="vessel-equipments"]', { timeout: 10000 }).should('be.visible')
 
     // Then
     cy.wait('@vesselBeaconMalfunctions').then(({ response }) => expect(response && response.statusCode).equal(200))
@@ -63,7 +89,7 @@ context('Vessel sidebar ers/vms tab', () => {
     cy.get('*[data-cy="vessel-beacon-malfunctions-history"]', { timeout: 10000 }).children().eq(0).click()
     cy.get('*[data-cy="vessel-beacon-malfunction-single-history"]', { timeout: 10000 }).click({ force: true })
     cy.get('*[data-cy="beacon-malfunction-back-to-resume"]', { timeout: 10000 }).click()
-    cy.get('*[data-cy="vessel-malfunctions-resume"]', { timeout: 10000 }).should('be.visible')
+    cy.get('*[data-cy="vessel-equipments"]', { timeout: 10000 }).should('be.visible')
 
     // See current beacon malfunction
     cy.get('*[data-cy="beacon-malfunction-current-see-details"]', { timeout: 10000 }).click()
@@ -85,7 +111,7 @@ context('Vessel sidebar ers/vms tab', () => {
     cy.wait('@vesselTwoBeaconMalfunctions').then(({ response }) => expect(response && response.statusCode).equal(200))
 
     // Then
-    cy.get('*[data-cy="vessel-malfunctions-resume"]', { timeout: 10000 }).should('be.visible')
+    cy.get('*[data-cy="vessel-equipments"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy="vessel-beacon-malfunctions"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy="vessel-beacon-malfunctions-resume-number"]', { timeout: 10000 }).contains('à quai 0')
     cy.get('*[data-cy="vessel-beacon-malfunctions-resume-number"]', { timeout: 10000 }).contains('en mer 1')

@@ -64,7 +64,7 @@ interface DBLogbookReportRepository :
                     value,
                     integration_datetime_utc,
                     CAST(NULL AS TEXT) AS trip_number,
-                    analyzed_by_rules,
+                    CAST(NULL AS TEXT[]) AS analyzed_by_rules,
                     CAST(TRUE AS BOOLEAN) AS trip_number_was_computed,
                     -- TODO /!\ CHECK IF THIS IS WHAT WE WANT /!\
                     CAST(NULL AS public.logbook_message_transmission_format) AS transmission_format,
@@ -75,7 +75,7 @@ interface DBLogbookReportRepository :
                     is_manually_created,
                     created_at,
                     updated_at
-                FROM prior_notifications
+                FROM manual_prior_notifications
                 WHERE
                     -- TODO /!\ INDEX operation_datetime_utc WITH TIMESCALE /!\
                     -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
@@ -296,7 +296,7 @@ interface DBLogbookReportRepository :
             value,
             integration_datetime_utc,
             CAST(NULL AS TEXT) AS trip_number,
-            analyzed_by_rules,
+            CAST(NULL AS TEXT[]) AS analyzed_by_rules,
             CAST(TRUE AS BOOLEAN) AS trip_number_was_computed,
             -- TODO /!\ CHECK IF THIS IS WHAT WE WANT /!\
             CAST(NULL AS public.logbook_message_transmission_format) AS transmission_format,
@@ -307,7 +307,7 @@ interface DBLogbookReportRepository :
             is_manually_created,
             created_at,
             updated_at
-        FROM prior_notifications
+        FROM manual_prior_notifications
         WHERE
             report_id = ?1
 

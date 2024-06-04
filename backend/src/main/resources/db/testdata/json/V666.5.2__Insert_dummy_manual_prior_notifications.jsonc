@@ -1,6 +1,6 @@
 [
     {
-        "table": "prior_notifications",
+        "table": "manual_prior_notifications",
         "data": [
             {
                 "id": 116,

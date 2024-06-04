@@ -10,6 +10,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionForma
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.CreateOrUpdatePriorNotification
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotification
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotificationTypes
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotifications
@@ -35,6 +36,9 @@ class PriorNotificationControllerITests {
     private lateinit var api: MockMvc
 
     @MockBean
+    private lateinit var createOrUpdatePriorNotification: CreateOrUpdatePriorNotification
+
+    @MockBean
     private lateinit var getPriorNotification: GetPriorNotification
 
     @MockBean
@@ -57,7 +61,6 @@ class PriorNotificationControllerITests {
                             reportId = "FAKE_REPORT_ID_1",
                             referencedReportId = null,
                             analyzedByRules = emptyList(),
-                            createdAt = ZonedDateTime.now(),
                             integrationDateTime = ZonedDateTime.now(),
                             isCorrectedByNewerMessage = false,
                             isDeleted = false,
@@ -67,8 +70,8 @@ class PriorNotificationControllerITests {
                             operationDateTime = ZonedDateTime.now(),
                             operationNumber = "1",
                             operationType = LogbookOperationType.DAT,
+                            reportDateTime = ZonedDateTime.now(),
                             transmissionFormat = LogbookTransmissionFormat.ERS,
-                            updatedAt = ZonedDateTime.now(),
                         ),
                     ),
                     reportingCount = null,
@@ -97,7 +100,6 @@ class PriorNotificationControllerITests {
                             reportId = "FAKE_REPORT_ID_2_COR",
                             referencedReportId = "FAKE_NONEXISTENT_REPORT_ID_2",
                             analyzedByRules = emptyList(),
-                            createdAt = ZonedDateTime.now(),
                             integrationDateTime = ZonedDateTime.now(),
                             isCorrectedByNewerMessage = true,
                             isDeleted = false,
@@ -107,8 +109,8 @@ class PriorNotificationControllerITests {
                             operationDateTime = ZonedDateTime.now(),
                             operationNumber = "1",
                             operationType = LogbookOperationType.COR,
+                            reportDateTime = ZonedDateTime.now(),
                             transmissionFormat = LogbookTransmissionFormat.ERS,
-                            updatedAt = ZonedDateTime.now(),
                         ),
                     ),
                     reportingCount = null,
@@ -174,7 +176,6 @@ class PriorNotificationControllerITests {
                         reportId = "FAKE_REPORT_ID_1",
                         referencedReportId = null,
                         analyzedByRules = emptyList(),
-                        createdAt = ZonedDateTime.now(),
                         integrationDateTime = ZonedDateTime.now(),
                         isCorrectedByNewerMessage = false,
                         isDeleted = false,
@@ -184,8 +185,8 @@ class PriorNotificationControllerITests {
                         operationDateTime = ZonedDateTime.now(),
                         operationNumber = "1",
                         operationType = LogbookOperationType.DAT,
+                        reportDateTime = ZonedDateTime.now(),
                         transmissionFormat = LogbookTransmissionFormat.ERS,
-                        updatedAt = ZonedDateTime.now(),
                     ),
                 ),
                 reportingCount = null,

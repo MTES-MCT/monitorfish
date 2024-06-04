@@ -1,11 +1,9 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTypeMapping
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.filters.LogbookReportFilter
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.exceptions.EntityConversionException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
@@ -49,18 +47,19 @@ class JpaLogbookReportRepository(
             willArriveBefore = filter.willArriveBefore,
         )
 
-        return mapToReferenceWithRelatedModels(allLogbookReportModels).mapNotNull { (referenceLogbookReportModel, relatedLogbookReportModels) ->
-            try {
-                referenceLogbookReportModel.toPriorNotification(mapper, relatedLogbookReportModels)
-            } catch (e: Exception) {
-                logger.warn(
-                    "Error while converting logbook report models to prior notifications (reoportId = ${referenceLogbookReportModel.reportId}).",
-                    e,
-                )
+        return mapToReferenceWithRelatedModels(allLogbookReportModels)
+            .mapNotNull { (referenceLogbookReportModel, relatedLogbookReportModels) ->
+                try {
+                    referenceLogbookReportModel.toPriorNotification(mapper, relatedLogbookReportModels)
+                } catch (e: Exception) {
+                    logger.warn(
+                        "Error while converting logbook report models to prior notifications (reoportId = ${referenceLogbookReportModel.reportId}).",
+                        e,
+                    )
 
-                null
+                    null
+                }
             }
-        }
     }
 
     override fun findPriorNotificationByReportId(reportId: String): PriorNotification {
@@ -339,6 +338,14 @@ class JpaLogbookReportRepository(
     @Transactional
     override fun save(message: LogbookMessage) {
         dbERSRepository.save(LogbookReportEntity.fromLogbookMessage(mapper, message))
+    }
+
+    @Modifying
+    @Transactional
+    override fun savePriorNotification(logbookMessageTyped: LogbookMessageTyped<PNO>): PriorNotification {
+        return dbERSRepository
+            .save(LogbookReportEntity.fromLogbookMessage(mapper, logbookMessageTyped.logbookMessage))
+            .toPriorNotification(mapper, emptyList())
     }
 
     private fun getCorrectedMessageIfAvailable(

@@ -70,7 +70,10 @@ class GetPriorNotification(
                 }
 
                 val finalPriorNotification = priorNotification.copy(
-                    logbookMessageTyped = LogbookMessageTyped(logbookMessageWithRawMessage, PNO::class.java),
+                    logbookMessageTyped = LogbookMessageTyped(
+                        logbookMessageWithRawMessage,
+                        PNO::class.java,
+                    ),
                     port = port,
                     seafront = seafront,
                     vessel = vessel,

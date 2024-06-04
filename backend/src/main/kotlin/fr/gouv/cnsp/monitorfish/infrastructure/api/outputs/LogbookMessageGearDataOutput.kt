@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Gear
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTripGear
 
 class LogbookMessageGearDataOutput(
     val gear: String,
@@ -9,7 +9,7 @@ class LogbookMessageGearDataOutput(
     val dimensions: String?,
 ) {
     companion object {
-        fun fromGear(gear: Gear): LogbookMessageGearDataOutput? {
+        fun fromGear(gear: LogbookTripGear): LogbookMessageGearDataOutput? {
             return gear.gear?.let { gearCode ->
                 LogbookMessageGearDataOutput(
                     gear = gearCode,

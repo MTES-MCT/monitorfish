@@ -15,6 +15,7 @@ from src.pipeline.flows.vessels import (
     extract_french_vessels,
     extract_french_vessels_navigation_licences,
     extract_non_eu_vessels,
+    extract_vessels_logbook_equipement,
     extract_vessels_operators,
     load_vessels,
 )
@@ -114,6 +115,13 @@ non_eu_vessels_data = {
     "fishing_gear_secondary": [None, None],
 }
 
+
+vessels_logbook_equipment_data = {
+    "id": [1, 2],
+    "logbook_equipment_status": ["Equipment status 1", None],
+    "has_esacapt": [1, None],
+}
+
 vessels_operators_data = {
     "id": [1, 3],
     "operator_name_pos": ["op1 pos", "op3 pos"],
@@ -178,6 +186,8 @@ concat_merged_data = {
     "operator_email_2": [None, None, None, None, "contact_2@email.com", None],
     "operator_phone_1": [None, None, None, None, "123", "789"],
     "operator_phone_2": [None, None, None, None, "456", "101112"],
+    "logbook_equipment_status": ["Equipment status 1", None, None, None, None, None],
+    "has_esacapt": [1, None, None, None, None, None],
     "operator_name_pos": ["op1 pos", None, "op3 pos", None, None, None],
     "operator_email_pos": [None, None, "operator_pos@mail", None, None, None],
     "operator_phone_1_pos": ["pos_01", None, None, None, None, None],
@@ -215,6 +225,7 @@ concat_merged_dtype = {
     "registry_port": "category",
     "sailing_category": "category",
     "sailing_type": "category",
+    "logbook_equipment_status": "category",
     "operator_email": "category",
     "operator_phone": "category",
     "operator_mobile_phone": "category",
@@ -317,6 +328,8 @@ cleaned_vessels_data = {
     "vessel_fax": [None, "159753", None, None, None, None],
     "vessel_telex": [None, "555", None, None, None, None],
     "under_charter": [False, False, False, True, False, False],
+    "logbook_equipment_status": ["Equipment status 1", None, None, None, None, None],
+    "has_esacapt": [True, False, False, False, False, False],
 }
 
 cleaned_vessels_dtype = {
@@ -333,6 +346,7 @@ cleaned_vessels_dtype = {
     "sailing_category": "category",
     "sailing_type": "category",
     "proprietor_name": "category",
+    "logbook_equipment_status": "category",
     "under_charter": bool,
 }
 
@@ -350,6 +364,11 @@ def eu_vessels() -> pd.DataFrame:
 @pytest.fixture
 def non_eu_vessels() -> pd.DataFrame:
     return pd.DataFrame(non_eu_vessels_data)
+
+
+@pytest.fixture
+def vessels_logbook_equipment() -> pd.DataFrame:
+    return pd.DataFrame(vessels_logbook_equipment_data)
 
 
 @pytest.fixture
@@ -419,6 +438,13 @@ def test_extract_control_charters(reset_test_data, expected_vessels_under_charte
 
 
 @patch("src.pipeline.flows.vessels.extract")
+def test_extract_vessels_logbook_equipement(mock_extract):
+    mock_extract.side_effect = mock_extract_side_effect
+    query = extract_vessels_logbook_equipement.run()
+    assert isinstance(query, sqlalchemy.sql.elements.TextClause)
+
+
+@patch("src.pipeline.flows.vessels.extract")
 def test_extract_vessels_operators(mock_extract):
     mock_extract.side_effect = mock_extract_side_effect
     query = extract_vessels_operators.run()
@@ -429,16 +455,17 @@ def test_concat_merge_vessels(
     french_vessels,
     eu_vessels,
     non_eu_vessels,
+    vessels_logbook_equipment,
     vessels_operators,
     licences,
     control_charters,
     all_vessels,
 ):
-
     res = concat_merge_vessels.run(
         french_vessels,
         eu_vessels,
         non_eu_vessels,
+        vessels_logbook_equipment,
         vessels_operators,
         licences,
         control_charters,
@@ -448,7 +475,6 @@ def test_concat_merge_vessels(
 
 
 def test_clean_vessels(all_vessels, cleaned_vessels):
-
     res = clean_vessels.run(all_vessels)
     pd.testing.assert_frame_equal(res, cleaned_vessels)
 

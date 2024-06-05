@@ -80,6 +80,11 @@ data class VesselEntity(
     val vesselEmails: List<String>? = null,
     @Column(name = "under_charter")
     val underCharter: Boolean? = null,
+    /** Logbook */
+    @Column(name = "logbook_equipment_status")
+    val logbookEquipmentStatus: String? = null,
+    @Column(name = "has_esacapt")
+    val hasLogbookEsacapt: Boolean,
 ) {
     fun toVessel() =
         Vessel(
@@ -111,6 +116,8 @@ data class VesselEntity(
             vesselPhones = vesselPhones,
             vesselEmails = vesselEmails,
             underCharter = underCharter,
+            logbookEquipmentStatus = logbookEquipmentStatus,
+            hasLogbookEsacapt = hasLogbookEsacapt,
         )
 
     companion object {

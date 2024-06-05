@@ -1,6 +1,5 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
-import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.filters.LogbookReportFilter
@@ -8,7 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.sorters.LogbookReportSor
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilter
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.UNKNOWN_VESSEL
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import org.springframework.data.domain.Sort
@@ -49,7 +48,7 @@ class GetPriorNotifications(
                 val vessel = priorNotification.logbookMessageTyped.logbookMessage
                     .internalReferenceNumber?.let { vesselInternalReferenceNumber ->
                         allVessels.find { it.internalReferenceNumber == vesselInternalReferenceNumber }
-                    } ?: Vessel(id = -1, flagState = CountryCode.UNDEFINED)
+                    } ?: UNKNOWN_VESSEL
 
                 val vesselRiskFactor = vessel.internalReferenceNumber?.let { vesselInternalReferenceNumber ->
                     allRiskFactors.find { it.internalReferenceNumber == vesselInternalReferenceNumber }

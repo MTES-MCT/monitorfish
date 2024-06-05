@@ -122,7 +122,7 @@ data class LogbookMessage(
             enrichGearPortAndSpecyNames(allGears, allPorts, allSpecies)
         }
 
-        enrichAknowledgeCorrectionAndDeletion(contextMessages)
+        enrichAcknowledgeCorrectionAndDeletion(contextMessages)
     }
 
     fun enrichGearPortAndSpecyNames(
@@ -175,7 +175,7 @@ data class LogbookMessage(
 
     private fun enrichAcnkowledge(relatedLogbookMessages: List<LogbookMessage>) {
         if (this.transmissionFormat == LogbookTransmissionFormat.FLUX ||
-            software !== null && software.contains(LogbookSoftware.VISIOCAPTURE.software)
+            LogbookSoftware.isVisioCapture(software)
         ) {
             this.setAcknowledgeAsSuccessful()
 
@@ -213,7 +213,7 @@ data class LogbookMessage(
         }
     }
 
-    private fun enrichAknowledgeCorrectionAndDeletion(contextLogbookMessages: List<LogbookMessage>) {
+    private fun enrichAcknowledgeCorrectionAndDeletion(contextLogbookMessages: List<LogbookMessage>) {
         val referenceLogbookMessage = findReferencedLogbookMessage(contextLogbookMessages)
         val relatedLogbookMessages = filterRelatedLogbookMessages(contextLogbookMessages)
 
@@ -234,7 +234,7 @@ data class LogbookMessage(
             }
 
             (transmissionFormat == LogbookTransmissionFormat.FLUX),
-            (software !== null && software.contains(LogbookSoftware.VISIOCAPTURE.software)),
+            (LogbookSoftware.isVisioCapture(software)),
             -> {
                 setAcknowledgeAsSuccessful()
             }
@@ -250,7 +250,7 @@ data class LogbookMessage(
     }
 
     private fun enrichIsSentByFailoverSoftware() {
-        if (software !== null && software.contains(LogbookSoftware.E_SACAPT.software)) {
+        if (LogbookSoftware.isESacapt(software)) {
             isSentByFailoverSoftware = true
         }
     }

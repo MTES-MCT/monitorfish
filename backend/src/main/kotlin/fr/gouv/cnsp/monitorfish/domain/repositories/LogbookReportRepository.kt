@@ -64,6 +64,8 @@ interface LogbookReportRepository {
 
     fun findDistinctPriorNotificationTypes(): List<String>
 
+    fun findLastReportSoftware(internalReferenceNumber: String): String?
+
     // For test purpose
     fun deleteAll()
 

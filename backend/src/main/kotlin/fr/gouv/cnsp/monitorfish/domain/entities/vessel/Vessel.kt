@@ -38,8 +38,10 @@ data class Vessel(
     val proprietorEmails: List<String>? = null,
     val vesselPhones: List<String>? = null,
     val vesselEmails: List<String>? = null,
-    val beaconNumber: String? = null,
     val underCharter: Boolean? = null,
+    val logbookEquipmentStatus: String? = null,
+    val hasLogbookEsacapt: Boolean,
+    val hasVisioCaptures: Boolean? = null,
 ) {
     fun isLessThanTwelveMetersVessel(): Boolean {
         return length?.let { it < 12.0 } ?: false
@@ -107,3 +109,5 @@ val LIKELY_CONTROLLED_COUNTRY_CODES =
         CountryCode.SE.alpha3,
         CountryCode.GB.alpha3,
     )
+
+val UNKNOWN_VESSEL = Vessel(id = -1, flagState = CountryCode.UNDEFINED, hasLogbookEsacapt = false)

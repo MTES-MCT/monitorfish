@@ -352,6 +352,22 @@ interface DBLogbookReportRepository :
     fun findLastOperationDateTime(): Instant
 
     @Query(
+        """
+            SELECT
+                software
+            FROM
+                logbook_reports
+            where
+                cfr = :internalReferenceNumber AND
+                operation_datetime_utc < now()
+            ORDER BY operation_datetime_utc DESC
+            LIMIT 1
+        """,
+        nativeQuery = true,
+    )
+    fun findLastReportSoftware(internalReferenceNumber: String): String?
+
+    @Query(
         """select *
             from logbook_reports
             where report_id in

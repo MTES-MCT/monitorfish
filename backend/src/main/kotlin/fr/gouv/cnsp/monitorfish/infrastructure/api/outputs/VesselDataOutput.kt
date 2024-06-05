@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import com.neovisionaries.i18n.CountryCode
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Beacon
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import java.util.*
@@ -35,12 +36,14 @@ data class VesselDataOutput(
     val proprietorEmails: List<String>? = null,
     val vesselPhones: List<String>? = null,
     val vesselEmails: List<String>? = null,
-    val beaconNumber: String? = null,
     val riskFactor: RiskFactorDataOutput? = null,
+    val beacon: BeaconDataOutput? = null,
     val underCharter: Boolean? = null,
+    val logbookEquipmentStatus: String? = null,
+    val hasLogbookEsacapt: Boolean,
 ) {
     companion object {
-        fun fromVesselAndRiskFactor(vessel: Vessel?, vesselRiskFactor: VesselRiskFactor): VesselDataOutput? {
+        fun fromVesselAndRelatedDatas(vessel: Vessel?, beacon: Beacon?, vesselRiskFactor: VesselRiskFactor): VesselDataOutput? {
             if (vessel == null) {
                 return null
             }
@@ -75,9 +78,11 @@ data class VesselDataOutput(
                 proprietorEmails = vessel.proprietorEmails,
                 vesselPhones = vessel.vesselPhones,
                 vesselEmails = vessel.vesselEmails,
-                beaconNumber = vessel.beaconNumber,
+                beacon = beacon?.let { BeaconDataOutput.fromBeacon(it) },
                 riskFactor = RiskFactorDataOutput.fromVesselRiskFactor(vesselRiskFactor),
                 underCharter = vessel.underCharter,
+                logbookEquipmentStatus = vessel.logbookEquipmentStatus,
+                hasLogbookEsacapt = vessel.hasLogbookEsacapt,
             )
         }
 
@@ -112,9 +117,9 @@ data class VesselDataOutput(
                 proprietorEmails = vessel.proprietorEmails,
                 vesselPhones = vessel.vesselPhones,
                 vesselEmails = vessel.vesselEmails,
-                beaconNumber = vessel.beaconNumber,
-                riskFactor = null,
                 underCharter = vessel.underCharter,
+                logbookEquipmentStatus = vessel.logbookEquipmentStatus,
+                hasLogbookEsacapt = vessel.hasLogbookEsacapt,
             )
         }
     }

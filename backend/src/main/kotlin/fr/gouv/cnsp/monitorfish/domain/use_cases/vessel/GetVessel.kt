@@ -1,7 +1,9 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookSoftware
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselInformation
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
@@ -58,23 +60,26 @@ class GetVessel(
                 }
 
             val vessel = vesselFuture.await()
-            val vesselWithBeaconNumber =
-                vessel?.id?.let { vesselId ->
-                    val beaconNumber = beaconRepository.findBeaconNumberByVesselId(vesselId)
-
-                    beaconNumber?.let {
-                        vessel.copy(beaconNumber = it)
-                    }
-                } ?: vessel
+            val beacon = vessel?.id?.let { vesselId -> beaconRepository.findBeaconByVesselId(vesselId) }
+            val hasVisioCaptures = hasVisioCaptures(vessel)
 
             Pair(
                 vesselTrackHasBeenModified,
                 VesselInformation(
-                    vesselWithBeaconNumber,
+                    vessel?.copy(hasVisioCaptures = hasVisioCaptures),
+                    beacon,
                     positions.await(),
                     vesselRiskFactorsFuture.await() ?: VesselRiskFactor(),
                 ),
             )
         }
     }
+
+    private fun hasVisioCaptures(vessel: Vessel?) = vessel?.internalReferenceNumber?.let {
+        val software = logbookReportRepository.findLastReportSoftware(
+            it,
+        )
+
+        return@let LogbookSoftware.isVisioCaptureInRealTime(software)
+    } ?: false
 }

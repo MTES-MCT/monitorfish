@@ -3,8 +3,8 @@ import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Accent, Button } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import { VesselBeaconMalfunctions } from './beacon_malfunctions/VesselBeaconMalfunctions'
 import { Controls } from './Controls'
+import { VesselEquipment } from './Equipment/VesselEquipment'
 import { Identity } from './Identity'
 import { VesselSummary } from './Summary'
 import { AlertWarning } from './warnings/AlertWarning'
@@ -51,7 +51,7 @@ export function Body() {
       {vesselSidebarTab === VesselSidebarTab.VOYAGES && <VesselLogbook />}
       {vesselSidebarTab === VesselSidebarTab.CONTROLS && <Controls />}
       {isSuperUser && vesselSidebarTab === VesselSidebarTab.REPORTING && <VesselReportings />}
-      {isSuperUser && vesselSidebarTab === VesselSidebarTab.ERSVMS && <VesselBeaconMalfunctions />}
+      {vesselSidebarTab === VesselSidebarTab.ERSVMS && <VesselEquipment />}
     </Wrapper>
   )
 }

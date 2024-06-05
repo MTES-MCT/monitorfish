@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
 import { getFirstVesselStatus } from '../../../../domain/entities/beaconMalfunction'
-import { BeaconMalfunctionsTab } from '../../../../domain/entities/beaconMalfunction/constants'
+import { EquipmentTab } from '../../../../domain/entities/beaconMalfunction/constants'
 import { setBeaconMalfunctionsTab } from '../../../../domain/shared_slices/BeaconMalfunction'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
@@ -19,7 +19,7 @@ export function BeaconMalfunctionDetails({ isCurrentBeaconMalfunctionDetails }: 
   const openedBeaconMalfunction = useMainAppSelector(state => state.beaconMalfunction.openedBeaconMalfunction)
   const dispatch = useMainAppDispatch()
 
-  const navigateToResume = () => dispatch(setBeaconMalfunctionsTab(BeaconMalfunctionsTab.RESUME))
+  const navigateToResume = () => dispatch(setBeaconMalfunctionsTab(EquipmentTab.RESUME))
 
   return (
     <Wrapper data-cy="vessel-malfunctions-details">

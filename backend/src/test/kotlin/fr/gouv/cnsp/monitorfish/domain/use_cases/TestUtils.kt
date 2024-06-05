@@ -7,11 +7,19 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingValue
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 
 object TestUtils {
+    val DUMMY_VESSEL = Vessel(
+        id = 123,
+        internalReferenceNumber = "DUMMY_CFR",
+        flagState = CountryCode.FR,
+        hasLogbookEsacapt = false,
+    )
+
     fun getDummyReportings(): List<Reporting> {
         return listOf(
             Reporting(

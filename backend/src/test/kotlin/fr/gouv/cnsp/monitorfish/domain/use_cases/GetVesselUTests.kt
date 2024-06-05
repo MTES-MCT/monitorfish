@@ -1,15 +1,15 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
-import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Beacon
 import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
+import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.DUMMY_VESSEL
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVessel
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
@@ -51,13 +51,13 @@ class GetVesselUTests {
                 null,
                 null,
                 PositionType.AIS,
-                false,
-                false,
-                16.445,
-                48.2525,
-                1.8,
-                180.0,
-                now.minusHours(
+                isManual = false,
+                isFishing = false,
+                latitude = 16.445,
+                longitude = 48.2525,
+                speed = 1.8,
+                course = 180.0,
+                dateTime = now.minusHours(
                     4,
                 ),
             )
@@ -71,13 +71,13 @@ class GetVesselUTests {
                 null,
                 null,
                 PositionType.AIS,
-                false,
-                false,
-                16.445,
-                48.2525,
-                1.8,
-                180.0,
-                now.minusHours(
+                isManual = false,
+                isFishing = false,
+                latitude = 16.445,
+                longitude = 48.2525,
+                speed = 1.8,
+                course = 180.0,
+                dateTime = now.minusHours(
                     3,
                 ),
             )
@@ -91,13 +91,13 @@ class GetVesselUTests {
                 null,
                 null,
                 PositionType.AIS,
-                false,
-                false,
-                16.445,
-                48.2525,
-                1.8,
-                180.0,
-                now.minusHours(
+                isManual = false,
+                isFishing = false,
+                latitude = 16.445,
+                longitude = 48.2525,
+                speed = 1.8,
+                course = 180.0,
+                dateTime = now.minusHours(
                     2,
                 ),
             )
@@ -111,24 +111,25 @@ class GetVesselUTests {
                 null,
                 null,
                 PositionType.AIS,
-                false,
-                false,
-                16.445,
-                48.2525,
-                1.8,
-                180.0,
-                now.minusHours(
+                isManual = false,
+                isFishing = false,
+                latitude = 16.445,
+                longitude = 48.2525,
+                speed = 1.8,
+                course = 180.0,
+                dateTime = now.minusHours(
                     1,
                 ),
             )
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
             listOf(firstPosition, fourthPosition, secondPosition, thirdPosition),
         )
-        given(vesselRepository.findVesselById(any())).willReturn(Vessel(id = 123, flagState = CountryCode.FR))
+        given(vesselRepository.findVesselById(any())).willReturn(DUMMY_VESSEL)
+        given(logbookReportRepository.findLastReportSoftware(any())).willReturn("FT_E-Sacapt")
         given(riskFactorRepository.findByInternalReferenceNumber(any())).willReturn(
             VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
         )
-        given(beaconRepository.findBeaconNumberByVesselId(eq(123))).willReturn("A_BEACON_NUMBER")
+        given(beaconRepository.findBeaconByVesselId(eq(123))).willReturn(Beacon("A_BEACON_NUMBER", vesselId = 123))
 
         // When
         val pair =
@@ -155,7 +156,8 @@ class GetVesselUTests {
         // Then
         assertThat(pair.first).isFalse
         assertThat(pair.second.vessel?.id).isEqualTo(123)
-        assertThat(pair.second.vessel?.beaconNumber).isEqualTo("A_BEACON_NUMBER")
+        assertThat(pair.second.vessel?.hasVisioCaptures).isTrue()
+        assertThat(pair.second.beacon?.beaconNumber).isEqualTo("A_BEACON_NUMBER")
         assertThat(pair.second.positions.first().dateTime).isEqualTo(now.minusHours(4))
         assertThat(pair.second.positions.last().dateTime).isEqualTo(now.minusHours(1))
         assertThat(pair.second.vesselRiskFactor.impactRiskFactor).isEqualTo(2.3)
@@ -206,7 +208,7 @@ class GetVesselUTests {
         )
         given(vesselRepository.findVesselById(any())).willReturn(null)
         given(riskFactorRepository.findByInternalReferenceNumber(any())).willReturn(VesselRiskFactor())
-        given(beaconRepository.findBeaconNumberByVesselId(eq(123))).willReturn(null)
+        given(beaconRepository.findBeaconByVesselId(eq(123))).willReturn(null)
 
         // When
         val pair =
@@ -232,6 +234,6 @@ class GetVesselUTests {
 
         // Then
         assertThat(pair.first).isFalse
-        assertThat(pair.second.vessel?.beaconNumber).isNull()
+        assertThat(pair.second.beacon?.beaconNumber).isNull()
     }
 }

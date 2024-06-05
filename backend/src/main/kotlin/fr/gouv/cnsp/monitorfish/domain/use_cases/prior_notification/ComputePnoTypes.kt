@@ -7,14 +7,11 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PnoType
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PnoTypeRule
 import fr.gouv.cnsp.monitorfish.domain.repositories.PnoTypeRepository
-import org.slf4j.LoggerFactory
 
 @UseCase
 class ComputePnoTypes(
     private val pnoTypeRepository: PnoTypeRepository,
 ) {
-    private val logger = LoggerFactory.getLogger(ComputePnoTypes::class.java)
-
     fun execute(
         catchToLand: List<Catch>,
         tripGears: List<Gear>,

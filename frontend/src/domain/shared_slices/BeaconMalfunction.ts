@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { BeaconMalfunctionsTab } from '../entities/beaconMalfunction/constants'
+import { EquipmentTab } from '../entities/beaconMalfunction/constants'
 
 import type {
   BeaconMalfunction,
@@ -13,7 +13,7 @@ import type { ValueOf } from 'type-fest'
 export type BeaconMalfunctionState = {
   beaconMalfunctions: BeaconMalfunction[]
   // TODO Replace when converted to enum.
-  beaconMalfunctionsTab: ValueOf<typeof BeaconMalfunctionsTab>
+  beaconMalfunctionsTab: ValueOf<typeof EquipmentTab>
   loadingVesselBeaconMalfunctions: boolean
   openedBeaconMalfunction: BeaconMalfunctionResumeAndDetails | null
   openedBeaconMalfunctionInKanban: BeaconMalfunctionResumeAndDetails | null
@@ -22,7 +22,7 @@ export type BeaconMalfunctionState = {
 }
 const INITIAL_STATE: BeaconMalfunctionState = {
   beaconMalfunctions: [],
-  beaconMalfunctionsTab: BeaconMalfunctionsTab.RESUME,
+  beaconMalfunctionsTab: EquipmentTab.RESUME,
   loadingVesselBeaconMalfunctions: false,
   openedBeaconMalfunction: null,
   openedBeaconMalfunctionInKanban: null,
@@ -52,7 +52,7 @@ const beaconMalfunctionSlice = createSlice({
       state.loadingVesselBeaconMalfunctions = true
       state.openedBeaconMalfunction = null
       state.vesselBeaconMalfunctionsResumeAndHistory = null
-      state.beaconMalfunctionsTab = BeaconMalfunctionsTab.RESUME
+      state.beaconMalfunctionsTab = EquipmentTab.RESUME
     },
 
     /**
@@ -99,7 +99,7 @@ const beaconMalfunctionSlice = createSlice({
       state.openedBeaconMalfunction = action.payload.beaconMalfunction
 
       if (action.payload.showTab) {
-        state.beaconMalfunctionsTab = BeaconMalfunctionsTab.DETAIL
+        state.beaconMalfunctionsTab = EquipmentTab.BEACON_MALFUNCTION_DETAIL
       }
     },
 

@@ -45,7 +45,7 @@ class JpaBeaconRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findBeaconNumberByVesselId Should return null When no beacon is found`() {
         // When
-        val beaconNumber = jpaBeaconRepository.findBeaconNumberByVesselId(666)
+        val beaconNumber = jpaBeaconRepository.findBeaconByVesselId(666)
 
         assertThat(beaconNumber).isNull()
     }

@@ -89,7 +89,7 @@ class VesselController(
 
             val returnCode = if (vesselTrackHasBeenModified) HttpStatus.ACCEPTED else HttpStatus.OK
 
-            ResponseEntity.status(returnCode).body(VesselAndPositionsDataOutput.fromVesselWithData(vesselWithData))
+            ResponseEntity.status(returnCode).body(VesselAndPositionsDataOutput.fromVesselInformation(vesselWithData))
         }
     }
 
@@ -213,7 +213,7 @@ class VesselController(
         searched: String,
     ): List<VesselIdentityDataOutput> {
         return searchVessels.execute(searched).map {
-            VesselIdentityDataOutput.fromVessel(it)
+            VesselIdentityDataOutput.fromVesselAndBeacon(it)
         }
     }
 

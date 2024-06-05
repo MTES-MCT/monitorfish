@@ -35,26 +35,78 @@ class GetVesselPositionsUTests {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
         val firstPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
-            now.minusHours(
+            id = null,
+            internalReferenceNumber = "FR224226850",
+            mmsi = "224226850",
+            ircs = null,
+            externalReferenceNumber = null,
+            vesselName = null,
+            flagState = null,
+            positionType = PositionType.AIS,
+            isManual = false,
+            isFishing = false,
+            latitude = 16.445,
+            longitude = 48.2525,
+            speed = 1.8,
+            course = 180.0,
+            dateTime = now.minusHours(
                 4,
             ),
         )
         val secondPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
-            now.minusHours(
+            id = null,
+            internalReferenceNumber = "FR224226850",
+            mmsi = "224226850",
+            ircs = null,
+            externalReferenceNumber = null,
+            vesselName = null,
+            flagState = null,
+            positionType = PositionType.AIS,
+            isManual = false,
+            isFishing = false,
+            latitude = 16.445,
+            longitude = 48.2525,
+            speed = 1.8,
+            course = 180.0,
+            dateTime = now.minusHours(
                 3,
             ),
         )
         val thirdPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
-            now.minusHours(
+            id = null,
+            internalReferenceNumber = "FR224226850",
+            mmsi = "224226850",
+            ircs = null,
+            externalReferenceNumber = null,
+            vesselName = null,
+            flagState = null,
+            positionType = PositionType.AIS,
+            isManual = false,
+            isFishing = false,
+            latitude = 16.445,
+            longitude = 48.2525,
+            speed = 1.8,
+            course = 180.0,
+            dateTime = now.minusHours(
                 2,
             ),
         )
         val fourthPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
-            now.minusHours(
+            id = null,
+            internalReferenceNumber = "FR224226850",
+            mmsi = "224226850",
+            ircs = null,
+            externalReferenceNumber = null,
+            vesselName = null,
+            flagState = null,
+            positionType = PositionType.AIS,
+            isManual = false,
+            isFishing = false,
+            latitude = 16.445,
+            longitude = 48.2525,
+            speed = 1.8,
+            course = 180.0,
+            dateTime = now.minusHours(
                 1,
             ),
         )
@@ -69,13 +121,13 @@ class GetVesselPositionsUTests {
         val pair = runBlocking {
             GetVesselPositions(positionRepository, logbookReportRepository)
                 .execute(
-                    "FR224226850",
-                    "",
-                    "",
-                    VesselTrackDepth.LAST_DEPARTURE,
-                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                    null,
-                    null,
+                    internalReferenceNumber = "FR224226850",
+                    externalReferenceNumber = "",
+                    ircs = "",
+                    trackDepth = VesselTrackDepth.LAST_DEPARTURE,
+                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    fromDateTime = null,
+                    toDateTime = null,
                 )
         }
 
@@ -99,13 +151,13 @@ class GetVesselPositionsUTests {
             runBlocking {
                 GetVesselPositions(positionRepository, logbookReportRepository)
                     .execute(
-                        "FR224226850",
-                        "",
-                        "",
-                        VesselTrackDepth.TWELVE_HOURS,
-                        VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                        null,
-                        null,
+                        internalReferenceNumber = "FR224226850",
+                        externalReferenceNumber = "",
+                        ircs = "",
+                        trackDepth = VesselTrackDepth.TWELVE_HOURS,
+                        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        fromDateTime = null,
+                        toDateTime = null,
                     )
             }
         }
@@ -126,13 +178,13 @@ class GetVesselPositionsUTests {
             runBlocking {
                 GetVesselPositions(positionRepository, logbookReportRepository)
                     .execute(
-                        "FR224226850",
-                        "",
-                        "",
-                        VesselTrackDepth.LAST_DEPARTURE,
-                        VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                        null,
-                        null,
+                        internalReferenceNumber = "FR224226850",
+                        externalReferenceNumber = "",
+                        ircs = "",
+                        trackDepth = VesselTrackDepth.LAST_DEPARTURE,
+                        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        fromDateTime = null,
+                        toDateTime = null,
                     )
             }
         }
@@ -153,13 +205,13 @@ class GetVesselPositionsUTests {
             runBlocking {
                 GetVesselPositions(positionRepository, logbookReportRepository)
                     .execute(
-                        "FR224226850",
-                        "",
-                        "",
-                        VesselTrackDepth.CUSTOM,
-                        VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                        null,
-                        ZonedDateTime.now(),
+                        internalReferenceNumber = "FR224226850",
+                        externalReferenceNumber = "",
+                        ircs = "",
+                        trackDepth = VesselTrackDepth.CUSTOM,
+                        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        fromDateTime = null,
+                        toDateTime = ZonedDateTime.now(),
                     )
             }
         }
@@ -182,13 +234,13 @@ class GetVesselPositionsUTests {
         runBlocking {
             GetVesselPositions(positionRepository, logbookReportRepository)
                 .execute(
-                    "FR224226850",
-                    "",
-                    "",
-                    VesselTrackDepth.CUSTOM,
-                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                    fromDateTime,
-                    toDateTime,
+                    internalReferenceNumber = "FR224226850",
+                    externalReferenceNumber = "",
+                    ircs = "",
+                    trackDepth = VesselTrackDepth.CUSTOM,
+                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    fromDateTime = fromDateTime,
+                    toDateTime = toDateTime,
                 )
         }
 
@@ -205,26 +257,78 @@ class GetVesselPositionsUTests {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
         val firstPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
-            now.minusHours(
+            id = null,
+            internalReferenceNumber = "FR224226850",
+            mmsi = "224226850",
+            ircs = null,
+            externalReferenceNumber = null,
+            vesselName = null,
+            flagState = null,
+            positionType = PositionType.AIS,
+            isManual = false,
+            isFishing = false,
+            latitude = 16.445,
+            longitude = 48.2525,
+            speed = 1.8,
+            course = 180.0,
+            dateTime = now.minusHours(
                 4,
             ),
         )
         val secondPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
-            now.minusHours(
+            id = null,
+            internalReferenceNumber = "FR224226850",
+            mmsi = "224226850",
+            ircs = null,
+            externalReferenceNumber = null,
+            vesselName = null,
+            flagState = null,
+            positionType = PositionType.AIS,
+            isManual = false,
+            isFishing = false,
+            latitude = 16.445,
+            longitude = 48.2525,
+            speed = 1.8,
+            course = 180.0,
+            dateTime = now.minusHours(
                 3,
             ),
         )
         val thirdPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
-            now.minusHours(
+            id = null,
+            internalReferenceNumber = "FR224226850",
+            mmsi = "224226850",
+            ircs = null,
+            externalReferenceNumber = null,
+            vesselName = null,
+            flagState = null,
+            positionType = PositionType.AIS,
+            isManual = false,
+            isFishing = false,
+            latitude = 16.445,
+            longitude = 48.2525,
+            speed = 1.8,
+            course = 180.0,
+            dateTime = now.minusHours(
                 2,
             ),
         )
         val fourthPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
-            now.minusHours(
+            id = null,
+            internalReferenceNumber = "FR224226850",
+            mmsi = "224226850",
+            ircs = null,
+            externalReferenceNumber = null,
+            vesselName = null,
+            flagState = null,
+            positionType = PositionType.AIS,
+            isManual = false,
+            isFishing = false,
+            latitude = 16.445,
+            longitude = 48.2525,
+            speed = 1.8,
+            course = 180.0,
+            dateTime = now.minusHours(
                 1,
             ),
         )
@@ -236,13 +340,13 @@ class GetVesselPositionsUTests {
         runBlocking {
             GetVesselPositions(positionRepository, logbookReportRepository)
                 .execute(
-                    "FR224226850",
-                    "",
-                    "",
-                    VesselTrackDepth.TWELVE_HOURS,
-                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                    null,
-                    null,
+                    internalReferenceNumber = "FR224226850",
+                    externalReferenceNumber = "",
+                    ircs = "",
+                    trackDepth = VesselTrackDepth.TWELVE_HOURS,
+                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    fromDateTime = null,
+                    toDateTime = null,
                 )
         }
 
@@ -259,26 +363,78 @@ class GetVesselPositionsUTests {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
         val firstPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
-            now.minusHours(
+            id = null,
+            internalReferenceNumber = "FR224226850",
+            mmsi = "224226850",
+            ircs = null,
+            externalReferenceNumber = null,
+            vesselName = null,
+            flagState = null,
+            positionType = PositionType.AIS,
+            isManual = false,
+            isFishing = false,
+            latitude = 16.445,
+            longitude = 48.2525,
+            speed = 1.8,
+            course = 180.0,
+            dateTime = now.minusHours(
                 4,
             ),
         )
         val secondPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
-            now.minusHours(
+            id = null,
+            internalReferenceNumber = "FR224226850",
+            mmsi = "224226850",
+            ircs = null,
+            externalReferenceNumber = null,
+            vesselName = null,
+            flagState = null,
+            positionType = PositionType.AIS,
+            isManual = false,
+            isFishing = false,
+            latitude = 16.445,
+            longitude = 48.2525,
+            speed = 1.8,
+            course = 180.0,
+            dateTime = now.minusHours(
                 3,
             ),
         )
         val thirdPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
-            now.minusHours(
+            id = null,
+            internalReferenceNumber = "FR224226850",
+            mmsi = "224226850",
+            ircs = null,
+            externalReferenceNumber = null,
+            vesselName = null,
+            flagState = null,
+            positionType = PositionType.AIS,
+            isManual = false,
+            isFishing = false,
+            latitude = 16.445,
+            longitude = 48.2525,
+            speed = 1.8,
+            course = 180.0,
+            dateTime = now.minusHours(
                 2,
             ),
         )
         val fourthPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
-            now.minusHours(
+            id = null,
+            internalReferenceNumber = "FR224226850",
+            mmsi = "224226850",
+            ircs = null,
+            externalReferenceNumber = null,
+            vesselName = null,
+            flagState = null,
+            positionType = PositionType.AIS,
+            isManual = false,
+            isFishing = false,
+            latitude = 16.445,
+            longitude = 48.2525,
+            speed = 1.8,
+            course = 180.0,
+            dateTime = now.minusHours(
                 1,
             ),
         )
@@ -292,13 +448,13 @@ class GetVesselPositionsUTests {
         val pair = runBlocking {
             GetVesselPositions(positionRepository, logbookReportRepository)
                 .execute(
-                    "FR224226850",
-                    "",
-                    "",
-                    VesselTrackDepth.TWELVE_HOURS,
-                    null,
-                    null,
-                    null,
+                    internalReferenceNumber = "FR224226850",
+                    externalReferenceNumber = "",
+                    ircs = "",
+                    trackDepth = VesselTrackDepth.TWELVE_HOURS,
+                    vesselIdentifier = null,
+                    fromDateTime = null,
+                    toDateTime = null,
                 )
         }
 

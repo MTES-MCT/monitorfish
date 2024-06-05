@@ -21,10 +21,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingValue
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselInformation
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.*
@@ -97,7 +94,22 @@ class VesselControllerITests {
         val farPastFixedDateTime = ZonedDateTime.of(EPOCH, LocalTime.MAX.plusSeconds(1), ZoneId.of("UTC"))
         val position =
             LastPosition(
-                0, 1, "MMSI", null, null, null, null, CountryCode.FR, PositionType.AIS, 16.445, 48.2525, 16.445, 48.2525, 1.8, 180.0, farPastFixedDateTime, vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                id = 0,
+                vesselId = 1,
+                internalReferenceNumber = "MMSI",
+                mmsi = null,
+                ircs = null,
+                externalReferenceNumber = null,
+                vesselName = null,
+                flagState = CountryCode.FR,
+                positionType = PositionType.AIS,
+                latitude = 16.445,
+                longitude = 48.2525,
+                estimatedCurrentLatitude = 16.445,
+                estimatedCurrentLongitude = 48.2525,
+                speed = 1.8,
+                course = 180.0,
+                dateTime = farPastFixedDateTime, vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 gearOnboard = listOf(
                     gear,
                 ),
@@ -137,20 +149,59 @@ class VesselControllerITests {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
         val firstPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
-            now.minusHours(
+            id = null,
+            internalReferenceNumber = "FR224226850",
+            mmsi = "224226850",
+            ircs = null,
+            externalReferenceNumber = null,
+            vesselName = null,
+            flagState = null,
+            positionType = PositionType.AIS,
+            isManual = false,
+            isFishing = false,
+            latitude = 16.445,
+            longitude = 48.2525,
+            speed = 1.8,
+            course = 180.0,
+            dateTime = now.minusHours(
                 4,
             ),
         )
         val secondPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
-            now.minusHours(
+            id = null,
+            internalReferenceNumber = "FR224226850",
+            mmsi = "224226850",
+            ircs = null,
+            externalReferenceNumber = null,
+            vesselName = null,
+            flagState = null,
+            positionType = PositionType.AIS,
+            isManual = false,
+            isFishing = false,
+            latitude = 16.445,
+            longitude = 48.2525,
+            speed = 1.8,
+            course = 180.0,
+            dateTime = now.minusHours(
                 3,
             ),
         )
         val thirdPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
-            now.minusHours(
+            id = null,
+            internalReferenceNumber = "FR224226850",
+            mmsi = "224226850",
+            ircs = null,
+            externalReferenceNumber = null,
+            vesselName = null,
+            flagState = null,
+            positionType = PositionType.AIS,
+            isManual = false,
+            isFishing = false,
+            latitude = 16.445,
+            longitude = 48.2525,
+            speed = 1.8,
+            course = 180.0,
+            dateTime = now.minusHours(
                 2,
             ),
         )
@@ -160,7 +211,7 @@ class VesselControllerITests {
             Pair(
                 false,
                 VesselInformation(
-                    Vessel(
+                    vessel = Vessel(
                         id = 123,
                         internalReferenceNumber = "FR224226850",
                         vesselName = "MY AWESOME VESSEL",
@@ -168,9 +219,11 @@ class VesselControllerITests {
                         declaredFishingGears = listOf("Trémails"),
                         vesselType = "Fishing",
                         underCharter = true,
+                        hasLogbookEsacapt = false,
                     ),
-                    listOf(firstPosition, secondPosition, thirdPosition),
-                    VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
+                    beacon = null,
+                    positions = listOf(firstPosition, secondPosition, thirdPosition),
+                    vesselRiskFactor = VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
                 ),
             )
         }
@@ -216,9 +269,10 @@ class VesselControllerITests {
             Pair(
                 true,
                 VesselInformation(
-                    null,
-                    listOf(),
-                    VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
+                    vessel = null,
+                    beacon = null,
+                    positions = listOf(),
+                    vesselRiskFactor = VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
                 ),
             )
         }
@@ -240,9 +294,10 @@ class VesselControllerITests {
             Pair(
                 false,
                 VesselInformation(
-                    null,
-                    listOf(),
-                    VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
+                    vessel = null,
+                    beacon = null,
+                    positions = listOf(),
+                    vesselRiskFactor = VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
                 ),
             )
         }
@@ -259,14 +314,14 @@ class VesselControllerITests {
 
         runBlocking {
             Mockito.verify(getVessel).execute(
-                null,
-                "FR224226850",
-                "123",
-                "IEF4",
-                VesselTrackDepth.CUSTOM,
-                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                ZonedDateTime.parse("2021-03-24T22:07:00Z"),
-                ZonedDateTime.parse("2021-04-24T22:07:00Z"),
+                vesselId = null,
+                internalReferenceNumber = "FR224226850",
+                externalReferenceNumber = "123",
+                ircs = "IEF4",
+                trackDepth = VesselTrackDepth.CUSTOM,
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                fromDateTime = ZonedDateTime.parse("2021-03-24T22:07:00Z"),
+                toDateTime = ZonedDateTime.parse("2021-04-24T22:07:00Z"),
             )
         }
     }
@@ -276,20 +331,59 @@ class VesselControllerITests {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
         val firstPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
-            now.minusHours(
+            id = null,
+            internalReferenceNumber = "FR224226850",
+            mmsi = "224226850",
+            ircs = null,
+            externalReferenceNumber = null,
+            vesselName = null,
+            flagState = null,
+            positionType = PositionType.AIS,
+            isManual = false,
+            isFishing = false,
+            latitude = 16.445,
+            longitude = 48.2525,
+            speed = 1.8,
+            course = 180.0,
+            dateTime = now.minusHours(
                 4,
             ),
         )
         val secondPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
-            now.minusHours(
+            id = null,
+            internalReferenceNumber = "FR224226850",
+            mmsi = "224226850",
+            ircs = null,
+            externalReferenceNumber = null,
+            vesselName = null,
+            flagState = null,
+            positionType = PositionType.AIS,
+            isManual = false,
+            isFishing = false,
+            latitude = 16.445,
+            longitude = 48.2525,
+            speed = 1.8,
+            course = 180.0,
+            dateTime = now.minusHours(
                 3,
             ),
         )
         val thirdPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
-            now.minusHours(
+            id = null,
+            internalReferenceNumber = "FR224226850",
+            mmsi = "224226850",
+            ircs = null,
+            externalReferenceNumber = null,
+            vesselName = null,
+            flagState = null,
+            positionType = PositionType.AIS,
+            isManual = false,
+            isFishing = false,
+            latitude = 16.445,
+            longitude = 48.2525,
+            speed = 1.8,
+            course = 180.0,
+            dateTime = now.minusHours(
                 2,
             ),
         )
@@ -327,21 +421,29 @@ class VesselControllerITests {
         // Given
         given(this.searchVessels.execute(any())).willReturn(
             listOf(
-                Vessel(
-                    id = 1,
-                    internalReferenceNumber = "FR224226850",
-                    vesselName = "MY AWESOME VESSEL",
-                    flagState = CountryCode.FR,
-                    declaredFishingGears = listOf("Trémails"),
-                    vesselType = "Fishing",
+                VesselAndBeacon(
+                    vessel = Vessel(
+                        id = 1,
+                        internalReferenceNumber = "FR224226850",
+                        vesselName = "MY AWESOME VESSEL",
+                        flagState = CountryCode.FR,
+                        declaredFishingGears = listOf("Trémails"),
+                        vesselType = "Fishing",
+                        hasLogbookEsacapt = false,
+                    ),
+                    beacon = Beacon(beaconNumber = "123456", vesselId = 1),
                 ),
-                Vessel(
-                    id = 2,
-                    internalReferenceNumber = "GBR21555445",
-                    vesselName = "ANOTHER VESSEL",
-                    flagState = CountryCode.GB,
-                    declaredFishingGears = listOf("Trémails"),
-                    vesselType = "Fishing",
+                VesselAndBeacon(
+                    vessel = Vessel(
+                        id = 2,
+                        internalReferenceNumber = "GBR21555445",
+                        vesselName = "ANOTHER VESSEL",
+                        flagState = CountryCode.GB,
+                        declaredFishingGears = listOf("Trémails"),
+                        vesselType = "Fishing",
+                        hasLogbookEsacapt = false,
+                    ),
+                    beacon = null,
                 ),
             ),
         )
@@ -354,6 +456,7 @@ class VesselControllerITests {
             .andExpect(jsonPath("$[0].flagState", equalTo("FR")))
             .andExpect(jsonPath("$[0].vesselName", equalTo("MY AWESOME VESSEL")))
             .andExpect(jsonPath("$[0].internalReferenceNumber", equalTo("FR224226850")))
+            .andExpect(jsonPath("$[0].beaconNumber", equalTo("123456")))
             .andExpect(jsonPath("$[1].flagState", equalTo("GB")))
             .andExpect(jsonPath("$[1].vesselName", equalTo("ANOTHER VESSEL")))
             .andExpect(jsonPath("$[1].internalReferenceNumber", equalTo("GBR21555445")))
@@ -449,9 +552,18 @@ class VesselControllerITests {
                     history = listOf(
                         BeaconMalfunctionWithDetails(
                             beaconMalfunction = BeaconMalfunction(
-                                1, "FR224226850", "1236514", "IRCS",
-                                "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
-                                ZonedDateTime.now(), null, ZonedDateTime.now(), endOfBeaconMalfunctionReason = EndOfBeaconMalfunctionReason.RESUMED_TRANSMISSION,
+                                id = 1,
+                                internalReferenceNumber = "FR224226850",
+                                externalReferenceNumber = "1236514",
+                                ircs = "IRCS",
+                                flagState = "fr",
+                                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                                vesselName = "BIDUBULE",
+                                vesselStatus = VesselStatus.AT_SEA,
+                                stage = Stage.END_OF_MALFUNCTION,
+                                malfunctionStartDateTime = ZonedDateTime.now(),
+                                malfunctionEndDateTime = null,
+                                vesselStatusLastModificationDateTime = ZonedDateTime.now(), endOfBeaconMalfunctionReason = EndOfBeaconMalfunctionReason.RESUMED_TRANSMISSION,
                                 beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
                             ),
                             comments = listOf(
@@ -475,9 +587,18 @@ class VesselControllerITests {
                     ),
                     current = BeaconMalfunctionWithDetails(
                         beaconMalfunction = BeaconMalfunction(
-                            2, "FR224226850", "1236514", "IRCS",
-                            "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
-                            ZonedDateTime.now(), null, ZonedDateTime.now(),
+                            id = 2,
+                            internalReferenceNumber = "FR224226850",
+                            externalReferenceNumber = "1236514",
+                            ircs = "IRCS",
+                            flagState = "fr",
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                            vesselName = "BIDUBULE",
+                            vesselStatus = VesselStatus.AT_SEA,
+                            stage = Stage.INITIAL_ENCOUNTER,
+                            malfunctionStartDateTime = ZonedDateTime.now(),
+                            malfunctionEndDateTime = null,
+                            vesselStatusLastModificationDateTime = ZonedDateTime.now(),
                             beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
                         ),
                         comments = listOf(

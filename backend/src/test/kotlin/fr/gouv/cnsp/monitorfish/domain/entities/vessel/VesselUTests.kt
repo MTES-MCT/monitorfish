@@ -20,6 +20,7 @@ class VesselUTests {
             declaredFishingGears = listOf("Trémails"),
             vesselType = "Fishing",
             districtCode = "AY",
+            hasLogbookEsacapt = false,
         )
 
         // When
@@ -40,6 +41,7 @@ class VesselUTests {
             declaredFishingGears = listOf("Trémails"),
             vesselType = "Fishing",
             districtCode = "",
+            hasLogbookEsacapt = false,
         )
 
         // When
@@ -60,6 +62,7 @@ class VesselUTests {
             declaredFishingGears = listOf("Trémails"),
             vesselType = "Fishing",
             districtCode = "AY",
+            hasLogbookEsacapt = false,
         )
 
         // When

@@ -371,6 +371,7 @@ class MissionActionsControllerITests {
                             declaredFishingGears = listOf("Trémails"),
                             vesselType = "Fishing",
                             districtCode = "AY",
+                            hasLogbookEsacapt = false,
                         ),
                     ),
                 ),

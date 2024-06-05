@@ -111,7 +111,6 @@ def attribute_segments_to_catches(
     )
 
     if append_unassigned_catches:
-
         unassigned_catch_ids = set(catches.catch_id) - set(segmented_catches.catch_id)
 
         segmented_catches = pd.concat(

@@ -21,9 +21,9 @@ from prefect.executors import LocalDaskExecutor
 from sqlalchemy import Table, update
 
 from config import (
+    CNSP_LOGO_PATH,
     CNSP_SIP_DEPARTMENT_EMAIL,
     EMAIL_FONTS_LOCATION,
-    EMAIL_IMAGES_LOCATION,
     EMAIL_STYLESHEETS_LOCATION,
     EMAIL_TEMPLATES_LOCATION,
     SMS_TEMPLATES_LOCATION,
@@ -52,8 +52,6 @@ from src.pipeline.shared_tasks.control_flow import (
     filter_results,
 )
 from src.pipeline.shared_tasks.infrastructure import get_table
-
-cnsp_logo_path = EMAIL_IMAGES_LOCATION / "logo_cnsp.jpg"
 
 
 @task(checkpoint=False)
@@ -194,11 +192,11 @@ def render(
     if output_format == "html":
         # Fonts shall not be included in email body
         fonts_directory = None
-        logo_src = f"cid:{cnsp_logo_path.name}"
+        logo_src = f"cid:{CNSP_LOGO_PATH.name}"
 
     else:
         fonts_directory = EMAIL_FONTS_LOCATION.as_uri()
-        logo_src = cnsp_logo_path.as_uri()
+        logo_src = CNSP_LOGO_PATH.as_uri()
 
     html = template.render(
         fonts_directory=fonts_directory,
@@ -282,7 +280,7 @@ def create_email(
             cc=cc,
             subject=m.get_notification_subject(),
             html=html,
-            images=[cnsp_logo_path],
+            images=[CNSP_LOGO_PATH],
             attachments={"Notification.pdf": pdf},
             reply_to=CNSP_SIP_DEPARTMENT_EMAIL,
         )

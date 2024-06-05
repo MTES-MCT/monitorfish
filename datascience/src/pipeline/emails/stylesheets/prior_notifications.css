@@ -1,0 +1,75 @@
+@font-face {
+font-family: Marianne;
+src: url({{ fonts_directory }}/Marianne/Marianne-Regular.woff2) format('woff2');
+font-weight: normal;  
+}
+
+@font-face {
+font-family: Marianne;
+src: url({{ fonts_directory }}/Marianne/Marianne-Bold.woff2) format('woff2');
+font-weight: 700;
+}
+
+@font-face {
+font-family: Marianne;
+src: url({{ fonts_directory }}/Marianne/Marianne-Light.woff2) format('woff2');
+font-weight: lighter;
+}
+
+@font-face {
+font-family: Marianne;
+src: url({{ fonts_directory }}/Marianne/Marianne-Medium.woff2) format('woff2');
+font-weight: 500;
+}
+
+@page {
+    margin: 0;
+    size: 21cm 29.7cm;
+}
+
+html {
+    margin: 80px 100px 36px 100px;
+    font: 15px Marianne, sans-serif;
+    line-height: 1.4;
+    color: #222;
+}
+
+body {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+header {
+    margin-bottom: 40px;
+}
+
+footer {
+    margin-top: 40px;
+    color: #666
+}
+
+img {
+    width: 120px;
+}
+
+#state_flag_icon {
+    margin-left: 5px;
+    width: 34px;
+}
+
+#vessel_length {
+    margin-top: 0px;
+    font-style: italic;
+}
+
+#vessel_ids_list {
+    padding: 0;
+    margin-bottom: 0;
+}
+
+#vessel_ids_list > li {
+    display:inline-block;
+    font-style: italic;
+    list-style-type: none;
+    margin-right: 15px;
+}

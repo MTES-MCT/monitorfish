@@ -1,11 +1,23 @@
+import os
 from datetime import datetime
 from pathlib import Path
 from typing import List
 
+import numpy as np
 import pandas as pd
-from prefect import Flow, Parameter, case, task
+import weasyprint
+from jinja2 import Environment, FileSystemLoader, Template, select_autoescape
+from prefect import Flow, Parameter, case, task, unmapped
 from prefect.executors import LocalDaskExecutor
 
+from config import (
+    CNSP_LOGO_PATH,
+    EMAIL_FONTS_LOCATION,
+    EMAIL_STYLESHEETS_LOCATION,
+    EMAIL_TEMPLATES_LOCATION,
+    SE_MER_LOGO_PATH,
+    STATE_FLAGS_ICONS_LOCATION,
+)
 from src.pipeline.entities.fleet_segments import FishingGear, FleetSegment
 from src.pipeline.entities.pnos import PnoCatch, PnoToRender, PreRenderedPno
 from src.pipeline.generic_tasks import extract
@@ -52,9 +64,7 @@ def extract_pnos_to_distribute(
 
 
 @task(checkpoint=False)
-def to_pnos_to_render(
-    pnos: pd.DataFrame, species_names: dict, fishing_gear_names: dict
-) -> List[PnoToRender]:
+def to_pnos_to_render(pnos: pd.DataFrame) -> List[PnoToRender]:
     records = pnos.to_dict(orient="records")
     return [PnoToRender(**record) for record in records]
 
@@ -128,13 +138,11 @@ def pre_render_pno(
         sum_by_species.number_of_fish > 0, "-"
     )
 
-    sum_by_species["weight"] = sum_by_species.weight.map(lambda x: f"{x} kg")
-
     sum_by_species = sum_by_species.rename(
         columns={
             "species_name_code": "Espèces",
             "area_sr": "Zones de pêche",
-            "weight": "Qtés",
+            "weight": "Qtés (kg)",
             "number_of_fish": "Nb",
         }
     )
@@ -167,6 +175,85 @@ def pre_render_pno(
     )
 
 
+@task(checkpoint=False)
+def get_template() -> Template:
+    templates_locations = [
+        EMAIL_TEMPLATES_LOCATION / "prior_notifications",
+        EMAIL_STYLESHEETS_LOCATION,
+    ]
+
+    env = Environment(
+        loader=FileSystemLoader(templates_locations), autoescape=select_autoescape()
+    )
+
+    return env.get_template("base_template.jinja")
+
+
+@task(checkpoint=False)
+def render_pno(pno: PreRenderedPno, template: Template) -> str:
+    fonts_directory = EMAIL_FONTS_LOCATION.as_uri()
+    cnsp_logo_src = CNSP_LOGO_PATH.as_uri()
+    se_mer_logo_src = SE_MER_LOGO_PATH.as_uri()
+    state_flags_icons = os.listdir(STATE_FLAGS_ICONS_LOCATION)
+    if f"{pno.flag_state}.png" in state_flags_icons:
+        state_flag_icon_src = STATE_FLAGS_ICONS_LOCATION / Path(f"{pno.flag_state}.png")
+
+    risk_factor_thresholds = np.array([1.75, 2.5, 3.25])
+    thresholds_exceeded = (pno.risk_factor >= risk_factor_thresholds).sum()
+    risk_factor_scale = [
+        "faible",
+        "moyenne",
+        "élevée",
+        "très élevée",
+    ]
+
+    risk_factor_description = risk_factor_scale[thresholds_exceeded]
+
+    date_format = "%d/%m/%Y à %Hh%M UTC"
+
+    html = template.render(
+        fonts_directory=fonts_directory,
+        cnsp_logo_src=cnsp_logo_src,
+        se_mer_logo_src=se_mer_logo_src,
+        state_flag_icon_src=state_flag_icon_src,
+        operation_datetime_utc=pno.operation_datetime_utc.strftime(date_format),
+        operation_type=pno.operation_type,
+        report_id=pno.report_id,
+        report_datetime_utc=pno.report_datetime_utc.strftime(date_format),
+        cfr=pno.cfr,
+        ircs=pno.ircs,
+        external_identification=pno.external_identification,
+        vessel_name=pno.vessel_name,
+        purpose=pno.purpose,
+        catch_onboard=pno.catch_onboard.to_html(index=False),
+        port_locode=pno.port_locode,
+        port_name=pno.port_name,
+        predicted_arrival_datetime_utc=pno.predicted_arrival_datetime_utc.strftime(
+            date_format
+        ),
+        predicted_landing_datetime_utc=pno.predicted_landing_datetime_utc.strftime(
+            date_format
+        ),
+        trip_gears="<br>".join(
+            [f"{g.name} ({g.code}) - Maillage {g.mesh} mm" for g in pno.trip_gears]
+        ),
+        trip_segments="<br>".join([f"{s.code} - {s.name}" for s in pno.trip_segments]),
+        pno_types=", ".join(pno.pno_types),
+        vessel_length=pno.vessel_length,
+        mmsi=pno.mmsi,
+        risk_factor=f"{pno.risk_factor:.1f}",
+        risk_factor_description=risk_factor_description,
+        last_control_datetime_utc=pno.last_control_datetime_utc.strftime(date_format),
+    )
+
+    return html
+
+
+def print_html_to_pdf(html: str) -> bytes:
+    pdf = weasyprint.HTML(string=html).write_pdf(optimize_size=("fonts", "images"))
+    return pdf
+
+
 with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
@@ -180,10 +267,17 @@ with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
 
         species_names = extract_species_names()
         fishing_gear_names = extract_fishing_gear_names()
+        template = get_template()
         pnos = extract_pnos_to_distribute(
             start_datetime_utc=start_datetime_utc,
             end_datetime_utc=end_datetime_utc,
         )
 
+        pnos = to_pnos_to_render(pnos)
+        pnos = pre_render_pno.map(
+            pnos,
+            species_names=unmapped(species_names),
+            fishing_gear_names=unmapped(fishing_gear_names),
+        )
 
 flow.file_name = Path(__file__).name

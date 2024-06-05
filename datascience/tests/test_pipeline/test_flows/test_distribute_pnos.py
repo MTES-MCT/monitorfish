@@ -1,17 +1,51 @@
 from datetime import datetime, timedelta, timezone
 
+import numpy as np
 import pandas as pd
 import pytest
 from dateutil.relativedelta import relativedelta
 
-from src.pipeline.flows.distribute_pnos import extract_pnos_to_distribute, flow
+from src.pipeline.entities.fleet_segments import FishingGear, FleetSegment
+from src.pipeline.entities.pnos import PnoToRender, PreRenderedPno
+from src.pipeline.flows.distribute_pnos import (
+    extract_fishing_gear_names,
+    extract_pnos_to_distribute,
+    extract_species_names,
+    flow,
+    pre_render_pno,
+    to_pnos_to_render,
+)
 from tests.mocks import mock_check_flow_not_running
 
 flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
 
 
 @pytest.fixture
-def expected_extracted_pnos() -> pd.DataFrame:
+def species_names() -> dict:
+    return {
+        "BFT": "(Capitaine) Haddock",
+        "GHL": "Pou Hasse Caille",
+        "SWO": "Friture sur la ligne",
+    }
+
+
+@pytest.fixture
+def fishing_gear_names() -> dict:
+    return {
+        "DRB": "Dragues remorquées par bateau",
+        "GNS": "Filets maillants calés (ancrés)",
+        "GTR": "Trémails",
+        "LLS": "Palangres calées",
+        "OTB": "Chaluts de fond à panneaux",
+        "OTM": "Chaluts pélagiques à panneaux",
+        "OTT": "Chaluts jumeaux à panneaux",
+        "PS": "Sennes coulissantes",
+        "PS1": "Sennes coulissantes manœuvrées par un navire",
+    }
+
+
+@pytest.fixture
+def extracted_pnos() -> pd.DataFrame:
     now = datetime.utcnow()
     return pd.DataFrame(
         {
@@ -64,18 +98,29 @@ def expected_extracted_pnos() -> pd.DataFrame:
                         "weight": 150.0,
                         "faoZone": "27.8.a",
                         "species": "GHL",
+                        "statisticalRectangle": "47E3",
                     },
+                    {
+                        "nbFish": None,
+                        "weight": 150.0,
+                        "faoZone": "27.8.a",
+                        "species": "GHL",
+                        "statisticalRectangle": "47E4",
+                    },
+                    {"unexpected_field": "All other field are missing"},
                     {
                         "nbFish": None,
                         "weight": 1450.0,
                         "faoZone": "27.8.a",
                         "species": "HKE",
+                        "statisticalRectangle": "47E3",
                     },
                     {
                         "nbFish": 2,
                         "weight": 150.0,
                         "faoZone": "27.8.a",
                         "species": "BFT",
+                        "statisticalRectangle": "47E3",
                     },
                     {
                         "nbFish": 2,
@@ -88,12 +133,14 @@ def expected_extracted_pnos() -> pd.DataFrame:
                         "weight": 150.0,
                         "faoZone": "27.8.b",
                         "species": "BFT",
+                        "statisticalRectangle": "47E6",
                     },
                     {
                         "nbFish": None,
                         "weight": 250.0,
                         "faoZone": "27.8.b",
                         "species": "GHL",
+                        "statisticalRectangle": "47E4",
                     },
                 ],
                 None,
@@ -314,7 +361,153 @@ def expected_extracted_pnos() -> pd.DataFrame:
     )
 
 
-def test_extract_pnos_to_distribute(reset_test_data, expected_extracted_pnos):
+@pytest.fixture
+def pno_to_render_1() -> PnoToRender:
+    return PnoToRender(
+        id=35,
+        operation_number="11",
+        operation_datetime_utc=datetime(2024, 5, 5, 8, 13, 38, 259967),
+        operation_type="DAT",
+        report_id="11",
+        report_datetime_utc=datetime(2024, 5, 5, 8, 11, 38, 259967),
+        cfr="ABC000542519",
+        ircs="FQ7058",
+        external_identification="RO237719",
+        vessel_name="DEVINER FIGURE CONSCIENCE",
+        flag_state="FRA",
+        purpose="LAN",
+        catch_onboard=[
+            {
+                "nbFish": None,
+                "weight": 150.0,
+                "faoZone": "27.8.a",
+                "species": "GHL",
+                "statisticalRectangle": "47E3",
+            },
+            {
+                "nbFish": None,
+                "weight": 150.0,
+                "faoZone": "27.8.a",
+                "species": "GHL",
+                "statisticalRectangle": "47E4",
+            },
+            {"unexpected_field": "All other field are missing"},
+            {
+                "nbFish": None,
+                "weight": 1450.0,
+                "faoZone": "27.8.a",
+                "species": "HKE",
+                "statisticalRectangle": "47E3",
+            },
+            {
+                "nbFish": 2,
+                "weight": 150.0,
+                "faoZone": "27.8.a",
+                "species": "BFT",
+                "statisticalRectangle": "47E3",
+            },
+            {"nbFish": 2, "weight": 70.0, "faoZone": "27.8.a", "species": "SWO"},
+            {
+                "nbFish": 2,
+                "weight": 150.0,
+                "species": "BFT",
+                "statisticalRectangle": "47E6",
+            },
+            {
+                "nbFish": None,
+                "weight": 250.0,
+                "faoZone": "27.8.b",
+                "species": "GHL",
+                "statisticalRectangle": "47E4",
+            },
+            {"nbFish": 2, "weight": 955.0, "species": "ABC"},
+        ],
+        port_locode="FRCQF",
+        port_name="Somewhere over the rainbow",
+        predicted_arrival_datetime_utc=datetime(2020, 5, 6, 11, 41, 3, 340000),
+        predicted_landing_datetime_utc=datetime(2020, 5, 6, 16, 40),
+        trip_gears=[
+            {"gear": "OTT", "mesh": 140, "dimensions": "250.0"},
+            {"gear": "OTT", "mesh": 120, "dimensions": "250.0"},
+        ],
+        trip_segments=[
+            {"segment": "SHKE27", "segmentName": "Merlu en zone 27"},
+            {"segment": "SOTM", "segmentName": "Chaluts pélagiques"},
+        ],
+        pno_types=[
+            {
+                "pnoTypeName": "Préavis type 1",
+                "hasDesignatedPorts": True,
+                "minimumNotificationPeriod": 4.0,
+            },
+            {
+                "pnoTypeName": "Préavis type 2",
+                "hasDesignatedPorts": False,
+                "minimumNotificationPeriod": 4.0,
+            },
+        ],
+        vessel_length=13.4,
+        mmsi=None,
+        risk_factor=2.09885592141872,
+        last_control_datetime_utc=datetime(2023, 6, 3, 9, 13, 38, 259967),
+    )
+
+
+@pytest.fixture
+def pre_rendered_pno_1_catch_onboard() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "Espèces": [
+                "- (HKE)",
+                "- (ABC)",
+                "Pou Hasse Caille (GHL)",
+                "(Capitaine) Haddock (BFT)",
+                "Friture sur la ligne (SWO)",
+            ],
+            "Zones de pêche": [
+                "27.8.a (47E3)",
+                "-",
+                "27.8.a (47E3, 47E4), 27.8.b (47E4)",
+                "- (47E6), 27.8.a (47E3)",
+                "27.8.a",
+            ],
+            "Qtés": ["1450 kg", "955 kg", "550 kg", "300 kg", "70 kg"],
+            "Nb": ["-", 2, "-", 4, 2],
+        }
+    )
+
+
+@pytest.fixture
+def pno_to_render_2() -> PnoToRender:
+    return PnoToRender(
+        id=36,
+        operation_number="12",
+        operation_datetime_utc=datetime(2024, 5, 5, 8, 48, 38, 259967),
+        operation_type="DAT",
+        report_id="12",
+        report_datetime_utc=datetime(2024, 5, 5, 8, 46, 38, 259967),
+        cfr="ABC000000000",
+        ircs="ABCD",
+        external_identification="LEB@T0",
+        vessel_name="CAPITAINE HADDOCK",
+        flag_state="POL",
+        purpose="ACS",
+        catch_onboard=None,
+        port_locode="FRZJZ",
+        port_name="Somewhere over the top",
+        predicted_arrival_datetime_utc=datetime(2020, 5, 6, 11, 41, 3, 340000),
+        predicted_landing_datetime_utc=pd.NaT,
+        trip_gears=[],
+        trip_segments=[],
+        pno_types=[],
+        vessel_length=np.nan,
+        mmsi=None,
+        risk_factor=np.nan,
+        last_control_datetime_utc=pd.NaT,
+    )
+
+
+def test_extract_pnos_to_distribute(reset_test_data, extracted_pnos):
     approximate_datetime_columns = [
         "operation_datetime_utc",
         "report_datetime_utc",
@@ -328,14 +521,57 @@ def test_extract_pnos_to_distribute(reset_test_data, expected_extracted_pnos):
 
     pd.testing.assert_frame_equal(
         pnos.drop(columns=approximate_datetime_columns),
-        expected_extracted_pnos.drop(columns=approximate_datetime_columns),
+        extracted_pnos.drop(columns=approximate_datetime_columns),
     )
 
     for col in approximate_datetime_columns:
         assert (
-            (pnos[col].dropna() - expected_extracted_pnos[col].dropna()).abs()
+            (pnos[col].dropna() - extracted_pnos[col].dropna()).abs()
             < timedelta(seconds=10)
         ).all()
+
+
+def test_extract_species_names(reset_test_data, species_names):
+    res = extract_species_names.run()
+    assert res == species_names
+
+
+def test_extract_fishing_gear_names(reset_test_data, fishing_gear_names):
+    res = extract_fishing_gear_names.run()
+    assert res == fishing_gear_names
+
+
+def test_to_pnos_to_render(extracted_pnos, species_names, fishing_gear_names):
+    res = to_pnos_to_render.run(
+        pnos=extracted_pnos,
+        species_names=species_names,
+        fishing_gear_names=fishing_gear_names,
+    )
+    assert len(res) == 5
+    assert isinstance(res[0], PnoToRender)
+
+
+def test_pre_render_pno_1(
+    pno_to_render_1, species_names, fishing_gear_names, pre_rendered_pno_1_catch_onboard
+):
+    res = pre_render_pno.run(
+        pno=pno_to_render_1,
+        species_names=species_names,
+        fishing_gear_names=fishing_gear_names,
+    )
+
+    assert isinstance(res, PreRenderedPno)
+    assert res.id == 35
+    assert res.pno_types == ["Préavis type 1", "Préavis type 2"]
+    assert res.trip_gears == [
+        FishingGear(code="OTT", name="Chaluts jumeaux à panneaux", mesh=140),
+        FishingGear(code="OTT", name="Chaluts jumeaux à panneaux", mesh=120),
+    ]
+    assert res.trip_segments == [
+        FleetSegment(code="SHKE27", name="Merlu en zone 27"),
+        FleetSegment(code="SOTM", name="Chaluts pélagiques"),
+    ]
+    pd.testing.assert_frame_equal(res.catch_onboard, pre_rendered_pno_1_catch_onboard)
 
 
 # def test_flow(reset_test_data):

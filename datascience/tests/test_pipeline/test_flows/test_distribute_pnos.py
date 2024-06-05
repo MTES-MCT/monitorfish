@@ -4,7 +4,9 @@ import numpy as np
 import pandas as pd
 import pytest
 from dateutil.relativedelta import relativedelta
+from jinja2 import Template
 
+from config import TEST_DATA_LOCATION
 from src.pipeline.entities.fleet_segments import FishingGear, FleetSegment
 from src.pipeline.entities.pnos import PnoToRender, PreRenderedPno
 from src.pipeline.flows.distribute_pnos import (
@@ -12,7 +14,9 @@ from src.pipeline.flows.distribute_pnos import (
     extract_pnos_to_distribute,
     extract_species_names,
     flow,
+    get_template,
     pre_render_pno,
+    render_pno,
     to_pnos_to_render,
 )
 from tests.mocks import mock_check_flow_not_running
@@ -471,9 +475,45 @@ def pre_rendered_pno_1_catch_onboard() -> pd.DataFrame:
                 "- (47E6), 27.8.a (47E3)",
                 "27.8.a",
             ],
-            "Qtés": ["1450 kg", "955 kg", "550 kg", "300 kg", "70 kg"],
+            "Qtés (kg)": ["1450", "955", "550", "300", "70"],
             "Nb": ["-", 2, "-", 4, 2],
         }
+    )
+
+
+@pytest.fixture
+def pre_rendered_pno_1(pre_rendered_pno_1_catch_onboard) -> PreRenderedPno:
+    return PreRenderedPno(
+        id=35,
+        operation_number="11",
+        operation_datetime_utc=datetime(2024, 5, 5, 8, 13, 38, 259967),
+        operation_type="DAT",
+        report_id="11",
+        report_datetime_utc=datetime(2024, 5, 5, 8, 11, 38, 259967),
+        cfr="ABC000542519",
+        ircs="FQ7058",
+        external_identification="RO237719",
+        vessel_name="DEVINER FIGURE CONSCIENCE",
+        flag_state="FRA",
+        purpose="LAN",
+        catch_onboard=pre_rendered_pno_1_catch_onboard,
+        port_locode="FRCQF",
+        port_name="Somewhere over the rainbow",
+        predicted_arrival_datetime_utc=datetime(2020, 5, 6, 11, 41, 3, 340000),
+        predicted_landing_datetime_utc=datetime(2020, 5, 6, 16, 40),
+        trip_gears=[
+            FishingGear(code="OTT", name="Chaluts jumeaux à panneaux", mesh=140),
+            FishingGear(code="OTT", name="Chaluts jumeaux à panneaux", mesh=120),
+        ],
+        trip_segments=[
+            FleetSegment(code="SHKE27", name="Merlu en zone 27"),
+            FleetSegment(code="SOTM", name="Chaluts pélagiques"),
+        ],
+        pno_types=["Préavis type 1", "Préavis type 2"],
+        vessel_length=13.4,
+        mmsi=None,
+        risk_factor=2.09885592141872,
+        last_control_datetime_utc=datetime(2023, 6, 3, 9, 13, 38, 259967),
     )
 
 
@@ -505,6 +545,16 @@ def pno_to_render_2() -> PnoToRender:
         risk_factor=np.nan,
         last_control_datetime_utc=pd.NaT,
     )
+
+
+def test_get_template():
+    template = get_template.run()
+    assert isinstance(template, Template)
+
+
+@pytest.fixture
+def template() -> dict:
+    return get_template.run()
 
 
 def test_extract_pnos_to_distribute(reset_test_data, extracted_pnos):
@@ -552,26 +602,28 @@ def test_to_pnos_to_render(extracted_pnos, species_names, fishing_gear_names):
 
 
 def test_pre_render_pno_1(
-    pno_to_render_1, species_names, fishing_gear_names, pre_rendered_pno_1_catch_onboard
+    pno_to_render_1, species_names, fishing_gear_names, pre_rendered_pno_1
 ):
     res = pre_render_pno.run(
         pno=pno_to_render_1,
         species_names=species_names,
         fishing_gear_names=fishing_gear_names,
     )
+    assert res == pre_rendered_pno_1
 
-    assert isinstance(res, PreRenderedPno)
-    assert res.id == 35
-    assert res.pno_types == ["Préavis type 1", "Préavis type 2"]
-    assert res.trip_gears == [
-        FishingGear(code="OTT", name="Chaluts jumeaux à panneaux", mesh=140),
-        FishingGear(code="OTT", name="Chaluts jumeaux à panneaux", mesh=120),
-    ]
-    assert res.trip_segments == [
-        FleetSegment(code="SHKE27", name="Merlu en zone 27"),
-        FleetSegment(code="SOTM", name="Chaluts pélagiques"),
-    ]
-    pd.testing.assert_frame_equal(res.catch_onboard, pre_rendered_pno_1_catch_onboard)
+
+# @patch("src.pipeline.flows.distribute_pnos.EMAIL_FONTS_LOCATION", "/somewhere")
+# @patch("src.pipeline.flows.distribute_pnos.CNSP_LOGO_PATH", "/somewhere")
+def test_render_pno_1(pre_rendered_pno_1, template):
+    res = render_pno.run(pno=pre_rendered_pno_1, template=template)
+
+    test_filepath = TEST_DATA_LOCATION / "emails/prior_notifications/pno_1.html"
+
+    ######################### Uncomment to replace test files #########################
+    with open(test_filepath, "w") as f:
+        f.write(res)
+    ###################################################################################
+    breakpoint()
 
 
 # def test_flow(reset_test_data):

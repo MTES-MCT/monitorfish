@@ -42,7 +42,7 @@ class PnoToRender:
     predicted_landing_datetime_utc: datetime
     trip_gears: List[dict]
     trip_segments: List[dict]
-    pno_types: List[str]
+    pno_types: List[dict]
     vessel_length: float
     mmsi: str
     risk_factor: float
@@ -88,3 +88,41 @@ class PreRenderedPno:
     mmsi: str
     risk_factor: float
     last_control_datetime_utc: datetime
+
+    def __eq__(self, other):
+        try:
+            pd.testing.assert_frame_equal(self.catch_onboard, other.catch_onboard)
+        except AssertionError:
+            return False
+
+        return (
+            (self.id == other.id)
+            & (self.operation_number == other.operation_number)
+            & (self.operation_datetime_utc == other.operation_datetime_utc)
+            & (self.operation_type == other.operation_type)
+            & (self.report_id == other.report_id)
+            & (self.report_datetime_utc == other.report_datetime_utc)
+            & (self.cfr == other.cfr)
+            & (self.ircs == other.ircs)
+            & (self.external_identification == other.external_identification)
+            & (self.vessel_name == other.vessel_name)
+            & (self.flag_state == other.flag_state)
+            & (self.purpose == other.purpose)
+            & (self.port_locode == other.port_locode)
+            & (self.port_name == other.port_name)
+            & (
+                self.predicted_arrival_datetime_utc
+                == other.predicted_arrival_datetime_utc
+            )
+            & (
+                self.predicted_landing_datetime_utc
+                == other.predicted_landing_datetime_utc
+            )
+            & (self.trip_gears == other.trip_gears)
+            & (self.trip_segments == other.trip_segments)
+            & (self.pno_types == other.pno_types)
+            & (self.vessel_length == other.vessel_length)
+            & (self.mmsi == other.mmsi)
+            & (self.risk_factor == other.risk_factor)
+            & (self.last_control_datetime_utc == other.last_control_datetime_utc)
+        )

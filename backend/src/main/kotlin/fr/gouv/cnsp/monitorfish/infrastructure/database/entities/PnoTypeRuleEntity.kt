@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
+import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PnoTypeRule
 import jakarta.persistence.*
 
@@ -39,7 +40,7 @@ data class PnoTypeRuleEntity(
         faoAreas = faoAreas,
         cgpmAreas = cgpmAreas,
         gears = gears,
-        flagStates = flagStates,
+        flagStates = flagStates.map { CountryCode.getByAlpha3Code(it) },
         minimumQuantityKg = minimumQuantityKg,
     )
 }

@@ -3,15 +3,16 @@
         "table": "manual_prior_notifications",
         "id": "report_id",
         "data": [
+            // - Vessel: POISSON PAS NET
             {
-                "report_id": "d2bd7d28-3130-4e3f-bf0d-5e919a5657be",
+                "report_id": "00000000-0000-4000-0000-000000000001",
                 "author_trigram": "ABC",
                 "cfr": "CFR112",
                 "did_not_fish_after_zero_notice": false,
                 "flag_state": "FRA",
                 "note": null,
                 "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
-                "trip_gears:jsonb": [{ "gear": "LNP", "mesh": 8, "dimensions": "50;200" }],
+                "trip_gears:jsonb": [{ "gear": "LNP" }],
                 "trip_segments:jsonb": [{ "segment": "NWW09", "segmentName": "Lignes" }],
                 "vessel_name": "POISSON PAS NET",
                 "value:jsonb": {
@@ -22,17 +23,120 @@
                             "species": "SOS"
                         }
                     ],
+                    "catchToLand": [
+                        {
+                            "weight": 72.0,
+                            "nbFish": null,
+                            "species": "SOS"
+                        }
+                    ],
                     "faoZone": "21.1.A",
                     "pnoTypes": [
                         {
-                            "pnoTypeName": "Préavis type D",
+                            "pnoTypeName": "Préavis type A",
                             "minimumNotificationPeriod": 4.0,
-                            "hasDesignatedPorts": true
+                            "hasDesignatedPorts": false
                         }
                     ],
                     "port": "FRVNE",
                     "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "purpose": "LAN",
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                }
+            },
+
+            // - Vessel: DOS FIN
+            // - Species: Bluefin tuna (BFT), Swordfish (SWO)
+            // - With risk factor
+            // - Under charter
+            // - With 2 reportings
+            // - Flag state: BEL
+            {
+                "report_id": "00000000-0000-4000-0000-000000000002",
+                "author_trigram": "ABC",
+                "cfr": "CFR115",
+                "did_not_fish_after_zero_notice": false,
+                "flag_state": "BEL",
+                "note": null,
+                "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "trip_gears:jsonb": [{ "gear": "TB" }, { "gear": "TBS" }],
+                "trip_segments:jsonb": [
+                    { "segment": "NWW03", "segmentName": "Chalut de fond en eau profonde" },
+                    { "segment": "NWW05", "segmentName": "Chalut à perche" }
+                ],
+                "vessel_name": "DOS FIN",
+                "value:jsonb": {
+                    "catchOnboard": [
+                        {
+                            "weight": 600.0,
+                            "nbFish": null,
+                            "species": "BFT"
+                        },
+                        {
+                            "weight": 300.0,
+                            "nbFish": 10,
+                            "species": "BF1"
+                        },
+                        {
+                            "weight": 200.0,
+                            "nbFish": 25,
+                            "species": "BF2"
+                        },
+                        {
+                            "weight": 100.0,
+                            "nbFish": 20,
+                            "species": "BF3"
+                        },
+                        {
+                            "weight": 400.0,
+                            "nbFish": 80,
+                            "species": "SWO"
+                        }
+                    ],
+                    "catchToLand": [
+                        {
+                            "weight": 600.0,
+                            "nbFish": null,
+                            "species": "BFT"
+                        },
+                        {
+                            "weight": 300.0,
+                            "nbFish": 10,
+                            "species": "BF1"
+                        },
+                        {
+                            "weight": 200.0,
+                            "nbFish": 25,
+                            "species": "BF2"
+                        },
+                        {
+                            "weight": 100.0,
+                            "nbFish": 20,
+                            "species": "BF3"
+                        },
+                        {
+                            "weight": 400.0,
+                            "nbFish": 80,
+                            "species": "SWO"
+                        }
+                    ],
+                    "faoZone": "21.1.B",
+                    "pnoTypes": [
+                        {
+                            "pnoTypeName": "Préavis type B",
+                            "minimumNotificationPeriod": 4.0,
+                            "hasDesignatedPorts": false
+                        },
+                        {
+                            "pnoTypeName": "Préavis type C",
+                            "minimumNotificationPeriod": 8.0,
+                            "hasDesignatedPorts": true
+                        }
+                    ],
+                    "port": "FRVNE",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '4 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
                     "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
                 }

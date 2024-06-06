@@ -4,7 +4,6 @@ CREATE TABLE public.manual_prior_notifications (
     -- Common columns with `logbook_reports`
 
     report_id VARCHAR(36) PRIMARY KEY DEFAULT gen_random_uuid(),
-    report_datetime_utc TIMESTAMP WITH TIME ZONE,
     cfr VARCHAR(12),
     vessel_name VARCHAR(100),
     flag_state VARCHAR(3),

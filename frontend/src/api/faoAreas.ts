@@ -15,13 +15,17 @@ export const faoAreasApi = monitorfishApi.injectEndpoints({
     computeVesselFaoAreas: builder.query<string[], ComputeVesselFaoAreasParams>({
       query: params =>
         `/fao_areas/compute?internalReferenceNumber=${params.internalReferenceNumber}&latitude=${
-          params.latitude || ''
-        }&longitude=${params.longitude || ''}&portLocode=${params.portLocode || ''}`
+          params.latitude ?? ''
+        }&longitude=${params.longitude ?? ''}&portLocode=${params.portLocode ?? ''}`
+    }),
+
+    getFaoAreas: builder.query<string[], void>({
+      query: () => '/fao_areas'
     })
   })
 })
 
-export const { useComputeVesselFaoAreasQuery } = faoAreasApi
+export const { useComputeVesselFaoAreasQuery, useGetFaoAreasQuery } = faoAreasApi
 
 /**
  * Get FAO areas

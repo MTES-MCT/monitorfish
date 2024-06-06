@@ -10,11 +10,11 @@ const VESSEL_SEARCH_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les navires
 const REPORTING_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les signalements de ce navire"
 
 function getVesselIdentityAsEmptyStringWhenNull(identity: VesselIdentity) {
-  const vesselId = identity.vesselId || ''
-  const internalReferenceNumber = identity.internalReferenceNumber || ''
-  const externalReferenceNumber = identity.externalReferenceNumber || ''
-  const ircs = identity.ircs || ''
-  const vesselIdentifier = identity.vesselIdentifier || ''
+  const vesselId = identity.vesselId ?? ''
+  const internalReferenceNumber = identity.internalReferenceNumber ?? ''
+  const externalReferenceNumber = identity.externalReferenceNumber ?? ''
+  const ircs = identity.ircs ?? ''
+  const vesselIdentifier = identity.vesselIdentifier ?? ''
 
   return { externalReferenceNumber, internalReferenceNumber, ircs, vesselId, vesselIdentifier }
 }
@@ -27,9 +27,9 @@ function getVesselIdentityAsEmptyStringWhenNull(identity: VesselIdentity) {
 async function getVesselFromAPI(identity: VesselIdentity, trackRequest: TrackRequest) {
   const { externalReferenceNumber, internalReferenceNumber, ircs, vesselId, vesselIdentifier } =
     getVesselIdentityAsEmptyStringWhenNull(identity)
-  const trackDepth = trackRequest.trackDepth || ''
-  const afterDateTime = trackRequest.afterDateTime?.toISOString() || ''
-  const beforeDateTime = trackRequest.beforeDateTime?.toISOString() || ''
+  const trackDepth = trackRequest.trackDepth ?? ''
+  const afterDateTime = trackRequest.afterDateTime?.toISOString() ?? ''
+  const beforeDateTime = trackRequest.beforeDateTime?.toISOString() ?? ''
 
   try {
     return await monitorfishApiKy
@@ -55,9 +55,9 @@ async function getVesselFromAPI(identity: VesselIdentity, trackRequest: TrackReq
 async function getVesselPositionsFromAPI(identity: VesselIdentity, trackRequest: TrackRequest) {
   const { externalReferenceNumber, internalReferenceNumber, ircs, vesselIdentifier } =
     getVesselIdentityAsEmptyStringWhenNull(identity)
-  const trackDepth = trackRequest.trackDepth || ''
-  const afterDateTime = trackRequest.afterDateTime?.toISOString() || ''
-  const beforeDateTime = trackRequest.beforeDateTime?.toISOString() || ''
+  const trackDepth = trackRequest.trackDepth ?? ''
+  const afterDateTime = trackRequest.afterDateTime?.toISOString() ?? ''
+  const beforeDateTime = trackRequest.beforeDateTime?.toISOString() ?? ''
 
   try {
     return await monitorfishApiKy

@@ -1,16 +1,21 @@
+import { useGetSpeciesQuery } from '@api/specy'
 import { useGetSpeciesAsOptions } from '@hooks/useGetSpeciesAsOptions'
 import { FormikNumberInput, Select, SingleTag } from '@mtes-mct/monitor-ui'
+import { assertNotNullish } from '@utils/assertNotNullish'
 import { useField } from 'formik'
 import { Fragment } from 'react/jsx-runtime'
 import styled from 'styled-components'
 
 import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES } from '../constants'
+import { getFishingsCatchesInitialValues } from '../utils'
 
 import type { PriorNotification } from '../../../PriorNotification.types'
 
+// TODO Is the species name really useful since the Backend fills it?
 export function FormikFishingCatchesMultiSelect() {
   const [input, , helper] = useField<PriorNotification.PriorNotificationDataFishingCatch[]>('fishingCatches')
   const { speciesAsOptions } = useGetSpeciesAsOptions()
+  const { data: speciesAndGroups } = useGetSpeciesQuery()
 
   const filteredSpeciesAsOptions = speciesAsOptions?.filter(specyOption =>
     input.value.every(fishingCatch => fishingCatch.specyCode !== specyOption.value)
@@ -22,44 +27,9 @@ export function FormikFishingCatchesMultiSelect() {
       return
     }
 
-    const nextFishingCatches = [
-      ...input.value,
-      ...(specyCode === 'BFT'
-        ? [
-            {
-              quantity: undefined,
-              specyCode: 'BFT',
-              specyName: specyOption.label,
-              weight: 0
-            },
-            {
-              quantity: 0,
-              specyCode: 'BF1',
-              specyName: specyOption.label,
-              weight: 0
-            },
-            {
-              quantity: 0,
-              specyCode: 'BF2',
-              specyName: specyOption.label,
-              weight: 0
-            },
-            {
-              quantity: 0,
-              specyCode: 'BF3',
-              specyName: specyOption.label,
-              weight: 0
-            }
-          ]
-        : [
-            {
-              quantity: undefined,
-              specyCode: specyOption.value,
-              specyName: specyOption.label,
-              weight: 0
-            }
-          ])
-    ]
+    const specyName = speciesAndGroups?.species.find(specy => specy.code === specyOption.value)?.name
+    assertNotNullish(specyName)
+    const nextFishingCatches = [...input.value, ...getFishingsCatchesInitialValues(specyOption.value, specyName)]
 
     helper.setValue(nextFishingCatches)
   }
@@ -108,7 +78,7 @@ export function FormikFishingCatchesMultiSelect() {
                   {/* BFT - Bluefin Tuna => + BF1, BF2, BF3 */}
                   {fishingCatch.specyCode === 'BFT' && (
                     <>
-                      {BLUEFIN_TUNA_EXTENDED_SPECY_CODES.forEach((extendedSpecyCode, extendedIndex) => (
+                      {BLUEFIN_TUNA_EXTENDED_SPECY_CODES.map((extendedSpecyCode, extendedIndex) => (
                         <Double key={extendedSpecyCode}>
                           <InputRow>
                             <FormikNumberInput
@@ -131,8 +101,8 @@ export function FormikFishingCatchesMultiSelect() {
                     </>
                   )}
 
-                  {/* SWC - Swordfish */}
-                  {fishingCatch.specyCode === 'SWC' && (
+                  {/* SWO - Swordfish */}
+                  {fishingCatch.specyCode === 'SWO' && (
                     <InputRow>
                       <FormikNumberInput
                         isLabelHidden

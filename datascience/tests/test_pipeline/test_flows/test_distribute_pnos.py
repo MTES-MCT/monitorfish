@@ -16,6 +16,7 @@ from src.pipeline.flows.distribute_pnos import (
     flow,
     get_template,
     pre_render_pno,
+    print_html_to_pdf,
     render_pno,
     to_pnos_to_render,
 )
@@ -475,7 +476,7 @@ def pre_rendered_pno_1_catch_onboard() -> pd.DataFrame:
                 "- (47E6), 27.8.a (47E3)",
                 "27.8.a",
             ],
-            "Qtés (kg)": ["1450", "955", "550", "300", "70"],
+            "Qtés (kg)": [1450, 955, 550, 300, 70],
             "Nb": ["-", 2, "-", 4, 2],
         }
     )
@@ -495,7 +496,7 @@ def pre_rendered_pno_1(pre_rendered_pno_1_catch_onboard) -> PreRenderedPno:
         external_identification="RO237719",
         vessel_name="DEVINER FIGURE CONSCIENCE",
         flag_state="FRA",
-        purpose="LAN",
+        purpose="Débarquement",
         catch_onboard=pre_rendered_pno_1_catch_onboard,
         port_locode="FRCQF",
         port_name="Somewhere over the rainbow",
@@ -591,12 +592,8 @@ def test_extract_fishing_gear_names(reset_test_data, fishing_gear_names):
     assert res == fishing_gear_names
 
 
-def test_to_pnos_to_render(extracted_pnos, species_names, fishing_gear_names):
-    res = to_pnos_to_render.run(
-        pnos=extracted_pnos,
-        species_names=species_names,
-        fishing_gear_names=fishing_gear_names,
-    )
+def test_to_pnos_to_render(extracted_pnos):
+    res = to_pnos_to_render.run(pnos=extracted_pnos)
     assert len(res) == 5
     assert isinstance(res[0], PnoToRender)
 
@@ -609,7 +606,7 @@ def test_pre_render_pno_1(
         species_names=species_names,
         fishing_gear_names=fishing_gear_names,
     )
-    assert res == pre_rendered_pno_1
+    PreRenderedPno.assertEqual(res, pre_rendered_pno_1)
 
 
 # @patch("src.pipeline.flows.distribute_pnos.EMAIL_FONTS_LOCATION", "/somewhere")
@@ -623,7 +620,21 @@ def test_render_pno_1(pre_rendered_pno_1, template):
     with open(test_filepath, "w") as f:
         f.write(res)
     ###################################################################################
-    breakpoint()
+
+
+def test_print_html_to_pdf():
+    test_filepath = TEST_DATA_LOCATION / "emails/prior_notifications/pno_1.html"
+
+    ######################### Uncomment to replace test files #########################
+    with open(test_filepath, "r") as f:
+        html = f.read()
+    pdf = print_html_to_pdf.run(html)
+
+    pdf_test_filepath = TEST_DATA_LOCATION / "emails/prior_notifications/pno_1.pdf"
+
+    ######################### Uncomment to replace test files #########################
+    with open(pdf_test_filepath, "wb") as f:
+        f.write(pdf)
 
 
 # def test_flow(reset_test_data):

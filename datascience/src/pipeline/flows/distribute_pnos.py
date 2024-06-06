@@ -5,6 +5,7 @@ from typing import List
 
 import numpy as np
 import pandas as pd
+import prefect
 import weasyprint
 from jinja2 import Environment, FileSystemLoader, Template, select_autoescape
 from prefect import Flow, Parameter, case, task, unmapped
@@ -19,8 +20,14 @@ from config import (
     STATE_FLAGS_ICONS_LOCATION,
 )
 from src.pipeline.entities.fleet_segments import FishingGear, FleetSegment
-from src.pipeline.entities.pnos import PnoCatch, PnoToRender, PreRenderedPno
+from src.pipeline.entities.pnos import (
+    PnoCatch,
+    PnoToRender,
+    PreRenderedPno,
+    ReturnToPortPurpose,
+)
 from src.pipeline.generic_tasks import extract
+from src.pipeline.helpers.emails import resize_pdf_to_A4
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.dates import get_utcnow, make_timedelta
 
@@ -73,6 +80,8 @@ def to_pnos_to_render(pnos: pd.DataFrame) -> List[PnoToRender]:
 def pre_render_pno(
     pno: PnoToRender, species_names: dict, fishing_gear_names: dict
 ) -> PreRenderedPno:
+    logger = prefect.context.get("logger")
+
     trip_gears = [
         FishingGear(
             code=g.get("gear"),
@@ -147,6 +156,13 @@ def pre_render_pno(
         }
     )
 
+    try:
+        purpose = ReturnToPortPurpose(pno.purpose).label()
+    except (ValueError, KeyError) as e:
+        error_message = str(e)
+        logger.error(f"Failed to interpret purpose code with error {error_message}.")
+        purpose = pno.purpose
+
     return PreRenderedPno(
         id=pno.id,
         operation_number=pno.operation_number,
@@ -159,7 +175,7 @@ def pre_render_pno(
         external_identification=pno.external_identification,
         vessel_name=pno.vessel_name,
         flag_state=pno.flag_state,
-        purpose=pno.purpose,
+        purpose=purpose,
         catch_onboard=sum_by_species,
         port_locode=pno.port_locode,
         port_name=pno.port_name,
@@ -196,7 +212,9 @@ def render_pno(pno: PreRenderedPno, template: Template) -> str:
     se_mer_logo_src = SE_MER_LOGO_PATH.as_uri()
     state_flags_icons = os.listdir(STATE_FLAGS_ICONS_LOCATION)
     if f"{pno.flag_state}.png" in state_flags_icons:
-        state_flag_icon_src = STATE_FLAGS_ICONS_LOCATION / Path(f"{pno.flag_state}.png")
+        state_flag_icon_src = (
+            STATE_FLAGS_ICONS_LOCATION / Path(f"{pno.flag_state}.png")
+        ).as_uri()
 
     risk_factor_thresholds = np.array([1.75, 2.5, 3.25])
     thresholds_exceeded = (pno.risk_factor >= risk_factor_thresholds).sum()
@@ -220,12 +238,12 @@ def render_pno(pno: PreRenderedPno, template: Template) -> str:
         operation_type=pno.operation_type,
         report_id=pno.report_id,
         report_datetime_utc=pno.report_datetime_utc.strftime(date_format),
-        cfr=pno.cfr,
-        ircs=pno.ircs,
-        external_identification=pno.external_identification,
+        cfr=pno.cfr or "",
+        ircs=pno.ircs or "",
+        external_identification=pno.external_identification or "",
         vessel_name=pno.vessel_name,
         purpose=pno.purpose,
-        catch_onboard=pno.catch_onboard.to_html(index=False),
+        catch_onboard=pno.catch_onboard.to_html(index=False, border=1, justify="left"),
         port_locode=pno.port_locode,
         port_name=pno.port_name,
         predicted_arrival_datetime_utc=pno.predicted_arrival_datetime_utc.strftime(
@@ -249,8 +267,10 @@ def render_pno(pno: PreRenderedPno, template: Template) -> str:
     return html
 
 
+@task(checkpoint=False)
 def print_html_to_pdf(html: str) -> bytes:
     pdf = weasyprint.HTML(string=html).write_pdf(optimize_size=("fonts", "images"))
+    pdf = resize_pdf_to_A4(pdf)
     return pdf
 
 

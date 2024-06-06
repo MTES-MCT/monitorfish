@@ -115,6 +115,7 @@ data class ManualPriorNotificationEntity(
                 operationType = LogbookOperationType.DAT,
                 reportDateTime = sentAt,
                 transmissionFormat = null,
+                tripGears = tripGears,
                 vesselName = vesselName,
             )
             // For pratical reasons `vessel` can't be `null`, so we temporarely set it to "Navire inconnu"

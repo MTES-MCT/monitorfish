@@ -28,17 +28,14 @@ class LogbookMessageUTests {
                 reportId = reportId,
                 referencedReportId = referenceReportId,
                 analyzedByRules = emptyList(),
-                createdAt = ZonedDateTime.now(),
                 integrationDateTime = ZonedDateTime.now(),
                 isEnriched = false,
-                isManuallyCreated = false,
                 message = message,
                 operationDateTime = ZonedDateTime.now(),
                 operationNumber = "FAKE_OPERATION_NUMBER_$reportId",
                 operationType = operationType,
                 reportDateTime = reportDateTime,
                 transmissionFormat = LogbookTransmissionFormat.ERS,
-                updatedAt = ZonedDateTime.now(),
             )
         }
     }

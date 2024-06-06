@@ -30,11 +30,9 @@ data class LogbookMessage(
     val software: String? = null,
 
     var acknowledgment: Acknowledgment? = null,
-    var createdAt: ZonedDateTime? = null,
     var isCorrectedByNewerMessage: Boolean = false,
     var isDeleted: Boolean = false,
     val isEnriched: Boolean = false,
-    val isManuallyCreated: Boolean,
     var isSentByFailoverSoftware: Boolean = false,
     val message: LogbookMessageValue? = null,
     val messageType: String? = null,
@@ -43,7 +41,6 @@ data class LogbookMessage(
     val reportDateTime: ZonedDateTime?,
     val tripGears: List<LogbookTripGear>? = emptyList(),
     val tripSegments: List<LogbookTripSegment>? = emptyList(),
-    val updatedAt: ZonedDateTime? = null,
 ) {
     private val logger = LoggerFactory.getLogger(LogbookMessage::class.java)
 

@@ -23,17 +23,14 @@ data class LogbookMessageDataOutput(
     val rawMessage: String?,
 
     val acknowledgment: Acknowledgment?,
-    val createdAt: ZonedDateTime?,
     val isCorrectedByNewerMessage: Boolean,
     val isDeleted: Boolean,
-    val isManuallyCreated: Boolean,
     val isSentByFailoverSoftware: Boolean,
     val message: LogbookMessageValue?,
     val messageType: String?,
     val operationType: LogbookOperationType,
     val tripGears: List<LogbookMessageGearDataOutput>?,
     val tripSegments: List<LogbookMessageTripSegmentDataOutput>?,
-    val updatedAt: ZonedDateTime?,
 ) {
     companion object {
         fun fromLogbookMessage(logbookMessage: LogbookMessage): LogbookMessageDataOutput {
@@ -61,17 +58,14 @@ data class LogbookMessageDataOutput(
                 rawMessage = logbookMessage.rawMessage,
 
                 acknowledgment = logbookMessage.acknowledgment,
-                createdAt = logbookMessage.createdAt,
                 isCorrectedByNewerMessage = logbookMessage.isCorrectedByNewerMessage,
                 isDeleted = logbookMessage.isDeleted,
-                isManuallyCreated = logbookMessage.isManuallyCreated,
                 isSentByFailoverSoftware = logbookMessage.isSentByFailoverSoftware,
                 message = logbookMessage.message,
                 messageType = logbookMessage.messageType,
                 operationType = logbookMessage.operationType,
                 tripGears = tripGears,
                 tripSegments = tripSegments,
-                updatedAt = logbookMessage.updatedAt,
             )
         }
     }

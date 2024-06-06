@@ -13,7 +13,6 @@ import org.hibernate.annotations.Type
 import org.hibernate.dialect.PostgreSQLEnumJdbcType
 import java.time.Instant
 import java.time.ZoneOffset.UTC
-import java.time.ZonedDateTime
 
 @Entity
 @Table(name = "logbook_reports")
@@ -76,12 +75,6 @@ data class LogbookReportEntity(
     @Type(JsonBinaryType::class)
     @Column(name = "trip_segments", nullable = true, columnDefinition = "jsonb")
     val tripSegments: String?,
-    @Column(name = "is_manually_created", nullable = false)
-    val isManuallyCreated: Boolean,
-    @Column(name = "created_at")
-    val createdAt: ZonedDateTime?,
-    @Column(name = "updated_at")
-    val updatedAt: ZonedDateTime?,
 ) {
     companion object {
         fun fromLogbookMessage(
@@ -105,16 +98,13 @@ data class LogbookReportEntity(
             software = logbookMessage.software,
             transmissionFormat = logbookMessage.transmissionFormat,
 
-            createdAt = logbookMessage.createdAt,
             isEnriched = logbookMessage.isEnriched,
-            isManuallyCreated = logbookMessage.isManuallyCreated,
             message = mapper.writeValueAsString(logbookMessage.message),
             messageType = logbookMessage.messageType,
             operationCountry = null,
             operationType = logbookMessage.operationType,
             tripGears = null,
             tripSegments = null,
-            updatedAt = logbookMessage.updatedAt,
         )
     }
 
@@ -138,38 +128,48 @@ data class LogbookReportEntity(
             tripNumber = tripNumber,
             flagState = flagState,
             imo = imo,
-            analyzedByRules = analyzedByRules ?: listOf(),
+            analyzedByRules = analyzedByRules ?: emptyList(),
             software = software,
             transmissionFormat = transmissionFormat,
 
-            createdAt = createdAt,
             isEnriched = isEnriched,
-            isManuallyCreated = isManuallyCreated,
             message = message,
             messageType = messageType,
             operationType = operationType,
             tripGears = tripGears,
             tripSegments = tripSegments,
-            updatedAt = updatedAt,
         )
     }
 
     fun toPriorNotification(mapper: ObjectMapper, relatedModels: List<LogbookReportEntity>): PriorNotification {
         val referenceLogbookMessage = toLogbookMessage(mapper)
-        val fingerprint = listOf(referenceLogbookMessage.id!!)
-            .plus(relatedModels.mapNotNull { it.id })
-            .sorted()
-            .joinToString(separator = ".")
-        val relatedLogbookMessages = relatedModels.map { it.toLogbookMessage(mapper) }
+        val relatedLogbookMessages = relatedModels
+            .map { it.toLogbookMessage(mapper) }
+            .sortedBy { it.operationDateTime }
         val enrichedLogbookMessageTyped = referenceLogbookMessage
             .toEnrichedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
-        // For practical reasons `vessel` can't be `null`, so we temporarily set it to "Navire inconnu"
+        val updatedAt = relatedLogbookMessages.lastOrNull()?.let { it.operationDateTime.toString() }
+            ?: operationDateTime.toString()
+        // For pratical reasons `vessel` can't be `null`, so we temporarely set it to "Navire inconnu"
         val vessel = UNKNOWN_VESSEL
 
         return PriorNotification(
-            fingerprint,
+            reportId = reportId,
+            authorTrigram = null,
+            createdAt = operationDateTime.toString(),
+            didNotFishAfterZeroNotice = false,
+            isManuallyCreated = false,
             logbookMessageTyped = enrichedLogbookMessageTyped,
+            note = null,
+            sentAt = enrichedLogbookMessageTyped.logbookMessage.reportDateTime?.toString(),
+            updatedAt = updatedAt,
             vessel = vessel,
+
+            // These props need to be calculated in the use case
+            port = null,
+            reportingCount = null,
+            seafront = null,
+            vesselRiskFactor = null,
         )
     }
 

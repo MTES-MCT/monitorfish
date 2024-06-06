@@ -8,14 +8,12 @@ import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.websocket.server.PathParam
 import kotlinx.coroutines.runBlocking
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.time.ZonedDateTime
 
 @RestController
@@ -24,6 +22,7 @@ import java.time.ZonedDateTime
 class VesselController(
     private val getLastPositions: GetLastPositions,
     private val getVessel: GetVessel,
+    private val getVesselById: GetVesselById,
     private val getVesselPositions: GetVesselPositions,
     private val getVesselVoyage: GetVesselVoyage,
     private val searchVessels: SearchVessels,
@@ -32,7 +31,6 @@ class VesselController(
     private val getVesselRiskFactor: GetVesselRiskFactor,
     private val getVesselLastTripNumbers: GetVesselLastTripNumbers,
 ) {
-
     @GetMapping("")
     @Operation(summary = "Get all vessels' last position")
     fun getVessels(): List<LastPositionDataOutput> {
@@ -43,6 +41,16 @@ class VesselController(
                 LastPositionDataOutput.fromLastPosition(position)
             }
         }
+    }
+
+    @GetMapping("/{vesselId}")
+    @Operation(summary = "Get a vessel by its ID")
+    fun getVesselById(
+        @PathParam("Vessel ID")
+        @PathVariable(name = "vesselId")
+        vesselId: Int,
+    ): VesselDataOutput {
+        return VesselDataOutput.fromVessel(getVesselById.execute(vesselId))
     }
 
     @GetMapping("/find")

@@ -1,21 +1,17 @@
-import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { priorNotificationApi } from '@features/PriorNotification/priorNotificationApi'
 import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
-import { Accent, Button } from '@mtes-mct/monitor-ui'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
 import { Formik } from 'formik'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
 
+import { Card } from './Card'
 import { FORM_VALIDATION_SCHEMA } from './constants'
-import { Form } from './Form'
-import { Header } from './Header'
-import { TagBar } from './TagBar'
 import { getInitialFormValues } from './utils'
 
 import type { FormValues } from './types'
@@ -29,6 +25,7 @@ export function PriorNotificationForm() {
     state => state.priorNotification.editedPriorNotificationReportId
   )
 
+  const [shouldValidateOnChange, setShouldValidateOnChange] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
 
   const close = () => {
@@ -115,9 +112,9 @@ export function PriorNotificationForm() {
       <Wrapper>
         <Background onClick={close} />
 
-        <Card>
+        <LoadingCard>
           <LoadingSpinnerWall />
-        </Card>
+        </LoadingCard>
       </Wrapper>
     )
   }
@@ -129,40 +126,15 @@ export function PriorNotificationForm() {
       <Formik
         initialValues={formInitialValuesRef.current}
         onSubmit={submit}
-        validateOnChange={false}
+        validateOnChange={shouldValidateOnChange}
         validationSchema={FORM_VALIDATION_SCHEMA}
       >
-        {({ errors, submitForm }) => (
-          <Card>
-            <FrontendErrorBoundary>
-              <Header onClose={close} />
-
-              <Body>
-                <pre style={{ minHeight: 240 }}>{JSON.stringify(errors, null, 2)}</pre>
-
-                <TagBar />
-
-                <p>
-                  Veuillez renseigner les champs du formulaire pour définir le type de préavis et son statut, ainsi que
-                  le segment de flotte et la note de risque du navire.
-                </p>
-
-                <hr />
-
-                <Form />
-              </Body>
-
-              <Footer>
-                <Button accent={Accent.TERTIARY} onClick={close}>
-                  Fermer
-                </Button>
-                <Button accent={Accent.PRIMARY} onClick={submitForm}>
-                  {!editedPriorNotificationReportId ? 'Créer le préavis' : 'Enregistrer'}
-                </Button>
-              </Footer>
-            </FrontendErrorBoundary>
-          </Card>
-        )}
+        <Card
+          isValidatingOnChange={shouldValidateOnChange}
+          onClose={close}
+          onSubmit={() => setShouldValidateOnChange(true)}
+          reportId={editedPriorNotificationReportId}
+        />
       </Formik>
     </Wrapper>
   )
@@ -185,44 +157,10 @@ const Background = styled.div`
   flex-grow: 1;
 `
 
-const Card = styled.div`
+const LoadingCard = styled.div`
   background-color: ${p => p.theme.color.white};
   display: flex;
   flex-direction: column;
   height: 100%;
   width: 560px;
-`
-
-const Body = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow-y: auto;
-  padding: 32px;
-
-  > p:first-child {
-    color: ${p => p.theme.color.slateGray};
-    font-style: italic;
-  }
-
-  > hr {
-    margin: 24px 0 0;
-  }
-
-  > .Element-Field,
-  > .Element-Fieldset,
-  > .FieldGroup {
-    margin-top: 24px;
-  }
-`
-
-const Footer = styled.div`
-  border-top: 1px solid ${p => p.theme.color.lightGray};
-  display: flex;
-  justify-content: flex-end;
-  padding: 16px 32px;
-
-  > .Element-Button:not(:first-child) {
-    margin-left: 16px;
-  }
 `

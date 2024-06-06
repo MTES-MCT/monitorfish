@@ -1,5 +1,6 @@
 from dataclasses import InitVar, dataclass, field
 from datetime import datetime
+from enum import Enum
 from typing import List
 
 import pandas as pd
@@ -89,40 +90,93 @@ class PreRenderedPno:
     risk_factor: float
     last_control_datetime_utc: datetime
 
-    def __eq__(self, other):
-        try:
-            pd.testing.assert_frame_equal(self.catch_onboard, other.catch_onboard)
-        except AssertionError:
-            return False
+    @staticmethod
+    def assertEqual(left: object, right: object):
+        if not isinstance(left, PreRenderedPno):
+            raise AssertionError("`left` is not a `PreRenderedPno`")
 
-        return (
-            (self.id == other.id)
-            & (self.operation_number == other.operation_number)
-            & (self.operation_datetime_utc == other.operation_datetime_utc)
-            & (self.operation_type == other.operation_type)
-            & (self.report_id == other.report_id)
-            & (self.report_datetime_utc == other.report_datetime_utc)
-            & (self.cfr == other.cfr)
-            & (self.ircs == other.ircs)
-            & (self.external_identification == other.external_identification)
-            & (self.vessel_name == other.vessel_name)
-            & (self.flag_state == other.flag_state)
-            & (self.purpose == other.purpose)
-            & (self.port_locode == other.port_locode)
-            & (self.port_name == other.port_name)
-            & (
-                self.predicted_arrival_datetime_utc
-                == other.predicted_arrival_datetime_utc
+        if not isinstance(right, PreRenderedPno):
+            raise AssertionError("`right` is not a `PreRenderedPno`")
+
+        try:
+            pd.testing.assert_frame_equal(left.catch_onboard, right.catch_onboard)
+        except AssertionError as e:
+            raise AssertionError(
+                (
+                    "`left` and `right` are not equal. Their `catch_onboard` "
+                    f"attributes are different : {str(e)}"
+                )
             )
-            & (
-                self.predicted_landing_datetime_utc
-                == other.predicted_landing_datetime_utc
-            )
-            & (self.trip_gears == other.trip_gears)
-            & (self.trip_segments == other.trip_segments)
-            & (self.pno_types == other.pno_types)
-            & (self.vessel_length == other.vessel_length)
-            & (self.mmsi == other.mmsi)
-            & (self.risk_factor == other.risk_factor)
-            & (self.last_control_datetime_utc == other.last_control_datetime_utc)
-        )
+
+        attributes_to_check = [k for k in left.__dict__.keys() if k != "catch_onboard"]
+
+        for attr in attributes_to_check:
+            if getattr(left, attr) != getattr(right, attr):
+                raise AssertionError(
+                    (
+                        f"`self` and `other` are not equal. Their `{attr}` "
+                        "attributes are different : "
+                        f"{getattr(left, attr)} != {getattr(right, attr)}"
+                    )
+                )
+
+        #     self.id == other.id
+        #     self.operation_number == other.operation_number
+        #     self.operation_datetime_utc == other.operation_datetime_utc
+        #     self.operation_type == other.operation_type
+        #     self.report_id == other.report_id
+        #     self.report_datetime_utc == other.report_datetime_utc
+        #     self.cfr == other.cfr
+        #     self.ircs == other.ircs
+        #     self.external_identification == other.external_identification
+        #     self.vessel_name == other.vessel_name
+        #     self.flag_state == other.flag_state
+        #     self.purpose == other.purpose
+        #     self.port_locode == other.port_locode
+        #     self.port_name == other.port_name
+        #     (
+        #         self.predicted_arrival_datetime_utc
+        #         == other.predicted_arrival_datetime_utc
+        #     )
+        #     (
+        #         self.predicted_landing_datetime_utc
+        #         == other.predicted_landing_datetime_utc
+        #     )
+        #     self.trip_gears == other.trip_gears
+        #     self.trip_segments == other.trip_segments
+        #     self.pno_types == other.pno_types
+        #     self.vessel_length == other.vessel_length
+        #     self.mmsi == other.mmsi
+        #     self.risk_factor == other.risk_factor
+        #     self.last_control_datetime_utc == other.last_control_datetime_utc
+        # ]
+
+
+class ReturnToPortPurpose(Enum):
+    SHE = "SHE"
+    OTH = "OTH"
+    LAN = "LAN"
+    REF = "REF"
+    REP = "REP"
+    RES = "RES"
+    ECY = "ECY"
+    TRA = "TRA"
+    SCR = "SCR"
+    GRD = "GRD"
+    ACS = "ACS"
+
+    def label(self):
+        labels = {
+            "SHE": "Mise à l’abri",
+            "OTH": "Autre",
+            "LAN": "Débarquement",
+            "REF": "Ravitaillement",
+            "REP": "Réparation",
+            "RES": "Repos",
+            "ECY": "Urgence",
+            "TRA": "Transbordement",
+            "SCR": "Retour pour Recherche Scientifique",
+            "GRD": "Immobilisation et convocation par les autorités",
+            "ACS": "Accès auxFresizeservices",
+        }
+        return labels[self.name]

@@ -28,45 +28,112 @@ src: url(file:///home/vincentchery/Documents/repos/monitorfish/datascience/src/p
 font-weight: 500;
 }
 
-@page {
-    margin: 0;
-    size: 21cm 29.7cm;
+@font-face {
+font-family: Marianne;
+src: url(file:///home/vincentchery/Documents/repos/monitorfish/datascience/src/pipeline/emails/fonts/Marianne/Marianne-Regular_Italic.woff2) format('woff2');
+font-style: italic;
+font-weight: normal;  
 }
 
+@font-face {
+font-family: Marianne;
+src: url(file:///home/vincentchery/Documents/repos/monitorfish/datascience/src/pipeline/emails/fonts/Marianne/Marianne-Bold_Italic.woff2) format('woff2');
+font-style: italic;
+font-weight: 700;
+}
+
+@font-face {
+font-family: Marianne;
+src: url(file:///home/vincentchery/Documents/repos/monitorfish/datascience/src/pipeline/emails/fonts/Marianne/Marianne-Light_Italic.woff2) format('woff2');
+font-style: italic;
+font-weight: lighter;
+}
+
+@font-face {
+font-family: Marianne;
+src: url(file:///home/vincentchery/Documents/repos/monitorfish/datascience/src/pipeline/emails/fonts/Marianne/Marianne-Medium_Italic.woff2) format('woff2');
+font-style: italic;
+font-weight: 500;
+}
+    
+@page {
+    margin: 0;
+    size: 15.75cm 22.275cm;
+}
+
+:root {
+    --white: #FFFFFF;
+    --gainsboro: #E5E5EB;
+    --light-gray: #CCCFD6;
+    --slate-gray: #707785;
+    --gunmetal: #282F3E;
+    --maximum-red: #E1000F;
+    --maximum-red-15: #FBD9DB;
+    --copper-red: #CF6A4E;
+    --medium-sea-green: #29B361;
+}
+  
 html {
-    margin: 80px 100px 36px 100px;
-    font: 15px Marianne, sans-serif;
-    line-height: 1.4;
-    color: #222;
+    margin: 0;
+    padding: 0px;
+    font: 11px Marianne, sans-serif;
+    line-height: 15px;
+    color: var(--gunmetal);
 }
 
 body {
-    max-width: 900px;
+    width: 596px;
     margin: 0 auto;
 }
 
+
+body > * {
+    padding: 0 64px 0 64px;
+}
+
 header {
-    margin-bottom: 40px;
+    padding-top: 40px;
+    padding-bottom: 25px;
+    background-color: var(--light-gray);
+    font-size: 10px;
+    line-height: 14px;
 }
 
-footer {
-    margin-top: 40px;
-    color: #666
+header > p {
+    margin: 0;
 }
 
-img {
-    width: 120px;
+h1 {
+    margin-top: 0px;
+    margin-bottom: 8px;
+    font-size: 15px;
+    line-height: 21px;
+    text-transform: uppercase;
+}
+
+h1 > p {
+    margin: 0;
+}
+
+ul {
+    margin-top: 0;
+    padding-right: 16px;
 }
 
 #state_flag_icon {
     margin-left: 5px;
-    width: 34px;
+    height: 14px;
+    width: 20px;
 }
 
 #vessel_length {
-    margin-top: 0px;
     font-style: italic;
 }
+
+#risk_factor {
+    margin-top: 9px;
+}
+
 
 #vessel_ids_list {
     padding: 0;
@@ -79,6 +146,90 @@ img {
     list-style-type: none;
     margin-right: 15px;
 }
+
+main {
+    margin-bottom: 39px;
+}
+
+h2 {
+    margin-top: 24px;
+    margin-bottom: 8px;
+    font-size: 11px;
+}
+
+hr {
+    border: 1px solid;
+    color: var(--light-gray);
+}
+
+.data-label {
+    color: var(--slate-gray);
+    padding-right: 16px;
+}    
+
+
+tr {
+    text-align: left;
+}
+
+
+.dataframe {
+    line-height: 22px;
+    border-color: var(--light-gray);
+}
+
+.dataframe, .dataframe th, .dataframe td {
+    border: 1px solid;
+    border-collapse: collapse;
+    border-color: var(--light-gray);
+    padding-left: 8px;
+}
+
+.dataframe th {
+    background-color: var(--gainsboro);
+    font-weight: normal;
+}
+
+.dataframe tr {
+    font-weight: bold;
+}
+
+.dataframe th:nth-child(1) {
+    width: 184px;
+}
+
+.dataframe th:nth-child(2) {
+    width: 184px;
+}
+
+.dataframe th:nth-child(3) {
+    width: 64px;
+}
+
+.dataframe th:nth-child(4) {
+    width: 39px;
+}
+
+footer {
+    color: var(--slate-gray);
+    line-height: 11x;;
+}
+
+footer > p {
+    margin: 0;
+}
+
+#logos {
+    margin-top: 16px;
+}
+
+#logo_cnsp {
+    width: 80px;
+}
+#logo_se_mer {
+    margin-left: 16px;
+    width: 127px;
+}
         </style>
     </head>
 
@@ -86,9 +237,11 @@ img {
 
         <header>
         <h1>
-            PREAVIS - LAN
-            <br>
-            DEVINER FIGURE CONSCIENCE <img id="state_flag_icon", src="/home/vincentchery/Documents/repos/monitorfish/datascience/src/pipeline/emails/images/flags/FRA.png" alt="Logo CNSP">
+            <p>PREAVIS - Débarquement</p>
+            <p>
+                DEVINER FIGURE CONSCIENCE
+                <img id="state_flag_icon", src="file:///home/vincentchery/Documents/repos/monitorfish/datascience/src/pipeline/emails/images/flags/FRA.png" alt="Logo CNSP">
+            </p>
         </h1>
         <ul id="vessel_ids_list">
             <li>CFR - ABC000542519</li>
@@ -97,7 +250,7 @@ img {
             <li>Call Sign - FQ7058</li>
         </ul>
         <p id="vessel_length">Taille du navire 13.4 m</p>
-        <p><strong>Note de risque moyenne <span id="risk_factor">2.1</span></strong></p>
+        <p id="risk_factor"><strong>Note de risque moyenne <span id="risk_factor">2.1</span></strong></p>
 
         </header>
 
@@ -107,13 +260,13 @@ img {
                 <h2>INFOS DU PRÉAVIS</h2>
                 <hr/>
                 <table>
-                    <tr><td>Préavis envoyé</td><td><strong>le 05/05/2024 à 08h11 UTC</strong></td></tr>
-                    <tr><td>Arrivée estimée</td><td><strong>le 06/05/2020 à 11h41 UTC</strong></td></tr>
-                    <tr><td>Débarque prévue</td><td><strong>le 06/05/2020 à 16h40 UTC</strong></td></tr>
+                    <tr><td class="data-label">Préavis envoyé</td><td><strong>le 05/05/2024 à 08h11 UTC</strong></td></tr>
+                    <tr><td class="data-label">Arrivée estimée</td><td><strong>le 06/05/2020 à 11h41 UTC</strong></td></tr>
+                    <tr><td class="data-label">Débarque prévue</td><td><strong>le 06/05/2020 à 16h40 UTC</strong></td></tr>
                 </table>
                 <table>
-                    <tr><td>Port de débarque</td><td><strong>Somewhere over the rainbow (FRCQF)</strong></td></tr>
-                    <tr><td>Type(s) de préavis</td><td><strong>Préavis type 1, Préavis type 2</strong></td></tr>
+                    <tr><td class="data-label">Port de débarque</td><td><strong>Somewhere over the rainbow (FRCQF)</strong></td></tr>
+                    <tr><td class="data-label">Type(s) de préavis</td><td><strong>Préavis type 1, Préavis type 2</strong></td></tr>
                 </table>            
             </section>
 
@@ -121,9 +274,9 @@ img {
                 <h2>INFOS POUR CONTRÔLE</h2>
                 <hr/>
                 <table>
-                    <tr><td>Segment(s) de flotte</td><td><strong>SHKE27 - Merlu en zone 27<br>SOTM - Chaluts pélagiques</strong></td></tr>
-                    <tr><td>Date du dernier contrôle</td><td><strong>03/06/2023 à 09h13 UTC</strong></td></tr>
-                    <tr><td>Résultat du contrôle</td><td><strong>None</strong></td></tr>
+                    <tr><td class="data-label">Segment(s) de flotte</td><td><strong>SHKE27 - Merlu en zone 27<br>SOTM - Chaluts pélagiques</strong></td></tr>
+                    <tr><td class="data-label">Date du dernier contrôle</td><td><strong>03/06/2023 à 09h13 UTC</strong></td></tr>
+                    <tr><td class="data-label">Résultat du contrôle</td><td><strong>None</strong></td></tr>
                 </table>     
             </section>
 
@@ -131,12 +284,12 @@ img {
                 <h2>ACTIVITÉ DU NAVIRE</h2>
                 <hr/>
                 <table>
-                    <tr><td>Engin(s) utilisé(s)</td><td><strong>Chaluts jumeaux à panneaux (OTT) - Maillage 140 mm<br>Chaluts jumeaux à panneaux (OTT) - Maillage 120 mm</strong></td></tr>
+                    <tr><td class="data-label">Engin(s) utilisé(s)</td><td><strong>Chaluts jumeaux à panneaux (OTT) - Maillage 140 mm<br>Chaluts jumeaux à panneaux (OTT) - Maillage 120 mm</strong></td></tr>
                 </table>
-                <p>Espèces à bord par zone de pêche <em>(tous les poids sont vifs)</em> :</p>
+                <p class="data-label">Espèces à bord par zone de pêche <em>(tous les poids sont vifs)</em> :</p>
                 <table border="1" class="dataframe">
   <thead>
-    <tr style="text-align: right;">
+    <tr style="text-align: left;">
       <th>Espèces</th>
       <th>Zones de pêche</th>
       <th>Qtés (kg)</th>
@@ -186,7 +339,7 @@ img {
             <p>40 avenue Louis Bougo</p>
             <p>56410 Étel</p>
             <p>(0)2 97 29 34 27</p>
-            <table>
+            <table id="logos">
                 <tr>
                     <td>
                        <img id="logo_cnsp", src="file:///home/vincentchery/Documents/repos/monitorfish/datascience/src/pipeline/emails/images/logo_cnsp.jpg" alt="Logo CNSP">

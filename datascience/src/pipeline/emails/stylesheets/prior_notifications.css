@@ -22,45 +22,112 @@ src: url({{ fonts_directory }}/Marianne/Marianne-Medium.woff2) format('woff2');
 font-weight: 500;
 }
 
-@page {
-    margin: 0;
-    size: 21cm 29.7cm;
+@font-face {
+font-family: Marianne;
+src: url({{ fonts_directory }}/Marianne/Marianne-Regular_Italic.woff2) format('woff2');
+font-style: italic;
+font-weight: normal;  
 }
 
+@font-face {
+font-family: Marianne;
+src: url({{ fonts_directory }}/Marianne/Marianne-Bold_Italic.woff2) format('woff2');
+font-style: italic;
+font-weight: 700;
+}
+
+@font-face {
+font-family: Marianne;
+src: url({{ fonts_directory }}/Marianne/Marianne-Light_Italic.woff2) format('woff2');
+font-style: italic;
+font-weight: lighter;
+}
+
+@font-face {
+font-family: Marianne;
+src: url({{ fonts_directory }}/Marianne/Marianne-Medium_Italic.woff2) format('woff2');
+font-style: italic;
+font-weight: 500;
+}
+    
+@page {
+    margin: 0;
+    size: 15.75cm 22.275cm;
+}
+
+:root {
+    --white: #FFFFFF;
+    --gainsboro: #E5E5EB;
+    --light-gray: #CCCFD6;
+    --slate-gray: #707785;
+    --gunmetal: #282F3E;
+    --maximum-red: #E1000F;
+    --maximum-red-15: #FBD9DB;
+    --copper-red: #CF6A4E;
+    --medium-sea-green: #29B361;
+}
+  
 html {
-    margin: 80px 100px 36px 100px;
-    font: 15px Marianne, sans-serif;
-    line-height: 1.4;
-    color: #222;
+    margin: 0;
+    padding: 0px;
+    font: 11px Marianne, sans-serif;
+    line-height: 15px;
+    color: var(--gunmetal);
 }
 
 body {
-    max-width: 900px;
+    width: 596px;
     margin: 0 auto;
 }
 
+
+body > * {
+    padding: 0 64px 0 64px;
+}
+
 header {
-    margin-bottom: 40px;
+    padding-top: 40px;
+    padding-bottom: 25px;
+    background-color: var(--light-gray);
+    font-size: 10px;
+    line-height: 14px;
 }
 
-footer {
-    margin-top: 40px;
-    color: #666
+header > p {
+    margin: 0;
 }
 
-img {
-    width: 120px;
+h1 {
+    margin-top: 0px;
+    margin-bottom: 8px;
+    font-size: 15px;
+    line-height: 21px;
+    text-transform: uppercase;
+}
+
+h1 > p {
+    margin: 0;
+}
+
+ul {
+    margin-top: 0;
+    padding-right: 16px;
 }
 
 #state_flag_icon {
     margin-left: 5px;
-    width: 34px;
+    height: 14px;
+    width: 20px;
 }
 
 #vessel_length {
-    margin-top: 0px;
     font-style: italic;
 }
+
+#risk_factor {
+    margin-top: 9px;
+}
+
 
 #vessel_ids_list {
     padding: 0;
@@ -72,4 +139,88 @@ img {
     font-style: italic;
     list-style-type: none;
     margin-right: 15px;
+}
+
+main {
+    margin-bottom: 39px;
+}
+
+h2 {
+    margin-top: 24px;
+    margin-bottom: 8px;
+    font-size: 11px;
+}
+
+hr {
+    border: 1px solid;
+    color: var(--light-gray);
+}
+
+.data-label {
+    color: var(--slate-gray);
+    padding-right: 16px;
+}    
+
+
+tr {
+    text-align: left;
+}
+
+
+.dataframe {
+    line-height: 22px;
+    border-color: var(--light-gray);
+}
+
+.dataframe, .dataframe th, .dataframe td {
+    border: 1px solid;
+    border-collapse: collapse;
+    border-color: var(--light-gray);
+    padding-left: 8px;
+}
+
+.dataframe th {
+    background-color: var(--gainsboro);
+    font-weight: normal;
+}
+
+.dataframe tr {
+    font-weight: bold;
+}
+
+.dataframe th:nth-child(1) {
+    width: 184px;
+}
+
+.dataframe th:nth-child(2) {
+    width: 184px;
+}
+
+.dataframe th:nth-child(3) {
+    width: 64px;
+}
+
+.dataframe th:nth-child(4) {
+    width: 39px;
+}
+
+footer {
+    color: var(--slate-gray);
+    line-height: 11x;;
+}
+
+footer > p {
+    margin: 0;
+}
+
+#logos {
+    margin-top: 16px;
+}
+
+#logo_cnsp {
+    width: 80px;
+}
+#logo_se_mer {
+    margin-left: 16px;
+    width: 127px;
 }

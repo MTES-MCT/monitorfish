@@ -2,9 +2,9 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.filters.LogbookReportFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
 import fr.gouv.cnsp.monitorfish.domain.exceptions.EntityConversionException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
@@ -30,7 +30,7 @@ class JpaLogbookReportRepository(
     private val logger = LoggerFactory.getLogger(JpaLogbookReportRepository::class.java)
     private val postgresChunkSize = 5000
 
-    override fun findAllPriorNotifications(filter: LogbookReportFilter): List<PriorNotification> {
+    override fun findAllPriorNotifications(filter: PriorNotificationsFilter): List<PriorNotification> {
         val allLogbookReportModels = dbERSRepository.findAllEnrichedPnoReferencesAndRelatedOperations(
             flagStates = filter.flagStates ?: emptyList(),
             hasOneOrMoreReportings = filter.hasOneOrMoreReportings,
@@ -62,12 +62,12 @@ class JpaLogbookReportRepository(
             }
     }
 
-    override fun findPriorNotificationByReportId(reportId: String): PriorNotification {
+    override fun findPriorNotificationByReportId(reportId: String): PriorNotification? {
         val allLogbookReportModels = dbERSRepository.findEnrichedPnoReferenceAndRelatedOperationsByReportId(
             reportId,
         )
         if (allLogbookReportModels.isEmpty()) {
-            throw NoERSMessagesFound("No logbook report found for the given reportId: $reportId.")
+            return null
         }
 
         try {

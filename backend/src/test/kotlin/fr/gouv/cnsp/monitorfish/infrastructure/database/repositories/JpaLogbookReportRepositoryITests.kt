@@ -6,8 +6,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTypeMappin
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookRawMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.filters.LogbookReportFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LogbookReportEntity
@@ -21,6 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.cache.CacheManager
 import org.springframework.context.annotation.Import
 import org.springframework.transaction.annotation.Transactional
+import java.time.Instant
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 import java.util.*
@@ -610,7 +611,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports from ESP & FRA vessels`() {
         // Given
-        val filter = LogbookReportFilter(
+        val filter = PriorNotificationsFilter(
             flagStates = listOf("ESP", "FRA"),
             willArriveAfter = "2000-01-01T00:00:00Z",
             willArriveBefore = "2100-01-01T00:00:00Z",
@@ -636,7 +637,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val expectedLogbookReportIdsWithOneOrMoreReportings = listOf(102L)
 
         // Given
-        val firstFilter = LogbookReportFilter(
+        val firstFilter = PriorNotificationsFilter(
             hasOneOrMoreReportings = true,
             willArriveAfter = "2000-01-01T00:00:00Z",
             willArriveBefore = "2100-01-01T00:00:00Z",
@@ -654,7 +655,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         ).isTrue()
 
         // Given
-        val secondFilter = LogbookReportFilter(
+        val secondFilter = PriorNotificationsFilter(
             hasOneOrMoreReportings = false,
             willArriveAfter = "2000-01-01T00:00:00Z",
             willArriveBefore = "2100-01-01T00:00:00Z",
@@ -677,7 +678,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports for less or more than 12 meters long vessels`() {
         // Given
-        val firstFilter = LogbookReportFilter(
+        val firstFilter = PriorNotificationsFilter(
             isLessThanTwelveMetersVessel = true,
             willArriveAfter = "2000-01-01T00:00:00Z",
             willArriveBefore = "2100-01-01T00:00:00Z",
@@ -697,7 +698,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(firstResultVessels.all { it.length!! < 12 }).isTrue()
 
         // Given
-        val secondFilter = LogbookReportFilter(
+        val secondFilter = PriorNotificationsFilter(
             isLessThanTwelveMetersVessel = false,
             willArriveAfter = "2000-01-01T00:00:00Z",
             willArriveBefore = "2100-01-01T00:00:00Z",
@@ -721,7 +722,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports controlled after or before January 1st, 2024`() {
         // Given
-        val firstFilter = LogbookReportFilter(
+        val firstFilter = PriorNotificationsFilter(
             lastControlledAfter = "2024-01-01T00:00:00Z",
             willArriveAfter = "2000-01-01T00:00:00Z",
             willArriveBefore = "2100-01-01T00:00:00Z",
@@ -745,7 +746,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         ).isTrue()
 
         // Given
-        val secondFilter = LogbookReportFilter(
+        val secondFilter = PriorNotificationsFilter(
             lastControlledBefore = "2024-01-01T00:00:00Z",
             willArriveAfter = "2000-01-01T00:00:00Z",
             willArriveBefore = "2100-01-01T00:00:00Z",
@@ -773,7 +774,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports for FRSML & FRVNE ports`() {
         // Given
-        val filter = LogbookReportFilter(
+        val filter = PriorNotificationsFilter(
             portLocodes = listOf("FRSML", "FRVNE"),
             willArriveAfter = "2000-01-01T00:00:00Z",
             willArriveBefore = "2100-01-01T00:00:00Z",
@@ -795,7 +796,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports for PHENOMENE vessel`() {
         // Given
-        val firstFilter = LogbookReportFilter(
+        val firstFilter = PriorNotificationsFilter(
             searchQuery = "pheno",
             willArriveAfter = "2000-01-01T00:00:00Z",
             willArriveBefore = "2100-01-01T00:00:00Z",
@@ -815,7 +816,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(firstResultVessels.all { it.vesselName == "PHENOMENE" }).isTrue()
 
         // Given
-        val secondFilter = LogbookReportFilter(
+        val secondFilter = PriorNotificationsFilter(
             searchQuery = "hénO",
             willArriveAfter = "2000-01-01T00:00:00Z",
             willArriveBefore = "2100-01-01T00:00:00Z",
@@ -839,7 +840,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports for COD & HKE species`() {
         // Given
-        val filter = LogbookReportFilter(
+        val filter = PriorNotificationsFilter(
             specyCodes = listOf("COD", "HKE"),
             willArriveAfter = "2000-01-01T00:00:00Z",
             willArriveBefore = "2100-01-01T00:00:00Z",
@@ -862,7 +863,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports for Préavis type A & Préavis type C types`() {
         // Given
-        val filter = LogbookReportFilter(
+        val filter = PriorNotificationsFilter(
             priorNotificationTypes = listOf("Préavis type A", "Préavis type C"),
             willArriveAfter = "2000-01-01T00:00:00Z",
             willArriveBefore = "2100-01-01T00:00:00Z",
@@ -885,7 +886,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports for SWW06 & NWW03 segments`() {
         // Given
-        val filter = LogbookReportFilter(
+        val filter = PriorNotificationsFilter(
             tripSegmentCodes = listOf("SWW06", "NWW03"),
             willArriveAfter = "2000-01-01T00:00:00Z",
             willArriveBefore = "2100-01-01T00:00:00Z",
@@ -912,7 +913,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports for OTT & TB gears`() {
         // Given
-        val filter = LogbookReportFilter(
+        val filter = PriorNotificationsFilter(
             tripGearCodes = listOf("OTT", "TB"),
             willArriveAfter = "2000-01-01T00:00:00Z",
             willArriveBefore = "2100-01-01T00:00:00Z",
@@ -935,7 +936,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports for vessels arriving after or before January 1st, 2024`() {
         // Given
-        val firstFilter = LogbookReportFilter(
+        val firstFilter = PriorNotificationsFilter(
             willArriveAfter = "2024-01-01T00:00:00Z",
             willArriveBefore = "2100-01-01T00:00:00Z",
         )
@@ -953,7 +954,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         ).isTrue()
 
         // Given
-        val secondFilter = LogbookReportFilter(
+        val secondFilter = PriorNotificationsFilter(
             willArriveAfter = "2000-01-01T00:00:00Z",
             willArriveBefore = "2024-01-01T00:00:00Z",
         )
@@ -975,7 +976,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllPriorNotifications Should return the expected PNO logbook reports with multiple filters`() {
         // Given
-        val filter = LogbookReportFilter(
+        val filter = PriorNotificationsFilter(
             priorNotificationTypes = listOf("Préavis type A", "Préavis type C"),
             tripGearCodes = listOf("OTT", "TB"),
             willArriveAfter = "2024-01-01T00:00:00Z",
@@ -1143,18 +1144,16 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
                 reportId = reportId,
                 referencedReportId = referenceReportId,
                 analyzedByRules = null,
-                createdAt = ZonedDateTime.now(),
                 externalReferenceNumber = null,
                 flagState = null,
-                integrationDateTime = ZonedDateTime.now().toInstant(),
+                integrationDateTime = Instant.now(),
                 internalReferenceNumber = null,
                 imo = null,
-                isManuallyCreated = false,
                 ircs = null,
                 message = null,
                 messageType = null,
                 operationCountry = null,
-                operationDateTime = ZonedDateTime.now().toInstant(),
+                operationDateTime = Instant.now(),
                 operationNumber = "FAKE_OPERATION_NUMBER_$reportId",
                 operationType = operationType,
                 reportDateTime = null,
@@ -1163,7 +1162,6 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
                 tripGears = null,
                 tripNumber = null,
                 tripSegments = null,
-                updatedAt = ZonedDateTime.now(),
                 vesselName = null,
             )
         }

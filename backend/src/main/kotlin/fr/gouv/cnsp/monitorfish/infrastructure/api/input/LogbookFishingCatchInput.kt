@@ -10,6 +10,18 @@ data class LogbookFishingCatchInput(
     val specyName: String,
     val weight: Double,
 ) {
+    companion object {
+        fun fromLogbookFishingCatch(logbookFishingCatch: LogbookFishingCatch): LogbookFishingCatchInput {
+            return LogbookFishingCatchInput(
+                isIncidentalCatch = false,
+                quantity = logbookFishingCatch.numberFish,
+                specyCode = requireNotNull(logbookFishingCatch.species),
+                specyName = requireNotNull(logbookFishingCatch.speciesName),
+                weight = requireNotNull(logbookFishingCatch.weight),
+            )
+        }
+    }
+
     fun toLogbookFishingCatch(): LogbookFishingCatch {
         return LogbookFishingCatch(
             conversionFactor = 1.toDouble(),

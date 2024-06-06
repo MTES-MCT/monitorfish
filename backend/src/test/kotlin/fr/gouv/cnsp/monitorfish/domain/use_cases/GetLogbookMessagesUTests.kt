@@ -283,10 +283,8 @@ class GetLogbookMessagesUTests {
                         reportId = "9065646816",
                         referencedReportId = "9065646811",
                         analyzedByRules = listOf(),
-                        createdAt = ZonedDateTime.now(),
                         integrationDateTime = ZonedDateTime.now(),
                         isEnriched = false,
-                        isManuallyCreated = false,
                         message = lastAck,
                         messageType = "",
                         operationDateTime = ZonedDateTime.now(),
@@ -296,7 +294,6 @@ class GetLogbookMessagesUTests {
                             12,
                         ),
                         transmissionFormat = LogbookTransmissionFormat.ERS,
-                        updatedAt = ZonedDateTime.now(),
                     ),
             )
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")

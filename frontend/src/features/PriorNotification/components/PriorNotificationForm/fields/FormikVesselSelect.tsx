@@ -81,21 +81,19 @@ export function FormikVesselSelect() {
   )
 
   return (
-    <>
-      <Field>
-        <StyledVesselSearch
-          key={key}
-          baseRef={newWindowContainerRef}
-          defaultValue={defaultValueRef.current}
-          disabled={isLoading}
-          hasError={!!meta.error}
-          isVesselIdRequiredFromResults
-          onChange={handleVesselSearchChange}
-        />
+    <Field>
+      <StyledVesselSearch
+        key={key}
+        baseRef={newWindowContainerRef}
+        defaultValue={defaultValueRef.current}
+        disabled={isLoading}
+        hasError={!!meta.error}
+        isVesselIdRequiredFromResults
+        onChange={handleVesselSearchChange}
+      />
 
-        {!!meta.error && <FieldError>{meta.error}</FieldError>}
-      </Field>
-    </>
+      {!!meta.error && <FieldError>{meta.error}</FieldError>}
+    </Field>
   )
 }
 

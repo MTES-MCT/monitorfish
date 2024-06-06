@@ -12,16 +12,17 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
 
-import { FORM_VALIDATION_SCHEMA, INITIAL_FORM_VALUES } from './constants'
+import { FORM_VALIDATION_SCHEMA } from './constants'
 import { Form } from './Form'
 import { Header } from './Header'
 import { TagBar } from './TagBar'
+import { getInitialFormValues } from './utils'
 
 import type { FormValues } from './types'
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
 export function PriorNotificationForm() {
-  const formInitialValuesRef = useRef(INITIAL_FORM_VALUES)
+  const formInitialValuesRef = useRef(getInitialFormValues())
 
   const dispatch = useMainAppDispatch()
   const editedPriorNotificationReportId = useMainAppSelector(

@@ -1,18 +1,19 @@
 [
     {
         "table": "manual_prior_notifications",
+        "id": "report_id",
         "data": [
             {
-                "id": 116,
                 "report_id": "d2bd7d28-3130-4e3f-bf0d-5e919a5657be",
+                "author_trigram": "ABC",
                 "cfr": "CFR112",
+                "did_not_fish_after_zero_notice": false,
                 "flag_state": "FRA",
-                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
-                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
-                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
-                "vessel_name": "POISSON PAS NET",
+                "note": null,
+                "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "trip_gears:jsonb": [{ "gear": "LNP", "mesh": 8, "dimensions": "50;200" }],
                 "trip_segments:jsonb": [{ "segment": "NWW09", "segmentName": "Lignes" }],
+                "vessel_name": "POISSON PAS NET",
                 "value:jsonb": {
                     "catchOnboard": [
                         {
@@ -21,6 +22,7 @@
                             "species": "SOS"
                         }
                     ],
+                    "faoZone": "21.1.A",
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type D",

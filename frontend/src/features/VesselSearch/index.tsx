@@ -22,9 +22,9 @@ import type { Promisable } from 'type-fest'
 type VesselSearchProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'defaultValue' | 'onChange'> & {
   baseRef?: MutableRefObject<HTMLDivElement | undefined> | undefined
   defaultValue?: VesselIdentity | undefined
-  extendedWidth: number
+  extendedWidth?: number | undefined
   hasError?: boolean | undefined
-  isExtended: boolean
+  isExtended?: boolean | undefined
   isLastSearchedVesselsShowed?: boolean
   isLinkToVesselSidebarDisplayed?: boolean
   isVesselIdRequiredFromResults?: boolean
@@ -160,7 +160,7 @@ export function VesselSearch({
 
   // TODO Replace with existing hooks.
   useEffect(() => {
-    if (clickedOutsideComponent || escapeFromKeyboard) {
+    if (clickedOutsideComponent ?? escapeFromKeyboard) {
       setShowLastSearchedVessels(false)
 
       if (onClickOutsideOrEscape) {
@@ -178,20 +178,24 @@ export function VesselSearch({
   }
 
   return (
-    <Wrapper ref={wrapperRef} className={className} extendedWidth={extendedWidth} isExtended={isExtended} style={style}>
+    <Wrapper
+      ref={wrapperRef}
+      $extendedWidth={extendedWidth}
+      $isExtended={isExtended}
+      className={className}
+      style={style}
+    >
       <InputWrapper>
         <Input
           key={controlledKey}
           // Disable this behavior when VesselSearch is used within side window
           // (`baseRef` prop is only provided in side window case)
+          $baseUrl={baseUrl}
+          $flagState={flagState}
+          $hasError={hasError}
           autoFocus={!baseRef && !!selectedVesselIdentity}
-          baseUrl={baseUrl}
           data-cy="vessel-search-input"
           defaultValue={vesselName}
-          extendedWidth={extendedWidth}
-          flagState={flagState}
-          hasError={hasError}
-          isExtended={isExtended}
           onChange={handleChange}
           onClick={onVesselInputClick}
           placeholder="Rechercher un navire..."
@@ -223,11 +227,11 @@ export function VesselSearch({
 }
 
 const Wrapper = styled.div<{
-  extendedWidth: number
-  isExtended: boolean
+  $extendedWidth: number | undefined
+  $isExtended: boolean
 }>`
   box-sizing: border-box;
-  width: ${p => (p.isExtended ? p.extendedWidth : 320)}px;
+  width: ${p => (p.$isExtended && p.$extendedWidth !== undefined ? p.$extendedWidth : 320)}px;
   transition: all 0.7s;
 
   * {
@@ -236,14 +240,12 @@ const Wrapper = styled.div<{
 `
 
 const Input = styled.input<{
-  baseUrl: string
-  extendedWidth: number
-  flagState: string | undefined
-  hasError: boolean | undefined
-  isExtended: boolean
+  $baseUrl: string
+  $flagState: string | undefined
+  $hasError: boolean | undefined
 }>`
   margin: 0;
-  border: ${p => (p.hasError ? '1px solid red' : 'none')};
+  border: ${p => (p.$hasError ? '1px solid red' : 'none')};
   border-radius: 0;
   border-radius: 2px;
   color: ${p => p.theme.color.gunMetal};
@@ -255,11 +257,11 @@ const Input = styled.input<{
   flex: 3;
   transition: all 0.7s;
   background: ${p =>
-    p.flagState ? `url(${p.baseUrl}/flags/${p.flagState.toLowerCase()}.svg) no-repeat scroll, white` : 'white'};
+    p.$flagState ? `url(${p.$baseUrl}/flags/${p.$flagState.toLowerCase()}.svg) no-repeat scroll, white` : 'white'};
   background-size: 20px;
   background-position-y: center;
   background-position-x: 16px;
-  padding-left: ${p => (p.flagState ? 45 : 16)}px;
+  padding-left: ${p => (p.$flagState ? 45 : 16)}px;
 
   :disabled {
     background-color: var(--rs-input-disabled-bg);

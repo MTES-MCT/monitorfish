@@ -10,16 +10,37 @@ import type { ListFilter } from './components/PriorNotificationList/types'
 import type { PriorNotification } from './PriorNotification.types'
 import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 
-const GET_PRIOR_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu récupérer le préavis."
+const CREATE_PRIOR_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu créé le préavis."
+const GET_PRIOR_NOTIFICATION_DATA_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les données du préavis."
+const GET_PRIOR_NOTIFICATION_DETAIL_ERROR_MESSAGE = "Nous n'avons pas pu récupérer le préavis."
 const GET_PRIOR_NOTIFICATIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la liste des préavis."
 const GET_PRIOR_NOTIFICATION_TYPES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la liste des types de préavis."
 
 export const priorNotificationApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
-    getPriorNotification: builder.query<PriorNotification.PriorNotificationDetail, string>({
+    createPriorNotification: builder.mutation<
+      PriorNotification.PriorNotificationData,
+      PriorNotification.NewPriorNotificationData
+    >({
+      invalidatesTags: [{ type: RtkCacheTagType.PriorNotifications }],
+      query: data => ({
+        body: data,
+        method: 'POST',
+        url: `/prior_notifications`
+      }),
+      transformErrorResponse: response => new FrontendApiError(CREATE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
+    }),
+
+    getPriorNotificationData: builder.query<PriorNotification.PriorNotificationData, string>({
       providesTags: () => [{ type: RtkCacheTagType.PriorNotification }],
-      query: logbookMessageReportId => `/prior_notifications/${logbookMessageReportId}`,
-      transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
+      query: reportId => `/prior_notifications/${reportId}/data`,
+      transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_DATA_ERROR_MESSAGE, response)
+    }),
+
+    getPriorNotificationDetail: builder.query<PriorNotification.PriorNotificationDetail, string>({
+      providesTags: () => [{ type: RtkCacheTagType.PriorNotification }],
+      query: reportId => `/prior_notifications/${reportId}`,
+      transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_DETAIL_ERROR_MESSAGE, response)
     }),
 
     getPriorNotifications: builder.query<
@@ -55,13 +76,31 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       providesTags: () => [{ type: RtkCacheTagType.PriorNotificationTypes }],
       query: () => '/prior_notifications/types',
       transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_TYPES_ERROR_MESSAGE, response)
+    }),
+
+    updatePriorNotification: builder.mutation<
+      PriorNotification.PriorNotificationData,
+      {
+        data: PriorNotification.NewPriorNotificationData
+        reportId: string
+      }
+    >({
+      invalidatesTags: [{ type: RtkCacheTagType.PriorNotifications }],
+      query: ({ data, reportId }) => ({
+        body: data,
+        method: 'PUT',
+        url: `/prior_notifications/${reportId}`
+      }),
+      transformErrorResponse: response => new FrontendApiError(CREATE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
     })
   })
 })
 
 export const {
-  useGetPriorNotificationQuery,
+  useCreatePriorNotificationMutation,
+  useGetPriorNotificationDataQuery,
+  useGetPriorNotificationDetailQuery,
   useGetPriorNotificationsQuery,
   useGetPriorNotificationTypesQuery,
-  useLazyGetPriorNotificationsQuery
+  useUpdatePriorNotificationMutation
 } = priorNotificationApi

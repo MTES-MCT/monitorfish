@@ -2,7 +2,7 @@ import type { Seafront } from '@constants/seafront'
 import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 
 export namespace PriorNotification {
-  export type PriorNotification = {
+  export interface PriorNotification {
     acknowledgment: LogbookMessage.Acknowledgment | undefined
     createdAt: string
     expectedArrivalDate: string | undefined
@@ -48,6 +48,29 @@ export namespace PriorNotification {
     id: string
     isLessThanTwelveMetersVessel: boolean
     logbookMessage: LogbookMessage.PnoLogbookMessage
+  }
+
+  export type PriorNotificationData = {
+    authorTrigram: string
+    didNotFishAfterZeroNotice: boolean
+    expectedArrivalDate: string
+    expectedLandingDate: string
+    faoArea: string
+    fishingCatches: PriorNotificationDataFishingCatch[]
+    note: string | undefined
+    portLocode: string
+    reportId: string
+    sentAt: string
+    tripGearCodes: string[]
+    vesselId: number
+  }
+  export type NewPriorNotificationData = Omit<PriorNotificationData, 'reportId'>
+
+  export type PriorNotificationDataFishingCatch = {
+    quantity?: number | undefined
+    specyCode: string
+    specyName: string
+    weight: number
   }
 
   export type Type = {

@@ -1,3 +1,4 @@
+import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import { VesselIdentifier, type VesselIdentity } from 'domain/entities/vessel/types'
@@ -7,7 +8,6 @@ import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
 import { openPriorNotificationCard } from '../../useCases/openPriorNotificationCard'
 
 import type { PriorNotification } from '../../PriorNotification.types'
-import type { MouseEvent } from 'react'
 
 type ButtonsGroupRowProps = Readonly<{
   priorNotification: PriorNotification.PriorNotification
@@ -15,15 +15,15 @@ type ButtonsGroupRowProps = Readonly<{
 export function ButtonsGroupRow({ priorNotification }: ButtonsGroupRowProps) {
   const dispatch = useMainAppDispatch()
 
-  const openPriorNotificationDetail = (event: MouseEvent<HTMLButtonElement>) => {
-    event.stopPropagation()
+  const editPriorNotification = (reportId: string) => {
+    dispatch(priorNotificationActions.createOrEditPriorNotification(reportId))
+  }
 
+  const openPriorNotificationDetail = () => {
     dispatch(openPriorNotificationCard(priorNotification.id, priorNotification.fingerprint))
   }
 
-  const selectMainMapVessel = (event: MouseEvent<HTMLButtonElement>) => {
-    event.stopPropagation()
-
+  const selectMainMapVessel = () => {
     const vesselIdentity: VesselIdentity = {
       beaconNumber: null,
       districtCode: null,
@@ -48,13 +48,26 @@ export function ButtonsGroupRow({ priorNotification }: ButtonsGroupRowProps) {
         Icon={Icon.ViewOnMap}
         onClick={selectMainMapVessel}
         title="Centrer le navire sur la carte"
+        withUnpropagatedClick
       />
-      <IconButton
-        accent={Accent.TERTIARY}
-        Icon={Icon.Display}
-        onClick={openPriorNotificationDetail}
-        title="Consulter le préavis"
-      />
+      {priorNotification.isManuallyCreated && (
+        <IconButton
+          accent={Accent.TERTIARY}
+          Icon={Icon.Edit}
+          onClick={() => editPriorNotification(priorNotification.id)}
+          title="Éditer le préavis"
+          withUnpropagatedClick
+        />
+      )}
+      {!priorNotification.isManuallyCreated && (
+        <IconButton
+          accent={Accent.TERTIARY}
+          Icon={Icon.Display}
+          onClick={openPriorNotificationDetail}
+          title="Consulter le préavis"
+          withUnpropagatedClick
+        />
+      )}
     </Wrapper>
   )
 }

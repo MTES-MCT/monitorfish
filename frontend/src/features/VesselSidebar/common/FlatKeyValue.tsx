@@ -30,8 +30,7 @@ const TableBody = styled.tbody``
 
 const Zone = styled.div`
   background: ${p => p.theme.color.white};
-  margin: 5px 5px 0px;
-  text-align: left;
+  display: flex;
 `
 
 const Fields = styled.table<{

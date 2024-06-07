@@ -1,19 +1,24 @@
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
+import { FlatKeyValue } from '@features/VesselSidebar/common/FlatKeyValue'
+import { uniq } from 'lodash'
 import { useMemo } from 'react'
+import styled from 'styled-components'
 
 import { CatchDetails } from './common/CatchDetails'
 import { SpecyCatch } from './common/SpecyCatch'
 import { getCodeWithNameOrDash, getDatetimeOrDash } from './utils'
 import { buildCatchArray, getTotalPNOWeight } from '../../../../utils'
 import { WeightType } from '../constants'
-import { NoValue, Table, TableBody, TableKey, TableRow, TableValue, Zone, SpeciesList } from '../styles'
+import { NoValue, SpeciesList, Table, TableBody, TableKey, TableRow, TableValue, Zone } from '../styles'
 
-import type { PNOMessageValue } from '../../../../Logbook.types'
+import type { Gear, PNOMessageValue } from '../../../../Logbook.types'
 
 type PNOMessageProps = Readonly<{
+  isLessThanTwelveMetersVessel: boolean
   message: PNOMessageValue
+  tripGears: Gear[] | undefined
 }>
-export function PNOMessage({ message }: PNOMessageProps) {
+export function PNOMessage({ isLessThanTwelveMetersVessel, message, tripGears }: PNOMessageProps) {
   const catchesWithProperties = useMemo(() => {
     if (!message?.catchOnboard) {
       return []
@@ -45,10 +50,12 @@ export function PNOMessage({ message }: PNOMessageProps) {
                   <TableKey>Date prévue de débarque</TableKey>
                   <TableValue>{getDatetimeOrDash(message.predictedLandingDatetimeUtc)}</TableValue>
                 </TableRow>
-                <TableRow>
-                  <TableKey>Date de début de la marée</TableKey>
-                  <TableValue>{getDatetimeOrDash(message.tripStartDate)}</TableValue>
-                </TableRow>
+                {!isLessThanTwelveMetersVessel && (
+                  <TableRow>
+                    <TableKey>Date de début de la marée</TableKey>
+                    <TableValue>{getDatetimeOrDash(message.tripStartDate)}</TableValue>
+                  </TableRow>
+                )}
                 <TableRow>
                   <TableKey>Port d’arrivée</TableKey>
                   <TableValue>{getCodeWithNameOrDash(message.port, message.portName)}</TableValue>
@@ -72,11 +79,26 @@ export function PNOMessage({ message }: PNOMessageProps) {
               </TableBody>
             </Table>
           </Zone>
+          {isLessThanTwelveMetersVessel && (
+            <StyledFlatKeyValue
+              column={[
+                {
+                  key: 'Engins utilisés',
+                  value: tripGears?.map(gear => gear.gear).join(', ')
+                },
+                {
+                  key: 'Zones de pêche',
+                  value: uniq(message.catchOnboard.map(aCatch => aCatch.faoZone)).join(', ')
+                }
+              ]}
+            />
+          )}
           <SpeciesList $hasCatches={!!catchesWithProperties.length}>
             {catchesWithProperties.map((speciesCatch, index) => (
               <SpecyCatch
                 // eslint-disable-next-line react/no-array-index-key
                 key={index}
+                isOpenable={!isLessThanTwelveMetersVessel}
                 specyCatch={speciesCatch}
                 weightType={WeightType.LIVE}
               >
@@ -92,3 +114,7 @@ export function PNOMessage({ message }: PNOMessageProps) {
     </>
   )
 }
+
+const StyledFlatKeyValue = styled(FlatKeyValue)`
+  margin: 10px 0px 10px 0px;
+`

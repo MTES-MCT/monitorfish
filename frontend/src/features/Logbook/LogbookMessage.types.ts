@@ -71,6 +71,8 @@ export namespace LogbookMessage {
   export type Gear = {
     dimensions: string
     gear: string
+    // TODO Replace null by undefined after deleting Gear in logbook.types.ts
+    gearName: string | null
     mesh: number
   }
 

@@ -1,11 +1,11 @@
 import { Ellipsised } from '@components/Ellipsised'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { getComponentFromMessageType } from './constants'
-import { useMainAppDispatch } from '../../../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
 import { getDateTime } from '../../../../../../utils'
 import XMLSVG from '../../../../../icons/Picto_XML.svg?react'
 import ShowActivitySVG from '../../../../../icons/Position_message_JPE_Pin_gris_clair.svg?react'
@@ -19,10 +19,16 @@ import type { LogbookMessage as LogbookMessageType } from '../../../../Logbook.t
 
 type LogbookMessageComponentProps = Readonly<{
   isFirst: boolean
+  isLessThanTwelveMetersVessel?: boolean
   logbookMessage: LogbookMessageType | LogbookMessageNamespace.LogbookMessage
   withMapControls?: boolean
 }>
-export function LogbookMessage({ isFirst, logbookMessage, withMapControls = false }: LogbookMessageComponentProps) {
+export function LogbookMessage({
+  isFirst,
+  isLessThanTwelveMetersVessel = false,
+  logbookMessage,
+  withMapControls = false
+}: LogbookMessageComponentProps) {
   const dispatch = useMainAppDispatch()
   const fishingActivitiesShowedOnMap = useMainAppSelector(state => state.fishingActivities.fishingActivitiesShowedOnMap)
 
@@ -37,11 +43,18 @@ export function LogbookMessage({ isFirst, logbookMessage, withMapControls = fals
           </>
         )
       }
+      case LogbookMessageTypeEnum.PNO.code.toString(): {
+        if (isLessThanTwelveMetersVessel) {
+          return 'Préavis (notification de retour au port) – navire sans JPE'
+        }
+
+        return LogbookMessageTypeEnum[logbookMessage.messageType].fullName
+      }
       default: {
         return LogbookMessageTypeEnum[logbookMessage.messageType].fullName
       }
     }
-  }, [logbookMessage])
+  }, [logbookMessage, isLessThanTwelveMetersVessel])
 
   const openXML = (xml: string) => {
     const blob = new Blob([xml], { type: 'text/xml' })
@@ -50,12 +63,17 @@ export function LogbookMessage({ isFirst, logbookMessage, withMapControls = fals
     URL.revokeObjectURL(url)
   }
 
-  const logbookMessageComponent = useMemo(() => getComponentFromMessageType(logbookMessage), [logbookMessage])
+  const logbookMessageComponent = useMemo(
+    () => getComponentFromMessageType(logbookMessage, isLessThanTwelveMetersVessel),
+    [logbookMessage, isLessThanTwelveMetersVessel]
+  )
 
   return (
     <Wrapper id={logbookMessage.operationNumber} isFirst={isFirst}>
       <Header>
-        <LogbookMessageTypeText>{getLogbookMessageType(logbookMessage)}</LogbookMessageTypeText>
+        {!isLessThanTwelveMetersVessel && (
+          <LogbookMessageTypeText>{getLogbookMessageType(logbookMessage)}</LogbookMessageTypeText>
+        )}
         <LogbookMessageHeaderText
           data-cy="vessel-fishing-message"
           isShortcut={
@@ -85,14 +103,12 @@ export function LogbookMessage({ isFirst, logbookMessage, withMapControls = fals
           </OperationTag>
         )}
 
-        {logbookMessage.rawMessage ? (
+        {!isLessThanTwelveMetersVessel && logbookMessage.rawMessage && (
           <Xml
             onClick={() => openXML(logbookMessage.rawMessage)}
             style={{ cursor: 'pointer' }}
             title="Ouvrir le message XML brut"
           />
-        ) : (
-          <Xml />
         )}
 
         {withMapControls &&
@@ -120,38 +136,42 @@ export function LogbookMessage({ isFirst, logbookMessage, withMapControls = fals
         )}
         <LogbookMessageMetadata>
           <EmissionDateTime>
-            <Key>Date d’émission</Key>
+            <Key>{isLessThanTwelveMetersVessel ? 'Date de saisie dans MF par le CNSP' : 'Date d’émission'}</Key>
             {getDateTime(logbookMessage.reportDateTime, true)}
           </EmissionDateTime>
           <ReceptionDateTime>
-            <Key>Date de réception</Key>
+            <Key>{isLessThanTwelveMetersVessel ? 'Date de réception par le CNSP' : 'Date de réception'}</Key>
             {getDateTime(logbookMessage.integrationDateTime, true)}
           </ReceptionDateTime>
-          <VoyageNumber>
-            <Key>N° de marée</Key>
-            {logbookMessage.tripNumber ? (
-              <Ellipsised maxWidth={80}>{logbookMessage.tripNumber}</Ellipsised>
-            ) : (
-              <Gray>-</Gray>
-            )}
-          </VoyageNumber>
-          <Acknowledge>
-            <Key>Acq.</Key>
-            {!logbookMessage.acknowledgment || (logbookMessage.acknowledgment.isSuccess === null && <Gray>-</Gray>)}
-            {logbookMessage.acknowledgment?.isSuccess === true && (
-              <Icon.Confirm
-                color={THEME.color.mediumSeaGreen}
-                data-cy="LogbookMessage-successful-acknowledgement-icon"
-              />
-            )}
-            {logbookMessage.acknowledgment?.isSuccess === false && (
-              <Icon.Reject
-                color={THEME.color.maximumRed}
-                data-cy="LogbookMessage-failed-acknowledgement-icon"
-                title={logbookMessage.acknowledgment?.rejectionCause ?? ''}
-              />
-            )}
-          </Acknowledge>
+          {!isLessThanTwelveMetersVessel && (
+            <VoyageNumber>
+              <Key>N° de marée</Key>
+              {logbookMessage.tripNumber ? (
+                <Ellipsised maxWidth={80}>{logbookMessage.tripNumber}</Ellipsised>
+              ) : (
+                <Gray>-</Gray>
+              )}
+            </VoyageNumber>
+          )}
+          {!isLessThanTwelveMetersVessel && (
+            <Acknowledge>
+              <Key>Acq.</Key>
+              {!logbookMessage.acknowledgment || (logbookMessage.acknowledgment.isSuccess === null && <Gray>-</Gray>)}
+              {logbookMessage.acknowledgment?.isSuccess === true && (
+                <Icon.Confirm
+                  color={THEME.color.mediumSeaGreen}
+                  data-cy="LogbookMessage-successful-acknowledgement-icon"
+                />
+              )}
+              {logbookMessage.acknowledgment?.isSuccess === false && (
+                <Icon.Reject
+                  color={THEME.color.maximumRed}
+                  data-cy="LogbookMessage-failed-acknowledgement-icon"
+                  title={logbookMessage.acknowledgment?.rejectionCause ?? ''}
+                />
+              )}
+            </Acknowledge>
+          )}
         </LogbookMessageMetadata>
         {logbookMessageComponent}
       </Body>

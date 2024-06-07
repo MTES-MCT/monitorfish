@@ -4,6 +4,7 @@ import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import { VesselIdentifier, type VesselIdentity } from 'domain/entities/vessel/types'
 import styled from 'styled-components'
 
+import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
 import { openPriorNotificationCard } from '../../useCases/openPriorNotificationCard'
 
@@ -13,6 +14,7 @@ type ButtonsGroupRowProps = Readonly<{
   priorNotification: PriorNotification.PriorNotification
 }>
 export function ButtonsGroupRow({ priorNotification }: ButtonsGroupRowProps) {
+  const isSuperUser = useIsSuperUser()
   const dispatch = useMainAppDispatch()
 
   const editPriorNotification = (reportId: string) => {
@@ -50,12 +52,21 @@ export function ButtonsGroupRow({ priorNotification }: ButtonsGroupRowProps) {
         title="Centrer le navire sur la carte"
         withUnpropagatedClick
       />
-      {priorNotification.isManuallyCreated && (
+      {isSuperUser && priorNotification.isManuallyCreated && (
         <IconButton
           accent={Accent.TERTIARY}
           Icon={Icon.Edit}
           onClick={() => editPriorNotification(priorNotification.id)}
           title="Éditer le préavis"
+          withUnpropagatedClick
+        />
+      )}
+      {!isSuperUser && priorNotification.isManuallyCreated && (
+        <IconButton
+          accent={Accent.TERTIARY}
+          Icon={Icon.Display}
+          onClick={openPriorNotificationDetail}
+          title="Consulter le préavis"
           withUnpropagatedClick
         />
       )}

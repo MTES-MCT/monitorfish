@@ -10,11 +10,18 @@ import type { ReactNode, HTMLProps } from 'react'
 
 type SpecyCatchProps = Readonly<{
   children: ReactNode
+  isOpenable?: boolean
   isProtectedSpecy?: boolean
   specyCatch: CatchWithProperties | ProtectedCatchWithProperties
   weightType: WeightType
 }>
-export function SpecyCatch({ children, isProtectedSpecy = false, specyCatch, weightType }: SpecyCatchProps) {
+export function SpecyCatch({
+  children,
+  isOpenable = true,
+  isProtectedSpecy = false,
+  specyCatch,
+  weightType
+}: SpecyCatchProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   const specyFullName = useMemo(() => {
@@ -27,13 +34,13 @@ export function SpecyCatch({ children, isProtectedSpecy = false, specyCatch, wei
 
   return (
     <Species>
-      <Title $isOpen={isOpen} onClick={() => setIsOpen(!isOpen)}>
+      <Title $isOpen={isOpen} $isOpenable={isOpenable} onClick={() => isOpenable && setIsOpen(!isOpen)}>
         <SpecyName title={specyFullName}>{specyFullName}</SpecyName>
         <SpecyWeight title={`${specyCatch.weight} kg (${weightType})`}>
           <SpecyWeightLabel>Poids total ({weightType})</SpecyWeightLabel>
           <SpecyWeightValue>{specyCatch.weight || <NoValue>-</NoValue>} kg</SpecyWeightValue>
         </SpecyWeight>
-        <ChevronIcon $isOpen={isOpen} />
+        {isOpenable && <ChevronIcon $isOpen={isOpen} />}
       </Title>
       <Content $isOpen={isOpen} $isProtectedSpecy={isProtectedSpecy} $length={specyCatch.properties.length || 1}>
         {specyCatch.properties.length > 1 && (
@@ -62,9 +69,10 @@ const MultipleProperties = styled.div`
 
 const Title = styled.div<{
   $isOpen: boolean
+  $isOpenable: boolean
 }>`
   border-bottom: ${p => (p.$isOpen ? `1px solid ${p.theme.color.lightGray}` : 'unset')};
-  cursor: pointer;
+  cursor: ${p => (p.$isOpenable ? 'pointer' : 'unset')};
   display: flex;
   flex-wrap: wrap;
   overflow: hidden;

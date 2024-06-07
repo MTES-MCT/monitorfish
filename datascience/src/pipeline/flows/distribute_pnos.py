@@ -218,14 +218,22 @@ def render_pno(pno: PreRenderedPno, template: Template) -> str:
 
     risk_factor_thresholds = np.array([1.75, 2.5, 3.25])
     thresholds_exceeded = (pno.risk_factor >= risk_factor_thresholds).sum()
-    risk_factor_scale = [
+    risk_factor_description_scale = [
         "faible",
         "moyenne",
         "élevée",
         "très élevée",
     ]
 
-    risk_factor_description = risk_factor_scale[thresholds_exceeded]
+    risk_factor_color_scale = [
+        "cadet-grey",
+        "grullo",
+        "copper-red",
+        "chinese-red",
+    ]
+
+    risk_factor_description = risk_factor_description_scale[thresholds_exceeded]
+    risk_factor_color = risk_factor_color_scale[thresholds_exceeded]
 
     date_format = "%d/%m/%Y à %Hh%M UTC"
 
@@ -261,6 +269,7 @@ def render_pno(pno: PreRenderedPno, template: Template) -> str:
         mmsi=pno.mmsi,
         risk_factor=f"{pno.risk_factor:.1f}",
         risk_factor_description=risk_factor_description,
+        risk_factor_color=risk_factor_color,
         last_control_datetime_utc=pno.last_control_datetime_utc.strftime(date_format),
     )
 

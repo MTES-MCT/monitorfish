@@ -65,14 +65,17 @@ font-weight: 500;
     --white: #FFFFFF;
     --gainsboro: #E5E5EB;
     --light-gray: #CCCFD6;
+    --cadet-grey: #8E9A9F;
     --slate-gray: #707785;
     --gunmetal: #282F3E;
-    --maximum-red: #E1000F;
     --maximum-red-15: #FBD9DB;
+    --grullo: #B89B8C;
     --copper-red: #CF6A4E;
+    --chinese-red: #A13112;
+    --maximum-red: #E1000F;
     --medium-sea-green: #29B361;
 }
-  
+
 html {
     margin: 0;
     padding: 0px;
@@ -132,6 +135,32 @@ ul {
 
 #risk_factor {
     margin-top: 9px;
+}
+
+#risk_factor span {
+    color: var(--white);
+    display: inline-block;
+    width: 24px;
+    height: 16px;
+    text-align: center;
+    margin-left: 8px;
+    font-size: 11px;
+}
+
+.cadet-grey {
+    background-color: var(--cadet-grey);
+}
+
+.grullo {
+    background-color: var(--grullo);
+}
+
+.copper-red {
+    background-color: var(--copper-red);
+}
+
+.chinese-red {
+    background-color: var(--chinese-red);
 }
 
 
@@ -228,7 +257,7 @@ footer > p {
 }
 #logo_se_mer {
     margin-left: 16px;
-    width: 127px;
+    width: 126.86px;
 }
         </style>
     </head>
@@ -249,8 +278,8 @@ footer > p {
             <li>MMSI - None</li>
             <li>Call Sign - FQ7058</li>
         </ul>
-        <p id="vessel_length">Taille du navire 13.4 m</p>
-        <p id="risk_factor"><strong>Note de risque moyenne <span id="risk_factor">2.1</span></strong></p>
+        <p id="vessel_length">Taille du navire - 13.4 m</p>
+        <p id="risk_factor"><strong>Note de risque moyenne <span class="grullo">2.1</span></strong></p>
 
         </header>
 
@@ -345,7 +374,7 @@ footer > p {
                        <img id="logo_cnsp", src="file:///home/vincentchery/Documents/repos/monitorfish/datascience/src/pipeline/emails/images/logo_cnsp.jpg" alt="Logo CNSP">
                     </td>
                     <td>
-                        <img id="logo_se_mer", src="file:///home/vincentchery/Documents/repos/monitorfish/datascience/src/pipeline/emails/images/logo_se_mer.png" alt="Logo Secretariat d'Etat chargé de la Mer et de la Biodiversité">
+                        <img id="logo_se_mer", src="file:///home/vincentchery/Documents/repos/monitorfish/datascience/src/pipeline/emails/images/logo_se_mer.jpg" alt="Logo Secretariat d'Etat chargé de la Mer et de la Biodiversité">
                     </td>
                 </tr>
             </table>

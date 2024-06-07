@@ -59,14 +59,17 @@ font-weight: 500;
     --white: #FFFFFF;
     --gainsboro: #E5E5EB;
     --light-gray: #CCCFD6;
+    --cadet-grey: #8E9A9F;
     --slate-gray: #707785;
     --gunmetal: #282F3E;
-    --maximum-red: #E1000F;
     --maximum-red-15: #FBD9DB;
+    --grullo: #B89B8C;
     --copper-red: #CF6A4E;
+    --chinese-red: #A13112;
+    --maximum-red: #E1000F;
     --medium-sea-green: #29B361;
 }
-  
+
 html {
     margin: 0;
     padding: 0px;
@@ -126,6 +129,32 @@ ul {
 
 #risk_factor {
     margin-top: 9px;
+}
+
+#risk_factor span {
+    color: var(--white);
+    display: inline-block;
+    width: 24px;
+    height: 16px;
+    text-align: center;
+    margin-left: 8px;
+    font-size: 11px;
+}
+
+.cadet-grey {
+    background-color: var(--cadet-grey);
+}
+
+.grullo {
+    background-color: var(--grullo);
+}
+
+.copper-red {
+    background-color: var(--copper-red);
+}
+
+.chinese-red {
+    background-color: var(--chinese-red);
 }
 
 
@@ -222,5 +251,5 @@ footer > p {
 }
 #logo_se_mer {
     margin-left: 16px;
-    width: 127px;
+    width: 126.86px;
 }

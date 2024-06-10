@@ -214,7 +214,60 @@
                 "external_immatriculation": "EXTIMM116",
                 "vessel_name": "NAVIRE RENOMMÉ (NOUVEAU NOM)",
                 "flag_state": "FR",
-                "length": 22.3,
+                "length": 11.0,
+                "under_charter": false
+            },
+
+            // - Vessel: QUEUE DE POISSON
+            {
+                "id": 117,
+                "cfr": "CFR117",
+                "mmsi": "MMSI117",
+                "ircs": "IRCS117",
+                "external_immatriculation": "EXTIMM117",
+                "vessel_name": "QUEUE DE POISSON",
+                "flag_state": "FR",
+                "length": 10.9,
+                "under_charter": false
+            },
+
+            // - Vessel: GOUJON BOUGON
+            {
+                "id": 118,
+                "cfr": "CFR118",
+                "mmsi": "MMSI118",
+                "ircs": "IRCS118",
+                "external_immatriculation": "EXTIMM118",
+                "vessel_name": "GOUJON BOUGON",
+                "flag_state": "FR",
+                "length": 11.2,
+                "under_charter": false
+            },
+
+            // - Vessel: PAGEOT JO
+            {
+                "id": 119,
+                "cfr": "CFR119",
+                "mmsi": "MMSI119",
+                "ircs": "IRCS119",
+                "external_immatriculation": "EXTIMM119",
+                "vessel_name": "PAGEOT JO",
+                "flag_state": "FR",
+                "length": 11.1,
+                "under_charter": false
+            },
+
+            // - Vessel: VIVA L'ITALIA
+            // - Flag state: IT
+            {
+                "id": 120,
+                "cfr": "CFR120",
+                "mmsi": "MMSI120",
+                "ircs": "IRCS120",
+                "external_immatriculation": "EXTIMM120",
+                "vessel_name": "VIVA L'ITALIA",
+                "flag_state": "IT",
+                "length": 11.1,
                 "under_charter": false
             }
         ]

@@ -720,7 +720,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllPriorNotifications Should return PNO logbook reports controlled after or before January 1st, 2024`() {
+    fun `findAllPriorNotifications Should return PNO logbook reports for vessels controlled after or before January 1st, 2024`() {
         // Given
         val firstFilter = PriorNotificationsFilter(
             lastControlledAfter = "2024-01-01T00:00:00Z",

@@ -160,7 +160,7 @@ class PriorNotificationController(
         @RequestBody
         priorNotificationDataInput: PriorNotificationDataInput,
     ): PriorNotificationDataOutput {
-        val cretedPriorNotification = createOrUpdatePriorNotification.execute(
+        val createdPriorNotification = createOrUpdatePriorNotification.execute(
             priorNotificationDataInput.authorTrigram,
             priorNotificationDataInput.didNotFishAfterZeroNotice,
             priorNotificationDataInput.expectedArrivalDate,
@@ -175,7 +175,7 @@ class PriorNotificationController(
             priorNotificationDataInput.vesselId,
         )
 
-        return PriorNotificationDataOutput.fromPriorNotification(cretedPriorNotification)
+        return PriorNotificationDataOutput.fromPriorNotification(createdPriorNotification)
     }
 
     @PutMapping("/{reportId}")

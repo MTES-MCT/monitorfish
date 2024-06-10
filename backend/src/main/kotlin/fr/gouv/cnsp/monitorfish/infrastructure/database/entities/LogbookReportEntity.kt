@@ -163,12 +163,12 @@ data class LogbookReportEntity(
             note = null,
             sentAt = enrichedLogbookMessageTyped.logbookMessage.reportDateTime?.toString(),
             updatedAt = updatedAt,
-            vessel = vessel,
 
             // These props need to be calculated in the use case
             port = null,
             reportingCount = null,
             seafront = null,
+            vessel = vessel,
             vesselRiskFactor = null,
         )
     }

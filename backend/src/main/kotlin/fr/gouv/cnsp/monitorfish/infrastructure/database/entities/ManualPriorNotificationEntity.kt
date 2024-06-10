@@ -116,6 +116,7 @@ data class ManualPriorNotificationEntity(
                 reportDateTime = sentAt,
                 transmissionFormat = null,
                 tripGears = tripGears,
+                tripSegments = tripSegments,
                 vesselName = vesselName,
             )
             // For pratical reasons `vessel` can't be `null`, so we temporarely set it to "Navire inconnu"
@@ -132,12 +133,12 @@ data class ManualPriorNotificationEntity(
                 reportId = reportId,
                 sentAt = sentAt.toString(),
                 updatedAt = updatedAt.toString(),
-                vessel = vessel,
 
                 // These props need to be calculated in the use case
                 port = null,
                 reportingCount = null,
                 seafront = null,
+                vessel = vessel,
                 vesselRiskFactor = null,
             )
         } catch (e: IllegalArgumentException) {

@@ -137,4 +137,81 @@ context('Side Window > Prior Notification Form > Form', () => {
       })
     })
   })
+
+  it('Should display the expected form validation errors', () => {
+    // Base form validation errors
+
+    const { utcDateTupleWithTime } = getUtcDateInMultipleFormats(customDayjs().toISOString())
+
+    addSideWindowPriorNotification()
+
+    cy.intercept('POST', '/bff/v1/prior_notifications').as('createPriorNotification')
+
+    cy.clickButton('Créer le préavis')
+
+    cy.fill('Date et heure de réception du préavis', undefined)
+
+    cy.contains('Veuillez indiquer le navire concerné.').should('exist')
+    cy.contains('Veuillez indiquer la date de réception du préavis.').should('exist')
+    cy.contains("Veuillez indiquer la date d'arrivée estimée.").should('exist')
+    cy.contains('Veuillez indiquer la date de débarquement prévue.').should('exist')
+    cy.contains("Veuillez indiquer le port d'arrivée.").should('exist')
+    cy.contains('Veuillez sélectionner au moins une espèce.').should('exist')
+    cy.contains('Veuillez sélectionner au moins un engin.').should('exist')
+    cy.contains('Veuillez indiquer la zone FAO.').should('exist')
+    cy.contains('Veuillez indiquer votre trigramme.').should('exist')
+    cy.contains('Créer le préavis').should('be.disabled')
+
+    cy.getDataCy('vessel-search-input').click().wait(500)
+    cy.getDataCy('vessel-search-input').type('pageot', { delay: 100 })
+    cy.getDataCy('vessel-search-item').first().click()
+
+    cy.contains('Veuillez indiquer le navire concerné.').should('not.exist')
+
+    cy.fill('Date et heure de réception du préavis', utcDateTupleWithTime)
+
+    cy.contains('Veuillez indiquer la date de réception du préavis.').should('not.exist')
+
+    cy.fill("Date et heure estimées d'arrivée au port", utcDateTupleWithTime)
+
+    cy.contains("Veuillez indiquer la date d'arrivée estimée.").should('not.exist')
+
+    cy.fill('Date et heure prévues de débarque', utcDateTupleWithTime)
+
+    cy.contains('Veuillez indiquer la date de débarquement prévue.').should('not.exist')
+
+    cy.fill("Port d'arrivée", 'Vannes')
+
+    cy.contains("Veuillez indiquer le port d'arrivée.").should('not.exist')
+
+    cy.fill('Espèces à bord et à débarquer', 'AAX')
+
+    cy.contains('Veuillez sélectionner au moins une espèce.').should('not.exist')
+
+    cy.fill('Engins utilisés', ['OTP'], { index: 1 })
+
+    cy.contains('Veuillez sélectionner au moins un engin.').should('not.exist')
+
+    cy.fill('Zone de pêche', '21.4.T')
+
+    cy.contains('Veuillez indiquer la zone FAO.').should('not.exist')
+
+    cy.fill('Saisi par', 'BOB')
+
+    cy.contains('Veuillez indiquer votre trigramme.').should('not.exist')
+
+    cy.contains('Créer le préavis').should('be.enabled')
+
+    // Other form validation errors
+
+    cy.fill('Date et heure prévues de débarque', undefined)
+
+    cy.contains('Veuillez indiquer la date de débarquement prévue.').should('exist')
+    cy.contains('Créer le préavis').should('be.disabled')
+
+    cy.fill("équivalentes à celles de l'arrivée au port", true)
+
+    cy.contains('Veuillez indiquer la date de débarquement prévue.').should('not.exist')
+    cy.contains('Créer le préavis').should('be.enabled')
+  })
 })

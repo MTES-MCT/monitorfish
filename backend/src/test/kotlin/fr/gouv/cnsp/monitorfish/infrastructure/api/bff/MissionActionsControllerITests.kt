@@ -298,7 +298,12 @@ class MissionActionsControllerITests {
     }
 
     @Test
-    fun `Should not update a mission action with a missing flagState`() {
+    fun `Should update a mission action with a missing flagState`() {
+        // Given
+        val dateTime = ZonedDateTime.parse("2022-05-05T03:04:05.000Z")
+        val newMission = TestUtils.getDummyMissionAction(dateTime).copy(flagState = CountryCode.UNDEFINED)
+        given(updateMissionAction.execute(any(), any())).willReturn(newMission)
+
         // When
         api.perform(
             put("/bff/v1/mission_actions/123")
@@ -314,17 +319,19 @@ class MissionActionsControllerITests {
                         "flagState": null,
                         "districtCode": "AD",
                         "faoAreas": [],
+                        "userTrigram": "LTH",
+                        "completion": "COMPLETED",
                         "flightGoals": [],
                         "missionId": 10556,
-                        "actionType": "LAND_CONTROL",
-                        "actionDatetimeUtc": "2024-02-01T14:29:00Z",
+                        "actionType": "OBSERVATION",
+                        "actionDatetimeUtc": "2024-02-01T14:29:00Z"
                     }
                     """.trimIndent(),
                 )
                 .contentType(MediaType.APPLICATION_JSON),
         )
             // Then
-            .andExpect(status().isBadRequest)
+            .andExpect(status().isCreated)
     }
 
     @Test

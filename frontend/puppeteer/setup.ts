@@ -25,7 +25,8 @@ export default async () => {
       ],
       defaultViewport: null,
       headless: process.env.IS_HEADLESS === 'true' ? 'new' : false,
-      product: 'firefox'
+      product: 'firefox',
+      timeout: 0
     })
 
     const version = await browser.version()

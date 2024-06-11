@@ -256,6 +256,38 @@ def vessels_most_recent_control() -> pd.DataFrame:
                 "RAS",
                 "Contrôle Poséidon à mettre à jour",
             ],
+            "last_control_logbook_infractions": [[], [], [], [], []],
+            "last_control_gear_infractions": [[], [], [], [], []],
+            "last_control_species_infractions": [
+                [
+                    {"natinf": 17, "comments": "Infraction espèces 1"},
+                    {"natinf": 1030},
+                    {"natinf": 1031},
+                ],
+                [],
+                [],
+                [],
+                [],
+            ],
+            "last_control_other_infractions": [
+                [
+                    {
+                        "natinf": 22206,
+                        "comments": "Infraction 1",
+                        "infractionType": "WITH_RECORD",
+                    }
+                ],
+                [
+                    {
+                        "natinf": 7061,
+                        "comments": "Infraction 7",
+                        "infractionType": "WITH_RECORD",
+                    }
+                ],
+                [],
+                [],
+                [],
+            ],
         }
     )
 
@@ -287,6 +319,38 @@ def transformed_vessels_most_recent_control():
                 None,
                 "RAS",
                 "Contrôle Poséidon à mettre à jour",
+            ],
+            "last_control_logbook_infractions": [[], [], [], [], []],
+            "last_control_gear_infractions": [[], [], [], [], []],
+            "last_control_species_infractions": [
+                [
+                    {"natinf": 17, "comments": "Infraction espèces 1"},
+                    {"natinf": 1030},
+                    {"natinf": 1031},
+                ],
+                [],
+                [],
+                [],
+                [],
+            ],
+            "last_control_other_infractions": [
+                [
+                    {
+                        "natinf": 22206,
+                        "comments": "Infraction 1",
+                        "infractionType": "WITH_RECORD",
+                    }
+                ],
+                [
+                    {
+                        "natinf": 7061,
+                        "comments": "Infraction 7",
+                        "infractionType": "WITH_RECORD",
+                    }
+                ],
+                [],
+                [],
+                [],
             ],
             "last_control_infraction": [True, True, False, False, False],
         }
@@ -380,21 +444,52 @@ def loaded_control_anteriority() -> pd.DataFrame:
                 1.98266423,
                 1.83120437,
             ],
-            "control_rate_risk_factor": [1.75, 1.75, 2.5, 2.5, 1.75],
-            "infraction_score": [54.9, -5.5, -1.0, -1.0, -1.9],
+            "control_rate_risk_factor": [1.0, 1.0, 2.5, 1.75, 1.75],
+            "infraction_score": [54.9, -5.5, -1.0, -1.9, -1.9],
             "infraction_rate_risk_factor": [4.0, 1.0, 1.0, 1.0, 1.0],
-            "number_controls_last_5_years": [7, 11, 1, 1, 2],
-            "number_controls_last_3_years": [5, 11, 1, 1, 2],
-            "number_infractions_last_5_years": [12, 1, 0, 0, 0],
+            "number_controls_last_5_years": [7, 11, 1, 2, 2],
+            "number_controls_last_3_years": [5, 11, 1, 2, 2],
+            "number_infractions_last_5_years": [12, 1, 0, 1, 0],
             "number_gear_seizures_last_5_years": [1, 0, 0, 0, 0],
             "number_species_seizures_last_5_years": [1, 0, 0, 0, 0],
             "number_vessel_seizures_last_5_years": [2, 1, 0, 0, 2],
+            "last_control_logbook_infractions": [[], [], [], [], []],
+            "last_control_gear_infractions": [[], [], [], [], []],
+            "last_control_species_infractions": [
+                [
+                    {"natinf": 17, "comments": "Infraction espèces 1"},
+                    {"natinf": 1030},
+                    {"natinf": 1031},
+                ],
+                [],
+                [],
+                [],
+                [],
+            ],
+            "last_control_other_infractions": [
+                [
+                    {
+                        "natinf": 22206,
+                        "comments": "Infraction 1",
+                        "infractionType": "WITH_RECORD",
+                    }
+                ],
+                [
+                    {
+                        "natinf": 7061,
+                        "comments": "Infraction 7",
+                        "infractionType": "WITH_RECORD",
+                    }
+                ],
+                [],
+                [],
+                [],
+            ],
         }
     )
 
 
 def test_extract_last_5_years_controls(reset_test_data, last_years_controls):
-
     now = pytz.utc.localize(datetime.utcnow())
     five_years = timedelta(days=5 * 366)
 
@@ -432,7 +527,6 @@ def test_transform_vessels_most_recent_control(
 def test_compute_control_rate_risk_factors(
     last_years_controls, control_rate_risk_factors
 ):
-
     with patch(
         "src.pipeline.flows.control_anteriority.datetime",
         mock_datetime_utcnow(datetime(2023, 12, 31)),
@@ -466,7 +560,6 @@ def test_test_compute_control_statistics(last_years_controls, control_statistics
 
 
 def test_control_anteriority_flow(reset_test_data, loaded_control_anteriority):
-
     query = "SELECT * FROM control_anteriority ORDER BY vessel_id"
 
     # Run control anteriority flow
@@ -476,9 +569,16 @@ def test_control_anteriority_flow(reset_test_data, loaded_control_anteriority):
 
     # Check that control anteriority data was correctly computed and loaded to
     # control_anteriority table
-
     control_anteriority = read_query(query, db="monitorfish_remote")
 
+    # Columns which cannot be checked exactly due to small differences depending on
+    # execution time and lead vs regular years.
+    inexact_columns = [
+        "last_control_datetime_utc",
+        "number_recent_controls",
+    ]
+
+    # Check last_control_datetime_utc
     max_seconds_of_difference_allowed = 10.0
 
     seconds_of_difference = (
@@ -492,10 +592,7 @@ def test_control_anteriority_flow(reset_test_data, loaded_control_anteriority):
 
     assert (seconds_of_difference < max_seconds_of_difference_allowed).all()
 
-    # The value of number_recent_controls may change slightly depending the date, due
-    # to the changing duration of years (regular vs leap years), so we need to make an
-    # approximate check for this value as well.
-
+    # Check number_recent_controls
     assert (
         (
             control_anteriority.number_recent_controls
@@ -503,3 +600,9 @@ def test_control_anteriority_flow(reset_test_data, loaded_control_anteriority):
         ).abs()
         < 0.1
     ).all()
+
+    # Check all other columns
+    pd.testing.assert_frame_equal(
+        control_anteriority.drop(columns=inexact_columns),
+        loaded_control_anteriority.drop(columns=inexact_columns),
+    )

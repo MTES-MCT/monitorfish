@@ -15,7 +15,7 @@ import type { PriorNotification } from '../../../../PriorNotification.types'
 
 // TODO Is the species name really useful since the Backend fills it?
 export function FormikFishingCatchesMultiSelect() {
-  const [input, , helper] = useField<PriorNotification.PriorNotificationDataFishingCatch[]>('fishingCatches')
+  const [input, meta, helper] = useField<PriorNotification.PriorNotificationDataFishingCatch[]>('fishingCatches')
   const { speciesAsOptions } = useGetSpeciesAsOptions()
   const { data: speciesAndGroups } = useGetSpeciesQuery()
 
@@ -50,6 +50,7 @@ export function FormikFishingCatchesMultiSelect() {
     <>
       <Select
         disabled={!filteredSpeciesAsOptions}
+        error={meta.error}
         label="Espèces à bord et à débarquer"
         name="fishingCatches"
         onChange={add}

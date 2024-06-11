@@ -22,7 +22,7 @@ export function FormikFishingCatchesMultiSelect() {
   const filteredSpeciesAsOptions = speciesAsOptions?.filter(specyOption =>
     input.value.every(fishingCatch => fishingCatch.specyCode !== specyOption.value)
   )
-  const sortedFishingCatches = input.value.sort(sortFishingCatches)
+  const sortedFishingCatches = [...input.value].sort(sortFishingCatches)
 
   const add = (specyCode: string | undefined) => {
     const specyOption = speciesAsOptions?.find(({ value }) => value === specyCode)

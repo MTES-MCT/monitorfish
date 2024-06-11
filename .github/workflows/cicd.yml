@@ -256,8 +256,8 @@ jobs:
   e2e_multi_windows_test:
     name: Run E2E multi windows tests
     needs: [version, build]
-    runs-on: ubuntu-22.04
     if: !contains(github.ref, 'dependabot')
+    runs-on: ubuntu-22.04
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
       ENV_PROFILE: ${{ needs.version.outputs.ENV_PROFILE }}

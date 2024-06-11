@@ -48,8 +48,8 @@ export function FormikFishingCatchesMultiSelect() {
     <>
       <Select
         disabled={!filteredSpeciesAsOptions}
-        label="Espèces à débarquer"
-        name="portLocode"
+        label="Espèces à bord et à débarquer"
+        name="fishingCatches"
         onChange={add}
         options={filteredSpeciesAsOptions ?? []}
         searchable

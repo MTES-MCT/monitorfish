@@ -302,6 +302,7 @@ jobs:
   generate_and_upload_source_maps:
     name: Generate and upload source maps to Sentry
     needs: [version, build, unit_test_backend, unit_test_frontend, e2e_test, e2e_multi_windows_test]
+    if: needs.version.outputs.IS_RELEASE && !contains(github.ref, 'dependabot')
     runs-on: ubuntu-22.04
     env:
       VERSION: ${{ needs.version.outputs.VERSION }}

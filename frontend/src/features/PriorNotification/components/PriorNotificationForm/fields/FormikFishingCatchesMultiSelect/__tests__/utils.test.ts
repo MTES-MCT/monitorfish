@@ -2,9 +2,11 @@ import { describe, expect, it } from '@jest/globals'
 
 import { sortFishingCatches } from '../utils'
 
+import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
+
 describe('@features/PriorNotification/components/PriorNotificationForm/fields/FormikFishingCatchesMultiSelectsortFishingCatches/utils.ts', () => {
   it('sortFishingCatches() should sort BFT specy codes as expected', () => {
-    const input = [
+    const fishingCatches = [
       { specyCode: 'AAA' },
       { specyCode: 'BF2' },
       { specyCode: 'BBB' },
@@ -12,9 +14,11 @@ describe('@features/PriorNotification/components/PriorNotificationForm/fields/Fo
       { specyCode: 'BFT' },
       { specyCode: 'CCC' },
       { specyCode: 'BF3' }
-    ]
+    ] as PriorNotification.PriorNotificationDataFishingCatch[]
 
-    const expectedOutput = [
+    const result = fishingCatches.sort(sortFishingCatches)
+
+    expect(result).toEqual([
       { specyCode: 'BFT' },
       { specyCode: 'BF1' },
       { specyCode: 'BF2' },
@@ -22,10 +26,6 @@ describe('@features/PriorNotification/components/PriorNotificationForm/fields/Fo
       { specyCode: 'AAA' },
       { specyCode: 'BBB' },
       { specyCode: 'CCC' }
-    ]
-
-    const sortedOutput = [...input].sort(sortFishingCatches)
-
-    expect(sortedOutput).toEqual(expectedOutput)
+    ] as PriorNotification.PriorNotificationDataFishingCatch[])
   })
 })

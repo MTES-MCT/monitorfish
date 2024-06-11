@@ -55,7 +55,7 @@ VALUES ('ALERT', 'MARIAGE ÎLE HASARD', 'ABC000180832', 'VP374069', 'CG1312', 'I
         false, ('{' ||
                 '"reportingActor": "UNIT",' ||
                 '"controlUnitId": 10012,' ||
-                '"authorTrigram": "",' ||
+                '"authorTrigram": "LTH",' ||
                 '"authorContact": "Jean Bon (0600000000)",' ||
                 '"title": "Pêche sans VMS ni JPE",' ||
                 '"description": "Pêche thon rouge sans VMS détecté ni JPE",' ||

@@ -24,7 +24,7 @@ export default async () => {
         '--enable-features=ExperimentalJavaScript'
       ],
       defaultViewport: null,
-      headless: process.env.IS_HEADLESS,
+      headless: process.env.IS_HEADLESS ?? false,
       product: 'firefox'
     })
 

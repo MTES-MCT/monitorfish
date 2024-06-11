@@ -7,7 +7,7 @@ import { Fragment } from 'react/jsx-runtime'
 import styled from 'styled-components'
 
 import { InputRow } from './styles'
-import { getFishingsCatchesExtraFields, sortFishingCatches } from './utils'
+import { getFishingsCatchesExtraFields } from './utils'
 import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES } from '../../constants'
 import { getFishingsCatchesInitialValues } from '../../utils'
 
@@ -22,7 +22,6 @@ export function FormikFishingCatchesMultiSelect() {
   const filteredSpeciesAsOptions = speciesAsOptions?.filter(specyOption =>
     input.value.every(fishingCatch => fishingCatch.specyCode !== specyOption.value)
   )
-  const sortedFishingCatches = [...input.value].sort(sortFishingCatches)
 
   const add = (specyCode: string | undefined) => {
     const specyOption = speciesAsOptions?.find(({ value }) => value === specyCode)
@@ -40,7 +39,7 @@ export function FormikFishingCatchesMultiSelect() {
   const remove = (specyCode: string | undefined) => {
     const nextFishingCatches = input.value.filter(fishingCatch =>
       specyCode === 'BFT'
-        ? !['BFT', 'BF1', 'BF2', 'BF3'].includes(fishingCatch.specyCode)
+        ? !['BFT', ...BLUEFIN_TUNA_EXTENDED_SPECY_CODES].includes(fishingCatch.specyCode)
         : fishingCatch.specyCode !== specyCode
     )
 
@@ -60,7 +59,7 @@ export function FormikFishingCatchesMultiSelect() {
       />
 
       <Wrapper>
-        {sortedFishingCatches.map((fishingCatch, index) => (
+        {input.value.map((fishingCatch, index) => (
           <Fragment key={fishingCatch.specyCode}>
             {!BLUEFIN_TUNA_EXTENDED_SPECY_CODES.includes(fishingCatch.specyCode) && (
               <Block>
@@ -78,7 +77,7 @@ export function FormikFishingCatchesMultiSelect() {
                     kg
                   </InputRow>
 
-                  {getFishingsCatchesExtraFields(fishingCatch.specyCode, index)}
+                  {getFishingsCatchesExtraFields(fishingCatch.specyCode, index, input.value)}
                 </div>
               </Block>
             )}

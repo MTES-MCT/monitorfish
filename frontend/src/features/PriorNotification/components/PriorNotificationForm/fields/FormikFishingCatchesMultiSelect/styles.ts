@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 export const Double = styled.div`
+  align-items: center;
   display: flex;
   gap: 8px;
 
@@ -8,6 +9,9 @@ export const Double = styled.div`
     max-width: 50%;
     width: 50%;
   }
+`
+export const ExtendedSpecyCode = styled.span`
+  color: ${p => p.theme.color.slateGray};
 `
 
 export const InputRow = styled.div`

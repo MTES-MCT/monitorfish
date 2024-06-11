@@ -71,21 +71,12 @@
                 "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "DOS FIN",
                 "value:jsonb": {
+                    // Unsorted on purpose
                     "catchOnboard": [
-                        {
-                            "weight": 600.0,
-                            "nbFish": null,
-                            "species": "BFT"
-                        },
                         {
                             "weight": 300.0,
                             "nbFish": 10,
                             "species": "BF1"
-                        },
-                        {
-                            "weight": 200.0,
-                            "nbFish": 25,
-                            "species": "BF2"
                         },
                         {
                             "weight": 100.0,
@@ -96,6 +87,16 @@
                             "weight": 400.0,
                             "nbFish": 80,
                             "species": "SWO"
+                        },
+                        {
+                            "weight": 600.0,
+                            "nbFish": null,
+                            "species": "BFT"
+                        },
+                        {
+                            "weight": 200.0,
+                            "nbFish": 25,
+                            "species": "BF2"
                         }
                     ],
                     "catchToLand": [

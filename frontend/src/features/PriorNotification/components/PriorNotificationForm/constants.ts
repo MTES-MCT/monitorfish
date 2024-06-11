@@ -4,7 +4,6 @@ import type { FormValues } from './types'
 import type { PriorNotification } from '../../PriorNotification.types'
 
 export const BLUEFIN_TUNA_EXTENDED_SPECY_CODES = ['BF1', 'BF2', 'BF3']
-export const GUARANTEED_ORDERED_SPECY_CODES = ['BFT', 'BF1', 'BF2', 'BF3']
 
 const FISHING_CATCH_VALIDATION_SCHEMA: ObjectSchema<PriorNotification.PriorNotificationDataFishingCatch> = object({
   quantity: number(),

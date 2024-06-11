@@ -169,10 +169,6 @@ jobs:
             VERSION=${{ env.VERSION }}
             ENV_PROFILE=${{ env.ENV_PROFILE }}
             GITHUB_SHA=${{ github.sha }}
-            SENTRY_URL=${{ secrets.SENTRY_URL }}
-            SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
-            SENTRY_ORG=${{ secrets.SENTRY_ORG }}
-            SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }}
 
         # Temp fix
         # https://github.com/docker/build-push-action/issues/252
@@ -303,9 +299,49 @@ jobs:
         run: npm run test:multi-windows:run
         working-directory: ./frontend
 
+  generate_and_upload_source_maps:
+    name: Generate and upload source maps to Sentry
+    needs: [version, build, unit_test_backend, unit_test_frontend, e2e_test, e2e_multi_windows_test]
+    runs-on: ubuntu-22.04
+    env:
+      VERSION: ${{ needs.version.outputs.VERSION }}
+      SENTRY_URL: ${{ secrets.SENTRY_URL }}
+      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+      SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 100
+
+      - name: Download image
+        uses: ishworkh/docker-image-artifact-download@v1
+        with:
+          image: monitorfish-app:${{ env.VERSION }}
+
+      - name: Extract frontend build files
+        run: |
+          docker create --name monitorfish-temp monitorfish-app:${{ env.VERSION }}
+          docker cp monitorfish-temp:/home/monitorfish/public/assets ./frontend_build
+          docker rm monitorfish-temp
+      - name: Generate and upload source maps to Sentry
+        uses: getsentry/action-release@v1
+        with:
+          environment: ${{ env.ENV_PROFILE }}
+          version: ${{ env.VERSION }}
+          sourcemaps: ./frontend_build
+          ignore_missing: true
+          ignore_empty: true
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+          SENTRY_URL: ${{ secrets.SENTRY_URL }}
+
   push_to_registry:
     name: Push to registry
-    needs: [version, unit_test_backend, unit_test_frontend, e2e_test, e2e_multi_windows_test]
+    needs: [version, unit_test_backend, unit_test_frontend, e2e_test, e2e_multi_windows_test, generate_and_upload_source_maps]
     runs-on: ubuntu-22.04
     if: needs.version.outputs.IS_RELEASE && !contains(github.ref, 'dependabot')
     env:

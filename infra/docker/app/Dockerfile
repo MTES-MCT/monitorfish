@@ -53,30 +53,6 @@ RUN npx pkg ./node_modules/@import-meta-env/cli/bin/import-meta-env.js \
   --output import-meta-env
 
 ######################
-# Upload sourcemaps  #
-######################
-FROM getsentry/sentry-cli:2.19.4 AS buildSourcemaps
-
-ARG VERSION
-ARG SENTRY_URL
-ARG SENTRY_AUTH_TOKEN
-ARG SENTRY_ORG
-ARG SENTRY_PROJECT
-
-RUN mkdir -p /tmp/frontend/build
-COPY --from=buildFront /tmp/frontend/build /tmp/frontend/build
-
-# Upload sourcemaps to sentry
-RUN sentry-cli sourcemaps inject /tmp/frontend
-RUN sentry-cli \
-  --url ${SENTRY_URL} \
-  --auth-token ${SENTRY_AUTH_TOKEN} \
-  sourcemaps upload /tmp/frontend \
-  --release ${VERSION} \
-  --org ${SENTRY_ORG} \
-  --project ${SENTRY_PROJECT}
-
-######################
 # Create final image #
 ######################
 FROM azul/zulu-openjdk-alpine:17-jre
@@ -115,7 +91,7 @@ COPY infra/configurations /home/monitorfish/configurations/
 USER monitorfish
 # Copy files for the front
 RUN mkdir /home/monitorfish/public
-COPY --from=buildSourcemaps /tmp/frontend/build /home/monitorfish/public/
+COPY --from=buildFront /tmp/frontend/build /home/monitorfish/public/
 
 # Copy import-meta-env
 COPY --from=buildFront /tmp/frontend/import-meta-env /home/monitorfish/

@@ -13,25 +13,86 @@ flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_ru
 @pytest.fixture
 def risk_factors() -> pd.DataFrame:
     return pd.DataFrame(
-        columns=pd.Index(
-            [
-                "vessel_id",
-                "cfr",
-                "ircs",
-                "external_immatriculation",
-                "probability_risk_factor",
-                "detectability_risk_factor",
-                "risk_factor",
-            ]
-        ),
-        data=[
-            [1, "ABC000306959", "LLUK", "RV348407", 1.0, 1.322876, 1.334146],
-            [2, "ABC000542519", None, None, 2.0, 2.000000, 2.168944],
-            [3, "ABC000055481", "IL2468", "AS761555", 1.0, 1.322876, 1.150163],
-            [4, "CFR_OF_LOGBK", "OLY7853", "SB125334", 1.0, 1.322876, 1.334146],
-            [5, "OLD_VESSEL_1", "SOMEID", "HG987654", 1.0, 1.322876, 1.150163],
-            [None, "UNKONWN_VESS", None, None, 2.0, 2.0, 1.741101],
-        ],
+        {
+            "vessel_id": [1.0, 2.0, 3.0, 4.0, 5.0, None],
+            "cfr": [
+                "ABC000306959",
+                "ABC000542519",
+                "ABC000055481",
+                "CFR_OF_LOGBK",
+                "OLD_VESSEL_1",
+                "UNKONWN_VESS",
+            ],
+            "ircs": ["LLUK", None, "IL2468", "OLY7853", "SOMEID", None],
+            "external_immatriculation": [
+                "RV348407",
+                None,
+                "AS761555",
+                "SB125334",
+                "HG987654",
+                None,
+            ],
+            "probability_risk_factor": [1.0, 2.0, 1.0, 1.0, 1.0, 2.0],
+            "detectability_risk_factor": [
+                1.3228756555323,
+                2.0,
+                1.3228756555323,
+                1.3228756555323,
+                1.3228756555323,
+                2.0,
+            ],
+            "risk_factor": [
+                1.3341460388872,
+                2.1689435423954,
+                1.1501633168956,
+                1.3341460388872,
+                1.1501633168956,
+                1.74110112659225,
+            ],
+            "last_control_logbook_infractions": [[], [], [], [], [], []],
+            "last_control_gear_infractions": [
+                [],
+                [],
+                [],
+                [
+                    {
+                        "natinf": 27724,
+                        "comments": "Infraction engin",
+                        "infractionType": "WITHOUT_RECORD",
+                    }
+                ],
+                [],
+                [],
+            ],
+            "last_control_species_infractions": [
+                [],
+                [],
+                [],
+                [
+                    {
+                        "natinf": 1030,
+                        "comments": "Infraction espèces 2",
+                        "infractionType": "WITH_RECORD",
+                    }
+                ],
+                [],
+                [],
+            ],
+            "last_control_other_infractions": [
+                [],
+                [],
+                [
+                    {
+                        "natinf": 20233,
+                        "comments": "Infraction 3",
+                        "infractionType": "WITH_RECORD",
+                    }
+                ],
+                [],
+                [{"natinf": 2606}, {"natinf": 4761}, {"natinf": 22206}],
+                [],
+            ],
+        }
     )
 
 
@@ -43,7 +104,11 @@ def test_risk_factor_flow(reset_test_data, risk_factors):
         external_immatriculation,
         probability_risk_factor,
         detectability_risk_factor,
-        risk_factor
+        risk_factor,
+        last_control_logbook_infractions,
+        last_control_gear_infractions,
+        last_control_species_infractions,
+        last_control_other_infractions
     FROM risk_factors
     ORDER BY vessel_id"""
 

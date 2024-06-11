@@ -75,6 +75,7 @@ context('Vessels list', () => {
 
   it('Vessels Should be downloaded When a vessel is selected', () => {
     // Given
+    cy.cleanFiles()
     cy.get('*[data-cy^="vessel-list"]').click({ timeout: 10000 })
     cy.get(
       '[aria-rowindex="2"] > .rs-table-cell-group-fixed-left > .table-content-editing ' +

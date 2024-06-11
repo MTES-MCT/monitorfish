@@ -6,10 +6,12 @@ import { useField } from 'formik'
 import { Fragment } from 'react/jsx-runtime'
 import styled from 'styled-components'
 
-import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES } from '../constants'
-import { getFishingsCatchesInitialValues } from '../utils'
+import { InputRow } from './styles'
+import { getFishingsCatchesExtraFields, sortFishingCatches } from './utils'
+import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES } from '../../constants'
+import { getFishingsCatchesInitialValues } from '../../utils'
 
-import type { PriorNotification } from '../../../PriorNotification.types'
+import type { PriorNotification } from '../../../../PriorNotification.types'
 
 // TODO Is the species name really useful since the Backend fills it?
 export function FormikFishingCatchesMultiSelect() {
@@ -20,6 +22,7 @@ export function FormikFishingCatchesMultiSelect() {
   const filteredSpeciesAsOptions = speciesAsOptions?.filter(specyOption =>
     input.value.every(fishingCatch => fishingCatch.specyCode !== specyOption.value)
   )
+  const sortedFishingCatches = input.value.sort(sortFishingCatches)
 
   const add = (specyCode: string | undefined) => {
     const specyOption = speciesAsOptions?.find(({ value }) => value === specyCode)
@@ -57,7 +60,7 @@ export function FormikFishingCatchesMultiSelect() {
       />
 
       <Wrapper>
-        {input.value.map((fishingCatch, index) => (
+        {sortedFishingCatches.map((fishingCatch, index) => (
           <Fragment key={fishingCatch.specyCode}>
             {!BLUEFIN_TUNA_EXTENDED_SPECY_CODES.includes(fishingCatch.specyCode) && (
               <Block>
@@ -75,43 +78,7 @@ export function FormikFishingCatchesMultiSelect() {
                     kg
                   </InputRow>
 
-                  {/* BFT - Bluefin Tuna => + BF1, BF2, BF3 */}
-                  {fishingCatch.specyCode === 'BFT' && (
-                    <>
-                      {BLUEFIN_TUNA_EXTENDED_SPECY_CODES.map((extendedSpecyCode, extendedIndex) => (
-                        <Double key={extendedSpecyCode}>
-                          <InputRow>
-                            <FormikNumberInput
-                              isLabelHidden
-                              label={`Quantité (${extendedSpecyCode})`}
-                              name={`fishingCatches[${index + extendedIndex + 1}].quantity`}
-                            />
-                            pc
-                          </InputRow>
-                          <InputRow>
-                            <FormikNumberInput
-                              isLabelHidden
-                              label={`Poids (${extendedSpecyCode})`}
-                              name={`fishingCatches[${index + extendedIndex + 1}].weight`}
-                            />
-                            kg
-                          </InputRow>
-                        </Double>
-                      ))}
-                    </>
-                  )}
-
-                  {/* SWO - Swordfish */}
-                  {fishingCatch.specyCode === 'SWO' && (
-                    <InputRow>
-                      <FormikNumberInput
-                        isLabelHidden
-                        label={`Quantité (${fishingCatch.specyCode})`}
-                        name={`fishingCatches[${index}].quantity`}
-                      />
-                      pc
-                    </InputRow>
-                  )}
+                  {getFishingsCatchesExtraFields(fishingCatch.specyCode, index)}
                 </div>
               </Block>
             )}
@@ -141,34 +108,6 @@ const Block = styled.div`
       display: flex;
       flex-direction: column;
       gap: 8px;
-    }
-  }
-`
-
-const Double = styled.div`
-  display: flex;
-  gap: 8px;
-
-  > div {
-    max-width: 50%;
-    width: 50%;
-  }
-`
-
-const InputRow = styled.div`
-  align-items: center;
-  background-color: ${p => p.theme.color.gainsboro};
-  color: ${p => p.theme.color.slateGray};
-  display: flex;
-  padding-right: 8px;
-
-  > .Field-NumberInput {
-    flex-grow: 1;
-    margin-right: 8px;
-
-    > input {
-      border: none !important;
-      padding: 6px 8px 4px;
     }
   }
 `

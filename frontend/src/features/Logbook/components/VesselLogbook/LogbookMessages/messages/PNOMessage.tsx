@@ -1,3 +1,4 @@
+import { useGetGearsQuery } from '@api/gear'
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { FlatKeyValue } from '@features/VesselSidebar/common/FlatKeyValue'
 import { uniq } from 'lodash'
@@ -19,6 +20,20 @@ type PNOMessageProps = Readonly<{
   tripGears: Gear[] | undefined
 }>
 export function PNOMessage({ isLessThanTwelveMetersVessel, message, tripGears }: PNOMessageProps) {
+  const getGearsApiQuery = useGetGearsQuery()
+
+  const gearsWithName: Array<Gear> = useMemo(() => {
+    if (!getGearsApiQuery.data || !tripGears) {
+      return []
+    }
+
+    return tripGears.map(tripGear => {
+      const gearName = getGearsApiQuery.data?.find(gear => gear.code === tripGear.gear)?.name || null
+
+      return { ...tripGear, gearName }
+    })
+  }, [getGearsApiQuery.data, tripGears])
+
   const catchesWithProperties = useMemo(() => {
     if (!message?.catchOnboard) {
       return []
@@ -84,7 +99,9 @@ export function PNOMessage({ isLessThanTwelveMetersVessel, message, tripGears }:
               column={[
                 {
                   key: 'Engins utilisés',
-                  value: tripGears?.map(gear => gear.gear).join(', ')
+                  value: gearsWithName
+                    .map(gear => (gear.gearName ? `${gear.gearName} (${gear.gear})` : gear.gear))
+                    .join(', ')
                 },
                 {
                   key: 'Zones de pêche',

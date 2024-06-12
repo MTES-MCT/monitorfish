@@ -45,7 +45,11 @@ export function LogbookMessage({
       }
       case LogbookMessageTypeEnum.PNO.code.toString(): {
         if (isLessThanTwelveMetersVessel) {
-          return 'Préavis (notification de retour au port) – navire sans JPE'
+          return (
+            <>
+              Préavis (notification de retour au port) – <i>navire sans JPE</i>
+            </>
+          )
         }
 
         return LogbookMessageTypeEnum[logbookMessage.messageType].fullName

@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.UNKNOWN_VESSEL
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendInternalException
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.abstractions.AbstractLogbookEntity
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
@@ -25,9 +26,6 @@ data class ManualPriorNotificationEntity(
     @Column(name = "author_trigram")
     val authorTrigram: String,
 
-    @Column(name = "cfr")
-    val cfr: String,
-
     @Column(name = "created_at", insertable = false, updatable = false)
     @CreationTimestamp
     val createdAt: ZonedDateTime? = null,
@@ -35,23 +33,11 @@ data class ManualPriorNotificationEntity(
     @Column(name = "did_not_fish_after_zero_notice")
     val didNotFishAfterZeroNotice: Boolean,
 
-    // ISO Alpha-3 country code
-    @Column(name = "flag_state")
-    val flagState: String?,
-
     @Column(name = "note")
     val note: String?,
 
     @Column(name = "sent_at")
     val sentAt: ZonedDateTime,
-
-    @Column(name = "trip_gears", nullable = true, columnDefinition = "jsonb")
-    @Type(JsonBinaryType::class)
-    val tripGears: List<LogbookTripGear>?,
-
-    @Column(name = "trip_segments", nullable = true, columnDefinition = "jsonb")
-    @Type(JsonBinaryType::class)
-    val tripSegments: List<LogbookTripSegment>?,
 
     @Column(name = "updated_at")
     @UpdateTimestamp
@@ -61,8 +47,18 @@ data class ManualPriorNotificationEntity(
     @Type(JsonBinaryType::class)
     val value: PNO,
 
-    @Column(name = "vessel_name")
-    val vesselName: String?,
+    /** ISO Alpha-3 country code. */
+    override val flagState: String?,
+    override val cfr: String?,
+    override val tripGears: List<LogbookTripGear>?,
+    override val tripSegments: List<LogbookTripSegment>?,
+    override val vesselName: String?,
+) : AbstractLogbookEntity(
+    cfr = cfr,
+    flagState = flagState,
+    vesselName = vesselName,
+    tripGears = tripGears,
+    tripSegments = tripSegments,
 ) {
 
     companion object {

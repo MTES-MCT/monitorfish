@@ -1147,7 +1147,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
                 externalReferenceNumber = null,
                 flagState = null,
                 integrationDateTime = Instant.now(),
-                internalReferenceNumber = null,
+                cfr = null,
                 imo = null,
                 ircs = null,
                 message = null,

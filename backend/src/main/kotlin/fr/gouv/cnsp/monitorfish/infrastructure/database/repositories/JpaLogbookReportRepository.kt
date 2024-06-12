@@ -252,13 +252,13 @@ class JpaLogbookReportRepository(
             }
 
         return lanAndPnoMessagesWithoutCorrectedMessages.filter {
-            it.internalReferenceNumber != null &&
+            it.cfr != null &&
                 it.tripNumber != null &&
                 it.messageType == LogbookMessageTypeMapping.LAN.name
         }.map { lanMessage ->
             val pnoMessage =
                 lanAndPnoMessagesWithoutCorrectedMessages.singleOrNull { message ->
-                    message.internalReferenceNumber == lanMessage.internalReferenceNumber &&
+                    message.cfr == lanMessage.cfr &&
                         message.tripNumber == lanMessage.tripNumber &&
                         message.messageType == LogbookMessageTypeMapping.PNO.name
                 }

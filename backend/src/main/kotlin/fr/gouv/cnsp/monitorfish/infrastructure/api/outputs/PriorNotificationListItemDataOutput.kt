@@ -83,7 +83,7 @@ data class PriorNotificationListItemDataOutput(
                 onBoardCatches,
                 portLocode = priorNotification.port?.locode,
                 portName = priorNotification.port?.name,
-                purposeCode = message.purpose,
+                purposeCode = message.purpose.toString(),
                 reportingCount = priorNotification.reportingCount,
                 seafront = priorNotification.seafront,
                 sentAt = logbookMessage.reportDateTime?.toString(),

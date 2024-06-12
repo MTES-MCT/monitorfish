@@ -120,14 +120,18 @@ for (const file of jsonFiles) {
   const dataTables = Array.isArray(jsonSourceAsObject) ? jsonSourceAsObject : [jsonSourceAsObject]
   const sqlStatementBlocks = dataTables
     .map(dataTable => {
-      const { data: rows, id, table } = dataTable
+      const { afterAll, beforeAll, data: rows, id, table } = dataTable
 
-      return rows.map(row => {
-        const insertStatement = generateInsertStatement(row, table)
-        const updateStatements = generateUpdateStatements(row, table, id)
+      return [
+        beforeAll,
+        ...rows.map(row => {
+          const insertStatement = generateInsertStatement(row, table)
+          const updateStatements = generateUpdateStatements(row, table, id)
 
-        return [insertStatement, ...updateStatements, ''].join('\n')
-      })
+          return [insertStatement, ...updateStatements, ''].join('\n')
+        }),
+        afterAll
+      ].filter(Boolean)
     })
     .flat()
 

@@ -1,6 +1,7 @@
 [
     {
         "table": "reportings",
+        "afterAll": "SELECT setval('reportings_id_seq', (SELECT MAX(id) FROM reportings));",
         "data": [
             // - Vessel: VIVA ESPANA
             // - With 2 reportings

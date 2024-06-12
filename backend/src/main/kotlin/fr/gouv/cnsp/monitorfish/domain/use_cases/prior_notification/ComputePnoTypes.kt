@@ -35,6 +35,26 @@ class ComputePnoTypes(
         }
 
         val filteredPnoTypes = allPnoTypes.filter { pnoType ->
+            val allCatchesOfPnoType = catchToPnoTypes
+                .filter { (_, pnoTypes) -> pnoTypes.any { pnoTypeOfCatch -> pnoTypeOfCatch.id == pnoType.id } }
+                .map { (pnoCatch, _) -> pnoCatch }
+
+            val hasEmptyGears = pnoType.pnoTypeRules.all { rule ->
+                rule.gears.isEmpty()
+            }
+            val hasEmptyFlagStates = pnoType.pnoTypeRules.all { rule ->
+                rule.flagStates.isEmpty()
+            }
+            val hasEmptyRequiredCatches = pnoType.pnoTypeRules.all { rule ->
+                rule.species.isEmpty()
+            } && pnoType.pnoTypeRules.all { rule ->
+                rule.faoAreas.isEmpty()
+            } && pnoType.pnoTypeRules.all { rule ->
+                rule.cgpmAreas.isEmpty()
+            }
+
+            val numberOfEmptyFields = listOf(hasEmptyGears, hasEmptyFlagStates, hasEmptyRequiredCatches).count { it }
+
             val containsGear = pnoType.pnoTypeRules.any { rule ->
                 rule.gears.any { pnoGears.contains(it) }
             }
@@ -42,16 +62,38 @@ class ComputePnoTypes(
                 rule.flagStates.contains(flagState)
             }
 
-            val allCatchesOfPnoType = catchToPnoTypes
-                .filter { (_, pnoTypes) -> pnoTypes.any { pnoTypeOfCatch -> pnoTypeOfCatch.id == pnoType.id } }
-                .map { (pnoCatch, _) -> pnoCatch }
-
             val totalCatchesWeight = allCatchesOfPnoType.mapNotNull { it.weight }.sum()
             val hasCatchesAndMinimumQuantity = allCatchesOfPnoType.isNotEmpty() && pnoType.pnoTypeRules.any { rules ->
                 totalCatchesWeight >= rules.minimumQuantityKg
             }
 
-            return@filter containsGear || containsFlagState || hasCatchesAndMinimumQuantity
+            return@filter when (numberOfEmptyFields) {
+                0 -> {
+                    containsGear && containsFlagState && hasCatchesAndMinimumQuantity
+                }
+
+                1 -> {
+                    when {
+                        !hasEmptyGears && !hasEmptyFlagStates -> containsGear && containsFlagState
+                        !hasEmptyGears && !hasEmptyRequiredCatches -> containsGear && hasCatchesAndMinimumQuantity
+                        !hasEmptyFlagStates && !hasEmptyRequiredCatches -> containsFlagState && hasCatchesAndMinimumQuantity
+                        else -> { throw IllegalArgumentException("Only one empty field is required.") }
+                    }
+                }
+
+                2 -> {
+                    when {
+                        hasEmptyGears && hasEmptyFlagStates -> hasCatchesAndMinimumQuantity
+                        hasEmptyGears && hasEmptyRequiredCatches -> containsFlagState
+                        hasEmptyFlagStates && hasEmptyRequiredCatches -> containsGear
+                        else -> { throw IllegalArgumentException("Two empty fields are required.") }
+                    }
+                }
+
+                else -> {
+                    false
+                }
+            }
         }
 
         return filteredPnoTypes

@@ -11,7 +11,7 @@ import java.time.ZonedDateTime
 const val defaultImpactRiskFactor = 1.0
 const val defaultProbabilityRiskFactor = 2.0
 const val defaultDetectabilityRiskFactor = 2.0
-const val defaultRiskFactor = 1.4
+const val defaultRiskFactor = 1.74
 const val defaultControlPriorityLevel = 1.0
 const val defaultControlRateRiskFactor = 4.0
 

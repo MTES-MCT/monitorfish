@@ -55,8 +55,8 @@ export function FormikVesselSelect() {
         flagState: vessel.flagState ?? null,
         internalReferenceNumber: null,
         ircs: vessel.ircs ?? null,
-        vesselId: vessel.vesselId,
-        vesselName: vessel.vesselName
+        vesselId: vessel.vesselId ?? null,
+        vesselName: vessel.vesselName ?? null
       }
 
       setIsLoading(false)

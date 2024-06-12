@@ -9,9 +9,9 @@ const GET_VESSEL_ERROR_MESSAGE = "Nous n'avons pas pu récupérer le préavis."
 
 export const vesselApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
-    getVessel: builder.query<Vessel.NextVessel, number>({
+    getVessel: builder.query<Vessel.Vessel, number>({
       providesTags: () => [{ type: RtkCacheTagType.Vessel }],
-      query: logbookMessageReportId => `/vessels/${logbookMessageReportId}`,
+      query: id => `/vessels/${id}`,
       transformErrorResponse: response => new FrontendApiError(GET_VESSEL_ERROR_MESSAGE, response)
     })
   })

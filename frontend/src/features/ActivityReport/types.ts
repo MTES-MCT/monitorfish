@@ -13,7 +13,7 @@ export type ActivityReport = {
   controlUnits: LegacyControlUnit.LegacyControlUnit[]
   faoArea: string | undefined
   segment: string | undefined
-  vessel: Vessel.Vessel
+  vessel: Vessel.EnrichedVessel
   vesselNationalIdentifier: string
 }
 

@@ -45,7 +45,7 @@ class ComputePnoTypes(
                 rule.species.isEmpty() && rule.faoAreas.isEmpty() && rule.cgpmAreas.isEmpty()
             }
 
-            val numberOfEmptyFields = listOf(hasEmptyGears, hasEmptyFlagStates, hasEmptyRequiredCatches).count { it }
+            val numberOfEmptyRules = listOf(hasEmptyGears, hasEmptyFlagStates, hasEmptyRequiredCatches).count { it }
 
             val containsGear = pnoType.pnoTypeRules.any { rule -> rule.gears.any { pnoGears.contains(it) } }
             val containsFlagState = pnoType.pnoTypeRules.any { rule -> rule.flagStates.contains(flagState) }
@@ -55,7 +55,7 @@ class ComputePnoTypes(
                 totalCatchesWeight >= rules.minimumQuantityKg
             }
 
-            return@filter when (numberOfEmptyFields) {
+            return@filter when (numberOfEmptyRules) {
                 0 -> containsGear && containsFlagState && hasCatchesAndMinimumQuantity
 
                 1 -> when {

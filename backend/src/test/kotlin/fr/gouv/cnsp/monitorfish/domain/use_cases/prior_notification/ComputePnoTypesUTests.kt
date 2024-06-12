@@ -241,6 +241,21 @@ class ComputePnoTypesUTests {
     }
 
     @Test
+    fun `execute Should not return Préavis type 7 When there is only one match in each rule`() {
+        // Given
+        val catchToLand = listOf<Catch>()
+        val tripGears = getGears(listOf("OTT"))
+        val flagState = CountryCode.BB
+        given(pnoTypeRepository.findAll()).willReturn(TestUtils.getDummyPnoTypes())
+
+        // When
+        val result = ComputePnoTypes(pnoTypeRepository).execute(catchToLand, tripGears, flagState)
+
+        // Then
+        assertThat(result).hasSize(0)
+    }
+
+    @Test
     fun `execute Should throw an Exception When the faoZone is missing a catch`() {
         // Given
         given(pnoTypeRepository.findAll()).willReturn(TestUtils.getDummyPnoTypes())

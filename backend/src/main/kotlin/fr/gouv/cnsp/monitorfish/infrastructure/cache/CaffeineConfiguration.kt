@@ -38,6 +38,7 @@ class CaffeineConfiguration {
     val logbookRawMessage = "logbook_raw_message"
     val nextLogbook = "next_logbook"
     val previousLogbook = "previous_logbook"
+    val pnoTypes = "pno_types"
 
     // Missions
     val missionControlUnits = "mission_control_units"
@@ -106,6 +107,8 @@ class CaffeineConfiguration {
         val nextLogbookCache = buildMinutesCache(nextLogbook, ticker, 10)
         val previousLogbookCache = buildMinutesCache(previousLogbook, ticker, 10)
 
+        val pnoTypesCache = buildMinutesCache(pnoTypes, ticker, 123)
+
         // Missions
         val missionControlUnitsCache = buildMinutesCache(missionControlUnits, ticker, 120)
 
@@ -170,6 +173,7 @@ class CaffeineConfiguration {
                 logbookRawMessageCache,
                 missionControlUnitsCache,
                 nextLogbookCache,
+                pnoTypesCache,
                 portCache,
                 portsCache,
                 previousLogbookCache,

@@ -38,7 +38,7 @@
     "@mtes-mct/monitor-ui": "18.0.3",
     "@reduxjs/toolkit": "1.9.6",
     "@sentry/browser": "7.55.2",
-    "@sentry/react": "7.52.1",
+    "@sentry/react": "7.117.0",
     "@tanstack/react-table": "8.17.3",
     "@tanstack/react-virtual": "beta",
     "comlink": "4.4.1",

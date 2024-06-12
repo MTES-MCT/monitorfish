@@ -15,7 +15,7 @@ interface DBLogbookReportRepository :
     @Query(
         """
         WITH
-            dat_and_cor_logbook_reports_with_extra_columns AS (
+            dat_and_cor_pno_logbook_reports_with_extra_columns AS (
                 SELECT
                     lr.*,
                     (SELECT array_agg(pnoTypes->>'pnoTypeName') FROM jsonb_array_elements(lr.value->'pnoTypes') AS pnoTypes) AS prior_notification_type_names,
@@ -23,7 +23,6 @@ interface DBLogbookReportRepository :
                     (SELECT array_agg(tripGears->>'gear') FROM jsonb_array_elements(lr.trip_gears) AS tripGears) AS trip_gear_codes,
                     (SELECT array_agg(tripSegments->>'segment') FROM jsonb_array_elements(lr.trip_segments) AS tripSegments) AS trip_segment_codes
                 FROM logbook_reports lr
-                LEFT JOIN ports p ON lr.value->>'port' = p.locode
                 LEFT JOIN risk_factors rf ON lr.cfr = rf.cfr
                 LEFT JOIN vessels v ON lr.cfr = v.cfr
                 WHERE
@@ -67,7 +66,7 @@ interface DBLogbookReportRepository :
 
             distinct_cfrs AS (
                 SELECT DISTINCT cfr
-                FROM dat_and_cor_logbook_reports_with_extra_columns
+                FROM dat_and_cor_pno_logbook_reports_with_extra_columns
             ),
 
             cfr_reporting_counts AS (
@@ -83,17 +82,17 @@ interface DBLogbookReportRepository :
                 GROUP BY cfr
             ),
 
-            dat_and_cor_logbook_reports_with_extra_columns_and_reporting_count AS (
+            dat_and_cor_pno_logbook_reports_with_extra_columns_and_reporting_count AS (
                 SELECT
-                    daclr.*,
+                    dacplrwecarc.*,
                     COALESCE(crc.reporting_count, 0) AS reporting_count
-                FROM dat_and_cor_logbook_reports_with_extra_columns daclr
-                LEFT JOIN cfr_reporting_counts crc ON daclr.cfr = crc.cfr
+                FROM dat_and_cor_pno_logbook_reports_with_extra_columns dacplrwecarc
+                LEFT JOIN cfr_reporting_counts crc ON dacplrwecarc.cfr = crc.cfr
             ),
 
-            dat_and_cor_logbook_reports AS (
+            filtered_dat_and_cor_pno_logbook_reports AS (
                 SELECT *
-                FROM dat_and_cor_logbook_reports_with_extra_columns_and_reporting_count
+                FROM dat_and_cor_pno_logbook_reports_with_extra_columns_and_reporting_count
                 WHERE
                     -- Has One Or More Reportings
                     (
@@ -115,7 +114,7 @@ interface DBLogbookReportRepository :
                     AND (:tripSegmentCodesAsSqlArrayString IS NULL OR trip_segment_codes && CAST(:tripSegmentCodesAsSqlArrayString AS TEXT[]))
             ),
 
-            del_logbook_reports AS (
+            del_pno_logbook_reports AS (
                 SELECT
                     lr.*,
                     CAST(NULL AS TEXT[]) AS prior_notification_type_names,
@@ -124,7 +123,7 @@ interface DBLogbookReportRepository :
                     CAST(NULL AS TEXT[]) AS trip_segment_codes,
                     CAST(NULL AS INTEGER) AS reporting_count
                 FROM logbook_reports lr
-                JOIN dat_and_cor_logbook_reports daclr ON lr.referenced_report_id = daclr.report_id
+                JOIN filtered_dat_and_cor_pno_logbook_reports fdacplr ON lr.referenced_report_id = fdacplr.report_id
                 WHERE
                     -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
                     lr.operation_datetime_utc
@@ -134,7 +133,7 @@ interface DBLogbookReportRepository :
                     AND lr.operation_type = 'DEL'
             ),
 
-            ret_logbook_reports AS (
+            ret_pno_logbook_reports AS (
                 SELECT
                     lr.*,
                     CAST(NULL AS TEXT[]) AS prior_notification_type_names,
@@ -143,7 +142,7 @@ interface DBLogbookReportRepository :
                     CAST(NULL AS TEXT[]) AS trip_segment_codes,
                     CAST(NULL AS INTEGER) AS reporting_count
                 FROM logbook_reports lr
-                JOIN dat_and_cor_logbook_reports daclr ON lr.referenced_report_id = daclr.report_id
+                JOIN filtered_dat_and_cor_pno_logbook_reports fdacplr ON lr.referenced_report_id = fdacplr.report_id
                 WHERE
                     -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
                     lr.operation_datetime_utc
@@ -154,17 +153,17 @@ interface DBLogbookReportRepository :
             )
 
         SELECT *
-        FROM dat_and_cor_logbook_reports
+        FROM filtered_dat_and_cor_pno_logbook_reports
 
         UNION
 
         SELECT *
-        FROM del_logbook_reports
+        FROM del_pno_logbook_reports
 
         UNION
 
         SELECT *
-        FROM ret_logbook_reports;
+        FROM ret_pno_logbook_reports;
         """,
         nativeQuery = true,
     )
@@ -192,23 +191,30 @@ interface DBLogbookReportRepository :
                 -- It may not exist while a COR operation would still exist (orphan COR case)
                 SELECT report_id
                 FROM logbook_reports
-                WHERE report_id = ?1 AND log_type = 'PNO' AND operation_type = 'DAT' AND enriched = TRUE
+                WHERE
+                    report_id = :reportId
+                    AND log_type = 'PNO'
+                    AND operation_type = 'DAT'
+                    AND enriched = TRUE
 
                 UNION
 
                 -- Get the logbook report corrections which may be used as base for the "final" report
                 SELECT report_id
                 FROM logbook_reports
-                WHERE referenced_report_id = ?1 AND log_type = 'PNO' AND operation_type = 'COR' AND enriched = TRUE
-            )
+                WHERE
+                    referenced_report_id = :reportId
+                    AND log_type = 'PNO'
+                    AND operation_type = 'COR'
+                    AND enriched = TRUE
+           )
 
         SELECT *
         FROM logbook_reports
         WHERE
             report_id IN (SELECT * FROM dat_and_cor_logbook_report_report_ids)
             OR referenced_report_id IN (SELECT * FROM dat_and_cor_logbook_report_report_ids)
-        ORDER BY
-            report_datetime_utc
+        ORDER BY report_datetime_utc;
         """,
         nativeQuery = true,
     )

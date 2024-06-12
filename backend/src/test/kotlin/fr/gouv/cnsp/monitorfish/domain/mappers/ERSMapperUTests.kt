@@ -33,17 +33,17 @@ class ERSMapperUTests {
     @Test
     fun `getERSMessageValueFromJSON Should deserialize a FAR message When it is first serialized`() {
         // Given
-        val catch = Catch()
-        catch.economicZone = "FRA"
-        catch.effortZone = "C"
-        catch.faoZone = "27.8.a"
-        catch.statisticalRectangle = "23E6"
-        catch.species = "SCR"
-        catch.weight = 125.0
+        val logbookFishingCatch = LogbookFishingCatch()
+        logbookFishingCatch.economicZone = "FRA"
+        logbookFishingCatch.effortZone = "C"
+        logbookFishingCatch.faoZone = "27.8.a"
+        logbookFishingCatch.statisticalRectangle = "23E6"
+        logbookFishingCatch.species = "SCR"
+        logbookFishingCatch.weight = 125.0
 
         val haul = Haul()
         haul.gear = "OTB"
-        haul.catches = listOf(catch)
+        haul.catches = listOf(logbookFishingCatch)
         haul.mesh = 80.0
         haul.latitude = 45.389
         haul.longitude = -1.303

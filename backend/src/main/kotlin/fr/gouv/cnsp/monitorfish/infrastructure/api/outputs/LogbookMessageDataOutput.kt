@@ -8,7 +8,7 @@ import java.time.ZonedDateTime
 
 data class LogbookMessageDataOutput(
     val reportId: String?,
-    val operationNumber: String,
+    val operationNumber: String?,
     val tripNumber: String?,
     val referencedReportId: String?,
     val operationDateTime: ZonedDateTime?,
@@ -20,11 +20,11 @@ data class LogbookMessageDataOutput(
     val vesselName: String?,
     val flagState: String?,
     val imo: String?,
-    var rawMessage: String?,
+    val rawMessage: String?,
 
-    var acknowledgment: Acknowledgment?,
-    var isCorrectedByNewerMessage: Boolean,
-    var isDeleted: Boolean,
+    val acknowledgment: Acknowledgment?,
+    val isCorrectedByNewerMessage: Boolean,
+    val isDeleted: Boolean,
     val isSentByFailoverSoftware: Boolean,
     val message: LogbookMessageValue?,
     val messageType: String?,

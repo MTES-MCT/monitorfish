@@ -70,17 +70,22 @@ function generateInsertStatement(row, table) {
   return `INSERT INTO ${table} (${sqlColumns.join(', ')}) VALUES (${sqlValues.join(', ')});`
 }
 
-function generateUpdateStatements(row, table) {
+function generateUpdateStatements(row, table, id) {
+  const idColumnName = id ?? 'id'
   const updates = []
 
   const processUpdates = (obj, path = []) => {
     Object.entries(obj).forEach(([key, value]) => {
       const currentPath = [...path, key.replace(/:sql$/, '')]
       if (key.endsWith(':sql')) {
+        const idColumnValue = row[idColumnName]
+        const escapedIdColumnValue =
+          typeof idColumnValue === 'string' ? `'${idColumnValue.replace(/'/g, "''")}'` : idColumnValue
+
         updates.push(
           `UPDATE ${table} SET value = JSONB_SET(value, '{${currentPath.join(
             ','
-          )}}', TO_JSONB(${value}), true) WHERE id = ${row.id};`
+          )}}', TO_JSONB(${value}), true) WHERE ${idColumnName} = ${escapedIdColumnValue};`
         )
       } else if (typeof value === 'object' && value !== null) {
         processUpdates(value, currentPath)
@@ -115,14 +120,18 @@ for (const file of jsonFiles) {
   const dataTables = Array.isArray(jsonSourceAsObject) ? jsonSourceAsObject : [jsonSourceAsObject]
   const sqlStatementBlocks = dataTables
     .map(dataTable => {
-      const { data: rows, table } = dataTable
+      const { afterAll, beforeAll, data: rows, id, table } = dataTable
 
-      return rows.map(row => {
-        const insertStatement = generateInsertStatement(row, table)
-        const updateStatements = generateUpdateStatements(row, table)
+      return [
+        beforeAll,
+        ...rows.map(row => {
+          const insertStatement = generateInsertStatement(row, table)
+          const updateStatements = generateUpdateStatements(row, table, id)
 
-        return [insertStatement, ...updateStatements, ''].join('\n')
-      })
+          return [insertStatement, ...updateStatements, ''].join('\n')
+        }),
+        afterAll
+      ].filter(Boolean)
     })
     .flat()
 

@@ -20,7 +20,7 @@ export const openPriorNotificationCard =
       dispatch(priorNotificationActions.openPriorNotificationCard())
 
       const priorNotificationDetail = await dispatch(
-        priorNotificationApi.endpoints.getPriorNotification.initiate(id)
+        priorNotificationApi.endpoints.getPriorNotificationDetail.initiate(id)
       ).unwrap()
 
       // Update prior notification list if prior notification fingerprint has changed

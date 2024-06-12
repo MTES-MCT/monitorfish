@@ -23,58 +23,58 @@ data class LogbookReportEntity(
     @Column(name = "id")
     val id: Long? = null,
     @Column(name = "operation_number")
-    val operationNumber: String,
+    val operationNumber: String?,
     @Column(name = "trip_number")
-    val tripNumber: String? = null,
+    val tripNumber: String?,
     @Column(name = "operation_country")
-    val operationCountry: String? = null,
+    val operationCountry: String?,
     @Column(name = "operation_datetime_utc")
     val operationDateTime: Instant,
     @Column(name = "operation_type")
     @Enumerated(EnumType.STRING)
     val operationType: LogbookOperationType,
     @Column(name = "report_id")
-    val reportId: String? = null,
+    val reportId: String?,
     @Column(name = "referenced_report_id")
-    val referencedReportId: String? = null,
+    val referencedReportId: String?,
     @Column(name = "report_datetime_utc")
-    val reportDateTime: Instant? = null,
+    val reportDateTime: Instant?,
     @Column(name = "cfr")
-    val internalReferenceNumber: String? = null,
+    val internalReferenceNumber: String?,
     @Column(name = "ircs")
-    val ircs: String? = null,
+    val ircs: String?,
     @Column(name = "external_identification")
-    val externalReferenceNumber: String? = null,
+    val externalReferenceNumber: String?,
     @Column(name = "vessel_name")
-    val vesselName: String? = null,
+    val vesselName: String?,
     // ISO Alpha-3 country code
     @Column(name = "flag_state")
-    val flagState: String? = null,
+    val flagState: String?,
     @Column(name = "imo")
-    val imo: String? = null,
+    val imo: String?,
     @Column(name = "log_type")
-    val messageType: String? = null,
+    val messageType: String?,
     @Column(name = "analyzed_by_rules", columnDefinition = "varchar(100)[]")
-    val analyzedByRules: List<String>? = listOf(),
+    val analyzedByRules: List<String>?,
     @Type(JsonBinaryType::class)
     @Column(name = "value", nullable = true, columnDefinition = "jsonb")
-    val message: String? = null,
+    val message: String?,
     @Column(name = "integration_datetime_utc")
     val integrationDateTime: Instant,
     @JdbcType(PostgreSQLEnumJdbcType::class)
     @Column(name = "transmission_format", columnDefinition = "logbook_message_transmission_format")
     @Enumerated(EnumType.STRING)
-    val transmissionFormat: LogbookTransmissionFormat,
+    val transmissionFormat: LogbookTransmissionFormat?,
     @Column(name = "software")
-    val software: String? = null,
+    val software: String?,
     @Column(name = "enriched")
     val isEnriched: Boolean = false,
     @Type(JsonBinaryType::class)
     @Column(name = "trip_gears", nullable = true, columnDefinition = "jsonb")
-    val tripGears: String? = null,
+    val tripGears: String?,
     @Type(JsonBinaryType::class)
     @Column(name = "trip_segments", nullable = true, columnDefinition = "jsonb")
-    val tripSegments: String? = null,
+    val tripSegments: String?,
 ) {
     companion object {
         fun fromLogbookMessage(
@@ -101,13 +101,16 @@ data class LogbookReportEntity(
             isEnriched = logbookMessage.isEnriched,
             message = mapper.writeValueAsString(logbookMessage.message),
             messageType = logbookMessage.messageType,
+            operationCountry = null,
             operationType = logbookMessage.operationType,
+            tripGears = null,
+            tripSegments = null,
         )
     }
 
     fun toLogbookMessage(mapper: ObjectMapper): LogbookMessage {
         val message = getERSMessageValueFromJSON(mapper, message, messageType, operationType)
-        val tripGears = deserializeJSONList(mapper, tripGears, Gear::class.java)
+        val tripGears = deserializeJSONList(mapper, tripGears, LogbookTripGear::class.java)
         val tripSegments = deserializeJSONList(mapper, tripSegments, LogbookTripSegment::class.java)
 
         return LogbookMessage(
@@ -125,7 +128,7 @@ data class LogbookReportEntity(
             tripNumber = tripNumber,
             flagState = flagState,
             imo = imo,
-            analyzedByRules = analyzedByRules ?: listOf(),
+            analyzedByRules = analyzedByRules ?: emptyList(),
             software = software,
             transmissionFormat = transmissionFormat,
 
@@ -140,20 +143,33 @@ data class LogbookReportEntity(
 
     fun toPriorNotification(mapper: ObjectMapper, relatedModels: List<LogbookReportEntity>): PriorNotification {
         val referenceLogbookMessage = toLogbookMessage(mapper)
-        val fingerprint = listOf(referenceLogbookMessage.id)
-            .plus(relatedModels.mapNotNull { it.id })
-            .sorted()
-            .joinToString(separator = ".")
-        val relatedLogbookMessages = relatedModels.map { it.toLogbookMessage(mapper) }
+        val relatedLogbookMessages = relatedModels
+            .map { it.toLogbookMessage(mapper) }
+            .sortedBy { it.operationDateTime }
         val enrichedLogbookMessageTyped = referenceLogbookMessage
             .toEnrichedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
-        // For practical reasons `vessel` can't be `null`, so we temporarily set it to "Navire inconnu"
+        val updatedAt = relatedLogbookMessages.lastOrNull()?.let { it.operationDateTime.toString() }
+            ?: operationDateTime.toString()
+        // For pratical reasons `vessel` can't be `null`, so we temporarely set it to "Navire inconnu"
         val vessel = UNKNOWN_VESSEL
 
         return PriorNotification(
-            fingerprint,
+            reportId = reportId,
+            authorTrigram = null,
+            createdAt = operationDateTime.toString(),
+            didNotFishAfterZeroNotice = false,
+            isManuallyCreated = false,
             logbookMessageTyped = enrichedLogbookMessageTyped,
+            note = null,
+            sentAt = enrichedLogbookMessageTyped.logbookMessage.reportDateTime?.toString(),
+            updatedAt = updatedAt,
+
+            // These props need to be calculated in the use case
+            port = null,
+            reportingCount = null,
+            seafront = null,
             vessel = vessel,
+            vesselRiskFactor = null,
         )
     }
 

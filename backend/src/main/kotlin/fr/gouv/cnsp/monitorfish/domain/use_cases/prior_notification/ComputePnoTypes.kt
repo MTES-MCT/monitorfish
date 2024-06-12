@@ -2,8 +2,8 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Catch
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Gear
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTripGear
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PnoType
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PnoTypeRule
 import fr.gouv.cnsp.monitorfish.domain.repositories.PnoTypeRepository
@@ -13,8 +13,8 @@ class ComputePnoTypes(
     private val pnoTypeRepository: PnoTypeRepository,
 ) {
     fun execute(
-        catchToLand: List<Catch>,
-        tripGears: List<Gear>,
+        catchToLand: List<LogbookFishingCatch>,
+        tripGears: List<LogbookTripGear>,
         flagState: CountryCode,
     ): List<PnoType> {
         require(catchToLand.all { it.faoZone != null }) {
@@ -48,7 +48,8 @@ class ComputePnoTypes(
             val containsFlagState = rule.flagStates.contains(flagState)
 
             val totalCatchesWeight = allCatchesOfRule.mapNotNull { it.weight }.sum()
-            val hasCatchesAndMinimumQuantity = allCatchesOfRule.isNotEmpty() && totalCatchesWeight >= rule.minimumQuantityKg
+            val hasCatchesAndMinimumQuantity =
+                allCatchesOfRule.isNotEmpty() && totalCatchesWeight >= rule.minimumQuantityKg
 
             return@filter when (numberOfEmptyRules) {
                 0 -> containsGear && containsFlagState && hasCatchesAndMinimumQuantity
@@ -74,7 +75,7 @@ class ComputePnoTypes(
         return filteredPnoTypeRules.map { (_, type) -> type }.distinctBy { it.id }
     }
 
-    fun ruleAppliesToCatch(rule: PnoTypeRule, pnoCatch: Catch, pnoGears: List<String>): Boolean {
+    fun ruleAppliesToCatch(rule: PnoTypeRule, pnoCatch: LogbookFishingCatch, pnoGears: List<String>): Boolean {
         val containsSpecies = rule.species.isEmpty() || rule.species.contains(pnoCatch.species)
         val containsGear = rule.gears.isEmpty() || rule.gears.any { pnoGears.contains(it) }
         val containsFaoAreas = rule.faoAreas.isEmpty() || rule.faoAreas.any { pnoCatch.faoZone?.startsWith(it) == true }

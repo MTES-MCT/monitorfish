@@ -7,16 +7,18 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotifica
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-data class PriorNotificationDataOutput(
+data class PriorNotificationListItemDataOutput(
     /** Reference logbook message (report) `reportId`. */
     val id: String,
     val acknowledgment: AcknowledgmentDataOutput?,
+    val createdAt: String?,
     val expectedArrivalDate: String?,
     val expectedLandingDate: String?,
     val hasVesselRiskFactorSegments: Boolean?,
     /** Unique identifier concatenating all the DAT, COR, RET & DEL operations `id` used for data consolidation. */
     val fingerprint: String,
     val isCorrection: Boolean,
+    val isManuallyCreated: Boolean = false,
     val isVesselUnderCharter: Boolean?,
     val onBoardCatches: List<LogbookMessageCatchDataOutput>,
     val portLocode: String?,
@@ -28,6 +30,7 @@ data class PriorNotificationDataOutput(
     val tripGears: List<LogbookMessageGearDataOutput>,
     val tripSegments: List<LogbookMessageTripSegmentDataOutput>,
     val types: List<PriorNotificationTypeDataOutput>,
+    val updatedAt: String?,
     val vesselId: Int?,
     val vesselExternalReferenceNumber: String?,
     val vesselFlagCountryCode: CountryCode,
@@ -43,9 +46,9 @@ data class PriorNotificationDataOutput(
     val vesselRiskFactorDetectability: Double?,
 ) {
     companion object {
-        val logger: Logger = LoggerFactory.getLogger(PriorNotificationDataOutput::class.java)
+        val logger: Logger = LoggerFactory.getLogger(PriorNotificationListItemDataOutput::class.java)
 
-        fun fromPriorNotification(priorNotification: PriorNotification): PriorNotificationDataOutput? {
+        fun fromPriorNotification(priorNotification: PriorNotification): PriorNotificationListItemDataOutput? {
             val logbookMessage = priorNotification.logbookMessageTyped.logbookMessage
             val referenceReportId = logbookMessage.getReferenceReportId()
             if (referenceReportId == null) {
@@ -64,35 +67,39 @@ data class PriorNotificationDataOutput(
                 LogbookMessageTripSegmentDataOutput.fromLogbookTripSegment(it)
             } ?: emptyList()
             val types = message.pnoTypes.map { PriorNotificationTypeDataOutput.fromPriorNotificationType(it) }
+            val vessel = requireNotNull(priorNotification.vessel)
 
-            return PriorNotificationDataOutput(
+            return PriorNotificationListItemDataOutput(
                 id = referenceReportId,
                 acknowledgment = acknowledgment,
+                createdAt = priorNotification.createdAt.toString(),
                 expectedArrivalDate = message.predictedArrivalDatetimeUtc?.toString(),
                 expectedLandingDate = message.predictedLandingDatetimeUtc?.toString(),
                 hasVesselRiskFactorSegments = priorNotification.vesselRiskFactor?.segments?.isNotEmpty(),
                 fingerprint = priorNotification.fingerprint,
                 isCorrection = logbookMessage.operationType === LogbookOperationType.COR,
-                isVesselUnderCharter = priorNotification.vessel.underCharter,
+                isManuallyCreated = priorNotification.isManuallyCreated,
+                isVesselUnderCharter = vessel.underCharter,
                 onBoardCatches,
                 portLocode = priorNotification.port?.locode,
                 portName = priorNotification.port?.name,
-                purposeCode = message.purpose,
+                purposeCode = message.purpose.toString(),
                 reportingCount = priorNotification.reportingCount,
                 seafront = priorNotification.seafront,
                 sentAt = logbookMessage.reportDateTime?.toString(),
                 tripGears,
                 tripSegments,
                 types,
-                vesselId = priorNotification.vessel.id,
-                vesselExternalReferenceNumber = priorNotification.vessel.externalReferenceNumber,
-                vesselFlagCountryCode = priorNotification.vessel.flagState,
-                vesselInternalReferenceNumber = priorNotification.vessel.internalReferenceNumber,
-                vesselIrcs = priorNotification.vessel.ircs,
+                updatedAt = priorNotification.updatedAt.toString(),
+                vesselId = vessel.id,
+                vesselExternalReferenceNumber = vessel.externalReferenceNumber,
+                vesselFlagCountryCode = vessel.flagState,
+                vesselInternalReferenceNumber = vessel.internalReferenceNumber,
+                vesselIrcs = vessel.ircs,
                 vesselLastControlDate = priorNotification.vesselRiskFactor?.lastControlDatetime?.toString(),
-                vesselLength = priorNotification.vessel.length,
-                vesselMmsi = priorNotification.vessel.mmsi,
-                vesselName = priorNotification.vessel.vesselName,
+                vesselLength = vessel.length,
+                vesselMmsi = vessel.mmsi,
+                vesselName = vessel.vesselName,
                 vesselRiskFactor = priorNotification.vesselRiskFactor?.riskFactor,
                 vesselRiskFactorImpact = priorNotification.vesselRiskFactor?.impactRiskFactor,
                 vesselRiskFactorProbability = priorNotification.vesselRiskFactor?.probabilityRiskFactor,

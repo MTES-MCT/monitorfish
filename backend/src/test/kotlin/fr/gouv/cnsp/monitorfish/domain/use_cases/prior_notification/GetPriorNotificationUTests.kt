@@ -1,6 +1,5 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
-import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTyped
@@ -8,7 +7,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
@@ -32,6 +30,9 @@ class GetPriorNotificationUTests {
     private lateinit var portRepository: PortRepository
 
     @MockBean
+    private lateinit var manualPriorNotificationRepository: ManualPriorNotificationRepository
+
+    @MockBean
     private lateinit var reportingRepository: ReportingRepository
 
     @MockBean
@@ -48,7 +49,11 @@ class GetPriorNotificationUTests {
         // Given
         given(logbookReportRepository.findPriorNotificationByReportId("FAKE_REPORT_ID_1")).willReturn(
             PriorNotification(
-                fingerprint = "1",
+                reportId = "1",
+                authorTrigram = null,
+                createdAt = null,
+                didNotFishAfterZeroNotice = false,
+                isManuallyCreated = false,
                 logbookMessageTyped = LogbookMessageTyped(
                     clazz = PNO::class.java,
                     logbookMessage = LogbookMessage(
@@ -65,23 +70,17 @@ class GetPriorNotificationUTests {
                         operationDateTime = ZonedDateTime.now(),
                         operationNumber = "1",
                         operationType = LogbookOperationType.DAT,
+                        reportDateTime = ZonedDateTime.now(),
                         transmissionFormat = LogbookTransmissionFormat.ERS,
                     ),
                 ),
+                note = null,
+                port = null,
                 reportingCount = null,
                 seafront = null,
-                vessel = Vessel(
-                    id = 1,
-                    externalReferenceNumber = null,
-                    flagState = CountryCode.FR,
-                    internalReferenceNumber = null,
-                    ircs = null,
-                    length = null,
-                    mmsi = null,
-                    underCharter = null,
-                    vesselName = null,
-                    hasLogbookEsacapt = false,
-                ),
+                sentAt = null,
+                updatedAt = null,
+                vessel = null,
                 vesselRiskFactor = null,
             ),
         )
@@ -91,6 +90,7 @@ class GetPriorNotificationUTests {
             gearRepository,
             logbookRawMessageRepository,
             logbookReportRepository,
+            manualPriorNotificationRepository,
             portRepository,
             reportingRepository,
             riskFactorRepository,
@@ -108,7 +108,11 @@ class GetPriorNotificationUTests {
         // Given
         given(logbookReportRepository.findPriorNotificationByReportId("FAKE_REPORT_ID_2")).willReturn(
             PriorNotification(
-                fingerprint = "2.3",
+                reportId = "2",
+                authorTrigram = null,
+                createdAt = null,
+                didNotFishAfterZeroNotice = false,
+                isManuallyCreated = false,
                 logbookMessageTyped = LogbookMessageTyped(
                     clazz = PNO::class.java,
                     logbookMessage = LogbookMessage(
@@ -125,23 +129,17 @@ class GetPriorNotificationUTests {
                         operationDateTime = ZonedDateTime.now(),
                         operationNumber = "2",
                         operationType = LogbookOperationType.COR,
+                        reportDateTime = ZonedDateTime.now(),
                         transmissionFormat = LogbookTransmissionFormat.ERS,
                     ),
                 ),
+                note = null,
+                port = null,
                 reportingCount = null,
                 seafront = null,
-                vessel = Vessel(
-                    id = 2,
-                    externalReferenceNumber = null,
-                    flagState = CountryCode.UK,
-                    internalReferenceNumber = null,
-                    ircs = null,
-                    length = null,
-                    mmsi = null,
-                    underCharter = null,
-                    vesselName = null,
-                    hasLogbookEsacapt = false,
-                ),
+                sentAt = null,
+                updatedAt = null,
+                vessel = null,
                 vesselRiskFactor = null,
             ),
         )
@@ -151,6 +149,7 @@ class GetPriorNotificationUTests {
             gearRepository,
             logbookRawMessageRepository,
             logbookReportRepository,
+            manualPriorNotificationRepository,
             portRepository,
             reportingRepository,
             riskFactorRepository,

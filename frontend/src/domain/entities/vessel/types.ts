@@ -60,7 +60,7 @@ export type VesselIdentity = {
   vesselName?: string | null
 }
 
-export type SelectedVessel = VesselEnhancedObject & Vessel.Vessel
+export type SelectedVessel = VesselEnhancedObject & Vessel.EnrichedVessel
 
 export type AugmentedSelectedVessel = SelectedVessel & {
   hasAlert: boolean
@@ -69,7 +69,7 @@ export type AugmentedSelectedVessel = SelectedVessel & {
 
 export type VesselAndPositions = {
   positions: VesselPosition[]
-  vessel: Vessel.Vessel
+  vessel: Vessel.EnrichedVessel
 }
 
 export type VesselLastPosition = {

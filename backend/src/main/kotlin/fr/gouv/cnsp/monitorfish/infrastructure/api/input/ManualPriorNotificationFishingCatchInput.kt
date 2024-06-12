@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.input
 
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
 
-data class LogbookFishingCatchInput(
+data class ManualPriorNotificationFishingCatchInput(
     // TODO What to do with this prop that doesn't exist in `LogbookFishingCatch`?
     val isIncidentalCatch: Boolean,
     val quantity: Double?,
@@ -11,8 +11,8 @@ data class LogbookFishingCatchInput(
     val weight: Double,
 ) {
     companion object {
-        fun fromLogbookFishingCatch(logbookFishingCatch: LogbookFishingCatch): LogbookFishingCatchInput {
-            return LogbookFishingCatchInput(
+        fun fromLogbookFishingCatch(logbookFishingCatch: LogbookFishingCatch): ManualPriorNotificationFishingCatchInput {
+            return ManualPriorNotificationFishingCatchInput(
                 isIncidentalCatch = false,
                 quantity = logbookFishingCatch.numberFish,
                 specyCode = requireNotNull(logbookFishingCatch.species),

@@ -45,7 +45,7 @@ class JpaManualPriorNotificationRepository(
     override fun save(newOrNextPriorNotification: PriorNotification): String {
         try {
             val manualPriorNotificationEntity = dbManualPriorNotificationRepository
-                .save(ManualPriorNotificationEntity.fromPriorNotification(newOrNextPriorNotification))
+                .save(ManualPriorNotificationEntity.fromPriorNotification(newOrNextPriorNotification, true))
 
             return requireNotNull(manualPriorNotificationEntity.reportId)
         } catch (e: IllegalArgumentException) {

@@ -14,9 +14,9 @@ CREATE TABLE public.manual_prior_notifications (
     -- Columns specific to `manual_prior_notifications`
 
     author_trigram VARCHAR(3) NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     did_not_fish_after_zero_notice BOOLEAN,
     note TEXT,
     sent_at TIMESTAMP WITH TIME ZONE NOT NULL,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL
 );

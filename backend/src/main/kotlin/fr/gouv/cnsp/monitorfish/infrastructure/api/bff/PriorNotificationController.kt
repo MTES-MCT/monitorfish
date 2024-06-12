@@ -4,11 +4,11 @@ import fr.gouv.cnsp.monitorfish.domain.entities.facade.SeafrontGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.hasSeafront
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.sorters.PriorNotificationsSortColumn
-import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.CreateOrUpdatePriorNotification
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.CreateOrUpdateManualPriorNotification
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotification
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotificationTypes
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotifications
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.PriorNotificationDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/bff/v1/prior_notifications")
 @Tag(name = "Prior notifications endpoints")
 class PriorNotificationController(
-    private val createOrUpdatePriorNotification: CreateOrUpdatePriorNotification,
+    private val createOrUpdateManualPriorNotification: CreateOrUpdateManualPriorNotification,
     private val getPriorNotification: GetPriorNotification,
     private val getPriorNotifications: GetPriorNotifications,
     private val getPriorNotificationTypes: GetPriorNotificationTypes,
@@ -136,14 +136,14 @@ class PriorNotificationController(
         )
     }
 
-    @GetMapping("/{reportId}/data")
-    @Operation(summary = "Get a prior notification form data by its `reportId`")
+    @GetMapping("/manual/{reportId}")
+    @Operation(summary = "Get a manual prior notification form data by its `reportId`")
     fun getOneData(
         @PathParam("Logbook message `reportId`")
         @PathVariable(name = "reportId")
         reportId: String,
-    ): PriorNotificationDataOutput {
-        return PriorNotificationDataOutput.fromPriorNotification(
+    ): ManualPriorNotificationDataOutput {
+        return ManualPriorNotificationDataOutput.fromPriorNotification(
             getPriorNotification.execute(reportId),
         )
     }
@@ -154,54 +154,54 @@ class PriorNotificationController(
         return getPriorNotificationTypes.execute()
     }
 
-    @PostMapping("")
-    @Operation(summary = "Create a new prior notification")
+    @PostMapping("/manual")
+    @Operation(summary = "Create a new manual prior notification")
     fun create(
         @RequestBody
-        priorNotificationDataInput: PriorNotificationDataInput,
-    ): PriorNotificationDataOutput {
-        val createdPriorNotification = createOrUpdatePriorNotification.execute(
-            priorNotificationDataInput.authorTrigram,
-            priorNotificationDataInput.didNotFishAfterZeroNotice,
-            priorNotificationDataInput.expectedArrivalDate,
-            priorNotificationDataInput.expectedLandingDate,
-            priorNotificationDataInput.faoArea,
-            priorNotificationDataInput.fishingCatches.map { it.toLogbookFishingCatch() },
-            priorNotificationDataInput.note,
-            priorNotificationDataInput.portLocode,
+        manualPriorNotificationDataInput: ManualPriorNotificationDataInput,
+    ): ManualPriorNotificationDataOutput {
+        val createdPriorNotification = createOrUpdateManualPriorNotification.execute(
+            manualPriorNotificationDataInput.authorTrigram,
+            manualPriorNotificationDataInput.didNotFishAfterZeroNotice,
+            manualPriorNotificationDataInput.expectedArrivalDate,
+            manualPriorNotificationDataInput.expectedLandingDate,
+            manualPriorNotificationDataInput.faoArea,
+            manualPriorNotificationDataInput.fishingCatches.map { it.toLogbookFishingCatch() },
+            manualPriorNotificationDataInput.note,
+            manualPriorNotificationDataInput.portLocode,
             null,
-            priorNotificationDataInput.sentAt,
-            priorNotificationDataInput.tripGearCodes,
-            priorNotificationDataInput.vesselId,
+            manualPriorNotificationDataInput.sentAt,
+            manualPriorNotificationDataInput.tripGearCodes,
+            manualPriorNotificationDataInput.vesselId,
         )
 
-        return PriorNotificationDataOutput.fromPriorNotification(createdPriorNotification)
+        return ManualPriorNotificationDataOutput.fromPriorNotification(createdPriorNotification)
     }
 
-    @PutMapping("/{reportId}")
-    @Operation(summary = "Update a prior notification by its `reportId`")
+    @PutMapping("/manual/{reportId}")
+    @Operation(summary = "Update a manual prior notification by its `reportId`")
     fun update(
         @PathParam("Logbook message `reportId`")
         @PathVariable(name = "reportId")
         reportId: String,
         @RequestBody
-        priorNotificationDataInput: PriorNotificationDataInput,
-    ): PriorNotificationDataOutput {
-        val updatedPriorNotification = createOrUpdatePriorNotification.execute(
-            priorNotificationDataInput.authorTrigram,
-            priorNotificationDataInput.didNotFishAfterZeroNotice,
-            priorNotificationDataInput.expectedArrivalDate,
-            priorNotificationDataInput.expectedLandingDate,
-            priorNotificationDataInput.faoArea,
-            priorNotificationDataInput.fishingCatches.map { it.toLogbookFishingCatch() },
-            priorNotificationDataInput.note,
-            priorNotificationDataInput.portLocode,
+        manualPriorNotificationDataInput: ManualPriorNotificationDataInput,
+    ): ManualPriorNotificationDataOutput {
+        val updatedPriorNotification = createOrUpdateManualPriorNotification.execute(
+            manualPriorNotificationDataInput.authorTrigram,
+            manualPriorNotificationDataInput.didNotFishAfterZeroNotice,
+            manualPriorNotificationDataInput.expectedArrivalDate,
+            manualPriorNotificationDataInput.expectedLandingDate,
+            manualPriorNotificationDataInput.faoArea,
+            manualPriorNotificationDataInput.fishingCatches.map { it.toLogbookFishingCatch() },
+            manualPriorNotificationDataInput.note,
+            manualPriorNotificationDataInput.portLocode,
             reportId,
-            priorNotificationDataInput.sentAt,
-            priorNotificationDataInput.tripGearCodes,
-            priorNotificationDataInput.vesselId,
+            manualPriorNotificationDataInput.sentAt,
+            manualPriorNotificationDataInput.tripGearCodes,
+            manualPriorNotificationDataInput.vesselId,
         )
 
-        return PriorNotificationDataOutput.fromPriorNotification(updatedPriorNotification)
+        return ManualPriorNotificationDataOutput.fromPriorNotification(updatedPriorNotification)
     }
 }

@@ -10,7 +10,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionForma
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
-import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.CreateOrUpdatePriorNotification
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.CreateOrUpdateManualPriorNotification
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotification
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotificationTypes
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotifications
@@ -36,7 +36,7 @@ class PriorNotificationControllerITests {
     private lateinit var api: MockMvc
 
     @MockBean
-    private lateinit var createOrUpdatePriorNotification: CreateOrUpdatePriorNotification
+    private lateinit var createOrUpdateManualPriorNotification: CreateOrUpdateManualPriorNotification
 
     @MockBean
     private lateinit var getPriorNotification: GetPriorNotification

@@ -26,14 +26,14 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       query: data => ({
         body: data,
         method: 'POST',
-        url: `/prior_notifications`
+        url: `/prior_notifications/manual`
       }),
       transformErrorResponse: response => new FrontendApiError(CREATE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
     }),
 
     getPriorNotificationData: builder.query<PriorNotification.PriorNotificationData, string>({
       providesTags: () => [{ type: RtkCacheTagType.PriorNotification }],
-      query: reportId => `/prior_notifications/${reportId}/data`,
+      query: reportId => `/prior_notifications/manual/${reportId}`,
       transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_DATA_ERROR_MESSAGE, response)
     }),
 
@@ -89,7 +89,7 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       query: ({ data, reportId }) => ({
         body: data,
         method: 'PUT',
-        url: `/prior_notifications/${reportId}`
+        url: `/prior_notifications/manual/${reportId}`
       }),
       transformErrorResponse: response => new FrontendApiError(CREATE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
     })

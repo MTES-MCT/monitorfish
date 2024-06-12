@@ -7,9 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.UNKNOWN_VESSEL
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendInternalException
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import jakarta.persistence.*
-import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.Type
-import org.hibernate.annotations.UpdateTimestamp
 import java.time.ZonedDateTime
 
 @Entity
@@ -26,9 +24,8 @@ data class ManualPriorNotificationEntity(
     @Column(name = "cfr")
     val cfr: String,
 
-    @Column(name = "created_at", insertable = false, updatable = false)
-    @CreationTimestamp
-    val createdAt: ZonedDateTime? = null,
+    @Column(name = "created_at")
+    val createdAt: ZonedDateTime,
 
     @Column(name = "did_not_fish_after_zero_notice")
     val didNotFishAfterZeroNotice: Boolean,
@@ -52,8 +49,7 @@ data class ManualPriorNotificationEntity(
     val tripSegments: List<LogbookTripSegment>?,
 
     @Column(name = "updated_at")
-    @UpdateTimestamp
-    val updatedAt: ZonedDateTime? = null,
+    val updatedAt: ZonedDateTime,
 
     @Column(name = "value", nullable = true, columnDefinition = "jsonb")
     @Type(JsonBinaryType::class)
@@ -62,14 +58,20 @@ data class ManualPriorNotificationEntity(
     @Column(name = "vessel_name")
     val vesselName: String?,
 ) {
-
     companion object {
-        fun fromPriorNotification(priorNotification: PriorNotification): ManualPriorNotificationEntity {
+        fun fromPriorNotification(
+            priorNotification: PriorNotification,
+            isUpdate: Boolean = false,
+        ): ManualPriorNotificationEntity {
             try {
                 val pnoLogbookMessage = priorNotification.logbookMessageTyped.logbookMessage
                 val pnoLogbookMessageValue = priorNotification.logbookMessageTyped.typedMessage
-                val createdAt = priorNotification.createdAt?.let { ZonedDateTime.parse(it) }
-                val updatedAt = priorNotification.updatedAt?.let { ZonedDateTime.parse(it) }
+                val createdAt = priorNotification.createdAt?.let { ZonedDateTime.parse(it) } ?: ZonedDateTime.now()
+                val updatedAt = if (isUpdate || priorNotification.updatedAt == null) {
+                    ZonedDateTime.now()
+                } else {
+                    ZonedDateTime.parse(priorNotification.updatedAt)
+                }
 
                 return ManualPriorNotificationEntity(
                     reportId = pnoLogbookMessage.reportId,
@@ -97,10 +99,6 @@ data class ManualPriorNotificationEntity(
 
     fun toPriorNotification(): PriorNotification {
         try {
-            val createdAt = requireNotNull(createdAt) {
-                "`createdAt` is null for reportId=$reportId."
-            }
-
             val pnoLogbookMessage = LogbookMessage(
                 id = null,
                 reportId = requireNotNull(reportId),

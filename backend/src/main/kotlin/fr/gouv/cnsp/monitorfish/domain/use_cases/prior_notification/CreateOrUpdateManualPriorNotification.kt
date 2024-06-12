@@ -12,7 +12,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import java.time.ZonedDateTime
 
 @UseCase
-class CreateOrUpdatePriorNotification(
+class CreateOrUpdateManualPriorNotification(
     private val gearRepository: GearRepository,
     private val manualPriorNotificationRepository: ManualPriorNotificationRepository,
     private val portRepository: PortRepository,

@@ -1,12 +1,12 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.input
 
-data class PriorNotificationDataInput(
+data class ManualPriorNotificationDataInput(
     val authorTrigram: String,
     val didNotFishAfterZeroNotice: Boolean,
     val expectedArrivalDate: String,
     val expectedLandingDate: String,
     val faoArea: String,
-    val fishingCatches: List<LogbookFishingCatchInput>,
+    val fishingCatches: List<ManualPriorNotificationFishingCatchInput>,
     val note: String?,
     val portLocode: String,
     val sentAt: String,

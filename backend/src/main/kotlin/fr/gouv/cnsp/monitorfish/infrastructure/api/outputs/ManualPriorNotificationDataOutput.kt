@@ -1,15 +1,15 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.LogbookFishingCatchInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationFishingCatchInput
 
-data class PriorNotificationDataOutput(
+data class ManualPriorNotificationDataOutput(
     val authorTrigram: String,
     val didNotFishAfterZeroNotice: Boolean,
     val expectedArrivalDate: String,
     val expectedLandingDate: String,
     val faoArea: String,
-    val fishingCatches: List<LogbookFishingCatchInput>,
+    val fishingCatches: List<ManualPriorNotificationFishingCatchInput>,
     val note: String?,
     val portLocode: String,
     val reportId: String,
@@ -18,17 +18,21 @@ data class PriorNotificationDataOutput(
     val vesselId: Int,
 ) {
     companion object {
-        fun fromPriorNotification(priorNotification: PriorNotification): PriorNotificationDataOutput {
+        fun fromPriorNotification(priorNotification: PriorNotification): ManualPriorNotificationDataOutput {
             val logbookMessage = priorNotification.logbookMessageTyped.logbookMessage
             val message = priorNotification.logbookMessageTyped.typedMessage
 
-            return PriorNotificationDataOutput(
+            return ManualPriorNotificationDataOutput(
                 authorTrigram = requireNotNull(priorNotification.authorTrigram),
                 didNotFishAfterZeroNotice = priorNotification.didNotFishAfterZeroNotice,
                 expectedArrivalDate = requireNotNull(message.predictedArrivalDatetimeUtc).toString(),
                 expectedLandingDate = requireNotNull(message.predictedLandingDatetimeUtc).toString(),
                 faoArea = requireNotNull(message.faoZone),
-                fishingCatches = message.catchOnboard.map { LogbookFishingCatchInput.fromLogbookFishingCatch(it) },
+                fishingCatches = message.catchOnboard.map {
+                    ManualPriorNotificationFishingCatchInput.fromLogbookFishingCatch(
+                        it,
+                    )
+                },
                 note = priorNotification.note,
                 portLocode = requireNotNull(message.port),
                 reportId = requireNotNull(priorNotification.reportId),

@@ -32,7 +32,7 @@ object TestUtils {
                     minimumQuantityKg = 0.0,
                 ),
                 PnoTypeRule(
-                    id = 1,
+                    id = 2,
                     species = listOf("HKE"),
                     faoAreas = listOf("37"),
                     cgpmAreas = listOf("30.01", "30.05", "30.06", "30.07", "30.09", "30.10", "30.11"),
@@ -41,7 +41,7 @@ object TestUtils {
                     minimumQuantityKg = 0.0,
                 ),
                 PnoTypeRule(
-                    id = 1,
+                    id = 3,
                     species = listOf("HER", "MAC", "HOM", "WHB"),
                     faoAreas = listOf("27", "34.1.2", "34.2"),
                     cgpmAreas = listOf(),
@@ -59,7 +59,7 @@ object TestUtils {
             hasDesignatedPorts = true,
             pnoTypeRules = listOf(
                 PnoTypeRule(
-                    id = 1,
+                    id = 4,
                     species = listOf("HKE", "BSS", "COD", "ANF", "SOL"),
                     faoAreas = listOf(
                         "27.3.a",
@@ -78,7 +78,7 @@ object TestUtils {
                     minimumQuantityKg = 2000.0,
                 ),
                 PnoTypeRule(
-                    id = 1,
+                    id = 5,
                     species = listOf("HER", "MAC", "HOM", "WHB"),
                     faoAreas = listOf(
                         "27",
@@ -99,7 +99,7 @@ object TestUtils {
             hasDesignatedPorts = true,
             pnoTypeRules = listOf(
                 PnoTypeRule(
-                    id = 1,
+                    id = 6,
                     species = listOf(),
                     faoAreas = listOf(),
                     cgpmAreas = listOf(),
@@ -117,7 +117,7 @@ object TestUtils {
             hasDesignatedPorts = true,
             pnoTypeRules = listOf(
                 PnoTypeRule(
-                    id = 1,
+                    id = 7,
                     species = listOf(),
                     faoAreas = listOf(),
                     cgpmAreas = listOf(),
@@ -135,7 +135,7 @@ object TestUtils {
             hasDesignatedPorts = true,
             pnoTypeRules = listOf(
                 PnoTypeRule(
-                    id = 1,
+                    id = 7,
                     species = listOf(),
                     faoAreas = listOf(),
                     cgpmAreas = listOf(),
@@ -153,7 +153,7 @@ object TestUtils {
             hasDesignatedPorts = true,
             pnoTypeRules = listOf(
                 PnoTypeRule(
-                    id = 1,
+                    id = 8,
                     species = listOf("AMZ"),
                     faoAreas = listOf("37"),
                     cgpmAreas = listOf("30.01", "30.05", "30.06", "30.07", "30.09", "30.10", "30.11"),

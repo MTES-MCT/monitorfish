@@ -27,7 +27,7 @@ class ComputeRiskFactor(
     ): Double {
         val currentYear = ZonedDateTime.now(clock).year
         val facade = portRepository.findByLocode(portLocode).facade
-        val storedRiskFactor = riskFactorRepository.findByInternalReferenceNumber(portLocode)
+        val storedRiskFactor = riskFactorRepository.findByInternalReferenceNumber(vesselCfr)
 
         val highestImpactRiskFactor = fleetSegments.maxByOrNull { it.impactRiskFactor }?.impactRiskFactor ?: defaultImpactRiskFactor
         val probabilityRiskFactor = storedRiskFactor?.probabilityRiskFactor ?: defaultProbabilityRiskFactor

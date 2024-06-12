@@ -40,7 +40,7 @@ class ComputeRiskFactorUTests {
         val vesselCfr = "CFR"
         val port = Port(locode = portLocode, name = "Port name", facade = "")
         given(portRepository.findByLocode(portLocode)).willReturn(port)
-        given(riskFactorRepository.findByInternalReferenceNumber(portLocode)).willReturn(null)
+        given(riskFactorRepository.findByInternalReferenceNumber(vesselCfr)).willReturn(null)
         given(controlObjectivesRepository.findAllByYear(anyInt())).willReturn(listOf())
 
         // When
@@ -86,7 +86,7 @@ class ComputeRiskFactorUTests {
         val vesselCfr = "CFR"
         val port = Port(locode = portLocode, name = "Port name", facade = "")
         given(portRepository.findByLocode(portLocode)).willReturn(port)
-        given(riskFactorRepository.findByInternalReferenceNumber(portLocode)).willReturn(null)
+        given(riskFactorRepository.findByInternalReferenceNumber(vesselCfr)).willReturn(null)
         given(controlObjectivesRepository.findAllByYear(anyInt())).willReturn(listOf())
 
         // When
@@ -124,7 +124,7 @@ class ComputeRiskFactorUTests {
         val port = Port(locode = portLocode, name = "Port name", facade = "")
         val storedRiskFactor = VesselRiskFactor(probabilityRiskFactor = 0.6, controlRateRiskFactor = 0.7)
         given(portRepository.findByLocode(portLocode)).willReturn(port)
-        given(riskFactorRepository.findByInternalReferenceNumber(portLocode)).willReturn(storedRiskFactor)
+        given(riskFactorRepository.findByInternalReferenceNumber(vesselCfr)).willReturn(storedRiskFactor)
         given(controlObjectivesRepository.findAllByYear(anyInt())).willReturn(listOf())
 
         // When
@@ -187,7 +187,7 @@ class ComputeRiskFactorUTests {
         )
         val port = Port(locode = portLocode, name = "Port name", facade = "MED")
         given(portRepository.findByLocode(portLocode)).willReturn(port)
-        given(riskFactorRepository.findByInternalReferenceNumber(portLocode)).willReturn(null)
+        given(riskFactorRepository.findByInternalReferenceNumber(vesselCfr)).willReturn(null)
         given(controlObjectivesRepository.findAllByYear(anyInt())).willReturn(controlObjectives)
 
         // When
@@ -252,7 +252,7 @@ class ComputeRiskFactorUTests {
         )
         val port = Port(locode = portLocode, name = "Port name", facade = "MED")
         given(portRepository.findByLocode(portLocode)).willReturn(port)
-        given(riskFactorRepository.findByInternalReferenceNumber(portLocode)).willReturn(storedRiskFactor)
+        given(riskFactorRepository.findByInternalReferenceNumber(vesselCfr)).willReturn(storedRiskFactor)
         given(controlObjectivesRepository.findAllByYear(anyInt())).willReturn(controlObjectives)
 
         // When

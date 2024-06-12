@@ -63,7 +63,7 @@ export function PriorNotificationForm() {
         expectedLandingDate: isExpectedLandingDateSameAsExpectedArrivalDate
           ? priorNotificationData.expectedArrivalDate
           : priorNotificationData.expectedLandingDate
-      } as PriorNotification.NewPriorNotificationData
+      } as PriorNotification.NewManualPriorNotificationData
 
       try {
         if (!editedPriorNotificationReportId) {

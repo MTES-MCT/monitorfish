@@ -19,8 +19,8 @@ const GET_PRIOR_NOTIFICATION_TYPES_ERROR_MESSAGE = "Nous n'avons pas pu récupé
 export const priorNotificationApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
     createPriorNotification: builder.mutation<
-      PriorNotification.PriorNotificationData,
-      PriorNotification.NewPriorNotificationData
+      PriorNotification.ManualPriorNotificationData,
+      PriorNotification.NewManualPriorNotificationData
     >({
       invalidatesTags: [{ type: RtkCacheTagType.PriorNotifications }],
       query: data => ({
@@ -31,7 +31,7 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(CREATE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
     }),
 
-    getPriorNotificationData: builder.query<PriorNotification.PriorNotificationData, string>({
+    getPriorNotificationData: builder.query<PriorNotification.ManualPriorNotificationData, string>({
       providesTags: () => [{ type: RtkCacheTagType.PriorNotification }],
       query: reportId => `/prior_notifications/manual/${reportId}`,
       transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_DATA_ERROR_MESSAGE, response)
@@ -79,9 +79,9 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
     }),
 
     updatePriorNotification: builder.mutation<
-      PriorNotification.PriorNotificationData,
+      PriorNotification.ManualPriorNotificationData,
       {
-        data: PriorNotification.NewPriorNotificationData
+        data: PriorNotification.NewManualPriorNotificationData
         reportId: string
       }
     >({

@@ -50,7 +50,7 @@ export namespace PriorNotification {
     logbookMessage: LogbookMessage.PnoLogbookMessage
   }
 
-  export type PriorNotificationData = {
+  export type ManualPriorNotificationData = {
     authorTrigram: string
     didNotFishAfterZeroNotice: boolean
     expectedArrivalDate: string
@@ -64,7 +64,7 @@ export namespace PriorNotification {
     tripGearCodes: string[]
     vesselId: number
   }
-  export type NewPriorNotificationData = Omit<PriorNotificationData, 'reportId'>
+  export type NewManualPriorNotificationData = Omit<ManualPriorNotificationData, 'reportId'>
 
   export type PriorNotificationDataFishingCatch = {
     quantity?: number | undefined

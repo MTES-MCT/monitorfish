@@ -67,7 +67,7 @@ class ComputePnoTypes(
                     else -> false
                 }
 
-                else -> false
+                else -> true
             }
         }
 

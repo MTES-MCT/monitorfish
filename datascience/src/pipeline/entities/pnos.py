@@ -6,6 +6,7 @@ from typing import List
 import pandas as pd
 
 from src.pipeline.entities.fleet_segments import FishingGear, FleetSegment
+from src.pipeline.entities.missions import Infraction
 
 
 @dataclass(kw_only=True)
@@ -48,6 +49,10 @@ class PnoToRender:
     mmsi: str
     risk_factor: float
     last_control_datetime_utc: datetime
+    last_control_logbook_infractions: List[dict]
+    last_control_gear_infractions: List[dict]
+    last_control_species_infractions: List[dict]
+    last_control_other_infractions: List[dict]
 
     def __post_init__(self):
         datetime_attrs = [
@@ -61,6 +66,21 @@ class PnoToRender:
         for att in datetime_attrs:
             if isinstance(getattr(self, att), pd.Timedelta):
                 setattr(self, att, getattr(self, att).to_pydatetime())
+
+        # float and datetime nulls are represented as np.nan and pd.NaT in pandas, which we normalize to None
+        nullables_to_correct = [
+            "operation_datetime_utc",
+            "report_datetime_utc",
+            "predicted_arrival_datetime_utc",
+            "predicted_landing_datetime_utc",
+            "vessel_length",
+            "risk_factor",
+            "last_control_datetime_utc",
+        ]
+
+        for att in nullables_to_correct:
+            if pd.isna(getattr(self, att)):
+                setattr(self, att, None)
 
 
 @dataclass(kw_only=True)
@@ -89,6 +109,10 @@ class PreRenderedPno:
     mmsi: str
     risk_factor: float
     last_control_datetime_utc: datetime
+    last_control_logbook_infractions: List[Infraction]
+    last_control_gear_infractions: List[Infraction]
+    last_control_species_infractions: List[Infraction]
+    last_control_other_infractions: List[Infraction]
 
     @staticmethod
     def assertEqual(left: object, right: object):
@@ -98,58 +122,33 @@ class PreRenderedPno:
         if not isinstance(right, PreRenderedPno):
             raise AssertionError("`right` is not a `PreRenderedPno`")
 
-        try:
-            pd.testing.assert_frame_equal(left.catch_onboard, right.catch_onboard)
-        except AssertionError as e:
-            raise AssertionError(
-                (
-                    "`left` and `right` are not equal. Their `catch_onboard` "
-                    f"attributes are different : {str(e)}"
+        if left.catch_onboard is None and right.catch_onboard is None:
+            pass
+        else:
+            try:
+                pd.testing.assert_frame_equal(left.catch_onboard, right.catch_onboard)
+            except AssertionError as e:
+                raise AssertionError(
+                    (
+                        "`left` and `right` are not equal. Their `catch_onboard` "
+                        f"attributes are different : {str(e)}"
+                    )
                 )
-            )
 
         attributes_to_check = [k for k in left.__dict__.keys() if k != "catch_onboard"]
 
         for attr in attributes_to_check:
             if getattr(left, attr) != getattr(right, attr):
-                raise AssertionError(
-                    (
-                        f"`self` and `other` are not equal. Their `{attr}` "
-                        "attributes are different : "
-                        f"{getattr(left, attr)} != {getattr(right, attr)}"
+                if pd.isna(getattr(left, attr)) and pd.isna(getattr(right, attr)):
+                    pass
+                else:
+                    raise AssertionError(
+                        (
+                            f"`self` and `other` are not equal. Their `{attr}` "
+                            "attributes are different : "
+                            f"{getattr(left, attr)} != {getattr(right, attr)}"
+                        )
                     )
-                )
-
-        #     self.id == other.id
-        #     self.operation_number == other.operation_number
-        #     self.operation_datetime_utc == other.operation_datetime_utc
-        #     self.operation_type == other.operation_type
-        #     self.report_id == other.report_id
-        #     self.report_datetime_utc == other.report_datetime_utc
-        #     self.cfr == other.cfr
-        #     self.ircs == other.ircs
-        #     self.external_identification == other.external_identification
-        #     self.vessel_name == other.vessel_name
-        #     self.flag_state == other.flag_state
-        #     self.purpose == other.purpose
-        #     self.port_locode == other.port_locode
-        #     self.port_name == other.port_name
-        #     (
-        #         self.predicted_arrival_datetime_utc
-        #         == other.predicted_arrival_datetime_utc
-        #     )
-        #     (
-        #         self.predicted_landing_datetime_utc
-        #         == other.predicted_landing_datetime_utc
-        #     )
-        #     self.trip_gears == other.trip_gears
-        #     self.trip_segments == other.trip_segments
-        #     self.pno_types == other.pno_types
-        #     self.vessel_length == other.vessel_length
-        #     self.mmsi == other.mmsi
-        #     self.risk_factor == other.risk_factor
-        #     self.last_control_datetime_utc == other.last_control_datetime_utc
-        # ]
 
 
 class ReturnToPortPurpose(Enum):
@@ -177,6 +176,6 @@ class ReturnToPortPurpose(Enum):
             "TRA": "Transbordement",
             "SCR": "Retour pour Recherche Scientifique",
             "GRD": "Immobilisation et convocation par les autorités",
-            "ACS": "Accès auxFresizeservices",
+            "ACS": "Accès aux services",
         }
         return labels[self.name]

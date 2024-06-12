@@ -1,13 +1,18 @@
+import io
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
+from unittest.mock import patch
 
 import numpy as np
 import pandas as pd
+import pypdf
 import pytest
 from dateutil.relativedelta import relativedelta
 from jinja2 import Template
 
-from config import TEST_DATA_LOCATION
+from config import TEST_DATA_LOCATION, default_risk_factors
 from src.pipeline.entities.fleet_segments import FishingGear, FleetSegment
+from src.pipeline.entities.missions import Infraction
 from src.pipeline.entities.pnos import PnoToRender, PreRenderedPno
 from src.pipeline.flows.distribute_pnos import (
     extract_fishing_gear_names,
@@ -362,6 +367,28 @@ def extracted_pnos() -> pd.DataFrame:
                 now - relativedelta(months=6, days=6, hours=6),
                 pd.NaT,
             ],
+            "last_control_logbook_infractions": [[], [], [], [], []],
+            "last_control_gear_infractions": [
+                [
+                    {
+                        "natinf": 27724,
+                        "comments": "Infraction engin",
+                        "infractionType": "WITHOUT_RECORD",
+                    }
+                ],
+                [],
+                [],
+                [],
+                [],
+            ],
+            "last_control_species_infractions": [[], [], [], [], []],
+            "last_control_other_infractions": [
+                [{"natinf": 2606}, {"natinf": 4761}, {"natinf": 22206}],
+                [],
+                [],
+                [],
+                [],
+            ],
         }
     )
 
@@ -455,6 +482,20 @@ def pno_to_render_1() -> PnoToRender:
         mmsi=None,
         risk_factor=2.09885592141872,
         last_control_datetime_utc=datetime(2023, 6, 3, 9, 13, 38, 259967),
+        last_control_logbook_infractions=[],
+        last_control_gear_infractions=[
+            {
+                "natinf": 27724,
+                "comments": "Infraction engin",
+                "infractionType": "WITHOUT_RECORD",
+            }
+        ],
+        last_control_species_infractions=[],
+        last_control_other_infractions=[
+            {"natinf": 2606},
+            {"natinf": 4761},
+            {"natinf": 22206},
+        ],
     )
 
 
@@ -515,6 +556,16 @@ def pre_rendered_pno_1(pre_rendered_pno_1_catch_onboard) -> PreRenderedPno:
         mmsi=None,
         risk_factor=2.09885592141872,
         last_control_datetime_utc=datetime(2023, 6, 3, 9, 13, 38, 259967),
+        last_control_logbook_infractions=[],
+        last_control_gear_infractions=[
+            Infraction(natinf=27724, comments="Infraction engin")
+        ],
+        last_control_species_infractions=[],
+        last_control_other_infractions=[
+            Infraction(natinf=2606, comments=None),
+            Infraction(natinf=4761, comments=None),
+            Infraction(natinf=22206, comments=None),
+        ],
     )
 
 
@@ -545,6 +596,44 @@ def pno_to_render_2() -> PnoToRender:
         mmsi=None,
         risk_factor=np.nan,
         last_control_datetime_utc=pd.NaT,
+        last_control_logbook_infractions=[],
+        last_control_gear_infractions=[],
+        last_control_species_infractions=[],
+        last_control_other_infractions=[],
+    )
+
+
+@pytest.fixture
+def pre_rendered_pno_2() -> PreRenderedPno:
+    return PreRenderedPno(
+        id=36,
+        operation_number="12",
+        operation_datetime_utc=datetime(2024, 5, 5, 8, 48, 38, 259967),
+        operation_type="DAT",
+        report_id="12",
+        report_datetime_utc=datetime(2024, 5, 5, 8, 46, 38, 259967),
+        cfr="ABC000000000",
+        ircs="ABCD",
+        external_identification="LEB@T0",
+        vessel_name="CAPITAINE HADDOCK",
+        flag_state="POL",
+        purpose="Accès aux services",
+        catch_onboard=None,
+        port_locode="FRZJZ",
+        port_name="Somewhere over the top",
+        predicted_arrival_datetime_utc=datetime(2020, 5, 6, 11, 41, 3, 340000),
+        predicted_landing_datetime_utc=None,
+        trip_gears=[],
+        trip_segments=[],
+        pno_types=[],
+        vessel_length=None,
+        mmsi=None,
+        risk_factor=default_risk_factors["risk_factor"],
+        last_control_datetime_utc=None,
+        last_control_logbook_infractions=[],
+        last_control_gear_infractions=[],
+        last_control_species_infractions=[],
+        last_control_other_infractions=[],
     )
 
 
@@ -609,32 +698,107 @@ def test_pre_render_pno_1(
     PreRenderedPno.assertEqual(res, pre_rendered_pno_1)
 
 
-# @patch("src.pipeline.flows.distribute_pnos.EMAIL_FONTS_LOCATION", "/somewhere")
-# @patch("src.pipeline.flows.distribute_pnos.CNSP_LOGO_PATH", "/somewhere")
-def test_render_pno_1(pre_rendered_pno_1, template):
-    res = render_pno.run(pno=pre_rendered_pno_1, template=template)
+def test_pre_render_pno_2(
+    pno_to_render_2, species_names, fishing_gear_names, pre_rendered_pno_2
+):
+    res = pre_render_pno.run(
+        pno=pno_to_render_2,
+        species_names=species_names,
+        fishing_gear_names=fishing_gear_names,
+    )
+    PreRenderedPno.assertEqual(res, pre_rendered_pno_2)
 
-    test_filepath = TEST_DATA_LOCATION / "emails/prior_notifications/pno_1.html"
+
+@patch(
+    "src.pipeline.flows.distribute_pnos.EMAIL_FONTS_LOCATION",
+    Path("/email/fonts/location"),
+)
+@patch("src.pipeline.flows.distribute_pnos.CNSP_LOGO_PATH", Path("/cnsp/logo/path"))
+@patch("src.pipeline.flows.distribute_pnos.SE_MER_LOGO_PATH", Path("/se_mer/logo/path"))
+@patch(
+    "src.pipeline.flows.distribute_pnos.EMAIL_FONTS_LOCATION", Path("/se_mer/logo/path")
+)
+def test_render_pno_1(template, pre_rendered_pno_1):
+    html = render_pno.run(pno=pre_rendered_pno_1, template=template)
+    test_filepath = (
+        TEST_DATA_LOCATION / "emails/prior_notifications/expected_pno_1.html"
+    )
 
     ######################### Uncomment to replace test files #########################
-    with open(test_filepath, "w") as f:
-        f.write(res)
+    # with open(test_filepath, "w") as f:
+    #     f.write(html)
+
     ###################################################################################
-
-
-def test_print_html_to_pdf():
-    test_filepath = TEST_DATA_LOCATION / "emails/prior_notifications/pno_1.html"
-
-    ######################### Uncomment to replace test files #########################
     with open(test_filepath, "r") as f:
-        html = f.read()
-    pdf = print_html_to_pdf.run(html)
+        expected_html = f.read()
+    assert html == expected_html
 
-    pdf_test_filepath = TEST_DATA_LOCATION / "emails/prior_notifications/pno_1.pdf"
+
+@patch(
+    "src.pipeline.flows.distribute_pnos.EMAIL_FONTS_LOCATION",
+    Path("/email/fonts/location"),
+)
+@patch("src.pipeline.flows.distribute_pnos.CNSP_LOGO_PATH", Path("/cnsp/logo/path"))
+@patch("src.pipeline.flows.distribute_pnos.SE_MER_LOGO_PATH", Path("/se_mer/logo/path"))
+@patch(
+    "src.pipeline.flows.distribute_pnos.EMAIL_FONTS_LOCATION", Path("/se_mer/logo/path")
+)
+def test_render_pno_2(template, pre_rendered_pno_2):
+    html = render_pno.run(pno=pre_rendered_pno_2, template=template)
+    test_filepath = (
+        TEST_DATA_LOCATION / "emails/prior_notifications/expected_pno_2.html"
+    )
 
     ######################### Uncomment to replace test files #########################
-    with open(pdf_test_filepath, "wb") as f:
-        f.write(pdf)
+    # with open(test_filepath, "w") as f:
+    #     f.write(html)
+
+    ###################################################################################
+    with open(test_filepath, "r") as f:
+        expected_html = f.read()
+    assert html == expected_html
+
+
+# `print_html_to_pdf` cannot be tested directly from a test html file, because the
+# paths inserted in the html for images and fonts depend on the environment where tests
+# are run. So we generate the html and then print in order to have an html with the
+# correct paths for the machine running the tests, that then can be printed.
+
+
+def test_render_then_print_to_pdf_1(template, pre_rendered_pno_1):
+    html = render_pno.run(pno=pre_rendered_pno_1, template=template)
+    pdf = print_html_to_pdf.run(html)
+    pdf = pypdf.PdfReader(io.BytesIO(pdf))
+
+    test_filepath = TEST_DATA_LOCATION / "emails/prior_notifications/expected_pno_1.pdf"
+
+    ######################### Uncomment to replace test files #########################
+    # with open(test_filepath, "wb") as f:
+    #     f.write(pdf)
+
+    ###################################################################################
+    with open(test_filepath, "rb") as f:
+        expected_res = pypdf.PdfReader(io.BytesIO(f.read()))
+
+    assert expected_res.pages[0].extract_text() == pdf.pages[0].extract_text()
+
+
+def test_render_then_print_to_pdf_2(template, pre_rendered_pno_2):
+    html = render_pno.run(pno=pre_rendered_pno_2, template=template)
+    pdf = print_html_to_pdf.run(html)
+    pdf = pypdf.PdfReader(io.BytesIO(pdf))
+
+    test_filepath = TEST_DATA_LOCATION / "emails/prior_notifications/expected_pno_2.pdf"
+
+    ######################### Uncomment to replace test files #########################
+    # with open(test_filepath, "wb") as f:
+    #     f.write(pdf)
+
+    ###################################################################################
+    with open(test_filepath, "rb") as f:
+        expected_res = pypdf.PdfReader(io.BytesIO(f.read()))
+
+    assert expected_res.pages[0].extract_text() == pdf.pages[0].extract_text()
 
 
 # def test_flow(reset_test_data):

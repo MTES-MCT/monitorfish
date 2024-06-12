@@ -634,7 +634,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Test
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports with or without reportings`() {
-        val expectedLogbookReportIdsWithOneOrMoreReportings = listOf(102L)
+        val expectedLogbookReportIdsWithOneOrMoreReportings = listOf(102L, 104L)
 
         // Given
         val firstFilter = PriorNotificationsFilter(

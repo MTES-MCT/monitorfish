@@ -1,5 +1,4 @@
-import { BrowserTracing } from '@sentry/browser'
-import { init } from '@sentry/react'
+import { browserTracingIntegration, init } from '@sentry/react'
 import { createRoot } from 'react-dom/client'
 import { AuthProvider } from 'react-oidc-context'
 
@@ -16,7 +15,7 @@ if (import.meta.env.PROD) {
     dsn: import.meta.env.FRONTEND_SENTRY_DSN ?? '',
     environment: import.meta.env.FRONTEND_SENTRY_ENV ?? '',
     integrations: [
-      new BrowserTracing({
+      browserTracingIntegration({
         tracingOrigins: import.meta.env.FRONTEND_SENTRY_TRACING_ORIGINS
           ? [import.meta.env.FRONTEND_SENTRY_TRACING_ORIGINS ?? '']
           : []

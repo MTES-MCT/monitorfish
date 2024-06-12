@@ -6,58 +6,58 @@
         <style>
             @font-face {
 font-family: Marianne;
-src: url(file:///home/vincentchery/Documents/repos/monitorfish/datascience/src/pipeline/emails/fonts/Marianne/Marianne-Regular.woff2) format('woff2');
+src: url(file:///email/fonts/location/Marianne/Marianne-Regular.woff2) format('woff2');
 font-weight: normal;  
 }
 
 @font-face {
 font-family: Marianne;
-src: url(file:///home/vincentchery/Documents/repos/monitorfish/datascience/src/pipeline/emails/fonts/Marianne/Marianne-Bold.woff2) format('woff2');
+src: url(file:///email/fonts/location/Marianne/Marianne-Bold.woff2) format('woff2');
 font-weight: 700;
 }
 
 @font-face {
 font-family: Marianne;
-src: url(file:///home/vincentchery/Documents/repos/monitorfish/datascience/src/pipeline/emails/fonts/Marianne/Marianne-Light.woff2) format('woff2');
+src: url(file:///email/fonts/location/Marianne/Marianne-Light.woff2) format('woff2');
 font-weight: lighter;
 }
 
 @font-face {
 font-family: Marianne;
-src: url(file:///home/vincentchery/Documents/repos/monitorfish/datascience/src/pipeline/emails/fonts/Marianne/Marianne-Medium.woff2) format('woff2');
+src: url(file:///email/fonts/location/Marianne/Marianne-Medium.woff2) format('woff2');
 font-weight: 500;
 }
 
 @font-face {
 font-family: Marianne;
-src: url(file:///home/vincentchery/Documents/repos/monitorfish/datascience/src/pipeline/emails/fonts/Marianne/Marianne-Regular_Italic.woff2) format('woff2');
+src: url(file:///email/fonts/location/Marianne/Marianne-Regular_Italic.woff2) format('woff2');
 font-style: italic;
 font-weight: normal;  
 }
 
 @font-face {
 font-family: Marianne;
-src: url(file:///home/vincentchery/Documents/repos/monitorfish/datascience/src/pipeline/emails/fonts/Marianne/Marianne-Bold_Italic.woff2) format('woff2');
+src: url(file:///email/fonts/location/Marianne/Marianne-Bold_Italic.woff2) format('woff2');
 font-style: italic;
 font-weight: 700;
 }
 
 @font-face {
 font-family: Marianne;
-src: url(file:///home/vincentchery/Documents/repos/monitorfish/datascience/src/pipeline/emails/fonts/Marianne/Marianne-Light_Italic.woff2) format('woff2');
+src: url(file:///email/fonts/location/Marianne/Marianne-Light_Italic.woff2) format('woff2');
 font-style: italic;
 font-weight: lighter;
 }
 
 @font-face {
 font-family: Marianne;
-src: url(file:///home/vincentchery/Documents/repos/monitorfish/datascience/src/pipeline/emails/fonts/Marianne/Marianne-Medium_Italic.woff2) format('woff2');
+src: url(file:///email/fonts/location/Marianne/Marianne-Medium_Italic.woff2) format('woff2');
 font-style: italic;
 font-weight: 500;
 }
     
 @page {
-    margin: 0;
+    margin: 40px 0;
     size: 15.75cm 22.275cm;
 }
 
@@ -95,6 +95,7 @@ body > * {
 }
 
 header {
+    margin-top: -40px;
     padding-top: 40px;
     padding-bottom: 25px;
     background-color: var(--light-gray);
@@ -194,8 +195,17 @@ hr {
 .data-label {
     color: var(--slate-gray);
     padding-right: 16px;
+    vertical-align: top;
 }    
 
+.infractions-details {
+    font-weight: bold;
+    margin: 0;
+}
+
+.infraction-count {
+    color: var(--maximum-red);
+}
 
 tr {
     text-align: left;
@@ -241,7 +251,8 @@ tr {
 
 footer {
     color: var(--slate-gray);
-    line-height: 11x;;
+    line-height: 11x;
+    break-inside: avoid;
 }
 
 footer > p {
@@ -266,20 +277,20 @@ footer > p {
 
         <header>
         <h1>
-            <p>PREAVIS - Débarquement</p>
+            <p>PREAVIS - Accès aux services</p>
             <p>
-                DEVINER FIGURE CONSCIENCE
-                <img id="state_flag_icon", src="file:///home/vincentchery/Documents/repos/monitorfish/datascience/src/pipeline/emails/images/flags/FRA.png" alt="Logo CNSP">
+                CAPITAINE HADDOCK
+                <img id="state_flag_icon", src="file:///home/vincentchery/Documents/repos/monitorfish/datascience/src/pipeline/emails/images/flags/POL.png" alt="Logo CNSP">
             </p>
         </h1>
         <ul id="vessel_ids_list">
-            <li>CFR - ABC000542519</li>
-            <li>Marquage ext. - RO237719</li>
-            <li>MMSI - None</li>
-            <li>Call Sign - FQ7058</li>
+            <li>CFR - ABC000000000</li>
+            <li>Marquage ext. - LEB@T0</li>
+            <li>MMSI - </li>
+            <li>Call Sign - ABCD</li>
         </ul>
-        <p id="vessel_length">Taille du navire - 13.4 m</p>
-        <p id="risk_factor"><strong>Note de risque moyenne <span class="grullo">2.1</span></strong></p>
+        <p id="vessel_length">Taille du navire - </p>
+        <p id="risk_factor"><strong>Note de risque faible <span class="cadet-grey">1.7</span></strong></p>
 
         </header>
 
@@ -289,13 +300,13 @@ footer > p {
                 <h2>INFOS DU PRÉAVIS</h2>
                 <hr/>
                 <table>
-                    <tr><td class="data-label">Préavis envoyé</td><td><strong>le 05/05/2024 à 08h11 UTC</strong></td></tr>
+                    <tr><td class="data-label">Préavis envoyé</td><td><strong>le 05/05/2024 à 08h46 UTC</strong></td></tr>
                     <tr><td class="data-label">Arrivée estimée</td><td><strong>le 06/05/2020 à 11h41 UTC</strong></td></tr>
-                    <tr><td class="data-label">Débarque prévue</td><td><strong>le 06/05/2020 à 16h40 UTC</strong></td></tr>
+                    <tr><td class="data-label">Débarque prévue</td><td><strong></strong></td></tr>
                 </table>
                 <table>
-                    <tr><td class="data-label">Port de débarque</td><td><strong>Somewhere over the rainbow (FRCQF)</strong></td></tr>
-                    <tr><td class="data-label">Type(s) de préavis</td><td><strong>Préavis type 1, Préavis type 2</strong></td></tr>
+                    <tr><td class="data-label">Port de débarque</td><td><strong>Somewhere over the top (FRZJZ)</strong></td></tr>
+                    <tr><td class="data-label">Type(s) de préavis</td><td><strong></strong></td></tr>
                 </table>            
             </section>
 
@@ -303,9 +314,21 @@ footer > p {
                 <h2>INFOS POUR CONTRÔLE</h2>
                 <hr/>
                 <table>
-                    <tr><td class="data-label">Segment(s) de flotte</td><td><strong>SHKE27 - Merlu en zone 27<br>SOTM - Chaluts pélagiques</strong></td></tr>
-                    <tr><td class="data-label">Date du dernier contrôle</td><td><strong>03/06/2023 à 09h13 UTC</strong></td></tr>
-                    <tr><td class="data-label">Résultat du contrôle</td><td><strong>None</strong></td></tr>
+                    <tr><td class="data-label">Segment(s) de flotte</td><td><strong></strong></td></tr>
+                    <tr><td class="data-label">Date du dernier contrôle</td><td><strong></strong></td></tr>
+                    <tr>
+                        <td class="data-label">Résultat du contrôle</td>
+                        <td>
+                            
+
+                            
+
+
+                            
+
+                            
+
+                        </td></tr>
                 </table>     
             </section>
 
@@ -313,51 +336,10 @@ footer > p {
                 <h2>ACTIVITÉ DU NAVIRE</h2>
                 <hr/>
                 <table>
-                    <tr><td class="data-label">Engin(s) utilisé(s)</td><td><strong>Chaluts jumeaux à panneaux (OTT) - Maillage 140 mm<br>Chaluts jumeaux à panneaux (OTT) - Maillage 120 mm</strong></td></tr>
+                    <tr><td class="data-label">Engin(s) utilisé(s)</td><td><strong></strong></td></tr>
                 </table>
                 <p class="data-label">Espèces à bord par zone de pêche <em>(tous les poids sont vifs)</em> :</p>
-                <table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: left;">
-      <th>Espèces</th>
-      <th>Zones de pêche</th>
-      <th>Qtés (kg)</th>
-      <th>Nb</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>- (HKE)</td>
-      <td>27.8.a (47E3)</td>
-      <td>1450</td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <td>- (ABC)</td>
-      <td>-</td>
-      <td>955</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td>Pou Hasse Caille (GHL)</td>
-      <td>27.8.a (47E3, 47E4), 27.8.b (47E4)</td>
-      <td>550</td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <td>(Capitaine) Haddock (BFT)</td>
-      <td>- (47E6), 27.8.a (47E3)</td>
-      <td>300</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <td>Friture sur la ligne (SWO)</td>
-      <td>27.8.a</td>
-      <td>70</td>
-      <td>2</td>
-    </tr>
-  </tbody>
-</table>
+                Aucune capture
             </section>
 
         </main>
@@ -371,10 +353,10 @@ footer > p {
             <table id="logos">
                 <tr>
                     <td>
-                       <img id="logo_cnsp", src="file:///home/vincentchery/Documents/repos/monitorfish/datascience/src/pipeline/emails/images/logo_cnsp.jpg" alt="Logo CNSP">
+                       <img id="logo_cnsp", src="file:///cnsp/logo/path" alt="Logo CNSP">
                     </td>
                     <td>
-                        <img id="logo_se_mer", src="file:///home/vincentchery/Documents/repos/monitorfish/datascience/src/pipeline/emails/images/logo_se_mer.jpg" alt="Logo Secretariat d'Etat chargé de la Mer et de la Biodiversité">
+                        <img id="logo_se_mer", src="file:///se_mer/logo/path" alt="Logo Secretariat d'Etat chargé de la Mer et de la Biodiversité">
                     </td>
                 </tr>
             </table>

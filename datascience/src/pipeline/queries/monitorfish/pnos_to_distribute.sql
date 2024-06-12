@@ -41,7 +41,11 @@ SELECT
     v.length AS vessel_length,
     v.mmsi,
     rf.risk_factor,
-    rf.last_control_datetime_utc
+    rf.last_control_datetime_utc,
+    COALESCE(rf.last_control_logbook_infractions, '[]') AS last_control_logbook_infractions,
+    COALESCE(rf.last_control_gear_infractions, '[]') AS last_control_gear_infractions,
+    COALESCE(rf.last_control_species_infractions, '[]') AS last_control_species_infractions,
+    COALESCE(rf.last_control_other_infractions, '[]') AS last_control_other_infractions
 FROM logbook_reports r
 LEFT JOIN vessels v
 ON v.cfr = r.cfr

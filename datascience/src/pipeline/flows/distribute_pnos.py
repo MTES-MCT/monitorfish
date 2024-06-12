@@ -18,8 +18,10 @@ from config import (
     EMAIL_TEMPLATES_LOCATION,
     SE_MER_LOGO_PATH,
     STATE_FLAGS_ICONS_LOCATION,
+    default_risk_factors,
 )
 from src.pipeline.entities.fleet_segments import FishingGear, FleetSegment
+from src.pipeline.entities.missions import Infraction
 from src.pipeline.entities.pnos import (
     PnoCatch,
     PnoToRender,
@@ -101,60 +103,70 @@ def pre_render_pno(
 
     pno_types = [t.get("pnoTypeName") for t in pno.pno_types]
 
-    catches_list = [
-        PnoCatch(
-            species_code=c.get("species"),
-            species_name=species_names.get(c.get("species")),
-            number_of_fish=c.get("nbFish"),
-            weight=c.get("weight"),
-            fao_area=c.get("faoZone"),
-            statistical_rectangle=c.get("statisticalRectangle"),
+    if pno.catch_onboard:
+        catches_list = [
+            PnoCatch(
+                species_code=c.get("species"),
+                species_name=species_names.get(c.get("species")),
+                number_of_fish=c.get("nbFish"),
+                weight=c.get("weight"),
+                fao_area=c.get("faoZone"),
+                statistical_rectangle=c.get("statisticalRectangle"),
+            )
+            for c in pno.catch_onboard
+            if c.get("species") is not None
+        ]
+
+        df = pd.DataFrame(catches_list)
+        df["fao_area"] = df.fao_area.fillna("-")
+        sum_by_area = (
+            df.groupby(["species_name_code", "fao_area"], dropna=False)
+            .agg(
+                {
+                    "weight": sum,
+                    "number_of_fish": sum,
+                    "statistical_rectangle": "unique",
+                }
+            )
+            .reset_index()
         )
-        for c in pno.catch_onboard
-        if c.get("species") is not None
-    ]
 
-    df = pd.DataFrame(catches_list)
-    df["fao_area"] = df.fao_area.fillna("-")
-    sum_by_area = (
-        df.groupby(["species_name_code", "fao_area"], dropna=False)
-        .agg({"weight": sum, "number_of_fish": sum, "statistical_rectangle": "unique"})
-        .reset_index()
-    )
+        def format_list(li: list) -> str:
+            li = [x for x in li if x is not None]
+            return f"{', '.join(li)}"
 
-    def format_list(li: list) -> str:
-        li = [x for x in li if x is not None]
-        return f"{', '.join(li)}"
+        def format_sr_list(sr_list: list) -> str:
+            res = format_list(sr_list)
+            return f" ({res})" if res else ""
 
-    def format_sr_list(sr_list: list) -> str:
-        res = format_list(sr_list)
-        return f" ({res})" if res else ""
+        sum_by_area["area_sr"] = sum_by_area.apply(
+            lambda row: f"{row.fao_area}{format_sr_list(row.statistical_rectangle)}",
+            axis=1,
+        )
+        sum_by_species = (
+            sum_by_area.groupby("species_name_code")
+            .agg({"area_sr": list, "weight": sum, "number_of_fish": sum})
+            .reset_index()
+            .sort_values("weight", ascending=False)
+            .reset_index(drop=True)
+        )
 
-    sum_by_area["area_sr"] = sum_by_area.apply(
-        lambda row: f"{row.fao_area}{format_sr_list(row.statistical_rectangle)}", axis=1
-    )
-    sum_by_species = (
-        sum_by_area.groupby("species_name_code")
-        .agg({"area_sr": list, "weight": sum, "number_of_fish": sum})
-        .reset_index()
-        .sort_values("weight", ascending=False)
-        .reset_index(drop=True)
-    )
+        sum_by_species["area_sr"] = sum_by_species.area_sr.map(format_list)
+        sum_by_species = sum_by_species.astype({"number_of_fish": int, "weight": int})
+        sum_by_species["number_of_fish"] = sum_by_species.number_of_fish.where(
+            sum_by_species.number_of_fish > 0, "-"
+        )
 
-    sum_by_species["area_sr"] = sum_by_species.area_sr.map(format_list)
-    sum_by_species = sum_by_species.astype({"number_of_fish": int, "weight": int})
-    sum_by_species["number_of_fish"] = sum_by_species.number_of_fish.where(
-        sum_by_species.number_of_fish > 0, "-"
-    )
-
-    sum_by_species = sum_by_species.rename(
-        columns={
-            "species_name_code": "Espèces",
-            "area_sr": "Zones de pêche",
-            "weight": "Qtés (kg)",
-            "number_of_fish": "Nb",
-        }
-    )
+        sum_by_species = sum_by_species.rename(
+            columns={
+                "species_name_code": "Espèces",
+                "area_sr": "Zones de pêche",
+                "weight": "Qtés (kg)",
+                "number_of_fish": "Nb",
+            }
+        )
+    else:
+        sum_by_species = None
 
     try:
         purpose = ReturnToPortPurpose(pno.purpose).label()
@@ -162,6 +174,23 @@ def pre_render_pno(
         error_message = str(e)
         logger.error(f"Failed to interpret purpose code with error {error_message}.")
         purpose = pno.purpose
+
+    last_control_logbook_infractions = [
+        Infraction(natinf=inf.get("natinf"), comments=inf.get("comments"))
+        for inf in pno.last_control_logbook_infractions
+    ]
+    last_control_gear_infractions = [
+        Infraction(natinf=inf.get("natinf"), comments=inf.get("comments"))
+        for inf in pno.last_control_gear_infractions
+    ]
+    last_control_species_infractions = [
+        Infraction(natinf=inf.get("natinf"), comments=inf.get("comments"))
+        for inf in pno.last_control_species_infractions
+    ]
+    last_control_other_infractions = [
+        Infraction(natinf=inf.get("natinf"), comments=inf.get("comments"))
+        for inf in pno.last_control_other_infractions
+    ]
 
     return PreRenderedPno(
         id=pno.id,
@@ -186,8 +215,12 @@ def pre_render_pno(
         pno_types=pno_types,
         vessel_length=pno.vessel_length,
         mmsi=pno.mmsi,
-        risk_factor=pno.risk_factor,
+        risk_factor=pno.risk_factor or default_risk_factors["risk_factor"],
         last_control_datetime_utc=pno.last_control_datetime_utc,
+        last_control_logbook_infractions=last_control_logbook_infractions,
+        last_control_gear_infractions=last_control_gear_infractions,
+        last_control_species_infractions=last_control_species_infractions,
+        last_control_other_infractions=last_control_other_infractions,
     )
 
 
@@ -201,6 +234,14 @@ def get_template() -> Template:
     env = Environment(
         loader=FileSystemLoader(templates_locations), autoescape=select_autoescape()
     )
+
+    def pluralize(value, singular="", plural="s"):
+        if value == 1:
+            return singular
+        else:
+            return plural
+
+    env.filters["pluralize"] = pluralize
 
     return env.get_template("base_template.jinja")
 
@@ -235,30 +276,41 @@ def render_pno(pno: PreRenderedPno, template: Template) -> str:
     risk_factor_description = risk_factor_description_scale[thresholds_exceeded]
     risk_factor_color = risk_factor_color_scale[thresholds_exceeded]
 
+    if isinstance(pno.catch_onboard, pd.DataFrame):
+        catch_onboard = pno.catch_onboard.to_html(index=False, border=1, justify="left")
+    else:
+        catch_onboard = None
+
     date_format = "%d/%m/%Y à %Hh%M UTC"
+
+    def format_nullable_datetime(d: datetime, format: str = date_format):
+        if d:
+            return d.strftime(format)
+        else:
+            return ""
 
     html = template.render(
         fonts_directory=fonts_directory,
         cnsp_logo_src=cnsp_logo_src,
         se_mer_logo_src=se_mer_logo_src,
         state_flag_icon_src=state_flag_icon_src,
-        operation_datetime_utc=pno.operation_datetime_utc.strftime(date_format),
+        operation_datetime_utc=format_nullable_datetime(pno.operation_datetime_utc),
         operation_type=pno.operation_type,
         report_id=pno.report_id,
-        report_datetime_utc=pno.report_datetime_utc.strftime(date_format),
+        report_datetime_utc=format_nullable_datetime(pno.report_datetime_utc),
         cfr=pno.cfr or "",
         ircs=pno.ircs or "",
         external_identification=pno.external_identification or "",
         vessel_name=pno.vessel_name,
         purpose=pno.purpose,
-        catch_onboard=pno.catch_onboard.to_html(index=False, border=1, justify="left"),
+        catch_onboard=catch_onboard,
         port_locode=pno.port_locode,
         port_name=pno.port_name,
-        predicted_arrival_datetime_utc=pno.predicted_arrival_datetime_utc.strftime(
-            date_format
+        predicted_arrival_datetime_utc=format_nullable_datetime(
+            pno.predicted_arrival_datetime_utc
         ),
-        predicted_landing_datetime_utc=pno.predicted_landing_datetime_utc.strftime(
-            date_format
+        predicted_landing_datetime_utc=format_nullable_datetime(
+            pno.predicted_landing_datetime_utc
         ),
         trip_gears="<br>".join(
             [f"{g.name} ({g.code}) - Maillage {g.mesh} mm" for g in pno.trip_gears]
@@ -270,7 +322,13 @@ def render_pno(pno: PreRenderedPno, template: Template) -> str:
         risk_factor=f"{pno.risk_factor:.1f}",
         risk_factor_description=risk_factor_description,
         risk_factor_color=risk_factor_color,
-        last_control_datetime_utc=pno.last_control_datetime_utc.strftime(date_format),
+        last_control_datetime_utc=format_nullable_datetime(
+            pno.last_control_datetime_utc
+        ),
+        last_control_logbook_infractions=pno.last_control_logbook_infractions,
+        last_control_gear_infractions=pno.last_control_gear_infractions,
+        last_control_species_infractions=pno.last_control_species_infractions,
+        last_control_other_infractions=pno.last_control_other_infractions,
     )
 
     return html

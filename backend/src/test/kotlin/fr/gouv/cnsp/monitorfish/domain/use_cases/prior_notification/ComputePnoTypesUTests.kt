@@ -192,6 +192,55 @@ class ComputePnoTypesUTests {
     }
 
     @Test
+    fun `execute Should return Préavis par engin et pavillon When empty catch with specific gear is given`() {
+        // Given
+        val catchToLand = listOf<Catch>()
+        val tripGears = getGears(listOf("OTB"))
+        val flagState = CountryCode.AD
+        given(pnoTypeRepository.findAll()).willReturn(TestUtils.getDummyPnoTypes())
+
+        // When
+        val result = ComputePnoTypes(pnoTypeRepository).execute(catchToLand, tripGears, flagState)
+
+        // Then
+        assertThat(result).hasSize(1)
+        val resultPnoTypeNames = result.map { it.name }
+        assertThat(resultPnoTypeNames).containsAll(listOf("Préavis par engin et pavillon"))
+    }
+
+    @Test
+    fun `execute Should return Préavis par espèce, fao et pavillon When empty catch with specific gear is given`() {
+        // Given
+        val catchToLand = listOf(Catch(species = "AMZ", faoZone = "37.2.a", weight = 3500.0))
+        val tripGears = getGears(listOf())
+        val flagState = CountryCode.AD
+        given(pnoTypeRepository.findAll()).willReturn(TestUtils.getDummyPnoTypes())
+
+        // When
+        val result = ComputePnoTypes(pnoTypeRepository).execute(catchToLand, tripGears, flagState)
+
+        // Then
+        assertThat(result).hasSize(1)
+        val resultPnoTypeNames = result.map { it.name }
+        assertThat(resultPnoTypeNames).containsAll(listOf("Préavis par espèce, fao et pavillon"))
+    }
+
+    @Test
+    fun `execute Should return no pno type associated`() {
+        // Given
+        val catchToLand = listOf<Catch>()
+        val tripGears = getGears(listOf("OTM"))
+        val flagState = CountryCode.AD
+        given(pnoTypeRepository.findAll()).willReturn(TestUtils.getDummyPnoTypes())
+
+        // When
+        val result = ComputePnoTypes(pnoTypeRepository).execute(catchToLand, tripGears, flagState)
+
+        // Then
+        assertThat(result).hasSize(0)
+    }
+
+    @Test
     fun `execute Should throw an Exception When the faoZone is missing a catch`() {
         // Given
         given(pnoTypeRepository.findAll()).willReturn(TestUtils.getDummyPnoTypes())

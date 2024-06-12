@@ -128,6 +128,42 @@ object TestUtils {
             ),
         )
 
-        return listOf(pnoType1, pnoType2, pnoType3, pnoType4)
+        val pnoType5 = PnoType(
+            id = 4,
+            name = "Préavis par engin et pavillon",
+            minimumNotificationPeriod = 4.0,
+            hasDesignatedPorts = true,
+            pnoTypeRules = listOf(
+                PnoTypeRule(
+                    id = 1,
+                    species = listOf(),
+                    faoAreas = listOf(),
+                    cgpmAreas = listOf(),
+                    gears = listOf("OTB"),
+                    flagStates = listOf(CountryCode.AD),
+                    minimumQuantityKg = 0.0,
+                ),
+            ),
+        )
+
+        val pnoType6 = PnoType(
+            id = 4,
+            name = "Préavis par espèce, fao et pavillon",
+            minimumNotificationPeriod = 4.0,
+            hasDesignatedPorts = true,
+            pnoTypeRules = listOf(
+                PnoTypeRule(
+                    id = 1,
+                    species = listOf("AMZ"),
+                    faoAreas = listOf("37"),
+                    cgpmAreas = listOf("30.01", "30.05", "30.06", "30.07", "30.09", "30.10", "30.11"),
+                    gears = listOf(),
+                    flagStates = listOf(CountryCode.AD),
+                    minimumQuantityKg = 250.0,
+                ),
+            ),
+        )
+
+        return listOf(pnoType1, pnoType2, pnoType3, pnoType4, pnoType5, pnoType6)
     }
 }

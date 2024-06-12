@@ -27,6 +27,7 @@
         "table": "logbook_reports",
         "data": [
             // - Vessel: PHENOMENE
+            // - With risk factor
             {
                 "id": 101,
                 "report_id": "FAKE_OPERATION_101",
@@ -83,7 +84,7 @@
             },
 
             // - Vessel: COURANT MAIN PROFESSEUR
-            // - With reportings
+            // - With 1 reporting
             {
                 "id": 102,
                 "report_id": "FAKE_OPERATION_102",
@@ -173,6 +174,10 @@
             },
 
             // - Vessel: VIVA ESPANA
+            // - With 2 reportings
+            // - With risk factor
+            // - Under charter
+            // - Flag state: ES
             {
                 "id": 104,
                 "report_id": "FAKE_OPERATION_104",
@@ -283,6 +288,7 @@
             },
 
             // - Vessel: LEVE NEDERLAND
+            // - Flag state: NL
             {
                 "id": 105,
                 "report_id": "FAKE_OPERATION_105",
@@ -387,9 +393,10 @@
                 }
             },
 
-            // - Vessel: DES BARS (Unknown Flag State)
+            // - Vessel: DES BARS
             // - With RET
             // - Aknowledged
+            // - Flag state: UNKNOWN
             {
                 "id": 107,
                 "report_id": "FAKE_OPERATION_107",

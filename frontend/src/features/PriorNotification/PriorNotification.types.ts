@@ -2,8 +2,9 @@ import type { Seafront } from '@constants/seafront'
 import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 
 export namespace PriorNotification {
-  export type PriorNotification = {
+  export interface PriorNotification {
     acknowledgment: LogbookMessage.Acknowledgment | undefined
+    createdAt: string
     expectedArrivalDate: string | undefined
     expectedLandingDate: string | undefined
     /** Unique identifier concatenating all the DAT, COR, RET & DEL operations `id` used for data consolidation. */
@@ -12,6 +13,7 @@ export namespace PriorNotification {
     /** Logbook message `reportId`. */
     id: string
     isCorrection: boolean
+    isManuallyCreated: boolean
     isVesselUnderCharter: boolean | undefined
     onBoardCatches: LogbookMessage.Catch[]
     portLocode: string | undefined
@@ -23,6 +25,7 @@ export namespace PriorNotification {
     tripGears: LogbookMessage.Gear[]
     tripSegments: LogbookMessage.Segment[]
     types: Type[]
+    updatedAt: string
     vesselExternalReferenceNumber: string | undefined
     vesselFlagCountryCode: string | undefined
     vesselId: number
@@ -45,6 +48,29 @@ export namespace PriorNotification {
     id: string
     isLessThanTwelveMetersVessel: boolean
     logbookMessage: LogbookMessage.PnoLogbookMessage
+  }
+
+  export type ManualPriorNotificationData = {
+    authorTrigram: string
+    didNotFishAfterZeroNotice: boolean
+    expectedArrivalDate: string
+    expectedLandingDate: string
+    faoArea: string
+    fishingCatches: PriorNotificationDataFishingCatch[]
+    note: string | undefined
+    portLocode: string
+    reportId: string
+    sentAt: string
+    tripGearCodes: string[]
+    vesselId: number
+  }
+  export type NewManualPriorNotificationData = Omit<ManualPriorNotificationData, 'reportId'>
+
+  export type PriorNotificationDataFishingCatch = {
+    quantity?: number | undefined
+    specyCode: string
+    specyName: string
+    weight: number
   }
 
   export type Type = {

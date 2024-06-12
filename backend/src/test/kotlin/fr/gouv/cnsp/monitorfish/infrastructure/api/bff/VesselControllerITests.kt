@@ -61,6 +61,9 @@ class VesselControllerITests {
     private lateinit var getVessel: GetVessel
 
     @MockBean
+    private lateinit var getVesselById: GetVesselById
+
+    @MockBean
     private lateinit var getVesselPositions: GetVesselPositions
 
     @MockBean

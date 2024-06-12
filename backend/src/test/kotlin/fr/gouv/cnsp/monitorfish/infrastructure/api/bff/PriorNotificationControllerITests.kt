@@ -10,6 +10,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionForma
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.CreateOrUpdateManualPriorNotification
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotification
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotificationTypes
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotifications
@@ -35,6 +36,9 @@ class PriorNotificationControllerITests {
     private lateinit var api: MockMvc
 
     @MockBean
+    private lateinit var createOrUpdateManualPriorNotification: CreateOrUpdateManualPriorNotification
+
+    @MockBean
     private lateinit var getPriorNotification: GetPriorNotification
 
     @MockBean
@@ -49,7 +53,11 @@ class PriorNotificationControllerITests {
         given(this.getPriorNotifications.execute(any(), any(), any())).willReturn(
             listOf(
                 PriorNotification(
-                    fingerprint = "1",
+                    reportId = "FAKE_REPORT_ID_1",
+                    authorTrigram = null,
+                    createdAt = null,
+                    didNotFishAfterZeroNotice = false,
+                    isManuallyCreated = false,
                     logbookMessageTyped = LogbookMessageTyped(
                         clazz = PNO::class.java,
                         logbookMessage = LogbookMessage(
@@ -65,28 +73,32 @@ class PriorNotificationControllerITests {
                             operationDateTime = ZonedDateTime.now(),
                             operationNumber = "1",
                             operationType = LogbookOperationType.DAT,
+                            reportDateTime = ZonedDateTime.now(),
                             transmissionFormat = LogbookTransmissionFormat.ERS,
                         ),
                     ),
+                    note = null,
+                    port = null,
                     reportingCount = null,
                     seafront = null,
+                    sentAt = null,
+                    updatedAt = null,
                     vessel = Vessel(
                         id = 1,
-                        externalReferenceNumber = null,
                         flagState = CountryCode.FR,
-                        internalReferenceNumber = null,
-                        ircs = null,
-                        length = null,
-                        mmsi = null,
-                        underCharter = null,
-                        vesselName = null,
                         hasLogbookEsacapt = false,
+                        internalReferenceNumber = "FAKE_CFR_1",
+                        vesselName = "FAKE_VESSEL_NAME",
                     ),
                     vesselRiskFactor = null,
                 ),
 
                 PriorNotification(
-                    fingerprint = "3",
+                    reportId = "FAKE_REPORT_ID_2_COR",
+                    authorTrigram = null,
+                    createdAt = null,
+                    didNotFishAfterZeroNotice = false,
+                    isManuallyCreated = false,
                     logbookMessageTyped = LogbookMessageTyped(
                         clazz = PNO::class.java,
                         logbookMessage = LogbookMessage(
@@ -102,22 +114,22 @@ class PriorNotificationControllerITests {
                             operationDateTime = ZonedDateTime.now(),
                             operationNumber = "1",
                             operationType = LogbookOperationType.COR,
+                            reportDateTime = ZonedDateTime.now(),
                             transmissionFormat = LogbookTransmissionFormat.ERS,
                         ),
                     ),
-                    reportingCount = null,
+                    note = null,
+                    port = null,
+                    reportingCount = 0,
                     seafront = null,
+                    sentAt = null,
+                    updatedAt = null,
                     vessel = Vessel(
-                        id = 1,
-                        externalReferenceNumber = null,
-                        flagState = CountryCode.UK,
-                        internalReferenceNumber = null,
-                        ircs = null,
-                        length = null,
-                        mmsi = null,
-                        underCharter = null,
-                        vesselName = null,
+                        id = 2,
+                        flagState = CountryCode.FR,
                         hasLogbookEsacapt = false,
+                        internalReferenceNumber = "FAKE_CFR_2",
+                        vesselName = "FAKE_VESSEL_NAME",
                     ),
                     vesselRiskFactor = null,
                 ),
@@ -160,7 +172,11 @@ class PriorNotificationControllerITests {
         // Given
         given(this.getPriorNotification.execute("FAKE_REPORT_ID_1")).willReturn(
             PriorNotification(
-                fingerprint = "1",
+                reportId = "FAKE_REPORT_ID_1",
+                authorTrigram = null,
+                createdAt = null,
+                didNotFishAfterZeroNotice = false,
+                isManuallyCreated = false,
                 logbookMessageTyped = LogbookMessageTyped(
                     clazz = PNO::class.java,
                     logbookMessage = LogbookMessage(
@@ -176,22 +192,25 @@ class PriorNotificationControllerITests {
                         operationDateTime = ZonedDateTime.now(),
                         operationNumber = "1",
                         operationType = LogbookOperationType.DAT,
+                        reportDateTime = ZonedDateTime.now(),
                         transmissionFormat = LogbookTransmissionFormat.ERS,
                     ),
                 ),
+                note = null,
+                port = null,
                 reportingCount = null,
                 seafront = null,
+                sentAt = null,
+                updatedAt = null,
                 vessel = Vessel(
                     id = 1,
-                    externalReferenceNumber = null,
                     flagState = CountryCode.FR,
-                    internalReferenceNumber = null,
-                    ircs = null,
+                    hasLogbookEsacapt = false,
+                    internalReferenceNumber = "FAKE_CFR_1",
                     length = 10.0,
                     mmsi = null,
                     underCharter = null,
-                    vesselName = null,
-                    hasLogbookEsacapt = false,
+                    vesselName = "FAKE_VESSEL_NAME",
                 ),
                 vesselRiskFactor = null,
             ),

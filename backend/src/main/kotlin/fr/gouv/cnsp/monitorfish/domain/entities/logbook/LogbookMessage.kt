@@ -7,12 +7,11 @@ import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
 import fr.gouv.cnsp.monitorfish.domain.exceptions.EntityConversionException
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Gear as LogbookGear
 
 data class LogbookMessage(
-    val id: Long,
+    val id: Long?,
     val reportId: String? = null,
-    val operationNumber: String,
+    val operationNumber: String?,
     val tripNumber: String? = null,
     val referencedReportId: String? = null,
     val operationDateTime: ZonedDateTime,
@@ -23,13 +22,11 @@ data class LogbookMessage(
     // ISO Alpha-3 country code
     val flagState: String? = null,
     val imo: String? = null,
-    // Submission date of the report by the vessel
-    val reportDateTime: ZonedDateTime? = null,
     // Reception date of the report by the data center
     val integrationDateTime: ZonedDateTime,
     val analyzedByRules: List<String>,
     var rawMessage: String? = null,
-    val transmissionFormat: LogbookTransmissionFormat,
+    val transmissionFormat: LogbookTransmissionFormat?,
     val software: String? = null,
 
     var acknowledgment: Acknowledgment? = null,
@@ -40,7 +37,9 @@ data class LogbookMessage(
     val message: LogbookMessageValue? = null,
     val messageType: String? = null,
     val operationType: LogbookOperationType,
-    val tripGears: List<LogbookGear>? = emptyList(),
+    // Submission date of the report by the vessel
+    val reportDateTime: ZonedDateTime?,
+    val tripGears: List<LogbookTripGear>? = emptyList(),
     val tripSegments: List<LogbookTripSegment>? = emptyList(),
 ) {
     private val logger = LoggerFactory.getLogger(LogbookMessage::class.java)
@@ -425,7 +424,7 @@ data class LogbookMessage(
         }
     }
 
-    private fun addSpeciesName(catch: Catch, species: String, allSpecies: List<Species>) {
+    private fun addSpeciesName(catch: LogbookFishingCatch, species: String, allSpecies: List<Species>) {
         catch.speciesName = allSpecies.find { it.code == species }?.name
     }
 
@@ -434,7 +433,7 @@ data class LogbookMessage(
     }
 
     private fun addGearName(
-        gear: LogbookGear,
+        gear: LogbookTripGear,
         gearCode: String,
         allGears: List<Gear>,
     ) {

@@ -5,7 +5,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import java.util.*
 
 @ExtendWith(SpringExtension::class)
 class CountryCodeUTests {
@@ -272,7 +271,6 @@ class CountryCodeUTests {
         countryCodesFromNavpro.forEach {
             val code = CountryCode.getByCode(it)
 
-            println("Found $code for $it")
             assertThat(code).isNotNull()
         }
     }

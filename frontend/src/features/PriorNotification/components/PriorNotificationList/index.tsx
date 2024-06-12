@@ -13,8 +13,9 @@ import { useLoadingState } from '@hooks/useLoadingState'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
-import { Accent, Button, Icon, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Icon, Size, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
 import { flexRender, getCoreRowModel, useReactTable, getExpandedRowModel } from '@tanstack/react-table'
+import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import { useCallback, useState } from 'react'
 import styled, { css } from 'styled-components'
 
@@ -28,6 +29,7 @@ import { getTitle } from './utils'
 import { useGetPriorNotificationsQuery } from '../../priorNotificationApi'
 import { priorNotificationActions } from '../../slice'
 import { PriorNotificationCard } from '../PriorNotificationCard'
+import { PriorNotificationForm } from '../PriorNotificationForm'
 
 import type { AllSeafrontGroup, NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 
@@ -35,6 +37,8 @@ export function PriorNotificationList() {
   const dispatch = useMainAppDispatch()
   const listFilter = useMainAppSelector(state => state.priorNotification.listFilterValues)
   const isPriorNotificationCardOpen = useMainAppSelector(state => state.priorNotification.isPriorNotificationCardOpen)
+  const isPriorNotificationFormOpen = useMainAppSelector(state => state.priorNotification.isPriorNotificationFormOpen)
+  const isSuperUser = useIsSuperUser()
 
   const [rowSelection, setRowSelection] = useState({})
 
@@ -123,9 +127,22 @@ export function PriorNotificationList() {
           <FilterTags />
 
           <TableOuterWrapper>
-            <TableLegend>{`${
-              loadingState.isLoadingNewPage || totalLength === undefined ? '...' : totalLength
-            } préavis (tous les horaires sont en UTC)`}</TableLegend>
+            <TableTop>
+              <TableLegend>{`${
+                loadingState.isLoadingNewPage || totalLength === undefined ? '...' : totalLength
+              } préavis (tous les horaires sont en UTC)`}</TableLegend>
+
+              {isSuperUser && (
+                <Button
+                  accent={Accent.PRIMARY}
+                  Icon={Icon.Plus}
+                  onClick={() => dispatch(priorNotificationActions.createOrEditPriorNotification())}
+                  size={Size.SMALL}
+                >
+                  Ajouter un préavis
+                </Button>
+              )}
+            </TableTop>
 
             <TableInnerWrapper $hasError={isError}>
               {isError && <ErrorWall displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_LIST_ERROR} />}
@@ -188,6 +205,7 @@ export function PriorNotificationList() {
       </Page>
 
       {isPriorNotificationCardOpen && <PriorNotificationCard />}
+      {isPriorNotificationFormOpen && <PriorNotificationForm />}
     </>
   )
 }
@@ -203,10 +221,17 @@ const TableOuterWrapper = styled.div`
   }
 `
 
+const TableTop = styled.div`
+  align-items: flex-end;
+  display: flex;
+  justify-content: space-between;
+  margin: 8px 0;
+`
+
 const TableLegend = styled.p`
   color: ${p => p.theme.color.slateGray};
   line-height: 1;
-  margin: 8px 0;
+  margin: 0;
 `
 
 const TableInnerWrapper = styled.div<{

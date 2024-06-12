@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { getFirstTitleRowText } from './utils'
 
-import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
+import type { PriorNotification } from '../../PriorNotification.types'
 
 type HeaderProps = Readonly<{
   onClose: () => void
@@ -47,6 +47,7 @@ export function Header({ onClose, priorNotificationDetail }: HeaderProps) {
 const Wrapper = styled.div`
   align-items: flex-start;
   border-bottom: 1px solid ${p => p.theme.color.lightGray};
+  box-shadow: 0px 3px 6px ${p => p.theme.color.lightGray};
   display: flex;
   padding: 24px 32px;
 

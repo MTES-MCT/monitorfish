@@ -184,7 +184,13 @@ MMSI: ${reporting.mmsi || ''}`
             const reportingDate = reporting.validationDate ?? reporting.creationDate
 
             return (
-              <CardTableRow key={reporting.id} data-cy="side-window-current-reportings" index={index + 1} style={{}}>
+              <CardTableRow
+                key={reporting.id}
+                data-cy="ReportingList-reporting"
+                data-id={reporting.id}
+                index={index + 1}
+                style={{}}
+              >
                 <FlexboxGrid>
                   <Cell style={columnStyles[0] ?? {}}>
                     <StyledCheckbox

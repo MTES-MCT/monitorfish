@@ -4,6 +4,7 @@
         "data": [
             // - Vessel: VIVA ESPANA
             // - Flag state: ES
+            // - Under charter
             {
                 "id": 101,
                 "cfr": "CFR101",
@@ -13,7 +14,7 @@
                 "vessel_name": "VIVA ESPANA",
                 "flag_state": "ES",
                 "length": 15,
-                "under_charter": false
+                "under_charter": true
             },
 
             // - Vessel: LEVE NEDERLAND
@@ -159,6 +160,114 @@
                 "vessel_name": "LE MARIN D'EAU DOUCE",
                 "flag_state": "FR",
                 "length": 9.5,
+                "under_charter": false
+            },
+
+            // - Vessel: POISSON PAS NET
+            {
+                "id": 112,
+                "cfr": "CFR112",
+                "mmsi": "MMSI112",
+                "ircs": "IRCS112",
+                "external_immatriculation": "EXTIMM112",
+                "vessel_name": "POISSON PAS NET",
+                "flag_state": "FR",
+                "length": 7.3,
+                "under_charter": false
+            },
+
+            // - Vessel: IN-ARÊTE-ABLE
+            {
+                "id": 113,
+                "cfr": "CFR113",
+                "mmsi": "MMSI113",
+                "ircs": "IRCS113",
+                "external_immatriculation": "EXTIMM113",
+                "vessel_name": "IN-ARÊTE-ABLE",
+                "flag_state": "FR",
+                "length": 8.5,
+                "under_charter": false
+            },
+
+            // - Vessel: DOS FIN
+            // - Flag state: BE
+            // - Under charter
+            {
+                "id": 115,
+                "cfr": "CFR115",
+                "mmsi": "MMSI115",
+                "ircs": "IRCS115",
+                "external_immatriculation": "EXTIMM115",
+                "vessel_name": "DOS FIN",
+                "flag_state": "BE",
+                "length": 9.2,
+                "under_charter": true
+            },
+
+            // - Vessel: NAVIRE RENOMMÉ (NOUVEAU NOM)
+            // - RENAMED VESSEL NAME
+            {
+                "id": 116,
+                "cfr": "CFR116",
+                "mmsi": "MMSI116",
+                "ircs": "IRCS116",
+                "external_immatriculation": "EXTIMM116",
+                "vessel_name": "NAVIRE RENOMMÉ (NOUVEAU NOM)",
+                "flag_state": "FR",
+                "length": 11.0,
+                "under_charter": false
+            },
+
+            // - Vessel: QUEUE DE POISSON
+            {
+                "id": 117,
+                "cfr": "CFR117",
+                "mmsi": "MMSI117",
+                "ircs": "IRCS117",
+                "external_immatriculation": "EXTIMM117",
+                "vessel_name": "QUEUE DE POISSON",
+                "flag_state": "FR",
+                "length": 10.9,
+                "under_charter": false
+            },
+
+            // - Vessel: GOUJON BOUGON
+            {
+                "id": 118,
+                "cfr": "CFR118",
+                "mmsi": "MMSI118",
+                "ircs": "IRCS118",
+                "external_immatriculation": "EXTIMM118",
+                "vessel_name": "GOUJON BOUGON",
+                "flag_state": "FR",
+                "length": 11.2,
+                "under_charter": false
+            },
+
+            // - Vessel: PAGEOT JO
+            {
+                "id": 119,
+                "cfr": "CFR119",
+                "mmsi": "MMSI119",
+                "ircs": "IRCS119",
+                "external_immatriculation": "EXTIMM119",
+                "vessel_name": "PAGEOT JO",
+                "flag_state": "FR",
+                "length": 11.1,
+                "under_charter": false
+            },
+
+            // - Vessel: VIVA L'ITALIA
+            // - Flag state: IT
+            {
+                "id": 120,
+                "cfr": "CFR120",
+                "mmsi": "MMSI120",
+                "ircs": "IRCS120",
+                "external_immatriculation": "EXTIMM120",
+                "vessel_name": "VIVA L'ITALIA",
+                "flag_state": "IT",
+                "length": 11.1,
                 "under_charter": false
             }
         ]

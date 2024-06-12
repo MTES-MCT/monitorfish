@@ -2,8 +2,8 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.given
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Catch
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Gear
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTripGear
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PnoType
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PnoTypeRule
 import fr.gouv.cnsp.monitorfish.domain.repositories.PnoTypeRepository
@@ -37,7 +37,7 @@ class ComputePnoTypesUTests {
     @Test
     fun `execute Should return type 1 When single catch with type 1 is given`() {
         // Given
-        val catchToLand = listOf(Catch(species = "HKE", faoZone = "27.9.a", weight = 1500.0))
+        val catchToLand = listOf(LogbookFishingCatch(species = "HKE", faoZone = "27.9.a", weight = 1500.0))
         val tripGears = getGears(listOf("OTT"))
         val flagState = CountryCode.FR
         given(pnoTypeRepository.findAll()).willReturn(TestUtils.getDummyPnoTypes())
@@ -54,7 +54,7 @@ class ComputePnoTypesUTests {
     @Test
     fun `execute Should return types 1 and 2 When single catch with types 1 and 2 is given`() {
         // Given
-        val catchToLand = listOf(Catch(species = "HKE", faoZone = "27.9.a", weight = 2500.0))
+        val catchToLand = listOf(LogbookFishingCatch(species = "HKE", faoZone = "27.9.a", weight = 2500.0))
         val tripGears = getGears(listOf("TBB"))
         val flagState = CountryCode.FR
         given(pnoTypeRepository.findAll()).willReturn(TestUtils.getDummyPnoTypes())
@@ -71,7 +71,7 @@ class ComputePnoTypesUTests {
     @Test
     fun `execute Should return specific types When single catch with flag state GB is given`() {
         // Given
-        val catchToLand = listOf(Catch(species = "HKE", faoZone = "37.1.3", weight = 2500.0))
+        val catchToLand = listOf(LogbookFishingCatch(species = "HKE", faoZone = "37.1.3", weight = 2500.0))
         val tripGears = getGears(listOf())
         val flagState = CountryCode.GB
         given(pnoTypeRepository.findAll()).willReturn(TestUtils.getDummyPnoTypes())
@@ -105,9 +105,9 @@ class ComputePnoTypesUTests {
     fun `execute Should return single type When multiple catches are given`() {
         // Given
         val catchToLand = listOf(
-            Catch(species = "BSS", faoZone = "27.7.d", weight = 800.0),
-            Catch(species = "COD", faoZone = "27.8.c", weight = 800.0),
-            Catch(species = "COD", faoZone = "27.10.c", weight = 800.0),
+            LogbookFishingCatch(species = "BSS", faoZone = "27.7.d", weight = 800.0),
+            LogbookFishingCatch(species = "COD", faoZone = "27.8.c", weight = 800.0),
+            LogbookFishingCatch(species = "COD", faoZone = "27.10.c", weight = 800.0),
         )
         val tripGears = getGears(listOf("OTB"))
         val flagState = CountryCode.FR
@@ -126,9 +126,9 @@ class ComputePnoTypesUTests {
     fun `execute Should return types 1 and 2 When multiple catches with types 1 and 2 are given`() {
         // Given
         val catchToLand = listOf(
-            Catch(species = "MAC", faoZone = "27.7.d", weight = 5000.0),
-            Catch(species = "HOM", faoZone = "27.8.a", weight = 5000.0),
-            Catch(species = "HER", faoZone = "34.1.2", weight = 5000.0),
+            LogbookFishingCatch(species = "MAC", faoZone = "27.7.d", weight = 5000.0),
+            LogbookFishingCatch(species = "HOM", faoZone = "27.8.a", weight = 5000.0),
+            LogbookFishingCatch(species = "HER", faoZone = "34.1.2", weight = 5000.0),
         )
         val tripGears = getGears(listOf("PTM"))
         val flagState = CountryCode.FR
@@ -146,7 +146,7 @@ class ComputePnoTypesUTests {
     @Test
     fun `execute Should return empty list When single catch with no expected types is given`() {
         // Given
-        val catchToLand = listOf(Catch(species = "HKE", faoZone = "27.2.a", weight = 3500.0))
+        val catchToLand = listOf(LogbookFishingCatch(species = "HKE", faoZone = "27.2.a", weight = 3500.0))
         val tripGears = getGears(listOf("OTM"))
         val flagState = CountryCode.FR
         given(pnoTypeRepository.findAll()).willReturn(TestUtils.getDummyPnoTypes())
@@ -161,7 +161,7 @@ class ComputePnoTypesUTests {
     @Test
     fun `execute Should return specific type When non-empty catch with specific gear is given`() {
         // Given
-        val catchToLand = listOf(Catch(species = "HKE", faoZone = "27.2.a", weight = 3500.0))
+        val catchToLand = listOf(LogbookFishingCatch(species = "HKE", faoZone = "27.2.a", weight = 3500.0))
         val tripGears = getGears(listOf("SB"))
         val flagState = CountryCode.FR
         val expectedPnoTypeNames = listOf("Préavis par engin")
@@ -179,7 +179,7 @@ class ComputePnoTypesUTests {
     @Test
     fun `execute Should return Préavis par engin When empty catch with specific gear is given`() {
         // Given
-        val catchToLand = listOf<Catch>()
+        val catchToLand = listOf<LogbookFishingCatch>()
         val tripGears = getGears(listOf("SB"))
         val flagState = CountryCode.FR
         given(pnoTypeRepository.findAll()).willReturn(TestUtils.getDummyPnoTypes())
@@ -196,7 +196,7 @@ class ComputePnoTypesUTests {
     @Test
     fun `execute Should return Préavis par engin et pavillon When empty catch with specific gear is given`() {
         // Given
-        val catchToLand = listOf<Catch>()
+        val catchToLand = listOf<LogbookFishingCatch>()
         val tripGears = getGears(listOf("OTB"))
         val flagState = CountryCode.AD
         given(pnoTypeRepository.findAll()).willReturn(TestUtils.getDummyPnoTypes())
@@ -213,7 +213,7 @@ class ComputePnoTypesUTests {
     @Test
     fun `execute Should return Préavis par espèce, fao et pavillon When empty catch with specific gear is given`() {
         // Given
-        val catchToLand = listOf(Catch(species = "AMZ", faoZone = "37.2.a", weight = 3500.0))
+        val catchToLand = listOf(LogbookFishingCatch(species = "AMZ", faoZone = "37.2.a", weight = 3500.0))
         val tripGears = getGears(listOf())
         val flagState = CountryCode.AD
         given(pnoTypeRepository.findAll()).willReturn(TestUtils.getDummyPnoTypes())
@@ -230,7 +230,7 @@ class ComputePnoTypesUTests {
     @Test
     fun `execute Should return no pno type associated`() {
         // Given
-        val catchToLand = listOf<Catch>()
+        val catchToLand = listOf<LogbookFishingCatch>()
         val tripGears = getGears(listOf("OTM"))
         val flagState = CountryCode.AD
         given(pnoTypeRepository.findAll()).willReturn(TestUtils.getDummyPnoTypes())
@@ -245,7 +245,7 @@ class ComputePnoTypesUTests {
     @Test
     fun `execute Should not return Préavis type 7 When there is only one match in each rule`() {
         // Given
-        val catchToLand = listOf<Catch>()
+        val catchToLand = listOf<LogbookFishingCatch>()
         val tripGears = getGears(listOf("OTT"))
         val flagState = CountryCode.BB
         given(pnoTypeRepository.findAll()).willReturn(TestUtils.getDummyPnoTypes())
@@ -265,7 +265,7 @@ class ComputePnoTypesUTests {
         // When
         val throwable = catchThrowable {
             ComputePnoTypes(pnoTypeRepository).execute(
-                listOf(Catch(species = "HKE", weight = 3500.0)),
+                listOf(LogbookFishingCatch(species = "HKE", weight = 3500.0)),
                 listOf(),
                 CountryCode.FR,
             )
@@ -278,7 +278,7 @@ class ComputePnoTypesUTests {
     @Test
     fun `execute Should return the type When there is no rule in the type rules`() {
         // Given
-        val catchToLand = listOf<Catch>()
+        val catchToLand = listOf<LogbookFishingCatch>()
         val tripGears = getGears(listOf("OTM"))
         val flagState = CountryCode.AD
         val pnoType = PnoType(
@@ -310,14 +310,14 @@ class ComputePnoTypesUTests {
     }
 
     private fun getGears(gears: List<String>) = gears.map {
-        val gear = Gear()
+        val gear = LogbookTripGear()
         gear.gear = it
 
         return@map gear
     }
 
     private fun getCatches(speciesAndFaoArea: List<List<String>>) = speciesAndFaoArea.map {
-        val aCatch = Catch(weight = 123.0)
+        val aCatch = LogbookFishingCatch(weight = 123.0)
         aCatch.species = it[0]
         aCatch.faoZone = it[1]
         aCatch.weight = it[2].toDouble()

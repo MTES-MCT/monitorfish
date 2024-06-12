@@ -71,16 +71,16 @@ object TestUtils {
     }
 
     fun getDummyLogbookMessages(): List<LogbookMessage> {
-        val gearOne = Gear()
+        val gearOne = LogbookTripGear()
         gearOne.gear = "OTB"
-        val gearTwo = Gear()
+        val gearTwo = LogbookTripGear()
         gearTwo.gear = "DRB"
 
-        val catchOne = Catch()
+        val catchOne = LogbookFishingCatch()
         catchOne.species = "TTV"
-        val catchTwo = Catch()
+        val catchTwo = LogbookFishingCatch()
         catchTwo.species = "SMV"
-        val catchThree = Catch()
+        val catchThree = LogbookFishingCatch()
         catchThree.species = "PNB"
 
         val dep = DEP()
@@ -183,8 +183,7 @@ object TestUtils {
                 messageType = "PNO",
                 software = "e-Sacapt Secours ERSV3 V 1.0.7",
                 message = pno,
-                reportDateTime =
-                ZonedDateTime.of(
+                reportDateTime = ZonedDateTime.of(
                     2020,
                     5,
                     5,
@@ -209,8 +208,7 @@ object TestUtils {
                 messageType = "COE",
                 software = "e-Sacapt Secours ERSV3 V 1.0.7",
                 message = coe,
-                reportDateTime =
-                ZonedDateTime.of(
+                reportDateTime = ZonedDateTime.of(
                     2020,
                     5,
                     5,
@@ -235,8 +233,7 @@ object TestUtils {
                 messageType = "COX",
                 software = "e-Sacapt Secours ERSV3 V 1.0.7",
                 message = cox,
-                reportDateTime =
-                ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(0).minusMinutes(
+                reportDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(0).minusMinutes(
                     20,
                 ),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
@@ -254,8 +251,7 @@ object TestUtils {
                 messageType = "CPS",
                 software = "",
                 message = cpsMessage,
-                reportDateTime =
-                ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(0).minusMinutes(
+                reportDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(0).minusMinutes(
                     20,
                 ),
                 transmissionFormat = LogbookTransmissionFormat.ERS,
@@ -267,16 +263,16 @@ object TestUtils {
     }
 
     fun getDummyFluxAndVisioCaptureLogbookMessages(): List<LogbookMessage> {
-        val gearOne = Gear()
+        val gearOne = LogbookTripGear()
         gearOne.gear = "OTB"
-        val gearTwo = Gear()
+        val gearTwo = LogbookTripGear()
         gearTwo.gear = "DRB"
 
-        val catchOne = Catch()
+        val catchOne = LogbookFishingCatch()
         catchOne.species = "TTV"
-        val catchTwo = Catch()
+        val catchTwo = LogbookFishingCatch()
         catchTwo.species = "SMV"
-        val catchThree = Catch()
+        val catchThree = LogbookFishingCatch()
         catchThree.species = "PNB"
 
         val dep = DEP()
@@ -306,8 +302,7 @@ object TestUtils {
                 messageType = "DEP",
                 software = "FT/VISIOCaptures V1.4.7",
                 message = dep,
-                reportDateTime =
-                ZonedDateTime.of(
+                reportDateTime = ZonedDateTime.of(
                     2020,
                     5,
                     5,
@@ -332,8 +327,7 @@ object TestUtils {
                 messageType = "FAR",
                 software = "FP/VISIOCaptures V1.4.7",
                 message = far,
-                reportDateTime =
-                ZonedDateTime.of(
+                reportDateTime = ZonedDateTime.of(
                     2020,
                     5,
                     5,
@@ -358,8 +352,7 @@ object TestUtils {
                 messageType = "PNO",
                 software = "TurboCatch (3.6-1)",
                 message = pno,
-                reportDateTime =
-                ZonedDateTime.of(
+                reportDateTime = ZonedDateTime.of(
                     2020,
                     5,
                     5,
@@ -378,11 +371,11 @@ object TestUtils {
     }
 
     fun getDummyCorrectedLogbookMessages(): List<LogbookMessage> {
-        val catchOne = Catch()
+        val catchOne = LogbookFishingCatch()
         catchOne.species = "TTV"
-        val catchTwo = Catch()
+        val catchTwo = LogbookFishingCatch()
         catchTwo.species = "SMV"
-        val catchThree = Catch()
+        val catchThree = LogbookFishingCatch()
         catchThree.species = "PNB"
 
         val far = FAR()
@@ -409,8 +402,7 @@ object TestUtils {
                 operationType = LogbookOperationType.DAT,
                 messageType = "FAR",
                 message = far,
-                reportDateTime =
-                ZonedDateTime.of(
+                reportDateTime = ZonedDateTime.of(
                     2020,
                     5,
                     5,
@@ -435,8 +427,7 @@ object TestUtils {
                 operationType = LogbookOperationType.COR,
                 messageType = "FAR",
                 message = correctedFar,
-                reportDateTime =
-                ZonedDateTime.of(
+                reportDateTime = ZonedDateTime.of(
                     2020,
                     5,
                     5,
@@ -455,11 +446,11 @@ object TestUtils {
     }
 
     fun getDummyRETLogbookMessages(): List<LogbookMessage> {
-        val catchOne = Catch()
+        val catchOne = LogbookFishingCatch()
         catchOne.species = "TTV"
-        val catchTwo = Catch()
+        val catchTwo = LogbookFishingCatch()
         catchTwo.species = "SMV"
-        val catchThree = Catch()
+        val catchThree = LogbookFishingCatch()
         catchThree.species = "PNB"
 
         val far = FAR()
@@ -634,47 +625,47 @@ object TestUtils {
         weightToAdd: Double = 0.0,
         addSpeciesToLAN: Boolean = false,
     ): List<Pair<LogbookMessage, LogbookMessage>> {
-        val catchOne = Catch()
+        val catchOne = LogbookFishingCatch()
         catchOne.species = "TTV"
         catchOne.weight = 123.0
         catchOne.conversionFactor = 1.0
 
-        val catchTwo = Catch()
+        val catchTwo = LogbookFishingCatch()
         catchTwo.species = "SMV"
         catchTwo.weight = 961.5
         catchTwo.conversionFactor = 1.22
 
-        val catchThree = Catch()
+        val catchThree = LogbookFishingCatch()
         catchThree.species = "PNB"
         catchThree.weight = 69.7
         catchThree.conversionFactor = 1.35
 
-        val catchFour = Catch()
+        val catchFour = LogbookFishingCatch()
         catchFour.species = "CQL"
         catchFour.weight = 98.2
         catchFour.conversionFactor = 1.0
 
-        val catchFive = Catch()
+        val catchFive = LogbookFishingCatch()
         catchFive.species = "FGV"
         catchFive.weight = 25.5
 
-        val catchSix = Catch()
+        val catchSix = LogbookFishingCatch()
         catchSix.species = "THB"
         catchSix.weight = 35.0
 
-        val catchSeven = Catch()
+        val catchSeven = LogbookFishingCatch()
         catchSeven.species = "VGY"
         catchSeven.weight = 66666.0
 
-        val catchEight = Catch()
+        val catchEight = LogbookFishingCatch()
         catchEight.species = "MQP"
         catchEight.weight = 11.1
 
-        val catchNine = Catch()
+        val catchNine = LogbookFishingCatch()
         catchNine.species = "FPS"
         catchNine.weight = 22.0
 
-        val catchTen = Catch()
+        val catchTen = LogbookFishingCatch()
         catchTen.species = "DPD"
         catchTen.weight = 2225.0
 
@@ -724,6 +715,7 @@ object TestUtils {
                     integrationDateTime = ZonedDateTime.now(),
                     isEnriched = false,
                     operationDateTime = ZonedDateTime.now(),
+                    reportDateTime = ZonedDateTime.now(),
                 ),
                 LogbookMessage(
                     id = 2,
@@ -738,6 +730,7 @@ object TestUtils {
                     integrationDateTime = ZonedDateTime.now(),
                     isEnriched = false,
                     operationDateTime = ZonedDateTime.now(),
+                    reportDateTime = ZonedDateTime.now(),
                 ),
             ),
             Pair(
@@ -754,6 +747,7 @@ object TestUtils {
                     integrationDateTime = ZonedDateTime.now(),
                     isEnriched = false,
                     operationDateTime = ZonedDateTime.now(),
+                    reportDateTime = ZonedDateTime.now(),
                 ),
                 LogbookMessage(
                     id = 4,
@@ -768,6 +762,7 @@ object TestUtils {
                     integrationDateTime = ZonedDateTime.now(),
                     isEnriched = false,
                     operationDateTime = ZonedDateTime.now(),
+                    reportDateTime = ZonedDateTime.now(),
                 ),
             ),
         )
@@ -777,37 +772,37 @@ object TestUtils {
         weightToAdd: Double = 0.0,
         addSpeciesToLAN: Boolean = false,
     ): List<Pair<LogbookMessage, LogbookMessage>> {
-        val catchOne = Catch()
+        val catchOne = LogbookFishingCatch()
         catchOne.species = "TTV"
         catchOne.weight = 123.0
-        val catchTwo = Catch()
+        val catchTwo = LogbookFishingCatch()
         catchTwo.species = "SMV"
         catchTwo.weight = 961.5
-        val catchThree = Catch()
+        val catchThree = LogbookFishingCatch()
         catchThree.species = "PNB"
         catchThree.weight = 69.7
-        val catchFour = Catch()
+        val catchFour = LogbookFishingCatch()
         catchFour.species = "CQL"
         catchFour.weight = 98.2
 
-        val catchFive = Catch()
+        val catchFive = LogbookFishingCatch()
         catchFive.species = "FGV"
         catchFive.weight = 25.5
-        val catchSix = Catch()
+        val catchSix = LogbookFishingCatch()
         catchSix.species = "THB"
         catchSix.weight = 35.0
-        val catchSeven = Catch()
+        val catchSeven = LogbookFishingCatch()
         catchSeven.species = "VGY"
         catchSeven.weight = 66666.0
-        val catchEight = Catch()
+        val catchEight = LogbookFishingCatch()
         catchEight.species = "MQP"
         catchEight.weight = 11.1
 
-        val catchNine = Catch()
+        val catchNine = LogbookFishingCatch()
         catchNine.species = "FPS"
         catchNine.weight = 22.0
 
-        val catchTen = Catch()
+        val catchTen = LogbookFishingCatch()
         catchTen.species = "DPD"
         catchTen.weight = 2225.0
 
@@ -848,6 +843,7 @@ object TestUtils {
                     integrationDateTime = ZonedDateTime.now(),
                     isEnriched = false,
                     operationDateTime = ZonedDateTime.now(),
+                    reportDateTime = ZonedDateTime.now(),
                 ),
                 LogbookMessage(
                     id = 2,
@@ -862,6 +858,7 @@ object TestUtils {
                     integrationDateTime = ZonedDateTime.now(),
                     isEnriched = false,
                     operationDateTime = ZonedDateTime.now(),
+                    reportDateTime = ZonedDateTime.now(),
                 ),
             ),
             Pair(
@@ -878,6 +875,7 @@ object TestUtils {
                     integrationDateTime = ZonedDateTime.now(),
                     isEnriched = false,
                     operationDateTime = ZonedDateTime.now(),
+                    reportDateTime = ZonedDateTime.now(),
                 ),
                 LogbookMessage(
                     id = 4,
@@ -892,6 +890,7 @@ object TestUtils {
                     integrationDateTime = ZonedDateTime.now(),
                     isEnriched = false,
                     operationDateTime = ZonedDateTime.now(),
+                    reportDateTime = ZonedDateTime.now(),
                 ),
             ),
         )

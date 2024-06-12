@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Catch
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
 
 class LogbookMessageCatchDataOutput(
     var weight: Double?,
@@ -18,7 +18,7 @@ class LogbookMessageCatchDataOutput(
     var statisticalRectangle: String?,
 ) {
     companion object {
-        fun fromCatch(catch: Catch): LogbookMessageCatchDataOutput {
+        fun fromCatch(catch: LogbookFishingCatch): LogbookMessageCatchDataOutput {
             return LogbookMessageCatchDataOutput(
                 weight = catch.weight,
                 numberFish = catch.numberFish,

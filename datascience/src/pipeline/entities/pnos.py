@@ -23,6 +23,11 @@ class PnoCatch:
         self.species_name_code = f"{species_name or '-'} ({species_code})"
 
 
+class PnoSource(Enum):
+    MANUAL = "MANUAL"
+    LOGBOOK = "LOGBOOK"
+
+
 @dataclass(kw_only=True)
 class PnoToRender:
     id: int
@@ -53,6 +58,7 @@ class PnoToRender:
     last_control_gear_infractions: List[dict]
     last_control_species_infractions: List[dict]
     last_control_other_infractions: List[dict]
+    source: PnoSource
 
     def __post_init__(self):
         datetime_attrs = [
@@ -113,6 +119,7 @@ class PreRenderedPno:
     last_control_gear_infractions: List[Infraction]
     last_control_species_infractions: List[Infraction]
     last_control_other_infractions: List[Infraction]
+    source: PnoSource
 
     @staticmethod
     def assertEqual(left: object, right: object):
@@ -179,3 +186,18 @@ class ReturnToPortPurpose(Enum):
             "ACS": "Accès aux services",
         }
         return labels[self.name]
+
+
+@dataclass
+class PnoHtmlDocument:
+    report_id: str
+    source: PnoSource
+    html: str
+
+
+@dataclass
+class PnoPdfDocument:
+    report_id: str
+    source: PnoSource
+    generation_datetime_utc: datetime
+    pdf_document: bytes

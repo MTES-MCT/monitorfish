@@ -109,7 +109,7 @@ data class ManualPriorNotificationEntity(
                 integrationDateTime = createdAt,
                 internalReferenceNumber = cfr,
                 message = value,
-                messageType = "PNO",
+                messageType = LogbookMessageTypeMapping.PNO.name,
                 operationDateTime = createdAt,
                 operationNumber = null,
                 operationType = LogbookOperationType.DAT,

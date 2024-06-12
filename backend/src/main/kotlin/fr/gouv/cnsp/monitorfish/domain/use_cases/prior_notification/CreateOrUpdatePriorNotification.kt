@@ -65,7 +65,7 @@ class CreateOrUpdatePriorNotification(
             isEnriched = true,
             isSentByFailoverSoftware = false,
             message = message,
-            messageType = "PNO",
+            messageType = LogbookMessageTypeMapping.PNO.name,
             operationType = LogbookOperationType.DAT,
             tripGears = tripGears,
             tripSegments = tripSegments,

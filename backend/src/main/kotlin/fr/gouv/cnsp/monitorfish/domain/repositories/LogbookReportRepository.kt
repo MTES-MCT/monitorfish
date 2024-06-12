@@ -68,7 +68,7 @@ interface LogbookReportRepository {
 
     fun findLastReportSoftware(internalReferenceNumber: String): String?
 
-    // TODO Is it used?
+    // Only used in tests
     fun save(message: LogbookMessage)
 
     fun savePriorNotification(logbookMessageTyped: LogbookMessageTyped<PNO>): PriorNotification

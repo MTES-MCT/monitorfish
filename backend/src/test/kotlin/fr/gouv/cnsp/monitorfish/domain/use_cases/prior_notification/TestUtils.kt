@@ -177,7 +177,7 @@ object TestUtils {
                     faoAreas = listOf(),
                     cgpmAreas = listOf(),
                     gears = listOf("OTT"),
-                    flagStates = listOf(),
+                    flagStates = listOf(CountryCode.GB),
                     minimumQuantityKg = 2000.0,
                 ),
                 PnoTypeRule(
@@ -185,7 +185,7 @@ object TestUtils {
                     species = listOf(),
                     faoAreas = listOf(),
                     cgpmAreas = listOf(),
-                    gears = listOf(),
+                    gears = listOf("PTB"),
                     flagStates = listOf(CountryCode.BB),
                     minimumQuantityKg = 10000.0,
                 ),

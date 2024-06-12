@@ -17,7 +17,7 @@ context('Side Window > Prior Notification Form > Form', () => {
 
     addSideWindowPriorNotification()
 
-    cy.intercept('POST', '/bff/v1/prior_notifications').as('createPriorNotification')
+    cy.intercept('POST', '/bff/v1/prior_notifications/manual').as('createPriorNotification')
 
     cy.getDataCy('vessel-search-input').click().wait(500)
     cy.getDataCy('vessel-search-input').type('pageot', { delay: 100 })
@@ -116,7 +116,7 @@ context('Side Window > Prior Notification Form > Form', () => {
 
       editSideWindowPriorNotification('pageot')
 
-      cy.intercept('PUT', `/bff/v1/prior_notifications/${createdPriorNotification.reportId}`).as(
+      cy.intercept('PUT', `/bff/v1/prior_notifications/manual/${createdPriorNotification.reportId}`).as(
         'updatePriorNotification'
       )
 
@@ -144,8 +144,6 @@ context('Side Window > Prior Notification Form > Form', () => {
     const { utcDateTupleWithTime } = getUtcDateInMultipleFormats(customDayjs().toISOString())
 
     addSideWindowPriorNotification()
-
-    cy.intercept('POST', '/bff/v1/prior_notifications').as('createPriorNotification')
 
     cy.clickButton('Créer le préavis')
 

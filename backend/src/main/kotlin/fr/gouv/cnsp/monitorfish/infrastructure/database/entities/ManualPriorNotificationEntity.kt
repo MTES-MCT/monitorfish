@@ -10,8 +10,6 @@ import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.Type
 import org.hibernate.annotations.UpdateTimestamp
-import java.time.Instant
-import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 @Entity
@@ -99,7 +97,7 @@ data class ManualPriorNotificationEntity(
 
     fun toPriorNotification(): PriorNotification {
         try {
-            val createdAt = getUtcZonedDateTime(createdAt, reportId)
+            val createdAt = requireNotNull(createdAt, fun() = "`createdAt` is null for reportId=$reportId.")
 
             val pnoLogbookMessage = LogbookMessage(
                 id = null,
@@ -146,18 +144,6 @@ data class ManualPriorNotificationEntity(
                 "Error while converting `ManualPriorNotificationEntity` to `PriorNotification` (likely because a non-nullable variable is null).",
                 e,
             )
-        }
-    }
-
-    private fun getUtcZonedDateTime(dateTime: ZonedDateTime?, reportId: String?): ZonedDateTime {
-        return if (dateTime != null) {
-            dateTime
-        } else {
-            // TODO Impossible to add a `logger` property in this class.
-            // logger.warn("`dateTime` is null for reportId=$reportId. Replaced by EPOCH date.")
-            println("WARNING: `dateTime` is null for reportId=$reportId. Replaced by EPOCH date.")
-
-            ZonedDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC)
         }
     }
 }

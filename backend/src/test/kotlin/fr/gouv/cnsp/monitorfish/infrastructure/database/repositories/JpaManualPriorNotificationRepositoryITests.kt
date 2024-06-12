@@ -94,7 +94,6 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(secondResult).hasSizeBetween(1, allPriorNotificationsLength - 1)
-        println(secondResult.map { it.logbookMessageTyped.logbookMessage.id })
         assertThat(
             secondResult.none {
                 it.reportId in expectedLogbookReportIdsWithOneOrMoreReportings

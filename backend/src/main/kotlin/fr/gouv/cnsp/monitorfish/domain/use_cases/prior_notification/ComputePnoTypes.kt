@@ -71,7 +71,7 @@ class ComputePnoTypes(
             }
         }
 
-        return filteredPnoTypeRules.map { it.second }.distinctBy { it.id }
+        return filteredPnoTypeRules.map { (_, type) -> type }.distinctBy { it.id }
     }
 
     fun ruleAppliesToCatch(rule: PnoTypeRule, pnoCatch: Catch, pnoGears: List<String>): Boolean {

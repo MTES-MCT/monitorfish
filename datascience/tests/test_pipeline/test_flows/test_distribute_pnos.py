@@ -13,7 +13,12 @@ from jinja2 import Template
 from config import TEST_DATA_LOCATION, default_risk_factors
 from src.pipeline.entities.fleet_segments import FishingGear, FleetSegment
 from src.pipeline.entities.missions import Infraction
-from src.pipeline.entities.pnos import PnoToRender, PreRenderedPno
+from src.pipeline.entities.pnos import (
+    PnoHtmlDocument,
+    PnoSource,
+    PnoToRender,
+    PreRenderedPno,
+)
 from src.pipeline.flows.distribute_pnos import (
     extract_fishing_gear_names,
     extract_pnos_to_distribute,
@@ -496,6 +501,7 @@ def pno_to_render_1() -> PnoToRender:
             {"natinf": 4761},
             {"natinf": 22206},
         ],
+        source=PnoSource.LOGBOOK,
     )
 
 
@@ -566,6 +572,7 @@ def pre_rendered_pno_1(pre_rendered_pno_1_catch_onboard) -> PreRenderedPno:
             Infraction(natinf=4761, comments=None),
             Infraction(natinf=22206, comments=None),
         ],
+        source=PnoSource.LOGBOOK,
     )
 
 
@@ -600,6 +607,7 @@ def pno_to_render_2() -> PnoToRender:
         last_control_gear_infractions=[],
         last_control_species_infractions=[],
         last_control_other_infractions=[],
+        source=PnoSource.LOGBOOK,
     )
 
 
@@ -634,6 +642,7 @@ def pre_rendered_pno_2() -> PreRenderedPno:
         last_control_gear_infractions=[],
         last_control_species_infractions=[],
         last_control_other_infractions=[],
+        source=PnoSource.LOGBOOK,
     )
 
 
@@ -719,7 +728,7 @@ def test_pre_render_pno_2(
     "src.pipeline.flows.distribute_pnos.EMAIL_FONTS_LOCATION", Path("/se_mer/logo/path")
 )
 def test_render_pno_1(template, pre_rendered_pno_1):
-    html = render_pno.run(pno=pre_rendered_pno_1, template=template)
+    html_document = render_pno.run(pno=pre_rendered_pno_1, template=template)
     test_filepath = (
         TEST_DATA_LOCATION / "emails/prior_notifications/expected_pno_1.html"
     )
@@ -731,7 +740,11 @@ def test_render_pno_1(template, pre_rendered_pno_1):
     ###################################################################################
     with open(test_filepath, "r") as f:
         expected_html = f.read()
-    assert html == expected_html
+
+    assert isinstance(html_document, PnoHtmlDocument)
+    assert html_document.html == expected_html
+    assert html_document.report_id == "11"
+    assert html_document.source == PnoSource.LOGBOOK
 
 
 @patch(
@@ -744,7 +757,7 @@ def test_render_pno_1(template, pre_rendered_pno_1):
     "src.pipeline.flows.distribute_pnos.EMAIL_FONTS_LOCATION", Path("/se_mer/logo/path")
 )
 def test_render_pno_2(template, pre_rendered_pno_2):
-    html = render_pno.run(pno=pre_rendered_pno_2, template=template)
+    html_document = render_pno.run(pno=pre_rendered_pno_2, template=template)
     test_filepath = (
         TEST_DATA_LOCATION / "emails/prior_notifications/expected_pno_2.html"
     )
@@ -756,7 +769,11 @@ def test_render_pno_2(template, pre_rendered_pno_2):
     ###################################################################################
     with open(test_filepath, "r") as f:
         expected_html = f.read()
-    assert html == expected_html
+
+    assert isinstance(html_document, PnoHtmlDocument)
+    assert html_document.html == expected_html
+    assert html_document.report_id == "12"
+    assert html_document.source == PnoSource.LOGBOOK
 
 
 # `print_html_to_pdf` cannot be tested directly from a test html file, because the
@@ -766,9 +783,9 @@ def test_render_pno_2(template, pre_rendered_pno_2):
 
 
 def test_render_then_print_to_pdf_1(template, pre_rendered_pno_1):
-    html = render_pno.run(pno=pre_rendered_pno_1, template=template)
-    pdf = print_html_to_pdf.run(html)
-    pdf = pypdf.PdfReader(io.BytesIO(pdf))
+    html_document = render_pno.run(pno=pre_rendered_pno_1, template=template)
+    pno_pdf_document = print_html_to_pdf.run(html_document)
+    pdf = pypdf.PdfReader(io.BytesIO(pno_pdf_document.pdf_document))
 
     test_filepath = TEST_DATA_LOCATION / "emails/prior_notifications/expected_pno_1.pdf"
 
@@ -782,11 +799,15 @@ def test_render_then_print_to_pdf_1(template, pre_rendered_pno_1):
 
     assert expected_res.pages[0].extract_text() == pdf.pages[0].extract_text()
 
+    assert pno_pdf_document.report_id == "11"
+    assert pno_pdf_document.source == PnoSource.LOGBOOK
+    assert isinstance(pno_pdf_document.generation_datetime_utc, datetime)
+
 
 def test_render_then_print_to_pdf_2(template, pre_rendered_pno_2):
-    html = render_pno.run(pno=pre_rendered_pno_2, template=template)
-    pdf = print_html_to_pdf.run(html)
-    pdf = pypdf.PdfReader(io.BytesIO(pdf))
+    html_document = render_pno.run(pno=pre_rendered_pno_2, template=template)
+    pno_pdf_document = print_html_to_pdf.run(html_document)
+    pdf = pypdf.PdfReader(io.BytesIO(pno_pdf_document.pdf_document))
 
     test_filepath = TEST_DATA_LOCATION / "emails/prior_notifications/expected_pno_2.pdf"
 
@@ -799,6 +820,10 @@ def test_render_then_print_to_pdf_2(template, pre_rendered_pno_2):
         expected_res = pypdf.PdfReader(io.BytesIO(f.read()))
 
     assert expected_res.pages[0].extract_text() == pdf.pages[0].extract_text()
+
+    assert pno_pdf_document.report_id == "12"
+    assert pno_pdf_document.source == PnoSource.LOGBOOK
+    assert isinstance(pno_pdf_document.generation_datetime_utc, datetime)
 
 
 # def test_flow(reset_test_data):

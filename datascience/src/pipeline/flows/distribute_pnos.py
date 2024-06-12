@@ -24,6 +24,9 @@ from src.pipeline.entities.fleet_segments import FishingGear, FleetSegment
 from src.pipeline.entities.missions import Infraction
 from src.pipeline.entities.pnos import (
     PnoCatch,
+    PnoHtmlDocument,
+    PnoPdfDocument,
+    PnoSource,
     PnoToRender,
     PreRenderedPno,
     ReturnToPortPurpose,
@@ -75,7 +78,7 @@ def extract_pnos_to_distribute(
 @task(checkpoint=False)
 def to_pnos_to_render(pnos: pd.DataFrame) -> List[PnoToRender]:
     records = pnos.to_dict(orient="records")
-    return [PnoToRender(**record) for record in records]
+    return [PnoToRender(**record, source=PnoSource.LOGBOOK) for record in records]
 
 
 @task(checkpoint=False)
@@ -221,6 +224,7 @@ def pre_render_pno(
         last_control_gear_infractions=last_control_gear_infractions,
         last_control_species_infractions=last_control_species_infractions,
         last_control_other_infractions=last_control_other_infractions,
+        source=pno.source,
     )
 
 
@@ -247,7 +251,7 @@ def get_template() -> Template:
 
 
 @task(checkpoint=False)
-def render_pno(pno: PreRenderedPno, template: Template) -> str:
+def render_pno(pno: PreRenderedPno, template: Template) -> PnoHtmlDocument:
     fonts_directory = EMAIL_FONTS_LOCATION.as_uri()
     cnsp_logo_src = CNSP_LOGO_PATH.as_uri()
     se_mer_logo_src = SE_MER_LOGO_PATH.as_uri()
@@ -331,14 +335,21 @@ def render_pno(pno: PreRenderedPno, template: Template) -> str:
         last_control_other_infractions=pno.last_control_other_infractions,
     )
 
-    return html
+    return PnoHtmlDocument(report_id=pno.report_id, source=pno.source, html=html)
 
 
 @task(checkpoint=False)
-def print_html_to_pdf(html: str) -> bytes:
-    pdf = weasyprint.HTML(string=html).write_pdf(optimize_size=("fonts", "images"))
+def print_html_to_pdf(html_document: PnoHtmlDocument) -> PnoPdfDocument:
+    pdf = weasyprint.HTML(string=html_document.html).write_pdf(
+        optimize_size=("fonts", "images")
+    )
     pdf = resize_pdf_to_A4(pdf)
-    return pdf
+    return PnoPdfDocument(
+        report_id=html_document.report_id,
+        source=html_document.source,
+        generation_datetime_utc=datetime.utcnow(),
+        pdf_document=pdf,
+    )
 
 
 with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
@@ -366,5 +377,8 @@ with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
             species_names=unmapped(species_names),
             fishing_gear_names=unmapped(fishing_gear_names),
         )
+        html_documents = render_pno.map(pnos, template=unmapped(template))
+        pdfs = print_html_to_pdf.map(html_documents)
+
 
 flow.file_name = Path(__file__).name

@@ -4,7 +4,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
 
 class LogbookMessageCatchDataOutput(
     var weight: Double?,
-    var numberFish: Double?,
+    var nbFish: Double?,
     var species: String?,
     var speciesName: String?,
     var faoZone: String?,
@@ -21,7 +21,7 @@ class LogbookMessageCatchDataOutput(
         fun fromCatch(catch: LogbookFishingCatch): LogbookMessageCatchDataOutput {
             return LogbookMessageCatchDataOutput(
                 weight = catch.weight,
-                numberFish = catch.numberFish,
+                nbFish = catch.nbFish,
                 species = catch.species,
                 speciesName = catch.speciesName,
                 faoZone = catch.faoZone,

@@ -73,6 +73,7 @@ export function EquipmentResume({ setIsCurrentBeaconMalfunctionDetails }: Beacon
                     !!selectedVessel?.beacon.loggingDatetimeUtc && getDateTime(selectedVessel.beacon.loggingDatetimeUtc)
                 }
               ]}
+              valueEllipsisedForWidth={100}
             />
             <StyledFlatKeyValue
               column={[

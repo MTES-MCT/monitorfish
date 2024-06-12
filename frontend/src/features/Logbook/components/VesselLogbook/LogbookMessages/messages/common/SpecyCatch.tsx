@@ -40,6 +40,12 @@ export function SpecyCatch({
           <SpecyWeightLabel>Poids total ({weightType})</SpecyWeightLabel>
           <SpecyWeightValue>{specyCatch.weight || <NoValue>-</NoValue>} kg</SpecyWeightValue>
         </SpecyWeight>
+        {specyCatch.nbFish > 0 && (
+          <SpecyWeight title={`${specyCatch.nbFish} pièces`}>
+            <SpecyWeightLabel>Pc.</SpecyWeightLabel>
+            <SpecyWeightValue>{specyCatch.nbFish || <NoValue>-</NoValue>}</SpecyWeightValue>
+          </SpecyWeight>
+        )}
         {isOpenable && <ChevronIcon $isOpen={isOpen} />}
       </Title>
       <Content $isOpen={isOpen} $isProtectedSpecy={isProtectedSpecy} $length={specyCatch.properties.length || 1}>

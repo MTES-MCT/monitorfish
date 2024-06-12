@@ -58,7 +58,7 @@ export namespace LogbookMessage {
     effortZone: string | undefined
     faoZone: string | undefined
     freshness: string | undefined
-    numberFish: number | undefined
+    nbFish: number | undefined
     packaging: string | undefined
     presentation: string | undefined
     preservationState: string | undefined

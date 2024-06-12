@@ -78,7 +78,7 @@ export type LogbookCatch = {
   effortZone: string | null
   faoZone: string | null
   freshness: string | null
-  numberFish: number | null
+  nbFish: number | null
   packaging: string | null
   presentation: string | null
   preservationState: string | null

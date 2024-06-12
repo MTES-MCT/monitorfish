@@ -666,7 +666,6 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(secondResult).hasSizeGreaterThan(0)
-        println(secondResult.map { it.logbookMessageTyped.logbookMessage.id })
         assertThat(
             secondResult.none {
                 it.logbookMessageTyped.logbookMessage.id in expectedLogbookReportIdsWithOneOrMoreReportings

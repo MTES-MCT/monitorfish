@@ -97,7 +97,9 @@ data class ManualPriorNotificationEntity(
 
     fun toPriorNotification(): PriorNotification {
         try {
-            val createdAt = requireNotNull(createdAt, fun() = "`createdAt` is null for reportId=$reportId.")
+            val createdAt = requireNotNull(createdAt) {
+                "`createdAt` is null for reportId=$reportId."
+            }
 
             val pnoLogbookMessage = LogbookMessage(
                 id = null,

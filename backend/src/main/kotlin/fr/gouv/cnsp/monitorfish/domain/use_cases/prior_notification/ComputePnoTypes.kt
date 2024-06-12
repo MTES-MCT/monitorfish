@@ -23,37 +23,32 @@ class ComputePnoTypes(
 
         val pnoGears = tripGears.mapNotNull { it.gear }.distinct()
         val allPnoTypes = pnoTypeRepository.findAll()
+        val allPnoTypeRules = allPnoTypes.map { pnoType -> pnoType.pnoTypeRules.map { it to pnoType } }.flatten()
 
-        val catchToPnoTypes = catchToLand.map { pnoCatch ->
-            val pnoTypes = allPnoTypes.filter { pnoType ->
-                val rules = pnoType.pnoTypeRules
+        val catchToPnoTypeRules = catchToLand.map { pnoCatch ->
+            val pnoTypeRules = allPnoTypeRules
+                .map { it.first }
+                .filter { rule -> ruleAppliesToCatch(rule, pnoCatch, pnoGears) }
 
-                return@filter rules.any { rule -> ruleAppliesToCatch(rule, pnoCatch, pnoGears) }
-            }
-
-            return@map pnoCatch to pnoTypes
+            return@map pnoCatch to pnoTypeRules
         }
 
-        val filteredPnoTypes = allPnoTypes.filter { pnoType ->
-            val allCatchesOfPnoType = catchToPnoTypes
-                .filter { (_, pnoTypes) -> pnoTypes.any { pnoTypeOfCatch -> pnoTypeOfCatch.id == pnoType.id } }
+        val filteredPnoTypeRules = allPnoTypeRules.filter { (rule) ->
+            val allCatchesOfRule = catchToPnoTypeRules
+                .filter { (_, pnoTypeRules) -> pnoTypeRules.any { pnoTypeRuleOfCatch -> pnoTypeRuleOfCatch.id == rule.id } }
                 .map { (pnoCatch, _) -> pnoCatch }
 
-            val hasEmptyGears = pnoType.pnoTypeRules.all { rule -> rule.gears.isEmpty() }
-            val hasEmptyFlagStates = pnoType.pnoTypeRules.all { rule -> rule.flagStates.isEmpty() }
-            val hasEmptyRequiredCatches = pnoType.pnoTypeRules.all { rule ->
-                rule.species.isEmpty() && rule.faoAreas.isEmpty() && rule.cgpmAreas.isEmpty()
-            }
+            val hasEmptyGears = rule.gears.isEmpty()
+            val hasEmptyFlagStates = rule.flagStates.isEmpty()
+            val hasEmptyRequiredCatches = rule.species.isEmpty() && rule.faoAreas.isEmpty() && rule.cgpmAreas.isEmpty()
 
             val numberOfEmptyRules = listOf(hasEmptyGears, hasEmptyFlagStates, hasEmptyRequiredCatches).count { it }
 
-            val containsGear = pnoType.pnoTypeRules.any { rule -> rule.gears.any { pnoGears.contains(it) } }
-            val containsFlagState = pnoType.pnoTypeRules.any { rule -> rule.flagStates.contains(flagState) }
+            val containsGear = rule.gears.any { pnoGears.contains(it) }
+            val containsFlagState = rule.flagStates.contains(flagState)
 
-            val totalCatchesWeight = allCatchesOfPnoType.mapNotNull { it.weight }.sum()
-            val hasCatchesAndMinimumQuantity = allCatchesOfPnoType.isNotEmpty() && pnoType.pnoTypeRules.any { rules ->
-                totalCatchesWeight >= rules.minimumQuantityKg
-            }
+            val totalCatchesWeight = allCatchesOfRule.mapNotNull { it.weight }.sum()
+            val hasCatchesAndMinimumQuantity = allCatchesOfRule.isNotEmpty() && totalCatchesWeight >= rule.minimumQuantityKg
 
             return@filter when (numberOfEmptyRules) {
                 0 -> containsGear && containsFlagState && hasCatchesAndMinimumQuantity
@@ -62,21 +57,21 @@ class ComputePnoTypes(
                     !hasEmptyGears && !hasEmptyFlagStates -> containsGear && containsFlagState
                     !hasEmptyGears && !hasEmptyRequiredCatches -> containsGear && hasCatchesAndMinimumQuantity
                     !hasEmptyFlagStates && !hasEmptyRequiredCatches -> containsFlagState && hasCatchesAndMinimumQuantity
-                    else -> { throw IllegalArgumentException("Only one empty field is required.") }
+                    else -> false
                 }
 
                 2 -> when {
                     hasEmptyGears && hasEmptyFlagStates -> hasCatchesAndMinimumQuantity
                     hasEmptyGears && hasEmptyRequiredCatches -> containsFlagState
                     hasEmptyFlagStates && hasEmptyRequiredCatches -> containsGear
-                    else -> { throw IllegalArgumentException("Two empty fields are required.") }
+                    else -> false
                 }
 
                 else -> false
             }
         }
 
-        return filteredPnoTypes
+        return filteredPnoTypeRules.map { it.second }.distinctBy { it.id }
     }
 
     fun ruleAppliesToCatch(rule: PnoTypeRule, pnoCatch: Catch, pnoGears: List<String>): Boolean {

@@ -1,14 +1,9 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.filters.LogbookReportFilter
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.sorters.LogbookReportSortColumn
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilter
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.UNKNOWN_VESSEL
-import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.sorters.PriorNotificationsSortColumn
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import org.springframework.data.domain.Sort
 
@@ -16,15 +11,17 @@ import org.springframework.data.domain.Sort
 class GetPriorNotifications(
     private val gearRepository: GearRepository,
     private val logbookReportRepository: LogbookReportRepository,
+    private val manualPriorNotificationRepository: ManualPriorNotificationRepository,
     private val portRepository: PortRepository,
     private val reportingRepository: ReportingRepository,
     private val riskFactorRepository: RiskFactorRepository,
     private val speciesRepository: SpeciesRepository,
     private val vesselRepository: VesselRepository,
+
 ) {
     fun execute(
-        filter: LogbookReportFilter,
-        sortColumn: LogbookReportSortColumn,
+        filter: PriorNotificationsFilter,
+        sortColumn: PriorNotificationsSortColumn,
         sortDirection: Sort.Direction,
     ): List<PriorNotification> {
         val allGears = gearRepository.findAll()
@@ -33,42 +30,19 @@ class GetPriorNotifications(
         val allSpecies = speciesRepository.findAll()
         val allVessels = vesselRepository.findAll()
 
-        val incompletePriorNotifications = logbookReportRepository.findAllPriorNotifications(filter)
-        val priorNotificationsWithoutReportingCount = incompletePriorNotifications
+        val automaticPriorNotifications = logbookReportRepository.findAllPriorNotifications(filter)
+        val manualPriorNotifications = manualPriorNotificationRepository.findAll(filter)
+        val incompletePriorNotifications = automaticPriorNotifications + manualPriorNotifications
+
+        val priorNotifications = incompletePriorNotifications
             .map { priorNotification ->
-                val port = try {
-                    priorNotification.logbookMessageTyped.typedMessage.port?.let { portLocode ->
-                        allPorts.find { it.locode == portLocode }
-                    }
-                } catch (e: CodeNotFoundException) {
-                    null
-                }
-
-                // Default to UNKNOWN vessel when null or not found
-                val vessel = priorNotification.logbookMessageTyped.logbookMessage
-                    .internalReferenceNumber?.let { vesselInternalReferenceNumber ->
-                        allVessels.find { it.internalReferenceNumber == vesselInternalReferenceNumber }
-                    } ?: UNKNOWN_VESSEL
-
-                val vesselRiskFactor = vessel.internalReferenceNumber?.let { vesselInternalReferenceNumber ->
-                    allRiskFactors.find { it.internalReferenceNumber == vesselInternalReferenceNumber }
-                }
-
-                val seafront: Seafront? = port?.facade?.let { Seafront.from(it) }
-
-                val finalPriorNotification = priorNotification.copy(
-                    port = port,
-                    seafront = seafront,
-                    vessel = vessel,
-                    vesselRiskFactor = vesselRiskFactor,
-                )
-
-                finalPriorNotification.logbookMessageTyped.logbookMessage
+                priorNotification.enrich(allPorts, allRiskFactors, allVessels)
+                priorNotification.enrichReportingCount(reportingRepository)
+                priorNotification.logbookMessageTyped.logbookMessage
                     .enrichGearPortAndSpecyNames(allGears, allPorts, allSpecies)
 
-                finalPriorNotification
+                priorNotification
             }
-        val priorNotifications = enrichPriorNotificationsWithReportingCount(priorNotificationsWithoutReportingCount)
 
         val sortedPriorNotifications = when (sortDirection) {
             Sort.Direction.ASC -> priorNotifications.sortedWith(
@@ -90,40 +64,17 @@ class GetPriorNotifications(
         return sortedPriorNotificationsWithoutDeletedOnes
     }
 
-    private fun enrichPriorNotificationsWithReportingCount(
-        priorNotifications: List<PriorNotification>,
-    ): List<PriorNotification> {
-        val currentReportings = reportingRepository.findAll(
-            ReportingFilter(
-                vesselInternalReferenceNumbers = priorNotifications.mapNotNull { it.vessel.internalReferenceNumber },
-                isArchived = false,
-                isDeleted = false,
-                types = listOf(ReportingType.INFRACTION_SUSPICION),
-            ),
-        )
-
-        val priorNotificationsWithReportingCount = priorNotifications.map { priorNotification ->
-            val reportingCount = currentReportings.count { reporting ->
-                reporting.internalReferenceNumber == priorNotification.vessel.internalReferenceNumber
-            }
-
-            priorNotification.copy(reportingCount = reportingCount)
-        }
-
-        return priorNotificationsWithReportingCount
-    }
-
     companion object {
         private fun getSortKey(
             priorNotification: PriorNotification,
-            sortColumn: LogbookReportSortColumn,
+            sortColumn: PriorNotificationsSortColumn,
         ): Comparable<*>? {
             return when (sortColumn) {
-                LogbookReportSortColumn.EXPECTED_ARRIVAL_DATE -> priorNotification.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc
-                LogbookReportSortColumn.EXPECTED_LANDING_DATE -> priorNotification.logbookMessageTyped.typedMessage.predictedLandingDatetimeUtc
-                LogbookReportSortColumn.PORT_NAME -> priorNotification.port?.name
-                LogbookReportSortColumn.VESSEL_NAME -> priorNotification.logbookMessageTyped.logbookMessage.vesselName
-                LogbookReportSortColumn.VESSEL_RISK_FACTOR -> priorNotification.vesselRiskFactor?.riskFactor
+                PriorNotificationsSortColumn.EXPECTED_ARRIVAL_DATE -> priorNotification.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc
+                PriorNotificationsSortColumn.EXPECTED_LANDING_DATE -> priorNotification.logbookMessageTyped.typedMessage.predictedLandingDatetimeUtc
+                PriorNotificationsSortColumn.PORT_NAME -> priorNotification.port?.name
+                PriorNotificationsSortColumn.VESSEL_NAME -> priorNotification.logbookMessageTyped.logbookMessage.vesselName
+                PriorNotificationsSortColumn.VESSEL_RISK_FACTOR -> priorNotification.vesselRiskFactor?.riskFactor
             }
         }
     }

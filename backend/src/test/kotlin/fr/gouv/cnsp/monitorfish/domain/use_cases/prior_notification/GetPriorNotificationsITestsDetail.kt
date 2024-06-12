@@ -1,8 +1,8 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.filters.LogbookReportFilter
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.sorters.LogbookReportSortColumn
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.sorters.PriorNotificationsSortColumn
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.AbstractDBTests
 import org.assertj.core.api.Assertions.assertThat
@@ -19,7 +19,7 @@ import java.time.ZonedDateTime
 @ExtendWith(SpringExtension::class)
 @Import(MapperConfiguration::class)
 @SpringBootTest
-class GetPriorNotificationsITests : AbstractDBTests() {
+class GetPriorNotificationsITestsDetail : AbstractDBTests() {
     @Autowired
     private lateinit var getPriorNotifications: GetPriorNotifications
 
@@ -44,11 +44,11 @@ class GetPriorNotificationsITests : AbstractDBTests() {
     @Autowired
     private lateinit var vesselRepository: VesselRepository
 
-    private val defaultFilter = LogbookReportFilter(
+    private val defaultFilter = PriorNotificationsFilter(
         willArriveAfter = "2000-01-01T00:00:00Z",
         willArriveBefore = "2099-12-31T00:00:00Z",
     )
-    private val defaultSortColumn = LogbookReportSortColumn.EXPECTED_ARRIVAL_DATE
+    private val defaultSortColumn = PriorNotificationsSortColumn.EXPECTED_ARRIVAL_DATE
     private val defaultSortDirection = Sort.Direction.ASC
     private val defaultPageSize = 10
     private val defaultPageNumber = 0
@@ -57,7 +57,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
     @Transactional
     fun `execute should return a list of prior notifications sorted by expected arrival date ascending`() {
         // Given
-        val sortColumn = LogbookReportSortColumn.EXPECTED_ARRIVAL_DATE
+        val sortColumn = PriorNotificationsSortColumn.EXPECTED_ARRIVAL_DATE
         val sortDirection = Sort.Direction.ASC
 
         // When
@@ -77,7 +77,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
     @Transactional
     fun `execute should return a list of prior notifications sorted by expected arrival date descending`() {
         // Given
-        val sortColumn = LogbookReportSortColumn.EXPECTED_ARRIVAL_DATE
+        val sortColumn = PriorNotificationsSortColumn.EXPECTED_ARRIVAL_DATE
         val sortDirection = Sort.Direction.DESC
 
         // When
@@ -97,7 +97,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
     @Transactional
     fun `execute should return a list of prior notifications sorted by expected landing date ascending`() {
         // Given
-        val sortColumn = LogbookReportSortColumn.EXPECTED_LANDING_DATE
+        val sortColumn = PriorNotificationsSortColumn.EXPECTED_LANDING_DATE
         val sortDirection = Sort.Direction.ASC
 
         // When
@@ -109,7 +109,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
         assertThat(
             firstPriorNotificationWithNonNullLandingDate.logbookMessageTyped.typedMessage.predictedLandingDatetimeUtc,
         )
-            .isEqualTo(ZonedDateTime.parse("2024-03-01T17:30:00Z"))
+            .isEqualTo(ZonedDateTime.parse("2023-01-01T10:30:00Z"))
         assertThat(result).hasSizeGreaterThan(0)
     }
 
@@ -117,7 +117,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
     @Transactional
     fun `execute should return a list of prior notifications sorted by expected landing date descending`() {
         // Given
-        val sortColumn = LogbookReportSortColumn.EXPECTED_LANDING_DATE
+        val sortColumn = PriorNotificationsSortColumn.EXPECTED_LANDING_DATE
         val sortDirection = Sort.Direction.DESC
 
         // When
@@ -137,7 +137,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
     @Transactional
     fun `execute should return a list of prior notifications sorted by port name ascending`() {
         // Given
-        val sortColumn = LogbookReportSortColumn.PORT_NAME
+        val sortColumn = PriorNotificationsSortColumn.PORT_NAME
         val sortDirection = Sort.Direction.ASC
 
         // When
@@ -154,7 +154,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
     @Transactional
     fun `execute should return a list of prior notifications sorted by port name descending`() {
         // Given
-        val sortColumn = LogbookReportSortColumn.PORT_NAME
+        val sortColumn = PriorNotificationsSortColumn.PORT_NAME
         val sortDirection = Sort.Direction.DESC
 
         // When
@@ -171,17 +171,17 @@ class GetPriorNotificationsITests : AbstractDBTests() {
     @Transactional
     fun `execute should return a list of prior notifications sorted by vessel name ascending`() {
         // Given
-        val sortColumn = LogbookReportSortColumn.VESSEL_NAME
+        val sortColumn = PriorNotificationsSortColumn.VESSEL_NAME
         val sortDirection = Sort.Direction.ASC
 
         // When
         val result = getPriorNotifications.execute(defaultFilter, sortColumn, sortDirection)
 
         // Then
-        val firstPriorNotificationWithKnownVessel = result.first { it.vessel.id != -1 }
+        val firstPriorNotificationWithKnownVessel = result.first { it.vessel!!.id != -1 }
         // We don't test the `.vessel.VesselName` since in the real world,
         // the vessel name may have changed between the logbook message date and now
-        assertThat(firstPriorNotificationWithKnownVessel.vessel.internalReferenceNumber).isEqualTo("CFR105")
+        assertThat(firstPriorNotificationWithKnownVessel.vessel!!.internalReferenceNumber).isEqualTo("CFR105")
         assertThat(firstPriorNotificationWithKnownVessel.logbookMessageTyped.logbookMessage.internalReferenceNumber)
             .isEqualTo("CFR105")
         assertThat(firstPriorNotificationWithKnownVessel.logbookMessageTyped.logbookMessage.vesselName)
@@ -193,21 +193,21 @@ class GetPriorNotificationsITests : AbstractDBTests() {
     @Transactional
     fun `execute should return a list of prior notifications sorted by vessel name descending`() {
         // Given
-        val sortColumn = LogbookReportSortColumn.VESSEL_NAME
+        val sortColumn = PriorNotificationsSortColumn.VESSEL_NAME
         val sortDirection = Sort.Direction.DESC
 
         // When
         val result = getPriorNotifications.execute(defaultFilter, sortColumn, sortDirection)
 
         // Then
-        val firstPriorNotificationWithKnownVessel = result.first { it.vessel.id != -1 }
+        val firstPriorNotificationWithKnownVessel = result.first { it.vessel!!.id != -1 }
         // We don't test the `.vessel.VesselName` since in the real world,
         // the vessel name may have changed between the logbook message date and now
-        assertThat(firstPriorNotificationWithKnownVessel.vessel.internalReferenceNumber).isEqualTo("CFR101")
+        assertThat(firstPriorNotificationWithKnownVessel.vessel!!.internalReferenceNumber).isEqualTo("CFR120")
         assertThat(firstPriorNotificationWithKnownVessel.logbookMessageTyped.logbookMessage.internalReferenceNumber)
-            .isEqualTo("CFR101")
+            .isEqualTo("CFR120")
         assertThat(firstPriorNotificationWithKnownVessel.logbookMessageTyped.logbookMessage.vesselName)
-            .isEqualTo("VIVA ESPANA")
+            .isEqualTo("VIVA L'ITALIA")
         assertThat(result).hasSizeGreaterThan(0)
     }
 
@@ -215,7 +215,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
     @Transactional
     fun `execute should return a list of prior notifications sorted by vessel risk factor ascending`() {
         // Given
-        val sortColumn = LogbookReportSortColumn.VESSEL_RISK_FACTOR
+        val sortColumn = PriorNotificationsSortColumn.VESSEL_RISK_FACTOR
         val sortDirection = Sort.Direction.ASC
 
         // When
@@ -223,7 +223,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
         // Then
         val firstPriorNotificationWithNonNullRiskFactor = result.first { it.vesselRiskFactor != null }
-        assertThat(firstPriorNotificationWithNonNullRiskFactor.vesselRiskFactor!!.riskFactor).isEqualTo(2.473)
+        assertThat(firstPriorNotificationWithNonNullRiskFactor.vesselRiskFactor!!.riskFactor).isEqualTo(2.2)
         assertThat(result).hasSizeGreaterThan(0)
     }
 
@@ -231,7 +231,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
     @Transactional
     fun `execute should return a list of prior notifications sorted by vessel risk factor descending`() {
         // Given
-        val sortColumn = LogbookReportSortColumn.VESSEL_RISK_FACTOR
+        val sortColumn = PriorNotificationsSortColumn.VESSEL_RISK_FACTOR
         val sortDirection = Sort.Direction.DESC
 
         // When

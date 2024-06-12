@@ -36,15 +36,17 @@ class GetLogbookMessages(
                 tripNumber,
             )
             .sortedBy { it.reportDateTime }
-            .map {
-                try {
-                    val rawMessage = logbookRawMessageRepository.findRawMessage(it.operationNumber)
-                    it.rawMessage = rawMessage
-                } catch (e: NoERSMessagesFound) {
-                    logger.warn(e.message)
+            .map { logbookMessage ->
+                logbookMessage.operationNumber?.let { operationNumber ->
+                    try {
+                        val rawMessage = logbookRawMessageRepository.findRawMessage(operationNumber)
+                        logbookMessage.rawMessage = rawMessage
+                    } catch (e: NoERSMessagesFound) {
+                        logger.warn(e.message)
+                    }
                 }
 
-                it
+                logbookMessage
             }
 
         messages.forEach { it.enrich(messages, allGears, allPorts, allSpecies) }

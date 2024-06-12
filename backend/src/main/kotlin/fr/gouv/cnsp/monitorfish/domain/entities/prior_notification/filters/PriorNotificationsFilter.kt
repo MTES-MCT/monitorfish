@@ -1,6 +1,6 @@
-package fr.gouv.cnsp.monitorfish.domain.entities.logbook.filters
+package fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters
 
-data class LogbookReportFilter(
+data class PriorNotificationsFilter(
     val flagStates: List<String>? = null,
     val hasOneOrMoreReportings: Boolean? = null,
     val isLessThanTwelveMetersVessel: Boolean? = null,

@@ -1,14 +1,16 @@
 package fr.gouv.cnsp.monitorfish.domain.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTyped
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.filters.LogbookReportFilter
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import java.time.ZonedDateTime
 
 interface LogbookReportRepository {
-    fun findAllPriorNotifications(filter: LogbookReportFilter): List<PriorNotification>
+    fun findAllPriorNotifications(filter: PriorNotificationsFilter): List<PriorNotification>
 
     @Throws(NoLogbookFishingTripFound::class)
     fun findLastTripBeforeDateTime(
@@ -51,7 +53,7 @@ interface LogbookReportRepository {
     // Only used in tests
     fun findById(id: Long): LogbookMessage
 
-    fun findPriorNotificationByReportId(reportId: String): PriorNotification
+    fun findPriorNotificationByReportId(reportId: String): PriorNotification?
 
     fun findLastMessageDate(): ZonedDateTime
 
@@ -66,8 +68,11 @@ interface LogbookReportRepository {
 
     fun findLastReportSoftware(internalReferenceNumber: String): String?
 
+    // Only used in tests
+    fun save(message: LogbookMessage)
+
+    fun savePriorNotification(logbookMessageTyped: LogbookMessageTyped<PNO>): PriorNotification
+
     // For test purpose
     fun deleteAll()
-
-    fun save(message: LogbookMessage)
 }

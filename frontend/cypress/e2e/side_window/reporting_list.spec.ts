@@ -97,7 +97,7 @@ context('Reportings', () => {
     cy.get('[data-cy="side-window-sub-menu-NAMO"]').click()
     cy.wait(200)
 
-    cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', 3)
+    cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', 7)
 
     // When
     // Select reporting
@@ -113,7 +113,7 @@ context('Reportings', () => {
 
     // Then
     // Should delete the row
-    cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', 1)
+    cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', 6)
   })
 
   it('A Reporting Should be edited', () => {
@@ -136,7 +136,7 @@ context('Reportings', () => {
     })
     cy.wait(200)
 
-    cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', 3)
+    cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', 7)
     // We do not know if the edited reporting is the first or second row in the list
     cy.get('*[data-cy="side-window-current-reportings"]')
       .eq(1)
@@ -148,8 +148,8 @@ context('Reportings', () => {
           return
         }
 
-        cy.get('*[data-cy="side-window-current-reportings"]').eq(2).contains('DML 56')
-        cy.get('*[data-cy="side-window-current-reportings"]').eq(2).contains(23581)
+        cy.get('*[data-cy="side-window-current-reportings"]').eq(6).contains('DML 56')
+        cy.get('*[data-cy="side-window-current-reportings"]').eq(6).contains(23581)
       })
   })
 
@@ -159,7 +159,7 @@ context('Reportings', () => {
     cy.get('*[data-cy="side-window-reporting-tab"]').click()
     cy.get('[data-cy="side-window-sub-menu-NAMO"]').click()
 
-    cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', 3)
+    cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', 7)
 
     // When
     // We do not know if the edited reporting is the first or second row in the list

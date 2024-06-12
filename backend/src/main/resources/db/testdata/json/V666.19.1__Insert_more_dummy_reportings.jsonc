@@ -1,0 +1,129 @@
+[
+    {
+        "table": "reportings",
+        "afterAll": "SELECT setval('reportings_id_seq', (SELECT MAX(id) FROM reportings));",
+        "data": [
+            // - Vessel: VIVA ESPANA
+            // - With 2 reportings
+            {
+                "id": 9,
+                "archived": false,
+                "creation_date:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '10 days'",
+                "deleted": false,
+                "external_reference_number": "EXTIMM101",
+                "flag_state": "FR",
+                "internal_reference_number": "CFR101",
+                "ircs": "IRCS101",
+                "latitude": null,
+                "longitude": null,
+                "type": "INFRACTION_SUSPICION",
+                "validation_date": null,
+                "value:jsonb": {
+                    "authorContact": "Jean Bon (0623456789)",
+                    "authorTrigram": "LTH",
+                    "controlUnitId": 10012,
+                    "description": "Une description d'infraction.",
+                    "dml": "DML 29",
+                    "natinfCode": 27689,
+                    "reportingActor": "OPS",
+                    "seaFront": "NAMO",
+                    "title": "Suspicion d'infraction 9",
+                    "type": "INFRACTION_SUSPICION"
+                },
+                "vessel_id": 101,
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "vessel_name": "VIVA ESPANA"
+            },
+            {
+                "id": 10,
+                "archived": false,
+                "creation_date:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 days'",
+                "deleted": false,
+                "external_reference_number": "EXTIMM101",
+                "flag_state": "FR",
+                "internal_reference_number": "CFR101",
+                "ircs": "IRCS101",
+                "latitude": null,
+                "longitude": null,
+                "type": "INFRACTION_SUSPICION",
+                "validation_date": null,
+                "value:jsonb": {
+                    "authorContact": "Jean Bon (0623456789)",
+                    "authorTrigram": "LTH",
+                    "controlUnitId": 10012,
+                    "description": "Une description d'infraction.",
+                    "dml": "DML 29",
+                    "natinfCode": 27689,
+                    "reportingActor": "OPS",
+                    "seaFront": "NAMO",
+                    "title": "Suspicion d'infraction 10",
+                    "type": "INFRACTION_SUSPICION"
+                },
+                "vessel_id": 101,
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "vessel_name": "VIVA ESPANA"
+            },
+
+            // - Vessel: DOS FIN
+            // - With 2 reportings
+            {
+                "id": 11,
+                "archived": false,
+                "creation_date:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '20 days'",
+                "deleted": false,
+                "external_reference_number": "EXTIMM115",
+                "flag_state": "FR",
+                "internal_reference_number": "CFR115",
+                "ircs": "IRCS115",
+                "latitude": null,
+                "longitude": null,
+                "type": "INFRACTION_SUSPICION",
+                "validation_date": null,
+                "value:jsonb": {
+                    "authorContact": "Jean Bon (0623456789)",
+                    "authorTrigram": "LTH",
+                    "controlUnitId": 10012,
+                    "description": "Une description d'infraction.",
+                    "dml": "DML 29",
+                    "natinfCode": 27689,
+                    "reportingActor": "OPS",
+                    "seaFront": "NAMO",
+                    "title": "Suspicion d'infraction 11",
+                    "type": "INFRACTION_SUSPICION"
+                },
+                "vessel_id": 115,
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "vessel_name": "DOS FIN"
+            },
+            {
+                "id": 12,
+                "archived": false,
+                "creation_date:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '25 days'",
+                "deleted": false,
+                "external_reference_number": "EXTIMM115",
+                "flag_state": "FR",
+                "internal_reference_number": "CFR115",
+                "ircs": "IRCS115",
+                "latitude": null,
+                "longitude": null,
+                "type": "INFRACTION_SUSPICION",
+                "validation_date": null,
+                "value:jsonb": {
+                    "authorContact": "Jean Bon (0623456789)",
+                    "authorTrigram": "LTH",
+                    "controlUnitId": 10012,
+                    "description": "Une description d'infraction.",
+                    "dml": "DML 29",
+                    "natinfCode": 27689,
+                    "reportingActor": "OPS",
+                    "seaFront": "NAMO",
+                    "title": "Suspicion d'infraction 212",
+                    "type": "INFRACTION_SUSPICION"
+                },
+                "vessel_id": 115,
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "vessel_name": "DOS FIN"
+            }
+        ]
+    }
+]

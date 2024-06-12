@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.properties.Delegates
 
 class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
     @Autowired
@@ -19,7 +20,8 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
     @Autowired
     lateinit var cacheManager: CacheManager
 
-    private val currentYear: Int
+    // https://stackoverflow.com/a/44386513/2736233
+    private var currentYear by Delegates.notNull<Int>()
 
     init {
         val formatter = DateTimeFormatter.ofPattern("yyyy")

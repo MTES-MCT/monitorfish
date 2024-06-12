@@ -8,7 +8,7 @@ import java.time.ZonedDateTime
 
 data class LogbookMessageDataOutput(
     val reportId: String? = null,
-    val operationNumber: String,
+    val operationNumber: String?,
     val tripNumber: String? = null,
     val referencedReportId: String? = null,
     var isCorrected: Boolean? = false,
@@ -20,6 +20,7 @@ data class LogbookMessageDataOutput(
     val externalReferenceNumber: String? = null,
     val ircs: String? = null,
     val vesselName: String? = null,
+    /** ISO Alpha-3 country code. **/
     val flagState: String? = null,
     val imo: String? = null,
     val messageType: String? = null,

@@ -25,10 +25,8 @@ class GetPriorNotification(
         val allSpecies = speciesRepository.findAll()
         val allVessels = vesselRepository.findAll()
 
-        val manualPriorNotification = manualPriorNotificationRepository.findByReportId(reportId)
-        val automaticPriorNotification = logbookReportRepository.findPriorNotificationByReportId(reportId)
-        val priorNotification = manualPriorNotification
-            ?: automaticPriorNotification
+        val priorNotification = manualPriorNotificationRepository.findByReportId(reportId)
+            ?: logbookReportRepository.findPriorNotificationByReportId(reportId)
             ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
 
         priorNotification.enrich(allPorts, allRiskFactors, allVessels)

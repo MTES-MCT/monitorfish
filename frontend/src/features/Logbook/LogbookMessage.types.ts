@@ -1,4 +1,5 @@
 import type { AllSeafrontGroup, NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
+import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
 export namespace LogbookMessage {
   export type LogbookMessage = PnoLogbookMessage | RetOperationLogbookMessage
@@ -87,7 +88,7 @@ export namespace LogbookMessage {
     portName: string | undefined
     predictedArrivalDatetimeUtc: string | undefined
     predictedLandingDatetimeUtc: string | undefined
-    purpose: string | undefined
+    purpose: PriorNotification.PurposeCode | undefined
     statisticalRectangle: string | undefined
     tripStartDate: string | undefined
   }

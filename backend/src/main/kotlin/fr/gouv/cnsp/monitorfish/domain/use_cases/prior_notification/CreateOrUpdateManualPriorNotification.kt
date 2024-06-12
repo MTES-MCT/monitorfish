@@ -125,7 +125,7 @@ class CreateOrUpdateManualPriorNotification(
             this.portName = portName
             this.predictedArrivalDatetimeUtc = predictedArrivalDatetimeUtc
             this.predictedLandingDatetimeUtc = predictedLandingDatetimeUtc
-            this.purpose = "LAN"
+            this.purpose = LogbookMessagePurpose.LAN
             this.statisticalRectangle = null
             this.tripStartDate = null
         }

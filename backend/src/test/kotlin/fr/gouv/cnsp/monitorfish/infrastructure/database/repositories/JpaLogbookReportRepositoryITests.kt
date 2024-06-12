@@ -2,10 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTypeMapping
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookRawMessage
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
@@ -248,7 +245,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(messages[2].message).isInstanceOf(PNO::class.java)
         val pnoMessage = messages[2].message as PNO
         assertThat(pnoMessage.port).isEqualTo("AEJAZ")
-        assertThat(pnoMessage.purpose).isEqualTo("LAN")
+        assertThat(pnoMessage.purpose).isEqualTo(LogbookMessagePurpose.LAN)
         assertThat(pnoMessage.catchOnboard).hasSize(4)
         assertThat(pnoMessage.catchOnboard.first().weight).isEqualTo(20.0)
         assertThat(pnoMessage.catchOnboard.first().numberFish).isEqualTo(null)

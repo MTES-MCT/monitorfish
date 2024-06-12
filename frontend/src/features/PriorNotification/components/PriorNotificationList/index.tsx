@@ -15,6 +15,7 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Accent, Button, Icon, Size, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
 import { flexRender, getCoreRowModel, useReactTable, getExpandedRowModel } from '@tanstack/react-table'
+import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import { useCallback, useState } from 'react'
 import styled, { css } from 'styled-components'
 
@@ -37,6 +38,7 @@ export function PriorNotificationList() {
   const listFilter = useMainAppSelector(state => state.priorNotification.listFilterValues)
   const isPriorNotificationCardOpen = useMainAppSelector(state => state.priorNotification.isPriorNotificationCardOpen)
   const isPriorNotificationFormOpen = useMainAppSelector(state => state.priorNotification.isPriorNotificationFormOpen)
+  const isSuperUser = useIsSuperUser()
 
   const [rowSelection, setRowSelection] = useState({})
 
@@ -130,14 +132,16 @@ export function PriorNotificationList() {
                 loadingState.isLoadingNewPage || totalLength === undefined ? '...' : totalLength
               } préavis (tous les horaires sont en UTC)`}</TableLegend>
 
-              <Button
-                accent={Accent.PRIMARY}
-                Icon={Icon.Plus}
-                onClick={() => dispatch(priorNotificationActions.createOrEditPriorNotification())}
-                size={Size.SMALL}
-              >
-                Ajouter un préavis
-              </Button>
+              {isSuperUser && (
+                <Button
+                  accent={Accent.PRIMARY}
+                  Icon={Icon.Plus}
+                  onClick={() => dispatch(priorNotificationActions.createOrEditPriorNotification())}
+                  size={Size.SMALL}
+                >
+                  Ajouter un préavis
+                </Button>
+              )}
             </TableTop>
 
             <TableInnerWrapper $hasError={isError}>

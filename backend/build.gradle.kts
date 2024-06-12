@@ -41,7 +41,7 @@ dependencies {
     api("org.springframework.security:spring-security-oauth2-jose:6.1.5")
     api("org.springframework.boot:spring-boot-starter-actuator:3.2.5")
     api("org.springframework.boot:spring-boot-starter-json:3.2.5")
-    api("org.springframework.boot:spring-boot-starter-security:3.2.5")
+    api("org.springframework.boot:spring-boot-starter-security:3.3.0")
     api("org.springframework.boot:spring-boot-starter-data-jpa:3.3.0")
     api("org.springframework.boot:spring-boot-configuration-processor:3.2.5")
     api("org.springframework.boot:spring-boot-starter-cache:3.2.5")

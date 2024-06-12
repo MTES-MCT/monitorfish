@@ -4,6 +4,8 @@ import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Catch
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Gear
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PnoType
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PnoTypeRule
 import fr.gouv.cnsp.monitorfish.domain.repositories.PnoTypeRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
@@ -271,6 +273,40 @@ class ComputePnoTypesUTests {
 
         // Then
         assertThat(throwable).hasMessage("All `faoZone` of catches must be given.")
+    }
+
+    @Test
+    fun `execute Should return the type When there is no rule in the type rules`() {
+        // Given
+        val catchToLand = listOf<Catch>()
+        val tripGears = getGears(listOf("OTM"))
+        val flagState = CountryCode.AD
+        val pnoType = PnoType(
+            id = 8,
+            name = "Préavis sans règle",
+            minimumNotificationPeriod = 4.0,
+            hasDesignatedPorts = true,
+            pnoTypeRules = listOf(
+                PnoTypeRule(
+                    id = 10,
+                    species = listOf(),
+                    faoAreas = listOf(),
+                    cgpmAreas = listOf(),
+                    gears = listOf(),
+                    flagStates = listOf(),
+                    minimumQuantityKg = 0.0,
+                ),
+            ),
+        )
+        given(pnoTypeRepository.findAll()).willReturn(listOf(pnoType))
+
+        // When
+        val result = ComputePnoTypes(pnoTypeRepository).execute(catchToLand, tripGears, flagState)
+
+        // Then
+        assertThat(result).hasSize(1)
+        val resultPnoTypeNames = result.map { it.name }
+        assertThat(resultPnoTypeNames).containsAll(listOf("Préavis sans règle"))
     }
 
     private fun getGears(gears: List<String>) = gears.map {

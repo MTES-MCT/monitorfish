@@ -58,42 +58,36 @@ context('Side Window > Prior Notification Form > Form', () => {
       assert.isString(createdPriorNotification.reportId)
       assert.isTrue(isDateCloseTo(createdPriorNotification.sentAt, now, 15))
       assert.deepInclude(createdPriorNotification.fishingCatches, {
-        isIncidentalCatch: false,
         quantity: null,
         specyCode: 'AAX',
         specyName: 'AAPTOSYAX GRYPUS',
         weight: 25.0
       })
       assert.deepInclude(createdPriorNotification.fishingCatches, {
-        isIncidentalCatch: false,
         quantity: null,
         specyCode: 'BFT',
         specyName: 'THON ROUGE',
         weight: 150.0
       })
       assert.deepInclude(createdPriorNotification.fishingCatches, {
-        isIncidentalCatch: false,
         quantity: 4.0,
         specyCode: 'BF1',
         specyName: 'THON ROUGE + 30 KG',
         weight: 40.0
       })
       assert.deepInclude(createdPriorNotification.fishingCatches, {
-        isIncidentalCatch: false,
         quantity: 5.0,
         specyCode: 'BF2',
         specyName: 'THON ROUGE 8 À 30 KG',
         weight: 50.0
       })
       assert.deepInclude(createdPriorNotification.fishingCatches, {
-        isIncidentalCatch: false,
         quantity: 6.0,
         specyCode: 'BF3',
         specyName: 'THON ROUGE 6.4 À 8 KG',
         weight: 60.0
       })
       assert.deepInclude(createdPriorNotification.fishingCatches, {
-        isIncidentalCatch: false,
         quantity: 20.0,
         specyCode: 'SWO',
         specyName: 'ESPADON',

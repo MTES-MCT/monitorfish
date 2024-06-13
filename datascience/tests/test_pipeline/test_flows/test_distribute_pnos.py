@@ -865,8 +865,9 @@ def test_load_pno_pdf_documents(reset_test_data, loaded_pno_pdf_documents):
                 pdf_document=pdf,
             )
         )
-        # Run
-        load_pno_pdf_documents.run(pno_pdf_documents)
+
+    # Run
+    load_pno_pdf_documents.run(pno_pdf_documents)
 
     # Asserts
     res = read_query(

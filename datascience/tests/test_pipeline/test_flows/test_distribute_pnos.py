@@ -649,21 +649,6 @@ def pre_rendered_pno_2() -> PreRenderedPno:
     )
 
 
-@pytest.fixture
-def loaded_pno_pdf_documents() -> pd.DataFrame:
-    return pd.DataFrame(
-        {
-            "id": [1, 2],
-            "report_id": ["abc-def", "ghi-jkl"],
-            "source": ["LOGBOOK", "LOGBOOK"],
-            "generation_datetime_utc": [
-                datetime(2020, 5, 6, 8, 52, 42),
-                datetime(2020, 5, 6, 8, 52, 42),
-            ],
-        }
-    )
-
-
 def test_get_template():
     template = get_template.run()
     assert isinstance(template, Template)
@@ -844,7 +829,7 @@ def test_render_then_print_to_pdf_2(template, pre_rendered_pno_2):
     assert isinstance(pno_pdf_document.generation_datetime_utc, datetime)
 
 
-def test_load_pno_pdf_documents(reset_test_data, loaded_pno_pdf_documents):
+def test_load_pno_pdf_documents(reset_test_data):
     # Setup
     test_filepaths = [
         TEST_DATA_LOCATION / "emails/prior_notifications/expected_pno_1.pdf",
@@ -853,7 +838,7 @@ def test_load_pno_pdf_documents(reset_test_data, loaded_pno_pdf_documents):
 
     pno_pdf_documents = []
 
-    for fp, report_id in zip(test_filepaths, ["abc-def", "ghi-jkl"]):
+    for fp, report_id in zip(test_filepaths, ["existing-report-id", "new-report-id"]):
         with open(fp, "rb") as f:
             pdf = f.read()
 
@@ -866,22 +851,62 @@ def test_load_pno_pdf_documents(reset_test_data, loaded_pno_pdf_documents):
             )
         )
 
-    # Run
+    query = """
+        SELECT *
+        FROM prior_notification_pdf_documents
+        WHERE report_id IN ('existing-report-id', 'new-report-id', '12')
+        ORDER BY report_id
+    """
+    initial_pdfs = read_query(query, db="monitorfish_remote")
+
+    ### Run ###
     load_pno_pdf_documents.run(pno_pdf_documents)
 
-    # Asserts
-    res = read_query(
-        "SELECT * FROM prior_notification_pdf_documents ORDER BY report_id",
-        db="monitorfish_remote",
-    )
+    ### Asserts ###
+    final_pdfs = read_query(query, db="monitorfish_remote")
 
     # Test pdf document equality
-    assert res.loc[0, "pdf_document"].tobytes() == pno_pdf_documents[0].pdf_document
-    assert res.loc[1, "pdf_document"].tobytes() == pno_pdf_documents[1].pdf_document
 
-    # Test other columns equality
-    pd.testing.assert_frame_equal(
-        res.drop(columns=["pdf_document"]), loaded_pno_pdf_documents
+    # report-id '12' was in the database initially and should be unchanged
+    assert (
+        (
+            initial_pdfs.loc[initial_pdfs.report_id == "12", "pdf_document"]
+            .values[0]
+            .tobytes()
+        )
+        == b"This is a PDF document"
+        == (
+            final_pdfs.loc[final_pdfs.report_id == "12", "pdf_document"]
+            .values[0]
+            .tobytes()
+        )
+    )
+
+    # report-id 'existing-report-id' was in the database initially and should be replaced
+    assert (
+        (
+            initial_pdfs.loc[
+                initial_pdfs.report_id == "existing-report-id", "pdf_document"
+            ]
+            .values[0]
+            .tobytes()
+        )
+        == b"Anonymous didn't code this"
+        != (
+            final_pdfs.loc[final_pdfs.report_id == "existing-report-id", "pdf_document"]
+            .values[0]
+            .tobytes()
+        )
+        == pno_pdf_documents[0].pdf_document
+    )
+
+    # report-id 'new-report-id' was not in database initially and should be inserted
+    assert "new-report-id" not in initial_pdfs.report_id
+    assert (
+        final_pdfs.loc[final_pdfs.report_id == "new-report-id", "pdf_document"]
+        .values[0]
+        .tobytes()
+        == pno_pdf_documents[1].pdf_document
     )
 
 

@@ -57,7 +57,10 @@ WHERE
     operation_datetime_utc >= :start_datetime_utc
     AND operation_datetime_utc < :end_datetime_utc
     AND log_type='PNO'
-    AND (value->>'isBeingSent')::BOOLEAN IS true
+    AND (
+        (value->>'isBeingSent')::BOOLEAN IS true
+        OR report_id NOT IN (SELECT report_id FROM prior_notification_pdf_documents)
+    )
     AND report_id NOT IN (SELECT referenced_report_id FROM deleted_messages)
     AND (
         transmission_format = 'FLUX'

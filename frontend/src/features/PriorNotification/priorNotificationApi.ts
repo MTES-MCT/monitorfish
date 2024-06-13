@@ -11,7 +11,7 @@ import type { PriorNotification } from './PriorNotification.types'
 import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 
 const COMPUTE_PRIOR_NOTIFICATION_ERROR_MESSAGE =
-  "Nous n'avons pas pu calculé facteur de risque, segments ou types le préavis pour ce préavis."
+  "Nous n'avons pas pu calculer note de risque, segments ou types pour ce préavis."
 const CREATE_PRIOR_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu créé le préavis."
 const GET_PRIOR_NOTIFICATION_DATA_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les données du préavis."
 const GET_PRIOR_NOTIFICATION_DETAIL_ERROR_MESSAGE = "Nous n'avons pas pu récupérer le préavis."

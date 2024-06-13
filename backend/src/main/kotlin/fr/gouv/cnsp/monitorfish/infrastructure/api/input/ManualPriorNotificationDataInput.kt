@@ -6,7 +6,7 @@ data class ManualPriorNotificationDataInput(
     val expectedArrivalDate: String,
     val expectedLandingDate: String,
     val faoArea: String,
-    val fishingCatches: List<ManualPriorNotificationFishingCatchInput>,
+    val fishingCatches: List<ManualPriorNotificationFishingCatchDataInput>,
     val note: String?,
     val portLocode: String,
     val sentAt: String,

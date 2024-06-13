@@ -19,7 +19,7 @@ import java.time.ZonedDateTime
 @ExtendWith(SpringExtension::class)
 @Import(MapperConfiguration::class)
 @SpringBootTest
-class GetPriorNotificationsITestsDetail : AbstractDBTests() {
+class GetPriorNotificationsITests : AbstractDBTests() {
     @Autowired
     private lateinit var getPriorNotifications: GetPriorNotifications
 

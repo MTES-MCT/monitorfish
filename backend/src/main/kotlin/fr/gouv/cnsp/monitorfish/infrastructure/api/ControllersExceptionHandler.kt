@@ -32,7 +32,7 @@ class ControllersExceptionHandler(val sentryConfig: SentryConfig) {
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(BackendRequestException::class)
     fun handleBackendRequestException(e: BackendRequestException): BackendRequestErrorDataOutput {
-        return BackendRequestErrorDataOutput(code = e.code, data = e.data, message = null)
+        return BackendRequestErrorDataOutput(code = e.code, data = e.data, message = e.message)
     }
 
     @ExceptionHandler(BackendUsageException::class)

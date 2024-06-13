@@ -1,11 +1,17 @@
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
-import { Accent, Button } from '@mtes-mct/monitor-ui'
+import { priorNotificationActions } from '@features/PriorNotification/slice'
+import { updateEditedPriorNotificationComputedValues } from '@features/PriorNotification/useCases/updateEditedPriorNotificationComputedValues'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { Accent, Button, FormikEffect, usePrevious } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
+import { isEqual } from 'lodash'
 import styled from 'styled-components'
+import { useDebouncedCallback } from 'use-debounce'
 
 import { Form } from './Form'
 import { Header } from './Header'
 import { TagBar } from './TagBar'
+import { getPartialComputationRequestData, isZeroNotice } from './utils'
 
 import type { FormValues } from './types'
 
@@ -17,6 +23,9 @@ type CardProps = Readonly<{
 }>
 export function Card({ isValidatingOnChange, onClose, onSubmit, reportId }: CardProps) {
   const { isValid, submitForm, values } = useFormikContext<FormValues>()
+  const dispatch = useMainAppDispatch()
+
+  const previousPartialComputationRequestData = usePrevious(getPartialComputationRequestData(values))
 
   const handleSubmit = () => {
     onSubmit()
@@ -24,8 +33,25 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, reportId }: Card
     submitForm()
   }
 
+  const updateComputedValues = useDebouncedCallback((nextFormValues: FormValues) => {
+    if (isZeroNotice(nextFormValues)) {
+      dispatch(priorNotificationActions.unsetPriorNotificationComputedValues())
+
+      return
+    }
+
+    const nextPartialComputationRequestData = getPartialComputationRequestData(nextFormValues)
+    if (isEqual(nextPartialComputationRequestData, previousPartialComputationRequestData)) {
+      return
+    }
+
+    dispatch(updateEditedPriorNotificationComputedValues(nextPartialComputationRequestData))
+  }, 1000)
+
   return (
     <Wrapper>
+      <FormikEffect onChange={updateComputedValues as any} />
+
       <FrontendErrorBoundary>
         <Header isNewPriorNotification={!reportId} onClose={onClose} vesselId={values.vesselId} />
 

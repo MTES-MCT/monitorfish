@@ -10,10 +10,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionForma
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
-import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.CreateOrUpdateManualPriorNotification
-import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotification
-import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotificationTypes
-import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotifications
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.*
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
@@ -34,6 +31,9 @@ import java.time.ZonedDateTime
 class PriorNotificationControllerITests {
     @Autowired
     private lateinit var api: MockMvc
+
+    @MockBean
+    private lateinit var computeManualPriorNotification: ComputeManualPriorNotification
 
     @MockBean
     private lateinit var createOrUpdateManualPriorNotification: CreateOrUpdateManualPriorNotification

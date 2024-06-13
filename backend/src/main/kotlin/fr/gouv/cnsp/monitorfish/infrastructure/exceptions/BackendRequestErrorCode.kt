@@ -11,4 +11,6 @@ package fr.gouv.cnsp.monitorfish.infrastructure.exceptions
  * ## ⚠️ Important
  * **Don't forget to mirror any update here in the corresponding Frontend enum.**
  */
-enum class BackendRequestErrorCode
+enum class BackendRequestErrorCode {
+    WRONG_BODY_PARAMETER_TYPE,
+}

@@ -6,4 +6,12 @@ data class PnoType(
     val minimumNotificationPeriod: Double,
     val hasDesignatedPorts: Boolean,
     val pnoTypeRules: List<PnoTypeRule>,
-)
+) {
+    fun toPriorNotificationType(): PriorNotificationType {
+        return PriorNotificationType(
+            hasDesignatedPorts,
+            minimumNotificationPeriod,
+            name,
+        )
+    }
+}

@@ -4,10 +4,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.facade.SeafrontGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.hasSeafront
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.sorters.PriorNotificationsSortColumn
-import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.CreateOrUpdateManualPriorNotification
-import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotification
-import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotificationTypes
-import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotifications
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.*
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationComputeDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
 import io.swagger.v3.oas.annotations.Operation
@@ -21,6 +19,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/bff/v1/prior_notifications")
 @Tag(name = "Prior notifications endpoints")
 class PriorNotificationController(
+    private val computeManualPriorNotification: ComputeManualPriorNotification,
     private val createOrUpdateManualPriorNotification: CreateOrUpdateManualPriorNotification,
     private val getPriorNotification: GetPriorNotification,
     private val getPriorNotifications: GetPriorNotifications,
@@ -138,7 +137,7 @@ class PriorNotificationController(
 
     @GetMapping("/manual/{reportId}")
     @Operation(summary = "Get a manual prior notification form data by its `reportId`")
-    fun getOneData(
+    fun getOneManual(
         @PathParam("Logbook message `reportId`")
         @PathVariable(name = "reportId")
         reportId: String,
@@ -148,15 +147,32 @@ class PriorNotificationController(
         )
     }
 
-    @GetMapping("/types")
-    @Operation(summary = "Get all prior notification types")
-    fun getAllTypes(): List<String> {
-        return getPriorNotificationTypes.execute()
+    @PostMapping("/manual/compute")
+    @Operation(summary = "Calculate manual prior notification fleet segments, prior notification types and risk factor")
+    fun getManualComputation(
+        @RequestBody
+        manualPriorNotificationComputeDataInput: ManualPriorNotificationComputeDataInput,
+    ): ManualPriorNotificationComputationDataOutput {
+        val fishingCatches = manualPriorNotificationComputeDataInput.fishingCatches.map { it.toLogbookFishingCatch() }
+
+        val (fleetSegments, priorNotificationTypes, riskFactor) = computeManualPriorNotification.execute(
+            manualPriorNotificationComputeDataInput.faoArea,
+            fishingCatches,
+            manualPriorNotificationComputeDataInput.portLocode,
+            manualPriorNotificationComputeDataInput.tripGearCodes,
+            manualPriorNotificationComputeDataInput.vesselId,
+        )
+
+        return ManualPriorNotificationComputationDataOutput.fromFleetSegmentsAndPriotNotificationTypesAndRiskFactor(
+            fleetSegments,
+            priorNotificationTypes,
+            riskFactor,
+        )
     }
 
     @PostMapping("/manual")
     @Operation(summary = "Create a new manual prior notification")
-    fun create(
+    fun createManual(
         @RequestBody
         manualPriorNotificationDataInput: ManualPriorNotificationDataInput,
     ): ManualPriorNotificationDataOutput {
@@ -180,7 +196,7 @@ class PriorNotificationController(
 
     @PutMapping("/manual/{reportId}")
     @Operation(summary = "Update a manual prior notification by its `reportId`")
-    fun update(
+    fun updateManual(
         @PathParam("Logbook message `reportId`")
         @PathVariable(name = "reportId")
         reportId: String,
@@ -203,5 +219,11 @@ class PriorNotificationController(
         )
 
         return ManualPriorNotificationDataOutput.fromPriorNotification(updatedPriorNotification)
+    }
+
+    @GetMapping("/types")
+    @Operation(summary = "Get all prior notification types")
+    fun getAllTypes(): List<String> {
+        return getPriorNotificationTypes.execute()
     }
 }

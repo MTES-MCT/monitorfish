@@ -14,11 +14,11 @@ type VesselRiskFactorProps = Readonly<
     hasVesselRiskFactorSegments: boolean
     isInteractive?: boolean
     isVesselUnderCharter: boolean
-    vesselLastControlDate: string
+    vesselLastControlDate?: string
     vesselRiskFactor: number
-    vesselRiskFactorDetectability: number
-    vesselRiskFactorImpact: number
-    vesselRiskFactorProbability: number
+    vesselRiskFactorDetectability?: number
+    vesselRiskFactorImpact?: number
+    vesselRiskFactorProbability?: number
   }>
 >
 // https://github.com/MTES-MCT/monitorfish/issues/3043

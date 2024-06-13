@@ -15,6 +15,7 @@ from src.pipeline.entities.fleet_segments import FishingGear, FleetSegment
 from src.pipeline.entities.missions import Infraction
 from src.pipeline.entities.pnos import (
     PnoHtmlDocument,
+    PnoPdfDocument,
     PnoSource,
     PnoToRender,
     PreRenderedPno,
@@ -25,11 +26,13 @@ from src.pipeline.flows.distribute_pnos import (
     extract_species_names,
     flow,
     get_template,
+    load_pno_pdf_documents,
     pre_render_pno,
     print_html_to_pdf,
     render_pno,
     to_pnos_to_render,
 )
+from src.read_query import read_query
 from tests.mocks import mock_check_flow_not_running
 
 flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
@@ -646,6 +649,21 @@ def pre_rendered_pno_2() -> PreRenderedPno:
     )
 
 
+@pytest.fixture
+def loaded_pno_pdf_documents() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "id": [1, 2],
+            "report_id": ["abc-def", "ghi-jkl"],
+            "source": ["LOGBOOK", "LOGBOOK"],
+            "generation_datetime_utc": [
+                datetime(2020, 5, 6, 8, 52, 42),
+                datetime(2020, 5, 6, 8, 52, 42),
+            ],
+        }
+    )
+
+
 def test_get_template():
     template = get_template.run()
     assert isinstance(template, Template)
@@ -824,6 +842,46 @@ def test_render_then_print_to_pdf_2(template, pre_rendered_pno_2):
     assert pno_pdf_document.report_id == "12"
     assert pno_pdf_document.source == PnoSource.LOGBOOK
     assert isinstance(pno_pdf_document.generation_datetime_utc, datetime)
+
+
+def test_load_pno_pdf_documents(reset_test_data, loaded_pno_pdf_documents):
+    # Setup
+    test_filepaths = [
+        TEST_DATA_LOCATION / "emails/prior_notifications/expected_pno_1.pdf",
+        TEST_DATA_LOCATION / "emails/prior_notifications/expected_pno_2.pdf",
+    ]
+
+    pno_pdf_documents = []
+
+    for fp, report_id in zip(test_filepaths, ["abc-def", "ghi-jkl"]):
+        with open(fp, "rb") as f:
+            pdf = f.read()
+
+        pno_pdf_documents.append(
+            PnoPdfDocument(
+                report_id=report_id,
+                source=PnoSource.LOGBOOK,
+                generation_datetime_utc=datetime(2020, 5, 6, 8, 52, 42),
+                pdf_document=pdf,
+            )
+        )
+        # Run
+        load_pno_pdf_documents.run(pno_pdf_documents)
+
+    # Asserts
+    res = read_query(
+        "SELECT * FROM prior_notification_pdf_documents ORDER BY report_id",
+        db="monitorfish_remote",
+    )
+
+    # Test pdf document equality
+    assert res.loc[0, "pdf_document"].tobytes() == pno_pdf_documents[0].pdf_document
+    assert res.loc[1, "pdf_document"].tobytes() == pno_pdf_documents[1].pdf_document
+
+    # Test other columns equality
+    pd.testing.assert_frame_equal(
+        res.drop(columns=["pdf_document"]), loaded_pno_pdf_documents
+    )
 
 
 # def test_flow(reset_test_data):

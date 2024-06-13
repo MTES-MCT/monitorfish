@@ -31,7 +31,7 @@ from src.pipeline.entities.pnos import (
     PreRenderedPno,
     ReturnToPortPurpose,
 )
-from src.pipeline.generic_tasks import extract
+from src.pipeline.generic_tasks import extract, load
 from src.pipeline.helpers.emails import resize_pdf_to_A4
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.dates import get_utcnow, make_timedelta
@@ -352,6 +352,26 @@ def print_html_to_pdf(html_document: PnoHtmlDocument) -> PnoPdfDocument:
     )
 
 
+@task(checkpoint=False)
+def load_pno_pdf_documents(pno_pdf_documents: List[PnoPdfDocument]):
+    logger = prefect.context.get("logger")
+
+    df = pd.DataFrame(pno_pdf_documents)
+
+    load(
+        df,
+        table_name="prior_notification_pdf_documents",
+        schema="public",
+        logger=logger,
+        how="upsert",
+        db_name="monitorfish_remote",
+        table_id_column="report_id",
+        df_id_column="report_id",
+        enum_columns=["source"],
+        bytea_columns=["pdf_document"],
+    )
+
+
 with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
@@ -378,7 +398,8 @@ with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
             fishing_gear_names=unmapped(fishing_gear_names),
         )
         html_documents = render_pno.map(pnos, template=unmapped(template))
-        pdfs = print_html_to_pdf.map(html_documents)
+        pno_pdf_documents = print_html_to_pdf.map(html_documents)
+        load_pno_pdf_documents(pno_pdf_documents)
 
 
 flow.file_name = Path(__file__).name

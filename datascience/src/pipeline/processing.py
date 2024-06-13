@@ -481,6 +481,7 @@ def prepare_df_for_loading(
     nullable_integer_columns: list = None,
     timedelta_columns: list = None,
     enum_columns: list = None,
+    bytea_columns: list = None,
 ):
     df_ = df.copy(deep=True)
 
@@ -513,6 +514,11 @@ def prepare_df_for_loading(
         logger.info("Serializing enum columns")
         for enum_column in enum_columns:
             df_[enum_column] = df_[enum_column].map(lambda x: x.value if x else None)
+
+    if bytea_columns:
+        logger.info("Hexing bytea columns")
+        for c in bytea_columns:
+            df_[c] = df_[c].map(lambda x: r"\x" + x.hex())
 
     return df_
 

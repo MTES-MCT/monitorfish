@@ -20,7 +20,7 @@ data class PriorNotificationListItemDataOutput(
     val isCorrection: Boolean,
     val isManuallyCreated: Boolean = false,
     val isVesselUnderCharter: Boolean?,
-    val onBoardCatches: List<LogbookMessageCatchDataOutput>,
+    val onBoardCatches: List<LogbookMessageFishingCatchDataOutput>,
     val portLocode: String?,
     val portName: String?,
     val purposeCode: String?,
@@ -59,7 +59,8 @@ data class PriorNotificationListItemDataOutput(
             val message = priorNotification.logbookMessageTyped.typedMessage
 
             val acknowledgment = logbookMessage.acknowledgment?.let { AcknowledgmentDataOutput.fromAcknowledgment(it) }
-            val onBoardCatches = message.catchOnboard.map { LogbookMessageCatchDataOutput.fromCatch(it) }
+            val onBoardCatches = message.catchOnboard
+                .map { LogbookMessageFishingCatchDataOutput.fromLogbookFishingCatch(it) }
             val tripGears = logbookMessage.tripGears?.mapNotNull {
                 LogbookMessageGearDataOutput.fromGear(it)
             } ?: emptyList()

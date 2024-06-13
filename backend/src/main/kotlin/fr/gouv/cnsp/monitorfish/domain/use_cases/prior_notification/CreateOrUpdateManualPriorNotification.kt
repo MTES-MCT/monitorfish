@@ -47,10 +47,11 @@ class CreateOrUpdateManualPriorNotification(
         val priorNotificationTypes = computePnoTypes.execute(fishingCatchesWithFaoArea, tripGearCodes, vessel.flagState)
             .map { it.toPriorNotificationType() }
         val message = getMessage(
-            faoArea,
             expectedArrivalDate,
             expectedLandingDate,
-            fishingCatches,
+            // At the moment, manual prior notifications only have a single global FAO area field in Frontend,
+            // so we transform that single FAO area into an FAO area per fishing catch.
+            fishingCatchesWithFaoArea,
             priorNotificationTypes,
             portLocode,
         )
@@ -113,7 +114,6 @@ class CreateOrUpdateManualPriorNotification(
     }
 
     private fun getMessage(
-        faoArea: String,
         expectedArrivalDate: String,
         expectedLandingDate: String,
         fishingCatches: List<LogbookFishingCatch>,
@@ -131,7 +131,10 @@ class CreateOrUpdateManualPriorNotification(
             this.catchToLand = fishingCatches
             this.economicZone = null
             this.effortZone = null
-            this.faoZone = faoArea
+            // At the moment, manual prior notifications only have a single global FAO area field in Frontend,
+            // so we transform that single FAO area into an FAO area per fishing catch.
+            // This means we don't need to set a global PNO message FAO area here.
+            this.faoZone = null
             this.latitude = null
             this.longitude = null
             this.pnoTypes = pnoTypes

@@ -23,6 +23,22 @@ context('Side Window > Prior Notification Card > Card', () => {
     cy.contains(`32.5 kg`).should('be.visible')
   })
 
+  it('Should display a corrected message for a non-super user', () => {
+    cy.intercept('/bff/v1/authorization/current', { statusCode: 401 }).as('getIsSuperUser')
+    openSideWindowPriorNotification(`POISSON PAS NET`)
+    cy.wait('@getIsSuperUser')
+
+    // Title
+    cy.contains(`PNO < 12 M - SEGMENT(S) INCONNU(S)`).should('be.visible')
+    cy.contains(`POISSON PAS NET (CFR112)`).should('be.visible')
+
+    // Message Header
+    cy.contains(`Préavis (notification de retour au port) – navire sans JPE`).should('be.visible')
+
+    // Message Body
+    cy.contains(`Filets soulevés portatifs (LNP)`).should('be.visible')
+  })
+
   it('Should display a successfully acknowledged message as expected', () => {
     openSideWindowPriorNotification(`BARS`)
 

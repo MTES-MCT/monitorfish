@@ -23,7 +23,7 @@ context('Side Window > Prior Notification Card > Card', () => {
     cy.contains(`32.5 kg`).should('be.visible')
   })
 
-  it('Should display a corrected message for a non-super user', () => {
+  it('Should display a non-editable message for a non-super user', () => {
     cy.intercept('/bff/v1/authorization/current', { statusCode: 401 }).as('getIsSuperUser')
     openSideWindowPriorNotification(`POISSON PAS NET`)
     cy.wait('@getIsSuperUser')

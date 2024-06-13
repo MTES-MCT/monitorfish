@@ -9,6 +9,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.GearRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ManualPriorNotificationRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
+import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.ComputeFleetSegments
 import java.time.ZonedDateTime
 
 @UseCase
@@ -18,6 +19,8 @@ class CreateOrUpdateManualPriorNotification(
     private val portRepository: PortRepository,
     private val vesselRepository: VesselRepository,
 
+    private val computeFleetSegments: ComputeFleetSegments,
+    private val computePnoTypes: ComputePnoTypes,
     private val getPriorNotification: GetPriorNotification,
 ) {
     fun execute(
@@ -34,11 +37,23 @@ class CreateOrUpdateManualPriorNotification(
         tripGearCodes: List<String>,
         vesselId: Int,
     ): PriorNotification {
-        val message = getMessage(faoArea, expectedArrivalDate, expectedLandingDate, fishingCatches, portLocode)
+        val faoAreas = listOf(faoArea)
+        val fishingCatchesWithFaoArea = fishingCatches.map { it.copy(faoZone = faoArea) }
+        val specyCodes = fishingCatches.mapNotNull { it.species }
         val tripGears = getTripGears(tripGearCodes)
-        // TODO To calculate.
-        val tripSegments = emptyList<LogbookTripSegment>()
+        val tripSegments = computeFleetSegments.execute(faoAreas, tripGearCodes, specyCodes)
+            .map { it.toLogbookTripSegment() }
         val vessel = vesselRepository.findVesselById(vesselId)
+        val priorNotificationTypes = computePnoTypes.execute(fishingCatchesWithFaoArea, tripGearCodes, vessel.flagState)
+            .map { it.toPriorNotificationType() }
+        val message = getMessage(
+            faoArea,
+            expectedArrivalDate,
+            expectedLandingDate,
+            fishingCatches,
+            priorNotificationTypes,
+            portLocode,
+        )
 
         val pnoLogbookMessage = LogbookMessage(
             id = null,
@@ -102,12 +117,11 @@ class CreateOrUpdateManualPriorNotification(
         expectedArrivalDate: String,
         expectedLandingDate: String,
         fishingCatches: List<LogbookFishingCatch>,
+        pnoTypes: List<PriorNotificationType>,
         portLocode: String,
     ): PNO {
         val allPorts = portRepository.findAll()
 
-        // TODO To calculate.
-        val pnoTypes = emptyList<PriorNotificationType>()
         val portName = allPorts.find { it.locode == portLocode }?.name
         val predictedArrivalDatetimeUtc = ZonedDateTime.parse(expectedArrivalDate)
         val predictedLandingDatetimeUtc = ZonedDateTime.parse(expectedLandingDate)

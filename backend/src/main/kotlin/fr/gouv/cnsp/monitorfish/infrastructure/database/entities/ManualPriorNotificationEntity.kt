@@ -103,6 +103,7 @@ data class ManualPriorNotificationEntity(
                 id = null,
                 reportId = requireNotNull(reportId),
                 analyzedByRules = emptyList(),
+                flagState = flagState,
                 isEnriched = true,
                 integrationDateTime = createdAt,
                 internalReferenceNumber = cfr,

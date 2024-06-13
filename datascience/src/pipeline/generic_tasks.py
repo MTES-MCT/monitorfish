@@ -101,8 +101,9 @@ def load(
     connection: Connection = None,
     init_ddls: List[DDL] = None,
     end_ddls: List[DDL] = None,
+    bytea_columns: list = None,
 ):
-    """
+    r"""
     Load a DataFrame or GeoDataFrame to a database table using sqlalchemy. The table
     must already exist in the database.
 
@@ -155,6 +156,19 @@ def load(
           the loading operation. Defaults to None.
         end_ddls: (List[DDL], optional): If given, these DDLs will be executed after
           the loading operation. Defaults to None.
+        bytea_columns (list, optional): columns containing bytes that must be
+          serialized before loading into columns with Postgresql `BYTEA` type.
+          Serialization is done following Postgresql `Hex` format, which consists in
+          representing each byte by two hexadecimal digits and prefixing the whole hex
+          string by '\x'.
+          For example, for a two-byte sequence (01011001, 11000001) :
+
+            - the hex representation of each byte is computed :
+
+                - '59' for 01011001
+                - 'c1' for 11000001
+
+            - the Postgresql hex string will be '\x59c1'
     """
 
     df = prepare_df_for_loading(
@@ -167,6 +181,7 @@ def load(
         nullable_integer_columns=nullable_integer_columns,
         timedelta_columns=timedelta_columns,
         enum_columns=enum_columns,
+        bytea_columns=bytea_columns,
     )
 
     if connection is None:

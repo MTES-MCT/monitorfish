@@ -1,10 +1,14 @@
+import { useGetGearsQuery } from '@api/gear'
 import { ErrorWall } from '@components/ErrorWall'
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { LogbookMessage } from '@features/Logbook/components/VesselLogbook/LogbookMessages/messages/LogbookMessage'
+import { pdfContent, pdfStyle } from '@features/PriorNotification/components/PriorNotificationCard/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
-import { Accent, Button } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Dropdown, Icon } from '@mtes-mct/monitor-ui'
+import printJS from 'print-js'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
 
@@ -17,9 +21,31 @@ export function PriorNotificationCard() {
   const sideWindowPriorNotificationCardError = useMainAppSelector(
     state => state.displayedError.sideWindowPriorNotificationCardError
   )
+  const getGearsApiQuery = useGetGearsQuery()
+
+  const gearsWithName = useMemo(() => {
+    if (!getGearsApiQuery.data || !priorNotificationDetail?.logbookMessage?.tripGears) {
+      return []
+    }
+
+    return priorNotificationDetail.logbookMessage.tripGears.map(tripGear => {
+      const gearName = getGearsApiQuery.data?.find(gear => gear.code === tripGear.gear)?.name || null
+
+      return { ...tripGear, gearName }
+    })
+  }, [getGearsApiQuery.data, priorNotificationDetail?.logbookMessage?.tripGears])
 
   const close = () => {
     dispatch(priorNotificationActions.closePriorNotificationCard())
+  }
+
+  const downloadPDF = () => {
+    printJS({
+      documentTitle: '',
+      printable: pdfContent(priorNotificationDetail.logbookMessage, gearsWithName),
+      style: pdfStyle,
+      type: 'raw-html'
+    })
   }
 
   if (sideWindowPriorNotificationCardError) {
@@ -66,6 +92,15 @@ export function PriorNotificationCard() {
             <Button accent={Accent.TERTIARY} onClick={close}>
               Fermer
             </Button>
+            <Dropdown accent={Accent.PRIMARY} Icon={Icon.Download} placement="topEnd" title="Télécharger les documents">
+              <>
+                {priorNotificationDetail.logbookMessage.flagState !== 'FR' && (
+                  <Dropdown.Item onClick={downloadPDF}>
+                    Autorisation d&apos;entrée au port et de débarquement
+                  </Dropdown.Item>
+                )}
+              </>
+            </Dropdown>
           </Footer>
         </FrontendErrorBoundary>
       </Card>

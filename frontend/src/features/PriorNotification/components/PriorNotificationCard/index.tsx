@@ -32,7 +32,7 @@ export function PriorNotificationCard() {
     }
 
     return priorNotificationDetail.logbookMessage.tripGears.map(tripGear => {
-      const gearName = getGearsApiQuery.data?.find(gear => gear.code === tripGear.gear)?.name || null
+      const gearName = getGearsApiQuery.data?.find(gear => gear.code === tripGear.gear)?.name ?? null
 
       return { ...tripGear, gearName }
     })

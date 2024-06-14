@@ -15,7 +15,7 @@ data class ManualPriorNotificationFishingCatchDataInput(
             effortZone = null,
             faoZone = null,
             freshness = null,
-            numberFish = quantity,
+            nbFish = quantity,
             packaging = null,
             presentation = null,
             preservationState = null,

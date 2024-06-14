@@ -16,7 +16,7 @@ declare global {
       before(property: string): string
       cleanFiles(): void
       cleanScreenshots(fromNumber: number): void
-      countRequestsByAlias(alias: string): Cypress.Chainable<number>
+      countRequestsByAlias(alias: string, waitForInMs?: number): Cypress.Chainable<number>
       dragTo(
         selector: string,
         options?: Partial<{

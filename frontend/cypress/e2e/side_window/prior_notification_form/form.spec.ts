@@ -337,29 +337,94 @@ context('Side Window > Prior Notification Form > Form', () => {
     })
   })
 
-  it('Should only recalculate fleet segments, risk factor & types when necessary', () => {
-    // -------------------------------------------------------------------------
-    // Add
-
+  it('Should only recalculate fleet segments, risk factor & types when necessary (creation)', () => {
     cy.intercept('POST', '/bff/v1/prior_notifications/manual/compute').as('computePriorNotification')
 
-    // Manual prior notification for "POISSON PAS NET"
-    editSideWindowPriorNotification('POISSON PAS NET', '00000000-0000-4000-0000-000000000001')
+    addSideWindowPriorNotification()
 
-    cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 0)
+    cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 0)
+
+    cy.getDataCy('vessel-search-input').click().wait(500)
+    cy.getDataCy('vessel-search-input').clear().type('IN-ARÊTE-ABLE', { delay: 100 })
+    cy.getDataCy('vessel-search-item').first().click()
+
+    cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 0)
 
     cy.fill("Port d'arrivée", 'Marseille')
 
-    cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 0)
+    cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 0)
 
-    cy.fill('Zone de pêche', '27.7.c')
+    cy.fill('Espèces à bord et à débarquer', 'AAX')
 
-    cy.wait('@computePriorNotification')
-    cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 1)
+    cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 0)
+
+    cy.fill('Poids (AAX)', 50)
+
+    cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 0)
+
+    cy.fill('Engins utilisés', ['OTB'], { index: 1 })
+
+    cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 0)
 
     cy.fill('Zone de pêche', '27.7.d')
 
     cy.wait('@computePriorNotification')
+    cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 1)
+
+    cy.fill("Points d'attention identifiés par le CNSP", "Un point d'attention.")
+
+    cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 1)
+
+    cy.fill('Saisi par', 'BOB')
+
+    cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 1)
+  })
+
+  it('Should only recalculate fleet segments, risk factor & types when necessary (edition)', () => {
+    cy.intercept('POST', '/bff/v1/prior_notifications/manual/compute').as('computePriorNotification')
+
+    editSideWindowPriorNotification('POISSON PAS NET', '00000000-0000-4000-0000-000000000001')
+
+    cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 0)
+
+    cy.getDataCy('vessel-search-input').click().wait(500)
+    cy.getDataCy('vessel-search-input').clear().type('IN-ARÊTE-ABLE', { delay: 100 })
+    cy.getDataCy('vessel-search-item').first().click()
+
+    cy.wait('@computePriorNotification')
+    cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 1)
+
+    cy.fill("Port d'arrivée", 'Marseille')
+
+    cy.wait('@computePriorNotification')
     cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 2)
+
+    cy.fill('Poids (SOS)', 50)
+
+    cy.wait('@computePriorNotification')
+    cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 3)
+
+    cy.fill('Espèces à bord et à débarquer', 'AAX')
+
+    cy.wait('@computePriorNotification')
+    cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 4)
+
+    cy.fill('Engins utilisés', ['OTB'], { index: 1 })
+
+    cy.wait('@computePriorNotification')
+    cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 5)
+
+    cy.fill('Zone de pêche', '27.7.d')
+
+    cy.wait('@computePriorNotification')
+    cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 6)
+
+    cy.fill("Points d'attention identifiés par le CNSP", "Un point d'attention.")
+
+    cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 6)
+
+    cy.fill('Saisi par', 'BOB')
+
+    cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 6)
   })
 })

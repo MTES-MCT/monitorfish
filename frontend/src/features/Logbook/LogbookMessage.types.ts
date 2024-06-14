@@ -7,12 +7,12 @@ export namespace LogbookMessage {
   interface LogbookMessageBase {
     acknowledgment: Acknowledgment | undefined
     createdAt: string
-    externalReferenceNumber: string
+    externalReferenceNumber: string | undefined
     flagState: string | undefined
     imo: string | undefined
     integrationDateTime: string
     internalReferenceNumber: string
-    ircs: string
+    ircs: string | undefined
     isCorrectedByNewerMessage: boolean
     isDeleted: boolean
     isManuallyCreated: boolean
@@ -79,6 +79,7 @@ export namespace LogbookMessage {
   interface MessageBase {}
   export interface PnoMessage extends MessageBase {
     catchOnboard: Catch[] | undefined
+    catchToLand: Catch[] | undefined
     economicZone: string | undefined
     effortZone: string | undefined
     faoZone: string | undefined

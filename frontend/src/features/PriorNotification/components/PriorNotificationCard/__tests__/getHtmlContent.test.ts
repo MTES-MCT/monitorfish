@@ -1,77 +1,131 @@
+import { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
+import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { expect } from '@jest/globals'
 
 import { getHtmlContent } from '../utils'
+
+import PurposeCode = PriorNotification.PurposeCode
+import MessageType = LogbookMessage.MessageType
+import OperationType = LogbookMessage.OperationType
 
 describe('PriorNotificationCard/utils.getHtmlContent()', () => {
   it('Should format the HTML template', () => {
     // Given
     const pno = {
+      acknowledgment: undefined,
+      createdAt: '2024-06-14T06:52:22.978603Z',
+      externalReferenceNumber: undefined,
       flagState: 'ESP',
+      imo: undefined,
       integrationDateTime: '2024-06-14T06:52:22.978603Z',
       internalReferenceNumber: 'CFR101',
+      ircs: undefined,
       isCorrectedByNewerMessage: false,
       isDeleted: false,
+      isManuallyCreated: true,
       isSentByFailoverSoftware: false,
       message: {
         catchOnboard: [
           {
+            conversionFactor: undefined,
             economicZone: 'FRA',
             effortZone: 'C',
             faoZone: '27.8.a',
+            freshness: undefined,
+            numberFish: undefined,
+            packaging: undefined,
+            presentation: undefined,
+            preservationState: undefined,
             species: 'FRF',
             speciesName: 'DIVERS POISSONS(EAU DOUCE)',
             statisticalRectangle: '23E6',
             weight: 25
           },
           {
+            conversionFactor: undefined,
             economicZone: 'FRA',
             effortZone: 'C',
             faoZone: '27.8.a',
+            freshness: undefined,
+            numberFish: undefined,
+            packaging: undefined,
+            presentation: undefined,
+            preservationState: undefined,
             species: 'AFH',
             speciesName: 'APHYOSEMION AHLI',
             statisticalRectangle: '23E6',
             weight: 150
           },
           {
+            conversionFactor: undefined,
             economicZone: 'FRA',
             effortZone: 'C',
             faoZone: '27.8.a',
+            freshness: undefined,
+            numberFish: undefined,
+            packaging: undefined,
+            presentation: undefined,
+            preservationState: undefined,
             species: 'AFI',
             speciesName: 'CONOCARA FIOLENTI',
             statisticalRectangle: '23E6',
             weight: 250
           },
           {
+            conversionFactor: undefined,
             economicZone: 'FRA',
             effortZone: 'C',
             faoZone: '27.8.a',
+            freshness: undefined,
+            numberFish: undefined,
+            packaging: undefined,
+            presentation: undefined,
+            preservationState: undefined,
             species: 'AFT',
             speciesName: 'AGONUS CATAPHRACTUS',
             statisticalRectangle: '23E6',
             weight: 75
           },
           {
+            conversionFactor: undefined,
             economicZone: 'FRA',
             effortZone: 'C',
             faoZone: '27.8.a',
+            freshness: undefined,
+            numberFish: undefined,
+            packaging: undefined,
+            presentation: undefined,
+            preservationState: undefined,
             species: 'AFU',
             speciesName: 'ALFARO CULTRATUS',
             statisticalRectangle: '23E6',
             weight: 10
           },
           {
+            conversionFactor: undefined,
             economicZone: 'FRA',
             effortZone: 'C',
             faoZone: '27.8.a',
+            freshness: undefined,
+            numberFish: undefined,
+            packaging: undefined,
+            presentation: undefined,
+            preservationState: undefined,
             species: 'APX',
             speciesName: 'HOLBICHE PORC',
             statisticalRectangle: '23E6',
             weight: 430
           },
           {
+            conversionFactor: undefined,
             economicZone: 'FRA',
             effortZone: 'C',
             faoZone: '27.8.a',
+            freshness: undefined,
+            numberFish: undefined,
+            packaging: undefined,
+            presentation: undefined,
+            preservationState: undefined,
             species: 'AQD',
             speciesName: 'APELTES QUADRACUS',
             statisticalRectangle: '23E6',
@@ -79,6 +133,11 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
           }
         ],
         catchToLand: [],
+        economicZone: undefined,
+        effortZone: undefined,
+        faoZone: undefined,
+        latitude: undefined,
+        longitude: undefined,
         pnoTypes: [
           {
             hasDesignatedPorts: false,
@@ -91,14 +150,16 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
         portName: 'Vannes',
         predictedArrivalDatetimeUtc: '2024-06-14T10:07:22Z',
         predictedLandingDatetimeUtc: '2024-06-14T11:07:22Z',
-        purpose: 'LAN',
+        purpose: PurposeCode.LAN,
+        statisticalRectangle: undefined,
         tripStartDate: '2024-06-13T21:07:22Z'
       },
-      messageType: 'PNO',
+      messageType: MessageType.PNO as MessageType.PNO,
       operationDateTime: '2024-06-14T06:52:22.978603Z',
       operationNumber: 'FAKE_OPERATION_104',
-      operationType: 'DAT',
+      operationType: OperationType.DAT as OperationType.DAT,
       rawMessage: '<Flux>Message FLUX xml</Flux>',
+      referencedReportId: undefined,
       reportDateTime: '2024-06-14T06:52:22.978603Z',
       reportId: 'FAKE_OPERATION_104',
       tripGears: [
@@ -109,6 +170,7 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
           mesh: 120.5
         }
       ],
+      tripNumber: undefined,
       tripSegments: [
         { code: 'NWW03', name: 'Chalut de fond en eau profonde' },
         {
@@ -116,6 +178,7 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
           name: 'Chalut à perche'
         }
       ],
+      updatedAt: '2024-06-14T06:52:22.978603Z',
       vesselName: 'VIVA ESPANA'
     }
     const gears = [

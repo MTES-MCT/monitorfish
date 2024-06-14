@@ -7,12 +7,12 @@ export namespace LogbookMessage {
   interface LogbookMessageBase {
     acknowledgment: Acknowledgment | undefined
     createdAt: string
-    externalReferenceNumber: string
+    externalReferenceNumber: string | undefined
     flagState: string | undefined
     imo: string | undefined
     integrationDateTime: string
     internalReferenceNumber: string
-    ircs: string
+    ircs: string | undefined
     isCorrectedByNewerMessage: boolean
     isDeleted: boolean
     isManuallyCreated: boolean

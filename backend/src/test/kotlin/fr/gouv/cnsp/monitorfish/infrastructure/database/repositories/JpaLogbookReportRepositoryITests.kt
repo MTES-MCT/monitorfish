@@ -248,7 +248,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(pnoMessage.purpose).isEqualTo(LogbookMessagePurpose.LAN)
         assertThat(pnoMessage.catchOnboard).hasSize(4)
         assertThat(pnoMessage.catchOnboard.first().weight).isEqualTo(20.0)
-        assertThat(pnoMessage.catchOnboard.first().numberFish).isEqualTo(null)
+        assertThat(pnoMessage.catchOnboard.first().nbFish).isEqualTo(null)
         assertThat(pnoMessage.catchOnboard.first().species).isEqualTo("SLS")
         assertThat(pnoMessage.catchOnboard.first().faoZone).isEqualTo("27.8.a")
         assertThat(pnoMessage.catchOnboard.first().effortZone).isEqualTo("C")
@@ -256,7 +256,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(pnoMessage.catchOnboard.first().statisticalRectangle).isEqualTo("23E6")
         assertThat(pnoMessage.catchToLand).hasSize(4)
         assertThat(pnoMessage.catchToLand.first().weight).isEqualTo(15.0)
-        assertThat(pnoMessage.catchToLand.first().numberFish).isEqualTo(null)
+        assertThat(pnoMessage.catchToLand.first().nbFish).isEqualTo(null)
         assertThat(pnoMessage.catchToLand.first().species).isEqualTo("SLS")
         assertThat(pnoMessage.catchToLand.first().faoZone).isEqualTo("27.8.a")
         assertThat(pnoMessage.catchToLand.first().effortZone).isEqualTo("C")
@@ -275,7 +275,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val disMessage = messages[4].message as DIS
         assertThat(disMessage.catches).hasSize(2)
         assertThat(disMessage.catches.first().weight).isEqualTo(5.0)
-        assertThat(disMessage.catches.first().numberFish).isEqualTo(1.0)
+        assertThat(disMessage.catches.first().nbFish).isEqualTo(1.0)
         assertThat(disMessage.catches.first().species).isEqualTo("NEP")
 
         // INS
@@ -296,7 +296,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         assertThat(farMessageOneCorrectedHaul.catches).hasSize(20)
         assertThat(farMessageOneCorrectedHaul.catches.first().weight).isEqualTo(1500.0)
-        assertThat(farMessageOneCorrectedHaul.catches.first().numberFish).isEqualTo(null)
+        assertThat(farMessageOneCorrectedHaul.catches.first().nbFish).isEqualTo(null)
         assertThat(farMessageOneCorrectedHaul.catches.first().species).isEqualTo("BON")
         assertThat(farMessageOneCorrectedHaul.catches.first().faoZone).isEqualTo("27.8.a")
         assertThat(farMessageOneCorrectedHaul.catches.first().effortZone).isEqualTo("C")
@@ -315,7 +315,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(farMessageOneHaul.catchDateTime.toString()).isEqualTo("2019-10-17T11:32Z")
         assertThat(farMessageOneHaul.catches).hasSize(4)
         assertThat(farMessageOneHaul.catches.first().weight).isEqualTo(1500.0)
-        assertThat(farMessageOneHaul.catches.first().numberFish).isEqualTo(null)
+        assertThat(farMessageOneHaul.catches.first().nbFish).isEqualTo(null)
         assertThat(farMessageOneHaul.catches.first().species).isEqualTo("BON")
         assertThat(farMessageOneHaul.catches.first().faoZone).isEqualTo("27.8.a")
         assertThat(farMessageOneHaul.catches.first().effortZone).isEqualTo("C")

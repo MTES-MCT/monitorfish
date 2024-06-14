@@ -58,7 +58,7 @@ export namespace LogbookMessage {
     effortZone: string | undefined
     faoZone: string | undefined
     freshness: string | undefined
-    numberFish: number | undefined
+    nbFish: number | undefined
     packaging: string | undefined
     presentation: string | undefined
     preservationState: string | undefined
@@ -71,6 +71,8 @@ export namespace LogbookMessage {
   export type Gear = {
     dimensions: string
     gear: string
+    // TODO Replace null by undefined after deleting Gear in logbook.types.ts
+    gearName: string | null
     mesh: number
   }
 

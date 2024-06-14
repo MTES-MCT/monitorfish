@@ -73,6 +73,7 @@ export function EquipmentResume({ setIsCurrentBeaconMalfunctionDetails }: Beacon
                     !!selectedVessel?.beacon.loggingDatetimeUtc && getDateTime(selectedVessel.beacon.loggingDatetimeUtc)
                 }
               ]}
+              valueEllipsisedForWidth={100}
             />
             <StyledFlatKeyValue
               column={[
@@ -124,6 +125,7 @@ const Columns = styled.div`
 `
 
 const StyledFlatKeyValue = styled(FlatKeyValue)`
+  margin: 5px 5px 0px;
   margin-top: 10px;
   width: 235px;
 `

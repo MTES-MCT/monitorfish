@@ -38,6 +38,7 @@ export type LogbookTripSummary = {
 }
 
 export type CatchWithProperties = {
+  nbFish: number
   properties: CatchProperty[]
   species: string
   speciesName: string | undefined
@@ -45,6 +46,7 @@ export type CatchWithProperties = {
 }
 
 export type ProtectedCatchWithProperties = {
+  nbFish: number
   properties: ProtectedSpeciesCatch[]
   species: string
   speciesName: string | undefined
@@ -56,6 +58,7 @@ export type CatchProperty = {
   economicZone: string | undefined
   effortZone: string | undefined
   faoZone: string | undefined
+  nbFish: number | undefined
   packaging: string | undefined
   presentation: string | undefined
   preservationState: string | undefined

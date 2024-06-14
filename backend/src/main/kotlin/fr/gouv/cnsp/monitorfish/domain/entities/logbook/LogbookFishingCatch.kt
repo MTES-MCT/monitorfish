@@ -1,13 +1,11 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.logbook
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonTypeName
 
 @JsonTypeName("catch")
 data class LogbookFishingCatch(
     var weight: Double? = null,
-    @JsonProperty("nbFish")
-    var numberFish: Double? = null,
+    var nbFish: Double? = null,
     /** Species FAO code. */
     var species: String? = null,
     var speciesName: String? = null,

@@ -1,6 +1,6 @@
-control_unit_id,cfr
-1,ABCDEFGHIJ1
-1,ABCDEFGHIJ2
-2,ABCDEFGHIJ3
-5,ABCDEFGHIJ1
-1,ABCDEFGHIJ7
+control_unit_id,vessel_id
+1,1
+1,2
+2,3
+5,1
+1,7

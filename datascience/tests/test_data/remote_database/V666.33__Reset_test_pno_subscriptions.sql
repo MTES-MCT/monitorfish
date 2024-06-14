@@ -22,6 +22,8 @@ INSERT INTO public.pno_segments_subscriptions (
 
 
 INSERT INTO public.pno_vessels_subscriptions (
-        control_unit_id,            cfr) VALUES
-    (                 4, '___TARGET___')
+        control_unit_id, vessel_id) VALUES
+    (                 4,         7),
+    (                 1,         4),
+    (                 4,         2)
 ;

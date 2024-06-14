@@ -15,7 +15,7 @@ def test_flow(reset_test_data):
         "SELECT * FROM pno_segments_subscriptions ORDER BY control_unit_id, segment"
     )
     pno_vessels_subscriptions_query = (
-        "SELECT * FROM pno_vessels_subscriptions ORDER BY control_unit_id, cfr"
+        "SELECT * FROM pno_vessels_subscriptions ORDER BY control_unit_id, vessel_id"
     )
     initial_pno_ports_subscriptions = read_query(
         pno_ports_subscriptions_query, db="monitorfish_remote"
@@ -47,7 +47,7 @@ def test_flow(reset_test_data):
 
     assert len(initial_pno_ports_subscriptions) == 7
     assert len(initial_pno_segments_subscriptions) == 2
-    assert len(initial_pno_vessels_subscriptions) == 1
+    assert len(initial_pno_vessels_subscriptions) == 3
 
     assert len(pno_ports_subscriptions_first_run) == 19
     assert len(pno_segments_subscriptions_first_run) == 7

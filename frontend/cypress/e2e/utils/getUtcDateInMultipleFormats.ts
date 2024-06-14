@@ -6,14 +6,9 @@ export function getUtcDateInMultipleFormats(date?: string) {
   return {
     utcDateAsDayjs,
     utcDateAsEncodedString: encodeURIComponent(utcDateAsDayjs.toISOString()),
-    /**
-     * ISO string without seconds, milliseconds, and timezone offset.
-     *
-     * @example
-     * `2023-06-08T13:54`
-     */
-    utcDateAsShortString: utcDateAsDayjs.toISOString().substring(0, 16),
+
     utcDateAsString: utcDateAsDayjs.toISOString(),
+    utcDateAsStringWithoutMs: utcDateAsDayjs.format('YYYY-MM-DDTHH:mm:ss[Z]'),
     utcDateTuple: [utcDateAsDayjs.year(), utcDateAsDayjs.month() + 1, utcDateAsDayjs.date()] as [
       number,
       number,

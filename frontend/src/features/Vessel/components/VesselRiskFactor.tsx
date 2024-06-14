@@ -51,7 +51,7 @@ export function VesselRiskFactor({
     : false
 
   return (
-    <Box onClick={event => event.stopPropagation()}>
+    <Box data-cy="VesselRiskFactor" onClick={event => event.stopPropagation()}>
       <Score $isInteractive={isInteractive} $value={vesselRiskFactor} onClick={toggle}>
         {vesselRiskFactor.toFixed(0)}
       </Score>

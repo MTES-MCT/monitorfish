@@ -1,8 +1,10 @@
 import { customDayjs } from '@mtes-mct/monitor-ui'
+import { omit } from 'lodash'
 
 import { addSideWindowPriorNotification, editSideWindowPriorNotification } from './utils'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 import { isDateCloseTo } from '../../utils/isDateCloseTo'
+import { openSideWindowPriorNotificationList } from '../prior_notification_list/utils'
 
 context('Side Window > Prior Notification Form > Form', () => {
   it('Should add and edit a prior notification', () => {
@@ -10,17 +12,17 @@ context('Side Window > Prior Notification Form > Form', () => {
     // Add
 
     const now = new Date()
-    const { utcDateAsString: arrivalDateAsString, utcDateTupleWithTime: arrivalDateTupleWithTime } =
+    const { utcDateAsStringWithoutMs: arrivalDateAsString, utcDateTupleWithTime: arrivalDateTupleWithTime } =
       getUtcDateInMultipleFormats(customDayjs().add(2, 'hours').startOf('minute').toISOString())
-    const { utcDateAsString: landingDateAsString, utcDateTupleWithTime: landingDateTupleWithTime } =
+    const { utcDateAsStringWithoutMs: landingDateAsString, utcDateTupleWithTime: landingDateTupleWithTime } =
       getUtcDateInMultipleFormats(customDayjs().add(2.5, 'hours').startOf('minute').toISOString())
-
-    addSideWindowPriorNotification()
 
     cy.intercept('POST', '/bff/v1/prior_notifications/manual').as('createPriorNotification')
 
+    addSideWindowPriorNotification()
+
     cy.getDataCy('vessel-search-input').click().wait(500)
-    cy.getDataCy('vessel-search-input').type('pageot', { delay: 100 })
+    cy.getDataCy('vessel-search-input').type('PAGEOT JO', { delay: 100 })
     cy.getDataCy('vessel-search-item').first().click()
 
     cy.fill("Date et heure estimées d'arrivée au port", arrivalDateTupleWithTime)
@@ -93,7 +95,7 @@ context('Side Window > Prior Notification Form > Form', () => {
         specyName: 'ESPADON',
         weight: 200.0
       })
-      assert.deepInclude(createInterception.request.body, {
+      assert.deepInclude(createdPriorNotification, {
         authorTrigram: 'BOB',
         didNotFishAfterZeroNotice: false,
         expectedArrivalDate: arrivalDateAsString,
@@ -108,7 +110,7 @@ context('Side Window > Prior Notification Form > Form', () => {
       // -----------------------------------------------------------------------
       // Edit
 
-      editSideWindowPriorNotification('pageot')
+      editSideWindowPriorNotification('PAGEOT JO', createdPriorNotification.reportId)
 
       cy.intercept('PUT', `/bff/v1/prior_notifications/manual/${createdPriorNotification.reportId}`).as(
         'updatePriorNotification'
@@ -123,7 +125,7 @@ context('Side Window > Prior Notification Form > Form', () => {
           assert.fail('`updateInterception.response` is undefined.')
         }
 
-        assert.deepInclude(updateInterception.request.body, {
+        assert.deepInclude(updateInterception.response.body, {
           ...createdPriorNotification,
           note: "Un point d'attention mis à jour.",
           reportId: createdPriorNotification.reportId
@@ -133,6 +135,7 @@ context('Side Window > Prior Notification Form > Form', () => {
   })
 
   it('Should display the expected form validation errors', () => {
+    // -------------------------------------------------------------------------
     // Base form validation errors
 
     const { utcDateTupleWithTime } = getUtcDateInMultipleFormats(customDayjs().toISOString())
@@ -194,6 +197,7 @@ context('Side Window > Prior Notification Form > Form', () => {
 
     cy.contains('Créer le préavis').should('be.enabled')
 
+    // -------------------------------------------------------------------------
     // Other form validation errors
 
     cy.fill('Date et heure prévues de débarque', undefined)
@@ -205,5 +209,157 @@ context('Side Window > Prior Notification Form > Form', () => {
 
     cy.contains('Veuillez indiquer la date de débarquement prévue.').should('not.exist')
     cy.contains('Créer le préavis').should('be.enabled')
+  })
+
+  it('Should calculate and display fleet segments, risk factor & types', () => {
+    // -------------------------------------------------------------------------
+    // Add
+
+    const now = new Date()
+    const { utcDateAsStringWithoutMs: arrivalDateAsString, utcDateTupleWithTime: arrivalDateTupleWithTime } =
+      getUtcDateInMultipleFormats(customDayjs().add(2, 'hours').startOf('minute').toISOString())
+
+    cy.intercept('POST', '/bff/v1/prior_notifications/manual').as('createPriorNotification')
+    cy.intercept('POST', '/bff/v1/prior_notifications/manual/compute').as('computePriorNotification')
+
+    addSideWindowPriorNotification()
+
+    cy.getDataCy('vessel-search-input').click().wait(500)
+    cy.getDataCy('vessel-search-input').type('IN-ARÊTE-ABLE', { delay: 100 })
+    cy.getDataCy('vessel-search-item').first().click()
+
+    cy.fill("Date et heure estimées d'arrivée au port", arrivalDateTupleWithTime)
+    cy.fill("équivalentes à celles de l'arrivée au port", true)
+    cy.fill("Port d'arrivée", 'Vannes')
+
+    cy.fill('Espèces à bord et à débarquer', 'MORUE COMMUNE')
+    cy.fill('Poids (COD)', 5000)
+
+    cy.fill('Engins utilisés', ['OTB'], { index: 1 })
+    cy.fill('Zone de pêche', '27.7.d')
+    cy.fill('Saisi par', 'BOB')
+
+    cy.wait('@computePriorNotification')
+    cy.getDataCy('VesselRiskFactor').contains('2').should('exist')
+    cy.get('.Element-Tag').contains('NWW01/02 – Trawl').should('exist')
+    cy.get('.Element-Tag').contains('Préavis type 1').should('exist')
+    cy.get('.Element-Tag').contains('Préavis type 2').should('exist')
+
+    cy.clickButton('Créer le préavis')
+
+    cy.wait('@createPriorNotification').then(createInterception => {
+      if (!createInterception.response) {
+        assert.fail('`createInterception.response` is undefined.')
+      }
+
+      const createdPriorNotification = createInterception.response.body
+
+      assert.isString(createdPriorNotification.reportId)
+      assert.isTrue(isDateCloseTo(createdPriorNotification.sentAt, now, 15))
+      assert.deepInclude(createdPriorNotification.fishingCatches, {
+        quantity: null,
+        specyCode: 'COD',
+        specyName: 'MORUE COMMUNE (CABILLAUD)',
+        weight: 5000.0
+      })
+      assert.deepInclude(createdPriorNotification, {
+        authorTrigram: 'BOB',
+        didNotFishAfterZeroNotice: false,
+        expectedArrivalDate: arrivalDateAsString,
+        // Should be the same as the arrival date since we checked "équivalentes à celles de l'arrivée au port"
+        expectedLandingDate: arrivalDateAsString,
+        faoArea: '27.7.d',
+        note: null,
+        portLocode: 'FRVNE',
+        tripGearCodes: ['OTB'],
+        vesselId: 113
+      })
+
+      // -----------------------------------------------------------------------
+      // List
+
+      openSideWindowPriorNotificationList()
+      cy.fill('Rechercher un navire', 'IN-ARÊTE-ABLE')
+
+      // TODO Check if we need to update the vessel risk factor in DB while saving a prior notification.
+      // cy.getTableRowById(createdPriorNotification.reportId).getDataCy('VesselRiskFactor').contains('2')
+      cy.getTableRowById(createdPriorNotification.reportId).contains('NWW01/02')
+      cy.getTableRowById(createdPriorNotification.reportId).contains('Préavis type 1')
+      cy.getTableRowById(createdPriorNotification.reportId).contains('Préavis type 2')
+
+      // -----------------------------------------------------------------------
+      // Edit
+
+      editSideWindowPriorNotification('IN-ARÊTE-ABLE', createdPriorNotification.reportId)
+
+      cy.intercept('PUT', `/bff/v1/prior_notifications/manual/${createdPriorNotification.reportId}`).as(
+        'updatePriorNotification'
+      )
+
+      cy.fill('Engins utilisés', ['OTB', 'Chaluts de fond (non spécifiés)' /* (TB) */], { index: 1 })
+      cy.fill('Zone de pêche', '27.5.b')
+
+      cy.wait('@computePriorNotification')
+      cy.getDataCy('VesselRiskFactor').contains('2').should('exist')
+      cy.get('.Element-Tag').contains('NWW01/02 – Trawl').should('exist')
+      cy.get('.Element-Tag').contains('NWW03 – Deep water trawl ≥100 mm').should('exist')
+      cy.get('.Element-Tag').contains('Préavis type 1').should('not.exist')
+      cy.get('.Element-Tag').contains('Préavis type 2').should('not.exist')
+
+      cy.clickButton('Enregistrer')
+
+      cy.wait('@updatePriorNotification').then(updateInterception => {
+        if (!updateInterception.response) {
+          assert.fail('`updateInterception.response` is undefined.')
+        }
+
+        const updatedPriorNotification = updateInterception.response.body
+
+        assert.includeMembers(updatedPriorNotification.tripGearCodes, ['OTB', 'TB'])
+        assert.deepInclude(updatedPriorNotification, {
+          ...omit(createdPriorNotification, ['tripGearCodes']),
+          faoArea: '27.5.b',
+          reportId: createdPriorNotification.reportId
+        })
+
+        // -----------------------------------------------------------------------
+        // List
+
+        openSideWindowPriorNotificationList()
+        cy.fill('Rechercher un navire', 'IN-ARÊTE-ABLE')
+
+        // TODO Check if we need to update the vessel risk factor in DB while saving a prior notification.
+        // cy.getTableRowById(createdPriorNotification.reportId).getDataCy('VesselRiskFactor').contains('2')
+        cy.getTableRowById(createdPriorNotification.reportId).contains('NWW01/02')
+        cy.getTableRowById(createdPriorNotification.reportId).contains('NWW03')
+        cy.getTableRowById(createdPriorNotification.reportId).contains('Aucun type')
+      })
+    })
+  })
+
+  it('Should only recalculate fleet segments, risk factor & types when necessary', () => {
+    // -------------------------------------------------------------------------
+    // Add
+
+    cy.intercept('POST', '/bff/v1/prior_notifications/manual/compute').as('computePriorNotification')
+
+    // Manual prior notification for "POISSON PAS NET"
+    editSideWindowPriorNotification('POISSON PAS NET', '00000000-0000-4000-0000-000000000001')
+
+    cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 0)
+
+    cy.fill("Port d'arrivée", 'Marseille')
+
+    cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 0)
+
+    cy.fill('Zone de pêche', '27.7.c')
+
+    cy.wait('@computePriorNotification')
+    cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 1)
+
+    cy.fill('Zone de pêche', '27.7.d')
+
+    cy.wait('@computePriorNotification')
+    cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 2)
   })
 })

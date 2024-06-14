@@ -46,8 +46,8 @@ def test_flow(reset_test_data):
     )
 
     assert len(initial_pno_ports_subscriptions) == 7
-    assert len(initial_pno_segments_subscriptions) == 2
-    assert len(initial_pno_vessels_subscriptions) == 3
+    assert len(initial_pno_segments_subscriptions) == 4
+    assert len(initial_pno_vessels_subscriptions) == 4
 
     assert len(pno_ports_subscriptions_first_run) == 19
     assert len(pno_segments_subscriptions_first_run) == 7

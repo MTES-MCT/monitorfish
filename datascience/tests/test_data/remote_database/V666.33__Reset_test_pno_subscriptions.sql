@@ -17,7 +17,9 @@ INSERT INTO public.pno_ports_subscriptions (
 INSERT INTO public.pno_segments_subscriptions (
         control_unit_id,       segment) VALUES
     (                 1, 'SWW01/02/03'),
-    (                 3, 'SWW01/02/03')
+    (                 3, 'SWW01/02/03'),
+    (                 3,       'NWW01'),
+    (                 8,       'NWW02')
 ;
 
 
@@ -25,5 +27,6 @@ INSERT INTO public.pno_vessels_subscriptions (
         control_unit_id, vessel_id) VALUES
     (                 4,         7),
     (                 1,         4),
+    (                 2,         4),
     (                 4,         2)
 ;

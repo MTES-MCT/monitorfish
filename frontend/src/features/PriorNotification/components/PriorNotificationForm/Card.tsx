@@ -1,8 +1,8 @@
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
-import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { updateEditedPriorNotificationComputedValues } from '@features/PriorNotification/useCases/updateEditedPriorNotificationComputedValues'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Button, FormikEffect, usePrevious } from '@mtes-mct/monitor-ui'
+import { getDefinedObject } from '@utils/getDefinedObject'
 import { useFormikContext } from 'formik'
 import { isEqual } from 'lodash'
 import styled from 'styled-components'
@@ -11,9 +11,10 @@ import { useDebouncedCallback } from 'use-debounce'
 import { Form } from './Form'
 import { Header } from './Header'
 import { TagBar } from './TagBar'
-import { getPartialComputationRequestData, isZeroNotice } from './utils'
+import { getPartialComputationRequestData } from './utils'
 
 import type { FormValues } from './types'
+import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
 type CardProps = Readonly<{
   isValidatingOnChange: boolean
@@ -33,24 +34,31 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, reportId }: Card
     submitForm()
   }
 
-  const updateComputedValues = useDebouncedCallback((nextFormValues: FormValues) => {
-    if (isZeroNotice(nextFormValues)) {
-      dispatch(priorNotificationActions.unsetPriorNotificationComputedValues())
+  const updateComputedValues = useDebouncedCallback(
+    (nextComputationRequestData: PriorNotification.ManualPriorNotificationComputeRequestData) => {
+      dispatch(updateEditedPriorNotificationComputedValues(nextComputationRequestData))
+    },
+    1000
+  )
 
-      return
-    }
-
+  // We need to check for equality outside the debounce to ensure `nextFormValues` is up-to-date.
+  const updateComputedValuesIfMecessary = (nextFormValues: FormValues) => {
     const nextPartialComputationRequestData = getPartialComputationRequestData(nextFormValues)
     if (isEqual(nextPartialComputationRequestData, previousPartialComputationRequestData)) {
       return
     }
 
-    dispatch(updateEditedPriorNotificationComputedValues(nextPartialComputationRequestData))
-  }, 1000)
+    const nextComputationRequestData = getDefinedObject(nextPartialComputationRequestData)
+    if (!nextComputationRequestData) {
+      return
+    }
+
+    updateComputedValues(nextComputationRequestData)
+  }
 
   return (
     <Wrapper>
-      <FormikEffect onChange={updateComputedValues as any} />
+      <FormikEffect onChange={updateComputedValuesIfMecessary as any} />
 
       <FrontendErrorBoundary>
         <Header isNewPriorNotification={!reportId} onClose={onClose} vesselId={values.vesselId} />

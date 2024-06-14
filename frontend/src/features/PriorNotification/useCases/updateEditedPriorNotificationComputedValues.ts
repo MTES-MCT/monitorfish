@@ -1,6 +1,5 @@
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
-import { getDefinedObject } from '@utils/getDefinedObject'
 import { handleThunkError } from '@utils/handleThunkError'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
 
@@ -8,20 +7,12 @@ import { priorNotificationApi } from '../priorNotificationApi'
 import { priorNotificationActions } from '../slice'
 
 import type { PriorNotification } from '../PriorNotification.types'
-import type { Undefine } from '@mtes-mct/monitor-ui'
 import type { MainAppThunk } from '@store'
 
 export const updateEditedPriorNotificationComputedValues =
-  (
-    partialRequestData: Undefine<PriorNotification.ManualPriorNotificationComputeRequestData>
-  ): MainAppThunk<Promise<void>> =>
+  (requestData: PriorNotification.ManualPriorNotificationComputeRequestData): MainAppThunk<Promise<void>> =>
   async dispatch => {
     try {
-      const requestData = getDefinedObject(partialRequestData)
-      if (!requestData) {
-        return
-      }
-
       const priorNotificationComputedValues = await dispatch(
         priorNotificationApi.endpoints.computePriorNotification.initiate(requestData)
       ).unwrap()

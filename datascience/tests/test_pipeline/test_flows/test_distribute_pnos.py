@@ -24,7 +24,7 @@ from src.pipeline.flows.distribute_pnos import (
     extract_fishing_gear_names,
     extract_pno_units_ports_and_segments_subscriptions,
     extract_pno_units_targeting_vessels,
-    extract_pnos_to_distribute,
+    extract_pnos_to_generate,
     extract_species_names,
     flow,
     get_template,
@@ -724,14 +724,14 @@ def template() -> dict:
     return get_template.run()
 
 
-def test_extract_pnos_to_distribute(reset_test_data, extracted_pnos):
+def test_extract_pnos_to_generate(reset_test_data, extracted_pnos):
     approximate_datetime_columns = [
         "operation_datetime_utc",
         "report_datetime_utc",
         "last_control_datetime_utc",
     ]
 
-    pnos = extract_pnos_to_distribute.run(
+    pnos = extract_pnos_to_generate.run(
         start_datetime_utc=datetime(2020, 1, 1),
         end_datetime_utc=datetime.now(tz=timezone.utc).replace(tzinfo=None),
     )

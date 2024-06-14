@@ -62,12 +62,12 @@ def extract_fishing_gear_names() -> dict:
 
 
 @task(checkpoint=False)
-def extract_pnos_to_distribute(
+def extract_pnos_to_generate(
     start_datetime_utc: datetime, end_datetime_utc: datetime
 ) -> pd.DataFrame:
     return extract(
         db_name="monitorfish_remote",
-        query_filepath="monitorfish/pnos_to_distribute.sql",
+        query_filepath="monitorfish/pnos_to_generate.sql",
         params={
             "start_datetime_utc": start_datetime_utc,
             "end_datetime_utc": end_datetime_utc,
@@ -440,7 +440,7 @@ with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
         species_names = extract_species_names()
         fishing_gear_names = extract_fishing_gear_names()
         template = get_template()
-        pnos = extract_pnos_to_distribute(
+        pnos = extract_pnos_to_generate(
             start_datetime_utc=start_datetime_utc,
             end_datetime_utc=end_datetime_utc,
         )

@@ -29,7 +29,7 @@ context('Side Window > Prior Notification Card > Card', () => {
     cy.wait('@getIsSuperUser')
 
     // Title
-    cy.contains(`PNO < 12 M - SEGMENT(S) INCONNU(S)`).should('be.visible')
+    cy.contains(`PNO < 12 M - NWW09 (LIGNES)`).should('be.visible')
     cy.contains(`POISSON PAS NET (CFR112)`).should('be.visible')
 
     // Message Header

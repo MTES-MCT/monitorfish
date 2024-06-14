@@ -16,6 +16,6 @@ CREATE TABLE IF NOT EXISTS public.pno_segments_subscriptions (
 -- Vessels from which each control unit wants to reveive all PNOs
 CREATE TABLE IF NOT EXISTS public.pno_vessels_subscriptions (
     control_unit_id INTEGER NOT NULL,
-    cfr VARCHAR(12) NOT NULL,
-    PRIMARY KEY (control_unit_id, cfr)
+    vessel_id INTEGER NOT NULL,
+    PRIMARY KEY (control_unit_id, vessel_id)
 );

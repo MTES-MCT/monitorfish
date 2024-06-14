@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PnoType
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationType
 
 class PriorNotificationTypeDataOutput(
@@ -13,6 +14,14 @@ class PriorNotificationTypeDataOutput(
                 hasDesignatedPorts = priorNotificationType.hasDesignatedPorts,
                 minimumNotificationPeriod = priorNotificationType.minimumNotificationPeriod,
                 name = priorNotificationType.name ?: "Type de préavis inconnu",
+            )
+        }
+
+        fun fromPnoType(pnoType: PnoType): PriorNotificationTypeDataOutput {
+            return PriorNotificationTypeDataOutput(
+                hasDesignatedPorts = pnoType.hasDesignatedPorts,
+                minimumNotificationPeriod = pnoType.minimumNotificationPeriod,
+                name = pnoType.name,
             )
         }
     }

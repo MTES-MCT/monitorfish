@@ -24,7 +24,7 @@ export function Row({ row }: RowProps) {
 
   return (
     <>
-      <TableWithSelectableRows.BodyTr>
+      <TableWithSelectableRows.BodyTr data-id={row.id}>
         {row?.getVisibleCells().map(cell => (
           <ExpandableRowCell
             key={cell.id}
@@ -42,7 +42,7 @@ export function Row({ row }: RowProps) {
       </TableWithSelectableRows.BodyTr>
 
       {row.getIsExpanded() && (
-        <ExpandedRow>
+        <ExpandedRow data-id={`${row.id}-expanded`}>
           <ExpandedRowCell />
           <ExpandedRowCell>
             <p>

@@ -10,6 +10,8 @@ import type { ListFilter } from './components/PriorNotificationList/types'
 import type { PriorNotification } from './PriorNotification.types'
 import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 
+const COMPUTE_PRIOR_NOTIFICATION_ERROR_MESSAGE =
+  "Nous n'avons pas pu calculer note de risque, segments ou types pour ce préavis."
 const CREATE_PRIOR_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu créé le préavis."
 const GET_PRIOR_NOTIFICATION_DATA_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les données du préavis."
 const GET_PRIOR_NOTIFICATION_DETAIL_ERROR_MESSAGE = "Nous n'avons pas pu récupérer le préavis."
@@ -18,6 +20,19 @@ const GET_PRIOR_NOTIFICATION_TYPES_ERROR_MESSAGE = "Nous n'avons pas pu récupé
 
 export const priorNotificationApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
+    computePriorNotification: builder.mutation<
+      PriorNotification.ManualPriorNotificationComputedValues,
+      PriorNotification.ManualPriorNotificationComputeRequestData
+    >({
+      invalidatesTags: [{ type: RtkCacheTagType.PriorNotifications }],
+      query: data => ({
+        body: data,
+        method: 'POST',
+        url: `/prior_notifications/manual/compute`
+      }),
+      transformErrorResponse: response => new FrontendApiError(COMPUTE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
+    }),
+
     createPriorNotification: builder.mutation<
       PriorNotification.ManualPriorNotificationData,
       PriorNotification.NewManualPriorNotificationData
@@ -97,6 +112,7 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
 })
 
 export const {
+  useComputePriorNotificationMutation,
   useCreatePriorNotificationMutation,
   useGetPriorNotificationDataQuery,
   useGetPriorNotificationDetailQuery,

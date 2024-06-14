@@ -97,6 +97,14 @@ const FieldGroup = styled.div.attrs({ className: 'FieldGroup' })`
   flex-direction: column;
   gap: 8px;
 
+  .rs-checkbox {
+    > .rs-checkbox-checker {
+      > label {
+        line-height: 18px;
+      }
+    }
+  }
+
   textarea {
     box-sizing: border-box !important;
   }

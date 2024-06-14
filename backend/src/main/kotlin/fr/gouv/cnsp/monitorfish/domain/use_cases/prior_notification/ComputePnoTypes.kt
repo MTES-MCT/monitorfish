@@ -3,7 +3,6 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTripGear
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PnoType
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PnoTypeRule
 import fr.gouv.cnsp.monitorfish.domain.repositories.PnoTypeRepository
@@ -14,21 +13,20 @@ class ComputePnoTypes(
 ) {
     fun execute(
         catchToLand: List<LogbookFishingCatch>,
-        tripGears: List<LogbookTripGear>,
+        gearCodes: List<String>,
         flagState: CountryCode,
     ): List<PnoType> {
         require(catchToLand.all { it.faoZone != null }) {
             "All `faoZone` of catches must be given."
         }
 
-        val pnoGears = tripGears.mapNotNull { it.gear }.distinct()
         val allPnoTypes = pnoTypeRepository.findAll()
         val allPnoTypeRules = allPnoTypes.map { pnoType -> pnoType.pnoTypeRules.map { it to pnoType } }.flatten()
 
         val catchToPnoTypeRules = catchToLand.map { pnoCatch ->
             val pnoTypeRules = allPnoTypeRules
                 .map { it.first }
-                .filter { rule -> ruleAppliesToCatch(rule, pnoCatch, pnoGears) }
+                .filter { rule -> ruleAppliesToCatch(rule, pnoCatch, pnoGears = gearCodes) }
 
             return@map pnoCatch to pnoTypeRules
         }
@@ -44,7 +42,7 @@ class ComputePnoTypes(
 
             val numberOfEmptyRules = listOf(hasEmptyGears, hasEmptyFlagStates, hasEmptyRequiredCatches).count { it }
 
-            val containsGear = rule.gears.any { pnoGears.contains(it) }
+            val containsGear = rule.gears.any { gearCodes.contains(it) }
             val containsFlagState = rule.flagStates.contains(flagState)
 
             val totalCatchesWeight = allCatchesOfRule.mapNotNull { it.weight }.sum()

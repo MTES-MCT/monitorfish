@@ -1,5 +1,6 @@
 import { registerMonitorUiCustomCommands } from '@mtes-mct/monitor-ui/cypress'
 
+import { countRequestsByAlias } from './commands/countRequestsByAlias'
 import { getComputedStyle } from './commands/getComputedStyle'
 
 registerMonitorUiCustomCommands()
@@ -43,6 +44,7 @@ Cypress.Commands.add('cleanFiles', () => {
   cy.exec(`rm -f cypress/downloads/*.csv`, { failOnNonZeroExit: false })
 })
 
+Cypress.Commands.add('countRequestsByAlias', countRequestsByAlias)
 Cypress.Commands.add('getComputedStyle', getComputedStyle)
 
 // @ts-ignore

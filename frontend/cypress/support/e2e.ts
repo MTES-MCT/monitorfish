@@ -5,6 +5,7 @@
 
 import 'cypress-mouse-position/commands'
 import 'cypress-plugin-snapshots/commands'
+
 import './commands'
 import './commands/dragTo'
 import './commands/loadPath'
@@ -15,6 +16,7 @@ declare global {
       before(property: string): string
       cleanFiles(): void
       cleanScreenshots(fromNumber: number): void
+      countRequestsByAlias(alias: string, waitForInMs?: number): Cypress.Chainable<number>
       dragTo(
         selector: string,
         options?: Partial<{

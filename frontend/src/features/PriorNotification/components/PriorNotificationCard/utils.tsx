@@ -24,7 +24,7 @@ export function getFirstTitleRowText(
   )
 }
 
-export function pdfContent(
+export function getHtmlContent(
   pno: LogbookMessage.PnoLogbookMessage | undefined,
   gearsWithName: Array<LogbookMessage.Gear & { gearName: string | null }>
 ): string {

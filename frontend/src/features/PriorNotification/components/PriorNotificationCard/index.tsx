@@ -3,7 +3,7 @@ import { ErrorWall } from '@components/ErrorWall'
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { LogbookMessage } from '@features/Logbook/components/VesselLogbook/LogbookMessages/messages/LogbookMessage'
 import { HTML_STYLE } from '@features/PriorNotification/components/PriorNotificationCard/template'
-import { pdfContent } from '@features/PriorNotification/components/PriorNotificationCard/utils'
+import { getHtmlContent } from '@features/PriorNotification/components/PriorNotificationCard/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
@@ -45,7 +45,7 @@ export function PriorNotificationCard() {
   const downloadPDF = () => {
     printJS({
       documentTitle: `preavis_entree_port_debarquement_${customDayjs().utc().format('DDMMYYYY')}.pdf`,
-      printable: pdfContent(priorNotificationDetail?.logbookMessage, gearsWithName),
+      printable: getHtmlContent(priorNotificationDetail?.logbookMessage, gearsWithName),
       style: HTML_STYLE,
       type: 'raw-html'
     })

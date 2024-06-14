@@ -81,7 +81,7 @@ def current_segments() -> pd.DataFrame:
             "control_priority_level": [1.0, 1.0, 1.0, 1.0],
             "segment_highest_impact": [None, "SWW04", "SWW01/02/03", None],
             "segment_highest_priority": [None, None, None, None],
-            "vessel_id": [None, 1.0, 2.0, None],
+            "vessel_id": [None, 1.0, 2.0, 7.0],
             "external_immatriculation": [None, "RV348407", "RO237719", None],
             "ircs": [None, "LLUK", "FQ7058", None],
         }

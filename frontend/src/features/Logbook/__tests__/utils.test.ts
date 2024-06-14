@@ -122,12 +122,14 @@ describe('Logbook/utils.tsx', () => {
 
     const ANFSpecy = catches.find(specyCatch => specyCatch.species === 'ANF')
     expect(ANFSpecy).toEqual({
+      nbFish: 0,
       properties: [
         {
           conversionFactor: 1.22,
           economicZone: 'GBR',
           effortZone: 'A',
           faoZone: '27.6.a',
+          nbFish: undefined,
           packaging: 'BOX',
           presentation: 'GUT',
           preservationState: 'FRE',
@@ -139,6 +141,7 @@ describe('Logbook/utils.tsx', () => {
           economicZone: 'IRL',
           effortZone: 'A',
           faoZone: '27.6.a',
+          nbFish: undefined,
           packaging: 'BOX',
           presentation: 'GUT',
           preservationState: 'FRE',
@@ -150,6 +153,7 @@ describe('Logbook/utils.tsx', () => {
           economicZone: 'GBR',
           effortZone: 'A',
           faoZone: '27.6.a',
+          nbFish: undefined,
           packaging: 'BOX',
           presentation: 'LVR-C',
           preservationState: 'FRE',
@@ -161,6 +165,7 @@ describe('Logbook/utils.tsx', () => {
           economicZone: 'IRL',
           effortZone: 'A',
           faoZone: '27.6.a',
+          nbFish: undefined,
           packaging: 'BOX',
           presentation: 'LVR-C',
           preservationState: 'FRE',

@@ -55,7 +55,11 @@ export function PriorNotificationCard() {
           <Header onClose={close} priorNotificationDetail={priorNotificationDetail} />
 
           <Body>
-            <LogbookMessage isFirst logbookMessage={priorNotificationDetail.logbookMessage} />
+            <LogbookMessage
+              isFirst
+              isLessThanTwelveMetersVessel={priorNotificationDetail.isLessThanTwelveMetersVessel}
+              logbookMessage={priorNotificationDetail.logbookMessage}
+            />
           </Body>
 
           <Footer>

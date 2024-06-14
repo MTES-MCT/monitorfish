@@ -18,6 +18,7 @@ function getCatchPropertiesObject(logbookCatch: LogbookCatch): CatchProperty {
     economicZone: undefinedize(logbookCatch.economicZone),
     effortZone: undefinedize(logbookCatch.effortZone),
     faoZone: undefinedize(logbookCatch.faoZone),
+    nbFish: undefinedize(logbookCatch.nbFish),
     packaging: undefinedize(logbookCatch.packaging),
     presentation: undefinedize(logbookCatch.presentation),
     preservationState: undefinedize(logbookCatch.preservationState),
@@ -36,6 +37,7 @@ export function buildCatchArray(catches: LogbookCatch[]): CatchWithProperties[] 
 
       if (sameSpeciesIndex === NOT_FOUND) {
         return accumulator.concat({
+          nbFish: logbookCatch.nbFish ? logbookCatch.nbFish : 0,
           properties: [logbookCatchProperties],
           species: logbookCatch.species,
           speciesName: undefinedize(logbookCatch.speciesName),
@@ -46,6 +48,7 @@ export function buildCatchArray(catches: LogbookCatch[]): CatchWithProperties[] 
       const nextCatch = accumulator[sameSpeciesIndex] as CatchWithProperties
       nextCatch.properties = nextCatch.properties.concat(logbookCatchProperties)
       nextCatch.weight += logbookCatch.weight ?? 0
+      nextCatch.nbFish += logbookCatch.nbFish ?? 0
 
       accumulator[sameSpeciesIndex] = nextCatch
 
@@ -63,6 +66,7 @@ export function buildProtectedCatchArray(catches: ProtectedSpeciesCatch[]): Prot
 
       if (sameSpeciesIndex === NOT_FOUND) {
         return accumulator.concat({
+          nbFish: logbookCatch.nbFish ? logbookCatch.nbFish : 0,
           properties: [logbookCatch],
           species: logbookCatch.species,
           speciesName: undefinedize(logbookCatch.speciesName),
@@ -73,6 +77,7 @@ export function buildProtectedCatchArray(catches: ProtectedSpeciesCatch[]): Prot
       const nextCatch = accumulator[sameSpeciesIndex] as ProtectedCatchWithProperties
       nextCatch.properties = nextCatch.properties.concat(logbookCatch)
       nextCatch.weight += logbookCatch.weight ?? 0
+      nextCatch.nbFish += logbookCatch.nbFish ?? 0
 
       accumulator[sameSpeciesIndex] = nextCatch
 

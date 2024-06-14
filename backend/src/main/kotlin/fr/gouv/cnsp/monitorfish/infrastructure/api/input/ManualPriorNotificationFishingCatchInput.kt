@@ -14,7 +14,7 @@ data class ManualPriorNotificationFishingCatchInput(
         fun fromLogbookFishingCatch(logbookFishingCatch: LogbookFishingCatch): ManualPriorNotificationFishingCatchInput {
             return ManualPriorNotificationFishingCatchInput(
                 isIncidentalCatch = false,
-                quantity = logbookFishingCatch.numberFish,
+                quantity = logbookFishingCatch.nbFish,
                 specyCode = requireNotNull(logbookFishingCatch.species),
                 specyName = requireNotNull(logbookFishingCatch.speciesName),
                 weight = requireNotNull(logbookFishingCatch.weight),
@@ -29,7 +29,7 @@ data class ManualPriorNotificationFishingCatchInput(
             effortZone = null,
             faoZone = null,
             freshness = null,
-            numberFish = quantity,
+            nbFish = quantity,
             packaging = null,
             presentation = null,
             preservationState = null,

@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
+import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTripSegment
 
 class LogbookMessageTripSegmentDataOutput(
@@ -7,6 +8,13 @@ class LogbookMessageTripSegmentDataOutput(
     val name: String,
 ) {
     companion object {
+        fun fromFleetSegment(fleetSegment: FleetSegment): LogbookMessageTripSegmentDataOutput {
+            return LogbookMessageTripSegmentDataOutput(
+                code = fleetSegment.segment,
+                name = fleetSegment.segmentName,
+            )
+        }
+
         fun fromLogbookTripSegment(logbookTripSegment: LogbookTripSegment) =
             LogbookMessageTripSegmentDataOutput(
                 code = logbookTripSegment.code,

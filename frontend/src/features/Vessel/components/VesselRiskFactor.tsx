@@ -14,11 +14,11 @@ type VesselRiskFactorProps = Readonly<
     hasVesselRiskFactorSegments: boolean
     isInteractive?: boolean
     isVesselUnderCharter: boolean
-    vesselLastControlDate: string
+    vesselLastControlDate?: string
     vesselRiskFactor: number
-    vesselRiskFactorDetectability: number
-    vesselRiskFactorImpact: number
-    vesselRiskFactorProbability: number
+    vesselRiskFactorDetectability?: number
+    vesselRiskFactorImpact?: number
+    vesselRiskFactorProbability?: number
   }>
 >
 // https://github.com/MTES-MCT/monitorfish/issues/3043
@@ -51,7 +51,7 @@ export function VesselRiskFactor({
     : false
 
   return (
-    <Box onClick={event => event.stopPropagation()}>
+    <Box data-cy="VesselRiskFactor" onClick={event => event.stopPropagation()}>
       <Score $isInteractive={isInteractive} $value={vesselRiskFactor} onClick={toggle}>
         {vesselRiskFactor.toFixed(0)}
       </Score>

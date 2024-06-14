@@ -19,7 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
-class GetPriorNotificationsUTestsDetail {
+class GetPriorNotificationsUTests {
     @MockBean
     private lateinit var gearRepository: GearRepository
 

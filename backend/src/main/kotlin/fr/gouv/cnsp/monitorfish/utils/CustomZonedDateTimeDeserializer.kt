@@ -5,12 +5,17 @@ import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
-class ZonedDateTimeDeserializer : JsonDeserializer<ZonedDateTime>() {
+class CustomZonedDateTimeDeserializer : JsonDeserializer<CustomZonedDateTime>() {
     override fun deserialize(
         jsonParser: JsonParser,
         deserializationContext: DeserializationContext,
-    ): ZonedDateTime {
-        return ZonedDateTime.parse(jsonParser.text).withZoneSameInstant(ZoneOffset.UTC)
+    ): CustomZonedDateTime {
+        val zonedDateTime = ZonedDateTime
+            .parse(jsonParser.text, DateTimeFormatter.ISO_DATE_TIME)
+            .withZoneSameInstant(ZoneOffset.UTC)
+
+        return CustomZonedDateTime(zonedDateTime)
     }
 }

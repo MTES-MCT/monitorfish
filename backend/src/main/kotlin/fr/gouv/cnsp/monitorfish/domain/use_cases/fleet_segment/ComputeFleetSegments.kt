@@ -20,18 +20,19 @@ class ComputeFleetSegments(
 
     fun execute(
         faoAreas: List<String>,
-        gears: List<String>,
-        species: List<String>,
+        gearCodes: List<String>,
+        specyCodes: List<String>,
     ): List<FleetSegment> {
         val currentYear = ZonedDateTime.now(clock).year
         val fleetSegments = fleetSegmentRepository.findAllByYear(currentYear)
 
         val computedSegments = fleetSegments.filter { fleetSegment ->
-            val isContainingGearFromList = fleetSegment.gears.isEmpty() || fleetSegment.gears.any { gears.contains(it) }
+            val isContainingGearFromList =
+                fleetSegment.gears.isEmpty() || fleetSegment.gears.any { gearCodes.contains(it) }
             val isContainingSpecyFromList =
                 (fleetSegment.targetSpecies.isEmpty() && fleetSegment.bycatchSpecies.isEmpty()) ||
-                    fleetSegment.targetSpecies.any { species.contains(it) } ||
-                    fleetSegment.bycatchSpecies.any { species.contains(it) }
+                    fleetSegment.targetSpecies.any { specyCodes.contains(it) } ||
+                    fleetSegment.bycatchSpecies.any { specyCodes.contains(it) }
             val isContainingFaoAreaFromList = fleetSegment.faoAreas.isEmpty() || fleetSegment.faoAreas.any { faoArea ->
                 faoAreas.map { FAOArea(it) }.any { it.hasFaoCodeIncludedIn(faoArea) }
             }

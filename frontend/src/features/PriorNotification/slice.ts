@@ -2,10 +2,13 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
 import { DEFAULT_LIST_FILTER_VALUES } from './components/PriorNotificationList/constants'
 
+import type { FormValues } from './components/PriorNotificationForm/types'
 import type { ListFilter } from './components/PriorNotificationList/types'
 import type { PriorNotification } from './PriorNotification.types'
 
 interface PriorNotificationState {
+  editedPriorNotificationComputedValues: PriorNotification.ManualPriorNotificationComputedValues | undefined
+  editedPriorNotificationInitialFormValues: FormValues | undefined
   editedPriorNotificationReportId: string | undefined
   isPriorNotificationCardOpen: boolean
   isPriorNotificationFormOpen: boolean
@@ -13,6 +16,8 @@ interface PriorNotificationState {
   priorNotificationCardDetail: PriorNotification.PriorNotificationDetail | undefined
 }
 const INITIAL_STATE: PriorNotificationState = {
+  editedPriorNotificationComputedValues: undefined,
+  editedPriorNotificationInitialFormValues: undefined,
   editedPriorNotificationReportId: undefined,
   isPriorNotificationCardOpen: false,
   isPriorNotificationFormOpen: false,
@@ -30,16 +35,18 @@ const priorNotificationSlice = createSlice({
     },
 
     closePriorNotificationForm(state) {
+      state.editedPriorNotificationComputedValues = undefined
+      state.editedPriorNotificationInitialFormValues = undefined
+      state.editedPriorNotificationReportId = undefined
       state.isPriorNotificationFormOpen = false
-    },
-
-    createOrEditPriorNotification(state, action: PayloadAction<string | undefined>) {
-      state.editedPriorNotificationReportId = action.payload
-      state.isPriorNotificationFormOpen = true
     },
 
     openPriorNotificationCard(state) {
       state.isPriorNotificationCardOpen = true
+    },
+
+    openPriorNotificationForm(state) {
+      state.isPriorNotificationFormOpen = true
     },
 
     resetListFilterValues(state) {
@@ -47,6 +54,21 @@ const priorNotificationSlice = createSlice({
         ...DEFAULT_LIST_FILTER_VALUES,
         seafrontGroup: state.listFilterValues.seafrontGroup
       }
+    },
+
+    setEditedPriorNotificationComputedValues(
+      state,
+      action: PayloadAction<PriorNotification.ManualPriorNotificationComputedValues>
+    ) {
+      state.editedPriorNotificationComputedValues = action.payload
+    },
+
+    setEditedPriorNotificationInitialFormValues(state, action: PayloadAction<FormValues>) {
+      state.editedPriorNotificationInitialFormValues = action.payload
+    },
+
+    setEditedPriorNotificationReportId(state, action: PayloadAction<string>) {
+      state.editedPriorNotificationReportId = action.payload
     },
 
     setListFilterValues(state, action: PayloadAction<Partial<ListFilter>>) {
@@ -58,6 +80,14 @@ const priorNotificationSlice = createSlice({
 
     setPriorNotificationCardDetail(state, action: PayloadAction<PriorNotification.PriorNotificationDetail>) {
       state.priorNotificationCardDetail = action.payload
+    },
+
+    unsetEditedPriorNotificationComputedValues(state) {
+      state.editedPriorNotificationComputedValues = undefined
+    },
+
+    unsetEditedPriorNotificationReportId(state) {
+      state.editedPriorNotificationReportId = undefined
     }
   }
 })

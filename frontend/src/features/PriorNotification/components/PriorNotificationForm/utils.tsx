@@ -1,7 +1,13 @@
+import { pick } from 'lodash'
+
 import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES, INITIAL_FORM_VALUES } from './constants'
 
 import type { FormValues } from './types'
 import type { PriorNotification } from '../../PriorNotification.types'
+
+export function getPartialComputationRequestData(formValues: FormValues) {
+  return pick(formValues, ['faoArea', 'fishingCatches', 'portLocode', 'tripGearCodes', 'vesselId'])
+}
 
 export function getInitialFormValues(): FormValues {
   return {

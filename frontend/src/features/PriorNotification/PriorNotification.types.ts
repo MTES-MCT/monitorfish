@@ -66,6 +66,15 @@ export namespace PriorNotification {
   }
   export type NewManualPriorNotificationData = Omit<ManualPriorNotificationData, 'reportId'>
 
+  export type ManualPriorNotificationComputeRequestData = Pick<
+    ManualPriorNotificationData,
+    'faoArea' | 'fishingCatches' | 'portLocode' | 'tripGearCodes' | 'vesselId'
+  >
+  export type ManualPriorNotificationComputedValues = Pick<
+    PriorNotification,
+    'tripSegments' | 'types' | 'vesselRiskFactor'
+  >
+
   export type PriorNotificationDataFishingCatch = {
     quantity?: number | undefined
     specyCode: string
@@ -74,8 +83,8 @@ export namespace PriorNotification {
   }
 
   export type Type = {
-    hasDesignatedPorts: number
-    minimumNotificationPeriod: string
+    hasDesignatedPorts: boolean
+    minimumNotificationPeriod: number
     name: string
   }
 

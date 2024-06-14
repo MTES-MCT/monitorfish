@@ -20,7 +20,7 @@ export const addSideWindowPriorNotification = () => {
   }
 }
 
-export const editSideWindowPriorNotification = (vesselName: string) => {
+export const editSideWindowPriorNotification = (vesselName: string, reportId: string) => {
   cy.viewport(1920, 1080)
   cy.visit('/side_window')
   cy.wait(500)
@@ -37,7 +37,8 @@ export const editSideWindowPriorNotification = (vesselName: string) => {
   cy.get('[data-cy="side-window-sub-menu-ALL"]').click()
   cy.fill('Rechercher un navire', vesselName)
 
-  cy.clickButton('Éditer le préavis')
+  // TODO Allow for `string` type in monitor-ui.
+  cy.getTableRowById(reportId as any).clickButton('Éditer le préavis')
   if (document.querySelector('[data-cy="first-loader"]')) {
     cy.getDataCy('first-loader').should('not.be.visible')
   }

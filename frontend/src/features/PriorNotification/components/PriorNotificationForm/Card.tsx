@@ -1,13 +1,20 @@
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
-import { Accent, Button } from '@mtes-mct/monitor-ui'
+import { updateEditedPriorNotificationComputedValues } from '@features/PriorNotification/useCases/updateEditedPriorNotificationComputedValues'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { Accent, Button, FormikEffect, usePrevious } from '@mtes-mct/monitor-ui'
+import { getDefinedObject } from '@utils/getDefinedObject'
 import { useFormikContext } from 'formik'
+import { isEqual } from 'lodash'
 import styled from 'styled-components'
+import { useDebouncedCallback } from 'use-debounce'
 
 import { Form } from './Form'
 import { Header } from './Header'
 import { TagBar } from './TagBar'
+import { getPartialComputationRequestData } from './utils'
 
 import type { FormValues } from './types'
+import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
 type CardProps = Readonly<{
   isValidatingOnChange: boolean
@@ -17,6 +24,9 @@ type CardProps = Readonly<{
 }>
 export function Card({ isValidatingOnChange, onClose, onSubmit, reportId }: CardProps) {
   const { isValid, submitForm, values } = useFormikContext<FormValues>()
+  const dispatch = useMainAppDispatch()
+
+  const previousPartialComputationRequestData = usePrevious(getPartialComputationRequestData(values))
 
   const handleSubmit = () => {
     onSubmit()
@@ -24,8 +34,41 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, reportId }: Card
     submitForm()
   }
 
+  const updateComputedValues = useDebouncedCallback(
+    (nextComputationRequestData: PriorNotification.ManualPriorNotificationComputeRequestData) => {
+      dispatch(updateEditedPriorNotificationComputedValues(nextComputationRequestData))
+    },
+    1000
+  )
+
+  // We need to check for equality outside the debounce to ensure `nextFormValues` is up-to-date.
+  const updateComputedValuesIfMecessary = (nextFormValues: FormValues) => {
+    const nextPartialComputationRequestData = getPartialComputationRequestData(nextFormValues)
+    if (
+      !previousPartialComputationRequestData ||
+      isEqual(nextPartialComputationRequestData, previousPartialComputationRequestData)
+    ) {
+      return
+    }
+
+    const nextComputationRequestData = getDefinedObject(nextPartialComputationRequestData, [
+      'faoArea',
+      'fishingCatches',
+      'portLocode',
+      'tripGearCodes',
+      'vesselId'
+    ])
+    if (!nextComputationRequestData) {
+      return
+    }
+
+    updateComputedValues(nextComputationRequestData)
+  }
+
   return (
     <Wrapper>
+      <FormikEffect onChange={updateComputedValuesIfMecessary as any} />
+
       <FrontendErrorBoundary>
         <Header isNewPriorNotification={!reportId} onClose={onClose} vesselId={values.vesselId} />
 

@@ -13,6 +13,9 @@ package fr.gouv.cnsp.monitorfish.domain.exceptions
  * **Don't forget to mirror any update here in the corresponding Frontend enum.**
  */
 enum class BackendUsageErrorCode {
+    /** Thrown when a related resource is found but has missing required props. */
+    MISSING_PROPS_ON_RELATED_RESOURCE,
+
     /** Thrown when a resource is expected to exist but doesn't. */
     NOT_FOUND,
 }

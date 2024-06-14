@@ -36,6 +36,7 @@ class PnoToRender:
     operation_type: str
     report_id: str
     report_datetime_utc: datetime
+    vessel_id: str
     cfr: str
     ircs: str
     external_identification: str
@@ -58,6 +59,8 @@ class PnoToRender:
     last_control_gear_infractions: List[dict]
     last_control_species_infractions: List[dict]
     last_control_other_infractions: List[dict]
+    is_verified: bool
+    is_being_sent: bool
     source: PnoSource
 
     def __post_init__(self):
@@ -88,6 +91,10 @@ class PnoToRender:
             if pd.isna(getattr(self, att)):
                 setattr(self, att, None)
 
+        if not isinstance(self.source, PnoSource):
+            assert isinstance(self.source, str)
+            self.source = PnoSource(self.source)
+
 
 @dataclass(kw_only=True)
 class PreRenderedPno:
@@ -97,6 +104,7 @@ class PreRenderedPno:
     operation_type: str
     report_id: str
     report_datetime_utc: datetime
+    vessel_id: str
     cfr: str
     ircs: str
     external_identification: str
@@ -119,6 +127,8 @@ class PreRenderedPno:
     last_control_gear_infractions: List[Infraction]
     last_control_species_infractions: List[Infraction]
     last_control_other_infractions: List[Infraction]
+    is_verified: bool
+    is_being_sent: bool
     source: PnoSource
 
     @staticmethod
@@ -191,6 +201,12 @@ class ReturnToPortPurpose(Enum):
 @dataclass
 class PnoHtmlDocument:
     report_id: str
+    vessel_id: int
+    cfr: str
+    is_verified: bool
+    is_being_sent: bool
+    trip_segments: list
+    port_locode: str
     source: PnoSource
     html: str
 
@@ -198,6 +214,12 @@ class PnoHtmlDocument:
 @dataclass
 class PnoPdfDocument:
     report_id: str
+    vessel_id: int
+    cfr: str
+    is_verified: bool
+    is_being_sent: bool
+    trip_segments: list
+    port_locode: str
     source: PnoSource
     generation_datetime_utc: datetime
     pdf_document: bytes

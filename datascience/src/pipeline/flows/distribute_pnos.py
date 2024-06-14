@@ -1,3 +1,4 @@
+import dataclasses
 import os
 from datetime import datetime
 from pathlib import Path
@@ -26,7 +27,6 @@ from src.pipeline.entities.pnos import (
     PnoCatch,
     PnoHtmlDocument,
     PnoPdfDocument,
-    PnoSource,
     PnoToRender,
     PreRenderedPno,
     ReturnToPortPurpose,
@@ -94,7 +94,7 @@ def extract_pno_units_ports_and_segments_subscriptions() -> pd.DataFrame:
 @task(checkpoint=False)
 def to_pnos_to_render(pnos: pd.DataFrame) -> List[PnoToRender]:
     records = pnos.to_dict(orient="records")
-    return [PnoToRender(**record, source=PnoSource.LOGBOOK) for record in records]
+    return [PnoToRender(**record) for record in records]
 
 
 @task(checkpoint=False)
@@ -218,6 +218,7 @@ def pre_render_pno(
         operation_type=pno.operation_type,
         report_id=pno.report_id,
         report_datetime_utc=pno.report_datetime_utc,
+        vessel_id=pno.vessel_id,
         cfr=pno.cfr,
         ircs=pno.ircs,
         external_identification=pno.external_identification,
@@ -240,6 +241,8 @@ def pre_render_pno(
         last_control_gear_infractions=last_control_gear_infractions,
         last_control_species_infractions=last_control_species_infractions,
         last_control_other_infractions=last_control_other_infractions,
+        is_verified=pno.is_verified,
+        is_being_sent=pno.is_being_sent,
         source=pno.source,
     )
 
@@ -351,7 +354,17 @@ def render_pno(pno: PreRenderedPno, template: Template) -> PnoHtmlDocument:
         last_control_other_infractions=pno.last_control_other_infractions,
     )
 
-    return PnoHtmlDocument(report_id=pno.report_id, source=pno.source, html=html)
+    return PnoHtmlDocument(
+        report_id=pno.report_id,
+        vessel_id=pno.vessel_id,
+        cfr=pno.cfr,
+        is_verified=pno.is_verified,
+        is_being_sent=pno.is_being_sent,
+        trip_segments=pno.trip_segments,
+        port_locode=pno.port_locode,
+        source=pno.source,
+        html=html,
+    )
 
 
 @task(checkpoint=False)
@@ -362,6 +375,12 @@ def print_html_to_pdf(html_document: PnoHtmlDocument) -> PnoPdfDocument:
     pdf = resize_pdf_to_A4(pdf)
     return PnoPdfDocument(
         report_id=html_document.report_id,
+        vessel_id=html_document.vessel_id,
+        cfr=html_document.cfr,
+        is_verified=html_document.is_verified,
+        is_being_sent=html_document.is_being_sent,
+        trip_segments=html_document.trip_segments,
+        port_locode=html_document.port_locode,
         source=html_document.source,
         generation_datetime_utc=datetime.utcnow(),
         pdf_document=pdf,
@@ -369,10 +388,25 @@ def print_html_to_pdf(html_document: PnoHtmlDocument) -> PnoPdfDocument:
 
 
 @task(checkpoint=False)
-def load_pno_pdf_documents(pno_pdf_documents: List[PnoPdfDocument]):
+def load_pno_pdf_documents(
+    pno_pdf_documents: List[PnoPdfDocument],
+) -> List[PnoPdfDocument]:
+    """
+    Loads input pno_pdf_documents to `prior_notification_pdf_documents` and returns
+    the subset of the input that must be distributed, i.e. the list of `PnoPdfDocument`
+    on which `is_being_sent` is `True`.
+
+    Args:
+        pno_pdf_documents (List[PnoPdfDocument]): PnoPdfDocuments to load
+
+    Returns:
+        List[PnoPdfDocument]: subset of input having `is_being_sent` equal to `True`.
+    """
     logger = prefect.context.get("logger")
 
-    df = pd.DataFrame(pno_pdf_documents)
+    df = pd.DataFrame(pno_pdf_documents)[
+        ["report_id", "source", "generation_datetime_utc", "pdf_document"]
+    ]
 
     load(
         df,
@@ -386,6 +420,10 @@ def load_pno_pdf_documents(pno_pdf_documents: List[PnoPdfDocument]):
         enum_columns=["source"],
         bytea_columns=["pdf_document"],
     )
+
+    return [
+        dataclasses.replace(d) for d in pno_pdf_documents if d.is_being_sent == True
+    ]
 
 
 with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:

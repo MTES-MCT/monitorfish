@@ -24,6 +24,7 @@ SELECT
     r.operation_type,
     r.report_id,
     r.report_datetime_utc,
+    v.id as vessel_id,
     r.cfr,
     r.ircs,
     r.external_identification,
@@ -45,7 +46,10 @@ SELECT
     COALESCE(rf.last_control_logbook_infractions, '[]') AS last_control_logbook_infractions,
     COALESCE(rf.last_control_gear_infractions, '[]') AS last_control_gear_infractions,
     COALESCE(rf.last_control_species_infractions, '[]') AS last_control_species_infractions,
-    COALESCE(rf.last_control_other_infractions, '[]') AS last_control_other_infractions
+    COALESCE(rf.last_control_other_infractions, '[]') AS last_control_other_infractions,
+    (value->>'isVerified')::BOOLEAN AS is_verified,
+    (value->>'isBeingSent')::BOOLEAN AS is_being_sent,
+    'LOGBOOK' AS source
 FROM logbook_reports r
 LEFT JOIN vessels v
 ON v.cfr = r.cfr

@@ -87,6 +87,7 @@ def extracted_pnos() -> pd.DataFrame:
                 now - relativedelta(months=1, minutes=54),
                 now - relativedelta(months=1, minutes=34),
             ],
+            "vessel_id": [2, None, 1, 1, 7],
             "cfr": [
                 "ABC000542519",
                 "ABC000000000",
@@ -399,6 +400,9 @@ def extracted_pnos() -> pd.DataFrame:
                 [],
                 [],
             ],
+            "is_verified": [True, True, False, False, False],
+            "is_being_sent": [True, True, False, True, True],
+            "source": ["LOGBOOK", "LOGBOOK", "LOGBOOK", "LOGBOOK", "LOGBOOK"],
         }
     )
 
@@ -412,6 +416,7 @@ def pno_to_render_1() -> PnoToRender:
         operation_type="DAT",
         report_id="11",
         report_datetime_utc=datetime(2024, 5, 5, 8, 11, 38, 259967),
+        vessel_id=2,
         cfr="ABC000542519",
         ircs="FQ7058",
         external_identification="RO237719",
@@ -506,6 +511,8 @@ def pno_to_render_1() -> PnoToRender:
             {"natinf": 4761},
             {"natinf": 22206},
         ],
+        is_verified=False,
+        is_being_sent=True,
         source=PnoSource.LOGBOOK,
     )
 
@@ -543,6 +550,7 @@ def pre_rendered_pno_1(pre_rendered_pno_1_catch_onboard) -> PreRenderedPno:
         operation_type="DAT",
         report_id="11",
         report_datetime_utc=datetime(2024, 5, 5, 8, 11, 38, 259967),
+        vessel_id=2,
         cfr="ABC000542519",
         ircs="FQ7058",
         external_identification="RO237719",
@@ -577,6 +585,8 @@ def pre_rendered_pno_1(pre_rendered_pno_1_catch_onboard) -> PreRenderedPno:
             Infraction(natinf=4761, comments=None),
             Infraction(natinf=22206, comments=None),
         ],
+        is_verified=False,
+        is_being_sent=True,
         source=PnoSource.LOGBOOK,
     )
 
@@ -590,6 +600,7 @@ def pno_to_render_2() -> PnoToRender:
         operation_type="DAT",
         report_id="12",
         report_datetime_utc=datetime(2024, 5, 5, 8, 46, 38, 259967),
+        vessel_id=52,
         cfr="ABC000000000",
         ircs="ABCD",
         external_identification="LEB@T0",
@@ -612,6 +623,8 @@ def pno_to_render_2() -> PnoToRender:
         last_control_gear_infractions=[],
         last_control_species_infractions=[],
         last_control_other_infractions=[],
+        is_verified=True,
+        is_being_sent=True,
         source=PnoSource.LOGBOOK,
     )
 
@@ -625,6 +638,7 @@ def pre_rendered_pno_2() -> PreRenderedPno:
         operation_type="DAT",
         report_id="12",
         report_datetime_utc=datetime(2024, 5, 5, 8, 46, 38, 259967),
+        vessel_id=52,
         cfr="ABC000000000",
         ircs="ABCD",
         external_identification="LEB@T0",
@@ -647,6 +661,8 @@ def pre_rendered_pno_2() -> PreRenderedPno:
         last_control_gear_infractions=[],
         last_control_species_infractions=[],
         last_control_other_infractions=[],
+        is_verified=True,
+        is_being_sent=True,
         source=PnoSource.LOGBOOK,
     )
 
@@ -901,13 +917,21 @@ def test_load_pno_pdf_documents(reset_test_data):
 
     pno_pdf_documents = []
 
-    for fp, report_id in zip(test_filepaths, ["existing-report-id", "new-report-id"]):
+    for fp, report_id, is_being_sent in zip(
+        test_filepaths, ["existing-report-id", "new-report-id"], [True, False]
+    ):
         with open(fp, "rb") as f:
             pdf = f.read()
 
         pno_pdf_documents.append(
             PnoPdfDocument(
                 report_id=report_id,
+                vessel_id=66,
+                cfr="XXX999999999",
+                is_verified=True,
+                is_being_sent=is_being_sent,
+                trip_segments=[],
+                port_locode="FRBOL",
                 source=PnoSource.LOGBOOK,
                 generation_datetime_utc=datetime(2020, 5, 6, 8, 52, 42),
                 pdf_document=pdf,
@@ -923,7 +947,7 @@ def test_load_pno_pdf_documents(reset_test_data):
     initial_pdfs = read_query(query, db="monitorfish_remote")
 
     ### Run ###
-    load_pno_pdf_documents.run(pno_pdf_documents)
+    pno_pdf_documents_being_sent = load_pno_pdf_documents.run(pno_pdf_documents)
 
     ### Asserts ###
     final_pdfs = read_query(query, db="monitorfish_remote")
@@ -971,6 +995,10 @@ def test_load_pno_pdf_documents(reset_test_data):
         .tobytes()
         == pno_pdf_documents[1].pdf_document
     )
+
+    assert isinstance(pno_pdf_documents_being_sent, list)
+    assert len(pno_pdf_documents_being_sent) == 1
+    assert pno_pdf_documents_being_sent[0] == pno_pdf_documents[0]
 
 
 # def test_flow(reset_test_data):

@@ -20,6 +20,7 @@
                 "value:jsonb": {
                     "catchOnboard": [
                         {
+                            "faoZone": "21.1.A",
                             "weight": 72.0,
                             "nbFish": null,
                             "species": "SOS"
@@ -27,12 +28,13 @@
                     ],
                     "catchToLand": [
                         {
+                            "faoZone": "21.1.A",
                             "weight": 72.0,
                             "nbFish": null,
                             "species": "SOS"
                         }
                     ],
-                    "faoZone": "21.1.A",
+                    "faoZone": null,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type A",
@@ -74,26 +76,31 @@
                     // Unsorted on purpose
                     "catchOnboard": [
                         {
+                            "faoZone": "21.1.B",
                             "weight": 300.0,
                             "nbFish": 10,
                             "species": "BF1"
                         },
                         {
+                            "faoZone": "21.1.B",
                             "weight": 100.0,
                             "nbFish": 20,
                             "species": "BF3"
                         },
                         {
+                            "faoZone": "21.1.B",
                             "weight": 400.0,
                             "nbFish": 80,
                             "species": "SWO"
                         },
                         {
+                            "faoZone": "21.1.B",
                             "weight": 600.0,
                             "nbFish": null,
                             "species": "BFT"
                         },
                         {
+                            "faoZone": "21.1.B",
                             "weight": 200.0,
                             "nbFish": 25,
                             "species": "BF2"
@@ -101,32 +108,37 @@
                     ],
                     "catchToLand": [
                         {
+                            "faoZone": "21.1.B",
                             "weight": 600.0,
                             "nbFish": null,
                             "species": "BFT"
                         },
                         {
+                            "faoZone": "21.1.B",
                             "weight": 300.0,
                             "nbFish": 10,
                             "species": "BF1"
                         },
                         {
+                            "faoZone": "21.1.B",
                             "weight": 200.0,
                             "nbFish": 25,
                             "species": "BF2"
                         },
                         {
+                            "faoZone": "21.1.B",
                             "weight": 100.0,
                             "nbFish": 20,
                             "species": "BF3"
                         },
                         {
+                            "faoZone": "21.1.B",
                             "weight": 400.0,
                             "nbFish": 80,
                             "species": "SWO"
                         }
                     ],
-                    "faoZone": "21.1.B",
+                    "faoZone": null,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type B",
@@ -172,6 +184,7 @@
                 "value:jsonb": {
                     "catchOnboard": [
                         {
+                            "faoZone": "21.1.C",
                             "weight": 0,
                             "nbFish": null,
                             "species": "BIB"
@@ -179,12 +192,13 @@
                     ],
                     "catchToLand": [
                         {
+                            "faoZone": "21.1.C",
                             "weight": 0,
                             "nbFish": null,
                             "species": "BIB"
                         }
                     ],
-                    "faoZone": "21.1.C",
+                    "faoZone": null,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type E",
@@ -218,6 +232,7 @@
                 "value:jsonb": {
                     "catchOnboard": [
                         {
+                            "faoZone": "21.1.C",
                             "weight": 0,
                             "nbFish": null,
                             "species": "BIB"
@@ -225,12 +240,13 @@
                     ],
                     "catchToLand": [
                         {
+                            "faoZone": "21.1.C",
                             "weight": 0,
                             "nbFish": null,
                             "species": "BIB"
                         }
                     ],
-                    "faoZone": "21.1.C",
+                    "faoZone": null,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type F",
@@ -264,6 +280,7 @@
                 "value:jsonb": {
                     "catchOnboard": [
                         {
+                            "faoZone": "21.1.C",
                             "weight": 24.3,
                             "nbFish": null,
                             "species": "ALV"
@@ -271,12 +288,13 @@
                     ],
                     "catchToLand": [
                         {
+                            "faoZone": "21.1.C",
                             "weight": 24.3,
                             "nbFish": null,
                             "species": "ALV"
                         }
                     ],
-                    "faoZone": "21.1.C",
+                    "faoZone": null,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type C",
@@ -312,6 +330,7 @@
                 "value:jsonb": {
                     "catchOnboard": [
                         {
+                            "faoZone": "21.1.C",
                             "weight": 0,
                             "nbFish": null,
                             "species": "AGS"
@@ -319,12 +338,13 @@
                     ],
                     "catchToLand": [
                         {
+                            "faoZone": "21.1.C",
                             "weight": 0,
                             "nbFish": null,
                             "species": "AGS"
                         }
                     ],
-                    "faoZone": "21.1.C",
+                    "faoZone": null,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type C",

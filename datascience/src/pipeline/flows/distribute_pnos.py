@@ -426,6 +426,64 @@ def load_pno_pdf_documents(
     ]
 
 
+@task(checkpoint=False)
+def attribute_addressees(
+    pno_to_distribute: PnoPdfDocument,
+    units_targeting_vessels: pd.DataFrame,
+    units_ports_and_segments_subscriptions: pd.DataFrame,
+):
+    if pno_to_distribute.vessel_id in units_targeting_vessels.vessel_id.values:
+        units_targeting_vessel = set(
+            units_targeting_vessels.loc[
+                units_targeting_vessels.vessel_id == pno_to_distribute.vessel_id,
+                "control_unit_ids_targeting_vessel",
+            ].values[0]
+        )
+    else:
+        units_targeting_vessel = set()
+
+    if pno_to_distribute.is_verified:
+        units_subscribed_to_port = set(
+            units_ports_and_segments_subscriptions.loc[
+                (
+                    units_ports_and_segments_subscriptions.port_locode
+                    == pno_to_distribute.port_locode
+                ),
+                "control_unit_id",
+            ].values
+        )
+
+    else:
+        pno_segments = [s.code for s in pno_to_distribute.trip_segments]
+
+        units_subscribed_to_port = set(
+            units_ports_and_segments_subscriptions.loc[
+                (
+                    (
+                        units_ports_and_segments_subscriptions.port_locode
+                        == pno_to_distribute.port_locode
+                    )
+                    & (
+                        units_ports_and_segments_subscriptions.receive_all_pnos_from_port
+                        | (
+                            units_ports_and_segments_subscriptions.unit_subscribed_segments.map(
+                                set
+                            ).map(
+                                lambda s: not s.isdisjoint(pno_segments)
+                            )
+                        )
+                    )
+                ),
+                "control_unit_id",
+            ].values
+        )
+
+    return dataclasses.replace(
+        pno_to_distribute,
+        control_unit_ids=units_subscribed_to_port.union(units_targeting_vessel),
+    )
+
+
 with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
@@ -444,6 +502,10 @@ with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
             start_datetime_utc=start_datetime_utc,
             end_datetime_utc=end_datetime_utc,
         )
+        units_targeting_vessels = extract_pno_units_targeting_vessels()
+        units_ports_and_segments_subscriptions = (
+            extract_pno_units_ports_and_segments_subscriptions()
+        )
 
         pnos = to_pnos_to_render(pnos)
         pnos = pre_render_pno.map(
@@ -453,7 +515,12 @@ with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
         )
         html_documents = render_pno.map(pnos, template=unmapped(template))
         pno_pdf_documents = print_html_to_pdf.map(html_documents)
-        load_pno_pdf_documents(pno_pdf_documents)
+        pnos_to_distribute = load_pno_pdf_documents(pno_pdf_documents)
+        pnos_with_unit_ids = attribute_addressees.map(
+            pnos_to_distribute,
+            unmapped(units_targeting_vessels),
+            unmapped(units_ports_and_segments_subscriptions),
+        )
 
 
 flow.file_name = Path(__file__).name

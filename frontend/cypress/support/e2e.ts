@@ -5,6 +5,7 @@
 
 import 'cypress-mouse-position/commands'
 import 'cypress-plugin-snapshots/commands'
+
 import './commands'
 import './commands/dragTo'
 import './commands/loadPath'

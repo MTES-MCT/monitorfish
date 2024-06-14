@@ -1,4 +1,4 @@
-import { priorNotificationActions } from '@features/PriorNotification/slice'
+import { openPriorNotificationForm } from '@features/PriorNotification/useCases/openPriorNotificationForm'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import { VesselIdentifier, type VesselIdentity } from 'domain/entities/vessel/types'
@@ -17,8 +17,8 @@ export function ButtonsGroupRow({ priorNotification }: ButtonsGroupRowProps) {
   const isSuperUser = useIsSuperUser()
   const dispatch = useMainAppDispatch()
 
-  const editPriorNotification = (reportId: string) => {
-    dispatch(priorNotificationActions.createOrEditPriorNotification(reportId))
+  const editPriorNotification = (reportId: string, fingerprint: string) => {
+    dispatch(openPriorNotificationForm(reportId, fingerprint))
   }
 
   const openPriorNotificationDetail = () => {
@@ -56,7 +56,7 @@ export function ButtonsGroupRow({ priorNotification }: ButtonsGroupRowProps) {
         <IconButton
           accent={Accent.TERTIARY}
           Icon={Icon.Edit}
-          onClick={() => editPriorNotification(priorNotification.id)}
+          onClick={() => editPriorNotification(priorNotification.id, priorNotification.fingerprint)}
           title="Éditer le préavis"
           withUnpropagatedClick
         />

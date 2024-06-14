@@ -6,21 +6,23 @@ import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
 import { Formik } from 'formik'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
 
 import { Card } from './Card'
 import { FORM_VALIDATION_SCHEMA } from './constants'
-import { getInitialFormValues } from './utils'
 
 import type { FormValues } from './types'
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
 export function PriorNotificationForm() {
-  const formInitialValuesRef = useRef(getInitialFormValues())
+  const initialFormValuesRef = useRef<FormValues | undefined>()
 
   const dispatch = useMainAppDispatch()
+  const editedPriorNotificationInitialFormValues = useMainAppSelector(
+    state => state.priorNotification.editedPriorNotificationInitialFormValues
+  )
   const editedPriorNotificationReportId = useMainAppSelector(
     state => state.priorNotification.editedPriorNotificationReportId
   )
@@ -32,84 +34,63 @@ export function PriorNotificationForm() {
     dispatch(priorNotificationActions.closePriorNotificationForm())
   }
 
-  const fetchEditedPriorNotificationData = useCallback(
-    async (reportId: string) => {
-      const editedPriorNotificationData = await dispatch(
-        priorNotificationApi.endpoints.getPriorNotificationData.initiate(reportId)
-      ).unwrap()
-
-      formInitialValuesRef.current = {
-        ...editedPriorNotificationData,
-        isExpectedLandingDateSameAsExpectedArrivalDate:
-          editedPriorNotificationData.expectedLandingDate === editedPriorNotificationData.expectedArrivalDate
-      }
-
-      setIsLoading(false)
-    },
-    [dispatch]
-  )
-
   // TODO Replace that with a use case dispatcher.
-  const submit = useCallback(
-    async (nextFormValues: FormValues) => {
-      // We don't want to lose the initial values if there is an error.
-      formInitialValuesRef.current = nextFormValues
+  const submit = async (nextFormValues: FormValues) => {
+    // We don't want to lose the initial values if there is an error.
+    initialFormValuesRef.current = nextFormValues
+    setIsLoading(true)
 
-      setIsLoading(true)
+    const { isExpectedLandingDateSameAsExpectedArrivalDate, ...priorNotificationData } = nextFormValues
+    const newOrNextPriorNotificationData = {
+      ...priorNotificationData,
+      expectedLandingDate: isExpectedLandingDateSameAsExpectedArrivalDate
+        ? priorNotificationData.expectedArrivalDate
+        : priorNotificationData.expectedLandingDate
+    } as PriorNotification.NewManualPriorNotificationData
 
-      const { isExpectedLandingDateSameAsExpectedArrivalDate, ...priorNotificationData } = nextFormValues
-      const newOrNextPriorNotificationData = {
-        ...priorNotificationData,
-        expectedLandingDate: isExpectedLandingDateSameAsExpectedArrivalDate
-          ? priorNotificationData.expectedArrivalDate
-          : priorNotificationData.expectedLandingDate
-      } as PriorNotification.NewManualPriorNotificationData
-
-      try {
-        if (!editedPriorNotificationReportId) {
-          const createdPriorNotificationData = await dispatch(
-            priorNotificationApi.endpoints.createPriorNotification.initiate(newOrNextPriorNotificationData)
-          ).unwrap()
-
-          dispatch(priorNotificationActions.createOrEditPriorNotification(createdPriorNotificationData.reportId))
-        } else {
-          const updatedPriorNotificationData = await dispatch(
-            priorNotificationApi.endpoints.updatePriorNotification.initiate({
-              data: newOrNextPriorNotificationData,
-              reportId: editedPriorNotificationReportId
-            })
-          ).unwrap()
-
-          formInitialValuesRef.current = {
-            ...updatedPriorNotificationData,
-            isExpectedLandingDateSameAsExpectedArrivalDate:
-              updatedPriorNotificationData.expectedLandingDate === updatedPriorNotificationData.expectedArrivalDate
-          }
-
-          setIsLoading(false)
-        }
-      } catch (err) {
-        if (err instanceof FrontendApiError) {
-          dispatch(displayOrLogError(err, undefined, true, DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR))
-        }
+    try {
+      let updatedPriorNotificationData: PriorNotification.ManualPriorNotificationData
+      if (!editedPriorNotificationReportId) {
+        updatedPriorNotificationData = await dispatch(
+          priorNotificationApi.endpoints.createPriorNotification.initiate(newOrNextPriorNotificationData)
+        ).unwrap()
+      } else {
+        updatedPriorNotificationData = await dispatch(
+          priorNotificationApi.endpoints.updatePriorNotification.initiate({
+            data: newOrNextPriorNotificationData,
+            reportId: editedPriorNotificationReportId
+          })
+        ).unwrap()
       }
-    },
-    [dispatch, editedPriorNotificationReportId]
-  )
+
+      dispatch(priorNotificationActions.setEditedPriorNotificationReportId(updatedPriorNotificationData.reportId))
+      dispatch(
+        priorNotificationActions.setEditedPriorNotificationInitialFormValues({
+          ...updatedPriorNotificationData,
+          isExpectedLandingDateSameAsExpectedArrivalDate:
+            updatedPriorNotificationData.expectedLandingDate === updatedPriorNotificationData.expectedArrivalDate
+        })
+      )
+    } catch (err) {
+      if (err instanceof FrontendApiError) {
+        dispatch(displayOrLogError(err, undefined, true, DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR))
+      }
+    }
+  }
 
   useEffect(() => {
-    if (!editedPriorNotificationReportId) {
-      setIsLoading(false)
-
+    if (!editedPriorNotificationInitialFormValues) {
       return
     }
 
-    fetchEditedPriorNotificationData(editedPriorNotificationReportId)
-  }, [editedPriorNotificationReportId, fetchEditedPriorNotificationData])
+    initialFormValuesRef.current = editedPriorNotificationInitialFormValues
 
-  if (isLoading) {
+    setIsLoading(false)
+  }, [editedPriorNotificationInitialFormValues])
+
+  if (!initialFormValuesRef.current || isLoading) {
     return (
-      <Wrapper>
+      <Wrapper className="Form">
         <Background onClick={close} />
 
         <LoadingCard>
@@ -124,7 +105,7 @@ export function PriorNotificationForm() {
       <Background onClick={close} />
 
       <Formik
-        initialValues={formInitialValuesRef.current}
+        initialValues={initialFormValuesRef.current}
         onSubmit={submit}
         validateOnChange={shouldValidateOnChange}
         validationSchema={FORM_VALIDATION_SCHEMA}

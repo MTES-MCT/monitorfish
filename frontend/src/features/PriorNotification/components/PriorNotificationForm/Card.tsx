@@ -44,11 +44,20 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, reportId }: Card
   // We need to check for equality outside the debounce to ensure `nextFormValues` is up-to-date.
   const updateComputedValuesIfMecessary = (nextFormValues: FormValues) => {
     const nextPartialComputationRequestData = getPartialComputationRequestData(nextFormValues)
-    if (isEqual(nextPartialComputationRequestData, previousPartialComputationRequestData)) {
+    if (
+      !previousPartialComputationRequestData ||
+      isEqual(nextPartialComputationRequestData, previousPartialComputationRequestData)
+    ) {
       return
     }
 
-    const nextComputationRequestData = getDefinedObject(nextPartialComputationRequestData)
+    const nextComputationRequestData = getDefinedObject(nextPartialComputationRequestData, [
+      'faoArea',
+      'fishingCatches',
+      'portLocode',
+      'tripGearCodes',
+      'vesselId'
+    ])
     if (!nextComputationRequestData) {
       return
     }

@@ -2,6 +2,7 @@ import { BackendApi } from '@api/BackendApi.types'
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS, RtkCacheTagType } from '@api/constants'
 import { ErrorWall } from '@components/ErrorWall'
 import { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
+import { openPriorNotificationForm } from '@features/PriorNotification/useCases/openPriorNotificationForm'
 import { Body } from '@features/SideWindow/components/Body'
 import { Header } from '@features/SideWindow/components/Header'
 import { Page } from '@features/SideWindow/components/Page'
@@ -137,7 +138,7 @@ export function PriorNotificationList() {
                 <Button
                   accent={Accent.PRIMARY}
                   Icon={Icon.Plus}
-                  onClick={() => dispatch(priorNotificationActions.createOrEditPriorNotification())}
+                  onClick={() => dispatch(openPriorNotificationForm(undefined))}
                   size={Size.SMALL}
                 >
                   Ajouter un préavis

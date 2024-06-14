@@ -83,8 +83,8 @@ export namespace PriorNotification {
   }
 
   export type Type = {
-    hasDesignatedPorts: number
-    minimumNotificationPeriod: string
+    hasDesignatedPorts: boolean
+    minimumNotificationPeriod: number
     name: string
   }
 

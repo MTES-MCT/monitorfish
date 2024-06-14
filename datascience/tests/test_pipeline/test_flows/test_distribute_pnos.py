@@ -1,3 +1,4 @@
+import dataclasses
 import io
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -21,6 +22,7 @@ from src.pipeline.entities.pnos import (
     PreRenderedPno,
 )
 from src.pipeline.flows.distribute_pnos import (
+    attribute_addressees,
     extract_fishing_gear_names,
     extract_pno_units_ports_and_segments_subscriptions,
     extract_pno_units_targeting_vessels,
@@ -668,6 +670,77 @@ def pre_rendered_pno_2() -> PreRenderedPno:
 
 
 @pytest.fixture
+def pno_pdf_document_to_distribute_targeted_vessel_and_segments() -> PnoPdfDocument:
+    return PnoPdfDocument(
+        report_id="123-abc",
+        vessel_id=4,
+        cfr=None,
+        is_verified=False,
+        is_being_sent=True,
+        trip_segments=[
+            FleetSegment("NWW01", "Chalutiers"),
+            FleetSegment("NWW02", "Autres"),
+        ],
+        port_locode="FRZJZ",
+        source=PnoSource.MANUAL,
+        generation_datetime_utc=datetime(2023, 5, 6, 23, 52, 0),
+        pdf_document=b"PDF Document",
+        control_unit_ids=None,
+    )
+
+
+@pytest.fixture
+def pno_pdf_document_to_distribute_receive_all_pnos_from_port() -> PnoPdfDocument:
+    return PnoPdfDocument(
+        report_id="456-def",
+        vessel_id=1,
+        cfr="ABC000306959",
+        is_verified=False,
+        is_being_sent=True,
+        trip_segments=[],
+        port_locode="FRDPE",
+        source=PnoSource.MANUAL,
+        generation_datetime_utc=datetime(2023, 6, 6, 23, 50, 0),
+        pdf_document=b"PDF Document",
+        control_unit_ids=None,
+    )
+
+
+@pytest.fixture
+def pno_pdf_document_to_distribute_without_addressees() -> PnoPdfDocument:
+    return PnoPdfDocument(
+        report_id="456-def",
+        vessel_id=1,
+        cfr="ABC000306959",
+        is_verified=False,
+        is_being_sent=True,
+        trip_segments=[],
+        port_locode="FRDKK",
+        source=PnoSource.MANUAL,
+        generation_datetime_utc=datetime(2023, 6, 6, 23, 50, 0),
+        pdf_document=b"PDF Document",
+        control_unit_ids=None,
+    )
+
+
+@pytest.fixture
+def pno_pdf_document_to_distribute_verified() -> PnoPdfDocument:
+    return PnoPdfDocument(
+        report_id="456-def",
+        vessel_id=1,
+        cfr="ABC000306959",
+        is_verified=True,
+        is_being_sent=True,
+        trip_segments=[],
+        port_locode="FRLEH",
+        source=PnoSource.MANUAL,
+        generation_datetime_utc=datetime(2023, 6, 6, 23, 50, 0),
+        pdf_document=b"PDF Document",
+        control_unit_ids=None,
+    )
+
+
+@pytest.fixture
 def pno_units_targeting_vessels():
     return pd.DataFrame(
         {
@@ -999,6 +1072,67 @@ def test_load_pno_pdf_documents(reset_test_data):
     assert isinstance(pno_pdf_documents_being_sent, list)
     assert len(pno_pdf_documents_being_sent) == 1
     assert pno_pdf_documents_being_sent[0] == pno_pdf_documents[0]
+
+
+def test_attribute_addressees_uses_target_vessels_and_segments(
+    pno_pdf_document_to_distribute_targeted_vessel_and_segments,
+    pno_units_targeting_vessels,
+    pno_units_ports_and_segments_subscriptions,
+):
+    res = attribute_addressees.run(
+        pno_pdf_document_to_distribute_targeted_vessel_and_segments,
+        pno_units_targeting_vessels,
+        pno_units_ports_and_segments_subscriptions,
+    )
+    assert res == dataclasses.replace(
+        pno_pdf_document_to_distribute_targeted_vessel_and_segments,
+        control_unit_ids={1, 2, 3},
+    )
+
+
+def test_attribute_addressees_uses_receive_al_pnos_from_port(
+    pno_pdf_document_to_distribute_receive_all_pnos_from_port,
+    pno_units_targeting_vessels,
+    pno_units_ports_and_segments_subscriptions,
+):
+    res = attribute_addressees.run(
+        pno_pdf_document_to_distribute_receive_all_pnos_from_port,
+        pno_units_targeting_vessels,
+        pno_units_ports_and_segments_subscriptions,
+    )
+    assert res == dataclasses.replace(
+        pno_pdf_document_to_distribute_receive_all_pnos_from_port, control_unit_ids={4}
+    )
+
+
+def test_attribute_addressees_returns_emptry_addressees(
+    pno_pdf_document_to_distribute_without_addressees,
+    pno_units_targeting_vessels,
+    pno_units_ports_and_segments_subscriptions,
+):
+    res = attribute_addressees.run(
+        pno_pdf_document_to_distribute_without_addressees,
+        pno_units_targeting_vessels,
+        pno_units_ports_and_segments_subscriptions,
+    )
+    assert res == dataclasses.replace(
+        pno_pdf_document_to_distribute_without_addressees, control_unit_ids=set()
+    )
+
+
+def test_attribute_addressees_when_is_verified(
+    pno_pdf_document_to_distribute_verified,
+    pno_units_targeting_vessels,
+    pno_units_ports_and_segments_subscriptions,
+):
+    res = attribute_addressees.run(
+        pno_pdf_document_to_distribute_verified,
+        pno_units_targeting_vessels,
+        pno_units_ports_and_segments_subscriptions,
+    )
+    assert res == dataclasses.replace(
+        pno_pdf_document_to_distribute_verified, control_unit_ids={2, 3}
+    )
 
 
 # def test_flow(reset_test_data):

@@ -223,3 +223,4 @@ class PnoPdfDocument:
     source: PnoSource
     generation_datetime_utc: datetime
     pdf_document: bytes
+    control_unit_ids: list = None

@@ -4,21 +4,20 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.module.SimpleModule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import java.time.ZonedDateTime
 
-class ZonedDateTimeDeserializerUTests {
+class CustomZonedDateTimeDeserializerUTests {
     @Test
     fun `deserialize Should parse the expected UTC ISO 8601 date`() {
         // Given
         val mapper = ObjectMapper()
         val module = SimpleModule()
-        module.addDeserializer(ZonedDateTime::class.java, ZonedDateTimeDeserializer())
+        module.addDeserializer(CustomZonedDateTime::class.java, CustomZonedDateTimeDeserializer())
         mapper.registerModule(module)
 
         val json = "\"2024-12-21T12:34:56Z\""
 
         // When
-        val result = mapper.readValue(json, ZonedDateTime::class.java).toString()
+        val result = mapper.readValue(json, CustomZonedDateTime::class.java).toString()
 
         // Then
         assertThat(result).isEqualTo("2024-12-21T12:34:56Z")
@@ -29,16 +28,16 @@ class ZonedDateTimeDeserializerUTests {
         // Given
         val mapper = ObjectMapper()
         val module = SimpleModule()
-        module.addDeserializer(ZonedDateTime::class.java, ZonedDateTimeDeserializer())
+        module.addDeserializer(CustomZonedDateTime::class.java, CustomZonedDateTimeDeserializer())
         mapper.registerModule(module)
 
         val json = "\"2024-12-21T12:34Z\""
 
         // When
-        val result = mapper.readValue(json, ZonedDateTime::class.java).toString()
+        val result = mapper.readValue(json, CustomZonedDateTime::class.java).toString()
 
         // Then
-        assertThat(result).isEqualTo("2024-12-21T12:34Z")
+        assertThat(result).isEqualTo("2024-12-21T12:34:00Z")
     }
 
     @Test
@@ -46,33 +45,32 @@ class ZonedDateTimeDeserializerUTests {
         // Given
         val mapper = ObjectMapper()
         val module = SimpleModule()
-        module.addDeserializer(ZonedDateTime::class.java, ZonedDateTimeDeserializer())
+        module.addDeserializer(CustomZonedDateTime::class.java, CustomZonedDateTimeDeserializer())
         mapper.registerModule(module)
 
         val json = "\"2024-12-21T12:34:56+02:00\""
 
         // When
-        val result = mapper.readValue(json, ZonedDateTime::class.java).toString()
+        val result = mapper.readValue(json, CustomZonedDateTime::class.java).toString()
 
         // Then
         assertThat(result).isEqualTo("2024-12-21T10:34:56Z")
     }
 
-    // This test proves the issue with the naive implementation of `ZonedDateTime.toString()`
     @Test
-    fun `deserialize Should omit seconds when the source date starts at second '00'`() {
+    fun `deserialize Should NOT omit seconds when the source date starts at second '00'`() {
         // Given
         val mapper = ObjectMapper()
         val module = SimpleModule()
-        module.addDeserializer(ZonedDateTime::class.java, ZonedDateTimeDeserializer())
+        module.addDeserializer(CustomZonedDateTime::class.java, CustomZonedDateTimeDeserializer())
         mapper.registerModule(module)
 
         val json = "\"2024-12-21T12:34:00Z\""
 
         // When
-        val result = mapper.readValue(json, ZonedDateTime::class.java).toString()
+        val result = mapper.readValue(json, CustomZonedDateTime::class.java).toString()
 
         // Then
-        assertThat(result).isEqualTo("2024-12-21T12:34Z") // <-- The seconds are omitted
+        assertThat(result).isEqualTo("2024-12-21T12:34:00Z")
     }
 }

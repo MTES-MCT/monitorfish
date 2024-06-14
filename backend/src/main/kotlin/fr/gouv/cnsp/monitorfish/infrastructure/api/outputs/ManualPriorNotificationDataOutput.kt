@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
+import fr.gouv.cnsp.monitorfish.utils.CustomZonedDateTime
 
 data class ManualPriorNotificationDataOutput(
     val authorTrigram: String,
@@ -21,6 +22,12 @@ data class ManualPriorNotificationDataOutput(
             val logbookMessage = priorNotification.logbookMessageTyped.logbookMessage
             val message = priorNotification.logbookMessageTyped.typedMessage
 
+            val expectedArrivalDate = CustomZonedDateTime.fromZonedDateTime(
+                requireNotNull(message.predictedArrivalDatetimeUtc),
+            ).toString()
+            val expectedLandingDate = CustomZonedDateTime.fromZonedDateTime(
+                requireNotNull(message.predictedLandingDatetimeUtc),
+            ).toString()
             // At the moment, manual prior notifications only have a single global FAO area field in Frontend,
             // so we transform that single FAO area into an FAO area per fishing catch when we save it,
             // while setting the global `PNO.faoZone` to `null`.
@@ -35,8 +42,8 @@ data class ManualPriorNotificationDataOutput(
             return ManualPriorNotificationDataOutput(
                 authorTrigram = requireNotNull(priorNotification.authorTrigram),
                 didNotFishAfterZeroNotice = priorNotification.didNotFishAfterZeroNotice,
-                expectedArrivalDate = requireNotNull(message.predictedArrivalDatetimeUtc).toString(),
-                expectedLandingDate = requireNotNull(message.predictedLandingDatetimeUtc).toString(),
+                expectedArrivalDate = expectedArrivalDate,
+                expectedLandingDate = expectedLandingDate,
                 faoArea = globalFaoArea,
                 fishingCatches = fishingCatchDataOutputs,
                 note = priorNotification.note,

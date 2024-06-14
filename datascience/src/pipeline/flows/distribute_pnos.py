@@ -7,6 +7,7 @@ from typing import List
 import numpy as np
 import pandas as pd
 import prefect
+import requests
 import weasyprint
 from jinja2 import Environment, FileSystemLoader, Template, select_autoescape
 from prefect import Flow, Parameter, case, task, unmapped
@@ -17,6 +18,7 @@ from config import (
     EMAIL_FONTS_LOCATION,
     EMAIL_STYLESHEETS_LOCATION,
     EMAIL_TEMPLATES_LOCATION,
+    MONITORENV_API_ENDPOINT,
     SE_MER_LOGO_PATH,
     STATE_FLAGS_ICONS_LOCATION,
     default_risk_factors,
@@ -89,6 +91,43 @@ def extract_pno_units_ports_and_segments_subscriptions() -> pd.DataFrame:
         db_name="monitorfish_remote",
         query_filepath="monitorfish/pno_units_ports_and_segments_subscriptions.sql",
     )
+
+
+@task(checkpoint=False)
+def fetch_control_units_contacts():
+    r = requests.get(MONITORENV_API_ENDPOINT + "control_units")
+
+    r.raise_for_status()
+    df = pd.DataFrame(r.json())
+
+    columns = {
+        "id": "control_unit_id",
+        "controlUnitContacts": "control_unit_contacts",
+        "isArchived": "is_archived",
+    }
+
+    df = df[columns.keys()].rename(columns=columns)
+
+    contacts = (
+        df.loc[~df.is_archived, ["control_unit_id", "control_unit_contacts"]]
+        .explode("control_unit_contacts")
+        .dropna()
+        .reset_index(drop=True)
+    )
+    contacts["email"] = contacts["control_unit_contacts"].apply(
+        lambda x: x.get("email") if x.get("isEmailSubscriptionContact") else None
+    )
+
+    email_contacts = (
+        contacts[["control_unit_id", "email"]]
+        .dropna()
+        .groupby("control_unit_id")["email"]
+        .unique()
+        .map(sorted)
+        .reset_index()
+    )
+
+    return email_contacts
 
 
 @task(checkpoint=False)

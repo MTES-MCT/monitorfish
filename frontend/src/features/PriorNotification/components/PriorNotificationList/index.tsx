@@ -92,6 +92,7 @@ export function PriorNotificationList() {
     getCoreRowModel: getCoreRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
     getRowCanExpand: () => true,
+    getRowId: row => row.id,
     manualPagination: true,
     manualSorting: true,
     onPaginationChange: setReactTablePaginationState,

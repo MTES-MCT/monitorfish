@@ -359,7 +359,7 @@ def extracted_pnos() -> pd.DataFrame:
                 ],
                 [],
             ],
-            "vessel_length": [13.4, None, 17.4, 17.4, None],
+            "vessel_length": [13.4, None, 17.4, 17.4, 8.58],
             "mmsi": [None, None, None, None, None],
             "risk_factor": [
                 2.09885592141872,

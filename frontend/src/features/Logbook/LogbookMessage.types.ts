@@ -79,6 +79,7 @@ export namespace LogbookMessage {
   interface MessageBase {}
   export interface PnoMessage extends MessageBase {
     catchOnboard: Catch[] | undefined
+    catchToLand: Catch[] | undefined
     economicZone: string | undefined
     effortZone: string | undefined
     faoZone: string | undefined

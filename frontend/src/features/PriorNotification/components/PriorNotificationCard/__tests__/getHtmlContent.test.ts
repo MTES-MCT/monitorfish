@@ -11,7 +11,7 @@ import OperationType = LogbookMessage.OperationType
 describe('PriorNotificationCard/utils.getHtmlContent()', () => {
   it('Should format the HTML template', () => {
     // Given
-    const pno = {
+    const pno: LogbookMessage.PnoLogbookMessage = {
       acknowledgment: undefined,
       createdAt: '2024-06-14T06:52:22.978603Z',
       externalReferenceNumber: undefined,
@@ -32,7 +32,7 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
             effortZone: 'C',
             faoZone: '27.8.a',
             freshness: undefined,
-            numberFish: undefined,
+            nbFish: undefined,
             packaging: undefined,
             presentation: undefined,
             preservationState: undefined,
@@ -47,7 +47,7 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
             effortZone: 'C',
             faoZone: '27.8.a',
             freshness: undefined,
-            numberFish: undefined,
+            nbFish: undefined,
             packaging: undefined,
             presentation: undefined,
             preservationState: undefined,
@@ -62,7 +62,7 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
             effortZone: 'C',
             faoZone: '27.8.a',
             freshness: undefined,
-            numberFish: undefined,
+            nbFish: undefined,
             packaging: undefined,
             presentation: undefined,
             preservationState: undefined,
@@ -77,7 +77,7 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
             effortZone: 'C',
             faoZone: '27.8.a',
             freshness: undefined,
-            numberFish: undefined,
+            nbFish: undefined,
             packaging: undefined,
             presentation: undefined,
             preservationState: undefined,
@@ -92,7 +92,7 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
             effortZone: 'C',
             faoZone: '27.8.a',
             freshness: undefined,
-            numberFish: undefined,
+            nbFish: undefined,
             packaging: undefined,
             presentation: undefined,
             preservationState: undefined,
@@ -107,7 +107,7 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
             effortZone: 'C',
             faoZone: '27.8.a',
             freshness: undefined,
-            numberFish: undefined,
+            nbFish: undefined,
             packaging: undefined,
             presentation: undefined,
             preservationState: undefined,
@@ -122,7 +122,7 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
             effortZone: 'C',
             faoZone: '27.8.a',
             freshness: undefined,
-            numberFish: undefined,
+            nbFish: undefined,
             packaging: undefined,
             presentation: undefined,
             preservationState: undefined,
@@ -163,10 +163,11 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
       reportDateTime: '2024-06-14T06:52:22.978603Z',
       reportId: 'FAKE_OPERATION_104',
       tripGears: [
-        { dimensions: '250;180', gear: 'TB', mesh: 100 },
+        { dimensions: '250;180', gear: 'TB', gearName: 'TB gear name', mesh: 100 },
         {
           dimensions: '250;280',
           gear: 'TBS',
+          gearName: 'TBS gear name',
           mesh: 120.5
         }
       ],

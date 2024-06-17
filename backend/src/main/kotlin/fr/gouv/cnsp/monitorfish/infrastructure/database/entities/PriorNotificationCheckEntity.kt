@@ -12,7 +12,7 @@ data class PriorNotificationCheckEntity(
     @Column(name = "report_id", updatable = false)
     val reportId: String?,
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     @Convert(converter = CustomZonedDateTimeConverter::class)
     val createdAt: CustomZonedDateTime,
 

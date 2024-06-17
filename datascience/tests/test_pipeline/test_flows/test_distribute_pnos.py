@@ -1321,7 +1321,7 @@ def test_attribute_addressees_uses_target_vessels_and_segments(
     )
 
 
-def test_attribute_addressees_uses_receive_al_pnos_from_port(
+def test_attribute_addressees_uses_receive_all_pnos_from_port(
     pno_pdf_document_to_distribute_receive_all_pnos_from_port,
     pno_units_targeting_vessels,
     pno_units_ports_and_segments_subscriptions,
@@ -1336,7 +1336,7 @@ def test_attribute_addressees_uses_receive_al_pnos_from_port(
     )
 
 
-def test_attribute_addressees_returns_emptry_addressees(
+def test_attribute_addressees_returns_empty_addressees(
     pno_pdf_document_to_distribute_without_addressees,
     pno_units_targeting_vessels,
     pno_units_ports_and_segments_subscriptions,

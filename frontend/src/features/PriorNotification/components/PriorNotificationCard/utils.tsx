@@ -51,7 +51,7 @@ export function getHtmlContent(
             .map(property => `${property.faoZone} (${property.statisticalRectangle})`)
             .join(', ')}</td>
           <td>${aCatch.weight}</td>
-          <td>-</td>
+          <td>${aCatch.nbFish}</td>
         </tr>`
     )
     .join('')

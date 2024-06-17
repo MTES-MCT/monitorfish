@@ -1,0 +1,25 @@
+[
+    {
+        "table": "prior_notification_checks",
+        "data": [
+            {
+                "report_id": "FAKE_OPERATION_101",
+                "is_in_verification_scope": false,
+                "is_verified": false,
+                "is_pending_send": false,
+                "is_sent": false,
+                "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '5 minutes'",
+                "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '5 minutes'"
+            },
+            {
+                "report_id": "00000000-0000-4000-0000-000000000001",
+                "is_in_verification_scope": true,
+                "is_verified": false,
+                "is_pending_send": false,
+                "is_sent": false,
+                "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '5 minutes'",
+                "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '5 minutes'"
+            }
+        ]
+    }
+]

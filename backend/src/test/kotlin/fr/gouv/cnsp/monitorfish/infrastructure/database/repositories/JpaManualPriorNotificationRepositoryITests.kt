@@ -398,7 +398,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findById Should return the expected manual prior notification`() {
+    fun `findByReportId Should return the expected manual prior notification`() {
         // Given
         val reportId = "00000000-0000-4000-0000-000000000002"
 

@@ -14,7 +14,6 @@ class GetPriorNotificationCheck(private val priorNotificationCheckRepository: Pr
             return priorNotificationCheckRepository.save(newPriorNotificationCheck)
         }
 
-
         return priorNotificationCheck
     }
 }

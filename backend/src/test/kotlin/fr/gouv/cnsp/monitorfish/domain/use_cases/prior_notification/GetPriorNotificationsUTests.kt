@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
 import com.nhaarman.mockitokotlin2.given
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.SeafrontGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTyped
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
@@ -48,6 +49,7 @@ class GetPriorNotificationsUTests {
         willArriveAfter = "2000-01-01T00:00:00Z",
         willArriveBefore = "2099-12-31T00:00:00Z",
     )
+    private val defaultSeafrontGroup = SeafrontGroup.ALL
     private val defaultSortColumn = PriorNotificationsSortColumn.EXPECTED_ARRIVAL_DATE
     private val defaultSortDirection = Sort.Direction.ASC
     private val defaultPageSize = 10
@@ -140,14 +142,21 @@ class GetPriorNotificationsUTests {
             riskFactorRepository,
             speciesRepository,
             vesselRepository,
-        ).execute(defaultFilter, defaultSortColumn, defaultSortDirection)
+        ).execute(
+            defaultFilter,
+            defaultSeafrontGroup,
+            defaultSortColumn,
+            defaultSortDirection,
+            defaultPageNumber,
+            defaultPageSize,
+        )
 
         // Then
-        assertThat(result).hasSize(2)
-        assertThat(result[0].logbookMessageTyped.logbookMessage.reportId).isEqualTo(
+        assertThat(result.data).hasSize(2)
+        assertThat(result.data[0].logbookMessageTyped.logbookMessage.reportId).isEqualTo(
             "FAKE_REPORT_ID_1",
         )
-        assertThat(result[1].logbookMessageTyped.logbookMessage.reportId).isEqualTo(
+        assertThat(result.data[1].logbookMessageTyped.logbookMessage.reportId).isEqualTo(
             "FAKE_REPORT_ID_2_COR",
         )
     }

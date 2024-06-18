@@ -1,10 +1,14 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.SeafrontGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.hasSeafront
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationStats
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.sorters.PriorNotificationsSortColumn
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
+import fr.gouv.cnsp.monitorfish.domain.utils.PaginatedList
 import org.springframework.data.domain.Sort
 
 @UseCase
@@ -17,13 +21,15 @@ class GetPriorNotifications(
     private val riskFactorRepository: RiskFactorRepository,
     private val speciesRepository: SpeciesRepository,
     private val vesselRepository: VesselRepository,
-
 ) {
     fun execute(
         filter: PriorNotificationsFilter,
+        seafrontGroup: SeafrontGroup,
         sortColumn: PriorNotificationsSortColumn,
         sortDirection: Sort.Direction,
-    ): List<PriorNotification> {
+        pageNumber: Int,
+        pageSize: Int,
+    ): PaginatedList<PriorNotification, PriorNotificationStats> {
         val allGears = gearRepository.findAll()
         val allPorts = portRepository.findAll()
         val allRiskFactors = riskFactorRepository.findAll()
@@ -34,10 +40,13 @@ class GetPriorNotifications(
         val manualPriorNotifications = manualPriorNotificationRepository.findAll(filter)
         val incompletePriorNotifications = automaticPriorNotifications + manualPriorNotifications
 
-        val priorNotifications = incompletePriorNotifications
+        val filteredIncompletePriorNotifications = incompletePriorNotifications
+            .filter { !it.logbookMessageTyped.logbookMessage.isDeleted }
+            .filter { seafrontGroup.hasSeafront(it.seafront) }
+
+        val priorNotifications = filteredIncompletePriorNotifications
             .map { priorNotification ->
                 priorNotification.enrich(allPorts, allRiskFactors, allVessels)
-                priorNotification.enrichReportingCount(reportingRepository)
                 priorNotification.logbookMessageTyped.logbookMessage
                     .enrichGearPortAndSpecyNames(allGears, allPorts, allSpecies)
 
@@ -58,10 +67,30 @@ class GetPriorNotifications(
                     .thenByDescending { it.logbookMessageTyped.logbookMessage.id }, // Tie-breaker
             )
         }
-        val sortedPriorNotificationsWithoutDeletedOnes = sortedPriorNotifications
-            .filter { !it.logbookMessageTyped.logbookMessage.isDeleted }
 
-        return sortedPriorNotificationsWithoutDeletedOnes
+        val extraData = PriorNotificationStats(
+            perSeafrontGroupCount = SeafrontGroup.entries.associateWith { seafrontGroupEntry ->
+                priorNotifications.count { priorNotification ->
+                    seafrontGroupEntry.hasSeafront(priorNotification.seafront)
+                }
+            },
+        )
+
+        val paginatedList = PaginatedList.new(
+            sortedPriorNotifications,
+            pageNumber,
+            pageSize,
+            extraData,
+        )
+
+        // Enrich the reporting count for each prior notification after pagination to limit the number of queries
+        val enrichedPaginatedList = paginatedList.apply {
+            data.forEach {
+                it.enrichReportingCount(reportingRepository)
+            }
+        }
+
+        return enrichedPaginatedList
     }
 
     companion object {

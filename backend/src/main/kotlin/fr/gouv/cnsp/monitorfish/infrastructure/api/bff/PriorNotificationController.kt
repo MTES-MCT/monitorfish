@@ -1,7 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.SeafrontGroup
-import fr.gouv.cnsp.monitorfish.domain.entities.facade.hasSeafront
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.sorters.PriorNotificationsSortColumn
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.*
@@ -101,25 +100,20 @@ class PriorNotificationController(
             willArriveBefore = willArriveBefore,
         )
 
-        val priorNotifications = getPriorNotifications
-            .execute(priorNotificationsFilter, sortColumn, sortDirection)
-        val priorNotificationListItemDataOutputsFilteredBySeafrontGroup = priorNotifications
-            .filter { seafrontGroup.hasSeafront(it.seafront) }
+        val paginatedPriorNotifications = getPriorNotifications
+            .execute(priorNotificationsFilter, seafrontGroup, sortColumn, sortDirection, pageNumber, pageSize)
+        val priorNotificationListItemDataOutputs = paginatedPriorNotifications.data
             .mapNotNull { PriorNotificationListItemDataOutput.fromPriorNotification(it) }
+        val extraDataOutput = PriorNotificationsExtraDataOutput
+            .fromPriorNotificationStats(paginatedPriorNotifications.extraData)
 
-        val extraDataOutput = PriorNotificationsExtraDataOutput(
-            perSeafrontGroupCount = SeafrontGroup.entries.associateWith { seafrontGroupEntry ->
-                priorNotifications.count { priorNotification ->
-                    seafrontGroupEntry.hasSeafront(priorNotification.seafront)
-                }
-            },
-        )
-
-        return PaginatedListDataOutput.fromListDataOutput(
-            priorNotificationListItemDataOutputsFilteredBySeafrontGroup,
-            pageNumber,
-            pageSize,
+        return PaginatedListDataOutput(
+            priorNotificationListItemDataOutputs,
             extraDataOutput,
+            lastPageNumber = paginatedPriorNotifications.lastPageNumber,
+            pageNumber = paginatedPriorNotifications.pageNumber,
+            pageSize = paginatedPriorNotifications.pageSize,
+            totalLength = paginatedPriorNotifications.totalLength,
         )
     }
 

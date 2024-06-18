@@ -94,7 +94,7 @@ def extract_pno_units_ports_and_segments_subscriptions() -> pd.DataFrame:
 
 
 @task(checkpoint=False)
-def fetch_control_units_contacts():
+def fetch_control_units_contacts() -> pd.DataFrame:
     r = requests.get(MONITORENV_API_ENDPOINT + "control_units")
 
     r.raise_for_status()
@@ -470,7 +470,32 @@ def attribute_addressees(
     pno_to_distribute: PnoPdfDocument,
     units_targeting_vessels: pd.DataFrame,
     units_ports_and_segments_subscriptions: pd.DataFrame,
-):
+) -> PnoPdfDocument:
+    """
+    Returns a copy of the input `PnoPdfDocument`'s with its `control_unit_ids`
+    attribute updated. The control units ids attributed to the PNO are :
+
+      - ids of control units who target the vessel
+      - ids of control units who subscribed to the port with the "receive all pnos"
+        option
+      - Plus :
+        - ids of control units who subscribed to the port, if the PNO is in
+          verification scope
+        - ids of control units who subscribed to the port AND to a segment of the PNO
+          if the PNO is not in verification scope
+
+    Args:
+        pno_to_distribute (PnoPdfDocument): PnoPdfDocument
+        units_targeting_vessels (pd.DataFrame): DataFrame with columns
+          `control_unit_ids_targeting_vessel` and `vessel_id`
+        units_ports_and_segments_subscriptions (pd.DataFrame): DataFrame with columns
+          `control_unit_id`, `port_locode`, `receive_all_pnos_from_port`, and
+          `unit_subscribed_segments`
+
+    Returns:
+        PnoPdfDocument: copy of the input `pno_to_distribute` with its
+          `control_unit_ids` attribute updated
+    """
     if pno_to_distribute.vessel_id in units_targeting_vessels.vessel_id.values:
         units_targeting_vessel = set(
             units_targeting_vessels.loc[

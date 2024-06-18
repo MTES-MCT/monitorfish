@@ -47,7 +47,7 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
             effortZone: 'C',
             faoZone: '27.8.a',
             freshness: undefined,
-            nbFish: undefined,
+            nbFish: 12,
             packaging: undefined,
             presentation: undefined,
             preservationState: undefined,
@@ -250,37 +250,37 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
           <td>HOLBICHE PORC - (APX)</td>
           <td>27.8.a (23E6)</td>
           <td>430</td>
-          <td>-</td>
+          <td>0</td>
         </tr><tr>
           <td>CONOCARA FIOLENTI - (AFI)</td>
           <td>27.8.a (23E6)</td>
           <td>250</td>
-          <td>-</td>
+          <td>0</td>
         </tr><tr>
           <td>APHYOSEMION AHLI - (AFH)</td>
           <td>27.8.a (23E6)</td>
           <td>150</td>
-          <td>-</td>
+          <td>12</td>
         </tr><tr>
           <td>APELTES QUADRACUS - (AQD)</td>
           <td>27.8.a (23E6)</td>
           <td>90</td>
-          <td>-</td>
+          <td>0</td>
         </tr><tr>
           <td>AGONUS CATAPHRACTUS - (AFT)</td>
           <td>27.8.a (23E6)</td>
           <td>75</td>
-          <td>-</td>
+          <td>0</td>
         </tr><tr>
           <td>DIVERS POISSONS(EAU DOUCE) - (FRF)</td>
           <td>27.8.a (23E6)</td>
           <td>25</td>
-          <td>-</td>
+          <td>0</td>
         </tr><tr>
           <td>ALFARO CULTRATUS - (AFU)</td>
           <td>27.8.a (23E6)</td>
           <td>10</td>
-          <td>-</td>
+          <td>0</td>
         </tr></tbody>
         </table>
       </section>

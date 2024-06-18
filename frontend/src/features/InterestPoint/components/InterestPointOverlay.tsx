@@ -1,3 +1,6 @@
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { useMoveOverlayWhenDragging } from '@hooks/useMoveOverlayWhenDragging'
+import { useMoveOverlayWhenZooming } from '@hooks/useMoveOverlayWhenZooming'
 import { usePrevious } from '@mtes-mct/monitor-ui'
 import { noop } from 'lodash'
 import LineString from 'ol/geom/LineString'
@@ -8,12 +11,9 @@ import styled from 'styled-components'
 
 import { getCoordinates } from '../../../coordinates'
 import { OPENLAYERS_PROJECTION } from '../../../domain/entities/map/constants'
-import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { useMoveOverlayWhenDragging } from '../../../hooks/useMoveOverlayWhenDragging'
-import { useMoveOverlayWhenZooming } from '../../../hooks/useMoveOverlayWhenZooming'
 import EditSVG from '../../icons/Bouton_edition.svg?react'
 import DeleteSVG from '../../icons/Suppression.svg?react'
-import { monitorfishMap } from '../monitorfishMap'
+import { monitorfishMap } from '../../map/monitorfishMap'
 
 const X = 0
 const Y = 1

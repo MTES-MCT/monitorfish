@@ -6,14 +6,14 @@ import { LegacyRsuiteComponentsWrapper } from 'ui/LegacyRsuiteComponentsWrapper'
 import { AlertsMapButton } from './AlertsMapButton'
 import { BeaconMalfunctionsMapButton } from './BeaconMalfunctionsMapButton'
 import { FavoriteVessels } from './FavoriteVessels'
-import { InterestPointMapButton } from './InterestPoints'
-import { MeasurementMapButton } from './Measurements'
 import { MissionsMenu } from './Missions'
 import { PriorNotificationListButton } from './PriorNotificationListButton'
 import { VesselFiltersMapButton } from './VesselFilters'
 import { VesselLabelsMapButton } from './VesselLabels'
 import { VesselVisibilityMapButton } from './VesselVisibility'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
+import { InterestPointMapButton } from '../../../InterestPoint/components/InterestPointMapButton'
+import { MeasurementMapButton } from '../../../Measurement/components/MeasurementMapButton'
 
 export function MapButtons() {
   const isSuperUser = useIsSuperUser()

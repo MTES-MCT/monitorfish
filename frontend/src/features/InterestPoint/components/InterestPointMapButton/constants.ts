@@ -1,4 +1,4 @@
-import { InterestPointType } from '../../../../../domain/entities/interestPoints'
+import { InterestPointType } from '../../utils'
 
 import type { Option } from '@mtes-mct/monitor-ui'
 

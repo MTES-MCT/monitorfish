@@ -4,8 +4,8 @@ import CircleStyle from 'ol/style/Circle'
 import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
 
-import { InterestPointLine } from '../../../../domain/entities/interestPointLine'
-import { INTEREST_POINT_STYLE, InterestPointType } from '../../../../domain/entities/interestPoints'
+import { InterestPointLine } from './interestPointLine'
+import { INTEREST_POINT_STYLE, InterestPointType } from '../utils'
 
 const interestPointStylesCache = new Map()
 

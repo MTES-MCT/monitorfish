@@ -60,6 +60,11 @@ export const openPriorNotificationForm =
       }
 
       const nextComputedValues: PriorNotification.ManualPriorNotificationComputedValues = {
+        // TODO Add a type-guaranteed output in Backend for PNO message.
+        isBeingSent: priorNotificationDetail.logbookMessage.message.isBeingSent!,
+        isInVerificationScope: priorNotificationDetail.logbookMessage.message.isInVerificationScope!,
+        isSent: priorNotificationDetail.logbookMessage.message.isSent!,
+        isVerified: priorNotificationDetail.logbookMessage.message.isVerified!,
         tripSegments: priorNotificationDetail.logbookMessage.tripSegments ?? [],
         types:
           priorNotificationDetail.logbookMessage.message.pnoTypes?.map(({ pnoTypeName, ...rest }) => ({
@@ -67,7 +72,7 @@ export const openPriorNotificationForm =
             name: pnoTypeName
           })) ?? [],
         // TODO Add vessel risk factor in details API response.
-        vesselRiskFactor: 0
+        vesselRiskFactor: undefined
       }
       const nextInitialFormValues: FormValues = {
         ...priorNotificationData,

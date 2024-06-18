@@ -12,8 +12,12 @@ export namespace PriorNotification {
     hasVesselRiskFactorSegments: boolean | undefined
     /** Logbook message `reportId`. */
     id: string
+    isBeingSent: boolean
     isCorrection: boolean
+    isInVerificationScope: boolean
     isManuallyCreated: boolean
+    isSent: boolean
+    isVerified: boolean
     isVesselUnderCharter: boolean | undefined
     onBoardCatches: LogbookMessage.Catch[]
     portLocode: string | undefined
@@ -72,7 +76,7 @@ export namespace PriorNotification {
   >
   export type ManualPriorNotificationComputedValues = Pick<
     PriorNotification,
-    'tripSegments' | 'types' | 'vesselRiskFactor'
+    'isBeingSent' | 'isInVerificationScope' | 'isSent' | 'isVerified' | 'tripSegments' | 'types' | 'vesselRiskFactor'
   >
 
   export type PriorNotificationDataFishingCatch = {

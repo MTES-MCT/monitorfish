@@ -63,6 +63,10 @@
                             "statisticalRectangle": "23E6"
                         }
                     ],
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": false,
+                    "isVerified": false,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type A",
@@ -129,6 +133,10 @@
                             "statisticalRectangle": "23E6"
                         }
                     ],
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": false,
+                    "isVerified": false,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type C",
@@ -267,6 +275,10 @@
                             "statisticalRectangle": "23E6"
                         }
                     ],
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": false,
+                    "isVerified": false,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type A",
@@ -323,6 +335,10 @@
                             "statisticalRectangle": "23E6"
                         }
                     ],
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": false,
+                    "isVerified": false,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type A",
@@ -378,6 +394,10 @@
                             "statisticalRectangle": "23E6"
                         }
                     ],
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": false,
+                    "isVerified": false,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type E",
@@ -431,6 +451,10 @@
                             "statisticalRectangle": "23E6"
                         }
                     ],
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": false,
+                    "isVerified": false,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type Z",
@@ -594,6 +618,10 @@
                             "weight": 32.5
                         }
                     ],
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": false,
+                    "isVerified": false,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type Z",
@@ -706,6 +734,10 @@
                             "weight": 25.0
                         }
                     ],
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": false,
+                    "isVerified": false,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type Z",
@@ -802,6 +834,10 @@
                             "statisticalRectangle": null
                         }
                     ],
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": false,
+                    "isVerified": false,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Espèces soumises à préavis",
@@ -873,6 +909,10 @@
                 "trip_segments:jsonb": [],
                 "value:jsonb": {
                     "catchOnboard": [],
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": false,
+                    "isVerified": false,
                     "pnoTypes": [],
                     "port": "REZSE",
                     "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '1 hour', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",

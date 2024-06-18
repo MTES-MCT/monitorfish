@@ -138,6 +138,10 @@
                         }
                     ],
                     "faoZone": null,
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": false,
+                    "isVerified": false,
                     "note": null,
                     "pnoTypes": [
                         {
@@ -198,6 +202,10 @@
                         }
                     ],
                     "faoZone": null,
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": false,
+                    "isVerified": false,
                     "note": "Pêche abandonnée pour cause de météo défavorable.",
                     "pnoTypes": [
                         {
@@ -246,6 +254,10 @@
                         }
                     ],
                     "faoZone": null,
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": false,
+                    "isVerified": false,
                     "note": null,
                     "pnoTypes": [
                         {
@@ -294,6 +306,10 @@
                         }
                     ],
                     "faoZone": null,
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": false,
+                    "isVerified": false,
                     "note": 0,
                     "pnoTypes": [
                         {
@@ -344,6 +360,10 @@
                         }
                     ],
                     "faoZone": null,
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": false,
+                    "isVerified": false,
                     "note": null,
                     "pnoTypes": [
                         {

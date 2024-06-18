@@ -20,7 +20,7 @@ data class PriorNotificationCheck(
      */
     val isInVerificationScope: Boolean,
     val isVerified: Boolean,
-    val isPendingSend: Boolean,
+    val isBeingSent: Boolean,
     val isSent: Boolean,
     val updatedAt: String,
 ) {
@@ -29,7 +29,7 @@ data class PriorNotificationCheck(
             reportId: String,
             isInVerificationScope: Boolean = false,
             isVerified: Boolean = false,
-            isPendingSend: Boolean = false,
+            isBeingSent: Boolean = false,
             isSent: Boolean = false,
         ): PriorNotificationCheck {
             return PriorNotificationCheck(
@@ -37,7 +37,7 @@ data class PriorNotificationCheck(
                 createdAt = CustomZonedDateTime.now().toString(),
                 isInVerificationScope = isInVerificationScope,
                 isVerified = isVerified,
-                isPendingSend = isPendingSend,
+                isBeingSent = isBeingSent,
                 isSent = isSent,
                 updatedAt = CustomZonedDateTime.now().toString(),
             )

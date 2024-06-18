@@ -22,6 +22,24 @@ class PNO() : LogbookMessageValue {
      * Only used for cod fishing in the Baltic Sea (instead of regular "per caught species" zones).
      */
     var faoZone: String? = null
+
+    /**
+     * Is it a prior notification requiring a manual verification?
+     *
+     * It should stay `true` even after the manual verification is done (`isVerified == true`)
+     * to differanciate mandatory-verification prior notifications from non-mandatory-verification prior notifications.
+     *
+     * # Example
+     *
+     * - `isInVerificationScope == true && isVerified == false` => The prior notification must be manually verified.
+     * - `isInVerificationScope == true && isVerified == true` => The prior notification had to be manually verified, and it was.
+     * - `isInVerificationScope == false && isVerified == true` => The prior notification did not have to be manually verified, but it was.
+     * - `isInVerificationScope == true && isVerified == false` => /!\ SHOULD NEVER HAPPEN.
+     */
+    var isInVerificationScope: Boolean? = null
+    var isVerified: Boolean? = null
+    var isBeingSent: Boolean? = null
+    var isSent: Boolean? = null
     var latitude: Double? = null
     var longitude: Double? = null
     var note: String? = null

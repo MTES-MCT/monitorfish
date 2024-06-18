@@ -160,7 +160,6 @@ data class LogbookReportEntity(
             didNotFishAfterZeroNotice = false,
             isManuallyCreated = false,
             logbookMessageTyped = enrichedLogbookMessageTyped,
-            note = null,
             sentAt = enrichedLogbookMessageTyped.logbookMessage.reportDateTime?.toString(),
             updatedAt = updatedAt,
 

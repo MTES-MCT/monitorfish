@@ -24,6 +24,7 @@ export function getFirstTitleRowText(
   )
 }
 
+// TODO WHere is the note?
 export function getHtmlContent(
   pno: LogbookMessage.PnoLogbookMessage | undefined,
   gearsWithName: Array<LogbookMessage.Gear & { gearName: string | null }>

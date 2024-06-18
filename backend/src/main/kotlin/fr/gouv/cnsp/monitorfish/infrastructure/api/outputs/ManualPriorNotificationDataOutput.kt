@@ -46,7 +46,7 @@ data class ManualPriorNotificationDataOutput(
                 expectedLandingDate = expectedLandingDate,
                 faoArea = globalFaoArea,
                 fishingCatches = fishingCatchDataOutputs,
-                note = priorNotification.note,
+                note = message.note,
                 portLocode = requireNotNull(message.port),
                 reportId = requireNotNull(priorNotification.reportId),
                 sentAt = requireNotNull(priorNotification.sentAt),

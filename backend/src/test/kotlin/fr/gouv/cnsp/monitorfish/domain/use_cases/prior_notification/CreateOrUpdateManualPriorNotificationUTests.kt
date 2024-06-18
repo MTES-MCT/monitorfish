@@ -85,7 +85,6 @@ class CreateOrUpdateManualPriorNotificationUTests {
                         transmissionFormat = LogbookTransmissionFormat.ERS,
                     ),
                 ),
-                note = null,
                 port = null,
                 reportingCount = null,
                 seafront = null,

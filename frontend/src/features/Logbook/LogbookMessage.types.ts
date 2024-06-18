@@ -85,6 +85,7 @@ export namespace LogbookMessage {
     faoZone: string | undefined
     latitude: string | undefined
     longitude: string | undefined
+    note: string | undefined
     pnoTypes: MessagePnoType[] | undefined
     /** Port code. */
     port: string | undefined

@@ -24,7 +24,6 @@ data class PriorNotification(
     val didNotFishAfterZeroNotice: Boolean,
     val isManuallyCreated: Boolean,
     var logbookMessageTyped: LogbookMessageTyped<PNO>,
-    val note: String?,
     var port: Port?,
     var reportingCount: Int?,
     var seafront: Seafront?,

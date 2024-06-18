@@ -34,9 +34,6 @@ data class ManualPriorNotificationEntity(
     @Column(name = "flag_state")
     val flagState: String?,
 
-    @Column(name = "note")
-    val note: String?,
-
     @Column(name = "sent_at")
     val sentAt: ZonedDateTime,
 
@@ -80,7 +77,6 @@ data class ManualPriorNotificationEntity(
                     createdAt = createdAt,
                     didNotFishAfterZeroNotice = priorNotification.didNotFishAfterZeroNotice,
                     flagState = pnoLogbookMessage.flagState,
-                    note = priorNotification.note,
                     sentAt = ZonedDateTime.parse(requireNotNull(priorNotification.sentAt)),
                     tripGears = pnoLogbookMessage.tripGears,
                     tripSegments = pnoLogbookMessage.tripSegments,
@@ -128,7 +124,6 @@ data class ManualPriorNotificationEntity(
                 didNotFishAfterZeroNotice = didNotFishAfterZeroNotice,
                 isManuallyCreated = true,
                 logbookMessageTyped = logbookMessageTyped,
-                note = note,
                 reportId = reportId,
                 sentAt = sentAt.toString(),
                 updatedAt = updatedAt.toString(),

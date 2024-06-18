@@ -461,7 +461,6 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
                     ),
                     PNO::class.java,
                 ),
-                note = null,
                 port = null,
                 reportingCount = null,
                 seafront = null,

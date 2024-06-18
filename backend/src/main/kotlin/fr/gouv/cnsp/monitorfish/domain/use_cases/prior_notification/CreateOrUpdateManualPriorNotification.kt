@@ -52,6 +52,7 @@ class CreateOrUpdateManualPriorNotification(
             // At the moment, manual prior notifications only have a single global FAO area field in Frontend,
             // so we transform that single FAO area into an FAO area per fishing catch.
             fishingCatchesWithFaoArea,
+            note,
             priorNotificationTypes,
             portLocode,
         )
@@ -94,7 +95,6 @@ class CreateOrUpdateManualPriorNotification(
             didNotFishAfterZeroNotice = didNotFishAfterZeroNotice,
             isManuallyCreated = true,
             logbookMessageTyped = logbookMessageTyped,
-            note = note,
             sentAt = sentAt,
 
             // All these props are useless for the save operation.
@@ -117,6 +117,7 @@ class CreateOrUpdateManualPriorNotification(
         expectedArrivalDate: String,
         expectedLandingDate: String,
         fishingCatches: List<LogbookFishingCatch>,
+        note: String?,
         pnoTypes: List<PriorNotificationType>,
         portLocode: String,
     ): PNO {
@@ -137,6 +138,7 @@ class CreateOrUpdateManualPriorNotification(
             this.faoZone = null
             this.latitude = null
             this.longitude = null
+            this.note = note
             this.pnoTypes = pnoTypes
             this.port = portLocode
             this.portName = portName

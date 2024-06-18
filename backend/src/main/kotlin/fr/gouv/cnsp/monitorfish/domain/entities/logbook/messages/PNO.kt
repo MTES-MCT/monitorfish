@@ -24,6 +24,7 @@ class PNO() : LogbookMessageValue {
     var faoZone: String? = null
     var latitude: Double? = null
     var longitude: Double? = null
+    var note: String? = null
     var pnoTypes: List<PriorNotificationType> = emptyList()
 
     /** Port locode. */

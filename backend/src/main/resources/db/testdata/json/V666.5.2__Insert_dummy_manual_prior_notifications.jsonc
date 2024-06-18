@@ -11,7 +11,6 @@
                 "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "did_not_fish_after_zero_notice": false,
                 "flag_state": "FRA",
-                "note": null,
                 "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
                 "trip_gears:jsonb": [{ "gear": "LNP" }],
                 "trip_segments:jsonb": [{ "segment": "NWW09", "segmentName": "Lignes" }],
@@ -35,6 +34,7 @@
                         }
                     ],
                     "faoZone": null,
+                    "note": null,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type A",
@@ -63,7 +63,6 @@
                 "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "did_not_fish_after_zero_notice": false,
                 "flag_state": "BEL",
-                "note": null,
                 "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
                 "trip_gears:jsonb": [{ "gear": "TB" }, { "gear": "TBS" }],
                 "trip_segments:jsonb": [
@@ -139,6 +138,7 @@
                         }
                     ],
                     "faoZone": null,
+                    "note": null,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type B",
@@ -172,7 +172,6 @@
                 "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '50 minutes'",
                 "did_not_fish_after_zero_notice": true,
                 "flag_state": "FRA",
-                "note": null,
                 "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
                 "trip_gears:jsonb": [{ "gear": "TBS" }],
                 "trip_segments:jsonb": [
@@ -199,6 +198,7 @@
                         }
                     ],
                     "faoZone": null,
+                    "note": "Pêche abandonnée pour cause de météo défavorable.",
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type E",
@@ -223,7 +223,6 @@
                 "created_at": "2023-01-01T08:45:00",
                 "did_not_fish_after_zero_notice": true,
                 "flag_state": "FRA",
-                "note": null,
                 "sent_at": "2023-01-01T08:30:00",
                 "trip_gears:jsonb": [{ "gear": "OTB" }],
                 "trip_segments:jsonb": [{ "segment": "MED01", "segmentName": "All Trawls 1" }],
@@ -247,6 +246,7 @@
                         }
                     ],
                     "faoZone": null,
+                    "note": null,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type F",
@@ -271,7 +271,6 @@
                 "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "did_not_fish_after_zero_notice": false,
                 "flag_state": "FRA",
-                "note": "Pêche abandonnée pour cause de météo défavorable.",
                 "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
                 "trip_gears:jsonb": [{ "gear": "OTT" }],
                 "trip_segments:jsonb": [{ "segment": "MED01", "segmentName": "All Trawls 1" }],
@@ -295,6 +294,7 @@
                         }
                     ],
                     "faoZone": null,
+                    "note": 0,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type C",
@@ -321,7 +321,6 @@
                 "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "did_not_fish_after_zero_notice": false,
                 "flag_state": "ITA",
-                "note": "Pêche abandonnée pour cause de météo défavorable.",
                 "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
                 "trip_gears:jsonb": [{ "gear": "OTT" }],
                 "trip_segments:jsonb": [{ "segment": "MED01", "segmentName": "All Trawls 1" }],
@@ -345,6 +344,7 @@
                         }
                     ],
                     "faoZone": null,
+                    "note": null,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type C",

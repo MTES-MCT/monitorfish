@@ -1,23 +1,20 @@
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { MultiRadio, THEME } from '@mtes-mct/monitor-ui'
+import { MultiRadio, THEME, CoordinatesInput } from '@mtes-mct/monitor-ui'
 import { transform } from 'ol/proj'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { INTEREST_POINTS_OPTIONS } from './constants'
-import { coordinatesAreDistinct, getCoordinates } from '../../../../../coordinates'
-import { InterestPointType } from '../../../../../domain/entities/interestPoints'
-import {
-  CoordinatesFormat,
-  OPENLAYERS_PROJECTION,
-  WSG84_PROJECTION
-} from '../../../../../domain/entities/map/constants'
-import { addInterestPoint, updateInterestPointKeyBeingDrawed } from '../../../../../domain/shared_slices/InterestPoint'
-import saveInterestPointFeature from '../../../../../domain/use_cases/interestPoint/saveInterestPointFeature'
-import { SetCoordinates } from '../../../../coordinates/SetCoordinates'
-import { MapToolBox } from '../shared/MapToolBox'
-import { Header } from '../shared/styles'
+import { coordinatesAreDistinct, getCoordinates } from '../../../../coordinates'
+import { CoordinatesFormat, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../../domain/entities/map/constants'
+import saveInterestPointFeature from '../../../../domain/use_cases/interestPoint/saveInterestPointFeature'
+import { MapToolBox } from '../../../MainWindow/components/MapButtons/shared/MapToolBox'
+import { Header } from '../../../MainWindow/components/MapButtons/shared/styles'
+import { addInterestPoint, updateInterestPointKeyBeingDrawed } from '../../slice'
+import { InterestPointType } from '../../utils'
+
+import type { Coordinates } from '@mtes-mct/monitor-ui'
 
 // TODO Refactor this component
 // - Move the state logic to the reducer
@@ -28,14 +25,14 @@ type EditInterestPointProps = Readonly<{
 }>
 export function EditInterestPoint({ close, isOpen }: EditInterestPointProps) {
   const dispatch = useMainAppDispatch()
-
+  const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
   const interestPointBeingDrawed = useMainAppSelector(state => state.interestPoint.interestPointBeingDrawed)
   const isEditing = useMainAppSelector(state => state.interestPoint.isEditing)
 
   /** Coordinates formatted in DD [latitude, longitude] */
-  const coordinates: number[] = useMemo(() => {
+  const coordinates: Coordinates | undefined = useMemo(() => {
     if (!interestPointBeingDrawed?.coordinates?.length) {
-      return []
+      return undefined
     }
 
     const [latitude, longitude] = getCoordinates(
@@ -45,10 +42,10 @@ export function EditInterestPoint({ close, isOpen }: EditInterestPointProps) {
       false
     )
     if (!latitude || !longitude) {
-      return []
+      return undefined
     }
 
-    return [parseFloat(latitude.replace(/°/g, '')), parseFloat(longitude.replace(/°/g, ''))]
+    return [parseFloat(latitude.replace(/°/g, '')), parseFloat(longitude.replace(/°/g, ''))] as Coordinates
   }, [interestPointBeingDrawed?.coordinates])
 
   const updateName = useCallback(
@@ -99,7 +96,7 @@ export function EditInterestPoint({ close, isOpen }: EditInterestPointProps) {
    * @param {number[]} coordinates - Previous coordinates ([latitude, longitude]), in decimal format.
    */
   const updateCoordinates = useCallback(
-    (nextCoordinates: number[], previousCoordinates: number[]) => {
+    (nextCoordinates: Coordinates | undefined, previousCoordinates: Coordinates | undefined) => {
       if (nextCoordinates?.length) {
         if (!previousCoordinates?.length || coordinatesAreDistinct(nextCoordinates, previousCoordinates)) {
           const [latitude, longitude] = nextCoordinates
@@ -134,7 +131,16 @@ export function EditInterestPoint({ close, isOpen }: EditInterestPointProps) {
       <Header>Créer un point d&apos;intérêt</Header>
       <Body>
         <p>Coordonnées</p>
-        {isOpen && <SetCoordinates coordinates={coordinates} updateCoordinates={updateCoordinates} />}
+        {isOpen && (
+          <CoordinatesInput
+            coordinatesFormat={coordinatesFormat}
+            defaultValue={coordinates}
+            isLabelHidden
+            label={"Coordonnées du point d'intérêt"}
+            name="interest-point-coordinates"
+            onChange={updateCoordinates}
+          />
+        )}
         <RadioWrapper>
           <MultiRadio
             label="Type de point"

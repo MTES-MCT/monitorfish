@@ -5,7 +5,7 @@ import { batch } from 'react-redux'
 
 import { OPENLAYERS_PROJECTION } from '../../entities/map/constants'
 import { setRightMapBoxOpened } from '../../shared_slices/Global'
-import { addMeasurementDrawed, resetCircleMeasurementInDrawing } from '../../shared_slices/Measurement'
+import { addMeasurementDrawed, resetCircleMeasurementInDrawing } from '@features/Measurement/slice'
 
 const saveMeasurement = (feature, measurement) => dispatch => {
   feature.setId(feature.ol_uid)

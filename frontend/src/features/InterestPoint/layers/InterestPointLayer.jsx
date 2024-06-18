@@ -6,9 +6,9 @@ import VectorSource from 'ol/source/Vector'
 import { MapBox, OPENLAYERS_PROJECTION } from '../../../domain/entities/map/constants'
 import Draw from 'ol/interaction/Draw'
 import VectorLayer from 'ol/layer/Vector'
-import { getInterestPointStyle, POIStyle } from './styles/interestPoint.style'
+import { getInterestPointStyle, POIStyle } from './interestPoint.style'
 import { v4 as uuidv4 } from 'uuid'
-import { InterestPointOverlay } from '../overlays/InterestPointOverlay'
+import { InterestPointOverlay } from '../components/InterestPointOverlay'
 import {
   deleteInterestPointBeingDrawed,
   editInterestPoint,
@@ -17,20 +17,20 @@ import {
   resetInterestPointFeatureDeletion,
   updateInterestPointBeingDrawed,
   updateInterestPointKeyBeingDrawed
-} from '../../../domain/shared_slices/InterestPoint'
+} from '../slice'
 import {
   coordinatesAreModified,
   coordinatesOrTypeAreModified,
   InterestPointType
-} from '../../../domain/entities/interestPoints'
+} from '../utils'
 import saveInterestPointFeature from '../../../domain/use_cases/interestPoint/saveInterestPointFeature'
 import GeoJSON from 'ol/format/GeoJSON'
 import LineString from 'ol/geom/LineString'
-import { InterestPointLine } from '../../../domain/entities/interestPointLine'
+import { InterestPointLine } from './interestPointLine'
 import { getLength } from 'ol/sphere'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
-import { monitorfishMap } from '../monitorfishMap'
+import { monitorfishMap } from '../../map/monitorfishMap'
 
 const DRAW_START_EVENT = 'drawstart'
 const DRAW_ABORT_EVENT = 'drawabort'

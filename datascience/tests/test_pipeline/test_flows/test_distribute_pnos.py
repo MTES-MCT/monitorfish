@@ -17,11 +17,10 @@ from config import TEST_DATA_LOCATION, default_risk_factors
 from src.pipeline.entities.fleet_segments import FishingGear, FleetSegment
 from src.pipeline.entities.missions import Infraction
 from src.pipeline.entities.pnos import (
-    PnoHtmlDocument,
-    PnoPdfDocument,
     PnoSource,
     PnoToRender,
     PreRenderedPno,
+    RenderedPno,
 )
 from src.pipeline.flows.distribute_pnos import (
     attribute_addressees,
@@ -673,8 +672,8 @@ def pre_rendered_pno_2() -> PreRenderedPno:
 
 
 @pytest.fixture
-def pno_pdf_document_to_distribute_targeted_vessel_and_segments() -> PnoPdfDocument:
-    return PnoPdfDocument(
+def pno_pdf_document_to_distribute_targeted_vessel_and_segments() -> RenderedPno:
+    return RenderedPno(
         report_id="123-abc",
         vessel_id=4,
         cfr=None,
@@ -693,8 +692,8 @@ def pno_pdf_document_to_distribute_targeted_vessel_and_segments() -> PnoPdfDocum
 
 
 @pytest.fixture
-def pno_pdf_document_to_distribute_receive_all_pnos_from_port() -> PnoPdfDocument:
-    return PnoPdfDocument(
+def pno_pdf_document_to_distribute_receive_all_pnos_from_port() -> RenderedPno:
+    return RenderedPno(
         report_id="456-def",
         vessel_id=1,
         cfr="ABC000306959",
@@ -710,8 +709,8 @@ def pno_pdf_document_to_distribute_receive_all_pnos_from_port() -> PnoPdfDocumen
 
 
 @pytest.fixture
-def pno_pdf_document_to_distribute_without_addressees() -> PnoPdfDocument:
-    return PnoPdfDocument(
+def pno_pdf_document_to_distribute_without_addressees() -> RenderedPno:
+    return RenderedPno(
         report_id="456-def",
         vessel_id=1,
         cfr="ABC000306959",
@@ -727,8 +726,8 @@ def pno_pdf_document_to_distribute_without_addressees() -> PnoPdfDocument:
 
 
 @pytest.fixture
-def pno_pdf_document_to_distribute_verified() -> PnoPdfDocument:
-    return PnoPdfDocument(
+def pno_pdf_document_to_distribute_verified() -> RenderedPno:
+    return RenderedPno(
         report_id="456-def",
         vessel_id=1,
         cfr="ABC000306959",
@@ -1127,8 +1126,8 @@ def test_render_pno_1(template, pre_rendered_pno_1):
     with open(test_filepath, "r") as f:
         expected_html = f.read()
 
-    assert isinstance(html_document, PnoHtmlDocument)
-    assert html_document.html == expected_html
+    assert isinstance(html_document, RenderedPno)
+    assert html_document.html_for_pdf == expected_html
     assert html_document.report_id == "11"
     assert html_document.source == PnoSource.LOGBOOK
 
@@ -1156,8 +1155,8 @@ def test_render_pno_2(template, pre_rendered_pno_2):
     with open(test_filepath, "r") as f:
         expected_html = f.read()
 
-    assert isinstance(html_document, PnoHtmlDocument)
-    assert html_document.html == expected_html
+    assert isinstance(html_document, RenderedPno)
+    assert html_document.html_for_pdf == expected_html
     assert html_document.report_id == "12"
     assert html_document.source == PnoSource.LOGBOOK
 
@@ -1228,7 +1227,7 @@ def test_load_pno_pdf_documents(reset_test_data):
             pdf = f.read()
 
         pno_pdf_documents.append(
-            PnoPdfDocument(
+            RenderedPno(
                 report_id=report_id,
                 vessel_id=66,
                 cfr="XXX999999999",

@@ -27,10 +27,9 @@ from src.pipeline.entities.fleet_segments import FishingGear, FleetSegment
 from src.pipeline.entities.missions import Infraction
 from src.pipeline.entities.pnos import (
     PnoCatch,
-    PnoHtmlDocument,
-    PnoPdfDocument,
     PnoToRender,
     PreRenderedPno,
+    RenderedPno,
     ReturnToPortPurpose,
 )
 from src.pipeline.generic_tasks import extract, load
@@ -309,7 +308,7 @@ def get_template() -> Template:
 
 
 @task(checkpoint=False)
-def render_pno(pno: PreRenderedPno, template: Template) -> PnoHtmlDocument:
+def render_pno(pno: PreRenderedPno, template: Template) -> RenderedPno:
     fonts_directory = EMAIL_FONTS_LOCATION.as_uri()
     cnsp_logo_src = CNSP_LOGO_PATH.as_uri()
     se_mer_logo_src = SE_MER_LOGO_PATH.as_uri()
@@ -393,7 +392,7 @@ def render_pno(pno: PreRenderedPno, template: Template) -> PnoHtmlDocument:
         last_control_other_infractions=pno.last_control_other_infractions,
     )
 
-    return PnoHtmlDocument(
+    return RenderedPno(
         report_id=pno.report_id,
         vessel_id=pno.vessel_id,
         cfr=pno.cfr,
@@ -402,17 +401,17 @@ def render_pno(pno: PreRenderedPno, template: Template) -> PnoHtmlDocument:
         trip_segments=pno.trip_segments,
         port_locode=pno.port_locode,
         source=pno.source,
-        html=html,
+        html_for_pdf=html,
     )
 
 
 @task(checkpoint=False)
-def print_html_to_pdf(html_document: PnoHtmlDocument) -> PnoPdfDocument:
-    pdf = weasyprint.HTML(string=html_document.html).write_pdf(
+def print_html_to_pdf(html_document: RenderedPno) -> RenderedPno:
+    pdf = weasyprint.HTML(string=html_document.html_for_pdf).write_pdf(
         optimize_size=("fonts", "images")
     )
     pdf = resize_pdf_to_A4(pdf)
-    return PnoPdfDocument(
+    return RenderedPno(
         report_id=html_document.report_id,
         vessel_id=html_document.vessel_id,
         cfr=html_document.cfr,
@@ -428,18 +427,18 @@ def print_html_to_pdf(html_document: PnoHtmlDocument) -> PnoPdfDocument:
 
 @task(checkpoint=False)
 def load_pno_pdf_documents(
-    pno_pdf_documents: List[PnoPdfDocument],
-) -> List[PnoPdfDocument]:
+    pno_pdf_documents: List[RenderedPno],
+) -> List[RenderedPno]:
     """
     Loads input pno_pdf_documents to `prior_notification_pdf_documents` and returns
-    the subset of the input that must be distributed, i.e. the list of `PnoPdfDocument`
+    the subset of the input that must be distributed, i.e. the list of `RenderedPno`
     on which `is_being_sent` is `True`.
 
     Args:
-        pno_pdf_documents (List[PnoPdfDocument]): PnoPdfDocuments to load
+        pno_pdf_documents (List[RenderedPno]): RenderedPnos to load
 
     Returns:
-        List[PnoPdfDocument]: subset of input having `is_being_sent` equal to `True`.
+        List[RenderedPno]: subset of input having `is_being_sent` equal to `True`.
     """
     logger = prefect.context.get("logger")
 
@@ -467,12 +466,12 @@ def load_pno_pdf_documents(
 
 @task(checkpoint=False)
 def attribute_addressees(
-    pno_to_distribute: PnoPdfDocument,
+    pno_to_distribute: RenderedPno,
     units_targeting_vessels: pd.DataFrame,
     units_ports_and_segments_subscriptions: pd.DataFrame,
-) -> PnoPdfDocument:
+) -> RenderedPno:
     """
-    Returns a copy of the input `PnoPdfDocument`'s with its `control_unit_ids`
+    Returns a copy of the input `RenderedPno`'s with its `control_unit_ids`
     attribute updated. The control units ids attributed to the PNO are :
 
       - ids of control units who target the vessel
@@ -485,7 +484,7 @@ def attribute_addressees(
           if the PNO is not in verification scope
 
     Args:
-        pno_to_distribute (PnoPdfDocument): PnoPdfDocument
+        pno_to_distribute (RenderedPno): RenderedPno
         units_targeting_vessels (pd.DataFrame): DataFrame with columns
           `control_unit_ids_targeting_vessel` and `vessel_id`
         units_ports_and_segments_subscriptions (pd.DataFrame): DataFrame with columns
@@ -493,7 +492,7 @@ def attribute_addressees(
           `unit_subscribed_segments`
 
     Returns:
-        PnoPdfDocument: copy of the input `pno_to_distribute` with its
+        RenderedPno: copy of the input `pno_to_distribute` with its
           `control_unit_ids` attribute updated
     """
     if pno_to_distribute.vessel_id in units_targeting_vessels.vessel_id.values:

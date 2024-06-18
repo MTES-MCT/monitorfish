@@ -199,7 +199,7 @@ class ReturnToPortPurpose(Enum):
 
 
 @dataclass
-class PnoHtmlDocument:
+class RenderedPno:
     report_id: str
     vessel_id: int
     cfr: str
@@ -208,19 +208,7 @@ class PnoHtmlDocument:
     trip_segments: list
     port_locode: str
     source: PnoSource
-    html: str
-
-
-@dataclass
-class PnoPdfDocument:
-    report_id: str
-    vessel_id: int
-    cfr: str
-    is_verified: bool
-    is_being_sent: bool
-    trip_segments: list
-    port_locode: str
-    source: PnoSource
-    generation_datetime_utc: datetime
-    pdf_document: bytes
+    html_for_pdf: str = None
+    pdf_document: bytes = None
+    generation_datetime_utc: datetime = None
     control_unit_ids: list = None

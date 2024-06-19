@@ -38,7 +38,7 @@ const Wrapper = styled.span<{
 `
 const Spinner = styled.span`
   animation: rotation 1s linear infinite;
-  border: 2px solid #707785;
+  border: 2px solid ${p => p.theme.color.mediumSeaGreen};
   border-bottom-color: transparent;
   border-radius: 50%;
   box-sizing: border-box;

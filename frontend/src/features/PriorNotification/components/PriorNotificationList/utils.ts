@@ -108,15 +108,13 @@ function getApiFilterFromLastControlPeriod(period: LastControlPeriod | undefined
 
 export function getColorAndBackgroundColorFromState(state: PriorNotification.State | undefined): [string, string] {
   switch (state) {
-    case PriorNotification.State.PENDING_SEND:
-      return [THEME.color.mediumSeaGreen, THEME.color.mediumSeaGreen25]
-
     case PriorNotification.State.PENDING_VERIFICATION:
       return [THEME.color.charcoal, THEME.color.goldenPoppyBorder]
 
     case PriorNotification.State.SENT:
       return [THEME.color.charcoal, THEME.color.lightGray]
 
+    case PriorNotification.State.PENDING_SEND:
     case PriorNotification.State.VERIFIED_AND_SENT:
       return [THEME.color.mediumSeaGreen, THEME.color.mediumSeaGreen25]
 

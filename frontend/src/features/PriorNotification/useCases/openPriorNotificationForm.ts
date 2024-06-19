@@ -24,6 +24,7 @@ export const openPriorNotificationForm =
 
       if (!reportId) {
         dispatch(priorNotificationActions.unsetEditedPriorNotificationComputedValues())
+        dispatch(priorNotificationActions.unsetEditedPriorNotificationDetail())
         dispatch(priorNotificationActions.setEditedPriorNotificationInitialFormValues(getInitialFormValues()))
         dispatch(priorNotificationActions.unsetEditedPriorNotificationReportId())
         dispatch(priorNotificationActions.openPriorNotificationForm())
@@ -60,6 +61,7 @@ export const openPriorNotificationForm =
       }
 
       const nextComputedValues: PriorNotification.ManualPriorNotificationComputedValues = {
+        isVesselUnderCharter: priorNotificationDetail.isVesselUnderCharter,
         state: priorNotificationDetail.state,
         tripSegments: priorNotificationDetail.logbookMessage.tripSegments ?? [],
         types:
@@ -67,8 +69,7 @@ export const openPriorNotificationForm =
             ...rest,
             name: pnoTypeName
           })) ?? [],
-        // TODO Add vessel risk factor in details API response.
-        vesselRiskFactor: undefined
+        vesselRiskFactor: priorNotificationDetail.vesselRiskFactor
       }
       const nextInitialFormValues: FormValues = {
         ...priorNotificationData,
@@ -77,6 +78,7 @@ export const openPriorNotificationForm =
       }
 
       dispatch(priorNotificationActions.setEditedPriorNotificationComputedValues(nextComputedValues))
+      dispatch(priorNotificationActions.setEditedPriorNotificationDetail(priorNotificationDetail))
       dispatch(priorNotificationActions.setEditedPriorNotificationInitialFormValues(nextInitialFormValues))
       dispatch(priorNotificationActions.setEditedPriorNotificationReportId(reportId))
     } catch (err) {

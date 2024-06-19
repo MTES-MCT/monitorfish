@@ -1,6 +1,9 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.logbook
 
 enum class LogbookMessagePurpose {
+    // TODO Find out what this purpose code means.
+    ACS,
+
     /** Emergency. */
     ECY,
 

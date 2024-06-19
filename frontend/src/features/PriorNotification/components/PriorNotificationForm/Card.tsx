@@ -75,10 +75,19 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, reportId }: Card
         <Body>
           <TagBar />
 
-          <p>
-            Veuillez renseigner les champs du formulaire pour définir le type de préavis et son statut, ainsi que le
-            segment de flotte et la note de risque du navire.
-          </p>
+          {!reportId && (
+            <Intro>
+              Veuillez renseigner les champs du formulaire pour définir le type de préavis et son statut, ainsi que le
+              segment de flotte et la note de risque du navire.
+            </Intro>
+          )}
+          {!!reportId && (
+            <Intro>
+              Le préavis doit être vérifié par le CNSP avant sa diffusion.
+              <br />
+              Le navire doit respecter un délai d’envoi et débarquer dans un port désigné.
+            </Intro>
+          )}
 
           <hr />
 
@@ -113,11 +122,6 @@ const Body = styled.div`
   overflow-y: auto;
   padding: 32px;
 
-  > p:first-child {
-    color: ${p => p.theme.color.slateGray};
-    font-style: italic;
-  }
-
   > hr {
     margin: 24px 0 0;
   }
@@ -127,6 +131,11 @@ const Body = styled.div`
   > .FieldGroup {
     margin-top: 24px;
   }
+`
+
+const Intro = styled.p`
+  color: ${p => p.theme.color.slateGray};
+  font-style: italic;
 `
 
 const Footer = styled.div`

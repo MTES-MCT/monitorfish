@@ -8,6 +8,7 @@ import type { PriorNotification } from './PriorNotification.types'
 
 interface PriorNotificationState {
   editedPriorNotificationComputedValues: PriorNotification.ManualPriorNotificationComputedValues | undefined
+  editedPriorNotificationDetail: PriorNotification.PriorNotificationDetail | undefined
   editedPriorNotificationInitialFormValues: FormValues | undefined
   editedPriorNotificationReportId: string | undefined
   isPriorNotificationCardOpen: boolean
@@ -17,6 +18,7 @@ interface PriorNotificationState {
 }
 const INITIAL_STATE: PriorNotificationState = {
   editedPriorNotificationComputedValues: undefined,
+  editedPriorNotificationDetail: undefined,
   editedPriorNotificationInitialFormValues: undefined,
   editedPriorNotificationReportId: undefined,
   isPriorNotificationCardOpen: false,
@@ -63,6 +65,10 @@ const priorNotificationSlice = createSlice({
       state.editedPriorNotificationComputedValues = action.payload
     },
 
+    setEditedPriorNotificationDetail(state, action: PayloadAction<PriorNotification.PriorNotificationDetail>) {
+      state.editedPriorNotificationDetail = action.payload
+    },
+
     setEditedPriorNotificationInitialFormValues(state, action: PayloadAction<FormValues>) {
       state.editedPriorNotificationInitialFormValues = action.payload
     },
@@ -84,6 +90,10 @@ const priorNotificationSlice = createSlice({
 
     unsetEditedPriorNotificationComputedValues(state) {
       state.editedPriorNotificationComputedValues = undefined
+    },
+
+    unsetEditedPriorNotificationDetail(state) {
+      state.editedPriorNotificationDetail = undefined
     },
 
     unsetEditedPriorNotificationReportId(state) {

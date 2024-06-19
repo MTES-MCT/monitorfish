@@ -10,14 +10,19 @@ class PriorNotificationDetailDataOutput(
     /** Unique identifier concatenating all the DAT, COR, RET & DEL operations `id` used for data consolidation. */
     val fingerprint: String,
     val isLessThanTwelveMetersVessel: Boolean,
+    val isVesselUnderCharter: Boolean?,
     val logbookMessage: LogbookMessageDataOutput,
     val state: PriorNotificationState?,
+    val vesselRiskFactor: Double?,
 ) {
     companion object {
         fun fromPriorNotification(priorNotification: PriorNotification): PriorNotificationDetailDataOutput {
             val isLessThanTwelveMetersVessel = requireNotNull(priorNotification.vessel) {
                 "`priorNotification.vessel` is null."
             }.isLessThanTwelveMetersVessel()
+            val isVesselUnderCharter = requireNotNull(priorNotification.vessel) {
+                "`priorNotification.vessel` is null."
+            }.underCharter
             val logbookMessage = priorNotification.logbookMessageTyped.logbookMessage
             val referenceReportId = requireNotNull(logbookMessage.getReferenceReportId()) {
                 "`logbookMessage.getReferenceReportId()` returned null."
@@ -28,8 +33,10 @@ class PriorNotificationDetailDataOutput(
                 id = referenceReportId,
                 fingerprint = priorNotification.fingerprint,
                 isLessThanTwelveMetersVessel = isLessThanTwelveMetersVessel,
+                isVesselUnderCharter,
                 logbookMessage = logbookMessageDataOutput,
                 state = priorNotification.state,
+                vesselRiskFactor = priorNotification.vesselRiskFactor?.riskFactor,
             )
         }
     }

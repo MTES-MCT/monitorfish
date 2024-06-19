@@ -5,7 +5,9 @@ import { useFormikContext } from 'formik'
 import styled from 'styled-components'
 
 import { isZeroNotice } from './utils'
+import { PriorNotification } from '../../PriorNotification.types'
 import { FixedTag } from '../PriorNotificationList/styles'
+import { getColorAndBackgroundColorFromState } from '../PriorNotificationList/utils'
 
 import type { FormValues } from './types'
 
@@ -13,25 +15,23 @@ export function TagBar() {
   const editedPriorNotificationComputedValues = useMainAppSelector(
     store => store.priorNotification.editedPriorNotificationComputedValues
   )
+  const editedPriorNotificationDetail = useMainAppSelector(
+    store => store.priorNotification.editedPriorNotificationDetail
+  )
   const { values } = useFormikContext<FormValues>()
 
   return (
     <Wrapper className="Wrapper">
-      {isZeroNotice(values) && (
-        <FixedTag key="zeroNotice" borderColor={THEME.color.slateGray}>
-          Préavis Zéro
-        </FixedTag>
-      )}
-
       {!!editedPriorNotificationComputedValues && (
         <>
-          <Row className="Row">
-            <VesselRiskFactor
-              hasVesselRiskFactorSegments={editedPriorNotificationComputedValues.tripSegments.length > 0}
-              // TODO We need to add that.
-              isVesselUnderCharter={false}
-              vesselRiskFactor={editedPriorNotificationComputedValues.vesselRiskFactor}
-            />
+          <Row>
+            {!!editedPriorNotificationComputedValues.vesselRiskFactor && (
+              <VesselRiskFactor
+                hasVesselRiskFactorSegments={editedPriorNotificationComputedValues.tripSegments.length > 0}
+                isVesselUnderCharter={editedPriorNotificationComputedValues.isVesselUnderCharter}
+                vesselRiskFactor={editedPriorNotificationComputedValues.vesselRiskFactor}
+              />
+            )}
 
             {editedPriorNotificationComputedValues.tripSegments.map(tripSegment => (
               <FixedTag key={`tripSegment-${tripSegment.code}`} backgroundColor={THEME.color.blueGray25}>
@@ -41,6 +41,22 @@ export function TagBar() {
           </Row>
 
           <Row>
+            {isZeroNotice(values) && (
+              <FixedTag key="zeroNotice" borderColor={THEME.color.slateGray}>
+                Préavis Zéro
+              </FixedTag>
+            )}
+
+            {!!editedPriorNotificationDetail?.state && (
+              <FixedTag
+                key="state"
+                backgroundColor={getColorAndBackgroundColorFromState(editedPriorNotificationDetail.state)[1]}
+                color={getColorAndBackgroundColorFromState(editedPriorNotificationDetail.state)[0]}
+              >
+                {PriorNotification.STATE_LABEL[editedPriorNotificationDetail.state]}
+              </FixedTag>
+            )}
+
             {editedPriorNotificationComputedValues.types.map(
               type =>
                 type.hasDesignatedPorts && (

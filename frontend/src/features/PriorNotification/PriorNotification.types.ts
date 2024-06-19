@@ -52,8 +52,10 @@ export namespace PriorNotification {
     /** Logbook message `reportId`. */
     id: string
     isLessThanTwelveMetersVessel: boolean
+    isVesselUnderCharter: boolean | undefined
     logbookMessage: LogbookMessage.PnoLogbookMessage
     state: State | undefined
+    vesselRiskFactor: number | undefined
   }
 
   export type ManualPriorNotificationData = {
@@ -78,7 +80,7 @@ export namespace PriorNotification {
   >
   export type ManualPriorNotificationComputedValues = Pick<
     PriorNotification,
-    'state' | 'tripSegments' | 'types' | 'vesselRiskFactor'
+    'isVesselUnderCharter' | 'state' | 'tripSegments' | 'types' | 'vesselRiskFactor'
   >
 
   export type PriorNotificationDataFishingCatch = {

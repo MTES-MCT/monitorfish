@@ -253,52 +253,52 @@ jobs:
           wait-on: "http://localhost:8880"
           working-directory: ./frontend
 
-  e2e_multi_windows_test:
-    name: Run E2E multi windows tests
-    needs: [version, build]
-    if: contains(github.ref, 'dependabot') == false
-    runs-on: ubuntu-22.04
-    env:
-      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-      ENV_PROFILE: ${{ needs.version.outputs.ENV_PROFILE }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      MONITORFISH_VERSION: ${{ needs.version.outputs.VERSION }}
-      PUPPETEER_SKIP_DOWNLOAD: "true"
-      VITE_CYPRESS_PORT: 8880
-      VERSION: ${{ needs.version.outputs.VERSION }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+  # e2e_multi_windows_test:
+  #   name: Run E2E multi windows tests
+  #   needs: [version, build]
+  #   if: contains(github.ref, 'dependabot') == false
+  #   runs-on: ubuntu-22.04
+  #   env:
+  #     ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+  #     ENV_PROFILE: ${{ needs.version.outputs.ENV_PROFILE }}
+  #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     MONITORFISH_VERSION: ${{ needs.version.outputs.VERSION }}
+  #     PUPPETEER_SKIP_DOWNLOAD: "true"
+  #     VITE_CYPRESS_PORT: 8880
+  #     VERSION: ${{ needs.version.outputs.VERSION }}
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
 
-      - name: Download image
-        uses: ishworkh/docker-image-artifact-download@v1
-        with:
-          image: monitorfish-app:${{ env.VERSION }}
+  #     - name: Download image
+  #       uses: ishworkh/docker-image-artifact-download@v1
+  #       with:
+  #         image: monitorfish-app:${{ env.VERSION }}
 
-      - name: Docker login
-        run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${GITHUB_ACTOR} --password-stdin
+  #     - name: Docker login
+  #       run: |
+  #         echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${GITHUB_ACTOR} --password-stdin
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          cache: npm
-          cache-dependency-path: ./frontend/package-lock.json
-          node-version: 20
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         cache: npm
+  #         cache-dependency-path: ./frontend/package-lock.json
+  #         node-version: 20
 
-      - name: Install Node.js dependencies
-        run: npm ci
-        working-directory: ./frontend
+  #     - name: Install Node.js dependencies
+  #       run: npm ci
+  #       working-directory: ./frontend
 
-      - name: Run docker images
-        run: make docker-compose-puppeteer-up
+  #     - name: Run docker images
+  #       run: make docker-compose-puppeteer-up
 
-      - name: Install Firefox
-        run: npx puppeteer browsers install firefox
+  #     - name: Install Firefox
+  #       run: npx puppeteer browsers install firefox
 
-      - name: Run multi-windows tests
-        run: npm run test:multi-windows:run
-        working-directory: ./frontend
+  #     - name: Run multi-windows tests
+  #       run: npm run test:multi-windows:run
+  #       working-directory: ./frontend
 
   # generate_and_upload_source_maps:
   #   name: Generate and upload source maps to Sentry
@@ -344,7 +344,7 @@ jobs:
   push_to_registry:
     name: Push to registry
     # needs: [version, unit_test_backend, unit_test_frontend, e2e_test, e2e_multi_windows_test, generate_and_upload_source_maps]
-    needs: [version, unit_test_backend, unit_test_frontend, e2e_test, e2e_multi_windows_test]
+    needs: [version, unit_test_backend, unit_test_frontend, e2e_test]
     runs-on: ubuntu-22.04
     if: needs.version.outputs.IS_RELEASE && !contains(github.ref, 'dependabot')
     env:

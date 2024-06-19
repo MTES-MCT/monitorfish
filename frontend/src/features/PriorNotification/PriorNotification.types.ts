@@ -89,6 +89,7 @@ export namespace PriorNotification {
   }
 
   export enum PurposeCode {
+    ACS = 'ACS',
     ECY = 'ECY',
     GRD = 'GRD',
     LAN = 'LAN',
@@ -101,6 +102,8 @@ export namespace PriorNotification {
     TRA = 'TRA'
   }
   export const PURPOSE_LABEL: Record<PurposeCode, string> = {
+    // TODO Find out what this purpose code means.
+    ACS: 'Non supporté',
     // "Emergency"
     ECY: 'Urgence',
     // "Vessels grounded and called by the authorities"

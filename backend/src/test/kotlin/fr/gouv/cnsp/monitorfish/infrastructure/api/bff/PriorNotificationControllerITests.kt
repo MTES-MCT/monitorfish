@@ -84,6 +84,7 @@ class PriorNotificationControllerITests {
                         reportingCount = null,
                         seafront = null,
                         sentAt = null,
+                        state = null,
                         updatedAt = null,
                         vessel = Vessel(
                             id = 1,
@@ -124,6 +125,7 @@ class PriorNotificationControllerITests {
                         reportingCount = 0,
                         seafront = null,
                         sentAt = null,
+                        state = null,
                         updatedAt = null,
                         vessel = Vessel(
                             id = 2,
@@ -208,6 +210,7 @@ class PriorNotificationControllerITests {
                 reportingCount = null,
                 seafront = null,
                 sentAt = null,
+                state = null,
                 updatedAt = null,
                 vessel = Vessel(
                     id = 1,

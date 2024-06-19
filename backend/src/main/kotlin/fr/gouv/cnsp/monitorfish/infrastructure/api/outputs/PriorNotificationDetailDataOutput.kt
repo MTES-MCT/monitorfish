@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationState
 
 class PriorNotificationDetailDataOutput(
     // TODO Rename that to `reportId`.
@@ -10,12 +11,17 @@ class PriorNotificationDetailDataOutput(
     val fingerprint: String,
     val isLessThanTwelveMetersVessel: Boolean,
     val logbookMessage: LogbookMessageDataOutput,
+    val state: PriorNotificationState?,
 ) {
     companion object {
         fun fromPriorNotification(priorNotification: PriorNotification): PriorNotificationDetailDataOutput {
-            val isLessThanTwelveMetersVessel = requireNotNull(priorNotification.vessel).isLessThanTwelveMetersVessel()
+            val isLessThanTwelveMetersVessel = requireNotNull(priorNotification.vessel) {
+                "`priorNotification.vessel` is null."
+            }.isLessThanTwelveMetersVessel()
             val logbookMessage = priorNotification.logbookMessageTyped.logbookMessage
-            val referenceReportId = requireNotNull(logbookMessage.getReferenceReportId())
+            val referenceReportId = requireNotNull(logbookMessage.getReferenceReportId()) {
+                "`logbookMessage.getReferenceReportId()` returned null."
+            }
             val logbookMessageDataOutput = LogbookMessageDataOutput.fromLogbookMessage(logbookMessage)
 
             return PriorNotificationDetailDataOutput(
@@ -23,6 +29,7 @@ class PriorNotificationDetailDataOutput(
                 fingerprint = priorNotification.fingerprint,
                 isLessThanTwelveMetersVessel = isLessThanTwelveMetersVessel,
                 logbookMessage = logbookMessageDataOutput,
+                state = priorNotification.state,
             )
         }
     }

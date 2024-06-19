@@ -95,9 +95,11 @@ data class ManualPriorNotificationEntity(
 
     fun toPriorNotification(): PriorNotification {
         try {
+            val reportId = requireNotNull(reportId) { "`reportId` is null." }
+
             val pnoLogbookMessage = LogbookMessage(
                 id = null,
-                reportId = requireNotNull(reportId),
+                reportId = reportId,
                 analyzedByRules = emptyList(),
                 flagState = flagState,
                 isEnriched = true,
@@ -132,6 +134,7 @@ data class ManualPriorNotificationEntity(
                 port = null,
                 reportingCount = null,
                 seafront = null,
+                state = null,
                 vessel = vessel,
                 vesselRiskFactor = null,
             )

@@ -51,7 +51,7 @@ data class LogbookMessage(
         return referencedReportId ?: reportId
     }
 
-    fun <T : LogbookMessageValue> toEnrichedLogbookMessageTyped(
+    fun <T : LogbookMessageValue> toConsolidatedLogbookMessageTyped(
         relatedLogbookMessages: List<LogbookMessage>,
         clazz: Class<T>,
     ): LogbookMessageTyped<T> {

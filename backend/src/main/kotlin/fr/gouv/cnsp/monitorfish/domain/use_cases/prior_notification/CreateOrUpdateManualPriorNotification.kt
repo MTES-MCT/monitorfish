@@ -102,6 +102,7 @@ class CreateOrUpdateManualPriorNotification(
             port = null,
             reportingCount = null,
             seafront = null,
+            state = null,
             vessel = null,
             vesselRiskFactor = null,
             updatedAt = null,

@@ -5,7 +5,8 @@ import {
   ALL_SEAFRONT_GROUP,
   type AllSeafrontGroup
 } from '@constants/seafront'
-import { customDayjs, getMaybeBooleanFromRichBoolean, type DateAsStringRange } from '@mtes-mct/monitor-ui'
+import { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
+import { THEME, customDayjs, getMaybeBooleanFromRichBoolean, type DateAsStringRange } from '@mtes-mct/monitor-ui'
 
 import {
   COMMUNITY_PRIOR_NOTIFICATION_TYPES,
@@ -14,9 +15,10 @@ import {
   LastControlPeriod,
   SUB_MENU_LABEL
 } from './constants'
+import { PriorNotification } from '../../PriorNotification.types'
 
 import type { ListFilter } from './types'
-import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
+import type { CSSProperties } from 'react'
 
 function getApiFilterFromExpectedArrivalPeriod(
   period: ExpectedArrivalPeriod,
@@ -98,6 +100,40 @@ function getApiFilterFromLastControlPeriod(period: LastControlPeriod | undefined
       return {
         lastControlledBefore: customDayjs().subtract(2, 'year').toISOString()
       }
+
+    default:
+      return {}
+  }
+}
+
+export function getColorAndBackgroundColorFromState(state: PriorNotification.State | undefined): [string, string] {
+  switch (state) {
+    case PriorNotification.State.PENDING_SEND:
+      return [THEME.color.mediumSeaGreen, THEME.color.mediumSeaGreen25]
+
+    case PriorNotification.State.PENDING_VERIFICATION:
+      return [THEME.color.charcoal, THEME.color.goldenPoppyBorder]
+
+    case PriorNotification.State.SENT:
+      return [THEME.color.charcoal, THEME.color.lightGray]
+
+    case PriorNotification.State.VERIFIED_AND_SENT:
+      return [THEME.color.mediumSeaGreen, THEME.color.mediumSeaGreen25]
+
+    case PriorNotification.State.OUT_OF_VERIFICATION_SCOPE:
+    default:
+      return [THEME.color.charcoal, THEME.color.white]
+  }
+}
+
+export function getExpandableRowCellCustomStyle(columnId: string): CSSProperties {
+  switch (columnId) {
+    case LogbookMessage.ApiSortColumn.VESSEL_RISK_FACTOR:
+    case 'actions':
+      return { verticalAlign: 'bottom' }
+
+    case 'state':
+      return { padding: '7px 14px', verticalAlign: 'bottom' }
 
     default:
       return {}

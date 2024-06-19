@@ -4,6 +4,7 @@
         "id": "report_id",
         "data": [
             // - Vessel: POISSON PAS NET
+            // - State: UnVerified and sent
             {
                 "report_id": "00000000-0000-4000-0000-000000000001",
                 "author_trigram": "ABC",
@@ -34,6 +35,10 @@
                         }
                     ],
                     "faoZone": null,
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": true,
+                    "isVerified": false,
                     "note": null,
                     "pnoTypes": [
                         {
@@ -56,6 +61,7 @@
             // - Under charter
             // - With 2 reportings
             // - Flag state: BEL
+            // - State: Verified (non-required) and sent
             {
                 "report_id": "00000000-0000-4000-0000-000000000002",
                 "author_trigram": "ABC",
@@ -140,8 +146,8 @@
                     "faoZone": null,
                     "isBeingSent": false,
                     "isInVerificationScope": false,
-                    "isSent": false,
-                    "isVerified": false,
+                    "isSent": true,
+                    "isVerified": true,
                     "note": null,
                     "pnoTypes": [
                         {
@@ -169,6 +175,7 @@
             // - Updated
             // - Did not fish after zero notice
             // - With risk factor
+            // - State: Verified (required) and sent
             {
                 "report_id": "00000000-0000-4000-0000-000000000003",
                 "author_trigram": "ABC",
@@ -203,9 +210,9 @@
                     ],
                     "faoZone": null,
                     "isBeingSent": false,
-                    "isInVerificationScope": false,
-                    "isSent": false,
-                    "isVerified": false,
+                    "isInVerificationScope": true,
+                    "isSent": true,
+                    "isVerified": true,
                     "note": "Pêche abandonnée pour cause de météo défavorable.",
                     "pnoTypes": [
                         {
@@ -276,6 +283,7 @@
 
             // - Vessel: NAVIRE RENOMMÉ (ANCIEN NOM)
             // - RENAMED TO: NAVIRE RENOMMÉ (NOUVEAU NOM)
+            // - State: Pending verification (required)
             {
                 "report_id": "00000000-0000-4000-0000-000000000005",
                 "author_trigram": "ABC",
@@ -307,7 +315,7 @@
                     ],
                     "faoZone": null,
                     "isBeingSent": false,
-                    "isInVerificationScope": false,
+                    "isInVerificationScope": true,
                     "isSent": false,
                     "isVerified": false,
                     "note": 0,
@@ -330,6 +338,7 @@
             // - Landing date = Arrival date
             // - Zero notice
             // - Flag state: ITA
+            // - State: Unverified and pending sending
             {
                 "report_id": "00000000-0000-4000-0000-000000000006",
                 "author_trigram": "ABC",
@@ -360,7 +369,7 @@
                         }
                     ],
                     "faoZone": null,
-                    "isBeingSent": false,
+                    "isBeingSent": true,
                     "isInVerificationScope": false,
                     "isSent": false,
                     "isVerified": false,

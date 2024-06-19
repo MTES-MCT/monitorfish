@@ -26,6 +26,7 @@ export namespace PriorNotification {
     reportingCount: number
     seafront: Seafront | undefined
     sentAt: string | undefined
+    state: State | undefined
     tripGears: LogbookMessage.Gear[]
     tripSegments: LogbookMessage.Segment[]
     types: Type[]
@@ -52,6 +53,7 @@ export namespace PriorNotification {
     id: string
     isLessThanTwelveMetersVessel: boolean
     logbookMessage: LogbookMessage.PnoLogbookMessage
+    state: State | undefined
   }
 
   export type ManualPriorNotificationData = {
@@ -76,7 +78,7 @@ export namespace PriorNotification {
   >
   export type ManualPriorNotificationComputedValues = Pick<
     PriorNotification,
-    'isBeingSent' | 'isInVerificationScope' | 'isSent' | 'isVerified' | 'tripSegments' | 'types' | 'vesselRiskFactor'
+    'state' | 'tripSegments' | 'types' | 'vesselRiskFactor'
   >
 
   export type PriorNotificationDataFishingCatch = {
@@ -128,5 +130,25 @@ export namespace PriorNotification {
     SHE: 'Mise à l’abri',
     // "Transhipment"
     TRA: 'Transbordement'
+  }
+
+  export enum State {
+    /** "Hors diffusion". */
+    OUT_OF_VERIFICATION_SCOPE = 'OUT_OF_VERIFICATION_SCOPE',
+    /** "En cours de diffusion". */
+    PENDING_SEND = 'PENDING_SEND',
+    /** "À vérifier". */
+    PENDING_VERIFICATION = 'PENDING_VERIFICATION',
+    /** "Diffusé". */
+    SENT = 'SENT',
+    /** "Vérifié et diffusé". */
+    VERIFIED_AND_SENT = 'VERIFIED_AND_SENT'
+  }
+  export const STATE_LABEL: Record<State, string> = {
+    OUT_OF_VERIFICATION_SCOPE: 'Hors diffusion',
+    PENDING_SEND: 'En cours de diffusion',
+    PENDING_VERIFICATION: 'À vérifier',
+    SENT: 'Diffusé',
+    VERIFIED_AND_SENT: 'Vérifié et diffusé'
   }
 }

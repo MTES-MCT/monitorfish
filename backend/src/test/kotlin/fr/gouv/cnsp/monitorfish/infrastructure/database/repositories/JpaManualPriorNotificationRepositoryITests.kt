@@ -465,6 +465,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
                 reportingCount = null,
                 seafront = null,
                 sentAt = ZonedDateTime.now().toString(),
+                state = null,
                 updatedAt = null,
                 vessel = null,
                 vesselRiskFactor = null,

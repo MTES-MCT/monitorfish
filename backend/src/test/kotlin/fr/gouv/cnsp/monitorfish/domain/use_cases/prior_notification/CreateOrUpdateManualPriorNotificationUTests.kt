@@ -89,6 +89,7 @@ class CreateOrUpdateManualPriorNotificationUTests {
                 reportingCount = null,
                 seafront = null,
                 sentAt = null,
+                state = null,
                 updatedAt = null,
                 vessel = null,
                 vesselRiskFactor = null,

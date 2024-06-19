@@ -60,11 +60,7 @@ export const openPriorNotificationForm =
       }
 
       const nextComputedValues: PriorNotification.ManualPriorNotificationComputedValues = {
-        // TODO Add a type-guaranteed output in Backend for PNO message.
-        isBeingSent: priorNotificationDetail.logbookMessage.message.isBeingSent!,
-        isInVerificationScope: priorNotificationDetail.logbookMessage.message.isInVerificationScope!,
-        isSent: priorNotificationDetail.logbookMessage.message.isSent!,
-        isVerified: priorNotificationDetail.logbookMessage.message.isVerified!,
+        state: priorNotificationDetail.state,
         tripSegments: priorNotificationDetail.logbookMessage.tripSegments ?? [],
         types:
           priorNotificationDetail.logbookMessage.message.pnoTypes?.map(({ pnoTypeName, ...rest }) => ({

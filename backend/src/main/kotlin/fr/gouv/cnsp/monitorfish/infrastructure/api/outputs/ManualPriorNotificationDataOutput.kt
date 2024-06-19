@@ -20,38 +20,54 @@ data class ManualPriorNotificationDataOutput(
     companion object {
         fun fromPriorNotification(priorNotification: PriorNotification): ManualPriorNotificationDataOutput {
             val logbookMessage = priorNotification.logbookMessageTyped.logbookMessage
-            val message = priorNotification.logbookMessageTyped.typedMessage
+            val pnoMessage = priorNotification.logbookMessageTyped.typedMessage
 
+            val authorTrigram = requireNotNull(priorNotification.authorTrigram) {
+                "`priorNotification.authorTrigram` is null."
+            }
             val expectedArrivalDate = CustomZonedDateTime.fromZonedDateTime(
-                requireNotNull(message.predictedArrivalDatetimeUtc),
+                requireNotNull(pnoMessage.predictedArrivalDatetimeUtc) {
+                    "`message.predictedArrivalDatetimeUtc` is null."
+                },
             ).toString()
             val expectedLandingDate = CustomZonedDateTime.fromZonedDateTime(
-                requireNotNull(message.predictedLandingDatetimeUtc),
+                requireNotNull(pnoMessage.predictedLandingDatetimeUtc) {
+                    "`message.predictedLandingDatetimeUtc` is null."
+                },
             ).toString()
             // At the moment, manual prior notifications only have a single global FAO area field in Frontend,
             // so we transform that single FAO area into an FAO area per fishing catch when we save it,
             // while setting the global `PNO.faoZone` to `null`.
             // We need to reverse this transformation when we output the data.
-            val globalFaoArea = requireNotNull(message.catchOnboard.firstOrNull()?.faoZone) {
+            val globalFaoArea = requireNotNull(pnoMessage.catchOnboard.firstOrNull()?.faoZone) {
                 "`message.catchOnboard.firstOrNull()?.faoZone` is null."
             }
-            val fishingCatchDataOutputs = message.catchOnboard.map {
+            val fishingCatchDataOutputs = pnoMessage.catchOnboard.map {
                 ManualPriorNotificationFishingCatchDataOutput.fromLogbookFishingCatch(it)
             }
+            val portLocode = requireNotNull(pnoMessage.port) { "`message.port` is null." }
+            val reportId = requireNotNull(priorNotification.reportId) { "`priorNotification.reportId` is null." }
+            val sentAt = requireNotNull(priorNotification.sentAt) { "`priorNotification.sentAt` is null." }
+            val tripGearCodes = requireNotNull(logbookMessage.tripGears) {
+                "`logbookMessage.tripGears` is null."
+            }.map { requireNotNull(it.gear) { "`it.gear` is null." } }
+            val vesselId = requireNotNull(priorNotification.vessel) {
+                "`priorNotification.vessel` is null."
+            }.id
 
             return ManualPriorNotificationDataOutput(
-                authorTrigram = requireNotNull(priorNotification.authorTrigram),
+                authorTrigram,
                 didNotFishAfterZeroNotice = priorNotification.didNotFishAfterZeroNotice,
-                expectedArrivalDate = expectedArrivalDate,
-                expectedLandingDate = expectedLandingDate,
+                expectedArrivalDate,
+                expectedLandingDate,
                 faoArea = globalFaoArea,
                 fishingCatches = fishingCatchDataOutputs,
-                note = message.note,
-                portLocode = requireNotNull(message.port),
-                reportId = requireNotNull(priorNotification.reportId),
-                sentAt = requireNotNull(priorNotification.sentAt),
-                tripGearCodes = requireNotNull(logbookMessage.tripGears).map { requireNotNull(it.gear) },
-                vesselId = requireNotNull(priorNotification.vessel).id,
+                note = pnoMessage.note,
+                portLocode,
+                reportId,
+                sentAt,
+                tripGearCodes,
+                vesselId,
             )
         }
     }

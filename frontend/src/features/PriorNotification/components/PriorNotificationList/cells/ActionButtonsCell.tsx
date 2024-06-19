@@ -4,16 +4,16 @@ import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import { VesselIdentifier, type VesselIdentity } from 'domain/entities/vessel/types'
 import styled from 'styled-components'
 
-import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
-import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
-import { openPriorNotificationCard } from '../../useCases/openPriorNotificationCard'
+import { useIsSuperUser } from '../../../../../auth/hooks/useIsSuperUser'
+import { showVessel } from '../../../../../domain/use_cases/vessel/showVessel'
+import { openPriorNotificationCard } from '../../../useCases/openPriorNotificationCard'
 
-import type { PriorNotification } from '../../PriorNotification.types'
+import type { PriorNotification } from '../../../PriorNotification.types'
 
-type ButtonsGroupRowProps = Readonly<{
+type ActionButtonsCellProps = Readonly<{
   priorNotification: PriorNotification.PriorNotification
 }>
-export function ButtonsGroupRow({ priorNotification }: ButtonsGroupRowProps) {
+export function ActionButtonsCell({ priorNotification }: ActionButtonsCellProps) {
   const isSuperUser = useIsSuperUser()
   const dispatch = useMainAppDispatch()
 

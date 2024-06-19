@@ -1,10 +1,11 @@
 import { VesselRiskFactor } from '@features/Vessel/components/VesselRiskFactor'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { THEME, Tag } from '@mtes-mct/monitor-ui'
+import { THEME } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import styled from 'styled-components'
 
 import { isZeroNotice } from './utils'
+import { FixedTag } from '../PriorNotificationList/styles'
 
 import type { FormValues } from './types'
 
@@ -17,9 +18,9 @@ export function TagBar() {
   return (
     <Wrapper className="Wrapper">
       {isZeroNotice(values) && (
-        <Tag key="zeroNotice" borderColor={THEME.color.slateGray}>
+        <FixedTag key="zeroNotice" borderColor={THEME.color.slateGray}>
           Préavis Zéro
-        </Tag>
+        </FixedTag>
       )}
 
       {!!editedPriorNotificationComputedValues && (
@@ -33,9 +34,9 @@ export function TagBar() {
             />
 
             {editedPriorNotificationComputedValues.tripSegments.map(tripSegment => (
-              <Tag key={`tripSegment-${tripSegment.code}`} backgroundColor={THEME.color.blueGray25}>
+              <FixedTag key={`tripSegment-${tripSegment.code}`} backgroundColor={THEME.color.blueGray25}>
                 {`${tripSegment.code} – ${tripSegment.name}`}
-              </Tag>
+              </FixedTag>
             ))}
           </Row>
 
@@ -43,9 +44,9 @@ export function TagBar() {
             {editedPriorNotificationComputedValues.types.map(
               type =>
                 type.hasDesignatedPorts && (
-                  <Tag key={`type-${type.name}`} backgroundColor={THEME.color.gainsboro}>
+                  <FixedTag key={`type-${type.name}`} backgroundColor={THEME.color.gainsboro}>
                     {type.name}
-                  </Tag>
+                  </FixedTag>
                 )
             )}
           </Row>

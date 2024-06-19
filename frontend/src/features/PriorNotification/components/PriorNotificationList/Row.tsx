@@ -1,11 +1,11 @@
-import { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Icon, THEME, TableWithSelectableRows, Tag, customDayjs } from '@mtes-mct/monitor-ui'
 import { flexRender, type Row as RowType } from '@tanstack/react-table'
 import { orderBy } from 'lodash'
 import styled from 'styled-components'
 
-import { None } from './styles'
+import { FixedTag, None } from './styles'
+import { getColorAndBackgroundColorFromState, getExpandableRowCellCustomStyle } from './utils'
 import { PriorNotification } from '../../PriorNotification.types'
 import { openPriorNotificationCard } from '../../useCases/openPriorNotificationCard'
 
@@ -28,13 +28,9 @@ export function Row({ row }: RowProps) {
         {row?.getVisibleCells().map(cell => (
           <ExpandableRowCell
             key={cell.id}
-            $hasRightBorder={cell.column.id === 'reportingCount'}
+            $hasRightBorder={['types', 'state'].includes(cell.column.id)}
             onClick={() => row.toggleExpanded()}
-            style={
-              [LogbookMessage.ApiSortColumn.VESSEL_RISK_FACTOR, 'reportingCount', 'actions'].includes(cell.column.id)
-                ? { verticalAlign: 'bottom' }
-                : undefined
-            }
+            style={getExpandableRowCellCustomStyle(cell.column.id)}
           >
             {flexRender(cell.column.columnDef.cell, cell.getContext())}
           </ExpandableRowCell>
@@ -156,8 +152,22 @@ export function Row({ row }: RowProps) {
               <Link onClick={openCard}>Voir plus de détail</Link>
             </p>
           </ExpandedRowCell>
-          <ExpandedRowCell />
-          <ExpandedRowCell />
+          <ExpandedRowCell colSpan={2} style={{ paddingLeft: 0, paddingRight: 0, paddingTop: 12 }}>
+            <>
+              {!!priorNotification.state && (
+                <FixedTag
+                  backgroundColor={getColorAndBackgroundColorFromState(priorNotification.state)[1]}
+                  color={getColorAndBackgroundColorFromState(priorNotification.state)[0]}
+                  style={{ marginBottom: 16 }}
+                >
+                  {PriorNotification.STATE_LABEL[priorNotification.state]}
+                </FixedTag>
+              )}
+              <FixedTag backgroundColor={THEME.color.maximumRed15} color={THEME.color.maximumRed}>{`${
+                priorNotification.reportingCount
+              } signalement${priorNotification.reportingCount > 1 ? 's' : ''}`}</FixedTag>
+            </>
+          </ExpandedRowCell>
         </ExpandedRow>
       )}
     </>
@@ -186,6 +196,7 @@ const ExpandedRowCell = styled(TableWithSelectableRows.Td).attrs(props => ({
 }))`
   padding: 8px 16px 16px;
   height: 42px;
+  vertical-align: top;
   white-space: normal;
 
   > p:not(:first-child) {

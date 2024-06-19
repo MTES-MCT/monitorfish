@@ -28,6 +28,7 @@
         "data": [
             // - Vessel: PHENOMENE
             // - With risk factor
+            // - State: UnVerified and sent
             {
                 "id": 101,
                 "report_id": "FAKE_OPERATION_101",
@@ -65,7 +66,7 @@
                     ],
                     "isBeingSent": false,
                     "isInVerificationScope": false,
-                    "isSent": false,
+                    "isSent": true,
                     "isVerified": false,
                     "pnoTypes": [
                         {
@@ -89,6 +90,7 @@
 
             // - Vessel: COURANT MAIN PROFESSEUR
             // - With 1 reporting
+            // - State: Verified (non-required) and sent
             {
                 "id": 102,
                 "report_id": "FAKE_OPERATION_102",
@@ -135,8 +137,8 @@
                     ],
                     "isBeingSent": false,
                     "isInVerificationScope": false,
-                    "isSent": false,
-                    "isVerified": false,
+                    "isSent": true,
+                    "isVerified": true,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type C",
@@ -186,6 +188,7 @@
             // - With risk factor
             // - Under charter
             // - Flag state: ES
+            // - State: Verified (required) and sent
             {
                 "id": 104,
                 "report_id": "FAKE_OPERATION_104",
@@ -276,9 +279,9 @@
                         }
                     ],
                     "isBeingSent": false,
-                    "isInVerificationScope": false,
-                    "isSent": false,
-                    "isVerified": false,
+                    "isInVerificationScope": true,
+                    "isSent": true,
+                    "isVerified": true,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type A",
@@ -360,6 +363,7 @@
             },
 
             // - Vessel: L'OM DU POISSON
+            // - State: Pending verification (required)
             {
                 "id": 106,
                 "report_id": "FAKE_OPERATION_106",
@@ -395,7 +399,7 @@
                         }
                     ],
                     "isBeingSent": false,
-                    "isInVerificationScope": false,
+                    "isInVerificationScope": true,
                     "isSent": false,
                     "isVerified": false,
                     "pnoTypes": [
@@ -417,6 +421,7 @@
             // - With RET
             // - Aknowledged
             // - Flag state: UNKNOWN
+            // - State: Unverified and pending sending
             {
                 "id": 107,
                 "report_id": "FAKE_OPERATION_107",
@@ -451,8 +456,8 @@
                             "statisticalRectangle": "23E6"
                         }
                     ],
-                    "isBeingSent": false,
-                    "isInVerificationScope": false,
+                    "isBeingSent": true,
+                    "isInVerificationScope": true,
                     "isSent": false,
                     "isVerified": false,
                     "pnoTypes": [

@@ -31,10 +31,11 @@ from src.pipeline.flows.distribute_pnos import (
     extract_species_names,
     fetch_control_units_contacts,
     flow,
-    get_template,
+    get_email_body_template,
+    get_html_for_pdf_template,
+    get_sms_template,
     load_pno_pdf_documents,
     pre_render_pno,
-    print_html_to_pdf,
     render_pno,
     to_pnos_to_render,
 )
@@ -862,7 +863,7 @@ def monitorenv_control_units_api_response() -> list:
                 {
                     "id": 322,
                     "controlUnitId": 3,
-                    "email": "email.3@bla",
+                    "email": None,
                     "isEmailSubscriptionContact": True,
                     "isSmsSubscriptionContact": True,
                     "name": "UNKNOWN",
@@ -900,7 +901,6 @@ def monitorenv_control_units_api_response() -> list:
                     "isEmailSubscriptionContact": True,
                     "isSmsSubscriptionContact": True,
                     "name": "Unité",
-                    "phone": " 99 99 99 99 99",
                 },
             ],
             "isArchived": False,
@@ -959,7 +959,6 @@ def monitorenv_control_units_api_response() -> list:
                     "isEmailSubscriptionContact": False,
                     "isSmsSubscriptionContact": True,
                     "name": "UNKNOWN",
-                    "phone": "88 88 88 88 88",
                 },
                 {
                     "id": 1540,
@@ -973,7 +972,6 @@ def monitorenv_control_units_api_response() -> list:
                 {
                     "id": 1541,
                     "controlUnitId": 6,
-                    "email": "email.6@contact",
                     "isEmailSubscriptionContact": True,
                     "isSmsSubscriptionContact": False,
                     "name": "Référent police",
@@ -1006,25 +1004,49 @@ def monitorenv_control_units_api_response() -> list:
 def control_units_contacts() -> pd.DataFrame:
     return pd.DataFrame(
         {
-            "control_unit_id": [2, 3, 4, 6],
+            "control_unit_id": [2, 3, 4],
             "email": [
                 ["alternative@email", "some.email@control.unit.4"],
-                ["email.3@bla"],
+                [],
                 ["email4@email.com"],
-                ["email.6@contact"],
+            ],
+            "phone": [
+                ["'00 11 22 33 44 55"],
+                ["44 44 44 44 44"],
+                [],
             ],
         }
     )
 
 
-def test_get_template():
-    template = get_template.run()
-    assert isinstance(template, Template)
+def test_get_html_for_pdf_template():
+    html_for_pdf_template = get_html_for_pdf_template.run()
+    assert isinstance(html_for_pdf_template, Template)
 
 
 @pytest.fixture
-def template() -> dict:
-    return get_template.run()
+def html_for_pdf_template() -> dict:
+    return get_html_for_pdf_template.run()
+
+
+def test_get_email_body_template():
+    email_body_template = get_email_body_template.run()
+    assert isinstance(email_body_template, Template)
+
+
+@pytest.fixture
+def email_body_template() -> dict:
+    return get_email_body_template.run()
+
+
+def test_get_sms_template():
+    sms_template = get_sms_template.run()
+    assert isinstance(sms_template, Template)
+
+
+@pytest.fixture
+def sms_template() -> dict:
+    return get_sms_template.run()
 
 
 def test_extract_pnos_to_generate(reset_test_data, extracted_pnos):
@@ -1112,24 +1134,52 @@ def test_pre_render_pno_2(
 @patch(
     "src.pipeline.flows.distribute_pnos.EMAIL_FONTS_LOCATION", Path("/se_mer/logo/path")
 )
-def test_render_pno_1(template, pre_rendered_pno_1):
-    html_document = render_pno.run(pno=pre_rendered_pno_1, template=template)
-    test_filepath = (
+def test_render_pno_1(
+    html_for_pdf_template, pre_rendered_pno_1, email_body_template, sms_template
+):
+    pno = render_pno.run(
+        pno=pre_rendered_pno_1,
+        html_for_pdf_template=html_for_pdf_template,
+        email_body_template=email_body_template,
+        sms_template=sms_template,
+    )
+
+    test_sms_filepath = (
+        TEST_DATA_LOCATION / "emails/prior_notifications/expected_sms_1.txt"
+    )
+    test_html_filepath = (
         TEST_DATA_LOCATION / "emails/prior_notifications/expected_pno_1.html"
+    )
+    test_email_body_file_path = (
+        TEST_DATA_LOCATION / "emails/prior_notifications/expected_email_body_1.html"
     )
 
     ######################### Uncomment to replace test files #########################
-    # with open(test_filepath, "w") as f:
-    #     f.write(html)
+    # with open(test_html_filepath, "w") as f:
+    #     f.write(pno.html_for_pdf)
+
+    # with open(test_email_body_file_path, "w") as f:
+    #     f.write(pno.html_email_body)
+
+    # with open(test_sms_filepath, "w") as f:
+    #     f.write(pno.sms_content)
 
     ###################################################################################
-    with open(test_filepath, "r") as f:
+    with open(test_html_filepath, "r") as f:
         expected_html = f.read()
 
-    assert isinstance(html_document, RenderedPno)
-    assert html_document.html_for_pdf == expected_html
-    assert html_document.report_id == "11"
-    assert html_document.source == PnoSource.LOGBOOK
+    with open(test_email_body_file_path, "r") as f:
+        expected_html_email_body = f.read()
+
+    with open(test_sms_filepath, "r") as f:
+        expected_sms_content = f.read()
+
+    assert isinstance(pno, RenderedPno)
+    assert pno.html_for_pdf == expected_html
+    assert pno.html_email_body == expected_html_email_body
+    assert pno.report_id == "11"
+    assert pno.source == PnoSource.LOGBOOK
+    assert pno.sms_content == expected_sms_content
 
 
 @patch(
@@ -1141,36 +1191,64 @@ def test_render_pno_1(template, pre_rendered_pno_1):
 @patch(
     "src.pipeline.flows.distribute_pnos.EMAIL_FONTS_LOCATION", Path("/se_mer/logo/path")
 )
-def test_render_pno_2(template, pre_rendered_pno_2):
-    html_document = render_pno.run(pno=pre_rendered_pno_2, template=template)
-    test_filepath = (
+def test_render_pno_2(
+    html_for_pdf_template, pre_rendered_pno_2, email_body_template, sms_template
+):
+    pno = render_pno.run(
+        pno=pre_rendered_pno_2,
+        html_for_pdf_template=html_for_pdf_template,
+        email_body_template=email_body_template,
+        sms_template=sms_template,
+    )
+
+    test_sms_filepath = (
+        TEST_DATA_LOCATION / "emails/prior_notifications/expected_sms_2.txt"
+    )
+    test_html_filepath = (
         TEST_DATA_LOCATION / "emails/prior_notifications/expected_pno_2.html"
+    )
+    test_email_body_file_path = (
+        TEST_DATA_LOCATION / "emails/prior_notifications/expected_email_body_2.html"
     )
 
     ######################### Uncomment to replace test files #########################
-    # with open(test_filepath, "w") as f:
-    #     f.write(html)
+    # with open(test_html_filepath, "w") as f:
+    #     f.write(pno.html_for_pdf)
+
+    # with open(test_email_body_file_path, "w") as f:
+    #     f.write(pno.html_email_body)
+
+    # with open(test_sms_filepath, "w") as f:
+    #     f.write(pno.sms_content)
 
     ###################################################################################
-    with open(test_filepath, "r") as f:
+    with open(test_html_filepath, "r") as f:
         expected_html = f.read()
 
-    assert isinstance(html_document, RenderedPno)
-    assert html_document.html_for_pdf == expected_html
-    assert html_document.report_id == "12"
-    assert html_document.source == PnoSource.LOGBOOK
+    with open(test_email_body_file_path, "r") as f:
+        expected_html_email_body = f.read()
+
+    with open(test_sms_filepath, "r") as f:
+        expected_sms_content = f.read()
+
+    assert isinstance(pno, RenderedPno)
+    assert pno.html_for_pdf == expected_html
+    assert pno.html_email_body == expected_html_email_body
+    assert pno.report_id == "12"
+    assert pno.source == PnoSource.LOGBOOK
+    assert pno.sms_content == expected_sms_content
 
 
-# `print_html_to_pdf` cannot be tested directly from a test html file, because the
-# paths inserted in the html for images and fonts depend on the environment where tests
-# are run. So we generate the html and then print in order to have an html with the
-# correct paths for the machine running the tests, that then can be printed.
-
-
-def test_render_then_print_to_pdf_1(template, pre_rendered_pno_1):
-    html_document = render_pno.run(pno=pre_rendered_pno_1, template=template)
-    pno_pdf_document = print_html_to_pdf.run(html_document)
-    pdf = pypdf.PdfReader(io.BytesIO(pno_pdf_document.pdf_document))
+def test_render_pno_1_pdf(
+    html_for_pdf_template, pre_rendered_pno_1, email_body_template, sms_template
+):
+    pno = render_pno.run(
+        pno=pre_rendered_pno_1,
+        html_for_pdf_template=html_for_pdf_template,
+        email_body_template=email_body_template,
+        sms_template=sms_template,
+    )
+    pdf = pypdf.PdfReader(io.BytesIO(pno.pdf_document))
 
     test_filepath = TEST_DATA_LOCATION / "emails/prior_notifications/expected_pno_1.pdf"
 
@@ -1180,19 +1258,25 @@ def test_render_then_print_to_pdf_1(template, pre_rendered_pno_1):
 
     ###################################################################################
     with open(test_filepath, "rb") as f:
-        expected_res = pypdf.PdfReader(io.BytesIO(f.read()))
+        expected_pdf = pypdf.PdfReader(io.BytesIO(f.read()))
 
-    assert expected_res.pages[0].extract_text() == pdf.pages[0].extract_text()
+    assert expected_pdf.pages[0].extract_text() == pdf.pages[0].extract_text()
 
-    assert pno_pdf_document.report_id == "11"
-    assert pno_pdf_document.source == PnoSource.LOGBOOK
-    assert isinstance(pno_pdf_document.generation_datetime_utc, datetime)
+    assert pno.report_id == "11"
+    assert pno.source == PnoSource.LOGBOOK
+    assert isinstance(pno.generation_datetime_utc, datetime)
 
 
-def test_render_then_print_to_pdf_2(template, pre_rendered_pno_2):
-    html_document = render_pno.run(pno=pre_rendered_pno_2, template=template)
-    pno_pdf_document = print_html_to_pdf.run(html_document)
-    pdf = pypdf.PdfReader(io.BytesIO(pno_pdf_document.pdf_document))
+def test_render_pno_2_pdf(
+    html_for_pdf_template, pre_rendered_pno_2, email_body_template, sms_template
+):
+    pno = render_pno.run(
+        pno=pre_rendered_pno_2,
+        html_for_pdf_template=html_for_pdf_template,
+        email_body_template=email_body_template,
+        sms_template=sms_template,
+    )
+    pdf = pypdf.PdfReader(io.BytesIO(pno.pdf_document))
 
     test_filepath = TEST_DATA_LOCATION / "emails/prior_notifications/expected_pno_2.pdf"
 
@@ -1206,9 +1290,9 @@ def test_render_then_print_to_pdf_2(template, pre_rendered_pno_2):
 
     assert expected_res.pages[0].extract_text() == pdf.pages[0].extract_text()
 
-    assert pno_pdf_document.report_id == "12"
-    assert pno_pdf_document.source == PnoSource.LOGBOOK
-    assert isinstance(pno_pdf_document.generation_datetime_utc, datetime)
+    assert pno.report_id == "12"
+    assert pno.source == PnoSource.LOGBOOK
+    assert isinstance(pno.generation_datetime_utc, datetime)
 
 
 def test_load_pno_pdf_documents(reset_test_data):
@@ -1218,7 +1302,7 @@ def test_load_pno_pdf_documents(reset_test_data):
         TEST_DATA_LOCATION / "emails/prior_notifications/expected_pno_2.pdf",
     ]
 
-    pno_pdf_documents = []
+    pnos = []
 
     for fp, report_id, is_being_sent in zip(
         test_filepaths, ["existing-report-id", "new-report-id"], [True, False]
@@ -1226,7 +1310,7 @@ def test_load_pno_pdf_documents(reset_test_data):
         with open(fp, "rb") as f:
             pdf = f.read()
 
-        pno_pdf_documents.append(
+        pnos.append(
             RenderedPno(
                 report_id=report_id,
                 vessel_id=66,
@@ -1250,7 +1334,7 @@ def test_load_pno_pdf_documents(reset_test_data):
     initial_pdfs = read_query(query, db="monitorfish_remote")
 
     ### Run ###
-    pno_pdf_documents_being_sent = load_pno_pdf_documents.run(pno_pdf_documents)
+    pno_pdf_documents_being_sent = load_pno_pdf_documents.run(pnos)
 
     ### Asserts ###
     final_pdfs = read_query(query, db="monitorfish_remote")
@@ -1287,7 +1371,7 @@ def test_load_pno_pdf_documents(reset_test_data):
             .values[0]
             .tobytes()
         )
-        == pno_pdf_documents[0].pdf_document
+        == pnos[0].pdf_document
     )
 
     # report-id 'new-report-id' was not in database initially and should be inserted
@@ -1296,12 +1380,12 @@ def test_load_pno_pdf_documents(reset_test_data):
         final_pdfs.loc[final_pdfs.report_id == "new-report-id", "pdf_document"]
         .values[0]
         .tobytes()
-        == pno_pdf_documents[1].pdf_document
+        == pnos[1].pdf_document
     )
 
     assert isinstance(pno_pdf_documents_being_sent, list)
     assert len(pno_pdf_documents_being_sent) == 1
-    assert pno_pdf_documents_being_sent[0] == pno_pdf_documents[0]
+    assert pno_pdf_documents_being_sent[0] == pnos[0]
 
 
 def test_attribute_addressees_uses_target_vessels_and_segments(

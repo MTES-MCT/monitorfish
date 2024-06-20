@@ -14,12 +14,16 @@ from prefect import Flow, Parameter, case, task, unmapped
 from prefect.executors import LocalDaskExecutor
 
 from config import (
+    CNSP_CROSSA_CACEM_LOGOS_PATH,
     CNSP_LOGO_PATH,
     EMAIL_FONTS_LOCATION,
     EMAIL_STYLESHEETS_LOCATION,
     EMAIL_TEMPLATES_LOCATION,
+    LIBERTE_EGALITE_FRATERNITE_LOGO_PATH,
+    MARIANNE_LOGO_PATH,
     MONITORENV_API_ENDPOINT,
     SE_MER_LOGO_PATH,
+    SMS_TEMPLATES_LOCATION,
     STATE_FLAGS_ICONS_LOCATION,
     default_risk_factors,
 )
@@ -34,6 +38,7 @@ from src.pipeline.entities.pnos import (
 )
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.helpers.emails import resize_pdf_to_A4
+from src.pipeline.processing import remove_nones_from_list
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.dates import get_utcnow, make_timedelta
 
@@ -117,16 +122,21 @@ def fetch_control_units_contacts() -> pd.DataFrame:
         lambda x: x.get("email") if x.get("isEmailSubscriptionContact") else None
     )
 
-    email_contacts = (
-        contacts[["control_unit_id", "email"]]
-        .dropna()
-        .groupby("control_unit_id")["email"]
-        .unique()
+    contacts["phone"] = contacts["control_unit_contacts"].apply(
+        lambda x: x.get("phone") if x.get("isSmsSubscriptionContact") else None
+    )
+
+    email_and_phone_contacts = (
+        contacts[["control_unit_id", "email", "phone"]]
+        .dropna(subset=["email", "phone"], how="all")
+        .groupby("control_unit_id")
+        .agg({"email": "unique", "phone": "unique"})
+        .map(remove_nones_from_list)
         .map(sorted)
         .reset_index()
     )
 
-    return email_contacts
+    return email_and_phone_contacts
 
 
 @task(checkpoint=False)
@@ -286,7 +296,7 @@ def pre_render_pno(
 
 
 @task(checkpoint=False)
-def get_template() -> Template:
+def get_html_for_pdf_template() -> Template:
     templates_locations = [
         EMAIL_TEMPLATES_LOCATION / "prior_notifications",
         EMAIL_STYLESHEETS_LOCATION,
@@ -308,15 +318,59 @@ def get_template() -> Template:
 
 
 @task(checkpoint=False)
-def render_pno(pno: PreRenderedPno, template: Template) -> RenderedPno:
+def get_email_body_template() -> Template:
+    templates_locations = [EMAIL_TEMPLATES_LOCATION / "prior_notifications"]
+
+    env = Environment(
+        loader=FileSystemLoader(templates_locations), autoescape=select_autoescape()
+    )
+
+    def pluralize(value, singular="", plural="s"):
+        if value == 1:
+            return singular
+        else:
+            return plural
+
+    env.filters["pluralize"] = pluralize
+
+    return env.get_template("email_body_template.jinja")
+
+
+@task(checkpoint=False)
+def get_sms_template() -> Template:
+    templates_locations = [SMS_TEMPLATES_LOCATION]
+
+    env = Environment(
+        loader=FileSystemLoader(templates_locations), autoescape=select_autoescape()
+    )
+
+    def pluralize(value, singular="", plural="s"):
+        if value == 1:
+            return singular
+        else:
+            return plural
+
+    env.filters["pluralize"] = pluralize
+
+    return env.get_template("prior_notification.jinja")
+
+
+@task(checkpoint=False)
+def render_pno(
+    pno: PreRenderedPno,
+    html_for_pdf_template: Template,
+    email_body_template: Template,
+    sms_template: Template,
+) -> RenderedPno:
     fonts_directory = EMAIL_FONTS_LOCATION.as_uri()
-    cnsp_logo_src = CNSP_LOGO_PATH.as_uri()
-    se_mer_logo_src = SE_MER_LOGO_PATH.as_uri()
+
     state_flags_icons = os.listdir(STATE_FLAGS_ICONS_LOCATION)
     if f"{pno.flag_state}.png" in state_flags_icons:
         state_flag_icon_src = (
             STATE_FLAGS_ICONS_LOCATION / Path(f"{pno.flag_state}.png")
         ).as_uri()
+    else:
+        state_flag_icon_src = None
 
     risk_factor_thresholds = np.array([1.75, 2.5, 3.25])
     thresholds_exceeded = (pno.risk_factor >= risk_factor_thresholds).sum()
@@ -350,10 +404,10 @@ def render_pno(pno: PreRenderedPno, template: Template) -> RenderedPno:
         else:
             return ""
 
-    html = template.render(
+    html_for_pdf = html_for_pdf_template.render(
         fonts_directory=fonts_directory,
-        cnsp_logo_src=cnsp_logo_src,
-        se_mer_logo_src=se_mer_logo_src,
+        cnsp_logo_src=CNSP_LOGO_PATH.as_uri(),
+        se_mer_logo_src=SE_MER_LOGO_PATH.as_uri(),
         state_flag_icon_src=state_flag_icon_src,
         operation_datetime_utc=format_nullable_datetime(pno.operation_datetime_utc),
         operation_type=pno.operation_type,
@@ -380,7 +434,7 @@ def render_pno(pno: PreRenderedPno, template: Template) -> RenderedPno:
         pno_types=", ".join(pno.pno_types),
         vessel_length=pno.vessel_length,
         mmsi=pno.mmsi,
-        risk_factor=f"{pno.risk_factor:.1f}",
+        risk_factor=pno.risk_factor,
         risk_factor_description=risk_factor_description,
         risk_factor_color=risk_factor_color,
         last_control_datetime_utc=format_nullable_datetime(
@@ -392,6 +446,43 @@ def render_pno(pno: PreRenderedPno, template: Template) -> RenderedPno:
         last_control_other_infractions=pno.last_control_other_infractions,
     )
 
+    html_email_body = email_body_template.render(
+        vessel_name=pno.vessel_name,
+        cfr=pno.cfr,
+        trip_segments=", ".join([f"{s.code} - {s.name}" for s in pno.trip_segments]),
+        risk_factor=pno.risk_factor,
+        cnsp_crossa_cacem_logos_src=f"cid:{CNSP_CROSSA_CACEM_LOGOS_PATH.name}",
+        liberte_egalite_fraternite_logo_src=f"cid:{LIBERTE_EGALITE_FRATERNITE_LOGO_PATH.name}",
+        marianne_logo_src=f"cid:{MARIANNE_LOGO_PATH.name}",
+        report_datetime_utc=format_nullable_datetime(pno.report_datetime_utc),
+        predicted_arrival_datetime_utc=format_nullable_datetime(
+            pno.predicted_arrival_datetime_utc
+        ),
+        predicted_landing_datetime_utc=format_nullable_datetime(
+            pno.predicted_landing_datetime_utc
+        ),
+        port_name=pno.port_name,
+        port_locode=pno.port_locode,
+        pno_types=", ".join(pno.pno_types),
+    )
+
+    sms_content = sms_template.render(
+        vessel_name=pno.vessel_name,
+        cfr=pno.cfr,
+        trip_segments=", ".join([f"{s.code} ({s.name})" for s in pno.trip_segments]),
+        risk_factor=pno.risk_factor,
+        report_datetime_utc=format_nullable_datetime(pno.report_datetime_utc),
+        predicted_arrival_datetime_utc=format_nullable_datetime(
+            pno.predicted_arrival_datetime_utc
+        ),
+        port_name=pno.port_name,
+    )
+
+    pdf = weasyprint.HTML(string=html_for_pdf).write_pdf(
+        optimize_size=("fonts", "images")
+    )
+    pdf = resize_pdf_to_A4(pdf)
+
     return RenderedPno(
         report_id=pno.report_id,
         vessel_id=pno.vessel_id,
@@ -401,27 +492,11 @@ def render_pno(pno: PreRenderedPno, template: Template) -> RenderedPno:
         trip_segments=pno.trip_segments,
         port_locode=pno.port_locode,
         source=pno.source,
-        html_for_pdf=html,
-    )
-
-
-@task(checkpoint=False)
-def print_html_to_pdf(html_document: RenderedPno) -> RenderedPno:
-    pdf = weasyprint.HTML(string=html_document.html_for_pdf).write_pdf(
-        optimize_size=("fonts", "images")
-    )
-    pdf = resize_pdf_to_A4(pdf)
-    return RenderedPno(
-        report_id=html_document.report_id,
-        vessel_id=html_document.vessel_id,
-        cfr=html_document.cfr,
-        is_verified=html_document.is_verified,
-        is_being_sent=html_document.is_being_sent,
-        trip_segments=html_document.trip_segments,
-        port_locode=html_document.port_locode,
-        source=html_document.source,
-        generation_datetime_utc=datetime.utcnow(),
+        html_for_pdf=html_for_pdf,
         pdf_document=pdf,
+        generation_datetime_utc=datetime.utcnow(),
+        html_email_body=html_email_body,
+        sms_content=sms_content,
     )
 
 
@@ -560,7 +635,9 @@ with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
 
         species_names = extract_species_names()
         fishing_gear_names = extract_fishing_gear_names()
-        template = get_template()
+        html_for_pdf_template = get_html_for_pdf_template()
+        email_body_template = get_email_body_template()
+        sms_template = get_sms_template()
         pnos = extract_pnos_to_generate(
             start_datetime_utc=start_datetime_utc,
             end_datetime_utc=end_datetime_utc,
@@ -576,9 +653,13 @@ with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
             species_names=unmapped(species_names),
             fishing_gear_names=unmapped(fishing_gear_names),
         )
-        html_documents = render_pno.map(pnos, template=unmapped(template))
-        pno_pdf_documents = print_html_to_pdf.map(html_documents)
-        pnos_to_distribute = load_pno_pdf_documents(pno_pdf_documents)
+        pnos = render_pno.map(
+            pnos,
+            html_for_pdf_template=unmapped(html_for_pdf_template),
+            email_body_template=unmapped(email_body_template),
+            sms_template=unmapped(sms_template),
+        )
+        pnos_to_distribute = load_pno_pdf_documents(pnos)
         pnos_with_unit_ids = attribute_addressees.map(
             pnos_to_distribute,
             unmapped(units_targeting_vessels),

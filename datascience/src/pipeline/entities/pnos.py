@@ -211,4 +211,6 @@ class RenderedPno:
     html_for_pdf: str = None
     pdf_document: bytes = None
     generation_datetime_utc: datetime = None
+    html_email_body: str = None
+    sms_content: str = None
     control_unit_ids: list = None

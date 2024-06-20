@@ -73,6 +73,8 @@ interface LogbookReportRepository {
 
     fun savePriorNotification(logbookMessageTyped: LogbookMessageTyped<PNO>): PriorNotification
 
+    fun updatePriorNotificationState(reportId: String, isBeingSent: Boolean, isVerified: Boolean)
+
     // For test purpose
     fun deleteAll()
 }

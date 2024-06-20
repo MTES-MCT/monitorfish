@@ -49,6 +49,9 @@ class PriorNotificationControllerITests {
     @MockBean
     private lateinit var getPriorNotificationTypes: GetPriorNotificationTypes
 
+    @MockBean
+    private lateinit var verifyAndSendPriorNotification: VerifyAndSendPriorNotification
+
     @Test
     fun `Should get a list of prior notifications`() {
         // Given

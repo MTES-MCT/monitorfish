@@ -1,14 +1,20 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendInternalException
+import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
+import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.repositories.ManualPriorNotificationRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ManualPriorNotificationEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBManualPriorNotificationRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.utils.toSqlArrayString
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
+import kotlin.reflect.full.declaredMemberProperties
+import kotlin.reflect.jvm.isAccessible
+import kotlin.reflect.jvm.javaField
 
 @Repository
 class JpaManualPriorNotificationRepository(
@@ -54,5 +60,29 @@ class JpaManualPriorNotificationRepository(
                 e,
             )
         }
+    }
+
+    @Transactional
+    override fun updateState(reportId: String, isBeingSent: Boolean, isVerified: Boolean) {
+        val manualPriorNotificationEntity =
+            dbManualPriorNotificationRepository.findByReportId(reportId) ?: throw BackendUsageException(
+                BackendUsageErrorCode.NOT_FOUND,
+            )
+
+        val nextPnoValue: PNO = manualPriorNotificationEntity.value
+        nextPnoValue.isBeingSent = isBeingSent
+        nextPnoValue.isVerified = isVerified
+
+        // We use a reflection to update the entity `value` prop since it's immutable
+        val pnoValueRefection = ManualPriorNotificationEntity::class.declaredMemberProperties
+            .find { it.name == "value" }
+        pnoValueRefection?.let {
+            it.isAccessible = true
+            val field = it.javaField
+            field?.isAccessible = true
+            field?.set(manualPriorNotificationEntity, nextPnoValue)
+        }
+
+        dbManualPriorNotificationRepository.save(manualPriorNotificationEntity)
     }
 }

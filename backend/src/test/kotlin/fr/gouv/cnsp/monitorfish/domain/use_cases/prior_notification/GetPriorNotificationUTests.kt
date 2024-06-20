@@ -6,9 +6,9 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTyped
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
-import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
-import org.assertj.core.api.Assertions
+import fr.gouv.cnsp.monitorfish.fakers.PriorNotificationFaker
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -46,44 +46,11 @@ class GetPriorNotificationUTests {
 
     @Test
     fun `execute Should return a prior notification with a non-corrected logbook report operation`() {
+        val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
+
         // Given
-        given(logbookReportRepository.findPriorNotificationByReportId("FAKE_REPORT_ID_1")).willReturn(
-            PriorNotification(
-                reportId = "1",
-                authorTrigram = null,
-                createdAt = null,
-                didNotFishAfterZeroNotice = false,
-                isManuallyCreated = false,
-                logbookMessageTyped = LogbookMessageTyped(
-                    clazz = PNO::class.java,
-                    logbookMessage = LogbookMessage(
-                        id = 1,
-                        reportId = "FAKE_REPORT_ID_1",
-                        referencedReportId = null,
-                        analyzedByRules = emptyList(),
-                        isDeleted = false,
-                        integrationDateTime = ZonedDateTime.now(),
-                        isCorrectedByNewerMessage = false,
-                        isEnriched = true,
-                        message = PNO(),
-                        messageType = "PNO",
-                        operationDateTime = ZonedDateTime.now(),
-                        operationNumber = "1",
-                        operationType = LogbookOperationType.DAT,
-                        reportDateTime = ZonedDateTime.now(),
-                        transmissionFormat = LogbookTransmissionFormat.ERS,
-                    ),
-                ),
-                port = null,
-                reportingCount = null,
-                seafront = null,
-                sentAt = null,
-                state = null,
-                updatedAt = null,
-                vessel = null,
-                vesselRiskFactor = null,
-            ),
-        )
+        given(logbookReportRepository.findPriorNotificationByReportId(fakePriorNotification.reportId!!))
+            .willReturn(fakePriorNotification)
 
         // When
         val result = GetPriorNotification(
@@ -96,53 +63,44 @@ class GetPriorNotificationUTests {
             riskFactorRepository,
             speciesRepository,
             vesselRepository,
-        ).execute("FAKE_REPORT_ID_1")
+        ).execute(fakePriorNotification.reportId!!)
 
         // Then
-        Assertions.assertThat(result.logbookMessageTyped.logbookMessage.reportId).isEqualTo("FAKE_REPORT_ID_1")
-        Assertions.assertThat(result.logbookMessageTyped.logbookMessage.referencedReportId).isNull()
+        assertThat(result.logbookMessageTyped.logbookMessage.reportId)
+            .isEqualTo(fakePriorNotification.reportId!!)
+        assertThat(result.logbookMessageTyped.logbookMessage.referencedReportId).isNull()
     }
 
     @Test
     fun `execute Should return a prior notification with a corrected logbook report operation`() {
-        // Given
-        given(logbookReportRepository.findPriorNotificationByReportId("FAKE_REPORT_ID_2")).willReturn(
-            PriorNotification(
-                reportId = "2",
-                authorTrigram = null,
-                createdAt = null,
-                didNotFishAfterZeroNotice = false,
-                isManuallyCreated = false,
-                logbookMessageTyped = LogbookMessageTyped(
-                    clazz = PNO::class.java,
-                    logbookMessage = LogbookMessage(
-                        id = 2,
-                        reportId = null,
-                        referencedReportId = "FAKE_REPORT_ID_2",
-                        analyzedByRules = emptyList(),
-                        isDeleted = false,
-                        integrationDateTime = ZonedDateTime.now(),
-                        isCorrectedByNewerMessage = true,
-                        isEnriched = true,
-                        message = PNO(),
-                        messageType = "PNO",
-                        operationDateTime = ZonedDateTime.now(),
-                        operationNumber = "2",
-                        operationType = LogbookOperationType.COR,
-                        reportDateTime = ZonedDateTime.now(),
-                        transmissionFormat = LogbookTransmissionFormat.ERS,
-                    ),
+        val fakeLogbookMessageReferenceReportId = "FAKE_REPORT_ID_1"
+        val fakePriorNotification = PriorNotificationFaker.fakePriorNotification().copy(
+            reportId = null,
+            logbookMessageTyped = LogbookMessageTyped(
+                clazz = PNO::class.java,
+                logbookMessage = LogbookMessage(
+                    id = 2,
+                    reportId = null,
+                    referencedReportId = fakeLogbookMessageReferenceReportId,
+                    analyzedByRules = emptyList(),
+                    isDeleted = false,
+                    integrationDateTime = ZonedDateTime.now(),
+                    isCorrectedByNewerMessage = true,
+                    isEnriched = true,
+                    message = PNO(),
+                    messageType = "PNO",
+                    operationDateTime = ZonedDateTime.now(),
+                    operationNumber = "2",
+                    operationType = LogbookOperationType.COR,
+                    reportDateTime = ZonedDateTime.now(),
+                    transmissionFormat = LogbookTransmissionFormat.ERS,
                 ),
-                port = null,
-                reportingCount = null,
-                seafront = null,
-                sentAt = null,
-                state = null,
-                updatedAt = null,
-                vessel = null,
-                vesselRiskFactor = null,
             ),
         )
+
+        // Given
+        given(logbookReportRepository.findPriorNotificationByReportId(fakeLogbookMessageReferenceReportId))
+            .willReturn(fakePriorNotification)
 
         // When
         val result = GetPriorNotification(
@@ -155,11 +113,12 @@ class GetPriorNotificationUTests {
             riskFactorRepository,
             speciesRepository,
             vesselRepository,
-        ).execute("FAKE_REPORT_ID_2")
+        ).execute(fakeLogbookMessageReferenceReportId)
 
         // Then
-        Assertions.assertThat(result.logbookMessageTyped.logbookMessage.reportId).isNull()
-        Assertions.assertThat(result.logbookMessageTyped.logbookMessage.referencedReportId)
-            .isEqualTo("FAKE_REPORT_ID_2")
+        assertThat(result.reportId).isNull()
+        assertThat(result.logbookMessageTyped.logbookMessage.reportId).isNull()
+        assertThat(result.logbookMessageTyped.logbookMessage.referencedReportId)
+            .isEqualTo(fakeLogbookMessageReferenceReportId)
     }
 }

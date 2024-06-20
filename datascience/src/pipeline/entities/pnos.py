@@ -214,3 +214,5 @@ class RenderedPno:
     html_email_body: str = None
     sms_content: str = None
     control_unit_ids: list = None
+    emails: list = None
+    phone_numbers: list = None

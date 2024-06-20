@@ -11,14 +11,14 @@ import type { NativeAny, NativeArray, NativeObject } from '@mtes-mct/monitor-ui'
 type Nullify<T> = T extends undefined
   ? null
   : T extends Array<any>
-  ? {
-      [K in keyof T]: T[K] extends (infer U)[] ? Nullify<U>[] : Nullify<T[K]>
-    }
-  : T extends Record<string, any>
-  ? {
-      [K in keyof T]: T[K] extends (infer U)[] ? Nullify<U>[] : Nullify<T[K]>
-    }
-  : T
+    ? {
+        [K in keyof T]: T[K] extends (infer U)[] ? Nullify<U>[] : Nullify<T[K]>
+      }
+    : T extends Record<string, any>
+      ? {
+          [K in keyof T]: T[K] extends (infer U)[] ? Nullify<U>[] : Nullify<T[K]>
+        }
+      : T
 
 const nullifyArrayValues = <T extends NativeArray>(list: T): Nullify<T> => list.map(nullify as any) as any
 

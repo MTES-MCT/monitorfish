@@ -1,13 +1,5 @@
 from datetime import datetime
 from pathlib import Path
-from smtplib import (
-    SMTPDataError,
-    SMTPHeloError,
-    SMTPNotSupportedError,
-    SMTPRecipientsRefused,
-    SMTPSenderRefused,
-)
-from time import sleep
 from typing import List, Union
 
 import css_inline
@@ -34,17 +26,15 @@ from src.pipeline.entities.beacon_malfunctions import (
     BeaconMalfunctionNotification,
     BeaconMalfunctionNotificationType,
     BeaconMalfunctionToNotify,
-    CommunicationMeans,
 )
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.helpers.emails import (
+    CommunicationMeans,
     create_fax_email,
     create_html_email,
     create_sms_email,
     resize_pdf_to_A4,
-    send_email,
-    send_fax,
-    send_sms,
+    send_email_or_sms_or_fax_message,
 )
 from src.pipeline.helpers.spatial import Position, position_to_position_representation
 from src.pipeline.shared_tasks.control_flow import (
@@ -349,101 +339,9 @@ def send_beacon_malfunction_message(
     communication_means = msg_to_send.communication_means
     logger = prefect.context.get("logger")
 
-    send_functions = {
-        CommunicationMeans.EMAIL: send_email,
-        CommunicationMeans.SMS: send_sms,
-        CommunicationMeans.FAX: send_fax,
-    }
-
-    send = send_functions[communication_means]
-
-    try:
-        try:
-            if is_integration:
-                logger.info(
-                    (
-                        f"(Mock) Sending {m.notification_type} by "
-                        f"{communication_means.value.lower()}."
-                    )
-                )
-                send_errors = {}
-            else:
-                logger.info(
-                    (
-                        f"Sending {m.notification_type} by "
-                        f"{communication_means.value.lower()}."
-                    )
-                )
-                send_errors = send(msg)
-        except (SMTPHeloError, SMTPDataError):
-            # Retry
-            logger.warning("Message not sent, retrying...")
-            sleep(10)
-            send_errors = send(msg)
-    except SMTPHeloError:
-        send_errors = {
-            addr.address_or_number: (
-                None,
-                "The server didn't reply properly to the helo greeting.",
-            )
-            for addr in addressees
-        }
-        logger.error(str(send_errors))
-    except SMTPRecipientsRefused:
-        # All recipients were refused
-        send_errors = {
-            addr.address_or_number: (
-                None,
-                "The server rejected ALL recipients (no mail was sent)",
-            )
-            for addr in addressees
-        }
-        logger.error(str(send_errors))
-    except SMTPSenderRefused:
-        send_errors = {
-            addr.address_or_number: (None, "The server didn't accept the from_addr.")
-            for addr in addressees
-        }
-        logger.error(str(send_errors))
-    except SMTPDataError:
-        send_errors = {
-            addr.address_or_number: (
-                None,
-                (
-                    "The server replied with an unexpected error code "
-                    "(other than a refusal of a recipient)."
-                ),
-            )
-            for addr in addressees
-        }
-        logger.error(str(send_errors))
-    except SMTPNotSupportedError:
-        send_errors = {
-            addr.address_or_number: (
-                None,
-                (
-                    "The mail_options parameter includes 'SMTPUTF8' but the SMTPUTF8 "
-                    "extension is not supported by the server."
-                ),
-            )
-            for addr in addressees
-        }
-        logger.error(str(send_errors))
-    except ValueError:
-        send_errors = {
-            addr.address_or_number: (
-                None,
-                "there is more than one set of 'Resent-' headers.",
-            )
-            for addr in addressees
-        }
-        logger.error(str(send_errors))
-    except Exception:
-        send_errors = {
-            addr.address_or_number: (None, "Unknown error.") for addr in addressees
-        }
-        logger.error(str(send_errors))
-
+    send_errors = send_email_or_sms_or_fax_message(
+        msg, communication_means, is_integration, logger
+    )
     now = datetime.utcnow()
 
     notifications = []

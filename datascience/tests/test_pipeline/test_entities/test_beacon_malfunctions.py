@@ -10,8 +10,8 @@ from src.pipeline.entities.beacon_malfunctions import (
     BeaconMalfunctionNotificationRecipientFunction,
     BeaconMalfunctionNotificationType,
     BeaconMalfunctionToNotify,
-    CommunicationMeans,
 )
+from src.pipeline.helpers.emails import CommunicationMeans
 
 
 @fixture
@@ -190,7 +190,6 @@ def test_beacon_malfunction_to_notify_test_mode_without_cnsp_contact_info(
 
 
 def test_beacon_malfunction_message_to_send(malfunction_to_notify_data):
-
     m = BeaconMalfunctionToNotify(
         **malfunction_to_notify_data,
         test_mode=False,

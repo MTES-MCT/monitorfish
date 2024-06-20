@@ -1,6 +1,6 @@
 import { Seafront } from '@constants/seafront'
 import { customDayjs } from '@mtes-mct/monitor-ui'
-import { skipToken } from '@reduxjs/toolkit/dist/query'
+import { skipToken } from '@reduxjs/toolkit/query'
 import { last } from 'ramda'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { InputPicker } from 'rsuite'

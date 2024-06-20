@@ -1,7 +1,7 @@
 import Style from 'ol/style/Style'
 import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
-import { COLORS } from '../../../../constants/constants'
+import { COLORS } from '@constants/constants'
 import CircleStyle from 'ol/style/Circle'
 import Point from 'ol/geom/Point'
 import { getCenter } from 'ol/extent'

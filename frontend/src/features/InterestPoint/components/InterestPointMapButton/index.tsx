@@ -5,15 +5,11 @@ import { useCallback, useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
 import { EditInterestPoint } from './EditInterestPoint'
-import { MapBox } from '../../../../../domain/entities/map/constants'
-import { setRightMapBoxOpened } from '../../../../../domain/shared_slices/Global'
-import {
-  deleteInterestPointBeingDrawed,
-  drawInterestPoint,
-  endInterestPointDraw
-} from '../../../../../domain/shared_slices/InterestPoint'
-import InterestPointSVG from '../../../../icons/standardized/Landmark.svg?react'
-import { MapToolButton } from '../shared/MapToolButton'
+import { MapBox } from '../../../../domain/entities/map/constants'
+import { setRightMapBoxOpened } from '../../../../domain/shared_slices/Global'
+import InterestPointSVG from '../../../icons/standardized/Landmark.svg?react'
+import { MapToolButton } from '../../../MainWindow/components/MapButtons/shared/MapToolButton'
+import { deleteInterestPointBeingDrawed, drawInterestPoint, endInterestPointDraw } from '../../slice'
 
 export function InterestPointMapButton() {
   const dispatch = useMainAppDispatch()

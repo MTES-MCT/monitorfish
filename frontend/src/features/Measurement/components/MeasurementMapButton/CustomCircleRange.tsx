@@ -1,34 +1,37 @@
-import { COLORS } from '@constants/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { CoordinatesInput } from '@mtes-mct/monitor-ui'
 import { transform } from 'ol/proj'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { coordinatesAreDistinct, getCoordinates } from '../../../../../coordinates'
+import { coordinatesAreDistinct, getCoordinates } from '../../../../coordinates'
 import {
   CoordinatesFormat,
   MeasurementType,
   OPENLAYERS_PROJECTION,
   WSG84_PROJECTION
-} from '../../../../../domain/entities/map/constants'
-import { setRightMapBoxOpened } from '../../../../../domain/shared_slices/Global'
+} from '../../../../domain/entities/map/constants'
+import { setRightMapBoxOpened } from '../../../../domain/shared_slices/Global'
+import { MapToolBox } from '../../../MainWindow/components/MapButtons/shared/MapToolBox'
 import {
   resetCircleMeasurementInDrawing,
   setCircleMeasurementInDrawing,
   setCircleMeasurementToAdd,
   setMeasurementTypeToAdd
-} from '../../../../../domain/shared_slices/Measurement'
-import { SetCoordinates } from '../../../../coordinates/SetCoordinates'
-import { MapToolBox } from '../shared/MapToolBox'
+} from '../../slice'
+
+import type { Coordinates } from '@mtes-mct/monitor-ui'
 
 export function CustomCircleRange() {
   const dispatch = useMainAppDispatch()
-  const { circleMeasurementInDrawing, measurementTypeToAdd } = useMainAppSelector(state => state.measurement)
+  const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
+  const circleMeasurementInDrawing = useMainAppSelector(state => state.measurement.circleMeasurementInDrawing)
+  const measurementTypeToAdd = useMainAppSelector(state => state.measurement.measurementTypeToAdd)
 
-  const circleCoordinates = useMemo(() => {
+  const circleCoordinates: Coordinates | undefined = useMemo(() => {
     if (measurementTypeToAdd !== MeasurementType.CIRCLE_RANGE || !circleMeasurementInDrawing?.coordinates?.length) {
-      return []
+      return undefined
     }
 
     return getCoordinates(
@@ -36,7 +39,7 @@ export function CustomCircleRange() {
       OPENLAYERS_PROJECTION,
       CoordinatesFormat.DECIMAL_DEGREES,
       false
-    ).map(coordinate => parseFloat(coordinate.replace(/°/g, '')))
+    ).map(coordinate => parseFloat(coordinate.replace(/°/g, ''))) as Coordinates
   }, [measurementTypeToAdd, circleMeasurementInDrawing])
 
   const circleRadius = useMemo(() => {
@@ -104,7 +107,14 @@ export function CustomCircleRange() {
       <Header>Définir une valeur</Header>
       <Body>
         <p>Coordonnées</p>
-        <SetCoordinates coordinates={circleCoordinates} updateCoordinates={updateCoordinates} />
+        <CoordinatesInput
+          coordinatesFormat={coordinatesFormat}
+          defaultValue={circleCoordinates}
+          isLabelHidden
+          label="Coordonnées du centre"
+          name="interest-point-coordinates"
+          onChange={updateCoordinates}
+        />
         <p>Distance (rayon)</p>
         <input
           data-cy="measurement-circle-radius-input"
@@ -128,22 +138,22 @@ export function CustomCircleRange() {
 }
 
 const CancelButton = styled.button`
-  border: 1px solid ${COLORS.charcoal};
-  color: ${COLORS.gunMetal};
+  border: 1px solid ${p => p.theme.color.charcoal};
+  color: ${p => p.theme.color.gunMetal};
   font-size: 13px;
   margin: 15px 0 0 15px;
   padding: 5px 12px;
   width: 130px;
 
   :disabled {
-    border: 1px solid ${COLORS.lightGray};
-    color: ${COLORS.lightGray};
+    border: 1px solid ${p => p.theme.color.lightGray};
+    color: ${p => p.theme.color.lightGray};
   }
 `
 
 const OkButton = styled.button`
-  background: ${COLORS.charcoal};
-  color: ${COLORS.gainsboro};
+  background: ${p => p.theme.color.charcoal};
+  color: ${p => p.theme.color.gainsboro};
   font-size: 13px;
   margin: 15px 0 0;
   padding: 5px 12px;
@@ -151,12 +161,12 @@ const OkButton = styled.button`
 
   :hover,
   :focus {
-    background: ${COLORS.charcoal};
+    background: ${p => p.theme.color.charcoal};
   }
 `
 
 const Body = styled.div`
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   font-size: 13px;
   margin: 10px 15px;
   text-align: left;
@@ -186,10 +196,10 @@ const Body = styled.div`
 `
 
 const Header = styled.div`
-  background: ${COLORS.charcoal};
+  background: ${p => p.theme.color.charcoal};
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
-  color: ${COLORS.gainsboro};
+  color: ${p => p.theme.color.gainsboro};
   font-size: 16px;
   padding: 9px 0 7px 15px;
   text-align: left;

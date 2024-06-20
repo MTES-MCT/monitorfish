@@ -11,21 +11,21 @@ import {
   removeMeasurementDrawed,
   resetMeasurementTypeToAdd,
   setCircleMeasurementInDrawing
-} from '../../../domain/shared_slices/Measurement'
+} from '../slice'
 import VectorLayer from 'ol/layer/Vector'
 import Circle from 'ol/geom/Circle'
 import { circular, fromCircle } from 'ol/geom/Polygon'
 import Feature from 'ol/Feature'
 import { METERS_PER_UNIT } from 'ol/proj/Units'
 import GeoJSON from 'ol/format/GeoJSON'
-import MeasurementOverlay from '../overlays/MeasurementOverlay'
+import MeasurementOverlay from '../components/MeasurementOverlay'
 import { getNauticalMilesFromMeters } from '../../../utils'
 import saveMeasurement from '../../../domain/use_cases/measurement/saveMeasurement'
-import { measurementStyle, measurementStyleWithCenter } from './styles/measurement.style'
+import { measurementStyle, measurementStyleWithCenter } from './measurement.style'
 import { transform } from 'ol/proj'
 import { getCenter } from 'ol/extent'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
-import { monitorfishMap } from '../monitorfishMap'
+import { monitorfishMap } from '../../map/monitorfishMap'
 
 const DRAW_START_EVENT = 'drawstart'
 const DRAW_ABORT_EVENT = 'drawabort'

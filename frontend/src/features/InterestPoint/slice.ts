@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 import { getLocalStorageState } from '../../utils'
 
-import type { InterestPoint } from '../types/interestPoint'
+import type { InterestPoint } from '../../domain/types/interestPoint'
 
 const interestPointsLocalStorageKey = 'interestPoints'
 

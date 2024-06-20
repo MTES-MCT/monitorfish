@@ -1,7 +1,6 @@
 import dayjs from 'dayjs'
 
 import { openSideWindowBeaconMalfunctionBoard } from './utils'
-import { getDate } from '../../../../src/utils'
 import { getUtcizedDayjs } from '../../utils/getUtcizedDayjs'
 
 context('Side Window > Beacon Malfunction Board', () => {
@@ -180,20 +179,11 @@ context('Side Window > Beacon Malfunction Board', () => {
     // Check the comments order
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comments-number"]').contains('2 commentaires')
     const oneWeekBefore = getUtcizedDayjs().subtract(7, 'days').toISOString()
-    const oneWeekBeforeAsString = getDate(oneWeekBefore)
-    if (!oneWeekBeforeAsString) {
-      throw new Error('`oneWeekBeforeAsString` is undefined.')
-    }
+    const oneWeekBeforeAsString = dayjs(oneWeekBefore).format('DD/MM/YYYY')
     const oneWeekBeforePlusSixtyHours = dayjs(oneWeekBefore).add(60, 'hours').toISOString()
-    const oneWeekBeforePlusSixtyHoursAsString = getDate(oneWeekBeforePlusSixtyHours)
-    if (!oneWeekBeforePlusSixtyHoursAsString) {
-      throw new Error('`oneWeekBeforePlusSixtyHoursAsString` is undefined.')
-    }
+    const oneWeekBeforePlusSixtyHoursAsString = dayjs(oneWeekBeforePlusSixtyHours).format('DD/MM/YYYY')
     const fourDaysBefore = getUtcizedDayjs().subtract(4, 'days').toISOString()
-    const fourDaysBeforeAsString = getDate(fourDaysBefore)
-    if (!fourDaysBeforeAsString) {
-      throw new Error('`fourDaysBeforeAsString` is undefined.')
-    }
+    const fourDaysBeforeAsString = dayjs(fourDaysBefore).format('DD/MM/YYYY')
     cy.wait(200)
     const areFourDaysBeforeAndMalfunctionDateWithOffsetEquals =
       oneWeekBeforePlusSixtyHoursAsString === fourDaysBeforeAsString

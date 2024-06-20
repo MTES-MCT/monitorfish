@@ -586,6 +586,10 @@
                 "vessel_name": "L'ANCRE SÈCHE",
                 "value:jsonb": {
                     "catchOnboard": [],
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": false,
+                    "isVerified": false,
                     "pnoTypes": [],
                     "port": "FRSML",
                     "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",

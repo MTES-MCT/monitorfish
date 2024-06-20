@@ -489,4 +489,27 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         assertThat(lastPriorNotification.logbookMessageTyped.logbookMessage)
             .isEqualTo(createdPriorNotification.logbookMessageTyped.logbookMessage)
     }
+
+    @Test
+    @Transactional
+    fun `updateState Should update writable state values for an existing PNO logbook report`() {
+        // Given
+        val currentManualPriorNotification = jpaManualPriorNotificationRepository
+            .findByReportId("00000000-0000-4000-0000-000000000005")!!
+        assertThat(currentManualPriorNotification.logbookMessageTyped.typedMessage.isBeingSent).isEqualTo(false)
+        assertThat(currentManualPriorNotification.logbookMessageTyped.typedMessage.isVerified).isEqualTo(false)
+
+        // When
+        jpaManualPriorNotificationRepository.updateState(
+            "00000000-0000-4000-0000-000000000005",
+            isBeingSent = true,
+            isVerified = true,
+        )
+
+        // Then
+        val updatedManualPriorNotification = jpaManualPriorNotificationRepository
+            .findByReportId("00000000-0000-4000-0000-000000000005")!!
+        assertThat(updatedManualPriorNotification.logbookMessageTyped.typedMessage.isBeingSent).isEqualTo(true)
+        assertThat(updatedManualPriorNotification.logbookMessageTyped.typedMessage.isVerified).isEqualTo(true)
+    }
 }

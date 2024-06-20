@@ -51,7 +51,7 @@ jobs:
             ${{ runner.os }}-single-buildx-data-pipeline-
 
       - name: Build image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           load: true

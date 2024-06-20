@@ -20,7 +20,6 @@ from src.pipeline.entities.beacon_malfunctions import (
     BeaconMalfunctionNotificationRecipientFunction,
     BeaconMalfunctionNotificationType,
     BeaconMalfunctionToNotify,
-    CommunicationMeans,
 )
 from src.pipeline.flows.notify_beacon_malfunctions import (
     create_email,
@@ -36,6 +35,7 @@ from src.pipeline.flows.notify_beacon_malfunctions import (
     send_beacon_malfunction_message,
     to_malfunctions_to_notify_list,
 )
+from src.pipeline.helpers.emails import CommunicationMeans
 from src.read_query import read_query
 from tests.mocks import mock_check_flow_not_running, mock_datetime_utcnow
 
@@ -398,7 +398,7 @@ def email_message() -> EmailMessage:
     msg["From"] = "The from field"
     msg[
         "To"
-    ] = "someone@email.com, someone.else@email.fr, fail1@email.com, fail2@email.com"
+    ] = "someone@email.com, someone.else@email.fr, fail1@email.com, fail2@email.com, 0699999999, 0600000000, 0100000000, 0200000000"
     msg["Cc"] = "cced@email.com"
     msg["Bcc"] = "Bcced@email.com"
     msg.set_content("<html>Hello there this is a test email</html>", subtype="html")
@@ -473,7 +473,7 @@ def expected_notifications(request) -> list:
             recipient_name=None,
             recipient_address_or_number="0699999999",
             success=False,
-            error_message="Unknown error.",
+            error_message="Other error: [Errno -2] Name or service not known",
         ),
         BeaconMalfunctionNotification(
             beacon_malfunction_id=1,
@@ -484,7 +484,7 @@ def expected_notifications(request) -> list:
             recipient_name="Le pêcheur de crevettes",
             recipient_address_or_number="0600000000",
             success=False,
-            error_message="Unknown error.",
+            error_message="Other error: [Errno -2] Name or service not known",
         ),
         BeaconMalfunctionNotification(
             beacon_malfunction_id=1,
@@ -495,7 +495,7 @@ def expected_notifications(request) -> list:
             recipient_name=None,
             recipient_address_or_number="0100000000",
             success=False,
-            error_message="Unknown error.",
+            error_message="Other error: [Errno -2] Name or service not known",
         ),
         BeaconMalfunctionNotification(
             beacon_malfunction_id=1,
@@ -506,7 +506,7 @@ def expected_notifications(request) -> list:
             recipient_name="Le pêcheur de crevettes",
             recipient_address_or_number="0200000000",
             success=False,
-            error_message="Unknown error.",
+            error_message="Other error: [Errno -2] Name or service not known",
         ),
     ]
 
@@ -802,7 +802,7 @@ def test_create_fax(malfunction_to_notify_data, cnsp_logo, notification_type):
     "src.pipeline.flows.notify_beacon_malfunctions.datetime",
     mock_datetime_utcnow(datetime(2021, 1, 1, 16, 10, 0)),
 )
-@patch("src.pipeline.flows.notify_beacon_malfunctions.send_email")
+@patch("src.pipeline.helpers.emails.send_email")
 def test_send_beacon_malfunction_message(
     mock_send_email,
     malfunction_to_notify_data,
@@ -912,9 +912,9 @@ def test_flow(reset_test_data):
     )
 
     @task(checkpoint=False)
-    @patch("src.pipeline.flows.notify_beacon_malfunctions.send_fax")
-    @patch("src.pipeline.flows.notify_beacon_malfunctions.send_sms")
-    @patch("src.pipeline.flows.notify_beacon_malfunctions.send_email")
+    @patch("src.pipeline.helpers.emails.send_fax")
+    @patch("src.pipeline.helpers.emails.send_sms")
+    @patch("src.pipeline.helpers.emails.send_email")
     def mock_send_beacon_malfunction_message(
         mock_send_email,
         mock_send_sms,

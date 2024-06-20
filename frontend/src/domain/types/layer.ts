@@ -4,10 +4,9 @@ import VectorImageLayer from 'ol/layer/VectorImage'
 import { TileWMS } from 'ol/source'
 
 import type { RegulatoryZone } from '../../features/Regulation/types'
-import type { Point } from 'ol/geom'
+import type { Geometry } from 'ol/geom'
 import type VectorLayer from 'ol/layer/Vector'
 import type WebGLPointsLayer from 'ol/layer/WebGLPoints'
-import type VectorSource from 'ol/source/Vector'
 
 export type TopicContainingMultipleZones = {
   namespace: string
@@ -31,11 +30,11 @@ export type LayerToFeatures = {
   simplifiedFeatures: Object[]
 }
 
-export type VectorLayerWithName = VectorLayer<VectorSource> & {
+export type VectorLayerWithName = VectorLayer<Feature<Geometry>> & {
   name?: string
 }
 
-export type VectorImageLayerWithName = VectorImageLayer<VectorSource> & {
+export type VectorImageLayerWithName = VectorImageLayer<Feature<Geometry>> & {
   name?: string
 }
 
@@ -43,6 +42,6 @@ export type TileLayerWithName = TileLayer<TileWMS> & {
   name?: string
 }
 
-export type WebGLPointsLayerWithName = WebGLPointsLayer<VectorSource<Feature<Point>>> & {
+export type WebGLPointsLayerWithName = WebGLPointsLayer<any> & {
   name?: string
 }

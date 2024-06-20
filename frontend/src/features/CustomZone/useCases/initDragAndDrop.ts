@@ -25,7 +25,7 @@ import type { ThunkDispatch } from 'redux-thunk'
  */
 export const initDragAndDrop = (): MainAppThunk => dispatch => {
   const dragAndDropInteraction = new DragAndDrop({
-    formatConstructors: [GPX, GeoJSON, IGC, KML, TopoJSON]
+    formatConstructors: [GPX, GeoJSON, IGC, KML, TopoJSON] as any
   })
 
   dragAndDropInteraction.on('addfeatures', saveAndShowCustomZones(dispatch))

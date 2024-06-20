@@ -14,11 +14,11 @@ export const ONE_MINUTE = 60 * 1000
 export const FIVE_MINUTES = 5 * 60 * 1000
 
 export const COUNTRIES_AS_ALPHA2_OPTIONS: Option<string>[] = Object.keys(Countries.getAlpha2Codes()).map(code => ({
-  label: Countries.getName(code, 'fr'),
+  label: Countries.getName(code, 'fr') ?? code,
   value: code
 }))
 
 export const COUNTRIES_AS_ALPHA3_OPTIONS: Option<string>[] = Object.keys(Countries.getAlpha3Codes()).map(code => ({
-  label: Countries.getName(code, 'fr'),
+  label: Countries.getName(code, 'fr') ?? code,
   value: code
 }))

@@ -35,7 +35,7 @@ function UnmemoizedStationLayer({ hoveredFeatureId }: StationLayerProps) {
   const { data: stations } = useGetStationsQuery(undefined, RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS)
 
   const stationsAsFeatures = useMemo(
-    () => (stations || []).filter(station => station.controlUnitResourceIds.length > 0).map(getStationPointFeature),
+    () => (stations ?? []).filter(station => station.controlUnitResourceIds.length > 0).map(getStationPointFeature),
     [stations]
   )
 

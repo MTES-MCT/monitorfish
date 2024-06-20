@@ -33,7 +33,7 @@ export const getVectorOLLayer = (
   type: string,
   zone: string | null,
   isBackoffice: boolean
-): VectorImageLayer<VectorSource<Feature<Geometry>>> => {
+): VectorImageLayer<Feature<Geometry>> => {
   const layer = new VectorImageLayer({
     className: 'administrative',
     declutter: true,
@@ -46,7 +46,7 @@ export const getVectorOLLayer = (
   return layer
 }
 
-const getVectorSource = (type: string, zone: string | null, isBackoffice): VectorSource<Feature<Geometry>> => {
+const getVectorSource = (type: string, zone: string | null, isBackoffice): VectorSource => {
   if (zone) {
     return buildWholeVectorSource(type, zone, isBackoffice)
   }

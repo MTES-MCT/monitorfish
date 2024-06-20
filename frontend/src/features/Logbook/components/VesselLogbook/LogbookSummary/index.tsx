@@ -1,5 +1,5 @@
 import { Select } from '@mtes-mct/monitor-ui'
-import { skipToken } from '@reduxjs/toolkit/dist/query'
+import { skipToken } from '@reduxjs/toolkit/query'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 

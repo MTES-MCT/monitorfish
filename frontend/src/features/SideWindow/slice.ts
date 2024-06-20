@@ -11,7 +11,7 @@ export const bannerStackAdapter = createEntityAdapter({
 })
 
 export interface SideWindowState {
-  bannerStack: EntityState<SideWindow.BannerStackItem>
+  bannerStack: EntityState<SideWindow.BannerStackItem, number>
   isDraftCancellationConfirmationDialogOpen: boolean
   nextPath: SideWindow.FullPath | undefined
   selectedPath: SideWindow.FullPath

@@ -1,5 +1,5 @@
 import { Icon } from '@mtes-mct/monitor-ui'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 
 import { PriorNotification } from '../../../PriorNotification.types'
 import { getColorAndBackgroundColorFromState } from '../utils'
@@ -16,7 +16,14 @@ export function StateCell({ state }: SendButtonCellProps) {
 
   return (
     <Wrapper $backgroundColor={backgroundColor} $color={color} title={PriorNotification.STATE_LABEL[state]}>
-      {!!state && state === PriorNotification.State.PENDING_SEND ? <Spinner /> : <Icon.Send />}
+      {!!state && state === PriorNotification.State.PENDING_SEND ? (
+        <SpinnerWrapper>
+          <Icon.Send />
+          <SpinnerBorder />
+        </SpinnerWrapper>
+      ) : (
+        <Icon.Send />
+      )}
     </Wrapper>
   )
 }
@@ -36,13 +43,32 @@ const Wrapper = styled.span<{
   vertical-align: bottom;
   width: 26px;
 `
-const Spinner = styled.span`
-  animation: rotation 1s linear infinite;
+
+const SpinnerWrapper = styled.div`
+  align-items: center;
+  display: inline-flex;
+  height: 26px;
+  justify-content: center;
+  position: relative;
+  width: 26px;
+`
+
+const rotate = keyframes`
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+`
+const SpinnerBorder = styled.span`
+  animation: ${rotate} 1s linear infinite;
   border: 2px solid ${p => p.theme.color.mediumSeaGreen};
   border-bottom-color: transparent;
   border-radius: 50%;
-  box-sizing: border-box;
-  display: inline-block;
-  height: 26px;
-  width: 26px;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
 `

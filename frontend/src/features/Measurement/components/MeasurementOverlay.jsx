@@ -2,9 +2,9 @@ import Overlay from 'ol/Overlay'
 import React, { createRef, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../constants/constants'
+import { COLORS } from '@constants/constants'
 import CloseIconSVG from '../../icons/Croix_grise.svg?react'
-import { monitorfishMap } from '../monitorfishMap'
+import { monitorfishMap } from '../../map/monitorfishMap'
 
 function MeasurementOverlay({ coordinates, deleteFeature, id, measurement }) {
   const ref = createRef()

@@ -6,14 +6,14 @@ import { useCallback, useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
 import { CustomCircleRange } from './CustomCircleRange'
-import { MapBox, MeasurementType } from '../../../../../domain/entities/map/constants'
-import { setRightMapBoxOpened } from '../../../../../domain/shared_slices/Global'
-import { setMeasurementTypeToAdd } from '../../../../../domain/shared_slices/Measurement'
-import { MapComponent } from '../../../../commonStyles/MapComponent'
-import MultiLineSVG from '../../../../icons/standardized/Measure_broken_line.svg?react'
-import CircleRangeSVG from '../../../../icons/standardized/Measure_circle.svg?react'
-import MeasurementSVG from '../../../../icons/standardized/Measure_line.svg?react'
-import { MapToolButton } from '../shared/MapToolButton'
+import { MapBox, MeasurementType } from '../../../../domain/entities/map/constants'
+import { setRightMapBoxOpened } from '../../../../domain/shared_slices/Global'
+import { MapComponent } from '../../../commonStyles/MapComponent'
+import MultiLineSVG from '../../../icons/standardized/Measure_broken_line.svg?react'
+import CircleRangeSVG from '../../../icons/standardized/Measure_circle.svg?react'
+import MeasurementSVG from '../../../icons/standardized/Measure_line.svg?react'
+import { MapToolButton } from '../../../MainWindow/components/MapButtons/shared/MapToolButton'
+import { setMeasurementTypeToAdd } from '../../slice'
 
 export function MeasurementMapButton() {
   const dispatch = useMainAppDispatch()

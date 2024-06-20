@@ -317,7 +317,8 @@ const regulatorySlice = createSlice({
       if (action.payload?.length) {
         const regulatoryLayers = action.payload
         let nextSelectedRegulatoryLayers = {}
-        let nextSelectedRegulatoryLayerIds = []
+        // TODO Remove this `any` once layers are fully typed.
+        let nextSelectedRegulatoryLayerIds: any[] = []
         let selectedRegulatoryLayerIds = getLocalStorageState([], SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY)
         if (!selectedRegulatoryLayerIds.length) {
           const selectedRegulatoryLayers = getLocalStorageState([], SELECTED_REG_ZONES_LOCAL_STORAGE_KEY)

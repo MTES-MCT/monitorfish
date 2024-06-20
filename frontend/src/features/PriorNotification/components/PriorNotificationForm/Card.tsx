@@ -1,10 +1,12 @@
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
+import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { updateEditedPriorNotificationComputedValues } from '@features/PriorNotification/useCases/updateEditedPriorNotificationComputedValues'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { Accent, Button, FormikEffect, usePrevious } from '@mtes-mct/monitor-ui'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { Accent, Button, FormikEffect, Icon, usePrevious } from '@mtes-mct/monitor-ui'
 import { getDefinedObject } from '@utils/getDefinedObject'
 import { useFormikContext } from 'formik'
-import { isEqual } from 'lodash'
+import { isEqual, noop } from 'lodash'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
@@ -14,7 +16,6 @@ import { TagBar } from './TagBar'
 import { getPartialComputationRequestData } from './utils'
 
 import type { FormValues } from './types'
-import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
 type CardProps = Readonly<{
   isValidatingOnChange: boolean
@@ -25,8 +26,17 @@ type CardProps = Readonly<{
 export function Card({ isValidatingOnChange, onClose, onSubmit, reportId }: CardProps) {
   const { isValid, submitForm, values } = useFormikContext<FormValues>()
   const dispatch = useMainAppDispatch()
+  const editedPriorNotificationDetail = useMainAppSelector(
+    store => store.priorNotification.editedPriorNotificationDetail
+  )
 
   const previousPartialComputationRequestData = usePrevious(getPartialComputationRequestData(values))
+
+  const isNewPriorNotification = !reportId
+  const isPendingSend = editedPriorNotificationDetail?.state === PriorNotification.State.PENDING_SEND
+  const isSent = [PriorNotification.State.SENT, PriorNotification.State.VERIFIED_AND_SENT].includes(
+    editedPriorNotificationDetail?.state as any
+  )
 
   const handleSubmit = () => {
     onSubmit()
@@ -70,18 +80,18 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, reportId }: Card
       <FormikEffect onChange={updateComputedValuesIfMecessary as any} />
 
       <FrontendErrorBoundary>
-        <Header isNewPriorNotification={!reportId} onClose={onClose} vesselId={values.vesselId} />
+        <Header isNewPriorNotification={isNewPriorNotification} onClose={onClose} vesselId={values.vesselId} />
 
         <Body>
           <TagBar />
 
-          {!reportId && (
+          {isNewPriorNotification && (
             <Intro>
               Veuillez renseigner les champs du formulaire pour définir le type de préavis et son statut, ainsi que le
               segment de flotte et la note de risque du navire.
             </Intro>
           )}
-          {!!reportId && (
+          {!isNewPriorNotification && (
             <Intro>
               Le préavis doit être vérifié par le CNSP avant sa diffusion.
               <br />
@@ -98,9 +108,23 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, reportId }: Card
           <Button accent={Accent.TERTIARY} onClick={onClose}>
             Fermer
           </Button>
-          <Button accent={Accent.PRIMARY} disabled={isValidatingOnChange && !isValid} onClick={handleSubmit}>
-            {!reportId ? 'Créer le préavis' : 'Enregistrer'}
+          <Button
+            accent={Accent.PRIMARY}
+            disabled={isPendingSend || isSent || (isValidatingOnChange && !isValid)}
+            onClick={handleSubmit}
+          >
+            {isNewPriorNotification ? 'Créer le préavis' : 'Enregistrer'}
           </Button>
+          {!isNewPriorNotification && (
+            <Button
+              accent={Accent.PRIMARY}
+              disabled={isPendingSend || isSent}
+              Icon={isSent ? Icon.Check : Icon.Send}
+              onClick={noop}
+            >
+              {isSent ? 'Diffusé' : 'Diffuser'}
+            </Button>
+          )}
         </Footer>
       </FrontendErrorBoundary>
     </Wrapper>

@@ -44,7 +44,7 @@ export function ExportTrack() {
             longitude: coordinates[1]
           }
         })
-        ?.filter((position): position is VesselPositionWithId => position !== undefined) || [],
+        ?.filter((position): position is VesselPositionWithId => position !== undefined) ?? [],
     [selectedVesselPositions, coordinatesFormat]
   )
 
@@ -69,7 +69,7 @@ export function ExportTrack() {
       internalReferenceNumber: 'CFR',
       flagState: {
         label: 'Pavillon',
-        transform: position => countries.getName(position.flagState.toLowerCase(), 'fr').toString()
+        transform: position => countries.getName(position.flagState.toLowerCase(), 'fr')?.toString()
       },
       dateTime: 'GDH (UTC)',
       latitude: 'Latitude',

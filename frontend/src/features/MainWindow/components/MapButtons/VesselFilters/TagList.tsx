@@ -41,7 +41,7 @@ export function TagList({ className, filters, removeTagFromFilter, uuid }: TagLi
     if (filters.countriesFiltered?.length) {
       const countriesTags = filters.countriesFiltered.map(country => ({
         iconElement: <StyledCountryFlag countryCode={country} size={[20, 14]} />,
-        text: countries.getName(country, 'fr'),
+        text: countries.getName(country, 'fr') ?? country,
         type: 'countriesFiltered',
         value: country
       }))

@@ -108,7 +108,7 @@ export class Vessel {
           break
         }
         case VesselLabel.VESSEL_NATIONALITY: {
-          label.labelText = feature.flagState ? countries.getName(feature.flagState, 'fr') : null
+          label.labelText = feature.flagState ? countries.getName(feature.flagState, 'fr') ?? null : null
           break
         }
         case VesselLabel.VESSEL_FLEET_SEGMENT: {

@@ -45,7 +45,7 @@ function UnmemoizedMissionLayer() {
     if (!layerRef.current) {
       layerRef.current = new WebGLPointsLayer({
         className: MonitorFishLayer.MISSION_PIN_POINT,
-        source: getVectorSource(),
+        source: getVectorSource() as any,
         style: missionPointWebGLStyle,
         zIndex: LayerProperties.MISSION_PIN_POINT.zIndex
       })

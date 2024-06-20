@@ -19,7 +19,7 @@
     "prepare": "cd .. && ./frontend/node_modules/.bin/husky ./frontend/config/husky",
     "start": "import-meta-env-prepare -u -x ./.env.local.defaults && vite preview --port 3000",
     "start:emulate": "npm run clean && npm run build && import-meta-env -x ./.env.example -p ./build/index.html && import-meta-env-prepare -u -x ./.env.local.defaults && vite preview --port 3000",
-    "test:e2e": "cypress run --browser firefox --config-file ./config/cypress.config.ts --e2e",
+    "test:e2e": "cypress run --browser firefox --config-file ./config/cypress.config.js --e2e",
     "test:e2e:flaky": "./cypress/support/test_flaky_test.sh",
     "test:e2e:generate": "./scripts/clean_wiremock_stubs.sh && node ./scripts/generate_wiremock_stubs.mjs",
     "test:e2e:open": "cypress open --browser firefox --config-file ./config/cypress.config.ts --e2e",

@@ -44,7 +44,6 @@ class VerifyAndSendPriorNotificationUTests {
         Assertions.assertThat(result.reportId).isEqualTo(fakePriorNotification.reportId!!)
     }
 
-
     @Test
     fun `execute Should update and return a manual prior notification`() {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification().copy(isManuallyCreated = true)

@@ -244,7 +244,7 @@ jobs:
       - uses: cypress-io/github-action@v6
         with:
           browser: firefox
-          config-file: config/cypress.config.ts
+          config-file: config/cypress.config.js
           env: PORT=8880
           install: true
           install-command: npm ci
@@ -343,7 +343,15 @@ jobs:
 
   push_to_registry:
     name: Push to registry
-    needs: [version, unit_test_backend, unit_test_frontend, e2e_test, e2e_multi_windows_test, generate_and_upload_source_maps]
+    needs:
+      [
+        version,
+        unit_test_backend,
+        unit_test_frontend,
+        e2e_test,
+        e2e_multi_windows_test,
+        generate_and_upload_source_maps,
+      ]
     runs-on: ubuntu-22.04
     if: needs.version.outputs.IS_RELEASE && !contains(github.ref, 'dependabot')
     env:

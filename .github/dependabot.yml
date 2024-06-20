@@ -20,6 +20,15 @@ updates:
     commit-message:
       prefix: "[Tech] "
     labels: ["tech. enhancement", "dependencies"]
+    groups:
+      non-major-dependencies:
+        applies-to: version-updates
+        dependency-type: production
+        update-types: ['minor', 'patch']
+      non-major-dev-dependencies:
+        applies-to: version-updates
+        dependency-type: development
+        update-types: ['minor', 'patch']
 
   - package-ecosystem: "npm"
     directory: "/frontend"
@@ -31,6 +40,15 @@ updates:
     commit-message:
       prefix: "[Tech] "
     labels: ["tech. enhancement", "dependencies"]
+    groups:
+      non-major-dependencies:
+        applies-to: version-updates
+        dependency-type: production
+        update-types: ['minor', 'patch']
+      non-major-dev-dependencies:
+        applies-to: version-updates
+        dependency-type: development
+        update-types: ['minor', 'patch']
 
   - package-ecosystem: "pip"
     directory: "/datascience"
@@ -41,3 +59,12 @@ updates:
     commit-message:
       prefix: "[Tech] "
     labels: ["tech. enhancement", "dependencies"]
+    groups:
+      non-major-dependencies:
+        applies-to: version-updates
+        dependency-type: production
+        update-types: ['minor', 'patch']
+      non-major-dev-dependencies:
+        applies-to: version-updates
+        dependency-type: development
+        update-types: ['minor', 'patch']

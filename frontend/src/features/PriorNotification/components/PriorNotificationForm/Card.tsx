@@ -6,7 +6,7 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Button, FormikEffect, Icon, usePrevious } from '@mtes-mct/monitor-ui'
 import { getDefinedObject } from '@utils/getDefinedObject'
 import { useFormikContext } from 'formik'
-import { isEqual, noop } from 'lodash'
+import { isEqual } from 'lodash'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
@@ -16,14 +16,16 @@ import { TagBar } from './TagBar'
 import { getPartialComputationRequestData } from './utils'
 
 import type { FormValues } from './types'
+import type { Promisable } from 'type-fest'
 
 type CardProps = Readonly<{
   isValidatingOnChange: boolean
   onClose: () => void
-  onSubmit: () => void
+  onSubmit: () => Promisable<void>
+  onVerifyAndSend: () => Promisable<void>
   reportId: string | undefined
 }>
-export function Card({ isValidatingOnChange, onClose, onSubmit, reportId }: CardProps) {
+export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend, reportId }: CardProps) {
   const { isValid, submitForm, values } = useFormikContext<FormValues>()
   const dispatch = useMainAppDispatch()
   const editedPriorNotificationDetail = useMainAppSelector(
@@ -120,7 +122,7 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, reportId }: Card
               accent={Accent.PRIMARY}
               disabled={isPendingSend || isSent}
               Icon={isSent ? Icon.Check : Icon.Send}
-              onClick={noop}
+              onClick={onVerifyAndSend}
             >
               {isSent ? 'Diffusé' : 'Diffuser'}
             </Button>

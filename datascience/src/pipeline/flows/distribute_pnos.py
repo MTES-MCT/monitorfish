@@ -1,6 +1,7 @@
 import dataclasses
 import os
 from datetime import datetime
+from itertools import chain
 from pathlib import Path
 from typing import List
 
@@ -131,6 +132,7 @@ def fetch_control_units_contacts() -> pd.DataFrame:
         .dropna(subset=["email", "phone"], how="all")
         .groupby("control_unit_id")
         .agg({"email": "unique", "phone": "unique"})
+        .rename(columns={"email": "emails", "phone": "phone_numbers"})
         .map(remove_nones_from_list)
         .map(sorted)
         .reset_index()
@@ -544,18 +546,20 @@ def attribute_addressees(
     pno_to_distribute: RenderedPno,
     units_targeting_vessels: pd.DataFrame,
     units_ports_and_segments_subscriptions: pd.DataFrame,
+    control_units_contacts: pd.DataFrame,
 ) -> RenderedPno:
     """
-    Returns a copy of the input `RenderedPno`'s with its `control_unit_ids`
-    attribute updated. The control units ids attributed to the PNO are :
+    Returns a copy of the input `RenderedPno`'s with its `control_unit_ids`,
+    `email_addresses` and `phone_numbers` attributes updated, representing control
+    units that should receive the PNO. The control units attributed to the PNO are :
 
-      - ids of control units who target the vessel
-      - ids of control units who subscribed to the port with the "receive all pnos"
+      - control units who target the vessel
+      - control units who subscribed to the port with the "receive all pnos"
         option
       - Plus :
-        - ids of control units who subscribed to the port, if the PNO is in
+        - control units who subscribed to the port, if the PNO is in
           verification scope
-        - ids of control units who subscribed to the port AND to a segment of the PNO
+        - control units who subscribed to the port AND to a segment of the PNO
           if the PNO is not in verification scope
 
     Args:
@@ -565,10 +569,11 @@ def attribute_addressees(
         units_ports_and_segments_subscriptions (pd.DataFrame): DataFrame with columns
           `control_unit_id`, `port_locode`, `receive_all_pnos_from_port`, and
           `unit_subscribed_segments`
+        control_units_contacts (pd.DataFrame): DataFrame with columns
+          `control_unit_id`, `emails` and `phone_numbers`
 
     Returns:
-        RenderedPno: copy of the input `pno_to_distribute` with its
-          `control_unit_ids` attribute updated
+        RenderedPno: copy of the input `pno_to_distribute` with addressees added
     """
     if pno_to_distribute.vessel_id in units_targeting_vessels.vessel_id.values:
         units_targeting_vessel = set(
@@ -616,10 +621,83 @@ def attribute_addressees(
             ].values
         )
 
+    control_unit_ids = units_subscribed_to_port.union(units_targeting_vessel)
+
+    emails = sorted(
+        set(
+            chain.from_iterable(
+                control_units_contacts.loc[
+                    control_units_contacts.control_unit_id.isin(control_unit_ids),
+                    "emails",
+                ].tolist()
+            )
+        )
+    )
+
+    phone_numbers = sorted(
+        set(
+            chain.from_iterable(
+                control_units_contacts.loc[
+                    control_units_contacts.control_unit_id.isin(control_unit_ids),
+                    "phone_numbers",
+                ].tolist()
+            )
+        )
+    )
+
     return dataclasses.replace(
         pno_to_distribute,
-        control_unit_ids=units_subscribed_to_port.union(units_targeting_vessel),
+        control_unit_ids=control_unit_ids,
+        emails=emails,
+        phone_numbers=phone_numbers,
     )
+
+
+# @task(checkpoint=False)
+# def create_email(
+#     pno: RenderedPno
+# ) -> :
+#     to = [
+#         email_addressee.address_or_number
+#         for email_addressee in pno.get_email_addressees()
+#     ]
+
+#     cc = CNSP_SIP_DEPARTMENT_EMAIL if not pno.test_mode else None
+
+#     if to:
+#         message = create_html_email(
+#             to=to,
+#             cc=cc,
+#             subject=pno.get_notification_subject(),
+#             html=html,
+#             images=[CNSP_LOGO_PATH],
+#             attachments={"Notification.pdf": pdf},
+#             reply_to=CNSP_SIP_DEPARTMENT_EMAIL,
+#         )
+
+#         return BeaconMalfunctionMessageToSend(
+#             message=message,
+#             beacon_malfunction_to_notify=pno,
+#             communication_means=CommunicationMeans.EMAIL,
+#         )
+#     else:
+#         return None
+
+
+# @task(checkpoint=False)
+# def create_sms(
+#     text: str, m: BeaconMalfunctionToNotify
+# ) -> BeaconMalfunctionMessageToSend:
+#     to = [sms_addressee.address_or_number for sms_addressee in m.get_sms_addressees()]
+
+#     if to:
+#         return BeaconMalfunctionMessageToSend(
+#             message=create_sms_email(to=to, text=text),
+#             beacon_malfunction_to_notify=m,
+#             communication_means=CommunicationMeans.SMS,
+#         )
+#     else:
+#         return None
 
 
 with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
@@ -633,6 +711,7 @@ with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
         start_datetime_utc = utcnow - timedelta_from_start_to_now
         end_datetime_utc = utcnow - timedelta_from_end_to_now
 
+        control_units_contacts = fetch_control_units_contacts()
         species_names = extract_species_names()
         fishing_gear_names = extract_fishing_gear_names()
         html_for_pdf_template = get_html_for_pdf_template()
@@ -664,6 +743,7 @@ with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
             pnos_to_distribute,
             unmapped(units_targeting_vessels),
             unmapped(units_ports_and_segments_subscriptions),
+            control_units_contacts=unmapped(control_units_contacts),
         )
 
 

@@ -1005,12 +1005,12 @@ def control_units_contacts() -> pd.DataFrame:
     return pd.DataFrame(
         {
             "control_unit_id": [2, 3, 4],
-            "email": [
+            "emails": [
                 ["alternative@email", "some.email@control.unit.4"],
                 [],
                 ["email4@email.com"],
             ],
-            "phone": [
+            "phone_numbers": [
                 ["'00 11 22 33 44 55"],
                 ["44 44 44 44 44"],
                 [],
@@ -1392,15 +1392,19 @@ def test_attribute_addressees_uses_target_vessels_and_segments(
     pno_pdf_document_to_distribute_targeted_vessel_and_segments,
     pno_units_targeting_vessels,
     pno_units_ports_and_segments_subscriptions,
+    control_units_contacts,
 ):
     res = attribute_addressees.run(
         pno_pdf_document_to_distribute_targeted_vessel_and_segments,
         pno_units_targeting_vessels,
         pno_units_ports_and_segments_subscriptions,
+        control_units_contacts,
     )
     assert res == dataclasses.replace(
         pno_pdf_document_to_distribute_targeted_vessel_and_segments,
         control_unit_ids={1, 2, 3},
+        phone_numbers=["'00 11 22 33 44 55", "44 44 44 44 44"],
+        emails=["alternative@email", "some.email@control.unit.4"],
     )
 
 
@@ -1408,14 +1412,19 @@ def test_attribute_addressees_uses_receive_all_pnos_from_port(
     pno_pdf_document_to_distribute_receive_all_pnos_from_port,
     pno_units_targeting_vessels,
     pno_units_ports_and_segments_subscriptions,
+    control_units_contacts,
 ):
     res = attribute_addressees.run(
         pno_pdf_document_to_distribute_receive_all_pnos_from_port,
         pno_units_targeting_vessels,
         pno_units_ports_and_segments_subscriptions,
+        control_units_contacts,
     )
     assert res == dataclasses.replace(
-        pno_pdf_document_to_distribute_receive_all_pnos_from_port, control_unit_ids={4}
+        pno_pdf_document_to_distribute_receive_all_pnos_from_port,
+        control_unit_ids={4},
+        emails=["email4@email.com"],
+        phone_numbers=[],
     )
 
 
@@ -1423,14 +1432,19 @@ def test_attribute_addressees_returns_empty_addressees(
     pno_pdf_document_to_distribute_without_addressees,
     pno_units_targeting_vessels,
     pno_units_ports_and_segments_subscriptions,
+    control_units_contacts,
 ):
     res = attribute_addressees.run(
         pno_pdf_document_to_distribute_without_addressees,
         pno_units_targeting_vessels,
         pno_units_ports_and_segments_subscriptions,
+        control_units_contacts,
     )
     assert res == dataclasses.replace(
-        pno_pdf_document_to_distribute_without_addressees, control_unit_ids=set()
+        pno_pdf_document_to_distribute_without_addressees,
+        control_unit_ids=set(),
+        emails=[],
+        phone_numbers=[],
     )
 
 
@@ -1438,14 +1452,19 @@ def test_attribute_addressees_when_is_verified(
     pno_pdf_document_to_distribute_verified,
     pno_units_targeting_vessels,
     pno_units_ports_and_segments_subscriptions,
+    control_units_contacts,
 ):
     res = attribute_addressees.run(
         pno_pdf_document_to_distribute_verified,
         pno_units_targeting_vessels,
         pno_units_ports_and_segments_subscriptions,
+        control_units_contacts,
     )
     assert res == dataclasses.replace(
-        pno_pdf_document_to_distribute_verified, control_unit_ids={2, 3}
+        pno_pdf_document_to_distribute_verified,
+        control_unit_ids={2, 3},
+        emails=["alternative@email", "some.email@control.unit.4"],
+        phone_numbers=["'00 11 22 33 44 55", "44 44 44 44 44"],
     )
 
 

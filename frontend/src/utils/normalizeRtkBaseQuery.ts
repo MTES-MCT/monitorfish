@@ -3,7 +3,7 @@ import { nullify } from './nullify'
 import { undefinedize } from './undefinedize'
 import { FrontendError } from '../libs/FrontendError'
 
-import type { BaseQueryEnhancer, FetchArgs } from '@reduxjs/toolkit/dist/query'
+import type { BaseQueryEnhancer, FetchArgs } from '@reduxjs/toolkit/query'
 
 export const normalizeRtkBaseQuery: BaseQueryEnhancer<unknown, {}, {} | void> =
   baseQuery => async (args: string | FetchArgs, api) => {

@@ -7,7 +7,7 @@ import { Mission } from '@features/Mission/mission.types'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { useGetMissionQuery } from '@features/Mission/monitorfishMissionApi'
 import { Dropdown, Icon } from '@mtes-mct/monitor-ui'
-import { skipToken } from '@reduxjs/toolkit/dist/query'
+import { skipToken } from '@reduxjs/toolkit/query'
 import { useMemo, useRef } from 'react'
 import styled from 'styled-components'
 

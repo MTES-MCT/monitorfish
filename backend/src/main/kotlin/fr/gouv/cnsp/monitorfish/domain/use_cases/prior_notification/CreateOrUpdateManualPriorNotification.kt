@@ -37,6 +37,10 @@ class CreateOrUpdateManualPriorNotification(
         tripGearCodes: List<String>,
         vesselId: Int,
     ): PriorNotification {
+        val existingPnoMessage = reportId?.let {
+            manualPriorNotificationRepository.findByReportId(it)
+        }?.logbookMessageTyped?.typedMessage
+
         val faoAreas = listOf(faoArea)
         val fishingCatchesWithFaoArea = fishingCatches.map { it.copy(faoZone = faoArea) }
         val specyCodes = fishingCatches.mapNotNull { it.species }
@@ -47,6 +51,7 @@ class CreateOrUpdateManualPriorNotification(
         val priorNotificationTypes = computePnoTypes.execute(fishingCatchesWithFaoArea, tripGearCodes, vessel.flagState)
             .map { it.toPriorNotificationType() }
         val message = getMessage(
+            existingPnoMessage,
             expectedArrivalDate,
             expectedLandingDate,
             // At the moment, manual prior notifications only have a single global FAO area field in Frontend,
@@ -115,6 +120,7 @@ class CreateOrUpdateManualPriorNotification(
     }
 
     private fun getMessage(
+        existingPnoValue: PNO?,
         expectedArrivalDate: String,
         expectedLandingDate: String,
         fishingCatches: List<LogbookFishingCatch>,
@@ -137,6 +143,10 @@ class CreateOrUpdateManualPriorNotification(
             // so we transform that single FAO area into an FAO area per fishing catch.
             // This means we don't need to set a global PNO message FAO area here.
             this.faoZone = null
+            this.isBeingSent = existingPnoValue?.isBeingSent ?: false
+            this.isInVerificationScope = existingPnoValue?.isInVerificationScope ?: false
+            this.isSent = existingPnoValue?.isSent ?: false
+            this.isVerified = existingPnoValue?.isVerified ?: false
             this.latitude = null
             this.longitude = null
             this.note = note

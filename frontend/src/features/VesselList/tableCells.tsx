@@ -10,7 +10,7 @@ import type { InnerCellProps } from 'rsuite-table/es/Cell'
 
 const { Cell } = Table
 
-type CellUsingVesselPropertyProps = InnerCellProps & {
+type CellUsingVesselPropertyProps = InnerCellProps<any, any> & {
   vesselProperty: string
 }
 export function CellUsingVesselProperty({ vesselProperty, ...props }: CellUsingVesselPropertyProps) {
@@ -45,7 +45,7 @@ export const StyledCheckbox = styled(Checkbox)`
   height: 36px;
 `
 
-type FlagCellProps = InnerCellProps & {
+type FlagCellProps = InnerCellProps<any, any> & {
   baseUrl?: string
   vesselProperty: string
 }
@@ -61,7 +61,7 @@ export function FlagCell({ baseUrl, rowData, vesselProperty, ...props }: FlagCel
   )
 }
 
-export function TimeAgoCell({ dataKey, rowData, ...props }: InnerCellProps) {
+export function TimeAgoCell({ dataKey, rowData, ...props }: InnerCellProps<any, any>) {
   return <Cell {...props}>{dataKey && rowData[dataKey] ? timeago.format(rowData[dataKey], 'fr') : ''}</Cell>
 }
 

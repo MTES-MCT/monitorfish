@@ -16,6 +16,8 @@ import { MissionLabelOverlay } from '../../components/MissionUnitLabelOverlay'
 
 import type { FeatureAndLabel } from './types'
 import type { VectorLayerWithName } from '../../../../domain/types/layer'
+import type { Feature } from 'ol'
+import type { Geometry } from 'ol/geom'
 
 const MIN_ZOOM = 7
 
@@ -32,7 +34,7 @@ export function MissionsLabelsLayer({ mapMovingAndZoomEvent }) {
 
   const getVectorSource = useCallback(() => {
     if (!vectorSourceRef.current) {
-      vectorSourceRef.current = new VectorSource({
+      vectorSourceRef.current = new VectorSource<Feature<Geometry>>({
         features: [],
         wrapX: false
       })

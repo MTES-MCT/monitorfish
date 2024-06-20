@@ -21,6 +21,8 @@ import { getLabelLineStyle } from '../styles/labelLine.style'
 
 import type { VesselLastPositionFeature } from '../../../../domain/entities/vessel/types'
 import type { VectorLayerWithName } from '../../../../domain/types/layer'
+import type { Feature } from 'ol'
+import type { Geometry } from 'ol/geom'
 import type { MutableRefObject } from 'react'
 
 const MAX_LABELS_DISPLAYED = 200
@@ -70,7 +72,7 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
 
   const getVectorSource = useCallback(() => {
     if (vectorSourceRef.current === undefined) {
-      vectorSourceRef.current = new VectorSource({
+      vectorSourceRef.current = new VectorSource<Feature<Geometry>>({
         features: [],
         wrapX: false
       })
@@ -309,7 +311,7 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
         const showedFeaturesIdentities = Object.keys(vesselsTracksShowed)
         featuresRequiringLabel = featuresInExtent.filter(
           feature =>
-            (selectedVessel && feature.getId() === selectedVesselId) ||
+            (!!selectedVessel && feature.getId() === selectedVesselId) ||
             showedFeaturesIdentities.find(identity => feature?.getId()?.toString()?.includes(identity))
         )
       } else if (previewFilteredVesselsMode) {

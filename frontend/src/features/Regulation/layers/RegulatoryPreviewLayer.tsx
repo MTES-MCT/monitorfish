@@ -13,6 +13,7 @@ import { monitorfishMap } from '../../map/monitorfishMap'
 import type { VectorLayerWithName } from '../../../domain/types/layer'
 import type { BaseRegulatoryZone } from '../types'
 import type { Feature } from 'ol'
+import type { Geometry } from 'ol/geom'
 import type { MutableRefObject } from 'react'
 
 function UnmemoizedRegulatoryPreviewLayer() {
@@ -31,7 +32,7 @@ function UnmemoizedRegulatoryPreviewLayer() {
 
   function getVectorSource() {
     if (!vectorSourceRef.current) {
-      vectorSourceRef.current = new VectorSource({
+      vectorSourceRef.current = new VectorSource<Feature<Geometry>>({
         features: []
       })
     }

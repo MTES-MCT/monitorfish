@@ -60,7 +60,7 @@ function UnmemoizedVesselsLayer() {
     const isLight = Vessel.iconIsLight(selectedBaseLayer)
     const { vesselIsHidden, vesselIsOpacityReduced } =
       getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
-    const filterColorRGBArray = customHexToRGB(filterColor || isLight ? theme.color.lightGray : COLORS.charcoal)
+    const filterColorRGBArray = customHexToRGB(!!filterColor || isLight ? theme.color.lightGray : COLORS.charcoal)
     const initStyles = {
       filterColorBlue: filterColorRGBArray[2],
       filterColorGreen: filterColorRGBArray[1],
@@ -77,7 +77,7 @@ function UnmemoizedVesselsLayer() {
 
     const vesselsVectorLayer = new WebGLPointsLayer({
       className: LayerProperties[MonitorFishLayer.VESSELS].code,
-      source: getVesselsVectorSource(),
+      source: getVesselsVectorSource() as any,
       style: style.current,
       zIndex: LayerProperties[MonitorFishLayer.VESSELS].zIndex
     }) as WebGLPointsLayerWithName

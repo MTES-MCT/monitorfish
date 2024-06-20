@@ -1,18 +1,15 @@
-import { Feature } from 'ol'
 import VectorLayer from 'ol/layer/Vector'
 
 import type { MonitorFishLayer } from '../domain/entities/layers/types'
+import type Feature from 'ol/Feature'
 import type { Geometry } from 'ol/geom'
-import type { Options as VectorLayerOptions } from 'ol/layer/BaseVector'
-import type VectorSource from 'ol/source/Vector'
+import type { Options as LayerVectorOptions } from 'ol/layer/Vector'
 
-type Options<T extends VectorSource<Feature<Geometry>>> = VectorLayerOptions<T> & {
+type Options<T extends Feature<Geometry>> = LayerVectorOptions<T> & {
   code: MonitorFishLayer
 }
 
-export class VectorLayerWithCode<
-  T extends VectorSource<Feature<Geometry>> = VectorSource<Feature<Geometry>>
-> extends VectorLayer<T> {
+export class VectorLayerWithCode<T extends Feature<Geometry> = Feature<Geometry>> extends VectorLayer<T> {
   public code: MonitorFishLayer
   /** @deprecated Replaced by `code`. */
   public name: MonitorFishLayer

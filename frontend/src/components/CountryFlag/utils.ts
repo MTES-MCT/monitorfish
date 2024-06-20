@@ -11,7 +11,7 @@ export function getAlpha2CodeFromAlpha2or3Code(countryCode: string | undefined):
 
   try {
     if (countryCode.length === 3) {
-      return countries.alpha3ToAlpha2(countryCode).toLowerCase()
+      return countries.alpha3ToAlpha2(countryCode)?.toLowerCase()
     }
 
     if (countryCode.length === 2) {

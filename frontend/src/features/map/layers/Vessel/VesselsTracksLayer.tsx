@@ -31,7 +31,9 @@ import FishingActivityOverlay from '../../overlays/FishingActivityOverlay'
 import type { FishingActivityShowedOnMap } from '../../../../domain/entities/vessel/types'
 import type { VectorLayerWithName } from '../../../../domain/types/layer'
 import type { FishingActivityFeatureIdAndCoordinates } from '../../../Logbook/types'
+import type { Feature } from 'ol'
 import type { Coordinate } from 'ol/coordinate'
+import type { Geometry } from 'ol/geom'
 
 function VesselsTracksLayer() {
   const dispatch = useMainAppDispatch()
@@ -63,7 +65,7 @@ function VesselsTracksLayer() {
   const vectorSourceRef = useRef<VectorSource>()
   const getVectorSource = useCallback(() => {
     if (vectorSourceRef.current === undefined) {
-      vectorSourceRef.current = new VectorSource({
+      vectorSourceRef.current = new VectorSource<Feature<Geometry>>({
         features: [],
         wrapX: false
       })

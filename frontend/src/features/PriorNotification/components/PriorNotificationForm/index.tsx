@@ -1,9 +1,11 @@
 import { priorNotificationApi } from '@features/PriorNotification/priorNotificationApi'
 import { priorNotificationActions } from '@features/PriorNotification/slice'
+import { verifyAndSendPriorNotification } from '@features/PriorNotification/useCases/verifyAndSendPriorNotification'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
+import { assertNotNullish } from '@utils/assertNotNullish'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
 import { Formik } from 'formik'
 import { useEffect, useRef, useState } from 'react'
@@ -78,6 +80,16 @@ export function PriorNotificationForm() {
     }
   }
 
+  const verifyAndSend = async () => {
+    setIsLoading(true)
+
+    assertNotNullish(editedPriorNotificationReportId)
+
+    await dispatch(verifyAndSendPriorNotification(editedPriorNotificationReportId))
+
+    setIsLoading(false)
+  }
+
   useEffect(() => {
     if (!editedPriorNotificationInitialFormValues) {
       return
@@ -114,6 +126,7 @@ export function PriorNotificationForm() {
           isValidatingOnChange={shouldValidateOnChange}
           onClose={close}
           onSubmit={() => setShouldValidateOnChange(true)}
+          onVerifyAndSend={verifyAndSend}
           reportId={editedPriorNotificationReportId}
         />
       </Formik>

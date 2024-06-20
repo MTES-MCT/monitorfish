@@ -1,8 +1,4 @@
-/* eslint-disable no-undef */
-
 import dayjs from 'dayjs'
-
-import { getDate } from '../../../src/utils'
 
 context('Vessel sidebar controls tab', () => {
   beforeEach(() => {
@@ -24,7 +20,7 @@ context('Vessel sidebar controls tab', () => {
 
     // Then
     // Summary
-    const date = getDate(new Date().toISOString())
+    const date = dayjs().format('DD/MM/YYYY')
     cy.get('*[data-cy="vessel-controls-summary"]').contains('0Appréhens. engin')
     cy.get('*[data-cy="vessel-controls-summary"]').contains('1Appréhens. espèce')
     cy.get('*[data-cy="vessel-controls-summary"]').contains('1Déroutement')
@@ -126,24 +122,24 @@ context('Vessel sidebar controls tab', () => {
     if (currentMonth === 0) {
       cy.get(`[data-cy="vessel-control-years"] > div > div[title="${currentYear - 1}"]`).click({ timeout: 10000 })
       const yearBefore = dayjs().subtract(1, 'year')
-      cy.get('*[data-cy="vessel-control-title"]').contains(`CONTRÔLE EN MER DU ${getDate(yearBefore.toISOString())}`)
+      cy.get('*[data-cy="vessel-control-title"]').contains(`CONTRÔLE EN MER DU ${yearBefore.format('DD/MM/YYYY')}`)
       cy.get(`[data-cy="vessel-control-years"] > div > div[title="${currentYear - 1}"]`).click({ timeout: 10000 })
 
       cy.get(`[data-cy="vessel-control-years"] > div > div[title="${currentYear - 2}"]`).click({ timeout: 10000 })
       const yearBeforeMinusOneMonth = dayjs(yearBefore).subtract(1, 'month')
       cy.get('*[data-cy="vessel-control-title"]').contains(
-        `CONTRÔLE EN MER DU ${getDate(yearBeforeMinusOneMonth.toISOString())}`
+        `CONTRÔLE EN MER DU ${dayjs(yearBeforeMinusOneMonth).format('DD/MM/YYYY')}`
       )
     } else {
       cy.get(`[data-cy="vessel-control-years"] > div > div[title="${currentYear - 1}"]`).click({ timeout: 10000 })
       const yearBefore = dayjs().subtract(1, 'year')
       cy.get('*[data-cy="vessel-control-title"]')
         .eq(0)
-        .contains(`CONTRÔLE EN MER DU ${getDate(yearBefore.toISOString())}`)
+        .contains(`CONTRÔLE EN MER DU ${yearBefore.format('DD/MM/YYYY')}`)
       const yearBeforeMinusOneMonth = dayjs(yearBefore).subtract(1, 'month')
       cy.get('*[data-cy="vessel-control-title"]')
         .eq(1)
-        .contains(`CONTRÔLE EN MER DU ${getDate(yearBeforeMinusOneMonth.toISOString())}`)
+        .contains(`CONTRÔLE EN MER DU ${dayjs(yearBeforeMinusOneMonth).format('DD/MM/YYYY')}`)
     }
   })
 

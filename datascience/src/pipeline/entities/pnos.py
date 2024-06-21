@@ -1,5 +1,6 @@
 from dataclasses import InitVar, dataclass, field
 from datetime import datetime
+from email.message import EmailMessage
 from enum import Enum
 from typing import List
 
@@ -7,6 +8,7 @@ import pandas as pd
 
 from src.pipeline.entities.fleet_segments import FishingGear, FleetSegment
 from src.pipeline.entities.missions import Infraction
+from src.pipeline.helpers.emails import CommunicationMeans
 
 
 @dataclass(kw_only=True)
@@ -203,6 +205,7 @@ class RenderedPno:
     report_id: str
     vessel_id: int
     cfr: str
+    vessel_name: str
     is_verified: bool
     is_being_sent: bool
     trip_segments: list
@@ -216,3 +219,31 @@ class RenderedPno:
     control_unit_ids: list = None
     emails: list = None
     phone_numbers: list = None
+
+
+@dataclass
+class PnoToSend:
+    pno: RenderedPno
+    message: EmailMessage
+    communication_means: CommunicationMeans
+
+    def get_addressees(self):
+        if self.communication_means == CommunicationMeans.EMAIL:
+            return self.pno.emails
+        elif self.communication_means == CommunicationMeans.SMS:
+            return self.pno.phone_numbers
+        else:
+            raise ValueError(
+                f"Unexpected communication_means {self.communication_means}"
+            )
+
+
+@dataclass
+class PriorNotificationSentMessage:
+    prior_notification_report_id: str
+    prior_notification_source: PnoSource
+    date_time_utc: datetime
+    communication_means: CommunicationMeans
+    recipient_address_or_number: str
+    success: bool
+    error_message: str = None

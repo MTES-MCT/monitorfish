@@ -11,11 +11,13 @@ import prefect
 import requests
 import weasyprint
 from jinja2 import Environment, FileSystemLoader, Template, select_autoescape
-from prefect import Flow, Parameter, case, task, unmapped
+from prefect import Flow, Parameter, case, flatten, task, unmapped
 from prefect.executors import LocalDaskExecutor
+from sqlalchemy import Executable, text
 
 from config import (
     CNSP_CROSSA_CACEM_LOGOS_PATH,
+    CNSP_FRANCE_EMAIL_ADDRESS,
     CNSP_LOGO_PATH,
     EMAIL_FONTS_LOCATION,
     EMAIL_STYLESHEETS_LOCATION,
@@ -23,6 +25,7 @@ from config import (
     LIBERTE_EGALITE_FRATERNITE_LOGO_PATH,
     MARIANNE_LOGO_PATH,
     MONITORENV_API_ENDPOINT,
+    MONITORFISH_EMAIL_ADDRESS,
     SE_MER_LOGO_PATH,
     SMS_TEMPLATES_LOCATION,
     STATE_FLAGS_ICONS_LOCATION,
@@ -32,16 +35,29 @@ from src.pipeline.entities.fleet_segments import FishingGear, FleetSegment
 from src.pipeline.entities.missions import Infraction
 from src.pipeline.entities.pnos import (
     PnoCatch,
+    PnoSource,
     PnoToRender,
+    PnoToSend,
     PreRenderedPno,
+    PriorNotificationSentMessage,
     RenderedPno,
     ReturnToPortPurpose,
 )
 from src.pipeline.generic_tasks import extract, load
-from src.pipeline.helpers.emails import resize_pdf_to_A4
+from src.pipeline.helpers.emails import (
+    CommunicationMeans,
+    create_html_email,
+    create_sms_email,
+    resize_pdf_to_A4,
+    send_email_or_sms_or_fax_message,
+)
 from src.pipeline.processing import remove_nones_from_list
-from src.pipeline.shared_tasks.control_flow import check_flow_not_running
+from src.pipeline.shared_tasks.control_flow import (
+    check_flow_not_running,
+    filter_results,
+)
 from src.pipeline.shared_tasks.dates import get_utcnow, make_timedelta
+from src.pipeline.shared_tasks.infrastructure import execute_statement
 
 
 @task(checkpoint=False)
@@ -489,6 +505,7 @@ def render_pno(
         report_id=pno.report_id,
         vessel_id=pno.vessel_id,
         cfr=pno.cfr,
+        vessel_name=pno.vessel_name,
         is_verified=pno.is_verified,
         is_being_sent=pno.is_being_sent,
         trip_segments=pno.trip_segments,
@@ -653,56 +670,138 @@ def attribute_addressees(
     )
 
 
-# @task(checkpoint=False)
-# def create_email(
-#     pno: RenderedPno
-# ) -> :
-#     to = [
-#         email_addressee.address_or_number
-#         for email_addressee in pno.get_email_addressees()
-#     ]
+@task(checkpoint=False)
+def create_email(pno: RenderedPno) -> PnoToSend:
+    if pno.emails:
+        message = create_html_email(
+            to=pno.emails,
+            subject=f"Préavis de débarquement - {pno.vessel_name}",
+            html=pno.html_email_body,
+            from_=MONITORFISH_EMAIL_ADDRESS,
+            images=[
+                CNSP_CROSSA_CACEM_LOGOS_PATH,
+                LIBERTE_EGALITE_FRATERNITE_LOGO_PATH,
+                MARIANNE_LOGO_PATH,
+            ],
+            attachments={
+                f"Preavis_{pno.vessel_name if pno.vessel_name else ''}.pdf": pno.pdf_document
+            },
+            reply_to=CNSP_FRANCE_EMAIL_ADDRESS,
+        )
+        return PnoToSend(
+            pno=pno,
+            message=message,
+            communication_means=CommunicationMeans.EMAIL,
+        )
 
-#     cc = CNSP_SIP_DEPARTMENT_EMAIL if not pno.test_mode else None
-
-#     if to:
-#         message = create_html_email(
-#             to=to,
-#             cc=cc,
-#             subject=pno.get_notification_subject(),
-#             html=html,
-#             images=[CNSP_LOGO_PATH],
-#             attachments={"Notification.pdf": pdf},
-#             reply_to=CNSP_SIP_DEPARTMENT_EMAIL,
-#         )
-
-#         return BeaconMalfunctionMessageToSend(
-#             message=message,
-#             beacon_malfunction_to_notify=pno,
-#             communication_means=CommunicationMeans.EMAIL,
-#         )
-#     else:
-#         return None
+    else:
+        return None
 
 
-# @task(checkpoint=False)
-# def create_sms(
-#     text: str, m: BeaconMalfunctionToNotify
-# ) -> BeaconMalfunctionMessageToSend:
-#     to = [sms_addressee.address_or_number for sms_addressee in m.get_sms_addressees()]
+@task(checkpoint=False)
+def create_sms(pno: RenderedPno) -> PnoToSend:
+    if pno.phone_numbers:
+        return PnoToSend(
+            pno=pno,
+            message=create_sms_email(to=pno.phone_numbers, text=pno.sms_content),
+            communication_means=CommunicationMeans.SMS,
+        )
+    else:
+        return None
 
-#     if to:
-#         return BeaconMalfunctionMessageToSend(
-#             message=create_sms_email(to=to, text=text),
-#             beacon_malfunction_to_notify=m,
-#             communication_means=CommunicationMeans.SMS,
-#         )
-#     else:
-#         return None
+
+@task(checkpoint=False)
+def send_pno_message(
+    pno_to_send: PnoToSend, is_integration: bool
+) -> List[PriorNotificationSentMessage]:
+    logger = prefect.context.get("logger")
+
+    send_errors = send_email_or_sms_or_fax_message(
+        pno_to_send.message, pno_to_send.communication_means, is_integration, logger
+    )
+
+    prior_notification_sent_messages = []
+
+    for addressee in pno_to_send.get_addressees():
+        if addressee in send_errors:
+            success = False
+            error_message = send_errors[addressee][1]
+        else:
+            success = True
+            error_message = None
+
+        prior_notification_sent_messages.append(
+            PriorNotificationSentMessage(
+                prior_notification_report_id=pno_to_send.pno.report_id,
+                prior_notification_source=pno_to_send.pno.source,
+                date_time_utc=datetime.utcnow(),
+                communication_means=pno_to_send.communication_means,
+                recipient_address_or_number=addressee,
+                success=success,
+                error_message=error_message,
+            )
+        )
+    return prior_notification_sent_messages
+
+
+@task(checkpoint=False)
+def load_prior_notification_sent_messages(
+    prior_notification_sent_messages: List[PriorNotificationSentMessage],
+):
+    if prior_notification_sent_messages:
+        load(
+            pd.DataFrame(prior_notification_sent_messages),
+            table_name="prior_notification_sent_messages",
+            schema="public",
+            logger=prefect.context.get("logger"),
+            how="append",
+            db_name="monitorfish_remote",
+            enum_columns=[
+                "prior_notification_source",
+                "communication_means",
+            ],
+        )
+
+
+@task(checkpoint=False)
+def make_update_logbook_reports_statement(
+    pnos_to_update: List[RenderedPno],
+    start_datetime_utc: datetime,
+    end_datetime_utc: datetime,
+) -> Executable:
+    logbook_pno_report_ids = (
+        pno.report_id for pno in pnos_to_update if pno.source == PnoSource.LOGBOOK
+    )
+
+    statement = text(
+        "UPDATE public.logbook_reports "
+        "value = jsonb_set("
+        "jsonb_set("
+        "value, "
+        "{'isBeingSent'}, "
+        "false"
+        "), "
+        "{'isSent'}, "
+        "true"
+        ") "
+        "WHERE "
+        "operation_datetime_utc >= :start_datetime_utc "
+        "AND operation_datetime_utc < :end_datetime_utc "
+        "AND report_id IN :logbook_pno_report_ids"
+    ).bindparams(
+        start_datetime_utc=start_datetime_utc,
+        end_datetime_utc=end_datetime_utc,
+        logbook_pno_report_ids=logbook_pno_report_ids,
+    )
+
+    return statement
 
 
 with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
+        test_mode = Parameter("test_mode")
+        is_integration = Parameter("is_integration")
         start_hours_ago = Parameter("start_hours_ago")
         end_hours_ago = Parameter("end_hours_ago")
         timedelta_from_start_to_now = make_timedelta(hours=start_hours_ago)
@@ -739,12 +838,37 @@ with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
             sms_template=unmapped(sms_template),
         )
         pnos_to_distribute = load_pno_pdf_documents(pnos)
-        pnos_with_unit_ids = attribute_addressees.map(
+        pnos_with_addressees = attribute_addressees.map(
             pnos_to_distribute,
             unmapped(units_targeting_vessels),
             unmapped(units_ports_and_segments_subscriptions),
             control_units_contacts=unmapped(control_units_contacts),
         )
+
+        email = create_email.map(pnos_with_addressees)
+        email = filter_results(email)
+
+        sms = create_sms.map(pnos_with_addressees)
+        sms = filter_results(sms)
+
+        messages_to_send = flatten([email, sms])
+
+        sent_messages = send_pno_message.map(
+            messages_to_send, is_integration=unmapped(is_integration)
+        )
+        sent_messages = filter_results(sent_messages)
+        loaded_prior_notification_sent_messages = load_prior_notification_sent_messages(
+            flatten(sent_messages)
+        )
+
+        update_logbook_reports_statement = make_update_logbook_reports_statement(
+            pnos_to_update=pnos_to_distribute,
+            start_datetime_utc=start_datetime_utc,
+            end_datetime_utc=end_datetime_utc,
+            upstream_tasks=[loaded_prior_notification_sent_messages],
+        )
+
+        execute_statement(update_logbook_reports_statement)
 
 
 flow.file_name = Path(__file__).name

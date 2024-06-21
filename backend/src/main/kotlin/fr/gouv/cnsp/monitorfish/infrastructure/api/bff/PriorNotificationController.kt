@@ -1,7 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.SeafrontGroup
-import fr.gouv.cnsp.monitorfish.domain.entities.facade.hasSeafront
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.sorters.PriorNotificationsSortColumn
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.*
@@ -24,6 +23,7 @@ class PriorNotificationController(
     private val getPriorNotification: GetPriorNotification,
     private val getPriorNotifications: GetPriorNotifications,
     private val getPriorNotificationTypes: GetPriorNotificationTypes,
+    private val verifyAndSendPriorNotification: VerifyAndSendPriorNotification,
 ) {
     @GetMapping("")
     @Operation(summary = "Get all prior notifications")
@@ -101,38 +101,41 @@ class PriorNotificationController(
             willArriveBefore = willArriveBefore,
         )
 
-        val priorNotifications = getPriorNotifications
-            .execute(priorNotificationsFilter, sortColumn, sortDirection)
-        val priorNotificationListItemDataOutputsFilteredBySeafrontGroup = priorNotifications
-            .filter { seafrontGroup.hasSeafront(it.seafront) }
+        val paginatedPriorNotifications = getPriorNotifications
+            .execute(priorNotificationsFilter, seafrontGroup, sortColumn, sortDirection, pageNumber, pageSize)
+        val priorNotificationListItemDataOutputs = paginatedPriorNotifications.data
             .mapNotNull { PriorNotificationListItemDataOutput.fromPriorNotification(it) }
+        val extraDataOutput = PriorNotificationsExtraDataOutput
+            .fromPriorNotificationStats(paginatedPriorNotifications.extraData)
 
-        val extraDataOutput = PriorNotificationsExtraDataOutput(
-            perSeafrontGroupCount = SeafrontGroup.entries.associateWith { seafrontGroupEntry ->
-                priorNotifications.count { priorNotification ->
-                    seafrontGroupEntry.hasSeafront(priorNotification.seafront)
-                }
-            },
-        )
-
-        return PaginatedListDataOutput.fromListDataOutput(
-            priorNotificationListItemDataOutputsFilteredBySeafrontGroup,
-            pageNumber,
-            pageSize,
+        return PaginatedListDataOutput(
+            priorNotificationListItemDataOutputs,
             extraDataOutput,
+            lastPageNumber = paginatedPriorNotifications.lastPageNumber,
+            pageNumber = paginatedPriorNotifications.pageNumber,
+            pageSize = paginatedPriorNotifications.pageSize,
+            totalLength = paginatedPriorNotifications.totalLength,
         )
     }
 
-    @GetMapping("/{reportId}")
-    @Operation(summary = "Get a prior notification by its `reportId`")
-    fun getOne(
-        @PathParam("Logbook message `reportId`")
-        @PathVariable(name = "reportId")
-        reportId: String,
-    ): PriorNotificationDetailDataOutput {
-        return PriorNotificationDetailDataOutput.fromPriorNotification(
-            getPriorNotification.execute(reportId),
+    @PostMapping("/manual/compute")
+    @Operation(summary = "Calculate manual prior notification fleet segments, prior notification types and risk factor")
+    fun getManualComputation(
+        @RequestBody
+        manualPriorNotificationComputeDataInput: ManualPriorNotificationComputeDataInput,
+    ): ManualPriorNotificationComputedValuesDataOutput {
+        val fishingCatches = manualPriorNotificationComputeDataInput.fishingCatches.map { it.toLogbookFishingCatch() }
+
+        val manualPriorNotificationComputedValues = computeManualPriorNotification.execute(
+            manualPriorNotificationComputeDataInput.faoArea,
+            fishingCatches,
+            manualPriorNotificationComputeDataInput.portLocode,
+            manualPriorNotificationComputeDataInput.tripGearCodes,
+            manualPriorNotificationComputeDataInput.vesselId,
         )
+
+        return ManualPriorNotificationComputedValuesDataOutput
+            .fromManualPriorNotificationComputedValues(manualPriorNotificationComputedValues)
     }
 
     @GetMapping("/manual/{reportId}")
@@ -142,56 +145,7 @@ class PriorNotificationController(
         @PathVariable(name = "reportId")
         reportId: String,
     ): ManualPriorNotificationDataOutput {
-        return ManualPriorNotificationDataOutput.fromPriorNotification(
-            getPriorNotification.execute(reportId),
-        )
-    }
-
-    @PostMapping("/manual/compute")
-    @Operation(summary = "Calculate manual prior notification fleet segments, prior notification types and risk factor")
-    fun getManualComputation(
-        @RequestBody
-        manualPriorNotificationComputeDataInput: ManualPriorNotificationComputeDataInput,
-    ): ManualPriorNotificationComputationDataOutput {
-        val fishingCatches = manualPriorNotificationComputeDataInput.fishingCatches.map { it.toLogbookFishingCatch() }
-
-        val (fleetSegments, priorNotificationTypes, riskFactor) = computeManualPriorNotification.execute(
-            manualPriorNotificationComputeDataInput.faoArea,
-            fishingCatches,
-            manualPriorNotificationComputeDataInput.portLocode,
-            manualPriorNotificationComputeDataInput.tripGearCodes,
-            manualPriorNotificationComputeDataInput.vesselId,
-        )
-
-        return ManualPriorNotificationComputationDataOutput.fromFleetSegmentsAndPriotNotificationTypesAndRiskFactor(
-            fleetSegments,
-            priorNotificationTypes,
-            riskFactor,
-        )
-    }
-
-    @PostMapping("/manual")
-    @Operation(summary = "Create a new manual prior notification")
-    fun createManual(
-        @RequestBody
-        manualPriorNotificationDataInput: ManualPriorNotificationDataInput,
-    ): ManualPriorNotificationDataOutput {
-        val createdPriorNotification = createOrUpdateManualPriorNotification.execute(
-            manualPriorNotificationDataInput.authorTrigram,
-            manualPriorNotificationDataInput.didNotFishAfterZeroNotice,
-            manualPriorNotificationDataInput.expectedArrivalDate,
-            manualPriorNotificationDataInput.expectedLandingDate,
-            manualPriorNotificationDataInput.faoArea,
-            manualPriorNotificationDataInput.fishingCatches.map { it.toLogbookFishingCatch() },
-            manualPriorNotificationDataInput.note,
-            manualPriorNotificationDataInput.portLocode,
-            null,
-            manualPriorNotificationDataInput.sentAt,
-            manualPriorNotificationDataInput.tripGearCodes,
-            manualPriorNotificationDataInput.vesselId,
-        )
-
-        return ManualPriorNotificationDataOutput.fromPriorNotification(createdPriorNotification)
+        return ManualPriorNotificationDataOutput.fromPriorNotification(getPriorNotification.execute(reportId))
     }
 
     @PutMapping("/manual/{reportId}")
@@ -221,9 +175,53 @@ class PriorNotificationController(
         return ManualPriorNotificationDataOutput.fromPriorNotification(updatedPriorNotification)
     }
 
+    @PostMapping("/manual")
+    @Operation(summary = "Create a new manual prior notification")
+    fun createManual(
+        @RequestBody
+        manualPriorNotificationDataInput: ManualPriorNotificationDataInput,
+    ): ManualPriorNotificationDataOutput {
+        val createdPriorNotification = createOrUpdateManualPriorNotification.execute(
+            manualPriorNotificationDataInput.authorTrigram,
+            manualPriorNotificationDataInput.didNotFishAfterZeroNotice,
+            manualPriorNotificationDataInput.expectedArrivalDate,
+            manualPriorNotificationDataInput.expectedLandingDate,
+            manualPriorNotificationDataInput.faoArea,
+            manualPriorNotificationDataInput.fishingCatches.map { it.toLogbookFishingCatch() },
+            manualPriorNotificationDataInput.note,
+            manualPriorNotificationDataInput.portLocode,
+            null,
+            manualPriorNotificationDataInput.sentAt,
+            manualPriorNotificationDataInput.tripGearCodes,
+            manualPriorNotificationDataInput.vesselId,
+        )
+
+        return ManualPriorNotificationDataOutput.fromPriorNotification(createdPriorNotification)
+    }
+
     @GetMapping("/types")
     @Operation(summary = "Get all prior notification types")
     fun getAllTypes(): List<String> {
         return getPriorNotificationTypes.execute()
+    }
+
+    @GetMapping("/{reportId}")
+    @Operation(summary = "Get a prior notification by its `reportId`")
+    fun getOne(
+        @PathParam("Logbook message `reportId`")
+        @PathVariable(name = "reportId")
+        reportId: String,
+    ): PriorNotificationDetailDataOutput {
+        return PriorNotificationDetailDataOutput.fromPriorNotification(getPriorNotification.execute(reportId))
+    }
+
+    @PostMapping("/{reportId}/verify_and_send")
+    @Operation(summary = "Verify and send a prior notification by its `reportId`")
+    fun verifyAndSend(
+        @PathParam("Logbook message `reportId`")
+        @PathVariable(name = "reportId")
+        reportId: String,
+    ): PriorNotificationDetailDataOutput {
+        return PriorNotificationDetailDataOutput.fromPriorNotification(verifyAndSendPriorNotification.execute(reportId))
     }
 }

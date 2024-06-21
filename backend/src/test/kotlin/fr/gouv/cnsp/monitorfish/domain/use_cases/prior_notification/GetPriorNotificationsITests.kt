@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.SeafrontGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.sorters.PriorNotificationsSortColumn
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
@@ -48,9 +49,10 @@ class GetPriorNotificationsITests : AbstractDBTests() {
         willArriveAfter = "2000-01-01T00:00:00Z",
         willArriveBefore = "2099-12-31T00:00:00Z",
     )
+    private val defaultSeafrontGroup = SeafrontGroup.ALL
     private val defaultSortColumn = PriorNotificationsSortColumn.EXPECTED_ARRIVAL_DATE
     private val defaultSortDirection = Sort.Direction.ASC
-    private val defaultPageSize = 10
+    private val defaultPageSize = 100
     private val defaultPageNumber = 0
 
     @Test
@@ -61,16 +63,17 @@ class GetPriorNotificationsITests : AbstractDBTests() {
         val sortDirection = Sort.Direction.ASC
 
         // When
-        val result = getPriorNotifications.execute(defaultFilter, sortColumn, sortDirection)
+        val result = getPriorNotifications
+            .execute(defaultFilter, defaultSeafrontGroup, sortColumn, sortDirection, defaultPageNumber, defaultPageSize)
 
         // Then
-        val firstPriorNotificationWithNonNullArrivalDate = result
+        val firstPriorNotificationWithNonNullArrivalDate = result.data
             .first { it.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc != null }
         assertThat(
             firstPriorNotificationWithNonNullArrivalDate.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc,
         )
             .isBefore(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
-        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(result.data).hasSizeGreaterThan(0)
     }
 
     @Test
@@ -81,16 +84,17 @@ class GetPriorNotificationsITests : AbstractDBTests() {
         val sortDirection = Sort.Direction.DESC
 
         // When
-        val result = getPriorNotifications.execute(defaultFilter, sortColumn, sortDirection)
+        val result = getPriorNotifications
+            .execute(defaultFilter, defaultSeafrontGroup, sortColumn, sortDirection, defaultPageNumber, defaultPageSize)
 
         // Then
-        val firstPriorNotificationWithNonNullArrivalDate = result
+        val firstPriorNotificationWithNonNullArrivalDate = result.data
             .first { it.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc != null }
         assertThat(
             firstPriorNotificationWithNonNullArrivalDate.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc,
         )
             .isAfter(ZonedDateTime.now().minusHours(1))
-        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(result.data).hasSizeGreaterThan(0)
     }
 
     @Test
@@ -101,16 +105,17 @@ class GetPriorNotificationsITests : AbstractDBTests() {
         val sortDirection = Sort.Direction.ASC
 
         // When
-        val result = getPriorNotifications.execute(defaultFilter, sortColumn, sortDirection)
+        val result = getPriorNotifications
+            .execute(defaultFilter, defaultSeafrontGroup, sortColumn, sortDirection, defaultPageNumber, defaultPageSize)
 
         // Then
-        val firstPriorNotificationWithNonNullLandingDate = result
+        val firstPriorNotificationWithNonNullLandingDate = result.data
             .first { it.logbookMessageTyped.typedMessage.predictedLandingDatetimeUtc != null }
         assertThat(
             firstPriorNotificationWithNonNullLandingDate.logbookMessageTyped.typedMessage.predictedLandingDatetimeUtc,
         )
             .isEqualTo(ZonedDateTime.parse("2023-01-01T10:30:00Z"))
-        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(result.data).hasSizeGreaterThan(0)
     }
 
     @Test
@@ -121,16 +126,17 @@ class GetPriorNotificationsITests : AbstractDBTests() {
         val sortDirection = Sort.Direction.DESC
 
         // When
-        val result = getPriorNotifications.execute(defaultFilter, sortColumn, sortDirection)
+        val result = getPriorNotifications
+            .execute(defaultFilter, defaultSeafrontGroup, sortColumn, sortDirection, defaultPageNumber, defaultPageSize)
 
         // Then
-        val firstPriorNotificationWithNonNullLandingDate = result
+        val firstPriorNotificationWithNonNullLandingDate = result.data
             .first { it.logbookMessageTyped.typedMessage.predictedLandingDatetimeUtc != null }
         assertThat(
             firstPriorNotificationWithNonNullLandingDate.logbookMessageTyped.typedMessage.predictedLandingDatetimeUtc,
         )
             .isAfter(ZonedDateTime.now().plusHours(4))
-        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(result.data).hasSizeGreaterThan(0)
     }
 
     @Test
@@ -141,13 +147,14 @@ class GetPriorNotificationsITests : AbstractDBTests() {
         val sortDirection = Sort.Direction.ASC
 
         // When
-        val result = getPriorNotifications.execute(defaultFilter, sortColumn, sortDirection)
+        val result = getPriorNotifications
+            .execute(defaultFilter, defaultSeafrontGroup, sortColumn, sortDirection, defaultPageNumber, defaultPageSize)
 
         // Then
-        val firstPriorNotificationWithNonNullPort = result.first { it.port != null }
+        val firstPriorNotificationWithNonNullPort = result.data.first { it.port != null }
         assertThat(firstPriorNotificationWithNonNullPort.port!!.name).isEqualTo("Al Jazeera Port")
         assertThat(firstPriorNotificationWithNonNullPort.logbookMessageTyped.typedMessage.port).isEqualTo("AEJAZ")
-        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(result.data).hasSizeGreaterThan(0)
     }
 
     @Test
@@ -158,13 +165,14 @@ class GetPriorNotificationsITests : AbstractDBTests() {
         val sortDirection = Sort.Direction.DESC
 
         // When
-        val result = getPriorNotifications.execute(defaultFilter, sortColumn, sortDirection)
+        val result = getPriorNotifications
+            .execute(defaultFilter, defaultSeafrontGroup, sortColumn, sortDirection, defaultPageNumber, defaultPageSize)
 
         // Then
-        val firstPriorNotificationWithNonNullPort = result.first { it.port != null }
+        val firstPriorNotificationWithNonNullPort = result.data.first { it.port != null }
         assertThat(firstPriorNotificationWithNonNullPort.port!!.name).isEqualTo("Vannes")
         assertThat(firstPriorNotificationWithNonNullPort.logbookMessageTyped.typedMessage.port).isEqualTo("FRVNE")
-        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(result.data).hasSizeGreaterThan(0)
     }
 
     @Test
@@ -175,10 +183,11 @@ class GetPriorNotificationsITests : AbstractDBTests() {
         val sortDirection = Sort.Direction.ASC
 
         // When
-        val result = getPriorNotifications.execute(defaultFilter, sortColumn, sortDirection)
+        val result = getPriorNotifications
+            .execute(defaultFilter, defaultSeafrontGroup, sortColumn, sortDirection, defaultPageNumber, defaultPageSize)
 
         // Then
-        val firstPriorNotificationWithKnownVessel = result.first { it.vessel!!.id != -1 }
+        val firstPriorNotificationWithKnownVessel = result.data.first { it.vessel!!.id != -1 }
         // We don't test the `.vessel.VesselName` since in the real world,
         // the vessel name may have changed between the logbook message date and now
         assertThat(firstPriorNotificationWithKnownVessel.vessel!!.internalReferenceNumber).isEqualTo("CFR105")
@@ -186,7 +195,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             .isEqualTo("CFR105")
         assertThat(firstPriorNotificationWithKnownVessel.logbookMessageTyped.logbookMessage.vesselName)
             .isEqualTo("CALAMARO")
-        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(result.data).hasSizeGreaterThan(0)
     }
 
     @Test
@@ -197,10 +206,11 @@ class GetPriorNotificationsITests : AbstractDBTests() {
         val sortDirection = Sort.Direction.DESC
 
         // When
-        val result = getPriorNotifications.execute(defaultFilter, sortColumn, sortDirection)
+        val result = getPriorNotifications
+            .execute(defaultFilter, defaultSeafrontGroup, sortColumn, sortDirection, defaultPageNumber, defaultPageSize)
 
         // Then
-        val firstPriorNotificationWithKnownVessel = result.first { it.vessel!!.id != -1 }
+        val firstPriorNotificationWithKnownVessel = result.data.first { it.vessel!!.id != -1 }
         // We don't test the `.vessel.VesselName` since in the real world,
         // the vessel name may have changed between the logbook message date and now
         assertThat(firstPriorNotificationWithKnownVessel.vessel!!.internalReferenceNumber).isEqualTo("CFR120")
@@ -208,7 +218,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             .isEqualTo("CFR120")
         assertThat(firstPriorNotificationWithKnownVessel.logbookMessageTyped.logbookMessage.vesselName)
             .isEqualTo("VIVA L'ITALIA")
-        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(result.data).hasSizeGreaterThan(0)
     }
 
     @Test
@@ -219,12 +229,13 @@ class GetPriorNotificationsITests : AbstractDBTests() {
         val sortDirection = Sort.Direction.ASC
 
         // When
-        val result = getPriorNotifications.execute(defaultFilter, sortColumn, sortDirection)
+        val result = getPriorNotifications
+            .execute(defaultFilter, defaultSeafrontGroup, sortColumn, sortDirection, defaultPageNumber, defaultPageSize)
 
         // Then
-        val firstPriorNotificationWithNonNullRiskFactor = result.first { it.vesselRiskFactor != null }
+        val firstPriorNotificationWithNonNullRiskFactor = result.data.first { it.vesselRiskFactor != null }
         assertThat(firstPriorNotificationWithNonNullRiskFactor.vesselRiskFactor!!.riskFactor).isEqualTo(2.2)
-        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(result.data).hasSizeGreaterThan(0)
     }
 
     @Test
@@ -235,11 +246,12 @@ class GetPriorNotificationsITests : AbstractDBTests() {
         val sortDirection = Sort.Direction.DESC
 
         // When
-        val result = getPriorNotifications.execute(defaultFilter, sortColumn, sortDirection)
+        val result = getPriorNotifications
+            .execute(defaultFilter, defaultSeafrontGroup, sortColumn, sortDirection, defaultPageNumber, defaultPageSize)
 
         // Then
-        val firstPriorNotificationWithNonNullRiskFactor = result.first { it.vesselRiskFactor != null }
+        val firstPriorNotificationWithNonNullRiskFactor = result.data.first { it.vesselRiskFactor != null }
         assertThat(firstPriorNotificationWithNonNullRiskFactor.vesselRiskFactor!!.riskFactor).isEqualTo(4.0)
-        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(result.data).hasSizeGreaterThan(0)
     }
 }

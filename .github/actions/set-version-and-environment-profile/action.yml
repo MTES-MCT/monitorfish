@@ -16,18 +16,21 @@ runs:
       with:
         repository: mtes-mct/monitorfish
 
-    - name: "Set environment profile as 'dev' by default"
+    - name: "Set ENV_PROFILE as 'dev' and IS_RELEASE as false by default"
       shell: bash
       run: |
         echo "ENV_PROFILE=dev" >> $GITHUB_ENV
         echo "IS_RELEASE=false" >> $GITHUB_ENV
 
-    - name: "Set environment profile as 'prod' if it's a release"
+    - name: "Set IS_RELEASE as true if we are on master branch"
+      if: github.ref == 'refs/heads/master'
+      shell: bash
+      run: echo "IS_RELEASE=true" >> $GITHUB_ENV
+
+    - name: "Set ENV_PROFILE as 'prod' if it's a tag or branch starting with 'v1' or 'v2'"
       if: startsWith(github.ref, 'refs/tags/v1') || startsWith(github.ref, 'refs/heads/v1') || startsWith(github.ref, 'refs/tags/v2') || startsWith(github.ref, 'refs/heads/v2')
       shell: bash
-      run: |
-        echo "ENV_PROFILE=prod" >> $GITHUB_ENV
-        echo "IS_RELEASE=true" >> $GITHUB_ENV
+      run: echo "ENV_PROFILE=prod" >> $GITHUB_ENV
 
     - name: Set version output
       id: set-version
@@ -43,6 +46,6 @@ runs:
     - name: Print environment profile and version
       shell: bash
       run: |
-        echo "ENV_PROFILE ${{ env.ENV_PROFILE }}"
-        echo "IS_RELEASE ${{ env.IS_RELEASE }}"
+        echo "ENV_PROFILE: ${{ env.ENV_PROFILE }}"
+        echo "IS_RELEASE: ${{ env.IS_RELEASE }}"
         echo "VERSION: ${{ env.VERSION }}"

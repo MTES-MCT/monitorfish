@@ -4,6 +4,7 @@ import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationState
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -27,6 +28,7 @@ data class PriorNotificationListItemDataOutput(
     val reportingCount: Int?,
     val seafront: Seafront?,
     val sentAt: String?,
+    val state: PriorNotificationState?,
     val tripGears: List<LogbookMessageGearDataOutput>,
     val tripSegments: List<LogbookMessageTripSegmentDataOutput>,
     val types: List<PriorNotificationTypeDataOutput>,
@@ -68,7 +70,7 @@ data class PriorNotificationListItemDataOutput(
                 LogbookMessageTripSegmentDataOutput.fromLogbookTripSegment(it)
             } ?: emptyList()
             val types = message.pnoTypes.map { PriorNotificationTypeDataOutput.fromPriorNotificationType(it) }
-            val vessel = requireNotNull(priorNotification.vessel)
+            val vessel = requireNotNull(priorNotification.vessel) { "`vessel` is null." }
 
             return PriorNotificationListItemDataOutput(
                 id = referenceReportId,
@@ -88,6 +90,7 @@ data class PriorNotificationListItemDataOutput(
                 reportingCount = priorNotification.reportingCount,
                 seafront = priorNotification.seafront,
                 sentAt = logbookMessage.reportDateTime?.toString(),
+                state = priorNotification.state,
                 tripGears,
                 tripSegments,
                 types,

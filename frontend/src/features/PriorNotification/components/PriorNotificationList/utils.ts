@@ -5,7 +5,8 @@ import {
   ALL_SEAFRONT_GROUP,
   type AllSeafrontGroup
 } from '@constants/seafront'
-import { customDayjs, getMaybeBooleanFromRichBoolean, type DateAsStringRange } from '@mtes-mct/monitor-ui'
+import { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
+import { THEME, customDayjs, getMaybeBooleanFromRichBoolean, type DateAsStringRange } from '@mtes-mct/monitor-ui'
 
 import {
   COMMUNITY_PRIOR_NOTIFICATION_TYPES,
@@ -14,9 +15,10 @@ import {
   LastControlPeriod,
   SUB_MENU_LABEL
 } from './constants'
+import { PriorNotification } from '../../PriorNotification.types'
 
 import type { ListFilter } from './types'
-import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
+import type { CSSProperties } from 'react'
 
 function getApiFilterFromExpectedArrivalPeriod(
   period: ExpectedArrivalPeriod,
@@ -98,6 +100,55 @@ function getApiFilterFromLastControlPeriod(period: LastControlPeriod | undefined
       return {
         lastControlledBefore: customDayjs().subtract(2, 'year').toISOString()
       }
+
+    default:
+      return {}
+  }
+}
+
+export function getColorsFromState(state: PriorNotification.State | undefined): {
+  backgroundColor: string
+  borderColor: string
+  color: string
+} {
+  // [backgroundColor, borderColor, color]
+  let colors: [string, string, string]
+
+  switch (state) {
+    case PriorNotification.State.PENDING_VERIFICATION:
+      colors = [THEME.color.goldenPoppyBorder, THEME.color.goldenPoppyBorder, THEME.color.charcoal]
+      break
+
+    case PriorNotification.State.SENT:
+      colors = [THEME.color.lightGray, THEME.color.lightGray, THEME.color.charcoal]
+      break
+
+    case PriorNotification.State.PENDING_SEND:
+    case PriorNotification.State.VERIFIED_AND_SENT:
+      colors = [THEME.color.mediumSeaGreen25, THEME.color.mediumSeaGreen25, THEME.color.mediumSeaGreen]
+      break
+
+    case PriorNotification.State.OUT_OF_VERIFICATION_SCOPE:
+    default:
+      colors = [THEME.color.white, THEME.color.charcoal, THEME.color.charcoal]
+      break
+  }
+
+  return {
+    backgroundColor: colors[0],
+    borderColor: colors[1],
+    color: colors[2]
+  }
+}
+
+export function getExpandableRowCellCustomStyle(columnId: string): CSSProperties {
+  switch (columnId) {
+    case LogbookMessage.ApiSortColumn.VESSEL_RISK_FACTOR:
+    case 'actions':
+      return { verticalAlign: 'bottom' }
+
+    case 'state':
+      return { padding: '7px 14px', verticalAlign: 'bottom' }
 
     default:
       return {}

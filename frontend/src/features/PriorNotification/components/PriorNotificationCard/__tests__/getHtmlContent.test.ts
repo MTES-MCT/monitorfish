@@ -136,8 +136,13 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
         economicZone: undefined,
         effortZone: undefined,
         faoZone: undefined,
+        isBeingSent: false,
+        isInVerificationScope: false,
+        isSent: false,
+        isVerified: false,
         latitude: undefined,
         longitude: undefined,
+        note: undefined,
         pnoTypes: [
           {
             hasDesignatedPorts: false,

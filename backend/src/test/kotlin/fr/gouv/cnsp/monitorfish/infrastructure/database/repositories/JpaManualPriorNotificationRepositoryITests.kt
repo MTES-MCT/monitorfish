@@ -398,7 +398,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findById Should return the expected manual prior notification`() {
+    fun `findByReportId Should return the expected manual prior notification`() {
         // Given
         val reportId = "00000000-0000-4000-0000-000000000002"
 
@@ -461,11 +461,11 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
                     ),
                     PNO::class.java,
                 ),
-                note = null,
                 port = null,
                 reportingCount = null,
                 seafront = null,
                 sentAt = ZonedDateTime.now().toString(),
+                state = null,
                 updatedAt = null,
                 vessel = null,
                 vesselRiskFactor = null,
@@ -488,5 +488,28 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
             .isEqualTo(createdPriorNotification!!)
         assertThat(lastPriorNotification.logbookMessageTyped.logbookMessage)
             .isEqualTo(createdPriorNotification.logbookMessageTyped.logbookMessage)
+    }
+
+    @Test
+    @Transactional
+    fun `updateState Should update writable state values for an existing PNO logbook report`() {
+        // Given
+        val currentManualPriorNotification = jpaManualPriorNotificationRepository
+            .findByReportId("00000000-0000-4000-0000-000000000005")!!
+        assertThat(currentManualPriorNotification.logbookMessageTyped.typedMessage.isBeingSent).isEqualTo(false)
+        assertThat(currentManualPriorNotification.logbookMessageTyped.typedMessage.isVerified).isEqualTo(false)
+
+        // When
+        jpaManualPriorNotificationRepository.updateState(
+            "00000000-0000-4000-0000-000000000005",
+            isBeingSent = true,
+            isVerified = true,
+        )
+
+        // Then
+        val updatedManualPriorNotification = jpaManualPriorNotificationRepository
+            .findByReportId("00000000-0000-4000-0000-000000000005")!!
+        assertThat(updatedManualPriorNotification.logbookMessageTyped.typedMessage.isBeingSent).isEqualTo(true)
+        assertThat(updatedManualPriorNotification.logbookMessageTyped.typedMessage.isVerified).isEqualTo(true)
     }
 }

@@ -1,13 +1,12 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
+import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
-import fr.gouv.cnsp.monitorfish.domain.exceptions.EntityConversionException
-import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
-import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
+import fr.gouv.cnsp.monitorfish.domain.exceptions.*
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LogbookReportEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBLogbookReportRepository
@@ -21,17 +20,20 @@ import org.springframework.data.jpa.repository.Modifying
 import org.springframework.stereotype.Repository
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
+import kotlin.reflect.full.declaredMemberProperties
+import kotlin.reflect.jvm.isAccessible
+import kotlin.reflect.jvm.javaField
 
 @Repository
 class JpaLogbookReportRepository(
-    private val dbERSRepository: DBLogbookReportRepository,
-    private val mapper: ObjectMapper,
+    private val dbLogbookReportRepository: DBLogbookReportRepository,
+    private val objectMapper: ObjectMapper,
 ) : LogbookReportRepository {
     private val logger = LoggerFactory.getLogger(JpaLogbookReportRepository::class.java)
     private val postgresChunkSize = 5000
 
     override fun findAllPriorNotifications(filter: PriorNotificationsFilter): List<PriorNotification> {
-        val allLogbookReportModels = dbERSRepository.findAllEnrichedPnoReferencesAndRelatedOperations(
+        val allLogbookReportModels = dbLogbookReportRepository.findAllEnrichedPnoReferencesAndRelatedOperations(
             flagStates = filter.flagStates ?: emptyList(),
             hasOneOrMoreReportings = filter.hasOneOrMoreReportings,
             isLessThanTwelveMetersVessel = filter.isLessThanTwelveMetersVessel,
@@ -50,10 +52,10 @@ class JpaLogbookReportRepository(
         return mapToReferenceWithRelatedModels(allLogbookReportModels)
             .mapNotNull { (referenceLogbookReportModel, relatedLogbookReportModels) ->
                 try {
-                    referenceLogbookReportModel.toPriorNotification(mapper, relatedLogbookReportModels)
+                    referenceLogbookReportModel.toPriorNotification(objectMapper, relatedLogbookReportModels)
                 } catch (e: Exception) {
                     logger.warn(
-                        "Error while converting logbook report models to prior notifications (reoportId = ${referenceLogbookReportModel.reportId}).",
+                        "Error while converting logbook report models to prior notifications (reportId = ${referenceLogbookReportModel.reportId}).",
                         e,
                     )
 
@@ -63,7 +65,7 @@ class JpaLogbookReportRepository(
     }
 
     override fun findPriorNotificationByReportId(reportId: String): PriorNotification? {
-        val allLogbookReportModels = dbERSRepository.findEnrichedPnoReferenceAndRelatedOperationsByReportId(
+        val allLogbookReportModels = dbLogbookReportRepository.findEnrichedPnoReferenceAndRelatedOperationsByReportId(
             reportId,
         )
         if (allLogbookReportModels.isEmpty()) {
@@ -74,7 +76,7 @@ class JpaLogbookReportRepository(
             val (referenceLogbookReportModel, relatedLogbookReportModels) =
                 mapToReferenceWithRelatedModels(allLogbookReportModels).first()
 
-            return referenceLogbookReportModel.toPriorNotification(mapper, relatedLogbookReportModels)
+            return referenceLogbookReportModel.toPriorNotification(objectMapper, relatedLogbookReportModels)
         } catch (e: Exception) {
             throw EntityConversionException(
                 "Error while converting logbook report models to prior notification (reoportId = $reportId).",
@@ -90,7 +92,7 @@ class JpaLogbookReportRepository(
         try {
             if (internalReferenceNumber.isNotEmpty()) {
                 val lastTrip =
-                    dbERSRepository.findTripsBeforeDatetime(
+                    dbLogbookReportRepository.findTripsBeforeDatetime(
                         internalReferenceNumber,
                         beforeDateTime.toInstant(),
                         PageRequest.of(0, 1),
@@ -119,13 +121,13 @@ class JpaLogbookReportRepository(
         try {
             if (internalReferenceNumber.isNotEmpty()) {
                 val previousTripNumber =
-                    dbERSRepository.findPreviousTripNumber(
+                    dbLogbookReportRepository.findPreviousTripNumber(
                         internalReferenceNumber,
                         tripNumber,
                         PageRequest.of(0, 1),
                     ).first().tripNumber
                 val previousTrip =
-                    dbERSRepository.findFirstAndLastOperationsDatesOfTrip(
+                    dbLogbookReportRepository.findFirstAndLastOperationsDatesOfTrip(
                         internalReferenceNumber,
                         previousTripNumber,
                     )
@@ -155,7 +157,7 @@ class JpaLogbookReportRepository(
         try {
             if (internalReferenceNumber.isNotEmpty()) {
                 val nextTrip =
-                    dbERSRepository.findFirstAndLastOperationsDatesOfTrip(
+                    dbLogbookReportRepository.findFirstAndLastOperationsDatesOfTrip(
                         internalReferenceNumber,
                         tripNumber,
                     )
@@ -185,13 +187,13 @@ class JpaLogbookReportRepository(
         try {
             if (internalReferenceNumber.isNotEmpty()) {
                 val nextTripNumber =
-                    dbERSRepository.findNextTripNumber(
+                    dbLogbookReportRepository.findNextTripNumber(
                         internalReferenceNumber,
                         tripNumber,
                         PageRequest.of(0, 1),
                     ).first().tripNumber
                 val nextTrip =
-                    dbERSRepository.findFirstAndLastOperationsDatesOfTrip(
+                    dbLogbookReportRepository.findFirstAndLastOperationsDatesOfTrip(
                         internalReferenceNumber,
                         nextTripNumber,
                     )
@@ -225,13 +227,13 @@ class JpaLogbookReportRepository(
     ): List<LogbookMessage> {
         try {
             if (internalReferenceNumber.isNotEmpty()) {
-                return dbERSRepository.findAllMessagesByTripNumberBetweenDates(
+                return dbLogbookReportRepository.findAllMessagesByTripNumberBetweenDates(
                     internalReferenceNumber,
                     afterDate.toInstant().toString(),
                     beforeDate.toInstant().toString(),
                     tripNumber,
                 ).map {
-                    it.toLogbookMessage(mapper)
+                    it.toLogbookMessage(objectMapper)
                 }
             }
 
@@ -244,7 +246,7 @@ class JpaLogbookReportRepository(
     }
 
     override fun findLANAndPNOMessagesNotAnalyzedBy(ruleType: String): List<Pair<LogbookMessage, LogbookMessage?>> {
-        val lanAndPnoMessages = dbERSRepository.findAllLANAndPNONotProcessedByRule(ruleType)
+        val lanAndPnoMessages = dbLogbookReportRepository.findAllLANAndPNONotProcessedByRule(ruleType)
 
         val lanAndPnoMessagesWithoutCorrectedMessages =
             lanAndPnoMessages.filter { lanMessage ->
@@ -263,12 +265,12 @@ class JpaLogbookReportRepository(
                         message.messageType == LogbookMessageTypeMapping.PNO.name
                 }
 
-            Pair(lanMessage.toLogbookMessage(mapper), pnoMessage?.toLogbookMessage(mapper))
+            Pair(lanMessage.toLogbookMessage(objectMapper), pnoMessage?.toLogbookMessage(objectMapper))
         }
     }
 
     override fun findDistinctPriorNotificationTypes(): List<String> {
-        return dbERSRepository.findDistinctPriorNotificationType() ?: emptyList()
+        return dbLogbookReportRepository.findDistinctPriorNotificationType() ?: emptyList()
     }
 
     override fun updateLogbookMessagesAsProcessedByRule(
@@ -276,16 +278,16 @@ class JpaLogbookReportRepository(
         ruleType: String,
     ) {
         ids.chunked(postgresChunkSize).forEach {
-            dbERSRepository.updateERSMessagesAsProcessedByRule(it, ruleType)
+            dbLogbookReportRepository.updateERSMessagesAsProcessedByRule(it, ruleType)
         }
     }
 
     override fun findById(id: Long): LogbookMessage {
-        return dbERSRepository.findById(id).get().toLogbookMessage(mapper)
+        return dbLogbookReportRepository.findById(id).get().toLogbookMessage(objectMapper)
     }
 
     override fun findLastMessageDate(): ZonedDateTime {
-        return dbERSRepository.findLastOperationDateTime().atZone(UTC)
+        return dbLogbookReportRepository.findLastOperationDateTime().atZone(UTC)
     }
 
     override fun findFirstAcknowledgedDateOfTripBeforeDateTime(
@@ -295,13 +297,13 @@ class JpaLogbookReportRepository(
         try {
             if (internalReferenceNumber.isNotEmpty()) {
                 val lastTrip =
-                    dbERSRepository.findTripsBeforeDatetime(
+                    dbLogbookReportRepository.findTripsBeforeDatetime(
                         internalReferenceNumber,
                         beforeDateTime.toInstant(),
                         PageRequest.of(0, 1),
                     ).first()
 
-                return dbERSRepository.findFirstAcknowledgedDateOfTrip(
+                return dbLogbookReportRepository.findFirstAcknowledgedDateOfTrip(
                     internalReferenceNumber,
                     lastTrip.tripNumber,
                 ).atZone(
@@ -320,32 +322,64 @@ class JpaLogbookReportRepository(
     }
 
     override fun findLastTwoYearsTripNumbers(internalReferenceNumber: String): List<String> {
-        return dbERSRepository.findLastTwoYearsTripNumbers(internalReferenceNumber)
+        return dbLogbookReportRepository.findLastTwoYearsTripNumbers(internalReferenceNumber)
     }
 
     override fun findLastReportSoftware(internalReferenceNumber: String): String? {
-        return dbERSRepository.findLastReportSoftware(internalReferenceNumber)
+        return dbLogbookReportRepository.findLastReportSoftware(internalReferenceNumber)
     }
 
     // For test purpose
     @Modifying
     @Transactional
     override fun deleteAll() {
-        dbERSRepository.deleteAll()
+        dbLogbookReportRepository.deleteAll()
     }
 
     @Modifying
     @Transactional
     override fun save(message: LogbookMessage) {
-        dbERSRepository.save(LogbookReportEntity.fromLogbookMessage(mapper, message))
+        dbLogbookReportRepository.save(LogbookReportEntity.fromLogbookMessage(objectMapper, message))
     }
 
     @Modifying
     @Transactional
     override fun savePriorNotification(logbookMessageTyped: LogbookMessageTyped<PNO>): PriorNotification {
-        return dbERSRepository
-            .save(LogbookReportEntity.fromLogbookMessage(mapper, logbookMessageTyped.logbookMessage))
-            .toPriorNotification(mapper, emptyList())
+        return dbLogbookReportRepository
+            .save(LogbookReportEntity.fromLogbookMessage(objectMapper, logbookMessageTyped.logbookMessage))
+            .toPriorNotification(objectMapper, emptyList())
+    }
+
+    @Transactional
+    override fun updatePriorNotificationState(reportId: String, isBeingSent: Boolean, isVerified: Boolean) {
+        val logbookReportEntities =
+            dbLogbookReportRepository.findEnrichedPnoReferenceAndRelatedOperationsByReportId(reportId)
+        if (logbookReportEntities.isEmpty()) {
+            throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
+        }
+
+        // We need to update both DAT and related COR operations (which also covers orphan COR cases)
+        logbookReportEntities
+            .filter { it.operationType in listOf(LogbookOperationType.DAT, LogbookOperationType.COR) }
+            .map { logbookReportEntity ->
+                val messageMap: MutableMap<String, Any> = objectMapper
+                    .readValue(logbookReportEntity.message, object : TypeReference<MutableMap<String, Any>>() {})
+                messageMap["isBeingSent"] = isBeingSent
+                messageMap["isVerified"] = isVerified
+
+                val nextMessage = objectMapper.writeValueAsString(messageMap)
+
+                // We use a reflection to update the entity `message` prop since it's immutable
+                val messageField = LogbookReportEntity::class.declaredMemberProperties.find { it.name == "message" }
+                messageField?.let {
+                    it.isAccessible = true
+                    val field = it.javaField
+                    field?.isAccessible = true
+                    field?.set(logbookReportEntity, nextMessage)
+                }
+
+                dbLogbookReportRepository.save(logbookReportEntity)
+            }
     }
 
     private fun getCorrectedMessageIfAvailable(

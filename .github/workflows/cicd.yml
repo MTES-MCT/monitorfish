@@ -29,39 +29,15 @@ jobs:
     name: Set application version and env profile
     runs-on: ubuntu-22.04
     outputs:
-      IS_RELEASE: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v1') || startsWith(github.ref, 'refs/heads/v1') || startsWith(github.ref, 'refs/tags/v2') || startsWith(github.ref, 'refs/heads/v2')
-      ENV_PROFILE: ${{ steps.env_profile.outputs.ENV_PROFILE }}
-      VERSION: ${{ steps.version.outputs.VERSION }}
+      ENV_PROFILE: ${{ env.ENV_PROFILE }}
+      IS_RELEASE: ${{ env.IS_RELEASE }}
+      VERSION: ${{ env.VERSION }}
     steps:
-      - name: Is a dependabot PR
-        run: echo ${{ contains(github.ref, 'dependabot') }}
-      - name: Get last release version
-        id: lastrelease
-        uses: pozetroninc/github-action-get-latest-release@master
-        with:
-          repository: mtes-mct/monitorfish
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - id: step1
-        name: Set ENV profile as dev by default
-        run: echo "ENV_PROFILE=dev" >> $GITHUB_ENV
-
-      - name: Set ENV profile as PROD when it is a release
-        if: startsWith(github.ref, 'refs/tags/v1') || startsWith(github.ref, 'refs/heads/v1') || startsWith(github.ref, 'refs/tags/v2') || startsWith(github.ref, 'refs/heads/v2')
-        run: echo "ENV_PROFILE=prod" >> $GITHUB_ENV
-
-      - id: env_profile
-        name: Set ENV profile output
-        run: ENV_PROFILE=${{ env.ENV_PROFILE }} && echo "ENV_PROFILE=$ENV_PROFILE" >> $GITHUB_OUTPUT
-
-      - id: version
-        name: Set VERSION env
-        run: |
-          if [ "${ENV_PROFILE}" != "prod" ]; then\
-              export VERSION=${{ steps.lastrelease.outputs.release }}_snapshot
-          else\
-              export VERSION=${{ steps.lastrelease.outputs.release }}
-          fi
-          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+      - name: Set version and environment profile
+        uses: ./.github/actions/set-version-and-environment-profile
 
   unit_test_backend:
     name: Run backend unit tests
@@ -72,9 +48,6 @@ jobs:
       VERSION: ${{needs.version.outputs.VERSION}}
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
-      - name: Show version
-        run: echo "VERSION:${{ env.VERSION }} ENV_PROFILE:${{ env.ENV_PROFILE }}"
-
       - name: Setup Java JDK
         uses: actions/setup-java@v4
         with:
@@ -135,9 +108,6 @@ jobs:
       VERSION: ${{needs.version.outputs.VERSION}}
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
-      - name: Show version
-        run: echo "VERSION:${{ env.VERSION }} ENV_PROFILE:${{ env.ENV_PROFILE }}"
-
       - name: Checkout
         uses: actions/checkout@v4
 

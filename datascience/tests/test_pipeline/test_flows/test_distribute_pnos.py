@@ -2,6 +2,7 @@ import dataclasses
 import io
 import json
 from datetime import datetime, timedelta, timezone
+from email.message import EmailMessage
 from pathlib import Path
 from unittest.mock import patch
 
@@ -13,17 +14,20 @@ from dateutil.relativedelta import relativedelta
 from jinja2 import Template
 from requests import Response
 
-from config import TEST_DATA_LOCATION, default_risk_factors
+from config import EMAIL_IMAGES_LOCATION, TEST_DATA_LOCATION, default_risk_factors
 from src.pipeline.entities.fleet_segments import FishingGear, FleetSegment
 from src.pipeline.entities.missions import Infraction
 from src.pipeline.entities.pnos import (
     PnoSource,
     PnoToRender,
+    PnoToSend,
     PreRenderedPno,
     RenderedPno,
 )
 from src.pipeline.flows.distribute_pnos import (
     attribute_addressees,
+    create_email,
+    create_sms,
     extract_fishing_gear_names,
     extract_pno_units_ports_and_segments_subscriptions,
     extract_pno_units_targeting_vessels,
@@ -39,10 +43,32 @@ from src.pipeline.flows.distribute_pnos import (
     render_pno,
     to_pnos_to_render,
 )
+from src.pipeline.helpers.emails import CommunicationMeans
 from src.read_query import read_query
 from tests.mocks import mock_check_flow_not_running
 
 flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
+
+
+@pytest.fixture
+def cnsp_crossa_cacem_logos() -> bytes:
+    with open(EMAIL_IMAGES_LOCATION / "logos_cnsp_crossa_cacem.jpg", "rb") as f:
+        logo = f.read()
+    return logo
+
+
+@pytest.fixture
+def marianne_gif() -> bytes:
+    with open(EMAIL_IMAGES_LOCATION / "marianne.gif", "rb") as f:
+        logo = f.read()
+    return logo
+
+
+@pytest.fixture
+def liberte_egalite_fraternite_gif() -> bytes:
+    with open(EMAIL_IMAGES_LOCATION / "liberte_egalite_fraternite.gif", "rb") as f:
+        logo = f.read()
+    return logo
 
 
 @pytest.fixture
@@ -675,9 +701,10 @@ def pre_rendered_pno_2() -> PreRenderedPno:
 @pytest.fixture
 def pno_pdf_document_to_distribute_targeted_vessel_and_segments() -> RenderedPno:
     return RenderedPno(
-        report_id="123-abc",
+        report_id="123-abc-pno",
         vessel_id=4,
-        cfr=None,
+        cfr="123-abc",
+        vessel_name="Le navire 123-abc",
         is_verified=False,
         is_being_sent=True,
         trip_segments=[
@@ -689,6 +716,20 @@ def pno_pdf_document_to_distribute_targeted_vessel_and_segments() -> RenderedPno
         generation_datetime_utc=datetime(2023, 5, 6, 23, 52, 0),
         pdf_document=b"PDF Document",
         control_unit_ids=None,
+        sms_content="Message SMS préavis 123-abc",
+        html_email_body="<html>Ce navire va débarquer</html>",
+    )
+
+
+@pytest.fixture
+def pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned(
+    pno_pdf_document_to_distribute_targeted_vessel_and_segments,
+) -> RenderedPno:
+    return dataclasses.replace(
+        pno_pdf_document_to_distribute_targeted_vessel_and_segments,
+        control_unit_ids={1, 2, 3},
+        phone_numbers=["'00 11 22 33 44 55", "44 44 44 44 44"],
+        emails=["alternative@email", "some.email@control.unit.4"],
     )
 
 
@@ -698,6 +739,7 @@ def pno_pdf_document_to_distribute_receive_all_pnos_from_port() -> RenderedPno:
         report_id="456-def",
         vessel_id=1,
         cfr="ABC000306959",
+        vessel_name="ÉTABLIR IMPRESSION LORSQUE",
         is_verified=False,
         is_being_sent=True,
         trip_segments=[],
@@ -710,11 +752,24 @@ def pno_pdf_document_to_distribute_receive_all_pnos_from_port() -> RenderedPno:
 
 
 @pytest.fixture
+def pno_pdf_document_to_distribute_receive_all_pnos_from_port_assigned(
+    pno_pdf_document_to_distribute_receive_all_pnos_from_port,
+) -> RenderedPno:
+    return dataclasses.replace(
+        pno_pdf_document_to_distribute_receive_all_pnos_from_port,
+        control_unit_ids={4},
+        emails=["email4@email.com"],
+        phone_numbers=[],
+    )
+
+
+@pytest.fixture
 def pno_pdf_document_to_distribute_without_addressees() -> RenderedPno:
     return RenderedPno(
         report_id="456-def",
         vessel_id=1,
         cfr="ABC000306959",
+        vessel_name="ÉTABLIR IMPRESSION LORSQUE",
         is_verified=False,
         is_being_sent=True,
         trip_segments=[],
@@ -727,11 +782,24 @@ def pno_pdf_document_to_distribute_without_addressees() -> RenderedPno:
 
 
 @pytest.fixture
+def pno_pdf_document_to_distribute_without_addressees_assigned(
+    pno_pdf_document_to_distribute_without_addressees,
+) -> RenderedPno:
+    return dataclasses.replace(
+        pno_pdf_document_to_distribute_without_addressees,
+        control_unit_ids=set(),
+        emails=[],
+        phone_numbers=[],
+    )
+
+
+@pytest.fixture
 def pno_pdf_document_to_distribute_verified() -> RenderedPno:
     return RenderedPno(
         report_id="456-def",
         vessel_id=1,
         cfr="ABC000306959",
+        vessel_name="ÉTABLIR IMPRESSION LORSQUE",
         is_verified=True,
         is_being_sent=True,
         trip_segments=[],
@@ -740,6 +808,18 @@ def pno_pdf_document_to_distribute_verified() -> RenderedPno:
         generation_datetime_utc=datetime(2023, 6, 6, 23, 50, 0),
         pdf_document=b"PDF Document",
         control_unit_ids=None,
+    )
+
+
+@pytest.fixture
+def pno_pdf_document_to_distribute_verified_assigned(
+    pno_pdf_document_to_distribute_verified,
+) -> RenderedPno:
+    return dataclasses.replace(
+        pno_pdf_document_to_distribute_verified,
+        control_unit_ids={2, 3},
+        emails=["alternative@email", "some.email@control.unit.4"],
+        phone_numbers=["'00 11 22 33 44 55", "44 44 44 44 44"],
     )
 
 
@@ -1315,6 +1395,7 @@ def test_load_pno_pdf_documents(reset_test_data):
                 report_id=report_id,
                 vessel_id=66,
                 cfr="XXX999999999",
+                vessel_name="THE BOAT",
                 is_verified=True,
                 is_being_sent=is_being_sent,
                 trip_segments=[],
@@ -1390,6 +1471,7 @@ def test_load_pno_pdf_documents(reset_test_data):
 
 def test_attribute_addressees_uses_target_vessels_and_segments(
     pno_pdf_document_to_distribute_targeted_vessel_and_segments,
+    pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned,
     pno_units_targeting_vessels,
     pno_units_ports_and_segments_subscriptions,
     control_units_contacts,
@@ -1400,16 +1482,12 @@ def test_attribute_addressees_uses_target_vessels_and_segments(
         pno_units_ports_and_segments_subscriptions,
         control_units_contacts,
     )
-    assert res == dataclasses.replace(
-        pno_pdf_document_to_distribute_targeted_vessel_and_segments,
-        control_unit_ids={1, 2, 3},
-        phone_numbers=["'00 11 22 33 44 55", "44 44 44 44 44"],
-        emails=["alternative@email", "some.email@control.unit.4"],
-    )
+    assert res == pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned
 
 
 def test_attribute_addressees_uses_receive_all_pnos_from_port(
     pno_pdf_document_to_distribute_receive_all_pnos_from_port,
+    pno_pdf_document_to_distribute_receive_all_pnos_from_port_assigned,
     pno_units_targeting_vessels,
     pno_units_ports_and_segments_subscriptions,
     control_units_contacts,
@@ -1420,16 +1498,12 @@ def test_attribute_addressees_uses_receive_all_pnos_from_port(
         pno_units_ports_and_segments_subscriptions,
         control_units_contacts,
     )
-    assert res == dataclasses.replace(
-        pno_pdf_document_to_distribute_receive_all_pnos_from_port,
-        control_unit_ids={4},
-        emails=["email4@email.com"],
-        phone_numbers=[],
-    )
+    assert res == pno_pdf_document_to_distribute_receive_all_pnos_from_port_assigned
 
 
 def test_attribute_addressees_returns_empty_addressees(
     pno_pdf_document_to_distribute_without_addressees,
+    pno_pdf_document_to_distribute_without_addressees_assigned,
     pno_units_targeting_vessels,
     pno_units_ports_and_segments_subscriptions,
     control_units_contacts,
@@ -1440,16 +1514,12 @@ def test_attribute_addressees_returns_empty_addressees(
         pno_units_ports_and_segments_subscriptions,
         control_units_contacts,
     )
-    assert res == dataclasses.replace(
-        pno_pdf_document_to_distribute_without_addressees,
-        control_unit_ids=set(),
-        emails=[],
-        phone_numbers=[],
-    )
+    assert res == pno_pdf_document_to_distribute_without_addressees_assigned
 
 
 def test_attribute_addressees_when_is_verified(
     pno_pdf_document_to_distribute_verified,
+    pno_pdf_document_to_distribute_verified_assigned,
     pno_units_targeting_vessels,
     pno_units_ports_and_segments_subscriptions,
     control_units_contacts,
@@ -1460,12 +1530,7 @@ def test_attribute_addressees_when_is_verified(
         pno_units_ports_and_segments_subscriptions,
         control_units_contacts,
     )
-    assert res == dataclasses.replace(
-        pno_pdf_document_to_distribute_verified,
-        control_unit_ids={2, 3},
-        emails=["alternative@email", "some.email@control.unit.4"],
-        phone_numbers=["'00 11 22 33 44 55", "44 44 44 44 44"],
-    )
+    assert res == pno_pdf_document_to_distribute_verified_assigned
 
 
 @patch("src.pipeline.flows.distribute_pnos.requests")
@@ -1482,6 +1547,105 @@ def test_fetch_control_units_contacts(
     mock_requests.get.return_value = response
     res = fetch_control_units_contacts.run()
     pd.testing.assert_frame_equal(res, control_units_contacts)
+
+
+def test_create_email(
+    pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned,
+    cnsp_crossa_cacem_logos,
+    marianne_gif,
+    liberte_egalite_fraternite_gif,
+):
+    pno_to_send = create_email.run(
+        pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned
+    )
+
+    assert isinstance(pno_to_send, PnoToSend)
+    assert (
+        pno_to_send.pno
+        == pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned
+    )
+    pno_to_send.communication_means == CommunicationMeans.EMAIL
+    assert isinstance(pno_to_send.message, EmailMessage)
+    assert pno_to_send.message["To"] == "alternative@email, some.email@control.unit.4"
+    assert pno_to_send.message["From"] == "monitorfish@test.email"
+    assert pno_to_send.message["Cc"] is None
+    assert pno_to_send.message["Bcc"] is None
+    assert pno_to_send.message["Reply-To"] == "cnsp.france@test.email"
+    assert (
+        pno_to_send.message["Subject"] == "Préavis de débarquement - Le navire 123-abc"
+    )
+
+    attachments = list(pno_to_send.message.iter_attachments())
+    assert len(attachments) == 1
+    attachment = attachments[0]
+    assert attachment.get_content_type() == "application/octet-stream"
+    assert attachment.get_content() == b"PDF Document"
+
+    body = pno_to_send.message.get_body()
+    assert body.get_content_type() == "multipart/related"
+    parts = list(body.iter_parts())
+    assert len(parts) == 4
+    part1, part2, part3, part4 = parts
+
+    assert part1.get_content_type() == "text/html"
+    assert part1.get_charsets() == ["utf-8"]
+    assert part1.get_content() == "<html>Ce navire va débarquer</html>\n"
+
+    assert part2.is_attachment()
+    assert part2.get_content_type() == "image/jpeg"
+    assert part2["Content-ID"] == "<logos_cnsp_crossa_cacem.jpg>"
+    assert part2.get_filename() == "logos_cnsp_crossa_cacem.jpg"
+    assert part2.get_content() == cnsp_crossa_cacem_logos
+
+    assert part3.is_attachment()
+    assert part3.get_content_type() == "image/gif"
+    assert part3["Content-ID"] == "<liberte_egalite_fraternite.gif>"
+    assert part3.get_filename() == "liberte_egalite_fraternite.gif"
+    assert part3.get_content() == liberte_egalite_fraternite_gif
+
+    assert part4.is_attachment()
+    assert part4.get_content_type() == "image/gif"
+    assert part4["Content-ID"] == "<marianne.gif>"
+    assert part4.get_filename() == "marianne.gif"
+    assert part4.get_content() == marianne_gif
+
+
+def test_create_email_with_no_email_addressees_returns_none(
+    pno_pdf_document_to_distribute_without_addressees_assigned,
+):
+    pno_to_send = create_email.run(
+        pno_pdf_document_to_distribute_without_addressees_assigned
+    )
+    assert pno_to_send is None
+
+
+def test_create_sms(
+    pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned,
+):
+    pno_to_send = create_sms.run(
+        pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned
+    )
+    assert isinstance(pno_to_send, PnoToSend)
+    assert (
+        pno_to_send.pno
+        == pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned
+    )
+    pno_to_send.communication_means == CommunicationMeans.SMS
+    assert isinstance(pno_to_send.message, EmailMessage)
+
+    assert pno_to_send.message["Subject"] is None
+    assert pno_to_send.message["From"] == "monitorfish@test.email"
+    assert (
+        pno_to_send.message["To"]
+        == '"\'00 11 22 33 44 55"@test.sms, "44 44 44 44 44"@test.sms'
+    )
+    assert pno_to_send.message["Cc"] is None
+    assert pno_to_send.message.get_content_type() == "text/plain"
+
+    attachments = list(pno_to_send.message.iter_attachments())
+    assert len(attachments) == 0
+
+    assert pno_to_send.message.get_content() == "Message SMS préavis 123-abc\n"
 
 
 # def test_flow(reset_test_data):

@@ -1,5 +1,6 @@
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
+import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { updateEditedPriorNotificationComputedValues } from '@features/PriorNotification/useCases/updateEditedPriorNotificationComputedValues'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -56,6 +57,8 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
   // We need to check for equality outside the debounce to ensure `nextFormValues` is up-to-date.
   const updateComputedValuesIfMecessary = (nextFormValues: FormValues) => {
     const nextPartialComputationRequestData = getPartialComputationRequestData(nextFormValues)
+
+    // If nothing changed, we don't need to update the computed values
     if (
       !previousPartialComputationRequestData ||
       isEqual(nextPartialComputationRequestData, previousPartialComputationRequestData)
@@ -63,6 +66,7 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
       return
     }
 
+    // If we don't have enough data to compute the values, we can't update them
     const nextComputationRequestData = getDefinedObject(nextPartialComputationRequestData, [
       'faoArea',
       'fishingCatches',
@@ -71,6 +75,9 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
       'vesselId'
     ])
     if (!nextComputationRequestData) {
+      // but we need to unset existing computed values in case they were computed before
+      dispatch(priorNotificationActions.unsetEditedPriorNotificationComputedValues())
+
       return
     }
 

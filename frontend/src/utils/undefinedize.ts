@@ -11,14 +11,14 @@ import type { NativeAny, NativeArray, NativeObject } from '@mtes-mct/monitor-ui'
 type Undefinedized<T> = T extends null
   ? undefined
   : T extends Array<any>
-  ? {
-      [K in keyof T]: T[K] extends (infer U)[] ? Undefinedized<U>[] : Undefinedized<T[K]>
-    }
-  : T extends Record<string, any>
-  ? {
-      [K in keyof T]: T[K] extends (infer U)[] ? Undefinedized<U>[] : Undefinedized<T[K]>
-    }
-  : T
+    ? {
+        [K in keyof T]: T[K] extends (infer U)[] ? Undefinedized<U>[] : Undefinedized<T[K]>
+      }
+    : T extends Record<string, any>
+      ? {
+          [K in keyof T]: T[K] extends (infer U)[] ? Undefinedized<U>[] : Undefinedized<T[K]>
+        }
+      : T
 
 const undefinedizeArrayValues = <T extends NativeArray>(list: T): Undefinedized<T> =>
   list.map(undefinedize as any) as any

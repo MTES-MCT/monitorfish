@@ -68,9 +68,7 @@ export function RegulatoryLayerSearch() {
       return
     }
 
-    const features = getVectorSource()
-      .getFormat()
-      ?.readFeatures(zoneSelected?.feature)
+    const features = getVectorSource().getFormat()?.readFeatures(zoneSelected?.feature)
     if (!features) {
       return
     }

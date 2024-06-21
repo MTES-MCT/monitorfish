@@ -2,7 +2,7 @@ import { CountryFlag } from '@components/CountryFlag'
 import { useGetVesselQuery } from '@features/Vessel/vesselApi'
 import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 
 type HeaderProps = Readonly<{
   isNewPriorNotification: boolean
@@ -24,15 +24,23 @@ export function Header({ isNewPriorNotification, onClose, vesselId }: HeaderProp
           {!isNewPriorNotification && <span>{`PRÉAVIS NAVIRE < 12 M`}</span>}
         </TitleRow>
 
-        {!!vessel && (
+        {!isNewPriorNotification && (
           <TitleRow>
             <TitleRowIconBox>
-              <CountryFlag countryCode={vessel?.flagState} size={[24, 18]} />
+              {vessel ? (
+                <CountryFlag countryCode={vessel.flagState} size={[24, 18]} />
+              ) : (
+                <Loader $height={18} $width={24} />
+              )}
             </TitleRowIconBox>
 
-            <span>
-              <VesselName>{vessel?.vesselName ?? '...'}</VesselName> ({vessel?.internalReferenceNumber ?? '...'})
-            </span>
+            {vessel ? (
+              <span>
+                <VesselName>{vessel.vesselName ?? '...'}</VesselName> ({vessel.internalReferenceNumber ?? '...'})
+              </span>
+            ) : (
+              <Loader $height={22} />
+            )}
           </TitleRow>
         )}
       </Title>
@@ -85,8 +93,42 @@ const TitleRowIconBox = styled.span`
     vertical-align: -4px;
   }
 
-  > img {
+  > img,
+  > span {
     vertical-align: -3.5px;
+  }
+`
+
+const loaderAnimation = keyframes`
+  from {
+    left: -100%;
+  }
+
+  to {
+    left: 100%;
+  }
+`
+const Loader = styled.span<{
+  $height?: number
+  $width?: number
+}>`
+  background-color: ${p => p.theme.color.lightGray};
+  display: inline-block;
+  height: ${p => (p.$height ? `${p.$height}px` : '100%')};
+  overflow: hidden;
+  position: relative;
+  width: ${p => (p.$width ? `${p.$width}px` : '100%')};
+
+  &:before {
+    animation: ${loaderAnimation} 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    background: linear-gradient(to right, transparent 0%, ${p => p.theme.color.white} 50%, transparent 100%);
+    content: '';
+    display: block;
+    height: 100%;
+    left: -100%;
+    position: absolute;
+    top: 0;
+    width: 100%;
   }
 `
 

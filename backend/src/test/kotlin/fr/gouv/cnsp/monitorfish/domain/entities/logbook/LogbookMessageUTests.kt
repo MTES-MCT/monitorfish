@@ -58,7 +58,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessage = refenceLogbookMessage
-            .toEnrichedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
+            .toConsolidatedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessage.logbookMessage.acknowledgment?.isSuccess).isTrue()
@@ -96,7 +96,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessage = refenceLogbookMessage
-            .toEnrichedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
+            .toConsolidatedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessage.logbookMessage.acknowledgment?.isSuccess).isTrue()
@@ -122,7 +122,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessage = refenceLogbookMessage
-            .toEnrichedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
+            .toConsolidatedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessage.logbookMessage.acknowledgment?.isSuccess).isFalse()
@@ -154,7 +154,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessage = refenceLogbookMessage
-            .toEnrichedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
+            .toConsolidatedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessage.logbookMessage.acknowledgment?.isSuccess).isFalse()
@@ -165,7 +165,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessageReversed = refenceLogbookMessage
-            .toEnrichedLogbookMessageTyped(relatedLogbookMessages.reversed(), PNO::class.java)
+            .toConsolidatedLogbookMessageTyped(relatedLogbookMessages.reversed(), PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessageReversed.logbookMessage.acknowledgment?.isSuccess).isFalse()
@@ -187,7 +187,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessage = refenceLogbookMessage
-            .toEnrichedLogbookMessageTyped(emptyList(), PNO::class.java)
+            .toConsolidatedLogbookMessageTyped(emptyList(), PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessage.logbookMessage.acknowledgment?.isSuccess).isTrue()
@@ -207,7 +207,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessage = refenceLogbookMessage
-            .toEnrichedLogbookMessageTyped(emptyList(), PNO::class.java)
+            .toConsolidatedLogbookMessageTyped(emptyList(), PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessage.logbookMessage.acknowledgment?.isSuccess).isTrue()
@@ -227,7 +227,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessage = refenceLogbookMessage
-            .toEnrichedLogbookMessageTyped(emptyList(), PNO::class.java)
+            .toConsolidatedLogbookMessageTyped(emptyList(), PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessage.logbookMessage.reportDateTime)
@@ -263,7 +263,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessage = refenceLogbookMessage
-            .toEnrichedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
+            .toConsolidatedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessage.logbookMessage.reportDateTime).isEqualTo(
@@ -274,7 +274,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessageReversed = refenceLogbookMessage
-            .toEnrichedLogbookMessageTyped(relatedLogbookMessages.reversed(), PNO::class.java)
+            .toConsolidatedLogbookMessageTyped(relatedLogbookMessages.reversed(), PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessageReversed.logbookMessage.reportDateTime)
@@ -300,7 +300,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessage = refenceLogbookMessage
-            .toEnrichedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
+            .toConsolidatedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessage.logbookMessage.reportDateTime)
@@ -328,7 +328,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessage = refenceLogbookMessage
-            .toEnrichedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
+            .toConsolidatedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessage.logbookMessage.reportDateTime)
@@ -364,7 +364,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessage = refenceLogbookMessage
-            .toEnrichedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
+            .toConsolidatedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessage.logbookMessage.reportDateTime)
@@ -419,7 +419,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessage = refenceLogbookMessage
-            .toEnrichedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
+            .toConsolidatedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessage.logbookMessage.reportDateTime)
@@ -456,7 +456,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessage = refenceLogbookMessage
-            .toEnrichedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
+            .toConsolidatedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessage.logbookMessage.reportDateTime)

@@ -24,11 +24,11 @@ data class PriorNotification(
     val didNotFishAfterZeroNotice: Boolean,
     val isManuallyCreated: Boolean,
     var logbookMessageTyped: LogbookMessageTyped<PNO>,
-    val note: String?,
     var port: Port?,
     var reportingCount: Int?,
     var seafront: Seafront?,
     val sentAt: String?,
+    var state: PriorNotificationState?,
     val updatedAt: String?,
     var vessel: Vessel?,
     var vesselRiskFactor: VesselRiskFactor?,
@@ -38,8 +38,11 @@ data class PriorNotification(
     private val logger = LoggerFactory.getLogger(PriorNotification::class.java)
 
     fun enrich(allPorts: List<Port>, allRiskFactors: List<VesselRiskFactor>, allVessels: List<Vessel>) {
+        val logbookMessage = logbookMessageTyped.logbookMessage
+        val pnoMessage = logbookMessageTyped.typedMessage
+
         port = try {
-            logbookMessageTyped.typedMessage.port?.let { portLocode ->
+            pnoMessage.port?.let { portLocode ->
                 allPorts.find { it.locode == portLocode }
             }
         } catch (e: CodeNotFoundException) {
@@ -48,8 +51,21 @@ data class PriorNotification(
 
         seafront = port?.facade?.let { Seafront.from(it) }
 
+        val isBeingSent = pnoMessage.isBeingSent
+        val isInVerificationScope = pnoMessage.isInVerificationScope
+        val isVerified = pnoMessage.isVerified
+        val isSent = pnoMessage.isSent
+        state = when {
+            isBeingSent == null || isInVerificationScope == null || isVerified == null || isSent == null -> null
+            isVerified && isSent -> PriorNotificationState.VERIFIED_AND_SENT
+            isSent -> PriorNotificationState.SENT
+            isBeingSent -> PriorNotificationState.PENDING_SEND
+            isInVerificationScope -> PriorNotificationState.PENDING_VERIFICATION
+            else -> PriorNotificationState.OUT_OF_VERIFICATION_SCOPE
+        }
+
         // Default to UNKNOWN vessel when null or not found
-        vessel = logbookMessageTyped.logbookMessage
+        vessel = logbookMessage
             .internalReferenceNumber?.let { vesselInternalReferenceNumber ->
                 allVessels.find { it.internalReferenceNumber == vesselInternalReferenceNumber }
             } ?: UNKNOWN_VESSEL

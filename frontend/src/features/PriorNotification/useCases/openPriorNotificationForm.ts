@@ -2,7 +2,7 @@ import { RtkCacheTagType } from '@api/constants'
 import { addMainWindowBanner } from '@features/SideWindow/useCases/addMainWindowBanner'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
-import { Level } from '@mtes-mct/monitor-ui'
+import { Level, type Undefine } from '@mtes-mct/monitor-ui'
 import { handleThunkError } from '@utils/handleThunkError'
 import { displayedErrorActions } from 'domain/shared_slices/DisplayedError'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
@@ -10,6 +10,7 @@ import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
 import { getInitialFormValues } from '../components/PriorNotificationForm/utils'
 import { priorNotificationApi } from '../priorNotificationApi'
 import { priorNotificationActions } from '../slice'
+import { getPriorNotificationTypesFromLogbookMessagePnoTypes } from '../utils'
 
 import type { FormValues } from '../components/PriorNotificationForm/types'
 import type { PriorNotification } from '../PriorNotification.types'
@@ -24,6 +25,7 @@ export const openPriorNotificationForm =
 
       if (!reportId) {
         dispatch(priorNotificationActions.unsetEditedPriorNotificationComputedValues())
+        dispatch(priorNotificationActions.unsetEditedPriorNotificationDetail())
         dispatch(priorNotificationActions.setEditedPriorNotificationInitialFormValues(getInitialFormValues()))
         dispatch(priorNotificationActions.unsetEditedPriorNotificationReportId())
         dispatch(priorNotificationActions.openPriorNotificationForm())
@@ -59,16 +61,16 @@ export const openPriorNotificationForm =
         return
       }
 
-      const nextComputedValues: PriorNotification.ManualPriorNotificationComputedValues = {
-        tripSegments: priorNotificationDetail.logbookMessage.tripSegments ?? [],
-        types:
-          priorNotificationDetail.logbookMessage.message.pnoTypes?.map(({ pnoTypeName, ...rest }) => ({
-            ...rest,
-            name: pnoTypeName
-          })) ?? [],
-        // TODO Add vessel risk factor in details API response.
-        vesselRiskFactor: 0
+      const nextComputedValues: Undefine<PriorNotification.ManualPriorNotificationComputedValues> = {
+        isInVerificationScope: priorNotificationDetail.logbookMessage.message.isInVerificationScope,
+        isVesselUnderCharter: priorNotificationDetail.isVesselUnderCharter,
+        tripSegments: priorNotificationDetail.logbookMessage.tripSegments,
+        types: getPriorNotificationTypesFromLogbookMessagePnoTypes(
+          priorNotificationDetail.logbookMessage.message.pnoTypes
+        ),
+        vesselRiskFactor: priorNotificationDetail.vesselRiskFactor
       }
+
       const nextInitialFormValues: FormValues = {
         ...priorNotificationData,
         isExpectedLandingDateSameAsExpectedArrivalDate:
@@ -76,6 +78,7 @@ export const openPriorNotificationForm =
       }
 
       dispatch(priorNotificationActions.setEditedPriorNotificationComputedValues(nextComputedValues))
+      dispatch(priorNotificationActions.setEditedPriorNotificationDetail(priorNotificationDetail))
       dispatch(priorNotificationActions.setEditedPriorNotificationInitialFormValues(nextInitialFormValues))
       dispatch(priorNotificationActions.setEditedPriorNotificationReportId(reportId))
     } catch (err) {

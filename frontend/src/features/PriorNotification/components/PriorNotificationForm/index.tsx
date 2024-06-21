@@ -1,10 +1,9 @@
-import { priorNotificationApi } from '@features/PriorNotification/priorNotificationApi'
 import { priorNotificationActions } from '@features/PriorNotification/slice'
+import { createOrUpdatePriorNotification } from '@features/PriorNotification/useCases/createOrUpdatePriorNotification'
+import { verifyAndSendPriorNotification } from '@features/PriorNotification/useCases/verifyAndSendPriorNotification'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
-import { FrontendApiError } from '@libs/FrontendApiError'
-import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
+import { assertNotNullish } from '@utils/assertNotNullish'
 import { Formik } from 'formik'
 import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -34,7 +33,6 @@ export function PriorNotificationForm() {
     dispatch(priorNotificationActions.closePriorNotificationForm())
   }
 
-  // TODO Replace that with a use case dispatcher.
   const submit = async (nextFormValues: FormValues) => {
     // We don't want to lose the initial values if there is an error.
     initialFormValuesRef.current = nextFormValues
@@ -48,34 +46,19 @@ export function PriorNotificationForm() {
         : priorNotificationData.expectedLandingDate
     } as PriorNotification.NewManualPriorNotificationData
 
-    try {
-      let updatedPriorNotificationData: PriorNotification.ManualPriorNotificationData
-      if (!editedPriorNotificationReportId) {
-        updatedPriorNotificationData = await dispatch(
-          priorNotificationApi.endpoints.createPriorNotification.initiate(newOrNextPriorNotificationData)
-        ).unwrap()
-      } else {
-        updatedPriorNotificationData = await dispatch(
-          priorNotificationApi.endpoints.updatePriorNotification.initiate({
-            data: newOrNextPriorNotificationData,
-            reportId: editedPriorNotificationReportId
-          })
-        ).unwrap()
-      }
+    await dispatch(createOrUpdatePriorNotification(editedPriorNotificationReportId, newOrNextPriorNotificationData))
 
-      dispatch(priorNotificationActions.setEditedPriorNotificationReportId(updatedPriorNotificationData.reportId))
-      dispatch(
-        priorNotificationActions.setEditedPriorNotificationInitialFormValues({
-          ...updatedPriorNotificationData,
-          isExpectedLandingDateSameAsExpectedArrivalDate:
-            updatedPriorNotificationData.expectedLandingDate === updatedPriorNotificationData.expectedArrivalDate
-        })
-      )
-    } catch (err) {
-      if (err instanceof FrontendApiError) {
-        dispatch(displayOrLogError(err, undefined, true, DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR))
-      }
-    }
+    setIsLoading(false)
+  }
+
+  const verifyAndSend = async () => {
+    setIsLoading(true)
+
+    assertNotNullish(editedPriorNotificationReportId)
+
+    await dispatch(verifyAndSendPriorNotification(editedPriorNotificationReportId))
+
+    setIsLoading(false)
   }
 
   useEffect(() => {
@@ -114,6 +97,7 @@ export function PriorNotificationForm() {
           isValidatingOnChange={shouldValidateOnChange}
           onClose={close}
           onSubmit={() => setShouldValidateOnChange(true)}
+          onVerifyAndSend={verifyAndSend}
           reportId={editedPriorNotificationReportId}
         />
       </Formik>

@@ -1,15 +1,16 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
+import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.ManualPriorNotificationComputedValues
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationType
 import fr.gouv.cnsp.monitorfish.domain.repositories.GearRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ManualPriorNotificationRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.ComputeFleetSegments
 import java.time.ZonedDateTime
 
 @UseCase
@@ -19,8 +20,7 @@ class CreateOrUpdateManualPriorNotification(
     private val portRepository: PortRepository,
     private val vesselRepository: VesselRepository,
 
-    private val computeFleetSegments: ComputeFleetSegments,
-    private val computePnoTypes: ComputePnoTypes,
+    private val computeManualPriorNotification: ComputeManualPriorNotification,
     private val getPriorNotification: GetPriorNotification,
 ) {
     fun execute(
@@ -37,23 +37,36 @@ class CreateOrUpdateManualPriorNotification(
         tripGearCodes: List<String>,
         vesselId: Int,
     ): PriorNotification {
-        val faoAreas = listOf(faoArea)
+        val existingManualPriorNotification = reportId?.let { manualPriorNotificationRepository.findByReportId(it) }
+        val existingPnoMessage = existingManualPriorNotification?.logbookMessageTyped?.typedMessage
+
+        // /!\ Backend computed vessel risk factor is only used as a real time Frontend indicator.
+        // The Backend should NEVER update `risk_factors` DB table, only the pipeline is allowed to update it.
+        val computedValues = computeManualPriorNotification.execute(
+            faoArea,
+            fishingCatches,
+            portLocode,
+            tripGearCodes,
+            vesselId,
+        )
+
         val fishingCatchesWithFaoArea = fishingCatches.map { it.copy(faoZone = faoArea) }
-        val specyCodes = fishingCatches.mapNotNull { it.species }
         val tripGears = getTripGears(tripGearCodes)
-        val tripSegments = computeFleetSegments.execute(faoAreas, tripGearCodes, specyCodes)
-            .map { it.toLogbookTripSegment() }
+        val tripSegments = computedValues.tripSegments.map { it.toLogbookTripSegment() }
         val vessel = vesselRepository.findVesselById(vesselId)
-        val priorNotificationTypes = computePnoTypes.execute(fishingCatchesWithFaoArea, tripGearCodes, vessel.flagState)
-            .map { it.toPriorNotificationType() }
+        val priorNotificationTypes = computedValues.types.map { it.toPriorNotificationType() }
         val message = getMessage(
+            existingPnoMessage,
             expectedArrivalDate,
             expectedLandingDate,
             // At the moment, manual prior notifications only have a single global FAO area field in Frontend,
             // so we transform that single FAO area into an FAO area per fishing catch.
             fishingCatchesWithFaoArea,
+            note,
             priorNotificationTypes,
             portLocode,
+            vessel?.flagState,
+            computedValues.vesselRiskFactor,
         )
 
         val pnoLogbookMessage = LogbookMessage(
@@ -63,12 +76,12 @@ class CreateOrUpdateManualPriorNotification(
             tripNumber = null,
             referencedReportId = null,
             operationDateTime = ZonedDateTime.now(),
-            internalReferenceNumber = vessel.internalReferenceNumber,
-            externalReferenceNumber = vessel.externalReferenceNumber,
-            ircs = vessel.ircs,
-            vesselName = vessel.vesselName,
-            flagState = vessel.flagState.alpha3,
-            imo = vessel.imo,
+            internalReferenceNumber = vessel?.internalReferenceNumber,
+            externalReferenceNumber = vessel?.externalReferenceNumber,
+            ircs = vessel?.ircs,
+            vesselName = vessel?.vesselName,
+            flagState = vessel?.flagState?.alpha3,
+            imo = vessel?.imo,
             reportDateTime = ZonedDateTime.parse(sentAt),
             integrationDateTime = ZonedDateTime.now(),
             analyzedByRules = emptyList(),
@@ -94,7 +107,6 @@ class CreateOrUpdateManualPriorNotification(
             didNotFishAfterZeroNotice = didNotFishAfterZeroNotice,
             isManuallyCreated = true,
             logbookMessageTyped = logbookMessageTyped,
-            note = note,
             sentAt = sentAt,
 
             // All these props are useless for the save operation.
@@ -102,6 +114,7 @@ class CreateOrUpdateManualPriorNotification(
             port = null,
             reportingCount = null,
             seafront = null,
+            state = null,
             vessel = null,
             vesselRiskFactor = null,
             updatedAt = null,
@@ -114,14 +127,21 @@ class CreateOrUpdateManualPriorNotification(
     }
 
     private fun getMessage(
+        existingPnoValue: PNO?,
         expectedArrivalDate: String,
         expectedLandingDate: String,
         fishingCatches: List<LogbookFishingCatch>,
+        note: String?,
         pnoTypes: List<PriorNotificationType>,
         portLocode: String,
+        computedVesselFlagCountryCode: CountryCode?,
+        computedVesselRiskFactor: Double?,
     ): PNO {
         val allPorts = portRepository.findAll()
 
+        val isInVerificationScope = existingPnoValue?.isInVerificationScope
+            ?: ManualPriorNotificationComputedValues
+                .computeIsInVerificationScope(computedVesselFlagCountryCode, computedVesselRiskFactor)
         val portName = allPorts.find { it.locode == portLocode }?.name
         val predictedArrivalDatetimeUtc = ZonedDateTime.parse(expectedArrivalDate)
         val predictedLandingDatetimeUtc = ZonedDateTime.parse(expectedLandingDate)
@@ -135,8 +155,13 @@ class CreateOrUpdateManualPriorNotification(
             // so we transform that single FAO area into an FAO area per fishing catch.
             // This means we don't need to set a global PNO message FAO area here.
             this.faoZone = null
+            this.isBeingSent = existingPnoValue?.isBeingSent ?: false
+            this.isInVerificationScope = isInVerificationScope
+            this.isSent = existingPnoValue?.isSent ?: false
+            this.isVerified = existingPnoValue?.isVerified ?: false
             this.latitude = null
             this.longitude = null
+            this.note = note
             this.pnoTypes = pnoTypes
             this.port = portLocode
             this.portName = portName

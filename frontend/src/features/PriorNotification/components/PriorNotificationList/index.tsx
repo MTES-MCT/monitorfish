@@ -20,7 +20,7 @@ import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import { useCallback, useState } from 'react'
 import styled, { css } from 'styled-components'
 
-import { TABLE_COLUMNS } from './columns'
+import { getTableColumns } from './columns'
 import { DEFAULT_PAGE_SIZE, SUB_MENUS_AS_OPTIONS } from './constants'
 import { FilterBar } from './FilterBar'
 import { FilterTags } from './FilterTags'
@@ -86,7 +86,7 @@ export function PriorNotificationList() {
   )
 
   const table = useReactTable({
-    columns: TABLE_COLUMNS,
+    columns: getTableColumns(),
     data: priorNotifications ?? [],
     enableRowSelection: true,
     enableSortingRemoval: false,
@@ -240,9 +240,11 @@ const TableInnerWrapper = styled.div<{
   $hasError: boolean
 }>`
   align-items: flex-start;
+  border-top: solid 1px ${p => p.theme.color.lightGray};
   height: 513px; /* = table height - 5px */
+  min-width: 1391px; /* = table width */
   overflow-y: auto;
-  width: 1410px /* = table width */;
+  width: auto;
 
   > table {
     margin-top: -5px;
@@ -252,6 +254,7 @@ const TableInnerWrapper = styled.div<{
     p.$hasError &&
     css`
       align-items: center;
+      border: solid 1px ${p.theme.color.lightGray};
       display: flex;
       justify-content: center;
     `}

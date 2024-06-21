@@ -1,7 +1,7 @@
 import { getAlpha2CodeFromAlpha2or3Code } from '@components/CountryFlag/utils'
 import { Titled } from '@components/Titled'
 import { buildCatchArray } from '@features/Logbook/utils'
-import { HTML_TEMPLATE } from '@features/PriorNotification/components/PriorNotificationCard/template'
+import { HTML_TEMPLATE } from '@features/PriorNotification/components/shared/DownloadButton/template'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
 import type { LogbookCatch } from '@features/Logbook/Logbook.types'
@@ -24,6 +24,7 @@ export function getFirstTitleRowText(
   )
 }
 
+// TODO WHere is the note?
 export function getHtmlContent(
   pno: LogbookMessage.PnoLogbookMessage | undefined,
   gearsWithName: Array<LogbookMessage.Gear & { gearName: string | null }>

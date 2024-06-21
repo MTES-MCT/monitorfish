@@ -1,54 +1,32 @@
-import { useGetGearsQuery } from '@api/gear'
 import { ErrorWall } from '@components/ErrorWall'
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { LogbookMessage } from '@features/Logbook/components/VesselLogbook/LogbookMessages/messages/LogbookMessage'
-import { HTML_STYLE } from '@features/PriorNotification/components/PriorNotificationCard/template'
-import { getHtmlContent } from '@features/PriorNotification/components/PriorNotificationCard/utils'
+import {
+  getPriorNotificationFishingCatchesFromLogbookMessageFishingCatches,
+  getPriorNotificationTypesFromLogbookMessagePnoTypes,
+  isZeroNotice
+} from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
-import { Accent, Button, customDayjs, Dropdown, Icon } from '@mtes-mct/monitor-ui'
-import printJS from 'print-js'
-import { useMemo } from 'react'
+import { Accent, Button } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
 
 import { Header } from './Header'
-import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { priorNotificationActions } from '../../slice'
+import { DownloadButton } from '../shared/DownloadButton'
+import { TagBar } from '../shared/TagBar'
 
 export function PriorNotificationCard() {
   const dispatch = useMainAppDispatch()
-  const isSuperUser = useIsSuperUser()
   const priorNotificationDetail = useMainAppSelector(state => state.priorNotification.priorNotificationCardDetail)
   const sideWindowPriorNotificationCardError = useMainAppSelector(
     state => state.displayedError.sideWindowPriorNotificationCardError
   )
-  const getGearsApiQuery = useGetGearsQuery()
-
-  const gearsWithName = useMemo(() => {
-    if (!getGearsApiQuery.data || !priorNotificationDetail?.logbookMessage?.tripGears) {
-      return []
-    }
-
-    return priorNotificationDetail.logbookMessage.tripGears.map(tripGear => {
-      const gearName = getGearsApiQuery.data?.find(gear => gear.code === tripGear.gear)?.name ?? null
-
-      return { ...tripGear, gearName }
-    })
-  }, [getGearsApiQuery.data, priorNotificationDetail?.logbookMessage?.tripGears])
 
   const close = () => {
     dispatch(priorNotificationActions.closePriorNotificationCard())
-  }
-
-  const downloadPDF = () => {
-    printJS({
-      documentTitle: `preavis_entree_port_debarquement_${customDayjs().utc().format('DDMMYYYY')}.pdf`,
-      printable: getHtmlContent(priorNotificationDetail?.logbookMessage, gearsWithName),
-      style: HTML_STYLE,
-      type: 'raw-html'
-    })
   }
 
   if (sideWindowPriorNotificationCardError) {
@@ -84,6 +62,29 @@ export function PriorNotificationCard() {
           <Header onClose={close} priorNotificationDetail={priorNotificationDetail} />
 
           <Body>
+            <TagBar
+              isVesselUnderCharter={priorNotificationDetail.isVesselUnderCharter}
+              isZeroNotice={isZeroNotice(
+                getPriorNotificationFishingCatchesFromLogbookMessageFishingCatches(
+                  priorNotificationDetail.logbookMessage.message.catchOnboard
+                )
+              )}
+              state={priorNotificationDetail.state}
+              tripSegments={priorNotificationDetail.logbookMessage.tripSegments}
+              types={getPriorNotificationTypesFromLogbookMessagePnoTypes(
+                priorNotificationDetail.logbookMessage.message.pnoTypes
+              )}
+              vesselRiskFactor={priorNotificationDetail.vesselRiskFactor}
+            />
+
+            <Intro>
+              Le préavis doit être vérifié par le CNSP avant sa diffusion.
+              <br />
+              Le navire doit respecter un délai d’envoi et débarquer dans un port désigné.
+            </Intro>
+
+            <hr />
+
             <LogbookMessage
               isFirst
               isLessThanTwelveMetersVessel={priorNotificationDetail.isLessThanTwelveMetersVessel}
@@ -95,15 +96,8 @@ export function PriorNotificationCard() {
             <Button accent={Accent.TERTIARY} onClick={close}>
               Fermer
             </Button>
-            <Dropdown accent={Accent.PRIMARY} Icon={Icon.Download} placement="topEnd" title="Télécharger les documents">
-              <>
-                {isSuperUser && priorNotificationDetail.logbookMessage.flagState !== 'FR' && (
-                  <Dropdown.Item onClick={downloadPDF}>
-                    Autorisation d&apos;entrée au port et de débarquement
-                  </Dropdown.Item>
-                )}
-              </>
-            </Dropdown>
+
+            <DownloadButton pnoLogbookMessage={priorNotificationDetail.logbookMessage} />
           </Footer>
         </FrontendErrorBoundary>
       </Card>
@@ -142,6 +136,15 @@ const Body = styled.div`
   flex-grow: 1;
   overflow-y: auto;
   padding: 32px;
+
+  > hr {
+    margin: 24px 0;
+  }
+`
+
+const Intro = styled.p`
+  color: ${p => p.theme.color.slateGray};
+  font-style: italic;
 `
 
 const Footer = styled.div`

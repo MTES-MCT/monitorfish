@@ -12,8 +12,12 @@ export namespace PriorNotification {
     hasVesselRiskFactorSegments: boolean | undefined
     /** Logbook message `reportId`. */
     id: string
+    isBeingSent: boolean
     isCorrection: boolean
+    isInVerificationScope: boolean
     isManuallyCreated: boolean
+    isSent: boolean
+    isVerified: boolean
     isVesselUnderCharter: boolean | undefined
     onBoardCatches: LogbookMessage.Catch[]
     portLocode: string | undefined
@@ -22,6 +26,7 @@ export namespace PriorNotification {
     reportingCount: number
     seafront: Seafront | undefined
     sentAt: string | undefined
+    state: State | undefined
     tripGears: LogbookMessage.Gear[]
     tripSegments: LogbookMessage.Segment[]
     types: Type[]
@@ -47,7 +52,10 @@ export namespace PriorNotification {
     /** Logbook message `reportId`. */
     id: string
     isLessThanTwelveMetersVessel: boolean
+    isVesselUnderCharter: boolean | undefined
     logbookMessage: LogbookMessage.PnoLogbookMessage
+    state: State | undefined
+    vesselRiskFactor: number | undefined
   }
 
   export type ManualPriorNotificationData = {
@@ -72,8 +80,10 @@ export namespace PriorNotification {
   >
   export type ManualPriorNotificationComputedValues = Pick<
     PriorNotification,
-    'tripSegments' | 'types' | 'vesselRiskFactor'
-  >
+    'isVesselUnderCharter' | 'tripSegments' | 'types' | 'vesselRiskFactor'
+  > & {
+    isInVerificationScope: boolean
+  }
 
   export type PriorNotificationDataFishingCatch = {
     quantity?: number | undefined
@@ -124,5 +134,25 @@ export namespace PriorNotification {
     SHE: 'Mise à l’abri',
     // "Transhipment"
     TRA: 'Transbordement'
+  }
+
+  export enum State {
+    /** "Hors diffusion". */
+    OUT_OF_VERIFICATION_SCOPE = 'OUT_OF_VERIFICATION_SCOPE',
+    /** "En cours de diffusion". */
+    PENDING_SEND = 'PENDING_SEND',
+    /** "À vérifier". */
+    PENDING_VERIFICATION = 'PENDING_VERIFICATION',
+    /** "Diffusé". */
+    SENT = 'SENT',
+    /** "Vérifié et diffusé". */
+    VERIFIED_AND_SENT = 'VERIFIED_AND_SENT'
+  }
+  export const STATE_LABEL: Record<State, string> = {
+    OUT_OF_VERIFICATION_SCOPE: 'Hors diffusion',
+    PENDING_SEND: 'En cours de diffusion',
+    PENDING_VERIFICATION: 'À vérifier',
+    SENT: 'Diffusé',
+    VERIFIED_AND_SENT: 'Vérifié et diffusé'
   }
 }

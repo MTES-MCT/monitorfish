@@ -9,4 +9,6 @@ interface ManualPriorNotificationRepository {
     fun findByReportId(reportId: String): PriorNotification?
 
     fun save(newOrNextPriorNotification: PriorNotification): String
+
+    fun updateState(reportId: String, isBeingSent: Boolean, isVerified: Boolean)
 }

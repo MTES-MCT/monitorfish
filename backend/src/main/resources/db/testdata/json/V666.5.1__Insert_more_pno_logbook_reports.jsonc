@@ -28,6 +28,7 @@
         "data": [
             // - Vessel: PHENOMENE
             // - With risk factor
+            // - State: UnVerified and sent
             {
                 "id": 101,
                 "report_id": "FAKE_OPERATION_101",
@@ -63,6 +64,10 @@
                             "statisticalRectangle": "23E6"
                         }
                     ],
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": true,
+                    "isVerified": false,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type A",
@@ -85,6 +90,7 @@
 
             // - Vessel: COURANT MAIN PROFESSEUR
             // - With 1 reporting
+            // - State: Verified (non-required) and sent
             {
                 "id": 102,
                 "report_id": "FAKE_OPERATION_102",
@@ -129,6 +135,10 @@
                             "statisticalRectangle": "23E6"
                         }
                     ],
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": true,
+                    "isVerified": true,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type C",
@@ -178,6 +188,7 @@
             // - With risk factor
             // - Under charter
             // - Flag state: ES
+            // - State: Verified (required) and sent
             {
                 "id": 104,
                 "report_id": "FAKE_OPERATION_104",
@@ -267,6 +278,10 @@
                             "statisticalRectangle": "23E6"
                         }
                     ],
+                    "isBeingSent": false,
+                    "isInVerificationScope": true,
+                    "isSent": true,
+                    "isVerified": true,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type A",
@@ -323,6 +338,10 @@
                             "statisticalRectangle": "23E6"
                         }
                     ],
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": false,
+                    "isVerified": false,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type A",
@@ -344,6 +363,7 @@
             },
 
             // - Vessel: L'OM DU POISSON
+            // - State: Pending verification (required)
             {
                 "id": 106,
                 "report_id": "FAKE_OPERATION_106",
@@ -378,6 +398,10 @@
                             "statisticalRectangle": "23E6"
                         }
                     ],
+                    "isBeingSent": false,
+                    "isInVerificationScope": true,
+                    "isSent": false,
+                    "isVerified": false,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type E",
@@ -397,6 +421,7 @@
             // - With RET
             // - Aknowledged
             // - Flag state: UNKNOWN
+            // - State: Unverified and pending sending
             {
                 "id": 107,
                 "report_id": "FAKE_OPERATION_107",
@@ -431,6 +456,10 @@
                             "statisticalRectangle": "23E6"
                         }
                     ],
+                    "isBeingSent": true,
+                    "isInVerificationScope": true,
+                    "isSent": false,
+                    "isVerified": false,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type Z",
@@ -557,6 +586,10 @@
                 "vessel_name": "L'ANCRE SÈCHE",
                 "value:jsonb": {
                     "catchOnboard": [],
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": false,
+                    "isVerified": false,
                     "pnoTypes": [],
                     "port": "FRSML",
                     "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
@@ -594,6 +627,10 @@
                             "weight": 32.5
                         }
                     ],
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": false,
+                    "isVerified": false,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type Z",
@@ -706,6 +743,10 @@
                             "weight": 25.0
                         }
                     ],
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": false,
+                    "isVerified": false,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type Z",
@@ -802,6 +843,10 @@
                             "statisticalRectangle": null
                         }
                     ],
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": false,
+                    "isVerified": false,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Espèces soumises à préavis",
@@ -873,6 +918,10 @@
                 "trip_segments:jsonb": [],
                 "value:jsonb": {
                     "catchOnboard": [],
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": false,
+                    "isVerified": false,
                     "pnoTypes": [],
                     "port": "REZSE",
                     "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '1 hour', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",

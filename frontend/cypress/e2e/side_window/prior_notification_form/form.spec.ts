@@ -1,3 +1,4 @@
+import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 import { omit } from 'lodash'
 
@@ -328,8 +329,6 @@ context('Side Window > Prior Notification Form > Form', () => {
         openSideWindowPriorNotificationList()
         cy.fill('Rechercher un navire', 'IN-ARÊTE-ABLE')
 
-        // TODO Check if we need to update the vessel risk factor in DB while saving a prior notification.
-        // cy.getTableRowById(createdPriorNotification.reportId).getDataCy('VesselRiskFactor').contains('2')
         cy.getTableRowById(createdPriorNotification.reportId).contains('NWW01/02')
         cy.getTableRowById(createdPriorNotification.reportId).contains('NWW03')
         cy.getTableRowById(createdPriorNotification.reportId).contains('Aucun type')
@@ -426,5 +425,93 @@ context('Side Window > Prior Notification Form > Form', () => {
     cy.fill('Saisi par', 'BOB')
 
     cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 6)
+  })
+
+  it('Should verify and send a manual prior notification', () => {
+    // -------------------------------------------------------------------------
+    // Add
+
+    const { utcDateTupleWithTime: arrivalDateTupleWithTime } = getUtcDateInMultipleFormats(
+      customDayjs().add(2, 'hours').startOf('minute').toISOString()
+    )
+
+    cy.intercept('POST', '/bff/v1/prior_notifications/manual').as('createPriorNotification')
+    cy.intercept(
+      'GET',
+      /\/bff\/v1\/prior_notifications\/[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
+    ).as('getPriorNotification')
+
+    addSideWindowPriorNotification()
+
+    cy.getDataCy('vessel-search-input').click().wait(500)
+    cy.getDataCy('vessel-search-input').type('IN-ARÊTE-ABLE', { delay: 100 })
+    cy.getDataCy('vessel-search-item').first().click()
+
+    cy.fill("Date et heure estimées d'arrivée au port", arrivalDateTupleWithTime)
+    cy.fill("équivalentes à celles de l'arrivée au port", true)
+    cy.fill("Port d'arrivée", 'Vannes')
+
+    cy.fill('Espèces à bord et à débarquer', 'MORUE COMMUNE')
+    cy.fill('Poids (COD)', 5000)
+
+    cy.fill('Engins utilisés', ['OTB'], { index: 1 })
+    cy.fill('Zone de pêche', '27.7.d')
+    cy.fill('Saisi par', 'BOB')
+
+    cy.clickButton('Créer le préavis')
+
+    cy.wait('@createPriorNotification').then(createInterception => {
+      if (!createInterception.response) {
+        assert.fail('`createInterception.response` is undefined.')
+      }
+
+      const createdPriorNotification = createInterception.response.body
+
+      // -----------------------------------------------------------------------
+      // Get (created prior notification full data)
+
+      cy.wait('@getPriorNotification').then(getInterception => {
+        if (!getInterception.response) {
+          assert.fail('`getInterception.response` is undefined.')
+        }
+
+        assert.deepInclude(getInterception.response.body, {
+          state: PriorNotification.State.OUT_OF_VERIFICATION_SCOPE
+        })
+
+        cy.get('.Element-Tag').contains('Hors diffusion').should('exist')
+
+        // -----------------------------------------------------------------------
+        // Veryify and send
+
+        cy.intercept('POST', `/bff/v1/prior_notifications/${createdPriorNotification.reportId}/verify_and_send`).as(
+          'verifyAndSendPriorNotification'
+        )
+
+        cy.clickButton('Diffuser')
+
+        cy.wait('@verifyAndSendPriorNotification').then(verifyAndSendInterception => {
+          if (!verifyAndSendInterception.response) {
+            assert.fail('`verifyAndSendInterception.response` is undefined.')
+          }
+
+          const updatedPriorNotification = verifyAndSendInterception.response.body
+
+          assert.deepInclude(updatedPriorNotification, {
+            state: PriorNotification.State.PENDING_SEND
+          })
+
+          // -----------------------------------------------------------------------
+          // List
+
+          cy.clickButton('Fermer')
+          cy.fill('Rechercher un navire', 'IN-ARÊTE-ABLE')
+
+          cy.getTableRowById(createdPriorNotification.reportId)
+            .find('span[title="En cours de diffusion"]')
+            .should('be.visible')
+        })
+      })
+    })
   })
 })

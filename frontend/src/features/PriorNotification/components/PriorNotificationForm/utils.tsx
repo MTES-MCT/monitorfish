@@ -97,7 +97,3 @@ export function getApplicableState(
 
   return computedState
 }
-
-export function isZeroNotice(formValues: FormValues) {
-  return formValues.fishingCatches.every(fishingCatch => fishingCatch.weight === 0)
-}

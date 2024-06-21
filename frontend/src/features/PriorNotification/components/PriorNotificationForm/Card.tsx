@@ -2,6 +2,7 @@ import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { updateEditedPriorNotificationComputedValues } from '@features/PriorNotification/useCases/updateEditedPriorNotificationComputedValues'
+import { isZeroNotice } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Banner, Button, FormikEffect, Icon, Level, usePrevious } from '@mtes-mct/monitor-ui'
@@ -13,8 +14,8 @@ import { useDebouncedCallback } from 'use-debounce'
 
 import { Form } from './Form'
 import { Header } from './Header'
-import { TagBar } from './TagBar'
-import { getPartialComputationRequestData } from './utils'
+import { getApplicableState, getPartialComputationRequestData } from './utils'
+import { TagBar } from '../shared/TagBar'
 
 import type { FormValues } from './types'
 import type { Promisable } from 'type-fest'
@@ -29,12 +30,16 @@ type CardProps = Readonly<{
 export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend, reportId }: CardProps) {
   const { isValid, submitForm, values } = useFormikContext<FormValues>()
   const dispatch = useMainAppDispatch()
+  const editedPriorNotificationComputedValues = useMainAppSelector(
+    store => store.priorNotification.editedPriorNotificationComputedValues
+  )
   const editedPriorNotificationDetail = useMainAppSelector(
     store => store.priorNotification.editedPriorNotificationDetail
   )
 
   const previousPartialComputationRequestData = usePrevious(getPartialComputationRequestData(values))
 
+  const applicableState = getApplicableState(editedPriorNotificationComputedValues, editedPriorNotificationDetail)
   const isNewPriorNotification = !reportId
   const isPendingSend = editedPriorNotificationDetail?.state === PriorNotification.State.PENDING_SEND
   const isSent = [PriorNotification.State.SENT, PriorNotification.State.VERIFIED_AND_SENT].includes(
@@ -98,7 +103,14 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
         <Header isNewPriorNotification={isNewPriorNotification} onClose={onClose} vesselId={values.vesselId} />
 
         <Body>
-          <TagBar />
+          <TagBar
+            isVesselUnderCharter={editedPriorNotificationComputedValues?.isVesselUnderCharter}
+            isZeroNotice={isZeroNotice(values.fishingCatches)}
+            state={applicableState}
+            tripSegments={editedPriorNotificationComputedValues?.tripSegments}
+            types={editedPriorNotificationComputedValues?.types}
+            vesselRiskFactor={editedPriorNotificationComputedValues?.vesselRiskFactor}
+          />
 
           {isNewPriorNotification && (
             <Intro>

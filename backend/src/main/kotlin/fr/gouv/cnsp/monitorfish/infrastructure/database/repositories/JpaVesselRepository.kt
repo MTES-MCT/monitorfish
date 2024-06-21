@@ -1,8 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
-import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
-import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBVesselRepository
 import org.slf4j.Logger
@@ -10,6 +8,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Repository
+import kotlin.jvm.optionals.getOrNull
 
 @Repository
 class JpaVesselRepository(private val dbVesselRepository: DBVesselRepository) : VesselRepository {
@@ -64,12 +63,8 @@ class JpaVesselRepository(private val dbVesselRepository: DBVesselRepository) : 
         return dbVesselRepository.findAllByIds(ids).map { it.toVessel() }
     }
 
-    override fun findVesselById(vesselId: Int): Vessel {
-        return try {
-            dbVesselRepository.findById(vesselId).get().toVessel()
-        } catch (e: NoSuchElementException) {
-            throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
-        }
+    override fun findVesselById(vesselId: Int): Vessel? {
+        return dbVesselRepository.findById(vesselId).getOrNull()?.toVessel()
     }
 
     @Cacheable(value = ["search_vessels"])

@@ -80,8 +80,10 @@ export namespace PriorNotification {
   >
   export type ManualPriorNotificationComputedValues = Pick<
     PriorNotification,
-    'isVesselUnderCharter' | 'state' | 'tripSegments' | 'types' | 'vesselRiskFactor'
-  >
+    'isVesselUnderCharter' | 'tripSegments' | 'types' | 'vesselRiskFactor'
+  > & {
+    isInVerificationScope: boolean
+  }
 
   export type PriorNotificationDataFishingCatch = {
     quantity?: number | undefined

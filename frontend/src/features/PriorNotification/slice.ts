@@ -5,9 +5,10 @@ import { DEFAULT_LIST_FILTER_VALUES } from './components/PriorNotificationList/c
 import type { FormValues } from './components/PriorNotificationForm/types'
 import type { ListFilter } from './components/PriorNotificationList/types'
 import type { PriorNotification } from './PriorNotification.types'
+import type { Undefine } from '@mtes-mct/monitor-ui'
 
 interface PriorNotificationState {
-  editedPriorNotificationComputedValues: PriorNotification.ManualPriorNotificationComputedValues | undefined
+  editedPriorNotificationComputedValues: Undefine<PriorNotification.ManualPriorNotificationComputedValues> | undefined
   editedPriorNotificationDetail: PriorNotification.PriorNotificationDetail | undefined
   editedPriorNotificationInitialFormValues: FormValues | undefined
   editedPriorNotificationReportId: string | undefined
@@ -60,7 +61,7 @@ const priorNotificationSlice = createSlice({
 
     setEditedPriorNotificationComputedValues(
       state,
-      action: PayloadAction<PriorNotification.ManualPriorNotificationComputedValues>
+      action: PayloadAction<Undefine<PriorNotification.ManualPriorNotificationComputedValues>>
     ) {
       state.editedPriorNotificationComputedValues = action.payload
     },

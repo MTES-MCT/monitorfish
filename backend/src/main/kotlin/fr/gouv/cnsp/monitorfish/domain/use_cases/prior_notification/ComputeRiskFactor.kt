@@ -23,13 +23,18 @@ class ComputeRiskFactor(
     fun execute(
         portLocode: String,
         fleetSegments: List<FleetSegment>,
-        vesselCfr: String,
-    ): Double {
+        vesselCfr: String?,
+    ): Double? {
+        if (vesselCfr == null) {
+            return null
+        }
+
         val currentYear = ZonedDateTime.now(clock).year
         val facade = portRepository.findByLocode(portLocode).facade
         val storedRiskFactor = riskFactorRepository.findByInternalReferenceNumber(vesselCfr)
 
-        val highestImpactRiskFactor = fleetSegments.maxByOrNull { it.impactRiskFactor }?.impactRiskFactor ?: defaultImpactRiskFactor
+        val highestImpactRiskFactor =
+            fleetSegments.maxByOrNull { it.impactRiskFactor }?.impactRiskFactor ?: defaultImpactRiskFactor
         val probabilityRiskFactor = storedRiskFactor?.probabilityRiskFactor ?: defaultProbabilityRiskFactor
         val controlRateRiskFactor = storedRiskFactor?.controlRateRiskFactor ?: defaultControlRateRiskFactor
         val highestControlPriorityLevel = controlObjectivesRepository.findAllByYear(currentYear)

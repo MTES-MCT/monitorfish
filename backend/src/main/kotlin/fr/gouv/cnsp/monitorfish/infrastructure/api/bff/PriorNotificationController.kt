@@ -123,10 +123,10 @@ class PriorNotificationController(
     fun getManualComputation(
         @RequestBody
         manualPriorNotificationComputeDataInput: ManualPriorNotificationComputeDataInput,
-    ): ManualPriorNotificationComputationDataOutput {
+    ): ManualPriorNotificationComputedValuesDataOutput {
         val fishingCatches = manualPriorNotificationComputeDataInput.fishingCatches.map { it.toLogbookFishingCatch() }
 
-        val (fleetSegments, priorNotificationTypes, riskFactor) = computeManualPriorNotification.execute(
+        val manualPriorNotificationComputedValues = computeManualPriorNotification.execute(
             manualPriorNotificationComputeDataInput.faoArea,
             fishingCatches,
             manualPriorNotificationComputeDataInput.portLocode,
@@ -134,11 +134,8 @@ class PriorNotificationController(
             manualPriorNotificationComputeDataInput.vesselId,
         )
 
-        return ManualPriorNotificationComputationDataOutput.fromFleetSegmentsAndPriotNotificationTypesAndRiskFactor(
-            fleetSegments,
-            priorNotificationTypes,
-            riskFactor,
-        )
+        return ManualPriorNotificationComputedValuesDataOutput
+            .fromManualPriorNotificationComputedValues(manualPriorNotificationComputedValues)
     }
 
     @GetMapping("/manual/{reportId}")

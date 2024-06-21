@@ -2,7 +2,7 @@ import { RtkCacheTagType } from '@api/constants'
 import { addMainWindowBanner } from '@features/SideWindow/useCases/addMainWindowBanner'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
-import { Level } from '@mtes-mct/monitor-ui'
+import { Level, type Undefine } from '@mtes-mct/monitor-ui'
 import { handleThunkError } from '@utils/handleThunkError'
 import { displayedErrorActions } from 'domain/shared_slices/DisplayedError'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
@@ -60,17 +60,18 @@ export const openPriorNotificationForm =
         return
       }
 
-      const nextComputedValues: PriorNotification.ManualPriorNotificationComputedValues = {
+      const nextTypes = priorNotificationDetail.logbookMessage.message.pnoTypes?.map(({ pnoTypeName, ...rest }) => ({
+        ...rest,
+        name: pnoTypeName
+      }))
+      const nextComputedValues: Undefine<PriorNotification.ManualPriorNotificationComputedValues> = {
+        isInVerificationScope: priorNotificationDetail.logbookMessage.message.isInVerificationScope,
         isVesselUnderCharter: priorNotificationDetail.isVesselUnderCharter,
-        state: priorNotificationDetail.state,
-        tripSegments: priorNotificationDetail.logbookMessage.tripSegments ?? [],
-        types:
-          priorNotificationDetail.logbookMessage.message.pnoTypes?.map(({ pnoTypeName, ...rest }) => ({
-            ...rest,
-            name: pnoTypeName
-          })) ?? [],
+        tripSegments: priorNotificationDetail.logbookMessage.tripSegments,
+        types: nextTypes,
         vesselRiskFactor: priorNotificationDetail.vesselRiskFactor
       }
+
       const nextInitialFormValues: FormValues = {
         ...priorNotificationData,
         isExpectedLandingDateSameAsExpectedArrivalDate:

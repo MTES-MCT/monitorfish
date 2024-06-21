@@ -27,13 +27,17 @@ export function TagBar() {
           <Row>
             {!!editedPriorNotificationComputedValues.vesselRiskFactor && (
               <VesselRiskFactor
-                hasVesselRiskFactorSegments={editedPriorNotificationComputedValues.tripSegments.length > 0}
+                hasVesselRiskFactorSegments={
+                  editedPriorNotificationComputedValues.tripSegments
+                    ? editedPriorNotificationComputedValues.tripSegments.length > 0
+                    : undefined
+                }
                 isVesselUnderCharter={editedPriorNotificationComputedValues.isVesselUnderCharter}
                 vesselRiskFactor={editedPriorNotificationComputedValues.vesselRiskFactor}
               />
             )}
 
-            {editedPriorNotificationComputedValues.tripSegments.map(tripSegment => (
+            {editedPriorNotificationComputedValues.tripSegments?.map(tripSegment => (
               <FixedTag key={`tripSegment-${tripSegment.code}`} backgroundColor={THEME.color.blueGray25}>
                 {`${tripSegment.code} – ${tripSegment.name}`}
               </FixedTag>
@@ -57,7 +61,7 @@ export function TagBar() {
               </FixedTag>
             )}
 
-            {editedPriorNotificationComputedValues.types.map(
+            {editedPriorNotificationComputedValues.types?.map(
               type =>
                 type.hasDesignatedPorts && (
                   <FixedTag key={`type-${type.name}`} backgroundColor={THEME.color.gainsboro}>

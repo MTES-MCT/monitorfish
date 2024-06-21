@@ -20,7 +20,6 @@ from config import (
     EMAIL_TEMPLATES_LOCATION,
     SMS_TEMPLATES_LOCATION,
 )
-from src.db_config import create_engine
 from src.pipeline.entities.beacon_malfunctions import (
     BeaconMalfunctionMessageToSend,
     BeaconMalfunctionNotification,
@@ -41,7 +40,7 @@ from src.pipeline.shared_tasks.control_flow import (
     check_flow_not_running,
     filter_results,
 )
-from src.pipeline.shared_tasks.infrastructure import get_table
+from src.pipeline.shared_tasks.infrastructure import execute_statement, get_table
 
 
 @task(checkpoint=False)
@@ -406,13 +405,6 @@ def make_reset_requested_notifications_statement(
     )
 
     return statement
-
-
-@task(checkpoint=False)
-def execute_statement(reset_requested_notifications_statement):
-    e = create_engine("monitorfish_remote")
-    with e.begin() as conn:
-        conn.execute(reset_requested_notifications_statement)
 
 
 with Flow("Notify malfunctions", executor=LocalDaskExecutor()) as flow:

@@ -106,21 +106,38 @@ function getApiFilterFromLastControlPeriod(period: LastControlPeriod | undefined
   }
 }
 
-export function getColorAndBackgroundColorFromState(state: PriorNotification.State | undefined): [string, string] {
+export function getColorsFromState(state: PriorNotification.State | undefined): {
+  backgroundColor: string
+  borderColor: string
+  color: string
+} {
+  // [backgroundColor, borderColor, color]
+  let colors: [string, string, string]
+
   switch (state) {
     case PriorNotification.State.PENDING_VERIFICATION:
-      return [THEME.color.charcoal, THEME.color.goldenPoppyBorder]
+      colors = [THEME.color.goldenPoppyBorder, THEME.color.goldenPoppyBorder, THEME.color.charcoal]
+      break
 
     case PriorNotification.State.SENT:
-      return [THEME.color.charcoal, THEME.color.lightGray]
+      colors = [THEME.color.lightGray, THEME.color.lightGray, THEME.color.charcoal]
+      break
 
     case PriorNotification.State.PENDING_SEND:
     case PriorNotification.State.VERIFIED_AND_SENT:
-      return [THEME.color.mediumSeaGreen, THEME.color.mediumSeaGreen25]
+      colors = [THEME.color.mediumSeaGreen, THEME.color.mediumSeaGreen25, THEME.color.mediumSeaGreen25]
+      break
 
     case PriorNotification.State.OUT_OF_VERIFICATION_SCOPE:
     default:
-      return [THEME.color.charcoal, THEME.color.white]
+      colors = [THEME.color.white, THEME.color.charcoal, THEME.color.charcoal]
+      break
+  }
+
+  return {
+    backgroundColor: colors[0],
+    borderColor: colors[1],
+    color: colors[2]
   }
 }
 

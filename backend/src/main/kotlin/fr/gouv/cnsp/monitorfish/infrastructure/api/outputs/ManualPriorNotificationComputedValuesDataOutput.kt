@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.ManualPriorNotificationComputedValues
 
 data class ManualPriorNotificationComputedValuesDataOutput(
-    val isInVerificationScore: Boolean,
+    val isInVerificationScope: Boolean,
     val isVesselUnderCharter: Boolean?,
     val tripSegments: List<LogbookMessageTripSegmentDataOutput>,
     val types: List<PriorNotificationTypeDataOutput>,
@@ -19,7 +19,7 @@ data class ManualPriorNotificationComputedValuesDataOutput(
                 .map { PriorNotificationTypeDataOutput.fromPnoType(it) }
 
             return ManualPriorNotificationComputedValuesDataOutput(
-                isInVerificationScore = manualPriorNotificationComputedValues.isInVerificationScope,
+                isInVerificationScope = manualPriorNotificationComputedValues.isInVerificationScope,
                 isVesselUnderCharter = manualPriorNotificationComputedValues.isVesselUnderCharter,
                 tripSegments = tripSegmentDataOutputs,
                 types = priorNotificationTypeDataOutputs,

@@ -5,7 +5,7 @@ import { orderBy } from 'lodash'
 import styled from 'styled-components'
 
 import { FixedTag, None } from './styles'
-import { getColorAndBackgroundColorFromState, getExpandableRowCellCustomStyle } from './utils'
+import { getColorsFromState, getExpandableRowCellCustomStyle } from './utils'
 import { PriorNotification } from '../../PriorNotification.types'
 import { openPriorNotificationCard } from '../../useCases/openPriorNotificationCard'
 
@@ -156,8 +156,8 @@ export function Row({ row }: RowProps) {
             <>
               {!!priorNotification.state && (
                 <FixedTag
-                  backgroundColor={getColorAndBackgroundColorFromState(priorNotification.state)[1]}
-                  color={getColorAndBackgroundColorFromState(priorNotification.state)[0]}
+                  backgroundColor={getColorsFromState(priorNotification.state).backgroundColor}
+                  color={getColorsFromState(priorNotification.state).color}
                   style={{ marginBottom: 16 }}
                 >
                   {PriorNotification.STATE_LABEL[priorNotification.state]}

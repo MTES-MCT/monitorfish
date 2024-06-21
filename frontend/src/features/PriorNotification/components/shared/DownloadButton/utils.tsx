@@ -1,5 +1,4 @@
 import { getAlpha2CodeFromAlpha2or3Code } from '@components/CountryFlag/utils'
-import { Titled } from '@components/Titled'
 import { buildCatchArray } from '@features/Logbook/utils'
 import { HTML_TEMPLATE } from '@features/PriorNotification/components/shared/DownloadButton/template'
 import { customDayjs } from '@mtes-mct/monitor-ui'
@@ -8,23 +7,7 @@ import type { LogbookCatch } from '@features/Logbook/Logbook.types'
 import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 import type { TemplateData } from '@features/PriorNotification/components/PriorNotificationCard/types'
 
-export function getFirstTitleRowText(
-  isLessThanTwelveMetersVessel: boolean,
-  tripSegments: LogbookMessage.Segment[] | undefined
-) {
-  const tripSegmentNames =
-    tripSegments?.map(tripSegment => `${tripSegment.code} (${tripSegment.name.toUpperCase()})`) ?? []
-  const tripSegmentNamesAsText = tripSegmentNames.length > 0 ? tripSegmentNames.join(', ') : 'SEGMENT(S) INCONNU(S)'
-
-  return (
-    <>
-      {`PNO ${isLessThanTwelveMetersVessel ? '< 12 M' : '≥ 12 M'} - `}
-      <Titled>{tripSegmentNamesAsText}</Titled>
-    </>
-  )
-}
-
-// TODO WHere is the note?
+// TODO Where is the note?
 export function getHtmlContent(
   pno: LogbookMessage.PnoLogbookMessage | undefined,
   gearsWithName: Array<LogbookMessage.Gear & { gearName: string | null }>

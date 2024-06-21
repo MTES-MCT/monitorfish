@@ -15,6 +15,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import { Form } from './Form'
 import { Header } from './Header'
 import { getApplicableState, getPartialComputationRequestData } from './utils'
+import { DownloadButton } from '../shared/DownloadButton'
 import { TagBar } from '../shared/TagBar'
 
 import type { FormValues } from './types'
@@ -135,6 +136,11 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
           <Button accent={Accent.TERTIARY} onClick={onClose}>
             Fermer
           </Button>
+
+          {!!editedPriorNotificationDetail && (
+            <DownloadButton pnoLogbookMessage={editedPriorNotificationDetail.logbookMessage} />
+          )}
+
           <Button
             accent={Accent.PRIMARY}
             disabled={isPendingSend || isSent || (isValidatingOnChange && !isValid)}
@@ -142,6 +148,7 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
           >
             {isNewPriorNotification ? 'Créer le préavis' : 'Enregistrer'}
           </Button>
+
           {!isNewPriorNotification && (
             <Button
               accent={Accent.PRIMARY}

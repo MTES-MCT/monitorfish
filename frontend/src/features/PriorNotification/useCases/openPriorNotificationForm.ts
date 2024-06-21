@@ -10,6 +10,7 @@ import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
 import { getInitialFormValues } from '../components/PriorNotificationForm/utils'
 import { priorNotificationApi } from '../priorNotificationApi'
 import { priorNotificationActions } from '../slice'
+import { getPriorNotificationTypesFromLogbookMessagePnoTypes } from '../utils'
 
 import type { FormValues } from '../components/PriorNotificationForm/types'
 import type { PriorNotification } from '../PriorNotification.types'
@@ -60,15 +61,13 @@ export const openPriorNotificationForm =
         return
       }
 
-      const nextTypes = priorNotificationDetail.logbookMessage.message.pnoTypes?.map(({ pnoTypeName, ...rest }) => ({
-        ...rest,
-        name: pnoTypeName
-      }))
       const nextComputedValues: Undefine<PriorNotification.ManualPriorNotificationComputedValues> = {
         isInVerificationScope: priorNotificationDetail.logbookMessage.message.isInVerificationScope,
         isVesselUnderCharter: priorNotificationDetail.isVesselUnderCharter,
         tripSegments: priorNotificationDetail.logbookMessage.tripSegments,
-        types: nextTypes,
+        types: getPriorNotificationTypesFromLogbookMessagePnoTypes(
+          priorNotificationDetail.logbookMessage.message.pnoTypes
+        ),
         vesselRiskFactor: priorNotificationDetail.vesselRiskFactor
       }
 

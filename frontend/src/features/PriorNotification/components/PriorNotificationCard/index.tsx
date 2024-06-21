@@ -4,6 +4,11 @@ import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { LogbookMessage } from '@features/Logbook/components/VesselLogbook/LogbookMessages/messages/LogbookMessage'
 import { HTML_STYLE } from '@features/PriorNotification/components/PriorNotificationCard/template'
 import { getHtmlContent } from '@features/PriorNotification/components/PriorNotificationCard/utils'
+import {
+  getPriorNotificationFishingCatchesFromLogbookMessageFishingCatches,
+  getPriorNotificationTypesFromLogbookMessagePnoTypes,
+  isZeroNotice
+} from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
@@ -16,6 +21,7 @@ import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
 import { Header } from './Header'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { priorNotificationActions } from '../../slice'
+import { TagBar } from '../shared/TagBar'
 
 export function PriorNotificationCard() {
   const dispatch = useMainAppDispatch()
@@ -84,6 +90,29 @@ export function PriorNotificationCard() {
           <Header onClose={close} priorNotificationDetail={priorNotificationDetail} />
 
           <Body>
+            <TagBar
+              isVesselUnderCharter={priorNotificationDetail.isVesselUnderCharter}
+              isZeroNotice={isZeroNotice(
+                getPriorNotificationFishingCatchesFromLogbookMessageFishingCatches(
+                  priorNotificationDetail.logbookMessage.message.catchOnboard
+                )
+              )}
+              state={priorNotificationDetail.state}
+              tripSegments={priorNotificationDetail.logbookMessage.tripSegments}
+              types={getPriorNotificationTypesFromLogbookMessagePnoTypes(
+                priorNotificationDetail.logbookMessage.message.pnoTypes
+              )}
+              vesselRiskFactor={priorNotificationDetail.vesselRiskFactor}
+            />
+
+            <Intro>
+              Le préavis doit être vérifié par le CNSP avant sa diffusion.
+              <br />
+              Le navire doit respecter un délai d’envoi et débarquer dans un port désigné.
+            </Intro>
+
+            <hr />
+
             <LogbookMessage
               isFirst
               isLessThanTwelveMetersVessel={priorNotificationDetail.isLessThanTwelveMetersVessel}
@@ -142,6 +171,15 @@ const Body = styled.div`
   flex-grow: 1;
   overflow-y: auto;
   padding: 32px;
+
+  > hr {
+    margin: 24px 0;
+  }
+`
+
+const Intro = styled.p`
+  color: ${p => p.theme.color.slateGray};
+  font-style: italic;
 `
 
 const Footer = styled.div`

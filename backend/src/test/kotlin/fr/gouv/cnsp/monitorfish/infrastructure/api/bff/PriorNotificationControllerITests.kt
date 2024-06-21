@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.ManualPriorNotificationComputedValues
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationStats
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.*
 import fr.gouv.cnsp.monitorfish.domain.utils.PaginatedList
@@ -92,7 +93,15 @@ class PriorNotificationControllerITests {
     fun `getManualComputation Should get a manual prior notification computated values`() {
         // Given
         given(this.computeManualPriorNotification.execute(any(), any(), any(), any(), any()))
-            .willReturn(Triple(emptyList(), emptyList(), 1.2))
+            .willReturn(
+                ManualPriorNotificationComputedValues(
+                    isInVerificationScope = false,
+                    isVesselUnderCharter = null,
+                    tripSegments = emptyList(),
+                    types = emptyList(),
+                    vesselRiskFactor = 1.2,
+                ),
+            )
 
         // When
         val requestBody = objectMapper.writeValueAsString(

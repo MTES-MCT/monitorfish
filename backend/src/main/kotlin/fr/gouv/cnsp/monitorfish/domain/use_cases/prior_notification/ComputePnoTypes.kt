@@ -14,10 +14,14 @@ class ComputePnoTypes(
     fun execute(
         catchToLand: List<LogbookFishingCatch>,
         gearCodes: List<String>,
-        flagState: CountryCode,
+        flagState: CountryCode?,
     ): List<PnoType> {
         require(catchToLand.all { it.faoZone != null }) {
             "All `faoZone` of catches must be given."
+        }
+
+        if (flagState == null) {
+            return emptyList()
         }
 
         val allPnoTypes = pnoTypeRepository.findAll()

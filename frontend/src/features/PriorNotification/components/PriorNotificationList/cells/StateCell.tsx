@@ -2,20 +2,18 @@ import { Icon } from '@mtes-mct/monitor-ui'
 import styled, { keyframes } from 'styled-components'
 
 import { PriorNotification } from '../../../PriorNotification.types'
-import { getColorAndBackgroundColorFromState } from '../utils'
+import { getColorsFromState } from '../utils'
 
 type SendButtonCellProps = Readonly<{
   state: PriorNotification.State | undefined
 }>
 export function StateCell({ state }: SendButtonCellProps) {
-  const [color, backgroundColor] = getColorAndBackgroundColorFromState(state)
-
   if (!state || state === PriorNotification.State.OUT_OF_VERIFICATION_SCOPE) {
     return <Wrapper title={state ? PriorNotification.STATE_LABEL[state] : undefined}>-</Wrapper>
   }
 
   return (
-    <Wrapper $backgroundColor={backgroundColor} $color={color} title={PriorNotification.STATE_LABEL[state]}>
+    <Wrapper $state={state} title={PriorNotification.STATE_LABEL[state]}>
       {!!state && state === PriorNotification.State.PENDING_SEND ? (
         <SpinnerWrapper>
           <Icon.Send />
@@ -29,13 +27,12 @@ export function StateCell({ state }: SendButtonCellProps) {
 }
 
 const Wrapper = styled.span<{
-  $backgroundColor?: string
-  $color?: string
+  $state?: PriorNotification.State
 }>`
   align-items: center;
-  background-color: ${p => p.$backgroundColor ?? 'transparent'};
+  background-color: ${p => getColorsFromState(p.$state).backgroundColor ?? 'transparent'};
   border-radius: 50%;
-  color: ${p => p.$color ?? 'inherit'};
+  color: ${p => getColorsFromState(p.$state).color ?? 'inherit'};
   display: inline-flex;
   height: 26px;
   justify-content: center;

@@ -4,21 +4,23 @@ import { THEME } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import styled from 'styled-components'
 
-import { isZeroNotice } from './utils'
+import { getApplicableState, isZeroNotice } from './utils'
 import { PriorNotification } from '../../PriorNotification.types'
 import { FixedTag } from '../PriorNotificationList/styles'
-import { getColorAndBackgroundColorFromState } from '../PriorNotificationList/utils'
+import { getColorsFromState } from '../PriorNotificationList/utils'
 
 import type { FormValues } from './types'
 
 export function TagBar() {
+  const { values } = useFormikContext<FormValues>()
   const editedPriorNotificationComputedValues = useMainAppSelector(
     store => store.priorNotification.editedPriorNotificationComputedValues
   )
   const editedPriorNotificationDetail = useMainAppSelector(
     store => store.priorNotification.editedPriorNotificationDetail
   )
-  const { values } = useFormikContext<FormValues>()
+
+  const applicableState = getApplicableState(editedPriorNotificationComputedValues, editedPriorNotificationDetail)
 
   return (
     <Wrapper className="Wrapper">
@@ -51,13 +53,14 @@ export function TagBar() {
               </FixedTag>
             )}
 
-            {!!editedPriorNotificationDetail?.state && (
+            {!!applicableState && (
               <FixedTag
                 key="state"
-                backgroundColor={getColorAndBackgroundColorFromState(editedPriorNotificationDetail.state)[1]}
-                color={getColorAndBackgroundColorFromState(editedPriorNotificationDetail.state)[0]}
+                backgroundColor={getColorsFromState(applicableState).backgroundColor}
+                borderColor={getColorsFromState(applicableState).borderColor}
+                color={getColorsFromState(applicableState).color}
               >
-                {PriorNotification.STATE_LABEL[editedPriorNotificationDetail.state]}
+                {PriorNotification.STATE_LABEL[applicableState]}
               </FixedTag>
             )}
 

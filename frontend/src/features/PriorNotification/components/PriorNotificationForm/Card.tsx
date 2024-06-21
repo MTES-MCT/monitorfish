@@ -3,7 +3,7 @@ import { PriorNotification } from '@features/PriorNotification/PriorNotification
 import { updateEditedPriorNotificationComputedValues } from '@features/PriorNotification/useCases/updateEditedPriorNotificationComputedValues'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, FormikEffect, Icon, usePrevious } from '@mtes-mct/monitor-ui'
+import { Accent, Banner, Button, FormikEffect, Icon, Level, usePrevious } from '@mtes-mct/monitor-ui'
 import { getDefinedObject } from '@utils/getDefinedObject'
 import { useFormikContext } from 'formik'
 import { isEqual } from 'lodash'
@@ -81,6 +81,12 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
     <Wrapper>
       <FormikEffect onChange={updateComputedValuesIfMecessary as any} />
 
+      {editedPriorNotificationDetail?.state === PriorNotification.State.PENDING_SEND && (
+        <StyledBanner isCollapsible level={Level.WARNING} top="100px">
+          Le préavis est en cours de diffusion.
+        </StyledBanner>
+      )}
+
       <FrontendErrorBoundary>
         <Header isNewPriorNotification={isNewPriorNotification} onClose={onClose} vesselId={values.vesselId} />
 
@@ -138,7 +144,29 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
+  position: relative;
   width: 560px;
+`
+
+const StyledBanner = styled(Banner)`
+  box-shadow: inset 0 3px 6px ${p => p.theme.color.lightGray};
+  padding: 0;
+
+  > div > p {
+    font-size: 16px;
+    font-weight: 500;
+    padding-top: 3px;
+  }
+
+  > .banner-button {
+    position: relative;
+
+    > button {
+      position: absolute;
+      right: 32px;
+      top: -7.5px;
+    }
+  }
 `
 
 const Body = styled.div`

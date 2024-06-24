@@ -17,12 +17,24 @@ export function ActionButtonsCell({ priorNotification }: ActionButtonsCellProps)
   const isSuperUser = useIsSuperUser()
   const dispatch = useMainAppDispatch()
 
-  const editPriorNotification = (reportId: string, fingerprint: string) => {
-    dispatch(openPriorNotificationForm(reportId, fingerprint))
+  const editPriorNotification = () => {
+    dispatch(
+      openPriorNotificationForm(
+        priorNotification.id,
+        priorNotification.fingerprint,
+        priorNotification.isManuallyCreated
+      )
+    )
   }
 
   const openPriorNotificationDetail = () => {
-    dispatch(openPriorNotificationCard(priorNotification.id, priorNotification.fingerprint))
+    dispatch(
+      openPriorNotificationCard(
+        priorNotification.id,
+        priorNotification.fingerprint,
+        priorNotification.isManuallyCreated
+      )
+    )
   }
 
   const selectMainMapVessel = () => {
@@ -56,7 +68,7 @@ export function ActionButtonsCell({ priorNotification }: ActionButtonsCellProps)
         <IconButton
           accent={Accent.TERTIARY}
           Icon={Icon.Edit}
-          onClick={() => editPriorNotification(priorNotification.id, priorNotification.fingerprint)}
+          onClick={editPriorNotification}
           title="Éditer le préavis"
           withUnpropagatedClick
         />

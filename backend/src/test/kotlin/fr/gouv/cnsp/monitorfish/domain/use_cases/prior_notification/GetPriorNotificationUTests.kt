@@ -63,7 +63,7 @@ class GetPriorNotificationUTests {
             riskFactorRepository,
             speciesRepository,
             vesselRepository,
-        ).execute(fakePriorNotification.reportId!!)
+        ).execute(fakePriorNotification.reportId!!, false)
 
         // Then
         assertThat(result.logbookMessageTyped.logbookMessage.reportId)
@@ -113,7 +113,7 @@ class GetPriorNotificationUTests {
             riskFactorRepository,
             speciesRepository,
             vesselRepository,
-        ).execute(fakeLogbookMessageReferenceReportId)
+        ).execute(fakeLogbookMessageReferenceReportId, false)
 
         // Then
         assertThat(result.reportId).isNull()

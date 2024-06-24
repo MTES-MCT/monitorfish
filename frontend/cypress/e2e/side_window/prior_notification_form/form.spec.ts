@@ -486,9 +486,10 @@ context('Side Window > Prior Notification Form > Form', () => {
         // -----------------------------------------------------------------------
         // Veryify and send
 
-        cy.intercept('POST', `/bff/v1/prior_notifications/${createdPriorNotification.reportId}/verify_and_send`).as(
-          'verifyAndSendPriorNotification'
-        )
+        cy.intercept(
+          'POST',
+          `/bff/v1/prior_notifications/${createdPriorNotification.reportId}/verify_and_send?isManuallyCreated=true`
+        ).as('verifyAndSendPriorNotification')
 
         cy.clickButton('Diffuser')
 

@@ -56,7 +56,7 @@ export function PriorNotificationForm() {
 
     assertNotNullish(editedPriorNotificationReportId)
 
-    await dispatch(verifyAndSendPriorNotification(editedPriorNotificationReportId))
+    await dispatch(verifyAndSendPriorNotification(editedPriorNotificationReportId, true))
 
     setIsLoading(false)
   }

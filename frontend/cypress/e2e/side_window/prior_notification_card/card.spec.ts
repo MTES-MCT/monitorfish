@@ -78,7 +78,7 @@ context('Side Window > Prior Notification Card > Card', () => {
   })
 
   it('Should refresh the list when the opened prior notification data differs from its entry in the current list', () => {
-    const url = '/bff/v1/prior_notifications/FAKE_OPERATION_109'
+    const url = '/bff/v1/prior_notifications/FAKE_OPERATION_109?isManuallyCreated=false'
 
     cy.intercept({
       method: 'GET',
@@ -111,7 +111,7 @@ context('Side Window > Prior Notification Card > Card', () => {
   })
 
   it('Should display a warning banner and refresh the list when the opened prior notification has been deleted', () => {
-    const url = '/bff/v1/prior_notifications/FAKE_OPERATION_109'
+    const url = '/bff/v1/prior_notifications/FAKE_OPERATION_109?isManuallyCreated=false'
 
     cy.intercept({
       method: 'GET',

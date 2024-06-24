@@ -121,7 +121,7 @@ class CreateOrUpdateManualPriorNotification(
         )
 
         val newOrCurrentReportId = manualPriorNotificationRepository.save(newOrNextPriorNotification)
-        val createdOrUpdatedPriorNotification = getPriorNotification.execute(newOrCurrentReportId)
+        val createdOrUpdatedPriorNotification = getPriorNotification.execute(newOrCurrentReportId, true)
 
         return createdOrUpdatedPriorNotification
     }

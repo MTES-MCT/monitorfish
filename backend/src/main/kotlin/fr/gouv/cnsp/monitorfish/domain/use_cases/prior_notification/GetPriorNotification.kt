@@ -18,15 +18,18 @@ class GetPriorNotification(
     private val speciesRepository: SpeciesRepository,
     private val vesselRepository: VesselRepository,
 ) {
-    fun execute(reportId: String): PriorNotification {
+    fun execute(reportId: String, isManuallyCreated: Boolean): PriorNotification {
         val allGears = gearRepository.findAll()
         val allPorts = portRepository.findAll()
         val allRiskFactors = riskFactorRepository.findAll()
         val allSpecies = speciesRepository.findAll()
         val allVessels = vesselRepository.findAll()
 
-        val priorNotification = manualPriorNotificationRepository.findByReportId(reportId)
-            ?: logbookReportRepository.findPriorNotificationByReportId(reportId)
+        val priorNotification = if (isManuallyCreated) {
+            manualPriorNotificationRepository.findByReportId(reportId)
+        } else {
+            logbookReportRepository.findPriorNotificationByReportId(reportId)
+        }
             ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
 
         priorNotification.enrich(allPorts, allRiskFactors, allVessels)

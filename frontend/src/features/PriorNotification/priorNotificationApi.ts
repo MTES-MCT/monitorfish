@@ -53,9 +53,16 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_DATA_ERROR_MESSAGE, response)
     }),
 
-    getPriorNotificationDetail: builder.query<PriorNotification.PriorNotificationDetail, string>({
+    getPriorNotificationDetail: builder.query<
+      PriorNotification.PriorNotificationDetail,
+      {
+        isManuallyCreated: boolean
+        reportId: string
+      }
+    >({
       providesTags: () => [{ type: RtkCacheTagType.PriorNotification }],
-      query: reportId => `/prior_notifications/${reportId}`,
+      query: ({ isManuallyCreated, reportId }) =>
+        getUrlOrPathWithQueryParams(`/prior_notifications/${reportId}`, { isManuallyCreated }),
       transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_DETAIL_ERROR_MESSAGE, response)
     }),
 
@@ -110,11 +117,17 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(CREATE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
     }),
 
-    verifyAndSendPriorNotification: builder.mutation<PriorNotification.PriorNotificationDetail, string>({
+    verifyAndSendPriorNotification: builder.mutation<
+      PriorNotification.PriorNotificationDetail,
+      {
+        isManuallyCreated: boolean
+        reportId: string
+      }
+    >({
       invalidatesTags: [{ type: RtkCacheTagType.PriorNotifications }],
-      query: reportId => ({
+      query: ({ isManuallyCreated, reportId }) => ({
         method: 'POST',
-        url: `/prior_notifications/${reportId}/verify_and_send`
+        url: getUrlOrPathWithQueryParams(`/prior_notifications/${reportId}/verify_and_send`, { isManuallyCreated })
       }),
       transformErrorResponse: response =>
         new FrontendApiError(VERIFY_AND_SEND_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
@@ -122,12 +135,4 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
   })
 })
 
-export const {
-  useComputePriorNotificationMutation,
-  useCreatePriorNotificationMutation,
-  useGetPriorNotificationDataQuery,
-  useGetPriorNotificationDetailQuery,
-  useGetPriorNotificationsQuery,
-  useGetPriorNotificationTypesQuery,
-  useUpdatePriorNotificationMutation
-} = priorNotificationApi
+export const { useGetPriorNotificationsQuery, useGetPriorNotificationTypesQuery } = priorNotificationApi

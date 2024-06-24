@@ -12,14 +12,13 @@ class VerifyAndSendPriorNotification(
 
     private val getPriorNotification: GetPriorNotification,
 ) {
-    fun execute(reportId: String): PriorNotification {
-        val autoPriorNotification = logbookReportRepository.findPriorNotificationByReportId(reportId)
-        if (autoPriorNotification != null) {
-            logbookReportRepository.updatePriorNotificationState(reportId, isBeingSent = true, isVerified = true)
-        } else {
+    fun execute(reportId: String, isManuallyCreated: Boolean): PriorNotification {
+        if (isManuallyCreated) {
             manualPriorNotificationRepository.updateState(reportId, isBeingSent = true, isVerified = true)
+        } else {
+            logbookReportRepository.updatePriorNotificationState(reportId, isBeingSent = true, isVerified = true)
         }
 
-        return getPriorNotification.execute(reportId)
+        return getPriorNotification.execute(reportId, isManuallyCreated)
     }
 }

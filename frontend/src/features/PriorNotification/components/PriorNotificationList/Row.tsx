@@ -19,7 +19,13 @@ export function Row({ row }: RowProps) {
   const firstFiveOnBoardCatchesByWeight = orderBy(priorNotification.onBoardCatches, ['weight'], ['desc']).slice(0, 5)
 
   const openCard = () => {
-    dispatch(openPriorNotificationCard(priorNotification.id, priorNotification.fingerprint))
+    dispatch(
+      openPriorNotificationCard(
+        priorNotification.id,
+        priorNotification.fingerprint,
+        priorNotification.isManuallyCreated
+      )
+    )
   }
 
   return (

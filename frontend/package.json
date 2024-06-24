@@ -146,6 +146,7 @@
     "vite-tsconfig-paths": "4.3.2"
   },
   "overrides": {
+    "socket.io": ">=2.5.0",
     "ws": ">=7.5.10"
   },
   "browserslist": {

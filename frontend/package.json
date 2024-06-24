@@ -145,6 +145,10 @@
     "vite-plugin-svgr": "4.2.0",
     "vite-tsconfig-paths": "4.3.2"
   },
+  "overrides": {
+    "socket.io": ">=2.5.0",
+    "ws": ">=7.5.10"
+  },
   "browserslist": {
     "production": [
       ">0.2%",

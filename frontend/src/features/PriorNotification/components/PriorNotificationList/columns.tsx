@@ -2,6 +2,7 @@ import { Ellipsised } from '@components/Ellipsised'
 import { Titled } from '@components/Titled'
 import { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 import { customDayjs, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
+import { isLegacyFirefox } from '@utils/isLegacyFirefox'
 
 import { ActionButtonsCell } from './cells/ActionButtonsCell'
 import { StateCell } from './cells/StateCell'
@@ -13,6 +14,8 @@ import { PriorNotification } from '../../PriorNotification.types'
 import type { CellContext, ColumnDef } from '@tanstack/react-table'
 
 export function getTableColumns(): Array<ColumnDef<PriorNotification.PriorNotification, any>> {
+  const legacyFirefoxOffset = isLegacyFirefox() ? -32 : 0
+
   return [
     {
       accessorFn: row => row.id,
@@ -32,7 +35,7 @@ export function getTableColumns(): Array<ColumnDef<PriorNotification.PriorNotifi
         />
       ),
       id: 'select',
-      size: 25
+      size: 25 + legacyFirefoxOffset
     },
     {
       accessorFn: row => row.expectedArrivalDate,
@@ -44,7 +47,7 @@ export function getTableColumns(): Array<ColumnDef<PriorNotification.PriorNotifi
       enableSorting: true,
       header: () => 'Arrivée estimée',
       id: LogbookMessage.ApiSortColumn.EXPECTED_ARRIVAL_DATE,
-      size: 160
+      size: 160 + legacyFirefoxOffset
     },
     {
       accessorFn: row => row.expectedLandingDate,
@@ -56,7 +59,7 @@ export function getTableColumns(): Array<ColumnDef<PriorNotification.PriorNotifi
       enableSorting: true,
       header: () => 'Débarque prévue',
       id: LogbookMessage.ApiSortColumn.EXPECTED_LANDING_DATE,
-      size: 160
+      size: 160 + legacyFirefoxOffset
     },
     {
       accessorFn: row => (!!row.portLocode && !!row.portName ? `${row.portName} (${row.portLocode})` : '-'),
@@ -66,7 +69,7 @@ export function getTableColumns(): Array<ColumnDef<PriorNotification.PriorNotifi
       enableSorting: true,
       header: () => "Port d'arrivée",
       id: LogbookMessage.ApiSortColumn.PORT_NAME,
-      size: 192
+      size: 192 + legacyFirefoxOffset
     },
     {
       accessorFn: row => row.vesselRiskFactor,
@@ -88,7 +91,7 @@ export function getTableColumns(): Array<ColumnDef<PriorNotification.PriorNotifi
       enableSorting: true,
       header: () => 'Note',
       id: LogbookMessage.ApiSortColumn.VESSEL_RISK_FACTOR,
-      size: 95
+      size: 95 + legacyFirefoxOffset
     },
     {
       accessorFn: row => row.vesselName ?? (row.vesselId === -1 ? 'Navire inconnu' : '-'),
@@ -105,7 +108,7 @@ export function getTableColumns(): Array<ColumnDef<PriorNotification.PriorNotifi
       enableSorting: true,
       header: () => 'Nom',
       id: LogbookMessage.ApiSortColumn.VESSEL_NAME,
-      size: 204
+      size: 204 + legacyFirefoxOffset
     },
     {
       accessorFn: row =>
@@ -115,7 +118,7 @@ export function getTableColumns(): Array<ColumnDef<PriorNotification.PriorNotifi
       enableSorting: false,
       header: () => 'Segments',
       id: 'tripSegments',
-      size: 168
+      size: 168 + legacyFirefoxOffset
     },
     {
       accessorFn: row =>
@@ -127,7 +130,7 @@ export function getTableColumns(): Array<ColumnDef<PriorNotification.PriorNotifi
       enableSorting: false,
       header: () => 'Types de préavis',
       id: 'types',
-      size: 244
+      size: 244 + legacyFirefoxOffset
     },
     {
       accessorFn: row => row.state,
@@ -137,7 +140,7 @@ export function getTableColumns(): Array<ColumnDef<PriorNotification.PriorNotifi
       enableSorting: false,
       header: () => '',
       id: 'state',
-      size: 55
+      size: 55 + legacyFirefoxOffset
     },
     {
       accessorFn: row => row.id,
@@ -147,7 +150,7 @@ export function getTableColumns(): Array<ColumnDef<PriorNotification.PriorNotifi
       enableSorting: false,
       header: () => '',
       id: 'actions',
-      size: 88
+      size: 88 + legacyFirefoxOffset
     }
   ]
 }

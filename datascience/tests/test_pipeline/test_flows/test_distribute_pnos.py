@@ -4,6 +4,7 @@ import json
 from datetime import datetime, timedelta, timezone
 from email.message import EmailMessage
 from pathlib import Path
+from typing import List
 from unittest.mock import patch
 
 import numpy as np
@@ -22,6 +23,7 @@ from src.pipeline.entities.pnos import (
     PnoToRender,
     PnoToSend,
     PreRenderedPno,
+    PriorNotificationSentMessage,
     RenderedPno,
 )
 from src.pipeline.flows.distribute_pnos import (
@@ -39,13 +41,15 @@ from src.pipeline.flows.distribute_pnos import (
     get_html_for_pdf_template,
     get_sms_template,
     load_pno_pdf_documents,
+    load_prior_notification_sent_messages,
     pre_render_pno,
     render_pno,
+    send_pno_message,
     to_pnos_to_render,
 )
 from src.pipeline.helpers.emails import CommunicationMeans
 from src.read_query import read_query
-from tests.mocks import mock_check_flow_not_running
+from tests.mocks import mock_check_flow_not_running, mock_datetime_utcnow
 
 flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
 
@@ -1129,6 +1133,103 @@ def sms_template() -> dict:
     return get_sms_template.run()
 
 
+@pytest.fixture
+def pno_to_send_by_email() -> PnoToSend:
+    return PnoToSend(
+        pno=RenderedPno(
+            report_id="Report-1",
+            vessel_id=123,
+            cfr="ABC000000123",
+            vessel_name="Le bateau 123",
+            is_verified=True,
+            is_being_sent=True,
+            trip_segments=["Segment1", "Segment2"],
+            port_locode="FRBOL",
+            source=PnoSource.LOGBOOK,
+            html_for_pdf="<html>Html for PDF</html>",
+            pdf_document=b"PDF document",
+            generation_datetime_utc=datetime(2023, 5, 6, 12, 52, 12),
+            html_email_body="<html>Hello this is a prior notification</html>",
+            sms_content="Hello, PNO",
+            control_unit_ids=[1, 2],
+            emails=["email1@control.unit", "email.in.error@control.unit"],
+            phone_numbers=["00000000000"],
+        ),
+        message=EmailMessage(),
+        communication_means=CommunicationMeans.EMAIL,
+    )
+
+
+@pytest.fixture
+def messages_sent_by_email() -> List[PriorNotificationSentMessage]:
+    return [
+        PriorNotificationSentMessage(
+            prior_notification_report_id="Report-1",
+            prior_notification_source=PnoSource.LOGBOOK,
+            date_time_utc=datetime(2023, 6, 6, 16, 10),
+            communication_means=CommunicationMeans.EMAIL,
+            recipient_address_or_number="email1@control.unit",
+            success=True,
+            error_message=None,
+        ),
+        PriorNotificationSentMessage(
+            prior_notification_report_id="Report-1",
+            prior_notification_source=PnoSource.LOGBOOK,
+            date_time_utc=datetime(2023, 6, 6, 16, 10),
+            communication_means=CommunicationMeans.EMAIL,
+            recipient_address_or_number="email.in.error@control.unit",
+            success=False,
+            error_message="Error when sending email",
+        ),
+    ]
+
+
+@pytest.fixture
+def pno_to_send_by_sms(pno_to_send_by_email) -> PnoToSend:
+    return dataclasses.replace(
+        pno_to_send_by_email, communication_means=CommunicationMeans.SMS
+    )
+
+
+@pytest.fixture
+def messages_sent_by_sms() -> List[PriorNotificationSentMessage]:
+    return [
+        PriorNotificationSentMessage(
+            prior_notification_report_id="Report-1",
+            prior_notification_source=PnoSource.LOGBOOK,
+            date_time_utc=datetime(2023, 6, 6, 16, 10),
+            communication_means=CommunicationMeans.SMS,
+            recipient_address_or_number="00000000000",
+            success=True,
+            error_message=None,
+        ),
+    ]
+
+
+@pytest.fixture
+def loaded_sent_messages() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "id": [1, 2, 3],
+            "prior_notification_report_id": ["Report-1", "Report-1", "Report-1"],
+            "prior_notification_source": ["LOGBOOK", "LOGBOOK", "LOGBOOK"],
+            "date_time_utc": [
+                datetime(2023, 6, 6, 16, 10, 00),
+                datetime(2023, 6, 6, 16, 10, 00),
+                datetime(2023, 6, 6, 16, 10, 00),
+            ],
+            "communication_means": ["EMAIL", "EMAIL", "SMS"],
+            "recipient_address_or_number": [
+                "email1@control.unit",
+                "email.in.error@control.unit",
+                "00000000000",
+            ],
+            "success": [True, False, True],
+            "error_message": [None, "Error when sending email", None],
+        }
+    )
+
+
 def test_extract_pnos_to_generate(reset_test_data, extracted_pnos):
     approximate_datetime_columns = [
         "operation_datetime_utc",
@@ -1646,6 +1747,47 @@ def test_create_sms(
     assert len(attachments) == 0
 
     assert pno_to_send.message.get_content() == "Message SMS préavis 123-abc\n"
+
+
+@patch(
+    "src.pipeline.flows.distribute_pnos.datetime",
+    mock_datetime_utcnow(datetime(2023, 6, 6, 16, 10, 0)),
+)
+@patch("src.pipeline.flows.distribute_pnos.send_email_or_sms_or_fax_message")
+def test_send_pno_message_by_email(
+    mock_send, pno_to_send_by_email, messages_sent_by_email
+):
+    mock_send.return_value = {
+        "email.in.error@control.unit": (None, "Error when sending email")
+    }
+    sent_messages = send_pno_message.run(pno_to_send_by_email, False)
+    assert sent_messages == messages_sent_by_email
+
+
+@patch(
+    "src.pipeline.flows.distribute_pnos.datetime",
+    mock_datetime_utcnow(datetime(2023, 6, 6, 16, 10, 0)),
+)
+@patch("src.pipeline.flows.distribute_pnos.send_email_or_sms_or_fax_message")
+def test_send_pno_message_by_sms(mock_send, pno_to_send_by_sms, messages_sent_by_sms):
+    mock_send.return_value = dict()
+    sent_messages = send_pno_message.run(pno_to_send_by_sms, False)
+    assert sent_messages == messages_sent_by_sms
+
+
+def test_load_prior_notification_sent_messages(
+    reset_test_data, messages_sent_by_email, messages_sent_by_sms, loaded_sent_messages
+):
+    query = "SELECT * FROM prior_notification_sent_messages ORDER BY id"
+
+    initial_sent_messages = read_query(query=query, db="monitorfish_remote")
+    load_prior_notification_sent_messages.run(
+        messages_sent_by_email + messages_sent_by_sms
+    )
+    final_sent_messages = read_query(query=query, db="monitorfish_remote")
+
+    assert len(initial_sent_messages) == 0
+    pd.testing.assert_frame_equal(final_sent_messages, loaded_sent_messages)
 
 
 # def test_flow(reset_test_data):

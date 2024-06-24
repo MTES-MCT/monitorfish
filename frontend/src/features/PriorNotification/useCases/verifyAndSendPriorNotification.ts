@@ -9,11 +9,11 @@ import { priorNotificationActions } from '../slice'
 import type { MainAppThunk } from '@store'
 
 export const verifyAndSendPriorNotification =
-  (reportId: string): MainAppThunk<Promise<void>> =>
+  (reportId: string, isManuallyCreated: boolean): MainAppThunk<Promise<void>> =>
   async dispatch => {
     try {
       const updatedPriorNotificationDetail = await dispatch(
-        priorNotificationApi.endpoints.verifyAndSendPriorNotification.initiate(reportId)
+        priorNotificationApi.endpoints.verifyAndSendPriorNotification.initiate({ isManuallyCreated, reportId })
       ).unwrap()
 
       dispatch(priorNotificationActions.setEditedPriorNotificationDetail(updatedPriorNotificationDetail))

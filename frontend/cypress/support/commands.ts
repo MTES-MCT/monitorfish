@@ -1,6 +1,6 @@
 import { registerMonitorUiCustomCommands } from '@mtes-mct/monitor-ui/cypress'
 
-import { countRequestsByAlias } from './commands/countRequestsByAlias'
+import { countRequestsByAlias, resetCountRequestsByAlias } from './commands/countRequestsByAlias'
 import { getComputedStyle } from './commands/getComputedStyle'
 
 registerMonitorUiCustomCommands()
@@ -46,6 +46,7 @@ Cypress.Commands.add('cleanFiles', () => {
 
 Cypress.Commands.add('countRequestsByAlias', countRequestsByAlias)
 Cypress.Commands.add('getComputedStyle', getComputedStyle)
+Cypress.Commands.add('resetCountRequestsByAlias', resetCountRequestsByAlias)
 
 // @ts-ignore
 Cypress.Commands.add('waitForLastRequest', (alias, partialRequest, maxRequests, level = 0) => {

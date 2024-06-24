@@ -13,14 +13,17 @@ import { priorNotificationActions } from '../slice'
 import type { MainAppThunk } from '@store'
 
 export const openPriorNotificationCard =
-  (id: string, fingerprint: string): MainAppThunk<Promise<void>> =>
+  (reportId: string, fingerprint: string, isManuallyCreated: boolean): MainAppThunk<Promise<void>> =>
   async dispatch => {
     try {
       dispatch(displayedErrorActions.unset(DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_CARD_ERROR))
       dispatch(priorNotificationActions.openPriorNotificationCard())
 
       const priorNotificationDetail = await dispatch(
-        priorNotificationApi.endpoints.getPriorNotificationDetail.initiate(id)
+        priorNotificationApi.endpoints.getPriorNotificationDetail.initiate({
+          isManuallyCreated,
+          reportId
+        })
       ).unwrap()
 
       // Update prior notification list if prior notification fingerprint has changed
@@ -50,7 +53,7 @@ export const openPriorNotificationCard =
         dispatch(
           displayOrLogError(
             err,
-            () => openPriorNotificationCard(id, fingerprint),
+            () => openPriorNotificationCard(reportId, fingerprint, isManuallyCreated),
             true,
             DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_CARD_ERROR
           )

@@ -31,7 +31,10 @@ export const createOrUpdatePriorNotification =
       }
 
       const newOrUpdatedPriorNotificationDetail = await dispatch(
-        priorNotificationApi.endpoints.getPriorNotificationDetail.initiate(updatedPriorNotificationData.reportId)
+        priorNotificationApi.endpoints.getPriorNotificationDetail.initiate({
+          isManuallyCreated: true,
+          reportId: updatedPriorNotificationData.reportId
+        })
       ).unwrap()
 
       dispatch(priorNotificationActions.setEditedPriorNotificationReportId(updatedPriorNotificationData.reportId))

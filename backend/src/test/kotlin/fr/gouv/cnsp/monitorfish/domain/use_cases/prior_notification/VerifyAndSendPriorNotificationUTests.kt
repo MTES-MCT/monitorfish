@@ -30,7 +30,7 @@ class VerifyAndSendPriorNotificationUTests {
             .willReturn(fakePriorNotification)
         given(manualPriorNotificationRepository.findByReportId(fakePriorNotification.reportId!!))
             .willReturn(null)
-        given(getPriorNotification.execute(fakePriorNotification.reportId!!))
+        given(getPriorNotification.execute(fakePriorNotification.reportId!!, false))
             .willReturn(fakePriorNotification)
 
         // When
@@ -38,7 +38,7 @@ class VerifyAndSendPriorNotificationUTests {
             logbookReportRepository,
             manualPriorNotificationRepository,
             getPriorNotification,
-        ).execute(fakePriorNotification.reportId!!)
+        ).execute(fakePriorNotification.reportId!!, false)
 
         // Then
         Assertions.assertThat(result.reportId).isEqualTo(fakePriorNotification.reportId!!)
@@ -53,7 +53,7 @@ class VerifyAndSendPriorNotificationUTests {
             .willReturn(null)
         given(manualPriorNotificationRepository.findByReportId(fakePriorNotification.reportId!!))
             .willReturn(fakePriorNotification)
-        given(getPriorNotification.execute(fakePriorNotification.reportId!!))
+        given(getPriorNotification.execute(fakePriorNotification.reportId!!, true))
             .willReturn(fakePriorNotification)
 
         // When
@@ -61,7 +61,7 @@ class VerifyAndSendPriorNotificationUTests {
             logbookReportRepository,
             manualPriorNotificationRepository,
             getPriorNotification,
-        ).execute(fakePriorNotification.reportId!!)
+        ).execute(fakePriorNotification.reportId!!, true)
 
         // Then
         Assertions.assertThat(result.reportId).isEqualTo(fakePriorNotification.reportId!!)

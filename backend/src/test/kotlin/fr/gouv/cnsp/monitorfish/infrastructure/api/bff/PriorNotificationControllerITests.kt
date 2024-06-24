@@ -128,7 +128,7 @@ class PriorNotificationControllerITests {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
 
         // Given
-        given(getPriorNotification.execute(fakePriorNotification.reportId!!))
+        given(getPriorNotification.execute(fakePriorNotification.reportId!!, true))
             .willReturn(fakePriorNotification)
 
         // When
@@ -257,11 +257,11 @@ class PriorNotificationControllerITests {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
 
         // Given
-        given(getPriorNotification.execute(fakePriorNotification.reportId!!))
+        given(getPriorNotification.execute(fakePriorNotification.reportId!!, false))
             .willReturn(fakePriorNotification)
 
         // When
-        api.perform(get("/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}"))
+        api.perform(get("/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}?isManuallyCreated=false"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.id", equalTo(fakePriorNotification.reportId)))
@@ -272,11 +272,15 @@ class PriorNotificationControllerITests {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
 
         // Given
-        given(verifyAndSendPriorNotification.execute(fakePriorNotification.reportId!!))
+        given(verifyAndSendPriorNotification.execute(fakePriorNotification.reportId!!, false))
             .willReturn(fakePriorNotification)
 
         // When
-        api.perform(post("/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}/verify_and_send"))
+        api.perform(
+            post(
+                "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}/verify_and_send?isManuallyCreated=false",
+            ),
+        )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.id", equalTo(fakePriorNotification.reportId)))

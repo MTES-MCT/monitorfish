@@ -145,7 +145,7 @@ class PriorNotificationController(
         @PathVariable(name = "reportId")
         reportId: String,
     ): ManualPriorNotificationDataOutput {
-        return ManualPriorNotificationDataOutput.fromPriorNotification(getPriorNotification.execute(reportId))
+        return ManualPriorNotificationDataOutput.fromPriorNotification(getPriorNotification.execute(reportId, true))
     }
 
     @PutMapping("/manual/{reportId}")
@@ -211,8 +211,12 @@ class PriorNotificationController(
         @PathParam("Logbook message `reportId`")
         @PathVariable(name = "reportId")
         reportId: String,
+        @Parameter(description = "Is the prior notification manually created?")
+        @RequestParam(name = "isManuallyCreated")
+        isManuallyCreated: Boolean,
     ): PriorNotificationDetailDataOutput {
-        return PriorNotificationDetailDataOutput.fromPriorNotification(getPriorNotification.execute(reportId))
+        return PriorNotificationDetailDataOutput
+            .fromPriorNotification(getPriorNotification.execute(reportId, isManuallyCreated))
     }
 
     @PostMapping("/{reportId}/verify_and_send")
@@ -221,7 +225,11 @@ class PriorNotificationController(
         @PathParam("Logbook message `reportId`")
         @PathVariable(name = "reportId")
         reportId: String,
+        @Parameter(description = "Is the prior notification manually created?")
+        @RequestParam(name = "isManuallyCreated")
+        isManuallyCreated: Boolean,
     ): PriorNotificationDetailDataOutput {
-        return PriorNotificationDetailDataOutput.fromPriorNotification(verifyAndSendPriorNotification.execute(reportId))
+        return PriorNotificationDetailDataOutput
+            .fromPriorNotification(verifyAndSendPriorNotification.execute(reportId, isManuallyCreated))
     }
 }

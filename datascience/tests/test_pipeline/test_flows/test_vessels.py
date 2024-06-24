@@ -492,6 +492,8 @@ def test_add_unknown_vessel(cleaned_vessels):
     assert last_vessel["external_immatriculation"] == "UNKNOWN"
     assert last_vessel["ircs"] == "UNKNOWN"
     assert last_vessel["vessel_name"] == "UNKNOWN"
+    assert vessels.has_esacapt.notnull().all()
+    assert not last_vessel["has_esacapt"]
 
     with pytest.raises(AssertionError):
         add_unknown_vessel.run(vessels)

@@ -128,7 +128,7 @@ class PriorNotificationControllerITests {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
 
         // Given
-        given(getPriorNotification.execute(fakePriorNotification.reportId!!))
+        given(getPriorNotification.execute(fakePriorNotification.reportId!!, true))
             .willReturn(fakePriorNotification)
 
         // When
@@ -257,7 +257,7 @@ class PriorNotificationControllerITests {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
 
         // Given
-        given(getPriorNotification.execute(fakePriorNotification.reportId!!))
+        given(getPriorNotification.execute(fakePriorNotification.reportId!!, false))
             .willReturn(fakePriorNotification)
 
         // When

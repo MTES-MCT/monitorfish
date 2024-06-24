@@ -53,9 +53,16 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_DATA_ERROR_MESSAGE, response)
     }),
 
-    getPriorNotificationDetail: builder.query<PriorNotification.PriorNotificationDetail, string>({
+    getPriorNotificationDetail: builder.query<
+      PriorNotification.PriorNotificationDetail,
+      {
+        isManuallyCreated: boolean
+        reportId: string
+      }
+    >({
       providesTags: () => [{ type: RtkCacheTagType.PriorNotification }],
-      query: reportId => `/prior_notifications/${reportId}`,
+      query: ({ isManuallyCreated, reportId }) =>
+        getUrlOrPathWithQueryParams(`/prior_notifications/${reportId}`, { isManuallyCreated }),
       transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_DETAIL_ERROR_MESSAGE, response)
     }),
 
@@ -122,12 +129,4 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
   })
 })
 
-export const {
-  useComputePriorNotificationMutation,
-  useCreatePriorNotificationMutation,
-  useGetPriorNotificationDataQuery,
-  useGetPriorNotificationDetailQuery,
-  useGetPriorNotificationsQuery,
-  useGetPriorNotificationTypesQuery,
-  useUpdatePriorNotificationMutation
-} = priorNotificationApi
+export const { useGetPriorNotificationsQuery, useGetPriorNotificationTypesQuery } = priorNotificationApi

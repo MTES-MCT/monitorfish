@@ -51,7 +51,7 @@ class CreateOrUpdateManualPriorNotificationUTests {
             ),
         )
         given(manualPriorNotificationRepository.save(any())).willReturn(fakePriorNotification.reportId!!)
-        given(getPriorNotification.execute(fakePriorNotification.reportId!!)).willReturn(fakePriorNotification)
+        given(getPriorNotification.execute(fakePriorNotification.reportId!!, false)).willReturn(fakePriorNotification)
 
         // When
         val result = CreateOrUpdateManualPriorNotification(

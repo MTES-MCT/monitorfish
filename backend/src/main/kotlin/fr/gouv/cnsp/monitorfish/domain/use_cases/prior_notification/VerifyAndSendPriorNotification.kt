@@ -20,6 +20,6 @@ class VerifyAndSendPriorNotification(
             manualPriorNotificationRepository.updateState(reportId, isBeingSent = true, isVerified = true)
         }
 
-        return getPriorNotification.execute(reportId)
+        return getPriorNotification.execute(reportId, true)
     }
 }

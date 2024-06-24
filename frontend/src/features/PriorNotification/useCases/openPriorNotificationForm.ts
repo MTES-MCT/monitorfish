@@ -3,6 +3,7 @@ import { addMainWindowBanner } from '@features/SideWindow/useCases/addMainWindow
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { Level, type Undefine } from '@mtes-mct/monitor-ui'
+import { assertNotNullish } from '@utils/assertNotNullish'
 import { handleThunkError } from '@utils/handleThunkError'
 import { displayedErrorActions } from 'domain/shared_slices/DisplayedError'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
@@ -17,7 +18,11 @@ import type { PriorNotification } from '../PriorNotification.types'
 import type { MainAppThunk } from '@store'
 
 export const openPriorNotificationForm =
-  (reportId: string | undefined, fingerprint?: string): MainAppThunk<Promise<void>> =>
+  (
+    reportId: string | undefined,
+    fingerprint?: string | undefined,
+    isManuallyCreated?: boolean | undefined
+  ): MainAppThunk<Promise<void>> =>
   async dispatch => {
     try {
       dispatch(displayedErrorActions.unset(DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR))
@@ -33,8 +38,13 @@ export const openPriorNotificationForm =
         return
       }
 
+      assertNotNullish(isManuallyCreated)
+
       const priorNotificationDetail = await dispatch(
-        priorNotificationApi.endpoints.getPriorNotificationDetail.initiate(reportId)
+        priorNotificationApi.endpoints.getPriorNotificationDetail.initiate({
+          isManuallyCreated,
+          reportId
+        })
       ).unwrap()
       const priorNotificationData = await dispatch(
         priorNotificationApi.endpoints.getPriorNotificationData.initiate(reportId)
@@ -86,7 +96,7 @@ export const openPriorNotificationForm =
         dispatch(
           displayOrLogError(
             err,
-            () => openPriorNotificationForm(reportId, fingerprint),
+            () => openPriorNotificationForm(reportId, fingerprint, isManuallyCreated),
             true,
             DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR
           )

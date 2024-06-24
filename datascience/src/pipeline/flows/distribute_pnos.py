@@ -13,7 +13,7 @@ import weasyprint
 from jinja2 import Environment, FileSystemLoader, Template, select_autoescape
 from prefect import Flow, Parameter, case, flatten, task, unmapped
 from prefect.executors import LocalDaskExecutor
-from sqlalchemy import Executable, text
+from sqlalchemy import Executable, bindparam, text
 
 from config import (
     CNSP_CROSSA_CACEM_LOGOS_PATH,
@@ -769,29 +769,31 @@ def make_update_logbook_reports_statement(
     start_datetime_utc: datetime,
     end_datetime_utc: datetime,
 ) -> Executable:
-    logbook_pno_report_ids = (
+    logbook_pno_report_ids = tuple(
         pno.report_id for pno in pnos_to_update if pno.source == PnoSource.LOGBOOK
     )
 
     statement = text(
         "UPDATE public.logbook_reports "
-        "value = jsonb_set("
-        "jsonb_set("
-        "value, "
-        "{'isBeingSent'}, "
-        "false"
-        "), "
-        "{'isSent'}, "
-        "true"
-        ") "
+        "   SET value = jsonb_set("
+        "       jsonb_set("
+        "           value, "
+        "           '{isBeingSent}', "
+        "           false::text::jsonb"
+        "       ), "
+        "       '{isSent}', "
+        "       true::text::jsonb"
+        "   ) "
         "WHERE "
-        "operation_datetime_utc >= :start_datetime_utc "
-        "AND operation_datetime_utc < :end_datetime_utc "
-        "AND report_id IN :logbook_pno_report_ids"
+        "   operation_datetime_utc >= :start_datetime_utc "
+        "   AND operation_datetime_utc < :end_datetime_utc "
+        "   AND report_id IN :logbook_pno_report_ids"
     ).bindparams(
+        bindparam(
+            "logbook_pno_report_ids", value=logbook_pno_report_ids, expanding=True
+        ),
         start_datetime_utc=start_datetime_utc,
         end_datetime_utc=end_datetime_utc,
-        logbook_pno_report_ids=logbook_pno_report_ids,
     )
 
     return statement

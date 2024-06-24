@@ -1790,8 +1790,30 @@ def test_load_prior_notification_sent_messages(
     pd.testing.assert_frame_equal(final_sent_messages, loaded_sent_messages)
 
 
-# def test_flow(reset_test_data):
-#     flow.schedule = None
-#     state = flow.run()
+@patch("src.pipeline.flows.distribute_pnos.requests")
+def test_flow(mock_requests, monitorenv_control_units_api_response, reset_test_data):
+    # Mock call to Monitorenv API for control units contacts
+    response = Response()
+    response.status_code = 200
+    response._content = json.dumps(monitorenv_control_units_api_response).encode(
+        "utf-8"
+    )
+    response.encoding = "utf-8"
+    mock_requests.get.return_value = response
 
-#     assert state.is_successful()
+    # start_hours_ago to query PNOs to generate since January 1st 2020
+    start_datetime_utc = datetime(2020, 1, 1)
+    now = datetime.utcnow()
+    start_hours_ago = (now - start_datetime_utc).total_seconds() / 3600
+
+    # Run
+    flow.schedule = None
+    state = flow.run(
+        is_integration=True,
+        start_hours_ago=start_hours_ago,
+        end_hours_ago=0,
+    )
+
+    # Assets
+    assert state.is_successful()
+    breakpoint()

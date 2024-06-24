@@ -373,6 +373,7 @@ def add_unknown_vessel(all_vessels: pd.DataFrame) -> pd.DataFrame:
             "ircs": ["UNKNOWN"],
             "external_immatriculation": ["UNKNOWN"],
             "vessel_name": ["UNKNOWN"],
+            "has_esacapt": False,
         }
     )
 

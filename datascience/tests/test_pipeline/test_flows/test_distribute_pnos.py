@@ -11,6 +11,7 @@ import numpy as np
 import pandas as pd
 import pypdf
 import pytest
+import sqlalchemy
 from dateutil.relativedelta import relativedelta
 from jinja2 import Template
 from requests import Response
@@ -42,6 +43,7 @@ from src.pipeline.flows.distribute_pnos import (
     get_sms_template,
     load_pno_pdf_documents,
     load_prior_notification_sent_messages,
+    make_update_logbook_reports_statement,
     pre_render_pno,
     render_pno,
     send_pno_message,
@@ -1134,27 +1136,55 @@ def sms_template() -> dict:
 
 
 @pytest.fixture
-def pno_to_send_by_email() -> PnoToSend:
+def logbook_rendered_pno():
+    return RenderedPno(
+        report_id="Report-1",
+        vessel_id=123,
+        cfr="ABC000000123",
+        vessel_name="Le bateau 123",
+        is_verified=True,
+        is_being_sent=True,
+        trip_segments=["Segment1", "Segment2"],
+        port_locode="FRBOL",
+        source=PnoSource.LOGBOOK,
+        html_for_pdf="<html>Html for PDF</html>",
+        pdf_document=b"PDF document",
+        generation_datetime_utc=datetime(2023, 5, 6, 12, 52, 12),
+        html_email_body="<html>Hello this is a prior notification</html>",
+        sms_content="Hello, PNO",
+        control_unit_ids=[1, 2],
+        emails=["email1@control.unit", "email.in.error@control.unit"],
+        phone_numbers=["00000000000"],
+    )
+
+
+@pytest.fixture
+def manual_rendered_pno():
+    return RenderedPno(
+        report_id="Report-2",
+        vessel_id=321,
+        cfr="ABC000000321",
+        vessel_name="Le bateau 321",
+        is_verified=False,
+        is_being_sent=True,
+        trip_segments=["Segment3"],
+        port_locode="FRBOL",
+        source=PnoSource.MANUAL,
+        html_for_pdf="<html>Html for PDF manual</html>",
+        pdf_document=b"PDF document manual",
+        generation_datetime_utc=datetime(2023, 5, 4, 8, 42, 26),
+        html_email_body="<html>Hello this is a manual prior notification</html>",
+        sms_content="Hello, PNO manual",
+        control_unit_ids=[3],
+        emails=["manual.email1@control.unit", "manual.email.in.error@control.unit"],
+        phone_numbers=["11111111111"],
+    )
+
+
+@pytest.fixture
+def pno_to_send_by_email(logbook_rendered_pno) -> PnoToSend:
     return PnoToSend(
-        pno=RenderedPno(
-            report_id="Report-1",
-            vessel_id=123,
-            cfr="ABC000000123",
-            vessel_name="Le bateau 123",
-            is_verified=True,
-            is_being_sent=True,
-            trip_segments=["Segment1", "Segment2"],
-            port_locode="FRBOL",
-            source=PnoSource.LOGBOOK,
-            html_for_pdf="<html>Html for PDF</html>",
-            pdf_document=b"PDF document",
-            generation_datetime_utc=datetime(2023, 5, 6, 12, 52, 12),
-            html_email_body="<html>Hello this is a prior notification</html>",
-            sms_content="Hello, PNO",
-            control_unit_ids=[1, 2],
-            emails=["email1@control.unit", "email.in.error@control.unit"],
-            phone_numbers=["00000000000"],
-        ),
+        pno=logbook_rendered_pno,
         message=EmailMessage(),
         communication_means=CommunicationMeans.EMAIL,
     )
@@ -1228,6 +1258,11 @@ def loaded_sent_messages() -> pd.DataFrame:
             "error_message": [None, "Error when sending email", None],
         }
     )
+
+
+@pytest.fixture
+def pnos_to_reset() -> List[RenderedPno]:
+    return [RenderedPno()]
 
 
 def test_extract_pnos_to_generate(reset_test_data, extracted_pnos):
@@ -1790,8 +1825,39 @@ def test_load_prior_notification_sent_messages(
     pd.testing.assert_frame_equal(final_sent_messages, loaded_sent_messages)
 
 
+def test_make_update_logbook_reports_statement(
+    logbook_rendered_pno, manual_rendered_pno
+):
+    statement = make_update_logbook_reports_statement.run(
+        pnos_to_update=[logbook_rendered_pno, manual_rendered_pno],
+        start_datetime_utc=datetime(2023, 6, 5, 12, 5, 6),
+        end_datetime_utc=datetime(2023, 7, 5, 15, 2, 38),
+    )
+    assert isinstance(statement, sqlalchemy.TextClause)
+    compiled_statement = str(statement.compile(compile_kwargs={"literal_binds": True}))
+
+    assert compiled_statement == (
+        "UPDATE public.logbook_reports"
+        "    SET value = jsonb_set("
+        "       jsonb_set("
+        "           value,"
+        "            '{isBeingSent}',"
+        "            false::text::jsonb"
+        "       ),"
+        "        '{isSent}',"
+        "        true::text::jsonb"
+        "   ) "
+        "WHERE"
+        "    operation_datetime_utc >= '2023-06-05 12:05:06'"
+        "    AND operation_datetime_utc < '2023-07-05 15:02:38'"
+        "    AND report_id IN ('Report-1')"
+    )
+
+
 @patch("src.pipeline.flows.distribute_pnos.requests")
-def test_flow(mock_requests, monitorenv_control_units_api_response, reset_test_data):
+def test_flow_blablabla(
+    mock_requests, monitorenv_control_units_api_response, reset_test_data
+):
     # Mock call to Monitorenv API for control units contacts
     response = Response()
     response.status_code = 200
@@ -1806,6 +1872,12 @@ def test_flow(mock_requests, monitorenv_control_units_api_response, reset_test_d
     now = datetime.utcnow()
     start_hours_ago = (now - start_datetime_utc).total_seconds() / 3600
 
+    # Initial data status
+    pdf_documents_query = "SELECT * FROM prior_notification_pdf_documents"
+    sent_messages_query = "SELECT * FROM prior_notification_sent_messages"
+
+    initial_pdf_documents = read_query(pdf_documents_query, db="monitorfish_remote")
+    initial_sent_messages = read_query(sent_messages_query, db="monitorfish_remote")
     # Run
     flow.schedule = None
     state = flow.run(
@@ -1814,6 +1886,14 @@ def test_flow(mock_requests, monitorenv_control_units_api_response, reset_test_d
         end_hours_ago=0,
     )
 
-    # Assets
+    # Asserts
     assert state.is_successful()
-    breakpoint()
+
+    final_pdf_documents = read_query(pdf_documents_query, db="monitorfish_remote")
+    final_sent_messages = read_query(sent_messages_query, db="monitorfish_remote")
+
+    assert len(initial_pdf_documents) == 5
+    assert len(initial_sent_messages) == 0
+    assert len(final_pdf_documents) == 9
+    assert len(final_sent_messages) == 7
+    assert final_sent_messages.success.all()

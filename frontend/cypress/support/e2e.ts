@@ -26,6 +26,7 @@ declare global {
       ): void
       getComputedStyle(dataCy: string, backUpToParentNumber?: number): Cypress.Chainable<CSSStyleDeclaration>
       loadPath(path: string): void
+      resetCountRequestsByAlias(alias: string): void
 
       /* eslint-disable typescript-sort-keys/interface */
       toMatchSnapshot(

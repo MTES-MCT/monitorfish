@@ -67,7 +67,7 @@ dependencies {
     api("io.hypersistence:hypersistence-utils-hibernate-63:3.7.5")
     api("org.locationtech.jts:jts-core:1.19.0")
     api("org.hibernate:hibernate-spatial:6.1.7.Final")
-    api("io.sentry:sentry:6.31.0")
+    api("io.sentry:sentry:7.10.0")
     api("io.sentry:sentry-log4j2:7.5.0")
     runtimeOnly("org.postgresql:postgresql:42.7.3")
     testImplementation("io.ktor:ktor-client-mock-jvm:2.3.9")

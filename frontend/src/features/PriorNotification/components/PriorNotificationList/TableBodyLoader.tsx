@@ -3,9 +3,12 @@ import { TableWithSelectableRows } from '@mtes-mct/monitor-ui'
 import { getTableColumns } from './columns'
 import { DEFAULT_PAGE_SIZE } from './constants'
 
-export function TableBodyLoader() {
+type TableBodyLoaderProps = Readonly<{
+  isFromUrl: boolean
+}>
+export function TableBodyLoader({ isFromUrl }: TableBodyLoaderProps) {
   const emptyRows = new Array(DEFAULT_PAGE_SIZE).fill(undefined)
-  const tableColumns = getTableColumns()
+  const tableColumns = getTableColumns(isFromUrl)
 
   return (
     <tbody>

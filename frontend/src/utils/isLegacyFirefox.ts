@@ -1,3 +1,5 @@
+let IS_LEGACY_FIREFOX: boolean | undefined
+
 function getFirefoxVersion(): number | undefined {
   const matches = navigator.userAgent.match(/Firefox\/(\d+)/)
   if (!matches) {
@@ -19,7 +21,13 @@ function getFirefoxVersion(): number | undefined {
  * The side window seems to respect size constraints from version 126 onwards.
  */
 export function isLegacyFirefox(): boolean {
+  if (IS_LEGACY_FIREFOX !== undefined) {
+    return IS_LEGACY_FIREFOX
+  }
+
   const firefoxVersion = getFirefoxVersion()
 
-  return firefoxVersion !== undefined && firefoxVersion < 126
+  IS_LEGACY_FIREFOX = firefoxVersion !== undefined && firefoxVersion < 126
+
+  return IS_LEGACY_FIREFOX
 }

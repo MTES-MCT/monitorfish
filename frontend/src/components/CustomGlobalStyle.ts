@@ -37,6 +37,17 @@ export const CustomGlobalStyle = createGlobalStyle`
   * {
     -webkit-box-sizing: revert;
     box-sizing: revert;
+    scrollbar-width: thin; /* Firefox */
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+    &::-webkit-scrollbar-track {
+      background-color: ${p => p.theme.color.lightGray};
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: ${p => p.theme.color.slateGray};
+    }
   }
 
   *::before,

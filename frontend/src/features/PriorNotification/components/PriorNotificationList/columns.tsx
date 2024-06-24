@@ -13,8 +13,8 @@ import { PriorNotification } from '../../PriorNotification.types'
 
 import type { CellContext, ColumnDef } from '@tanstack/react-table'
 
-export function getTableColumns(): Array<ColumnDef<PriorNotification.PriorNotification, any>> {
-  const legacyFirefoxOffset = isLegacyFirefox() ? -32 : 0
+export function getTableColumns(isFromUrl: boolean): Array<ColumnDef<PriorNotification.PriorNotification, any>> {
+  const legacyFirefoxOffset = !isFromUrl && isLegacyFirefox() ? -32 : 0
 
   return [
     {

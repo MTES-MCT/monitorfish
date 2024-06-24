@@ -225,7 +225,11 @@ class PriorNotificationController(
         @PathParam("Logbook message `reportId`")
         @PathVariable(name = "reportId")
         reportId: String,
+        @Parameter(description = "Is the prior notification manually created?")
+        @RequestParam(name = "isManuallyCreated")
+        isManuallyCreated: Boolean,
     ): PriorNotificationDetailDataOutput {
-        return PriorNotificationDetailDataOutput.fromPriorNotification(verifyAndSendPriorNotification.execute(reportId))
+        return PriorNotificationDetailDataOutput
+            .fromPriorNotification(verifyAndSendPriorNotification.execute(reportId, isManuallyCreated))
     }
 }

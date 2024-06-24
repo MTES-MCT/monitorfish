@@ -38,7 +38,7 @@ class VerifyAndSendPriorNotificationUTests {
             logbookReportRepository,
             manualPriorNotificationRepository,
             getPriorNotification,
-        ).execute(fakePriorNotification.reportId!!)
+        ).execute(fakePriorNotification.reportId!!, false)
 
         // Then
         Assertions.assertThat(result.reportId).isEqualTo(fakePriorNotification.reportId!!)
@@ -61,7 +61,7 @@ class VerifyAndSendPriorNotificationUTests {
             logbookReportRepository,
             manualPriorNotificationRepository,
             getPriorNotification,
-        ).execute(fakePriorNotification.reportId!!)
+        ).execute(fakePriorNotification.reportId!!, true)
 
         // Then
         Assertions.assertThat(result.reportId).isEqualTo(fakePriorNotification.reportId!!)

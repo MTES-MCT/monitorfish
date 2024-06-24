@@ -117,11 +117,17 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(CREATE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
     }),
 
-    verifyAndSendPriorNotification: builder.mutation<PriorNotification.PriorNotificationDetail, string>({
+    verifyAndSendPriorNotification: builder.mutation<
+      PriorNotification.PriorNotificationDetail,
+      {
+        isManuallyCreated: boolean
+        reportId: string
+      }
+    >({
       invalidatesTags: [{ type: RtkCacheTagType.PriorNotifications }],
-      query: reportId => ({
+      query: ({ isManuallyCreated, reportId }) => ({
         method: 'POST',
-        url: `/prior_notifications/${reportId}/verify_and_send`
+        url: getUrlOrPathWithQueryParams(`/prior_notifications/${reportId}/verify_and_send`, { isManuallyCreated })
       }),
       transformErrorResponse: response =>
         new FrontendApiError(VERIFY_AND_SEND_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)

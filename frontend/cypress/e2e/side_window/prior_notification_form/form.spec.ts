@@ -338,6 +338,7 @@ context('Side Window > Prior Notification Form > Form', () => {
 
   it('Should only recalculate fleet segments, risk factor & types when necessary (creation)', () => {
     cy.intercept('POST', '/bff/v1/prior_notifications/manual/compute').as('computePriorNotification')
+    cy.resetCountRequestsByAlias('@computePriorNotification')
 
     addSideWindowPriorNotification()
 
@@ -381,6 +382,7 @@ context('Side Window > Prior Notification Form > Form', () => {
 
   it('Should only recalculate fleet segments, risk factor & types when necessary (edition)', () => {
     cy.intercept('POST', '/bff/v1/prior_notifications/manual/compute').as('computePriorNotification')
+    cy.resetCountRequestsByAlias('@computePriorNotification')
 
     editSideWindowPriorNotification('POISSON PAS NET', '00000000-0000-4000-0000-000000000001')
 
@@ -391,27 +393,27 @@ context('Side Window > Prior Notification Form > Form', () => {
     cy.getDataCy('vessel-search-item').first().click()
 
     cy.wait('@computePriorNotification')
-    // cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 1)
+    cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 1)
 
     cy.fill("Port d'arrivée", 'Marseille')
 
     cy.wait('@computePriorNotification')
-    // cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 2)
+    cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 2)
 
     cy.fill('Poids (SOS)', 50)
 
     cy.wait('@computePriorNotification')
-    // cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 3)
+    cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 3)
 
     cy.fill('Espèces à bord et à débarquer', 'AAX')
 
     cy.wait('@computePriorNotification')
-    // cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 4)
+    cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 4)
 
     cy.fill('Engins utilisés', ['OTB'], { index: 1 })
 
     cy.wait('@computePriorNotification')
-    // cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 5)
+    cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 5)
 
     cy.fill('Zone de pêche', '27.7.d')
 
@@ -438,7 +440,7 @@ context('Side Window > Prior Notification Form > Form', () => {
     cy.intercept('POST', '/bff/v1/prior_notifications/manual').as('createPriorNotification')
     cy.intercept(
       'GET',
-      /\/bff\/v1\/prior_notifications\/[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
+      /\/bff\/v1\/prior_notifications\/[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\?isManuallyCreated=true$/i
     ).as('getPriorNotification')
 
     addSideWindowPriorNotification()

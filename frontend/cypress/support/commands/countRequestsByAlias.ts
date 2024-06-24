@@ -7,6 +7,9 @@ const STORE: Record<string, string[]> = {}
  *
  * @example
  * ```ts
+ * // Reset the count of requests made with the alias '@myRequest'
+ * cy.resetCountRequestsByAlias('@myRequest')
+ *
  * // Check that no request has been made with the alias '@myRequest'
  * cy.countRequestByAlias('@myRequest', 1500).should('eq', 0)
  *
@@ -33,4 +36,11 @@ export function countRequestsByAlias(alias: string, waitForInMs: number = 0): Cy
 
     return storedInterceptionIds.length
   })
+}
+
+/**
+ * Reset the count of requests made by Cypress with the given alias.
+ */
+export function resetCountRequestsByAlias(alias: string): void {
+  STORE[alias] = []
 }

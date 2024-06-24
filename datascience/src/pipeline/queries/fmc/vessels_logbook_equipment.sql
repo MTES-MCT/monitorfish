@@ -1,5 +1,5 @@
 SELECT
-    n.id_fmc_navire AS id,
+    n.id_nav_flotteur AS id,
     ceq.libelle AS logbook_equipment_status,
     eq.equipe_esacapt AS has_esacapt
 FROM fmc2.fmc_navire n

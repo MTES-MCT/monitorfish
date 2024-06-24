@@ -800,7 +800,7 @@ def make_update_logbook_reports_statement(
 with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
-        test_mode = Parameter("test_mode")
+        # test_mode = Parameter("test_mode")
         is_integration = Parameter("is_integration")
         start_hours_ago = Parameter("start_hours_ago")
         end_hours_ago = Parameter("end_hours_ago")

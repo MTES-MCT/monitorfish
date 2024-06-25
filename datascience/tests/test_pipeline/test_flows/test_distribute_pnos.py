@@ -1349,7 +1349,8 @@ def test_pre_render_pno_2(
 @patch("src.pipeline.flows.distribute_pnos.CNSP_LOGO_PATH", Path("/cnsp/logo/path"))
 @patch("src.pipeline.flows.distribute_pnos.SE_MER_LOGO_PATH", Path("/se_mer/logo/path"))
 @patch(
-    "src.pipeline.flows.distribute_pnos.EMAIL_FONTS_LOCATION", Path("/se_mer/logo/path")
+    "src.pipeline.flows.distribute_pnos.STATE_FLAGS_ICONS_LOCATION",
+    Path("/state/flags/icons/location"),
 )
 def test_render_pno_1(
     html_for_pdf_template, pre_rendered_pno_1, email_body_template, sms_template
@@ -1406,7 +1407,8 @@ def test_render_pno_1(
 @patch("src.pipeline.flows.distribute_pnos.CNSP_LOGO_PATH", Path("/cnsp/logo/path"))
 @patch("src.pipeline.flows.distribute_pnos.SE_MER_LOGO_PATH", Path("/se_mer/logo/path"))
 @patch(
-    "src.pipeline.flows.distribute_pnos.EMAIL_FONTS_LOCATION", Path("/se_mer/logo/path")
+    "src.pipeline.flows.distribute_pnos.STATE_FLAGS_ICONS_LOCATION",
+    Path("/state/flags/icons/location"),
 )
 def test_render_pno_2(
     html_for_pdf_template, pre_rendered_pno_2, email_body_template, sms_template
@@ -1876,7 +1878,7 @@ def test_make_update_logbook_reports_statement(
 @patch("src.pipeline.helpers.emails.send_sms")
 @patch("src.pipeline.helpers.emails.send_fax")
 @patch("src.pipeline.flows.distribute_pnos.requests")
-def test_flow_abracadabra(
+def test_flow(
     mock_requests,
     mock_send_fax,
     mock_send_sms,

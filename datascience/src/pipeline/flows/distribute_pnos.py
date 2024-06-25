@@ -1,5 +1,4 @@
 import dataclasses
-import os
 from datetime import datetime
 from email.policy import EmailPolicy
 from itertools import chain
@@ -385,13 +384,9 @@ def render_pno(
 ) -> RenderedPno:
     fonts_directory = EMAIL_FONTS_LOCATION.as_uri()
 
-    state_flags_icons = os.listdir(STATE_FLAGS_ICONS_LOCATION)
-    if f"{pno.flag_state}.png" in state_flags_icons:
-        state_flag_icon_src = (
-            STATE_FLAGS_ICONS_LOCATION / Path(f"{pno.flag_state}.png")
-        ).as_uri()
-    else:
-        state_flag_icon_src = None
+    state_flag_icon_src = (
+        STATE_FLAGS_ICONS_LOCATION / Path(f"{pno.flag_state}.png")
+    ).as_uri()
 
     risk_factor_thresholds = np.array([1.75, 2.5, 3.25])
     thresholds_exceeded = (pno.risk_factor >= risk_factor_thresholds).sum()

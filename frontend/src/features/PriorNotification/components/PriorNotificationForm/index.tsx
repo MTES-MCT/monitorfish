@@ -1,23 +1,21 @@
-import { priorNotificationActions } from '@features/PriorNotification/slice'
-import { createOrUpdatePriorNotification } from '@features/PriorNotification/useCases/createOrUpdatePriorNotification'
 import { verifyAndSendPriorNotification } from '@features/PriorNotification/useCases/verifyAndSendPriorNotification'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { Formik } from 'formik'
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
 import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
 
 import { Card } from './Card'
 import { FORM_VALIDATION_SCHEMA } from './constants'
+import { priorNotificationActions } from '../../slice'
+import { createOrUpdatePriorNotification } from '../../useCases/createOrUpdatePriorNotification'
 
 import type { FormValues } from './types'
-import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
+import type { PriorNotification } from '../../PriorNotification.types'
 
 export function PriorNotificationForm() {
-  const initialFormValuesRef = useRef<FormValues | undefined>()
-
   const dispatch = useMainAppDispatch()
   const editedPriorNotificationInitialFormValues = useMainAppSelector(
     state => state.priorNotification.editedPriorNotificationInitialFormValues
@@ -27,15 +25,14 @@ export function PriorNotificationForm() {
   )
 
   const [shouldValidateOnChange, setShouldValidateOnChange] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
   const close = () => {
     dispatch(priorNotificationActions.closePriorNotificationForm())
   }
 
+  // TODO Replace that with a use case dispatcher.
   const submit = async (nextFormValues: FormValues) => {
-    // We don't want to lose the initial values if there is an error.
-    initialFormValuesRef.current = nextFormValues
     setIsLoading(true)
 
     const { isExpectedLandingDateSameAsExpectedArrivalDate, ...priorNotificationData } = nextFormValues
@@ -61,17 +58,7 @@ export function PriorNotificationForm() {
     setIsLoading(false)
   }
 
-  useEffect(() => {
-    if (!editedPriorNotificationInitialFormValues) {
-      return
-    }
-
-    initialFormValuesRef.current = editedPriorNotificationInitialFormValues
-
-    setIsLoading(false)
-  }, [editedPriorNotificationInitialFormValues])
-
-  if (!initialFormValuesRef.current || isLoading) {
+  if (!editedPriorNotificationInitialFormValues || isLoading) {
     return (
       <Wrapper className="Form">
         <Background onClick={close} />
@@ -88,7 +75,7 @@ export function PriorNotificationForm() {
       <Background onClick={close} />
 
       <Formik
-        initialValues={initialFormValuesRef.current}
+        initialValues={editedPriorNotificationInitialFormValues}
         onSubmit={submit}
         validateOnChange={shouldValidateOnChange}
         validationSchema={FORM_VALIDATION_SCHEMA}
@@ -109,7 +96,7 @@ const Wrapper = styled.div`
   bottom: 0;
   display: flex;
   justify-content: flex-end;
-  left: 0;
+  left: 70px;
   position: fixed;
   right: 0;
   top: 0;

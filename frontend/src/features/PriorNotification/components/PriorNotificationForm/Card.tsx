@@ -1,5 +1,4 @@
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
-import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { updateEditedPriorNotificationComputedValues } from '@features/PriorNotification/useCases/updateEditedPriorNotificationComputedValues'
 import { isZeroNotice } from '@features/PriorNotification/utils'
@@ -9,12 +8,14 @@ import { Accent, Banner, Button, FormikEffect, Icon, Level, Size, usePrevious } 
 import { getDefinedObject } from '@utils/getDefinedObject'
 import { useFormikContext } from 'formik'
 import { isEqual } from 'lodash'
+import { useEffect } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { Form } from './Form'
 import { Header } from './Header'
 import { getApplicableState, getPartialComputationRequestData } from './utils'
+import { PriorNotification } from '../../PriorNotification.types'
 import { DownloadButton } from '../shared/DownloadButton'
 import { TagBar } from '../shared/TagBar'
 
@@ -89,6 +90,13 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
 
     updateComputedValues(nextComputationRequestData)
   }
+
+  useEffect(
+    () => () => {
+      dispatch(priorNotificationActions.setEditedPriorNotificationInitialFormValues(values))
+    },
+    [dispatch, values]
+  )
 
   return (
     <Wrapper>

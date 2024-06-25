@@ -2,7 +2,7 @@ from dataclasses import InitVar, dataclass, field
 from datetime import datetime
 from email.message import EmailMessage
 from enum import Enum
-from typing import List
+from typing import List, Optional
 
 import pandas as pd
 
@@ -207,14 +207,14 @@ class RenderedPno:
     trip_segments: list
     port_locode: str
     source: PnoSource
-    html_for_pdf: str = None
-    pdf_document: bytes = None
-    generation_datetime_utc: datetime = None
-    html_email_body: str = None
-    sms_content: str = None
-    control_unit_ids: list = None
-    emails: list = None
-    phone_numbers: list = None
+    html_for_pdf: Optional[str] = None
+    pdf_document: Optional[bytes] = None
+    generation_datetime_utc: Optional[datetime] = None
+    html_email_body: Optional[str] = None
+    sms_content: Optional[str] = None
+    control_unit_ids: Optional[list] = None
+    emails: Optional[list] = None
+    phone_numbers: Optional[list] = None
 
 
 @dataclass
@@ -242,4 +242,4 @@ class PriorNotificationSentMessage:
     communication_means: CommunicationMeans
     recipient_address_or_number: str
     success: bool
-    error_message: str = None
+    error_message: Optional[str] = None

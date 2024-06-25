@@ -1328,7 +1328,7 @@ def test_pre_render_pno_1(
         species_names=species_names,
         fishing_gear_names=fishing_gear_names,
     )
-    PreRenderedPno.assertEqual(res, pre_rendered_pno_1)
+    PreRenderedPno.assert_equal(res, pre_rendered_pno_1)
 
 
 def test_pre_render_pno_2(
@@ -1339,7 +1339,7 @@ def test_pre_render_pno_2(
         species_names=species_names,
         fishing_gear_names=fishing_gear_names,
     )
-    PreRenderedPno.assertEqual(res, pre_rendered_pno_2)
+    PreRenderedPno.assert_equal(res, pre_rendered_pno_2)
 
 
 @patch(

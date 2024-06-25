@@ -24,5 +24,9 @@ export function getPriorNotificationFishingCatchesFromLogbookMessageFishingCatch
 export function isZeroNotice(
   fishingCatches: PriorNotification.PriorNotificationDataFishingCatch[] | undefined
 ): boolean | undefined {
-  return fishingCatches?.every(fishingCatch => fishingCatch.weight === 0)
+  if (fishingCatches === undefined || fishingCatches.length === 0) {
+    return undefined
+  }
+
+  return fishingCatches.every(fishingCatch => fishingCatch.weight === 0)
 }

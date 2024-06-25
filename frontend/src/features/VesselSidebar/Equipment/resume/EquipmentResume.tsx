@@ -52,6 +52,14 @@ export function EquipmentResume({ setIsCurrentBeaconMalfunctionDetails }: Beacon
     dispatch(setVesselBeaconMalfunctionsFromDate(nextDate))
   }
 
+  const beaconType = useMemo(() => {
+    if (selectedVessel?.beacon?.isCoastal === undefined) {
+      return undefined
+    }
+
+    return selectedVessel.beacon.isCoastal ? 'Côtier' : 'Satellitaire'
+  }, [selectedVessel?.beacon?.isCoastal])
+
   return (
     <>
       {!loadingVesselBeaconMalfunctions ? (
@@ -61,16 +69,17 @@ export function EquipmentResume({ setIsCurrentBeaconMalfunctionDetails }: Beacon
               column={[
                 {
                   key: 'N° balise VMS',
-                  value: selectedVessel?.beacon.beaconNumber
+                  value: selectedVessel?.beacon?.beaconNumber
                 },
                 {
                   key: 'Type de balise',
-                  value: selectedVessel?.beacon.isCoastal ? 'Côtier' : 'Satellitaire'
+                  value: beaconType
                 },
                 {
                   key: 'Date de loggage',
                   value:
-                    !!selectedVessel?.beacon.loggingDatetimeUtc && getDateTime(selectedVessel.beacon.loggingDatetimeUtc)
+                    !!selectedVessel?.beacon?.loggingDatetimeUtc &&
+                    getDateTime(selectedVessel.beacon.loggingDatetimeUtc)
                 }
               ]}
               valueEllipsisedForWidth={100}

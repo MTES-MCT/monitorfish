@@ -156,9 +156,7 @@ class PreRenderedPno:
 
         for attr in attributes_to_check:
             if getattr(left, attr) != getattr(right, attr):
-                if pd.isna(getattr(left, attr)) and pd.isna(getattr(right, attr)):
-                    pass
-                else:
+                if not (pd.isna(getattr(left, attr)) and pd.isna(getattr(right, attr))):
                     raise AssertionError(
                         (
                             f"`self` and `other` are not equal. Their `{attr}` "

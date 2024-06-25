@@ -1,21 +1,27 @@
+import { BOOLEAN_AS_OPTIONS } from '@constants/index'
+import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { useGetFaoAreasAsOptions } from '@hooks/useGetFaoAreasAsOptions'
 import { useGetGearsAsOptions } from '@hooks/useGetGearsAsOptions'
 import { useGetPortsAsOptions } from '@hooks/useGetPortsAsOptions'
 import {
   FormikCheckbox,
   FormikDatePicker,
+  FormikMultiRadio,
   FormikMultiSelect,
   FormikSelect,
+  FormikTextarea,
   FormikTextInput,
-  FormikTextarea
+  getOptionsFromLabelledEnum
 } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
+import { useRef } from 'react'
 import styled from 'styled-components'
 
 import { FormikFishingCatchesMultiSelect } from './fields/FormikFishingCatchesMultiSelect'
 import { FormikVesselSelect } from './fields/FormikVesselSelect'
 
 import type { FormValues } from './types'
+import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
 
 export function Form() {
   const { values } = useFormikContext<FormValues>()
@@ -24,9 +30,28 @@ export function Form() {
   const { gearsAsOptions } = useGetGearsAsOptions()
   const { portsAsOptions } = useGetPortsAsOptions()
 
+  const isThirdPartyVessel = useRef<boolean>(false)
+
+  const onChange = (nextVessel: VesselIdentity | undefined) => {
+    if (nextVessel.flagState !== 'FR') {
+      isThirdPartyVessel.current = true
+
+      return
+    }
+
+    isThirdPartyVessel.current = false
+  }
+
   return (
     <>
-      <FormikVesselSelect />
+      <FormikVesselSelect onChange={onChange} />
+
+      <FormikSelect
+        isCleanable={false}
+        label="Raison du préavis"
+        name="purpose"
+        options={getOptionsFromLabelledEnum(PriorNotification.PURPOSE_LABEL)}
+      />
 
       <FormikDatePicker isStringDate label="Date et heure de réception du préavis" name="sentAt" withTime />
 
@@ -81,6 +106,23 @@ export function Form() {
       />
 
       <hr />
+
+      {isThirdPartyVessel.current && (
+        <>
+          <FormikMultiRadio
+            isInline
+            label="Autorisation d'entrée au port"
+            name="authorizedPortEntrance"
+            options={BOOLEAN_AS_OPTIONS}
+          />
+          <FormikMultiRadio
+            isInline
+            label="Autorisation de débarquement"
+            name="authorizedLanding"
+            options={BOOLEAN_AS_OPTIONS}
+          />
+        </>
+      )}
 
       <FieldGroup>
         <FormikTextarea label="Points d'attention identifiés par le CNSP" name="note" />

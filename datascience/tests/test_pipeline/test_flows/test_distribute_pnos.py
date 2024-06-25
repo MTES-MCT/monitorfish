@@ -54,6 +54,7 @@ from src.read_query import read_query
 from tests.mocks import mock_check_flow_not_running, mock_datetime_utcnow
 
 flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
+flow.executor = None
 
 
 @pytest.fixture
@@ -1854,9 +1855,19 @@ def test_make_update_logbook_reports_statement(
     )
 
 
+@pytest.mark.parametrize("is_integration", [True, False])
+@patch("src.pipeline.helpers.emails.send_email")
+@patch("src.pipeline.helpers.emails.send_sms")
+@patch("src.pipeline.helpers.emails.send_fax")
 @patch("src.pipeline.flows.distribute_pnos.requests")
-def test_flow_blablabla(
-    mock_requests, monitorenv_control_units_api_response, reset_test_data
+def test_flow_abracadabra(
+    mock_requests,
+    mock_send_fax,
+    mock_send_sms,
+    mock_send_email,
+    monitorenv_control_units_api_response,
+    reset_test_data,
+    is_integration,
 ):
     # Mock call to Monitorenv API for control units contacts
     response = Response()
@@ -1866,6 +1877,16 @@ def test_flow_blablabla(
     )
     response.encoding = "utf-8"
     mock_requests.get.return_value = response
+
+    # Mock send_email and send_sms calls
+    mock_send_email.return_value = {
+        "some.email@control.unit.4": ("Errorrr", "Didn't work")
+    }
+
+    class UnexpectedFailureOfDeath(Exception):
+        pass
+
+    mock_send_sms.side_effect = UnexpectedFailureOfDeath("Pouet pouet")
 
     # start_hours_ago to query PNOs to generate since January 1st 2020
     start_datetime_utc = datetime(2020, 1, 1)
@@ -1878,16 +1899,30 @@ def test_flow_blablabla(
 
     initial_pdf_documents = read_query(pdf_documents_query, db="monitorfish_remote")
     initial_sent_messages = read_query(sent_messages_query, db="monitorfish_remote")
+
     # Run
     flow.schedule = None
     state = flow.run(
-        is_integration=True,
+        is_integration=is_integration,
         start_hours_ago=start_hours_ago,
         end_hours_ago=0,
     )
 
     # Asserts
     assert state.is_successful()
+
+    mock_requests.get.assert_called_once_with(
+        "https://monitor.env/api/v2/control_units"
+    )
+
+    mock_send_fax.assert_not_called()
+
+    if is_integration:
+        mock_send_sms.assert_not_called()
+        mock_send_email.assert_not_called()
+    else:
+        assert mock_send_sms.call_count == 2
+        assert mock_send_email.call_count == 3
 
     final_pdf_documents = read_query(pdf_documents_query, db="monitorfish_remote")
     final_sent_messages = read_query(sent_messages_query, db="monitorfish_remote")
@@ -1896,4 +1931,53 @@ def test_flow_blablabla(
     assert len(initial_sent_messages) == 0
     assert len(final_pdf_documents) == 9
     assert len(final_sent_messages) == 7
-    assert final_sent_messages.success.all()
+
+    if is_integration:
+        assert final_sent_messages.success.all()
+    else:
+        assert (
+            final_sent_messages.loc[
+                (
+                    final_sent_messages.communication_means
+                    == CommunicationMeans.SMS.value
+                ),
+                ["success", "error_message"],
+            ].values.tolist()
+            == [[False, "Other error: Pouet pouet"]] * 3
+        )
+
+        assert (
+            len(
+                final_sent_messages.loc[
+                    final_sent_messages.communication_means
+                    == CommunicationMeans.EMAIL.value
+                ]
+            )
+            == 4
+        )
+        assert final_sent_messages.loc[
+            (
+                (
+                    final_sent_messages.communication_means
+                    == CommunicationMeans.EMAIL.value
+                )
+                & (
+                    final_sent_messages.recipient_address_or_number
+                    == "some.email@control.unit.4"
+                )
+            ),
+            ["success", "error_message"],
+        ].values.tolist() == [[False, "Didn't work"]]
+        assert final_sent_messages.loc[
+            (
+                (
+                    final_sent_messages.communication_means
+                    == CommunicationMeans.EMAIL.value
+                )
+                & (
+                    final_sent_messages.recipient_address_or_number
+                    != "some.email@control.unit.4"
+                )
+            ),
+            "success",
+        ].all()

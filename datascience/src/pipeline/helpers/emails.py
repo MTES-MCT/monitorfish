@@ -377,6 +377,16 @@ def send_email_or_sms_or_fax_message(
         send_errors = {addr: (None, f"Other error: {e}") for addr in addressees}
         logger.error(str(send_errors))
 
+    match communication_means:
+        case CommunicationMeans.SMS:
+            suffix = f"@{MONITORFISH_SMS_DOMAIN}"
+        case CommunicationMeans.FAX:
+            suffix = f"@{MONITORFISH_FAX_DOMAIN}"
+        case CommunicationMeans.EMAIL:
+            suffix = ""
+
+    send_errors = {k.removesuffix(suffix): v for k, v in send_errors.items()}
+
     return send_errors
 
 

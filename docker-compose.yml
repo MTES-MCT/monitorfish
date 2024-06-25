@@ -1,4 +1,3 @@
-version: "3"
 services:
   db:
     image: ghcr.io/mtes-mct/monitorfish/monitorfish-database:pg16-ts2.14.2-postgis3.4.2

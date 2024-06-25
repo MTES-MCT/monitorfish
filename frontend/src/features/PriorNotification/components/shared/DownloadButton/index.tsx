@@ -10,9 +10,10 @@ import { useIsSuperUser } from '../../../../../auth/hooks/useIsSuperUser'
 import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 
 type DownloadButtonProps = Readonly<{
+  isDisabled?: boolean
   pnoLogbookMessage: LogbookMessage.PnoLogbookMessage
 }>
-export function DownloadButton({ pnoLogbookMessage }: DownloadButtonProps) {
+export function DownloadButton({ isDisabled = false, pnoLogbookMessage }: DownloadButtonProps) {
   const isSuperUser = useIsSuperUser()
   const getGearsApiQuery = useGetGearsQuery()
 
@@ -40,8 +41,12 @@ export function DownloadButton({ pnoLogbookMessage }: DownloadButtonProps) {
   return (
     <Dropdown accent={Accent.PRIMARY} Icon={Icon.Download} placement="topEnd" title="Télécharger les documents">
       <>
+        {/** If the form is dirty (has been modified), the export will be outdated. */}
+        {/** The user MUST first save the new version */}
         {isSuperUser && pnoLogbookMessage.flagState !== 'FR' && (
-          <Dropdown.Item onClick={downloadPDF}>Autorisation d&apos;entrée au port et de débarquement</Dropdown.Item>
+          <Dropdown.Item disabled={isDisabled} onClick={downloadPDF}>
+            Autorisation d&apos;entrée au port et de débarquement {isDisabled && '(Veuillez enregistrer le préavis)'}
+          </Dropdown.Item>
         )}
       </>
     </Dropdown>

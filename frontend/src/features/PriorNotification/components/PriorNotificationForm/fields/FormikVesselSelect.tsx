@@ -55,7 +55,7 @@ export function FormikVesselSelect({ onChange }: FormikVesselSelectProps) {
 
       const vessel = await dispatch(vesselApi.endpoints.getVessel.initiate(vesselId)).unwrap()
 
-      defaultValueRef.current = {
+      const nextVessel = {
         externalReferenceNumber: vessel.externalReferenceNumber ?? null,
         flagState: vessel.flagState ?? null,
         internalReferenceNumber: null,
@@ -63,10 +63,12 @@ export function FormikVesselSelect({ onChange }: FormikVesselSelectProps) {
         vesselId: vessel.vesselId ?? null,
         vesselName: vessel.vesselName ?? null
       }
+      defaultValueRef.current = nextVessel
+      onChange(nextVessel)
 
       setIsLoading(false)
     },
-    [dispatch]
+    [dispatch, onChange]
   )
 
   useEffect(
@@ -78,7 +80,6 @@ export function FormikVesselSelect({ onChange }: FormikVesselSelectProps) {
       }
 
       setDefaultValue(input.value)
-      onChange(input.value)
     },
 
     // Ignore `input.value` change since it should only be called on mount.

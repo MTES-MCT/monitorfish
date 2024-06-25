@@ -60,6 +60,8 @@ export namespace PriorNotification {
 
   export type ManualPriorNotificationData = {
     authorTrigram: string
+    authorizedLanding: boolean
+    authorizedPortEntrance: boolean
     didNotFishAfterZeroNotice: boolean
     expectedArrivalDate: string
     expectedLandingDate: string
@@ -67,6 +69,7 @@ export namespace PriorNotification {
     fishingCatches: PriorNotificationDataFishingCatch[]
     note: string | undefined
     portLocode: string
+    purpose: PurposeCode
     reportId: string
     sentAt: string
     tripGearCodes: string[]

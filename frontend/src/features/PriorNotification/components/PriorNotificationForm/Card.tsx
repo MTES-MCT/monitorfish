@@ -5,7 +5,7 @@ import { updateEditedPriorNotificationComputedValues } from '@features/PriorNoti
 import { isZeroNotice } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Banner, Button, FormikEffect, Icon, Level, usePrevious } from '@mtes-mct/monitor-ui'
+import { Accent, Banner, Button, FormikEffect, Icon, Level, Size, usePrevious } from '@mtes-mct/monitor-ui'
 import { getDefinedObject } from '@utils/getDefinedObject'
 import { useFormikContext } from 'formik'
 import { isEqual } from 'lodash'
@@ -133,7 +133,7 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
         </Body>
 
         <Footer>
-          <Button accent={Accent.TERTIARY} onClick={onClose}>
+          <Button accent={Accent.TERTIARY} onClick={onClose} size={Size.SMALL}>
             Fermer
           </Button>
 
@@ -223,8 +223,13 @@ const Footer = styled.div`
   display: flex;
   justify-content: flex-end;
   padding: 16px 32px;
+  min-height: 30px;
 
   > .Element-Button:not(:first-child) {
-    margin-left: 16px;
+    margin-left: 8px;
+  }
+
+  > div {
+    margin-left: 8px;
   }
 `

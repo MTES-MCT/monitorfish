@@ -78,6 +78,8 @@ export namespace LogbookMessage {
 
   interface MessageBase {}
   export interface PnoMessage extends MessageBase {
+    authorizedLanding: boolean | undefined
+    authorizedPortEntrance: boolean | undefined
     catchOnboard: Catch[] | undefined
     catchToLand: Catch[] | undefined
     economicZone: string | undefined

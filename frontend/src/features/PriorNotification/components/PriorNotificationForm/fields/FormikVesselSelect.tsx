@@ -8,7 +8,10 @@ import styled from 'styled-components'
 
 import type { VesselIdentity } from 'domain/entities/vessel/types'
 
-export function FormikVesselSelect() {
+type FormikVesselSelectProps = {
+  onChange: (nextVessel: VesselIdentity | undefined) => void
+}
+export function FormikVesselSelect({ onChange }: FormikVesselSelectProps) {
   const defaultValueRef = useRef<VesselIdentity | undefined>(undefined)
 
   const dispatch = useMainAppDispatch()
@@ -24,6 +27,7 @@ export function FormikVesselSelect() {
       defaultValueRef.current = undefined
 
       helper.setValue(undefined)
+      onChange(undefined)
 
       return
     }
@@ -42,6 +46,7 @@ export function FormikVesselSelect() {
     await setDefaultValue(nextVessel.vesselId)
 
     helper.setValue(nextVessel.vesselId)
+    onChange(nextVessel)
   }
 
   const setDefaultValue = useCallback(
@@ -73,6 +78,7 @@ export function FormikVesselSelect() {
       }
 
       setDefaultValue(input.value)
+      onChange(input.value)
     },
 
     // Ignore `input.value` change since it should only be called on mount.

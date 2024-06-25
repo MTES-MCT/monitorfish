@@ -1,6 +1,7 @@
 import dataclasses
 import os
 from datetime import datetime
+from email.policy import EmailPolicy
 from itertools import chain
 from pathlib import Path
 from typing import List
@@ -722,10 +723,14 @@ def send_pno_message(
 
     prior_notification_sent_messages = []
 
+    policy = EmailPolicy()
+
     for addressee in pno_to_send.get_addressees():
-        if addressee in send_errors:
+        formatted_addressee = policy.header_factory("To", addressee)
+
+        if formatted_addressee in send_errors:
             success = False
-            error_message = send_errors[addressee][1]
+            error_message = send_errors[formatted_addressee][1]
         else:
             success = True
             error_message = None

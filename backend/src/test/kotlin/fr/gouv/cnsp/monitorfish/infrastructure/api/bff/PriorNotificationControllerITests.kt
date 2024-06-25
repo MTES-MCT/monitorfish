@@ -2,7 +2,9 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.anyOrNull
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagePurpose
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.ManualPriorNotificationComputedValues
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationStats
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.*
@@ -11,7 +13,6 @@ import fr.gouv.cnsp.monitorfish.fakers.PriorNotificationFaker
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationComputeDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationDataInput
 import org.hamcrest.Matchers.equalTo
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
 import org.springframework.beans.factory.annotation.Autowired
@@ -139,25 +140,27 @@ class PriorNotificationControllerITests {
     }
 
     @Test
-    @Disabled("TODO Investigate why `createOrUpdateManualPriorNotification.execute()` returns `null`.")
     fun `updateManual Should create a manual prior notification`() {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
 
         // Given
         given(
             createOrUpdateManualPriorNotification.execute(
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
             ),
         )
             .willReturn(fakePriorNotification)
@@ -165,6 +168,8 @@ class PriorNotificationControllerITests {
         // When
         val requestBody = objectMapper.writeValueAsString(
             ManualPriorNotificationDataInput(
+                authorizedPortEntrance = true,
+                authorizedLanding = true,
                 authorTrigram = "ABC",
                 didNotFishAfterZeroNotice = false,
                 expectedArrivalDate = ZonedDateTime.now().toString(),
@@ -174,6 +179,7 @@ class PriorNotificationControllerITests {
                 note = null,
                 portLocode = "FRABVC",
                 sentAt = ZonedDateTime.now().toString(),
+                purpose = LogbookMessagePurpose.LAN,
                 tripGearCodes = emptyList(),
                 vesselId = 42,
             ),
@@ -189,25 +195,27 @@ class PriorNotificationControllerITests {
     }
 
     @Test
-    @Disabled("TODO Investigate why `createOrUpdateManualPriorNotification.execute()` returns `null`.")
     fun `updateManual Should update a manual prior notification by its reportId`() {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
 
         // Given
         given(
             createOrUpdateManualPriorNotification.execute(
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
+                authorizedPortEntrance = anyOrNull(),
+                authorizedLanding = anyOrNull(),
+                authorTrigram = anyOrNull(),
+                didNotFishAfterZeroNotice = anyOrNull(),
+                expectedArrivalDate = anyOrNull(),
+                expectedLandingDate = anyOrNull(),
+                faoArea = anyOrNull(),
+                fishingCatches = anyOrNull(),
+                note = anyOrNull(),
+                portLocode = anyOrNull(),
+                reportId = anyOrNull(),
+                sentAt = anyOrNull(),
+                purpose = anyOrNull(),
+                tripGearCodes = anyOrNull(),
+                vesselId = anyOrNull(),
             ),
         )
             .willReturn(fakePriorNotification)
@@ -215,6 +223,8 @@ class PriorNotificationControllerITests {
         // When
         val requestBody = objectMapper.writeValueAsString(
             ManualPriorNotificationDataInput(
+                authorizedPortEntrance = true,
+                authorizedLanding = true,
                 authorTrigram = "ABC",
                 didNotFishAfterZeroNotice = false,
                 expectedArrivalDate = ZonedDateTime.now().toString(),
@@ -224,6 +234,7 @@ class PriorNotificationControllerITests {
                 note = null,
                 portLocode = "FRABVC",
                 sentAt = ZonedDateTime.now().toString(),
+                purpose = LogbookMessagePurpose.LAN,
                 tripGearCodes = emptyList(),
                 vesselId = 42,
             ),

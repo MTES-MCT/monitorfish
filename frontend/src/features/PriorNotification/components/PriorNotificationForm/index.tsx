@@ -71,24 +71,20 @@ export function PriorNotificationForm() {
   }
 
   return (
-    <Wrapper>
-      <Background onClick={close} />
-
-      <Formik
-        initialValues={editedPriorNotificationInitialFormValues}
-        onSubmit={submit}
-        validateOnChange={shouldValidateOnChange}
-        validationSchema={FORM_VALIDATION_SCHEMA}
-      >
-        <Card
-          isValidatingOnChange={shouldValidateOnChange}
-          onClose={close}
-          onSubmit={() => setShouldValidateOnChange(true)}
-          onVerifyAndSend={verifyAndSend}
-          reportId={editedPriorNotificationReportId}
-        />
-      </Formik>
-    </Wrapper>
+    <Formik
+      initialValues={editedPriorNotificationInitialFormValues}
+      onSubmit={submit}
+      validateOnChange={shouldValidateOnChange}
+      validationSchema={FORM_VALIDATION_SCHEMA}
+    >
+      <Card
+        isValidatingOnChange={shouldValidateOnChange}
+        onClose={close}
+        onSubmit={() => setShouldValidateOnChange(true)}
+        onVerifyAndSend={verifyAndSend}
+        reportId={editedPriorNotificationReportId}
+      />
+    </Formik>
   )
 }
 

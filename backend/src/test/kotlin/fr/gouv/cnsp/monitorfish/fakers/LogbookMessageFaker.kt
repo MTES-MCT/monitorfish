@@ -1,9 +1,6 @@
 package fr.gouv.cnsp.monitorfish.fakers
 
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import java.time.ZonedDateTime
 
@@ -29,7 +26,7 @@ class LogbookMessageFaker {
             )
         }
 
-        fun fakeLogbookFishingCatch(specyCode: String = "HKE"): LogbookFishingCatch {
+        private fun fakeLogbookFishingCatch(specyCode: String = "HKE"): LogbookFishingCatch {
             return LogbookFishingCatch(
                 conversionFactor = null,
                 economicZone = null,
@@ -47,8 +44,10 @@ class LogbookMessageFaker {
             )
         }
 
-        fun fakePnoMessage(): PNO {
+        private fun fakePnoMessage(): PNO {
             return PNO().apply {
+                authorizedPortEntrance = null
+                authorizedLanding = null
                 catchOnboard = listOf(fakeLogbookFishingCatch())
                 catchToLand = listOf(fakeLogbookFishingCatch())
                 economicZone = null
@@ -66,7 +65,7 @@ class LogbookMessageFaker {
                 portName = null
                 predictedArrivalDatetimeUtc = ZonedDateTime.now()
                 predictedLandingDatetimeUtc = ZonedDateTime.now()
-                purpose = null
+                purpose = LogbookMessagePurpose.LAN
                 statisticalRectangle = null
             }
         }

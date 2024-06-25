@@ -141,9 +141,7 @@ class PreRenderedPno:
         if not isinstance(right, PreRenderedPno):
             raise AssertionError("`right` is not a `PreRenderedPno`")
 
-        if left.catch_onboard is None and right.catch_onboard is None:
-            pass
-        else:
+        if not (left.catch_onboard is None and right.catch_onboard is None):
             try:
                 pd.testing.assert_frame_equal(left.catch_onboard, right.catch_onboard)
             except AssertionError as e:

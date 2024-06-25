@@ -1,20 +1,21 @@
 import { FlatTwoColumnKeyValue } from '@features/VesselSidebar/common/FlatTwoColumnKeyValue'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { THEME } from '@mtes-mct/monitor-ui'
 import countries from 'i18n-iso-countries'
 import { useEffect, useMemo } from 'react'
 import { FingerprintSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../constants/constants'
 import { showVessel } from '../../../domain/use_cases/vessel/showVessel'
-import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { getDate } from '../../../utils'
 
 export function Identity() {
   const dispatch = useMainAppDispatch()
-  const { loadingVessel, selectedVessel, selectedVesselIdentity, selectedVesselPositions } = useMainAppSelector(
-    state => state.vessel
-  )
+  const loadingVessel = useMainAppSelector(state => state.vessel.loadingVessel)
+  const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
+  const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
+  const selectedVesselPositions = useMainAppSelector(state => state.vessel.selectedVesselPositions)
   const gears = useMainAppSelector(state => state.gear.gears)
 
   const lastPosition = useMemo(() => {
@@ -52,11 +53,12 @@ export function Identity() {
     if (selectedVessel && selectedVessel[propertyName]) {
       return selectedVessel[propertyName]
     }
+
     if (lastPosition && lastPosition[propertyName]) {
       return lastPosition[propertyName]
     }
 
-    return <NoValue>-</NoValue>
+    return undefined
   }
 
   return !loadingVessel ? (
@@ -73,7 +75,7 @@ export function Identity() {
           },
           {
             key: 'Balise n°',
-            value: getVesselOrLastPositionProperty('beaconNumber')
+            value: selectedVessel?.beacon?.beaconNumber
           }
         ]}
         secondColumn={[
@@ -272,7 +274,7 @@ export function Identity() {
       </Zone>
     </Body>
   ) : (
-    <FingerprintSpinner className="radar" color={COLORS.charcoal} size={100} />
+    <FingerprintSpinner className="radar" color={THEME.color.charcoal} size={100} />
   )
 }
 

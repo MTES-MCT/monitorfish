@@ -1,8 +1,10 @@
-import { ObjectSchema, array, boolean, number, object, string } from 'yup'
+import { ObjectSchema, array, boolean, number, object, string, mixed } from 'yup'
 
 import { PriorNotification } from '../../PriorNotification.types'
 
 import type { FormValues } from './types'
+
+import PurposeCode = PriorNotification.PurposeCode
 
 export const BLUEFIN_TUNA_EXTENDED_SPECY_CODES = ['BF1', 'BF2', 'BF3']
 
@@ -14,6 +16,8 @@ const FISHING_CATCH_VALIDATION_SCHEMA: ObjectSchema<PriorNotification.PriorNotif
 })
 
 export const FORM_VALIDATION_SCHEMA: ObjectSchema<FormValues> = object({
+  authorizedLanding: boolean().nonNullable().required(),
+  authorizedPortEntrance: boolean().nonNullable().required(),
   authorTrigram: string().trim().required('Veuillez indiquer votre trigramme.'),
   didNotFishAfterZeroNotice: boolean().required(),
   expectedArrivalDate: string().required("Veuillez indiquer la date d'arrivée estimée."),
@@ -30,7 +34,9 @@ export const FORM_VALIDATION_SCHEMA: ObjectSchema<FormValues> = object({
   isExpectedLandingDateSameAsExpectedArrivalDate: boolean().required(),
   note: string(),
   portLocode: string().required("Veuillez indiquer le port d'arrivée."),
-  purpose: string().required('Veuillez indiquer la raison du préavis.'),
+  purpose: mixed<PurposeCode>()
+    .oneOf(Object.values(PurposeCode) as PurposeCode[])
+    .required('Veuillez indiquer la raison du préavis.'),
   sentAt: string().required('Veuillez indiquer la date de réception du préavis.'),
   tripGearCodes: array().of(string().required()).ensure().required().min(1, 'Veuillez sélectionner au moins un engin.'),
   vesselId: number().required('Veuillez indiquer le navire concerné.')

@@ -29,7 +29,7 @@ type CardProps = Readonly<{
   reportId: string | undefined
 }>
 export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend, reportId }: CardProps) {
-  const { isValid, submitForm, values } = useFormikContext<FormValues>()
+  const { dirty, isValid, submitForm, values } = useFormikContext<FormValues>()
   const dispatch = useMainAppDispatch()
   const editedPriorNotificationComputedValues = useMainAppSelector(
     store => store.priorNotification.editedPriorNotificationComputedValues
@@ -61,7 +61,7 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
   )
 
   // We need to check for equality outside the debounce to ensure `nextFormValues` is up-to-date.
-  const updateComputedValuesIfMecessary = (nextFormValues: FormValues) => {
+  const updateComputedValuesIfNecessary = (nextFormValues: FormValues) => {
     const nextPartialComputationRequestData = getPartialComputationRequestData(nextFormValues)
 
     // If nothing changed, we don't need to update the computed values
@@ -92,7 +92,7 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
 
   return (
     <Wrapper>
-      <FormikEffect onChange={updateComputedValuesIfMecessary as any} />
+      <FormikEffect onChange={updateComputedValuesIfNecessary as any} />
 
       {editedPriorNotificationDetail?.state === PriorNotification.State.PENDING_SEND && (
         <StyledBanner isCollapsible level={Level.WARNING} top="100px">
@@ -138,12 +138,15 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
           </Button>
 
           {!!editedPriorNotificationDetail && (
-            <DownloadButton pnoLogbookMessage={editedPriorNotificationDetail.logbookMessage} />
+            <DownloadButton
+              isDisabled={dirty && (!isSent || !isPendingSend)}
+              pnoLogbookMessage={editedPriorNotificationDetail.logbookMessage}
+            />
           )}
 
           <Button
             accent={Accent.PRIMARY}
-            disabled={isPendingSend || isSent || (isValidatingOnChange && !isValid)}
+            disabled={!dirty || isPendingSend || isSent || (isValidatingOnChange && !isValid)}
             onClick={handleSubmit}
           >
             {isNewPriorNotification ? 'Créer le préavis' : 'Enregistrer'}

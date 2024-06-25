@@ -33,7 +33,7 @@ export function Form() {
   const isThirdPartyVessel = useRef<boolean>(false)
 
   const onChange = (nextVessel: VesselIdentity | undefined) => {
-    if (nextVessel.flagState !== 'FR') {
+    if (nextVessel?.flagState !== 'FR') {
       isThirdPartyVessel.current = true
 
       return

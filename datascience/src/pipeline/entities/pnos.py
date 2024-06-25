@@ -134,7 +134,7 @@ class PreRenderedPno:
     source: PnoSource
 
     @staticmethod
-    def assertEqual(left: object, right: object):
+    def assert_equal(left: object, right: object):
         if not isinstance(left, PreRenderedPno):
             raise AssertionError("`left` is not a `PreRenderedPno`")
 

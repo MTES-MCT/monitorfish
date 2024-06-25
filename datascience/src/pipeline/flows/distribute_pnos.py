@@ -20,6 +20,8 @@ from config import (
     CNSP_CROSSA_CACEM_LOGOS_PATH,
     CNSP_FRANCE_EMAIL_ADDRESS,
     CNSP_LOGO_PATH,
+    CNSP_SIP_DEPARTMENT_EMAIL,
+    CNSP_SIP_DEPARTMENT_MOBILE_PHONE,
     EMAIL_FONTS_LOCATION,
     EMAIL_STYLESHEETS_LOCATION,
     EMAIL_TEMPLATES_LOCATION,
@@ -672,10 +674,12 @@ def attribute_addressees(
 
 
 @task(checkpoint=False)
-def create_email(pno: RenderedPno) -> PnoToSend:
-    if pno.emails:
+def create_email(pno: RenderedPno, test_mode: bool) -> PnoToSend:
+    if pno.emails or (test_mode and CNSP_SIP_DEPARTMENT_EMAIL):
+        to = CNSP_SIP_DEPARTMENT_EMAIL if test_mode else pno.emails
+
         message = create_html_email(
-            to=pno.emails,
+            to=to,
             subject=f"Préavis de débarquement - {pno.vessel_name}",
             html=pno.html_email_body,
             from_=MONITORFISH_EMAIL_ADDRESS,
@@ -700,11 +704,13 @@ def create_email(pno: RenderedPno) -> PnoToSend:
 
 
 @task(checkpoint=False)
-def create_sms(pno: RenderedPno) -> PnoToSend:
-    if pno.phone_numbers:
+def create_sms(pno: RenderedPno, test_mode: bool) -> PnoToSend:
+    if pno.phone_numbers or (test_mode and CNSP_SIP_DEPARTMENT_MOBILE_PHONE):
+        to = CNSP_SIP_DEPARTMENT_MOBILE_PHONE if test_mode else pno.phone_numbers
+
         return PnoToSend(
             pno=pno,
-            message=create_sms_email(to=pno.phone_numbers, text=pno.sms_content),
+            message=create_sms_email(to=to, text=pno.sms_content),
             communication_means=CommunicationMeans.SMS,
         )
     else:
@@ -807,7 +813,7 @@ def make_update_logbook_reports_statement(
 with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
-        # test_mode = Parameter("test_mode")
+        test_mode = Parameter("test_mode")
         is_integration = Parameter("is_integration")
         start_hours_ago = Parameter("start_hours_ago")
         end_hours_ago = Parameter("end_hours_ago")
@@ -852,10 +858,10 @@ with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
             control_units_contacts=unmapped(control_units_contacts),
         )
 
-        email = create_email.map(pnos_with_addressees)
+        email = create_email.map(pnos_with_addressees, test_mode=unmapped(test_mode))
         email = filter_results(email)
 
-        sms = create_sms.map(pnos_with_addressees)
+        sms = create_sms.map(pnos_with_addressees, test_mode=unmapped(test_mode))
         sms = filter_results(sms)
 
         messages_to_send = flatten([email, sms])

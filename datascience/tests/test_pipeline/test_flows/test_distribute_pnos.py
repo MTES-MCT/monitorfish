@@ -1686,14 +1686,17 @@ def test_fetch_control_units_contacts(
     pd.testing.assert_frame_equal(res, control_units_contacts)
 
 
+@pytest.mark.parametrize("test_mode", [False, True])
 def test_create_email(
     pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned,
     cnsp_crossa_cacem_logos,
     marianne_gif,
     liberte_egalite_fraternite_gif,
+    test_mode,
 ):
     pno_to_send = create_email.run(
-        pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned
+        pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned,
+        test_mode=test_mode,
     )
 
     assert isinstance(pno_to_send, PnoToSend)
@@ -1703,7 +1706,12 @@ def test_create_email(
     )
     pno_to_send.communication_means == CommunicationMeans.EMAIL
     assert isinstance(pno_to_send.message, EmailMessage)
-    assert pno_to_send.message["To"] == "alternative@email, some.email@control.unit.4"
+    if test_mode:
+        assert pno_to_send.message["To"] == "cnsp.sip@email.fr"
+    else:
+        assert (
+            pno_to_send.message["To"] == "alternative@email, some.email@control.unit.4"
+        )
     assert pno_to_send.message["From"] == "monitorfish@test.email"
     assert pno_to_send.message["Cc"] is None
     assert pno_to_send.message["Bcc"] is None
@@ -1751,16 +1759,19 @@ def test_create_email_with_no_email_addressees_returns_none(
     pno_pdf_document_to_distribute_without_addressees_assigned,
 ):
     pno_to_send = create_email.run(
-        pno_pdf_document_to_distribute_without_addressees_assigned
+        pno_pdf_document_to_distribute_without_addressees_assigned, test_mode=False
     )
     assert pno_to_send is None
 
 
+@pytest.mark.parametrize("test_mode", [False, True])
 def test_create_sms(
     pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned,
+    test_mode,
 ):
     pno_to_send = create_sms.run(
-        pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned
+        pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned,
+        test_mode=test_mode,
     )
     assert isinstance(pno_to_send, PnoToSend)
     assert (
@@ -1772,10 +1783,15 @@ def test_create_sms(
 
     assert pno_to_send.message["Subject"] is None
     assert pno_to_send.message["From"] == "monitorfish@test.email"
-    assert (
-        pno_to_send.message["To"]
-        == '"\'00 11 22 33 44 55"@test.sms, "44 44 44 44 44"@test.sms'
-    )
+
+    if test_mode:
+        assert pno_to_send.message["To"] == "0123456789@test.sms"
+    else:
+        assert (
+            pno_to_send.message["To"]
+            == '"\'00 11 22 33 44 55"@test.sms, "44 44 44 44 44"@test.sms'
+        )
+
     assert pno_to_send.message["Cc"] is None
     assert pno_to_send.message.get_content_type() == "text/plain"
 
@@ -1906,6 +1922,7 @@ def test_flow_abracadabra(
         is_integration=is_integration,
         start_hours_ago=start_hours_ago,
         end_hours_ago=0,
+        test_mode=False,
     )
 
     # Asserts

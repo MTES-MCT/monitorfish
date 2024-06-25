@@ -1,11 +1,12 @@
 from dataclasses import dataclass
+from typing import Optional
 
 
 @dataclass
 class FishingGear:
     code: str
     name: str
-    mesh: float = None
+    mesh: Optional[float] = None
 
 
 @dataclass

@@ -148,7 +148,9 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
                     <Alert baseRef={wrapperRef as MutableRefObject<HTMLDivElement>} />
                   )}
                   {selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD && <BeaconMalfunctionBoard />}
-                  {selectedPath.menu === SideWindowMenuKey.PRIOR_NOTIFICATION_LIST && <PriorNotificationList />}
+                  {selectedPath.menu === SideWindowMenuKey.PRIOR_NOTIFICATION_LIST && (
+                    <PriorNotificationList isFromUrl={isFromURL} />
+                  )}
                   {selectedPath.menu === SideWindowMenuKey.MISSION_LIST && <MissionList />}
 
                   {selectedPath.menu === SideWindowMenuKey.MISSION_FORM && (

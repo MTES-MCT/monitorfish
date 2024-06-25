@@ -16,6 +16,7 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Accent, Button, Icon, Size, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
 import { flexRender, getCoreRowModel, useReactTable, getExpandedRowModel } from '@tanstack/react-table'
+import { isLegacyFirefox } from '@utils/isLegacyFirefox'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import { useCallback, useState } from 'react'
 import styled, { css } from 'styled-components'
@@ -34,7 +35,10 @@ import { PriorNotificationForm } from '../PriorNotificationForm'
 
 import type { AllSeafrontGroup, NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 
-export function PriorNotificationList() {
+type PriorNotificationListProps = Readonly<{
+  isFromUrl: boolean
+}>
+export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps) {
   const dispatch = useMainAppDispatch()
   const listFilter = useMainAppSelector(state => state.priorNotification.listFilterValues)
   const isPriorNotificationCardOpen = useMainAppSelector(state => state.priorNotification.isPriorNotificationCardOpen)
@@ -86,7 +90,7 @@ export function PriorNotificationList() {
   )
 
   const table = useReactTable({
-    columns: getTableColumns(),
+    columns: getTableColumns(isFromUrl),
     data: priorNotifications ?? [],
     enableRowSelection: true,
     enableSortingRemoval: false,
@@ -128,8 +132,8 @@ export function PriorNotificationList() {
           <FilterBar />
           <FilterTags />
 
-          <TableOuterWrapper>
-            <TableTop>
+          <TableOuterWrapper $isFromUrl={isFromUrl}>
+            <TableTop $isFromUrl={isFromUrl}>
               <TableLegend>{`${
                 loadingState.isLoadingNewPage || totalLength === undefined ? '...' : totalLength
               } préavis (tous les horaires sont en UTC)`}</TableLegend>
@@ -174,7 +178,7 @@ export function PriorNotificationList() {
                       </tr>
                     ))}
                   </TableWithSelectableRows.Head>
-                  {loadingState.isLoadingNewPage && <TableBodyLoader />}
+                  {loadingState.isLoadingNewPage && <TableBodyLoader isFromUrl={isFromUrl} />}
                   {!loadingState.isLoadingNewPage && !!priorNotifications && (
                     <tbody>
                       {rows.map(row => (
@@ -212,7 +216,9 @@ export function PriorNotificationList() {
   )
 }
 
-const TableOuterWrapper = styled.div`
+const TableOuterWrapper = styled.div<{
+  $isFromUrl: boolean
+}>`
   align-self: flex-start;
   box-sizing: border-box;
   display: flex;
@@ -221,13 +227,21 @@ const TableOuterWrapper = styled.div`
   * {
     box-sizing: border-box;
   }
+
+  > .Element-Button {
+    margin-top: 8px;
+    width: ${p => (!p.$isFromUrl && isLegacyFirefox() ? 1396 : 1391)}px; /* = table width */
+  }
 `
 
-const TableTop = styled.div`
+const TableTop = styled.div<{
+  $isFromUrl: boolean
+}>`
   align-items: flex-end;
   display: flex;
   justify-content: space-between;
   margin: 8px 0;
+  width: ${p => (!p.$isFromUrl && isLegacyFirefox() ? 1396 : 1391)}px; /* = table width */
 `
 
 const TableLegend = styled.p`
@@ -240,14 +254,14 @@ const TableInnerWrapper = styled.div<{
   $hasError: boolean
 }>`
   align-items: flex-start;
-  border-top: solid 1px ${p => p.theme.color.lightGray};
-  height: 513px; /* = table height - 5px */
-  min-width: 1391px; /* = table width */
-  overflow-y: auto;
+  height: ${() => (isLegacyFirefox() ? 518 : 513)}px; /* = table height - 5px */
+  min-width: 1407px; /* = table width + right padding + scrollbar width (8px) */
+  padding-right: 8px;
+  overflow-y: scroll;
   width: auto;
 
   > table {
-    margin-top: -5px;
+    margin-top: -4.5px;
   }
 
   ${p =>

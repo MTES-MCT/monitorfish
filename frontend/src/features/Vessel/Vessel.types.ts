@@ -42,7 +42,7 @@ export namespace Vessel {
   }
 
   export interface EnrichedVessel extends Vessel {
-    beacon: Beacon
+    beacon: Beacon | undefined
     hasLogbookEsacapt: boolean
     hasVisioCaptures: boolean | undefined
     logbookEquipmentStatus: string | undefined

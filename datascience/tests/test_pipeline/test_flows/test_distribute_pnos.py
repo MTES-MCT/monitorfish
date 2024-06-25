@@ -1704,7 +1704,7 @@ def test_create_email(
         pno_to_send.pno
         == pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned
     )
-    pno_to_send.communication_means == CommunicationMeans.EMAIL
+    assert pno_to_send.communication_means == CommunicationMeans.EMAIL
     assert isinstance(pno_to_send.message, EmailMessage)
     if test_mode:
         assert pno_to_send.message["To"] == "cnsp.sip@email.fr"
@@ -1778,7 +1778,7 @@ def test_create_sms(
         pno_to_send.pno
         == pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned
     )
-    pno_to_send.communication_means == CommunicationMeans.SMS
+    assert pno_to_send.communication_means == CommunicationMeans.SMS
     assert isinstance(pno_to_send.message, EmailMessage)
 
     assert pno_to_send.message["Subject"] is None

@@ -143,9 +143,9 @@ context('Side Window > Prior Notification Form > Form', () => {
 
     addSideWindowPriorNotification()
 
-    cy.clickButton('Créer le préavis')
-
     cy.fill('Date et heure de réception du préavis', undefined)
+
+    cy.clickButton('Créer le préavis')
 
     cy.contains('Veuillez indiquer le navire concerné.').should('exist')
     cy.contains('Veuillez indiquer la date de réception du préavis.').should('exist')

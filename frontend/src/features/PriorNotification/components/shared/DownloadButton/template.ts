@@ -10,7 +10,7 @@ export const HTML_TEMPLATE = `
   <body>
     <header>
       <h1>
-        <p>PREAVIS - Débarquement</p>
+        <p>PREAVIS - {purpose}</p>
         <p>
         {vesselName}
         <img id="state_flag_icon" src="flags/{flagState}.png" />
@@ -28,12 +28,33 @@ export const HTML_TEMPLATE = `
         <h2>INFOS DU PRÉAVIS</h2>
         <hr/>
         <table>
-          <tr><td class="data-label">Préavis envoyé</td><td><strong>{operationDateTime}</strong></td></tr>
-          <tr><td class="data-label">Arrivée estimée</td><td><strong>{predictedArrivalDatetimeUtc}</strong></td></tr>
-          <tr><td class="data-label">Débarque prévue</td><td><strong>{predictedLandingDatetimeUtc}</strong></td></tr>
-          <tr><td class="data-label"></td><td></td></tr>
-          <tr><td class="data-label">Port de débarque</td><td><strong>{portName} ({port})</strong></td></tr>
-          <tr><td class="data-label">Décision CNSP</td><td><strong class="decision">Autorisation donnée d'entrer au port<br/>Autorisation donnée de débarquer</strong></td></tr>
+          <tr>
+            <td class="data-label">Préavis envoyé</td>
+            <td><strong>{operationDateTime}</strong></td>
+          </tr>
+          <tr>
+            <td class="data-label">Arrivée estimée</td>
+            <td><strong>{predictedArrivalDatetimeUtc}</strong></td>
+          </tr>
+          <tr>
+            <td class="data-label">Débarque prévue</td>
+            <td><strong>{predictedLandingDatetimeUtc}</strong></td>
+          </tr>
+          <tr>
+            <td class="data-label"></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="data-label">Port de débarque</td>
+            <td><strong>{portName} ({port})</strong></td>
+          </tr>
+          <tr>
+            <td class="data-label">Décision CNSP</td>
+            <td>
+            {portEntranceAuthorization}
+            {portLandingAuthorization}
+            </td>
+          </tr>
         </table>
       </section>
       <section>
@@ -218,8 +239,12 @@ hr {
     color: var(--maximum-red);
 }
 
-.decision {
+.authorized {
     color: var(--medium-sea-green);
+}
+
+.unauthorized {
+    color: var(--maximum-red);
 }
 
 tr {

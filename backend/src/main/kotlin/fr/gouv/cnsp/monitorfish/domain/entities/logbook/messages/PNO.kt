@@ -11,6 +11,9 @@ import java.time.ZonedDateTime
 
 // TODO Rename to `LogbookMessageValueForPno`.
 class PNO() : LogbookMessageValue {
+    var hasPortEntranceAuthorization: Boolean? = null
+    var hasPortLandingAuthorization: Boolean? = null
+
     var catchOnboard: List<LogbookFishingCatch> = emptyList()
     var catchToLand: List<LogbookFishingCatch> = emptyList()
     var economicZone: String? = null

@@ -136,6 +136,8 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
         economicZone: undefined,
         effortZone: undefined,
         faoZone: undefined,
+        hasPortEntranceAuthorization: false,
+        hasPortLandingAuthorization: true,
         isBeingSent: false,
         isInVerificationScope: false,
         isSent: false,
@@ -227,12 +229,33 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
         <h2>INFOS DU PRÉAVIS</h2>
         <hr/>
         <table>
-          <tr><td class="data-label">Préavis envoyé</td><td><strong>le 14/06/2024 à 06h52 UTC</strong></td></tr>
-          <tr><td class="data-label">Arrivée estimée</td><td><strong>le 14/06/2024 à 10h07 UTC</strong></td></tr>
-          <tr><td class="data-label">Débarque prévue</td><td><strong>le 14/06/2024 à 11h07 UTC</strong></td></tr>
-          <tr><td class="data-label"></td><td></td></tr>
-          <tr><td class="data-label">Port de débarque</td><td><strong>Vannes (FRVNE)</strong></td></tr>
-          <tr><td class="data-label">Décision CNSP</td><td><strong class="decision">Autorisation donnée d'entrer au port<br/>Autorisation donnée de débarquer</strong></td></tr>
+          <tr>
+            <td class="data-label">Préavis envoyé</td>
+            <td><strong>le 14/06/2024 à 06h52 UTC</strong></td>
+          </tr>
+          <tr>
+            <td class="data-label">Arrivée estimée</td>
+            <td><strong>le 14/06/2024 à 10h07 UTC</strong></td>
+          </tr>
+          <tr>
+            <td class="data-label">Débarque prévue</td>
+            <td><strong>le 14/06/2024 à 11h07 UTC</strong></td>
+          </tr>
+          <tr>
+            <td class="data-label"></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="data-label">Port de débarque</td>
+            <td><strong>Vannes (FRVNE)</strong></td>
+          </tr>
+          <tr>
+            <td class="data-label">Décision CNSP</td>
+            <td>
+            <strong class="unauthorized">Interdiction donnée d'entrer au port<br/></strong>
+            <strong class="authorized">Autorisation donnée de débarquer<br/></strong>
+            </td>
+          </tr>
         </table>
       </section>
       <section>

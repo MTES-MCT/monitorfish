@@ -19,11 +19,12 @@ class CreateOrUpdateManualPriorNotification(
     private val manualPriorNotificationRepository: ManualPriorNotificationRepository,
     private val portRepository: PortRepository,
     private val vesselRepository: VesselRepository,
-
     private val computeManualPriorNotification: ComputeManualPriorNotification,
     private val getPriorNotification: GetPriorNotification,
 ) {
     fun execute(
+        hasPortEntranceAuthorization: Boolean,
+        hasPortLandingAuthorization: Boolean,
         authorTrigram: String,
         didNotFishAfterZeroNotice: Boolean,
         expectedArrivalDate: String,
@@ -34,6 +35,7 @@ class CreateOrUpdateManualPriorNotification(
         portLocode: String,
         reportId: String?,
         sentAt: String,
+        purpose: LogbookMessagePurpose,
         tripGearCodes: List<String>,
         vesselId: Int,
     ): PriorNotification {
@@ -56,17 +58,20 @@ class CreateOrUpdateManualPriorNotification(
         val vessel = vesselRepository.findVesselById(vesselId)
         val priorNotificationTypes = computedValues.types.map { it.toPriorNotificationType() }
         val message = getMessage(
-            existingPnoMessage,
-            expectedArrivalDate,
-            expectedLandingDate,
+            hasPortEntranceAuthorization = hasPortEntranceAuthorization,
+            hasPortLandingAuthorization = hasPortLandingAuthorization,
+            existingPnoValue = existingPnoMessage,
+            expectedArrivalDate = expectedArrivalDate,
+            expectedLandingDate = expectedLandingDate,
             // At the moment, manual prior notifications only have a single global FAO area field in Frontend,
             // so we transform that single FAO area into an FAO area per fishing catch.
-            fishingCatchesWithFaoArea,
-            note,
-            priorNotificationTypes,
-            portLocode,
-            vessel?.flagState,
-            computedValues.vesselRiskFactor,
+            fishingCatches = fishingCatchesWithFaoArea,
+            note = note,
+            pnoTypes = priorNotificationTypes,
+            portLocode = portLocode,
+            purpose = purpose,
+            computedVesselFlagCountryCode = vessel?.flagState,
+            computedVesselRiskFactor = computedValues.vesselRiskFactor,
         )
 
         val pnoLogbookMessage = LogbookMessage(
@@ -128,6 +133,9 @@ class CreateOrUpdateManualPriorNotification(
 
     private fun getMessage(
         existingPnoValue: PNO?,
+        hasPortEntranceAuthorization: Boolean,
+        hasPortLandingAuthorization: Boolean,
+        purpose: LogbookMessagePurpose,
         expectedArrivalDate: String,
         expectedLandingDate: String,
         fishingCatches: List<LogbookFishingCatch>,
@@ -147,6 +155,8 @@ class CreateOrUpdateManualPriorNotification(
         val predictedLandingDatetimeUtc = ZonedDateTime.parse(expectedLandingDate)
 
         return PNO().apply {
+            this.hasPortEntranceAuthorization = hasPortEntranceAuthorization
+            this.hasPortLandingAuthorization = hasPortLandingAuthorization
             this.catchOnboard = fishingCatches
             this.catchToLand = fishingCatches
             this.economicZone = null
@@ -167,7 +177,7 @@ class CreateOrUpdateManualPriorNotification(
             this.portName = portName
             this.predictedArrivalDatetimeUtc = predictedArrivalDatetimeUtc
             this.predictedLandingDatetimeUtc = predictedLandingDatetimeUtc
-            this.purpose = LogbookMessagePurpose.LAN
+            this.purpose = purpose
             this.statisticalRectangle = null
             this.tripStartDate = null
         }

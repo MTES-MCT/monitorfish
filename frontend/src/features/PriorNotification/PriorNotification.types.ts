@@ -65,8 +65,11 @@ export namespace PriorNotification {
     expectedLandingDate: string
     faoArea: string
     fishingCatches: PriorNotificationDataFishingCatch[]
+    hasPortEntranceAuthorization: boolean
+    hasPortLandingAuthorization: boolean
     note: string | undefined
     portLocode: string
+    purpose: PurposeCode
     reportId: string
     sentAt: string
     tripGearCodes: string[]

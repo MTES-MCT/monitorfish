@@ -1,9 +1,12 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagePurpose
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.utils.CustomZonedDateTime
 
 data class ManualPriorNotificationDataOutput(
+    val hasPortEntranceAuthorization: Boolean,
+    val hasPortLandingAuthorization: Boolean,
     val authorTrigram: String,
     val didNotFishAfterZeroNotice: Boolean,
     val expectedArrivalDate: String,
@@ -14,6 +17,7 @@ data class ManualPriorNotificationDataOutput(
     val portLocode: String,
     val reportId: String,
     val sentAt: String,
+    val purpose: LogbookMessagePurpose,
     val tripGearCodes: List<String>,
     val vesselId: Int,
 ) {
@@ -54,20 +58,26 @@ data class ManualPriorNotificationDataOutput(
             val vesselId = requireNotNull(priorNotification.vessel) {
                 "`priorNotification.vessel` is null."
             }.id
+            val hasPortEntranceAuthorization = pnoMessage.hasPortEntranceAuthorization ?: true
+            val hasPortLandingAuthorization = pnoMessage.hasPortLandingAuthorization ?: true
+            val purpose = requireNotNull(pnoMessage.purpose) { "`message.purpose` is null." }
 
             return ManualPriorNotificationDataOutput(
-                authorTrigram,
+                hasPortEntranceAuthorization = hasPortEntranceAuthorization,
+                hasPortLandingAuthorization = hasPortLandingAuthorization,
+                authorTrigram = authorTrigram,
                 didNotFishAfterZeroNotice = priorNotification.didNotFishAfterZeroNotice,
-                expectedArrivalDate,
-                expectedLandingDate,
+                expectedArrivalDate = expectedArrivalDate,
+                expectedLandingDate = expectedLandingDate,
                 faoArea = globalFaoArea,
                 fishingCatches = fishingCatchDataOutputs,
                 note = pnoMessage.note,
-                portLocode,
-                reportId,
-                sentAt,
-                tripGearCodes,
-                vesselId,
+                portLocode = portLocode,
+                reportId = reportId,
+                sentAt = sentAt,
+                purpose = purpose,
+                tripGearCodes = tripGearCodes,
+                vesselId = vesselId,
             )
         }
     }

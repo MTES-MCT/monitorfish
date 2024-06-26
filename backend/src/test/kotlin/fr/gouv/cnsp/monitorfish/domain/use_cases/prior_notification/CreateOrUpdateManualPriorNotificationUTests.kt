@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagePurpose
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.ManualPriorNotificationComputedValues
 import fr.gouv.cnsp.monitorfish.domain.repositories.GearRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ManualPriorNotificationRepository
@@ -62,6 +63,9 @@ class CreateOrUpdateManualPriorNotificationUTests {
             computeManualPriorNotification,
             getPriorNotification,
         ).execute(
+            hasPortEntranceAuthorization = true,
+            hasPortLandingAuthorization = true,
+            purpose = LogbookMessagePurpose.LAN,
             authorTrigram = "ABC",
             didNotFishAfterZeroNotice = false,
             expectedArrivalDate = "2024-01-01T00:00:00Z",

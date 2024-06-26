@@ -8,7 +8,10 @@ import styled from 'styled-components'
 
 import type { VesselIdentity } from 'domain/entities/vessel/types'
 
-export function FormikVesselSelect() {
+type FormikVesselSelectProps = {
+  onChange: (nextVessel: VesselIdentity | undefined) => void
+}
+export function FormikVesselSelect({ onChange }: FormikVesselSelectProps) {
   const defaultValueRef = useRef<VesselIdentity | undefined>(undefined)
 
   const dispatch = useMainAppDispatch()
@@ -24,6 +27,7 @@ export function FormikVesselSelect() {
       defaultValueRef.current = undefined
 
       helper.setValue(undefined)
+      onChange(undefined)
 
       return
     }
@@ -42,6 +46,7 @@ export function FormikVesselSelect() {
     await setDefaultValue(nextVessel.vesselId)
 
     helper.setValue(nextVessel.vesselId)
+    onChange(nextVessel)
   }
 
   const setDefaultValue = useCallback(
@@ -50,7 +55,7 @@ export function FormikVesselSelect() {
 
       const vessel = await dispatch(vesselApi.endpoints.getVessel.initiate(vesselId)).unwrap()
 
-      defaultValueRef.current = {
+      const nextVessel = {
         externalReferenceNumber: vessel.externalReferenceNumber ?? null,
         flagState: vessel.flagState ?? null,
         internalReferenceNumber: null,
@@ -58,10 +63,12 @@ export function FormikVesselSelect() {
         vesselId: vessel.vesselId ?? null,
         vesselName: vessel.vesselName ?? null
       }
+      defaultValueRef.current = nextVessel
+      onChange(nextVessel)
 
       setIsLoading(false)
     },
-    [dispatch]
+    [dispatch, onChange]
   )
 
   useEffect(

@@ -283,6 +283,7 @@ flows_to_register = [
     controls.flow,
     controls_open_data.flow,
     current_segments.flow,
+    distribute_pnos.flow,
     districts.flow,
     enrich_logbook.flow,
     enrich_positions.flow,

@@ -29,6 +29,7 @@ from src.pipeline.flows import (
     controls,
     controls_open_data,
     current_segments,
+    distribute_pnos,
     districts,
     enrich_logbook,
     enrich_positions,
@@ -73,6 +74,19 @@ control_anteriority.flow.schedule = CronSchedule("5 * * * *")
 control_units.flow.schedule = CronSchedule("12 8 * * *")
 controls_open_data.flow.schedule = CronSchedule("15 3 * * 5")
 current_segments.flow.schedule = CronSchedule("2,12,22,32,42,52 * * * *")
+distribute_pnos.flow.schedule = Schedule(
+    clocks=[
+        clocks.CronClock(
+            "* * * * *",
+            parameter_defaults={
+                "test_mode": TEST_MODE,
+                "is_integration": IS_INTEGRATION,
+                "start_hours_ago": 120,
+                "end_hours_ago": 0,
+            },
+        ),
+    ]
+)
 logbook.flow.schedule = CronSchedule("* * * * *")
 enrich_positions.flow.schedule = Schedule(
     clocks=[

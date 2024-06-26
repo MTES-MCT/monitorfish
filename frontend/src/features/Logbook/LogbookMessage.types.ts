@@ -83,6 +83,8 @@ export namespace LogbookMessage {
     economicZone: string | undefined
     effortZone: string | undefined
     faoZone: string | undefined
+    hasPortEntranceAuthorization: boolean | undefined
+    hasPortLandingAuthorization: boolean | undefined
     isBeingSent: boolean | undefined
     isInVerificationScope: boolean | undefined
     isSent: boolean | undefined

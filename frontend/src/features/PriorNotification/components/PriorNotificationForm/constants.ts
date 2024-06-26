@@ -1,7 +1,10 @@
-import { ObjectSchema, array, boolean, number, object, string } from 'yup'
+import { ObjectSchema, array, boolean, number, object, string, mixed } from 'yup'
+
+import { PriorNotification } from '../../PriorNotification.types'
 
 import type { FormValues } from './types'
-import type { PriorNotification } from '../../PriorNotification.types'
+
+import PurposeCode = PriorNotification.PurposeCode
 
 export const BLUEFIN_TUNA_EXTENDED_SPECY_CODES = ['BF1', 'BF2', 'BF3']
 
@@ -26,9 +29,14 @@ export const FORM_VALIDATION_SCHEMA: ObjectSchema<FormValues> = object({
     .ensure()
     .required()
     .min(1, 'Veuillez sélectionner au moins une espèce.'),
+  hasPortEntranceAuthorization: boolean().nonNullable().required(),
+  hasPortLandingAuthorization: boolean().nonNullable().required(),
   isExpectedLandingDateSameAsExpectedArrivalDate: boolean().required(),
   note: string(),
   portLocode: string().required("Veuillez indiquer le port d'arrivée."),
+  purpose: mixed<PurposeCode>()
+    .oneOf(Object.values(PurposeCode) as PurposeCode[])
+    .required('Veuillez indiquer la raison du préavis.'),
   sentAt: string().required('Veuillez indiquer la date de réception du préavis.'),
   tripGearCodes: array().of(string().required()).ensure().required().min(1, 'Veuillez sélectionner au moins un engin.'),
   vesselId: number().required('Veuillez indiquer le navire concerné.')
@@ -41,9 +49,12 @@ export const INITIAL_FORM_VALUES: FormValues = {
   expectedLandingDate: undefined,
   faoArea: undefined,
   fishingCatches: [],
+  hasPortEntranceAuthorization: true,
+  hasPortLandingAuthorization: true,
   isExpectedLandingDateSameAsExpectedArrivalDate: false,
   note: undefined,
   portLocode: undefined,
+  purpose: PriorNotification.PurposeCode.LAN,
   sentAt: undefined,
   tripGearCodes: [],
   vesselId: undefined

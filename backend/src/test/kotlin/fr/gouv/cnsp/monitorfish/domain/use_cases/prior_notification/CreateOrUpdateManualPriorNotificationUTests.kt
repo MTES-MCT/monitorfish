@@ -63,8 +63,8 @@ class CreateOrUpdateManualPriorNotificationUTests {
             computeManualPriorNotification,
             getPriorNotification,
         ).execute(
-            authorizedPortEntrance = true,
-            authorizedLanding = true,
+            hasPortEntranceAuthorization = true,
+            hasPortLandingAuthorization = true,
             purpose = LogbookMessagePurpose.LAN,
             authorTrigram = "ABC",
             didNotFishAfterZeroNotice = false,

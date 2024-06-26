@@ -23,8 +23,8 @@ class CreateOrUpdateManualPriorNotification(
     private val getPriorNotification: GetPriorNotification,
 ) {
     fun execute(
-        authorizedPortEntrance: Boolean,
-        authorizedLanding: Boolean,
+        hasPortEntranceAuthorization: Boolean,
+        hasPortLandingAuthorization: Boolean,
         authorTrigram: String,
         didNotFishAfterZeroNotice: Boolean,
         expectedArrivalDate: String,
@@ -58,8 +58,8 @@ class CreateOrUpdateManualPriorNotification(
         val vessel = vesselRepository.findVesselById(vesselId)
         val priorNotificationTypes = computedValues.types.map { it.toPriorNotificationType() }
         val message = getMessage(
-            authorizedPortEntrance = authorizedPortEntrance,
-            authorizedLanding = authorizedLanding,
+            hasPortEntranceAuthorization = hasPortEntranceAuthorization,
+            hasPortLandingAuthorization = hasPortLandingAuthorization,
             existingPnoValue = existingPnoMessage,
             expectedArrivalDate = expectedArrivalDate,
             expectedLandingDate = expectedLandingDate,
@@ -133,8 +133,8 @@ class CreateOrUpdateManualPriorNotification(
 
     private fun getMessage(
         existingPnoValue: PNO?,
-        authorizedPortEntrance: Boolean,
-        authorizedLanding: Boolean,
+        hasPortEntranceAuthorization: Boolean,
+        hasPortLandingAuthorization: Boolean,
         purpose: LogbookMessagePurpose,
         expectedArrivalDate: String,
         expectedLandingDate: String,
@@ -155,8 +155,8 @@ class CreateOrUpdateManualPriorNotification(
         val predictedLandingDatetimeUtc = ZonedDateTime.parse(expectedLandingDate)
 
         return PNO().apply {
-            this.authorizedPortEntrance = authorizedPortEntrance
-            this.authorizedLanding = authorizedLanding
+            this.hasPortEntranceAuthorization = hasPortEntranceAuthorization
+            this.hasPortLandingAuthorization = hasPortLandingAuthorization
             this.catchOnboard = fishingCatches
             this.catchToLand = fishingCatches
             this.economicZone = null

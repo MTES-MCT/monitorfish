@@ -158,8 +158,8 @@ class PriorNotificationController(
         manualPriorNotificationDataInput: ManualPriorNotificationDataInput,
     ): ManualPriorNotificationDataOutput {
         val updatedPriorNotification = createOrUpdateManualPriorNotification.execute(
-            authorizedPortEntrance = manualPriorNotificationDataInput.authorizedPortEntrance,
-            authorizedLanding = manualPriorNotificationDataInput.authorizedLanding,
+            hasPortEntranceAuthorization = manualPriorNotificationDataInput.hasPortEntranceAuthorization,
+            hasPortLandingAuthorization = manualPriorNotificationDataInput.hasPortLandingAuthorization,
             authorTrigram = manualPriorNotificationDataInput.authorTrigram,
             didNotFishAfterZeroNotice = manualPriorNotificationDataInput.didNotFishAfterZeroNotice,
             expectedArrivalDate = manualPriorNotificationDataInput.expectedArrivalDate,
@@ -185,8 +185,8 @@ class PriorNotificationController(
         manualPriorNotificationDataInput: ManualPriorNotificationDataInput,
     ): ManualPriorNotificationDataOutput {
         val createdPriorNotification = createOrUpdateManualPriorNotification.execute(
-            authorizedPortEntrance = manualPriorNotificationDataInput.authorizedPortEntrance,
-            authorizedLanding = manualPriorNotificationDataInput.authorizedLanding,
+            hasPortEntranceAuthorization = manualPriorNotificationDataInput.hasPortEntranceAuthorization,
+            hasPortLandingAuthorization = manualPriorNotificationDataInput.hasPortLandingAuthorization,
             authorTrigram = manualPriorNotificationDataInput.authorTrigram,
             didNotFishAfterZeroNotice = manualPriorNotificationDataInput.didNotFishAfterZeroNotice,
             expectedArrivalDate = manualPriorNotificationDataInput.expectedArrivalDate,

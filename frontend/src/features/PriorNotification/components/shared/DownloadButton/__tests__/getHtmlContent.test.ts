@@ -25,8 +25,6 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
       isManuallyCreated: true,
       isSentByFailoverSoftware: false,
       message: {
-        authorizedLanding: true,
-        authorizedPortEntrance: false,
         catchOnboard: [
           {
             conversionFactor: undefined,
@@ -138,6 +136,8 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
         economicZone: undefined,
         effortZone: undefined,
         faoZone: undefined,
+        hasPortEntranceAuthorization: false,
+        hasPortLandingAuthorization: true,
         isBeingSent: false,
         isInVerificationScope: false,
         isSent: false,

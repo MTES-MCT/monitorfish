@@ -168,8 +168,8 @@ class PriorNotificationControllerITests {
         // When
         val requestBody = objectMapper.writeValueAsString(
             ManualPriorNotificationDataInput(
-                authorizedPortEntrance = true,
-                authorizedLanding = true,
+                hasPortEntranceAuthorization = true,
+                hasPortLandingAuthorization = true,
                 authorTrigram = "ABC",
                 didNotFishAfterZeroNotice = false,
                 expectedArrivalDate = ZonedDateTime.now().toString(),
@@ -201,8 +201,8 @@ class PriorNotificationControllerITests {
         // Given
         given(
             createOrUpdateManualPriorNotification.execute(
-                authorizedPortEntrance = anyOrNull(),
-                authorizedLanding = anyOrNull(),
+                hasPortEntranceAuthorization = anyOrNull(),
+                hasPortLandingAuthorization = anyOrNull(),
                 authorTrigram = anyOrNull(),
                 didNotFishAfterZeroNotice = anyOrNull(),
                 expectedArrivalDate = anyOrNull(),
@@ -223,8 +223,8 @@ class PriorNotificationControllerITests {
         // When
         val requestBody = objectMapper.writeValueAsString(
             ManualPriorNotificationDataInput(
-                authorizedPortEntrance = true,
-                authorizedLanding = true,
+                hasPortEntranceAuthorization = true,
+                hasPortLandingAuthorization = true,
                 authorTrigram = "ABC",
                 didNotFishAfterZeroNotice = false,
                 expectedArrivalDate = ZonedDateTime.now().toString(),

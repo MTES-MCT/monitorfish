@@ -1273,7 +1273,7 @@ def test_extract_pnos_to_generate(reset_test_data, extracted_pnos):
         "last_control_datetime_utc",
     ]
 
-    pnos = extract_pnos_to_generate.run(
+    pnos, generation_needed = extract_pnos_to_generate.run(
         start_datetime_utc=datetime(2020, 1, 1),
         end_datetime_utc=datetime.now(tz=timezone.utc).replace(tzinfo=None),
     )
@@ -1554,9 +1554,10 @@ def test_load_pno_pdf_documents(reset_test_data):
     initial_pdfs = read_query(query, db="monitorfish_remote")
 
     ### Run ###
-    pno_pdf_documents_being_sent = load_pno_pdf_documents.run(pnos)
+    pno_pdf_documents_being_sent, distribution_needed = load_pno_pdf_documents.run(pnos)
 
     ### Asserts ###
+    assert distribution_needed
     final_pdfs = read_query(query, db="monitorfish_remote")
 
     # Test pdf document equality
@@ -2000,3 +2001,97 @@ def test_flow(
             ),
             "success",
         ].all()
+
+
+@pytest.mark.parametrize("is_integration", [True, False])
+@patch("src.pipeline.helpers.emails.send_email")
+@patch("src.pipeline.helpers.emails.send_sms")
+@patch("src.pipeline.helpers.emails.send_fax")
+@patch("src.pipeline.flows.distribute_pnos.requests")
+def test_flow_with_zero_pno_to_generate(
+    mock_requests,
+    mock_send_fax,
+    mock_send_sms,
+    mock_send_email,
+    monitorenv_control_units_api_response,
+    reset_test_data,
+    is_integration,
+):
+    # Mock call to Monitorenv API for control units contacts
+    response = Response()
+    response.status_code = 200
+    response._content = json.dumps(monitorenv_control_units_api_response).encode(
+        "utf-8"
+    )
+    response.encoding = "utf-8"
+    mock_requests.get.return_value = response
+
+    # Mock send_email and send_sms calls
+    mock_send_email.return_value = dict()
+    mock_send_sms.return_values = dict()
+
+    # Run
+    flow.schedule = None
+    state = flow.run(
+        is_integration=is_integration,
+        start_hours_ago=0,
+        end_hours_ago=0,
+        test_mode=False,
+    )
+
+    # Asserts
+    assert state.is_successful()
+
+
+@pytest.mark.parametrize("is_integration", [True, False])
+@patch("src.pipeline.helpers.emails.send_email")
+@patch("src.pipeline.helpers.emails.send_sms")
+@patch("src.pipeline.helpers.emails.send_fax")
+@patch("src.pipeline.flows.distribute_pnos.requests")
+def test_flow_with_zero_pno_to_send(
+    mock_requests,
+    mock_send_fax,
+    mock_send_sms,
+    mock_send_email,
+    monitorenv_control_units_api_response,
+    reset_test_data,
+    is_integration,
+):
+    # Mock call to Monitorenv API for control units contacts
+    response = Response()
+    response.status_code = 200
+    response._content = json.dumps(monitorenv_control_units_api_response).encode(
+        "utf-8"
+    )
+    response.encoding = "utf-8"
+    mock_requests.get.return_value = response
+
+    # Mock send_email and send_sms calls
+    mock_send_email.return_value = dict()
+    mock_send_sms.return_values = dict()
+
+    # Compute start_hours_ago to query PNO with report_id '13'
+    now = datetime.utcnow()
+    start_datetime_utc = now - relativedelta(months=1, hours=2, minutes=15)
+    end_datetime_utc = now - relativedelta(months=1, hours=1, minutes=45)
+
+    start_hours_ago = (now - start_datetime_utc).total_seconds() / 3600
+    end_hours_ago = (now - end_datetime_utc).total_seconds() / 3600
+    # Run
+    flow.schedule = None
+    state = flow.run(
+        is_integration=is_integration,
+        start_hours_ago=start_hours_ago,
+        end_hours_ago=end_hours_ago,
+        test_mode=False,
+    )
+
+    # Asserts
+    assert state.is_successful()
+
+    pnos_to_generate = state.result[
+        flow.get_tasks("extract_pnos_to_generate")[0]
+    ].result[0]
+    assert len(pnos_to_generate) == 1
+    assert pnos_to_generate.loc[0, "operation_number"] == "13"
+    assert pnos_to_generate.loc[0, "is_being_sent"] == False

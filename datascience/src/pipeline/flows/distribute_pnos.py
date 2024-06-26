@@ -3,7 +3,7 @@ from datetime import datetime
 from email.policy import EmailPolicy
 from itertools import chain
 from pathlib import Path
-from typing import List
+from typing import List, Tuple
 
 import numpy as np
 import pandas as pd
@@ -89,8 +89,10 @@ def extract_fishing_gear_names() -> dict:
 @task(checkpoint=False)
 def extract_pnos_to_generate(
     start_datetime_utc: datetime, end_datetime_utc: datetime
-) -> pd.DataFrame:
-    return extract(
+) -> Tuple[pd.DataFrame, bool]:
+    logger = prefect.context.get("logger")
+
+    pnos = extract(
         db_name="monitorfish_remote",
         query_filepath="monitorfish/pnos_to_generate.sql",
         params={
@@ -98,6 +100,11 @@ def extract_pnos_to_generate(
             "end_datetime_utc": end_datetime_utc,
         },
     )
+    logger.info(f"Extracted {len(pnos)} PNOs to generate.")
+
+    generation_needed = len(pnos) > 0
+
+    return (pnos, generation_needed)
 
 
 @task(checkpoint=False)
@@ -520,7 +527,7 @@ def render_pno(
 @task(checkpoint=False)
 def load_pno_pdf_documents(
     pno_pdf_documents: List[RenderedPno],
-) -> List[RenderedPno]:
+) -> Tuple[List[RenderedPno], bool]:
     """
     Loads input pno_pdf_documents to `prior_notification_pdf_documents` and returns
     the subset of the input that must be distributed, i.e. the list of `RenderedPno`
@@ -538,6 +545,8 @@ def load_pno_pdf_documents(
         ["report_id", "source", "generation_datetime_utc", "pdf_document"]
     ]
 
+    logger.info(f"Loading {len(df)} generated PNO pdf documents.")
+
     load(
         df,
         table_name="prior_notification_pdf_documents",
@@ -551,9 +560,15 @@ def load_pno_pdf_documents(
         bytea_columns=["pdf_document"],
     )
 
-    return [
+    pnos_to_distribute = [
         dataclasses.replace(d) for d in pno_pdf_documents if d.is_being_sent == True
     ]
+
+    logger.info(f"Returning {len(pnos_to_distribute)} PNOs to distribute.")
+
+    distribution_needed = len(pnos_to_distribute) > 0
+
+    return (pnos_to_distribute, distribution_needed)
 
 
 @task(checkpoint=False)
@@ -779,6 +794,14 @@ def make_update_logbook_reports_statement(
         pno.report_id for pno in pnos_to_update if pno.source == PnoSource.LOGBOOK
     )
 
+    logger = prefect.context.get("logger")
+    logger.info(
+        (
+            "Creating state change SQL statement for "
+            f"{ len(logbook_pno_report_ids) } LOGBOOK PNOs."
+        )
+    )
+
     statement = text(
         "UPDATE public.logbook_reports "
         "   SET value = jsonb_set("
@@ -808,75 +831,106 @@ def make_update_logbook_reports_statement(
 with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
+        # Input parameters
         test_mode = Parameter("test_mode")
         is_integration = Parameter("is_integration")
         start_hours_ago = Parameter("start_hours_ago")
         end_hours_ago = Parameter("end_hours_ago")
+
+        # Computed parameters
         timedelta_from_start_to_now = make_timedelta(hours=start_hours_ago)
         timedelta_from_end_to_now = make_timedelta(hours=end_hours_ago)
         utcnow = get_utcnow()
         start_datetime_utc = utcnow - timedelta_from_start_to_now
         end_datetime_utc = utcnow - timedelta_from_end_to_now
 
-        control_units_contacts = fetch_control_units_contacts()
-        species_names = extract_species_names()
-        fishing_gear_names = extract_fishing_gear_names()
-        html_for_pdf_template = get_html_for_pdf_template()
-        email_body_template = get_email_body_template()
-        sms_template = get_sms_template()
-        pnos = extract_pnos_to_generate(
+        # Extract PNOs
+        pnos_to_generate, generation_needed = extract_pnos_to_generate(
             start_datetime_utc=start_datetime_utc,
             end_datetime_utc=end_datetime_utc,
         )
-        units_targeting_vessels = extract_pno_units_targeting_vessels()
-        units_ports_and_segments_subscriptions = (
-            extract_pno_units_ports_and_segments_subscriptions()
-        )
 
-        pnos = to_pnos_to_render(pnos)
-        pnos = pre_render_pno.map(
-            pnos,
-            species_names=unmapped(species_names),
-            fishing_gear_names=unmapped(fishing_gear_names),
-        )
-        pnos = render_pno.map(
-            pnos,
-            html_for_pdf_template=unmapped(html_for_pdf_template),
-            email_body_template=unmapped(email_body_template),
-            sms_template=unmapped(sms_template),
-        )
-        pnos_to_distribute = load_pno_pdf_documents(pnos)
-        pnos_with_addressees = attribute_addressees.map(
-            pnos_to_distribute,
-            unmapped(units_targeting_vessels),
-            unmapped(units_ports_and_segments_subscriptions),
-            control_units_contacts=unmapped(control_units_contacts),
-        )
+        with case(generation_needed, True):
+            # Extract
+            control_units_contacts = fetch_control_units_contacts()
+            species_names = extract_species_names()
+            fishing_gear_names = extract_fishing_gear_names()
+            html_for_pdf_template = get_html_for_pdf_template()
+            email_body_template = get_email_body_template()
+            sms_template = get_sms_template()
+            units_targeting_vessels = extract_pno_units_targeting_vessels()
+            units_ports_and_segments_subscriptions = (
+                extract_pno_units_ports_and_segments_subscriptions()
+            )
 
-        email = create_email.map(pnos_with_addressees, test_mode=unmapped(test_mode))
-        email = filter_results(email)
+            # Render pdf documents
+            pnos_to_render = to_pnos_to_render(pnos_to_generate)
+            pre_rendered_pnos = pre_render_pno.map(
+                pnos_to_render,
+                species_names=unmapped(species_names),
+                fishing_gear_names=unmapped(fishing_gear_names),
+            )
+            rendered_pnos = render_pno.map(
+                pre_rendered_pnos,
+                html_for_pdf_template=unmapped(html_for_pdf_template),
+                email_body_template=unmapped(email_body_template),
+                sms_template=unmapped(sms_template),
+            )
 
-        sms = create_sms.map(pnos_with_addressees, test_mode=unmapped(test_mode))
-        sms = filter_results(sms)
+            # Load pdf documents
+            pnos_to_distribute, distribution_needed = load_pno_pdf_documents(
+                rendered_pnos
+            )
 
-        messages_to_send = flatten([email, sms])
+            with case(distribution_needed, True):
+                # Distribute PNOs
+                pnos_with_addressees = attribute_addressees.map(
+                    pnos_to_distribute,
+                    unmapped(units_targeting_vessels),
+                    unmapped(units_ports_and_segments_subscriptions),
+                    control_units_contacts=unmapped(control_units_contacts),
+                )
 
-        sent_messages = send_pno_message.map(
-            messages_to_send, is_integration=unmapped(is_integration)
-        )
-        sent_messages = filter_results(sent_messages)
-        loaded_prior_notification_sent_messages = load_prior_notification_sent_messages(
-            flatten(sent_messages)
-        )
+                email = create_email.map(
+                    pnos_with_addressees, test_mode=unmapped(test_mode)
+                )
+                email = filter_results(email)
 
-        update_logbook_reports_statement = make_update_logbook_reports_statement(
-            pnos_to_update=pnos_to_distribute,
-            start_datetime_utc=start_datetime_utc,
-            end_datetime_utc=end_datetime_utc,
-            upstream_tasks=[loaded_prior_notification_sent_messages],
-        )
+                sms = create_sms.map(
+                    pnos_with_addressees, test_mode=unmapped(test_mode)
+                )
+                sms = filter_results(sms)
 
-        execute_statement(update_logbook_reports_statement)
+                messages_to_send = flatten([email, sms])
 
+                sent_messages = send_pno_message.map(
+                    messages_to_send, is_integration=unmapped(is_integration)
+                )
+                sent_messages = filter_results(sent_messages)
+                loaded_prior_notification_sent_messages = (
+                    load_prior_notification_sent_messages(flatten(sent_messages))
+                )
+
+                # Perform state changes
+                update_logbook_reports_statement = (
+                    make_update_logbook_reports_statement(
+                        pnos_to_update=pnos_to_distribute,
+                        start_datetime_utc=start_datetime_utc,
+                        end_datetime_utc=end_datetime_utc,
+                        upstream_tasks=[loaded_prior_notification_sent_messages],
+                    )
+                )
+
+                executed_statement = execute_statement(update_logbook_reports_statement)
+
+flow.set_reference_tasks(
+    [
+        pnos_to_generate,
+        pnos_to_distribute,
+        pnos_with_addressees,
+        loaded_prior_notification_sent_messages,
+        executed_statement,
+    ]
+)
 
 flow.file_name = Path(__file__).name

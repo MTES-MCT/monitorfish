@@ -1,8 +1,9 @@
 import { useGetSpeciesQuery } from '@api/specy'
 import { useGetSpeciesAsOptions } from '@hooks/useGetSpeciesAsOptions'
-import { FormikNumberInput, Select, SingleTag } from '@mtes-mct/monitor-ui'
+import { CustomSearch, FormikNumberInput, Select, SingleTag } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { useField } from 'formik'
+import { useMemo } from 'react'
 import { Fragment } from 'react/jsx-runtime'
 import styled from 'styled-components'
 
@@ -11,6 +12,7 @@ import { getFishingsCatchesExtraFields } from './utils'
 import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES } from '../../constants'
 import { getFishingsCatchesInitialValues } from '../../utils'
 
+import type { Specy } from '../../../../../../domain/types/specy'
 import type { PriorNotification } from '../../../../PriorNotification.types'
 
 // TODO Is the species name really useful since the Backend fills it?
@@ -19,19 +21,23 @@ export function FormikFishingCatchesMultiSelect() {
   const { speciesAsOptions } = useGetSpeciesAsOptions()
   const { data: speciesAndGroups } = useGetSpeciesQuery()
 
-  const filteredSpeciesAsOptions = speciesAsOptions?.filter(specyOption =>
-    input.value.every(fishingCatch => fishingCatch.specyCode !== specyOption.value)
+  const filteredSpeciesAsOptions = useMemo(
+    () =>
+      speciesAsOptions?.filter(specyOption =>
+        input.value.every(fishingCatch => fishingCatch.specyCode !== specyOption.value.code)
+      ) ?? [],
+    [speciesAsOptions, input.value]
   )
 
-  const add = (specyCode: string | undefined) => {
-    const specyOption = speciesAsOptions?.find(({ value }) => value === specyCode)
+  const add = (nextSpecy: Specy | undefined) => {
+    const specyOption = speciesAsOptions?.find(({ value }) => value.code === nextSpecy?.code)
     if (!specyOption) {
       return
     }
 
-    const specyName = speciesAndGroups?.species.find(specy => specy.code === specyOption.value)?.name
+    const specyName = speciesAndGroups?.species.find(specy => specy.code === specyOption.value.code)?.name
     assertNotNullish(specyName)
-    const nextFishingCatches = [...input.value, ...getFishingsCatchesInitialValues(specyOption.value, specyName)]
+    const nextFishingCatches = [...input.value, ...getFishingsCatchesInitialValues(specyOption.value.code, specyName)]
 
     helper.setValue(nextFishingCatches)
   }
@@ -46,15 +52,36 @@ export function FormikFishingCatchesMultiSelect() {
     helper.setValue(nextFishingCatches)
   }
 
+  const customSearch = useMemo(
+    () =>
+      new CustomSearch(
+        filteredSpeciesAsOptions,
+        [
+          {
+            name: 'value.code',
+            weight: 0.9
+          },
+          {
+            name: 'value.name',
+            weight: 0.1
+          }
+        ],
+        { cacheKey: 'SPECIES_AS_OPTIONS', isStrict: true }
+      ),
+    [filteredSpeciesAsOptions]
+  )
+
   return (
     <>
       <Select
+        customSearch={customSearch}
         disabled={!filteredSpeciesAsOptions}
         error={meta.error}
         label="Espèces à bord et à débarquer"
         name="fishingCatches"
         onChange={add}
         options={filteredSpeciesAsOptions ?? []}
+        optionValueKey="code"
         searchable
         virtualized
       />

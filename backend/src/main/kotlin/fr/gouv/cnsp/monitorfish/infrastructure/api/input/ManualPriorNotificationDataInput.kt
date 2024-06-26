@@ -3,8 +3,8 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.input
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagePurpose
 
 data class ManualPriorNotificationDataInput(
-    val authorizedPortEntrance: Boolean,
-    val authorizedLanding: Boolean,
+    val hasPortEntranceAuthorization: Boolean,
+    val hasPortLandingAuthorization: Boolean,
     val authorTrigram: String,
     val didNotFishAfterZeroNotice: Boolean,
     val expectedArrivalDate: String,

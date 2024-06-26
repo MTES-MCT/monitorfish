@@ -45,12 +45,6 @@ export function getHtmlContent(
     .join('')
 
   const data = {
-    authorizedLanding: pno.message.authorizedLanding
-      ? `<strong class="authorized">Autorisation donnée de débarquer<br/></strong>`
-      : `<strong class="unauthorized">Interdiction donnée de débarquer<br/></strong>`,
-    authorizedPortEntrance: pno.message.authorizedPortEntrance
-      ? `<strong class="authorized">Autorisation donnée d'entrer au port<br/></strong>`
-      : `<strong class="unauthorized">Interdiction donnée d'entrer au port<br/></strong>`,
     catchDetails,
     externalReferenceNumber: pno.externalReferenceNumber ?? 'Aucun',
     flagState: getAlpha2CodeFromAlpha2or3Code(pno.flagState) ?? 'unknown',
@@ -62,6 +56,12 @@ export function getHtmlContent(
       ? customDayjs(pno.operationDateTime).utc().format('le DD/MM/YYYY à HH[h]mm UTC')
       : '-',
     port: pno.message.port,
+    portEntranceAuthorization: pno.message.hasPortEntranceAuthorization
+      ? `<strong class="authorized">Autorisation donnée d'entrer au port<br/></strong>`
+      : `<strong class="unauthorized">Interdiction donnée d'entrer au port<br/></strong>`,
+    portLandingAuthorization: pno.message.hasPortLandingAuthorization
+      ? `<strong class="authorized">Autorisation donnée de débarquer<br/></strong>`
+      : `<strong class="unauthorized">Interdiction donnée de débarquer<br/></strong>`,
     portName: pno.message.portName,
     predictedArrivalDatetimeUtc: pno.message.predictedArrivalDatetimeUtc
       ? customDayjs(pno.message.predictedArrivalDatetimeUtc).utc().format('le DD/MM/YYYY à HH[h]mm UTC')

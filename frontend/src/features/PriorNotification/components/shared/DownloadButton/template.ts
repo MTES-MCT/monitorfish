@@ -51,8 +51,8 @@ export const HTML_TEMPLATE = `
           <tr>
             <td class="data-label">Décision CNSP</td>
             <td>
-            {authorizedPortEntrance}
-            {authorizedLanding}
+            {portEntranceAuthorization}
+            {portLandingAuthorization}
             </td>
           </tr>
         </table>

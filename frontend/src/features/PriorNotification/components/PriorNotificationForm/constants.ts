@@ -16,8 +16,6 @@ const FISHING_CATCH_VALIDATION_SCHEMA: ObjectSchema<PriorNotification.PriorNotif
 })
 
 export const FORM_VALIDATION_SCHEMA: ObjectSchema<FormValues> = object({
-  authorizedLanding: boolean().nonNullable().required(),
-  authorizedPortEntrance: boolean().nonNullable().required(),
   authorTrigram: string().trim().required('Veuillez indiquer votre trigramme.'),
   didNotFishAfterZeroNotice: boolean().required(),
   expectedArrivalDate: string().required("Veuillez indiquer la date d'arrivée estimée."),
@@ -31,6 +29,8 @@ export const FORM_VALIDATION_SCHEMA: ObjectSchema<FormValues> = object({
     .ensure()
     .required()
     .min(1, 'Veuillez sélectionner au moins une espèce.'),
+  hasPortEntranceAuthorization: boolean().nonNullable().required(),
+  hasPortLandingAuthorization: boolean().nonNullable().required(),
   isExpectedLandingDateSameAsExpectedArrivalDate: boolean().required(),
   note: string(),
   portLocode: string().required("Veuillez indiquer le port d'arrivée."),
@@ -43,14 +43,14 @@ export const FORM_VALIDATION_SCHEMA: ObjectSchema<FormValues> = object({
 })
 
 export const INITIAL_FORM_VALUES: FormValues = {
-  authorizedLanding: true,
-  authorizedPortEntrance: true,
   authorTrigram: undefined,
   didNotFishAfterZeroNotice: false,
   expectedArrivalDate: undefined,
   expectedLandingDate: undefined,
   faoArea: undefined,
   fishingCatches: [],
+  hasPortEntranceAuthorization: true,
+  hasPortLandingAuthorization: true,
   isExpectedLandingDateSameAsExpectedArrivalDate: false,
   note: undefined,
   portLocode: undefined,

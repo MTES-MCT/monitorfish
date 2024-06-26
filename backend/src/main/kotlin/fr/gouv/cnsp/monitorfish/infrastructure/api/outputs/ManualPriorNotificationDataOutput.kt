@@ -5,8 +5,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotifica
 import fr.gouv.cnsp.monitorfish.utils.CustomZonedDateTime
 
 data class ManualPriorNotificationDataOutput(
-    val authorizedPortEntrance: Boolean,
-    val authorizedLanding: Boolean,
+    val hasPortEntranceAuthorization: Boolean,
+    val hasPortLandingAuthorization: Boolean,
     val authorTrigram: String,
     val didNotFishAfterZeroNotice: Boolean,
     val expectedArrivalDate: String,
@@ -58,13 +58,13 @@ data class ManualPriorNotificationDataOutput(
             val vesselId = requireNotNull(priorNotification.vessel) {
                 "`priorNotification.vessel` is null."
             }.id
-            val authorizedPortEntrance = pnoMessage.authorizedPortEntrance ?: true
-            val authorizedLanding = pnoMessage.authorizedLanding ?: true
+            val hasPortEntranceAuthorization = pnoMessage.hasPortEntranceAuthorization ?: true
+            val hasPortLandingAuthorization = pnoMessage.hasPortLandingAuthorization ?: true
             val purpose = requireNotNull(pnoMessage.purpose) { "`message.purpose` is null." }
 
             return ManualPriorNotificationDataOutput(
-                authorizedPortEntrance = authorizedPortEntrance,
-                authorizedLanding = authorizedLanding,
+                hasPortEntranceAuthorization = hasPortEntranceAuthorization,
+                hasPortLandingAuthorization = hasPortLandingAuthorization,
                 authorTrigram = authorTrigram,
                 didNotFishAfterZeroNotice = priorNotification.didNotFishAfterZeroNotice,
                 expectedArrivalDate = expectedArrivalDate,

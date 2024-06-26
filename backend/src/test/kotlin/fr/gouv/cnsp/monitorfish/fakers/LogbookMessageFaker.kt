@@ -46,8 +46,8 @@ class LogbookMessageFaker {
 
         private fun fakePnoMessage(): PNO {
             return PNO().apply {
-                authorizedPortEntrance = null
-                authorizedLanding = null
+                hasPortEntranceAuthorization = null
+                hasPortLandingAuthorization = null
                 catchOnboard = listOf(fakeLogbookFishingCatch())
                 catchToLand = listOf(fakeLogbookFishingCatch())
                 economicZone = null

@@ -112,13 +112,13 @@ export function Form() {
           <FormikMultiRadio
             isInline
             label="Autorisation d'entrée au port"
-            name="authorizedPortEntrance"
+            name="hasPortEntranceAuthorization"
             options={BOOLEAN_AS_OPTIONS}
           />
           <FormikMultiRadio
             isInline
             label="Autorisation de débarquement"
-            name="authorizedLanding"
+            name="hasPortLandingAuthorization"
             options={BOOLEAN_AS_OPTIONS}
           />
         </>

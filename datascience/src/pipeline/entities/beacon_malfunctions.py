@@ -9,6 +9,7 @@ from config import (
     CNSP_SIP_DEPARTMENT_FAX,
     CNSP_SIP_DEPARTMENT_MOBILE_PHONE,
 )
+from src.pipeline.helpers.emails import CommunicationMeans
 
 
 class BeaconStatus(Enum):
@@ -92,12 +93,6 @@ class BeaconMalfunctionNotificationRecipientFunction(Enum):
     SATELLITE_OPERATOR = "SATELLITE_OPERATOR"
     FMC = "FMC"
     FOREIGN_FMC = "FOREIGN_FMC"
-
-
-class CommunicationMeans(Enum):
-    EMAIL = "EMAIL"
-    SMS = "SMS"
-    FAX = "FAX"
 
 
 @dataclass

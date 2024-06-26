@@ -211,7 +211,9 @@ def transform_vessels_most_recent_control(controls: pd.DataFrame) -> pd.DataFram
     controls["last_control_infraction"] = controls.last_control_infractions.astype(bool)
 
     controls["infraction_comments"] = controls.last_control_infractions.map(
-        lambda l: ", ".join(remove_nones_from_list(map(try_get_factory("comments"), l)))
+        lambda li: ", ".join(
+            remove_nones_from_list(map(try_get_factory("comments"), li))
+        )
     )
     controls["infraction_comments"] = controls.infraction_comments.where(
         controls.infraction_comments != "", None
@@ -352,7 +354,7 @@ def compute_infraction_rate_risk_factors(
     controls = controls[columns].copy(deep=True)
 
     controls["n_fishing_infractions"] = controls["infractions_natinf_codes"].map(
-        lambda l: sum(map(lambda x: x in fishing_infraction_natinfs, l))
+        lambda li: sum(map(lambda x: x in fishing_infraction_natinfs, li))
     )
 
     controls["points"] = controls["n_fishing_infractions"] * 10 - (
@@ -506,14 +508,18 @@ def load_control_anteriority(control_anteriority: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        jsonb_columns=[
+            "last_control_logbook_infractions",
+            "last_control_gear_infractions",
+            "last_control_species_infractions",
+            "last_control_other_infractions",
+        ],
     )
 
 
 with Flow("Control anteriority", executor=LocalDaskExecutor()) as flow:
-
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
-
         number_years = Parameter("number_years", 5)
 
         # Extract

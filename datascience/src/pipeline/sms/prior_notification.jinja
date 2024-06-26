@@ -1,0 +1,7 @@
+Préavis de débarquement à {{ port_name }}
+- {{ vessel_name }} ({{ cfr }})
+- Segment(s) {{ trip_segments }}
+- Note de risque {{ "{:.2f}".format(risk_factor) }}
+- Préavis envoyé {{ "le {}".format(report_datetime_utc) if report_datetime_utc }}, arrivée estimée {{ "le {}".format(predicted_arrival_datetime_utc) if predicted_arrival_datetime_utc }}{% if note %}
+
+[ ! ] Points d'attention relevés par le CNSP, consultez le pdf du préavis et contactez le CNSP pour infos supplémentaires.{% endif %}

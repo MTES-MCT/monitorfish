@@ -1,8 +1,19 @@
+import email
 import io
 import smtplib
 from email.message import EmailMessage
+from enum import Enum
+from logging import Logger
 from mimetypes import guess_type
 from pathlib import Path
+from smtplib import (
+    SMTPDataError,
+    SMTPHeloError,
+    SMTPNotSupportedError,
+    SMTPRecipientsRefused,
+    SMTPSenderRefused,
+)
+from time import sleep
 from typing import List, Union
 
 import pypdf
@@ -18,6 +29,12 @@ from config import (
     MONITORFISH_SMS_SERVER_PORT,
     MONITORFISH_SMS_SERVER_URL,
 )
+
+
+class CommunicationMeans(Enum):
+    EMAIL = "EMAIL"
+    SMS = "SMS"
+    FAX = "FAX"
 
 
 def create_html_email(
@@ -243,7 +260,6 @@ def send_sms(msg: EmailMessage) -> dict:
     """
     Same as `send_email`, using sms server.
     """
-
     assert MONITORFISH_SMS_SERVER_URL is not None
     assert MONITORFISH_SMS_SERVER_PORT is not None
 
@@ -266,6 +282,111 @@ def send_fax(msg: EmailMessage) -> dict:
         host=MONITORFISH_FAX_SERVER_URL, port=MONITORFISH_FAX_SERVER_PORT
     ) as server:
         send_errors = server.send_message(msg)
+    return send_errors
+
+
+def send_email_or_sms_or_fax_message(
+    msg: EmailMessage,
+    communication_means: CommunicationMeans,
+    is_integration: bool,
+    logger: Logger,
+) -> dict:
+    send_functions = {
+        CommunicationMeans.EMAIL: send_email,
+        CommunicationMeans.SMS: send_sms,
+        CommunicationMeans.FAX: send_fax,
+    }
+
+    send = send_functions[communication_means]
+
+    addr_fields = [f for f in (msg["To"], msg["Bcc"], msg["Cc"]) if f is not None]
+    addressees = [a[1] for a in email.utils.getaddresses(addr_fields)]
+
+    try:
+        try:
+            if is_integration:
+                logger.info(f"(Mock) Sending {communication_means.value.lower()}.")
+                send_errors = {}
+            else:
+                logger.info(f"Sending {communication_means.value.lower()}.")
+                send_errors = send(msg)
+        except (SMTPHeloError, SMTPDataError):
+            # Retry
+            logger.warning("Message not sent, retrying...")
+            sleep(10)
+            send_errors = send(msg)
+    except SMTPHeloError:
+        send_errors = {
+            addr: (
+                None,
+                "The server didn't reply properly to the helo greeting.",
+            )
+            for addr in addressees
+        }
+        logger.error(str(send_errors))
+    except SMTPRecipientsRefused:
+        # All recipients were refused
+        send_errors = {
+            addr: (
+                None,
+                "The server rejected ALL recipients (no mail was sent)",
+            )
+            for addr in addressees
+        }
+        logger.error(str(send_errors))
+    except SMTPSenderRefused:
+        send_errors = {
+            addr: (None, "The server didn't accept the from_addr.")
+            for addr in addressees
+        }
+        logger.error(str(send_errors))
+    except SMTPDataError:
+        send_errors = {
+            addr: (
+                None,
+                (
+                    "The server replied with an unexpected error code "
+                    "(other than a refusal of a recipient)."
+                ),
+            )
+            for addr in addressees
+        }
+        logger.error(str(send_errors))
+    except SMTPNotSupportedError:
+        send_errors = {
+            addr: (
+                None,
+                (
+                    "The mail_options parameter includes 'SMTPUTF8' but the SMTPUTF8 "
+                    "extension is not supported by the server."
+                ),
+            )
+            for addr in addressees
+        }
+        logger.error(str(send_errors))
+    except ValueError:
+        send_errors = {
+            addr: (
+                None,
+                "there is more than one set of 'Resent-' headers.",
+            )
+            for addr in addressees
+        }
+        logger.error(str(send_errors))
+    except Exception as e:
+        send_errors = {addr: (None, f"Other error: {e}") for addr in addressees}
+        logger.error(str(send_errors))
+
+    match communication_means:
+        case CommunicationMeans.SMS:
+            suffix = f"@{MONITORFISH_SMS_DOMAIN}"
+        case CommunicationMeans.FAX:
+            suffix = f"@{MONITORFISH_FAX_DOMAIN}"
+        case CommunicationMeans.EMAIL:
+            suffix = ""
+
+    send_errors = {k.removesuffix(suffix): v for k, v in send_errors.items()}
+
     return send_errors
 
 

@@ -15,5 +15,9 @@ SELECT
     number_species_seizures_last_5_years,
     number_vessel_seizures_last_5_years,
     number_infractions_last_5_years,
-    number_recent_controls
+    number_recent_controls,
+    last_control_logbook_infractions,
+    last_control_gear_infractions,
+    last_control_species_infractions,
+    last_control_other_infractions
 FROM control_anteriority

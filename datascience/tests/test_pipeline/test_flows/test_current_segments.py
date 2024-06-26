@@ -4,6 +4,7 @@ import geopandas as gpd
 import numpy as np
 import pandas as pd
 import pytest
+from dateutil import relativedelta
 from shapely.geometry import Polygon
 
 from src.pipeline.flows.current_segments import (
@@ -27,21 +28,28 @@ def current_segments() -> pd.DataFrame:
     now = datetime.datetime.utcnow()
     return pd.DataFrame(
         {
-            "cfr": ["ABC000306959", "ABC000542519"],
+            "cfr": ["ABC000000000", "ABC000306959", "ABC000542519", "___TARGET___"],
             "last_logbook_message_datetime_utc": [
+                now - relativedelta.relativedelta(months=1, minutes=27),
                 now - datetime.timedelta(days=1, hours=6),
                 now - datetime.timedelta(weeks=1, days=3),
+                now - relativedelta.relativedelta(months=1, minutes=34),
             ],
             "departure_datetime_utc": [
+                pd.NaT,
                 datetime.datetime(2018, 2, 27, 1, 5),
                 now - datetime.timedelta(weeks=1, days=5),
+                pd.NaT,
             ],
-            "trip_number": ["20210001", "20210002"],
+            "trip_number": [None, "20210001", "20210002", None],
             "gear_onboard": [
-                [{"gear": "OTM", "mesh": 80.0, "dimensions": None}],
-                [{"gear": "OTB", "mesh": 80.0, "dimensions": None}],
+                None,
+                [{"gear": "OTM", "mesh": 80, "dimensions": None}],
+                [{"gear": "OTB", "mesh": 80, "dimensions": None}],
+                None,
             ],
             "species_onboard": [
+                None,
                 [
                     {
                         "gear": "OTM",
@@ -64,26 +72,32 @@ def current_segments() -> pd.DataFrame:
                         "species": "HKE",
                     },
                 ],
+                None,
             ],
-            "segments": [["SWW04"], ["SWW01/02/03"]],
-            "total_weight_onboard": [713.0, 2583.0],
-            "probable_segments": [None, None],
-            "impact_risk_factor": [2.1, 3.0],
-            "control_priority_level": [1.0, 1.0],
-            "segment_highest_impact": ["SWW04", "SWW01/02/03"],
-            "segment_highest_priority": [None, None],
-            "vessel_id": [1, 2],
-            "external_immatriculation": ["RV348407", "RO237719"],
-            "ircs": ["LLUK", "FQ7058"],
+            "segments": [[], ["SWW04"], ["SWW01/02/03"], []],
+            "total_weight_onboard": [0.0, 713.0, 2583.0, 0.0],
+            "probable_segments": [None, None, None, None],
+            "impact_risk_factor": [1.0, 2.1, 3.0, 1.0],
+            "control_priority_level": [1.0, 1.0, 1.0, 1.0],
+            "segment_highest_impact": [None, "SWW04", "SWW01/02/03", None],
+            "segment_highest_priority": [None, None, None, None],
+            "vessel_id": [None, 1.0, 2.0, 7.0],
+            "external_immatriculation": [None, "RV348407", "RO237719", None],
+            "ircs": [None, "LLUK", "FQ7058", None],
         }
     )
 
 
 def test_extract_catches(reset_test_data):
     catches = extract_catches.run()
-    assert len(catches) == 3
-    assert set(catches.cfr) == {"ABC000542519", "ABC000306959"}
-    assert set(catches.ircs) == {"LLUK", "FQ7058"}
+    assert len(catches) == 5
+    assert set(catches.cfr) == {
+        "ABC000542519",
+        "ABC000306959",
+        "ABC000000000",
+        "___TARGET___",
+    }
+    assert set(catches.ircs) == {"LLUK", "FQ7058", None}
     assert set(catches.loc[catches.cfr == "ABC000542519", "trip_number"]) == {
         "20210002"
     }
@@ -461,11 +475,19 @@ def test_test_current_segments_flow(reset_test_data, current_segments):
         computed_current_segments.drop(columns=datetime_columns),
     )
 
+    # Data of these vessels is only for PNO distribution testing and should be ignored
+    # when testing this flow
+    excluded_cfrs = ["ABC000000000", "___TARGET___"]
+
     assert (
         (
             (
-                current_segments[datetime_columns]
-                - computed_current_segments[datetime_columns]
+                current_segments.loc[
+                    ~current_segments.cfr.isin(excluded_cfrs), datetime_columns
+                ]
+                - computed_current_segments.loc[
+                    ~computed_current_segments.cfr.isin(excluded_cfrs), datetime_columns
+                ]
             )
             < datetime.timedelta(seconds=10)
         )

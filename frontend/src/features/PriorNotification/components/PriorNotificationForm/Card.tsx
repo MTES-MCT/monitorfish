@@ -5,7 +5,7 @@ import { updateEditedPriorNotificationComputedValues } from '@features/PriorNoti
 import { isZeroNotice } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Banner, Button, FormikEffect, Icon, Level, Size, usePrevious } from '@mtes-mct/monitor-ui'
+import { Accent, Banner, Button, FormikEffect, Icon, Level, usePrevious } from '@mtes-mct/monitor-ui'
 import { getDefinedObject } from '@utils/getDefinedObject'
 import { useFormikContext } from 'formik'
 import { isEqual } from 'lodash'
@@ -160,20 +160,20 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
               Fermer
             </Button>
 
-          {!!editedPriorNotificationDetail && (
-            <DownloadButton
-              isDisabled={dirty && (!isSent || !isPendingSend)}
-              pnoLogbookMessage={editedPriorNotificationDetail.logbookMessage}
-            />
-          )}
+            {!!editedPriorNotificationDetail && (
+              <DownloadButton
+                isDisabled={dirty && (!isSent || !isPendingSend)}
+                pnoLogbookMessage={editedPriorNotificationDetail.logbookMessage}
+              />
+            )}
 
-          <Button
-            accent={Accent.PRIMARY}
-            disabled={!dirty || isPendingSend || isSent || (isValidatingOnChange && !isValid)}
-            onClick={handleSubmit}
-          >
-            {isNewPriorNotification ? 'Créer le préavis' : 'Enregistrer'}
-          </Button>
+            <Button
+              accent={Accent.PRIMARY}
+              disabled={!dirty || isPendingSend || isSent || (isValidatingOnChange && !isValid)}
+              onClick={handleSubmit}
+            >
+              {isNewPriorNotification ? 'Créer le préavis' : 'Enregistrer'}
+            </Button>
 
             {!isNewPriorNotification && (
               <Button

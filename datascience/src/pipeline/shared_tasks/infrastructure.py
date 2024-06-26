@@ -1,6 +1,6 @@
 import prefect
 from prefect import task
-from sqlalchemy import Table
+from sqlalchemy import Executable, Table
 
 from src.db_config import create_engine
 from src.pipeline import utils
@@ -31,3 +31,15 @@ def get_table(
         conn=create_engine(database),
         logger=logger,
     )
+
+
+@task(checkpoint=False)
+def execute_statement(statement: Executable):
+    """Execute input statement on Monitorfish remote database
+
+    Args:
+        statement (Executable): Statement to execute
+    """
+    e = create_engine("monitorfish_remote")
+    with e.begin() as conn:
+        conn.execute(statement)

@@ -17,27 +17,35 @@ def test_missing_trip_numbers_flow(reset_test_data):
             text("UPDATE logbook_reports SET trip_number = NULL WHERE cfr = 'SOCR4T3';")
         )
 
-    initial_missing_trip_numbers = read_query(
-        """
+    missing_trip_numbers_query = """
         SELECT
             report_id,
             trip_number
         FROM logbook_reports
-        WHERE trip_number IS NULL
+        WHERE
+            operation_type IN ('DAT', 'COR')
+            AND trip_number IS NULL
         ORDER BY report_id;
-        """,
+    """
+
+    vessel_trip_number_query = """
+        SELECT
+            report_id,
+            trip_number
+        FROM logbook_reports
+        WHERE
+            operation_type IN ('DAT', 'COR')
+            AND cfr = 'SOCR4T3'
+        ORDER BY report_id;
+    """
+
+    initial_missing_trip_numbers = read_query(
+        missing_trip_numbers_query,
         db="monitorfish_remote",
     )
 
     initial_vessel_trip_numbers = read_query(
-        """
-        SELECT
-            report_id,
-            trip_number
-        FROM logbook_reports
-        WHERE cfr = 'SOCR4T3'
-        ORDER BY report_id;
-        """,
+        vessel_trip_number_query,
         db="monitorfish_remote",
     )
 
@@ -53,26 +61,12 @@ def test_missing_trip_numbers_flow(reset_test_data):
 
     # Check that the vessel whose trip numbers were set to NULL were correctly computed
     final_missing_trip_numbers = read_query(
-        """
-        SELECT
-            report_id,
-            trip_number
-        FROM logbook_reports
-        WHERE trip_number IS NULL
-        ORDER BY report_id;
-        """,
+        missing_trip_numbers_query,
         db="monitorfish_remote",
     )
 
     final_vessel_trip_numbers = read_query(
-        """
-        SELECT
-            report_id,
-            trip_number
-        FROM logbook_reports
-        WHERE cfr = 'SOCR4T3'
-        ORDER BY report_id;
-        """,
+        vessel_trip_number_query,
         db="monitorfish_remote",
     )
 
@@ -141,34 +135,47 @@ def test_missing_trip_numbers_flow_overwrites_only_computed_trip_numbers(
             )
         )
 
-    initial_missing_trip_numbers = read_query(
-        """
+    missing_trip_numbers_query = """
         SELECT
             report_id,
             trip_number
         FROM logbook_reports
-        WHERE trip_number IS NULL
+        WHERE
+            operation_type IN ('DAT', 'COR')
+            AND trip_number IS NULL
         ORDER BY report_id;
-        """,
+    """
+
+    vessel_trip_number_query = """
+        SELECT
+            report_id,
+            trip_number
+        FROM logbook_reports
+        WHERE
+            operation_type IN ('DAT', 'COR')
+            AND cfr = 'SOCR4T3'
+        ORDER BY report_id;
+    """
+
+    initial_missing_trip_numbers = read_query(
+        missing_trip_numbers_query,
         db="monitorfish_remote",
     )
 
     initial_vessel_trip_numbers = read_query(
-        """
-        SELECT
-            report_id,
-            trip_number
-        FROM logbook_reports
-        WHERE cfr = 'SOCR4T3'
-        AND report_id != '1e1bff95-dfff-4cc3-82d3-d72b46fda745'
-        ORDER BY report_id;
-        """,
+        vessel_trip_number_query,
         db="monitorfish_remote",
     )
 
     # Check that the only missing trip_numbers are those of the designated vessel
     pd.testing.assert_frame_equal(
-        initial_missing_trip_numbers, initial_vessel_trip_numbers
+        initial_missing_trip_numbers,
+        initial_vessel_trip_numbers.loc[
+            (
+                initial_vessel_trip_numbers.report_id
+                != "1e1bff95-dfff-4cc3-82d3-d72b46fda745"
+            )
+        ].reset_index(drop=True),
     )
 
     # Run the flow to compute missing trip numbers
@@ -178,26 +185,12 @@ def test_missing_trip_numbers_flow_overwrites_only_computed_trip_numbers(
 
     # Check that the vessel whose trip numbers were set to NULL were correctly computed
     final_missing_trip_numbers = read_query(
-        """
-        SELECT
-            report_id,
-            trip_number
-        FROM logbook_reports
-        WHERE trip_number IS NULL
-        ORDER BY report_id;
-        """,
+        missing_trip_numbers_query,
         db="monitorfish_remote",
     )
 
     final_vessel_trip_numbers = read_query(
-        """
-        SELECT
-            report_id,
-            trip_number
-        FROM logbook_reports
-        WHERE cfr = 'SOCR4T3'
-        ORDER BY report_id;
-        """,
+        vessel_trip_number_query,
         db="monitorfish_remote",
     )
 

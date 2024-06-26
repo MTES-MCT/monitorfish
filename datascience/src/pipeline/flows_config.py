@@ -15,6 +15,7 @@ from config import (
     MINIMUM_CONSECUTIVE_POSITIONS,
     MINIMUM_MINUTES_OF_EMISSION_AT_SEA,
     MONITORFISH_VERSION,
+    NON_COMMITED_DATA_LOCATION,
     ROOT_DIRECTORY,
     TEST_MODE,
 )
@@ -28,6 +29,7 @@ from src.pipeline.flows import (
     controls,
     controls_open_data,
     current_segments,
+    distribute_pnos,
     districts,
     enrich_logbook,
     enrich_positions,
@@ -36,6 +38,7 @@ from src.pipeline.flows import (
     fishing_gear_codes,
     foreign_fmcs,
     infractions,
+    init_pno_subscriptions,
     init_pno_types,
     init_species_groups,
     last_positions,
@@ -71,6 +74,19 @@ control_anteriority.flow.schedule = CronSchedule("5 * * * *")
 control_units.flow.schedule = CronSchedule("12 8 * * *")
 controls_open_data.flow.schedule = CronSchedule("15 3 * * 5")
 current_segments.flow.schedule = CronSchedule("2,12,22,32,42,52 * * * *")
+distribute_pnos.flow.schedule = Schedule(
+    clocks=[
+        clocks.CronClock(
+            "* * * * *",
+            parameter_defaults={
+                "test_mode": TEST_MODE,
+                "is_integration": IS_INTEGRATION,
+                "start_hours_ago": 120,
+                "end_hours_ago": 0,
+            },
+        ),
+    ]
+)
 logbook.flow.schedule = CronSchedule("* * * * *")
 enrich_positions.flow.schedule = Schedule(
     clocks=[
@@ -277,6 +293,7 @@ flows_to_register = [
     foreign_fmcs.flow,
     infractions.flow,
     init_pno_types.flow,
+    init_pno_subscriptions.flow,
     init_species_groups.flow,
     last_positions.flow,
     missing_far_alerts.flow,
@@ -311,7 +328,7 @@ for flow in flows_to_register:
 
 ################### Define flows' run config ####################
 for flow in flows_to_register:
-    if flow.name == "Logbook":
+    if flow.name == logbook.flow.name:
         host_config = {
             "group_add": [LOGBOOK_FILES_GID],
             "mounts": [
@@ -322,6 +339,18 @@ for flow in flows_to_register:
                 )
             ],
         }
+
+    elif flow.name in (init_pno_subscriptions.flow.name,):
+        host_config = {
+            "mounts": [
+                Mount(
+                    target=NON_COMMITED_DATA_LOCATION.as_posix(),
+                    source="/opt/pipeline-data",
+                    type="bind",
+                )
+            ],
+        }
+
     else:
         host_config = None
 

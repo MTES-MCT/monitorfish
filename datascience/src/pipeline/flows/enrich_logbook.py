@@ -1,3 +1,4 @@
+from datetime import datetime
 from logging import Logger
 from pathlib import Path
 
@@ -7,12 +8,16 @@ import prefect
 from prefect import Flow, Parameter, case, task, unmapped
 from sqlalchemy import text
 
+from config import (
+    FLAG_STATES_WITHOUT_SYSTEMATIC_VERIFICATION,
+    RISK_FACTOR_VERIFICATION_THRESHOLD,
+)
 from src.db_config import create_engine
 from src.pipeline.generic_tasks import extract
 from src.pipeline.helpers.dates import Period
 from src.pipeline.processing import prepare_df_for_loading
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
-from src.pipeline.shared_tasks.dates import make_periods
+from src.pipeline.shared_tasks.dates import get_utcnow, make_periods
 from src.pipeline.shared_tasks.segments import extract_all_segments
 from src.pipeline.utils import psql_insert_copy
 
@@ -25,9 +30,20 @@ def extract_pno_types() -> pd.DataFrame:
 
 
 @task(checkpoint=False)
+def extract_risk_factors() -> pd.DataFrame:
+    return extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/risk_factors_for_pnos.sql",
+    )
+
+
+@task(checkpoint=False)
 def reset_pnos(period: Period):
     """
     Deletes enriched data from pnos in logbook table in the designated Period.
+
+    Distribution attributes (`isInVerificationScope`, `IsVerified`, `IsSent`,
+    `IsBeingSent`) are not reset.
     """
 
     logger = prefect.context.get("logger")
@@ -200,6 +216,8 @@ def compute_pno_types(
           Must have columns :
 
           - logbook_reports_pno_id `int` `1`
+          - cfr `str` `FRA000000000`
+          - `predicted_arrival_datetime_utc` `datetime`
           - trip_gears `List[dict]`
             `[{"gear": "xxx", "mesh": yyy, "dimensions": "zzz}, {...}]`
           - species `str` `'COD'`
@@ -226,6 +244,8 @@ def compute_pno_types(
           Has columns:
 
             - logbook_reports_pno_id `int` `1`
+            - cfr `str` `FRA000000000`
+            - `predicted_arrival_datetime_utc` `datetime`
             - trip_gears `List[dict]`
               `[{"gear": "xxx", "mesh": yyy, "dimensions": "zzz}, {...}]`
             - pno_types `List[dict]`
@@ -247,6 +267,15 @@ def compute_pno_types(
         .agg({"trip_gear_codes": "unique"})
         .reset_index()
     )
+
+    trips_info = pno_species_and_gears[
+        [
+            "logbook_reports_pno_id",
+            "cfr",
+            "flag_state",
+            "predicted_arrival_datetime_utc",
+        ]
+    ].drop_duplicates()
 
     pnos_trip_gears = pno_species_and_gears.drop_duplicates(  # noqa: F841
         subset=["logbook_reports_pno_id"]
@@ -289,14 +318,45 @@ def compute_pno_types(
     ).to_df()
 
     res = pd.merge(
-        pnos_trip_gears, pnos_pno_types, how="left", on="logbook_reports_pno_id"
-    ).sort_values("logbook_reports_pno_id")
+        trips_info,
+        pd.merge(
+            pnos_trip_gears,
+            pnos_pno_types,
+            how="left",
+            on="logbook_reports_pno_id",
+            validate="1:1",
+        ).sort_values("logbook_reports_pno_id"),
+        on="logbook_reports_pno_id",
+        how="inner",
+        validate="1:1",
+    )
 
     return res
 
 
-def merge_segments_and_types(
-    pnos_with_types: pd.DataFrame, pnos_with_segments: pd.DataFrame
+def flag_pnos_to_verify_and_send(
+    pnos: pd.DataFrame, predicted_arrival_threshold: datetime
+):
+    pnos = pnos.copy(deep=True)
+
+    pnos["is_in_verification_scope"] = (
+        pnos.risk_factor >= RISK_FACTOR_VERIFICATION_THRESHOLD
+    ) | (~pnos.flag_state.isin(FLAG_STATES_WITHOUT_SYSTEMATIC_VERIFICATION))
+
+    pnos["is_verified"] = False
+    pnos["is_sent"] = False
+
+    pnos["is_being_sent"] = (~pnos.is_in_verification_scope) * (
+        pnos.predicted_arrival_datetime_utc >= predicted_arrival_threshold
+    )
+
+    return pnos
+
+
+def merge_pnos_data(
+    pnos_with_types: pd.DataFrame,
+    pnos_with_segments: pd.DataFrame,
+    risk_factors: pd.DataFrame,
 ) -> pd.DataFrame:
     """
     Merges the input DataFrames on `logbook_reports_pno_id`
@@ -304,12 +364,14 @@ def merge_segments_and_types(
     Args:
         pnos_with_types (pd.DataFrame): DataFrame of PNOs with their types
         pnos_with_segments (pd.DataFrame): DataFrame of PNOs with their segments
+        pnos_to_distribute (pd.DataFrame): DataFrame of PNOs with a boolean attribute
+          indicating whether they should be distributed
 
     Returns:
-        pd.DataFrame: DataFrame of PNOs with their types and segments
+        pd.DataFrame: DataFrame of PNOs with their types, segments and disbution info
     """
 
-    return pd.merge(
+    res = pd.merge(
         pnos_with_types,
         pnos_with_segments,
         on="logbook_reports_pno_id",
@@ -317,8 +379,30 @@ def merge_segments_and_types(
         how="inner",
     )
 
+    res = pd.merge(
+        res,
+        risk_factors,
+        on="cfr",
+        validate="m:1",
+        how="left",
+    )
+
+    return res
+
 
 def load_enriched_pnos(enriched_pnos: pd.DataFrame, period: Period, logger: Logger):
+    """Loads `enriched_pnos` data to `logbook_reports` table.
+
+    If distribution attributes (`isInVerificationScope`, `IsVerified`, `IsSent`,
+    `IsBeingSent`) are already present in the `value` field of the `logbook_reports`
+    table, the values in the table are preserved and values from the DataFrame are
+    ignored.
+
+    Args:
+        enriched_pnos (pd.DataFrame): Enriched PNOs data
+        period (Period): Date range of PNOs
+        logger (Logger): logger instance
+    """
     e = create_engine("monitorfish_remote")
 
     with e.begin() as connection:
@@ -330,7 +414,11 @@ def load_enriched_pnos(enriched_pnos: pd.DataFrame, period: Period, logger: Logg
                 "    enriched BOOLEAN,"
                 "    trip_gears JSONB,"
                 "    pno_types JSONB,"
-                "    trip_segments JSONB"
+                "    trip_segments JSONB,"
+                "    is_in_verification_scope BOOLEAN,"
+                "    is_verified BOOLEAN,"
+                "    is_sent BOOLEAN,"
+                "    is_being_sent BOOLEAN "
                 ")"
                 "ON COMMIT DROP;"
             )
@@ -347,6 +435,10 @@ def load_enriched_pnos(enriched_pnos: pd.DataFrame, period: Period, logger: Logg
             "trip_gears",
             "pno_types",
             "trip_segments",
+            "is_in_verification_scope",
+            "is_verified",
+            "is_sent",
+            "is_being_sent",
         ]
 
         logger.info("Loading to temporary table")
@@ -368,14 +460,15 @@ def load_enriched_pnos(enriched_pnos: pd.DataFrame, period: Period, logger: Logg
                 "    trip_gears = CASE "
                 "       WHEN ep.trip_gears = 'null' THEN '[]'::jsonb "
                 "       ELSE ep.trip_gears END, "
-                "    value = jsonb_set("
-                "       value, "
-                "       '{pnoTypes}', "
-                "       CASE "
-                "           WHEN ep.pno_types = 'null' THEN '[]'::jsonb "
-                "           ELSE ep.pno_types "
-                "       END"
-                "    ), "
+                "    value = ("
+                "       jsonb_build_object("
+                "           'pnoTypes', CASE WHEN ep.pno_types = 'null' THEN '[]'::jsonb ELSE ep.pno_types END, "
+                "           'isInVerificationScope', is_in_verification_scope, "
+                "           'isVerified', is_verified, "
+                "           'isSent', is_sent, "
+                "           'isBeingSent', is_being_sent"
+                "       ) || value"
+                "   ), "
                 "    trip_segments = CASE "
                 "       WHEN ep.trip_segments = 'null' THEN '[]'::jsonb "
                 "       ELSE ep.trip_segments END "
@@ -394,7 +487,11 @@ def load_enriched_pnos(enriched_pnos: pd.DataFrame, period: Period, logger: Logg
 
 @task(checkpoint=False)
 def extract_enrich_load_logbook(
-    period: Period, segments: pd.DataFrame, pno_types: pd.DataFrame
+    period: Period,
+    segments: pd.DataFrame,
+    pno_types: pd.DataFrame,
+    risk_factors: pd.DataFrame,
+    utcnow: datetime,
 ):
     """Extract pnos for the given `Period`, enrich and update the `logbook` table.
 
@@ -429,7 +526,10 @@ def extract_enrich_load_logbook(
     )
 
     logger.info("Merging PNO types and segments...")
-    pnos = merge_segments_and_types(pnos_with_types, pnos_with_segments)
+    pnos = merge_pnos_data(pnos_with_types, pnos_with_segments, risk_factors)
+
+    logger.info("Flagging PNOs to verify_and_distribute...")
+    pnos = flag_pnos_to_verify_and_send(pnos=pnos, predicted_arrival_threshold=utcnow)
 
     logger.info("Loading")
     load_enriched_pnos(pnos, period, logger)
@@ -443,6 +543,7 @@ with Flow("Enrich Logbook") as flow:
         minutes_per_chunk = Parameter("minutes_per_chunk")
         recompute_all = Parameter("recompute_all")
 
+        utcnow = get_utcnow()
         periods = make_periods(
             start_hours_ago,
             end_hours_ago,
@@ -452,6 +553,7 @@ with Flow("Enrich Logbook") as flow:
 
         segments = extract_all_segments()
         pno_types = extract_pno_types()
+        risk_factors = extract_risk_factors()
 
         with case(recompute_all, True):
             reset = reset_pnos.map(periods)
@@ -459,6 +561,8 @@ with Flow("Enrich Logbook") as flow:
                 periods,
                 segments=unmapped(segments),
                 pno_types=unmapped(pno_types),
+                risk_factors=unmapped(risk_factors),
+                utcnow=unmapped(utcnow),
                 upstream_tasks=[reset],
             )
 
@@ -467,6 +571,8 @@ with Flow("Enrich Logbook") as flow:
                 periods,
                 segments=unmapped(segments),
                 pno_types=unmapped(pno_types),
+                risk_factors=unmapped(risk_factors),
+                utcnow=unmapped(utcnow),
             )
 
 flow.file_name = Path(__file__).name

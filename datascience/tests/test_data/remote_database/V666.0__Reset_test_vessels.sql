@@ -62,5 +62,14 @@ INSERT INTO public.vessels (
     '{}', '{}', NULL, '{}', '{}', 'Le pêcheur qui se fait ses 4h reports', '{3333333333}', 
     false,
     null, null, null, null, null, 'reglo@bateau.fr'
+),
+(
+    7,
+    '___TARGET___', 'PNO_TARGET', NULL, 'TGT', 'I AM A CONTROL TARGET', 'FR', 2.1, 8.58,
+    'Noirmoutier', 'NO', 1.7, 'Noirmoutier', 95, 'Ligneur', '2ème', 'Pêche côtière',
+    '{LLS}', NULL,
+    '{}', '{}', NULL, '{}', '{}', 'Pêchou', '{9546458753}',
+    false,
+    null, null, null, null, null, 'target@me'
 )
 ;

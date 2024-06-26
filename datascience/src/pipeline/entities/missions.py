@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from enum import Enum
 
 
@@ -73,3 +74,9 @@ class InfractionType(Enum):
         ]
 
         return infraction_types[infraction]
+
+
+@dataclass
+class Infraction:
+    natinf: int
+    comments: str

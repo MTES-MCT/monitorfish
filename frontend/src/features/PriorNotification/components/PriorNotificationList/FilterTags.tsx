@@ -82,7 +82,7 @@ export function FilterTags() {
             !!speciesAsOptions &&
             listFilterValues.specyCodes.map(specyCode => (
               <SingleTag key={`specyCodes-${specyCode}`} onDelete={() => remove('specyCodes', specyCode)}>
-                {String(speciesAsOptions.find(option => option.value === specyCode)?.label)}
+                {String(speciesAsOptions.find(option => option.value.code === specyCode)?.label)}
               </SingleTag>
             ))}
 

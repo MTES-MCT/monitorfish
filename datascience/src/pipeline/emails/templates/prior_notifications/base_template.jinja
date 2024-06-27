@@ -19,10 +19,10 @@
             </p>
         </h1>
         <ul id="vessel_ids_list">
-            <li>CFR - {{ cfr if cfr }}</li>
-            <li>Marquage ext. - {{ external_identification if external_identification }}</li>
-            <li>MMSI - {{ mmsi if mmsi }}</li>
-            <li>Call Sign - {{ ircs if ircs }}</li>
+            <li>CFR - {{ cfr or "<span style='color:var(--slate-gray)'>aucun</span>" }}</li>
+            <li>Marquage ext. - {{ external_identification or "<span style='color:var(--slate-gray)'>aucun</span>" }}</li>
+            <li>MMSI - {{ mmsi or "<span style='color:var(--slate-gray)'>aucun</span>" }}</li>
+            <li>Call Sign - {{ ircs or "<span style='color:var(--slate-gray)'>aucun</span>" }}</li>
         </ul>
         <p id="vessel_length">Taille du navire - {{ "{} m".format(vessel_length) if vessel_length }}</p>
         <p id="risk_factor"><strong>Note de risque {{ risk_factor_description }} <span class="{{ risk_factor_color }}">{{ "{:.1f}".format(risk_factor) }}</span></strong></p>
@@ -37,9 +37,7 @@
                 <table>
                     <tr><td class="data-label">Préavis envoyé</td><td><strong>{{ "le {}".format(report_datetime_utc) if report_datetime_utc else "-" }}</strong></td></tr>
                     <tr><td class="data-label">Arrivée estimée</td><td><strong>{{ "le {}".format(predicted_arrival_datetime_utc) if predicted_arrival_datetime_utc else "-" }}</strong></td></tr>
-                    <tr><td class="data-label">Débarque prévue</td><td><strong>{{ "le {}".format(predicted_landing_datetime_utc) if predicted_landing_datetime_utc else "-" }}</strong></td></tr>
-                </table>
-                <table>
+                    <tr id="predicted-landing-date"><td class="data-label">Débarque prévue</td><td><strong>{{ "le {}".format(predicted_landing_datetime_utc) if predicted_landing_datetime_utc else "-" }}</strong></td></tr>
                     <tr><td class="data-label">Port de débarque</td><td><strong>{{ port_name }} ({{ port_locode }})</strong></td></tr>
                     <tr><td class="data-label">Type(s) de préavis</td><td><strong>{{ pno_types or "-" }}</strong></td></tr>
                 </table>            

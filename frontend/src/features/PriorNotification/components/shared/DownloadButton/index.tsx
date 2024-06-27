@@ -1,4 +1,5 @@
 import { useGetGearsQuery } from '@api/gear'
+import { getAlpha2CodeFromAlpha2or3Code } from '@components/CountryFlag/utils'
 import { Accent, customDayjs, Dropdown, Icon } from '@mtes-mct/monitor-ui'
 import printJS from 'print-js'
 import { useMemo } from 'react'
@@ -39,11 +40,11 @@ export function DownloadButton({ isDisabled = false, pnoLogbookMessage }: Downlo
   }
 
   return (
-    <Dropdown accent={Accent.PRIMARY} Icon={Icon.Download} placement="topEnd" title="Télécharger les documents">
+    <Dropdown accent={Accent.SECONDARY} Icon={Icon.Download} placement="topEnd" title="Télécharger les documents">
       <>
         {/** If the form is dirty (has been modified), the export will be outdated. */}
         {/** The user MUST first save the new version */}
-        {isSuperUser && pnoLogbookMessage.flagState !== 'FR' && (
+        {isSuperUser && getAlpha2CodeFromAlpha2or3Code(pnoLogbookMessage.flagState) !== 'FR' && (
           <Dropdown.Item disabled={isDisabled} onClick={downloadPDF}>
             Autorisation d&apos;entrée au port et de débarquement {isDisabled && '(Veuillez enregistrer le préavis)'}
           </Dropdown.Item>

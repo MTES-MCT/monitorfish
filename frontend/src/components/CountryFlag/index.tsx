@@ -19,7 +19,7 @@ export function CountryFlag({ countryCode, size, ...nativeProps }: CountryFlagPr
   const [width, height] = size
 
   const url = countryAlpha2Code
-    ? `${window.location.origin}/flags/${countryAlpha2Code}.svg`
+    ? `${window.location.origin}/flags/${countryAlpha2Code.toLowerCase()}.svg`
     : `https://placehold.co/${width < MIN_DEFAULT_WIDTH ? MIN_DEFAULT_WIDTH : width}x${height}?text=%3F`
 
   if (!countryAlpha2Code || countryAlpha2Code === 'undefined') {

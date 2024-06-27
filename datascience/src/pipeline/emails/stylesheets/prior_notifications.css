@@ -209,6 +209,14 @@ tr {
     text-align: left;
 }
 
+#note-title {
+    color: var(--slate-gray);
+}
+
+#note {
+background-color: var(--maximum-red-15);
+  padding: 8px 8px 10px 8px;
+}
 
 .dataframe {
     line-height: 22px;
@@ -245,6 +253,10 @@ tr {
 
 .dataframe th:nth-child(4) {
     width: 39px;
+}
+
+tr {
+    break-inside: avoid;
 }
 
 footer {

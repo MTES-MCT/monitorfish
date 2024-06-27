@@ -308,6 +308,7 @@ def pre_render_pno(
         trip_gears=trip_gears,
         trip_segments=trip_segments,
         pno_types=pno_types,
+        note=pno.note,
         vessel_length=pno.vessel_length,
         mmsi=pno.mmsi,
         risk_factor=pno.risk_factor or default_risk_factors["risk_factor"],
@@ -455,6 +456,7 @@ def render_pno(
         ),
         trip_segments="<br>".join([f"{s.code} - {s.name}" for s in pno.trip_segments]),
         pno_types=", ".join(pno.pno_types),
+        note=pno.note,
         vessel_length=pno.vessel_length,
         mmsi=pno.mmsi,
         risk_factor=pno.risk_factor,
@@ -494,6 +496,7 @@ def render_pno(
         port_name=pno.port_name,
         port_locode=pno.port_locode,
         pno_types=", ".join(pno.pno_types),
+        note=pno.note,
     )
 
     sms_content = sms_template.render(
@@ -506,6 +509,7 @@ def render_pno(
             pno.predicted_arrival_datetime_utc
         ),
         port_name=pno.port_name,
+        note=pno.note,
     )
 
     pdf = weasyprint.HTML(string=html_for_pdf).write_pdf(

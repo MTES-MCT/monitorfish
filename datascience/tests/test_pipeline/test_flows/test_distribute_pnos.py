@@ -400,6 +400,18 @@ def extracted_pnos() -> pd.DataFrame:
                 ],
                 [],
             ],
+            "note": [
+                None,
+                None,
+                (
+                    "Attention attention faites bien attention très attention sait-on "
+                    "jamais ce qui pourrait, ô grand Dieu des Poissons qui se font "
+                    "pêcher, nous arriver, si on ne fait pas assez attention à ce qu'y "
+                    "pêche c'te navire d'pêche qui fait d'la pêche de poissons."
+                ),
+                None,
+                None,
+            ],
             "vessel_length": [13.4, None, 17.4, 17.4, 8.58],
             "mmsi": [None, None, None, None, None],
             "risk_factor": [
@@ -531,6 +543,12 @@ def pno_to_render_1() -> PnoToRender:
                 "minimumNotificationPeriod": 4.0,
             },
         ],
+        note=(
+            "Attention attention faites bien attention très attention sait-on "
+            "jamais ce qui pourrait, ô grand Dieu des Poissons qui se font "
+            "pêcher, nous arriver, si on ne fait pas assez attention à ce qu'y "
+            "pêche c'te navire d'pêche qui fait d'la pêche de poissons."
+        ),
         vessel_length=13.4,
         mmsi=None,
         risk_factor=2.09885592141872,
@@ -609,6 +627,12 @@ def pre_rendered_pno_1(pre_rendered_pno_1_catch_onboard) -> PreRenderedPno:
             FleetSegment(code="SOTM", name="Chaluts pélagiques"),
         ],
         pno_types=["Préavis type 1", "Préavis type 2"],
+        note=(
+            "Attention attention faites bien attention très attention sait-on "
+            "jamais ce qui pourrait, ô grand Dieu des Poissons qui se font "
+            "pêcher, nous arriver, si on ne fait pas assez attention à ce qu'y "
+            "pêche c'te navire d'pêche qui fait d'la pêche de poissons."
+        ),
         vessel_length=13.4,
         mmsi=None,
         risk_factor=2.09885592141872,
@@ -653,6 +677,7 @@ def pno_to_render_2() -> PnoToRender:
         trip_gears=[],
         trip_segments=[],
         pno_types=[],
+        note=None,
         vessel_length=np.nan,
         mmsi=None,
         risk_factor=np.nan,
@@ -691,6 +716,7 @@ def pre_rendered_pno_2() -> PreRenderedPno:
         trip_gears=[],
         trip_segments=[],
         pno_types=[],
+        note=None,
         vessel_length=None,
         mmsi=None,
         risk_factor=default_risk_factors["risk_factor"],

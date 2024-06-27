@@ -93,11 +93,15 @@
                             {% endif %}
 
                         </td></tr>
-                </table>     
+                </table>
+                {% if note %}
+                    <p id="note-title">Points d'attention relevés par le CNSP</p>
+                    <p id="note">{{ note }}</p>
+                {% endif %}
             </section>
 
             <section>
-                <h2>ACTIVITÉ DU NAVIRE</h2>
+                <h2>ACTIVITÉ DE PÊCHE</h2>
                 <hr/>
                 <table>
                     <tr><td class="data-label">Engin(s) utilisé(s)</td><td><strong>{{ trip_gears or "-" }}</strong></td></tr>

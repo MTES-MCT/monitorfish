@@ -1,20 +1,22 @@
+import { ConfirmationModal } from '@components/ConfirmationModal'
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
-import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { updateEditedPriorNotificationComputedValues } from '@features/PriorNotification/useCases/updateEditedPriorNotificationComputedValues'
 import { isZeroNotice } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Banner, Button, FormikEffect, Icon, Level, Size, usePrevious } from '@mtes-mct/monitor-ui'
+import { Accent, Banner, Button, FormikEffect, Icon, Level, usePrevious } from '@mtes-mct/monitor-ui'
 import { getDefinedObject } from '@utils/getDefinedObject'
 import { useFormikContext } from 'formik'
 import { isEqual } from 'lodash'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { Form } from './Form'
 import { Header } from './Header'
 import { getApplicableState, getPartialComputationRequestData } from './utils'
+import { PriorNotification } from '../../PriorNotification.types'
 import { DownloadButton } from '../shared/DownloadButton'
 import { TagBar } from '../shared/TagBar'
 
@@ -38,6 +40,7 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
     store => store.priorNotification.editedPriorNotificationDetail
   )
 
+  const [isClosingConfirmationDialog, setIsClosingConfirmationDialog] = useState(false)
   const previousPartialComputationRequestData = usePrevious(getPartialComputationRequestData(values))
 
   const applicableState = getApplicableState(editedPriorNotificationComputedValues, editedPriorNotificationDetail)
@@ -46,6 +49,16 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
   const isSent = [PriorNotification.State.SENT, PriorNotification.State.VERIFIED_AND_SENT].includes(
     editedPriorNotificationDetail?.state as any
   )
+
+  const handleClose = () => {
+    if (dirty) {
+      setIsClosingConfirmationDialog(true)
+
+      return
+    }
+
+    onClose()
+  }
 
   const handleSubmit = () => {
     onSubmit()
@@ -90,85 +103,125 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
     updateComputedValues(nextComputationRequestData)
   }
 
+  useEffect(
+    () => () => {
+      dispatch(priorNotificationActions.setEditedPriorNotificationInitialFormValues(values))
+    },
+    [dispatch, values]
+  )
+
   return (
     <Wrapper>
-      <FormikEffect onChange={updateComputedValuesIfNecessary as any} />
+      <Background onClick={handleClose} />
 
-      {editedPriorNotificationDetail?.state === PriorNotification.State.PENDING_SEND && (
-        <StyledBanner isCollapsible level={Level.WARNING} top="100px">
-          Le préavis est en cours de diffusion.
-        </StyledBanner>
-      )}
+      <InnerWrapper>
+        <FormikEffect onChange={updateComputedValuesIfNecessary as any} />
 
-      <FrontendErrorBoundary>
-        <Header isNewPriorNotification={isNewPriorNotification} onClose={onClose} vesselId={values.vesselId} />
+        {editedPriorNotificationDetail?.state === PriorNotification.State.PENDING_SEND && (
+          <StyledBanner isCollapsible level={Level.WARNING} top="100px">
+            Le préavis est en cours de diffusion.
+          </StyledBanner>
+        )}
 
-        <Body>
-          <TagBar
-            isVesselUnderCharter={editedPriorNotificationComputedValues?.isVesselUnderCharter}
-            isZeroNotice={isZeroNotice(values.fishingCatches)}
-            state={applicableState}
-            tripSegments={editedPriorNotificationComputedValues?.tripSegments}
-            types={editedPriorNotificationComputedValues?.types}
-            vesselRiskFactor={editedPriorNotificationComputedValues?.vesselRiskFactor}
-          />
+        <FrontendErrorBoundary>
+          <Header isNewPriorNotification={isNewPriorNotification} onClose={handleClose} vesselId={values.vesselId} />
 
-          {isNewPriorNotification && (
-            <Intro>
-              Veuillez renseigner les champs du formulaire pour définir le type de préavis et son statut, ainsi que le
-              segment de flotte et la note de risque du navire.
-            </Intro>
-          )}
-          {!isNewPriorNotification && (
-            <Intro>
-              Le préavis doit être vérifié par le CNSP avant sa diffusion.
-              <br />
-              Le navire doit respecter un délai d’envoi et débarquer dans un port désigné.
-            </Intro>
-          )}
-
-          <hr />
-
-          <Form />
-        </Body>
-
-        <Footer>
-          <Button accent={Accent.TERTIARY} onClick={onClose} size={Size.SMALL}>
-            Fermer
-          </Button>
-
-          {!!editedPriorNotificationDetail && (
-            <DownloadButton
-              isDisabled={dirty && (!isSent || !isPendingSend)}
-              pnoLogbookMessage={editedPriorNotificationDetail.logbookMessage}
+          <Body>
+            <TagBar
+              isVesselUnderCharter={editedPriorNotificationComputedValues?.isVesselUnderCharter}
+              isZeroNotice={isZeroNotice(values.fishingCatches)}
+              state={applicableState}
+              tripSegments={editedPriorNotificationComputedValues?.tripSegments}
+              types={editedPriorNotificationComputedValues?.types}
+              vesselRiskFactor={editedPriorNotificationComputedValues?.vesselRiskFactor}
             />
-          )}
 
-          <Button
-            accent={Accent.PRIMARY}
-            disabled={!dirty || isPendingSend || isSent || (isValidatingOnChange && !isValid)}
-            onClick={handleSubmit}
-          >
-            {isNewPriorNotification ? 'Créer le préavis' : 'Enregistrer'}
-          </Button>
+            {isNewPriorNotification && (
+              <Intro>
+                Veuillez renseigner les champs du formulaire pour définir le type de préavis et son statut, ainsi que le
+                segment de flotte et la note de risque du navire.
+              </Intro>
+            )}
+            {!isNewPriorNotification && (
+              <Intro>
+                Le préavis doit être vérifié par le CNSP avant sa diffusion.
+                <br />
+                Le navire doit respecter un délai d’envoi et débarquer dans un port désigné.
+              </Intro>
+            )}
 
-          {!isNewPriorNotification && (
+            <hr />
+
+            <Form />
+          </Body>
+
+          <Footer>
+            <Button accent={Accent.TERTIARY} onClick={handleClose}>
+              Fermer
+            </Button>
+
+            {!!editedPriorNotificationDetail && (
+              <DownloadButton
+                isDisabled={dirty && (!isSent || !isPendingSend)}
+                pnoLogbookMessage={editedPriorNotificationDetail.logbookMessage}
+              />
+            )}
+
             <Button
               accent={Accent.PRIMARY}
-              disabled={isPendingSend || isSent}
-              Icon={isSent ? Icon.Check : Icon.Send}
-              onClick={onVerifyAndSend}
+              disabled={!dirty || isPendingSend || isSent || (isValidatingOnChange && !isValid)}
+              onClick={handleSubmit}
             >
-              {isSent ? 'Diffusé' : 'Diffuser'}
+              {isNewPriorNotification ? 'Créer le préavis' : 'Enregistrer'}
             </Button>
-          )}
-        </Footer>
-      </FrontendErrorBoundary>
+
+            {!isNewPriorNotification && (
+              <Button
+                accent={Accent.PRIMARY}
+                disabled={isPendingSend || isSent}
+                Icon={isSent ? Icon.Check : Icon.Send}
+                onClick={onVerifyAndSend}
+              >
+                {isSent ? 'Diffusé' : 'Diffuser'}
+              </Button>
+            )}
+          </Footer>
+        </FrontendErrorBoundary>
+      </InnerWrapper>
+
+      {isClosingConfirmationDialog && (
+        <ConfirmationModal
+          confirmationButtonLabel="Quitter sans enregistrer"
+          message={`Vous êtes en train d’abandonner ${
+            isNewPriorNotification ? 'la création' : 'l’édition'
+          } d’un préavis.`}
+          onCancel={() => setIsClosingConfirmationDialog(false)}
+          onConfirm={onClose}
+          title="Abandon de préavis"
+        />
+      )}
     </Wrapper>
   )
 }
 
 const Wrapper = styled.div`
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  left: 70px;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 1000;
+`
+
+const Background = styled.div`
+  background-color: ${p => p.theme.color.charcoal};
+  opacity: 0.5;
+  flex-grow: 1;
+`
+
+const InnerWrapper = styled.div`
   background-color: ${p => p.theme.color.white};
   display: flex;
   flex-direction: column;

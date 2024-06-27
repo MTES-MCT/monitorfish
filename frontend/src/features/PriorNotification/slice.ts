@@ -7,7 +7,7 @@ import type { ListFilter } from './components/PriorNotificationList/types'
 import type { PriorNotification } from './PriorNotification.types'
 import type { Undefine } from '@mtes-mct/monitor-ui'
 
-interface PriorNotificationState {
+export interface PriorNotificationState {
   editedPriorNotificationComputedValues: Undefine<PriorNotification.ManualPriorNotificationComputedValues> | undefined
   editedPriorNotificationDetail: PriorNotification.PriorNotificationDetail | undefined
   editedPriorNotificationInitialFormValues: FormValues | undefined
@@ -49,6 +49,9 @@ const priorNotificationSlice = createSlice({
     },
 
     openPriorNotificationForm(state) {
+      state.editedPriorNotificationComputedValues = undefined
+      state.editedPriorNotificationInitialFormValues = undefined
+      state.editedPriorNotificationReportId = undefined
       state.isPriorNotificationFormOpen = true
     },
 

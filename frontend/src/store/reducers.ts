@@ -28,7 +28,7 @@ import { customZoneReducer, type CustomZoneState } from '../features/CustomZone/
 import { logbookReducer } from '../features/Logbook/slice'
 import { missionFormReducer } from '../features/Mission/components/MissionForm/slice'
 import { missionListReducer, type MissionListState } from '../features/Mission/components/MissionList/slice'
-import { priorNotificationReducer } from '../features/PriorNotification/slice'
+import { priorNotificationReducer, type PriorNotificationState } from '../features/PriorNotification/slice'
 import { regulatoryLayerSearchReducer } from '../features/Regulation/components/RegulationSearch/slice'
 import { regulatoryReducer } from '../features/Regulation/slice'
 import { reportingReducer } from '../features/Reporting/slice'
@@ -99,7 +99,10 @@ export const mainReducer = {
     },
     missionListReducer
   ),
-  priorNotification: priorNotificationReducer,
+  priorNotification: persistReducerTyped(
+    { ...getCommonPersistReducerConfig<PriorNotificationState>('mainPersistorPriorNotification', []) },
+    priorNotificationReducer
+  ),
   regulatoryLayerSearch: regulatoryLayerSearchReducer,
   reporting: reportingReducer,
   sideWindow: sideWindowReducer,

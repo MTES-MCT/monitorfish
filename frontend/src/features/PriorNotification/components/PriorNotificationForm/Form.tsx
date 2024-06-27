@@ -53,11 +53,11 @@ export function Form() {
         options={getOptionsFromLabelledEnum(PriorNotification.PURPOSE_LABEL)}
       />
 
-      <FormikDatePicker isStringDate label="Date et heure de réception du préavis" name="sentAt" withTime />
+      <FormikDatePicker isStringDate label="Date et heure de réception du préavis (UTC)" name="sentAt" withTime />
 
       <FormikDatePicker
         isStringDate
-        label="Date et heure estimées d'arrivée au port"
+        label="Date et heure estimées d'arrivée au port (UTC)"
         name="expectedArrivalDate"
         withTime
       />
@@ -66,7 +66,7 @@ export function Form() {
         <FormikDatePicker
           disabled={values.isExpectedLandingDateSameAsExpectedArrivalDate}
           isStringDate
-          label="Date et heure prévues de débarque"
+          label="Date et heure prévues de débarque (UTC)"
           name="expectedLandingDate"
           withTime
         />
@@ -129,10 +129,14 @@ export function Form() {
         <FormikCheckbox label="pas de pêche après le préavis zéro" name="didNotFishAfterZeroNotice" />
       </FieldGroup>
 
-      <FormikTextInput label="Saisi par" maxLength={3} name="authorTrigram" />
+      <EnteredByTextInput label="Saisi par" maxLength={3} name="authorTrigram" />
     </>
   )
 }
+
+const EnteredByTextInput = styled(FormikTextInput)`
+  width: 120px;
+`
 
 const FieldGroup = styled.div.attrs({ className: 'FieldGroup' })`
   display: flex;

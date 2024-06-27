@@ -48,6 +48,9 @@ export function FilterBar() {
   const { speciesAsOptions } = useGetSpeciesAsOptions()
   const { priorNotificationTypesAsOptions } = useGetPriorNotificationTypesAsOptions()
 
+  const speciesAsCodeOptions =
+    speciesAsOptions?.map(option => ({ label: option.label, value: option.value.code })) ?? []
+
   const updateCountryCodes = (nextCountryCodes: string[] | undefined) => {
     dispatch(priorNotificationActions.setListFilterValues({ countryCodes: nextCountryCodes }))
   }
@@ -159,13 +162,13 @@ export function FilterBar() {
           virtualized
         />
         <CheckPicker
-          disabled={!speciesAsOptions}
+          disabled={!speciesAsCodeOptions}
           isLabelHidden
           isTransparent
           label="Espèces à bord"
           name="specyCodes"
           onChange={updateSpecyCodes}
-          options={speciesAsOptions ?? []}
+          options={speciesAsCodeOptions ?? []}
           placeholder="Espèces à bord"
           popupWidth={320}
           renderValue={(_, items) =>

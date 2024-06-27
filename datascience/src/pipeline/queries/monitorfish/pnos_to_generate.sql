@@ -39,6 +39,7 @@ SELECT
     r.trip_gears,
     r.trip_segments,
     r.value->'pnoTypes' AS pno_types,
+    r.value->>'note' AS note,
     v.length AS vessel_length,
     v.mmsi,
     rf.risk_factor,

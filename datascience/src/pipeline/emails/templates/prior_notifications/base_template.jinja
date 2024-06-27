@@ -12,17 +12,17 @@
 
         <header>
         <h1>
-            <p>PREAVIS - {{ purpose }}</p>
+            <p>PRÉAVIS - {{ purpose }}</p>
             <p>
                 {{ vessel_name }}
-                <img id="state_flag_icon", src="{{ state_flag_icon_src }}" alt="Logo CNSP">
+                <img id="state_flag_icon", src="{{ state_flag_icon_src }}" alt="Pavillon">
             </p>
         </h1>
         <ul id="vessel_ids_list">
-            <li>CFR - {{ cfr if cfr }}</li>
-            <li>Marquage ext. - {{ external_identification if external_identification }}</li>
-            <li>MMSI - {{ mmsi if mmsi }}</li>
-            <li>Call Sign - {{ ircs if ircs }}</li>
+            <li>CFR - {{ cfr or "<span style='color:var(--slate-gray)'>aucun</span>" }}</li>
+            <li>Marquage ext. - {{ external_identification or "<span style='color:var(--slate-gray)'>aucun</span>" }}</li>
+            <li>MMSI - {{ mmsi or "<span style='color:var(--slate-gray)'>aucun</span>" }}</li>
+            <li>Call Sign - {{ ircs or "<span style='color:var(--slate-gray)'>aucun</span>" }}</li>
         </ul>
         <p id="vessel_length">Taille du navire - {{ "{} m".format(vessel_length) if vessel_length }}</p>
         <p id="risk_factor"><strong>Note de risque {{ risk_factor_description }} <span class="{{ risk_factor_color }}">{{ "{:.1f}".format(risk_factor) }}</span></strong></p>
@@ -35,13 +35,11 @@
                 <h2>INFOS DU PRÉAVIS</h2>
                 <hr/>
                 <table>
-                    <tr><td class="data-label">Préavis envoyé</td><td><strong>{{ "le {}".format(report_datetime_utc) if report_datetime_utc }}</strong></td></tr>
-                    <tr><td class="data-label">Arrivée estimée</td><td><strong>{{ "le {}".format(predicted_arrival_datetime_utc) if predicted_arrival_datetime_utc }}</strong></td></tr>
-                    <tr><td class="data-label">Débarque prévue</td><td><strong>{{ "le {}".format(predicted_landing_datetime_utc) if predicted_landing_datetime_utc }}</strong></td></tr>
-                </table>
-                <table>
+                    <tr><td class="data-label">Préavis envoyé</td><td><strong>{{ "le {}".format(report_datetime_utc) if report_datetime_utc else "-" }}</strong></td></tr>
+                    <tr><td class="data-label">Arrivée estimée</td><td><strong>{{ "le {}".format(predicted_arrival_datetime_utc) if predicted_arrival_datetime_utc else "-" }}</strong></td></tr>
+                    <tr id="predicted-landing-date"><td class="data-label">Débarque prévue</td><td><strong>{{ "le {}".format(predicted_landing_datetime_utc) if predicted_landing_datetime_utc else "-" }}</strong></td></tr>
                     <tr><td class="data-label">Port de débarque</td><td><strong>{{ port_name }} ({{ port_locode }})</strong></td></tr>
-                    <tr><td class="data-label">Type(s) de préavis</td><td><strong>{{ pno_types }}</strong></td></tr>
+                    <tr><td class="data-label">Type(s) de préavis</td><td><strong>{{ pno_types or "-" }}</strong></td></tr>
                 </table>            
             </section>
 
@@ -49,52 +47,65 @@
                 <h2>INFOS POUR CONTRÔLE</h2>
                 <hr/>
                 <table>
-                    <tr><td class="data-label">Segment(s) de flotte</td><td><strong>{{ trip_segments }}</strong></td></tr>
-                    <tr><td class="data-label">Date du dernier contrôle</td><td><strong>{{ last_control_datetime_utc }}</strong></td></tr>
+                    <tr><td class="data-label">Segment(s) de flotte</td><td><strong>{{ trip_segments or "-" }}</strong></td></tr>
+                    <tr><td class="data-label">Date du dernier contrôle</td><td><strong>{{ last_control_datetime_utc or "-" }}</strong></td></tr>
                     <tr>
                         <td class="data-label">Résultat du contrôle</td>
                         <td>
-                            {% if  last_control_gear_infractions %}
-                                <p class="infractions-details">
-                                    <span class="infraction-count">{{ last_control_gear_infractions|count }} infraction{{ last_control_gear_infractions|count|pluralize }} engins</span> - 
-                                    NATINF{{ last_control_gear_infractions|count|pluralize|capitalize }} {{ last_control_gear_infractions|map(attribute="natinf", default="-")|join(", ")  }}
-                                </p>
-                            {% endif %}
+                            {% if last_control_datetime_utc %}
+                                {% if last_control_gear_infractions %}
+                                    <p class="control-result">
+                                        <span class="infraction-count">{{ last_control_gear_infractions|count }} infraction{{ last_control_gear_infractions|count|pluralize }} engins</span> - 
+                                        NATINF{{ last_control_gear_infractions|count|pluralize|capitalize }} {{ last_control_gear_infractions|map(attribute="natinf", default="-")|join(", ")  }}
+                                    </p>
+                                {% endif %}
 
-                            {% if  last_control_logbook_infractions %}
-                                <p class="infractions-details">
-                                    <span class="infraction-count">{{ last_control_logbook_infractions|count }} infraction{{ last_control_logbook_infractions|count|pluralize }} obl. déclaratives et déclarations</span> - 
-                                    NATINF{{ last_control_logbook_infractions|count|pluralize|capitalize }} {{ last_control_logbook_infractions|map(attribute="natinf", default="-")|join(", ")  }}
-                                </p>
-                            {% endif %}
+                                {% if last_control_logbook_infractions %}
+                                    <p class="control-result">
+                                        <span class="infraction-count">{{ last_control_logbook_infractions|count }} infraction{{ last_control_logbook_infractions|count|pluralize }} obl. déclaratives et déclarations</span> - 
+                                        NATINF{{ last_control_logbook_infractions|count|pluralize|capitalize }} {{ last_control_logbook_infractions|map(attribute="natinf", default="-")|join(", ")  }}
+                                    </p>
+                                {% endif %}
 
 
-                            {% if  last_control_species_infractions %}
-                                <p class="infractions-details">
-                                    <span class="infraction-count">{{ last_control_species_infractions|count }} infraction{{ last_control_species_infractions|count|pluralize }} espèces</span> - 
-                                    NATINF{{ last_control_species_infractions|count|pluralize|capitalize }} {{ last_control_species_infractions|map(attribute="natinf", default="-")|join(", ")  }}
-                                </p>
-                            {% endif %}
+                                {% if last_control_species_infractions %}
+                                    <p class="control-result">
+                                        <span class="infraction-count">{{ last_control_species_infractions|count }} infraction{{ last_control_species_infractions|count|pluralize }} espèces</span> - 
+                                        NATINF{{ last_control_species_infractions|count|pluralize|capitalize }} {{ last_control_species_infractions|map(attribute="natinf", default="-")|join(", ")  }}
+                                    </p>
+                                {% endif %}
 
-                            {% if  last_control_other_infractions %}
-                                <p class="infractions-details">
-                                    <span class="infraction-count">{{ last_control_other_infractions|count }} infraction{{ last_control_other_infractions|count|pluralize }} autre</span> - 
-                                    NATINF{{ last_control_other_infractions|count|pluralize|capitalize }} {{ last_control_other_infractions|map(attribute="natinf", default="-")|join(", ")  }}
-                                </p>
+                                {% if last_control_other_infractions %}
+                                    <p class="control-result">
+                                        <span class="infraction-count">{{ last_control_other_infractions|count }} infraction{{ last_control_other_infractions|count|pluralize }} autre</span> - 
+                                        NATINF{{ last_control_other_infractions|count|pluralize|capitalize }} {{ last_control_other_infractions|map(attribute="natinf", default="-")|join(", ")  }}
+                                    </p>
+                                {% endif %}
+
+                                {% if last_control_compliant %}
+                                    <p class="control-result"><span class="compliant-control">RAS</span></p>
+                                {% endif %}
+
+                            {% else %}
+                                <p class="control-result">-</p>
                             {% endif %}
 
                         </td></tr>
-                </table>     
+                </table>
+                {% if note %}
+                    <p id="note-title">Points d'attention relevés par le CNSP</p>
+                    <p id="note">{{ note }}</p>
+                {% endif %}
             </section>
 
             <section>
-                <h2>ACTIVITÉ DU NAVIRE</h2>
+                <h2>ACTIVITÉ DE PÊCHE</h2>
                 <hr/>
                 <table>
-                    <tr><td class="data-label">Engin(s) utilisé(s)</td><td><strong>{{ trip_gears }}</strong></td></tr>
+                    <tr><td class="data-label">Engin(s) utilisé(s)</td><td><strong>{{ trip_gears or "-" }}</strong></td></tr>
                 </table>
                 <p class="data-label">Espèces à bord par zone de pêche <em>(tous les poids sont vifs)</em> :</p>
-                {{ catch_onboard if catch_onboard else "Aucune capture" }}
+                {{ catch_onboard or "<strong>-</strong>" }}
             </section>
 
         </main>

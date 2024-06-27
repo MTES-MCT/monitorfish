@@ -53,6 +53,7 @@ class PnoToRender:
     trip_gears: List[dict]
     trip_segments: List[dict]
     pno_types: List[dict]
+    note: str
     vessel_length: float
     mmsi: str
     risk_factor: float
@@ -121,6 +122,7 @@ class PreRenderedPno:
     trip_gears: List[FishingGear]
     trip_segments: List[FleetSegment]
     pno_types: List[str]
+    note: str
     vessel_length: float
     mmsi: str
     risk_factor: float

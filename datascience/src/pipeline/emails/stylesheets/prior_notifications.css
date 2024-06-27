@@ -186,13 +186,22 @@ hr {
     color: var(--light-gray);
 }
 
+table, table * {
+    border-collapse: collapse;
+}
+
 .data-label {
     color: var(--slate-gray);
     padding-right: 16px;
+    padding-left: 0;
     vertical-align: top;
 }    
 
-.infractions-details {
+#predicted-landing-date > td {
+    padding-bottom: 16px;
+}
+
+.control-result {
     font-weight: bold;
     margin: 0;
 }
@@ -201,10 +210,22 @@ hr {
     color: var(--maximum-red);
 }
 
+.compliant-control {
+    color: var(--medium-sea-green)
+}
+
 tr {
     text-align: left;
 }
 
+#note-title {
+    color: var(--slate-gray);
+}
+
+#note {
+background-color: var(--maximum-red-15);
+  padding: 8px 8px 10px 8px;
+}
 
 .dataframe {
     line-height: 22px;
@@ -221,6 +242,7 @@ tr {
 .dataframe th {
     background-color: var(--gainsboro);
     font-weight: normal;
+    color: var(--slate-gray);
 }
 
 .dataframe tr {
@@ -241,6 +263,10 @@ tr {
 
 .dataframe th:nth-child(4) {
     width: 39px;
+}
+
+tr {
+    break-inside: avoid;
 }
 
 footer {

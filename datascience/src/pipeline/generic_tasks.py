@@ -266,7 +266,9 @@ def load_with_connection(
         raise ValueError(f"how must be 'replace', 'upsert' or 'append', got {how}")
 
     # Insert data into table
-    logger.info(f"Loading into {schema}.{table_name}")
+    logger.info(
+        f"Loading {len(df)} row{'s' if len(df) > 1 else ''} into {schema}.{table_name}"
+    )
 
     if isinstance(df, gpd.GeoDataFrame):
         logger.info("GeodateFrame detected, using to_postgis")

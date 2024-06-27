@@ -192,13 +192,22 @@ hr {
     color: var(--light-gray);
 }
 
+table, table * {
+    border-collapse: collapse;
+}
+
 .data-label {
     color: var(--slate-gray);
     padding-right: 16px;
+    padding-left: 0;
     vertical-align: top;
 }    
 
-.infractions-details {
+#predicted-landing-date > td {
+    padding-bottom: 16px;
+}
+
+.control-result {
     font-weight: bold;
     margin: 0;
 }
@@ -207,10 +216,22 @@ hr {
     color: var(--maximum-red);
 }
 
+.compliant-control {
+    color: var(--medium-sea-green)
+}
+
 tr {
     text-align: left;
 }
 
+#note-title {
+    color: var(--slate-gray);
+}
+
+#note {
+background-color: var(--maximum-red-15);
+  padding: 8px 8px 10px 8px;
+}
 
 .dataframe {
     line-height: 22px;
@@ -227,6 +248,7 @@ tr {
 .dataframe th {
     background-color: var(--gainsboro);
     font-weight: normal;
+    color: var(--slate-gray);
 }
 
 .dataframe tr {
@@ -247,6 +269,10 @@ tr {
 
 .dataframe th:nth-child(4) {
     width: 39px;
+}
+
+tr {
+    break-inside: avoid;
 }
 
 footer {
@@ -276,16 +302,16 @@ footer > p {
 
         <header>
         <h1>
-            <p>PREAVIS - Débarquement</p>
+            <p>PRÉAVIS - Débarquement</p>
             <p>
                 DEVINER FIGURE CONSCIENCE
-                <img id="state_flag_icon", src="file:///state/flags/icons/location/FRA.png" alt="Logo CNSP">
+                <img id="state_flag_icon", src="file:///state/flags/icons/location/FRA.svg" alt="Pavillon">
             </p>
         </h1>
         <ul id="vessel_ids_list">
             <li>CFR - ABC000542519</li>
             <li>Marquage ext. - RO237719</li>
-            <li>MMSI - </li>
+            <li>MMSI - <span style='color:var(--slate-gray)'>aucun</span></li>
             <li>Call Sign - FQ7058</li>
         </ul>
         <p id="vessel_length">Taille du navire - 13.4 m</p>
@@ -301,9 +327,7 @@ footer > p {
                 <table>
                     <tr><td class="data-label">Préavis envoyé</td><td><strong>le 05/05/2024 à 08h11 UTC</strong></td></tr>
                     <tr><td class="data-label">Arrivée estimée</td><td><strong>le 06/05/2020 à 11h41 UTC</strong></td></tr>
-                    <tr><td class="data-label">Débarque prévue</td><td><strong>le 06/05/2020 à 16h40 UTC</strong></td></tr>
-                </table>
-                <table>
+                    <tr id="predicted-landing-date"><td class="data-label">Débarque prévue</td><td><strong>le 06/05/2020 à 16h40 UTC</strong></td></tr>
                     <tr><td class="data-label">Port de débarque</td><td><strong>Somewhere over the rainbow (FRCQF)</strong></td></tr>
                     <tr><td class="data-label">Type(s) de préavis</td><td><strong>Préavis type 1, Préavis type 2</strong></td></tr>
                 </table>            
@@ -319,30 +343,39 @@ footer > p {
                         <td class="data-label">Résultat du contrôle</td>
                         <td>
                             
-                                <p class="infractions-details">
-                                    <span class="infraction-count">1 infraction engins</span> - 
-                                    NATINF 27724
-                                </p>
-                            
+                                
+                                    <p class="control-result">
+                                        <span class="infraction-count">1 infraction engins</span> - 
+                                        NATINF 27724
+                                    </p>
+                                
 
-                            
+                                
 
 
-                            
+                                
 
-                            
-                                <p class="infractions-details">
-                                    <span class="infraction-count">3 infractions autre</span> - 
-                                    NATINFS 2606, 4761, 22206
-                                </p>
+                                
+                                    <p class="control-result">
+                                        <span class="infraction-count">3 infractions autre</span> - 
+                                        NATINFS 2606, 4761, 22206
+                                    </p>
+                                
+
+                                
+
                             
 
                         </td></tr>
-                </table>     
+                </table>
+                
+                    <p id="note-title">Points d'attention relevés par le CNSP</p>
+                    <p id="note">Attention attention faites bien attention très attention sait-on jamais ce qui pourrait, ô grand Dieu des Poissons qui se font pêcher, nous arriver, si on ne fait pas assez attention à ce qu'y pêche c'te navire d'pêche qui fait d'la pêche de poissons.</p>
+                
             </section>
 
             <section>
-                <h2>ACTIVITÉ DU NAVIRE</h2>
+                <h2>ACTIVITÉ DE PÊCHE</h2>
                 <hr/>
                 <table>
                     <tr><td class="data-label">Engin(s) utilisé(s)</td><td><strong>Chaluts jumeaux à panneaux (OTT) - Maillage 140 mm<br>Chaluts jumeaux à panneaux (OTT) - Maillage 120 mm</strong></td></tr>

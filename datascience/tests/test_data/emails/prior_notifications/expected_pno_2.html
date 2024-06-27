@@ -192,13 +192,22 @@ hr {
     color: var(--light-gray);
 }
 
+table, table * {
+    border-collapse: collapse;
+}
+
 .data-label {
     color: var(--slate-gray);
     padding-right: 16px;
+    padding-left: 0;
     vertical-align: top;
 }    
 
-.infractions-details {
+#predicted-landing-date > td {
+    padding-bottom: 16px;
+}
+
+.control-result {
     font-weight: bold;
     margin: 0;
 }
@@ -207,10 +216,22 @@ hr {
     color: var(--maximum-red);
 }
 
+.compliant-control {
+    color: var(--medium-sea-green)
+}
+
 tr {
     text-align: left;
 }
 
+#note-title {
+    color: var(--slate-gray);
+}
+
+#note {
+background-color: var(--maximum-red-15);
+  padding: 8px 8px 10px 8px;
+}
 
 .dataframe {
     line-height: 22px;
@@ -227,6 +248,7 @@ tr {
 .dataframe th {
     background-color: var(--gainsboro);
     font-weight: normal;
+    color: var(--slate-gray);
 }
 
 .dataframe tr {
@@ -247,6 +269,10 @@ tr {
 
 .dataframe th:nth-child(4) {
     width: 39px;
+}
+
+tr {
+    break-inside: avoid;
 }
 
 footer {
@@ -276,16 +302,16 @@ footer > p {
 
         <header>
         <h1>
-            <p>PREAVIS - Accès aux services</p>
+            <p>PRÉAVIS - Accès aux services</p>
             <p>
                 CAPITAINE HADDOCK
-                <img id="state_flag_icon", src="file:///state/flags/icons/location/POL.png" alt="Logo CNSP">
+                <img id="state_flag_icon", src="file:///state/flags/icons/location/POL.svg" alt="Pavillon">
             </p>
         </h1>
         <ul id="vessel_ids_list">
             <li>CFR - ABC000000000</li>
             <li>Marquage ext. - LEB@T0</li>
-            <li>MMSI - </li>
+            <li>MMSI - <span style='color:var(--slate-gray)'>aucun</span></li>
             <li>Call Sign - ABCD</li>
         </ul>
         <p id="vessel_length">Taille du navire - </p>
@@ -301,11 +327,9 @@ footer > p {
                 <table>
                     <tr><td class="data-label">Préavis envoyé</td><td><strong>le 05/05/2024 à 08h46 UTC</strong></td></tr>
                     <tr><td class="data-label">Arrivée estimée</td><td><strong>le 06/05/2020 à 11h41 UTC</strong></td></tr>
-                    <tr><td class="data-label">Débarque prévue</td><td><strong></strong></td></tr>
-                </table>
-                <table>
+                    <tr id="predicted-landing-date"><td class="data-label">Débarque prévue</td><td><strong>-</strong></td></tr>
                     <tr><td class="data-label">Port de débarque</td><td><strong>Somewhere over the top (FRZJZ)</strong></td></tr>
-                    <tr><td class="data-label">Type(s) de préavis</td><td><strong></strong></td></tr>
+                    <tr><td class="data-label">Type(s) de préavis</td><td><strong>-</strong></td></tr>
                 </table>            
             </section>
 
@@ -313,32 +337,28 @@ footer > p {
                 <h2>INFOS POUR CONTRÔLE</h2>
                 <hr/>
                 <table>
-                    <tr><td class="data-label">Segment(s) de flotte</td><td><strong></strong></td></tr>
-                    <tr><td class="data-label">Date du dernier contrôle</td><td><strong></strong></td></tr>
+                    <tr><td class="data-label">Segment(s) de flotte</td><td><strong>-</strong></td></tr>
+                    <tr><td class="data-label">Date du dernier contrôle</td><td><strong>-</strong></td></tr>
                     <tr>
                         <td class="data-label">Résultat du contrôle</td>
                         <td>
                             
-
-                            
-
-
-                            
-
+                                <p class="control-result">-</p>
                             
 
                         </td></tr>
-                </table>     
+                </table>
+                
             </section>
 
             <section>
-                <h2>ACTIVITÉ DU NAVIRE</h2>
+                <h2>ACTIVITÉ DE PÊCHE</h2>
                 <hr/>
                 <table>
-                    <tr><td class="data-label">Engin(s) utilisé(s)</td><td><strong></strong></td></tr>
+                    <tr><td class="data-label">Engin(s) utilisé(s)</td><td><strong>-</strong></td></tr>
                 </table>
                 <p class="data-label">Espèces à bord par zone de pêche <em>(tous les poids sont vifs)</em> :</p>
-                Aucune capture
+                <strong>-</strong>
             </section>
 
         </main>

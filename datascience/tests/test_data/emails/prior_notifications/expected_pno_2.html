@@ -198,13 +198,17 @@ hr {
     vertical-align: top;
 }    
 
-.infractions-details {
+.control-result {
     font-weight: bold;
     margin: 0;
 }
 
 .infraction-count {
     color: var(--maximum-red);
+}
+
+.compliant-control {
+    color: var(--medium-sea-green)
 }
 
 tr {
@@ -301,11 +305,11 @@ footer > p {
                 <table>
                     <tr><td class="data-label">Préavis envoyé</td><td><strong>le 05/05/2024 à 08h46 UTC</strong></td></tr>
                     <tr><td class="data-label">Arrivée estimée</td><td><strong>le 06/05/2020 à 11h41 UTC</strong></td></tr>
-                    <tr><td class="data-label">Débarque prévue</td><td><strong></strong></td></tr>
+                    <tr><td class="data-label">Débarque prévue</td><td><strong>-</strong></td></tr>
                 </table>
                 <table>
                     <tr><td class="data-label">Port de débarque</td><td><strong>Somewhere over the top (FRZJZ)</strong></td></tr>
-                    <tr><td class="data-label">Type(s) de préavis</td><td><strong></strong></td></tr>
+                    <tr><td class="data-label">Type(s) de préavis</td><td><strong>-</strong></td></tr>
                 </table>            
             </section>
 
@@ -313,18 +317,13 @@ footer > p {
                 <h2>INFOS POUR CONTRÔLE</h2>
                 <hr/>
                 <table>
-                    <tr><td class="data-label">Segment(s) de flotte</td><td><strong></strong></td></tr>
-                    <tr><td class="data-label">Date du dernier contrôle</td><td><strong></strong></td></tr>
+                    <tr><td class="data-label">Segment(s) de flotte</td><td><strong>-</strong></td></tr>
+                    <tr><td class="data-label">Date du dernier contrôle</td><td><strong>-</strong></td></tr>
                     <tr>
                         <td class="data-label">Résultat du contrôle</td>
                         <td>
                             
-
-                            
-
-
-                            
-
+                                <p class="control-result">-</p>
                             
 
                         </td></tr>
@@ -335,10 +334,10 @@ footer > p {
                 <h2>ACTIVITÉ DU NAVIRE</h2>
                 <hr/>
                 <table>
-                    <tr><td class="data-label">Engin(s) utilisé(s)</td><td><strong></strong></td></tr>
+                    <tr><td class="data-label">Engin(s) utilisé(s)</td><td><strong>-</strong></td></tr>
                 </table>
                 <p class="data-label">Espèces à bord par zone de pêche <em>(tous les poids sont vifs)</em> :</p>
-                Aucune capture
+                <strong>-</strong>
             </section>
 
         </main>

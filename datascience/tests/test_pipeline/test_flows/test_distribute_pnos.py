@@ -1473,7 +1473,7 @@ def test_render_pno_1_pdf(
 
     ######################### Uncomment to replace test files #########################
     # with open(test_filepath, "wb") as f:
-    #     f.write(pdf)
+    #     f.write(pno.pdf_document)
 
     ###################################################################################
     with open(test_filepath, "rb") as f:
@@ -1501,7 +1501,7 @@ def test_render_pno_2_pdf(
 
     ######################### Uncomment to replace test files #########################
     # with open(test_filepath, "wb") as f:
-    #     f.write(pdf)
+    #     f.write(pno.pdf_document)
 
     ###################################################################################
     with open(test_filepath, "rb") as f:

@@ -1,4 +1,5 @@
 import { useGetSpeciesQuery } from '@api/specy'
+import { FieldsetGroupSpinner } from '@features/Mission/components/MissionForm/shared/FieldsetGroup'
 import { useGetSpeciesAsOptions } from '@hooks/useGetSpeciesAsOptions'
 import { CustomSearch, FormikNumberInput, Select, SingleTag } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
@@ -54,22 +55,28 @@ export function FormikFishingCatchesMultiSelect() {
 
   const customSearch = useMemo(
     () =>
-      new CustomSearch(
-        filteredSpeciesAsOptions,
-        [
-          {
-            name: 'value.code',
-            weight: 0.9
-          },
-          {
-            name: 'value.name',
-            weight: 0.1
-          }
-        ],
-        { cacheKey: 'SPECIES_AS_OPTIONS', isStrict: true }
-      ),
+      filteredSpeciesAsOptions.length
+        ? new CustomSearch(
+            filteredSpeciesAsOptions,
+            [
+              {
+                name: 'value.code',
+                weight: 0.9
+              },
+              {
+                name: 'value.name',
+                weight: 0.1
+              }
+            ],
+            { cacheKey: 'SPECIES_AS_OPTIONS', isStrict: true }
+          )
+        : undefined,
     [filteredSpeciesAsOptions]
   )
+
+  if (!filteredSpeciesAsOptions.length || !customSearch) {
+    return <FieldsetGroupSpinner isLight legend="Espèces à bord et à débarquer" />
+  }
 
   return (
     <>

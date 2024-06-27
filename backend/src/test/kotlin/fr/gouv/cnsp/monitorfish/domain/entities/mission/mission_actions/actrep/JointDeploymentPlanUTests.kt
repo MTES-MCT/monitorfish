@@ -52,6 +52,42 @@ class JointDeploymentPlanUTests {
 
     @ParameterizedTest
     @EnumSource(JointDeploymentPlan::class)
+    fun `isLandControlApplicable Should return true When it is a LAND control`(
+        jdp: JointDeploymentPlan,
+    ) {
+        // Given
+        val control = MissionAction(
+            id = 3,
+            vesselId = 2,
+            missionId = 3,
+            actionDatetimeUtc = ZonedDateTime.now(),
+            actionType = MissionActionType.LAND_CONTROL,
+            faoAreas = listOf("27.7.a"),
+            seizureAndDiversion = false,
+            speciesOnboard = getSpecies(listOf("SOL", "ANF")),
+            speciesInfractions = listOf(),
+            isDeleted = false,
+            hasSomeGearsSeized = false,
+            hasSomeSpeciesSeized = false,
+            isFromPoseidon = false,
+            completion = Completion.COMPLETED,
+            flagState = CountryCode.FR,
+            userTrigram = "LTH",
+        )
+
+        // When
+        val isLandControlApplicable = jdp.isLandControlApplicable(control)
+
+        // Then
+        when (jdp) {
+            JointDeploymentPlan.MEDITERRANEAN_AND_EASTERN_ATLANTIC -> assertThat(isLandControlApplicable).isFalse()
+            JointDeploymentPlan.NORTH_SEA -> assertThat(isLandControlApplicable).isFalse()
+            JointDeploymentPlan.WESTERN_WATERS -> assertThat(isLandControlApplicable).isTrue()
+        }
+    }
+
+    @ParameterizedTest
+    @EnumSource(JointDeploymentPlan::class)
     fun `isLandControlApplicable Should return false When a targeted specy is not contained in the control`(
         jdp: JointDeploymentPlan,
     ) {

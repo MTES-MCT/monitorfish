@@ -124,7 +124,7 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
         reportId: string
       }
     >({
-      invalidatesTags: [{ type: RtkCacheTagType.PriorNotifications }],
+      invalidatesTags: [{ type: RtkCacheTagType.PriorNotifications }, { type: RtkCacheTagType.PriorNotification }],
       query: ({ isManuallyCreated, reportId }) => ({
         method: 'POST',
         url: getUrlOrPathWithQueryParams(`/prior_notifications/${reportId}/verify_and_send`, { isManuallyCreated })

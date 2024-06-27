@@ -47,7 +47,7 @@ export function getHtmlContent(
   const data = {
     catchDetails,
     externalReferenceNumber: pno.externalReferenceNumber ?? 'Aucun',
-    flagState: getAlpha2CodeFromAlpha2or3Code(pno.flagState) ?? 'unknown',
+    flagState: getAlpha2CodeFromAlpha2or3Code(pno.flagState)?.toLowerCase() ?? 'unknown',
     gearDetails,
     imo: pno.imo ?? 'Aucun',
     internalReferenceNumber: pno.internalReferenceNumber ?? 'Aucun',

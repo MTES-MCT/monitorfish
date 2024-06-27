@@ -393,7 +393,7 @@ def render_pno(
     fonts_directory = EMAIL_FONTS_LOCATION.as_uri()
 
     state_flag_icon_src = (
-        STATE_FLAGS_ICONS_LOCATION / Path(f"{pno.flag_state}.png")
+        STATE_FLAGS_ICONS_LOCATION / Path(f"{pno.flag_state}.svg")
     ).as_uri()
 
     risk_factor_thresholds = np.array([1.75, 2.5, 3.25])

@@ -113,7 +113,7 @@ enum class JointDeploymentPlan(private val species: List<FaoZonesAndSpecy>, priv
              * We add a filter by species to avoid counting all controls done in
              * `EASTERN_ATLANTIC_OPERATIONAL_ZONES without targeted species in catches.
              */
-            if (control.actionType == MissionActionType.SEA_CONTROL && jdpEntry == MEDITERRANEAN_AND_EASTERN_ATLANTIC) {
+            if (jdpEntry == MEDITERRANEAN_AND_EASTERN_ATLANTIC) {
                 return@firstOrNull isMedJdpAttributed(control)
             }
 

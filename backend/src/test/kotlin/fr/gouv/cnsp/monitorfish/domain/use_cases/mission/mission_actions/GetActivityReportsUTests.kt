@@ -321,9 +321,15 @@ class GetActivityReportsUTests {
 
         // Then
         assertThat(activityReports.jdpSpecies).hasSize(38)
-        assertThat(activityReports.activityReports).hasSize(1)
+        assertThat(activityReports.activityReports).hasSize(2)
 
-        activityReports.activityReports.first().let { seaReport ->
+        activityReports.activityReports.first().let { landReport ->
+            assertThat(landReport.activityCode).isEqualTo(ActivityCode.LAN)
+            assertThat(landReport.vesselNationalIdentifier).isEqualTo("AYFR00022680")
+            assertThat(landReport.faoArea).isEqualTo("27.4.c")
+            assertThat(landReport.segment).isNull()
+        }
+        activityReports.activityReports.last().let { seaReport ->
             assertThat(seaReport.activityCode).isEqualTo(ActivityCode.FIS)
             assertThat(seaReport.vesselNationalIdentifier).isEqualTo("AYFR00022680")
             assertThat(seaReport.faoArea).isEqualTo("27.4.c")

@@ -16,7 +16,13 @@ export const verifyAndSendPriorNotification =
         priorNotificationApi.endpoints.verifyAndSendPriorNotification.initiate({ isManuallyCreated, reportId })
       ).unwrap()
 
-      dispatch(priorNotificationActions.setEditedPriorNotificationDetail(updatedPriorNotificationDetail))
+      if (isManuallyCreated) {
+        dispatch(priorNotificationActions.setEditedPriorNotificationDetail(updatedPriorNotificationDetail))
+
+        return
+      }
+
+      dispatch(priorNotificationActions.setPriorNotificationCardDetail(updatedPriorNotificationDetail))
     } catch (err) {
       if (err instanceof FrontendApiError) {
         dispatch(displayOrLogError(err, undefined, true, DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_CARD_ERROR))

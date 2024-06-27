@@ -1,7 +1,7 @@
+import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
+
 import { openSideWindowPriorNotification } from './utils'
 import { openSideWindowPriorNotificationList } from '../prior_notification_list/utils'
-
-import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
 context('Side Window > Prior Notification Card > Card', () => {
   it('Should display a corrected message as expected', () => {
@@ -147,6 +147,40 @@ context('Side Window > Prior Notification Card > Card', () => {
       cy.contains(`Ce préavis a été supprimé (entre temps).`).should('be.visible')
       // The card should be closed
       cy.contains(`L'ANCRE SÈCHE (CFR106)`).should('not.exist')
+    })
+  })
+
+  it('Should verify and send a prior notification', () => {
+    openSideWindowPriorNotification(`LE POISSON AMBULANT`)
+
+    cy.intercept('POST', `/bff/v1/prior_notifications/FAKE_OPERATION_111/verify_and_send?isManuallyCreated=false`).as(
+      'verifyAndSendPriorNotification'
+    )
+
+    cy.clickButton('Diffuser')
+
+    cy.wait('@verifyAndSendPriorNotification').then(verifyAndSendInterception => {
+      if (!verifyAndSendInterception.response) {
+        assert.fail('`verifyAndSendInterception.response` is undefined.')
+      }
+
+      const updatedPriorNotification = verifyAndSendInterception.response.body
+
+      assert.deepInclude(updatedPriorNotification, {
+        state: PriorNotification.State.PENDING_SEND
+      })
+
+      cy.contains('En cours de diffusion')
+
+      // -----------------------------------------------------------------------
+      // List
+
+      cy.clickButton('Fermer')
+      cy.fill('Rechercher un navire', 'LE POISSON AMBULANT')
+
+      cy.getTableRowById('FAKE_OPERATION_111' as unknown as number)
+        .find('span[title="En cours de diffusion"]')
+        .should('be.visible')
     })
   })
 })

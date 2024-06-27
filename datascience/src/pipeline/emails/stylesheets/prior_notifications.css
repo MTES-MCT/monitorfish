@@ -192,13 +192,17 @@ hr {
     vertical-align: top;
 }    
 
-.infractions-details {
+.control-result {
     font-weight: bold;
     margin: 0;
 }
 
 .infraction-count {
     color: var(--maximum-red);
+}
+
+.compliant-control {
+    color: var(--medium-sea-green)
 }
 
 tr {

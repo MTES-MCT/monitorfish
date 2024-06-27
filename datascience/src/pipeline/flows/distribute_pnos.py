@@ -467,6 +467,13 @@ def render_pno(
         last_control_gear_infractions=pno.last_control_gear_infractions,
         last_control_species_infractions=pno.last_control_species_infractions,
         last_control_other_infractions=pno.last_control_other_infractions,
+        last_control_compliant=(
+            isinstance(pno.last_control_datetime_utc, datetime)
+            and (pno.last_control_logbook_infractions == [])
+            and (pno.last_control_gear_infractions == [])
+            and (pno.last_control_species_infractions == [])
+            and (pno.last_control_other_infractions == [])
+        ),
     )
 
     html_email_body = email_body_template.render(

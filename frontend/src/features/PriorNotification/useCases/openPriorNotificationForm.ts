@@ -33,7 +33,6 @@ export const openPriorNotificationForm =
         dispatch(priorNotificationActions.unsetEditedPriorNotificationDetail())
         dispatch(priorNotificationActions.setEditedPriorNotificationInitialFormValues(getInitialFormValues()))
         dispatch(priorNotificationActions.unsetEditedPriorNotificationReportId())
-        dispatch(priorNotificationActions.openPriorNotificationForm())
 
         return
       }

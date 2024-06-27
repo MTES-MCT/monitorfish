@@ -26,8 +26,8 @@ context('Side Window > Prior Notification Form > Form', () => {
     cy.getDataCy('vessel-search-input').type('PAGEOT JO', { delay: 100 })
     cy.getDataCy('vessel-search-item').first().click()
 
-    cy.fill("Date et heure estimées d'arrivée au port", arrivalDateTupleWithTime)
-    cy.fill('Date et heure prévues de débarque', landingDateTupleWithTime)
+    cy.fill("Date et heure estimées d'arrivée au port (UTC)", arrivalDateTupleWithTime)
+    cy.fill('Date et heure prévues de débarque (UTC)', landingDateTupleWithTime)
     cy.fill("Port d'arrivée", 'Vannes')
 
     cy.fill('Espèces à bord et à débarquer', 'AAX')
@@ -143,7 +143,7 @@ context('Side Window > Prior Notification Form > Form', () => {
 
     addSideWindowPriorNotification()
 
-    cy.fill('Date et heure de réception du préavis', undefined)
+    cy.fill('Date et heure de réception du préavis (UTC)', undefined)
 
     cy.clickButton('Créer le préavis')
 
@@ -164,15 +164,15 @@ context('Side Window > Prior Notification Form > Form', () => {
 
     cy.contains('Veuillez indiquer le navire concerné.').should('not.exist')
 
-    cy.fill('Date et heure de réception du préavis', utcDateTupleWithTime)
+    cy.fill('Date et heure de réception du préavis (UTC)', utcDateTupleWithTime)
 
     cy.contains('Veuillez indiquer la date de réception du préavis.').should('not.exist')
 
-    cy.fill("Date et heure estimées d'arrivée au port", utcDateTupleWithTime)
+    cy.fill("Date et heure estimées d'arrivée au port (UTC)", utcDateTupleWithTime)
 
     cy.contains("Veuillez indiquer la date d'arrivée estimée.").should('not.exist')
 
-    cy.fill('Date et heure prévues de débarque', utcDateTupleWithTime)
+    cy.fill('Date et heure prévues de débarque (UTC)', utcDateTupleWithTime)
 
     cy.contains('Veuillez indiquer la date de débarquement prévue.').should('not.exist')
 
@@ -201,7 +201,7 @@ context('Side Window > Prior Notification Form > Form', () => {
     // -------------------------------------------------------------------------
     // Other form validation errors
 
-    cy.fill('Date et heure prévues de débarque', undefined)
+    cy.fill('Date et heure prévues de débarque (UTC)', undefined)
 
     cy.contains('Veuillez indiquer la date de débarquement prévue.').should('exist')
     cy.contains('Créer le préavis').should('be.disabled')
@@ -229,7 +229,7 @@ context('Side Window > Prior Notification Form > Form', () => {
     cy.getDataCy('vessel-search-input').type('IN-ARÊTE-ABLE', { delay: 100 })
     cy.getDataCy('vessel-search-item').first().click()
 
-    cy.fill("Date et heure estimées d'arrivée au port", arrivalDateTupleWithTime)
+    cy.fill("Date et heure estimées d'arrivée au port (UTC)", arrivalDateTupleWithTime)
     cy.fill("équivalentes à celles de l'arrivée au port", true)
     cy.fill("Port d'arrivée", 'Vannes')
 
@@ -241,7 +241,7 @@ context('Side Window > Prior Notification Form > Form', () => {
     cy.fill('Saisi par', 'BOB')
 
     cy.wait('@computePriorNotification')
-    cy.getDataCy('VesselRiskFactor').contains('2').should('exist')
+    cy.getDataCy('VesselRiskFactor').contains('1.9').should('exist')
     cy.get('.Element-Tag').contains('NWW01/02 – Trawl').should('exist')
     cy.get('.Element-Tag').contains('Préavis type 1').should('exist')
     cy.get('.Element-Tag').contains('Préavis type 2').should('exist')
@@ -301,7 +301,7 @@ context('Side Window > Prior Notification Form > Form', () => {
       cy.fill('Zone de pêche', '27.5.b')
 
       cy.wait('@computePriorNotification')
-      cy.getDataCy('VesselRiskFactor').contains('2').should('exist')
+      cy.getDataCy('VesselRiskFactor').contains('1.9').should('exist')
       cy.get('.Element-Tag').contains('NWW01/02 – Trawl').should('exist')
       cy.get('.Element-Tag').contains('NWW03 – Deep water trawl ≥100 mm').should('exist')
       cy.get('.Element-Tag').contains('Préavis type 1').should('not.exist')
@@ -449,7 +449,7 @@ context('Side Window > Prior Notification Form > Form', () => {
     cy.getDataCy('vessel-search-input').type('IN-ARÊTE-ABLE', { delay: 100 })
     cy.getDataCy('vessel-search-item').first().click()
 
-    cy.fill("Date et heure estimées d'arrivée au port", arrivalDateTupleWithTime)
+    cy.fill("Date et heure estimées d'arrivée au port (UTC)", arrivalDateTupleWithTime)
     cy.fill("équivalentes à celles de l'arrivée au port", true)
     cy.fill("Port d'arrivée", 'Vannes')
 

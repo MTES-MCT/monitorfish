@@ -53,7 +53,7 @@ export function VesselRiskFactor({
   return (
     <Box data-cy="VesselRiskFactor" onClick={event => event.stopPropagation()}>
       <Score $isInteractive={isInteractive} $value={vesselRiskFactor} onClick={toggle}>
-        {vesselRiskFactor.toFixed(0)}
+        {vesselRiskFactor.toFixed(1)}
       </Score>
       {isVesselUnderCharter && <UnderCharterAsBadge title="Navire sous charte" />}
 

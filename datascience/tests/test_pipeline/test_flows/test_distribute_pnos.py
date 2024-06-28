@@ -107,39 +107,73 @@ def extracted_pnos() -> pd.DataFrame:
     now = datetime.utcnow()
     return pd.DataFrame(
         {
-            "id": [35, 36, 37, 38, 39],
-            "operation_number": ["11", "12", "13", "14", "15"],
+            "id": [35.0, 36.0, 37.0, 38.0, 39.0, None, None, None, None],
             "operation_datetime_utc": [
                 now - relativedelta(months=1, hours=1),
                 now - relativedelta(months=1, minutes=25),
                 now - relativedelta(months=1, hours=2),
                 now - relativedelta(months=1, minutes=52),
                 now - relativedelta(months=1, minutes=32),
+                None,
+                None,
+                None,
+                None,
             ],
-            "operation_type": ["DAT", "DAT", "DAT", "DAT", "DAT"],
-            "report_id": ["11", "12", "13", "14", "15"],
+            "report_id": [
+                "11",
+                "12",
+                "13",
+                "14",
+                "15",
+                "00000000-0000-4000-0000-000000000001",
+                "00000000-0000-4000-0000-000000000003",
+                "00000000-0000-4000-0000-000000000004",
+                "00000000-0000-4000-0000-000000000005",
+            ],
             "report_datetime_utc": [
                 now - relativedelta(months=1, hours=1, minutes=2),
                 now - relativedelta(months=1, minutes=27),
                 now - relativedelta(months=1, hours=2, minutes=2),
                 now - relativedelta(months=1, minutes=54),
                 now - relativedelta(months=1, minutes=34),
+                now - relativedelta(minutes=15),
+                now - relativedelta(months=3),
+                now - relativedelta(weeks=3),
+                now - relativedelta(days=3),
             ],
-            "vessel_id": [2, None, 1, 1, 7],
+            "vessel_id": [2, None, 1, 1, 7, 3, 6, 6, 6],
             "cfr": [
                 "ABC000542519",
                 "ABC000000000",
                 "ABC000306959",
                 "ABC000306959",
                 "___TARGET___",
+                "ABC000055481",
+                None,
+                None,
+                None,
             ],
-            "ircs": ["FQ7058", "ABCD", "LLUK", "LLUK", "TRGT"],
+            "ircs": [
+                "FQ7058",
+                "ABCD",
+                "LLUK",
+                "LLUK",
+                "TRGT",
+                "IL2468",
+                "ZZ000000",
+                "ZZ000000",
+                "ZZ000000",
+            ],
             "external_identification": [
                 "RO237719",
                 "LEB@T0",
                 "RV348407",
                 "RV348407",
                 "TARGET",
+                "AS761555",
+                "ZZTOPACDC",
+                "ZZTOPACDC",
+                "ZZTOPACDC",
             ],
             "vessel_name": [
                 "DEVINER FIGURE CONSCIENCE",
@@ -147,9 +181,23 @@ def extracted_pnos() -> pd.DataFrame:
                 "ÉTABLIR IMPRESSION LORSQUE",
                 "ÉTABLIR IMPRESSION LORSQUE",
                 "NAVIRE CIBLE",
+                "PLACE SPECTACLE SUBIR",
+                "I DO 4H REPORT",
+                "I DO 4H REPORT",
+                "I DO 4H REPORT",
             ],
-            "flag_state": ["FRA", "POL", "FRA", "FRA", "FRA"],
-            "purpose": ["LAN", "ACS", "OTH", "LAN", "LAN"],
+            "flag_state": [
+                "FRA",
+                "POL",
+                "FRA",
+                "FRA",
+                "FRA",
+                "FRA",
+                "FRA",
+                "FRA",
+                "FRA",
+            ],
+            "purpose": ["LAN", "ACS", "OTH", "LAN", "LAN", "LAN", "LAN", "LAN", "LAN"],
             "catch_onboard": [
                 [
                     {
@@ -317,14 +365,56 @@ def extracted_pnos() -> pd.DataFrame:
                         "species": "GHL",
                     },
                 ],
+                [
+                    {
+                        "nbFish": None,
+                        "weight": 1272,
+                        "faoZone": "27.8.a",
+                        "species": "HKE",
+                    }
+                ],
+                [{"nbFish": 3, "weight": 172, "faoZone": "37.1", "species": "BFT"}],
+                None,
+                [
+                    {
+                        "nbFish": None,
+                        "weight": 72,
+                        "faoZone": "21.1.a",
+                        "species": "GHL",
+                    },
+                    {
+                        "nbFish": None,
+                        "weight": 172,
+                        "faoZone": "21.1.a",
+                        "species": "GHL",
+                    },
+                    {"nbFish": 3, "weight": 72, "faoZone": "21.1.a", "species": "BFT"},
+                    {"nbFish": 2, "weight": 32, "faoZone": "27.2.a", "species": "BFT"},
+                    {"nbFish": 2, "weight": 502, "faoZone": "27.2.a", "species": "SWO"},
+                    {"nbFish": 1, "weight": 202, "faoZone": "27.2.a", "species": "SWO"},
+                ],
             ],
-            "port_locode": ["FRCQF", "FRZJZ", "FRDKK", "FRLEH", "FRDPE"],
+            "port_locode": [
+                "FRCQF",
+                "FRZJZ",
+                "FRDKK",
+                "FRLEH",
+                "FRDPE",
+                "FRBES",
+                "FRDPE",
+                "FRDKK",
+                "FRLEH",
+            ],
             "port_name": [
                 "Somewhere over the rainbow",
                 "Somewhere over the top",
                 "Somewhere over the swell",
                 "Somewhere over the ocean",
                 "Somewhere over the clouds",
+                "Somewhere over the hill",
+                "Somewhere over the clouds",
+                "Somewhere over the swell",
+                "Somewhere over the ocean",
             ],
             "predicted_arrival_datetime_utc": [
                 datetime(2020, 5, 6, 11, 41, 3, 340000),
@@ -332,13 +422,21 @@ def extracted_pnos() -> pd.DataFrame:
                 datetime(2020, 5, 6, 11, 41, 3, 340000),
                 datetime(2020, 5, 6, 11, 41, 3, 340000),
                 datetime(2020, 5, 6, 11, 41, 3, 340000),
+                datetime(2021, 5, 6, 7, 41, 3, 340000),
+                datetime(2021, 5, 6, 7, 41, 3, 340000),
+                datetime(2021, 5, 6, 7, 41, 3, 340000),
+                datetime(2021, 5, 6, 7, 41, 3, 340000),
             ],
             "predicted_landing_datetime_utc": [
                 datetime(2020, 5, 6, 16, 40, 0, 0),
-                pd.NaT,
-                pd.NaT,
-                pd.NaT,
-                pd.NaT,
+                None,
+                None,
+                None,
+                None,
+                datetime(2021, 5, 6, 11, 41, 3, 340000),
+                datetime(2021, 5, 6, 11, 41, 3, 340000),
+                datetime(2021, 5, 6, 11, 41, 3, 340000),
+                datetime(2021, 5, 6, 11, 41, 3, 340000),
             ],
             "trip_gears": [
                 [
@@ -349,6 +447,10 @@ def extracted_pnos() -> pd.DataFrame:
                 [{"gear": "OTT", "mesh": 140, "dimensions": "250.0"}],
                 [{"gear": "OTB", "mesh": 140, "dimensions": "250.0"}],
                 [{"gear": "OTB", "mesh": 140, "dimensions": "250.0"}],
+                [{"gear": "LNP"}],
+                None,
+                None,
+                [{"gear": "LNP"}, {"gear": "OTM", "mesh": 80}],
             ],
             "trip_segments": [
                 [
@@ -364,6 +466,13 @@ def extracted_pnos() -> pd.DataFrame:
                     }
                 ],
                 [],
+                [{"segment": "NWW09", "segmentName": "Lignes"}],
+                None,
+                None,
+                [
+                    {"segment": "NWW09", "segmentName": "Lignes"},
+                    {"segment": "SWW01", "segmentName": "Chaluts de fond"},
+                ],
             ],
             "pno_types": [
                 [
@@ -399,27 +508,63 @@ def extracted_pnos() -> pd.DataFrame:
                     },
                 ],
                 [],
+                [
+                    {
+                        "pnoTypeName": "Préavis type A",
+                        "hasDesignatedPorts": False,
+                        "minimumNotificationPeriod": 4,
+                    }
+                ],
+                [
+                    {
+                        "pnoTypeName": "Préavis type A",
+                        "hasDesignatedPorts": False,
+                        "minimumNotificationPeriod": 4,
+                    }
+                ],
+                [
+                    {
+                        "pnoTypeName": "Préavis type A",
+                        "hasDesignatedPorts": False,
+                        "minimumNotificationPeriod": 4,
+                    }
+                ],
+                [
+                    {
+                        "pnoTypeName": "Préavis type A",
+                        "hasDesignatedPorts": False,
+                        "minimumNotificationPeriod": 4,
+                    },
+                    {
+                        "pnoTypeName": "Préavis type B",
+                        "hasDesignatedPorts": True,
+                        "minimumNotificationPeriod": 4,
+                    },
+                ],
             ],
             "note": [
                 None,
                 None,
-                (
-                    "Attention attention faites bien attention très attention sait-on "
-                    "jamais ce qui pourrait, ô grand Dieu des Poissons qui se font "
-                    "pêcher, nous arriver, si on ne fait pas assez attention à ce qu'y "
-                    "pêche c'te navire d'pêche qui fait d'la pêche de poissons."
-                ),
+                "Attention attention faites bien attention très attention sait-on jamais ce qui pourrait, ô grand Dieu des Poissons qui se font pêcher, nous arriver, si on ne fait pas assez attention à ce qu'y pêche c'te navire d'pêche qui fait d'la pêche de poissons.",
                 None,
                 None,
+                None,
+                None,
+                None,
+                "Ceci est une note de préavis manuel",
             ],
-            "vessel_length": [13.4, None, 17.4, 17.4, 8.58],
-            "mmsi": [None, None, None, None, None],
+            "vessel_length": [13.4, None, 17.4, 17.4, 8.58, 11.5, 12.5, 12.5, 12.5],
+            "mmsi": [None, None, None, None, None, None, None, None, None],
             "risk_factor": [
                 2.09885592141872,
                 None,
                 2.14443662414848,
                 2.14443662414848,
                 None,
+                2.1,
+                2.8,
+                3.1,
+                3.8,
             ],
             "last_control_datetime_utc": [
                 now - relativedelta(years=1, days=2),
@@ -427,8 +572,12 @@ def extracted_pnos() -> pd.DataFrame:
                 now - relativedelta(months=6, days=6, hours=6),
                 now - relativedelta(months=6, days=6, hours=6),
                 pd.NaT,
+                None,
+                None,
+                None,
+                None,
             ],
-            "last_control_logbook_infractions": [[], [], [], [], []],
+            "last_control_logbook_infractions": [[], [], [], [], [], [], [], [], []],
             "last_control_gear_infractions": [
                 [
                     {
@@ -441,18 +590,36 @@ def extracted_pnos() -> pd.DataFrame:
                 [],
                 [],
                 [],
+                [],
+                [],
+                [],
+                [],
             ],
-            "last_control_species_infractions": [[], [], [], [], []],
+            "last_control_species_infractions": [[], [], [], [], [], [], [], [], []],
             "last_control_other_infractions": [
                 [{"natinf": 2606}, {"natinf": 4761}, {"natinf": 22206}],
                 [],
                 [],
                 [],
                 [],
+                [],
+                [],
+                [],
+                [],
             ],
-            "is_verified": [True, True, False, False, False],
-            "is_being_sent": [True, True, False, True, True],
-            "source": ["LOGBOOK", "LOGBOOK", "LOGBOOK", "LOGBOOK", "LOGBOOK"],
+            "is_verified": [True, True, False, False, False, False, True, False, True],
+            "is_being_sent": [True, True, False, True, True, True, True, False, True],
+            "source": [
+                "LOGBOOK",
+                "LOGBOOK",
+                "LOGBOOK",
+                "LOGBOOK",
+                "LOGBOOK",
+                "MANUAL",
+                "MANUAL",
+                "MANUAL",
+                "MANUAL",
+            ],
         }
     )
 

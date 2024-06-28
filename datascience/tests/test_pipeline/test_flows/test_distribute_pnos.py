@@ -1973,9 +1973,9 @@ def test_flow(
     final_pdf_documents = read_query(pdf_documents_query, db="monitorfish_remote")
     final_sent_messages = read_query(sent_messages_query, db="monitorfish_remote")
 
-    assert len(initial_pdf_documents) == 5
+    assert len(initial_pdf_documents) == 8
     assert len(initial_sent_messages) == 0
-    assert len(final_pdf_documents) == 9
+    assert len(final_pdf_documents) == 12
     assert len(final_sent_messages) == 7
 
     if is_integration:

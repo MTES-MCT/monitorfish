@@ -30,10 +30,12 @@ export function DownloadButton({ isDisabled = false, pnoLogbookMessage }: Downlo
     })
   }, [getGearsApiQuery.data, pnoLogbookMessage?.tripGears])
 
-  const downloadPDF = () => {
+  const downloadPDF = async () => {
+    const htmlContent = await getHtmlContent(pnoLogbookMessage, gearsWithName)
+
     printJS({
       documentTitle: `preavis_entree_port_debarquement_${customDayjs().utc().format('DDMMYYYY')}.pdf`,
-      printable: getHtmlContent(pnoLogbookMessage, gearsWithName),
+      printable: htmlContent,
       style: HTML_STYLE,
       type: 'raw-html'
     })

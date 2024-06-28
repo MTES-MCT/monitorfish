@@ -325,6 +325,7 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
             <img id="logo_cnsp" src="logo_cnsp.jpg" alt="Logo CNSP"/>
           </td>
           <td>
+            <img id="logo_se_mer", src="logo_se_mer.jpg" alt="Logo Secretariat d'Etat chargé de la Mer et de la Biodiversité"/>
           </td>
         </tr>
       </table>

@@ -13,7 +13,8 @@ export const HTML_TEMPLATE = `
         <p>PREAVIS - {purpose}</p>
         <p>
         {vesselName}
-        <img id="state_flag_icon" src="flags/{flagState}.png" />
+        <img rel="preload" id="state_flag_icon" src="{flagStateFilePath}" />
+        {svg}
         </p>
       </h1>
       <ul id="vessel_ids_list">
@@ -89,6 +90,7 @@ export const HTML_TEMPLATE = `
             <img id="logo_cnsp" src="logo_cnsp.jpg" alt="Logo CNSP"/>
           </td>
           <td>
+            <img id="logo_se_mer" src="logo_se_mer.jpg" alt="Logo Secretariat d'Etat chargé de la Mer et de la Biodiversité"/>
           </td>
         </tr>
       </table>

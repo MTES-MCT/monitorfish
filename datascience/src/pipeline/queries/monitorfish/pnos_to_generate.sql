@@ -17,11 +17,9 @@ acknowledged_messages AS (
         AND value->>'returnStatus' = '000'
 )
 
-SELECT
+(SELECT
     r.id,
-    r.operation_number,
     r.operation_datetime_utc,
-    r.operation_type,
     r.report_id,
     r.report_datetime_utc,
     v.id as vessel_id,
@@ -75,4 +73,50 @@ WHERE
             AND report_id IN (SELECT referenced_report_id FROM acknowledged_messages)
         )
     )
-ORDER BY id
+ORDER BY id)
+
+UNION ALL
+
+(SELECT
+    NULL AS id,
+    NULL AS operation_datetime_utc,
+    r.report_id,
+    r.sent_at AT TIME ZONE 'UTC' AS report_datetime_utc,
+    v.id as vessel_id,
+    r.cfr,
+    v.ircs,
+    v.external_immatriculation AS external_identification,
+    r.vessel_name,
+    r.flag_state,
+    r.value->>'purpose' AS purpose,
+    r.value->'catchOnboard' AS catch_onboard,
+    r.value->>'port' AS port_locode,
+    p.port_name,
+    (r.value->>'predictedArrivalDatetimeUtc')::TIMESTAMPTZ AT TIME ZONE 'UTC' AS predicted_arrival_datetime_utc,
+    (r.value->>'predictedLandingDatetimeUtc')::TIMESTAMPTZ AT TIME ZONE 'UTC' AS predicted_landing_datetime_utc,
+    r.trip_gears,
+    r.trip_segments,
+    r.value->'pnoTypes' AS pno_types,
+    r.value->>'note' AS note,
+    v.length AS vessel_length,
+    v.mmsi,
+    (r.value->>'riskFactor')::DOUBLE PRECISION AS risk_factor,
+    rf.last_control_datetime_utc,
+    COALESCE(rf.last_control_logbook_infractions, '[]') AS last_control_logbook_infractions,
+    COALESCE(rf.last_control_gear_infractions, '[]') AS last_control_gear_infractions,
+    COALESCE(rf.last_control_species_infractions, '[]') AS last_control_species_infractions,
+    COALESCE(rf.last_control_other_infractions, '[]') AS last_control_other_infractions,
+    (value->>'isVerified')::BOOLEAN AS is_verified,
+    (value->>'isBeingSent')::BOOLEAN AS is_being_sent,
+    'MANUAL' AS source
+FROM manual_prior_notifications r
+LEFT JOIN vessels v
+ON v.id = r.vessel_id
+LEFT JOIN risk_factors rf
+ON rf.vessel_id = r.vessel_id
+LEFT JOIN ports p
+ON p.locode = r.value->>'port'
+WHERE
+    (value->>'isBeingSent')::BOOLEAN IS true
+    OR report_id NOT IN (SELECT report_id FROM prior_notification_pdf_documents)
+ORDER BY report_id)

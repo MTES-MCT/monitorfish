@@ -13,8 +13,7 @@ export const HTML_TEMPLATE = `
         <p>PREAVIS - {purpose}</p>
         <p>
         {vesselName}
-        <img rel="preload" id="state_flag_icon" src="{flagStateFilePath}" />
-        {svg}
+        <img id="state_flag_icon" src="{flagStateFilePath}" />
         </p>
       </h1>
       <ul id="vessel_ids_list">

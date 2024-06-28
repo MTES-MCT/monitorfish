@@ -9,6 +9,7 @@
                 "report_id": "00000000-0000-4000-0000-000000000001",
                 "author_trigram": "ABC",
                 "cfr": "CFR112",
+                "vessel_id": 112,
                 "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "did_not_fish_after_zero_notice": false,
                 "flag_state": "FRA",
@@ -18,6 +19,7 @@
                 "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "POISSON PAS NET",
                 "value:jsonb": {
+                    "riskFactor": 2.1,
                     "catchOnboard": [
                         {
                             "faoZone": "21.1.A",
@@ -66,6 +68,7 @@
                 "report_id": "00000000-0000-4000-0000-000000000002",
                 "author_trigram": "ABC",
                 "cfr": "CFR115",
+                "vessel_id": 115,
                 "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "did_not_fish_after_zero_notice": false,
                 "flag_state": "BEL",
@@ -78,6 +81,7 @@
                 "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "DOS FIN",
                 "value:jsonb": {
+                    "riskFactor": 2.7,
                     // Unsorted on purpose
                     "catchOnboard": [
                         {
@@ -180,6 +184,7 @@
                 "report_id": "00000000-0000-4000-0000-000000000003",
                 "author_trigram": "ABC",
                 "cfr": "CFR117",
+                "vessel_id": 117,
                 "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '50 minutes'",
                 "did_not_fish_after_zero_notice": true,
                 "flag_state": "FRA",
@@ -192,6 +197,7 @@
                 "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '5 minutes'",
                 "vessel_name": "QUEUE DE POISSON",
                 "value:jsonb": {
+                    "riskFactor": 3.1,
                     "catchOnboard": [
                         {
                             "faoZone": "21.1.C",
@@ -235,6 +241,7 @@
                 "report_id": "00000000-0000-4000-0000-000000000004",
                 "author_trigram": "ABC",
                 "cfr": "CFR118",
+                "vessel_id": 118,
                 "created_at": "2023-01-01T08:45:00",
                 "did_not_fish_after_zero_notice": true,
                 "flag_state": "FRA",
@@ -244,6 +251,7 @@
                 "updated_at": "2023-01-01T08:45:00",
                 "vessel_name": "GOUJON BOUGON",
                 "value:jsonb": {
+                    "riskFactor": 3.8,
                     "catchOnboard": [
                         {
                             "faoZone": "21.1.C",
@@ -288,6 +296,7 @@
                 "report_id": "00000000-0000-4000-0000-000000000005",
                 "author_trigram": "ABC",
                 "cfr": "CFR116",
+                "vessel_id": 116,
                 "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "did_not_fish_after_zero_notice": false,
                 "flag_state": "FRA",
@@ -297,6 +306,7 @@
                 "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "NAVIRE RENOMMÉ (ANCIEN NOM)",
                 "value:jsonb": {
+                    "riskFactor": 1.5,
                     "catchOnboard": [
                         {
                             "faoZone": "21.1.C",
@@ -343,6 +353,7 @@
                 "report_id": "00000000-0000-4000-0000-000000000006",
                 "author_trigram": "ABC",
                 "cfr": "CFR120",
+                "vessel_id": 120,
                 "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "did_not_fish_after_zero_notice": false,
                 "flag_state": "ITA",
@@ -352,6 +363,7 @@
                 "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "VIVA L'ITALIA",
                 "value:jsonb": {
+                    "riskFactor": 3.2,
                     "catchOnboard": [
                         {
                             "faoZone": "21.1.C",

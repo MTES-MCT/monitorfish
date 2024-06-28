@@ -34,7 +34,6 @@ class PnoSource(Enum):
 class PnoToRender:
     id: int
     operation_datetime_utc: datetime
-    operation_type: str
     report_id: str
     report_datetime_utc: datetime
     vessel_id: str
@@ -102,7 +101,6 @@ class PnoToRender:
 class PreRenderedPno:
     id: int
     operation_datetime_utc: datetime
-    operation_type: str
     report_id: str
     report_datetime_utc: datetime
     vessel_id: str

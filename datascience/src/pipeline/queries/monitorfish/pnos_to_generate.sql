@@ -60,6 +60,7 @@ WHERE
     operation_datetime_utc >= :start_datetime_utc
     AND operation_datetime_utc < :end_datetime_utc
     AND log_type='PNO'
+    AND enriched
     AND (
         (value->>'isBeingSent')::BOOLEAN IS true
         OR report_id NOT IN (SELECT report_id FROM prior_notification_pdf_documents)
@@ -94,9 +95,9 @@ UNION ALL
     p.port_name,
     (r.value->>'predictedArrivalDatetimeUtc')::TIMESTAMPTZ AT TIME ZONE 'UTC' AS predicted_arrival_datetime_utc,
     (r.value->>'predictedLandingDatetimeUtc')::TIMESTAMPTZ AT TIME ZONE 'UTC' AS predicted_landing_datetime_utc,
-    r.trip_gears,
-    r.trip_segments,
-    r.value->'pnoTypes' AS pno_types,
+    (CASE WHEN jsonb_typeof(r.trip_gears) = 'array' THEN r.trip_gears ELSE '[]'::jsonb END) AS trip_gears,
+    (CASE WHEN jsonb_typeof(r.trip_segments) = 'array' THEN r.trip_segments ELSE '[]'::jsonb END) AS trip_segments,
+    (CASE WHEN jsonb_typeof(r.value->'pnoTypes') = 'array' THEN r.value->'pnoTypes' ELSE '[]'::jsonb END) AS pno_types,
     r.value->>'note' AS note,
     v.length AS vessel_length,
     v.mmsi,

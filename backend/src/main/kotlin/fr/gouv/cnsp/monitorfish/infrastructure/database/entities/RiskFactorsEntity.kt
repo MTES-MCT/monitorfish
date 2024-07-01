@@ -59,6 +59,8 @@ data class RiskFactorsEntity(
     val numberSpeciesSeizuresLastFiveYears: Short,
     @Column(name = "number_vessel_seizures_last_5_years")
     val numberVesselSeizuresLastFiveYears: Short,
+    @Column(name = "vessel_id")
+    val vesselId: Int? = null,
 ) : Serializable {
     fun toVesselRiskFactor(mapper: ObjectMapper) =
         VesselRiskFactor(

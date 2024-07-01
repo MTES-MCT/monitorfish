@@ -92,7 +92,7 @@ class GetPriorNotificationsUTests {
                     state = null,
                     updatedAt = null,
                     vessel = null,
-                    vesselRiskFactor = null,
+                    lastControlDateTime = null,
                 ),
 
                 PriorNotification(
@@ -127,7 +127,7 @@ class GetPriorNotificationsUTests {
                     state = null,
                     updatedAt = null,
                     vessel = null,
-                    vesselRiskFactor = null,
+                    lastControlDateTime = null,
                 ),
             ),
         )

@@ -46,7 +46,7 @@ class GetPriorNotifications(
 
         val priorNotifications = filteredIncompletePriorNotifications
             .map { priorNotification ->
-                priorNotification.enrich(allPorts, allRiskFactors, allVessels)
+                priorNotification.enrich(allPorts, allRiskFactors, allVessels, priorNotification.isManuallyCreated)
                 priorNotification.logbookMessageTyped.logbookMessage
                     .enrichGearPortAndSpecyNames(allGears, allPorts, allSpecies)
 
@@ -103,7 +103,7 @@ class GetPriorNotifications(
                 PriorNotificationsSortColumn.EXPECTED_LANDING_DATE -> priorNotification.logbookMessageTyped.typedMessage.predictedLandingDatetimeUtc
                 PriorNotificationsSortColumn.PORT_NAME -> priorNotification.port?.name
                 PriorNotificationsSortColumn.VESSEL_NAME -> priorNotification.logbookMessageTyped.logbookMessage.vesselName
-                PriorNotificationsSortColumn.VESSEL_RISK_FACTOR -> priorNotification.vesselRiskFactor?.riskFactor
+                PriorNotificationsSortColumn.VESSEL_RISK_FACTOR -> priorNotification.logbookMessageTyped.typedMessage.riskFactor
             }
         }
     }

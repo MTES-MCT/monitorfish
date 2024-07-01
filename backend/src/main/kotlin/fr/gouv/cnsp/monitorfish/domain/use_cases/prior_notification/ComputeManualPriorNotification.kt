@@ -13,7 +13,6 @@ const val VESSEL_RISK_FACTOR_VERIFICATION_THRESHOLD: Double = 2.3
 @UseCase
 class ComputeManualPriorNotification(
     private val vesselRepository: VesselRepository,
-
     private val computeFleetSegments: ComputeFleetSegments,
     private val computePnoTypes: ComputePnoTypes,
     private val computeRiskFactor: ComputeRiskFactor,

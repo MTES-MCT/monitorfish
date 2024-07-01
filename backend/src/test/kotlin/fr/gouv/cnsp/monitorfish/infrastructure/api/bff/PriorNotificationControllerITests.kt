@@ -91,7 +91,7 @@ class PriorNotificationControllerITests {
     }
 
     @Test
-    fun `getManualComputation Should get a manual prior notification computated values`() {
+    fun `getManualComputation Should get a manual prior notification computed values`() {
         // Given
         given(this.computeManualPriorNotification.execute(any(), any(), any(), any(), any()))
             .willReturn(
@@ -121,7 +121,7 @@ class PriorNotificationControllerITests {
         )
             // Then
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.vesselRiskFactor", equalTo(1.2)))
+            .andExpect(jsonPath("$.riskFactor", equalTo(1.2)))
     }
 
     @Test

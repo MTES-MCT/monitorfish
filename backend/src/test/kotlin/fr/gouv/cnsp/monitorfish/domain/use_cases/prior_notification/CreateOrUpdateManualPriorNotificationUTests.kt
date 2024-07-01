@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class CreateOrUpdateManualPriorNotificationUTests {
@@ -68,14 +69,14 @@ class CreateOrUpdateManualPriorNotificationUTests {
             purpose = LogbookMessagePurpose.LAN,
             authorTrigram = "ABC",
             didNotFishAfterZeroNotice = false,
-            expectedArrivalDate = "2024-01-01T00:00:00Z",
-            expectedLandingDate = "2024-01-01T00:00:00Z",
+            expectedArrivalDate = ZonedDateTime.parse("2024-01-01T00:00:00Z"),
+            expectedLandingDate = ZonedDateTime.parse("2024-01-01T00:00:00Z"),
             faoArea = "FAKE_FAO_AREA",
             fishingCatches = emptyList(),
             note = null,
             portLocode = "FAKE_PORT_LOCODE",
             reportId = null,
-            sentAt = "2024-01-01T00:00:00Z",
+            sentAt = ZonedDateTime.parse("2024-01-01T00:00:00Z"),
             tripGearCodes = emptyList(),
             vesselId = 1,
         )

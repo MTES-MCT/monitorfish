@@ -32,7 +32,7 @@ class GetPriorNotification(
         }
             ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
 
-        priorNotification.enrich(allPorts, allRiskFactors, allVessels)
+        priorNotification.enrich(allPorts, allRiskFactors, allVessels, isManuallyCreated)
         priorNotification.enrichLogbookMessage(
             allGears,
             allPorts,

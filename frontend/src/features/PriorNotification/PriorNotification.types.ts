@@ -24,6 +24,7 @@ export namespace PriorNotification {
     portName: string | undefined
     purposeCode: PurposeCode | undefined
     reportingCount: number
+    riskFactor: number | undefined
     seafront: Seafront | undefined
     sentAt: string | undefined
     state: State | undefined
@@ -36,14 +37,10 @@ export namespace PriorNotification {
     vesselId: number
     vesselInternalReferenceNumber: string | undefined
     vesselIrcs: string | undefined
-    vesselLastControlDate: string | undefined
+    vesselLastControlDateTime: string | undefined
     vesselLength: number | undefined
     vesselMmsi: string | undefined
     vesselName: string | undefined
-    vesselRiskFactor: number | undefined
-    vesselRiskFactorDetectability: number | undefined
-    vesselRiskFactorImpact: number | undefined
-    vesselRiskFactorProbability: number | undefined
   }
 
   export type PriorNotificationDetail = {
@@ -54,8 +51,8 @@ export namespace PriorNotification {
     isLessThanTwelveMetersVessel: boolean
     isVesselUnderCharter: boolean | undefined
     logbookMessage: LogbookMessage.PnoLogbookMessage
+    riskFactor: number | undefined
     state: State | undefined
-    vesselRiskFactor: number | undefined
   }
 
   export type ManualPriorNotificationData = {
@@ -83,7 +80,7 @@ export namespace PriorNotification {
   >
   export type ManualPriorNotificationComputedValues = Pick<
     PriorNotification,
-    'isVesselUnderCharter' | 'tripSegments' | 'types' | 'vesselRiskFactor'
+    'isVesselUnderCharter' | 'tripSegments' | 'types' | 'riskFactor'
   > & {
     isInVerificationScope: boolean
   }

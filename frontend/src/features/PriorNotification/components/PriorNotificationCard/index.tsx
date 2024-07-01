@@ -100,12 +100,12 @@ export function PriorNotificationCard() {
                   priorNotificationDetail.logbookMessage.message.catchOnboard
                 )
               )}
+              riskFactor={priorNotificationDetail.riskFactor}
               state={priorNotificationDetail.state}
               tripSegments={priorNotificationDetail.logbookMessage.tripSegments}
               types={getPriorNotificationTypesFromLogbookMessagePnoTypes(
                 priorNotificationDetail.logbookMessage.message.pnoTypes
               )}
-              vesselRiskFactor={priorNotificationDetail.vesselRiskFactor}
             />
 
             <Intro>

@@ -124,8 +124,8 @@ export function Row({ row }: RowProps) {
             <p>
               <ExpandedRowLabel>Dernier contrôle :</ExpandedRowLabel>
               <ExpandedRowValue>
-                {priorNotification.vesselLastControlDate
-                  ? customDayjs(priorNotification.vesselLastControlDate).utc().format('[Le] DD/MM/YYYY')
+                {priorNotification.vesselLastControlDateTime
+                  ? customDayjs(priorNotification.vesselLastControlDateTime).utc().format('[Le] DD/MM/YYYY')
                   : '-'}
               </ExpandedRowValue>
             </p>

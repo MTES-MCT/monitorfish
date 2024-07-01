@@ -73,11 +73,11 @@ export const openPriorNotificationForm =
       const nextComputedValues: Undefine<PriorNotification.ManualPriorNotificationComputedValues> = {
         isInVerificationScope: priorNotificationDetail.logbookMessage.message.isInVerificationScope,
         isVesselUnderCharter: priorNotificationDetail.isVesselUnderCharter,
+        riskFactor: priorNotificationDetail.riskFactor,
         tripSegments: priorNotificationDetail.logbookMessage.tripSegments,
         types: getPriorNotificationTypesFromLogbookMessagePnoTypes(
           priorNotificationDetail.logbookMessage.message.pnoTypes
-        ),
-        vesselRiskFactor: priorNotificationDetail.vesselRiskFactor
+        )
       }
 
       const nextInitialFormValues: FormValues = {

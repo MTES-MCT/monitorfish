@@ -2438,13 +2438,13 @@ test = ["jupyter-server (>=2.0.0)", "pytest (>=7.0)", "pytest-jupyter[server] (>
 
 [[package]]
 name = "jupyterlab"
-version = "4.2.2"
+version = "4.2.3"
 description = "JupyterLab computational environment"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "jupyterlab-4.2.2-py3-none-any.whl", hash = "sha256:59ee9b839f43308c3dfd55d72d1f1a299ed42a7f91f2d1afe9c12a783f9e525f"},
-    {file = "jupyterlab-4.2.2.tar.gz", hash = "sha256:a534b6a25719a92a40d514fb133a9fe8f0d9981b0bbce5d8a5fcaa33344a3038"},
+    {file = "jupyterlab-4.2.3-py3-none-any.whl", hash = "sha256:0b59d11808e84bb84105c73364edfa867dd475492429ab34ea388a52f2e2e596"},
+    {file = "jupyterlab-4.2.3.tar.gz", hash = "sha256:df6e46969ea51d66815167f23d92f105423b7f1f06fa604d4f44aeb018c82c7b"},
 ]
 
 [package.dependencies]
@@ -3376,13 +3376,13 @@ defusedxml = "*"
 
 [[package]]
 name = "openpyxl"
-version = "3.1.4"
+version = "3.1.5"
 description = "A Python library to read/write Excel 2010 xlsx/xlsm files"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "openpyxl-3.1.4-py2.py3-none-any.whl", hash = "sha256:ec17f6483f2b8f7c88c57e5e5d3b0de0e3fb9ac70edc084d28e864f5b33bbefd"},
-    {file = "openpyxl-3.1.4.tar.gz", hash = "sha256:8d2c8adf5d20d6ce8f9bca381df86b534835e974ed0156dacefa76f68c1d69fb"},
+    {file = "openpyxl-3.1.5-py2.py3-none-any.whl", hash = "sha256:5282c12b107bffeef825f4617dc029afaf41d0ea60823bbb665ef3079dc79de2"},
+    {file = "openpyxl-3.1.5.tar.gz", hash = "sha256:cf0e3cf56142039133628b5acffe8ef0c12bc902d2aadd3e0fe5878dc08d1050"},
 ]
 
 [package.dependencies]
@@ -5351,13 +5351,13 @@ test = ["cython (>=3.0)", "defusedxml (>=0.7.1)", "pytest (>=6.0)", "setuptools 
 
 [[package]]
 name = "sphinx-autoapi"
-version = "3.1.1"
+version = "3.1.2"
 description = "Sphinx API documentation generator"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "sphinx_autoapi-3.1.1-py2.py3-none-any.whl", hash = "sha256:ff202754c38e119fe60b9336fb3cdbd0b78f8623753fa9151aed42a7052506b3"},
-    {file = "sphinx_autoapi-3.1.1.tar.gz", hash = "sha256:b5f6e3c61cd86c0cdb7ee77a9d580c0fd116726c5b29cdcb1f1d5f30a5bca1bd"},
+    {file = "sphinx_autoapi-3.1.2-py2.py3-none-any.whl", hash = "sha256:8d672bd2baa8365ac844d3f52c0d3360aa492299131d3dea156a20a26f048d23"},
+    {file = "sphinx_autoapi-3.1.2.tar.gz", hash = "sha256:fa5eb188f67ae39e19b2e7d2527c75d064e0f0b9ac7f77a3558ec26ccb731c26"},
 ]
 
 [package.dependencies]
@@ -6282,4 +6282,4 @@ test = ["pytest"]
 [metadata]
 lock-version = "2.0"
 python-versions = "3.11.6"
-content-hash = "2b6ade2697fa6a8fa4526684ca22f9b12f17518efd4d1a58d18643accf99bf32"
+content-hash = "c0772a8108279b6d3ed4847cac7802e5e8f74958bc5c8003e474080415d7b9c7"

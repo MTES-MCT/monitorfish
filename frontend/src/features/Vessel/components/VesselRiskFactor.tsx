@@ -14,7 +14,7 @@ type VesselRiskFactorProps = Readonly<
     hasVesselRiskFactorSegments: boolean
     isInteractive?: boolean
     isVesselUnderCharter: boolean
-    vesselLastControlDate?: string
+    vesselLastControlDateTime?: string
     vesselRiskFactor: number
     vesselRiskFactorDetectability?: number
     vesselRiskFactorImpact?: number
@@ -26,7 +26,7 @@ export function VesselRiskFactor({
   hasVesselRiskFactorSegments = false,
   isInteractive = false,
   isVesselUnderCharter = false,
-  vesselLastControlDate,
+  vesselLastControlDateTime,
   vesselRiskFactor,
   vesselRiskFactorDetectability,
   vesselRiskFactorImpact,
@@ -46,8 +46,8 @@ export function VesselRiskFactor({
     return '-'
   }
 
-  const hasBeenControlledWithinPastFiveYears = vesselLastControlDate
-    ? customDayjs(vesselLastControlDate).isAfter(customDayjs().subtract(5, 'year'))
+  const hasBeenControlledWithinPastFiveYears = vesselLastControlDateTime
+    ? customDayjs(vesselLastControlDateTime).isAfter(customDayjs().subtract(5, 'year'))
     : false
 
   return (

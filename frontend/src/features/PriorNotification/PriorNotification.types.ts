@@ -1,5 +1,6 @@
+import { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
+
 import type { Seafront } from '@constants/seafront'
-import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 
 export namespace PriorNotification {
   export interface PriorNotification {
@@ -54,6 +55,8 @@ export namespace PriorNotification {
     riskFactor: number | undefined
     state: State | undefined
   }
+
+  export type PriorNotificationUpdateNoteRequestData = Pick<LogbookMessage.PnoMessage, 'note'>
 
   export type ManualPriorNotificationData = {
     authorTrigram: string

@@ -2,6 +2,7 @@ import { ErrorWall } from '@components/ErrorWall'
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { LogbookMessage } from '@features/Logbook/components/VesselLogbook/LogbookMessages/messages/LogbookMessage'
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
+import { updatePriorNotificationNote } from '@features/PriorNotification/useCases/updatePriorNotificationNote'
 import { verifyAndSendPriorNotification } from '@features/PriorNotification/useCases/verifyAndSendPriorNotification'
 import {
   getPriorNotificationFishingCatchesFromLogbookMessageFishingCatches,
@@ -11,19 +12,25 @@ import {
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
-import { Accent, Button, Icon } from '@mtes-mct/monitor-ui'
+import { Accent, Button, FormikEffect, FormikTextarea, Icon } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
-import { useState } from 'react'
+import { Formik } from 'formik'
+import { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
+import { useDebouncedCallback } from 'use-debounce'
 
 import { Header } from './Header'
+import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { priorNotificationActions } from '../../slice'
 import { DownloadButton } from '../shared/DownloadButton'
 import { TagBar } from '../shared/TagBar'
 
+const DEBOUNCE_DELAY = 500
+
 export function PriorNotificationCard() {
   const dispatch = useMainAppDispatch()
+  const isSuperUser = useIsSuperUser()
   const priorNotificationDetail = useMainAppSelector(state => state.priorNotification.priorNotificationCardDetail)
   const sideWindowPriorNotificationCardError = useMainAppSelector(
     state => state.displayedError.sideWindowPriorNotificationCardError
@@ -47,6 +54,17 @@ export function PriorNotificationCard() {
 
     setIsLoading(false)
   }
+
+  const updateNoteCallback = useCallback(
+    async (note: string | undefined) => {
+      assertNotNullish(priorNotificationDetail?.id)
+
+      await dispatch(updatePriorNotificationNote(priorNotificationDetail.id, note))
+    },
+    [dispatch, priorNotificationDetail?.id]
+  )
+
+  const updateNote = useDebouncedCallback((note: string | undefined) => updateNoteCallback(note), DEBOUNCE_DELAY)
 
   if (sideWindowPriorNotificationCardError) {
     return (
@@ -121,6 +139,25 @@ export function PriorNotificationCard() {
               isLessThanTwelveMetersVessel={priorNotificationDetail.isLessThanTwelveMetersVessel}
               logbookMessage={priorNotificationDetail.logbookMessage}
             />
+
+            <hr />
+
+            <Formik
+              initialValues={{ note: priorNotificationDetail.logbookMessage.message.note }}
+              onSubmit={() => {}}
+              validateOnChange={false}
+            >
+              <>
+                <FormikEffect onChange={values => updateNote(values.note)} />
+                <FieldGroup>
+                  <FormikTextarea
+                    label="Points d'attention identifiés par le CNSP"
+                    name="note"
+                    readOnly={isPendingSend || isSent || !isSuperUser}
+                  />
+                </FieldGroup>
+              </>
+            </Formik>
           </Body>
 
           <Footer>
@@ -200,5 +237,23 @@ const Footer = styled.div`
 
   > div {
     margin-left: 8px;
+  }
+`
+
+const FieldGroup = styled.div.attrs({ className: 'FieldGroup' })`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .rs-checkbox {
+    > .rs-checkbox-checker {
+      > label {
+        line-height: 18px;
+      }
+    }
+  }
+
+  textarea {
+    box-sizing: border-box !important;
   }
 `

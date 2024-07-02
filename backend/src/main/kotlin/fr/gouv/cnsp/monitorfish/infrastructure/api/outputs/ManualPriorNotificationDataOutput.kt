@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagePurpose
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.utils.CustomZonedDateTime
+import java.time.ZonedDateTime
 
 data class ManualPriorNotificationDataOutput(
     val hasPortEntranceAuthorization: Boolean,
@@ -16,7 +17,7 @@ data class ManualPriorNotificationDataOutput(
     val note: String?,
     val portLocode: String,
     val reportId: String,
-    val sentAt: String,
+    val sentAt: ZonedDateTime,
     val purpose: LogbookMessagePurpose,
     val tripGearCodes: List<String>,
     val vesselId: Int,

@@ -16,7 +16,7 @@ interface DBManualPriorNotificationRepository : JpaRepository<ManualPriorNotific
                     (SELECT array_agg(tripGears->>'gear') FROM jsonb_array_elements(mpn.trip_gears) AS tripGears) AS trip_gear_codes,
                     (SELECT array_agg(tripSegments->>'segment') FROM jsonb_array_elements(mpn.trip_segments) AS tripSegments) AS trip_segment_codes
                 FROM manual_prior_notifications mpn
-                LEFT JOIN risk_factors rf ON mpn.cfr = rf.cfr
+                LEFT JOIN risk_factors rf ON mpn.vessel_id = rf.vessel_id
                 WHERE
                     -- TODO /!\ INDEX created_at WITH TIMESCALE /!\
                     -- This filter helps Timescale optimize the query since `created_at` is indexed
@@ -46,30 +46,30 @@ interface DBManualPriorNotificationRepository : JpaRepository<ManualPriorNotific
                     AND mpn.value->>'predictedArrivalDatetimeUtc' <= :willArriveBefore
             ),
 
-            distinct_cfrs AS (
-                SELECT DISTINCT cfr
+            distinct_vessel_ids AS (
+                SELECT DISTINCT vessel_id
                 FROM manual_prior_notifications_with_extra_columns
             ),
 
-            cfr_reporting_counts AS (
+            vessel_id_reporting_counts AS (
                 SELECT
-                    dc.cfr,
+                    dc.vessel_id,
                     COUNT(r.id) AS reporting_count
-                FROM distinct_cfrs dc
-                LEFT JOIN reportings r ON dc.cfr = r.internal_reference_number
+                FROM distinct_vessel_ids dc
+                LEFT JOIN reportings r ON dc.vessel_id = r.vessel_id
                 WHERE
                     r.type = 'INFRACTION_SUSPICION'
                     AND r.archived = FALSE
                     AND r.deleted = FALSE
-                GROUP BY cfr
+                GROUP BY dc.vessel_id
             ),
 
             manual_prior_notifications_with_extra_columns_and_reporting_count AS (
                 SELECT
                     mpnwecarc.*,
-                    COALESCE(crc.reporting_count, 0) AS reporting_count
+                    COALESCE(vrc.reporting_count, 0) AS reporting_count
                 FROM manual_prior_notifications_with_extra_columns mpnwecarc
-                LEFT JOIN cfr_reporting_counts crc ON mpnwecarc.cfr = crc.cfr
+                LEFT JOIN vessel_id_reporting_counts vrc ON mpnwecarc.vessel_id = vrc.vessel_id
             ),
 
             filtered_manual_prior_notifications AS (

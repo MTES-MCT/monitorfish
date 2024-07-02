@@ -72,19 +72,16 @@ export function getTableColumns(isFromUrl: boolean): Array<ColumnDef<PriorNotifi
       size: 192 + legacyFirefoxOffset
     },
     {
-      accessorFn: row => row.vesselRiskFactor,
+      accessorFn: row => row.riskFactor,
       cell: (info: CellContext<PriorNotification.PriorNotification, number | undefined>) => {
         const priorNotification = info.row.original
 
         return (
           <VesselRiskFactor
-            hasVesselRiskFactorSegments={priorNotification.hasVesselRiskFactorSegments}
+            hasVesselRiskFactorSegments={false}
             isVesselUnderCharter={priorNotification.isVesselUnderCharter}
-            vesselLastControlDate={priorNotification.vesselLastControlDate}
-            vesselRiskFactor={priorNotification.vesselRiskFactor}
-            vesselRiskFactorDetectability={priorNotification.vesselRiskFactorDetectability}
-            vesselRiskFactorImpact={priorNotification.vesselRiskFactorImpact}
-            vesselRiskFactorProbability={priorNotification.vesselRiskFactorProbability}
+            vesselLastControlDateTime={priorNotification.vesselLastControlDateTime}
+            vesselRiskFactor={priorNotification.riskFactor}
           />
         )
       },

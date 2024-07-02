@@ -11,27 +11,20 @@ import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 type TagBarProps = Readonly<{
   isVesselUnderCharter: boolean | undefined
   isZeroNotice: boolean | undefined
+  riskFactor: number | undefined
   state: PriorNotification.State | undefined
   tripSegments: LogbookMessage.Segment[] | undefined
   types: PriorNotification.Type[] | undefined
-  vesselRiskFactor: number | undefined
 }>
-export function TagBar({
-  isVesselUnderCharter,
-  isZeroNotice,
-  state,
-  tripSegments,
-  types,
-  vesselRiskFactor
-}: TagBarProps) {
+export function TagBar({ isVesselUnderCharter, isZeroNotice, riskFactor, state, tripSegments, types }: TagBarProps) {
   return (
     <Wrapper className="Wrapper">
       <Row>
-        {!!vesselRiskFactor && (
+        {!!riskFactor && (
           <VesselRiskFactor
             hasVesselRiskFactorSegments={tripSegments ? tripSegments.length > 0 : undefined}
             isVesselUnderCharter={isVesselUnderCharter}
-            vesselRiskFactor={vesselRiskFactor}
+            vesselRiskFactor={riskFactor}
           />
         )}
 

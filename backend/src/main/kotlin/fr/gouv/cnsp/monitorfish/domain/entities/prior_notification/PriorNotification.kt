@@ -16,28 +16,34 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookRawMessageRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import org.slf4j.LoggerFactory
+import java.time.ZonedDateTime
 
 data class PriorNotification(
     val reportId: String?,
     val authorTrigram: String?,
-    val createdAt: String?,
+    val createdAt: ZonedDateTime?,
     val didNotFishAfterZeroNotice: Boolean,
     val isManuallyCreated: Boolean,
     var logbookMessageTyped: LogbookMessageTyped<PNO>,
     var port: Port?,
     var reportingCount: Int?,
     var seafront: Seafront?,
-    val sentAt: String?,
+    val sentAt: ZonedDateTime?,
     var state: PriorNotificationState?,
-    val updatedAt: String?,
+    val updatedAt: ZonedDateTime?,
     var vessel: Vessel?,
-    var vesselRiskFactor: VesselRiskFactor?,
+    var lastControlDateTime: ZonedDateTime?,
 ) {
     /** Each prior notification and each of its updates have a unique fingerprint. */
     val fingerprint: String = listOf(reportId, updatedAt).joinToString(separator = ".")
     private val logger = LoggerFactory.getLogger(PriorNotification::class.java)
 
-    fun enrich(allPorts: List<Port>, allRiskFactors: List<VesselRiskFactor>, allVessels: List<Vessel>) {
+    fun enrich(
+        allPorts: List<Port>,
+        allRiskFactors: List<VesselRiskFactor>,
+        allVessels: List<Vessel>,
+        isManuallyCreated: Boolean,
+    ) {
         val logbookMessage = logbookMessageTyped.logbookMessage
         val pnoMessage = logbookMessageTyped.typedMessage
 
@@ -65,13 +71,25 @@ data class PriorNotification(
         }
 
         // Default to UNKNOWN vessel when null or not found
-        vessel = logbookMessage
-            .internalReferenceNumber?.let { vesselInternalReferenceNumber ->
-                allVessels.find { it.internalReferenceNumber == vesselInternalReferenceNumber }
+        vessel = if (isManuallyCreated) {
+            logbookMessage.vesselId?.let { vesselId ->
+                allVessels.find { it.id == vesselId }
             } ?: UNKNOWN_VESSEL
+        } else {
+            logbookMessage
+                .internalReferenceNumber?.let { vesselInternalReferenceNumber ->
+                    allVessels.find { it.internalReferenceNumber == vesselInternalReferenceNumber }
+                } ?: UNKNOWN_VESSEL
+        }
 
-        vesselRiskFactor = vessel!!.internalReferenceNumber?.let { vesselInternalReferenceNumber ->
-            allRiskFactors.find { it.internalReferenceNumber == vesselInternalReferenceNumber }
+        lastControlDateTime = if (isManuallyCreated) {
+            logbookMessage.vesselId?.let { vesselId ->
+                allRiskFactors.find { it.vesselId == vesselId }?.lastControlDatetime
+            }
+        } else {
+            vessel!!.internalReferenceNumber?.let { vesselInternalReferenceNumber ->
+                allRiskFactors.find { it.internalReferenceNumber == vesselInternalReferenceNumber }?.lastControlDatetime
+            }
         }
     }
 

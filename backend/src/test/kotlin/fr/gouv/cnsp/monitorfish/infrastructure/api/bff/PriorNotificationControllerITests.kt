@@ -91,7 +91,7 @@ class PriorNotificationControllerITests {
     }
 
     @Test
-    fun `getManualComputation Should get a manual prior notification computated values`() {
+    fun `getManualComputation Should get a manual prior notification computed values`() {
         // Given
         given(this.computeManualPriorNotification.execute(any(), any(), any(), any(), any()))
             .willReturn(
@@ -121,7 +121,7 @@ class PriorNotificationControllerITests {
         )
             // Then
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.vesselRiskFactor", equalTo(1.2)))
+            .andExpect(jsonPath("$.riskFactor", equalTo(1.2)))
     }
 
     @Test
@@ -172,13 +172,13 @@ class PriorNotificationControllerITests {
                 hasPortLandingAuthorization = true,
                 authorTrigram = "ABC",
                 didNotFishAfterZeroNotice = false,
-                expectedArrivalDate = ZonedDateTime.now().toString(),
-                expectedLandingDate = ZonedDateTime.now().toString(),
+                expectedArrivalDate = ZonedDateTime.now(),
+                expectedLandingDate = ZonedDateTime.now(),
                 faoArea = "FAO AREA 51",
                 fishingCatches = emptyList(),
                 note = null,
                 portLocode = "FRABVC",
-                sentAt = ZonedDateTime.now().toString(),
+                sentAt = ZonedDateTime.now(),
                 purpose = LogbookMessagePurpose.LAN,
                 tripGearCodes = emptyList(),
                 vesselId = 42,
@@ -227,13 +227,13 @@ class PriorNotificationControllerITests {
                 hasPortLandingAuthorization = true,
                 authorTrigram = "ABC",
                 didNotFishAfterZeroNotice = false,
-                expectedArrivalDate = ZonedDateTime.now().toString(),
-                expectedLandingDate = ZonedDateTime.now().toString(),
+                expectedArrivalDate = ZonedDateTime.now(),
+                expectedLandingDate = ZonedDateTime.now(),
                 faoArea = "FAO AREA 51",
                 fishingCatches = emptyList(),
                 note = null,
                 portLocode = "FRABVC",
-                sentAt = ZonedDateTime.now().toString(),
+                sentAt = ZonedDateTime.now(),
                 purpose = LogbookMessagePurpose.LAN,
                 tripGearCodes = emptyList(),
                 vesselId = 42,

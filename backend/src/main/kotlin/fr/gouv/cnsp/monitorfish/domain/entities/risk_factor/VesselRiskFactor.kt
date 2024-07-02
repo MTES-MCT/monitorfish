@@ -33,6 +33,7 @@ data class VesselRiskFactor(
     val controlRateRiskFactor: Double = defaultControlRateRiskFactor,
     /** CFR (Community Fleet Register Number). */
     val internalReferenceNumber: String? = null,
+    val vesselId: Int? = null,
     val gearOnboard: List<Gear>? = listOf(),
     val speciesOnboard: List<Species>? = listOf(),
     val totalWeightOnboard: Double? = null,

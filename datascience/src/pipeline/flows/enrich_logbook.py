@@ -11,6 +11,8 @@ from sqlalchemy import text
 from config import (
     FLAG_STATES_WITHOUT_SYSTEMATIC_VERIFICATION,
     RISK_FACTOR_VERIFICATION_THRESHOLD,
+    default_risk_factors,
+    risk_factor_coefficients,
 )
 from src.db_config import create_engine
 from src.pipeline.generic_tasks import extract
@@ -23,6 +25,14 @@ from src.pipeline.utils import psql_insert_copy
 
 
 @task(checkpoint=False)
+def extract_all_control_priorities():
+    return extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/all_control_priorities.sql",
+    )
+
+
+@task(checkpoint=False)
 def extract_pno_types() -> pd.DataFrame:
     return extract(
         db_name="monitorfish_remote", query_filepath="monitorfish/pno_types.sql"
@@ -30,10 +40,10 @@ def extract_pno_types() -> pd.DataFrame:
 
 
 @task(checkpoint=False)
-def extract_risk_factors() -> pd.DataFrame:
+def extract_control_anteriority() -> pd.DataFrame:
     return extract(
         db_name="monitorfish_remote",
-        query_filepath="monitorfish/risk_factors_for_pnos.sql",
+        query_filepath="monitorfish/control_anteriority_for_pnos.sql",
     )
 
 
@@ -58,7 +68,7 @@ def reset_pnos(period: Period):
                 "SET "
                 "    enriched = false,"
                 "    trip_gears = NULL,"
-                "    value = value - 'pnoTypes',"
+                "    value = value - 'pnoTypes' - 'riskFactor',"
                 "    trip_segments = NULL "
                 "WHERE p.operation_datetime_utc >= :start "
                 "AND p.operation_datetime_utc <= :end "
@@ -113,7 +123,9 @@ def extract_pno_species_and_gears(
 
 
 def compute_pno_segments(
-    pno_species_and_gears: pd.DataFrame, segments: pd.DataFrame
+    pno_species_and_gears: pd.DataFrame,
+    segments: pd.DataFrame,
+    all_control_priorities: pd.DataFrame,
 ) -> pd.DataFrame:
     """
     Computes the segments of the input PNO species and gears.
@@ -138,6 +150,15 @@ def compute_pno_segments(
           - gears `List[str]` `["OTB", ...]`
           - fao_areas `List[str]` `["27.8", ...]`
           - species `List[str]` `["COD", ...]`
+          - impact_risk_factor `float` `2.8`
+
+        all_control_priorities (pd.DataFrame): DataFrame of control priorities.
+          Must have columns:
+
+          - year `int` 2022
+          - facade `str` "MEMN"
+          - segment `str` "SWW01"
+          - control_priority_level `float` 2.8
 
     Returns:
         pd.DataFrame: DataFrame of PNOs with attributed PNO types. 1 line = 1 PNO.
@@ -155,6 +176,8 @@ def compute_pno_segments(
                     },
                     {...}
                 ]```
+            - impact_risk_factor `float` `2.8`
+            - control_priority_level `float` `2.8`
     """
     trip_gear_codes = (  # noqa: F841
         pno_species_and_gears[["logbook_reports_pno_id", "trip_gears"]]
@@ -181,7 +204,9 @@ def compute_pno_segments(
                 LIST_SORT(ARRAY_AGG(DISTINCT {
                     'segment': s.segment,
                     'segmentName': s.segment_name
-                })) AS trip_segments
+                })) AS trip_segments,
+                MAX(s.impact_risk_factor) AS impact_risk_factor,
+                MAX(acp.control_priority_level) AS control_priority_level
             FROM pno_species_and_gears sg
             LEFT JOIN trip_gear_codes tgc
             ON tgc.logbook_reports_pno_id = sg.logbook_reports_pno_id
@@ -191,16 +216,28 @@ def compute_pno_segments(
                 (list_has_any(tgc.trip_gear_codes, s.gears) OR s.gears = '[]'::VARCHAR[]) AND
                 (length(filter(s.fao_areas, a -> sg.fao_area LIKE a || '%')) > 0 OR s.fao_areas = '[]'::VARCHAR[]) AND
                 s.year = sg.year
+            LEFT JOIN all_control_priorities acp
+            ON
+                acp.year = sg.year AND
+                acp.facade = sg.facade AND
+                acp.segment = s.segment
             GROUP BY 1
         )
 
-        SELECT t.logbook_reports_pno_id, s.trip_segments
+        SELECT t.logbook_reports_pno_id, s.trip_segments, s.impact_risk_factor, s.control_priority_level
         FROM trip_ids t
         LEFT JOIN pnos_with_segments s
         ON t.logbook_reports_pno_id = s.logbook_reports_pno_id
         ORDER BY 1
     """
     ).to_df()
+
+    res = res.fillna(
+        {
+            "impact_risk_factor": default_risk_factors["impact_risk_factor"],
+            "control_priority_level": default_risk_factors["control_priority_level"],
+        }
+    )
 
     return res
 
@@ -334,6 +371,74 @@ def compute_pno_types(
     return res
 
 
+def merge_pnos_data(
+    pnos_with_types: pd.DataFrame,
+    pnos_with_segments: pd.DataFrame,
+) -> pd.DataFrame:
+    """
+    Merges the input DataFrames on `logbook_reports_pno_id`
+
+    Args:
+        pnos_with_types (pd.DataFrame): DataFrame of PNOs with their types
+        pnos_with_segments (pd.DataFrame): DataFrame of PNOs with their segments
+
+    Returns:
+        pd.DataFrame: DataFrame of PNOs with their types and segments
+    """
+
+    res = pd.merge(
+        pnos_with_types,
+        pnos_with_segments,
+        on="logbook_reports_pno_id",
+        validate="1:1",
+        how="inner",
+    )
+
+    return res
+
+
+def compute_pno_risk_factors(
+    pnos: pd.DataFrame, control_anteriority: pd.DataFrame
+) -> pd.DataFrame:
+    res = pd.merge(
+        pnos,
+        control_anteriority,
+        on="cfr",
+        how="left",
+        validate="m:1",
+    )
+
+    res = res.fillna({**default_risk_factors})
+
+    res["probability_risk_factor"] = res["infraction_rate_risk_factor"]
+
+    res["detectability_risk_factor"] = (
+        res["control_rate_risk_factor"] * res["control_priority_level"]
+    ) ** 0.5
+
+    res["risk_factor"] = (
+        (res["impact_risk_factor"] ** risk_factor_coefficients["impact"])
+        * (res["probability_risk_factor"] ** risk_factor_coefficients["probability"])
+        * (
+            res["detectability_risk_factor"]
+            ** risk_factor_coefficients["detectability"]
+        )
+    )
+
+    res = res.drop(
+        columns=[
+            "infraction_rate_risk_factor",
+            "impact_risk_factor",
+            "probability_risk_factor",
+            "detectability_risk_factor",
+            "control_rate_risk_factor",
+            "control_priority_level",
+        ]
+    )
+
+    return res
+
+
 def flag_pnos_to_verify_and_send(
     pnos: pd.DataFrame, predicted_arrival_threshold: datetime
 ):
@@ -351,43 +456,6 @@ def flag_pnos_to_verify_and_send(
     )
 
     return pnos
-
-
-def merge_pnos_data(
-    pnos_with_types: pd.DataFrame,
-    pnos_with_segments: pd.DataFrame,
-    risk_factors: pd.DataFrame,
-) -> pd.DataFrame:
-    """
-    Merges the input DataFrames on `logbook_reports_pno_id`
-
-    Args:
-        pnos_with_types (pd.DataFrame): DataFrame of PNOs with their types
-        pnos_with_segments (pd.DataFrame): DataFrame of PNOs with their segments
-        pnos_to_distribute (pd.DataFrame): DataFrame of PNOs with a boolean attribute
-          indicating whether they should be distributed
-
-    Returns:
-        pd.DataFrame: DataFrame of PNOs with their types, segments and disbution info
-    """
-
-    res = pd.merge(
-        pnos_with_types,
-        pnos_with_segments,
-        on="logbook_reports_pno_id",
-        validate="1:1",
-        how="inner",
-    )
-
-    res = pd.merge(
-        res,
-        risk_factors,
-        on="cfr",
-        validate="m:1",
-        how="left",
-    )
-
-    return res
 
 
 def load_enriched_pnos(enriched_pnos: pd.DataFrame, period: Period, logger: Logger):
@@ -418,7 +486,8 @@ def load_enriched_pnos(enriched_pnos: pd.DataFrame, period: Period, logger: Logg
                 "    is_in_verification_scope BOOLEAN,"
                 "    is_verified BOOLEAN,"
                 "    is_sent BOOLEAN,"
-                "    is_being_sent BOOLEAN "
+                "    is_being_sent BOOLEAN, "
+                "    risk_factor DOUBLE PRECISION "
                 ")"
                 "ON COMMIT DROP;"
             )
@@ -439,6 +508,7 @@ def load_enriched_pnos(enriched_pnos: pd.DataFrame, period: Period, logger: Logg
             "is_verified",
             "is_sent",
             "is_being_sent",
+            "risk_factor",
         ]
 
         logger.info("Loading to temporary table")
@@ -466,7 +536,8 @@ def load_enriched_pnos(enriched_pnos: pd.DataFrame, period: Period, logger: Logg
                 "           'isInVerificationScope', is_in_verification_scope, "
                 "           'isVerified', is_verified, "
                 "           'isSent', is_sent, "
-                "           'isBeingSent', is_being_sent"
+                "           'isBeingSent', is_being_sent, "
+                "           'riskFactor', risk_factor "
                 "       ) || value"
                 "   ), "
                 "    trip_segments = CASE "
@@ -490,7 +561,8 @@ def extract_enrich_load_logbook(
     period: Period,
     segments: pd.DataFrame,
     pno_types: pd.DataFrame,
-    risk_factors: pd.DataFrame,
+    control_anteriority: pd.DataFrame,
+    all_control_priorities: pd.DataFrame,
     utcnow: datetime,
 ):
     """Extract pnos for the given `Period`, enrich and update the `logbook` table.
@@ -517,7 +589,9 @@ def extract_enrich_load_logbook(
 
     logger.info("Computing PNO segments...")
     pnos_with_segments = compute_pno_segments(
-        pno_species_and_gears=pnos_species_and_gears, segments=segments
+        pno_species_and_gears=pnos_species_and_gears,
+        segments=segments,
+        all_control_priorities=all_control_priorities,
     )
 
     logger.info("Computing PNO types...")
@@ -526,10 +600,17 @@ def extract_enrich_load_logbook(
     )
 
     logger.info("Merging PNO types and segments...")
-    pnos = merge_pnos_data(pnos_with_types, pnos_with_segments, risk_factors)
+    pnos = merge_pnos_data(pnos_with_types, pnos_with_segments)
+
+    logger.info("Computing risk factors...")
+    pnos_with_risk_factors = compute_pno_risk_factors(
+        pnos=pnos, control_anteriority=control_anteriority
+    )
 
     logger.info("Flagging PNOs to verify_and_distribute...")
-    pnos = flag_pnos_to_verify_and_send(pnos=pnos, predicted_arrival_threshold=utcnow)
+    pnos = flag_pnos_to_verify_and_send(
+        pnos=pnos_with_risk_factors, predicted_arrival_threshold=utcnow
+    )
 
     logger.info("Loading")
     load_enriched_pnos(pnos, period, logger)
@@ -552,8 +633,9 @@ with Flow("Enrich Logbook") as flow:
         )
 
         segments = extract_all_segments()
+        all_control_priorities = extract_all_control_priorities()
         pno_types = extract_pno_types()
-        risk_factors = extract_risk_factors()
+        control_anteriority = extract_control_anteriority()
 
         with case(recompute_all, True):
             reset = reset_pnos.map(periods)
@@ -561,7 +643,8 @@ with Flow("Enrich Logbook") as flow:
                 periods,
                 segments=unmapped(segments),
                 pno_types=unmapped(pno_types),
-                risk_factors=unmapped(risk_factors),
+                control_anteriority=unmapped(control_anteriority),
+                all_control_priorities=unmapped(all_control_priorities),
                 utcnow=unmapped(utcnow),
                 upstream_tasks=[reset],
             )
@@ -571,7 +654,8 @@ with Flow("Enrich Logbook") as flow:
                 periods,
                 segments=unmapped(segments),
                 pno_types=unmapped(pno_types),
-                risk_factors=unmapped(risk_factors),
+                control_anteriority=unmapped(control_anteriority),
+                all_control_priorities=unmapped(all_control_priorities),
                 utcnow=unmapped(utcnow),
             )
 

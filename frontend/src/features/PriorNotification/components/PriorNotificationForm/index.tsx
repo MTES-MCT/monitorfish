@@ -10,7 +10,7 @@ import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
 import { Card } from './Card'
 import { FORM_VALIDATION_SCHEMA } from './constants'
 import { priorNotificationActions } from '../../slice'
-import { createOrUpdatePriorNotification } from '../../useCases/createOrUpdatePriorNotification'
+import { createOrUpdateManualPriorNotification } from '../../useCases/createOrUpdateManualPriorNotification'
 
 import type { FormValues } from './types'
 import type { PriorNotification } from '../../PriorNotification.types'
@@ -43,7 +43,9 @@ export function PriorNotificationForm() {
         : priorNotificationData.expectedLandingDate
     } as PriorNotification.NewManualPriorNotificationData
 
-    await dispatch(createOrUpdatePriorNotification(editedPriorNotificationReportId, newOrNextPriorNotificationData))
+    await dispatch(
+      createOrUpdateManualPriorNotification(editedPriorNotificationReportId, newOrNextPriorNotificationData)
+    )
 
     setIsLoading(false)
   }

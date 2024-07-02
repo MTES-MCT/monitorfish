@@ -1,18 +1,19 @@
+import { monitorfishApi } from '@api/api'
 import { BackendApi } from '@api/BackendApi.types'
 import { RtkCacheTagType } from '@api/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { getUrlOrPathWithQueryParams } from '@utils/getUrlOrPathWithQueryParams'
 
 import { getStaticApiFilterFromListFilter } from './components/PriorNotificationList/utils'
-import { monitorfishApi } from '../../api/api'
+import { PriorNotification } from './PriorNotification.types'
 
 import type { ListFilter } from './components/PriorNotificationList/types'
-import type { PriorNotification } from './PriorNotification.types'
 import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 
 const COMPUTE_PRIOR_NOTIFICATION_ERROR_MESSAGE =
   "Nous n'avons pas pu calculer note de risque, segments ou types pour ce préavis."
 const CREATE_PRIOR_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu créé le préavis."
+const UPDATE_PRIOR_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu modifier le préavis."
 const GET_PRIOR_NOTIFICATION_DATA_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les données du préavis."
 const GET_PRIOR_NOTIFICATION_DETAIL_ERROR_MESSAGE = "Nous n'avons pas pu récupérer le préavis."
 const GET_PRIOR_NOTIFICATIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la liste des préavis."
@@ -101,20 +102,36 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_TYPES_ERROR_MESSAGE, response)
     }),
 
-    updatePriorNotification: builder.mutation<
+    updateManualPriorNotification: builder.mutation<
       PriorNotification.ManualPriorNotificationData,
       {
         data: PriorNotification.NewManualPriorNotificationData
         reportId: string
       }
     >({
-      invalidatesTags: [{ type: RtkCacheTagType.PriorNotifications }],
+      invalidatesTags: [{ type: RtkCacheTagType.PriorNotifications }, { type: RtkCacheTagType.PriorNotification }],
       query: ({ data, reportId }) => ({
         body: data,
         method: 'PUT',
         url: `/prior_notifications/manual/${reportId}`
       }),
-      transformErrorResponse: response => new FrontendApiError(CREATE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
+      transformErrorResponse: response => new FrontendApiError(UPDATE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
+    }),
+
+    updatePriorNotificationNote: builder.mutation<
+      PriorNotification.PriorNotificationDetail,
+      {
+        data: PriorNotification.PriorNotificationUpdateNoteRequestData
+        reportId: string
+      }
+    >({
+      invalidatesTags: [{ type: RtkCacheTagType.PriorNotifications }, { type: RtkCacheTagType.PriorNotification }],
+      query: ({ data, reportId }) => ({
+        body: data,
+        method: 'PUT',
+        url: `/prior_notifications/${reportId}/note`
+      }),
+      transformErrorResponse: response => new FrontendApiError(UPDATE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
     }),
 
     verifyAndSendPriorNotification: builder.mutation<

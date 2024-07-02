@@ -288,7 +288,6 @@ def pre_render_pno(
 
     return PreRenderedPno(
         id=pno.id,
-        operation_number=pno.operation_number,
         operation_datetime_utc=pno.operation_datetime_utc,
         operation_type=pno.operation_type,
         report_id=pno.report_id,
@@ -433,8 +432,6 @@ def render_pno(
         cnsp_logo_src=CNSP_LOGO_PATH.as_uri(),
         se_mer_logo_src=SE_MER_LOGO_PATH.as_uri(),
         state_flag_icon_src=state_flag_icon_src,
-        operation_datetime_utc=format_nullable_datetime(pno.operation_datetime_utc),
-        operation_type=pno.operation_type,
         report_id=pno.report_id,
         report_datetime_utc=format_nullable_datetime(pno.report_datetime_utc),
         cfr=pno.cfr or "",

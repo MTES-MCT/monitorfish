@@ -130,10 +130,10 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
             <TagBar
               isVesselUnderCharter={editedPriorNotificationComputedValues?.isVesselUnderCharter}
               isZeroNotice={isZeroNotice(values.fishingCatches)}
+              riskFactor={editedPriorNotificationComputedValues?.riskFactor}
               state={applicableState}
               tripSegments={editedPriorNotificationComputedValues?.tripSegments}
               types={editedPriorNotificationComputedValues?.types}
-              vesselRiskFactor={editedPriorNotificationComputedValues?.vesselRiskFactor}
             />
 
             {isNewPriorNotification && (

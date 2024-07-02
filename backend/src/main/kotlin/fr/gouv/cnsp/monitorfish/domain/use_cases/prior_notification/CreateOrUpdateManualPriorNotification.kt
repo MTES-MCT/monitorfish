@@ -27,14 +27,14 @@ class CreateOrUpdateManualPriorNotification(
         hasPortLandingAuthorization: Boolean,
         authorTrigram: String,
         didNotFishAfterZeroNotice: Boolean,
-        expectedArrivalDate: String,
-        expectedLandingDate: String,
+        expectedArrivalDate: ZonedDateTime,
+        expectedLandingDate: ZonedDateTime,
         faoArea: String,
         fishingCatches: List<LogbookFishingCatch>,
         note: String?,
         portLocode: String,
         reportId: String?,
-        sentAt: String,
+        sentAt: ZonedDateTime,
         purpose: LogbookMessagePurpose,
         tripGearCodes: List<String>,
         vesselId: Int,
@@ -85,9 +85,10 @@ class CreateOrUpdateManualPriorNotification(
             externalReferenceNumber = vessel?.externalReferenceNumber,
             ircs = vessel?.ircs,
             vesselName = vessel?.vesselName,
+            vesselId = vesselId,
             flagState = vessel?.flagState?.alpha3,
             imo = vessel?.imo,
-            reportDateTime = ZonedDateTime.parse(sentAt),
+            reportDateTime = sentAt,
             integrationDateTime = ZonedDateTime.now(),
             analyzedByRules = emptyList(),
             rawMessage = null,
@@ -121,7 +122,7 @@ class CreateOrUpdateManualPriorNotification(
             seafront = null,
             state = null,
             vessel = null,
-            vesselRiskFactor = null,
+            lastControlDateTime = null,
             updatedAt = null,
         )
 
@@ -136,8 +137,8 @@ class CreateOrUpdateManualPriorNotification(
         hasPortEntranceAuthorization: Boolean,
         hasPortLandingAuthorization: Boolean,
         purpose: LogbookMessagePurpose,
-        expectedArrivalDate: String,
-        expectedLandingDate: String,
+        expectedArrivalDate: ZonedDateTime,
+        expectedLandingDate: ZonedDateTime,
         fishingCatches: List<LogbookFishingCatch>,
         note: String?,
         pnoTypes: List<PriorNotificationType>,
@@ -151,8 +152,6 @@ class CreateOrUpdateManualPriorNotification(
             ?: ManualPriorNotificationComputedValues
                 .computeIsInVerificationScope(computedVesselFlagCountryCode, computedVesselRiskFactor)
         val portName = allPorts.find { it.locode == portLocode }?.name
-        val predictedArrivalDatetimeUtc = ZonedDateTime.parse(expectedArrivalDate)
-        val predictedLandingDatetimeUtc = ZonedDateTime.parse(expectedLandingDate)
 
         return PNO().apply {
             this.hasPortEntranceAuthorization = hasPortEntranceAuthorization
@@ -175,11 +174,12 @@ class CreateOrUpdateManualPriorNotification(
             this.pnoTypes = pnoTypes
             this.port = portLocode
             this.portName = portName
-            this.predictedArrivalDatetimeUtc = predictedArrivalDatetimeUtc
-            this.predictedLandingDatetimeUtc = predictedLandingDatetimeUtc
+            this.predictedArrivalDatetimeUtc = expectedArrivalDate
+            this.predictedLandingDatetimeUtc = expectedLandingDate
             this.purpose = purpose
             this.statisticalRectangle = null
             this.tripStartDate = null
+            this.riskFactor = computedVesselRiskFactor
         }
     }
 

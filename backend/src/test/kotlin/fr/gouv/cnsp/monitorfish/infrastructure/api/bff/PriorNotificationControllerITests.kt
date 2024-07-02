@@ -12,6 +12,7 @@ import fr.gouv.cnsp.monitorfish.domain.utils.PaginatedList
 import fr.gouv.cnsp.monitorfish.fakers.PriorNotificationFaker
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationComputeDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.PriorNotificationDataInput
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
@@ -52,6 +53,9 @@ class PriorNotificationControllerITests {
     @MockBean
     private lateinit var verifyAndSendPriorNotification: VerifyAndSendPriorNotification
 
+    @MockBean
+    private lateinit var updatePriorNotificationNote: UpdatePriorNotificationNote
+
     @Autowired
     private lateinit var objectMapper: ObjectMapper
 
@@ -91,7 +95,7 @@ class PriorNotificationControllerITests {
     }
 
     @Test
-    fun `getManualComputation Should get a manual prior notification computated values`() {
+    fun `getManualComputation Should get a manual prior notification computed values`() {
         // Given
         given(this.computeManualPriorNotification.execute(any(), any(), any(), any(), any()))
             .willReturn(
@@ -121,7 +125,7 @@ class PriorNotificationControllerITests {
         )
             // Then
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.vesselRiskFactor", equalTo(1.2)))
+            .andExpect(jsonPath("$.riskFactor", equalTo(1.2)))
     }
 
     @Test
@@ -172,13 +176,13 @@ class PriorNotificationControllerITests {
                 hasPortLandingAuthorization = true,
                 authorTrigram = "ABC",
                 didNotFishAfterZeroNotice = false,
-                expectedArrivalDate = ZonedDateTime.now().toString(),
-                expectedLandingDate = ZonedDateTime.now().toString(),
+                expectedArrivalDate = ZonedDateTime.now(),
+                expectedLandingDate = ZonedDateTime.now(),
                 faoArea = "FAO AREA 51",
                 fishingCatches = emptyList(),
                 note = null,
                 portLocode = "FRABVC",
-                sentAt = ZonedDateTime.now().toString(),
+                sentAt = ZonedDateTime.now(),
                 purpose = LogbookMessagePurpose.LAN,
                 tripGearCodes = emptyList(),
                 vesselId = 42,
@@ -227,13 +231,13 @@ class PriorNotificationControllerITests {
                 hasPortLandingAuthorization = true,
                 authorTrigram = "ABC",
                 didNotFishAfterZeroNotice = false,
-                expectedArrivalDate = ZonedDateTime.now().toString(),
-                expectedLandingDate = ZonedDateTime.now().toString(),
+                expectedArrivalDate = ZonedDateTime.now(),
+                expectedLandingDate = ZonedDateTime.now(),
                 faoArea = "FAO AREA 51",
                 fishingCatches = emptyList(),
                 note = null,
                 portLocode = "FRABVC",
-                sentAt = ZonedDateTime.now().toString(),
+                sentAt = ZonedDateTime.now(),
                 purpose = LogbookMessagePurpose.LAN,
                 tripGearCodes = emptyList(),
                 vesselId = 42,
@@ -295,5 +299,41 @@ class PriorNotificationControllerITests {
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.id", equalTo(fakePriorNotification.reportId)))
+    }
+
+    @Test
+    fun `update Should update a prior notification note by its reportId`() {
+        val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
+        fakePriorNotification.logbookMessageTyped.typedMessage.note = "Test !"
+
+        // Given
+        given(
+            updatePriorNotificationNote.execute(
+                note = anyOrNull(),
+                reportId = anyOrNull(),
+            ),
+        )
+            .willReturn(fakePriorNotification)
+
+        // When
+        val requestBody = objectMapper.writeValueAsString(
+            PriorNotificationDataInput(
+                note = "Test !",
+            ),
+        )
+        api.perform(
+            put("/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}/note")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody),
+        )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.id", equalTo(fakePriorNotification.reportId)))
+            .andExpect(
+                jsonPath(
+                    "$.logbookMessage.message.note",
+                    equalTo(fakePriorNotification.logbookMessageTyped.typedMessage.note),
+                ),
+            )
     }
 }

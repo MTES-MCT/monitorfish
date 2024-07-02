@@ -6,6 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.sorters.Prior
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationComputeDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.PriorNotificationDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -23,6 +24,7 @@ class PriorNotificationController(
     private val getPriorNotification: GetPriorNotification,
     private val getPriorNotifications: GetPriorNotifications,
     private val getPriorNotificationTypes: GetPriorNotificationTypes,
+    private val updatePriorNotificationNote: UpdatePriorNotificationNote,
     private val verifyAndSendPriorNotification: VerifyAndSendPriorNotification,
 ) {
     @GetMapping("")
@@ -237,5 +239,22 @@ class PriorNotificationController(
     ): PriorNotificationDetailDataOutput {
         return PriorNotificationDetailDataOutput
             .fromPriorNotification(verifyAndSendPriorNotification.execute(reportId, isManuallyCreated))
+    }
+
+    @PutMapping("/{reportId}/note")
+    @Operation(summary = "Update a prior notification note by its `reportId`")
+    fun updateNote(
+        @PathParam("Logbook message `reportId`")
+        @PathVariable(name = "reportId")
+        reportId: String,
+        @RequestBody
+        priorNotificationDataInput: PriorNotificationDataInput,
+    ): PriorNotificationDetailDataOutput {
+        val updatedPriorNotification = updatePriorNotificationNote.execute(
+            note = priorNotificationDataInput.note,
+            reportId = reportId,
+        )
+
+        return PriorNotificationDetailDataOutput.fromPriorNotification(updatedPriorNotification)
     }
 }

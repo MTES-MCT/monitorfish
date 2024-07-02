@@ -223,7 +223,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `execute should return a list of prior notifications sorted by vessel risk factor ascending`() {
+    fun `execute should return a list of prior notifications sorted by risk factor ascending`() {
         // Given
         val sortColumn = PriorNotificationsSortColumn.VESSEL_RISK_FACTOR
         val sortDirection = Sort.Direction.ASC
@@ -233,8 +233,10 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             .execute(defaultFilter, defaultSeafrontGroup, sortColumn, sortDirection, defaultPageNumber, defaultPageSize)
 
         // Then
-        val firstPriorNotificationWithNonNullRiskFactor = result.data.first { it.vesselRiskFactor != null }
-        assertThat(firstPriorNotificationWithNonNullRiskFactor.vesselRiskFactor!!.riskFactor).isEqualTo(2.2)
+        val firstPriorNotificationWithNonNullRiskFactor = result.data.first { it.logbookMessageTyped.typedMessage.riskFactor != null }
+        assertThat(firstPriorNotificationWithNonNullRiskFactor.logbookMessageTyped.typedMessage.riskFactor!!).isEqualTo(
+            1.5,
+        )
         assertThat(result.data).hasSizeGreaterThan(0)
     }
 
@@ -250,8 +252,10 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             .execute(defaultFilter, defaultSeafrontGroup, sortColumn, sortDirection, defaultPageNumber, defaultPageSize)
 
         // Then
-        val firstPriorNotificationWithNonNullRiskFactor = result.data.first { it.vesselRiskFactor != null }
-        assertThat(firstPriorNotificationWithNonNullRiskFactor.vesselRiskFactor!!.riskFactor).isEqualTo(4.0)
+        val firstPriorNotificationWithNonNullRiskFactor = result.data.first { it.logbookMessageTyped.typedMessage.riskFactor != null }
+        assertThat(firstPriorNotificationWithNonNullRiskFactor.logbookMessageTyped.typedMessage.riskFactor!!).isEqualTo(
+            3.9,
+        )
         assertThat(result.data).hasSizeGreaterThan(0)
     }
 }

@@ -19,6 +19,7 @@ data class LogbookMessage(
     val externalReferenceNumber: String? = null,
     val ircs: String? = null,
     val vesselName: String? = null,
+    val vesselId: Int? = null,
     // ISO Alpha-3 country code
     val flagState: String? = null,
     val imo: String? = null,

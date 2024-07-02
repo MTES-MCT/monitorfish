@@ -10,6 +10,8 @@ import org.springframework.data.repository.query.Param
 interface DBRiskFactorRepository : JpaRepository<RiskFactorsEntity, Int> {
     fun findByCfr(cfr: String): RiskFactorsEntity
 
+    fun findByVesselId(vesselId: Int): RiskFactorsEntity
+
     // Only used in tests
     @Query(value = "SELECT * FROM risk_factors WHERE cfr = :cfr LIMIT 1", nativeQuery = true)
     fun findFirstByCfr(@Param("cfr") cfr: String): RiskFactorsEntity?

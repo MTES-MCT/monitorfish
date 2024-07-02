@@ -446,6 +446,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
                             predictedArrivalDatetimeUtc = ZonedDateTime.now().withZoneSameInstant(ZoneOffset.UTC)
                             predictedLandingDatetimeUtc = ZonedDateTime.now().withZoneSameInstant(ZoneOffset.UTC)
                             purpose = LogbookMessagePurpose.LAN
+                            riskFactor = 2.1
                             statisticalRectangle = null
                             tripStartDate = null
                         },
@@ -458,17 +459,18 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
                         reportDateTime = ZonedDateTime.now(),
                         transmissionFormat = null,
                         vesselName = "Vessel Name",
+                        vesselId = 123,
                     ),
                     PNO::class.java,
                 ),
                 port = null,
                 reportingCount = null,
                 seafront = null,
-                sentAt = ZonedDateTime.now().toString(),
+                sentAt = ZonedDateTime.now(),
                 state = null,
                 updatedAt = null,
                 vessel = null,
-                vesselRiskFactor = null,
+                lastControlDateTime = null,
             )
 
         // When
@@ -488,6 +490,8 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
             .isEqualTo(createdPriorNotification!!)
         assertThat(lastPriorNotification.logbookMessageTyped.logbookMessage)
             .isEqualTo(createdPriorNotification.logbookMessageTyped.logbookMessage)
+        assertThat(createdPriorNotification.logbookMessageTyped.typedMessage.riskFactor)
+            .isEqualTo(2.1)
     }
 
     @Test

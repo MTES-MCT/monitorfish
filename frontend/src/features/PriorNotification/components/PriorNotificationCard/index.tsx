@@ -56,15 +56,22 @@ export function PriorNotificationCard() {
   }
 
   const updateNoteCallback = useCallback(
-    async (note: string | undefined) => {
-      assertNotNullish(priorNotificationDetail?.id)
+    async (nextNote: string | undefined) => {
+      assertNotNullish(priorNotificationDetail)
 
-      await dispatch(updatePriorNotificationNote(priorNotificationDetail.id, note))
+      if (nextNote === priorNotificationDetail.logbookMessage.message.note) {
+        return
+      }
+
+      await dispatch(updatePriorNotificationNote(priorNotificationDetail.id, nextNote))
     },
-    [dispatch, priorNotificationDetail?.id]
+    [dispatch, priorNotificationDetail]
   )
 
-  const updateNote = useDebouncedCallback((note: string | undefined) => updateNoteCallback(note), DEBOUNCE_DELAY)
+  const updateNote = useDebouncedCallback(
+    (nextNote: string | undefined) => updateNoteCallback(nextNote),
+    DEBOUNCE_DELAY
+  )
 
   if (sideWindowPriorNotificationCardError) {
     return (

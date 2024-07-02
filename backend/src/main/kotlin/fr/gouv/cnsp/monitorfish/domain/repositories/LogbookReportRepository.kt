@@ -77,4 +77,5 @@ interface LogbookReportRepository {
 
     // For test purpose
     fun deleteAll()
+    fun updatePriorNotificationNote(reportId: String, note: String?)
 }

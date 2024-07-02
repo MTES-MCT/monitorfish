@@ -114,14 +114,14 @@ context('Side Window > Prior Notification Form > Form', () => {
       editSideWindowPriorNotification('PAGEOT JO', createdPriorNotification.reportId)
 
       cy.intercept('PUT', `/bff/v1/prior_notifications/manual/${createdPriorNotification.reportId}`).as(
-        'updatePriorNotification'
+        'updateManualPriorNotification'
       )
 
       cy.fill("Points d'attention identifiés par le CNSP", "Un point d'attention mis à jour.")
 
       cy.clickButton('Enregistrer')
 
-      cy.wait('@updatePriorNotification').then(updateInterception => {
+      cy.wait('@updateManualPriorNotification').then(updateInterception => {
         if (!updateInterception.response) {
           assert.fail('`updateInterception.response` is undefined.')
         }
@@ -294,7 +294,7 @@ context('Side Window > Prior Notification Form > Form', () => {
       editSideWindowPriorNotification('IN-ARÊTE-ABLE', createdPriorNotification.reportId)
 
       cy.intercept('PUT', `/bff/v1/prior_notifications/manual/${createdPriorNotification.reportId}`).as(
-        'updatePriorNotification'
+        'updateManualPriorNotification'
       )
 
       cy.fill('Engins utilisés', ['OTB', 'Chaluts de fond (non spécifiés)' /* (TB) */], { index: 1 })
@@ -309,7 +309,7 @@ context('Side Window > Prior Notification Form > Form', () => {
 
       cy.clickButton('Enregistrer')
 
-      cy.wait('@updatePriorNotification').then(updateInterception => {
+      cy.wait('@updateManualPriorNotification').then(updateInterception => {
         if (!updateInterception.response) {
           assert.fail('`updateInterception.response` is undefined.')
         }

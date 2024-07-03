@@ -40,7 +40,7 @@ acknowledged_messages AS (
     r.value->>'note' AS note,
     v.length AS vessel_length,
     v.mmsi,
-    rf.risk_factor,
+    (r.value->>'riskFactor')::DOUBLE PRECISION AS risk_factor,
     rf.last_control_datetime_utc,
     COALESCE(rf.last_control_logbook_infractions, '[]') AS last_control_logbook_infractions,
     COALESCE(rf.last_control_gear_infractions, '[]') AS last_control_gear_infractions,

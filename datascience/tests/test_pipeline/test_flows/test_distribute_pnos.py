@@ -559,7 +559,7 @@ def extracted_pnos() -> pd.DataFrame:
             "mmsi": [None, None, None, None, None, None, None, None, None],
             "risk_factor": [
                 2.09885592141872,
-                None,
+                3.9,
                 2.14443662414848,
                 2.14443662414848,
                 None,

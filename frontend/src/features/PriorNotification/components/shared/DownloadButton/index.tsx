@@ -12,9 +12,11 @@ import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 
 type DownloadButtonProps = Readonly<{
   isDisabled?: boolean
+  reportId: string
+  isPdfDocumentAvailable: boolean
   pnoLogbookMessage: LogbookMessage.PnoLogbookMessage
 }>
-export function DownloadButton({ isDisabled = false, pnoLogbookMessage }: DownloadButtonProps) {
+export function DownloadButton({ isDisabled = false, reportId, isPdfDocumentAvailable, pnoLogbookMessage }: DownloadButtonProps) {
   const isSuperUser = useIsSuperUser()
   const getGearsApiQuery = useGetGearsQuery()
 
@@ -44,6 +46,9 @@ export function DownloadButton({ isDisabled = false, pnoLogbookMessage }: Downlo
   return (
     <Dropdown accent={Accent.SECONDARY} Icon={Icon.Download} placement="topEnd" title="Télécharger les documents">
       <>
+        {isPdfDocumentAvailable && <Dropdown.Item onClick={() => window.open(`/bff/v1/prior_notifications/${reportId}/pdf`, "_blank")}>
+          Préavis de débarquement (à destination des unités)
+        </Dropdown.Item>}
         {/** If the form is dirty (has been modified), the export will be outdated. */}
         {/** The user MUST first save the new version */}
         {isSuperUser && getAlpha2CodeFromAlpha2or3Code(pnoLogbookMessage.flagState) !== 'FR' && (

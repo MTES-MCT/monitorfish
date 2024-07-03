@@ -6,7 +6,7 @@ data class PdfDocument(
     val reportId: String,
     val source: PriorNotificationSource,
     val generationDatetimeUtc: ZonedDateTime,
-    val pdfDocument: ByteArray?
+    val pdfDocument: ByteArray?,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

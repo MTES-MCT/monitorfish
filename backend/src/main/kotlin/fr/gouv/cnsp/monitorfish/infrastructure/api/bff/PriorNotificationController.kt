@@ -31,7 +31,7 @@ class PriorNotificationController(
     private val getPriorNotificationTypes: GetPriorNotificationTypes,
     private val updatePriorNotificationNote: UpdatePriorNotificationNote,
     private val verifyAndSendPriorNotification: VerifyAndSendPriorNotification,
-    private val getPriorNotificationPdfDocument: GetPriorNotificationPdfDocument
+    private val getPriorNotificationPdfDocument: GetPriorNotificationPdfDocument,
 ) {
     @GetMapping("")
     @Operation(summary = "Get all prior notifications")
@@ -266,14 +266,19 @@ class PriorNotificationController(
 
     @GetMapping("/{reportId}/pdf")
     @Operation(summary = "Get the PDF document")
-    fun getPdfDocument(@PathParam("Logbook message `reportId`")
-                       @PathVariable(name = "reportId")
-                       reportId: String): ResponseEntity<ByteArray?> {
+    fun getPdfDocument(
+        @PathParam("Logbook message `reportId`")
+        @PathVariable(name = "reportId")
+        reportId: String,
+    ): ResponseEntity<ByteArray?> {
         val pdfDocument = getPriorNotificationPdfDocument.execute(reportId = reportId)
 
         val headers = HttpHeaders().apply {
             contentType = MediaType.APPLICATION_PDF
-            setContentDispositionFormData("attachment", "preavis_debarquement_${pdfDocument.generationDatetimeUtc.format(ISO_DATE_TIME)}.pdf")
+            setContentDispositionFormData(
+                "attachment",
+                "preavis_debarquement_${pdfDocument.generationDatetimeUtc.format(ISO_DATE_TIME)}.pdf",
+            )
         }
 
         return ResponseEntity(pdfDocument.pdfDocument, headers, HttpStatus.OK)

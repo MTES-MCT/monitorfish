@@ -20,7 +20,7 @@ data class PriorNotificationPdfDocumentEntity(
     @Column(name = "generation_datetime_utc")
     val generationDatetimeUtc: ZonedDateTime,
     @Column(name = "pdf_document")
-    val pdfDocument: ByteArray?
+    val pdfDocument: ByteArray?,
 ) {
 
     fun toPdfDocument() = PdfDocument(

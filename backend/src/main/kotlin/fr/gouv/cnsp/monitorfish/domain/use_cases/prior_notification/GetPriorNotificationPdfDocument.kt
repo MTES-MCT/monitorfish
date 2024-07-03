@@ -6,7 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.PriorNotificationPdfDocument
 
 @UseCase
 class GetPriorNotificationPdfDocument(
-    private val priorNotificationPdfDocumentRepository: PriorNotificationPdfDocumentRepository
+    private val priorNotificationPdfDocumentRepository: PriorNotificationPdfDocumentRepository,
 ) {
     fun execute(reportId: String): PdfDocument {
         return priorNotificationPdfDocumentRepository.findByReportId(reportId)

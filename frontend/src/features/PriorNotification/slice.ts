@@ -9,23 +9,21 @@ import type { Undefine } from '@mtes-mct/monitor-ui'
 
 export interface PriorNotificationState {
   editedPriorNotificationComputedValues: Undefine<PriorNotification.ManualPriorNotificationComputedValues> | undefined
-  editedPriorNotificationDetail: PriorNotification.PriorNotificationDetail | undefined
   editedPriorNotificationInitialFormValues: FormValues | undefined
-  editedPriorNotificationReportId: string | undefined
+  isOpenedPriorNotificationManual: boolean | undefined
   isPriorNotificationCardOpen: boolean
   isPriorNotificationFormOpen: boolean
   listFilterValues: ListFilter
-  priorNotificationCardDetail: PriorNotification.PriorNotificationDetail | undefined
+  openedPriorNotificationReportId: string | undefined
 }
 const INITIAL_STATE: PriorNotificationState = {
   editedPriorNotificationComputedValues: undefined,
-  editedPriorNotificationDetail: undefined,
   editedPriorNotificationInitialFormValues: undefined,
-  editedPriorNotificationReportId: undefined,
+  isOpenedPriorNotificationManual: undefined,
   isPriorNotificationCardOpen: false,
   isPriorNotificationFormOpen: false,
   listFilterValues: DEFAULT_LIST_FILTER_VALUES,
-  priorNotificationCardDetail: undefined
+  openedPriorNotificationReportId: undefined
 }
 
 const priorNotificationSlice = createSlice({
@@ -34,13 +32,13 @@ const priorNotificationSlice = createSlice({
   reducers: {
     closePriorNotificationCard(state) {
       state.isPriorNotificationCardOpen = false
-      state.priorNotificationCardDetail = undefined
     },
 
     closePriorNotificationForm(state) {
       state.editedPriorNotificationComputedValues = undefined
       state.editedPriorNotificationInitialFormValues = undefined
-      state.editedPriorNotificationReportId = undefined
+      state.openedPriorNotificationReportId = undefined
+      state.isOpenedPriorNotificationManual = undefined
       state.isPriorNotificationFormOpen = false
     },
 
@@ -51,7 +49,8 @@ const priorNotificationSlice = createSlice({
     openPriorNotificationForm(state) {
       state.editedPriorNotificationComputedValues = undefined
       state.editedPriorNotificationInitialFormValues = undefined
-      state.editedPriorNotificationReportId = undefined
+      state.isOpenedPriorNotificationManual = true
+      state.openedPriorNotificationReportId = undefined
       state.isPriorNotificationFormOpen = true
     },
 
@@ -69,16 +68,8 @@ const priorNotificationSlice = createSlice({
       state.editedPriorNotificationComputedValues = action.payload
     },
 
-    setEditedPriorNotificationDetail(state, action: PayloadAction<PriorNotification.PriorNotificationDetail>) {
-      state.editedPriorNotificationDetail = action.payload
-    },
-
     setEditedPriorNotificationInitialFormValues(state, action: PayloadAction<FormValues>) {
       state.editedPriorNotificationInitialFormValues = action.payload
-    },
-
-    setEditedPriorNotificationReportId(state, action: PayloadAction<string>) {
-      state.editedPriorNotificationReportId = action.payload
     },
 
     setListFilterValues(state, action: PayloadAction<Partial<ListFilter>>) {
@@ -88,20 +79,18 @@ const priorNotificationSlice = createSlice({
       }
     },
 
-    setPriorNotificationCardDetail(state, action: PayloadAction<PriorNotification.PriorNotificationDetail>) {
-      state.priorNotificationCardDetail = action.payload
+    setOpenedPriorNotification(state, action: PayloadAction<{ isManual: boolean; reportId: string }>) {
+      state.openedPriorNotificationReportId = action.payload.reportId
+      state.isOpenedPriorNotificationManual = action.payload.isManual
     },
 
     unsetEditedPriorNotificationComputedValues(state) {
       state.editedPriorNotificationComputedValues = undefined
     },
 
-    unsetEditedPriorNotificationDetail(state) {
-      state.editedPriorNotificationDetail = undefined
-    },
-
-    unsetEditedPriorNotificationReportId(state) {
-      state.editedPriorNotificationReportId = undefined
+    unsetOpenedPriorNotification(state) {
+      state.openedPriorNotificationReportId = undefined
+      state.isOpenedPriorNotificationManual = undefined
     }
   }
 })

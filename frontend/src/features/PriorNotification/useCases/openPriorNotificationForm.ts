@@ -3,7 +3,6 @@ import { addMainWindowBanner } from '@features/SideWindow/useCases/addMainWindow
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { Level, type Undefine } from '@mtes-mct/monitor-ui'
-import { assertNotNullish } from '@utils/assertNotNullish'
 import { handleThunkError } from '@utils/handleThunkError'
 import { displayedErrorActions } from 'domain/shared_slices/DisplayedError'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
@@ -18,11 +17,7 @@ import type { PriorNotification } from '../PriorNotification.types'
 import type { MainAppThunk } from '@store'
 
 export const openPriorNotificationForm =
-  (
-    reportId: string | undefined,
-    fingerprint?: string | undefined,
-    isManuallyCreated?: boolean | undefined
-  ): MainAppThunk<Promise<void>> =>
+  (reportId: string | undefined, fingerprint?: string | undefined): MainAppThunk<Promise<void>> =>
   async dispatch => {
     try {
       dispatch(displayedErrorActions.unset(DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR))
@@ -30,23 +25,20 @@ export const openPriorNotificationForm =
 
       if (!reportId) {
         dispatch(priorNotificationActions.unsetEditedPriorNotificationComputedValues())
-        dispatch(priorNotificationActions.unsetEditedPriorNotificationDetail())
         dispatch(priorNotificationActions.setEditedPriorNotificationInitialFormValues(getInitialFormValues()))
-        dispatch(priorNotificationActions.unsetEditedPriorNotificationReportId())
+        dispatch(priorNotificationActions.unsetOpenedPriorNotification())
 
         return
       }
 
-      assertNotNullish(isManuallyCreated)
-
       const priorNotificationDetail = await dispatch(
         priorNotificationApi.endpoints.getPriorNotificationDetail.initiate({
-          isManuallyCreated,
+          isManuallyCreated: true,
           reportId
         })
       ).unwrap()
       const priorNotificationData = await dispatch(
-        priorNotificationApi.endpoints.getPriorNotificationData.initiate(reportId)
+        priorNotificationApi.endpoints.getPriorNotificationFormData.initiate(reportId)
       ).unwrap()
 
       // Update prior notification list if prior notification fingerprint has changed
@@ -87,15 +79,19 @@ export const openPriorNotificationForm =
       }
 
       dispatch(priorNotificationActions.setEditedPriorNotificationComputedValues(nextComputedValues))
-      dispatch(priorNotificationActions.setEditedPriorNotificationDetail(priorNotificationDetail))
+      dispatch(
+        priorNotificationActions.setOpenedPriorNotification({
+          isManual: true,
+          reportId
+        })
+      )
       dispatch(priorNotificationActions.setEditedPriorNotificationInitialFormValues(nextInitialFormValues))
-      dispatch(priorNotificationActions.setEditedPriorNotificationReportId(reportId))
     } catch (err) {
       if (err instanceof FrontendApiError) {
         dispatch(
           displayOrLogError(
             err,
-            () => openPriorNotificationForm(reportId, fingerprint, isManuallyCreated),
+            () => openPriorNotificationForm(reportId, fingerprint),
             true,
             DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR
           )

@@ -47,7 +47,12 @@ export const openPriorNotificationCard =
         return
       }
 
-      dispatch(priorNotificationActions.setPriorNotificationCardDetail(priorNotificationDetail))
+      dispatch(
+        priorNotificationActions.setOpenedPriorNotification({
+          isManual: isManuallyCreated,
+          reportId
+        })
+      )
     } catch (err) {
       if (err instanceof FrontendApiError) {
         dispatch(

@@ -164,9 +164,9 @@ class CreateOrUpdateManualPriorNotification(
             // so we transform that single FAO area into an FAO area per fishing catch.
             // This means we don't need to set a global PNO message FAO area here.
             this.faoZone = null
-            this.isBeingSent = existingPnoValue?.isBeingSent ?: false
+            this.isBeingSent = isInVerificationScope
             this.isInVerificationScope = isInVerificationScope
-            this.isSent = existingPnoValue?.isSent ?: false
+            this.isSent = false
             this.isVerified = existingPnoValue?.isVerified ?: false
             this.latitude = null
             this.longitude = null

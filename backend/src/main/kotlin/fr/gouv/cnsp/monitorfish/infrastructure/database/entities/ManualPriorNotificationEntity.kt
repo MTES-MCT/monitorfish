@@ -21,6 +21,9 @@ data class ManualPriorNotificationEntity(
     @Column(name = "author_trigram")
     val authorTrigram: String,
 
+    @Column(name = "vessel_id", nullable = false)
+    val vesselId: Int,
+
     @Column(name = "cfr")
     val cfr: String,
 
@@ -63,11 +66,18 @@ data class ManualPriorNotificationEntity(
             try {
                 val pnoLogbookMessage = priorNotification.logbookMessageTyped.logbookMessage
                 val pnoLogbookMessageValue = priorNotification.logbookMessageTyped.typedMessage
-                val createdAt = priorNotification.createdAt?.let { ZonedDateTime.parse(it) } ?: ZonedDateTime.now()
+                val createdAt = priorNotification.createdAt ?: ZonedDateTime.now()
                 val updatedAt = if (isUpdate || priorNotification.updatedAt == null) {
                     ZonedDateTime.now()
                 } else {
-                    ZonedDateTime.parse(priorNotification.updatedAt)
+                    priorNotification.updatedAt
+                }
+
+                requireNotNull(pnoLogbookMessage.vesselId) {
+                    "vesselId must be not null"
+                }
+                requireNotNull(priorNotification.sentAt) {
+                    "sentAt must be not null"
                 }
 
                 return ManualPriorNotificationEntity(
@@ -77,12 +87,13 @@ data class ManualPriorNotificationEntity(
                     createdAt = createdAt,
                     didNotFishAfterZeroNotice = priorNotification.didNotFishAfterZeroNotice,
                     flagState = pnoLogbookMessage.flagState,
-                    sentAt = ZonedDateTime.parse(requireNotNull(priorNotification.sentAt)),
+                    sentAt = priorNotification.sentAt,
                     tripGears = pnoLogbookMessage.tripGears,
                     tripSegments = pnoLogbookMessage.tripSegments,
                     updatedAt = updatedAt,
                     value = pnoLogbookMessageValue,
                     vesselName = pnoLogbookMessage.vesselName,
+                    vesselId = pnoLogbookMessage.vesselId,
                 )
             } catch (e: IllegalArgumentException) {
                 throw BackendInternalException(
@@ -115,20 +126,21 @@ data class ManualPriorNotificationEntity(
                 tripGears = tripGears,
                 tripSegments = tripSegments,
                 vesselName = vesselName,
+                vesselId = vesselId,
             )
-            // For pratical reasons `vessel` can't be `null`, so we temporarely set it to "Navire inconnu"
+            // For practical reasons `vessel` can't be `null`, so we temporarily set it to "Navire inconnu"
             val vessel = UNKNOWN_VESSEL
             val logbookMessageTyped = LogbookMessageTyped(pnoLogbookMessage, PNO::class.java)
 
             return PriorNotification(
                 authorTrigram = authorTrigram,
-                createdAt = createdAt.toString(),
+                createdAt = createdAt,
                 didNotFishAfterZeroNotice = didNotFishAfterZeroNotice,
                 isManuallyCreated = true,
                 logbookMessageTyped = logbookMessageTyped,
                 reportId = reportId,
-                sentAt = sentAt.toString(),
-                updatedAt = updatedAt.toString(),
+                sentAt = sentAt,
+                updatedAt = updatedAt,
 
                 // These props need to be calculated in the use case
                 port = null,
@@ -136,7 +148,7 @@ data class ManualPriorNotificationEntity(
                 seafront = null,
                 state = null,
                 vessel = vessel,
-                vesselRiskFactor = null,
+                lastControlDateTime = null,
             )
         } catch (e: IllegalArgumentException) {
             throw BackendInternalException(

@@ -7,5 +7,7 @@ interface RiskFactorRepository {
 
     fun findByInternalReferenceNumber(internalReferenceNumber: String): VesselRiskFactor?
 
+    fun findByVesselId(vesselId: Int): VesselRiskFactor?
+
     fun findFirstByInternalReferenceNumber(internalReferenceNumber: String): VesselRiskFactor?
 }

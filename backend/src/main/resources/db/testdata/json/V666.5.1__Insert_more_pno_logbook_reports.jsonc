@@ -53,6 +53,7 @@
                     { "segment": "SWW06", "segmentName": "Sennes" }
                 ],
                 "value:jsonb": {
+                    "riskFactor": 2.1,
                     "catchOnboard": [
                         {
                             "weight": 25.0,
@@ -115,6 +116,7 @@
                     { "segment": "SWW11", "segmentName": "Hameçons" }
                 ],
                 "value:jsonb": {
+                    "riskFactor": 2.8,
                     "catchOnboard": [
                         {
                             "weight": 25.0,
@@ -174,6 +176,7 @@
                 "trip_gears:jsonb": [],
                 "trip_segments:jsonb": [],
                 "value:jsonb": {
+                    "riskFactor": 1.8,
                     "catchOnboard": [],
                     "pnoTypes": [],
                     "port": "AEHZP",
@@ -213,6 +216,7 @@
                     { "segment": "NWW05", "segmentName": "Chalut à perche" }
                 ],
                 "value:jsonb": {
+                    "riskFactor": 2.2,
                     "catchOnboard": [
                         {
                             "weight": 25.0,
@@ -327,6 +331,7 @@
                     { "segment": "NWW03", "segmentName": "Chalut de fond en eau profonde ≥100 mm" }
                 ],
                 "value:jsonb": {
+                    "riskFactor": 1.9,
                     "catchOnboard": [
                         {
                             "weight": 25.0,
@@ -387,6 +392,7 @@
                     { "segment": "NWW03", "segmentName": "Chalut de fond en eau profonde ≥100 mm" }
                 ],
                 "value:jsonb": {
+                    "riskFactor": 2.5,
                     "catchOnboard": [
                         {
                             "weight": 25.0,
@@ -445,6 +451,7 @@
                 ],
                 "vessel_name": "DES BARS",
                 "value:jsonb": {
+                    "riskFactor": 3.4,
                     "catchOnboard": [
                         {
                             "weight": 25.0,
@@ -517,6 +524,7 @@
                 "trip_segments": null,
                 "vessel_name": "CALAMARO",
                 "value:jsonb": {
+                    "riskFactor": 2.9,
                     "catchOnboard": [
                         {
                             "weight": 150.0,
@@ -585,6 +593,7 @@
                 "trip_segments": null,
                 "vessel_name": "L'ANCRE SÈCHE",
                 "value:jsonb": {
+                    "riskFactor": 2.2,
                     "catchOnboard": [],
                     "isBeingSent": false,
                     "isInVerificationScope": false,
@@ -616,6 +625,7 @@
                 "trip_gears": null,
                 "trip_segments": null,
                 "value:jsonb": {
+                    "riskFactor": 1.7,
                     "catchOnboard": [
                         {
                             "economicZone": "FRA",
@@ -666,6 +676,7 @@
                 "trip_segments": null,
                 "vessel_name": "MERLU L'ENCHANTEUR",
                 "value:jsonb": {
+                    "riskFactor": 2.1,
                     "catchOnboard": [
                         {
                             "economicZone": "FRA",
@@ -732,6 +743,7 @@
                 "trip_gears": null,
                 "trip_segments": null,
                 "value:jsonb": {
+                    "riskFactor": 3.1,
                     "catchOnboard": [
                         {
                             "economicZone": "FRA",
@@ -805,6 +817,7 @@
                 "trip_segments:jsonb": [{ "segment": "FR_SCE", "segmentName": "Scallop fisheries" }],
                 "vessel_name": "LE POISSON AMBULANT",
                 "value:jsonb": {
+                    "riskFactor": 3.9,
                     "catchOnboard": [
                         {
                             "nbFish": null,
@@ -917,6 +930,7 @@
                 "trip_gears:jsonb": [],
                 "trip_segments:jsonb": [],
                 "value:jsonb": {
+                    "riskFactor": 2.9,
                     "catchOnboard": [],
                     "isBeingSent": false,
                     "isInVerificationScope": false,

@@ -37,5 +37,21 @@ def test_refresh_analytics_controls_full_data(reset_test_data):
 
     pd.testing.assert_frame_equal(initial_controls, controls_before_refresh)
     pd.testing.assert_frame_equal(
-        initial_controls.query("id != 6").reset_index(drop=True), controls_after_refresh
+        initial_controls.query("id != 6")
+        .reset_index(drop=True)
+        .drop(columns=["comments"]),
+        controls_after_refresh.drop(columns=["comments"]),
+    )
+
+    # Comments may differ because the aggregation of all comments field may not be
+    # performed in the same sort order.
+    # Comments lengths should however be identical.
+    pd.testing.assert_series_equal(
+        (
+            initial_controls.query("id != 6")
+            .reset_index(drop=True)["comments"]
+            .fillna("")
+            .map(len)
+        ),
+        controls_after_refresh["comments"].fillna("").map(len),
     )

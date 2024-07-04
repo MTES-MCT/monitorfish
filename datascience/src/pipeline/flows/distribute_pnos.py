@@ -8,6 +8,9 @@ from typing import List, Tuple
 import numpy as np
 import pandas as pd
 import prefect
+import prefect.engine
+import prefect.engine.signals
+import prefect.exceptions
 import requests
 import weasyprint
 from jinja2 import Environment, FileSystemLoader, Template, select_autoescape
@@ -288,9 +291,7 @@ def pre_render_pno(
 
     return PreRenderedPno(
         id=pno.id,
-        operation_number=pno.operation_number,
         operation_datetime_utc=pno.operation_datetime_utc,
-        operation_type=pno.operation_type,
         report_id=pno.report_id,
         report_datetime_utc=pno.report_datetime_utc,
         vessel_id=pno.vessel_id,
@@ -433,8 +434,6 @@ def render_pno(
         cnsp_logo_src=CNSP_LOGO_PATH.as_uri(),
         se_mer_logo_src=SE_MER_LOGO_PATH.as_uri(),
         state_flag_icon_src=state_flag_icon_src,
-        operation_datetime_utc=format_nullable_datetime(pno.operation_datetime_utc),
-        operation_type=pno.operation_type,
         report_id=pno.report_id,
         report_datetime_utc=format_nullable_datetime(pno.report_datetime_utc),
         cfr=pno.cfr or "",
@@ -801,42 +800,119 @@ def make_update_logbook_reports_statement(
     start_datetime_utc: datetime,
     end_datetime_utc: datetime,
 ) -> Executable:
+    """
+    Creates slqalchemy update statement to update `isBeingSent` and `isSent` fields of
+    PNO of source `LOGBOOK` in table `logbook_reports`.
+
+    Args:
+        pnos_to_update (List[RenderedPno]): PNOs to update
+        start_datetime_utc (datetime): start date
+        end_datetime_utc (datetime): end date
+
+    Raises:
+        prefect.engine.signals.SKIP: If no PNOs with source = 'LOGBOOK' is in the input
+          list
+
+    Returns:
+        Executable: SQLAlchemy Update Statement
+    """
     logbook_pno_report_ids = tuple(
         pno.report_id for pno in pnos_to_update if pno.source == PnoSource.LOGBOOK
     )
 
     logger = prefect.context.get("logger")
-    logger.info(
-        (
-            "Creating state change SQL statement for "
-            f"{ len(logbook_pno_report_ids) } LOGBOOK PNOs."
+
+    if logbook_pno_report_ids:
+        logger.info(
+            (
+                "Creating state change SQL statement for "
+                f"{ len(logbook_pno_report_ids) } LOGBOOK PNOs."
+            )
         )
+
+        statement = text(
+            "UPDATE public.logbook_reports "
+            "   SET value = jsonb_set("
+            "       jsonb_set("
+            "           value, "
+            "           '{isBeingSent}', "
+            "           false::text::jsonb"
+            "       ), "
+            "       '{isSent}', "
+            "       true::text::jsonb"
+            "   ) "
+            "WHERE "
+            "   operation_datetime_utc >= :start_datetime_utc "
+            "   AND operation_datetime_utc < :end_datetime_utc "
+            "   AND report_id IN :logbook_pno_report_ids"
+        ).bindparams(
+            bindparam(
+                "logbook_pno_report_ids", value=logbook_pno_report_ids, expanding=True
+            ),
+            start_datetime_utc=start_datetime_utc,
+            end_datetime_utc=end_datetime_utc,
+        )
+
+        return statement
+
+    else:
+        raise prefect.engine.signals.SKIP
+
+
+@task(checkpoint=False)
+def make_manual_prior_notifications_statement(
+    pnos_to_update: List[RenderedPno],
+) -> Executable:
+    """
+    Creates slqalchemy update statement to update `isBeingSent` and `isSent` fields of
+    PNO of source `MANUAL` in table `manual_prior_notifications`.
+
+    Args:
+        pnos_to_update (List[RenderedPno]): PNOs to update
+
+    Raises:
+        prefect.engine.signals.SKIP: If no PNOs with source = 'MANUAL' is in the input
+          list
+
+    Returns:
+        Executable: SQLAlchemy Update Statement
+    """
+    manual_pno_report_ids = tuple(
+        pno.report_id for pno in pnos_to_update if pno.source == PnoSource.MANUAL
     )
 
-    statement = text(
-        "UPDATE public.logbook_reports "
-        "   SET value = jsonb_set("
-        "       jsonb_set("
-        "           value, "
-        "           '{isBeingSent}', "
-        "           false::text::jsonb"
-        "       ), "
-        "       '{isSent}', "
-        "       true::text::jsonb"
-        "   ) "
-        "WHERE "
-        "   operation_datetime_utc >= :start_datetime_utc "
-        "   AND operation_datetime_utc < :end_datetime_utc "
-        "   AND report_id IN :logbook_pno_report_ids"
-    ).bindparams(
-        bindparam(
-            "logbook_pno_report_ids", value=logbook_pno_report_ids, expanding=True
-        ),
-        start_datetime_utc=start_datetime_utc,
-        end_datetime_utc=end_datetime_utc,
-    )
+    logger = prefect.context.get("logger")
 
-    return statement
+    if manual_pno_report_ids:
+        logger.info(
+            (
+                "Creating state change SQL statement for "
+                f"{ len(manual_pno_report_ids) } MANUAL PNOs."
+            )
+        )
+
+        statement = text(
+            "UPDATE public.manual_prior_notifications "
+            "   SET value = jsonb_set("
+            "       jsonb_set("
+            "           value, "
+            "           '{isBeingSent}', "
+            "           false::text::jsonb"
+            "       ), "
+            "       '{isSent}', "
+            "       true::text::jsonb"
+            "   ) "
+            "WHERE report_id IN :manual_pno_report_ids"
+        ).bindparams(
+            bindparam(
+                "manual_pno_report_ids", value=manual_pno_report_ids, expanding=True
+            ),
+        )
+
+        return statement
+
+    else:
+        raise prefect.engine.signals.SKIP
 
 
 with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
@@ -932,7 +1008,20 @@ with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
                     )
                 )
 
-                executed_statement = execute_statement(update_logbook_reports_statement)
+                update_manual_pnos_statement = (
+                    make_manual_prior_notifications_statement(
+                        pnos_to_update=pnos_to_distribute,
+                        upstream_tasks=[loaded_prior_notification_sent_messages],
+                    )
+                )
+
+                updated_logbook_reports_statement = execute_statement(
+                    update_logbook_reports_statement
+                )
+                updated_manual_pnos_statement = execute_statement(
+                    update_manual_pnos_statement
+                )
+
 
 flow.set_reference_tasks(
     [
@@ -940,7 +1029,8 @@ flow.set_reference_tasks(
         pnos_to_distribute,
         pnos_with_addressees,
         loaded_prior_notification_sent_messages,
-        executed_statement,
+        updated_logbook_reports_statement,
+        updated_manual_pnos_statement,
     ]
 )
 

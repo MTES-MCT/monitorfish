@@ -6,6 +6,8 @@ import com.nhaarman.mockitokotlin2.anyOrNull
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagePurpose
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.ManualPriorNotificationComputedValues
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PdfDocument
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationSource
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationStats
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.*
 import fr.gouv.cnsp.monitorfish.domain.utils.PaginatedList
@@ -378,7 +380,14 @@ class PriorNotificationControllerITests {
 
         // Given
         given(getPriorNotificationPdfDocument.execute("REPORT_ID"))
-            .willReturn(dummyPdfContent)
+            .willReturn(
+                PdfDocument(
+                    reportId = "REPORT_ID",
+                    source = PriorNotificationSource.LOGBOOK,
+                    generationDatetimeUtc = ZonedDateTime.now(),
+                    pdfDocument = dummyPdfContent,
+                ),
+            )
 
         // When
         api.perform(get("/bff/v1/prior_notifications/REPORT_ID/pdf"))

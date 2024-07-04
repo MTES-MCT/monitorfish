@@ -172,7 +172,11 @@ export function PriorNotificationCard() {
               Fermer
             </Button>
 
-            <DownloadButton isPdfDocumentAvailable={isSent} reportId={priorNotificationDetail.id} pnoLogbookMessage={priorNotificationDetail.logbookMessage} />
+            <DownloadButton
+              isPdfDocumentAvailable={isSent}
+              pnoLogbookMessage={priorNotificationDetail.logbookMessage}
+              reportId={priorNotificationDetail.id}
+            />
 
             <Button
               accent={Accent.PRIMARY}

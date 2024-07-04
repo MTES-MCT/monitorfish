@@ -163,7 +163,9 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
             {!!editedPriorNotificationDetail && (
               <DownloadButton
                 isDisabled={dirty && (!isSent || !isPendingSend)}
+                isPdfDocumentAvailable={isSent}
                 pnoLogbookMessage={editedPriorNotificationDetail.logbookMessage}
+                reportId={editedPriorNotificationDetail.id}
               />
             )}
 

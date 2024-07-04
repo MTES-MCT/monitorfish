@@ -109,19 +109,26 @@ def create_html_email(
     msg.set_content(html, subtype="html")
 
     if images:
+        msg.make_related()
         for image in images:
             (mimetype, _) = guess_type(image)
             (maintype, subtype) = mimetype.split("/")
 
             with open(image, "rb") as f:
                 img_data = f.read()
-            msg.add_related(
+            img = EmailMessage(policy=msg.policy)
+            img.set_content(
                 img_data,
                 maintype=maintype,
                 subtype=subtype,
                 filename=image.name,
                 cid=f"<{image.name}>",
             )
+
+            img.replace_header(
+                "Content-Disposition", f'inline; filename="{image.name}"'
+            )
+            msg.attach(img)
 
     if attachments:
         for filename, filebytes in attachments.items():

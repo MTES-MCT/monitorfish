@@ -272,12 +272,16 @@ class PriorNotificationController(
         reportId: String,
     ): ResponseEntity<ByteArray?> {
         val pdfDocument = getPriorNotificationPdfDocument.execute(reportId = reportId)
+        if (pdfDocument.pdfDocument == null) {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body(null)
+        }
 
+        val fileName = "preavis_debarquement_${pdfDocument.generationDatetimeUtc.format(ISO_DATE_TIME)}.pdf"
         val headers = HttpHeaders().apply {
             contentType = MediaType.APPLICATION_PDF
             setContentDispositionFormData(
                 "attachment",
-                "preavis_debarquement_${pdfDocument.generationDatetimeUtc.format(ISO_DATE_TIME)}.pdf",
+                fileName,
             )
         }
 

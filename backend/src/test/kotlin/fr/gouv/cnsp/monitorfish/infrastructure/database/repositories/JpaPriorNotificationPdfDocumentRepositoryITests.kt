@@ -16,10 +16,10 @@ class JpaPriorNotificationPdfDocumentRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findByReportId Should return a pdf document`() {
         // When
-        val pdfDocument = jpaPriorNotificationPdfDocumentRepository.findByReportId("FAKE_OPERATION_108")
+        val pdfDocument = jpaPriorNotificationPdfDocumentRepository.findByReportId("FAKE_OPERATION_102")
 
         // Then
-        assertThat(pdfDocument.reportId).isEqualTo("FAKE_OPERATION_108")
+        assertThat(pdfDocument.reportId).isEqualTo("FAKE_OPERATION_102")
         assertThat(pdfDocument.source).isEqualTo(PriorNotificationSource.LOGBOOK)
         assertThat(pdfDocument.generationDatetimeUtc).isEqualTo(ZonedDateTime.parse("2024-07-03T14:45:00Z"))
         assertThat(pdfDocument.pdfDocument).isNotNull()

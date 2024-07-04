@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotifica
 import jakarta.persistence.*
 import org.hibernate.annotations.JdbcType
 import org.hibernate.dialect.PostgreSQLEnumJdbcType
+import org.hibernate.type.descriptor.jdbc.BinaryJdbcType
 import java.time.ZonedDateTime
 
 @Entity
@@ -19,7 +20,9 @@ data class PriorNotificationPdfDocumentEntity(
     val source: PriorNotificationSource,
     @Column(name = "generation_datetime_utc")
     val generationDatetimeUtc: ZonedDateTime,
+
     @Column(name = "pdf_document")
+    @JdbcType(BinaryJdbcType::class)
     val pdfDocument: ByteArray?,
 ) {
 

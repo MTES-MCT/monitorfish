@@ -199,4 +199,23 @@ context('Side Window > Prior Notification Card > Card', () => {
     openSideWindowPriorNotification(`CALAMARO`)
     cy.get('*[name="note"]').should('have.value', "Un point d'attention.")
   })
+
+  it('Should download a pdf document', () => {
+    // Given
+    openSideWindowPriorNotification(`COURANT MAIN PROFESSEUR`)
+
+    // When
+    cy.clickButton('Télécharger les documents')
+
+    // Spy on the window.open method
+    cy.window().then(win => {
+      cy.stub(win, 'open').as('windowOpen')
+    })
+
+    // Click the button
+    cy.clickButton('Préavis de débarquement (à destination des unités)')
+
+    // Verify that window.open was called with the correct URL
+    cy.get('@windowOpen').should('be.calledWith', '/bff/v1/prior_notifications/FAKE_OPERATION_102/pdf', '_blank')
+  })
 })

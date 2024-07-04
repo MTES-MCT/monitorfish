@@ -10,6 +10,7 @@ import type { Undefine } from '@mtes-mct/monitor-ui'
 export interface PriorNotificationState {
   editedPriorNotificationComputedValues: Undefine<PriorNotification.ManualPriorNotificationComputedValues> | undefined
   editedPriorNotificationInitialFormValues: FormValues | undefined
+  isOpenedPriorNotificationManual: boolean | undefined
   isPriorNotificationCardOpen: boolean
   isPriorNotificationFormOpen: boolean
   listFilterValues: ListFilter
@@ -18,6 +19,7 @@ export interface PriorNotificationState {
 const INITIAL_STATE: PriorNotificationState = {
   editedPriorNotificationComputedValues: undefined,
   editedPriorNotificationInitialFormValues: undefined,
+  isOpenedPriorNotificationManual: undefined,
   isPriorNotificationCardOpen: false,
   isPriorNotificationFormOpen: false,
   listFilterValues: DEFAULT_LIST_FILTER_VALUES,
@@ -36,6 +38,7 @@ const priorNotificationSlice = createSlice({
       state.editedPriorNotificationComputedValues = undefined
       state.editedPriorNotificationInitialFormValues = undefined
       state.openedPriorNotificationReportId = undefined
+      state.isOpenedPriorNotificationManual = undefined
       state.isPriorNotificationFormOpen = false
     },
 
@@ -46,6 +49,7 @@ const priorNotificationSlice = createSlice({
     openPriorNotificationForm(state) {
       state.editedPriorNotificationComputedValues = undefined
       state.editedPriorNotificationInitialFormValues = undefined
+      state.isOpenedPriorNotificationManual = true
       state.openedPriorNotificationReportId = undefined
       state.isPriorNotificationFormOpen = true
     },
@@ -75,16 +79,18 @@ const priorNotificationSlice = createSlice({
       }
     },
 
-    setOpenedPriorNotificationReportId(state, action: PayloadAction<string>) {
-      state.openedPriorNotificationReportId = action.payload
+    setOpenedPriorNotification(state, action: PayloadAction<{ isManual: boolean; reportId: string }>) {
+      state.openedPriorNotificationReportId = action.payload.reportId
+      state.isOpenedPriorNotificationManual = action.payload.isManual
     },
 
     unsetEditedPriorNotificationComputedValues(state) {
       state.editedPriorNotificationComputedValues = undefined
     },
 
-    unsetOpenedPriorNotificationReportId(state) {
+    unsetOpenedPriorNotification(state) {
       state.openedPriorNotificationReportId = undefined
+      state.isOpenedPriorNotificationManual = undefined
     }
   }
 })

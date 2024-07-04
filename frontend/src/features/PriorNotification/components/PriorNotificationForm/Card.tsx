@@ -1,11 +1,14 @@
+import { RTK_FORCE_REFETCH_QUERY_OPTIONS, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
+import { useGetPriorNotificationDetailQuery } from '@features/PriorNotification/priorNotificationApi'
 import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { updateEditedPriorNotificationComputedValues } from '@features/PriorNotification/useCases/updateEditedPriorNotificationComputedValues'
 import { isZeroNotice } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Banner, Button, FormikEffect, Icon, Level, usePrevious } from '@mtes-mct/monitor-ui'
+import { skipToken } from '@reduxjs/toolkit/query'
 import { getDefinedObject } from '@utils/getDefinedObject'
 import { useFormikContext } from 'formik'
 import { isEqual } from 'lodash'
@@ -36,8 +39,24 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
   const editedPriorNotificationComputedValues = useMainAppSelector(
     store => store.priorNotification.editedPriorNotificationComputedValues
   )
-  const editedPriorNotificationDetail = useMainAppSelector(
-    store => store.priorNotification.editedPriorNotificationDetail
+  const openedPriorNotificationReportId = useMainAppSelector(
+    store => store.priorNotification.openedPriorNotificationReportId
+  )
+  const isOpenedPriorNotificationManual = useMainAppSelector(
+    store => store.priorNotification.isOpenedPriorNotificationManual
+  )
+
+  const { data: editedPriorNotificationDetail } = useGetPriorNotificationDetailQuery(
+    openedPriorNotificationReportId && typeof isOpenedPriorNotificationManual === 'boolean'
+      ? {
+          isManuallyCreated: isOpenedPriorNotificationManual,
+          reportId: openedPriorNotificationReportId
+        }
+      : skipToken,
+    {
+      ...RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS,
+      ...RTK_FORCE_REFETCH_QUERY_OPTIONS
+    }
   )
 
   const [isClosingConfirmationDialog, setIsClosingConfirmationDialog] = useState(false)

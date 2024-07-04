@@ -10,16 +10,16 @@
             <p>Veuillez trouver ci-joint un préavis de débarquement :</p>
             <ul>
                 <li>Navire : <strong>{{ vessel_name }} - {{ cfr }}</strong></li>
-                <li>Segment(s) de flotte : <strong>{{ trip_segments }}</strong></li>
+                <li>Segment(s) de flotte : <strong>{{ trip_segments or "-" }}</strong></li>
                 <li>Note de risque : <strong>{{ "{:.2f}".format(risk_factor) }}</strong></li>
             </ul>
             <p>Infos du préavis</p>
             <ul>
-                <li>Préavis envoyé <strong>le {{ "le {}".format(report_datetime_utc) if report_datetime_utc }}</strong></li>
-                <li>Arrivée estimée <strong>le {{ "le {}".format(predicted_arrival_datetime_utc) if predicted_arrival_datetime_utc }}</strong></li>
-                <li>Débarque prévue <strong>le {{ "le {}".format(predicted_landing_datetime_utc) if predicted_landing_datetime_utc }}</strong></li>
+                <li>Préavis envoyé : <strong>{{ "le {}".format(report_datetime_utc) if report_datetime_utc else "-" }}</strong></li>
+                <li>Arrivée estimée : <strong>{{ "le {}".format(predicted_arrival_datetime_utc) if predicted_arrival_datetime_utc else "-" }}</strong></li>
+                <li>Débarque prévue : <strong>{{ "le {}".format(predicted_landing_datetime_utc) if predicted_landing_datetime_utc else "-" }}</strong></li>
                 <li>Port de débarquement : <strong>{{ port_name }} ({{ port_locode }})</strong></li>
-                <li>Type(s) de préavis : <strong>{{ pno_types }}</strong></li>
+                <li>Type(s) de préavis : <strong>{{ pno_types or "-" }}</strong></li>
             </ul>
             {% if note %}
             <p><span style="color:red;"><strong>[ ! ] Points d'attention identifiés par le CNSP</strong></span> - Consultez le pdf du préavis et contactez le CNSP pour plus d'informations.</p>

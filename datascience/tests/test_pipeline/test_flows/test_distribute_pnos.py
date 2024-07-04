@@ -692,7 +692,7 @@ def pno_to_render_1() -> PnoToRender:
         predicted_landing_datetime_utc=datetime(2020, 5, 6, 16, 40),
         trip_gears=[
             {"gear": "OTT", "mesh": 140, "dimensions": "250.0"},
-            {"gear": "OTT", "mesh": 120, "dimensions": "250.0"},
+            {"gear": "OTT", "dimensions": "250.0"},
         ],
         trip_segments=[
             {"segment": "SHKE27", "segmentName": "Merlu en zone 27"},
@@ -785,7 +785,7 @@ def pre_rendered_pno_1(pre_rendered_pno_1_catch_onboard) -> PreRenderedPno:
         predicted_landing_datetime_utc=datetime(2020, 5, 6, 16, 40),
         trip_gears=[
             FishingGear(code="OTT", name="Chaluts jumeaux à panneaux", mesh=140),
-            FishingGear(code="OTT", name="Chaluts jumeaux à panneaux", mesh=120),
+            FishingGear(code="OTT", name="Chaluts jumeaux à panneaux"),
         ],
         trip_segments=[
             FleetSegment(code="SHKE27", name="Merlu en zone 27"),
@@ -1926,19 +1926,19 @@ def test_create_email(
     assert part1.get_charsets() == ["utf-8"]
     assert part1.get_content() == "<html>Ce navire va débarquer</html>\n"
 
-    assert part2.is_attachment()
+    assert not part2.is_attachment()
     assert part2.get_content_type() == "image/jpeg"
     assert part2["Content-ID"] == "<logos_cnsp_crossa_cacem.jpg>"
     assert part2.get_filename() == "logos_cnsp_crossa_cacem.jpg"
     assert part2.get_content() == cnsp_crossa_cacem_logos
 
-    assert part3.is_attachment()
+    assert not part3.is_attachment()
     assert part3.get_content_type() == "image/gif"
     assert part3["Content-ID"] == "<liberte_egalite_fraternite.gif>"
     assert part3.get_filename() == "liberte_egalite_fraternite.gif"
     assert part3.get_content() == liberte_egalite_fraternite_gif
 
-    assert part4.is_attachment()
+    assert not part4.is_attachment()
     assert part4.get_content_type() == "image/gif"
     assert part4["Content-ID"] == "<marianne.gif>"
     assert part4.get_filename() == "marianne.gif"

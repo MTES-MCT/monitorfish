@@ -1,4 +1,4 @@
-import { RtkCacheTagType } from '@api/constants'
+import { RTK_FORCE_REFETCH_QUERY_OPTIONS, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS, RtkCacheTagType } from '@api/constants'
 import { addMainWindowBanner } from '@features/SideWindow/useCases/addMainWindowBanner'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
@@ -20,10 +20,17 @@ export const openPriorNotificationCard =
       dispatch(priorNotificationActions.openPriorNotificationCard())
 
       const priorNotificationDetail = await dispatch(
-        priorNotificationApi.endpoints.getPriorNotificationDetail.initiate({
-          isManuallyCreated,
-          reportId
-        })
+        priorNotificationApi.endpoints.getPriorNotificationDetail.initiate(
+          {
+            isManuallyCreated,
+            reportId
+          },
+          {
+            subscribe: true,
+            subscriptionOptions: RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS,
+            ...RTK_FORCE_REFETCH_QUERY_OPTIONS
+          }
+        )
       ).unwrap()
 
       // Update prior notification list if prior notification fingerprint has changed
@@ -47,7 +54,7 @@ export const openPriorNotificationCard =
         return
       }
 
-      dispatch(priorNotificationActions.setPriorNotificationCardDetail(priorNotificationDetail))
+      dispatch(priorNotificationActions.setOpenedPriorNotificationReportId(reportId))
     } catch (err) {
       if (err instanceof FrontendApiError) {
         dispatch(

@@ -1,7 +1,9 @@
+import { RTK_FORCE_REFETCH_QUERY_OPTIONS, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { ErrorWall } from '@components/ErrorWall'
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { LogbookMessage } from '@features/Logbook/components/VesselLogbook/LogbookMessages/messages/LogbookMessage'
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
+import { useGetPriorNotificationDetailQuery } from '@features/PriorNotification/priorNotificationApi'
 import { updatePriorNotificationNote } from '@features/PriorNotification/useCases/updatePriorNotificationNote'
 import { verifyAndSendPriorNotification } from '@features/PriorNotification/useCases/verifyAndSendPriorNotification'
 import {
@@ -13,6 +15,7 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Accent, Button, FormikEffect, FormikTextarea, Icon } from '@mtes-mct/monitor-ui'
+import { skipToken } from '@reduxjs/toolkit/query'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { Formik } from 'formik'
 import { useCallback, useState } from 'react'
@@ -31,7 +34,21 @@ const DEBOUNCE_DELAY = 500
 export function PriorNotificationCard() {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
-  const priorNotificationDetail = useMainAppSelector(state => state.priorNotification.priorNotificationCardDetail)
+  const openedPriorNotificationReportId = useMainAppSelector(
+    state => state.priorNotification.openedPriorNotificationReportId
+  )
+  const { data: priorNotificationDetail } = useGetPriorNotificationDetailQuery(
+    openedPriorNotificationReportId
+      ? {
+          isManuallyCreated: false,
+          reportId: openedPriorNotificationReportId
+        }
+      : skipToken,
+    {
+      ...RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS,
+      ...RTK_FORCE_REFETCH_QUERY_OPTIONS
+    }
+  )
   const sideWindowPriorNotificationCardError = useMainAppSelector(
     state => state.displayedError.sideWindowPriorNotificationCardError
   )

@@ -451,7 +451,10 @@ def render_pno(
             pno.predicted_landing_datetime_utc
         ),
         trip_gears="<br>".join(
-            [f"{g.name} ({g.code}) - Maillage {g.mesh} mm" for g in pno.trip_gears]
+            [
+                f"{g.name} ({g.code})" + (f" - Maillage {g.mesh} mm" if g.mesh else "")
+                for g in pno.trip_gears
+            ]
         ),
         trip_segments="<br>".join([f"{s.code} - {s.name}" for s in pno.trip_segments]),
         pno_types=", ".join(pno.pno_types),

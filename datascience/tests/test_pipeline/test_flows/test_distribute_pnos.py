@@ -692,7 +692,7 @@ def pno_to_render_1() -> PnoToRender:
         predicted_landing_datetime_utc=datetime(2020, 5, 6, 16, 40),
         trip_gears=[
             {"gear": "OTT", "mesh": 140, "dimensions": "250.0"},
-            {"gear": "OTT", "mesh": 120, "dimensions": "250.0"},
+            {"gear": "OTT", "dimensions": "250.0"},
         ],
         trip_segments=[
             {"segment": "SHKE27", "segmentName": "Merlu en zone 27"},
@@ -785,7 +785,7 @@ def pre_rendered_pno_1(pre_rendered_pno_1_catch_onboard) -> PreRenderedPno:
         predicted_landing_datetime_utc=datetime(2020, 5, 6, 16, 40),
         trip_gears=[
             FishingGear(code="OTT", name="Chaluts jumeaux à panneaux", mesh=140),
-            FishingGear(code="OTT", name="Chaluts jumeaux à panneaux", mesh=120),
+            FishingGear(code="OTT", name="Chaluts jumeaux à panneaux"),
         ],
         trip_segments=[
             FleetSegment(code="SHKE27", name="Merlu en zone 27"),

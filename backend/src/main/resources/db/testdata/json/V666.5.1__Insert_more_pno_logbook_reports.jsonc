@@ -862,7 +862,7 @@
                     "isVerified": false,
                     "pnoTypes": [
                         {
-                            "pnoTypeName": "Espèces soumises à préavis",
+                            "pnoTypeName": "Autres espèces soumises à préavis",
                             "hasDesignatedPorts": true,
                             "minimumNotificationPeriod": 4.0
                         },

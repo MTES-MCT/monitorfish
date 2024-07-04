@@ -698,7 +698,7 @@ def test_create_email(malfunction_to_notify_data, cnsp_logo, notification_type):
     assert part1.get_charsets() == ["utf-8"]
     assert part1.get_content() == html
 
-    assert part2.is_attachment()
+    assert not part2.is_attachment()
     assert part2.get_content_type() == "image/jpeg"
     assert part2["Content-ID"] == "<logo_cnsp.jpg>"
     assert part2.get_filename() == "logo_cnsp.jpg"

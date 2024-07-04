@@ -1156,6 +1156,28 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat((updatedCorReport.message as PNO).isVerified).isEqualTo(true)
     }
 
+    @Test
+    @Transactional
+    fun `updatePriorNotificationNote Should update a note for an existing PNO logbook report`() {
+        // Given
+        val currentDatReport = jpaLogbookReportRepository.findById(109)
+        assertThat((currentDatReport.message as PNO).note).isNull()
+        val currentCorReport = jpaLogbookReportRepository.findById(1109)
+        assertThat((currentCorReport.message as PNO).note).isNull()
+
+        // When
+        jpaLogbookReportRepository.updatePriorNotificationNote(
+            "FAKE_OPERATION_109",
+            "A wonderful note",
+        )
+
+        // Then
+        val updatedDatReport = jpaLogbookReportRepository.findById(109)
+        assertThat((updatedDatReport.message as PNO).note).isEqualTo("A wonderful note")
+        val updatedCorReport = jpaLogbookReportRepository.findById(1109)
+        assertThat((updatedCorReport.message as PNO).note).isEqualTo("A wonderful note")
+    }
+
     companion object {
         private fun getFakeLogbookReportModel(
             operationType: LogbookOperationType,

@@ -9,7 +9,7 @@ import { priorNotificationActions } from '../slice'
 import type { PriorNotification } from '../PriorNotification.types'
 import type { MainAppThunk } from '@store'
 
-export const createOrUpdatePriorNotification =
+export const createOrUpdateManualPriorNotification =
   (
     reportId: string | undefined,
     newOrNextPriorNotificationData: PriorNotification.NewManualPriorNotificationData
@@ -23,7 +23,7 @@ export const createOrUpdatePriorNotification =
         ).unwrap()
       } else {
         updatedPriorNotificationData = await dispatch(
-          priorNotificationApi.endpoints.updatePriorNotification.initiate({
+          priorNotificationApi.endpoints.updateManualPriorNotification.initiate({
             data: newOrNextPriorNotificationData,
             reportId
           })

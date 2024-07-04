@@ -9,7 +9,6 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.ManualPriorNotificationRepos
 class VerifyAndSendPriorNotification(
     private val logbookReportRepository: LogbookReportRepository,
     private val manualPriorNotificationRepository: ManualPriorNotificationRepository,
-
     private val getPriorNotification: GetPriorNotification,
 ) {
     fun execute(reportId: String, isManuallyCreated: Boolean): PriorNotification {

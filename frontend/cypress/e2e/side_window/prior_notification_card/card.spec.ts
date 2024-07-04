@@ -183,4 +183,20 @@ context('Side Window > Prior Notification Card > Card', () => {
         .should('be.visible')
     })
   })
+
+  it('Should update a note', () => {
+    // Given
+    openSideWindowPriorNotification(`CALAMARO`)
+    cy.get('*[name="note"]').should('have.value', '')
+
+    // When
+    cy.intercept('PUT', `/bff/v1/prior_notifications/FAKE_OPERATION_108/note`).as('updatePriorNotificationNote')
+    cy.fill("Points d'attention identifiés par le CNSP", "Un point d'attention.")
+    cy.get('*[name="note"]').should('have.value', "Un point d'attention.")
+    cy.wait('@updatePriorNotificationNote')
+
+    // Then, the note is saved
+    openSideWindowPriorNotification(`CALAMARO`)
+    cy.get('*[name="note"]').should('have.value', "Un point d'attention.")
+  })
 })

@@ -37,10 +37,13 @@ export function PriorNotificationCard() {
   const openedPriorNotificationReportId = useMainAppSelector(
     state => state.priorNotification.openedPriorNotificationReportId
   )
+  const isOpenedPriorNotificationManual = useMainAppSelector(
+    store => store.priorNotification.isOpenedPriorNotificationManual
+  )
   const { data: priorNotificationDetail } = useGetPriorNotificationDetailQuery(
-    openedPriorNotificationReportId
+    openedPriorNotificationReportId && typeof isOpenedPriorNotificationManual === 'boolean'
       ? {
-          isManuallyCreated: false,
+          isManuallyCreated: isOpenedPriorNotificationManual,
           reportId: openedPriorNotificationReportId
         }
       : skipToken,

@@ -1,9 +1,8 @@
-import { RTK_FORCE_REFETCH_QUERY_OPTIONS, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS, RtkCacheTagType } from '@api/constants'
+import { RtkCacheTagType } from '@api/constants'
 import { addMainWindowBanner } from '@features/SideWindow/useCases/addMainWindowBanner'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { Level, type Undefine } from '@mtes-mct/monitor-ui'
-import { assertNotNullish } from '@utils/assertNotNullish'
 import { handleThunkError } from '@utils/handleThunkError'
 import { displayedErrorActions } from 'domain/shared_slices/DisplayedError'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
@@ -18,11 +17,7 @@ import type { PriorNotification } from '../PriorNotification.types'
 import type { MainAppThunk } from '@store'
 
 export const openPriorNotificationForm =
-  (
-    reportId: string | undefined,
-    fingerprint?: string | undefined,
-    isManuallyCreated?: boolean | undefined
-  ): MainAppThunk<Promise<void>> =>
+  (reportId: string | undefined, fingerprint?: string | undefined): MainAppThunk<Promise<void>> =>
   async dispatch => {
     try {
       dispatch(displayedErrorActions.unset(DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR))
@@ -31,25 +26,16 @@ export const openPriorNotificationForm =
       if (!reportId) {
         dispatch(priorNotificationActions.unsetEditedPriorNotificationComputedValues())
         dispatch(priorNotificationActions.setEditedPriorNotificationInitialFormValues(getInitialFormValues()))
-        dispatch(priorNotificationActions.unsetOpenedPriorNotificationReportId())
+        dispatch(priorNotificationActions.unsetOpenedPriorNotification())
 
         return
       }
 
-      assertNotNullish(isManuallyCreated)
-
       const priorNotificationDetail = await dispatch(
-        priorNotificationApi.endpoints.getPriorNotificationDetail.initiate(
-          {
-            isManuallyCreated,
-            reportId
-          },
-          {
-            subscribe: true,
-            subscriptionOptions: RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS,
-            ...RTK_FORCE_REFETCH_QUERY_OPTIONS
-          }
-        )
+        priorNotificationApi.endpoints.getPriorNotificationDetail.initiate({
+          isManuallyCreated: true,
+          reportId
+        })
       ).unwrap()
       const priorNotificationData = await dispatch(
         priorNotificationApi.endpoints.getPriorNotificationFormData.initiate(reportId)
@@ -93,14 +79,19 @@ export const openPriorNotificationForm =
       }
 
       dispatch(priorNotificationActions.setEditedPriorNotificationComputedValues(nextComputedValues))
-      dispatch(priorNotificationActions.setOpenedPriorNotificationReportId(reportId))
+      dispatch(
+        priorNotificationActions.setOpenedPriorNotification({
+          isManual: true,
+          reportId
+        })
+      )
       dispatch(priorNotificationActions.setEditedPriorNotificationInitialFormValues(nextInitialFormValues))
     } catch (err) {
       if (err instanceof FrontendApiError) {
         dispatch(
           displayOrLogError(
             err,
-            () => openPriorNotificationForm(reportId, fingerprint, isManuallyCreated),
+            () => openPriorNotificationForm(reportId, fingerprint),
             true,
             DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR
           )

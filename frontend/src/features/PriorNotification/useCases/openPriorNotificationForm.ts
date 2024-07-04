@@ -1,4 +1,4 @@
-import { RtkCacheTagType } from '@api/constants'
+import { RTK_FORCE_REFETCH_QUERY_OPTIONS, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS, RtkCacheTagType } from '@api/constants'
 import { addMainWindowBanner } from '@features/SideWindow/useCases/addMainWindowBanner'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
@@ -30,9 +30,8 @@ export const openPriorNotificationForm =
 
       if (!reportId) {
         dispatch(priorNotificationActions.unsetEditedPriorNotificationComputedValues())
-        dispatch(priorNotificationActions.unsetEditedPriorNotificationDetail())
         dispatch(priorNotificationActions.setEditedPriorNotificationInitialFormValues(getInitialFormValues()))
-        dispatch(priorNotificationActions.unsetEditedPriorNotificationReportId())
+        dispatch(priorNotificationActions.unsetOpenedPriorNotificationReportId())
 
         return
       }
@@ -40,13 +39,20 @@ export const openPriorNotificationForm =
       assertNotNullish(isManuallyCreated)
 
       const priorNotificationDetail = await dispatch(
-        priorNotificationApi.endpoints.getPriorNotificationDetail.initiate({
-          isManuallyCreated,
-          reportId
-        })
+        priorNotificationApi.endpoints.getPriorNotificationDetail.initiate(
+          {
+            isManuallyCreated,
+            reportId
+          },
+          {
+            subscribe: true,
+            subscriptionOptions: RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS,
+            ...RTK_FORCE_REFETCH_QUERY_OPTIONS
+          }
+        )
       ).unwrap()
       const priorNotificationData = await dispatch(
-        priorNotificationApi.endpoints.getPriorNotificationData.initiate(reportId)
+        priorNotificationApi.endpoints.getPriorNotificationFormData.initiate(reportId)
       ).unwrap()
 
       // Update prior notification list if prior notification fingerprint has changed
@@ -87,9 +93,8 @@ export const openPriorNotificationForm =
       }
 
       dispatch(priorNotificationActions.setEditedPriorNotificationComputedValues(nextComputedValues))
-      dispatch(priorNotificationActions.setEditedPriorNotificationDetail(priorNotificationDetail))
+      dispatch(priorNotificationActions.setOpenedPriorNotificationReportId(reportId))
       dispatch(priorNotificationActions.setEditedPriorNotificationInitialFormValues(nextInitialFormValues))
-      dispatch(priorNotificationActions.setEditedPriorNotificationReportId(reportId))
     } catch (err) {
       if (err instanceof FrontendApiError) {
         dispatch(

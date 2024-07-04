@@ -148,19 +148,18 @@ data class LogbookReportEntity(
             .sortedBy { it.operationDateTime }
         val consolidatedLogbookMessageTyped = referenceLogbookMessage
             .toConsolidatedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
-        val updatedAt = relatedLogbookMessages.lastOrNull()?.let { it.operationDateTime.toString() }
-            ?: operationDateTime.toString()
-        // For pratical reasons `vessel` can't be `null`, so we temporarely set it to "Navire inconnu"
+        val updatedAt = relatedLogbookMessages.lastOrNull()?.operationDateTime ?: operationDateTime.atZone(UTC)
+        // For practical reasons `vessel` can't be `null`, so we temporarily set it to "Navire inconnu"
         val vessel = UNKNOWN_VESSEL
 
         return PriorNotification(
             reportId = reportId,
             authorTrigram = null,
-            createdAt = operationDateTime.toString(),
+            createdAt = operationDateTime.atZone(UTC),
             didNotFishAfterZeroNotice = false,
             isManuallyCreated = false,
             logbookMessageTyped = consolidatedLogbookMessageTyped,
-            sentAt = consolidatedLogbookMessageTyped.logbookMessage.reportDateTime?.toString(),
+            sentAt = consolidatedLogbookMessageTyped.logbookMessage.reportDateTime,
             updatedAt = updatedAt,
 
             // These props need to be calculated in the use case
@@ -169,7 +168,7 @@ data class LogbookReportEntity(
             seafront = null,
             state = null,
             vessel = vessel,
-            vesselRiskFactor = null,
+            lastControlDateTime = null,
         )
     }
 

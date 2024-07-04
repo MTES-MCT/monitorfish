@@ -7,7 +7,7 @@ data class ManualPriorNotificationComputedValuesDataOutput(
     val isVesselUnderCharter: Boolean?,
     val tripSegments: List<LogbookMessageTripSegmentDataOutput>,
     val types: List<PriorNotificationTypeDataOutput>,
-    val vesselRiskFactor: Double?,
+    val riskFactor: Double?,
 ) {
     companion object {
         fun fromManualPriorNotificationComputedValues(
@@ -23,7 +23,7 @@ data class ManualPriorNotificationComputedValuesDataOutput(
                 isVesselUnderCharter = manualPriorNotificationComputedValues.isVesselUnderCharter,
                 tripSegments = tripSegmentDataOutputs,
                 types = priorNotificationTypeDataOutputs,
-                vesselRiskFactor = manualPriorNotificationComputedValues.vesselRiskFactor,
+                riskFactor = manualPriorNotificationComputedValues.vesselRiskFactor,
             )
         }
     }

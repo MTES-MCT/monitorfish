@@ -17,6 +17,7 @@ from jinja2 import Template
 from requests import Response
 
 from config import EMAIL_IMAGES_LOCATION, TEST_DATA_LOCATION, default_risk_factors
+from src.db_config import create_engine
 from src.pipeline.entities.fleet_segments import FishingGear, FleetSegment
 from src.pipeline.entities.missions import Infraction
 from src.pipeline.entities.pnos import (
@@ -43,6 +44,7 @@ from src.pipeline.flows.distribute_pnos import (
     get_sms_template,
     load_pno_pdf_documents,
     load_prior_notification_sent_messages,
+    make_manual_prior_notifications_statement,
     make_update_logbook_reports_statement,
     pre_render_pno,
     render_pno,
@@ -107,39 +109,73 @@ def extracted_pnos() -> pd.DataFrame:
     now = datetime.utcnow()
     return pd.DataFrame(
         {
-            "id": [35, 36, 37, 38, 39],
-            "operation_number": ["11", "12", "13", "14", "15"],
+            "id": [35.0, 36.0, 37.0, 38.0, 39.0, None, None, None, None],
             "operation_datetime_utc": [
                 now - relativedelta(months=1, hours=1),
                 now - relativedelta(months=1, minutes=25),
                 now - relativedelta(months=1, hours=2),
                 now - relativedelta(months=1, minutes=52),
                 now - relativedelta(months=1, minutes=32),
+                None,
+                None,
+                None,
+                None,
             ],
-            "operation_type": ["DAT", "DAT", "DAT", "DAT", "DAT"],
-            "report_id": ["11", "12", "13", "14", "15"],
+            "report_id": [
+                "11",
+                "12",
+                "13",
+                "14",
+                "15",
+                "00000000-0000-4000-0000-000000000001",
+                "00000000-0000-4000-0000-000000000003",
+                "00000000-0000-4000-0000-000000000004",
+                "00000000-0000-4000-0000-000000000005",
+            ],
             "report_datetime_utc": [
                 now - relativedelta(months=1, hours=1, minutes=2),
                 now - relativedelta(months=1, minutes=27),
                 now - relativedelta(months=1, hours=2, minutes=2),
                 now - relativedelta(months=1, minutes=54),
                 now - relativedelta(months=1, minutes=34),
+                now - relativedelta(minutes=15),
+                now - relativedelta(months=3),
+                now - relativedelta(weeks=3),
+                now - relativedelta(days=3),
             ],
-            "vessel_id": [2, None, 1, 1, 7],
+            "vessel_id": [2, None, 1, 1, 7, 3, 6, 6, 6],
             "cfr": [
                 "ABC000542519",
                 "ABC000000000",
                 "ABC000306959",
                 "ABC000306959",
                 "___TARGET___",
+                "ABC000055481",
+                None,
+                None,
+                None,
             ],
-            "ircs": ["FQ7058", "ABCD", "LLUK", "LLUK", "TRGT"],
+            "ircs": [
+                "FQ7058",
+                "ABCD",
+                "LLUK",
+                "LLUK",
+                "TRGT",
+                "IL2468",
+                "ZZ000000",
+                "ZZ000000",
+                "ZZ000000",
+            ],
             "external_identification": [
                 "RO237719",
                 "LEB@T0",
                 "RV348407",
                 "RV348407",
                 "TARGET",
+                "AS761555",
+                "ZZTOPACDC",
+                "ZZTOPACDC",
+                "ZZTOPACDC",
             ],
             "vessel_name": [
                 "DEVINER FIGURE CONSCIENCE",
@@ -147,9 +183,23 @@ def extracted_pnos() -> pd.DataFrame:
                 "ÉTABLIR IMPRESSION LORSQUE",
                 "ÉTABLIR IMPRESSION LORSQUE",
                 "NAVIRE CIBLE",
+                "PLACE SPECTACLE SUBIR",
+                "I DO 4H REPORT",
+                "I DO 4H REPORT",
+                "I DO 4H REPORT",
             ],
-            "flag_state": ["FRA", "POL", "FRA", "FRA", "FRA"],
-            "purpose": ["LAN", "ACS", "OTH", "LAN", "LAN"],
+            "flag_state": [
+                "FRA",
+                "POL",
+                "FRA",
+                "FRA",
+                "FRA",
+                "FRA",
+                "FRA",
+                "FRA",
+                "FRA",
+            ],
+            "purpose": ["LAN", "ACS", "OTH", "LAN", "LAN", "LAN", "LAN", "LAN", "LAN"],
             "catch_onboard": [
                 [
                     {
@@ -317,14 +367,56 @@ def extracted_pnos() -> pd.DataFrame:
                         "species": "GHL",
                     },
                 ],
+                [
+                    {
+                        "nbFish": None,
+                        "weight": 1272,
+                        "faoZone": "27.8.a",
+                        "species": "HKE",
+                    }
+                ],
+                [{"nbFish": 3, "weight": 172, "faoZone": "37.1", "species": "BFT"}],
+                None,
+                [
+                    {
+                        "nbFish": None,
+                        "weight": 72,
+                        "faoZone": "21.1.a",
+                        "species": "GHL",
+                    },
+                    {
+                        "nbFish": None,
+                        "weight": 172,
+                        "faoZone": "21.1.a",
+                        "species": "GHL",
+                    },
+                    {"nbFish": 3, "weight": 72, "faoZone": "21.1.a", "species": "BFT"},
+                    {"nbFish": 2, "weight": 32, "faoZone": "27.2.a", "species": "BFT"},
+                    {"nbFish": 2, "weight": 502, "faoZone": "27.2.a", "species": "SWO"},
+                    {"nbFish": 1, "weight": 202, "faoZone": "27.2.a", "species": "SWO"},
+                ],
             ],
-            "port_locode": ["FRCQF", "FRZJZ", "FRDKK", "FRLEH", "FRDPE"],
+            "port_locode": [
+                "FRCQF",
+                "FRZJZ",
+                "FRDKK",
+                "FRLEH",
+                "FRDPE",
+                "FRBES",
+                "FRDPE",
+                "FRDKK",
+                "FRLEH",
+            ],
             "port_name": [
                 "Somewhere over the rainbow",
                 "Somewhere over the top",
                 "Somewhere over the swell",
                 "Somewhere over the ocean",
                 "Somewhere over the clouds",
+                "Somewhere over the hill",
+                "Somewhere over the clouds",
+                "Somewhere over the swell",
+                "Somewhere over the ocean",
             ],
             "predicted_arrival_datetime_utc": [
                 datetime(2020, 5, 6, 11, 41, 3, 340000),
@@ -332,13 +424,21 @@ def extracted_pnos() -> pd.DataFrame:
                 datetime(2020, 5, 6, 11, 41, 3, 340000),
                 datetime(2020, 5, 6, 11, 41, 3, 340000),
                 datetime(2020, 5, 6, 11, 41, 3, 340000),
+                datetime(2021, 5, 6, 7, 41, 3, 340000),
+                datetime(2021, 5, 6, 7, 41, 3, 340000),
+                datetime(2021, 5, 6, 7, 41, 3, 340000),
+                datetime(2021, 5, 6, 7, 41, 3, 340000),
             ],
             "predicted_landing_datetime_utc": [
                 datetime(2020, 5, 6, 16, 40, 0, 0),
-                pd.NaT,
-                pd.NaT,
-                pd.NaT,
-                pd.NaT,
+                None,
+                None,
+                None,
+                None,
+                datetime(2021, 5, 6, 11, 41, 3, 340000),
+                datetime(2021, 5, 6, 11, 41, 3, 340000),
+                datetime(2021, 5, 6, 11, 41, 3, 340000),
+                datetime(2021, 5, 6, 11, 41, 3, 340000),
             ],
             "trip_gears": [
                 [
@@ -349,6 +449,10 @@ def extracted_pnos() -> pd.DataFrame:
                 [{"gear": "OTT", "mesh": 140, "dimensions": "250.0"}],
                 [{"gear": "OTB", "mesh": 140, "dimensions": "250.0"}],
                 [{"gear": "OTB", "mesh": 140, "dimensions": "250.0"}],
+                [{"gear": "LNP"}],
+                [],
+                [],
+                [{"gear": "LNP"}, {"gear": "OTM", "mesh": 80}],
             ],
             "trip_segments": [
                 [
@@ -364,6 +468,13 @@ def extracted_pnos() -> pd.DataFrame:
                     }
                 ],
                 [],
+                [{"segment": "NWW09", "segmentName": "Lignes"}],
+                [],
+                [],
+                [
+                    {"segment": "NWW09", "segmentName": "Lignes"},
+                    {"segment": "SWW01", "segmentName": "Chaluts de fond"},
+                ],
             ],
             "pno_types": [
                 [
@@ -399,27 +510,63 @@ def extracted_pnos() -> pd.DataFrame:
                     },
                 ],
                 [],
+                [
+                    {
+                        "pnoTypeName": "Préavis type A",
+                        "hasDesignatedPorts": False,
+                        "minimumNotificationPeriod": 4,
+                    }
+                ],
+                [
+                    {
+                        "pnoTypeName": "Préavis type A",
+                        "hasDesignatedPorts": False,
+                        "minimumNotificationPeriod": 4,
+                    }
+                ],
+                [
+                    {
+                        "pnoTypeName": "Préavis type A",
+                        "hasDesignatedPorts": False,
+                        "minimumNotificationPeriod": 4,
+                    }
+                ],
+                [
+                    {
+                        "pnoTypeName": "Préavis type A",
+                        "hasDesignatedPorts": False,
+                        "minimumNotificationPeriod": 4,
+                    },
+                    {
+                        "pnoTypeName": "Préavis type B",
+                        "hasDesignatedPorts": True,
+                        "minimumNotificationPeriod": 4,
+                    },
+                ],
             ],
             "note": [
                 None,
                 None,
-                (
-                    "Attention attention faites bien attention très attention sait-on "
-                    "jamais ce qui pourrait, ô grand Dieu des Poissons qui se font "
-                    "pêcher, nous arriver, si on ne fait pas assez attention à ce qu'y "
-                    "pêche c'te navire d'pêche qui fait d'la pêche de poissons."
-                ),
+                "Attention attention faites bien attention très attention sait-on jamais ce qui pourrait, ô grand Dieu des Poissons qui se font pêcher, nous arriver, si on ne fait pas assez attention à ce qu'y pêche c'te navire d'pêche qui fait d'la pêche de poissons.",
                 None,
                 None,
+                None,
+                None,
+                None,
+                "Ceci est une note de préavis manuel",
             ],
-            "vessel_length": [13.4, None, 17.4, 17.4, 8.58],
-            "mmsi": [None, None, None, None, None],
+            "vessel_length": [13.4, None, 17.4, 17.4, 8.58, 11.5, 12.5, 12.5, 12.5],
+            "mmsi": [None, None, None, None, None, None, None, None, None],
             "risk_factor": [
                 2.09885592141872,
-                None,
+                3.9,
                 2.14443662414848,
                 2.14443662414848,
                 None,
+                2.1,
+                2.8,
+                3.1,
+                3.8,
             ],
             "last_control_datetime_utc": [
                 now - relativedelta(years=1, days=2),
@@ -427,8 +574,12 @@ def extracted_pnos() -> pd.DataFrame:
                 now - relativedelta(months=6, days=6, hours=6),
                 now - relativedelta(months=6, days=6, hours=6),
                 pd.NaT,
+                None,
+                None,
+                None,
+                None,
             ],
-            "last_control_logbook_infractions": [[], [], [], [], []],
+            "last_control_logbook_infractions": [[], [], [], [], [], [], [], [], []],
             "last_control_gear_infractions": [
                 [
                     {
@@ -441,18 +592,36 @@ def extracted_pnos() -> pd.DataFrame:
                 [],
                 [],
                 [],
+                [],
+                [],
+                [],
+                [],
             ],
-            "last_control_species_infractions": [[], [], [], [], []],
+            "last_control_species_infractions": [[], [], [], [], [], [], [], [], []],
             "last_control_other_infractions": [
                 [{"natinf": 2606}, {"natinf": 4761}, {"natinf": 22206}],
                 [],
                 [],
                 [],
                 [],
+                [],
+                [],
+                [],
+                [],
             ],
-            "is_verified": [True, True, False, False, False],
-            "is_being_sent": [True, True, False, True, True],
-            "source": ["LOGBOOK", "LOGBOOK", "LOGBOOK", "LOGBOOK", "LOGBOOK"],
+            "is_verified": [True, True, False, False, False, False, True, False, True],
+            "is_being_sent": [True, True, False, True, True, True, True, False, True],
+            "source": [
+                "LOGBOOK",
+                "LOGBOOK",
+                "LOGBOOK",
+                "LOGBOOK",
+                "LOGBOOK",
+                "MANUAL",
+                "MANUAL",
+                "MANUAL",
+                "MANUAL",
+            ],
         }
     )
 
@@ -461,9 +630,7 @@ def extracted_pnos() -> pd.DataFrame:
 def pno_to_render_1() -> PnoToRender:
     return PnoToRender(
         id=35,
-        operation_number="11",
         operation_datetime_utc=datetime(2024, 5, 5, 8, 13, 38, 259967),
-        operation_type="DAT",
         report_id="11",
         report_datetime_utc=datetime(2024, 5, 5, 8, 11, 38, 259967),
         vessel_id=2,
@@ -601,9 +768,7 @@ def pre_rendered_pno_1_catch_onboard() -> pd.DataFrame:
 def pre_rendered_pno_1(pre_rendered_pno_1_catch_onboard) -> PreRenderedPno:
     return PreRenderedPno(
         id=35,
-        operation_number="11",
         operation_datetime_utc=datetime(2024, 5, 5, 8, 13, 38, 259967),
-        operation_type="DAT",
         report_id="11",
         report_datetime_utc=datetime(2024, 5, 5, 8, 11, 38, 259967),
         vessel_id=2,
@@ -657,9 +822,7 @@ def pre_rendered_pno_1(pre_rendered_pno_1_catch_onboard) -> PreRenderedPno:
 def pno_to_render_2() -> PnoToRender:
     return PnoToRender(
         id=36,
-        operation_number="12",
         operation_datetime_utc=datetime(2024, 5, 5, 8, 48, 38, 259967),
-        operation_type="DAT",
         report_id="12",
         report_datetime_utc=datetime(2024, 5, 5, 8, 46, 38, 259967),
         vessel_id=52,
@@ -696,9 +859,7 @@ def pno_to_render_2() -> PnoToRender:
 def pre_rendered_pno_2() -> PreRenderedPno:
     return PreRenderedPno(
         id=36,
-        operation_number="12",
         operation_datetime_utc=datetime(2024, 5, 5, 8, 48, 38, 259967),
-        operation_type="DAT",
         report_id="12",
         report_datetime_utc=datetime(2024, 5, 5, 8, 46, 38, 259967),
         vessel_id=52,
@@ -1342,7 +1503,7 @@ def test_extract_fishing_gear_names(reset_test_data, fishing_gear_names):
 
 def test_to_pnos_to_render(extracted_pnos):
     res = to_pnos_to_render.run(pnos=extracted_pnos)
-    assert len(res) == 5
+    assert len(res) == 9
     assert isinstance(res[0], PnoToRender)
 
 
@@ -1900,6 +2061,30 @@ def test_make_update_logbook_reports_statement(
     )
 
 
+def test_make_update_manual_prior_notifications_statement(
+    logbook_rendered_pno, manual_rendered_pno
+):
+    statement = make_manual_prior_notifications_statement.run(
+        pnos_to_update=[logbook_rendered_pno, manual_rendered_pno],
+    )
+    assert isinstance(statement, sqlalchemy.TextClause)
+    compiled_statement = str(statement.compile(compile_kwargs={"literal_binds": True}))
+
+    assert compiled_statement == (
+        "UPDATE public.manual_prior_notifications"
+        "    SET value = jsonb_set("
+        "       jsonb_set("
+        "           value,"
+        "            '{isBeingSent}',"
+        "            false::text::jsonb"
+        "       ),"
+        "        '{isSent}',"
+        "        true::text::jsonb"
+        "   ) "
+        "WHERE report_id IN ('Report-2')"
+    )
+
+
 @pytest.mark.parametrize("is_integration", [True, False])
 @patch("src.pipeline.helpers.emails.send_email")
 @patch("src.pipeline.helpers.emails.send_sms")
@@ -1967,16 +2152,16 @@ def test_flow(
         mock_send_sms.assert_not_called()
         mock_send_email.assert_not_called()
     else:
-        assert mock_send_sms.call_count == 2
-        assert mock_send_email.call_count == 3
+        assert mock_send_sms.call_count == 3
+        assert mock_send_email.call_count == 5
 
     final_pdf_documents = read_query(pdf_documents_query, db="monitorfish_remote")
     final_sent_messages = read_query(sent_messages_query, db="monitorfish_remote")
 
-    assert len(initial_pdf_documents) == 5
+    assert len(initial_pdf_documents) == 8
     assert len(initial_sent_messages) == 0
-    assert len(final_pdf_documents) == 9
-    assert len(final_sent_messages) == 7
+    assert len(final_pdf_documents) == 14
+    assert len(final_sent_messages) == 12
 
     if is_integration:
         assert final_sent_messages.success.all()
@@ -1989,7 +2174,7 @@ def test_flow(
                 ),
                 ["success", "error_message"],
             ].values.tolist()
-            == [[False, "Other error: Pouet pouet"]] * 3
+            == [[False, "Other error: Pouet pouet"]] * 5
         )
 
         assert (
@@ -1999,7 +2184,7 @@ def test_flow(
                     == CommunicationMeans.EMAIL.value
                 ]
             )
-            == 4
+            == 7
         )
         assert final_sent_messages.loc[
             (
@@ -2013,7 +2198,7 @@ def test_flow(
                 )
             ),
             ["success", "error_message"],
-        ].values.tolist() == [[False, "Didn't work"]]
+        ].values.tolist() == [[False, "Didn't work"], [False, "Didn't work"]]
         assert final_sent_messages.loc[
             (
                 (
@@ -2029,6 +2214,7 @@ def test_flow(
         ].all()
 
 
+@pytest.mark.parametrize("zero_pno_types", ["manual", "logbook", "both"])
 @pytest.mark.parametrize("is_integration", [True, False])
 @patch("src.pipeline.helpers.emails.send_email")
 @patch("src.pipeline.helpers.emails.send_sms")
@@ -2042,7 +2228,24 @@ def test_flow_with_zero_pno_to_generate(
     monitorenv_control_units_api_response,
     reset_test_data,
     is_integration,
+    zero_pno_types,
 ):
+    # Delete PNO to create a situation with no manual and / or logbook PNO to generate
+    e = create_engine(db="monitorfish_remote")
+    with e.begin() as con:
+        if zero_pno_types in ("logbook", "both"):
+            con.execute(
+                sqlalchemy.text("DELETE FROM logbook_reports WHERE log_type = 'PNO'")
+            )
+
+        if zero_pno_types in ("manual", "both"):
+            con.execute(sqlalchemy.text("DELETE FROM manual_prior_notifications"))
+
+    # start_hours_ago to query PNOs to generate since January 1st 2020
+    start_datetime_utc = datetime(2020, 1, 1)
+    now = datetime.utcnow()
+    start_hours_ago = (now - start_datetime_utc).total_seconds() / 3600
+
     # Mock call to Monitorenv API for control units contacts
     response = Response()
     response.status_code = 200
@@ -2060,7 +2263,7 @@ def test_flow_with_zero_pno_to_generate(
     flow.schedule = None
     state = flow.run(
         is_integration=is_integration,
-        start_hours_ago=0,
+        start_hours_ago=start_hours_ago,
         end_hours_ago=0,
         test_mode=False,
     )
@@ -2096,6 +2299,16 @@ def test_flow_with_zero_pno_to_send(
     mock_send_email.return_value = dict()
     mock_send_sms.return_values = dict()
 
+    # Delete PNOs with is_being_sent = True to create a situation with no PNO to send
+    e = create_engine(db="monitorfish_remote")
+    with e.begin() as con:
+        con.execute(
+            sqlalchemy.text(
+                "DELETE FROM manual_prior_notifications "
+                "WHERE value->>'isBeingSent' = 'true'"
+            )
+        )
+
     # Compute start_hours_ago to query PNO with report_id '13'
     now = datetime.utcnow()
     start_datetime_utc = now - relativedelta(months=1, hours=2, minutes=15)
@@ -2118,6 +2331,5 @@ def test_flow_with_zero_pno_to_send(
     pnos_to_generate = state.result[
         flow.get_tasks("extract_pnos_to_generate")[0]
     ].result[0]
-    assert len(pnos_to_generate) == 1
-    assert pnos_to_generate.loc[0, "operation_number"] == "13"
-    assert pnos_to_generate.loc[0, "is_being_sent"] == False
+    assert len(pnos_to_generate) == 2
+    assert (pnos_to_generate["is_being_sent"] == False).all()

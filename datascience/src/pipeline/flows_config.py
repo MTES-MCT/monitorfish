@@ -88,6 +88,19 @@ distribute_pnos.flow.schedule = Schedule(
     ]
 )
 logbook.flow.schedule = CronSchedule("* * * * *")
+enrich_logbook.flow.schedule = Schedule(
+    clocks=[
+        clocks.CronClock(
+            "1,6,11,16,21,26,31,36,41,46,51,56 * * * *",
+            parameter_defaults={
+                "start_hours_ago": 6,
+                "end_hours_ago": 0,
+                "minutes_per_chunk": 480,
+                "recompute_all": False,
+            },
+        )
+    ]
+)
 enrich_positions.flow.schedule = Schedule(
     clocks=[
         clocks.CronClock(
@@ -283,6 +296,7 @@ flows_to_register = [
     controls.flow,
     controls_open_data.flow,
     current_segments.flow,
+    distribute_pnos.flow,
     districts.flow,
     enrich_logbook.flow,
     enrich_positions.flow,

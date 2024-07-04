@@ -52,6 +52,8 @@ class PNO() : LogbookMessageValue {
     var port: String? = null
     var portName: String? = null
 
+    var riskFactor: Double? = null
+
     @JsonDeserialize(using = ZonedDateTimeDeserializer::class)
     @JsonSerialize(using = ZonedDateTimeSerializer::class)
     var predictedArrivalDatetimeUtc: ZonedDateTime? = null

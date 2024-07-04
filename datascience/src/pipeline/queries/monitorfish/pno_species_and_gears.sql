@@ -21,12 +21,15 @@ pno_species AS (
         flag_state,
         trip_number,
         report_datetime_utc,
+        p.facade,
         (r.value->>'tripStartDate')::TIMESTAMPTZ AS trip_start_date,
         (r.value->>'predictedArrivalDatetimeUtc')::TIMESTAMPTZ AS predicted_arrival_datetime_utc,
         catch->>'species' AS species,
         catch->>'faoZone' AS fao_area,
         (catch->>'weight')::DOUBLE PRECISION AS weight
     FROM logbook_reports r
+    LEFT JOIN ports p
+    ON p.locode = r.value->>'port'
     LEFT JOIN jsonb_array_elements(value->'catchOnboard') catch ON true
     WHERE
         operation_datetime_utc >= :min_pno_date
@@ -99,7 +102,8 @@ SELECT
     COALESCE(fg.far_gears, dg.dep_gears, '[]'::jsonb) AS trip_gears,
     s.fao_area,
     s.weight,
-    s.flag_state
+    s.flag_state,
+    s.facade
 FROM pno_species s
 LEFT JOIN far_gears fg
 ON s.id = fg.id

@@ -11,7 +11,7 @@ class PriorNotificationFaker {
             return PriorNotification(
                 reportId = "FAKE_REPORT_ID_$index",
                 authorTrigram = "ABC",
-                createdAt = ZonedDateTime.now().toString(),
+                createdAt = ZonedDateTime.now(),
                 didNotFishAfterZeroNotice = false,
                 isManuallyCreated = false,
                 logbookMessageTyped = LogbookMessageTyped(
@@ -21,11 +21,11 @@ class PriorNotificationFaker {
                 port = PortFaker.fakePort(),
                 reportingCount = null,
                 seafront = null,
-                sentAt = ZonedDateTime.now().toString(),
+                sentAt = ZonedDateTime.now(),
                 state = null,
-                updatedAt = ZonedDateTime.now().toString(),
+                updatedAt = ZonedDateTime.now(),
                 vessel = VesselFaker.fakeVessel(),
-                vesselRiskFactor = null,
+                lastControlDateTime = null,
             )
         }
     }

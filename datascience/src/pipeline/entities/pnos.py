@@ -33,9 +33,7 @@ class PnoSource(Enum):
 @dataclass(kw_only=True)
 class PnoToRender:
     id: int
-    operation_number: str
     operation_datetime_utc: datetime
-    operation_type: str
     report_id: str
     report_datetime_utc: datetime
     vessel_id: str
@@ -102,9 +100,7 @@ class PnoToRender:
 @dataclass(kw_only=True)
 class PreRenderedPno:
     id: int
-    operation_number: str
     operation_datetime_utc: datetime
-    operation_type: str
     report_id: str
     report_datetime_utc: datetime
     vessel_id: str

@@ -13,7 +13,7 @@ class PriorNotificationDetailDataOutput(
     val isVesselUnderCharter: Boolean?,
     val logbookMessage: LogbookMessageDataOutput,
     val state: PriorNotificationState?,
-    val vesselRiskFactor: Double?,
+    val riskFactor: Double?,
 ) {
     companion object {
         fun fromPriorNotification(priorNotification: PriorNotification): PriorNotificationDetailDataOutput {
@@ -36,7 +36,7 @@ class PriorNotificationDetailDataOutput(
                 isVesselUnderCharter,
                 logbookMessage = logbookMessageDataOutput,
                 state = priorNotification.state,
-                vesselRiskFactor = priorNotification.vesselRiskFactor?.riskFactor,
+                riskFactor = priorNotification.logbookMessageTyped.typedMessage.riskFactor,
             )
         }
     }

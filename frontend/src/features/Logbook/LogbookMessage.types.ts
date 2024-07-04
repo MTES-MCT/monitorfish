@@ -99,6 +99,7 @@ export namespace LogbookMessage {
     predictedArrivalDatetimeUtc: string | undefined
     predictedLandingDatetimeUtc: string | undefined
     purpose: PriorNotification.PurposeCode | undefined
+    riskFactor: number | undefined
     statisticalRectangle: string | undefined
     tripStartDate: string | undefined
   }

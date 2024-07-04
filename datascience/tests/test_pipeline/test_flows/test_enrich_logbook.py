@@ -6,14 +6,17 @@ import pytest
 import pytz
 from sqlalchemy import text
 
+from config import default_risk_factors
 from src.db_config import create_engine
 from src.pipeline.flows.enrich_logbook import (
+    compute_pno_risk_factors,
     compute_pno_segments,
     compute_pno_types,
+    extract_all_control_priorities,
+    extract_control_anteriority,
     extract_pno_species_and_gears,
     extract_pno_trips_period,
     extract_pno_types,
-    extract_risk_factors,
     flag_pnos_to_verify_and_send,
     flow,
     load_enriched_pnos,
@@ -28,11 +31,37 @@ flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_ru
 
 
 @pytest.fixture
-def risk_factors() -> pd.DataFrame:
+def control_anteriority() -> pd.DataFrame:
     return pd.DataFrame(
         {
-            "cfr": ["ABC000306959", "ABC000542519"],
-            "risk_factor": [2.14443662414848, 2.09885592141872],
+            "cfr": ["ABC000055481", "ABC000306959", "OLD_VESSEL_1"],
+            "control_rate_risk_factor": [1.75, 1.75, 1.75],
+            "infraction_rate_risk_factor": [1.0, 1.0, 1.0],
+        }
+    )
+
+
+@pytest.fixture
+def sample_control_anteriority() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "cfr": ["CFR000000001", "CFR000000006", "CFR000000004"],
+            "control_rate_risk_factor": [1.75, 4, 2.5],
+            "infraction_rate_risk_factor": [1.0, 3.0, 1.0],
+        }
+    )
+
+
+@pytest.fixture
+def expected_all_control_priorities() -> pd.DataFrame:
+    current_year = datetime.utcnow().year
+
+    return pd.DataFrame(
+        {
+            "year": [current_year - 1, current_year - 1, current_year, current_year],
+            "facade": ["SA", "SA", "SA", "SA"],
+            "segment": ["SWW01/02/03", "SWW04", "SWW01/02/03", "SWW04"],
+            "control_priority_level": [2.0, 2.0, 1.0, 3.0],
         }
     )
 
@@ -219,16 +248,40 @@ def sample_pno_species_and_gears() -> pd.DataFrame:
                 "FRA",
                 "FRA",
             ],
+            "facade": [
+                "SA",
+                "SA",
+                "MEMN",
+                "SA",
+                "SA",
+                "SA",
+                "NAMO",
+                "NAMO",
+                "NAMO",
+                "MED",
+                "Guadeloupe",
+                "Guadeloupe",
+            ],
         }
     )
 
 
 @pytest.fixture
-def sample_risk_factors() -> pd.DataFrame:
+def sample_all_control_priorities() -> pd.DataFrame:
     return pd.DataFrame(
         {
-            "cfr": ["CFR000000001", "CFR000000002", "CFR000000004", "CFR000000006"],
-            "risk_factor": [1.0, 3.5, 2.6, 2.8],
+            "year": [2023, 2023, 2023, 2023, 2023, 2022, 2022],
+            "facade": ["MED", "MED", "MEMN", "SA", "Guadeloupe", "SA", "MED"],
+            "segment": [
+                "SHKE27",
+                "SOTM",
+                "SOTM",
+                "SxTB8910",
+                "SOTM",
+                "SxTB8910",
+                "SHKE27",
+            ],
+            "control_priority_level": [2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6],
         }
     )
 
@@ -252,6 +305,7 @@ def expected_pno_species_and_gears() -> pd.DataFrame:
             "fao_area": ["27.7.a", None],
             "weight": [1500.0, None],
             "flag_state": ["CYP", "CYP"],
+            "facade": ["MEMN", None],
         }
     )
 
@@ -290,6 +344,7 @@ def segments() -> pd.DataFrame:
                 ["HKE", "COD"],
                 ["HKE", "COD"],
             ],
+            "impact_risk_factor": [2.5, 2.8, 1.9, 3.5, 3.2],
         }
     )
 
@@ -421,6 +476,26 @@ def expected_computed_pno_segments() -> pd.DataFrame:
                 [{"segment": "SOTM", "segmentName": "Chaluts pélagiques"}],
                 [{"segment": "SSB", "segmentName": "Senne de plage"}],
             ],
+            "impact_risk_factor": [
+                default_risk_factors["impact_risk_factor"],
+                default_risk_factors["impact_risk_factor"],
+                default_risk_factors["impact_risk_factor"],
+                3.5,
+                2.5,
+                2.8,
+                2.5,
+                1.9,
+            ],
+            "control_priority_level": [
+                default_risk_factors["control_priority_level"],
+                default_risk_factors["control_priority_level"],
+                default_risk_factors["control_priority_level"],
+                2.3,
+                default_risk_factors["control_priority_level"],
+                2.1,
+                2.4,
+                default_risk_factors["control_priority_level"],
+            ],
         }
     )
 
@@ -463,6 +538,7 @@ def pnos_to_load() -> pd.DataFrame:
             "is_verified": [False, False],
             "is_sent": [False, False],
             "is_being_sent": [True, False],
+            "risk_factor": [1.0, 3.8],
         }
     )
 
@@ -704,19 +780,63 @@ def merged_pnos() -> pd.DataFrame:
                 [{"segment": "SOTM", "segmentName": "Chaluts pélagiques"}],
                 [{"segment": "SSB", "segmentName": "Senne de plage"}],
             ],
-            "risk_factor": [1.0, 3.5, None, 2.6, None, 2.8, 1.0, None],
+            "impact_risk_factor": [
+                default_risk_factors["impact_risk_factor"],
+                default_risk_factors["impact_risk_factor"],
+                default_risk_factors["impact_risk_factor"],
+                3.5,
+                2.5,
+                2.8,
+                2.5,
+                1.9,
+            ],
+            "control_priority_level": [
+                default_risk_factors["control_priority_level"],
+                default_risk_factors["control_priority_level"],
+                default_risk_factors["control_priority_level"],
+                2.3,
+                default_risk_factors["control_priority_level"],
+                2.1,
+                2.4,
+                default_risk_factors["control_priority_level"],
+            ],
         }
     )
 
 
 @pytest.fixture
-def flagged_pnos(merged_pnos) -> pd.DataFrame:
-    return merged_pnos.assign(
-        is_in_verification_scope=[False, True, True, True, False, True, False, False],
+def pnos_with_risk_factors(merged_pnos) -> pd.DataFrame:
+    return merged_pnos.drop(
+        columns=["impact_risk_factor", "control_priority_level"]
+    ).assign(
+        risk_factor=[
+            1.15016332,
+            1.74110113,
+            1.74110113,
+            1.98943874,
+            2.09127911,
+            2.90829063,
+            1.71949265,
+            1.97958756,
+        ]
+    )
+
+
+@pytest.fixture
+def flagged_pnos(pnos_with_risk_factors) -> pd.DataFrame:
+    return pnos_with_risk_factors.assign(
+        is_in_verification_scope=[False, False, True, False, False, True, False, False],
         is_verified=[False, False, False, False, False, False, False, False],
         is_sent=[False, False, False, False, False, False, False, False],
         is_being_sent=[False, False, False, False, True, False, True, True],
     )
+
+
+def test_extract_all_control_priorities(
+    reset_test_data, expected_all_control_priorities
+):
+    res = extract_all_control_priorities.run()
+    pd.testing.assert_frame_equal(res, expected_all_control_priorities)
 
 
 def test_extract_pno_types(reset_test_data, expected_pno_types):
@@ -755,9 +875,9 @@ def test_extract_pno_species_and_gears(reset_test_data, expected_pno_species_and
     )
 
 
-def test_extract_risk_factors(reset_test_data, risk_factors):
-    res = extract_risk_factors.run()
-    pd.testing.assert_frame_equal(res, risk_factors)
+def test_extract_control_anteriority(reset_test_data, control_anteriority):
+    res = extract_control_anteriority.run()
+    pd.testing.assert_frame_equal(res, control_anteriority)
 
 
 def test_compute_pno_types(
@@ -781,9 +901,12 @@ def test_compute_pno_segments(
     reset_test_data,
     sample_pno_species_and_gears,
     segments,
+    sample_all_control_priorities,
     expected_computed_pno_segments,
 ):
-    res = compute_pno_segments(sample_pno_species_and_gears, segments)
+    res = compute_pno_segments(
+        sample_pno_species_and_gears, segments, sample_all_control_priorities
+    )
     pd.testing.assert_frame_equal(res, expected_computed_pno_segments)
 
 
@@ -791,10 +914,13 @@ def test_compute_pno_segments_with_empty_gears_only(
     reset_test_data,
     sample_pno_species_and_gears,
     segments,
+    sample_all_control_priorities,
     expected_computed_pno_segments,
 ):
     assert sample_pno_species_and_gears.loc[2, "trip_gears"] == []
-    res = compute_pno_segments(sample_pno_species_and_gears.loc[[2]], segments)
+    res = compute_pno_segments(
+        sample_pno_species_and_gears.loc[[2]], segments, sample_all_control_priorities
+    )
     pd.testing.assert_frame_equal(
         res, expected_computed_pno_segments.loc[[2]].reset_index(drop=True)
     )
@@ -803,20 +929,28 @@ def test_compute_pno_segments_with_empty_gears_only(
 def test_merge_pnos_data(
     expected_computed_pno_types,
     expected_computed_pno_segments,
-    sample_risk_factors,
     merged_pnos,
 ):
     res = merge_pnos_data(
         expected_computed_pno_types,
         expected_computed_pno_segments,
-        sample_risk_factors,
     )
     pd.testing.assert_frame_equal(res, merged_pnos)
 
 
-def test_flag_pnos_to_verify_and_send(merged_pnos, flagged_pnos):
-    res = flag_pnos_to_verify_and_send(
+def test_compute_pno_risk_factors(
+    merged_pnos, sample_control_anteriority, pnos_with_risk_factors
+):
+    res = compute_pno_risk_factors(
         pnos=merged_pnos,
+        control_anteriority=sample_control_anteriority,
+    )
+    pd.testing.assert_frame_equal(res, pnos_with_risk_factors)
+
+
+def test_flag_pnos_to_verify_and_send(pnos_with_risk_factors, flagged_pnos):
+    res = flag_pnos_to_verify_and_send(
+        pnos=pnos_with_risk_factors,
         predicted_arrival_threshold=datetime(2023, 5, 4, 14, 12, 25),
     )
     pd.testing.assert_frame_equal(res, flagged_pnos)
@@ -907,7 +1041,7 @@ def test_load_then_reset_logbook(
 
 def test_flow(reset_test_data):
     query = (
-        "SELECT id, enriched, trip_gears, value->'pnoTypes' AS pno_types, trip_segments "
+        "SELECT id, enriched, trip_gears, value->'pnoTypes' AS pno_types, (value->>'riskFactor')::DOUBLE PRECISION AS risk_factor, trip_segments "
         "FROM logbook_reports "
         "WHERE "
         "   log_type = 'PNO' AND "
@@ -928,6 +1062,7 @@ def test_flow(reset_test_data):
     end_hours_ago = int((now - pno_end_date).total_seconds() / 3600)
     minutes_per_chunk = 2 * 24 * 60
 
+    flow.schedule = None
     # First run
     state = flow.run(
         start_hours_ago=start_hours_ago,

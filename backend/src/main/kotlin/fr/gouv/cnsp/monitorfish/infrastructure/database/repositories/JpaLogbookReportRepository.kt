@@ -1,6 +1,5 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
-import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
@@ -20,9 +19,6 @@ import org.springframework.data.jpa.repository.Modifying
 import org.springframework.stereotype.Repository
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
-import kotlin.reflect.full.declaredMemberProperties
-import kotlin.reflect.jvm.isAccessible
-import kotlin.reflect.jvm.javaField
 
 @Repository
 class JpaLogbookReportRepository(
@@ -362,23 +358,38 @@ class JpaLogbookReportRepository(
         logbookReportEntities
             .filter { it.operationType in listOf(LogbookOperationType.DAT, LogbookOperationType.COR) }
             .map { logbookReportEntity ->
-                val messageMap: MutableMap<String, Any> = objectMapper
-                    .readValue(logbookReportEntity.message, object : TypeReference<MutableMap<String, Any>>() {})
-                messageMap["isBeingSent"] = isBeingSent
-                messageMap["isVerified"] = isVerified
+                val pnoMessage = objectMapper.readValue(logbookReportEntity.message, PNO::class.java)
+                pnoMessage.isBeingSent = isBeingSent
+                pnoMessage.isVerified = isVerified
 
-                val nextMessage = objectMapper.writeValueAsString(messageMap)
+                val nextMessage = objectMapper.writeValueAsString(pnoMessage)
 
-                // We use a reflection to update the entity `message` prop since it's immutable
-                val messageField = LogbookReportEntity::class.declaredMemberProperties.find { it.name == "message" }
-                messageField?.let {
-                    it.isAccessible = true
-                    val field = it.javaField
-                    field?.isAccessible = true
-                    field?.set(logbookReportEntity, nextMessage)
-                }
+                val updatedEntity = logbookReportEntity.copy(message = nextMessage)
 
-                dbLogbookReportRepository.save(logbookReportEntity)
+                dbLogbookReportRepository.save(updatedEntity)
+            }
+    }
+
+    @Transactional
+    override fun updatePriorNotificationNote(reportId: String, note: String?) {
+        val logbookReportEntities =
+            dbLogbookReportRepository.findEnrichedPnoReferenceAndRelatedOperationsByReportId(reportId)
+        if (logbookReportEntities.isEmpty()) {
+            throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
+        }
+
+        // We need to update both DAT and related COR operations (which also covers orphan COR cases)
+        logbookReportEntities
+            .filter { it.operationType in listOf(LogbookOperationType.DAT, LogbookOperationType.COR) }
+            .map { logbookReportEntity ->
+                val pnoMessage = objectMapper.readValue(logbookReportEntity.message, PNO::class.java)
+                pnoMessage.note = note
+
+                val nextMessage = objectMapper.writeValueAsString(pnoMessage)
+
+                val updatedEntity = logbookReportEntity.copy(message = nextMessage)
+
+                dbLogbookReportRepository.save(updatedEntity)
             }
     }
 

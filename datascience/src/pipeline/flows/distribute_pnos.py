@@ -501,14 +501,17 @@ def render_pno(
         note=pno.note,
     )
 
+    sms_date_format = "%d/%m/%Y, %Hh%M UTC"
     sms_content = sms_template.render(
         vessel_name=pno.vessel_name,
         cfr=pno.cfr,
-        trip_segments=", ".join([f"{s.code} ({s.name})" for s in pno.trip_segments]),
+        trip_segments=", ".join([f"{s.code}" for s in pno.trip_segments]),
         risk_factor=pno.risk_factor,
-        report_datetime_utc=format_nullable_datetime(pno.report_datetime_utc),
+        predicted_landing_datetime_utc=format_nullable_datetime(
+            pno.predicted_landing_datetime_utc, format=sms_date_format
+        ),
         predicted_arrival_datetime_utc=format_nullable_datetime(
-            pno.predicted_arrival_datetime_utc
+            pno.predicted_arrival_datetime_utc, format=sms_date_format
         ),
         port_name=pno.port_name,
         note=pno.note,

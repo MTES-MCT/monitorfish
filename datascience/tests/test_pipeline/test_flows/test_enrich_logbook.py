@@ -1062,6 +1062,7 @@ def test_flow(reset_test_data):
     end_hours_ago = int((now - pno_end_date).total_seconds() / 3600)
     minutes_per_chunk = 2 * 24 * 60
 
+    flow.schedule = None
     # First run
     state = flow.run(
         start_hours_ago=start_hours_ago,

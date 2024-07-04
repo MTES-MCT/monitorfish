@@ -165,7 +165,7 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
                 isDisabled={dirty && (!isSent || !isPendingSend)}
                 isPdfDocumentAvailable={isSent}
                 pnoLogbookMessage={editedPriorNotificationDetail.logbookMessage}
-                reportId={editedPriorNotificationDetail.reportId}
+                reportId={editedPriorNotificationDetail.id}
               />
             )}
 

@@ -1926,19 +1926,19 @@ def test_create_email(
     assert part1.get_charsets() == ["utf-8"]
     assert part1.get_content() == "<html>Ce navire va débarquer</html>\n"
 
-    assert part2.is_attachment()
+    assert not part2.is_attachment()
     assert part2.get_content_type() == "image/jpeg"
     assert part2["Content-ID"] == "<logos_cnsp_crossa_cacem.jpg>"
     assert part2.get_filename() == "logos_cnsp_crossa_cacem.jpg"
     assert part2.get_content() == cnsp_crossa_cacem_logos
 
-    assert part3.is_attachment()
+    assert not part3.is_attachment()
     assert part3.get_content_type() == "image/gif"
     assert part3["Content-ID"] == "<liberte_egalite_fraternite.gif>"
     assert part3.get_filename() == "liberte_egalite_fraternite.gif"
     assert part3.get_content() == liberte_egalite_fraternite_gif
 
-    assert part4.is_attachment()
+    assert not part4.is_attachment()
     assert part4.get_content_type() == "image/gif"
     assert part4["Content-ID"] == "<marianne.gif>"
     assert part4.get_filename() == "marianne.gif"

@@ -2,7 +2,6 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.SeafrontGroup
-import fr.gouv.cnsp.monitorfish.domain.entities.facade.hasSeafront
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationStats
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
@@ -40,11 +39,10 @@ class GetPriorNotifications(
         val manualPriorNotifications = manualPriorNotificationRepository.findAll(filter)
         val incompletePriorNotifications = automaticPriorNotifications + manualPriorNotifications
 
-        val filteredIncompletePriorNotifications = incompletePriorNotifications
+        val undeletedPriorNotifications = incompletePriorNotifications
             .filter { !it.logbookMessageTyped.logbookMessage.isDeleted }
-            .filter { seafrontGroup.hasSeafront(it.seafront) }
 
-        val priorNotifications = filteredIncompletePriorNotifications
+        val priorNotifications = undeletedPriorNotifications
             .map { priorNotification ->
                 priorNotification.enrich(allPorts, allRiskFactors, allVessels, priorNotification.isManuallyCreated)
                 priorNotification.logbookMessageTyped.logbookMessage
@@ -53,7 +51,7 @@ class GetPriorNotifications(
                 priorNotification
             }
 
-        val sortedPriorNotifications = when (sortDirection) {
+        val sortedAndFilteredPriorNotifications = when (sortDirection) {
             Sort.Direction.ASC -> priorNotifications.sortedWith(
                 compareBy(
                     { getSortKey(it, sortColumn) },
@@ -66,7 +64,7 @@ class GetPriorNotifications(
                 compareByDescending<PriorNotification> { getSortKey(it, sortColumn) }
                     .thenByDescending { it.logbookMessageTyped.logbookMessage.id }, // Tie-breaker
             )
-        }
+        }.filter { seafrontGroup.hasSeafront(it.seafront) }
 
         val extraData = PriorNotificationStats(
             perSeafrontGroupCount = SeafrontGroup.entries.associateWith { seafrontGroupEntry ->
@@ -77,7 +75,7 @@ class GetPriorNotifications(
         )
 
         val paginatedList = PaginatedList.new(
-            sortedPriorNotifications,
+            sortedAndFilteredPriorNotifications,
             pageNumber,
             pageSize,
             extraData,

@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.facade
 
 /**
- * This Facade enum is used as a type safeguard to prevent storing any string to a postgres `facade` column
+ * This Seafront enum is used as a type safeguard to prevent storing any string to a postgres `facade` column
  */
 enum class Seafront(private val storedValue: String) {
     MARTINIQUE("Martinique"),

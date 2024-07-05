@@ -856,6 +856,15 @@ def test_extract_pno_trips_period(reset_test_data):
     assert trips_period == expected_trips_period
 
 
+def test_extract_pno_trips_period_when_no_pno_is_in_queried_period(reset_test_data):
+    pno_period = Period(
+        start=datetime(1950, 1, 1, 0, 0, 0), end=datetime(1950, 1, 1, 0, 0, 0)
+    )
+
+    trips_period = extract_pno_trips_period(period=pno_period)
+    assert trips_period is None
+
+
 def test_extract_pno_species_and_gears(reset_test_data, expected_pno_species_and_gears):
     pno_species_and_gears = extract_pno_species_and_gears(
         pno_emission_period=Period(
@@ -1142,3 +1151,15 @@ def test_flow(reset_test_data):
     # After third run with reset, manual modifications on PNO n°14 should be erased and
     # recomputed.
     pd.testing.assert_frame_equal(pnos_after_first_run, pnos_after_third_run_with_reset)
+
+
+def test_flow_with_no_pno_in_period(reset_test_data):
+    flow.schedule = None
+    state = flow.run(
+        start_hours_ago=0,
+        end_hours_ago=0,
+        minutes_per_chunk=10,
+        recompute_all=False,
+    )
+    assert state.is_successful()
+    assert state.result[flow.get_tasks("extract_enrich_load_logbook")[0]].is_skipped()

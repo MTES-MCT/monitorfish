@@ -6,6 +6,7 @@ import duckdb
 import pandas as pd
 import prefect
 from prefect import Flow, Parameter, case, task, unmapped
+from prefect.engine.signals import SKIP
 from sqlalchemy import text
 
 from config import (
@@ -101,10 +102,20 @@ def extract_pno_trips_period(period: Period) -> Period:
             "pno_emission_end_datetime_utc": period.end,
         },
     )
-    return Period(
-        start=dates.loc[0, "min_trip_start_date"].to_pydatetime(),
-        end=dates.loc[0, "max_predicted_arrival_datetime_utc"].to_pydatetime(),
-    )
+
+    assert len(dates) == 1
+    dates = dates.iloc[0].to_dict()
+
+    min_trip_start_date = dates["min_trip_start_date"]
+    max_predicted_arrival_datetime_utc = dates["max_predicted_arrival_datetime_utc"]
+
+    if min_trip_start_date and max_predicted_arrival_datetime_utc:
+        return Period(
+            start=min_trip_start_date.to_pydatetime(),
+            end=max_predicted_arrival_datetime_utc.to_pydatetime(),
+        )
+    else:
+        return None
 
 
 def extract_pno_species_and_gears(
@@ -577,6 +588,8 @@ def extract_enrich_load_logbook(
     logger.info(f"Processing pnos for period {period.start} - {period.end}.")
 
     trips_period = extract_pno_trips_period(period)
+    if trips_period is None:
+        raise SKIP("No PNO to enrich.")
 
     logger.info("Extracting PNOs...")
     pnos_species_and_gears = extract_pno_species_and_gears(

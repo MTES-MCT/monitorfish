@@ -56,7 +56,6 @@ export function PriorNotificationCard() {
     state => state.displayedError.sideWindowPriorNotificationCardError
   )
   const [isLoading, setIsLoading] = useState(false)
-  const isPendingSend = priorNotificationDetail?.state === PriorNotification.State.PENDING_SEND
   const isSent = [PriorNotification.State.SENT, PriorNotification.State.VERIFIED_AND_SENT].includes(
     priorNotificationDetail?.state as any
   )
@@ -180,7 +179,7 @@ export function PriorNotificationCard() {
                   <FormikTextarea
                     label="Points d'attention identifiés par le CNSP"
                     name="note"
-                    readOnly={isPendingSend || isSent || !isSuperUser}
+                    readOnly={!isSuperUser}
                   />
                 </FieldGroup>
               </>
@@ -193,14 +192,13 @@ export function PriorNotificationCard() {
             </Button>
 
             <DownloadButton
-              isPdfDocumentAvailable={isSent}
               pnoLogbookMessage={priorNotificationDetail.logbookMessage}
               reportId={priorNotificationDetail.id}
             />
 
             <Button
               accent={Accent.PRIMARY}
-              disabled={isPendingSend || isSent}
+              disabled={isSent}
               Icon={isSent ? Icon.Check : Icon.Send}
               onClick={verifyAndSend}
             >

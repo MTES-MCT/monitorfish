@@ -184,7 +184,7 @@ context('Side Window > Prior Notification Card > Card', () => {
     })
   })
 
-  it('Should update a note', () => {
+  it('Should update a note and delete the current PDF', () => {
     // Given
     openSideWindowPriorNotification(`CALAMARO`)
     cy.get('*[name="note"]').should('have.value', '')
@@ -195,7 +195,11 @@ context('Side Window > Prior Notification Card > Card', () => {
     cy.get('*[name="note"]').should('have.value', "Un point d'attention.")
     cy.wait('@updatePriorNotificationNote')
 
-    // Then, the note is saved
+    // Then, the PDF is deleted
+    cy.clickButton('Télécharger les documents')
+    cy.get('li[aria-disabled="true"]').contains('Préavis de débarquement (Document non généré)')
+
+    // The note is saved
     openSideWindowPriorNotification(`CALAMARO`)
     cy.get('*[name="note"]').should('have.value', "Un point d'attention.")
   })

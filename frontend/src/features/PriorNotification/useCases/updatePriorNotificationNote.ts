@@ -17,6 +17,8 @@ export const updatePriorNotificationNote =
           reportId
         })
       ).unwrap()
+
+      await dispatch(priorNotificationApi.endpoints.getPriorNotificationPDF.initiate(reportId)).unwrap()
     } catch (err) {
       if (err instanceof FrontendApiError) {
         dispatch(displayOrLogError(err, undefined, true, DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR))

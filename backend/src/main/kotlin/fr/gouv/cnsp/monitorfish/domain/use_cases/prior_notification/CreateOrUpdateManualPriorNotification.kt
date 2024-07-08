@@ -7,10 +7,9 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.ManualPriorNotificationComputedValues
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationType
-import fr.gouv.cnsp.monitorfish.domain.repositories.GearRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.ManualPriorNotificationRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.*
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
 @UseCase
@@ -20,8 +19,11 @@ class CreateOrUpdateManualPriorNotification(
     private val portRepository: PortRepository,
     private val vesselRepository: VesselRepository,
     private val computeManualPriorNotification: ComputeManualPriorNotification,
+    private val priorNotificationPdfDocumentRepository: PriorNotificationPdfDocumentRepository,
     private val getPriorNotification: GetPriorNotification,
 ) {
+    private val logger: Logger = LoggerFactory.getLogger(CreateOrUpdateManualPriorNotification::class.java)
+
     fun execute(
         hasPortEntranceAuthorization: Boolean,
         hasPortLandingAuthorization: Boolean,
@@ -126,6 +128,14 @@ class CreateOrUpdateManualPriorNotification(
             updatedAt = null,
         )
 
+        if (reportId !== null) {
+            try {
+                priorNotificationPdfDocumentRepository.deleteByReportId(reportId)
+            } catch (e: Exception) {
+                logger.warn("Could not delete existing PDF document", e)
+            }
+        }
+
         val newOrCurrentReportId = manualPriorNotificationRepository.save(newOrNextPriorNotification)
         val createdOrUpdatedPriorNotification = getPriorNotification.execute(newOrCurrentReportId, true)
 
@@ -164,10 +174,10 @@ class CreateOrUpdateManualPriorNotification(
             // so we transform that single FAO area into an FAO area per fishing catch.
             // This means we don't need to set a global PNO message FAO area here.
             this.faoZone = null
-            this.isBeingSent = isInVerificationScope
+            this.isBeingSent = false
             this.isInVerificationScope = isInVerificationScope
             this.isSent = false
-            this.isVerified = existingPnoValue?.isVerified ?: false
+            this.isVerified = false
             this.latitude = null
             this.longitude = null
             this.note = note

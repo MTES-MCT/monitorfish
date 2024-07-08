@@ -55,6 +55,8 @@ export const openPriorNotificationCard =
       dispatch(priorNotificationActions.openPriorNotificationCard())
     } catch (err) {
       if (err instanceof FrontendApiError) {
+        dispatch(priorNotificationActions.openPriorNotificationCard())
+
         dispatch(
           displayOrLogError(
             err,

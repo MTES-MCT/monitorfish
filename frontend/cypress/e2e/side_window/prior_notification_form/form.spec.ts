@@ -323,6 +323,9 @@ context('Side Window > Prior Notification Form > Form', () => {
           reportId: createdPriorNotification.reportId
         })
 
+        cy.clickButton('Télécharger les documents')
+        cy.get('li[aria-disabled="true"]').contains('Préavis de débarquement (Document non généré)')
+
         // -----------------------------------------------------------------------
         // List
 
@@ -429,6 +432,24 @@ context('Side Window > Prior Notification Form > Form', () => {
     cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 6)
   })
 
+  it('Should permit the resending of an updated manual PNO', () => {
+    // Given
+    cy.intercept(
+      'POST',
+      '/bff/v1/prior_notifications/00000000-0000-4000-0000-000000000002/verify_and_send?isManuallyCreated=true'
+    ).as('verifyAndSendPriorNotification')
+    editSideWindowPriorNotification('DOS FIN', '00000000-0000-4000-0000-000000000002')
+    cy.get('button').contains('Diffusé')
+    cy.fill('Saisi par', 'BOB')
+
+    // When
+    cy.clickButton('Enregistrer')
+
+    // Then
+    cy.clickButton('Diffuser')
+    cy.wait('@verifyAndSendPriorNotification')
+  })
+
   it('Should verify and send a manual prior notification', () => {
     // -------------------------------------------------------------------------
     // Add
@@ -484,7 +505,7 @@ context('Side Window > Prior Notification Form > Form', () => {
         cy.get('.Element-Tag').contains('Hors diffusion').should('exist')
 
         // -----------------------------------------------------------------------
-        // Veryify and send
+        // Verify and send
 
         cy.intercept(
           'POST',

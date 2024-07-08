@@ -186,10 +186,10 @@ interface DBLogbookReportRepository :
     @Query(
         """
         WITH
-           dat_and_cor_logbook_report_report_ids AS (
+           dats_cors AS (
                 -- Get the logbook report reference (DAT operation)
                 -- It may not exist while a COR operation would still exist (orphan COR case)
-                SELECT report_id
+                SELECT *
                 FROM logbook_reports
                 WHERE
                     report_id = :reportId
@@ -197,23 +197,51 @@ interface DBLogbookReportRepository :
                     AND operation_type = 'DAT'
                     AND enriched = TRUE
 
-                UNION
+                UNION ALL
 
                 -- Get the logbook report corrections which may be used as base for the "final" report
-                SELECT report_id
+                SELECT *
                 FROM logbook_reports
                 WHERE
                     referenced_report_id = :reportId
                     AND log_type = 'PNO'
                     AND operation_type = 'COR'
                     AND enriched = TRUE
+           ),
+
+           dels AS (
+               SELECT *
+               FROM logbook_reports
+               WHERE
+                   operation_type = 'DEL'
+                   AND referenced_report_id IN (SELECT report_id FROM dats_cors)
+           ),
+
+           rets AS (
+               SELECT *
+               FROM logbook_reports
+               WHERE
+                   operation_type = 'RET'
+                   AND referenced_report_id IN (
+                       SELECT report_id FROM dats_cors
+                       UNION ALL
+                       SELECT report_id FROM dels
+                   )
            )
 
         SELECT *
-        FROM logbook_reports
-        WHERE
-            report_id IN (SELECT * FROM dat_and_cor_logbook_report_report_ids)
-            OR referenced_report_id IN (SELECT * FROM dat_and_cor_logbook_report_report_ids)
+        FROM dats_cors
+
+        UNION ALL
+
+        SELECT *
+        FROM dels
+
+        UNION ALL
+
+        SELECT *
+        FROM rets
+
         ORDER BY report_datetime_utc;
         """,
         nativeQuery = true,

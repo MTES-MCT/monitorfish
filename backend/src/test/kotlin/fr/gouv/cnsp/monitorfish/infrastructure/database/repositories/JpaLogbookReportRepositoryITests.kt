@@ -1174,8 +1174,14 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // Then
         val updatedDatReport = jpaLogbookReportRepository.findById(109)
         assertThat((updatedDatReport.message as PNO).note).isEqualTo("A wonderful note")
+        assertThat((updatedDatReport.message as PNO).isBeingSent).isEqualTo(false)
+        assertThat((updatedDatReport.message as PNO).isVerified).isEqualTo(false)
+        assertThat((updatedDatReport.message as PNO).isSent).isEqualTo(false)
         val updatedCorReport = jpaLogbookReportRepository.findById(1109)
         assertThat((updatedCorReport.message as PNO).note).isEqualTo("A wonderful note")
+        assertThat((updatedCorReport.message as PNO).isBeingSent).isEqualTo(false)
+        assertThat((updatedCorReport.message as PNO).isVerified).isEqualTo(false)
+        assertThat((updatedCorReport.message as PNO).isSent).isEqualTo(false)
     }
 
     companion object {

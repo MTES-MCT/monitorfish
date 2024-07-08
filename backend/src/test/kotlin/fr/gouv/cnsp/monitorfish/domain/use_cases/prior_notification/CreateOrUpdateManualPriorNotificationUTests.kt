@@ -4,10 +4,7 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagePurpose
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.ManualPriorNotificationComputedValues
-import fr.gouv.cnsp.monitorfish.domain.repositories.GearRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.ManualPriorNotificationRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import fr.gouv.cnsp.monitorfish.fakers.PriorNotificationFaker
 import fr.gouv.cnsp.monitorfish.fakers.VesselFaker
 import org.assertj.core.api.Assertions.assertThat
@@ -37,6 +34,9 @@ class CreateOrUpdateManualPriorNotificationUTests {
     @MockBean
     private lateinit var getPriorNotification: GetPriorNotification
 
+    @MockBean
+    private lateinit var priorNotificationPdfDocumentRepository: PriorNotificationPdfDocumentRepository
+
     @Test
     fun `execute Should update a manual prior notification`() {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
@@ -62,6 +62,7 @@ class CreateOrUpdateManualPriorNotificationUTests {
             portRepository,
             vesselRepository,
             computeManualPriorNotification,
+            priorNotificationPdfDocumentRepository,
             getPriorNotification,
         ).execute(
             hasPortEntranceAuthorization = true,

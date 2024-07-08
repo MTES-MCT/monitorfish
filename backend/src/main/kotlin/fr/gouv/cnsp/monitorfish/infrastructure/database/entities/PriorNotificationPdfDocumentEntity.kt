@@ -14,10 +14,12 @@ data class PriorNotificationPdfDocumentEntity(
     @Id
     @Column(name = "report_id")
     val reportId: String,
+
     @Column(name = "source", columnDefinition = "prior_notification_source")
     @Enumerated(EnumType.STRING)
     @JdbcType(PostgreSQLEnumJdbcType::class)
     val source: PriorNotificationSource,
+
     @Column(name = "generation_datetime_utc")
     val generationDatetimeUtc: ZonedDateTime,
 

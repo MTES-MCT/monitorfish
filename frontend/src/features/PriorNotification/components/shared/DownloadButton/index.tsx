@@ -1,5 +1,7 @@
+import { RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { useGetGearsQuery } from '@api/gear'
 import { getAlpha2CodeFromAlpha2or3Code } from '@components/CountryFlag/utils'
+import { useGetPriorNotificationPDFQuery } from '@features/PriorNotification/priorNotificationApi'
 import { Accent, customDayjs, Dropdown, Icon } from '@mtes-mct/monitor-ui'
 import printJS from 'print-js'
 import { useMemo } from 'react'
@@ -12,18 +14,14 @@ import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 
 type DownloadButtonProps = Readonly<{
   isDisabled?: boolean
-  isPdfDocumentAvailable: boolean
   pnoLogbookMessage: LogbookMessage.PnoLogbookMessage
   reportId: string
 }>
-export function DownloadButton({
-  isDisabled = false,
-  isPdfDocumentAvailable,
-  pnoLogbookMessage,
-  reportId
-}: DownloadButtonProps) {
+export function DownloadButton({ isDisabled = false, pnoLogbookMessage, reportId }: DownloadButtonProps) {
   const isSuperUser = useIsSuperUser()
   const getGearsApiQuery = useGetGearsQuery()
+  const { isError } = useGetPriorNotificationPDFQuery(reportId, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS)
+  const isPriorNotificationPDFDocumentAvailable = useMemo(() => !isError, [isError])
 
   const gearsWithName = useMemo(() => {
     if (!getGearsApiQuery.data || !pnoLogbookMessage?.tripGears) {
@@ -51,9 +49,15 @@ export function DownloadButton({
   return (
     <Dropdown accent={Accent.SECONDARY} Icon={Icon.Download} placement="topEnd" title="Télécharger les documents">
       <>
-        {isPdfDocumentAvailable && (
-          <Dropdown.Item onClick={() => window.open(`/bff/v1/prior_notifications/${reportId}/pdf`, '_blank')}>
-            Préavis de débarquement (à destination des unités)
+        {!isPriorNotificationPDFDocumentAvailable && (
+          <Dropdown.Item disabled>Préavis de débarquement (Document non généré)</Dropdown.Item>
+        )}
+        {isPriorNotificationPDFDocumentAvailable && (
+          <Dropdown.Item
+            disabled={isDisabled}
+            onClick={() => window.open(`/bff/v1/prior_notifications/${reportId}/pdf`, '_blank')}
+          >
+            Préavis de débarquement (à destination des unités) {isDisabled && '(Veuillez enregistrer le préavis)'}
           </Dropdown.Item>
         )}
         {/** If the form is dirty (has been modified), the export will be outdated. */}

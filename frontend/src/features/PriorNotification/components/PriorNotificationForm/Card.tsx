@@ -181,8 +181,7 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
 
             {!!editedPriorNotificationDetail && (
               <DownloadButton
-                isDisabled={dirty && (!isSent || !isPendingSend)}
-                isPdfDocumentAvailable={isSent}
+                isDisabled={dirty}
                 pnoLogbookMessage={editedPriorNotificationDetail.logbookMessage}
                 reportId={editedPriorNotificationDetail.id}
               />
@@ -190,7 +189,7 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
 
             <Button
               accent={Accent.PRIMARY}
-              disabled={!dirty || isPendingSend || isSent || (isValidatingOnChange && !isValid)}
+              disabled={!dirty || (isValidatingOnChange && !isValid)}
               onClick={handleSubmit}
             >
               {isNewPriorNotification ? 'Créer le préavis' : 'Enregistrer'}

@@ -17,7 +17,6 @@ export const openPriorNotificationCard =
   async dispatch => {
     try {
       dispatch(displayedErrorActions.unset(DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_CARD_ERROR))
-      dispatch(priorNotificationActions.openPriorNotificationCard())
 
       const priorNotificationDetail = await dispatch(
         priorNotificationApi.endpoints.getPriorNotificationDetail.initiate({
@@ -53,8 +52,11 @@ export const openPriorNotificationCard =
           reportId
         })
       )
+      dispatch(priorNotificationActions.openPriorNotificationCard())
     } catch (err) {
       if (err instanceof FrontendApiError) {
+        dispatch(priorNotificationActions.openPriorNotificationCard())
+
         dispatch(
           displayOrLogError(
             err,

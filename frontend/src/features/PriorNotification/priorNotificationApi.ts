@@ -18,6 +18,7 @@ const GET_PRIOR_NOTIFICATION_DATA_ERROR_MESSAGE = "Nous n'avons pas pu récupér
 const GET_PRIOR_NOTIFICATION_DETAIL_ERROR_MESSAGE = "Nous n'avons pas pu récupérer le préavis."
 const GET_PRIOR_NOTIFICATIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la liste des préavis."
 const GET_PRIOR_NOTIFICATION_TYPES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la liste des types de préavis."
+const GET_PRIOR_NOTIFICATION_PDF_ERROR_MESSAGE = "Nous n'avons pas pu récupérer le PDF du préavis."
 const VERIFY_AND_SEND_PRIOR_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu vérifier et envoyer le préavis."
 
 export const priorNotificationApi = monitorfishApi.injectEndpoints({
@@ -64,6 +65,18 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       providesTags: (_, __, reportId) => [{ id: reportId, type: RtkCacheTagType.PriorNotification }],
       query: reportId => `/prior_notifications/manual/${reportId}`,
       transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_DATA_ERROR_MESSAGE, response)
+    }),
+
+    // https://redux-toolkit.js.org/rtk-query/api/fetchBaseQuery#parsing-a-response
+    getPriorNotificationPDF: builder.query<string, string>({
+      extraOptions: { maxRetries: 0 },
+      forceRefetch: () => true,
+      query: reportId => ({
+        method: 'GET',
+        responseHandler: response => response.text(),
+        url: `/prior_notifications/${reportId}/pdf`
+      }),
+      transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_PDF_ERROR_MESSAGE, response)
     }),
 
     getPriorNotifications: builder.query<
@@ -160,5 +173,9 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
   })
 })
 
-export const { useGetPriorNotificationDetailQuery, useGetPriorNotificationsQuery, useGetPriorNotificationTypesQuery } =
-  priorNotificationApi
+export const {
+  useGetPriorNotificationDetailQuery,
+  useGetPriorNotificationPDFQuery,
+  useGetPriorNotificationsQuery,
+  useGetPriorNotificationTypesQuery
+} = priorNotificationApi

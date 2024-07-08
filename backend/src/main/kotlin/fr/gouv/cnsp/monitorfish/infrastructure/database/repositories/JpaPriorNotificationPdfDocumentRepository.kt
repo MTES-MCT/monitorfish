@@ -6,6 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.repositories.PriorNotificationPdfDocumentRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBPriorNotificationPdfDocumentRepository
 import org.springframework.dao.EmptyResultDataAccessException
+import org.springframework.data.jpa.repository.Modifying
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -15,6 +16,15 @@ class JpaPriorNotificationPdfDocumentRepository(
     override fun findByReportId(reportId: String): PdfDocument {
         return try {
             dbPriorNotificationPdfDocumentRepository.findByReportId(reportId).toPdfDocument()
+        } catch (e: EmptyResultDataAccessException) {
+            throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
+        }
+    }
+
+    @Modifying(clearAutomatically = true)
+    override fun deleteByReportId(reportId: String) {
+        return try {
+            dbPriorNotificationPdfDocumentRepository.deleteById(reportId)
         } catch (e: EmptyResultDataAccessException) {
             throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
         }

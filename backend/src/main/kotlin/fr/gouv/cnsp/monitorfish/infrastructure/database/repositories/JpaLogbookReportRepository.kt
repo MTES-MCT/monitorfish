@@ -385,6 +385,15 @@ class JpaLogbookReportRepository(
                 val pnoMessage = objectMapper.readValue(logbookReportEntity.message, PNO::class.java)
                 pnoMessage.note = note
 
+                /**
+                 * The PNO states are re-initialized,
+                 * - the PDF will be generated
+                 * - the PNO will require another verification before sending
+                 */
+                pnoMessage.isBeingSent = false
+                pnoMessage.isVerified = false
+                pnoMessage.isSent = false
+
                 val nextMessage = objectMapper.writeValueAsString(pnoMessage)
 
                 val updatedEntity = logbookReportEntity.copy(message = nextMessage)

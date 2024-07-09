@@ -59,6 +59,10 @@ export function PriorNotificationCard() {
   const isSent = [PriorNotification.State.SENT, PriorNotification.State.VERIFIED_AND_SENT].includes(
     priorNotificationDetail?.state as any
   )
+  const isPendingVerification = priorNotificationDetail?.state === PriorNotification.State.PENDING_VERIFICATION
+  const hasDesignatedPorts = priorNotificationDetail?.logbookMessage?.message?.pnoTypes?.find(
+    type => type.hasDesignatedPorts
+  )
 
   const close = () => {
     dispatch(priorNotificationActions.closePriorNotificationCard())
@@ -152,10 +156,9 @@ export function PriorNotificationCard() {
               )}
             />
 
+            {isPendingVerification && <Intro>Le préavis doit être vérifié par le CNSP avant sa diffusion.</Intro>}
             <Intro>
-              Le préavis doit être vérifié par le CNSP avant sa diffusion.
-              <br />
-              Le navire doit respecter un délai d’envoi et débarquer dans un port désigné.
+              Le navire doit respecter un délai d’envoi{hasDesignatedPorts && ' et débarquer dans un port désigné'}.
             </Intro>
 
             <hr />

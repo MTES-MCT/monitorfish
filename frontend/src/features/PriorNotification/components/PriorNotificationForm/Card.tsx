@@ -42,14 +42,14 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
   const openedPriorNotificationReportId = useMainAppSelector(
     store => store.priorNotification.openedPriorNotificationReportId
   )
-  const isOpenedPriorNotificationManual = useMainAppSelector(
-    store => store.priorNotification.isOpenedPriorNotificationManual
+  const isOpenedPriorNotificationManuallyCreated = useMainAppSelector(
+    store => store.priorNotification.isOpenedPriorNotificationManuallyCreated
   )
 
   const { data: editedPriorNotificationDetail } = useGetPriorNotificationDetailQuery(
-    openedPriorNotificationReportId && typeof isOpenedPriorNotificationManual === 'boolean'
+    openedPriorNotificationReportId && typeof isOpenedPriorNotificationManuallyCreated === 'boolean'
       ? {
-          isManuallyCreated: isOpenedPriorNotificationManual,
+          isManuallyCreated: isOpenedPriorNotificationManuallyCreated,
           reportId: openedPriorNotificationReportId
         }
       : skipToken,

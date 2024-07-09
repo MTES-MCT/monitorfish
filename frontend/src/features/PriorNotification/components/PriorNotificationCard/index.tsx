@@ -37,13 +37,13 @@ export function PriorNotificationCard() {
   const openedPriorNotificationReportId = useMainAppSelector(
     state => state.priorNotification.openedPriorNotificationReportId
   )
-  const isOpenedPriorNotificationManual = useMainAppSelector(
-    store => store.priorNotification.isOpenedPriorNotificationManual
+  const isOpenedPriorNotificationManuallyCreated = useMainAppSelector(
+    state => state.priorNotification.isOpenedPriorNotificationManuallyCreated
   )
   const { data: priorNotificationDetail } = useGetPriorNotificationDetailQuery(
-    openedPriorNotificationReportId && typeof isOpenedPriorNotificationManual === 'boolean'
+    openedPriorNotificationReportId && typeof isOpenedPriorNotificationManuallyCreated === 'boolean'
       ? {
-          isManuallyCreated: isOpenedPriorNotificationManual,
+          isManuallyCreated: isOpenedPriorNotificationManuallyCreated,
           reportId: openedPriorNotificationReportId
         }
       : skipToken,
@@ -162,7 +162,7 @@ export function PriorNotificationCard() {
 
             <LogbookMessage
               isFirst
-              isLessThanTwelveMetersVessel={priorNotificationDetail.isLessThanTwelveMetersVessel}
+              isManuallyCreated={isOpenedPriorNotificationManuallyCreated ?? false}
               logbookMessage={priorNotificationDetail.logbookMessage}
             />
 

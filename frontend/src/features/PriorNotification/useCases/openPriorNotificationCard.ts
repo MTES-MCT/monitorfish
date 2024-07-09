@@ -48,7 +48,7 @@ export const openPriorNotificationCard =
 
       dispatch(
         priorNotificationActions.setOpenedPriorNotification({
-          isManual: isManuallyCreated,
+          isManuallyCreated,
           reportId
         })
       )

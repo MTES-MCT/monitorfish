@@ -10,7 +10,7 @@ import type { Undefine } from '@mtes-mct/monitor-ui'
 export interface PriorNotificationState {
   editedPriorNotificationComputedValues: Undefine<PriorNotification.ManualPriorNotificationComputedValues> | undefined
   editedPriorNotificationInitialFormValues: FormValues | undefined
-  isOpenedPriorNotificationManual: boolean | undefined
+  isOpenedPriorNotificationManuallyCreated: boolean | undefined
   isPriorNotificationCardOpen: boolean
   isPriorNotificationFormOpen: boolean
   listFilterValues: ListFilter
@@ -19,7 +19,7 @@ export interface PriorNotificationState {
 const INITIAL_STATE: PriorNotificationState = {
   editedPriorNotificationComputedValues: undefined,
   editedPriorNotificationInitialFormValues: undefined,
-  isOpenedPriorNotificationManual: undefined,
+  isOpenedPriorNotificationManuallyCreated: undefined,
   isPriorNotificationCardOpen: false,
   isPriorNotificationFormOpen: false,
   listFilterValues: DEFAULT_LIST_FILTER_VALUES,
@@ -38,7 +38,7 @@ const priorNotificationSlice = createSlice({
       state.editedPriorNotificationComputedValues = undefined
       state.editedPriorNotificationInitialFormValues = undefined
       state.openedPriorNotificationReportId = undefined
-      state.isOpenedPriorNotificationManual = undefined
+      state.isOpenedPriorNotificationManuallyCreated = undefined
       state.isPriorNotificationFormOpen = false
     },
 
@@ -49,7 +49,7 @@ const priorNotificationSlice = createSlice({
     openPriorNotificationForm(state) {
       state.editedPriorNotificationComputedValues = undefined
       state.editedPriorNotificationInitialFormValues = undefined
-      state.isOpenedPriorNotificationManual = true
+      state.isOpenedPriorNotificationManuallyCreated = true
       state.openedPriorNotificationReportId = undefined
       state.isPriorNotificationFormOpen = true
     },
@@ -79,9 +79,9 @@ const priorNotificationSlice = createSlice({
       }
     },
 
-    setOpenedPriorNotification(state, action: PayloadAction<{ isManual: boolean; reportId: string }>) {
+    setOpenedPriorNotification(state, action: PayloadAction<{ isManuallyCreated: boolean; reportId: string }>) {
       state.openedPriorNotificationReportId = action.payload.reportId
-      state.isOpenedPriorNotificationManual = action.payload.isManual
+      state.isOpenedPriorNotificationManuallyCreated = action.payload.isManuallyCreated
     },
 
     unsetEditedPriorNotificationComputedValues(state) {
@@ -90,7 +90,7 @@ const priorNotificationSlice = createSlice({
 
     unsetOpenedPriorNotification(state) {
       state.openedPriorNotificationReportId = undefined
-      state.isOpenedPriorNotificationManual = undefined
+      state.isOpenedPriorNotificationManuallyCreated = undefined
     }
   }
 })

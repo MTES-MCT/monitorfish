@@ -81,7 +81,7 @@ export const openPriorNotificationForm =
       dispatch(priorNotificationActions.setEditedPriorNotificationComputedValues(nextComputedValues))
       dispatch(
         priorNotificationActions.setOpenedPriorNotification({
-          isManual: true,
+          isManuallyCreated: true,
           reportId
         })
       )

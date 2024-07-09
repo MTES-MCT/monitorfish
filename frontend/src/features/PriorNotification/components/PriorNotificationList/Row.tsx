@@ -1,5 +1,6 @@
+import { openPriorNotificationForm } from '@features/PriorNotification/useCases/openPriorNotificationForm'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { Icon, THEME, TableWithSelectableRows, Tag, customDayjs } from '@mtes-mct/monitor-ui'
+import { customDayjs, Icon, TableWithSelectableRows, Tag, THEME } from '@mtes-mct/monitor-ui'
 import { flexRender, type Row as RowType } from '@tanstack/react-table'
 import { orderBy } from 'lodash'
 import styled from 'styled-components'
@@ -7,7 +8,6 @@ import styled from 'styled-components'
 import { FixedTag, None } from './styles'
 import { getColorsFromState, getExpandableRowCellCustomStyle } from './utils'
 import { PriorNotification } from '../../PriorNotification.types'
-import { openPriorNotificationCard } from '../../useCases/openPriorNotificationCard'
 
 type RowProps = Readonly<{
   row: RowType<PriorNotification.PriorNotification>
@@ -19,13 +19,7 @@ export function Row({ row }: RowProps) {
   const firstFiveOnBoardCatchesByWeight = orderBy(priorNotification.onBoardCatches, ['weight'], ['desc']).slice(0, 5)
 
   const openCard = () => {
-    dispatch(
-      openPriorNotificationCard(
-        priorNotification.id,
-        priorNotification.fingerprint,
-        priorNotification.isManuallyCreated
-      )
-    )
+    dispatch(openPriorNotificationForm(priorNotification.id, priorNotification.fingerprint))
   }
 
   return (
@@ -147,16 +141,21 @@ export function Row({ row }: RowProps) {
             {priorNotification.onBoardCatches.length > 0 ? (
               <ExpandedRowList>
                 {firstFiveOnBoardCatchesByWeight.map(({ species, speciesName, weight }) => (
-                  <li key={species}>{`${speciesName} (${species}) – ${weight} kg`}</li>
+                  <StyledLi
+                    key={species}
+                    title={`${speciesName} (${species}) – ${weight} kg`}
+                  >{`${speciesName} (${species}) – ${weight} kg`}</StyledLi>
                 ))}
               </ExpandedRowList>
             ) : (
               <None>Aucune capture à bord.</None>
             )}
-            <p>
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <Link onClick={openCard}>Voir plus de détail</Link>
-            </p>
+            {priorNotification.onBoardCatches.length > 5 && (
+              <p>
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                <Link onClick={openCard}>Voir plus de détail</Link>
+              </p>
+            )}
           </ExpandedRowCell>
           <ExpandedRowCell colSpan={2} style={{ paddingLeft: 0, paddingRight: 0, paddingTop: 12 }}>
             <>
@@ -179,6 +178,13 @@ export function Row({ row }: RowProps) {
     </>
   )
 }
+
+const StyledLi = styled.li`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 215px;
+  white-space: nowrap;
+`
 
 // TODO Update in monitor-ui.
 const ExpandableRowCell = styled(TableWithSelectableRows.Td)`

@@ -8,7 +8,7 @@ context('Side Window > Prior Notification Card > Card', () => {
     openSideWindowPriorNotification(`L'ANCRE`)
 
     // Title
-    cy.contains(`PNO < 12 M - SEGMENT(S) INCONNU(S)`).should('be.visible')
+    cy.contains(`Préavis navire < 12 M`).should('be.visible')
     cy.contains(`L'ANCRE SÈCHE (CFR106)`).should('be.visible')
 
     // Message Header
@@ -29,7 +29,7 @@ context('Side Window > Prior Notification Card > Card', () => {
     cy.wait('@getIsSuperUser')
 
     // Title
-    cy.contains(`PNO < 12 M - NWW09 (LIGNES)`).should('be.visible')
+    cy.contains(`Préavis navire < 12 M`).should('be.visible')
     cy.contains(`POISSON PAS NET (CFR112)`).should('be.visible')
 
     // Message Header
@@ -43,7 +43,7 @@ context('Side Window > Prior Notification Card > Card', () => {
     openSideWindowPriorNotification(`BARS`)
 
     // Title
-    cy.contains(`PNO ≥ 12 M - NWW03 (CHALUT DE FOND EN EAU PROFONDE ≥100 MM)`).should('be.visible')
+    cy.contains(`Préavis navire ≥ 12 M`).should('be.visible')
     cy.contains(`DES BARS (CFR104)`).should('be.visible')
 
     // Message Header
@@ -62,7 +62,7 @@ context('Side Window > Prior Notification Card > Card', () => {
     openSideWindowPriorNotification(`CALAMARO`)
 
     // Title
-    cy.contains(`PNO ≥ 12 M - SEGMENT(S) INCONNU(S)`).should('be.visible')
+    cy.contains(`Préavis navire ≥ 12 M`).should('be.visible')
     cy.contains(`CALAMARO (CFR105)`).should('be.visible')
 
     // Message Header

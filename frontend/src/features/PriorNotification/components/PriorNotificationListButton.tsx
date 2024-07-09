@@ -5,10 +5,12 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import { useCallback } from 'react'
 
-import { MapToolButton } from './shared/MapToolButton'
-import { SideWindowMenuKey, SideWindowStatus } from '../../../../domain/entities/sideWindow/constants'
+import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser'
+import { SideWindowMenuKey, SideWindowStatus } from '../../../domain/entities/sideWindow/constants'
+import { MapToolButton } from '../../MainWindow/components/MapButtons/shared/MapToolButton'
 
 export function PriorNotificationListButton() {
+  const isSuperUser = useIsSuperUser()
   const dispatch = useMainAppDispatch()
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
   const sideWindow = useMainAppSelector(state => state.sideWindow)
@@ -36,10 +38,10 @@ export function PriorNotificationListButton() {
       isActive={isActive}
       isLeftButton
       onClick={toggleSideWindow}
-      style={{ top: 204 }}
+      style={{ top: isSuperUser ? 204 : 120 }}
       title="Afficher la liste des préavis"
     >
-      <Icon.Fishery color={THEME.color.white} />
+      <Icon.Fishery color={THEME.color.white} size={26} />
     </MapToolButton>
   )
 }

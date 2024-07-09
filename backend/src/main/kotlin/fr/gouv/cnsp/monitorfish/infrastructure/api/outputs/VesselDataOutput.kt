@@ -41,6 +41,7 @@ data class VesselDataOutput(
     val underCharter: Boolean? = null,
     val logbookEquipmentStatus: String? = null,
     val hasLogbookEsacapt: Boolean,
+    val hasVisioCaptures: Boolean? = null,
 ) {
     companion object {
         fun fromVesselAndRelatedDatas(vessel: Vessel?, beacon: Beacon?, vesselRiskFactor: VesselRiskFactor): VesselDataOutput? {
@@ -83,6 +84,7 @@ data class VesselDataOutput(
                 underCharter = vessel.underCharter,
                 logbookEquipmentStatus = vessel.logbookEquipmentStatus,
                 hasLogbookEsacapt = vessel.hasLogbookEsacapt,
+                hasVisioCaptures = vessel.hasVisioCaptures,
             )
         }
 
@@ -120,6 +122,7 @@ data class VesselDataOutput(
                 underCharter = vessel.underCharter,
                 logbookEquipmentStatus = vessel.logbookEquipmentStatus,
                 hasLogbookEsacapt = vessel.hasLogbookEsacapt,
+                hasVisioCaptures = vessel.hasVisioCaptures,
             )
         }
     }

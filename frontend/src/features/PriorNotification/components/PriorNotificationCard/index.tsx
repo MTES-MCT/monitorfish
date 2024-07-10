@@ -37,13 +37,13 @@ export function PriorNotificationCard() {
   const openedPriorNotificationReportId = useMainAppSelector(
     state => state.priorNotification.openedPriorNotificationReportId
   )
-  const isOpenedPriorNotificationManual = useMainAppSelector(
-    store => store.priorNotification.isOpenedPriorNotificationManual
+  const isOpenedPriorNotificationManuallyCreated = useMainAppSelector(
+    state => state.priorNotification.isOpenedPriorNotificationManuallyCreated
   )
   const { data: priorNotificationDetail } = useGetPriorNotificationDetailQuery(
-    openedPriorNotificationReportId && typeof isOpenedPriorNotificationManual === 'boolean'
+    openedPriorNotificationReportId && typeof isOpenedPriorNotificationManuallyCreated === 'boolean'
       ? {
-          isManuallyCreated: isOpenedPriorNotificationManual,
+          isManuallyCreated: isOpenedPriorNotificationManuallyCreated,
           reportId: openedPriorNotificationReportId
         }
       : skipToken,
@@ -58,6 +58,10 @@ export function PriorNotificationCard() {
   const [isLoading, setIsLoading] = useState(false)
   const isSent = [PriorNotification.State.SENT, PriorNotification.State.VERIFIED_AND_SENT].includes(
     priorNotificationDetail?.state as any
+  )
+  const isPendingVerification = priorNotificationDetail?.state === PriorNotification.State.PENDING_VERIFICATION
+  const hasDesignatedPorts = priorNotificationDetail?.logbookMessage?.message?.pnoTypes?.find(
+    type => type.hasDesignatedPorts
   )
 
   const close = () => {
@@ -152,17 +156,16 @@ export function PriorNotificationCard() {
               )}
             />
 
+            {isPendingVerification && <Intro>Le préavis doit être vérifié par le CNSP avant sa diffusion.</Intro>}
             <Intro>
-              Le préavis doit être vérifié par le CNSP avant sa diffusion.
-              <br />
-              Le navire doit respecter un délai d’envoi et débarquer dans un port désigné.
+              Le navire doit respecter un délai d’envoi{hasDesignatedPorts && ' et débarquer dans un port désigné'}.
             </Intro>
 
             <hr />
 
             <LogbookMessage
               isFirst
-              isLessThanTwelveMetersVessel={priorNotificationDetail.isLessThanTwelveMetersVessel}
+              isManuallyCreated={isOpenedPriorNotificationManuallyCreated ?? false}
               logbookMessage={priorNotificationDetail.logbookMessage}
             />
 

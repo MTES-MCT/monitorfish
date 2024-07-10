@@ -42,14 +42,14 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
   const openedPriorNotificationReportId = useMainAppSelector(
     store => store.priorNotification.openedPriorNotificationReportId
   )
-  const isOpenedPriorNotificationManual = useMainAppSelector(
-    store => store.priorNotification.isOpenedPriorNotificationManual
+  const isOpenedPriorNotificationManuallyCreated = useMainAppSelector(
+    store => store.priorNotification.isOpenedPriorNotificationManuallyCreated
   )
 
   const { data: editedPriorNotificationDetail } = useGetPriorNotificationDetailQuery(
-    openedPriorNotificationReportId && typeof isOpenedPriorNotificationManual === 'boolean'
+    openedPriorNotificationReportId && typeof isOpenedPriorNotificationManuallyCreated === 'boolean'
       ? {
-          isManuallyCreated: isOpenedPriorNotificationManual,
+          isManuallyCreated: isOpenedPriorNotificationManuallyCreated,
           reportId: openedPriorNotificationReportId
         }
       : skipToken,
@@ -65,9 +65,11 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
   const applicableState = getApplicableState(editedPriorNotificationComputedValues, editedPriorNotificationDetail)
   const isNewPriorNotification = !reportId
   const isPendingSend = editedPriorNotificationDetail?.state === PriorNotification.State.PENDING_SEND
+  const isPendingVerification = editedPriorNotificationDetail?.state === PriorNotification.State.PENDING_VERIFICATION
   const isSent = [PriorNotification.State.SENT, PriorNotification.State.VERIFIED_AND_SENT].includes(
     editedPriorNotificationDetail?.state as any
   )
+  const hasDesignatedPorts = editedPriorNotificationComputedValues?.types?.find(type => type.hasDesignatedPorts)
 
   const handleClose = () => {
     if (dirty) {
@@ -155,19 +157,18 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
               types={editedPriorNotificationComputedValues?.types}
             />
 
-            {isNewPriorNotification && (
+            {isNewPriorNotification && !editedPriorNotificationComputedValues && (
               <Intro>
                 Veuillez renseigner les champs du formulaire pour définir le type de préavis et son statut, ainsi que le
                 segment de flotte et la note de risque du navire.
               </Intro>
             )}
-            {!isNewPriorNotification && (
-              <Intro>
-                Le préavis doit être vérifié par le CNSP avant sa diffusion.
-                <br />
-                Le navire doit respecter un délai d’envoi et débarquer dans un port désigné.
-              </Intro>
+            {!isNewPriorNotification && isPendingVerification && (
+              <Intro>Le préavis doit être vérifié par le CNSP avant sa diffusion.</Intro>
             )}
+            <Intro>
+              Le navire doit respecter un délai d’envoi{hasDesignatedPorts && ' et débarquer dans un port désigné'}.
+            </Intro>
 
             <hr />
 

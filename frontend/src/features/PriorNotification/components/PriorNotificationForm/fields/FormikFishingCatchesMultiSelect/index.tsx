@@ -68,7 +68,7 @@ export function FormikFishingCatchesMultiSelect() {
                 weight: 0.1
               }
             ],
-            { cacheKey: 'SPECIES_AS_OPTIONS', isStrict: true }
+            { cacheKey: 'PNO_SPECIES_AS_OPTIONS', isStrict: true }
           )
         : undefined,
     [filteredSpeciesAsOptions]
@@ -89,7 +89,6 @@ export function FormikFishingCatchesMultiSelect() {
         onChange={add}
         options={filteredSpeciesAsOptions ?? []}
         optionValueKey="code"
-        searchable
         virtualized
       />
 

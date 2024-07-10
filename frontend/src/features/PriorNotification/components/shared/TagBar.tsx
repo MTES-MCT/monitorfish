@@ -33,6 +33,15 @@ export function TagBar({ isVesselUnderCharter, isZeroNotice, riskFactor, state, 
             {`${tripSegment.code} – ${tripSegment.name}`}
           </FixedTag>
         ))}
+        {!tripSegments?.length && (
+          <FixedTag
+            backgroundColor={THEME.color.white}
+            borderColor={THEME.color.lightGray}
+            color={THEME.color.slateGray}
+          >
+            Aucun segment
+          </FixedTag>
+        )}
       </Row>
 
       <Row>
@@ -76,5 +85,6 @@ const Wrapper = styled.div`
 const Row = styled.div`
   align-items: center;
   display: flex;
+  flex-flow: row wrap;
   gap: 8px;
 `

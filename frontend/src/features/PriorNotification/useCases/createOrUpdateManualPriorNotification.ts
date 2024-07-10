@@ -32,7 +32,7 @@ export const createOrUpdateManualPriorNotification =
 
       dispatch(
         priorNotificationActions.setOpenedPriorNotification({
-          isManual: true,
+          isManuallyCreated: true,
           reportId: updatedPriorNotificationData.reportId
         })
       )

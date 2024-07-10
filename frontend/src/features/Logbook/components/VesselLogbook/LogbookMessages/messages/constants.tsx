@@ -17,7 +17,7 @@ import type { LogbookMessage as LogbookMessageNamespace } from '../../../../Logb
 
 export function getComponentFromMessageType(
   logbookMessage: LogbookMessage | LogbookMessageNamespace.LogbookMessage,
-  isLessThanTwelveMetersVessel: boolean
+  isManuallyCreated: boolean
 ) {
   switch (logbookMessage.messageType) {
     case LogbookMessageType.DEP.code:
@@ -27,7 +27,7 @@ export function getComponentFromMessageType(
     case LogbookMessageType.PNO.code:
       return (
         <PNOMessage
-          isLessThanTwelveMetersVessel={isLessThanTwelveMetersVessel}
+          isManuallyCreated={isManuallyCreated}
           message={logbookMessage.message}
           tripGears={logbookMessage.tripGears}
         />

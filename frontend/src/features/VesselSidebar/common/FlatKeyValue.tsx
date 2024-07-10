@@ -19,7 +19,7 @@ export function FlatKeyValue({ className, column, valueEllipsisedForWidth }: Key
             <Field key={key}>
               <Key>{key}</Key>
               {value ? (
-                <Value title={value?.toString()} valueEllipsisedForWidth={valueEllipsisedForWidth}>
+                <Value data-cy={key} title={value?.toString()} valueEllipsisedForWidth={valueEllipsisedForWidth}>
                   {value}
                 </Value>
               ) : (

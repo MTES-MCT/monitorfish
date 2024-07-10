@@ -19,8 +19,8 @@ enum class LogbookSoftware(val software: String) {
     companion object {
         /**
          * True for:
-         * - VisioCaptures in real time (JP and JT)
-         * - VisioCaptures in sheets (FP)
+         * - VisioCaptures in real time (FT and JT)
+         * - VisioCaptures in sheets (JP)
          */
         fun isVisioCapture(software: String?): Boolean {
             val isVisioCapture = software?.contains(VISIOCAPTURE.software)

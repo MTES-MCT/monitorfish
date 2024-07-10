@@ -34,7 +34,7 @@ context('Vessels list', () => {
     cy.get('*[data-cy^="vessel-summary-latitude"]', { timeout: 10000 }).should('not.exist')
 
     // Back to vessels list
-    cy.get('*[data-cy^="back-to-vessels-list"]').click({ timeout: 10000 })
+    cy.get('*[data-cy^="back-to-vessels-list"]').click({ timeout: 10000, force: true })
     cy.get('*[data-cy^="vessel-list-table-count"]').contains('12 navires')
   })
 

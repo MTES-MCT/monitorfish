@@ -19,13 +19,13 @@ import type { LogbookMessage as LogbookMessageType } from '../../../../Logbook.t
 
 type LogbookMessageComponentProps = Readonly<{
   isFirst: boolean
-  isLessThanTwelveMetersVessel?: boolean
+  isManuallyCreated?: boolean
   logbookMessage: LogbookMessageType | LogbookMessageNamespace.LogbookMessage
   withMapControls?: boolean
 }>
 export function LogbookMessage({
   isFirst,
-  isLessThanTwelveMetersVessel = false,
+  isManuallyCreated = false,
   logbookMessage,
   withMapControls = false
 }: LogbookMessageComponentProps) {
@@ -44,7 +44,7 @@ export function LogbookMessage({
         )
       }
       case LogbookMessageTypeEnum.PNO.code.toString(): {
-        if (isLessThanTwelveMetersVessel) {
+        if (isManuallyCreated) {
           return (
             <>
               Préavis (notification de retour au port) – <i>navire sans JPE</i>
@@ -58,7 +58,7 @@ export function LogbookMessage({
         return LogbookMessageTypeEnum[logbookMessage.messageType].fullName
       }
     }
-  }, [logbookMessage, isLessThanTwelveMetersVessel])
+  }, [logbookMessage, isManuallyCreated])
 
   const openXML = (xml: string) => {
     const blob = new Blob([xml], { type: 'text/xml' })
@@ -68,16 +68,14 @@ export function LogbookMessage({
   }
 
   const logbookMessageComponent = useMemo(
-    () => getComponentFromMessageType(logbookMessage, isLessThanTwelveMetersVessel),
-    [logbookMessage, isLessThanTwelveMetersVessel]
+    () => getComponentFromMessageType(logbookMessage, isManuallyCreated),
+    [logbookMessage, isManuallyCreated]
   )
 
   return (
     <Wrapper id={logbookMessage.operationNumber} isFirst={isFirst}>
       <Header>
-        {!isLessThanTwelveMetersVessel && (
-          <LogbookMessageTypeText>{getLogbookMessageType(logbookMessage)}</LogbookMessageTypeText>
-        )}
+        {!isManuallyCreated && <LogbookMessageTypeText>{getLogbookMessageType(logbookMessage)}</LogbookMessageTypeText>}
         <LogbookMessageHeaderText
           data-cy="vessel-fishing-message"
           isShortcut={
@@ -107,7 +105,7 @@ export function LogbookMessage({
           </OperationTag>
         )}
 
-        {!isLessThanTwelveMetersVessel && logbookMessage.rawMessage && (
+        {!isManuallyCreated && logbookMessage.rawMessage && (
           <Xml
             onClick={() => openXML(logbookMessage.rawMessage)}
             style={{ cursor: 'pointer' }}
@@ -140,14 +138,14 @@ export function LogbookMessage({
         )}
         <LogbookMessageMetadata>
           <EmissionDateTime>
-            <Key>{isLessThanTwelveMetersVessel ? 'Date de saisie dans MF par le CNSP' : 'Date d’émission'}</Key>
+            <Key>{isManuallyCreated ? 'Date de saisie dans MF par le CNSP' : 'Date d’émission'}</Key>
             {getDateTime(logbookMessage.reportDateTime, true)}
           </EmissionDateTime>
           <ReceptionDateTime>
-            <Key>{isLessThanTwelveMetersVessel ? 'Date de réception par le CNSP' : 'Date de réception'}</Key>
+            <Key>{isManuallyCreated ? 'Date de réception par le CNSP' : 'Date de réception'}</Key>
             {getDateTime(logbookMessage.integrationDateTime, true)}
           </ReceptionDateTime>
-          {!isLessThanTwelveMetersVessel && (
+          {!isManuallyCreated && (
             <VoyageNumber>
               <Key>N° de marée</Key>
               {logbookMessage.tripNumber ? (
@@ -157,7 +155,7 @@ export function LogbookMessage({
               )}
             </VoyageNumber>
           )}
-          {!isLessThanTwelveMetersVessel && (
+          {!isManuallyCreated && (
             <Acknowledge>
               <Key>Acq.</Key>
               {!logbookMessage.acknowledgment || (logbookMessage.acknowledgment.isSuccess === null && <Gray>-</Gray>)}

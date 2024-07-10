@@ -7,13 +7,13 @@ import { AlertsMapButton } from './AlertsMapButton'
 import { BeaconMalfunctionsMapButton } from './BeaconMalfunctionsMapButton'
 import { FavoriteVessels } from './FavoriteVessels'
 import { MissionsMenu } from './Missions'
-import { PriorNotificationListButton } from './PriorNotificationListButton'
 import { VesselFiltersMapButton } from './VesselFilters'
 import { VesselLabelsMapButton } from './VesselLabels'
 import { VesselVisibilityMapButton } from './VesselVisibility'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { InterestPointMapButton } from '../../../InterestPoint/components/InterestPointMapButton'
 import { MeasurementMapButton } from '../../../Measurement/components/MeasurementMapButton'
+import { PriorNotificationListButton } from '../../../PriorNotification/components/PriorNotificationListButton'
 
 export function MapButtons() {
   const isSuperUser = useIsSuperUser()

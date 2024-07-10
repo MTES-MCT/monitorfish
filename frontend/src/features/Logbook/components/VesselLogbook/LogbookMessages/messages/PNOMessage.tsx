@@ -15,11 +15,11 @@ import { NoValue, SpeciesList, Table, TableBody, TableKey, TableRow, TableValue,
 import type { Gear, PNOMessageValue } from '../../../../Logbook.types'
 
 type PNOMessageProps = Readonly<{
-  isLessThanTwelveMetersVessel: boolean
+  isManuallyCreated: boolean
   message: PNOMessageValue
   tripGears: Gear[] | undefined
 }>
-export function PNOMessage({ isLessThanTwelveMetersVessel, message, tripGears }: PNOMessageProps) {
+export function PNOMessage({ isManuallyCreated, message, tripGears }: PNOMessageProps) {
   const getGearsApiQuery = useGetGearsQuery()
 
   const gearsWithName: Array<Gear> = useMemo(() => {
@@ -65,7 +65,7 @@ export function PNOMessage({ isLessThanTwelveMetersVessel, message, tripGears }:
                   <TableKey>Date prévue de débarque</TableKey>
                   <TableValue>{getDatetimeOrDash(message.predictedLandingDatetimeUtc)}</TableValue>
                 </TableRow>
-                {!isLessThanTwelveMetersVessel && (
+                {!isManuallyCreated && (
                   <TableRow>
                     <TableKey>Date de début de la marée</TableKey>
                     <TableValue>{getDatetimeOrDash(message.tripStartDate)}</TableValue>
@@ -94,7 +94,7 @@ export function PNOMessage({ isLessThanTwelveMetersVessel, message, tripGears }:
               </TableBody>
             </Table>
           </Zone>
-          {isLessThanTwelveMetersVessel && (
+          {isManuallyCreated && (
             <StyledFlatKeyValue
               column={[
                 {
@@ -115,7 +115,7 @@ export function PNOMessage({ isLessThanTwelveMetersVessel, message, tripGears }:
               <SpecyCatch
                 // eslint-disable-next-line react/no-array-index-key
                 key={index}
-                isOpenable={!isLessThanTwelveMetersVessel}
+                isOpenable={!isManuallyCreated}
                 specyCatch={speciesCatch}
                 weightType={WeightType.LIVE}
               >

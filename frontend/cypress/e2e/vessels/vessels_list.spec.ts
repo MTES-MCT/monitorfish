@@ -16,7 +16,7 @@ context('Vessels list', () => {
     cy.get('*[data-cy="vessel-list-country-filter"]').click({ force: true })
     cy.get('*[data-cy="select-picker-menu-item-France"]').scrollIntoView().click()
     // Close the tag picker
-    cy.get('.rs-modal-title').click()
+    cy.get('.rs-modal-title').click({ force: true })
     cy.wait(200)
     cy.get('*[data-cy^="vessels-list-box-filter"]').click({ timeout: 10000 })
     cy.wait(200)

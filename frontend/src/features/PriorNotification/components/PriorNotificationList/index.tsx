@@ -15,7 +15,7 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Accent, Button, Icon, Size, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
-import { flexRender, getCoreRowModel, useReactTable, getExpandedRowModel } from '@tanstack/react-table'
+import { flexRender, getCoreRowModel, getExpandedRowModel, useReactTable } from '@tanstack/react-table'
 import { isLegacyFirefox } from '@utils/isLegacyFirefox'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import { useCallback, useState } from 'react'
@@ -191,20 +191,20 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
             </TableInnerWrapper>
 
             {loadingState.isLoadingNextPage && (
-              <Button accent={Accent.SECONDARY} disabled isFullWidth>
+              <LoadMore accent={Accent.SECONDARY} disabled>
                 Chargement en cours...
-              </Button>
+              </LoadMore>
             )}
             {!isError &&
               !loadingState.isLoadingNewPage &&
               !loadingState.isLoadingNextPage &&
               table.getCanNextPage() && (
-                <Button accent={Accent.SECONDARY} isFullWidth onClick={table.nextPage}>
+                <LoadMore accent={Accent.SECONDARY} onClick={table.nextPage}>
                   {`Charger les ${Math.min(
                     totalLength! - priorNotifications!.length,
                     DEFAULT_PAGE_SIZE
                   )} préavis suivants`}
-                </Button>
+                </LoadMore>
               )}
           </TableOuterWrapper>
         </Body>
@@ -216,6 +216,13 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
   )
 }
 
+const LoadMore = styled(Button)`
+  margin-top: 8px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+`
+
 const TableOuterWrapper = styled.div<{
   $isFromUrl: boolean
 }>`
@@ -226,11 +233,6 @@ const TableOuterWrapper = styled.div<{
 
   * {
     box-sizing: border-box;
-  }
-
-  > .Element-Button {
-    margin-top: 8px;
-    width: ${p => (!p.$isFromUrl && isLegacyFirefox() ? 1396 : 1391)}px; /* = table width */
   }
 `
 

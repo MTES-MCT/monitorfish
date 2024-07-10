@@ -430,7 +430,7 @@ VALUES ('OOF20190265896325', 9463701, 'OOF', '2018-02-17T01:05:00Z', 'DAT', 'OOF
        ('OOF20191030056523', 9463715, 'OOF', '2019-10-17T11:37:00Z', 'COR', 'OOF20191030056523', 'OOF20191030056523',
         '2019-10-30T11:37:00Z',
         'FAK000999999', 'CALLME', 'DONTSINK', 'PHENOMENE', 'FRA', null, 'INS',
-        'null', '2021-01-18T07:19:27.384921Z', 'ERS', 'JP/VISIOCaptures V1.4.7'),
+        'null', '2021-01-18T07:19:27.384921Z', 'ERS', 'TurboCatch (3.7-1)'),
        ('OOF20103048321388', null, 'OOF', '2019-10-17T11:36:00Z', 'RET', 'OOF19103048321388', 'OOF20191030059903',
         '2019-10-30T11:32:00Z',
         null, null, null, null, null, null, '',
@@ -486,7 +486,7 @@ VALUES ('OOF20190265896325', 9463701, 'OOF', '2018-02-17T01:05:00Z', 'DAT', 'OOF
        ('OOF22103048321398', null, 'OOF', '2106-10-17T11:36:00Z', 'RET', null, 'OOF20190627059903',
         '2106-10-30T11:32:00Z',
         null, null, null, null, null, null, '',
-        '{"returnStatus": "000"}', '2100-01-18T07:19:28.384921Z', 'ERS', 'JP/VISIOCaptures V1.4.7');
+        '{"returnStatus": "000"}', '2100-01-18T07:19:28.384921Z', 'ERS', 'TurboCatch (3.7-1)');
 
 
 -- Add FLUX test data

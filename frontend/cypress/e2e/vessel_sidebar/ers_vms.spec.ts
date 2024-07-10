@@ -17,18 +17,12 @@ context('Vessel sidebar ers/vms tab', () => {
     cy.get('*[data-cy="vessel-menu-ers-vms"]').click({ timeout: 10000 })
 
     // Then
-    cy.get('*[data-cy="vessel-equipments"]').contains('N° balise VMS')
-    cy.get('*[data-cy="vessel-equipments"]').contains('FGEDX85')
-    cy.get('*[data-cy="vessel-equipments"]').contains('Type de balise')
-    cy.get('*[data-cy="vessel-equipments"]').contains('Côtier')
-    cy.get('*[data-cy="vessel-equipments"]').contains('Date de loggage')
-    cy.get('*[data-cy="vessel-equipments"]').contains('12/05/2021 à 12h23:00')
-    cy.get('*[data-cy="vessel-equipments"]').contains('Statut JPE')
-    cy.get('*[data-cy="vessel-equipments"]').contains('Equipé')
-    cy.get('*[data-cy="vessel-equipments"]').contains('Équipé e-Sacapt')
-    cy.get('*[data-cy="vessel-equipments"]').contains('Non')
-    cy.get('*[data-cy="vessel-equipments"]').contains('Équipé VisioCaptures')
-    cy.get('*[data-cy="vessel-equipments"]').contains('Non')
+    cy.get('*[data-cy="N° balise VMS"]').contains('FGEDX85')
+    cy.get('*[data-cy="Type de balise"]').contains('Côtier')
+    cy.get('*[data-cy="Date de loggage"]').contains('12/05/2021 à 12h23:00')
+    cy.get('*[data-cy="Statut JPE"]').contains('Equipé')
+    cy.get('*[data-cy="Équipé e-Sacapt"]').contains('Non')
+    cy.get('*[data-cy="Équipé VisioCaptures"]').contains('Oui')
   })
 
   it('ERS/VMS tab Should not throw When a beacon is missing', () => {

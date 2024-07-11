@@ -20,6 +20,7 @@ import { Alert } from './Alert'
 import { BeaconMalfunctionBoard } from './BeaconMalfunctionBoard'
 import { BannerStack } from './components/BannerStack'
 import { Menu } from './Menu'
+import { useIsSuperUser } from '../../auth/hooks/useIsSuperUser'
 import { MissionEventContext } from '../../context/MissionEventContext'
 import { SideWindowMenuKey } from '../../domain/entities/sideWindow/constants'
 import { closeBeaconMalfunctionInKanban } from '../../domain/shared_slices/BeaconMalfunction'
@@ -41,6 +42,7 @@ export type SideWindowProps = HTMLAttributes<HTMLDivElement> & {
 }
 export function SideWindow({ isFromURL }: SideWindowProps) {
   const dispatch = useMainAppDispatch()
+  const isSuperUser = useIsSuperUser()
   // eslint-disable-next-line no-null/no-null
   const wrapperRef = useRef<HTMLDivElement | null>(null)
 
@@ -126,7 +128,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
 
             <BannerStack />
 
-            <Menu selectedMenu={selectedPath.menu} />
+            {isSuperUser && <Menu selectedMenu={selectedPath.menu} />}
             {(selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD ||
               selectedPath.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST) && (
               <GrayOverlay onClick={closeRightSidebar} style={grayOverlayStyle} />

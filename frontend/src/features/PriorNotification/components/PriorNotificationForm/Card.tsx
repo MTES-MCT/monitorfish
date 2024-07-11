@@ -149,6 +149,7 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
 
           <Body>
             <TagBar
+              hasBeenComputed={!!editedPriorNotificationComputedValues}
               isVesselUnderCharter={editedPriorNotificationComputedValues?.isVesselUnderCharter}
               isZeroNotice={isZeroNotice(values.fishingCatches)}
               riskFactor={editedPriorNotificationComputedValues?.riskFactor}
@@ -166,9 +167,11 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
             {!isNewPriorNotification && isPendingVerification && (
               <Intro>Le préavis doit être vérifié par le CNSP avant sa diffusion.</Intro>
             )}
-            <Intro>
-              Le navire doit respecter un délai d’envoi{hasDesignatedPorts && ' et débarquer dans un port désigné'}.
-            </Intro>
+            {(!!editedPriorNotificationComputedValues || !!openedPriorNotificationReportId) && (
+              <Intro hasNoTopMargin={!isNewPriorNotification && isPendingVerification}>
+                Le navire doit respecter un délai d’envoi{hasDesignatedPorts && ' et débarquer dans un port désigné'}.
+              </Intro>
+            )}
 
             <hr />
 
@@ -290,7 +293,10 @@ const Body = styled.div`
   }
 `
 
-const Intro = styled.p`
+const Intro = styled.p<{
+  hasNoTopMargin: boolean
+}>`
+  ${p => p.hasNoTopMargin && 'margin-top: 2px;'}
   color: ${p => p.theme.color.slateGray};
   font-style: italic;
 `

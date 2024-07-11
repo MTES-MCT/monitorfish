@@ -18,7 +18,10 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
+import java.io.IOException
 import java.time.format.DateTimeFormatter.ISO_DATE_TIME
+
 
 @RestController
 @RequestMapping("/bff/v1/prior_notifications")
@@ -32,6 +35,7 @@ class PriorNotificationController(
     private val updatePriorNotificationNote: UpdatePriorNotificationNote,
     private val verifyAndSendPriorNotification: VerifyAndSendPriorNotification,
     private val getPriorNotificationPdfDocument: GetPriorNotificationPdfDocument,
+    private val uploadPdfDocument: UploadPdfDocument
 ) {
     @GetMapping("")
     @Operation(summary = "Get all prior notifications")
@@ -265,7 +269,7 @@ class PriorNotificationController(
     }
 
     @GetMapping("/{reportId}/pdf")
-    @Operation(summary = "Get the PDF document")
+    @Operation(summary = "Get the PNO PDF document")
     fun getPdfDocument(
         @PathParam("Logbook message `reportId`")
         @PathVariable(name = "reportId")
@@ -286,5 +290,21 @@ class PriorNotificationController(
         }
 
         return ResponseEntity(pdfDocument.pdfDocument, headers, HttpStatus.OK)
+    }
+
+    @PostMapping("/{reportId}/upload")
+    @Operation(summary = "Upload a PDF document")
+    fun uploadFile(@PathParam("Logbook message `reportId`")
+                   @PathVariable(name = "reportId")
+                   reportId: String,
+                   @RequestParam("file")
+                   file: MultipartFile): ResponseEntity<*> {
+        if (file.isEmpty) {
+            return ResponseEntity("Please select a file to upload", HttpStatus.BAD_REQUEST)
+        }
+
+        uploadPdfDocument.execute(reportId, file)
+
+        return ResponseEntity("File uploaded successfully: " + file.originalFilename, HttpStatus.OK)
     }
 }

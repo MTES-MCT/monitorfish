@@ -253,7 +253,7 @@ const Body = styled.div`
 `
 
 const Intro = styled.p<{
-  hasNoTopMargin: boolean
+  hasNoTopMargin?: boolean
 }>`
   ${p => p.hasNoTopMargin && 'margin-top: 2px;'}
   color: ${p => p.theme.color.slateGray};

@@ -28,6 +28,7 @@ import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { priorNotificationActions } from '../../slice'
 import { DownloadButton } from '../shared/DownloadButton'
 import { TagBar } from '../shared/TagBar'
+import {UploadFiles} from "@features/PriorNotification/components/shared/UploadFiles";
 
 const DEBOUNCE_DELAY = 500
 
@@ -187,6 +188,10 @@ export function PriorNotificationCard() {
                 </FieldGroup>
               </>
             </Formik>
+
+            <hr />
+
+            <UploadFiles reportId={openedPriorNotificationReportId}/>
           </Body>
 
           <Footer>

@@ -56,6 +56,7 @@ export function PriorNotificationCard() {
     state => state.displayedError.sideWindowPriorNotificationCardError
   )
   const [isLoading, setIsLoading] = useState(false)
+  const isPendingSend = priorNotificationDetail?.state === PriorNotification.State.PENDING_SEND
   const isSent = [PriorNotification.State.SENT, PriorNotification.State.VERIFIED_AND_SENT].includes(
     priorNotificationDetail?.state as any
   )
@@ -157,7 +158,7 @@ export function PriorNotificationCard() {
             />
 
             {isPendingVerification && <Intro>Le préavis doit être vérifié par le CNSP avant sa diffusion.</Intro>}
-            <Intro>
+            <Intro hasNoTopMargin={isPendingVerification}>
               Le navire doit respecter un délai d’envoi{hasDesignatedPorts && ' et débarquer dans un port désigné'}.
             </Intro>
 
@@ -201,7 +202,7 @@ export function PriorNotificationCard() {
 
             <Button
               accent={Accent.PRIMARY}
-              disabled={isSent}
+              disabled={isPendingSend || isSent}
               Icon={isSent ? Icon.Check : Icon.Send}
               onClick={verifyAndSend}
             >
@@ -251,7 +252,10 @@ const Body = styled.div`
   }
 `
 
-const Intro = styled.p`
+const Intro = styled.p<{
+  hasNoTopMargin: boolean
+}>`
+  ${p => p.hasNoTopMargin && 'margin-top: 2px;'}
   color: ${p => p.theme.color.slateGray};
   font-style: italic;
 `

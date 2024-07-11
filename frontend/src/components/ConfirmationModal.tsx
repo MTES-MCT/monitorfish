@@ -61,7 +61,7 @@ const StyledDialog = styled(Dialog)`
       padding: 24px 0 32px;
 
       > .Element-Button {
-        width: 136px;
+        width: 175px;
 
         :not(:first-child) {
           margin-left: 8px;

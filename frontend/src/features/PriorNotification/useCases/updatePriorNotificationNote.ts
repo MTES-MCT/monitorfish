@@ -3,7 +3,7 @@ import { FrontendApiError } from '@libs/FrontendApiError'
 import { handleThunkError } from '@utils/handleThunkError'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
 
-import { priorNotificationApi } from '../priorNotificationApi'
+import { priorNotificationApi, priorNotificationPublicApi } from '../priorNotificationApi'
 
 import type { MainAppThunk } from '@store'
 
@@ -18,7 +18,7 @@ export const updatePriorNotificationNote =
         })
       ).unwrap()
 
-      await dispatch(priorNotificationApi.endpoints.getPriorNotificationPDF.initiate(reportId)).unwrap()
+      await dispatch(priorNotificationPublicApi.endpoints.getPriorNotificationPDF.initiate(reportId)).unwrap()
     } catch (err) {
       if (err instanceof FrontendApiError) {
         dispatch(displayOrLogError(err, undefined, true, DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR))

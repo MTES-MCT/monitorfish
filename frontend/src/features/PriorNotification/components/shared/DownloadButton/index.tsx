@@ -24,7 +24,7 @@ export function DownloadButton({ isDisabled = false, pnoLogbookMessage, reportId
   const isPriorNotificationPDFDocumentAvailable = useMemo(() => !isError, [isError])
   const hasAuthorizedLandingDownload =
     isSuperUser && getAlpha2CodeFromAlpha2or3Code(pnoLogbookMessage.flagState) !== 'FR'
-  const pdfUrl = `/bff/v1/prior_notifications/${reportId}/pdf`
+  const pdfUrl = `/api/v1/prior_notifications/pdf/${reportId}`
 
   const gearsWithName = useMemo(() => {
     if (!getGearsApiQuery.data || !pnoLogbookMessage?.tripGears) {

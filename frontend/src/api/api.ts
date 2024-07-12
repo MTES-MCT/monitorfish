@@ -6,6 +6,7 @@ import { sha256 } from '@utils/sha256'
 import ky from 'ky'
 
 import { RTK_MAX_RETRIES, RtkCacheTagType } from './constants'
+import { getOIDCConfig } from '../auth/getOIDCConfig'
 import { getOIDCUser } from '../auth/getOIDCUser'
 import { normalizeRtkBaseQuery } from '../utils/normalizeRtkBaseQuery'
 
@@ -55,10 +56,11 @@ const CORRELATION_HEADER = 'X-Correlation-Id'
 
 const setAuthorizationHeader = async headers => {
   const user = getOIDCUser()
+  const { IS_OIDC_ENABLED } = getOIDCConfig()
   const token = user?.access_token
 
   // If we have a token set in state, we pass it.
-  if (token) {
+  if (IS_OIDC_ENABLED && token) {
     headers.set(AUTHORIZATION_HEADER, `Bearer ${token}`)
 
     if (crypto?.subtle) {
@@ -156,11 +158,12 @@ export const monitorfishApiKy = ky.extend({
   hooks: {
     beforeRequest: [
       async request => {
+        const { IS_OIDC_ENABLED } = getOIDCConfig()
         const user = getOIDCUser()
         const token = user?.access_token
 
         // If we have a token set in state, we pass it.
-        if (token) {
+        if (IS_OIDC_ENABLED && token) {
           request.headers.set(AUTHORIZATION_HEADER, `Bearer ${token}`)
 
           if (crypto?.subtle) {
@@ -173,11 +176,12 @@ export const monitorfishApiKy = ky.extend({
     ],
     beforeRetry: [
       async ({ request }) => {
+        const { IS_OIDC_ENABLED } = getOIDCConfig()
         const user = getOIDCUser()
         const token = user?.access_token
 
         // If we have a token set in state, we pass it.
-        if (token) {
+        if (IS_OIDC_ENABLED && token) {
           request.headers.set(AUTHORIZATION_HEADER, `Bearer ${token}`)
 
           if (crypto?.subtle) {

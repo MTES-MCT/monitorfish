@@ -1,5 +1,5 @@
 import { editSideWindowMission } from './utils'
-import { SeafrontGroup } from '../../../../src/constants/seafront'
+import { ALL_SEAFRONT_GROUP, SeafrontGroup } from '../../../../src/constants/seafront'
 import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 import { editSideWindowMissionListMissionWithId, openSideWindowMissionList } from '../mission_list/utils'
@@ -451,5 +451,22 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
 
     // Then, the form is valid but incomplete (the completed by field is missing)
     cy.get('button:contains("Enregistrer")').should('not.be.disabled')
+  })
+
+  it('Should delete an existing infraction', () => {
+    // Given
+    openSideWindowMissionList()
+    cy.getDataCy(`side-window-sub-menu-${ALL_SEAFRONT_GROUP}`).click()
+    cy.fill('Etat des données', ['Complétées'])
+    cy.get('.Table').find(`.TableBodyRow[data-id="2"]`).clickButton('Éditer la mission')
+    cy.get('*[data-cy="action-list-item"]').click()
+    cy.wait(500)
+    cy.contains('Autre infraction 2').should('exist')
+
+    // When
+    cy.clickButton("Supprimer l'infraction", { index: 4 })
+
+    // Then
+    cy.contains('Autre infraction 2').should('not.exist')
   })
 })

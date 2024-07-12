@@ -62,7 +62,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
     if (!isSuperUser && selectedPath?.menu !== SideWindowMenuKey.PRIOR_NOTIFICATION_LIST) {
       dispatch(openSideWindowPath({ menu: SideWindowMenuKey.PRIOR_NOTIFICATION_LIST }))
     }
-  }, [isSuperUser])
+  }, [dispatch, isSuperUser, selectedPath?.menu])
 
   const grayOverlayStyle: CSSProperties = useMemo(
     () => ({

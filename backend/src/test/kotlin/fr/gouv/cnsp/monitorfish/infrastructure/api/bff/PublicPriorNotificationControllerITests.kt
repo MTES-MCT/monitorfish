@@ -32,7 +32,7 @@ import java.time.ZonedDateTime
 @Import(SentryConfig::class)
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = [(PriorNotificationController::class)])
-class PriorNotificationControllerITests {
+class PublicPriorNotificationControllerITests {
     @Autowired
     private lateinit var api: MockMvc
 
@@ -390,7 +390,7 @@ class PriorNotificationControllerITests {
             )
 
         // When
-        api.perform(get("/bff/v1/prior_notifications/REPORT_ID/pdf"))
+        api.perform(get("/api/v1/prior_notifications/pdf/REPORT_ID"))
             // Then
             .andExpect(status().isOk)
             .andExpect(content().contentType(MediaType.APPLICATION_PDF))

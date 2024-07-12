@@ -25,7 +25,7 @@ context('Side Window > Prior Notification Card > Card', () => {
 
   it('Should display a non-editable message for a non-super user', () => {
     cy.intercept('/bff/v1/authorization/current', { statusCode: 401 }).as('getIsSuperUser')
-    openSideWindowPriorNotification(`POISSON PAS NET`)
+    openSideWindowPriorNotification(`POISSON PAS NET`, false)
     cy.wait('@getIsSuperUser')
 
     // Title
@@ -101,7 +101,7 @@ context('Side Window > Prior Notification Card > Card', () => {
       cy.intercept('GET', url, { body: updatedPriorNotificationDetailStub }).as('getUpdatedPriorNotification')
       cy.intercept('GET', '/bff/v1/prior_notifications?*').as('getPriorNotifications')
 
-      cy.clickButton('Consulter le préavis')
+      cy.clickButton('Éditer le préavis')
 
       cy.wait('@getUpdatedPriorNotification')
       cy.wait('@getPriorNotifications')
@@ -138,7 +138,7 @@ context('Side Window > Prior Notification Card > Card', () => {
       cy.intercept('GET', url, { body: deletedPriorNotificationDetailStub }).as('getDeletedPriorNotification')
       cy.intercept('GET', '/bff/v1/prior_notifications?*').as('getPriorNotifications')
 
-      cy.clickButton('Consulter le préavis')
+      cy.clickButton('Éditer le préavis')
 
       cy.wait('@getDeletedPriorNotification')
       cy.wait('@getPriorNotifications')
@@ -196,7 +196,7 @@ context('Side Window > Prior Notification Card > Card', () => {
     cy.wait('@updatePriorNotificationNote')
 
     // Then, the PDF is deleted
-    cy.get('Element-Button').contains('Télécharger (Document non généré)')
+    cy.get('.Element-Button').contains('Télécharger (Document non généré)')
 
     // The note is saved
     openSideWindowPriorNotification(`CALAMARO`)

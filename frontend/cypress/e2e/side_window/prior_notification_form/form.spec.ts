@@ -323,8 +323,7 @@ context('Side Window > Prior Notification Form > Form', () => {
           reportId: createdPriorNotification.reportId
         })
 
-        cy.clickButton('Télécharger les documents')
-        cy.get('li[aria-disabled="true"]').contains('Préavis de débarquement (Document non généré)')
+        cy.get('.Element-Button').contains('Télécharger (Document non généré)')
 
         // -----------------------------------------------------------------------
         // List

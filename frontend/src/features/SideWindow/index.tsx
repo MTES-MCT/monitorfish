@@ -1,6 +1,7 @@
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { MissionForm } from '@features/Mission/components/MissionForm'
 import { useListenToAllMissionEventsUpdates } from '@features/Mission/components/MissionForm/hooks/useListenToAllMissionEventsUpdates'
+import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { THEME, type NewWindowContextValue, NewWindowContext, Notifier } from '@mtes-mct/monitor-ui'
 import {
   type CSSProperties,
@@ -56,6 +57,12 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
   const [isFirstRender, setIsFirstRender] = useState(true)
   const [isOverlayed, setIsOverlayed] = useState(false)
   const [isPreloading, setIsPreloading] = useState(true)
+
+  useEffect(() => {
+    if (!isSuperUser && selectedPath?.menu !== SideWindowMenuKey.PRIOR_NOTIFICATION_LIST) {
+      dispatch(openSideWindowPath({ menu: SideWindowMenuKey.PRIOR_NOTIFICATION_LIST }))
+    }
+  }, [isSuperUser])
 
   const grayOverlayStyle: CSSProperties = useMemo(
     () => ({

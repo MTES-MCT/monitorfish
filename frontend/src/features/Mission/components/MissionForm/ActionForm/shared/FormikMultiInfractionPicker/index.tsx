@@ -32,11 +32,10 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
   const infractionsWithLabelGroupAndIndex = useMemo(() => {
     const allInfractions = [
       ...(values.gearInfractions?.map((infraction, index) => ({
-          ...infraction,
-          group: InfractionCategory.GEAR_INFRACTIONS,
-          index
-      })) ??
-        []),
+        ...infraction,
+        group: InfractionCategory.GEAR_INFRACTIONS,
+        index
+      })) ?? []),
       ...(values.logbookInfractions?.map((infraction, index) => ({
         ...infraction,
         group: InfractionCategory.LOGBOOK_INFRACTION,
@@ -102,8 +101,6 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
 
   const remove = useCallback(
     (index: number, infractionGroup: string) => {
-      console.log(index, infractionGroup, values[infractionGroup], values)
-
       if (!values[infractionGroup]) {
         throw new FrontendError('`values[infractionGroup]` is undefined')
       }
@@ -169,7 +166,9 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
                 {index !== editedIndex && (
                   <>
                     <Infraction data={infraction} index={infraction.index} onDelete={remove} onEdit={setEditedIndex} />
-                    {index + 1 < infractionsWithLabelGroupAndIndex.length && <FieldsetGroupSeparator marginBottom={12} />}
+                    {index + 1 < infractionsWithLabelGroupAndIndex.length && (
+                      <FieldsetGroupSeparator marginBottom={12} />
+                    )}
                   </>
                 )}
 
@@ -182,7 +181,9 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
                       onCancel={closeInfractionForm}
                       onSubmit={update}
                     />
-                    {infractionsWithLabelGroupAndIndex.length > index + 1 && <FieldsetGroupSeparator marginBottom={12} />}
+                    {infractionsWithLabelGroupAndIndex.length > index + 1 && (
+                      <FieldsetGroupSeparator marginBottom={12} />
+                    )}
                   </>
                 )}
               </Fragment>

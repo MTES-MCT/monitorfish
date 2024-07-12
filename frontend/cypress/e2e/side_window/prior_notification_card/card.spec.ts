@@ -216,6 +216,6 @@ context('Side Window > Prior Notification Card > Card', () => {
     cy.clickButton('Télécharger')
 
     // Verify that window.open was called with the correct URL
-    cy.get('@windowOpen').should('be.calledWith', '/bff/v1/prior_notifications/FAKE_OPERATION_102/pdf', '_blank')
+    cy.get('@windowOpen').should('be.calledWith', '/api/v1/prior_notifications/pdf/FAKE_OPERATION_102', '_blank')
   })
 })

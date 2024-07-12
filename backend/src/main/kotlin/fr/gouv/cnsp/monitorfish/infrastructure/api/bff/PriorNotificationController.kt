@@ -26,7 +26,6 @@ class PriorNotificationController(
     private val getPriorNotificationTypes: GetPriorNotificationTypes,
     private val updatePriorNotificationNote: UpdatePriorNotificationNote,
     private val verifyAndSendPriorNotification: VerifyAndSendPriorNotification,
-    private val getPriorNotificationPdfDocument: GetPriorNotificationPdfDocument,
 ) {
     @GetMapping("")
     @Operation(summary = "Get all prior notifications")

@@ -58,25 +58,16 @@ export function ActionButtonsCell({ priorNotification }: ActionButtonsCellProps)
         title="Centrer le navire sur la carte"
         withUnpropagatedClick
       />
-      {isSuperUser && priorNotification.isManuallyCreated && (
+      {isSuperUser && (
         <IconButton
           accent={Accent.TERTIARY}
           Icon={Icon.Edit}
-          onClick={editPriorNotification}
+          onClick={priorNotification.isManuallyCreated ? editPriorNotification : openPriorNotificationDetail}
           title="Éditer le préavis"
           withUnpropagatedClick
         />
       )}
-      {!isSuperUser && priorNotification.isManuallyCreated && (
-        <IconButton
-          accent={Accent.TERTIARY}
-          Icon={Icon.Display}
-          onClick={openPriorNotificationDetail}
-          title="Consulter le préavis"
-          withUnpropagatedClick
-        />
-      )}
-      {!priorNotification.isManuallyCreated && (
+      {!isSuperUser && (
         <IconButton
           accent={Accent.TERTIARY}
           Icon={Icon.Display}

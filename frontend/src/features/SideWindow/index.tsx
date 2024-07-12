@@ -1,6 +1,7 @@
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { MissionForm } from '@features/Mission/components/MissionForm'
 import { useListenToAllMissionEventsUpdates } from '@features/Mission/components/MissionForm/hooks/useListenToAllMissionEventsUpdates'
+import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { THEME, type NewWindowContextValue, NewWindowContext, Notifier } from '@mtes-mct/monitor-ui'
 import {
   type CSSProperties,
@@ -20,6 +21,7 @@ import { Alert } from './Alert'
 import { BeaconMalfunctionBoard } from './BeaconMalfunctionBoard'
 import { BannerStack } from './components/BannerStack'
 import { Menu } from './Menu'
+import { useIsSuperUser } from '../../auth/hooks/useIsSuperUser'
 import { MissionEventContext } from '../../context/MissionEventContext'
 import { SideWindowMenuKey } from '../../domain/entities/sideWindow/constants'
 import { closeBeaconMalfunctionInKanban } from '../../domain/shared_slices/BeaconMalfunction'
@@ -41,6 +43,7 @@ export type SideWindowProps = HTMLAttributes<HTMLDivElement> & {
 }
 export function SideWindow({ isFromURL }: SideWindowProps) {
   const dispatch = useMainAppDispatch()
+  const isSuperUser = useIsSuperUser()
   // eslint-disable-next-line no-null/no-null
   const wrapperRef = useRef<HTMLDivElement | null>(null)
 
@@ -54,6 +57,12 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
   const [isFirstRender, setIsFirstRender] = useState(true)
   const [isOverlayed, setIsOverlayed] = useState(false)
   const [isPreloading, setIsPreloading] = useState(true)
+
+  useEffect(() => {
+    if (!isSuperUser && selectedPath?.menu !== SideWindowMenuKey.PRIOR_NOTIFICATION_LIST) {
+      dispatch(openSideWindowPath({ menu: SideWindowMenuKey.PRIOR_NOTIFICATION_LIST }))
+    }
+  }, [dispatch, isSuperUser, selectedPath?.menu])
 
   const grayOverlayStyle: CSSProperties = useMemo(
     () => ({
@@ -126,7 +135,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
 
             <BannerStack />
 
-            <Menu selectedMenu={selectedPath.menu} />
+            {isSuperUser && <Menu selectedMenu={selectedPath.menu} />}
             {(selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD ||
               selectedPath.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST) && (
               <GrayOverlay onClick={closeRightSidebar} style={grayOverlayStyle} />

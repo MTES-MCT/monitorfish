@@ -41,7 +41,7 @@ export function PriorNotificationListButton() {
       style={{ top: isSuperUser ? 204 : 120 }}
       title="Afficher la liste des préavis"
     >
-      <Icon.Fishery color={THEME.color.white} size={26} />
+      <Icon.Fishery color={isActive ? THEME.color.white : THEME.color.gainsboro} size={26} />
     </MapToolButton>
   )
 }

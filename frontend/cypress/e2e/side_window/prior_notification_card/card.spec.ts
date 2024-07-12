@@ -25,7 +25,7 @@ context('Side Window > Prior Notification Card > Card', () => {
 
   it('Should display a non-editable message for a non-super user', () => {
     cy.intercept('/bff/v1/authorization/current', { statusCode: 401 }).as('getIsSuperUser')
-    openSideWindowPriorNotification(`POISSON PAS NET`)
+    openSideWindowPriorNotification(`POISSON PAS NET`, false)
     cy.wait('@getIsSuperUser')
 
     // Title
@@ -101,7 +101,7 @@ context('Side Window > Prior Notification Card > Card', () => {
       cy.intercept('GET', url, { body: updatedPriorNotificationDetailStub }).as('getUpdatedPriorNotification')
       cy.intercept('GET', '/bff/v1/prior_notifications?*').as('getPriorNotifications')
 
-      cy.clickButton('Consulter le préavis')
+      cy.clickButton('Éditer le préavis')
 
       cy.wait('@getUpdatedPriorNotification')
       cy.wait('@getPriorNotifications')
@@ -138,7 +138,7 @@ context('Side Window > Prior Notification Card > Card', () => {
       cy.intercept('GET', url, { body: deletedPriorNotificationDetailStub }).as('getDeletedPriorNotification')
       cy.intercept('GET', '/bff/v1/prior_notifications?*').as('getPriorNotifications')
 
-      cy.clickButton('Consulter le préavis')
+      cy.clickButton('Éditer le préavis')
 
       cy.wait('@getDeletedPriorNotification')
       cy.wait('@getPriorNotifications')
@@ -196,8 +196,7 @@ context('Side Window > Prior Notification Card > Card', () => {
     cy.wait('@updatePriorNotificationNote')
 
     // Then, the PDF is deleted
-    cy.clickButton('Télécharger les documents')
-    cy.get('li[aria-disabled="true"]').contains('Préavis de débarquement (Document non généré)')
+    cy.get('.Element-Button').contains('Télécharger (Document non généré)')
 
     // The note is saved
     openSideWindowPriorNotification(`CALAMARO`)
@@ -208,16 +207,13 @@ context('Side Window > Prior Notification Card > Card', () => {
     // Given
     openSideWindowPriorNotification(`COURANT MAIN PROFESSEUR`)
 
-    // When
-    cy.clickButton('Télécharger les documents')
-
     // Spy on the window.open method
     cy.window().then(win => {
       cy.stub(win, 'open').as('windowOpen')
     })
 
-    // Click the button
-    cy.clickButton('Préavis de débarquement (à destination des unités)')
+    // When
+    cy.clickButton('Télécharger')
 
     // Verify that window.open was called with the correct URL
     cy.get('@windowOpen').should('be.calledWith', '/bff/v1/prior_notifications/FAKE_OPERATION_102/pdf', '_blank')

@@ -1,5 +1,5 @@
 import { editSideWindowMission } from './utils'
-import {ALL_SEAFRONT_GROUP, SeafrontGroup} from '../../../../src/constants/seafront'
+import { ALL_SEAFRONT_GROUP, SeafrontGroup } from '../../../../src/constants/seafront'
 import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 import { editSideWindowMissionListMissionWithId, openSideWindowMissionList } from '../mission_list/utils'

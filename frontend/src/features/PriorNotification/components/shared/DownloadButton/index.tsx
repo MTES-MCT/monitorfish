@@ -87,7 +87,7 @@ export function DownloadButton({ isDisabled = false, pnoLogbookMessage, reportId
               Icon={Icon.Download}
               onClick={() => window.open(pdfUrl, '_blank')}
             >
-              Télécharger {isDisabled && '(Veuillez enregistrer le préavis)'}
+              {isDisabled ? 'Télécharger (Veuillez enregistrer le préavis)' : 'Télécharger'}
             </Button>
           )}
         </>

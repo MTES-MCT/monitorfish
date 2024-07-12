@@ -2,7 +2,7 @@ import { RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { useGetGearsQuery } from '@api/gear'
 import { getAlpha2CodeFromAlpha2or3Code } from '@components/CountryFlag/utils'
 import { useGetPriorNotificationPDFQuery } from '@features/PriorNotification/priorNotificationApi'
-import { Accent, customDayjs, Dropdown, Icon } from '@mtes-mct/monitor-ui'
+import { Accent, Button, customDayjs, Dropdown, Icon } from '@mtes-mct/monitor-ui'
 import printJS from 'print-js'
 import { useMemo } from 'react'
 
@@ -22,6 +22,9 @@ export function DownloadButton({ isDisabled = false, pnoLogbookMessage, reportId
   const getGearsApiQuery = useGetGearsQuery()
   const { isError } = useGetPriorNotificationPDFQuery(reportId, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS)
   const isPriorNotificationPDFDocumentAvailable = useMemo(() => !isError, [isError])
+  const hasAuthorizedLandingDownload =
+    isSuperUser && getAlpha2CodeFromAlpha2or3Code(pnoLogbookMessage.flagState) !== 'FR'
+  const pdfUrl = `/bff/v1/prior_notifications/${reportId}/pdf`
 
   const gearsWithName = useMemo(() => {
     if (!getGearsApiQuery.data || !pnoLogbookMessage?.tripGears) {
@@ -47,27 +50,48 @@ export function DownloadButton({ isDisabled = false, pnoLogbookMessage, reportId
   }
 
   return (
-    <Dropdown accent={Accent.SECONDARY} Icon={Icon.Download} placement="topEnd" title="Télécharger les documents">
-      <>
-        {!isPriorNotificationPDFDocumentAvailable && (
-          <Dropdown.Item disabled>Préavis de débarquement (Document non généré)</Dropdown.Item>
-        )}
-        {isPriorNotificationPDFDocumentAvailable && (
-          <Dropdown.Item
-            disabled={isDisabled}
-            onClick={() => window.open(`/bff/v1/prior_notifications/${reportId}/pdf`, '_blank')}
-          >
-            Préavis de débarquement (à destination des unités) {isDisabled && '(Veuillez enregistrer le préavis)'}
-          </Dropdown.Item>
-        )}
-        {/** If the form is dirty (has been modified), the export will be outdated. */}
-        {/** The user MUST first save the new version */}
-        {isSuperUser && getAlpha2CodeFromAlpha2or3Code(pnoLogbookMessage.flagState) !== 'FR' && (
-          <Dropdown.Item disabled={isDisabled} onClick={downloadPDF}>
-            Autorisation d&apos;entrée au port et de débarquement {isDisabled && '(Veuillez enregistrer le préavis)'}
-          </Dropdown.Item>
-        )}
-      </>
-    </Dropdown>
+    <>
+      {hasAuthorizedLandingDownload && (
+        <Dropdown accent={Accent.SECONDARY} Icon={Icon.Download} placement="topEnd" title="Télécharger les documents">
+          <>
+            {!isPriorNotificationPDFDocumentAvailable && (
+              <Dropdown.Item disabled>Préavis de débarquement (Document non généré)</Dropdown.Item>
+            )}
+            {isPriorNotificationPDFDocumentAvailable && (
+              <Dropdown.Item disabled={isDisabled} onClick={() => window.open(pdfUrl, '_blank')}>
+                Préavis de débarquement (à destination des unités) {isDisabled && '(Veuillez enregistrer le préavis)'}
+              </Dropdown.Item>
+            )}
+            {/** If the form is dirty (has been modified), the export will be outdated. */}
+            {/** The user MUST first save the new version */}
+            {hasAuthorizedLandingDownload && (
+              <Dropdown.Item disabled={isDisabled} onClick={downloadPDF}>
+                Autorisation d&apos;entrée au port et de débarquement{' '}
+                {isDisabled && '(Veuillez enregistrer le préavis)'}
+              </Dropdown.Item>
+            )}
+          </>
+        </Dropdown>
+      )}
+      {!hasAuthorizedLandingDownload && (
+        <>
+          {!isPriorNotificationPDFDocumentAvailable && (
+            <Button accent={Accent.SECONDARY} disabled Icon={Icon.Download}>
+              Télécharger (Document non généré)
+            </Button>
+          )}
+          {isPriorNotificationPDFDocumentAvailable && (
+            <Button
+              accent={Accent.SECONDARY}
+              disabled={isDisabled}
+              Icon={Icon.Download}
+              onClick={() => window.open(pdfUrl, '_blank')}
+            >
+              {isDisabled ? 'Télécharger (Veuillez enregistrer le préavis)' : 'Télécharger'}
+            </Button>
+          )}
+        </>
+      )}
+    </>
   )
 }

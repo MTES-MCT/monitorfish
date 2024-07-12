@@ -9,6 +9,7 @@ import { getColorsFromState } from '../PriorNotificationList/utils'
 import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 
 type TagBarProps = Readonly<{
+  hasBeenComputed?: boolean | undefined
   isVesselUnderCharter: boolean | undefined
   isZeroNotice: boolean | undefined
   riskFactor: number | undefined
@@ -16,7 +17,15 @@ type TagBarProps = Readonly<{
   tripSegments: LogbookMessage.Segment[] | undefined
   types: PriorNotification.Type[] | undefined
 }>
-export function TagBar({ isVesselUnderCharter, isZeroNotice, riskFactor, state, tripSegments, types }: TagBarProps) {
+export function TagBar({
+  hasBeenComputed = true,
+  isVesselUnderCharter,
+  isZeroNotice,
+  riskFactor,
+  state,
+  tripSegments,
+  types
+}: TagBarProps) {
   return (
     <Wrapper className="Wrapper">
       <Row>
@@ -33,7 +42,7 @@ export function TagBar({ isVesselUnderCharter, isZeroNotice, riskFactor, state, 
             {`${tripSegment.code} – ${tripSegment.name}`}
           </FixedTag>
         ))}
-        {!tripSegments?.length && (
+        {hasBeenComputed && !tripSegments?.length && (
           <FixedTag
             backgroundColor={THEME.color.white}
             borderColor={THEME.color.lightGray}

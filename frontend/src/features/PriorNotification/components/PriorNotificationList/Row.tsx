@@ -1,3 +1,4 @@
+import { openPriorNotificationCard } from '@features/PriorNotification/useCases/openPriorNotificationCard'
 import { openPriorNotificationForm } from '@features/PriorNotification/useCases/openPriorNotificationForm'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { customDayjs, Icon, TableWithSelectableRows, Tag, THEME } from '@mtes-mct/monitor-ui'
@@ -19,7 +20,19 @@ export function Row({ row }: RowProps) {
   const firstFiveOnBoardCatchesByWeight = orderBy(priorNotification.onBoardCatches, ['weight'], ['desc']).slice(0, 5)
 
   const openCard = () => {
-    dispatch(openPriorNotificationForm(priorNotification.id, priorNotification.fingerprint))
+    if (priorNotification.isManuallyCreated) {
+      dispatch(openPriorNotificationForm(priorNotification.id, priorNotification.fingerprint))
+
+      return
+    }
+
+    dispatch(
+      openPriorNotificationCard(
+        priorNotification.id,
+        priorNotification.fingerprint,
+        priorNotification.isManuallyCreated
+      )
+    )
   }
 
   return (
@@ -162,6 +175,7 @@ export function Row({ row }: RowProps) {
               {!!priorNotification.state && (
                 <FixedTag
                   backgroundColor={getColorsFromState(priorNotification.state).backgroundColor}
+                  borderColor={getColorsFromState(priorNotification.state).borderColor}
                   color={getColorsFromState(priorNotification.state).color}
                   style={{ marginBottom: 16 }}
                 >
@@ -194,6 +208,10 @@ const ExpandableRowCell = styled(TableWithSelectableRows.Td)`
 
 // TODO Add this feature in monitor-ui.
 const ExpandedRow = styled(TableWithSelectableRows.BodyTr)`
+  > td {
+    overflow: hidden !important;
+  }
+
   &:hover {
     > td {
       /* Hack to disable hover background color in expanded rows */

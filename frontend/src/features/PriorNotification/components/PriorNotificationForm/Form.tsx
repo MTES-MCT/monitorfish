@@ -109,13 +109,13 @@ export function Form() {
 
       {isThirdPartyVessel.current && (
         <>
-          <FormikMultiRadio
+          <StyledFormikMultiRadio
             isInline
             label="Autorisation d'entrée au port"
             name="hasPortEntranceAuthorization"
             options={BOOLEAN_AS_OPTIONS}
           />
-          <FormikMultiRadio
+          <StyledFormikMultiRadio
             isInline
             label="Autorisation de débarquement"
             name="hasPortLandingAuthorization"
@@ -133,6 +133,12 @@ export function Form() {
     </>
   )
 }
+
+const StyledFormikMultiRadio = styled(FormikMultiRadio)`
+  legend {
+    margin-bottom: 8px;
+  }
+`
 
 const EnteredByTextInput = styled(FormikTextInput)`
   width: 120px;

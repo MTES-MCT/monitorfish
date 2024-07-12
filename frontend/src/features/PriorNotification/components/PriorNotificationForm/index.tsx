@@ -57,7 +57,9 @@ export function PriorNotificationForm() {
 
     await dispatch(verifyAndSendPriorNotification(openedPriorNotificationReportId, true))
 
-    setIsLoading(false)
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 1000)
   }
 
   if (!editedPriorNotificationInitialFormValues || isLoading) {

@@ -20,6 +20,7 @@ data class MissionActionDataOutput(
     val missionId: Int,
     val actionType: MissionActionType,
     val actionDatetimeUtc: ZonedDateTime,
+    val actionEndDatetimeUtc: ZonedDateTime? = null,
     val emitsVms: ControlCheck? = null,
     val emitsAis: ControlCheck? = null,
     val logbookMatchesActivity: ControlCheck? = null,
@@ -60,6 +61,7 @@ data class MissionActionDataOutput(
     val isComplianceWithWaterRegulationsControl: Boolean? = null,
     val isSafetyEquipmentAndStandardsComplianceControl: Boolean? = null,
     val isSeafarersControl: Boolean? = null,
+    val observationsByUnit: String? = null,
 ) {
     companion object {
         fun fromMissionAction(missionAction: MissionAction) = MissionActionDataOutput(
@@ -76,6 +78,7 @@ data class MissionActionDataOutput(
             missionId = missionAction.missionId,
             actionType = missionAction.actionType,
             actionDatetimeUtc = missionAction.actionDatetimeUtc,
+            actionEndDatetimeUtc = missionAction.actionEndDatetimeUtc,
             emitsVms = missionAction.emitsVms,
             emitsAis = missionAction.emitsAis,
             logbookMatchesActivity = missionAction.logbookMatchesActivity,
@@ -116,6 +119,7 @@ data class MissionActionDataOutput(
             isComplianceWithWaterRegulationsControl = missionAction.isComplianceWithWaterRegulationsControl,
             isSafetyEquipmentAndStandardsComplianceControl = missionAction.isSafetyEquipmentAndStandardsComplianceControl,
             isSeafarersControl = missionAction.isSeafarersControl,
+            observationsByUnit = missionAction.observationsByUnit,
         )
     }
 }

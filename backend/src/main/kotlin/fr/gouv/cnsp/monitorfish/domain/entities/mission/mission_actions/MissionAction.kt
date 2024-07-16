@@ -17,6 +17,7 @@ data class MissionAction(
     val faoAreas: List<String> = listOf(),
     val actionType: MissionActionType,
     val actionDatetimeUtc: ZonedDateTime,
+    val actionEndDatetimeUtc: ZonedDateTime? = null,
     val emitsVms: ControlCheck? = null,
     val emitsAis: ControlCheck? = null,
     val flightGoals: List<FlightGoal> = listOf(),
@@ -64,6 +65,7 @@ data class MissionAction(
     val isComplianceWithWaterRegulationsControl: Boolean? = null,
     val isSafetyEquipmentAndStandardsComplianceControl: Boolean? = null,
     val isSeafarersControl: Boolean? = null,
+    val observationsByUnit: String? = null,
 ) {
     fun verify() {
         val controlTypes = listOf(

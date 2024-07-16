@@ -48,6 +48,8 @@ class MissionActionEntity(
     val actionType: MissionActionType,
     @Column(name = "action_datetime_utc")
     val actionDatetimeUtc: Instant,
+    @Column(name = "action_end_datetime_utc")
+    val actionEndDatetimeUtc: Instant? = null,
     @Column(name = "emits_vms")
     @Enumerated(EnumType.STRING)
     val emitsVms: ControlCheck? = null,
@@ -141,6 +143,8 @@ class MissionActionEntity(
     val isSafetyEquipmentAndStandardsComplianceControl: Boolean? = null,
     @Column(name = "is_seafarers_control")
     val isSeafarersControl: Boolean? = null,
+    @Column(name = "observations_by_unit")
+    val observationsByUnit: String? = null,
 ) {
 
     companion object {
@@ -162,6 +166,7 @@ class MissionActionEntity(
                 flightGoals = missionAction.flightGoals.map { it.value },
                 actionType = missionAction.actionType,
                 actionDatetimeUtc = missionAction.actionDatetimeUtc.toInstant(),
+                actionEndDatetimeUtc = missionAction.actionEndDatetimeUtc?.let { it.toInstant() },
                 emitsVms = missionAction.emitsVms,
                 emitsAis = missionAction.emitsAis,
                 logbookMatchesActivity = missionAction.logbookMatchesActivity,
@@ -201,6 +206,7 @@ class MissionActionEntity(
                 isComplianceWithWaterRegulationsControl = missionAction.isComplianceWithWaterRegulationsControl,
                 isSafetyEquipmentAndStandardsComplianceControl = missionAction.isSafetyEquipmentAndStandardsComplianceControl,
                 isSeafarersControl = missionAction.isSeafarersControl,
+                observationsByUnit = missionAction.observationsByUnit,
             )
     }
 
@@ -223,6 +229,7 @@ class MissionActionEntity(
             } ?: listOf(),
             actionType = actionType,
             actionDatetimeUtc = actionDatetimeUtc.atZone(ZoneOffset.UTC),
+            actionEndDatetimeUtc = actionEndDatetimeUtc?.let { it.atZone(ZoneOffset.UTC) },
             emitsVms = emitsVms,
             emitsAis = emitsAis,
             logbookMatchesActivity = logbookMatchesActivity,
@@ -278,6 +285,7 @@ class MissionActionEntity(
             isComplianceWithWaterRegulationsControl = isComplianceWithWaterRegulationsControl,
             isSafetyEquipmentAndStandardsComplianceControl = isSafetyEquipmentAndStandardsComplianceControl,
             isSeafarersControl = isSeafarersControl,
+            observationsByUnit = observationsByUnit,
         )
 
     private fun <T> deserializeJSONList(mapper: ObjectMapper, json: String?, clazz: Class<T>): List<T> = json?.let {

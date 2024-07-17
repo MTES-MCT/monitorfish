@@ -1153,7 +1153,10 @@ def test_flow(reset_test_data):
     pd.testing.assert_frame_equal(pnos_after_first_run, pnos_after_third_run_with_reset)
 
 
-def test_flow_with_no_pno_in_period(reset_test_data):
+def test_flow_with_no_pno_in_period_does_nothing(reset_test_data):
+    query = "SELECT * FROM logbook_reports ORDER BY id"
+    initial_logbook = read_query(query, db="monitorfish_remote")
+
     flow.schedule = None
     state = flow.run(
         start_hours_ago=0,
@@ -1162,4 +1165,5 @@ def test_flow_with_no_pno_in_period(reset_test_data):
         recompute_all=False,
     )
     assert state.is_successful()
-    assert state.result[flow.get_tasks("extract_enrich_load_logbook")[0]].is_skipped()
+    final_logbook = read_query(query, db="monitorfish_remote")
+    pd.testing.assert_frame_equal(initial_logbook, final_logbook)

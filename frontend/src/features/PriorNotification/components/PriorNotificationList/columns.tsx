@@ -6,8 +6,8 @@ import { isLegacyFirefox } from '@utils/isLegacyFirefox'
 
 import { ActionButtonsCell } from './cells/ActionButtonsCell'
 import { StateCell } from './cells/StateCell'
+import { TypesCell } from './cells/TypesCell'
 import { None, StyledCountryFlag } from './styles'
-import { sortPriorNotificationTypesByPriority } from './utils'
 import { VesselRiskFactor } from '../../../Vessel/components/VesselRiskFactor'
 import { PriorNotification } from '../../PriorNotification.types'
 
@@ -118,12 +118,13 @@ export function getTableColumns(isFromUrl: boolean): Array<ColumnDef<PriorNotifi
       size: 168 + legacyFirefoxOffset
     },
     {
-      accessorFn: row =>
-        row.types.length > 0
-          ? sortPriorNotificationTypesByPriority(row.types.map(({ name }) => name)).join(', ')
-          : undefined,
-      cell: (info: CellContext<PriorNotification.PriorNotification, string | undefined>) =>
-        info.getValue() ? <Ellipsised>{info.getValue()}</Ellipsised> : <None>Aucun type</None>,
+      // accessorFn: row =>
+      //   row.types.length > 0
+      //     ? sortPriorNotificationTypesByPriority(row.types.map(({ name }) => name)).join(', ')
+      //     : undefined,
+      cell: (info: CellContext<PriorNotification.PriorNotification, string | undefined>) => (
+        <TypesCell priorNotification={info.row.original} />
+      ),
       enableSorting: false,
       header: () => 'Types de préavis',
       id: 'types',

@@ -5,7 +5,11 @@ import styled from 'styled-components'
 // TODO Update that in monitor-ui.
 export const FixedTag = styled(Tag)`
   align-items: baseline;
+  display: inline-block;
   line-height: 22px;
+  max-width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 `
 

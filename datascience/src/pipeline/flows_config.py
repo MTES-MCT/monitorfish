@@ -16,6 +16,7 @@ from config import (
     MINIMUM_MINUTES_OF_EMISSION_AT_SEA,
     MONITORFISH_VERSION,
     NON_COMMITED_DATA_LOCATION,
+    PNO_TEST_MODE,
     ROOT_DIRECTORY,
     TEST_MODE,
 )
@@ -79,7 +80,7 @@ distribute_pnos.flow.schedule = Schedule(
         clocks.CronClock(
             "* * * * *",
             parameter_defaults={
-                "test_mode": TEST_MODE,
+                "test_mode": PNO_TEST_MODE,
                 "is_integration": IS_INTEGRATION,
                 "start_hours_ago": 120,
                 "end_hours_ago": 0,

@@ -53,7 +53,7 @@ export function MapButtons() {
         {isFavoriteVesselsMapButtonDisplayed && <FavoriteVessels />}
         {isSuperUser && isFavoriteVesselsMapButtonDisplayed && <MissionsMenu />}
         {isSuperUser && isAlertsMapButtonDisplayed && <AlertsMapButton />}
-        {import.meta.env.FRONTEND_PRIOR_NOTIFICATION_LIST_ENABLED === 'true' &&
+        {(isSuperUser || import.meta.env.FRONTEND_PRIOR_NOTIFICATION_LIST_ENABLED === 'true') &&
           isPriorNotificationMapButtonDisplayed && <PriorNotificationListButton />}
         {isSuperUser && isBeaconMalfunctionsMapButtonDisplayed && <BeaconMalfunctionsMapButton />}
 

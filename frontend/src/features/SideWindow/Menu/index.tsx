@@ -1,4 +1,5 @@
 import { Icon, IconButton } from '@mtes-mct/monitor-ui'
+import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import styled from 'styled-components'
 
 import { SideWindowMenuKey, SideWindowMenuLabel } from '../../../domain/entities/sideWindow/constants'
@@ -10,6 +11,7 @@ export type MenuProps = Readonly<{
 }>
 export function Menu({ selectedMenu }: MenuProps) {
   const dispatch = useMainAppDispatch()
+  const isSuperUser = useIsSuperUser()
 
   return (
     <Wrapper role="menu">
@@ -32,7 +34,7 @@ export function Menu({ selectedMenu }: MenuProps) {
         selected={selectedMenu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST}
         title={SideWindowMenuLabel.ALERT_LIST_AND_REPORTING_LIST}
       />
-      {import.meta.env.FRONTEND_PRIOR_NOTIFICATION_LIST_ENABLED === 'true' && (
+      {(isSuperUser || import.meta.env.FRONTEND_PRIOR_NOTIFICATION_LIST_ENABLED === 'true') && (
         <MenuButton
           aria-label={SideWindowMenuKey.PRIOR_NOTIFICATION_LIST}
           Icon={Icon.Fishery}

@@ -1425,6 +1425,54 @@ def messages_sent_by_sms() -> List[PriorNotificationSentMessage]:
 
 
 @pytest.fixture
+def some_more_sent_messages(
+    messages_sent_by_email, messages_sent_by_sms
+) -> List[PriorNotificationSentMessage]:
+    return (
+        messages_sent_by_email
+        + messages_sent_by_sms
+        + [
+            PriorNotificationSentMessage(
+                prior_notification_report_id="Manual-Report-1",
+                prior_notification_source=PnoSource.MANUAL,
+                date_time_utc=datetime(2023, 6, 6, 16, 10),
+                communication_means=CommunicationMeans.SMS,
+                recipient_address_or_number="00000000000",
+                success=True,
+                error_message=None,
+            ),
+            PriorNotificationSentMessage(
+                prior_notification_report_id="Failed-logbook-report-123",
+                prior_notification_source=PnoSource.LOGBOOK,
+                date_time_utc=datetime(2023, 6, 6, 16, 10),
+                communication_means=CommunicationMeans.SMS,
+                recipient_address_or_number="00000000000",
+                success=False,
+                error_message=None,
+            ),
+            PriorNotificationSentMessage(
+                prior_notification_report_id="Other-logbook-report-123",
+                prior_notification_source=PnoSource.LOGBOOK,
+                date_time_utc=datetime(2023, 6, 6, 16, 10),
+                communication_means=CommunicationMeans.SMS,
+                recipient_address_or_number="00000000000",
+                success=True,
+                error_message=None,
+            ),
+            PriorNotificationSentMessage(
+                prior_notification_report_id="Manual-Report-failed",
+                prior_notification_source=PnoSource.MANUAL,
+                date_time_utc=datetime(2023, 6, 6, 16, 10),
+                communication_means=CommunicationMeans.SMS,
+                recipient_address_or_number="00000000000",
+                success=False,
+                error_message=None,
+            ),
+        ]
+    )
+
+
+@pytest.fixture
 def loaded_sent_messages() -> pd.DataFrame:
     return pd.DataFrame(
         {
@@ -1953,6 +2001,11 @@ def test_create_email_with_no_email_addressees_returns_none(
     )
     assert pno_to_send is None
 
+    pno_to_send = create_email.run(
+        pno_pdf_document_to_distribute_without_addressees_assigned, test_mode=True
+    )
+    assert pno_to_send is None
+
 
 @pytest.mark.parametrize("test_mode", [False, True])
 def test_create_sms(
@@ -1989,6 +2042,20 @@ def test_create_sms(
     assert len(attachments) == 0
 
     assert pno_to_send.message.get_content() == "Message SMS préavis 123-abc\n"
+
+
+def test_create_sms_with_no_phone_addressees_returns_none(
+    pno_pdf_document_to_distribute_without_addressees_assigned,
+):
+    pno_to_send = create_sms.run(
+        pno_pdf_document_to_distribute_without_addressees_assigned, test_mode=False
+    )
+    assert pno_to_send is None
+
+    pno_to_send = create_sms.run(
+        pno_pdf_document_to_distribute_without_addressees_assigned, test_mode=True
+    )
+    assert pno_to_send is None
 
 
 @patch(
@@ -2033,10 +2100,12 @@ def test_load_prior_notification_sent_messages(
 
 
 def test_make_update_logbook_reports_statement(
-    logbook_rendered_pno, manual_rendered_pno
+    logbook_rendered_pno, manual_rendered_pno, some_more_sent_messages
 ):
+    # Test without sent messages
     statement = make_update_logbook_reports_statement.run(
         pnos_to_update=[logbook_rendered_pno, manual_rendered_pno],
+        sent_messages=[],
         start_datetime_utc=datetime(2023, 6, 5, 12, 5, 6),
         end_datetime_utc=datetime(2023, 7, 5, 15, 2, 38),
     )
@@ -2052,7 +2121,35 @@ def test_make_update_logbook_reports_statement(
         "            false::text::jsonb"
         "       ),"
         "        '{isSent}',"
-        "        true::text::jsonb"
+        "        false::text::jsonb"
+        "   ) "
+        "WHERE"
+        "    operation_datetime_utc >= '2023-06-05 12:05:06'"
+        "    AND operation_datetime_utc < '2023-07-05 15:02:38'"
+        "    AND report_id IN ('Report-1')"
+    )
+
+    # Test with sent messages
+    statement = make_update_logbook_reports_statement.run(
+        pnos_to_update=[logbook_rendered_pno, manual_rendered_pno],
+        sent_messages=some_more_sent_messages,
+        start_datetime_utc=datetime(2023, 6, 5, 12, 5, 6),
+        end_datetime_utc=datetime(2023, 7, 5, 15, 2, 38),
+    )
+    assert isinstance(statement, sqlalchemy.TextClause)
+    compiled_statement = str(statement.compile(compile_kwargs={"literal_binds": True}))
+
+    assert compiled_statement == (
+        "UPDATE public.logbook_reports"
+        "    SET value = jsonb_set("
+        "       jsonb_set("
+        "           value,"
+        "            '{isBeingSent}',"
+        "            false::text::jsonb"
+        "       ),"
+        "        '{isSent}',"
+        "        (CASE WHEN report_id IN ('Other-logbook-report-123', 'Report-1') "
+        "THEN 'true' ELSE 'false' END)::jsonb"
         "   ) "
         "WHERE"
         "    operation_datetime_utc >= '2023-06-05 12:05:06'"
@@ -2062,10 +2159,11 @@ def test_make_update_logbook_reports_statement(
 
 
 def test_make_update_manual_prior_notifications_statement(
-    logbook_rendered_pno, manual_rendered_pno
+    logbook_rendered_pno, manual_rendered_pno, some_more_sent_messages
 ):
+    # Test without sent messages
     statement = make_manual_prior_notifications_statement.run(
-        pnos_to_update=[logbook_rendered_pno, manual_rendered_pno],
+        pnos_to_update=[logbook_rendered_pno, manual_rendered_pno], sent_messages=[]
     )
     assert isinstance(statement, sqlalchemy.TextClause)
     compiled_statement = str(statement.compile(compile_kwargs={"literal_binds": True}))
@@ -2079,7 +2177,29 @@ def test_make_update_manual_prior_notifications_statement(
         "            false::text::jsonb"
         "       ),"
         "        '{isSent}',"
-        "        true::text::jsonb"
+        "        false::text::jsonb"
+        "   ) "
+        "WHERE report_id IN ('Report-2')"
+    )
+
+    # Test with sent messages
+    statement = make_manual_prior_notifications_statement.run(
+        pnos_to_update=[logbook_rendered_pno, manual_rendered_pno],
+        sent_messages=some_more_sent_messages,
+    )
+    assert isinstance(statement, sqlalchemy.TextClause)
+    compiled_statement = str(statement.compile(compile_kwargs={"literal_binds": True}))
+
+    assert compiled_statement == (
+        "UPDATE public.manual_prior_notifications"
+        "    SET value = jsonb_set("
+        "       jsonb_set("
+        "           value,"
+        "            '{isBeingSent}',"
+        "            false::text::jsonb"
+        "       ),"
+        "        '{isSent}',"
+        "        (CASE WHEN report_id IN ('Manual-Report-1') THEN 'true' ELSE 'false' END)::jsonb"
         "   ) "
         "WHERE report_id IN ('Report-2')"
     )

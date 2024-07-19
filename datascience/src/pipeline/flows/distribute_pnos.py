@@ -701,8 +701,14 @@ def attribute_addressees(
 
 @task(checkpoint=False)
 def create_email(pno: RenderedPno, test_mode: bool) -> PnoToSend:
-    if pno.emails or (test_mode and PNO_TEST_EMAIL):
-        to = PNO_TEST_EMAIL if test_mode else pno.emails
+    if pno.emails:
+        if test_mode:
+            if PNO_TEST_EMAIL:
+                to = PNO_TEST_EMAIL
+            else:
+                return None
+        else:
+            to = pno.emails
 
         message = create_html_email(
             to=to,
@@ -731,8 +737,14 @@ def create_email(pno: RenderedPno, test_mode: bool) -> PnoToSend:
 
 @task(checkpoint=False)
 def create_sms(pno: RenderedPno, test_mode: bool) -> PnoToSend:
-    if pno.phone_numbers or (test_mode and CNSP_SIP_DEPARTMENT_MOBILE_PHONE):
-        to = CNSP_SIP_DEPARTMENT_MOBILE_PHONE if test_mode else pno.phone_numbers
+    if pno.phone_numbers:
+        if test_mode:
+            if CNSP_SIP_DEPARTMENT_MOBILE_PHONE:
+                to = CNSP_SIP_DEPARTMENT_MOBILE_PHONE
+            else:
+                return None
+        else:
+            to = pno.phone_numbers
 
         return PnoToSend(
             pno=pno,

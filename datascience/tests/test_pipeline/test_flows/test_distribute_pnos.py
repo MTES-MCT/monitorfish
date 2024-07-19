@@ -1953,6 +1953,11 @@ def test_create_email_with_no_email_addressees_returns_none(
     )
     assert pno_to_send is None
 
+    pno_to_send = create_email.run(
+        pno_pdf_document_to_distribute_without_addressees_assigned, test_mode=True
+    )
+    assert pno_to_send is None
+
 
 @pytest.mark.parametrize("test_mode", [False, True])
 def test_create_sms(
@@ -1989,6 +1994,20 @@ def test_create_sms(
     assert len(attachments) == 0
 
     assert pno_to_send.message.get_content() == "Message SMS préavis 123-abc\n"
+
+
+def test_create_sms_with_no_phone_addressees_returns_none(
+    pno_pdf_document_to_distribute_without_addressees_assigned,
+):
+    pno_to_send = create_sms.run(
+        pno_pdf_document_to_distribute_without_addressees_assigned, test_mode=False
+    )
+    assert pno_to_send is None
+
+    pno_to_send = create_sms.run(
+        pno_pdf_document_to_distribute_without_addressees_assigned, test_mode=True
+    )
+    assert pno_to_send is None
 
 
 @patch(

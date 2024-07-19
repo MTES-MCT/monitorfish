@@ -815,6 +815,7 @@ def load_prior_notification_sent_messages(
 @task(checkpoint=False)
 def make_update_logbook_reports_statement(
     pnos_to_update: List[RenderedPno],
+    sent_messages: List[PriorNotificationSentMessage],
     start_datetime_utc: datetime,
     end_datetime_utc: datetime,
 ) -> Executable:
@@ -824,6 +825,7 @@ def make_update_logbook_reports_statement(
 
     Args:
         pnos_to_update (List[RenderedPno]): PNOs to update
+        sent_messages (List[PriorNotificationSentMessage]): PNOs that were sent
         start_datetime_utc (datetime): start date
         end_datetime_utc (datetime): end date
 
@@ -838,6 +840,16 @@ def make_update_logbook_reports_statement(
         pno.report_id for pno in pnos_to_update if pno.source == PnoSource.LOGBOOK
     )
 
+    sent_pno_report_ids = tuple(
+        sorted(
+            set(
+                m.prior_notification_report_id
+                for m in sent_messages
+                if (m.success and m.prior_notification_source == PnoSource.LOGBOOK)
+            )
+        )
+    )
+
     logger = prefect.context.get("logger")
 
     if logbook_pno_report_ids:
@@ -848,6 +860,29 @@ def make_update_logbook_reports_statement(
             )
         )
 
+        bind_params = [
+            bindparam(
+                "logbook_pno_report_ids", value=logbook_pno_report_ids, expanding=True
+            ),
+        ]
+
+        # Empty tuple is not expanded correctly by SQLAlchemy so this case must be
+        # handled separately
+        if sent_pno_report_ids:
+            is_sent_line = (
+                "       (CASE WHEN report_id IN :sent_pno_report_ids "
+                "THEN 'true' "
+                "ELSE 'false' END)::jsonb"
+            )
+            bind_params.append(
+                bindparam(
+                    "sent_pno_report_ids", value=sent_pno_report_ids, expanding=True
+                )
+            )
+
+        else:
+            is_sent_line = "       false::text::jsonb"
+
         statement = text(
             "UPDATE public.logbook_reports "
             "   SET value = jsonb_set("
@@ -857,16 +892,14 @@ def make_update_logbook_reports_statement(
             "           false::text::jsonb"
             "       ), "
             "       '{isSent}', "
-            "       true::text::jsonb"
+            f"{is_sent_line}"
             "   ) "
             "WHERE "
             "   operation_datetime_utc >= :start_datetime_utc "
             "   AND operation_datetime_utc < :end_datetime_utc "
             "   AND report_id IN :logbook_pno_report_ids"
         ).bindparams(
-            bindparam(
-                "logbook_pno_report_ids", value=logbook_pno_report_ids, expanding=True
-            ),
+            *bind_params,
             start_datetime_utc=start_datetime_utc,
             end_datetime_utc=end_datetime_utc,
         )
@@ -880,6 +913,7 @@ def make_update_logbook_reports_statement(
 @task(checkpoint=False)
 def make_manual_prior_notifications_statement(
     pnos_to_update: List[RenderedPno],
+    sent_messages: List[PriorNotificationSentMessage],
 ) -> Executable:
     """
     Creates slqalchemy update statement to update `isBeingSent` and `isSent` fields of
@@ -899,6 +933,16 @@ def make_manual_prior_notifications_statement(
         pno.report_id for pno in pnos_to_update if pno.source == PnoSource.MANUAL
     )
 
+    sent_pno_report_ids = tuple(
+        sorted(
+            set(
+                m.prior_notification_report_id
+                for m in sent_messages
+                if (m.success and m.prior_notification_source == PnoSource.MANUAL)
+            )
+        )
+    )
+
     logger = prefect.context.get("logger")
 
     if manual_pno_report_ids:
@@ -909,6 +953,29 @@ def make_manual_prior_notifications_statement(
             )
         )
 
+        bind_params = [
+            bindparam(
+                "manual_pno_report_ids", value=manual_pno_report_ids, expanding=True
+            ),
+        ]
+
+        # Empty tuple is not expanded correctly by SQLAlchemy so this case must be
+        # handled separately
+        if sent_pno_report_ids:
+            is_sent_line = (
+                "       (CASE WHEN report_id IN :sent_pno_report_ids "
+                "THEN 'true' "
+                "ELSE 'false' END)::jsonb"
+            )
+            bind_params.append(
+                bindparam(
+                    "sent_pno_report_ids", value=sent_pno_report_ids, expanding=True
+                )
+            )
+
+        else:
+            is_sent_line = "       false::text::jsonb"
+
         statement = text(
             "UPDATE public.manual_prior_notifications "
             "   SET value = jsonb_set("
@@ -918,14 +985,10 @@ def make_manual_prior_notifications_statement(
             "           false::text::jsonb"
             "       ), "
             "       '{isSent}', "
-            "       true::text::jsonb"
+            f"{is_sent_line}"
             "   ) "
             "WHERE report_id IN :manual_pno_report_ids"
-        ).bindparams(
-            bindparam(
-                "manual_pno_report_ids", value=manual_pno_report_ids, expanding=True
-            ),
-        )
+        ).bindparams(*bind_params)
 
         return statement
 
@@ -1020,6 +1083,7 @@ with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
                 update_logbook_reports_statement = (
                     make_update_logbook_reports_statement(
                         pnos_to_update=pnos_to_distribute,
+                        sent_messages=flatten(sent_messages),
                         start_datetime_utc=start_datetime_utc,
                         end_datetime_utc=end_datetime_utc,
                         upstream_tasks=[loaded_prior_notification_sent_messages],
@@ -1029,6 +1093,7 @@ with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
                 update_manual_pnos_statement = (
                     make_manual_prior_notifications_statement(
                         pnos_to_update=pnos_to_distribute,
+                        sent_messages=flatten(sent_messages),
                         upstream_tasks=[loaded_prior_notification_sent_messages],
                     )
                 )

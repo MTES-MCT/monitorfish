@@ -2210,7 +2210,7 @@ def test_make_update_manual_prior_notifications_statement(
 @patch("src.pipeline.helpers.emails.send_sms")
 @patch("src.pipeline.helpers.emails.send_fax")
 @patch("src.pipeline.flows.distribute_pnos.requests")
-def test_flow_abracadabra(
+def test_flow(
     mock_requests,
     mock_send_fax,
     mock_send_sms,
@@ -2332,8 +2332,6 @@ def test_flow_abracadabra(
             ),
             "success",
         ].all()
-
-        breakpoint()
 
 
 @pytest.mark.parametrize("zero_pno_types", ["manual", "logbook", "both"])

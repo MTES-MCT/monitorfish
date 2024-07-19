@@ -22,7 +22,6 @@ from config import (
     CNSP_CROSSA_CACEM_LOGOS_PATH,
     CNSP_FRANCE_EMAIL_ADDRESS,
     CNSP_LOGO_PATH,
-    CNSP_SIP_DEPARTMENT_EMAIL,
     CNSP_SIP_DEPARTMENT_MOBILE_PHONE,
     EMAIL_FONTS_LOCATION,
     EMAIL_STYLESHEETS_LOCATION,
@@ -31,6 +30,7 @@ from config import (
     MARIANNE_LOGO_PATH,
     MONITORENV_API_ENDPOINT,
     MONITORFISH_EMAIL_ADDRESS,
+    PNO_TEST_EMAIL,
     SE_MER_LOGO_PATH,
     SMS_TEMPLATES_LOCATION,
     STATE_FLAGS_ICONS_LOCATION,
@@ -701,8 +701,8 @@ def attribute_addressees(
 
 @task(checkpoint=False)
 def create_email(pno: RenderedPno, test_mode: bool) -> PnoToSend:
-    if pno.emails or (test_mode and CNSP_SIP_DEPARTMENT_EMAIL):
-        to = CNSP_SIP_DEPARTMENT_EMAIL if test_mode else pno.emails
+    if pno.emails or (test_mode and PNO_TEST_EMAIL):
+        to = PNO_TEST_EMAIL if test_mode else pno.emails
 
         message = create_html_email(
             to=to,

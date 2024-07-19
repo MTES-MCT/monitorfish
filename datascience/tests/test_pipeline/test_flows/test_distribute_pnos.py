@@ -1897,7 +1897,7 @@ def test_create_email(
     assert pno_to_send.communication_means == CommunicationMeans.EMAIL
     assert isinstance(pno_to_send.message, EmailMessage)
     if test_mode:
-        assert pno_to_send.message["To"] == "cnsp.sip@email.fr"
+        assert pno_to_send.message["To"] == "pno.test@email.fr"
     else:
         assert (
             pno_to_send.message["To"] == "alternative@email, some.email@control.unit.4"

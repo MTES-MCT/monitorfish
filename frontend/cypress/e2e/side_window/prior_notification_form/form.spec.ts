@@ -323,7 +323,7 @@ context('Side Window > Prior Notification Form > Form', () => {
           reportId: createdPriorNotification.reportId
         })
 
-        cy.get('.Element-Button').contains('Télécharger (Document non généré)')
+        cy.get('.Element-Button').contains('Télécharger').should('be.disabled')
 
         // -----------------------------------------------------------------------
         // List

@@ -180,6 +180,9 @@ frontend/cypress/videos/
 /datascience/src/pipeline/data/non_commited_data/pno_segments_subscriptions.csv
 /datascience/src/pipeline/data/non_commited_data/pno_vessels_subscriptions.csv
 
+# Kotlin sessions
+.kotlin/
+
 # Python
 *.pyc
 datascience/monitorfish.egg-info

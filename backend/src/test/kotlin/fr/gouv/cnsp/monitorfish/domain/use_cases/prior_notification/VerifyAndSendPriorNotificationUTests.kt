@@ -26,11 +26,22 @@ class VerifyAndSendPriorNotificationUTests {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
 
         // Given
-        given(logbookReportRepository.findPriorNotificationByReportId(fakePriorNotification.reportId!!))
+        given(
+            logbookReportRepository.findPriorNotificationByReportId(
+                fakePriorNotification.reportId!!,
+                fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+            ),
+        )
             .willReturn(fakePriorNotification)
         given(manualPriorNotificationRepository.findByReportId(fakePriorNotification.reportId!!))
             .willReturn(null)
-        given(getPriorNotification.execute(fakePriorNotification.reportId!!, false))
+        given(
+            getPriorNotification.execute(
+                fakePriorNotification.reportId!!,
+                fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+                false,
+            ),
+        )
             .willReturn(fakePriorNotification)
 
         // When
@@ -38,7 +49,11 @@ class VerifyAndSendPriorNotificationUTests {
             logbookReportRepository,
             manualPriorNotificationRepository,
             getPriorNotification,
-        ).execute(fakePriorNotification.reportId!!, false)
+        ).execute(
+            fakePriorNotification.reportId!!,
+            fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+            false,
+        )
 
         // Then
         Assertions.assertThat(result.reportId).isEqualTo(fakePriorNotification.reportId!!)
@@ -49,11 +64,22 @@ class VerifyAndSendPriorNotificationUTests {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification().copy(isManuallyCreated = true)
 
         // Given
-        given(logbookReportRepository.findPriorNotificationByReportId(fakePriorNotification.reportId!!))
+        given(
+            logbookReportRepository.findPriorNotificationByReportId(
+                fakePriorNotification.reportId!!,
+                fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+            ),
+        )
             .willReturn(null)
         given(manualPriorNotificationRepository.findByReportId(fakePriorNotification.reportId!!))
             .willReturn(fakePriorNotification)
-        given(getPriorNotification.execute(fakePriorNotification.reportId!!, true))
+        given(
+            getPriorNotification.execute(
+                fakePriorNotification.reportId!!,
+                fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+                true,
+            ),
+        )
             .willReturn(fakePriorNotification)
 
         // When
@@ -61,7 +87,11 @@ class VerifyAndSendPriorNotificationUTests {
             logbookReportRepository,
             manualPriorNotificationRepository,
             getPriorNotification,
-        ).execute(fakePriorNotification.reportId!!, true)
+        ).execute(
+            fakePriorNotification.reportId!!,
+            fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+            true,
+        )
 
         // Then
         Assertions.assertThat(result.reportId).isEqualTo(fakePriorNotification.reportId!!)

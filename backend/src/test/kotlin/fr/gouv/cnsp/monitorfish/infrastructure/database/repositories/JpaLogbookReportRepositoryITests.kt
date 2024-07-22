@@ -1143,6 +1143,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // When
         jpaLogbookReportRepository.updatePriorNotificationState(
             "FAKE_OPERATION_109",
+            ZonedDateTime.now().minusMinutes(15),
             isBeingSent = true,
             isVerified = true,
         )
@@ -1168,6 +1169,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // When
         jpaLogbookReportRepository.updatePriorNotificationNote(
             "FAKE_OPERATION_109",
+            ZonedDateTime.now().minusMinutes(15),
             "A wonderful note",
         )
 

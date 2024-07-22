@@ -474,9 +474,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
             )
 
         // When
-        val createdPriorNotificationReportId = jpaManualPriorNotificationRepository.save(newPriorNotification)
-        val createdPriorNotification = jpaManualPriorNotificationRepository
-            .findByReportId(createdPriorNotificationReportId)
+        val createdPriorNotification = jpaManualPriorNotificationRepository.save(newPriorNotification)
         val priorNotifications = jpaManualPriorNotificationRepository
             .findAll(defaultPriorNotificationsFilter)
             .sortedBy { it.createdAt }
@@ -487,7 +485,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         assertThat(lastPriorNotification)
             .usingRecursiveComparison()
             .ignoringFields("logbookMessageTyped")
-            .isEqualTo(createdPriorNotification!!)
+            .isEqualTo(createdPriorNotification)
         assertThat(lastPriorNotification.logbookMessageTyped.logbookMessage)
             .isEqualTo(createdPriorNotification.logbookMessageTyped.logbookMessage)
         assertThat(createdPriorNotification.logbookMessageTyped.typedMessage.riskFactor)

@@ -10,18 +10,23 @@ import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
 import { priorNotificationApi } from '../priorNotificationApi'
 import { priorNotificationActions } from '../slice'
 
+import type { PriorNotification } from '../PriorNotification.types'
 import type { MainAppThunk } from '@store'
 
 export const openPriorNotificationCard =
-  (reportId: string, fingerprint: string, isManuallyCreated: boolean): MainAppThunk<Promise<void>> =>
+  (
+    priorNotificationIdentifier: PriorNotification.PriorNotificationIdentifier,
+    fingerprint: string,
+    isManuallyCreated: boolean
+  ): MainAppThunk<Promise<void>> =>
   async dispatch => {
     try {
       dispatch(displayedErrorActions.unset(DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_CARD_ERROR))
 
       const priorNotificationDetail = await dispatch(
         priorNotificationApi.endpoints.getPriorNotificationDetail.initiate({
-          isManuallyCreated,
-          reportId
+          ...priorNotificationIdentifier,
+          isManuallyCreated
         })
       ).unwrap()
 
@@ -48,8 +53,8 @@ export const openPriorNotificationCard =
 
       dispatch(
         priorNotificationActions.setOpenedPriorNotification({
-          isManuallyCreated,
-          reportId
+          ...priorNotificationIdentifier,
+          isManuallyCreated
         })
       )
       dispatch(priorNotificationActions.openPriorNotificationCard())
@@ -60,7 +65,7 @@ export const openPriorNotificationCard =
         dispatch(
           displayOrLogError(
             err,
-            () => openPriorNotificationCard(reportId, fingerprint, isManuallyCreated),
+            () => openPriorNotificationCard(priorNotificationIdentifier, fingerprint, isManuallyCreated),
             true,
             DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_CARD_ERROR
           )

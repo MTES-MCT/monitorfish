@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotifica
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
+import java.time.ZonedDateTime
 
 @UseCase
 class GetPriorNotification(
@@ -18,7 +19,7 @@ class GetPriorNotification(
     private val speciesRepository: SpeciesRepository,
     private val vesselRepository: VesselRepository,
 ) {
-    fun execute(reportId: String, isManuallyCreated: Boolean): PriorNotification {
+    fun execute(reportId: String, operationDate: ZonedDateTime, isManuallyCreated: Boolean): PriorNotification {
         val allGears = gearRepository.findAll()
         val allPorts = portRepository.findAll()
         val allRiskFactors = riskFactorRepository.findAll()
@@ -28,7 +29,7 @@ class GetPriorNotification(
         val priorNotification = if (isManuallyCreated) {
             manualPriorNotificationRepository.findByReportId(reportId)
         } else {
-            logbookReportRepository.findPriorNotificationByReportId(reportId)
+            logbookReportRepository.findPriorNotificationByReportId(reportId, operationDate)
         }
             ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
 

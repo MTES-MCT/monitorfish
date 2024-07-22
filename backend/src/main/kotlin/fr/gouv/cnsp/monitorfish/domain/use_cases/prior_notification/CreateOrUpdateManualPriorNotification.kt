@@ -136,8 +136,13 @@ class CreateOrUpdateManualPriorNotification(
             }
         }
 
-        val newOrCurrentReportId = manualPriorNotificationRepository.save(newOrNextPriorNotification)
-        val createdOrUpdatedPriorNotification = getPriorNotification.execute(newOrCurrentReportId, true)
+        val createdOrUpdatedIncompletePriorNotification =
+            manualPriorNotificationRepository.save(newOrNextPriorNotification)
+        val createdOrUpdatedPriorNotification = getPriorNotification.execute(
+            createdOrUpdatedIncompletePriorNotification.reportId!!,
+            createdOrUpdatedIncompletePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+            true,
+        )
 
         return createdOrUpdatedPriorNotification
     }

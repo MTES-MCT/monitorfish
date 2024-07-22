@@ -26,7 +26,13 @@ class UpdatePriorNotificationNoteUTests {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
 
         // Given
-        given(getPriorNotification.execute(fakePriorNotification.reportId!!, false)).willReturn(fakePriorNotification)
+        given(
+            getPriorNotification.execute(
+                fakePriorNotification.reportId!!,
+                fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+                false,
+            ),
+        ).willReturn(fakePriorNotification)
 
         // When
         val result = UpdatePriorNotificationNote(
@@ -34,8 +40,9 @@ class UpdatePriorNotificationNoteUTests {
             priorNotificationPdfDocumentRepository,
             getPriorNotification,
         ).execute(
-            note = null,
             reportId = fakePriorNotification.reportId!!,
+            operationDate = fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+            note = null,
         )
 
         // Then

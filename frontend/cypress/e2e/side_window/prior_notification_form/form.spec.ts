@@ -127,7 +127,7 @@ context('Side Window > Prior Notification Form > Form', () => {
         }
 
         assert.deepInclude(updateInterception.response.body, {
-          ...createdPriorNotification,
+          ...omit(createdPriorNotification, ['updatedAt']),
           note: "Un point d'attention mis à jour.",
           reportId: createdPriorNotification.reportId
         })
@@ -318,12 +318,12 @@ context('Side Window > Prior Notification Form > Form', () => {
 
         assert.includeMembers(updatedPriorNotification.tripGearCodes, ['OTB', 'TB'])
         assert.deepInclude(updatedPriorNotification, {
-          ...omit(createdPriorNotification, ['tripGearCodes']),
+          ...omit(createdPriorNotification, ['tripGearCodes', 'updatedAt']),
           faoArea: '27.5.b',
           reportId: createdPriorNotification.reportId
         })
 
-        cy.get('.Element-Button').contains('Télécharger (Document non généré)')
+        cy.get('.Element-Button').contains('Télécharger').parent().should('be.disabled')
 
         // -----------------------------------------------------------------------
         // List
@@ -435,7 +435,7 @@ context('Side Window > Prior Notification Form > Form', () => {
     // Given
     cy.intercept(
       'POST',
-      '/bff/v1/prior_notifications/00000000-0000-4000-0000-000000000002/verify_and_send?isManuallyCreated=true'
+      '/bff/v1/prior_notifications/00000000-0000-4000-0000-000000000002/verify_and_send?isManuallyCreated=true&operationDate=*'
     ).as('verifyAndSendPriorNotification')
     editSideWindowPriorNotification('DOS FIN', '00000000-0000-4000-0000-000000000002')
     cy.get('button').contains('Diffusé')
@@ -460,7 +460,7 @@ context('Side Window > Prior Notification Form > Form', () => {
     cy.intercept('POST', '/bff/v1/prior_notifications/manual').as('createPriorNotification')
     cy.intercept(
       'GET',
-      /\/bff\/v1\/prior_notifications\/[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\?isManuallyCreated=true$/i
+      /\/bff\/v1\/prior_notifications\/[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\?isManuallyCreated=true&operationDate=.*/i
     ).as('getPriorNotification')
 
     addSideWindowPriorNotification()
@@ -508,7 +508,7 @@ context('Side Window > Prior Notification Form > Form', () => {
 
         cy.intercept(
           'POST',
-          `/bff/v1/prior_notifications/${createdPriorNotification.reportId}/verify_and_send?isManuallyCreated=true`
+          `/bff/v1/prior_notifications/${createdPriorNotification.reportId}/verify_and_send?isManuallyCreated=true&operationDate=*`
         ).as('verifyAndSendPriorNotification')
 
         cy.clickButton('Diffuser')

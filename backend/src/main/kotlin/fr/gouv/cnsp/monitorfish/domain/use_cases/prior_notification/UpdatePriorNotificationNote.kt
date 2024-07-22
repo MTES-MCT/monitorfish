@@ -6,6 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PriorNotificationPdfDocumentRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.time.ZonedDateTime
 
 @UseCase
 class UpdatePriorNotificationNote(
@@ -16,8 +17,9 @@ class UpdatePriorNotificationNote(
     private val logger: Logger = LoggerFactory.getLogger(CreateOrUpdateManualPriorNotification::class.java)
 
     fun execute(
-        note: String?,
         reportId: String,
+        operationDate: ZonedDateTime,
+        note: String?,
     ): PriorNotification {
         try {
             priorNotificationPdfDocumentRepository.deleteByReportId(reportId)
@@ -27,9 +29,10 @@ class UpdatePriorNotificationNote(
 
         logbookReportRepository.updatePriorNotificationNote(
             reportId = reportId,
+            operationDate = operationDate,
             note = note,
         )
 
-        return getPriorNotification.execute(reportId, false)
+        return getPriorNotification.execute(reportId, operationDate, false)
     }
 }

@@ -34,17 +34,17 @@ const DEBOUNCE_DELAY = 500
 export function PriorNotificationCard() {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
-  const openedPriorNotificationReportId = useMainAppSelector(
-    state => state.priorNotification.openedPriorNotificationReportId
+  const openedPriorNotificationIdentity = useMainAppSelector(
+    state => state.priorNotification.openedPriorNotificationIdentifier
   )
   const isOpenedPriorNotificationManuallyCreated = useMainAppSelector(
     state => state.priorNotification.isOpenedPriorNotificationManuallyCreated
   )
   const { data: priorNotificationDetail } = useGetPriorNotificationDetailQuery(
-    openedPriorNotificationReportId && typeof isOpenedPriorNotificationManuallyCreated === 'boolean'
+    openedPriorNotificationIdentity && typeof isOpenedPriorNotificationManuallyCreated === 'boolean'
       ? {
-          isManuallyCreated: isOpenedPriorNotificationManuallyCreated,
-          reportId: openedPriorNotificationReportId
+          ...openedPriorNotificationIdentity,
+          isManuallyCreated: isOpenedPriorNotificationManuallyCreated
         }
       : skipToken,
     {
@@ -72,24 +72,25 @@ export function PriorNotificationCard() {
   const verifyAndSend = async () => {
     setIsLoading(true)
 
-    assertNotNullish(priorNotificationDetail?.id)
+    assertNotNullish(openedPriorNotificationIdentity)
 
-    await dispatch(verifyAndSendPriorNotification(priorNotificationDetail.id, false))
+    await dispatch(verifyAndSendPriorNotification(openedPriorNotificationIdentity, false))
 
     setIsLoading(false)
   }
 
   const updateNoteCallback = useCallback(
     async (nextNote: string | undefined) => {
+      assertNotNullish(openedPriorNotificationIdentity)
       assertNotNullish(priorNotificationDetail)
 
       if (nextNote === priorNotificationDetail.logbookMessage.message.note) {
         return
       }
 
-      await dispatch(updatePriorNotificationNote(priorNotificationDetail.id, nextNote))
+      await dispatch(updatePriorNotificationNote(openedPriorNotificationIdentity, nextNote))
     },
-    [dispatch, priorNotificationDetail]
+    [dispatch, openedPriorNotificationIdentity, priorNotificationDetail]
   )
 
   const updateNote = useDebouncedCallback(

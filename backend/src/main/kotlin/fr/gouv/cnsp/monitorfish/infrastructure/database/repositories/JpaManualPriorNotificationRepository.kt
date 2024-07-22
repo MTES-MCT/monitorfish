@@ -48,12 +48,12 @@ class JpaManualPriorNotificationRepository(
     }
 
     @Transactional
-    override fun save(newOrNextPriorNotification: PriorNotification): String {
+    override fun save(newOrNextPriorNotification: PriorNotification): PriorNotification {
         try {
             val manualPriorNotificationEntity = dbManualPriorNotificationRepository
                 .save(ManualPriorNotificationEntity.fromPriorNotification(newOrNextPriorNotification, true))
 
-            return requireNotNull(manualPriorNotificationEntity.reportId)
+            return manualPriorNotificationEntity.toPriorNotification()
         } catch (e: IllegalArgumentException) {
             throw BackendInternalException(
                 "Error while saving the prior notification (likely because a non-nullable variable is null).",

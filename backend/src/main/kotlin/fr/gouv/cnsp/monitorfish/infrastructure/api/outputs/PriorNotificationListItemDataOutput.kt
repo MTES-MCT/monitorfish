@@ -22,6 +22,8 @@ data class PriorNotificationListItemDataOutput(
     val isManuallyCreated: Boolean = false,
     val isVesselUnderCharter: Boolean?,
     val onBoardCatches: List<LogbookMessageFishingCatchDataOutput>,
+    // Used to optimize SQL query via Timescale when fetching a single prior notification from the list
+    val operationDate: ZonedDateTime,
     val portLocode: String?,
     val portName: String?,
     val purposeCode: String?,
@@ -80,6 +82,7 @@ data class PriorNotificationListItemDataOutput(
                 isManuallyCreated = priorNotification.isManuallyCreated,
                 isVesselUnderCharter = vessel.underCharter,
                 onBoardCatches = onBoardCatches,
+                operationDate = logbookMessage.operationDateTime,
                 portLocode = priorNotification.port?.locode,
                 portName = priorNotification.port?.name,
                 purposeCode = message.purpose.toString(),

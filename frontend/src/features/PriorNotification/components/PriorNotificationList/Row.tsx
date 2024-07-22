@@ -21,14 +21,22 @@ export function Row({ row }: RowProps) {
 
   const openCard = () => {
     if (priorNotification.isManuallyCreated) {
-      dispatch(openPriorNotificationForm(priorNotification.id, priorNotification.fingerprint))
+      dispatch(
+        openPriorNotificationForm(
+          { operationDate: priorNotification.operationDate, reportId: priorNotification.id },
+          priorNotification.fingerprint
+        )
+      )
 
       return
     }
 
     dispatch(
       openPriorNotificationCard(
-        priorNotification.id,
+        {
+          operationDate: priorNotification.operationDate,
+          reportId: priorNotification.id
+        },
         priorNotification.fingerprint,
         priorNotification.isManuallyCreated
       )

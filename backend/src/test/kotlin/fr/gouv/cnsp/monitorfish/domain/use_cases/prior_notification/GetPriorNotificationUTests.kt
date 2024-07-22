@@ -49,7 +49,12 @@ class GetPriorNotificationUTests {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
 
         // Given
-        given(logbookReportRepository.findPriorNotificationByReportId(fakePriorNotification.reportId!!))
+        given(
+            logbookReportRepository.findPriorNotificationByReportId(
+                fakePriorNotification.reportId!!,
+                fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+            ),
+        )
             .willReturn(fakePriorNotification)
 
         // When
@@ -63,7 +68,11 @@ class GetPriorNotificationUTests {
             riskFactorRepository,
             speciesRepository,
             vesselRepository,
-        ).execute(fakePriorNotification.reportId!!, false)
+        ).execute(
+            fakePriorNotification.reportId!!,
+            fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+            false,
+        )
 
         // Then
         assertThat(result.logbookMessageTyped.logbookMessage.reportId)
@@ -99,7 +108,12 @@ class GetPriorNotificationUTests {
         )
 
         // Given
-        given(logbookReportRepository.findPriorNotificationByReportId(fakeLogbookMessageReferenceReportId))
+        given(
+            logbookReportRepository.findPriorNotificationByReportId(
+                fakeLogbookMessageReferenceReportId,
+                fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+            ),
+        )
             .willReturn(fakePriorNotification)
 
         // When
@@ -113,7 +127,11 @@ class GetPriorNotificationUTests {
             riskFactorRepository,
             speciesRepository,
             vesselRepository,
-        ).execute(fakeLogbookMessageReferenceReportId, false)
+        ).execute(
+            fakeLogbookMessageReferenceReportId,
+            fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+            false,
+        )
 
         // Then
         assertThat(result.reportId).isNull()

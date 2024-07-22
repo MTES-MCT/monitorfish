@@ -78,7 +78,7 @@ context('Side Window > Prior Notification Card > Card', () => {
   })
 
   it('Should refresh the list when the opened prior notification data differs from its entry in the current list', () => {
-    const url = '/bff/v1/prior_notifications/FAKE_OPERATION_109?isManuallyCreated=false'
+    const url = '/bff/v1/prior_notifications/FAKE_OPERATION_109?isManuallyCreated=false&operationDate=*'
 
     cy.intercept({
       method: 'GET',
@@ -111,7 +111,7 @@ context('Side Window > Prior Notification Card > Card', () => {
   })
 
   it('Should display a warning banner and refresh the list when the opened prior notification has been deleted', () => {
-    const url = '/bff/v1/prior_notifications/FAKE_OPERATION_109?isManuallyCreated=false'
+    const url = '/bff/v1/prior_notifications/FAKE_OPERATION_109?isManuallyCreated=false&operationDate=*'
 
     cy.intercept({
       method: 'GET',
@@ -153,9 +153,10 @@ context('Side Window > Prior Notification Card > Card', () => {
   it('Should verify and send a prior notification', () => {
     openSideWindowPriorNotification(`LE POISSON AMBULANT`)
 
-    cy.intercept('POST', `/bff/v1/prior_notifications/FAKE_OPERATION_111/verify_and_send?isManuallyCreated=false`).as(
-      'verifyAndSendPriorNotification'
-    )
+    cy.intercept(
+      'POST',
+      `/bff/v1/prior_notifications/FAKE_OPERATION_111/verify_and_send?isManuallyCreated=false&operationDate=*`
+    ).as('verifyAndSendPriorNotification')
 
     cy.clickButton('Diffuser')
 
@@ -190,13 +191,15 @@ context('Side Window > Prior Notification Card > Card', () => {
     cy.get('*[name="note"]').should('have.value', '')
 
     // When
-    cy.intercept('PUT', `/bff/v1/prior_notifications/FAKE_OPERATION_108/note`).as('updatePriorNotificationNote')
+    cy.intercept('PUT', `/bff/v1/prior_notifications/FAKE_OPERATION_108/note?operationDate=*`).as(
+      'updatePriorNotificationNote'
+    )
     cy.fill("Points d'attention identifiés par le CNSP", "Un point d'attention.")
     cy.get('*[name="note"]').should('have.value', "Un point d'attention.")
     cy.wait('@updatePriorNotificationNote')
 
     // Then, the PDF is deleted
-    cy.get('.Element-Button').contains('Télécharger').should('be.disabled')
+    cy.get('.Element-Button').contains('Télécharger').parent().should('be.disabled')
 
     // The note is saved
     openSideWindowPriorNotification(`CALAMARO`)

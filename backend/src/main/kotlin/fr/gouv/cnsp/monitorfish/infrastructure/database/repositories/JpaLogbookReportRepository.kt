@@ -17,6 +17,7 @@ import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.stereotype.Repository
+import java.time.ZoneOffset
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 
@@ -60,9 +61,10 @@ class JpaLogbookReportRepository(
             }
     }
 
-    override fun findPriorNotificationByReportId(reportId: String): PriorNotification? {
+    override fun findPriorNotificationByReportId(reportId: String, operationDate: ZonedDateTime): PriorNotification? {
         val allLogbookReportModels = dbLogbookReportRepository.findEnrichedPnoReferenceAndRelatedOperationsByReportId(
             reportId,
+            operationDate.toString(),
         )
         if (allLogbookReportModels.isEmpty()) {
             return null
@@ -347,9 +349,17 @@ class JpaLogbookReportRepository(
     }
 
     @Transactional
-    override fun updatePriorNotificationState(reportId: String, isBeingSent: Boolean, isVerified: Boolean) {
+    override fun updatePriorNotificationState(
+        reportId: String,
+        operationDate: ZonedDateTime,
+        isBeingSent: Boolean,
+        isVerified: Boolean,
+    ) {
         val logbookReportEntities =
-            dbLogbookReportRepository.findEnrichedPnoReferenceAndRelatedOperationsByReportId(reportId)
+            dbLogbookReportRepository.findEnrichedPnoReferenceAndRelatedOperationsByReportId(
+                reportId,
+                operationDate.withZoneSameInstant(ZoneOffset.UTC).toString(),
+            )
         if (logbookReportEntities.isEmpty()) {
             throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
         }
@@ -371,9 +381,12 @@ class JpaLogbookReportRepository(
     }
 
     @Transactional
-    override fun updatePriorNotificationNote(reportId: String, note: String?) {
+    override fun updatePriorNotificationNote(reportId: String, operationDate: ZonedDateTime, note: String?) {
         val logbookReportEntities =
-            dbLogbookReportRepository.findEnrichedPnoReferenceAndRelatedOperationsByReportId(reportId)
+            dbLogbookReportRepository.findEnrichedPnoReferenceAndRelatedOperationsByReportId(
+                reportId,
+                operationDate.withZoneSameInstant(ZoneOffset.UTC).toString(),
+            )
         if (logbookReportEntities.isEmpty()) {
             throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
         }

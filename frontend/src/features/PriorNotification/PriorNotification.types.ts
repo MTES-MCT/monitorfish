@@ -21,6 +21,7 @@ export namespace PriorNotification {
     isVerified: boolean
     isVesselUnderCharter: boolean | undefined
     onBoardCatches: LogbookMessage.Catch[]
+    operationDate: string
     portLocode: string | undefined
     portName: string | undefined
     purposeCode: PurposeCode | undefined
@@ -42,6 +43,12 @@ export namespace PriorNotification {
     vesselLength: number | undefined
     vesselMmsi: string | undefined
     vesselName: string | undefined
+  }
+
+  export type PriorNotificationIdentifier = {
+    /** `operationDate` is used in Backend SQL query to optimize Timescale index usage. */
+    operationDate: string
+    reportId: string
   }
 
   export type PriorNotificationDetail = {
@@ -73,6 +80,7 @@ export namespace PriorNotification {
     reportId: string
     sentAt: string
     tripGearCodes: string[]
+    updatedAt: string
     vesselId: number
   }
   export type NewManualPriorNotificationData = Omit<ManualPriorNotificationData, 'reportId'>

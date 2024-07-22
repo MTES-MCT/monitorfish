@@ -77,7 +77,7 @@ export function DownloadButton({ isDisabled = false, pnoLogbookMessage, reportId
         <>
           {!isPriorNotificationPDFDocumentAvailable && (
             <Button accent={Accent.SECONDARY} disabled Icon={Icon.Download}>
-              Télécharger (Document non généré)
+              Télécharger (Non généré)
             </Button>
           )}
           {isPriorNotificationPDFDocumentAvailable && (

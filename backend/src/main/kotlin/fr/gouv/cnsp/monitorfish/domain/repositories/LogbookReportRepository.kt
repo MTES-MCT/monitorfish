@@ -53,7 +53,7 @@ interface LogbookReportRepository {
     // Only used in tests
     fun findById(id: Long): LogbookMessage
 
-    fun findPriorNotificationByReportId(reportId: String): PriorNotification?
+    fun findPriorNotificationByReportId(reportId: String, operationDate: ZonedDateTime): PriorNotification?
 
     fun findLastMessageDate(): ZonedDateTime
 
@@ -73,9 +73,14 @@ interface LogbookReportRepository {
 
     fun savePriorNotification(logbookMessageTyped: LogbookMessageTyped<PNO>): PriorNotification
 
-    fun updatePriorNotificationState(reportId: String, isBeingSent: Boolean, isVerified: Boolean)
+    fun updatePriorNotificationState(
+        reportId: String,
+        operationDate: ZonedDateTime,
+        isBeingSent: Boolean,
+        isVerified: Boolean,
+    )
 
     // For test purpose
     fun deleteAll()
-    fun updatePriorNotificationNote(reportId: String, note: String?)
+    fun updatePriorNotificationNote(reportId: String, operationDate: ZonedDateTime, note: String?)
 }

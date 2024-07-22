@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagePurpose
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.utils.CustomZonedDateTime
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 data class ManualPriorNotificationDataOutput(
@@ -20,6 +21,7 @@ data class ManualPriorNotificationDataOutput(
     val sentAt: ZonedDateTime,
     val purpose: LogbookMessagePurpose,
     val tripGearCodes: List<String>,
+    val updatedAt: String,
     val vesselId: Int,
 ) {
     companion object {
@@ -50,18 +52,22 @@ data class ManualPriorNotificationDataOutput(
             val fishingCatchDataOutputs = pnoMessage.catchOnboard.map {
                 ManualPriorNotificationFishingCatchDataOutput.fromLogbookFishingCatch(it)
             }
-            val portLocode = requireNotNull(pnoMessage.port) { "`message.port` is null." }
+            val portLocode = requireNotNull(pnoMessage.port) { "`pnoMessage.port` is null." }
+            val purpose = requireNotNull(pnoMessage.purpose) { "`pnoMessage.purpose` is null." }
             val reportId = requireNotNull(priorNotification.reportId) { "`priorNotification.reportId` is null." }
             val sentAt = requireNotNull(priorNotification.sentAt) { "`priorNotification.sentAt` is null." }
             val tripGearCodes = requireNotNull(logbookMessage.tripGears) {
                 "`logbookMessage.tripGears` is null."
             }.map { requireNotNull(it.gear) { "`it.gear` is null." } }
+            val updatedAt =
+                requireNotNull(priorNotification.updatedAt) { "`priorNotification.updatedAt` is null." }.withZoneSameInstant(
+                    ZoneOffset.UTC,
+                ).toString()
             val vesselId = requireNotNull(priorNotification.vessel) {
                 "`priorNotification.vessel` is null."
             }.id
             val hasPortEntranceAuthorization = pnoMessage.hasPortEntranceAuthorization ?: true
             val hasPortLandingAuthorization = pnoMessage.hasPortLandingAuthorization ?: true
-            val purpose = requireNotNull(pnoMessage.purpose) { "`message.purpose` is null." }
 
             return ManualPriorNotificationDataOutput(
                 hasPortEntranceAuthorization = hasPortEntranceAuthorization,
@@ -78,6 +84,7 @@ data class ManualPriorNotificationDataOutput(
                 sentAt = sentAt,
                 purpose = purpose,
                 tripGearCodes = tripGearCodes,
+                updatedAt = updatedAt,
                 vesselId = vesselId,
             )
         }

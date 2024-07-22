@@ -52,8 +52,14 @@ class CreateOrUpdateManualPriorNotificationUTests {
                 vesselRiskFactor = null,
             ),
         )
-        given(manualPriorNotificationRepository.save(any())).willReturn(fakePriorNotification.reportId!!)
-        given(getPriorNotification.execute(fakePriorNotification.reportId!!, true)).willReturn(fakePriorNotification)
+        given(manualPriorNotificationRepository.save(any())).willReturn(fakePriorNotification)
+        given(
+            getPriorNotification.execute(
+                fakePriorNotification.reportId!!,
+                fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+                true,
+            ),
+        ).willReturn(fakePriorNotification)
 
         // When
         val result = CreateOrUpdateManualPriorNotification(

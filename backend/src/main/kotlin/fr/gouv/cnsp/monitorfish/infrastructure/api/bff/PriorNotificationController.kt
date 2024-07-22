@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.websocket.server.PathParam
 import org.springframework.data.domain.Sort
 import org.springframework.web.bind.annotation.*
+import java.time.ZonedDateTime
 
 @RestController
 @RequestMapping("/bff/v1/prior_notifications")
@@ -146,8 +147,17 @@ class PriorNotificationController(
         @PathParam("Logbook message `reportId`")
         @PathVariable(name = "reportId")
         reportId: String,
+        @Parameter(description = "Operation date (to optimize SQL query via Timescale).")
+        @RequestParam(name = "operationDate")
+        operationDate: ZonedDateTime,
     ): ManualPriorNotificationDataOutput {
-        return ManualPriorNotificationDataOutput.fromPriorNotification(getPriorNotification.execute(reportId, true))
+        return ManualPriorNotificationDataOutput.fromPriorNotification(
+            getPriorNotification.execute(
+                reportId,
+                operationDate,
+                true,
+            ),
+        )
     }
 
     @PutMapping("/manual/{reportId}")
@@ -222,9 +232,12 @@ class PriorNotificationController(
         @Parameter(description = "Is the prior notification manually created?")
         @RequestParam(name = "isManuallyCreated")
         isManuallyCreated: Boolean,
+        @Parameter(description = "Operation date (to optimize SQL query via Timescale).")
+        @RequestParam(name = "operationDate")
+        operationDate: ZonedDateTime,
     ): PriorNotificationDetailDataOutput {
         return PriorNotificationDetailDataOutput
-            .fromPriorNotification(getPriorNotification.execute(reportId, isManuallyCreated))
+            .fromPriorNotification(getPriorNotification.execute(reportId, operationDate, isManuallyCreated))
     }
 
     @PostMapping("/{reportId}/verify_and_send")
@@ -233,12 +246,15 @@ class PriorNotificationController(
         @PathParam("Logbook message `reportId`")
         @PathVariable(name = "reportId")
         reportId: String,
+        @Parameter(description = "Operation date (to optimize SQL query via Timescale).")
+        @RequestParam(name = "operationDate")
+        operationDate: ZonedDateTime,
         @Parameter(description = "Is the prior notification manually created?")
         @RequestParam(name = "isManuallyCreated")
         isManuallyCreated: Boolean,
     ): PriorNotificationDetailDataOutput {
         return PriorNotificationDetailDataOutput
-            .fromPriorNotification(verifyAndSendPriorNotification.execute(reportId, isManuallyCreated))
+            .fromPriorNotification(verifyAndSendPriorNotification.execute(reportId, operationDate, isManuallyCreated))
     }
 
     @PutMapping("/{reportId}/note")
@@ -247,11 +263,15 @@ class PriorNotificationController(
         @PathParam("Logbook message `reportId`")
         @PathVariable(name = "reportId")
         reportId: String,
+        @Parameter(description = "Operation date (to optimize SQL query via Timescale).")
+        @RequestParam(name = "operationDate")
+        operationDate: ZonedDateTime,
         @RequestBody
         priorNotificationDataInput: PriorNotificationDataInput,
     ): PriorNotificationDetailDataOutput {
         val updatedPriorNotification = updatePriorNotificationNote.execute(
             note = priorNotificationDataInput.note,
+            operationDate = operationDate,
             reportId = reportId,
         )
 

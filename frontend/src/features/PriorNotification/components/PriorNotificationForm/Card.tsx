@@ -39,18 +39,18 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
   const editedPriorNotificationComputedValues = useMainAppSelector(
     store => store.priorNotification.editedPriorNotificationComputedValues
   )
-  const openedPriorNotificationReportId = useMainAppSelector(
-    store => store.priorNotification.openedPriorNotificationReportId
+  const openedPriorNotificationIdentifier = useMainAppSelector(
+    store => store.priorNotification.openedPriorNotificationIdentifier
   )
   const isOpenedPriorNotificationManuallyCreated = useMainAppSelector(
     store => store.priorNotification.isOpenedPriorNotificationManuallyCreated
   )
 
   const { data: editedPriorNotificationDetail } = useGetPriorNotificationDetailQuery(
-    openedPriorNotificationReportId && typeof isOpenedPriorNotificationManuallyCreated === 'boolean'
+    openedPriorNotificationIdentifier && typeof isOpenedPriorNotificationManuallyCreated === 'boolean'
       ? {
-          isManuallyCreated: isOpenedPriorNotificationManuallyCreated,
-          reportId: openedPriorNotificationReportId
+          ...openedPriorNotificationIdentifier,
+          isManuallyCreated: isOpenedPriorNotificationManuallyCreated
         }
       : skipToken,
     {
@@ -167,7 +167,7 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
             {!isNewPriorNotification && isPendingVerification && (
               <Intro>Le préavis doit être vérifié par le CNSP avant sa diffusion.</Intro>
             )}
-            {(!!editedPriorNotificationComputedValues || !!openedPriorNotificationReportId) && (
+            {(!!editedPriorNotificationComputedValues || !!openedPriorNotificationIdentifier) && (
               <Intro hasNoTopMargin={!isNewPriorNotification && isPendingVerification}>
                 Le navire doit respecter un délai d’envoi{hasDesignatedPorts && ' et débarquer dans un port désigné'}.
               </Intro>

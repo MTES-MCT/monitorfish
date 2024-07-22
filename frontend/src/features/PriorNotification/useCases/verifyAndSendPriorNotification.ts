@@ -5,14 +5,21 @@ import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
 
 import { priorNotificationApi } from '../priorNotificationApi'
 
+import type { PriorNotification } from '../PriorNotification.types'
 import type { MainAppThunk } from '@store'
 
 export const verifyAndSendPriorNotification =
-  (reportId: string, isManuallyCreated: boolean): MainAppThunk<Promise<void>> =>
+  (
+    priorNotificationIdentifier: PriorNotification.PriorNotificationIdentifier,
+    isManuallyCreated: boolean
+  ): MainAppThunk<Promise<void>> =>
   async dispatch => {
     try {
       await dispatch(
-        priorNotificationApi.endpoints.verifyAndSendPriorNotification.initiate({ isManuallyCreated, reportId })
+        priorNotificationApi.endpoints.verifyAndSendPriorNotification.initiate({
+          ...priorNotificationIdentifier,
+          isManuallyCreated
+        })
       ).unwrap()
     } catch (err) {
       if (err instanceof FrontendApiError) {

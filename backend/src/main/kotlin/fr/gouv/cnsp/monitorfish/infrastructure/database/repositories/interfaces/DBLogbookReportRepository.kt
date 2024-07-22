@@ -192,7 +192,12 @@ interface DBLogbookReportRepository :
                 SELECT *
                 FROM logbook_reports
                 WHERE
-                    report_id = :reportId
+                    -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
+                    operation_datetime_utc
+                        BETWEEN CAST(:operationDate AS TIMESTAMP) - INTERVAL '48 hours'
+                        AND CAST(:operationDate AS TIMESTAMP) + INTERVAL '48 hours'
+
+                    AND report_id = :reportId
                     AND log_type = 'PNO'
                     AND operation_type = 'DAT'
                     AND enriched = TRUE
@@ -203,7 +208,12 @@ interface DBLogbookReportRepository :
                 SELECT *
                 FROM logbook_reports
                 WHERE
-                    referenced_report_id = :reportId
+                    -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
+                    operation_datetime_utc
+                        BETWEEN CAST(:operationDate AS TIMESTAMP) - INTERVAL '48 hours'
+                        AND CAST(:operationDate AS TIMESTAMP) + INTERVAL '48 hours'
+
+                    AND referenced_report_id = :reportId
                     AND log_type = 'PNO'
                     AND operation_type = 'COR'
                     AND enriched = TRUE
@@ -213,7 +223,12 @@ interface DBLogbookReportRepository :
                SELECT *
                FROM logbook_reports
                WHERE
-                   operation_type = 'DEL'
+                   -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
+                   operation_datetime_utc
+                       BETWEEN CAST(:operationDate AS TIMESTAMP) - INTERVAL '48 hours'
+                       AND CAST(:operationDate AS TIMESTAMP) + INTERVAL '48 hours'
+
+                   AND operation_type = 'DEL'
                    AND referenced_report_id IN (SELECT report_id FROM dats_cors)
            ),
 
@@ -221,7 +236,12 @@ interface DBLogbookReportRepository :
                SELECT *
                FROM logbook_reports
                WHERE
-                   operation_type = 'RET'
+                   -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
+                   operation_datetime_utc
+                       BETWEEN CAST(:operationDate AS TIMESTAMP) - INTERVAL '48 hours'
+                       AND CAST(:operationDate AS TIMESTAMP) + INTERVAL '48 hours'
+
+                   AND operation_type = 'RET'
                    AND referenced_report_id IN (
                        SELECT report_id FROM dats_cors
                        UNION ALL
@@ -246,7 +266,10 @@ interface DBLogbookReportRepository :
         """,
         nativeQuery = true,
     )
-    fun findEnrichedPnoReferenceAndRelatedOperationsByReportId(reportId: String): List<LogbookReportEntity>
+    fun findEnrichedPnoReferenceAndRelatedOperationsByReportId(
+        reportId: String,
+        operationDate: String,
+    ): List<LogbookReportEntity>
 
     @Query(
         """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDate(e.tripNumber, MIN(e.operationDateTime))

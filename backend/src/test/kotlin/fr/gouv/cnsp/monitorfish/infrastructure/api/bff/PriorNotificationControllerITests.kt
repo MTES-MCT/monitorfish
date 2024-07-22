@@ -133,11 +133,21 @@ class PriorNotificationControllerITests {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
 
         // Given
-        given(getPriorNotification.execute(fakePriorNotification.reportId!!, true))
+        given(
+            getPriorNotification.execute(
+                fakePriorNotification.reportId!!,
+                fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+                true,
+            ),
+        )
             .willReturn(fakePriorNotification)
 
         // When
-        api.perform(get("/bff/v1/prior_notifications/manual/${fakePriorNotification.reportId!!}"))
+        api.perform(
+            get(
+                "/bff/v1/prior_notifications/manual/${fakePriorNotification.reportId!!}?operationDate=${fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime}",
+            ),
+        )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
@@ -272,11 +282,21 @@ class PriorNotificationControllerITests {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
 
         // Given
-        given(getPriorNotification.execute(fakePriorNotification.reportId!!, false))
+        given(
+            getPriorNotification.execute(
+                fakePriorNotification.reportId!!,
+                fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+                false,
+            ),
+        )
             .willReturn(fakePriorNotification)
 
         // When
-        api.perform(get("/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}?isManuallyCreated=false"))
+        api.perform(
+            get(
+                "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}?operationDate=${fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime}&isManuallyCreated=false",
+            ),
+        )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.id", equalTo(fakePriorNotification.reportId)))
@@ -287,13 +307,19 @@ class PriorNotificationControllerITests {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
 
         // Given
-        given(verifyAndSendPriorNotification.execute(fakePriorNotification.reportId!!, false))
+        given(
+            verifyAndSendPriorNotification.execute(
+                fakePriorNotification.reportId!!,
+                fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+                false,
+            ),
+        )
             .willReturn(fakePriorNotification)
 
         // When
         api.perform(
             post(
-                "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}/verify_and_send?isManuallyCreated=false",
+                "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}/verify_and_send?operationDate=${fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime}&isManuallyCreated=false",
             ),
         )
             // Then
@@ -309,8 +335,9 @@ class PriorNotificationControllerITests {
         // Given
         given(
             updatePriorNotificationNote.execute(
-                note = anyOrNull(),
                 reportId = anyOrNull(),
+                operationDate = anyOrNull(),
+                note = anyOrNull(),
             ),
         )
             .willReturn(fakePriorNotification)
@@ -322,7 +349,9 @@ class PriorNotificationControllerITests {
             ),
         )
         api.perform(
-            put("/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}/note")
+            put(
+                "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}/note?operationDate=${fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime}",
+            )
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody),
         )

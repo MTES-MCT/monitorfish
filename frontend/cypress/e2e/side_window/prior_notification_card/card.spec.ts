@@ -196,7 +196,7 @@ context('Side Window > Prior Notification Card > Card', () => {
     cy.wait('@updatePriorNotificationNote')
 
     // Then, the PDF is deleted
-    cy.get('.Element-Button').contains('Télécharger (Document non généré)')
+    cy.get('.Element-Button').contains('Télécharger').should('be.disabled')
 
     // The note is saved
     openSideWindowPriorNotification(`CALAMARO`)

@@ -4,7 +4,7 @@ import { openSideWindowPriorNotification } from './utils'
 
 context('Side Window > Prior Notification Card > Error Handling', () => {
   const failedQueryCount = RTK_MAX_RETRIES + 1
-  const url = '/bff/v1/prior_notifications/FAKE_OPERATION_109?isManuallyCreated=false'
+  const url = '/bff/v1/prior_notifications/FAKE_OPERATION_109?isManuallyCreated=false&operationDate=*'
 
   it('Should handle fetching error as expected', () => {
     cy.intercept(

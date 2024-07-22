@@ -50,20 +50,23 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
 
     getPriorNotificationDetail: builder.query<
       PriorNotification.PriorNotificationDetail,
-      {
+      PriorNotification.PriorNotificationIdentifier & {
         isManuallyCreated: boolean
-        reportId: string
       }
     >({
       providesTags: (_, __, { reportId }) => [{ id: reportId, type: RtkCacheTagType.PriorNotification }],
-      query: ({ isManuallyCreated, reportId }) =>
-        getUrlOrPathWithQueryParams(`/prior_notifications/${reportId}`, { isManuallyCreated }),
+      query: ({ isManuallyCreated, operationDate, reportId }) =>
+        getUrlOrPathWithQueryParams(`/prior_notifications/${reportId}`, { isManuallyCreated, operationDate }),
       transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_DETAIL_ERROR_MESSAGE, response)
     }),
 
-    getPriorNotificationFormData: builder.query<PriorNotification.ManualPriorNotificationData, string>({
-      providesTags: (_, __, reportId) => [{ id: reportId, type: RtkCacheTagType.PriorNotification }],
-      query: reportId => `/prior_notifications/manual/${reportId}`,
+    getPriorNotificationFormData: builder.query<
+      PriorNotification.ManualPriorNotificationData,
+      PriorNotification.PriorNotificationIdentifier
+    >({
+      providesTags: (_, __, { reportId }) => [{ id: reportId, type: RtkCacheTagType.PriorNotification }],
+      query: ({ operationDate, reportId }) =>
+        getUrlOrPathWithQueryParams(`/prior_notifications/manual/${reportId}`, { operationDate }),
       transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_DATA_ERROR_MESSAGE, response)
     }),
 
@@ -123,37 +126,38 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
 
     updatePriorNotificationNote: builder.mutation<
       PriorNotification.PriorNotificationDetail,
-      {
+      PriorNotification.PriorNotificationIdentifier & {
         data: PriorNotification.PriorNotificationUpdateNoteRequestData
-        reportId: string
       }
     >({
       invalidatesTags: (_, __, { reportId }) => [
         { type: RtkCacheTagType.PriorNotifications },
         { id: reportId, type: RtkCacheTagType.PriorNotification }
       ],
-      query: ({ data, reportId }) => ({
+      query: ({ data, operationDate, reportId }) => ({
         body: data,
         method: 'PUT',
-        url: `/prior_notifications/${reportId}/note`
+        url: getUrlOrPathWithQueryParams(`/prior_notifications/${reportId}/note`, { operationDate })
       }),
       transformErrorResponse: response => new FrontendApiError(UPDATE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
     }),
 
     verifyAndSendPriorNotification: builder.mutation<
       PriorNotification.PriorNotificationDetail,
-      {
+      PriorNotification.PriorNotificationIdentifier & {
         isManuallyCreated: boolean
-        reportId: string
       }
     >({
       invalidatesTags: (_, __, { reportId }) => [
         { type: RtkCacheTagType.PriorNotifications },
         { id: reportId, type: RtkCacheTagType.PriorNotification }
       ],
-      query: ({ isManuallyCreated, reportId }) => ({
+      query: ({ isManuallyCreated, operationDate, reportId }) => ({
         method: 'POST',
-        url: getUrlOrPathWithQueryParams(`/prior_notifications/${reportId}/verify_and_send`, { isManuallyCreated })
+        url: getUrlOrPathWithQueryParams(`/prior_notifications/${reportId}/verify_and_send`, {
+          isManuallyCreated,
+          operationDate
+        })
       }),
       transformErrorResponse: response =>
         new FrontendApiError(VERIFY_AND_SEND_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)

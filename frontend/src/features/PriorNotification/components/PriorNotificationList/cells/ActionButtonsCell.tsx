@@ -18,13 +18,21 @@ export function ActionButtonsCell({ priorNotification }: ActionButtonsCellProps)
   const dispatch = useMainAppDispatch()
 
   const editPriorNotification = () => {
-    dispatch(openPriorNotificationForm(priorNotification.id, priorNotification.fingerprint))
+    dispatch(
+      openPriorNotificationForm(
+        { operationDate: priorNotification.operationDate, reportId: priorNotification.id },
+        priorNotification.fingerprint
+      )
+    )
   }
 
   const openPriorNotificationDetail = () => {
     dispatch(
       openPriorNotificationCard(
-        priorNotification.id,
+        {
+          operationDate: priorNotification.operationDate,
+          reportId: priorNotification.id
+        },
         priorNotification.fingerprint,
         priorNotification.isManuallyCreated
       )

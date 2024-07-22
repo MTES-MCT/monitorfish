@@ -76,8 +76,13 @@ export function DownloadButton({ isDisabled = false, pnoLogbookMessage, reportId
       {!hasAuthorizedLandingDownload && (
         <>
           {!isPriorNotificationPDFDocumentAvailable && (
-            <Button accent={Accent.SECONDARY} disabled Icon={Icon.Download}>
-              Télécharger (Document non généré)
+            <Button
+              accent={Accent.SECONDARY}
+              disabled
+              Icon={Icon.Download}
+              title="Le pdf du préavis est en cours de création, cela peut prendre jusqu'à 1 min."
+            >
+              Télécharger
             </Button>
           )}
           {isPriorNotificationPDFDocumentAvailable && (

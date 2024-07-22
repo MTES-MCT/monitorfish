@@ -14,7 +14,7 @@ export interface PriorNotificationState {
   isPriorNotificationCardOpen: boolean
   isPriorNotificationFormOpen: boolean
   listFilterValues: ListFilter
-  openedPriorNotificationReportId: string | undefined
+  openedPriorNotificationIdentifier: PriorNotification.PriorNotificationIdentifier | undefined
 }
 const INITIAL_STATE: PriorNotificationState = {
   editedPriorNotificationComputedValues: undefined,
@@ -23,7 +23,7 @@ const INITIAL_STATE: PriorNotificationState = {
   isPriorNotificationCardOpen: false,
   isPriorNotificationFormOpen: false,
   listFilterValues: DEFAULT_LIST_FILTER_VALUES,
-  openedPriorNotificationReportId: undefined
+  openedPriorNotificationIdentifier: undefined
 }
 
 const priorNotificationSlice = createSlice({
@@ -37,7 +37,7 @@ const priorNotificationSlice = createSlice({
     closePriorNotificationForm(state) {
       state.editedPriorNotificationComputedValues = undefined
       state.editedPriorNotificationInitialFormValues = undefined
-      state.openedPriorNotificationReportId = undefined
+      state.openedPriorNotificationIdentifier = undefined
       state.isOpenedPriorNotificationManuallyCreated = undefined
       state.isPriorNotificationFormOpen = false
     },
@@ -50,7 +50,7 @@ const priorNotificationSlice = createSlice({
       state.editedPriorNotificationComputedValues = undefined
       state.editedPriorNotificationInitialFormValues = undefined
       state.isOpenedPriorNotificationManuallyCreated = true
-      state.openedPriorNotificationReportId = undefined
+      state.openedPriorNotificationIdentifier = undefined
       state.isPriorNotificationFormOpen = true
     },
 
@@ -79,8 +79,14 @@ const priorNotificationSlice = createSlice({
       }
     },
 
-    setOpenedPriorNotification(state, action: PayloadAction<{ isManuallyCreated: boolean; reportId: string }>) {
-      state.openedPriorNotificationReportId = action.payload.reportId
+    setOpenedPriorNotification(
+      state,
+      action: PayloadAction<PriorNotification.PriorNotificationIdentifier & { isManuallyCreated: boolean }>
+    ) {
+      state.openedPriorNotificationIdentifier = {
+        operationDate: action.payload.operationDate,
+        reportId: action.payload.reportId
+      }
       state.isOpenedPriorNotificationManuallyCreated = action.payload.isManuallyCreated
     },
 
@@ -89,7 +95,7 @@ const priorNotificationSlice = createSlice({
     },
 
     unsetOpenedPriorNotification(state) {
-      state.openedPriorNotificationReportId = undefined
+      state.openedPriorNotificationIdentifier = undefined
       state.isOpenedPriorNotificationManuallyCreated = undefined
     }
   }

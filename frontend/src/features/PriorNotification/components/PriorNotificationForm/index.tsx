@@ -20,8 +20,8 @@ export function PriorNotificationForm() {
   const editedPriorNotificationInitialFormValues = useMainAppSelector(
     state => state.priorNotification.editedPriorNotificationInitialFormValues
   )
-  const openedPriorNotificationReportId = useMainAppSelector(
-    state => state.priorNotification.openedPriorNotificationReportId
+  const openedPriorNotificationIdentifier = useMainAppSelector(
+    state => state.priorNotification.openedPriorNotificationIdentifier
   )
 
   const [shouldValidateOnChange, setShouldValidateOnChange] = useState(false)
@@ -44,7 +44,7 @@ export function PriorNotificationForm() {
     } as PriorNotification.NewManualPriorNotificationData
 
     await dispatch(
-      createOrUpdateManualPriorNotification(openedPriorNotificationReportId, newOrNextPriorNotificationData)
+      createOrUpdateManualPriorNotification(openedPriorNotificationIdentifier?.reportId, newOrNextPriorNotificationData)
     )
 
     setIsLoading(false)
@@ -53,9 +53,9 @@ export function PriorNotificationForm() {
   const verifyAndSend = async () => {
     setIsLoading(true)
 
-    assertNotNullish(openedPriorNotificationReportId)
+    assertNotNullish(openedPriorNotificationIdentifier)
 
-    await dispatch(verifyAndSendPriorNotification(openedPriorNotificationReportId, true))
+    await dispatch(verifyAndSendPriorNotification(openedPriorNotificationIdentifier, true))
 
     setTimeout(() => {
       setIsLoading(false)
@@ -86,7 +86,7 @@ export function PriorNotificationForm() {
         onClose={close}
         onSubmit={() => setShouldValidateOnChange(true)}
         onVerifyAndSend={verifyAndSend}
-        reportId={openedPriorNotificationReportId}
+        reportId={openedPriorNotificationIdentifier?.reportId}
       />
     </Formik>
   )

@@ -1,6 +1,7 @@
 import { COUNTRIES_AS_ALPHA3_OPTIONS } from '@constants/index'
 import { useGetFleetSegmentsAsOptions } from '@features/FleetSegment/hooks/useGetFleetSegmentsAsOptions'
 import { useGetPriorNotificationTypesAsOptions } from '@features/PriorNotification/hooks/useGetPriorNotificationTypesAsOptions'
+import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { useGetGearsAsTreeOptions } from '@hooks/useGetGearsAsTreeOptions'
 import { useGetPortsAsTreeOptions } from '@hooks/useGetPortsAsTreeOptions'
 import { useGetSpeciesAsOptions } from '@hooks/useGetSpeciesAsOptions'
@@ -109,6 +110,10 @@ export function FilterBar() {
 
   const updateSpecyCodes = (nextSpecyCodes: string[] | undefined) => {
     dispatch(priorNotificationActions.setListFilterValues({ specyCodes: nextSpecyCodes }))
+  }
+
+  const updateStates = (nextStates: PriorNotification.State[] | undefined) => {
+    dispatch(priorNotificationActions.setListFilterValues({ states: nextStates }))
   }
 
   return (
@@ -264,6 +269,17 @@ export function FilterBar() {
           }
           searchable
           value={listFilterValues.priorNotificationTypes}
+        />
+        <CheckPicker
+          isLabelHidden
+          isTransparent
+          label="Statuts"
+          name="states"
+          onChange={updateStates}
+          options={PriorNotification.STATE_LABELS_AS_OPTIONS}
+          placeholder="Statuts"
+          renderValue={(_, items) => (items.length > 0 ? <SelectValue>Statuts ({items.length})</SelectValue> : <></>)}
+          value={listFilterValues.states}
         />
         <RichBooleanCheckbox
           falseOptionLabel="Navires ≥ 12 m"

@@ -1,4 +1,5 @@
 import { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
+import { getOptionsFromLabelledEnum } from '@mtes-mct/monitor-ui'
 
 import type { Seafront } from '@constants/seafront'
 
@@ -166,4 +167,5 @@ export namespace PriorNotification {
     SENT: 'Diffusé',
     VERIFIED_AND_SENT: 'Vérifié et diffusé'
   }
+  export const STATE_LABELS_AS_OPTIONS = getOptionsFromLabelledEnum(STATE_LABEL)
 }

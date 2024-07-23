@@ -62,7 +62,6 @@ class CreateOrUpdateManualPriorNotification(
         val message = getMessage(
             hasPortEntranceAuthorization = hasPortEntranceAuthorization,
             hasPortLandingAuthorization = hasPortLandingAuthorization,
-            existingPnoValue = existingPnoMessage,
             expectedArrivalDate = expectedArrivalDate,
             expectedLandingDate = expectedLandingDate,
             // At the moment, manual prior notifications only have a single global FAO area field in Frontend,
@@ -148,7 +147,6 @@ class CreateOrUpdateManualPriorNotification(
     }
 
     private fun getMessage(
-        existingPnoValue: PNO?,
         hasPortEntranceAuthorization: Boolean,
         hasPortLandingAuthorization: Boolean,
         purpose: LogbookMessagePurpose,

@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.SeafrontGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationState
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.sorters.PriorNotificationsSortColumn
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.*
@@ -74,6 +75,9 @@ class PriorNotificationController(
         @Parameter(description = "Seafront group.")
         @RequestParam(name = "seafrontGroup")
         seafrontGroup: SeafrontGroup,
+        @Parameter(description = "States.")
+        @RequestParam(name = "states")
+        states: List<PriorNotificationState>? = null,
 
         @Parameter(description = "Sort column.")
         @RequestParam(name = "sortColumn")
@@ -105,7 +109,7 @@ class PriorNotificationController(
         )
 
         val paginatedPriorNotifications = getPriorNotifications
-            .execute(priorNotificationsFilter, seafrontGroup, sortColumn, sortDirection, pageNumber, pageSize)
+            .execute(priorNotificationsFilter, seafrontGroup, states, sortColumn, sortDirection, pageNumber, pageSize)
         val priorNotificationListItemDataOutputs = paginatedPriorNotifications.data
             .mapNotNull { PriorNotificationListItemDataOutput.fromPriorNotification(it) }
         val extraDataOutput = PriorNotificationsExtraDataOutput

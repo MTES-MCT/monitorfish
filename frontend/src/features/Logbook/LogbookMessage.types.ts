@@ -274,6 +274,7 @@ export namespace LogbookMessage {
     seafrontGroup: SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup | undefined
     searchQuery: string | undefined
     specyCodes: string[] | undefined
+    states: PriorNotification.State[] | undefined
     tripGearCodes: string[] | undefined
     tripSegmentCodes: string[] | undefined
     vesselLength: number | undefined

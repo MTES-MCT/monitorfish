@@ -498,7 +498,9 @@ context('Side Window > Prior Notification Form > Form', () => {
         }
 
         assert.deepInclude(getInterception.response.body, {
-          state: PriorNotification.State.OUT_OF_VERIFICATION_SCOPE
+          // `PENDING_SEND` since this prior notification is out of verification scope
+          // so the backend will ask the workflow to send it right away.
+          state: PriorNotification.State.PENDING_SEND
         })
 
         cy.get('.Element-Tag').contains('Hors diffusion').should('exist')

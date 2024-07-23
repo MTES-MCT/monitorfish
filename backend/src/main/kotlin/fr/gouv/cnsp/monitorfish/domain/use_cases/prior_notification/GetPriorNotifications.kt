@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.SeafrontGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationState
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationStats
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.sorters.PriorNotificationsSortColumn
@@ -24,6 +25,7 @@ class GetPriorNotifications(
     fun execute(
         filter: PriorNotificationsFilter,
         seafrontGroup: SeafrontGroup,
+        states: List<PriorNotificationState>?,
         sortColumn: PriorNotificationsSortColumn,
         sortDirection: Sort.Direction,
         pageNumber: Int,
@@ -64,7 +66,7 @@ class GetPriorNotifications(
                 compareByDescending<PriorNotification> { getSortKey(it, sortColumn) }
                     .thenByDescending { it.logbookMessageTyped.logbookMessage.id }, // Tie-breaker
             )
-        }.filter { seafrontGroup.hasSeafront(it.seafront) }
+        }.filter { seafrontGroup.hasSeafront(it.seafront) && (states.isNullOrEmpty() || states.contains(it.state)) }
 
         val extraData = PriorNotificationStats(
             perSeafrontGroupCount = SeafrontGroup.entries.associateWith { seafrontGroupEntry ->

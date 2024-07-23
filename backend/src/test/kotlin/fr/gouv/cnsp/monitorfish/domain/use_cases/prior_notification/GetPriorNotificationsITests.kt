@@ -1,7 +1,9 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.SeafrontGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationState
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.sorters.PriorNotificationsSortColumn
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
@@ -50,6 +52,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
         willArriveBefore = "2099-12-31T00:00:00Z",
     )
     private val defaultSeafrontGroup = SeafrontGroup.ALL
+    private val defaultStates = null
     private val defaultSortColumn = PriorNotificationsSortColumn.EXPECTED_ARRIVAL_DATE
     private val defaultSortDirection = Sort.Direction.ASC
     private val defaultPageSize = 100
@@ -64,7 +67,15 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
         // When
         val result = getPriorNotifications
-            .execute(defaultFilter, defaultSeafrontGroup, sortColumn, sortDirection, defaultPageNumber, defaultPageSize)
+            .execute(
+                defaultFilter,
+                defaultSeafrontGroup,
+                defaultStates,
+                sortColumn,
+                sortDirection,
+                defaultPageNumber,
+                defaultPageSize,
+            )
 
         // Then
         val firstPriorNotificationWithNonNullArrivalDate = result.data
@@ -85,7 +96,15 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
         // When
         val result = getPriorNotifications
-            .execute(defaultFilter, defaultSeafrontGroup, sortColumn, sortDirection, defaultPageNumber, defaultPageSize)
+            .execute(
+                defaultFilter,
+                defaultSeafrontGroup,
+                defaultStates,
+                sortColumn,
+                sortDirection,
+                defaultPageNumber,
+                defaultPageSize,
+            )
 
         // Then
         val firstPriorNotificationWithNonNullArrivalDate = result.data
@@ -106,7 +125,15 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
         // When
         val result = getPriorNotifications
-            .execute(defaultFilter, defaultSeafrontGroup, sortColumn, sortDirection, defaultPageNumber, defaultPageSize)
+            .execute(
+                defaultFilter,
+                defaultSeafrontGroup,
+                defaultStates,
+                sortColumn,
+                sortDirection,
+                defaultPageNumber,
+                defaultPageSize,
+            )
 
         // Then
         val firstPriorNotificationWithNonNullLandingDate = result.data
@@ -127,7 +154,15 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
         // When
         val result = getPriorNotifications
-            .execute(defaultFilter, defaultSeafrontGroup, sortColumn, sortDirection, defaultPageNumber, defaultPageSize)
+            .execute(
+                defaultFilter,
+                defaultSeafrontGroup,
+                defaultStates,
+                sortColumn,
+                sortDirection,
+                defaultPageNumber,
+                defaultPageSize,
+            )
 
         // Then
         val firstPriorNotificationWithNonNullLandingDate = result.data
@@ -148,7 +183,15 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
         // When
         val result = getPriorNotifications
-            .execute(defaultFilter, defaultSeafrontGroup, sortColumn, sortDirection, defaultPageNumber, defaultPageSize)
+            .execute(
+                defaultFilter,
+                defaultSeafrontGroup,
+                defaultStates,
+                sortColumn,
+                sortDirection,
+                defaultPageNumber,
+                defaultPageSize,
+            )
 
         // Then
         val firstPriorNotificationWithNonNullPort = result.data.first { it.port != null }
@@ -166,7 +209,15 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
         // When
         val result = getPriorNotifications
-            .execute(defaultFilter, defaultSeafrontGroup, sortColumn, sortDirection, defaultPageNumber, defaultPageSize)
+            .execute(
+                defaultFilter,
+                defaultSeafrontGroup,
+                defaultStates,
+                sortColumn,
+                sortDirection,
+                defaultPageNumber,
+                defaultPageSize,
+            )
 
         // Then
         val firstPriorNotificationWithNonNullPort = result.data.first { it.port != null }
@@ -184,7 +235,15 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
         // When
         val result = getPriorNotifications
-            .execute(defaultFilter, defaultSeafrontGroup, sortColumn, sortDirection, defaultPageNumber, defaultPageSize)
+            .execute(
+                defaultFilter,
+                defaultSeafrontGroup,
+                defaultStates,
+                sortColumn,
+                sortDirection,
+                defaultPageNumber,
+                defaultPageSize,
+            )
 
         // Then
         val firstPriorNotificationWithKnownVessel = result.data.first { it.vessel!!.id != -1 }
@@ -207,7 +266,15 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
         // When
         val result = getPriorNotifications
-            .execute(defaultFilter, defaultSeafrontGroup, sortColumn, sortDirection, defaultPageNumber, defaultPageSize)
+            .execute(
+                defaultFilter,
+                defaultSeafrontGroup,
+                defaultStates,
+                sortColumn,
+                sortDirection,
+                defaultPageNumber,
+                defaultPageSize,
+            )
 
         // Then
         val firstPriorNotificationWithKnownVessel = result.data.first { it.vessel!!.id != -1 }
@@ -230,10 +297,19 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
         // When
         val result = getPriorNotifications
-            .execute(defaultFilter, defaultSeafrontGroup, sortColumn, sortDirection, defaultPageNumber, defaultPageSize)
+            .execute(
+                defaultFilter,
+                defaultSeafrontGroup,
+                defaultStates,
+                sortColumn,
+                sortDirection,
+                defaultPageNumber,
+                defaultPageSize,
+            )
 
         // Then
-        val firstPriorNotificationWithNonNullRiskFactor = result.data.first { it.logbookMessageTyped.typedMessage.riskFactor != null }
+        val firstPriorNotificationWithNonNullRiskFactor =
+            result.data.first { it.logbookMessageTyped.typedMessage.riskFactor != null }
         assertThat(firstPriorNotificationWithNonNullRiskFactor.logbookMessageTyped.typedMessage.riskFactor!!).isEqualTo(
             1.5,
         )
@@ -249,13 +325,75 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
         // When
         val result = getPriorNotifications
-            .execute(defaultFilter, defaultSeafrontGroup, sortColumn, sortDirection, defaultPageNumber, defaultPageSize)
+            .execute(
+                defaultFilter,
+                defaultSeafrontGroup,
+                defaultStates,
+                sortColumn,
+                sortDirection,
+                defaultPageNumber,
+                defaultPageSize,
+            )
 
         // Then
-        val firstPriorNotificationWithNonNullRiskFactor = result.data.first { it.logbookMessageTyped.typedMessage.riskFactor != null }
+        val firstPriorNotificationWithNonNullRiskFactor =
+            result.data.first { it.logbookMessageTyped.typedMessage.riskFactor != null }
         assertThat(firstPriorNotificationWithNonNullRiskFactor.logbookMessageTyped.typedMessage.riskFactor!!).isEqualTo(
             3.9,
         )
         assertThat(result.data).hasSizeGreaterThan(0)
+    }
+
+    @Test
+    @Transactional
+    fun `execute should return a list of NAMO seafront group prior notifications`() {
+        // Given
+        val seafrontGroup = SeafrontGroup.NAMO
+
+        // When
+        val result = getPriorNotifications
+            .execute(
+                defaultFilter,
+                seafrontGroup,
+                defaultStates,
+                defaultSortColumn,
+                defaultSortDirection,
+                defaultPageNumber,
+                defaultPageSize,
+            )
+
+        // Then
+        assertThat(result.data).hasSizeGreaterThan(0)
+        assertThat(result.data.all { it.seafront === Seafront.NAMO }).isTrue()
+    }
+
+    @Test
+    @Transactional
+    fun `execute should return a list of pending sent and out of verification scope prior notifications`() {
+        // Given
+        val states = listOf(PriorNotificationState.PENDING_SEND, PriorNotificationState.OUT_OF_VERIFICATION_SCOPE)
+
+        // When
+        val result = getPriorNotifications
+            .execute(
+                defaultFilter,
+                defaultSeafrontGroup,
+                states,
+                defaultSortColumn,
+                defaultSortDirection,
+                defaultPageNumber,
+                defaultPageSize,
+            )
+
+        // Then
+        assertThat(result.data).hasSizeGreaterThan(0)
+        assertThat(
+            result.data.all {
+                listOf(
+                    PriorNotificationState.PENDING_SEND,
+                    PriorNotificationState.OUT_OF_VERIFICATION_SCOPE,
+                ).contains(it.state)
+            },
+        ).isTrue()
     }
 }

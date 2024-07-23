@@ -67,7 +67,8 @@ export const DEFAULT_LIST_FILTER_VALUES: ListFilter = {
   priorNotificationTypes: undefined,
   seafrontGroup: ALL_SEAFRONT_GROUP,
   searchQuery: undefined,
-  specyCodes: undefined
+  specyCodes: undefined,
+  states: undefined
 }
 
 export const DEFAULT_PAGE_SIZE = 10

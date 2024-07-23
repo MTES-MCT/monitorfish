@@ -50,6 +50,7 @@ class GetPriorNotificationsUTests {
         willArriveBefore = "2099-12-31T00:00:00Z",
     )
     private val defaultSeafrontGroup = SeafrontGroup.ALL
+    private val defaultStates = null
     private val defaultSortColumn = PriorNotificationsSortColumn.EXPECTED_ARRIVAL_DATE
     private val defaultSortDirection = Sort.Direction.ASC
     private val defaultPageSize = 10
@@ -145,6 +146,7 @@ class GetPriorNotificationsUTests {
         ).execute(
             defaultFilter,
             defaultSeafrontGroup,
+            defaultStates,
             defaultSortColumn,
             defaultSortDirection,
             defaultPageNumber,

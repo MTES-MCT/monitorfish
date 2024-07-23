@@ -1,6 +1,7 @@
 import { COUNTRIES_AS_ALPHA3_OPTIONS } from '@constants/index'
 import { useGetFleetSegmentsAsOptions } from '@features/FleetSegment/hooks/useGetFleetSegmentsAsOptions'
 import { useGetPriorNotificationTypesAsOptions } from '@features/PriorNotification/hooks/useGetPriorNotificationTypesAsOptions'
+import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { useGetGearsAsTreeOptions } from '@hooks/useGetGearsAsTreeOptions'
 import { useGetPortsAsTreeOptions } from '@hooks/useGetPortsAsTreeOptions'
@@ -31,7 +32,8 @@ export function FilterTags() {
     !!listFilterValues.specyCodes ||
     !!listFilterValues.gearCodes ||
     !!listFilterValues.portLocodes ||
-    !!listFilterValues.priorNotificationTypes
+    !!listFilterValues.priorNotificationTypes ||
+    !!listFilterValues.states
   const areListFilterValuesEqualToDefaultOnes = isEqual(
     omit(listFilterValues, ['seafrontGroup']),
     omit(DEFAULT_LIST_FILTER_VALUES, ['seafrontGroup'])
@@ -112,6 +114,12 @@ export function FilterTags() {
                 {String(priorNotificationTypesAsOptions.find(option => option.value === priorNotificationType)?.label)}
               </SingleTag>
             ))}
+
+          {listFilterValues.states?.map(state => (
+            <SingleTag key={`states-${state}`} onDelete={() => remove('states', state)}>
+              {PriorNotification.STATE_LABEL[state]}
+            </SingleTag>
+          ))}
         </Row>
       )}
 

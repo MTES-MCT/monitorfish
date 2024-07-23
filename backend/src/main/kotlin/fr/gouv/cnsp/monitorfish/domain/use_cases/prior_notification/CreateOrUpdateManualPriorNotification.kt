@@ -163,9 +163,11 @@ class CreateOrUpdateManualPriorNotification(
     ): PNO {
         val allPorts = portRepository.findAll()
 
-        val isInVerificationScope = existingPnoValue?.isInVerificationScope
-            ?: ManualPriorNotificationComputedValues
-                .computeIsInVerificationScope(computedVesselFlagCountryCode, computedVesselRiskFactor)
+        val isInVerificationScope = ManualPriorNotificationComputedValues
+            .computeIsInVerificationScope(computedVesselFlagCountryCode, computedVesselRiskFactor)
+        // If the prior notification is not in verification scope,
+        // we pass `isBeingSent` as `true` in order to ask the workflow to send it.
+        val isBeingSent = !isInVerificationScope
         val portName = allPorts.find { it.locode == portLocode }?.name
 
         return PNO().apply {
@@ -179,7 +181,9 @@ class CreateOrUpdateManualPriorNotification(
             // so we transform that single FAO area into an FAO area per fishing catch.
             // This means we don't need to set a global PNO message FAO area here.
             this.faoZone = null
-            this.isBeingSent = false
+            // If the prior notification is not in verification scope,
+            // we pass `isBeingSent` as `true` in order to ask the workflow to send it.
+            this.isBeingSent = isBeingSent
             this.isInVerificationScope = isInVerificationScope
             this.isSent = false
             this.isVerified = false

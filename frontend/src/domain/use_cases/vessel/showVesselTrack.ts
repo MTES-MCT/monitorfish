@@ -8,13 +8,18 @@ import { removeError, setError } from '../../shared_slices/Global'
 import { doNotAnimate } from '../../shared_slices/Map'
 import { addVesselTrackShowed, resetLoadingVessel } from '../../shared_slices/Vessel'
 
-import type { TrackRequest, VesselIdentity } from '../../entities/vessel/types'
+import type { TrackRequest, FrontendVesselIdentity } from '../../entities/vessel/types'
 
 /**
  * Show a specified vessel track on map
  */
 export const showVesselTrack =
-  (vesselIdentity: VesselIdentity, isFromUserAction: boolean, trackRequest: TrackRequest | null, hasZoom?: boolean) =>
+  (
+    vesselIdentity: FrontendVesselIdentity,
+    isFromUserAction: boolean,
+    trackRequest: TrackRequest | null,
+    hasZoom?: boolean
+  ) =>
   async (dispatch, getState) => {
     try {
       const { defaultVesselTrackDepth } = getState().map

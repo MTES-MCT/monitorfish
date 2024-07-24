@@ -1,11 +1,11 @@
 import { FrontendError } from '../libs/FrontendError'
 
-export function assertNotNullish<T>(value: T | null | undefined): asserts value is T {
+export function assertNotNullish<T>(value: T | null | undefined, message?: string | undefined): asserts value is T {
   if (value === null) {
-    throw new FrontendError('The value is null.')
+    throw new FrontendError(message ?? 'The value is null.')
   }
 
   if (value === undefined) {
-    throw new FrontendError('The value is undefined.')
+    throw new FrontendError(message ?? 'The value is undefined.')
   }
 }

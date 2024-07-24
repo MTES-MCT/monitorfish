@@ -1,17 +1,19 @@
 import { expect } from '@jest/globals'
 
 import { anotherDummyVessels, dummyVessels } from './mocks'
-import { removeDuplicatedFoundVessels } from '../utils'
+import { removeDuplicatesFromFoundVesselIdentities } from '../utils'
+
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 describe('vessel_search/utils.removeDuplicatedFoundVessels()', () => {
   it('Should return vessels from API concatenated with vessels from Map When no vessels in common', () => {
     // Given
     const vesselsFromApi = dummyVessels
     const vesselsFromMap = anotherDummyVessels
-    const expectedResult = vesselsFromApi.concat(vesselsFromMap).slice(0, 50)
+    const expectedResult = (vesselsFromApi as Vessel.VesselIdentityData[]).concat(vesselsFromMap).slice(0, 50)
 
     // When
-    const result = removeDuplicatedFoundVessels(vesselsFromApi, vesselsFromMap)
+    const result = removeDuplicatesFromFoundVesselIdentities(vesselsFromApi, vesselsFromMap)
 
     // Then
     expect(result).toHaveLength(50)
@@ -26,7 +28,7 @@ describe('vessel_search/utils.removeDuplicatedFoundVessels()', () => {
     const vesselsFromMapWithFiveVesselsInCommon = anotherDummyVessels.concat(vesselsInCommon).slice(0, 50)
 
     // When
-    const result = removeDuplicatedFoundVessels(dummyVessels, vesselsFromMapWithFiveVesselsInCommon)
+    const result = removeDuplicatesFromFoundVesselIdentities(dummyVessels, vesselsFromMapWithFiveVesselsInCommon)
 
     // Then
     expect(result).toHaveLength(dummyVessels.length + anotherDummyVessels.length - 10)
@@ -43,7 +45,7 @@ describe('vessel_search/utils.removeDuplicatedFoundVessels()', () => {
     }))
 
     // When
-    const result = removeDuplicatedFoundVessels(dummyVessels, vesselsInCommon)
+    const result = removeDuplicatesFromFoundVesselIdentities(dummyVessels, vesselsInCommon)
 
     // Then, from the 3 vessels compared (vesselsInCommon)
     // - The two vessel with a `vesselId` a filtered

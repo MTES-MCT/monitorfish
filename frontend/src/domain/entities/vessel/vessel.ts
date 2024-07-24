@@ -1,3 +1,4 @@
+import { Vessel as VesselTypes } from '@features/Vessel/Vessel.types'
 import countries from 'i18n-iso-countries'
 
 import { VesselLabel } from './label/types'
@@ -9,11 +10,10 @@ import type {
   ShowedVesselTrack,
   VesselCompositeIdentifier,
   VesselEnhancedObject,
-  VesselIdentity
+  FrontendVesselIdentity
 } from './types'
 import type { LastPositionVisibility } from '../../types/map'
 import type { Reporting } from '../../types/reporting'
-import type { Vessel as VesselTypes } from '@features/Vessel/Vessel.types'
 
 export const VESSEL_ALERT_STYLE = 1
 export const VESSEL_INFRACTION_SUSPICION_STYLE = 1
@@ -142,15 +142,17 @@ export class Vessel {
     selectedBaseLayer === BaseLayers.SATELLITE.code || selectedBaseLayer === BaseLayers.DARK.code
 }
 
-export const getOnlyVesselIdentityProperties = (
-  vessel: VesselEnhancedObject | SelectedVessel | VesselTypes.EnrichedVessel | Reporting
-): VesselIdentity => ({
+export const toVesselIdentityData = (
+  vessel: SelectedVessel | VesselTypes.EnrichedVessel | Reporting
+): VesselTypes.VesselIdentityData => ({
   beaconNumber: 'beaconNumber' in vessel && !!vessel.beaconNumber ? vessel.beaconNumber : null,
   districtCode: 'districtCode' in vessel && !!vessel.districtCode ? vessel.districtCode : null,
   externalReferenceNumber: vessel.externalReferenceNumber ?? null,
   flagState: vessel.flagState,
+  imo: 'imo' in vessel && !!vessel.imo ? vessel.imo : null,
   internalReferenceNumber: vessel.internalReferenceNumber ?? null,
   ircs: 'ircs' in vessel && !!vessel.ircs ? vessel.ircs : null,
+  length: 'length' in vessel && !!vessel.length ? vessel.length : null,
   mmsi: 'mmsi' in vessel && !!vessel.mmsi ? vessel.mmsi : null,
   vesselId: 'vesselId' in vessel && !!vessel.vesselId ? vessel.vesselId : null,
   vesselIdentifier: 'vesselIdentifier' in vessel && !!vessel.vesselIdentifier ? vessel.vesselIdentifier : null,
@@ -164,12 +166,11 @@ export const getVesselCompositeIdentifier: (vessel) => VesselCompositeIdentifier
 
 /**
  * Returns true if there is at least one vessel track or vessel selected
- * @param {Object.<string, ShowedVesselTrack>} vesselsTracksShowed
- * @param {VesselIdentity | null} selectedVesselIdentity
- * @return {boolean}
  */
-export const atLeastOneVesselSelected = (vesselsTracksShowed, selectedVesselIdentity) =>
-  !!(Object.values(vesselsTracksShowed)?.length || selectedVesselIdentity)
+export const atLeastOneVesselSelected = (
+  vesselsTracksShowed: Record<string, ShowedVesselTrack>,
+  selectedVesselIdentity: FrontendVesselIdentity | null
+) => !!(Object.values(vesselsTracksShowed)?.length || selectedVesselIdentity)
 
 /**
  * Returns true if the vessel is showed:
@@ -177,9 +178,9 @@ export const atLeastOneVesselSelected = (vesselsTracksShowed, selectedVesselIden
  *  - The vessel is selected (`selectedVesselIdentity` param)
  */
 export const vesselIsShowed = (
-  vesselIdentity: VesselIdentity,
+  vesselIdentity: FrontendVesselIdentity,
   vesselsTracksShowed: ShowedVesselTrack,
-  selectedVesselIdentity: VesselIdentity
+  selectedVesselIdentity: FrontendVesselIdentity
 ): boolean =>
   vesselsAreEquals(vesselIdentity, selectedVesselIdentity) ||
   vesselsAreEquals(vesselIdentity, vesselsTracksShowed.vesselIdentity)
@@ -194,29 +195,23 @@ export const getVesselLastPositionVisibilityDates = vesselsLastPositionVisibilit
   return { vesselIsHidden, vesselIsOpacityReduced }
 }
 
-const VesselIdentifier = {
-  EXTERNAL_REFERENCE_NUMBER: 'EXTERNAL_REFERENCE_NUMBER',
-  INTERNAL_REFERENCE_NUMBER: 'INTERNAL_REFERENCE_NUMBER',
-  IRCS: 'IRCS'
-}
-
 export function vesselsAreEquals(firstVessel, secondVessel) {
   if (!firstVessel || !secondVessel) {
     return false
   }
 
   switch (firstVessel?.vesselIdentifier) {
-    case VesselIdentifier.INTERNAL_REFERENCE_NUMBER:
+    case VesselTypes.Identifier.INTERNAL_REFERENCE_NUMBER:
       return (
         firstVessel.internalReferenceNumber &&
         firstVessel.internalReferenceNumber === secondVessel.internalReferenceNumber
       )
-    case VesselIdentifier.EXTERNAL_REFERENCE_NUMBER:
+    case VesselTypes.Identifier.EXTERNAL_REFERENCE_NUMBER:
       return (
         firstVessel.externalReferenceNumber &&
         firstVessel.externalReferenceNumber === secondVessel.externalReferenceNumber
       )
-    case VesselIdentifier.IRCS:
+    case VesselTypes.Identifier.IRCS:
       return firstVessel.ircs && firstVessel.ircs === secondVessel.ircs
 
     default:
@@ -275,11 +270,17 @@ export enum FishingActivitiesTab {
  * An unknown vessel to use when no vessel is found
  * @see https://github.com/MTES-MCT/monitorfish/pull/2045/files#diff-bcb14fe011ecfdcd40c018e16578c292cd8ba9d5bd39ad19600172865980caadR104
  */
-export const UNKNOWN_VESSEL: VesselIdentity = {
+export const UNKNOWN_VESSEL: VesselTypes.VesselIdentity = {
+  beaconNumber: null,
+  districtCode: null,
   externalReferenceNumber: 'UNKNOWN',
   flagState: 'UNDEFINED',
+  imo: null,
   internalReferenceNumber: 'UNKNOWN',
   ircs: 'UNKNOWN',
+  length: null,
+  mmsi: null,
   vesselId: -1,
+  vesselIdentifier: null,
   vesselName: 'UNKNOWN'
 }

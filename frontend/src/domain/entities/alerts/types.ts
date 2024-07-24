@@ -1,7 +1,8 @@
 import { Seafront } from '@constants/seafront'
 
-import type { VesselIdentifier, VesselIdentity } from '../vessel/types'
+import type { FrontendVesselIdentity } from '../vessel/types'
 import type { MissionAction } from '@features/Mission/missionAction.types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { Except } from 'type-fest'
 
 export enum PendingAlertValueType {
@@ -22,7 +23,7 @@ export type PendingAlert = {
   ircs: string
   tripNumber: string
   value: PendingAlertValue
-  vesselIdentifier: VesselIdentifier
+  vesselIdentifier: Vessel.Identifier
   vesselName: string
 }
 
@@ -50,7 +51,7 @@ export type SilencedAlert = {
   silencedBeforeDate: string
   value: PendingAlertValue
   vesselId: number | null
-  vesselIdentifier: VesselIdentifier
+  vesselIdentifier: Vessel.Identifier
   vesselName: string
 }
 
@@ -71,6 +72,6 @@ export type SilenceAlertQueueItem = {
   silencedAlertPeriodRequest: SilencedAlertPeriodRequest
 }
 
-export type AlertNameAndVesselIdentity = VesselIdentity & {
+export type AlertNameAndVesselIdentity = FrontendVesselIdentity & {
   name: string | null
 }

@@ -14,7 +14,7 @@ import { useCallback, useMemo } from 'react'
 import { Radio, RadioGroup } from 'rsuite'
 import styled from 'styled-components'
 
-import { getOnlyVesselIdentityProperties } from '../../../../domain/entities/vessel/vessel'
+import { toVesselIdentityData } from '../../../../domain/entities/vessel/vessel'
 import { ReportingType } from '../../../../domain/types/reporting'
 import { sortArrayByColumn } from '../../../VesselList/tableSort'
 import { ReportingOriginActor, ReportingTypeCharacteristics } from '../../types'
@@ -22,7 +22,7 @@ import { addReporting } from '../../useCases/addReporting'
 import { updateReporting } from '../../useCases/updateReporting'
 import { mapControlUnitsToUniqueSortedIdsAsOptions } from '../VesselReportings/Current/utils'
 
-import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
+import type { FrontendVesselIdentity } from '../../../../domain/entities/vessel/types'
 import type { EditableReporting, EditedReporting } from '../../../../domain/types/reporting'
 import type { Option } from '@mtes-mct/monitor-ui'
 
@@ -31,7 +31,7 @@ type ReportingFormProps = {
   editedReporting: EditableReporting | undefined
   hasWhiteBackground: boolean
   isFromSideWindow: boolean
-  selectedVesselIdentity: VesselIdentity
+  selectedVesselIdentity: FrontendVesselIdentity
 }
 export function ReportingForm({
   closeForm,
@@ -70,7 +70,7 @@ export function ReportingForm({
       if (editedReporting?.id) {
         dispatch(
           updateReporting(
-            getOnlyVesselIdentityProperties(editedReporting),
+            toVesselIdentityData(editedReporting),
             editedReporting.id,
             nextReportingValue,
             editedReporting.type

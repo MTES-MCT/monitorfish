@@ -9,10 +9,10 @@ import { showVessel } from '../../../../../domain/use_cases/vessel/showVessel'
 import { showVesselTrack } from '../../../../../domain/use_cases/vessel/showVesselTrack'
 import { unselectVessel } from '../../../../../domain/use_cases/vessel/unselectVessel'
 
-import type { VesselCompositeIdentifier, VesselIdentity } from '../../../../../domain/entities/vessel/types'
+import type { VesselCompositeIdentifier, FrontendVesselIdentity } from '../../../../../domain/entities/vessel/types'
 
 type FavoriteVesselProps = Readonly<{
-  favorite: VesselIdentity
+  favorite: FrontendVesselIdentity
   isLastItem: boolean
   isTrackShowed: boolean
   isVesselShowed: boolean

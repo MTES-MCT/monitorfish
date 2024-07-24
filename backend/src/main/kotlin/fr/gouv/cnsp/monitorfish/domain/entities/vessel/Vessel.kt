@@ -47,6 +47,22 @@ data class Vessel(
         return length?.let { it < 12.0 } ?: false
     }
 
+    fun getIdentifier(): VesselIdentifier? {
+        if (internalReferenceNumber != null) {
+            return VesselIdentifier.INTERNAL_REFERENCE_NUMBER
+        }
+
+        if (ircs != null) {
+            return VesselIdentifier.IRCS
+        }
+
+        if (externalReferenceNumber != null) {
+            return VesselIdentifier.EXTERNAL_REFERENCE_NUMBER
+        }
+
+        return null
+    }
+
     fun getNationalIdentifier(): String {
         val internalReferenceNumberCountryCode =
             LIKELY_CONTROLLED_COUNTRY_CODES.find { countryAlpha3 ->

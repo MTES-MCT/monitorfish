@@ -6,13 +6,13 @@ import { useField } from 'formik'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import type { VesselIdentity } from 'domain/entities/vessel/types'
+import type { FrontendVesselIdentity } from 'domain/entities/vessel/types'
 
 type FormikVesselSelectProps = {
-  onChange: (nextVessel: VesselIdentity | undefined) => void
+  onChange: (nextVessel: FrontendVesselIdentity | undefined) => void
 }
 export function FormikVesselSelect({ onChange }: FormikVesselSelectProps) {
-  const defaultValueRef = useRef<VesselIdentity | undefined>(undefined)
+  const defaultValueRef = useRef<FrontendVesselIdentity | undefined>(undefined)
 
   const dispatch = useMainAppDispatch()
   const [input, meta, helper] = useField<number | undefined>('vesselId')
@@ -22,7 +22,7 @@ export function FormikVesselSelect({ onChange }: FormikVesselSelectProps) {
 
   const key = useKey([defaultValueRef.current, isLoading])
 
-  const handleVesselSearchChange = async (nextVessel: VesselIdentity | undefined) => {
+  const handleVesselSearchChange = async (nextVessel: FrontendVesselIdentity | undefined) => {
     if (!nextVessel) {
       defaultValueRef.current = undefined
 

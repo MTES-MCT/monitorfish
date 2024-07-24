@@ -12,13 +12,14 @@ import { doNotAnimate } from '../../shared_slices/Map'
 import { loadingVessel, resetLoadingVessel, setSelectedVessel } from '../../shared_slices/Vessel'
 import { displayOrLogError } from '../error/displayOrLogError'
 
-import type { SelectedVessel, VesselEnhancedObject, VesselIdentity } from '../../entities/vessel/types'
+import type { SelectedVessel, VesselEnhancedObject, FrontendVesselIdentity } from '../../entities/vessel/types'
 
 /**
  * Show a specified vessel track on map and on the vessel right sidebar
  */
 export const showVessel =
-  (vesselIdentity: VesselIdentity, isFromSearch: boolean, isFromUserAction: boolean) => async (dispatch, getState) => {
+  (vesselIdentity: FrontendVesselIdentity, isFromSearch: boolean, isFromUserAction: boolean) =>
+  async (dispatch, getState) => {
     try {
       const { fishingActivities, map, vessel } = getState()
       const { selectedVesselTrackRequest, vessels } = vessel

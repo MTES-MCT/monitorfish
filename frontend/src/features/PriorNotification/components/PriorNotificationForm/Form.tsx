@@ -21,7 +21,7 @@ import { FormikFishingCatchesMultiSelect } from './fields/FormikFishingCatchesMu
 import { FormikVesselSelect } from './fields/FormikVesselSelect'
 
 import type { FormValues } from './types'
-import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
+import type { FrontendVesselIdentity } from '../../../../domain/entities/vessel/types'
 
 export function Form() {
   const { values } = useFormikContext<FormValues>()
@@ -32,7 +32,7 @@ export function Form() {
 
   const isThirdPartyVessel = useRef<boolean>(false)
 
-  const onChange = (nextVessel: VesselIdentity | undefined) => {
+  const onChange = (nextVessel: FrontendVesselIdentity | undefined) => {
     if (nextVessel?.flagState !== 'FR') {
       isThirdPartyVessel.current = true
 

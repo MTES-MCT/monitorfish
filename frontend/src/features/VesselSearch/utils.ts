@@ -1,46 +1,67 @@
-import { VesselIdentifier } from '../../domain/entities/vessel/types'
+import { Vessel } from '@features/Vessel/Vessel.types'
 
-import type { VesselIdentity, VesselEnhancedObject } from '../../domain/entities/vessel/types'
+import type { VesselEnhancedObject } from '../../domain/entities/vessel/types'
+
+export function getVesselIdentityDataFromVesselEnhancedObject(
+  vesselEnhancedObject: VesselEnhancedObject
+): Vessel.VesselIdentityData {
+  return {
+    beaconNumber: vesselEnhancedObject.beaconNumber ?? null,
+    districtCode: vesselEnhancedObject.districtCode,
+    externalReferenceNumber: vesselEnhancedObject.externalReferenceNumber,
+    flagState: vesselEnhancedObject.flagState,
+    imo: null,
+    internalReferenceNumber: vesselEnhancedObject.internalReferenceNumber,
+    ircs: vesselEnhancedObject.ircs,
+    length: vesselEnhancedObject.length,
+    mmsi: vesselEnhancedObject.mmsi,
+    vesselId: vesselEnhancedObject.vesselId,
+    vesselIdentifier: vesselEnhancedObject.vesselIdentifier,
+    vesselName: vesselEnhancedObject.vesselName
+  }
+}
 
 /**
  * Remove duplicated vessels : keep vessels from APIs when a duplicate is found on either
  * - internalReferenceNumber (CFR) or
  * - vesselId (Vessel internal identifier)
  */
-export function removeDuplicatedFoundVessels(
-  foundVesselsFromAPI: VesselIdentity[],
-  foundVesselsOnMap: VesselIdentity[]
-): VesselIdentity[] {
-  const filteredVesselsFromMap = foundVesselsOnMap.filter(vesselFromMap => {
+export function removeDuplicatesFromFoundVesselIdentities(
+  foundVesselsFromApi: Vessel.VesselIdentity[],
+  foundVesselsFromMap: Vessel.VesselIdentityData[]
+): Vessel.VesselIdentityData[] {
+  const filteredVesselsFromMap = foundVesselsFromMap.filter(vesselFromMap => {
     if (!vesselFromMap.internalReferenceNumber) {
       return true
     }
 
-    return !foundVesselsFromAPI.some(
+    return !foundVesselsFromApi.some(
       vesselFromApi =>
         vesselFromApi.internalReferenceNumber === vesselFromMap.internalReferenceNumber ||
         (vesselFromApi.vesselId && vesselFromApi.vesselId === vesselFromMap.vesselId)
     )
   })
 
-  return foundVesselsFromAPI.concat(filteredVesselsFromMap).slice(0, 50)
+  return (foundVesselsFromApi as Vessel.VesselIdentityData[]).concat(filteredVesselsFromMap).slice(0, 50)
 }
 
-export function enrichWithVesselIdentifierIfNotFound(identity: VesselEnhancedObject | VesselIdentity): VesselIdentity {
+export function enrichWithVesselIdentifierIfNotFound(
+  identity: VesselEnhancedObject | Vessel.VesselIdentityData
+): Vessel.VesselIdentityData {
   if (identity.vesselIdentifier) {
-    return identity
+    return identity as Vessel.VesselIdentityData
   }
 
   if (identity.internalReferenceNumber) {
-    return { ...identity, vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER }
+    return { ...identity, vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER }
   }
 
   if (identity.ircs) {
-    return { ...identity, vesselIdentifier: VesselIdentifier.IRCS }
+    return { ...identity, vesselIdentifier: Vessel.Identifier.IRCS }
   }
 
   if (identity.externalReferenceNumber) {
-    return { ...identity, vesselIdentifier: VesselIdentifier.EXTERNAL_REFERENCE_NUMBER }
+    return { ...identity, vesselIdentifier: Vessel.Identifier.EXTERNAL_REFERENCE_NUMBER }
   }
 
   return identity

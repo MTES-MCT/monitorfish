@@ -13,7 +13,7 @@ import SearchIconSVG from '../../icons/Loupe.svg?react'
 import { MapButton } from '../../MainWindow/components/MapButtons/MapButton'
 import { VesselSearch } from '../../VesselSearch'
 
-import type { VesselIdentity } from '../../../domain/entities/vessel/types'
+import type { FrontendVesselIdentity } from '../../../domain/entities/vessel/types'
 
 export function VesselSidebarHeader() {
   const dispatch = useMainAppDispatch()
@@ -29,7 +29,7 @@ export function VesselSidebarHeader() {
   const isRightMenuShrinked = vesselSidebarIsOpen && !rightMenuIsOpen
 
   const handleVesselChange = useCallback(
-    (vesselIdentity: VesselIdentity | undefined) => {
+    (vesselIdentity: FrontendVesselIdentity | undefined) => {
       if (!vesselIdentity) {
         return
       }

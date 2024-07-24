@@ -2,32 +2,37 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselAndBeacon
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 
 data class VesselIdentityDataOutput(
-    val internalReferenceNumber: String? = null,
-    val districtCode: String? = null,
     val vesselId: Int,
-    val imo: String? = null,
-    val mmsi: String? = null,
-    val ircs: String? = null,
-    val externalReferenceNumber: String? = null,
-    val vesselName: String? = null,
+    val beaconNumber: String?,
+    val districtCode: String?,
+    val externalReferenceNumber: String?,
     val flagState: CountryCode,
-    val beaconNumber: String? = null,
+    val imo: String?,
+    val internalReferenceNumber: String?,
+    val ircs: String?,
+    val length: Double?,
+    val mmsi: String?,
+    val vesselIdentifer: VesselIdentifier?,
+    val vesselName: String?,
 ) {
     companion object {
         fun fromVesselAndBeacon(vesselAndBeacon: VesselAndBeacon): VesselIdentityDataOutput {
             return VesselIdentityDataOutput(
-                internalReferenceNumber = vesselAndBeacon.vessel.internalReferenceNumber,
-                districtCode = vesselAndBeacon.vessel.districtCode,
                 vesselId = vesselAndBeacon.vessel.id,
-                imo = vesselAndBeacon.vessel.imo,
-                ircs = vesselAndBeacon.vessel.ircs,
-                mmsi = vesselAndBeacon.vessel.mmsi,
-                externalReferenceNumber = vesselAndBeacon.vessel.externalReferenceNumber,
-                vesselName = vesselAndBeacon.vessel.vesselName,
-                flagState = vesselAndBeacon.vessel.flagState,
                 beaconNumber = vesselAndBeacon.beacon?.beaconNumber,
+                districtCode = vesselAndBeacon.vessel.districtCode,
+                externalReferenceNumber = vesselAndBeacon.vessel.externalReferenceNumber,
+                flagState = vesselAndBeacon.vessel.flagState,
+                imo = vesselAndBeacon.vessel.imo,
+                internalReferenceNumber = vesselAndBeacon.vessel.internalReferenceNumber,
+                ircs = vesselAndBeacon.vessel.ircs,
+                length = vesselAndBeacon.vessel.length,
+                mmsi = vesselAndBeacon.vessel.mmsi,
+                vesselIdentifer = vesselAndBeacon.vessel.getIdentifier(),
+                vesselName = vesselAndBeacon.vessel.vesselName,
             )
         }
     }

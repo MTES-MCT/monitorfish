@@ -1,8 +1,8 @@
 import { Seafront } from '@constants/seafront'
+import { Vessel } from '@features/Vessel/Vessel.types'
 import { expect } from '@jest/globals'
 
 import { PendingAlertValueType } from '../../../../../../domain/entities/alerts/types'
-import { VesselIdentifier } from '../../../../../../domain/entities/vessel/types'
 import { ReportingType } from '../../../../../../domain/types/reporting'
 import { sortByValidationOrCreationDateDesc } from '../utils'
 
@@ -37,7 +37,7 @@ describe('Reportings/Current/utils.sortByValidationOrCreationDateDesc()', () => 
         type: PendingAlertValueType.TWELVE_MILES_FISHING_ALERT
       },
       vesselId: 1234568,
-      vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+      vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
       vesselName: 'A VESSEL'
     }
     const secondReporting: PendingAlertReporting = {

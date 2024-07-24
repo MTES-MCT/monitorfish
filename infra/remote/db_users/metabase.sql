@@ -7,3 +7,5 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO readaccess;
 
 CREATE USER metabase WITH PASSWORD '***';
 GRANT readaccess TO metabase;
+
+GRANT pg_read_all_stats TO metabase;

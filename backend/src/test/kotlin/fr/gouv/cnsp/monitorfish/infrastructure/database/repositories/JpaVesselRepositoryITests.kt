@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.neovisionaries.i18n.CountryCode
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -118,4 +119,29 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
         assertThat(vessels.first().internalReferenceNumber).isEqualTo("FAK000999999")
         assertThat(vessels.first().vesselName).isEqualTo("PHENOMENE")
     }
+
+    @Test
+    @Transactional
+    fun `findUnderCharterForVessel Should get the underCharter field of a vessel`() {
+        // When
+        val notUnderCharterOnCfr = jpaVesselRepository.findUnderCharterForVessel(
+            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            "FAK000999999",
+        )
+        val underCharterOnIrcs = jpaVesselRepository.findUnderCharterForVessel(
+            VesselIdentifier.IRCS,
+            "QGDF",
+        )
+        val underCharterOnExternalImmatriculation = jpaVesselRepository.findUnderCharterForVessel(
+            VesselIdentifier.EXTERNAL_REFERENCE_NUMBER,
+            "08FR65324",
+        )
+
+
+        // Then
+        assertThat(notUnderCharterOnCfr).isFalse
+        assertThat(underCharterOnIrcs).isTrue
+        assertThat(underCharterOnExternalImmatriculation).isTrue
+    }
+
 }

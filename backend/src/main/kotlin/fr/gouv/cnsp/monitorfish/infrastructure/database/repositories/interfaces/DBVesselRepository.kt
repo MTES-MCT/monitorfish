@@ -34,11 +34,24 @@ interface DBVesselRepository : CrudRepository<VesselEntity, Int> {
         SELECT under_charter
         FROM vessels
         WHERE
-            CASE
-                WHEN :vesselIdentifier = 'INTERNAL_REFERENCE_NUMBER' THEN cfr
-                WHEN :vesselIdentifier = 'IRCS' THEN ircs
-                WHEN :vesselIdentifier = 'EXTERNAL_REFERENCE_NUMBER' THEN external_immatriculation
-            END = :value
+            ircs = :value
+            AND :vesselIdentifier = 'IRCS'
+
+        UNION ALL
+
+        SELECT under_charter
+        FROM vessels
+        WHERE
+            cfr = :value
+            AND :vesselIdentifier = 'INTERNAL_REFERENCE_NUMBER'
+
+        UNION ALL
+
+        SELECT under_charter
+        FROM vessels
+        WHERE
+            external_immatriculation = :value
+            AND :vesselIdentifier = 'EXTERNAL_REFERENCE_NUMBER'
         """,
         nativeQuery = true,
     )

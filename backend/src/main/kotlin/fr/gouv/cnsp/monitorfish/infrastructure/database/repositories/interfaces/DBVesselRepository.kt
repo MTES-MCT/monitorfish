@@ -28,4 +28,33 @@ interface DBVesselRepository : CrudRepository<VesselEntity, Int> {
 
     @Query(value = "SELECT * FROM vessels WHERE id in (:ids)", nativeQuery = true)
     fun findAllByIds(ids: List<Int>): List<VesselEntity>
+
+    @Query(
+        value = """
+        SELECT under_charter
+        FROM vessels
+        WHERE
+            ircs = :value
+            AND :vesselIdentifier = 'IRCS'
+
+        UNION ALL
+
+        SELECT under_charter
+        FROM vessels
+        WHERE
+            cfr = :value
+            AND :vesselIdentifier = 'INTERNAL_REFERENCE_NUMBER'
+
+        UNION ALL
+
+        SELECT under_charter
+        FROM vessels
+        WHERE
+            external_immatriculation = :value
+            AND :vesselIdentifier = 'EXTERNAL_REFERENCE_NUMBER'
+        """,
+        nativeQuery = true,
+    )
+    fun findUnderCharterByVesselIdentifierEquals(vesselIdentifier: String, value: String): Boolean
+
 }

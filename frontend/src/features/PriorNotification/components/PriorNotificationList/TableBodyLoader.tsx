@@ -1,4 +1,5 @@
 import { TableWithSelectableRows } from '@mtes-mct/monitor-ui'
+import styled from 'styled-components'
 
 import { getTableColumns } from './columns'
 import { DEFAULT_PAGE_SIZE } from './constants'
@@ -14,12 +15,21 @@ export function TableBodyLoader({ isFromUrl }: TableBodyLoaderProps) {
     <tbody>
       {emptyRows.map((_, index) => (
         // eslint-disable-next-line react/no-array-index-key
-        <TableWithSelectableRows.BodyTr key={`row-${index}`}>
+        <Row key={`row-${index}`}>
           {tableColumns.map(column => (
             <TableWithSelectableRows.Td key={column.id} $isLoading />
           ))}
-        </TableWithSelectableRows.BodyTr>
+        </Row>
       ))}
     </tbody>
   )
 }
+
+const Row = styled(TableWithSelectableRows.BodyTr)`
+  &:hover {
+    > td {
+      /* Hack to disable hover background color in expanded rows */
+      background-color: ${p => p.theme.color.cultured};
+    }
+  }
+`

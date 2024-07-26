@@ -2,6 +2,8 @@ import { usePrevious, type AnyObject } from '@mtes-mct/monitor-ui'
 import { isEqual } from 'lodash'
 import { useRef } from 'react'
 
+import { usePreviousIf } from './usePreviousIfTrue'
+
 export type LoadingState = {
   /**
    * `true` if:
@@ -28,8 +30,12 @@ export function useLoadingState(
     isReloading: false
   })
 
-  const previousFilterAndSortingState = usePrevious(filterAndSortingState)
-  const previousPaginationState = usePrevious(paginationState)
+  // We want to keep track of the previous filter/sorting & pagination states only when the data is been fetched.
+  // Indeed, when new filters are passed to a Redux RTK query hook,
+  // there is a first render happening with the new filters but `isFetching` is still `false`.
+  // The hook will then start fetching the data which will trigger a new render with `isFetching` set to `true`.
+  const previousFilterAndSortingState = usePreviousIf(filterAndSortingState, isFetching)
+  const previousPaginationState = usePreviousIf(paginationState, isFetching)
   const wasFetching = usePrevious(isFetching)
 
   if (isFirstRenderRef.current) {

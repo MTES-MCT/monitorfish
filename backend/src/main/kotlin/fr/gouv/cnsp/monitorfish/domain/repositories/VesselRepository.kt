@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 
 interface VesselRepository {
     fun findAll(): List<Vessel>
@@ -18,4 +19,6 @@ interface VesselRepository {
     fun findVesselById(vesselId: Int): Vessel?
 
     fun search(searched: String): List<Vessel>
+
+    fun findUnderCharterForVessel(vesselIdentifier: VesselIdentifier, value: String): Boolean
 }

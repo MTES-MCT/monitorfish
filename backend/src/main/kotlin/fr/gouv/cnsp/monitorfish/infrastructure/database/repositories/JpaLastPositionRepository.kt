@@ -75,13 +75,6 @@ class JpaLastPositionRepository(
         )
     }
 
-    override fun findUnderCharterForVessel(
-        vesselIdentifier: VesselIdentifier,
-        value: String,
-    ): Boolean {
-        return dbLastPositionRepository.findUnderCharterByVesselIdentifierEquals(vesselIdentifier.name, value)
-    }
-
     override fun deleteAll() {
         dbLastPositionRepository.deleteAllInBatch()
     }

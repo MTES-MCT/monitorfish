@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBVesselRepository
 import org.slf4j.Logger
@@ -76,4 +77,13 @@ class JpaVesselRepository(private val dbVesselRepository: DBVesselRepository) : 
         return dbVesselRepository.searchBy(searched)
             .map { it.toVessel() }
     }
+
+    override fun findUnderCharterForVessel(
+        vesselIdentifier: VesselIdentifier,
+        value: String,
+    ): Boolean {
+        return dbVesselRepository.findUnderCharterByVesselIdentifierEquals(vesselIdentifier.name, value)
+    }
+
+
 }

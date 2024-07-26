@@ -48,19 +48,4 @@ interface DBLastPositionRepository : JpaRepository<LastPositionEntity, Int> {
         alertType: String,
         isValidated: Boolean,
     )
-
-    @Query(
-        value = """
-        SELECT under_charter
-        FROM last_positions
-        WHERE
-            CASE
-                WHEN :vesselIdentifier = 'INTERNAL_REFERENCE_NUMBER' THEN cfr
-                WHEN :vesselIdentifier = 'IRCS' THEN ircs
-                WHEN :vesselIdentifier = 'EXTERNAL_REFERENCE_NUMBER' THEN external_immatriculation
-            END = :value
-        """,
-        nativeQuery = true,
-    )
-    fun findUnderCharterByVesselIdentifierEquals(vesselIdentifier: String, value: String): Boolean
 }

@@ -9,7 +9,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
-import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllControlUnits
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetAllCurrentReportings
@@ -27,7 +27,7 @@ class GetAllCurrentReportingsUTests {
     private lateinit var reportingRepository: ReportingRepository
 
     @MockBean
-    private lateinit var lastPositionRepository: LastPositionRepository
+    private lateinit var vesselRepository: VesselRepository
 
     @MockBean
     private lateinit var getAllControlUnits: GetAllControlUnits
@@ -55,7 +55,7 @@ class GetAllCurrentReportingsUTests {
             )
         given(reportingRepository.findAll(any())).willReturn(listOf(currentReporting))
         given(
-            lastPositionRepository.findUnderCharterForVessel(
+            vesselRepository.findUnderCharterForVessel(
                 eq(VesselIdentifier.INTERNAL_REFERENCE_NUMBER),
                 eq("FRFGRGR"),
             ),
@@ -66,7 +66,7 @@ class GetAllCurrentReportingsUTests {
         val reportings =
             GetAllCurrentReportings(
                 reportingRepository,
-                lastPositionRepository,
+                vesselRepository,
                 getAllControlUnits,
             ).execute()
 
@@ -103,7 +103,7 @@ class GetAllCurrentReportingsUTests {
         // When
         val throwable =
             catchThrowable {
-                GetAllCurrentReportings(reportingRepository, lastPositionRepository, getAllControlUnits).execute()
+                GetAllCurrentReportings(reportingRepository, vesselRepository, getAllControlUnits).execute()
             }
 
         // Then

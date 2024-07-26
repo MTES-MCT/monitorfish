@@ -69,6 +69,7 @@ class CaffeineConfiguration {
     val vesselsAllPositions = "vessels_all_position"
     val vesselsPositions = "vessels_positions"
     val vesselsPositionsWithBeaconMalfunctions = "vessels_positions_with_beacon_malfunctions"
+    val vesselCharter = "vessel_charter"
 
     // Others
     val controlAnteriority = "control_anteriority"
@@ -142,6 +143,7 @@ class CaffeineConfiguration {
             ticker,
             1,
         )
+        val vesselCharterCache = buildMinutesCache(vesselCharter, ticker, 30)
 
         // Others
         val controlAnteriorityCache = buildMinutesCache(controlAnteriority, ticker, 1)
@@ -189,6 +191,7 @@ class CaffeineConfiguration {
                 vesselsAllPositionsCache,
                 vesselsPositionsCache,
                 vesselsPositionsWithBeaconMalfunctionsCache,
+                vesselCharterCache,
             ),
         )
 

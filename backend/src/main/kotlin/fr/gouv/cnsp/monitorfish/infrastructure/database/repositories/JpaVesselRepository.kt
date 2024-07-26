@@ -78,12 +78,11 @@ class JpaVesselRepository(private val dbVesselRepository: DBVesselRepository) : 
             .map { it.toVessel() }
     }
 
+    @Cacheable(value = ["vessel_charter"])
     override fun findUnderCharterForVessel(
         vesselIdentifier: VesselIdentifier,
         value: String,
     ): Boolean {
         return dbVesselRepository.findUnderCharterByVesselIdentifierEquals(vesselIdentifier.name, value)
     }
-
-
 }

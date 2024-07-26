@@ -26,6 +26,7 @@ import { DEFAULT_PAGE_SIZE, SUB_MENUS_AS_OPTIONS } from './constants'
 import { FilterBar } from './FilterBar'
 import { FilterTags } from './FilterTags'
 import { Row } from './Row'
+import { TableBodyEmptyData } from './TableBodyEmptyData'
 import { TableBodyLoader } from './TableBodyLoader'
 import { getTitle } from './utils'
 import { useGetPriorNotificationsQuery } from '../../priorNotificationApi'
@@ -62,6 +63,7 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
     apiSortingParams,
     listFilter
   }
+  // `!!error` !== `isError` because `isError` is `false` when the query is fetching.
   const { data, error, isError, isFetching } = useGetPriorNotificationsQuery(rtkQueryParams, {
     ...RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS,
     ...RTK_FORCE_REFETCH_QUERY_OPTIONS
@@ -74,6 +76,8 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
   const { data: priorNotifications, extraData, totalLength } = data ?? {}
 
   const loadingState = useLoadingState(isFetching, { apiSortingParams, listFilter }, apiPaginationParams)
+  const isBodyLoaderVisible = loadingState.isLoadingNewPage || (loadingState.isReloading && !!error)
+  const isBodyEmptyDataVisible = !isBodyLoaderVisible && !!priorNotifications && priorNotifications.length === 0
   const title = getTitle(listFilter.seafrontGroup)
 
   const handleSubMenuChange = useCallback(
@@ -135,7 +139,7 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
           <TableOuterWrapper $isFromUrl={isFromUrl}>
             <TableTop $isFromUrl={isFromUrl}>
               <TableLegend>{`${
-                loadingState.isLoadingNewPage || totalLength === undefined ? '...' : totalLength
+                isBodyLoaderVisible || isError || totalLength === undefined ? '...' : totalLength
               } préavis (tous les horaires sont en UTC)`}</TableLegend>
 
               {isSuperUser && (
@@ -178,8 +182,10 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
                       </tr>
                     ))}
                   </TableWithSelectableRows.Head>
-                  {loadingState.isLoadingNewPage && <TableBodyLoader isFromUrl={isFromUrl} />}
-                  {!loadingState.isLoadingNewPage && !!priorNotifications && (
+
+                  {isBodyLoaderVisible && <TableBodyLoader isFromUrl={isFromUrl} />}
+                  {isBodyEmptyDataVisible && <TableBodyEmptyData />}
+                  {!isBodyLoaderVisible && !isBodyEmptyDataVisible && (
                     <tbody>
                       {rows.map(row => (
                         <Row key={row.id} row={row} />

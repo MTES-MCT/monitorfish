@@ -9,7 +9,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.ProtectedSpeciesCatch
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingTypeMapping
-import fr.gouv.cnsp.monitorfish.domain.entities.rules.type.RuleTypeMapping
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
@@ -17,7 +16,6 @@ import java.util.*
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.IHasImplementation as IAlertsHasImplementation
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTripGear as GearLogbook
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.IHasImplementation as IReportingsHasImplementation
-import fr.gouv.cnsp.monitorfish.domain.entities.rules.type.IHasImplementation as IRulesHasImplementation
 
 @Configuration
 class MapperConfiguration {
@@ -34,20 +32,10 @@ class MapperConfiguration {
         mapper.registerSubtypes(NamedType(ProtectedSpeciesCatch::class.java, "protectedSpeciesCatch"))
         mapper.registerSubtypes(NamedType(GearLogbook::class.java, "gear"))
 
-        registerRulesSubType(mapper, RuleTypeMapping::class.java)
         registerAlertsSubType(mapper, AlertTypeMapping::class.java)
         registerReportingsSubType(mapper, ReportingTypeMapping::class.java)
 
         return mapper
-    }
-
-    private fun <E> registerRulesSubType(
-        mapper: ObjectMapper,
-        enumOfTypeToAdd: Class<E>,
-    ) where E : Enum<E>?, E : IRulesHasImplementation? {
-        Arrays.stream(enumOfTypeToAdd.enumConstants)
-            .map { enumItem -> NamedType(enumItem.getImplementation(), enumItem.name) }
-            .forEach { type -> mapper.registerSubtypes(type) }
     }
 
     private fun <E> registerAlertsSubType(

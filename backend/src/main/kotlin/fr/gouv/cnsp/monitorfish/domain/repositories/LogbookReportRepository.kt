@@ -43,13 +43,6 @@ interface LogbookReportRepository {
         tripNumber: String,
     ): List<LogbookMessage>
 
-    fun findLANAndPNOMessagesNotAnalyzedBy(ruleType: String): List<Pair<LogbookMessage, LogbookMessage?>>
-
-    fun updateLogbookMessagesAsProcessedByRule(
-        ids: List<Long>,
-        ruleType: String,
-    )
-
     // Only used in tests
     fun findById(id: Long): LogbookMessage
 

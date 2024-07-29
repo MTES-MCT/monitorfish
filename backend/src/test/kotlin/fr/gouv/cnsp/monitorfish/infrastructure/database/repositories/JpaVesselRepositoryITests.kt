@@ -137,11 +137,9 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
             "08FR65324",
         )
 
-
         // Then
         assertThat(notUnderCharterOnCfr).isFalse
         assertThat(underCharterOnIrcs).isTrue
         assertThat(underCharterOnExternalImmatriculation).isTrue
     }
-
 }

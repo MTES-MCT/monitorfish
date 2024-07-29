@@ -104,9 +104,9 @@ DATA_GOUV_SPECIES_URL = (
 )
 
 FAO_AREAS_URL = (
-    "http://www.fao.org/fishery/geoserver/fifao/ows?"
+    "https://www.fao.org/fishery/geoserver/fifao/ows?"
     "service=WFS&request=GetFeature&version=1.0.0&"
-    "typeName=fifao:FAO_AREAS_CWP&outputFormat=SHAPE-ZIP"
+    "typeName=fifao:FAO_AREAS_CWP_NOCOASTLINE&outputFormat=json"
 )
 
 # Anchorages config

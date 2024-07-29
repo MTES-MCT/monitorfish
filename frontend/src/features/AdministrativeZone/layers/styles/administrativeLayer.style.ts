@@ -29,6 +29,23 @@ export function getAdministrativeLayerStyle(type: string) {
             }`
           })
         })
+    case LayerProperties.FAO.code:
+      return (feature: Feature | undefined) =>
+        new Style({
+          stroke: new Stroke({
+            color: '#767AB2',
+            width: 1
+          }),
+          text: new Text({
+            fill: new Fill({ color: THEME.color.gunMetal }),
+            font: '12px Marianne',
+            overflow: true,
+            stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
+            text: `${
+              (LayerProperties.FAO.zoneNamePropertyKey && feature?.get(LayerProperties.FAO.zoneNamePropertyKey)) || ''
+            }`
+          })
+        })
     case LayerProperties.AEM.code:
       return (feature: Feature | undefined) =>
         new Style({

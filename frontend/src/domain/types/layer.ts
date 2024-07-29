@@ -1,7 +1,5 @@
 import { Feature } from 'ol'
-import TileLayer from 'ol/layer/Tile'
 import VectorImageLayer from 'ol/layer/VectorImage'
-import { TileWMS } from 'ol/source'
 
 import type { RegulatoryZone } from '../../features/Regulation/types'
 import type { Geometry } from 'ol/geom'
@@ -35,10 +33,6 @@ export type VectorLayerWithName = VectorLayer<Feature<Geometry>> & {
 }
 
 export type VectorImageLayerWithName = VectorImageLayer<Feature<Geometry>> & {
-  name?: string
-}
-
-export type TileLayerWithName = TileLayer<TileWMS> & {
   name?: string
 }
 

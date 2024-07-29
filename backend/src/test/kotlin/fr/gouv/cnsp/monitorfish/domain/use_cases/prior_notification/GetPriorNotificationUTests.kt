@@ -91,7 +91,6 @@ class GetPriorNotificationUTests {
                     id = 2,
                     reportId = null,
                     referencedReportId = fakeLogbookMessageReferenceReportId,
-                    analyzedByRules = emptyList(),
                     isDeleted = false,
                     integrationDateTime = ZonedDateTime.now(),
                     isCorrectedByNewerMessage = true,

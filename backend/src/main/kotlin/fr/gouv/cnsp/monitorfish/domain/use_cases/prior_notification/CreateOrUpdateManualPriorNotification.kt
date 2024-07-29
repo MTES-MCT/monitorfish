@@ -91,7 +91,6 @@ class CreateOrUpdateManualPriorNotification(
             imo = vessel?.imo,
             reportDateTime = sentAt,
             integrationDateTime = ZonedDateTime.now(),
-            analyzedByRules = emptyList(),
             rawMessage = null,
             transmissionFormat = null,
             software = null,

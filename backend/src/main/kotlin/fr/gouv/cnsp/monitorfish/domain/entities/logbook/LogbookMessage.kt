@@ -25,7 +25,6 @@ data class LogbookMessage(
     val imo: String? = null,
     // Reception date of the report by the data center
     val integrationDateTime: ZonedDateTime,
-    val analyzedByRules: List<String>,
     var rawMessage: String? = null,
     val transmissionFormat: LogbookTransmissionFormat?,
     val software: String? = null,

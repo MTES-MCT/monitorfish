@@ -27,7 +27,6 @@ class LogbookMessageUTests {
                 id = id,
                 reportId = reportId,
                 referencedReportId = referenceReportId,
-                analyzedByRules = emptyList(),
                 integrationDateTime = ZonedDateTime.now(),
                 isEnriched = false,
                 message = message,

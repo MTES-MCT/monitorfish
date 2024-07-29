@@ -1131,7 +1131,6 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
             return LogbookReportEntity(
                 reportId = reportId,
                 referencedReportId = referenceReportId,
-                analyzedByRules = null,
                 externalReferenceNumber = null,
                 flagState = null,
                 integrationDateTime = Instant.now(),

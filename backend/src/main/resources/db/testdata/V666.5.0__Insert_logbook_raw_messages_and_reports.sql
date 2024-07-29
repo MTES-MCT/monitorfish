@@ -245,26 +245,26 @@ VALUES ('OOF20190126059903', '<ers:OPS AD="FRA" FR="OOE" ON="OOF20190126059903" 
        ('OOF20190439686457', ''),
        ('d5c3b039-aaee-4cca-bcae-637f5fe574f5', '<Flux>Message FLUX xml</Flux>');
 
-INSERT INTO logbook_reports (operation_number, analyzed_by_rules, trip_number, operation_country,
+INSERT INTO logbook_reports (operation_number, trip_number, operation_country,
                              operation_datetime_utc,
                              operation_type, report_id,
                              referenced_report_id, report_datetime_utc,
                              cfr, ircs, external_identification, vessel_name, flag_state, imo, log_type,
                              value, integration_datetime_utc, transmission_format)
-VALUES ('OOF20190430056936', '{"PNO_LAN_WEIGHT_TOLERANCE"}'::text[], 9463710, 'OOF', '2018-08-23T12:41:00Z', 'DAT',
+VALUES ('OOF20190430056936', 9463710, 'OOF', '2018-08-23T12:41:00Z', 'DAT',
         'OOF20190430056936', null, '2018-08-23T12:41:00Z',
         'FAK000999999', 'CALLME', 'DONTSINK', 'PHENOMENE', 'FRA', null, 'LAN',
         '{"port": "AEJAZ", "catchLanded": [{"weight": 40.0, "nbFish": null, "species": "SCR", "faoZone": "27.8.a", "freshness": null, "packaging": "CNT", "effortZone": "C", "presentation": "WHL", "economicZone": "FRA", "preservationState": "ALI", "statisticalRectangle": "23E6"}, {"weight": 2.0, "nbFish": null, "species": "LBE", "faoZone": "27.8.a", "freshness": null, "packaging": "CNT", "effortZone": "C", "presentation": "WHL", "economicZone": "FRA", "preservationState": "ALI", "statisticalRectangle": "23E6"}], "landingDatetimeUtc": "2018-09-03T12:18Z"}',
         '2021-01-18T07:17:31.532639Z', 'ERS'),
-       ('OOF20190430056397', null, null, 'OOF', '2018-10-17T11:36:00Z', 'RET', null, 'OOF20190430056936',
+       ('OOF20190430056397', null, 'OOF', '2018-10-17T11:36:00Z', 'RET', null, 'OOF20190430056936',
         '2018-10-30T11:32:00Z',
         null, null, null, null, null, null, '', '{"returnStatus": "000"}', '2021-01-18T07:19:28.384921Z', 'ERS'),
-       ('OOF99190430056936', null, 9463710, 'OOF', '2018-08-30T12:41:00Z', 'DAT',
+       ('OOF99190430056936', 9463710, 'OOF', '2018-08-30T12:41:00Z', 'DAT',
         'OOF99190430056936', null, '2018-01-30T12:41:00Z',
         'FAK000999999', 'CALLME', 'DONTSINK', 'PHENOMENE', 'FRA', null, 'LAN',
         '{"port": "AEJAZ", "catchLanded": [{"weight": 40.0, "nbFish": null, "species": "SCR", "faoZone": "27.8.a", "freshness": null, "packaging": "CNT", "effortZone": "C", "presentation": "WHL", "economicZone": "FRA", "preservationState": "ALI", "statisticalRectangle": "23E6"}, {"weight": 2.0, "nbFish": null, "species": "LBE", "faoZone": "27.8.a", "freshness": null, "packaging": "CNT", "effortZone": "C", "presentation": "WHL", "economicZone": "FRA", "preservationState": "ALI", "statisticalRectangle": "23E6"}], "landingDatetimeUtc": "2018-09-03T12:18Z"}',
         '2021-01-18T07:17:31.532639Z', 'ERS'),
-       ('OOF91190430056936', null, null, 'OOF', '2018-10-17T11:36:00Z', 'RET', null, 'OOF99190430056936',
+       ('OOF91190430056936', null, 'OOF', '2018-10-17T11:36:00Z', 'RET', null, 'OOF99190430056936',
         '2019-10-30T11:32:00Z',
         null, null, null, null, null, null, '', '{"returnStatus": "002"}', '2021-01-18T07:19:28.384921Z', 'ERS');
 

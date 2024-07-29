@@ -11,7 +11,6 @@ class LogbookMessageFaker {
                 id = index.toLong(),
                 reportId = "FAKE_REPORT_ID_$index",
                 referencedReportId = null,
-                analyzedByRules = emptyList(),
                 isDeleted = false,
                 integrationDateTime = ZonedDateTime.now(),
                 isCorrectedByNewerMessage = false,

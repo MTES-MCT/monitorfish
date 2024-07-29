@@ -125,7 +125,6 @@ object TestUtils {
         return listOf(
             LogbookMessage(
                 id = 2,
-                analyzedByRules = listOf(),
                 operationNumber = "",
                 tripNumber = "345",
                 reportId = "",
@@ -150,7 +149,6 @@ object TestUtils {
             ),
             LogbookMessage(
                 id = 1,
-                analyzedByRules = listOf(),
                 operationNumber = "",
                 tripNumber = "345",
                 reportId = "",
@@ -175,7 +173,6 @@ object TestUtils {
             ),
             LogbookMessage(
                 id = 3,
-                analyzedByRules = listOf(),
                 operationNumber = "",
                 tripNumber = "345",
                 reportId = "",
@@ -200,7 +197,6 @@ object TestUtils {
             ),
             LogbookMessage(
                 id = 3,
-                analyzedByRules = listOf(),
                 operationNumber = "",
                 tripNumber = "345",
                 reportId = "",
@@ -225,7 +221,6 @@ object TestUtils {
             ),
             LogbookMessage(
                 id = 4,
-                analyzedByRules = listOf(),
                 operationNumber = "",
                 tripNumber = "345",
                 reportId = "",
@@ -243,7 +238,6 @@ object TestUtils {
             ),
             LogbookMessage(
                 id = 5,
-                analyzedByRules = listOf(),
                 operationNumber = "",
                 tripNumber = "345",
                 reportId = "",
@@ -294,7 +288,6 @@ object TestUtils {
         return listOf(
             LogbookMessage(
                 id = 1,
-                analyzedByRules = listOf(),
                 operationNumber = "",
                 tripNumber = "345",
                 reportId = "",
@@ -319,7 +312,6 @@ object TestUtils {
             ),
             LogbookMessage(
                 id = 2,
-                analyzedByRules = listOf(),
                 operationNumber = "",
                 tripNumber = "345",
                 reportId = "",
@@ -344,7 +336,6 @@ object TestUtils {
             ),
             LogbookMessage(
                 id = 3,
-                analyzedByRules = listOf(),
                 operationNumber = "",
                 tripNumber = "345",
                 reportId = "",
@@ -395,7 +386,6 @@ object TestUtils {
         return listOf(
             LogbookMessage(
                 id = 1,
-                analyzedByRules = listOf(),
                 operationNumber = "9065646811",
                 tripNumber = "345",
                 reportId = "9065646811",
@@ -419,7 +409,6 @@ object TestUtils {
             ),
             LogbookMessage(
                 id = 2,
-                analyzedByRules = listOf(),
                 operationNumber = "",
                 tripNumber = "345",
                 reportId = "",
@@ -477,7 +466,6 @@ object TestUtils {
         return listOf(
             LogbookMessage(
                 id = 1,
-                analyzedByRules = listOf(),
                 operationNumber = "",
                 tripNumber = "345",
                 reportId = "9065646811",
@@ -501,7 +489,6 @@ object TestUtils {
             ),
             LogbookMessage(
                 id = 2,
-                analyzedByRules = listOf(),
                 operationNumber = "",
                 reportId = "9065646816",
                 referencedReportId = "9065646811",
@@ -525,7 +512,6 @@ object TestUtils {
             ),
             LogbookMessage(
                 id = 3,
-                analyzedByRules = listOf(),
                 operationNumber = "",
                 tripNumber = "345",
                 reportId = "9065646813",
@@ -549,7 +535,6 @@ object TestUtils {
             ),
             LogbookMessage(
                 id = 4,
-                analyzedByRules = listOf(),
                 operationNumber = "",
                 reportId = "9065646818",
                 referencedReportId = "9065646813",
@@ -573,7 +558,6 @@ object TestUtils {
             ),
             LogbookMessage(
                 id = 5,
-                analyzedByRules = listOf(),
                 operationNumber = "",
                 referencedReportId = "9065646813",
                 operationType = LogbookOperationType.DEL,
@@ -596,7 +580,6 @@ object TestUtils {
             ),
             LogbookMessage(
                 id = 6,
-                analyzedByRules = listOf(),
                 operationNumber = "5h499-erh5u7-pm3ae8c5trj78j67dfh",
                 tripNumber = "SCR-TTT20200505030505",
                 reportId = "zegj15-zeg56-errg569iezz3659g",
@@ -704,7 +687,6 @@ object TestUtils {
             Pair(
                 LogbookMessage(
                     id = 1,
-                    analyzedByRules = listOf(),
                     operationNumber = "456846844658",
                     tripNumber = "125345",
                     reportId = "456846844658",
@@ -719,7 +701,6 @@ object TestUtils {
                 ),
                 LogbookMessage(
                     id = 2,
-                    analyzedByRules = listOf(),
                     operationNumber = "47177857577",
                     tripNumber = "125345",
                     reportId = "47177857577",
@@ -736,7 +717,6 @@ object TestUtils {
             Pair(
                 LogbookMessage(
                     id = 3,
-                    analyzedByRules = listOf(),
                     operationNumber = "48545254254",
                     tripNumber = "125345",
                     reportId = "48545254254",
@@ -751,7 +731,6 @@ object TestUtils {
                 ),
                 LogbookMessage(
                     id = 4,
-                    analyzedByRules = listOf(),
                     operationNumber = "004045204504",
                     tripNumber = "125345",
                     reportId = "004045204504",
@@ -832,7 +811,6 @@ object TestUtils {
             Pair(
                 LogbookMessage(
                     id = 1,
-                    analyzedByRules = listOf(),
                     operationNumber = "456846844658",
                     tripNumber = "125345",
                     reportId = "456846844658",
@@ -847,7 +825,6 @@ object TestUtils {
                 ),
                 LogbookMessage(
                     id = 2,
-                    analyzedByRules = listOf(),
                     operationNumber = "47177857577",
                     tripNumber = "125345",
                     reportId = "47177857577",
@@ -864,7 +841,6 @@ object TestUtils {
             Pair(
                 LogbookMessage(
                     id = 3,
-                    analyzedByRules = listOf(),
                     operationNumber = "48545254254",
                     tripNumber = "125345",
                     reportId = "48545254254",
@@ -879,7 +855,6 @@ object TestUtils {
                 ),
                 LogbookMessage(
                     id = 4,
-                    analyzedByRules = listOf(),
                     operationNumber = "004045204504",
                     tripNumber = "125345",
                     reportId = "004045204504",

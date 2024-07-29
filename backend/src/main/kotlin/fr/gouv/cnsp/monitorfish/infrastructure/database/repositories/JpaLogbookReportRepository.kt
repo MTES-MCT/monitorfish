@@ -1,7 +1,10 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTyped
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
@@ -27,7 +30,6 @@ class JpaLogbookReportRepository(
     private val objectMapper: ObjectMapper,
 ) : LogbookReportRepository {
     private val logger = LoggerFactory.getLogger(JpaLogbookReportRepository::class.java)
-    private val postgresChunkSize = 5000
 
     override fun findAllPriorNotifications(filter: PriorNotificationsFilter): List<PriorNotification> {
         val allLogbookReportModels = dbLogbookReportRepository.findAllEnrichedPnoReferencesAndRelatedOperations(
@@ -243,41 +245,8 @@ class JpaLogbookReportRepository(
         }
     }
 
-    override fun findLANAndPNOMessagesNotAnalyzedBy(ruleType: String): List<Pair<LogbookMessage, LogbookMessage?>> {
-        val lanAndPnoMessages = dbLogbookReportRepository.findAllLANAndPNONotProcessedByRule(ruleType)
-
-        val lanAndPnoMessagesWithoutCorrectedMessages =
-            lanAndPnoMessages.filter { lanMessage ->
-                getCorrectedMessageIfAvailable(lanMessage, lanAndPnoMessages)
-            }
-
-        return lanAndPnoMessagesWithoutCorrectedMessages.filter {
-            it.internalReferenceNumber != null &&
-                it.tripNumber != null &&
-                it.messageType == LogbookMessageTypeMapping.LAN.name
-        }.map { lanMessage ->
-            val pnoMessage =
-                lanAndPnoMessagesWithoutCorrectedMessages.singleOrNull { message ->
-                    message.internalReferenceNumber == lanMessage.internalReferenceNumber &&
-                        message.tripNumber == lanMessage.tripNumber &&
-                        message.messageType == LogbookMessageTypeMapping.PNO.name
-                }
-
-            Pair(lanMessage.toLogbookMessage(objectMapper), pnoMessage?.toLogbookMessage(objectMapper))
-        }
-    }
-
     override fun findDistinctPriorNotificationTypes(): List<String> {
         return dbLogbookReportRepository.findDistinctPriorNotificationType() ?: emptyList()
-    }
-
-    override fun updateLogbookMessagesAsProcessedByRule(
-        ids: List<Long>,
-        ruleType: String,
-    ) {
-        ids.chunked(postgresChunkSize).forEach {
-            dbLogbookReportRepository.updateERSMessagesAsProcessedByRule(it, ruleType)
-        }
     }
 
     override fun findById(id: Long): LogbookMessage {
@@ -413,19 +382,6 @@ class JpaLogbookReportRepository(
 
                 dbLogbookReportRepository.save(updatedEntity)
             }
-    }
-
-    private fun getCorrectedMessageIfAvailable(
-        pnoMessage: LogbookReportEntity,
-        messages: List<LogbookReportEntity>,
-    ): Boolean {
-        return if (pnoMessage.operationType == LogbookOperationType.DAT) {
-            !messages.any {
-                it.operationType == LogbookOperationType.COR && it.referencedReportId == pnoMessage.reportId
-            }
-        } else {
-            true
-        }
     }
 
     private fun getAllMessagesExceptionMessage(internalReferenceNumber: String) =

@@ -56,5 +56,4 @@ interface DBVesselRepository : CrudRepository<VesselEntity, Int> {
         nativeQuery = true,
     )
     fun findUnderCharterByVesselIdentifierEquals(vesselIdentifier: String, value: String): Boolean
-
 }

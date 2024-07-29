@@ -111,7 +111,6 @@ data class ManualPriorNotificationEntity(
             val pnoLogbookMessage = LogbookMessage(
                 id = null,
                 reportId = reportId,
-                analyzedByRules = emptyList(),
                 flagState = flagState,
                 isEnriched = true,
                 integrationDateTime = createdAt,

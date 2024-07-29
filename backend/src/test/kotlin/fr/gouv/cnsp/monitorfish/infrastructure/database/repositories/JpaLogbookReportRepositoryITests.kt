@@ -428,71 +428,6 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findLANAndPNOMessagesNotAnalyzedBy Should not return already analyzed LAN by rule PNO_LAN_WEIGHT_TOLERANCE`() {
-        // When
-        val messages = jpaLogbookReportRepository.findLANAndPNOMessagesNotAnalyzedBy("PNO_LAN_WEIGHT_TOLERANCE")
-
-        // Then
-        assertThat(messages).hasSize(2)
-    }
-
-    @Test
-    @Transactional
-    fun `findLANAndPNOMessagesNotAnalyzedBy Should return the corrected LAN and not the previous one`() {
-        // Given
-        val lanMessageBeingCorrected = "OOF20190430059907"
-
-        // When
-        val messages = jpaLogbookReportRepository.findLANAndPNOMessagesNotAnalyzedBy("FAKE_RULE_NAME")
-
-        // Then, the origin LAN message is not present (3 messages in place of 4)
-        assertThat(messages).hasSize(3)
-
-        assertThat(
-            messages.any {
-                it.first.operationType == LogbookOperationType.DAT && it.first.reportId == lanMessageBeingCorrected
-            },
-        ).isFalse
-        assertThat(
-            messages.any {
-                it.first.operationType == LogbookOperationType.COR && it.first.referencedReportId == lanMessageBeingCorrected
-            },
-        ).isTrue
-    }
-
-    @Test
-    @Transactional
-    fun `findLANAndPNOMessagesNotAnalyzedBy Should return the LAN and the associated PNO`() {
-        // When
-        val messages = jpaLogbookReportRepository.findLANAndPNOMessagesNotAnalyzedBy("PNO_LAN_WEIGHT_TOLERANCE")
-
-        // Then, for the first pair of result
-        assertThat(messages.first().first.internalReferenceNumber).isEqualTo("FAK000999999")
-        assertThat(messages.first().second?.internalReferenceNumber).isEqualTo("FAK000999999")
-        assertThat(messages.first().first.tripNumber).isEqualTo("9463714")
-        assertThat(messages.first().second?.tripNumber).isEqualTo("9463714")
-        assertThat(messages.first().first.messageType).isEqualTo(LogbookMessageTypeMapping.LAN.name)
-        assertThat(messages.first().second?.messageType).isEqualTo(LogbookMessageTypeMapping.PNO.name)
-    }
-
-    @Test
-    @Transactional
-    fun `updateERSMessagesAsProcessedByRule Should update multiple message processed by a rule`() {
-        // When
-        jpaLogbookReportRepository.updateLogbookMessagesAsProcessedByRule(listOf(2, 10), "PNO_LAN_WEIGHT_TOLERANCE")
-
-        // Then
-        val firstMessageUpdated = jpaLogbookReportRepository.findById(2)
-        assertThat(firstMessageUpdated.analyzedByRules).hasSize(1)
-        assertThat(firstMessageUpdated.analyzedByRules.first()).isEqualTo("PNO_LAN_WEIGHT_TOLERANCE")
-
-        val secondMessageUpdated = jpaLogbookReportRepository.findById(10)
-        assertThat(secondMessageUpdated.analyzedByRules).hasSize(1)
-        assertThat(secondMessageUpdated.analyzedByRules.first()).isEqualTo("PNO_LAN_WEIGHT_TOLERANCE")
-    }
-
-    @Test
-    @Transactional
     fun `findLastMessageDate Should find the last message datetime before now and not a datetime in the future`() {
         // When
         val dateTime = jpaLogbookReportRepository.findLastMessageDate()
@@ -1196,7 +1131,6 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
             return LogbookReportEntity(
                 reportId = reportId,
                 referencedReportId = referenceReportId,
-                analyzedByRules = null,
                 externalReferenceNumber = null,
                 flagState = null,
                 integrationDateTime = Instant.now(),

@@ -4,7 +4,6 @@ import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LogbookReportEn
 import org.hibernate.annotations.DynamicUpdate
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor
-import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import java.time.Instant
@@ -423,27 +422,6 @@ interface DBLogbookReportRepository :
         nativeQuery = true,
     )
     fun findLastReportSoftware(internalReferenceNumber: String): String?
-
-    @Query(
-        """select *
-            from logbook_reports
-            where report_id in
-                (select distinct referenced_report_id from logbook_reports where operation_type = 'RET' and value->>'returnStatus' = '000')
-                and (log_type = 'LAN' or log_type = 'PNO')
-                and (:ruleType <> ANY(analyzed_by_rules) or analyzed_by_rules is null)""",
-        nativeQuery = true,
-    )
-    fun findAllLANAndPNONotProcessedByRule(ruleType: String): List<LogbookReportEntity>
-
-    @Modifying(clearAutomatically = true)
-    @Query(
-        "update logbook_reports set analyzed_by_rules = array_append(analyzed_by_rules, :ruleType) where id in (:ids)",
-        nativeQuery = true,
-    )
-    fun updateERSMessagesAsProcessedByRule(
-        ids: List<Long>,
-        ruleType: String,
-    )
 
     @Query(
         """SELECT distinct e.trip_number

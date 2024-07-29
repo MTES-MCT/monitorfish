@@ -4,7 +4,6 @@ from unittest.mock import patch
 import fiona
 import geopandas as gpd
 import pandas as pd
-from shapely.geometry import MultiPolygon
 
 from src.pipeline.shared_tasks.datagouv import (
     api_url,
@@ -12,27 +11,7 @@ from src.pipeline.shared_tasks.datagouv import (
     get_geopackage_file_object,
     update_resource,
 )
-
-
-def make_square_multipolygon(
-    init_lon,
-    init_lat,
-    width,
-    height,
-):
-    return MultiPolygon(
-        [
-            (
-                (
-                    (init_lon, init_lat),
-                    (init_lon + width, init_lat),
-                    (init_lon + width, init_lat + height),
-                    (init_lon, init_lat + height),
-                ),
-                [],
-            )
-        ]
-    )
+from tests.test_pipeline.test_utils import make_square_multipolygon
 
 
 def test_api_url():

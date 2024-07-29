@@ -428,7 +428,6 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
                 logbookMessageTyped = LogbookMessageTyped(
                     LogbookMessage(
                         id = null,
-                        analyzedByRules = emptyList(),
                         internalReferenceNumber = "CFR123",
                         // Replaced by the generated `createdAt` during the save operation.
                         integrationDateTime = ZonedDateTime.now(),

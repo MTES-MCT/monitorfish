@@ -282,7 +282,6 @@ class GetLogbookMessagesUTests {
                         id = 2,
                         reportId = "9065646816",
                         referencedReportId = "9065646811",
-                        analyzedByRules = listOf(),
                         integrationDateTime = ZonedDateTime.now(),
                         isEnriched = false,
                         message = lastAck,

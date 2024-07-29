@@ -54,8 +54,6 @@ data class LogbookReportEntity(
     val imo: String?,
     @Column(name = "log_type")
     val messageType: String?,
-    @Column(name = "analyzed_by_rules", columnDefinition = "varchar(100)[]")
-    val analyzedByRules: List<String>?,
     @Type(JsonBinaryType::class)
     @Column(name = "value", nullable = true, columnDefinition = "jsonb")
     val message: String?,
@@ -94,7 +92,6 @@ data class LogbookReportEntity(
             tripNumber = logbookMessage.tripNumber,
             flagState = logbookMessage.flagState,
             imo = logbookMessage.imo,
-            analyzedByRules = logbookMessage.analyzedByRules,
             software = logbookMessage.software,
             transmissionFormat = logbookMessage.transmissionFormat,
 
@@ -128,7 +125,6 @@ data class LogbookReportEntity(
             tripNumber = tripNumber,
             flagState = flagState,
             imo = imo,
-            analyzedByRules = analyzedByRules ?: emptyList(),
             software = software,
             transmissionFormat = transmissionFormat,
 

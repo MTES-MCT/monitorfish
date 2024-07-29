@@ -4,6 +4,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from shapely import MultiPolygon
+
 from src.pipeline.utils import move
 
 
@@ -77,3 +79,24 @@ class TestProcessingMethods(unittest.TestCase):
             # Test if_exists argument
             with self.assertRaises(ValueError):
                 move(tmp_file_path, dest_dirpath, if_exists="unexpected")
+
+
+def make_square_multipolygon(
+    init_lon,
+    init_lat,
+    width,
+    height,
+):
+    return MultiPolygon(
+        [
+            (
+                (
+                    (init_lon, init_lat),
+                    (init_lon + width, init_lat),
+                    (init_lon + width, init_lat + height),
+                    (init_lon, init_lat + height),
+                ),
+                [],
+            )
+        ]
+    )

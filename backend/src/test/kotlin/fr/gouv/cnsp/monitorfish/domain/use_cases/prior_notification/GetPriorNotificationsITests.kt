@@ -249,11 +249,11 @@ class GetPriorNotificationsITests : AbstractDBTests() {
         val firstPriorNotificationWithKnownVessel = result.data.first { it.vessel!!.id != -1 }
         // We don't test the `.vessel.VesselName` since in the real world,
         // the vessel name may have changed between the logbook message date and now
-        assertThat(firstPriorNotificationWithKnownVessel.vessel!!.internalReferenceNumber).isEqualTo("CFR105")
+        assertThat(firstPriorNotificationWithKnownVessel.vessel!!.internalReferenceNumber).isEqualTo("CFR125")
         assertThat(firstPriorNotificationWithKnownVessel.logbookMessageTyped.logbookMessage.internalReferenceNumber)
-            .isEqualTo("CFR105")
+            .isEqualTo("CFR125")
         assertThat(firstPriorNotificationWithKnownVessel.logbookMessageTyped.logbookMessage.vesselName)
-            .isEqualTo("CALAMARO")
+            .isEqualTo("BEAU SÉANT")
         assertThat(result.data).hasSizeGreaterThan(0)
     }
 

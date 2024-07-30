@@ -16,10 +16,14 @@ import java.time.ZonedDateTime
 class CreateOrUpdateManualPriorNotification(
     private val gearRepository: GearRepository,
     private val manualPriorNotificationRepository: ManualPriorNotificationRepository,
+    private val pnoPortSubscriptionRepository: PnoPortSubscriptionRepository,
+    private val pnoSegmentSubscriptionRepository: PnoSegmentSubscriptionRepository,
+    private val pnoVesselSubscriptionRepository: PnoVesselSubscriptionRepository,
     private val portRepository: PortRepository,
-    private val vesselRepository: VesselRepository,
-    private val computeManualPriorNotification: ComputeManualPriorNotification,
     private val priorNotificationPdfDocumentRepository: PriorNotificationPdfDocumentRepository,
+    private val vesselRepository: VesselRepository,
+
+    private val computeManualPriorNotification: ComputeManualPriorNotification,
     private val getPriorNotification: GetPriorNotification,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(CreateOrUpdateManualPriorNotification::class.java)
@@ -41,9 +45,6 @@ class CreateOrUpdateManualPriorNotification(
         tripGearCodes: List<String>,
         vesselId: Int,
     ): PriorNotification {
-        val existingManualPriorNotification = reportId?.let { manualPriorNotificationRepository.findByReportId(it) }
-        val existingPnoMessage = existingManualPriorNotification?.logbookMessageTyped?.typedMessage
-
         // /!\ Backend computed vessel risk factor is only used as a real time Frontend indicator.
         // The Backend should NEVER update `risk_factors` DB table, only the pipeline is allowed to update it.
         val computedValues = computeManualPriorNotification.execute(
@@ -54,8 +55,9 @@ class CreateOrUpdateManualPriorNotification(
             vesselId,
         )
 
-        // TODO Implement DB check.
-        val isPartOfControlUnitSubscriptions = false
+        val isPartOfControlUnitSubscriptions = pnoPortSubscriptionRepository.has(portLocode)
+            || pnoVesselSubscriptionRepository.has(vesselId)
+            || pnoSegmentSubscriptionRepository.has(portLocode, computedValues.tripSegments.map { it.segment })
 
         val fishingCatchesWithFaoArea = fishingCatches.map { it.copy(faoZone = faoArea) }
         val tripGears = getTripGears(tripGearCodes)

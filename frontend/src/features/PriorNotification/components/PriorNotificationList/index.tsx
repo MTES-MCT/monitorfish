@@ -29,7 +29,7 @@ import { Row } from './Row'
 import { TableBodyEmptyData } from './TableBodyEmptyData'
 import { TableBodyLoader } from './TableBodyLoader'
 import { getTitle } from './utils'
-import { useGetPriorNotificationsQuery } from '../../priorNotificationApi'
+import { useGetPriorNotificationsQuery, useGetPriorNotificationsToVerifyQuery } from '../../priorNotificationApi'
 import { priorNotificationActions } from '../../slice'
 import { PriorNotificationCard } from '../PriorNotificationCard'
 import { PriorNotificationForm } from '../PriorNotificationForm'
@@ -75,6 +75,11 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
   )
   const { data: priorNotifications, extraData, totalLength } = data ?? {}
 
+  const { data: priorNotificationToVerify } = useGetPriorNotificationsToVerifyQuery(undefined, {
+    ...RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS,
+    ...RTK_FORCE_REFETCH_QUERY_OPTIONS
+  })
+
   const loadingState = useLoadingState(isFetching, { apiSortingParams, listFilter }, apiPaginationParams)
   const isBodyLoaderVisible = loadingState.isLoadingNewPage || (loadingState.isReloading && !!error)
   const isBodyEmptyDataVisible = !isBodyLoaderVisible && !!priorNotifications && priorNotifications.length === 0
@@ -91,6 +96,12 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
     (seafrontGroup: SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup): number =>
       extraData?.perSeafrontGroupCount[seafrontGroup] ?? 0,
     [extraData]
+  )
+
+  const subMenuBadgeCounter = useCallback(
+    (seafrontGroup: SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup): number | undefined =>
+      priorNotificationToVerify?.perSeafrontGroupCount[seafrontGroup],
+    [priorNotificationToVerify]
   )
 
   const table = useReactTable({
@@ -120,6 +131,7 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
   return (
     <>
       <SubMenu
+        badgeCounter={subMenuBadgeCounter}
         counter={subMenuCounter}
         onChange={handleSubMenuChange}
         options={SUB_MENUS_AS_OPTIONS}

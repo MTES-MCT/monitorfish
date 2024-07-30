@@ -41,9 +41,6 @@ class CreateOrUpdateManualPriorNotification(
         tripGearCodes: List<String>,
         vesselId: Int,
     ): PriorNotification {
-        val existingManualPriorNotification = reportId?.let { manualPriorNotificationRepository.findByReportId(it) }
-        val existingPnoMessage = existingManualPriorNotification?.logbookMessageTyped?.typedMessage
-
         // /!\ Backend computed vessel risk factor is only used as a real time Frontend indicator.
         // The Backend should NEVER update `risk_factors` DB table, only the pipeline is allowed to update it.
         val computedValues = computeManualPriorNotification.execute(

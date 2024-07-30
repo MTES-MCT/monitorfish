@@ -38,9 +38,9 @@ class ComputeManualPriorNotification(
         val vesselRiskFactor = computeRiskFactor.execute(portLocode, tripSegments, vesselCfr)
 
         val isInVerificationScope = ManualPriorNotificationComputedValues
-            .computeIsInVerificationScope(vesselFlagCountryCode, vesselRiskFactor)
+            .getIsInVerificationScope(vesselFlagCountryCode, vesselRiskFactor)
         // TODO Implement DB check.
-        val isPartOfControlUnitSubscriptions = true
+        val isPartOfControlUnitSubscriptions = false
         val nextState = PriorNotification.getNextState(isInVerificationScope, isPartOfControlUnitSubscriptions)
 
         return ManualPriorNotificationComputedValues(

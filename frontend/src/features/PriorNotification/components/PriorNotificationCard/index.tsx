@@ -56,10 +56,12 @@ export function PriorNotificationCard() {
     state => state.displayedError.sideWindowPriorNotificationCardError
   )
   const [isLoading, setIsLoading] = useState(false)
-  const isPendingSend = priorNotificationDetail?.state === PriorNotification.State.PENDING_SEND
-  const isSent = [PriorNotification.State.SENT, PriorNotification.State.VERIFIED_AND_SENT].includes(
-    priorNotificationDetail?.state as any
-  )
+  const isPendingSend =
+    !!priorNotificationDetail?.state &&
+    [PriorNotification.State.AUTO_SEND_IN_PROGRESS, PriorNotification.State.PENDING_SEND].includes(
+      priorNotificationDetail?.state
+    )
+  const isVerifiedAndSent = priorNotificationDetail?.state === PriorNotification.State.VERIFIED_AND_SENT
   const isPendingVerification = priorNotificationDetail?.state === PriorNotification.State.PENDING_VERIFICATION
   const hasDesignatedPorts = priorNotificationDetail?.logbookMessage?.message?.pnoTypes?.find(
     type => type.hasDesignatedPorts
@@ -203,11 +205,11 @@ export function PriorNotificationCard() {
 
             <Button
               accent={Accent.PRIMARY}
-              disabled={isPendingSend || isSent}
-              Icon={isSent ? Icon.Check : Icon.Send}
+              disabled={isPendingSend || isVerifiedAndSent}
+              Icon={isVerifiedAndSent ? Icon.Check : Icon.Send}
               onClick={verifyAndSend}
             >
-              {isSent ? 'Diffusé' : 'Diffuser'}
+              {isVerifiedAndSent ? 'Diffusé' : 'Diffuser'}
             </Button>
           </Footer>
         </FrontendErrorBoundary>

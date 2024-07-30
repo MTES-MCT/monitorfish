@@ -10,7 +10,7 @@ import type { PriorNotification } from '../PriorNotification.types'
 import type { MainAppThunk } from '@store'
 
 export const updateEditedPriorNotificationComputedValues =
-  (requestData: PriorNotification.ManualPriorNotificationComputeRequestData): MainAppThunk<Promise<void>> =>
+  (requestData: PriorNotification.PriorNotificationComputeRequestData): MainAppThunk<Promise<void>> =>
   async dispatch => {
     try {
       const nextPriorNotificationComputedValues = await dispatch(

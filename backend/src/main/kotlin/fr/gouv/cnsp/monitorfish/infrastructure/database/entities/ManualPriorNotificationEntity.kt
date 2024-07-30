@@ -145,7 +145,6 @@ data class ManualPriorNotificationEntity(
                 port = null,
                 reportingCount = null,
                 seafront = null,
-                state = null,
                 vessel = vessel,
                 lastControlDateTime = null,
             )

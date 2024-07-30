@@ -4,6 +4,10 @@ import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.ManualPriorNotificationComputedValues
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
+import fr.gouv.cnsp.monitorfish.domain.repositories.PnoPortSubscriptionRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.PnoSegmentSubscriptionRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.PnoVesselSubscriptionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.ComputeFleetSegments
 
@@ -12,7 +16,11 @@ const val VESSEL_RISK_FACTOR_VERIFICATION_THRESHOLD: Double = 2.3
 
 @UseCase
 class ComputeManualPriorNotification(
+    private val pnoPortSubscriptionRepository: PnoPortSubscriptionRepository,
+    private val pnoSegmentSubscriptionRepository: PnoSegmentSubscriptionRepository,
+    private val pnoVesselSubscriptionRepository: PnoVesselSubscriptionRepository,
     private val vesselRepository: VesselRepository,
+
     private val computeFleetSegments: ComputeFleetSegments,
     private val computePnoTypes: ComputePnoTypes,
     private val computeRiskFactor: ComputeRiskFactor,
@@ -35,12 +43,17 @@ class ComputeManualPriorNotification(
         val tripSegments = computeFleetSegments.execute(faoAreas, tripGearCodes, specyCodes)
         val types = computePnoTypes.execute(fishingCatchesWithFaoArea, tripGearCodes, vesselFlagCountryCode)
         val vesselRiskFactor = computeRiskFactor.execute(portLocode, tripSegments, vesselCfr)
+
         val isInVerificationScope = ManualPriorNotificationComputedValues
-            .computeIsInVerificationScope(vesselFlagCountryCode, vesselRiskFactor)
+            .isInVerificationScope(vesselFlagCountryCode, vesselRiskFactor)
+        val isPartOfControlUnitSubscriptions = pnoPortSubscriptionRepository.has(portLocode)
+            || pnoVesselSubscriptionRepository.has(vesselId)
+            || pnoSegmentSubscriptionRepository.has(portLocode, tripSegments.map { it.segment })
+        val nextState = PriorNotification.getNextState(isInVerificationScope, isPartOfControlUnitSubscriptions)
 
         return ManualPriorNotificationComputedValues(
-            isInVerificationScope,
             isVesselUnderCharter = vessel?.underCharter,
+            nextState,
             tripSegments,
             types,
             vesselRiskFactor,

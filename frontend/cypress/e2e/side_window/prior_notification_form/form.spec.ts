@@ -431,21 +431,21 @@ context('Side Window > Prior Notification Form > Form', () => {
     cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 6)
   })
 
-  it('Should permit the resending of an updated manual PNO', () => {
+  it('Should be able to resend & verify a previously sent & verified manual prior notification', () => {
     // Given
     cy.intercept(
       'POST',
-      '/bff/v1/prior_notifications/00000000-0000-4000-0000-000000000002/verify_and_send?isManuallyCreated=true&operationDate=*'
+      '/bff/v1/prior_notifications/00000000-0000-4000-0000-000000000010/verify_and_send?isManuallyCreated=true&operationDate=*'
     ).as('verifyAndSendPriorNotification')
-    editSideWindowPriorNotification('DOS FIN', '00000000-0000-4000-0000-000000000002')
+    editSideWindowPriorNotification('BEAU SÉANT', '00000000-0000-4000-0000-000000000010')
     cy.get('button').contains('Diffusé')
     cy.fill('Saisi par', 'BOB')
 
     // When
     cy.clickButton('Enregistrer')
+    cy.clickButton('Diffuser')
 
     // Then
-    cy.clickButton('Diffuser')
     cy.wait('@verifyAndSendPriorNotification')
   })
 
@@ -498,9 +498,7 @@ context('Side Window > Prior Notification Form > Form', () => {
         }
 
         assert.deepInclude(getInterception.response.body, {
-          // `PENDING_SEND` since this prior notification is out of verification scope
-          // so the backend will ask the workflow to send it right away.
-          state: PriorNotification.State.PENDING_SEND
+          state: PriorNotification.State.OUT_OF_VERIFICATION_SCOPE
         })
 
         cy.get('.Element-Tag').contains('Hors diffusion').should('exist')

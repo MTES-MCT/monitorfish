@@ -1,9 +1,14 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.ManualPriorNotificationComputedValues
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationState
 
+/**
+ * Output data for the real-time computed values displayed within a prior notification form.
+ */
 data class ManualPriorNotificationComputedValuesDataOutput(
-    val isInVerificationScope: Boolean,
+    /** Next initial state of the prior notification once it will be created or updated. */
+    val nextState: PriorNotificationState,
     val isVesselUnderCharter: Boolean?,
     val tripSegments: List<LogbookMessageTripSegmentDataOutput>,
     val types: List<PriorNotificationTypeDataOutput>,
@@ -19,7 +24,7 @@ data class ManualPriorNotificationComputedValuesDataOutput(
                 .map { PriorNotificationTypeDataOutput.fromPnoType(it) }
 
             return ManualPriorNotificationComputedValuesDataOutput(
-                isInVerificationScope = manualPriorNotificationComputedValues.isInVerificationScope,
+                nextState = manualPriorNotificationComputedValues.nextState,
                 isVesselUnderCharter = manualPriorNotificationComputedValues.isVesselUnderCharter,
                 tripSegments = tripSegmentDataOutputs,
                 types = priorNotificationTypeDataOutputs,

@@ -40,3 +40,13 @@ INSERT INTO vessels (id, cfr, mmsi, ircs, external_immatriculation, vessel_name,
 INSERT INTO vessels (id, cfr, mmsi, ircs, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (119, 'CFR119', 'MMSI119', 'IRCS119', 'EXTIMM119', 'PAGEOT JO', 'FR', 11.1, false);
 
 INSERT INTO vessels (id, cfr, mmsi, ircs, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (120, 'CFR120', 'MMSI120', 'IRCS120', 'EXTIMM120', 'VIVA L''ITALIA', 'IT', 11.1, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (121, 'CFR121', 'MMSI121', 'IRCS121', 'EXTIMM121', 'MARE ET BASS', 'FR', 7.7, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (123, 'CFR123', 'MMSI123', 'IRCS123', 'EXTIMM123', 'FILET DOUX', 'FR', 7.8, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (124, 'CFR124', 'MMSI124', 'IRCS124', 'EXTIMM124', 'DÉVOILÉ', 'FR', 7.9, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (125, 'CFR125', 'MMSI125', 'IRCS125', 'EXTIMM125', 'MAT QUILLE', 'FR', 8, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (126, 'CFR126', 'MMSI126', 'IRCS126', 'EXTIMM126', 'BEAU SÉANT', 'FR', 8, false);

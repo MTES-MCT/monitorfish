@@ -11,6 +11,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.UNKNOWN_VESSEL
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
+import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendInternalErrorCode
+import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendInternalException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookRawMessageRepository
@@ -29,7 +31,6 @@ data class PriorNotification(
     var reportingCount: Int?,
     var seafront: Seafront?,
     val sentAt: ZonedDateTime?,
-    var state: PriorNotificationState?,
     val updatedAt: ZonedDateTime?,
     var vessel: Vessel?,
     var lastControlDateTime: ZonedDateTime?,
@@ -37,6 +38,37 @@ data class PriorNotification(
     /** Each prior notification and each of its updates have a unique fingerprint. */
     val fingerprint: String = listOf(reportId, updatedAt).joinToString(separator = ".")
     private val logger = LoggerFactory.getLogger(PriorNotification::class.java)
+
+    val state: PriorNotificationState?
+        /**
+         *  See /adrs/0006-prior-notification-states-specifications.md for more details.
+         */
+        get() = run {
+            val pnoMessage = logbookMessageTyped.typedMessage
+
+            val isInVerificationScope = pnoMessage.isInVerificationScope
+            val isVerified = pnoMessage.isVerified
+            val isSent = pnoMessage.isSent
+            val isBeingSent = pnoMessage.isBeingSent
+
+            return when {
+                isInVerificationScope == null || isVerified == null || isSent == null || isBeingSent == null -> null
+                !isInVerificationScope && !isVerified && !isSent && !isBeingSent -> PriorNotificationState.OUT_OF_VERIFICATION_SCOPE
+                !isInVerificationScope && !isVerified && !isSent && isBeingSent -> PriorNotificationState.AUTO_SEND_IN_PROGRESS
+                !isInVerificationScope && !isVerified && isSent && !isBeingSent -> PriorNotificationState.AUTO_SEND_DONE
+                !isInVerificationScope && isVerified && !isSent && !isBeingSent -> PriorNotificationState.FAILED_SEND
+                !isInVerificationScope && isVerified && !isSent && isBeingSent -> PriorNotificationState.PENDING_SEND
+                !isInVerificationScope && isVerified && isSent && !isBeingSent -> PriorNotificationState.VERIFIED_AND_SENT
+                isInVerificationScope && !isVerified && !isSent && !isBeingSent -> PriorNotificationState.PENDING_VERIFICATION
+                isInVerificationScope && isVerified && !isSent && !isBeingSent -> PriorNotificationState.FAILED_SEND
+                isInVerificationScope && isVerified && !isSent && isBeingSent -> PriorNotificationState.PENDING_SEND
+                isInVerificationScope && isVerified && isSent && !isBeingSent -> PriorNotificationState.VERIFIED_AND_SENT
+                else -> throw BackendInternalException(
+                    "Impossible PriorNotification state: `reportId = $reportId`, isInVerificationScope = $isInVerificationScope`, `isVerified = $isVerified`, `isSent = $isSent`, `isBeingSent = $isBeingSent`.",
+                    code = BackendInternalErrorCode.UNPROCESSABLE_RESOURCE_DATA,
+                )
+            }
+        }
 
     fun enrich(
         allPorts: List<Port>,
@@ -56,19 +88,6 @@ data class PriorNotification(
         }
 
         seafront = port?.facade?.let { Seafront.from(it) }
-
-        val isBeingSent = pnoMessage.isBeingSent
-        val isInVerificationScope = pnoMessage.isInVerificationScope
-        val isVerified = pnoMessage.isVerified
-        val isSent = pnoMessage.isSent
-        state = when {
-            isBeingSent == null || isInVerificationScope == null || isVerified == null || isSent == null -> null
-            isVerified && isSent -> PriorNotificationState.VERIFIED_AND_SENT
-            isSent -> PriorNotificationState.SENT
-            isBeingSent -> PriorNotificationState.PENDING_SEND
-            isInVerificationScope -> PriorNotificationState.PENDING_VERIFICATION
-            else -> PriorNotificationState.OUT_OF_VERIFICATION_SCOPE
-        }
 
         // Default to UNKNOWN vessel when null or not found
         vessel = if (isManuallyCreated) {
@@ -133,5 +152,23 @@ data class PriorNotification(
             }
 
         reportingCount = currentReportings?.count() ?: 0
+    }
+
+    companion object {
+        /**
+         * Next initial state of the prior notification once it will be created or updated.
+         *
+         * Used within the prior notification form to display the next state of the prior notification in real-time.
+         */
+        fun getNextState(
+            isInverificationScope: Boolean,
+            isPartOfControlUnitSubscriptions: Boolean,
+        ): PriorNotificationState {
+            return when {
+                isInverificationScope -> PriorNotificationState.PENDING_VERIFICATION
+                isPartOfControlUnitSubscriptions -> PriorNotificationState.AUTO_SEND_REQUESTED
+                else -> PriorNotificationState.OUT_OF_VERIFICATION_SCOPE
+            }
+        }
     }
 }

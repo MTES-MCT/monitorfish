@@ -18,7 +18,7 @@ import { useDebouncedCallback } from 'use-debounce'
 
 import { Form } from './Form'
 import { Header } from './Header'
-import { getApplicableState, getPartialComputationRequestData } from './utils'
+import { getPartialComputationRequestData } from './utils'
 import { PriorNotification } from '../../PriorNotification.types'
 import { DownloadButton } from '../shared/DownloadButton'
 import { TagBar } from '../shared/TagBar'
@@ -62,13 +62,15 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
   const [isClosingConfirmationDialog, setIsClosingConfirmationDialog] = useState(false)
   const previousPartialComputationRequestData = usePrevious(getPartialComputationRequestData(values))
 
-  const applicableState = getApplicableState(editedPriorNotificationComputedValues, editedPriorNotificationDetail)
+  const applicableState = editedPriorNotificationComputedValues?.nextState ?? editedPriorNotificationDetail?.state
   const isNewPriorNotification = !reportId
-  const isPendingSend = editedPriorNotificationDetail?.state === PriorNotification.State.PENDING_SEND
+  const isPendingSend =
+    !!editedPriorNotificationDetail?.state &&
+    [PriorNotification.State.AUTO_SEND_IN_PROGRESS, PriorNotification.State.PENDING_SEND].includes(
+      editedPriorNotificationDetail?.state
+    )
   const isPendingVerification = editedPriorNotificationDetail?.state === PriorNotification.State.PENDING_VERIFICATION
-  const isSent = [PriorNotification.State.SENT, PriorNotification.State.VERIFIED_AND_SENT].includes(
-    editedPriorNotificationDetail?.state as any
-  )
+  const isVerifiedAndSent = editedPriorNotificationDetail?.state === PriorNotification.State.VERIFIED_AND_SENT
   const hasDesignatedPorts = editedPriorNotificationComputedValues?.types?.find(type => type.hasDesignatedPorts)
 
   const handleClose = () => {
@@ -88,7 +90,7 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
   }
 
   const updateComputedValues = useDebouncedCallback(
-    (nextComputationRequestData: PriorNotification.ManualPriorNotificationComputeRequestData) => {
+    (nextComputationRequestData: PriorNotification.PriorNotificationComputeRequestData) => {
       dispatch(updateEditedPriorNotificationComputedValues(nextComputationRequestData))
     },
     1000
@@ -143,6 +145,11 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
             Le préavis est en cours de diffusion.
           </StyledBanner>
         )}
+        {editedPriorNotificationDetail?.state === PriorNotification.State.AUTO_SEND_IN_PROGRESS && (
+          <StyledBanner isCollapsible level={Level.WARNING} top="100px">
+            Le préavis est en cours d’envoi aux unités qui l’ont demandé.
+          </StyledBanner>
+        )}
 
         <FrontendErrorBoundary>
           <Header isNewPriorNotification={isNewPriorNotification} onClose={handleClose} vesselId={values.vesselId} />
@@ -168,7 +175,7 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
               <Intro>Le préavis doit être vérifié par le CNSP avant sa diffusion.</Intro>
             )}
             {(!!editedPriorNotificationComputedValues || !!openedPriorNotificationIdentifier) && (
-              <Intro hasNoTopMargin={!isNewPriorNotification && isPendingVerification}>
+              <Intro $withTopMargin={!isNewPriorNotification && isPendingVerification}>
                 Le navire doit respecter un délai d’envoi{hasDesignatedPorts && ' et débarquer dans un port désigné'}.
               </Intro>
             )}
@@ -202,11 +209,11 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
             {!isNewPriorNotification && (
               <Button
                 accent={Accent.PRIMARY}
-                disabled={isPendingSend || isSent}
-                Icon={isSent ? Icon.Check : Icon.Send}
+                disabled={isPendingSend || isVerifiedAndSent}
+                Icon={isVerifiedAndSent ? Icon.Check : Icon.Send}
                 onClick={onVerifyAndSend}
               >
-                {isSent ? 'Diffusé' : 'Diffuser'}
+                {isVerifiedAndSent ? 'Diffusé' : 'Diffuser'}
               </Button>
             )}
           </Footer>
@@ -294,9 +301,9 @@ const Body = styled.div`
 `
 
 const Intro = styled.p<{
-  hasNoTopMargin?: boolean
+  $withTopMargin?: boolean
 }>`
-  ${p => p.hasNoTopMargin && 'margin-top: 2px;'}
+  ${p => p.$withTopMargin && 'margin-top: 2px;'}
   color: ${p => p.theme.color.slateGray};
   font-style: italic;
 `

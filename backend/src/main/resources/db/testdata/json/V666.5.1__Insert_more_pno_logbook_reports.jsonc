@@ -473,7 +473,7 @@
                     "isBeingSent": true,
                     "isInVerificationScope": true,
                     "isSent": false,
-                    "isVerified": false,
+                    "isVerified": true,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type Z",

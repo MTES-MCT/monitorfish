@@ -4,6 +4,7 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagePurpose
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.ManualPriorNotificationComputedValues
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationState
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import fr.gouv.cnsp.monitorfish.fakers.PriorNotificationFaker
 import fr.gouv.cnsp.monitorfish.fakers.VesselFaker
@@ -45,8 +46,8 @@ class CreateOrUpdateManualPriorNotificationUTests {
         given(vesselRepository.findVesselById(any())).willReturn(VesselFaker.fakeVessel())
         given(computeManualPriorNotification.execute(any(), any(), any(), any(), any())).willReturn(
             ManualPriorNotificationComputedValues(
-                isInVerificationScope = false,
                 isVesselUnderCharter = null,
+                nextState = PriorNotificationState.OUT_OF_VERIFICATION_SCOPE,
                 tripSegments = emptyList(),
                 types = emptyList(),
                 vesselRiskFactor = null,

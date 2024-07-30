@@ -269,6 +269,71 @@
                 "flag_state": "IT",
                 "length": 11.1,
                 "under_charter": false
+            },
+
+            // - Vessel: MARE ET BASS
+            {
+                "id": 121,
+                "cfr": "CFR121",
+                "mmsi": "MMSI121",
+                "ircs": "IRCS121",
+                "external_immatriculation": "EXTIMM121",
+                "vessel_name": "MARE ET BASS",
+                "flag_state": "FR",
+                "length": 7.7,
+                "under_charter": false
+            },
+
+            // - Vessel: FILET DOUX
+            {
+                "id": 123,
+                "cfr": "CFR123",
+                "mmsi": "MMSI123",
+                "ircs": "IRCS123",
+                "external_immatriculation": "EXTIMM123",
+                "vessel_name": "FILET DOUX",
+                "flag_state": "FR",
+                "length": 7.8,
+                "under_charter": false
+            },
+
+            // - Vessel: DÉVOILÉ
+            {
+                "id": 124,
+                "cfr": "CFR124",
+                "mmsi": "MMSI124",
+                "ircs": "IRCS124",
+                "external_immatriculation": "EXTIMM124",
+                "vessel_name": "DÉVOILÉ",
+                "flag_state": "FR",
+                "length": 7.9,
+                "under_charter": false
+            },
+
+            // - Vessel: MAT QUILLE
+            {
+                "id": 125,
+                "cfr": "CFR125",
+                "mmsi": "MMSI125",
+                "ircs": "IRCS125",
+                "external_immatriculation": "EXTIMM125",
+                "vessel_name": "MAT QUILLE",
+                "flag_state": "FR",
+                "length": 8,
+                "under_charter": false
+            },
+
+            // - Vessel: BEAU SÉANT
+            {
+                "id": 126,
+                "cfr": "CFR126",
+                "mmsi": "MMSI126",
+                "ircs": "IRCS126",
+                "external_immatriculation": "EXTIMM126",
+                "vessel_name": "BEAU SÉANT",
+                "flag_state": "FR",
+                "length": 8,
+                "under_charter": false
             }
         ]
     }

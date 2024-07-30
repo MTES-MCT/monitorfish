@@ -4,6 +4,7 @@ import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.ManualPriorNotificationComputedValues
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.ComputeFleetSegments
 
@@ -35,12 +36,16 @@ class ComputeManualPriorNotification(
         val tripSegments = computeFleetSegments.execute(faoAreas, tripGearCodes, specyCodes)
         val types = computePnoTypes.execute(fishingCatchesWithFaoArea, tripGearCodes, vesselFlagCountryCode)
         val vesselRiskFactor = computeRiskFactor.execute(portLocode, tripSegments, vesselCfr)
+
         val isInVerificationScope = ManualPriorNotificationComputedValues
             .computeIsInVerificationScope(vesselFlagCountryCode, vesselRiskFactor)
+        // TODO Implement DB check.
+        val isPartOfControlUnitSubscriptions = true
+        val nextState = PriorNotification.getNextState(isInVerificationScope, isPartOfControlUnitSubscriptions)
 
         return ManualPriorNotificationComputedValues(
-            isInVerificationScope,
             isVesselUnderCharter = vessel?.underCharter,
+            nextState,
             tripSegments,
             types,
             vesselRiskFactor,

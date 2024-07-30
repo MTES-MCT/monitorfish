@@ -3,8 +3,13 @@
         "table": "manual_prior_notifications",
         "id": "report_id",
         "data": [
+            // =========================================================================================================
+            // ALL POSSIBLE STATES (ordered by their specs binary representation)
+            // See adrs/0006-prior-notification-states-specifications.md
+            // =========================================================================================================
+
+            // - State: 10000
             // - Vessel: POISSON PAS NET
-            // - State: UnVerified and sent
             {
                 "report_id": "00000000-0000-4000-0000-000000000001",
                 "author_trigram": "ABC",
@@ -39,7 +44,7 @@
                     "faoZone": null,
                     "isBeingSent": false,
                     "isInVerificationScope": false,
-                    "isSent": true,
+                    "isSent": false,
                     "isVerified": false,
                     "note": null,
                     "pnoTypes": [
@@ -57,13 +62,13 @@
                 }
             },
 
+            // - State: 10001
             // - Vessel: DOS FIN
             // - Species: Bluefin tuna (BFT), Swordfish (SWO)
             // - With risk factor
             // - Under charter
             // - With 2 reportings
             // - Flag state: BEL
-            // - State: Verified (non-required) and sent
             {
                 "report_id": "00000000-0000-4000-0000-000000000002",
                 "author_trigram": "ABC",
@@ -148,10 +153,10 @@
                         }
                     ],
                     "faoZone": null,
-                    "isBeingSent": false,
+                    "isBeingSent": true,
                     "isInVerificationScope": false,
-                    "isSent": true,
-                    "isVerified": true,
+                    "isSent": false,
+                    "isVerified": false,
                     "note": null,
                     "pnoTypes": [
                         {
@@ -173,13 +178,13 @@
                 }
             },
 
+            // - State: 10010
             // - Vessel: QUEUE DE POISSON
             // - Landing date = Arrival date
             // - Zero notice
             // - Updated
             // - Did not fish after zero notice
             // - With risk factor
-            // - State: Verified (required) and sent
             {
                 "report_id": "00000000-0000-4000-0000-000000000003",
                 "author_trigram": "ABC",
@@ -216,9 +221,9 @@
                     ],
                     "faoZone": null,
                     "isBeingSent": false,
-                    "isInVerificationScope": true,
+                    "isInVerificationScope": false,
                     "isSent": true,
-                    "isVerified": true,
+                    "isVerified": false,
                     "note": "Pêche abandonnée pour cause de météo défavorable.",
                     "pnoTypes": [
                         {
@@ -235,10 +240,396 @@
                 }
             },
 
+            // - State: 10100
+            // - Vessel: NAVIRE RENOMMÉ (ANCIEN NOM)
+            // - RENAMED TO: NAVIRE RENOMMÉ (NOUVEAU NOM)
+            {
+                "report_id": "00000000-0000-4000-0000-000000000004",
+                "author_trigram": "ABC",
+                "cfr": "CFR116",
+                "vessel_id": 116,
+                "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "did_not_fish_after_zero_notice": false,
+                "flag_state": "FRA",
+                "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
+                "trip_gears:jsonb": [{ "gear": "OTT" }],
+                "trip_segments:jsonb": [{ "segment": "MED01", "segmentName": "All Trawls 1" }],
+                "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "vessel_name": "NAVIRE RENOMMÉ (ANCIEN NOM)",
+                "value:jsonb": {
+                    "riskFactor": 1.5,
+                    "catchOnboard": [
+                        {
+                            "faoZone": "21.1.C",
+                            "weight": 24.3,
+                            "nbFish": null,
+                            "species": "ALV"
+                        }
+                    ],
+                    "catchToLand": [
+                        {
+                            "faoZone": "21.1.C",
+                            "weight": 24.3,
+                            "nbFish": null,
+                            "species": "ALV"
+                        }
+                    ],
+                    "faoZone": null,
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": false,
+                    "isVerified": true,
+                    "note": 0,
+                    "pnoTypes": [
+                        {
+                            "pnoTypeName": "Préavis type C",
+                            "minimumNotificationPeriod": 8.0,
+                            "hasDesignatedPorts": true
+                        }
+                    ],
+                    "port": "FRMRS",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "purpose": "LAN",
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                }
+            },
+
+            // - State: 10101
+            // - Vessel: VIVA L'ITALIA
+            // - Landing date = Arrival date
+            // - Zero notice
+            // - Flag state: ITA
+            {
+                "report_id": "00000000-0000-4000-0000-000000000005",
+                "author_trigram": "ABC",
+                "cfr": "CFR120",
+                "vessel_id": 120,
+                "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "did_not_fish_after_zero_notice": false,
+                "flag_state": "ITA",
+                "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
+                "trip_gears:jsonb": [{ "gear": "OTT" }],
+                "trip_segments:jsonb": [{ "segment": "MED01", "segmentName": "All Trawls 1" }],
+                "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "vessel_name": "VIVA L'ITALIA",
+                "value:jsonb": {
+                    "riskFactor": 3.2,
+                    "catchOnboard": [
+                        {
+                            "faoZone": "21.1.C",
+                            "weight": 0,
+                            "nbFish": null,
+                            "species": "AGS"
+                        }
+                    ],
+                    "catchToLand": [
+                        {
+                            "faoZone": "21.1.C",
+                            "weight": 0,
+                            "nbFish": null,
+                            "species": "AGS"
+                        }
+                    ],
+                    "faoZone": null,
+                    "isBeingSent": true,
+                    "isInVerificationScope": false,
+                    "isSent": false,
+                    "isVerified": true,
+                    "note": null,
+                    "pnoTypes": [
+                        {
+                            "pnoTypeName": "Préavis type C",
+                            "minimumNotificationPeriod": 8.0,
+                            "hasDesignatedPorts": true
+                        }
+                    ],
+                    "port": "FRMRS",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "purpose": "LAN",
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                }
+            },
+
+            // - State: 10110
+            // - Vessel: MARE ET BASS
+            {
+                "report_id": "00000000-0000-4000-0000-000000000006",
+                "author_trigram": "ABC",
+                "cfr": "CFR121",
+                "vessel_id": 121,
+                "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "did_not_fish_after_zero_notice": false,
+                "flag_state": "FRA",
+                "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
+                "trip_gears:jsonb": [{ "gear": "OTT" }],
+                "trip_segments:jsonb": [{ "segment": "MED01", "segmentName": "All Trawls 1" }],
+                "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "vessel_name": "MARE ET BASS",
+                "value:jsonb": {
+                    "riskFactor": 3.2,
+                    "catchOnboard": [
+                        {
+                            "faoZone": "21.1.C",
+                            "weight": 50,
+                            "nbFish": null,
+                            "species": "AGS"
+                        }
+                    ],
+                    "catchToLand": [
+                        {
+                            "faoZone": "21.1.C",
+                            "weight": 50,
+                            "nbFish": null,
+                            "species": "AGS"
+                        }
+                    ],
+                    "faoZone": null,
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": true,
+                    "isVerified": true,
+                    "note": null,
+                    "pnoTypes": [
+                        {
+                            "pnoTypeName": "Préavis type A",
+                            "minimumNotificationPeriod": 4.0,
+                            "hasDesignatedPorts": false
+                        }
+                    ],
+                    "port": "FRMRS",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "purpose": "LAN",
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                }
+            },
+
+            // - State: 11000
+            // - Vessel: FILET DOUX
+            {
+                "report_id": "00000000-0000-4000-0000-000000000007",
+                "author_trigram": "ABC",
+                "cfr": "CFR122",
+                "vessel_id": 122,
+                "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "did_not_fish_after_zero_notice": false,
+                "flag_state": "FRA",
+                "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
+                "trip_gears:jsonb": [{ "gear": "OTT" }],
+                "trip_segments:jsonb": [{ "segment": "MED01", "segmentName": "All Trawls 1" }],
+                "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "vessel_name": "FILET DOUX",
+                "value:jsonb": {
+                    "riskFactor": 3.2,
+                    "catchOnboard": [
+                        {
+                            "faoZone": "21.1.C",
+                            "weight": 50,
+                            "nbFish": null,
+                            "species": "AGS"
+                        }
+                    ],
+                    "catchToLand": [
+                        {
+                            "faoZone": "21.1.C",
+                            "weight": 50,
+                            "nbFish": null,
+                            "species": "AGS"
+                        }
+                    ],
+                    "faoZone": null,
+                    "isBeingSent": false,
+                    "isInVerificationScope": true,
+                    "isSent": false,
+                    "isVerified": false,
+                    "note": null,
+                    "pnoTypes": [
+                        {
+                            "pnoTypeName": "Préavis type A",
+                            "minimumNotificationPeriod": 4.0,
+                            "hasDesignatedPorts": false
+                        }
+                    ],
+                    "port": "FRMRS",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "purpose": "LAN",
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                }
+            },
+
+            // - State: 11100
+            // - Vessel: DÉVOILÉ
+            {
+                "report_id": "00000000-0000-4000-0000-000000000008",
+                "author_trigram": "ABC",
+                "cfr": "CFR124",
+                "vessel_id": 124,
+                "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "did_not_fish_after_zero_notice": false,
+                "flag_state": "FRA",
+                "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
+                "trip_gears:jsonb": [{ "gear": "OTT" }],
+                "trip_segments:jsonb": [{ "segment": "MED01", "segmentName": "All Trawls 1" }],
+                "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "vessel_name": "DÉVOILÉ",
+                "value:jsonb": {
+                    "riskFactor": 3.2,
+                    "catchOnboard": [
+                        {
+                            "faoZone": "21.1.C",
+                            "weight": 50,
+                            "nbFish": null,
+                            "species": "AGS"
+                        }
+                    ],
+                    "catchToLand": [
+                        {
+                            "faoZone": "21.1.C",
+                            "weight": 50,
+                            "nbFish": null,
+                            "species": "AGS"
+                        }
+                    ],
+                    "faoZone": null,
+                    "isBeingSent": false,
+                    "isInVerificationScope": true,
+                    "isSent": false,
+                    "isVerified": true,
+                    "note": null,
+                    "pnoTypes": [
+                        {
+                            "pnoTypeName": "Préavis type A",
+                            "minimumNotificationPeriod": 4.0,
+                            "hasDesignatedPorts": false
+                        }
+                    ],
+                    "port": "FRMRS",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "purpose": "LAN",
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                }
+            },
+
+            // - State: 11101
+            // - Vessel: MAT QUILLE
+            {
+                "report_id": "00000000-0000-4000-0000-000000000009",
+                "author_trigram": "ABC",
+                "cfr": "CFR125",
+                "vessel_id": 125,
+                "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "did_not_fish_after_zero_notice": false,
+                "flag_state": "FRA",
+                "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
+                "trip_gears:jsonb": [{ "gear": "OTT" }],
+                "trip_segments:jsonb": [{ "segment": "MED01", "segmentName": "All Trawls 1" }],
+                "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "vessel_name": "MAT QUILLE",
+                "value:jsonb": {
+                    "riskFactor": 3.2,
+                    "catchOnboard": [
+                        {
+                            "faoZone": "21.1.C",
+                            "weight": 50,
+                            "nbFish": null,
+                            "species": "AGS"
+                        }
+                    ],
+                    "catchToLand": [
+                        {
+                            "faoZone": "21.1.C",
+                            "weight": 50,
+                            "nbFish": null,
+                            "species": "AGS"
+                        }
+                    ],
+                    "faoZone": null,
+                    "isBeingSent": true,
+                    "isInVerificationScope": true,
+                    "isSent": false,
+                    "isVerified": true,
+                    "note": null,
+                    "pnoTypes": [
+                        {
+                            "pnoTypeName": "Préavis type A",
+                            "minimumNotificationPeriod": 4.0,
+                            "hasDesignatedPorts": false
+                        }
+                    ],
+                    "port": "FRMRS",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "purpose": "LAN",
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                }
+            },
+
+            // - State: 11110
+            // - Vessel: BEAU SÉANT
+            {
+                "report_id": "00000000-0000-4000-0000-000000000010",
+                "author_trigram": "ABC",
+                "cfr": "CFR126",
+                "vessel_id": 126,
+                "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "did_not_fish_after_zero_notice": false,
+                "flag_state": "FRA",
+                "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
+                "trip_gears:jsonb": [{ "gear": "OTT" }],
+                "trip_segments:jsonb": [{ "segment": "MED01", "segmentName": "All Trawls 1" }],
+                "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "vessel_name": "BEAU SÉANT",
+                "value:jsonb": {
+                    "riskFactor": 3.2,
+                    "catchOnboard": [
+                        {
+                            "faoZone": "21.1.C",
+                            "weight": 50,
+                            "nbFish": null,
+                            "species": "AGS"
+                        }
+                    ],
+                    "catchToLand": [
+                        {
+                            "faoZone": "21.1.C",
+                            "weight": 50,
+                            "nbFish": null,
+                            "species": "AGS"
+                        }
+                    ],
+                    "faoZone": null,
+                    "isBeingSent": false,
+                    "isInVerificationScope": true,
+                    "isSent": true,
+                    "isVerified": true,
+                    "note": null,
+                    "pnoTypes": [
+                        {
+                            "pnoTypeName": "Préavis type A",
+                            "minimumNotificationPeriod": 4.0,
+                            "hasDesignatedPorts": false
+                        }
+                    ],
+                    "port": "FRMRS",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "purpose": "LAN",
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                }
+            },
+
+            // =========================================================================================================
+            // OTHER CASES
+            // =========================================================================================================
+
             // - Vessel: GOUJON BOUGON
             // - Arrival date: 2023
             {
-                "report_id": "00000000-0000-4000-0000-000000000004",
+                "report_id": "00000000-0000-4000-0000-000000000011",
                 "author_trigram": "ABC",
                 "cfr": "CFR118",
                 "vessel_id": 118,
@@ -286,118 +677,6 @@
                     "predictedLandingDatetimeUtc": "2023-01-01T10:30:00Z",
                     "purpose": "LAN",
                     "tripStartDate": "2023-01-01T08:00:00Z"
-                }
-            },
-
-            // - Vessel: NAVIRE RENOMMÉ (ANCIEN NOM)
-            // - RENAMED TO: NAVIRE RENOMMÉ (NOUVEAU NOM)
-            // - State: Pending verification (required)
-            {
-                "report_id": "00000000-0000-4000-0000-000000000005",
-                "author_trigram": "ABC",
-                "cfr": "CFR116",
-                "vessel_id": 116,
-                "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
-                "did_not_fish_after_zero_notice": false,
-                "flag_state": "FRA",
-                "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
-                "trip_gears:jsonb": [{ "gear": "OTT" }],
-                "trip_segments:jsonb": [{ "segment": "MED01", "segmentName": "All Trawls 1" }],
-                "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
-                "vessel_name": "NAVIRE RENOMMÉ (ANCIEN NOM)",
-                "value:jsonb": {
-                    "riskFactor": 1.5,
-                    "catchOnboard": [
-                        {
-                            "faoZone": "21.1.C",
-                            "weight": 24.3,
-                            "nbFish": null,
-                            "species": "ALV"
-                        }
-                    ],
-                    "catchToLand": [
-                        {
-                            "faoZone": "21.1.C",
-                            "weight": 24.3,
-                            "nbFish": null,
-                            "species": "ALV"
-                        }
-                    ],
-                    "faoZone": null,
-                    "isBeingSent": false,
-                    "isInVerificationScope": true,
-                    "isSent": false,
-                    "isVerified": false,
-                    "note": 0,
-                    "pnoTypes": [
-                        {
-                            "pnoTypeName": "Préavis type C",
-                            "minimumNotificationPeriod": 8.0,
-                            "hasDesignatedPorts": true
-                        }
-                    ],
-                    "port": "FRMRS",
-                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
-                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
-                    "purpose": "LAN",
-                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
-                }
-            },
-
-            // - Vessel: VIVA L'ITALIA
-            // - Landing date = Arrival date
-            // - Zero notice
-            // - Flag state: ITA
-            // - State: Unverified and pending sending
-            {
-                "report_id": "00000000-0000-4000-0000-000000000006",
-                "author_trigram": "ABC",
-                "cfr": "CFR120",
-                "vessel_id": 120,
-                "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
-                "did_not_fish_after_zero_notice": false,
-                "flag_state": "ITA",
-                "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
-                "trip_gears:jsonb": [{ "gear": "OTT" }],
-                "trip_segments:jsonb": [{ "segment": "MED01", "segmentName": "All Trawls 1" }],
-                "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
-                "vessel_name": "VIVA L'ITALIA",
-                "value:jsonb": {
-                    "riskFactor": 3.2,
-                    "catchOnboard": [
-                        {
-                            "faoZone": "21.1.C",
-                            "weight": 0,
-                            "nbFish": null,
-                            "species": "AGS"
-                        }
-                    ],
-                    "catchToLand": [
-                        {
-                            "faoZone": "21.1.C",
-                            "weight": 0,
-                            "nbFish": null,
-                            "species": "AGS"
-                        }
-                    ],
-                    "faoZone": null,
-                    "isBeingSent": true,
-                    "isInVerificationScope": false,
-                    "isSent": false,
-                    "isVerified": false,
-                    "note": null,
-                    "pnoTypes": [
-                        {
-                            "pnoTypeName": "Préavis type C",
-                            "minimumNotificationPeriod": 8.0,
-                            "hasDesignatedPorts": true
-                        }
-                    ],
-                    "port": "FRMRS",
-                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
-                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
-                    "purpose": "LAN",
-                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
                 }
             }
         ]

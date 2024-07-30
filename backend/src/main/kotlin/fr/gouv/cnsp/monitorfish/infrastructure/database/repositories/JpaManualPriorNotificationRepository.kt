@@ -10,8 +10,11 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.ManualPriorNotificationRepos
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ManualPriorNotificationEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBManualPriorNotificationRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.utils.toSqlArrayString
+import fr.gouv.cnsp.monitorfish.utils.CustomZonedDateTime
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
+import java.time.ZonedDateTime
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.jvm.isAccessible
 import kotlin.reflect.jvm.javaField
@@ -41,6 +44,30 @@ class JpaManualPriorNotificationRepository(
                 willArriveAfter = filter.willArriveAfter,
                 willArriveBefore = filter.willArriveBefore,
             ).map { it.toPriorNotification() }
+    }
+
+    @Cacheable(value = ["manual_pno_to_verify"])
+    override fun findAllToVerify(): List<PriorNotification> {
+        return dbManualPriorNotificationRepository
+            .findAll(
+                flagStates = emptyList(),
+                hasOneOrMoreReportings = null,
+                lastControlledAfter = null,
+                lastControlledBefore = null,
+                portLocodes = emptyList(),
+                priorNotificationTypesAsSqlArrayString = null,
+                searchQuery = null,
+                specyCodesAsSqlArrayString = null,
+                tripGearCodesAsSqlArrayString = null,
+                tripSegmentCodesAsSqlArrayString = null,
+                willArriveAfter = CustomZonedDateTime(ZonedDateTime.now()).toString(),
+                willArriveBefore = CustomZonedDateTime(ZonedDateTime.now().plusHours(24)).toString(),
+            ).filter {
+                it.value.isInVerificationScope == true && it.value.isVerified == false
+            }
+            .map {
+                it.toPriorNotification()
+            }
     }
 
     override fun findByReportId(reportId: String): PriorNotification? {

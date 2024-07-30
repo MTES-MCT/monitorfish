@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.SeafrontGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagePurpose
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.ManualPriorNotificationComputedValues
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationStats
@@ -46,6 +47,9 @@ class PriorNotificationControllerITests {
 
     @MockBean
     private lateinit var getPriorNotifications: GetPriorNotifications
+
+    @MockBean
+    private lateinit var getNumberToVerify: GetNumberToVerify
 
     @MockBean
     private lateinit var getPriorNotificationTypes: GetPriorNotificationTypes
@@ -92,6 +96,24 @@ class PriorNotificationControllerITests {
             .andExpect(jsonPath("$.pageNumber", equalTo(0)))
             .andExpect(jsonPath("$.pageSize", equalTo(10)))
             .andExpect(jsonPath("$.totalLength", equalTo(2)))
+    }
+
+    @Test
+    fun `getNumberToVerify Should get the number of prior notification to verify`() {
+        // Given
+        given(getNumberToVerify.execute()).willReturn(
+            PriorNotificationStats(perSeafrontGroupCount = mapOf(Pair(SeafrontGroup.ALL, 2))),
+        )
+
+        // When
+        api.perform(
+            get(
+                "/bff/v1/prior_notifications/to_verify",
+            ),
+        )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.perSeafrontGroupCount['ALL']", equalTo(2)))
     }
 
     @Test

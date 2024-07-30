@@ -73,7 +73,10 @@ interface LogbookReportRepository {
         isVerified: Boolean,
     )
 
+    fun findAllPriorNotificationsToVerify(): List<PriorNotification>
+
+    fun updatePriorNotificationNote(reportId: String, operationDate: ZonedDateTime, note: String?)
+
     // For test purpose
     fun deleteAll()
-    fun updatePriorNotificationNote(reportId: String, operationDate: ZonedDateTime, note: String?)
 }

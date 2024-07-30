@@ -11,4 +11,6 @@ interface ManualPriorNotificationRepository {
     fun save(newOrNextPriorNotification: PriorNotification): PriorNotification
 
     fun updateState(reportId: String, isBeingSent: Boolean, isVerified: Boolean)
+
+    fun findAllToVerify(): List<PriorNotification>
 }

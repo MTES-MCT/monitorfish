@@ -7,6 +7,7 @@ import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindow
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
+import { skipToken } from '@reduxjs/toolkit/query'
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
@@ -19,7 +20,7 @@ export function PriorNotificationListButton() {
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
   const sideWindow = useMainAppSelector(state => state.sideWindow)
 
-  const { data } = useGetPriorNotificationsToVerifyQuery(undefined, {
+  const { data } = useGetPriorNotificationsToVerifyQuery(isSuperUser ? undefined : skipToken, {
     ...RTK_THIRTY_SECONDS_POLLING_QUERY_OPTIONS,
     ...RTK_FORCE_REFETCH_QUERY_OPTIONS
   })

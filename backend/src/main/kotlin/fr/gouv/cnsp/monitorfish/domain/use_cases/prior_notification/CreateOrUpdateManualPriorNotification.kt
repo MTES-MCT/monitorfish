@@ -54,6 +54,9 @@ class CreateOrUpdateManualPriorNotification(
             vesselId,
         )
 
+        // TODO Implement DB check.
+        val isPartOfControlUnitSubscriptions = false
+
         val fishingCatchesWithFaoArea = fishingCatches.map { it.copy(faoZone = faoArea) }
         val tripGears = getTripGears(tripGearCodes)
         val tripSegments = computedValues.tripSegments.map { it.toLogbookTripSegment() }
@@ -73,6 +76,7 @@ class CreateOrUpdateManualPriorNotification(
             purpose = purpose,
             computedVesselFlagCountryCode = vessel?.flagState,
             computedVesselRiskFactor = computedValues.vesselRiskFactor,
+            isPartOfControlUnitSubscriptions = isPartOfControlUnitSubscriptions,
         )
 
         val pnoLogbookMessage = LogbookMessage(
@@ -156,14 +160,15 @@ class CreateOrUpdateManualPriorNotification(
         portLocode: String,
         computedVesselFlagCountryCode: CountryCode?,
         computedVesselRiskFactor: Double?,
+        isPartOfControlUnitSubscriptions: Boolean,
     ): PNO {
         val allPorts = portRepository.findAll()
 
         val isInVerificationScope = ManualPriorNotificationComputedValues
-            .computeIsInVerificationScope(computedVesselFlagCountryCode, computedVesselRiskFactor)
+            .getIsInVerificationScope(computedVesselFlagCountryCode, computedVesselRiskFactor)
         // If the prior notification is not in verification scope,
         // we pass `isBeingSent` as `true` in order to ask the workflow to send it.
-        val isBeingSent = !isInVerificationScope
+        val isBeingSent = !isInVerificationScope && isPartOfControlUnitSubscriptions
         val portName = allPorts.find { it.locode == portLocode }?.name
 
         return PNO().apply {

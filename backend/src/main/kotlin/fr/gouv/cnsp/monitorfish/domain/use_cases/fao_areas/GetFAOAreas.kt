@@ -8,10 +8,7 @@ class GetFAOAreas(private val faoAreasRepository: FAOAreasRepository) {
     fun execute(): List<String> {
         val faoAreas = faoAreasRepository.findAll()
 
-        return (
-            faoAreas.mapNotNull { it.division } +
-                faoAreas.mapNotNull { it.subArea }
-            )
+        return faoAreas.map { it.faoCode }
             .distinct()
             .sorted()
     }

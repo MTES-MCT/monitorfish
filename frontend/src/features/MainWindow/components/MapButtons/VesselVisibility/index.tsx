@@ -37,7 +37,7 @@ export function VesselVisibilityMapButton() {
         data-cy="vessel-visibility"
         isActive={isOpen}
         onClick={openOrCloseVesselVisibility}
-        style={{ top: 152 }}
+        style={{ top: 172 }}
         title="Affichage des dernières positions"
       >
         <Icon.Vessel color={isRightMenuShrinked ? THEME.color.charcoal : THEME.color.gainsboro} size={26} />

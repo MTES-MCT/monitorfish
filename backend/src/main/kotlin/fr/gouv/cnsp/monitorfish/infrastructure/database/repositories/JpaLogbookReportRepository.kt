@@ -16,6 +16,7 @@ import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.utils.toSql
 import fr.gouv.cnsp.monitorfish.utils.CustomZonedDateTime
 import jakarta.transaction.Transactional
 import org.slf4j.LoggerFactory
+import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.data.domain.PageRequest
@@ -355,6 +356,7 @@ class JpaLogbookReportRepository(
     }
 
     @Transactional
+    @CacheEvict(value = ["pno_to_verify"], allEntries = true)
     override fun updatePriorNotificationState(
         reportId: String,
         operationDate: ZonedDateTime,

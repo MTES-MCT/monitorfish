@@ -385,7 +385,7 @@ export function VesselList({ namespace }) {
               })
             )
           }
-          style={{ top: 68 }}
+          style={{ top: 76 }}
           title="Liste des navires avec VMS"
         >
           <VesselIcon

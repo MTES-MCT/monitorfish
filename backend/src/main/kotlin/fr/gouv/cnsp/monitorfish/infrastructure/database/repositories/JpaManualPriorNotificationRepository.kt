@@ -11,6 +11,7 @@ import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ManualPriorNoti
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBManualPriorNotificationRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.utils.toSqlArrayString
 import fr.gouv.cnsp.monitorfish.utils.CustomZonedDateTime
+import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -90,6 +91,7 @@ class JpaManualPriorNotificationRepository(
     }
 
     @Transactional
+    @CacheEvict(value = ["manual_pno_to_verify"], allEntries = true)
     override fun updateState(reportId: String, isBeingSent: Boolean, isVerified: Boolean) {
         val manualPriorNotificationEntity =
             dbManualPriorNotificationRepository.findByReportId(reportId) ?: throw BackendUsageException(

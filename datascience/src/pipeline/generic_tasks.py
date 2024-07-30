@@ -114,7 +114,7 @@ def load(
         logger (logging.Logger): logger instance
         how (str): one of
 
-          - 'replace' to delete all rows in the table before loading
+          - 'replace' to truncate the table before loading
           - 'append' to append the data to rows already in the table
           - 'upsert' to append the rows to the table, replacing the rows whose id is
             already
@@ -233,8 +233,8 @@ def load_with_connection(
 
     table = get_table(table_name, schema, connection, logger)
     if how == "replace":
-        # Delete all rows from table
-        utils.delete(table, connection, logger)
+        # Truncate table
+        utils.truncate([table], connection, logger)
 
     elif how == "upsert":
         # Delete rows that are in the DataFrame from the table

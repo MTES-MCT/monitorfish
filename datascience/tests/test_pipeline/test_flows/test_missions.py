@@ -2,7 +2,6 @@ from datetime import datetime, timedelta
 from unittest.mock import patch
 
 import pandas as pd
-import pytest
 import sqlalchemy
 from prefect import task
 
@@ -100,8 +99,7 @@ def test_extract_missions_control_units(mock_extract):
     assert isinstance(query, sqlalchemy.sql.elements.TextClause)
 
 
-@pytest.mark.parametrize("loading_mode", ["replace", "upsert"])
-def test_flow(reset_test_data, loading_mode):
+def test_flow(reset_test_data):
     missions_query = "SELECT * FROM analytics_missions ORDER BY id"
     missions_control_units_query = (
         "SELECT * FROM analytics_missions_control_units ORDER BY id"
@@ -113,7 +111,7 @@ def test_flow(reset_test_data, loading_mode):
     )
 
     flow.schedule = None
-    state = flow.run(loading_mode=loading_mode, number_of_months=12)
+    state = flow.run(number_of_months=12)
     assert state.is_successful()
 
     extracted_missions = state.result[flow.get_tasks("mock_extract_missions")[0]].result
@@ -157,40 +155,7 @@ def test_flow(reset_test_data, loading_mode):
         filtered_missions_control_units.mission_id
     ) == extracted_missions_control_unit_ids.intersection(extracted_mission_ids)
 
-    if loading_mode == "upsert":
-        assert len(loaded_missions) == 27
-        assert set(loaded_missions.id) == extracted_mission_ids.union(
-            initial_mission_ids
-        )
-        assert set(
-            loaded_missions_control_units.mission_id
-        ) == initial_mission_ids.union({112})
-
-        # Check data is updated for missions already present initially
-        assert (
-            initial_missions.loc[initial_missions.id == 1, "facade"] == "NAMO"
-        ).all()
-        assert (
-            extracted_missions.loc[extracted_missions.id == 1, "facade"] == "Facade 1"
-        ).all()
-        assert (
-            loaded_missions.loc[loaded_missions.id == 1, "facade"] == "Facade 1"
-        ).all()
-        assert set(
-            initial_missions_control_units.loc[
-                initial_missions_control_units.mission_id == 1, "control_unit_id"
-            ]
-        ) == {5}
-        assert set(
-            loaded_missions_control_units.loc[
-                loaded_missions_control_units.mission_id == 1, "control_unit_id"
-            ]
-        ) == {7, 8}
-
-    else:
-        pd.testing.assert_frame_equal(
-            extracted_missions, loaded_missions, check_like=True
-        )
-        pd.testing.assert_frame_equal(
-            filtered_missions_control_units, loaded_missions_control_units
-        )
+    pd.testing.assert_frame_equal(extracted_missions, loaded_missions, check_like=True)
+    pd.testing.assert_frame_equal(
+        filtered_missions_control_units, loaded_missions_control_units
+    )

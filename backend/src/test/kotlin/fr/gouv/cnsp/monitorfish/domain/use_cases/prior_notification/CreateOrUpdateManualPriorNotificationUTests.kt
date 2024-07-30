@@ -4,6 +4,7 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagePurpose
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.ManualPriorNotificationComputedValues
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationState
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import fr.gouv.cnsp.monitorfish.fakers.PriorNotificationFaker
 import fr.gouv.cnsp.monitorfish.fakers.VesselFaker
@@ -23,7 +24,19 @@ class CreateOrUpdateManualPriorNotificationUTests {
     private lateinit var manualPriorNotificationRepository: ManualPriorNotificationRepository
 
     @MockBean
+    private lateinit var pnoPortSubscriptionRepository: PnoPortSubscriptionRepository
+
+    @MockBean
+    private lateinit var pnoSegmentSubscriptionRepository: PnoSegmentSubscriptionRepository
+
+    @MockBean
+    private lateinit var pnoVesselSubscriptionRepository: PnoVesselSubscriptionRepository
+
+    @MockBean
     private lateinit var portRepository: PortRepository
+
+    @MockBean
+    private lateinit var priorNotificationPdfDocumentRepository: PriorNotificationPdfDocumentRepository
 
     @MockBean
     private lateinit var vesselRepository: VesselRepository
@@ -34,9 +47,6 @@ class CreateOrUpdateManualPriorNotificationUTests {
     @MockBean
     private lateinit var getPriorNotification: GetPriorNotification
 
-    @MockBean
-    private lateinit var priorNotificationPdfDocumentRepository: PriorNotificationPdfDocumentRepository
-
     @Test
     fun `execute Should update a manual prior notification`() {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
@@ -45,8 +55,8 @@ class CreateOrUpdateManualPriorNotificationUTests {
         given(vesselRepository.findVesselById(any())).willReturn(VesselFaker.fakeVessel())
         given(computeManualPriorNotification.execute(any(), any(), any(), any(), any())).willReturn(
             ManualPriorNotificationComputedValues(
-                isInVerificationScope = false,
                 isVesselUnderCharter = null,
+                nextState = PriorNotificationState.OUT_OF_VERIFICATION_SCOPE,
                 tripSegments = emptyList(),
                 types = emptyList(),
                 vesselRiskFactor = null,
@@ -65,10 +75,13 @@ class CreateOrUpdateManualPriorNotificationUTests {
         val result = CreateOrUpdateManualPriorNotification(
             gearRepository,
             manualPriorNotificationRepository,
+            pnoPortSubscriptionRepository,
+            pnoSegmentSubscriptionRepository,
+            pnoVesselSubscriptionRepository,
             portRepository,
+            priorNotificationPdfDocumentRepository,
             vesselRepository,
             computeManualPriorNotification,
-            priorNotificationPdfDocumentRepository,
             getPriorNotification,
         ).execute(
             hasPortEntranceAuthorization = true,

@@ -22,7 +22,6 @@ class PriorNotificationFaker {
                 reportingCount = null,
                 seafront = null,
                 sentAt = ZonedDateTime.now(),
-                state = null,
                 updatedAt = ZonedDateTime.now(),
                 vessel = VesselFaker.fakeVessel(),
                 lastControlDateTime = null,

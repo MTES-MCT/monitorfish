@@ -16,10 +16,14 @@ import java.time.ZonedDateTime
 class CreateOrUpdateManualPriorNotification(
     private val gearRepository: GearRepository,
     private val manualPriorNotificationRepository: ManualPriorNotificationRepository,
+    private val pnoPortSubscriptionRepository: PnoPortSubscriptionRepository,
+    private val pnoSegmentSubscriptionRepository: PnoSegmentSubscriptionRepository,
+    private val pnoVesselSubscriptionRepository: PnoVesselSubscriptionRepository,
     private val portRepository: PortRepository,
-    private val vesselRepository: VesselRepository,
-    private val computeManualPriorNotification: ComputeManualPriorNotification,
     private val priorNotificationPdfDocumentRepository: PriorNotificationPdfDocumentRepository,
+    private val vesselRepository: VesselRepository,
+
+    private val computeManualPriorNotification: ComputeManualPriorNotification,
     private val getPriorNotification: GetPriorNotification,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(CreateOrUpdateManualPriorNotification::class.java)
@@ -41,9 +45,6 @@ class CreateOrUpdateManualPriorNotification(
         tripGearCodes: List<String>,
         vesselId: Int,
     ): PriorNotification {
-        val existingManualPriorNotification = reportId?.let { manualPriorNotificationRepository.findByReportId(it) }
-        val existingPnoMessage = existingManualPriorNotification?.logbookMessageTyped?.typedMessage
-
         // /!\ Backend computed vessel risk factor is only used as a real time Frontend indicator.
         // The Backend should NEVER update `risk_factors` DB table, only the pipeline is allowed to update it.
         val computedValues = computeManualPriorNotification.execute(
@@ -53,6 +54,10 @@ class CreateOrUpdateManualPriorNotification(
             tripGearCodes,
             vesselId,
         )
+
+        val isPartOfControlUnitSubscriptions = pnoPortSubscriptionRepository.has(portLocode)
+            || pnoVesselSubscriptionRepository.has(vesselId)
+            || pnoSegmentSubscriptionRepository.has(portLocode, computedValues.tripSegments.map { it.segment })
 
         val fishingCatchesWithFaoArea = fishingCatches.map { it.copy(faoZone = faoArea) }
         val tripGears = getTripGears(tripGearCodes)
@@ -73,6 +78,7 @@ class CreateOrUpdateManualPriorNotification(
             purpose = purpose,
             computedVesselFlagCountryCode = vessel?.flagState,
             computedVesselRiskFactor = computedValues.vesselRiskFactor,
+            isPartOfControlUnitSubscriptions = isPartOfControlUnitSubscriptions,
         )
 
         val pnoLogbookMessage = LogbookMessage(
@@ -120,7 +126,6 @@ class CreateOrUpdateManualPriorNotification(
             port = null,
             reportingCount = null,
             seafront = null,
-            state = null,
             vessel = null,
             lastControlDateTime = null,
             updatedAt = null,
@@ -157,14 +162,15 @@ class CreateOrUpdateManualPriorNotification(
         portLocode: String,
         computedVesselFlagCountryCode: CountryCode?,
         computedVesselRiskFactor: Double?,
+        isPartOfControlUnitSubscriptions: Boolean,
     ): PNO {
         val allPorts = portRepository.findAll()
 
         val isInVerificationScope = ManualPriorNotificationComputedValues
-            .computeIsInVerificationScope(computedVesselFlagCountryCode, computedVesselRiskFactor)
+            .isInVerificationScope(computedVesselFlagCountryCode, computedVesselRiskFactor)
         // If the prior notification is not in verification scope,
         // we pass `isBeingSent` as `true` in order to ask the workflow to send it.
-        val isBeingSent = !isInVerificationScope
+        val isBeingSent = !isInVerificationScope && isPartOfControlUnitSubscriptions
         val portName = allPorts.find { it.locode == portLocode }?.name
 
         return PNO().apply {

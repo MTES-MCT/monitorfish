@@ -52,7 +52,7 @@ abstract class AbstractDBTests {
             val toStringConsumer = ToStringConsumer()
             container.followOutput(toStringConsumer, OutputFrame.OutputType.STDOUT)
 
-            return "jdbc:postgresql://" + container.containerIpAddress + ":" + container.getMappedPort(
+            return "jdbc:postgresql://" + container.host + ":" + container.getMappedPort(
                 PostgreSQLContainer.POSTGRESQL_PORT,
             ).toString() + "/testdb?user=postgres&password=postgres"
         }

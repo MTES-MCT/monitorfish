@@ -25,7 +25,7 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
     computePriorNotification: builder.mutation<
       PriorNotification.ManualPriorNotificationComputedValues,
-      PriorNotification.ManualPriorNotificationComputeRequestData
+      PriorNotification.PriorNotificationComputeRequestData
     >({
       query: data => ({
         body: data,

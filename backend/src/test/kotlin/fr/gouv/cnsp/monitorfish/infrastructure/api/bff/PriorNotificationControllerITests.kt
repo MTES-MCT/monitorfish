@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.anyOrNull
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagePurpose
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.ManualPriorNotificationComputedValues
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationState
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationStats
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.*
 import fr.gouv.cnsp.monitorfish.domain.utils.PaginatedList
@@ -100,8 +101,8 @@ class PriorNotificationControllerITests {
         given(this.computeManualPriorNotification.execute(any(), any(), any(), any(), any()))
             .willReturn(
                 ManualPriorNotificationComputedValues(
-                    isInVerificationScope = false,
                     isVesselUnderCharter = null,
+                    nextState = PriorNotificationState.OUT_OF_VERIFICATION_SCOPE,
                     tripSegments = emptyList(),
                     types = emptyList(),
                     vesselRiskFactor = 1.2,

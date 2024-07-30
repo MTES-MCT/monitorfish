@@ -1,10 +1,11 @@
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
+import { customDayjs } from '@mtes-mct/monitor-ui'
 import { handleThunkError } from '@utils/handleThunkError'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
 
+import { openPriorNotificationForm } from './openPriorNotificationForm'
 import { priorNotificationApi } from '../priorNotificationApi'
-import { priorNotificationActions } from '../slice'
 
 import type { PriorNotification } from '../PriorNotification.types'
 import type { MainAppThunk } from '@store'
@@ -31,17 +32,11 @@ export const createOrUpdateManualPriorNotification =
       }
 
       dispatch(
-        priorNotificationActions.setOpenedPriorNotification({
-          isManuallyCreated: true,
-          operationDate: updatedPriorNotificationData.updatedAt,
+        openPriorNotificationForm({
+          // `operationDate` is not part of `PriorNotification.ManualPriorNotificationData`
+          // but this is a good enough guess since this param is only used to optimize SQL queries through Timescale
+          operationDate: customDayjs().toISOString(),
           reportId: updatedPriorNotificationData.reportId
-        })
-      )
-      dispatch(
-        priorNotificationActions.setEditedPriorNotificationInitialFormValues({
-          ...updatedPriorNotificationData,
-          isExpectedLandingDateSameAsExpectedArrivalDate:
-            updatedPriorNotificationData.expectedLandingDate === updatedPriorNotificationData.expectedArrivalDate
         })
       )
     } catch (err) {

@@ -26,7 +26,7 @@ class ControllersExceptionHandler(val sentryConfig: SentryConfig) {
     fun handleBackendInternalException(
         e: BackendInternalException,
     ): BackendInternalErrorDataOutput {
-        return BackendInternalErrorDataOutput()
+        return BackendInternalErrorDataOutput(code = e.code, message = e.message)
     }
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)

@@ -115,14 +115,20 @@ export function getColorsFromState(state: PriorNotification.State | undefined): 
   let colors: [string, string, string]
 
   switch (state) {
+    case PriorNotification.State.FAILED_SEND:
+      colors = [THEME.color.maximumRed15, THEME.color.maximumRed15, THEME.color.maximumRed]
+      break
+
     case PriorNotification.State.PENDING_VERIFICATION:
       colors = [THEME.color.goldenPoppyBorder, THEME.color.goldenPoppyBorder, THEME.color.charcoal]
       break
 
-    case PriorNotification.State.SENT:
+    case PriorNotification.State.AUTO_SEND_REQUESTED:
+    case PriorNotification.State.AUTO_SEND_DONE:
       colors = [THEME.color.lightGray, THEME.color.lightGray, THEME.color.charcoal]
       break
 
+    case PriorNotification.State.AUTO_SEND_IN_PROGRESS:
     case PriorNotification.State.PENDING_SEND:
       colors = [THEME.color.gainsboro, THEME.color.slateGray, THEME.color.slateGray]
       break

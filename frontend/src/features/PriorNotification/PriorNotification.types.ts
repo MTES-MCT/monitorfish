@@ -86,15 +86,17 @@ export namespace PriorNotification {
   }
   export type NewManualPriorNotificationData = Omit<ManualPriorNotificationData, 'reportId'>
 
-  export type ManualPriorNotificationComputeRequestData = Pick<
+  export type PriorNotificationComputeRequestData = Pick<
     ManualPriorNotificationData,
     'faoArea' | 'fishingCatches' | 'portLocode' | 'tripGearCodes' | 'vesselId'
   >
+  /** Real-time computed values displayed within a prior notification form. */
   export type ManualPriorNotificationComputedValues = Pick<
     PriorNotification,
     'isVesselUnderCharter' | 'tripSegments' | 'types' | 'riskFactor'
   > & {
-    isInVerificationScope: boolean
+    /** Next initial state of the prior notification once it will be created or updated. */
+    nextState: State
   }
 
   export type PriorNotificationDataFishingCatch = {
@@ -149,23 +151,35 @@ export namespace PriorNotification {
   }
 
   export enum State {
+    /** "Envoi auto. fait". */
+    AUTO_SEND_DONE = 'AUTO_SEND_DONE',
+    /** "En cours d'envoi auto". */
+    AUTO_SEND_IN_PROGRESS = 'AUTO_SEND_IN_PROGRESS',
+    /** "Envoi auto. demandé". */
+    AUTO_SEND_REQUESTED = 'AUTO_SEND_REQUESTED',
+    /** "Échec de diffusion". */
+    FAILED_SEND = 'FAILED_SEND',
     /** "Hors diffusion". */
     OUT_OF_VERIFICATION_SCOPE = 'OUT_OF_VERIFICATION_SCOPE',
+    /** "En cours de d'envoi auto". */
+    PENDING_AUTO_SEND = 'PENDING_AUTO_SEND',
     /** "En cours de diffusion". */
     PENDING_SEND = 'PENDING_SEND',
-    /** "À vérifier". */
+    /** "À vérifier (CNSP)". */
     PENDING_VERIFICATION = 'PENDING_VERIFICATION',
-    /** "Diffusé". */
-    SENT = 'SENT',
     /** "Vérifié et diffusé". */
     VERIFIED_AND_SENT = 'VERIFIED_AND_SENT'
   }
   export const STATE_LABEL: Record<State, string> = {
+    AUTO_SEND_DONE: 'Envoi auto. fait',
+    AUTO_SEND_IN_PROGRESS: "En cours d'envoi auto",
+    AUTO_SEND_REQUESTED: 'Envoi auto. demandé',
+    FAILED_SEND: 'Échec de diffusion',
     OUT_OF_VERIFICATION_SCOPE: 'Hors diffusion',
+    PENDING_AUTO_SEND: "En cours de d'envoi auto",
     PENDING_SEND: 'En cours de diffusion',
-    PENDING_VERIFICATION: 'À vérifier',
-    SENT: 'Diffusé',
+    PENDING_VERIFICATION: 'À vérifier (CNSP)',
     VERIFIED_AND_SENT: 'Vérifié et diffusé'
   }
-  export const STATE_LABELS_AS_OPTIONS = getOptionsFromLabelledEnum(STATE_LABEL)
+  export const STATE_LABELS_AS_OPTIONS = getOptionsFromLabelledEnum(STATE_LABEL, true)
 }

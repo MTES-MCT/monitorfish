@@ -465,8 +465,8 @@
             {
                 "report_id": "00000000-0000-4000-0000-000000000008",
                 "author_trigram": "ABC",
-                "cfr": "CFR124",
-                "vessel_id": 124,
+                "cfr": "CFR123",
+                "vessel_id": 123,
                 "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "did_not_fish_after_zero_notice": false,
                 "flag_state": "FRA",
@@ -519,8 +519,8 @@
             {
                 "report_id": "00000000-0000-4000-0000-000000000009",
                 "author_trigram": "ABC",
-                "cfr": "CFR125",
-                "vessel_id": 125,
+                "cfr": "CFR124",
+                "vessel_id": 124,
                 "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "did_not_fish_after_zero_notice": false,
                 "flag_state": "FRA",
@@ -573,8 +573,8 @@
             {
                 "report_id": "00000000-0000-4000-0000-000000000010",
                 "author_trigram": "ABC",
-                "cfr": "CFR126",
-                "vessel_id": 126,
+                "cfr": "CFR125",
+                "vessel_id": 125,
                 "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "did_not_fish_after_zero_notice": false,
                 "flag_state": "FRA",

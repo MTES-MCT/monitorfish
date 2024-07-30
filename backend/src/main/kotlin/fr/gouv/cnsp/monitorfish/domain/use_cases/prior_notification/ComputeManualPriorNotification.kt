@@ -45,7 +45,7 @@ class ComputeManualPriorNotification(
         val vesselRiskFactor = computeRiskFactor.execute(portLocode, tripSegments, vesselCfr)
 
         val isInVerificationScope = ManualPriorNotificationComputedValues
-            .getIsInVerificationScope(vesselFlagCountryCode, vesselRiskFactor)
+            .isInVerificationScope(vesselFlagCountryCode, vesselRiskFactor)
         val isPartOfControlUnitSubscriptions = pnoPortSubscriptionRepository.has(portLocode)
             || pnoVesselSubscriptionRepository.has(vesselId)
             || pnoSegmentSubscriptionRepository.has(portLocode, tripSegments.map { it.segment })

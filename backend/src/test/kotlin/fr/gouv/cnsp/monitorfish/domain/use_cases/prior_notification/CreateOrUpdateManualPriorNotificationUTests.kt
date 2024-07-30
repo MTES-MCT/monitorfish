@@ -24,7 +24,19 @@ class CreateOrUpdateManualPriorNotificationUTests {
     private lateinit var manualPriorNotificationRepository: ManualPriorNotificationRepository
 
     @MockBean
+    private lateinit var pnoPortSubscriptionRepository: PnoPortSubscriptionRepository
+
+    @MockBean
+    private lateinit var pnoSegmentSubscriptionRepository: PnoSegmentSubscriptionRepository
+
+    @MockBean
+    private lateinit var pnoVesselSubscriptionRepository: PnoVesselSubscriptionRepository
+
+    @MockBean
     private lateinit var portRepository: PortRepository
+
+    @MockBean
+    private lateinit var priorNotificationPdfDocumentRepository: PriorNotificationPdfDocumentRepository
 
     @MockBean
     private lateinit var vesselRepository: VesselRepository
@@ -34,9 +46,6 @@ class CreateOrUpdateManualPriorNotificationUTests {
 
     @MockBean
     private lateinit var getPriorNotification: GetPriorNotification
-
-    @MockBean
-    private lateinit var priorNotificationPdfDocumentRepository: PriorNotificationPdfDocumentRepository
 
     @Test
     fun `execute Should update a manual prior notification`() {
@@ -66,10 +75,13 @@ class CreateOrUpdateManualPriorNotificationUTests {
         val result = CreateOrUpdateManualPriorNotification(
             gearRepository,
             manualPriorNotificationRepository,
+            pnoPortSubscriptionRepository,
+            pnoSegmentSubscriptionRepository,
+            pnoVesselSubscriptionRepository,
             portRepository,
+            priorNotificationPdfDocumentRepository,
             vesselRepository,
             computeManualPriorNotification,
-            priorNotificationPdfDocumentRepository,
             getPriorNotification,
         ).execute(
             hasPortEntranceAuthorization = true,

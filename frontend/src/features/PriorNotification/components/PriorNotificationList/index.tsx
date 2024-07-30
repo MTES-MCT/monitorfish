@@ -15,6 +15,7 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Accent, Button, Icon, Size, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
+import { skipToken } from '@reduxjs/toolkit/query'
 import { flexRender, getCoreRowModel, getExpandedRowModel, useReactTable } from '@tanstack/react-table'
 import { isLegacyFirefox } from '@utils/isLegacyFirefox'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
@@ -75,10 +76,13 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
   )
   const { data: priorNotifications, extraData, totalLength } = data ?? {}
 
-  const { data: priorNotificationToVerify } = useGetPriorNotificationsToVerifyQuery(undefined, {
-    ...RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS,
-    ...RTK_FORCE_REFETCH_QUERY_OPTIONS
-  })
+  const { data: priorNotificationToVerify } = useGetPriorNotificationsToVerifyQuery(
+    isSuperUser ? undefined : skipToken,
+    {
+      ...RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS,
+      ...RTK_FORCE_REFETCH_QUERY_OPTIONS
+    }
+  )
 
   const loadingState = useLoadingState(isFetching, { apiSortingParams, listFilter }, apiPaginationParams)
   const isBodyLoaderVisible = loadingState.isLoadingNewPage || (loadingState.isReloading && !!error)

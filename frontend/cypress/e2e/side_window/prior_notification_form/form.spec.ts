@@ -435,9 +435,9 @@ context('Side Window > Prior Notification Form > Form', () => {
     // Given
     cy.intercept(
       'POST',
-      '/bff/v1/prior_notifications/00000000-0000-4000-0000-000000000002/verify_and_send?isManuallyCreated=true&operationDate=*'
+      '/bff/v1/prior_notifications/00000000-0000-4000-0000-000000000006/verify_and_send?isManuallyCreated=true&operationDate=*'
     ).as('verifyAndSendPriorNotification')
-    editSideWindowPriorNotification('DOS FIN', '00000000-0000-4000-0000-000000000002')
+    editSideWindowPriorNotification('MARE ET BASS', '00000000-0000-4000-0000-000000000006')
     cy.get('button').contains('Diffusé')
     cy.fill('Saisi par', 'BOB')
 
@@ -498,9 +498,9 @@ context('Side Window > Prior Notification Form > Form', () => {
         }
 
         assert.deepInclude(getInterception.response.body, {
-          // `PENDING_SEND` since this prior notification is out of verification scope
+          // `AUTO_SEND_IN_PROGRESS` since this prior notification is out of verification scope
           // so the backend will ask the workflow to send it right away.
-          state: PriorNotification.State.PENDING_SEND
+          state: PriorNotification.State.AUTO_SEND_IN_PROGRESS
         })
 
         cy.get('.Element-Tag').contains('Hors diffusion').should('exist')

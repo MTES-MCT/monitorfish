@@ -17,7 +17,7 @@ data class ManualPriorNotificationComputedValues(
     val vesselRiskFactor: Double?,
 ) {
     companion object {
-        fun getIsInVerificationScope(
+        fun isInVerificationScope(
             vesselFlagCountryCode: CountryCode?,
             vesselRiskFactor: Double?,
         ): Boolean {

@@ -167,7 +167,7 @@ class CreateOrUpdateManualPriorNotification(
         val allPorts = portRepository.findAll()
 
         val isInVerificationScope = ManualPriorNotificationComputedValues
-            .getIsInVerificationScope(computedVesselFlagCountryCode, computedVesselRiskFactor)
+            .isInVerificationScope(computedVesselFlagCountryCode, computedVesselRiskFactor)
         // If the prior notification is not in verification scope,
         // we pass `isBeingSent` as `true` in order to ask the workflow to send it.
         val isBeingSent = !isInVerificationScope && isPartOfControlUnitSubscriptions

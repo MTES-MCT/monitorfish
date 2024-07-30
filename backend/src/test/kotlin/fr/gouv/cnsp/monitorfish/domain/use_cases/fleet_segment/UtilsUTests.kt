@@ -13,11 +13,11 @@ class UtilsUTests {
     fun `removeRedundantFaoArea Should remove redundant fao codes`() {
         // Given
         val faoAreas = listOf(
-            FAOArea(faoCode = "27.1.B", null, null),
-            FAOArea(faoCode = "27.1", null, null),
-            FAOArea(faoCode = "27.1", null, null),
-            FAOArea(faoCode = "18", null, null),
-            FAOArea(faoCode = "27.1.B.a", null, null),
+            FAOArea(faoCode = "27.1.B"),
+            FAOArea(faoCode = "27.1"),
+            FAOArea(faoCode = "27.1"),
+            FAOArea(faoCode = "18"),
+            FAOArea(faoCode = "27.1.B.a"),
         )
 
         // When
@@ -33,10 +33,10 @@ class UtilsUTests {
     fun `removeRedundantFaoArea Should keep different fao codes`() {
         // Given
         val faoAreas = listOf(
-            FAOArea(faoCode = "27.1.B", null, null),
-            FAOArea(faoCode = "27.1.B", null, null),
-            FAOArea(faoCode = "27.1.B", null, null),
-            FAOArea(faoCode = "27.1.C", null, null),
+            FAOArea(faoCode = "27.1.B"),
+            FAOArea(faoCode = "27.1.B"),
+            FAOArea(faoCode = "27.1.B"),
+            FAOArea(faoCode = "27.1.C"),
         )
 
         // When
@@ -52,9 +52,9 @@ class UtilsUTests {
     fun `removeRedundantFaoArea Should not remove redundant fao codes When fao code is not located at the start of the string`() {
         // Given
         val faoAreas = listOf(
-            FAOArea(faoCode = "27", null, null),
-            FAOArea(faoCode = "22.1.27", null, null),
-            FAOArea(faoCode = "18", null, null),
+            FAOArea(faoCode = "27"),
+            FAOArea(faoCode = "22.1.27"),
+            FAOArea(faoCode = "18"),
         )
 
         // When
@@ -66,16 +66,16 @@ class UtilsUTests {
 
     @Test
     fun `hasFaoCodeIncludedIn Should test fao areas included in another fao area`() {
-        val faoAreaOne = FAOArea(faoCode = "27.1.B", null, null)
+        val faoAreaOne = FAOArea(faoCode = "27.1.B")
         assertThat(faoAreaOne.hasFaoCodeIncludedIn("27.1")).isTrue()
 
-        val faoAreaTwo = FAOArea(faoCode = "27.1", null, null)
+        val faoAreaTwo = FAOArea(faoCode = "27.1")
         assertThat(faoAreaTwo.hasFaoCodeIncludedIn("27.1")).isTrue()
 
-        val faoAreaThree = FAOArea(faoCode = "28.1", null, null)
+        val faoAreaThree = FAOArea(faoCode = "28.1")
         assertThat(faoAreaThree.hasFaoCodeIncludedIn("27.1")).isFalse()
 
-        val faoAreaFour = FAOArea(faoCode = "28.1.56", null, null)
+        val faoAreaFour = FAOArea(faoCode = "28.1.56")
         assertThat(faoAreaFour.hasFaoCodeIncludedIn("56")).isFalse()
     }
 }

@@ -53,7 +53,7 @@ context('Sidebars > Custom Zones', () => {
 
   it('A custom zone Should be edited', () => {
     cy.loadPath('/#@-9649561.29,3849836.62,7.84')
-    cy.get('*[data-cy="layers-sidebar"]').click()
+    cy.get('*[title="Afficher la liste des préavis"]').click()
     cy.get('*[data-cy="custom-zones-toggle"]').click()
 
     // When

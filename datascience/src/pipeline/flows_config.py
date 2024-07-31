@@ -74,7 +74,7 @@ clean_flow_runs.flow.schedule = CronSchedule("8,18,28,38,48,58 * * * *")
 control_anteriority.flow.schedule = CronSchedule("5 * * * *")
 control_units.flow.schedule = CronSchedule("12 8 * * *")
 controls_open_data.flow.schedule = CronSchedule("15 3 * * 5")
-current_segments.flow.schedule = CronSchedule("2,12,22,32,42,52 * * * *")
+current_segments.flow.schedule = CronSchedule("2,22,42 * * * *")
 distribute_pnos.flow.schedule = Schedule(
     clocks=[
         clocks.CronClock(
@@ -180,7 +180,7 @@ notify_beacon_malfunctions.flow.schedule = Schedule(
         ),
     ]
 )
-update_beacon_malfunctions.flow.schedule = CronSchedule("5,15,25,35,45,55 * * * *")
+update_beacon_malfunctions.flow.schedule = CronSchedule("6,16,26,36,46,56 * * * *")
 position_alerts.flow.schedule = Schedule(
     clocks=[
         clocks.CronClock(
@@ -196,7 +196,7 @@ position_alerts.flow.schedule = Schedule(
             },
         ),
         clocks.CronClock(
-            "2,12,22,32,42,52 * * * *",
+            "3,13,23,33,43,53 * * * *",
             parameter_defaults={
                 "alert_type": "FRENCH_EEZ_FISHING_ALERT",
                 "alert_config_name": "FRENCH_EEZ_FISHING_ALERT",
@@ -213,7 +213,7 @@ position_alerts.flow.schedule = Schedule(
             },
         ),
         clocks.CronClock(
-            "3,13,23,33,43,53 * * * *",
+            "5,15,25,35,45,55 * * * *",
             parameter_defaults={
                 "alert_type": "TWELVE_MILES_FISHING_ALERT",
                 "alert_config_name": "TWELVE_MILES_FISHING_ALERT_BE_NL",
@@ -224,7 +224,7 @@ position_alerts.flow.schedule = Schedule(
             },
         ),
         clocks.CronClock(
-            "4,14,24,34,44,54 * * * *",
+            "7,17,27,37,47,57 * * * *",
             parameter_defaults={
                 "alert_type": "TWELVE_MILES_FISHING_ALERT",
                 "alert_config_name": "TWELVE_MILES_FISHING_ALERT_ES",
@@ -235,7 +235,7 @@ position_alerts.flow.schedule = Schedule(
             },
         ),
         clocks.CronClock(
-            "5,15,25,35,45,55 * * * *",
+            "8,18,28,38,48,58 * * * *",
             parameter_defaults={
                 "alert_type": "TWELVE_MILES_FISHING_ALERT",
                 "alert_config_name": "TWELVE_MILES_FISHING_ALERT_DE",
@@ -246,7 +246,7 @@ position_alerts.flow.schedule = Schedule(
             },
         ),
         clocks.CronClock(
-            "6,16,26,36,46,56 * * * *",
+            "9,19,29,39,49,59 * * * *",
             parameter_defaults={
                 "alert_type": "TWELVE_MILES_FISHING_ALERT",
                 "alert_config_name": "TWELVE_MILES_FISHING_ALERT_OTHERS",
@@ -268,10 +268,10 @@ refresh_materialized_view.flow.schedule = Schedule(
         ),
     ]
 )
-regulations.flow.schedule = CronSchedule("6,16,26,36,46,56 * * * *")
+regulations.flow.schedule = CronSchedule("2,32 * * * *")
 regulations_checkup.flow.schedule = CronSchedule("5 6 * * 1,2,3,4,5")
 regulations_open_data.flow.schedule = CronSchedule("18 1 * * 5")
-risk_factor.flow.schedule = CronSchedule("3,13,23,33,43,53 * * * *")
+risk_factor.flow.schedule = CronSchedule("3,23,43 * * * *")
 scrape_legipeche.flow.schedule = CronSchedule("15 5 * * 1,2,3,4,5")
 validate_pending_alerts.flow.schedule = Schedule(
     clocks=[
@@ -283,7 +283,7 @@ validate_pending_alerts.flow.schedule = Schedule(
         ),
     ]
 )
-vessels.flow.schedule = CronSchedule("5 2,5,8,11,14,17,20,23 * * *")
+vessels.flow.schedule = CronSchedule("2 2,5,8,11,14,17,20,23 * * *")
 
 
 ###################### List flows to register with prefect server #####################

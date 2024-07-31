@@ -100,6 +100,7 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
     }),
 
     getPriorNotificationsToVerify: builder.query<LogbookMessage.ApiListExtraData, void>({
+      providesTags: () => [{ type: RtkCacheTagType.PriorNotificationsToVerify }],
       query: () => '/prior_notifications/to_verify',
       transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_TYPES_ERROR_MESSAGE, response)
     }),

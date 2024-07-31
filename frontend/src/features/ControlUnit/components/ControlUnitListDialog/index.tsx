@@ -1,5 +1,6 @@
 import { Accent, Icon, MapMenuDialog } from '@mtes-mct/monitor-ui'
 import { useCallback, useMemo } from 'react'
+import styled from 'styled-components'
 
 import { FilterBar } from './FilterBar'
 import { Item } from './Item'
@@ -49,8 +50,8 @@ export function ControlUnitListDialog() {
 
   return (
     <NoRsuiteOverrideWrapper>
-      <MapMenuDialog.Container style={{ height: 480, position: 'absolute', right: 50, top: 118 }}>
-        <MapMenuDialog.Header>
+      <MapMenuDialog.Container style={{ height: 480, position: 'absolute', right: 50, top: 126 }}>
+        <MissionsMenuHeader>
           <MapMenuDialog.CloseButton Icon={Icon.Close} onClick={close} />
           <MapMenuDialog.Title>Unités de contrôle</MapMenuDialog.Title>
           <MapMenuDialog.VisibilityButton
@@ -59,7 +60,7 @@ export function ControlUnitListDialog() {
             onClick={toggleStationLayer}
             title={isStationLayerDisplayed ? 'Masquer les bases' : 'Afficher les bases'}
           />
-        </MapMenuDialog.Header>
+        </MissionsMenuHeader>
         <MapMenuDialog.Body>
           <FilterBar />
 
@@ -70,3 +71,9 @@ export function ControlUnitListDialog() {
     </NoRsuiteOverrideWrapper>
   )
 }
+
+const MissionsMenuHeader = styled(MapMenuDialog.Header)`
+  height: 40px;
+  flex-shrink: 0;
+  padding: 0 5px 0 5px;
+`

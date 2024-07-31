@@ -116,5 +116,5 @@ const Header = styled.div<{
 
 const VesselFilterBox = styled(MapToolBox)`
   width: 305px;
-  top: 110px;
+  top: 124px;
 `

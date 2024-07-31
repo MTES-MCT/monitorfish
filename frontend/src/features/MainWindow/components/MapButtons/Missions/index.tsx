@@ -97,7 +97,7 @@ const Wrapper = styled.div`
 `
 
 const MissionMenuBox = styled(MapToolBox)`
-  top: 120px;
+  top: 136px;
 `
 
 const MissionMenuButton = styled(MapToolButton)``

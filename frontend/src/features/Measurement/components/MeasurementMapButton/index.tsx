@@ -149,7 +149,7 @@ const MeasurementOptions = styled(MapComponent)<{
   opacity: ${p => (p.isOpen ? '1' : '0')};
   position: absolute;
   right: 10px;
-  top: 291px;
+  top: 316px;
   transition: all 0.5s;
   width: 135px;
   z-index: 1000;

@@ -62,5 +62,5 @@ export function EditVesselLabels() {
 
 const Wrapper = styled(MapToolBox)`
   width: 406px;
-  top: 194px;
+  top: 220px;
 `

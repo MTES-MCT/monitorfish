@@ -4,10 +4,10 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.ManualPriorNo
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationState
 
 /**
- * Output data for the real-time computed values displayed within a prior notification form.
+ * Output data for the real-time computed values displayed within a manual prior notification form.
  */
 data class ManualPriorNotificationComputedValuesDataOutput(
-    /** Next initial state of the prior notification once it will be created or updated. */
+    /** Next initial state of the manual prior notification once it will be created or updated. */
     val nextState: PriorNotificationState,
     val isVesselUnderCharter: Boolean?,
     val tripSegments: List<LogbookMessageTripSegmentDataOutput>,

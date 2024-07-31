@@ -501,7 +501,7 @@ context('Side Window > Prior Notification Form > Form', () => {
           state: PriorNotification.State.OUT_OF_VERIFICATION_SCOPE
         })
 
-        cy.get('.Element-Tag').contains('Hors diffusion').should('exist')
+        cy.get('.Element-Tag').contains('Hors vérification').should('exist')
 
         // -----------------------------------------------------------------------
         // Verify and send

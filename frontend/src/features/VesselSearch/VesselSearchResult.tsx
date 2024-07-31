@@ -15,8 +15,7 @@ export function VesselSearchResult({ foundVessels, searchQuery, selectVessel, sh
         <Results>
           <List>
             {foundVessels.map(featureOrIdentity => {
-              const vesselCompositeIdentifier =
-                featureOrIdentity.vesselCompositeIdentifier || getVesselCompositeIdentifier(featureOrIdentity)
+              const vesselCompositeIdentifier = `${featureOrIdentity.vesselId}/${getVesselCompositeIdentifier(featureOrIdentity)}`
 
               return (
                 <VesselSearchResultItem
@@ -35,7 +34,7 @@ export function VesselSearchResult({ foundVessels, searchQuery, selectVessel, sh
         <Results>
           <List>
             {lastSearchedVessels.map(vessel => {
-              const vesselCompositeIdentifier = getVesselCompositeIdentifier(vessel)
+              const vesselCompositeIdentifier = `${vessel.vesselId}/${getVesselCompositeIdentifier(vessel)}`
 
               return (
                 <VesselSearchResultItem

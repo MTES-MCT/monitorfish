@@ -49,7 +49,7 @@ export function VesselSearch({
   ...inputNativeProps
 }: VesselSearchProps) {
   const dispatch = useMainAppDispatch()
-  const baseUrl = useMemo(() => window.location.origin, [])
+  const baseUrl = window.location.origin
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
   const vessels = useMainAppSelector(state => state.vessel.vessels)
   const searchQueryRef = useRef('')
@@ -88,23 +88,20 @@ export function VesselSearch({
 
   const selectVessel = useCallback(
     vesselIdentity => {
-      const vesselIdentifyWithVesselIdentifier = enrichWithVesselIdentifierIfNotFound(vesselIdentity)
+      const vesselWithIdentifier = enrichWithVesselIdentifierIfNotFound(vesselIdentity)
 
       setShowLastSearchedVessels(false)
       setFoundVessels([])
-      setSelectedVessel(vesselIdentifyWithVesselIdentifier)
+      setSelectedVessel(vesselWithIdentifier)
 
-      onChange(vesselIdentifyWithVesselIdentifier)
+      onChange(vesselWithIdentifier)
     },
     [onChange]
   )
 
   const onVesselInputClick = useCallback(() => {
     setShowLastSearchedVessels(true)
-
-    if (onInputClick) {
-      onInputClick()
-    }
+    onInputClick?.()
   }, [onInputClick])
 
   const fuse = useMemo(() => new Fuse(vessels, VESSEL_SEARCH_OPTIONS), [vessels])
@@ -117,7 +114,7 @@ export function VesselSearch({
 
       const nextFoundVesselsFromAPI = await dispatch(searchVesselsAction(searchQuery.toUpperCase()))
       if (!nextFoundVesselsFromAPI) {
-        return []
+        return isVesselIdRequiredFromResults ? vesselsFromMap.filter(_vessel => _vessel.vesselId) : vesselsFromMap
       }
 
       const nextFoundVessels = removeDuplicatedFoundVessels(nextFoundVesselsFromAPI, vesselsFromMap)
@@ -133,7 +130,6 @@ export function VesselSearch({
   const handleChange = useCallback(
     async (event: ChangeEvent<HTMLInputElement>) => {
       const searchQuery = event.target.value
-
       searchQueryRef.current = searchQuery
 
       if (searchQuery.length <= 1) {
@@ -143,9 +139,8 @@ export function VesselSearch({
       }
 
       const nextFoundVessels = await findVessels(searchQuery)
-
-      setFoundVessels(nextFoundVessels)
       setShowLastSearchedVessels(false)
+      setFoundVessels(nextFoundVessels)
     },
     [findVessels]
   )
@@ -163,9 +158,7 @@ export function VesselSearch({
     if (clickedOutsideComponent ?? escapeFromKeyboard) {
       setShowLastSearchedVessels(false)
 
-      if (onClickOutsideOrEscape) {
-        onClickOutsideOrEscape()
-      }
+      onClickOutsideOrEscape?.()
     }
   }, [clickedOutsideComponent, escapeFromKeyboard, onClickOutsideOrEscape])
 

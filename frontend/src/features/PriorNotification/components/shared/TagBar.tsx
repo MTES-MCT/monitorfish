@@ -40,7 +40,7 @@ export function TagBar({
         )}
 
         {tripSegments?.map(tripSegment => (
-          <FixedTag key={`tripSegment-${tripSegment.code}`} backgroundColor={THEME.color.blueGray25}>
+          <FixedTag key={`tripSegment-${tripSegment.code}`} $isFullWidth backgroundColor={THEME.color.blueGray25}>
             {`${tripSegment.code} – ${tripSegment.name}`}
           </FixedTag>
         ))}
@@ -71,6 +71,7 @@ export function TagBar({
         {!!state && (
           <FixedTag
             key="state"
+            $isFullWidth
             backgroundColor={getColorsFromState(state).backgroundColor}
             borderColor={getColorsFromState(state).borderColor}
             color={getColorsFromState(state).color}
@@ -83,7 +84,7 @@ export function TagBar({
         {types?.map(
           type =>
             type.hasDesignatedPorts && (
-              <FixedTag key={`type-${type.name}`} backgroundColor={THEME.color.gainsboro}>
+              <FixedTag key={`type-${type.name}`} $isFullWidth backgroundColor={THEME.color.gainsboro}>
                 {type.name}
               </FixedTag>
             )

@@ -21,6 +21,10 @@ from src.pipeline.helpers.dates import Period
 from src.pipeline.processing import prepare_df_for_loading
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.dates import get_utcnow, make_periods
+from src.pipeline.shared_tasks.pnos import (
+    extract_pno_units_ports_and_segments_subscriptions,
+    extract_pno_units_targeting_vessels,
+)
 from src.pipeline.shared_tasks.segments import extract_all_segments
 from src.pipeline.utils import psql_insert_copy
 
@@ -266,12 +270,15 @@ def compute_pno_types(
           - logbook_reports_pno_id `int` `1`
           - cfr `str` `FRA000000000`
           - `predicted_arrival_datetime_utc` `datetime`
+          - year `int` `2023`
+          - species `str` `'COD'`
           - trip_gears `List[dict]`
             `[{"gear": "xxx", "mesh": yyy, "dimensions": "zzz}, {...}]`
-          - species `str` `'COD'`
           - fao_area `str` `'27.7.d'`
-          - flag_state `str` `'FRA'`
           - weight `float` `150.5`
+          - flag_state `str` `'FRA'`
+          - locode `str` `CCXXX`
+          - facade `str` `NAMO`
 
         pno_types (pd.DataFrame): DataFrame of pno_types definitions. 1 line = 1 rule.
           Must have columns :
@@ -293,6 +300,7 @@ def compute_pno_types(
 
             - logbook_reports_pno_id `int` `1`
             - cfr `str` `FRA000000000`
+            - locode `str` `CCXXX`
             - `predicted_arrival_datetime_utc` `datetime`
             - trip_gears `List[dict]`
               `[{"gear": "xxx", "mesh": yyy, "dimensions": "zzz}, {...}]`
@@ -320,6 +328,7 @@ def compute_pno_types(
         [
             "logbook_reports_pno_id",
             "cfr",
+            "locode",
             "flag_state",
             "predicted_arrival_datetime_utc",
         ]
@@ -451,7 +460,10 @@ def compute_pno_risk_factors(
 
 
 def flag_pnos_to_verify_and_send(
-    pnos: pd.DataFrame, predicted_arrival_threshold: datetime
+    pnos: pd.DataFrame,
+    pno_units_targeting_vessels: pd.DataFrame,
+    pno_units_ports_and_segments_subscriptions: pd.DataFrame,
+    predicted_arrival_threshold: datetime,
 ):
     pnos = pnos.copy(deep=True)
 
@@ -462,8 +474,76 @@ def flag_pnos_to_verify_and_send(
     pnos["is_verified"] = False
     pnos["is_sent"] = False
 
-    pnos["is_being_sent"] = (~pnos.is_in_verification_scope) * (
-        pnos.predicted_arrival_datetime_utc >= predicted_arrival_threshold
+    segment_subscriptions = (
+        pno_units_ports_and_segments_subscriptions.explode("unit_subscribed_segments")[
+            ["port_locode", "unit_subscribed_segments"]
+        ]
+        .dropna()
+        .reset_index(drop=True)
+        .assign(is_target_segment=True)
+    )
+
+    target_ports = set(
+        pno_units_ports_and_segments_subscriptions.loc[
+            pno_units_ports_and_segments_subscriptions.receive_all_pnos_from_port,
+            "port_locode",
+        ].tolist()
+    )
+
+    target_vessels = set(pno_units_targeting_vessels["cfr"].dropna().tolist())
+
+    pnos_with_segments = (
+        pnos[["logbook_reports_pno_id", "locode", "trip_segments"]]
+        .explode("trip_segments")
+        .assign(
+            trip_segment=lambda x: x.trip_segments.map(
+                lambda d: d.get("segment"), na_action="ignore"
+            )
+        )
+        .drop(columns=["trip_segments"])
+        .reset_index(drop=True)
+        .dropna()
+    )
+
+    if len(pnos_with_segments) > 0 and len(segment_subscriptions) > 0:
+        segment_matches = pd.merge(
+            pnos_with_segments,
+            segment_subscriptions,
+            how="left",
+            left_on=["locode", "trip_segment"],
+            right_on=["port_locode", "unit_subscribed_segments"],
+        )
+        logbook_reports_targeting_segment_ids = set(
+            segment_matches.loc[
+                segment_matches.is_target_segment.fillna(False),
+                "logbook_reports_pno_id",
+            ]
+        )
+    else:
+        logbook_reports_targeting_segment_ids = set()
+
+    if len(target_ports) > 0:
+        logbook_reports_targeting_port_ids = set(
+            pnos.loc[pnos.locode.isin(target_ports), "logbook_reports_pno_id"].tolist()
+        )
+    else:
+        logbook_reports_targeting_port_ids = set()
+
+    if len(target_vessels) > 0:
+        logbook_reports_targeting_vessel_ids = set(
+            pnos.loc[pnos.cfr.isin(target_vessels), "logbook_reports_pno_id"].tolist()
+        )
+    else:
+        logbook_reports_targeting_vessel_ids = set()
+
+    logbook_reports_to_sent_ids = logbook_reports_targeting_segment_ids.union(
+        logbook_reports_targeting_port_ids
+    ).union(logbook_reports_targeting_vessel_ids)
+
+    pnos["is_being_sent"] = (
+        (~pnos.is_in_verification_scope)
+        * (pnos.predicted_arrival_datetime_utc >= predicted_arrival_threshold)
+        * pnos.logbook_reports_pno_id.isin(logbook_reports_to_sent_ids)
     )
 
     return pnos
@@ -574,6 +654,8 @@ def extract_enrich_load_logbook(
     pno_types: pd.DataFrame,
     control_anteriority: pd.DataFrame,
     all_control_priorities: pd.DataFrame,
+    pno_units_targeting_vessels: pd.DataFrame,
+    pno_units_ports_and_segments_subscriptions: pd.DataFrame,
     utcnow: datetime,
 ):
     """Extract pnos for the given `Period`, enrich and update the `logbook` table.
@@ -622,7 +704,10 @@ def extract_enrich_load_logbook(
 
     logger.info("Flagging PNOs to verify_and_distribute...")
     pnos = flag_pnos_to_verify_and_send(
-        pnos=pnos_with_risk_factors, predicted_arrival_threshold=utcnow
+        pnos=pnos_with_risk_factors,
+        pno_units_targeting_vessels=pno_units_targeting_vessels,
+        pno_units_ports_and_segments_subscriptions=pno_units_ports_and_segments_subscriptions,
+        predicted_arrival_threshold=utcnow,
     )
 
     logger.info("Loading")
@@ -649,6 +734,10 @@ with Flow("Enrich Logbook") as flow:
         all_control_priorities = extract_all_control_priorities()
         pno_types = extract_pno_types()
         control_anteriority = extract_control_anteriority()
+        pno_units_targeting_vessels = extract_pno_units_targeting_vessels()
+        pno_units_ports_and_segments_subscriptions = (
+            extract_pno_units_ports_and_segments_subscriptions()
+        )
 
         with case(recompute_all, True):
             reset = reset_pnos.map(periods)
@@ -658,6 +747,10 @@ with Flow("Enrich Logbook") as flow:
                 pno_types=unmapped(pno_types),
                 control_anteriority=unmapped(control_anteriority),
                 all_control_priorities=unmapped(all_control_priorities),
+                pno_units_targeting_vessels=unmapped(pno_units_targeting_vessels),
+                pno_units_ports_and_segments_subscriptions=unmapped(
+                    pno_units_ports_and_segments_subscriptions
+                ),
                 utcnow=unmapped(utcnow),
                 upstream_tasks=[reset],
             )
@@ -669,6 +762,10 @@ with Flow("Enrich Logbook") as flow:
                 pno_types=unmapped(pno_types),
                 control_anteriority=unmapped(control_anteriority),
                 all_control_priorities=unmapped(all_control_priorities),
+                pno_units_targeting_vessels=unmapped(pno_units_targeting_vessels),
+                pno_units_ports_and_segments_subscriptions=unmapped(
+                    pno_units_ports_and_segments_subscriptions
+                ),
                 utcnow=unmapped(utcnow),
             )
 

@@ -21,6 +21,7 @@ pno_species AS (
         flag_state,
         trip_number,
         report_datetime_utc,
+        p.locode,
         p.facade,
         (r.value->>'tripStartDate')::TIMESTAMPTZ AS trip_start_date,
         (r.value->>'predictedArrivalDatetimeUtc')::TIMESTAMPTZ AS predicted_arrival_datetime_utc,
@@ -103,6 +104,7 @@ SELECT
     s.fao_area,
     s.weight,
     s.flag_state,
+    s.locode,
     s.facade
 FROM pno_species s
 LEFT JOIN far_gears fg

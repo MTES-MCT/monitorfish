@@ -63,6 +63,10 @@ from src.pipeline.shared_tasks.control_flow import (
 )
 from src.pipeline.shared_tasks.dates import get_utcnow, make_timedelta
 from src.pipeline.shared_tasks.infrastructure import execute_statement
+from src.pipeline.shared_tasks.pnos import (
+    extract_pno_units_ports_and_segments_subscriptions,
+    extract_pno_units_targeting_vessels,
+)
 
 
 @task(checkpoint=False)
@@ -108,22 +112,6 @@ def extract_pnos_to_generate(
     generation_needed = len(pnos) > 0
 
     return (pnos, generation_needed)
-
-
-@task(checkpoint=False)
-def extract_pno_units_targeting_vessels() -> pd.DataFrame:
-    return extract(
-        db_name="monitorfish_remote",
-        query_filepath="monitorfish/pno_units_targeting_vessels.sql",
-    )
-
-
-@task(checkpoint=False)
-def extract_pno_units_ports_and_segments_subscriptions() -> pd.DataFrame:
-    return extract(
-        db_name="monitorfish_remote",
-        query_filepath="monitorfish/pno_units_ports_and_segments_subscriptions.sql",
-    )
 
 
 @task(checkpoint=False)

@@ -140,9 +140,9 @@ def sample_pno_species_and_gears() -> pd.DataFrame:
                 "CFR000000004",
                 "CFR000000004",
                 "CFR000000004",
-                "CFR000000005",
-                "CFR000000005",
-                "CFR000000005",
+                "___TARGET___",
+                "___TARGET___",
+                "___TARGET___",
                 "CFR000000006",
                 "CFR000000001",  # The same vessel has two PNOs
                 "CFR000000008",
@@ -248,6 +248,20 @@ def sample_pno_species_and_gears() -> pd.DataFrame:
                 "FRA",
                 "FRA",
             ],
+            "locode": [
+                "FRABH",
+                "FRABH",
+                "FRUUU",
+                "FRLEH",
+                "FRLEH",
+                "FRLEH",
+                "FRAMO",
+                "FRAMO",
+                "FRAMO",
+                "FRAAA",
+                "FRDPE",
+                "FRLEH",
+            ],
             "facade": [
                 "SA",
                 "SA",
@@ -305,6 +319,7 @@ def expected_pno_species_and_gears() -> pd.DataFrame:
             "fao_area": ["27.7.a", None],
             "weight": [1500.0, None],
             "flag_state": ["CYP", "CYP"],
+            "locode": ["GBPHD", None],
             "facade": ["MEMN", None],
         }
     )
@@ -315,7 +330,7 @@ def segments() -> pd.DataFrame:
     return pd.DataFrame(
         {
             "year": [2023, 2023, 2023, 2023, 2015],
-            "segment": ["SOTM", "SHKE27", "SSB", "SxTB8910", "SxTB8910-2015"],
+            "segment": ["SOTM", "SHKE27", "NWW01", "SxTB8910", "SxTB8910-2015"],
             "segment_name": [
                 "Chaluts pélagiques",
                 "Merlu en zone 27",
@@ -359,10 +374,20 @@ def expected_computed_pno_types() -> pd.DataFrame:
                 "CFR000000002",
                 "CFR000000003",
                 "CFR000000004",
-                "CFR000000005",
+                "___TARGET___",
                 "CFR000000006",
                 "CFR000000001",  # The same vessel has two PNOs
                 "CFR000000008",
+            ],
+            "locode": [
+                "FRABH",
+                "FRABH",
+                "FRUUU",
+                "FRLEH",
+                "FRAMO",
+                "FRAAA",
+                "FRDPE",
+                "FRLEH",
             ],
             "flag_state": ["FRA", "FRA", "GBR", "FRA", "FRA", "FRA", "FRA", "FRA"],
             "predicted_arrival_datetime_utc": [
@@ -474,7 +499,7 @@ def expected_computed_pno_segments() -> pd.DataFrame:
                     {"segment": "SOTM", "segmentName": "Chaluts pélagiques"},
                 ],
                 [{"segment": "SOTM", "segmentName": "Chaluts pélagiques"}],
-                [{"segment": "SSB", "segmentName": "Senne de plage"}],
+                [{"segment": "NWW01", "segmentName": "Senne de plage"}],
             ],
             "impact_risk_factor": [
                 default_risk_factors["impact_risk_factor"],
@@ -672,10 +697,20 @@ def merged_pnos() -> pd.DataFrame:
                 "CFR000000002",
                 "CFR000000003",
                 "CFR000000004",
-                "CFR000000005",
+                "___TARGET___",
                 "CFR000000006",
                 "CFR000000001",  # The same vessel has two PNOs
                 "CFR000000008",
+            ],
+            "locode": [
+                "FRABH",
+                "FRABH",
+                "FRUUU",
+                "FRLEH",
+                "FRAMO",
+                "FRAAA",
+                "FRDPE",
+                "FRLEH",
             ],
             "flag_state": ["FRA", "FRA", "GBR", "FRA", "FRA", "FRA", "FRA", "FRA"],
             "predicted_arrival_datetime_utc": [
@@ -778,7 +813,7 @@ def merged_pnos() -> pd.DataFrame:
                     {"segment": "SOTM", "segmentName": "Chaluts pélagiques"},
                 ],
                 [{"segment": "SOTM", "segmentName": "Chaluts pélagiques"}],
-                [{"segment": "SSB", "segmentName": "Senne de plage"}],
+                [{"segment": "NWW01", "segmentName": "Senne de plage"}],
             ],
             "impact_risk_factor": [
                 default_risk_factors["impact_risk_factor"],
@@ -957,10 +992,17 @@ def test_compute_pno_risk_factors(
     pd.testing.assert_frame_equal(res, pnos_with_risk_factors)
 
 
-def test_flag_pnos_to_verify_and_send(pnos_with_risk_factors, flagged_pnos):
+def test_flag_pnos_to_verify_and_send(
+    pnos_with_risk_factors,
+    flagged_pnos,
+    pno_units_targeting_vessels,
+    pno_units_ports_and_segments_subscriptions,
+):
     res = flag_pnos_to_verify_and_send(
         pnos=pnos_with_risk_factors,
-        predicted_arrival_threshold=datetime(2023, 5, 4, 14, 12, 25),
+        pno_units_targeting_vessels=pno_units_targeting_vessels,
+        pno_units_ports_and_segments_subscriptions=pno_units_ports_and_segments_subscriptions,
+        predicted_arrival_threshold=datetime(2023, 5, 2, 14, 12, 25),
     )
     pd.testing.assert_frame_equal(res, flagged_pnos)
 
@@ -1048,7 +1090,7 @@ def test_load_then_reset_logbook(
         )
 
 
-def test_flow(reset_test_data):
+def test_flow_abracadabra(reset_test_data):
     query = (
         "SELECT id, enriched, trip_gears, value->'pnoTypes' AS pno_types, (value->>'riskFactor')::DOUBLE PRECISION AS risk_factor, trip_segments "
         "FROM logbook_reports "

@@ -38,7 +38,7 @@ export function VesselLabelsMapButton() {
         isActive={isOpen}
         onClick={openOrCloseVesselLabels}
         style={{ top: 220 }}
-        title="Affichage des dernières positions"
+        title="Affichage des labels"
       >
         <Icon.Tag color={isRightMenuShrinked ? THEME.color.charcoal : THEME.color.gainsboro} size={26} />
       </MapToolButton>

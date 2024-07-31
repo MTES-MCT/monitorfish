@@ -41,7 +41,6 @@ export function LayersSidebar() {
               $isActive={leftMapBoxOpened === MapBox.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
               accent={Accent.PRIMARY}
               aria-label="Arbre des couches"
-              data-cy="layers-sidebar"
               Icon={Icon.MapLayers}
               onClick={() =>
                 dispatch(setLeftMapBoxOpened(leftMapBoxOpened === MapBox.REGULATIONS ? undefined : MapBox.REGULATIONS))

@@ -8,7 +8,7 @@ context('Sidebars > Custom Zones', () => {
 
     cy.cleanScreenshots(1)
 
-    cy.get('*[data-cy="layers-sidebar"]').click()
+    cy.get('*[title="Arbre des couches"]').click()
     cy.get('*[data-cy="custom-zones-toggle"]').click()
 
     // When it displays the zone at init

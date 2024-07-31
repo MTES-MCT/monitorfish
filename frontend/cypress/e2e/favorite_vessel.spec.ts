@@ -8,7 +8,7 @@ context('Favorite Vessel', () => {
     cy.get('*[data-cy="layers-sidebar-box"]').should('be.not.visible')
 
     // Open the layers box
-    cy.get('*[data-cy="layers-sidebar"]').click()
+    cy.get('*[title="Arbre des couches"]').click()
     cy.get('*[data-cy="favorite-vessels-box"]').should('be.not.visible')
 
     // Re-open the favorite vessels box

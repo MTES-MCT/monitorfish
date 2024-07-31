@@ -88,7 +88,6 @@ distribute_pnos.flow.schedule = Schedule(
         ),
     ]
 )
-logbook.flow.schedule = CronSchedule("* * * * *")
 enrich_logbook.flow.schedule = Schedule(
     clocks=[
         clocks.CronClock(
@@ -130,6 +129,7 @@ last_positions.flow.schedule = Schedule(
         )
     ]
 )
+logbook.flow.schedule = CronSchedule("0,5,10,15,20,25,30,35,40,45,50,55 * * * *")
 missing_far_alerts.flow.schedule = Schedule(
     clocks=[
         clocks.CronClock(

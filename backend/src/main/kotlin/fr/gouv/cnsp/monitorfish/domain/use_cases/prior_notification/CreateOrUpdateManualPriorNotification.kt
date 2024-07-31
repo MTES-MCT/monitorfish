@@ -55,9 +55,9 @@ class CreateOrUpdateManualPriorNotification(
             vesselId,
         )
 
-        val isPartOfControlUnitSubscriptions = pnoPortSubscriptionRepository.has(portLocode)
-            || pnoVesselSubscriptionRepository.has(vesselId)
-            || pnoSegmentSubscriptionRepository.has(portLocode, computedValues.tripSegments.map { it.segment })
+        val isPartOfControlUnitSubscriptions = pnoPortSubscriptionRepository.has(portLocode) ||
+            pnoVesselSubscriptionRepository.has(vesselId) ||
+            pnoSegmentSubscriptionRepository.has(portLocode, computedValues.tripSegments.map { it.segment })
 
         val fishingCatchesWithFaoArea = fishingCatches.map { it.copy(faoZone = faoArea) }
         val tripGears = getTripGears(tripGearCodes)

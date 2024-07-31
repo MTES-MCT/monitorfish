@@ -2,14 +2,20 @@ import { monitorfishApiKy } from './api'
 import { HttpStatusCode } from './constants'
 import { ApiError } from '../libs/ApiError'
 
-import type { TrackRequest, VesselAndPositions, VesselIdentity, VesselPosition } from '../domain/entities/vessel/types'
+import type {
+  TrackRequest,
+  VesselAndPositions,
+  FrontendVesselIdentity,
+  VesselPosition
+} from '../domain/entities/vessel/types'
 import type { CurrentAndArchivedReportingsOfSelectedVessel } from '../domain/types/reporting'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 const VESSEL_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations du navire"
 const VESSEL_SEARCH_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les navires dans notre base"
 const REPORTING_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les signalements de ce navire"
 
-function getVesselIdentityAsEmptyStringWhenNull(identity: VesselIdentity) {
+function getVesselIdentityAsEmptyStringWhenNull(identity: FrontendVesselIdentity) {
   const vesselId = identity.vesselId ?? ''
   const internalReferenceNumber = identity.internalReferenceNumber ?? ''
   const externalReferenceNumber = identity.externalReferenceNumber ?? ''
@@ -24,7 +30,7 @@ function getVesselIdentityAsEmptyStringWhenNull(identity: VesselIdentity) {
  *
  * @throws {@link ApiError}
  */
-async function getVesselFromAPI(identity: VesselIdentity, trackRequest: TrackRequest) {
+async function getVesselFromAPI(identity: FrontendVesselIdentity, trackRequest: TrackRequest) {
   const { externalReferenceNumber, internalReferenceNumber, ircs, vesselId, vesselIdentifier } =
     getVesselIdentityAsEmptyStringWhenNull(identity)
   const trackDepth = trackRequest.trackDepth ?? ''
@@ -52,7 +58,7 @@ async function getVesselFromAPI(identity: VesselIdentity, trackRequest: TrackReq
  *
  * @throws {@link ApiError}
  */
-async function getVesselPositionsFromAPI(identity: VesselIdentity, trackRequest: TrackRequest) {
+async function getVesselPositionsFromAPI(identity: FrontendVesselIdentity, trackRequest: TrackRequest) {
   const { externalReferenceNumber, internalReferenceNumber, ircs, vesselIdentifier } =
     getVesselIdentityAsEmptyStringWhenNull(identity)
   const trackDepth = trackRequest.trackDepth ?? ''
@@ -79,7 +85,9 @@ async function searchVesselsFromAPI(searched: string) {
   const encodedSearched = encodeURI(searched) || ''
 
   try {
-    return await monitorfishApiKy.get(`/bff/v1/vessels/search?searched=${encodedSearched}`).json<VesselIdentity[]>()
+    return await monitorfishApiKy
+      .get(`/bff/v1/vessels/search?searched=${encodedSearched}`)
+      .json<Vessel.VesselIdentity[]>()
   } catch (err) {
     throw new ApiError(VESSEL_SEARCH_ERROR_MESSAGE, err)
   }
@@ -90,7 +98,7 @@ async function searchVesselsFromAPI(searched: string) {
  *
  * @throws {@link ApiError}
  */
-async function getVesselReportingsFromAPI(identity: VesselIdentity, fromDate: Date) {
+async function getVesselReportingsFromAPI(identity: FrontendVesselIdentity, fromDate: Date) {
   const { externalReferenceNumber, internalReferenceNumber, ircs, vesselId, vesselIdentifier } =
     getVesselIdentityAsEmptyStringWhenNull(identity)
 

@@ -4,12 +4,7 @@ import { transform } from 'ol/proj'
 
 import { ReportingTypeCharacteristics } from '../../features/Reporting/types'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map/constants'
-import {
-  atLeastOneVesselSelected,
-  getOnlyVesselIdentityProperties,
-  Vessel,
-  VesselSidebarTab
-} from '../entities/vessel/vessel'
+import { atLeastOneVesselSelected, toVesselIdentityData, Vessel, VesselSidebarTab } from '../entities/vessel/vessel'
 import { ReportingType } from '../types/reporting'
 
 import type {
@@ -20,7 +15,7 @@ import type {
   TrackRequest,
   VesselEnhancedLastPositionWebGLObject,
   VesselFeatureId,
-  VesselIdentity,
+  FrontendVesselIdentity,
   VesselPosition
 } from '../entities/vessel/types'
 import type { PayloadAction } from '@reduxjs/toolkit'
@@ -65,7 +60,7 @@ export type VesselState = {
   loadingPositions: boolean | null
   loadingVessel: boolean | null
   selectedVessel: AugmentedSelectedVessel | null
-  selectedVesselIdentity: VesselIdentity | null
+  selectedVesselIdentity: FrontendVesselIdentity | null
   selectedVesselPositions: VesselPosition[] | null
   selectedVesselTrackRequest: TrackRequest | null
   tripMessagesLastToFormerDEPDateTimes: any[]
@@ -503,7 +498,7 @@ const vesselSlice = createSlice({
       state.loadingVessel = null
       state.loadingPositions = null
       state.selectedVessel = action.payload.vessel
-      state.selectedVesselIdentity = getOnlyVesselIdentityProperties(action.payload.vessel)
+      state.selectedVesselIdentity = toVesselIdentityData(action.payload.vessel)
       state.selectedVesselPositions = action.payload.positions
     },
 

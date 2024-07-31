@@ -48,4 +48,30 @@ export namespace Vessel {
     logbookEquipmentStatus: string | undefined
     riskFactor: RiskFactor | undefined
   }
+
+  // TODO Replace with `| undefined` once API calls use RTK.
+  export interface VesselIdentity {
+    beaconNumber: number | null
+    districtCode: string | null
+    externalReferenceNumber: string | null
+    flagState: string
+    imo: string | null
+    internalReferenceNumber: string | null
+    ircs: string | null
+    length: number | null
+    mmsi: string | null
+    vesselId: number
+    vesselIdentifier: Identifier | null
+    vesselName: string | null
+  }
+  // TODO Replace with `Undefine<VesselIdentity>` once API calls use RTK.
+  export type VesselIdentityData = Omit<VesselIdentity, 'vesselId'> & {
+    vesselId: number | null
+  }
+
+  export enum Identifier {
+    EXTERNAL_REFERENCE_NUMBER = 'EXTERNAL_REFERENCE_NUMBER',
+    INTERNAL_REFERENCE_NUMBER = 'INTERNAL_REFERENCE_NUMBER',
+    IRCS = 'IRCS'
+  }
 }

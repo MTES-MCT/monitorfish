@@ -1,8 +1,6 @@
-import { VesselIdentifier } from '../../../../domain/entities/vessel/types'
+import { Vessel } from '@features/Vessel/Vessel.types'
 
-import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
-
-export const dummyVessels: VesselIdentity[] = [
+export const dummyVessels = [
   {
     externalReferenceNumber: 'FF115457',
     flagState: 'FR',
@@ -10,7 +8,7 @@ export const dummyVessels: VesselIdentity[] = [
     ircs: 'WF3003',
     mmsi: '556780654',
     vesselId: 963,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'EN SOUFFRANCE JUSTICE'
   },
   {
@@ -20,7 +18,7 @@ export const dummyVessels: VesselIdentity[] = [
     ircs: 'FFF1687',
     mmsi: '087615227',
     vesselId: 852,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'IDÉE POSSIBLE GUÈRE'
   },
   {
@@ -30,7 +28,7 @@ export const dummyVessels: VesselIdentity[] = [
     ircs: 'WTMZ',
     mmsi: '863050989',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'FOI COMMANDER DE'
   },
   {
@@ -40,7 +38,7 @@ export const dummyVessels: VesselIdentity[] = [
     ircs: 'CZ9746',
     mmsi: '526719212',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'SILENCE MOYEN ENTRETENIR'
   },
   {
@@ -50,7 +48,7 @@ export const dummyVessels: VesselIdentity[] = [
     ircs: 'KJX1408',
     mmsi: '711778932',
     vesselId: 741,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'OFFICIER REMARQUER DIMANCHE'
   },
   {
@@ -60,7 +58,7 @@ export const dummyVessels: VesselIdentity[] = [
     ircs: null,
     mmsi: null,
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'AFFAIRE NÉCESSAIRE DÉCIDER'
   },
   {
@@ -70,7 +68,7 @@ export const dummyVessels: VesselIdentity[] = [
     ircs: 'LMV2444',
     mmsi: '273738571',
     vesselId: 789,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'OFFICIER QUALITÉ INQUIÉTER'
   },
   {
@@ -80,7 +78,7 @@ export const dummyVessels: VesselIdentity[] = [
     ircs: 'TGY9721',
     mmsi: '290440715',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'SUFFIRE ORDRE AINSI'
   },
   {
@@ -90,7 +88,7 @@ export const dummyVessels: VesselIdentity[] = [
     ircs: 'WQWP',
     mmsi: '450576026',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'DIFFICILE PLANTE FLAMME'
   },
   {
@@ -100,7 +98,7 @@ export const dummyVessels: VesselIdentity[] = [
     ircs: 'TLCK',
     mmsi: '170953206',
     vesselId: 456,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'CHIFFRE PRÉSIDENT ARMER'
   },
   {
@@ -109,8 +107,8 @@ export const dummyVessels: VesselIdentity[] = [
     internalReferenceNumber: 'ABC000848435',
     ircs: 'NQPD',
     mmsi: '122626260',
-    vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselId: 457,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'SOUFFRANCE ATTACHER VIE'
   },
   {
@@ -119,8 +117,8 @@ export const dummyVessels: VesselIdentity[] = [
     internalReferenceNumber: 'ABC000984112',
     ircs: 'QYB7543',
     mmsi: '013996100',
-    vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselId: 458,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'BAS ÉTOUFFER DAVANTAGE'
   },
   {
@@ -129,8 +127,8 @@ export const dummyVessels: VesselIdentity[] = [
     internalReferenceNumber: 'ABC000308039',
     ircs: 'NZO0385',
     mmsi: '860689344',
-    vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselId: 459,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'ÉCLAT SOUFFLER PRESSER'
   },
   {
@@ -139,8 +137,8 @@ export const dummyVessels: VesselIdentity[] = [
     internalReferenceNumber: 'ABC000166726',
     ircs: 'HE7480',
     mmsi: '525379682',
-    vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselId: 460,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'DERNIER SUFFIRE PARFAITEMENT'
   },
   {
@@ -149,8 +147,8 @@ export const dummyVessels: VesselIdentity[] = [
     internalReferenceNumber: 'ABC000394671',
     ircs: 'DH3450',
     mmsi: '667035940',
-    vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselId: 461,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'ANCIEN SOUFFLER HABILLER'
   },
   {
@@ -159,8 +157,8 @@ export const dummyVessels: VesselIdentity[] = [
     internalReferenceNumber: 'ABC000149343',
     ircs: 'WRP7197',
     mmsi: null,
-    vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselId: 462,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'DANGER FEU SUFFIRE'
   },
   {
@@ -169,8 +167,8 @@ export const dummyVessels: VesselIdentity[] = [
     internalReferenceNumber: 'ABC000140641',
     ircs: 'JDUO',
     mmsi: '274259742',
-    vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselId: 463,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'CONSCIENCE CHIFFRE REGARD'
   },
   {
@@ -179,8 +177,8 @@ export const dummyVessels: VesselIdentity[] = [
     internalReferenceNumber: 'ABC000035772',
     ircs: 'NC1001',
     mmsi: '029546102',
-    vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselId: 464,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'ROND FOLIE SOUFFRANCE'
   },
   {
@@ -189,8 +187,8 @@ export const dummyVessels: VesselIdentity[] = [
     internalReferenceNumber: 'ABC000540522',
     ircs: 'CEU6005',
     mmsi: '881553203',
-    vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselId: 465,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'FERMER FAVEUR OFFRIR'
   },
   {
@@ -199,8 +197,8 @@ export const dummyVessels: VesselIdentity[] = [
     internalReferenceNumber: 'ABC000765593',
     ircs: 'WBHK',
     mmsi: '101230463',
-    vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselId: 466,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'COU DERNIER SOUFFRANCE'
   },
   {
@@ -209,8 +207,8 @@ export const dummyVessels: VesselIdentity[] = [
     internalReferenceNumber: 'ABC000072345',
     ircs: 'XC6966',
     mmsi: '090689089',
-    vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselId: 467,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'PROFITER IDÉE AFFIRMER'
   },
   {
@@ -219,8 +217,8 @@ export const dummyVessels: VesselIdentity[] = [
     internalReferenceNumber: 'ABC000979712',
     ircs: 'FNQ7400',
     mmsi: '169370366',
-    vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselId: 468,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'SERRER PEINE DIFFÉRENT'
   },
   {
@@ -229,8 +227,8 @@ export const dummyVessels: VesselIdentity[] = [
     internalReferenceNumber: 'ABC000828264',
     ircs: 'NTYW',
     mmsi: '141147149',
-    vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselId: 469,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'COURT OCCUPER AFFIRMER'
   },
   {
@@ -239,8 +237,8 @@ export const dummyVessels: VesselIdentity[] = [
     internalReferenceNumber: 'ABC000455406',
     ircs: 'YHT3571',
     mmsi: '059995227',
-    vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselId: 470,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'AUSSI TENIR SOUFFRIR'
   },
   {
@@ -249,8 +247,8 @@ export const dummyVessels: VesselIdentity[] = [
     internalReferenceNumber: 'ABC000180200',
     ircs: 'IIHU',
     mmsi: '905961726',
-    vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselId: 471,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'CHEF MEMBRE ÉTOUFFER'
   },
   {
@@ -259,8 +257,8 @@ export const dummyVessels: VesselIdentity[] = [
     internalReferenceNumber: 'ABC000369225',
     ircs: 'YLPJ',
     mmsi: '904787795',
-    vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselId: 472,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'ENTRER ESPÈCE DIFFICILE'
   },
   {
@@ -270,7 +268,7 @@ export const dummyVessels: VesselIdentity[] = [
     ircs: 'CJ2803',
     mmsi: '456215392',
     vesselId: 123,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'VIVRE INVENTER OFFICIER'
   },
   {
@@ -279,8 +277,8 @@ export const dummyVessels: VesselIdentity[] = [
     internalReferenceNumber: 'ABC000300531',
     ircs: 'NHH9883',
     mmsi: '191556941',
-    vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselId: 473,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'PROUVER HIVER SOUFFLER'
   },
   {
@@ -289,8 +287,8 @@ export const dummyVessels: VesselIdentity[] = [
     internalReferenceNumber: 'ABC000689105',
     ircs: 'GLJ6104',
     mmsi: '136720331',
-    vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselId: 474,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'EXPLIQUER PLEURER AFFAIRE'
   },
   {
@@ -299,13 +297,13 @@ export const dummyVessels: VesselIdentity[] = [
     internalReferenceNumber: 'ABC000603340',
     ircs: 'EVB8126',
     mmsi: '771294761',
-    vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselId: 475,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'ENGAGER TROUBLER SOUFFLER'
   }
-]
+] as Vessel.VesselIdentity[]
 
-export const anotherDummyVessels: VesselIdentity[] = [
+export const anotherDummyVessels = [
   {
     externalReferenceNumber: 'FF115457',
     flagState: 'FR',
@@ -313,7 +311,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'WF3003',
     mmsi: '556780654',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'EN SOUFFRANCE JUSTICE'
   },
   {
@@ -323,7 +321,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'FFF1687',
     mmsi: '087615227',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'IDÉE POSSIBLE GUÈRE'
   },
   {
@@ -333,7 +331,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'WTMZ',
     mmsi: '863050989',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'FOI COMMANDER DE'
   },
   {
@@ -343,7 +341,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'CZ9746',
     mmsi: '526719212',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'SILENCE MOYEN ENTRETENIR'
   },
   {
@@ -353,7 +351,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'KJX1408',
     mmsi: '711778932',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'OFFICIER REMARQUER DIMANCHE'
   },
   {
@@ -363,7 +361,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: null,
     mmsi: null,
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'AFFAIRE NÉCESSAIRE DÉCIDER'
   },
   {
@@ -373,7 +371,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'LMV2444',
     mmsi: '273738571',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'OFFICIER QUALITÉ INQUIÉTER'
   },
   {
@@ -383,7 +381,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'TGY9721',
     mmsi: '290440715',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'SUFFIRE ORDRE AINSI'
   },
   {
@@ -393,7 +391,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'WQWP',
     mmsi: '450576026',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'DIFFICILE PLANTE FLAMME'
   },
   {
@@ -403,7 +401,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'TLCK',
     mmsi: '170953206',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'CHIFFRE PRÉSIDENT ARMER'
   },
   {
@@ -413,7 +411,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'NQPD',
     mmsi: '122626260',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'SOUFFRANCE ATTACHER VIE'
   },
   {
@@ -423,7 +421,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'QYB7543',
     mmsi: '013996100',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'BAS ÉTOUFFER DAVANTAGE'
   },
   {
@@ -433,7 +431,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'NZO0385',
     mmsi: '860689344',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'ÉCLAT SOUFFLER PRESSER'
   },
   {
@@ -443,7 +441,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'HE7480',
     mmsi: '525379682',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'DERNIER SUFFIRE PARFAITEMENT'
   },
   {
@@ -453,7 +451,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'DH3450',
     mmsi: '667035940',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'ANCIEN SOUFFLER HABILLER'
   },
   {
@@ -463,7 +461,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'WRP7197',
     mmsi: null,
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'DANGER FEU SUFFIRE'
   },
   {
@@ -473,7 +471,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'JDUO',
     mmsi: '274259742',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'CONSCIENCE CHIFFRE REGARD'
   },
   {
@@ -483,7 +481,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'NC1001',
     mmsi: '029546102',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'ROND FOLIE SOUFFRANCE'
   },
   {
@@ -493,7 +491,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'CEU6005',
     mmsi: '881553203',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'FERMER FAVEUR OFFRIR'
   },
   {
@@ -503,7 +501,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'WBHK',
     mmsi: '101230463',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'COU DERNIER SOUFFRANCE'
   },
   {
@@ -513,7 +511,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'XC6966',
     mmsi: '090689089',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'PROFITER IDÉE AFFIRMER'
   },
   {
@@ -523,7 +521,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'FNQ7400',
     mmsi: '169370366',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'SERRER PEINE DIFFÉRENT'
   },
   {
@@ -533,7 +531,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'NTYW',
     mmsi: '141147149',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'COURT OCCUPER AFFIRMER'
   },
   {
@@ -543,7 +541,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'YHT3571',
     mmsi: '059995227',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'AUSSI TENIR SOUFFRIR'
   },
   {
@@ -553,7 +551,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'IIHU',
     mmsi: '905961726',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'CHEF MEMBRE ÉTOUFFER'
   },
   {
@@ -563,7 +561,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'YLPJ',
     mmsi: '904787795',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'ENTRER ESPÈCE DIFFICILE'
   },
   {
@@ -573,7 +571,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'CJ2803',
     mmsi: '456215392',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'VIVRE INVENTER OFFICIER'
   },
   {
@@ -583,7 +581,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'NHH9883',
     mmsi: '191556941',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'PROUVER HIVER SOUFFLER'
   },
   {
@@ -593,7 +591,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'GLJ6104',
     mmsi: '136720331',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'EXPLIQUER PLEURER AFFAIRE'
   },
   {
@@ -603,7 +601,7 @@ export const anotherDummyVessels: VesselIdentity[] = [
     ircs: 'EVB8126',
     mmsi: '771294761',
     vesselId: null,
-    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
     vesselName: 'ENGAGER TROUBLER SOUFFLER'
   }
-]
+] as Vessel.VesselIdentityData[]

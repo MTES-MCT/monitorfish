@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import type { VesselIdentity } from '../../domain/entities/vessel/types'
+import type { FrontendVesselIdentity } from '../../domain/entities/vessel/types'
 import type {
   CurrentAndArchivedReportingsOfSelectedVessel,
   InfractionSuspicionReporting,
@@ -16,7 +16,7 @@ export type ReportingState = {
   editedReporting: EditableReporting | undefined
   editedReportingInSideWindow: EditableReporting | undefined
   isLoadingReporting: boolean
-  vesselIdentity: VesselIdentity | undefined
+  vesselIdentity: FrontendVesselIdentity | undefined
 }
 const INITIAL_STATE: ReportingState = {
   archivedReportingsFromDate: new Date(new Date().getUTCFullYear() - 5, 0, 1),
@@ -96,7 +96,7 @@ const reportingSlice = createSlice({
      * @param {Object=} state
      * @param {{payload: {
      *   currentAndArchivedReportingsOfSelectedVessel: CurrentAndArchivedReportingsOfSelectedVessel,
-     *   vesselIdentity: VesselIdentity
+     *   vesselIdentity: FrontendVesselIdentity
      * }}} action - the reporting
      */
     setCurrentAndArchivedReportingsOfSelectedVessel(state, action) {

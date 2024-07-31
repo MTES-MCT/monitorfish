@@ -10,13 +10,13 @@ import {
   updateCurrentReporting
 } from '../slice'
 
-import type { VesselIdentity } from '../../../domain/entities/vessel/types'
+import type { FrontendVesselIdentity } from '../../../domain/entities/vessel/types'
 import type { EditedReporting, InfractionSuspicionReporting } from '../../../domain/types/reporting'
 import type { MainAppThunk } from '@store'
 
 export const updateReporting =
   (
-    selectedVesselIdentity: VesselIdentity,
+    selectedVesselIdentity: FrontendVesselIdentity,
     id: number,
     nextReporting: EditedReporting,
     previousReportingType: ReportingType

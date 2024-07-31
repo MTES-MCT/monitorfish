@@ -112,7 +112,7 @@ export function SilencedAlerts() {
             <Row
               key={alert.id}
               $isFocused={alert.id === focusedPendingAlertId}
-              $toClose={alert.isReactivated || false}
+              $toClose={!!alert.isReactivated || false}
               index={index + 1}
             >
               {alert.isReactivated && <AlertTransition>L’alerte est réactivée</AlertTransition>}
@@ -234,7 +234,7 @@ const SearchVesselInput = styled.input<{
   min-width: 280px;
   flex-grow: 0;
 
-  :hover, :focus: {
+  &:hover, &:focus: {
     border-bottom: ${p => `1px ${p.theme.color.lightGray} solid`};
   }
 `

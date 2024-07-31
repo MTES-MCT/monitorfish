@@ -4,7 +4,7 @@ import { ReportingOriginActor } from '@features/Reporting/types'
 import type { Infraction } from './infraction'
 import type { LegacyControlUnit } from './legacyControlUnit'
 import type { PendingAlertValue } from '../entities/alerts/types'
-import type { VesselIdentifier } from '../entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 export enum ReportingType {
   // TODO Should be renamed 'PENDING_ALERT'.
@@ -27,7 +27,7 @@ export type BaseReporting = {
   underCharter: boolean | null
   validationDate: string | null
   vesselId: number | null
-  vesselIdentifier: VesselIdentifier | null
+  vesselIdentifier: Vessel.Identifier | null
   vesselName: string | null
 
   // TODO These 2 props shouldn't be there at all and should be treated in a separated redux state.

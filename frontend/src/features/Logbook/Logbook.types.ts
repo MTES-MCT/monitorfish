@@ -1,4 +1,4 @@
-import type { VesselIdentity } from '../../domain/entities/vessel/types'
+import type { FrontendVesselIdentity } from '../../domain/entities/vessel/types'
 import type { LogbookMessage as LogbookMessageNamespace } from '@features/Logbook/LogbookMessage.types'
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
@@ -9,7 +9,7 @@ export type VesselVoyage = {
   logbookMessagesAndAlerts: FishingActivities
   startDate: string | null
   tripNumber: string
-  vesselIdentity: VesselIdentity
+  vesselIdentity: FrontendVesselIdentity
 }
 
 export type FishingActivities = {

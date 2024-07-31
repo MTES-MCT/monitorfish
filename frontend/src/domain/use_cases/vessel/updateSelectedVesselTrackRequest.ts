@@ -11,14 +11,14 @@ import {
 } from '../../shared_slices/Vessel'
 
 import type { MainAppDispatch, MainAppThunk } from '../../../store'
-import type { TrackRequest, VesselIdentity } from '../../entities/vessel/types'
+import type { TrackRequest, FrontendVesselIdentity } from '../../entities/vessel/types'
 
 /**
  * Modify the vessel track depth on map
  */
 export const updateSelectedVesselTrackRequest =
   (
-    vesselIdentity: VesselIdentity,
+    vesselIdentity: FrontendVesselIdentity,
     trackRequest: TrackRequest,
     withoutFishingMessagesRerendering: boolean = false
   ): MainAppThunk =>

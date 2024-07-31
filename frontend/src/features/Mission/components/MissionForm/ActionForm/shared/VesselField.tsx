@@ -9,7 +9,7 @@ import styled from 'styled-components'
 import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActionFormikUsecases'
 
 import type { MissionActionFormValues } from '../../types'
-import type { VesselIdentity } from 'domain/entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 export function VesselField() {
   const { errors, setValues, values } = useFormikContext<MissionActionFormValues>()
@@ -26,15 +26,22 @@ export function VesselField() {
       return undefined
     }
 
-    return {
+    const typedDefaultValue: Vessel.VesselIdentityData = {
+      beaconNumber: null,
       districtCode: values.districtCode ?? null,
       externalReferenceNumber: values.externalReferenceNumber ?? null,
       flagState: values.flagState ?? '',
+      imo: null,
       internalReferenceNumber: values.internalReferenceNumber ?? null,
       ircs: values.ircs ?? null,
+      length: null,
+      mmsi: null,
       vesselId: values.vesselId,
+      vesselIdentifier: null,
       vesselName: values.vesselName ?? null
     }
+
+    return typedDefaultValue
   }, [
     values.flagState,
     values.vesselName,
@@ -45,7 +52,7 @@ export function VesselField() {
     values.ircs
   ])
 
-  const handleVesselSearchChange = (nextVessel: VesselIdentity | undefined) => {
+  const handleVesselSearchChange = (nextVessel: Vessel.VesselIdentityData | undefined) => {
     if (!nextVessel) {
       setValues({
         ...values,

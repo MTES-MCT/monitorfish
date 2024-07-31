@@ -9,26 +9,30 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { VESSEL_SEARCH_OPTIONS } from './constants'
-import { enrichWithVesselIdentifierIfNotFound, removeDuplicatedFoundVessels } from './utils'
+import {
+  enrichWithVesselIdentifierIfNotFound,
+  getVesselIdentityDataFromVesselEnhancedObject,
+  removeDuplicatesFromFoundVesselIdentities
+} from './utils'
 import { VesselSearchResult } from './VesselSearchResult'
-import { getOnlyVesselIdentityProperties } from '../../domain/entities/vessel/vessel'
 import { searchVessels as searchVesselsAction } from '../../domain/use_cases/vessel/searchVessels'
 import { showVessel } from '../../domain/use_cases/vessel/showVessel'
 
-import type { VesselIdentity } from '../../domain/entities/vessel/types'
+import type { FrontendVesselIdentity } from '../../domain/entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { ChangeEvent, InputHTMLAttributes, MutableRefObject } from 'react'
 import type { Promisable } from 'type-fest'
 
 type VesselSearchProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'defaultValue' | 'onChange'> & {
   baseRef?: MutableRefObject<HTMLDivElement | undefined> | undefined
-  defaultValue?: VesselIdentity | undefined
+  defaultValue?: Vessel.VesselIdentityData | undefined
   extendedWidth?: number | undefined
   hasError?: boolean | undefined
   isExtended?: boolean | undefined
   isLastSearchedVesselsShowed?: boolean
   isLinkToVesselSidebarDisplayed?: boolean
   isVesselIdRequiredFromResults?: boolean
-  onChange: (selectedVessel: VesselIdentity | undefined) => Promisable<void>
+  onChange: (selectedVessel: Vessel.VesselIdentityData | undefined) => Promisable<void>
   onClickOutsideOrEscape?: () => Promisable<void>
   onInputClick?: () => Promisable<void>
 }
@@ -51,12 +55,12 @@ export function VesselSearch({
   const dispatch = useMainAppDispatch()
   const baseUrl = useMemo(() => window.location.origin, [])
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
-  const vessels = useMainAppSelector(state => state.vessel.vessels)
+  const vesselEnhancedLastPositionWbglObjects = useMainAppSelector(state => state.vessel.vessels)
   const searchQueryRef = useRef('')
   const wrapperRef = useRef(null)
 
-  const [selectedVessel, setSelectedVessel] = useState<VesselIdentity | undefined>(undefined)
-  const [foundVessels, setFoundVessels] = useState<VesselIdentity[]>([])
+  const [selectedVessel, setSelectedVessel] = useState<FrontendVesselIdentity | undefined>(undefined)
+  const [foundVessels, setFoundVessels] = useState<FrontendVesselIdentity[]>([])
   const [showLastSearchedVessels, setShowLastSearchedVessels] = useState(false)
 
   const escapeFromKeyboard = useEscapeFromKeyboard()
@@ -107,20 +111,26 @@ export function VesselSearch({
     }
   }, [onInputClick])
 
-  const fuse = useMemo(() => new Fuse(vessels, VESSEL_SEARCH_OPTIONS), [vessels])
+  const fuse = useMemo(
+    () => new Fuse(vesselEnhancedLastPositionWbglObjects, VESSEL_SEARCH_OPTIONS),
+    [vesselEnhancedLastPositionWbglObjects]
+  )
 
   const findVessels = useCallback(
     async (searchQuery: string) => {
-      const vesselsFromMap = fuse
+      const nextFoundVesselIdentitiesFromMap = fuse
         .search(searchQuery)
-        .map(result => getOnlyVesselIdentityProperties(result.item.vesselProperties))
+        .map(result => getVesselIdentityDataFromVesselEnhancedObject(result.item.vesselProperties))
 
-      const nextFoundVesselsFromAPI = await dispatch(searchVesselsAction(searchQuery.toUpperCase()))
-      if (!nextFoundVesselsFromAPI) {
+      const nextFoundVesselIdentitiesFromApi = await dispatch(searchVesselsAction(searchQuery.toUpperCase()))
+      if (!nextFoundVesselIdentitiesFromApi) {
         return []
       }
 
-      const nextFoundVessels = removeDuplicatedFoundVessels(nextFoundVesselsFromAPI, vesselsFromMap)
+      const nextFoundVessels = removeDuplicatesFromFoundVesselIdentities(
+        nextFoundVesselIdentitiesFromApi,
+        nextFoundVesselIdentitiesFromMap
+      )
       const filteredVessels = isVesselIdRequiredFromResults
         ? nextFoundVessels.filter(_vessel => _vessel.vesselId)
         : nextFoundVessels

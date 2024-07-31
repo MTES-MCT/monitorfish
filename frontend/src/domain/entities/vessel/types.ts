@@ -41,13 +41,10 @@ export type VesselCompositeIdentifier = string
  */
 export type VesselFeatureId = string
 
-export enum VesselIdentifier {
-  EXTERNAL_REFERENCE_NUMBER = 'EXTERNAL_REFERENCE_NUMBER',
-  INTERNAL_REFERENCE_NUMBER = 'INTERNAL_REFERENCE_NUMBER',
-  IRCS = 'IRCS'
-}
-
-export type VesselIdentity = {
+/**
+ * @deprecated Use `Vessel.VesselIdentityWithIdentifier` instead.
+ */
+export type FrontendVesselIdentity = {
   beaconNumber?: number | null
   districtCode?: string | null
   externalReferenceNumber: string | null
@@ -56,7 +53,7 @@ export type VesselIdentity = {
   ircs: string | null
   mmsi?: string | null
   vesselId?: VesselId | null
-  vesselIdentifier?: VesselIdentifier | null
+  vesselIdentifier?: Vessel.Identifier | null
   vesselName?: string | null
 }
 
@@ -114,8 +111,9 @@ export type VesselLastPosition = {
   totalWeightOnboard: number
   tripNumber: number
   underCharter: boolean
+  // TODO Can it be null? If not, remove `| null` and remove the `assertNotNullish()` in `getVesselIdentityFromVesselEnhancedObject()`.
   vesselId: number | null
-  vesselIdentifier: VesselIdentifier
+  vesselIdentifier: Vessel.Identifier
   vesselName: string
   width: number
 }
@@ -171,7 +169,7 @@ export type ShowedVesselTrack = {
   toShow: boolean
   toZoom: boolean
   vesselCompositeIdentifier: string
-  vesselIdentity: VesselIdentity
+  vesselIdentity: FrontendVesselIdentity
 }
 
 // TODO Exist both in Vessel and Species.

@@ -5,7 +5,7 @@ import type {
   EndOfBeaconMalfunctionReason
 } from './constants'
 import type { BeaconMalfunctionDetailsType } from '../../../features/SideWindow/BeaconMalfunctionBoard/beaconMalfunctions'
-import type { VesselIdentity } from '../vessel/types'
+import type { FrontendVesselIdentity } from '../vessel/types'
 import type { Integer } from 'type-fest'
 
 export type BeaconMalfunction = {
@@ -91,7 +91,7 @@ export type VesselBeaconMalfunctionsResumeAndHistory = {
   current: BeaconMalfunctionResumeAndDetails | null
   history: BeaconMalfunctionResumeAndDetails[]
   resume: VesselBeaconMalfunctionsResume
-  vesselIdentity: VesselIdentity
+  vesselIdentity: FrontendVesselIdentity
 }
 
 export type VesselBeaconMalfunctionsResume = {

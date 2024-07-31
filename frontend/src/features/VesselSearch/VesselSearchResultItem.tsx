@@ -4,6 +4,8 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
 
+import type { Vessel } from '@features/Vessel/Vessel.types'
+
 export function VesselSearchResultItem({ baseUrl, searchQuery, selectVessel, vessel }) {
   const { flagState } = vessel
   const { vesselName } = vessel
@@ -32,7 +34,7 @@ export function VesselSearchResultItem({ baseUrl, searchQuery, selectVessel, ves
   )
 }
 
-const showVesselIdentityData = (vessel, searchQuery) => {
+const showVesselIdentityData = (vessel: Vessel.VesselIdentity, searchQuery: string) => {
   const arrayOfInformation = [
     {
       name: 'CFR',
@@ -53,6 +55,10 @@ const showVesselIdentityData = (vessel, searchQuery) => {
     {
       name: 'Balise n°',
       value: vessel.beaconNumber
+    },
+    {
+      name: 'Longueur',
+      value: vessel.length
     }
   ]
 
@@ -65,7 +71,7 @@ const showVesselIdentityData = (vessel, searchQuery) => {
             autoEscape
             highlightClassName="highlight"
             searchWords={[searchQuery]}
-            textToHighlight={information.value || ''}
+            textToHighlight={information.value ?? ''}
           />{' '}
           <Light>({information.name})</Light>
         </>

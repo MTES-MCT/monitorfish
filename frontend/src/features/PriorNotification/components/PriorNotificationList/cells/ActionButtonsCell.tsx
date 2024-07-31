@@ -1,7 +1,7 @@
 import { openPriorNotificationForm } from '@features/PriorNotification/useCases/openPriorNotificationForm'
+import { Vessel } from '@features/Vessel/Vessel.types'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
-import { VesselIdentifier, type VesselIdentity } from 'domain/entities/vessel/types'
 import styled from 'styled-components'
 
 import { useIsSuperUser } from '../../../../../auth/hooks/useIsSuperUser'
@@ -40,17 +40,19 @@ export function ActionButtonsCell({ priorNotification }: ActionButtonsCellProps)
   }
 
   const selectMainMapVessel = () => {
-    const vesselIdentity: VesselIdentity = {
+    const vesselIdentity: Vessel.VesselIdentityData = {
       beaconNumber: null,
       districtCode: null,
       externalReferenceNumber: priorNotification.vesselExternalReferenceNumber ?? null,
       // TODO Check that.
       flagState: priorNotification.vesselFlagCountryCode ?? 'UNDEFINED',
+      imo: null,
       internalReferenceNumber: priorNotification.vesselInternalReferenceNumber ?? null,
       ircs: priorNotification.vesselIrcs ?? null,
+      length: null,
       mmsi: priorNotification.vesselMmsi ?? null,
       vesselId: priorNotification.vesselId,
-      vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+      vesselIdentifier: Vessel.Identifier.INTERNAL_REFERENCE_NUMBER,
       vesselName: priorNotification.vesselName ?? null
     }
 

@@ -12,7 +12,7 @@ import { getVesselLogbookFromAPI } from '../api'
 import { NavigateTo } from '../constants'
 import { logbookActions } from '../slice'
 
-import type { VesselIdentity } from '../../../domain/entities/vessel/types'
+import type { FrontendVesselIdentity } from '../../../domain/entities/vessel/types'
 
 /**
  * Get the vessel fishing voyage and update the vessel positions track when navigating in the trips
@@ -20,7 +20,7 @@ import type { VesselIdentity } from '../../../domain/entities/vessel/types'
 export const getVesselLogbook =
   (isInLightMode: boolean) =>
   (
-    vesselIdentity: VesselIdentity | null,
+    vesselIdentity: FrontendVesselIdentity | null,
     navigateTo: NavigateTo | undefined,
     isFromUserAction: boolean,
     nextTripNumber?: string

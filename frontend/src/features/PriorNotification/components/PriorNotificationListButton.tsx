@@ -50,7 +50,6 @@ export function PriorNotificationListButton() {
         accent={Accent.PRIMARY}
         aria-label="Afficher la liste des préavis"
         badgeNumber={data?.perSeafrontGroupCount && data?.perSeafrontGroupCount[ALL_SEAFRONT_GROUP]}
-        data-cy="layers-sidebar"
         Icon={Icon.Fishery}
         onClick={toggleSideWindow}
         size={Size.LARGE}

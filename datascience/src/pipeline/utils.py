@@ -5,11 +5,11 @@ import pathlib
 import shutil
 import sys
 from io import StringIO
-from typing import Sequence, Union
+from typing import List, Sequence, Union
 
 import geoalchemy2
 import sqlalchemy
-from sqlalchemy import MetaData, Table, func, select
+from sqlalchemy import MetaData, Table, func, select, text
 from sqlalchemy.exc import InvalidRequestError
 
 # ***************************** Database operations utils *****************************
@@ -53,23 +53,22 @@ def get_table(
     return table
 
 
-def delete(
-    table: sqlalchemy.Table,
+def truncate(
+    tables: List[sqlalchemy.Table],
     connection: sqlalchemy.engine.base.Connection,
     logger: logging.Logger,
 ):
-    """Deletes all rows from a table.
-    Useful to wipe a table before re-inserting fresh data in ETL jobs."""
-    count_statement = select(func.count()).select_from(table)
-    n = connection.execute(count_statement).fetchall()[0][0]
-    if logger:
-        logger.info(f"Found existing table {table.name} with {n} rows.")
-        logger.info(f"Deleting table {table.name}...")
-    connection.execute(table.delete())
-    count_statement = select(func.count()).select_from(table)
-    n = connection.execute(count_statement).fetchall()[0][0]
-    if logger:
-        logger.info(f"Rows after deletion: {n}.")
+    """Truncate tables.
+    Useful to wipe tables before re-inserting fresh data in ETL jobs."""
+    for table in tables:
+        count_statement = select(func.count()).select_from(table)
+        n = connection.execute(count_statement).fetchall()[0][0]
+        logger.info(f"Table {table.name} has {n} rows.")
+
+    tables_list = ", ".join([f'"{table.schema}"."{table.name}"' for table in tables])
+    logger.info(f"Truncating tables {tables_list}...")
+
+    connection.execute(text(f"TRUNCATE {tables_list}"))
 
 
 def delete_rows(

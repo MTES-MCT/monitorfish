@@ -389,7 +389,13 @@ class JpaLogbookReportRepository(
     }
 
     @Transactional
-    override fun updatePriorNotificationNote(reportId: String, operationDate: ZonedDateTime, note: String?) {
+    override fun updatePriorNotificationData(
+        reportId: String,
+        operationDate: ZonedDateTime,
+
+        authorTrigram: String?,
+        note: String?,
+    ) {
         val logbookReportEntities =
             dbLogbookReportRepository.findEnrichedPnoReferenceAndRelatedOperationsByReportId(
                 reportId,
@@ -404,12 +410,16 @@ class JpaLogbookReportRepository(
             .filter { it.operationType in listOf(LogbookOperationType.DAT, LogbookOperationType.COR) }
             .map { logbookReportEntity ->
                 val pnoMessage = objectMapper.readValue(logbookReportEntity.message, PNO::class.java)
+                pnoMessage.authorTrigram = authorTrigram
                 pnoMessage.note = note
 
                 /**
-                 * The PNO states are re-initialized,
-                 * - the PDF will be generated
+                 * The PNO states are re-initialized:
+                 * - the PDF will be re-generated (done in the use case by deleting the old one)
                  * - the PNO will require another verification before sending
+                 *
+                 * Note: We will lose the distinction between `AUTO_SEND_DONE` and `OUT_OF_VERIFICATION_SCOPE`
+                 * if it was in one of these states before the update. But it's an acceptable trade-off.
                  */
                 pnoMessage.isBeingSent = false
                 pnoMessage.isVerified = false

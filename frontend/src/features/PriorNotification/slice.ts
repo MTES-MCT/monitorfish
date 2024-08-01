@@ -1,29 +1,30 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
 import { DEFAULT_LIST_FILTER_VALUES } from './components/PriorNotificationList/constants'
+import { PriorNotification } from './PriorNotification.types'
 
-import type { FormValues } from './components/PriorNotificationForm/types'
+import type { ManualPriorNotificationFormValues } from './components/ManualPriorNotificationForm/types'
 import type { ListFilter } from './components/PriorNotificationList/types'
-import type { PriorNotification } from './PriorNotification.types'
 import type { Undefine } from '@mtes-mct/monitor-ui'
 
 export interface PriorNotificationState {
-  editedPriorNotificationComputedValues: Undefine<PriorNotification.ManualPriorNotificationComputedValues> | undefined
-  editedPriorNotificationInitialFormValues: FormValues | undefined
-  isOpenedPriorNotificationManuallyCreated: boolean | undefined
+  editedAutoPriorNotificationInitialFormValues: PriorNotification.AutoPriorNotificationData | undefined
+  editedManualPriorNotificationComputedValues: Undefine<PriorNotification.ManualComputedValues> | undefined
+  editedManualPriorNotificationInitialFormValues: ManualPriorNotificationFormValues | undefined
   isPriorNotificationCardOpen: boolean
   isPriorNotificationFormOpen: boolean
   listFilterValues: ListFilter
-  openedPriorNotificationIdentifier: PriorNotification.PriorNotificationIdentifier | undefined
+  /** Used for both prior notification forms & card. */
+  openedPriorNotificationDetail: PriorNotification.PriorNotificationDetail | undefined
 }
 const INITIAL_STATE: PriorNotificationState = {
-  editedPriorNotificationComputedValues: undefined,
-  editedPriorNotificationInitialFormValues: undefined,
-  isOpenedPriorNotificationManuallyCreated: undefined,
+  editedAutoPriorNotificationInitialFormValues: undefined,
+  editedManualPriorNotificationComputedValues: undefined,
+  editedManualPriorNotificationInitialFormValues: undefined,
   isPriorNotificationCardOpen: false,
   isPriorNotificationFormOpen: false,
   listFilterValues: DEFAULT_LIST_FILTER_VALUES,
-  openedPriorNotificationIdentifier: undefined
+  openedPriorNotificationDetail: undefined
 }
 
 const priorNotificationSlice = createSlice({
@@ -32,14 +33,15 @@ const priorNotificationSlice = createSlice({
   reducers: {
     closePriorNotificationCard(state) {
       state.isPriorNotificationCardOpen = false
+      state.openedPriorNotificationDetail = undefined
     },
 
     closePriorNotificationForm(state) {
-      state.editedPriorNotificationComputedValues = undefined
-      state.editedPriorNotificationInitialFormValues = undefined
-      state.openedPriorNotificationIdentifier = undefined
-      state.isOpenedPriorNotificationManuallyCreated = undefined
+      state.editedAutoPriorNotificationInitialFormValues = undefined
+      state.editedManualPriorNotificationComputedValues = undefined
+      state.editedManualPriorNotificationInitialFormValues = undefined
       state.isPriorNotificationFormOpen = false
+      state.openedPriorNotificationDetail = undefined
     },
 
     openPriorNotificationCard(state) {
@@ -47,10 +49,6 @@ const priorNotificationSlice = createSlice({
     },
 
     openPriorNotificationForm(state) {
-      state.editedPriorNotificationComputedValues = undefined
-      state.editedPriorNotificationInitialFormValues = undefined
-      state.isOpenedPriorNotificationManuallyCreated = true
-      state.openedPriorNotificationIdentifier = undefined
       state.isPriorNotificationFormOpen = true
     },
 
@@ -61,15 +59,22 @@ const priorNotificationSlice = createSlice({
       }
     },
 
-    setEditedPriorNotificationComputedValues(
+    setEditedAutoPriorNotificationInitialFormValues(
       state,
-      action: PayloadAction<Undefine<PriorNotification.ManualPriorNotificationComputedValues>>
+      action: PayloadAction<PriorNotification.AutoPriorNotificationData>
     ) {
-      state.editedPriorNotificationComputedValues = action.payload
+      state.editedAutoPriorNotificationInitialFormValues = action.payload
     },
 
-    setEditedPriorNotificationInitialFormValues(state, action: PayloadAction<FormValues>) {
-      state.editedPriorNotificationInitialFormValues = action.payload
+    setEditedManualPriorNotificationComputedValues(
+      state,
+      action: PayloadAction<Undefine<PriorNotification.ManualComputedValues>>
+    ) {
+      state.editedManualPriorNotificationComputedValues = action.payload
+    },
+
+    setEditedManualPriorNotificationInitialFormValues(state, action: PayloadAction<ManualPriorNotificationFormValues>) {
+      state.editedManualPriorNotificationInitialFormValues = action.payload
     },
 
     setListFilterValues(state, action: PayloadAction<Partial<ListFilter>>) {
@@ -79,24 +84,16 @@ const priorNotificationSlice = createSlice({
       }
     },
 
-    setOpenedPriorNotification(
-      state,
-      action: PayloadAction<PriorNotification.PriorNotificationIdentifier & { isManuallyCreated: boolean }>
-    ) {
-      state.openedPriorNotificationIdentifier = {
-        operationDate: action.payload.operationDate,
-        reportId: action.payload.reportId
-      }
-      state.isOpenedPriorNotificationManuallyCreated = action.payload.isManuallyCreated
+    setOpenedPriorNotification(state, action: PayloadAction<PriorNotification.PriorNotificationDetail>) {
+      state.openedPriorNotificationDetail = action.payload
     },
 
     unsetEditedPriorNotificationComputedValues(state) {
-      state.editedPriorNotificationComputedValues = undefined
+      state.editedManualPriorNotificationComputedValues = undefined
     },
 
-    unsetOpenedPriorNotification(state) {
-      state.openedPriorNotificationIdentifier = undefined
-      state.isOpenedPriorNotificationManuallyCreated = undefined
+    unsetOpenedPriorNotificationDetail(state) {
+      state.openedPriorNotificationDetail = undefined
     }
   }
 })

@@ -48,7 +48,6 @@ class GetNumberToVerifyUTests {
             listOf(
                 PriorNotification(
                     reportId = "FAKE_REPORT_ID_1",
-                    authorTrigram = null,
                     createdAt = null,
                     didNotFishAfterZeroNotice = false,
                     isManuallyCreated = false,
@@ -81,7 +80,6 @@ class GetNumberToVerifyUTests {
 
                 PriorNotification(
                     reportId = "FAKE_REPORT_ID_2",
-                    authorTrigram = null,
                     createdAt = null,
                     didNotFishAfterZeroNotice = false,
                     isManuallyCreated = false,

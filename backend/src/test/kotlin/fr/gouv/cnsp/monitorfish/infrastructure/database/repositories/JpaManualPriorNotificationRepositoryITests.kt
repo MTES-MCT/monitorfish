@@ -422,7 +422,6 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         val newPriorNotification =
             PriorNotification(
                 reportId = null,
-                authorTrigram = "ABC",
                 createdAt = null,
                 didNotFishAfterZeroNotice = false,
                 isManuallyCreated = false,
@@ -433,6 +432,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
                         // Replaced by the generated `createdAt` during the save operation.
                         integrationDateTime = ZonedDateTime.now(),
                         message = PNO().apply {
+                            authorTrigram = "ABC"
                             catchOnboard = emptyList()
                             catchToLand = emptyList()
                             economicZone = null

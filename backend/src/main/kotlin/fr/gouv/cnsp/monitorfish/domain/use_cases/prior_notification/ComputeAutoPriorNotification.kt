@@ -19,9 +19,9 @@ class ComputeAutoPriorNotification(
         segmentCodes: List<String>,
         vesselId: Int,
     ): AutoPriorNotificationComputedValues {
-        val isPartOfControlUnitSubscriptions = pnoPortSubscriptionRepository.has(portLocode)
-            || pnoVesselSubscriptionRepository.has(vesselId)
-            || pnoSegmentSubscriptionRepository.has(portLocode, segmentCodes)
+        val isPartOfControlUnitSubscriptions = pnoPortSubscriptionRepository.has(portLocode) ||
+            pnoVesselSubscriptionRepository.has(vesselId) ||
+            pnoSegmentSubscriptionRepository.has(portLocode, segmentCodes)
         val nextState = PriorNotification.getNextState(isInVerificationScope, isPartOfControlUnitSubscriptions)
 
         return AutoPriorNotificationComputedValues(nextState)

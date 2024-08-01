@@ -75,7 +75,13 @@ interface LogbookReportRepository {
 
     fun findAllPriorNotificationsToVerify(): List<PriorNotification>
 
-    fun updatePriorNotificationNote(reportId: String, operationDate: ZonedDateTime, note: String?)
+    fun updatePriorNotificationData(
+        reportId: String,
+        operationDate: ZonedDateTime,
+
+        authorTrigram: String?,
+        note: String?,
+    )
 
     fun invalidate(reportId: String, operationDate: ZonedDateTime)
 

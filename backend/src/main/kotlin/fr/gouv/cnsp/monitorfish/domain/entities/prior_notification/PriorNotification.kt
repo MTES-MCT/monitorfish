@@ -21,7 +21,6 @@ import java.time.ZonedDateTime
 
 data class PriorNotification(
     val reportId: String?,
-    val authorTrigram: String?,
     val createdAt: ZonedDateTime?,
     val didNotFishAfterZeroNotice: Boolean,
     val isManuallyCreated: Boolean,

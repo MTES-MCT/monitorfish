@@ -1,18 +1,13 @@
-import { RTK_FORCE_REFETCH_QUERY_OPTIONS, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { InvalidatePriorNotificationDialog } from '@features/PriorNotification/components/InvalidatePriorNotificationDialog'
-import {
-  useGetPriorNotificationDetailQuery,
-  useInvalidatePriorNotificationMutation
-} from '@features/PriorNotification/priorNotificationApi'
+import { useInvalidatePriorNotificationMutation } from '@features/PriorNotification/priorNotificationApi'
 import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { updateEditedPriorNotificationComputedValues } from '@features/PriorNotification/useCases/updateEditedPriorNotificationComputedValues'
 import { isZeroNotice } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Banner, Button, FormikEffect, Icon, Level, usePrevious } from '@mtes-mct/monitor-ui'
-import { skipToken } from '@reduxjs/toolkit/query'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { getDefinedObject } from '@utils/getDefinedObject'
 import { useFormikContext } from 'formik'
@@ -28,40 +23,21 @@ import { PriorNotification } from '../../PriorNotification.types'
 import { DownloadButton } from '../shared/DownloadButton'
 import { TagBar } from '../shared/TagBar'
 
-import type { FormValues } from './types'
+import type { ManualPriorNotificationFormValues } from './types'
 import type { Promisable } from 'type-fest'
 
 type CardProps = Readonly<{
+  detail: PriorNotification.PriorNotificationDetail | undefined
   isValidatingOnChange: boolean
   onClose: () => void
   onSubmit: () => Promisable<void>
   onVerifyAndSend: () => Promisable<void>
-  reportId: string | undefined
 }>
-export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend, reportId }: CardProps) {
-  const { dirty, isValid, submitForm, values } = useFormikContext<FormValues>()
+export function Card({ detail, isValidatingOnChange, onClose, onSubmit, onVerifyAndSend }: CardProps) {
+  const { dirty, isValid, submitForm, values } = useFormikContext<ManualPriorNotificationFormValues>()
   const dispatch = useMainAppDispatch()
   const editedPriorNotificationComputedValues = useMainAppSelector(
-    store => store.priorNotification.editedPriorNotificationComputedValues
-  )
-  const openedPriorNotificationIdentifier = useMainAppSelector(
-    store => store.priorNotification.openedPriorNotificationIdentifier
-  )
-  const isOpenedPriorNotificationManuallyCreated = useMainAppSelector(
-    store => store.priorNotification.isOpenedPriorNotificationManuallyCreated
-  )
-
-  const { data: editedPriorNotificationDetail } = useGetPriorNotificationDetailQuery(
-    openedPriorNotificationIdentifier && typeof isOpenedPriorNotificationManuallyCreated === 'boolean'
-      ? {
-          ...openedPriorNotificationIdentifier,
-          isManuallyCreated: isOpenedPriorNotificationManuallyCreated
-        }
-      : skipToken,
-    {
-      ...RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS,
-      ...RTK_FORCE_REFETCH_QUERY_OPTIONS
-    }
+    store => store.priorNotification.editedManualPriorNotificationComputedValues
   )
   const [invalidatePriorNotification] = useInvalidatePriorNotificationMutation()
 
@@ -69,16 +45,14 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
   const [isClosingConfirmationDialog, setIsClosingConfirmationDialog] = useState(false)
   const previousPartialComputationRequestData = usePrevious(getPartialComputationRequestData(values))
 
-  const applicableState = editedPriorNotificationComputedValues?.nextState ?? editedPriorNotificationDetail?.state
-  const isNewPriorNotification = !reportId
-  const isInvalidated = editedPriorNotificationDetail?.logbookMessage?.message?.isInvalidated
+  const applicableState = editedPriorNotificationComputedValues?.nextState ?? detail?.state
+  const isNewPriorNotification = !detail
+  const isInvalidated = detail?.logbookMessage?.message?.isInvalidated
   const isPendingSend =
-    !!editedPriorNotificationDetail?.state &&
-    [PriorNotification.State.AUTO_SEND_IN_PROGRESS, PriorNotification.State.PENDING_SEND].includes(
-      editedPriorNotificationDetail?.state
-    )
-  const isPendingVerification = editedPriorNotificationDetail?.state === PriorNotification.State.PENDING_VERIFICATION
-  const isVerifiedAndSent = editedPriorNotificationDetail?.state === PriorNotification.State.VERIFIED_AND_SENT
+    !!detail?.state &&
+    [PriorNotification.State.AUTO_SEND_IN_PROGRESS, PriorNotification.State.PENDING_SEND].includes(detail?.state)
+  const isPendingVerification = detail?.state === PriorNotification.State.PENDING_VERIFICATION
+  const isVerifiedAndSent = detail?.state === PriorNotification.State.VERIFIED_AND_SENT
   const hasDesignatedPorts = editedPriorNotificationComputedValues?.types?.find(type => type.hasDesignatedPorts)
 
   const handleClose = () => {
@@ -92,12 +66,12 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
   }
 
   const invalidate = async () => {
-    assertNotNullish(editedPriorNotificationDetail)
+    assertNotNullish(detail)
 
     await invalidatePriorNotification({
       isManuallyCreated: true,
-      operationDate: editedPriorNotificationDetail.logbookMessage.operationDateTime,
-      reportId: editedPriorNotificationDetail.logbookMessage.reportId
+      operationDate: detail.logbookMessage.operationDateTime,
+      reportId: detail.logbookMessage.reportId
     })
 
     setIsInvalidatingPriorNotificationDialog(false)
@@ -110,14 +84,14 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
   }
 
   const updateComputedValues = useDebouncedCallback(
-    (nextComputationRequestData: PriorNotification.PriorNotificationComputeRequestData) => {
+    (nextComputationRequestData: PriorNotification.ManualComputeRequestData) => {
       dispatch(updateEditedPriorNotificationComputedValues(nextComputationRequestData))
     },
     1000
   )
 
   // We need to check for equality outside the debounce to ensure `nextFormValues` is up-to-date.
-  const updateComputedValuesIfNecessary = (nextFormValues: FormValues) => {
+  const updateComputedValuesIfNecessary = (nextFormValues: ManualPriorNotificationFormValues) => {
     const nextPartialComputationRequestData = getPartialComputationRequestData(nextFormValues)
 
     // If nothing changed, we don't need to update the computed values
@@ -148,7 +122,7 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
 
   useEffect(
     () => () => {
-      dispatch(priorNotificationActions.setEditedPriorNotificationInitialFormValues(values))
+      dispatch(priorNotificationActions.setEditedManualPriorNotificationInitialFormValues(values))
     },
     [dispatch, values]
   )
@@ -160,12 +134,12 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
       <InnerWrapper>
         <FormikEffect onChange={updateComputedValuesIfNecessary as any} />
 
-        {editedPriorNotificationDetail?.state === PriorNotification.State.PENDING_SEND && (
+        {detail?.state === PriorNotification.State.PENDING_SEND && (
           <StyledBanner isCollapsible level={Level.WARNING} top="100px">
             Le préavis est en cours de diffusion.
           </StyledBanner>
         )}
-        {editedPriorNotificationDetail?.state === PriorNotification.State.AUTO_SEND_IN_PROGRESS && (
+        {detail?.state === PriorNotification.State.AUTO_SEND_IN_PROGRESS && (
           <StyledBanner isCollapsible level={Level.WARNING} top="100px">
             Le préavis est en cours d’envoi aux unités qui l’ont demandé.
           </StyledBanner>
@@ -195,7 +169,7 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
             {!isNewPriorNotification && isPendingVerification && (
               <Intro>Le préavis doit être vérifié par le CNSP avant sa diffusion.</Intro>
             )}
-            {(!!editedPriorNotificationComputedValues || !!openedPriorNotificationIdentifier) && (
+            {(!!editedPriorNotificationComputedValues || !!detail) && (
               <Intro $withTopMargin={!isNewPriorNotification && isPendingVerification}>
                 Le navire doit respecter un délai d’envoi{hasDesignatedPorts && ' et débarquer dans un port désigné'}.
               </Intro>
@@ -205,7 +179,7 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
 
             <Form isInvalidated={isInvalidated} />
 
-            {!!editedPriorNotificationDetail && !isInvalidated && (
+            {!!detail && !isInvalidated && (
               <InvalidateButton
                 accent={Accent.SECONDARY}
                 Icon={Icon.Invalid}
@@ -222,12 +196,8 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
               Fermer
             </Button>
 
-            {!!editedPriorNotificationDetail && (
-              <DownloadButton
-                isDisabled={dirty}
-                pnoLogbookMessage={editedPriorNotificationDetail.logbookMessage}
-                reportId={editedPriorNotificationDetail.id}
-              />
+            {!!detail && (
+              <DownloadButton isDisabled={dirty} pnoLogbookMessage={detail.logbookMessage} reportId={detail.reportId} />
             )}
 
             <Button

@@ -56,16 +56,21 @@ export namespace PriorNotification {
   export type PriorNotificationDetail = {
     /** Unique identifier concatenating all the DAT, COR, RET & DEL operations `id` used for data consolidation. */
     fingerprint: string
-    /** Logbook message `reportId`. */
-    id: string
     isLessThanTwelveMetersVessel: boolean
+    isManuallyCreated: boolean
     isVesselUnderCharter: boolean | undefined
     logbookMessage: LogbookMessage.PnoLogbookMessage
+    operationDate: string
+    /** Logbook message `reportId`. */
+    reportId: string
     riskFactor: number | undefined
     state: State | undefined
   }
 
-  export type PriorNotificationUpdateNoteRequestData = Pick<LogbookMessage.PnoMessage, 'note'>
+  export type AutoPriorNotificationData = {
+    authorTrigram: string | string
+    note: string | undefined
+  }
 
   export type ManualPriorNotificationData = {
     authorTrigram: string
@@ -87,12 +92,24 @@ export namespace PriorNotification {
   }
   export type NewManualPriorNotificationData = Omit<ManualPriorNotificationData, 'reportId'>
 
-  export type PriorNotificationComputeRequestData = Pick<
+  export type AutoComputeRequestData = {
+    isInVerificationScope: boolean
+    portLocode: string
+    segmentCodes: string[]
+    vesselId: number
+  }
+  /** Real-time computed values displayed within a prior notification form. */
+  export type AutoComputedValues = {
+    /** Next initial state of the prior notification once it will be created or updated. */
+    nextState: State
+  }
+
+  export type ManualComputeRequestData = Pick<
     ManualPriorNotificationData,
     'faoArea' | 'fishingCatches' | 'portLocode' | 'tripGearCodes' | 'vesselId'
   >
   /** Real-time computed values displayed within a prior notification form. */
-  export type ManualPriorNotificationComputedValues = Pick<
+  export type ManualComputedValues = Pick<
     PriorNotification,
     'isVesselUnderCharter' | 'tripSegments' | 'types' | 'riskFactor'
   > & {

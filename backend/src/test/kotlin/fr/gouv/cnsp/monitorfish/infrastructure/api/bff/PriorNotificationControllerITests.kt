@@ -14,9 +14,9 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.*
 import fr.gouv.cnsp.monitorfish.domain.utils.PaginatedList
 import fr.gouv.cnsp.monitorfish.fakers.PriorNotificationFaker
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AutoPriorNotificationComputeDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AutoPriorNotificationDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationComputeDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationDataInput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.PriorNotificationDataInput
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
@@ -64,7 +64,7 @@ class PriorNotificationControllerITests {
     private lateinit var verifyAndSendPriorNotification: VerifyAndSendPriorNotification
 
     @MockBean
-    private lateinit var updatePriorNotificationNote: UpdatePriorNotificationNote
+    private lateinit var updateAutoPriorNotification: UpdateAutoPriorNotification
 
     @MockBean
     private lateinit var invalidatePriorNotification: InvalidatePriorNotification
@@ -108,23 +108,6 @@ class PriorNotificationControllerITests {
     }
 
     @Test
-    fun `getNumberToVerify Should get the number of prior notification to verify`() {
-        // Given
-        given(getNumberToVerify.execute()).willReturn(
-            PriorNotificationStats(perSeafrontGroupCount = mapOf(Pair(SeafrontGroup.ALL, 2))),
-        )
-
-        // When
-        api.perform(
-            get(
-                "/bff/v1/prior_notifications/to_verify",
-            ),
-        )
-            // Then
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.perSeafrontGroupCount['ALL']", equalTo(2)))
-    }
-
     fun `getAutoComputation Should get an auto prior notification computed values`() {
         // Given
         given(this.computeAutoPriorNotification.execute(any(), any(), any(), any()))
@@ -151,6 +134,72 @@ class PriorNotificationControllerITests {
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.nextState", equalTo("OUT_OF_VERIFICATION_SCOPE")))
+    }
+
+    @Test
+    fun `getAutoData Should get an auto prior notification form data by its reportId`() {
+        val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
+
+        // Given
+        given(
+            getPriorNotification.execute(
+                fakePriorNotification.reportId!!,
+                fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
+                false,
+            ),
+        )
+            .willReturn(fakePriorNotification)
+
+        // When
+        api.perform(
+            get(
+                "/bff/v1/prior_notifications/auto/${fakePriorNotification.reportId!!}/data?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
+            ),
+        )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
+    }
+
+    @Test
+    fun `updateAuto Should update an auto prior notification by its reportId`() {
+        val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
+        fakePriorNotification.logbookMessageAndValue.value.note = "Test !"
+
+        // Given
+        given(
+            updateAutoPriorNotification.execute(
+                reportId = anyOrNull(),
+                operationDate = anyOrNull(),
+                authorTrigram = anyOrNull(),
+                note = anyOrNull(),
+            ),
+        )
+            .willReturn(fakePriorNotification)
+
+        // When
+        val requestBody = objectMapper.writeValueAsString(
+            AutoPriorNotificationDataInput(
+                authorTrigram = "ABC",
+                note = "Test !",
+            ),
+        )
+        api.perform(
+            put(
+                "/bff/v1/prior_notifications/auto/${fakePriorNotification.reportId!!}?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
+            )
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody),
+        )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
+            .andExpect(
+                jsonPath(
+                    "$.logbookMessage.message.note",
+                    equalTo(fakePriorNotification.logbookMessageAndValue.value.note),
+                ),
+            )
     }
 
     @Test
@@ -188,7 +237,7 @@ class PriorNotificationControllerITests {
     }
 
     @Test
-    fun `getOneManual Should get a manual prior notification form data by its reportId`() {
+    fun `getManualData Should get a manual prior notification form data by its reportId`() {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
 
         // Given
@@ -204,7 +253,7 @@ class PriorNotificationControllerITests {
         // When
         api.perform(
             get(
-                "/bff/v1/prior_notifications/manual/${fakePriorNotification.reportId!!}?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
+                "/bff/v1/prior_notifications/manual/${fakePriorNotification.reportId!!}/data?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
             ),
         )
             // Then
@@ -323,6 +372,24 @@ class PriorNotificationControllerITests {
     }
 
     @Test
+    fun `getNumberToVerify Should get the number of prior notification to verify`() {
+        // Given
+        given(getNumberToVerify.execute()).willReturn(
+            PriorNotificationStats(perSeafrontGroupCount = mapOf(Pair(SeafrontGroup.ALL, 2))),
+        )
+
+        // When
+        api.perform(
+            get(
+                "/bff/v1/prior_notifications/to_verify",
+            ),
+        )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.perSeafrontGroupCount['ALL']", equalTo(2)))
+    }
+
+    @Test
     fun `getAllTypes Should get a list of prior notification types`() {
         // Given
         given(getPriorNotificationTypes.execute()).willReturn(listOf("Préavis de Type A", "Préavis de Type B"))
@@ -358,7 +425,7 @@ class PriorNotificationControllerITests {
         )
             // Then
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.id", equalTo(fakePriorNotification.reportId)))
+            .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
     }
 
     @Test
@@ -393,9 +460,10 @@ class PriorNotificationControllerITests {
 
         // Given
         given(
-            updatePriorNotificationNote.execute(
+            updateAutoPriorNotification.execute(
                 reportId = anyOrNull(),
                 operationDate = anyOrNull(),
+                authorTrigram = anyOrNull(),
                 note = anyOrNull(),
             ),
         )
@@ -403,7 +471,8 @@ class PriorNotificationControllerITests {
 
         // When
         val requestBody = objectMapper.writeValueAsString(
-            PriorNotificationDataInput(
+            AutoPriorNotificationDataInput(
+                authorTrigram = "ABC",
                 note = "Test !",
             ),
         )
@@ -455,5 +524,6 @@ class PriorNotificationControllerITests {
                     equalTo(fakePriorNotification.logbookMessageAndValue.value.isInvalidated),
                 ),
             )
+            .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
     }
 }

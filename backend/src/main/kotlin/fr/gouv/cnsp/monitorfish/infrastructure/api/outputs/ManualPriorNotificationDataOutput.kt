@@ -29,8 +29,8 @@ data class ManualPriorNotificationDataOutput(
             val logbookMessage = priorNotification.logbookMessageAndValue.logbookMessage
             val pnoMessage = priorNotification.logbookMessageAndValue.value
 
-            val authorTrigram = requireNotNull(priorNotification.authorTrigram) {
-                "`priorNotification.authorTrigram` is null."
+            val authorTrigram = requireNotNull(pnoMessage.authorTrigram) {
+                "`pnoMessage.authorTrigram` is null."
             }
             val expectedArrivalDate = CustomZonedDateTime.fromZonedDateTime(
                 requireNotNull(pnoMessage.predictedArrivalDatetimeUtc) {

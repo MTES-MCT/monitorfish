@@ -100,18 +100,18 @@ const FavoriteVesselsNumber = styled(MapComponent)<{
 }>`
   display: inline-block;
   position: absolute;
-  width: 14px;
-  height: 18px;
+  height: 15px;
   border-radius: 10px;
-  top: 56px;
-  line-height: 15px;
+  top: 64px;
+  line-height: 14px;
   left: 40px;
   background-color: ${p => (p.isOpen ? p.theme.color.charcoal : p.theme.color.gainsboro)};
   transition: all 0.5s;
   color: ${p => (p.isOpen ? p.theme.color.white : p.theme.color.gunMetal)};
   z-index: 100;
-  padding: 0 2px;
+  padding: 0 4px;
   text-align: center;
+  font-size: 12px;
 `
 
 const List = styled.ul`
@@ -156,7 +156,7 @@ const FavoriteVesselsBox = styled(MapComponent)<{
   background: ${p => p.theme.color.white};
   margin-left: ${p => (p.isOpen ? '45px' : '-420px')};
   opacity: ${p => (p.isOpen ? '1' : '0')};
-  top: 65px;
+  top: 73px;
   left: 10px;
   border-radius: 2px;
   position: absolute;
@@ -170,7 +170,7 @@ const FavoriteVesselsIcon = styled(MapButton)<{
   position: absolute;
   display: inline-block;
   z-index: 99;
-  top: 65px;
+  top: 73px;
   height: 40px;
   width: 40px;
   border-radius: 2px;

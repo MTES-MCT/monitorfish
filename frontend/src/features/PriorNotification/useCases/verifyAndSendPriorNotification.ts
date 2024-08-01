@@ -1,3 +1,4 @@
+import { RtkCacheTagType } from '@api/constants'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { handleThunkError } from '@utils/handleThunkError'
@@ -21,6 +22,8 @@ export const verifyAndSendPriorNotification =
           isManuallyCreated
         })
       ).unwrap()
+
+      await dispatch(priorNotificationApi.util.invalidateTags([RtkCacheTagType.PriorNotificationsToVerify]))
     } catch (err) {
       if (err instanceof FrontendApiError) {
         dispatch(displayOrLogError(err, undefined, true, DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_CARD_ERROR))

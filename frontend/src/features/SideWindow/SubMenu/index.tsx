@@ -6,6 +6,7 @@ import type { Option } from '@mtes-mct/monitor-ui'
 import type { Promisable } from 'type-fest'
 
 type SubMenuProps<T extends string = string> = Readonly<{
+  badgeCounter?: ((subMenu: T) => number | undefined) | undefined
   counter: ((subMenu: T) => number) | undefined
   onChange: (nextSubMenuItem: T) => Promisable<void>
   options: Option<T>[]
@@ -13,6 +14,7 @@ type SubMenuProps<T extends string = string> = Readonly<{
   width?: number
 }>
 export function SubMenu<T extends string = string>({
+  badgeCounter,
   counter,
   onChange,
   options,
@@ -25,6 +27,7 @@ export function SubMenu<T extends string = string>({
         {options.map(option => (
           <Item
             key={JSON.stringify(option.value)}
+            badgeCounter={badgeCounter}
             counter={counter}
             isSelected={option.value === value}
             onClick={onChange}

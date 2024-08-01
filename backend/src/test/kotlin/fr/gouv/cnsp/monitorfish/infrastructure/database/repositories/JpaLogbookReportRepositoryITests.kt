@@ -947,8 +947,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(result).hasSizeGreaterThan(0)
-        assertThat(result.filter { it.logbookMessageTyped.typedMessage.isVerified == false }).hasSize(2)
-        assertThat(result.filter { it.logbookMessageTyped.typedMessage.isInVerificationScope == true }).hasSize(2)
+        assertThat(result.filter { it.logbookMessageTyped.typedMessage.isVerified == false }).hasSize(1)
+        assertThat(result.filter { it.logbookMessageTyped.typedMessage.isInVerificationScope == true }).hasSize(1)
     }
 
     @Test

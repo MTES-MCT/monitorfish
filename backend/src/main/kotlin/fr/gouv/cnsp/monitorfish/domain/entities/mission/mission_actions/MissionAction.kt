@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions
 
 import com.neovisionaries.i18n.CountryCode
+import fr.gouv.cnsp.monitorfish.config.Patchable
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
 import java.time.ZonedDateTime
 
@@ -17,6 +18,8 @@ data class MissionAction(
     val faoAreas: List<String> = listOf(),
     val actionType: MissionActionType,
     val actionDatetimeUtc: ZonedDateTime,
+    @Patchable
+    var actionEndDatetimeUtc: ZonedDateTime? = null,
     val emitsVms: ControlCheck? = null,
     val emitsAis: ControlCheck? = null,
     val flightGoals: List<FlightGoal> = listOf(),
@@ -64,6 +67,8 @@ data class MissionAction(
     val isComplianceWithWaterRegulationsControl: Boolean? = null,
     val isSafetyEquipmentAndStandardsComplianceControl: Boolean? = null,
     val isSeafarersControl: Boolean? = null,
+    @Patchable
+    var observationsByUnit: String? = null,
 ) {
     fun verify() {
         val controlTypes = listOf(

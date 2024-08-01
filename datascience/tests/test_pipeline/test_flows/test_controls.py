@@ -99,6 +99,18 @@ controls_df = pd.DataFrame(
             datetime(y, 2, 8, 19, 36, 0),
             datetime(y, 2, 23, 11, 18, 0),
         ],
+        "action_end_datetime_utc": [
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+        ],
         "longitude": [
             3.05,
             None,
@@ -285,6 +297,18 @@ controls_df = pd.DataFrame(
             "DEF",
             "DEF",
         ],
+        "observations_by_unit": [
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+        ],
     }
 )
 
@@ -308,12 +332,14 @@ unchanged_columns = [
     "flag_state",
     "district_code",
     "action_datetime_utc",
+    "action_end_datetime_utc",
     "longitude",
     "latitude",
     "seizure_and_diversion_comments",
     "other_comments",
     "open_by",
     "closed_by",
+    "observations_by_unit",
 ]
 
 expected_loaded_mission_actions_df = pd.merge(

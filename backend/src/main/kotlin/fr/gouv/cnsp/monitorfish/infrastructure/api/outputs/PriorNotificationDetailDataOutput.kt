@@ -2,16 +2,18 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationState
+import java.time.ZonedDateTime
 
 class PriorNotificationDetailDataOutput(
-    // TODO Rename that to `reportId`.
     /** Reference logbook message (report) `reportId`. */
-    val id: String,
+    val reportId: String,
     /** Unique identifier concatenating all the DAT, COR, RET & DEL operations `id` used for data consolidation. */
     val fingerprint: String,
     val isLessThanTwelveMetersVessel: Boolean,
+    val isManuallyCreated: Boolean,
     val isVesselUnderCharter: Boolean?,
     val logbookMessage: LogbookMessageDataOutput,
+    val operationDate: ZonedDateTime,
     val state: PriorNotificationState?,
     val riskFactor: Double?,
 ) {
@@ -30,11 +32,13 @@ class PriorNotificationDetailDataOutput(
             val logbookMessageDataOutput = LogbookMessageDataOutput.fromLogbookMessage(logbookMessage)
 
             return PriorNotificationDetailDataOutput(
-                id = referenceReportId,
+                reportId = referenceReportId,
                 fingerprint = priorNotification.fingerprint,
                 isLessThanTwelveMetersVessel = isLessThanTwelveMetersVessel,
+                isManuallyCreated = priorNotification.isManuallyCreated,
                 isVesselUnderCharter,
                 logbookMessage = logbookMessageDataOutput,
+                operationDate = logbookMessage.operationDateTime,
                 state = priorNotification.state,
                 riskFactor = priorNotification.logbookMessageAndValue.value.riskFactor,
             )

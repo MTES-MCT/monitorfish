@@ -20,14 +20,14 @@ import styled from 'styled-components'
 import { FormikFishingCatchesMultiSelect } from './fields/FormikFishingCatchesMultiSelect'
 import { FormikVesselSelect } from './fields/FormikVesselSelect'
 
-import type { FormValues } from './types'
+import type { ManualPriorNotificationFormValues } from './types'
 import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
 
 type FormProps = Readonly<{
   isInvalidated: boolean | undefined
 }>
 export function Form({ isInvalidated }: FormProps) {
-  const { values } = useFormikContext<FormValues>()
+  const { values } = useFormikContext<ManualPriorNotificationFormValues>()
 
   const { faoAreasAsOptions } = useGetFaoAreasAsOptions()
   const { gearsAsOptions } = useGetGearsAsOptions()
@@ -151,7 +151,7 @@ export function Form({ isInvalidated }: FormProps) {
         />
       </FieldGroup>
 
-      <EnteredByTextInput label="Saisi par" maxLength={3} name="authorTrigram" readOnly={!!isInvalidated} />
+      <AuthorTrigramInput label="Saisi par" maxLength={3} name="authorTrigram" readOnly={!!isInvalidated} />
     </>
   )
 }
@@ -162,7 +162,7 @@ const StyledFormikMultiRadio = styled(FormikMultiRadio)`
   }
 `
 
-const EnteredByTextInput = styled(FormikTextInput)`
+const AuthorTrigramInput = styled(FormikTextInput)`
   width: 120px;
 `
 

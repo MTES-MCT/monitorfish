@@ -1,75 +1,38 @@
-import { RTK_FORCE_REFETCH_QUERY_OPTIONS, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS } from '@api/constants'
-import { ErrorWall } from '@components/ErrorWall'
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { LogbookMessage } from '@features/Logbook/components/VesselLogbook/LogbookMessages/messages/LogbookMessage'
-import { InvalidatePriorNotificationDialog } from '@features/PriorNotification/components/InvalidatePriorNotificationDialog'
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
-import {
-  useGetPriorNotificationDetailQuery,
-  useInvalidatePriorNotificationMutation
-} from '@features/PriorNotification/priorNotificationApi'
-import { updatePriorNotificationNote } from '@features/PriorNotification/useCases/updatePriorNotificationNote'
-import { verifyAndSendPriorNotification } from '@features/PriorNotification/useCases/verifyAndSendPriorNotification'
 import {
   getPriorNotificationFishingCatchesFromLogbookMessageFishingCatches,
   getPriorNotificationTypesFromLogbookMessagePnoTypes,
   isZeroNotice
 } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
-import { Accent, Button, FormikEffect, FormikTextarea, Icon } from '@mtes-mct/monitor-ui'
-import { skipToken } from '@reduxjs/toolkit/query'
-import { assertNotNullish } from '@utils/assertNotNullish'
-import { Formik } from 'formik'
-import { useCallback, useState } from 'react'
+import { Accent, Button } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
-import { useDebouncedCallback } from 'use-debounce'
 
 import { Header } from './Header'
-import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { priorNotificationActions } from '../../slice'
 import { DownloadButton } from '../shared/DownloadButton'
 import { TagBar } from '../shared/TagBar'
 
-const DEBOUNCE_DELAY = 500
-
-export function PriorNotificationCard() {
+type PriorNotificationCardLayoutProps = Readonly<{
+  applicableState?: PriorNotification.State
+  bodyChildren?: React.ReactNode
+  footerChildren?: React.ReactNode
+  isLoading?: boolean
+  priorNotificationDetail?: PriorNotification.PriorNotificationDetail
+}>
+export function PriorNotificationCard({
+  applicableState,
+  bodyChildren,
+  footerChildren,
+  isLoading = false,
+  priorNotificationDetail
+}: PriorNotificationCardLayoutProps) {
   const dispatch = useMainAppDispatch()
-  const isSuperUser = useIsSuperUser()
-  const openedPriorNotificationIdentity = useMainAppSelector(
-    state => state.priorNotification.openedPriorNotificationIdentifier
-  )
-  const isOpenedPriorNotificationManuallyCreated = useMainAppSelector(
-    state => state.priorNotification.isOpenedPriorNotificationManuallyCreated
-  )
-  const { data: priorNotificationDetail } = useGetPriorNotificationDetailQuery(
-    openedPriorNotificationIdentity && typeof isOpenedPriorNotificationManuallyCreated === 'boolean'
-      ? {
-          ...openedPriorNotificationIdentity,
-          isManuallyCreated: isOpenedPriorNotificationManuallyCreated
-        }
-      : skipToken,
-    {
-      ...RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS,
-      ...RTK_FORCE_REFETCH_QUERY_OPTIONS
-    }
-  )
-  const [invalidatePriorNotification] = useInvalidatePriorNotificationMutation()
-  const sideWindowPriorNotificationCardError = useMainAppSelector(
-    state => state.displayedError.sideWindowPriorNotificationCardError
-  )
 
-  const [isLoading, setIsLoading] = useState(false)
-  const [isInvalidatingPriorNotificationDialog, setIsInvalidatingPriorNotificationDialog] = useState(false)
   const isInvalidated = priorNotificationDetail?.logbookMessage?.message?.isInvalidated
-  const isPendingSend =
-    !!priorNotificationDetail?.state &&
-    [PriorNotification.State.AUTO_SEND_IN_PROGRESS, PriorNotification.State.PENDING_SEND].includes(
-      priorNotificationDetail?.state
-    )
-  const isVerifiedAndSent = priorNotificationDetail?.state === PriorNotification.State.VERIFIED_AND_SENT
   const isPendingVerification = priorNotificationDetail?.state === PriorNotification.State.PENDING_VERIFICATION
   const hasDesignatedPorts = priorNotificationDetail?.logbookMessage?.message?.pnoTypes?.find(
     type => type.hasDesignatedPorts
@@ -77,80 +40,12 @@ export function PriorNotificationCard() {
 
   const close = () => {
     dispatch(priorNotificationActions.closePriorNotificationCard())
+    dispatch(priorNotificationActions.closePriorNotificationForm())
   }
 
-  const verifyAndSend = async () => {
-    setIsLoading(true)
-
-    assertNotNullish(openedPriorNotificationIdentity)
-
-    await dispatch(verifyAndSendPriorNotification(openedPriorNotificationIdentity, false))
-
-    setIsLoading(false)
-  }
-
-  const invalidate = async () => {
-    setIsLoading(true)
-
-    assertNotNullish(openedPriorNotificationIdentity)
-    assertNotNullish(isOpenedPriorNotificationManuallyCreated)
-
-    await invalidatePriorNotification({
-      isManuallyCreated: isOpenedPriorNotificationManuallyCreated,
-      operationDate: openedPriorNotificationIdentity.operationDate,
-      reportId: openedPriorNotificationIdentity.reportId
-    })
-
-    setIsInvalidatingPriorNotificationDialog(false)
-    setIsLoading(false)
-  }
-
-  const updateNoteCallback = useCallback(
-    async (nextNote: string | undefined) => {
-      assertNotNullish(openedPriorNotificationIdentity)
-      assertNotNullish(priorNotificationDetail)
-
-      if (nextNote === priorNotificationDetail.logbookMessage.message.note) {
-        return
-      }
-
-      await dispatch(updatePriorNotificationNote(openedPriorNotificationIdentity, nextNote))
-    },
-    [dispatch, openedPriorNotificationIdentity, priorNotificationDetail]
-  )
-
-  const updateNote = useDebouncedCallback(
-    (nextNote: string | undefined) => updateNoteCallback(nextNote),
-    DEBOUNCE_DELAY
-  )
-
-  if (sideWindowPriorNotificationCardError) {
+  if (!priorNotificationDetail || isLoading) {
     return (
       <Wrapper>
-        <Background onClick={close} />
-
-        <Card>
-          <ErrorWall displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_CARD_ERROR} />
-        </Card>
-      </Wrapper>
-    )
-  }
-
-  if (!priorNotificationDetail) {
-    return (
-      <Wrapper>
-        <Background onClick={close} />
-
-        <Card>
-          <LoadingSpinnerWall />
-        </Card>
-      </Wrapper>
-    )
-  }
-
-  if (isLoading) {
-    return (
-      <Wrapper className="Form">
         <Background onClick={close} />
 
         <Card>
@@ -178,7 +73,7 @@ export function PriorNotificationCard() {
                 )
               )}
               riskFactor={priorNotificationDetail.riskFactor}
-              state={priorNotificationDetail.state}
+              state={applicableState}
               tripSegments={priorNotificationDetail.logbookMessage.tripSegments}
               types={getPriorNotificationTypesFromLogbookMessagePnoTypes(
                 priorNotificationDetail.logbookMessage.message.pnoTypes
@@ -194,39 +89,13 @@ export function PriorNotificationCard() {
 
             <LogbookMessage
               isFirst
-              isManuallyCreated={isOpenedPriorNotificationManuallyCreated ?? false}
+              isManuallyCreated={priorNotificationDetail.isManuallyCreated ?? false}
               logbookMessage={priorNotificationDetail.logbookMessage}
             />
 
             <hr />
 
-            <Formik
-              initialValues={{ note: priorNotificationDetail.logbookMessage.message.note }}
-              onSubmit={() => {}}
-              validateOnChange={false}
-            >
-              <>
-                <FormikEffect onChange={values => updateNote(values.note)} />
-                <FieldGroup>
-                  <FormikTextarea
-                    label="Points d'attention identifiés par le CNSP"
-                    name="note"
-                    readOnly={!isSuperUser || isInvalidated}
-                  />
-                </FieldGroup>
-              </>
-            </Formik>
-
-            {isSuperUser && !isInvalidated && (
-              <InvalidateButton
-                accent={Accent.SECONDARY}
-                Icon={Icon.Invalid}
-                onClick={() => setIsInvalidatingPriorNotificationDialog(true)}
-                title="Invalider le préavis"
-              >
-                Invalider le préavis
-              </InvalidateButton>
-            )}
+            {bodyChildren}
           </Body>
 
           <Footer>
@@ -236,39 +105,16 @@ export function PriorNotificationCard() {
 
             <DownloadButton
               pnoLogbookMessage={priorNotificationDetail.logbookMessage}
-              reportId={priorNotificationDetail.id}
+              reportId={priorNotificationDetail.reportId}
             />
 
-            <Button
-              accent={Accent.PRIMARY}
-              disabled={isInvalidated || isPendingSend || isVerifiedAndSent}
-              Icon={isVerifiedAndSent ? Icon.Check : Icon.Send}
-              onClick={verifyAndSend}
-              title={
-                isInvalidated
-                  ? "Le préavis est invalidé, il n'est plus possible de le modifier ni de le diffuser."
-                  : undefined
-              }
-            >
-              {isVerifiedAndSent ? 'Diffusé' : 'Diffuser'}
-            </Button>
+            {footerChildren}
           </Footer>
         </FrontendErrorBoundary>
       </Card>
-      {isInvalidatingPriorNotificationDialog && (
-        <InvalidatePriorNotificationDialog
-          onCancel={() => setIsInvalidatingPriorNotificationDialog(false)}
-          onConfirm={invalidate}
-        />
-      )}
     </Wrapper>
   )
 }
-
-const InvalidateButton = styled(Button)`
-  color: ${p => p.theme.color.maximumRed};
-  margin-top: 48px;
-`
 
 const Wrapper = styled.div`
   bottom: 0;
@@ -328,23 +174,5 @@ const Footer = styled.div`
 
   > div {
     margin-left: 8px;
-  }
-`
-
-const FieldGroup = styled.div.attrs({ className: 'FieldGroup' })`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-
-  .rs-checkbox {
-    > .rs-checkbox-checker {
-      > label {
-        line-height: 18px;
-      }
-    }
-  }
-
-  textarea {
-    box-sizing: border-box !important;
   }
 `

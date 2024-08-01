@@ -1,6 +1,19 @@
 import type { PriorNotification } from './PriorNotification.types'
 import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 
+export function getPriorNotificationIdentifier(
+  data: { [key: string]: any; operationDate: string; reportId: string } | undefined
+): PriorNotification.PriorNotificationIdentifier | undefined {
+  if (!data) {
+    return undefined
+  }
+
+  return {
+    operationDate: data.operationDate,
+    reportId: data.reportId
+  }
+}
+
 export function getPriorNotificationTypesFromLogbookMessagePnoTypes(
   logbookMessagePnoTypes: LogbookMessage.MessagePnoType[] | undefined
 ): PriorNotification.Type[] | undefined {

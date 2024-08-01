@@ -8,17 +8,17 @@ import { priorNotificationApi, priorNotificationPublicApi } from '../priorNotifi
 import type { PriorNotification } from '../PriorNotification.types'
 import type { MainAppThunk } from '@store'
 
-export const updatePriorNotificationNote =
+export const updateAutoPriorNotification =
   (
     priorNotificationIdentifier: PriorNotification.PriorNotificationIdentifier,
-    note: string | undefined
+    nextData: PriorNotification.AutoPriorNotificationData
   ): MainAppThunk<Promise<void>> =>
   async dispatch => {
     try {
       await dispatch(
-        priorNotificationApi.endpoints.updatePriorNotificationNote.initiate({
+        priorNotificationApi.endpoints.updateAutoPriorNotification.initiate({
           ...priorNotificationIdentifier,
-          data: { note }
+          data: nextData
         })
       ).unwrap()
 

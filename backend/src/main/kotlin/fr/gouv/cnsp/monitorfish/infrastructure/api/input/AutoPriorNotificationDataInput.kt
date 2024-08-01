@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.input
 
-data class PriorNotificationDataInput(
+data class AutoPriorNotificationDataInput(
+    val authorTrigram: String?,
     val note: String?,
 )

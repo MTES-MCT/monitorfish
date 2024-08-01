@@ -18,9 +18,6 @@ data class ManualPriorNotificationEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val reportId: String?,
 
-    @Column(name = "author_trigram")
-    val authorTrigram: String,
-
     @Column(name = "vessel_id", nullable = false)
     val vesselId: Int,
 
@@ -73,27 +70,23 @@ data class ManualPriorNotificationEntity(
                     priorNotification.updatedAt
                 }
 
-                requireNotNull(pnoLogbookMessage.vesselId) {
-                    "vesselId must be not null"
-                }
-                requireNotNull(priorNotification.sentAt) {
-                    "sentAt must be not null"
-                }
+                val cfr = requireNotNull(pnoLogbookMessage.internalReferenceNumber) { "`cfr` is null." }
+                val sentAt = requireNotNull(priorNotification.sentAt) { "`sentAt` is null." }
+                val vesselId = requireNotNull(pnoLogbookMessage.vesselId) { "`vesselId` is null." }
 
                 return ManualPriorNotificationEntity(
                     reportId = pnoLogbookMessage.reportId,
-                    authorTrigram = requireNotNull(priorNotification.authorTrigram),
-                    cfr = requireNotNull(pnoLogbookMessage.internalReferenceNumber),
+                    cfr = cfr,
                     createdAt = createdAt,
                     didNotFishAfterZeroNotice = priorNotification.didNotFishAfterZeroNotice,
                     flagState = pnoLogbookMessage.flagState,
-                    sentAt = priorNotification.sentAt,
+                    sentAt = sentAt,
                     tripGears = pnoLogbookMessage.tripGears,
                     tripSegments = pnoLogbookMessage.tripSegments,
                     updatedAt = updatedAt,
                     value = pnoLogbookMessageValue,
                     vesselName = pnoLogbookMessage.vesselName,
-                    vesselId = pnoLogbookMessage.vesselId,
+                    vesselId = vesselId,
                 )
             } catch (e: IllegalArgumentException) {
                 throw BackendInternalException(
@@ -132,7 +125,6 @@ data class ManualPriorNotificationEntity(
             val logbookMessageAndValue = LogbookMessageAndValue(pnoLogbookMessage, PNO::class.java)
 
             return PriorNotification(
-                authorTrigram = authorTrigram,
                 createdAt = createdAt,
                 didNotFishAfterZeroNotice = didNotFishAfterZeroNotice,
                 isManuallyCreated = true,

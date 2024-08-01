@@ -12,7 +12,6 @@
             // - Vessel: POISSON PAS NET
             {
                 "report_id": "00000000-0000-4000-0000-000000000001",
-                "author_trigram": "ABC",
                 "cfr": "CFR112",
                 "vessel_id": 112,
                 "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
@@ -24,6 +23,7 @@
                 "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "POISSON PAS NET",
                 "value:jsonb": {
+                    "authorTrigram": "ABC",
                     "riskFactor": 2.1,
                     "catchOnboard": [
                         {
@@ -71,7 +71,6 @@
             // - Flag state: BEL
             {
                 "report_id": "00000000-0000-4000-0000-000000000002",
-                "author_trigram": "ABC",
                 "cfr": "CFR115",
                 "vessel_id": 115,
                 "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
@@ -86,6 +85,7 @@
                 "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "DOS FIN",
                 "value:jsonb": {
+                    "authorTrigram": "ABC",
                     "riskFactor": 2.7,
                     // Unsorted on purpose
                     "catchOnboard": [
@@ -187,7 +187,6 @@
             // - With risk factor
             {
                 "report_id": "00000000-0000-4000-0000-000000000003",
-                "author_trigram": "ABC",
                 "cfr": "CFR117",
                 "vessel_id": 117,
                 "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '50 minutes'",
@@ -202,6 +201,7 @@
                 "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '5 minutes'",
                 "vessel_name": "QUEUE DE POISSON",
                 "value:jsonb": {
+                    "authorTrigram": "ABC",
                     "riskFactor": 3.1,
                     "catchOnboard": [
                         {
@@ -245,7 +245,6 @@
             // - RENAMED TO: NAVIRE RENOMMÉ (NOUVEAU NOM)
             {
                 "report_id": "00000000-0000-4000-0000-000000000004",
-                "author_trigram": "ABC",
                 "cfr": "CFR116",
                 "vessel_id": 116,
                 "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
@@ -257,6 +256,7 @@
                 "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "NAVIRE RENOMMÉ (ANCIEN NOM)",
                 "value:jsonb": {
+                    "authorTrigram": "ABC",
                     "riskFactor": 1.5,
                     "catchOnboard": [
                         {
@@ -303,7 +303,6 @@
             // - Flag state: ITA
             {
                 "report_id": "00000000-0000-4000-0000-000000000005",
-                "author_trigram": "ABC",
                 "cfr": "CFR120",
                 "vessel_id": 120,
                 "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
@@ -315,6 +314,7 @@
                 "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "VIVA L'ITALIA",
                 "value:jsonb": {
+                    "authorTrigram": "ABC",
                     "riskFactor": 3.2,
                     "catchOnboard": [
                         {
@@ -357,7 +357,6 @@
             // - Vessel: MARE ET BASS
             {
                 "report_id": "00000000-0000-4000-0000-000000000006",
-                "author_trigram": "ABC",
                 "cfr": "CFR121",
                 "vessel_id": 121,
                 "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
@@ -369,6 +368,7 @@
                 "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "MARE ET BASS",
                 "value:jsonb": {
+                    "authorTrigram": "ABC",
                     "riskFactor": 3.2,
                     "catchOnboard": [
                         {
@@ -411,7 +411,6 @@
             // - Vessel: FILET DOUX
             {
                 "report_id": "00000000-0000-4000-0000-000000000007",
-                "author_trigram": "ABC",
                 "cfr": "CFR122",
                 "vessel_id": 122,
                 "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
@@ -423,6 +422,7 @@
                 "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "FILET DOUX",
                 "value:jsonb": {
+                    "authorTrigram": "ABC",
                     "riskFactor": 3.2,
                     "catchOnboard": [
                         {
@@ -465,7 +465,6 @@
             // - Vessel: DÉVOILÉ
             {
                 "report_id": "00000000-0000-4000-0000-000000000008",
-                "author_trigram": "ABC",
                 "cfr": "CFR123",
                 "vessel_id": 123,
                 "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
@@ -477,6 +476,7 @@
                 "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "DÉVOILÉ",
                 "value:jsonb": {
+                    "authorTrigram": "ABC",
                     "riskFactor": 3.2,
                     "catchOnboard": [
                         {
@@ -519,7 +519,6 @@
             // - Vessel: MAT QUILLE
             {
                 "report_id": "00000000-0000-4000-0000-000000000009",
-                "author_trigram": "ABC",
                 "cfr": "CFR124",
                 "vessel_id": 124,
                 "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
@@ -531,6 +530,7 @@
                 "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "MAT QUILLE",
                 "value:jsonb": {
+                    "authorTrigram": "ABC",
                     "riskFactor": 3.2,
                     "catchOnboard": [
                         {
@@ -573,7 +573,6 @@
             // - Vessel: BEAU SÉANT
             {
                 "report_id": "00000000-0000-4000-0000-000000000010",
-                "author_trigram": "ABC",
                 "cfr": "CFR125",
                 "vessel_id": 125,
                 "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
@@ -585,6 +584,7 @@
                 "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "BEAU SÉANT",
                 "value:jsonb": {
+                    "authorTrigram": "ABC",
                     "riskFactor": 3.2,
                     "catchOnboard": [
                         {
@@ -631,7 +631,6 @@
             // - Arrival date: 2023
             {
                 "report_id": "00000000-0000-4000-0000-000000000011",
-                "author_trigram": "ABC",
                 "cfr": "CFR118",
                 "vessel_id": 118,
                 "created_at": "2023-01-01T08:45:00",
@@ -643,6 +642,7 @@
                 "updated_at": "2023-01-01T08:45:00",
                 "vessel_name": "GOUJON BOUGON",
                 "value:jsonb": {
+                    "authorTrigram": "ABC",
                     "riskFactor": 3.8,
                     "catchOnboard": [
                         {

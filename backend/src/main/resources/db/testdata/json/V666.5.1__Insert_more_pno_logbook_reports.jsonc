@@ -813,7 +813,6 @@
             },
 
             // - Vessel: LE POISSON D'AVRIL
-            // - DUPLICATE Risk Factor CFR (= 2 `risk_factors` table rows with the same `cfr` value)
             // - DUPLICATE Vessel CFR (= 2 `vessels` table rows with the same `cfr` value)
             {
                 "id": 113,

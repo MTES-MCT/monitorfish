@@ -1,4 +1,5 @@
-import { openPriorNotificationForm } from '@features/PriorNotification/useCases/openPriorNotificationForm'
+import { openAutoPriorNotificationForm } from '@features/PriorNotification/useCases/openAutoPriorNotificationForm'
+import { openManualPriorNotificationForm } from '@features/PriorNotification/useCases/openManualPriorNotificationForm'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import { VesselIdentifier, type VesselIdentity } from 'domain/entities/vessel/types'
@@ -17,16 +18,25 @@ export function ActionButtonsCell({ priorNotification }: ActionButtonsCellProps)
   const isSuperUser = useIsSuperUser()
   const dispatch = useMainAppDispatch()
 
-  const editPriorNotification = () => {
+  const editAutoPriorNotification = () => {
     dispatch(
-      openPriorNotificationForm(
+      openAutoPriorNotificationForm(
         { operationDate: priorNotification.operationDate, reportId: priorNotification.id },
         priorNotification.fingerprint
       )
     )
   }
 
-  const openPriorNotificationDetail = () => {
+  const editManualPriorNotification = () => {
+    dispatch(
+      openManualPriorNotificationForm(
+        { operationDate: priorNotification.operationDate, reportId: priorNotification.id },
+        priorNotification.fingerprint
+      )
+    )
+  }
+
+  const open = () => {
     dispatch(
       openPriorNotificationCard(
         {
@@ -70,7 +80,7 @@ export function ActionButtonsCell({ priorNotification }: ActionButtonsCellProps)
         <IconButton
           accent={Accent.TERTIARY}
           Icon={Icon.Edit}
-          onClick={priorNotification.isManuallyCreated ? editPriorNotification : openPriorNotificationDetail}
+          onClick={priorNotification.isManuallyCreated ? editManualPriorNotification : editAutoPriorNotification}
           title="Éditer le préavis"
           withUnpropagatedClick
         />
@@ -79,7 +89,7 @@ export function ActionButtonsCell({ priorNotification }: ActionButtonsCellProps)
         <IconButton
           accent={Accent.TERTIARY}
           Icon={Icon.Display}
-          onClick={openPriorNotificationDetail}
+          onClick={open}
           title="Consulter le préavis"
           withUnpropagatedClick
         />

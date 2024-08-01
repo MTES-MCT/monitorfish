@@ -1,5 +1,3 @@
-import { openPriorNotificationCard } from '@features/PriorNotification/useCases/openPriorNotificationCard'
-import { openPriorNotificationForm } from '@features/PriorNotification/useCases/openPriorNotificationForm'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { customDayjs, Icon, TableWithSelectableRows, Tag, THEME } from '@mtes-mct/monitor-ui'
 import { flexRender, type Row as RowType } from '@tanstack/react-table'
@@ -9,6 +7,8 @@ import styled from 'styled-components'
 import { FixedTag, None } from './styles'
 import { getColorsFromState, getExpandableRowCellCustomStyle } from './utils'
 import { PriorNotification } from '../../PriorNotification.types'
+import { openManualPriorNotificationForm } from '../../useCases/openManualPriorNotificationForm'
+import { openPriorNotificationCard } from '../../useCases/openPriorNotificationCard'
 
 type RowProps = Readonly<{
   row: RowType<PriorNotification.PriorNotification>
@@ -22,7 +22,7 @@ export function Row({ row }: RowProps) {
   const openCard = () => {
     if (priorNotification.isManuallyCreated) {
       dispatch(
-        openPriorNotificationForm(
+        openManualPriorNotificationForm(
           { operationDate: priorNotification.operationDate, reportId: priorNotification.id },
           priorNotification.fingerprint
         )

@@ -1,8 +1,7 @@
+import { THEME } from '@mtes-mct/monitor-ui'
 import countries from 'i18n-iso-countries'
 import Highlighter from 'react-highlight-words'
 import styled from 'styled-components'
-
-import { COLORS } from '../../constants/constants'
 
 export function VesselSearchResultItem({ baseUrl, searchQuery, selectVessel, vessel }) {
   const { flagState } = vessel
@@ -94,10 +93,10 @@ const ListItem = styled.li`
   text-align: left;
   list-style-type: none;
   cursor: pointer;
-  border-bottom: ${COLORS.lightGray} 1px solid;
+  border-bottom: ${THEME.color.lightGray} 1px solid;
 
   :hover {
-    background: ${COLORS.gainsboro};
+    background: ${THEME.color.gainsboro};
   }
 `
 
@@ -118,7 +117,7 @@ const IdentityDataWrapper = styled.div`
   flex-wrap: wrap;
   font-size: 13px;
   margin-left: 5px;
-  color: ${COLORS.slateGray};
+  color: ${THEME.color.slateGray};
   width: 350px;
 `
 

@@ -270,7 +270,7 @@ const InputWrapper = styled.div`
   position: relative;
 
   /* Clear icon button */
-  > button {
+  > div {
     position: absolute;
     right: 7.5px;
     top: 7.5px;

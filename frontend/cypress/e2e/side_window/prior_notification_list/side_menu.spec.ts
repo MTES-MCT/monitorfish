@@ -20,10 +20,10 @@ context('Side Window > Prior Notification List > Side Menu', () => {
   it('Should update the badge number When a prior notification is verified', () => {
     // Given
     cy.get('[data-cy="side-window-sub-menu-ALL"]').click()
-    cy.get('[data-cy="side-window-sub-menu-ALL-number"] > div').contains('3')
-    cy.fill('Rechercher un navire', 'NAVIRE')
+    cy.get('[data-cy="side-window-sub-menu-ALL-number"] > div').contains('2')
+    cy.fill('Rechercher un navire', 'FILET DOUX')
 
-    cy.getTableRowById('00000000-0000-4000-0000-000000000005' as any).clickButton('Éditer le préavis')
+    cy.getTableRowById('00000000-0000-4000-0000-000000000007' as any).clickButton('Éditer le préavis')
     if (document.querySelector('[data-cy="first-loader"]')) {
       cy.getDataCy('first-loader').should('not.be.visible')
     }
@@ -32,6 +32,6 @@ context('Side Window > Prior Notification List > Side Menu', () => {
     cy.clickButton('Diffuser')
 
     // Then
-    cy.get('[data-cy="side-window-sub-menu-ALL-number"] > div').contains('2')
+    cy.get('[data-cy="side-window-sub-menu-ALL-number"] > div').contains('1')
   })
 })

@@ -6,7 +6,7 @@ export function TableBodyEmptyData() {
     <tbody>
       <Row>
         <Cell colSpan={10} rowSpan={10}>
-          Aucun préavis.
+          Aucun préavis
         </Cell>
       </Row>
     </tbody>

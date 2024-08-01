@@ -192,7 +192,7 @@ const Row = styled.div`
   display: flex;
   margin: 8px 0 0;
 
-  > button {
+  > div > button {
     margin: 0 0 0 8px;
   }
 `

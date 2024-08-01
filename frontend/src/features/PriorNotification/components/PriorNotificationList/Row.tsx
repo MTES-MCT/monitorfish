@@ -213,7 +213,6 @@ const StyledLi = styled.li`
 const ExpandableRowCell = styled(TableWithSelectableRows.Td)`
   cursor: pointer;
   user-select: none;
-  height: 12px;
 `
 
 // TODO Add this feature in monitor-ui.

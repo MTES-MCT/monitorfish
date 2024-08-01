@@ -165,7 +165,7 @@ missions.flow.schedule = Schedule(
     clocks=[
         clocks.CronClock(
             "6 4 * * *",
-            parameter_defaults={"number_of_months": 200, "loading_mode": "replace"},
+            parameter_defaults={"number_of_months": 200},
         ),
     ]
 )

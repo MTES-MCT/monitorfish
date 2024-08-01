@@ -2,11 +2,14 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.public_api
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.GetMissionActions
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.PatchMissionAction
+import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -17,8 +20,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
+import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.ZonedDateTime
@@ -33,6 +38,9 @@ class PublicMissionActionsControllerITests {
 
     @MockBean
     private lateinit var getMissionActions: GetMissionActions
+
+    @MockBean
+    private lateinit var patchMissionAction: PatchMissionAction
 
     private fun <T> givenSuspended(block: suspend () -> T) = BDDMockito.given(runBlocking { block() })!!
 
@@ -68,5 +76,29 @@ class PublicMissionActionsControllerITests {
         runBlocking {
             Mockito.verify(getMissionActions).execute(123)
         }
+    }
+
+    @Test
+    fun `Should patch a mission action`() {
+        // Given
+        val dateTime = ZonedDateTime.parse("2022-05-05T03:04:05.000Z")
+        val newMission = TestUtils.getDummyMissionAction(dateTime).copy(flagState = CountryCode.UNDEFINED)
+        given(patchMissionAction.execute(any(), any())).willReturn(newMission)
+
+        // When
+        api.perform(
+            patch("/api/v1/mission_actions/123")
+                .content(
+                    """
+                    {
+                        "observationsByUnit": "OBSERVATION",
+                        "actionEndDatetimeUtc": "2024-02-01T14:29:00Z"
+                    }
+                    """.trimIndent(),
+                )
+                .contentType(MediaType.APPLICATION_JSON),
+        )
+            // Then
+            .andExpect(status().isOk)
     }
 }

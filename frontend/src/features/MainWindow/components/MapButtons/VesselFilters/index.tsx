@@ -43,7 +43,7 @@ export function VesselFiltersMapButton() {
           data-cy="vessel-filters"
           isActive={isOpen}
           onClick={openOrCloseVesselFilters}
-          style={{ top: 110 }}
+          style={{ top: 124 }}
           title="Mes filtres"
         >
           <FilterIcon $isRightMenuShrinked={isRightMenuShrinked} />
@@ -69,7 +69,7 @@ const NewFilterAdded = styled.div<{
   padding: 11px 12px;
   position: absolute;
   right: -150px;
-  top: 110px;
+  top: 122px;
   width: 86px;
   z-index: 9999;
 

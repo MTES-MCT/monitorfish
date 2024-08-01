@@ -144,6 +144,6 @@ const Wrapper = styled(MapToolBox)<{
   isHidden?: boolean
   isOpen: boolean
 }>`
-  top: 152px;
+  top: 172px;
   width: 406px;
 `

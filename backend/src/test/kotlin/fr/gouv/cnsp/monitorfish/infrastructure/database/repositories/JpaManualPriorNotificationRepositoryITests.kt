@@ -513,4 +513,16 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         assertThat(updatedManualPriorNotification.logbookMessageTyped.typedMessage.isBeingSent).isEqualTo(true)
         assertThat(updatedManualPriorNotification.logbookMessageTyped.typedMessage.isVerified).isEqualTo(true)
     }
+
+    @Test
+    @Transactional
+    fun `findAllToVerify Should return manual PNO to verify`() {
+        // When
+        val result = jpaManualPriorNotificationRepository.findAllToVerify()
+
+        // Then
+        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(result.filter { it.logbookMessageTyped.typedMessage.isVerified == false }).hasSize(1)
+        assertThat(result.filter { it.logbookMessageTyped.typedMessage.isInVerificationScope == true }).hasSize(1)
+    }
 }

@@ -25,6 +25,7 @@ class PriorNotificationController(
     private val createOrUpdateManualPriorNotification: CreateOrUpdateManualPriorNotification,
     private val getPriorNotification: GetPriorNotification,
     private val getPriorNotifications: GetPriorNotifications,
+    private val getNumberToVerify: GetNumberToVerify,
     private val getPriorNotificationTypes: GetPriorNotificationTypes,
     private val updatePriorNotificationNote: UpdatePriorNotificationNote,
     private val verifyAndSendPriorNotification: VerifyAndSendPriorNotification,
@@ -123,6 +124,14 @@ class PriorNotificationController(
             pageSize = paginatedPriorNotifications.pageSize,
             totalLength = paginatedPriorNotifications.totalLength,
         )
+    }
+
+    @GetMapping("/to_verify")
+    @Operation(summary = "Get number of prior notifications to verify")
+    fun getNumberToVerify(): PriorNotificationsExtraDataOutput {
+        val priorNotificationStats = getNumberToVerify.execute()
+
+        return PriorNotificationsExtraDataOutput.fromPriorNotificationStats(priorNotificationStats)
     }
 
     @PostMapping("/manual/compute")

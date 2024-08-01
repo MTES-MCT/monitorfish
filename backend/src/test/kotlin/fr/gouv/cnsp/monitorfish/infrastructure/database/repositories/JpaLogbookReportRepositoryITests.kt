@@ -941,6 +941,18 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
+    fun `findPriorNotificationsToVerify Should return logbook reports PNO to verify`() {
+        // When
+        val result = jpaLogbookReportRepository.findAllPriorNotificationsToVerify()
+
+        // Then
+        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(result.filter { it.logbookMessageTyped.typedMessage.isVerified == false }).hasSize(2)
+        assertThat(result.filter { it.logbookMessageTyped.typedMessage.isInVerificationScope == true }).hasSize(2)
+    }
+
+    @Test
+    @Transactional
     fun `findById Should return the expected PNO logbook report`() {
         // Given
         val id = 101L

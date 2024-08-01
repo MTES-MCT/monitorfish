@@ -4,14 +4,23 @@ import type { Option } from '@mtes-mct/monitor-ui'
 import type { Promisable } from 'type-fest'
 
 type ItemProps<T extends string = string> = {
+  badgeCounter?: ((subMenu: T) => number | undefined) | undefined
   counter: ((subMenu: T) => number) | undefined
   isSelected: boolean
   onClick: (nextSubMenuItem: T) => Promisable<void>
   option: Option<T>
   width: number
 }
-export function Item<T extends string = string>({ counter, isSelected, onClick, option, width }: ItemProps<T>) {
+export function Item<T extends string = string>({
+  badgeCounter,
+  counter,
+  isSelected,
+  onClick,
+  option,
+  width
+}: ItemProps<T>) {
   const count = counter ? counter(option.value) : 0
+  const badgeNumber = badgeCounter ? badgeCounter(option.value) : undefined
 
   return (
     <MenuButton
@@ -24,11 +33,29 @@ export function Item<T extends string = string>({ counter, isSelected, onClick, 
       {count > 0 && (
         <CircleWithKeyMetric $isSelected={isSelected} data-cy={`side-window-sub-menu-${option.value}-number`}>
           {count}
+          {!!badgeNumber && <BadgeNumber>{badgeNumber}</BadgeNumber>}
         </CircleWithKeyMetric>
       )}
     </MenuButton>
   )
 }
+
+const BadgeNumber = styled.div`
+  display: inline-block;
+  position: absolute;
+  height: 15px;
+  padding: 0 4px;
+  text-align: center;
+  border-radius: 10px;
+  top: -10px;
+  line-height: 14px;
+  right: -10px;
+  background: ${p => p.theme.color.maximumRed};
+  color: ${p => p.theme.color.white};
+  font-size: 12px;
+  letter-spacing: 0px;
+  font-weight: 700;
+`
 
 const MenuButton = styled.div<{
   $isSelected: boolean
@@ -51,6 +78,7 @@ const MenuButton = styled.div<{
 const CircleWithKeyMetric = styled.span<{
   $isSelected: boolean
 }>`
+  position: relative;
   background: ${p => (p.$isSelected ? p.theme.color.charcoal : p.theme.color.lightGray)};
   border-radius: 2px;
   color: ${p => (p.$isSelected ? p.theme.color.white : p.theme.color.slateGray)};

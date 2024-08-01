@@ -81,7 +81,7 @@ export function MissionsMenu() {
         isActive={leftMapBoxOpened === MapBox.MISSIONS}
         isLeftButton
         onClick={toggleMissionsMenu}
-        style={{ color: THEME.color.gainsboro, top: 120 }}
+        style={{ color: THEME.color.gainsboro, top: 136 }}
         title="Missions et contrôles"
       >
         <Icon.MissionAction size={26} />
@@ -97,7 +97,7 @@ const Wrapper = styled.div`
 `
 
 const MissionMenuBox = styled(MapToolBox)`
-  top: 120px;
+  top: 136px;
 `
 
 const MissionMenuButton = styled(MapToolButton)``

@@ -99,6 +99,12 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATIONS_ERROR_MESSAGE, response)
     }),
 
+    getPriorNotificationsToVerify: builder.query<LogbookMessage.ApiListExtraData, void>({
+      providesTags: () => [{ type: RtkCacheTagType.PriorNotificationsToVerify }],
+      query: () => '/prior_notifications/to_verify',
+      transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_TYPES_ERROR_MESSAGE, response)
+    }),
+
     getPriorNotificationTypes: builder.query<string[], void>({
       providesTags: () => [{ type: RtkCacheTagType.PriorNotificationTypes }],
       query: () => '/prior_notifications/types',
@@ -180,7 +186,11 @@ export const priorNotificationPublicApi = monitorfishPublicApi.injectEndpoints({
   })
 })
 
-export const { useGetPriorNotificationDetailQuery, useGetPriorNotificationsQuery, useGetPriorNotificationTypesQuery } =
-  priorNotificationApi
+export const {
+  useGetPriorNotificationDetailQuery,
+  useGetPriorNotificationsQuery,
+  useGetPriorNotificationsToVerifyQuery,
+  useGetPriorNotificationTypesQuery
+} = priorNotificationApi
 
 export const { useGetPriorNotificationPDFQuery } = priorNotificationPublicApi

@@ -13,8 +13,10 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LogbookReportEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBLogbookReportRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.utils.toSqlArrayString
+import fr.gouv.cnsp.monitorfish.utils.CustomZonedDateTime
 import jakarta.transaction.Transactional
 import org.slf4j.LoggerFactory
+import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.data.domain.PageRequest
@@ -60,6 +62,42 @@ class JpaLogbookReportRepository(
 
                     null
                 }
+            }
+    }
+
+    @Cacheable(value = ["pno_to_verify"])
+    override fun findAllPriorNotificationsToVerify(): List<PriorNotification> {
+        val allLogbookReportModels = dbLogbookReportRepository.findAllEnrichedPnoReferencesAndRelatedOperations(
+            flagStates = emptyList(),
+            hasOneOrMoreReportings = null,
+            isLessThanTwelveMetersVessel = null,
+            lastControlledAfter = null,
+            lastControlledBefore = null,
+            portLocodes = emptyList(),
+            priorNotificationTypesAsSqlArrayString = null,
+            searchQuery = null,
+            specyCodesAsSqlArrayString = null,
+            tripGearCodesAsSqlArrayString = null,
+            tripSegmentCodesAsSqlArrayString = null,
+            willArriveAfter = CustomZonedDateTime(ZonedDateTime.now()).toString(),
+            willArriveBefore = CustomZonedDateTime(ZonedDateTime.now().plusHours(24)).toString(),
+        )
+
+        return mapToReferenceWithRelatedModels(allLogbookReportModels)
+            .mapNotNull { (referenceLogbookReportModel, relatedLogbookReportModels) ->
+                try {
+                    referenceLogbookReportModel.toPriorNotification(objectMapper, relatedLogbookReportModels)
+                } catch (e: Exception) {
+                    logger.warn(
+                        "Error while converting logbook report models to prior notifications (reportId = ${referenceLogbookReportModel.reportId}).",
+                        e,
+                    )
+
+                    null
+                }
+            }.filter {
+                it.logbookMessageTyped.typedMessage.isInVerificationScope == true &&
+                    it.logbookMessageTyped.typedMessage.isVerified == false
             }
     }
 
@@ -318,6 +356,7 @@ class JpaLogbookReportRepository(
     }
 
     @Transactional
+    @CacheEvict(value = ["pno_to_verify"], allEntries = true)
     override fun updatePriorNotificationState(
         reportId: String,
         operationDate: ZonedDateTime,

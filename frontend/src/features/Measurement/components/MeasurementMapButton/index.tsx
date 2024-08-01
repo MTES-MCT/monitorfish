@@ -71,7 +71,7 @@ export function MeasurementMapButton() {
         data-cy="measurement"
         isActive={isOpen || !!measurementTypeToAdd}
         onClick={openOrCloseMeasurementMenu}
-        style={{ top: 291 }}
+        style={{ top: 316 }}
         title="Mesurer une distance"
       >
         {measurementIcon}
@@ -149,7 +149,7 @@ const MeasurementOptions = styled(MapComponent)<{
   opacity: ${p => (p.isOpen ? '1' : '0')};
   position: absolute;
   right: 10px;
-  top: 291px;
+  top: 316px;
   transition: all 0.5s;
   width: 135px;
   z-index: 1000;

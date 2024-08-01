@@ -10,7 +10,7 @@ import { UserAccountContext } from '../../../context/UserAccountContext'
 import { MapBox } from '../../../domain/entities/map/constants'
 import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
 
-const MARGIN_TOP = 388
+const MARGIN_TOP = 428
 
 export function Account() {
   const dispatch = useMainAppDispatch()

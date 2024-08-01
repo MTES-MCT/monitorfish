@@ -41,7 +41,7 @@ export function ControlUnitListMapButton() {
       <MapToolButton
         isActive={isControlUnitListDialogDisplayed || isControlUnitDialogDisplayed}
         onClick={toggle}
-        style={{ top: 236 }}
+        style={{ top: 268 }}
         title="Liste des unités de contrôle"
       >
         <Icon.ControlUnit size={28} />

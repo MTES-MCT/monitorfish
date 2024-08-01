@@ -77,6 +77,7 @@ class CaffeineConfiguration {
     val controlAnteriority = "control_anteriority"
     val district = "district"
     val firstAndLastTripDates = "first_and_last_trip_dates"
+    val suddenDropOfPositionsReceived = "sudden_drop_of_positions_received"
     val userAuthorization = "user_authorization"
 
     @Bean
@@ -153,6 +154,7 @@ class CaffeineConfiguration {
         val controlAnteriorityCache = buildMinutesCache(controlAnteriority, ticker, 1)
         val districtCache = buildMinutesCache(district, ticker, 10)
         val firstAndLastTripDates = buildMinutesCache(firstAndLastTripDates, ticker, 10)
+        val suddenDropOfPositionsReceivedCache = buildMinutesCache(suddenDropOfPositionsReceived, ticker, 2)
         val userAuthorizationCache = buildMinutesCache(userAuthorization, ticker, 120)
 
         val manager = SimpleCacheManager()
@@ -190,6 +192,7 @@ class CaffeineConfiguration {
                 searchBeaconsCache,
                 searchVesselsCache,
                 speciesCache,
+                suddenDropOfPositionsReceivedCache,
                 userAuthorizationCache,
                 vesselCache,
                 vesselsCache,

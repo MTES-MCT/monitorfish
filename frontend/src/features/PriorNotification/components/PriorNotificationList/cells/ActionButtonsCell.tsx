@@ -93,7 +93,7 @@ const Wrapper = styled.div`
   flex-direction: row;
   gap: 8px;
 
-  > button {
+  > div > button {
     padding: 0px;
   }
 `

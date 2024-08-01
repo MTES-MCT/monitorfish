@@ -12,7 +12,7 @@ from src.db_config import create_engine
 from src.pipeline.generic_tasks import load
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.infrastructure import get_table
-from src.pipeline.utils import delete
+from src.pipeline.utils import truncate
 
 
 @task(checkpoint=False)
@@ -47,8 +47,11 @@ def load_pno_types_and_rules(
     e = create_engine("monitorfish_remote")
 
     with e.begin() as con:
-        delete(table=pno_type_rules_table, connection=con, logger=logger)
-        delete(table=pno_types_table, connection=con, logger=logger)
+        truncate(
+            tables=[pno_type_rules_table, pno_types_table],
+            connection=con,
+            logger=logger,
+        )
 
         load(
             pno_types,
@@ -56,7 +59,7 @@ def load_pno_types_and_rules(
             schema="public",
             connection=con,
             logger=prefect.context.get("logger"),
-            how="replace",
+            how="append",
             end_ddls=[
                 DDL(
                     "SELECT setval("
@@ -74,7 +77,7 @@ def load_pno_types_and_rules(
             schema="public",
             connection=con,
             logger=prefect.context.get("logger"),
-            how="replace",
+            how="append",
             pg_array_columns=[
                 "species",
                 "fao_areas",

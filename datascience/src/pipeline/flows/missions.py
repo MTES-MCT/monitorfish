@@ -4,11 +4,13 @@ import pandas as pd
 import prefect
 from prefect import Flow, Parameter, case, task
 from prefect.executors import LocalDaskExecutor
-from sqlalchemy import DDL
+from sqlalchemy import Table
 
 from src.db_config import create_engine
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
+from src.pipeline.shared_tasks.infrastructure import get_table
+from src.pipeline.utils import truncate
 
 
 @task(checkpoint=False)
@@ -100,53 +102,37 @@ def filter_missions_control_units(
 
 @task(checkpoint=False)
 def load_missions_and_missions_control_units(
-    missions: pd.DataFrame, missions_control_units: pd.DataFrame, loading_mode: str
+    missions: pd.DataFrame,
+    missions_control_units: pd.DataFrame,
+    analytics_missions_table: Table,
+    analytics_missions_control_units_table: Table,
 ):
-    # In "replace" loading mode, we want to replace all `missions`, so we use `replace`
-    # loading mode.
-
-    # In "upsert" loading mode, we want to replace only the missions whose `id` is
-    # present in the DataFrame. So we use `id` as the identifier and `upsert` loading
-    # mode.
-
-    assert loading_mode in ("replace", "upsert")
-    missions_id_column = "id" if loading_mode == "upsert" else None
-
+    """
+    Truncates tables and populates them with data from input DataFrames.
+    """
     e = create_engine("monitorfish_remote")
+
     with e.begin() as connection:
+        truncate(
+            tables=[analytics_missions_table, analytics_missions_control_units_table],
+            connection=connection,
+            logger=prefect.context.get("logger"),
+        )
+
         load(
             missions,
-            table_name="analytics_missions",
-            schema="public",
+            table_name=analytics_missions_table.name,
+            schema=analytics_missions_table.schema,
             connection=connection,
             logger=prefect.context.get("logger"),
             pg_array_columns=["mission_types"],
-            how=loading_mode,
-            table_id_column=missions_id_column,
-            df_id_column=missions_id_column,
-            init_ddls=[
-                DDL(
-                    "ALTER TABLE public.analytics_missions_control_units "
-                    "ADD CONSTRAINT "
-                    "analytics_missions_control_units_mission_id_cascade_fkey "
-                    "FOREIGN KEY (mission_id) "
-                    "REFERENCES public.analytics_missions (id) "
-                    "ON DELETE CASCADE;"
-                ),
-            ],
-            end_ddls=[
-                DDL(
-                    "ALTER TABLE public.analytics_missions_control_units "
-                    "DROP CONSTRAINT "
-                    "analytics_missions_control_units_mission_id_cascade_fkey;"
-                ),
-            ],
+            how="append",
         )
 
         load(
             missions_control_units,
-            table_name="analytics_missions_control_units",
-            schema="public",
+            table_name=analytics_missions_control_units_table.name,
+            schema=analytics_missions_control_units_table.schema,
             connection=connection,
             logger=prefect.context.get("logger"),
             how="append",
@@ -157,12 +143,15 @@ with Flow("missions", executor=LocalDaskExecutor()) as flow:
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
         # Parameters
-        loading_mode = Parameter("loading_mode")
         number_of_months = Parameter("number_of_months")
 
         # Extract
         missions = extract_missions(number_of_months=number_of_months)
         missions_control_units = extract_missions_control_units()
+        analytics_missions_table = get_table("analytics_missions")
+        analytics_missions_control_units_table = get_table(
+            "analytics_missions_control_units"
+        )
 
         # Transform
         missions_control_units = filter_missions_control_units(
@@ -171,7 +160,10 @@ with Flow("missions", executor=LocalDaskExecutor()) as flow:
 
         # Load
         load_missions_and_missions_control_units(
-            missions, missions_control_units, loading_mode=loading_mode
+            missions,
+            missions_control_units,
+            analytics_missions_table,
+            analytics_missions_control_units_table,
         )
 
 

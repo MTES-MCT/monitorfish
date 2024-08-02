@@ -8,6 +8,7 @@ import {
 } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Button } from '@mtes-mct/monitor-ui'
+import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import styled from 'styled-components'
 import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
 
@@ -31,6 +32,7 @@ export function PriorNotificationCard({
   priorNotificationDetail
 }: PriorNotificationCardLayoutProps) {
   const dispatch = useMainAppDispatch()
+  const isSuperUser = useIsSuperUser()
 
   const isInvalidated = priorNotificationDetail?.logbookMessage?.message?.isInvalidated
   const isPendingVerification = priorNotificationDetail?.state === PriorNotification.State.PENDING_VERIFICATION
@@ -45,7 +47,7 @@ export function PriorNotificationCard({
 
   if (!priorNotificationDetail || isLoading) {
     return (
-      <Wrapper>
+      <Wrapper $isSuperUser={isSuperUser}>
         <Background onClick={close} />
 
         <Card>
@@ -56,7 +58,7 @@ export function PriorNotificationCard({
   }
 
   return (
-    <Wrapper>
+    <Wrapper $isSuperUser={isSuperUser}>
       <Background onClick={close} />
 
       <Card>
@@ -116,11 +118,14 @@ export function PriorNotificationCard({
   )
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{
+  // TODO Pass this prop via a context?
+  $isSuperUser: boolean
+}>`
   bottom: 0;
   display: flex;
   justify-content: flex-end;
-  left: 70px;
+  left: ${p => (p.$isSuperUser ? '70px' : 0)};
   position: fixed;
   right: 0;
   top: 0;

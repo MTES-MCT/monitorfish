@@ -77,6 +77,8 @@ interface LogbookReportRepository {
 
     fun updatePriorNotificationNote(reportId: String, operationDate: ZonedDateTime, note: String?)
 
+    fun invalidate(reportId: String, operationDate: ZonedDateTime)
+
     // For test purpose
     fun deleteAll()
 }

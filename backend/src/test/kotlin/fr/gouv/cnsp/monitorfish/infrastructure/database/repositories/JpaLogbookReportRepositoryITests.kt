@@ -1133,6 +1133,28 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat((updatedCorReport.message as PNO).isSent).isEqualTo(false)
     }
 
+    @Test
+    @Transactional
+    fun `invalidate Should invalidate for an existing PNO logbook report`() {
+        // Given
+        val currentDatReport = jpaLogbookReportRepository.findById(109)
+        assertThat((currentDatReport.message as PNO).isInvalidated).isNull()
+        val currentCorReport = jpaLogbookReportRepository.findById(1109)
+        assertThat((currentCorReport.message as PNO).isInvalidated).isNull()
+
+        // When
+        jpaLogbookReportRepository.invalidate(
+            "FAKE_OPERATION_109",
+            ZonedDateTime.now().minusMinutes(15),
+        )
+
+        // Then
+        val updatedDatReport = jpaLogbookReportRepository.findById(109)
+        assertThat((updatedDatReport.message as PNO).isInvalidated).isEqualTo(true)
+        val updatedCorReport = jpaLogbookReportRepository.findById(1109)
+        assertThat((updatedCorReport.message as PNO).isInvalidated).isEqualTo(true)
+    }
+
     companion object {
         private fun getFakeLogbookReportModel(
             operationType: LogbookOperationType,

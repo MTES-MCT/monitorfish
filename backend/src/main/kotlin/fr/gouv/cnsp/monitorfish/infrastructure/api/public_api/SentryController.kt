@@ -16,7 +16,7 @@ class SentryController(val sentryConfig: SentryConfig) {
     @GetMapping("/trigger_sentry_error")
     fun triggerError(): Map<String, Boolean?> {
         try {
-            throw Exception("Sentry test error triggered from get request.")
+            throw IllegalArgumentException("Sentry test error triggered from get request.")
         } catch (e: Exception) {
             logger.error(e.message, e)
         }

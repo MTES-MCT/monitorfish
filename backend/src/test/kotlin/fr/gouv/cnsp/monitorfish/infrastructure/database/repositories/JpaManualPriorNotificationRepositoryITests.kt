@@ -2,8 +2,8 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagePurpose
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageAndValue
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagePurpose
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
@@ -524,5 +524,24 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(result.filter { it.logbookMessageAndValue.value.isVerified == false }).hasSize(1)
         assertThat(result.filter { it.logbookMessageAndValue.value.isInVerificationScope == true }).hasSize(1)
+    }
+
+    @Test
+    @Transactional
+    fun `invalidate Should invalidate an existing PNO logbook report`() {
+        // Given
+        val currentManualPriorNotification = jpaManualPriorNotificationRepository
+            .findByReportId("00000000-0000-4000-0000-000000000001")!!
+        assertThat(currentManualPriorNotification.logbookMessageAndValue.value.isInvalidated).isNull()
+
+        // When
+        jpaManualPriorNotificationRepository.invalidate(
+            "00000000-0000-4000-0000-000000000001",
+        )
+
+        // Then
+        val updatedManualPriorNotification = jpaManualPriorNotificationRepository
+            .findByReportId("00000000-0000-4000-0000-000000000001")!!
+        assertThat(updatedManualPriorNotification.logbookMessageAndValue.value.isInvalidated).isEqualTo(true)
     }
 }

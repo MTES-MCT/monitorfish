@@ -12,5 +12,7 @@ interface ManualPriorNotificationRepository {
 
     fun updateState(reportId: String, isBeingSent: Boolean, isVerified: Boolean)
 
+    fun invalidate(reportId: String)
+
     fun findAllToVerify(): List<PriorNotification>
 }

@@ -5,10 +5,10 @@ import styled from 'styled-components'
 import type { PriorNotification } from '../../PriorNotification.types'
 
 type HeaderProps = Readonly<{
+  detail: PriorNotification.PriorNotificationDetail
   onClose: () => void
-  priorNotificationDetail: PriorNotification.PriorNotificationDetail
 }>
-export function Header({ onClose, priorNotificationDetail }: HeaderProps) {
+export function Header({ detail, onClose }: HeaderProps) {
   return (
     <Wrapper>
       <Title>
@@ -17,17 +17,17 @@ export function Header({ onClose, priorNotificationDetail }: HeaderProps) {
             <Icon.Fishery />
           </TitleRowIconBox>
 
-          <span>{`Préavis navire ${priorNotificationDetail.isLessThanTwelveMetersVessel ? '< 12 M' : '≥ 12 M'}`}</span>
+          <span>{`Préavis navire ${detail.isLessThanTwelveMetersVessel ? '< 12 M' : '≥ 12 M'}`}</span>
         </TitleRow>
 
         <TitleRow>
           <TitleRowIconBox>
-            <CountryFlag countryCode={priorNotificationDetail.logbookMessage.flagState} size={[24, 18]} />
+            <CountryFlag countryCode={detail.logbookMessage.flagState} size={[24, 18]} />
           </TitleRowIconBox>
 
           <span>
-            <VesselName>{priorNotificationDetail.logbookMessage.vesselName}</VesselName> (
-            {priorNotificationDetail.logbookMessage.internalReferenceNumber})
+            <VesselName>{detail.logbookMessage.vesselName}</VesselName> ({detail.logbookMessage.internalReferenceNumber}
+            )
           </span>
         </TitleRow>
       </Title>

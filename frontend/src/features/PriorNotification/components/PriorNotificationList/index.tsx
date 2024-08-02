@@ -236,7 +236,12 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
         </Body>
       </Page>
 
-      {isPriorNotificationCardOpen && <PriorNotificationCard key={openedPriorNotificationDetail?.fingerprint} />}
+      {isPriorNotificationCardOpen && (
+        <PriorNotificationCard
+          key={openedPriorNotificationDetail?.fingerprint}
+          detail={openedPriorNotificationDetail}
+        />
+      )}
       {isPriorNotificationFormOpen && !openedPriorNotificationDetail?.isManuallyCreated && (
         <AutoPriorNotificationForm key={openedPriorNotificationDetail?.fingerprint} />
       )}

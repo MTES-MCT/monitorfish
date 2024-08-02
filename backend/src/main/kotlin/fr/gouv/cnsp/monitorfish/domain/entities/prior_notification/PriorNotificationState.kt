@@ -4,9 +4,6 @@ enum class PriorNotificationState {
     /** "Envoi auto. demandé". */
     AUTO_SEND_REQUESTED,
 
-    /** "Envoi auto en cours". */
-    AUTO_SEND_IN_PROGRESS,
-
     /** "Envoi auto. fait". */
     AUTO_SEND_DONE,
 
@@ -16,7 +13,7 @@ enum class PriorNotificationState {
     /** "Hors vérification". */
     OUT_OF_VERIFICATION_SCOPE,
 
-    /** "Envoi auto en cours". */
+    /** "Envoi auto. en cours". */
     PENDING_AUTO_SEND,
 
     /** "Diffusion en cours". */

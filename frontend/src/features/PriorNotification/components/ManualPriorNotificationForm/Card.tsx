@@ -50,7 +50,7 @@ export function Card({ detail, isValidatingOnChange, onClose, onSubmit, onVerify
   const isInvalidated = detail?.logbookMessage?.message?.isInvalidated
   const isPendingSend =
     !!detail?.state &&
-    [PriorNotification.State.AUTO_SEND_IN_PROGRESS, PriorNotification.State.PENDING_SEND].includes(detail?.state)
+    [PriorNotification.State.PENDING_AUTO_SEND, PriorNotification.State.PENDING_SEND].includes(detail?.state)
   const isPendingVerification = detail?.state === PriorNotification.State.PENDING_VERIFICATION
   const isVerifiedAndSent = detail?.state === PriorNotification.State.VERIFIED_AND_SENT
   const hasDesignatedPorts = editedPriorNotificationComputedValues?.types?.find(type => type.hasDesignatedPorts)
@@ -139,7 +139,7 @@ export function Card({ detail, isValidatingOnChange, onClose, onSubmit, onVerify
             Le préavis est en cours de diffusion.
           </StyledBanner>
         )}
-        {detail?.state === PriorNotification.State.AUTO_SEND_IN_PROGRESS && (
+        {detail?.state === PriorNotification.State.PENDING_AUTO_SEND && (
           <StyledBanner isCollapsible level={Level.WARNING} top="100px">
             Le préavis est en cours d’envoi aux unités qui l’ont demandé.
           </StyledBanner>

@@ -14,7 +14,7 @@ export function Footer({ detail }: FooterProps) {
   const { isInvalidated } = detail.logbookMessage.message
   const isPendingSend =
     !!detail.state &&
-    [PriorNotification.State.AUTO_SEND_IN_PROGRESS, PriorNotification.State.PENDING_SEND].includes(detail.state)
+    [PriorNotification.State.PENDING_AUTO_SEND, PriorNotification.State.PENDING_SEND].includes(detail.state)
   const isVerifiedAndSent = detail.state === PriorNotification.State.VERIFIED_AND_SENT
 
   const verifyAndSend = async () => {

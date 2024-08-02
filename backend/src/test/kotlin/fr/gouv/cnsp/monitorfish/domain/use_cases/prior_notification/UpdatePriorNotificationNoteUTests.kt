@@ -29,7 +29,7 @@ class UpdatePriorNotificationNoteUTests {
         given(
             getPriorNotification.execute(
                 fakePriorNotification.reportId!!,
-                fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+                fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
                 false,
             ),
         ).willReturn(fakePriorNotification)
@@ -41,7 +41,7 @@ class UpdatePriorNotificationNoteUTests {
             getPriorNotification,
         ).execute(
             reportId = fakePriorNotification.reportId!!,
-            operationDate = fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+            operationDate = fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
             note = null,
         )
 

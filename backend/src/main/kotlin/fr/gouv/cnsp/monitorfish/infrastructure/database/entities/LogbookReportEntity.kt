@@ -142,8 +142,8 @@ data class LogbookReportEntity(
         val relatedLogbookMessages = relatedModels
             .map { it.toLogbookMessage(mapper) }
             .sortedBy { it.operationDateTime }
-        val consolidatedLogbookMessageTyped = referenceLogbookMessage
-            .toConsolidatedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
+        val consolidatedLogbookMessageAndValue = referenceLogbookMessage
+            .toConsolidatedLogbookMessageAndValue(relatedLogbookMessages, PNO::class.java)
         val updatedAt = relatedLogbookMessages.lastOrNull()?.operationDateTime ?: operationDateTime.atZone(UTC)
         // For practical reasons `vessel` can't be `null`, so we temporarily set it to "Navire inconnu"
         val vessel = UNKNOWN_VESSEL
@@ -154,8 +154,8 @@ data class LogbookReportEntity(
             createdAt = operationDateTime.atZone(UTC),
             didNotFishAfterZeroNotice = false,
             isManuallyCreated = false,
-            logbookMessageTyped = consolidatedLogbookMessageTyped,
-            sentAt = consolidatedLogbookMessageTyped.logbookMessage.reportDateTime,
+            logbookMessageAndValue = consolidatedLogbookMessageAndValue,
+            sentAt = consolidatedLogbookMessageAndValue.logbookMessage.reportDateTime,
             updatedAt = updatedAt,
 
             // These props need to be calculated in the use case

@@ -23,7 +23,7 @@ class GetNumberToVerify(
         val incompletePriorNotifications = automaticPriorNotifications + manualPriorNotifications
 
         val undeletedPriorNotifications = incompletePriorNotifications
-            .filter { !it.logbookMessageTyped.logbookMessage.isDeleted }
+            .filter { !it.logbookMessageAndValue.logbookMessage.isDeleted }
 
         val priorNotifications = undeletedPriorNotifications
             .map { priorNotification ->

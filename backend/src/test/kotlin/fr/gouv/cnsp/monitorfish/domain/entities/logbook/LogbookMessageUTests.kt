@@ -40,7 +40,7 @@ class LogbookMessageUTests {
     }
 
     @Test
-    fun `toEnrichedLogbookMessageTyped Should set acknowledge to successful with one successful RET message`() {
+    fun `toConsolidatedLogbookMessageAndValue Should set acknowledge to successful with one successful RET message`() {
         // Given
         val refenceLogbookMessage = getFakeLogbookMessage(
             LogbookOperationType.DAT,
@@ -57,7 +57,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessage = refenceLogbookMessage
-            .toConsolidatedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
+            .toConsolidatedLogbookMessageAndValue(relatedLogbookMessages, PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessage.logbookMessage.acknowledgment?.isSuccess).isTrue()
@@ -66,7 +66,7 @@ class LogbookMessageUTests {
     }
 
     @Test
-    fun `toEnrichedLogbookMessageTyped Should set acknowledge to successful with multiple RET messages of which one is successful, no matter the (historical) order`() {
+    fun `toConsolidatedLogbookMessageAndValue Should set acknowledge to successful with multiple RET messages of which one is successful, no matter the (historical) order`() {
         // Given
         val refenceLogbookMessage = getFakeLogbookMessage(
             LogbookOperationType.DAT,
@@ -95,7 +95,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessage = refenceLogbookMessage
-            .toConsolidatedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
+            .toConsolidatedLogbookMessageAndValue(relatedLogbookMessages, PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessage.logbookMessage.acknowledgment?.isSuccess).isTrue()
@@ -104,7 +104,7 @@ class LogbookMessageUTests {
     }
 
     @Test
-    fun `toEnrichedLogbookMessageTyped Should set acknowledge to not successful with one unsuccessful RET message`() {
+    fun `toConsolidatedLogbookMessageAndValue Should set acknowledge to not successful with one unsuccessful RET message`() {
         // Given
         val refenceLogbookMessage = getFakeLogbookMessage(
             LogbookOperationType.DAT,
@@ -121,7 +121,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessage = refenceLogbookMessage
-            .toConsolidatedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
+            .toConsolidatedLogbookMessageAndValue(relatedLogbookMessages, PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessage.logbookMessage.acknowledgment?.isSuccess).isFalse()
@@ -130,7 +130,7 @@ class LogbookMessageUTests {
     }
 
     @Test
-    fun `toEnrichedLogbookMessageTyped Should set acknowledge to (most recent) not successful with multiple unsucessful RET message`() {
+    fun `toConsolidatedLogbookMessageAndValue Should set acknowledge to (most recent) not successful with multiple unsucessful RET message`() {
         // Given
         val refenceLogbookMessage = getFakeLogbookMessage(
             LogbookOperationType.DAT,
@@ -153,7 +153,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessage = refenceLogbookMessage
-            .toConsolidatedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
+            .toConsolidatedLogbookMessageAndValue(relatedLogbookMessages, PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessage.logbookMessage.acknowledgment?.isSuccess).isFalse()
@@ -164,7 +164,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessageReversed = refenceLogbookMessage
-            .toConsolidatedLogbookMessageTyped(relatedLogbookMessages.reversed(), PNO::class.java)
+            .toConsolidatedLogbookMessageAndValue(relatedLogbookMessages.reversed(), PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessageReversed.logbookMessage.acknowledgment?.isSuccess).isFalse()
@@ -175,7 +175,7 @@ class LogbookMessageUTests {
     }
 
     @Test
-    fun `toEnrichedLogbookMessageTyped Should set acknowledge to successful when it comes from FLUX flow`() {
+    fun `toConsolidatedLogbookMessageAndValue Should set acknowledge to successful when it comes from FLUX flow`() {
         // Given
         val refenceLogbookMessage = getFakeLogbookMessage(
             LogbookOperationType.DAT,
@@ -186,7 +186,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessage = refenceLogbookMessage
-            .toConsolidatedLogbookMessageTyped(emptyList(), PNO::class.java)
+            .toConsolidatedLogbookMessageAndValue(emptyList(), PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessage.logbookMessage.acknowledgment?.isSuccess).isTrue()
@@ -195,7 +195,7 @@ class LogbookMessageUTests {
     }
 
     @Test
-    fun `toEnrichedLogbookMessageTyped Should set acknowledge to successful when it was generated via VISIOCaptures app`() {
+    fun `toConsolidatedLogbookMessageAndValue Should set acknowledge to successful when it was generated via VISIOCaptures app`() {
         // Given
         val refenceLogbookMessage = getFakeLogbookMessage(
             LogbookOperationType.DAT,
@@ -206,7 +206,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessage = refenceLogbookMessage
-            .toConsolidatedLogbookMessageTyped(emptyList(), PNO::class.java)
+            .toConsolidatedLogbookMessageAndValue(emptyList(), PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessage.logbookMessage.acknowledgment?.isSuccess).isTrue()
@@ -215,7 +215,7 @@ class LogbookMessageUTests {
     }
 
     @Test
-    fun `toEnrichedLogbookMessageTyped Should flag it as corrected from an orphan COR message`() {
+    fun `toConsolidatedLogbookMessageAndValue Should flag it as corrected from an orphan COR message`() {
         // Given
         val missingDatLogbookMessageReportId = UUID.randomUUID().toString()
         val refenceLogbookMessage = getFakeLogbookMessage(
@@ -226,7 +226,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessage = refenceLogbookMessage
-            .toConsolidatedLogbookMessageTyped(emptyList(), PNO::class.java)
+            .toConsolidatedLogbookMessageAndValue(emptyList(), PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessage.logbookMessage.reportDateTime)
@@ -236,7 +236,7 @@ class LogbookMessageUTests {
     }
 
     @Test
-    fun `toEnrichedLogbookMessageTyped Should use the most recent COR message as base and flag it corrected from a DAT with multiple COR messages`() {
+    fun `toConsolidatedLogbookMessageAndValue Should use the most recent COR message as base and flag it corrected from a DAT with multiple COR messages`() {
         // Given
         val refenceLogbookMessage = getFakeLogbookMessage(
             LogbookOperationType.DAT,
@@ -262,7 +262,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessage = refenceLogbookMessage
-            .toConsolidatedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
+            .toConsolidatedLogbookMessageAndValue(relatedLogbookMessages, PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessage.logbookMessage.reportDateTime).isEqualTo(
@@ -273,7 +273,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessageReversed = refenceLogbookMessage
-            .toConsolidatedLogbookMessageTyped(relatedLogbookMessages.reversed(), PNO::class.java)
+            .toConsolidatedLogbookMessageAndValue(relatedLogbookMessages.reversed(), PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessageReversed.logbookMessage.reportDateTime)
@@ -283,7 +283,7 @@ class LogbookMessageUTests {
     }
 
     @Test
-    fun `toEnrichedLogbookMessageTyped Should flag it as deleted from a DAT with a DEL message`() {
+    fun `toConsolidatedLogbookMessageAndValue Should flag it as deleted from a DAT with a DEL message`() {
         // Given
         val refenceLogbookMessage = getFakeLogbookMessage(
             LogbookOperationType.DAT,
@@ -299,7 +299,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessage = refenceLogbookMessage
-            .toConsolidatedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
+            .toConsolidatedLogbookMessageAndValue(relatedLogbookMessages, PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessage.logbookMessage.reportDateTime)
@@ -309,7 +309,7 @@ class LogbookMessageUTests {
     }
 
     @Test
-    fun `toEnrichedLogbookMessageTyped Should flag it as corrected and deleted from an orphan COR with a DEL message`() {
+    fun `toConsolidatedLogbookMessageAndValue Should flag it as corrected and deleted from an orphan COR with a DEL message`() {
         // Given
         val missingDatLogbookMessageReportId = UUID.randomUUID().toString()
         val refenceLogbookMessage = getFakeLogbookMessage(
@@ -327,7 +327,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessage = refenceLogbookMessage
-            .toConsolidatedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
+            .toConsolidatedLogbookMessageAndValue(relatedLogbookMessages, PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessage.logbookMessage.reportDateTime)
@@ -337,7 +337,7 @@ class LogbookMessageUTests {
     }
 
     @Test
-    fun `toEnrichedLogbookMessageTyped Should use the most recent COR message as base and flag it corrected and deleted from a DAT with COR and DEL messages`() {
+    fun `toConsolidatedLogbookMessageAndValue Should use the most recent COR message as base and flag it corrected and deleted from a DAT with COR and DEL messages`() {
         // Given
         val refenceLogbookMessage = getFakeLogbookMessage(
             LogbookOperationType.DAT,
@@ -363,7 +363,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessage = refenceLogbookMessage
-            .toConsolidatedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
+            .toConsolidatedLogbookMessageAndValue(relatedLogbookMessages, PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessage.logbookMessage.reportDateTime)
@@ -373,7 +373,7 @@ class LogbookMessageUTests {
     }
 
     @Test
-    fun `toEnrichedLogbookMessageTyped Should use the most recent COR message as base and associate its RET from a DAT, even with a later DAT-RET message`() {
+    fun `toConsolidatedLogbookMessageAndValue Should use the most recent COR message as base and associate its RET from a DAT, even with a later DAT-RET message`() {
         // Given
         val refenceLogbookMessage = getFakeLogbookMessage(
             LogbookOperationType.DAT,
@@ -418,7 +418,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessage = refenceLogbookMessage
-            .toConsolidatedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
+            .toConsolidatedLogbookMessageAndValue(relatedLogbookMessages, PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessage.logbookMessage.reportDateTime)
@@ -432,7 +432,7 @@ class LogbookMessageUTests {
     }
 
     @Test
-    fun `toEnrichedLogbookMessageTyped Should use the most recent COR message as base and skip acknowledgement flagging without a COR-related RET`() {
+    fun `toConsolidatedLogbookMessageAndValue Should use the most recent COR message as base and skip acknowledgement flagging without a COR-related RET`() {
         // Given
         val refenceLogbookMessage = getFakeLogbookMessage(
             LogbookOperationType.DAT,
@@ -455,7 +455,7 @@ class LogbookMessageUTests {
 
         // When
         val enrichedLogbookMessage = refenceLogbookMessage
-            .toConsolidatedLogbookMessageTyped(relatedLogbookMessages, PNO::class.java)
+            .toConsolidatedLogbookMessageAndValue(relatedLogbookMessages, PNO::class.java)
 
         // Then
         assertThat(enrichedLogbookMessage.logbookMessage.reportDateTime)

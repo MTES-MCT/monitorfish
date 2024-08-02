@@ -66,7 +66,7 @@ class CreateOrUpdateManualPriorNotificationUTests {
         given(
             getPriorNotification.execute(
                 fakePriorNotification.reportId!!,
-                fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+                fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
                 true,
             ),
         ).willReturn(fakePriorNotification)

@@ -42,12 +42,12 @@ class GetPriorNotifications(
         val incompletePriorNotifications = automaticPriorNotifications + manualPriorNotifications
 
         val undeletedPriorNotifications = incompletePriorNotifications
-            .filter { !it.logbookMessageTyped.logbookMessage.isDeleted }
+            .filter { !it.logbookMessageAndValue.logbookMessage.isDeleted }
 
         val priorNotifications = undeletedPriorNotifications
             .map { priorNotification ->
                 priorNotification.enrich(allPorts, allRiskFactors, allVessels, priorNotification.isManuallyCreated)
-                priorNotification.logbookMessageTyped.logbookMessage
+                priorNotification.logbookMessageAndValue.logbookMessage
                     .enrichGearPortAndSpecyNames(allGears, allPorts, allSpecies)
 
                 priorNotification
@@ -57,14 +57,14 @@ class GetPriorNotifications(
             Sort.Direction.ASC -> priorNotifications.sortedWith(
                 compareBy(
                     { getSortKey(it, sortColumn) },
-                    { it.logbookMessageTyped.logbookMessage.id }, // Tie-breaker
+                    { it.logbookMessageAndValue.logbookMessage.id }, // Tie-breaker
                 ),
             )
 
             Sort.Direction.DESC -> priorNotifications.sortedWith(
                 // Only solution found to fix typing issues
                 compareByDescending<PriorNotification> { getSortKey(it, sortColumn) }
-                    .thenByDescending { it.logbookMessageTyped.logbookMessage.id }, // Tie-breaker
+                    .thenByDescending { it.logbookMessageAndValue.logbookMessage.id }, // Tie-breaker
             )
         }.filter { seafrontGroup.hasSeafront(it.seafront) && (states.isNullOrEmpty() || states.contains(it.state)) }
 
@@ -99,11 +99,11 @@ class GetPriorNotifications(
             sortColumn: PriorNotificationsSortColumn,
         ): Comparable<*>? {
             return when (sortColumn) {
-                PriorNotificationsSortColumn.EXPECTED_ARRIVAL_DATE -> priorNotification.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc
-                PriorNotificationsSortColumn.EXPECTED_LANDING_DATE -> priorNotification.logbookMessageTyped.typedMessage.predictedLandingDatetimeUtc
+                PriorNotificationsSortColumn.EXPECTED_ARRIVAL_DATE -> priorNotification.logbookMessageAndValue.value.predictedArrivalDatetimeUtc
+                PriorNotificationsSortColumn.EXPECTED_LANDING_DATE -> priorNotification.logbookMessageAndValue.value.predictedLandingDatetimeUtc
                 PriorNotificationsSortColumn.PORT_NAME -> priorNotification.port?.name
-                PriorNotificationsSortColumn.VESSEL_NAME -> priorNotification.logbookMessageTyped.logbookMessage.vesselName
-                PriorNotificationsSortColumn.VESSEL_RISK_FACTOR -> priorNotification.logbookMessageTyped.typedMessage.riskFactor
+                PriorNotificationsSortColumn.VESSEL_NAME -> priorNotification.logbookMessageAndValue.logbookMessage.vesselName
+                PriorNotificationsSortColumn.VESSEL_RISK_FACTOR -> priorNotification.logbookMessageAndValue.value.riskFactor
             }
         }
     }

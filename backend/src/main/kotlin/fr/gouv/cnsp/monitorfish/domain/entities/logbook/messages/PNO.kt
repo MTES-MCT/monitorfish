@@ -30,7 +30,7 @@ class PNO() : LogbookMessageValue {
      * Is it a prior notification requiring a manual verification?
      *
      * It should stay `true` even after the manual verification is done (`isVerified == true`)
-     * to differanciate mandatory-verification prior notifications from non-mandatory-verification prior notifications.
+     * to differentiate mandatory-verification prior notifications from non-mandatory-verification prior notifications.
      *
      * # Example
      *
@@ -43,6 +43,7 @@ class PNO() : LogbookMessageValue {
     var isVerified: Boolean? = null
     var isBeingSent: Boolean? = null
     var isSent: Boolean? = null
+    var isInvalidated: Boolean? = null
     var latitude: Double? = null
     var longitude: Double? = null
     var note: String? = null

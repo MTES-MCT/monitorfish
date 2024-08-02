@@ -26,8 +26,8 @@ data class ManualPriorNotificationDataOutput(
 ) {
     companion object {
         fun fromPriorNotification(priorNotification: PriorNotification): ManualPriorNotificationDataOutput {
-            val logbookMessage = priorNotification.logbookMessageTyped.logbookMessage
-            val pnoMessage = priorNotification.logbookMessageTyped.typedMessage
+            val logbookMessage = priorNotification.logbookMessageAndValue.logbookMessage
+            val pnoMessage = priorNotification.logbookMessageAndValue.value
 
             val authorTrigram = requireNotNull(priorNotification.authorTrigram) {
                 "`priorNotification.authorTrigram` is null."

@@ -196,7 +196,7 @@ class PriorNotificationControllerITests {
             .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
             .andExpect(
                 jsonPath(
-                    "$.logbookMessage.message.note",
+                    "$.note",
                     equalTo(fakePriorNotification.logbookMessageAndValue.value.note),
                 ),
             )
@@ -239,6 +239,7 @@ class PriorNotificationControllerITests {
     @Test
     fun `getManualData Should get a manual prior notification form data by its reportId`() {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
+        fakePriorNotification.logbookMessageTyped.typedMessage.authorTrigram = "ABC"
 
         // Given
         given(
@@ -264,6 +265,7 @@ class PriorNotificationControllerITests {
     @Test
     fun `updateManual Should create a manual prior notification`() {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
+        fakePriorNotification.logbookMessageTyped.typedMessage.authorTrigram = "ABC"
 
         // Given
         given(
@@ -319,21 +321,22 @@ class PriorNotificationControllerITests {
     @Test
     fun `updateManual Should update a manual prior notification by its reportId`() {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
+        fakePriorNotification.logbookMessageTyped.typedMessage.authorTrigram = "ABC"
 
         // Given
         given(
             createOrUpdateManualPriorNotification.execute(
-                hasPortEntranceAuthorization = anyOrNull(),
-                hasPortLandingAuthorization = anyOrNull(),
+                reportId = any(),
                 authorTrigram = anyOrNull(),
                 didNotFishAfterZeroNotice = anyOrNull(),
                 expectedArrivalDate = anyOrNull(),
                 expectedLandingDate = anyOrNull(),
                 faoArea = anyOrNull(),
                 fishingCatches = anyOrNull(),
+                hasPortEntranceAuthorization = anyOrNull(),
+                hasPortLandingAuthorization = anyOrNull(),
                 note = anyOrNull(),
                 portLocode = anyOrNull(),
-                reportId = anyOrNull(),
                 sentAt = anyOrNull(),
                 purpose = anyOrNull(),
                 tripGearCodes = anyOrNull(),

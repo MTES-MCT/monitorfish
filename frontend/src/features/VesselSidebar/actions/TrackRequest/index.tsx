@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { ExportTrack } from './ExportTrack'
 import { PositionsTable } from './PositionsTable'
 import { TrackDepthSelection } from './TrackDepthSelection'
-import { VesselTrackDepth, getTrackRequestFromTrackDepth } from '../../../../domain/entities/vesselTrackDepth'
+import { getTrackRequestFromTrackDepth, VesselTrackDepth } from '../../../../domain/entities/vesselTrackDepth'
 import { updateSelectedVesselTrackRequest } from '../../../../domain/use_cases/vessel/updateSelectedVesselTrackRequest'
 import { MapComponent } from '../../../commonStyles/MapComponent'
 import VesselSVG from '../../../icons/Icone_navire.svg?react'
@@ -93,35 +93,37 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
       >
         <VesselIcon />
       </VesselSidebarActionButton>
-      <TrackRequestBody isOpen={isOpen} isRightMenuOpen={rightMenuIsOpen} isSidebarOpen={isSidebarOpen}>
-        <Header>Paramétrer l&apos;affichage de la piste VMS</Header>
-        <Section>
-          <Field>
-            <TrackDepthSelection
-              defaultValue={selectedVesselTrackRequest?.trackDepth ?? defaultVesselTrackDepth}
-              label="Afficher la piste VMS depuis"
-              name="vessel-track-depth"
-              onChange={handleDateRangeRadioChange}
-            />
-          </Field>
-          <Field>
-            <DateRangePicker
-              key={selectedVesselTrackRequest?.trackDepth}
-              defaultValue={dateRangePickerDefaultValue}
-              isCompact
-              isHistorical
-              isLabelHidden
-              label="Plage de temps sur mesure"
-              name="dateRange"
-              onChange={handleDateRangePickerChange}
-              withTime
-            />
-          </Field>
-          <ExportTrack />
-        </Section>
-        <Header>Liste des positions VMS affichées</Header>
-        <PositionsTable openBox />
-      </TrackRequestBody>
+      {isOpen && (
+        <TrackRequestBody isRightMenuOpen={rightMenuIsOpen} isSidebarOpen={isSidebarOpen}>
+          <Header>Paramétrer l&apos;affichage de la piste VMS</Header>
+          <Section>
+            <Field>
+              <TrackDepthSelection
+                defaultValue={selectedVesselTrackRequest?.trackDepth ?? defaultVesselTrackDepth}
+                label="Afficher la piste VMS depuis"
+                name="vessel-track-depth"
+                onChange={handleDateRangeRadioChange}
+              />
+            </Field>
+            <Field>
+              <DateRangePicker
+                key={selectedVesselTrackRequest?.trackDepth}
+                defaultValue={dateRangePickerDefaultValue}
+                isCompact
+                isHistorical
+                isLabelHidden
+                label="Plage de temps sur mesure"
+                name="dateRange"
+                onChange={handleDateRangePickerChange}
+                withTime
+              />
+            </Field>
+            <ExportTrack />
+          </Section>
+          <Header>Liste des positions VMS affichées</Header>
+          <PositionsTable openBox />
+        </TrackRequestBody>
+      )}
     </>
   )
 }
@@ -151,7 +153,6 @@ const Field = styled.div`
 `
 
 const TrackRequestBody = styled(MapComponent)<{
-  isOpen: boolean
   isRightMenuOpen: boolean
   isSidebarOpen: boolean
 }>`
@@ -161,14 +162,12 @@ const TrackRequestBody = styled(MapComponent)<{
   display: flex;
   flex-direction: column;
   font-size: 13px;
-  margin-right: ${p => (p.isOpen ? '540px' : '217px')};
-  opacity: ${p => (p.isOpen ? '1' : '0')};
+  margin-right: 540px;
   position: absolute;
   right: ${p => (p.isRightMenuOpen && p.isSidebarOpen ? 55 : 10)}px;
   text-align: left;
   top: 118px;
   transition: all 0.3s;
-  visibility: ${p => (p.isOpen ? 'visible' : 'hidden')};
   width: 379px;
 `
 

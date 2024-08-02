@@ -22,11 +22,6 @@ class JpaManualPriorNotificationRepository(
     private val dbManualPriorNotificationRepository: DBManualPriorNotificationRepository,
 ) : ManualPriorNotificationRepository {
     override fun findAll(filter: PriorNotificationsFilter): List<PriorNotification> {
-        // Manual prior notifications are only for less than 12 meters vessels
-        if (filter.isLessThanTwelveMetersVessel == false) {
-            return emptyList()
-        }
-
         return dbManualPriorNotificationRepository
             .findAll(
                 flagStates = filter.flagStates ?: emptyList(),

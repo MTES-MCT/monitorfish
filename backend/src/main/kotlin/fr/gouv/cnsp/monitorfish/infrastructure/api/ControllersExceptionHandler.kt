@@ -65,6 +65,7 @@ class ControllersExceptionHandler(val sentryConfig: SentryConfig) {
     @ExceptionHandler(NoLogbookFishingTripFound::class)
     fun handleNoLogbookLastDepartureDateFound(e: Exception): ApiError {
         logger.warn(e.message, e.cause)
+
         return ApiError(e)
     }
 
@@ -73,6 +74,7 @@ class ControllersExceptionHandler(val sentryConfig: SentryConfig) {
         IllegalArgumentException::class,
         CouldNotUpdateControlObjectiveException::class,
         CouldNotFindException::class,
+        NoSuchElementException::class,
     )
     fun handleIllegalArgumentException(e: Exception): ApiError {
         logger.error(e.message, e.cause)

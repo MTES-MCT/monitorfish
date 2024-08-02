@@ -120,7 +120,7 @@ const Wrapper = styled.div`
   bottom: 0;
   display: flex;
   justify-content: flex-end;
-  left: 0;
+  left: 70px;
   position: fixed;
   right: 0;
   top: 0;

@@ -26,6 +26,7 @@ class JpaManualPriorNotificationRepository(
             .findAll(
                 flagStates = filter.flagStates ?: emptyList(),
                 hasOneOrMoreReportings = filter.hasOneOrMoreReportings,
+                isLessThanTwelveMetersVessel = filter.isLessThanTwelveMetersVessel,
                 lastControlledAfter = filter.lastControlledAfter,
                 lastControlledBefore = filter.lastControlledBefore,
                 portLocodes = filter.portLocodes ?: emptyList(),
@@ -45,6 +46,7 @@ class JpaManualPriorNotificationRepository(
             .findAll(
                 flagStates = emptyList(),
                 hasOneOrMoreReportings = null,
+                isLessThanTwelveMetersVessel = null,
                 lastControlledAfter = null,
                 lastControlledBefore = null,
                 portLocodes = emptyList(),

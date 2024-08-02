@@ -17,6 +17,7 @@ interface DBManualPriorNotificationRepository : JpaRepository<ManualPriorNotific
                     (SELECT array_agg(tripSegments->>'segment') FROM jsonb_array_elements(mpn.trip_segments) AS tripSegments) AS trip_segment_codes
                 FROM manual_prior_notifications mpn
                 LEFT JOIN risk_factors rf ON mpn.vessel_id = rf.vessel_id
+                LEFT JOIN vessels v ON mpn.vessel_id = v.id
                 WHERE
                     -- TODO /!\ INDEX created_at WITH TIMESCALE /!\
                     -- This filter helps Timescale optimize the query since `created_at` is indexed
@@ -26,6 +27,13 @@ interface DBManualPriorNotificationRepository : JpaRepository<ManualPriorNotific
 
                     -- Flag States
                     AND (:flagStates IS NULL OR mpn.flag_state IN (:flagStates))
+
+                    -- Is Less Than Twelve Meters Vessel
+                    AND (
+                        :isLessThanTwelveMetersVessel IS NULL
+                        OR (:isLessThanTwelveMetersVessel = TRUE AND v.length < 12)
+                        OR (:isLessThanTwelveMetersVessel = FALSE AND v.length >= 12)
+                    )
 
                     -- Last Controlled After
                     AND (:lastControlledAfter IS NULL OR rf.last_control_datetime_utc >= CAST(:lastControlledAfter AS TIMESTAMP))
@@ -104,6 +112,7 @@ interface DBManualPriorNotificationRepository : JpaRepository<ManualPriorNotific
     fun findAll(
         flagStates: List<String>,
         hasOneOrMoreReportings: Boolean?,
+        isLessThanTwelveMetersVessel: Boolean?,
         lastControlledAfter: String?,
         lastControlledBefore: String?,
         portLocodes: List<String>,

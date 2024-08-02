@@ -283,6 +283,7 @@ class JpaLogbookReportRepository(
         }
     }
 
+    @Cacheable(value = ["logbook_pno_types"])
     override fun findDistinctPriorNotificationTypes(): List<String> {
         return dbLogbookReportRepository.findDistinctPriorNotificationType() ?: emptyList()
     }

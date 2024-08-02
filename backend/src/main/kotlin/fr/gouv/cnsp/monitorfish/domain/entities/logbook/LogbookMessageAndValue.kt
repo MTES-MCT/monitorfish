@@ -3,12 +3,12 @@ package fr.gouv.cnsp.monitorfish.domain.entities.logbook
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.LogbookMessageValue
 import fr.gouv.cnsp.monitorfish.domain.exceptions.EntityConversionException
 
-class LogbookMessageTyped<T : LogbookMessageValue>(
+class LogbookMessageAndValue<T : LogbookMessageValue>(
     /** Logbook report DAT operation, or last COR one if any, enriched with RET & DEL information if any. */
     val logbookMessage: LogbookMessage,
     private val clazz: Class<T>,
 ) {
-    val typedMessage: T
+    val value: T
         get() = if (clazz.isInstance(logbookMessage.message)) {
             clazz.cast(logbookMessage.message)
         } else {

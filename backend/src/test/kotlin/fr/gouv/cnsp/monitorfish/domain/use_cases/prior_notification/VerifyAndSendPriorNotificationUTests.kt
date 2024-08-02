@@ -29,7 +29,7 @@ class VerifyAndSendPriorNotificationUTests {
         given(
             logbookReportRepository.findPriorNotificationByReportId(
                 fakePriorNotification.reportId!!,
-                fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+                fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
             ),
         )
             .willReturn(fakePriorNotification)
@@ -38,7 +38,7 @@ class VerifyAndSendPriorNotificationUTests {
         given(
             getPriorNotification.execute(
                 fakePriorNotification.reportId!!,
-                fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+                fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
                 false,
             ),
         )
@@ -51,7 +51,7 @@ class VerifyAndSendPriorNotificationUTests {
             getPriorNotification,
         ).execute(
             fakePriorNotification.reportId!!,
-            fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+            fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
             false,
         )
 
@@ -67,7 +67,7 @@ class VerifyAndSendPriorNotificationUTests {
         given(
             logbookReportRepository.findPriorNotificationByReportId(
                 fakePriorNotification.reportId!!,
-                fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+                fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
             ),
         )
             .willReturn(null)
@@ -76,7 +76,7 @@ class VerifyAndSendPriorNotificationUTests {
         given(
             getPriorNotification.execute(
                 fakePriorNotification.reportId!!,
-                fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+                fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
                 true,
             ),
         )
@@ -89,7 +89,7 @@ class VerifyAndSendPriorNotificationUTests {
             getPriorNotification,
         ).execute(
             fakePriorNotification.reportId!!,
-            fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+            fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
             true,
         )
 

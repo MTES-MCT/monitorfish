@@ -50,14 +50,14 @@ data class PriorNotificationListItemDataOutput(
         val logger: Logger = LoggerFactory.getLogger(PriorNotificationListItemDataOutput::class.java)
 
         fun fromPriorNotification(priorNotification: PriorNotification): PriorNotificationListItemDataOutput? {
-            val logbookMessage = priorNotification.logbookMessageTyped.logbookMessage
+            val logbookMessage = priorNotification.logbookMessageAndValue.logbookMessage
             val referenceReportId = logbookMessage.getReferenceReportId()
             if (referenceReportId == null) {
                 logger.warn("Prior notification has neither `reportId` nor `referencedReportId`: $priorNotification.")
 
                 return null
             }
-            val message = priorNotification.logbookMessageTyped.typedMessage
+            val message = priorNotification.logbookMessageAndValue.value
 
             val acknowledgment = logbookMessage.acknowledgment?.let { AcknowledgmentDataOutput.fromAcknowledgment(it) }
             val onBoardCatches = message.catchOnboard
@@ -103,7 +103,7 @@ data class PriorNotificationListItemDataOutput(
                 vesselLength = vessel.length,
                 vesselMmsi = vessel.mmsi,
                 vesselName = vessel.vesselName,
-                riskFactor = priorNotification.logbookMessageTyped.typedMessage.riskFactor,
+                riskFactor = priorNotification.logbookMessageAndValue.value.riskFactor,
             )
         }
     }

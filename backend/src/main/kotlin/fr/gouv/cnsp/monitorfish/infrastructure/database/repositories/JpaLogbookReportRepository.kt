@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTyped
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageAndValue
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
@@ -96,8 +96,8 @@ class JpaLogbookReportRepository(
                     null
                 }
             }.filter {
-                it.logbookMessageTyped.typedMessage.isInVerificationScope == true &&
-                    it.logbookMessageTyped.typedMessage.isVerified == false
+                it.logbookMessageAndValue.value.isInVerificationScope == true &&
+                    it.logbookMessageAndValue.value.isVerified == false
             }
     }
 
@@ -350,9 +350,9 @@ class JpaLogbookReportRepository(
 
     @Modifying
     @Transactional
-    override fun savePriorNotification(logbookMessageTyped: LogbookMessageTyped<PNO>): PriorNotification {
+    override fun savePriorNotification(logbookMessageAndValue: LogbookMessageAndValue<PNO>): PriorNotification {
         return dbLogbookReportRepository
-            .save(LogbookReportEntity.fromLogbookMessage(objectMapper, logbookMessageTyped.logbookMessage))
+            .save(LogbookReportEntity.fromLogbookMessage(objectMapper, logbookMessageAndValue.logbookMessage))
             .toPriorNotification(objectMapper, emptyList())
     }
 

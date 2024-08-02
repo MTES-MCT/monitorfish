@@ -440,6 +440,8 @@ interface DBLogbookReportRepository :
         """
         SELECT DISTINCT jsonb_array_elements(value->'pnoTypes')->>'pnoTypeName' AS uniquePnoTypeName
         FROM logbook_reports
+        WHERE log_type = 'PNO'
+        AND operation_datetime_utc > now() - interval '2 year'
         ORDER BY uniquePnoTypeName
         """,
         nativeQuery = true,

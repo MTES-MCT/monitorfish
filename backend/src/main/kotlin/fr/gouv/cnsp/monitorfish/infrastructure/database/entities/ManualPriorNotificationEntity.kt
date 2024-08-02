@@ -22,7 +22,7 @@ data class ManualPriorNotificationEntity(
     val vesselId: Int,
 
     @Column(name = "cfr")
-    val cfr: String,
+    val cfr: String?,
 
     @Column(name = "created_at")
     val createdAt: ZonedDateTime,
@@ -70,13 +70,12 @@ data class ManualPriorNotificationEntity(
                     priorNotification.updatedAt
                 }
 
-                val cfr = requireNotNull(pnoLogbookMessage.internalReferenceNumber) { "`cfr` is null." }
                 val sentAt = requireNotNull(priorNotification.sentAt) { "`sentAt` is null." }
                 val vesselId = requireNotNull(pnoLogbookMessage.vesselId) { "`vesselId` is null." }
 
                 return ManualPriorNotificationEntity(
                     reportId = pnoLogbookMessage.reportId,
-                    cfr = cfr,
+                    cfr = pnoLogbookMessage.internalReferenceNumber,
                     createdAt = createdAt,
                     didNotFishAfterZeroNotice = priorNotification.didNotFishAfterZeroNotice,
                     flagState = pnoLogbookMessage.flagState,

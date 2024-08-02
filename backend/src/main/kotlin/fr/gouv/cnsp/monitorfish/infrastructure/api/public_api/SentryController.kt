@@ -1,17 +1,28 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.public_api
 
-import org.springframework.boot.info.BuildProperties
+import fr.gouv.cnsp.monitorfish.config.SentryConfig
+import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class VersionController(val buildProperties: BuildProperties) {
+@RequestMapping("/api/v1/test")
+class SentryController(val sentryConfig: SentryConfig) {
+    private val logger = LoggerFactory.getLogger(SentryController::class.java)
 
-    @GetMapping("/version")
-    fun version(): Map<String, String> {
+    // This route is for testing purpose only
+    // Used to test that errors are correctly sent to sentry
+    @GetMapping("/trigger_sentry_error")
+    fun triggerError(): Map<String, Boolean?> {
+        try {
+            throw Exception("Sentry test error triggered from get request.")
+        } catch (e: Exception) {
+            logger.error(e.message, e)
+        }
+
         return mapOf(
-            "version" to buildProperties.version,
-            "commit" to buildProperties.get("commit.hash"),
+            "enabled" to sentryConfig.enabled,
         )
     }
 }

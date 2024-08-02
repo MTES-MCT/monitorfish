@@ -20,32 +20,30 @@ import { TagBar } from '../shared/TagBar'
 type PriorNotificationCardLayoutProps = Readonly<{
   applicableState?: PriorNotification.State
   bodyChildren?: React.ReactNode
+  detail: PriorNotification.PriorNotificationDetail | undefined
   footerChildren?: React.ReactNode
   isLoading?: boolean
-  priorNotificationDetail?: PriorNotification.PriorNotificationDetail
 }>
 export function PriorNotificationCard({
   applicableState,
   bodyChildren,
+  detail,
   footerChildren,
-  isLoading = false,
-  priorNotificationDetail
+  isLoading = false
 }: PriorNotificationCardLayoutProps) {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
 
-  const isInvalidated = priorNotificationDetail?.logbookMessage?.message?.isInvalidated
-  const isPendingVerification = priorNotificationDetail?.state === PriorNotification.State.PENDING_VERIFICATION
-  const hasDesignatedPorts = priorNotificationDetail?.logbookMessage?.message?.pnoTypes?.find(
-    type => type.hasDesignatedPorts
-  )
+  const isInvalidated = detail?.logbookMessage.message.isInvalidated
+  const hasDesignatedPorts = detail?.logbookMessage.message.pnoTypes?.find(type => type.hasDesignatedPorts)
+  const isPendingVerification = detail?.state === PriorNotification.State.PENDING_VERIFICATION
 
   const close = () => {
     dispatch(priorNotificationActions.closePriorNotificationCard())
     dispatch(priorNotificationActions.closePriorNotificationForm())
   }
 
-  if (!priorNotificationDetail || isLoading) {
+  if (!detail || isLoading) {
     return (
       <Wrapper $isSuperUser={isSuperUser}>
         <Background onClick={close} />
@@ -63,23 +61,21 @@ export function PriorNotificationCard({
 
       <Card>
         <FrontendErrorBoundary>
-          <Header onClose={close} priorNotificationDetail={priorNotificationDetail} />
+          <Header detail={detail} onClose={close} />
 
           <Body>
             <TagBar
               isInvalidated={isInvalidated}
-              isVesselUnderCharter={priorNotificationDetail.isVesselUnderCharter}
+              isVesselUnderCharter={detail.isVesselUnderCharter}
               isZeroNotice={isZeroNotice(
                 getPriorNotificationFishingCatchesFromLogbookMessageFishingCatches(
-                  priorNotificationDetail.logbookMessage.message.catchOnboard
+                  detail.logbookMessage.message.catchOnboard
                 )
               )}
-              riskFactor={priorNotificationDetail.riskFactor}
+              riskFactor={detail.riskFactor}
               state={applicableState}
-              tripSegments={priorNotificationDetail.logbookMessage.tripSegments}
-              types={getPriorNotificationTypesFromLogbookMessagePnoTypes(
-                priorNotificationDetail.logbookMessage.message.pnoTypes
-              )}
+              tripSegments={detail.logbookMessage.tripSegments}
+              types={getPriorNotificationTypesFromLogbookMessagePnoTypes(detail.logbookMessage.message.pnoTypes)}
             />
 
             {isPendingVerification && <Intro>Le préavis doit être vérifié par le CNSP avant sa diffusion.</Intro>}
@@ -91,8 +87,8 @@ export function PriorNotificationCard({
 
             <LogbookMessage
               isFirst
-              isManuallyCreated={priorNotificationDetail.isManuallyCreated ?? false}
-              logbookMessage={priorNotificationDetail.logbookMessage}
+              isManuallyCreated={detail.isManuallyCreated ?? false}
+              logbookMessage={detail.logbookMessage}
             />
 
             <hr />
@@ -105,10 +101,7 @@ export function PriorNotificationCard({
               Fermer
             </Button>
 
-            <DownloadButton
-              pnoLogbookMessage={priorNotificationDetail.logbookMessage}
-              reportId={priorNotificationDetail.reportId}
-            />
+            <DownloadButton pnoLogbookMessage={detail.logbookMessage} reportId={detail.reportId} />
 
             {footerChildren}
           </Footer>

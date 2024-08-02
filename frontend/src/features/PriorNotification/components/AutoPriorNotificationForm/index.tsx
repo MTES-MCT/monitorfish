@@ -13,7 +13,7 @@ export function AutoPriorNotificationForm() {
   )
 
   if (!editedAutoPriorNotificationInitialFormValues || !openedPriorNotificationDetail) {
-    return <PriorNotificationCard isLoading />
+    return <PriorNotificationCard detail={undefined} isLoading />
   }
 
   return (
@@ -21,8 +21,8 @@ export function AutoPriorNotificationForm() {
       bodyChildren={
         <Form detail={openedPriorNotificationDetail} initialFormValues={editedAutoPriorNotificationInitialFormValues} />
       }
+      detail={openedPriorNotificationDetail}
       footerChildren={<Footer detail={openedPriorNotificationDetail} />}
-      priorNotificationDetail={openedPriorNotificationDetail}
     />
   )
 }

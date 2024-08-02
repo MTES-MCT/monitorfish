@@ -277,6 +277,7 @@
                     "faoZone": null,
                     "isBeingSent": false,
                     "isInVerificationScope": false,
+                    "isInvalidated": true,
                     "isSent": false,
                     "isVerified": true,
                     "note": 0,

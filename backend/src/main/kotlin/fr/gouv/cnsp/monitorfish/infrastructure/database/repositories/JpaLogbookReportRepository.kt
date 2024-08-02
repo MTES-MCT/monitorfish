@@ -22,7 +22,6 @@ import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.stereotype.Repository
-import java.time.ZoneOffset
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 
@@ -367,7 +366,7 @@ class JpaLogbookReportRepository(
         val logbookReportEntities =
             dbLogbookReportRepository.findEnrichedPnoReferenceAndRelatedOperationsByReportId(
                 reportId,
-                operationDate.withZoneSameInstant(ZoneOffset.UTC).toString(),
+                operationDate.withZoneSameInstant(UTC).toString(),
             )
         if (logbookReportEntities.isEmpty()) {
             throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
@@ -394,7 +393,7 @@ class JpaLogbookReportRepository(
         val logbookReportEntities =
             dbLogbookReportRepository.findEnrichedPnoReferenceAndRelatedOperationsByReportId(
                 reportId,
-                operationDate.withZoneSameInstant(ZoneOffset.UTC).toString(),
+                operationDate.withZoneSameInstant(UTC).toString(),
             )
         if (logbookReportEntities.isEmpty()) {
             throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
@@ -415,6 +414,32 @@ class JpaLogbookReportRepository(
                 pnoMessage.isBeingSent = false
                 pnoMessage.isVerified = false
                 pnoMessage.isSent = false
+
+                val nextMessage = objectMapper.writeValueAsString(pnoMessage)
+
+                val updatedEntity = logbookReportEntity.copy(message = nextMessage)
+
+                dbLogbookReportRepository.save(updatedEntity)
+            }
+    }
+
+    @Transactional
+    override fun invalidate(reportId: String, operationDate: ZonedDateTime) {
+        val logbookReportEntities =
+            dbLogbookReportRepository.findEnrichedPnoReferenceAndRelatedOperationsByReportId(
+                reportId,
+                operationDate.withZoneSameInstant(UTC).toString(),
+            )
+        if (logbookReportEntities.isEmpty()) {
+            throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
+        }
+
+        // We need to update both DAT and related COR operations (which also covers orphan COR cases)
+        logbookReportEntities
+            .filter { it.operationType in listOf(LogbookOperationType.DAT, LogbookOperationType.COR) }
+            .map { logbookReportEntity ->
+                val pnoMessage = objectMapper.readValue(logbookReportEntity.message, PNO::class.java)
+                pnoMessage.isInvalidated = true
 
                 val nextMessage = objectMapper.writeValueAsString(pnoMessage)
 

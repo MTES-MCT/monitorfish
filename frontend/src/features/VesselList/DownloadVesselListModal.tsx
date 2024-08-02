@@ -99,7 +99,7 @@ export function DownloadVesselListModal({ filteredVessels, isOpen, setIsOpen }) 
           switch (valueChecked) {
             case CSVOptions.flagState.code:
               filteredVesselObject[CSVOptions.flagState.code] = vessel?.vesselProperties?.flagState
-                ? countries.getName(vessel?.vesselProperties?.flagState, 'fr') ?? ''
+                ? (countries.getName(vessel?.vesselProperties?.flagState, 'fr') ?? '')
                 : ''
               break
             default: {

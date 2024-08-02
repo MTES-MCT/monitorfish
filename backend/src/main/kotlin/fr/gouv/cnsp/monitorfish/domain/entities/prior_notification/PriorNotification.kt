@@ -52,7 +52,7 @@ data class PriorNotification(
             return when {
                 isInVerificationScope == null || isVerified == null || isSent == null || isBeingSent == null -> null
                 !isInVerificationScope && !isVerified && !isSent && !isBeingSent -> PriorNotificationState.OUT_OF_VERIFICATION_SCOPE
-                !isInVerificationScope && !isVerified && !isSent && isBeingSent -> PriorNotificationState.AUTO_SEND_IN_PROGRESS
+                !isInVerificationScope && !isVerified && !isSent && isBeingSent -> PriorNotificationState.PENDING_AUTO_SEND
                 !isInVerificationScope && !isVerified && isSent && !isBeingSent -> PriorNotificationState.AUTO_SEND_DONE
                 !isInVerificationScope && isVerified && !isSent && !isBeingSent -> PriorNotificationState.FAILED_SEND
                 !isInVerificationScope && isVerified && !isSent && isBeingSent -> PriorNotificationState.PENDING_SEND

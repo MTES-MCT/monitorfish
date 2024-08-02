@@ -23,8 +23,7 @@ export function StateCell({ isInvalidated, state }: SendButtonCellProps) {
 
   return (
     <Wrapper $state={state} title={PriorNotification.STATE_LABEL[state]}>
-      {!!state &&
-      [PriorNotification.State.AUTO_SEND_IN_PROGRESS, PriorNotification.State.PENDING_SEND].includes(state) ? (
+      {!!state && [PriorNotification.State.PENDING_AUTO_SEND, PriorNotification.State.PENDING_SEND].includes(state) ? (
         <SpinnerWrapper>
           <Icon.Send />
           <SpinnerBorder />

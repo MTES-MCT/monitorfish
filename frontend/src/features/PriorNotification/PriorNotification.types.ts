@@ -171,15 +171,13 @@ export namespace PriorNotification {
   export enum State {
     /** "Envoi auto. fait". */
     AUTO_SEND_DONE = 'AUTO_SEND_DONE',
-    /** "Envoi auto en cours". */
-    AUTO_SEND_IN_PROGRESS = 'AUTO_SEND_IN_PROGRESS',
     /** "Envoi auto. demandé". */
     AUTO_SEND_REQUESTED = 'AUTO_SEND_REQUESTED',
     /** "Échec de diffusion". */
     FAILED_SEND = 'FAILED_SEND',
     /** "Hors vérification". */
     OUT_OF_VERIFICATION_SCOPE = 'OUT_OF_VERIFICATION_SCOPE',
-    /** "Envoi auto en cours". */
+    /** "Envoi auto. en cours". */
     PENDING_AUTO_SEND = 'PENDING_AUTO_SEND',
     /** "Diffusion en cours". */
     PENDING_SEND = 'PENDING_SEND',
@@ -190,11 +188,10 @@ export namespace PriorNotification {
   }
   export const STATE_LABEL: Record<State, string> = {
     AUTO_SEND_DONE: 'Envoi auto. fait',
-    AUTO_SEND_IN_PROGRESS: 'Envoi auto en cours',
     AUTO_SEND_REQUESTED: 'Envoi auto. demandé',
     FAILED_SEND: 'Échec de diffusion',
     OUT_OF_VERIFICATION_SCOPE: 'Hors vérification',
-    PENDING_AUTO_SEND: 'Envoi auto en cours',
+    PENDING_AUTO_SEND: 'Envoi auto. en cours',
     PENDING_SEND: 'Diffusion en cours',
     PENDING_VERIFICATION: 'À vérifier (CNSP)',
     VERIFIED_AND_SENT: 'Vérifié et diffusé'

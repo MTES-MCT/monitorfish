@@ -44,7 +44,11 @@ enum class LogbookMessageTypeMapping(private val clazz: Class<out LogbookMessage
 
     companion object {
         fun getClassFromName(messageType: String): Class<out LogbookMessageValue> {
-            return values().first { it.name == messageType }.getImplementation()
+            return try {
+                entries.first { it.name == messageType }.getImplementation()
+            } catch (e: Exception) {
+                throw NoSuchElementException("Message type $messageType not found", e)
+            }
         }
     }
 }

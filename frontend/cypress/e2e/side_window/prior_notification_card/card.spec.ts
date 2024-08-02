@@ -171,7 +171,7 @@ context('Side Window > Prior Notification Card > Card', () => {
         state: PriorNotification.State.PENDING_SEND
       })
 
-      cy.contains('En cours de diffusion')
+      cy.contains('Diffusion en cours')
 
       // -----------------------------------------------------------------------
       // List
@@ -180,7 +180,7 @@ context('Side Window > Prior Notification Card > Card', () => {
       cy.fill('Rechercher un navire', 'LE POISSON AMBULANT')
 
       cy.getTableRowById('FAKE_OPERATION_111' as unknown as number)
-        .find('span[title="En cours de diffusion"]')
+        .find('span[title="Diffusion en cours"]')
         .should('be.visible')
     })
   })

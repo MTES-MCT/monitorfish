@@ -34,7 +34,7 @@ data class PriorNotification(
     var lastControlDateTime: ZonedDateTime?,
 ) {
     /** Each prior notification and each of its updates have a unique fingerprint. */
-    val fingerprint: String = listOf(reportId, updatedAt).joinToString(separator = ".")
+    val fingerprint: String = listOf(reportId, updatedAt, state).joinToString(separator = ".")
     private val logger = LoggerFactory.getLogger(PriorNotification::class.java)
 
     val state: PriorNotificationState?

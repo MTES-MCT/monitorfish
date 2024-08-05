@@ -205,10 +205,9 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
 
             <Form isInvalidated={isInvalidated} />
 
-            {!!editedPriorNotificationDetail && (
+            {!!editedPriorNotificationDetail && !isInvalidated && (
               <InvalidateButton
                 accent={Accent.SECONDARY}
-                disabled={isInvalidated}
                 Icon={Icon.Invalid}
                 onClick={() => setIsInvalidatingPriorNotificationDialog(true)}
                 title="Invalider le préavis"

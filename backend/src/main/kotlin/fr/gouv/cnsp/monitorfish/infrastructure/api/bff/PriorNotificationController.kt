@@ -292,9 +292,9 @@ class PriorNotificationController(
         return PriorNotificationDetailDataOutput.fromPriorNotification(updatedPriorNotification)
     }
 
-    @GetMapping("/{reportId}/invalidate")
+    @PutMapping("/{reportId}/invalidate")
     @Operation(summary = "Invalidate a prior notification by its `reportId`")
-    fun updateNote(
+    fun invalidate(
         @PathParam("Logbook message `reportId`")
         @PathVariable(name = "reportId")
         reportId: String,

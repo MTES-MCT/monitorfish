@@ -217,10 +217,9 @@ export function PriorNotificationCard() {
               </>
             </Formik>
 
-            {isSuperUser && (
+            {isSuperUser && !isInvalidated && (
               <InvalidateButton
                 accent={Accent.SECONDARY}
-                disabled={isInvalidated}
                 Icon={Icon.Invalid}
                 onClick={() => setIsInvalidatingPriorNotificationDialog(true)}
                 title="Invalider le préavis"

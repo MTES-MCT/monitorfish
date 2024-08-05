@@ -2,6 +2,7 @@ import { RTK_FORCE_REFETCH_QUERY_OPTIONS, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS }
 import { ErrorWall } from '@components/ErrorWall'
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { LogbookMessage } from '@features/Logbook/components/VesselLogbook/LogbookMessages/messages/LogbookMessage'
+import { InvalidatePriorNotificationDialog } from '@features/PriorNotification/components/InvalidatePriorNotificationDialog'
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import {
   useGetPriorNotificationDetailQuery,
@@ -61,6 +62,7 @@ export function PriorNotificationCard() {
   )
 
   const [isLoading, setIsLoading] = useState(false)
+  const [isInvalidatingPriorNotificationDialog, setIsInvalidatingPriorNotificationDialog] = useState(false)
   const isInvalidated = priorNotificationDetail?.logbookMessage?.message?.isInvalidated
   const isPendingSend =
     !!priorNotificationDetail?.state &&
@@ -98,6 +100,7 @@ export function PriorNotificationCard() {
       reportId: openedPriorNotificationIdentity.reportId
     })
 
+    setIsInvalidatingPriorNotificationDialog(false)
     setIsLoading(false)
   }
 
@@ -219,7 +222,7 @@ export function PriorNotificationCard() {
                 disabled={isInvalidated}
                 Icon={Icon.Invalid}
                 iconSize={17}
-                onClick={invalidate}
+                onClick={() => setIsInvalidatingPriorNotificationDialog(true)}
                 title="Invalider le préavis"
               >
                 Invalider le préavis
@@ -253,6 +256,12 @@ export function PriorNotificationCard() {
           </Footer>
         </FrontendErrorBoundary>
       </Card>
+      {isInvalidatingPriorNotificationDialog && (
+        <InvalidatePriorNotificationDialog
+          onCancel={() => setIsInvalidatingPriorNotificationDialog(false)}
+          onConfirm={invalidate}
+        />
+      )}
     </Wrapper>
   )
 }

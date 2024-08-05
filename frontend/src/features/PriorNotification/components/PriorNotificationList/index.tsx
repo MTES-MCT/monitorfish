@@ -32,7 +32,7 @@ import { TableBodyLoader } from './TableBodyLoader'
 import { getTitle } from './utils'
 import { useGetPriorNotificationsQuery, useGetPriorNotificationsToVerifyQuery } from '../../priorNotificationApi'
 import { priorNotificationActions } from '../../slice'
-import { AutoPriorNotificationForm } from '../AutoPriorNotificationForm'
+import { LogbookPriorNotificationForm } from '../LogbookPriorNotificationForm'
 import { ManualPriorNotificationForm } from '../ManualPriorNotificationForm'
 import { PriorNotificationCard } from '../PriorNotificationCard'
 
@@ -243,7 +243,7 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
         />
       )}
       {isPriorNotificationFormOpen && !openedPriorNotificationDetail?.isManuallyCreated && (
-        <AutoPriorNotificationForm key={openedPriorNotificationDetail?.fingerprint} />
+        <LogbookPriorNotificationForm key={openedPriorNotificationDetail?.fingerprint} />
       )}
       {isPriorNotificationFormOpen &&
         (!openedPriorNotificationDetail || openedPriorNotificationDetail?.isManuallyCreated) && (

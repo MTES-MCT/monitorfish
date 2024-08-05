@@ -9,10 +9,10 @@ import { Footer } from './Footer'
 import { Form } from './Form'
 import { PriorNotificationCard } from '../PriorNotificationCard'
 
-export function AutoPriorNotificationForm() {
+export function LogbookPriorNotificationForm() {
   const dispatch = useMainAppDispatch()
-  const editedAutoPriorNotificationInitialFormValues = useMainAppSelector(
-    state => state.priorNotification.editedAutoPriorNotificationInitialFormValues
+  const editedLogbookPriorNotificationInitialFormValues = useMainAppSelector(
+    state => state.priorNotification.editedLogbookPriorNotificationInitialFormValues
   )
   const openedPriorNotificationDetail = useMainAppSelector(
     state => state.priorNotification.openedPriorNotificationDetail
@@ -30,14 +30,17 @@ export function AutoPriorNotificationForm() {
     await dispatch(verifyAndSendPriorNotification(identifier, false))
   }
 
-  if (!editedAutoPriorNotificationInitialFormValues || !openedPriorNotificationDetail || isLoading) {
+  if (!editedLogbookPriorNotificationInitialFormValues || !openedPriorNotificationDetail || isLoading) {
     return <PriorNotificationCard detail={undefined} isLoading />
   }
 
   return (
     <PriorNotificationCard
       bodyChildren={
-        <Form detail={openedPriorNotificationDetail} initialFormValues={editedAutoPriorNotificationInitialFormValues} />
+        <Form
+          detail={openedPriorNotificationDetail}
+          initialFormValues={editedLogbookPriorNotificationInitialFormValues}
+        />
       }
       detail={openedPriorNotificationDetail}
       footerChildren={<Footer detail={openedPriorNotificationDetail} onVerifyAndSend={verifyAndSend} />}

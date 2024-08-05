@@ -1,4 +1,4 @@
-import { openAutoPriorNotificationForm } from '@features/PriorNotification/useCases/openAutoPriorNotificationForm'
+import { openLogbookPriorNotificationForm } from '@features/PriorNotification/useCases/openLogbookPriorNotificationForm'
 import { openManualPriorNotificationForm } from '@features/PriorNotification/useCases/openManualPriorNotificationForm'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
@@ -31,7 +31,7 @@ export function ActionButtonsCell({ priorNotification }: ActionButtonsCellProps)
     }
 
     dispatch(
-      openAutoPriorNotificationForm(
+      openLogbookPriorNotificationForm(
         { operationDate: priorNotification.operationDate, reportId: priorNotification.id },
         priorNotification.fingerprint
       )

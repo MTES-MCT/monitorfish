@@ -49,13 +49,13 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(CREATE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
     }),
 
-    getAutoPriorNotificationFormData: builder.query<
-      PriorNotification.AutoPriorNotificationData,
+    getLogbookPriorNotificationFormData: builder.query<
+      PriorNotification.LogbookPriorNotificationData,
       PriorNotification.PriorNotificationIdentifier
     >({
       providesTags: (_, __, { reportId }) => [{ id: reportId, type: RtkCacheTagType.PriorNotification }],
       query: ({ operationDate, reportId }) =>
-        getUrlOrPathWithQueryParams(`/prior_notifications/auto/${reportId}/data`, { operationDate }),
+        getUrlOrPathWithQueryParams(`/prior_notifications/logbook/${reportId}/data`, { operationDate }),
       transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_DATA_ERROR_MESSAGE, response)
     }),
 
@@ -142,10 +142,10 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(INVALIDATE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
     }),
 
-    updateAutoPriorNotification: builder.mutation<
-      PriorNotification.AutoPriorNotificationData,
+    updateLogbookPriorNotification: builder.mutation<
+      PriorNotification.LogbookPriorNotificationData,
       {
-        data: PriorNotification.AutoPriorNotificationData
+        data: PriorNotification.LogbookPriorNotificationData
         operationDate: string
         reportId: string
       }
@@ -153,7 +153,7 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       query: ({ data, operationDate, reportId }) => ({
         body: data,
         method: 'PUT',
-        url: getUrlOrPathWithQueryParams(`/prior_notifications/auto/${reportId}`, { operationDate })
+        url: getUrlOrPathWithQueryParams(`/prior_notifications/logbook/${reportId}`, { operationDate })
       }),
       transformErrorResponse: response => new FrontendApiError(UPDATE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
     }),

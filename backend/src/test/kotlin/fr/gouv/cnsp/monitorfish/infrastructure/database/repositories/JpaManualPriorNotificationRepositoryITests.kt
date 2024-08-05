@@ -131,7 +131,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
 
         val secondResultVessels = secondResult.mapNotNull {
             jpaVesselRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageTyped.logbookMessage.internalReferenceNumber!!,
+                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
             )
         }
         assertThat(secondResultVessels).hasSize(secondResult.size)

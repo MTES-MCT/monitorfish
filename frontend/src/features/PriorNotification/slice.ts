@@ -8,7 +8,7 @@ import type { ListFilter } from './components/PriorNotificationList/types'
 import type { Undefine } from '@mtes-mct/monitor-ui'
 
 export interface PriorNotificationState {
-  editedAutoPriorNotificationInitialFormValues: PriorNotification.AutoPriorNotificationData | undefined
+  editedLogbookPriorNotificationInitialFormValues: PriorNotification.LogbookPriorNotificationData | undefined
   editedManualPriorNotificationComputedValues: Undefine<PriorNotification.ManualComputedValues> | undefined
   editedManualPriorNotificationInitialFormValues: ManualPriorNotificationFormValues | undefined
   isPriorNotificationCardOpen: boolean
@@ -18,7 +18,7 @@ export interface PriorNotificationState {
   openedPriorNotificationDetail: PriorNotification.PriorNotificationDetail | undefined
 }
 const INITIAL_STATE: PriorNotificationState = {
-  editedAutoPriorNotificationInitialFormValues: undefined,
+  editedLogbookPriorNotificationInitialFormValues: undefined,
   editedManualPriorNotificationComputedValues: undefined,
   editedManualPriorNotificationInitialFormValues: undefined,
   isPriorNotificationCardOpen: false,
@@ -37,7 +37,7 @@ const priorNotificationSlice = createSlice({
     },
 
     closePriorNotificationForm(state) {
-      state.editedAutoPriorNotificationInitialFormValues = undefined
+      state.editedLogbookPriorNotificationInitialFormValues = undefined
       state.editedManualPriorNotificationComputedValues = undefined
       state.editedManualPriorNotificationInitialFormValues = undefined
       state.isPriorNotificationFormOpen = false
@@ -59,18 +59,11 @@ const priorNotificationSlice = createSlice({
       }
     },
 
-    setEditedAutoPriorNotificationInitialFormValues(
+    setEditedLogbookPriorNotificationInitialFormValues(
       state,
-      action: PayloadAction<PriorNotification.AutoPriorNotificationData>
+      action: PayloadAction<PriorNotification.LogbookPriorNotificationData>
     ) {
-      state.editedAutoPriorNotificationInitialFormValues = action.payload
-    },
-
-    setEditedManualPriorNotificationComputedValues(
-      state,
-      action: PayloadAction<Undefine<PriorNotification.ManualComputedValues>>
-    ) {
-      state.editedManualPriorNotificationComputedValues = action.payload
+      state.editedLogbookPriorNotificationInitialFormValues = action.payload
     },
 
     setEditedManualPriorNotificationInitialFormValues(state, action: PayloadAction<ManualPriorNotificationFormValues>) {
@@ -82,6 +75,13 @@ const priorNotificationSlice = createSlice({
         ...state.listFilterValues,
         ...action.payload
       }
+    },
+
+    setManualPriorNotificationComputedValues(
+      state,
+      action: PayloadAction<Undefine<PriorNotification.ManualComputedValues>>
+    ) {
+      state.editedManualPriorNotificationComputedValues = action.payload
     },
 
     setOpenedPriorNotification(state, action: PayloadAction<PriorNotification.PriorNotificationDetail>) {

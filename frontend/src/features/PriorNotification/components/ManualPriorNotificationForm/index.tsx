@@ -59,7 +59,7 @@ export function ManualPriorNotificationForm() {
 
     setIsLoading(true)
 
-    await dispatch(verifyAndSendPriorNotification(identifier, openedPriorNotificationDetail?.fingerprint, true))
+    await dispatch(verifyAndSendPriorNotification(identifier, true))
   }
 
   if (!editedManualPriorNotificationInitialFormValues || isLoading) {

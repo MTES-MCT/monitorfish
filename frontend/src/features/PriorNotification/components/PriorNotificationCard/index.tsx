@@ -7,13 +7,14 @@ import {
   isZeroNotice
 } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { Accent, Button } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Level } from '@mtes-mct/monitor-ui'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import styled from 'styled-components'
 import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
 
 import { Header } from './Header'
 import { priorNotificationActions } from '../../slice'
+import { CardBanner } from '../shared/CardBanner'
 import { DownloadButton } from '../shared/DownloadButton'
 import { TagBar } from '../shared/TagBar'
 
@@ -60,6 +61,17 @@ export function PriorNotificationCard({
       <Background onClick={close} />
 
       <Card>
+        {detail?.state === PriorNotification.State.PENDING_SEND && (
+          <CardBanner isCollapsible level={Level.WARNING} top="100px">
+            Le préavis est en cours de diffusion.
+          </CardBanner>
+        )}
+        {detail?.state === PriorNotification.State.PENDING_AUTO_SEND && (
+          <CardBanner isCollapsible level={Level.WARNING} top="100px">
+            Le préavis est en cours d’envoi aux unités qui l’ont demandé.
+          </CardBanner>
+        )}
+
         <FrontendErrorBoundary>
           <Header detail={detail} onClose={close} />
 
@@ -136,6 +148,7 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
+  position: relative;
   width: 560px;
 `
 

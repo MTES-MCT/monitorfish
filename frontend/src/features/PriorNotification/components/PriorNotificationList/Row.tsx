@@ -50,7 +50,7 @@ export function Row({ row }: RowProps) {
           <ExpandableRowCell
             key={cell.id}
             $hasRightBorder={['types', 'state'].includes(cell.column.id)}
-            isInvalidated={!!row.original.isInvalidated}
+            $isInvalidated={!!row.original.isInvalidated}
             onClick={() => row.toggleExpanded()}
             style={getExpandableRowCellCustomStyle(cell.column.id)}
           >
@@ -60,7 +60,7 @@ export function Row({ row }: RowProps) {
       </TableWithSelectableRows.BodyTr>
 
       {row.getIsExpanded() && (
-        <ExpandedRow data-id={`${row.id}-expanded`} isInvalidated={!!row.original.isInvalidated}>
+        <ExpandedRow $isInvalidated={!!row.original.isInvalidated} data-id={`${row.id}-expanded`}>
           <ExpandedRowCell />
           <ExpandedRowCell>
             <p>
@@ -216,22 +216,22 @@ const StyledLi = styled.li`
 `
 
 const ExpandableRowCell = styled(TableWithSelectableRows.Td)<{
-  isInvalidated: boolean
+  $isInvalidated: boolean
 }>`
   cursor: pointer;
   user-select: none;
-  color: ${p => (p.isInvalidated ? p.theme.color.slateGray : p.theme.color.charcoal)};
-  background: ${p => (p.isInvalidated ? p.theme.color.gainsboro : 'inherit')};
+  color: ${p => (p.$isInvalidated ? p.theme.color.slateGray : p.theme.color.charcoal)};
+  background: ${p => (p.$isInvalidated ? p.theme.color.gainsboro : 'inherit')};
 `
 
 // TODO Add this feature in monitor-ui.
 const ExpandedRow = styled(TableWithSelectableRows.BodyTr)<{
-  isInvalidated: boolean
+  $isInvalidated: boolean
 }>`
   > td {
     overflow: hidden !important;
-    color: ${p => (p.isInvalidated ? p.theme.color.slateGray : p.theme.color.charcoal)};
-    background: ${p => (p.isInvalidated ? p.theme.color.gainsboro : 'inherit')};
+    color: ${p => (p.$isInvalidated ? p.theme.color.slateGray : p.theme.color.charcoal)};
+    background: ${p => (p.$isInvalidated ? p.theme.color.gainsboro : 'inherit')};
   }
 
   &:hover {

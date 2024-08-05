@@ -409,7 +409,7 @@ class PriorNotificationControllerITests {
 
         // When
         api.perform(
-            get(
+            put(
                 "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}/invalidate?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}&isManuallyCreated=false",
             ),
         )

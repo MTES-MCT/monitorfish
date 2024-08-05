@@ -243,7 +243,7 @@ context('Side Window > Prior Notification Card > Card', () => {
 
     // Then
     cy.get('.Wrapper').contains('Invalidé')
-    cy.get('[title="Invalider le préavis"]').should('be.disabled')
+    cy.get('[title="Invalider le préavis"]').should('not.exist')
 
     cy.clickButton('Fermer')
 

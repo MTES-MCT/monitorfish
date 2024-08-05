@@ -551,7 +551,7 @@ context('Side Window > Prior Notification Form > Form', () => {
     cy.clickButton('Invalider le préavis')
     cy.clickButton('Confirmer l’invalidation')
     cy.get('.Wrapper').contains('Invalidé')
-    cy.get('[title="Invalider le préavis"]').should('be.disabled')
+    cy.get('[title="Invalider le préavis"]').should('not.exist')
 
     // Then
     cy.clickButton('Fermer')

@@ -47,7 +47,7 @@ export function Form({ isInvalidated }: FormProps) {
 
   return (
     <>
-      <FormikVesselSelect disabled={isInvalidated} onChange={onChange} />
+      <FormikVesselSelect onChange={onChange} readOnly={isInvalidated} />
 
       <FormikSelect
         isCleanable={false}

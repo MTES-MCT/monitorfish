@@ -9,10 +9,10 @@ import styled from 'styled-components'
 import type { VesselIdentity } from 'domain/entities/vessel/types'
 
 type FormikVesselSelectProps = {
-  disabled?: boolean | undefined
   onChange: (nextVessel: VesselIdentity | undefined) => void
+  readOnly?: boolean | undefined
 }
-export function FormikVesselSelect({ disabled, onChange }: FormikVesselSelectProps) {
+export function FormikVesselSelect({ onChange, readOnly }: FormikVesselSelectProps) {
   const defaultValueRef = useRef<VesselIdentity | undefined>(undefined)
 
   const dispatch = useMainAppDispatch()
@@ -94,7 +94,7 @@ export function FormikVesselSelect({ disabled, onChange }: FormikVesselSelectPro
         key={key}
         baseRef={newWindowContainerRef}
         defaultValue={defaultValueRef.current}
-        disabled={isLoading || disabled}
+        disabled={isLoading || readOnly}
         hasError={!!meta.error}
         isVesselIdRequiredFromResults
         onChange={handleVesselSearchChange}

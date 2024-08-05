@@ -50,6 +50,7 @@ export function Row({ row }: RowProps) {
           <ExpandableRowCell
             key={cell.id}
             $hasRightBorder={['types', 'state'].includes(cell.column.id)}
+            $isInvalidated={!!row.original.isInvalidated}
             onClick={() => row.toggleExpanded()}
             style={getExpandableRowCellCustomStyle(cell.column.id)}
           >
@@ -59,7 +60,7 @@ export function Row({ row }: RowProps) {
       </TableWithSelectableRows.BodyTr>
 
       {row.getIsExpanded() && (
-        <ExpandedRow data-id={`${row.id}-expanded`}>
+        <ExpandedRow $isInvalidated={!!row.original.isInvalidated} data-id={`${row.id}-expanded`}>
           <ExpandedRowCell />
           <ExpandedRowCell>
             <p>
@@ -180,6 +181,11 @@ export function Row({ row }: RowProps) {
           </ExpandedRowCell>
           <ExpandedRowCell colSpan={2} style={{ paddingLeft: 0, paddingRight: 0, paddingTop: 12 }}>
             <>
+              {priorNotification.isInvalidated && (
+                <Tag backgroundColor={THEME.color.maximumRed} color={THEME.color.white} style={{ marginBottom: 16 }}>
+                  Invalidé
+                </Tag>
+              )}
               {!!priorNotification.state && (
                 <FixedTag
                   backgroundColor={getColorsFromState(priorNotification.state).backgroundColor}
@@ -209,16 +215,23 @@ const StyledLi = styled.li`
   white-space: nowrap;
 `
 
-// TODO Update in monitor-ui.
-const ExpandableRowCell = styled(TableWithSelectableRows.Td)`
+const ExpandableRowCell = styled(TableWithSelectableRows.Td)<{
+  $isInvalidated: boolean
+}>`
   cursor: pointer;
   user-select: none;
+  color: ${p => (p.$isInvalidated ? p.theme.color.slateGray : p.theme.color.charcoal)};
+  background: ${p => (p.$isInvalidated ? p.theme.color.gainsboro : 'inherit')};
 `
 
 // TODO Add this feature in monitor-ui.
-const ExpandedRow = styled(TableWithSelectableRows.BodyTr)`
+const ExpandedRow = styled(TableWithSelectableRows.BodyTr)<{
+  $isInvalidated: boolean
+}>`
   > td {
     overflow: hidden !important;
+    color: ${p => (p.$isInvalidated ? p.theme.color.slateGray : p.theme.color.charcoal)};
+    background: ${p => (p.$isInvalidated ? p.theme.color.gainsboro : 'inherit')};
   }
 
   &:hover {

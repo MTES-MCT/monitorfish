@@ -17,6 +17,7 @@ export namespace PriorNotification {
     isBeingSent: boolean
     isCorrection: boolean
     isInVerificationScope: boolean
+    isInvalidated: boolean | undefined
     isManuallyCreated: boolean
     isSent: boolean
     isVerified: boolean

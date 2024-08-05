@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTyped
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageAndValue
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
@@ -52,7 +52,7 @@ class GetPriorNotificationUTests {
         given(
             logbookReportRepository.findPriorNotificationByReportId(
                 fakePriorNotification.reportId!!,
-                fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+                fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
             ),
         )
             .willReturn(fakePriorNotification)
@@ -70,14 +70,14 @@ class GetPriorNotificationUTests {
             vesselRepository,
         ).execute(
             fakePriorNotification.reportId!!,
-            fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+            fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
             false,
         )
 
         // Then
-        assertThat(result.logbookMessageTyped.logbookMessage.reportId)
+        assertThat(result.logbookMessageAndValue.logbookMessage.reportId)
             .isEqualTo(fakePriorNotification.reportId!!)
-        assertThat(result.logbookMessageTyped.logbookMessage.referencedReportId).isNull()
+        assertThat(result.logbookMessageAndValue.logbookMessage.referencedReportId).isNull()
     }
 
     @Test
@@ -85,7 +85,7 @@ class GetPriorNotificationUTests {
         val fakeLogbookMessageReferenceReportId = "FAKE_REPORT_ID_1"
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification().copy(
             reportId = null,
-            logbookMessageTyped = LogbookMessageTyped(
+            logbookMessageAndValue = LogbookMessageAndValue(
                 clazz = PNO::class.java,
                 logbookMessage = LogbookMessage(
                     id = 2,
@@ -110,7 +110,7 @@ class GetPriorNotificationUTests {
         given(
             logbookReportRepository.findPriorNotificationByReportId(
                 fakeLogbookMessageReferenceReportId,
-                fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+                fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
             ),
         )
             .willReturn(fakePriorNotification)
@@ -128,14 +128,14 @@ class GetPriorNotificationUTests {
             vesselRepository,
         ).execute(
             fakeLogbookMessageReferenceReportId,
-            fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+            fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
             false,
         )
 
         // Then
         assertThat(result.reportId).isNull()
-        assertThat(result.logbookMessageTyped.logbookMessage.reportId).isNull()
-        assertThat(result.logbookMessageTyped.logbookMessage.referencedReportId)
+        assertThat(result.logbookMessageAndValue.logbookMessage.reportId).isNull()
+        assertThat(result.logbookMessageAndValue.logbookMessage.referencedReportId)
             .isEqualTo(fakeLogbookMessageReferenceReportId)
     }
 }

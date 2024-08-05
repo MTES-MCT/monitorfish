@@ -61,6 +61,9 @@ class PriorNotificationControllerITests {
     @MockBean
     private lateinit var updatePriorNotificationNote: UpdatePriorNotificationNote
 
+    @MockBean
+    private lateinit var invalidatePriorNotification: InvalidatePriorNotification
+
     @Autowired
     private lateinit var objectMapper: ObjectMapper
 
@@ -159,7 +162,7 @@ class PriorNotificationControllerITests {
         given(
             getPriorNotification.execute(
                 fakePriorNotification.reportId!!,
-                fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+                fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
                 true,
             ),
         )
@@ -168,7 +171,7 @@ class PriorNotificationControllerITests {
         // When
         api.perform(
             get(
-                "/bff/v1/prior_notifications/manual/${fakePriorNotification.reportId!!}?operationDate=${fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime}",
+                "/bff/v1/prior_notifications/manual/${fakePriorNotification.reportId!!}?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
             ),
         )
             // Then
@@ -308,7 +311,7 @@ class PriorNotificationControllerITests {
         given(
             getPriorNotification.execute(
                 fakePriorNotification.reportId!!,
-                fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+                fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
                 false,
             ),
         )
@@ -317,7 +320,7 @@ class PriorNotificationControllerITests {
         // When
         api.perform(
             get(
-                "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}?operationDate=${fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime}&isManuallyCreated=false",
+                "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}&isManuallyCreated=false",
             ),
         )
             // Then
@@ -333,7 +336,7 @@ class PriorNotificationControllerITests {
         given(
             verifyAndSendPriorNotification.execute(
                 fakePriorNotification.reportId!!,
-                fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+                fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
                 false,
             ),
         )
@@ -342,7 +345,7 @@ class PriorNotificationControllerITests {
         // When
         api.perform(
             post(
-                "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}/verify_and_send?operationDate=${fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime}&isManuallyCreated=false",
+                "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}/verify_and_send?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}&isManuallyCreated=false",
             ),
         )
             // Then
@@ -353,7 +356,7 @@ class PriorNotificationControllerITests {
     @Test
     fun `update Should update a prior notification note by its reportId`() {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
-        fakePriorNotification.logbookMessageTyped.typedMessage.note = "Test !"
+        fakePriorNotification.logbookMessageAndValue.value.note = "Test !"
 
         // Given
         given(
@@ -373,7 +376,7 @@ class PriorNotificationControllerITests {
         )
         api.perform(
             put(
-                "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}/note?operationDate=${fakePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime}",
+                "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}/note?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
             )
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody),
@@ -384,7 +387,39 @@ class PriorNotificationControllerITests {
             .andExpect(
                 jsonPath(
                     "$.logbookMessage.message.note",
-                    equalTo(fakePriorNotification.logbookMessageTyped.typedMessage.note),
+                    equalTo(fakePriorNotification.logbookMessageAndValue.value.note),
+                ),
+            )
+    }
+
+    @Test
+    fun `invalidate Should invalidate a prior notification by its reportId`() {
+        val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
+        fakePriorNotification.logbookMessageAndValue.value.isInvalidated = null
+
+        // Given
+        given(
+            invalidatePriorNotification.execute(
+                reportId = anyOrNull(),
+                operationDate = anyOrNull(),
+                isManuallyCreated = anyOrNull(),
+            ),
+        )
+            .willReturn(fakePriorNotification)
+
+        // When
+        api.perform(
+            put(
+                "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}/invalidate?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}&isManuallyCreated=false",
+            ),
+        )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.id", equalTo(fakePriorNotification.reportId)))
+            .andExpect(
+                jsonPath(
+                    "$.logbookMessage.message.isInvalidated",
+                    equalTo(fakePriorNotification.logbookMessageAndValue.value.isInvalidated),
                 ),
             )
     }

@@ -29,6 +29,7 @@ class PriorNotificationController(
     private val getPriorNotificationTypes: GetPriorNotificationTypes,
     private val updatePriorNotificationNote: UpdatePriorNotificationNote,
     private val verifyAndSendPriorNotification: VerifyAndSendPriorNotification,
+    private val invalidatePriorNotification: InvalidatePriorNotification,
 ) {
     @GetMapping("")
     @Operation(summary = "Get all prior notifications")
@@ -286,6 +287,28 @@ class PriorNotificationController(
             note = priorNotificationDataInput.note,
             operationDate = operationDate,
             reportId = reportId,
+        )
+
+        return PriorNotificationDetailDataOutput.fromPriorNotification(updatedPriorNotification)
+    }
+
+    @PutMapping("/{reportId}/invalidate")
+    @Operation(summary = "Invalidate a prior notification by its `reportId`")
+    fun invalidate(
+        @PathParam("Logbook message `reportId`")
+        @PathVariable(name = "reportId")
+        reportId: String,
+        @Parameter(description = "Operation date (to optimize SQL query via Timescale).")
+        @RequestParam(name = "operationDate")
+        operationDate: ZonedDateTime,
+        @Parameter(description = "Is the prior notification manually created?")
+        @RequestParam(name = "isManuallyCreated")
+        isManuallyCreated: Boolean,
+    ): PriorNotificationDetailDataOutput {
+        val updatedPriorNotification = invalidatePriorNotification.execute(
+            reportId = reportId,
+            operationDate = operationDate,
+            isManuallyCreated = isManuallyCreated,
         )
 
         return PriorNotificationDetailDataOutput.fromPriorNotification(updatedPriorNotification)

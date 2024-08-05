@@ -1,13 +1,22 @@
-import { Icon } from '@mtes-mct/monitor-ui'
+import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import styled, { keyframes } from 'styled-components'
 
 import { PriorNotification } from '../../../PriorNotification.types'
 import { getColorsFromState } from '../utils'
 
 type SendButtonCellProps = Readonly<{
+  isInvalidated: boolean | undefined
   state: PriorNotification.State | undefined
 }>
-export function StateCell({ state }: SendButtonCellProps) {
+export function StateCell({ isInvalidated, state }: SendButtonCellProps) {
+  if (isInvalidated) {
+    return (
+      <Wrapper title="Préavis invalidé">
+        {isInvalidated && <Icon.Invalid color={THEME.color.maximumRed} size={26} />}
+      </Wrapper>
+    )
+  }
+
   if (!state || state === PriorNotification.State.OUT_OF_VERIFICATION_SCOPE) {
     return <Wrapper title={state ? PriorNotification.STATE_LABEL[state] : undefined}>-</Wrapper>
   }

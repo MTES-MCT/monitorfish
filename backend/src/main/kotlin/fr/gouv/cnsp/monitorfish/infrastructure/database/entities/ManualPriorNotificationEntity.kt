@@ -64,8 +64,8 @@ data class ManualPriorNotificationEntity(
             isUpdate: Boolean = false,
         ): ManualPriorNotificationEntity {
             try {
-                val pnoLogbookMessage = priorNotification.logbookMessageTyped.logbookMessage
-                val pnoLogbookMessageValue = priorNotification.logbookMessageTyped.typedMessage
+                val pnoLogbookMessage = priorNotification.logbookMessageAndValue.logbookMessage
+                val pnoLogbookMessageValue = priorNotification.logbookMessageAndValue.value
                 val createdAt = priorNotification.createdAt ?: ZonedDateTime.now()
                 val updatedAt = if (isUpdate || priorNotification.updatedAt == null) {
                     ZonedDateTime.now()
@@ -129,14 +129,14 @@ data class ManualPriorNotificationEntity(
             )
             // For practical reasons `vessel` can't be `null`, so we temporarily set it to "Navire inconnu"
             val vessel = UNKNOWN_VESSEL
-            val logbookMessageTyped = LogbookMessageTyped(pnoLogbookMessage, PNO::class.java)
+            val logbookMessageAndValue = LogbookMessageAndValue(pnoLogbookMessage, PNO::class.java)
 
             return PriorNotification(
                 authorTrigram = authorTrigram,
                 createdAt = createdAt,
                 didNotFishAfterZeroNotice = didNotFishAfterZeroNotice,
                 isManuallyCreated = true,
-                logbookMessageTyped = logbookMessageTyped,
+                logbookMessageAndValue = logbookMessageAndValue,
                 reportId = reportId,
                 sentAt = sentAt,
                 updatedAt = updatedAt,

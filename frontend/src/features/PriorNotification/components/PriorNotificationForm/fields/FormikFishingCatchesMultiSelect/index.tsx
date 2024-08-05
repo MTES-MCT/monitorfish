@@ -17,7 +17,10 @@ import type { Specy } from '../../../../../../domain/types/specy'
 import type { PriorNotification } from '../../../../PriorNotification.types'
 
 // TODO Is the species name really useful since the Backend fills it?
-export function FormikFishingCatchesMultiSelect() {
+type FormikFishingCatchesMultiSelectProps = {
+  readOnly?: boolean | undefined
+}
+export function FormikFishingCatchesMultiSelect({ readOnly }: FormikFishingCatchesMultiSelectProps) {
   const [input, meta, helper] = useField<PriorNotification.PriorNotificationDataFishingCatch[]>('fishingCatches')
   const { speciesAsOptions } = useGetSpeciesAsOptions()
   const { data: speciesAndGroups } = useGetSpeciesQuery()
@@ -89,6 +92,7 @@ export function FormikFishingCatchesMultiSelect() {
         onChange={add}
         options={filteredSpeciesAsOptions ?? []}
         optionValueKey="code"
+        readOnly={!!readOnly}
         virtualized
       />
 
@@ -98,7 +102,13 @@ export function FormikFishingCatchesMultiSelect() {
             {!BLUEFIN_TUNA_EXTENDED_SPECY_CODES.includes(fishingCatch.specyCode) && (
               <Block>
                 <SingleTag
-                  onDelete={() => remove(fishingCatch.specyCode)}
+                  onDelete={() => {
+                    if (readOnly) {
+                      return
+                    }
+
+                    remove(fishingCatch.specyCode)
+                  }}
                 >{`${fishingCatch.specyCode} – ${fishingCatch.specyName}`}</SingleTag>
 
                 <div>
@@ -107,6 +117,7 @@ export function FormikFishingCatchesMultiSelect() {
                       isLabelHidden
                       label={`Poids (${fishingCatch.specyCode})`}
                       name={`fishingCatches[${index}].weight`}
+                      readOnly={!!readOnly}
                     />
                     kg
                   </InputRow>

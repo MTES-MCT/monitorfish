@@ -38,7 +38,6 @@ export function TypesCell({ priorNotification }: TypesCellProps) {
 
 const Wrapper = styled.span`
   display: inline-flex;
-  vertical-align: bottom;
 
   > .Element-Tag {
     margin-right: 8px;

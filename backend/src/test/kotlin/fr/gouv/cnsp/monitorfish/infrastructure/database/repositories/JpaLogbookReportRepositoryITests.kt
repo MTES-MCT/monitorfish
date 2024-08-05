@@ -556,7 +556,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeGreaterThan(0)
         val resultVessels = result.mapNotNull {
             jpaVesselRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageTyped.logbookMessage.internalReferenceNumber!!,
+                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
             )
         }
         assertThat(resultVessels).hasSize(result.size)
@@ -582,7 +582,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(firstResult).hasSizeGreaterThan(0)
         assertThat(
             firstResult.all {
-                it.logbookMessageTyped.logbookMessage.id in expectedLogbookReportIdsWithOneOrMoreReportings
+                it.logbookMessageAndValue.logbookMessage.id in expectedLogbookReportIdsWithOneOrMoreReportings
             },
         ).isTrue()
 
@@ -600,7 +600,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(secondResult).hasSizeGreaterThan(0)
         assertThat(
             secondResult.none {
-                it.logbookMessageTyped.logbookMessage.id in expectedLogbookReportIdsWithOneOrMoreReportings
+                it.logbookMessageAndValue.logbookMessage.id in expectedLogbookReportIdsWithOneOrMoreReportings
             },
         ).isTrue()
     }
@@ -622,7 +622,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(firstResult).hasSizeGreaterThan(0)
         val firstResultVessels = firstResult.mapNotNull {
             jpaVesselRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageTyped.logbookMessage.internalReferenceNumber!!,
+                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
             )
         }
         assertThat(firstResultVessels).hasSize(firstResult.size)
@@ -642,7 +642,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(secondResult).hasSizeGreaterThan(0)
         val secondResultVessels = secondResult.mapNotNull {
             jpaVesselRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageTyped.logbookMessage.internalReferenceNumber!!,
+                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
             )
         }
         assertThat(secondResultVessels).hasSize(secondResult.size)
@@ -666,7 +666,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(firstResult).hasSizeGreaterThan(0)
         val firstResultRiskFactors = firstResult.mapNotNull {
             jpaRiskFactorRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageTyped.logbookMessage.internalReferenceNumber!!,
+                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
             )
         }
         assertThat(firstResultRiskFactors).hasSize(firstResult.size)
@@ -690,7 +690,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(secondResult).hasSizeGreaterThan(0)
         val secondResultRiskFactors = secondResult.mapNotNull {
             jpaRiskFactorRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageTyped.logbookMessage.internalReferenceNumber!!,
+                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
             )
         }
         assertThat(secondResultRiskFactors).hasSize(secondResult.size)
@@ -718,7 +718,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(
             result.all {
-                listOf("FRSML", "FRVNE").contains(it.logbookMessageTyped.typedMessage.port)
+                listOf("FRSML", "FRVNE").contains(it.logbookMessageAndValue.value.port)
             },
         ).isTrue()
     }
@@ -740,7 +740,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(firstResult).hasSizeGreaterThan(0)
         val firstResultVessels = firstResult.mapNotNull {
             jpaVesselRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageTyped.logbookMessage.internalReferenceNumber!!,
+                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
             )
         }
         assertThat(firstResultVessels).hasSize(firstResult.size)
@@ -760,7 +760,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(secondResult).hasSizeGreaterThan(0)
         val secondResultVessels = secondResult.mapNotNull {
             jpaVesselRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageTyped.logbookMessage.internalReferenceNumber!!,
+                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
             )
         }
         assertThat(secondResultVessels).hasSize(secondResult.size)
@@ -784,7 +784,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(
             result.all {
-                it.logbookMessageTyped.typedMessage.catchOnboard
+                it.logbookMessageAndValue.value.catchOnboard
                     .any { catch -> listOf("COD", "HKE").contains(catch.species) }
             },
         ).isTrue()
@@ -807,7 +807,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(
             result.all {
-                it.logbookMessageTyped.typedMessage.pnoTypes
+                it.logbookMessageAndValue.value.pnoTypes
                     .any { type -> listOf("Préavis type A", "Préavis type C").contains(type.name) }
             },
         ).isTrue()
@@ -830,7 +830,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(
             result.all {
-                it.logbookMessageTyped.logbookMessage.tripSegments!!
+                it.logbookMessageAndValue.logbookMessage.tripSegments!!
                     .any { tripSegment ->
                         listOf("SWW06", "NWW03").contains(
                             tripSegment.code,
@@ -857,7 +857,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(
             result.all {
-                it.logbookMessageTyped.logbookMessage.tripGears!!
+                it.logbookMessageAndValue.logbookMessage.tripGears!!
                     .any { tripGear -> listOf("OTT", "TB").contains(tripGear.gear) }
             },
         ).isTrue()
@@ -879,7 +879,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(firstResult).hasSizeGreaterThan(0)
         assertThat(
             firstResult.all {
-                it.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc!!
+                it.logbookMessageAndValue.value.predictedArrivalDatetimeUtc!!
                     .isAfter(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
             },
         ).isTrue()
@@ -897,7 +897,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(secondResult).hasSizeGreaterThan(0)
         assertThat(
             secondResult.all {
-                it.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc!!
+                it.logbookMessageAndValue.value.predictedArrivalDatetimeUtc!!
                     .isBefore(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
             },
         ).isTrue()
@@ -921,19 +921,19 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(
             result.all {
-                it.logbookMessageTyped.typedMessage.pnoTypes
+                it.logbookMessageAndValue.value.pnoTypes
                     .any { type -> listOf("Préavis type A", "Préavis type C").contains(type.name) }
             },
         ).isTrue()
         assertThat(
             result.all {
-                it.logbookMessageTyped.logbookMessage.tripGears!!
+                it.logbookMessageAndValue.logbookMessage.tripGears!!
                     .any { tripGear -> listOf("OTT", "TB").contains(tripGear.gear) }
             },
         ).isTrue()
         assertThat(
             result.all {
-                it.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc!!
+                it.logbookMessageAndValue.value.predictedArrivalDatetimeUtc!!
                     .isAfter(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
             },
         ).isTrue()
@@ -947,8 +947,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(result).hasSizeGreaterThan(0)
-        assertThat(result.filter { it.logbookMessageTyped.typedMessage.isVerified == false }).hasSize(1)
-        assertThat(result.filter { it.logbookMessageTyped.typedMessage.isInVerificationScope == true }).hasSize(1)
+        assertThat(result.filter { it.logbookMessageAndValue.value.isVerified == false }).hasSize(1)
+        assertThat(result.filter { it.logbookMessageAndValue.value.isInVerificationScope == true }).hasSize(1)
     }
 
     @Test
@@ -1131,6 +1131,28 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat((updatedCorReport.message as PNO).isBeingSent).isEqualTo(false)
         assertThat((updatedCorReport.message as PNO).isVerified).isEqualTo(false)
         assertThat((updatedCorReport.message as PNO).isSent).isEqualTo(false)
+    }
+
+    @Test
+    @Transactional
+    fun `invalidate Should invalidate for an existing PNO logbook report`() {
+        // Given
+        val currentDatReport = jpaLogbookReportRepository.findById(109)
+        assertThat((currentDatReport.message as PNO).isInvalidated).isNull()
+        val currentCorReport = jpaLogbookReportRepository.findById(1109)
+        assertThat((currentCorReport.message as PNO).isInvalidated).isNull()
+
+        // When
+        jpaLogbookReportRepository.invalidate(
+            "FAKE_OPERATION_109",
+            ZonedDateTime.now().minusMinutes(15),
+        )
+
+        // Then
+        val updatedDatReport = jpaLogbookReportRepository.findById(109)
+        assertThat((updatedDatReport.message as PNO).isInvalidated).isEqualTo(true)
+        val updatedCorReport = jpaLogbookReportRepository.findById(1109)
+        assertThat((updatedCorReport.message as PNO).isInvalidated).isEqualTo(true)
     }
 
     companion object {

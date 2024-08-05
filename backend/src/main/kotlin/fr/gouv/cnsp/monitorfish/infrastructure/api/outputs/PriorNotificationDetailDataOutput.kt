@@ -23,7 +23,7 @@ class PriorNotificationDetailDataOutput(
             val isVesselUnderCharter = requireNotNull(priorNotification.vessel) {
                 "`priorNotification.vessel` is null."
             }.underCharter
-            val logbookMessage = priorNotification.logbookMessageTyped.logbookMessage
+            val logbookMessage = priorNotification.logbookMessageAndValue.logbookMessage
             val referenceReportId = requireNotNull(logbookMessage.getReferenceReportId()) {
                 "`logbookMessage.getReferenceReportId()` returned null."
             }
@@ -36,7 +36,7 @@ class PriorNotificationDetailDataOutput(
                 isVesselUnderCharter,
                 logbookMessage = logbookMessageDataOutput,
                 state = priorNotification.state,
-                riskFactor = priorNotification.logbookMessageTyped.typedMessage.riskFactor,
+                riskFactor = priorNotification.logbookMessageAndValue.value.riskFactor,
             )
         }
     }

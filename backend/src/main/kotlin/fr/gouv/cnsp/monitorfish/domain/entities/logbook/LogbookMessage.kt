@@ -51,10 +51,10 @@ data class LogbookMessage(
         return referencedReportId ?: reportId
     }
 
-    fun <T : LogbookMessageValue> toConsolidatedLogbookMessageTyped(
+    fun <T : LogbookMessageValue> toConsolidatedLogbookMessageAndValue(
         relatedLogbookMessages: List<LogbookMessage>,
         clazz: Class<T>,
-    ): LogbookMessageTyped<T> {
+    ): LogbookMessageAndValue<T> {
         if (reportId == null) {
             throw EntityConversionException(
                 "Logbook report $id has no `reportId`. You can only enrich a DAT or an orphan COR operation with a `reportId`.",
@@ -77,7 +77,7 @@ data class LogbookMessage(
             isDeleted = historicallySortedRelatedLogbookMessages.any { it.operationType == LogbookOperationType.DEL },
         )
 
-        return LogbookMessageTyped(
+        return LogbookMessageAndValue(
             logbookMessage = finalLogbookMessage,
             clazz = clazz,
         )

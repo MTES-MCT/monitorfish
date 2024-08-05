@@ -207,7 +207,15 @@ export function VesselSearch({
             </Link>
           </>
         )}
-        {vesselName && <IconButton accent={Accent.TERTIARY} Icon={Icon.Close} iconSize={14} onClick={clean} />}
+        {vesselName && (
+          <IconButton
+            accent={Accent.TERTIARY}
+            disabled={inputNativeProps.disabled}
+            Icon={Icon.Close}
+            iconSize={14}
+            onClick={clean}
+          />
+        )}
       </InputWrapper>
       <VesselSearchResult
         foundVessels={foundVessels}

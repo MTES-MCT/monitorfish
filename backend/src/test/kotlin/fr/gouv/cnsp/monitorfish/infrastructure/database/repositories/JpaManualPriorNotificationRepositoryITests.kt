@@ -2,8 +2,8 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageAndValue
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagePurpose
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTyped
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
@@ -62,7 +62,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeBetween(1, allManualPriorNotificationsLength - 1)
         val resultVessels = result.mapNotNull {
             jpaVesselRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageTyped.logbookMessage.internalReferenceNumber!!,
+                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
             )
         }
         assertThat(resultVessels).hasSize(result.size)
@@ -116,7 +116,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         assertThat(firstResult).hasSize(allManualPriorNotificationsLength)
         val firstResultVessels = firstResult.mapNotNull {
             jpaVesselRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageTyped.logbookMessage.internalReferenceNumber!!,
+                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
             )
         }
         assertThat(firstResultVessels).hasSize(firstResult.size)
@@ -145,7 +145,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         assertThat(firstResult).hasSizeBetween(1, allManualPriorNotificationsLength - 1)
         val firstResultRiskFactors = firstResult.mapNotNull {
             jpaRiskFactorRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageTyped.logbookMessage.internalReferenceNumber!!,
+                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
             )
         }
         assertThat(firstResultRiskFactors).hasSize(firstResult.size)
@@ -165,7 +165,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         assertThat(secondResult).hasSizeBetween(1, allManualPriorNotificationsLength - 1)
         val secondResultRiskFactors = secondResult.mapNotNull {
             jpaRiskFactorRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageTyped.logbookMessage.internalReferenceNumber!!,
+                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
             )
         }
         assertThat(secondResultRiskFactors).hasSize(secondResult.size)
@@ -189,7 +189,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeBetween(1, allManualPriorNotificationsLength - 1)
         assertThat(
             result.all {
-                listOf("FRNCE", "FRVNE").contains(it.logbookMessageTyped.typedMessage.port)
+                listOf("FRNCE", "FRVNE").contains(it.logbookMessageAndValue.value.port)
             },
         ).isTrue()
     }
@@ -206,11 +206,11 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         // Then
         assertThat(firstResult).hasSizeBetween(1, allManualPriorNotificationsLength - 1)
         assertThat(
-            firstResult.all { it.logbookMessageTyped.logbookMessage.vesselName == "NAVIRE RENOMMÉ (ANCIEN NOM)" },
+            firstResult.all { it.logbookMessageAndValue.logbookMessage.vesselName == "NAVIRE RENOMMÉ (ANCIEN NOM)" },
         ).isTrue()
         val firstResultVessels = firstResult.mapNotNull {
             jpaVesselRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageTyped.logbookMessage.internalReferenceNumber!!,
+                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
             )
         }
         assertThat(firstResultVessels).hasSize(firstResult.size)
@@ -225,11 +225,11 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         // Then
         assertThat(secondResult).hasSizeBetween(1, allManualPriorNotificationsLength - 1)
         assertThat(
-            secondResult.all { it.logbookMessageTyped.logbookMessage.vesselName == "NAVIRE RENOMMÉ (ANCIEN NOM)" },
+            secondResult.all { it.logbookMessageAndValue.logbookMessage.vesselName == "NAVIRE RENOMMÉ (ANCIEN NOM)" },
         ).isTrue()
         val secondResultVessels = secondResult.mapNotNull {
             jpaVesselRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageTyped.logbookMessage.internalReferenceNumber!!,
+                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
             )
         }
         assertThat(secondResultVessels).hasSize(secondResult.size)
@@ -249,13 +249,13 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeBetween(1, allManualPriorNotificationsLength - 1)
         assertThat(
             result.all {
-                it.logbookMessageTyped.typedMessage.catchOnboard
+                it.logbookMessageAndValue.value.catchOnboard
                     .any { catch -> listOf("BIB", "BFT").contains(catch.species) }
             },
         ).isTrue()
         assertThat(
             result.all {
-                it.logbookMessageTyped.typedMessage.catchToLand
+                it.logbookMessageAndValue.value.catchToLand
                     .any { catch -> listOf("BIB", "BFT").contains(catch.species) }
             },
         ).isTrue()
@@ -275,7 +275,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeBetween(1, allManualPriorNotificationsLength - 1)
         assertThat(
             result.all {
-                it.logbookMessageTyped.typedMessage.pnoTypes
+                it.logbookMessageAndValue.value.pnoTypes
                     .any { type -> listOf("Préavis type A", "Préavis type C").contains(type.name) }
             },
         ).isTrue()
@@ -294,7 +294,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeBetween(1, allManualPriorNotificationsLength - 1)
         assertThat(
             result.all {
-                it.logbookMessageTyped.logbookMessage.tripSegments!!
+                it.logbookMessageAndValue.logbookMessage.tripSegments!!
                     .any { tripSegment ->
                         listOf("NWW05", "NWW09").contains(
                             tripSegment.code,
@@ -317,7 +317,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeBetween(1, allManualPriorNotificationsLength - 1)
         assertThat(
             result.all {
-                it.logbookMessageTyped.logbookMessage.tripGears!!
+                it.logbookMessageAndValue.logbookMessage.tripGears!!
                     .any { tripGear -> listOf("LNP", "TBS").contains(tripGear.gear) }
             },
         ).isTrue()
@@ -339,7 +339,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         assertThat(firstResult).hasSizeBetween(1, allManualPriorNotificationsLength - 1)
         assertThat(
             firstResult.all {
-                it.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc!!
+                it.logbookMessageAndValue.value.predictedArrivalDatetimeUtc!!
                     .isAfter(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
             },
         ).isTrue()
@@ -357,7 +357,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         assertThat(secondResult).hasSizeBetween(1, allManualPriorNotificationsLength - 1)
         assertThat(
             secondResult.all {
-                it.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc!!
+                it.logbookMessageAndValue.value.predictedArrivalDatetimeUtc!!
                     .isBefore(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
             },
         ).isTrue()
@@ -379,19 +379,19 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeBetween(1, allManualPriorNotificationsLength - 1)
         assertThat(
             result.all {
-                it.logbookMessageTyped.typedMessage.pnoTypes
+                it.logbookMessageAndValue.value.pnoTypes
                     .any { type -> listOf("Préavis type A", "Préavis type C").contains(type.name) }
             },
         ).isTrue()
         assertThat(
             result.all {
-                it.logbookMessageTyped.logbookMessage.tripGears!!
+                it.logbookMessageAndValue.logbookMessage.tripGears!!
                     .any { tripGear -> listOf("OTT", "TB").contains(tripGear.gear) }
             },
         ).isTrue()
         assertThat(
             result.all {
-                it.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc!!
+                it.logbookMessageAndValue.value.predictedArrivalDatetimeUtc!!
                     .isAfter(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
             },
         ).isTrue()
@@ -408,7 +408,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(result!!.reportId).isEqualTo("00000000-0000-4000-0000-000000000002")
-        assertThat(result.logbookMessageTyped.logbookMessage.vesselName).isEqualTo("DOS FIN")
+        assertThat(result.logbookMessageAndValue.logbookMessage.vesselName).isEqualTo("DOS FIN")
     }
 
     @Test
@@ -426,7 +426,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
                 createdAt = null,
                 didNotFishAfterZeroNotice = false,
                 isManuallyCreated = false,
-                logbookMessageTyped = LogbookMessageTyped(
+                logbookMessageAndValue = LogbookMessageAndValue(
                     LogbookMessage(
                         id = null,
                         internalReferenceNumber = "CFR123",
@@ -485,9 +485,9 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
             .usingRecursiveComparison()
             .ignoringFields("logbookMessageTyped")
             .isEqualTo(createdPriorNotification)
-        assertThat(lastPriorNotification.logbookMessageTyped.logbookMessage)
-            .isEqualTo(createdPriorNotification.logbookMessageTyped.logbookMessage)
-        assertThat(createdPriorNotification.logbookMessageTyped.typedMessage.riskFactor)
+        assertThat(lastPriorNotification.logbookMessageAndValue.logbookMessage)
+            .isEqualTo(createdPriorNotification.logbookMessageAndValue.logbookMessage)
+        assertThat(createdPriorNotification.logbookMessageAndValue.value.riskFactor)
             .isEqualTo(2.1)
     }
 
@@ -497,8 +497,8 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         // Given
         val currentManualPriorNotification = jpaManualPriorNotificationRepository
             .findByReportId("00000000-0000-4000-0000-000000000001")!!
-        assertThat(currentManualPriorNotification.logbookMessageTyped.typedMessage.isBeingSent).isEqualTo(false)
-        assertThat(currentManualPriorNotification.logbookMessageTyped.typedMessage.isVerified).isEqualTo(false)
+        assertThat(currentManualPriorNotification.logbookMessageAndValue.value.isBeingSent).isEqualTo(false)
+        assertThat(currentManualPriorNotification.logbookMessageAndValue.value.isVerified).isEqualTo(false)
 
         // When
         jpaManualPriorNotificationRepository.updateState(
@@ -510,8 +510,8 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         // Then
         val updatedManualPriorNotification = jpaManualPriorNotificationRepository
             .findByReportId("00000000-0000-4000-0000-000000000001")!!
-        assertThat(updatedManualPriorNotification.logbookMessageTyped.typedMessage.isBeingSent).isEqualTo(true)
-        assertThat(updatedManualPriorNotification.logbookMessageTyped.typedMessage.isVerified).isEqualTo(true)
+        assertThat(updatedManualPriorNotification.logbookMessageAndValue.value.isBeingSent).isEqualTo(true)
+        assertThat(updatedManualPriorNotification.logbookMessageAndValue.value.isVerified).isEqualTo(true)
     }
 
     @Test
@@ -522,7 +522,26 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(result).hasSizeGreaterThan(0)
-        assertThat(result.filter { it.logbookMessageTyped.typedMessage.isVerified == false }).hasSize(1)
-        assertThat(result.filter { it.logbookMessageTyped.typedMessage.isInVerificationScope == true }).hasSize(1)
+        assertThat(result.filter { it.logbookMessageAndValue.value.isVerified == false }).hasSize(1)
+        assertThat(result.filter { it.logbookMessageAndValue.value.isInVerificationScope == true }).hasSize(1)
+    }
+
+    @Test
+    @Transactional
+    fun `invalidate Should invalidate an existing PNO logbook report`() {
+        // Given
+        val currentManualPriorNotification = jpaManualPriorNotificationRepository
+            .findByReportId("00000000-0000-4000-0000-000000000001")!!
+        assertThat(currentManualPriorNotification.logbookMessageAndValue.value.isInvalidated).isNull()
+
+        // When
+        jpaManualPriorNotificationRepository.invalidate(
+            "00000000-0000-4000-0000-000000000001",
+        )
+
+        // Then
+        val updatedManualPriorNotification = jpaManualPriorNotificationRepository
+            .findByReportId("00000000-0000-4000-0000-000000000001")!!
+        assertThat(updatedManualPriorNotification.logbookMessageAndValue.value.isInvalidated).isEqualTo(true)
     }
 }

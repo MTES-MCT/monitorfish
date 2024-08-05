@@ -93,6 +93,7 @@ export function PriorNotificationCard() {
     setIsLoading(true)
 
     assertNotNullish(openedPriorNotificationIdentity)
+    assertNotNullish(isOpenedPriorNotificationManuallyCreated)
 
     await invalidatePriorNotification({
       isManuallyCreated: isOpenedPriorNotificationManuallyCreated,
@@ -221,7 +222,6 @@ export function PriorNotificationCard() {
                 accent={Accent.SECONDARY}
                 disabled={isInvalidated}
                 Icon={Icon.Invalid}
-                iconSize={17}
                 onClick={() => setIsInvalidatingPriorNotificationDialog(true)}
                 title="Invalider le préavis"
               >

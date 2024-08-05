@@ -139,6 +139,7 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
         hasPortEntranceAuthorization: false,
         hasPortLandingAuthorization: true,
         isBeingSent: false,
+        isInvalidated: false,
         isInVerificationScope: false,
         isSent: false,
         isVerified: false,

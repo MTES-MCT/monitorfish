@@ -19,14 +19,12 @@ import { DownloadButton } from '../shared/DownloadButton'
 import { TagBar } from '../shared/TagBar'
 
 type PriorNotificationCardLayoutProps = Readonly<{
-  applicableState?: PriorNotification.State
   bodyChildren?: React.ReactNode
   detail: PriorNotification.PriorNotificationDetail | undefined
   footerChildren?: React.ReactNode
   isLoading?: boolean
 }>
 export function PriorNotificationCard({
-  applicableState,
   bodyChildren,
   detail,
   footerChildren,
@@ -85,7 +83,7 @@ export function PriorNotificationCard({
                 )
               )}
               riskFactor={detail.riskFactor}
-              state={applicableState}
+              state={detail.state}
               tripSegments={detail.logbookMessage.tripSegments}
               types={getPriorNotificationTypesFromLogbookMessagePnoTypes(detail.logbookMessage.message.pnoTypes)}
             />

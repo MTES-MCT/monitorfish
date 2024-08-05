@@ -5,7 +5,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotifica
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.sorters.PriorNotificationsSortColumn
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.*
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AutoPriorNotificationComputeDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AutoPriorNotificationDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationComputeDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationDataInput
@@ -22,7 +21,6 @@ import java.time.ZonedDateTime
 @RequestMapping("/bff/v1/prior_notifications")
 @Tag(name = "Prior notifications endpoints")
 class PriorNotificationController(
-    private val computeAutoPriorNotification: ComputeAutoPriorNotification,
     private val computeManualPriorNotification: ComputeManualPriorNotification,
     private val createOrUpdateManualPriorNotification: CreateOrUpdateManualPriorNotification,
     private val getPriorNotification: GetPriorNotification,
@@ -127,22 +125,6 @@ class PriorNotificationController(
             pageSize = paginatedPriorNotifications.pageSize,
             totalLength = paginatedPriorNotifications.totalLength,
         )
-    }
-
-    @PostMapping("/auto/compute")
-    @Operation(summary = "Calculate auto prior notification next state")
-    fun getAutoComputation(
-        @RequestBody
-        autoPriorNotificationComputeDataInput: AutoPriorNotificationComputeDataInput,
-    ): AutoPriorNotificationComputedValuesDataOutput {
-        val manualPriorNotificationComputedValues = computeAutoPriorNotification.execute(
-            isInVerificationScope = autoPriorNotificationComputeDataInput.isInVerificationScope,
-            portLocode = autoPriorNotificationComputeDataInput.portLocode,
-            segmentCodes = autoPriorNotificationComputeDataInput.segmentCodes,
-            vesselId = autoPriorNotificationComputeDataInput.vesselId,
-        )
-
-        return AutoPriorNotificationComputedValuesDataOutput(manualPriorNotificationComputedValues.nextState)
     }
 
     @GetMapping("/auto/{reportId}/data")

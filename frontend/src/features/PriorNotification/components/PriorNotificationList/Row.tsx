@@ -50,7 +50,7 @@ export function Row({ row }: RowProps) {
           <ExpandableRowCell
             key={cell.id}
             $hasRightBorder={['types', 'state'].includes(cell.column.id)}
-            isInvalidated={row.original.isInvalidated}
+            isInvalidated={!!row.original.isInvalidated}
             onClick={() => row.toggleExpanded()}
             style={getExpandableRowCellCustomStyle(cell.column.id)}
           >
@@ -60,7 +60,7 @@ export function Row({ row }: RowProps) {
       </TableWithSelectableRows.BodyTr>
 
       {row.getIsExpanded() && (
-        <ExpandedRow data-id={`${row.id}-expanded`} isInvalidated={row.original.isInvalidated}>
+        <ExpandedRow data-id={`${row.id}-expanded`} isInvalidated={!!row.original.isInvalidated}>
           <ExpandedRowCell />
           <ExpandedRowCell>
             <p>
@@ -225,7 +225,9 @@ const ExpandableRowCell = styled(TableWithSelectableRows.Td)<{
 `
 
 // TODO Add this feature in monitor-ui.
-const ExpandedRow = styled(TableWithSelectableRows.BodyTr)`
+const ExpandedRow = styled(TableWithSelectableRows.BodyTr)<{
+  isInvalidated: boolean
+}>`
   > td {
     overflow: hidden !important;
     color: ${p => (p.isInvalidated ? p.theme.color.slateGray : p.theme.color.charcoal)};

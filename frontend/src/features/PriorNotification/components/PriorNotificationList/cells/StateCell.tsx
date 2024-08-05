@@ -11,7 +11,7 @@ type SendButtonCellProps = Readonly<{
 export function StateCell({ isInvalidated, state }: SendButtonCellProps) {
   if (isInvalidated) {
     return (
-      <Wrapper $state={state} title="Préavis invalidé">
+      <Wrapper title="Préavis invalidé">
         {isInvalidated && <Icon.Invalid color={THEME.color.maximumRed} size={26} />}
       </Wrapper>
     )

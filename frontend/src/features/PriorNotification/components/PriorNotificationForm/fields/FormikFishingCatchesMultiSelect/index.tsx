@@ -92,7 +92,7 @@ export function FormikFishingCatchesMultiSelect({ readOnly }: FormikFishingCatch
         onChange={add}
         options={filteredSpeciesAsOptions ?? []}
         optionValueKey="code"
-        readOnly={readOnly}
+        readOnly={!!readOnly}
         virtualized
       />
 
@@ -117,7 +117,7 @@ export function FormikFishingCatchesMultiSelect({ readOnly }: FormikFishingCatch
                       isLabelHidden
                       label={`Poids (${fishingCatch.specyCode})`}
                       name={`fishingCatches[${index}].weight`}
-                      readOnly={readOnly}
+                      readOnly={!!readOnly}
                     />
                     kg
                   </InputRow>

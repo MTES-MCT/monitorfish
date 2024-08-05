@@ -1,6 +1,7 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
+import { InvalidatePriorNotificationDialog } from '@features/PriorNotification/components/InvalidatePriorNotificationDialog'
 import {
   useGetPriorNotificationDetailQuery,
   useInvalidatePriorNotificationMutation
@@ -64,6 +65,7 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
   )
   const [invalidatePriorNotification] = useInvalidatePriorNotificationMutation()
 
+  const [isInvalidatingPriorNotificationDialog, setIsInvalidatingPriorNotificationDialog] = useState(false)
   const [isClosingConfirmationDialog, setIsClosingConfirmationDialog] = useState(false)
   const previousPartialComputationRequestData = usePrevious(getPartialComputationRequestData(values))
 
@@ -97,6 +99,8 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
       operationDate: editedPriorNotificationDetail.logbookMessage.operationDateTime,
       reportId: editedPriorNotificationDetail.logbookMessage.reportId
     })
+
+    setIsInvalidatingPriorNotificationDialog(false)
   }
 
   const handleSubmit = () => {
@@ -207,7 +211,7 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
                 disabled={isInvalidated}
                 Icon={Icon.Invalid}
                 iconSize={17}
-                onClick={invalidate}
+                onClick={() => setIsInvalidatingPriorNotificationDialog(true)}
                 title="Invalider le préavis"
               >
                 Invalider le préavis
@@ -269,6 +273,13 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
           onCancel={() => setIsClosingConfirmationDialog(false)}
           onConfirm={onClose}
           title="Abandon de préavis"
+        />
+      )}
+
+      {isInvalidatingPriorNotificationDialog && (
+        <InvalidatePriorNotificationDialog
+          onCancel={() => setIsInvalidatingPriorNotificationDialog(false)}
+          onConfirm={invalidate}
         />
       )}
     </Wrapper>

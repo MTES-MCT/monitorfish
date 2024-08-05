@@ -6,14 +6,12 @@ import com.nhaarman.mockitokotlin2.anyOrNull
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.SeafrontGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagePurpose
-import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.AutoPriorNotificationComputedValues
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.ManualPriorNotificationComputedValues
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationState
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationStats
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.*
 import fr.gouv.cnsp.monitorfish.domain.utils.PaginatedList
 import fr.gouv.cnsp.monitorfish.fakers.PriorNotificationFaker
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AutoPriorNotificationComputeDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AutoPriorNotificationDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationComputeDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationDataInput
@@ -38,9 +36,6 @@ import java.time.ZonedDateTime
 class PriorNotificationControllerITests {
     @Autowired
     private lateinit var api: MockMvc
-
-    @MockBean
-    private lateinit var computeAutoPriorNotification: ComputeAutoPriorNotification
 
     @MockBean
     private lateinit var computeManualPriorNotification: ComputeManualPriorNotification
@@ -105,35 +100,6 @@ class PriorNotificationControllerITests {
             .andExpect(jsonPath("$.pageNumber", equalTo(0)))
             .andExpect(jsonPath("$.pageSize", equalTo(10)))
             .andExpect(jsonPath("$.totalLength", equalTo(2)))
-    }
-
-    @Test
-    fun `getAutoComputation Should get an auto prior notification computed values`() {
-        // Given
-        given(this.computeAutoPriorNotification.execute(any(), any(), any(), any()))
-            .willReturn(
-                AutoPriorNotificationComputedValues(
-                    nextState = PriorNotificationState.OUT_OF_VERIFICATION_SCOPE,
-                ),
-            )
-
-        // When
-        val requestBody = objectMapper.writeValueAsString(
-            AutoPriorNotificationComputeDataInput(
-                isInVerificationScope = false,
-                portLocode = "FRABC",
-                segmentCodes = emptyList(),
-                vesselId = 42,
-            ),
-        )
-        api.perform(
-            post("/bff/v1/prior_notifications/auto/compute")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody),
-        )
-            // Then
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.nextState", equalTo("OUT_OF_VERIFICATION_SCOPE")))
     }
 
     @Test

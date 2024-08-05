@@ -24,18 +24,6 @@ const INVALIDATE_PRIOR_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu invalid
 
 export const priorNotificationApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
-    computeAutoPriorNotification: builder.mutation<
-      PriorNotification.AutoComputedValues,
-      PriorNotification.AutoComputeRequestData
-    >({
-      query: data => ({
-        body: data,
-        method: 'POST',
-        url: `/prior_notifications/auto/compute`
-      }),
-      transformErrorResponse: response => new FrontendApiError(COMPUTE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
-    }),
-
     computeManualPriorNotification: builder.mutation<
       PriorNotification.ManualComputedValues,
       PriorNotification.ManualComputeRequestData

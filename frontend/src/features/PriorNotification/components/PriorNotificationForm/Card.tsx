@@ -1,7 +1,10 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
-import { useGetPriorNotificationDetailQuery } from '@features/PriorNotification/priorNotificationApi'
+import {
+  useGetPriorNotificationDetailQuery,
+  useInvalidatePriorNotificationMutation
+} from '@features/PriorNotification/priorNotificationApi'
 import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { updateEditedPriorNotificationComputedValues } from '@features/PriorNotification/useCases/updateEditedPriorNotificationComputedValues'
 import { isZeroNotice } from '@features/PriorNotification/utils'
@@ -9,6 +12,7 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Banner, Button, FormikEffect, Icon, Level, usePrevious } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
+import { assertNotNullish } from '@utils/assertNotNullish'
 import { getDefinedObject } from '@utils/getDefinedObject'
 import { useFormikContext } from 'formik'
 import { isEqual } from 'lodash'
@@ -58,12 +62,14 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
       ...RTK_FORCE_REFETCH_QUERY_OPTIONS
     }
   )
+  const [invalidatePriorNotification] = useInvalidatePriorNotificationMutation()
 
   const [isClosingConfirmationDialog, setIsClosingConfirmationDialog] = useState(false)
   const previousPartialComputationRequestData = usePrevious(getPartialComputationRequestData(values))
 
   const applicableState = editedPriorNotificationComputedValues?.nextState ?? editedPriorNotificationDetail?.state
   const isNewPriorNotification = !reportId
+  const isInvalidated = editedPriorNotificationDetail?.logbookMessage?.message?.isInvalidated
   const isPendingSend =
     !!editedPriorNotificationDetail?.state &&
     [PriorNotification.State.AUTO_SEND_IN_PROGRESS, PriorNotification.State.PENDING_SEND].includes(
@@ -81,6 +87,16 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
     }
 
     onClose()
+  }
+
+  const invalidate = async () => {
+    assertNotNullish(editedPriorNotificationDetail)
+
+    await invalidatePriorNotification({
+      isManuallyCreated: true,
+      operationDate: editedPriorNotificationDetail.logbookMessage.operationDateTime,
+      reportId: editedPriorNotificationDetail.logbookMessage.reportId
+    })
   }
 
   const handleSubmit = () => {
@@ -157,6 +173,7 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
           <Body>
             <TagBar
               hasBeenComputed={!!editedPriorNotificationComputedValues}
+              isInvalidated={isInvalidated}
               isVesselUnderCharter={editedPriorNotificationComputedValues?.isVesselUnderCharter}
               isZeroNotice={isZeroNotice(values.fishingCatches)}
               riskFactor={editedPriorNotificationComputedValues?.riskFactor}
@@ -182,7 +199,20 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
 
             <hr />
 
-            <Form />
+            <Form isInvalidated={isInvalidated} />
+
+            {!!editedPriorNotificationDetail && (
+              <InvalidateButton
+                accent={Accent.SECONDARY}
+                disabled={isInvalidated}
+                Icon={Icon.Invalid}
+                iconSize={17}
+                onClick={invalidate}
+                title="Invalider le préavis"
+              >
+                Invalider le préavis
+              </InvalidateButton>
+            )}
           </Body>
 
           <Footer>
@@ -200,8 +230,13 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
 
             <Button
               accent={Accent.PRIMARY}
-              disabled={!dirty || (isValidatingOnChange && !isValid)}
+              disabled={(isInvalidated && !dirty) || (isValidatingOnChange && !isValid)}
               onClick={handleSubmit}
+              title={
+                isInvalidated
+                  ? "Le préavis est invalidé, il n'est plus possible de le modifier ni de le diffuser."
+                  : undefined
+              }
             >
               {isNewPriorNotification ? 'Créer le préavis' : 'Enregistrer'}
             </Button>
@@ -209,9 +244,14 @@ export function Card({ isValidatingOnChange, onClose, onSubmit, onVerifyAndSend,
             {!isNewPriorNotification && (
               <Button
                 accent={Accent.PRIMARY}
-                disabled={isPendingSend || isVerifiedAndSent}
+                disabled={isInvalidated || isPendingSend || isVerifiedAndSent}
                 Icon={isVerifiedAndSent ? Icon.Check : Icon.Send}
                 onClick={onVerifyAndSend}
+                title={
+                  isInvalidated
+                    ? "Le préavis est invalidé, il n'est plus possible de le modifier ni de le diffuser."
+                    : undefined
+                }
               >
                 {isVerifiedAndSent ? 'Diffusé' : 'Diffuser'}
               </Button>
@@ -244,6 +284,11 @@ const Wrapper = styled.div`
   right: 0;
   top: 0;
   z-index: 1000;
+`
+
+const InvalidateButton = styled(Button)`
+  color: ${p => p.theme.color.maximumRed};
+  margin-top: 48px;
 `
 
 const Background = styled.div`

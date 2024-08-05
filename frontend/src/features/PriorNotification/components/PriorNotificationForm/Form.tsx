@@ -23,7 +23,10 @@ import { FormikVesselSelect } from './fields/FormikVesselSelect'
 import type { FormValues } from './types'
 import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
 
-export function Form() {
+type FormProps = Readonly<{
+  isInvalidated: boolean | undefined
+}>
+export function Form({ isInvalidated }: FormProps) {
   const { values } = useFormikContext<FormValues>()
 
   const { faoAreasAsOptions } = useGetFaoAreasAsOptions()
@@ -44,21 +47,29 @@ export function Form() {
 
   return (
     <>
-      <FormikVesselSelect onChange={onChange} />
+      <FormikVesselSelect disabled={isInvalidated} onChange={onChange} />
 
       <FormikSelect
         isCleanable={false}
         label="Raison du préavis"
         name="purpose"
         options={getOptionsFromLabelledEnum(PriorNotification.PURPOSE_LABEL)}
+        readOnly={isInvalidated}
       />
 
-      <FormikDatePicker isStringDate label="Date et heure de réception du préavis (UTC)" name="sentAt" withTime />
+      <FormikDatePicker
+        isStringDate
+        label="Date et heure de réception du préavis (UTC)"
+        name="sentAt"
+        readOnly={isInvalidated}
+        withTime
+      />
 
       <FormikDatePicker
         isStringDate
         label="Date et heure estimées d'arrivée au port (UTC)"
         name="expectedArrivalDate"
+        readOnly={isInvalidated}
         withTime
       />
 
@@ -68,11 +79,13 @@ export function Form() {
           isStringDate
           label="Date et heure prévues de débarque (UTC)"
           name="expectedLandingDate"
+          readOnly={isInvalidated}
           withTime
         />
         <FormikCheckbox
           label="équivalentes à celles de l'arrivée au port"
           name="isExpectedLandingDateSameAsExpectedArrivalDate"
+          readOnly={isInvalidated}
         />
       </FieldGroup>
 
@@ -81,17 +94,19 @@ export function Form() {
         label="Port d'arrivée"
         name="portLocode"
         options={portsAsOptions ?? []}
+        readOnly={isInvalidated}
         searchable
         virtualized
       />
 
-      <FormikFishingCatchesMultiSelect />
+      <FormikFishingCatchesMultiSelect readOnly={isInvalidated} />
 
       <FormikMultiSelect
         disabled={!gearsAsOptions}
         label="Engins utilisés"
         name="tripGearCodes"
         options={gearsAsOptions ?? []}
+        readOnly={isInvalidated}
         searchable
         virtualized
       />
@@ -101,6 +116,7 @@ export function Form() {
         label="Zone de pêche"
         name="faoArea"
         options={faoAreasAsOptions ?? []}
+        readOnly={isInvalidated}
         searchable
         virtualized
       />
@@ -114,22 +130,28 @@ export function Form() {
             label="Autorisation d'entrée au port"
             name="hasPortEntranceAuthorization"
             options={BOOLEAN_AS_OPTIONS}
+            readOnly={isInvalidated}
           />
           <StyledFormikMultiRadio
             isInline
             label="Autorisation de débarquement"
             name="hasPortLandingAuthorization"
             options={BOOLEAN_AS_OPTIONS}
+            readOnly={isInvalidated}
           />
         </>
       )}
 
       <FieldGroup>
-        <FormikTextarea label="Points d'attention identifiés par le CNSP" name="note" />
-        <FormikCheckbox label="pas de pêche après le préavis zéro" name="didNotFishAfterZeroNotice" />
+        <FormikTextarea label="Points d'attention identifiés par le CNSP" name="note" readOnly={isInvalidated} />
+        <FormikCheckbox
+          label="pas de pêche après le préavis zéro"
+          name="didNotFishAfterZeroNotice"
+          readOnly={isInvalidated}
+        />
       </FieldGroup>
 
-      <EnteredByTextInput label="Saisi par" maxLength={3} name="authorTrigram" />
+      <EnteredByTextInput label="Saisi par" maxLength={3} name="authorTrigram" readOnly={isInvalidated} />
     </>
   )
 }

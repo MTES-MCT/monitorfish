@@ -3,7 +3,10 @@ import { ErrorWall } from '@components/ErrorWall'
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { LogbookMessage } from '@features/Logbook/components/VesselLogbook/LogbookMessages/messages/LogbookMessage'
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
-import { useGetPriorNotificationDetailQuery } from '@features/PriorNotification/priorNotificationApi'
+import {
+  useGetPriorNotificationDetailQuery,
+  useInvalidatePriorNotificationMutation
+} from '@features/PriorNotification/priorNotificationApi'
 import { updatePriorNotificationNote } from '@features/PriorNotification/useCases/updatePriorNotificationNote'
 import { verifyAndSendPriorNotification } from '@features/PriorNotification/useCases/verifyAndSendPriorNotification'
 import {
@@ -52,10 +55,13 @@ export function PriorNotificationCard() {
       ...RTK_FORCE_REFETCH_QUERY_OPTIONS
     }
   )
+  const [invalidatePriorNotification] = useInvalidatePriorNotificationMutation()
   const sideWindowPriorNotificationCardError = useMainAppSelector(
     state => state.displayedError.sideWindowPriorNotificationCardError
   )
+
   const [isLoading, setIsLoading] = useState(false)
+  const isInvalidated = priorNotificationDetail?.logbookMessage?.message?.isInvalidated
   const isPendingSend =
     !!priorNotificationDetail?.state &&
     [PriorNotification.State.AUTO_SEND_IN_PROGRESS, PriorNotification.State.PENDING_SEND].includes(
@@ -77,6 +83,20 @@ export function PriorNotificationCard() {
     assertNotNullish(openedPriorNotificationIdentity)
 
     await dispatch(verifyAndSendPriorNotification(openedPriorNotificationIdentity, false))
+
+    setIsLoading(false)
+  }
+
+  const invalidate = async () => {
+    setIsLoading(true)
+
+    assertNotNullish(openedPriorNotificationIdentity)
+
+    await invalidatePriorNotification({
+      isManuallyCreated: isOpenedPriorNotificationManuallyCreated,
+      operationDate: openedPriorNotificationIdentity.operationDate,
+      reportId: openedPriorNotificationIdentity.reportId
+    })
 
     setIsLoading(false)
   }
@@ -146,6 +166,7 @@ export function PriorNotificationCard() {
 
           <Body>
             <TagBar
+              isInvalidated={isInvalidated}
               isVesselUnderCharter={priorNotificationDetail.isVesselUnderCharter}
               isZeroNotice={isZeroNotice(
                 getPriorNotificationFishingCatchesFromLogbookMessageFishingCatches(
@@ -186,11 +207,24 @@ export function PriorNotificationCard() {
                   <FormikTextarea
                     label="Points d'attention identifiés par le CNSP"
                     name="note"
-                    readOnly={!isSuperUser}
+                    readOnly={!isSuperUser || isInvalidated}
                   />
                 </FieldGroup>
               </>
             </Formik>
+
+            {isSuperUser && (
+              <InvalidateButton
+                accent={Accent.SECONDARY}
+                disabled={isInvalidated}
+                Icon={Icon.Invalid}
+                iconSize={17}
+                onClick={invalidate}
+                title="Invalider le préavis"
+              >
+                Invalider le préavis
+              </InvalidateButton>
+            )}
           </Body>
 
           <Footer>
@@ -205,9 +239,14 @@ export function PriorNotificationCard() {
 
             <Button
               accent={Accent.PRIMARY}
-              disabled={isPendingSend || isVerifiedAndSent}
+              disabled={isInvalidated || isPendingSend || isVerifiedAndSent}
               Icon={isVerifiedAndSent ? Icon.Check : Icon.Send}
               onClick={verifyAndSend}
+              title={
+                isInvalidated
+                  ? "Le préavis est invalidé, il n'est plus possible de le modifier ni de le diffuser."
+                  : undefined
+              }
             >
               {isVerifiedAndSent ? 'Diffusé' : 'Diffuser'}
             </Button>
@@ -217,6 +256,11 @@ export function PriorNotificationCard() {
     </Wrapper>
   )
 }
+
+const InvalidateButton = styled(Button)`
+  color: ${p => p.theme.color.maximumRed};
+  margin-top: 48px;
+`
 
 const Wrapper = styled.div`
   bottom: 0;

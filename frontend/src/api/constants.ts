@@ -1,8 +1,8 @@
+import { RefetchConfigOptions } from '@reduxjs/toolkit/src/query/core/apiState'
+
 import { FIVE_MINUTES, ONE_MINUTE, THIRTY_SECONDS } from '../constants'
 
-import type { RefetchConfigOptions } from '@reduxjs/toolkit/dist/query/core/apiState'
-import type { StartQueryActionCreatorOptions } from '@reduxjs/toolkit/dist/query/core/buildInitiate'
-import type { SubscriptionOptions } from '@reduxjs/toolkit/query'
+import type { StartQueryActionCreatorOptions, SubscriptionOptions } from '@reduxjs/toolkit/query'
 
 export const RTK_MAX_RETRIES = 2
 

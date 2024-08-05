@@ -13,7 +13,7 @@ import { priorNotificationActions } from '../slice'
 import type { PriorNotification } from '../PriorNotification.types'
 import type { MainAppThunk } from '@store'
 
-export const openAutoPriorNotificationForm =
+export const openLogbookPriorNotificationForm =
   (
     priorNotificationIdentifier: PriorNotification.PriorNotificationIdentifier,
     fingerprint?: string
@@ -32,7 +32,7 @@ export const openAutoPriorNotificationForm =
         })
       ).unwrap()
       const priorNotificationData = await dispatch(
-        priorNotificationApi.endpoints.getAutoPriorNotificationFormData.initiate(priorNotificationIdentifier)
+        priorNotificationApi.endpoints.getLogbookPriorNotificationFormData.initiate(priorNotificationIdentifier)
       ).unwrap()
 
       // Update prior notification list if prior notification fingerprint has changed
@@ -57,13 +57,13 @@ export const openAutoPriorNotificationForm =
       }
 
       dispatch(priorNotificationActions.setOpenedPriorNotification(priorNotificationDetail))
-      dispatch(priorNotificationActions.setEditedAutoPriorNotificationInitialFormValues(priorNotificationData))
+      dispatch(priorNotificationActions.setEditedLogbookPriorNotificationInitialFormValues(priorNotificationData))
     } catch (err) {
       if (err instanceof FrontendApiError) {
         dispatch(
           displayOrLogError(
             err,
-            () => openAutoPriorNotificationForm(priorNotificationIdentifier, fingerprint),
+            () => openLogbookPriorNotificationForm(priorNotificationIdentifier, fingerprint),
             true,
             DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR
           )

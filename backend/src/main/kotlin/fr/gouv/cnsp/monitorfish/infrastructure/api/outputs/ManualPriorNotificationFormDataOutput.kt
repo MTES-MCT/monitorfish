@@ -6,7 +6,7 @@ import fr.gouv.cnsp.monitorfish.utils.CustomZonedDateTime
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
-data class ManualPriorNotificationDataOutput(
+data class ManualPriorNotificationFormDataOutput(
     val hasPortEntranceAuthorization: Boolean,
     val hasPortLandingAuthorization: Boolean,
     val authorTrigram: String,
@@ -25,7 +25,7 @@ data class ManualPriorNotificationDataOutput(
     val vesselId: Int,
 ) {
     companion object {
-        fun fromPriorNotification(priorNotification: PriorNotification): ManualPriorNotificationDataOutput {
+        fun fromPriorNotification(priorNotification: PriorNotification): ManualPriorNotificationFormDataOutput {
             val logbookMessage = priorNotification.logbookMessageAndValue.logbookMessage
             val pnoMessage = priorNotification.logbookMessageAndValue.value
 
@@ -69,7 +69,7 @@ data class ManualPriorNotificationDataOutput(
             val hasPortEntranceAuthorization = pnoMessage.hasPortEntranceAuthorization ?: true
             val hasPortLandingAuthorization = pnoMessage.hasPortLandingAuthorization ?: true
 
-            return ManualPriorNotificationDataOutput(
+            return ManualPriorNotificationFormDataOutput(
                 hasPortEntranceAuthorization = hasPortEntranceAuthorization,
                 hasPortLandingAuthorization = hasPortLandingAuthorization,
                 authorTrigram = authorTrigram,

@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.input
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagePurpose
 import java.time.ZonedDateTime
 
-data class ManualPriorNotificationDataInput(
+data class ManualPriorNotificationFormDataInput(
     val hasPortEntranceAuthorization: Boolean,
     val hasPortLandingAuthorization: Boolean,
     val authorTrigram: String,

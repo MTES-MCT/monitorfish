@@ -9,12 +9,12 @@ import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
 @UseCase
-class UpdateAutoPriorNotification(
+class UpdateLogbookPriorNotification(
     private val logbookReportRepository: LogbookReportRepository,
     private val priorNotificationPdfDocumentRepository: PriorNotificationPdfDocumentRepository,
     private val getPriorNotification: GetPriorNotification,
 ) {
-    private val logger: Logger = LoggerFactory.getLogger(UpdateAutoPriorNotification::class.java)
+    private val logger: Logger = LoggerFactory.getLogger(UpdateLogbookPriorNotification::class.java)
 
     fun execute(
         reportId: String,

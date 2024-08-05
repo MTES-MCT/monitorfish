@@ -3,7 +3,7 @@ import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { InvalidatePriorNotificationDialog } from '@features/PriorNotification/components/InvalidatePriorNotificationDialog'
 import { useInvalidatePriorNotificationMutation } from '@features/PriorNotification/priorNotificationApi'
 import { priorNotificationActions } from '@features/PriorNotification/slice'
-import { updateEditedPriorNotificationComputedValues } from '@features/PriorNotification/useCases/updateEditedPriorNotificationComputedValues'
+import { updateManualPriorNotificationComputedValues } from '@features/PriorNotification/useCases/updateManualPriorNotificationComputedValues'
 import { isZeroNotice } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -86,7 +86,7 @@ export function Card({ detail, isValidatingOnChange, onClose, onSubmit, onVerify
 
   const updateComputedValues = useDebouncedCallback(
     (nextComputationRequestData: PriorNotification.ManualComputeRequestData) => {
-      dispatch(updateEditedPriorNotificationComputedValues(nextComputationRequestData))
+      dispatch(updateManualPriorNotificationComputedValues(nextComputationRequestData))
     },
     1000
   )

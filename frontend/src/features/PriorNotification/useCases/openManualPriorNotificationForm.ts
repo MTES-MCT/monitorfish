@@ -82,7 +82,7 @@ export const openManualPriorNotificationForm =
       }
 
       dispatch(priorNotificationActions.setEditedManualPriorNotificationInitialFormValues(nextInitialFormValues))
-      dispatch(priorNotificationActions.setEditedManualPriorNotificationComputedValues(nextComputedValues))
+      dispatch(priorNotificationActions.setManualPriorNotificationComputedValues(nextComputedValues))
       dispatch(priorNotificationActions.setOpenedPriorNotification(priorNotificationDetail))
     } catch (err) {
       if (err instanceof FrontendApiError) {

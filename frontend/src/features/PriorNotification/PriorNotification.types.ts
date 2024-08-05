@@ -67,7 +67,7 @@ export namespace PriorNotification {
     state: State | undefined
   }
 
-  export type AutoPriorNotificationData = {
+  export type LogbookPriorNotificationData = {
     authorTrigram: string | string
     note: string | undefined
   }

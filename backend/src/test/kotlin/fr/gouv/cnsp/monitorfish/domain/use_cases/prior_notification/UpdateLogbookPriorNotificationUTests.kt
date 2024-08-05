@@ -11,7 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
-class UpdateAutoPriorNotificationUTests {
+class UpdateLogbookPriorNotificationUTests {
     @MockBean
     private lateinit var logbookReportRepository: LogbookReportRepository
 
@@ -35,7 +35,7 @@ class UpdateAutoPriorNotificationUTests {
         ).willReturn(fakePriorNotification)
 
         // When
-        val result = UpdateAutoPriorNotification(
+        val result = UpdateLogbookPriorNotification(
             logbookReportRepository,
             priorNotificationPdfDocumentRepository,
             getPriorNotification,

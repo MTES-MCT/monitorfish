@@ -12,9 +12,9 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotifica
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.*
 import fr.gouv.cnsp.monitorfish.domain.utils.PaginatedList
 import fr.gouv.cnsp.monitorfish.fakers.PriorNotificationFaker
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AutoPriorNotificationDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.LogbookPriorNotificationFormDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationComputeDataInput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationFormDataInput
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
@@ -59,7 +59,7 @@ class PriorNotificationControllerITests {
     private lateinit var verifyAndSendPriorNotification: VerifyAndSendPriorNotification
 
     @MockBean
-    private lateinit var updateAutoPriorNotification: UpdateAutoPriorNotification
+    private lateinit var updateLogbookPriorNotification: UpdateLogbookPriorNotification
 
     @MockBean
     private lateinit var invalidatePriorNotification: InvalidatePriorNotification
@@ -119,7 +119,7 @@ class PriorNotificationControllerITests {
         // When
         api.perform(
             get(
-                "/bff/v1/prior_notifications/auto/${fakePriorNotification.reportId!!}/data?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
+                "/bff/v1/prior_notifications/logbook/${fakePriorNotification.reportId!!}/data?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
             ),
         )
             // Then
@@ -134,7 +134,7 @@ class PriorNotificationControllerITests {
 
         // Given
         given(
-            updateAutoPriorNotification.execute(
+            updateLogbookPriorNotification.execute(
                 reportId = anyOrNull(),
                 operationDate = anyOrNull(),
                 authorTrigram = anyOrNull(),
@@ -145,14 +145,14 @@ class PriorNotificationControllerITests {
 
         // When
         val requestBody = objectMapper.writeValueAsString(
-            AutoPriorNotificationDataInput(
+            LogbookPriorNotificationFormDataInput(
                 authorTrigram = "ABC",
                 note = "Test !",
             ),
         )
         api.perform(
             put(
-                "/bff/v1/prior_notifications/auto/${fakePriorNotification.reportId!!}?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
+                "/bff/v1/prior_notifications/logbook/${fakePriorNotification.reportId!!}?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
             )
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody),
@@ -205,7 +205,7 @@ class PriorNotificationControllerITests {
     @Test
     fun `getManualData Should get a manual prior notification form data by its reportId`() {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
-        fakePriorNotification.logbookMessageTyped.typedMessage.authorTrigram = "ABC"
+        fakePriorNotification.logbookMessageAndValue.value.authorTrigram = "ABC"
 
         // Given
         given(
@@ -231,7 +231,7 @@ class PriorNotificationControllerITests {
     @Test
     fun `updateManual Should create a manual prior notification`() {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
-        fakePriorNotification.logbookMessageTyped.typedMessage.authorTrigram = "ABC"
+        fakePriorNotification.logbookMessageAndValue.value.authorTrigram = "ABC"
 
         // Given
         given(
@@ -257,7 +257,7 @@ class PriorNotificationControllerITests {
 
         // When
         val requestBody = objectMapper.writeValueAsString(
-            ManualPriorNotificationDataInput(
+            ManualPriorNotificationFormDataInput(
                 hasPortEntranceAuthorization = true,
                 hasPortLandingAuthorization = true,
                 authorTrigram = "ABC",
@@ -287,7 +287,7 @@ class PriorNotificationControllerITests {
     @Test
     fun `updateManual Should update a manual prior notification by its reportId`() {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
-        fakePriorNotification.logbookMessageTyped.typedMessage.authorTrigram = "ABC"
+        fakePriorNotification.logbookMessageAndValue.value.authorTrigram = "ABC"
 
         // Given
         given(
@@ -313,7 +313,7 @@ class PriorNotificationControllerITests {
 
         // When
         val requestBody = objectMapper.writeValueAsString(
-            ManualPriorNotificationDataInput(
+            ManualPriorNotificationFormDataInput(
                 hasPortEntranceAuthorization = true,
                 hasPortLandingAuthorization = true,
                 authorTrigram = "ABC",
@@ -429,7 +429,7 @@ class PriorNotificationControllerITests {
 
         // Given
         given(
-            updateAutoPriorNotification.execute(
+            updateLogbookPriorNotification.execute(
                 reportId = anyOrNull(),
                 operationDate = anyOrNull(),
                 authorTrigram = anyOrNull(),
@@ -440,7 +440,7 @@ class PriorNotificationControllerITests {
 
         // When
         val requestBody = objectMapper.writeValueAsString(
-            AutoPriorNotificationDataInput(
+            LogbookPriorNotificationFormDataInput(
                 authorTrigram = "ABC",
                 note = "Test !",
             ),

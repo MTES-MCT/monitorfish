@@ -1095,6 +1095,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
             "FAKE_OPERATION_109",
             ZonedDateTime.now().minusMinutes(15),
             isBeingSent = true,
+            isSent = false,
             isVerified = true,
         )
 

@@ -10,6 +10,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotifica
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
 import fr.gouv.cnsp.monitorfish.domain.exceptions.*
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
+import fr.gouv.cnsp.monitorfish.infrastructure.Utils
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LogbookReportEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBLogbookReportRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.utils.toSqlArrayString
@@ -360,7 +361,9 @@ class JpaLogbookReportRepository(
     override fun updatePriorNotificationState(
         reportId: String,
         operationDate: ZonedDateTime,
+
         isBeingSent: Boolean,
+        isSent: Boolean,
         isVerified: Boolean,
     ) {
         val logbookReportEntities =
@@ -378,10 +381,10 @@ class JpaLogbookReportRepository(
             .map { logbookReportEntity ->
                 val pnoMessage = objectMapper.readValue(logbookReportEntity.message, PNO::class.java)
                 pnoMessage.isBeingSent = isBeingSent
+                pnoMessage.isSent = isSent
                 pnoMessage.isVerified = isVerified
 
                 val nextMessage = objectMapper.writeValueAsString(pnoMessage)
-
                 val updatedEntity = logbookReportEntity.copy(message = nextMessage)
 
                 dbLogbookReportRepository.save(updatedEntity)
@@ -410,26 +413,26 @@ class JpaLogbookReportRepository(
             .filter { it.operationType in listOf(LogbookOperationType.DAT, LogbookOperationType.COR) }
             .map { logbookReportEntity ->
                 val pnoMessage = objectMapper.readValue(logbookReportEntity.message, PNO::class.java)
-                pnoMessage.authorTrigram = authorTrigram
-                pnoMessage.note = note
+                if (
+                    !Utils.areStringsEquivalent(authorTrigram, pnoMessage.authorTrigram) ||
+                    !Utils.areStringsEquivalent(note, pnoMessage.note)
+                ) {
+                    pnoMessage.authorTrigram = authorTrigram
+                    pnoMessage.note = note
 
-                /**
-                 * The PNO states are re-initialized:
-                 * - the PDF will be re-generated (done in the use case by deleting the old one)
-                 * - the PNO will require another verification before sending
-                 *
-                 * Note: We will lose the distinction between `AUTO_SEND_DONE` and `OUT_OF_VERIFICATION_SCOPE`
-                 * if it was in one of these states before the update. But it's an acceptable trade-off.
-                 */
-                pnoMessage.isBeingSent = false
-                pnoMessage.isVerified = false
-                pnoMessage.isSent = false
+                    /**
+                     * The PNO states are re-initialized:
+                     * - the PDF will be re-generated (done in the use case by deleting the old one)
+                     * - the PNO will require another verification before sending
+                     */
+                    pnoMessage.isVerified = false
 
-                val nextMessage = objectMapper.writeValueAsString(pnoMessage)
+                    val nextMessage = objectMapper.writeValueAsString(pnoMessage)
 
-                val updatedEntity = logbookReportEntity.copy(message = nextMessage)
+                    val updatedEntity = logbookReportEntity.copy(message = nextMessage)
 
-                dbLogbookReportRepository.save(updatedEntity)
+                    dbLogbookReportRepository.save(updatedEntity)
+                }
             }
     }
 

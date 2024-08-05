@@ -18,18 +18,20 @@ export function ActionButtonsCell({ priorNotification }: ActionButtonsCellProps)
   const isSuperUser = useIsSuperUser()
   const dispatch = useMainAppDispatch()
 
-  const editAutoPriorNotification = () => {
+  const edit = () => {
+    if (priorNotification.isManuallyCreated) {
+      dispatch(
+        openManualPriorNotificationForm(
+          { operationDate: priorNotification.operationDate, reportId: priorNotification.id },
+          priorNotification.fingerprint
+        )
+      )
+
+      return
+    }
+
     dispatch(
       openAutoPriorNotificationForm(
-        { operationDate: priorNotification.operationDate, reportId: priorNotification.id },
-        priorNotification.fingerprint
-      )
-    )
-  }
-
-  const editManualPriorNotification = () => {
-    dispatch(
-      openManualPriorNotificationForm(
         { operationDate: priorNotification.operationDate, reportId: priorNotification.id },
         priorNotification.fingerprint
       )
@@ -80,7 +82,7 @@ export function ActionButtonsCell({ priorNotification }: ActionButtonsCellProps)
         <IconButton
           accent={Accent.TERTIARY}
           Icon={Icon.Edit}
-          onClick={priorNotification.isManuallyCreated ? editManualPriorNotification : editAutoPriorNotification}
+          onClick={edit}
           title="Éditer le préavis"
           withUnpropagatedClick
         />

@@ -7,7 +7,7 @@ import { updateEditedPriorNotificationComputedValues } from '@features/PriorNoti
 import { isZeroNotice } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Banner, Button, FormikEffect, Icon, Level, usePrevious } from '@mtes-mct/monitor-ui'
+import { Accent, Button, FormikEffect, Icon, Level, usePrevious } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { getDefinedObject } from '@utils/getDefinedObject'
 import { useFormikContext } from 'formik'
@@ -20,6 +20,7 @@ import { Form } from './Form'
 import { Header } from './Header'
 import { getPartialComputationRequestData } from './utils'
 import { PriorNotification } from '../../PriorNotification.types'
+import { CardBanner } from '../shared/CardBanner'
 import { DownloadButton } from '../shared/DownloadButton'
 import { TagBar } from '../shared/TagBar'
 
@@ -135,14 +136,14 @@ export function Card({ detail, isValidatingOnChange, onClose, onSubmit, onVerify
         <FormikEffect onChange={updateComputedValuesIfNecessary as any} />
 
         {detail?.state === PriorNotification.State.PENDING_SEND && (
-          <StyledBanner isCollapsible level={Level.WARNING} top="100px">
+          <CardBanner isCollapsible level={Level.WARNING} top="100px">
             Le préavis est en cours de diffusion.
-          </StyledBanner>
+          </CardBanner>
         )}
         {detail?.state === PriorNotification.State.PENDING_AUTO_SEND && (
-          <StyledBanner isCollapsible level={Level.WARNING} top="100px">
+          <CardBanner isCollapsible level={Level.WARNING} top="100px">
             Le préavis est en cours d’envoi aux unités qui l’ont demandé.
-          </StyledBanner>
+          </CardBanner>
         )}
 
         <FrontendErrorBoundary>
@@ -283,27 +284,6 @@ const InnerWrapper = styled.div`
   height: 100%;
   position: relative;
   width: 560px;
-`
-
-const StyledBanner = styled(Banner)`
-  box-shadow: inset 0 3px 6px ${p => p.theme.color.lightGray};
-  padding: 0;
-
-  > div > p {
-    font-size: 16px;
-    font-weight: 500;
-    padding-top: 3px;
-  }
-
-  > .banner-button {
-    position: relative;
-
-    > button {
-      position: absolute;
-      right: 32px;
-      top: -7.5px;
-    }
-  }
 `
 
 const Body = styled.div`

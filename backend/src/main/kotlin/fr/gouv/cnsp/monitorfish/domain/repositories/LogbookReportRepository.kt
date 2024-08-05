@@ -69,7 +69,9 @@ interface LogbookReportRepository {
     fun updatePriorNotificationState(
         reportId: String,
         operationDate: ZonedDateTime,
+
         isBeingSent: Boolean,
+        isSent: Boolean,
         isVerified: Boolean,
     )
 

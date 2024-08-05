@@ -20,6 +20,7 @@ class VerifyAndSendPriorNotification(
                 reportId,
                 operationDate,
                 isBeingSent = true,
+                isSent = false,
                 isVerified = true,
             )
         }

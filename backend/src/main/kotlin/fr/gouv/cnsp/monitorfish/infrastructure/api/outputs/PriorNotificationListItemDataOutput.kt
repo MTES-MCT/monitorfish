@@ -21,6 +21,7 @@ data class PriorNotificationListItemDataOutput(
     val isCorrection: Boolean,
     val isManuallyCreated: Boolean = false,
     val isVesselUnderCharter: Boolean?,
+    val isInvalidated: Boolean? = false,
     val onBoardCatches: List<LogbookMessageFishingCatchDataOutput>,
     // Used to optimize SQL query via Timescale when fetching a single prior notification from the list
     val operationDate: ZonedDateTime,
@@ -50,14 +51,14 @@ data class PriorNotificationListItemDataOutput(
         val logger: Logger = LoggerFactory.getLogger(PriorNotificationListItemDataOutput::class.java)
 
         fun fromPriorNotification(priorNotification: PriorNotification): PriorNotificationListItemDataOutput? {
-            val logbookMessage = priorNotification.logbookMessageTyped.logbookMessage
+            val logbookMessage = priorNotification.logbookMessageAndValue.logbookMessage
             val referenceReportId = logbookMessage.getReferenceReportId()
             if (referenceReportId == null) {
                 logger.warn("Prior notification has neither `reportId` nor `referencedReportId`: $priorNotification.")
 
                 return null
             }
-            val message = priorNotification.logbookMessageTyped.typedMessage
+            val message = priorNotification.logbookMessageAndValue.value
 
             val acknowledgment = logbookMessage.acknowledgment?.let { AcknowledgmentDataOutput.fromAcknowledgment(it) }
             val onBoardCatches = message.catchOnboard
@@ -80,6 +81,7 @@ data class PriorNotificationListItemDataOutput(
                 fingerprint = priorNotification.fingerprint,
                 isCorrection = logbookMessage.operationType === LogbookOperationType.COR,
                 isManuallyCreated = priorNotification.isManuallyCreated,
+                isInvalidated = message.isInvalidated,
                 isVesselUnderCharter = vessel.underCharter,
                 onBoardCatches = onBoardCatches,
                 operationDate = logbookMessage.operationDateTime,
@@ -103,7 +105,7 @@ data class PriorNotificationListItemDataOutput(
                 vesselLength = vessel.length,
                 vesselMmsi = vessel.mmsi,
                 vesselName = vessel.vesselName,
-                riskFactor = priorNotification.logbookMessageTyped.typedMessage.riskFactor,
+                riskFactor = priorNotification.logbookMessageAndValue.value.riskFactor,
             )
         }
     }

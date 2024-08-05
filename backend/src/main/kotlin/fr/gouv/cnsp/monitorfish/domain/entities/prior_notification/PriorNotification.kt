@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.entities.prior_notification
 
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
 import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTyped
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageAndValue
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
@@ -25,7 +25,7 @@ data class PriorNotification(
     val createdAt: ZonedDateTime?,
     val didNotFishAfterZeroNotice: Boolean,
     val isManuallyCreated: Boolean,
-    var logbookMessageTyped: LogbookMessageTyped<PNO>,
+    var logbookMessageAndValue: LogbookMessageAndValue<PNO>,
     var port: Port?,
     var reportingCount: Int?,
     var seafront: Seafront?,
@@ -43,7 +43,7 @@ data class PriorNotification(
          *  See /adrs/0006-prior-notification-states-specifications.md for more details.
          */
         get() = run {
-            val pnoMessage = logbookMessageTyped.typedMessage
+            val pnoMessage = logbookMessageAndValue.value
 
             val isInVerificationScope = pnoMessage.isInVerificationScope
             val isVerified = pnoMessage.isVerified
@@ -79,8 +79,8 @@ data class PriorNotification(
         allVessels: List<Vessel>,
         isManuallyCreated: Boolean,
     ) {
-        val logbookMessage = logbookMessageTyped.logbookMessage
-        val pnoMessage = logbookMessageTyped.typedMessage
+        val logbookMessage = logbookMessageAndValue.logbookMessage
+        val pnoMessage = logbookMessageAndValue.value
 
         port = try {
             pnoMessage.port?.let { portLocode ->
@@ -121,7 +121,7 @@ data class PriorNotification(
         allSpecies: List<Species>,
         logbookRawMessageRepository: LogbookRawMessageRepository,
     ) {
-        val logbookMessage = logbookMessageTyped.logbookMessage
+        val logbookMessage = logbookMessageAndValue.logbookMessage
         val logbookMessageWithRawMessage = logbookMessage.operationNumber?.let { operationNumber ->
             logbookMessage.copy(
                 rawMessage = try {
@@ -135,7 +135,7 @@ data class PriorNotification(
         } ?: logbookMessage
         logbookMessageWithRawMessage.enrichGearPortAndSpecyNames(allGears, allPorts, allSpecies)
 
-        logbookMessageTyped = LogbookMessageTyped(
+        logbookMessageAndValue = LogbookMessageAndValue(
             logbookMessageWithRawMessage,
             PNO::class.java,
         )

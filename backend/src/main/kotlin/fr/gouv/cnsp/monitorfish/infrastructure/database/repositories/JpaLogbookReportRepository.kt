@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTyped
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageAndValue
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
@@ -22,7 +22,6 @@ import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.stereotype.Repository
-import java.time.ZoneOffset
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 
@@ -96,8 +95,8 @@ class JpaLogbookReportRepository(
                     null
                 }
             }.filter {
-                it.logbookMessageTyped.typedMessage.isInVerificationScope == true &&
-                    it.logbookMessageTyped.typedMessage.isVerified == false
+                it.logbookMessageAndValue.value.isInVerificationScope == true &&
+                    it.logbookMessageAndValue.value.isVerified == false
             }
     }
 
@@ -350,9 +349,9 @@ class JpaLogbookReportRepository(
 
     @Modifying
     @Transactional
-    override fun savePriorNotification(logbookMessageTyped: LogbookMessageTyped<PNO>): PriorNotification {
+    override fun savePriorNotification(logbookMessageAndValue: LogbookMessageAndValue<PNO>): PriorNotification {
         return dbLogbookReportRepository
-            .save(LogbookReportEntity.fromLogbookMessage(objectMapper, logbookMessageTyped.logbookMessage))
+            .save(LogbookReportEntity.fromLogbookMessage(objectMapper, logbookMessageAndValue.logbookMessage))
             .toPriorNotification(objectMapper, emptyList())
     }
 
@@ -367,7 +366,7 @@ class JpaLogbookReportRepository(
         val logbookReportEntities =
             dbLogbookReportRepository.findEnrichedPnoReferenceAndRelatedOperationsByReportId(
                 reportId,
-                operationDate.withZoneSameInstant(ZoneOffset.UTC).toString(),
+                operationDate.withZoneSameInstant(UTC).toString(),
             )
         if (logbookReportEntities.isEmpty()) {
             throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
@@ -394,7 +393,7 @@ class JpaLogbookReportRepository(
         val logbookReportEntities =
             dbLogbookReportRepository.findEnrichedPnoReferenceAndRelatedOperationsByReportId(
                 reportId,
-                operationDate.withZoneSameInstant(ZoneOffset.UTC).toString(),
+                operationDate.withZoneSameInstant(UTC).toString(),
             )
         if (logbookReportEntities.isEmpty()) {
             throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
@@ -415,6 +414,32 @@ class JpaLogbookReportRepository(
                 pnoMessage.isBeingSent = false
                 pnoMessage.isVerified = false
                 pnoMessage.isSent = false
+
+                val nextMessage = objectMapper.writeValueAsString(pnoMessage)
+
+                val updatedEntity = logbookReportEntity.copy(message = nextMessage)
+
+                dbLogbookReportRepository.save(updatedEntity)
+            }
+    }
+
+    @Transactional
+    override fun invalidate(reportId: String, operationDate: ZonedDateTime) {
+        val logbookReportEntities =
+            dbLogbookReportRepository.findEnrichedPnoReferenceAndRelatedOperationsByReportId(
+                reportId,
+                operationDate.withZoneSameInstant(UTC).toString(),
+            )
+        if (logbookReportEntities.isEmpty()) {
+            throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
+        }
+
+        // We need to update both DAT and related COR operations (which also covers orphan COR cases)
+        logbookReportEntities
+            .filter { it.operationType in listOf(LogbookOperationType.DAT, LogbookOperationType.COR) }
+            .map { logbookReportEntity ->
+                val pnoMessage = objectMapper.readValue(logbookReportEntity.message, PNO::class.java)
+                pnoMessage.isInvalidated = true
 
                 val nextMessage = objectMapper.writeValueAsString(pnoMessage)
 

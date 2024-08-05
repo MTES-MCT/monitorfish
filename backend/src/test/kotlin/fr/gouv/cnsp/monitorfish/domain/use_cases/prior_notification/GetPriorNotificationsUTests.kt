@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.SeafrontGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTyped
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageAndValue
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
@@ -67,7 +67,7 @@ class GetPriorNotificationsUTests {
                     createdAt = null,
                     didNotFishAfterZeroNotice = false,
                     isManuallyCreated = false,
-                    logbookMessageTyped = LogbookMessageTyped(
+                    logbookMessageAndValue = LogbookMessageAndValue(
                         clazz = PNO::class.java,
                         logbookMessage = LogbookMessage(
                             id = 1,
@@ -100,7 +100,7 @@ class GetPriorNotificationsUTests {
                     createdAt = null,
                     didNotFishAfterZeroNotice = false,
                     isManuallyCreated = false,
-                    logbookMessageTyped = LogbookMessageTyped(
+                    logbookMessageAndValue = LogbookMessageAndValue(
                         clazz = PNO::class.java,
                         logbookMessage = LogbookMessage(
                             id = 1,
@@ -151,10 +151,10 @@ class GetPriorNotificationsUTests {
 
         // Then
         assertThat(result.data).hasSize(2)
-        assertThat(result.data[0].logbookMessageTyped.logbookMessage.reportId).isEqualTo(
+        assertThat(result.data[0].logbookMessageAndValue.logbookMessage.reportId).isEqualTo(
             "FAKE_REPORT_ID_1",
         )
-        assertThat(result.data[1].logbookMessageTyped.logbookMessage.reportId).isEqualTo(
+        assertThat(result.data[1].logbookMessageAndValue.logbookMessage.reportId).isEqualTo(
             "FAKE_REPORT_ID_2_COR",
         )
     }

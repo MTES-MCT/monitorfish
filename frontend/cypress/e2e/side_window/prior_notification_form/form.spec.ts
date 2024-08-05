@@ -537,4 +537,26 @@ context('Side Window > Prior Notification Form > Form', () => {
       })
     })
   })
+
+  it('Should invalidate a manual prior notification', () => {
+    // Given
+    cy.intercept(
+      'POST',
+      '/bff/v1/prior_notifications/00000000-0000-4000-0000-000000000001/invalidate?isManuallyCreated=true&operationDate=*'
+    ).as('verifyAndSendPriorNotification')
+    editSideWindowPriorNotification('POISSON PAS NET', '00000000-0000-4000-0000-000000000001')
+    cy.get('.Wrapper').should('not.contain', 'Invalidé')
+
+    // When
+    cy.clickButton('Invalider le préavis')
+    cy.clickButton('Confirmer l’invalidation')
+    cy.get('.Wrapper').contains('Invalidé')
+    cy.get('[title="Invalider le préavis"]').should('not.exist')
+
+    // Then
+    cy.clickButton('Fermer')
+    cy.getTableRowById('00000000-0000-4000-0000-000000000001' as any)
+      .find('[title="Préavis invalidé"]')
+      .should('exist')
+  })
 })

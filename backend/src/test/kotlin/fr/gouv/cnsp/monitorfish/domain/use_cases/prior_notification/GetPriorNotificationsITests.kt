@@ -79,9 +79,9 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
         // Then
         val firstPriorNotificationWithNonNullArrivalDate = result.data
-            .first { it.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc != null }
+            .first { it.logbookMessageAndValue.value.predictedArrivalDatetimeUtc != null }
         assertThat(
-            firstPriorNotificationWithNonNullArrivalDate.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc,
+            firstPriorNotificationWithNonNullArrivalDate.logbookMessageAndValue.value.predictedArrivalDatetimeUtc,
         )
             .isBefore(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
         assertThat(result.data).hasSizeGreaterThan(0)
@@ -108,9 +108,9 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
         // Then
         val firstPriorNotificationWithNonNullArrivalDate = result.data
-            .first { it.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc != null }
+            .first { it.logbookMessageAndValue.value.predictedArrivalDatetimeUtc != null }
         assertThat(
-            firstPriorNotificationWithNonNullArrivalDate.logbookMessageTyped.typedMessage.predictedArrivalDatetimeUtc,
+            firstPriorNotificationWithNonNullArrivalDate.logbookMessageAndValue.value.predictedArrivalDatetimeUtc,
         )
             .isAfter(ZonedDateTime.now().minusHours(1))
         assertThat(result.data).hasSizeGreaterThan(0)
@@ -137,9 +137,9 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
         // Then
         val firstPriorNotificationWithNonNullLandingDate = result.data
-            .first { it.logbookMessageTyped.typedMessage.predictedLandingDatetimeUtc != null }
+            .first { it.logbookMessageAndValue.value.predictedLandingDatetimeUtc != null }
         assertThat(
-            firstPriorNotificationWithNonNullLandingDate.logbookMessageTyped.typedMessage.predictedLandingDatetimeUtc,
+            firstPriorNotificationWithNonNullLandingDate.logbookMessageAndValue.value.predictedLandingDatetimeUtc,
         )
             .isEqualTo(ZonedDateTime.parse("2023-01-01T10:30:00Z"))
         assertThat(result.data).hasSizeGreaterThan(0)
@@ -166,9 +166,9 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
         // Then
         val firstPriorNotificationWithNonNullLandingDate = result.data
-            .first { it.logbookMessageTyped.typedMessage.predictedLandingDatetimeUtc != null }
+            .first { it.logbookMessageAndValue.value.predictedLandingDatetimeUtc != null }
         assertThat(
-            firstPriorNotificationWithNonNullLandingDate.logbookMessageTyped.typedMessage.predictedLandingDatetimeUtc,
+            firstPriorNotificationWithNonNullLandingDate.logbookMessageAndValue.value.predictedLandingDatetimeUtc,
         )
             .isAfter(ZonedDateTime.now().plusHours(4))
         assertThat(result.data).hasSizeGreaterThan(0)
@@ -196,7 +196,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
         // Then
         val firstPriorNotificationWithNonNullPort = result.data.first { it.port != null }
         assertThat(firstPriorNotificationWithNonNullPort.port!!.name).isEqualTo("Al Jazeera Port")
-        assertThat(firstPriorNotificationWithNonNullPort.logbookMessageTyped.typedMessage.port).isEqualTo("AEJAZ")
+        assertThat(firstPriorNotificationWithNonNullPort.logbookMessageAndValue.value.port).isEqualTo("AEJAZ")
         assertThat(result.data).hasSizeGreaterThan(0)
     }
 
@@ -222,7 +222,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
         // Then
         val firstPriorNotificationWithNonNullPort = result.data.first { it.port != null }
         assertThat(firstPriorNotificationWithNonNullPort.port!!.name).isEqualTo("Vannes")
-        assertThat(firstPriorNotificationWithNonNullPort.logbookMessageTyped.typedMessage.port).isEqualTo("FRVNE")
+        assertThat(firstPriorNotificationWithNonNullPort.logbookMessageAndValue.value.port).isEqualTo("FRVNE")
         assertThat(result.data).hasSizeGreaterThan(0)
     }
 
@@ -250,9 +250,9 @@ class GetPriorNotificationsITests : AbstractDBTests() {
         // We don't test the `.vessel.VesselName` since in the real world,
         // the vessel name may have changed between the logbook message date and now
         assertThat(firstPriorNotificationWithKnownVessel.vessel!!.internalReferenceNumber).isEqualTo("CFR125")
-        assertThat(firstPriorNotificationWithKnownVessel.logbookMessageTyped.logbookMessage.internalReferenceNumber)
+        assertThat(firstPriorNotificationWithKnownVessel.logbookMessageAndValue.logbookMessage.internalReferenceNumber)
             .isEqualTo("CFR125")
-        assertThat(firstPriorNotificationWithKnownVessel.logbookMessageTyped.logbookMessage.vesselName)
+        assertThat(firstPriorNotificationWithKnownVessel.logbookMessageAndValue.logbookMessage.vesselName)
             .isEqualTo("BEAU SÉANT")
         assertThat(result.data).hasSizeGreaterThan(0)
     }
@@ -281,9 +281,9 @@ class GetPriorNotificationsITests : AbstractDBTests() {
         // We don't test the `.vessel.VesselName` since in the real world,
         // the vessel name may have changed between the logbook message date and now
         assertThat(firstPriorNotificationWithKnownVessel.vessel!!.internalReferenceNumber).isEqualTo("CFR120")
-        assertThat(firstPriorNotificationWithKnownVessel.logbookMessageTyped.logbookMessage.internalReferenceNumber)
+        assertThat(firstPriorNotificationWithKnownVessel.logbookMessageAndValue.logbookMessage.internalReferenceNumber)
             .isEqualTo("CFR120")
-        assertThat(firstPriorNotificationWithKnownVessel.logbookMessageTyped.logbookMessage.vesselName)
+        assertThat(firstPriorNotificationWithKnownVessel.logbookMessageAndValue.logbookMessage.vesselName)
             .isEqualTo("VIVA L'ITALIA")
         assertThat(result.data).hasSizeGreaterThan(0)
     }
@@ -309,8 +309,8 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
         // Then
         val firstPriorNotificationWithNonNullRiskFactor =
-            result.data.first { it.logbookMessageTyped.typedMessage.riskFactor != null }
-        assertThat(firstPriorNotificationWithNonNullRiskFactor.logbookMessageTyped.typedMessage.riskFactor!!).isEqualTo(
+            result.data.first { it.logbookMessageAndValue.value.riskFactor != null }
+        assertThat(firstPriorNotificationWithNonNullRiskFactor.logbookMessageAndValue.value.riskFactor!!).isEqualTo(
             1.5,
         )
         assertThat(result.data).hasSizeGreaterThan(0)
@@ -337,8 +337,8 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
         // Then
         val firstPriorNotificationWithNonNullRiskFactor =
-            result.data.first { it.logbookMessageTyped.typedMessage.riskFactor != null }
-        assertThat(firstPriorNotificationWithNonNullRiskFactor.logbookMessageTyped.typedMessage.riskFactor!!).isEqualTo(
+            result.data.first { it.logbookMessageAndValue.value.riskFactor != null }
+        assertThat(firstPriorNotificationWithNonNullRiskFactor.logbookMessageAndValue.value.riskFactor!!).isEqualTo(
             3.9,
         )
         assertThat(result.data).hasSizeGreaterThan(0)

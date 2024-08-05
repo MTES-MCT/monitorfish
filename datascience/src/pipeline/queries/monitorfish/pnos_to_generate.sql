@@ -74,6 +74,10 @@ WHERE
             AND report_id IN (SELECT referenced_report_id FROM acknowledged_messages)
         )
     )
+    AND (
+        (value->>'isInvalidated') IS NULL
+        OR (value->>'isInvalidated')::BOOLEAN IS false
+    )
 ORDER BY id)
 
 UNION ALL
@@ -118,6 +122,12 @@ ON rf.vessel_id = r.vessel_id
 LEFT JOIN ports p
 ON p.locode = r.value->>'port'
 WHERE
-    (value->>'isBeingSent')::BOOLEAN IS true
-    OR report_id NOT IN (SELECT report_id FROM prior_notification_pdf_documents)
+    (
+        (value->>'isInvalidated') IS NULL
+        OR (value->>'isInvalidated')::BOOLEAN IS false
+    )
+    AND (
+        (value->>'isBeingSent')::BOOLEAN IS true
+        OR report_id NOT IN (SELECT report_id FROM prior_notification_pdf_documents)
+    )
 ORDER BY report_id)

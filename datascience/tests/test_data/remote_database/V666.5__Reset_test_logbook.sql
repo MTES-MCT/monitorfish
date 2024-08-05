@@ -174,7 +174,9 @@ INSERT INTO logbook_raw_messages (operation_number, xml_message) VALUES
     ('17', '<ERS>Message ERS xml</ERS>'),
     ('18', '<ERS>Message ERS xml</ERS>'),
     ('19', '<ERS>Message ERS xml</ERS>'),
-    ('20', '<ERS>Message ERS xml</ERS>');
+    ('20', '<ERS>Message ERS xml</ERS>'),
+    ('21', '<ERS>Message ERS xml</ERS>'),
+    ('22', '<ERS>Message ERS xml</ERS>');
 
 INSERT INTO logbook_reports (
     operation_number, operation_country, operation_datetime_utc, operation_type,
@@ -215,7 +217,7 @@ INSERT INTO logbook_reports (
     '14', 'OOF', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 52 minutes')::TIMESTAMP, 'DAT',
     '14', null, ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 54 minutes')::TIMESTAMP,
     'ABC000306959', 'LLUK', 'RV348407', 'ÉTABLIR IMPRESSION LORSQUE', 'FRA', null, 'PNO',
-    '{"port": "FRLEH", "purpose": "LAN", "catchOnboard": [{"nbFish": null, "faoZone": "27.8.a", "weight": 150.0, "species": "GHL"}, {"nbFish": null, "faoZone": "27.8.a", "weight": 1450.0, "species": "HKE"}, {"nbFish": 2, "faoZone": "27.8.a", "weight": 150.0, "species": "BFT"}, {"nbFish": 2, "faoZone": "27.8.a", "weight": 70.0, "species": "SWO"}, {"nbFish": 2, "faoZone": "27.8.b", "weight": 150.0, "species": "BFT"}, {"nbFish": null, "faoZone": "27.8.b", "weight": 250.0, "species": "GHL"}], "tripStartDate": "2020-05-04T19:41:03.340Z", "predictedArrivalDatetimeUtc": "2020-05-06T11:41:03.340Z", "pnoTypes": [{"pnoTypeName": "Préavis type 1", "minimumNotificationPeriod": 4.0, "hasDesignatedPorts": true}, {"pnoTypeName": "Préavis type 2", "minimumNotificationPeriod": 4.0, "hasDesignatedPorts": true}], "isInVerificationScope": false, "isVerified": false, "isSent": false, "isBeingSent": true, "riskFactor": 2.14443662414848}',
+    '{"port": "FRLEH", "purpose": "LAN", "catchOnboard": [{"nbFish": null, "faoZone": "27.8.a", "weight": 150.0, "species": "GHL"}, {"nbFish": null, "faoZone": "27.8.a", "weight": 1450.0, "species": "HKE"}, {"nbFish": 2, "faoZone": "27.8.a", "weight": 150.0, "species": "BFT"}, {"nbFish": 2, "faoZone": "27.8.a", "weight": 70.0, "species": "SWO"}, {"nbFish": 2, "faoZone": "27.8.b", "weight": 150.0, "species": "BFT"}, {"nbFish": null, "faoZone": "27.8.b", "weight": 250.0, "species": "GHL"}], "tripStartDate": "2020-05-04T19:41:03.340Z", "predictedArrivalDatetimeUtc": "2020-05-06T11:41:03.340Z", "pnoTypes": [{"pnoTypeName": "Préavis type 1", "minimumNotificationPeriod": 4.0, "hasDesignatedPorts": true}, {"pnoTypeName": "Préavis type 2", "minimumNotificationPeriod": 4.0, "hasDesignatedPorts": true}], "isInVerificationScope": false, "isVerified": false, "isSent": false, "isBeingSent": true, "riskFactor": 2.14443662414848, "isInvalidated": false}',
     ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 50 minutes')::TIMESTAMP, '20510003', 'ERS',
     true, '[{"gear": "OTB", "mesh": 140, "dimensions": "250.0"}]', '[{"segment": "SWW01/02/03", "segmentName": "Segment ciblé par une unité"}]'
 ),
@@ -266,6 +268,22 @@ INSERT INTO logbook_reports (
     NULL, NULL, NULL, NULL, NULL, NULL, NULL,
     '{"returnStatus": "000"}',
     ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 27 minutes')::TIMESTAMP, NULL, 'ERS',
+    false, NULL, NULL
+),
+(
+    '21', 'OOF', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 12 minutes')::TIMESTAMP, 'DAT',
+    '21', null, ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 14 minutes')::TIMESTAMP,
+    'INVA_PNO_VES', 'INVA', 'INVALID', 'NAVIRE AVEC PNO INVALIDE', 'FRA', null, 'PNO',
+    '{"port": "FRDPE", "purpose": "LAN", "catchOnboard": [{"nbFish": null, "faoZone": "27.8.a", "weight": 150.0, "species": "GHL"}, {"nbFish": null, "faoZone": "27.8.a", "weight": 1450.0, "species": "HKE"}, {"nbFish": 2, "faoZone": "27.8.a", "weight": 150.0, "species": "BFT"}, {"nbFish": 2, "faoZone": "27.8.a", "weight": 70.0, "species": "SWO"}, {"nbFish": 2, "faoZone": "27.8.b", "weight": 150.0, "species": "BFT"}, {"nbFish": null, "faoZone": "27.8.b", "weight": 250.0, "species": "GHL"}], "tripStartDate": "2020-05-04T19:41:03.340Z", "predictedArrivalDatetimeUtc": "2020-05-06T11:41:03.340Z", "pnoTypes": [], "isInVerificationScope": false, "isVerified": false, "isSent": false, "isBeingSent": true, "isInvalidated": true}',
+    ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 30 minutes')::TIMESTAMP, '20510003', 'ERS',
+    true, '[{"gear": "OTB", "mesh": 140, "dimensions": "250.0"}]', '[]'
+),
+(
+    '22', 'OOE', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 10 minutes')::TIMESTAMP, 'RET',
+    NULL, '21', NULL,
+    NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+    '{"returnStatus": "000"}',
+    ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 10 minutes')::TIMESTAMP, NULL, 'ERS',
     false, NULL, NULL
 )
 ;

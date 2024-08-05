@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.fakers
 
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTyped
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageAndValue
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import java.time.ZonedDateTime
@@ -14,7 +14,7 @@ class PriorNotificationFaker {
                 createdAt = ZonedDateTime.now(),
                 didNotFishAfterZeroNotice = false,
                 isManuallyCreated = false,
-                logbookMessageTyped = LogbookMessageTyped(
+                logbookMessageAndValue = LogbookMessageAndValue(
                     clazz = PNO::class.java,
                     logbookMessage = LogbookMessageFaker.fakePnoLogbookMessage(index),
                 ),

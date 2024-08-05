@@ -16,9 +16,6 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 import java.time.ZonedDateTime
-import kotlin.reflect.full.declaredMemberProperties
-import kotlin.reflect.jvm.isAccessible
-import kotlin.reflect.jvm.javaField
 
 @Repository
 class JpaManualPriorNotificationRepository(
@@ -93,25 +90,32 @@ class JpaManualPriorNotificationRepository(
     @Transactional
     @CacheEvict(value = ["manual_pno_to_verify"], allEntries = true)
     override fun updateState(reportId: String, isBeingSent: Boolean, isVerified: Boolean) {
-        val manualPriorNotificationEntity =
+        val manualPriorNotification =
             dbManualPriorNotificationRepository.findByReportId(reportId) ?: throw BackendUsageException(
                 BackendUsageErrorCode.NOT_FOUND,
             )
 
-        val nextPnoValue: PNO = manualPriorNotificationEntity.value
+        val nextPnoValue: PNO = manualPriorNotification.value
         nextPnoValue.isBeingSent = isBeingSent
         nextPnoValue.isVerified = isVerified
 
-        // We use a reflection to update the entity `value` prop since it's immutable
-        val pnoValueRefection = ManualPriorNotificationEntity::class.declaredMemberProperties
-            .find { it.name == "value" }
-        pnoValueRefection?.let {
-            it.isAccessible = true
-            val field = it.javaField
-            field?.isAccessible = true
-            field?.set(manualPriorNotificationEntity, nextPnoValue)
-        }
+        val updatedManualPriorNotification = manualPriorNotification.copy(value = nextPnoValue)
 
-        dbManualPriorNotificationRepository.save(manualPriorNotificationEntity)
+        dbManualPriorNotificationRepository.save(updatedManualPriorNotification)
+    }
+
+    @Transactional
+    override fun invalidate(reportId: String) {
+        val manualPriorNotification =
+            dbManualPriorNotificationRepository.findByReportId(reportId) ?: throw BackendUsageException(
+                BackendUsageErrorCode.NOT_FOUND,
+            )
+
+        val nextPnoValue: PNO = manualPriorNotification.value
+        nextPnoValue.isInvalidated = true
+
+        val updatedManualPriorNotification = manualPriorNotification.copy(value = nextPnoValue)
+
+        dbManualPriorNotificationRepository.save(updatedManualPriorNotification)
     }
 }

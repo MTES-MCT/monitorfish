@@ -10,6 +10,7 @@ import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 
 type TagBarProps = Readonly<{
   hasBeenComputed?: boolean | undefined
+  isInvalidated: boolean | undefined
   isVesselUnderCharter: boolean | undefined
   isZeroNotice: boolean | undefined
   riskFactor: number | undefined
@@ -19,6 +20,7 @@ type TagBarProps = Readonly<{
 }>
 export function TagBar({
   hasBeenComputed = true,
+  isInvalidated,
   isVesselUnderCharter,
   isZeroNotice,
   riskFactor,
@@ -54,6 +56,12 @@ export function TagBar({
       </Row>
 
       <Row>
+        {isInvalidated && (
+          <FixedTag backgroundColor={THEME.color.maximumRed} color={THEME.color.white}>
+            Invalidé
+          </FixedTag>
+        )}
+
         {isZeroNotice && (
           <FixedTag key="zeroNotice" borderColor={THEME.color.slateGray}>
             Préavis Zéro

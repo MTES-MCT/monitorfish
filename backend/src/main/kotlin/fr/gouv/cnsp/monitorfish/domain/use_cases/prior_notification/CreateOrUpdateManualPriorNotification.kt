@@ -111,14 +111,14 @@ class CreateOrUpdateManualPriorNotification(
             tripGears = tripGears,
             tripSegments = tripSegments,
         )
-        val logbookMessageTyped = LogbookMessageTyped(pnoLogbookMessage, PNO::class.java)
+        val logbookMessageAndValue = LogbookMessageAndValue(pnoLogbookMessage, PNO::class.java)
 
         val newOrNextPriorNotification = PriorNotification(
             reportId = reportId,
             authorTrigram = authorTrigram,
             didNotFishAfterZeroNotice = didNotFishAfterZeroNotice,
             isManuallyCreated = true,
-            logbookMessageTyped = logbookMessageTyped,
+            logbookMessageAndValue = logbookMessageAndValue,
             sentAt = sentAt,
 
             // All these props are useless for the save operation.
@@ -143,7 +143,7 @@ class CreateOrUpdateManualPriorNotification(
             manualPriorNotificationRepository.save(newOrNextPriorNotification)
         val createdOrUpdatedPriorNotification = getPriorNotification.execute(
             createdOrUpdatedIncompletePriorNotification.reportId!!,
-            createdOrUpdatedIncompletePriorNotification.logbookMessageTyped.logbookMessage.operationDateTime,
+            createdOrUpdatedIncompletePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
             true,
         )
 

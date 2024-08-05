@@ -20,6 +20,7 @@ const GET_PRIOR_NOTIFICATIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer l
 const GET_PRIOR_NOTIFICATION_TYPES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la liste des types de préavis."
 const GET_PRIOR_NOTIFICATION_PDF_ERROR_MESSAGE = "Nous n'avons pas pu récupérer le PDF du préavis."
 const VERIFY_AND_SEND_PRIOR_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu vérifier et envoyer le préavis."
+const INVALIDATE_PRIOR_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu invalider et envoyer le préavis."
 
 export const priorNotificationApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
@@ -111,6 +112,26 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_TYPES_ERROR_MESSAGE, response)
     }),
 
+    invalidatePriorNotification: builder.mutation<
+      PriorNotification.PriorNotificationDetail,
+      PriorNotification.PriorNotificationIdentifier & {
+        isManuallyCreated: boolean
+      }
+    >({
+      invalidatesTags: (_, __, { reportId }) => [
+        { type: RtkCacheTagType.PriorNotifications },
+        { id: reportId, type: RtkCacheTagType.PriorNotification }
+      ],
+      query: ({ isManuallyCreated, operationDate, reportId }) => ({
+        method: 'GET',
+        url: getUrlOrPathWithQueryParams(`/prior_notifications/${reportId}/invalidate`, {
+          isManuallyCreated,
+          operationDate
+        })
+      }),
+      transformErrorResponse: response => new FrontendApiError(INVALIDATE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
+    }),
+
     updateManualPriorNotification: builder.mutation<
       PriorNotification.ManualPriorNotificationData,
       {
@@ -190,7 +211,8 @@ export const {
   useGetPriorNotificationDetailQuery,
   useGetPriorNotificationsQuery,
   useGetPriorNotificationsToVerifyQuery,
-  useGetPriorNotificationTypesQuery
+  useGetPriorNotificationTypesQuery,
+  useInvalidatePriorNotificationMutation
 } = priorNotificationApi
 
 export const { useGetPriorNotificationPDFQuery } = priorNotificationPublicApi

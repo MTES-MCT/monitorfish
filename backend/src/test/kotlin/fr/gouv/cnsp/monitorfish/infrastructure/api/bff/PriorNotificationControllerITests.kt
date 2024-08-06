@@ -419,7 +419,7 @@ class PriorNotificationControllerITests {
         )
             // Then
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.id", equalTo(fakePriorNotification.reportId)))
+            .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
     }
 
     @Test
@@ -454,7 +454,7 @@ class PriorNotificationControllerITests {
         )
             // Then
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.id", equalTo(fakePriorNotification.reportId)))
+            .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
             .andExpect(
                 jsonPath(
                     "$.logbookMessage.message.note",
@@ -486,7 +486,7 @@ class PriorNotificationControllerITests {
         )
             // Then
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.id", equalTo(fakePriorNotification.reportId)))
+            .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
             .andExpect(
                 jsonPath(
                     "$.logbookMessage.message.isInvalidated",

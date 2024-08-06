@@ -10,8 +10,8 @@ import type { MainAppThunk } from '@store'
 
 export const updateLogbookPriorNotification =
   (
-    priorNotificationIdentifier: PriorNotification.PriorNotificationIdentifier,
-    nextData: PriorNotification.LogbookPriorNotificationData
+    priorNotificationIdentifier: PriorNotification.Identifier,
+    nextData: PriorNotification.LogbookFormData
   ): MainAppThunk<Promise<void>> =>
   async dispatch => {
     try {

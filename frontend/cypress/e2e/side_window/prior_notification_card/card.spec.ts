@@ -90,8 +90,8 @@ context('Side Window > Prior Notification Card > Card', () => {
     openSideWindowPriorNotification(`L'ANCRE`)
 
     cy.wait('@getOriginalPriorNotification').then(interception => {
-      const originalPriorNotificationDetail: PriorNotification.PriorNotificationDetail = interception.response!.body
-      const updatedPriorNotificationDetailStub: PriorNotification.PriorNotificationDetail = {
+      const originalPriorNotificationDetail: PriorNotification.Detail = interception.response!.body
+      const updatedPriorNotificationDetailStub: PriorNotification.Detail = {
         ...originalPriorNotificationDetail,
         fingerprint: '109.1109.2109'
       }
@@ -123,8 +123,8 @@ context('Side Window > Prior Notification Card > Card', () => {
     openSideWindowPriorNotification(`L'ANCRE`)
 
     cy.wait('@getOriginalPriorNotification').then(interception => {
-      const originalPriorNotificationDetail: PriorNotification.PriorNotificationDetail = interception.response!.body
-      const deletedPriorNotificationDetailStub: PriorNotification.PriorNotificationDetail = {
+      const originalPriorNotificationDetail: PriorNotification.Detail = interception.response!.body
+      const deletedPriorNotificationDetailStub: PriorNotification.Detail = {
         ...originalPriorNotificationDetail,
         fingerprint: '109.1109.2109',
         logbookMessage: {

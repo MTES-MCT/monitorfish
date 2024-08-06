@@ -47,14 +47,13 @@ export namespace PriorNotification {
     vesselName: string | undefined
   }
 
-  export type PriorNotificationIdentifier = {
+  export type Identifier = {
     /** `operationDate` is used in Backend SQL query to optimize Timescale index usage. */
     operationDate: string
     reportId: string
   }
 
-  export type PriorNotificationDetail = {
-    /** Unique identifier concatenating all the DAT, COR, RET & DEL operations `id` used for data consolidation. */
+  export type Detail = {
     fingerprint: string
     isLessThanTwelveMetersVessel: boolean
     isManuallyCreated: boolean
@@ -67,18 +66,18 @@ export namespace PriorNotification {
     state: State | undefined
   }
 
-  export type LogbookPriorNotificationData = {
+  export type LogbookFormData = {
     authorTrigram: string | string
     note: string | undefined
   }
 
-  export type ManualPriorNotificationData = {
+  export type ManualFormData = {
     authorTrigram: string
     didNotFishAfterZeroNotice: boolean
     expectedArrivalDate: string
     expectedLandingDate: string
     faoArea: string
-    fishingCatches: PriorNotificationDataFishingCatch[]
+    fishingCatches: FormDataFishingCatch[]
     hasPortEntranceAuthorization: boolean
     hasPortLandingAuthorization: boolean
     note: string | undefined
@@ -90,22 +89,22 @@ export namespace PriorNotification {
     updatedAt: string
     vesselId: number
   }
-  export type NewManualPriorNotificationData = Omit<ManualPriorNotificationData, 'reportId'>
+  export type NewManualFormData = Omit<ManualFormData, 'reportId'>
 
-  export type AutoComputeRequestData = {
+  export type LogbookComputeRequestData = {
     isInVerificationScope: boolean
     portLocode: string
     segmentCodes: string[]
     vesselId: number
   }
   /** Real-time computed values displayed within a prior notification form. */
-  export type AutoComputedValues = {
+  export type LogbookComputedValues = {
     /** Next initial state of the prior notification once it will be created or updated. */
     nextState: State
   }
 
   export type ManualComputeRequestData = Pick<
-    ManualPriorNotificationData,
+    ManualFormData,
     'faoArea' | 'fishingCatches' | 'portLocode' | 'tripGearCodes' | 'vesselId'
   >
   /** Real-time computed values displayed within a prior notification form. */
@@ -117,7 +116,7 @@ export namespace PriorNotification {
     nextState: State
   }
 
-  export type PriorNotificationDataFishingCatch = {
+  export type FormDataFishingCatch = {
     quantity?: number | undefined
     specyCode: string
     specyName: string

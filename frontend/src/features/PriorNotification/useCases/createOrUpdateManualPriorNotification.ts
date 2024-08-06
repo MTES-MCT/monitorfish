@@ -11,13 +11,10 @@ import type { PriorNotification } from '../PriorNotification.types'
 import type { MainAppThunk } from '@store'
 
 export const createOrUpdateManualPriorNotification =
-  (
-    reportId: string | undefined,
-    newOrNextData: PriorNotification.NewManualPriorNotificationData
-  ): MainAppThunk<Promise<void>> =>
+  (reportId: string | undefined, newOrNextData: PriorNotification.NewManualFormData): MainAppThunk<Promise<void>> =>
   async dispatch => {
     try {
-      let updatedPriorNotificationData: PriorNotification.ManualPriorNotificationData
+      let updatedPriorNotificationData: PriorNotification.ManualFormData
       if (!reportId) {
         updatedPriorNotificationData = await dispatch(
           priorNotificationApi.endpoints.createPriorNotification.initiate(newOrNextData)

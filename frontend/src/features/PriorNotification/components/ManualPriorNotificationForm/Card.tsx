@@ -28,7 +28,7 @@ import type { ManualPriorNotificationFormValues } from './types'
 import type { Promisable } from 'type-fest'
 
 type CardProps = Readonly<{
-  detail: PriorNotification.PriorNotificationDetail | undefined
+  detail: PriorNotification.Detail | undefined
   isValidatingOnChange: boolean
   onClose: () => void
   onSubmit: () => Promisable<void>
@@ -123,7 +123,7 @@ export function Card({ detail, isValidatingOnChange, onClose, onSubmit, onVerify
 
   useEffect(
     () => () => {
-      dispatch(priorNotificationActions.setEditedManualPriorNotificationInitialFormValues(values))
+      dispatch(priorNotificationActions.setEditedManualPriorNotificationFormValues(values))
     },
     [dispatch, values]
   )

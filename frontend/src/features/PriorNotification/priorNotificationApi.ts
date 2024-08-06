@@ -36,10 +36,7 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(COMPUTE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
     }),
 
-    createPriorNotification: builder.mutation<
-      PriorNotification.ManualPriorNotificationData,
-      PriorNotification.NewManualPriorNotificationData
-    >({
+    createPriorNotification: builder.mutation<PriorNotification.ManualFormData, PriorNotification.NewManualFormData>({
       invalidatesTags: [{ type: RtkCacheTagType.PriorNotifications }],
       query: data => ({
         body: data,
@@ -49,20 +46,16 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(CREATE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
     }),
 
-    getLogbookPriorNotificationFormData: builder.query<
-      PriorNotification.LogbookPriorNotificationData,
-      PriorNotification.PriorNotificationIdentifier
-    >({
-      providesTags: (_, __, { reportId }) => [{ id: reportId, type: RtkCacheTagType.PriorNotification }],
-      query: ({ operationDate, reportId }) =>
-        getUrlOrPathWithQueryParams(`/prior_notifications/logbook/${reportId}/form`, { operationDate }),
-      transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_DATA_ERROR_MESSAGE, response)
-    }),
+    getLogbookPriorNotificationFormData: builder.query<PriorNotification.LogbookFormData, PriorNotification.Identifier>(
+      {
+        providesTags: (_, __, { reportId }) => [{ id: reportId, type: RtkCacheTagType.PriorNotification }],
+        query: ({ operationDate, reportId }) =>
+          getUrlOrPathWithQueryParams(`/prior_notifications/logbook/${reportId}/form`, { operationDate }),
+        transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_DATA_ERROR_MESSAGE, response)
+      }
+    ),
 
-    getManualPriorNotificationFormData: builder.query<
-      PriorNotification.ManualPriorNotificationData,
-      PriorNotification.PriorNotificationIdentifier
-    >({
+    getManualPriorNotificationFormData: builder.query<PriorNotification.ManualFormData, PriorNotification.Identifier>({
       providesTags: (_, __, { reportId }) => [{ id: reportId, type: RtkCacheTagType.PriorNotification }],
       query: ({ operationDate, reportId }) =>
         getUrlOrPathWithQueryParams(`/prior_notifications/manual/${reportId}/form`, { operationDate }),
@@ -70,8 +63,8 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
     }),
 
     getPriorNotificationDetail: builder.query<
-      PriorNotification.PriorNotificationDetail,
-      PriorNotification.PriorNotificationIdentifier & {
+      PriorNotification.Detail,
+      PriorNotification.Identifier & {
         isManuallyCreated: boolean
       }
     >({
@@ -143,9 +136,9 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
     }),
 
     updateLogbookPriorNotification: builder.mutation<
-      PriorNotification.LogbookPriorNotificationData,
+      PriorNotification.LogbookFormData,
       {
-        data: PriorNotification.LogbookPriorNotificationData
+        data: PriorNotification.LogbookFormData
         operationDate: string
         reportId: string
       }
@@ -159,9 +152,9 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
     }),
 
     updateManualPriorNotification: builder.mutation<
-      PriorNotification.ManualPriorNotificationData,
+      PriorNotification.ManualFormData,
       {
-        data: PriorNotification.NewManualPriorNotificationData
+        data: PriorNotification.NewManualFormData
         reportId: string
       }
     >({
@@ -178,8 +171,8 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
     }),
 
     verifyAndSendPriorNotification: builder.mutation<
-      PriorNotification.PriorNotificationDetail,
-      PriorNotification.PriorNotificationIdentifier & {
+      PriorNotification.Detail,
+      PriorNotification.Identifier & {
         isManuallyCreated: boolean
       }
     >({

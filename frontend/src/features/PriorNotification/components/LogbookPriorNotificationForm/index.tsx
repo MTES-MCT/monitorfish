@@ -15,8 +15,8 @@ export function LogbookPriorNotificationForm() {
   const displayedError = useMainAppSelector(
     state => state.displayedError[DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR]
   )
-  const editedLogbookPriorNotificationInitialFormValues = useMainAppSelector(
-    state => state.priorNotification.editedLogbookPriorNotificationInitialFormValues
+  const editedLogbookPriorNotificationFormValues = useMainAppSelector(
+    state => state.priorNotification.editedLogbookPriorNotificationFormValues
   )
   const openedPriorNotificationDetail = useMainAppSelector(
     state => state.priorNotification.openedPriorNotificationDetail
@@ -40,17 +40,14 @@ export function LogbookPriorNotificationForm() {
     return <PriorNotificationCard detail={undefined} otherDisplayedErrorKey={displayedErrorKey} />
   }
 
-  if (!editedLogbookPriorNotificationInitialFormValues || !openedPriorNotificationDetail || isLoading) {
+  if (!editedLogbookPriorNotificationFormValues || !openedPriorNotificationDetail || isLoading) {
     return <PriorNotificationCard detail={undefined} isLoading />
   }
 
   return (
     <PriorNotificationCard
       bodyChildren={
-        <Form
-          detail={openedPriorNotificationDetail}
-          initialFormValues={editedLogbookPriorNotificationInitialFormValues}
-        />
+        <Form detail={openedPriorNotificationDetail} initialFormValues={editedLogbookPriorNotificationFormValues} />
       }
       detail={openedPriorNotificationDetail}
       footerChildren={<Footer detail={openedPriorNotificationDetail} onVerifyAndSend={verifyAndSend} />}

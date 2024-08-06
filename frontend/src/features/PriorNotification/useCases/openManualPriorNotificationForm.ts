@@ -17,7 +17,7 @@ import type { MainAppThunk } from '@store'
 
 export const openManualPriorNotificationForm =
   (
-    priorNotificationIdentifier: PriorNotification.PriorNotificationIdentifier | undefined,
+    priorNotificationIdentifier: PriorNotification.Identifier | undefined,
     fingerprint?: string | undefined
   ): MainAppThunk<Promise<void>> =>
   async dispatch => {
@@ -27,7 +27,7 @@ export const openManualPriorNotificationForm =
       dispatch(priorNotificationActions.openManualPriorNotificationForm())
 
       if (!priorNotificationIdentifier) {
-        dispatch(priorNotificationActions.setEditedManualPriorNotificationInitialFormValues(getInitialFormValues()))
+        dispatch(priorNotificationActions.setEditedManualPriorNotificationFormValues(getInitialFormValues()))
 
         return
       }
@@ -57,13 +57,13 @@ export const openManualPriorNotificationForm =
         )
       }
 
-      const nextInitialFormValues: ManualPriorNotificationFormValues = {
+      const nextFormValues: ManualPriorNotificationFormValues = {
         ...priorNotificationData,
         isExpectedLandingDateSameAsExpectedArrivalDate:
           priorNotificationData.expectedLandingDate === priorNotificationData.expectedArrivalDate
       }
 
-      dispatch(priorNotificationActions.setEditedManualPriorNotificationInitialFormValues(nextInitialFormValues))
+      dispatch(priorNotificationActions.setEditedManualPriorNotificationFormValues(nextFormValues))
       dispatch(priorNotificationActions.setManualPriorNotificationComputedValues(nextComputedValues))
       dispatch(priorNotificationActions.setOpenedPriorNotification(priorNotificationDetail))
     } catch (err) {

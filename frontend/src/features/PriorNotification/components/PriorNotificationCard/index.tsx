@@ -23,7 +23,7 @@ import { TagBar } from '../shared/TagBar'
 
 type PriorNotificationCardProps = Readonly<{
   bodyChildren?: React.ReactNode
-  detail: PriorNotification.PriorNotificationDetail | undefined
+  detail: PriorNotification.Detail | undefined
   footerChildren?: React.ReactNode
   isLoading?: boolean
   otherDisplayedErrorKey?: DisplayedErrorKey

@@ -14,10 +14,7 @@ import type { PriorNotification } from '../PriorNotification.types'
 import type { MainAppThunk } from '@store'
 
 export const openLogbookPriorNotificationForm =
-  (
-    priorNotificationIdentifier: PriorNotification.PriorNotificationIdentifier,
-    fingerprint?: string
-  ): MainAppThunk<Promise<void>> =>
+  (priorNotificationIdentifier: PriorNotification.Identifier, fingerprint?: string): MainAppThunk<Promise<void>> =>
   async dispatch => {
     try {
       dispatch(displayedErrorActions.unset(DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR))
@@ -56,7 +53,7 @@ export const openLogbookPriorNotificationForm =
       }
 
       dispatch(priorNotificationActions.setOpenedPriorNotification(priorNotificationDetail))
-      dispatch(priorNotificationActions.setEditedLogbookPriorNotificationInitialFormValues(priorNotificationData))
+      dispatch(priorNotificationActions.setEditedLogbookPriorNotificationFormValues(priorNotificationData))
     } catch (err) {
       if (err instanceof FrontendApiError) {
         dispatch(

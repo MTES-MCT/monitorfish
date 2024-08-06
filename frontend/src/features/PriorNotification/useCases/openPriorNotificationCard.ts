@@ -15,7 +15,7 @@ import type { MainAppThunk } from '@store'
 
 export const openPriorNotificationCard =
   (
-    priorNotificationIdentifier: PriorNotification.PriorNotificationIdentifier,
+    priorNotificationIdentifier: PriorNotification.Identifier,
     fingerprint: string,
     isManuallyCreated: boolean
   ): MainAppThunk<Promise<void>> =>

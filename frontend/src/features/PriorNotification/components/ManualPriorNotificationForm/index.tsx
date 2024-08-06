@@ -18,8 +18,8 @@ import type { PriorNotification } from '../../PriorNotification.types'
 
 export function ManualPriorNotificationForm() {
   const dispatch = useMainAppDispatch()
-  const editedManualPriorNotificationInitialFormValues = useMainAppSelector(
-    state => state.priorNotification.editedManualPriorNotificationInitialFormValues
+  const editedManualPriorNotificationFormValues = useMainAppSelector(
+    state => state.priorNotification.editedManualPriorNotificationFormValues
   )
   const openedPriorNotificationDetail = useMainAppSelector(
     state => state.priorNotification.openedPriorNotificationDetail
@@ -44,7 +44,7 @@ export function ManualPriorNotificationForm() {
       expectedLandingDate: isExpectedLandingDateSameAsExpectedArrivalDate
         ? priorNotificationData.expectedArrivalDate
         : priorNotificationData.expectedLandingDate
-    } as PriorNotification.NewManualPriorNotificationData
+    } as PriorNotification.NewManualFormData
 
     await dispatch(
       createOrUpdateManualPriorNotification(openedPriorNotificationDetail?.reportId, newOrNextPriorNotificationData)
@@ -62,7 +62,7 @@ export function ManualPriorNotificationForm() {
     await dispatch(verifyAndSendPriorNotification(identifier, true))
   }
 
-  if (!editedManualPriorNotificationInitialFormValues || isLoading) {
+  if (!editedManualPriorNotificationFormValues || isLoading) {
     return (
       <Wrapper className="Form">
         <Background onClick={close} />
@@ -76,7 +76,7 @@ export function ManualPriorNotificationForm() {
 
   return (
     <Formik
-      initialValues={editedManualPriorNotificationInitialFormValues}
+      initialValues={editedManualPriorNotificationFormValues}
       onSubmit={submit}
       validateOnChange={shouldValidateOnChange}
       validationSchema={FORM_VALIDATION_SCHEMA}

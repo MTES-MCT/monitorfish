@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import type { PriorNotification } from '../../PriorNotification.types'
 
 type HeaderProps = Readonly<{
-  detail: PriorNotification.PriorNotificationDetail
+  detail: PriorNotification.Detail
   onClose: () => void
 }>
 export function Header({ detail, onClose }: HeaderProps) {

@@ -12,7 +12,7 @@ import type { MainAppThunk } from '@store'
 
 export const verifyAndSendPriorNotification =
   (
-    priorNotificationIdentifier: PriorNotification.PriorNotificationIdentifier,
+    priorNotificationIdentifier: PriorNotification.Identifier,
     isManuallyCreated: boolean
   ): MainAppThunk<Promise<void>> =>
   async dispatch => {

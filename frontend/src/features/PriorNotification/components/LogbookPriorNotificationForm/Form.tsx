@@ -17,8 +17,8 @@ import { InvalidatePriorNotificationDialog } from '../InvalidatePriorNotificatio
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
 type FormProps = Readonly<{
-  detail: PriorNotification.PriorNotificationDetail
-  initialFormValues: PriorNotification.LogbookPriorNotificationData
+  detail: PriorNotification.Detail
+  initialFormValues: PriorNotification.LogbookFormData
 }>
 export function Form({ detail, initialFormValues }: FormProps) {
   const dispatch = useMainAppDispatch()
@@ -44,14 +44,14 @@ export function Form({ detail, initialFormValues }: FormProps) {
   }
 
   const updateNoteCallback = useCallback(
-    async (nextValues: PriorNotification.LogbookPriorNotificationData) => {
+    async (nextValues: PriorNotification.LogbookFormData) => {
       await dispatch(updateLogbookPriorNotification(priorNotificationIdentifier, nextValues))
     },
     [dispatch, priorNotificationIdentifier]
   )
 
   const updateNote = useDebouncedCallback(
-    (nextValues: PriorNotification.LogbookPriorNotificationData) => updateNoteCallback(nextValues),
+    (nextValues: PriorNotification.LogbookFormData) => updateNoteCallback(nextValues),
     HALF_A_SECOND
   )
 

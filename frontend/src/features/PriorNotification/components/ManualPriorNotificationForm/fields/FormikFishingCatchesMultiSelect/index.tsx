@@ -21,7 +21,7 @@ type FormikFishingCatchesMultiSelectProps = {
   readOnly?: boolean | undefined
 }
 export function FormikFishingCatchesMultiSelect({ readOnly }: FormikFishingCatchesMultiSelectProps) {
-  const [input, meta, helper] = useField<PriorNotification.PriorNotificationDataFishingCatch[]>('fishingCatches')
+  const [input, meta, helper] = useField<PriorNotification.FormDataFishingCatch[]>('fishingCatches')
   const { speciesAsOptions } = useGetSpeciesAsOptions()
   const { data: speciesAndGroups } = useGetSpeciesQuery()
 

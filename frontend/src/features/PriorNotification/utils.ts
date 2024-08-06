@@ -3,7 +3,7 @@ import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 
 export function getPriorNotificationIdentifier(
   data: { [key: string]: any; operationDate: string; reportId: string } | undefined
-): PriorNotification.PriorNotificationIdentifier | undefined {
+): PriorNotification.Identifier | undefined {
   if (!data) {
     return undefined
   }
@@ -25,7 +25,7 @@ export function getPriorNotificationTypesFromLogbookMessagePnoTypes(
 
 export function getPriorNotificationFishingCatchesFromLogbookMessageFishingCatches(
   logbookMessageFishingCatches: LogbookMessage.Catch[] | undefined
-): PriorNotification.PriorNotificationDataFishingCatch[] | undefined {
+): PriorNotification.FormDataFishingCatch[] | undefined {
   return logbookMessageFishingCatches?.map(({ species, speciesName, weight, ...rest }) => ({
     ...rest,
     specyCode: species,
@@ -35,7 +35,7 @@ export function getPriorNotificationFishingCatchesFromLogbookMessageFishingCatch
 }
 
 export function isZeroNotice(
-  fishingCatches: PriorNotification.PriorNotificationDataFishingCatch[] | undefined
+  fishingCatches: PriorNotification.FormDataFishingCatch[] | undefined
 ): boolean | undefined {
   if (fishingCatches === undefined || fishingCatches.length === 0) {
     return undefined

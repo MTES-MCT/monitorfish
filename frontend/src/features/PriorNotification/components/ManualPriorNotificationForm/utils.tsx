@@ -12,7 +12,7 @@ export function getPartialComputationRequestData(formValues: ManualPriorNotifica
 export function getFishingsCatchesInitialValues(
   specyCode: string,
   specyName: string
-): PriorNotification.PriorNotificationDataFishingCatch[] {
+): PriorNotification.FormDataFishingCatch[] {
   switch (specyCode) {
     case 'BFT':
       return [

@@ -8,5 +8,5 @@ FROM beacon_malfunctions bm
 JOIN beacons b
 ON b.beacon_number = bm.beacon_number
 WHERE
-    bm.stage NOT IN ('END_OF_MALFUNCTION', 'ARCHIVED') AND
+    bm.stage != 'ARCHIVED' AND
     b.beacon_status = 'ACTIVATED'

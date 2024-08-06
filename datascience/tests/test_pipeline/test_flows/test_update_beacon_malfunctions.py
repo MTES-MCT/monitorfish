@@ -410,7 +410,7 @@ def test_get_ended_malfunction_ids():
     )
 
     assert ids_not_at_port_restarted_emitting == [3, 6]
-    assert ids_at_port_restarted_emitting == [4]
+    assert ids_at_port_restarted_emitting == [4, 7]
     assert ids_not_required_to_emit == [1]
     assert ids_unsupervised_restarted_emitting == [5]
 
@@ -707,7 +707,7 @@ def test_update_beacon_malfunction_raises_when_reason_is_missing(mock_requests):
     with pytest.raises(ValueError):
         update_beacon_malfunction.run(
             malfunction_id_to_update,
-            new_stage=BeaconMalfunctionStage.END_OF_MALFUNCTION,
+            new_stage=BeaconMalfunctionStage.ARCHIVED,
         )
 
 
@@ -756,24 +756,10 @@ def test_update_beacon_malfunction_updates_stage(mock_requests):
 
 
 @pytest.mark.parametrize(
-    "stage,reason",
+    "reason",
     [
-        (
-            BeaconMalfunctionStage.END_OF_MALFUNCTION,
-            EndOfMalfunctionReason.RESUMED_TRANSMISSION,
-        ),
-        (
-            BeaconMalfunctionStage.END_OF_MALFUNCTION,
-            EndOfMalfunctionReason.BEACON_DEACTIVATED_OR_UNEQUIPPED,
-        ),
-        (
-            BeaconMalfunctionStage.ARCHIVED,
-            EndOfMalfunctionReason.RESUMED_TRANSMISSION,
-        ),
-        (
-            BeaconMalfunctionStage.ARCHIVED,
-            EndOfMalfunctionReason.BEACON_DEACTIVATED_OR_UNEQUIPPED,
-        ),
+        EndOfMalfunctionReason.RESUMED_TRANSMISSION,
+        EndOfMalfunctionReason.BEACON_DEACTIVATED_OR_UNEQUIPPED,
     ],
 )
 @patch("src.pipeline.flows.update_beacon_malfunctions.requests")
@@ -781,19 +767,17 @@ def test_update_beacon_malfunction_updates_stage(mock_requests):
     "src.pipeline.flows.update_beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
     "dummy/end/point/",
 )
-def test_update_beacon_malfunction_updates_stage_and_reason(
-    mock_requests, stage, reason
-):
+def test_update_beacon_malfunction_updates_stage_and_reason(mock_requests, reason):
     malfunction_id_to_update = 25
     update_beacon_malfunction.run(
         malfunction_id_to_update,
-        new_stage=stage,
+        new_stage=BeaconMalfunctionStage.ARCHIVED,
         end_of_malfunction_reason=reason,
     )
     mock_requests.put.assert_called_once_with(
         url=f"dummy/end/point/{malfunction_id_to_update}",
         json={
-            "stage": stage.value,
+            "stage": BeaconMalfunctionStage.ARCHIVED.value,
             "endOfBeaconMalfunctionReason": reason.value,
         },
         headers={
@@ -859,7 +843,7 @@ def test_update_beacon_malfunctions_flow_doesnt_create_malfunctions_if_never_emi
 def test_update_beacon_malfunctions_flow_moves_malfunctions_to_end_of_malfunction(
     reset_test_data,
 ):
-    beacon_malfunction_id_to_move_to_end_of_malfunction = read_query(
+    beacon_malfunction_id_to_move_to_archived_and_notify = read_query(
         "SELECT id FROM beacon_malfunctions WHERE ircs = 'OLY7853'",
         db="monitorfish_remote",
     ).iloc[0, 0]
@@ -897,23 +881,32 @@ def test_update_beacon_malfunctions_flow_moves_malfunctions_to_end_of_malfunctio
         ids_not_required_to_emit,
         ids_unsupervised_restarted_emitting,
     ) == (
-        [beacon_malfunction_id_to_move_to_end_of_malfunction],
+        [beacon_malfunction_id_to_move_to_archived_and_notify],
         [],
         [beacon_malfunction_id_to_archive],
         [],
     )
-    assert mock_requests.put.call_count == 2
+    assert mock_requests.put.call_count == 3
 
     mock_requests.put.assert_any_call(
         url=BEACON_MALFUNCTIONS_ENDPOINT
-        + f"{beacon_malfunction_id_to_move_to_end_of_malfunction}",
+        + f"{beacon_malfunction_id_to_move_to_archived_and_notify}",
         json={
-            "stage": "END_OF_MALFUNCTION",
-            "endOfBeaconMalfunctionReason": "RESUMED_TRANSMISSION",
+            "stage": BeaconMalfunctionStage.ARCHIVED.value,
+            "endOfBeaconMalfunctionReason": EndOfMalfunctionReason.RESUMED_TRANSMISSION.value,
         },
         headers={
             "Accept": "application/json, text/plain",
             "Content-Type": "application/json;charset=UTF-8",
+            "X-API-KEY": "backend_api_key",
+        },
+    )
+
+    mock_requests.put.assert_any_call(
+        url=BEACON_MALFUNCTIONS_ENDPOINT
+        + f"{beacon_malfunction_id_to_move_to_archived_and_notify}/"
+        + f"{BeaconMalfunctionNotificationType.END_OF_MALFUNCTION.value}",
+        headers={
             "X-API-KEY": "backend_api_key",
         },
     )
@@ -934,10 +927,7 @@ def test_update_beacon_malfunctions_flow_moves_malfunctions_to_end_of_malfunctio
 
 def test_update_beacon_malfunctions_flow_inserts_new_malfunctions(reset_test_data):
     initial_beacon_malfunctions = read_query(
-        (
-            "SELECT * FROM beacon_malfunctions "
-            "WHERE stage NOT IN ('END_OF_MALFUNCTION', 'ARCHIVED')"
-        ),
+        ("SELECT * FROM beacon_malfunctions " "WHERE stage != 'ARCHIVED'"),
         db="monitorfish_remote",
     )
     flow.schedule = None
@@ -947,10 +937,7 @@ def test_update_beacon_malfunctions_flow_inserts_new_malfunctions(reset_test_dat
             max_hours_without_emission_at_sea=6, max_hours_without_emission_at_port=1
         )
     loaded_beacon_malfunctions = read_query(
-        (
-            "SELECT * FROM beacon_malfunctions "
-            "WHERE stage NOT IN ('END_OF_MALFUNCTION', 'ARCHIVED')"
-        ),
+        ("SELECT * FROM beacon_malfunctions " "WHERE stage != 'ARCHIVED'"),
         db="monitorfish_remote",
     )
 

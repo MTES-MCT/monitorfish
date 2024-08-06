@@ -22,8 +22,7 @@ export const openPriorNotificationCard =
   async dispatch => {
     try {
       dispatch(displayedErrorActions.unset(DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_CARD_ERROR))
-      dispatch(priorNotificationActions.closePriorNotificationCard())
-      dispatch(priorNotificationActions.closePriorNotificationForm())
+      dispatch(priorNotificationActions.closePriorNotificationCardAndForm())
       dispatch(priorNotificationActions.openPriorNotificationCard())
 
       const priorNotificationDetail = await dispatch(
@@ -40,7 +39,7 @@ export const openPriorNotificationCard =
 
       // Close card and display a warning banner if prior notification has been deleted (in the meantime)
       if (priorNotificationDetail.logbookMessage.isDeleted) {
-        dispatch(priorNotificationActions.closePriorNotificationCard())
+        dispatch(priorNotificationActions.closePriorNotificationCardAndForm())
         dispatch(
           addMainWindowBanner({
             children: 'Ce préavis a été supprimé (entre temps).',

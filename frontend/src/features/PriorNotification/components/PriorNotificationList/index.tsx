@@ -48,7 +48,12 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
     state => state.priorNotification.openedPriorNotificationDetail
   )
   const isPriorNotificationCardOpen = useMainAppSelector(state => state.priorNotification.isPriorNotificationCardOpen)
-  const isPriorNotificationFormOpen = useMainAppSelector(state => state.priorNotification.isPriorNotificationFormOpen)
+  const isLogbookPriorNotificationFormOpen = useMainAppSelector(
+    state => state.priorNotification.isLogbookPriorNotificationFormOpen
+  )
+  const isManualPriorNotificationFormOpen = useMainAppSelector(
+    state => state.priorNotification.isManualPriorNotificationFormOpen
+  )
   const isSuperUser = useIsSuperUser()
 
   const [rowSelection, setRowSelection] = useState({})
@@ -242,13 +247,12 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
           detail={openedPriorNotificationDetail}
         />
       )}
-      {isPriorNotificationFormOpen && !openedPriorNotificationDetail?.isManuallyCreated && (
+      {isLogbookPriorNotificationFormOpen && (
         <LogbookPriorNotificationForm key={openedPriorNotificationDetail?.fingerprint} />
       )}
-      {isPriorNotificationFormOpen &&
-        (!openedPriorNotificationDetail || openedPriorNotificationDetail?.isManuallyCreated) && (
-          <ManualPriorNotificationForm key={openedPriorNotificationDetail?.fingerprint} />
-        )}
+      {isManualPriorNotificationFormOpen && (
+        <ManualPriorNotificationForm key={openedPriorNotificationDetail?.fingerprint} />
+      )}
     </>
   )
 }

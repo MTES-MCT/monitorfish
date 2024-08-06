@@ -3,7 +3,7 @@ import { FrontendApiError } from '@libs/FrontendApiError'
 import { handleThunkError } from '@utils/handleThunkError'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
 
-import { priorNotificationApi, priorNotificationPublicApi } from '../priorNotificationApi'
+import { priorNotificationApi } from '../priorNotificationApi'
 
 import type { PriorNotification } from '../PriorNotification.types'
 import type { MainAppThunk } from '@store'
@@ -20,10 +20,6 @@ export const updateLogbookPriorNotification =
           ...priorNotificationIdentifier,
           data: nextData
         })
-      ).unwrap()
-
-      await dispatch(
-        priorNotificationPublicApi.endpoints.getPriorNotificationPDF.initiate(priorNotificationIdentifier.reportId)
       ).unwrap()
     } catch (err) {
       if (err instanceof FrontendApiError) {

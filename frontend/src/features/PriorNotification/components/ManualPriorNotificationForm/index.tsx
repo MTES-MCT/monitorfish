@@ -31,7 +31,7 @@ export function ManualPriorNotificationForm() {
   const identifier = getPriorNotificationIdentifier(openedPriorNotificationDetail)
 
   const close = () => {
-    dispatch(priorNotificationActions.closePriorNotificationForm())
+    dispatch(priorNotificationActions.closePriorNotificationCardAndForm())
   }
 
   // TODO Replace that with a use case dispatcher.

@@ -1,4 +1,5 @@
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
+import dayjs from 'dayjs'
 
 import { openSideWindowPriorNotification } from './utils'
 import { openSideWindowPriorNotificationList } from '../prior_notification_list/utils'
@@ -150,7 +151,43 @@ context('Side Window > Prior Notification Card > Card', () => {
     })
   })
 
-  it('Should verify and send a prior notification', () => {
+  it('Should update a logbook prior notification', () => {
+    // Given
+    openSideWindowPriorNotification(`CALAMARO`)
+
+    cy.intercept('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_108?operationDate=*`).as(
+      'updateLogbookPriorNotification'
+    )
+
+    cy.get('[name="note"]').should('have.value', '')
+    cy.get('[name="authorTrigram"]').should('have.value', '')
+
+    // When
+    cy.fill("Points d'attention identifiés par le CNSP", "Un point d'attention.")
+    cy.fill('Par', 'ABC')
+
+    cy.wait('@updateLogbookPriorNotification')
+
+    // Then, the PDF is deleted
+    cy.get('.Element-Button').contains('Télécharger').parent().should('be.disabled')
+
+    // The note is saved
+    openSideWindowPriorNotification(`CALAMARO`)
+
+    cy.get('[name="note"]').should('have.value', "Un point d'attention.")
+    cy.get('[name="authorTrigram"]').should('have.value', 'ABC')
+
+    // Reset
+    cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_108?operationDate=${dayjs().toISOString()}`, {
+      body: {
+        authorTrigram: null,
+        note: null
+      },
+      reportId: 'FAKE_OPERATION_108'
+    })
+  })
+
+  it('Should verify and send a logbook prior notification', () => {
     openSideWindowPriorNotification(`LE POISSON AMBULANT`)
 
     cy.intercept(
@@ -185,28 +222,7 @@ context('Side Window > Prior Notification Card > Card', () => {
     })
   })
 
-  it('Should update a note and delete the current PDF', () => {
-    // Given
-    openSideWindowPriorNotification(`CALAMARO`)
-    cy.get('*[name="note"]').should('have.value', '')
-
-    // When
-    cy.intercept('PUT', `/bff/v1/prior_notifications/FAKE_OPERATION_108/note?operationDate=*`).as(
-      'updatePriorNotificationNote'
-    )
-    cy.fill("Points d'attention identifiés par le CNSP", "Un point d'attention.")
-    cy.get('*[name="note"]').should('have.value', "Un point d'attention.")
-    cy.wait('@updatePriorNotificationNote')
-
-    // Then, the PDF is deleted
-    cy.get('.Element-Button').contains('Télécharger').parent().should('be.disabled')
-
-    // The note is saved
-    openSideWindowPriorNotification(`CALAMARO`)
-    cy.get('*[name="note"]').should('have.value', "Un point d'attention.")
-  })
-
-  it('Should download a pdf document', () => {
+  it('Should download a logbook prior notification as a PDF document', () => {
     // Given
     openSideWindowPriorNotification(`COURANT MAIN PROFESSEUR`)
 

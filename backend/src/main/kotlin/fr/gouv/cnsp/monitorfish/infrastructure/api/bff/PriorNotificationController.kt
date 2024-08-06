@@ -314,28 +314,6 @@ class PriorNotificationController(
             .fromPriorNotification(verifyAndSendPriorNotification.execute(reportId, operationDate, isManuallyCreated))
     }
 
-    @PutMapping("/{reportId}/note")
-    @Operation(summary = "Update a prior notification note by its `reportId`")
-    fun updateNote(
-        @PathParam("Logbook message `reportId`")
-        @PathVariable(name = "reportId")
-        reportId: String,
-        @Parameter(description = "Operation date (to optimize SQL query via Timescale).")
-        @RequestParam(name = "operationDate")
-        operationDate: ZonedDateTime,
-        @RequestBody
-        logbookPriorNotificationDataInput: LogbookPriorNotificationFormDataInput,
-    ): PriorNotificationDetailDataOutput {
-        val updatedPriorNotification = updateLogbookPriorNotification.execute(
-            reportId = reportId,
-            operationDate = operationDate,
-            authorTrigram = logbookPriorNotificationDataInput.authorTrigram,
-            note = logbookPriorNotificationDataInput.note,
-        )
-
-        return PriorNotificationDetailDataOutput.fromPriorNotification(updatedPriorNotification)
-    }
-
     @PutMapping("/{reportId}/invalidate")
     @Operation(summary = "Invalidate a prior notification by its `reportId`")
     fun invalidate(

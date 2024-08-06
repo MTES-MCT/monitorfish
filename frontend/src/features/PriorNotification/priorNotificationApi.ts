@@ -143,6 +143,10 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
         reportId: string
       }
     >({
+      invalidatesTags: (_, __, { reportId }) => [
+        { type: RtkCacheTagType.PriorNotifications },
+        { id: reportId, type: RtkCacheTagType.PriorNotification }
+      ],
       query: ({ data, operationDate, reportId }) => ({
         body: data,
         method: 'PUT',

@@ -392,7 +392,7 @@ class JpaLogbookReportRepository(
     }
 
     @Transactional
-    override fun updatePriorNotificationData(
+    override fun updatePriorNotificationAuthorTrigramAndNote(
         reportId: String,
         operationDate: ZonedDateTime,
 

@@ -119,7 +119,7 @@ class PriorNotificationControllerITests {
         // When
         api.perform(
             get(
-                "/bff/v1/prior_notifications/logbook/${fakePriorNotification.reportId!!}/data?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
+                "/bff/v1/prior_notifications/logbook/${fakePriorNotification.reportId!!}/form?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
             ),
         )
             // Then
@@ -220,7 +220,7 @@ class PriorNotificationControllerITests {
         // When
         api.perform(
             get(
-                "/bff/v1/prior_notifications/manual/${fakePriorNotification.reportId!!}/data?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
+                "/bff/v1/prior_notifications/manual/${fakePriorNotification.reportId!!}/form?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
             ),
         )
             // Then

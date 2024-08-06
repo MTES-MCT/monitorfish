@@ -127,7 +127,7 @@ class PriorNotificationController(
         )
     }
 
-    @GetMapping("/logbook/{reportId}/data")
+    @GetMapping("/logbook/{reportId}/form")
     @Operation(summary = "Get an auto prior notification form data by its `reportId`")
     fun getAutoData(
         @PathParam("Logbook message `reportId`")
@@ -190,7 +190,7 @@ class PriorNotificationController(
             .fromManualPriorNotificationComputedValues(manualPriorNotificationComputedValues)
     }
 
-    @GetMapping("/manual/{reportId}/data")
+    @GetMapping("/manual/{reportId}/form")
     @Operation(summary = "Get a manual prior notification form data by its `reportId`")
     fun getManualData(
         @PathParam("Logbook message `reportId`")

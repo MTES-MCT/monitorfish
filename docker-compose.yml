@@ -8,7 +8,7 @@ services:
       - POSTGRES_DB=monitorfishdb
     volumes:
       - db-data:/var/lib/postgresql/data
-      - ./infra/dev/database/init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
+      - ./infra/dev/database/enable_pg_query_stats_and_history.sh:/docker-entrypoint-initdb.d/init-user-db.sh
     ports:
       - 5432:5432
     healthcheck:

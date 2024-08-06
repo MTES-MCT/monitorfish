@@ -447,7 +447,7 @@ class PriorNotificationControllerITests {
         )
         api.perform(
             put(
-                "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}/note?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
+                "/bff/v1/prior_notifications/logbook/${fakePriorNotification.reportId!!}?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
             )
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody),
@@ -457,7 +457,7 @@ class PriorNotificationControllerITests {
             .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
             .andExpect(
                 jsonPath(
-                    "$.logbookMessage.message.note",
+                    "$.note",
                     equalTo(fakePriorNotification.logbookMessageAndValue.value.note),
                 ),
             )

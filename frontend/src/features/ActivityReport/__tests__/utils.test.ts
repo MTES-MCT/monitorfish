@@ -56,6 +56,25 @@ describe('utils', () => {
     expect(groupedSpeciesOnboard[2]?.declaredWeight).toEqual(12.6)
   })
 
+  it('getSpeciesOnboardWithUntargetedSpeciesGrouped Should not return untargeted species grouped as OTH When the weight is 0', async () => {
+    // Given
+    const speciesOnboard = [
+      { controlledWeight: 500, declaredWeight: 471.2, nbFish: undefined, speciesCode: 'HKE', underSized: true },
+      { controlledWeight: undefined, declaredWeight: 0, nbFish: undefined, speciesCode: 'BLI', underSized: false },
+      { controlledWeight: undefined, declaredWeight: 12.6, nbFish: undefined, speciesCode: 'ANZ', underSized: false }
+    ]
+
+    // When
+    const groupedSpeciesOnboard = getSpeciesOnboardWithUntargetedSpeciesGrouped(speciesOnboard, ['ANZ', 'HKE', 'ATJ'])
+
+    // Then
+    expect(groupedSpeciesOnboard).toHaveLength(2)
+    expect(groupedSpeciesOnboard[0]?.speciesCode).toEqual('HKE')
+    expect(groupedSpeciesOnboard[0]?.controlledWeight).toEqual(500)
+    expect(groupedSpeciesOnboard[1]?.speciesCode).toEqual('ANZ')
+    expect(groupedSpeciesOnboard[1]?.declaredWeight).toEqual(12.6)
+  })
+
   it('getJDPCsvMap Should be dynamically generated with species, infractions and control comment for WESTERN_WATERS', async () => {
     // When
     const csvMap = getJDPCsvMap(JDP_CSV_MAP_BASE, JDP.WESTERN_WATERS)

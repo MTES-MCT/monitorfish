@@ -152,6 +152,13 @@ context('Side Window > Prior Notification Card > Card', () => {
   })
 
   it('Should update a logbook prior notification', () => {
+    cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_108?operationDate=${dayjs().toISOString()}`, {
+      body: {
+        authorTrigram: null,
+        note: null
+      }
+    })
+
     // Given
     openSideWindowPriorNotification(`CALAMARO`)
 
@@ -182,8 +189,7 @@ context('Side Window > Prior Notification Card > Card', () => {
       body: {
         authorTrigram: null,
         note: null
-      },
-      reportId: 'FAKE_OPERATION_108'
+      }
     })
   })
 

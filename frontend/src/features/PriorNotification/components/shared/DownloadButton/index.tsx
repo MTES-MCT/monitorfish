@@ -55,19 +55,28 @@ export function DownloadButton({ isDisabled = false, pnoLogbookMessage, reportId
         <Dropdown accent={Accent.SECONDARY} Icon={Icon.Download} placement="topEnd" title="Télécharger les documents">
           <>
             {!isPriorNotificationPDFDocumentAvailable && (
-              <Dropdown.Item disabled>Préavis de débarquement (Document non généré)</Dropdown.Item>
+              <Dropdown.Item disabled title="Document non généré">
+                Préavis de débarquement
+              </Dropdown.Item>
             )}
             {isPriorNotificationPDFDocumentAvailable && (
-              <Dropdown.Item disabled={isDisabled} onClick={() => window.open(pdfUrl, '_blank')}>
-                Préavis de débarquement (à destination des unités) {isDisabled && '(Veuillez enregistrer le préavis)'}
+              <Dropdown.Item
+                disabled={isDisabled}
+                onClick={() => window.open(pdfUrl, '_blank')}
+                title={isDisabled ? 'Veuillez enregistrer le préavis' : undefined}
+              >
+                Préavis de débarquement (à destination des unités)
               </Dropdown.Item>
             )}
             {/** If the form is dirty (has been modified), the export will be outdated. */}
             {/** The user MUST first save the new version */}
             {hasAuthorizedLandingDownload && (
-              <Dropdown.Item disabled={isDisabled} onClick={downloadPDF}>
-                Autorisation d&apos;entrée au port et de débarquement{' '}
-                {isDisabled && '(Veuillez enregistrer le préavis)'}
+              <Dropdown.Item
+                disabled={isDisabled}
+                onClick={downloadPDF}
+                title={isDisabled ? 'Veuillez enregistrer le préavis' : undefined}
+              >
+                Autorisation d&apos;entrée au port et de débarquement
               </Dropdown.Item>
             )}
           </>
@@ -91,6 +100,7 @@ export function DownloadButton({ isDisabled = false, pnoLogbookMessage, reportId
               disabled={isDisabled}
               Icon={Icon.Download}
               onClick={() => window.open(pdfUrl, '_blank')}
+              title={isDisabled ? 'Veuillez enregistrer le préavis' : undefined}
             >
               Télécharger
             </Button>

@@ -73,7 +73,7 @@ class GetAllBeaconMalfunctionsUTests {
                 ),
                 BeaconMalfunction(
                     2, "FR224226850", "1236514", "IRCS",
-                    null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
+                    null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.TARGETING_VESSEL,
                     ZonedDateTime.now(), ZonedDateTime.now(), ZonedDateTime.now(),
                     beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, endOfBeaconMalfunctionReason = EndOfBeaconMalfunctionReason.RESUMED_TRANSMISSION, vesselId = 123,
                 ),

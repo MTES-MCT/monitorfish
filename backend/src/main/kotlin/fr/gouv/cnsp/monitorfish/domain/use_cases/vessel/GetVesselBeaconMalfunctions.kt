@@ -33,7 +33,7 @@ class GetVesselBeaconMalfunctions(
 
         val resume = VesselBeaconMalfunctionsResume.fromBeaconMalfunctions(beaconMalfunctionsWithDetails)
         val currentBeaconMalfunction = beaconMalfunctionsWithDetails.find {
-            it.beaconMalfunction.stage != Stage.ARCHIVED && it.beaconMalfunction.stage != Stage.END_OF_MALFUNCTION
+            it.beaconMalfunction.stage != Stage.ARCHIVED
         }
         val history = beaconMalfunctionsWithDetails.filter {
             it.beaconMalfunction.id != currentBeaconMalfunction?.beaconMalfunction?.id

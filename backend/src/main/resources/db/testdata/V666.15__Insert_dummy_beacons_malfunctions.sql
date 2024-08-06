@@ -7,7 +7,7 @@ VALUES (1, 'FAK000999999', 'CALLME', 'DONTSINK', 'GB', 'INTERNAL_REFERENCE_NUMBE
         'INITIAL_ENCOUNTER', NOW() - ('1 WEEK')::interval, null, NOW(), null, 1,
         'MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION', 'FGEDX85', 'ACTIVATED'),
        (2, 'FAK000999999', 'CALLME', 'DONTSINK', 'GB', 'INTERNAL_REFERENCE_NUMBER', 'PHENOMENE', 'AT_SEA',
-        'END_OF_MALFUNCTION', NOW() - ('8 WEEKS')::interval, NOW() - ('6 WEEKS')::interval,
+        'ARCHIVED', NOW() - ('8 WEEKS')::interval, NOW() - ('6 WEEKS')::interval,
         NOW() - ('6 WEEKS')::interval, 'RESUMED_TRANSMISSION', 1, null, 'FGEDX85', 'ACTIVATED'),
        (3, 'U_W0NTFINDME', 'QGDF', 'TALK2ME', 'FR', 'IRCS', 'MALOTRU', 'NO_NEWS', 'FOUR_HOUR_REPORT',
         NOW() - ('2 WEEK')::interval, null, NOW() - ('1 WEEK')::interval, null, 2, null, '123456', 'UNSUPERVISED'),

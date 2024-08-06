@@ -295,7 +295,7 @@ jobs:
       - name: Extract frontend build files
         run: |
           docker create --name monitorfish-temp monitorfish-app:${{ env.VERSION }}
-          docker cp monitorfish-temp:/home/monitorfish/public/assets ./frontend_build
+          docker cp monitorfish-temp:/home/monitorfish/public ./frontend_build
           docker rm monitorfish-temp
       - name: Generate and upload source maps to Sentry
         uses: getsentry/action-release@v1

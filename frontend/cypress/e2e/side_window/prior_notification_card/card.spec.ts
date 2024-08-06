@@ -238,17 +238,17 @@ context('Side Window > Prior Notification Card > Card', () => {
     cy.get('@windowOpen').should('be.calledWith', '/api/v1/prior_notifications/pdf/FAKE_OPERATION_102', '_blank')
   })
 
-  it('Should invalidate a prior notification', () => {
+  it('Should invalidate a logbook prior notification', () => {
     // Given
     openSideWindowPriorNotificationList()
     cy.get('[data-cy="side-window-sub-menu-ALL"]').click()
-    cy.fill('Rechercher un navire', 'COURANT')
+    cy.fill('Rechercher un navire', 'ANCRE')
 
-    cy.getTableRowById('FAKE_OPERATION_102' as any)
+    cy.getTableRowById('FAKE_OPERATION_109' as any)
       .find('[title="Préavis invalidé"]')
       .should('not.exist')
 
-    cy.getTableRowById('FAKE_OPERATION_102' as any).clickButton('Éditer le préavis')
+    cy.getTableRowById('FAKE_OPERATION_109' as any).clickButton('Éditer le préavis')
     if (document.querySelector('[data-cy="first-loader"]')) {
       cy.getDataCy('first-loader').should('not.be.visible')
     }
@@ -263,7 +263,7 @@ context('Side Window > Prior Notification Card > Card', () => {
 
     cy.clickButton('Fermer')
 
-    cy.getTableRowById('FAKE_OPERATION_102' as any)
+    cy.getTableRowById('FAKE_OPERATION_109' as any)
       .find('[title="Préavis invalidé"]')
       .should('exist')
   })

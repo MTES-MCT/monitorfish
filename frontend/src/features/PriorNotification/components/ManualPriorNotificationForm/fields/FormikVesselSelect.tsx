@@ -8,10 +8,10 @@ import styled from 'styled-components'
 
 import type { VesselIdentity } from 'domain/entities/vessel/types'
 
-type FormikVesselSelectProps = {
+type FormikVesselSelectProps = Readonly<{
   onChange: (nextVessel: VesselIdentity | undefined) => void
   readOnly?: boolean | undefined
-}
+}>
 export function FormikVesselSelect({ onChange, readOnly }: FormikVesselSelectProps) {
   const defaultValueRef = useRef<VesselIdentity | undefined>(undefined)
 

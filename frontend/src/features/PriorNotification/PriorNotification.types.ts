@@ -67,7 +67,7 @@ export namespace PriorNotification {
   }
 
   export type LogbookFormData = {
-    authorTrigram: string | string
+    authorTrigram: string | undefined
     note: string | undefined
   }
 

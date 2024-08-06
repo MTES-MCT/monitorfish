@@ -280,6 +280,7 @@ interface DBLogbookReportRepository :
         WHERE e.internalReferenceNumber = ?1
         AND e.tripNumber IS NOT NULL
         AND e.operationType IN ('DAT', 'COR')
+        AND NOT e.isTestMessage
         AND e.operationDateTime < (SELECT MIN(er.operationDateTime) FROM LogbookReportEntity er WHERE er.internalReferenceNumber = ?1 AND er.tripNumber = ?2)
         GROUP BY e.tripNumber
         ORDER BY 2 DESC""",
@@ -296,6 +297,7 @@ interface DBLogbookReportRepository :
         WHERE e.internalReferenceNumber = ?1
         AND e.tripNumber IS NOT NULL
         AND e.operationType IN ('DAT', 'COR')
+        AND NOT e.isTestMessage
         AND e.operationDateTime > (SELECT MAX(er.operationDateTime) FROM LogbookReportEntity er WHERE er.internalReferenceNumber = ?1 AND er.tripNumber = ?2)
         GROUP BY e.tripNumber
         ORDER BY 2 ASC""",
@@ -310,7 +312,8 @@ interface DBLogbookReportRepository :
         """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageDates(MIN(e.operationDateTime), MAX(e.operationDateTime))
         FROM LogbookReportEntity e
         WHERE e.internalReferenceNumber = ?1
-        AND e.tripNumber = ?2""",
+        AND e.tripNumber = ?2
+        AND NOT e.isTestMessage""",
     )
     fun findFirstAndLastOperationsDatesOfTrip(
         internalReferenceNumber: String,
@@ -324,6 +327,7 @@ interface DBLogbookReportRepository :
         AND e.tripNumber IS NOT NULL
         AND e.operationType IN ('DAT', 'COR')
         AND e.operationDateTime <= ?2
+        AND NOT e.isTestMessage
         GROUP BY e.tripNumber
         ORDER BY 2 DESC """,
     )
@@ -339,12 +343,14 @@ interface DBLogbookReportRepository :
             FROM logbook_reports e
             WHERE e.cfr = ?1
             AND e.trip_number = ?2
+            AND NOT e.is_test_message
         ),
         ret AS (
             SELECT *
             FROM logbook_reports
             WHERE referenced_report_id IN (select report_id FROM dat_cor)
             AND operation_type = 'RET'
+            AND NOT is_test_message
         )
         SELECT MIN(dc.operation_datetime_utc)
         FROM dat_cor dc
@@ -370,6 +376,7 @@ interface DBLogbookReportRepository :
                cfr = ?1 AND
                trip_number = ?4 AND
                operation_type IN ('DAT', 'COR')
+               AND NOT is_test_message
            ORDER BY operation_datetime_utc DESC
         ),
         ret AS (
@@ -380,6 +387,7 @@ interface DBLogbookReportRepository :
                operation_datetime_utc + INTERVAL '1 day' >= cast(?2 AS timestamp) AND
                operation_datetime_utc - INTERVAL '1 day' < cast(?3 AS timestamp) AND
                operation_type = 'RET'
+               AND NOT is_test_message
            ORDER BY operation_datetime_utc DESC
         ),
         del AS (
@@ -390,6 +398,7 @@ interface DBLogbookReportRepository :
                operation_datetime_utc >= cast(?2 AS timestamp) AND
                operation_datetime_utc - INTERVAL '1 week' < cast(?3 AS timestamp) AND
                operation_type = 'DEL'
+               AND NOT is_test_message
            ORDER BY operation_datetime_utc desc
         )
         SELECT *
@@ -433,6 +442,7 @@ interface DBLogbookReportRepository :
         WHERE e.cfr = ?1
         AND e.trip_number IS NOT NULL
         AND e.operation_type IN ('DAT', 'COR')
+        AND NOT e.is_test_message
         AND e.operation_datetime_utc > now() - interval '2 year'
         ORDER BY e.trip_number DESC
     """,

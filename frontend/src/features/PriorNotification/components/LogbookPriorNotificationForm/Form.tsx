@@ -1,5 +1,5 @@
 import { HALF_A_SECOND } from '@constants/index'
-import { useInvalidatePriorNotificationMutation } from '@features/PriorNotification/priorNotificationApi'
+import { invalidatePriorNotification } from '@features/PriorNotification/useCases/invalidatePriorNotification'
 import { updateLogbookPriorNotification } from '@features/PriorNotification/useCases/updateLogbookPriorNotification'
 import { getPriorNotificationIdentifier } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -24,8 +24,6 @@ export function Form({ detail, initialFormValues }: FormProps) {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
 
-  const [invalidatePriorNotification] = useInvalidatePriorNotificationMutation()
-
   const [isInvalidatingPriorNotificationDialog, setIsInvalidatingPriorNotificationDialog] = useState(false)
 
   const priorNotificationIdentifier = useMemo(() => getPriorNotificationIdentifier(detail), [detail])
@@ -34,13 +32,7 @@ export function Form({ detail, initialFormValues }: FormProps) {
   const { isInvalidated } = detail.logbookMessage.message
 
   const invalidate = async () => {
-    await invalidatePriorNotification({
-      isManuallyCreated: detail.isManuallyCreated,
-      operationDate: priorNotificationIdentifier.operationDate,
-      reportId: priorNotificationIdentifier.reportId
-    })
-
-    setIsInvalidatingPriorNotificationDialog(false)
+    dispatch(invalidatePriorNotification(priorNotificationIdentifier, false))
   }
 
   const updateNoteCallback = useCallback(

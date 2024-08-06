@@ -11,8 +11,9 @@ export interface PriorNotificationState {
   editedLogbookPriorNotificationInitialFormValues: PriorNotification.LogbookPriorNotificationData | undefined
   editedManualPriorNotificationComputedValues: Undefine<PriorNotification.ManualComputedValues> | undefined
   editedManualPriorNotificationInitialFormValues: ManualPriorNotificationFormValues | undefined
+  isLogbookPriorNotificationFormOpen: boolean
+  isManualPriorNotificationFormOpen: boolean
   isPriorNotificationCardOpen: boolean
-  isPriorNotificationFormOpen: boolean
   listFilterValues: ListFilter
   /** Used for both prior notification forms & card. */
   openedPriorNotificationDetail: PriorNotification.PriorNotificationDetail | undefined
@@ -21,8 +22,9 @@ const INITIAL_STATE: PriorNotificationState = {
   editedLogbookPriorNotificationInitialFormValues: undefined,
   editedManualPriorNotificationComputedValues: undefined,
   editedManualPriorNotificationInitialFormValues: undefined,
+  isLogbookPriorNotificationFormOpen: false,
+  isManualPriorNotificationFormOpen: false,
   isPriorNotificationCardOpen: false,
-  isPriorNotificationFormOpen: false,
   listFilterValues: DEFAULT_LIST_FILTER_VALUES,
   openedPriorNotificationDetail: undefined
 }
@@ -31,25 +33,26 @@ const priorNotificationSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'priorNotification',
   reducers: {
-    closePriorNotificationCard(state) {
-      state.isPriorNotificationCardOpen = false
-      state.openedPriorNotificationDetail = undefined
-    },
-
-    closePriorNotificationForm(state) {
+    closePriorNotificationCardAndForm(state) {
       state.editedLogbookPriorNotificationInitialFormValues = undefined
       state.editedManualPriorNotificationComputedValues = undefined
       state.editedManualPriorNotificationInitialFormValues = undefined
-      state.isPriorNotificationFormOpen = false
+      state.isPriorNotificationCardOpen = false
+      state.isManualPriorNotificationFormOpen = false
+      state.isLogbookPriorNotificationFormOpen = false
       state.openedPriorNotificationDetail = undefined
+    },
+
+    openLogbookPriorNotificationForm(state) {
+      state.isLogbookPriorNotificationFormOpen = true
+    },
+
+    openManualPriorNotificationForm(state) {
+      state.isManualPriorNotificationFormOpen = true
     },
 
     openPriorNotificationCard(state) {
       state.isPriorNotificationCardOpen = true
-    },
-
-    openPriorNotificationForm(state) {
-      state.isPriorNotificationFormOpen = true
     },
 
     resetListFilterValues(state) {

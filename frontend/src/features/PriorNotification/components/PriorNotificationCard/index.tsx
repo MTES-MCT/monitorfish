@@ -1,3 +1,4 @@
+import { ErrorWall } from '@components/ErrorWall'
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { LogbookMessage } from '@features/Logbook/components/VesselLogbook/LogbookMessages/messages/LogbookMessage'
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
@@ -7,6 +8,8 @@ import {
   isZeroNotice
 } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Accent, Button, Level } from '@mtes-mct/monitor-ui'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import styled from 'styled-components'
@@ -23,23 +26,42 @@ type PriorNotificationCardProps = Readonly<{
   detail: PriorNotification.PriorNotificationDetail | undefined
   footerChildren?: React.ReactNode
   isLoading?: boolean
+  otherDisplayedErrorKey?: DisplayedErrorKey
 }>
 export function PriorNotificationCard({
   bodyChildren,
   detail,
   footerChildren,
-  isLoading = false
+  isLoading = false,
+  otherDisplayedErrorKey
 }: PriorNotificationCardProps) {
   const dispatch = useMainAppDispatch()
+  const displayedError = useMainAppSelector(
+    state => state.displayedError[DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_CARD_ERROR]
+  )
   const isSuperUser = useIsSuperUser()
 
-  const isInvalidated = detail?.logbookMessage.message.isInvalidated
+  const controlledDisplayedErrorKey = displayedError
+    ? DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_CARD_ERROR
+    : otherDisplayedErrorKey
   const hasDesignatedPorts = detail?.logbookMessage.message.pnoTypes?.find(type => type.hasDesignatedPorts)
+  const isInvalidated = detail?.logbookMessage.message.isInvalidated
   const isPendingVerification = detail?.state === PriorNotification.State.PENDING_VERIFICATION
 
   const close = () => {
-    dispatch(priorNotificationActions.closePriorNotificationCard())
-    dispatch(priorNotificationActions.closePriorNotificationForm())
+    dispatch(priorNotificationActions.closePriorNotificationCardAndForm())
+  }
+
+  if (controlledDisplayedErrorKey) {
+    return (
+      <Wrapper $isSuperUser={isSuperUser}>
+        <Background onClick={close} />
+
+        <Card>
+          <ErrorWall displayedErrorKey={controlledDisplayedErrorKey} />
+        </Card>
+      </Wrapper>
+    )
   }
 
   if (!detail || isLoading) {

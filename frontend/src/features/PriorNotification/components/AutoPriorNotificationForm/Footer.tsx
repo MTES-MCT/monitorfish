@@ -2,7 +2,7 @@ import { PriorNotification } from '@features/PriorNotification/PriorNotification
 import { Accent, Button, Icon } from '@mtes-mct/monitor-ui'
 
 type FooterProps = Readonly<{
-  detail: PriorNotification.PriorNotificationDetail
+  detail: PriorNotification.Detail
   onVerifyAndSend: () => void
 }>
 export function Footer({ detail, onVerifyAndSend }: FooterProps) {

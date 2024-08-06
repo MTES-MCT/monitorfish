@@ -114,7 +114,10 @@ export function getSpeciesOnboardWithUntargetedSpeciesGrouped(
 
   const speciesOnboardWithoutOtherSpecies = speciesOnboard.filter(species => jdpSpecies.includes(species.speciesCode))
 
-  const groupedSpeciesOnboard = speciesOnboardWithoutOtherSpecies.concat(otherSpecy)
+  const groupedSpeciesOnboard =
+    otherSpeciesSummedWeight > 0
+      ? speciesOnboardWithoutOtherSpecies.concat(otherSpecy)
+      : speciesOnboardWithoutOtherSpecies
 
   return sortBy(groupedSpeciesOnboard, ({ declaredWeight }) => declaredWeight).reverse()
 }

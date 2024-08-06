@@ -6,5 +6,6 @@ enum class Stage {
     FOUR_HOUR_REPORT,
     AT_QUAY,
     TARGETING_VESSEL,
+    END_OF_MALFUNCTION,
     ARCHIVED,
 }

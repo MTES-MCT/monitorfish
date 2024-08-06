@@ -31,7 +31,7 @@ export function Form({ detail, initialFormValues }: FormProps) {
 
   const { isInvalidated } = detail.logbookMessage.message
 
-  const invalidate = async () => {
+  const invalidate = () => {
     dispatch(invalidatePriorNotification(priorNotificationIdentifier, false))
   }
 

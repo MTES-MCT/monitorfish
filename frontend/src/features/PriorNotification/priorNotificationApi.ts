@@ -116,8 +116,8 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
     }),
 
     invalidatePriorNotification: builder.mutation<
-      PriorNotification.PriorNotificationDetail,
-      PriorNotification.PriorNotificationIdentifier & {
+      PriorNotification.Detail,
+      PriorNotification.Identifier & {
         isManuallyCreated: boolean
       }
     >({

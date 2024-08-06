@@ -1,10 +1,10 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { InvalidatePriorNotificationDialog } from '@features/PriorNotification/components/InvalidatePriorNotificationDialog'
-import { useInvalidatePriorNotificationMutation } from '@features/PriorNotification/priorNotificationApi'
 import { priorNotificationActions } from '@features/PriorNotification/slice'
+import { invalidatePriorNotification } from '@features/PriorNotification/useCases/invalidatePriorNotification'
 import { updateManualPriorNotificationComputedValues } from '@features/PriorNotification/useCases/updateManualPriorNotificationComputedValues'
-import { isZeroNotice } from '@features/PriorNotification/utils'
+import { getPriorNotificationIdentifier, isZeroNotice } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Button, FormikEffect, Icon, Level, usePrevious } from '@mtes-mct/monitor-ui'
@@ -40,7 +40,6 @@ export function Card({ detail, isValidatingOnChange, onClose, onSubmit, onVerify
   const editedPriorNotificationComputedValues = useMainAppSelector(
     store => store.priorNotification.editedManualPriorNotificationComputedValues
   )
-  const [invalidatePriorNotification] = useInvalidatePriorNotificationMutation()
 
   const [isInvalidatingPriorNotificationDialog, setIsInvalidatingPriorNotificationDialog] = useState(false)
   const [isClosingConfirmationDialog, setIsClosingConfirmationDialog] = useState(false)
@@ -55,6 +54,7 @@ export function Card({ detail, isValidatingOnChange, onClose, onSubmit, onVerify
   const isPendingVerification = detail?.state === PriorNotification.State.PENDING_VERIFICATION
   const isVerifiedAndSent = detail?.state === PriorNotification.State.VERIFIED_AND_SENT
   const hasDesignatedPorts = editedPriorNotificationComputedValues?.types?.find(type => type.hasDesignatedPorts)
+  const priorNotificationIdentifier = getPriorNotificationIdentifier(detail)
 
   const handleClose = () => {
     if (dirty) {
@@ -66,16 +66,10 @@ export function Card({ detail, isValidatingOnChange, onClose, onSubmit, onVerify
     onClose()
   }
 
-  const invalidate = async () => {
-    assertNotNullish(detail)
+  const invalidate = () => {
+    assertNotNullish(priorNotificationIdentifier)
 
-    await invalidatePriorNotification({
-      isManuallyCreated: true,
-      operationDate: detail.logbookMessage.operationDateTime,
-      reportId: detail.logbookMessage.reportId
-    })
-
-    setIsInvalidatingPriorNotificationDialog(false)
+    dispatch(invalidatePriorNotification(priorNotificationIdentifier, true))
   }
 
   const handleSubmit = () => {

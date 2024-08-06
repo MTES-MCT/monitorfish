@@ -213,11 +213,9 @@ export const priorNotificationPublicApi = monitorfishPublicApi.injectEndpoints({
 })
 
 export const {
-  useGetPriorNotificationDetailQuery,
   useGetPriorNotificationsQuery,
   useGetPriorNotificationsToVerifyQuery,
-  useGetPriorNotificationTypesQuery,
-  useInvalidatePriorNotificationMutation
+  useGetPriorNotificationTypesQuery
 } = priorNotificationApi
 
 export const { useGetPriorNotificationPDFQuery } = priorNotificationPublicApi

@@ -30,7 +30,7 @@ class UpdateLogbookPriorNotification(
             logger.warn("Could not delete existing PDF document", e)
         }
 
-        logbookReportRepository.updatePriorNotificationData(
+        logbookReportRepository.updatePriorNotificationAuthorTrigramAndNote(
             reportId = reportId,
             operationDate = operationDate,
             authorTrigram = authorTrigram,

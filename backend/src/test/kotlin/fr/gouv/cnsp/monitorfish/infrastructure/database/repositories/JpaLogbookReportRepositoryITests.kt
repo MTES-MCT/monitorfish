@@ -1118,7 +1118,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat((currentCorReport.message as PNO).note).isNull()
 
         // When
-        jpaLogbookReportRepository.updatePriorNotificationData(
+        jpaLogbookReportRepository.updatePriorNotificationAuthorTrigramAndNote(
             "FAKE_OPERATION_109",
             ZonedDateTime.now().minusMinutes(15),
             "ABC",

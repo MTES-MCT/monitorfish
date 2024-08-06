@@ -18,7 +18,7 @@ import { CardBanner } from '../shared/CardBanner'
 import { DownloadButton } from '../shared/DownloadButton'
 import { TagBar } from '../shared/TagBar'
 
-type PriorNotificationCardLayoutProps = Readonly<{
+type PriorNotificationCardProps = Readonly<{
   bodyChildren?: React.ReactNode
   detail: PriorNotification.PriorNotificationDetail | undefined
   footerChildren?: React.ReactNode
@@ -29,7 +29,7 @@ export function PriorNotificationCard({
   detail,
   footerChildren,
   isLoading = false
-}: PriorNotificationCardLayoutProps) {
+}: PriorNotificationCardProps) {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
 
@@ -122,7 +122,6 @@ export function PriorNotificationCard({
 }
 
 const Wrapper = styled.div<{
-  // TODO Pass this prop via a context?
   $isSuperUser: boolean
 }>`
   bottom: 0;

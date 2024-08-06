@@ -55,7 +55,7 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
     >({
       providesTags: (_, __, { reportId }) => [{ id: reportId, type: RtkCacheTagType.PriorNotification }],
       query: ({ operationDate, reportId }) =>
-        getUrlOrPathWithQueryParams(`/prior_notifications/logbook/${reportId}/data`, { operationDate }),
+        getUrlOrPathWithQueryParams(`/prior_notifications/logbook/${reportId}/form`, { operationDate }),
       transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_DATA_ERROR_MESSAGE, response)
     }),
 
@@ -65,7 +65,7 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
     >({
       providesTags: (_, __, { reportId }) => [{ id: reportId, type: RtkCacheTagType.PriorNotification }],
       query: ({ operationDate, reportId }) =>
-        getUrlOrPathWithQueryParams(`/prior_notifications/manual/${reportId}/data`, { operationDate }),
+        getUrlOrPathWithQueryParams(`/prior_notifications/manual/${reportId}/form`, { operationDate }),
       transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_DATA_ERROR_MESSAGE, response)
     }),
 

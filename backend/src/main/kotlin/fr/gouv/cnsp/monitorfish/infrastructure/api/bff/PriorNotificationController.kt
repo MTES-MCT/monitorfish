@@ -129,7 +129,7 @@ class PriorNotificationController(
 
     @GetMapping("/logbook/{reportId}/form")
     @Operation(summary = "Get an auto prior notification form data by its `reportId`")
-    fun getAutoData(
+    fun getLogbookFormData(
         @PathParam("Logbook message `reportId`")
         @PathVariable(name = "reportId")
         reportId: String,
@@ -148,7 +148,7 @@ class PriorNotificationController(
 
     @PutMapping("/logbook/{reportId}")
     @Operation(summary = "Update an auto prior notification by its `reportId`")
-    fun updateAuto(
+    fun updateLogbook(
         @PathParam("Logbook message `reportId`")
         @PathVariable(name = "reportId")
         reportId: String,

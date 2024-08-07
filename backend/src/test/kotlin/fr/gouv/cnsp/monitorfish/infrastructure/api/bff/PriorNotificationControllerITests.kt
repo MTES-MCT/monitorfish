@@ -128,7 +128,7 @@ class PriorNotificationControllerITests {
     }
 
     @Test
-    fun `updateAuto Should update an auto prior notification by its reportId`() {
+    fun `updateLogbook Should update an auto prior notification by its reportId`() {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
         fakePriorNotification.logbookMessageAndValue.value.note = "Test !"
 
@@ -150,6 +150,7 @@ class PriorNotificationControllerITests {
                 note = "Test !",
             ),
         )
+        val pnoValue = fakePriorNotification.logbookMessageAndValue.value
         api.perform(
             put(
                 "/bff/v1/prior_notifications/logbook/${fakePriorNotification.reportId!!}?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
@@ -160,12 +161,8 @@ class PriorNotificationControllerITests {
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
-            .andExpect(
-                jsonPath(
-                    "$.note",
-                    equalTo(fakePriorNotification.logbookMessageAndValue.value.note),
-                ),
-            )
+            .andExpect(jsonPath("$.authorTrigram", equalTo(pnoValue.authorTrigram)))
+            .andExpect(jsonPath("$.note", equalTo(pnoValue.note)))
     }
 
     @Test
@@ -229,7 +226,7 @@ class PriorNotificationControllerITests {
     }
 
     @Test
-    fun `updateManual Should create a manual prior notification`() {
+    fun `createManual Should create a manual prior notification`() {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
         fakePriorNotification.logbookMessageAndValue.value.authorTrigram = "ABC"
 
@@ -420,47 +417,6 @@ class PriorNotificationControllerITests {
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
-    }
-
-    @Test
-    fun `update Should update a prior notification note by its reportId`() {
-        val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
-        fakePriorNotification.logbookMessageAndValue.value.note = "Test !"
-
-        // Given
-        given(
-            updateLogbookPriorNotification.execute(
-                reportId = anyOrNull(),
-                operationDate = anyOrNull(),
-                authorTrigram = anyOrNull(),
-                note = anyOrNull(),
-            ),
-        )
-            .willReturn(fakePriorNotification)
-
-        // When
-        val requestBody = objectMapper.writeValueAsString(
-            LogbookPriorNotificationFormDataInput(
-                authorTrigram = "ABC",
-                note = "Test !",
-            ),
-        )
-        api.perform(
-            put(
-                "/bff/v1/prior_notifications/logbook/${fakePriorNotification.reportId!!}?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
-            )
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody),
-        )
-            // Then
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
-            .andExpect(
-                jsonPath(
-                    "$.note",
-                    equalTo(fakePriorNotification.logbookMessageAndValue.value.note),
-                ),
-            )
     }
 
     @Test

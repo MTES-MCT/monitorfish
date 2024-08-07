@@ -55,9 +55,6 @@ class BeaconMalfunctionControllerITests {
     @MockBean
     private lateinit var requestNotification: RequestNotification
 
-    @MockBean
-    private lateinit var archiveBeaconMalfunctions: ArchiveBeaconMalfunctions
-
     @Autowired
     private lateinit var objectMapper: ObjectMapper
 
@@ -351,83 +348,5 @@ class BeaconMalfunctionControllerITests {
             eq(BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC),
             eq("ABC"),
         )
-    }
-
-    @Test
-    fun `Should return Ok When archiving multiple beacon malfunctions`() {
-        given(this.archiveBeaconMalfunctions.execute(listOf(123, 456)))
-            .willReturn(
-                listOf(
-                    BeaconMalfunctionResumeAndDetails(
-                        beaconMalfunction = BeaconMalfunction(
-                            123, "CFR", "EXTERNAL_IMMAT", "IRCS",
-                            "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDIBULE 1", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
-                            ZonedDateTime.now(), null, ZonedDateTime.now(),
-                            beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
-                        ),
-                        comments = listOf(
-                            BeaconMalfunctionComment(
-                                1,
-                                1,
-                                "A comment",
-                                BeaconMalfunctionCommentUserType.SIP,
-                                ZonedDateTime.now(),
-                            ),
-                        ),
-                        actions = listOf(
-                            BeaconMalfunctionAction(
-                                1,
-                                1,
-                                BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
-                                "PREVIOUS",
-                                "NEXT",
-                                ZonedDateTime.now(),
-                            ),
-                        ),
-                    ),
-                    BeaconMalfunctionResumeAndDetails(
-                        beaconMalfunction = BeaconMalfunction(
-                            465, "CFR", "EXTERNAL_IMMAT", "IRCS",
-                            "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDIBULE 2", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
-                            ZonedDateTime.now(), null, ZonedDateTime.now(),
-                            beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
-                        ),
-                        comments = listOf(
-                            BeaconMalfunctionComment(
-                                1,
-                                1,
-                                "A comment",
-                                BeaconMalfunctionCommentUserType.SIP,
-                                ZonedDateTime.now(),
-                            ),
-                        ),
-                        actions = listOf(
-                            BeaconMalfunctionAction(
-                                1,
-                                1,
-                                BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
-                                "PREVIOUS",
-                                "NEXT",
-                                ZonedDateTime.now(),
-                            ),
-                        ),
-                    ),
-                ),
-            )
-
-        // When
-        api.perform(
-            put("/bff/v1/beacon_malfunctions/archive")
-                .content(
-                    objectMapper.writeValueAsString(
-                        listOf(123, 456),
-                    ),
-                )
-                .contentType(MediaType.APPLICATION_JSON),
-        )
-            // Then
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$[0].beaconMalfunction.vesselName", equalTo("BIDIBULE 1")))
-            .andExpect(jsonPath("$[1].beaconMalfunction.vesselName", equalTo("BIDIBULE 2")))
     }
 }

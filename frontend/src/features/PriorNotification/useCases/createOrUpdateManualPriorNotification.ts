@@ -4,35 +4,32 @@ import { customDayjs } from '@mtes-mct/monitor-ui'
 import { handleThunkError } from '@utils/handleThunkError'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
 
-import { openPriorNotificationForm } from './openPriorNotificationForm'
+import { openManualPriorNotificationForm } from './openManualPriorNotificationForm'
 import { priorNotificationApi } from '../priorNotificationApi'
 
 import type { PriorNotification } from '../PriorNotification.types'
 import type { MainAppThunk } from '@store'
 
 export const createOrUpdateManualPriorNotification =
-  (
-    reportId: string | undefined,
-    newOrNextPriorNotificationData: PriorNotification.NewManualPriorNotificationData
-  ): MainAppThunk<Promise<void>> =>
+  (reportId: string | undefined, newOrNextData: PriorNotification.NewManualFormData): MainAppThunk<Promise<void>> =>
   async dispatch => {
     try {
-      let updatedPriorNotificationData: PriorNotification.ManualPriorNotificationData
+      let updatedPriorNotificationData: PriorNotification.ManualFormData
       if (!reportId) {
         updatedPriorNotificationData = await dispatch(
-          priorNotificationApi.endpoints.createPriorNotification.initiate(newOrNextPriorNotificationData)
+          priorNotificationApi.endpoints.createPriorNotification.initiate(newOrNextData)
         ).unwrap()
       } else {
         updatedPriorNotificationData = await dispatch(
           priorNotificationApi.endpoints.updateManualPriorNotification.initiate({
-            data: newOrNextPriorNotificationData,
+            data: newOrNextData,
             reportId
           })
         ).unwrap()
       }
 
       dispatch(
-        openPriorNotificationForm({
+        openManualPriorNotificationForm({
           // `operationDate` is not part of `PriorNotification.ManualPriorNotificationData`
           // but this is a good enough guess since this param is only used to optimize SQL queries through Timescale
           operationDate: customDayjs().toISOString(),

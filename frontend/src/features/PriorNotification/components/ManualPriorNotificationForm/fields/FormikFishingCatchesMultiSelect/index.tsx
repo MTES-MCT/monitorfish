@@ -17,11 +17,11 @@ import type { Specy } from '../../../../../../domain/types/specy'
 import type { PriorNotification } from '../../../../PriorNotification.types'
 
 // TODO Is the species name really useful since the Backend fills it?
-type FormikFishingCatchesMultiSelectProps = {
+type FormikFishingCatchesMultiSelectProps = Readonly<{
   readOnly?: boolean | undefined
-}
+}>
 export function FormikFishingCatchesMultiSelect({ readOnly }: FormikFishingCatchesMultiSelectProps) {
-  const [input, meta, helper] = useField<PriorNotification.PriorNotificationDataFishingCatch[]>('fishingCatches')
+  const [input, meta, helper] = useField<PriorNotification.FormDataFishingCatch[]>('fishingCatches')
   const { speciesAsOptions } = useGetSpeciesAsOptions()
   const { data: speciesAndGroups } = useGetSpeciesQuery()
 

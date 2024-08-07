@@ -14,23 +14,22 @@ import { priorNotificationActions } from '../slice'
 import type { PriorNotification } from '../PriorNotification.types'
 import type { MainAppThunk } from '@store'
 
-export const openPriorNotificationCard =
-  (
-    priorNotificationIdentifier: PriorNotification.Identifier,
-    fingerprint: string,
-    isManuallyCreated: boolean
-  ): MainAppThunk<Promise<void>> =>
+export const openLogbookPriorNotificationForm =
+  (priorNotificationIdentifier: PriorNotification.Identifier, fingerprint?: string): MainAppThunk<Promise<void>> =>
   async dispatch => {
     try {
-      dispatch(displayedErrorActions.unset(DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_CARD_ERROR))
+      dispatch(displayedErrorActions.unset(DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR))
       dispatch(priorNotificationActions.closePriorNotificationCardAndForm())
-      dispatch(priorNotificationActions.openPriorNotification(OpenedPriorNotificationType.Card))
+      dispatch(priorNotificationActions.openPriorNotification(OpenedPriorNotificationType.LogbookForm))
 
       const priorNotificationDetail = await dispatch(
         priorNotificationApi.endpoints.getPriorNotificationDetail.initiate({
           ...priorNotificationIdentifier,
-          isManuallyCreated
+          isManuallyCreated: false
         })
+      ).unwrap()
+      const priorNotificationData = await dispatch(
+        priorNotificationApi.endpoints.getLogbookPriorNotificationFormData.initiate(priorNotificationIdentifier)
       ).unwrap()
 
       // Update prior notification list if prior notification fingerprint has changed
@@ -55,14 +54,15 @@ export const openPriorNotificationCard =
       }
 
       dispatch(priorNotificationActions.setOpenedPriorNotificationDetail(priorNotificationDetail))
+      dispatch(priorNotificationActions.setEditedLogbookPriorNotificationFormValues(priorNotificationData))
     } catch (err) {
       if (err instanceof FrontendApiError) {
         dispatch(
           displayOrLogError(
             err,
-            () => openPriorNotificationCard(priorNotificationIdentifier, fingerprint, isManuallyCreated),
+            () => openLogbookPriorNotificationForm(priorNotificationIdentifier, fingerprint),
             true,
-            DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_CARD_ERROR
+            DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR
           )
         )
 

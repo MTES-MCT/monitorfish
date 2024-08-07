@@ -21,7 +21,6 @@ import java.time.ZonedDateTime
 
 data class PriorNotification(
     val reportId: String?,
-    val authorTrigram: String?,
     val createdAt: ZonedDateTime?,
     val didNotFishAfterZeroNotice: Boolean,
     val isManuallyCreated: Boolean,
@@ -35,7 +34,7 @@ data class PriorNotification(
     var lastControlDateTime: ZonedDateTime?,
 ) {
     /** Each prior notification and each of its updates have a unique fingerprint. */
-    val fingerprint: String = listOf(reportId, updatedAt).joinToString(separator = ".")
+    val fingerprint: String = listOf(reportId, updatedAt, state).joinToString(separator = ".")
     private val logger = LoggerFactory.getLogger(PriorNotification::class.java)
 
     val state: PriorNotificationState?
@@ -53,7 +52,7 @@ data class PriorNotification(
             return when {
                 isInVerificationScope == null || isVerified == null || isSent == null || isBeingSent == null -> null
                 !isInVerificationScope && !isVerified && !isSent && !isBeingSent -> PriorNotificationState.OUT_OF_VERIFICATION_SCOPE
-                !isInVerificationScope && !isVerified && !isSent && isBeingSent -> PriorNotificationState.AUTO_SEND_IN_PROGRESS
+                !isInVerificationScope && !isVerified && !isSent && isBeingSent -> PriorNotificationState.PENDING_AUTO_SEND
                 !isInVerificationScope && !isVerified && isSent && !isBeingSent -> PriorNotificationState.AUTO_SEND_DONE
                 !isInVerificationScope && isVerified && !isSent && !isBeingSent -> PriorNotificationState.FAILED_SEND
                 !isInVerificationScope && isVerified && !isSent && isBeingSent -> PriorNotificationState.PENDING_SEND

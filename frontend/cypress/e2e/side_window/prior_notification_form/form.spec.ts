@@ -531,7 +531,7 @@ context('Side Window > Prior Notification Form > Form', () => {
           cy.fill('Rechercher un navire', 'IN-ARÊTE-ABLE')
 
           cy.getTableRowById(createdPriorNotification.reportId)
-            .find('span[title="En cours de diffusion"]')
+            .find('span[title="Diffusion en cours"]')
             .should('be.visible')
         })
       })

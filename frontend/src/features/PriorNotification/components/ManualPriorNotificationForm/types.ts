@@ -1,8 +1,8 @@
 import type { PriorNotification } from '../../PriorNotification.types'
 import type { UndefineExcept } from '@mtes-mct/monitor-ui'
 
-export type FormValues = UndefineExcept<
-  Omit<PriorNotification.NewManualPriorNotificationData, 'updatedAt'>,
+export type ManualPriorNotificationFormValues = UndefineExcept<
+  Omit<PriorNotification.NewManualFormData, 'updatedAt'>,
   'didNotFishAfterZeroNotice' | 'fishingCatches' | 'tripGearCodes'
 > & {
   isExpectedLandingDateSameAsExpectedArrivalDate: boolean

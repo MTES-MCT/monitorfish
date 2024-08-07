@@ -69,13 +69,21 @@ interface LogbookReportRepository {
     fun updatePriorNotificationState(
         reportId: String,
         operationDate: ZonedDateTime,
+
         isBeingSent: Boolean,
+        isSent: Boolean,
         isVerified: Boolean,
     )
 
     fun findAllPriorNotificationsToVerify(): List<PriorNotification>
 
-    fun updatePriorNotificationNote(reportId: String, operationDate: ZonedDateTime, note: String?)
+    fun updatePriorNotificationAuthorTrigramAndNote(
+        reportId: String,
+        operationDate: ZonedDateTime,
+
+        authorTrigram: String?,
+        note: String?,
+    )
 
     fun invalidate(reportId: String, operationDate: ZonedDateTime)
 

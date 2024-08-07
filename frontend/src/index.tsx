@@ -17,7 +17,7 @@ if (import.meta.env.PROD) {
     integrations: [
       browserTracingIntegration({
         tracingOrigins: import.meta.env.FRONTEND_SENTRY_TRACING_ORIGINS
-          ? [import.meta.env.FRONTEND_SENTRY_TRACING_ORIGINS ?? '']
+          ? [import.meta.env.FRONTEND_SENTRY_TRACING_ORIGINS]
           : []
       })
     ],

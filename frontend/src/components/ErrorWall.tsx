@@ -23,7 +23,7 @@ export function ErrorWall({ displayedErrorKey, isAbsolute = false }: ErrorWallPr
   }
 
   return (
-    <Wrapper $isAbsolute={isAbsolute} data-cy="first-loader">
+    <Wrapper $isAbsolute={isAbsolute}>
       <p>🔌 {displayedErrorStateValue.message}</p>
 
       {displayedErrorStateValue.hasRetryableUseCase && (

@@ -15,9 +15,10 @@ import type { Promisable } from 'type-fest'
 
 type FishActionCardProps = Readonly<{
   missionAction: MissionActionFormValues
+  onDuplicate: () => Promisable<void>
   onRemove: () => Promisable<void>
 }>
-export function FishActionCard({ missionAction, onRemove }: FishActionCardProps) {
+export function FishActionCard({ missionAction, onDuplicate, onRemove }: FishActionCardProps) {
   const natinfsAsOptions = useGetNatinfsAsOptions()
 
   const isControlAction =
@@ -124,6 +125,15 @@ export function FishActionCard({ missionAction, onRemove }: FishActionCardProps)
           <p>{actionLabel}</p>
         </ActionLabel>
 
+        <RightAlignedIconButton
+          accent={Accent.TERTIARY}
+          color={THEME.color.slateGray}
+          Icon={Icon.Duplicate}
+          iconSize={20}
+          onClick={onDuplicate}
+          title="Dupliquer l’action"
+          withUnpropagatedClick
+        />
         <RightAlignedIconButton
           accent={Accent.TERTIARY}
           color={THEME.color.maximumRed}

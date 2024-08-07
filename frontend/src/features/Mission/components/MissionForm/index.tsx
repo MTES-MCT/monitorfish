@@ -34,6 +34,7 @@ import {
 } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { SideWindowMenuKey } from 'domain/entities/sideWindow/constants'
+import { omit } from 'lodash/fp'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { NoRsuiteOverrideWrapper } from 'ui/NoRsuiteOverrideWrapper'
@@ -280,6 +281,30 @@ export function MissionForm() {
     [dispatch, updateEditedActionFormValues, updateReduxSliceDraft, actionsFormValues, isAutoSaveEnabled]
   )
 
+  const duplicateAction = useCallback(
+    async (actionIndex: number) => {
+      /**
+       * If a debounce function is not yet executed, stop there to avoid race condition.
+       * /!\ This can leads to save the debounced action update to the wrong action index
+       */
+      if (updateEditedActionFormValues.isPending()) {
+        setTimeout(() => duplicateAction(actionIndex), DEBOUNCE_DELAY)
+
+        return
+      }
+
+      const actionCopy: MissionActionFormValues = omit(['id'], actionsFormValues[actionIndex])
+      setEditedActionIndex(0)
+
+      const createdId = await dispatch(autoSaveMissionAction(actionCopy, missionIdRef.current, isAutoSaveEnabled))
+
+      const nextActionsWithIdFormValues = [{ ...actionCopy, id: createdId }, ...actionsFormValues]
+      setActionsFormValues(nextActionsWithIdFormValues)
+      updateReduxSliceDraft()
+    },
+    [dispatch, updateEditedActionFormValues, updateReduxSliceDraft, actionsFormValues, isAutoSaveEnabled]
+  )
+
   const updateEditedActionIndex = useCallback(
     (nextActionIndex: number | undefined) => {
       /**
@@ -432,6 +457,7 @@ export function MissionForm() {
                 missionId={missionIdRef.current}
                 missionTypes={mainFormValues.missionTypes}
                 onAdd={addAction}
+                onDuplicate={duplicateAction}
                 onRemove={removeAction}
                 onSelect={updateEditedActionIndex}
               />

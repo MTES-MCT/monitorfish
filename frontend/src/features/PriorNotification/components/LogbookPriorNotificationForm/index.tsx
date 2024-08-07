@@ -4,7 +4,6 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { assertNotNullish } from '@utils/assertNotNullish'
-import { useState } from 'react'
 
 import { Footer } from './Footer'
 import { Form } from './Form'
@@ -22,13 +21,9 @@ export function LogbookPriorNotificationForm() {
     state => state.priorNotification.openedPriorNotificationDetail
   )
 
-  const [isLoading, setIsLoading] = useState(false)
-
   const displayedErrorKey = displayedError ? DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR : undefined
 
   const verifyAndSend = async () => {
-    setIsLoading(true)
-
     assertNotNullish(openedPriorNotificationDetail)
     const identifier = getPriorNotificationIdentifier(openedPriorNotificationDetail)
     assertNotNullish(identifier)
@@ -40,7 +35,7 @@ export function LogbookPriorNotificationForm() {
     return <PriorNotificationCard detail={undefined} otherDisplayedErrorKey={displayedErrorKey} />
   }
 
-  if (!editedLogbookPriorNotificationFormValues || !openedPriorNotificationDetail || isLoading) {
+  if (!editedLogbookPriorNotificationFormValues || !openedPriorNotificationDetail) {
     return <PriorNotificationCard detail={undefined} isLoading />
   }
 

@@ -417,11 +417,6 @@ class JpaLogbookReportRepository(
                     !Utils.areStringsEquivalent(authorTrigram, pnoMessage.authorTrigram) ||
                     !Utils.areStringsEquivalent(note, pnoMessage.note)
                 ) {
-                    println("================================================================================")
-                    println("authorTrigram: $authorTrigram")
-                    println("note: $note")
-                    println("================================================================================")
-
                     pnoMessage.authorTrigram = authorTrigram
                     pnoMessage.note = note
 

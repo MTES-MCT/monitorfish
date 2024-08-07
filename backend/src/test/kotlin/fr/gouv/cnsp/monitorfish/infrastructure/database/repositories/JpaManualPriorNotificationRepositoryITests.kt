@@ -202,7 +202,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAll Should return manual prior notifications for NAVIRE RENOMMÉ vessel`() {
+    fun `findAll Should return manual prior notifications When searching a vessel name`() {
         // Given
         val firstFilter = defaultPriorNotificationsFilter.copy(searchQuery = "renom")
 
@@ -224,6 +224,48 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
 
         // Given
         val secondFilter = defaultPriorNotificationsFilter.copy(searchQuery = "eNÔm")
+
+        // When
+        val secondResult = jpaManualPriorNotificationRepository.findAll(secondFilter)
+
+        // Then
+        assertThat(secondResult).hasSizeBetween(1, allManualPriorNotificationsLength - 1)
+        assertThat(
+            secondResult.all { it.logbookMessageAndValue.logbookMessage.vesselName == "NAVIRE RENOMMÉ (ANCIEN NOM)" },
+        ).isTrue()
+        val secondResultVessels = secondResult.mapNotNull {
+            jpaVesselRepository.findFirstByInternalReferenceNumber(
+                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
+            )
+        }
+        assertThat(secondResultVessels).hasSize(secondResult.size)
+        assertThat(secondResultVessels.all { it.vesselName == "NAVIRE RENOMMÉ (NOUVEAU NOM)" }).isTrue()
+    }
+
+    @Test
+    @Transactional
+    fun `findAll Should return manual prior notifications When searching a vessel cfr`() {
+        // Given
+        val firstFilter = defaultPriorNotificationsFilter.copy(searchQuery = "CFR116")
+
+        // When
+        val firstResult = jpaManualPriorNotificationRepository.findAll(firstFilter)
+
+        // Then
+        assertThat(firstResult).hasSizeBetween(1, allManualPriorNotificationsLength - 1)
+        assertThat(
+            firstResult.all { it.logbookMessageAndValue.logbookMessage.vesselName == "NAVIRE RENOMMÉ (ANCIEN NOM)" },
+        ).isTrue()
+        val firstResultVessels = firstResult.mapNotNull {
+            jpaVesselRepository.findFirstByInternalReferenceNumber(
+                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
+            )
+        }
+        assertThat(firstResultVessels).hasSize(firstResult.size)
+        assertThat(firstResultVessels.all { it.vesselName == "NAVIRE RENOMMÉ (NOUVEAU NOM)" }).isTrue()
+
+        // Given
+        val secondFilter = defaultPriorNotificationsFilter.copy(searchQuery = "116")
 
         // When
         val secondResult = jpaManualPriorNotificationRepository.findAll(secondFilter)

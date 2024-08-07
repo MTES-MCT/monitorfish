@@ -54,7 +54,11 @@ interface DBLogbookReportRepository :
                     AND (:portLocodes IS NULL OR lr.value->>'port' IN (:portLocodes))
 
                     -- Search Query
-                    AND (:searchQuery IS NULL OR unaccent(lower(lr.vessel_name)) ILIKE CONCAT('%', unaccent(lower(:searchQuery)), '%'))
+                    AND (
+                        :searchQuery IS NULL OR
+                        unaccent(lower(lr.vessel_name)) ILIKE CONCAT('%', unaccent(lower(:searchQuery)), '%') OR
+                        unaccent(lower(lr.cfr)) ILIKE CONCAT('%', unaccent(lower(:searchQuery)), '%')
+                    )
 
                     -- Will Arrive After
                     AND lr.value->>'predictedArrivalDatetimeUtc' >= :willArriveAfter

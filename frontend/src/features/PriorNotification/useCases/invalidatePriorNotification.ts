@@ -30,6 +30,20 @@ export const invalidatePriorNotification =
         })
       ).unwrap()
 
+      if (isManuallyCreated) {
+        const nextManualFormData = await dispatch(
+          priorNotificationApi.endpoints.getManualPriorNotificationFormData.initiate(identifier)
+        ).unwrap()
+
+        dispatch(priorNotificationActions.setEditedLogbookPriorNotificationFormValues(nextManualFormData))
+      } else {
+        const nextLogbookFormData = await dispatch(
+          priorNotificationApi.endpoints.getLogbookPriorNotificationFormData.initiate(identifier)
+        ).unwrap()
+
+        dispatch(priorNotificationActions.setEditedLogbookPriorNotificationFormValues(nextLogbookFormData))
+      }
+
       dispatch(priorNotificationActions.setOpenedPriorNotificationDetail(nextDetail))
     } catch (err) {
       if (err instanceof FrontendApiError) {

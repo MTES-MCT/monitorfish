@@ -298,7 +298,6 @@ export function FilterBar() {
           <DateRangePicker
             baseContainer={newWindowContainerRef.current}
             defaultValue={listFilterValues.expectedArrivalCustomPeriod}
-            isHistorical
             isStringDate
             isTransparent
             label="Arrivée estimée du navire entre deux dates"

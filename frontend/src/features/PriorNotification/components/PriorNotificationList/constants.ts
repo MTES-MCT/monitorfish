@@ -5,14 +5,14 @@ import type { ListFilter } from './types'
 
 /* eslint-disable sort-keys-fix/sort-keys-fix, typescript-sort-keys/string-enum */
 export const SUB_MENU_LABEL: Record<SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup, string> = {
-  ALL: 'TOUT',
+  ALL: 'Tout',
   MED: 'MED',
   MEMN: 'MEMN',
   NAMO: 'NAMO',
   SA: 'SA',
   OUTREMEROA: 'O-M OA',
   OUTREMEROI: 'O-M OI',
-  NONE: 'HORS'
+  NONE: 'Hors f.'
 }
 export const SUB_MENUS_AS_OPTIONS = getOptionsFromLabelledEnum(SUB_MENU_LABEL)
 
@@ -40,6 +40,7 @@ export enum ExpectedArrivalPeriod {
   IN_LESS_THAN_EIGTH_HOURS = 'IN_LESS_THAN_EIGTH_HOURS',
   IN_LESS_THAN_TWELVE_HOURS = 'IN_LESS_THAN_TWELVE_HOURS',
   IN_LESS_THAN_ONE_DAY = 'IN_LESS_THAN_ONE_DAY',
+  IN_LESS_THAN_ONE_MONTH = 'IN_LESS_THAN_ONE_MONTH',
   CUSTOM = 'CUSTOM'
 }
 export const EXPECTED_ARRIVAL_PERIOD_LABEL: Record<ExpectedArrivalPeriod, string> = {
@@ -48,6 +49,7 @@ export const EXPECTED_ARRIVAL_PERIOD_LABEL: Record<ExpectedArrivalPeriod, string
   IN_LESS_THAN_EIGTH_HOURS: 'Arrivée estimée dans moins de 8h',
   IN_LESS_THAN_TWELVE_HOURS: 'Arrivée estimée dans moins de 12h',
   IN_LESS_THAN_ONE_DAY: 'Arrivée estimée dans moins de 24h',
+  IN_LESS_THAN_ONE_MONTH: 'Arrivée estimée dans moins d’un mois',
   CUSTOM: 'Période spécifique'
 }
 export const EXPECTED_ARRIVAL_PERIODS_AS_OPTIONS = getOptionsFromLabelledEnum(EXPECTED_ARRIVAL_PERIOD_LABEL)

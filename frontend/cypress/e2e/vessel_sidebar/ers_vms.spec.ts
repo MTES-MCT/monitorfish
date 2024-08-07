@@ -77,7 +77,7 @@ context('Vessel sidebar ers/vms tab', () => {
       'Avarie en mer ouverte dans MonitorFish, dernière émission le'
     )
     cy.get('*[data-cy="beacon-malfunction-details-follow-up"]', { timeout: 10000 }).contains(
-      "Le ticket a été déplacé de Premier contact à Fin de l'avarie."
+      "Le ticket a été déplacé de Premier contact à Avaries clôturées."
     )
     cy.get('*[data-cy="beacon-malfunction-details"]', { timeout: 10000 }).contains('Navire en mer')
     cy.get('*[data-cy="beacon-malfunction-details"]', { timeout: 10000 }).contains('14 jours')

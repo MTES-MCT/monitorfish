@@ -40,7 +40,7 @@ export const MISSION_FILTER_OPTIONS: Record<MissionFilterType, Option<any>[]> = 
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 export const SUB_MENU_LABEL: Record<SeafrontGroup | AllSeafrontGroup, string> = {
-  ALL: 'TOUT',
+  ALL: 'Tout',
   MED: 'MED',
   MEMN: 'MEMN',
   NAMO: 'NAMO',

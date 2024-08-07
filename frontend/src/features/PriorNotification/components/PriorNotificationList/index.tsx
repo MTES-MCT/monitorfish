@@ -2,6 +2,7 @@ import { BackendApi } from '@api/BackendApi.types'
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS, RtkCacheTagType } from '@api/constants'
 import { ErrorWall } from '@components/ErrorWall'
 import { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
+import { OpenedPriorNotificationType } from '@features/PriorNotification/constants'
 import { openManualPriorNotificationForm } from '@features/PriorNotification/useCases/openManualPriorNotificationForm'
 import { Body } from '@features/SideWindow/components/Body'
 import { Header } from '@features/SideWindow/components/Header'
@@ -47,12 +48,8 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
   const openedPriorNotificationDetail = useMainAppSelector(
     state => state.priorNotification.openedPriorNotificationDetail
   )
-  const isPriorNotificationCardOpen = useMainAppSelector(state => state.priorNotification.isPriorNotificationCardOpen)
-  const isLogbookPriorNotificationFormOpen = useMainAppSelector(
-    state => state.priorNotification.isLogbookPriorNotificationFormOpen
-  )
-  const isManualPriorNotificationFormOpen = useMainAppSelector(
-    state => state.priorNotification.isManualPriorNotificationFormOpen
+  const openedPriorNotificationComponentType = useMainAppSelector(
+    state => state.priorNotification.openedPriorNotificationComponentType
   )
   const isSuperUser = useIsSuperUser()
 
@@ -241,16 +238,16 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
         </Body>
       </Page>
 
-      {isPriorNotificationCardOpen && (
+      {openedPriorNotificationComponentType === OpenedPriorNotificationType.Card && (
         <PriorNotificationCard
           key={openedPriorNotificationDetail?.fingerprint}
           detail={openedPriorNotificationDetail}
         />
       )}
-      {isLogbookPriorNotificationFormOpen && (
+      {openedPriorNotificationComponentType === OpenedPriorNotificationType.LogbookForm && (
         <LogbookPriorNotificationForm key={openedPriorNotificationDetail?.fingerprint} />
       )}
-      {isManualPriorNotificationFormOpen && (
+      {openedPriorNotificationComponentType === OpenedPriorNotificationType.ManualForm && (
         <ManualPriorNotificationForm key={openedPriorNotificationDetail?.fingerprint} />
       )}
     </>

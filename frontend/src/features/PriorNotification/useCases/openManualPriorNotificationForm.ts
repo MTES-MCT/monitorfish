@@ -7,6 +7,7 @@ import { displayedErrorActions } from 'domain/shared_slices/DisplayedError'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
 
 import { getInitialFormValues } from '../components/ManualPriorNotificationForm/utils'
+import { OpenedPriorNotificationType } from '../constants'
 import { priorNotificationApi } from '../priorNotificationApi'
 import { priorNotificationActions } from '../slice'
 import { getPriorNotificationTypesFromLogbookMessagePnoTypes } from '../utils'
@@ -24,7 +25,7 @@ export const openManualPriorNotificationForm =
     try {
       dispatch(displayedErrorActions.unset(DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR))
       dispatch(priorNotificationActions.closePriorNotificationCardAndForm())
-      dispatch(priorNotificationActions.openManualPriorNotificationForm())
+      dispatch(priorNotificationActions.openPriorNotification(OpenedPriorNotificationType.ManualForm))
 
       if (!priorNotificationIdentifier) {
         dispatch(priorNotificationActions.setEditedManualPriorNotificationFormValues(getInitialFormValues()))
@@ -65,7 +66,7 @@ export const openManualPriorNotificationForm =
 
       dispatch(priorNotificationActions.setEditedManualPriorNotificationFormValues(nextFormValues))
       dispatch(priorNotificationActions.setManualPriorNotificationComputedValues(nextComputedValues))
-      dispatch(priorNotificationActions.setOpenedPriorNotification(priorNotificationDetail))
+      dispatch(priorNotificationActions.setOpenedPriorNotificationDetail(priorNotificationDetail))
     } catch (err) {
       if (err instanceof FrontendApiError) {
         dispatch(

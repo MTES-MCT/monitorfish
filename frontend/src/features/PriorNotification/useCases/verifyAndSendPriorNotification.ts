@@ -25,7 +25,7 @@ export const verifyAndSendPriorNotification =
       ).unwrap()
 
       dispatch(priorNotificationApi.util.invalidateTags([RtkCacheTagType.PriorNotificationsToVerify]))
-      dispatch(priorNotificationActions.setOpenedPriorNotification(priorNotificationDetail))
+      dispatch(priorNotificationActions.setOpenedPriorNotificationDetail(priorNotificationDetail))
     } catch (err) {
       if (err instanceof FrontendApiError) {
         dispatch(displayOrLogError(err, undefined, true, DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_CARD_ERROR))

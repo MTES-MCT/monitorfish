@@ -16,6 +16,7 @@ import styled from 'styled-components'
 import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
 
 import { Header } from './Header'
+import { SideWindowCard } from '../../../../components/SideWindowCard'
 import { priorNotificationActions } from '../../slice'
 import { CardBanner } from '../shared/CardBanner'
 import { DownloadButton } from '../shared/DownloadButton'
@@ -54,121 +55,87 @@ export function PriorNotificationCard({
 
   if (controlledDisplayedErrorKey) {
     return (
-      <Wrapper $isSuperUser={isSuperUser}>
-        <Background onClick={close} />
-
-        <Card>
-          <ErrorWall displayedErrorKey={controlledDisplayedErrorKey} />
-        </Card>
-      </Wrapper>
+      <StyledCard $isSuperUser={isSuperUser} onBackgroundClick={close}>
+        <ErrorWall displayedErrorKey={controlledDisplayedErrorKey} />
+      </StyledCard>
     )
   }
 
   if (!detail || isLoading) {
     return (
-      <Wrapper $isSuperUser={isSuperUser}>
-        <Background onClick={close} />
-
-        <Card>
-          <LoadingSpinnerWall />
-        </Card>
-      </Wrapper>
+      <StyledCard $isSuperUser={isSuperUser} onBackgroundClick={close}>
+        <LoadingSpinnerWall />
+      </StyledCard>
     )
   }
 
   return (
-    <Wrapper $isSuperUser={isSuperUser}>
-      <Background onClick={close} />
+    <StyledCard $isSuperUser={isSuperUser} onBackgroundClick={close}>
+      {detail?.state === PriorNotification.State.PENDING_SEND && (
+        <CardBanner isCollapsible level={Level.WARNING} top="100px">
+          Le préavis est en cours de diffusion.
+        </CardBanner>
+      )}
+      {detail?.state === PriorNotification.State.PENDING_AUTO_SEND && (
+        <CardBanner isCollapsible level={Level.WARNING} top="100px">
+          Le préavis est en cours d’envoi aux unités qui l’ont demandé.
+        </CardBanner>
+      )}
 
-      <Card>
-        {detail?.state === PriorNotification.State.PENDING_SEND && (
-          <CardBanner isCollapsible level={Level.WARNING} top="100px">
-            Le préavis est en cours de diffusion.
-          </CardBanner>
-        )}
-        {detail?.state === PriorNotification.State.PENDING_AUTO_SEND && (
-          <CardBanner isCollapsible level={Level.WARNING} top="100px">
-            Le préavis est en cours d’envoi aux unités qui l’ont demandé.
-          </CardBanner>
-        )}
+      <FrontendErrorBoundary>
+        <Header detail={detail} onClose={close} />
 
-        <FrontendErrorBoundary>
-          <Header detail={detail} onClose={close} />
+        <Body>
+          <TagBar
+            isInvalidated={isInvalidated}
+            isVesselUnderCharter={detail.isVesselUnderCharter}
+            isZeroNotice={isZeroNotice(
+              getPriorNotificationFishingCatchesFromLogbookMessageFishingCatches(
+                detail.logbookMessage.message.catchOnboard
+              )
+            )}
+            riskFactor={detail.riskFactor}
+            state={detail.state}
+            tripSegments={detail.logbookMessage.tripSegments}
+            types={getPriorNotificationTypesFromLogbookMessagePnoTypes(detail.logbookMessage.message.pnoTypes)}
+          />
 
-          <Body>
-            <TagBar
-              isInvalidated={isInvalidated}
-              isVesselUnderCharter={detail.isVesselUnderCharter}
-              isZeroNotice={isZeroNotice(
-                getPriorNotificationFishingCatchesFromLogbookMessageFishingCatches(
-                  detail.logbookMessage.message.catchOnboard
-                )
-              )}
-              riskFactor={detail.riskFactor}
-              state={detail.state}
-              tripSegments={detail.logbookMessage.tripSegments}
-              types={getPriorNotificationTypesFromLogbookMessagePnoTypes(detail.logbookMessage.message.pnoTypes)}
-            />
+          {isPendingVerification && <Intro>Le préavis doit être vérifié par le CNSP avant sa diffusion.</Intro>}
+          <Intro hasNoTopMargin={isPendingVerification}>
+            Le navire doit respecter un délai d’envoi{hasDesignatedPorts && ' et débarquer dans un port désigné'}.
+          </Intro>
 
-            {isPendingVerification && <Intro>Le préavis doit être vérifié par le CNSP avant sa diffusion.</Intro>}
-            <Intro hasNoTopMargin={isPendingVerification}>
-              Le navire doit respecter un délai d’envoi{hasDesignatedPorts && ' et débarquer dans un port désigné'}.
-            </Intro>
+          <hr />
 
-            <hr />
+          <LogbookMessage
+            isFirst
+            isManuallyCreated={detail.isManuallyCreated ?? false}
+            logbookMessage={detail.logbookMessage}
+          />
 
-            <LogbookMessage
-              isFirst
-              isManuallyCreated={detail.isManuallyCreated ?? false}
-              logbookMessage={detail.logbookMessage}
-            />
+          <hr />
 
-            <hr />
+          {bodyChildren}
+        </Body>
 
-            {bodyChildren}
-          </Body>
+        <Footer>
+          <Button accent={Accent.TERTIARY} onClick={close}>
+            Fermer
+          </Button>
 
-          <Footer>
-            <Button accent={Accent.TERTIARY} onClick={close}>
-              Fermer
-            </Button>
+          <DownloadButton pnoLogbookMessage={detail.logbookMessage} reportId={detail.reportId} />
 
-            <DownloadButton pnoLogbookMessage={detail.logbookMessage} reportId={detail.reportId} />
-
-            {footerChildren}
-          </Footer>
-        </FrontendErrorBoundary>
-      </Card>
-    </Wrapper>
+          {footerChildren}
+        </Footer>
+      </FrontendErrorBoundary>
+    </StyledCard>
   )
 }
 
-const Wrapper = styled.div<{
+const StyledCard = styled(SideWindowCard)<{
   $isSuperUser: boolean
 }>`
-  bottom: 0;
-  display: flex;
-  justify-content: flex-end;
   left: ${p => (p.$isSuperUser ? '70px' : 0)};
-  position: fixed;
-  right: 0;
-  top: 0;
-  z-index: 1000;
-`
-
-const Background = styled.div`
-  background-color: ${p => p.theme.color.charcoal};
-  opacity: 0.5;
-  flex-grow: 1;
-`
-
-const Card = styled.div`
-  background-color: ${p => p.theme.color.white};
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  position: relative;
-  width: 560px;
 `
 
 const Body = styled.div`

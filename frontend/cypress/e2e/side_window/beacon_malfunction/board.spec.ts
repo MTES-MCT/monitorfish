@@ -53,7 +53,7 @@ context('Side Window > Beacon Malfunction Board', () => {
     cy.log('Board Should be initialized with the beacon malfunctions')
 
     // Then
-    cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]').children().should('have.length', 7)
+    cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]').children().should('have.length', 6)
 
     // Count the number of cards in the columns' header
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]')
@@ -310,9 +310,9 @@ context('Side Window > Beacon Malfunction Board', () => {
       .contains('I just added a new comment')
   })
 
-  it('Beacon malfunction end of malfunction reason Should be showed', () => {
+  it('Beacon malfunction archived reason Should be showed', () => {
     // In the board
-    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-END_OF_MALFUNCTION"]')
+    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-ARCHIVED"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
       .first()
@@ -322,7 +322,7 @@ context('Side Window > Beacon Malfunction Board', () => {
 
   it('Notification messages feedback should be showed in beacon follow up', () => {
     // In the board
-    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-END_OF_MALFUNCTION"]')
+    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-ARCHIVED"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
       .eq(0)
@@ -366,7 +366,7 @@ context('Side Window > Beacon Malfunction Board', () => {
 
   it('Temporary sent message Should be seen When clicking on sent notification select menu', () => {
     // In the board
-    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-END_OF_MALFUNCTION"]')
+    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-ARCHIVED"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
       .eq(0)
@@ -388,7 +388,7 @@ context('Side Window > Beacon Malfunction Board', () => {
 
   it('Temporary sent message Should be seen When clicking on sent notification to foreign FMC select menu', () => {
     // In the board
-    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-END_OF_MALFUNCTION"]')
+    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-ARCHIVED"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
       .eq(0)
@@ -407,32 +407,6 @@ context('Side Window > Beacon Malfunction Board', () => {
     cy.get('*[data-cy="side-window-beacon-malfunctions-sending-notification"]').contains(
       'En attente d’envoi de la Notification à un FMC étranger'
     )
-  })
-
-  it('Archive all Should archive all cards the END OF MALFUNCTION column', () => {
-    // Given
-    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-END_OF_MALFUNCTION"]')
-      .children()
-      .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .should('have.length', 1)
-    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-ARCHIVED"]')
-      .children()
-      .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .should('have.length', 0)
-
-    // When
-    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-END_OF_MALFUNCTION"]').scrollIntoView()
-    cy.get('[data-cy="side-window-beacon-malfunctions-archive-all"]').click()
-
-    // Then
-    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-END_OF_MALFUNCTION"]')
-      .children()
-      .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .should('have.length', 0)
-    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-ARCHIVED"]')
-      .children()
-      .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .should('have.length', 1)
   })
 
   it('Beacon malfunctions Should be filtered by status', () => {

@@ -49,7 +49,7 @@ class UpdateBeaconMalfunctionUTests {
     }
 
     @Test
-    fun `execute Should throw an exception When the Stage is END_OF_MALFUNCTION but there si no endOfBeaconMalfunctionReason`() {
+    fun `execute Should throw an exception When the Stage is ARCHIVED but there si no endOfBeaconMalfunctionReason`() {
         // When
         val throwable = catchThrowable {
             UpdateBeaconMalfunction(
@@ -57,12 +57,14 @@ class UpdateBeaconMalfunctionUTests {
                 beaconMalfunctionActionRepository,
                 getBeaconMalfunction,
             )
-                .execute(1, null, Stage.END_OF_MALFUNCTION, null)
+                .execute(1, null, Stage.ARCHIVED, null)
         }
 
         // Then
         assertThat(throwable).isInstanceOf(IllegalArgumentException::class.java)
-        assertThat(throwable.message).contains("Cannot end malfunction without giving an endOfBeaconMalfunctionReason")
+        assertThat(throwable.message).contains(
+            "Cannot archive malfunction without giving an endOfBeaconMalfunctionReason",
+        )
     }
 
     @Test

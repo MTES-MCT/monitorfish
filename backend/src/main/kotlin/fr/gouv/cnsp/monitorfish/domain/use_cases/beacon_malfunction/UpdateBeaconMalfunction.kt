@@ -23,9 +23,9 @@ class UpdateBeaconMalfunction(
         require(vesselStatus != null || stage != null) {
             "No value to update"
         }
-        if (stage == Stage.END_OF_MALFUNCTION) {
+        if (stage == Stage.ARCHIVED) {
             require(endOfBeaconMalfunctionReason != null) {
-                "Cannot end malfunction without giving an endOfBeaconMalfunctionReason"
+                "Cannot archive malfunction without giving an endOfBeaconMalfunctionReason"
             }
         }
 

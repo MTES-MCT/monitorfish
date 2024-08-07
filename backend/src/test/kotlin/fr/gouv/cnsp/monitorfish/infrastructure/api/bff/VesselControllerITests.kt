@@ -563,7 +563,7 @@ class VesselControllerITests {
                                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                                 vesselName = "BIDUBULE",
                                 vesselStatus = VesselStatus.AT_SEA,
-                                stage = Stage.END_OF_MALFUNCTION,
+                                stage = Stage.ARCHIVED,
                                 malfunctionStartDateTime = ZonedDateTime.now(),
                                 malfunctionEndDateTime = null,
                                 vesselStatusLastModificationDateTime = ZonedDateTime.now(), endOfBeaconMalfunctionReason = EndOfBeaconMalfunctionReason.RESUMED_TRANSMISSION,

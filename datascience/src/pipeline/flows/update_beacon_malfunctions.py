@@ -1,6 +1,6 @@
 from datetime import datetime
 from pathlib import Path
-from typing import Tuple
+from typing import Optional, Tuple
 
 import numpy as np
 import pandas as pd
@@ -38,8 +38,7 @@ from src.pipeline.shared_tasks.healthcheck import (
 @task(checkpoint=False)
 def extract_last_positions() -> pd.DataFrame:
     """
-    Extract the last emission date of each vessel in the `last_positions` table for
-    certain flag states.
+    Extract the last emission date of each vessel in the `last_positions` table.
     """
     return extract(
         "monitorfish_remote",
@@ -201,7 +200,6 @@ def get_ended_malfunction_ids(
 
     malfunctions_with_restarted_emissions = known_malfunctions_last_emissions.loc[
         (known_malfunctions_last_emissions.is_manual == False)
-        & (known_malfunctions_last_emissions.is_at_port == False)
         & (
             known_malfunctions_last_emissions.last_position_datetime_utc
             >= malfunction_datetime_utc_threshold_at_sea
@@ -336,15 +334,17 @@ def load_new_beacon_malfunctions(new_beacon_malfunctions: pd.DataFrame):
 def update_beacon_malfunction(
     beacon_malfunction_id: int,
     *,
-    new_stage: BeaconMalfunctionStage = None,
-    new_vessel_status: BeaconMalfunctionVesselStatus = None,
-    end_of_malfunction_reason: EndOfMalfunctionReason = None,
+    new_stage: Optional[BeaconMalfunctionStage] = None,
+    new_vessel_status: Optional[BeaconMalfunctionVesselStatus] = None,
+    end_of_malfunction_reason: Optional[EndOfMalfunctionReason] = None,
 ):
     """Update a `beacon_malfunction` stage or vessel status.
 
     - Exactly one of `new_state` or `new_vessel_status` must be provided
     - `end_of_malfunction_reason` must be provided if `new_stage` is provided and is
-      equal to `END_OF_MALFUNCTION`
+      equal to `ARCHIVED`
+    - `end_of_malfunction_reason` cannot be be provided when `new_stage` is provided
+       and is different from `ARCHIVED`
     - `end_of_malfunction_reason` cannot be be provided when `new_vessel_status` is
       provided
 
@@ -355,16 +355,18 @@ def update_beacon_malfunction(
         new_vessel_status (beaconMalfunctionVesselStatus, optional): vessel_status to
           move the beacon malfunction to. Defaults to None.
         end_of_malfunction_reason (endOfMalfunctionReason, optional): reason that led
-          to the end of the malfunction. Defaults to None.
+          to the archiving of the malfunction. Defaults to None.
 
     Raises:
         ValueError: in the following cases :
 
           - both `new_stage` and `new_vessel_status` are provided
           - both `new_stage` and `new_vessel_status` are null
-          - `new_stage` is `END_OF_MALFUNCTION` and no `end_of_malfunction_reason` is
+          - `new_stage` is `ARCHIVED` and no `end_of_malfunction_reason` is
             provided
           - an `end_of_malfunction_reason` is provided along with a `new_vessel_status`
+          - an `end_of_malfunction_reason` is provided along with a `new_stage` other
+            than `ARCHIVED`
     """
 
     try:
@@ -385,7 +387,7 @@ def update_beacon_malfunction(
     if new_stage:
         json["stage"] = new_stage.value
 
-        if new_stage is BeaconMalfunctionStage.END_OF_MALFUNCTION:
+        if new_stage is BeaconMalfunctionStage.ARCHIVED:
             try:
                 assert isinstance(end_of_malfunction_reason, EndOfMalfunctionReason)
             except AssertionError:
@@ -395,23 +397,18 @@ def update_beacon_malfunction(
                         "giving an end_of_malfunction_reason"
                     )
                 )
+            json["endOfBeaconMalfunctionReason"] = end_of_malfunction_reason.value
 
-        if end_of_malfunction_reason:
-            assert isinstance(end_of_malfunction_reason, EndOfMalfunctionReason)
+        else:
             try:
-                assert new_stage in (
-                    BeaconMalfunctionStage.END_OF_MALFUNCTION,
-                    BeaconMalfunctionStage.ARCHIVED,
-                )
+                assert end_of_malfunction_reason is None
             except AssertionError:
                 raise ValueError(
                     (
                         "Cannot give a `EndOfBeaconMalfunctionReason` for a new_stage "
-                        "other than `END_OF_MALFUNCTION`  or `ARCHIVED`."
+                        "other than `ARCHIVED`."
                     )
                 )
-
-            json["endOfBeaconMalfunctionReason"] = end_of_malfunction_reason.value
 
     if new_vessel_status:
         try:
@@ -538,16 +535,28 @@ with Flow("Beacons malfunctions", executor=LocalDaskExecutor()) as flow:
             malfunction_datetime_utc_threshold_at_sea,
         )
 
+        # Updated August 2024 :
         # Malfunctions not "at port" (or supposed not to be, according to the latest
         # vessel_status of the malfunction) - that is, in a status of AT_SEA,
-        # ACTIVITY_DETECTED... anything by AT_PORT - are moved to END_OF_MALFUNCTION.
-        # Notification is left to be done manually after a human check.
-        update_beacon_malfunction.map(
+        # ACTIVITY_DETECTED... anything by AT_PORT - are moved to ARCHIVED and
+        # automatically notified.
+        # Previously : were moved to END_OF_MALFUNCTION and the notification was
+        # requested by the user after a manual check
+        ids_not_at_port_restarted_emitting_updated = update_beacon_malfunction.map(
             ids_not_at_port_restarted_emitting,
-            new_stage=unmapped(BeaconMalfunctionStage.END_OF_MALFUNCTION),
+            new_stage=unmapped(BeaconMalfunctionStage.ARCHIVED),
             end_of_malfunction_reason=unmapped(
                 EndOfMalfunctionReason.RESUMED_TRANSMISSION
             ),
+        )
+
+        ids_not_at_port_restarted_emitting_updated = filter_results(
+            ids_not_at_port_restarted_emitting_updated
+        )
+
+        request_notification.map(
+            ids_not_at_port_restarted_emitting_updated,
+            unmapped(BeaconMalfunctionNotificationType.END_OF_MALFUNCTION),
         )
 
         # Malfunctions "at port" (or supposed to be, according to the latest
@@ -570,6 +579,7 @@ with Flow("Beacons malfunctions", executor=LocalDaskExecutor()) as flow:
             unmapped(BeaconMalfunctionNotificationType.END_OF_MALFUNCTION),
         )
 
+        # Malfunctions of unsupervised beacons are archived and automatically notified.
         ids_unsupervised_restarted_emitting_updated = update_beacon_malfunction.map(
             ids_unsupervised_restarted_emitting,
             new_stage=unmapped(BeaconMalfunctionStage.ARCHIVED),

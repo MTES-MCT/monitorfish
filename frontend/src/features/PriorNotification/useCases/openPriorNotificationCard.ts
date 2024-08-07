@@ -7,6 +7,7 @@ import { handleThunkError } from '@utils/handleThunkError'
 import { displayedErrorActions } from 'domain/shared_slices/DisplayedError'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
 
+import { OpenedPriorNotificationType } from '../constants'
 import { priorNotificationApi } from '../priorNotificationApi'
 import { priorNotificationActions } from '../slice'
 
@@ -23,7 +24,7 @@ export const openPriorNotificationCard =
     try {
       dispatch(displayedErrorActions.unset(DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_CARD_ERROR))
       dispatch(priorNotificationActions.closePriorNotificationCardAndForm())
-      dispatch(priorNotificationActions.openPriorNotificationCard())
+      dispatch(priorNotificationActions.openPriorNotification(OpenedPriorNotificationType.Card))
 
       const priorNotificationDetail = await dispatch(
         priorNotificationApi.endpoints.getPriorNotificationDetail.initiate({
@@ -53,11 +54,9 @@ export const openPriorNotificationCard =
         return
       }
 
-      dispatch(priorNotificationActions.setOpenedPriorNotification(priorNotificationDetail))
+      dispatch(priorNotificationActions.setOpenedPriorNotificationDetail(priorNotificationDetail))
     } catch (err) {
       if (err instanceof FrontendApiError) {
-        dispatch(priorNotificationActions.openPriorNotificationCard())
-
         dispatch(
           displayOrLogError(
             err,

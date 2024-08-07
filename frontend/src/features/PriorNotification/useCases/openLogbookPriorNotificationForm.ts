@@ -7,6 +7,7 @@ import { handleThunkError } from '@utils/handleThunkError'
 import { displayedErrorActions } from 'domain/shared_slices/DisplayedError'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
 
+import { OpenedPriorNotificationType } from '../constants'
 import { priorNotificationApi } from '../priorNotificationApi'
 import { priorNotificationActions } from '../slice'
 
@@ -19,7 +20,7 @@ export const openLogbookPriorNotificationForm =
     try {
       dispatch(displayedErrorActions.unset(DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR))
       dispatch(priorNotificationActions.closePriorNotificationCardAndForm())
-      dispatch(priorNotificationActions.openLogbookPriorNotificationForm())
+      dispatch(priorNotificationActions.openPriorNotification(OpenedPriorNotificationType.LogbookForm))
 
       const priorNotificationDetail = await dispatch(
         priorNotificationApi.endpoints.getPriorNotificationDetail.initiate({
@@ -52,7 +53,7 @@ export const openLogbookPriorNotificationForm =
         return
       }
 
-      dispatch(priorNotificationActions.setOpenedPriorNotification(priorNotificationDetail))
+      dispatch(priorNotificationActions.setOpenedPriorNotificationDetail(priorNotificationDetail))
       dispatch(priorNotificationActions.setEditedLogbookPriorNotificationFormValues(priorNotificationData))
     } catch (err) {
       if (err instanceof FrontendApiError) {

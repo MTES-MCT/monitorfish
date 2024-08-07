@@ -5,16 +5,15 @@ import { PriorNotification } from './PriorNotification.types'
 
 import type { ManualPriorNotificationFormValues } from './components/ManualPriorNotificationForm/types'
 import type { ListFilter } from './components/PriorNotificationList/types'
+import type { OpenedPriorNotificationType } from './constants'
 import type { Undefine } from '@mtes-mct/monitor-ui'
 
 export interface PriorNotificationState {
   editedLogbookPriorNotificationFormValues: PriorNotification.LogbookFormData | undefined
   editedManualPriorNotificationComputedValues: Undefine<PriorNotification.ManualComputedValues> | undefined
   editedManualPriorNotificationFormValues: ManualPriorNotificationFormValues | undefined
-  isLogbookPriorNotificationFormOpen: boolean
-  isManualPriorNotificationFormOpen: boolean
-  isPriorNotificationCardOpen: boolean
   listFilterValues: ListFilter
+  openedPriorNotificationComponentType: OpenedPriorNotificationType | undefined
   /** Used for both prior notification forms & card. */
   openedPriorNotificationDetail: PriorNotification.Detail | undefined
 }
@@ -22,10 +21,8 @@ const INITIAL_STATE: PriorNotificationState = {
   editedLogbookPriorNotificationFormValues: undefined,
   editedManualPriorNotificationComputedValues: undefined,
   editedManualPriorNotificationFormValues: undefined,
-  isLogbookPriorNotificationFormOpen: false,
-  isManualPriorNotificationFormOpen: false,
-  isPriorNotificationCardOpen: false,
   listFilterValues: DEFAULT_LIST_FILTER_VALUES,
+  openedPriorNotificationComponentType: undefined,
   openedPriorNotificationDetail: undefined
 }
 
@@ -37,22 +34,12 @@ const priorNotificationSlice = createSlice({
       state.editedLogbookPriorNotificationFormValues = undefined
       state.editedManualPriorNotificationComputedValues = undefined
       state.editedManualPriorNotificationFormValues = undefined
-      state.isPriorNotificationCardOpen = false
-      state.isManualPriorNotificationFormOpen = false
-      state.isLogbookPriorNotificationFormOpen = false
+      state.openedPriorNotificationComponentType = undefined
       state.openedPriorNotificationDetail = undefined
     },
 
-    openLogbookPriorNotificationForm(state) {
-      state.isLogbookPriorNotificationFormOpen = true
-    },
-
-    openManualPriorNotificationForm(state) {
-      state.isManualPriorNotificationFormOpen = true
-    },
-
-    openPriorNotificationCard(state) {
-      state.isPriorNotificationCardOpen = true
+    openPriorNotification(state, action: PayloadAction<OpenedPriorNotificationType>) {
+      state.openedPriorNotificationComponentType = action.payload
     },
 
     resetListFilterValues(state) {
@@ -84,7 +71,7 @@ const priorNotificationSlice = createSlice({
       state.editedManualPriorNotificationComputedValues = action.payload
     },
 
-    setOpenedPriorNotification(state, action: PayloadAction<PriorNotification.Detail>) {
+    setOpenedPriorNotificationDetail(state, action: PayloadAction<PriorNotification.Detail>) {
       state.openedPriorNotificationDetail = action.payload
     },
 

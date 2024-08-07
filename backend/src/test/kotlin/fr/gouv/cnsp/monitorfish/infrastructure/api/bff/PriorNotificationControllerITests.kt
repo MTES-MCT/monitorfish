@@ -103,7 +103,7 @@ class PriorNotificationControllerITests {
     }
 
     @Test
-    fun `getAutoData Should get an auto prior notification form data by its reportId`() {
+    fun `getLogbookFormData Should get a logbook prior notification form data by its reportId`() {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
 
         // Given
@@ -128,7 +128,7 @@ class PriorNotificationControllerITests {
     }
 
     @Test
-    fun `updateLogbook Should update an auto prior notification by its reportId`() {
+    fun `updateLogbook Should update a logbook prior notification by its reportId`() {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
         fakePriorNotification.logbookMessageAndValue.value.note = "Test !"
 

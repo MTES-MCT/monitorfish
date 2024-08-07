@@ -47,7 +47,7 @@ export function Card({ detail, isValidatingOnChange, onClose, onSubmit, onVerify
 
   const applicableState = editedPriorNotificationComputedValues?.nextState ?? detail?.state
   const isNewPriorNotification = !detail
-  const isInvalidated = detail?.logbookMessage?.message?.isInvalidated
+  const isInvalidated = !!detail?.logbookMessage?.message?.isInvalidated
   const isPendingSend =
     !!detail?.state &&
     [PriorNotification.State.PENDING_AUTO_SEND, PriorNotification.State.PENDING_SEND].includes(detail?.state)

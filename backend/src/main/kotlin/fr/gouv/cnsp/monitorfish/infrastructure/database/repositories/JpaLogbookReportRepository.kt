@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import fr.gouv.cnsp.monitorfish.Utils
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageAndValue
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
@@ -10,7 +11,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotifica
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
 import fr.gouv.cnsp.monitorfish.domain.exceptions.*
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
-import fr.gouv.cnsp.monitorfish.infrastructure.Utils
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LogbookReportEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBLogbookReportRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.utils.toSqlArrayString
@@ -414,8 +414,8 @@ class JpaLogbookReportRepository(
             .map { logbookReportEntity ->
                 val pnoMessage = objectMapper.readValue(logbookReportEntity.message, PNO::class.java)
                 if (
-                    !Utils.areStringsEquivalent(authorTrigram, pnoMessage.authorTrigram) ||
-                    !Utils.areStringsEquivalent(note, pnoMessage.note)
+                    !Utils.areStringsEqual(authorTrigram, pnoMessage.authorTrigram) ||
+                    !Utils.areStringsEqual(note, pnoMessage.note)
                 ) {
                     pnoMessage.authorTrigram = authorTrigram
                     pnoMessage.note = note

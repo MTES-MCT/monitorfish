@@ -45,7 +45,7 @@ export function Header({ isNewPriorNotification, onClose, vesselId }: HeaderProp
         )}
       </Title>
 
-      <IconButton accent={Accent.TERTIARY} Icon={Icon.Close} isCompact onClick={onClose} />
+      <IconButton accent={Accent.TERTIARY} Icon={Icon.Close} isCompact onClick={onClose} title="Fermer le formulaire" />
     </Wrapper>
   )
 }

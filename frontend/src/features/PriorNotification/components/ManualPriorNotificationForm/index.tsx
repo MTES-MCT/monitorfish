@@ -7,11 +7,11 @@ import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { Formik } from 'formik'
 import { useState } from 'react'
-import styled from 'styled-components'
 import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
 
-import { Card } from './Card'
 import { FORM_VALIDATION_SCHEMA } from './constants'
+import { Content } from './Content'
+import { SideWindowCard } from '../../../../components/SideWindowCard'
 import { priorNotificationActions } from '../../slice'
 import { createOrUpdateManualPriorNotification } from '../../useCases/createOrUpdateManualPriorNotification'
 
@@ -69,25 +69,17 @@ export function ManualPriorNotificationForm() {
 
   if (displayedError) {
     return (
-      <Wrapper>
-        <Background onClick={close} />
-
-        <LoadingCard>
-          <ErrorWall displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR} />
-        </LoadingCard>
-      </Wrapper>
+      <SideWindowCard onBackgroundClick={close}>
+        <ErrorWall displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR} />
+      </SideWindowCard>
     )
   }
 
   if (!editedManualPriorNotificationFormValues || isLoading) {
     return (
-      <Wrapper>
-        <Background onClick={close} />
-
-        <LoadingCard>
-          <LoadingSpinnerWall />
-        </LoadingCard>
-      </Wrapper>
+      <SideWindowCard onBackgroundClick={close}>
+        <LoadingSpinnerWall />
+      </SideWindowCard>
     )
   }
 
@@ -98,7 +90,7 @@ export function ManualPriorNotificationForm() {
       validateOnChange={shouldValidateOnChange}
       validationSchema={FORM_VALIDATION_SCHEMA}
     >
-      <Card
+      <Content
         detail={openedPriorNotificationDetail}
         isValidatingOnChange={shouldValidateOnChange}
         onClose={close}
@@ -108,28 +100,3 @@ export function ManualPriorNotificationForm() {
     </Formik>
   )
 }
-
-const Wrapper = styled.div`
-  bottom: 0;
-  display: flex;
-  justify-content: flex-end;
-  left: 70px;
-  position: fixed;
-  right: 0;
-  top: 0;
-  z-index: 1000;
-`
-
-const Background = styled.div`
-  background-color: ${p => p.theme.color.charcoal};
-  opacity: 0.5;
-  flex-grow: 1;
-`
-
-const LoadingCard = styled.div`
-  background-color: ${p => p.theme.color.white};
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 560px;
-`

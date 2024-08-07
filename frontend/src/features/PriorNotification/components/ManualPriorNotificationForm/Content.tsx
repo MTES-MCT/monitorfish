@@ -19,6 +19,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import { Form } from './Form'
 import { Header } from './Header'
 import { getPartialComputationRequestData } from './utils'
+import { SideWindowCard } from '../../../../components/SideWindowCard'
 import { PriorNotification } from '../../PriorNotification.types'
 import { CardBanner } from '../shared/CardBanner'
 import { DownloadButton } from '../shared/DownloadButton'
@@ -27,14 +28,14 @@ import { TagBar } from '../shared/TagBar'
 import type { ManualPriorNotificationFormValues } from './types'
 import type { Promisable } from 'type-fest'
 
-type CardProps = Readonly<{
+type ContentProps = Readonly<{
   detail: PriorNotification.Detail | undefined
   isValidatingOnChange: boolean
   onClose: () => void
   onSubmit: () => Promisable<void>
   onVerifyAndSend: () => Promisable<void>
 }>
-export function Card({ detail, isValidatingOnChange, onClose, onSubmit, onVerifyAndSend }: CardProps) {
+export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVerifyAndSend }: ContentProps) {
   const { isValid, submitForm, values } = useFormikContext<ManualPriorNotificationFormValues>()
   const dispatch = useMainAppDispatch()
   const editedPriorNotificationComputedValues = useMainAppSelector(
@@ -124,113 +125,109 @@ export function Card({ detail, isValidatingOnChange, onClose, onSubmit, onVerify
   )
 
   return (
-    <Wrapper>
-      <Background onClick={handleClose} />
+    <SideWindowCard onBackgroundClick={handleClose}>
+      <FormikEffect onChange={updateComputedValuesIfNecessary as any} />
 
-      <InnerWrapper>
-        <FormikEffect onChange={updateComputedValuesIfNecessary as any} />
+      {detail?.state === PriorNotification.State.PENDING_SEND && (
+        <CardBanner isCollapsible level={Level.WARNING} top="100px">
+          Le préavis est en cours de diffusion.
+        </CardBanner>
+      )}
+      {detail?.state === PriorNotification.State.PENDING_AUTO_SEND && (
+        <CardBanner isCollapsible level={Level.WARNING} top="100px">
+          Le préavis est en cours d’envoi aux unités qui l’ont demandé.
+        </CardBanner>
+      )}
 
-        {detail?.state === PriorNotification.State.PENDING_SEND && (
-          <CardBanner isCollapsible level={Level.WARNING} top="100px">
-            Le préavis est en cours de diffusion.
-          </CardBanner>
-        )}
-        {detail?.state === PriorNotification.State.PENDING_AUTO_SEND && (
-          <CardBanner isCollapsible level={Level.WARNING} top="100px">
-            Le préavis est en cours d’envoi aux unités qui l’ont demandé.
-          </CardBanner>
-        )}
+      <FrontendErrorBoundary>
+        <Header isNewPriorNotification={isNewPriorNotification} onClose={handleClose} vesselId={values.vesselId} />
 
-        <FrontendErrorBoundary>
-          <Header isNewPriorNotification={isNewPriorNotification} onClose={handleClose} vesselId={values.vesselId} />
+        <Body>
+          <TagBar
+            hasBeenComputed={!!editedPriorNotificationComputedValues}
+            isInvalidated={isInvalidated}
+            isVesselUnderCharter={editedPriorNotificationComputedValues?.isVesselUnderCharter}
+            isZeroNotice={isZeroNotice(values.fishingCatches)}
+            riskFactor={editedPriorNotificationComputedValues?.riskFactor}
+            state={applicableState}
+            tripSegments={editedPriorNotificationComputedValues?.tripSegments}
+            types={editedPriorNotificationComputedValues?.types}
+          />
 
-          <Body>
-            <TagBar
-              hasBeenComputed={!!editedPriorNotificationComputedValues}
-              isInvalidated={isInvalidated}
-              isVesselUnderCharter={editedPriorNotificationComputedValues?.isVesselUnderCharter}
-              isZeroNotice={isZeroNotice(values.fishingCatches)}
-              riskFactor={editedPriorNotificationComputedValues?.riskFactor}
-              state={applicableState}
-              tripSegments={editedPriorNotificationComputedValues?.tripSegments}
-              types={editedPriorNotificationComputedValues?.types}
+          {isNewPriorNotification && !editedPriorNotificationComputedValues && (
+            <Intro>
+              Veuillez renseigner les champs du formulaire pour définir le type de préavis et son statut, ainsi que le
+              segment de flotte et la note de risque du navire.
+            </Intro>
+          )}
+          {!isNewPriorNotification && isPendingVerification && (
+            <Intro>Le préavis doit être vérifié par le CNSP avant sa diffusion.</Intro>
+          )}
+          {(!!editedPriorNotificationComputedValues || !!detail) && (
+            <Intro $withTopMargin={!isNewPriorNotification && isPendingVerification}>
+              Le navire doit respecter un délai d’envoi{hasDesignatedPorts && ' et débarquer dans un port désigné'}.
+            </Intro>
+          )}
+
+          <hr />
+
+          <Form isInvalidated={isInvalidated} />
+
+          {!!detail && !isInvalidated && (
+            <InvalidateButton
+              accent={Accent.SECONDARY}
+              Icon={Icon.Invalid}
+              onClick={() => setIsInvalidatingPriorNotificationDialog(true)}
+              title="Invalider le préavis"
+            >
+              Invalider le préavis
+            </InvalidateButton>
+          )}
+        </Body>
+
+        <Footer>
+          <Button accent={Accent.TERTIARY} onClick={handleClose}>
+            Fermer
+          </Button>
+
+          {!!detail && (
+            <DownloadButton
+              isDisabled={isPriorNotificationFormDirty}
+              pnoLogbookMessage={detail.logbookMessage}
+              reportId={detail.reportId}
             />
+          )}
 
-            {isNewPriorNotification && !editedPriorNotificationComputedValues && (
-              <Intro>
-                Veuillez renseigner les champs du formulaire pour définir le type de préavis et son statut, ainsi que le
-                segment de flotte et la note de risque du navire.
-              </Intro>
-            )}
-            {!isNewPriorNotification && isPendingVerification && (
-              <Intro>Le préavis doit être vérifié par le CNSP avant sa diffusion.</Intro>
-            )}
-            {(!!editedPriorNotificationComputedValues || !!detail) && (
-              <Intro $withTopMargin={!isNewPriorNotification && isPendingVerification}>
-                Le navire doit respecter un délai d’envoi{hasDesignatedPorts && ' et débarquer dans un port désigné'}.
-              </Intro>
-            )}
+          <Button
+            accent={Accent.PRIMARY}
+            disabled={(isInvalidated && !isPriorNotificationFormDirty) || (isValidatingOnChange && !isValid)}
+            onClick={handleSubmit}
+            title={
+              isInvalidated
+                ? "Le préavis est invalidé, il n'est plus possible de le modifier ni de le diffuser."
+                : undefined
+            }
+          >
+            {isNewPriorNotification ? 'Créer le préavis' : 'Enregistrer'}
+          </Button>
 
-            <hr />
-
-            <Form isInvalidated={isInvalidated} />
-
-            {!!detail && !isInvalidated && (
-              <InvalidateButton
-                accent={Accent.SECONDARY}
-                Icon={Icon.Invalid}
-                onClick={() => setIsInvalidatingPriorNotificationDialog(true)}
-                title="Invalider le préavis"
-              >
-                Invalider le préavis
-              </InvalidateButton>
-            )}
-          </Body>
-
-          <Footer>
-            <Button accent={Accent.TERTIARY} onClick={handleClose}>
-              Fermer
-            </Button>
-
-            {!!detail && (
-              <DownloadButton
-                isDisabled={isPriorNotificationFormDirty}
-                pnoLogbookMessage={detail.logbookMessage}
-                reportId={detail.reportId}
-              />
-            )}
-
+          {!isNewPriorNotification && (
             <Button
               accent={Accent.PRIMARY}
-              disabled={(isInvalidated && !isPriorNotificationFormDirty) || (isValidatingOnChange && !isValid)}
-              onClick={handleSubmit}
+              disabled={isInvalidated || isPendingSend || isVerifiedAndSent}
+              Icon={isVerifiedAndSent ? Icon.Check : Icon.Send}
+              onClick={onVerifyAndSend}
               title={
                 isInvalidated
                   ? "Le préavis est invalidé, il n'est plus possible de le modifier ni de le diffuser."
                   : undefined
               }
             >
-              {isNewPriorNotification ? 'Créer le préavis' : 'Enregistrer'}
+              {isVerifiedAndSent ? 'Diffusé' : 'Diffuser'}
             </Button>
-
-            {!isNewPriorNotification && (
-              <Button
-                accent={Accent.PRIMARY}
-                disabled={isInvalidated || isPendingSend || isVerifiedAndSent}
-                Icon={isVerifiedAndSent ? Icon.Check : Icon.Send}
-                onClick={onVerifyAndSend}
-                title={
-                  isInvalidated
-                    ? "Le préavis est invalidé, il n'est plus possible de le modifier ni de le diffuser."
-                    : undefined
-                }
-              >
-                {isVerifiedAndSent ? 'Diffusé' : 'Diffuser'}
-              </Button>
-            )}
-          </Footer>
-        </FrontendErrorBoundary>
-      </InnerWrapper>
+          )}
+        </Footer>
+      </FrontendErrorBoundary>
 
       {isClosingConfirmationDialog && (
         <ConfirmationModal
@@ -250,39 +247,13 @@ export function Card({ detail, isValidatingOnChange, onClose, onSubmit, onVerify
           onConfirm={invalidate}
         />
       )}
-    </Wrapper>
+    </SideWindowCard>
   )
 }
-
-const Wrapper = styled.div`
-  bottom: 0;
-  display: flex;
-  justify-content: flex-end;
-  left: 70px;
-  position: fixed;
-  right: 0;
-  top: 0;
-  z-index: 1000;
-`
 
 const InvalidateButton = styled(Button)`
   color: ${p => p.theme.color.maximumRed};
   margin-top: 48px;
-`
-
-const Background = styled.div`
-  background-color: ${p => p.theme.color.charcoal};
-  opacity: 0.5;
-  flex-grow: 1;
-`
-
-const InnerWrapper = styled.div`
-  background-color: ${p => p.theme.color.white};
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  position: relative;
-  width: 560px;
 `
 
 const Body = styled.div`

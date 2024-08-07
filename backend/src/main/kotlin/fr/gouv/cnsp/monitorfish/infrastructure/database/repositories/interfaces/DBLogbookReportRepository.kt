@@ -57,7 +57,7 @@ interface DBLogbookReportRepository :
                     AND (
                         :searchQuery IS NULL OR
                         unaccent(lower(lr.vessel_name)) ILIKE CONCAT('%', unaccent(lower(:searchQuery)), '%') OR
-                        unaccent(lower(lr.cfr)) ILIKE CONCAT('%', unaccent(lower(:searchQuery)), '%')
+                        lower(lr.cfr) ILIKE CONCAT('%', lower(:searchQuery), '%')
                     )
 
                     -- Will Arrive After

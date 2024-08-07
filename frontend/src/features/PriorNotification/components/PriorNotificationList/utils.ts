@@ -64,6 +64,12 @@ function getApiFilterFromExpectedArrivalPeriod(
         willArriveBefore: customDayjs.utc().add(1, 'day').toISOString()
       }
 
+    case ExpectedArrivalPeriod.IN_LESS_THAN_ONE_MONTH:
+      return {
+        willArriveAfter: customDayjs.utc().toISOString(),
+        willArriveBefore: customDayjs.utc().add(1, 'month').toISOString()
+      }
+
     default:
       return {}
   }

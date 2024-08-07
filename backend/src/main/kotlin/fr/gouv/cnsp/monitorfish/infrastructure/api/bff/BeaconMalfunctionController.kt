@@ -22,7 +22,6 @@ class BeaconMalfunctionController(
     private val getBeaconMalfunction: GetBeaconMalfunction,
     private val saveBeaconMalfunctionComment: SaveBeaconMalfunctionComment,
     private val requestNotification: RequestNotification,
-    private val archiveBeaconMalfunctions: ArchiveBeaconMalfunctions,
 ) {
 
     @GetMapping(value = [""])
@@ -48,16 +47,6 @@ class BeaconMalfunctionController(
             stage = updateBeaconMalfunctionData.stage,
             endOfBeaconMalfunctionReason = updateBeaconMalfunctionData.endOfBeaconMalfunctionReason,
         ).let {
-            BeaconMalfunctionResumeAndDetailsDataOutput.fromBeaconMalfunctionResumeAndDetails(it)
-        }
-    }
-
-    @PutMapping(value = ["/archive"], consumes = ["application/json"])
-    @Operation(summary = "Archive multiple beacon malfunctions")
-    fun archiveBeaconMalfunctions(
-        @RequestBody ids: List<Int>,
-    ): List<BeaconMalfunctionResumeAndDetailsDataOutput> {
-        return archiveBeaconMalfunctions.execute(ids).map {
             BeaconMalfunctionResumeAndDetailsDataOutput.fromBeaconMalfunctionResumeAndDetails(it)
         }
     }

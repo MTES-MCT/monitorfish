@@ -35,7 +35,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
         // When
         val baconMalfunctions = jpaBeaconMalfunctionsRepository.findAllExceptArchived()
 
-        assertThat(baconMalfunctions).hasSize(11)
+        assertThat(baconMalfunctions).hasSize(10)
         assertThat(baconMalfunctions.first().internalReferenceNumber).isEqualTo("FAK000999999")
         assertThat(baconMalfunctions.first().stage).isEqualTo(Stage.INITIAL_ENCOUNTER)
         assertThat(baconMalfunctions.first().vesselStatus).isEqualTo(VesselStatus.ACTIVITY_DETECTED)
@@ -47,7 +47,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
         // When
         val baconMalfunctions = jpaBeaconMalfunctionsRepository.findLastSixtyArchived()
 
-        assertThat(baconMalfunctions).hasSize(1)
+        assertThat(baconMalfunctions).hasSize(2)
         assertThat(baconMalfunctions.first().internalReferenceNumber).isEqualTo("FR263465414")
         assertThat(baconMalfunctions.first().stage).isEqualTo(Stage.ARCHIVED)
         assertThat(baconMalfunctions.first().vesselStatus).isEqualTo(VesselStatus.ON_SALE)
@@ -91,14 +91,14 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
         jpaBeaconMalfunctionsRepository.update(
             id = 1,
             null,
-            Stage.END_OF_MALFUNCTION,
+            Stage.ARCHIVED,
             EndOfBeaconMalfunctionReason.BEACON_DEACTIVATED_OR_UNEQUIPPED,
             updateDateTime,
         )
 
         // Then
         val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 1 }
-        assertThat(updatedBeaconMalfunction?.stage).isEqualTo(Stage.END_OF_MALFUNCTION)
+        assertThat(updatedBeaconMalfunction?.stage).isEqualTo(Stage.ARCHIVED)
         assertThat(updatedBeaconMalfunction?.vesselStatusLastModificationDateTime).isCloseTo(
             updateDateTime,
             within(100, ChronoUnit.MILLIS),

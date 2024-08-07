@@ -188,27 +188,30 @@ const STAGE_RECORD: Record<BeaconMalfunctionsStage, BeaconMalfunctionStageColumn
     isColumn: true,
     title: 'Ciblage du navire'
   },
-  END_OF_MALFUNCTION: {
-    index: 5,
-    code: 'END_OF_MALFUNCTION',
-    description:
-      "Envoyer un message de reprise aux unités dont les émissions ont repris et archiver les avaries qu'on ne suit plus.",
-    isColumn: true,
-    title: "Fin de l'avarie"
-  },
   ARCHIVED: {
     index: 6,
     code: 'ARCHIVED',
-    description: 'Avaries clôturées.\n NB : Seules les 30 dernières avaries restent dans le kanban.',
+    description: 'NB : Seules les 60 dernières avaries restent dans le kanban.',
     isColumn: true,
-    title: 'Archivage'
+    title: 'Avaries clôturées'
   },
-  /** Old stages - for backward compatibility * */
+  /** Old stages - for backward compatibility
+   *
+   * /!\ These values are no more used. The value is kept to display historic `stage` values.
+   */
   RESUMED_TRANSMISSION: {
     index: undefined,
     code: 'RESUMED_TRANSMISSION',
     isColumn: false,
     title: 'Reprise des émissions'
+  },
+  END_OF_MALFUNCTION: {
+    index: 5,
+    code: 'END_OF_MALFUNCTION',
+    description:
+      "Envoyer un message de reprise aux unités dont les émissions ont repris et archiver les avaries qu'on ne suit plus.",
+    isColumn: false,
+    title: "Fin de l'avarie"
   }
 }
 /* eslint-enable sort-keys-fix/sort-keys-fix */

@@ -122,29 +122,11 @@ async function sendNotificationFromAPI(
   }
 }
 
-/**
- * Archive multiple beacon malfunctions
- *
- * @throws {@link ApiError}
- */
-async function archiveBeaconMalfunctionsFromAPI(ids: number[]): Promise<BeaconMalfunctionResumeAndDetails[]> {
-  try {
-    return await monitorfishApiKy
-      .put(`/bff/v1/beacon_malfunctions/archive`, {
-        json: ids
-      })
-      .json<BeaconMalfunctionResumeAndDetails[]>()
-  } catch (err) {
-    throw new ApiError(ARCHIVE_BEACON_MALFUNCTION, err)
-  }
-}
-
 export {
   getVesselBeaconsMalfunctionsFromAPI,
   saveBeaconMalfunctionCommentFromAPI,
   getBeaconMalfunctionFromAPI,
   updateBeaconMalfunctionFromAPI,
   getAllBeaconMalfunctionsFromAPI,
-  sendNotificationFromAPI,
-  archiveBeaconMalfunctionsFromAPI
+  sendNotificationFromAPI
 }

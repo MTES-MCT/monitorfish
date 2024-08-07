@@ -38,7 +38,6 @@ export function StageColumn({
     <Wrapper data-cy={`side-window-beacon-malfunctions-columns-${stage.code}`} style={wrapperStyle}>
       <StageColumnHeader
         description={stage.description}
-        ids={beaconMalfunctions.map(beaconMalfunction => beaconMalfunction.id)}
         numberOfItems={beaconMalfunctions?.length}
         stage={stage.title}
       />

@@ -488,6 +488,11 @@ VALUES ('OOF20190265896325', 9463701, 'OOF', '2018-02-17T01:05:00Z', 'DAT', 'OOF
         null, null, null, null, null, null, '',
         '{"returnStatus": "000"}', '2100-01-18T07:19:28.384921Z', 'ERS', 'TurboCatch (3.7-1)');
 
+-- Add is_test_message data
+INSERT INTO logbook_reports (operation_number, trip_number, operation_country, operation_datetime_utc, operation_type, report_id, referenced_report_id, report_datetime_utc, cfr, ircs, external_identification, vessel_name, flag_state, imo, log_type, value, integration_datetime_utc, transmission_format, software, is_test_message)
+                      SELECT operation_number, trip_number, operation_country, operation_datetime_utc, operation_type, report_id, referenced_report_id, report_datetime_utc, cfr, ircs, external_identification, vessel_name, flag_state, imo, log_type, value, integration_datetime_utc, transmission_format, software, true
+                      FROM logbook_reports
+                      WHERE report_id = 'OOF20191011059900';
 
 -- Add FLUX test data
 INSERT INTO logbook_reports (operation_number, operation_country, operation_datetime_utc, operation_type, report_id,

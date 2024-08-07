@@ -51,13 +51,13 @@ export function Form({ detail, initialFormValues }: FormProps) {
     <>
       <Formik initialValues={initialFormValues} onSubmit={noop}>
         <>
-          <FormikEffect onChange={updateNote as any} />
+          <FormikEffect onChange={!isInvalidated ? (updateNote as any) : noop} />
 
           <FieldGroup>
-            <FormikTextarea label="Points d'attention identifiés par le CNSP" name="note" />
+            <FormikTextarea label="Points d'attention identifiés par le CNSP" name="note" readOnly={isInvalidated} />
           </FieldGroup>
 
-          <AuthorTrigramInput label="Par" name="authorTrigram" />
+          <AuthorTrigramInput label="Par" name="authorTrigram" readOnly={isInvalidated} />
         </>
       </Formik>
 

@@ -7,8 +7,8 @@ import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFor
 import { isDateCloseTo } from '../../utils/isDateCloseTo'
 import { openSideWindowPriorNotificationList } from '../prior_notification_list/utils'
 
-context('Side Window > Prior Notification Form > Form', () => {
-  it('Should add and edit a prior notification', () => {
+context('Side Window > Manual Prior Notification Form > Form', () => {
+  it('Should add and edit a manual prior notification', () => {
     // -------------------------------------------------------------------------
     // Add
 

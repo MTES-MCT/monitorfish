@@ -728,7 +728,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllPriorNotifications Should return PNO logbook reports for PHENOMENE vessel`() {
+    fun `findAllPriorNotifications Should return PNO logbook reports When using a vessel name`() {
         // Given
         val firstFilter = PriorNotificationsFilter(
             searchQuery = "pheno",
@@ -752,6 +752,50 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // Given
         val secondFilter = PriorNotificationsFilter(
             searchQuery = "hénO",
+            willArriveAfter = "2000-01-01T00:00:00Z",
+            willArriveBefore = "2100-01-01T00:00:00Z",
+        )
+
+        // When
+        val secondResult = jpaLogbookReportRepository.findAllPriorNotifications(secondFilter)
+
+        // Then
+        assertThat(secondResult).hasSizeGreaterThan(0)
+        val secondResultVessels = secondResult.mapNotNull {
+            jpaVesselRepository.findFirstByInternalReferenceNumber(
+                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
+            )
+        }
+        assertThat(secondResultVessels).hasSize(secondResult.size)
+        assertThat(secondResultVessels.all { it.vesselName == "PHENOMENE" }).isTrue()
+    }
+
+    @Test
+    @Transactional
+    fun `findAllPriorNotifications Should return PNO logbook reports When using a CFR`() {
+        // Given
+        val firstFilter = PriorNotificationsFilter(
+            searchQuery = "FAK000999999",
+            willArriveAfter = "2000-01-01T00:00:00Z",
+            willArriveBefore = "2100-01-01T00:00:00Z",
+        )
+
+        // When
+        val firstResult = jpaLogbookReportRepository.findAllPriorNotifications(firstFilter)
+
+        // Then
+        assertThat(firstResult).hasSizeGreaterThan(0)
+        val firstResultVessels = firstResult.mapNotNull {
+            jpaVesselRepository.findFirstByInternalReferenceNumber(
+                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
+            )
+        }
+        assertThat(firstResultVessels).hasSize(firstResult.size)
+        assertThat(firstResultVessels.all { it.vesselName == "PHENOMENE" }).isTrue()
+
+        // Given
+        val secondFilter = PriorNotificationsFilter(
+            searchQuery = "999999",
             willArriveAfter = "2000-01-01T00:00:00Z",
             willArriveBefore = "2100-01-01T00:00:00Z",
         )

@@ -62,7 +62,9 @@ class UpdateBeaconMalfunctionUTests {
 
         // Then
         assertThat(throwable).isInstanceOf(IllegalArgumentException::class.java)
-        assertThat(throwable.message).contains("Cannot archive malfunction without giving an endOfBeaconMalfunctionReason")
+        assertThat(throwable.message).contains(
+            "Cannot archive malfunction without giving an endOfBeaconMalfunctionReason",
+        )
     }
 
     @Test

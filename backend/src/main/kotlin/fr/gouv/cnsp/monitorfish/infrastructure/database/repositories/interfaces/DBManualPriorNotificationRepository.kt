@@ -45,7 +45,11 @@ interface DBManualPriorNotificationRepository : JpaRepository<ManualPriorNotific
                     AND (:portLocodes IS NULL OR mpn.value->>'port' IN (:portLocodes))
 
                     -- Search Query
-                    AND (:searchQuery IS NULL OR unaccent(lower(mpn.vessel_name)) ILIKE CONCAT('%', unaccent(lower(:searchQuery)), '%'))
+                    AND (
+                        :searchQuery IS NULL OR
+                        unaccent(lower(mpn.vessel_name)) ILIKE CONCAT('%', unaccent(lower(:searchQuery)), '%') OR
+                        lower(mpn.cfr) ILIKE CONCAT('%', lower(:searchQuery), '%')
+                    )
 
                     -- Will Arrive After
                     AND mpn.value->>'predictedArrivalDatetimeUtc' >= :willArriveAfter

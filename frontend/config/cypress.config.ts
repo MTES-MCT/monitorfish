@@ -6,9 +6,6 @@ const IS_CI = Boolean(process.env.CI)
 const DEFAULT_PORT = IS_CI ? 8880 : 3000
 
 export default defineConfig({
-  build: {
-    sourcemap: true
-  },
   e2e: {
     baseUrl: `http://localhost:${DEFAULT_PORT}`,
     excludeSpecPattern: ['**/__snapshots__/*', '**/__image_snapshots__/*'],

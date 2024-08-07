@@ -48,7 +48,7 @@ interface DBManualPriorNotificationRepository : JpaRepository<ManualPriorNotific
                     AND (
                         :searchQuery IS NULL OR
                         unaccent(lower(mpn.vessel_name)) ILIKE CONCAT('%', unaccent(lower(:searchQuery)), '%') OR
-                        unaccent(lower(mpn.cfr)) ILIKE CONCAT('%', unaccent(lower(:searchQuery)), '%')
+                        lower(mpn.cfr) ILIKE CONCAT('%', lower(:searchQuery), '%')
                     )
 
                     -- Will Arrive After

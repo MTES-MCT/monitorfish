@@ -1,8 +1,8 @@
 import { RTK_MAX_RETRIES } from '@api/constants'
 
-import { editSideWindowPriorNotification } from './utils'
+import { editSideWindowPriorNotification } from '../manual_prior_notification_form/utils'
 
-context('Side Window > Prior Notification Form > Error Handling', () => {
+context('Side Window > Logbook Prior Notification Form > Error Handling', () => {
   const failedQueryCount = RTK_MAX_RETRIES + 1
   const url = '/bff/v1/prior_notifications/FAKE_OPERATION_109?isManuallyCreated=false&operationDate=*'
 

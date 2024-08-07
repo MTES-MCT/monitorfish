@@ -1,8 +1,11 @@
 import { BOOLEAN_AS_OPTIONS } from '@constants/index'
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
+import { priorNotificationActions } from '@features/PriorNotification/slice'
+import { useFormikDirtyOnceEffect } from '@hooks/useFormikDirtyOnceEffect'
 import { useGetFaoAreasAsOptions } from '@hooks/useGetFaoAreasAsOptions'
 import { useGetGearsAsOptions } from '@hooks/useGetGearsAsOptions'
 import { useGetPortsAsOptions } from '@hooks/useGetPortsAsOptions'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import {
   FormikCheckbox,
   FormikDatePicker,
@@ -29,6 +32,7 @@ type FormProps = Readonly<{
 export function Form({ isInvalidated }: FormProps) {
   const { values } = useFormikContext<ManualPriorNotificationFormValues>()
 
+  const dispatch = useMainAppDispatch()
   const { faoAreasAsOptions } = useGetFaoAreasAsOptions()
   const { gearsAsOptions } = useGetGearsAsOptions()
   const { portsAsOptions } = useGetPortsAsOptions()
@@ -44,6 +48,12 @@ export function Form({ isInvalidated }: FormProps) {
 
     isThirdPartyVessel.current = false
   }
+
+  const updateIsDirty = (isDirty: boolean) => {
+    dispatch(priorNotificationActions.setIsPriorNotificationFormDirty(isDirty))
+  }
+
+  useFormikDirtyOnceEffect(updateIsDirty)
 
   return (
     <>

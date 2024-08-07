@@ -35,11 +35,12 @@ type CardProps = Readonly<{
   onVerifyAndSend: () => Promisable<void>
 }>
 export function Card({ detail, isValidatingOnChange, onClose, onSubmit, onVerifyAndSend }: CardProps) {
-  const { dirty, isValid, submitForm, values } = useFormikContext<ManualPriorNotificationFormValues>()
+  const { isValid, submitForm, values } = useFormikContext<ManualPriorNotificationFormValues>()
   const dispatch = useMainAppDispatch()
   const editedPriorNotificationComputedValues = useMainAppSelector(
     store => store.priorNotification.editedManualPriorNotificationComputedValues
   )
+  const isPriorNotificationFormDirty = useMainAppSelector(store => store.priorNotification.isPriorNotificationFormDirty)
 
   const [isInvalidatingPriorNotificationDialog, setIsInvalidatingPriorNotificationDialog] = useState(false)
   const [isClosingConfirmationDialog, setIsClosingConfirmationDialog] = useState(false)
@@ -57,7 +58,7 @@ export function Card({ detail, isValidatingOnChange, onClose, onSubmit, onVerify
   const priorNotificationIdentifier = getPriorNotificationIdentifier(detail)
 
   const handleClose = () => {
-    if (dirty) {
+    if (isPriorNotificationFormDirty) {
       setIsClosingConfirmationDialog(true)
 
       return
@@ -192,12 +193,16 @@ export function Card({ detail, isValidatingOnChange, onClose, onSubmit, onVerify
             </Button>
 
             {!!detail && (
-              <DownloadButton isDisabled={dirty} pnoLogbookMessage={detail.logbookMessage} reportId={detail.reportId} />
+              <DownloadButton
+                isDisabled={isPriorNotificationFormDirty}
+                pnoLogbookMessage={detail.logbookMessage}
+                reportId={detail.reportId}
+              />
             )}
 
             <Button
               accent={Accent.PRIMARY}
-              disabled={(isInvalidated && !dirty) || (isValidatingOnChange && !isValid)}
+              disabled={(isInvalidated && !isPriorNotificationFormDirty) || (isValidatingOnChange && !isValid)}
               onClick={handleSubmit}
               title={
                 isInvalidated

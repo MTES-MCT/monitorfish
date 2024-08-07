@@ -12,6 +12,7 @@ export interface PriorNotificationState {
   editedLogbookPriorNotificationFormValues: PriorNotification.LogbookFormData | undefined
   editedManualPriorNotificationComputedValues: Undefine<PriorNotification.ManualComputedValues> | undefined
   editedManualPriorNotificationFormValues: ManualPriorNotificationFormValues | undefined
+  isPriorNotificationFormDirty: boolean
   listFilterValues: ListFilter
   openedPriorNotificationComponentType: OpenedPriorNotificationType | undefined
   /** Used for both prior notification forms & card. */
@@ -21,6 +22,7 @@ const INITIAL_STATE: PriorNotificationState = {
   editedLogbookPriorNotificationFormValues: undefined,
   editedManualPriorNotificationComputedValues: undefined,
   editedManualPriorNotificationFormValues: undefined,
+  isPriorNotificationFormDirty: false,
   listFilterValues: DEFAULT_LIST_FILTER_VALUES,
   openedPriorNotificationComponentType: undefined,
   openedPriorNotificationDetail: undefined
@@ -34,6 +36,7 @@ const priorNotificationSlice = createSlice({
       state.editedLogbookPriorNotificationFormValues = undefined
       state.editedManualPriorNotificationComputedValues = undefined
       state.editedManualPriorNotificationFormValues = undefined
+      state.isPriorNotificationFormDirty = false
       state.openedPriorNotificationComponentType = undefined
       state.openedPriorNotificationDetail = undefined
     },
@@ -55,6 +58,10 @@ const priorNotificationSlice = createSlice({
 
     setEditedManualPriorNotificationFormValues(state, action: PayloadAction<ManualPriorNotificationFormValues>) {
       state.editedManualPriorNotificationFormValues = action.payload
+    },
+
+    setIsPriorNotificationFormDirty(state, action: PayloadAction<boolean>) {
+      state.isPriorNotificationFormDirty = action.payload
     },
 
     setListFilterValues(state, action: PayloadAction<Partial<ListFilter>>) {

@@ -1,6 +1,5 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
-import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.ManualPriorNotificationComputedValues
@@ -10,9 +9,6 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.PnoSegmentSubscriptionReposi
 import fr.gouv.cnsp.monitorfish.domain.repositories.PnoVesselSubscriptionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.ComputeFleetSegments
-
-val VESSEL_FLAG_COUNTRY_CODES_WITHOUT_SYSTEMATIC_VERIFICATION: List<CountryCode> = listOf(CountryCode.FR)
-const val VESSEL_RISK_FACTOR_VERIFICATION_THRESHOLD: Double = 2.3
 
 @UseCase
 class ComputeManualPriorNotification(

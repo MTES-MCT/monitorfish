@@ -12,9 +12,9 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotifica
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.*
 import fr.gouv.cnsp.monitorfish.domain.utils.PaginatedList
 import fr.gouv.cnsp.monitorfish.fakers.PriorNotificationFaker
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.LogbookPriorNotificationFormDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationComputeDataInput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationDataInput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.PriorNotificationDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationFormDataInput
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
@@ -59,7 +59,7 @@ class PriorNotificationControllerITests {
     private lateinit var verifyAndSendPriorNotification: VerifyAndSendPriorNotification
 
     @MockBean
-    private lateinit var updatePriorNotificationNote: UpdatePriorNotificationNote
+    private lateinit var updateLogbookPriorNotification: UpdateLogbookPriorNotification
 
     @MockBean
     private lateinit var invalidatePriorNotification: InvalidatePriorNotification
@@ -103,21 +103,66 @@ class PriorNotificationControllerITests {
     }
 
     @Test
-    fun `getNumberToVerify Should get the number of prior notification to verify`() {
+    fun `getLogbookFormData Should get a logbook prior notification form data by its reportId`() {
+        val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
+
         // Given
-        given(getNumberToVerify.execute()).willReturn(
-            PriorNotificationStats(perSeafrontGroupCount = mapOf(Pair(SeafrontGroup.ALL, 2))),
+        given(
+            getPriorNotification.execute(
+                fakePriorNotification.reportId!!,
+                fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
+                false,
+            ),
         )
+            .willReturn(fakePriorNotification)
 
         // When
         api.perform(
             get(
-                "/bff/v1/prior_notifications/to_verify",
+                "/bff/v1/prior_notifications/logbook/${fakePriorNotification.reportId!!}/form?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
             ),
         )
             // Then
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.perSeafrontGroupCount['ALL']", equalTo(2)))
+            .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
+    }
+
+    @Test
+    fun `updateLogbook Should update a logbook prior notification by its reportId`() {
+        val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
+        fakePriorNotification.logbookMessageAndValue.value.note = "Test !"
+
+        // Given
+        given(
+            updateLogbookPriorNotification.execute(
+                reportId = anyOrNull(),
+                operationDate = anyOrNull(),
+                authorTrigram = anyOrNull(),
+                note = anyOrNull(),
+            ),
+        )
+            .willReturn(fakePriorNotification)
+
+        // When
+        val requestBody = objectMapper.writeValueAsString(
+            LogbookPriorNotificationFormDataInput(
+                authorTrigram = "ABC",
+                note = "Test !",
+            ),
+        )
+        val pnoValue = fakePriorNotification.logbookMessageAndValue.value
+        api.perform(
+            put(
+                "/bff/v1/prior_notifications/logbook/${fakePriorNotification.reportId!!}?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
+            )
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody),
+        )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
+            .andExpect(jsonPath("$.authorTrigram", equalTo(pnoValue.authorTrigram)))
+            .andExpect(jsonPath("$.note", equalTo(pnoValue.note)))
     }
 
     @Test
@@ -155,8 +200,9 @@ class PriorNotificationControllerITests {
     }
 
     @Test
-    fun `getOneManual Should get a manual prior notification form data by its reportId`() {
+    fun `getManualData Should get a manual prior notification form data by its reportId`() {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
+        fakePriorNotification.logbookMessageAndValue.value.authorTrigram = "ABC"
 
         // Given
         given(
@@ -171,7 +217,7 @@ class PriorNotificationControllerITests {
         // When
         api.perform(
             get(
-                "/bff/v1/prior_notifications/manual/${fakePriorNotification.reportId!!}?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
+                "/bff/v1/prior_notifications/manual/${fakePriorNotification.reportId!!}/form?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
             ),
         )
             // Then
@@ -180,8 +226,9 @@ class PriorNotificationControllerITests {
     }
 
     @Test
-    fun `updateManual Should create a manual prior notification`() {
+    fun `createManual Should create a manual prior notification`() {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
+        fakePriorNotification.logbookMessageAndValue.value.authorTrigram = "ABC"
 
         // Given
         given(
@@ -207,7 +254,7 @@ class PriorNotificationControllerITests {
 
         // When
         val requestBody = objectMapper.writeValueAsString(
-            ManualPriorNotificationDataInput(
+            ManualPriorNotificationFormDataInput(
                 hasPortEntranceAuthorization = true,
                 hasPortLandingAuthorization = true,
                 authorTrigram = "ABC",
@@ -237,21 +284,22 @@ class PriorNotificationControllerITests {
     @Test
     fun `updateManual Should update a manual prior notification by its reportId`() {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
+        fakePriorNotification.logbookMessageAndValue.value.authorTrigram = "ABC"
 
         // Given
         given(
             createOrUpdateManualPriorNotification.execute(
-                hasPortEntranceAuthorization = anyOrNull(),
-                hasPortLandingAuthorization = anyOrNull(),
+                reportId = any(),
                 authorTrigram = anyOrNull(),
                 didNotFishAfterZeroNotice = anyOrNull(),
                 expectedArrivalDate = anyOrNull(),
                 expectedLandingDate = anyOrNull(),
                 faoArea = anyOrNull(),
                 fishingCatches = anyOrNull(),
+                hasPortEntranceAuthorization = anyOrNull(),
+                hasPortLandingAuthorization = anyOrNull(),
                 note = anyOrNull(),
                 portLocode = anyOrNull(),
-                reportId = anyOrNull(),
                 sentAt = anyOrNull(),
                 purpose = anyOrNull(),
                 tripGearCodes = anyOrNull(),
@@ -262,7 +310,7 @@ class PriorNotificationControllerITests {
 
         // When
         val requestBody = objectMapper.writeValueAsString(
-            ManualPriorNotificationDataInput(
+            ManualPriorNotificationFormDataInput(
                 hasPortEntranceAuthorization = true,
                 hasPortLandingAuthorization = true,
                 authorTrigram = "ABC",
@@ -287,6 +335,24 @@ class PriorNotificationControllerITests {
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
+    }
+
+    @Test
+    fun `getNumberToVerify Should get the number of prior notification to verify`() {
+        // Given
+        given(getNumberToVerify.execute()).willReturn(
+            PriorNotificationStats(perSeafrontGroupCount = mapOf(Pair(SeafrontGroup.ALL, 2))),
+        )
+
+        // When
+        api.perform(
+            get(
+                "/bff/v1/prior_notifications/to_verify",
+            ),
+        )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.perSeafrontGroupCount['ALL']", equalTo(2)))
     }
 
     @Test
@@ -325,7 +391,7 @@ class PriorNotificationControllerITests {
         )
             // Then
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.id", equalTo(fakePriorNotification.reportId)))
+            .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
     }
 
     @Test
@@ -350,46 +416,7 @@ class PriorNotificationControllerITests {
         )
             // Then
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.id", equalTo(fakePriorNotification.reportId)))
-    }
-
-    @Test
-    fun `update Should update a prior notification note by its reportId`() {
-        val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
-        fakePriorNotification.logbookMessageAndValue.value.note = "Test !"
-
-        // Given
-        given(
-            updatePriorNotificationNote.execute(
-                reportId = anyOrNull(),
-                operationDate = anyOrNull(),
-                note = anyOrNull(),
-            ),
-        )
-            .willReturn(fakePriorNotification)
-
-        // When
-        val requestBody = objectMapper.writeValueAsString(
-            PriorNotificationDataInput(
-                note = "Test !",
-            ),
-        )
-        api.perform(
-            put(
-                "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}/note?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
-            )
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody),
-        )
-            // Then
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.id", equalTo(fakePriorNotification.reportId)))
-            .andExpect(
-                jsonPath(
-                    "$.logbookMessage.message.note",
-                    equalTo(fakePriorNotification.logbookMessageAndValue.value.note),
-                ),
-            )
+            .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
     }
 
     @Test
@@ -415,12 +442,13 @@ class PriorNotificationControllerITests {
         )
             // Then
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.id", equalTo(fakePriorNotification.reportId)))
+            .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
             .andExpect(
                 jsonPath(
                     "$.logbookMessage.message.isInvalidated",
                     equalTo(fakePriorNotification.logbookMessageAndValue.value.isInvalidated),
                 ),
             )
+            .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
     }
 }

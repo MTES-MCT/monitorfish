@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import fr.gouv.cnsp.monitorfish.Utils
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageAndValue
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
@@ -360,7 +361,9 @@ class JpaLogbookReportRepository(
     override fun updatePriorNotificationState(
         reportId: String,
         operationDate: ZonedDateTime,
+
         isBeingSent: Boolean,
+        isSent: Boolean,
         isVerified: Boolean,
     ) {
         val logbookReportEntities =
@@ -378,10 +381,10 @@ class JpaLogbookReportRepository(
             .map { logbookReportEntity ->
                 val pnoMessage = objectMapper.readValue(logbookReportEntity.message, PNO::class.java)
                 pnoMessage.isBeingSent = isBeingSent
+                pnoMessage.isSent = isSent
                 pnoMessage.isVerified = isVerified
 
                 val nextMessage = objectMapper.writeValueAsString(pnoMessage)
-
                 val updatedEntity = logbookReportEntity.copy(message = nextMessage)
 
                 dbLogbookReportRepository.save(updatedEntity)
@@ -389,7 +392,13 @@ class JpaLogbookReportRepository(
     }
 
     @Transactional
-    override fun updatePriorNotificationNote(reportId: String, operationDate: ZonedDateTime, note: String?) {
+    override fun updatePriorNotificationAuthorTrigramAndNote(
+        reportId: String,
+        operationDate: ZonedDateTime,
+
+        authorTrigram: String?,
+        note: String?,
+    ) {
         val logbookReportEntities =
             dbLogbookReportRepository.findEnrichedPnoReferenceAndRelatedOperationsByReportId(
                 reportId,
@@ -404,22 +413,26 @@ class JpaLogbookReportRepository(
             .filter { it.operationType in listOf(LogbookOperationType.DAT, LogbookOperationType.COR) }
             .map { logbookReportEntity ->
                 val pnoMessage = objectMapper.readValue(logbookReportEntity.message, PNO::class.java)
-                pnoMessage.note = note
+                if (
+                    !Utils.areStringsEqual(authorTrigram, pnoMessage.authorTrigram) ||
+                    !Utils.areStringsEqual(note, pnoMessage.note)
+                ) {
+                    pnoMessage.authorTrigram = authorTrigram
+                    pnoMessage.note = note
 
-                /**
-                 * The PNO states are re-initialized,
-                 * - the PDF will be generated
-                 * - the PNO will require another verification before sending
-                 */
-                pnoMessage.isBeingSent = false
-                pnoMessage.isVerified = false
-                pnoMessage.isSent = false
+                    /**
+                     * The PNO states are re-initialized:
+                     * - the PDF will be re-generated (done in the use case by deleting the old one)
+                     * - the PNO will require another verification before sending
+                     */
+                    pnoMessage.isVerified = false
 
-                val nextMessage = objectMapper.writeValueAsString(pnoMessage)
+                    val nextMessage = objectMapper.writeValueAsString(pnoMessage)
 
-                val updatedEntity = logbookReportEntity.copy(message = nextMessage)
+                    val updatedEntity = logbookReportEntity.copy(message = nextMessage)
 
-                dbLogbookReportRepository.save(updatedEntity)
+                    dbLogbookReportRepository.save(updatedEntity)
+                }
             }
     }
 

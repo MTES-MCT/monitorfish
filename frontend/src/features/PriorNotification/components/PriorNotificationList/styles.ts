@@ -3,11 +3,13 @@ import { Tag } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 // TODO Update that in monitor-ui.
-export const FixedTag = styled(Tag)`
+export const FixedTag = styled(Tag)<{
+  $isFullWidth?: boolean
+}>`
   align-items: baseline;
   display: inline-block;
   line-height: 22px;
-  max-width: 130px;
+  max-width: ${p => (p.$isFullWidth ? 'auto' : '130px')};
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

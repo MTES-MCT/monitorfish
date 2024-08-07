@@ -10,7 +10,6 @@ class PriorNotificationFaker {
         fun fakePriorNotification(index: Int = 1): PriorNotification {
             return PriorNotification(
                 reportId = "FAKE_REPORT_ID_$index",
-                authorTrigram = "ABC",
                 createdAt = ZonedDateTime.now(),
                 didNotFishAfterZeroNotice = false,
                 isManuallyCreated = false,

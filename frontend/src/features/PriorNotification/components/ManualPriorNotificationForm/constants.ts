@@ -2,20 +2,20 @@ import { ObjectSchema, array, boolean, number, object, string, mixed } from 'yup
 
 import { PriorNotification } from '../../PriorNotification.types'
 
-import type { FormValues } from './types'
+import type { ManualPriorNotificationFormValues } from './types'
 
 import PurposeCode = PriorNotification.PurposeCode
 
 export const BLUEFIN_TUNA_EXTENDED_SPECY_CODES = ['BF1', 'BF2', 'BF3']
 
-const FISHING_CATCH_VALIDATION_SCHEMA: ObjectSchema<PriorNotification.PriorNotificationDataFishingCatch> = object({
+const FISHING_CATCH_VALIDATION_SCHEMA: ObjectSchema<PriorNotification.FormDataFishingCatch> = object({
   quantity: number(),
   specyCode: string().required(),
   specyName: string().required(),
   weight: number().required()
 })
 
-export const FORM_VALIDATION_SCHEMA: ObjectSchema<FormValues> = object({
+export const FORM_VALIDATION_SCHEMA: ObjectSchema<ManualPriorNotificationFormValues> = object({
   authorTrigram: string().trim().required('Veuillez indiquer votre trigramme.'),
   didNotFishAfterZeroNotice: boolean().required(),
   expectedArrivalDate: string().required("Veuillez indiquer la date d'arrivée estimée."),
@@ -42,7 +42,7 @@ export const FORM_VALIDATION_SCHEMA: ObjectSchema<FormValues> = object({
   vesselId: number().required('Veuillez indiquer le navire concerné.')
 })
 
-export const INITIAL_FORM_VALUES: FormValues = {
+export const INITIAL_FORM_VALUES: ManualPriorNotificationFormValues = {
   authorTrigram: undefined,
   didNotFishAfterZeroNotice: false,
   expectedArrivalDate: undefined,

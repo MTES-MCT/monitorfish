@@ -150,7 +150,6 @@ data class LogbookReportEntity(
 
         return PriorNotification(
             reportId = reportId,
-            authorTrigram = null,
             createdAt = operationDateTime.atZone(UTC),
             didNotFishAfterZeroNotice = false,
             isManuallyCreated = false,

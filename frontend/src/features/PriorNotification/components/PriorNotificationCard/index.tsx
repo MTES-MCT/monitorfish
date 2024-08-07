@@ -1,15 +1,7 @@
-import { RTK_FORCE_REFETCH_QUERY_OPTIONS, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { ErrorWall } from '@components/ErrorWall'
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { LogbookMessage } from '@features/Logbook/components/VesselLogbook/LogbookMessages/messages/LogbookMessage'
-import { InvalidatePriorNotificationDialog } from '@features/PriorNotification/components/InvalidatePriorNotificationDialog'
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
-import {
-  useGetPriorNotificationDetailQuery,
-  useInvalidatePriorNotificationMutation
-} from '@features/PriorNotification/priorNotificationApi'
-import { updatePriorNotificationNote } from '@features/PriorNotification/useCases/updatePriorNotificationNote'
-import { verifyAndSendPriorNotification } from '@features/PriorNotification/useCases/verifyAndSendPriorNotification'
 import {
   getPriorNotificationFishingCatchesFromLogbookMessageFishingCatches,
   getPriorNotificationTypesFromLogbookMessagePnoTypes,
@@ -18,139 +10,63 @@ import {
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
-import { Accent, Button, FormikEffect, FormikTextarea, Icon } from '@mtes-mct/monitor-ui'
-import { skipToken } from '@reduxjs/toolkit/query'
-import { assertNotNullish } from '@utils/assertNotNullish'
-import { Formik } from 'formik'
-import { useCallback, useState } from 'react'
+import { Accent, Button, Level } from '@mtes-mct/monitor-ui'
+import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import styled from 'styled-components'
 import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
-import { useDebouncedCallback } from 'use-debounce'
 
 import { Header } from './Header'
-import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { priorNotificationActions } from '../../slice'
+import { CardBanner } from '../shared/CardBanner'
 import { DownloadButton } from '../shared/DownloadButton'
 import { TagBar } from '../shared/TagBar'
 
-const DEBOUNCE_DELAY = 500
-
-export function PriorNotificationCard() {
+type PriorNotificationCardProps = Readonly<{
+  bodyChildren?: React.ReactNode
+  detail: PriorNotification.Detail | undefined
+  footerChildren?: React.ReactNode
+  isLoading?: boolean
+  otherDisplayedErrorKey?: DisplayedErrorKey
+}>
+export function PriorNotificationCard({
+  bodyChildren,
+  detail,
+  footerChildren,
+  isLoading = false,
+  otherDisplayedErrorKey
+}: PriorNotificationCardProps) {
   const dispatch = useMainAppDispatch()
+  const displayedError = useMainAppSelector(
+    state => state.displayedError[DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_CARD_ERROR]
+  )
   const isSuperUser = useIsSuperUser()
-  const openedPriorNotificationIdentity = useMainAppSelector(
-    state => state.priorNotification.openedPriorNotificationIdentifier
-  )
-  const isOpenedPriorNotificationManuallyCreated = useMainAppSelector(
-    state => state.priorNotification.isOpenedPriorNotificationManuallyCreated
-  )
-  const { data: priorNotificationDetail } = useGetPriorNotificationDetailQuery(
-    openedPriorNotificationIdentity && typeof isOpenedPriorNotificationManuallyCreated === 'boolean'
-      ? {
-          ...openedPriorNotificationIdentity,
-          isManuallyCreated: isOpenedPriorNotificationManuallyCreated
-        }
-      : skipToken,
-    {
-      ...RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS,
-      ...RTK_FORCE_REFETCH_QUERY_OPTIONS
-    }
-  )
-  const [invalidatePriorNotification] = useInvalidatePriorNotificationMutation()
-  const sideWindowPriorNotificationCardError = useMainAppSelector(
-    state => state.displayedError.sideWindowPriorNotificationCardError
-  )
 
-  const [isLoading, setIsLoading] = useState(false)
-  const [isInvalidatingPriorNotificationDialog, setIsInvalidatingPriorNotificationDialog] = useState(false)
-  const isInvalidated = priorNotificationDetail?.logbookMessage?.message?.isInvalidated
-  const isPendingSend =
-    !!priorNotificationDetail?.state &&
-    [PriorNotification.State.AUTO_SEND_IN_PROGRESS, PriorNotification.State.PENDING_SEND].includes(
-      priorNotificationDetail?.state
-    )
-  const isVerifiedAndSent = priorNotificationDetail?.state === PriorNotification.State.VERIFIED_AND_SENT
-  const isPendingVerification = priorNotificationDetail?.state === PriorNotification.State.PENDING_VERIFICATION
-  const hasDesignatedPorts = priorNotificationDetail?.logbookMessage?.message?.pnoTypes?.find(
-    type => type.hasDesignatedPorts
-  )
+  const controlledDisplayedErrorKey = displayedError
+    ? DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_CARD_ERROR
+    : otherDisplayedErrorKey
+  const hasDesignatedPorts = detail?.logbookMessage.message.pnoTypes?.find(type => type.hasDesignatedPorts)
+  const isInvalidated = detail?.logbookMessage.message.isInvalidated
+  const isPendingVerification = detail?.state === PriorNotification.State.PENDING_VERIFICATION
 
   const close = () => {
-    dispatch(priorNotificationActions.closePriorNotificationCard())
+    dispatch(priorNotificationActions.closePriorNotificationCardAndForm())
   }
 
-  const verifyAndSend = async () => {
-    setIsLoading(true)
-
-    assertNotNullish(openedPriorNotificationIdentity)
-
-    await dispatch(verifyAndSendPriorNotification(openedPriorNotificationIdentity, false))
-
-    setIsLoading(false)
-  }
-
-  const invalidate = async () => {
-    setIsLoading(true)
-
-    assertNotNullish(openedPriorNotificationIdentity)
-    assertNotNullish(isOpenedPriorNotificationManuallyCreated)
-
-    await invalidatePriorNotification({
-      isManuallyCreated: isOpenedPriorNotificationManuallyCreated,
-      operationDate: openedPriorNotificationIdentity.operationDate,
-      reportId: openedPriorNotificationIdentity.reportId
-    })
-
-    setIsInvalidatingPriorNotificationDialog(false)
-    setIsLoading(false)
-  }
-
-  const updateNoteCallback = useCallback(
-    async (nextNote: string | undefined) => {
-      assertNotNullish(openedPriorNotificationIdentity)
-      assertNotNullish(priorNotificationDetail)
-
-      if (nextNote === priorNotificationDetail.logbookMessage.message.note) {
-        return
-      }
-
-      await dispatch(updatePriorNotificationNote(openedPriorNotificationIdentity, nextNote))
-    },
-    [dispatch, openedPriorNotificationIdentity, priorNotificationDetail]
-  )
-
-  const updateNote = useDebouncedCallback(
-    (nextNote: string | undefined) => updateNoteCallback(nextNote),
-    DEBOUNCE_DELAY
-  )
-
-  if (sideWindowPriorNotificationCardError) {
+  if (controlledDisplayedErrorKey) {
     return (
-      <Wrapper>
+      <Wrapper $isSuperUser={isSuperUser}>
         <Background onClick={close} />
 
         <Card>
-          <ErrorWall displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_CARD_ERROR} />
+          <ErrorWall displayedErrorKey={controlledDisplayedErrorKey} />
         </Card>
       </Wrapper>
     )
   }
 
-  if (!priorNotificationDetail) {
+  if (!detail || isLoading) {
     return (
-      <Wrapper>
-        <Background onClick={close} />
-
-        <Card>
-          <LoadingSpinnerWall />
-        </Card>
-      </Wrapper>
-    )
-  }
-
-  if (isLoading) {
-    return (
-      <Wrapper className="Form">
+      <Wrapper $isSuperUser={isSuperUser}>
         <Background onClick={close} />
 
         <Card>
@@ -161,28 +77,37 @@ export function PriorNotificationCard() {
   }
 
   return (
-    <Wrapper>
+    <Wrapper $isSuperUser={isSuperUser}>
       <Background onClick={close} />
 
       <Card>
+        {detail?.state === PriorNotification.State.PENDING_SEND && (
+          <CardBanner isCollapsible level={Level.WARNING} top="100px">
+            Le préavis est en cours de diffusion.
+          </CardBanner>
+        )}
+        {detail?.state === PriorNotification.State.PENDING_AUTO_SEND && (
+          <CardBanner isCollapsible level={Level.WARNING} top="100px">
+            Le préavis est en cours d’envoi aux unités qui l’ont demandé.
+          </CardBanner>
+        )}
+
         <FrontendErrorBoundary>
-          <Header onClose={close} priorNotificationDetail={priorNotificationDetail} />
+          <Header detail={detail} onClose={close} />
 
           <Body>
             <TagBar
               isInvalidated={isInvalidated}
-              isVesselUnderCharter={priorNotificationDetail.isVesselUnderCharter}
+              isVesselUnderCharter={detail.isVesselUnderCharter}
               isZeroNotice={isZeroNotice(
                 getPriorNotificationFishingCatchesFromLogbookMessageFishingCatches(
-                  priorNotificationDetail.logbookMessage.message.catchOnboard
+                  detail.logbookMessage.message.catchOnboard
                 )
               )}
-              riskFactor={priorNotificationDetail.riskFactor}
-              state={priorNotificationDetail.state}
-              tripSegments={priorNotificationDetail.logbookMessage.tripSegments}
-              types={getPriorNotificationTypesFromLogbookMessagePnoTypes(
-                priorNotificationDetail.logbookMessage.message.pnoTypes
-              )}
+              riskFactor={detail.riskFactor}
+              state={detail.state}
+              tripSegments={detail.logbookMessage.tripSegments}
+              types={getPriorNotificationTypesFromLogbookMessagePnoTypes(detail.logbookMessage.message.pnoTypes)}
             />
 
             {isPendingVerification && <Intro>Le préavis doit être vérifié par le CNSP avant sa diffusion.</Intro>}
@@ -194,39 +119,13 @@ export function PriorNotificationCard() {
 
             <LogbookMessage
               isFirst
-              isManuallyCreated={isOpenedPriorNotificationManuallyCreated ?? false}
-              logbookMessage={priorNotificationDetail.logbookMessage}
+              isManuallyCreated={detail.isManuallyCreated ?? false}
+              logbookMessage={detail.logbookMessage}
             />
 
             <hr />
 
-            <Formik
-              initialValues={{ note: priorNotificationDetail.logbookMessage.message.note }}
-              onSubmit={() => {}}
-              validateOnChange={false}
-            >
-              <>
-                <FormikEffect onChange={values => updateNote(values.note)} />
-                <FieldGroup>
-                  <FormikTextarea
-                    label="Points d'attention identifiés par le CNSP"
-                    name="note"
-                    readOnly={!isSuperUser || isInvalidated}
-                  />
-                </FieldGroup>
-              </>
-            </Formik>
-
-            {isSuperUser && !isInvalidated && (
-              <InvalidateButton
-                accent={Accent.SECONDARY}
-                Icon={Icon.Invalid}
-                onClick={() => setIsInvalidatingPriorNotificationDialog(true)}
-                title="Invalider le préavis"
-              >
-                Invalider le préavis
-              </InvalidateButton>
-            )}
+            {bodyChildren}
           </Body>
 
           <Footer>
@@ -234,47 +133,23 @@ export function PriorNotificationCard() {
               Fermer
             </Button>
 
-            <DownloadButton
-              pnoLogbookMessage={priorNotificationDetail.logbookMessage}
-              reportId={priorNotificationDetail.id}
-            />
+            <DownloadButton pnoLogbookMessage={detail.logbookMessage} reportId={detail.reportId} />
 
-            <Button
-              accent={Accent.PRIMARY}
-              disabled={isInvalidated || isPendingSend || isVerifiedAndSent}
-              Icon={isVerifiedAndSent ? Icon.Check : Icon.Send}
-              onClick={verifyAndSend}
-              title={
-                isInvalidated
-                  ? "Le préavis est invalidé, il n'est plus possible de le modifier ni de le diffuser."
-                  : undefined
-              }
-            >
-              {isVerifiedAndSent ? 'Diffusé' : 'Diffuser'}
-            </Button>
+            {footerChildren}
           </Footer>
         </FrontendErrorBoundary>
       </Card>
-      {isInvalidatingPriorNotificationDialog && (
-        <InvalidatePriorNotificationDialog
-          onCancel={() => setIsInvalidatingPriorNotificationDialog(false)}
-          onConfirm={invalidate}
-        />
-      )}
     </Wrapper>
   )
 }
 
-const InvalidateButton = styled(Button)`
-  color: ${p => p.theme.color.maximumRed};
-  margin-top: 48px;
-`
-
-const Wrapper = styled.div`
+const Wrapper = styled.div<{
+  $isSuperUser: boolean
+}>`
   bottom: 0;
   display: flex;
   justify-content: flex-end;
-  left: 0;
+  left: ${p => (p.$isSuperUser ? '70px' : 0)};
   position: fixed;
   right: 0;
   top: 0;
@@ -292,6 +167,7 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
+  position: relative;
   width: 560px;
 `
 
@@ -328,23 +204,5 @@ const Footer = styled.div`
 
   > div {
     margin-left: 8px;
-  }
-`
-
-const FieldGroup = styled.div.attrs({ className: 'FieldGroup' })`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-
-  .rs-checkbox {
-    > .rs-checkbox-checker {
-      > label {
-        line-height: 18px;
-      }
-    }
-  }
-
-  textarea {
-    box-sizing: border-box !important;
   }
 `

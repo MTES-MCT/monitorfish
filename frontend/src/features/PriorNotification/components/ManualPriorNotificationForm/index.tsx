@@ -1,4 +1,5 @@
 import { verifyAndSendPriorNotification } from '@features/PriorNotification/useCases/verifyAndSendPriorNotification'
+import { getPriorNotificationIdentifier } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { assertNotNullish } from '@utils/assertNotNullish'
@@ -12,27 +13,29 @@ import { FORM_VALIDATION_SCHEMA } from './constants'
 import { priorNotificationActions } from '../../slice'
 import { createOrUpdateManualPriorNotification } from '../../useCases/createOrUpdateManualPriorNotification'
 
-import type { FormValues } from './types'
+import type { ManualPriorNotificationFormValues } from './types'
 import type { PriorNotification } from '../../PriorNotification.types'
 
-export function PriorNotificationForm() {
+export function ManualPriorNotificationForm() {
   const dispatch = useMainAppDispatch()
-  const editedPriorNotificationInitialFormValues = useMainAppSelector(
-    state => state.priorNotification.editedPriorNotificationInitialFormValues
+  const editedManualPriorNotificationFormValues = useMainAppSelector(
+    state => state.priorNotification.editedManualPriorNotificationFormValues
   )
-  const openedPriorNotificationIdentifier = useMainAppSelector(
-    state => state.priorNotification.openedPriorNotificationIdentifier
+  const openedPriorNotificationDetail = useMainAppSelector(
+    state => state.priorNotification.openedPriorNotificationDetail
   )
 
   const [shouldValidateOnChange, setShouldValidateOnChange] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
+  const identifier = getPriorNotificationIdentifier(openedPriorNotificationDetail)
+
   const close = () => {
-    dispatch(priorNotificationActions.closePriorNotificationForm())
+    dispatch(priorNotificationActions.closePriorNotificationCardAndForm())
   }
 
   // TODO Replace that with a use case dispatcher.
-  const submit = async (nextFormValues: FormValues) => {
+  const submit = async (nextFormValues: ManualPriorNotificationFormValues) => {
     setIsLoading(true)
 
     const { isExpectedLandingDateSameAsExpectedArrivalDate, ...priorNotificationData } = nextFormValues
@@ -41,28 +44,25 @@ export function PriorNotificationForm() {
       expectedLandingDate: isExpectedLandingDateSameAsExpectedArrivalDate
         ? priorNotificationData.expectedArrivalDate
         : priorNotificationData.expectedLandingDate
-    } as PriorNotification.NewManualPriorNotificationData
+    } as PriorNotification.NewManualFormData
 
     await dispatch(
-      createOrUpdateManualPriorNotification(openedPriorNotificationIdentifier?.reportId, newOrNextPriorNotificationData)
+      createOrUpdateManualPriorNotification(openedPriorNotificationDetail?.reportId, newOrNextPriorNotificationData)
     )
 
     setIsLoading(false)
   }
 
   const verifyAndSend = async () => {
+    assertNotNullish(identifier)
+    assertNotNullish(openedPriorNotificationDetail)
+
     setIsLoading(true)
 
-    assertNotNullish(openedPriorNotificationIdentifier)
-
-    await dispatch(verifyAndSendPriorNotification(openedPriorNotificationIdentifier, true))
-
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 1000)
+    await dispatch(verifyAndSendPriorNotification(identifier, true))
   }
 
-  if (!editedPriorNotificationInitialFormValues || isLoading) {
+  if (!editedManualPriorNotificationFormValues || isLoading) {
     return (
       <Wrapper className="Form">
         <Background onClick={close} />
@@ -76,17 +76,17 @@ export function PriorNotificationForm() {
 
   return (
     <Formik
-      initialValues={editedPriorNotificationInitialFormValues}
+      initialValues={editedManualPriorNotificationFormValues}
       onSubmit={submit}
       validateOnChange={shouldValidateOnChange}
       validationSchema={FORM_VALIDATION_SCHEMA}
     >
       <Card
+        detail={openedPriorNotificationDetail}
         isValidatingOnChange={shouldValidateOnChange}
         onClose={close}
         onSubmit={() => setShouldValidateOnChange(true)}
         onVerifyAndSend={verifyAndSend}
-        reportId={openedPriorNotificationIdentifier?.reportId}
       />
     </Formik>
   )

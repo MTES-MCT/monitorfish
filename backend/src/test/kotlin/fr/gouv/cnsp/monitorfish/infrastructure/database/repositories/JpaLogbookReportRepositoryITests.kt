@@ -2,7 +2,10 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagePurpose
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookRawMessage
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
@@ -947,8 +950,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(result).hasSizeGreaterThan(0)
-        assertThat(result.filter { it.logbookMessageAndValue.value.isVerified == false }).hasSize(1)
-        assertThat(result.filter { it.logbookMessageAndValue.value.isInVerificationScope == true }).hasSize(1)
+        assertThat(result.all { it.logbookMessageAndValue.value.isVerified == false }).isTrue()
+        assertThat(result.all { it.logbookMessageAndValue.value.isInVerificationScope == true }).isTrue()
     }
 
     @Test
@@ -1092,6 +1095,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
             "FAKE_OPERATION_109",
             ZonedDateTime.now().minusMinutes(15),
             isBeingSent = true,
+            isSent = false,
             isVerified = true,
         )
 
@@ -1114,9 +1118,10 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat((currentCorReport.message as PNO).note).isNull()
 
         // When
-        jpaLogbookReportRepository.updatePriorNotificationNote(
+        jpaLogbookReportRepository.updatePriorNotificationAuthorTrigramAndNote(
             "FAKE_OPERATION_109",
             ZonedDateTime.now().minusMinutes(15),
+            "ABC",
             "A wonderful note",
         )
 

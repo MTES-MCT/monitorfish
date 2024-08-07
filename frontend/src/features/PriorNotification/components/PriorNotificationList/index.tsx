@@ -2,7 +2,8 @@ import { BackendApi } from '@api/BackendApi.types'
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS, RtkCacheTagType } from '@api/constants'
 import { ErrorWall } from '@components/ErrorWall'
 import { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
-import { openPriorNotificationForm } from '@features/PriorNotification/useCases/openPriorNotificationForm'
+import { OpenedPriorNotificationType } from '@features/PriorNotification/constants'
+import { openManualPriorNotificationForm } from '@features/PriorNotification/useCases/openManualPriorNotificationForm'
 import { Body } from '@features/SideWindow/components/Body'
 import { Header } from '@features/SideWindow/components/Header'
 import { Page } from '@features/SideWindow/components/Page'
@@ -32,8 +33,9 @@ import { TableBodyLoader } from './TableBodyLoader'
 import { getTitle } from './utils'
 import { useGetPriorNotificationsQuery, useGetPriorNotificationsToVerifyQuery } from '../../priorNotificationApi'
 import { priorNotificationActions } from '../../slice'
+import { LogbookPriorNotificationForm } from '../LogbookPriorNotificationForm'
+import { ManualPriorNotificationForm } from '../ManualPriorNotificationForm'
 import { PriorNotificationCard } from '../PriorNotificationCard'
-import { PriorNotificationForm } from '../PriorNotificationForm'
 
 import type { AllSeafrontGroup, NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 
@@ -43,8 +45,12 @@ type PriorNotificationListProps = Readonly<{
 export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps) {
   const dispatch = useMainAppDispatch()
   const listFilter = useMainAppSelector(state => state.priorNotification.listFilterValues)
-  const isPriorNotificationCardOpen = useMainAppSelector(state => state.priorNotification.isPriorNotificationCardOpen)
-  const isPriorNotificationFormOpen = useMainAppSelector(state => state.priorNotification.isPriorNotificationFormOpen)
+  const openedPriorNotificationDetail = useMainAppSelector(
+    state => state.priorNotification.openedPriorNotificationDetail
+  )
+  const openedPriorNotificationComponentType = useMainAppSelector(
+    state => state.priorNotification.openedPriorNotificationComponentType
+  )
   const isSuperUser = useIsSuperUser()
 
   const [rowSelection, setRowSelection] = useState({})
@@ -162,7 +168,7 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
                 <Button
                   accent={Accent.PRIMARY}
                   Icon={Icon.Plus}
-                  onClick={() => dispatch(openPriorNotificationForm(undefined))}
+                  onClick={() => dispatch(openManualPriorNotificationForm(undefined))}
                   size={Size.SMALL}
                 >
                   Ajouter un préavis
@@ -232,8 +238,18 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
         </Body>
       </Page>
 
-      {isPriorNotificationCardOpen && <PriorNotificationCard />}
-      {isPriorNotificationFormOpen && <PriorNotificationForm />}
+      {openedPriorNotificationComponentType === OpenedPriorNotificationType.Card && (
+        <PriorNotificationCard
+          key={openedPriorNotificationDetail?.fingerprint}
+          detail={openedPriorNotificationDetail}
+        />
+      )}
+      {openedPriorNotificationComponentType === OpenedPriorNotificationType.LogbookForm && (
+        <LogbookPriorNotificationForm key={openedPriorNotificationDetail?.fingerprint} />
+      )}
+      {openedPriorNotificationComponentType === OpenedPriorNotificationType.ManualForm && (
+        <ManualPriorNotificationForm key={openedPriorNotificationDetail?.fingerprint} />
+      )}
     </>
   )
 }

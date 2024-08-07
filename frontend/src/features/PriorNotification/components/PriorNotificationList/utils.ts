@@ -134,7 +134,7 @@ export function getColorsFromState(state: PriorNotification.State | undefined): 
       colors = [THEME.color.lightGray, THEME.color.lightGray, THEME.color.charcoal]
       break
 
-    case PriorNotification.State.AUTO_SEND_IN_PROGRESS:
+    case PriorNotification.State.PENDING_AUTO_SEND:
     case PriorNotification.State.PENDING_SEND:
       colors = [THEME.color.gainsboro, THEME.color.slateGray, THEME.color.slateGray]
       break

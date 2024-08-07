@@ -8,7 +8,7 @@ import type { PriorNotification } from '@features/PriorNotification/PriorNotific
 export function getFishingsCatchesExtraFields(
   specyCode: string,
   fishingsCatchesIndex: number,
-  allFishingsCatches: PriorNotification.PriorNotificationDataFishingCatch[]
+  allFishingsCatches: PriorNotification.FormDataFishingCatch[]
 ) {
   // BFT - Bluefin Tuna => + BF1, BF2, BF3
   if (specyCode === 'BFT') {

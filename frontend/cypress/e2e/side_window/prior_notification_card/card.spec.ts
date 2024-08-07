@@ -1,4 +1,5 @@
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
+import dayjs from 'dayjs'
 
 import { openSideWindowPriorNotification } from './utils'
 import { openSideWindowPriorNotificationList } from '../prior_notification_list/utils'
@@ -89,8 +90,8 @@ context('Side Window > Prior Notification Card > Card', () => {
     openSideWindowPriorNotification(`L'ANCRE`)
 
     cy.wait('@getOriginalPriorNotification').then(interception => {
-      const originalPriorNotificationDetail: PriorNotification.PriorNotificationDetail = interception.response!.body
-      const updatedPriorNotificationDetailStub: PriorNotification.PriorNotificationDetail = {
+      const originalPriorNotificationDetail: PriorNotification.Detail = interception.response!.body
+      const updatedPriorNotificationDetailStub: PriorNotification.Detail = {
         ...originalPriorNotificationDetail,
         fingerprint: '109.1109.2109'
       }
@@ -122,8 +123,8 @@ context('Side Window > Prior Notification Card > Card', () => {
     openSideWindowPriorNotification(`L'ANCRE`)
 
     cy.wait('@getOriginalPriorNotification').then(interception => {
-      const originalPriorNotificationDetail: PriorNotification.PriorNotificationDetail = interception.response!.body
-      const deletedPriorNotificationDetailStub: PriorNotification.PriorNotificationDetail = {
+      const originalPriorNotificationDetail: PriorNotification.Detail = interception.response!.body
+      const deletedPriorNotificationDetailStub: PriorNotification.Detail = {
         ...originalPriorNotificationDetail,
         fingerprint: '109.1109.2109',
         logbookMessage: {
@@ -150,7 +151,49 @@ context('Side Window > Prior Notification Card > Card', () => {
     })
   })
 
-  it('Should verify and send a prior notification', () => {
+  it('Should update a logbook prior notification', () => {
+    cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_108?operationDate=${dayjs().toISOString()}`, {
+      body: {
+        authorTrigram: null,
+        note: null
+      }
+    })
+
+    // Given
+    openSideWindowPriorNotification(`CALAMARO`)
+
+    cy.intercept('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_108?operationDate=*`).as(
+      'updateLogbookPriorNotification'
+    )
+
+    cy.get('[name="note"]').should('have.value', '')
+    cy.get('[name="authorTrigram"]').should('have.value', '')
+
+    // When
+    cy.fill("Points d'attention identifiés par le CNSP", "Un point d'attention.")
+    cy.fill('Par', 'ABC')
+
+    cy.wait('@updateLogbookPriorNotification')
+
+    // Then, the PDF is deleted
+    cy.get('.Element-Button').contains('Télécharger').parent().should('be.disabled')
+
+    // The note is saved
+    openSideWindowPriorNotification(`CALAMARO`)
+
+    cy.get('[name="note"]').should('have.value', "Un point d'attention.")
+    cy.get('[name="authorTrigram"]').should('have.value', 'ABC')
+
+    // Reset
+    cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_108?operationDate=${dayjs().toISOString()}`, {
+      body: {
+        authorTrigram: null,
+        note: null
+      }
+    })
+  })
+
+  it('Should verify and send a logbook prior notification', () => {
     openSideWindowPriorNotification(`LE POISSON AMBULANT`)
 
     cy.intercept(
@@ -171,7 +214,7 @@ context('Side Window > Prior Notification Card > Card', () => {
         state: PriorNotification.State.PENDING_SEND
       })
 
-      cy.contains('En cours de diffusion')
+      cy.contains('Diffusion en cours')
 
       // -----------------------------------------------------------------------
       // List
@@ -180,33 +223,12 @@ context('Side Window > Prior Notification Card > Card', () => {
       cy.fill('Rechercher un navire', 'LE POISSON AMBULANT')
 
       cy.getTableRowById('FAKE_OPERATION_111' as unknown as number)
-        .find('span[title="En cours de diffusion"]')
+        .find('span[title="Diffusion en cours"]')
         .should('be.visible')
     })
   })
 
-  it('Should update a note and delete the current PDF', () => {
-    // Given
-    openSideWindowPriorNotification(`CALAMARO`)
-    cy.get('*[name="note"]').should('have.value', '')
-
-    // When
-    cy.intercept('PUT', `/bff/v1/prior_notifications/FAKE_OPERATION_108/note?operationDate=*`).as(
-      'updatePriorNotificationNote'
-    )
-    cy.fill("Points d'attention identifiés par le CNSP", "Un point d'attention.")
-    cy.get('*[name="note"]').should('have.value', "Un point d'attention.")
-    cy.wait('@updatePriorNotificationNote')
-
-    // Then, the PDF is deleted
-    cy.get('.Element-Button').contains('Télécharger').parent().should('be.disabled')
-
-    // The note is saved
-    openSideWindowPriorNotification(`CALAMARO`)
-    cy.get('*[name="note"]').should('have.value', "Un point d'attention.")
-  })
-
-  it('Should download a pdf document', () => {
+  it('Should download a logbook prior notification as a PDF document', () => {
     // Given
     openSideWindowPriorNotification(`COURANT MAIN PROFESSEUR`)
 
@@ -222,17 +244,17 @@ context('Side Window > Prior Notification Card > Card', () => {
     cy.get('@windowOpen').should('be.calledWith', '/api/v1/prior_notifications/pdf/FAKE_OPERATION_102', '_blank')
   })
 
-  it('Should invalidate a prior notification', () => {
+  it('Should invalidate a logbook prior notification', () => {
     // Given
     openSideWindowPriorNotificationList()
     cy.get('[data-cy="side-window-sub-menu-ALL"]').click()
-    cy.fill('Rechercher un navire', 'COURANT')
+    cy.fill('Rechercher un navire', 'ANCRE')
 
-    cy.getTableRowById('FAKE_OPERATION_102' as any)
+    cy.getTableRowById('FAKE_OPERATION_109' as any)
       .find('[title="Préavis invalidé"]')
       .should('not.exist')
 
-    cy.getTableRowById('FAKE_OPERATION_102' as any).clickButton('Éditer le préavis')
+    cy.getTableRowById('FAKE_OPERATION_109' as any).clickButton('Éditer le préavis')
     if (document.querySelector('[data-cy="first-loader"]')) {
       cy.getDataCy('first-loader').should('not.be.visible')
     }
@@ -247,7 +269,7 @@ context('Side Window > Prior Notification Card > Card', () => {
 
     cy.clickButton('Fermer')
 
-    cy.getTableRowById('FAKE_OPERATION_102' as any)
+    cy.getTableRowById('FAKE_OPERATION_109' as any)
       .find('[title="Préavis invalidé"]')
       .should('exist')
   })

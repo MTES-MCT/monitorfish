@@ -22,7 +22,7 @@ class VerifyAndSendPriorNotificationUTests {
     private lateinit var getPriorNotification: GetPriorNotification
 
     @Test
-    fun `execute Should update and return an auto prior notification`() {
+    fun `execute Should update and return a logbook prior notification`() {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
 
         // Given

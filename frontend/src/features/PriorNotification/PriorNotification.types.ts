@@ -47,33 +47,37 @@ export namespace PriorNotification {
     vesselName: string | undefined
   }
 
-  export type PriorNotificationIdentifier = {
+  export type Identifier = {
     /** `operationDate` is used in Backend SQL query to optimize Timescale index usage. */
     operationDate: string
     reportId: string
   }
 
-  export type PriorNotificationDetail = {
-    /** Unique identifier concatenating all the DAT, COR, RET & DEL operations `id` used for data consolidation. */
+  export type Detail = {
     fingerprint: string
-    /** Logbook message `reportId`. */
-    id: string
     isLessThanTwelveMetersVessel: boolean
+    isManuallyCreated: boolean
     isVesselUnderCharter: boolean | undefined
     logbookMessage: LogbookMessage.PnoLogbookMessage
+    operationDate: string
+    /** Logbook message `reportId`. */
+    reportId: string
     riskFactor: number | undefined
     state: State | undefined
   }
 
-  export type PriorNotificationUpdateNoteRequestData = Pick<LogbookMessage.PnoMessage, 'note'>
+  export type LogbookFormData = {
+    authorTrigram: string | undefined
+    note: string | undefined
+  }
 
-  export type ManualPriorNotificationData = {
+  export type ManualFormData = {
     authorTrigram: string
     didNotFishAfterZeroNotice: boolean
     expectedArrivalDate: string
     expectedLandingDate: string
     faoArea: string
-    fishingCatches: PriorNotificationDataFishingCatch[]
+    fishingCatches: FormDataFishingCatch[]
     hasPortEntranceAuthorization: boolean
     hasPortLandingAuthorization: boolean
     note: string | undefined
@@ -85,14 +89,26 @@ export namespace PriorNotification {
     updatedAt: string
     vesselId: number
   }
-  export type NewManualPriorNotificationData = Omit<ManualPriorNotificationData, 'reportId'>
+  export type NewManualFormData = Omit<ManualFormData, 'reportId'>
 
-  export type PriorNotificationComputeRequestData = Pick<
-    ManualPriorNotificationData,
+  export type LogbookComputeRequestData = {
+    isInVerificationScope: boolean
+    portLocode: string
+    segmentCodes: string[]
+    vesselId: number
+  }
+  /** Real-time computed values displayed within a prior notification form. */
+  export type LogbookComputedValues = {
+    /** Next initial state of the prior notification once it will be created or updated. */
+    nextState: State
+  }
+
+  export type ManualComputeRequestData = Pick<
+    ManualFormData,
     'faoArea' | 'fishingCatches' | 'portLocode' | 'tripGearCodes' | 'vesselId'
   >
   /** Real-time computed values displayed within a prior notification form. */
-  export type ManualPriorNotificationComputedValues = Pick<
+  export type ManualComputedValues = Pick<
     PriorNotification,
     'isVesselUnderCharter' | 'tripSegments' | 'types' | 'riskFactor'
   > & {
@@ -100,7 +116,7 @@ export namespace PriorNotification {
     nextState: State
   }
 
-  export type PriorNotificationDataFishingCatch = {
+  export type FormDataFishingCatch = {
     quantity?: number | undefined
     specyCode: string
     specyName: string
@@ -154,17 +170,15 @@ export namespace PriorNotification {
   export enum State {
     /** "Envoi auto. fait". */
     AUTO_SEND_DONE = 'AUTO_SEND_DONE',
-    /** "En cours d'envoi auto.". */
-    AUTO_SEND_IN_PROGRESS = 'AUTO_SEND_IN_PROGRESS',
     /** "Envoi auto. demandé". */
     AUTO_SEND_REQUESTED = 'AUTO_SEND_REQUESTED',
     /** "Échec de diffusion". */
     FAILED_SEND = 'FAILED_SEND',
     /** "Hors vérification". */
     OUT_OF_VERIFICATION_SCOPE = 'OUT_OF_VERIFICATION_SCOPE',
-    /** "En cours de d'envoi auto". */
+    /** "Envoi auto. en cours". */
     PENDING_AUTO_SEND = 'PENDING_AUTO_SEND',
-    /** "En cours de diffusion". */
+    /** "Diffusion en cours". */
     PENDING_SEND = 'PENDING_SEND',
     /** "À vérifier (CNSP)". */
     PENDING_VERIFICATION = 'PENDING_VERIFICATION',
@@ -173,12 +187,11 @@ export namespace PriorNotification {
   }
   export const STATE_LABEL: Record<State, string> = {
     AUTO_SEND_DONE: 'Envoi auto. fait',
-    AUTO_SEND_IN_PROGRESS: "En cours d'envoi auto.",
     AUTO_SEND_REQUESTED: 'Envoi auto. demandé',
     FAILED_SEND: 'Échec de diffusion',
     OUT_OF_VERIFICATION_SCOPE: 'Hors vérification',
-    PENDING_AUTO_SEND: "En cours de d'envoi auto",
-    PENDING_SEND: 'En cours de diffusion',
+    PENDING_AUTO_SEND: 'Envoi auto. en cours',
+    PENDING_SEND: 'Diffusion en cours',
     PENDING_VERIFICATION: 'À vérifier (CNSP)',
     VERIFIED_AND_SENT: 'Vérifié et diffusé'
   }

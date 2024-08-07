@@ -105,7 +105,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAll Should return all manual prior notifications for less than 12 meters long vessels and none for more than 12 meters long vessels`() {
+    fun `findAll Should return manual prior notifications for less or more than 12 meters long vessels`() {
         // Given
         val firstFilter = defaultPriorNotificationsFilter.copy(isLessThanTwelveMetersVessel = true)
 
@@ -113,7 +113,6 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         val firstResult = jpaManualPriorNotificationRepository.findAll(firstFilter)
 
         // Then
-        assertThat(firstResult).hasSize(allManualPriorNotificationsLength)
         val firstResultVessels = firstResult.mapNotNull {
             jpaVesselRepository.findFirstByInternalReferenceNumber(
                 it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
@@ -129,7 +128,14 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         val secondResult = jpaManualPriorNotificationRepository.findAll(secondFilter)
 
         // Then
-        assertThat(secondResult).isEmpty()
+
+        val secondResultVessels = secondResult.mapNotNull {
+            jpaVesselRepository.findFirstByInternalReferenceNumber(
+                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
+            )
+        }
+        assertThat(secondResultVessels).hasSize(secondResult.size)
+        assertThat(secondResultVessels.all { it.length!! >= 12 }).isTrue()
     }
 
     @Test
@@ -422,7 +428,6 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         val newPriorNotification =
             PriorNotification(
                 reportId = null,
-                authorTrigram = "ABC",
                 createdAt = null,
                 didNotFishAfterZeroNotice = false,
                 isManuallyCreated = false,
@@ -433,6 +438,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
                         // Replaced by the generated `createdAt` during the save operation.
                         integrationDateTime = ZonedDateTime.now(),
                         message = PNO().apply {
+                            authorTrigram = "ABC"
                             catchOnboard = emptyList()
                             catchToLand = emptyList()
                             economicZone = null

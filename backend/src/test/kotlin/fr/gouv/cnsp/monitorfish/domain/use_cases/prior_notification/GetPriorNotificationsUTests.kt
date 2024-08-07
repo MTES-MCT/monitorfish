@@ -63,7 +63,6 @@ class GetPriorNotificationsUTests {
             listOf(
                 PriorNotification(
                     reportId = "FAKE_REPORT_ID_1",
-                    authorTrigram = null,
                     createdAt = null,
                     didNotFishAfterZeroNotice = false,
                     isManuallyCreated = false,
@@ -96,7 +95,6 @@ class GetPriorNotificationsUTests {
 
                 PriorNotification(
                     reportId = "FAKE_REPORT_ID_2",
-                    authorTrigram = null,
                     createdAt = null,
                     didNotFishAfterZeroNotice = false,
                     isManuallyCreated = false,

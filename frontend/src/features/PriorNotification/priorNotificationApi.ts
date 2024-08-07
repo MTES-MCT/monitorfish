@@ -24,9 +24,9 @@ const INVALIDATE_PRIOR_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu invalid
 
 export const priorNotificationApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
-    computePriorNotification: builder.mutation<
-      PriorNotification.ManualPriorNotificationComputedValues,
-      PriorNotification.PriorNotificationComputeRequestData
+    computeManualPriorNotification: builder.mutation<
+      PriorNotification.ManualComputedValues,
+      PriorNotification.ManualComputeRequestData
     >({
       query: data => ({
         body: data,
@@ -36,10 +36,7 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(COMPUTE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
     }),
 
-    createPriorNotification: builder.mutation<
-      PriorNotification.ManualPriorNotificationData,
-      PriorNotification.NewManualPriorNotificationData
-    >({
+    createPriorNotification: builder.mutation<PriorNotification.ManualFormData, PriorNotification.NewManualFormData>({
       invalidatesTags: [{ type: RtkCacheTagType.PriorNotifications }],
       query: data => ({
         body: data,
@@ -49,9 +46,25 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(CREATE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
     }),
 
+    getLogbookPriorNotificationFormData: builder.query<PriorNotification.LogbookFormData, PriorNotification.Identifier>(
+      {
+        providesTags: (_, __, { reportId }) => [{ id: reportId, type: RtkCacheTagType.PriorNotification }],
+        query: ({ operationDate, reportId }) =>
+          getUrlOrPathWithQueryParams(`/prior_notifications/logbook/${reportId}/form`, { operationDate }),
+        transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_DATA_ERROR_MESSAGE, response)
+      }
+    ),
+
+    getManualPriorNotificationFormData: builder.query<PriorNotification.ManualFormData, PriorNotification.Identifier>({
+      providesTags: (_, __, { reportId }) => [{ id: reportId, type: RtkCacheTagType.PriorNotification }],
+      query: ({ operationDate, reportId }) =>
+        getUrlOrPathWithQueryParams(`/prior_notifications/manual/${reportId}/form`, { operationDate }),
+      transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_DATA_ERROR_MESSAGE, response)
+    }),
+
     getPriorNotificationDetail: builder.query<
-      PriorNotification.PriorNotificationDetail,
-      PriorNotification.PriorNotificationIdentifier & {
+      PriorNotification.Detail,
+      PriorNotification.Identifier & {
         isManuallyCreated: boolean
       }
     >({
@@ -59,16 +72,6 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       query: ({ isManuallyCreated, operationDate, reportId }) =>
         getUrlOrPathWithQueryParams(`/prior_notifications/${reportId}`, { isManuallyCreated, operationDate }),
       transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_DETAIL_ERROR_MESSAGE, response)
-    }),
-
-    getPriorNotificationFormData: builder.query<
-      PriorNotification.ManualPriorNotificationData,
-      PriorNotification.PriorNotificationIdentifier
-    >({
-      providesTags: (_, __, { reportId }) => [{ id: reportId, type: RtkCacheTagType.PriorNotification }],
-      query: ({ operationDate, reportId }) =>
-        getUrlOrPathWithQueryParams(`/prior_notifications/manual/${reportId}`, { operationDate }),
-      transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_DATA_ERROR_MESSAGE, response)
     }),
 
     getPriorNotifications: builder.query<
@@ -113,8 +116,8 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
     }),
 
     invalidatePriorNotification: builder.mutation<
-      PriorNotification.PriorNotificationDetail,
-      PriorNotification.PriorNotificationIdentifier & {
+      PriorNotification.Detail,
+      PriorNotification.Identifier & {
         isManuallyCreated: boolean
       }
     >({
@@ -132,10 +135,30 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(INVALIDATE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
     }),
 
-    updateManualPriorNotification: builder.mutation<
-      PriorNotification.ManualPriorNotificationData,
+    updateLogbookPriorNotification: builder.mutation<
+      PriorNotification.LogbookFormData,
       {
-        data: PriorNotification.NewManualPriorNotificationData
+        data: PriorNotification.LogbookFormData
+        operationDate: string
+        reportId: string
+      }
+    >({
+      invalidatesTags: (_, __, { reportId }) => [
+        { type: RtkCacheTagType.PriorNotifications },
+        { id: reportId, type: RtkCacheTagType.PriorNotification }
+      ],
+      query: ({ data, operationDate, reportId }) => ({
+        body: data,
+        method: 'PUT',
+        url: getUrlOrPathWithQueryParams(`/prior_notifications/logbook/${reportId}`, { operationDate })
+      }),
+      transformErrorResponse: response => new FrontendApiError(UPDATE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
+    }),
+
+    updateManualPriorNotification: builder.mutation<
+      PriorNotification.ManualFormData,
+      {
+        data: PriorNotification.NewManualFormData
         reportId: string
       }
     >({
@@ -151,27 +174,9 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(UPDATE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
     }),
 
-    updatePriorNotificationNote: builder.mutation<
-      PriorNotification.PriorNotificationDetail,
-      PriorNotification.PriorNotificationIdentifier & {
-        data: PriorNotification.PriorNotificationUpdateNoteRequestData
-      }
-    >({
-      invalidatesTags: (_, __, { reportId }) => [
-        { type: RtkCacheTagType.PriorNotifications },
-        { id: reportId, type: RtkCacheTagType.PriorNotification }
-      ],
-      query: ({ data, operationDate, reportId }) => ({
-        body: data,
-        method: 'PUT',
-        url: getUrlOrPathWithQueryParams(`/prior_notifications/${reportId}/note`, { operationDate })
-      }),
-      transformErrorResponse: response => new FrontendApiError(UPDATE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
-    }),
-
     verifyAndSendPriorNotification: builder.mutation<
-      PriorNotification.PriorNotificationDetail,
-      PriorNotification.PriorNotificationIdentifier & {
+      PriorNotification.Detail,
+      PriorNotification.Identifier & {
         isManuallyCreated: boolean
       }
     >({
@@ -208,11 +213,9 @@ export const priorNotificationPublicApi = monitorfishPublicApi.injectEndpoints({
 })
 
 export const {
-  useGetPriorNotificationDetailQuery,
   useGetPriorNotificationsQuery,
   useGetPriorNotificationsToVerifyQuery,
-  useGetPriorNotificationTypesQuery,
-  useInvalidatePriorNotificationMutation
+  useGetPriorNotificationTypesQuery
 } = priorNotificationApi
 
 export const { useGetPriorNotificationPDFQuery } = priorNotificationPublicApi

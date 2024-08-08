@@ -51,6 +51,7 @@ def simple_parser(el: xml.etree.ElementTree.Element, pass_child: bool = False):
 def parse_ops(ops):
     ops_date = ops.get("OD")
     ops_time = ops.get("OT")
+    is_test_message = ops.get("TS") == "1"
 
     ops_datetime = make_datetime(ops_date, ops_time)
 
@@ -59,6 +60,7 @@ def parse_ops(ops):
         "operation_country": ops.get("FR"),
         "operation_datetime_utc": ops_datetime,
         "software": ops.get("EVL"),
+        "is_test_message": is_test_message,
     }
 
     child = get_first_child(list(ops), assert_child_single=True)

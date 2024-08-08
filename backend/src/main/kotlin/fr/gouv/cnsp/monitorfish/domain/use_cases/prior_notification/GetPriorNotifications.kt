@@ -9,7 +9,10 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.Prior
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.sorters.PriorNotificationsSortColumn
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import fr.gouv.cnsp.monitorfish.domain.utils.PaginatedList
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Sort
+import kotlin.time.measureTimedValue
 
 @UseCase
 class GetPriorNotifications(
@@ -22,6 +25,8 @@ class GetPriorNotifications(
     private val speciesRepository: SpeciesRepository,
     private val vesselRepository: VesselRepository,
 ) {
+    private val logger: Logger = LoggerFactory.getLogger(GetPriorNotifications::class.java)
+
     fun execute(
         filter: PriorNotificationsFilter,
         seafrontGroup: SeafrontGroup,
@@ -31,64 +36,112 @@ class GetPriorNotifications(
         pageNumber: Int,
         pageSize: Int,
     ): PaginatedList<PriorNotification, PriorNotificationStats> {
-        val allGears = gearRepository.findAll()
-        val allPorts = portRepository.findAll()
-        val allRiskFactors = riskFactorRepository.findAll()
-        val allSpecies = speciesRepository.findAll()
-        val allVessels = vesselRepository.findAll()
+        val (allGears, gearRepositoryTimeTaken) = measureTimedValue {
+            gearRepository.findAll()
+        }
+        logger.info("TIME_RECORD - 'gearRepository.findAll()' took $gearRepositoryTimeTaken.")
 
-        val automaticPriorNotifications = logbookReportRepository.findAllPriorNotifications(filter)
-        val manualPriorNotifications = manualPriorNotificationRepository.findAll(filter)
+        val (allPorts, portRepositoryTimeTaken) = measureTimedValue {
+            portRepository.findAll()
+        }
+        logger.info("TIME_RECORD - 'portRepository.findAll()' took $portRepositoryTimeTaken.")
+
+        val (allRiskFactors, allRiskFactorsTimeTaken) = measureTimedValue {
+            riskFactorRepository.findAll()
+        }
+        logger.info("TIME_RECORD - 'riskFactorRepository.findAll()' took $allRiskFactorsTimeTaken.")
+
+        val (allSpecies, speciesRepositoryTimeTaken) = measureTimedValue {
+            speciesRepository.findAll()
+        }
+        logger.info("TIME_RECORD - 'speciesRepository.findAll()' took $speciesRepositoryTimeTaken.")
+
+        val (allVessels, vesselRepositoryTimeTaken) = measureTimedValue {
+            vesselRepository.findAll()
+        }
+        logger.info("TIME_RECORD - 'vesselRepository.findAll()' took $vesselRepositoryTimeTaken.")
+
+        val (automaticPriorNotifications, findAllPriorNotificationsTimeTaken) = measureTimedValue {
+            logbookReportRepository.findAllPriorNotifications(filter)
+        }
+        logger.info(
+            "TIME_RECORD - 'logbookReportRepository.findAllPriorNotifications()' took $findAllPriorNotificationsTimeTaken.",
+        )
+
+        val (manualPriorNotifications, manualPriorNotificationRepositoryFindAllTimeTaken) = measureTimedValue {
+            manualPriorNotificationRepository.findAll(filter)
+        }
+        logger.info(
+            "TIME_RECORD - 'manualPriorNotificationRepository.findAll()' took $manualPriorNotificationRepositoryFindAllTimeTaken.",
+        )
+
         val incompletePriorNotifications = automaticPriorNotifications + manualPriorNotifications
 
         val undeletedPriorNotifications = incompletePriorNotifications
             .filter { !it.logbookMessageAndValue.logbookMessage.isDeleted }
 
-        val priorNotifications = undeletedPriorNotifications
-            .map { priorNotification ->
-                priorNotification.enrich(allPorts, allRiskFactors, allVessels, priorNotification.isManuallyCreated)
-                priorNotification.logbookMessageAndValue.logbookMessage
-                    .enrichGearPortAndSpecyNames(allGears, allPorts, allSpecies)
+        val (priorNotifications, enrichedPriorNotificationsTimeTaken) = measureTimedValue {
+            undeletedPriorNotifications
+                .map { priorNotification ->
+                    priorNotification.enrich(allPorts, allRiskFactors, allVessels, priorNotification.isManuallyCreated)
+                    priorNotification.logbookMessageAndValue.logbookMessage
+                        .enrichGearPortAndSpecyNames(allGears, allPorts, allSpecies)
 
-                priorNotification
-            }
-
-        val sortedAndFilteredPriorNotifications = when (sortDirection) {
-            Sort.Direction.ASC -> priorNotifications.sortedWith(
-                compareBy(
-                    { getSortKey(it, sortColumn) },
-                    { it.logbookMessageAndValue.logbookMessage.id }, // Tie-breaker
-                ),
-            )
-
-            Sort.Direction.DESC -> priorNotifications.sortedWith(
-                // Only solution found to fix typing issues
-                compareByDescending<PriorNotification> { getSortKey(it, sortColumn) }
-                    .thenByDescending { it.logbookMessageAndValue.logbookMessage.id }, // Tie-breaker
-            )
-        }.filter { seafrontGroup.hasSeafront(it.seafront) && (states.isNullOrEmpty() || states.contains(it.state)) }
-
-        val extraData = PriorNotificationStats(
-            perSeafrontGroupCount = SeafrontGroup.entries.associateWith { seafrontGroupEntry ->
-                priorNotifications.count { priorNotification ->
-                    seafrontGroupEntry.hasSeafront(priorNotification.seafront)
+                    priorNotification
                 }
-            },
+        }
+        logger.info("TIME_RECORD - 'priorNotifications' took $enrichedPriorNotificationsTimeTaken.")
+
+        val (sortedAndFilteredPriorNotifications, sortedAndFilteredPriorNotificationsTimeTaken) = measureTimedValue {
+            when (sortDirection) {
+                Sort.Direction.ASC -> priorNotifications.sortedWith(
+                    compareBy(
+                        { getSortKey(it, sortColumn) },
+                        { it.logbookMessageAndValue.logbookMessage.id }, // Tie-breaker
+                    ),
+                )
+
+                Sort.Direction.DESC -> priorNotifications.sortedWith(
+                    // Only solution found to fix typing issues
+                    compareByDescending<PriorNotification> { getSortKey(it, sortColumn) }
+                        .thenByDescending { it.logbookMessageAndValue.logbookMessage.id }, // Tie-breaker
+                )
+            }.filter { seafrontGroup.hasSeafront(it.seafront) && (states.isNullOrEmpty() || states.contains(it.state)) }
+        }
+        logger.info(
+            "TIME_RECORD - 'sortedAndFilteredPriorNotifications' took $sortedAndFilteredPriorNotificationsTimeTaken.",
         )
 
-        val paginatedList = PaginatedList.new(
-            sortedAndFilteredPriorNotifications,
-            pageNumber,
-            pageSize,
-            extraData,
-        )
+        val (extraData, extraDataTimeTaken) = measureTimedValue {
+            PriorNotificationStats(
+                perSeafrontGroupCount = SeafrontGroup.entries.associateWith { seafrontGroupEntry ->
+                    priorNotifications.count { priorNotification ->
+                        seafrontGroupEntry.hasSeafront(priorNotification.seafront)
+                    }
+                },
+            )
+        }
+        logger.info("TIME_RECORD - 'extraData' took $extraDataTimeTaken.")
+
+        val (paginatedList, paginatedListTimeTaken) = measureTimedValue {
+            PaginatedList.new(
+                sortedAndFilteredPriorNotifications,
+                pageNumber,
+                pageSize,
+                extraData,
+            )
+        }
+        logger.info("TIME_RECORD - 'paginatedList' took $paginatedListTimeTaken.")
 
         // Enrich the reporting count for each prior notification after pagination to limit the number of queries
-        val enrichedPaginatedList = paginatedList.apply {
-            data.forEach {
-                it.enrichReportingCount(reportingRepository)
+        val (enrichedPaginatedList, enrichedPaginatedListTimeTaken) = measureTimedValue {
+            paginatedList.apply {
+                data.forEach {
+                    it.enrichReportingCount(reportingRepository)
+                }
             }
         }
+        logger.info("TIME_RECORD - 'enrichedPaginatedList' took $enrichedPaginatedListTimeTaken.")
 
         return enrichedPaginatedList
     }

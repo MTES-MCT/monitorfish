@@ -338,7 +338,7 @@ def test_flow(mock_move, reset_test_data):
     assert (~initial_logbook_reports.is_test_message).sum() == 46
     assert initial_logbook_reports.is_test_message.sum() == 0
 
-    assert (~final_logbook_reports.is_test_message).sum() == 65
+    assert (~final_logbook_reports.is_test_message).sum() == 66
     assert final_logbook_reports.is_test_message.sum() == 1
     assert (
         final_logbook_reports.loc[

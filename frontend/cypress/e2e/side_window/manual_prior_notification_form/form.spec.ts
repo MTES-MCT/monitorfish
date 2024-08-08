@@ -1,8 +1,8 @@
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
-import { customDayjs } from '@mtes-mct/monitor-ui'
 import { omit } from 'lodash'
 
 import { addSideWindowPriorNotification, editSideWindowPriorNotification } from './utils'
+import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 import { isDateCloseTo } from '../../utils/isDateCloseTo'
 import { openSideWindowPriorNotificationList } from '../prior_notification_list/utils'

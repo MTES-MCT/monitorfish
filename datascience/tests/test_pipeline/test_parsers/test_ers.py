@@ -22,6 +22,7 @@ def test_cor_parser():
     metadata, data_list = parse_file(test_file)
 
     expected_metadata = {
+        "is_test_message": False,
         "software": "TurboCatch (3.5-5)",
         "operation_number": "OOE20200402018600",
         "operation_country": "OOE",
@@ -58,6 +59,7 @@ def test_cox_parser():
     metadata, data_list = parse_file(test_file)
 
     expected_metadata = {
+        "is_test_message": True,
         "software": "TurboCatch (3.5-5)",
         "operation_number": "OOE20200323034701",
         "operation_country": "OOE",
@@ -343,6 +345,7 @@ def test_del_parser():
     metadata, data_list = parse_file(test_file)
 
     expected_metadata = {
+        "is_test_message": False,
         "software": "IKTUS 4.5.8",
         "operation_number": "OOF20200321016003",
         "operation_country": "OOF",
@@ -360,6 +363,7 @@ def test_ret_parser():
     metadata, data_list = parse_file(test_file)
 
     expected_metadata = {
+        "is_test_message": False,
         "operation_number": "FRA20200321502645",
         "operation_country": "FRA",
         "operation_datetime_utc": datetime.datetime(2020, 3, 21, 22, 14),
@@ -376,6 +380,7 @@ def test_multi_line_message():
     test_file = "FAC20211018001928.xml"
     metadata, data_list = parse_file(test_file)
     expected_metadata = {
+        "is_test_message": False,
         "operation_number": "FAC20211018001928",
         "operation_country": "FAC",
         "operation_datetime_utc": datetime.datetime(2021, 10, 18, 15, 31),

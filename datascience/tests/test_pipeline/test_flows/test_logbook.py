@@ -15,6 +15,7 @@ from src.pipeline.flows.logbook import (
     get_logbook_zipped_file_type,
     parse_xmls,
 )
+from src.read_query import read_query
 from tests.mocks import mock_check_flow_not_running
 
 ZIPFILES_TEST_DATA_LOCATION = TEST_DATA_LOCATION / "logbook/zipfiles/"
@@ -45,7 +46,6 @@ def test_get_logbook_zipped_file_type():
 
 @patch("src.pipeline.flows.logbook.move")
 def test_extract_zipfiles_does_not_return_more_than_two_hundred_files(mock_move):
-
     TEST_DIRECTORY = (
         ZIPFILES_TEST_DATA_LOCATION / "test_extract_zipfiles/many_zipfiles/"
     )
@@ -69,7 +69,6 @@ def test_extract_zipfiles_does_not_return_more_than_two_hundred_files(mock_move)
 
 @patch("src.pipeline.flows.logbook.move")
 def test_extract_zipfiles_handles_flux_ers3_and_unexpected_files(mock_move):
-
     TEST_DIRECTORY = (
         ZIPFILES_TEST_DATA_LOCATION / "test_extract_zipfiles/sample_zipfiles/"
     )
@@ -167,7 +166,6 @@ def test_extract_xmls_from_un_zipfile():
 
 
 def test_parse_xmls_parses_ers3_files():
-
     xml_messages = []
     with open(XML_FILES_TEST_DATA_LOCATION / "ers/OOE20200324042000.xml") as f:
         xml_messages.append(f.read())
@@ -206,7 +204,6 @@ def test_parse_xmls_parses_ers3_files():
 
 
 def test_parse_xmls_parses_flux_files():
-
     xml_messages = []
     with open(
         (
@@ -326,10 +323,25 @@ def test_flow(mock_move, reset_test_data):
     treated_directory = ZIPFILES_TEST_DATA_LOCATION / "test_flow/treated"
     error_directory = ZIPFILES_TEST_DATA_LOCATION / "test_flow/error"
 
+    query = "SELECT * FROM logbook_reports"
+    initial_logbook_reports = read_query(query, db="monitorfish_remote")
+
     flow.schedule = None
     state = flow.run(
         received_directory=received_directory,
         treated_directory=treated_directory,
         error_directory=error_directory,
     )
+
     assert state.is_successful()
+    final_logbook_reports = read_query(query, db="monitorfish_remote")
+    assert (~initial_logbook_reports.is_test_message).sum() == 46
+    assert initial_logbook_reports.is_test_message.sum() == 0
+
+    assert (~final_logbook_reports.is_test_message).sum() == 66
+    assert final_logbook_reports.is_test_message.sum() == 1
+    assert (
+        final_logbook_reports.loc[
+            final_logbook_reports.is_test_message, "operation_number"
+        ].values[0]
+    ) == "FRA20200321502645"

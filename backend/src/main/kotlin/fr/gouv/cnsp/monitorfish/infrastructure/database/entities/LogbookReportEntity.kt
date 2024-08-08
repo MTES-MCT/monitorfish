@@ -73,7 +73,10 @@ data class LogbookReportEntity(
     @Type(JsonBinaryType::class)
     @Column(name = "trip_segments", nullable = true, columnDefinition = "jsonb")
     val tripSegments: String?,
-) {
+    @Column(name = "is_test_message")
+    val isTestMessage: Boolean = false,
+
+    ) {
     companion object {
         fun fromLogbookMessage(
             mapper: ObjectMapper,

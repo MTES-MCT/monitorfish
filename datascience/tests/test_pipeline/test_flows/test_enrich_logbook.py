@@ -1090,7 +1090,7 @@ def test_load_then_reset_logbook(
         )
 
 
-def test_flow_abracadabra(reset_test_data):
+def test_flow(reset_test_data):
     query = (
         "SELECT id, enriched, trip_gears, value->'pnoTypes' AS pno_types, (value->>'riskFactor')::DOUBLE PRECISION AS risk_factor, trip_segments "
         "FROM logbook_reports "

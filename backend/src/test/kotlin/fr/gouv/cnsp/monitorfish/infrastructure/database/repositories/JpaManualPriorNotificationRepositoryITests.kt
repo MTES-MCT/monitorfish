@@ -477,6 +477,8 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
                     LogbookMessage(
                         id = null,
                         internalReferenceNumber = "CFR123",
+                        ircs = "123",
+                        externalReferenceNumber = "456",
                         // Replaced by the generated `createdAt` during the save operation.
                         integrationDateTime = ZonedDateTime.now(),
                         message = PNO().apply {
@@ -537,6 +539,9 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
             .isEqualTo(createdPriorNotification.logbookMessageAndValue.logbookMessage)
         assertThat(createdPriorNotification.logbookMessageAndValue.value.riskFactor)
             .isEqualTo(2.1)
+        assertThat(createdPriorNotification.logbookMessageAndValue.logbookMessage.ircs).isEqualTo(
+            newPriorNotification.logbookMessageAndValue.logbookMessage.ircs,
+        )
     }
 
     @Test

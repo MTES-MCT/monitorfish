@@ -1,0 +1,50 @@
+{
+  "realm": "monitor",
+  "enabled": true,
+  "clients": [
+    {
+      "clientId": "monitorfish",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "redirectUris": [
+        "http://localhost:3000/*"
+      ],
+      "webOrigins": [
+        "http://localhost:3000"
+      ],
+      "publicClient": true
+    }
+  ],
+  "users": [
+    {
+      "username": "user",
+      "email": "another@email.com",
+      "firstName": "User",
+      "lastName": "Fish",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "fish",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "superuser",
+      "email": "dummy@email.gouv.fr",
+      "firstName": "SuperUser",
+      "lastName": "Fish",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "fish",
+          "temporary": false
+        }
+      ]
+    }
+  ]
+}

@@ -35,7 +35,7 @@ class FleetSegmentController(
         }
     }
 
-    @PutMapping(value = [""], consumes = ["application/json"])
+    @PutMapping(value = ["/backoffice"], consumes = ["application/json"])
     @Operation(summary = "Update a fleet segment")
     fun updateFleetSegment(
         @Parameter(description = "Year")
@@ -56,7 +56,7 @@ class FleetSegmentController(
         return FleetSegmentDataOutput.fromFleetSegment(updatedFleetSegment)
     }
 
-    @DeleteMapping(value = [""])
+    @DeleteMapping(value = ["/backoffice"])
     @Operation(summary = "Delete a fleet segment")
     fun deleteFleetSegment(
         @Parameter(description = "Year")
@@ -72,7 +72,7 @@ class FleetSegmentController(
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(value = [""])
+    @PostMapping(value = ["/backoffice"])
     @Operation(summary = "Create a fleet segment")
     fun createFleetSegment(
         @RequestBody
@@ -83,7 +83,7 @@ class FleetSegmentController(
         return FleetSegmentDataOutput.fromFleetSegment(createdFleetSegment)
     }
 
-    @GetMapping("/years")
+    @GetMapping("/backoffice/years")
     @Operation(summary = "Get fleet segment year entries")
     fun getFleetSegmentYearEntries(): List<Int> {
         return getFleetSegmentYearEntries.execute()

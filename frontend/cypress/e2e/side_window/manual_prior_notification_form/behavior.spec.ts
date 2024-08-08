@@ -1,7 +1,7 @@
 import { ALL_SEAFRONT_GROUP } from '@constants/seafront'
-import { customDayjs } from '@mtes-mct/monitor-ui'
 
 import { addSideWindowPriorNotification, editSideWindowPriorNotification } from './utils'
+import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 
 context('Side Window > Manual Prior Notification Form > Behavior', () => {

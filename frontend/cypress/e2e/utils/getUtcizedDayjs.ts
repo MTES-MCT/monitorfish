@@ -12,7 +12,7 @@ import type { Dayjs } from 'dayjs'
  * ```
  */
 export function getUtcizedDayjs(localDate?: Date): Dayjs {
-  const definedLocalDate = localDate || new Date()
+  const definedLocalDate = localDate ?? new Date()
 
   // The number of minutes returned by getTimezoneOffset() is positive if the local time zone is behind UTC,
   // and negative if the local time zone is ahead of UTC. For example, for UTC+10, `-600` will be returned.

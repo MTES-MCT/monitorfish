@@ -324,6 +324,7 @@ def test_flow(mock_move, reset_test_data):
     error_directory = ZIPFILES_TEST_DATA_LOCATION / "test_flow/error"
 
     query = "SELECT * FROM logbook_reports"
+    initial_logbook_reports = read_query(query, db="monitorfish_remote")
 
     flow.schedule = None
     state = flow.run(
@@ -334,8 +335,11 @@ def test_flow(mock_move, reset_test_data):
 
     assert state.is_successful()
     final_logbook_reports = read_query(query, db="monitorfish_remote")
-    assert final_logbook_reports.is_test_message.sum() == 1
+    assert (~initial_logbook_reports.is_test_message).sum() == 46
+    assert initial_logbook_reports.is_test_message.sum() == 0
+
     assert (~final_logbook_reports.is_test_message).sum() == 65
+    assert final_logbook_reports.is_test_message.sum() == 1
     assert (
         final_logbook_reports.loc[
             final_logbook_reports.is_test_message, "operation_number"

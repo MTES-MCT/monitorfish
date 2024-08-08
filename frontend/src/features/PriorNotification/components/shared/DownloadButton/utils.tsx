@@ -81,3 +81,13 @@ export function getHtmlContent(
 function fillTemplate(html: string, data: TemplateData): string {
   return html.replace(/{(.*?)}/g, (_, key) => (data[key] !== null && data[key] !== undefined ? String(data[key]) : ''))
 }
+
+// FK = Port-aux-Français
+const DISTRICT_LOCODE_WITH_LANDING_REQUESTED = 'FK'
+
+export function getHasAuthorizedLandingDownload(
+  flagState: string | undefined,
+  externalReferenceNumber: string | null | undefined
+) {
+  return flagState !== 'FR' || externalReferenceNumber?.includes(DISTRICT_LOCODE_WITH_LANDING_REQUESTED)
+}

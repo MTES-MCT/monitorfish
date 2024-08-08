@@ -7,7 +7,7 @@ import printJS from 'print-js'
 import { useMemo } from 'react'
 
 import { HTML_STYLE } from './template'
-import { getHtmlContent } from './utils'
+import { getHasAuthorizedLandingDownload, getHtmlContent } from './utils'
 import { useIsSuperUser } from '../../../../../auth/hooks/useIsSuperUser'
 
 import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
@@ -23,7 +23,12 @@ export function DownloadButton({ isDisabled = false, pnoLogbookMessage, reportId
   const { isError } = useGetPriorNotificationPDFQuery(reportId, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS)
   const isPriorNotificationPDFDocumentAvailable = useMemo(() => !isError, [isError])
   const hasAuthorizedLandingDownload =
-    isSuperUser && getAlpha2CodeFromAlpha2or3Code(pnoLogbookMessage.flagState) !== 'FR'
+    isSuperUser &&
+    getHasAuthorizedLandingDownload(
+      getAlpha2CodeFromAlpha2or3Code(pnoLogbookMessage.flagState),
+      pnoLogbookMessage.externalReferenceNumber
+    ) &&
+    pnoLogbookMessage.isManuallyCreated
   const pdfUrl = `/api/v1/prior_notifications/pdf/${reportId}`
 
   const gearsWithName = useMemo(() => {

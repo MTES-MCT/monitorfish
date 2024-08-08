@@ -3,7 +3,7 @@ import { fleetSegmentApi } from '@features/FleetSegment/apis'
 import type { FleetSegment } from '@features/FleetSegment/types'
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 
-export const getFleetSegments =
+export const computeFleetSegments =
   (
     faoAreas: string[] | undefined,
     gearOnBoard: MissionActionFormValues['gearOnboard'],

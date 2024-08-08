@@ -20,7 +20,7 @@ init-local-sig:
 	./infra/local/postgis_insert_layers.sh && ./infra/init/geoserver_init_layers.sh
 
 run-back: run-stubbed-apis
-	docker compose up -d --quiet-pull --wait db
+	docker compose up -d --quiet-pull --wait db keycloak
 	cd backend && ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
 
 run-back-with-monitorenv: run-monitorenv

@@ -22,7 +22,6 @@ def extract_facade_areas() -> pd.DataFrame:
 
 @task(checkpoint=False)
 def load_facade_areas(facade_areas: pd.DataFrame):
-
     logger = prefect.context.get("logger")
 
     load(
@@ -32,6 +31,7 @@ def load_facade_areas(facade_areas: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=logger,
         how="replace",
+        replace_with_truncate=True,
     )
 
 

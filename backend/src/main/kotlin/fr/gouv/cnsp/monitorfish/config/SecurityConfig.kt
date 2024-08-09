@@ -52,6 +52,7 @@ class SecurityConfig(
                         "/index.html",
                         "/*.js",
                         "/*.png",
+                        "/*.jpg",
                         "/*.svg",
                         "/static/**",
                         "/assets/**",

@@ -8,7 +8,7 @@ dayjs.extend(utc)
 const currentYear = dayjs().utc().year()
 context('Fleet segments', () => {
   beforeEach(() => {
-    cy.intercept('GET', `/bff/v1/fleet_segments/backoffice/${currentYear}`).as('fleetSegments')
+    cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear}`).as('fleetSegments')
     cy.visit('/backoffice/fleet_segments')
     cy.wait('@fleetSegments')
     cy.wait(1000)

@@ -58,10 +58,14 @@ export function Form({ detail, initialFormValues }: FormProps) {
           <FormikEffect onChange={!isInvalidated ? (updateNote as any) : noop} />
 
           <FieldGroup>
-            <FormikTextarea label="Points d'attention identifiés par le CNSP" name="note" readOnly={isInvalidated} />
+            <FormikTextarea
+              label="Points d'attention identifiés par le CNSP"
+              name="note"
+              readOnly={!isSuperUser || isInvalidated}
+            />
           </FieldGroup>
 
-          <AuthorTrigramInput label="Par" name="authorTrigram" readOnly={isInvalidated} />
+          {isSuperUser && <AuthorTrigramInput label="Par" name="authorTrigram" readOnly={isInvalidated} />}
         </>
       </Formik>
 

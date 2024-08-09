@@ -35,7 +35,6 @@ import { useGetPriorNotificationsQuery, useGetPriorNotificationsToVerifyQuery } 
 import { priorNotificationActions } from '../../slice'
 import { LogbookPriorNotificationForm } from '../LogbookPriorNotificationForm'
 import { ManualPriorNotificationForm } from '../ManualPriorNotificationForm'
-import { PriorNotificationCard } from '../PriorNotificationCard'
 
 import type { AllSeafrontGroup, NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 
@@ -238,12 +237,6 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
         </Body>
       </Page>
 
-      {openedPriorNotificationComponentType === OpenedPriorNotificationType.Card && (
-        <PriorNotificationCard
-          key={openedPriorNotificationDetail?.fingerprint}
-          detail={openedPriorNotificationDetail}
-        />
-      )}
       {openedPriorNotificationComponentType === OpenedPriorNotificationType.LogbookForm && (
         <LogbookPriorNotificationForm key={openedPriorNotificationDetail?.fingerprint} />
       )}

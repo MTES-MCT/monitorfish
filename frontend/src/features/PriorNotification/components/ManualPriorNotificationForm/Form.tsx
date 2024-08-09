@@ -1,4 +1,5 @@
 import { BOOLEAN_AS_OPTIONS } from '@constants/index'
+import { getHasAuthorizedLandingDownload } from '@features/PriorNotification/components/shared/DownloadButton/utils'
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { useFormikDirtyOnceEffect } from '@hooks/useFormikDirtyOnceEffect'
@@ -40,7 +41,7 @@ export function Form({ isInvalidated }: FormProps) {
   const isThirdPartyVessel = useRef<boolean>(false)
 
   const onChange = (nextVessel: VesselIdentity | undefined) => {
-    if (nextVessel?.flagState !== 'FR') {
+    if (getHasAuthorizedLandingDownload(nextVessel?.flagState, nextVessel?.externalReferenceNumber)) {
       isThirdPartyVessel.current = true
 
       return

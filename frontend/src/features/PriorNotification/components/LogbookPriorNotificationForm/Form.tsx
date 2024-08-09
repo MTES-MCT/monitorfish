@@ -7,7 +7,7 @@ import { Accent, Button, FormikEffect, FormikTextarea, FormikTextInput, Icon } f
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import { Formik } from 'formik'
-import { noop } from 'lodash'
+import { noop, isEqual } from 'lodash'
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
@@ -35,15 +35,19 @@ export function Form({ detail, initialFormValues }: FormProps) {
     dispatch(invalidatePriorNotification(priorNotificationIdentifier, false))
   }
 
-  const updateNoteCallback = useCallback(
+  const updateFormCallback = useCallback(
     async (nextValues: PriorNotification.LogbookFormData) => {
+      if (isEqual(nextValues, initialFormValues)) {
+        return
+      }
+
       await dispatch(updateLogbookPriorNotification(priorNotificationIdentifier, nextValues))
     },
-    [dispatch, priorNotificationIdentifier]
+    [dispatch, priorNotificationIdentifier, initialFormValues]
   )
 
   const updateNote = useDebouncedCallback(
-    (nextValues: PriorNotification.LogbookFormData) => updateNoteCallback(nextValues),
+    (nextValues: PriorNotification.LogbookFormData) => updateFormCallback(nextValues),
     HALF_A_SECOND
   )
 

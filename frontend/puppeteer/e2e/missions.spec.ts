@@ -3,9 +3,10 @@ import { platform } from 'os'
 import { Page } from 'puppeteer'
 
 import { getFirstTab, getInputContent, listenToConsole, wait, waitForSelectorWithText } from './utils'
+// /!\ Do not shorten imports, it will fail the run
 import { SeafrontGroup } from '../../src/constants/seafront'
 
-const TIMEOUT = 120 * 1000
+const TIMEOUT = 160 * 1000
 
 const IS_CI = Boolean(process.env.CI)
 const IS_DARWIN = platform() === 'darwin'

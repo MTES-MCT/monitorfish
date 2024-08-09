@@ -304,7 +304,6 @@ def extract_circabc_ports():
 
 @task(checkpoint=False)
 def merge_circabc_unece(circabc_ports, unece_ports):
-
     keep_unece_cols = ["region", "locode", "latitude", "longitude"]
 
     ports = pd.merge(
@@ -607,7 +606,6 @@ def flag_active_ports(ports: pd.DataFrame, active_ports_locodes: set) -> pd.Data
 
 @task(checkpoint=False)
 def geocode_ports(ports):
-
     country_codes_to_geocode = [
         "FR",
         "MQ",
@@ -874,15 +872,14 @@ def load_ports(ports):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
         pg_array_columns=["fao_areas"],
     )
 
 
 with Flow("Ports", executor=LocalDaskExecutor()) as flow:
-
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
-
         # Parameters
         dataset_id = Parameter("dataset_id", default=PORTS_DATASET_ID)
         ports_resource_id = Parameter(

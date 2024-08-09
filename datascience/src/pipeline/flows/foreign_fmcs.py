@@ -66,15 +66,14 @@ def load_foreign_fmcs(foreign_fmcs):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
         pg_array_columns=["email_addresses"],
     )
 
 
 with Flow("Foreign FMCs", executor=LocalDaskExecutor()) as flow:
-
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
-
         foreign_fmcs_contacts = extract_foreign_fmcs_contacts()
         foreign_fmcs = transform_foreign_fmcs_contacts(foreign_fmcs_contacts)
         load_foreign_fmcs(foreign_fmcs)

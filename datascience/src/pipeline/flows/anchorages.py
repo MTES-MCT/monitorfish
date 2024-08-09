@@ -317,7 +317,6 @@ def get_ports_locations(ports: pd.DataFrame) -> List[PortLocation]:
 def get_anchorages_closest_port(
     anchorage_h3_cells_rings: pd.DataFrame, ports_locations: List[PortLocation]
 ) -> pd.DataFrame:
-
     ports_vptree = PortsVPTree(ports_locations)
 
     anchorages_closest_port = anchorage_h3_cells_rings.apply(
@@ -357,7 +356,6 @@ def unite_ports_locodes(
 def get_active_ports(
     ports: pd.DataFrame, active_ports_locodes: Set[str]
 ) -> pd.DataFrame:
-
     active_ports = ports[ports.locode.isin(active_ports_locodes)].copy(deep=True)
     return active_ports
 
@@ -405,7 +403,6 @@ def load_processed_anchorages(anchorages: pd.DataFrame):
 
 
 with Flow("Anchorages") as flow_compute_anchorages:
-
     h3_resolution = Parameter("h3_resolution", ANCHORAGES_H3_CELL_RESOLUTION)
     number_signals_threshold = Parameter("number_signals_threshold", 100)
     static_vms_positions_file_relative_path = Parameter(
@@ -519,6 +516,7 @@ def load_anchorages_to_monitorfish(anchorages: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 

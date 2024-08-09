@@ -39,6 +39,7 @@ def load_analytics_control_units_and_administrations(
             connection=connection,
             logger=logger,
             how="replace",
+            replace_with_truncate=True,
         )
 
         load(
@@ -48,6 +49,7 @@ def load_analytics_control_units_and_administrations(
             connection=connection,
             logger=logger,
             how="replace",
+            replace_with_truncate=True,
         )
 
 

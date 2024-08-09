@@ -7,10 +7,12 @@ import { assertNotNullish } from '@utils/assertNotNullish'
 
 import { Footer } from './Footer'
 import { Form } from './Form'
+import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { PriorNotificationCard } from '../PriorNotificationCard'
 
 export function LogbookPriorNotificationForm() {
   const dispatch = useMainAppDispatch()
+  const isSuperUser = useIsSuperUser()
   const displayedError = useMainAppSelector(
     state => state.displayedError[DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR]
   )
@@ -45,7 +47,9 @@ export function LogbookPriorNotificationForm() {
         <Form detail={openedPriorNotificationDetail} initialFormValues={editedLogbookPriorNotificationFormValues} />
       }
       detail={openedPriorNotificationDetail}
-      footerChildren={<Footer detail={openedPriorNotificationDetail} onVerifyAndSend={verifyAndSend} />}
+      footerChildren={
+        isSuperUser ? <Footer detail={openedPriorNotificationDetail} onVerifyAndSend={verifyAndSend} /> : null
+      }
     />
   )
 }

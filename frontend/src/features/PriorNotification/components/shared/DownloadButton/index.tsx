@@ -14,10 +14,16 @@ import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 
 type DownloadButtonProps = Readonly<{
   isDisabled?: boolean
+  isManuallyCreated: boolean
   pnoLogbookMessage: LogbookMessage.PnoLogbookMessage
   reportId: string
 }>
-export function DownloadButton({ isDisabled = false, pnoLogbookMessage, reportId }: DownloadButtonProps) {
+export function DownloadButton({
+  isDisabled = false,
+  isManuallyCreated,
+  pnoLogbookMessage,
+  reportId
+}: DownloadButtonProps) {
   const isSuperUser = useIsSuperUser()
   const getGearsApiQuery = useGetGearsQuery()
   const { isError } = useGetPriorNotificationPDFQuery(reportId, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS)
@@ -28,7 +34,7 @@ export function DownloadButton({ isDisabled = false, pnoLogbookMessage, reportId
       getAlpha2CodeFromAlpha2or3Code(pnoLogbookMessage.flagState),
       pnoLogbookMessage.externalReferenceNumber
     ) &&
-    pnoLogbookMessage.isManuallyCreated
+    isManuallyCreated
   const pdfUrl = `/api/v1/prior_notifications/pdf/${reportId}`
 
   const gearsWithName = useMemo(() => {

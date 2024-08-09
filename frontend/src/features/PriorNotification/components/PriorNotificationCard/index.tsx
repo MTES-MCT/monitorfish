@@ -123,7 +123,11 @@ export function PriorNotificationCard({
             Fermer
           </Button>
 
-          <DownloadButton pnoLogbookMessage={detail.logbookMessage} reportId={detail.reportId} />
+          <DownloadButton
+            isManuallyCreated={detail.isManuallyCreated}
+            pnoLogbookMessage={detail.logbookMessage}
+            reportId={detail.reportId}
+          />
 
           {footerChildren}
         </Footer>

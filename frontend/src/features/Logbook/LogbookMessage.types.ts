@@ -15,7 +15,6 @@ export namespace LogbookMessage {
     ircs: string | undefined
     isCorrectedByNewerMessage: boolean
     isDeleted: boolean
-    isManuallyCreated: boolean
     isSentByFailoverSoftware: boolean
     message: MessageBase | undefined
     messageType: MessageType

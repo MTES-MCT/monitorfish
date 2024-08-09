@@ -53,22 +53,29 @@ def get_table(
     return table
 
 
-def truncate(
+def delete(
     tables: List[sqlalchemy.Table],
     connection: sqlalchemy.engine.base.Connection,
     logger: logging.Logger,
+    truncate: bool = False,
 ):
-    """Truncate tables.
+    """Delete tables.
     Useful to wipe tables before re-inserting fresh data in ETL jobs."""
     for table in tables:
         count_statement = select(func.count()).select_from(table)
         n = connection.execute(count_statement).fetchall()[0][0]
         logger.info(f"Table {table.name} has {n} rows.")
 
-    tables_list = ", ".join([f'"{table.schema}"."{table.name}"' for table in tables])
-    logger.info(f"Truncating tables {tables_list}...")
-
-    connection.execute(text(f"TRUNCATE {tables_list}"))
+    if truncate:
+        tables_list = ", ".join(
+            [f'"{table.schema}"."{table.name}"' for table in tables]
+        )
+        logger.info(f"Truncating tables {tables_list}...")
+        connection.execute(text(f"TRUNCATE {tables_list}"))
+    else:
+        for table in tables:
+            logger.info(f"Deleting table {table.name}...")
+            connection.execute(table.delete())
 
 
 def delete_rows(

@@ -12,7 +12,7 @@ from src.db_config import create_engine
 from src.pipeline.generic_tasks import load
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.infrastructure import get_table
-from src.pipeline.utils import truncate
+from src.pipeline.utils import delete
 
 
 @task(checkpoint=False)
@@ -47,7 +47,7 @@ def load_pno_types_and_rules(
     e = create_engine("monitorfish_remote")
 
     with e.begin() as con:
-        truncate(
+        delete(
             tables=[pno_type_rules_table, pno_types_table],
             connection=con,
             logger=logger,

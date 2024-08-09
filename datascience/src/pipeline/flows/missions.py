@@ -10,7 +10,7 @@ from src.db_config import create_engine
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.infrastructure import get_table
-from src.pipeline.utils import truncate
+from src.pipeline.utils import delete
 
 
 @task(checkpoint=False)
@@ -113,7 +113,7 @@ def load_missions_and_missions_control_units(
     e = create_engine("monitorfish_remote")
 
     with e.begin() as connection:
-        truncate(
+        delete(
             tables=[analytics_missions_table, analytics_missions_control_units_table],
             connection=connection,
             logger=prefect.context.get("logger"),

@@ -90,7 +90,7 @@ class FleetSegmentController(
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/{year}")
+    @PostMapping("/backoffice/{year}")
     @Operation(summary = "Add a fleet segment year")
     fun addFleetSegmentYear(
         @PathParam("Year")

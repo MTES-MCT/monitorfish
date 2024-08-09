@@ -14,10 +14,6 @@ export function listenToConsole(page: Page, index: number) {
           return
         }
 
-        if (message.text().includes('Cannot log after tests are done')) {
-          return
-        }
-
         throw new Error(message.text())
       }
     })

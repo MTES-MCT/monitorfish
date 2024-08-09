@@ -53,7 +53,7 @@ async function updateFleetSegmentFromAPI(
 ): Promise<FleetSegment> {
   try {
     return await monitorfishApiKy
-      .put(`/bff/v1/fleet_segments?year=${year}&segment=${segment}`, {
+      .put(`/bff/v1/fleet_segments/backoffice?year=${year}&segment=${segment}`, {
         json: updatedFields
       })
       .json<FleetSegment>()
@@ -70,7 +70,7 @@ async function updateFleetSegmentFromAPI(
 async function deleteFleetSegmentFromAPI(segment: string, year: number): Promise<FleetSegment[]> {
   try {
     return await monitorfishApiKy
-      .delete(`/bff/v1/fleet_segments?year=${year}&segment=${segment}`)
+      .delete(`/bff/v1/fleet_segments/backoffice?year=${year}&segment=${segment}`)
       .json<FleetSegment[]>()
   } catch (err) {
     throw new ApiError(DELETE_FLEET_SEGMENT_ERROR_MESSAGE, err)
@@ -85,7 +85,7 @@ async function deleteFleetSegmentFromAPI(segment: string, year: number): Promise
 async function createFleetSegmentFromAPI(segmentFields: UpdateFleetSegment): Promise<FleetSegment> {
   try {
     return await monitorfishApiKy
-      .post('/bff/v1/fleet_segments', {
+      .post('/bff/v1/fleet_segments/backoffice', {
         json: segmentFields
       })
       .json<FleetSegment>()
@@ -101,7 +101,7 @@ async function createFleetSegmentFromAPI(segmentFields: UpdateFleetSegment): Pro
  */
 async function addFleetSegmentYearFromAPI(nextYear: number) {
   try {
-    return await monitorfishApiKy.post(`/bff/v1/fleet_segments/${nextYear}`)
+    return await monitorfishApiKy.post(`/bff/v1/fleet_segments/${nextYear}/backoffice`)
   } catch (err) {
     throw new ApiError(ADD_FLEET_SEGMENT_YEAR_ERROR_MESSAGE, err)
   }
@@ -114,7 +114,7 @@ async function addFleetSegmentYearFromAPI(nextYear: number) {
  */
 async function getFleetSegmentYearEntriesFromAPI(): Promise<number[]> {
   try {
-    return await monitorfishApiKy.get('/bff/v1/fleet_segments/years').json<number[]>()
+    return await monitorfishApiKy.get('/bff/v1/fleet_segments/backoffice/years').json<number[]>()
   } catch (err) {
     throw new ApiError(GET_FLEET_SEGMENT_YEAR_ENTRIES_ERROR_MESSAGE, err)
   }

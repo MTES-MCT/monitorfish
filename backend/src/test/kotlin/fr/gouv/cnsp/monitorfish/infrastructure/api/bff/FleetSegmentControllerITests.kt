@@ -92,7 +92,7 @@ class FleetSegmentControllerITests {
 
         // When
         api.perform(
-            put("/bff/v1/fleet_segments?year=2021&segment=A_SEGMENT/WITH/SLASH")
+            put("/bff/v1/fleet_segments/backoffice?year=2021&segment=A_SEGMENT/WITH/SLASH")
                 .content(
                     objectMapper.writeValueAsString(CreateOrUpdateFleetSegmentDataInput(gears = listOf("OTB", "OTC"))),
                 )
@@ -113,7 +113,7 @@ class FleetSegmentControllerITests {
     @Test
     fun `Should return Ok When a delete of a fleet segment is done`() {
         // When
-        api.perform(delete("/bff/v1/fleet_segments?year=2021&segment=A_SEGMENT/WITH/SLASH"))
+        api.perform(delete("/bff/v1/fleet_segments/backoffice?year=2021&segment=A_SEGMENT/WITH/SLASH"))
             // Then
             .andExpect(status().isOk)
     }
@@ -121,7 +121,7 @@ class FleetSegmentControllerITests {
     @Test
     fun `Should return Ok When a new year is created`() {
         // When
-        api.perform(post("/bff/v1/fleet_segments/2023"))
+        api.perform(post("/bff/v1/fleet_segments/backoffice/2023"))
             // Then
             .andExpect(status().isCreated)
     }
@@ -136,7 +136,7 @@ class FleetSegmentControllerITests {
 
         // When
         api.perform(
-            post("/bff/v1/fleet_segments")
+            post("/bff/v1/fleet_segments/backoffice")
                 .content(
                     objectMapper.writeValueAsString(
                         CreateOrUpdateFleetSegmentDataInput(
@@ -164,7 +164,7 @@ class FleetSegmentControllerITests {
 
         // When
         api.perform(
-            post("/bff/v1/fleet_segments")
+            post("/bff/v1/fleet_segments/backoffice")
                 .content(
                     objectMapper.writeValueAsString(
                         CreateOrUpdateFleetSegmentDataInput(segment = "SEGMENT", gears = listOf("OTB", "OTC")),

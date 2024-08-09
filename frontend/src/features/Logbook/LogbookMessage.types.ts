@@ -78,6 +78,7 @@ export namespace LogbookMessage {
 
   interface MessageBase {}
   export interface PnoMessage extends MessageBase {
+    authorTrigram: string | undefined
     catchOnboard: Catch[] | undefined
     catchToLand: Catch[] | undefined
     economicZone: string | undefined

@@ -25,6 +25,7 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
       isManuallyCreated: true,
       isSentByFailoverSoftware: false,
       message: {
+        authorTrigram: undefined,
         catchOnboard: [
           {
             conversionFactor: undefined,

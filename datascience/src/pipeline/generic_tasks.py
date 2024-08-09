@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-from typing import List, Union
+from typing import List, Optional, Union
 
 import geopandas as gpd
 import pandas as pd
@@ -19,12 +19,12 @@ from src.read_query import read_query, read_saved_query
 def extract(
     db_name: str,
     query_filepath: Union[Path, str],
-    dtypes: Union[None, dict] = None,
-    parse_dates: Union[list, dict, None] = None,
+    dtypes: Optional[dict] = None,
+    parse_dates: Optional[Union[list, dict]] = None,
     params=None,
     backend: str = "pandas",
     geom_col: str = "geom",
-    crs: Union[int, None] = None,
+    crs: Optional[int] = None,
 ) -> Union[pd.DataFrame, gpd.GeoDataFrame]:
     """Run SQL query against the indicated database and return the result as a
     `pandas.DataFrame`.
@@ -56,7 +56,7 @@ def extract(
         geom_col (str, optional): column name to convert to shapely geometries when
             `backend` is 'geopandas'. Ignored when `backend` is 'pandas'. Defaults to
             'geom'.
-        crs (Union[None, str], optional) : CRS to use for the returned GeoDataFrame;
+        crs (str, optional) : CRS to use for the returned GeoDataFrame;
             if not set, tries to determine CRS from the SRID associated with the first
             geometry in the database, and assigns that to all geometries. Ignored when
             `backend` is 'pandas'. Defaults to None.
@@ -88,20 +88,21 @@ def load(
     schema: str,
     logger: logging.Logger,
     how: str = "replace",
-    db_name: str = None,
-    pg_array_columns: list = None,
+    replace_with_truncate: bool = False,
+    db_name: Optional[str] = None,
+    pg_array_columns: Optional[list] = None,
     handle_array_conversion_errors: bool = True,
     value_on_array_conversion_error: str = "{}",
-    jsonb_columns: list = None,
-    table_id_column: str = None,
+    jsonb_columns: Optional[list] = None,
+    table_id_column: Optional[str] = None,
     df_id_column: str = None,
-    nullable_integer_columns: list = None,
-    timedelta_columns: list = None,
+    nullable_integer_columns: Optional[list] = None,
+    timedelta_columns: Optional[list] = None,
     enum_columns: list = None,
-    connection: Connection = None,
-    init_ddls: List[DDL] = None,
-    end_ddls: List[DDL] = None,
-    bytea_columns: list = None,
+    connection: Optional[Connection] = None,
+    init_ddls: Optional[List[DDL]] = None,
+    end_ddls: Optional[List[DDL]] = None,
+    bytea_columns: Optional[list] = None,
 ):
     r"""
     Load a DataFrame or GeoDataFrame to a database table using sqlalchemy. The table
@@ -118,7 +119,20 @@ def load(
           - 'append' to append the data to rows already in the table
           - 'upsert' to append the rows to the table, replacing the rows whose id is
             already
-
+        replace_with_truncate (bool): if `how` is `replace`, and
+          `replace_with_truncate` is `True`, the table to replace will be truncated
+          before loading the new data. If `how` is `replace`, and
+          `replace_with_truncate` is `False` (the default), the table to replace will
+          be deleted before loading the new data. If `how` is anything but `replace`,
+          `replace_with_truncate` is ignored.
+          TRUNCATE is more efficient than DELETE as the whole file holding table data
+          is dropped, rather than deleting rows one by one as DELETE does.
+          It also results in reallocating new pages and therefore results in table data
+          without any bloat (dead or free space in data pages). However, TRUNCATE
+          requires an ACCESS EXCLUSIVE lock on the table, which may conflict with other
+          database operations, notably `pg_dump` and `ALTER TABLE` commands, and result
+          in a deadlock and therefore downtime of the entire system during database
+          backup or migration. Use only if you know what you're doing.
         db_name (str, optional): Required if a `connection` is not provided.
           'monitorfish_remote', 'monitorenv_remote' or 'monitorfish_local'.
           Defaults to None.
@@ -194,6 +208,7 @@ def load(
                 schema=schema,
                 logger=logger,
                 how=how,
+                replace_with_truncate=replace_with_truncate,
                 table_id_column=table_id_column,
                 df_id_column=df_id_column,
                 init_ddls=init_ddls,
@@ -207,6 +222,7 @@ def load(
             schema=schema,
             logger=logger,
             how=how,
+            replace_with_truncate=replace_with_truncate,
             table_id_column=table_id_column,
             df_id_column=df_id_column,
             init_ddls=init_ddls,
@@ -222,10 +238,11 @@ def load_with_connection(
     schema: str,
     logger: logging.Logger,
     how: str = "replace",
-    table_id_column: Union[None, str] = None,
-    df_id_column: Union[None, str] = None,
-    init_ddls: List[DDL] = None,
-    end_ddls: List[DDL] = None,
+    replace_with_truncate: bool = False,
+    table_id_column: Optional[str] = None,
+    df_id_column: Optional[str] = None,
+    init_ddls: Optional[List[DDL]] = None,
+    end_ddls: Optional[List[DDL]] = None,
 ):
     if init_ddls:
         for ddl in init_ddls:
@@ -233,8 +250,8 @@ def load_with_connection(
 
     table = get_table(table_name, schema, connection, logger)
     if how == "replace":
-        # Truncate table
-        utils.truncate([table], connection, logger)
+        # Delete table
+        utils.delete([table], connection, logger, truncate=replace_with_truncate)
 
     elif how == "upsert":
         # Delete rows that are in the DataFrame from the table

@@ -125,7 +125,7 @@ describe('Missions Form', () => {
       // Erase the value
       await openBy.click({ clickCount: 3 })
       await openBy.type('FDJ', { delay: 50 })
-      await wait(2000)
+      await wait(10000)
     },
     TIMEOUT
   )

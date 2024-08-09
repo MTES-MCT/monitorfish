@@ -127,7 +127,7 @@ class CaffeineConfiguration {
 
         // Risk Factors
         val riskFactorCache = buildMinutesCache(riskFactor, ticker, 1)
-        val riskFactorsCache = buildMinutesCache(riskFactors, ticker, 1)
+        val riskFactorsCache = buildMinutesCache(riskFactors, ticker, 2)
 
         // Segments
         val currentSegmentsCache = buildMinutesCache(currentSegments, ticker, 1)
@@ -142,7 +142,7 @@ class CaffeineConfiguration {
         val searchVesselsCache = buildMinutesCache(searchVessels, ticker, 60)
         val vesselTrackCache = buildMinutesCache(vesselTrack, ticker, 1)
         val vesselCache = buildMinutesCache(vessel, ticker, 60)
-        val vesselsCache = buildMinutesCache(vessels, ticker, 60)
+        val vesselsCache = buildMinutesCache(vessels, ticker, 120)
         val vesselsAllPositionsCache = buildSecondsCache(vesselsAllPositions, ticker, 30)
         val vesselsPositionsCache = buildSecondsCache(vesselsPositions, ticker, 30)
         val vesselsPositionsWithBeaconMalfunctionsCache = buildMinutesCache(

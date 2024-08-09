@@ -22,7 +22,6 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
       ircs: undefined,
       isCorrectedByNewerMessage: false,
       isDeleted: false,
-      isManuallyCreated: true,
       isSentByFailoverSoftware: false,
       message: {
         authorTrigram: undefined,

@@ -24,6 +24,12 @@ data class ManualPriorNotificationEntity(
     @Column(name = "cfr")
     val cfr: String?,
 
+    @Column(name = "external_immatriculation")
+    val externalReferenceNumber: String? = null,
+
+    @Column(name = "ircs")
+    val ircs: String? = null,
+
     @Column(name = "created_at")
     val createdAt: ZonedDateTime,
 
@@ -76,6 +82,8 @@ data class ManualPriorNotificationEntity(
                 return ManualPriorNotificationEntity(
                     reportId = pnoLogbookMessage.reportId,
                     cfr = pnoLogbookMessage.internalReferenceNumber,
+                    ircs = pnoLogbookMessage.ircs,
+                    externalReferenceNumber = pnoLogbookMessage.externalReferenceNumber,
                     createdAt = createdAt,
                     didNotFishAfterZeroNotice = priorNotification.didNotFishAfterZeroNotice,
                     flagState = pnoLogbookMessage.flagState,
@@ -107,6 +115,8 @@ data class ManualPriorNotificationEntity(
                 isEnriched = true,
                 integrationDateTime = createdAt,
                 internalReferenceNumber = cfr,
+                ircs = ircs,
+                externalReferenceNumber = externalReferenceNumber,
                 message = value,
                 messageType = LogbookMessageTypeMapping.PNO.name,
                 operationDateTime = createdAt,

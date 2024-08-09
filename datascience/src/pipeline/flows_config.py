@@ -283,7 +283,7 @@ validate_pending_alerts.flow.schedule = Schedule(
         ),
     ]
 )
-vessels.flow.schedule = CronSchedule("2 2,5,8,11,14,17,20,23 * * *")
+vessels.flow.schedule = CronSchedule("2 2,5,8,11,14,20,23 * * *")
 
 
 ###################### List flows to register with prefect server #####################

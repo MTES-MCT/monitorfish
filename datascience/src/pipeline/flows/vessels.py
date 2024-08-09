@@ -399,6 +399,7 @@ def load_vessels(all_vessels: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
         pg_array_columns=[
             "declared_fishing_gears",
             "operator_phones",

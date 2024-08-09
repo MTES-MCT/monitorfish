@@ -56,6 +56,7 @@ def load_fao_areas(fao_areas: gpd.GeoDataFrame):
         db_name="monitorfish_remote",
         logger=logger,
         how="replace",
+        replace_with_truncate=True,
     )
 
 

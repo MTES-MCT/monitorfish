@@ -24,6 +24,7 @@ def load_cgpm_areas(
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -43,6 +44,7 @@ def load_cgpm_statistical_rectangles_areas(
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -62,6 +64,7 @@ def load_n_miles_to_shore_areas(
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -81,6 +84,7 @@ def load_3_miles_areas(
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -100,6 +104,7 @@ def load_6_miles_areas(
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -119,6 +124,7 @@ def load_12_miles_areas(
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -138,6 +144,7 @@ def load_eez_areas(
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -159,6 +166,7 @@ def load_1241_eaux_occidentales_australes_areas(
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -180,6 +188,7 @@ def load_1241_eaux_occidentales_septentrionales_areas(
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -201,6 +210,7 @@ def load_1241_eaux_union_dans_oi_et_atl_ouest_areas(
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -218,6 +228,7 @@ def load_1241_mer_baltique_areas(mer_baltique_areas: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -235,6 +246,7 @@ def load_1241_mer_du_nord_areas(mer_du_nord_areas: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -252,6 +264,7 @@ def load_1241_mer_mediterranee_areas(mer_mediterranee_areas: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -269,6 +282,7 @@ def load_1241_mer_noire_areas(mer_noire_areas: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -286,6 +300,7 @@ def load_1241_mer_celtique_areas(mer_celtique_areas: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -303,6 +318,7 @@ def load_aem_areas(aem_areas: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -320,6 +336,7 @@ def load_brexit_areas(brexit_areas: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -337,6 +354,7 @@ def load_cormoran_areas(cormoran_areas: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -354,6 +372,7 @@ def load_fao_ccamlr_areas(fao_ccamlr_areas: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -371,6 +390,7 @@ def load_fao_iccat_areas(fao_iccat_areas: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -388,6 +408,7 @@ def load_fao_iotc_areas(fao_iotc_areas: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -405,6 +426,7 @@ def load_fao_siofa_areas(fao_siofa_areas: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -422,6 +444,7 @@ def load_rectangles_stat_areas(rectangles_stat_areas: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -439,6 +462,7 @@ def load_situ_atlant_areas(situ_atlant_areas: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -456,6 +480,7 @@ def load_situ_med_areas(situ_med_areas: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -473,6 +498,7 @@ def load_situ_memn_areas(situ_memn_areas: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -490,6 +516,7 @@ def load_situ_outre_mer_areas(situ_outre_mer_areas: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -507,6 +534,7 @@ def load_situs_areas(situs_areas: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -524,6 +552,7 @@ def load_effort_zones_areas(effort_zones_areas: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -541,6 +570,7 @@ def load_neafc_regulatory_area(neafc_regulatory_area: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -558,6 +588,7 @@ def load_nafo_regulatory_area(nafo_regulatory_area: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -575,6 +606,7 @@ def load_navigation_category_two_areas(navigation_category_two_areas: pd.DataFra
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -592,6 +624,7 @@ def load_navigation_category_three_areas(navigation_category_three_areas: pd.Dat
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -609,6 +642,7 @@ def load_navigation_category_four_areas(navigation_category_four_areas: pd.DataF
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -626,6 +660,7 @@ def load_navigation_category_five_areas(navigation_category_five_areas: pd.DataF
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -643,6 +678,7 @@ def load_saltwater_limit_areas(saltwater_limit_areas: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -660,6 +696,7 @@ def load_transversal_sea_limit_areas(transversal_sea_limit_areas: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -677,6 +714,7 @@ def load_departments_areas(departments_areas: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 
@@ -694,6 +732,7 @@ def load_land_areas(land_areas: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        replace_with_truncate=True,
     )
 
 

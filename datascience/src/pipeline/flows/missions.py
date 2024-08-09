@@ -117,6 +117,7 @@ def load_missions_and_missions_control_units(
             tables=[analytics_missions_table, analytics_missions_control_units_table],
             connection=connection,
             logger=prefect.context.get("logger"),
+            truncate=True,
         )
 
         load(

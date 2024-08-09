@@ -76,7 +76,7 @@ data class LogbookReportEntity(
     @Column(name = "is_test_message")
     val isTestMessage: Boolean = false,
 
-    ) {
+) {
     companion object {
         fun fromLogbookMessage(
             mapper: ObjectMapper,

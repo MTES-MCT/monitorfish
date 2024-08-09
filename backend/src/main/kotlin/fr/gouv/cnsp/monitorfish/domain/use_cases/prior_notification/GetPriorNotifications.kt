@@ -80,6 +80,7 @@ class GetPriorNotifications(
         val undeletedPriorNotifications = incompletePriorNotifications
             .filter { !it.logbookMessageAndValue.logbookMessage.isDeleted }
 
+        logger.info("TIME_RECORD - ${undeletedPriorNotifications.size} elements in undeletedPriorNotifications")
         val (priorNotifications, enrichedPriorNotificationsTimeTaken) = measureTimedValue {
             undeletedPriorNotifications
                 .map { priorNotification ->

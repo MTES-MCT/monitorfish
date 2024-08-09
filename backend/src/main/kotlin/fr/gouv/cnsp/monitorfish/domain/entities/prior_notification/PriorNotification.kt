@@ -18,6 +18,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookRawMessageRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
+import kotlin.time.measureTimedValue
 
 data class PriorNotification(
     val reportId: String?,
@@ -81,37 +82,52 @@ data class PriorNotification(
         val logbookMessage = logbookMessageAndValue.logbookMessage
         val pnoMessage = logbookMessageAndValue.value
 
-        port = try {
-            pnoMessage.port?.let { portLocode ->
-                allPorts.find { it.locode == portLocode }
+        val (nextPort, nextPortTimeTaken) = measureTimedValue {
+            try {
+                pnoMessage.port?.let { portLocode ->
+                    allPorts.find { it.locode == portLocode }
+                }
+            } catch (e: CodeNotFoundException) {
+                null
             }
-        } catch (e: CodeNotFoundException) {
-            null
         }
+        logger.info("TIME_RECORD - 'allPorts.find()' took $nextPortTimeTaken.")
+
+        port = nextPort
 
         seafront = port?.facade?.let { Seafront.from(it) }
 
         // Default to UNKNOWN vessel when null or not found
-        vessel = if (isManuallyCreated) {
-            logbookMessage.vesselId?.let { vesselId ->
-                allVessels.find { it.id == vesselId }
-            } ?: UNKNOWN_VESSEL
-        } else {
-            logbookMessage
-                .internalReferenceNumber?.let { vesselInternalReferenceNumber ->
-                    allVessels.find { it.internalReferenceNumber == vesselInternalReferenceNumber }
+        val (nextVessel, nextVesselTimeTaken) = measureTimedValue {
+            if (isManuallyCreated) {
+                logbookMessage.vesselId?.let { vesselId ->
+                    allVessels.find { it.id == vesselId }
                 } ?: UNKNOWN_VESSEL
+            } else {
+                logbookMessage
+                    .internalReferenceNumber?.let { vesselInternalReferenceNumber ->
+                        allVessels.find { it.internalReferenceNumber == vesselInternalReferenceNumber }
+                    } ?: UNKNOWN_VESSEL
+            }
         }
+        logger.info("TIME_RECORD - 'allVessels.find()' took $nextVesselTimeTaken.")
 
-        lastControlDateTime = if (isManuallyCreated) {
-            logbookMessage.vesselId?.let { vesselId ->
-                allRiskFactors.find { it.vesselId == vesselId }?.lastControlDatetime
-            }
-        } else {
-            vessel!!.internalReferenceNumber?.let { vesselInternalReferenceNumber ->
-                allRiskFactors.find { it.internalReferenceNumber == vesselInternalReferenceNumber }?.lastControlDatetime
+        vessel = nextVessel
+
+        val (nextControlDateTime, nextControlDateTimeTimeTaken) = measureTimedValue {
+            if (isManuallyCreated) {
+                logbookMessage.vesselId?.let { vesselId ->
+                    allRiskFactors.find { it.vesselId == vesselId }?.lastControlDatetime
+                }
+            } else {
+                vessel!!.internalReferenceNumber?.let { vesselInternalReferenceNumber ->
+                    allRiskFactors.find { it.internalReferenceNumber == vesselInternalReferenceNumber }?.lastControlDatetime
+                }
             }
         }
+        logger.info("TIME_RECORD - 'allRiskFactors.find()' took $nextControlDateTimeTimeTaken.")
+
+        lastControlDateTime = nextControlDateTime
     }
 
     fun enrichLogbookMessage(

@@ -65,6 +65,14 @@ To run the backend for development purpose (with hot-reload), open another termi
 * During the first run, dependencies will be downloaded
 * You'll need to install `psql` to interact with the Postgres database
 
+The users for login are:
+ - User with non super-user access:
+   - username: "user"
+   - password: "fish"
+ - User with super-user access:
+   - username: "superuser"
+   - password: "fish"
+
 Then, insert the GIS layers to the postgres database by executing (make sure you have `psql` installed):
 
 .. code-block:: shell

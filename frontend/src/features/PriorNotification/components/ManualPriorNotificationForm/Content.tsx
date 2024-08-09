@@ -193,6 +193,7 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
           {!!detail && (
             <DownloadButton
               isDisabled={isPriorNotificationFormDirty}
+              isManuallyCreated={detail.isManuallyCreated}
               pnoLogbookMessage={detail.logbookMessage}
               reportId={detail.reportId}
             />

@@ -8,7 +8,7 @@ dayjs.extend(utc)
 const currentYear = dayjs().utc().year()
 context('Fleet segments', () => {
   beforeEach(() => {
-    cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear}`).as('fleetSegments')
+    cy.intercept('GET', `/bff/v1/fleet_segments/backoffice/${currentYear}`).as('fleetSegments')
     cy.visit('/backoffice/fleet_segments')
     cy.wait('@fleetSegments')
     cy.wait(1000)
@@ -35,7 +35,7 @@ context('Fleet segments', () => {
     cy.log('Should update the segment')
 
     // When
-    cy.intercept('PUT', `/bff/v1/fleet_segments?year=${currentYear}&segment=ATL01`).as('updateFleetSegment')
+    cy.intercept('PUT', `/bff/v1/fleet_segments/backoffice?year=${currentYear}&segment=ATL01`).as('updateFleetSegment')
 
     cy.get('[aria-rowindex="2"]').find('[title="Editer la ligne"]').click()
     cy.fill('Nom', 'ATL036')
@@ -92,7 +92,7 @@ context('Fleet segments', () => {
 
   it('Should create a new fleet segment and delete it', () => {
     // Given
-    cy.intercept('POST', '/bff/v1/fleet_segments').as('createFleetSegment')
+    cy.intercept('POST', '/bff/v1/fleet_segments/backoffice').as('createFleetSegment')
 
     // When
     cy.clickButton('Ajouter un segment')
@@ -137,7 +137,9 @@ context('Fleet segments', () => {
     // -------------------------------------------------------------------------
     cy.log('Should delete a fleet segment')
 
-    cy.intercept('DELETE', `/bff/v1/fleet_segments?year=${currentYear}&segment=ABC123`).as('deleteFleetSegment')
+    cy.intercept('DELETE', `/bff/v1/fleet_segments/backoffice?year=${currentYear}&segment=ABC123`).as(
+      'deleteFleetSegment'
+    )
     cy.get('[aria-rowindex="2"]').find('[title="Supprimer la ligne"]').click()
     cy.wait('@deleteFleetSegment')
 

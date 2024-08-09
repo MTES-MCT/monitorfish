@@ -3,7 +3,7 @@ import { Page, Browser, type FrameWaitForFunctionOptions } from 'puppeteer'
 
 export function listenToConsole(page: Page, index: number) {
   page
-    .on('console', message => {
+    .on('console', async message => {
       const messageType = message.type().substr(0, 3).toUpperCase()
       console.log(`[Page ${index}] ${messageType}: ${message.text()}`)
 
@@ -17,7 +17,7 @@ export function listenToConsole(page: Page, index: number) {
         throw new Error(message.text())
       }
     })
-    .on('response', response => {
+    .on('response', async response => {
       if (response.url().includes('/bff/') || response.url().includes('/api/')) {
         console.log(`[Page ${index}] HTTP ${response.request().method()} ${response.status()}: ${response.url()}`)
       }

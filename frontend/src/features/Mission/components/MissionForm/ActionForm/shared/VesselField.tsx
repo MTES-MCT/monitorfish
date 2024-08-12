@@ -136,7 +136,7 @@ export function VesselField() {
             )}
             {!isFetching && !!vessel?.length && (
               <>
-                <span>{vessel.length}</span> (Taille)
+                <span>{vessel.length}m</span> (Taille)
               </>
             )}
           </VesselIdentityBar>

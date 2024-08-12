@@ -30,10 +30,11 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.ZonedDateTime
 
+
 @Import(SentryConfig::class)
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = [(PriorNotificationController::class)])
-class PriorNotificationControllerITests {
+class PriorNotificationControllerUTests {
     @Autowired
     private lateinit var api: MockMvc
 

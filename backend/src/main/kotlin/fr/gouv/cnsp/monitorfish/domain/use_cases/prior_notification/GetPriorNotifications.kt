@@ -147,10 +147,10 @@ class GetPriorNotifications(
             val internalReferenceNumber = it.logbookMessageAndValue.logbookMessage.internalReferenceNumber
 
             val vessel = vessels.find { searchedVessel ->
-                if (isManuallyCreated) {
-                    return@find searchedVessel.id == vesselId
+                return@find if (isManuallyCreated) {
+                    searchedVessel.id == vesselId
                 } else {
-                    return@find searchedVessel.internalReferenceNumber == internalReferenceNumber
+                    searchedVessel.internalReferenceNumber == internalReferenceNumber
                 }
             } ?: UNKNOWN_VESSEL
 

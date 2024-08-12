@@ -122,6 +122,18 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
+    fun `findVesselsByInternalReferenceNumbers Should return vessels from vessel CFR`() {
+        // When
+        val vessels = jpaVesselRepository.findVesselsByInternalReferenceNumbers(listOf("U_W0NTFINDME", "FAK000999999"))
+
+        // Then
+        assertThat(vessels).hasSize(2)
+        assertThat(vessels.first().internalReferenceNumber).isEqualTo("FAK000999999")
+        assertThat(vessels.first().vesselName).isEqualTo("PHENOMENE")
+    }
+
+    @Test
+    @Transactional
     fun `findUnderCharterForVessel Should get the underCharter field of a vessel`() {
         // When
         val notUnderCharterOnCfr = jpaVesselRepository.findUnderCharterForVessel(

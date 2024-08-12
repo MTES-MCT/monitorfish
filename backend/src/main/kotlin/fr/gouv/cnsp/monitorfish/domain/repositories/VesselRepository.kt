@@ -16,6 +16,8 @@ interface VesselRepository {
 
     fun findVesselsByIds(ids: List<Int>): List<Vessel>
 
+    fun findVesselsByInternalReferenceNumbers(internalReferenceNumbers: List<String>): List<Vessel>
+
     fun findVesselById(vesselId: Int): Vessel?
 
     fun search(searched: String): List<Vessel>

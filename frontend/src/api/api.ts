@@ -2,6 +2,7 @@
 // https://redux-toolkit.js.org/rtk-query/usage/automated-refetching#cache-tags
 
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react'
+import { setMeasurement, startSpan } from '@sentry/react'
 import { sha256 } from '@utils/sha256'
 import ky from 'ky'
 
@@ -29,19 +30,28 @@ const monitorenvApiBaseQuery = retry(
 
 export const monitorenvApi = createApi({
   baseQuery: async (args: RTKBaseQueryArgs, api, extraOptions) => {
-    const result = await normalizeRtkBaseQuery(monitorenvApiBaseQuery)(args, api, extraOptions)
-    if (result.error) {
-      const error: CustomRTKResponseError = {
-        path: typeof args === 'string' ? args : args.url,
-        requestData: typeof args === 'string' ? undefined : args.body,
-        responseData: result.error.data as BackendApi.ResponseBodyError,
-        status: result.error.status
+    const spanName = `[Env API] [RTK ${api.type.toUpperCase()}] ${api.endpoint}`
+
+    return startSpan({ name: spanName }, async () => {
+      const measurementStart = Date.now()
+
+      const result = await normalizeRtkBaseQuery(monitorenvApiBaseQuery)(args, api, extraOptions)
+
+      setMeasurement(spanName, Date.now() - measurementStart, 'millisecond')
+
+      if (result.error) {
+        const error: CustomRTKResponseError = {
+          path: typeof args === 'string' ? args : args.url,
+          requestData: typeof args === 'string' ? undefined : args.body,
+          responseData: result.error.data as BackendApi.ResponseBodyError,
+          status: result.error.status
+        }
+
+        return { error }
       }
 
-      return { error }
-    }
-
-    return result
+      return result
+    })
   },
   endpoints: () => ({}),
   reducerPath: 'monitorenvApi',
@@ -84,19 +94,28 @@ const monitorfishBaseQuery = retry(
 
 export const monitorfishApi = createApi({
   baseQuery: async (args: RTKBaseQueryArgs, api, extraOptions) => {
-    const result = await normalizeRtkBaseQuery(monitorfishBaseQuery)(args, api, extraOptions)
-    if (result.error) {
-      const error: CustomRTKResponseError = {
-        path: typeof args === 'string' ? args : args.url,
-        requestData: typeof args === 'string' ? undefined : args.body,
-        responseData: result.error.data as BackendApi.ResponseBodyError,
-        status: result.error.status
+    const spanName = `[Fish API] [RTK ${api.type.toUpperCase()}] ${api.endpoint}`
+
+    return startSpan({ name: spanName }, async () => {
+      const measurementStart = Date.now()
+
+      const result = await normalizeRtkBaseQuery(monitorfishBaseQuery)(args, api, extraOptions)
+
+      setMeasurement(spanName, Date.now() - measurementStart, 'millisecond')
+
+      if (result.error) {
+        const error: CustomRTKResponseError = {
+          path: typeof args === 'string' ? args : args.url,
+          requestData: typeof args === 'string' ? undefined : args.body,
+          responseData: result.error.data as BackendApi.ResponseBodyError,
+          status: result.error.status
+        }
+
+        return { error }
       }
 
-      return { error }
-    }
-
-    return result
+      return result
+    })
   },
   endpoints: () => ({}),
   reducerPath: 'monitorfishApi',

@@ -122,7 +122,9 @@ SELECT
             CASE WHEN other_comments IS NOT NULL THEN other_comments ELSE '' END
         ),
         ''
-    ) as comments
+    ) as comments,
+    a.number_of_vessels_flown_over,
+    a.flight_goals
 FROM mission_actions a
 LEFT JOIN LATERAL jsonb_array_elements(CASE WHEN jsonb_typeof(segments) = 'array' THEN segments ELSE '[]' END) AS segment on true
 LEFT JOIN controls_infraction_natinfs_array inf ON inf.id = a.id
@@ -133,7 +135,7 @@ JOIN analytics_missions m ON a.mission_id = m.id
 LEFT JOIN analytics_missions_control_units mcu ON m.id = mcu.mission_id
 LEFT JOIN analytics_control_units cu ON mcu.control_unit_id = cu.id
 LEFT JOIN analytics_administrations adm ON cu.administration_id = adm.id
-WHERE action_type IN ('SEA_CONTROL', 'LAND_CONTROL', 'AIR_CONTROL') AND NOT a.is_deleted AND NOT m.deleted
+WHERE NOT a.is_deleted AND NOT m.deleted
 ORDER BY action_datetime_utc;
 
 CREATE INDEX ON analytics_controls_full_data USING BRIN(control_datetime_utc);

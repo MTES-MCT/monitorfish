@@ -840,7 +840,7 @@ context('Side Window > Mission Form > Sea Control', () => {
       cy.contains('U_W0NTFINDME (CFR)').should('exist')
       cy.contains('TALK2ME (Mq. ext)').should('exist')
       cy.contains('QGDF (Call Sign)').should('exist')
-      cy.contains('12.89 (Taille)').should('exist')
+      cy.contains('12.89m (Taille)').should('exist')
     })
   })
 })

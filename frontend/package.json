@@ -19,17 +19,17 @@
     "dev-puppeteer": "FRONTEND_MONITORENV_URL=//localhost:9880 import-meta-env-prepare -u -x ./.env.local.defaults && vite --port 3000",
     "bundle-sw": "esbuild src/workers/serviceWorker.ts --bundle --outfile=public/service-worker.js",
     "prepare": "cd .. && ./frontend/node_modules/.bin/husky ./frontend/config/husky",
-    "generate:testdata": "node ./scripts/generate_test_data_seeds.mjs",
+    "generate:testdata": "node ./scripts/generate_test_data_seeds.js",
     "start": "import-meta-env-prepare -u -x ./.env.local.defaults && vite preview --port 3000",
     "start:emulate": "npm run clean && npm run build && import-meta-env -x ./.env.example -p ./build/index.html && import-meta-env-prepare -u -x ./.env.local.defaults && vite preview --port 3000",
     "test:e2e": "cypress run --browser firefox --config-file ./config/cypress.config.js --e2e",
     "test:e2e:flaky": "./cypress/support/test_flaky_test.sh",
-    "test:e2e:generate": "./scripts/clean_wiremock_stubs.sh && node ./scripts/generate_wiremock_stubs.mjs",
+    "test:e2e:generate": "./scripts/clean_wiremock_stubs.sh && node ./scripts/generate_wiremock_stubs.js",
     "test:e2e:open": "cypress open --browser firefox --config-file ./config/cypress.config.ts --e2e",
     "test:multi-windows:open": "IS_HEADLESS=false jest --config=./config/multi-windows/jest.config.js",
     "test:multi-windows:run": "IS_HEADLESS=true jest --config=./config/multi-windows/jest.config.js",
-    "test:lint": "eslint ./src",
-    "test:lint:partial": "eslint --config=./.eslintrc.partial.js ./src ./cypress ./puppeteer",
+    "test:lint": "eslint --config=./.eslintrc.cjs ./src",
+    "test:lint:partial": "eslint --config=./.eslintrc.partial.cjs ./src ./cypress ./puppeteer",
     "test:lint:partial:fix": "npm run test:lint:partial -- --fix",
     "test:type": "tsc",
     "test:unit": "jest --config=./config/jest.config.js --detectOpenHandles",
@@ -171,7 +171,7 @@
   "lint-staged": {
     "*.{json,md,yaml,yml}": "prettier --write",
     "*.{ts,tsx}": [
-      "eslint --fix",
+      "eslint --config=./.eslintrc.cjs --fix",
       "bash -c 'npm run test:type'"
     ]
   },

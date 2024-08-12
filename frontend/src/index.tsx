@@ -1,4 +1,4 @@
-import { browserTracingIntegration, init } from '@sentry/react'
+import { browserTracingIntegration, init, replayIntegration } from '@sentry/react'
 import { createRoot } from 'react-dom/client'
 import { AuthProvider } from 'react-oidc-context'
 
@@ -10,18 +10,15 @@ import 'nouislider/dist/nouislider.css'
 import 'ol/ol.css'
 import '@mtes-mct/monitor-ui/assets/stylesheets/rsuite-override.css'
 
-if (import.meta.env.PROD) {
+if (import.meta.env.FRONTEND_SENTRY_DSN && import.meta.env.FRONTEND_SENTRY_TRACING_ORIGINS) {
   init({
-    dsn: import.meta.env.FRONTEND_SENTRY_DSN ?? '',
-    environment: import.meta.env.FRONTEND_SENTRY_ENV ?? '',
-    integrations: [
-      browserTracingIntegration({
-        tracingOrigins: import.meta.env.FRONTEND_SENTRY_TRACING_ORIGINS
-          ? [import.meta.env.FRONTEND_SENTRY_TRACING_ORIGINS]
-          : []
-      })
-    ],
-    release: import.meta.env.FRONTEND_MONITORFISH_VERSION ?? '',
+    dsn: import.meta.env.FRONTEND_SENTRY_DSN,
+    environment: import.meta.env.FRONTEND_SENTRY_ENV ?? 'development',
+    integrations: [browserTracingIntegration(), replayIntegration()],
+    release: import.meta.env.FRONTEND_MONITORFISH_VERSION ?? 'v0.0.0',
+    replaysOnErrorSampleRate: 1.0,
+    replaysSessionSampleRate: 0.1,
+    tracePropagationTargets: [import.meta.env.FRONTEND_SENTRY_TRACING_ORIGINS],
     tracesSampleRate: 1.0
   })
 }

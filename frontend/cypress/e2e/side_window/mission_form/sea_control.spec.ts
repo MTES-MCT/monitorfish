@@ -820,4 +820,27 @@ context('Side Window > Mission Form > Sea Control', () => {
       cy.wait('@updateMissionAction')
     })
   })
+
+  it('Should display the expected vessel details', () => {
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+
+    cy.intercept('GET', '/bff/v1/vessels/2').as('getVessel')
+
+    // -------------------------------------------------------------------------
+    // Form
+
+    // Navire
+    cy.get('input[placeholder="Rechercher un navire..."]').type('mal')
+    cy.contains('mark', 'MAL').click().wait(500)
+
+    cy.wait(500)
+
+    cy.wait('@getVessel').then(() => {
+      cy.contains('U_W0NTFINDME (CFR)').should('exist')
+      cy.contains('TALK2ME (Mq. ext)').should('exist')
+      cy.contains('QGDF (Call Sign)').should('exist')
+      cy.contains('12.89 (Taille)').should('exist')
+    })
+  })
 })

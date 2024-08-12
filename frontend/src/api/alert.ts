@@ -1,7 +1,5 @@
 // TODO We could remove the type discrimation normalization step if we had it done on API side.
 
-import ky from 'ky'
-
 import { monitorfishApi, monitorfishApiKy } from './api'
 import { ApiError } from '../libs/ApiError'
 
@@ -90,7 +88,7 @@ async function silenceAlertFromAPI(
   const beforeDateTime = silencedAlertPeriodRequest.beforeDateTime?.toISOString() || ''
 
   try {
-    return await ky
+    return await monitorfishApiKy
       .put(`/bff/v1/operational_alerts/${id}/silence`, {
         json: {
           beforeDateTime,

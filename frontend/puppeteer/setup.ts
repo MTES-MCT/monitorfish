@@ -3,12 +3,13 @@ import os from 'os'
 import path from 'path'
 import puppeteer from 'puppeteer'
 
+const IS_HEADLESS = process.env.IS_HEADLESS === 'true'
 const TEMP_DIRECTORY = path.join(os.tmpdir(), 'jest_puppeteer_global_setup')
 const NUMBER_OF_BROWSERS = 2
 const WIDTH = 1020
 const HEIGHT = 880
 
-console.log(`Running in ${process.env.CI ? 'headless' : 'browser'} mode.`)
+console.log(`Running in ${IS_HEADLESS ? 'headless' : 'browser'} mode.`)
 
 export default async () => {
   const browsers = []
@@ -24,7 +25,8 @@ export default async () => {
         '--enable-features=ExperimentalJavaScript'
       ],
       defaultViewport: null,
-      headless: process.env.IS_HEADLESS === 'true',
+      devtools: !IS_HEADLESS,
+      headless: IS_HEADLESS,
       product: 'firefox'
     })
 

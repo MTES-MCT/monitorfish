@@ -1,5 +1,4 @@
-import type { AnyObject } from '@mtes-mct/monitor-ui'
-import type { Define } from '@mtes-mct/monitor-ui/types/utilities'
+import type { AnyObject, Defined } from '@mtes-mct/monitor-ui'
 
 const isAnyPropUndefined = <T extends AnyObject>(obj: T, keys: Array<keyof T>): boolean => {
   // eslint-disable-next-line no-restricted-syntax
@@ -12,6 +11,6 @@ const isAnyPropUndefined = <T extends AnyObject>(obj: T, keys: Array<keyof T>): 
   return false
 }
 
-export function getDefinedObject<T extends AnyObject>(obj: T, keys: Array<keyof T>): Define<T> | undefined {
-  return isAnyPropUndefined(obj, keys) ? undefined : (obj as Define<T>)
+export function getDefinedObject<T extends AnyObject>(obj: T, keys: Array<keyof T>): Defined<T> | undefined {
+  return isAnyPropUndefined(obj, keys) ? undefined : (obj as Defined<T>)
 }

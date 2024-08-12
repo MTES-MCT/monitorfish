@@ -1,5 +1,18 @@
 {
   "compilerOptions": {
+    // "moduleResolution": "bundler",
+    // "useDefineForClassFields": true,
+    // "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    // "module": "ESNext",
+    // "skipLibCheck": true,
+
+    /* Bundler mode */
+    // "allowImportingTsExtensions": true,
+    // "isolatedModules": true,
+    // "moduleDetection": "force",
+    // "noEmit": true,
+    // "jsx": "react-jsx",
+
     "allowJs": true,
     "allowImportingTsExtensions": true,
     "allowUnreachableCode": false,
@@ -7,11 +20,15 @@
     "alwaysStrict": true,
     "baseUrl": "./src",
     "checkJs": false,
+    "composite": true,
+    // Override inherited value for CommonJS > ESM compatibility purpose
+    "esModuleInterop": true,
     "exactOptionalPropertyTypes": true,
     "incremental": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    // https://github.com/cypress-io/cypress/issues/26308#issuecomment-1666236726
     "module": "ESNext",
     "moduleDetection": "force",
     "moduleResolution": "Bundler",
@@ -43,22 +60,10 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "target": "ES2022",
-    // "types": ["vite/client", "vite-plugin-svgr/client"],
-    "types": ["vite-plugin-svgr/client"],
+    "types": ["vite/client", "vite-plugin-svgr/client"],
     "useDefineForClassFields": true,
     "useUnknownInCatchVariables": true,
     "verbatimModuleSyntax": true
   },
-  "include": [
-    "**/*.cjs",
-    "**/*.cts",
-    "**/*.js",
-    "**/*.jsx",
-    "**/*.ts",
-    "**/*.tsx",
-    "src/vite-env-override.d.ts",
-    "src/ui/styled.d.ts",
-    "vite.config.ts"
-  ],
-  "exclude": ["node_modules/*"]
+  "include": ["src"]
 }

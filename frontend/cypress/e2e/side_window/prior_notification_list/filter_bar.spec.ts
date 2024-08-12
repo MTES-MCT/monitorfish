@@ -1,7 +1,7 @@
 import { assertNotNullish } from '@utils/assertNotNullish'
-import { SideWindowMenuLabel } from 'domain/entities/sideWindow/constants'
 
 import { openSideWindowPriorNotificationList } from './utils'
+import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
 import { assertAll } from '../../utils/assertAll'
 import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'

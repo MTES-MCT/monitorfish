@@ -1,6 +1,5 @@
-import { ALL_SEAFRONT_GROUP } from '@constants/seafront'
-
 import { addSideWindowPriorNotification, editSideWindowPriorNotification } from './utils'
+import { ALL_SEAFRONT_GROUP } from '../../../../src/constants/seafront'
 import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 

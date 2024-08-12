@@ -1,4 +1,4 @@
-import { SideWindowMenuLabel } from 'domain/entities/sideWindow/constants'
+import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
 
 export const openSideWindowPriorNotification = (vesselName: string, isSuperUser: boolean = true) => {
   cy.viewport(1920, 1080)

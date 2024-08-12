@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "baseUrl": ".",
+    "composite": true,
+    "isolatedModules": true,
+    "lib": ["ES2023"],
+    "module": "ESNext",
+    "moduleDetection": "force",
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": false,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "paths": {
+      "@api/*": ["src/api/*"],
+      "@components/*": ["src/components/*"],
+      "@constants/*": ["src/constants/*"],
+      "@features/*": ["src/features/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@libs/*": ["src/libs/*"],
+      "@pages/*": ["src/pages/*"],
+      "@store": ["src/store/index.ts"],
+      "@store/*": ["src/store/*"],
+      "@utils/*": ["src/utils/*"]
+    },
+    "skipLibCheck": true,
+    "strict": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "target": "ES2022"
+  },
+  "include": ["vite.config.ts"]
+}

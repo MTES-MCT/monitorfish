@@ -1,5 +1,3 @@
-import type { Interception } from 'cypress/types/net-stubbing'
-
 const STORE: Record<string, string[]> = {}
 
 /**
@@ -23,7 +21,7 @@ export function countRequestsByAlias(alias: string, waitForInMs: number = 0): Cy
     cy.wait(waitForInMs)
   }
 
-  return cy.get<Interception>(alias).then(interception => {
+  return cy.get<{ id: string }>(alias).then(interception => {
     if (!STORE[alias]) {
       STORE[alias] = []
     }

@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   globalSetup: '<rootDir>/puppeteer/setup.ts',
   // because it's detected by the default value of testRegex
   // https://jestjs.io/docs/configuration#testregex-string--arraystring

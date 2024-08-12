@@ -1,10 +1,19 @@
 import { checkNameAndUrl, checkOtherRequiredValues } from '@features/BackOffice/edit_regulation/regulatory_text/utils'
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
-import { Accent, Button, Checkbox, DatePicker, MultiCheckbox, SingleTag, TextInput, THEME } from '@mtes-mct/monitor-ui'
+import {
+  Accent,
+  Button,
+  Checkbox,
+  customDayjs,
+  DatePicker,
+  MultiCheckbox,
+  SingleTag,
+  TextInput,
+  THEME
+} from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { customDayjs } from '../../../../../cypress/e2e/utils/customDayjs'
 import { ContentLine, Delimiter } from '../../../commonStyles/Backoffice.style'
 import { Label } from '../../../commonStyles/Input.style'
 import { checkURL, RegulatoryTextType } from '../../../Regulation/utils'

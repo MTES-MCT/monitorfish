@@ -7,6 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotifica
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationStats
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.sorters.PriorNotificationsSortColumn
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.UNKNOWN_VESSEL
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import fr.gouv.cnsp.monitorfish.domain.utils.PaginatedList
 import org.slf4j.Logger
@@ -36,30 +37,10 @@ class GetPriorNotifications(
         pageNumber: Int,
         pageSize: Int,
     ): PaginatedList<PriorNotification, PriorNotificationStats> {
-        val (allGears, gearRepositoryTimeTaken) = measureTimedValue {
-            gearRepository.findAll()
-        }
-        logger.info("TIME_RECORD - 'gearRepository.findAll()' took $gearRepositoryTimeTaken.")
-
-        val (allPorts, portRepositoryTimeTaken) = measureTimedValue {
-            portRepository.findAll()
-        }
-        logger.info("TIME_RECORD - 'portRepository.findAll()' took $portRepositoryTimeTaken.")
-
-        val (allRiskFactors, allRiskFactorsTimeTaken) = measureTimedValue {
-            riskFactorRepository.findAll()
-        }
-        logger.info("TIME_RECORD - 'riskFactorRepository.findAll()' took $allRiskFactorsTimeTaken.")
-
-        val (allSpecies, speciesRepositoryTimeTaken) = measureTimedValue {
-            speciesRepository.findAll()
-        }
-        logger.info("TIME_RECORD - 'speciesRepository.findAll()' took $speciesRepositoryTimeTaken.")
-
-        val (allVessels, vesselRepositoryTimeTaken) = measureTimedValue {
-            vesselRepository.findAll()
-        }
-        logger.info("TIME_RECORD - 'vesselRepository.findAll()' took $vesselRepositoryTimeTaken.")
+        val allGears = gearRepository.findAll()
+        val allPorts = portRepository.findAll()
+        val allRiskFactors = riskFactorRepository.findAll()
+        val allSpecies = speciesRepository.findAll()
 
         val (automaticPriorNotifications, findAllPriorNotificationsTimeTaken) = measureTimedValue {
             logbookReportRepository.findAllPriorNotifications(filter)
@@ -83,7 +64,7 @@ class GetPriorNotifications(
         val (priorNotifications, enrichedPriorNotificationsTimeTaken) = measureTimedValue {
             undeletedPriorNotifications
                 .map { priorNotification ->
-                    priorNotification.enrich(allPorts, allRiskFactors, allVessels, priorNotification.isManuallyCreated)
+                    priorNotification.enrich(allRiskFactors, allPorts, priorNotification.isManuallyCreated)
                     priorNotification.logbookMessageAndValue.logbookMessage
                         .enrichGearPortAndSpecyNames(allGears, allPorts, allSpecies)
 
@@ -133,9 +114,11 @@ class GetPriorNotifications(
         }
         logger.info("TIME_RECORD - 'paginatedList' took $paginatedListTimeTaken.")
 
+        val paginatedListWithVessels = paginatedList.copy(data = getPriorNotificationsWithVessel(paginatedList.data))
+
         // Enrich the reporting count for each prior notification after pagination to limit the number of queries
         val (enrichedPaginatedList, enrichedPaginatedListTimeTaken) = measureTimedValue {
-            paginatedList.apply {
+            paginatedListWithVessels.apply {
                 data.forEach {
                     it.enrichReportingCount(reportingRepository)
                 }
@@ -144,6 +127,35 @@ class GetPriorNotifications(
         logger.info("TIME_RECORD - 'enrichedPaginatedList' took $enrichedPaginatedListTimeTaken.")
 
         return enrichedPaginatedList
+    }
+
+    private fun getPriorNotificationsWithVessel(
+        priorNotifications: List<PriorNotification>,
+    ): List<PriorNotification> {
+        val vesselsIds = priorNotifications
+            .filter { it.isManuallyCreated }
+            .mapNotNull { it.logbookMessageAndValue.logbookMessage.vesselId }
+        val internalReferenceNumbers = priorNotifications
+            .filter { !it.isManuallyCreated }
+            .mapNotNull { it.logbookMessageAndValue.logbookMessage.internalReferenceNumber }
+        val vessels = vesselRepository.findVesselsByIds(vesselsIds) +
+            vesselRepository.findVesselsByInternalReferenceNumbers(internalReferenceNumbers)
+
+        return priorNotifications.map {
+            val isManuallyCreated = it.isManuallyCreated
+            val vesselId = it.logbookMessageAndValue.logbookMessage.vesselId
+            val internalReferenceNumber = it.logbookMessageAndValue.logbookMessage.internalReferenceNumber
+
+            val vessel = vessels.find { searchedVessel ->
+                return@find if (isManuallyCreated) {
+                    searchedVessel.id == vesselId
+                } else {
+                    searchedVessel.internalReferenceNumber == internalReferenceNumber
+                }
+            } ?: UNKNOWN_VESSEL
+
+            return@map it.copy(vessel = vessel)
+        }
     }
 
     companion object {

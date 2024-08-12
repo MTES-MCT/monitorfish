@@ -29,6 +29,9 @@ interface DBVesselRepository : CrudRepository<VesselEntity, Int> {
     @Query(value = "SELECT * FROM vessels WHERE id in (:ids)", nativeQuery = true)
     fun findAllByIds(ids: List<Int>): List<VesselEntity>
 
+    @Query(value = "SELECT * FROM vessels WHERE cfr in (:cfr)", nativeQuery = true)
+    fun findAllByInternalReferenceNumbers(cfr: List<String>): List<VesselEntity>
+
     @Query(
         value = """
         SELECT under_charter

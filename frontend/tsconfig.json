@@ -1,5 +1,5 @@
 {
-  "extends": "@tsconfig/vite-react/tsconfig.json",
+  "extends": "@tsconfig/vite-react",
   "compilerOptions": {
     "allowJs": true,
     "allowUnreachableCode": false,

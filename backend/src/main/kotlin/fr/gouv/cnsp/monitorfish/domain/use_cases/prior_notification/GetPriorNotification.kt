@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.UNKNOWN_VESSEL
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
@@ -24,7 +25,6 @@ class GetPriorNotification(
         val allPorts = portRepository.findAll()
         val allRiskFactors = riskFactorRepository.findAll()
         val allSpecies = speciesRepository.findAll()
-        val allVessels = vesselRepository.findAll()
 
         val priorNotification = if (isManuallyCreated) {
             manualPriorNotificationRepository.findByReportId(reportId)
@@ -33,7 +33,7 @@ class GetPriorNotification(
         }
             ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
 
-        priorNotification.enrich(allPorts, allRiskFactors, allVessels, isManuallyCreated)
+        priorNotification.enrich(allRiskFactors, allPorts, isManuallyCreated)
         priorNotification.enrichLogbookMessage(
             allGears,
             allPorts,
@@ -41,7 +41,29 @@ class GetPriorNotification(
             logbookRawMessageRepository,
         )
         priorNotification.enrichReportingCount(reportingRepository)
+        val priorNotificationWithVessel = getPriorNotificationWithVessel(priorNotification)
 
-        return priorNotification
+        return priorNotificationWithVessel
+    }
+
+    private fun getPriorNotificationWithVessel(
+        priorNotification: PriorNotification,
+    ): PriorNotification {
+        val vessel = when (priorNotification.isManuallyCreated) {
+            true -> if (priorNotification.logbookMessageAndValue.logbookMessage.vesselId != null) {
+                vesselRepository.findVesselById(priorNotification.logbookMessageAndValue.logbookMessage.vesselId!!)
+            } else {
+                null
+            }
+            false -> if (priorNotification.logbookMessageAndValue.logbookMessage.internalReferenceNumber != null) {
+                vesselRepository.findFirstByInternalReferenceNumber(
+                    priorNotification.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
+                )
+            } else {
+                null
+            }
+        } ?: UNKNOWN_VESSEL
+
+        return priorNotification.copy(vessel = vessel)
     }
 }

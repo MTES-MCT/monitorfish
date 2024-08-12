@@ -3,7 +3,10 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.SeafrontGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationStats
-import fr.gouv.cnsp.monitorfish.domain.repositories.*
+import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.ManualPriorNotificationRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorRepository
 
 @UseCase
 class GetNumberToVerify(
@@ -11,12 +14,10 @@ class GetNumberToVerify(
     private val manualPriorNotificationRepository: ManualPriorNotificationRepository,
     private val portRepository: PortRepository,
     private val riskFactorRepository: RiskFactorRepository,
-    private val vesselRepository: VesselRepository,
 ) {
     fun execute(): PriorNotificationStats {
         val allPorts = portRepository.findAll()
         val allRiskFactors = riskFactorRepository.findAll()
-        val allVessels = vesselRepository.findAll()
 
         val automaticPriorNotifications = logbookReportRepository.findAllPriorNotificationsToVerify()
         val manualPriorNotifications = manualPriorNotificationRepository.findAllToVerify()
@@ -27,7 +28,7 @@ class GetNumberToVerify(
 
         val priorNotifications = undeletedPriorNotifications
             .map { priorNotification ->
-                priorNotification.enrich(allPorts, allRiskFactors, allVessels, priorNotification.isManuallyCreated)
+                priorNotification.enrich(allRiskFactors, allPorts, priorNotification.isManuallyCreated)
 
                 priorNotification
             }

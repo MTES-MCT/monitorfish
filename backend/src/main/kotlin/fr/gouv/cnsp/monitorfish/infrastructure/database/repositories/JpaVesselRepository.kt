@@ -64,6 +64,10 @@ class JpaVesselRepository(private val dbVesselRepository: DBVesselRepository) : 
         return dbVesselRepository.findAllByIds(ids).map { it.toVessel() }
     }
 
+    override fun findVesselsByInternalReferenceNumbers(internalReferenceNumbers: List<String>): List<Vessel> {
+        return dbVesselRepository.findAllByInternalReferenceNumbers(internalReferenceNumbers).map { it.toVessel() }
+    }
+
     override fun findVesselById(vesselId: Int): Vessel? {
         return dbVesselRepository.findById(vesselId).getOrNull()?.toVessel()
     }

@@ -1,6 +1,8 @@
 import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
+import { useGetVesselQuery } from '@features/Vessel/apis'
 import { VesselSearch } from '@features/VesselSearch'
 import { Checkbox, useNewWindow } from '@mtes-mct/monitor-ui'
+import { skipToken } from '@reduxjs/toolkit/query'
 import { UNKNOWN_VESSEL } from 'domain/entities/vessel/vessel'
 import { useFormikContext } from 'formik'
 import { useMemo } from 'react'
@@ -16,6 +18,8 @@ export function VesselField() {
   const { updateFieldsControlledByVessel } = useGetMissionActionFormikUsecases()
 
   const { newWindowContainerRef } = useNewWindow()
+
+  const { data: vessel, isFetching } = useGetVesselQuery(values.vesselId ?? skipToken)
 
   const defaultValue = useMemo(() => {
     if (!values.vesselId || !values.flagState) {
@@ -122,12 +126,17 @@ export function VesselField() {
             )}
             {values.externalReferenceNumber && (
               <>
-                <span>{values.externalReferenceNumber}</span> (Marq. ext)
+                <span>{values.externalReferenceNumber}</span> (Mq. ext)
               </>
             )}
             {values.ircs && (
               <>
                 <span>{values.ircs}</span> (Call Sign)
+              </>
+            )}
+            {!isFetching && !!vessel?.length && (
+              <>
+                <span>{vessel.length}</span> (Taille)
               </>
             )}
           </VesselIdentityBar>

@@ -11,7 +11,6 @@ import prefect
 import prefect.engine
 import prefect.engine.signals
 import prefect.exceptions
-import requests
 import weasyprint
 from jinja2 import Environment, FileSystemLoader, Template, select_autoescape
 from prefect import Flow, Parameter, case, flatten, task, unmapped
@@ -28,7 +27,6 @@ from config import (
     EMAIL_TEMPLATES_LOCATION,
     LIBERTE_EGALITE_FRATERNITE_LOGO_PATH,
     MARIANNE_LOGO_PATH,
-    MONITORENV_API_ENDPOINT,
     MONITORFISH_EMAIL_ADDRESS,
     PNO_TEST_EMAIL,
     SE_MER_LOGO_PATH,
@@ -56,11 +54,11 @@ from src.pipeline.helpers.emails import (
     resize_pdf_to_A4,
     send_email_or_sms_or_fax_message,
 )
-from src.pipeline.processing import remove_nones_from_list
 from src.pipeline.shared_tasks.control_flow import (
     check_flow_not_running,
     filter_results,
 )
+from src.pipeline.shared_tasks.control_units import fetch_control_units_contacts
 from src.pipeline.shared_tasks.dates import get_utcnow, make_timedelta
 from src.pipeline.shared_tasks.infrastructure import execute_statement
 from src.pipeline.shared_tasks.pnos import (
@@ -112,49 +110,6 @@ def extract_pnos_to_generate(
     generation_needed = len(pnos) > 0
 
     return (pnos, generation_needed)
-
-
-@task(checkpoint=False)
-def fetch_control_units_contacts() -> pd.DataFrame:
-    r = requests.get(MONITORENV_API_ENDPOINT + "control_units")
-
-    r.raise_for_status()
-    df = pd.DataFrame(r.json())
-
-    columns = {
-        "id": "control_unit_id",
-        "controlUnitContacts": "control_unit_contacts",
-        "isArchived": "is_archived",
-    }
-
-    df = df[columns.keys()].rename(columns=columns)
-
-    contacts = (
-        df.loc[~df.is_archived, ["control_unit_id", "control_unit_contacts"]]
-        .explode("control_unit_contacts")
-        .dropna()
-        .reset_index(drop=True)
-    )
-    contacts["email"] = contacts["control_unit_contacts"].apply(
-        lambda x: x.get("email") if x.get("isEmailSubscriptionContact") else None
-    )
-
-    contacts["phone"] = contacts["control_unit_contacts"].apply(
-        lambda x: x.get("phone") if x.get("isSmsSubscriptionContact") else None
-    )
-
-    email_and_phone_contacts = (
-        contacts[["control_unit_id", "email", "phone"]]
-        .dropna(subset=["email", "phone"], how="all")
-        .groupby("control_unit_id")
-        .agg({"email": "unique", "phone": "unique"})
-        .rename(columns={"email": "emails", "phone": "phone_numbers"})
-        .map(remove_nones_from_list)
-        .map(sorted)
-        .reset_index()
-    )
-
-    return email_and_phone_contacts
 
 
 @task(checkpoint=False)

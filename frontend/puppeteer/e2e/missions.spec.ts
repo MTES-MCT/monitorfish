@@ -1,8 +1,8 @@
-import { beforeEach, describe, expect, it } from '@jest/globals'
+import { afterEach, beforeEach, describe, expect, it } from '@jest/globals'
 import { platform } from 'os'
 import { Page } from 'puppeteer'
 
-import { getFirstTab, getInputContent, listenToConsole, wait, waitForSelectorWithText } from './utils'
+import { consoleListener, getFirstTab, getInputContent, wait, waitForSelectorWithText } from './utils'
 // /!\ Do not shorten imports, it will fail the run
 import { SeafrontGroup } from '../../src/constants/seafront'
 
@@ -21,10 +21,10 @@ let pageB: Page
 describe('Missions Form', () => {
   beforeEach(async () => {
     pageA = await getFirstTab(browsers[0])
-    listenToConsole(pageA, 1)
+    consoleListener.start(pageA, 1)
 
     pageB = await getFirstTab(browsers[1])
-    listenToConsole(pageB, 2)
+    consoleListener.start(pageB, 2)
 
     /* eslint-disable no-restricted-syntax */
     for (const page of [pageA, pageB]) {
@@ -48,6 +48,10 @@ describe('Missions Form', () => {
       await wait(1000)
     }
   }, 50000)
+
+  afterEach(async () => {
+    consoleListener.stop()
+  })
 
   it(
     'Two windows must be synchronized on form update',

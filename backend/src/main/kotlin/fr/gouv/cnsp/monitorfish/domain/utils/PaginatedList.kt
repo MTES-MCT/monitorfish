@@ -25,11 +25,11 @@ data class PaginatedList<Entity, ExtraData>(
 
             return PaginatedList(
                 data = paginatedItems,
-                extraData,
-                lastPageNumber,
-                pageNumber,
-                pageSize,
-                totalLength,
+                extraData = extraData,
+                lastPageNumber = lastPageNumber,
+                pageNumber = pageNumber,
+                pageSize = pageSize,
+                totalLength = totalLength,
             )
         }
     }

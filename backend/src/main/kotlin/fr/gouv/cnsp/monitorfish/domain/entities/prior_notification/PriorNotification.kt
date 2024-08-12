@@ -9,10 +9,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.UNKNOWN_VESSEL
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendInternalErrorCode
-import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookRawMessageRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
@@ -30,7 +28,7 @@ data class PriorNotification(
     var seafront: Seafront?,
     val sentAt: ZonedDateTime?,
     val updatedAt: ZonedDateTime?,
-    var vessel: Vessel?,
+    val vessel: Vessel?,
     var lastControlDateTime: ZonedDateTime?,
 ) {
     /** Each prior notification and each of its updates have a unique fingerprint. */
@@ -73,42 +71,25 @@ data class PriorNotification(
         }
 
     fun enrich(
-        allPorts: List<Port>,
         allRiskFactors: List<VesselRiskFactor>,
-        allVessels: List<Vessel>,
+        allPorts: List<Port>,
         isManuallyCreated: Boolean,
     ) {
         val logbookMessage = logbookMessageAndValue.logbookMessage
         val pnoMessage = logbookMessageAndValue.value
 
-        port = try {
-            pnoMessage.port?.let { portLocode ->
-                allPorts.find { it.locode == portLocode }
-            }
-        } catch (e: CodeNotFoundException) {
-            null
+        port = pnoMessage.port?.let { portLocode ->
+            allPorts.find { it.locode == portLocode }
         }
 
         seafront = port?.facade?.let { Seafront.from(it) }
-
-        // Default to UNKNOWN vessel when null or not found
-        vessel = if (isManuallyCreated) {
-            logbookMessage.vesselId?.let { vesselId ->
-                allVessels.find { it.id == vesselId }
-            } ?: UNKNOWN_VESSEL
-        } else {
-            logbookMessage
-                .internalReferenceNumber?.let { vesselInternalReferenceNumber ->
-                    allVessels.find { it.internalReferenceNumber == vesselInternalReferenceNumber }
-                } ?: UNKNOWN_VESSEL
-        }
 
         lastControlDateTime = if (isManuallyCreated) {
             logbookMessage.vesselId?.let { vesselId ->
                 allRiskFactors.find { it.vesselId == vesselId }?.lastControlDatetime
             }
         } else {
-            vessel!!.internalReferenceNumber?.let { vesselInternalReferenceNumber ->
+            logbookMessage.internalReferenceNumber?.let { vesselInternalReferenceNumber ->
                 allRiskFactors.find { it.internalReferenceNumber == vesselInternalReferenceNumber }?.lastControlDatetime
             }
         }

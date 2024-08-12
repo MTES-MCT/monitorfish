@@ -31,9 +31,6 @@ class GetNumberToVerifyUTests {
     @MockBean
     private lateinit var riskFactorRepository: RiskFactorRepository
 
-    @MockBean
-    private lateinit var vesselRepository: VesselRepository
-
     @Test
     fun `execute Should return a map of PNO for each facade to verify`() {
         // Given
@@ -118,7 +115,6 @@ class GetNumberToVerifyUTests {
             manualPriorNotificationRepository,
             portRepository,
             riskFactorRepository,
-            vesselRepository,
         ).execute()
 
         // Then

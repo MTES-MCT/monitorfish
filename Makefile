@@ -154,15 +154,15 @@ docker-compose-up:
 	docker compose -f ./infra/docker/docker-compose.cypress.yml up --quiet-pull flyway
 	docker compose -f ./infra/docker/docker-compose.cypress.yml up -d --quiet-pull app
 	@printf 'Waiting for backend app to be ready'
-	@until curl --output /dev/null --silent --fail "http://localhost:8880/bff/v1/healthcheck"; do printf '.' && sleep 1; done
+	@until curl --output /dev/null --silent --fail "http://localhost:8880/api/v1/healthcheck"; do printf '.' && sleep 1; done
 
 docker-compose-puppeteer-up: docker-env
 	docker compose -f ./infra/docker/docker-compose.puppeteer.yml up -d monitorenv-app
 	docker compose -f ./infra/docker/docker-compose.puppeteer.yml up -d monitorfish-app
 	@printf 'Waiting for MonitorEnv app to be ready'
-	@until curl --output /dev/null --silent --fail "http://localhost:9880/bff/v1/healthcheck"; do printf '.' && sleep 1; done
+	@until curl --output /dev/null --silent --fail "http://localhost:9880/api/v1/healthcheck"; do printf '.' && sleep 1; done
 	@printf 'Waiting for MonitorFish app to be ready'
-	@until curl --output /dev/null --silent --fail "http://localhost:8880/bff/v1/healthcheck"; do printf '.' && sleep 1; done
+	@until curl --output /dev/null --silent --fail "http://localhost:8880/api/v1/healthcheck"; do printf '.' && sleep 1; done
 
 # ----------------------------------------------------------
 # CI: Pipeline Commands

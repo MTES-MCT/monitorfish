@@ -1,11 +1,11 @@
-const { defineConfig } = require('cypress')
-const initCypressMousePositionPlugin = require('cypress-mouse-position/plugin')
-const { initPlugin } = require('cypress-plugin-snapshots/plugin')
+import { defineConfig } from 'cypress'
+import initCypressMousePositionPlugin from 'cypress-mouse-position/plugin'
+import { initPlugin } from 'cypress-plugin-snapshots/plugin'
 
 const IS_CI = Boolean(process.env.CI)
 const DEFAULT_PORT = IS_CI ? 8880 : 3000
 
-module.exports = defineConfig({
+export default defineConfig({
   e2e: {
     baseUrl: `http://localhost:${DEFAULT_PORT}`,
     excludeSpecPattern: ['**/__snapshots__/*', '**/__image_snapshots__/*'],

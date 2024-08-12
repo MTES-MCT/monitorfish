@@ -8,7 +8,7 @@ module.exports = {
     ecmaVersion: 2022,
     project: path.join(__dirname, 'tsconfig.json')
   },
-  ignorePatterns: ['.eslintrc.js', '.eslintrc.partial.js', 'config/cypress.config.js'],
+  ignorePatterns: ['.eslintrc.cjs', '.eslintrc.partial.cjs'],
   env: {
     browser: true
   },
@@ -200,12 +200,14 @@ module.exports = {
         './scripts/**/*.js',
         '**/*.spec.ts',
         './config/**/*.ts',
-        './scripts/**/*.mjs',
         './scripts/**/*.ts'
       ],
       env: {
         browser: false,
         node: true
+      },
+      rules: {
+        'import/no-default-export': 'off'
       }
     }
   ]

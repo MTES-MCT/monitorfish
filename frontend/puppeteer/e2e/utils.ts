@@ -4,6 +4,11 @@ import { Page, Browser, type FrameWaitForFunctionOptions } from 'puppeteer'
 export function listenToConsole(page: Page, index: number) {
   page
     .on('console', async message => {
+      // Ignore SmallChat
+      if (message.text().includes('static.small.chat')) {
+        return
+      }
+
       const messageType = message.type().substr(0, 3).toUpperCase()
       console.log(`[Page ${index}] ${messageType}: ${message.text()}`)
 

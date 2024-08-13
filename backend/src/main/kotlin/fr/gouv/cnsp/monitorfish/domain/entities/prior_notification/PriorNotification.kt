@@ -33,7 +33,6 @@ data class PriorNotification(
 ) {
     /** Each prior notification and each of its updates have a unique fingerprint. */
     val fingerprint: String = listOf(reportId, updatedAt, state).joinToString(separator = ".")
-    private val logger = LoggerFactory.getLogger(PriorNotification::class.java)
 
     val state: PriorNotificationState?
         /**
@@ -138,6 +137,8 @@ data class PriorNotification(
     }
 
     companion object {
+        private val logger = LoggerFactory.getLogger(PriorNotification::class.java)
+
         /**
          * Next initial state of the prior notification once it will be created or updated.
          *

@@ -72,6 +72,7 @@ class JpaManualPriorNotificationRepository(
     }
 
     @Transactional
+    @CacheEvict(value = ["pno_to_verify"], allEntries = true)
     override fun save(newOrNextPriorNotification: PriorNotification): PriorNotification {
         try {
             val manualPriorNotificationEntity = dbManualPriorNotificationRepository

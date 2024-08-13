@@ -60,7 +60,7 @@ class JpaManualPriorNotificationRepository(
             ).filter {
                 it.value.isInVerificationScope == true &&
                     it.value.isVerified == false &&
-                    (it.value.isInvalidated == null || it.value.isInvalidated == false)
+                    it.value.isInvalidated != true
             }
             .map {
                 it.toPriorNotification()

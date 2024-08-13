@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FAOArea
+import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FaoArea
 import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
 import fr.gouv.cnsp.monitorfish.domain.repositories.FleetSegmentRepository
 import org.slf4j.LoggerFactory
@@ -34,7 +34,7 @@ class ComputeFleetSegments(
                     fleetSegment.targetSpecies.any { specyCodes.contains(it) } ||
                     fleetSegment.bycatchSpecies.any { specyCodes.contains(it) }
             val isContainingFaoAreaFromList = fleetSegment.faoAreas.isEmpty() || fleetSegment.faoAreas.any { faoArea ->
-                faoAreas.map { FAOArea(it) }.any { it.hasFaoCodeIncludedIn(faoArea) }
+                faoAreas.map { FaoArea(it) }.any { it.hasFaoCodeIncludedIn(faoArea) }
             }
 
             return@filter isContainingGearFromList && isContainingSpecyFromList && isContainingFaoAreaFromList

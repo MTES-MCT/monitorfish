@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.fao_areas
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FAOArea
+import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FaoArea
 import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.removeRedundantFaoArea
@@ -19,10 +19,10 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.removeRedundantFa
  *    - Fetch the fao zones from the portLocode if given
  */
 @UseCase
-class ComputeVesselFAOAreas(
+class ComputeVesselFaoAreas(
     private val riskFactorRepository: RiskFactorRepository,
     private val portRepository: PortRepository,
-    private val computeFAOAreasFromCoordinates: ComputeFAOAreasFromCoordinates,
+    private val computeFaoAreasFromCoordinates: ComputeFaoAreasFromCoordinates,
 ) {
     fun execute(
         internalReferenceNumber: String?,
@@ -45,7 +45,7 @@ class ComputeVesselFAOAreas(
             } ?: listOf()
 
             if (faoAreas.isNotEmpty()) {
-                val faoAreasObjects = faoAreas.map { FAOArea(faoCode = it) }
+                val faoAreasObjects = faoAreas.map { FaoArea(faoCode = it) }
 
                 return removeRedundantFaoArea(faoAreasObjects).map { it.faoCode }
             }
@@ -53,7 +53,7 @@ class ComputeVesselFAOAreas(
 
         // Otherwise, fetch the fao zones from the latitude/longitude if given
         if (latitude != null && longitude != null) {
-            return computeFAOAreasFromCoordinates.execute(longitude, latitude).map { it.faoCode }
+            return computeFaoAreasFromCoordinates.execute(longitude, latitude).map { it.faoCode }
         }
 
         // Otherwise, fetch the fao zones from the portLocode if given

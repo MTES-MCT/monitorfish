@@ -22,6 +22,7 @@ class CaffeineConfiguration {
 
     // FAO Areas
     val faoAreas = "fao_areas"
+    val faoAreasSortedByUsage = "fao_areas_sorted_by_usage"
 
     // Gears
     val gear = "gear"
@@ -95,6 +96,7 @@ class CaffeineConfiguration {
 
         // FAO Areas
         val faoAreasCache = buildMinutesCache(faoAreas, ticker, oneWeek)
+        val faoAreasSortedByUsageCache = buildMinutesCache(faoAreasSortedByUsage, ticker, oneDay)
 
         // Gears
         val gearsCache = buildMinutesCache(gears, ticker, oneWeek)
@@ -171,6 +173,7 @@ class CaffeineConfiguration {
                 segmentsByYearCache,
                 districtCache,
                 faoAreasCache,
+                faoAreasSortedByUsageCache,
                 findBeaconCache,
                 firstAndLastTripDates,
                 gearCache,

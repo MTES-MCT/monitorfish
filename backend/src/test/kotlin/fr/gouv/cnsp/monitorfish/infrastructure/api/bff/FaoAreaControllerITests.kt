@@ -4,8 +4,8 @@ import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
-import fr.gouv.cnsp.monitorfish.domain.use_cases.fao_areas.ComputeVesselFAOAreas
-import fr.gouv.cnsp.monitorfish.domain.use_cases.fao_areas.GetFAOAreas
+import fr.gouv.cnsp.monitorfish.domain.use_cases.fao_areas.ComputeVesselFaoAreas
+import fr.gouv.cnsp.monitorfish.domain.use_cases.fao_areas.GetFaoAreas
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
@@ -28,10 +28,10 @@ class FaoAreaControllerITests {
     private lateinit var api: MockMvc
 
     @MockBean
-    private lateinit var getFAOAreas: GetFAOAreas
+    private lateinit var getFAOAreas: GetFaoAreas
 
     @MockBean
-    private lateinit var computeVesselFAOAreas: ComputeVesselFAOAreas
+    private lateinit var computeVesselFAOAreas: ComputeVesselFaoAreas
 
     @Test
     fun `Should get FAO areas`() {

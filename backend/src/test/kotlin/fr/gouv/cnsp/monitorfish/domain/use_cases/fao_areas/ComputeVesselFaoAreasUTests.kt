@@ -1,15 +1,13 @@
-package fr.gouv.cnsp.monitorfish.domain.use_cases.faoAreas
+package fr.gouv.cnsp.monitorfish.domain.use_cases.fao_areas
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
-import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FAOArea
+import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FaoArea
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Species
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.fao_areas.ComputeFAOAreasFromCoordinates
-import fr.gouv.cnsp.monitorfish.domain.use_cases.fao_areas.ComputeVesselFAOAreas
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -17,7 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
-class ComputeVesselFAOAreasUTests {
+class ComputeVesselFaoAreasUTests {
 
     @MockBean
     private lateinit var riskFactorRepository: RiskFactorRepository
@@ -26,19 +24,19 @@ class ComputeVesselFAOAreasUTests {
     private lateinit var portRepository: PortRepository
 
     @MockBean
-    private lateinit var computeFAOAreasFromCoordinates: ComputeFAOAreasFromCoordinates
+    private lateinit var computeFAOAreasFromCoordinates: ComputeFaoAreasFromCoordinates
 
     @Test
     fun `execute Should return the computed fao areas When the latitude & longitude are given`() {
         given(computeFAOAreasFromCoordinates.execute(any(), any())).willReturn(
             listOf(
-                FAOArea("27.8.c"),
-                FAOArea("27.8"),
+                FaoArea("27.8.c"),
+                FaoArea("27.8"),
             ),
         )
 
         // When
-        val faoAreas = ComputeVesselFAOAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
+        val faoAreas = ComputeVesselFaoAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
             .execute(null, 12.5, 45.1, null)
 
         // Then
@@ -48,7 +46,7 @@ class ComputeVesselFAOAreasUTests {
     @Test
     fun `execute Should return no fao area When a coordinate parameter is null`() {
         // When
-        val faoAreas = ComputeVesselFAOAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
+        val faoAreas = ComputeVesselFaoAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
             .execute(null, null, 45.1, null)
 
         // Then
@@ -61,13 +59,13 @@ class ComputeVesselFAOAreasUTests {
             .willReturn(VesselRiskFactor(speciesOnboard = listOf(Species(faoZone = null))))
         given(computeFAOAreasFromCoordinates.execute(any(), any())).willReturn(
             listOf(
-                FAOArea("27.8.c"),
-                FAOArea("27.8"),
+                FaoArea("27.8.c"),
+                FaoArea("27.8"),
             ),
         )
 
         // When
-        val faoAreas = ComputeVesselFAOAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
+        val faoAreas = ComputeVesselFaoAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
             .execute("DUMMY_CFR", 12.5, 45.1, null)
 
         // Then
@@ -80,13 +78,13 @@ class ComputeVesselFAOAreasUTests {
             .willReturn(null)
         given(computeFAOAreasFromCoordinates.execute(any(), any())).willReturn(
             listOf(
-                FAOArea("27.8.c"),
-                FAOArea("27.8"),
+                FaoArea("27.8.c"),
+                FaoArea("27.8"),
             ),
         )
 
         // When
-        val faoAreas = ComputeVesselFAOAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
+        val faoAreas = ComputeVesselFaoAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
             .execute("DUMMY_CFR", 12.5, 45.1, null)
 
         // Then
@@ -99,7 +97,7 @@ class ComputeVesselFAOAreasUTests {
             .willReturn(VesselRiskFactor(speciesOnboard = listOf(Species(faoZone = "27.8.c"))))
 
         // When
-        val faoAreas = ComputeVesselFAOAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
+        val faoAreas = ComputeVesselFaoAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
             .execute("DUMMY_CFR", 12.5, 45.1, null)
 
         // Then
@@ -113,7 +111,7 @@ class ComputeVesselFAOAreasUTests {
         )
 
         // When
-        val faoAreas = ComputeVesselFAOAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
+        val faoAreas = ComputeVesselFaoAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
             .execute(null, null, null, "AEFAT")
 
         // Then
@@ -127,7 +125,7 @@ class ComputeVesselFAOAreasUTests {
         )
 
         // When
-        val faoAreas = ComputeVesselFAOAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
+        val faoAreas = ComputeVesselFaoAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
             .execute("DUMMY_CFR", null, null, "AEFAT")
 
         // Then

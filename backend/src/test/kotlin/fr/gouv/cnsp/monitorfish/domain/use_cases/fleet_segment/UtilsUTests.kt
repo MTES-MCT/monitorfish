@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment
 
-import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FAOArea
+import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FaoArea
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -13,11 +13,11 @@ class UtilsUTests {
     fun `removeRedundantFaoArea Should remove redundant fao codes`() {
         // Given
         val faoAreas = listOf(
-            FAOArea(faoCode = "27.1.B"),
-            FAOArea(faoCode = "27.1"),
-            FAOArea(faoCode = "27.1"),
-            FAOArea(faoCode = "18"),
-            FAOArea(faoCode = "27.1.B.a"),
+            FaoArea(faoCode = "27.1.B"),
+            FaoArea(faoCode = "27.1"),
+            FaoArea(faoCode = "27.1"),
+            FaoArea(faoCode = "18"),
+            FaoArea(faoCode = "27.1.B.a"),
         )
 
         // When
@@ -33,10 +33,10 @@ class UtilsUTests {
     fun `removeRedundantFaoArea Should keep different fao codes`() {
         // Given
         val faoAreas = listOf(
-            FAOArea(faoCode = "27.1.B"),
-            FAOArea(faoCode = "27.1.B"),
-            FAOArea(faoCode = "27.1.B"),
-            FAOArea(faoCode = "27.1.C"),
+            FaoArea(faoCode = "27.1.B"),
+            FaoArea(faoCode = "27.1.B"),
+            FaoArea(faoCode = "27.1.B"),
+            FaoArea(faoCode = "27.1.C"),
         )
 
         // When
@@ -52,9 +52,9 @@ class UtilsUTests {
     fun `removeRedundantFaoArea Should not remove redundant fao codes When fao code is not located at the start of the string`() {
         // Given
         val faoAreas = listOf(
-            FAOArea(faoCode = "27"),
-            FAOArea(faoCode = "22.1.27"),
-            FAOArea(faoCode = "18"),
+            FaoArea(faoCode = "27"),
+            FaoArea(faoCode = "22.1.27"),
+            FaoArea(faoCode = "18"),
         )
 
         // When
@@ -66,16 +66,16 @@ class UtilsUTests {
 
     @Test
     fun `hasFaoCodeIncludedIn Should test fao areas included in another fao area`() {
-        val faoAreaOne = FAOArea(faoCode = "27.1.B")
+        val faoAreaOne = FaoArea(faoCode = "27.1.B")
         assertThat(faoAreaOne.hasFaoCodeIncludedIn("27.1")).isTrue()
 
-        val faoAreaTwo = FAOArea(faoCode = "27.1")
+        val faoAreaTwo = FaoArea(faoCode = "27.1")
         assertThat(faoAreaTwo.hasFaoCodeIncludedIn("27.1")).isTrue()
 
-        val faoAreaThree = FAOArea(faoCode = "28.1")
+        val faoAreaThree = FaoArea(faoCode = "28.1")
         assertThat(faoAreaThree.hasFaoCodeIncludedIn("27.1")).isFalse()
 
-        val faoAreaFour = FAOArea(faoCode = "28.1.56")
+        val faoAreaFour = FaoArea(faoCode = "28.1.56")
         assertThat(faoAreaFour.hasFaoCodeIncludedIn("56")).isFalse()
     }
 }

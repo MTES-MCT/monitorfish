@@ -1,33 +1,50 @@
 import assert from 'assert'
 import { Page, Browser, type FrameWaitForFunctionOptions } from 'puppeteer'
 
-export function listenToConsole(page: Page, index: number) {
-  page
-    .on('console', async message => {
-      // Ignore SmallChat
-      if (message.text().includes('static.small.chat')) {
-        return
-      }
+class ConsoleListener {
+  #isStopped = false
 
-      const messageType = message.type().substr(0, 3).toUpperCase()
-      console.log(`[Page ${index}] ${messageType}: ${message.text()}`)
+  start(page: Page, index: number) {
+    page
+      .on('console', message => {
+        setImmediate(async () => {
+          if (this.#isStopped) {
+            return
+          }
 
-      if (messageType === 'ERR') {
-        console.log(message.args(), message.stackTrace())
-        if (message.text().includes('/sse')) {
-          // If the SSE connection fails, the browser will restart it, it is not an application error
-          return
-        }
+          const messageType = message.type().substr(0, 3).toUpperCase()
+          console.log(`[Page ${index}] ${messageType}: ${message.text()}`)
 
-        throw new Error(message.text())
-      }
-    })
-    .on('response', async response => {
-      if (response.url().includes('/bff/') || response.url().includes('/api/')) {
-        console.log(`[Page ${index}] HTTP ${response.request().method()} ${response.status()}: ${response.url()}`)
-      }
-    })
+          if (messageType === 'ERR') {
+            console.log(message.args(), message.stackTrace())
+            if (message.text().includes('/sse')) {
+              // If the SSE connection fails, the browser will restart it, it is not an application error
+              return
+            }
+
+            throw new Error(message.text())
+          }
+        })
+      })
+      .on('response', async response => {
+        setImmediate(async () => {
+          if (this.#isStopped) {
+            return
+          }
+
+          if (response.url().includes('/bff/') || response.url().includes('/api/')) {
+            console.log(`[Page ${index}] HTTP ${response.request().method()} ${response.status()}: ${response.url()}`)
+          }
+        })
+      })
+  }
+
+  stop() {
+    this.#isStopped = true
+  }
 }
+
+export const consoleListener = new ConsoleListener()
 
 export async function assertContains(page: Page, selector: string, text: string) {
   // TODO Remove ts-ignore when TS version is 4.9.3:

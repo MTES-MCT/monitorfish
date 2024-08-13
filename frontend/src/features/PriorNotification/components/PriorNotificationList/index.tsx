@@ -15,12 +15,12 @@ import { useLoadingState } from '@hooks/useLoadingState'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
-import { Accent, Button, Icon, Size, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Icon, Size, TableWithSelectableRows, usePrevious } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { flexRender, getCoreRowModel, getExpandedRowModel, useReactTable } from '@tanstack/react-table'
 import { isLegacyFirefox } from '@utils/isLegacyFirefox'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import { getTableColumns } from './columns'
@@ -92,6 +92,7 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
   const loadingState = useLoadingState(isFetching, { apiSortingParams, listFilter }, apiPaginationParams)
   const isBodyLoaderVisible = loadingState.isLoadingNewPage || (loadingState.isReloading && !!error)
   const isBodyEmptyDataVisible = !isBodyLoaderVisible && !!priorNotifications && priorNotifications.length === 0
+  const previousListFilter = usePrevious(listFilter)
   const title = getTitle(listFilter.seafrontGroup)
 
   const handleSubMenuChange = useCallback(
@@ -136,6 +137,12 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
   })
 
   const { rows } = table.getRowModel()
+
+  useEffect(() => {
+    if (previousListFilter !== listFilter) {
+      table.resetExpanded()
+    }
+  }, [previousListFilter, listFilter, table])
 
   return (
     <>

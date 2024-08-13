@@ -1,12 +1,11 @@
-package fr.gouv.cnsp.monitorfish.domain.use_cases.faoAreas
+package fr.gouv.cnsp.monitorfish.domain.use_cases.fao_areas
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.verify
-import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FAOArea
-import fr.gouv.cnsp.monitorfish.domain.repositories.FAOAreasRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.fao_areas.ComputeFAOAreasFromCoordinates
+import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FaoArea
+import fr.gouv.cnsp.monitorfish.domain.repositories.FaoAreaRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -16,27 +15,27 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
-class ComputeFAOAreasFromCoordinatesUTests {
+class ComputeFaoAreasFromCoordinatesUTests {
 
     @MockBean
-    private lateinit var faoAreasRepository: FAOAreasRepository
+    private lateinit var faoAreaRepository: FaoAreaRepository
 
     @Test
     fun `execute Should create a point object`() {
-        given(faoAreasRepository.findByIncluding(any())).willReturn(
+        given(faoAreaRepository.findByIncluding(any())).willReturn(
             listOf(
-                FAOArea("27.8.c"),
-                FAOArea("27.8"),
+                FaoArea("27.8.c"),
+                FaoArea("27.8"),
             ),
         )
 
         // When
-        val faoAreas = ComputeFAOAreasFromCoordinates(faoAreasRepository).execute(12.5, 45.1)
+        val faoAreas = ComputeFaoAreasFromCoordinates(faoAreaRepository).execute(12.5, 45.1)
 
         // Then
         assertThat(faoAreas).isNotEmpty()
         argumentCaptor<Point>().apply {
-            verify(faoAreasRepository).findByIncluding(capture())
+            verify(faoAreaRepository).findByIncluding(capture())
 
             assertThat(allValues.first().coordinate).isEqualTo(Coordinate(12.5, 45.1))
         }

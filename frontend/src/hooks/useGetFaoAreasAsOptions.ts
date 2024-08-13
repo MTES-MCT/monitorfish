@@ -10,20 +10,14 @@ export function useGetFaoAreasAsOptions() {
   const { data: faoAreas, error, isLoading } = useGetFaoAreasQuery()
 
   const faoAreasAsOptions: Option[] | undefined = useMemo(
-    () => {
-      if (!faoAreas) {
-        return undefined
-      }
+    () =>
+      // No need to sort them, the Backend already sorts them by usage and name.
+      faoAreas?.map(faoArea => ({
+        label: faoArea,
+        value: faoArea
+      })),
 
-      return faoAreas
-        .map(faoArea => ({
-          label: faoArea,
-          value: faoArea
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label))
-    },
-
-    // FAO areas are not expected to change.
+    // FAO areas are not expected to change (often).
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [isLoading]
   )

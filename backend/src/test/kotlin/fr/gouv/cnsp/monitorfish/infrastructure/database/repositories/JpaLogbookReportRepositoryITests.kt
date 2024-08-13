@@ -996,6 +996,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(result.all { it.logbookMessageAndValue.value.isVerified == false }).isTrue()
         assertThat(result.all { it.logbookMessageAndValue.value.isInVerificationScope == true }).isTrue()
+        assertThat(result.all { it.logbookMessageAndValue.value.isInvalidated == null }).isTrue()
     }
 
     @Test

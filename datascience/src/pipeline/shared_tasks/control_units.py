@@ -15,6 +15,7 @@ def fetch_control_units_contacts() -> pd.DataFrame:
 
     columns = {
         "id": "control_unit_id",
+        "name": "control_unit_name",
         "controlUnitContacts": "control_unit_contacts",
         "isArchived": "is_archived",
     }
@@ -22,7 +23,10 @@ def fetch_control_units_contacts() -> pd.DataFrame:
     df = df[columns.keys()].rename(columns=columns)
 
     contacts = (
-        df.loc[~df.is_archived, ["control_unit_id", "control_unit_contacts"]]
+        df.loc[
+            ~df.is_archived,
+            ["control_unit_id", "control_unit_name", "control_unit_contacts"],
+        ]
         .explode("control_unit_contacts")
         .dropna()
         .reset_index(drop=True)
@@ -36,9 +40,9 @@ def fetch_control_units_contacts() -> pd.DataFrame:
     )
 
     email_and_phone_contacts = (
-        contacts[["control_unit_id", "email", "phone"]]
+        contacts[["control_unit_id", "control_unit_name", "email", "phone"]]
         .dropna(subset=["email", "phone"], how="all")
-        .groupby("control_unit_id")
+        .groupby(["control_unit_id", "control_unit_name"])
         .agg({"email": "unique", "phone": "unique"})
         .rename(columns={"email": "emails", "phone": "phone_numbers"})
         .map(remove_nones_from_list)

@@ -425,6 +425,8 @@ class JpaLogbookReportRepository(
                      * - the PDF will be re-generated (done in the use case by deleting the old one)
                      * - the PNO will require another verification before sending
                      */
+                    pnoMessage.isBeingSent = false
+                    pnoMessage.isSent = false
                     pnoMessage.isVerified = false
 
                     val nextMessage = objectMapper.writeValueAsString(pnoMessage)

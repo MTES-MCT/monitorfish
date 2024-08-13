@@ -68,6 +68,17 @@ TEST_MODE = os.getenv("TEST_MODE", "False").lower() in (
     "y",
 )
 
+# Must be set to true to send prior notifications to the FMC, and
+# not to real addressees (control units)
+WEEKLY_CONTROL_REPORT_EMAIL_TEST_MODE = os.getenv(
+    "WEEKLY_CONTROL_REPORT_EMAIL_TEST_MODE", "False"
+).lower() in (
+    "true",
+    "t",
+    "yes",
+    "y",
+)
+
 # Flow execution configuration
 DOCKER_IMAGE = "docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline"
 MONITORFISH_VERSION = os.getenv("MONITORFISH_VERSION")

@@ -39,6 +39,15 @@ export function useCustomAuth(): {
     [logout, userAuthorization, auth?.user?.profile?.email]
   )
 
+  useEffect(
+    () =>
+      // the `return` is important - addAccessTokenExpiring() returns a cleanup function
+      auth?.events?.addAccessTokenExpiring(() => {
+        auth?.signinSilent()
+      }),
+    [auth]
+  )
+
   useEffect(() => {
     if (!auth) {
       return
@@ -61,7 +70,7 @@ export function useCustomAuth(): {
         const nextUserAuthorization = await getCurrentUserAuthorization()
 
         setUserAuthorization(nextUserAuthorization)
-      }, 250)
+      }, 500)
     }
   }, [
     auth,

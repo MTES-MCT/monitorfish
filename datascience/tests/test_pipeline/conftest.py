@@ -264,6 +264,7 @@ def control_units_contacts() -> pd.DataFrame:
     return pd.DataFrame(
         {
             "control_unit_id": [2, 3, 4],
+            "control_unit_name": ["Unité 2", "Unité 3", "Unité 4"],
             "emails": [
                 ["alternative@email", "some.email@control.unit.4"],
                 [],

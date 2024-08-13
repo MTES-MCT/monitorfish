@@ -7,7 +7,7 @@ from requests import Response
 from src.pipeline.shared_tasks.control_units import fetch_control_units_contacts
 
 
-@patch("src.pipeline.flows.distribute_pnos.requests")
+@patch("src.pipeline.shared_tasks.control_units.requests")
 def test_fetch_control_units_contacts(
     mock_requests, monitorenv_control_units_api_response, control_units_contacts
 ):

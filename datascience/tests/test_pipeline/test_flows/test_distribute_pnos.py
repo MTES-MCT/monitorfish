@@ -1900,7 +1900,7 @@ def test_make_update_manual_prior_notifications_statement(
 @patch("src.pipeline.helpers.emails.send_email")
 @patch("src.pipeline.helpers.emails.send_sms")
 @patch("src.pipeline.helpers.emails.send_fax")
-@patch("src.pipeline.flows.distribute_pnos.requests")
+@patch("src.pipeline.shared_tasks.control_units.requests")
 def test_flow(
     mock_requests,
     mock_send_fax,
@@ -2030,7 +2030,7 @@ def test_flow(
 @patch("src.pipeline.helpers.emails.send_email")
 @patch("src.pipeline.helpers.emails.send_sms")
 @patch("src.pipeline.helpers.emails.send_fax")
-@patch("src.pipeline.flows.distribute_pnos.requests")
+@patch("src.pipeline.shared_tasks.control_units.requests")
 def test_flow_with_zero_pno_to_generate(
     mock_requests,
     mock_send_fax,
@@ -2087,7 +2087,7 @@ def test_flow_with_zero_pno_to_generate(
 @patch("src.pipeline.helpers.emails.send_email")
 @patch("src.pipeline.helpers.emails.send_sms")
 @patch("src.pipeline.helpers.emails.send_fax")
-@patch("src.pipeline.flows.distribute_pnos.requests")
+@patch("src.pipeline.shared_tasks.control_units.requests")
 def test_flow_with_zero_pno_to_send(
     mock_requests,
     mock_send_fax,

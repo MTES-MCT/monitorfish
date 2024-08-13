@@ -101,7 +101,7 @@ async function createFleetSegmentFromAPI(segmentFields: UpdateFleetSegment): Pro
  */
 async function addFleetSegmentYearFromAPI(nextYear: number) {
   try {
-    return await monitorfishApiKy.post(`/bff/v1/fleet_segments/${nextYear}/backoffice`)
+    return await monitorfishApiKy.post(`/bff/v1/fleet_segments/backoffice/${nextYear}`)
   } catch (err) {
     throw new ApiError(ADD_FLEET_SEGMENT_YEAR_ERROR_MESSAGE, err)
   }

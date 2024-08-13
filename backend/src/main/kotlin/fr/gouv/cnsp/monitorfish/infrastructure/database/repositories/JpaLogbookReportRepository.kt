@@ -97,7 +97,11 @@ class JpaLogbookReportRepository(
                 }
             }.filter {
                 it.logbookMessageAndValue.value.isInVerificationScope == true &&
-                    it.logbookMessageAndValue.value.isVerified == false
+                    it.logbookMessageAndValue.value.isVerified == false &&
+                    (
+                        it.logbookMessageAndValue.value.isInvalidated == null ||
+                            it.logbookMessageAndValue.value.isInvalidated == false
+                        )
             }
     }
 

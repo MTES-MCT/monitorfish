@@ -58,7 +58,9 @@ class JpaManualPriorNotificationRepository(
                 willArriveAfter = CustomZonedDateTime(ZonedDateTime.now()).toString(),
                 willArriveBefore = CustomZonedDateTime(ZonedDateTime.now().plusHours(24)).toString(),
             ).filter {
-                it.value.isInVerificationScope == true && it.value.isVerified == false
+                it.value.isInVerificationScope == true &&
+                    it.value.isVerified == false &&
+                    (it.value.isInvalidated == null || it.value.isInvalidated == false)
             }
             .map {
                 it.toPriorNotification()

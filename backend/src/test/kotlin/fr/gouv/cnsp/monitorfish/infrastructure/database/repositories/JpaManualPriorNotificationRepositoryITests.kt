@@ -577,6 +577,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(result.filter { it.logbookMessageAndValue.value.isVerified == false }).hasSize(1)
         assertThat(result.filter { it.logbookMessageAndValue.value.isInVerificationScope == true }).hasSize(1)
+        assertThat(result.filter { it.logbookMessageAndValue.value.isInvalidated == null }).hasSize(1)
     }
 
     @Test

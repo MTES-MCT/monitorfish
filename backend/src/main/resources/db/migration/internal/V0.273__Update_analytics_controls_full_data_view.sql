@@ -124,7 +124,7 @@ SELECT
         ''
     ) as comments,
     a.number_of_vessels_flown_over,
-    a.flight_goals
+    COALESCE(a.flight_goals, '{}'::VARCHAR[]) AS flight_goals
 FROM mission_actions a
 LEFT JOIN LATERAL jsonb_array_elements(CASE WHEN jsonb_typeof(segments) = 'array' THEN segments ELSE '[]' END) AS segment on true
 LEFT JOIN controls_infraction_natinfs_array inf ON inf.id = a.id

@@ -205,4 +205,17 @@ internal class NAFMessageMapperUTests {
         assertThat(position.speed).isNull()
         assertThat(position.course).isNull()
     }
+
+    @Test
+    internal fun `init Should parse the position type When given`() {
+        // Given
+        val naf = "//SR//TM/POS//IR/FRA000123456//NA/MANUEL//RC/FT6951//FS/FRA//XR/TL326095//DA/20200814//TI/0911//LT/+43.0789//LG/+006.1549//SP/000//CO/0//FR/FRA//RD/20200814//RT/0912//MS/SAT//ER//"
+
+        // When
+        val position = NAFMessageMapper(naf).toPosition()
+
+        // Then
+        assertThat(position.speed).isNull()
+        assertThat(position.course).isNull()
+    }
 }

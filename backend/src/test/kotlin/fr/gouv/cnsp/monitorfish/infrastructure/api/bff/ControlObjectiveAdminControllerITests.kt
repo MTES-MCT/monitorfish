@@ -22,8 +22,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @Import(SentryConfig::class)
 @AutoConfigureMockMvc(addFilters = false)
-@WebMvcTest(value = [(ControlObjectiveController::class)])
-class ControlObjectiveControllerITests {
+@WebMvcTest(value = [(ControlObjectiveAdminController::class)])
+class ControlObjectiveAdminControllerITests {
 
     @Autowired
     private lateinit var api: MockMvc
@@ -53,7 +53,7 @@ class ControlObjectiveControllerITests {
     fun `Should return Created When an update of a control objective is done`() {
         // When
         api.perform(
-            put("/bff/v1/control_objectives/123")
+            put("/bff/v1/admin/control_objectives/123")
                 .content(
                     objectMapper.writeValueAsString(UpdateControlObjectiveDataInput(targetNumberOfControlsAtSea = 123)),
                 )
@@ -66,7 +66,7 @@ class ControlObjectiveControllerITests {
     @Test
     fun `Should return Ok When a delete of a control objective is done`() {
         // When
-        api.perform(delete("/bff/v1/control_objectives/123"))
+        api.perform(delete("/bff/v1/admin/control_objectives/123"))
             // Then
             .andExpect(status().isOk)
     }
@@ -75,7 +75,7 @@ class ControlObjectiveControllerITests {
     fun `Should return the id When a adding a control objective`() {
         // When
         api.perform(
-            post("/bff/v1/control_objectives")
+            post("/bff/v1/admin/control_objectives")
                 .content(
                     objectMapper.writeValueAsString(
                         AddControlObjectiveDataInput(segment = "SEGMENT", facade = "FACADE", year = 2021),
@@ -123,7 +123,7 @@ class ControlObjectiveControllerITests {
         )
 
         // When
-        api.perform(get("/bff/v1/control_objectives/2021"))
+        api.perform(get("/bff/v1/admin/control_objectives/2021"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(3)))
@@ -135,7 +135,7 @@ class ControlObjectiveControllerITests {
         given(this.getControlObjectiveYearEntries.execute()).willReturn(listOf(2021, 2022))
 
         // When
-        api.perform(get("/bff/v1/control_objectives/years"))
+        api.perform(get("/bff/v1/admin/control_objectives/years"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(2)))
@@ -145,7 +145,7 @@ class ControlObjectiveControllerITests {
     @Test
     fun `Should add a new control objective year`() {
         // When
-        api.perform(post("/bff/v1/control_objectives/years"))
+        api.perform(post("/bff/v1/admin/control_objectives/years"))
             // Then
             .andExpect(status().isCreated)
     }

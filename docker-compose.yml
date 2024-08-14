@@ -46,6 +46,20 @@ services:
     volumes:
       - ./frontend/cypress/mappings:/home/wiremock/mappings
 
+  keycloak:
+    container_name: monitorfish_keycloak
+    image: quay.io/keycloak/keycloak:latest
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    ports:
+      - "8085:8080"
+    volumes:
+      - ./infra/dev/keycloak:/opt/keycloak/data/import
+    command:
+      - start-dev
+      - --import-realm
+
 volumes:
   geoserver-data:
     driver: local

@@ -153,7 +153,7 @@ interface DBLogbookReportRepository :
         FROM filtered_dat_and_cor_pno_logbook_reports
         WHERE
             report_id IN (SELECT referenced_report_id FROM acknowledged_report_ids)
-            OR transmission_format = 'FLUX'
+            OR flag_state NOT IN ('FRA', 'GUF', 'VEN') -- flag_states for which we received RET messages
 
         UNION ALL
 
@@ -161,7 +161,7 @@ interface DBLogbookReportRepository :
         FROM del_pno_logbook_reports
         WHERE
             operation_number IN (SELECT referenced_report_id FROM acknowledged_report_ids)
-            OR transmission_format = 'FLUX'
+            OR flag_state NOT IN ('FRA', 'GUF', 'VEN') -- flag_states for which we received RET messages
         """,
         nativeQuery = true,
     )

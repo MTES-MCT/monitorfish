@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.mappers
 
 import com.neovisionaries.i18n.CountryCode
+import fr.gouv.cnsp.monitorfish.domain.entities.position.NetworkType
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
@@ -207,7 +208,7 @@ internal class NAFMessageMapperUTests {
     }
 
     @Test
-    internal fun `init Should parse the position type When given`() {
+    internal fun `init Should parse the network type When given`() {
         // Given
         val naf = "//SR//TM/POS//IR/FRA000123456//NA/MANUEL//RC/FT6951//FS/FRA//XR/TL326095//DA/20200814//TI/0911//LT/+43.0789//LG/+006.1549//SP/000//CO/0//FR/FRA//RD/20200814//RT/0912//MS/SAT//ER//"
 
@@ -215,7 +216,6 @@ internal class NAFMessageMapperUTests {
         val position = NAFMessageMapper(naf).toPosition()
 
         // Then
-        assertThat(position.speed).isNull()
-        assertThat(position.course).isNull()
+        assertThat(position.networkType).isEqualTo(NetworkType.SATELLITE)
     }
 }

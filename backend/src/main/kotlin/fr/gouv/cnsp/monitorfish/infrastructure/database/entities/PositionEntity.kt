@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.neovisionaries.i18n.CountryCode
+import fr.gouv.cnsp.monitorfish.domain.entities.position.NetworkType
 import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.converters.CountryCodeConverter
@@ -44,6 +45,9 @@ data class PositionEntity(
     val isFishing: Boolean? = false,
     @Column(name = "is_at_port")
     val isAtPort: Boolean? = null,
+    @Column(name = "network_type")
+    @Enumerated(EnumType.STRING)
+    val networkType: NetworkType? = null,
 
     // Mandatory fields
     @Enumerated(EnumType.STRING)
@@ -81,6 +85,7 @@ data class PositionEntity(
         isManual = isManual,
         isFishing = isFishing,
         isAtPort = isAtPort,
+        networkType = networkType,
     )
 
     companion object {
@@ -103,6 +108,7 @@ data class PositionEntity(
                 positionType = position.positionType,
                 isManual = position.isManual,
                 isFishing = position.isFishing,
+                networkType = position.networkType,
             )
         }
     }

@@ -19,7 +19,6 @@ data class Position(
     val vesselName: String? = null,
     val flagState: CountryCode? = null,
     val positionType: PositionType,
-    val networkType: NetworkType? = null,
     val isManual: Boolean? = null,
     val isFishing: Boolean? = null,
     val isAtPort: Boolean? = null,
@@ -32,4 +31,5 @@ data class Position(
     val from: CountryCode? = null,
     val destination: CountryCode? = null,
     val tripNumber: String? = null,
+    val networkType: NetworkType? = null,
 )

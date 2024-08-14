@@ -44,6 +44,7 @@ describe('vessel/track', () => {
         from: 'FR',
         internalReferenceNumber: 'ABC000898396',
         ircs: 'ZBRI',
+        isAtPort: null,
         isFishing: null,
         isManual: null,
         latitude: 46.386,

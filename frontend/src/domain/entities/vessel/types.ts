@@ -129,6 +129,7 @@ export type VesselPosition = {
   from: string
   internalReferenceNumber: string | null
   ircs: string | null
+  isAtPort: boolean | null
   isFishing: boolean | null
   isManual: boolean | null
   latitude: number

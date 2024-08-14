@@ -19,12 +19,17 @@ export const POSITION_TABLE_COLUMNS: Array<ColumnDef<VesselPosition & { id: numb
   {
     accessorFn: row => getLocalizedDayjs(row.dateTime).format('YYYY-MM-DD[T]HH:mm:ss[Z]'),
     cell: info => (
-      <HighlightPositionCell isManualPositionMarkerShowed row={info.row.original} value={info.getValue()} />
+      <HighlightPositionCell
+        isAtPortPositionMarkerShowed
+        isManualPositionMarkerShowed
+        row={info.row.original}
+        value={info.getValue()}
+      />
     ),
     enableSorting: true,
     header: 'GDH',
     id: 'dateTime',
-    size: 160
+    size: 170
   },
   {
     accessorFn: row => (isNumeric(row.speed) ? `${row.speed} nds` : '-'),

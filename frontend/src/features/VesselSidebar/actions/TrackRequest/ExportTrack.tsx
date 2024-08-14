@@ -75,7 +75,11 @@ export function ExportTrack() {
       latitude: 'Latitude',
       longitude: 'Longitude',
       course: 'Cap',
-      speed: 'Vitesse'
+      speed: 'Vitesse',
+      isAtPort: {
+        label: 'Au port',
+        transform: position => (position.isAtPort ? 'Oui' : 'Non')
+      }
     }
     /* eslint-enable sort-keys-fix/sort-keys-fix */
 

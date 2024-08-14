@@ -93,7 +93,7 @@ context('Vessels list', () => {
 
       return cy
         .readFile(`cypress/downloads/${downloadedCSVFilename}`)
-        .should('contains', 'Quartier,CFR,C/S,Nom,GDH (UTC),MMSI,Latitude,Longitude,Cap,Vitesse')
+        .should('contains', 'Quartier,CFR,C/S,Nom,GDH (UTC),MMSI,Latitude,Longitude,Cap,Vitesse,Au port')
         .should('contains', '"Duval","ABC000021309","","GENS SAISON PARMI"')
         .should('contains', '"","48°43′41″N","002°44′53″W"')
     })

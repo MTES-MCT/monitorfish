@@ -21,6 +21,7 @@ data class Position(
     val positionType: PositionType,
     val isManual: Boolean? = null,
     val isFishing: Boolean? = null,
+    val isAtPort: Boolean? = null,
 
     val latitude: Double,
     val longitude: Double,

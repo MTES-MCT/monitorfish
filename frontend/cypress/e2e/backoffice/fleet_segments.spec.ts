@@ -35,7 +35,7 @@ context('Fleet segments', () => {
     cy.log('Should update the segment')
 
     // When
-    cy.intercept('PUT', `/bff/v1/admin/fleet_segments/?year=${currentYear}&segment=ATL01`).as('updateFleetSegment')
+    cy.intercept('PUT', `/bff/v1/admin/fleet_segments?year=${currentYear}&segment=ATL01`).as('updateFleetSegment')
 
     cy.get('[aria-rowindex="2"]').find('[title="Editer la ligne"]').click()
     cy.fill('Nom', 'ATL036')
@@ -137,7 +137,7 @@ context('Fleet segments', () => {
     // -------------------------------------------------------------------------
     cy.log('Should delete a fleet segment')
 
-    cy.intercept('DELETE', `/bff/v1/admin/fleet_segments/?year=${currentYear}&segment=ABC123`).as('deleteFleetSegment')
+    cy.intercept('DELETE', `/bff/v1/admin/fleet_segments?year=${currentYear}&segment=ABC123`).as('deleteFleetSegment')
     cy.get('[aria-rowindex="2"]').find('[title="Supprimer la ligne"]').click()
     cy.wait('@deleteFleetSegment')
 

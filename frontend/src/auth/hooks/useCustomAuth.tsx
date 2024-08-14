@@ -23,20 +23,20 @@ export function useCustomAuth(): {
   }, [])
 
   const logout = useCallback(() => {
-    const idTokenHint = auth?.user?.id_token
+    const idTokenHint = auth.user?.id_token
 
-    auth?.removeUser()
-    auth?.removeUser()
-    auth?.signoutRedirect({ id_token_hint: idTokenHint ?? '' })
+    auth.removeUser()
+    auth.removeUser()
+    auth.signoutRedirect({ id_token_hint: idTokenHint ?? '' })
   }, [auth])
 
   const userAccount = useMemo(
     () => ({
-      email: auth?.user?.profile?.email,
+      email: auth.user?.profile?.email,
       isSuperUser: userAuthorization?.isSuperUser ?? false,
       logout
     }),
-    [logout, userAuthorization, auth?.user?.profile?.email]
+    [logout, userAuthorization, auth.user?.profile?.email]
   )
 
   useEffect(() => {
@@ -45,15 +45,15 @@ export function useCustomAuth(): {
     }
 
     // automatically sign-in
-    if (!hasAuthParams() && !auth?.isAuthenticated && !auth?.activeNavigator && !auth?.isLoading) {
+    if (!hasAuthParams() && !auth.isAuthenticated && !auth.activeNavigator && !auth.isLoading) {
       // eslint-disable-next-line no-console
       console.log('Redirect after Cerbère sign-in.')
-      auth?.signinRedirect()
+      auth.signinRedirect()
 
       return
     }
 
-    if (!auth.isLoading && auth?.isAuthenticated && userAuthorization?.mustReload) {
+    if (!auth.isLoading && auth.isAuthenticated && userAuthorization?.mustReload) {
       // eslint-disable-next-line no-console
       console.log('Re-trying to login with the latest token...')
 
@@ -65,10 +65,10 @@ export function useCustomAuth(): {
     }
   }, [
     auth,
-    auth?.isAuthenticated,
-    auth?.activeNavigator,
-    auth?.isLoading,
-    auth?.signinRedirect,
+    auth.isAuthenticated,
+    auth.activeNavigator,
+    auth.isLoading,
+    auth.signinRedirect,
     userAuthorization?.mustReload
   ])
 

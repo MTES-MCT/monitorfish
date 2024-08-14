@@ -24,7 +24,11 @@ class GetVesselVoyage(
             when (voyageRequest) {
                 VoyageRequest.LAST -> logbookReportRepository.findLastTripBeforeDateTime(
                     internalReferenceNumber,
-                    ZonedDateTime.now(),
+                    /**
+                     * This 4-hour buffer prevents incorrect message datetime to be filtered.
+                     * Sometimes, vessel inboard computers might have offset datetime.
+                     */
+                    ZonedDateTime.now().withHour(4),
                 )
                 VoyageRequest.PREVIOUS -> {
                     require(tripNumber != null) {

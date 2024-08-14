@@ -440,6 +440,7 @@ class JpaLogbookReportRepository(
     }
 
     @Transactional
+    @CacheEvict(value = ["pno_to_verify"], allEntries = true)
     override fun invalidate(reportId: String, operationDate: ZonedDateTime) {
         val logbookReportEntities =
             dbLogbookReportRepository.findEnrichedPnoReferenceAndRelatedOperationsByReportId(

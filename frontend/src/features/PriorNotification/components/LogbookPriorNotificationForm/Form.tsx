@@ -29,7 +29,8 @@ export function Form({ detail, initialFormValues }: FormProps) {
   const priorNotificationIdentifier = useMemo(() => getPriorNotificationIdentifier(detail), [detail])
   assertNotNullish(priorNotificationIdentifier)
 
-  const { isInvalidated } = detail.logbookMessage.message
+  const { isBeingSent, isInvalidated } = detail.logbookMessage.message
+  const isReadOnly = !isSuperUser || !!isBeingSent || isInvalidated
 
   const invalidate = () => {
     dispatch(invalidatePriorNotification(priorNotificationIdentifier, false))
@@ -55,23 +56,20 @@ export function Form({ detail, initialFormValues }: FormProps) {
     <>
       <Formik initialValues={initialFormValues} onSubmit={noop}>
         <>
-          <FormikEffect onChange={!isInvalidated ? (updateNote as any) : noop} />
+          {!isReadOnly && <FormikEffect onChange={updateNote as any} />}
 
           <FieldGroup>
-            <FormikTextarea
-              label="Points d'attention identifiés par le CNSP"
-              name="note"
-              readOnly={!isSuperUser || isInvalidated}
-            />
+            <FormikTextarea label="Points d'attention identifiés par le CNSP" name="note" readOnly={isReadOnly} />
           </FieldGroup>
 
-          {isSuperUser && <AuthorTrigramInput label="Par" name="authorTrigram" readOnly={isInvalidated} />}
+          {isSuperUser && <AuthorTrigramInput label="Par" name="authorTrigram" readOnly={isReadOnly} />}
         </>
       </Formik>
 
       {isSuperUser && !isInvalidated && (
         <InvalidateButton
           accent={Accent.SECONDARY}
+          disabled={isReadOnly}
           Icon={Icon.Invalid}
           onClick={() => setIsInvalidatingPriorNotificationDialog(true)}
           title="Invalider le préavis"

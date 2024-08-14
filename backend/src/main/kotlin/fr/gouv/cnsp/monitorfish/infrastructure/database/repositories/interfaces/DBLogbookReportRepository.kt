@@ -136,16 +136,9 @@ interface DBLogbookReportRepository :
                     AND lr.operation_type = 'DEL'
             ),
 
-            ret_pno_logbook_reports AS (
-                SELECT
-                    lr.*,
-                    CAST(NULL AS TEXT[]) AS prior_notification_type_names,
-                    CAST(NULL AS TEXT[]) AS specy_codes,
-                    CAST(NULL AS TEXT[]) AS trip_gear_codes,
-                    CAST(NULL AS TEXT[]) AS trip_segment_codes,
-                    CAST(NULL AS INTEGER) AS reporting_count
+            acknowledged_report_ids AS (
+                SELECT DISTINCT referenced_report_id
                 FROM logbook_reports lr
-                JOIN filtered_dat_and_cor_pno_logbook_reports fdacplr ON lr.referenced_report_id = fdacplr.report_id
                 WHERE
                     -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
                     lr.operation_datetime_utc
@@ -153,20 +146,22 @@ interface DBLogbookReportRepository :
                         AND CAST(:willArriveBefore AS TIMESTAMP) + INTERVAL '48 hours'
 
                     AND lr.operation_type = 'RET'
+                    AND lr.value->>'returnStatus' = '000'
             )
 
         SELECT *
         FROM filtered_dat_and_cor_pno_logbook_reports
+        WHERE
+            report_id IN (SELECT referenced_report_id FROM acknowledged_report_ids)
+            OR transmission_format = 'FLUX'
 
-        UNION
+        UNION ALL
 
         SELECT *
         FROM del_pno_logbook_reports
-
-        UNION
-
-        SELECT *
-        FROM ret_pno_logbook_reports;
+        WHERE
+            operation_number IN (SELECT referenced_report_id FROM acknowledged_report_ids)
+            OR transmission_format = 'FLUX'
         """,
         nativeQuery = true,
     )

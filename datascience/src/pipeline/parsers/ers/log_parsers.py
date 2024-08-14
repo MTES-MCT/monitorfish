@@ -9,7 +9,8 @@ from src.pipeline.parsers.ers.childless_parsers import (
 )
 from src.pipeline.parsers.utils import (
     get_root_tag,
-    make_datetime_json_serializable,
+    make_datetime,
+    serialize_datetime,
     tagged_children,
     try_float,
 )
@@ -23,7 +24,8 @@ def parse_dep(dep):
     date = dep.get("DA")
     time = dep.get("TI")
     # cannot use DateTime because the data needs to be json serializable
-    departure_datetime_utc = make_datetime_json_serializable(date, time)
+    activity_datetime_utc = make_datetime(date, time)
+    departure_datetime_utc = serialize_datetime(activity_datetime_utc)
 
     value = {
         "departureDatetimeUtc": departure_datetime_utc,
@@ -41,7 +43,11 @@ def parse_dep(dep):
         species_onboard = [parse_spe(spe) for spe in children["SPE"]]
         value["speciesOnboard"] = species_onboard
 
-    data = {"log_type": "DEP", "value": value}
+    data = {
+        "activity_datetime_utc": activity_datetime_utc,
+        "log_type": "DEP",
+        "value": value,
+    }
 
     return data
 
@@ -49,7 +55,8 @@ def parse_dep(dep):
 def parse_far(far):
     date = far.get("DA")
     time = far.get("TI")
-    far_datetime_utc = make_datetime_json_serializable(date, time)
+    activity_datetime_utc = make_datetime(date, time)
+    far_datetime_utc = serialize_datetime(activity_datetime_utc)
 
     value = {"farDatetimeUtc": far_datetime_utc}
 
@@ -72,7 +79,11 @@ def parse_far(far):
         value["latitude"] = try_float(lat)
         value["longitude"] = try_float(lon)
 
-    data = {"log_type": "FAR", "value": {"hauls": [value]}}
+    data = {
+        "activity_datetime_utc": activity_datetime_utc,
+        "log_type": "FAR",
+        "value": {"hauls": [value]},
+    }
 
     return data
 
@@ -80,7 +91,8 @@ def parse_far(far):
 def parse_ecps(ecps):
     date = ecps.get("DA")
     time = ecps.get("TI")
-    far_datetime_utc = make_datetime_json_serializable(date, time)
+    activity_datetime_utc = make_datetime(date, time)
+    far_datetime_utc = serialize_datetime(activity_datetime_utc)
 
     value = {"cpsDatetimeUtc": far_datetime_utc}
 
@@ -103,7 +115,11 @@ def parse_ecps(ecps):
         value["latitude"] = try_float(lat)
         value["longitude"] = try_float(lon)
 
-    data = {"log_type": "CPS", "value": value}
+    data = {
+        "activity_datetime_utc": activity_datetime_utc,
+        "log_type": "CPS",
+        "value": value,
+    }
 
     return data
 
@@ -111,7 +127,8 @@ def parse_ecps(ecps):
 def parse_dis(dis):
     date = dis.get("DA")
     time = dis.get("TI")
-    discard_datetime_utc = make_datetime_json_serializable(date, time)
+    activity_datetime_utc = make_datetime(date, time)
+    discard_datetime_utc = serialize_datetime(activity_datetime_utc)
 
     value = {"discardDatetimeUtc": discard_datetime_utc}
 
@@ -121,7 +138,11 @@ def parse_dis(dis):
         catches = [parse_spe(spe) for spe in children["SPE"]]
         value["catches"] = catches
 
-    data = {"log_type": "DIS", "value": value}
+    data = {
+        "activity_datetime_utc": activity_datetime_utc,
+        "log_type": "DIS",
+        "value": value,
+    }
 
     return data
 
@@ -129,7 +150,8 @@ def parse_dis(dis):
 def parse_coe(coe):
     date = coe.get("DA")
     time = coe.get("TI")
-    effort_zone_entry_datetime_utc = make_datetime_json_serializable(date, time)
+    activity_datetime_utc = make_datetime(date, time)
+    effort_zone_entry_datetime_utc = serialize_datetime(activity_datetime_utc)
 
     children = tagged_children(coe)
 
@@ -154,7 +176,11 @@ def parse_coe(coe):
         value["latitudeEntered"] = try_float(lat)
         value["longitudeEntered"] = try_float(lon)
 
-    data = {"log_type": "COE", "value": value}
+    data = {
+        "activity_datetime_utc": activity_datetime_utc,
+        "log_type": "COE",
+        "value": value,
+    }
 
     return data
 
@@ -162,7 +188,8 @@ def parse_coe(coe):
 def parse_cox(cox):
     date = cox.get("DA")
     time = cox.get("TI")
-    effort_zone_exit_datetime_utc = make_datetime_json_serializable(date, time)
+    activity_datetime_utc = make_datetime(date, time)
+    effort_zone_exit_datetime_utc = serialize_datetime(activity_datetime_utc)
 
     children = tagged_children(cox)
 
@@ -187,7 +214,11 @@ def parse_cox(cox):
         value["latitudeExited"] = try_float(lat)
         value["longitudeExited"] = try_float(lon)
 
-    data = {"log_type": "COX", "value": value}
+    data = {
+        "activity_datetime_utc": activity_datetime_utc,
+        "log_type": "COX",
+        "value": value,
+    }
 
     return data
 
@@ -196,6 +227,8 @@ def parse_cro(cro):
     children = tagged_children(cro)
 
     value = {}
+
+    activity_datetime_utc = None
 
     if "COE" in children:
         assert len(children["COE"]) == 1
@@ -207,24 +240,31 @@ def parse_cro(cro):
         assert len(children["COX"]) == 1
         cox = children["COX"][0]
         cox_data = parse_cox(cox)
+        activity_datetime_utc = cox_data["activity_datetime_utc"]
         cox_value = cox_data["value"]
         value = {**value, **cox_value}
 
-    data = {"log_type": "CRO", "value": value}
+    data = {
+        "activity_datetime_utc": activity_datetime_utc,
+        "log_type": "CRO",
+        "value": value,
+    }
     return data
 
 
 def parse_pno(pno):
     date = pno.get("PD")
     time = pno.get("PT")
-    predicted_arrival_datetime_utc = make_datetime_json_serializable(date, time)
+    activity_datetime_utc = make_datetime(date, time)
+    predicted_arrival_datetime_utc = serialize_datetime(activity_datetime_utc)
 
     date = pno.get("DA")
     time = pno.get("TI")
-    predicted_landing_datetime_utc = make_datetime_json_serializable(date, time)
+    predicted_landing_datetime_utc = serialize_datetime(make_datetime(date, time))
 
     start_date = pno.get("DS")
-    trip_start_date = make_datetime_json_serializable(start_date, None)
+    activity_datetime_utc = make_datetime(start_date, None)
+    trip_start_date = serialize_datetime(activity_datetime_utc)
 
     children = tagged_children(pno)
 
@@ -257,7 +297,11 @@ def parse_pno(pno):
         value["latitude"] = try_float(lat)
         value["longitude"] = try_float(lon)
 
-    data = {"log_type": "PNO", "value": value}
+    data = {
+        "activity_datetime_utc": activity_datetime_utc,
+        "log_type": "PNO",
+        "value": value,
+    }
 
     return data
 
@@ -265,7 +309,8 @@ def parse_pno(pno):
 def parse_lan(lan):
     date = lan.get("DA")
     time = lan.get("TI")
-    landing_datetime_utc = make_datetime_json_serializable(date, time)
+    activity_datetime_utc = make_datetime(date, time)
+    landing_datetime_utc = serialize_datetime(activity_datetime_utc)
 
     value = {
         "landingDatetimeUtc": landing_datetime_utc,
@@ -279,7 +324,11 @@ def parse_lan(lan):
         catches = [parse_spe(spe) for spe in children["SPE"]]
         value["catchLanded"] = catches
 
-    data = {"log_type": "LAN", "value": value}
+    data = {
+        "activity_datetime_utc": activity_datetime_utc,
+        "log_type": "LAN",
+        "value": value,
+    }
 
     return data
 
@@ -287,16 +336,22 @@ def parse_lan(lan):
 def parse_eof(eof):
     date = eof.get("DA")
     time = eof.get("TI")
-    end_of_fishing_datetime_utc = make_datetime_json_serializable(date, time)
+    activity_datetime_utc = make_datetime(date, time)
+    end_of_fishing_datetime_utc = serialize_datetime(activity_datetime_utc)
     value = {"endOfFishingDatetimeUtc": end_of_fishing_datetime_utc}
-    data = {"log_type": "EOF", "value": value}
+    data = {
+        "activity_datetime_utc": activity_datetime_utc,
+        "log_type": "EOF",
+        "value": value,
+    }
     return data
 
 
 def parse_rtp(rtp):
     date = rtp.get("DA")
     time = rtp.get("TI")
-    return_datetime_utc = make_datetime_json_serializable(date, time)
+    activity_datetime_utc = make_datetime(date, time)
+    return_datetime_utc = serialize_datetime(activity_datetime_utc)
 
     value = {
         "returnDatetimeUtc": return_datetime_utc,
@@ -310,6 +365,10 @@ def parse_rtp(rtp):
         gear = [parse_gea(gea) for gea in children["GEA"]]
         value["gearOnboard"] = gear
 
-    data = {"log_type": "RTP", "value": value}
+    data = {
+        "activity_datetime_utc": activity_datetime_utc,
+        "log_type": "RTP",
+        "value": value,
+    }
 
     return data

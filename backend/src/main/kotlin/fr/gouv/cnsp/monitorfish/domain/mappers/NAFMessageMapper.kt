@@ -87,7 +87,7 @@ class NAFMessageMapper(private val naf: String) {
                         NAFCode.COURSE -> this.course = value.toDouble()
                         NAFCode.NETWORK_TYPE -> {
                             when (value.isNotEmpty()) {
-                                true -> this.networkType = NetworkType.valueOf(value)
+                                true -> this.networkType = NetworkType.from(value)
                                 false -> this.networkType = null
                             }
                         }
@@ -95,7 +95,7 @@ class NAFMessageMapper(private val naf: String) {
                             logger.debug("VMS parsing: NAF code \"$it\" of value \"$value\" not handled")
                         }
                     }
-                } catch (e: NumberFormatException) {
+                } catch (e: Exception) {
                     throw NAFMessageParsingException("Incorrect value at field $it", naf, e)
                 }
             }.run {
@@ -160,7 +160,7 @@ class NAFMessageMapper(private val naf: String) {
             from = from,
             tripNumber = tripNumber,
             positionType = PositionType.VMS,
-            networkType = n,
+            networkType = networkType,
             isManual = isManual,
         )
     }

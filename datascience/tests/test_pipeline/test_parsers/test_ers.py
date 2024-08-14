@@ -218,6 +218,7 @@ def test_cps_parser():
     metadata, data_list = parse_file(test_file)
     assert data_list == [
         {
+            "activity_datetime_utc": datetime.datetime(2023, 2, 28, 17, 44),
             "log_type": "CPS",
             "value": {
                 "cpsDatetimeUtc": "2023-02-28T17:44:00Z",
@@ -400,6 +401,7 @@ def test_multi_line_message():
     expected_data_list = [
         {
             "log_type": "DEP",
+            "activity_datetime_utc": datetime.datetime(2021, 9, 19, 18, 0),
             "value": {
                 "departureDatetimeUtc": "2021-09-19T18:00:00Z",
                 "departurePort": "FRRTB",
@@ -409,6 +411,7 @@ def test_multi_line_message():
         },
         {
             "log_type": "FAR",
+            "activity_datetime_utc": datetime.datetime(2021, 9, 19, 0, 0),
             "value": {
                 "hauls": [
                     {
@@ -468,6 +471,7 @@ def test_multi_line_message():
         },
         {
             "log_type": "RTP",
+            "activity_datetime_utc": datetime.datetime(2021, 9, 19, 22, 15),
             "value": {
                 "returnDatetimeUtc": "2021-09-19T22:15:00Z",
                 "port": "FRRTB",
@@ -476,6 +480,7 @@ def test_multi_line_message():
         },
         {
             "log_type": "LAN",
+            "activity_datetime_utc": datetime.datetime(2021, 9, 19, 22, 15),
             "value": {
                 "landingDatetimeUtc": "2021-09-19T22:15:00Z",
                 "port": "FRRTB",

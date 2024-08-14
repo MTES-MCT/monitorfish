@@ -262,10 +262,10 @@ interface DBLogbookReportRepository :
         """,
         nativeQuery = true,
     )
-    fun findEnrichedPnoReferenceAndRelatedOperationsByReportId(
+    fun findByReportId(
         reportId: String,
         operationDate: String,
-    ): List<LogbookReportEntity>
+    ): LogbookReportEntity?
 
     @Query(
         """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDate(e.tripNumber, MIN(e.operationDateTime))

@@ -52,7 +52,6 @@ data class LogbookMessage(
     }
 
     fun <T : LogbookMessageValue> toConsolidatedLogbookMessageAndValue(
-        relatedLogbookMessages: List<LogbookMessage>,
         clazz: Class<T>,
     ): LogbookMessageAndValue<T> {
         if (reportId == null) {
@@ -66,19 +65,12 @@ data class LogbookMessage(
             )
         }
 
-        val historicallySortedRelatedLogbookMessages = relatedLogbookMessages.sortedBy { it.reportDateTime }
-        val maybeLastLogbookMessageCorrection = historicallySortedRelatedLogbookMessages
-            .lastOrNull { it.operationType == LogbookOperationType.COR }
-
-        val logbookMessageBase = maybeLastLogbookMessageCorrection ?: this
-        logbookMessageBase.enrichAcnkowledge(relatedLogbookMessages)
-        val finalLogbookMessage = logbookMessageBase.copy(
-            isCorrectedByNewerMessage = false,
-            isDeleted = historicallySortedRelatedLogbookMessages.any { it.operationType == LogbookOperationType.DEL },
-        )
+        // val logbookMessageBase = this
+        // logbookMessageBase.enrichAcnkowledge(relatedLogbookMessages)
+        // logbookMessageBase.enrichAcnkowledge(relatedLogbookMessages)
 
         return LogbookMessageAndValue(
-            logbookMessage = finalLogbookMessage,
+            logbookMessage = this,
             clazz = clazz,
         )
     }

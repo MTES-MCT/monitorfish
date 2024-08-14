@@ -43,6 +43,8 @@ context('Vessel sidebar controls buttons', () => {
     // The table should be sorted in ascending datetime order
     cy.get('.Table-SimpleTable').contains('GDH').click()
     cy.get('[data-id="0"] > td').eq(2).contains('8.7 nds')
+    cy.get('[data-id="0"] > td').eq(1).find('[title="Position au port"]').should('exist')
+    cy.get('[data-id="0"] > td').eq(1).find('[title="Position manuelle (4h-report)"]').should('exist')
   })
 
   it('Vessel track dates Should be changed When walking in fishing trips', () => {

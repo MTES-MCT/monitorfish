@@ -1,5 +1,6 @@
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { Icon } from '@mtes-mct/monitor-ui'
 import { transform } from 'ol/proj'
 import styled from 'styled-components'
 
@@ -12,11 +13,17 @@ import ManualPositionSVG from '../../../icons/Pastille_position_manuelle.svg?rea
 import type { VesselPosition } from '../../../../domain/entities/vessel/types'
 
 type HighlightPositionCellProps = {
+  isAtPortPositionMarkerShowed?: boolean
   isManualPositionMarkerShowed?: boolean
   row: VesselPosition
   value: unknown
 }
-export function HighlightPositionCell({ isManualPositionMarkerShowed, row, value }: HighlightPositionCellProps) {
+export function HighlightPositionCell({
+  isAtPortPositionMarkerShowed,
+  isManualPositionMarkerShowed,
+  row,
+  value
+}: HighlightPositionCellProps) {
   const dispatch = useMainAppDispatch()
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
 
@@ -35,11 +42,15 @@ export function HighlightPositionCell({ isManualPositionMarkerShowed, row, value
     >
       {(value ?? '') as string}
       {isManualPositionMarkerShowed && row.isManual ? <ManualPosition title="Position manuelle (4h-report)" /> : ''}
+      {isAtPortPositionMarkerShowed && row.isAtPort ? <StyledAnchor size={13} title="Position au port" /> : ''}
     </span>
   )
 }
 
+const StyledAnchor = styled(Icon.Anchor)`
+  margin-left: 3px;
+`
+
 const ManualPosition = styled(ManualPositionSVG)`
   margin-left: 3px;
-  vertical-align: sub;
 `

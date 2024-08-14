@@ -6,6 +6,7 @@ const IS_CYPRESS = isCypress()
 export function getOIDCConfig() {
   const IS_OIDC_ENABLED = import.meta.env.FRONTEND_OIDC_ENABLED === 'true'
   const OIDC_REDIRECT_URI = import.meta.env.FRONTEND_OIDC_REDIRECT_URI
+  const OIDC_LOGOUT_REDIRECT_URI = import.meta.env.FRONTEND_OIDC_LOGOUT_REDIRECT_URI
   const OIDC_AUTHORITY = import.meta.env.FRONTEND_OIDC_AUTHORITY
   const OIDC_CLIENT_ID = import.meta.env.FRONTEND_OIDC_CLIENT_ID
 
@@ -21,7 +22,7 @@ export function getOIDCConfig() {
     authority: String(OIDC_AUTHORITY),
     client_id: String(OIDC_CLIENT_ID),
     onSigninCallback,
-    post_logout_redirect_uri: 'https://www.mer.gouv.fr',
+    post_logout_redirect_uri: String(OIDC_LOGOUT_REDIRECT_URI),
     redirect_uri: String(OIDC_REDIRECT_URI),
     scope: 'openid email',
     userStore: new WebStorageStateStore({ store: window.localStorage })

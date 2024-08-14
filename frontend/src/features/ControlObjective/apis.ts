@@ -17,7 +17,7 @@ export const controlObjectiveApi = monitorfishApi.injectEndpoints({
       query: createdFields => ({
         body: createdFields,
         method: 'POST',
-        url: '/control_objectives'
+        url: '/admin/control_objectives'
       }),
       transformErrorResponse: response => new ApiError(ADD_CONTROL_OBJECTIVES_ERROR_MESSAGE, response)
     }),
@@ -25,7 +25,7 @@ export const controlObjectiveApi = monitorfishApi.injectEndpoints({
       invalidatesTags: [{ type: 'ControlObjectivesYears' }],
       query: () => ({
         method: 'POST',
-        url: '/control_objectives/years'
+        url: '/admin/control_objectives/years'
       }),
       transformErrorResponse: response => new ApiError(ADD_CONTROL_OBJECTIVES_YEAR_ERROR_MESSAGE, response)
     }),
@@ -33,17 +33,17 @@ export const controlObjectiveApi = monitorfishApi.injectEndpoints({
       invalidatesTags: [{ type: 'ControlObjectives' }],
       query: id => ({
         method: 'DELETE',
-        url: `/control_objectives/${id}`
+        url: `/admin/control_objectives/${id}`
       }),
       transformErrorResponse: response => new ApiError(DELETE_CONTROL_OBJECTIVES_ERROR_MESSAGE, response)
     }),
     getControlObjectives: builder.query<ControlObjective[], number>({
       providesTags: () => [{ type: 'ControlObjectives' }],
-      query: year => `/control_objectives/${year}`
+      query: year => `/admin/control_objectives/${year}`
     }),
     getControlObjectiveYears: builder.query<number[], void>({
       providesTags: () => [{ type: 'ControlObjectivesYears' }],
-      query: () => '/control_objectives/years',
+      query: () => '/admin/control_objectives/years',
       transformResponse: (baseQueryReturnValue: number[]) => baseQueryReturnValue.sort(ascend(identity))
     }),
     updateControlObjective: builder.mutation<void, UpdateControlObjective>({
@@ -51,7 +51,7 @@ export const controlObjectiveApi = monitorfishApi.injectEndpoints({
       query: ({ id, updatedFields }) => ({
         body: updatedFields,
         method: 'PUT',
-        url: `/control_objectives/${id}`
+        url: `/admin/control_objectives/${id}`
       }),
       transformErrorResponse: response => new ApiError(UPDATE_CONTROL_OBJECTIVES_ERROR_MESSAGE, response)
     })

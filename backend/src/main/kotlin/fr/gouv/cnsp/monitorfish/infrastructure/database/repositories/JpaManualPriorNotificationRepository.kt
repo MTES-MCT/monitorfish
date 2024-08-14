@@ -58,7 +58,9 @@ class JpaManualPriorNotificationRepository(
                 willArriveAfter = CustomZonedDateTime(ZonedDateTime.now()).toString(),
                 willArriveBefore = CustomZonedDateTime(ZonedDateTime.now().plusHours(24)).toString(),
             ).filter {
-                it.value.isInVerificationScope == true && it.value.isVerified == false
+                it.value.isInVerificationScope == true &&
+                    it.value.isVerified == false &&
+                    it.value.isInvalidated != true
             }
             .map {
                 it.toPriorNotification()
@@ -70,6 +72,7 @@ class JpaManualPriorNotificationRepository(
     }
 
     @Transactional
+    @CacheEvict(value = ["pno_to_verify"], allEntries = true)
     override fun save(newOrNextPriorNotification: PriorNotification): PriorNotification {
         try {
             val manualPriorNotificationEntity = dbManualPriorNotificationRepository

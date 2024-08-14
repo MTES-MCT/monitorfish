@@ -140,14 +140,12 @@ data class LogbookReportEntity(
         )
     }
 
-    fun toPriorNotification(mapper: ObjectMapper, relatedModels: List<LogbookReportEntity>): PriorNotification {
+    fun toPriorNotification(mapper: ObjectMapper): PriorNotification {
         val referenceLogbookMessage = toLogbookMessage(mapper)
-        val relatedLogbookMessages = relatedModels
-            .map { it.toLogbookMessage(mapper) }
-            .sortedBy { it.operationDateTime }
+
         val consolidatedLogbookMessageAndValue = referenceLogbookMessage
-            .toConsolidatedLogbookMessageAndValue(relatedLogbookMessages, PNO::class.java)
-        val updatedAt = relatedLogbookMessages.lastOrNull()?.operationDateTime ?: operationDateTime.atZone(UTC)
+            .toConsolidatedLogbookMessageAndValue(PNO::class.java)
+        val updatedAt = operationDateTime.atZone(UTC)
         // For practical reasons `vessel` can't be `null`, so we temporarily set it to "Navire inconnu"
         val vessel = UNKNOWN_VESSEL
 

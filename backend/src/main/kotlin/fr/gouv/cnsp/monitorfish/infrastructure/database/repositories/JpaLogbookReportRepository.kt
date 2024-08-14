@@ -4,12 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.Utils
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageAndValue
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
-import fr.gouv.cnsp.monitorfish.domain.exceptions.*
+import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
+import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
+import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
+import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LogbookReportEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBLogbookReportRepository
@@ -34,7 +36,7 @@ class JpaLogbookReportRepository(
     private val logger = LoggerFactory.getLogger(JpaLogbookReportRepository::class.java)
 
     override fun findAllPriorNotifications(filter: PriorNotificationsFilter): List<PriorNotification> {
-        val allLogbookReportModels = dbLogbookReportRepository.findAllEnrichedPnoReferencesAndRelatedOperations(
+        val logbookReportModels = dbLogbookReportRepository.findAllEnrichedPnoReferencesAndRelatedOperations(
             flagStates = filter.flagStates ?: emptyList(),
             hasOneOrMoreReportings = filter.hasOneOrMoreReportings,
             isLessThanTwelveMetersVessel = filter.isLessThanTwelveMetersVessel,
@@ -50,24 +52,23 @@ class JpaLogbookReportRepository(
             willArriveBefore = filter.willArriveBefore,
         )
 
-        return mapToReferenceWithRelatedModels(allLogbookReportModels)
-            .mapNotNull { (referenceLogbookReportModel, relatedLogbookReportModels) ->
-                try {
-                    referenceLogbookReportModel.toPriorNotification(objectMapper, relatedLogbookReportModels)
-                } catch (e: Exception) {
-                    logger.warn(
-                        "Error while converting logbook report models to prior notifications (reportId = ${referenceLogbookReportModel.reportId}).",
-                        e,
-                    )
+        return logbookReportModels.mapNotNull { logbookReportModel ->
+            try {
+                logbookReportModel.toPriorNotification(objectMapper)
+            } catch (e: Exception) {
+                logger.warn(
+                    "Error while converting logbook report model to prior notification (reportId = ${logbookReportModel.reportId}).",
+                    e,
+                )
 
-                    null
-                }
+                null
             }
+        }
     }
 
     @Cacheable(value = ["pno_to_verify"])
     override fun findAllPriorNotificationsToVerify(): List<PriorNotification> {
-        val allLogbookReportModels = dbLogbookReportRepository.findAllEnrichedPnoReferencesAndRelatedOperations(
+        val logbookReportModels = dbLogbookReportRepository.findAllEnrichedPnoReferencesAndRelatedOperations(
             flagStates = emptyList(),
             hasOneOrMoreReportings = null,
             isLessThanTwelveMetersVessel = null,
@@ -83,45 +84,31 @@ class JpaLogbookReportRepository(
             willArriveBefore = CustomZonedDateTime(ZonedDateTime.now().plusHours(24)).toString(),
         )
 
-        return mapToReferenceWithRelatedModels(allLogbookReportModels)
-            .mapNotNull { (referenceLogbookReportModel, relatedLogbookReportModels) ->
-                try {
-                    referenceLogbookReportModel.toPriorNotification(objectMapper, relatedLogbookReportModels)
-                } catch (e: Exception) {
-                    logger.warn(
-                        "Error while converting logbook report models to prior notifications (reportId = ${referenceLogbookReportModel.reportId}).",
-                        e,
-                    )
+        return logbookReportModels.mapNotNull { referenceLogbookReportModel ->
+            try {
+                referenceLogbookReportModel.toPriorNotification(objectMapper)
+            } catch (e: Exception) {
+                logger.warn(
+                    "Error while converting logbook report model to prior notifications (reportId = ${referenceLogbookReportModel.reportId}).",
+                    e,
+                )
 
-                    null
-                }
-            }.filter {
-                it.logbookMessageAndValue.value.isInVerificationScope == true &&
-                    it.logbookMessageAndValue.value.isVerified == false &&
-                    it.logbookMessageAndValue.value.isInvalidated != true
+                null
             }
+        }.filter {
+            it.logbookMessageAndValue.value.isInVerificationScope == true &&
+                it.logbookMessageAndValue.value.isVerified == false &&
+                it.logbookMessageAndValue.value.isInvalidated != true
+        }
     }
 
     override fun findPriorNotificationByReportId(reportId: String, operationDate: ZonedDateTime): PriorNotification? {
-        val allLogbookReportModels = dbLogbookReportRepository.findEnrichedPnoReferenceAndRelatedOperationsByReportId(
+        val logbookReportModel = dbLogbookReportRepository.findByReportId(
             reportId,
             operationDate.toString(),
         )
-        if (allLogbookReportModels.isEmpty()) {
-            return null
-        }
 
-        try {
-            val (referenceLogbookReportModel, relatedLogbookReportModels) =
-                mapToReferenceWithRelatedModels(allLogbookReportModels).first()
-
-            return referenceLogbookReportModel.toPriorNotification(objectMapper, relatedLogbookReportModels)
-        } catch (e: Exception) {
-            throw EntityConversionException(
-                "Error while converting logbook report models to prior notification (reoportId = $reportId).",
-                e,
-            )
-        }
+        return logbookReportModel?.toPriorNotification(objectMapper)
     }
 
     override fun findLastTripBeforeDateTime(
@@ -354,7 +341,7 @@ class JpaLogbookReportRepository(
     override fun savePriorNotification(logbookMessageAndValue: LogbookMessageAndValue<PNO>): PriorNotification {
         return dbLogbookReportRepository
             .save(LogbookReportEntity.fromLogbookMessage(objectMapper, logbookMessageAndValue.logbookMessage))
-            .toPriorNotification(objectMapper, emptyList())
+            .toPriorNotification(objectMapper)
     }
 
     @Transactional
@@ -366,30 +353,25 @@ class JpaLogbookReportRepository(
         isBeingSent: Boolean,
         isSent: Boolean,
         isVerified: Boolean,
-    ) {
-        val logbookReportEntities =
-            dbLogbookReportRepository.findEnrichedPnoReferenceAndRelatedOperationsByReportId(
+    ): PriorNotification {
+        val logbookReportModel =
+            dbLogbookReportRepository.findByReportId(
                 reportId,
                 operationDate.withZoneSameInstant(UTC).toString(),
             )
-        if (logbookReportEntities.isEmpty()) {
+        if (logbookReportModel == null) {
             throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
         }
 
-        // We need to update both DAT and related COR operations (which also covers orphan COR cases)
-        logbookReportEntities
-            .filter { it.operationType in listOf(LogbookOperationType.DAT, LogbookOperationType.COR) }
-            .map { logbookReportEntity ->
-                val pnoMessage = objectMapper.readValue(logbookReportEntity.message, PNO::class.java)
-                pnoMessage.isBeingSent = isBeingSent
-                pnoMessage.isSent = isSent
-                pnoMessage.isVerified = isVerified
+        val pnoMessage = objectMapper.readValue(logbookReportModel.message, PNO::class.java)
+        pnoMessage.isBeingSent = isBeingSent
+        pnoMessage.isSent = isSent
+        pnoMessage.isVerified = isVerified
 
-                val nextMessage = objectMapper.writeValueAsString(pnoMessage)
-                val updatedEntity = logbookReportEntity.copy(message = nextMessage)
+        val nextMessage = objectMapper.writeValueAsString(pnoMessage)
+        val updatedModel = logbookReportModel.copy(message = nextMessage)
 
-                dbLogbookReportRepository.save(updatedEntity)
-            }
+        return dbLogbookReportRepository.save(updatedModel).toPriorNotification(objectMapper)
     }
 
     @Transactional
@@ -400,106 +382,61 @@ class JpaLogbookReportRepository(
         authorTrigram: String?,
         note: String?,
     ) {
-        val logbookReportEntities =
-            dbLogbookReportRepository.findEnrichedPnoReferenceAndRelatedOperationsByReportId(
+        val logbookReportModel =
+            dbLogbookReportRepository.findByReportId(
                 reportId,
                 operationDate.withZoneSameInstant(UTC).toString(),
             )
-        if (logbookReportEntities.isEmpty()) {
+        if (logbookReportModel == null) {
             throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
         }
 
-        // We need to update both DAT and related COR operations (which also covers orphan COR cases)
-        logbookReportEntities
-            .filter { it.operationType in listOf(LogbookOperationType.DAT, LogbookOperationType.COR) }
-            .map { logbookReportEntity ->
-                val pnoMessage = objectMapper.readValue(logbookReportEntity.message, PNO::class.java)
-                if (
-                    !Utils.areStringsEqual(authorTrigram, pnoMessage.authorTrigram) ||
-                    !Utils.areStringsEqual(note, pnoMessage.note)
-                ) {
-                    pnoMessage.authorTrigram = authorTrigram
-                    pnoMessage.note = note
+        val pnoMessage = objectMapper.readValue(logbookReportModel.message, PNO::class.java)
+        if (
+            Utils.areStringsEqual(authorTrigram, pnoMessage.authorTrigram) &&
+            Utils.areStringsEqual(note, pnoMessage.note)
+        ) {
+            return
+        }
 
-                    /**
-                     * The PNO states are re-initialized:
-                     * - the PDF will be re-generated (done in the use case by deleting the old one)
-                     * - the PNO will require another verification before sending
-                     */
-                    pnoMessage.isBeingSent = false
-                    pnoMessage.isSent = false
-                    pnoMessage.isVerified = false
+        pnoMessage.authorTrigram = authorTrigram
+        pnoMessage.note = note
+        /**
+         * The PNO states are re-initialized:
+         * - the PDF will be re-generated (done in the use case by deleting the old one)
+         * - the PNO will require another verification before sending
+         */
+        pnoMessage.isBeingSent = false
+        pnoMessage.isSent = false
+        pnoMessage.isVerified = false
 
-                    val nextMessage = objectMapper.writeValueAsString(pnoMessage)
+        val nextMessage = objectMapper.writeValueAsString(pnoMessage)
+        val updatedModel = logbookReportModel.copy(message = nextMessage)
 
-                    val updatedEntity = logbookReportEntity.copy(message = nextMessage)
-
-                    dbLogbookReportRepository.save(updatedEntity)
-                }
-            }
+        dbLogbookReportRepository.save(updatedModel)
     }
 
     @Transactional
     @CacheEvict(value = ["pno_to_verify"], allEntries = true)
     override fun invalidate(reportId: String, operationDate: ZonedDateTime) {
-        val logbookReportEntities =
-            dbLogbookReportRepository.findEnrichedPnoReferenceAndRelatedOperationsByReportId(
+        val logbookReportModel =
+            dbLogbookReportRepository.findByReportId(
                 reportId,
                 operationDate.withZoneSameInstant(UTC).toString(),
             )
-        if (logbookReportEntities.isEmpty()) {
+        if (logbookReportModel == null) {
             throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
         }
 
-        // We need to update both DAT and related COR operations (which also covers orphan COR cases)
-        logbookReportEntities
-            .filter { it.operationType in listOf(LogbookOperationType.DAT, LogbookOperationType.COR) }
-            .map { logbookReportEntity ->
-                val pnoMessage = objectMapper.readValue(logbookReportEntity.message, PNO::class.java)
-                pnoMessage.isInvalidated = true
+        val pnoMessage = objectMapper.readValue(logbookReportModel.message, PNO::class.java)
+        pnoMessage.isInvalidated = true
 
-                val nextMessage = objectMapper.writeValueAsString(pnoMessage)
+        val nextMessage = objectMapper.writeValueAsString(pnoMessage)
+        val updatedEntity = logbookReportModel.copy(message = nextMessage)
 
-                val updatedEntity = logbookReportEntity.copy(message = nextMessage)
-
-                dbLogbookReportRepository.save(updatedEntity)
-            }
+        dbLogbookReportRepository.save(updatedEntity)
     }
 
     private fun getAllMessagesExceptionMessage(internalReferenceNumber: String) =
         "No messages found for the vessel. (internalReferenceNumber: \"$internalReferenceNumber\")"
-
-    companion object {
-        fun mapToReferenceWithRelatedModels(
-            allLogbookReportModels: List<LogbookReportEntity>,
-        ): List<Pair<LogbookReportEntity, List<LogbookReportEntity>>> {
-            // DAT operations are references by definition
-            val datLogbookReportModels = allLogbookReportModels.filter { it.operationType == LogbookOperationType.DAT }
-            // Orphan COR operations are also considered as references for lack of anything better
-            // They can be orphan for various reasons, like an error along the external JPE flow.
-            val orphanCorLogbookReportModels = allLogbookReportModels
-                .filter { it.operationType == LogbookOperationType.COR }
-                .filter { corOperation ->
-                    corOperation.referencedReportId == null ||
-                        datLogbookReportModels.none { it.reportId == corOperation.referencedReportId }
-                }
-            val referenceLogbookReportModels = datLogbookReportModels + orphanCorLogbookReportModels
-
-            return referenceLogbookReportModels.map { referenceLogbookReportModel ->
-                val directlyAssociatedLogbookReportModels = allLogbookReportModels.filter {
-                    it.referencedReportId == referenceLogbookReportModel.reportId
-                }
-                // COR operation also have their own `reportId` which can also be associated to their own operations
-                // For example, a RET (aknlowledgement) operation can be associated to a COR operation.
-                val directlyAssociatedReportIds = directlyAssociatedLogbookReportModels.mapNotNull { it.reportId }
-                val indirectlyAssociatedLogbookReportModels = allLogbookReportModels.filter {
-                    it.referencedReportId in directlyAssociatedReportIds
-                }
-                val associatedLogbookReportModels = directlyAssociatedLogbookReportModels +
-                    indirectlyAssociatedLogbookReportModels
-
-                Pair(referenceLogbookReportModel, associatedLogbookReportModels)
-            }
-        }
-    }
 }

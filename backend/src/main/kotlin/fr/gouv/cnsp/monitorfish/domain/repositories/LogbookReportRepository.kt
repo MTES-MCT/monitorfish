@@ -73,7 +73,7 @@ interface LogbookReportRepository {
         isBeingSent: Boolean,
         isSent: Boolean,
         isVerified: Boolean,
-    )
+    ): PriorNotification
 
     fun findAllPriorNotificationsToVerify(): List<PriorNotification>
 

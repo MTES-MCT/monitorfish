@@ -23,6 +23,7 @@ data class PositionDataOutput(
     val positionType: PositionType,
     val isManual: Boolean? = null,
     val isFishing: Boolean? = null,
+    val isAtPort: Boolean? = null,
 ) {
     companion object {
         fun fromPosition(position: Position): PositionDataOutput {
@@ -44,6 +45,7 @@ data class PositionDataOutput(
                 positionType = position.positionType,
                 isManual = position.isManual,
                 isFishing = position.isFishing,
+                isAtPort = position.isAtPort,
             )
         }
     }

@@ -11,9 +11,9 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/bff/v1/control_objectives")
+@RequestMapping("/bff/v1/admin/control_objectives")
 @Tag(name = "APIs for Control objectives")
-class ControlObjectiveController(
+class ControlObjectiveAdminController(
     private val getControlObjectivesOfYear: GetControlObjectivesOfYear,
     private val getControlObjectiveYearEntries: GetControlObjectiveYearEntries,
     private val addControlObjectiveYear: AddControlObjectiveYear,

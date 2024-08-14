@@ -54,6 +54,7 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
     !!detail?.state &&
     [PriorNotification.State.PENDING_AUTO_SEND, PriorNotification.State.PENDING_SEND].includes(detail?.state)
   const isPendingVerification = detail?.state === PriorNotification.State.PENDING_VERIFICATION
+  const isReadOnly = isPendingSend || isInvalidated
   const isVerifiedAndSent = detail?.state === PriorNotification.State.VERIFIED_AND_SENT
   const hasDesignatedPorts = editedPriorNotificationComputedValues?.types?.find(type => type.hasDesignatedPorts)
   const priorNotificationIdentifier = getPriorNotificationIdentifier(detail)
@@ -171,9 +172,9 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
 
           <hr />
 
-          <Form isInvalidated={isInvalidated} />
+          <Form isReadOnly={isReadOnly} />
 
-          {!!detail && !isInvalidated && (
+          {!!detail && !isInvalidated && !isPendingSend && (
             <InvalidateButton
               accent={Accent.SECONDARY}
               Icon={Icon.Invalid}
@@ -201,7 +202,7 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
 
           <Button
             accent={Accent.PRIMARY}
-            disabled={(isInvalidated && !isPriorNotificationFormDirty) || (isValidatingOnChange && !isValid)}
+            disabled={(isReadOnly && !isPriorNotificationFormDirty) || (isValidatingOnChange && !isValid)}
             onClick={handleSubmit}
             title={
               isInvalidated
@@ -215,7 +216,7 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
           {!isNewPriorNotification && (
             <Button
               accent={Accent.PRIMARY}
-              disabled={isInvalidated || isPendingSend || isVerifiedAndSent}
+              disabled={isReadOnly || isVerifiedAndSent}
               Icon={isVerifiedAndSent ? Icon.Check : Icon.Send}
               onClick={onVerifyAndSend}
               title={

@@ -143,8 +143,8 @@ export namespace PriorNotification {
     TRA = 'TRA'
   }
   export const PURPOSE_LABEL: Record<PurposeCode, string> = {
-    // TODO Find out what this purpose code means.
-    ACS: 'Non supporté',
+    // "Access to services"
+    ACS: 'Accès aux services',
     // "Emergency"
     ECY: 'Urgence',
     // "Vessels grounded and called by the authorities"

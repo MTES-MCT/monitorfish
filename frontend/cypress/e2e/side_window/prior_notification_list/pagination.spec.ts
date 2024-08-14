@@ -1,6 +1,6 @@
 import { getPseudoRandomString } from '@mtes-mct/monitor-ui'
 
-import { openSideWindowPriorNotificationList } from './utils'
+import { openSideWindowPriorNotificationListAsSuperUser } from './utils'
 
 import type { BackendApi } from '@api/BackendApi.types'
 import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
@@ -12,7 +12,7 @@ context('Side Window > Prior Notification List > Pagination', () => {
   it('Should filter prior notifications by seafront group', () => {
     cy.intercept('GET', `${apiPathBase}*`).as('getPriorNotifications')
 
-    openSideWindowPriorNotificationList()
+    openSideWindowPriorNotificationListAsSuperUser()
 
     cy.wait('@getPriorNotifications').then(interception => {
       const responseBody: BackendApi.ResponseBodyPaginatedList<
@@ -46,7 +46,7 @@ context('Side Window > Prior Notification List > Pagination', () => {
         }
       }).as('getPriorNotificationsSecondPage')
 
-      openSideWindowPriorNotificationList()
+      openSideWindowPriorNotificationListAsSuperUser()
 
       cy.wait('@getPriorNotificationsFirstPage')
 

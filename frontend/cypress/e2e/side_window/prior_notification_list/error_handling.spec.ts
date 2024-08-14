@@ -1,6 +1,6 @@
 import { RTK_MAX_RETRIES } from '@api/constants'
 
-import { openSideWindowPriorNotificationList } from './utils'
+import { openSideWindowPriorNotificationListAsSuperUser } from './utils'
 
 context('Side Window > Prior Notification List > Error Handling', () => {
   const failedQueryCount = RTK_MAX_RETRIES + 1
@@ -18,7 +18,7 @@ context('Side Window > Prior Notification List > Error Handling', () => {
       }
     ).as('getPriorNotificationsWithError')
 
-    openSideWindowPriorNotificationList()
+    openSideWindowPriorNotificationListAsSuperUser()
 
     for (let i = 1; i <= failedQueryCount; i += 1) {
       cy.wait('@getPriorNotificationsWithError')

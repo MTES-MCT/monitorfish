@@ -1,18 +1,19 @@
 import { ALL_SEAFRONT_GROUP } from '@constants/seafront'
 
-import { addSideWindowPriorNotification, editSideWindowPriorNotification } from './utils'
+import { addManualSideWindowPriorNotification } from './utils'
 import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
+import { editSideWindowPriorNotification } from '../logbook_prior_notification_form/utils'
 
 context('Side Window > Manual Prior Notification Form > Behavior', () => {
-  it('Should ask for confirmation before closing form when form is dirty', () => {
+  it('Should ask for confirmation before closing form when manual prior notification form is dirty', () => {
     const { utcDateTupleWithTime: arrivalDateTupleWithTime } = getUtcDateInMultipleFormats(
       customDayjs().add(2, 'hours').startOf('minute').toISOString()
     )
 
     cy.intercept('POST', '/bff/v1/prior_notifications/manual').as('createPriorNotification')
 
-    addSideWindowPriorNotification()
+    addManualSideWindowPriorNotification()
 
     cy.getDataCy('vessel-search-input').click().wait(500)
     cy.getDataCy('vessel-search-input').type('PAGEOT JO', { delay: 100 })
@@ -27,7 +28,7 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
     cy.contains('Abandon de préavis').should('be.visible')
     cy.clickButton('Annuler')
 
-    cy.getDataCy('Card-overlay').click()
+    cy.getDataCy('SideWindowCard-overlay').click()
     cy.contains('Abandon de préavis').should('be.visible')
     cy.clickButton('Annuler')
 
@@ -51,7 +52,7 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
     cy.contains('Abandon de préavis').should('be.visible')
     cy.clickButton('Annuler')
 
-    cy.getDataCy('Card-overlay').click()
+    cy.getDataCy('SideWindowCard-overlay').click()
     cy.contains('Abandon de préavis').should('be.visible')
     cy.clickButton('Annuler')
 
@@ -77,7 +78,7 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
 
       cy.clickButton('Fermer')
       cy.get('.Component-Dialog').should('not.exist')
-      cy.getDataCy('Card-overlay').should('not.exist')
+      cy.getDataCy('SideWindowCard-overlay').should('not.exist')
 
       editSideWindowPriorNotification('PAGEOT JO', createdPriorNotification.reportId)
 
@@ -93,7 +94,7 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
       cy.contains('Abandon de préavis').should('be.visible')
       cy.clickButton('Annuler')
 
-      cy.getDataCy('Card-overlay').click()
+      cy.getDataCy('SideWindowCard-overlay').click()
       cy.contains('Abandon de préavis').should('be.visible')
       cy.clickButton('Annuler')
 
@@ -103,7 +104,31 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
 
       cy.clickButton('Fermer')
       cy.get('.Component-Dialog').should('not.exist')
-      cy.getDataCy('Card-overlay').should('not.exist')
+      cy.getDataCy('SideWindowCard-overlay').should('not.exist')
     })
+  })
+
+  it("Should show a banner, freeze the manual prior notification form and button when it's in pending send", () => {
+    editSideWindowPriorNotification(`VIVA L'ITALIA`, '00000000-0000-4000-0000-000000000005')
+
+    cy.get('.Component-Banner').contains(`Le préavis est en cours de diffusion.`)
+
+    cy.get('textarea[name=note]').should('have.attr', 'readonly')
+    cy.get('input[name=authorTrigram]').should('have.attr', 'readonly')
+
+    cy.contains('button', 'Enregistrer').should('be.disabled')
+    cy.contains('button', 'Diffuser').should('be.disabled')
+  })
+
+  it("Should show a banner, freeze the manual prior notification form and button when it's in pending auto-send", () => {
+    editSideWindowPriorNotification(`DOS FIN`, '00000000-0000-4000-0000-000000000002')
+
+    cy.get('.Component-Banner').contains(`Le préavis est en cours d’envoi aux unités qui l’ont demandé.`)
+
+    cy.get('textarea[name=note]').should('have.attr', 'readonly')
+    cy.get('input[name=authorTrigram]').should('have.attr', 'readonly')
+
+    cy.contains('button', 'Enregistrer').should('be.disabled')
+    cy.contains('button', 'Diffuser').should('be.disabled')
   })
 })

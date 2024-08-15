@@ -262,7 +262,7 @@ interface DBLogbookReportRepository :
         """,
         nativeQuery = true,
     )
-    fun findByReportId(
+    fun findAcknowledgedNonDeletedPnoDatAndCorsByReportId(
         reportId: String,
         operationDate: String,
     ): List<LogbookReportEntity>

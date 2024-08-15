@@ -13,5 +13,4 @@ package fr.gouv.cnsp.monitorfish.infrastructure.exceptions
  */
 enum class BackendRequestErrorCode {
     WRONG_BODY_PARAMETER_TYPE,
-    UNAUTHORIZED,
 }

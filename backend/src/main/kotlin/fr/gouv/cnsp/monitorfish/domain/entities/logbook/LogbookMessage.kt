@@ -43,13 +43,6 @@ data class LogbookMessage(
 ) {
     private val logger = LoggerFactory.getLogger(LogbookMessage::class.java)
 
-    /**
-     * Returns the reference logbook message `reportId` (= the original DAT operation `reportId`).
-     */
-    fun getReferenceReportId(): String? {
-        return referencedReportId ?: reportId
-    }
-
     fun setAcknowledge(newLogbookMessageAcknowledgement: LogbookMessage) {
         val currentAcknowledgement = this.acknowledgment
         val newAcknowledgement = newLogbookMessageAcknowledgement.message as Acknowledgment

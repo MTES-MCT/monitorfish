@@ -2,9 +2,6 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
-import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.UNKNOWN_VESSEL
 import fr.gouv.cnsp.monitorfish.domain.mappers.ERSMapper.getERSMessageValueFromJSON
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import jakarta.persistence.*
@@ -137,34 +134,6 @@ data class LogbookReportEntity(
             operationType = operationType,
             tripGears = tripGears,
             tripSegments = tripSegments,
-        )
-    }
-
-    fun toPriorNotification(mapper: ObjectMapper): PriorNotification {
-        val logbookMessage = toLogbookMessage(mapper)
-        val logbookMessageAndValue = LogbookMessageAndValue(
-            logbookMessage = logbookMessage,
-            clazz = PNO::class.java,
-        )
-        val updatedAt = operationDateTime.atZone(UTC)
-        // For practical reasons `vessel` can't be `null`, so we temporarily set it to "Navire inconnu"
-        val vessel = UNKNOWN_VESSEL
-
-        return PriorNotification(
-            reportId = reportId,
-            createdAt = operationDateTime.atZone(UTC),
-            didNotFishAfterZeroNotice = false,
-            isManuallyCreated = false,
-            logbookMessageAndValue = logbookMessageAndValue,
-            sentAt = logbookMessageAndValue.logbookMessage.reportDateTime,
-            updatedAt = updatedAt,
-
-            // These props need to be calculated in the use case
-            port = null,
-            reportingCount = null,
-            seafront = null,
-            vessel = vessel,
-            lastControlDateTime = null,
         )
     }
 

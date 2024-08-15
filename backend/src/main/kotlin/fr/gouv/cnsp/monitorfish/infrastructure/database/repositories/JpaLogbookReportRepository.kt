@@ -346,8 +346,9 @@ class JpaLogbookReportRepository(
         isSent: Boolean,
         isVerified: Boolean,
     ) {
-        val logbookReportModel = findAcknowledgedPnoLogbookReportModelByReportId(reportId, operationDate)
-            ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
+        val logbookReportModel =
+            findAcknowledgedPnoLogbookReportModelByReportId(reportId, operationDate.withZoneSameInstant(UTC))
+                ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
 
         val pnoMessage = objectMapper.readValue(logbookReportModel.message, PNO::class.java)
         pnoMessage.isBeingSent = isBeingSent
@@ -368,8 +369,9 @@ class JpaLogbookReportRepository(
         authorTrigram: String?,
         note: String?,
     ) {
-        val logbookReportModel = findAcknowledgedPnoLogbookReportModelByReportId(reportId, operationDate)
-            ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
+        val logbookReportModel =
+            findAcknowledgedPnoLogbookReportModelByReportId(reportId, operationDate.withZoneSameInstant(UTC))
+                ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
 
         val pnoMessage = objectMapper.readValue(logbookReportModel.message, PNO::class.java)
         if (
@@ -399,8 +401,9 @@ class JpaLogbookReportRepository(
     @Transactional
     @CacheEvict(value = ["pno_to_verify"], allEntries = true)
     override fun invalidate(reportId: String, operationDate: ZonedDateTime) {
-        val logbookReportModel = findAcknowledgedPnoLogbookReportModelByReportId(reportId, operationDate)
-            ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
+        val logbookReportModel =
+            findAcknowledgedPnoLogbookReportModelByReportId(reportId, operationDate.withZoneSameInstant(UTC))
+                ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
 
         val pnoMessage = objectMapper.readValue(logbookReportModel.message, PNO::class.java)
         pnoMessage.isInvalidated = true

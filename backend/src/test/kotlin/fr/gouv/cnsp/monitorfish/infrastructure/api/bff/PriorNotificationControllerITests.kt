@@ -93,8 +93,8 @@ class PriorNotificationControllerITests {
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.data.length()", equalTo(2)))
-            .andExpect(jsonPath("$.data[0].id", equalTo(firstFakePriorNotification.reportId)))
-            .andExpect(jsonPath("$.data[1].id", equalTo(secondFakePriorNotification.reportId)))
+            .andExpect(jsonPath("$.data[0].reportId", equalTo(firstFakePriorNotification.reportId)))
+            .andExpect(jsonPath("$.data[1].reportId", equalTo(secondFakePriorNotification.reportId)))
             .andExpect(jsonPath("$.extraData.perSeafrontGroupCount", equalTo(emptyMap<Any, Any>())))
             .andExpect(jsonPath("$.lastPageNumber", equalTo(0)))
             .andExpect(jsonPath("$.pageNumber", equalTo(0)))

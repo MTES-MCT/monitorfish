@@ -43,7 +43,7 @@ class GetPriorNotifications(
         val allSpecies = speciesRepository.findAll()
 
         val (automaticPriorNotifications, findAllPriorNotificationsTimeTaken) = measureTimedValue {
-            logbookReportRepository.findAllPriorNotifications(filter)
+            logbookReportRepository.findAllAcknowledgedPriorNotifications(filter)
         }
         logger.info(
             "TIME_RECORD - 'logbookReportRepository.findAllPriorNotifications()' took $findAllPriorNotificationsTimeTaken.",

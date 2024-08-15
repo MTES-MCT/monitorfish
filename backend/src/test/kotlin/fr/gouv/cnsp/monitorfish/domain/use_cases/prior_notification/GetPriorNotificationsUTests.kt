@@ -59,7 +59,7 @@ class GetPriorNotificationsUTests {
     @Test
     fun `execute Should return a list of prior notifications with their total length`() {
         // Given
-        given(logbookReportRepository.findAllPriorNotifications(defaultFilter)).willReturn(
+        given(logbookReportRepository.findAllAcknowledgedPriorNotifications(defaultFilter)).willReturn(
             listOf(
                 PriorNotification(
                     reportId = "FAKE_REPORT_ID_1",

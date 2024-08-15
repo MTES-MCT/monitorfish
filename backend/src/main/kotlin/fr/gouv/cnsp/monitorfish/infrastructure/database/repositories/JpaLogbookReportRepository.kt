@@ -33,7 +33,7 @@ class JpaLogbookReportRepository(
     private val dbLogbookReportRepository: DBLogbookReportRepository,
     private val objectMapper: ObjectMapper,
 ) : LogbookReportRepository {
-    override fun findAllPriorNotifications(filter: PriorNotificationsFilter): List<PriorNotification> {
+    override fun findAllAcknowledgedPriorNotifications(filter: PriorNotificationsFilter): List<PriorNotification> {
         // Acknowledged "DAT", "COR" and "DEL" operations
         val logbookReportModelsWithCorAndDel =
             dbLogbookReportRepository.findAllEnrichedPnoReferencesAndRelatedOperations(
@@ -72,31 +72,35 @@ class JpaLogbookReportRepository(
             willArriveBefore = CustomZonedDateTime(ZonedDateTime.now().plusHours(24)).toString(),
         )
 
-        return findAllPriorNotifications(filter).filter {
+        return findAllAcknowledgedPriorNotifications(filter).filter {
             it.logbookMessageAndValue.value.isInVerificationScope == true &&
                 it.logbookMessageAndValue.value.isVerified == false &&
                 it.logbookMessageAndValue.value.isInvalidated != true
         }
     }
 
-    override fun findPriorNotificationByReportId(reportId: String, operationDate: ZonedDateTime): PriorNotification? {
-        val logbookReportModelsWithCorAndDel = dbLogbookReportRepository.findByReportId(
-            reportId,
-            operationDate.toString(),
-        )
-        val datOrOrphanCorLogbooReportModel = logbookReportModelsWithCorAndDel.firstOrNull {
+    /**
+     * Return null if the logbook report is deleted by an aknowledged "DEL" operation.
+     */
+    override fun findAcknowledgedPriorNotificationByReportId(
+        reportId: String,
+        operationDate: ZonedDateTime,
+    ): PriorNotification? {
+        // Acknowledged "DAT" and "COR" operations
+        val logbookReportModelsWithCor = dbLogbookReportRepository.findByReportId(reportId, operationDate.toString())
+        val datOrOrphanCorLogbookReportModel = logbookReportModelsWithCor.firstOrNull {
             it.operationType == LogbookOperationType.DAT || (
                 it.operationType == LogbookOperationType.COR &&
-                    logbookReportModelsWithCorAndDel.none { model -> model.reportId == it.referencedReportId }
+                    logbookReportModelsWithCor.none { model -> model.reportId == it.referencedReportId }
                 )
         }
-        if (datOrOrphanCorLogbooReportModel == null) {
+        if (datOrOrphanCorLogbookReportModel == null) {
             return null
         }
 
         return resolveAsPriorNotification(
-            datOrOrphanCorLogbooReportModel,
-            logbookReportModelsWithCorAndDel,
+            datOrOrphanCorLogbookReportModel,
+            logbookReportModelsWithCor,
             objectMapper,
         )
     }
@@ -344,7 +348,7 @@ class JpaLogbookReportRepository(
         isSent: Boolean,
         isVerified: Boolean,
     ): PriorNotification {
-        val priorNotification = findPriorNotificationByReportId(reportId, operationDate)
+        val priorNotification = findAcknowledgedPriorNotificationByReportId(reportId, operationDate)
             ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
 
         val nextPnoMessage = priorNotification.logbookMessageAndValue.value
@@ -365,7 +369,7 @@ class JpaLogbookReportRepository(
         authorTrigram: String?,
         note: String?,
     ) {
-        val priorNotification = findPriorNotificationByReportId(reportId, operationDate)
+        val priorNotification = findAcknowledgedPriorNotificationByReportId(reportId, operationDate)
             ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
 
         val nextPnoMessage = priorNotification.logbookMessageAndValue.value
@@ -396,7 +400,7 @@ class JpaLogbookReportRepository(
     @Transactional
     @CacheEvict(value = ["pno_to_verify"], allEntries = true)
     override fun invalidate(reportId: String, operationDate: ZonedDateTime) {
-        val priorNotification = findPriorNotificationByReportId(reportId, operationDate)
+        val priorNotification = findAcknowledgedPriorNotificationByReportId(reportId, operationDate)
             ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
 
         val nextPnoMessage = priorNotification.logbookMessageAndValue.value

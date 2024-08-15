@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-import { captureException, captureMessage, Scope } from '@sentry/react'
+import { captureException, Scope } from '@sentry/react'
 
 export class FrontendError extends Error {
   #scope: Scope | undefined
@@ -30,10 +30,7 @@ export class FrontendError extends Error {
   }
 
   logSentryError() {
-    captureMessage(this.message, this.scope)
-    if (this.originalError) {
-      captureException(this.originalError, this.scope)
-    }
+    captureException(new Error(this.message, { cause: this.originalError }), this.scope)
   }
 
   get scope() {

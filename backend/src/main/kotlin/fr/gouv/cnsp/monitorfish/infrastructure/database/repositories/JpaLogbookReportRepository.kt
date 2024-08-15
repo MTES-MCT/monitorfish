@@ -98,11 +98,7 @@ class JpaLogbookReportRepository(
             return null
         }
 
-        return resolveAsPriorNotification(
-            datOrOrphanCorLogbookReportModel,
-            logbookReportModelsWithCor,
-            objectMapper,
-        )
+        return resolveAsPriorNotification(datOrOrphanCorLogbookReportModel, logbookReportModelsWithCor, objectMapper)
     }
 
     override fun findLastTripBeforeDateTime(
@@ -349,20 +345,19 @@ class JpaLogbookReportRepository(
         isBeingSent: Boolean,
         isSent: Boolean,
         isVerified: Boolean,
-    ): PriorNotification {
-        val priorNotification = findAcknowledgedPriorNotificationByReportId(reportId, operationDate)
+    ) {
+        val logbookReportModel = findAcknowledgedPnoLogbookReportModelByReportId(reportId, operationDate)
             ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
 
-        val nextPnoMessage = priorNotification.logbookMessageAndValue.value
-        nextPnoMessage.isBeingSent = isBeingSent
-        nextPnoMessage.isSent = isSent
-        nextPnoMessage.isVerified = isVerified
-        val nextLogbookMessage = priorNotification.logbookMessageAndValue.logbookMessage.copy(message = nextPnoMessage)
-        val updatedModel = LogbookReportEntity.fromLogbookMessage(objectMapper, nextLogbookMessage)
+        val pnoMessage = objectMapper.readValue(logbookReportModel.message, PNO::class.java)
+        pnoMessage.isBeingSent = isBeingSent
+        pnoMessage.isSent = isSent
+        pnoMessage.isVerified = isVerified
 
-        return PriorNotification.fromLogbookMessage(
-            dbLogbookReportRepository.save(updatedModel).toLogbookMessage(objectMapper),
-        )
+        val nextPnoMessage = objectMapper.writeValueAsString(pnoMessage)
+        val updatedModel = logbookReportModel.copy(message = nextPnoMessage)
+
+        dbLogbookReportRepository.save(updatedModel)
     }
 
     @Transactional
@@ -373,30 +368,30 @@ class JpaLogbookReportRepository(
         authorTrigram: String?,
         note: String?,
     ) {
-        val priorNotification = findAcknowledgedPriorNotificationByReportId(reportId, operationDate)
+        val logbookReportModel = findAcknowledgedPnoLogbookReportModelByReportId(reportId, operationDate)
             ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
 
-        val nextPnoMessage = priorNotification.logbookMessageAndValue.value
+        val pnoMessage = objectMapper.readValue(logbookReportModel.message, PNO::class.java)
         if (
-            Utils.areStringsEqual(authorTrigram, nextPnoMessage.authorTrigram) &&
-            Utils.areStringsEqual(note, nextPnoMessage.note)
+            Utils.areStringsEqual(authorTrigram, pnoMessage.authorTrigram) &&
+            Utils.areStringsEqual(note, pnoMessage.note)
         ) {
             return
         }
 
-        nextPnoMessage.authorTrigram = authorTrigram
-        nextPnoMessage.note = note
+        pnoMessage.authorTrigram = authorTrigram
+        pnoMessage.note = note
         /**
          * The PNO states are re-initialized:
          * - the PDF will be re-generated (done in the use case by deleting the old one)
          * - the PNO will require another verification before sending
          */
-        nextPnoMessage.isBeingSent = false
-        nextPnoMessage.isSent = false
-        nextPnoMessage.isVerified = false
+        pnoMessage.isBeingSent = false
+        pnoMessage.isSent = false
+        pnoMessage.isVerified = false
 
-        val nextLogbookMessage = priorNotification.logbookMessageAndValue.logbookMessage.copy(message = nextPnoMessage)
-        val updatedModel = LogbookReportEntity.fromLogbookMessage(objectMapper, nextLogbookMessage)
+        val nextPnoMessage = objectMapper.writeValueAsString(pnoMessage)
+        val updatedModel = logbookReportModel.copy(message = nextPnoMessage)
 
         dbLogbookReportRepository.save(updatedModel)
     }
@@ -404,22 +399,63 @@ class JpaLogbookReportRepository(
     @Transactional
     @CacheEvict(value = ["pno_to_verify"], allEntries = true)
     override fun invalidate(reportId: String, operationDate: ZonedDateTime) {
-        val priorNotification = findAcknowledgedPriorNotificationByReportId(reportId, operationDate)
+        val logbookReportModel = findAcknowledgedPnoLogbookReportModelByReportId(reportId, operationDate)
             ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
 
-        val nextPnoMessage = priorNotification.logbookMessageAndValue.value
-        nextPnoMessage.isInvalidated = true
+        val pnoMessage = objectMapper.readValue(logbookReportModel.message, PNO::class.java)
+        pnoMessage.isInvalidated = true
 
-        val nextLogbookMessage = priorNotification.logbookMessageAndValue.logbookMessage.copy(message = nextPnoMessage)
-        val updatedModel = LogbookReportEntity.fromLogbookMessage(objectMapper, nextLogbookMessage)
+        val nextPnoMessage = objectMapper.writeValueAsString(pnoMessage)
+        val updatedModel = logbookReportModel.copy(message = nextPnoMessage)
 
         dbLogbookReportRepository.save(updatedModel)
+    }
+
+    /**
+     * Return null if the logbook report is deleted by an aknowledged "DEL" operation.
+     */
+    private fun findAcknowledgedPnoLogbookReportModelByReportId(
+        reportId: String,
+        operationDate: ZonedDateTime,
+    ): LogbookReportEntity? {
+        // Acknowledged "DAT" and "COR" operations
+        val logbookReportModelsWithCor = dbLogbookReportRepository.findByReportId(reportId, operationDate.toString())
+        val datOrOrphanCorLogbookReportModel = logbookReportModelsWithCor.firstOrNull {
+            it.operationType == LogbookOperationType.DAT || (
+                it.operationType == LogbookOperationType.COR &&
+                    logbookReportModelsWithCor.none { model -> model.reportId == it.referencedReportId }
+                )
+        }
+        if (datOrOrphanCorLogbookReportModel == null) {
+            return null
+        }
+
+        return resolveAsLogbookReportModel(datOrOrphanCorLogbookReportModel, logbookReportModelsWithCor)
     }
 
     private fun getAllMessagesExceptionMessage(internalReferenceNumber: String) =
         "No messages found for the vessel. (internalReferenceNumber: \"$internalReferenceNumber\")"
 
     companion object {
+        private fun resolveAsLogbookReportModel(
+            parent: LogbookReportEntity,
+            list: List<LogbookReportEntity>,
+        ): LogbookReportEntity {
+            val child = list.find { it.referencedReportId == parent.reportId }
+
+            return when {
+                child?.operationType == LogbookOperationType.COR -> {
+                    child
+                }
+
+                child?.reportId == null -> {
+                    parent
+                }
+
+                else -> resolveAsLogbookReportModel(child, list)
+            }
+        }
+
         private fun resolveAsPriorNotification(
             parent: LogbookReportEntity,
             list: List<LogbookReportEntity>,

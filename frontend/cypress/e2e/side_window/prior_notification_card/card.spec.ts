@@ -133,7 +133,7 @@ context('Side Window > Prior Notification Card > Card', () => {
   })
 
   it('Should update a logbook prior notification', () => {
-    cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_108?operationDate=${dayjs().toISOString()}`, {
+    cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_114?operationDate=${dayjs().toISOString()}`, {
       body: {
         authorTrigram: null,
         note: null
@@ -141,9 +141,9 @@ context('Side Window > Prior Notification Card > Card', () => {
     })
 
     // Given
-    openSideWindowPriorNotification(`CALAMARO`)
+    openSideWindowPriorNotification(`MER À BOIRE`)
 
-    cy.intercept('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_108?operationDate=*`).as(
+    cy.intercept('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_114?operationDate=*`).as(
       'updateLogbookPriorNotification'
     )
 
@@ -160,13 +160,13 @@ context('Side Window > Prior Notification Card > Card', () => {
     cy.get('.Element-Button').contains('Télécharger').parent().should('be.disabled')
 
     // The note is saved
-    openSideWindowPriorNotification(`CALAMARO`)
+    openSideWindowPriorNotification(`MER À BOIRE`)
 
     cy.get('[name="note"]').should('have.value', "Un point d'attention.")
     cy.get('[name="authorTrigram"]').should('have.value', 'ABC')
 
     // Reset
-    cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_108?operationDate=${dayjs().toISOString()}`, {
+    cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_114?operationDate=${dayjs().toISOString()}`, {
       body: {
         authorTrigram: null,
         note: null
@@ -179,7 +179,7 @@ context('Side Window > Prior Notification Card > Card', () => {
 
     cy.intercept(
       'POST',
-      `/bff/v1/prior_notifications/FAKE_OPERATION_111/verify_and_send?isManuallyCreated=false&operationDate=*`
+      `/bff/v1/prior_notifications/FAKE_OPERATION_111_COR_ORPHAN/verify_and_send?isManuallyCreated=false&operationDate=*`
     ).as('verifyAndSendPriorNotification')
 
     cy.clickButton('Diffuser')
@@ -203,7 +203,7 @@ context('Side Window > Prior Notification Card > Card', () => {
       cy.clickButton('Fermer')
       cy.fill('Rechercher un navire', 'LE POISSON AMBULANT')
 
-      cy.getTableRowById('FAKE_OPERATION_111' as unknown as number)
+      cy.getTableRowById('FAKE_OPERATION_111_COR_ORPHAN' as unknown as number)
         .find('span[title="Diffusion en cours"]')
         .should('be.visible')
     })

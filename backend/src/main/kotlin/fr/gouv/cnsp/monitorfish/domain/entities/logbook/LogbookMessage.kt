@@ -161,7 +161,7 @@ data class LogbookMessage(
 
             (transmissionFormat == LogbookTransmissionFormat.FLUX),
             (LogbookSoftware.isVisioCapture(software)),
-                -> {
+            -> {
                 setAcknowledgeAsSuccessful()
             }
 

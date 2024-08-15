@@ -265,7 +265,7 @@ interface DBLogbookReportRepository :
     fun findByReportId(
         reportId: String,
         operationDate: String,
-    ): LogbookReportEntity?
+    ): List<LogbookReportEntity>
 
     @Query(
         """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDate(e.tripNumber, MIN(e.operationDateTime))

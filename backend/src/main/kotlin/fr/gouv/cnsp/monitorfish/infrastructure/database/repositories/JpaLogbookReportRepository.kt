@@ -333,9 +333,11 @@ class JpaLogbookReportRepository(
     @Modifying
     @Transactional
     override fun savePriorNotification(logbookMessageAndValue: LogbookMessageAndValue<PNO>): PriorNotification {
-        return dbLogbookReportRepository
-            .save(LogbookReportEntity.fromLogbookMessage(objectMapper, logbookMessageAndValue.logbookMessage))
-            .toPriorNotification(objectMapper)
+        return PriorNotification.fromLogbookMessage(
+            dbLogbookReportRepository
+                .save(LogbookReportEntity.fromLogbookMessage(objectMapper, logbookMessageAndValue.logbookMessage))
+                .toLogbookMessage(objectMapper),
+        )
     }
 
     @Transactional
@@ -358,7 +360,9 @@ class JpaLogbookReportRepository(
         val nextLogbookMessage = priorNotification.logbookMessageAndValue.logbookMessage.copy(message = nextPnoMessage)
         val updatedModel = LogbookReportEntity.fromLogbookMessage(objectMapper, nextLogbookMessage)
 
-        return dbLogbookReportRepository.save(updatedModel).toPriorNotification(objectMapper)
+        return PriorNotification.fromLogbookMessage(
+            dbLogbookReportRepository.save(updatedModel).toLogbookMessage(objectMapper),
+        )
     }
 
     @Transactional
@@ -422,21 +426,32 @@ class JpaLogbookReportRepository(
             objectMapper: ObjectMapper,
         ): PriorNotification {
             val child = list.find { it.referencedReportId == parent.reportId }
-            if (child?.reportId == null) {
-                val datOrCorParent = parent.toPriorNotification(objectMapper)
-                datOrCorParent.markAsAcknowledged()
 
-                return datOrCorParent
+            return when {
+                child?.operationType == LogbookOperationType.DEL -> {
+                    val deletedParent = PriorNotification.fromLogbookMessage(parent.toLogbookMessage(objectMapper))
+                    deletedParent.markAsAcknowledged()
+                    deletedParent.markAsDeleted()
+
+                    deletedParent
+                }
+
+                child?.reportId == null && child?.operationType == LogbookOperationType.COR -> {
+                    val corChild = PriorNotification.fromLogbookMessage(child.toLogbookMessage(objectMapper))
+                    corChild.markAsAcknowledged()
+
+                    corChild
+                }
+
+                child?.reportId == null -> {
+                    val datOrCorParent = PriorNotification.fromLogbookMessage(parent.toLogbookMessage(objectMapper))
+                    datOrCorParent.markAsAcknowledged()
+
+                    datOrCorParent
+                }
+
+                else -> resolveAsPriorNotification(child, list, objectMapper)
             }
-            if (child.operationType == LogbookOperationType.DEL) {
-                val delParent = parent.toPriorNotification(objectMapper)
-                delParent.markAsAcknowledged()
-                delParent.markAsDeleted()
-
-                return delParent
-            }
-
-            return resolveAsPriorNotification(child, list, objectMapper)
         }
     }
 }

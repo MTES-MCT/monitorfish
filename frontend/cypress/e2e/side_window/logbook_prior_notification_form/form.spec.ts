@@ -4,11 +4,11 @@ import { editSideWindowPriorNotification } from '../manual_prior_notification_fo
 
 context('Side Window > Logbook Prior Notification Form > Form', () => {
   it('Should not update the form with a PUT request on first render', () => {
-    cy.intercept('PUT', '/bff/v1/prior_notifications/logbook/FAKE_OPERATION_114*', cy.spy().as('updateForm'))
+    cy.intercept('PUT', '/bff/v1/prior_notifications/logbook/FAKE_OPERATION_115*', cy.spy().as('updateForm'))
 
-    editSideWindowPriorNotification(`LA MER À BOIRE`, 'FAKE_OPERATION_114')
+    editSideWindowPriorNotification(`LE MARIN`, 'FAKE_OPERATION_115')
 
-    cy.contains(`LA MER À BOIRE (CFR110)`).should('be.visible')
+    cy.contains(`LE MARIN D'EAU DOUCE (CFR111)`).should('be.visible')
 
     cy.get('@updateForm').should('not.have.been.called')
 
@@ -17,7 +17,8 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
     cy.get('@updateForm').should('have.been.calledOnce')
 
     // Reset
-    cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_114?operationDate=${dayjs().toISOString()}`, {
+    const operationDate = dayjs().subtract(6, 'hours').toISOString()
+    cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_115?operationDate=${operationDate}`, {
       body: {
         authorTrigram: null,
         note: null

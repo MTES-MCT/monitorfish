@@ -87,7 +87,8 @@ class JpaLogbookReportRepository(
         operationDate: ZonedDateTime,
     ): PriorNotification? {
         // Acknowledged "DAT" and "COR" operations
-        val logbookReportModelsWithCor = dbLogbookReportRepository.findByReportId(reportId, operationDate.toString())
+        val logbookReportModelsWithCor = dbLogbookReportRepository
+            .findAcknowledgedNonDeletedPnoDatAndCorsByReportId(reportId, operationDate.toString())
         val datOrOrphanCorLogbookReportModel = logbookReportModelsWithCor.firstOrNull {
             it.operationType == LogbookOperationType.DAT || (
                 it.operationType == LogbookOperationType.COR &&
@@ -422,7 +423,9 @@ class JpaLogbookReportRepository(
         operationDate: ZonedDateTime,
     ): LogbookReportEntity? {
         // Acknowledged "DAT" and "COR" operations
-        val logbookReportModelsWithCor = dbLogbookReportRepository.findByReportId(reportId, operationDate.toString())
+        val logbookReportModelsWithCor = dbLogbookReportRepository
+            .findAcknowledgedNonDeletedPnoDatAndCorsByReportId(reportId, operationDate.toString())
+        logbookReportModelsWithCor.forEach { println("${it.reportId}") }
         val datOrOrphanCorLogbookReportModel = logbookReportModelsWithCor.firstOrNull {
             it.operationType == LogbookOperationType.DAT || (
                 it.operationType == LogbookOperationType.COR &&

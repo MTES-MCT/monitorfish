@@ -4,7 +4,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
-import fr.gouv.cnsp.monitorfish.domain.exceptions.EntityConversionException
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
@@ -49,30 +48,6 @@ data class LogbookMessage(
      */
     fun getReferenceReportId(): String? {
         return referencedReportId ?: reportId
-    }
-
-    fun <T : LogbookMessageValue> toConsolidatedLogbookMessageAndValue(
-        clazz: Class<T>,
-    ): LogbookMessageAndValue<T> {
-        if (reportId == null) {
-            throw EntityConversionException(
-                "Logbook report $id has no `reportId`. You can only enrich a DAT or an orphan COR operation with a `reportId`.",
-            )
-        }
-        if (operationType !in listOf(LogbookOperationType.DAT, LogbookOperationType.COR)) {
-            throw EntityConversionException(
-                "Logbook report $id has operationType '$operationType'. You can only enrich a DAT or an orphan COR operation.",
-            )
-        }
-
-        // val logbookMessageBase = this
-        // logbookMessageBase.enrichAcnkowledge(relatedLogbookMessages)
-        // logbookMessageBase.enrichAcnkowledge(relatedLogbookMessages)
-
-        return LogbookMessageAndValue(
-            logbookMessage = this,
-            clazz = clazz,
-        )
     }
 
     fun setAcknowledge(newLogbookMessageAcknowledgement: LogbookMessage) {
@@ -164,46 +139,6 @@ data class LogbookMessage(
         }
     }
 
-    private fun enrichAcnkowledge(relatedLogbookMessages: List<LogbookMessage>) {
-        if (this.transmissionFormat == LogbookTransmissionFormat.FLUX ||
-            LogbookSoftware.isVisioCapture(software)
-        ) {
-            this.setAcknowledgeAsSuccessful()
-
-            return
-        }
-
-        val historycallyOrderedRetLogbookMessages = relatedLogbookMessages
-            .filter { it.operationType == LogbookOperationType.RET && it.referencedReportId == reportId }
-            .sortedBy { it.reportDateTime }
-
-        val maybeLastSuccessfulRetLogbookMessage = historycallyOrderedRetLogbookMessages.lastOrNull {
-            val message = it.message as Acknowledgment
-
-            message.returnStatus == RETReturnErrorCode.SUCCESS.number
-        }
-        // If there is at least one successful RET message, we consider the report as acknowledged
-        if (maybeLastSuccessfulRetLogbookMessage != null) {
-            val lastSucessfulRetMessage = maybeLastSuccessfulRetLogbookMessage.message as Acknowledgment
-            this.acknowledgment = lastSucessfulRetMessage.also {
-                it.dateTime = maybeLastSuccessfulRetLogbookMessage.reportDateTime
-                it.isSuccess = true
-            }
-
-            return
-        }
-
-        // Else we consider the last (failure) RET message as the final acknowledgement
-        val maybeLastRetLogbookMessage = historycallyOrderedRetLogbookMessages.lastOrNull()
-        if (maybeLastRetLogbookMessage != null) {
-            val lastRetMessage = maybeLastRetLogbookMessage.message as Acknowledgment
-            this.acknowledgment = lastRetMessage.also {
-                it.dateTime = maybeLastRetLogbookMessage.reportDateTime
-                it.isSuccess = lastRetMessage.returnStatus == RETReturnErrorCode.SUCCESS.number
-            }
-        }
-    }
-
     private fun enrichAcknowledgeCorrectionAndDeletion(contextLogbookMessages: List<LogbookMessage>) {
         val referenceLogbookMessage = findReferencedLogbookMessage(contextLogbookMessages)
         val relatedLogbookMessages = filterRelatedLogbookMessages(contextLogbookMessages)
@@ -226,7 +161,7 @@ data class LogbookMessage(
 
             (transmissionFormat == LogbookTransmissionFormat.FLUX),
             (LogbookSoftware.isVisioCapture(software)),
-            -> {
+                -> {
                 setAcknowledgeAsSuccessful()
             }
 

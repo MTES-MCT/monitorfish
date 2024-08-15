@@ -133,7 +133,9 @@ context('Side Window > Prior Notification Card > Card', () => {
   })
 
   it('Should update a logbook prior notification', () => {
-    cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_114?operationDate=${dayjs().toISOString()}`, {
+    // Reset
+    const operationDate = dayjs().subtract(6, 'hours').toISOString()
+    cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_114?operationDate=${operationDate}`, {
       body: {
         authorTrigram: null,
         note: null
@@ -166,7 +168,6 @@ context('Side Window > Prior Notification Card > Card', () => {
     cy.get('[name="authorTrigram"]').should('have.value', 'ABC')
 
     // Reset
-    const operationDate = dayjs().subtract(6, 'hours').toISOString()
     cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_114?operationDate=${operationDate}`, {
       body: {
         authorTrigram: null,

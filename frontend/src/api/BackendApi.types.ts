@@ -1,4 +1,4 @@
-import type { AnyEnum, CollectionItem } from '@mtes-mct/monitor-ui'
+import type { AnyEnum } from '@mtes-mct/monitor-ui'
 import type { AnyObject } from 'yup'
 
 export namespace BackendApi {
@@ -28,7 +28,7 @@ export namespace BackendApi {
   }
 
   export type ResponseBodyPaginatedList<
-    ItemData extends CollectionItem = CollectionItem,
+    ItemData extends AnyObject = AnyObject,
     ExtraData extends AnyObject | undefined = undefined
   > = {
     data: ItemData[]

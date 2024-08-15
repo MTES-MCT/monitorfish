@@ -549,7 +549,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         )
 
         // When
-        val result = jpaLogbookReportRepository.findAllPriorNotifications(filter)
+        val result = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(filter)
 
         // Then
         assertThat(result).hasSizeGreaterThan(0)
@@ -575,7 +575,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         )
 
         // When
-        val firstResult = jpaLogbookReportRepository.findAllPriorNotifications(firstFilter)
+        val firstResult = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(firstFilter)
 
         // Then
         assertThat(firstResult).hasSizeGreaterThan(0)
@@ -593,7 +593,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         )
 
         // When
-        val secondResult = jpaLogbookReportRepository.findAllPriorNotifications(secondFilter)
+        val secondResult = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(secondFilter)
 
         // Then
         assertThat(secondResult).hasSizeGreaterThan(0)
@@ -615,7 +615,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         )
 
         // When
-        val firstResult = jpaLogbookReportRepository.findAllPriorNotifications(firstFilter)
+        val firstResult = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(firstFilter)
 
         // Then
         assertThat(firstResult).hasSizeGreaterThan(0)
@@ -635,7 +635,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         )
 
         // When
-        val secondResult = jpaLogbookReportRepository.findAllPriorNotifications(secondFilter)
+        val secondResult = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(secondFilter)
 
         // Then
         assertThat(secondResult).hasSizeGreaterThan(0)
@@ -659,7 +659,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         )
 
         // When
-        val firstResult = jpaLogbookReportRepository.findAllPriorNotifications(firstFilter)
+        val firstResult = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(firstFilter)
 
         // Then
         assertThat(firstResult).hasSizeGreaterThan(0)
@@ -683,7 +683,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         )
 
         // When
-        val secondResult = jpaLogbookReportRepository.findAllPriorNotifications(secondFilter)
+        val secondResult = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(secondFilter)
 
         // Then
         assertThat(secondResult).hasSizeGreaterThan(0)
@@ -711,7 +711,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         )
 
         // When
-        val result = jpaLogbookReportRepository.findAllPriorNotifications(filter)
+        val result = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(filter)
 
         // Then
         assertThat(result).hasSizeGreaterThan(0)
@@ -733,7 +733,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         )
 
         // When
-        val firstResult = jpaLogbookReportRepository.findAllPriorNotifications(firstFilter)
+        val firstResult = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(firstFilter)
 
         // Then
         assertThat(firstResult).hasSizeGreaterThan(0)
@@ -753,7 +753,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         )
 
         // When
-        val secondResult = jpaLogbookReportRepository.findAllPriorNotifications(secondFilter)
+        val secondResult = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(secondFilter)
 
         // Then
         assertThat(secondResult).hasSizeGreaterThan(0)
@@ -777,7 +777,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         )
 
         // When
-        val firstResult = jpaLogbookReportRepository.findAllPriorNotifications(firstFilter)
+        val firstResult = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(firstFilter)
 
         // Then
         assertThat(firstResult).hasSizeGreaterThan(0)
@@ -797,7 +797,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         )
 
         // When
-        val secondResult = jpaLogbookReportRepository.findAllPriorNotifications(secondFilter)
+        val secondResult = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(secondFilter)
 
         // Then
         assertThat(secondResult).hasSizeGreaterThan(0)
@@ -821,7 +821,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         )
 
         // When
-        val result = jpaLogbookReportRepository.findAllPriorNotifications(filter)
+        val result = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(filter)
 
         // Then
         assertThat(result).hasSizeGreaterThan(0)
@@ -844,7 +844,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         )
 
         // When
-        val result = jpaLogbookReportRepository.findAllPriorNotifications(filter)
+        val result = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(filter)
 
         // Then
         assertThat(result).hasSizeGreaterThan(0)
@@ -867,7 +867,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         )
 
         // When
-        val result = jpaLogbookReportRepository.findAllPriorNotifications(filter)
+        val result = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(filter)
 
         // Then
         assertThat(result).hasSizeGreaterThan(0)
@@ -894,7 +894,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         )
 
         // When
-        val result = jpaLogbookReportRepository.findAllPriorNotifications(filter)
+        val result = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(filter)
 
         // Then
         assertThat(result).hasSizeGreaterThan(0)
@@ -916,7 +916,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         )
 
         // When
-        val firstResult = jpaLogbookReportRepository.findAllPriorNotifications(firstFilter)
+        val firstResult = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(firstFilter)
 
         // Then
         assertThat(firstResult).hasSizeGreaterThan(0)
@@ -934,7 +934,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         )
 
         // When
-        val secondResult = jpaLogbookReportRepository.findAllPriorNotifications(secondFilter)
+        val secondResult = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(secondFilter)
 
         // Then
         assertThat(secondResult).hasSizeGreaterThan(0)
@@ -958,7 +958,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         )
 
         // When
-        val result = jpaLogbookReportRepository.findAllPriorNotifications(filter)
+        val result = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(filter)
 
         // Then
         assertThat(result).hasSizeGreaterThan(0)

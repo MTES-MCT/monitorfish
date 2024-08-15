@@ -29,7 +29,7 @@ class GetPriorNotification(
         val priorNotification = if (isManuallyCreated) {
             manualPriorNotificationRepository.findByReportId(reportId)
         } else {
-            logbookReportRepository.findPriorNotificationByReportId(reportId, operationDate)
+            logbookReportRepository.findAcknowledgedPriorNotificationByReportId(reportId, operationDate)
         }
             ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
 
@@ -55,6 +55,7 @@ class GetPriorNotification(
             } else {
                 null
             }
+
             false -> if (priorNotification.logbookMessageAndValue.logbookMessage.internalReferenceNumber != null) {
                 vesselRepository.findFirstByInternalReferenceNumber(
                     priorNotification.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,

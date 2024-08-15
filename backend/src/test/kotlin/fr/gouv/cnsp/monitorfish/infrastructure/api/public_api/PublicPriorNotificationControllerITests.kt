@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PdfDocument
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationSource
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotificationPdfDocument
+import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,8 +16,7 @@ import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.time.ZonedDateTime
 
 @Import(SentryConfig::class)
@@ -70,7 +70,7 @@ class PublicPriorNotificationControllerITests {
         """.trimIndent().toByteArray()
 
         // Given
-        given(getPriorNotificationPdfDocument.execute("REPORT_ID"))
+        given(getPriorNotificationPdfDocument.execute("REPORT_ID", false))
             .willReturn(
                 PdfDocument(
                     reportId = "REPORT_ID",
@@ -86,5 +86,18 @@ class PublicPriorNotificationControllerITests {
             .andExpect(status().isOk)
             .andExpect(content().contentType(MediaType.APPLICATION_PDF))
             .andExpect(content().bytes(dummyPdfContent))
+    }
+
+    @Test
+    fun `getPdfExistence Should get the PDF existence of a prior notification`() {
+        // Given
+        given(getPriorNotificationPdfDocument.execute("REPORT_ID", true)).willReturn(null)
+
+        // When
+        api.perform(get("/api/v1/prior_notifications/pdf/REPORT_ID/exist"))
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.status", equalTo("NO_CONTENT")))
     }
 }

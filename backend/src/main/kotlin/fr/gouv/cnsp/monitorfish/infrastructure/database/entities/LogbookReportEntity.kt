@@ -141,10 +141,11 @@ data class LogbookReportEntity(
     }
 
     fun toPriorNotification(mapper: ObjectMapper): PriorNotification {
-        val referenceLogbookMessage = toLogbookMessage(mapper)
-
-        val consolidatedLogbookMessageAndValue = referenceLogbookMessage
-            .toConsolidatedLogbookMessageAndValue(PNO::class.java)
+        val logbookMessage = toLogbookMessage(mapper)
+        val logbookMessageAndValue = LogbookMessageAndValue(
+            logbookMessage = logbookMessage,
+            clazz = PNO::class.java,
+        )
         val updatedAt = operationDateTime.atZone(UTC)
         // For practical reasons `vessel` can't be `null`, so we temporarily set it to "Navire inconnu"
         val vessel = UNKNOWN_VESSEL
@@ -154,8 +155,8 @@ data class LogbookReportEntity(
             createdAt = operationDateTime.atZone(UTC),
             didNotFishAfterZeroNotice = false,
             isManuallyCreated = false,
-            logbookMessageAndValue = consolidatedLogbookMessageAndValue,
-            sentAt = consolidatedLogbookMessageAndValue.logbookMessage.reportDateTime,
+            logbookMessageAndValue = logbookMessageAndValue,
+            sentAt = logbookMessageAndValue.logbookMessage.reportDateTime,
             updatedAt = updatedAt,
 
             // These props need to be calculated in the use case

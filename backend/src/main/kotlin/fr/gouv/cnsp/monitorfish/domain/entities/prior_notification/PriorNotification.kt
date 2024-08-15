@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.entities.prior_notification
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
 import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageAndValue
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledgment
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
@@ -134,6 +135,20 @@ data class PriorNotification(
             }
 
         reportingCount = currentReportings?.count() ?: 0
+    }
+
+    fun markAsAcknowledged() {
+        logbookMessageAndValue = LogbookMessageAndValue(
+            logbookMessageAndValue.logbookMessage.copy(acknowledgment = Acknowledgment(isSuccess = true)),
+            PNO::class.java,
+        )
+    }
+
+    fun markAsDeleted() {
+        logbookMessageAndValue = LogbookMessageAndValue(
+            logbookMessageAndValue.logbookMessage.copy(isDeleted = true),
+            PNO::class.java,
+        )
     }
 
     companion object {

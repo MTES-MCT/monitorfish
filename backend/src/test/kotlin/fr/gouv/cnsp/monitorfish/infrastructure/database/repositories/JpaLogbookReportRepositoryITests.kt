@@ -5,12 +5,10 @@ import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagePurpose
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookRawMessage
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils
-import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LogbookReportEntity
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.AfterEach
@@ -21,10 +19,8 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.cache.CacheManager
 import org.springframework.context.annotation.Import
 import org.springframework.transaction.annotation.Transactional
-import java.time.Instant
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
-import java.util.*
 
 @Import(MapperConfiguration::class)
 @SpringBootTest(properties = ["monitorfish.scheduling.enable=false"])
@@ -1037,16 +1033,13 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `updatePriorNotificationState Should update writable state values for an existing PNO logbook report`() {
         // Given
-        val currentDatReport = jpaLogbookReportRepository.findById(109)
-        assertThat((currentDatReport.message as PNO).isBeingSent).isEqualTo(false)
-        assertThat((currentDatReport.message as PNO).isVerified).isEqualTo(false)
-        val currentCorReport = jpaLogbookReportRepository.findById(1109)
+        val currentCorReport = jpaLogbookReportRepository.findById(2109)
         assertThat((currentCorReport.message as PNO).isBeingSent).isEqualTo(false)
         assertThat((currentCorReport.message as PNO).isVerified).isEqualTo(false)
 
         // When
         jpaLogbookReportRepository.updatePriorNotificationState(
-            "FAKE_OPERATION_109",
+            "FAKE_OPERATION_109_COR",
             ZonedDateTime.now().minusMinutes(15),
             isBeingSent = true,
             isSent = false,
@@ -1054,10 +1047,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         )
 
         // Then
-        val updatedDatReport = jpaLogbookReportRepository.findById(109)
-        assertThat((updatedDatReport.message as PNO).isBeingSent).isEqualTo(true)
-        assertThat((updatedDatReport.message as PNO).isVerified).isEqualTo(true)
-        val updatedCorReport = jpaLogbookReportRepository.findById(1109)
+        val updatedCorReport = jpaLogbookReportRepository.findById(2109)
         assertThat((updatedCorReport.message as PNO).isBeingSent).isEqualTo(true)
         assertThat((updatedCorReport.message as PNO).isVerified).isEqualTo(true)
     }
@@ -1066,26 +1056,19 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `updatePriorNotificationNote Should update a note for an existing PNO logbook report`() {
         // Given
-        val currentDatReport = jpaLogbookReportRepository.findById(109)
-        assertThat((currentDatReport.message as PNO).note).isNull()
-        val currentCorReport = jpaLogbookReportRepository.findById(1109)
+        val currentCorReport = jpaLogbookReportRepository.findById(2109)
         assertThat((currentCorReport.message as PNO).note).isNull()
 
         // When
         jpaLogbookReportRepository.updatePriorNotificationAuthorTrigramAndNote(
-            "FAKE_OPERATION_109",
+            "FAKE_OPERATION_109_COR",
             ZonedDateTime.now().minusMinutes(15),
             "ABC",
             "A wonderful note",
         )
 
         // Then
-        val updatedDatReport = jpaLogbookReportRepository.findById(109)
-        assertThat((updatedDatReport.message as PNO).note).isEqualTo("A wonderful note")
-        assertThat((updatedDatReport.message as PNO).isBeingSent).isEqualTo(false)
-        assertThat((updatedDatReport.message as PNO).isVerified).isEqualTo(false)
-        assertThat((updatedDatReport.message as PNO).isSent).isEqualTo(false)
-        val updatedCorReport = jpaLogbookReportRepository.findById(1109)
+        val updatedCorReport = jpaLogbookReportRepository.findById(2109)
         assertThat((updatedCorReport.message as PNO).note).isEqualTo("A wonderful note")
         assertThat((updatedCorReport.message as PNO).isBeingSent).isEqualTo(false)
         assertThat((updatedCorReport.message as PNO).isVerified).isEqualTo(false)
@@ -1096,54 +1079,17 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `invalidate Should invalidate for an existing PNO logbook report`() {
         // Given
-        val currentDatReport = jpaLogbookReportRepository.findById(109)
-        assertThat((currentDatReport.message as PNO).isInvalidated).isNull()
-        val currentCorReport = jpaLogbookReportRepository.findById(1109)
+        val currentCorReport = jpaLogbookReportRepository.findById(2109)
         assertThat((currentCorReport.message as PNO).isInvalidated).isNull()
 
         // When
         jpaLogbookReportRepository.invalidate(
-            "FAKE_OPERATION_109",
+            "FAKE_OPERATION_109_COR",
             ZonedDateTime.now().minusMinutes(15),
         )
 
         // Then
-        val updatedDatReport = jpaLogbookReportRepository.findById(109)
-        assertThat((updatedDatReport.message as PNO).isInvalidated).isEqualTo(true)
-        val updatedCorReport = jpaLogbookReportRepository.findById(1109)
+        val updatedCorReport = jpaLogbookReportRepository.findById(2109)
         assertThat((updatedCorReport.message as PNO).isInvalidated).isEqualTo(true)
-    }
-
-    companion object {
-        private fun getFakeLogbookReportModel(
-            operationType: LogbookOperationType,
-            referenceReportId: String? = null,
-        ): LogbookReportEntity {
-            val reportId = UUID.randomUUID().toString()
-
-            return LogbookReportEntity(
-                reportId = reportId,
-                referencedReportId = referenceReportId,
-                externalReferenceNumber = null,
-                flagState = null,
-                integrationDateTime = Instant.now(),
-                internalReferenceNumber = null,
-                imo = null,
-                ircs = null,
-                message = null,
-                messageType = null,
-                operationCountry = null,
-                operationDateTime = Instant.now(),
-                operationNumber = "FAKE_OPERATION_NUMBER_$reportId",
-                operationType = operationType,
-                reportDateTime = null,
-                software = null,
-                transmissionFormat = LogbookTransmissionFormat.ERS,
-                tripGears = null,
-                tripNumber = null,
-                tripSegments = null,
-                vesselName = null,
-            )
-        }
     }
 }

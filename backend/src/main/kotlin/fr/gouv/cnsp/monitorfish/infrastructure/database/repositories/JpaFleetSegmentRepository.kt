@@ -66,7 +66,7 @@ class JpaFleetSegmentRepository(
                 dbFleetSegmentRepository.findBySegmentAndYearEquals(segment, year).toFleetSegment()
             }
         } catch (e: Throwable) {
-            throw CouldNotUpdateFleetSegmentException("Could not update fleet segment: ${e.message}")
+            throw CouldNotUpdateFleetSegmentException("Could not update fleet segment: ${e.message}", e)
         }
     }
 

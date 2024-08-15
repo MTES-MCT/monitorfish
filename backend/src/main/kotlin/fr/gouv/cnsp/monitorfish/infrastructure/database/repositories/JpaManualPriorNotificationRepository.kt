@@ -72,7 +72,7 @@ class JpaManualPriorNotificationRepository(
     }
 
     @Transactional
-    @CacheEvict(value = ["pno_to_verify"], allEntries = true)
+    @CacheEvict(value = ["manual_pno_to_verify"], allEntries = true)
     override fun save(newOrNextPriorNotification: PriorNotification): PriorNotification {
         try {
             val manualPriorNotificationEntity = dbManualPriorNotificationRepository
@@ -105,6 +105,7 @@ class JpaManualPriorNotificationRepository(
     }
 
     @Transactional
+    @CacheEvict(value = ["manual_pno_to_verify"], allEntries = true)
     override fun invalidate(reportId: String) {
         val manualPriorNotification =
             dbManualPriorNotificationRepository.findByReportId(reportId) ?: throw BackendUsageException(

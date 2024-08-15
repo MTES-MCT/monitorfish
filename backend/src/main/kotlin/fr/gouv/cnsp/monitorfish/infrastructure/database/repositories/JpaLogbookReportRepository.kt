@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.Utils
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageAndValue
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
@@ -36,66 +37,45 @@ class JpaLogbookReportRepository(
     private val logger = LoggerFactory.getLogger(JpaLogbookReportRepository::class.java)
 
     override fun findAllPriorNotifications(filter: PriorNotificationsFilter): List<PriorNotification> {
-        val logbookReportModels = dbLogbookReportRepository.findAllEnrichedPnoReferencesAndRelatedOperations(
-            flagStates = filter.flagStates ?: emptyList(),
-            hasOneOrMoreReportings = filter.hasOneOrMoreReportings,
-            isLessThanTwelveMetersVessel = filter.isLessThanTwelveMetersVessel,
-            lastControlledAfter = filter.lastControlledAfter,
-            lastControlledBefore = filter.lastControlledBefore,
-            portLocodes = filter.portLocodes ?: emptyList(),
-            priorNotificationTypesAsSqlArrayString = toSqlArrayString(filter.priorNotificationTypes),
-            searchQuery = filter.searchQuery,
-            specyCodesAsSqlArrayString = toSqlArrayString(filter.specyCodes),
-            tripGearCodesAsSqlArrayString = toSqlArrayString(filter.tripGearCodes),
-            tripSegmentCodesAsSqlArrayString = toSqlArrayString(filter.tripSegmentCodes),
-            willArriveAfter = filter.willArriveAfter,
-            willArriveBefore = filter.willArriveBefore,
-        )
+        // Acknowledged "DAT", "COR" and "DEL" operations
+        val logbookReportModelsWithCorAndDel =
+            dbLogbookReportRepository.findAllEnrichedPnoReferencesAndRelatedOperations(
+                flagStates = filter.flagStates ?: emptyList(),
+                hasOneOrMoreReportings = filter.hasOneOrMoreReportings,
+                isLessThanTwelveMetersVessel = filter.isLessThanTwelveMetersVessel,
+                lastControlledAfter = filter.lastControlledAfter,
+                lastControlledBefore = filter.lastControlledBefore,
+                portLocodes = filter.portLocodes ?: emptyList(),
+                priorNotificationTypesAsSqlArrayString = toSqlArrayString(filter.priorNotificationTypes),
+                searchQuery = filter.searchQuery,
+                specyCodesAsSqlArrayString = toSqlArrayString(filter.specyCodes),
+                tripGearCodesAsSqlArrayString = toSqlArrayString(filter.tripGearCodes),
+                tripSegmentCodesAsSqlArrayString = toSqlArrayString(filter.tripSegmentCodes),
+                willArriveAfter = filter.willArriveAfter,
+                willArriveBefore = filter.willArriveBefore,
+            )
 
-        return logbookReportModels.mapNotNull { logbookReportModel ->
-            try {
-                logbookReportModel.toPriorNotification(objectMapper)
-            } catch (e: Exception) {
-                logger.warn(
-                    "Error while converting logbook report model to prior notification (reportId = ${logbookReportModel.reportId}).",
-                    e,
-                )
-
-                null
+        val datAndOrphanCorLogbooReportModels = logbookReportModelsWithCorAndDel
+            .filter {
+                it.operationType == LogbookOperationType.DAT || (
+                    it.operationType == LogbookOperationType.COR &&
+                        logbookReportModelsWithCorAndDel.none { model -> model.reportId == it.referencedReportId }
+                    )
             }
+
+        return datAndOrphanCorLogbooReportModels.map {
+            resolveAsPriorNotification(it, logbookReportModelsWithCorAndDel, objectMapper)
         }
     }
 
     @Cacheable(value = ["pno_to_verify"])
     override fun findAllPriorNotificationsToVerify(): List<PriorNotification> {
-        val logbookReportModels = dbLogbookReportRepository.findAllEnrichedPnoReferencesAndRelatedOperations(
-            flagStates = emptyList(),
-            hasOneOrMoreReportings = null,
-            isLessThanTwelveMetersVessel = null,
-            lastControlledAfter = null,
-            lastControlledBefore = null,
-            portLocodes = emptyList(),
-            priorNotificationTypesAsSqlArrayString = null,
-            searchQuery = null,
-            specyCodesAsSqlArrayString = null,
-            tripGearCodesAsSqlArrayString = null,
-            tripSegmentCodesAsSqlArrayString = null,
+        val filter = PriorNotificationsFilter(
             willArriveAfter = CustomZonedDateTime(ZonedDateTime.now()).toString(),
             willArriveBefore = CustomZonedDateTime(ZonedDateTime.now().plusHours(24)).toString(),
         )
 
-        return logbookReportModels.mapNotNull { referenceLogbookReportModel ->
-            try {
-                referenceLogbookReportModel.toPriorNotification(objectMapper)
-            } catch (e: Exception) {
-                logger.warn(
-                    "Error while converting logbook report model to prior notifications (reportId = ${referenceLogbookReportModel.reportId}).",
-                    e,
-                )
-
-                null
-            }
-        }.filter {
+        return findAllPriorNotifications(filter).filter {
             it.logbookMessageAndValue.value.isInVerificationScope == true &&
                 it.logbookMessageAndValue.value.isVerified == false &&
                 it.logbookMessageAndValue.value.isInvalidated != true
@@ -419,11 +399,10 @@ class JpaLogbookReportRepository(
     @Transactional
     @CacheEvict(value = ["pno_to_verify"], allEntries = true)
     override fun invalidate(reportId: String, operationDate: ZonedDateTime) {
-        val logbookReportModel =
-            dbLogbookReportRepository.findByReportId(
-                reportId,
-                operationDate.withZoneSameInstant(UTC).toString(),
-            )
+        val logbookReportModel = dbLogbookReportRepository.findByReportId(
+            reportId,
+            operationDate.withZoneSameInstant(UTC).toString(),
+        )
         if (logbookReportModel == null) {
             throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
         }
@@ -439,4 +418,29 @@ class JpaLogbookReportRepository(
 
     private fun getAllMessagesExceptionMessage(internalReferenceNumber: String) =
         "No messages found for the vessel. (internalReferenceNumber: \"$internalReferenceNumber\")"
+
+    companion object {
+        private fun resolveAsPriorNotification(
+            parent: LogbookReportEntity,
+            list: List<LogbookReportEntity>,
+            objectMapper: ObjectMapper,
+        ): PriorNotification {
+            val child = list.find { it.referencedReportId == parent.reportId }
+            if (child?.reportId == null) {
+                val datOrCorParent = parent.toPriorNotification(objectMapper)
+                datOrCorParent.markAsAcknowledged()
+
+                return datOrCorParent
+            }
+            if (child.operationType == LogbookOperationType.DEL) {
+                val delParent = parent.toPriorNotification(objectMapper)
+                delParent.markAsAcknowledged()
+                delParent.markAsDeleted()
+
+                return delParent
+            }
+
+            return resolveAsPriorNotification(child, list, objectMapper)
+        }
+    }
 }

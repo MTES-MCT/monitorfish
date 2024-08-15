@@ -57,6 +57,7 @@
                 "operation_number": "FAKE_OPERATION_101",
                 "operation_type": "DAT",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "software": "JT/VISIOCaptures V1.4.7",
                 "transmission_format": "ERS",
                 "vessel_name": "PHENOMENE",
                 "trip_gears:jsonb": [
@@ -111,6 +112,7 @@
                 "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "operation_number": "FAKE_OPERATION_101_RET",
                 "operation_type": "RET",
+                "software": "JT/VISIOCaptures V1.4.7",
                 "transmission_format": "ERS",
                 "value:jsonb": {
                     "returnStatus": "000"

@@ -125,17 +125,18 @@
                 "length": 25,
                 "under_charter": false
             },
-            {
-                "id": 1109,
-                "cfr": "CFR109",
-                "mmsi": "MMSI109_DUPLICATE",
-                "ircs": "IRCS109_DUPLICATE",
-                "external_immatriculation": "EXTIMM109_DUPLICATE",
-                "vessel_name": "LE POISSON D'AVRIL DUPLIQUÉ",
-                "flag_state": "FR",
-                "length": 50,
-                "under_charter": true
-            },
+            // TODO Check that with Vincent, this breaks the prior notifications SQL query.
+            // {
+            //     "id": 1109,
+            //     "cfr": "CFR109",
+            //     "mmsi": "MMSI109_DUPLICATE",
+            //     "ircs": "IRCS109_DUPLICATE",
+            //     "external_immatriculation": "EXTIMM109_DUPLICATE",
+            //     "vessel_name": "LE POISSON D'AVRIL DUPLIQUÉ",
+            //     "flag_state": "FR",
+            //     "length": 50,
+            //     "under_charter": true
+            // },
 
             // - Vessel: LA MER À BOIRE
             {

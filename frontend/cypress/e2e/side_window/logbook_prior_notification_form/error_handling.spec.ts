@@ -4,7 +4,7 @@ import { editSideWindowPriorNotification } from '../manual_prior_notification_fo
 
 context('Side Window > Logbook Prior Notification Form > Error Handling', () => {
   const failedQueryCount = RTK_MAX_RETRIES + 1
-  const url = '/bff/v1/prior_notifications/FAKE_OPERATION_109?isManuallyCreated=false&operationDate=*'
+  const url = '/bff/v1/prior_notifications/FAKE_OPERATION_109_COR?isManuallyCreated=false&operationDate=*'
 
   it('Should handle fetching error as expected', () => {
     cy.intercept(
@@ -18,7 +18,7 @@ context('Side Window > Logbook Prior Notification Form > Error Handling', () => 
       }
     ).as('getPriorNotificationsWithError')
 
-    editSideWindowPriorNotification(`L'ANCRE`, 'FAKE_OPERATION_109')
+    editSideWindowPriorNotification(`L'ANCRE`, 'FAKE_OPERATION_109_COR')
 
     for (let i = 1; i <= failedQueryCount; i += 1) {
       cy.wait('@getPriorNotificationsWithError')

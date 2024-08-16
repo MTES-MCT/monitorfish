@@ -59,27 +59,8 @@ context('Side Window > Prior Notification Card > Card', () => {
     cy.contains(`25 kg`).should('be.visible')
   })
 
-  it('Should display a failed acknowledged message as expected', () => {
-    openSideWindowPriorNotification(`CALAMARO`)
-
-    // Title
-    cy.contains(`Préavis navire ≥ 12 M`).should('be.visible')
-    cy.contains(`CALAMARO (CFR105)`).should('be.visible')
-
-    // Message Header
-    cy.contains(`PNO`).should('be.visible')
-    cy.contains(`Préavis (notification de retour au port)`).should('be.visible')
-
-    // Message Body
-    cy.getDataCy('LogbookMessage-failed-acknowledgement-icon').should('be.visible')
-    cy.contains(`Saint-Malo (FRSML)`).should('be.visible')
-    cy.contains(`Débarquement (LAN)`).should('be.visible')
-    cy.contains(`BAUDROIE (ANF)`).should('be.visible')
-    cy.contains(`150 kg`).should('be.visible')
-  })
-
   it('Should refresh the list when the opened prior notification data differs from its entry in the current list', () => {
-    const url = '/bff/v1/prior_notifications/FAKE_OPERATION_109?isManuallyCreated=false&operationDate=*'
+    const url = '/bff/v1/prior_notifications/FAKE_OPERATION_109_COR?isManuallyCreated=false&operationDate=*'
 
     cy.intercept({
       method: 'GET',
@@ -112,7 +93,7 @@ context('Side Window > Prior Notification Card > Card', () => {
   })
 
   it('Should display a warning banner and refresh the list when the opened prior notification has been deleted', () => {
-    const url = '/bff/v1/prior_notifications/FAKE_OPERATION_109?isManuallyCreated=false&operationDate=*'
+    const url = '/bff/v1/prior_notifications/FAKE_OPERATION_109_COR?isManuallyCreated=false&operationDate=*'
 
     cy.intercept({
       method: 'GET',
@@ -152,7 +133,9 @@ context('Side Window > Prior Notification Card > Card', () => {
   })
 
   it('Should update a logbook prior notification', () => {
-    cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_108?operationDate=${dayjs().toISOString()}`, {
+    // Reset
+    const operationDate = dayjs().subtract(6, 'hours').toISOString()
+    cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_114?operationDate=${operationDate}`, {
       body: {
         authorTrigram: null,
         note: null
@@ -160,9 +143,9 @@ context('Side Window > Prior Notification Card > Card', () => {
     })
 
     // Given
-    openSideWindowPriorNotification(`CALAMARO`)
+    openSideWindowPriorNotification(`MER À BOIRE`)
 
-    cy.intercept('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_108?operationDate=*`).as(
+    cy.intercept('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_114?operationDate=*`).as(
       'updateLogbookPriorNotification'
     )
 
@@ -179,13 +162,13 @@ context('Side Window > Prior Notification Card > Card', () => {
     cy.get('.Element-Button').contains('Télécharger').parent().should('be.disabled')
 
     // The note is saved
-    openSideWindowPriorNotification(`CALAMARO`)
+    openSideWindowPriorNotification(`MER À BOIRE`)
 
     cy.get('[name="note"]').should('have.value', "Un point d'attention.")
     cy.get('[name="authorTrigram"]').should('have.value', 'ABC')
 
     // Reset
-    cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_108?operationDate=${dayjs().toISOString()}`, {
+    cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_114?operationDate=${operationDate}`, {
       body: {
         authorTrigram: null,
         note: null
@@ -198,7 +181,7 @@ context('Side Window > Prior Notification Card > Card', () => {
 
     cy.intercept(
       'POST',
-      `/bff/v1/prior_notifications/FAKE_OPERATION_111/verify_and_send?isManuallyCreated=false&operationDate=*`
+      `/bff/v1/prior_notifications/FAKE_OPERATION_111_COR_ORPHAN/verify_and_send?isManuallyCreated=false&operationDate=*`
     ).as('verifyAndSendPriorNotification')
 
     cy.clickButton('Diffuser')
@@ -222,7 +205,7 @@ context('Side Window > Prior Notification Card > Card', () => {
       cy.clickButton('Fermer')
       cy.fill('Rechercher un navire', 'LE POISSON AMBULANT')
 
-      cy.getTableRowById('FAKE_OPERATION_111' as unknown as number)
+      cy.getTableRowById('FAKE_OPERATION_111_COR_ORPHAN' as unknown as number)
         .find('span[title="Diffusion en cours"]')
         .should('be.visible')
     })
@@ -250,11 +233,11 @@ context('Side Window > Prior Notification Card > Card', () => {
     cy.get('[data-cy="side-window-sub-menu-ALL"]').click()
     cy.fill('Rechercher un navire', 'ANCRE')
 
-    cy.getTableRowById('FAKE_OPERATION_109' as any)
+    cy.getTableRowById('FAKE_OPERATION_109_COR' as any)
       .find('[title="Préavis invalidé"]')
       .should('not.exist')
 
-    cy.getTableRowById('FAKE_OPERATION_109' as any).clickButton('Éditer le préavis')
+    cy.getTableRowById('FAKE_OPERATION_109_COR' as any).clickButton('Éditer le préavis')
     if (document.querySelector('[data-cy="first-loader"]')) {
       cy.getDataCy('first-loader').should('not.be.visible')
     }
@@ -269,7 +252,7 @@ context('Side Window > Prior Notification Card > Card', () => {
 
     cy.clickButton('Fermer')
 
-    cy.getTableRowById('FAKE_OPERATION_109' as any)
+    cy.getTableRowById('FAKE_OPERATION_109_COR' as any)
       .find('[title="Préavis invalidé"]')
       .should('exist')
   })

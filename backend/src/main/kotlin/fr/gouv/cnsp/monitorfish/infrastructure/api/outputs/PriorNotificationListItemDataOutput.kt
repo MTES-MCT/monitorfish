@@ -10,8 +10,7 @@ import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
 data class PriorNotificationListItemDataOutput(
-    /** Reference logbook message (report) `reportId`. */
-    val id: String,
+    val reportId: String,
     val acknowledgment: AcknowledgmentDataOutput?,
     val createdAt: ZonedDateTime?,
     val expectedArrivalDate: ZonedDateTime?,
@@ -51,13 +50,13 @@ data class PriorNotificationListItemDataOutput(
         val logger: Logger = LoggerFactory.getLogger(PriorNotificationListItemDataOutput::class.java)
 
         fun fromPriorNotification(priorNotification: PriorNotification): PriorNotificationListItemDataOutput? {
-            val logbookMessage = priorNotification.logbookMessageAndValue.logbookMessage
-            val referenceReportId = logbookMessage.getReferenceReportId()
-            if (referenceReportId == null) {
-                logger.warn("Prior notification has neither `reportId` nor `referencedReportId`: $priorNotification.")
+            if (priorNotification.reportId == null) {
+                logger.warn("Prior notification has no `reportId`: $priorNotification.")
 
                 return null
             }
+
+            val logbookMessage = priorNotification.logbookMessageAndValue.logbookMessage
             val message = priorNotification.logbookMessageAndValue.value
 
             val acknowledgment = logbookMessage.acknowledgment?.let { AcknowledgmentDataOutput.fromAcknowledgment(it) }
@@ -73,7 +72,7 @@ data class PriorNotificationListItemDataOutput(
             val vessel = requireNotNull(priorNotification.vessel) { "`vessel` is null." }
 
             return PriorNotificationListItemDataOutput(
-                id = referenceReportId,
+                reportId = priorNotification.reportId,
                 acknowledgment = acknowledgment,
                 createdAt = priorNotification.createdAt,
                 expectedArrivalDate = message.predictedArrivalDatetimeUtc,

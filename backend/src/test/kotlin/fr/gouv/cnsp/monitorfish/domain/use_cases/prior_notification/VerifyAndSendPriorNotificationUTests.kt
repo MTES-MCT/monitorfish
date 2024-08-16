@@ -27,7 +27,7 @@ class VerifyAndSendPriorNotificationUTests {
 
         // Given
         given(
-            logbookReportRepository.findPriorNotificationByReportId(
+            logbookReportRepository.findAcknowledgedPriorNotificationByReportId(
                 fakePriorNotification.reportId!!,
                 fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
             ),
@@ -65,7 +65,7 @@ class VerifyAndSendPriorNotificationUTests {
 
         // Given
         given(
-            logbookReportRepository.findPriorNotificationByReportId(
+            logbookReportRepository.findAcknowledgedPriorNotificationByReportId(
                 fakePriorNotification.reportId!!,
                 fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
             ),

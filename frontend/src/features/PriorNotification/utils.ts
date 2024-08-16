@@ -1,8 +1,18 @@
 import type { PriorNotification } from './PriorNotification.types'
 import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 
+type PriorNotificationData = {
+  operationDate: string
+  reportId: string
+}
+
+export function getPriorNotificationIdentifier(data: PriorNotificationData): PriorNotification.Identifier
+export function getPriorNotificationIdentifier(data: undefined): undefined
 export function getPriorNotificationIdentifier(
-  data: { [key: string]: any; operationDate: string; reportId: string } | undefined
+  data: PriorNotificationData | undefined
+): PriorNotification.Identifier | undefined
+export function getPriorNotificationIdentifier(
+  data: PriorNotificationData | undefined
 ): PriorNotification.Identifier | undefined {
   if (!data) {
     return undefined

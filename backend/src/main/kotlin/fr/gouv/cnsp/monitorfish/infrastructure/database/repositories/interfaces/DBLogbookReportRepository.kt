@@ -136,16 +136,9 @@ interface DBLogbookReportRepository :
                     AND lr.operation_type = 'DEL'
             ),
 
-            ret_pno_logbook_reports AS (
-                SELECT
-                    lr.*,
-                    CAST(NULL AS TEXT[]) AS prior_notification_type_names,
-                    CAST(NULL AS TEXT[]) AS specy_codes,
-                    CAST(NULL AS TEXT[]) AS trip_gear_codes,
-                    CAST(NULL AS TEXT[]) AS trip_segment_codes,
-                    CAST(NULL AS INTEGER) AS reporting_count
+            acknowledged_report_ids AS (
+                SELECT DISTINCT referenced_report_id
                 FROM logbook_reports lr
-                JOIN filtered_dat_and_cor_pno_logbook_reports fdacplr ON lr.referenced_report_id = fdacplr.report_id
                 WHERE
                     -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
                     lr.operation_datetime_utc
@@ -153,20 +146,22 @@ interface DBLogbookReportRepository :
                         AND CAST(:willArriveBefore AS TIMESTAMP) + INTERVAL '48 hours'
 
                     AND lr.operation_type = 'RET'
+                    AND lr.value->>'returnStatus' = '000'
             )
 
         SELECT *
         FROM filtered_dat_and_cor_pno_logbook_reports
+        WHERE
+            report_id IN (SELECT referenced_report_id FROM acknowledged_report_ids)
+            OR flag_state NOT IN ('FRA', 'GUF', 'VEN') -- flag_states for which we received RET messages
 
-        UNION
+        UNION ALL
 
         SELECT *
         FROM del_pno_logbook_reports
-
-        UNION
-
-        SELECT *
-        FROM ret_pno_logbook_reports;
+        WHERE
+            operation_number IN (SELECT referenced_report_id FROM acknowledged_report_ids)
+            OR flag_state NOT IN ('FRA', 'GUF', 'VEN') -- flag_states for which we received RET messages
         """,
         nativeQuery = true,
     )
@@ -186,90 +181,93 @@ interface DBLogbookReportRepository :
         willArriveBefore: String,
     ): List<LogbookReportEntity>
 
+    /**
+     * This query either returns:
+     * - 1 element if the report id is found, not corrected and not deleted
+     * - 0 element
+     */
     @Query(
         """
         WITH
-           dats_cors AS (
-                -- Get the logbook report reference (DAT operation)
-                -- It may not exist while a COR operation would still exist (orphan COR case)
+            searched_pno AS (
                 SELECT *
                 FROM logbook_reports
                 WHERE
-                    -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
                     operation_datetime_utc
-                        BETWEEN CAST(:operationDate AS TIMESTAMP) - INTERVAL '48 hours'
-                        AND CAST(:operationDate AS TIMESTAMP) + INTERVAL '48 hours'
-
+                        BETWEEN CAST(:operationDate AS TIMESTAMP) - INTERVAL '4 hours'
+                        AND CAST(:operationDate AS TIMESTAMP) + INTERVAL '4 hours'
                     AND report_id = :reportId
                     AND log_type = 'PNO'
-                    AND operation_type = 'DAT'
                     AND enriched = TRUE
+            ),
 
-                UNION ALL
+           dels_targeting_searched_pno AS (
 
-                -- Get the logbook report corrections which may be used as base for the "final" report
-                SELECT *
-                FROM logbook_reports
-                WHERE
-                    -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
-                    operation_datetime_utc
-                        BETWEEN CAST(:operationDate AS TIMESTAMP) - INTERVAL '48 hours'
-                        AND CAST(:operationDate AS TIMESTAMP) + INTERVAL '48 hours'
-
-                    AND referenced_report_id = :reportId
-                    AND log_type = 'PNO'
-                    AND operation_type = 'COR'
-                    AND enriched = TRUE
+               -- A DEL message has no flag_state, which we need to acknowledge messages of non french vessels.
+               -- So we use the flag_state of the deleted message.
+               SELECT del.referenced_report_id, del.operation_number, searched_pno.flag_state
+               FROM logbook_reports del
+               JOIN searched_pno
+               ON del.referenced_report_id = searched_pno.report_id
+               WHERE
+                   del.operation_datetime_utc
+                       BETWEEN CAST(:operationDate AS TIMESTAMP) - INTERVAL '48 hours'
+                       AND CAST(:operationDate AS TIMESTAMP) + INTERVAL '48 hours'
+                   AND del.operation_type = 'DEL'
            ),
 
-           dels AS (
+           cors_targeting_searched_pno AS (
                SELECT *
                FROM logbook_reports
                WHERE
-                   -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
                    operation_datetime_utc
                        BETWEEN CAST(:operationDate AS TIMESTAMP) - INTERVAL '48 hours'
                        AND CAST(:operationDate AS TIMESTAMP) + INTERVAL '48 hours'
-
-                   AND operation_type = 'DEL'
-                   AND referenced_report_id IN (SELECT report_id FROM dats_cors)
+                   AND operation_type = 'COR'
+                   AND referenced_report_id = :reportId
            ),
 
-           rets AS (
-               SELECT *
+           acknowledged_cors_and_dels AS (
+               SELECT DISTINCT referenced_report_id
                FROM logbook_reports
                WHERE
-                   -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
                    operation_datetime_utc
                        BETWEEN CAST(:operationDate AS TIMESTAMP) - INTERVAL '48 hours'
                        AND CAST(:operationDate AS TIMESTAMP) + INTERVAL '48 hours'
-
                    AND operation_type = 'RET'
+                   AND value->>'returnStatus' = '000'
                    AND referenced_report_id IN (
-                       SELECT report_id FROM dats_cors
+                       SELECT operation_number FROM dels_targeting_searched_pno
                        UNION ALL
-                       SELECT report_id FROM dels
+                       SELECT report_id FROM cors_targeting_searched_pno
                    )
-           )
+           ),
+
+            acknowledged_dels_targeting_searched_pno AS (
+                SELECT referenced_report_id
+                FROM dels_targeting_searched_pno
+                WHERE
+                    operation_number IN (SELECT referenced_report_id FROM acknowledged_cors_and_dels)
+                    OR flag_state NOT IN ('FRA', 'GUF', 'VEN') -- flag_states for which we received RET messages
+            ),
+
+            acknowledged_cors_targeting_searched_pno AS (
+                SELECT referenced_report_id
+                FROM cors_targeting_searched_pno
+                WHERE
+                    report_id IN (SELECT referenced_report_id FROM acknowledged_cors_and_dels)
+                    OR flag_state NOT IN ('FRA', 'GUF', 'VEN') -- flag_states for which we received RET messages
+            )
 
         SELECT *
-        FROM dats_cors
-
-        UNION ALL
-
-        SELECT *
-        FROM dels
-
-        UNION ALL
-
-        SELECT *
-        FROM rets
-
-        ORDER BY report_datetime_utc;
+        FROM searched_pno
+        WHERE
+            report_id NOT IN (SELECT referenced_report_id FROM acknowledged_dels_targeting_searched_pno) AND
+            report_id NOT IN (SELECT referenced_report_id FROM acknowledged_cors_targeting_searched_pno)
         """,
         nativeQuery = true,
     )
-    fun findEnrichedPnoReferenceAndRelatedOperationsByReportId(
+    fun findAcknowledgedNonDeletedPnoDatAndCorsByReportId(
         reportId: String,
         operationDate: String,
     ): List<LogbookReportEntity>

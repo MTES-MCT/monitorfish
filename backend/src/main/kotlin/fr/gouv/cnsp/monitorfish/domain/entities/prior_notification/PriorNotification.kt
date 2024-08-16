@@ -2,13 +2,16 @@ package fr.gouv.cnsp.monitorfish.domain.entities.prior_notification
 
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
 import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageAndValue
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledgment
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.UNKNOWN_VESSEL
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendInternalErrorCode
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
@@ -136,8 +139,40 @@ data class PriorNotification(
         reportingCount = currentReportings?.count() ?: 0
     }
 
+    fun markAsAcknowledged() {
+        logbookMessageAndValue = LogbookMessageAndValue(
+            logbookMessageAndValue.logbookMessage.copy(acknowledgment = Acknowledgment(isSuccess = true)),
+            PNO::class.java,
+        )
+    }
+
     companion object {
         private val logger = LoggerFactory.getLogger(PriorNotification::class.java)
+
+        fun fromLogbookMessage(logbookMessage: LogbookMessage): PriorNotification {
+            val logbookMessageAndValue = LogbookMessageAndValue(
+                logbookMessage = logbookMessage,
+                clazz = PNO::class.java,
+            )
+
+            return PriorNotification(
+                reportId = logbookMessage.reportId,
+                createdAt = logbookMessage.operationDateTime,
+                didNotFishAfterZeroNotice = false,
+                isManuallyCreated = false,
+                logbookMessageAndValue = logbookMessageAndValue,
+                sentAt = logbookMessageAndValue.logbookMessage.reportDateTime,
+                updatedAt = logbookMessage.operationDateTime,
+
+                // These props need to be calculated in the use case
+                port = null,
+                reportingCount = null,
+                seafront = null,
+                // For practical reasons `vessel` can't be `null`, so we temporarily set it to "Navire inconnu"
+                vessel = UNKNOWN_VESSEL,
+                lastControlDateTime = null,
+            )
+        }
 
         /**
          * Next initial state of the prior notification once it will be created or updated.
@@ -145,11 +180,11 @@ data class PriorNotification(
          * Used within the prior notification form to display the next state of the prior notification in real-time.
          */
         fun getNextState(
-            isInverificationScope: Boolean,
+            isInVerificationScope: Boolean,
             isPartOfControlUnitSubscriptions: Boolean,
         ): PriorNotificationState {
             return when {
-                isInverificationScope -> PriorNotificationState.PENDING_VERIFICATION
+                isInVerificationScope -> PriorNotificationState.PENDING_VERIFICATION
                 isPartOfControlUnitSubscriptions -> PriorNotificationState.AUTO_SEND_REQUESTED
                 else -> PriorNotificationState.OUT_OF_VERIFICATION_SCOPE
             }

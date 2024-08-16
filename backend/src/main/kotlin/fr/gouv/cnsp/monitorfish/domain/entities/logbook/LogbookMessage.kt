@@ -4,7 +4,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
-import fr.gouv.cnsp.monitorfish.domain.exceptions.EntityConversionException
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
@@ -43,45 +42,6 @@ data class LogbookMessage(
     val tripSegments: List<LogbookTripSegment>? = emptyList(),
 ) {
     private val logger = LoggerFactory.getLogger(LogbookMessage::class.java)
-
-    /**
-     * Returns the reference logbook message `reportId` (= the original DAT operation `reportId`).
-     */
-    fun getReferenceReportId(): String? {
-        return referencedReportId ?: reportId
-    }
-
-    fun <T : LogbookMessageValue> toConsolidatedLogbookMessageAndValue(
-        relatedLogbookMessages: List<LogbookMessage>,
-        clazz: Class<T>,
-    ): LogbookMessageAndValue<T> {
-        if (reportId == null) {
-            throw EntityConversionException(
-                "Logbook report $id has no `reportId`. You can only enrich a DAT or an orphan COR operation with a `reportId`.",
-            )
-        }
-        if (operationType !in listOf(LogbookOperationType.DAT, LogbookOperationType.COR)) {
-            throw EntityConversionException(
-                "Logbook report $id has operationType '$operationType'. You can only enrich a DAT or an orphan COR operation.",
-            )
-        }
-
-        val historicallySortedRelatedLogbookMessages = relatedLogbookMessages.sortedBy { it.reportDateTime }
-        val maybeLastLogbookMessageCorrection = historicallySortedRelatedLogbookMessages
-            .lastOrNull { it.operationType == LogbookOperationType.COR }
-
-        val logbookMessageBase = maybeLastLogbookMessageCorrection ?: this
-        logbookMessageBase.enrichAcnkowledge(relatedLogbookMessages)
-        val finalLogbookMessage = logbookMessageBase.copy(
-            isCorrectedByNewerMessage = false,
-            isDeleted = historicallySortedRelatedLogbookMessages.any { it.operationType == LogbookOperationType.DEL },
-        )
-
-        return LogbookMessageAndValue(
-            logbookMessage = finalLogbookMessage,
-            clazz = clazz,
-        )
-    }
 
     fun setAcknowledge(newLogbookMessageAcknowledgement: LogbookMessage) {
         val currentAcknowledgement = this.acknowledgment
@@ -168,46 +128,6 @@ data class LogbookMessage(
 
             LogbookMessageTypeMapping.RTP.name -> {
                 setNamesFromCodes(message as RTP, allGears, allPorts)
-            }
-        }
-    }
-
-    private fun enrichAcnkowledge(relatedLogbookMessages: List<LogbookMessage>) {
-        if (this.transmissionFormat == LogbookTransmissionFormat.FLUX ||
-            LogbookSoftware.isVisioCapture(software)
-        ) {
-            this.setAcknowledgeAsSuccessful()
-
-            return
-        }
-
-        val historycallyOrderedRetLogbookMessages = relatedLogbookMessages
-            .filter { it.operationType == LogbookOperationType.RET && it.referencedReportId == reportId }
-            .sortedBy { it.reportDateTime }
-
-        val maybeLastSuccessfulRetLogbookMessage = historycallyOrderedRetLogbookMessages.lastOrNull {
-            val message = it.message as Acknowledgment
-
-            message.returnStatus == RETReturnErrorCode.SUCCESS.number
-        }
-        // If there is at least one successful RET message, we consider the report as acknowledged
-        if (maybeLastSuccessfulRetLogbookMessage != null) {
-            val lastSucessfulRetMessage = maybeLastSuccessfulRetLogbookMessage.message as Acknowledgment
-            this.acknowledgment = lastSucessfulRetMessage.also {
-                it.dateTime = maybeLastSuccessfulRetLogbookMessage.reportDateTime
-                it.isSuccess = true
-            }
-
-            return
-        }
-
-        // Else we consider the last (failure) RET message as the final acknowledgement
-        val maybeLastRetLogbookMessage = historycallyOrderedRetLogbookMessages.lastOrNull()
-        if (maybeLastRetLogbookMessage != null) {
-            val lastRetMessage = maybeLastRetLogbookMessage.message as Acknowledgment
-            this.acknowledgment = lastRetMessage.also {
-                it.dateTime = maybeLastRetLogbookMessage.reportDateTime
-                it.isSuccess = lastRetMessage.returnStatus == RETReturnErrorCode.SUCCESS.number
             }
         }
     }

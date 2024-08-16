@@ -1,6 +1,6 @@
 import logging
 from datetime import datetime
-from typing import Union
+from typing import Optional, Union
 
 
 def remove_namespace(tag: str):
@@ -82,19 +82,15 @@ def make_datetime(date: str, time: Union[str, None] = None):
     return res
 
 
-def make_datetime_json_serializable(date: str, time: Union[str, None] = None):
-    """Returns a serialized (string) datetime object make from a ISO format date string
-    and an optional time string.
+def serialize_datetime(dt: Optional[datetime] = None) -> str:
+    """Serialize a datetime object
 
     Args:
-        date (str): ISO format date string. Egg:= '2021-10-25'
-        time (Union[str, None], optional): ISO format time string
-          Egg '12:00'. Defaults to None.
+        dt (Optional[datetime])
 
     Returns:
-        [type]: [description]
+        str: Serialized datetime in ISO format.
     """
-    dt = make_datetime(date, time)
     if dt:
         return dt.isoformat() + "Z"
     else:

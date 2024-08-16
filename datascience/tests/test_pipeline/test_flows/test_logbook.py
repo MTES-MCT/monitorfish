@@ -345,3 +345,4 @@ def test_flow(mock_move, reset_test_data):
             final_logbook_reports.is_test_message, "operation_number"
         ].values[0]
     ) == "FRA20200321502645"
+    assert final_logbook_reports.activity_datetime_utc.notnull().sum() == 14

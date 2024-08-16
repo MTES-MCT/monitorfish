@@ -9,6 +9,7 @@ from typing import List, Tuple
 from xml.etree.ElementTree import ParseError
 
 import pandas as pd
+from dateutil.parser import parse
 
 from src.pipeline.parsers.flux.log_parsers import (
     null_parser,
@@ -68,7 +69,6 @@ def get_fishing_activity_type(fishing_activity: ET.Element) -> FluxFishingActivi
 
 
 def get_fa_report_type(fa_report_document: ET.Element) -> FluxFAReportDocumentType:
-
     report_type = get_text(
         fa_report_document, './/ram:TypeCode[@listID="FLUX_FA_REPORT_TYPE"]'
     )
@@ -169,7 +169,6 @@ def get_operation_type(xml_element):
 
 
 def parse_metadata(fa_report_document: xml.etree.ElementTree.Element):
-
     metadata = {
         "operation_type": get_operation_type(fa_report_document),
         "report_id": get_text(fa_report_document, './/ram:ID[@schemeID="UUID"]'),
@@ -208,15 +207,18 @@ def parse_fa_report_document(fa_report_document: ET.Element):
 
     children = tagged_children(fa_report_document)
 
+    activity_datetimes_utc = []
     if "SpecifiedFishingActivity" in children:
         log_types = set()
         values = []
         for specified_fishing_activity in children["SpecifiedFishingActivity"]:
-            log_type, value = parse_specified_fishing_activity(
+            log_type, activity_datetime_utc, value = parse_specified_fishing_activity(
                 specified_fishing_activity, report_type
             )
             log_types.add(log_type)
             values.append(value)
+            if isinstance(activity_datetime_utc, datetime):
+                activity_datetimes_utc.append(activity_datetime_utc)
         try:
             assert len(log_types) == 1
         except AssertionError:
@@ -235,7 +237,16 @@ def parse_fa_report_document(fa_report_document: ET.Element):
     else:
         data = dict()
 
-    fa_report_document_data = {**metadata, **data}
+    if activity_datetimes_utc:
+        activity_datetime_utc = min(activity_datetimes_utc)
+    else:
+        activity_datetime_utc = None
+
+    fa_report_document_data = {
+        "activity_datetime_utc": activity_datetime_utc,
+        **metadata,
+        **data,
+    }
 
     return fa_report_document_data
 
@@ -274,7 +285,28 @@ def parse_specified_fishing_activity(
             f"Could not find appropriate parser for log type {log_type}: ", e
         )
     value = parser(fishing_activity)
-    return log_type, value
+
+    datetime_string = get_text(
+        fishing_activity, ".//ram:OccurrenceDateTime/udt:DateTime"
+    )
+    if not datetime_string:
+        datetime_string = get_text(
+            fishing_activity,
+            "./ram:SpecifiedDelimitedPeriod/ram:EndDateTime/udt:DateTime",
+        )
+
+    if datetime_string:
+        try:
+            activity_datetime_utc = parse(datetime_string).replace(tzinfo=None)
+        except Exception as e:
+            logging.error(
+                f"Cound not parse datetime string {datetime_string} with error: {e}"
+            )
+            activity_datetime_utc = None
+    else:
+        activity_datetime_utc = None
+
+    return log_type, activity_datetime_utc, value
 
 
 def get_list_fa_report_documents(fa_report_message: ET.Element) -> List[ET.Element]:

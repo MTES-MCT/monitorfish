@@ -99,7 +99,10 @@ class JpaLogbookReportRepository(
             .findAcknowledgedNonDeletedPnoDatAndCorsByReportId(reportId, operationDate.toString()).firstOrNull()
 
         return logbookReport?.let {
-            PriorNotification.fromLogbookMessage(it.toLogbookMessage(objectMapper))
+            val pno = PriorNotification.fromLogbookMessage(it.toLogbookMessage(objectMapper))
+            pno.markAsAcknowledged()
+
+            return@let pno
         }
     }
 

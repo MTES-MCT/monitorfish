@@ -13,6 +13,7 @@
     "clean": "rm -Rf ./node-modules/.vite ./node-modules/build",
     "cypress:open": "cypress open --browser firefox --config-file ./config/cypress.config.js --e2e",
     "dev": "import-meta-env-prepare -x ./.env.local.defaults && vite --port 3000",
+    "dev-cypress": "FRONTEND_OIDC_ENABLED=false import-meta-env-prepare -u -x ./.env.local.defaults && vite --port 3000",
     "dev-monitorenv": "FRONTEND_MONITORENV_URL=//localhost:9880 import-meta-env-prepare -u -x ./.env.local.defaults && vite --port 3000",
     "dev-puppeteer": "FRONTEND_MONITORENV_URL=//localhost:9880 import-meta-env-prepare -u -x ./.env.local.defaults && vite --port 3000",
     "bundle-sw": "esbuild src/workers/serviceWorker.ts --bundle --outfile=public/service-worker.js",

@@ -1,5 +1,6 @@
 import { openLogbookPriorNotificationForm } from '@features/PriorNotification/useCases/openLogbookPriorNotificationForm'
 import { openManualPriorNotificationForm } from '@features/PriorNotification/useCases/openManualPriorNotificationForm'
+import { getPriorNotificationIdentifier } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import { VesselIdentifier, type VesselIdentity } from 'domain/entities/vessel/types'
@@ -22,7 +23,7 @@ export function ActionButtonsCell({ priorNotification }: ActionButtonsCellProps)
     if (priorNotification.isManuallyCreated) {
       dispatch(
         openManualPriorNotificationForm(
-          { operationDate: priorNotification.operationDate, reportId: priorNotification.id },
+          getPriorNotificationIdentifier(priorNotification),
           priorNotification.fingerprint
         )
       )
@@ -31,20 +32,14 @@ export function ActionButtonsCell({ priorNotification }: ActionButtonsCellProps)
     }
 
     dispatch(
-      openLogbookPriorNotificationForm(
-        { operationDate: priorNotification.operationDate, reportId: priorNotification.id },
-        priorNotification.fingerprint
-      )
+      openLogbookPriorNotificationForm(getPriorNotificationIdentifier(priorNotification), priorNotification.fingerprint)
     )
   }
 
   const open = () => {
     dispatch(
       openPriorNotificationCard(
-        {
-          operationDate: priorNotification.operationDate,
-          reportId: priorNotification.id
-        },
+        getPriorNotificationIdentifier(priorNotification),
         priorNotification.fingerprint,
         priorNotification.isManuallyCreated
       )

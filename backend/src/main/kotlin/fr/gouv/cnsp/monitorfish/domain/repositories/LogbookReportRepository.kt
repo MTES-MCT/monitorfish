@@ -10,7 +10,7 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import java.time.ZonedDateTime
 
 interface LogbookReportRepository {
-    fun findAllPriorNotifications(filter: PriorNotificationsFilter): List<PriorNotification>
+    fun findAllAcknowledgedPriorNotifications(filter: PriorNotificationsFilter): List<PriorNotification>
 
     @Throws(NoLogbookFishingTripFound::class)
     fun findLastTripBeforeDateTime(
@@ -46,7 +46,7 @@ interface LogbookReportRepository {
     // Only used in tests
     fun findById(id: Long): LogbookMessage
 
-    fun findPriorNotificationByReportId(reportId: String, operationDate: ZonedDateTime): PriorNotification?
+    fun findAcknowledgedPriorNotificationByReportId(reportId: String, operationDate: ZonedDateTime): PriorNotification?
 
     fun findLastMessageDate(): ZonedDateTime
 

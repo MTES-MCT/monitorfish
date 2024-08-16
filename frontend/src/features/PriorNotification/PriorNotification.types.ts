@@ -12,8 +12,6 @@ export namespace PriorNotification {
     /** Unique identifier concatenating all the DAT, COR, RET & DEL operations `id` used for data consolidation. */
     fingerprint: string
     hasVesselRiskFactorSegments: boolean | undefined
-    /** Logbook message `reportId`. */
-    id: string
     isBeingSent: boolean
     isCorrection: boolean
     isInVerificationScope: boolean
@@ -27,6 +25,7 @@ export namespace PriorNotification {
     portLocode: string | undefined
     portName: string | undefined
     purposeCode: PurposeCode | undefined
+    reportId: string
     reportingCount: number
     riskFactor: number | undefined
     seafront: Seafront | undefined

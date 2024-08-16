@@ -18,7 +18,7 @@ export function getTableColumns(isFromUrl: boolean): Array<ColumnDef<PriorNotifi
 
   return [
     {
-      accessorFn: row => row.id,
+      accessorFn: row => row.reportId,
       cell: ({ row }) => (
         <TableWithSelectableRows.RowCheckbox
           checked={row.getIsSelected()}
@@ -141,7 +141,7 @@ export function getTableColumns(isFromUrl: boolean): Array<ColumnDef<PriorNotifi
       size: 55 + legacyFirefoxOffset
     },
     {
-      accessorFn: row => row.id,
+      accessorFn: row => row.reportId,
       cell: (info: CellContext<PriorNotification.PriorNotification, string>) => (
         <ActionButtonsCell priorNotification={info.row.original} />
       ),

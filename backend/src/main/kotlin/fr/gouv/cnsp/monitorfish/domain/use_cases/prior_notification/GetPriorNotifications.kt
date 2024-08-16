@@ -43,7 +43,7 @@ class GetPriorNotifications(
         val allSpecies = speciesRepository.findAll()
 
         val (automaticPriorNotifications, findAllPriorNotificationsTimeTaken) = measureTimedValue {
-            logbookReportRepository.findAllPriorNotifications(filter)
+            logbookReportRepository.findAllAcknowledgedPriorNotifications(filter)
         }
         logger.info(
             "TIME_RECORD - 'logbookReportRepository.findAllPriorNotifications()' took $findAllPriorNotificationsTimeTaken.",
@@ -58,11 +58,8 @@ class GetPriorNotifications(
 
         val incompletePriorNotifications = automaticPriorNotifications + manualPriorNotifications
 
-        val undeletedPriorNotifications = incompletePriorNotifications
-            .filter { !it.logbookMessageAndValue.logbookMessage.isDeleted }
-
         val (priorNotifications, enrichedPriorNotificationsTimeTaken) = measureTimedValue {
-            undeletedPriorNotifications
+            incompletePriorNotifications
                 .map { priorNotification ->
                     priorNotification.enrich(allRiskFactors, allPorts, priorNotification.isManuallyCreated)
                     priorNotification.logbookMessageAndValue.logbookMessage

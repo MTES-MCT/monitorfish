@@ -23,6 +23,10 @@ run-back: run-stubbed-apis
 	docker compose up -d --quiet-pull --wait db keycloak
 	cd backend && ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
 
+run-back-for-cypress: run-stubbed-apis
+	docker compose up -d --quiet-pull --wait db keycloak
+	cd backend && MONITORFISH_OIDC_ENABLED=false ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
+
 run-back-with-monitorenv: run-monitorenv
 	docker compose up -d --quiet-pull --wait db
 	cd backend && MONITORENV_URL=http://localhost:9880 ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'

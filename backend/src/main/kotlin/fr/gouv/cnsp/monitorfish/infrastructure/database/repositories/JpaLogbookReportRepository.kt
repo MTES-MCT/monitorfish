@@ -52,16 +52,18 @@ class JpaLogbookReportRepository(
                 willArriveBefore = filter.willArriveBefore,
             )
 
-        val logbookMessageReferencingOtherMessages = logbookReportsWithDatCorAndDel.filter { it.referencedReportId != null }
+        val referencedReportIds = logbookReportsWithDatCorAndDel
+            .filter { it.referencedReportId != null }
+            .map { it.referencedReportId }
+            .toSet()
+
         return logbookReportsWithDatCorAndDel
-            .filter {
-                logbookMessageReferencingOtherMessages.none {
-                        referencingMessage ->
-                    referencingMessage.referencedReportId == it.reportId
-                }
-            }.filter { it.operationType != LogbookOperationType.DEL }
-            .map {
-                val pno = PriorNotification.fromLogbookMessage(it.toLogbookMessage(objectMapper))
+            .filter { report ->
+                // Exclude reports that are referenced by other reports or have a DEL operation type
+                report.operationType != LogbookOperationType.DEL && report.reportId !in referencedReportIds
+            }
+            .map { report ->
+                val pno = PriorNotification.fromLogbookMessage(report.toLogbookMessage(objectMapper))
                 // All messages returned from the SQL query are acknowledged
                 pno.markAsAcknowledged()
 

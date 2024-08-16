@@ -181,6 +181,11 @@ interface DBLogbookReportRepository :
         willArriveBefore: String,
     ): List<LogbookReportEntity>
 
+    /**
+     * This query either returns:
+     * - 1 element if the report id is found, not corrected and not deleted
+     * - 0 element
+     */
     @Query(
         """
         WITH

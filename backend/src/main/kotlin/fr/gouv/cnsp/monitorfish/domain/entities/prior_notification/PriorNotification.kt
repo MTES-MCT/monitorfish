@@ -146,13 +146,6 @@ data class PriorNotification(
         )
     }
 
-    fun markAsDeleted() {
-        logbookMessageAndValue = LogbookMessageAndValue(
-            logbookMessageAndValue.logbookMessage.copy(isDeleted = true),
-            PNO::class.java,
-        )
-    }
-
     companion object {
         private val logger = LoggerFactory.getLogger(PriorNotification::class.java)
 
@@ -187,11 +180,11 @@ data class PriorNotification(
          * Used within the prior notification form to display the next state of the prior notification in real-time.
          */
         fun getNextState(
-            isInverificationScope: Boolean,
+            isInVerificationScope: Boolean,
             isPartOfControlUnitSubscriptions: Boolean,
         ): PriorNotificationState {
             return when {
-                isInverificationScope -> PriorNotificationState.PENDING_VERIFICATION
+                isInVerificationScope -> PriorNotificationState.PENDING_VERIFICATION
                 isPartOfControlUnitSubscriptions -> PriorNotificationState.AUTO_SEND_REQUESTED
                 else -> PriorNotificationState.OUT_OF_VERIFICATION_SCOPE
             }

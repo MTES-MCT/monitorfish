@@ -74,6 +74,7 @@ def test_batch_parse():
                 "imo",
                 "log_type",
                 "value",
+                "activity_datetime_utc",
                 "trip_number",
             ]
         ),
@@ -114,6 +115,15 @@ def test_batch_parse():
                         }
                     ],
                 },
+                datetime.datetime(
+                    year=2020,
+                    month=5,
+                    day=6,
+                    hour=11,
+                    minute=39,
+                    second=33,
+                    microsecond=176000,
+                ),
                 "SRC-TRP-TTT20200506193933176",
             ],
             [
@@ -136,6 +146,15 @@ def test_batch_parse():
                     "anticipatedActivity": "FIS",
                     "gearOnboard": [{"gear": "PS", "mesh": 140.0, "dimensions": 14.0}],
                 },
+                datetime.datetime(
+                    year=2020,
+                    month=5,
+                    day=6,
+                    hour=11,
+                    minute=39,
+                    second=40,
+                    microsecond=722000,
+                ),
                 "SRC-TRP-TTT20200506193940722",
             ],
             [
@@ -162,6 +181,15 @@ def test_batch_parse():
                     "latitudeEntered": 42.794,
                     "longitudeEntered": -13.809,
                 },
+                datetime.datetime(
+                    year=2020,
+                    month=5,
+                    day=6,
+                    hour=11,
+                    minute=39,
+                    second=46,
+                    microsecond=583000,
+                ),
                 "SRC-TRP-TTT20200506193946583",
             ],
             [
@@ -199,6 +227,15 @@ def test_batch_parse():
                         }
                     ]
                 },
+                datetime.datetime(
+                    year=2020,
+                    month=5,
+                    day=6,
+                    hour=11,
+                    minute=39,
+                    second=59,
+                    microsecond=462000,
+                ),
                 "SRC-TRP-TTT20200506193959462",
             ],
             [
@@ -253,6 +290,15 @@ def test_batch_parse():
                         },
                     ]
                 },
+                datetime.datetime(
+                    year=2020,
+                    month=5,
+                    day=4,
+                    hour=19,
+                    minute=40,
+                    second=5,
+                    microsecond=354000,
+                ),
                 "SRC-TRP-TTT20200506194005354",
             ],
             [
@@ -270,6 +316,15 @@ def test_batch_parse():
                 None,
                 "FAR",
                 {"hauls": [{"farDatetimeUtc": "2020-05-06T11:40:11.291Z"}]},
+                datetime.datetime(
+                    year=2020,
+                    month=5,
+                    day=6,
+                    hour=11,
+                    minute=40,
+                    second=11,
+                    microsecond=291000,
+                ),
                 "SRC-TRP-TTT20200506194011291",
             ],
             [
@@ -298,6 +353,9 @@ def test_batch_parse():
                         }
                     ]
                 },
+                datetime.datetime(
+                    year=2020, month=4, day=29, hour=12, minute=0, second=0
+                ),
                 "SRC-TRP-TTT20200506194017100",
             ],
             [
@@ -332,6 +390,15 @@ def test_batch_parse():
                         }
                     ]
                 },
+                datetime.datetime(
+                    year=2020,
+                    month=5,
+                    day=6,
+                    hour=11,
+                    minute=40,
+                    second=22,
+                    microsecond=885000,
+                ),
                 "SRC-TRP-TTT20200506194022885",
             ],
             [
@@ -349,6 +416,15 @@ def test_batch_parse():
                 "1234567",
                 "JFO",
                 None,
+                datetime.datetime(
+                    year=2020,
+                    month=5,
+                    day=6,
+                    hour=11,
+                    minute=40,
+                    second=28,
+                    microsecond=615000,
+                ),
                 "SRC-TRP-TTT20200506194028615",
             ],
             [
@@ -369,6 +445,15 @@ def test_batch_parse():
                     "discardDatetimeUtc": "2020-05-06T11:40:34.449Z",
                     "catches": [{"species": "COD", "weight": 100.0, "nbFish": None}],
                 },
+                datetime.datetime(
+                    year=2020,
+                    month=5,
+                    day=6,
+                    hour=11,
+                    minute=40,
+                    second=34,
+                    microsecond=449000,
+                ),
                 "SRC-TRP-TTT20200506194034449",
             ],
             [
@@ -386,6 +471,15 @@ def test_batch_parse():
                 "1234567",
                 "RLC",
                 None,
+                datetime.datetime(
+                    year=2020,
+                    month=5,
+                    day=6,
+                    hour=11,
+                    minute=40,
+                    second=40,
+                    microsecond=138000,
+                ),
                 "SRC-TRP-TTT20200506194040138",
             ],
             [
@@ -403,6 +497,15 @@ def test_batch_parse():
                 None,
                 "RLC",
                 None,
+                datetime.datetime(
+                    year=2020,
+                    month=5,
+                    day=6,
+                    hour=11,
+                    minute=40,
+                    second=45,
+                    microsecond=960000,
+                ),
                 "SRC-TRP-TTT20200506194045960",
             ],
             [
@@ -429,6 +532,15 @@ def test_batch_parse():
                     "latitudeExited": 57.7258,
                     "longitudeExited": 0.5983,
                 },
+                datetime.datetime(
+                    year=2020,
+                    month=5,
+                    day=6,
+                    hour=11,
+                    minute=40,
+                    second=51,
+                    microsecond=795000,
+                ),
                 "SRC-TRP-TTT20200506194051795",
             ],
             [
@@ -455,6 +567,15 @@ def test_batch_parse():
                     "latitudeExited": 46.678,
                     "longitudeExited": -14.616,
                 },
+                datetime.datetime(
+                    year=2020,
+                    month=5,
+                    day=6,
+                    hour=11,
+                    minute=40,
+                    second=57,
+                    microsecond=580000,
+                ),
                 "SRC-TRP-TTT20200506194057580",
             ],
             [
@@ -483,6 +604,15 @@ def test_batch_parse():
                         {"species": "GHL", "weight": 1500.0, "nbFish": None}
                     ],
                 },
+                datetime.datetime(
+                    year=2020,
+                    month=5,
+                    day=6,
+                    hour=11,
+                    minute=41,
+                    second=3,
+                    microsecond=340000,
+                ),
                 "SRC-TRP-TTT20200506194103340",
             ],
             [
@@ -511,6 +641,15 @@ def test_batch_parse():
                         {"species": "GHL", "weight": 1500.0, "nbFish": None}
                     ],
                 },
+                datetime.datetime(
+                    year=2020,
+                    month=5,
+                    day=6,
+                    hour=11,
+                    minute=41,
+                    second=3,
+                    microsecond=340000,
+                ),
                 "SRC-TRP-TTT20200506194103340",
             ],
             [
@@ -533,6 +672,15 @@ def test_batch_parse():
                     "purpose": "SHE",
                     "tripStartDate": "2020-05-04T19:41:09.200Z",
                 },
+                datetime.datetime(
+                    year=2020,
+                    month=5,
+                    day=6,
+                    hour=11,
+                    minute=41,
+                    second=9,
+                    microsecond=200000,
+                ),
                 "SRC-TRP-TTT20200506194109200",
             ],
             [
@@ -554,6 +702,15 @@ def test_batch_parse():
                     "port": "ESCAR",
                     "reasonOfReturn": "REF",
                 },
+                datetime.datetime(
+                    year=2020,
+                    month=5,
+                    day=6,
+                    hour=11,
+                    minute=41,
+                    second=15,
+                    microsecond=13000,
+                ),
                 "SRC-TRP-TTT20200506194115013",
             ],
             [
@@ -578,6 +735,15 @@ def test_batch_parse():
                         {"gear": "GN", "mesh": 140.0, "dimensions": 1000.0}
                     ],
                 },
+                datetime.datetime(
+                    year=2020,
+                    month=5,
+                    day=6,
+                    hour=11,
+                    minute=41,
+                    second=20,
+                    microsecond=712000,
+                ),
                 "SRC-TRP-TTT20200506194120712",
             ],
             [
@@ -615,6 +781,15 @@ def test_batch_parse():
                         }
                     ],
                 },
+                datetime.datetime(
+                    year=2020,
+                    month=5,
+                    day=5,
+                    hour=19,
+                    minute=41,
+                    second=26,
+                    microsecond=516000,
+                ),
                 "SRC-TRP-TTT20200506194126516",
             ],
             [
@@ -632,6 +807,15 @@ def test_batch_parse():
                 None,
                 "TRA",
                 None,
+                datetime.datetime(
+                    year=2020,
+                    month=5,
+                    day=5,
+                    hour=19,
+                    minute=41,
+                    second=32,
+                    microsecond=307000,
+                ),
                 "SRC-TRP-TTT20200506194132307",
             ],
             [
@@ -649,6 +833,15 @@ def test_batch_parse():
                 None,
                 "TRA",
                 None,
+                datetime.datetime(
+                    year=2020,
+                    month=5,
+                    day=5,
+                    hour=19,
+                    minute=41,
+                    second=38,
+                    microsecond=89000,
+                ),
                 "SRC-TRP-TTT20200506194138089",
             ],
             [
@@ -666,6 +859,15 @@ def test_batch_parse():
                 None,
                 "NOT-TRA",
                 None,
+                datetime.datetime(
+                    year=2020,
+                    month=5,
+                    day=6,
+                    hour=19,
+                    minute=48,
+                    second=43,
+                    microsecond=848000,
+                ),
                 "SRC-TRP-TTT20200506194143848",
             ],
             [
@@ -675,6 +877,7 @@ def test_batch_parse():
                 "e43c3bf0-163c-4fb0-a1de-1a61beb87981",
                 "e43c3bf0-163c-4fb0-a1de-1a61beb87988",
                 datetime.datetime(2020, 5, 6, 15, 41, 49),
+                None,
                 None,
                 None,
                 None,
@@ -700,6 +903,15 @@ def test_batch_parse():
                 "1234567",
                 "NOT-TRA",
                 None,
+                datetime.datetime(
+                    year=2020,
+                    month=5,
+                    day=6,
+                    hour=19,
+                    minute=48,
+                    second=49,
+                    microsecond=664000,
+                ),
                 "SRC-TRP-TTT20200506194149664",
             ],
             [
@@ -726,6 +938,9 @@ def test_batch_parse():
                     "latitudeEntered": 51.333333,
                     "longitudeEntered": 3.2,
                 },
+                datetime.datetime(
+                    year=2021, month=1, day=22, hour=9, minute=00, second=0
+                ),
                 "BEL-TRP-Z510-2021012200107",
             ],
         ],

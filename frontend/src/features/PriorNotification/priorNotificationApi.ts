@@ -22,6 +22,15 @@ const GET_PRIOR_NOTIFICATION_PDF_ERROR_MESSAGE = "Nous n'avons pas pu récupére
 const VERIFY_AND_SEND_PRIOR_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu vérifier et envoyer le préavis."
 const INVALIDATE_PRIOR_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu invalider et envoyer le préavis."
 
+export enum StatusBodyEnum {
+  FOUND = 'FOUND',
+  NO_CONTENT = 'NO_CONTENT'
+}
+
+type StatusBody = {
+  status: StatusBodyEnum
+}
+
 export const priorNotificationApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
     computeManualPriorNotification: builder.mutation<
@@ -208,6 +217,15 @@ export const priorNotificationPublicApi = monitorfishPublicApi.injectEndpoints({
         url: `/v1/prior_notifications/pdf/${reportId}`
       }),
       transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_PDF_ERROR_MESSAGE, response)
+    }),
+    getPriorNotificationPDFExistence: builder.query<StatusBody, string>({
+      extraOptions: { maxRetries: 0 },
+      forceRefetch: () => true,
+      query: reportId => ({
+        method: 'GET',
+        url: `/v1/prior_notifications/pdf/${reportId}/exist`
+      }),
+      transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_PDF_ERROR_MESSAGE, response)
     })
   })
 })
@@ -218,4 +236,4 @@ export const {
   useGetPriorNotificationTypesQuery
 } = priorNotificationApi
 
-export const { useGetPriorNotificationPDFQuery } = priorNotificationPublicApi
+export const { useGetPriorNotificationPDFExistenceQuery, useGetPriorNotificationPDFQuery } = priorNotificationPublicApi

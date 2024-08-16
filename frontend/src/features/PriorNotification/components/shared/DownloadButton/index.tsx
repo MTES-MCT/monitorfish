@@ -1,7 +1,10 @@
 import { RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { useGetGearsQuery } from '@api/gear'
 import { getAlpha2CodeFromAlpha2or3Code } from '@components/CountryFlag/utils'
-import { useGetPriorNotificationPDFQuery } from '@features/PriorNotification/priorNotificationApi'
+import {
+  StatusBodyEnum,
+  useGetPriorNotificationPDFExistenceQuery
+} from '@features/PriorNotification/priorNotificationApi'
 import { Accent, Button, customDayjs, Dropdown, Icon } from '@mtes-mct/monitor-ui'
 import printJS from 'print-js'
 import { useMemo } from 'react'
@@ -26,8 +29,8 @@ export function DownloadButton({
 }: DownloadButtonProps) {
   const isSuperUser = useIsSuperUser()
   const getGearsApiQuery = useGetGearsQuery()
-  const { isError } = useGetPriorNotificationPDFQuery(reportId, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS)
-  const isPriorNotificationPDFDocumentAvailable = useMemo(() => !isError, [isError])
+  const { data } = useGetPriorNotificationPDFExistenceQuery(reportId, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS)
+  const isPriorNotificationPDFDocumentAvailable = useMemo(() => data?.status === StatusBodyEnum.FOUND, [data])
   const hasAuthorizedLandingDownload =
     isSuperUser &&
     getHasAuthorizedLandingDownload(

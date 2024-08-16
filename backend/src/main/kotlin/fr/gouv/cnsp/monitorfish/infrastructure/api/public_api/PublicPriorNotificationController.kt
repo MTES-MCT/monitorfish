@@ -28,9 +28,9 @@ class PublicPriorNotificationController(
         @PathVariable(name = "reportId")
         reportId: String,
     ): ResponseEntity<ByteArray?> {
-        val pdfDocument = getPriorNotificationPdfDocument.execute(reportId = reportId)
-        if (pdfDocument.pdfDocument == null) {
-            ResponseEntity.status(HttpStatus.NOT_FOUND).body(null)
+        val pdfDocument = getPriorNotificationPdfDocument.execute(reportId = reportId, isVerifyingExistence = false)
+        if (pdfDocument?.pdfDocument == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null)
         }
 
         val fileName = "preavis_debarquement_${pdfDocument.generationDatetimeUtc.format(ISO_DATE_TIME)}.pdf"
@@ -43,5 +43,23 @@ class PublicPriorNotificationController(
         }
 
         return ResponseEntity(pdfDocument.pdfDocument, headers, HttpStatus.OK)
+    }
+
+    data class Status(val status: String)
+
+    // FIXME Move this API to `/bff`
+    @GetMapping("/pdf/{reportId}/exist")
+    @Operation(summary = "Check the PDF document")
+    fun getPdfDocumentExistence(
+        @PathParam("Logbook message `reportId`")
+        @PathVariable(name = "reportId")
+        reportId: String,
+    ): Status {
+        val pdfDocument = getPriorNotificationPdfDocument.execute(reportId = reportId, isVerifyingExistence = true)
+        if (pdfDocument?.pdfDocument == null) {
+            return Status(HttpStatus.NO_CONTENT.name)
+        }
+
+        return Status(HttpStatus.FOUND.name)
     }
 }

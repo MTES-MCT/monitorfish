@@ -61,7 +61,11 @@ class JpaLogbookReportRepository(
                 }
             }.filter { it.operationType != LogbookOperationType.DEL }
             .map {
-                PriorNotification.fromLogbookMessage(it.toLogbookMessage(objectMapper))
+                val pno = PriorNotification.fromLogbookMessage(it.toLogbookMessage(objectMapper))
+                // All messages returned from the SQL query are acknowledged
+                pno.markAsAcknowledged()
+
+                return@map pno
             }
     }
 
@@ -343,7 +347,10 @@ class JpaLogbookReportRepository(
         isVerified: Boolean,
     ) {
         val logbookReport = dbLogbookReportRepository
-            .findAcknowledgedNonDeletedPnoDatAndCorsByReportId(reportId, operationDate.withZoneSameInstant(UTC).toString()).firstOrNull()
+            .findAcknowledgedNonDeletedPnoDatAndCorsByReportId(
+                reportId,
+                operationDate.withZoneSameInstant(UTC).toString(),
+            ).firstOrNull()
             ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
 
         val pnoValue = objectMapper.readValue(logbookReport.message, PNO::class.java)
@@ -367,7 +374,10 @@ class JpaLogbookReportRepository(
         note: String?,
     ) {
         val logbookReport = dbLogbookReportRepository
-            .findAcknowledgedNonDeletedPnoDatAndCorsByReportId(reportId, operationDate.withZoneSameInstant(UTC).toString()).firstOrNull()
+            .findAcknowledgedNonDeletedPnoDatAndCorsByReportId(
+                reportId,
+                operationDate.withZoneSameInstant(UTC).toString(),
+            ).firstOrNull()
             ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
 
         val pnoValue = objectMapper.readValue(logbookReport.message, PNO::class.java)
@@ -399,7 +409,10 @@ class JpaLogbookReportRepository(
     @CacheEvict(value = ["pno_to_verify"], allEntries = true)
     override fun invalidate(reportId: String, operationDate: ZonedDateTime) {
         val logbookReport = dbLogbookReportRepository
-            .findAcknowledgedNonDeletedPnoDatAndCorsByReportId(reportId, operationDate.withZoneSameInstant(UTC).toString()).firstOrNull()
+            .findAcknowledgedNonDeletedPnoDatAndCorsByReportId(
+                reportId,
+                operationDate.withZoneSameInstant(UTC).toString(),
+            ).firstOrNull()
             ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
 
         val pnoValue = objectMapper.readValue(logbookReport.message, PNO::class.java)

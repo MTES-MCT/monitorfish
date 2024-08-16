@@ -80,3 +80,19 @@ class InfractionType(Enum):
 class Infraction:
     natinf: int
     comments: str
+
+
+class FlightGoal(Enum):
+    VMS_AIS_CHECK = "VMS_AIS_CHECK"
+    UNAUTHORIZED_FISHING = "UNAUTHORIZED_FISHING"
+    CLOSED_AREA = "CLOSED_AREA"
+
+    @property
+    def label(self):
+        labels = {
+            "VMS_AIS_CHECK": "Vérif. AIS/VMS",
+            "UNAUTHORIZED_FISHING": "Pêche interdite",
+            "CLOSED_AREA": "Zone fermée",
+        }
+
+        return labels[self.name]

@@ -35,7 +35,6 @@ from src.pipeline.flows.distribute_pnos import (
     extract_fishing_gear_names,
     extract_pnos_to_generate,
     extract_species_names,
-    fetch_control_units_contacts,
     flow,
     get_email_body_template,
     get_html_for_pdf_template,
@@ -1015,235 +1014,6 @@ def pno_pdf_document_to_distribute_verified_assigned(
     )
 
 
-@pytest.fixture
-def monitorenv_control_units_api_response() -> list:
-    return [
-        {
-            "id": 1,
-            "controlUnitContacts": [],
-            "isArchived": False,
-            "name": "Unité 1",
-            "otherUneededField_1": [1250],
-            "otherUneededField_2": None,
-        },
-        {
-            "id": 2,
-            "controlUnitContacts": [
-                {
-                    "id": 559,
-                    "controlUnitId": 2,
-                    "email": "some.email@control.unit.4",
-                    "isEmailSubscriptionContact": True,
-                    "isSmsSubscriptionContact": True,
-                    "otherUneededField_1": [1250],
-                    "otherUneededField_2": None,
-                    "name": "OFFICE",
-                    "phone": "'00 11 22 33 44 55",
-                },
-                {
-                    "id": 556,
-                    "controlUnitId": 2,
-                    "email": "alternative@email",
-                    "isEmailSubscriptionContact": True,
-                    "isSmsSubscriptionContact": False,
-                    "name": "OPERATIONAL_CENTER_HNO",
-                    "phone": "11 11 11 11 11",
-                },
-                {
-                    "id": 557,
-                    "controlUnitId": 2,
-                    "email": "unused_email.adresse@somewhere",
-                    "isEmailSubscriptionContact": False,
-                    "isSmsSubscriptionContact": False,
-                    "name": "OPERATIONAL_CENTER_HO",
-                    "phone": "xx xx xx xx xx",
-                },
-            ],
-            "isArchived": False,
-            "name": "Unité 2",
-            "otherUneededField_1": [1250],
-            "otherUneededField_2": None,
-        },
-        {
-            "id": 3,
-            "controlUnitContacts": [
-                {
-                    "id": 320,
-                    "controlUnitId": 3,
-                    "email": "com.email@bla1",
-                    "isEmailSubscriptionContact": False,
-                    "isSmsSubscriptionContact": False,
-                    "name": "OPERATIONAL_CENTER",
-                    "phone": "22 22 22 22 22",
-                },
-                {
-                    "id": 321,
-                    "controlUnitId": 3,
-                    "email": "com.email@bla2",
-                    "isEmailSubscriptionContact": False,
-                    "isSmsSubscriptionContact": False,
-                    "name": "OPERATIONAL_CENTER",
-                    "phone": "33 33 33 33 33",
-                },
-                {
-                    "id": 322,
-                    "controlUnitId": 3,
-                    "email": None,
-                    "isEmailSubscriptionContact": True,
-                    "isSmsSubscriptionContact": True,
-                    "name": "UNKNOWN",
-                    "phone": "44 44 44 44 44",
-                },
-            ],
-            "isArchived": False,
-            "name": "Unité 3",
-        },
-        {
-            "id": 4,
-            "controlUnitContacts": [
-                {
-                    "id": 1182,
-                    "controlUnitId": 4,
-                    "email": None,
-                    "isEmailSubscriptionContact": False,
-                    "isSmsSubscriptionContact": False,
-                    "name": "PERMANENT_CONTACT_ONBOARD",
-                    "phone": "77 77 77 77 77",
-                },
-                {
-                    "id": 1180,
-                    "controlUnitId": 4,
-                    "email": "--",
-                    "isEmailSubscriptionContact": False,
-                    "isSmsSubscriptionContact": False,
-                    "name": "OPERATIONAL_CENTER",
-                    "phone": "88 88 88 88 88 (HO) / 99 99 99 99 99 (HNO)",
-                },
-                {
-                    "id": 1181,
-                    "controlUnitId": 4,
-                    "email": "email4@email.com",
-                    "isEmailSubscriptionContact": True,
-                    "isSmsSubscriptionContact": True,
-                    "name": "Unité",
-                },
-            ],
-            "isArchived": False,
-            "name": "Unité 4",
-        },
-        {
-            "id": 5,
-            "controlUnitContacts": [
-                {
-                    "id": 382,
-                    "controlUnitId": 5,
-                    "email": "------",
-                    "isEmailSubscriptionContact": False,
-                    "isSmsSubscriptionContact": False,
-                    "name": "OFFICE",
-                    "phone": "0000000000",
-                },
-                {
-                    "id": 381,
-                    "controlUnitId": 5,
-                    "email": None,
-                    "isEmailSubscriptionContact": False,
-                    "isSmsSubscriptionContact": False,
-                    "name": "ONBOARD_PHONE",
-                    "phone": "0000000000",
-                },
-                {
-                    "id": 379,
-                    "controlUnitId": 5,
-                    "email": "----",
-                    "isEmailSubscriptionContact": False,
-                    "isSmsSubscriptionContact": False,
-                    "name": "OPERATIONAL_CENTER_HNO",
-                    "phone": "00000000000",
-                },
-                {
-                    "id": 380,
-                    "controlUnitId": 5,
-                    "email": "--",
-                    "isEmailSubscriptionContact": False,
-                    "isSmsSubscriptionContact": False,
-                    "name": "OPERATIONAL_CENTER_HO",
-                    "phone": "00000000000",
-                },
-            ],
-            "isArchived": False,
-            "name": "Unité 5",
-        },
-        {
-            "id": 6,
-            "controlUnitContacts": [
-                {
-                    "id": 631,
-                    "controlUnitId": 6,
-                    "email": "****",
-                    "isEmailSubscriptionContact": False,
-                    "isSmsSubscriptionContact": True,
-                    "name": "UNKNOWN",
-                },
-                {
-                    "id": 1540,
-                    "controlUnitId": 6,
-                    "email": "-----",
-                    "isEmailSubscriptionContact": False,
-                    "isSmsSubscriptionContact": False,
-                    "name": "OPERATIONAL_CENTER",
-                    "phone": None,
-                },
-                {
-                    "id": 1541,
-                    "controlUnitId": 6,
-                    "isEmailSubscriptionContact": True,
-                    "isSmsSubscriptionContact": False,
-                    "name": "Référent police",
-                    "phone": None,
-                },
-            ],
-            "isArchived": False,
-            "name": "Unité 6",
-        },
-        {
-            "id": 7,
-            "controlUnitContacts": [
-                {
-                    "id": 1540,
-                    "controlUnitId": 7,
-                    "email": "archived.email",
-                    "isEmailSubscriptionContact": True,
-                    "isSmsSubscriptionContact": True,
-                    "name": "OPERATIONAL_CENTER",
-                    "phone": "55 55 55 55 55",
-                },
-            ],
-            "isArchived": True,
-            "name": "Unité 7 (historique)",
-        },
-    ]
-
-
-@pytest.fixture
-def control_units_contacts() -> pd.DataFrame:
-    return pd.DataFrame(
-        {
-            "control_unit_id": [2, 3, 4],
-            "emails": [
-                ["alternative@email", "some.email@control.unit.4"],
-                [],
-                ["email4@email.com"],
-            ],
-            "phone_numbers": [
-                ["'00 11 22 33 44 55"],
-                ["44 44 44 44 44"],
-                [],
-            ],
-        }
-    )
-
-
 def test_get_html_for_pdf_template():
     html_for_pdf_template = get_html_for_pdf_template.run()
     assert isinstance(html_for_pdf_template, Template)
@@ -1845,22 +1615,6 @@ def test_attribute_addressees_when_is_verified(
     assert res == pno_pdf_document_to_distribute_verified_assigned
 
 
-@patch("src.pipeline.flows.distribute_pnos.requests")
-def test_fetch_control_units_contacts(
-    mock_requests, monitorenv_control_units_api_response, control_units_contacts
-):
-    response = Response()
-    response.status_code = 200
-    response._content = json.dumps(monitorenv_control_units_api_response).encode(
-        "utf-8"
-    )
-    response.encoding = "utf-8"
-
-    mock_requests.get.return_value = response
-    res = fetch_control_units_contacts.run()
-    pd.testing.assert_frame_equal(res, control_units_contacts)
-
-
 @pytest.mark.parametrize("test_mode", [False, True])
 def test_create_email(
     pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned,
@@ -2146,7 +1900,7 @@ def test_make_update_manual_prior_notifications_statement(
 @patch("src.pipeline.helpers.emails.send_email")
 @patch("src.pipeline.helpers.emails.send_sms")
 @patch("src.pipeline.helpers.emails.send_fax")
-@patch("src.pipeline.flows.distribute_pnos.requests")
+@patch("src.pipeline.shared_tasks.control_units.requests")
 def test_flow(
     mock_requests,
     mock_send_fax,
@@ -2276,7 +2030,7 @@ def test_flow(
 @patch("src.pipeline.helpers.emails.send_email")
 @patch("src.pipeline.helpers.emails.send_sms")
 @patch("src.pipeline.helpers.emails.send_fax")
-@patch("src.pipeline.flows.distribute_pnos.requests")
+@patch("src.pipeline.shared_tasks.control_units.requests")
 def test_flow_with_zero_pno_to_generate(
     mock_requests,
     mock_send_fax,
@@ -2333,7 +2087,7 @@ def test_flow_with_zero_pno_to_generate(
 @patch("src.pipeline.helpers.emails.send_email")
 @patch("src.pipeline.helpers.emails.send_sms")
 @patch("src.pipeline.helpers.emails.send_fax")
-@patch("src.pipeline.flows.distribute_pnos.requests")
+@patch("src.pipeline.shared_tasks.control_units.requests")
 def test_flow_with_zero_pno_to_send(
     mock_requests,
     mock_send_fax,

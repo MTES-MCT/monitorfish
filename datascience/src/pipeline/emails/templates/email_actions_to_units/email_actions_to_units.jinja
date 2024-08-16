@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <title>Bilan hebdomadaire contrôle des pêches</title>
+        <meta charset="UTF-8">
+        <style>
+            {% include "splendid.css" %}
+            {% include "email_to_control_units.css" %}
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>Bilan hebdomadaire contrôle des pêches</h1>
+        </header>
+        <hr />
+        <main>
+            <section>
+                <p>Bonjour,</p>
+                <p>Vous trouverez ci-dessous les données des actions de <strong>contrôle des pêches</strong> effectuées par votre unité
+                (<strong>{{ control_unit_name }}</strong>) <strong>entre le {{ from_date }} et le {{ to_date }}</strong> que vous avez rapportés au Centre National de Surveillance des Pêches (CNSP).</p>
+                <p>Seuls les contrôles et surveillances dont les données sont complètes sont transmis dans ce bilan hebdomadaire. Si certaines données n'ont pas encore été transmises (par ex. l'établissement d'un PV ou non),
+                il est normal que le contrôle ne figure pas encore dans le rapport.</p>
+                <p>Si des données sont manquantes, incorrectes ou incomplètes, ou pour toute remarque concernant ce bilan, n'hésitez pas à <strong>contacter le CNSP : <a href="mailto:{{ cnsp_france_email_address }}">{{ cnsp_france_email_address }}</a></strong>.</p>
+            </section>
+            <hr />
+            <section>
+                <h2>Contrôles à quai</h2>
+                {{ land_controls }}
+
+                <h2>Contrôles en mer</h2>
+                {{ sea_controls }}
+
+                <h2>Contrôles aériens</h2>
+                {{ air_controls }}
+
+                <h2>Surveillances aériennes</h2>
+                {{ air_surveillances }}
+            </section>
+        </main>
+        <footer class="no-vertical-margin">
+            <hr/>
+            <p>Centre National de Surveillance des Pêches - Tél : +33 2 97 29 34 27</p>
+        </footer>
+    </body>
+</html>

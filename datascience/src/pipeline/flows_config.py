@@ -19,6 +19,7 @@ from config import (
     PNO_TEST_MODE,
     ROOT_DIRECTORY,
     TEST_MODE,
+    WEEKLY_CONTROL_REPORT_EMAIL_TEST_MODE,
 )
 from src.pipeline.flows import (
     admin_areas,
@@ -32,6 +33,7 @@ from src.pipeline.flows import (
     current_segments,
     distribute_pnos,
     districts,
+    email_actions_to_units,
     enrich_logbook,
     enrich_positions,
     facade_areas,
@@ -84,6 +86,19 @@ distribute_pnos.flow.schedule = Schedule(
                 "is_integration": IS_INTEGRATION,
                 "start_hours_ago": 120,
                 "end_hours_ago": 0,
+            },
+        ),
+    ]
+)
+email_actions_to_units.flow.schedule = Schedule(
+    clocks=[
+        clocks.CronClock(
+            "0 5 * * 1",
+            parameter_defaults={
+                "start_days_ago": 7,
+                "end_days_ago": 1,
+                "test_mode": WEEKLY_CONTROL_REPORT_EMAIL_TEST_MODE,
+                "is_integration": IS_INTEGRATION,
             },
         ),
     ]
@@ -299,6 +314,7 @@ flows_to_register = [
     current_segments.flow,
     distribute_pnos.flow,
     districts.flow,
+    email_actions_to_units.flow,
     enrich_logbook.flow,
     enrich_positions.flow,
     logbook.flow,

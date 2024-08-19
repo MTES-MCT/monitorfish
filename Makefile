@@ -128,6 +128,9 @@ test-back: check-clean-archi
 		cd backend && ./gradlew test --tests "$(class)"; \
 	fi
 
+test-back-watch:
+	./backend/scripts/test-watch.sh
+
 lint-back:
 	cd ./backend && ./gradlew ktlintFormat | grep -v \
 		-e "Exceeded max line length" \

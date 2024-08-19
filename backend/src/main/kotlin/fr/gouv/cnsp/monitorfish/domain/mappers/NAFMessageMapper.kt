@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.mappers
 
 import com.neovisionaries.i18n.CountryCode
+import fr.gouv.cnsp.monitorfish.domain.entities.position.NetworkType
 import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NAFMessageParsingException
@@ -33,6 +34,7 @@ class NAFMessageMapper(private val naf: String) {
     private var speed: Double? = null
     private var tripNumber: String? = null
     private var isManual: Boolean = false
+    private var networkType: NetworkType? = null
 
     private val noCountry = "X"
     private val positionMessageType = "POS"
@@ -83,11 +85,17 @@ class NAFMessageMapper(private val naf: String) {
                         NAFCode.LONGITUDE_DECIMAL -> this.longitude = value.toDouble()
                         NAFCode.SPEED -> this.speed = value.toDouble().div(10)
                         NAFCode.COURSE -> this.course = value.toDouble()
+                        NAFCode.NETWORK_TYPE -> {
+                            when (value.isNotEmpty()) {
+                                true -> this.networkType = NetworkType.from(value)
+                                false -> this.networkType = null
+                            }
+                        }
                         else -> {
                             logger.debug("VMS parsing: NAF code \"$it\" of value \"$value\" not handled")
                         }
                     }
-                } catch (e: NumberFormatException) {
+                } catch (e: Exception) {
                     throw NAFMessageParsingException("Incorrect value at field $it", naf, e)
                 }
             }.run {
@@ -152,6 +160,7 @@ class NAFMessageMapper(private val naf: String) {
             from = from,
             tripNumber = tripNumber,
             positionType = PositionType.VMS,
+            networkType = networkType,
             isManual = isManual,
         )
     }

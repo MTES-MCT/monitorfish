@@ -1,6 +1,6 @@
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Icon } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, Tag } from '@mtes-mct/monitor-ui'
 import { transform } from 'ol/proj'
 import styled from 'styled-components'
 
@@ -15,12 +15,14 @@ import type { VesselPosition } from '../../../../domain/entities/vessel/types'
 type HighlightPositionCellProps = {
   isAtPortPositionMarkerShowed?: boolean
   isManualPositionMarkerShowed?: boolean
+  isNetworkTypeMarkerShowed?: boolean
   row: VesselPosition
   value: unknown
 }
 export function HighlightPositionCell({
   isAtPortPositionMarkerShowed,
   isManualPositionMarkerShowed,
+  isNetworkTypeMarkerShowed,
   row,
   value
 }: HighlightPositionCellProps) {
@@ -43,9 +45,24 @@ export function HighlightPositionCell({
       {(value ?? '') as string}
       {isManualPositionMarkerShowed && row.isManual ? <ManualPosition title="Position manuelle (4h-report)" /> : ''}
       {isAtPortPositionMarkerShowed && row.isAtPort ? <StyledAnchor size={13} title="Position au port" /> : ''}
+      {isNetworkTypeMarkerShowed && row.networkType ? (
+        <StyledTag accent={Accent.PRIMARY} title={`Réseau ${row.networkType}`}>
+          {row.networkType.slice(0, 3)}
+        </StyledTag>
+      ) : (
+        ''
+      )}
     </span>
   )
 }
+
+const StyledTag = styled(Tag)`
+  font-size: 10px;
+  height: 17px;
+  padding: 0px 4px;
+  margin-left: 3px;
+  vertical-align: text-top;
+`
 
 const StyledAnchor = styled(Icon.Anchor)`
   margin-left: 3px;

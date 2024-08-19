@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import com.neovisionaries.i18n.CountryCode
+import fr.gouv.cnsp.monitorfish.domain.entities.position.NetworkType
 import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import java.time.ZonedDateTime
@@ -24,6 +25,7 @@ data class PositionDataOutput(
     val isManual: Boolean? = null,
     val isFishing: Boolean? = null,
     val isAtPort: Boolean? = null,
+    val networkType: NetworkType? = null,
 ) {
     companion object {
         fun fromPosition(position: Position): PositionDataOutput {
@@ -46,6 +48,7 @@ data class PositionDataOutput(
                 isManual = position.isManual,
                 isFishing = position.isFishing,
                 isAtPort = position.isAtPort,
+                networkType = position.networkType,
             )
         }
     }

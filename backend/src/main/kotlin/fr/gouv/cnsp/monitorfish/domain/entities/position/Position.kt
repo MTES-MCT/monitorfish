@@ -31,4 +31,5 @@ data class Position(
     val from: CountryCode? = null,
     val destination: CountryCode? = null,
     val tripNumber: String? = null,
+    val networkType: NetworkType? = null,
 )

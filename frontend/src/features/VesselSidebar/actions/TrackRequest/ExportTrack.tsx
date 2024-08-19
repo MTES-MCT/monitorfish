@@ -5,6 +5,7 @@ import styled from 'styled-components'
 
 import { getCoordinates } from '../../../../coordinates'
 import { WSG84_PROJECTION } from '../../../../domain/entities/map/constants'
+import { NetworkType } from '../../../../domain/entities/vessel/types'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { getDate } from '../../../../utils'
 import { downloadAsCsv } from '../../../../utils/downloadAsCsv'
@@ -79,6 +80,20 @@ export function ExportTrack() {
       isAtPort: {
         label: 'Au port',
         transform: position => (position.isAtPort ? 'Oui' : 'Non')
+      },
+      networkType: {
+        label: 'Type de réseau',
+        transform: position => {
+          if (position.networkType === NetworkType.CELLULAR) {
+            return 'Cellulaire'
+          }
+
+          if (position.networkType === NetworkType.SATELLITE) {
+            return 'Satellite'
+          }
+
+          return 'Inconnu'
+        }
       }
     }
     /* eslint-enable sort-keys-fix/sort-keys-fix */

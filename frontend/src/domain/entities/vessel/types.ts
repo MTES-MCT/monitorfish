@@ -47,6 +47,11 @@ export enum VesselIdentifier {
   IRCS = 'IRCS'
 }
 
+export enum NetworkType {
+  CELLULAR = 'CELLULAR',
+  SATELLITE = 'SATELLITE'
+}
+
 export type VesselIdentity = {
   beaconNumber?: number | null
   districtCode?: string | null
@@ -135,6 +140,7 @@ export type VesselPosition = {
   latitude: number
   longitude: number
   mmsi: string | null
+  networkType: NetworkType | null
   positionType: string
   speed: number
   tripNumber: number | null

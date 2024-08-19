@@ -1,12 +1,12 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.fao_areas
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.repositories.FAOAreasRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.FaoAreaRepository
 
 @UseCase
-class GetFAOAreas(private val faoAreasRepository: FAOAreasRepository) {
+class GetFaoAreas(private val faoAreaRepository: FaoAreaRepository) {
     fun execute(): List<String> {
-        val faoAreas = faoAreasRepository.findAll()
+        val faoAreas = faoAreaRepository.findAllSortedByUsage()
 
         return faoAreas.map { it.faoCode }
             .distinct()

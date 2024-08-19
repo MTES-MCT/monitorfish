@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment
 
-import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FAOArea
+import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FaoArea
 
 /**
  * Filters the input sequence of FAO areas to keep only the smallest non overlapping areas.
@@ -13,7 +13,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FAOArea
  * @see: Python implementation :
  *      https://github.com/MTES-MCT/monitorfish/blob/master/datascience/src/pipeline/helpers/fao_areas.py#L4
  */
-fun removeRedundantFaoArea(faoAreas: List<FAOArea>): List<FAOArea> {
+fun removeRedundantFaoArea(faoAreas: List<FaoArea>): List<FaoArea> {
     val distinctFAOAreas = faoAreas.distinctBy { it.faoCode }
 
     return distinctFAOAreas
@@ -41,7 +41,7 @@ fun removeRedundantFaoArea(faoAreas: List<FAOArea>): List<FAOArea> {
  *  - true if the faoArea.faoCode if null or empty
  *  - false if the faoArea.faoCode is not null or empty and the tested are is null or empty
  */
-fun FAOArea.hasFaoCodeIncludedIn(faoCode: String?): Boolean {
+fun FaoArea.hasFaoCodeIncludedIn(faoCode: String?): Boolean {
     if (faoCode.isNullOrEmpty()) {
         return true
     }

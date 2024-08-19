@@ -1,4 +1,5 @@
 import { browserTracingIntegration, init, replayIntegration } from '@sentry/react'
+import { AppWithoutOicd } from 'AppWithoutOicd'
 import { createRoot } from 'react-dom/client'
 import { AuthProvider } from 'react-oidc-context'
 
@@ -39,5 +40,5 @@ if (IS_OIDC_ENABLED) {
     </AuthProvider>
   )
 } else {
-  root.render(<App />)
+  root.render(<AppWithoutOicd />)
 }

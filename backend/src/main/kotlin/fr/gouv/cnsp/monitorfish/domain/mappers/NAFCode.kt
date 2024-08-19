@@ -25,6 +25,7 @@ enum class NAFCode(val code: String) {
     TRIP_NUMBER("TN"),
     LATITUDE("LA"),
     LONGITUDE("LO"),
+    NETWORK_TYPE("MS"),
 
     ;
 

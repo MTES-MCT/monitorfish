@@ -7,6 +7,7 @@ import {
   VESSEL_TRACK_FEW_SAME_COORDINATES
 } from './__mocks__/vesselTrack'
 import { DUMMY_VESSEL_TRACK_WITH_DUPLICATE_POSITIONS } from './__mocks__/vesselTrackWithDuplicatePositions'
+import { NetworkType } from '../../types'
 import { getFeaturesFromPositions, getTrackType } from '../index'
 
 import type { VesselLineFeature, VesselPointFeature, VesselPosition } from '../../types'
@@ -50,6 +51,7 @@ describe('vessel/track', () => {
         latitude: 46.386,
         longitude: -3.328,
         mmsi: null,
+        networkType: NetworkType.SATELLITE,
         positionType: 'VMS',
         speed: 2.8,
         tripNumber: null,

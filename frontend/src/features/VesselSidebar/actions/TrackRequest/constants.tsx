@@ -22,6 +22,7 @@ export const POSITION_TABLE_COLUMNS: Array<ColumnDef<VesselPosition & { id: numb
       <HighlightPositionCell
         isAtPortPositionMarkerShowed
         isManualPositionMarkerShowed
+        isNetworkTypeMarkerShowed
         row={info.row.original}
         value={info.getValue()}
       />
@@ -29,7 +30,7 @@ export const POSITION_TABLE_COLUMNS: Array<ColumnDef<VesselPosition & { id: numb
     enableSorting: true,
     header: 'GDH',
     id: 'dateTime',
-    size: 170
+    size: 190
   },
   {
     accessorFn: row => (isNumeric(row.speed) ? `${row.speed} nds` : '-'),
@@ -37,7 +38,7 @@ export const POSITION_TABLE_COLUMNS: Array<ColumnDef<VesselPosition & { id: numb
     enableSorting: true,
     header: 'Vit.',
     id: 'speed',
-    size: 50
+    size: 40
   },
   {
     accessorFn: row => (isNumeric(row.course) ? `${row.course} °` : '-'),
@@ -45,7 +46,7 @@ export const POSITION_TABLE_COLUMNS: Array<ColumnDef<VesselPosition & { id: numb
     enableSorting: true,
     header: 'Cap',
     id: 'course',
-    size: 40
+    size: 30
   }
 ]
 

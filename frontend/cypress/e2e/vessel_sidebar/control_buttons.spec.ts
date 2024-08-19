@@ -45,6 +45,37 @@ context('Vessel sidebar controls buttons', () => {
     cy.get('[data-id="0"] > td').eq(2).contains('8.7 nds')
     cy.get('[data-id="0"] > td').eq(1).find('[title="Position au port"]').should('exist')
     cy.get('[data-id="0"] > td').eq(1).find('[title="Position manuelle (4h-report)"]').should('exist')
+    cy.get('[data-id="0"] > td').eq(1).find('[title="Réseau CELLULAR"]').should('exist')
+    cy.get('[data-id="0"] > td').eq(1).contains('CEL')
+  })
+
+  it('Vessel track Should be downloaded', () => {
+    // Given
+    cy.get('*[data-cy^="vessel-search-input"]', { timeout: 10000 }).type('Pheno')
+    cy.get('*[data-cy^="vessel-search-item"]').eq(0).click()
+    cy.wait(200)
+    cy.get('*[data-cy^="vessel-sidebar"]').should('be.visible')
+    cy.get('*[data-cy^="vessel-track-depth-selection"]').click()
+    cy.fill('Afficher la piste VMS depuis', '3 jours')
+    cy.wait(500)
+
+    // When
+    cy.clickButton('Exporter la piste')
+
+    // Then
+    cy.wait(400)
+    cy.exec('cd cypress/downloads && ls').then(result => {
+      const downloadedCSVFilename = result.stdout
+
+      return cy
+        .readFile(`cypress/downloads/${downloadedCSVFilename}`)
+        .should(
+          'contains',
+          'Nom,Marq. Ext.,C/S,MMSI,CFR,Pavillon,GDH (UTC),Latitude,Longitude,Cap,Vitesse,Au port,Type de réseau'
+        )
+        .should('contains', '"PHENOMENE","DONTSINK","CALLME","","FAK000999999"')
+        .should('contains', '"45° 55′ 12″ N","008° 45′ 54″ W",13,8.7,"Oui","Cellulaire"')
+    })
   })
 
   it('Vessel track dates Should be changed When walking in fishing trips', () => {

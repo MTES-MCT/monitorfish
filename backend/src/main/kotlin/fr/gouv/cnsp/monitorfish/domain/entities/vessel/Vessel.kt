@@ -40,6 +40,7 @@ data class Vessel(
     val vesselEmails: List<String>? = null,
     val underCharter: Boolean? = null,
     val logbookEquipmentStatus: String? = null,
+    val logbookSoftware: String? = null,
     val hasLogbookEsacapt: Boolean,
     val hasVisioCaptures: Boolean? = null,
 ) {

@@ -91,6 +91,10 @@ export function EquipmentResume({ setIsCurrentBeaconMalfunctionDetails }: Beacon
                   value: selectedVessel?.logbookEquipmentStatus
                 },
                 {
+                  key: 'Logiciel JPE',
+                  value: selectedVessel?.logbookSoftware || '-'
+                },
+                {
                   key: 'Équipé e-Sacapt',
                   value: selectedVessel?.hasLogbookEsacapt ? 'Oui' : 'Non'
                 },
@@ -99,6 +103,7 @@ export function EquipmentResume({ setIsCurrentBeaconMalfunctionDetails }: Beacon
                   value: selectedVessel?.hasVisioCaptures ? 'Oui' : 'Non'
                 }
               ]}
+              valueEllipsisedForWidth={70}
             />
           </Columns>
           {isSuperUser && (

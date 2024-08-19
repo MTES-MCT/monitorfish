@@ -74,6 +74,7 @@ dev-restore-db:
 
 ################################################################################
 # Database upgrade
+
 check-database-extensions-versions:
 	docker exec -i monitorfish_database bash < infra/remote/database_upgrade/check_extensions_versions.sh
 
@@ -111,6 +112,7 @@ add_timescaledb_to_shared_preload_libraries:
 		debian:buster \
 		bash -c "echo \"shared_preload_libraries = 'timescaledb'\" >> /var/lib/postgresql/data/postgresql.conf";
 
+
 ################################################################################
 # Testing
 
@@ -118,7 +120,13 @@ test: test-back
 	cd frontend && CI=true npm run test:unit -- --coverage
 
 test-back: check-clean-archi
-	cd backend && ./gradlew clean test
+	@if [ -z "$(class)" ]; then \
+		echo "Running all Backend tests..."; \
+		cd backend && ./gradlew clean test; \
+	else \
+		echo "Running single Backend test class $(class)..."; \
+		cd backend && ./gradlew test --tests "$(class)"; \
+	fi
 
 lint-back:
 	cd ./backend && ./gradlew ktlintFormat | grep -v \

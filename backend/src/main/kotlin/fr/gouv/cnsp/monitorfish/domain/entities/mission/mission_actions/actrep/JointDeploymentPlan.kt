@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep
 
-import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FAOArea
+import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FaoArea
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.hasFaoCodeIncludedIn
@@ -25,9 +25,13 @@ val NORTH_SEA_OPERATIONAL_ZONES = listOf("27.4", "27.3.a")
  *
  * cf. https://extranet.legipeche.metier.developpement-durable.gouv.fr/fichier/pdf/ed_decision_2023-25_-_ww_jdp_2024_planning_-_adoption_fr_cle128883.pdf?arg=25288&cle=9a2d7705425e766258f0d648353a05aa04249faf&file=pdf%2Fed_decision_2023-25_-_ww_jdp_2024_planning_-_adoption_fr_cle128883.pdf
  */
-val WESTERN_WATERS_OPERATIONAL_ZONES = listOf("27.5", "27.6", "27.7", "27.8", "27.9", "27.10", "34.1.1", "34.1.2", "34.2.0")
+val WESTERN_WATERS_OPERATIONAL_ZONES =
+    listOf("27.5", "27.6", "27.7", "27.8", "27.9", "27.10", "34.1.1", "34.1.2", "34.2.0")
 
-enum class JointDeploymentPlan(private val species: List<FaoZonesAndSpecy>, private val operationalZones: List<String>) {
+enum class JointDeploymentPlan(
+    private val species: List<FaoZonesAndSpecy>,
+    private val operationalZones: List<String>,
+) {
     MEDITERRANEAN_AND_EASTERN_ATLANTIC(
         MEDITERRANEAN_AND_EASTERN_ATLANTIC_SPECIES,
         MEDITERRANEAN_OPERATIONAL_ZONES + EASTERN_ATLANTIC_OPERATIONAL_ZONES,
@@ -82,7 +86,7 @@ enum class JointDeploymentPlan(private val species: List<FaoZonesAndSpecy>, priv
 
     fun getFirstFaoAreaIncludedInJdp(
         control: MissionAction,
-    ): FAOArea? {
+    ): FaoArea? {
         val jdpFaoAreas = this.getOperationalZones()
 
         if (control.actionType == MissionActionType.SEA_CONTROL && !isAttributedJdp(control)) {
@@ -90,7 +94,7 @@ enum class JointDeploymentPlan(private val species: List<FaoZonesAndSpecy>, priv
         }
 
         val firstFaoAreaIncludedInJdp = control.faoAreas
-            .map { FAOArea(it) }
+            .map { FaoArea(it) }
             .firstOrNull { controlFaoArea ->
                 jdpFaoAreas.any { controlFaoArea.hasFaoCodeIncludedIn(it) }
             }
@@ -119,7 +123,7 @@ enum class JointDeploymentPlan(private val species: List<FaoZonesAndSpecy>, priv
 
             return@firstOrNull jdpEntry.getOperationalZones().any { jdpFaoArea ->
                 control.faoAreas.any { controlFaoArea ->
-                    FAOArea(controlFaoArea).hasFaoCodeIncludedIn(jdpFaoArea)
+                    FaoArea(controlFaoArea).hasFaoCodeIncludedIn(jdpFaoArea)
                 }
             }
         } == this
@@ -133,13 +137,13 @@ enum class JointDeploymentPlan(private val species: List<FaoZonesAndSpecy>, priv
          */
         if (EASTERN_ATLANTIC_OPERATIONAL_ZONES.contains(jdpFaoArea)) {
             return@any control.faoAreas.any { controlFaoArea ->
-                FAOArea(controlFaoArea).hasFaoCodeIncludedIn(jdpFaoArea) &&
+                FaoArea(controlFaoArea).hasFaoCodeIncludedIn(jdpFaoArea) &&
                     control.speciesOnboard.map { it.speciesCode }.contains(EASTERN_ATLANTIC_SPECY.second)
             }
         }
 
         return@any control.faoAreas.any { controlFaoArea ->
-            FAOArea(controlFaoArea).hasFaoCodeIncludedIn(jdpFaoArea)
+            FaoArea(controlFaoArea).hasFaoCodeIncludedIn(jdpFaoArea)
         }
     }
 }

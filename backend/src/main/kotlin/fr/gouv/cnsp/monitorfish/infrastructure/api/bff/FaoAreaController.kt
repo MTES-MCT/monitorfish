@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
-import fr.gouv.cnsp.monitorfish.domain.use_cases.fao_areas.ComputeVesselFAOAreas
-import fr.gouv.cnsp.monitorfish.domain.use_cases.fao_areas.GetFAOAreas
+import fr.gouv.cnsp.monitorfish.domain.use_cases.fao_areas.ComputeVesselFaoAreas
+import fr.gouv.cnsp.monitorfish.domain.use_cases.fao_areas.GetFaoAreas
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/bff")
 @Tag(name = "APIs for Data referential")
 class FaoAreaController(
-    private val getFAOAreas: GetFAOAreas,
-    private val computeVesselFAOAreas: ComputeVesselFAOAreas,
+    private val getFAOAreas: GetFaoAreas,
+    private val computeVesselFAOAreas: ComputeVesselFaoAreas,
 ) {
 
     @GetMapping("/v1/fao_areas")

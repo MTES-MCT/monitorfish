@@ -46,6 +46,7 @@ export namespace Vessel {
     hasLogbookEsacapt: boolean
     hasVisioCaptures: boolean | undefined
     logbookEquipmentStatus: string | undefined
+    logbookSoftware: string | undefined
     riskFactor: RiskFactor | undefined
   }
 }

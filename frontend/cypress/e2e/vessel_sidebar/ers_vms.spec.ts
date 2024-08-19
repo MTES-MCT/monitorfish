@@ -23,6 +23,7 @@ context('Vessel sidebar ers/vms tab', () => {
     cy.get('*[data-cy="Statut JPE"]').contains('Equipé')
     cy.get('*[data-cy="Équipé e-Sacapt"]').contains('Non')
     cy.get('*[data-cy="Équipé VisioCaptures"]').contains('Oui')
+    cy.get('*[data-cy="Logiciel JPE"]').contains('JT/VISIOCaptures V1.4.7')
   })
 
   it('ERS/VMS tab Should not throw When a beacon is missing', () => {

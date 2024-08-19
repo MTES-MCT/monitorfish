@@ -40,6 +40,7 @@ data class VesselDataOutput(
     val beacon: BeaconDataOutput? = null,
     val underCharter: Boolean? = null,
     val logbookEquipmentStatus: String? = null,
+    val logbookSoftware: String? = null,
     val hasLogbookEsacapt: Boolean,
     val hasVisioCaptures: Boolean? = null,
 ) {
@@ -83,6 +84,7 @@ data class VesselDataOutput(
                 riskFactor = RiskFactorDataOutput.fromVesselRiskFactor(vesselRiskFactor),
                 underCharter = vessel.underCharter,
                 logbookEquipmentStatus = vessel.logbookEquipmentStatus,
+                logbookSoftware = vessel.logbookSoftware,
                 hasLogbookEsacapt = vessel.hasLogbookEsacapt,
                 hasVisioCaptures = vessel.hasVisioCaptures,
             )

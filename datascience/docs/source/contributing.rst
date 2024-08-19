@@ -45,7 +45,7 @@ To install front end dependencies, execute:
 
 .. code-block:: shell
 
-    make install
+    make install-front
 
 Run
 ---

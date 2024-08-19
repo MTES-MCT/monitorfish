@@ -10,14 +10,24 @@ docker-env:
 ################################################################################
 # Local Development
 
-install:
-	cd ./frontend && npm i
+check-clean-archi:
+	cd backend/tools && ./check-clean-architecture.sh
 
-run-front:
-	cd ./frontend && npm run dev
+clean: docker-env
+	rm -Rf ./backend/target
+	docker compose down -v
+	docker compose --env-file ./infra/docker/.env -f ./infra/docker/docker-compose.monitorenv.dev.yml down -v
+	docker compose --env-file ./infra/docker/.env -f ./infra/docker/docker-compose.cypress.yml down -v
+	docker compose -f ./infra/docker/docker-compose.puppeteer.yml down -v
+
+compile-back:
+	cd backend && ./gradlew assemble
 
 init-local-sig:
 	./infra/local/postgis_insert_layers.sh && ./infra/init/geoserver_init_layers.sh
+
+install-front:
+	cd ./frontend && npm i
 
 run-back: run-stubbed-apis
 	docker compose up -d --quiet-pull --wait db keycloak
@@ -30,6 +40,9 @@ run-back-for-cypress: run-stubbed-apis
 run-back-with-monitorenv: run-monitorenv
 	docker compose up -d --quiet-pull --wait db
 	cd backend && MONITORENV_URL=http://localhost:9880 ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
+
+run-front:
+	cd ./frontend && npm run dev
 
 run-monitorenv: docker-env
 	docker compose \
@@ -44,16 +57,6 @@ run-stubbed-apis:
 
 stop-stubbed-apis:
 	docker stop cypress-geoserver-1
-
-clean: docker-env
-	rm -Rf ./backend/target
-	docker compose down -v
-	docker compose --env-file ./infra/docker/.env -f ./infra/docker/docker-compose.monitorenv.dev.yml down -v
-	docker compose --env-file ./infra/docker/.env -f ./infra/docker/docker-compose.cypress.yml down -v
-	docker compose -f ./infra/docker/docker-compose.puppeteer.yml down -v
-
-check-clean-archi:
-	cd backend/tools && ./check-clean-architecture.sh
 
 update-test-data:
 	cd frontend && node ./scripts/generate_test_data_seeds.mjs
@@ -71,6 +74,7 @@ dev-restore-db:
 
 ################################################################################
 # Database upgrade
+
 check-database-extensions-versions:
 	docker exec -i monitorfish_database bash < infra/remote/database_upgrade/check_extensions_versions.sh
 
@@ -108,6 +112,7 @@ add_timescaledb_to_shared_preload_libraries:
 		debian:buster \
 		bash -c "echo \"shared_preload_libraries = 'timescaledb'\" >> /var/lib/postgresql/data/postgresql.conf";
 
+
 ################################################################################
 # Testing
 
@@ -115,7 +120,16 @@ test: test-back
 	cd frontend && CI=true npm run test:unit -- --coverage
 
 test-back: check-clean-archi
-	cd backend && ./gradlew clean test
+	@if [ -z "$(class)" ]; then \
+		echo "Running all Backend tests..."; \
+		cd backend && ./gradlew clean test; \
+	else \
+		echo "Running single Backend test class $(class)..."; \
+		cd backend && ./gradlew test --tests "$(class)"; \
+	fi
+
+test-back-watch:
+	./backend/scripts/test-watch.sh
 
 lint-back:
 	cd ./backend && ./gradlew ktlintFormat | grep -v \

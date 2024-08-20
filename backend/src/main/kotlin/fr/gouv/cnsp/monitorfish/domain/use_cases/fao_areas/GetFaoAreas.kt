@@ -9,7 +9,5 @@ class GetFaoAreas(private val faoAreaRepository: FaoAreaRepository) {
         val faoAreas = faoAreaRepository.findAllSortedByUsage()
 
         return faoAreas.map { it.faoCode }
-            .distinct()
-            .sorted()
     }
 }

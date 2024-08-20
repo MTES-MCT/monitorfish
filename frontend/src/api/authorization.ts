@@ -33,10 +33,7 @@ export async function getCurrentUserAuthorizationFromAPI(): Promise<UserAuthoriz
        *              The user juste re-login, but the request did include the previous access_token found in LocalStorage,
        *              there is a race condition.
        */
-      if (
-        !!authenticateResponse?.includes('authentication is required') ||
-        !!authenticateResponse?.includes('expired')
-      ) {
+      if (authenticateResponse?.includes('authentication is required') || authenticateResponse?.includes('expired')) {
         return {
           isLogged: false,
           isSuperUser: false,

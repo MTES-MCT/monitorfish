@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { hasAuthParams, useAuth } from 'react-oidc-context'
+import { hasAuthParams, useAuth, type AuthContextProps } from 'react-oidc-context'
 
 import { getCurrentUserAuthorization } from '../../domain/use_cases/authorization/getCurrentUserAuthorization'
 
@@ -11,7 +11,9 @@ export function useCustomAuth(): {
   isLoading: boolean
   userAccount: UserAccountContextType | undefined
 } {
-  const auth = useAuth()
+  // `| undefined` because it's undefined if the OICD is disabled which is the case for Cypress tests
+  const auth = useAuth() as AuthContextProps | undefined
+
   const [userAuthorization, setUserAuthorization] = useState<UserAuthorization | undefined>(undefined)
 
   useEffect(() => {
@@ -23,6 +25,10 @@ export function useCustomAuth(): {
   }, [])
 
   const logout = useCallback(() => {
+    if (!auth) {
+      return
+    }
+
     const idTokenHint = auth.user?.id_token
 
     auth.removeUser()
@@ -32,11 +38,11 @@ export function useCustomAuth(): {
 
   const userAccount = useMemo(
     () => ({
-      email: auth.user?.profile?.email,
+      email: auth?.user?.profile?.email,
       isSuperUser: userAuthorization?.isSuperUser ?? false,
       logout
     }),
-    [logout, userAuthorization, auth.user?.profile?.email]
+    [logout, userAuthorization, auth?.user?.profile?.email]
   )
 
   useEffect(() => {
@@ -65,10 +71,10 @@ export function useCustomAuth(): {
     }
   }, [
     auth,
-    auth.isAuthenticated,
-    auth.activeNavigator,
-    auth.isLoading,
-    auth.signinRedirect,
+    auth?.isAuthenticated,
+    auth?.activeNavigator,
+    auth?.isLoading,
+    auth?.signinRedirect,
     userAuthorization?.mustReload
   ])
 

@@ -1,11 +1,12 @@
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { omit } from 'lodash'
 
-import { addSideWindowPriorNotification, editSideWindowPriorNotification } from './utils'
+import { addManualSideWindowPriorNotification } from './utils'
 import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 import { isDateCloseTo } from '../../utils/isDateCloseTo'
-import { openSideWindowPriorNotificationList } from '../prior_notification_list/utils'
+import { editSideWindowPriorNotification } from '../logbook_prior_notification_form/utils'
+import { openSideWindowPriorNotificationListAsSuperUser } from '../prior_notification_list/utils'
 
 context('Side Window > Manual Prior Notification Form > Form', () => {
   it('Should add and edit a manual prior notification', () => {
@@ -20,7 +21,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
 
     cy.intercept('POST', '/bff/v1/prior_notifications/manual').as('createPriorNotification')
 
-    addSideWindowPriorNotification()
+    addManualSideWindowPriorNotification()
 
     cy.getDataCy('vessel-search-input').click().wait(500)
     cy.getDataCy('vessel-search-input').type('PAGEOT JO', { delay: 100 })
@@ -135,13 +136,13 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     })
   })
 
-  it('Should display the expected form validation errors', () => {
+  it('Should display the expected manual prior notification form validation errors', () => {
     // -------------------------------------------------------------------------
     // Base form validation errors
 
     const { utcDateTupleWithTime } = getUtcDateInMultipleFormats(customDayjs().toISOString())
 
-    addSideWindowPriorNotification()
+    addManualSideWindowPriorNotification()
 
     cy.fill('Date et heure de réception du préavis (UTC)', undefined)
 
@@ -212,7 +213,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.contains('Créer le préavis').should('be.enabled')
   })
 
-  it('Should calculate and display fleet segments, risk factor & types', () => {
+  it('Should calculate and display manual prior notification fleet segments, risk factor & types', () => {
     // -------------------------------------------------------------------------
     // Add
 
@@ -223,7 +224,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.intercept('POST', '/bff/v1/prior_notifications/manual').as('createPriorNotification')
     cy.intercept('POST', '/bff/v1/prior_notifications/manual/compute').as('computePriorNotification')
 
-    addSideWindowPriorNotification()
+    addManualSideWindowPriorNotification()
 
     cy.getDataCy('vessel-search-input').click().wait(500)
     cy.getDataCy('vessel-search-input').type('IN-ARÊTE-ABLE', { delay: 100 })
@@ -279,7 +280,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
       // -----------------------------------------------------------------------
       // List
 
-      openSideWindowPriorNotificationList()
+      openSideWindowPriorNotificationListAsSuperUser()
       cy.fill('Rechercher un navire', 'IN-ARÊTE-ABLE')
 
       // TODO Check if we need to update the vessel risk factor in DB while saving a prior notification.
@@ -328,7 +329,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         // -----------------------------------------------------------------------
         // List
 
-        openSideWindowPriorNotificationList()
+        openSideWindowPriorNotificationListAsSuperUser()
         cy.fill('Rechercher un navire', 'IN-ARÊTE-ABLE')
 
         cy.getTableRowById(createdPriorNotification.reportId).contains('NWW01/02')
@@ -338,11 +339,11 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     })
   })
 
-  it('Should only recalculate fleet segments, risk factor & types when necessary (creation)', () => {
+  it('Should only recalculate manual prior notification fleet segments, risk factor & types when necessary (creation)', () => {
     cy.intercept('POST', '/bff/v1/prior_notifications/manual/compute').as('computePriorNotification')
     cy.resetCountRequestsByAlias('@computePriorNotification')
 
-    addSideWindowPriorNotification()
+    addManualSideWindowPriorNotification()
 
     cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 0)
 
@@ -382,7 +383,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 1)
   })
 
-  it('Should only recalculate fleet segments, risk factor & types when necessary (edition)', () => {
+  it('Should only recalculate manual prior notification fleet segments, risk factor & types when necessary (edition)', () => {
     cy.intercept('POST', '/bff/v1/prior_notifications/manual/compute').as('computePriorNotification')
     cy.resetCountRequestsByAlias('@computePriorNotification')
 
@@ -463,7 +464,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
       /\/bff\/v1\/prior_notifications\/[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\?isManuallyCreated=true&operationDate=.*/i
     ).as('getPriorNotification')
 
-    addSideWindowPriorNotification()
+    addManualSideWindowPriorNotification()
 
     cy.getDataCy('vessel-search-input').click().wait(500)
     cy.getDataCy('vessel-search-input').type('IN-ARÊTE-ABLE', { delay: 100 })
@@ -555,8 +556,6 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
 
     // Then
     cy.clickButton('Fermer')
-    cy.getTableRowById('00000000-0000-4000-0000-000000000001' as any)
-      .find('[title="Préavis invalidé"]')
-      .should('exist')
+    cy.getTableRowById('00000000-0000-4000-0000-000000000001').find('[title="Préavis invalidé"]').should('exist')
   })
 })

@@ -1,6 +1,6 @@
 import { RTK_MAX_RETRIES } from '@api/constants'
 
-import { editSideWindowPriorNotification } from '../manual_prior_notification_form/utils'
+import { editSideWindowPriorNotification } from './utils'
 
 context('Side Window > Logbook Prior Notification Form > Error Handling', () => {
   const failedQueryCount = RTK_MAX_RETRIES + 1

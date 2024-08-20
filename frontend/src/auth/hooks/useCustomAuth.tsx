@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { hasAuthParams, useAuth } from 'react-oidc-context'
+import { hasAuthParams, useAuth, type AuthContextProps } from 'react-oidc-context'
 
 import { getCurrentUserAuthorization } from '../../domain/use_cases/authorization/getCurrentUserAuthorization'
 
@@ -11,7 +11,9 @@ export function useCustomAuth(): {
   isLoading: boolean
   userAccount: UserAccountContextType | undefined
 } {
-  const auth = useAuth()
+  // `| undefined` because it's undefined if the OICD is disabled which is the case for Cypress tests
+  const auth = useAuth() as AuthContextProps | undefined
+
   const [userAuthorization, setUserAuthorization] = useState<UserAuthorization | undefined>(undefined)
 
   useEffect(() => {
@@ -23,11 +25,15 @@ export function useCustomAuth(): {
   }, [])
 
   const logout = useCallback(() => {
-    const idTokenHint = auth?.user?.id_token
+    if (!auth) {
+      return
+    }
 
-    auth?.removeUser()
-    auth?.removeUser()
-    auth?.signoutRedirect({ id_token_hint: idTokenHint ?? '' })
+    const idTokenHint = auth.user?.id_token
+
+    auth.removeUser()
+    auth.removeUser()
+    auth.signoutRedirect({ id_token_hint: idTokenHint ?? '' })
   }, [auth])
 
   const userAccount = useMemo(
@@ -45,15 +51,15 @@ export function useCustomAuth(): {
     }
 
     // automatically sign-in
-    if (!hasAuthParams() && !auth?.isAuthenticated && !auth?.activeNavigator && !auth?.isLoading) {
+    if (!hasAuthParams() && !auth.isAuthenticated && !auth.activeNavigator && !auth.isLoading) {
       // eslint-disable-next-line no-console
       console.log('Redirect after Cerbère sign-in.')
-      auth?.signinRedirect()
+      auth.signinRedirect()
 
       return
     }
 
-    if (!auth.isLoading && auth?.isAuthenticated && userAuthorization?.mustReload) {
+    if (!auth.isLoading && auth.isAuthenticated && userAuthorization?.mustReload) {
       // eslint-disable-next-line no-console
       console.log('Re-trying to login with the latest token...')
 

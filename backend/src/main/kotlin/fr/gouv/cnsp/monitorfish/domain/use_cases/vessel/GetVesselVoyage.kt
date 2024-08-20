@@ -28,7 +28,7 @@ class GetVesselVoyage(
                      * This 4-hour buffer prevents incorrect message datetime to be filtered.
                      * Sometimes, vessel inboard computers might have offset datetime.
                      */
-                    ZonedDateTime.now().withHour(4),
+                    ZonedDateTime.now().plusHours(4),
                 )
                 VoyageRequest.PREVIOUS -> {
                     require(tripNumber != null) {

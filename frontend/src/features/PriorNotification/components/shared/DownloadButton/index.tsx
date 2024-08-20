@@ -55,8 +55,8 @@ export function DownloadButton({
     })
   }, [getGearsApiQuery.data, pnoLogbookMessage?.tripGears])
 
-  const downloadAuthorizationDocument = async () => {
-    const htmlContent = await getHtmlContent(pnoLogbookMessage, gearsWithName)
+  const downloadAuthorizationDocument = () => {
+    const htmlContent = getHtmlContent(pnoLogbookMessage, gearsWithName)
 
     printJS({
       documentTitle: `preavis_entree_port_debarquement_${customDayjs().utc().format('DDMMYYYY')}.pdf`,

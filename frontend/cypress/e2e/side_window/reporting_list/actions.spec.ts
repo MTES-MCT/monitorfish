@@ -160,8 +160,9 @@ context('Side Window > Reporting List > Actions', () => {
   })
 
   it('A reporting Should be downloaded', () => {
+    cy.cleanDownloadedFiles()
+
     // Given
-    cy.cleanFiles()
     cy.getDataCy('side-window-reporting-tab').click()
 
     // There should be one reporting either in SA or NAME sea front, depending of the previous

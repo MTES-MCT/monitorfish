@@ -1,14 +1,10 @@
 import { RTK_MAX_RETRIES } from '@api/constants'
 
-import { openSideWindowPriorNotification } from './utils'
+import { openSideWindowPriorNotificationCardAsUser } from './utils'
 
 context('Side Window > Logbook Prior Notification Card > Error Handling', () => {
   const failedQueryCount = RTK_MAX_RETRIES + 1
   const url = '/bff/v1/prior_notifications/FAKE_OPERATION_109_COR?isManuallyCreated=false&operationDate=*'
-
-  beforeEach(() => {
-    cy.intercept('/bff/v1/authorization/current', { statusCode: 401 }).as('getIsSuperUser')
-  })
 
   it('Should handle fetching error as expected', () => {
     cy.intercept(
@@ -22,7 +18,7 @@ context('Side Window > Logbook Prior Notification Card > Error Handling', () => 
       }
     ).as('getPriorNotificationsWithError')
 
-    openSideWindowPriorNotification(`L'ANCRE`, false)
+    openSideWindowPriorNotificationCardAsUser(`L'ANCRE`, 'FAKE_OPERATION_109_COR')
 
     for (let i = 1; i <= failedQueryCount; i += 1) {
       cy.wait('@getPriorNotificationsWithError')

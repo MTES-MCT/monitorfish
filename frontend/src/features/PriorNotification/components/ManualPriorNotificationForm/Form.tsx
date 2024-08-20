@@ -28,9 +28,9 @@ import type { ManualPriorNotificationFormValues } from './types'
 import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
 
 type FormProps = Readonly<{
-  isInvalidated: boolean
+  isReadOnly: boolean
 }>
-export function Form({ isInvalidated }: FormProps) {
+export function Form({ isReadOnly }: FormProps) {
   const { values } = useFormikContext<ManualPriorNotificationFormValues>()
 
   const dispatch = useMainAppDispatch()
@@ -58,21 +58,21 @@ export function Form({ isInvalidated }: FormProps) {
 
   return (
     <>
-      <FormikVesselSelect onChange={onChange} readOnly={isInvalidated} />
+      <FormikVesselSelect onChange={onChange} readOnly={isReadOnly} />
 
       <FormikSelect
         isCleanable={false}
         label="Raison du préavis"
         name="purpose"
         options={getOptionsFromLabelledEnum(PriorNotification.PURPOSE_LABEL)}
-        readOnly={isInvalidated}
+        readOnly={isReadOnly}
       />
 
       <FormikDatePicker
         isStringDate
         label="Date et heure de réception du préavis (UTC)"
         name="sentAt"
-        readOnly={isInvalidated}
+        readOnly={isReadOnly}
         withTime
       />
 
@@ -80,7 +80,7 @@ export function Form({ isInvalidated }: FormProps) {
         isStringDate
         label="Date et heure estimées d'arrivée au port (UTC)"
         name="expectedArrivalDate"
-        readOnly={isInvalidated}
+        readOnly={isReadOnly}
         withTime
       />
 
@@ -90,13 +90,13 @@ export function Form({ isInvalidated }: FormProps) {
           isStringDate
           label="Date et heure prévues de débarque (UTC)"
           name="expectedLandingDate"
-          readOnly={isInvalidated}
+          readOnly={isReadOnly}
           withTime
         />
         <FormikCheckbox
           label="équivalentes à celles de l'arrivée au port"
           name="isExpectedLandingDateSameAsExpectedArrivalDate"
-          readOnly={isInvalidated}
+          readOnly={isReadOnly}
         />
       </FieldGroup>
 
@@ -105,19 +105,19 @@ export function Form({ isInvalidated }: FormProps) {
         label="Port d'arrivée"
         name="portLocode"
         options={portsAsOptions ?? []}
-        readOnly={isInvalidated}
+        readOnly={isReadOnly}
         searchable
         virtualized
       />
 
-      <FormikFishingCatchesMultiSelect readOnly={isInvalidated} />
+      <FormikFishingCatchesMultiSelect readOnly={isReadOnly} />
 
       <FormikMultiSelect
         disabled={!gearsAsOptions}
         label="Engins utilisés"
         name="tripGearCodes"
         options={gearsAsOptions ?? []}
-        readOnly={isInvalidated}
+        readOnly={isReadOnly}
         searchable
         virtualized
       />
@@ -127,7 +127,7 @@ export function Form({ isInvalidated }: FormProps) {
         label="Zone de pêche"
         name="faoArea"
         options={faoAreasAsOptions ?? []}
-        readOnly={isInvalidated}
+        readOnly={isReadOnly}
         searchable
         virtualized
       />
@@ -141,28 +141,28 @@ export function Form({ isInvalidated }: FormProps) {
             label="Autorisation d'entrée au port"
             name="hasPortEntranceAuthorization"
             options={BOOLEAN_AS_OPTIONS}
-            readOnly={isInvalidated}
+            readOnly={isReadOnly}
           />
           <StyledFormikMultiRadio
             isInline
             label="Autorisation de débarquement"
             name="hasPortLandingAuthorization"
             options={BOOLEAN_AS_OPTIONS}
-            readOnly={isInvalidated}
+            readOnly={isReadOnly}
           />
         </>
       )}
 
       <FieldGroup>
-        <FormikTextarea label="Points d'attention identifiés par le CNSP" name="note" readOnly={isInvalidated} />
+        <FormikTextarea label="Points d'attention identifiés par le CNSP" name="note" readOnly={isReadOnly} />
         <FormikCheckbox
           label="pas de pêche après le préavis zéro"
           name="didNotFishAfterZeroNotice"
-          readOnly={isInvalidated}
+          readOnly={isReadOnly}
         />
       </FieldGroup>
 
-      <AuthorTrigramInput label="Saisi par" maxLength={3} name="authorTrigram" readOnly={isInvalidated} />
+      <AuthorTrigramInput label="Saisi par" maxLength={3} name="authorTrigram" readOnly={isReadOnly} />
     </>
   )
 }

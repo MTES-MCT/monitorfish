@@ -1,7 +1,7 @@
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { SideWindowMenuLabel } from 'domain/entities/sideWindow/constants'
 
-import { openSideWindowPriorNotificationList } from './utils'
+import { openSideWindowPriorNotificationListAsSuperUser } from './utils'
 import { assertAll } from '../../utils/assertAll'
 import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
@@ -12,7 +12,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
   const apiPathBase = '/bff/v1/prior_notifications?'
 
   it('Should filter prior notifications by seafront group', () => {
-    openSideWindowPriorNotificationList()
+    openSideWindowPriorNotificationListAsSuperUser()
 
     cy.intercept('GET', `${apiPathBase}*seafrontGroup=MEMN*`).as('getPriorNotificationsForMEMN')
 
@@ -32,7 +32,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
   })
 
   it('Should filter prior notifications by vessel name (search input)', () => {
-    openSideWindowPriorNotificationList()
+    openSideWindowPriorNotificationListAsSuperUser()
 
     cy.intercept('GET', `${apiPathBase}*searchQuery=pheno*`).as('getPriorNotifications')
 
@@ -44,7 +44,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
   })
 
   it('Should filter prior notifications by countries', () => {
-    openSideWindowPriorNotificationList()
+    openSideWindowPriorNotificationListAsSuperUser()
 
     cy.intercept('GET', `${apiPathBase}*flagStates=ESP,FRA*`).as('getPriorNotifications')
 
@@ -56,7 +56,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
   })
 
   it('Should filter prior notifications by fleet segments', () => {
-    openSideWindowPriorNotificationList()
+    openSideWindowPriorNotificationListAsSuperUser()
 
     cy.intercept('GET', `${apiPathBase}*tripSegmentCodes=NWW03,SWW06*`).as('getPriorNotifications')
 
@@ -68,7 +68,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
   })
 
   it('Should filter prior notifications by species', () => {
-    openSideWindowPriorNotificationList()
+    openSideWindowPriorNotificationListAsSuperUser()
 
     cy.intercept('GET', `${apiPathBase}*specyCodes=FRF,HKE*`).as('getPriorNotifications')
 
@@ -80,7 +80,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
   })
 
   it('Should filter prior notifications by gears', () => {
-    openSideWindowPriorNotificationList()
+    openSideWindowPriorNotificationListAsSuperUser()
 
     cy.intercept('GET', `${apiPathBase}*tripGearCodes=OTT,TBS*`).as('getPriorNotifications')
 
@@ -92,7 +92,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
   })
 
   it('Should filter prior notifications by last control date', () => {
-    openSideWindowPriorNotificationList()
+    openSideWindowPriorNotificationListAsSuperUser()
 
     const expectedPartialBeforeDate = customDayjs.utc().subtract(3, 'months').toISOString().substring(0, 10)
     cy.intercept('GET', `${apiPathBase}*lastControlledBefore=${expectedPartialBeforeDate}*`).as('getPriorNotifications')
@@ -114,7 +114,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
   })
 
   it('Should filter prior notifications with or without reportings', () => {
-    openSideWindowPriorNotificationList()
+    openSideWindowPriorNotificationListAsSuperUser()
 
     cy.intercept('GET', `${apiPathBase}*hasOneOrMoreReportings=true*`).as('getPriorNotificationsWithReportings')
 
@@ -164,7 +164,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
   })
 
   it('Should filter prior notifications by arrival date', () => {
-    openSideWindowPriorNotificationList()
+    openSideWindowPriorNotificationListAsSuperUser()
 
     cy.intercept('GET', `${apiPathBase}*`).as('getPriorNotifications')
 
@@ -189,7 +189,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
   })
 
   it('Should filter prior notifications by arrival date (custom)', () => {
-    openSideWindowPriorNotificationList()
+    openSideWindowPriorNotificationListAsSuperUser()
 
     cy.intercept('GET', `${apiPathBase}*`).as('getPriorNotifications')
 
@@ -220,7 +220,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
   })
 
   it('Should filter prior notifications by ports', () => {
-    openSideWindowPriorNotificationList()
+    openSideWindowPriorNotificationListAsSuperUser()
 
     cy.intercept('GET', `${apiPathBase}*&portsFRSM,FRVN*`).as('getPriorNotifications')
 
@@ -230,7 +230,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
   })
 
   it('Should filter prior notifications by type', () => {
-    openSideWindowPriorNotificationList()
+    openSideWindowPriorNotificationListAsSuperUser()
 
     cy.intercept('GET', `${apiPathBase}*priorNotificationTypes=Préavis type A,Préavis type C*`).as(
       'getPriorNotifications'
@@ -242,7 +242,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
   })
 
   it('Should filter prior notifications for vessels with length < or >= 12 meters', () => {
-    openSideWindowPriorNotificationList()
+    openSideWindowPriorNotificationListAsSuperUser()
 
     cy.intercept('GET', `${apiPathBase}*isLessThanTwelveMetersVessel=true*`).as(
       'getPriorNotificationsForVesselsWithLengthLessThanTwelveMeters'

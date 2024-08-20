@@ -10,7 +10,7 @@ export function SideWindowCard({ children, onBackgroundClick, ...nativeProps }: 
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
     <Box {...nativeProps}>
-      <Overlay data-cy="Card-overlay" onClick={onBackgroundClick} />
+      <Overlay data-cy="SideWindowCard-overlay" onClick={onBackgroundClick} />
 
       <Body>{children}</Body>
     </Box>

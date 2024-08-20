@@ -1,10 +1,10 @@
 import { RTK_MAX_RETRIES } from '@api/constants'
 
-import { editSideWindowPriorNotification } from '../logbook_prior_notification_form/utils'
+import { openSideWindowPriorNotificationCardAsUser } from '../logbook_prior_notification_card/utils'
 
-context('Side Window > Manual Prior Notification Form > Error Handling', () => {
+context('Side Window > Manual Prior Notification Card > Error Handling', () => {
   const failedQueryCount = RTK_MAX_RETRIES + 1
-  const url = '/bff/v1/prior_notifications/00000000-0000-4000-0000-000000000002?isManuallyCreated=true&operationDate=*'
+  const url = '/bff/v1/prior_notifications/00000000-0000-4000-0000-000000000001?isManuallyCreated=true&operationDate=*'
 
   it('Should handle fetching error as expected', () => {
     cy.intercept(
@@ -18,7 +18,7 @@ context('Side Window > Manual Prior Notification Form > Error Handling', () => {
       }
     ).as('getPriorNotificationsWithError')
 
-    editSideWindowPriorNotification(`DOS FIN`, '00000000-0000-4000-0000-000000000002')
+    openSideWindowPriorNotificationCardAsUser(`POISSON PAS NET`, '00000000-0000-4000-0000-000000000001')
 
     for (let i = 1; i <= failedQueryCount; i += 1) {
       cy.wait('@getPriorNotificationsWithError')
@@ -30,6 +30,6 @@ context('Side Window > Manual Prior Notification Form > Error Handling', () => {
 
     cy.wait('@getPriorNotification')
 
-    cy.contains(`DOS FIN (CFR115)`).should('be.visible')
+    cy.contains(`POISSON PAS NET (CFR112)`).should('be.visible')
   })
 })

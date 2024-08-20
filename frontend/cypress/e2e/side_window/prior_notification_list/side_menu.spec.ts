@@ -23,7 +23,7 @@ context('Side Window > Prior Notification List > Side Menu', () => {
     cy.get('[data-cy="side-window-sub-menu-ALL-number"] > div').contains('2')
     cy.fill('Rechercher un navire', 'FILET DOUX')
 
-    cy.getTableRowById('00000000-0000-4000-0000-000000000007' as any).clickButton('Éditer le préavis')
+    cy.getTableRowById('00000000-0000-4000-0000-000000000007').clickButton('Éditer le préavis')
     if (document.querySelector('[data-cy="first-loader"]')) {
       cy.getDataCy('first-loader').should('not.be.visible')
     }

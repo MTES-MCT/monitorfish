@@ -106,19 +106,29 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
   })
 
   it('Should download a logbook prior notification as a PDF document', () => {
+    cy.cleanDownloadedFiles()
+
     // Given
     editSideWindowPriorNotification(`L'OM DU POISSON`, 'FAKE_OPERATION_106')
 
-    // Spy on the window.open method
-    cy.window().then(win => {
-      cy.stub(win, 'open').as('windowOpen')
-    })
+    cy.intercept('GET', '/bff/v1/prior_notifications/FAKE_OPERATION_102/pdf').as('downloadPriorNotificationDocument')
 
     // When
     cy.clickButton('Télécharger')
 
-    // Verify that window.open was called with the correct URL
-    cy.get('@windowOpen').should('be.calledWith', '/api/v1/prior_notifications/pdf/FAKE_OPERATION_106', '_blank')
+    // Then
+    cy.wait('@downloadPriorNotificationDocument').then(downloadInterception => {
+      if (!downloadInterception.response) {
+        assert.fail('`downloadInterception.response` is undefined.')
+      }
+
+      expect(downloadInterception.response.headers['content-type']).to.equal('application/pdf')
+      expect(downloadInterception.response.headers['x-generation-date']).to.equal('2024-07-03T14:45:00Z')
+
+      cy.getDownloadedFileContent(content => {
+        content.should('match', /^%PDF-/)
+      })
+    })
   })
 
   it('Should invalidate a logbook prior notification', () => {

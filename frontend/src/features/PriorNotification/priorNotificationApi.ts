@@ -1,4 +1,4 @@
-import { monitorfishApi, monitorfishPublicApi } from '@api/api'
+import { monitorfishApi } from '@api/api'
 import { BackendApi } from '@api/BackendApi.types'
 import { RtkCacheTagType } from '@api/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
@@ -81,6 +81,16 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       query: ({ isManuallyCreated, operationDate, reportId }) =>
         getUrlOrPathWithQueryParams(`/prior_notifications/${reportId}`, { isManuallyCreated, operationDate }),
       transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_DETAIL_ERROR_MESSAGE, response)
+    }),
+
+    getPriorNotificationPdfExistence: builder.query<StatusBody, string>({
+      extraOptions: { maxRetries: 0 },
+      forceRefetch: () => true,
+      query: reportId => ({
+        method: 'GET',
+        url: `/prior_notifications/${reportId}/pdf/exist`
+      }),
+      transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_PDF_ERROR_MESSAGE, response)
     }),
 
     getPriorNotifications: builder.query<
@@ -206,34 +216,9 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
   })
 })
 
-export const priorNotificationPublicApi = monitorfishPublicApi.injectEndpoints({
-  endpoints: builder => ({
-    getPriorNotificationPDF: builder.query<string, string>({
-      extraOptions: { maxRetries: 0 },
-      forceRefetch: () => true,
-      query: reportId => ({
-        method: 'GET',
-        responseHandler: response => response.text(),
-        url: `/v1/prior_notifications/pdf/${reportId}`
-      }),
-      transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_PDF_ERROR_MESSAGE, response)
-    }),
-    getPriorNotificationPDFExistence: builder.query<StatusBody, string>({
-      extraOptions: { maxRetries: 0 },
-      forceRefetch: () => true,
-      query: reportId => ({
-        method: 'GET',
-        url: `/v1/prior_notifications/pdf/${reportId}/exist`
-      }),
-      transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_PDF_ERROR_MESSAGE, response)
-    })
-  })
-})
-
 export const {
+  useGetPriorNotificationPdfExistenceQuery,
   useGetPriorNotificationsQuery,
   useGetPriorNotificationsToVerifyQuery,
   useGetPriorNotificationTypesQuery
 } = priorNotificationApi
-
-export const { useGetPriorNotificationPDFExistenceQuery, useGetPriorNotificationPDFQuery } = priorNotificationPublicApi

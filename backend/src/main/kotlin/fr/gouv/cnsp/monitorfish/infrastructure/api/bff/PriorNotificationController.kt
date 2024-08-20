@@ -14,8 +14,13 @@ import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.websocket.server.PathParam
 import org.springframework.data.domain.Sort
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter.ISO_DATE_TIME
 
 @RestController
 @RequestMapping("/bff/v1/prior_notifications")
@@ -24,6 +29,7 @@ class PriorNotificationController(
     private val computeManualPriorNotification: ComputeManualPriorNotification,
     private val createOrUpdateManualPriorNotification: CreateOrUpdateManualPriorNotification,
     private val getPriorNotification: GetPriorNotification,
+    private val getPriorNotificationPdfDocument: GetPriorNotificationPdfDocument,
     private val getPriorNotifications: GetPriorNotifications,
     private val getNumberToVerify: GetNumberToVerify,
     private val getPriorNotificationTypes: GetPriorNotificationTypes,
@@ -31,6 +37,8 @@ class PriorNotificationController(
     private val verifyAndSendPriorNotification: VerifyAndSendPriorNotification,
     private val invalidatePriorNotification: InvalidatePriorNotification,
 ) {
+    data class Status(val status: String)
+
     @GetMapping("")
     @Operation(summary = "Get all prior notifications")
     fun getAll(
@@ -295,6 +303,41 @@ class PriorNotificationController(
     ): PriorNotificationDetailDataOutput {
         return PriorNotificationDetailDataOutput
             .fromPriorNotification(getPriorNotification.execute(reportId, operationDate, isManuallyCreated))
+    }
+
+    @GetMapping("/{reportId}/pdf")
+    @Operation(summary = "Get the PDF document")
+    fun getPdfDocument(
+        @PathParam("Logbook message `reportId`")
+        @PathVariable(name = "reportId")
+        reportId: String,
+    ): ResponseEntity<ByteArray?> {
+        val pdfDocument = getPriorNotificationPdfDocument.execute(reportId = reportId, isVerifyingExistence = false)
+            ?: return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null)
+
+        val fileName = "preavis_debarquement_${pdfDocument.generationDatetimeUtc.format(ISO_DATE_TIME)}.pdf"
+        val headers = HttpHeaders().apply {
+            contentType = MediaType.APPLICATION_PDF
+            setContentDispositionFormData("attachment", fileName)
+        }
+        headers.add("x-generation-date", pdfDocument.generationDatetimeUtc.format(ISO_DATE_TIME))
+
+        return ResponseEntity(pdfDocument.pdfDocument, headers, HttpStatus.OK)
+    }
+
+    @GetMapping("/{reportId}/pdf/exist")
+    @Operation(summary = "Check the PDF document")
+    fun getPdfDocumentExistence(
+        @PathParam("Logbook message `reportId`")
+        @PathVariable(name = "reportId")
+        reportId: String,
+    ): Status {
+        val pdfDocument = getPriorNotificationPdfDocument.execute(reportId = reportId, isVerifyingExistence = true)
+        if (pdfDocument?.pdfDocument == null) {
+            return Status(HttpStatus.NO_CONTENT.name)
+        }
+
+        return Status(HttpStatus.FOUND.name)
     }
 
     @PostMapping("/{reportId}/verify_and_send")

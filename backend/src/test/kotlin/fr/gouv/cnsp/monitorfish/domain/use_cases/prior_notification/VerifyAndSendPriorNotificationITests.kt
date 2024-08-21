@@ -219,9 +219,8 @@ class VerifyAndSendPriorNotificationITests : AbstractDBTests() {
         // Then
         val afterPnoValue = afterPriorNotification.logbookMessageAndValue.value
         assertThat(afterPriorNotification.reportId).isEqualTo(testCase.reportId)
-        assertThat(afterPriorNotification.isManuallyCreated).isEqualTo(
-            testCase.expectedAfterStateRepresentation[0] == '1',
-        )
+        assertThat(afterPriorNotification.isManuallyCreated)
+            .isEqualTo(testCase.expectedAfterStateRepresentation[0] == '1')
         assertThat(afterPnoValue.isInVerificationScope).isEqualTo(testCase.expectedAfterStateRepresentation[1] == '1')
         assertThat(afterPnoValue.isVerified).isEqualTo(testCase.expectedAfterStateRepresentation[2] == '1')
         assertThat(afterPnoValue.isSent).isEqualTo(testCase.expectedAfterStateRepresentation[3] == '1')

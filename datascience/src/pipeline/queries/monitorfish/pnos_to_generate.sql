@@ -17,7 +17,7 @@ acknowledged_messages AS (
         AND value->>'returnStatus' = '000'
 )
 
-(SELECT
+(SELECT DISTINCT ON (r.report_id) -- In rare cases the same PNO with the same data and the same report_id is sent multiple times in messages with different operation numbers
     r.id,
     r.operation_datetime_utc,
     r.report_id,
@@ -78,7 +78,7 @@ WHERE
         (value->>'isInvalidated') IS NULL
         OR (value->>'isInvalidated')::BOOLEAN IS false
     )
-ORDER BY id)
+ORDER BY report_id)
 
 UNION ALL
 

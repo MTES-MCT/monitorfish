@@ -30,13 +30,15 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.ZonedDateTime
 
-
 @Import(SentryConfig::class)
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = [(PriorNotificationController::class)])
 class PriorNotificationControllerUTests {
     @Autowired
     private lateinit var api: MockMvc
+
+    @Autowired
+    private lateinit var objectMapper: ObjectMapper
 
     @MockBean
     private lateinit var computeManualPriorNotification: ComputeManualPriorNotification
@@ -64,9 +66,6 @@ class PriorNotificationControllerUTests {
 
     @MockBean
     private lateinit var invalidatePriorNotification: InvalidatePriorNotification
-
-    @Autowired
-    private lateinit var objectMapper: ObjectMapper
 
     @Test
     fun `getAll Should get a list of prior notifications`() {

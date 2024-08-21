@@ -1,6 +1,7 @@
 const RETRY_COUNT = 5
 
-export function getRetryableDownloadedFileContent(
+/** @internal */
+function getRetryableDownloadedFileContent(
   callback: (content: Cypress.Chainable<any>) => void,
   leftRetryCount: number
 ) {

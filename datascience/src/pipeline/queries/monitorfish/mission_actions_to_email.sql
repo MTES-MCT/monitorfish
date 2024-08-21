@@ -19,6 +19,7 @@ WITH actions_to_email AS (
     WHERE
         control_datetime_utc >= :min_datetime_utc
         AND control_datetime_utc < :max_datetime_utc
+        AND control_type IN ('SEA_CONTROL', 'LAND_CONTROL', 'AIR_CONTROL', 'AIR_SURVEILLANCE')
 ),
 
 actions_segments AS (

@@ -17,7 +17,8 @@ data class MissionAction(
     val districtCode: String? = null,
     val faoAreas: List<String> = listOf(),
     val actionType: MissionActionType,
-    val actionDatetimeUtc: ZonedDateTime,
+    @Patchable
+    var actionDatetimeUtc: ZonedDateTime,
     @Patchable
     var actionEndDatetimeUtc: ZonedDateTime? = null,
     val emitsVms: ControlCheck? = null,

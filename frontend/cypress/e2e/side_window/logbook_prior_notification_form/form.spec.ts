@@ -125,11 +125,11 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
     // Given
     openSideWindowPriorNotificationListAsSuperUser()
     cy.get('[data-cy="side-window-sub-menu-ALL"]').click()
-    cy.fill('Rechercher un navire', 'ANCRE')
+    cy.fill('Rechercher un navire', 'THON')
 
-    cy.getTableRowById('FAKE_OPERATION_109_COR').find('[title="Préavis invalidé"]').should('not.exist')
+    cy.getTableRowById('FAKE_OPERATION_110').find('[title="Préavis invalidé"]').should('not.exist')
 
-    cy.getTableRowById('FAKE_OPERATION_109_COR').clickButton('Éditer le préavis')
+    cy.getTableRowById('FAKE_OPERATION_110').clickButton('Éditer le préavis')
     if (document.querySelector('[data-cy="first-loader"]')) {
       cy.getDataCy('first-loader').should('not.be.visible')
     }
@@ -144,6 +144,6 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
 
     cy.clickButton('Fermer')
 
-    cy.getTableRowById('FAKE_OPERATION_109_COR').find('[title="Préavis invalidé"]').should('exist')
+    cy.getTableRowById('FAKE_OPERATION_110').find('[title="Préavis invalidé"]').should('exist')
   })
 })

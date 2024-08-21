@@ -1,5 +1,7 @@
 WITH deleted_messages AS (
-    SELECT referenced_report_id
+    SELECT
+        operation_number,
+        referenced_report_id
     FROM logbook_reports
     WHERE
         operation_datetime_utc >= :start_datetime_utc - INTERVAL '4 hours'
@@ -15,9 +17,16 @@ acknowledged_messages AS (
         AND operation_datetime_utc < :end_datetime_utc + INTERVAL '8 hours'
         AND operation_type ='RET'
         AND value->>'returnStatus' = '000'
+),
+
+acknowledged_deleted_messages AS (
+    SELECT referenced_report_id
+    FROM deleted_messages
+    WHERE
+        operation_number IN (SELECT referenced_report_id FROM acknowledged_messages)
 )
 
-(SELECT
+(SELECT DISTINCT ON (r.report_id) -- In rare cases the same PNO with the same data and the same report_id is sent multiple times in messages with different operation numbers
     r.id,
     r.operation_datetime_utc,
     r.report_id,
@@ -65,20 +74,23 @@ WHERE
         (value->>'isBeingSent')::BOOLEAN IS true
         OR report_id NOT IN (SELECT report_id FROM prior_notification_pdf_documents)
     )
-    AND report_id NOT IN (SELECT referenced_report_id FROM deleted_messages)
-    AND (
-        transmission_format = 'FLUX'
-        OR (value->>'isVerified')::BOOLEAN IS true
-        OR (
-            transmission_format = 'ERS'
-            AND report_id IN (SELECT referenced_report_id FROM acknowledged_messages)
+    AND NOT (
+            report_id IN (SELECT referenced_report_id FROM acknowledged_deleted_messages)
+            OR (
+                report_id IN (SELECT referenced_report_id FROM deleted_messages)
+                AND r.flag_state NOT IN ('FRA', 'GUF', 'VEN')
+            )
         )
+    AND (
+        r.flag_state NOT IN ('FRA', 'GUF', 'VEN') -- Flag states for which we receive RET
+        OR report_id IN (SELECT referenced_report_id FROM acknowledged_messages)
+        OR (value->>'isVerified')::BOOLEAN IS true
     )
     AND (
         (value->>'isInvalidated') IS NULL
         OR (value->>'isInvalidated')::BOOLEAN IS false
     )
-ORDER BY id)
+ORDER BY report_id)
 
 UNION ALL
 

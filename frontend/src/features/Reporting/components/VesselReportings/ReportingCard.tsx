@@ -16,15 +16,14 @@ import type { Reporting } from '../../../../domain/types/reporting'
 import type { Promisable } from 'type-fest'
 
 export type ReportingCardProps = {
-  isArchive?: boolean
-  numberOfAlerts?: number
+  isArchived?: boolean
+  numberOfOccurrences?: number
   openConfirmDeletionModalForId: (reportingId: number) => Promisable<void>
-  // TODO Doesn't respect Reporting type from domain. Can it be undefined (wouldn't make sense)?
   reporting: Reporting
 }
 export function ReportingCard({
-  isArchive = false,
-  numberOfAlerts,
+  isArchived = false,
+  numberOfOccurrences,
   openConfirmDeletionModalForId,
   reporting
 }: ReportingCardProps) {
@@ -55,7 +54,7 @@ export function ReportingCard({
           {reporting.type === ReportingType.ALERT ? getAlertNameFromType(reporting.value.type) : reporting.value.title}
         </Title>
         <Date>
-          {numberOfAlerts ? 'Dernière alerte le' : 'Le'}{' '}
+          {numberOfOccurrences ? 'Dernière alerte le' : 'Le'}{' '}
           {getDateTime(
             reporting.type === ReportingType.ALERT ? reporting.validationDate : reporting.creationDate,
             true
@@ -82,9 +81,11 @@ export function ReportingCard({
           </Natinf>
         )}
       </Body>
-      {!isArchive && (
-        <Actions isAlert={!!numberOfAlerts} isInfractionSuspicion={isAnInfractionSuspicion}>
-          {numberOfAlerts && <NumberOfAlerts>{numberOfAlerts}</NumberOfAlerts>}
+      {isArchived ? (
+        <>{numberOfOccurrences && <NumberOfAlerts isArchived>{numberOfOccurrences}</NumberOfAlerts>}</>
+      ) : (
+        <Actions isAlert={!!numberOfOccurrences} isInfractionSuspicion={isAnInfractionSuspicion}>
+          {numberOfOccurrences && <NumberOfAlerts>{numberOfOccurrences}</NumberOfAlerts>}
           <IconButton
             accent={Accent.TERTIARY}
             color={THEME.color.charcoal}
@@ -155,15 +156,20 @@ const Actions = styled.div<{
   margin-left: auto;
 `
 
-const NumberOfAlerts = styled.span`
+const NumberOfAlerts = styled.span<{
+  isArchived?: boolean | undefined
+}>`
+  margin-top: ${p => (p.isArchived ? 8 : 0)}px;
+  margin-right: ${p => (p.isArchived ? '8px' : 'unset')};
+  margin-left: ${p => (p.isArchived ? 'auto' : 'unset')};
   background: ${p => p.theme.color.maximumRed} 0% 0% no-repeat padding-box;
   border-radius: 2px;
   color: ${p => p.theme.color.white};
   display: inline-block;
-  font-weight: 500;
-  height: 17px;
+  font-weight: 700;
+  height: 18px;
   line-height: 16px;
-  padding: 0 5.5px;
+  padding: 0 5.1px;
 `
 
 const Title = styled.div`

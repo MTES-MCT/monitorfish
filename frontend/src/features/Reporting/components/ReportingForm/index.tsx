@@ -152,6 +152,7 @@ export function ReportingForm({
               name="reportingActor"
               onChange={updateActor}
               options={getOptionsFromLabelledEnum(ReportingOriginActorLabel)}
+              value={values.reportingActor}
             />
             {values.reportingActor === ReportingOriginActor.UNIT && (
               <StyledFormikSelect

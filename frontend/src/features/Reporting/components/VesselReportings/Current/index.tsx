@@ -75,7 +75,7 @@ export function Current() {
         return (
           <ReportingCard
             key={lastValidatedAlert.id}
-            numberOfAlerts={alertReportings.length}
+            numberOfOccurrences={alertReportings.length}
             openConfirmDeletionModalForId={setDeletionModalIsOpenForId}
             reporting={lastValidatedAlert}
           />

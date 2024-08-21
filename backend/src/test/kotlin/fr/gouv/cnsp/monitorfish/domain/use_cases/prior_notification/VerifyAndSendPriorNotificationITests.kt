@@ -33,11 +33,19 @@ class VerifyAndSendPriorNotificationITests : AbstractDBTests() {
     @Autowired
     private lateinit var getPriorNotification: GetPriorNotification
 
+    data class BooleanState(
+        val isManualPriorNotification: Boolean,
+        val isInVerificationScope: Boolean,
+        val isVerified: Boolean,
+        val isSent: Boolean,
+        val isBeingSent: Boolean,
+    )
+
     data class TestCase(
         val reportId: String,
-        val beforeStateRepresentation: String,
+        val beforeBooleanState: BooleanState,
         val beforeState: PriorNotificationState,
-        val expectedAfterStateRepresentation: String,
+        val expectedAfterBooleanState: BooleanState,
         val expectedAfterState: PriorNotificationState,
     )
 
@@ -45,149 +53,429 @@ class VerifyAndSendPriorNotificationITests : AbstractDBTests() {
         @JvmStatic
         fun getTestCases(): Stream<TestCase> {
             return Stream.of(
+                // -------------------------------------------------------------
                 // Logbook prior notifications
 
+                // "00000" -> "00101"
                 TestCase(
                     "FAKE_OPERATION_101",
-                    "00000",
+                    BooleanState(
+                        isManualPriorNotification = false,
+                        isInVerificationScope = false,
+                        isVerified = false,
+                        isSent = false,
+                        isBeingSent = false,
+                    ),
                     PriorNotificationState.OUT_OF_VERIFICATION_SCOPE,
-                    "00101",
+                    BooleanState(
+                        isManualPriorNotification = false,
+                        isInVerificationScope = false,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_SEND,
                 ),
+
+                // "00001" -> "00101"
                 TestCase(
                     "FAKE_OPERATION_102",
-                    "00001",
+                    BooleanState(
+                        isManualPriorNotification = false,
+                        isInVerificationScope = false,
+                        isVerified = false,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_AUTO_SEND,
-                    "00101",
+                    BooleanState(
+                        isManualPriorNotification = false,
+                        isInVerificationScope = false,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_SEND,
                 ),
+
+                // "00010" -> "00101"
                 TestCase(
                     "FAKE_OPERATION_103",
-                    "00010",
+                    BooleanState(
+                        isManualPriorNotification = false,
+                        isInVerificationScope = false,
+                        isVerified = false,
+                        isSent = true,
+                        isBeingSent = false,
+                    ),
                     PriorNotificationState.AUTO_SEND_DONE,
-                    "00101",
+                    BooleanState(
+                        isManualPriorNotification = false,
+                        isInVerificationScope = false,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_SEND,
                 ),
+
+                // "00100" -> "00101"
                 TestCase(
                     "FAKE_OPERATION_104",
-                    "00100",
+                    BooleanState(
+                        isManualPriorNotification = false,
+                        isInVerificationScope = false,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = false,
+                    ),
                     PriorNotificationState.FAILED_SEND,
-                    "00101",
+                    BooleanState(
+                        isManualPriorNotification = false,
+                        isInVerificationScope = false,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_SEND,
                 ),
+
+                // "00101" -> "00101"
                 TestCase(
                     "FAKE_OPERATION_105",
-                    "00101",
+                    BooleanState(
+                        isManualPriorNotification = false,
+                        isInVerificationScope = false,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_SEND,
-                    "00101",
+                    BooleanState(
+                        isManualPriorNotification = false,
+                        isInVerificationScope = false,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_SEND,
                 ),
+
+                // "00110" -> "00101"
                 TestCase(
                     "FAKE_OPERATION_106",
-                    "00110",
+                    BooleanState(
+                        isManualPriorNotification = false,
+                        isInVerificationScope = false,
+                        isVerified = true,
+                        isSent = true,
+                        isBeingSent = false,
+                    ),
                     PriorNotificationState.VERIFIED_AND_SENT,
-                    "00101",
+                    BooleanState(
+                        isManualPriorNotification = false,
+                        isInVerificationScope = false,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_SEND,
                 ),
+
+                // "01000" -> "01101"
                 TestCase(
                     "FAKE_OPERATION_107",
-                    "01000",
+                    BooleanState(
+                        isManualPriorNotification = false,
+                        isInVerificationScope = true,
+                        isVerified = false,
+                        isSent = false,
+                        isBeingSent = false,
+                    ),
                     PriorNotificationState.PENDING_VERIFICATION,
-                    "01101",
+                    BooleanState(
+                        isManualPriorNotification = false,
+                        isInVerificationScope = true,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_SEND,
                 ),
+
+                // "01100" -> "01101"
                 TestCase(
                     "FAKE_OPERATION_108",
-                    "01100",
+                    BooleanState(
+                        isManualPriorNotification = false,
+                        isInVerificationScope = true,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = false,
+                    ),
                     PriorNotificationState.FAILED_SEND,
-                    "01101",
+                    BooleanState(
+                        isManualPriorNotification = false,
+                        isInVerificationScope = true,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_SEND,
                 ),
+
+                // "01101" -> "01101"
                 TestCase(
                     "FAKE_OPERATION_109_COR",
-                    "01101",
+                    BooleanState(
+                        isManualPriorNotification = false,
+                        isInVerificationScope = true,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_SEND,
-                    "01101",
+                    BooleanState(
+                        isManualPriorNotification = false,
+                        isInVerificationScope = true,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_SEND,
                 ),
+
+                // "01110" -> "01101"
                 TestCase(
                     "FAKE_OPERATION_110",
-                    "01110",
+                    BooleanState(
+                        isManualPriorNotification = false,
+                        isInVerificationScope = true,
+                        isVerified = true,
+                        isSent = true,
+                        isBeingSent = false,
+                    ),
                     PriorNotificationState.VERIFIED_AND_SENT,
-                    "01101",
+                    BooleanState(
+                        isManualPriorNotification = false,
+                        isInVerificationScope = true,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_SEND,
                 ),
 
+                // -------------------------------------------------------------
                 // Manual prior notifications
 
+                // "10000" -> "10101"
                 TestCase(
                     "00000000-0000-4000-0000-000000000001",
-                    "10000",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = false,
+                        isVerified = false,
+                        isSent = false,
+                        isBeingSent = false,
+                    ),
                     PriorNotificationState.OUT_OF_VERIFICATION_SCOPE,
-                    "10101",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = false,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_SEND,
                 ),
+
+                // "10001" -> "10101"
                 TestCase(
                     "00000000-0000-4000-0000-000000000002",
-                    "10001",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = false,
+                        isVerified = false,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_AUTO_SEND,
-                    "10101",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = false,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_SEND,
                 ),
+
+                // "10010" -> "10101"
                 TestCase(
                     "00000000-0000-4000-0000-000000000003",
-                    "10010",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = false,
+                        isVerified = false,
+                        isSent = true,
+                        isBeingSent = false,
+                    ),
                     PriorNotificationState.AUTO_SEND_DONE,
-                    "10101",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = false,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_SEND,
                 ),
+
+                // "10100" -> "10101"
                 TestCase(
                     "00000000-0000-4000-0000-000000000004",
-                    "10100",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = false,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = false,
+                    ),
                     PriorNotificationState.FAILED_SEND,
-                    "10101",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = false,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_SEND,
                 ),
+
+                // "10101" -> "10101"
                 TestCase(
                     "00000000-0000-4000-0000-000000000005",
-                    "10101",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = false,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_SEND,
-                    "10101",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = false,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_SEND,
                 ),
+
+                // "10110" -> "10101"
                 TestCase(
                     "00000000-0000-4000-0000-000000000006",
-                    "10110",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = false,
+                        isVerified = true,
+                        isSent = true,
+                        isBeingSent = false,
+                    ),
                     PriorNotificationState.VERIFIED_AND_SENT,
-                    "10101",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = false,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_SEND,
                 ),
+
+                // "11000" -> "11101"
                 TestCase(
                     "00000000-0000-4000-0000-000000000007",
-                    "11000",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = true,
+                        isVerified = false,
+                        isSent = false,
+                        isBeingSent = false,
+                    ),
                     PriorNotificationState.PENDING_VERIFICATION,
-                    "11101",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = true,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_SEND,
                 ),
+
+                // "11100" -> "11101"
                 TestCase(
                     "00000000-0000-4000-0000-000000000008",
-                    "11100",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = true,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = false,
+                    ),
                     PriorNotificationState.FAILED_SEND,
-                    "11101",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = true,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_SEND,
                 ),
+
+                // "11101" -> "11101"
                 TestCase(
                     "00000000-0000-4000-0000-000000000009",
-                    "11101",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = true,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_SEND,
-                    "11101",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = true,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_SEND,
                 ),
+
+                // "11110" -> "11101"
                 TestCase(
                     "00000000-0000-4000-0000-000000000010",
-                    "11110",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = true,
+                        isVerified = true,
+                        isSent = true,
+                        isBeingSent = false,
+                    ),
                     PriorNotificationState.VERIFIED_AND_SENT,
-                    "11101",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = true,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_SEND,
                 ),
             )
@@ -201,16 +489,16 @@ class VerifyAndSendPriorNotificationITests : AbstractDBTests() {
         // Given
         val reportId = testCase.reportId
         val operationDate = CustomZonedDateTime.now().toZonedDateTime()
-        val isManuallyCreated = testCase.beforeStateRepresentation[0] == '1'
+        val isManuallyCreated = testCase.beforeBooleanState.isManualPriorNotification
 
         // Before
         val beforePriorNotification = getPriorNotification.execute(reportId, operationDate, isManuallyCreated)
 
         val beforePnoValue = beforePriorNotification.logbookMessageAndValue.value
-        assertThat(beforePnoValue.isInVerificationScope).isEqualTo(testCase.beforeStateRepresentation[1] == '1')
-        assertThat(beforePnoValue.isVerified).isEqualTo(testCase.beforeStateRepresentation[2] == '1')
-        assertThat(beforePnoValue.isSent).isEqualTo(testCase.beforeStateRepresentation[3] == '1')
-        assertThat(beforePnoValue.isBeingSent).isEqualTo(testCase.beforeStateRepresentation[4] == '1')
+        assertThat(beforePnoValue.isInVerificationScope).isEqualTo(testCase.beforeBooleanState.isInVerificationScope)
+        assertThat(beforePnoValue.isVerified).isEqualTo(testCase.beforeBooleanState.isVerified)
+        assertThat(beforePnoValue.isSent).isEqualTo(testCase.beforeBooleanState.isSent)
+        assertThat(beforePnoValue.isBeingSent).isEqualTo(testCase.beforeBooleanState.isBeingSent)
         assertThat(beforePriorNotification.state).isEqualTo(testCase.beforeState)
 
         // When
@@ -220,11 +508,11 @@ class VerifyAndSendPriorNotificationITests : AbstractDBTests() {
         val afterPnoValue = afterPriorNotification.logbookMessageAndValue.value
         assertThat(afterPriorNotification.reportId).isEqualTo(testCase.reportId)
         assertThat(afterPriorNotification.isManuallyCreated)
-            .isEqualTo(testCase.expectedAfterStateRepresentation[0] == '1')
-        assertThat(afterPnoValue.isInVerificationScope).isEqualTo(testCase.expectedAfterStateRepresentation[1] == '1')
-        assertThat(afterPnoValue.isVerified).isEqualTo(testCase.expectedAfterStateRepresentation[2] == '1')
-        assertThat(afterPnoValue.isSent).isEqualTo(testCase.expectedAfterStateRepresentation[3] == '1')
-        assertThat(afterPnoValue.isBeingSent).isEqualTo(testCase.expectedAfterStateRepresentation[4] == '1')
+            .isEqualTo(testCase.expectedAfterBooleanState.isManualPriorNotification)
+        assertThat(afterPnoValue.isInVerificationScope).isEqualTo(testCase.expectedAfterBooleanState.isInVerificationScope)
+        assertThat(afterPnoValue.isVerified).isEqualTo(testCase.expectedAfterBooleanState.isVerified)
+        assertThat(afterPnoValue.isSent).isEqualTo(testCase.expectedAfterBooleanState.isSent)
+        assertThat(afterPnoValue.isBeingSent).isEqualTo(testCase.expectedAfterBooleanState.isBeingSent)
         assertThat(afterPriorNotification.state).isEqualTo(testCase.expectedAfterState)
     }
 }

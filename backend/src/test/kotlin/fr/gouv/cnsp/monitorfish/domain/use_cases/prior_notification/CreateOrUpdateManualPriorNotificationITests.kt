@@ -58,9 +58,17 @@ class CreateOrUpdateManualPriorNotificationITests : AbstractDBTests() {
     @Autowired
     private lateinit var getPriorNotification: GetPriorNotification
 
+    data class BooleanState(
+        val isManualPriorNotification: Boolean,
+        val isInVerificationScope: Boolean,
+        val isVerified: Boolean,
+        val isSent: Boolean,
+        val isBeingSent: Boolean,
+    )
+
     data class TestCase(
         val reportId: String,
-        val beforeStateRepresentation: String,
+        val beforeBooleanState: BooleanState,
         val beforeState: PriorNotificationState,
     )
 
@@ -71,54 +79,124 @@ class CreateOrUpdateManualPriorNotificationITests : AbstractDBTests() {
             // we still need to test these case here. The user may indeed be able to call this action
             // if its prior notification data is outdated.
             return Stream.of(
+                // "10000" -> "10000"
                 TestCase(
                     "00000000-0000-4000-0000-000000000001",
-                    "10000",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = false,
+                        isVerified = false,
+                        isSent = false,
+                        isBeingSent = false,
+                    ),
                     PriorNotificationState.OUT_OF_VERIFICATION_SCOPE,
                 ),
+                // "10001" -> "10000"
                 TestCase(
                     "00000000-0000-4000-0000-000000000002",
-                    "10001",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = false,
+                        isVerified = false,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_AUTO_SEND,
                 ),
+                // "10010" -> "10000"
                 TestCase(
                     "00000000-0000-4000-0000-000000000003",
-                    "10010",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = false,
+                        isVerified = false,
+                        isSent = true,
+                        isBeingSent = false,
+                    ),
                     PriorNotificationState.AUTO_SEND_DONE,
                 ),
+                // "10100" -> "10000"
                 TestCase(
                     "00000000-0000-4000-0000-000000000004",
-                    "10100",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = false,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = false,
+                    ),
                     PriorNotificationState.FAILED_SEND,
                 ),
+                // "10101" -> "10000"
                 TestCase(
                     "00000000-0000-4000-0000-000000000005",
-                    "10101",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = false,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_SEND,
                 ),
+                // "10110" -> "10000"
                 TestCase(
                     "00000000-0000-4000-0000-000000000006",
-                    "10110",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = false,
+                        isVerified = true,
+                        isSent = true,
+                        isBeingSent = false,
+                    ),
                     PriorNotificationState.VERIFIED_AND_SENT,
                 ),
+                // "11000" -> "10000"
                 TestCase(
                     "00000000-0000-4000-0000-000000000007",
-                    "11000",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = true,
+                        isVerified = false,
+                        isSent = false,
+                        isBeingSent = false,
+                    ),
                     PriorNotificationState.PENDING_VERIFICATION,
                 ),
+                // "11100" -> "10000"
                 TestCase(
                     "00000000-0000-4000-0000-000000000008",
-                    "11100",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = true,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = false,
+                    ),
                     PriorNotificationState.FAILED_SEND,
                 ),
+                // "11101" -> "10000"
                 TestCase(
                     "00000000-0000-4000-0000-000000000009",
-                    "11101",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = true,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_SEND,
                 ),
+                // "11110" -> "10000"
                 TestCase(
                     "00000000-0000-4000-0000-000000000010",
-                    "11110",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = true,
+                        isVerified = true,
+                        isSent = true,
+                        isBeingSent = false,
+                    ),
                     PriorNotificationState.VERIFIED_AND_SENT,
                 ),
             )
@@ -130,54 +208,124 @@ class CreateOrUpdateManualPriorNotificationITests : AbstractDBTests() {
             // we still need to test these case here. The user may indeed be able to call this action
             // if its prior notification data is outdated.
             return Stream.of(
+                // "10000" -> "11000"
                 TestCase(
                     "00000000-0000-4000-0000-000000000001",
-                    "10000",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = false,
+                        isVerified = false,
+                        isSent = false,
+                        isBeingSent = false,
+                    ),
                     PriorNotificationState.OUT_OF_VERIFICATION_SCOPE,
                 ),
+                // "10001" -> "11000"
                 TestCase(
                     "00000000-0000-4000-0000-000000000002",
-                    "10001",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = false,
+                        isVerified = false,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_AUTO_SEND,
                 ),
+                // "10010" -> "11000"
                 TestCase(
                     "00000000-0000-4000-0000-000000000003",
-                    "10010",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = false,
+                        isVerified = false,
+                        isSent = true,
+                        isBeingSent = false,
+                    ),
                     PriorNotificationState.AUTO_SEND_DONE,
                 ),
+                // "10100" -> "11000"
                 TestCase(
                     "00000000-0000-4000-0000-000000000004",
-                    "10100",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = false,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = false,
+                    ),
                     PriorNotificationState.FAILED_SEND,
                 ),
+                // "10101" -> "11000"
                 TestCase(
                     "00000000-0000-4000-0000-000000000005",
-                    "10101",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = false,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_SEND,
                 ),
+                // "10110" -> "11000"
                 TestCase(
                     "00000000-0000-4000-0000-000000000006",
-                    "10110",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = false,
+                        isVerified = true,
+                        isSent = true,
+                        isBeingSent = false,
+                    ),
                     PriorNotificationState.VERIFIED_AND_SENT,
                 ),
+                // "11000" -> "11000"
                 TestCase(
                     "00000000-0000-4000-0000-000000000007",
-                    "11000",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = true,
+                        isVerified = false,
+                        isSent = false,
+                        isBeingSent = false,
+                    ),
                     PriorNotificationState.PENDING_VERIFICATION,
                 ),
+                // "11100" -> "11000"
                 TestCase(
                     "00000000-0000-4000-0000-000000000008",
-                    "11100",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = true,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = false,
+                    ),
                     PriorNotificationState.FAILED_SEND,
                 ),
+                // "11101" -> "11000"
                 TestCase(
                     "00000000-0000-4000-0000-000000000009",
-                    "11101",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = true,
+                        isVerified = true,
+                        isSent = false,
+                        isBeingSent = true,
+                    ),
                     PriorNotificationState.PENDING_SEND,
                 ),
+                // "11110" -> "11000"
                 TestCase(
                     "00000000-0000-4000-0000-000000000010",
-                    "11110",
+                    BooleanState(
+                        isManualPriorNotification = true,
+                        isInVerificationScope = true,
+                        isVerified = true,
+                        isSent = true,
+                        isBeingSent = false,
+                    ),
                     PriorNotificationState.VERIFIED_AND_SENT,
                 ),
             )
@@ -232,7 +380,6 @@ class CreateOrUpdateManualPriorNotificationITests : AbstractDBTests() {
         assertThat(afterPnoValue.isBeingSent).isEqualTo(false)
         assertThat(afterPriorNotification.state).isEqualTo(PriorNotificationState.OUT_OF_VERIFICATION_SCOPE)
     }
-
 
     @ParameterizedTest
     @MethodSource("getInVerificationScopeTestCases")

@@ -1,4 +1,3 @@
-import { COLORS } from '@constants/constants'
 import { useGetControlUnitsQuery } from '@features/ControlUnit/controlUnitApi'
 import { CreateOrEditReportingSchema } from '@features/Reporting/components/ReportingForm/schemas'
 import {
@@ -8,16 +7,24 @@ import {
 } from '@features/Reporting/components/ReportingForm/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, Fieldset, FormikSelect, FormikTextarea, FormikTextInput, Legend } from '@mtes-mct/monitor-ui'
+import {
+  Accent,
+  Button,
+  FormikMultiRadio,
+  FormikSelect,
+  FormikTextarea,
+  FormikTextInput,
+  getOptionsFromLabelledEnum,
+  MultiRadio
+} from '@mtes-mct/monitor-ui'
 import { Form, Formik } from 'formik'
 import { useCallback, useMemo } from 'react'
-import { Radio, RadioGroup } from 'rsuite'
 import styled from 'styled-components'
 
 import { getOnlyVesselIdentityProperties } from '../../../../domain/entities/vessel/vessel'
 import { ReportingType } from '../../../../domain/types/reporting'
 import { sortArrayByColumn } from '../../../VesselList/tableSort'
-import { ReportingOriginActor, ReportingTypeCharacteristics } from '../../types'
+import { ReportingOriginActor, ReportingOriginActorLabel, ReportingTypeCharacteristics } from '../../types'
 import { addReporting } from '../../useCases/addReporting'
 import { updateReporting } from '../../useCases/updateReporting'
 import { mapControlUnitsToUniqueSortedIdsAsOptions } from '../VesselReportings/Current/utils'
@@ -27,6 +34,7 @@ import type { EditableReporting, EditedReporting } from '../../../../domain/type
 import type { Option } from '@mtes-mct/monitor-ui'
 
 type ReportingFormProps = {
+  className?: string | undefined
   closeForm: () => void
   editedReporting: EditableReporting | undefined
   hasWhiteBackground: boolean
@@ -34,6 +42,7 @@ type ReportingFormProps = {
   selectedVesselIdentity: VesselIdentity
 }
 export function ReportingForm({
+  className,
   closeForm,
   editedReporting,
   hasWhiteBackground,
@@ -107,7 +116,7 @@ export function ReportingForm({
 
   return (
     <Formik
-      initialValues={getFormFields(editedReporting?.value)}
+      initialValues={getFormFields(editedReporting?.value, editedReporting?.type)}
       onSubmit={createOrEditReporting}
       validationSchema={CreateOrEditReportingSchema}
     >
@@ -115,117 +124,100 @@ export function ReportingForm({
         const updateActor = updateReportingActor(setFieldValue)
 
         return (
-          <>
-            <StyledForm $hasWhiteBackground={hasWhiteBackground}>
-              <Fieldset className="Field-MultiRadio">
-                <Legend>Type</Legend>
-                <RadioGroup
-                  appearance="picker"
-                  defaultValue={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
-                  id="type"
-                  inline
-                  onChange={value => setFieldValue('type', value as ReportingType)}
-                  value={values.type}
-                >
-                  <Radio
-                    key={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
-                    data-cy="new-reporting-select-infraction-reporting-type"
-                    value={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
-                  >
-                    {ReportingTypeCharacteristics.INFRACTION_SUSPICION.inputName}
-                  </Radio>
-                  <Radio
-                    key={ReportingTypeCharacteristics.OBSERVATION.code}
-                    data-cy="new-reporting-select-observation-reporting-type"
-                    value={ReportingTypeCharacteristics.OBSERVATION.code}
-                  >
-                    {ReportingTypeCharacteristics.OBSERVATION.inputName}
-                  </Radio>
-                </RadioGroup>
-              </Fieldset>
-              <Fieldset className="Field-MultiRadio">
-                <Legend>Origine</Legend>
-                <RadioGroup
-                  appearance="picker"
-                  defaultValue={ReportingOriginActor.OPS.code}
-                  id="reportingActor"
-                  inline
-                  onChange={value => updateActor(value)}
-                  value={values.reportingActor ?? ''}
-                >
-                  {Object.entries(ReportingOriginActor).map(([key, val]) => (
-                    <Radio key={key} data-cy={`new-reporting-reporting-actor-${key}`} value={key}>
-                      {val.name}
-                    </Radio>
-                  ))}
-                </RadioGroup>
-              </Fieldset>
-              {values.reportingActor === ReportingOriginActor.UNIT.code && (
-                <StyledFormikSelect
-                  isLight={!hasWhiteBackground}
-                  label="Choisir l'unité"
-                  name="controlUnitId"
-                  options={controlUnitsAsOptions}
-                  searchable
-                />
-              )}
-              {(values.reportingActor === ReportingOriginActor.UNIT.code ||
-                values.reportingActor === ReportingOriginActor.DML.code ||
-                values.reportingActor === ReportingOriginActor.DIRM.code ||
-                values.reportingActor === ReportingOriginActor.OTHER.code) && (
-                <StyledFormikTextInput
-                  isLight={!hasWhiteBackground}
-                  label="Nom et contact (numéro, mail…) de l’émetteur"
-                  name="authorContact"
-                  placeholder="Ex: Yannick Attal (06 24 25 01 91)"
-                />
-              )}
+          <StyledForm
+            $hasWhiteBackground={hasWhiteBackground}
+            $isInfractionSuspicion={values.type === ReportingType.INFRACTION_SUSPICION}
+            className={className}
+          >
+            <FormikMultiRadio
+              isInline
+              isLight={!hasWhiteBackground}
+              label="Type de signalement"
+              name="type"
+              options={[
+                {
+                  label: ReportingTypeCharacteristics.INFRACTION_SUSPICION.inputName,
+                  value: ReportingTypeCharacteristics.INFRACTION_SUSPICION.code
+                },
+                {
+                  label: ReportingTypeCharacteristics.OBSERVATION.inputName,
+                  value: ReportingTypeCharacteristics.OBSERVATION.code
+                }
+              ]}
+            />
+            <MultiRadio
+              isInline
+              isLight={!hasWhiteBackground}
+              label="Origine"
+              name="reportingActor"
+              onChange={updateActor}
+              options={getOptionsFromLabelledEnum(ReportingOriginActorLabel)}
+            />
+            {values.reportingActor === ReportingOriginActor.UNIT && (
+              <StyledFormikSelect
+                isLight={!hasWhiteBackground}
+                label="Choisir l'unité"
+                name="controlUnitId"
+                options={controlUnitsAsOptions}
+                searchable
+              />
+            )}
+            {(values.reportingActor === ReportingOriginActor.UNIT ||
+              values.reportingActor === ReportingOriginActor.DML ||
+              values.reportingActor === ReportingOriginActor.DIRM ||
+              values.reportingActor === ReportingOriginActor.OTHER) && (
               <StyledFormikTextInput
                 isLight={!hasWhiteBackground}
-                label="Titre"
-                name="title"
-                placeholder={
-                  values.type === ReportingTypeCharacteristics.OBSERVATION.code
-                    ? 'Ex: Dérogation temporaire licence'
-                    : 'Ex: Infraction maille cul de chalut'
-                }
+                label="Nom et contact (numéro, mail…) de l’émetteur"
+                name="authorContact"
+                placeholder="Ex: Yannick Attal (06 24 25 01 91)"
               />
-              <StyledFormikTextarea
+            )}
+            <StyledFormikTextInput
+              isLight={!hasWhiteBackground}
+              label="Titre"
+              name="title"
+              placeholder={
+                values.type === ReportingTypeCharacteristics.OBSERVATION.code
+                  ? 'Ex: Dérogation temporaire licence'
+                  : 'Ex: Infraction maille cul de chalut'
+              }
+            />
+            <StyledFormikTextarea
+              isLight={!hasWhiteBackground}
+              label="Description"
+              name="description"
+              placeholder={
+                values.type === ReportingTypeCharacteristics.OBSERVATION.code
+                  ? "Ex: Licence en cours de renouvellement, dérogation accordée par la DML jusqu'au 01/08/2022."
+                  : 'Ex: Infraction constatée sur la taille de la maille en cul de chalut'
+              }
+            />
+            {values.type === ReportingTypeCharacteristics.INFRACTION_SUSPICION.code && (
+              <StyledFormikSelect
                 isLight={!hasWhiteBackground}
-                label="Description"
-                name="description"
-                placeholder={
-                  values.type === ReportingTypeCharacteristics.OBSERVATION.code
-                    ? "Ex: Licence en cours de renouvellement, dérogation accordée par la DML jusqu'au 01/08/2022."
-                    : 'Ex: Infraction constatée sur la taille de la maille en cul de chalut'
-                }
+                label="Natinf"
+                name="natinfCode"
+                options={infractionsAsOptions}
+                placement={!isFromSideWindow ? 'topStart' : undefined}
+                searchable
+                // @ts-ignore
+                title={infractions?.find(infraction => infraction.natinfCode === values.natinfCode)?.infraction}
               />
-              {values.type === ReportingTypeCharacteristics.INFRACTION_SUSPICION.code && (
-                <StyledFormikSelect
-                  isLight={!hasWhiteBackground}
-                  label="Natinf"
-                  name="natinfCode"
-                  options={infractionsAsOptions}
-                  placement={!isFromSideWindow ? 'topStart' : undefined}
-                  searchable
-                  // @ts-ignore
-                  title={infractions?.find(infraction => infraction.natinfCode === values.natinfCode)?.infraction}
-                />
-              )}
-              <StyledFormikTextInput
-                isLight={!hasWhiteBackground}
-                label="Saisi par"
-                name="authorTrigram"
-                placeholder="Ex: LTH"
-              />
-              <ValidateButton accent={Accent.PRIMARY} type="submit">
-                Valider
-              </ValidateButton>
-              <CancelButton accent={Accent.SECONDARY} onClick={closeForm}>
-                Annuler
-              </CancelButton>
-            </StyledForm>
-          </>
+            )}
+            <StyledFormikTextInput
+              isLight={!hasWhiteBackground}
+              label="Saisi par"
+              name="authorTrigram"
+              placeholder="Ex: LTH"
+            />
+            <ValidateButton accent={Accent.PRIMARY} type="submit">
+              Valider
+            </ValidateButton>
+            <CancelButton accent={Accent.SECONDARY} onClick={closeForm}>
+              Annuler
+            </CancelButton>
+          </StyledForm>
         )
       }}
     </Formik>
@@ -233,15 +225,15 @@ export function ReportingForm({
 }
 
 const StyledFormikSelect = styled(FormikSelect)`
-  width: 410px;
+  width: 416px;
 `
 
 const StyledFormikTextInput = styled(FormikTextInput)`
-  width: 410px;
+  width: 416px;
 `
 
 const StyledFormikTextarea = styled(FormikTextarea)`
-  width: 410px;
+  width: 416px;
 `
 
 const ValidateButton = styled(Button)`
@@ -254,21 +246,29 @@ const CancelButton = styled(Button)`
 
 const StyledForm = styled(Form)<{
   $hasWhiteBackground: boolean
+  $isInfractionSuspicion: boolean
 }>`
+  background: ${p => {
+    if (p.$hasWhiteBackground) {
+      return 'unset'
+    }
+
+    return p.$isInfractionSuspicion ? p.theme.color.maximumRed15 : p.theme.color.gainsboro
+  }};
+
   * {
     box-sizing: border-box !important;
   }
 
   > .Element-Field,
-  > .Element-Fieldset {
-    margin-top: 12px;
+  > .Element-Fieldset:not(:first-child) {
+    margin-top: 16px;
   }
 
-  margin: 0px 16px 16px 16px;
-
-  .rs-radio-group {
-    margin-top: 1px;
-    margin-bottom: 5px;
-    background: ${p => (p.$hasWhiteBackground ? COLORS.gainsboro : COLORS.white)} !important;
+  > .Field-MultiRadio > legend {
+    margin-bottom: 8px;
   }
+
+  padding-right: 16px;
+  padding-left: 16px;
 `

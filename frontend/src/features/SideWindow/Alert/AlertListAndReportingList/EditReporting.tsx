@@ -46,17 +46,15 @@ export function EditReporting() {
         </Row>
       </Header>
       <Line />
-      <ReportingFormWrapper>
-        {editedReportingInSideWindow && (
-          <ReportingForm
-            closeForm={closeForm}
-            editedReporting={editedReportingInSideWindow}
-            hasWhiteBackground
-            isFromSideWindow
-            selectedVesselIdentity={getOnlyVesselIdentityProperties(editedReportingInSideWindow)}
-          />
-        )}
-      </ReportingFormWrapper>
+      {editedReportingInSideWindow && (
+        <StyledReportingForm
+          closeForm={closeForm}
+          editedReporting={editedReportingInSideWindow}
+          hasWhiteBackground
+          isFromSideWindow
+          selectedVesselIdentity={getOnlyVesselIdentityProperties(editedReportingInSideWindow)}
+        />
+      )}
     </EditReportingWrapper>
   )
 }
@@ -75,8 +73,8 @@ const EditReportingWrapper = styled.div<{
   z-index: 999;
 `
 
-const ReportingFormWrapper = styled.div`
-  padding: 10px 25px 20px 25px;
+const StyledReportingForm = styled(ReportingForm)`
+  margin: 20px 25px 20px 25px;
 `
 
 const Line = styled.div`

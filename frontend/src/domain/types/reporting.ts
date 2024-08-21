@@ -82,7 +82,7 @@ export type InfractionSuspicion = {
   description: string | undefined
   dml: string
   natinfCode: number
-  reportingActor: keyof typeof ReportingOriginActor
+  reportingActor: ReportingOriginActor
   seaFront: Seafront
   title: string
   type: ReportingType.INFRACTION_SUSPICION
@@ -94,7 +94,7 @@ export type Observation = {
   controlUnit: LegacyControlUnit.LegacyControlUnit | undefined
   controlUnitId: number | undefined
   description: string | undefined
-  reportingActor: keyof typeof ReportingOriginActor
+  reportingActor: ReportingOriginActor
   title: string
   type: ReportingType.OBSERVATION
 }

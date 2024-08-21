@@ -17,16 +17,16 @@ export const CreateOrEditReportingSchema = object({
   controlUnitId: string().test({
     message: 'Veuillez renseigner l&apos;unité',
     test: (controlUnitId, context) =>
-      context.parent.reportingActor === ReportingOriginActor.UNIT.code ? !!controlUnitId : true
+      context.parent.reportingActor === ReportingOriginActor.UNIT ? !!controlUnitId : true
   }),
   authorContact: string().test({
     message: 'Veuillez renseigner le contact',
     test: (authorContact, context) => {
       const { reportingActor } = context.parent
       if (
-        reportingActor === ReportingOriginActor.DML.code ||
-        reportingActor === ReportingOriginActor.DIRM.code ||
-        reportingActor === ReportingOriginActor.OTHER.code
+        reportingActor === ReportingOriginActor.DML ||
+        reportingActor === ReportingOriginActor.DIRM ||
+        reportingActor === ReportingOriginActor.OTHER
       ) {
         return !!authorContact
       }

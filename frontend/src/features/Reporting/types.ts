@@ -3,7 +3,7 @@ import { ReportingType } from '../../domain/types/reporting'
 type ReportingTypeCharacteristic = {
   // TODO It should be useless now that types are discriminated.
   code: ReportingType
-  inputName: string | null
+  inputName: string
   // TODO This should be named differently to avoid confusion with `ReportingType.INFRACTION_SUSPICION` type.
   isInfractionSuspicion: boolean
   name: string
@@ -12,7 +12,7 @@ type ReportingTypeCharacteristic = {
 export const ReportingTypeCharacteristics: Record<ReportingType, ReportingTypeCharacteristic> = {
   ALERT: {
     code: ReportingType.ALERT,
-    inputName: null,
+    inputName: '',
     isInfractionSuspicion: true,
     name: 'ALERTE'
   },
@@ -34,30 +34,21 @@ export const ReportingTypeCharacteristics: Record<ReportingType, ReportingTypeCh
  * We keep this order as it define the form option inputs order
  */
 /* eslint-disable sort-keys-fix/sort-keys-fix */
-export const ReportingOriginActor = {
-  OPS: {
-    code: 'OPS',
-    name: 'OPS'
-  },
-  SIP: {
-    code: 'SIP',
-    name: 'SIP'
-  },
-  UNIT: {
-    code: 'UNIT',
-    name: 'Unité'
-  },
-  DML: {
-    code: 'DML',
-    name: 'DML'
-  },
-  DIRM: {
-    code: 'DIRM',
-    name: 'DIRM'
-  },
-  OTHER: {
-    code: 'OTHER',
-    name: 'Autre'
-  }
+export enum ReportingOriginActor {
+  DIRM = 'DIRM',
+  DML = 'DML',
+  OPS = 'OPS',
+  OTHER = 'OTHER',
+  SIP = 'SIP',
+  UNIT = 'UNIT'
+}
+
+export const ReportingOriginActorLabel: Record<ReportingOriginActor, string> = {
+  OPS: 'OPS',
+  SIP: 'SIP',
+  UNIT: 'Unité',
+  DML: 'DML',
+  DIRM: 'DIRM',
+  OTHER: 'Autre'
 }
 /* eslint-enable sort-keys-fix/sort-keys-fix */

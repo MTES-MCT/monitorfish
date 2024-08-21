@@ -1,14 +1,14 @@
-import { ReportingOriginActor } from '@features/Reporting/types'
+import { ReportingOriginActor, ReportingOriginActorLabel } from '@features/Reporting/types'
 
 import type { LegacyControlUnit } from '../../../../domain/types/legacyControlUnit'
 
-export const getReportingActor = (
-  reportingActor: keyof typeof ReportingOriginActor,
+export const getReportingActorLabel = (
+  reportingActor: ReportingOriginActor,
   unit: LegacyControlUnit.LegacyControlUnit | undefined
 ) => {
-  if (reportingActor === ReportingOriginActor.UNIT.code) {
+  if (reportingActor === ReportingOriginActor.UNIT) {
     return unit?.name ?? 'Unité inconnue'
   }
 
-  return ReportingOriginActor[reportingActor].name
+  return ReportingOriginActorLabel[reportingActor]
 }

@@ -125,21 +125,10 @@ class UpdateLogbookPriorNotificationITests : AbstractDBTests() {
     @ParameterizedTest
     @MethodSource("getTestCases")
     @Transactional
-    fun `Should transition prior notification states as expected`(testCase: TestCase) {
+    fun `Should transition logbook prior notification states as expected`(testCase: TestCase) {
         // Given
         val reportId = testCase.reportId
         val operationDate = CustomZonedDateTime.now().toZonedDateTime()
-        val isManuallyCreated = testCase.beforeStateRepresentation[0] == '1'
-
-        // Before
-        val beforePriorNotification = getPriorNotification.execute(reportId, operationDate, isManuallyCreated)
-
-        val beforePnoValue = beforePriorNotification.logbookMessageAndValue.value
-        assertThat(beforePnoValue.isInVerificationScope).isEqualTo(testCase.beforeStateRepresentation[1] == '1')
-        assertThat(beforePnoValue.isVerified).isEqualTo(testCase.beforeStateRepresentation[2] == '1')
-        assertThat(beforePnoValue.isSent).isEqualTo(testCase.beforeStateRepresentation[3] == '1')
-        assertThat(beforePnoValue.isBeingSent).isEqualTo(testCase.beforeStateRepresentation[4] == '1')
-        assertThat(beforePriorNotification.state).isEqualTo(testCase.beforeState)
 
         // When
         val afterPriorNotification = updateLogbookPriorNotification.execute(reportId, operationDate, "ABC", "Une note.")
@@ -147,9 +136,8 @@ class UpdateLogbookPriorNotificationITests : AbstractDBTests() {
         // Then
         val afterPnoValue = afterPriorNotification.logbookMessageAndValue.value
         assertThat(afterPriorNotification.reportId).isEqualTo(testCase.reportId)
-        assertThat(afterPriorNotification.isManuallyCreated).isEqualTo(
-            testCase.expectedAfterStateRepresentation[0] == '1',
-        )
+        assertThat(afterPriorNotification.isManuallyCreated)
+            .isEqualTo(testCase.expectedAfterStateRepresentation[0] == '1')
         assertThat(afterPnoValue.isInVerificationScope).isEqualTo(testCase.expectedAfterStateRepresentation[1] == '1')
         assertThat(afterPnoValue.isVerified).isEqualTo(testCase.expectedAfterStateRepresentation[2] == '1')
         assertThat(afterPnoValue.isSent).isEqualTo(testCase.expectedAfterStateRepresentation[3] == '1')

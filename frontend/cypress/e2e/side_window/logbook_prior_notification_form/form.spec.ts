@@ -8,7 +8,7 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
   it('Should update a logbook prior notification', () => {
     // Reset
     const operationDate = dayjs().subtract(6, 'hours').toISOString()
-    cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_114?operationDate=${operationDate}`, {
+    cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_115?operationDate=${operationDate}`, {
       body: {
         authorTrigram: null,
         note: null
@@ -16,9 +16,9 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
     })
 
     // Given
-    editSideWindowPriorNotification(`MER À BOIRE`, 'FAKE_OPERATION_114')
+    editSideWindowPriorNotification(`MER À BOIRE`, 'FAKE_OPERATION_115')
 
-    cy.intercept('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_114?operationDate=*`).as(
+    cy.intercept('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_115?operationDate=*`).as(
       'updateLogbookPriorNotification'
     )
 
@@ -35,13 +35,13 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
     cy.get('.Element-Button').contains('Télécharger').parent().should('be.disabled')
 
     // The note is saved
-    editSideWindowPriorNotification(`MER À BOIRE`, 'FAKE_OPERATION_114')
+    editSideWindowPriorNotification(`MER À BOIRE`, 'FAKE_OPERATION_115')
 
     cy.get('[name="note"]').should('have.value', "Un point d'attention.")
     cy.get('[name="authorTrigram"]').should('have.value', 'ABC')
 
     // Reset
-    cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_114?operationDate=${operationDate}`, {
+    cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_115?operationDate=${operationDate}`, {
       body: {
         authorTrigram: null,
         note: null
@@ -50,9 +50,9 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
   })
 
   it('Should not update the logbook prior notification before the form is filled', () => {
-    cy.intercept('PUT', '/bff/v1/prior_notifications/logbook/FAKE_OPERATION_115*', cy.spy().as('updateForm'))
+    cy.intercept('PUT', '/bff/v1/prior_notifications/logbook/FAKE_OPERATION_116*', cy.spy().as('updateForm'))
 
-    editSideWindowPriorNotification(`LE MARIN`, 'FAKE_OPERATION_115')
+    editSideWindowPriorNotification(`LE MARIN`, 'FAKE_OPERATION_116')
 
     cy.contains(`LE MARIN D'EAU DOUCE (CFR111)`).should('be.visible')
 
@@ -64,7 +64,7 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
 
     // Reset
     const operationDate = dayjs().subtract(6, 'hours').toISOString()
-    cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_115?operationDate=${operationDate}`, {
+    cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_116?operationDate=${operationDate}`, {
       body: {
         authorTrigram: null,
         note: null
@@ -75,10 +75,10 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
   it('Should verify and send a logbook prior notification', () => {
     cy.intercept(
       'POST',
-      `/bff/v1/prior_notifications/FAKE_OPERATION_111_COR_ORPHAN/verify_and_send?isManuallyCreated=false&operationDate=*`
+      `/bff/v1/prior_notifications/FAKE_OPERATION_112_COR_ORPHAN/verify_and_send?isManuallyCreated=false&operationDate=*`
     ).as('verifyAndSendPriorNotification')
 
-    editSideWindowPriorNotification(`LE POISSON AMBULANT`, 'FAKE_OPERATION_111_COR_ORPHAN')
+    editSideWindowPriorNotification(`LE POISSON AMBULANT`, 'FAKE_OPERATION_112_COR_ORPHAN')
 
     cy.clickButton('Diffuser')
 
@@ -101,13 +101,13 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
       cy.clickButton('Fermer')
       cy.fill('Rechercher un navire', 'LE POISSON AMBULANT')
 
-      cy.getTableRowById('FAKE_OPERATION_111_COR_ORPHAN').find('span[title="Diffusion en cours"]').should('be.visible')
+      cy.getTableRowById('FAKE_OPERATION_112_COR_ORPHAN').find('span[title="Diffusion en cours"]').should('be.visible')
     })
   })
 
   it('Should download a logbook prior notification as a PDF document', () => {
     // Given
-    editSideWindowPriorNotification(`COURANT MAIN PROFESSEUR`, 'FAKE_OPERATION_102')
+    editSideWindowPriorNotification(`L'OM DU POISSON`, 'FAKE_OPERATION_106')
 
     // Spy on the window.open method
     cy.window().then(win => {
@@ -118,7 +118,7 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
     cy.clickButton('Télécharger')
 
     // Verify that window.open was called with the correct URL
-    cy.get('@windowOpen').should('be.calledWith', '/api/v1/prior_notifications/pdf/FAKE_OPERATION_102', '_blank')
+    cy.get('@windowOpen').should('be.calledWith', '/api/v1/prior_notifications/pdf/FAKE_OPERATION_106', '_blank')
   })
 
   it('Should invalidate a logbook prior notification', () => {

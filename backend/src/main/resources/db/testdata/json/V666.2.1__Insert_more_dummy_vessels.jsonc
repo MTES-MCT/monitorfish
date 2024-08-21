@@ -335,6 +335,32 @@
                 "flag_state": "FR",
                 "length": 8.2,
                 "under_charter": false
+            },
+
+            // - Vessel: THON BEAU
+            {
+                "id": 126,
+                "cfr": "CFR126",
+                "mmsi": "MMSI126",
+                "ircs": "IRCS126",
+                "external_immatriculation": "EXTIMM126",
+                "vessel_name": "THON BEAU",
+                "flag_state": "FR",
+                "length": 17.8,
+                "under_charter": false
+            },
+
+            // - Vessel: MILLE SABORDS
+            {
+                "id": 127,
+                "cfr": "CFR127",
+                "mmsi": "MMSI127",
+                "ircs": "IRCS127",
+                "external_immatriculation": "EXTIMM127",
+                "vessel_name": "MILLE SABORDS",
+                "flag_state": "FR",
+                "length": 16.9,
+                "under_charter": false
             }
         ]
     }

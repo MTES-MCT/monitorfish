@@ -24,26 +24,32 @@
             { "operation_number": "FAKE_OPERATION_109_COR_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" },
             { "operation_number": "FAKE_OPERATION_110", "xml_message": "<Flux>Message FLUX xml</Flux>" },
             { "operation_number": "FAKE_OPERATION_110_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" },
-            { "operation_number": "FAKE_OPERATION_110_DEL", "xml_message": "<Flux>Message FLUX xml</Flux>" },
-            { "operation_number": "FAKE_OPERATION_110_DEL_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" },
-            { "operation_number": "FAKE_OPERATION_111_COR_ORPHAN", "xml_message": "<Flux>Message FLUX xml</Flux>" },
-            { "operation_number": "FAKE_OPERATION_111_COR_ORPHAN_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" },
-            { "operation_number": "FAKE_OPERATION_112", "xml_message": "<Flux>Message FLUX xml</Flux>" },
-            { "operation_number": "FAKE_OPERATION_112_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" },
+            { "operation_number": "FAKE_OPERATION_111", "xml_message": "<Flux>Message FLUX xml</Flux>" },
+            { "operation_number": "FAKE_OPERATION_111_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" },
+            { "operation_number": "FAKE_OPERATION_111_DEL", "xml_message": "<Flux>Message FLUX xml</Flux>" },
+            { "operation_number": "FAKE_OPERATION_111_DEL_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" },
+            { "operation_number": "FAKE_OPERATION_112_COR_ORPHAN", "xml_message": "<Flux>Message FLUX xml</Flux>" },
+            { "operation_number": "FAKE_OPERATION_112_COR_ORPHAN_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" },
             { "operation_number": "FAKE_OPERATION_113", "xml_message": "<Flux>Message FLUX xml</Flux>" },
             { "operation_number": "FAKE_OPERATION_113_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" },
             { "operation_number": "FAKE_OPERATION_114", "xml_message": "<Flux>Message FLUX xml</Flux>" },
             { "operation_number": "FAKE_OPERATION_114_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" },
             { "operation_number": "FAKE_OPERATION_115", "xml_message": "<Flux>Message FLUX xml</Flux>" },
-            { "operation_number": "FAKE_OPERATION_115_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" }
+            { "operation_number": "FAKE_OPERATION_115_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" },
+            { "operation_number": "FAKE_OPERATION_116", "xml_message": "<Flux>Message FLUX xml</Flux>" },
+            { "operation_number": "FAKE_OPERATION_116_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" },
+            { "operation_number": "FAKE_OPERATION_117", "xml_message": "<Flux>Message FLUX xml</Flux>" },
+            { "operation_number": "FAKE_OPERATION_117_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" },
+            { "operation_number": "FAKE_OPERATION_118", "xml_message": "<Flux>Message FLUX xml</Flux>" },
+            { "operation_number": "FAKE_OPERATION_118_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" }
         ]
     },
     {
         "table": "logbook_reports",
         "data": [
+            // - State: 10000
             // - Vessel: PHENOMENE
             // - With risk factor
-            // - State: UnVerified and sent
             {
                 "id": 101,
                 "report_id": "FAKE_OPERATION_101",
@@ -83,7 +89,7 @@
                     ],
                     "isBeingSent": false,
                     "isInVerificationScope": false,
-                    "isSent": true,
+                    "isSent": false,
                     "isVerified": false,
                     "pnoTypes": [
                         {
@@ -119,6 +125,7 @@
                 }
             },
 
+            // - State: 00001
             // - Vessel: COURANT MAIN PROFESSEUR
             // - With 1 reporting
             // - State: Verified (non-required) and sent
@@ -167,10 +174,10 @@
                             "statisticalRectangle": "23E6"
                         }
                     ],
-                    "isBeingSent": false,
+                    "isBeingSent": true,
                     "isInVerificationScope": false,
-                    "isSent": true,
-                    "isVerified": true,
+                    "isSent": false,
+                    "isVerified": false,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type C",
@@ -199,8 +206,8 @@
                 }
             },
 
+            // - State: 00010
             // - Vessel: UNKNOWN
-            // - Purpose: GRD
             {
                 "id": 103,
                 "report_id": "FAKE_OPERATION_103",
@@ -208,32 +215,68 @@
                 "cfr": null,
                 "enriched": true,
                 "flag_state": null,
-                "integration_datetime_utc": "2023-12-31 17:00:00",
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "log_type": "PNO",
-                "operation_datetime_utc": "2023-12-31 17:00:00",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "operation_number": "FAKE_OPERATION_103",
                 "operation_type": "DAT",
-                "report_datetime_utc": "2023-12-31 17:00:00",
+                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "transmission_format": "ERS",
                 "vessel_name": null,
-                "trip_gears:jsonb": [],
-                "trip_segments:jsonb": [],
+                "trip_gears:jsonb": [
+                    { "gear": "PT", "mesh": 100, "dimensions": "250;180" },
+                    { "gear": "OT", "mesh": 120.5, "dimensions": "250;280" }
+                ],
+                "trip_segments:jsonb": [
+                    { "segment": "SWW10", "segmentName": "Palangres ciblant les espèces démersales" },
+                    { "segment": "SWW11", "segmentName": "Hameçons" }
+                ],
                 "value:jsonb": {
-                    "riskFactor": 1.8,
-                    "catchOnboard": [],
-                    "pnoTypes": [],
-                    "port": "AEHZP",
-                    "predictedArrivalDatetimeUtc": "2023-12-31T23:59:00Z",
-                    "purpose": "GRD",
-                    "tripStartDate": "2023-12-31T06:00:00Z"
+                    "riskFactor": 2.8,
+                    "catchOnboard": [
+                        {
+                            "weight": 25.0,
+                            "nbFish": null,
+                            "species": "SOL",
+                            "faoZone": "27.8.a",
+                            "effortZone": "C",
+                            "economicZone": "FRA",
+                            "statisticalRectangle": "23E6"
+                        },
+                        {
+                            "weight": 25.0,
+                            "nbFish": null,
+                            "species": "HKE",
+                            "faoZone": "27.8.a",
+                            "effortZone": "C",
+                            "economicZone": "FRA",
+                            "statisticalRectangle": "23E6"
+                        }
+                    ],
+                    "isBeingSent": false,
+                    "isInVerificationScope": false,
+                    "isSent": true,
+                    "isVerified": false,
+                    "pnoTypes": [
+                        {
+                            "pnoTypeName": "Préavis type C",
+                            "minimumNotificationPeriod": 4.0,
+                            "hasDesignatedPorts": false
+                        }
+                    ],
+                    "port": "FRBES",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '4 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "purpose": "LAN",
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
                 }
             },
             {
                 "id": 1103,
                 "report_id": null,
                 "referenced_report_id": "FAKE_OPERATION_103",
-                "integration_datetime_utc": "2023-12-31 17:00:00",
-                "operation_datetime_utc": "2023-12-31 17:00:00",
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "operation_number": "FAKE_OPERATION_103_RET",
                 "operation_type": "RET",
                 "transmission_format": "ERS",
@@ -242,12 +285,12 @@
                 }
             },
 
+            // - State: 00100
             // - Vessel: VIVA ESPANA
             // - With 2 reportings
             // - With risk factor
             // - Under charter
             // - Flag state: ES
-            // - State: Verified (required) and sent
             {
                 "id": 104,
                 "report_id": "FAKE_OPERATION_104",
@@ -339,8 +382,8 @@
                         }
                     ],
                     "isBeingSent": false,
-                    "isInVerificationScope": true,
-                    "isSent": true,
+                    "isInVerificationScope": false,
+                    "isSent": false,
                     "isVerified": true,
                     "pnoTypes": [
                         {
@@ -375,6 +418,7 @@
                 }
             },
 
+            // - State: 00101
             // - Vessel: LEVE NEDERLAND
             // - Flag state: NL
             {
@@ -384,12 +428,12 @@
                 "cfr": "CFR102",
                 "enriched": true,
                 "flag_state": "NLD",
-                "integration_datetime_utc": "2024-03-01 15:00:00",
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "log_type": "PNO",
-                "operation_datetime_utc": "2024-03-01 15:00:00",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "operation_number": "FAKE_OPERATION_105",
                 "operation_type": "DAT",
-                "report_datetime_utc": "2024-03-01 15:00:00",
+                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "transmission_format": "ERS",
                 "vessel_name": "LEVE NEDERLAND",
                 "trip_gears:jsonb": [
@@ -412,10 +456,10 @@
                             "statisticalRectangle": "23E6"
                         }
                     ],
-                    "isBeingSent": false,
+                    "isBeingSent": true,
                     "isInVerificationScope": false,
                     "isSent": false,
-                    "isVerified": false,
+                    "isVerified": true,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type A",
@@ -429,18 +473,18 @@
                         }
                     ],
                     "port": "FRVNE",
-                    "predictedArrivalDatetimeUtc": "2024-03-01T17:00:00Z",
-                    "predictedLandingDatetimeUtc": "2024-03-01T17:30:00Z",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '4 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
-                    "tripStartDate": "2024-03-01T05:00:00Z"
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
                 }
             },
             {
                 "id": 1105,
                 "report_id": null,
                 "referenced_report_id": "FAKE_OPERATION_105",
-                "integration_datetime_utc": "2024-03-01 15:00:00",
-                "operation_datetime_utc": "2024-03-01 15:00:00",
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "operation_number": "FAKE_OPERATION_105_RET",
                 "operation_type": "RET",
                 "transmission_format": "ERS",
@@ -449,8 +493,8 @@
                 }
             },
 
+            // - State: 10110
             // - Vessel: L'OM DU POISSON
-            // - State: Pending verification (required)
             {
                 "id": 106,
                 "report_id": "FAKE_OPERATION_106",
@@ -487,9 +531,9 @@
                         }
                     ],
                     "isBeingSent": false,
-                    "isInVerificationScope": true,
-                    "isSent": false,
-                    "isVerified": false,
+                    "isInVerificationScope": false,
+                    "isSent": true,
+                    "isVerified": true,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type E",
@@ -518,9 +562,9 @@
                 }
             },
 
+            // - State: 01000
             // - Vessel: DES BARS
             // - Flag state: UNKNOWN
-            // - State: Unverified and pending sending
             {
                 "id": 107,
                 "report_id": "FAKE_OPERATION_107",
@@ -556,10 +600,10 @@
                             "statisticalRectangle": "23E6"
                         }
                     ],
-                    "isBeingSent": true,
+                    "isBeingSent": false,
                     "isInVerificationScope": true,
                     "isSent": false,
-                    "isVerified": true,
+                    "isVerified": false,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type Z",
@@ -588,8 +632,8 @@
                 }
             },
 
+            // - State: 01100
             // - Vessel: CALAMARO
-            // - NOT Aknowledged
             {
                 "id": 108,
                 "report_id": "FAKE_OPERATION_108",
@@ -605,22 +649,31 @@
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "software": "TurboCatch (3.7-1)",
                 "transmission_format": "ERS",
-                "trip_gears": null,
-                "trip_segments": null,
+                "trip_gears:jsonb": [
+                    { "gear": "DHB", "mesh": 20.25, "dimensions": "500;500" },
+                    { "gear": "DRM", "mesh": 25.75, "dimensions": "1000;1000" }
+                ],
+                "trip_segments:jsonb": [
+                    { "segment": "NWW03", "segmentName": "Chalut de fond en eau profonde ≥100 mm" }
+                ],
                 "vessel_name": "CALAMARO",
                 "value:jsonb": {
-                    "riskFactor": 2.9,
+                    "riskFactor": 3.4,
                     "catchOnboard": [
                         {
-                            "weight": 150.0,
+                            "weight": 25.0,
                             "nbFish": null,
-                            "species": "ANF",
+                            "species": "COD",
                             "faoZone": "27.8.a",
                             "effortZone": "C",
                             "economicZone": "FRA",
                             "statisticalRectangle": "23E6"
                         }
                     ],
+                    "isBeingSent": false,
+                    "isInVerificationScope": true,
+                    "isSent": false,
+                    "isVerified": true,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type Z",
@@ -645,13 +698,12 @@
                 "operation_type": "RET",
                 "transmission_format": "ERS",
                 "value:jsonb": {
-                    "rejectionCause": "002 MGEN02 Message incorrect : la date/heure de l'événement RTP n° OOF20201105037001 est postérieure à la date/heure courante. Veuillez vérifier la date/heure de l'événement déclaré et renvoyer votre message.",
-                    "returnStatus": "002"
+                    "returnStatus": "000"
                 }
             },
 
+            // - State: 01101
             // - Vessel: L'ANCRE SÈCHE
-            // - With COR
             {
                 "id": 109,
                 "report_id": "FAKE_OPERATION_109",
@@ -727,10 +779,10 @@
                             "weight": 32.5
                         }
                     ],
-                    "isBeingSent": false,
-                    "isInVerificationScope": false,
+                    "isBeingSent": true,
+                    "isInVerificationScope": true,
                     "isSent": false,
-                    "isVerified": false,
+                    "isVerified": true,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type Z",
@@ -759,11 +811,75 @@
                 }
             },
 
-            // - Vessel: MERLU L'ENCHANTEUR
-            // - With DEL
+            // - State: 01110
+            // - Vessel: THON BEAU
             {
                 "id": 110,
                 "report_id": "FAKE_OPERATION_110",
+                "referenced_report_id": null,
+                "cfr": "CFR126",
+                "enriched": true,
+                "flag_state": "FRA",
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "log_type": "PNO",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "operation_number": "FAKE_OPERATION_110",
+                "operation_type": "DAT",
+                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "transmission_format": "ERS",
+                "trip_gears": null,
+                "trip_segments": null,
+                "vessel_name": "THON BEAU",
+                "value:jsonb": {
+                    "riskFactor": 1.7,
+                    "catchOnboard": [
+                        {
+                            "economicZone": "FRA",
+                            "effortZone": "C",
+                            "faoZone": "27.8.a",
+                            "nbFish": null,
+                            "species": "BHX",
+                            "statisticalRectangle": "23E6",
+                            "weight": 32.5
+                        }
+                    ],
+                    "isBeingSent": false,
+                    "isInVerificationScope": true,
+                    "isSent": true,
+                    "isVerified": true,
+                    "pnoTypes": [
+                        {
+                            "pnoTypeName": "Préavis type Z",
+                            "minimumNotificationPeriod": 4.0,
+                            "hasDesignatedPorts": false
+                        }
+                    ],
+                    "port": "FRVNE",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "purpose": "LAN",
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                }
+            },
+            {
+                "id": 1110,
+                "report_id": null,
+                "referenced_report_id": "FAKE_OPERATION_110",
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
+                "operation_number": "FAKE_OPERATION_110_RET",
+                "operation_type": "RET",
+                "transmission_format": "ERS",
+                "value:jsonb": {
+                    "returnStatus": "000"
+                }
+            },
+
+            // - Vessel: MERLU L'ENCHANTEUR
+            // - With DEL
+            {
+                "id": 111,
+                "report_id": "FAKE_OPERATION_111",
                 "referenced_report_id": null,
                 "cfr": "CFR107",
                 "enriched": true,
@@ -771,7 +887,7 @@
                 "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "log_type": "PNO",
                 "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
-                "operation_number": "FAKE_OPERATION_110",
+                "operation_number": "FAKE_OPERATION_111",
                 "operation_type": "DAT",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "transmission_format": "ERS",
@@ -806,12 +922,12 @@
                 }
             },
             {
-                "id": 1110,
+                "id": 1111,
                 "report_id": null,
-                "referenced_report_id": "FAKE_OPERATION_110",
+                "referenced_report_id": "FAKE_OPERATION_111",
                 "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
-                "operation_number": "FAKE_OPERATION_110_RET",
+                "operation_number": "FAKE_OPERATION_111_RET",
                 "operation_type": "RET",
                 "transmission_format": "ERS",
                 "value:jsonb": {
@@ -819,16 +935,16 @@
                 }
             },
             {
-                "id": 2110,
-                "report_id": "FAKE_OPERATION_110_DEL",
-                "referenced_report_id": "FAKE_OPERATION_110",
+                "id": 2111,
+                "report_id": "FAKE_OPERATION_111_DEL",
+                "referenced_report_id": "FAKE_OPERATION_111",
                 "cfr": "CFR107",
                 "enriched": false,
                 "flag_state": null,
                 "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "log_type": null,
                 "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
-                "operation_number": "FAKE_OPERATION_110_DEL",
+                "operation_number": "FAKE_OPERATION_111_DEL",
                 "operation_type": "DEL",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "transmission_format": "ERS",
@@ -838,12 +954,12 @@
                 "value": null
             },
             {
-                "id": 3110,
+                "id": 3111,
                 "report_id": null,
-                "referenced_report_id": "FAKE_OPERATION_110_DEL",
+                "referenced_report_id": "FAKE_OPERATION_111_DEL",
                 "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
-                "operation_number": "FAKE_OPERATION_110_DEL_RET",
+                "operation_number": "FAKE_OPERATION_111_DEL_RET",
                 "operation_type": "RET",
                 "transmission_format": "ERS",
                 "value:jsonb": {
@@ -854,17 +970,17 @@
             // - Vessel: LE POISSON AMBULANT
             // - Orphan COR (no DAT)
             {
-                "id": 2111,
-                "report_id": "FAKE_OPERATION_111_COR_ORPHAN",
+                "id": 2112,
+                "report_id": "FAKE_OPERATION_112_COR_ORPHAN",
                 // This `referenced_report_id` doesn't exist, this is intentional
-                "referenced_report_id": "FAKE_OPERATION_111",
+                "referenced_report_id": "FAKE_OPERATION_112",
                 "cfr": "CFR108",
                 "enriched": true,
                 "flag_state": "FRA",
                 "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "log_type": "PNO",
                 "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
-                "operation_number": "FAKE_OPERATION_111_COR_ORPHAN",
+                "operation_number": "FAKE_OPERATION_112_COR_ORPHAN",
                 "operation_type": "COR",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "transmission_format": "ERS",
@@ -903,12 +1019,12 @@
                 }
             },
             {
-                "id": 3111,
+                "id": 3112,
                 "report_id": null,
-                "referenced_report_id": "FAKE_OPERATION_111_COR_ORPHAN",
+                "referenced_report_id": "FAKE_OPERATION_112_COR_ORPHAN",
                 "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
-                "operation_number": "FAKE_OPERATION_111_COR_ORPHAN_RET",
+                "operation_number": "FAKE_OPERATION_112_COR_ORPHAN_RET",
                 "operation_type": "RET",
                 "transmission_format": "ERS",
                 "value:jsonb": {
@@ -919,8 +1035,8 @@
             // - Vessel: UNKNOWN
             // - NOT Enriched
             {
-                "id": 112,
-                "report_id": "FAKE_OPERATION_112",
+                "id": 113,
+                "report_id": "FAKE_OPERATION_113",
                 "referenced_report_id": null,
                 "cfr": null,
                 "enriched": false,
@@ -928,7 +1044,7 @@
                 "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "log_type": "PNO",
                 "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
-                "operation_number": "FAKE_OPERATION_112",
+                "operation_number": "FAKE_OPERATION_113",
                 "operation_type": "DAT",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "transmission_format": "ERS",
@@ -938,12 +1054,12 @@
                 "value": null
             },
             {
-                "id": 1112,
+                "id": 1113,
                 "report_id": null,
-                "referenced_report_id": "FAKE_OPERATION_112",
+                "referenced_report_id": "FAKE_OPERATION_113",
                 "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
-                "operation_number": "FAKE_OPERATION_112_RET",
+                "operation_number": "FAKE_OPERATION_113_RET",
                 "operation_type": "RET",
                 "transmission_format": "ERS",
                 "value:jsonb": {
@@ -954,8 +1070,8 @@
             // - Vessel: LE POISSON D'AVRIL
             // - DUPLICATE Vessel CFR (= 2 `vessels` table rows with the same `cfr` value)
             {
-                "id": 113,
-                "report_id": "FAKE_OPERATION_113",
+                "id": 114,
+                "report_id": "FAKE_OPERATION_114",
                 "referenced_report_id": null,
                 "cfr": "CFR109",
                 "enriched": true,
@@ -963,7 +1079,7 @@
                 "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "log_type": "PNO",
                 "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
-                "operation_number": "FAKE_OPERATION_113",
+                "operation_number": "FAKE_OPERATION_114",
                 "operation_type": "DAT",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "transmission_format": "FLUX",
@@ -1034,12 +1150,12 @@
                 }
             },
             {
-                "id": 1113,
+                "id": 1114,
                 "report_id": null,
-                "referenced_report_id": "FAKE_OPERATION_113",
+                "referenced_report_id": "FAKE_OPERATION_114",
                 "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
-                "operation_number": "FAKE_OPERATION_113_RET",
+                "operation_number": "FAKE_OPERATION_114_RET",
                 "operation_type": "RET",
                 "transmission_format": "ERS",
                 "value:jsonb": {
@@ -1050,8 +1166,8 @@
             // - Vessel: LA MER À BOIRE
             // - Without port (=> without seafront)
             {
-                "id": 114,
-                "report_id": "FAKE_OPERATION_114",
+                "id": 115,
+                "report_id": "FAKE_OPERATION_115",
                 "referenced_report_id": null,
                 "cfr": "CFR110",
                 "enriched": true,
@@ -1059,7 +1175,7 @@
                 "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '6 hours'",
                 "log_type": "PNO",
                 "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '6 hours'",
-                "operation_number": "FAKE_OPERATION_114",
+                "operation_number": "FAKE_OPERATION_115",
                 "operation_type": "DAT",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '6 hours'",
                 "transmission_format": "ERS",
@@ -1077,12 +1193,12 @@
                 }
             },
             {
-                "id": 1114,
+                "id": 1115,
                 "report_id": null,
-                "referenced_report_id": "FAKE_OPERATION_114",
+                "referenced_report_id": "FAKE_OPERATION_115",
                 "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
-                "operation_number": "FAKE_OPERATION_114_RET",
+                "operation_number": "FAKE_OPERATION_115_RET",
                 "operation_type": "RET",
                 "transmission_format": "ERS",
                 "value:jsonb": {
@@ -1093,8 +1209,8 @@
             // - Vessel: LE MARIN D'EAU DOUCE
             // - Port: Saint-Denis De La Réunion (Sud Océan Indien)
             {
-                "id": 115,
-                "report_id": "FAKE_OPERATION_115",
+                "id": 116,
+                "report_id": "FAKE_OPERATION_116",
                 "referenced_report_id": null,
                 "cfr": "CFR111",
                 "enriched": true,
@@ -1102,7 +1218,7 @@
                 "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '6 hours'",
                 "log_type": "PNO",
                 "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '6 hours'",
-                "operation_number": "FAKE_OPERATION_115",
+                "operation_number": "FAKE_OPERATION_116",
                 "operation_type": "DAT",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '6 hours'",
                 "transmission_format": "ERS",
@@ -1125,12 +1241,135 @@
                 }
             },
             {
-                "id": 1115,
+                "id": 1116,
                 "report_id": null,
-                "referenced_report_id": "FAKE_OPERATION_115",
+                "referenced_report_id": "FAKE_OPERATION_116",
                 "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
-                "operation_number": "FAKE_OPERATION_115_RET",
+                "operation_number": "FAKE_OPERATION_116_RET",
+                "operation_type": "RET",
+                "transmission_format": "ERS",
+                "value:jsonb": {
+                    "returnStatus": "000"
+                }
+            },
+
+            // - Vessel: MILLE SABORDS
+            // - NOT Aknowledged
+            {
+                "id": 117,
+                "report_id": "FAKE_OPERATION_117",
+                "referenced_report_id": null,
+                "cfr": "CFR127",
+                "enriched": true,
+                "flag_state": "FRA",
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "log_type": "PNO",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "operation_number": "FAKE_OPERATION_117",
+                "operation_type": "DAT",
+                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "software": "TurboCatch (3.7-1)",
+                "transmission_format": "ERS",
+                "trip_gears": null,
+                "trip_segments": null,
+                "vessel_name": "MILLE SABORDS",
+                "value:jsonb": {
+                    "riskFactor": 2.9,
+                    "catchOnboard": [
+                        {
+                            "weight": 150.0,
+                            "nbFish": null,
+                            "species": "ANF",
+                            "faoZone": "27.8.a",
+                            "effortZone": "C",
+                            "economicZone": "FRA",
+                            "statisticalRectangle": "23E6"
+                        }
+                    ],
+                    "pnoTypes": [
+                        {
+                            "pnoTypeName": "Préavis type Z",
+                            "minimumNotificationPeriod": 4.0,
+                            "hasDesignatedPorts": false
+                        }
+                    ],
+                    "port": "FRSML",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "purpose": "LAN",
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                }
+            },
+            {
+                "id": 1117,
+                "report_id": null,
+                "referenced_report_id": "FAKE_OPERATION_117",
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
+                "operation_number": "FAKE_OPERATION_117_RET",
+                "operation_type": "RET",
+                "transmission_format": "ERS",
+                "value:jsonb": {
+                    "rejectionCause": "002 MGEN02 Message incorrect : la date/heure de l'événement RTP n° OOF20201105037001 est postérieure à la date/heure courante. Veuillez vérifier la date/heure de l'événement déclaré et renvoyer votre message.",
+                    "returnStatus": "002"
+                }
+            },
+
+            // - Vessel: PHENOMENE
+            // - Date: 2023-12-31
+            {
+                "id": 118,
+                "report_id": "FAKE_OPERATION_118",
+                "referenced_report_id": null,
+                "cfr": "FAK000999999",
+                "enriched": true,
+                "flag_state": "FRA",
+                "integration_datetime_utc": "2023-12-31 17:00:00",
+                "log_type": "PNO",
+                "operation_datetime_utc": "2023-12-31 17:00:00",
+                "operation_number": "FAKE_OPERATION_118",
+                "operation_type": "DAT",
+                "report_datetime_utc": "2023-12-31 17:00:00",
+                "software": "TurboCatch (3.7-1)",
+                "transmission_format": "ERS",
+                "trip_gears": null,
+                "trip_segments": null,
+                "vessel_name": "PHENOMENE",
+                "value:jsonb": {
+                    "riskFactor": 2.9,
+                    "catchOnboard": [
+                        {
+                            "weight": 150.0,
+                            "nbFish": null,
+                            "species": "ANF",
+                            "faoZone": "27.8.a",
+                            "effortZone": "C",
+                            "economicZone": "FRA",
+                            "statisticalRectangle": "23E6"
+                        }
+                    ],
+                    "pnoTypes": [
+                        {
+                            "pnoTypeName": "Préavis type Z",
+                            "minimumNotificationPeriod": 4.0,
+                            "hasDesignatedPorts": false
+                        }
+                    ],
+                    "port": "FRSML",
+                    "predictedArrivalDatetimeUtc": "2023-12-31T23:59:00Z",
+                    "predictedLandingDatetimeUtc": "2023-12-31T23:59:00Z",
+                    "purpose": "LAN",
+                    "tripStartDate": "2023-12-31T06:00:00Z"
+                }
+            },
+            {
+                "id": 1118,
+                "report_id": null,
+                "referenced_report_id": "FAKE_OPERATION_118",
+                "integration_datetime_utc": "2023-12-31 17:15:00",
+                "operation_datetime_utc": "2023-12-31 17:15:00",
+                "operation_number": "FAKE_OPERATION_118_RET",
                 "operation_type": "RET",
                 "transmission_format": "ERS",
                 "value:jsonb": {

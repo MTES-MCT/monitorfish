@@ -117,6 +117,19 @@ interface DBLogbookReportRepository :
                     AND (:tripSegmentCodesAsSqlArrayString IS NULL OR trip_segment_codes && CAST(:tripSegmentCodesAsSqlArrayString AS TEXT[]))
             ),
 
+            acknowledged_report_ids AS (
+                SELECT DISTINCT referenced_report_id
+                FROM logbook_reports lr
+                WHERE
+                    -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
+                    lr.operation_datetime_utc
+                        BETWEEN CAST(:willArriveAfter AS TIMESTAMP) - INTERVAL '48 hours'
+                        AND CAST(:willArriveBefore AS TIMESTAMP) + INTERVAL '48 hours'
+
+                    AND lr.operation_type = 'RET'
+                    AND lr.value->>'returnStatus' = '000'
+            ),
+
             del_pno_logbook_reports AS (
                 SELECT
                     lr.*,
@@ -134,19 +147,10 @@ interface DBLogbookReportRepository :
                         AND CAST(:willArriveBefore AS TIMESTAMP) + INTERVAL '48 hours'
 
                     AND lr.operation_type = 'DEL'
-            ),
-
-            acknowledged_report_ids AS (
-                SELECT DISTINCT referenced_report_id
-                FROM logbook_reports lr
-                WHERE
-                    -- This filter helps Timescale optimize the query since `operation_datetime_utc` is indexed
-                    lr.operation_datetime_utc
-                        BETWEEN CAST(:willArriveAfter AS TIMESTAMP) - INTERVAL '48 hours'
-                        AND CAST(:willArriveBefore AS TIMESTAMP) + INTERVAL '48 hours'
-
-                    AND lr.operation_type = 'RET'
-                    AND lr.value->>'returnStatus' = '000'
+                    AND (
+                        lr.operation_number IN (SELECT referenced_report_id FROM acknowledged_report_ids)
+                        OR fdacplr.flag_state NOT IN ('FRA', 'GUF', 'VEN') -- flag_states for which we received RET messages
+                    )
             )
 
         SELECT *
@@ -159,9 +163,6 @@ interface DBLogbookReportRepository :
 
         SELECT *
         FROM del_pno_logbook_reports
-        WHERE
-            operation_number IN (SELECT referenced_report_id FROM acknowledged_report_ids)
-            OR flag_state NOT IN ('FRA', 'GUF', 'VEN') -- flag_states for which we received RET messages
         """,
         nativeQuery = true,
     )

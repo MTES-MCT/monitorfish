@@ -20,7 +20,6 @@ import java.time.temporal.ChronoUnit
 @TestPropertySource("classpath:/application.properties")
 @SpringBootTest
 abstract class AbstractDBTests {
-
     @MockBean
     private lateinit var jwtDecoder: JwtDecoder
 

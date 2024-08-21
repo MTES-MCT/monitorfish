@@ -1,3 +1,4 @@
+import { getSortedReportingsAndOccurrences } from '@features/Reporting/components/VesselReportings/Archived/utils'
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
 import {
   YearListChevronIcon,
@@ -32,17 +33,7 @@ export function YearReportings({ year, yearReportings }: YearReportingsProps) {
   }, [yearReportings])
   const numberOfObservations = yearReportings.length - numberOfInfractionsSuspicion
 
-  const sortedReportings = useMemo(
-    () =>
-      yearReportings.sort((a, b) => {
-        if (!b.validationDate || !a.validationDate) {
-          return new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime()
-        }
-
-        return new Date(b.validationDate).getTime() - new Date(a.validationDate).getTime()
-      }),
-    [yearReportings]
-  )
+  const sortedReportingsAndOccurrences = getSortedReportingsAndOccurrences(yearReportings)
 
   return (
     <Row>
@@ -77,10 +68,11 @@ export function YearReportings({ year, yearReportings }: YearReportingsProps) {
       {isOpen && (
         // TODO Why do we need to pass a name prop here?
         <YearListContentWithPadding name={year.toString()}>
-          {sortedReportings.map(reporting => (
+          {sortedReportingsAndOccurrences.map(({ otherOccurrences, reporting }) => (
             <ReportingCard
               key={reporting.id}
-              isArchive
+              isArchived
+              numberOfOccurrences={otherOccurrences.length + 1}
               openConfirmDeletionModalForId={() => {}}
               reporting={reporting}
             />

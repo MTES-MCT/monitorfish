@@ -3,7 +3,7 @@ import { registerMonitorUiCustomCommands } from '@mtes-mct/monitor-ui/cypress'
 import { cleanDownloadedFiles } from './commands/cleanDownloadedFiles'
 import { countRequestsByAlias, resetCountRequestsByAlias } from './commands/countRequestsByAlias'
 import { getComputedStyle } from './commands/getComputedStyle'
-import { getDownloadedFileContent } from './commands/getDownloadedFileSource'
+import { getDownloadedFileContent } from './commands/getDownloadedFileContent'
 
 registerMonitorUiCustomCommands()
 

@@ -273,7 +273,7 @@ const RightAligned = styled.div`
   flex-grow: 1;
   justify-content: flex-end;
 
-  div:not(:last-child) {
+  > button:not(:last-child) {
     margin-right: 10px;
   }
 `

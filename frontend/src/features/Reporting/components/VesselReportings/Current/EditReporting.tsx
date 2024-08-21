@@ -1,26 +1,19 @@
-import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, Icon, IconButton, Size, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, Size, THEME } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
-import { useCallback, useState } from 'react'
 import styled from 'styled-components'
 
-import { setEditedReporting } from '../../../slice'
 import { ReportingForm } from '../../ReportingForm'
 
-export function CreateOrEditReporting() {
-  const dispatch = useMainAppDispatch()
+type EditReportingProps = {
+  closeForm: () => void
+}
+export function EditReporting({ closeForm }: EditReportingProps) {
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
   assertNotNullish(selectedVesselIdentity)
-  const [isNewReportingFormOpen, setIsNewReportingFormOpen] = useState(false)
   const editedReporting = useMainAppSelector(state => state.reporting.editedReporting)
 
-  const close = useCallback(() => {
-    setIsNewReportingFormOpen(false)
-    dispatch(setEditedReporting(null))
-  }, [dispatch])
-
-  return isNewReportingFormOpen || editedReporting ? (
+  return (
     <FormWrapper>
       <Header>
         <HeaderText>{editedReporting ? 'Editer' : 'Ouvrir'} un signalement</HeaderText>
@@ -28,37 +21,30 @@ export function CreateOrEditReporting() {
           accent={Accent.TERTIARY}
           color={THEME.color.slateGray}
           Icon={Icon.Close}
-          onClick={close}
+          onClick={closeForm}
           size={Size.SMALL}
           title="Fermer le formulaire"
         />
       </Header>
-      <ReportingForm
-        closeForm={close}
+      <StyledReportingForm
+        closeForm={closeForm}
         editedReporting={editedReporting}
         hasWhiteBackground={false}
         isFromSideWindow={false}
         selectedVesselIdentity={selectedVesselIdentity}
       />
     </FormWrapper>
-  ) : (
-    <NewReportingButton
-      accent={Accent.PRIMARY}
-      data-cy="vessel-sidebar-open-reporting"
-      onClick={() => setIsNewReportingFormOpen(true)}
-    >
-      Ouvrir un signalement
-    </NewReportingButton>
   )
 }
+
+const StyledReportingForm = styled(ReportingForm)`
+  padding-top: 16px;
+  padding-bottom: 16px;
+`
 
 const CloseFormIcon = styled(IconButton)`
   margin-left: auto;
   margin-right: 8px;
-`
-
-const NewReportingButton = styled(Button)`
-  margin: 0px 10px 10px 0px;
 `
 
 const FormWrapper = styled.div`

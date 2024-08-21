@@ -14,17 +14,17 @@ export const getReportingOrigin = (reporting: Reporting, isHovering: boolean = f
   }
 
   switch (reporting.value.reportingActor) {
-    case ReportingOriginActor.UNIT.code:
+    case ReportingOriginActor.UNIT:
       return `${reporting.value.controlUnit?.name ?? ''}${isHovering ? `: ${reporting.value.authorContact}` : ''}`
-    case ReportingOriginActor.OPS.code:
+    case ReportingOriginActor.OPS:
       return `Pôle OPS (${reporting.value.authorTrigram})`
-    case ReportingOriginActor.SIP.code:
+    case ReportingOriginActor.SIP:
       return `Pôle SIP (${reporting.value.authorTrigram})`
-    case ReportingOriginActor.DIRM.code:
+    case ReportingOriginActor.DIRM:
       return `DIRM${isHovering ? `: ${reporting.value.authorContact}` : ''}`
-    case ReportingOriginActor.DML.code:
+    case ReportingOriginActor.DML:
       return `${reporting.value.dml}${isHovering ? `: ${reporting.value.authorContact}` : ''}`
-    case ReportingOriginActor.OTHER.code:
+    case ReportingOriginActor.OTHER:
       return `${reporting.value.dml}${isHovering ? `: ${reporting.value.authorContact}` : ''}`
     default:
       return ''

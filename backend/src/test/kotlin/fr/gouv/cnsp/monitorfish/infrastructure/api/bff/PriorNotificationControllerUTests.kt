@@ -33,9 +33,12 @@ import java.time.ZonedDateTime
 @Import(SentryConfig::class)
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = [(PriorNotificationController::class)])
-class PriorNotificationControllerITests {
+class PriorNotificationControllerUTests {
     @Autowired
     private lateinit var api: MockMvc
+
+    @Autowired
+    private lateinit var objectMapper: ObjectMapper
 
     @MockBean
     private lateinit var computeManualPriorNotification: ComputeManualPriorNotification
@@ -63,9 +66,6 @@ class PriorNotificationControllerITests {
 
     @MockBean
     private lateinit var invalidatePriorNotification: InvalidatePriorNotification
-
-    @Autowired
-    private lateinit var objectMapper: ObjectMapper
 
     @Test
     fun `getAll Should get a list of prior notifications`() {

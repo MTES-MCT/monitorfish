@@ -1033,13 +1033,14 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `updatePriorNotificationState Should update writable state values for an existing PNO logbook report`() {
         // Given
-        val currentCorReport = jpaLogbookReportRepository.findById(2109)
+        val currentCorReport = jpaLogbookReportRepository.findById(103)
         assertThat((currentCorReport.message as PNO).isBeingSent).isEqualTo(false)
+        assertThat((currentCorReport.message as PNO).isSent).isEqualTo(true)
         assertThat((currentCorReport.message as PNO).isVerified).isEqualTo(false)
 
         // When
         jpaLogbookReportRepository.updatePriorNotificationState(
-            "FAKE_OPERATION_109_COR",
+            "FAKE_OPERATION_103",
             ZonedDateTime.now().minusMinutes(15),
             isBeingSent = true,
             isSent = false,
@@ -1047,8 +1048,9 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         )
 
         // Then
-        val updatedCorReport = jpaLogbookReportRepository.findById(2109)
+        val updatedCorReport = jpaLogbookReportRepository.findById(103)
         assertThat((updatedCorReport.message as PNO).isBeingSent).isEqualTo(true)
+        assertThat((updatedCorReport.message as PNO).isSent).isEqualTo(false)
         assertThat((updatedCorReport.message as PNO).isVerified).isEqualTo(true)
     }
 

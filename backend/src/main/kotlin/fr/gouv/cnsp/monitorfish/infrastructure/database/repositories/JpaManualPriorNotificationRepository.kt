@@ -89,7 +89,7 @@ class JpaManualPriorNotificationRepository(
 
     @Transactional
     @CacheEvict(value = ["manual_pno_to_verify"], allEntries = true)
-    override fun updateState(reportId: String, isBeingSent: Boolean, isVerified: Boolean) {
+    override fun updateState(reportId: String, isBeingSent: Boolean, isSent: Boolean, isVerified: Boolean) {
         val manualPriorNotification =
             dbManualPriorNotificationRepository.findByReportId(reportId) ?: throw BackendUsageException(
                 BackendUsageErrorCode.NOT_FOUND,
@@ -97,6 +97,7 @@ class JpaManualPriorNotificationRepository(
 
         val nextPnoValue: PNO = manualPriorNotification.value
         nextPnoValue.isBeingSent = isBeingSent
+        nextPnoValue.isSent = isSent
         nextPnoValue.isVerified = isVerified
 
         val updatedManualPriorNotification = manualPriorNotification.copy(value = nextPnoValue)

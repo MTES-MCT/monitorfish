@@ -182,7 +182,7 @@ class PriorNotificationControllerUTests {
         // When
         val requestBody = objectMapper.writeValueAsString(
             ManualPriorNotificationComputeDataInput(
-                faoArea = "FAO AREA 51",
+                globalFaoArea = "FAO AREA 51",
                 fishingCatches = emptyList(),
                 portLocode = "FRABC",
                 tripGearCodes = emptyList(),
@@ -261,7 +261,7 @@ class PriorNotificationControllerUTests {
                 didNotFishAfterZeroNotice = false,
                 expectedArrivalDate = ZonedDateTime.now(),
                 expectedLandingDate = ZonedDateTime.now(),
-                faoArea = "FAO AREA 51",
+                globalFaoArea = "FAO AREA 51",
                 fishingCatches = emptyList(),
                 note = null,
                 portLocode = "FRABVC",
@@ -294,7 +294,7 @@ class PriorNotificationControllerUTests {
                 didNotFishAfterZeroNotice = anyOrNull(),
                 expectedArrivalDate = anyOrNull(),
                 expectedLandingDate = anyOrNull(),
-                faoArea = anyOrNull(),
+                globalFaoArea = anyOrNull(),
                 fishingCatches = anyOrNull(),
                 hasPortEntranceAuthorization = anyOrNull(),
                 hasPortLandingAuthorization = anyOrNull(),
@@ -317,7 +317,7 @@ class PriorNotificationControllerUTests {
                 didNotFishAfterZeroNotice = false,
                 expectedArrivalDate = ZonedDateTime.now(),
                 expectedLandingDate = ZonedDateTime.now(),
-                faoArea = "FAO AREA 51",
+                globalFaoArea = "FAO AREA 51",
                 fishingCatches = emptyList(),
                 note = null,
                 portLocode = "FRABVC",

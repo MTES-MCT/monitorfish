@@ -276,11 +276,12 @@ class UpdateLogbookPriorNotificationITests : AbstractDBTests() {
         assertThat(afterPriorNotification.reportId).isEqualTo(testCase.reportId)
         assertThat(afterPriorNotification.isManuallyCreated)
             .isEqualTo(testCase.expectedAfterBooleanState.isManualPriorNotification)
-        assertThat(afterPnoValue.isInVerificationScope).isEqualTo(testCase.expectedAfterBooleanState.isInVerificationScope)
+        assertThat(afterPnoValue.isInVerificationScope).isEqualTo(
+            testCase.expectedAfterBooleanState.isInVerificationScope,
+        )
         assertThat(afterPnoValue.isVerified).isEqualTo(testCase.expectedAfterBooleanState.isVerified)
         assertThat(afterPnoValue.isSent).isEqualTo(testCase.expectedAfterBooleanState.isSent)
         assertThat(afterPnoValue.isBeingSent).isEqualTo(testCase.expectedAfterBooleanState.isBeingSent)
         assertThat(afterPriorNotification.state).isEqualTo(testCase.expectedAfterState)
-
     }
 }

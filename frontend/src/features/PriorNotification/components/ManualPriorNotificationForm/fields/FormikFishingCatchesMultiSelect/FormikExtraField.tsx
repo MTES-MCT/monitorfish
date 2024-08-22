@@ -5,11 +5,12 @@ import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES } from '../../constants'
 
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
-export function getFishingsCatchesExtraFields(
-  specyCode: string,
-  fishingsCatchesIndex: number,
+type FormikExtraFieldProps = Readonly<{
   allFishingsCatches: PriorNotification.FormDataFishingCatch[]
-) {
+  fishingsCatchesIndex: number
+  specyCode: string
+}>
+export function FormikExtraField({ allFishingsCatches, fishingsCatchesIndex, specyCode }: FormikExtraFieldProps) {
   // BFT - Bluefin Tuna => + BF1, BF2, BF3
   if (specyCode === 'BFT') {
     return (
@@ -22,6 +23,7 @@ export function getFishingsCatchesExtraFields(
               <ExtendedSpecyCode>{extendedSpecyCode}</ExtendedSpecyCode>
               <InputRow>
                 <FormikNumberInput
+                  isErrorMessageHidden
                   isLabelHidden
                   label={`Quantité (${extendedSpecyCode})`}
                   name={`fishingCatches[${index}].quantity`}
@@ -30,6 +32,7 @@ export function getFishingsCatchesExtraFields(
               </InputRow>
               <InputRow>
                 <FormikNumberInput
+                  isErrorMessageHidden
                   isLabelHidden
                   label={`Poids (${extendedSpecyCode})`}
                   name={`fishingCatches[${index}].weight`}

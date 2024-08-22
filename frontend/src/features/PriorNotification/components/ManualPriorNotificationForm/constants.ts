@@ -9,10 +9,14 @@ import PurposeCode = PriorNotification.PurposeCode
 export const BLUEFIN_TUNA_EXTENDED_SPECY_CODES = ['BF1', 'BF2', 'BF3']
 
 const FISHING_CATCH_VALIDATION_SCHEMA: ObjectSchema<PriorNotification.FormDataFishingCatch> = object({
+  faoArea: string().when('$hasGlobalFaoArea', {
+    is: false,
+    then: schema => schema.required('Veuillez indiquer la zone FAO pour chaque espèce.')
+  }),
   quantity: number(),
   specyCode: string().required(),
   specyName: string().required(),
-  weight: number().required()
+  weight: number().required('Veuillez indiquer le poids pour chaque espèce.')
 })
 
 export const FORM_VALIDATION_SCHEMA: ObjectSchema<ManualPriorNotificationFormValues> = object({
@@ -23,12 +27,16 @@ export const FORM_VALIDATION_SCHEMA: ObjectSchema<ManualPriorNotificationFormVal
     is: false,
     then: schema => schema.required('Veuillez indiquer la date de débarquement prévue.')
   }),
-  faoArea: string().required('Veuillez indiquer la zone FAO.'),
   fishingCatches: array()
     .of(FISHING_CATCH_VALIDATION_SCHEMA.required())
     .ensure()
     .required()
     .min(1, 'Veuillez sélectionner au moins une espèce.'),
+  globalFaoArea: string().when('$hasGlobalFaoArea', {
+    is: true,
+    then: schema => schema.required('Veuillez indiquer la zone FAO.')
+  }),
+  hasGlobalFaoArea: boolean().required(),
   hasPortEntranceAuthorization: boolean().nonNullable().required(),
   hasPortLandingAuthorization: boolean().nonNullable().required(),
   isExpectedLandingDateSameAsExpectedArrivalDate: boolean().required(),
@@ -47,8 +55,9 @@ export const INITIAL_FORM_VALUES: ManualPriorNotificationFormValues = {
   didNotFishAfterZeroNotice: false,
   expectedArrivalDate: undefined,
   expectedLandingDate: undefined,
-  faoArea: undefined,
   fishingCatches: [],
+  globalFaoArea: undefined,
+  hasGlobalFaoArea: true,
   hasPortEntranceAuthorization: true,
   hasPortLandingAuthorization: true,
   isExpectedLandingDateSameAsExpectedArrivalDate: false,

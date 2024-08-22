@@ -6,6 +6,7 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { Formik } from 'formik'
+import { omit } from 'lodash'
 import { useState } from 'react'
 import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
 
@@ -43,7 +44,9 @@ export function ManualPriorNotificationForm() {
   const submit = async (nextFormValues: ManualPriorNotificationFormValues) => {
     setIsLoading(true)
 
-    const { isExpectedLandingDateSameAsExpectedArrivalDate, ...priorNotificationData } = nextFormValues
+    const { isExpectedLandingDateSameAsExpectedArrivalDate, ...priorNotificationData } = omit(nextFormValues, [
+      'hasGlobalFaoArea'
+    ])
     const newOrNextPriorNotificationData = {
       ...priorNotificationData,
       expectedLandingDate: isExpectedLandingDateSameAsExpectedArrivalDate

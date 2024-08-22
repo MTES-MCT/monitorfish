@@ -46,7 +46,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.fill('Quantité (SWO)', 20)
 
     cy.fill('Engins utilisés', ['OTP', 'PTB'], { index: 1 })
-    cy.fill('Zone de pêche', '21.4.T')
+    cy.fill('Zone globale de capture', '21.4.T')
     cy.fill("Points d'attention identifiés par le CNSP", "Un point d'attention.")
     cy.fill('Saisi par', 'BOB')
 
@@ -189,7 +189,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
 
     cy.contains('Veuillez sélectionner au moins un engin.').should('not.exist')
 
-    cy.fill('Zone de pêche', '21.4.T')
+    cy.fill('Zone globale de capture', '21.4.T')
 
     cy.contains('Veuillez indiquer la zone FAO.').should('not.exist')
 
@@ -238,7 +238,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.fill('Poids (COD)', 5000)
 
     cy.fill('Engins utilisés', ['OTB'], { index: 1 })
-    cy.fill('Zone de pêche', '27.7.d')
+    cy.fill('Zone globale de capture', '27.7.d')
     cy.fill('Saisi par', 'BOB')
 
     cy.wait('@computePriorNotification')
@@ -299,7 +299,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
       )
 
       cy.fill('Engins utilisés', ['OTB', 'Chaluts de fond (non spécifiés)' /* (TB) */], { index: 1 })
-      cy.fill('Zone de pêche', '27.5.b')
+      cy.fill('Zone globale de capture', '27.5.b')
 
       cy.wait('@computePriorNotification')
       cy.getDataCy('VesselRiskFactor').contains('1.9').should('exist')
@@ -369,7 +369,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
 
     cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 0)
 
-    cy.fill('Zone de pêche', '27.7.d')
+    cy.fill('Zone globale de capture', '27.7.d')
 
     cy.wait('@computePriorNotification')
     cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 1)
@@ -418,7 +418,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.wait('@computePriorNotification')
     cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 5)
 
-    cy.fill('Zone de pêche', '27.7.d')
+    cy.fill('Zone globale de capture', '27.7.d')
 
     cy.wait('@computePriorNotification')
     // cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 6)
@@ -478,7 +478,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.fill('Poids (COD)', 5000)
 
     cy.fill('Engins utilisés', ['OTB'], { index: 1 })
-    cy.fill('Zone de pêche', '27.7.d')
+    cy.fill('Zone globale de capture', '27.7.d')
     cy.fill('Saisi par', 'BOB')
 
     cy.clickButton('Créer le préavis')

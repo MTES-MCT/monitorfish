@@ -5,5 +5,6 @@ export type ManualPriorNotificationFormValues = UndefineExcept<
   Omit<PriorNotification.NewManualFormData, 'updatedAt'>,
   'didNotFishAfterZeroNotice' | 'fishingCatches' | 'tripGearCodes'
 > & {
+  hasGlobalFaoArea: boolean
   isExpectedLandingDateSameAsExpectedArrivalDate: boolean
 }

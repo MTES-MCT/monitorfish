@@ -58,10 +58,13 @@ export const openManualPriorNotificationForm =
         )
       }
 
+      const nextHasGlobalFaoArea = !!priorNotificationData.globalFaoArea
+      const nextIsExpectedLandingDateSameAsExpectedArrivalDate =
+        priorNotificationData.expectedLandingDate === priorNotificationData.expectedArrivalDate
       const nextFormValues: ManualPriorNotificationFormValues = {
         ...priorNotificationData,
-        isExpectedLandingDateSameAsExpectedArrivalDate:
-          priorNotificationData.expectedLandingDate === priorNotificationData.expectedArrivalDate
+        hasGlobalFaoArea: nextHasGlobalFaoArea,
+        isExpectedLandingDateSameAsExpectedArrivalDate: nextIsExpectedLandingDateSameAsExpectedArrivalDate
       }
 
       dispatch(priorNotificationActions.setEditedManualPriorNotificationFormValues(nextFormValues))

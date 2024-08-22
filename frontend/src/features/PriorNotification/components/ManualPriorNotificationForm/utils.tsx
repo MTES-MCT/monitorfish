@@ -6,7 +6,7 @@ import { PriorNotification } from '../../PriorNotification.types'
 import type { ManualPriorNotificationFormValues } from './types'
 
 export function getPartialComputationRequestData(formValues: ManualPriorNotificationFormValues) {
-  return pick(formValues, ['faoArea', 'fishingCatches', 'portLocode', 'tripGearCodes', 'vesselId'])
+  return pick(formValues, ['fishingCatches', 'globalFaoArea', 'portLocode', 'tripGearCodes', 'vesselId'])
 }
 
 export function getFishingsCatchesInitialValues(

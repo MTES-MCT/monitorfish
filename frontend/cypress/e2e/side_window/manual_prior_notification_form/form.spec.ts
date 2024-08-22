@@ -431,22 +431,22 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.wait('@computePriorNotification')
     cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 2)
 
-    cy.fill('Poids (SOS)', 50)
+    cy.fill('Zone globale de capture', '27.7.d')
 
     cy.wait('@computePriorNotification')
     cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 3)
 
-    cy.fill('Espèces à bord et à débarquer', 'AAX')
+    cy.fill('Poids (SOS)', 50)
 
     cy.wait('@computePriorNotification')
     cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 4)
 
-    cy.fill('Engins utilisés', ['OTB'], { index: 1 })
+    cy.fill('Espèces à bord et à débarquer', 'AAX')
 
     cy.wait('@computePriorNotification')
     cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 5)
 
-    cy.fill('Zone globale de capture', '27.7.d')
+    cy.fill('Engins utilisés', ['OTB'], { index: 1 })
 
     cy.wait('@computePriorNotification')
     // cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 6)

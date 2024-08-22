@@ -62,36 +62,42 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
       assert.isString(createdPriorNotification.reportId)
       assert.isTrue(isDateCloseTo(createdPriorNotification.sentAt, now, 15))
       assert.deepInclude(createdPriorNotification.fishingCatches, {
+        faoArea: null,
         quantity: null,
         specyCode: 'AAX',
         specyName: 'AAPTOSYAX GRYPUS',
         weight: 25.0
       })
       assert.deepInclude(createdPriorNotification.fishingCatches, {
+        faoArea: null,
         quantity: null,
         specyCode: 'BFT',
         specyName: 'THON ROUGE',
         weight: 150.0
       })
       assert.deepInclude(createdPriorNotification.fishingCatches, {
+        faoArea: null,
         quantity: 4.0,
         specyCode: 'BF1',
         specyName: 'THON ROUGE + 30 KG',
         weight: 40.0
       })
       assert.deepInclude(createdPriorNotification.fishingCatches, {
+        faoArea: null,
         quantity: 5.0,
         specyCode: 'BF2',
         specyName: 'THON ROUGE 8 À 30 KG',
         weight: 50.0
       })
       assert.deepInclude(createdPriorNotification.fishingCatches, {
+        faoArea: null,
         quantity: 6.0,
         specyCode: 'BF3',
         specyName: 'THON ROUGE 6.4 À 8 KG',
         weight: 60.0
       })
       assert.deepInclude(createdPriorNotification.fishingCatches, {
+        faoArea: null,
         quantity: 20.0,
         specyCode: 'SWO',
         specyName: 'ESPADON',
@@ -102,7 +108,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         didNotFishAfterZeroNotice: false,
         expectedArrivalDate: arrivalDateAsString,
         expectedLandingDate: landingDateAsString,
-        faoArea: '21.4.T',
+        globalFaoArea: '21.4.T',
         note: "Un point d'attention.",
         portLocode: 'FRVNE',
         tripGearCodes: ['OTP', 'PTB'],
@@ -259,6 +265,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
       assert.isString(createdPriorNotification.reportId)
       assert.isTrue(isDateCloseTo(createdPriorNotification.sentAt, now, 15))
       assert.deepInclude(createdPriorNotification.fishingCatches, {
+        faoArea: null,
         quantity: null,
         specyCode: 'COD',
         specyName: 'MORUE COMMUNE (CABILLAUD)',
@@ -270,7 +277,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         expectedArrivalDate: arrivalDateAsString,
         // Should be the same as the arrival date since we checked "équivalentes à celles de l'arrivée au port"
         expectedLandingDate: arrivalDateAsString,
-        faoArea: '27.7.d',
+        globalFaoArea: '27.7.d',
         note: null,
         portLocode: 'FRVNE',
         tripGearCodes: ['OTB'],
@@ -320,7 +327,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         assert.includeMembers(updatedPriorNotification.tripGearCodes, ['OTB', 'TB'])
         assert.deepInclude(updatedPriorNotification, {
           ...omit(createdPriorNotification, ['tripGearCodes', 'updatedAt']),
-          faoArea: '27.5.b',
+          globalFaoArea: '27.5.b',
           reportId: createdPriorNotification.reportId
         })
 

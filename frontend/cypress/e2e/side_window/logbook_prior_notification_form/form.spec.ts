@@ -105,23 +105,7 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
     })
   })
 
-  it('Should download a logbook prior notification as a PDF document', () => {
-    // Given
-    editSideWindowPriorNotification(`L'OM DU POISSON`, 'FAKE_OPERATION_106')
-
-    // Spy on the window.open method
-    cy.window().then(win => {
-      cy.stub(win, 'open').as('windowOpen')
-    })
-
-    // When
-    cy.clickButton('Télécharger')
-
-    // Verify that window.open was called with the correct URL
-    cy.get('@windowOpen').should('be.calledWith', '/api/v1/prior_notifications/pdf/FAKE_OPERATION_106', '_blank')
-  })
-
-  it('Should invalidate a logbook prior notification', () => {
+  it('Should invalidate a logbook prior notification', { retries: 0 }, () => {
     // Given
     openSideWindowPriorNotificationListAsSuperUser()
     cy.get('[data-cy="side-window-sub-menu-ALL"]').click()
@@ -145,5 +129,31 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
     cy.clickButton('Fermer')
 
     cy.getTableRowById('FAKE_OPERATION_110').find('[title="Préavis invalidé"]').should('exist')
+  })
+
+  it('Should download a logbook prior notification as a PDF document', { retries: 0 }, () => {
+    cy.cleanDownloadedFiles()
+
+    // Given
+    editSideWindowPriorNotification(`L'OM DU POISSON`, 'FAKE_OPERATION_106')
+
+    cy.intercept('GET', '/bff/v1/prior_notifications/FAKE_OPERATION_106/pdf').as('downloadPriorNotificationDocument')
+
+    // When
+    cy.clickButton('Télécharger')
+
+    // Then
+    cy.wait('@downloadPriorNotificationDocument').then(downloadInterception => {
+      if (!downloadInterception.response) {
+        assert.fail('`downloadInterception.response` is undefined.')
+      }
+
+      expect(downloadInterception.response.headers['content-type']).to.equal('application/pdf')
+      expect(downloadInterception.response.headers['x-generation-date']).to.equal('2024-07-03T14:45:00Z')
+
+      cy.getDownloadedFileContent(content => {
+        content.should('match', /^%PDF-/)
+      })
+    })
   })
 })

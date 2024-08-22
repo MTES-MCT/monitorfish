@@ -1,7 +1,9 @@
 import { registerMonitorUiCustomCommands } from '@mtes-mct/monitor-ui/cypress'
 
+import { cleanDownloadedFiles } from './commands/cleanDownloadedFiles'
 import { countRequestsByAlias, resetCountRequestsByAlias } from './commands/countRequestsByAlias'
 import { getComputedStyle } from './commands/getComputedStyle'
+import { getDownloadedFileContent } from './commands/getDownloadedFileContent'
 
 registerMonitorUiCustomCommands()
 
@@ -40,12 +42,10 @@ Cypress.Commands.add('cleanScreenshots', (fromNumber: number): void => {
   cy.exec(`cd cypress/e2e/__image_snapshots__/ && find . | grep -P "[${fromNumber}-7]\\.png" | xargs -i rm {}\n`)
 })
 
-Cypress.Commands.add('cleanFiles', () => {
-  cy.exec(`rm -f cypress/downloads/*.csv`, { failOnNonZeroExit: false })
-})
-
+Cypress.Commands.add('cleanDownloadedFiles', cleanDownloadedFiles)
 Cypress.Commands.add('countRequestsByAlias', countRequestsByAlias)
 Cypress.Commands.add('getComputedStyle', getComputedStyle)
+Cypress.Commands.add('getDownloadedFileContent', getDownloadedFileContent)
 Cypress.Commands.add('resetCountRequestsByAlias', resetCountRequestsByAlias)
 
 // @ts-ignore

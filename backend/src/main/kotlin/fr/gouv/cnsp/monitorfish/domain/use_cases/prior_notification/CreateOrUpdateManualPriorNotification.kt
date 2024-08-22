@@ -35,8 +35,13 @@ class CreateOrUpdateManualPriorNotification(
         didNotFishAfterZeroNotice: Boolean,
         expectedArrivalDate: ZonedDateTime,
         expectedLandingDate: ZonedDateTime,
-        faoArea: String,
         fishingCatches: List<LogbookFishingCatch>,
+        /**
+         * Single FAO area shared by all fishing catches.
+         *
+         * Take precedence over the FAO area of each fishing catch if set.
+         */
+        globalFaoArea: String?,
         hasPortEntranceAuthorization: Boolean,
         hasPortLandingAuthorization: Boolean,
         note: String?,
@@ -49,8 +54,8 @@ class CreateOrUpdateManualPriorNotification(
         // /!\ Backend computed vessel risk factor is only used as a real time Frontend indicator.
         // The Backend should NEVER update `risk_factors` DB table, only the pipeline is allowed to update it.
         val computedValues = computeManualPriorNotification.execute(
-            faoArea,
             fishingCatches,
+            globalFaoArea,
             portLocode,
             tripGearCodes,
             vesselId,
@@ -60,7 +65,8 @@ class CreateOrUpdateManualPriorNotification(
             pnoVesselSubscriptionRepository.has(vesselId) ||
             pnoSegmentSubscriptionRepository.has(portLocode, computedValues.tripSegments.map { it.segment })
 
-        val fishingCatchesWithFaoArea = fishingCatches.map { it.copy(faoZone = faoArea) }
+        val fishingCatchesWithFaoArea = globalFaoArea?.let { fishingCatches.map { it.copy(faoZone = globalFaoArea) } }
+            ?: fishingCatches
         val tripGears = getTripGears(tripGearCodes)
         val tripSegments = computedValues.tripSegments.map { it.toLogbookTripSegment() }
         val vessel = vesselRepository.findVesselById(vesselId)

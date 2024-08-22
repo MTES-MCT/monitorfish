@@ -122,7 +122,7 @@ export function FormikFishingCatchesMultiSelect({ isReadOnly }: FormikFishingCat
                     disabled={!filteredSpeciesAsOptions}
                     isErrorMessageHidden
                     isLabelHidden
-                    label={`Zone de pêche (${fishingCatch.specyCode})`}
+                    label={`Zone de capture (${fishingCatch.specyCode})`}
                     name={`fishingCatches[${index}].faoArea`}
                     options={faoAreasAsOptions ?? []}
                     placeholder="Choisir une zone"

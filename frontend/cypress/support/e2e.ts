@@ -14,7 +14,7 @@ declare global {
   namespace Cypress {
     interface Chainable {
       before(property: string): string
-      cleanFiles(): void
+      cleanDownloadedFiles(): void
       cleanScreenshots(fromNumber: number): void
       countRequestsByAlias(alias: string, waitForInMs?: number): Cypress.Chainable<number>
       dragTo(
@@ -25,6 +25,7 @@ declare global {
         }>
       ): void
       getComputedStyle(dataCy: string, backUpToParentNumber?: number): Cypress.Chainable<CSSStyleDeclaration>
+      getDownloadedFileContent(callback: (content: Cypress.Chainable<any>) => void): void
       loadPath(path: string): void
       resetCountRequestsByAlias(alias: string): void
 

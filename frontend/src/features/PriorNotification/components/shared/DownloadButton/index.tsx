@@ -1,11 +1,13 @@
+import { monitorfishApiKy } from '@api/api'
 import { RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { useGetGearsQuery } from '@api/gear'
 import { getAlpha2CodeFromAlpha2or3Code } from '@components/CountryFlag/utils'
 import {
   StatusBodyEnum,
-  useGetPriorNotificationPDFExistenceQuery
+  useGetPriorNotificationPdfExistenceQuery
 } from '@features/PriorNotification/priorNotificationApi'
 import { Accent, Button, customDayjs, Dropdown, Icon } from '@mtes-mct/monitor-ui'
+import { downloadAsPdf } from '@utils/downloadAsPdf'
 import printJS from 'print-js'
 import { useMemo } from 'react'
 
@@ -29,8 +31,10 @@ export function DownloadButton({
 }: DownloadButtonProps) {
   const isSuperUser = useIsSuperUser()
   const getGearsApiQuery = useGetGearsQuery()
-  const { data } = useGetPriorNotificationPDFExistenceQuery(reportId, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS)
-  const isPriorNotificationPDFDocumentAvailable = useMemo(() => data?.status === StatusBodyEnum.FOUND, [data])
+  const { data } = useGetPriorNotificationPdfExistenceQuery(reportId, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS)
+
+  const isPriorNotificationDocumentAvailable = useMemo(() => data?.status === StatusBodyEnum.FOUND, [data])
+
   const hasAuthorizedLandingDownload =
     isSuperUser &&
     getHasAuthorizedLandingDownload(
@@ -38,7 +42,6 @@ export function DownloadButton({
       pnoLogbookMessage.externalReferenceNumber
     ) &&
     isManuallyCreated
-  const pdfUrl = `/api/v1/prior_notifications/pdf/${reportId}`
 
   const gearsWithName = useMemo(() => {
     if (!getGearsApiQuery.data || !pnoLogbookMessage?.tripGears) {
@@ -52,8 +55,8 @@ export function DownloadButton({
     })
   }, [getGearsApiQuery.data, pnoLogbookMessage?.tripGears])
 
-  const downloadPDF = async () => {
-    const htmlContent = await getHtmlContent(pnoLogbookMessage, gearsWithName)
+  const downloadAuthorizationDocument = () => {
+    const htmlContent = getHtmlContent(pnoLogbookMessage, gearsWithName)
 
     printJS({
       documentTitle: `preavis_entree_port_debarquement_${customDayjs().utc().format('DDMMYYYY')}.pdf`,
@@ -63,20 +66,30 @@ export function DownloadButton({
     })
   }
 
+  const downloadPriorNotificationDocument = async () => {
+    const url = `/bff/v1/prior_notifications/${reportId}/pdf`
+    const response = await monitorfishApiKy.get(url)
+    const blob = await response.blob()
+    const generationDate = response.headers.get('x-generation-date')
+    const fileName = `preavis_debarquement_${generationDate}`
+
+    downloadAsPdf(fileName, blob)
+  }
+
   return (
     <>
       {hasAuthorizedLandingDownload && (
         <Dropdown accent={Accent.SECONDARY} Icon={Icon.Download} placement="topEnd" title="Télécharger les documents">
           <>
-            {!isPriorNotificationPDFDocumentAvailable && (
+            {!isPriorNotificationDocumentAvailable && (
               <Dropdown.Item disabled title="Document non généré">
                 Préavis de débarquement
               </Dropdown.Item>
             )}
-            {isPriorNotificationPDFDocumentAvailable && (
+            {isPriorNotificationDocumentAvailable && (
               <Dropdown.Item
                 disabled={isDisabled}
-                onClick={() => window.open(pdfUrl, '_blank')}
+                onClick={downloadPriorNotificationDocument}
                 title={isDisabled ? 'Veuillez enregistrer le préavis' : undefined}
               >
                 Préavis de débarquement (à destination des unités)
@@ -87,7 +100,7 @@ export function DownloadButton({
             {hasAuthorizedLandingDownload && (
               <Dropdown.Item
                 disabled={isDisabled}
-                onClick={downloadPDF}
+                onClick={downloadAuthorizationDocument}
                 title={isDisabled ? 'Veuillez enregistrer le préavis' : undefined}
               >
                 Autorisation d&apos;entrée au port et de débarquement
@@ -98,7 +111,7 @@ export function DownloadButton({
       )}
       {!hasAuthorizedLandingDownload && (
         <>
-          {!isPriorNotificationPDFDocumentAvailable && (
+          {!isPriorNotificationDocumentAvailable && (
             <Button
               accent={Accent.SECONDARY}
               disabled
@@ -108,12 +121,12 @@ export function DownloadButton({
               Télécharger
             </Button>
           )}
-          {isPriorNotificationPDFDocumentAvailable && (
+          {isPriorNotificationDocumentAvailable && (
             <Button
               accent={Accent.SECONDARY}
               disabled={isDisabled}
               Icon={Icon.Download}
-              onClick={() => window.open(pdfUrl, '_blank')}
+              onClick={downloadPriorNotificationDocument}
               title={isDisabled ? 'Veuillez enregistrer le préavis' : undefined}
             >
               Télécharger

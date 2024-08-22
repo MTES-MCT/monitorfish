@@ -125,7 +125,7 @@ test-back: check-clean-archi
 		cd backend && ./gradlew clean test; \
 	else \
 		echo "Running single Backend test class $(class)..."; \
-		cd backend && ./gradlew test --tests "$(class)"; \
+		cd backend && ./gradlew test --console plain --no-continue --parallel --tests "$(class)"; \
 	fi
 
 test-back-watch:

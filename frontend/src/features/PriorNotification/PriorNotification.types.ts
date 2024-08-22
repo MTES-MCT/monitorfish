@@ -55,7 +55,6 @@ export namespace PriorNotification {
   export type Detail = {
     fingerprint: string
     isLessThanTwelveMetersVessel: boolean
-    isManuallyCreated: boolean
     isVesselUnderCharter: boolean | undefined
     logbookMessage: LogbookMessage.PnoLogbookMessage
     operationDate: string
@@ -63,7 +62,18 @@ export namespace PriorNotification {
     reportId: string
     riskFactor: number | undefined
     state: State | undefined
-  }
+  } & (
+    | {
+        asLogbookFormData: LogbookFormData
+        asManualFormData: undefined
+        isManuallyCreated: false
+      }
+    | {
+        asLogbookFormData: undefined
+        asManualFormData: ManualFormData
+        isManuallyCreated: true
+      }
+  )
 
   export type LogbookFormData = {
     authorTrigram: string | undefined

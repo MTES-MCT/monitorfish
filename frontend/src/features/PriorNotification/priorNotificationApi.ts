@@ -14,7 +14,6 @@ const COMPUTE_PRIOR_NOTIFICATION_ERROR_MESSAGE =
   "Nous n'avons pas pu calculer note de risque, segments ou types pour ce préavis."
 const CREATE_PRIOR_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu créé le préavis."
 const UPDATE_PRIOR_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu modifier le préavis."
-const GET_PRIOR_NOTIFICATION_DATA_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les données du préavis."
 const GET_PRIOR_NOTIFICATION_DETAIL_ERROR_MESSAGE = "Nous n'avons pas pu récupérer le préavis."
 const GET_PRIOR_NOTIFICATIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la liste des préavis."
 const GET_PRIOR_NOTIFICATION_TYPES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la liste des types de préavis."
@@ -53,22 +52,6 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
         url: `/prior_notifications/manual`
       }),
       transformErrorResponse: response => new FrontendApiError(CREATE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
-    }),
-
-    getLogbookPriorNotificationFormData: builder.query<PriorNotification.LogbookFormData, PriorNotification.Identifier>(
-      {
-        providesTags: (_, __, { reportId }) => [{ id: reportId, type: RtkCacheTagType.PriorNotification }],
-        query: ({ operationDate, reportId }) =>
-          getUrlOrPathWithQueryParams(`/prior_notifications/logbook/${reportId}/form`, { operationDate }),
-        transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_DATA_ERROR_MESSAGE, response)
-      }
-    ),
-
-    getManualPriorNotificationFormData: builder.query<PriorNotification.ManualFormData, PriorNotification.Identifier>({
-      providesTags: (_, __, { reportId }) => [{ id: reportId, type: RtkCacheTagType.PriorNotification }],
-      query: ({ operationDate, reportId }) =>
-        getUrlOrPathWithQueryParams(`/prior_notifications/manual/${reportId}/form`, { operationDate }),
-      transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_DATA_ERROR_MESSAGE, response)
     }),
 
     getPriorNotificationDetail: builder.query<

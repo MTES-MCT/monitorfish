@@ -109,9 +109,9 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
     ])
     if (
       !nextComputationRequestData ||
-      // If there is neither a global FAO area nor any FAO area per fishing catch, we can't compute the values
+      // If there is neither a global FAO area nor all per species FAO areas, we can't compute the values
       (!nextFormValues.globalFaoArea &&
-        !nextComputationRequestData.fishingCatches.some(fishingCatch => !!fishingCatch.faoArea))
+        nextComputationRequestData.fishingCatches.some(fishingCatch => !fishingCatch.faoArea))
     ) {
       // but we need to unset existing computed values in case they were computed before
       dispatch(priorNotificationActions.unsetEditedPriorNotificationComputedValues())

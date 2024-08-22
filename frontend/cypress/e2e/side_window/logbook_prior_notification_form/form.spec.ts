@@ -135,9 +135,9 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
     cy.cleanDownloadedFiles()
 
     // Given
-    editSideWindowPriorNotification(`COURANT MAIN PROFESSEUR`, 'FAKE_OPERATION_102')
+    editSideWindowPriorNotification(`L'OM DU POISSON`, 'FAKE_OPERATION_106')
 
-    cy.intercept('GET', '/bff/v1/prior_notifications/FAKE_OPERATION_102/pdf').as('downloadPriorNotificationDocument')
+    cy.intercept('GET', '/bff/v1/prior_notifications/FAKE_OPERATION_106/pdf').as('downloadPriorNotificationDocument')
 
     // When
     cy.clickButton('Télécharger')

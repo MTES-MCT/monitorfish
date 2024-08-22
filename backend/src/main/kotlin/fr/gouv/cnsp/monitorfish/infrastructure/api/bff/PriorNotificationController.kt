@@ -135,25 +135,6 @@ class PriorNotificationController(
         )
     }
 
-    @GetMapping("/logbook/{reportId}/form")
-    @Operation(summary = "Get a logbook prior notification form data by its `reportId`")
-    fun getLogbookFormData(
-        @PathParam("Logbook message `reportId`")
-        @PathVariable(name = "reportId")
-        reportId: String,
-        @Parameter(description = "Operation date (to optimize SQL query via Timescale).")
-        @RequestParam(name = "operationDate")
-        operationDate: ZonedDateTime,
-    ): LogbookPriorNotificationFormDataOutput {
-        return LogbookPriorNotificationFormDataOutput.fromPriorNotification(
-            getPriorNotification.execute(
-                reportId,
-                operationDate,
-                false,
-            ),
-        )
-    }
-
     @PutMapping("/logbook/{reportId}")
     @Operation(summary = "Update a logbook prior notification by its `reportId`")
     fun updateLogbook(
@@ -196,25 +177,6 @@ class PriorNotificationController(
 
         return ManualPriorNotificationComputedValuesDataOutput
             .fromManualPriorNotificationComputedValues(manualPriorNotificationComputedValues)
-    }
-
-    @GetMapping("/manual/{reportId}/form")
-    @Operation(summary = "Get a manual prior notification form data by its `reportId`")
-    fun getManualData(
-        @PathParam("Logbook message `reportId`")
-        @PathVariable(name = "reportId")
-        reportId: String,
-        @Parameter(description = "Operation date (to optimize SQL query via Timescale).")
-        @RequestParam(name = "operationDate")
-        operationDate: ZonedDateTime,
-    ): ManualPriorNotificationFormDataOutput {
-        return ManualPriorNotificationFormDataOutput.fromPriorNotification(
-            getPriorNotification.execute(
-                reportId,
-                operationDate,
-                true,
-            ),
-        )
     }
 
     @PostMapping("/manual")

@@ -30,18 +30,10 @@ export const invalidatePriorNotification =
         })
       ).unwrap()
 
-      if (isManuallyCreated) {
-        const nextManualFormData = await dispatch(
-          priorNotificationApi.endpoints.getManualPriorNotificationFormData.initiate(identifier)
-        ).unwrap()
-
-        dispatch(priorNotificationActions.setEditedLogbookPriorNotificationFormValues(nextManualFormData))
+      if (nextDetail.isManuallyCreated) {
+        dispatch(priorNotificationActions.setEditedLogbookPriorNotificationFormValues(nextDetail.asManualFormData))
       } else {
-        const nextLogbookFormData = await dispatch(
-          priorNotificationApi.endpoints.getLogbookPriorNotificationFormData.initiate(identifier)
-        ).unwrap()
-
-        dispatch(priorNotificationActions.setEditedLogbookPriorNotificationFormValues(nextLogbookFormData))
+        dispatch(priorNotificationActions.setEditedLogbookPriorNotificationFormValues(nextDetail.asLogbookFormData))
       }
 
       dispatch(priorNotificationActions.setOpenedPriorNotificationDetail(nextDetail))

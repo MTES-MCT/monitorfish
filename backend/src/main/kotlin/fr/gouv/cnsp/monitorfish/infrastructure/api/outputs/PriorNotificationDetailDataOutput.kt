@@ -7,6 +7,8 @@ import java.time.ZonedDateTime
 class PriorNotificationDetailDataOutput(
     /** Reference logbook message (report) `reportId`. */
     val reportId: String,
+    val asLogbookFormData: LogbookPriorNotificationFormDataOutput?,
+    val asManualFormData: ManualPriorNotificationFormDataOutput?,
     /** Unique identifier concatenating all the DAT, COR, RET & DEL operations `id` used for data consolidation. */
     val fingerprint: String,
     val isLessThanTwelveMetersVessel: Boolean,
@@ -23,6 +25,17 @@ class PriorNotificationDetailDataOutput(
                 "`reportId` is null."
             }
 
+            val asLogbookFormDataOutput = if (!priorNotification.isManuallyCreated) {
+                LogbookPriorNotificationFormDataOutput.fromPriorNotification(priorNotification)
+            } else {
+                null
+            }
+            val asManualFormData = if (priorNotification.isManuallyCreated) {
+                ManualPriorNotificationFormDataOutput.fromPriorNotification(priorNotification)
+            } else {
+                null
+            }
+
             val isLessThanTwelveMetersVessel = requireNotNull(priorNotification.vessel) {
                 "`priorNotification.vessel` is null."
             }.isLessThanTwelveMetersVessel()
@@ -35,6 +48,8 @@ class PriorNotificationDetailDataOutput(
 
             return PriorNotificationDetailDataOutput(
                 reportId,
+                asLogbookFormDataOutput,
+                asManualFormData,
                 fingerprint = priorNotification.fingerprint,
                 isLessThanTwelveMetersVessel = isLessThanTwelveMetersVessel,
                 isManuallyCreated = priorNotification.isManuallyCreated,

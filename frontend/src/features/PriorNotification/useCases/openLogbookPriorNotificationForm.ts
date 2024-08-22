@@ -2,6 +2,7 @@ import { RtkCacheTagType } from '@api/constants'
 import { addMainWindowBanner } from '@features/SideWindow/useCases/addMainWindowBanner'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
+import { FrontendError } from '@libs/FrontendError'
 import { Level } from '@mtes-mct/monitor-ui'
 import { handleThunkError } from '@utils/handleThunkError'
 import { displayedErrorActions } from 'domain/shared_slices/DisplayedError'
@@ -28,9 +29,9 @@ export const openLogbookPriorNotificationForm =
           isManuallyCreated: false
         })
       ).unwrap()
-      const priorNotificationData = await dispatch(
-        priorNotificationApi.endpoints.getLogbookPriorNotificationFormData.initiate(priorNotificationIdentifier)
-      ).unwrap()
+      if (priorNotificationDetail.isManuallyCreated) {
+        throw new FrontendError('`priorNotificationDetail.isManuallyCreated` is `true` but should be `false`.')
+      }
 
       // Update prior notification list if prior notification fingerprint has changed
       if (priorNotificationDetail.fingerprint !== fingerprint) {
@@ -54,7 +55,9 @@ export const openLogbookPriorNotificationForm =
       }
 
       dispatch(priorNotificationActions.setOpenedPriorNotificationDetail(priorNotificationDetail))
-      dispatch(priorNotificationActions.setEditedLogbookPriorNotificationFormValues(priorNotificationData))
+      dispatch(
+        priorNotificationActions.setEditedLogbookPriorNotificationFormValues(priorNotificationDetail.asLogbookFormData)
+      )
     } catch (err) {
       if (err instanceof FrontendApiError) {
         dispatch(

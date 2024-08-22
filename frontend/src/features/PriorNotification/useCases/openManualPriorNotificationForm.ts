@@ -1,6 +1,7 @@
 import { RtkCacheTagType } from '@api/constants'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
+import { FrontendError } from '@libs/FrontendError'
 import { type Undefine } from '@mtes-mct/monitor-ui'
 import { handleThunkError } from '@utils/handleThunkError'
 import { displayedErrorActions } from 'domain/shared_slices/DisplayedError'
@@ -39,9 +40,9 @@ export const openManualPriorNotificationForm =
           isManuallyCreated: true
         })
       ).unwrap()
-      const priorNotificationData = await dispatch(
-        priorNotificationApi.endpoints.getManualPriorNotificationFormData.initiate(priorNotificationIdentifier)
-      ).unwrap()
+      if (!priorNotificationDetail.isManuallyCreated) {
+        throw new FrontendError('`priorNotificationDetail.isManuallyCreated` is `false` but should be `true`.')
+      }
 
       // Update prior notification list if prior notification fingerprint has changed
       if (priorNotificationDetail.fingerprint !== fingerprint) {
@@ -58,11 +59,12 @@ export const openManualPriorNotificationForm =
         )
       }
 
-      const nextHasGlobalFaoArea = !!priorNotificationData.globalFaoArea
+      const nextHasGlobalFaoArea = !!priorNotificationDetail.asManualFormData.globalFaoArea
       const nextIsExpectedLandingDateSameAsExpectedArrivalDate =
-        priorNotificationData.expectedLandingDate === priorNotificationData.expectedArrivalDate
+        priorNotificationDetail.asManualFormData.expectedLandingDate ===
+        priorNotificationDetail.asManualFormData.expectedArrivalDate
       const nextFormValues: ManualPriorNotificationFormValues = {
-        ...priorNotificationData,
+        ...priorNotificationDetail.asManualFormData,
         hasGlobalFaoArea: nextHasGlobalFaoArea,
         isExpectedLandingDateSameAsExpectedArrivalDate: nextIsExpectedLandingDateSameAsExpectedArrivalDate
       }

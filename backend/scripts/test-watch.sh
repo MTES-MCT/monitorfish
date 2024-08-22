@@ -11,12 +11,20 @@ while true; do
 
         TEST_COMMAND_ARGS=""
         for FILE in $GIT_DIRTY_KT_FILES; do
-            # Extract test pathed class name
-            TEST_CLASS=$(echo $FILE | sed -e 's#backend/src/test/kotlin/##' -e 's#/#.#g' -e 's/.kt$//')
-            TEST_COMMAND_ARGS="$TEST_COMMAND_ARGS --tests $TEST_CLASS"
+            # Filter for files ending with UTests.kt or ITests.kt
+            if [[ $FILE =~ (UTests|ITests)\.kt$ ]]; then
+                # Extract test pathed class name
+                TEST_CLASS=$(echo $FILE | sed -e 's#backend/src/test/kotlin/##' -e 's#/#.#g' -e 's/.kt$//')
+                TEST_COMMAND_ARGS="$TEST_COMMAND_ARGS --tests $TEST_CLASS"
+            fi
         done
-        echo "Running tests for: $TEST_COMMAND_ARGS..."
-        (cd backend && ./gradlew test $TEST_COMMAND_ARGS)
+
+        if [ ! -z "$TEST_COMMAND_ARGS" ]; then
+            echo "Running tests for: $TEST_COMMAND_ARGS..."
+            (cd backend && ./gradlew test --console plain --parallel $TEST_COMMAND_ARGS)
+        else
+            echo "No matching test files (UTests or ITests) found to run."
+        fi
     else
         echo "No Git dirty .kt file detected."
     fi

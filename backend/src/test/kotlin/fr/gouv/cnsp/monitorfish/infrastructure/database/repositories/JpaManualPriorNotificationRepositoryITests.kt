@@ -557,6 +557,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         jpaManualPriorNotificationRepository.updateState(
             "00000000-0000-4000-0000-000000000001",
             isBeingSent = true,
+            isSent = false,
             isVerified = true,
         )
 
@@ -564,6 +565,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         val updatedManualPriorNotification = jpaManualPriorNotificationRepository
             .findByReportId("00000000-0000-4000-0000-000000000001")!!
         assertThat(updatedManualPriorNotification.logbookMessageAndValue.value.isBeingSent).isEqualTo(true)
+        assertThat(updatedManualPriorNotification.logbookMessageAndValue.value.isSent).isEqualTo(false)
         assertThat(updatedManualPriorNotification.logbookMessageAndValue.value.isVerified).isEqualTo(true)
     }
 

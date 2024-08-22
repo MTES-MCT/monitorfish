@@ -10,7 +10,7 @@ interface ManualPriorNotificationRepository {
 
     fun save(newOrNextPriorNotification: PriorNotification): PriorNotification
 
-    fun updateState(reportId: String, isBeingSent: Boolean, isVerified: Boolean)
+    fun updateState(reportId: String, isBeingSent: Boolean, isSent: Boolean, isVerified: Boolean)
 
     fun invalidate(reportId: String)
 

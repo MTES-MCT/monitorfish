@@ -14,7 +14,8 @@ class VerifyAndSendPriorNotification(
 ) {
     fun execute(reportId: String, operationDate: ZonedDateTime, isManuallyCreated: Boolean): PriorNotification {
         if (isManuallyCreated) {
-            manualPriorNotificationRepository.updateState(reportId, isBeingSent = true, isVerified = true)
+            manualPriorNotificationRepository
+                .updateState(reportId, isBeingSent = true, isSent = false, isVerified = true)
         } else {
             logbookReportRepository.updatePriorNotificationState(
                 reportId,

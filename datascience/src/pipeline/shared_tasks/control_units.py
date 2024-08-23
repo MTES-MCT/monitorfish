@@ -32,11 +32,15 @@ def fetch_control_units_contacts() -> pd.DataFrame:
         .reset_index(drop=True)
     )
     contacts["email"] = contacts["control_unit_contacts"].apply(
-        lambda x: x.get("email") if x.get("isEmailSubscriptionContact") else None
+        lambda x: x.get("email")
+        if x.get("email") and x.get("isEmailSubscriptionContact")
+        else None
     )
 
     contacts["phone"] = contacts["control_unit_contacts"].apply(
-        lambda x: x.get("phone") if x.get("isSmsSubscriptionContact") else None
+        lambda x: x.get("phone")
+        if x.get("phone") and x.get("isSmsSubscriptionContact")
+        else None
     )
 
     email_and_phone_contacts = (

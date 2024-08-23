@@ -1,6 +1,7 @@
 // TODO This should be moved to `entities/vessel/mission.types.ts`
 
-import type { ReportingType } from '../../types/reporting'
+import { ReportingType } from '@features/Reporting/types'
+
 import type { VesselTrackDepth } from '../vesselTrackDepth'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { SelectableVesselTrackDepth } from '@features/VesselSidebar/actions/TrackRequest/types'

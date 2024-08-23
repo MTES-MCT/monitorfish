@@ -1,6 +1,6 @@
 import { getReportingOrigin, getReportingTitle } from './utils'
 
-import type { InfractionSuspicionReporting, PendingAlertReporting } from '../../../../domain/types/reporting'
+import type { InfractionSuspicionReporting, PendingAlertReporting } from '@features/Reporting/types'
 import type { TableOptions } from '@hooks/useTable/types'
 
 export const REPORTING_LIST_TABLE_OPTIONS: TableOptions<InfractionSuspicionReporting | PendingAlertReporting> = {

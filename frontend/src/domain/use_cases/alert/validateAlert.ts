@@ -1,3 +1,5 @@
+import { getVesselReportings } from '@features/Reporting/useCases/getVesselReportings'
+
 import { validateAlertFromAPI } from '../../../api/alert'
 import { setPendingAlerts } from '../../../features/SideWindow/Alert/slice'
 import { deleteListItems } from '../../../utils/deleteListItems'
@@ -5,7 +7,6 @@ import { updateListItemsProp } from '../../../utils/updateListItemsProp'
 import { Vessel } from '../../entities/vessel/vessel'
 import { setError } from '../../shared_slices/Global'
 import { removeVesselAlertAndUpdateReporting } from '../../shared_slices/Vessel'
-import { getVesselReportings } from '../vessel/getVesselReportings'
 
 import type { MainAppThunk } from '../../../store'
 import type { LEGACY_PendingAlert } from '../../entities/alerts/types'

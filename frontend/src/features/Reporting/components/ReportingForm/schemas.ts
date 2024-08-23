@@ -1,9 +1,7 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 
-import { ReportingOriginActor } from '@features/Reporting/types'
+import { ReportingOriginActor, ReportingType } from '@features/Reporting/types'
 import { number, object, string } from 'yup'
-
-import { ReportingType } from '../../../../domain/types/reporting'
 
 export const CreateOrEditReportingSchema = object({
   reportingActor: string().required('Veuillez renseigner l&apos;origine du signalement.'),

@@ -1,8 +1,7 @@
-import { ReportingType } from '../../../../domain/types/reporting'
 import { getAlertNameFromType } from '../../../SideWindow/Alert/AlertListAndReportingList/utils'
-import { ReportingOriginActor } from '../../types'
+import { ReportingOriginActor, ReportingType } from '../../types'
 
-import type { Reporting } from '../../../../domain/types/reporting'
+import type { Reporting } from '../../types'
 
 export const getReportingOrigin = (reporting: Reporting, isHovering: boolean = false): string => {
   if (reporting.type === ReportingType.ALERT) {

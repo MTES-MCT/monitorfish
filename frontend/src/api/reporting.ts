@@ -7,7 +7,7 @@ import type {
   PendingAlertReporting,
   Reporting,
   ReportingCreation
-} from '../domain/types/reporting'
+} from '@features/Reporting/types'
 
 export const ARCHIVE_REPORTING_ERROR_MESSAGE = "Nous n'avons pas pu archiver le signalement"
 export const ARCHIVE_REPORTINGS_ERROR_MESSAGE = "Nous n'avons pas pu archiver les signalements"

@@ -1,4 +1,3 @@
-import { getSortedReportingsAndOccurrences } from '@features/Reporting/components/VesselReportings/Archived/utils'
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
 import {
   YearListChevronIcon,
@@ -12,28 +11,40 @@ import styled from 'styled-components'
 
 import { ReportingCard } from '../ReportingCard'
 
-import type { Reporting } from '../../../../../domain/types/reporting'
+import type { ReportingAndOccurrences } from '@features/Reporting/types'
 
 type YearReportingsProps = {
   year: number
-  yearReportings: Reporting[]
+  yearReportings: ReportingAndOccurrences[]
 }
 export function YearReportings({ year, yearReportings }: YearReportingsProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
+
+  const numberOfReportings = useMemo(
+    () =>
+      yearReportings.reduce(
+        (accumulator, reportingAndOccurrences) => accumulator + reportingAndOccurrences.otherOccurrences.length + 1,
+        0
+      ),
+    [yearReportings]
+  )
 
   const numberOfInfractionsSuspicion = useMemo(() => {
     if (!yearReportings.length) {
       return 0
     }
 
-    return yearReportings.reduce(
-      (accumulator, reporting) => accumulator + (reportingIsAnInfractionSuspicion(reporting.type) ? 1 : 0),
-      0
-    )
-  }, [yearReportings])
-  const numberOfObservations = yearReportings.length - numberOfInfractionsSuspicion
+    return yearReportings.reduce((accumulator, reportingAndOccurrences) => {
+      const reportingCount = reportingIsAnInfractionSuspicion(reportingAndOccurrences.reporting.type) ? 1 : 0
+      const otherOccurrencesCount = reportingAndOccurrences.otherOccurrences
+        .map(reporting => (reportingIsAnInfractionSuspicion(reporting.type) ? Number(1) : Number(0)))
+        .reduce((acc, val) => acc + val, 0)
 
-  const sortedReportingsAndOccurrences = getSortedReportingsAndOccurrences(yearReportings)
+      return accumulator + reportingCount + otherOccurrencesCount
+    }, 0)
+  }, [yearReportings])
+
+  const numberOfObservations = numberOfReportings - numberOfInfractionsSuspicion
 
   return (
     <Row>
@@ -66,14 +77,12 @@ export function YearReportings({ year, yearReportings }: YearReportingsProps) {
         </YearListTitleText>
       </YearListTitle>
       {isOpen && (
-        // TODO Why do we need to pass a name prop here?
         <YearListContentWithPadding name={year.toString()}>
-          {sortedReportingsAndOccurrences.map(({ otherOccurrences, reporting }) => (
+          {yearReportings.map(({ otherOccurrences, reporting }) => (
             <ReportingCard
               key={reporting.id}
               isArchived
               numberOfOccurrences={otherOccurrences.length + 1}
-              openConfirmDeletionModalForId={() => {}}
               reporting={reporting}
             />
           ))}

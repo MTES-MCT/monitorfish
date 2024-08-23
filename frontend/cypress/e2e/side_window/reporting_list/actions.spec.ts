@@ -144,7 +144,7 @@ context('Side Window > Reporting List > Actions', () => {
       })
 
       // When
-      cy.fill('Type', 'Observation')
+      cy.fill('Type de signalement', 'Observation')
       cy.fill('Saisi par', '{backspace}{backspace}{backspace}LTH')
       cy.clickButton('Valider')
 

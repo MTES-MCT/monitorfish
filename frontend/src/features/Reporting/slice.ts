@@ -3,10 +3,10 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { VesselIdentity } from '../../domain/entities/vessel/types'
 import type {
   CurrentAndArchivedReportingsOfSelectedVessel,
+  EditableReporting,
   InfractionSuspicionReporting,
-  PendingAlertReporting,
-  EditableReporting
-} from '../../domain/types/reporting'
+  PendingAlertReporting
+} from '@features/Reporting/types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 export type ReportingState = {

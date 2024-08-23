@@ -1,16 +1,14 @@
-import { getYearsToReportings } from '@features/Reporting/utils'
 import { Header, Zone } from '@features/VesselSidebar/common_styles/common.style'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME } from '@mtes-mct/monitor-ui'
 import dayjs from 'dayjs'
-import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { YearReportings } from './YearReportings'
 import { setArchivedReportingsFromDate } from '../../../slice'
 
-import type { Reporting } from '../../../../../domain/types/reporting'
+import type { ReportingAndOccurrences } from '@features/Reporting/types'
 
 export function Archived() {
   const dispatch = useMainAppDispatch()
@@ -19,13 +17,7 @@ export function Archived() {
     state => state.reporting.currentAndArchivedReportingsOfSelectedVessel
   )
 
-  const yearsToReportings = useMemo(() => {
-    if (!currentAndArchivedReportingsOfSelectedVessel?.archived) {
-      return {}
-    }
-
-    return getYearsToReportings(archivedReportingsFromDate, currentAndArchivedReportingsOfSelectedVessel.archived)
-  }, [currentAndArchivedReportingsOfSelectedVessel, archivedReportingsFromDate])
+  const yearsToReportings = currentAndArchivedReportingsOfSelectedVessel?.archived
 
   function seeMore() {
     const nextDate = dayjs(archivedReportingsFromDate).subtract(1, 'year').toDate()
@@ -46,7 +38,7 @@ export function Archived() {
                   <YearReportings
                     key={year}
                     year={Number(year)}
-                    yearReportings={yearsToReportings[year] as Reporting[]}
+                    yearReportings={yearsToReportings[year] as ReportingAndOccurrences[]}
                   />
                 )
             )}

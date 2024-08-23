@@ -3,7 +3,7 @@ import { HttpStatusCode } from './constants'
 import { ApiError } from '../libs/ApiError'
 
 import type { TrackRequest, VesselAndPositions, VesselIdentity, VesselPosition } from '../domain/entities/vessel/types'
-import type { CurrentAndArchivedReportingsOfSelectedVessel } from '../domain/types/reporting'
+import type { CurrentAndArchivedReportingsOfSelectedVessel } from '@features/Reporting/types'
 
 const VESSEL_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations du navire"
 const VESSEL_SEARCH_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les navires dans notre base"

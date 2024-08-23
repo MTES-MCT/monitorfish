@@ -64,7 +64,7 @@ context('Vessel sidebar reporting tab', () => {
 
     // Create an new Observation
     cy.clickButton('Ouvrir un signalement')
-    cy.fill('Type', 'Observation')
+    cy.fill('Type de signalement', 'Observation')
     cy.fill('Origine', 'Unité')
     cy.fill("Choisir l'unité", 'OFB SD 56 (Office Français de la Biodiversité)')
     cy.fill('Nom et contact (numéro, mail…) de l’émetteur', 'Jean Bon (0612365896)')

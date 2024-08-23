@@ -20,8 +20,11 @@ data class Reporting(
     val value: ReportingValue,
     val isArchived: Boolean,
     val isDeleted: Boolean,
-    var infraction: Infraction? = null,
-    var underCharter: Boolean? = null,
     val latitude: Double? = null,
     val longitude: Double? = null,
+
+    // Enriched in the use-case
+    val infraction: Infraction? = null,
+    // Enriched in the use-case
+    val underCharter: Boolean? = null,
 )

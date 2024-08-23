@@ -2,7 +2,7 @@ import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
 import { createSlice } from '@reduxjs/toolkit'
 import { transform } from 'ol/proj'
 
-import { ReportingTypeCharacteristics } from '../../features/Reporting/types'
+import { ReportingType, ReportingTypeCharacteristics } from '../../features/Reporting/types'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map/constants'
 import {
   atLeastOneVesselSelected,
@@ -10,7 +10,6 @@ import {
   Vessel,
   VesselSidebarTab
 } from '../entities/vessel/vessel'
-import { ReportingType } from '../types/reporting'
 
 import type {
   AugmentedSelectedVessel,

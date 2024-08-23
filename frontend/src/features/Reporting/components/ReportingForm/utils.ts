@@ -1,8 +1,6 @@
-import { ReportingOriginActor } from '@features/Reporting/types'
+import { ReportingOriginActor, ReportingType } from '@features/Reporting/types'
 
-import { ReportingType } from '../../../../domain/types/reporting'
-
-import type { EditedReporting, InfractionSuspicion, Observation } from '../../../../domain/types/reporting'
+import type { EditedReporting, InfractionSuspicion, Observation } from '@features/Reporting/types'
 
 export function getFormFields(
   editedOrSavedReporting: InfractionSuspicion | Observation | undefined,

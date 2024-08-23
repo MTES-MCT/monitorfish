@@ -16,10 +16,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infracti
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.CurrentAndArchivedReportings
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingValue
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils
@@ -658,45 +655,40 @@ class VesselControllerITests {
     @Test
     fun `Should get vessel's reporting`() {
         // Given
-        val currentReportingAndControlUnit = Pair(
-            Reporting(
-                id = 1,
-                type = ReportingType.ALERT,
-                vesselName = "BIDUBULE",
-                internalReferenceNumber = "FR224226850",
-                externalReferenceNumber = "1236514",
-                ircs = "IRCS",
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                flagState = CountryCode.FR,
-                creationDate = ZonedDateTime.now(),
-                validationDate = ZonedDateTime.now(),
-                value = ThreeMilesTrawlingAlert() as ReportingValue,
-                isArchived = false,
-                isDeleted = false,
-                infraction = Infraction(
-                    natinfCode = 7059,
-                    infractionCategory = InfractionCategory.FISHING,
-                ),
+        val currentReporting = Reporting(
+            id = 1,
+            type = ReportingType.ALERT,
+            vesselName = "BIDUBULE",
+            internalReferenceNumber = "FR224226850",
+            externalReferenceNumber = "1236514",
+            ircs = "IRCS",
+            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            flagState = CountryCode.FR,
+            creationDate = ZonedDateTime.now(),
+            validationDate = ZonedDateTime.now(),
+            value = ThreeMilesTrawlingAlert() as ReportingValue,
+            isArchived = false,
+            isDeleted = false,
+            infraction = Infraction(
+                natinfCode = 7059,
+                infractionCategory = InfractionCategory.FISHING,
             ),
-            null,
         )
-        val archivedReportingAndControlUnit = Pair(
-            Reporting(
-                id = 666,
-                type = ReportingType.ALERT,
-                vesselName = "BIDUBULE",
-                internalReferenceNumber = "FR224226850",
-                externalReferenceNumber = "1236514",
-                ircs = "IRCS",
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                flagState = CountryCode.FR,
-                creationDate = ZonedDateTime.now().minusYears(1),
-                validationDate = ZonedDateTime.now().minusYears(1),
-                value = ThreeMilesTrawlingAlert() as ReportingValue,
-                isArchived = true,
-                isDeleted = false,
-            ),
-            null,
+
+        val archivedReporting = Reporting(
+            id = 666,
+            type = ReportingType.ALERT,
+            vesselName = "BIDUBULE",
+            internalReferenceNumber = "FR224226850",
+            externalReferenceNumber = "1236514",
+            ircs = "IRCS",
+            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            flagState = CountryCode.FR,
+            creationDate = ZonedDateTime.now().minusYears(1),
+            validationDate = ZonedDateTime.now().minusYears(1),
+            value = ThreeMilesTrawlingAlert() as ReportingValue,
+            isArchived = true,
+            isDeleted = false,
         )
 
         given(
@@ -711,8 +703,30 @@ class VesselControllerITests {
         )
             .willReturn(
                 CurrentAndArchivedReportings(
-                    current = listOf(currentReportingAndControlUnit, currentReportingAndControlUnit),
-                    archived = listOf(archivedReportingAndControlUnit),
+                    current = listOf(
+                        ReportingAndOccurrences(
+                            otherOccurrences = listOf(),
+                            reporting = currentReporting,
+                            controlUnit = null,
+                        ),
+                        ReportingAndOccurrences(
+                            otherOccurrences = listOf(),
+                            reporting = currentReporting,
+                            controlUnit = null,
+                        ),
+                    ),
+                    archived = mapOf(
+                        2024 to listOf(
+                            ReportingAndOccurrences(
+                                otherOccurrences = listOf(),
+                                reporting = archivedReporting,
+                                controlUnit = null,
+                            ),
+                        ),
+                        2023 to emptyList(),
+                        2022 to emptyList(),
+                        2021 to emptyList()
+                    )
                 ),
             )
 
@@ -726,22 +740,22 @@ class VesselControllerITests {
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.current.length()", equalTo(2)))
-            .andExpect(jsonPath("$.current[0].id", equalTo(1)))
-            .andExpect(jsonPath("$.current[0].flagState", equalTo("FR")))
-            .andExpect(jsonPath("$.current[0].internalReferenceNumber", equalTo("FR224226850")))
-            .andExpect(jsonPath("$.current[0].externalReferenceNumber", equalTo("1236514")))
-            .andExpect(jsonPath("$.current[0].type", equalTo("ALERT")))
-            .andExpect(jsonPath("$.current[0].isArchived", equalTo(false)))
-            .andExpect(jsonPath("$.current[0].isDeleted", equalTo(false)))
-            .andExpect(jsonPath("$.current[0].infraction.natinfCode", equalTo(7059)))
-            .andExpect(jsonPath("$.current[0].value.type", equalTo("THREE_MILES_TRAWLING_ALERT")))
-            .andExpect(jsonPath("$.current[0].value.natinfCode", equalTo(7059)))
-            .andExpect(jsonPath("$.archived[0].id", equalTo(666)))
-            .andExpect(jsonPath("$.archived[0].internalReferenceNumber", equalTo("FR224226850")))
-            .andExpect(jsonPath("$.archived[0].externalReferenceNumber", equalTo("1236514")))
-            .andExpect(jsonPath("$.archived[0].type", equalTo("ALERT")))
-            .andExpect(jsonPath("$.archived[0].isArchived", equalTo(true)))
-            .andExpect(jsonPath("$.archived[0].isDeleted", equalTo(false)))
+            .andExpect(jsonPath("$.current[0].reporting.id", equalTo(1)))
+            .andExpect(jsonPath("$.current[0].reporting.flagState", equalTo("FR")))
+            .andExpect(jsonPath("$.current[0].reporting.internalReferenceNumber", equalTo("FR224226850")))
+            .andExpect(jsonPath("$.current[0].reporting.externalReferenceNumber", equalTo("1236514")))
+            .andExpect(jsonPath("$.current[0].reporting.type", equalTo("ALERT")))
+            .andExpect(jsonPath("$.current[0].reporting.isArchived", equalTo(false)))
+            .andExpect(jsonPath("$.current[0].reporting.isDeleted", equalTo(false)))
+            .andExpect(jsonPath("$.current[0].reporting.infraction.natinfCode", equalTo(7059)))
+            .andExpect(jsonPath("$.current[0].reporting.value.type", equalTo("THREE_MILES_TRAWLING_ALERT")))
+            .andExpect(jsonPath("$.current[0].reporting.value.natinfCode", equalTo(7059)))
+            .andExpect(jsonPath("$.archived[2024][0].reporting.id", equalTo(666)))
+            .andExpect(jsonPath("$.archived[2024][0].reporting.internalReferenceNumber", equalTo("FR224226850")))
+            .andExpect(jsonPath("$.archived[2024][0].reporting.externalReferenceNumber", equalTo("1236514")))
+            .andExpect(jsonPath("$.archived[2024][0].reporting.type", equalTo("ALERT")))
+            .andExpect(jsonPath("$.archived[2024][0].reporting.isArchived", equalTo(true)))
+            .andExpect(jsonPath("$.archived[2024][0].reporting.isDeleted", equalTo(false)))
     }
 
     @Test
@@ -759,7 +773,7 @@ class VesselControllerITests {
             .willReturn(
                 CurrentAndArchivedReportings(
                     current = listOf(),
-                    archived = listOf(),
+                    archived = mapOf(),
                 ),
             )
 

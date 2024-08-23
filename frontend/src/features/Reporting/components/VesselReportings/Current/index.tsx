@@ -1,4 +1,5 @@
 import { setEditedReporting } from '@features/Reporting/slice'
+import { ReportingType } from '@features/Reporting/types'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Button, THEME } from '@mtes-mct/monitor-ui'
@@ -7,13 +8,10 @@ import styled from 'styled-components'
 
 import { ConfirmDeletionModal } from './ConfirmDeletionModal'
 import { EditReporting } from './EditReporting'
-import { sortByValidationOrCreationDateDesc } from './utils'
-import { operationalAlertTypes } from '../../../../../domain/entities/alerts/constants'
-import { ReportingType } from '../../../../../domain/types/reporting'
 import { deleteReporting } from '../../../useCases/deleteReporting'
 import { ReportingCard } from '../ReportingCard'
 
-import type { Reporting } from '../../../../../domain/types/reporting'
+import type { ReportingAndOccurrences } from '@features/Reporting/types'
 
 export function Current() {
   const dispatch = useMainAppDispatch()
@@ -22,27 +20,20 @@ export function Current() {
   )
   const editedReporting = useMainAppSelector(state => state.reporting.editedReporting)
   const [isNewReportingFormOpen, setIsNewReportingFormOpen] = useState(false)
-  const [deletionModalIsOpenForId, setDeletionModalIsOpenForId] = useState<number | undefined>(undefined)
+  const [isDeletionModalOpened, setIsDeletionModalOpened] = useState<
+    { id: number; reportingType: ReportingType } | undefined
+  >(undefined)
 
   const closeForm = useCallback(() => {
     setIsNewReportingFormOpen(false)
     dispatch(setEditedReporting(null))
   }, [dispatch])
 
-  const getAlertsDesc = useCallback(
-    alertType =>
-      currentAndArchivedReportingsOfSelectedVessel?.current
-        ?.filter(reporting => reporting.type === ReportingType.ALERT && reporting.value.type === alertType.code)
-        ?.sort((a, b) => sortByValidationOrCreationDateDesc(a, b)) || [],
-    [currentAndArchivedReportingsOfSelectedVessel]
-  )
-
-  const reportingsWithoutAlerts: Reporting[] = useMemo(
+  const reportingsWithoutEdited: ReportingAndOccurrences[] = useMemo(
     () =>
-      (currentAndArchivedReportingsOfSelectedVessel?.current || [])
-        .filter(reporting => reporting.type !== ReportingType.ALERT)
-        .filter(reporting => reporting.id !== editedReporting?.id)
-        .sort((a, b) => sortByValidationOrCreationDateDesc(a, b)),
+      (currentAndArchivedReportingsOfSelectedVessel?.current || []).filter(
+        reportingAndOccurrences => reportingAndOccurrences.reporting.id !== editedReporting?.id
+      ),
     [currentAndArchivedReportingsOfSelectedVessel, editedReporting]
   )
 
@@ -61,37 +52,21 @@ export function Current() {
         </NewReportingButton>
       )}
       {(isNewReportingFormOpen || editedReporting) && <EditReporting closeForm={closeForm} />}
-      {operationalAlertTypes.map(alertType => {
-        const alertReportings = getAlertsDesc(alertType)
-        if (!alertReportings.length) {
-          return null
-        }
-
-        const lastValidatedAlert = alertReportings[0]
-        if (!lastValidatedAlert) {
-          return null
-        }
-
-        return (
-          <ReportingCard
-            key={lastValidatedAlert.id}
-            numberOfOccurrences={alertReportings.length}
-            openConfirmDeletionModalForId={setDeletionModalIsOpenForId}
-            reporting={lastValidatedAlert}
-          />
-        )
-      })}
-      {reportingsWithoutAlerts.map(reporting => (
+      {reportingsWithoutEdited.map(reporting => (
         <ReportingCard
-          key={reporting.id}
-          openConfirmDeletionModalForId={setDeletionModalIsOpenForId}
-          reporting={reporting}
+          key={reporting.reporting.id}
+          numberOfOccurrences={reporting.otherOccurrences.length}
+          openConfirmDeletionModal={setIsDeletionModalOpened}
+          reporting={reporting.reporting}
         />
       ))}
       <ConfirmDeletionModal
-        closeModal={() => setDeletionModalIsOpenForId(undefined)}
-        isOpened={deletionModalIsOpenForId}
-        validateCallback={() => deletionModalIsOpenForId && dispatch(deleteReporting(deletionModalIsOpenForId))}
+        closeModal={() => setIsDeletionModalOpened(undefined)}
+        isOpened={!!isDeletionModalOpened}
+        validateCallback={() =>
+          isDeletionModalOpened &&
+          dispatch(deleteReporting(isDeletionModalOpened.id, isDeletionModalOpened.reportingType))
+        }
       />
     </Wrapper>
   )

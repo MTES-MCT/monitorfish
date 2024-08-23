@@ -220,7 +220,7 @@ internal class NAFMessageMapperUTests {
     }
 
     @Test
-    internal fun `init Should not throw Whe nthe network type is incorrect`() {
+    internal fun `init Should not throw When the network type is incorrect`() {
         // Given
         val naf = "//SR//TM/POS//IR/FRA000123456//NA/MANUEL//RC/FT6951//FS/FRA//XR/TL326095//DA/20200814//TI/0911//LT/+43.0789//LG/+006.1549//SP/000//CO/0//FR/FRA//RD/20200814//RT/0912//MS/INCORRECT//ER//"
 

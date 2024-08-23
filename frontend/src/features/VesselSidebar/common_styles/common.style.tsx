@@ -19,6 +19,7 @@ export const Header = styled.div`
   padding: 6px 10px 9px 20px;
   width: 400px;
   vertical-align: middle;
+  user-select: none;
 `
 
 export const NoValue = styled.span`

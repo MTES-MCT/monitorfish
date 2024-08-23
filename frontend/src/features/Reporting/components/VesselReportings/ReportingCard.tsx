@@ -5,26 +5,25 @@ import { Accent, Icon, IconButton, THEME } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { ReportingType } from '../../../../domain/types/reporting'
 import { getDateTime } from '../../../../utils'
 import { getAlertNameFromType } from '../../../SideWindow/Alert/AlertListAndReportingList/utils'
 import { setEditedReporting } from '../../slice'
-import { ReportingTypeCharacteristics } from '../../types'
-import archiveReporting from '../../useCases/archiveReporting'
+import { ReportingType, ReportingTypeCharacteristics } from '../../types'
+import { archiveReporting } from '../../useCases/archiveReporting'
 
-import type { Reporting } from '../../../../domain/types/reporting'
+import type { Reporting } from '../../types'
 import type { Promisable } from 'type-fest'
 
 export type ReportingCardProps = {
   isArchived?: boolean
   numberOfOccurrences?: number
-  openConfirmDeletionModalForId: (reportingId: number) => Promisable<void>
+  openConfirmDeletionModal?: ({ id, reportingType }) => Promisable<void>
   reporting: Reporting
 }
 export function ReportingCard({
   isArchived = false,
   numberOfOccurrences,
-  openConfirmDeletionModalForId,
+  openConfirmDeletionModal,
   reporting
 }: ReportingCardProps) {
   const dispatch = useMainAppDispatch()
@@ -101,7 +100,7 @@ export function ReportingCard({
             data-cy="archive-reporting-card"
             Icon={Icon.Archive}
             iconSize={20}
-            onClick={() => dispatch(archiveReporting(reporting.id))}
+            onClick={() => dispatch(archiveReporting(reporting.id, reporting.type))}
             title="Archiver"
           />
           <IconButton
@@ -110,7 +109,7 @@ export function ReportingCard({
             data-cy="delete-reporting-card"
             Icon={Icon.Delete}
             iconSize={20}
-            onClick={() => openConfirmDeletionModalForId(reporting.id)}
+            onClick={() => openConfirmDeletionModal?.({ id: reporting.id, reportingType: reporting.type })}
             title="Supprimer"
           />
         </Actions>

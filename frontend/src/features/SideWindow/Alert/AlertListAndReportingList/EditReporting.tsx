@@ -1,5 +1,7 @@
+import { ErrorWall } from '@components/ErrorWall'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { THEME } from '@mtes-mct/monitor-ui'
 import { useCallback } from 'react'
 import styled from 'styled-components'
@@ -14,10 +16,21 @@ export function EditReporting() {
   const dispatch = useMainAppDispatch()
   const baseUrl = window.location.origin
   const editedReportingInSideWindow = useMainAppSelector(state => state.reporting.editedReportingInSideWindow)
+  const displayedError = useMainAppSelector(
+    state => state.displayedError[DisplayedErrorKey.SIDE_WINDOW_REPORTING_FORM_ERROR]
+  )
 
   const closeForm = useCallback(() => {
     dispatch(setEditedReportingInSideWindow())
   }, [dispatch])
+
+  if (displayedError) {
+    return (
+      <EditReportingWrapper isEditedInSideWindow={!!editedReportingInSideWindow}>
+        <ErrorWall displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_REPORTING_FORM_ERROR} isAbsolute />
+      </EditReportingWrapper>
+    )
+  }
 
   return (
     <EditReportingWrapper

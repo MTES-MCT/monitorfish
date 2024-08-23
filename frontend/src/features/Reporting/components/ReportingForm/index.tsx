@@ -22,15 +22,19 @@ import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { getOnlyVesselIdentityProperties } from '../../../../domain/entities/vessel/vessel'
-import { ReportingType } from '../../../../domain/types/reporting'
 import { sortArrayByColumn } from '../../../VesselList/tableSort'
-import { ReportingOriginActor, ReportingOriginActorLabel, ReportingTypeCharacteristics } from '../../types'
+import {
+  ReportingOriginActor,
+  ReportingOriginActorLabel,
+  ReportingType,
+  ReportingTypeCharacteristics
+} from '../../types'
 import { addReporting } from '../../useCases/addReporting'
 import { updateReporting } from '../../useCases/updateReporting'
 import { mapControlUnitsToUniqueSortedIdsAsOptions } from '../VesselReportings/Current/utils'
 
 import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
-import type { EditableReporting, EditedReporting } from '../../../../domain/types/reporting'
+import type { EditableReporting, EditedReporting } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
 type ReportingFormProps = {
@@ -73,20 +77,21 @@ export function ReportingForm({
   }, [controlUnitsQuery.data])
 
   const createOrEditReporting = useCallback(
-    (reportingValue: EditedReporting) => {
+    async (reportingValue: EditedReporting) => {
       const nextReportingValue = getReportingValue(reportingValue)
 
       if (editedReporting?.id) {
-        dispatch(
+        await dispatch(
           updateReporting(
             getOnlyVesselIdentityProperties(editedReporting),
             editedReporting.id,
             nextReportingValue,
-            editedReporting.type
+            editedReporting.type,
+            isFromSideWindow
           )
-        ).then(() => {
-          closeForm()
-        })
+        )
+
+        closeForm()
 
         return
       }
@@ -107,11 +112,10 @@ export function ReportingForm({
         vesselName: selectedVesselIdentity.vesselName ?? null
       }
 
-      dispatch(addReporting(nextReportingWithMissingProperties)).then(() => {
-        closeForm()
-      })
+      await dispatch(addReporting(nextReportingWithMissingProperties))
+      closeForm()
     },
-    [dispatch, closeForm, editedReporting, selectedVesselIdentity]
+    [dispatch, closeForm, editedReporting, isFromSideWindow, selectedVesselIdentity]
   )
 
   return (

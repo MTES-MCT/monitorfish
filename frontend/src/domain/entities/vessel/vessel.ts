@@ -12,7 +12,7 @@ import type {
   VesselIdentity
 } from './types'
 import type { LastPositionVisibility } from '../../types/map'
-import type { Reporting } from '../../types/reporting'
+import type { Reporting } from '@features/Reporting/types'
 import type { Vessel as VesselTypes } from '@features/Vessel/Vessel.types'
 
 export const VESSEL_ALERT_STYLE = 1

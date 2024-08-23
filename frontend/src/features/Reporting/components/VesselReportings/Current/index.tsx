@@ -55,7 +55,7 @@ export function Current() {
       {reportingsWithoutEdited.map(reporting => (
         <ReportingCard
           key={reporting.reporting.id}
-          numberOfOccurrences={reporting.otherOccurrences.length}
+          numberOfOccurrences={reporting.otherOccurrences.length + 1}
           openConfirmDeletionModal={setIsDeletionModalOpened}
           reporting={reporting.reporting}
         />

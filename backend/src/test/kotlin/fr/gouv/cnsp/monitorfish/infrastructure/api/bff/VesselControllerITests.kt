@@ -750,12 +750,12 @@ class VesselControllerITests {
             .andExpect(jsonPath("$.current[0].reporting.infraction.natinfCode", equalTo(7059)))
             .andExpect(jsonPath("$.current[0].reporting.value.type", equalTo("THREE_MILES_TRAWLING_ALERT")))
             .andExpect(jsonPath("$.current[0].reporting.value.natinfCode", equalTo(7059)))
-            .andExpect(jsonPath("$.archived[2024][0].reporting.id", equalTo(666)))
-            .andExpect(jsonPath("$.archived[2024][0].reporting.internalReferenceNumber", equalTo("FR224226850")))
-            .andExpect(jsonPath("$.archived[2024][0].reporting.externalReferenceNumber", equalTo("1236514")))
-            .andExpect(jsonPath("$.archived[2024][0].reporting.type", equalTo("ALERT")))
-            .andExpect(jsonPath("$.archived[2024][0].reporting.isArchived", equalTo(true)))
-            .andExpect(jsonPath("$.archived[2024][0].reporting.isDeleted", equalTo(false)))
+            .andExpect(jsonPath("$.archived.2024[0].reporting.id", equalTo(666)))
+            .andExpect(jsonPath("$.archived.2024[0].reporting.internalReferenceNumber", equalTo("FR224226850")))
+            .andExpect(jsonPath("$.archived.2024[0].reporting.externalReferenceNumber", equalTo("1236514")))
+            .andExpect(jsonPath("$.archived.2024[0].reporting.type", equalTo("ALERT")))
+            .andExpect(jsonPath("$.archived.2024[0].reporting.isArchived", equalTo(true)))
+            .andExpect(jsonPath("$.archived.2024[0].reporting.isDeleted", equalTo(false)))
     }
 
     @Test

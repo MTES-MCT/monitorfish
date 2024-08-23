@@ -16,7 +16,7 @@ import type { Promisable } from 'type-fest'
 
 export type ReportingCardProps = {
   isArchived?: boolean
-  numberOfOccurrences?: number
+  numberOfOccurrences: number
   openConfirmDeletionModal?: ({ id, reportingType }) => Promisable<void>
   reporting: Reporting
 }
@@ -81,10 +81,10 @@ export function ReportingCard({
         )}
       </Body>
       {isArchived ? (
-        <>{numberOfOccurrences && <NumberOfAlerts isArchived>{numberOfOccurrences}</NumberOfAlerts>}</>
+        <>{numberOfOccurrences > 1 && <NumberOfAlerts isArchived>{numberOfOccurrences}</NumberOfAlerts>}</>
       ) : (
-        <Actions isAlert={!!numberOfOccurrences} isInfractionSuspicion={isAnInfractionSuspicion}>
-          {numberOfOccurrences && <NumberOfAlerts>{numberOfOccurrences}</NumberOfAlerts>}
+        <Actions hasOccurrences={numberOfOccurrences > 1}>
+          {numberOfOccurrences > 1 && <NumberOfAlerts>{numberOfOccurrences}</NumberOfAlerts>}
           <IconButton
             accent={Accent.TERTIARY}
             color={THEME.color.charcoal}
@@ -145,11 +145,10 @@ const Body = styled.div<{
 `
 
 const Actions = styled.div<{
-  isAlert: boolean
-  isInfractionSuspicion?: boolean
+  hasOccurrences: boolean
 }>`
   border-left: 2px solid ${p => p.theme.color.white};
-  padding-top: ${p => (p.isAlert ? 8 : 3)}px;
+  padding-top: ${p => (p.hasOccurrences ? 8 : 3)}px;
   text-align: center;
   width: 32px;
   margin-left: auto;

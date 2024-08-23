@@ -92,6 +92,15 @@ def monitorenv_control_units_api_response() -> list:
                     "name": "OPERATIONAL_CENTER_HO",
                     "phone": "xx xx xx xx xx",
                 },
+                {
+                    "id": 951357,
+                    "controlUnitId": 2,
+                    "email": "unused_email.adresse@somewhere",
+                    "isEmailSubscriptionContact": False,
+                    "isSmsSubscriptionContact": True,
+                    "name": "OPERATIONAL_CENTER_HO",
+                    "phone": "",
+                },
             ],
             "isArchived": False,
             "name": "Unité 2",
@@ -231,6 +240,7 @@ def monitorenv_control_units_api_response() -> list:
                 {
                     "id": 1541,
                     "controlUnitId": 6,
+                    "email": "",
                     "isEmailSubscriptionContact": True,
                     "isSmsSubscriptionContact": False,
                     "name": "Référent police",

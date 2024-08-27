@@ -187,8 +187,8 @@ class PriorNotificationController(
         val fishingCatches = manualPriorNotificationComputeDataInput.fishingCatches.map { it.toLogbookFishingCatch() }
 
         val manualPriorNotificationComputedValues = computeManualPriorNotification.execute(
-            faoArea = manualPriorNotificationComputeDataInput.faoArea,
             fishingCatches = fishingCatches,
+            globalFaoArea = manualPriorNotificationComputeDataInput.globalFaoArea,
             portLocode = manualPriorNotificationComputeDataInput.portLocode,
             tripGearCodes = manualPriorNotificationComputeDataInput.tripGearCodes,
             vesselId = manualPriorNotificationComputeDataInput.vesselId,
@@ -230,7 +230,7 @@ class PriorNotificationController(
             didNotFishAfterZeroNotice = manualPriorNotificationFormDataInput.didNotFishAfterZeroNotice,
             expectedArrivalDate = manualPriorNotificationFormDataInput.expectedArrivalDate,
             expectedLandingDate = manualPriorNotificationFormDataInput.expectedLandingDate,
-            faoArea = manualPriorNotificationFormDataInput.faoArea,
+            globalFaoArea = manualPriorNotificationFormDataInput.globalFaoArea,
             fishingCatches = manualPriorNotificationFormDataInput.fishingCatches.map { it.toLogbookFishingCatch() },
             note = manualPriorNotificationFormDataInput.note,
             portLocode = manualPriorNotificationFormDataInput.portLocode,
@@ -260,7 +260,7 @@ class PriorNotificationController(
             didNotFishAfterZeroNotice = manualPriorNotificationFormDataInput.didNotFishAfterZeroNotice,
             expectedArrivalDate = manualPriorNotificationFormDataInput.expectedArrivalDate,
             expectedLandingDate = manualPriorNotificationFormDataInput.expectedLandingDate,
-            faoArea = manualPriorNotificationFormDataInput.faoArea,
+            globalFaoArea = manualPriorNotificationFormDataInput.globalFaoArea,
             fishingCatches = manualPriorNotificationFormDataInput.fishingCatches.map { it.toLogbookFishingCatch() },
             note = manualPriorNotificationFormDataInput.note,
             portLocode = manualPriorNotificationFormDataInput.portLocode,

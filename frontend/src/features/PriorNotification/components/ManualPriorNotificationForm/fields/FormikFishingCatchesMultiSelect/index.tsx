@@ -1,60 +1,42 @@
 import { useGetSpeciesQuery } from '@api/specy'
 import { FieldsetGroupSpinner } from '@features/Mission/components/MissionForm/shared/FieldsetGroup'
+import { useGetFaoAreasAsOptions } from '@hooks/useGetFaoAreasAsOptions'
 import { useGetSpeciesAsOptions } from '@hooks/useGetSpeciesAsOptions'
-import { CustomSearch, FormikNumberInput, Select, SingleTag } from '@mtes-mct/monitor-ui'
+import { CustomSearch, FormikNumberInput, FormikSelect, Select, SingleTag } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
-import { useField } from 'formik'
+import { useFormikContext } from 'formik'
 import { useMemo } from 'react'
 import { Fragment } from 'react/jsx-runtime'
 import styled from 'styled-components'
 
-import { InputRow } from './styles'
-import { getFishingsCatchesExtraFields } from './utils'
+import { FormikExtraField } from './FormikExtraField'
+import { InputWithUnit, SubRow } from './styles'
+import { getFishingsCatchesValidationError } from './utils'
 import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES } from '../../constants'
 import { getFishingsCatchesInitialValues } from '../../utils'
 
 import type { Specy } from '../../../../../../domain/types/specy'
-import type { PriorNotification } from '../../../../PriorNotification.types'
+import type { ManualPriorNotificationFormValues } from '../../types'
 
 // TODO Is the species name really useful since the Backend fills it?
 type FormikFishingCatchesMultiSelectProps = Readonly<{
-  readOnly?: boolean | undefined
+  isReadOnly: boolean
 }>
-export function FormikFishingCatchesMultiSelect({ readOnly }: FormikFishingCatchesMultiSelectProps) {
-  const [input, meta, helper] = useField<PriorNotification.FormDataFishingCatch[]>('fishingCatches')
+export function FormikFishingCatchesMultiSelect({ isReadOnly }: FormikFishingCatchesMultiSelectProps) {
+  const { errors, setFieldValue, values } = useFormikContext<ManualPriorNotificationFormValues>()
   const { speciesAsOptions } = useGetSpeciesAsOptions()
   const { data: speciesAndGroups } = useGetSpeciesQuery()
+  const { faoAreasAsOptions } = useGetFaoAreasAsOptions()
+
+  const validationError = getFishingsCatchesValidationError(errors)
 
   const filteredSpeciesAsOptions = useMemo(
     () =>
       speciesAsOptions?.filter(specyOption =>
-        input.value.every(fishingCatch => fishingCatch.specyCode !== specyOption.value.code)
+        values.fishingCatches.every(fishingCatch => fishingCatch.specyCode !== specyOption.value.code)
       ) ?? [],
-    [speciesAsOptions, input.value]
+    [speciesAsOptions, values.fishingCatches]
   )
-
-  const add = (nextSpecy: Specy | undefined) => {
-    const specyOption = speciesAsOptions?.find(({ value }) => value.code === nextSpecy?.code)
-    if (!specyOption) {
-      return
-    }
-
-    const specyName = speciesAndGroups?.species.find(specy => specy.code === specyOption.value.code)?.name
-    assertNotNullish(specyName)
-    const nextFishingCatches = [...input.value, ...getFishingsCatchesInitialValues(specyOption.value.code, specyName)]
-
-    helper.setValue(nextFishingCatches)
-  }
-
-  const remove = (specyCode: string | undefined) => {
-    const nextFishingCatches = input.value.filter(fishingCatch =>
-      specyCode === 'BFT'
-        ? !['BFT', ...BLUEFIN_TUNA_EXTENDED_SPECY_CODES].includes(fishingCatch.specyCode)
-        : fishingCatch.specyCode !== specyCode
-    )
-
-    helper.setValue(nextFishingCatches)
-  }
 
   const customSearch = useMemo(
     () =>
@@ -77,6 +59,36 @@ export function FormikFishingCatchesMultiSelect({ readOnly }: FormikFishingCatch
     [filteredSpeciesAsOptions]
   )
 
+  const add = (nextSpecy: Specy | undefined) => {
+    const specyOption = speciesAsOptions?.find(({ value }) => value.code === nextSpecy?.code)
+    if (!specyOption) {
+      return
+    }
+
+    const specyName = speciesAndGroups?.species.find(specy => specy.code === specyOption.value.code)?.name
+    assertNotNullish(specyName)
+    const nextFishingCatches = [
+      ...values.fishingCatches,
+      ...getFishingsCatchesInitialValues(specyOption.value.code, specyName)
+    ]
+
+    setFieldValue('fishingCatches', nextFishingCatches)
+  }
+
+  const remove = (specyCode: string | undefined) => {
+    if (isReadOnly) {
+      return
+    }
+
+    const nextFishingCatches = values.fishingCatches.filter(fishingCatch =>
+      specyCode === 'BFT'
+        ? !['BFT', ...BLUEFIN_TUNA_EXTENDED_SPECY_CODES].includes(fishingCatch.specyCode)
+        : fishingCatch.specyCode !== specyCode
+    )
+
+    setFieldValue('fishingCatches', nextFishingCatches)
+  }
+
   if (!filteredSpeciesAsOptions.length || !customSearch) {
     return <FieldsetGroupSpinner isLight legend="Espèces à bord et à débarquer" />
   }
@@ -86,45 +98,59 @@ export function FormikFishingCatchesMultiSelect({ readOnly }: FormikFishingCatch
       <Select
         customSearch={customSearch}
         disabled={!filteredSpeciesAsOptions}
-        error={meta.error}
+        error={validationError}
         label="Espèces à bord et à débarquer"
         name="fishingCatches"
         onChange={add}
         options={filteredSpeciesAsOptions ?? []}
         optionValueKey="code"
-        readOnly={!!readOnly}
+        readOnly={isReadOnly}
         virtualized
       />
 
       <Wrapper>
-        {input.value.map((fishingCatch, index) => (
+        {values.fishingCatches.map((fishingCatch, index) => (
           <Fragment key={fishingCatch.specyCode}>
             {!BLUEFIN_TUNA_EXTENDED_SPECY_CODES.includes(fishingCatch.specyCode) && (
-              <Block>
-                <SingleTag
-                  onDelete={() => {
-                    if (readOnly) {
-                      return
-                    }
+              <Row>
+                <SubRow>
+                  <SpecyTag
+                    onDelete={() => remove(fishingCatch.specyCode)}
+                  >{`${fishingCatch.specyCode} – ${fishingCatch.specyName}`}</SpecyTag>
 
-                    remove(fishingCatch.specyCode)
-                  }}
-                >{`${fishingCatch.specyCode} – ${fishingCatch.specyName}`}</SingleTag>
+                  {!values.hasGlobalFaoArea && (
+                    <FormikSelect
+                      disabled={!filteredSpeciesAsOptions}
+                      isErrorMessageHidden
+                      isLabelHidden
+                      label={`Zone de capture (${fishingCatch.specyCode})`}
+                      name={`fishingCatches[${index}].faoArea`}
+                      options={faoAreasAsOptions ?? []}
+                      placeholder="Choisir une zone"
+                      readOnly={isReadOnly}
+                      searchable
+                      virtualized
+                    />
+                  )}
 
-                <div>
-                  <InputRow>
+                  <InputWithUnit>
                     <FormikNumberInput
+                      isErrorMessageHidden
                       isLabelHidden
                       label={`Poids (${fishingCatch.specyCode})`}
                       name={`fishingCatches[${index}].weight`}
-                      readOnly={!!readOnly}
+                      readOnly={isReadOnly}
                     />
                     kg
-                  </InputRow>
+                  </InputWithUnit>
+                </SubRow>
 
-                  {getFishingsCatchesExtraFields(fishingCatch.specyCode, index, input.value)}
-                </div>
-              </Block>
+                <FormikExtraField
+                  allFishingsCatches={values.fishingCatches}
+                  fishingsCatchesIndex={index}
+                  specyCode={fishingCatch.specyCode}
+                />
+              </Row>
             )}
           </Fragment>
         ))}
@@ -134,24 +160,24 @@ export function FormikFishingCatchesMultiSelect({ readOnly }: FormikFishingCatch
 }
 
 const Wrapper = styled.div`
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
+
+  * {
+    box-sizing: border-box;
+  }
 `
 
-const Block = styled.div`
-  align-items: flex-start;
+const Row = styled.div`
   display: flex;
-  gap: 16px;
+  flex-direction: column;
   margin-top: 24px;
+  row-gap: 8px;
+`
 
-  > div {
-    max-width: 50%;
-    width: 50%;
-
-    &:last-child {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-  }
+const SpecyTag = styled(SingleTag)`
+  margin-top: 2px;
+  max-width: 220px;
+  min-width: 220px;
 `

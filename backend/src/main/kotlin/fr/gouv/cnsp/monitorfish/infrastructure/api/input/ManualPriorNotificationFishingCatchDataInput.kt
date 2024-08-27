@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.input
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
 
 data class ManualPriorNotificationFishingCatchDataInput(
+    val faoArea: String?,
     val quantity: Double?,
     val specyCode: String,
     val specyName: String,
@@ -13,7 +14,7 @@ data class ManualPriorNotificationFishingCatchDataInput(
             conversionFactor = null,
             economicZone = null,
             effortZone = null,
-            faoZone = null,
+            faoZone = faoArea,
             freshness = null,
             nbFish = quantity,
             packaging = null,

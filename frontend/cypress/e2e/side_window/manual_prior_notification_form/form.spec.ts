@@ -30,6 +30,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.fill("Date et heure estimées d'arrivée au port (UTC)", arrivalDateTupleWithTime)
     cy.fill('Date et heure prévues de débarque (UTC)', landingDateTupleWithTime)
     cy.fill("Port d'arrivée", 'Vannes')
+    cy.fill('Zone globale de capture', '21.4.T')
 
     cy.fill('Espèces à bord et à débarquer', 'AAX')
     cy.fill('Poids (AAX)', 25)
@@ -46,7 +47,6 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.fill('Quantité (SWO)', 20)
 
     cy.fill('Engins utilisés', ['OTP', 'PTB'], { index: 1 })
-    cy.fill('Zone de pêche', '21.4.T')
     cy.fill("Points d'attention identifiés par le CNSP", "Un point d'attention.")
     cy.fill('Saisi par', 'BOB')
 
@@ -62,36 +62,42 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
       assert.isString(createdPriorNotification.reportId)
       assert.isTrue(isDateCloseTo(createdPriorNotification.sentAt, now, 15))
       assert.deepInclude(createdPriorNotification.fishingCatches, {
+        faoArea: null,
         quantity: null,
         specyCode: 'AAX',
         specyName: 'AAPTOSYAX GRYPUS',
         weight: 25.0
       })
       assert.deepInclude(createdPriorNotification.fishingCatches, {
+        faoArea: null,
         quantity: null,
         specyCode: 'BFT',
         specyName: 'THON ROUGE',
         weight: 150.0
       })
       assert.deepInclude(createdPriorNotification.fishingCatches, {
+        faoArea: null,
         quantity: 4.0,
         specyCode: 'BF1',
         specyName: 'THON ROUGE + 30 KG',
         weight: 40.0
       })
       assert.deepInclude(createdPriorNotification.fishingCatches, {
+        faoArea: null,
         quantity: 5.0,
         specyCode: 'BF2',
         specyName: 'THON ROUGE 8 À 30 KG',
         weight: 50.0
       })
       assert.deepInclude(createdPriorNotification.fishingCatches, {
+        faoArea: null,
         quantity: 6.0,
         specyCode: 'BF3',
         specyName: 'THON ROUGE 6.4 À 8 KG',
         weight: 60.0
       })
       assert.deepInclude(createdPriorNotification.fishingCatches, {
+        faoArea: null,
         quantity: 20.0,
         specyCode: 'SWO',
         specyName: 'ESPADON',
@@ -102,7 +108,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         didNotFishAfterZeroNotice: false,
         expectedArrivalDate: arrivalDateAsString,
         expectedLandingDate: landingDateAsString,
-        faoArea: '21.4.T',
+        globalFaoArea: '21.4.T',
         note: "Un point d'attention.",
         portLocode: 'FRVNE',
         tripGearCodes: ['OTP', 'PTB'],
@@ -181,6 +187,10 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
 
     cy.contains("Veuillez indiquer le port d'arrivée.").should('not.exist')
 
+    cy.fill('Zone globale de capture', '21.4.T')
+
+    cy.contains('Veuillez indiquer la zone FAO.').should('not.exist')
+
     cy.fill('Espèces à bord et à débarquer', 'AAX')
 
     cy.contains('Veuillez sélectionner au moins une espèce.').should('not.exist')
@@ -189,10 +199,6 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
 
     cy.contains('Veuillez sélectionner au moins un engin.').should('not.exist')
 
-    cy.fill('Zone de pêche', '21.4.T')
-
-    cy.contains('Veuillez indiquer la zone FAO.').should('not.exist')
-
     cy.fill('Saisi par', 'BOB')
 
     cy.contains('Veuillez indiquer votre trigramme.').should('not.exist')
@@ -200,7 +206,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.contains('Créer le préavis').should('be.enabled')
 
     // -------------------------------------------------------------------------
-    // Other form validation errors
+    // Date form validation errors
 
     cy.fill('Date et heure prévues de débarque (UTC)', undefined)
 
@@ -210,6 +216,27 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.fill("équivalentes à celles de l'arrivée au port", true)
 
     cy.contains('Veuillez indiquer la date de débarquement prévue.').should('not.exist')
+    cy.contains('Créer le préavis').should('be.enabled')
+
+    // -------------------------------------------------------------------------
+    // Date species & FAO area form validation errors
+
+    cy.fill('Poids (AAX)', undefined)
+
+    cy.contains('Veuillez indiquer le poids pour chaque espèce.').should('exist')
+    cy.contains('Créer le préavis').should('be.disabled')
+
+    cy.fill('Poids (AAX)', 10)
+
+    cy.contains('Veuillez indiquer le poids pour chaque espèce.').should('not.exist')
+
+    cy.fill('Zones de capture', 'Différentes zones de capture')
+
+    cy.contains('Veuillez indiquer la zone FAO pour chaque espèce.').should('exist')
+
+    cy.fill('Zone de capture (AAX)', '21.4.T')
+
+    cy.contains('Veuillez indiquer la zone FAO pour chaque espèce.').should('not.exist')
     cy.contains('Créer le préavis').should('be.enabled')
   })
 
@@ -233,12 +260,12 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.fill("Date et heure estimées d'arrivée au port (UTC)", arrivalDateTupleWithTime)
     cy.fill("équivalentes à celles de l'arrivée au port", true)
     cy.fill("Port d'arrivée", 'Vannes')
+    cy.fill('Zone globale de capture', '27.7.d')
 
     cy.fill('Espèces à bord et à débarquer', 'MORUE COMMUNE')
     cy.fill('Poids (COD)', 5000)
 
     cy.fill('Engins utilisés', ['OTB'], { index: 1 })
-    cy.fill('Zone de pêche', '27.7.d')
     cy.fill('Saisi par', 'BOB')
 
     cy.wait('@computePriorNotification')
@@ -259,6 +286,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
       assert.isString(createdPriorNotification.reportId)
       assert.isTrue(isDateCloseTo(createdPriorNotification.sentAt, now, 15))
       assert.deepInclude(createdPriorNotification.fishingCatches, {
+        faoArea: null,
         quantity: null,
         specyCode: 'COD',
         specyName: 'MORUE COMMUNE (CABILLAUD)',
@@ -270,7 +298,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         expectedArrivalDate: arrivalDateAsString,
         // Should be the same as the arrival date since we checked "équivalentes à celles de l'arrivée au port"
         expectedLandingDate: arrivalDateAsString,
-        faoArea: '27.7.d',
+        globalFaoArea: '27.7.d',
         note: null,
         portLocode: 'FRVNE',
         tripGearCodes: ['OTB'],
@@ -299,7 +327,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
       )
 
       cy.fill('Engins utilisés', ['OTB', 'Chaluts de fond (non spécifiés)' /* (TB) */], { index: 1 })
-      cy.fill('Zone de pêche', '27.5.b')
+      cy.fill('Zone globale de capture', '27.5.b')
 
       cy.wait('@computePriorNotification')
       cy.getDataCy('VesselRiskFactor').contains('1.9').should('exist')
@@ -320,7 +348,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         assert.includeMembers(updatedPriorNotification.tripGearCodes, ['OTB', 'TB'])
         assert.deepInclude(updatedPriorNotification, {
           ...omit(createdPriorNotification, ['tripGearCodes', 'updatedAt']),
-          faoArea: '27.5.b',
+          globalFaoArea: '27.5.b',
           reportId: createdPriorNotification.reportId
         })
 
@@ -357,6 +385,10 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
 
     cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 0)
 
+    cy.fill('Zone globale de capture', '27.7.d')
+
+    cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 0)
+
     cy.fill('Espèces à bord et à débarquer', 'AAX')
 
     cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 0)
@@ -366,10 +398,6 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 0)
 
     cy.fill('Engins utilisés', ['OTB'], { index: 1 })
-
-    cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 0)
-
-    cy.fill('Zone de pêche', '27.7.d')
 
     cy.wait('@computePriorNotification')
     cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 1)
@@ -403,22 +431,22 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.wait('@computePriorNotification')
     cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 2)
 
-    cy.fill('Poids (SOS)', 50)
+    cy.fill('Zone globale de capture', '27.7.d')
 
     cy.wait('@computePriorNotification')
     cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 3)
 
-    cy.fill('Espèces à bord et à débarquer', 'AAX')
+    cy.fill('Poids (SOS)', 50)
 
     cy.wait('@computePriorNotification')
     cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 4)
 
-    cy.fill('Engins utilisés', ['OTB'], { index: 1 })
+    cy.fill('Espèces à bord et à débarquer', 'AAX')
 
     cy.wait('@computePriorNotification')
     cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 5)
 
-    cy.fill('Zone de pêche', '27.7.d')
+    cy.fill('Engins utilisés', ['OTB'], { index: 1 })
 
     cy.wait('@computePriorNotification')
     // cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 6)
@@ -430,6 +458,163 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.fill('Saisi par', 'BOB')
 
     cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 6)
+  })
+
+  it('Should switch from global FAO area to per species FAO area and vice versa in a manual prior notification', () => {
+    // -------------------------------------------------------------------------
+    // Add
+
+    const now = new Date()
+    const { utcDateAsStringWithoutMs: arrivalDateAsString, utcDateTupleWithTime: arrivalDateTupleWithTime } =
+      getUtcDateInMultipleFormats(customDayjs().add(2, 'hours').startOf('minute').toISOString())
+
+    cy.intercept('POST', '/bff/v1/prior_notifications/manual').as('createPriorNotification')
+
+    addManualSideWindowPriorNotification()
+
+    cy.getDataCy('vessel-search-input').click().wait(500)
+    cy.getDataCy('vessel-search-input').type('SABORDS', { delay: 100 })
+    cy.getDataCy('vessel-search-item').first().click()
+
+    cy.fill("Date et heure estimées d'arrivée au port (UTC)", arrivalDateTupleWithTime)
+    cy.fill("équivalentes à celles de l'arrivée au port", true)
+    cy.fill("Port d'arrivée", 'Marseille')
+    cy.fill('Zone globale de capture', '27.5.a')
+
+    cy.fill('Espèces à bord et à débarquer', 'AAX')
+    cy.fill('Poids (AAX)', 25)
+    cy.fill('Espèces à bord et à débarquer', 'POH')
+    cy.fill('Poids (POH)', 50)
+
+    cy.fill('Engins utilisés', ['OTP'], { index: 1 })
+    cy.fill('Saisi par', 'BOB')
+
+    cy.clickButton('Créer le préavis')
+
+    cy.wait('@createPriorNotification').then(createInterception => {
+      if (!createInterception.response) {
+        assert.fail('`createInterception.response` is undefined.')
+      }
+
+      const createdPriorNotification = createInterception.response.body
+
+      assert.isString(createdPriorNotification.reportId)
+      assert.isTrue(isDateCloseTo(createdPriorNotification.sentAt, now, 15))
+      assert.deepInclude(createdPriorNotification.fishingCatches, {
+        faoArea: null,
+        quantity: null,
+        specyCode: 'AAX',
+        specyName: 'AAPTOSYAX GRYPUS',
+        weight: 25.0
+      })
+      assert.deepInclude(createdPriorNotification.fishingCatches, {
+        faoArea: null,
+        quantity: null,
+        specyCode: 'POH',
+        specyName: 'ROUSSETTE PANTHERE',
+        weight: 50.0
+      })
+      assert.deepInclude(createdPriorNotification, {
+        authorTrigram: 'BOB',
+        didNotFishAfterZeroNotice: false,
+        expectedArrivalDate: arrivalDateAsString,
+        expectedLandingDate: arrivalDateAsString, // Checked "équivalentes à celles de l'arrivée au port"
+        globalFaoArea: '27.5.a',
+        note: null,
+        portLocode: 'FRMRS',
+        tripGearCodes: ['OTP'],
+        vesselId: 127
+      })
+
+      // -----------------------------------------------------------------------
+      // Edit (1st time)
+
+      cy.intercept('PUT', `/bff/v1/prior_notifications/manual/${createdPriorNotification.reportId}`).as(
+        'updateManualPriorNotification'
+      )
+
+      cy.fill('Zones de capture', 'Différentes zones de capture')
+      cy.fill('Zone de capture (AAX)', '27.5.a.1')
+      cy.fill('Zone de capture (POH)', '27.5.a.2')
+
+      cy.clickButton('Enregistrer')
+
+      cy.wait('@updateManualPriorNotification').then(firstUpdateInterception => {
+        if (!firstUpdateInterception.response) {
+          assert.fail('`updateInterception.response` is undefined.')
+        }
+
+        const firstUpdatedPriorNotification = firstUpdateInterception.response.body
+
+        assert.deepInclude(firstUpdatedPriorNotification.fishingCatches, {
+          faoArea: '27.5.a.1',
+          quantity: null,
+          specyCode: 'AAX',
+          specyName: 'AAPTOSYAX GRYPUS',
+          weight: 25.0
+        })
+        assert.deepInclude(firstUpdatedPriorNotification.fishingCatches, {
+          faoArea: '27.5.a.2',
+          quantity: null,
+          specyCode: 'POH',
+          specyName: 'ROUSSETTE PANTHERE',
+          weight: 50.0
+        })
+        assert.deepInclude(firstUpdatedPriorNotification, {
+          authorTrigram: 'BOB',
+          didNotFishAfterZeroNotice: false,
+          expectedArrivalDate: arrivalDateAsString,
+          expectedLandingDate: arrivalDateAsString, // Checked "équivalentes à celles de l'arrivée au port"
+          globalFaoArea: null,
+          note: null,
+          portLocode: 'FRMRS',
+          tripGearCodes: ['OTP'],
+          vesselId: 127
+        })
+
+        // -----------------------------------------------------------------------
+        // Edit (2nd time)
+
+        cy.fill('Zones de capture', 'Une seule zone de capture')
+        cy.fill('Zone globale de capture', '27.5.b')
+
+        cy.clickButton('Enregistrer')
+
+        cy.wait('@updateManualPriorNotification').then(secondUpdateInterception => {
+          if (!secondUpdateInterception.response) {
+            assert.fail('`updateInterception.response` is undefined.')
+          }
+
+          const secondUpdatedPriorNotification = secondUpdateInterception.response.body
+
+          assert.deepInclude(secondUpdatedPriorNotification.fishingCatches, {
+            faoArea: null,
+            quantity: null,
+            specyCode: 'AAX',
+            specyName: 'AAPTOSYAX GRYPUS',
+            weight: 25.0
+          })
+          assert.deepInclude(secondUpdatedPriorNotification.fishingCatches, {
+            faoArea: null,
+            quantity: null,
+            specyCode: 'POH',
+            specyName: 'ROUSSETTE PANTHERE',
+            weight: 50.0
+          })
+          assert.deepInclude(secondUpdatedPriorNotification, {
+            authorTrigram: 'BOB',
+            didNotFishAfterZeroNotice: false,
+            expectedArrivalDate: arrivalDateAsString,
+            expectedLandingDate: arrivalDateAsString, // Checked "équivalentes à celles de l'arrivée au port"
+            globalFaoArea: '27.5.b',
+            note: null,
+            portLocode: 'FRMRS',
+            tripGearCodes: ['OTP'],
+            vesselId: 127
+          })
+        })
+      })
+    })
   })
 
   it('Should be able to resend & verify a previously sent & verified manual prior notification', () => {
@@ -478,7 +663,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.fill('Poids (COD)', 5000)
 
     cy.fill('Engins utilisés', ['OTB'], { index: 1 })
-    cy.fill('Zone de pêche', '27.7.d')
+    cy.fill('Zone globale de capture', '27.7.d')
     cy.fill('Saisi par', 'BOB')
 
     cy.clickButton('Créer le préavis')

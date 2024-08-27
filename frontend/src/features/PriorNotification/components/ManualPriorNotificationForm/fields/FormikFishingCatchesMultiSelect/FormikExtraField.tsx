@@ -1,6 +1,7 @@
 import { FormikNumberInput } from '@mtes-mct/monitor-ui'
+import styled from 'styled-components'
 
-import { Double, ExtendedSpecyCode, InputRow } from './styles'
+import { InputWithUnit, SubRow } from './styles'
 import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES } from '../../constants'
 
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
@@ -19,9 +20,9 @@ export function FormikExtraField({ allFishingsCatches, fishingsCatchesIndex, spe
           const index = allFishingsCatches.findIndex(fishingCatch => fishingCatch.specyCode === extendedSpecyCode)
 
           return (
-            <Double key={extendedSpecyCode}>
+            <StyledSubRow key={extendedSpecyCode}>
               <ExtendedSpecyCode>{extendedSpecyCode}</ExtendedSpecyCode>
-              <InputRow>
+              <InputWithUnit>
                 <FormikNumberInput
                   isErrorMessageHidden
                   isLabelHidden
@@ -29,8 +30,8 @@ export function FormikExtraField({ allFishingsCatches, fishingsCatchesIndex, spe
                   name={`fishingCatches[${index}].quantity`}
                 />
                 pc
-              </InputRow>
-              <InputRow>
+              </InputWithUnit>
+              <InputWithUnit>
                 <FormikNumberInput
                   isErrorMessageHidden
                   isLabelHidden
@@ -38,8 +39,8 @@ export function FormikExtraField({ allFishingsCatches, fishingsCatchesIndex, spe
                   name={`fishingCatches[${index}].weight`}
                 />
                 kg
-              </InputRow>
-            </Double>
+              </InputWithUnit>
+            </StyledSubRow>
           )
         })}
       </>
@@ -49,16 +50,27 @@ export function FormikExtraField({ allFishingsCatches, fishingsCatchesIndex, spe
   // SWO - Swordfish
   if (specyCode === 'SWO') {
     return (
-      <InputRow>
-        <FormikNumberInput
-          isLabelHidden
-          label={`Quantité (${specyCode})`}
-          name={`fishingCatches[${fishingsCatchesIndex}].quantity`}
-        />
-        pc
-      </InputRow>
+      <StyledSubRow key="SWO">
+        <InputWithUnit>
+          <FormikNumberInput
+            isLabelHidden
+            label={`Quantité (${specyCode})`}
+            name={`fishingCatches[${fishingsCatchesIndex}].quantity`}
+          />
+          pc
+        </InputWithUnit>
+      </StyledSubRow>
     )
   }
 
   return <></>
 }
+
+const StyledSubRow = styled(SubRow)`
+  align-items: center;
+  justify-content: flex-end;
+`
+
+const ExtendedSpecyCode = styled.span`
+  color: ${p => p.theme.color.slateGray};
+`

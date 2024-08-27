@@ -10,7 +10,7 @@ import { Fragment } from 'react/jsx-runtime'
 import styled from 'styled-components'
 
 import { FormikExtraField } from './FormikExtraField'
-import { InputRow } from './styles'
+import { InputWithUnit, SubRow } from './styles'
 import { getFishingsCatchesValidationError } from './utils'
 import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES } from '../../constants'
 import { getFishingsCatchesInitialValues } from '../../utils'
@@ -112,45 +112,47 @@ export function FormikFishingCatchesMultiSelect({ isReadOnly }: FormikFishingCat
         {values.fishingCatches.map((fishingCatch, index) => (
           <Fragment key={fishingCatch.specyCode}>
             {!BLUEFIN_TUNA_EXTENDED_SPECY_CODES.includes(fishingCatch.specyCode) && (
-              <Row>
-                <SpecyTag
-                  onDelete={() => remove(fishingCatch.specyCode)}
-                >{`${fishingCatch.specyCode} – ${fishingCatch.specyName}`}</SpecyTag>
+              <>
+                <Row>
+                  <SubRow>
+                    <SpecyTag
+                      onDelete={() => remove(fishingCatch.specyCode)}
+                    >{`${fishingCatch.specyCode} – ${fishingCatch.specyName}`}</SpecyTag>
 
-                {!values.hasGlobalFaoArea && (
-                  <FormikSelect
-                    disabled={!filteredSpeciesAsOptions}
-                    isErrorMessageHidden
-                    isLabelHidden
-                    label={`Zone de capture (${fishingCatch.specyCode})`}
-                    name={`fishingCatches[${index}].faoArea`}
-                    options={faoAreasAsOptions ?? []}
-                    placeholder="Choisir une zone"
-                    readOnly={isReadOnly}
-                    searchable
-                    virtualized
-                  />
-                )}
+                    {!values.hasGlobalFaoArea && (
+                      <FormikSelect
+                        disabled={!filteredSpeciesAsOptions}
+                        isErrorMessageHidden
+                        isLabelHidden
+                        label={`Zone de capture (${fishingCatch.specyCode})`}
+                        name={`fishingCatches[${index}].faoArea`}
+                        options={faoAreasAsOptions ?? []}
+                        placeholder="Choisir une zone"
+                        readOnly={isReadOnly}
+                        searchable
+                        virtualized
+                      />
+                    )}
 
-                <WeightAndQuantityBox>
-                  <InputRow>
-                    <FormikNumberInput
-                      isErrorMessageHidden
-                      isLabelHidden
-                      label={`Poids (${fishingCatch.specyCode})`}
-                      name={`fishingCatches[${index}].weight`}
-                      readOnly={isReadOnly}
-                    />
-                    kg
-                  </InputRow>
+                    <InputWithUnit>
+                      <FormikNumberInput
+                        isErrorMessageHidden
+                        isLabelHidden
+                        label={`Poids (${fishingCatch.specyCode})`}
+                        name={`fishingCatches[${index}].weight`}
+                        readOnly={isReadOnly}
+                      />
+                      kg
+                    </InputWithUnit>
+                  </SubRow>
 
                   <FormikExtraField
                     allFishingsCatches={values.fishingCatches}
                     fishingsCatchesIndex={index}
                     specyCode={fishingCatch.specyCode}
                   />
-                </WeightAndQuantityBox>
-              </Row>
+                </Row>
+              </>
             )}
           </Fragment>
         ))}
@@ -160,32 +162,24 @@ export function FormikFishingCatchesMultiSelect({ isReadOnly }: FormikFishingCat
 }
 
 const Wrapper = styled.div`
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
+
+  * {
+    box-sizing: border-box;
+  }
 `
 
 const Row = styled.div`
-  align-items: flex-start;
   display: flex;
-  justify-content: space-between;
-  gap: 8px;
+  flex-direction: column;
   margin-top: 24px;
-
-  > .Field-Select {
-    flex-grow: 1;
-  }
+  row-gap: 8px;
 `
 
 const SpecyTag = styled(SingleTag)`
   margin-top: 2px;
   max-width: 220px;
   min-width: 220px;
-`
-
-const WeightAndQuantityBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  max-width: 96px;
-  min-width: 96px;
 `

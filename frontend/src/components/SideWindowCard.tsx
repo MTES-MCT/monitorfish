@@ -18,6 +18,7 @@ export function SideWindowCard({ children, onBackgroundClick, ...nativeProps }: 
 }
 
 const Box = styled.div`
+  box-sizing: border-box;
   bottom: 0;
   display: flex;
   justify-content: flex-end;
@@ -26,6 +27,10 @@ const Box = styled.div`
   right: 0;
   top: 0;
   z-index: 1000;
+
+  * {
+    box-sizing: border-box;
+  }
 `
 
 const Overlay = styled.div`

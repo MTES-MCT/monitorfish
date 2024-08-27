@@ -22,16 +22,18 @@ class ComputeManualPriorNotification(
     private val computeRiskFactor: ComputeRiskFactor,
 ) {
     fun execute(
-        faoArea: String,
         fishingCatches: List<LogbookFishingCatch>,
+        /** When there is a single FAO area shared by all fishing catches. */
+        globalFaoArea: String?,
         portLocode: String,
         tripGearCodes: List<String>,
         vesselId: Int,
     ): ManualPriorNotificationComputedValues {
         val vessel = vesselRepository.findVesselById(vesselId)
 
-        val faoAreas = listOf(faoArea)
-        val fishingCatchesWithFaoArea = fishingCatches.map { it.copy(faoZone = faoArea) }
+        val faoAreas = globalFaoArea?.let { listOf(globalFaoArea) } ?: fishingCatches.mapNotNull { it.faoZone }
+        val fishingCatchesWithFaoArea = globalFaoArea?.let { fishingCatches.map { it.copy(faoZone = globalFaoArea) } }
+            ?: fishingCatches
         val specyCodes = fishingCatches.mapNotNull { it.species }
         val vesselCfr = vessel?.internalReferenceNumber
         val vesselFlagCountryCode = vessel?.flagState

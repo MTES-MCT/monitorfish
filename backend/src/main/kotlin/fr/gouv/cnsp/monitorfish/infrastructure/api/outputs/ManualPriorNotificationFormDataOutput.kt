@@ -13,8 +13,8 @@ data class ManualPriorNotificationFormDataOutput(
     val didNotFishAfterZeroNotice: Boolean,
     val expectedArrivalDate: String,
     val expectedLandingDate: String,
-    val faoArea: String?,
     val fishingCatches: List<ManualPriorNotificationFishingCatchDataOutput>,
+    val globalFaoArea: String?,
     val note: String?,
     val portLocode: String,
     val reportId: String,
@@ -42,16 +42,6 @@ data class ManualPriorNotificationFormDataOutput(
                     "`message.predictedLandingDatetimeUtc` is null."
                 },
             ).toString()
-            // At the moment, manual prior notifications only have a single global FAO area field in Frontend,
-            // so we transform that single FAO area into an FAO area per fishing catch when we save it,
-            // while setting the global `PNO.faoZone` to `null`.
-            // We need to reverse this transformation when we output the data.
-            val globalFaoArea = requireNotNull(pnoMessage.catchOnboard.firstOrNull()?.faoZone) {
-                "`message.catchOnboard.firstOrNull()?.faoZone` is null."
-            }
-            val fishingCatchDataOutputs = pnoMessage.catchOnboard.map {
-                ManualPriorNotificationFishingCatchDataOutput.fromLogbookFishingCatch(it)
-            }
             val portLocode = requireNotNull(pnoMessage.port) { "`pnoMessage.port` is null." }
             val purpose = requireNotNull(pnoMessage.purpose) { "`pnoMessage.purpose` is null." }
             val reportId = requireNotNull(priorNotification.reportId) { "`priorNotification.reportId` is null." }
@@ -69,6 +59,21 @@ data class ManualPriorNotificationFormDataOutput(
             val hasPortEntranceAuthorization = pnoMessage.hasPortEntranceAuthorization ?: true
             val hasPortLandingAuthorization = pnoMessage.hasPortLandingAuthorization ?: true
 
+            // In Frontend form, manual prior notifications can:
+            // - either have a single global FAO area field
+            // - or have an FAO area field per fishing catch
+            // while in Backend, we always have an FAO area field per fishing catch.
+            // So we need to check if all fishing catches have the same FAO area to know which case we are in.
+            val hasGlobalFaoArea = pnoMessage.catchOnboard.mapNotNull { it.faoZone }.distinct().size == 1
+            val globalFaoArea = if (hasGlobalFaoArea) {
+                pnoMessage.catchOnboard.first().faoZone
+            } else {
+                null
+            }
+            val fishingCatchDataOutputs = pnoMessage.catchOnboard.map {
+                ManualPriorNotificationFishingCatchDataOutput.fromLogbookFishingCatch(it, !hasGlobalFaoArea)
+            }
+
             return ManualPriorNotificationFormDataOutput(
                 hasPortEntranceAuthorization = hasPortEntranceAuthorization,
                 hasPortLandingAuthorization = hasPortLandingAuthorization,
@@ -76,7 +81,7 @@ data class ManualPriorNotificationFormDataOutput(
                 didNotFishAfterZeroNotice = priorNotification.didNotFishAfterZeroNotice,
                 expectedArrivalDate = expectedArrivalDate,
                 expectedLandingDate = expectedLandingDate,
-                faoArea = globalFaoArea,
+                globalFaoArea = globalFaoArea,
                 fishingCatches = fishingCatchDataOutputs,
                 note = pnoMessage.note,
                 portLocode = portLocode,

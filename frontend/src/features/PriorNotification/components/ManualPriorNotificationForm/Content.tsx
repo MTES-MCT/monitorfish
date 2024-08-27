@@ -102,13 +102,19 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
 
     // If we don't have enough data to compute the values, we can't update them
     const nextComputationRequestData = getDefinedObject(nextPartialComputationRequestData, [
-      'faoArea',
       'fishingCatches',
       'portLocode',
       'tripGearCodes',
       'vesselId'
     ])
-    if (!nextComputationRequestData) {
+    if (
+      !nextComputationRequestData ||
+      nextFormValues.fishingCatches.length === 0 ||
+      nextFormValues.tripGearCodes.length === 0 ||
+      // If there is neither a global FAO area nor all per species FAO areas, we can't compute the values
+      (!nextFormValues.globalFaoArea &&
+        nextComputationRequestData.fishingCatches.some(fishingCatch => !fishingCatch.faoArea))
+    ) {
       // but we need to unset existing computed values in case they were computed before
       dispatch(priorNotificationActions.unsetEditedPriorNotificationComputedValues())
 

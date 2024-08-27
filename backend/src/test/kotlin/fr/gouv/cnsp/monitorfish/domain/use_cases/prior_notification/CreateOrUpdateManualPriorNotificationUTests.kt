@@ -91,7 +91,7 @@ class CreateOrUpdateManualPriorNotificationUTests {
             didNotFishAfterZeroNotice = false,
             expectedArrivalDate = ZonedDateTime.parse("2024-01-01T00:00:00Z"),
             expectedLandingDate = ZonedDateTime.parse("2024-01-01T00:00:00Z"),
-            faoArea = "FAKE_FAO_AREA",
+            globalFaoArea = "FAKE_FAO_AREA",
             fishingCatches = emptyList(),
             note = null,
             portLocode = "FAKE_PORT_LOCODE",

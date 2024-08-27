@@ -75,8 +75,8 @@ export namespace PriorNotification {
     didNotFishAfterZeroNotice: boolean
     expectedArrivalDate: string
     expectedLandingDate: string
-    faoArea: string
     fishingCatches: FormDataFishingCatch[]
+    globalFaoArea: string | undefined
     hasPortEntranceAuthorization: boolean
     hasPortLandingAuthorization: boolean
     note: string | undefined
@@ -104,7 +104,7 @@ export namespace PriorNotification {
 
   export type ManualComputeRequestData = Pick<
     ManualFormData,
-    'faoArea' | 'fishingCatches' | 'portLocode' | 'tripGearCodes' | 'vesselId'
+    'fishingCatches' | 'globalFaoArea' | 'portLocode' | 'tripGearCodes' | 'vesselId'
   >
   /** Real-time computed values displayed within a prior notification form. */
   export type ManualComputedValues = Pick<
@@ -116,6 +116,7 @@ export namespace PriorNotification {
   }
 
   export type FormDataFishingCatch = {
+    faoArea?: string | undefined
     quantity?: number | undefined
     specyCode: string
     specyName: string

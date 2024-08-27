@@ -1,15 +1,17 @@
 import { FormikNumberInput } from '@mtes-mct/monitor-ui'
+import styled from 'styled-components'
 
-import { Double, ExtendedSpecyCode, InputRow } from './styles'
+import { InputWithUnit, SubRow } from './styles'
 import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES } from '../../constants'
 
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
-export function getFishingsCatchesExtraFields(
-  specyCode: string,
-  fishingsCatchesIndex: number,
+type FormikExtraFieldProps = Readonly<{
   allFishingsCatches: PriorNotification.FormDataFishingCatch[]
-) {
+  fishingsCatchesIndex: number
+  specyCode: string
+}>
+export function FormikExtraField({ allFishingsCatches, fishingsCatchesIndex, specyCode }: FormikExtraFieldProps) {
   // BFT - Bluefin Tuna => + BF1, BF2, BF3
   if (specyCode === 'BFT') {
     return (
@@ -18,25 +20,27 @@ export function getFishingsCatchesExtraFields(
           const index = allFishingsCatches.findIndex(fishingCatch => fishingCatch.specyCode === extendedSpecyCode)
 
           return (
-            <Double key={extendedSpecyCode}>
+            <StyledSubRow key={extendedSpecyCode}>
               <ExtendedSpecyCode>{extendedSpecyCode}</ExtendedSpecyCode>
-              <InputRow>
+              <InputWithUnit>
                 <FormikNumberInput
+                  isErrorMessageHidden
                   isLabelHidden
                   label={`Quantité (${extendedSpecyCode})`}
                   name={`fishingCatches[${index}].quantity`}
                 />
                 pc
-              </InputRow>
-              <InputRow>
+              </InputWithUnit>
+              <InputWithUnit>
                 <FormikNumberInput
+                  isErrorMessageHidden
                   isLabelHidden
                   label={`Poids (${extendedSpecyCode})`}
                   name={`fishingCatches[${index}].weight`}
                 />
                 kg
-              </InputRow>
-            </Double>
+              </InputWithUnit>
+            </StyledSubRow>
           )
         })}
       </>
@@ -46,16 +50,27 @@ export function getFishingsCatchesExtraFields(
   // SWO - Swordfish
   if (specyCode === 'SWO') {
     return (
-      <InputRow>
-        <FormikNumberInput
-          isLabelHidden
-          label={`Quantité (${specyCode})`}
-          name={`fishingCatches[${fishingsCatchesIndex}].quantity`}
-        />
-        pc
-      </InputRow>
+      <StyledSubRow key="SWO">
+        <InputWithUnit>
+          <FormikNumberInput
+            isLabelHidden
+            label={`Quantité (${specyCode})`}
+            name={`fishingCatches[${fishingsCatchesIndex}].quantity`}
+          />
+          pc
+        </InputWithUnit>
+      </StyledSubRow>
     )
   }
 
   return <></>
 }
+
+const StyledSubRow = styled(SubRow)`
+  align-items: center;
+  justify-content: flex-end;
+`
+
+const ExtendedSpecyCode = styled.span`
+  color: ${p => p.theme.color.slateGray};
+`

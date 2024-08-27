@@ -3,7 +3,6 @@ import { getHasAuthorizedLandingDownload } from '@features/PriorNotification/com
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { useFormikDirtyOnceEffect } from '@hooks/useFormikDirtyOnceEffect'
-import { useGetFaoAreasAsOptions } from '@hooks/useGetFaoAreasAsOptions'
 import { useGetGearsAsOptions } from '@hooks/useGetGearsAsOptions'
 import { useGetPortsAsOptions } from '@hooks/useGetPortsAsOptions'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -21,6 +20,7 @@ import { useFormikContext } from 'formik'
 import { useRef } from 'react'
 import styled from 'styled-components'
 
+import { FormikFaoAreaSelect } from './fields/FormikFaoAreaSelect'
 import { FormikFishingCatchesMultiSelect } from './fields/FormikFishingCatchesMultiSelect'
 import { FormikVesselSelect } from './fields/FormikVesselSelect'
 
@@ -34,7 +34,6 @@ export function Form({ isReadOnly }: FormProps) {
   const { values } = useFormikContext<ManualPriorNotificationFormValues>()
 
   const dispatch = useMainAppDispatch()
-  const { faoAreasAsOptions } = useGetFaoAreasAsOptions()
   const { gearsAsOptions } = useGetGearsAsOptions()
   const { portsAsOptions } = useGetPortsAsOptions()
 
@@ -110,23 +109,15 @@ export function Form({ isReadOnly }: FormProps) {
         virtualized
       />
 
-      <FormikFishingCatchesMultiSelect readOnly={isReadOnly} />
+      <FormikFaoAreaSelect isReadOnly={isReadOnly} />
+
+      <FormikFishingCatchesMultiSelect isReadOnly={isReadOnly} />
 
       <FormikMultiSelect
         disabled={!gearsAsOptions}
         label="Engins utilisés"
         name="tripGearCodes"
         options={gearsAsOptions ?? []}
-        readOnly={isReadOnly}
-        searchable
-        virtualized
-      />
-
-      <FormikSelect
-        disabled={!faoAreasAsOptions}
-        label="Zone de pêche"
-        name="faoArea"
-        options={faoAreasAsOptions ?? []}
         readOnly={isReadOnly}
         searchable
         virtualized

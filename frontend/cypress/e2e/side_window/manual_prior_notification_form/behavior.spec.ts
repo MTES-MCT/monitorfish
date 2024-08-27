@@ -64,7 +64,7 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
     cy.fill('Espèces à bord et à débarquer', 'AAX')
     cy.fill('Poids (AAX)', 25)
     cy.fill('Engins utilisés', ['OTP'], { index: 1 })
-    cy.fill('Zone de pêche', '21.4.T')
+    cy.fill('Zone globale de capture', '21.4.T')
     cy.fill('Saisi par', 'ABC')
 
     cy.clickButton('Créer le préavis')

@@ -112,47 +112,45 @@ export function FormikFishingCatchesMultiSelect({ isReadOnly }: FormikFishingCat
         {values.fishingCatches.map((fishingCatch, index) => (
           <Fragment key={fishingCatch.specyCode}>
             {!BLUEFIN_TUNA_EXTENDED_SPECY_CODES.includes(fishingCatch.specyCode) && (
-              <>
-                <Row>
-                  <SubRow>
-                    <SpecyTag
-                      onDelete={() => remove(fishingCatch.specyCode)}
-                    >{`${fishingCatch.specyCode} – ${fishingCatch.specyName}`}</SpecyTag>
+              <Row>
+                <SubRow>
+                  <SpecyTag
+                    onDelete={() => remove(fishingCatch.specyCode)}
+                  >{`${fishingCatch.specyCode} – ${fishingCatch.specyName}`}</SpecyTag>
 
-                    {!values.hasGlobalFaoArea && (
-                      <FormikSelect
-                        disabled={!filteredSpeciesAsOptions}
-                        isErrorMessageHidden
-                        isLabelHidden
-                        label={`Zone de capture (${fishingCatch.specyCode})`}
-                        name={`fishingCatches[${index}].faoArea`}
-                        options={faoAreasAsOptions ?? []}
-                        placeholder="Choisir une zone"
-                        readOnly={isReadOnly}
-                        searchable
-                        virtualized
-                      />
-                    )}
+                  {!values.hasGlobalFaoArea && (
+                    <FormikSelect
+                      disabled={!filteredSpeciesAsOptions}
+                      isErrorMessageHidden
+                      isLabelHidden
+                      label={`Zone de capture (${fishingCatch.specyCode})`}
+                      name={`fishingCatches[${index}].faoArea`}
+                      options={faoAreasAsOptions ?? []}
+                      placeholder="Choisir une zone"
+                      readOnly={isReadOnly}
+                      searchable
+                      virtualized
+                    />
+                  )}
 
-                    <InputWithUnit>
-                      <FormikNumberInput
-                        isErrorMessageHidden
-                        isLabelHidden
-                        label={`Poids (${fishingCatch.specyCode})`}
-                        name={`fishingCatches[${index}].weight`}
-                        readOnly={isReadOnly}
-                      />
-                      kg
-                    </InputWithUnit>
-                  </SubRow>
+                  <InputWithUnit>
+                    <FormikNumberInput
+                      isErrorMessageHidden
+                      isLabelHidden
+                      label={`Poids (${fishingCatch.specyCode})`}
+                      name={`fishingCatches[${index}].weight`}
+                      readOnly={isReadOnly}
+                    />
+                    kg
+                  </InputWithUnit>
+                </SubRow>
 
-                  <FormikExtraField
-                    allFishingsCatches={values.fishingCatches}
-                    fishingsCatchesIndex={index}
-                    specyCode={fishingCatch.specyCode}
-                  />
-                </Row>
-              </>
+                <FormikExtraField
+                  allFishingsCatches={values.fishingCatches}
+                  fishingsCatchesIndex={index}
+                  specyCode={fishingCatch.specyCode}
+                />
+              </Row>
             )}
           </Fragment>
         ))}

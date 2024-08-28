@@ -29,7 +29,7 @@ export function TagBar({
   types
 }: TagBarProps) {
   return (
-    <Wrapper className="Wrapper">
+    <Wrapper className="Wrapper" data-cy="PriorNotificationCard-TagBar">
       <Row>
         {!!riskFactor && (
           <VesselRiskFactor

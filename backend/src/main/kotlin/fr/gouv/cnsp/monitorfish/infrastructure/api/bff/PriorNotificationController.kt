@@ -262,8 +262,8 @@ class PriorNotificationController(
         @Parameter(description = "Operation date (to optimize SQL query via Timescale).")
         @RequestParam(name = "operationDate")
         operationDate: ZonedDateTime,
-    ): PriorNotificationDetailDataOutput {
-        return PriorNotificationDetailDataOutput
+    ): PriorNotificationDataOutput {
+        return PriorNotificationDataOutput
             .fromPriorNotification(getPriorNotification.execute(reportId, operationDate, isManuallyCreated))
     }
 
@@ -314,8 +314,8 @@ class PriorNotificationController(
         @Parameter(description = "Is the prior notification manually created?")
         @RequestParam(name = "isManuallyCreated")
         isManuallyCreated: Boolean,
-    ): PriorNotificationDetailDataOutput {
-        return PriorNotificationDetailDataOutput
+    ): PriorNotificationDataOutput {
+        return PriorNotificationDataOutput
             .fromPriorNotification(verifyAndSendPriorNotification.execute(reportId, operationDate, isManuallyCreated))
     }
 
@@ -331,13 +331,13 @@ class PriorNotificationController(
         @Parameter(description = "Is the prior notification manually created?")
         @RequestParam(name = "isManuallyCreated")
         isManuallyCreated: Boolean,
-    ): PriorNotificationDetailDataOutput {
+    ): PriorNotificationDataOutput {
         val updatedPriorNotification = invalidatePriorNotification.execute(
             reportId = reportId,
             operationDate = operationDate,
             isManuallyCreated = isManuallyCreated,
         )
 
-        return PriorNotificationDetailDataOutput.fromPriorNotification(updatedPriorNotification)
+        return PriorNotificationDataOutput.fromPriorNotification(updatedPriorNotification)
     }
 }

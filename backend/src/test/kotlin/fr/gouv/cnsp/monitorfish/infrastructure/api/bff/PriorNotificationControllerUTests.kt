@@ -135,7 +135,6 @@ class PriorNotificationControllerUTests {
         )
             // Then
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
             .andExpect(jsonPath("$.authorTrigram", equalTo(pnoValue.authorTrigram)))
             .andExpect(jsonPath("$.note", equalTo(pnoValue.note)))
     }

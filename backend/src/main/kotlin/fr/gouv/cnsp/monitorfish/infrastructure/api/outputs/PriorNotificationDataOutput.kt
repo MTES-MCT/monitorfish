@@ -4,11 +4,12 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotifica
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationState
 import java.time.ZonedDateTime
 
-class PriorNotificationDetailDataOutput(
+class PriorNotificationDataOutput(
     /** Reference logbook message (report) `reportId`. */
     val reportId: String,
-    val asLogbookFormData: LogbookPriorNotificationFormDataOutput?,
-    val asManualFormData: ManualPriorNotificationFormDataOutput?,
+    val asLogbookForm: LogbookPriorNotificationFormDataOutput?,
+    val asManualDraft: ManualPriorNotificationDraftDataOutput?,
+    val asManualForm: ManualPriorNotificationFormDataOutput?,
     /** Unique identifier concatenating all the DAT, COR, RET & DEL operations `id` used for data consolidation. */
     val fingerprint: String,
     val isLessThanTwelveMetersVessel: Boolean,
@@ -20,17 +21,22 @@ class PriorNotificationDetailDataOutput(
     val riskFactor: Double?,
 ) {
     companion object {
-        fun fromPriorNotification(priorNotification: PriorNotification): PriorNotificationDetailDataOutput {
+        fun fromPriorNotification(priorNotification: PriorNotification): PriorNotificationDataOutput {
             val reportId = requireNotNull(priorNotification.reportId) {
                 "`reportId` is null."
             }
 
-            val asLogbookFormDataOutput = if (!priorNotification.isManuallyCreated) {
+            val asLogbookForm = if (!priorNotification.isManuallyCreated) {
                 LogbookPriorNotificationFormDataOutput.fromPriorNotification(priorNotification)
             } else {
                 null
             }
-            val asManualFormData = if (priorNotification.isManuallyCreated) {
+            val asManualDraft = if (!priorNotification.isManuallyCreated) {
+                ManualPriorNotificationDraftDataOutput.fromPriorNotification(priorNotification)
+            } else {
+                null
+            }
+            val asManualForm = if (priorNotification.isManuallyCreated) {
                 ManualPriorNotificationFormDataOutput.fromPriorNotification(priorNotification)
             } else {
                 null
@@ -46,10 +52,11 @@ class PriorNotificationDetailDataOutput(
 
             val logbookMessageDataOutput = LogbookMessageDataOutput.fromLogbookMessage(logbookMessage)
 
-            return PriorNotificationDetailDataOutput(
-                reportId,
-                asLogbookFormDataOutput,
-                asManualFormData,
+            return PriorNotificationDataOutput(
+                reportId = reportId,
+                asLogbookForm = asLogbookForm,
+                asManualDraft = asManualDraft,
+                asManualForm = asManualForm,
                 fingerprint = priorNotification.fingerprint,
                 isLessThanTwelveMetersVessel = isLessThanTwelveMetersVessel,
                 isManuallyCreated = priorNotification.isManuallyCreated,

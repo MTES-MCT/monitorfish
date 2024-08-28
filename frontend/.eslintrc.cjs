@@ -207,7 +207,10 @@ module.exports = {
         node: true
       },
       rules: {
-        'import/no-default-export': 'off'
+        'import/no-default-export': 'off',
+        'import/no-extraneous-dependencies': 'off',
+
+        '@typescript-eslint/naming-convention': 'off'
       }
     }
   ]

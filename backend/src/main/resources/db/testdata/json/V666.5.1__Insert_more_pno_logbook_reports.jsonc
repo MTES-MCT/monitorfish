@@ -1085,7 +1085,7 @@
                 "transmission_format": "FLUX",
                 "trip_gears:jsonb": [{ "gear": "DRB", "mesh": null, "dimensions": null }],
                 "trip_segments:jsonb": [{ "segment": "FR_SCE", "segmentName": "Scallop fisheries" }],
-                "vessel_name": "LE POISSON AMBULANT",
+                "vessel_name": "LE POISSON D'AVRIL",
                 "value:jsonb": {
                     "riskFactor": 3.9,
                     "catchOnboard": [

@@ -20,6 +20,7 @@ export function Header({ isNewPriorNotification, onClose, vesselId }: HeaderProp
             <Icon.Fishery />
           </TitleRowIconBox>
 
+          {/* TODO "< 12 M" doesn't make sense anymore. */}
           {isNewPriorNotification && <span>{`AJOUTER UN NOUVEAU PRÉAVIS (< 12 M)`}</span>}
           {!isNewPriorNotification && <span>{`PRÉAVIS NAVIRE < 12 M`}</span>}
         </TitleRow>

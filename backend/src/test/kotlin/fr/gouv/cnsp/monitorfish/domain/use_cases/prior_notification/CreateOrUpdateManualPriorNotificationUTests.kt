@@ -81,6 +81,7 @@ class CreateOrUpdateManualPriorNotificationUTests {
             portRepository,
             priorNotificationPdfDocumentRepository,
             vesselRepository,
+
             computeManualPriorNotification,
             getPriorNotification,
         ).execute(
@@ -95,13 +96,13 @@ class CreateOrUpdateManualPriorNotificationUTests {
             fishingCatches = emptyList(),
             note = null,
             portLocode = "FAKE_PORT_LOCODE",
-            reportId = null,
+            reportId = fakePriorNotification.reportId!!,
             sentAt = ZonedDateTime.parse("2024-01-01T00:00:00Z"),
             tripGearCodes = emptyList(),
             vesselId = 1,
         )
 
         // Then
-        assertThat(result.reportId).isEqualTo(fakePriorNotification.reportId)
+        assertThat(result.reportId!!).isEqualTo(fakePriorNotification.reportId!!)
     }
 }

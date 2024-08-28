@@ -42,12 +42,12 @@ data class PriorNotification(
          *  See /adrs/0006-prior-notification-states-specifications.md for more details.
          */
         get() = run {
-            val pnoMessage = logbookMessageAndValue.value
+            val pnoValue = logbookMessageAndValue.value
 
-            val isInVerificationScope = pnoMessage.isInVerificationScope
-            val isVerified = pnoMessage.isVerified
-            val isSent = pnoMessage.isSent
-            val isBeingSent = pnoMessage.isBeingSent
+            val isInVerificationScope = pnoValue.isInVerificationScope
+            val isVerified = pnoValue.isVerified
+            val isSent = pnoValue.isSent
+            val isBeingSent = pnoValue.isBeingSent
 
             return when {
                 isInVerificationScope == null || isVerified == null || isSent == null || isBeingSent == null -> null
@@ -78,9 +78,9 @@ data class PriorNotification(
         isManuallyCreated: Boolean,
     ) {
         val logbookMessage = logbookMessageAndValue.logbookMessage
-        val pnoMessage = logbookMessageAndValue.value
+        val pnoValue = logbookMessageAndValue.value
 
-        port = pnoMessage.port?.let { portLocode ->
+        port = pnoValue.port?.let { portLocode ->
             allPorts.find { it.locode == portLocode }
         }
 

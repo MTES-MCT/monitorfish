@@ -159,7 +159,7 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
       )}
 
       <FrontendErrorBoundary>
-        <Header isNewPriorNotification={isNewPriorNotification} onClose={handleClose} vesselId={values.vesselId} />
+        <Header detail={detail} onClose={handleClose} vesselId={values.vesselId} />
 
         <Body data-cy="ManualPriorNotificationForm-Body">
           <TagBar

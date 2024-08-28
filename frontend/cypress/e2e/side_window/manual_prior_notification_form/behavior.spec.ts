@@ -41,7 +41,7 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
 
     cy.clickButton('Préavis de débarquement')
     cy.contains('Tous les préavis').should('be.visible')
-    cy.contains('AJOUTER UN NOUVEAU PRÉAVIS (< 12 M)').should('be.visible')
+    cy.contains('AJOUTER UN NOUVEAU PRÉAVIS').should('be.visible')
     cy.getDataCy('vessel-search-input').should('have.value', 'PAGEOT JO')
 
     cy.clickButton('Fermer')

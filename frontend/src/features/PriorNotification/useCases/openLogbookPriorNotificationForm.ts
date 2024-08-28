@@ -2,6 +2,7 @@ import { RtkCacheTagType } from '@api/constants'
 import { addMainWindowBanner } from '@features/SideWindow/useCases/addMainWindowBanner'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
+import { FrontendError } from '@libs/FrontendError'
 import { Level } from '@mtes-mct/monitor-ui'
 import { handleThunkError } from '@utils/handleThunkError'
 import { displayedErrorActions } from 'domain/shared_slices/DisplayedError'
@@ -15,30 +16,30 @@ import type { PriorNotification } from '../PriorNotification.types'
 import type { MainAppThunk } from '@store'
 
 export const openLogbookPriorNotificationForm =
-  (priorNotificationIdentifier: PriorNotification.Identifier, fingerprint?: string): MainAppThunk<Promise<void>> =>
+  (identifier: PriorNotification.Identifier, fingerprint?: string): MainAppThunk<Promise<void>> =>
   async dispatch => {
     try {
       dispatch(displayedErrorActions.unset(DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR))
       dispatch(priorNotificationActions.closePriorNotificationCardAndForm())
       dispatch(priorNotificationActions.openPriorNotification(OpenedPriorNotificationType.LogbookForm))
 
-      const priorNotificationDetail = await dispatch(
+      const logbookPriorNotification = await dispatch(
         priorNotificationApi.endpoints.getPriorNotificationDetail.initiate({
-          ...priorNotificationIdentifier,
+          ...identifier,
           isManuallyCreated: false
         })
       ).unwrap()
-      const priorNotificationData = await dispatch(
-        priorNotificationApi.endpoints.getLogbookPriorNotificationFormData.initiate(priorNotificationIdentifier)
-      ).unwrap()
+      if (logbookPriorNotification.isManuallyCreated) {
+        throw new FrontendError('`priorNotificationDetail.isManuallyCreated` is `true` but should be `false`.')
+      }
 
       // Update prior notification list if prior notification fingerprint has changed
-      if (priorNotificationDetail.fingerprint !== fingerprint) {
+      if (logbookPriorNotification.fingerprint !== fingerprint) {
         dispatch(priorNotificationApi.util.invalidateTags([RtkCacheTagType.PriorNotifications]))
       }
 
       // Close card and display a warning banner if prior notification has been deleted (in the meantime)
-      if (priorNotificationDetail.logbookMessage.isDeleted) {
+      if (logbookPriorNotification.logbookMessage.isDeleted) {
         dispatch(priorNotificationActions.closePriorNotificationCardAndForm())
         dispatch(
           addMainWindowBanner({
@@ -53,14 +54,16 @@ export const openLogbookPriorNotificationForm =
         return
       }
 
-      dispatch(priorNotificationActions.setOpenedPriorNotificationDetail(priorNotificationDetail))
-      dispatch(priorNotificationActions.setEditedLogbookPriorNotificationFormValues(priorNotificationData))
+      dispatch(priorNotificationActions.setOpenedPriorNotificationDetail(logbookPriorNotification))
+      dispatch(
+        priorNotificationActions.setEditedLogbookPriorNotificationFormValues(logbookPriorNotification.asLogbookForm)
+      )
     } catch (err) {
       if (err instanceof FrontendApiError) {
         dispatch(
           displayOrLogError(
             err,
-            () => openLogbookPriorNotificationForm(priorNotificationIdentifier, fingerprint),
+            () => openLogbookPriorNotificationForm(identifier, fingerprint),
             true,
             DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR
           )

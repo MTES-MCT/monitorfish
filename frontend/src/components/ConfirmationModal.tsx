@@ -1,13 +1,14 @@
 import { Accent, Button, Dialog, Icon } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
+import type { ReactNode } from 'react'
 import type { Promisable } from 'type-fest'
 
 export type ConfirmationModalProps = {
   color?: string
   confirmationButtonLabel: string
   iconName?: keyof typeof Icon
-  message: string
+  message: ReactNode
   onCancel: () => Promisable<void>
   onConfirm: () => Promisable<void>
   title: string

@@ -131,6 +131,48 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
     cy.getTableRowById('FAKE_OPERATION_110').find('[title="Préavis invalidé"]').should('exist')
   })
 
+  it('Should invalidate and duplicate a logbook prior notification', { retries: 0 }, () => {
+    cy.intercept(
+      'PUT',
+      `/bff/v1/prior_notifications/FAKE_OPERATION_114/invalidate?isManuallyCreated=false&operationDate=*`
+    ).as('invalidatePriorNotification')
+
+    openSideWindowPriorNotificationListAsSuperUser()
+    cy.get('[data-cy="side-window-sub-menu-ALL"]').click()
+    cy.fill('Rechercher un navire', 'POISSON')
+
+    cy.getTableRowById('FAKE_OPERATION_114').find('[title="Préavis invalidé"]').should('not.exist')
+
+    cy.getTableRowById('FAKE_OPERATION_114').clickButton('Éditer le préavis')
+    if (document.querySelector('[data-cy="first-loader"]')) {
+      cy.getDataCy('first-loader').should('not.be.visible')
+    }
+
+    cy.clickButton('Invalider et recréer le préavis')
+    cy.clickButton('Confirmer l’invalidation avec recréation')
+
+    cy.wait('@invalidatePriorNotification').wait(1000)
+
+    cy.contains('AJOUTER UN NOUVEAU PRÉAVIS (< 12 M)').should('be.visible')
+    cy.getDataCy('vessel-search-input').should('have.value', "LE POISSON D'AVRIL")
+    cy.getDataCy('ManualPriorNotificationForm-body').contains('Débarquement').should('be.visible')
+    cy.getDataCy('ManualPriorNotificationForm-body').contains('Vannes (FRVNE)').should('be.visible')
+    cy.getDataCy('ManualPriorNotificationForm-body').contains('27.7.d').should('be.visible')
+    cy.getDataCy('ManualPriorNotificationForm-body').contains('ANF – BAUDROIE').should('exist')
+    cy.get('input[id="fishingCatches[0].weight"]').should('have.value', '40')
+    cy.getDataCy('ManualPriorNotificationForm-body').contains('SOL – SOLE COMMUNE').should('exist')
+    cy.get('input[id="fishingCatches[1].weight"]').should('have.value', '3')
+    cy.getDataCy('ManualPriorNotificationForm-body').contains('TUR – TURBOT').should('exist')
+    cy.get('input[id="fishingCatches[2].weight"]').should('have.value', '16')
+    cy.getDataCy('ManualPriorNotificationForm-body').contains("SCE – COQUILLE ST-JACQUES D'EUROPE").should('exist')
+    cy.get('input[id="fishingCatches[3].weight"]').should('have.value', '27150')
+    cy.getDataCy('ManualPriorNotificationForm-body').contains('Dragues remorquées par bateau (DRB)').should('exist')
+
+    cy.clickButton('Fermer')
+
+    cy.getTableRowById('FAKE_OPERATION_114').find('[title="Préavis invalidé"]').should('exist')
+  })
+
   it('Should download a logbook prior notification as a PDF document', { retries: 0 }, () => {
     cy.cleanDownloadedFiles()
 

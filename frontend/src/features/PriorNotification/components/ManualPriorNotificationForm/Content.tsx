@@ -1,6 +1,5 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
-import { InvalidatePriorNotificationDialog } from '@features/PriorNotification/components/InvalidatePriorNotificationDialog'
 import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { invalidatePriorNotification } from '@features/PriorNotification/useCases/invalidatePriorNotification'
 import { updateManualPriorNotificationComputedValues } from '@features/PriorNotification/useCases/updateManualPriorNotificationComputedValues'
@@ -43,8 +42,9 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
   )
   const isPriorNotificationFormDirty = useMainAppSelector(store => store.priorNotification.isPriorNotificationFormDirty)
 
-  const [isInvalidatingPriorNotificationDialog, setIsInvalidatingPriorNotificationDialog] = useState(false)
-  const [isClosingConfirmationDialog, setIsClosingConfirmationDialog] = useState(false)
+  const [isCancellationConfirmationModalOpen, setIsCancellationConfirmationModalOpen] = useState(false)
+  const [isInvalidationConfirmationModalOpen, setIsInvalidationConfirmationModalOpen] = useState(false)
+
   const previousPartialComputationRequestData = usePrevious(getPartialComputationRequestData(values))
 
   const applicableState = editedPriorNotificationComputedValues?.nextState ?? detail?.state
@@ -59,14 +59,28 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
   const hasDesignatedPorts = editedPriorNotificationComputedValues?.types?.find(type => type.hasDesignatedPorts)
   const priorNotificationIdentifier = getPriorNotificationIdentifier(detail)
 
+  const closeCancellationConfirmationModal = () => {
+    setIsCancellationConfirmationModalOpen(false)
+  }
+
+  const closeInvalidationConfirmationModal = () => {
+    setIsInvalidationConfirmationModalOpen(false)
+  }
+
   const handleClose = () => {
     if (isPriorNotificationFormDirty) {
-      setIsClosingConfirmationDialog(true)
+      setIsCancellationConfirmationModalOpen(true)
 
       return
     }
 
     onClose()
+  }
+
+  const handleSubmit = () => {
+    onSubmit()
+
+    submitForm()
   }
 
   const invalidate = () => {
@@ -75,10 +89,8 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
     dispatch(invalidatePriorNotification(priorNotificationIdentifier, true))
   }
 
-  const handleSubmit = () => {
-    onSubmit()
-
-    submitForm()
+  const openInvalidationConfirmationModal = () => {
+    setIsInvalidationConfirmationModalOpen(true)
   }
 
   const updateComputedValues = useDebouncedCallback(
@@ -184,7 +196,7 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
             <InvalidateButton
               accent={Accent.SECONDARY}
               Icon={Icon.Invalid}
-              onClick={() => setIsInvalidatingPriorNotificationDialog(true)}
+              onClick={openInvalidationConfirmationModal}
               title="Invalider le préavis"
             >
               Invalider le préavis
@@ -237,22 +249,32 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
         </Footer>
       </FrontendErrorBoundary>
 
-      {isClosingConfirmationDialog && (
+      {isCancellationConfirmationModalOpen && (
         <ConfirmationModal
           confirmationButtonLabel="Quitter sans enregistrer"
           message={`Vous êtes en train d’abandonner ${
             isNewPriorNotification ? 'la création' : 'l’édition'
           } d’un préavis.`}
-          onCancel={() => setIsClosingConfirmationDialog(false)}
+          onCancel={closeCancellationConfirmationModal}
           onConfirm={onClose}
           title="Abandon de préavis"
         />
       )}
 
-      {isInvalidatingPriorNotificationDialog && (
-        <InvalidatePriorNotificationDialog
-          onCancel={() => setIsInvalidatingPriorNotificationDialog(false)}
+      {isInvalidationConfirmationModalOpen && (
+        <ConfirmationModal
+          confirmationButtonLabel="Confirmer l’invalidation"
+          message={
+            <>
+              <p>
+                <b>Êtes-vous sûr de vouloir invalider ce préavis ?</b>
+              </p>
+              <p>Vous ne pourrez plus le modifier ni le diffuser aux unités. Vous pourrez toujours le consulter.</p>
+            </>
+          }
+          onCancel={closeInvalidationConfirmationModal}
           onConfirm={invalidate}
+          title="Invalider le préavis"
         />
       )}
     </SideWindowCard>

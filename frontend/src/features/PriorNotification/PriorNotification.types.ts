@@ -64,23 +64,43 @@ export namespace PriorNotification {
     state: State | undefined
   } & (
     | {
-        asLogbookFormData: LogbookFormData
-        asManualFormData: undefined
+        asLogbookForm: LogbookForm
+        asManualDraft: ManualDraft
+        asManualForm: undefined
         isManuallyCreated: false
       }
     | {
-        asLogbookFormData: undefined
-        asManualFormData: ManualFormData
+        asLogbookForm: undefined
+        asManualDraft: undefined
+        asManualForm: ManualForm
         isManuallyCreated: true
       }
   )
 
-  export type LogbookFormData = {
+  export type ManualDraft = {
+    authorTrigram: string
+    didNotFishAfterZeroNotice: boolean
+    expectedArrivalDate: string | undefined
+    expectedLandingDate: string | undefined
+    fishingCatches: FormDataFishingCatch[]
+    globalFaoArea: string | undefined
+    hasPortEntranceAuthorization: boolean
+    hasPortLandingAuthorization: boolean
+    note: string | undefined
+    portLocode: string | undefined
+    purpose: PurposeCode | undefined
+    sentAt: string | undefined
+    tripGearCodes: string[]
+    updatedAt: string | undefined
+    vesselId: number | undefined
+  }
+
+  export type LogbookForm = {
     authorTrigram: string | undefined
     note: string | undefined
   }
 
-  export type ManualFormData = {
+  export type ManualForm = {
     authorTrigram: string
     didNotFishAfterZeroNotice: boolean
     expectedArrivalDate: string
@@ -98,7 +118,7 @@ export namespace PriorNotification {
     updatedAt: string
     vesselId: number
   }
-  export type NewManualFormData = Omit<ManualFormData, 'reportId'>
+  export type NewManualForm = Omit<ManualForm, 'reportId'>
 
   export type LogbookComputeRequestData = {
     isInVerificationScope: boolean
@@ -113,7 +133,7 @@ export namespace PriorNotification {
   }
 
   export type ManualComputeRequestData = Pick<
-    ManualFormData,
+    ManualForm,
     'fishingCatches' | 'globalFaoArea' | 'portLocode' | 'tripGearCodes' | 'vesselId'
   >
   /** Real-time computed values displayed within a prior notification form. */

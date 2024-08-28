@@ -7,7 +7,6 @@ import { handleThunkError } from '@utils/handleThunkError'
 import { displayedErrorActions } from 'domain/shared_slices/DisplayedError'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
 
-import { getInitialFormValues } from '../components/ManualPriorNotificationForm/utils'
 import { OpenedPriorNotificationType } from '../constants'
 import { priorNotificationApi } from '../priorNotificationApi'
 import { priorNotificationActions } from '../slice'
@@ -17,67 +16,54 @@ import type { ManualPriorNotificationFormValues } from '../components/ManualPrio
 import type { PriorNotification } from '../PriorNotification.types'
 import type { MainAppThunk } from '@store'
 
-export const openManualPriorNotificationForm =
-  (
-    identifier: PriorNotification.Identifier | undefined,
-    fingerprint?: string | undefined
-  ): MainAppThunk<Promise<void>> =>
+export const invalidateAndDuplicateLogbookPriorNotification =
+  (identifier: PriorNotification.Identifier): MainAppThunk<Promise<void>> =>
   async dispatch => {
     try {
       dispatch(displayedErrorActions.unset(DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR))
       dispatch(priorNotificationActions.closePriorNotificationCardAndForm())
       dispatch(priorNotificationActions.openPriorNotification(OpenedPriorNotificationType.ManualForm))
 
-      if (!identifier) {
-        dispatch(priorNotificationActions.setEditedManualPriorNotificationFormValues(getInitialFormValues()))
-
-        return
-      }
-
-      const manualPriorNotification = await dispatch(
-        priorNotificationApi.endpoints.getPriorNotificationDetail.initiate({
+      const logbookPriorNotification = await dispatch(
+        priorNotificationApi.endpoints.invalidatePriorNotification.initiate({
           ...identifier,
-          isManuallyCreated: true
+          isManuallyCreated: false
         })
       ).unwrap()
-      if (!manualPriorNotification.isManuallyCreated) {
-        throw new FrontendError('`priorNotificationDetail.isManuallyCreated` is `false` but should be `true`.')
+      if (logbookPriorNotification.isManuallyCreated) {
+        throw new FrontendError('`priorNotificationDetail.isManuallyCreated` is `true` but should be `false`.')
       }
 
-      // Update prior notification list if prior notification fingerprint has changed
-      if (manualPriorNotification.fingerprint !== fingerprint) {
-        dispatch(priorNotificationApi.util.invalidateTags([RtkCacheTagType.PriorNotifications]))
-      }
+      dispatch(priorNotificationApi.util.invalidateTags([RtkCacheTagType.PriorNotifications]))
 
       const nextComputedValues: Undefine<PriorNotification.ManualComputedValues> = {
-        isVesselUnderCharter: manualPriorNotification.isVesselUnderCharter,
-        nextState: manualPriorNotification.state,
-        riskFactor: manualPriorNotification.riskFactor,
-        tripSegments: manualPriorNotification.logbookMessage.tripSegments,
+        isVesselUnderCharter: logbookPriorNotification.isVesselUnderCharter,
+        nextState: logbookPriorNotification.state,
+        riskFactor: logbookPriorNotification.riskFactor,
+        tripSegments: logbookPriorNotification.logbookMessage.tripSegments,
         types: getPriorNotificationTypesFromLogbookMessagePnoTypes(
-          manualPriorNotification.logbookMessage.message.pnoTypes
+          logbookPriorNotification.logbookMessage.message.pnoTypes
         )
       }
 
-      const nextHasGlobalFaoArea = !!manualPriorNotification.asManualForm.globalFaoArea
+      const nextHasGlobalFaoArea = !!logbookPriorNotification.asManualDraft.globalFaoArea
       const nextIsExpectedLandingDateSameAsExpectedArrivalDate =
-        manualPriorNotification.asManualForm.expectedLandingDate ===
-        manualPriorNotification.asManualForm.expectedArrivalDate
+        logbookPriorNotification.asManualDraft.expectedLandingDate ===
+        logbookPriorNotification.asManualDraft.expectedArrivalDate
       const nextFormValues: ManualPriorNotificationFormValues = {
-        ...manualPriorNotification.asManualForm,
+        ...logbookPriorNotification.asManualDraft,
         hasGlobalFaoArea: nextHasGlobalFaoArea,
         isExpectedLandingDateSameAsExpectedArrivalDate: nextIsExpectedLandingDateSameAsExpectedArrivalDate
       }
 
       dispatch(priorNotificationActions.setEditedManualPriorNotificationFormValues(nextFormValues))
       dispatch(priorNotificationActions.setManualPriorNotificationComputedValues(nextComputedValues))
-      dispatch(priorNotificationActions.setOpenedPriorNotificationDetail(manualPriorNotification))
     } catch (err) {
       if (err instanceof FrontendApiError) {
         dispatch(
           displayOrLogError(
             err,
-            () => openManualPriorNotificationForm(identifier, fingerprint),
+            () => invalidateAndDuplicateLogbookPriorNotification(identifier),
             true,
             DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR
           )

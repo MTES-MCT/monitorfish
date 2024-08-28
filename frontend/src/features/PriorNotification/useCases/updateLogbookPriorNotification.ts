@@ -11,7 +11,7 @@ import type { MainAppThunk } from '@store'
 export const updateLogbookPriorNotification =
   (
     priorNotificationIdentifier: PriorNotification.Identifier,
-    nextData: PriorNotification.LogbookFormData
+    nextData: PriorNotification.LogbookForm
   ): MainAppThunk<Promise<void>> =>
   async dispatch => {
     try {

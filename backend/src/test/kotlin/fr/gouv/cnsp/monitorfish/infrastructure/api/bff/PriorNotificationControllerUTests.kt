@@ -103,31 +103,6 @@ class PriorNotificationControllerUTests {
     }
 
     @Test
-    fun `getLogbookFormData Should get a logbook prior notification form data by its reportId`() {
-        val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
-
-        // Given
-        given(
-            getPriorNotification.execute(
-                fakePriorNotification.reportId!!,
-                fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
-                false,
-            ),
-        )
-            .willReturn(fakePriorNotification)
-
-        // When
-        api.perform(
-            get(
-                "/bff/v1/prior_notifications/logbook/${fakePriorNotification.reportId!!}/form?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
-            ),
-        )
-            // Then
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
-    }
-
-    @Test
     fun `updateLogbook Should update a logbook prior notification by its reportId`() {
         val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
         fakePriorNotification.logbookMessageAndValue.value.note = "Test !"
@@ -160,7 +135,6 @@ class PriorNotificationControllerUTests {
         )
             // Then
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
             .andExpect(jsonPath("$.authorTrigram", equalTo(pnoValue.authorTrigram)))
             .andExpect(jsonPath("$.note", equalTo(pnoValue.note)))
     }
@@ -197,32 +171,6 @@ class PriorNotificationControllerUTests {
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.riskFactor", equalTo(1.2)))
-    }
-
-    @Test
-    fun `getManualData Should get a manual prior notification form data by its reportId`() {
-        val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
-        fakePriorNotification.logbookMessageAndValue.value.authorTrigram = "ABC"
-
-        // Given
-        given(
-            getPriorNotification.execute(
-                fakePriorNotification.reportId!!,
-                fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
-                true,
-            ),
-        )
-            .willReturn(fakePriorNotification)
-
-        // When
-        api.perform(
-            get(
-                "/bff/v1/prior_notifications/manual/${fakePriorNotification.reportId!!}/form?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
-            ),
-        )
-            // Then
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
     }
 
     @Test

@@ -33,6 +33,7 @@ data class LogbookMessage(
     var isDeleted: Boolean = false,
     val isEnriched: Boolean = false,
     var isSentByFailoverSoftware: Boolean = false,
+    // TODO Rename to `value` to help distinguish `message` (`value`) from `LogbookMessage`.
     val message: LogbookMessageValue? = null,
     val messageType: String? = null,
     val operationType: LogbookOperationType,

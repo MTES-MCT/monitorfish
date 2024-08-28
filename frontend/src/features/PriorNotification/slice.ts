@@ -9,7 +9,7 @@ import type { OpenedPriorNotificationType } from './constants'
 import type { Undefine } from '@mtes-mct/monitor-ui'
 
 export interface PriorNotificationState {
-  editedLogbookPriorNotificationFormValues: PriorNotification.LogbookFormData | undefined
+  editedLogbookPriorNotificationFormValues: PriorNotification.LogbookForm | undefined
   editedManualPriorNotificationComputedValues: Undefine<PriorNotification.ManualComputedValues> | undefined
   editedManualPriorNotificationFormValues: ManualPriorNotificationFormValues | undefined
   isPriorNotificationFormDirty: boolean
@@ -52,7 +52,7 @@ const priorNotificationSlice = createSlice({
       }
     },
 
-    setEditedLogbookPriorNotificationFormValues(state, action: PayloadAction<PriorNotification.LogbookFormData>) {
+    setEditedLogbookPriorNotificationFormValues(state, action: PayloadAction<PriorNotification.LogbookForm>) {
       state.editedLogbookPriorNotificationFormValues = action.payload
     },
 

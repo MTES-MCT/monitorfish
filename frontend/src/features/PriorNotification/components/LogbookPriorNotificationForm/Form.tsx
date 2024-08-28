@@ -1,9 +1,11 @@
+import { ConfirmationModal } from '@components/ConfirmationModal'
 import { HALF_A_SECOND } from '@constants/index'
+import { duplicateLogbookPriorNotification } from '@features/PriorNotification/useCases/duplicateLogbookPriorNotification'
 import { invalidatePriorNotification } from '@features/PriorNotification/useCases/invalidatePriorNotification'
 import { updateLogbookPriorNotification } from '@features/PriorNotification/useCases/updateLogbookPriorNotification'
 import { getPriorNotificationIdentifier } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { Accent, Button, FormikEffect, FormikTextarea, FormikTextInput, Icon } from '@mtes-mct/monitor-ui'
+import { Accent, Button, FormikEffect, FormikTextarea, FormikTextInput, Icon, THEME } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import { Formik } from 'formik'
@@ -12,32 +14,43 @@ import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
-import { InvalidatePriorNotificationDialog } from '../InvalidatePriorNotificationDialog'
-
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
 type FormProps = Readonly<{
   detail: PriorNotification.Detail
-  initialFormValues: PriorNotification.LogbookFormData
+  initialFormValues: PriorNotification.LogbookForm
 }>
 export function Form({ detail, initialFormValues }: FormProps) {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
 
-  const [isInvalidatingPriorNotificationDialog, setIsInvalidatingPriorNotificationDialog] = useState(false)
+  const [isInvalidationConfirmationModalOpen, setIsInvalidationConfirmationModalOpen] = useState(false)
 
   const priorNotificationIdentifier = useMemo(() => getPriorNotificationIdentifier(detail), [detail])
   assertNotNullish(priorNotificationIdentifier)
 
-  const { isBeingSent, isInvalidated } = detail.logbookMessage.message
-  const isReadOnly = !isSuperUser || !!isBeingSent || isInvalidated
+  const isBeingSent = !!detail.logbookMessage.message.isBeingSent
+  const isInvalidated = !!detail.logbookMessage.message.isInvalidated
+  const isReadOnly = !isSuperUser || isBeingSent || isInvalidated
+
+  const closeInvalidationConfirmationModal = () => {
+    setIsInvalidationConfirmationModalOpen(false)
+  }
+
+  const duplicate = () => {
+    dispatch(duplicateLogbookPriorNotification(priorNotificationIdentifier))
+  }
 
   const invalidate = () => {
     dispatch(invalidatePriorNotification(priorNotificationIdentifier, false))
   }
 
+  const openInvalidationConfirmationModal = () => {
+    setIsInvalidationConfirmationModalOpen(true)
+  }
+
   const updateFormCallback = useCallback(
-    async (nextValues: PriorNotification.LogbookFormData) => {
+    async (nextValues: PriorNotification.LogbookForm) => {
       if (isEqual(nextValues, initialFormValues)) {
         return
       }
@@ -48,7 +61,7 @@ export function Form({ detail, initialFormValues }: FormProps) {
   )
 
   const updateNote = useDebouncedCallback(
-    (nextValues: PriorNotification.LogbookFormData) => updateFormCallback(nextValues),
+    (nextValues: PriorNotification.LogbookForm) => updateFormCallback(nextValues),
     HALF_A_SECOND
   )
 
@@ -66,22 +79,45 @@ export function Form({ detail, initialFormValues }: FormProps) {
         </>
       </Formik>
 
-      {isSuperUser && !isInvalidated && (
-        <InvalidateButton
-          accent={Accent.SECONDARY}
-          disabled={isReadOnly}
-          Icon={Icon.Invalid}
-          onClick={() => setIsInvalidatingPriorNotificationDialog(true)}
-          title="Invalider le préavis"
-        >
-          Invalider le préavis
-        </InvalidateButton>
+      {isSuperUser && (
+        <ActionWrapper>
+          {!isInvalidated && (
+            <Button
+              accent={Accent.SECONDARY}
+              color={THEME.color.maximumRed}
+              disabled={isBeingSent}
+              Icon={Icon.Invalid}
+              onClick={openInvalidationConfirmationModal}
+            >
+              Invalider le préavis
+            </Button>
+          )}
+          <Button
+            accent={Accent.SECONDARY}
+            disabled={isBeingSent || !isInvalidated}
+            Icon={Icon.Duplicate}
+            onClick={duplicate}
+            title={!isInvalidated ? 'Le préavis doit d’abord être invalidé pour pouvoir être dupliqué.' : undefined}
+          >
+            Créer un préavis manuel à partir de ce préavis
+          </Button>
+        </ActionWrapper>
       )}
 
-      {isInvalidatingPriorNotificationDialog && (
-        <InvalidatePriorNotificationDialog
-          onCancel={() => setIsInvalidatingPriorNotificationDialog(false)}
+      {isInvalidationConfirmationModalOpen && (
+        <ConfirmationModal
+          confirmationButtonLabel="Confirmer l’invalidation"
+          message={
+            <>
+              <p>
+                <b>Êtes-vous sûr de vouloir invalider ce préavis ?</b>
+              </p>
+              <p>Vous ne pourrez plus le modifier ni le diffuser aux unités. Vous pourrez toujours le consulter.</p>
+            </>
+          }
+          onCancel={closeInvalidationConfirmationModal}
           onConfirm={invalidate}
+          title="Invalider le préavis"
         />
       )}
     </>
@@ -110,7 +146,9 @@ const AuthorTrigramInput = styled(FormikTextInput)`
   width: 120px;
 `
 
-const InvalidateButton = styled(Button)`
-  color: ${p => p.theme.color.maximumRed};
+const ActionWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
   margin-top: 48px;
+  row-gap: 8px;
 `

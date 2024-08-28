@@ -4,13 +4,17 @@ import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import styled, { keyframes } from 'styled-components'
 
+import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
+
 type HeaderProps = Readonly<{
-  isNewPriorNotification: boolean
+  detail: PriorNotification.Detail | undefined
   onClose: () => void
   vesselId: number | undefined
 }>
-export function Header({ isNewPriorNotification, onClose, vesselId }: HeaderProps) {
+export function Header({ detail, onClose, vesselId }: HeaderProps) {
   const { data: vessel } = useGetVesselQuery(vesselId ?? skipToken)
+
+  const isNewPriorNotification = !detail
 
   return (
     <Wrapper>
@@ -20,9 +24,10 @@ export function Header({ isNewPriorNotification, onClose, vesselId }: HeaderProp
             <Icon.Fishery />
           </TitleRowIconBox>
 
-          {/* TODO "< 12 M" doesn't make sense anymore. */}
-          {isNewPriorNotification && <span>{`AJOUTER UN NOUVEAU PRÉAVIS (< 12 M)`}</span>}
-          {!isNewPriorNotification && <span>{`PRÉAVIS NAVIRE < 12 M`}</span>}
+          {isNewPriorNotification && <span>AJOUTER UN NOUVEAU PRÉAVIS</span>}
+          {!isNewPriorNotification && (
+            <span>{`PRÉAVIS NAVIRE ${detail.isLessThanTwelveMetersVessel ? '< 12 M' : '≥ 12 M'}`}</span>
+          )}
         </TitleRow>
 
         {!isNewPriorNotification && (

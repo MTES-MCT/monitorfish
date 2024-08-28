@@ -165,7 +165,7 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
 
     cy.wait('@getPriorNotification')
 
-    cy.contains('AJOUTER UN NOUVEAU PRÉAVIS (< 12 M)').should('be.visible')
+    cy.contains('AJOUTER UN NOUVEAU PRÉAVIS').should('be.visible')
     cy.getDataCy('vessel-search-input').should('have.value', "LE POISSON D'AVRIL")
     cy.getDataCy('ManualPriorNotificationForm-Body').contains('Débarquement').should('be.visible')
     cy.getDataCy('ManualPriorNotificationForm-Body').contains('Vannes (FRVNE)').should('be.visible')

@@ -39,9 +39,9 @@ export function APIWorker() {
     state => state.beaconMalfunction.vesselBeaconMalfunctionsResumeAndHistory
   )
 
-  const sideWindowInterval = useRef<NodeJS.Timer>()
-  const beaconMalfunctionInKanbanInterval = useRef<NodeJS.Timer>()
-  const vesselBeaconMalfunctionInterval = useRef<NodeJS.Timer>()
+  const sideWindowInterval = useRef<number>()
+  const beaconMalfunctionInKanbanInterval = useRef<number>()
+  const vesselBeaconMalfunctionInterval = useRef<number>()
   const [updateVesselSidebarTab, setUpdateVesselSidebarTab] = useState(false)
 
   useEffect(() => {
@@ -86,7 +86,7 @@ export function APIWorker() {
         dispatch(getOperationalAlerts())
         dispatch(getAllCurrentReportings())
         dispatch(getSilencedAlerts())
-      }, THIRTY_SECONDS)
+      }, THIRTY_SECONDS) as any
     }
 
     return () => {
@@ -102,7 +102,7 @@ export function APIWorker() {
 
       beaconMalfunctionInKanbanInterval.current = setInterval(() => {
         dispatch(openBeaconMalfunctionInKanban(openedBeaconMalfunctionInKanban.beaconMalfunction.id))
-      }, THIRTY_SECONDS)
+      }, THIRTY_SECONDS) as any
     }
 
     return () => {
@@ -118,7 +118,7 @@ export function APIWorker() {
 
       vesselBeaconMalfunctionInterval.current = setInterval(() => {
         dispatch(getVesselBeaconMalfunctions(false))
-      }, THIRTY_SECONDS)
+      }, THIRTY_SECONDS) as any
     }
 
     return () => {

@@ -42,8 +42,8 @@ describe('Missions Form', () => {
       await page.waitForSelector('.Component-SingleTag')
       await page.click('.Component-SingleTag > button')
 
-      await page.waitForSelector('.TableBodyRow[data-id="29"] > div > div > [title="Éditer la mission"]')
-      await page.click('.TableBodyRow[data-id="29"] > div > div > [title="Éditer la mission"]')
+      await page.waitForSelector('.TableBodyRow[data-id="29"] > div > [title="Éditer la mission"]')
+      await page.click('.TableBodyRow[data-id="29"] > div > [title="Éditer la mission"]')
 
       await wait(1000)
     }

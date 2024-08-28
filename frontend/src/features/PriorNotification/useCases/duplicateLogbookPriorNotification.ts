@@ -16,7 +16,7 @@ import type { ManualPriorNotificationFormValues } from '../components/ManualPrio
 import type { PriorNotification } from '../PriorNotification.types'
 import type { MainAppThunk } from '@store'
 
-export const invalidateAndDuplicateLogbookPriorNotification =
+export const duplicateLogbookPriorNotification =
   (identifier: PriorNotification.Identifier): MainAppThunk<Promise<void>> =>
   async dispatch => {
     try {
@@ -25,7 +25,7 @@ export const invalidateAndDuplicateLogbookPriorNotification =
       dispatch(priorNotificationActions.openPriorNotification(OpenedPriorNotificationType.ManualForm))
 
       const logbookPriorNotification = await dispatch(
-        priorNotificationApi.endpoints.invalidatePriorNotification.initiate({
+        priorNotificationApi.endpoints.getPriorNotificationDetail.initiate({
           ...identifier,
           isManuallyCreated: false
         })
@@ -63,7 +63,7 @@ export const invalidateAndDuplicateLogbookPriorNotification =
         dispatch(
           displayOrLogError(
             err,
-            () => invalidateAndDuplicateLogbookPriorNotification(identifier),
+            () => duplicateLogbookPriorNotification(identifier),
             true,
             DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR
           )

@@ -161,7 +161,7 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
       <FrontendErrorBoundary>
         <Header isNewPriorNotification={isNewPriorNotification} onClose={handleClose} vesselId={values.vesselId} />
 
-        <Body>
+        <Body data-cy="ManualPriorNotificationForm-body">
           <TagBar
             hasBeenComputed={!!editedPriorNotificationComputedValues}
             isInvalidated={isInvalidated}
@@ -193,12 +193,7 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
           <Form isReadOnly={isReadOnly} />
 
           {!!detail && !isInvalidated && !isPendingSend && (
-            <InvalidateButton
-              accent={Accent.SECONDARY}
-              Icon={Icon.Invalid}
-              onClick={openInvalidationConfirmationModal}
-              title="Invalider le préavis"
-            >
+            <InvalidateButton accent={Accent.SECONDARY} Icon={Icon.Invalid} onClick={openInvalidationConfirmationModal}>
               Invalider le préavis
             </InvalidateButton>
           )}

@@ -95,7 +95,6 @@ export function Form({ detail, initialFormValues }: FormProps) {
             disabled={isReadOnly}
             Icon={Icon.Invalid}
             onClick={openInvalidationConfirmationModal}
-            title="Invalider le préavis"
           >
             Invalider le préavis
           </InvalidateButton>
@@ -105,7 +104,6 @@ export function Form({ detail, initialFormValues }: FormProps) {
             disabled={isReadOnly}
             Icon={Icon.Invalid}
             onClick={openInvalidationWithDuplicationConfirmationModal}
-            title="Invalider et recréer le préavis"
           >
             Invalider et recréer le préavis
           </InvalidateButton>

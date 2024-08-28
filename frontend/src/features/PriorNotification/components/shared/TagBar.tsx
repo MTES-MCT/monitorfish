@@ -61,14 +61,7 @@ export function TagBar({
             Invalidé
           </FixedTag>
         )}
-
-        {isZeroNotice && (
-          <FixedTag key="zeroNotice" borderColor={THEME.color.slateGray}>
-            Préavis Zéro
-          </FixedTag>
-        )}
-
-        {!!state && (
+        {!isInvalidated && !!state && (
           <FixedTag
             key="state"
             $isFullWidth
@@ -78,6 +71,12 @@ export function TagBar({
             title={PriorNotification.STATE_LABEL[state]}
           >
             {PriorNotification.STATE_LABEL[state]}
+          </FixedTag>
+        )}
+
+        {isZeroNotice && (
+          <FixedTag key="zeroNotice" borderColor={THEME.color.slateGray}>
+            Préavis Zéro
           </FixedTag>
         )}
 

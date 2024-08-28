@@ -186,7 +186,7 @@ export function Row({ row }: RowProps) {
                   Invalidé
                 </Tag>
               )}
-              {!!priorNotification.state && (
+              {!priorNotification.isInvalidated && !!priorNotification.state && (
                 <FixedTag
                   backgroundColor={getColorsFromState(priorNotification.state).backgroundColor}
                   borderColor={getColorsFromState(priorNotification.state).borderColor}
@@ -197,6 +197,7 @@ export function Row({ row }: RowProps) {
                   {PriorNotification.STATE_LABEL[priorNotification.state]}
                 </FixedTag>
               )}
+
               {isSuperUser && (
                 <FixedTag backgroundColor={THEME.color.maximumRed15} color={THEME.color.maximumRed}>{`${
                   priorNotification.reportingCount

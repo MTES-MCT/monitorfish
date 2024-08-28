@@ -52,7 +52,7 @@ export function ManualPriorNotificationForm() {
       expectedLandingDate: isExpectedLandingDateSameAsExpectedArrivalDate
         ? priorNotificationData.expectedArrivalDate
         : priorNotificationData.expectedLandingDate
-    } as PriorNotification.NewManualFormData
+    } as PriorNotification.NewManualForm
 
     await dispatch(
       createOrUpdateManualPriorNotification(openedPriorNotificationDetail?.reportId, newOrNextPriorNotificationData)

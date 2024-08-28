@@ -1,4 +1,6 @@
+import { ConfirmationModal } from '@components/ConfirmationModal'
 import { HALF_A_SECOND } from '@constants/index'
+import { invalidateAndDuplicateLogbookPriorNotification } from '@features/PriorNotification/useCases/invalidateAndDuplicateLogbookPriorNotification'
 import { invalidatePriorNotification } from '@features/PriorNotification/useCases/invalidatePriorNotification'
 import { updateLogbookPriorNotification } from '@features/PriorNotification/useCases/updateLogbookPriorNotification'
 import { getPriorNotificationIdentifier } from '@features/PriorNotification/utils'
@@ -12,19 +14,19 @@ import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
-import { InvalidatePriorNotificationDialog } from '../InvalidatePriorNotificationDialog'
-
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
 type FormProps = Readonly<{
   detail: PriorNotification.Detail
-  initialFormValues: PriorNotification.LogbookFormData
+  initialFormValues: PriorNotification.LogbookForm
 }>
 export function Form({ detail, initialFormValues }: FormProps) {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
 
-  const [isInvalidatingPriorNotificationDialog, setIsInvalidatingPriorNotificationDialog] = useState(false)
+  const [isInvalidationConfirmationModalOpen, setIsInvalidationConfirmationModalOpen] = useState(false)
+  const [isInvalidationWithDuplicationConfirmationModalOpen, setIsInvalidationWithDuplicationConfirmationModalOpen] =
+    useState(false)
 
   const priorNotificationIdentifier = useMemo(() => getPriorNotificationIdentifier(detail), [detail])
   assertNotNullish(priorNotificationIdentifier)
@@ -32,12 +34,32 @@ export function Form({ detail, initialFormValues }: FormProps) {
   const { isBeingSent, isInvalidated } = detail.logbookMessage.message
   const isReadOnly = !isSuperUser || !!isBeingSent || isInvalidated
 
+  const closeInvalidationConfirmationModal = () => {
+    setIsInvalidationConfirmationModalOpen(false)
+  }
+
+  const closeInvalidationWithDuplicationConfirmationModal = () => {
+    setIsInvalidationWithDuplicationConfirmationModalOpen(false)
+  }
+
   const invalidate = () => {
     dispatch(invalidatePriorNotification(priorNotificationIdentifier, false))
   }
 
+  const invalidateAndDuplicate = () => {
+    dispatch(invalidateAndDuplicateLogbookPriorNotification(priorNotificationIdentifier))
+  }
+
+  const openInvalidationConfirmationModal = () => {
+    setIsInvalidationConfirmationModalOpen(true)
+  }
+
+  const openInvalidationWithDuplicationConfirmationModal = () => {
+    setIsInvalidationWithDuplicationConfirmationModalOpen(true)
+  }
+
   const updateFormCallback = useCallback(
-    async (nextValues: PriorNotification.LogbookFormData) => {
+    async (nextValues: PriorNotification.LogbookForm) => {
       if (isEqual(nextValues, initialFormValues)) {
         return
       }
@@ -48,7 +70,7 @@ export function Form({ detail, initialFormValues }: FormProps) {
   )
 
   const updateNote = useDebouncedCallback(
-    (nextValues: PriorNotification.LogbookFormData) => updateFormCallback(nextValues),
+    (nextValues: PriorNotification.LogbookForm) => updateFormCallback(nextValues),
     HALF_A_SECOND
   )
 
@@ -67,21 +89,52 @@ export function Form({ detail, initialFormValues }: FormProps) {
       </Formik>
 
       {isSuperUser && !isInvalidated && (
-        <InvalidateButton
-          accent={Accent.SECONDARY}
-          disabled={isReadOnly}
-          Icon={Icon.Invalid}
-          onClick={() => setIsInvalidatingPriorNotificationDialog(true)}
-          title="Invalider le préavis"
-        >
-          Invalider le préavis
-        </InvalidateButton>
+        <>
+          <InvalidateButton
+            accent={Accent.SECONDARY}
+            disabled={isReadOnly}
+            Icon={Icon.Invalid}
+            onClick={openInvalidationConfirmationModal}
+            title="Invalider le préavis"
+          >
+            Invalider le préavis
+          </InvalidateButton>
+
+          <InvalidateButton
+            accent={Accent.SECONDARY}
+            disabled={isReadOnly}
+            Icon={Icon.Invalid}
+            onClick={openInvalidationWithDuplicationConfirmationModal}
+            title="Invalider et recréer le préavis"
+          >
+            Invalider et recréer le préavis
+          </InvalidateButton>
+        </>
       )}
 
-      {isInvalidatingPriorNotificationDialog && (
-        <InvalidatePriorNotificationDialog
-          onCancel={() => setIsInvalidatingPriorNotificationDialog(false)}
+      {isInvalidationConfirmationModalOpen && (
+        <ConfirmationModal
+          confirmationButtonLabel="Confirmer l’invalidation"
+          message={
+            <>
+              <p>
+                <b>Êtes-vous sûr de vouloir invalider ce préavis ?</b>
+              </p>
+              <p>Vous ne pourrez plus le modifier ni le diffuser aux unités. Vous pourrez toujours le consulter.</p>
+            </>
+          }
+          onCancel={closeInvalidationConfirmationModal}
           onConfirm={invalidate}
+          title="Invalider le préavis"
+        />
+      )}
+      {isInvalidationWithDuplicationConfirmationModalOpen && (
+        <ConfirmationModal
+          confirmationButtonLabel="Confirmer l’invalidation avec recréation"
+          message="Êtes-vous sûr de vouloir invalider et recréer ce préavis ?"
+          onCancel={closeInvalidationWithDuplicationConfirmationModal}
+          onConfirm={invalidateAndDuplicate}
+          title="Invalider et recréer le préavis"
         />
       )}
     </>

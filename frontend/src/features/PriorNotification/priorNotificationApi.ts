@@ -44,7 +44,7 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(COMPUTE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
     }),
 
-    createPriorNotification: builder.mutation<PriorNotification.ManualFormData, PriorNotification.NewManualFormData>({
+    createPriorNotification: builder.mutation<PriorNotification.ManualForm, PriorNotification.NewManualForm>({
       invalidatesTags: [{ type: RtkCacheTagType.PriorNotifications }],
       query: data => ({
         body: data,
@@ -138,9 +138,9 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
     }),
 
     updateLogbookPriorNotification: builder.mutation<
-      PriorNotification.LogbookFormData,
+      PriorNotification.LogbookForm,
       {
-        data: PriorNotification.LogbookFormData
+        data: PriorNotification.LogbookForm
         operationDate: string
         reportId: string
       }
@@ -158,9 +158,9 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
     }),
 
     updateManualPriorNotification: builder.mutation<
-      PriorNotification.ManualFormData,
+      PriorNotification.ManualForm,
       {
-        data: PriorNotification.NewManualFormData
+        data: PriorNotification.NewManualForm
         reportId: string
       }
     >({

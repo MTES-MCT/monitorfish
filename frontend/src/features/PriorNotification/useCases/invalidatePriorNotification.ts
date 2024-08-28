@@ -31,9 +31,9 @@ export const invalidatePriorNotification =
       ).unwrap()
 
       if (nextDetail.isManuallyCreated) {
-        dispatch(priorNotificationActions.setEditedLogbookPriorNotificationFormValues(nextDetail.asManualFormData))
+        dispatch(priorNotificationActions.setEditedLogbookPriorNotificationFormValues(nextDetail.asManualForm))
       } else {
-        dispatch(priorNotificationActions.setEditedLogbookPriorNotificationFormValues(nextDetail.asLogbookFormData))
+        dispatch(priorNotificationActions.setEditedLogbookPriorNotificationFormValues(nextDetail.asLogbookForm))
       }
 
       dispatch(priorNotificationActions.setOpenedPriorNotificationDetail(nextDetail))

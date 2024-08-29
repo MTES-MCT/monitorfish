@@ -25,7 +25,7 @@ export const addReporting =
           vesselFeatureId: Vessel.getVesselFeatureId(selectedVesselIdentity)
         })
       )
-      await dispatch(getVesselReportings(false))
+      await dispatch(getVesselReportings(true))
     } catch (error) {
       dispatch(
         displayOrLogError(

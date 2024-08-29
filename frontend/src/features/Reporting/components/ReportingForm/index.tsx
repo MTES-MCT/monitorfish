@@ -34,7 +34,7 @@ import { updateReporting } from '../../useCases/updateReporting'
 import { mapControlUnitsToUniqueSortedIdsAsOptions } from '../VesselReportings/Current/utils'
 
 import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
-import type { EditableReporting, EditedReporting } from '../../types'
+import type { EditableReporting, EditedReporting, InfractionSuspicion } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
 type ReportingFormProps = {
@@ -126,6 +126,9 @@ export function ReportingForm({
     >
       {({ setFieldValue, values }) => {
         const updateActor = updateReportingActor(setFieldValue)
+        const infractionTitle = infractions?.find(
+          infraction => infraction.natinfCode === (values as Partial<InfractionSuspicion>).natinfCode
+        )?.infraction
 
         return (
           <StyledForm
@@ -207,7 +210,7 @@ export function ReportingForm({
                 placement={!isFromSideWindow ? 'topStart' : undefined}
                 searchable
                 // @ts-ignore
-                title={infractions?.find(infraction => infraction.natinfCode === values.natinfCode)?.infraction}
+                title={infractionTitle}
               />
             )}
             <StyledFormikTextInput

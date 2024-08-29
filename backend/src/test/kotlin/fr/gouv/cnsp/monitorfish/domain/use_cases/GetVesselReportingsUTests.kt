@@ -38,7 +38,7 @@ class GetVesselReportingsUTests {
         // Given
         val expectedDateTime = ZonedDateTime.now().minusYears(10)
         given(reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(any(), any(), any())).willReturn(
-            emptyList()
+            emptyList(),
         )
 
         // When
@@ -92,7 +92,7 @@ class GetVesselReportingsUTests {
         // Then
         assertThat(currentAndArchivedReportings.current).hasSize(1)
         val firstCurrentReporting = currentAndArchivedReportings.current.first()
-        assertThat(firstCurrentReporting.otherOccurrences).hasSize(1)
+        assertThat(firstCurrentReporting.otherOccurrencesOfSameAlert).hasSize(1)
         assertThat(firstCurrentReporting.reporting.isArchived).isFalse
         assertThat(firstCurrentReporting.reporting.infraction?.natinfCode).isEqualTo(7059)
 
@@ -200,20 +200,20 @@ class GetVesselReportingsUTests {
             AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
         )
 
-        assertThat(firstResult.otherOccurrences).hasSize(2)
-        assertThat(firstResult.otherOccurrences[0].id).isEqualTo(12345)
-        assertThat((firstResult.otherOccurrences[0].value as AlertType).type).isEqualTo(
+        assertThat(firstResult.otherOccurrencesOfSameAlert).hasSize(2)
+        assertThat(firstResult.otherOccurrencesOfSameAlert[0].id).isEqualTo(12345)
+        assertThat((firstResult.otherOccurrencesOfSameAlert[0].value as AlertType).type).isEqualTo(
             AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
         )
-        assertThat(firstResult.otherOccurrences[1].id).isEqualTo(123456)
-        assertThat((firstResult.otherOccurrences[1].value as AlertType).type).isEqualTo(
+        assertThat(firstResult.otherOccurrencesOfSameAlert[1].id).isEqualTo(123456)
+        assertThat((firstResult.otherOccurrencesOfSameAlert[1].value as AlertType).type).isEqualTo(
             AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
         )
 
         val secondResult = result.current[1]
         assertThat(secondResult.reporting.id).isEqualTo(12345678)
         assertThat((secondResult.reporting.value as AlertType).type).isEqualTo(AlertTypeMapping.MISSING_FAR_ALERT)
-        assertThat(secondResult.otherOccurrences).isEmpty()
+        assertThat(secondResult.otherOccurrencesOfSameAlert).isEmpty()
     }
 
     @Test
@@ -277,21 +277,21 @@ class GetVesselReportingsUTests {
         assertThat((firstResult.reporting.value as AlertType).type).isEqualTo(
             AlertTypeMapping.MISSING_FAR_48_HOURS_ALERT,
         )
-        assertThat(firstResult.otherOccurrences).isEmpty()
+        assertThat(firstResult.otherOccurrencesOfSameAlert).isEmpty()
 
         val secondResult = result.current[1]
         assertThat(secondResult.reporting.id).isEqualTo(33445)
         assertThat(secondResult.reporting.type).isEqualTo(ReportingType.INFRACTION_SUSPICION)
-        assertThat(secondResult.otherOccurrences).isEmpty()
+        assertThat(secondResult.otherOccurrencesOfSameAlert).isEmpty()
 
         val thirdResult = result.current[2]
         assertThat(thirdResult.reporting.id).isEqualTo(22334)
         assertThat((thirdResult.reporting.value as AlertType).type).isEqualTo(
             AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
         )
-        assertThat(thirdResult.otherOccurrences).hasSize(1)
-        assertThat(thirdResult.otherOccurrences[0].id).isEqualTo(11223)
-        assertThat((thirdResult.otherOccurrences[0].value as AlertType).type).isEqualTo(
+        assertThat(thirdResult.otherOccurrencesOfSameAlert).hasSize(1)
+        assertThat(thirdResult.otherOccurrencesOfSameAlert[0].id).isEqualTo(11223)
+        assertThat((thirdResult.otherOccurrencesOfSameAlert[0].value as AlertType).type).isEqualTo(
             AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
         )
     }

@@ -23,7 +23,8 @@ export function YearReportings({ year, yearReportings }: YearReportingsProps) {
   const numberOfReportings = useMemo(
     () =>
       yearReportings.reduce(
-        (accumulator, reportingAndOccurrences) => accumulator + reportingAndOccurrences.otherOccurrences.length + 1,
+        (accumulator, reportingAndOccurrences) =>
+          accumulator + reportingAndOccurrences.otherOccurrencesOfSameAlert.length + 1,
         0
       ),
     [yearReportings]
@@ -36,7 +37,7 @@ export function YearReportings({ year, yearReportings }: YearReportingsProps) {
 
     return yearReportings.reduce((accumulator, reportingAndOccurrences) => {
       const reportingCount = reportingIsAnInfractionSuspicion(reportingAndOccurrences.reporting.type) ? 1 : 0
-      const otherOccurrencesCount = reportingAndOccurrences.otherOccurrences
+      const otherOccurrencesCount = reportingAndOccurrences.otherOccurrencesOfSameAlert
         .map(reporting => (reportingIsAnInfractionSuspicion(reporting.type) ? Number(1) : Number(0)))
         .reduce((acc, val) => acc + val, 0)
 
@@ -78,11 +79,11 @@ export function YearReportings({ year, yearReportings }: YearReportingsProps) {
       </YearListTitle>
       {isOpen && (
         <YearListContentWithPadding name={year.toString()}>
-          {yearReportings.map(({ otherOccurrences, reporting }) => (
+          {yearReportings.map(({ otherOccurrencesOfSameAlert, reporting }) => (
             <ReportingCard
               key={reporting.id}
               isArchived
-              numberOfOccurrences={otherOccurrences.length + 1}
+              numberOfOccurrences={otherOccurrencesOfSameAlert.length + 1}
               reporting={reporting}
             />
           ))}

@@ -29,7 +29,7 @@ import { FeatureWithCodeAndEntityId } from '../../libs/FeatureWithCodeAndEntityI
 import { AdministrativeLayers } from '../AdministrativeZone/layers/AdministrativeLayers'
 import { BaseLayer } from '../BaseMap/layers/BaseLayer'
 import { DrawLayer } from '../Draw/layer'
-import InterestPointLayer from '../InterestPoint/layers/InterestPointLayer'
+import { InterestPointLayer } from '../InterestPoint/layers/InterestPointLayer'
 import MeasurementLayer from '../Measurement/layers/MeasurementLayer'
 import { MissionOverlay } from '../Mission/components/MissionOverlay'
 import { SelectedMissionOverlay } from '../Mission/components/SelectedMissionOverlay'
@@ -45,6 +45,8 @@ import { HoveredStationOverlay } from '../Station/components/HoveredStationOverl
 import { SelectedStationOverlay } from '../Station/components/SelectedStationOverlay'
 import { StationLayer } from '../Station/components/StationLayer'
 
+import type { DummyObjectToForceEffectHookUpdate } from './types'
+
 export function Map() {
   const isSuperUser = useIsSuperUser()
   const { areVesselsDisplayed, isMissionsLayerDisplayed, isStationLayerDisplayed } = useMainAppSelector(
@@ -53,7 +55,7 @@ export function Map() {
   const [shouldUpdateView, setShouldUpdateView] = useState(true)
   const [historyMoveTrigger, setHistoryMoveTrigger] = useState({})
   const [hoveredFeature, setHoveredFeature] = useState<Feature | FeatureWithCodeAndEntityId | undefined>(undefined)
-  const [mapMovingAndZoomEvent, setMapMovingAndZoomEvent] = useState<Object>({})
+  const [mapMovingAndZoomEvent, setMapMovingAndZoomEvent] = useState<DummyObjectToForceEffectHookUpdate>({})
   const [handlePointerMoveEventPixel, setHandlePointerMoveEventPixel] = useState(null)
 
   const hoveredFeatureWithCodeAndEntityId =

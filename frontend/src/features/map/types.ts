@@ -9,3 +9,8 @@ export interface VectorSourceForFeatureWithCodeAndEntityId<G extends Geometry = 
   addFeatures(features: Array<FeatureWithCodeAndEntityId<G>>): void
   forEachFeature<T>(callback: (feature: FeatureWithCodeAndEntityId<G>) => void): T | undefined
 }
+
+// TODO Replace this hack by a cleaner solution. Created for legacy compatibility.
+export type DummyObjectToForceEffectHookUpdate = {
+  dummyUpdate?: true
+}

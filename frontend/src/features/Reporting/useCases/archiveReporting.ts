@@ -26,7 +26,7 @@ export const archiveReporting =
         })
       )
 
-      await dispatch(getVesselReportings(false))
+      await dispatch(getVesselReportings(true))
     } catch (error) {
       dispatch(
         displayOrLogError(

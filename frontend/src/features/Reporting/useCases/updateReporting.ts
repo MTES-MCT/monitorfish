@@ -57,7 +57,7 @@ export const updateReporting =
 
       // If the update is done from the Reporting tab of the vessel sidebar
       if (vesselIdentity) {
-        await dispatch(getVesselReportings(false))
+        await dispatch(getVesselReportings(true))
       }
     } catch (error) {
       dispatch(

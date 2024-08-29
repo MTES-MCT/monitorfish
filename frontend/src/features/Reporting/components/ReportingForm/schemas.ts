@@ -1,9 +1,7 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 
-import { ReportingOriginActor } from '@features/Reporting/types'
+import { ReportingOriginActor, ReportingType } from '@features/Reporting/types'
 import { number, object, string } from 'yup'
-
-import { ReportingType } from '../../../../domain/types/reporting'
 
 export const CreateOrEditReportingSchema = object({
   reportingActor: string().required('Veuillez renseigner l&apos;origine du signalement.'),
@@ -17,16 +15,16 @@ export const CreateOrEditReportingSchema = object({
   controlUnitId: string().test({
     message: 'Veuillez renseigner l&apos;unité',
     test: (controlUnitId, context) =>
-      context.parent.reportingActor === ReportingOriginActor.UNIT.code ? !!controlUnitId : true
+      context.parent.reportingActor === ReportingOriginActor.UNIT ? !!controlUnitId : true
   }),
   authorContact: string().test({
     message: 'Veuillez renseigner le contact',
     test: (authorContact, context) => {
       const { reportingActor } = context.parent
       if (
-        reportingActor === ReportingOriginActor.DML.code ||
-        reportingActor === ReportingOriginActor.DIRM.code ||
-        reportingActor === ReportingOriginActor.OTHER.code
+        reportingActor === ReportingOriginActor.DML ||
+        reportingActor === ReportingOriginActor.DIRM ||
+        reportingActor === ReportingOriginActor.OTHER
       ) {
         return !!authorContact
       }

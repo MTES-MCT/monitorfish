@@ -1,8 +1,8 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.reporting
 
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
+typealias Year = Int
 
 class CurrentAndArchivedReportings(
-    val current: List<Pair<Reporting, ControlUnit?>>,
-    val archived: List<Pair<Reporting, ControlUnit?>>,
+    val current: List<ReportingAndOccurrences>,
+    val archived: Map<Year, List<ReportingAndOccurrences>>,
 )

@@ -29,53 +29,53 @@ class GetAllCurrentReportings(
                 types = listOf(ReportingType.ALERT, ReportingType.INFRACTION_SUSPICION),
             )
 
-        val currents = reportingRepository.findAll(filter)
+        val currentReportings = reportingRepository.findAll(filter)
         val controlUnits = getAllControlUnits.execute()
 
-        currents.forEach {
-            it.underCharter =
-                try {
-                    when (it.vesselIdentifier) {
-                        VesselIdentifier.INTERNAL_REFERENCE_NUMBER -> {
-                            require(it.internalReferenceNumber != null) {
-                                "The fields 'internalReferenceNumber' must be not null when the vessel identifier is INTERNAL_REFERENCE_NUMBER."
-                            }
-                            vesselRepository.findUnderCharterForVessel(
-                                it.vesselIdentifier,
-                                it.internalReferenceNumber,
-                            )
+        val currentReportingsWithCharterInfo = currentReportings.map { reporting ->
+            val underCharter = try {
+                when (reporting.vesselIdentifier) {
+                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER -> {
+                        requireNotNull(reporting.internalReferenceNumber) {
+                            "The fields 'internalReferenceNumber' must be not null when the vessel identifier is INTERNAL_REFERENCE_NUMBER."
                         }
-
-                        VesselIdentifier.IRCS -> {
-                            require(it.ircs != null) {
-                                "The fields 'ircs' must be not null when the vessel identifier is IRCS."
-                            }
-                            vesselRepository.findUnderCharterForVessel(it.vesselIdentifier, it.ircs)
-                        }
-
-                        VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> {
-                            require(it.externalReferenceNumber != null) {
-                                "The fields 'externalReferenceNumber' must be not null when the vessel identifier is EXTERNAL_REFERENCE_NUMBER."
-                            }
-                            vesselRepository.findUnderCharterForVessel(
-                                it.vesselIdentifier,
-                                it.externalReferenceNumber,
-                            )
-                        }
-
-                        else -> null
+                        vesselRepository.findUnderCharterForVessel(
+                            reporting.vesselIdentifier,
+                            reporting.internalReferenceNumber,
+                        )
                     }
-                } catch (e: Throwable) {
-                    logger.debug(
-                        "Last position not found for vessel \"${it.internalReferenceNumber}/${it.ircs}/${it.externalReferenceNumber}\" " +
-                            "and vessel identifier \"${it.vesselIdentifier}\": ${e.message}",
-                    )
 
-                    null
+                    VesselIdentifier.IRCS -> {
+                        requireNotNull(reporting.ircs) {
+                            "The fields 'ircs' must be not null when the vessel identifier is IRCS."
+                        }
+                        vesselRepository.findUnderCharterForVessel(reporting.vesselIdentifier, reporting.ircs)
+                    }
+
+                    VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> {
+                        requireNotNull(reporting.externalReferenceNumber) {
+                            "The fields 'externalReferenceNumber' must be not null when the vessel identifier is EXTERNAL_REFERENCE_NUMBER."
+                        }
+                        vesselRepository.findUnderCharterForVessel(
+                            reporting.vesselIdentifier,
+                            reporting.externalReferenceNumber,
+                        )
+                    }
+
+                    else -> null
                 }
+            } catch (e: Throwable) {
+                logger.debug(
+                    "Last position not found for vessel \"${reporting.internalReferenceNumber}/${reporting.ircs}/${reporting.externalReferenceNumber}\" " +
+                        "and vessel identifier \"${reporting.vesselIdentifier}\": ${e.message}",
+                )
+                null
+            }
+
+            reporting.copy(underCharter = underCharter)
         }
 
-        return currents.map { reporting ->
+        return currentReportingsWithCharterInfo.map { reporting ->
             if (reporting.type == ReportingType.ALERT) {
                 return@map Pair(reporting, null)
             }

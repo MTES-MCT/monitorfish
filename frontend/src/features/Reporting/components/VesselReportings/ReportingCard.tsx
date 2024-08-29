@@ -1,36 +1,29 @@
-import { getReportingActor } from '@features/Reporting/components/VesselReportings/utils'
+import { getReportingActorLabel } from '@features/Reporting/components/VesselReportings/utils'
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { Accent, Icon, IconButton, THEME } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../../constants/constants'
-import { ReportingType } from '../../../../domain/types/reporting'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { getDateTime } from '../../../../utils'
-import ArchiveIconSVG from '../../../icons/Bouton_archiver.svg?react'
-import EditIconSVG from '../../../icons/Bouton_editer.svg?react'
-import DeleteIconSVG from '../../../icons/Bouton_supprimer.svg?react'
-import InfractionSuspicionIconSVG from '../../../icons/Icone_alerte_signalement_rouge_16.svg?react'
-import ObservationIconSVG from '../../../icons/Icone_observations.svg?react'
 import { getAlertNameFromType } from '../../../SideWindow/Alert/AlertListAndReportingList/utils'
 import { setEditedReporting } from '../../slice'
-import { ReportingTypeCharacteristics } from '../../types'
-import archiveReporting from '../../useCases/archiveReporting'
+import { ReportingType, ReportingTypeCharacteristics } from '../../types'
+import { archiveReporting } from '../../useCases/archiveReporting'
 
-import type { Reporting } from '../../../../domain/types/reporting'
+import type { Reporting } from '../../types'
 import type { Promisable } from 'type-fest'
 
 export type ReportingCardProps = {
-  isArchive?: boolean
-  numberOfAlerts?: number
-  openConfirmDeletionModalForId: (reportingId: number) => Promisable<void>
-  // TODO Doesn't respect Reporting type from domain. Can it be undefined (wouldn't make sense)?
+  isArchived?: boolean
+  numberOfOccurrences: number
+  openConfirmDeletionModal?: ({ id, reportingType }) => Promisable<void>
   reporting: Reporting
 }
 export function ReportingCard({
-  isArchive = false,
-  numberOfAlerts,
-  openConfirmDeletionModalForId,
+  isArchived = false,
+  numberOfOccurrences,
+  openConfirmDeletionModal,
   reporting
 }: ReportingCardProps) {
   const dispatch = useMainAppDispatch()
@@ -44,19 +37,23 @@ export function ReportingCard({
       return reportingName
     }
 
-    return getReportingActor(reporting.value.reportingActor, reporting.value.controlUnit)
+    return getReportingActorLabel(reporting.value.reportingActor, reporting.value.controlUnit)
   }, [reporting, reportingName])
 
   return (
     <Wrapper data-cy="reporting-card" isInfractionSuspicion={isAnInfractionSuspicion}>
-      <Icon>{isAnInfractionSuspicion ? <InfractionSuspicionIcon /> : <ObservationIcon />}</Icon>
+      {isAnInfractionSuspicion ? (
+        <StyledAlertIcon color={THEME.color.maximumRed} />
+      ) : (
+        <StyledObservationIcon color={THEME.color.charcoal} />
+      )}
       <Body isInfractionSuspicion={isAnInfractionSuspicion}>
         <Title>
           {reportingActor} /{' '}
           {reporting.type === ReportingType.ALERT ? getAlertNameFromType(reporting.value.type) : reporting.value.title}
         </Title>
         <Date>
-          {numberOfAlerts ? 'Dernière alerte le' : 'Le'}{' '}
+          {numberOfOccurrences ? 'Dernière alerte le' : 'Le'}{' '}
           {getDateTime(
             reporting.type === ReportingType.ALERT ? reporting.validationDate : reporting.creationDate,
             true
@@ -83,25 +80,36 @@ export function ReportingCard({
           </Natinf>
         )}
       </Body>
-      {!isArchive && (
-        <Actions isAlert={!!numberOfAlerts} isInfractionSuspicion={isAnInfractionSuspicion}>
-          {numberOfAlerts && <NumberOfAlerts>{numberOfAlerts}</NumberOfAlerts>}
-          {(reporting.type === ReportingType.OBSERVATION || reporting.type === ReportingType.INFRACTION_SUSPICION) && (
-            <EditButton
-              data-cy={`edit-reporting-card-${reporting.id}`}
-              onClick={() => dispatch(setEditedReporting(reporting))}
-              title="Editer"
-            />
-          )}
-          <ArchiveButton
-            $isAlert={!!numberOfAlerts}
+      {isArchived ? (
+        <>{numberOfOccurrences > 1 && <NumberOfAlerts isArchived>{numberOfOccurrences}</NumberOfAlerts>}</>
+      ) : (
+        <Actions hasOccurrences={numberOfOccurrences > 1}>
+          {numberOfOccurrences > 1 && <NumberOfAlerts>{numberOfOccurrences}</NumberOfAlerts>}
+          <IconButton
+            accent={Accent.TERTIARY}
+            color={THEME.color.charcoal}
+            data-cy={`edit-reporting-card-${reporting.id}`}
+            Icon={Icon.EditUnbordered}
+            iconSize={20}
+            onClick={() => dispatch(setEditedReporting(reporting))}
+            title="Editer"
+          />
+          <IconButton
+            accent={Accent.TERTIARY}
+            color={THEME.color.charcoal}
             data-cy="archive-reporting-card"
-            onClick={() => dispatch(archiveReporting(reporting.id))}
+            Icon={Icon.Archive}
+            iconSize={20}
+            onClick={() => dispatch(archiveReporting(reporting.id, reporting.type))}
             title="Archiver"
           />
-          <DeleteButton
+          <IconButton
+            accent={Accent.TERTIARY}
+            color={THEME.color.charcoal}
             data-cy="delete-reporting-card"
-            onClick={() => openConfirmDeletionModalForId(reporting.id)}
+            Icon={Icon.Delete}
+            iconSize={20}
+            onClick={() => openConfirmDeletionModal?.({ id: reporting.id, reportingType: reporting.type })}
             title="Supprimer"
           />
         </Actions>
@@ -113,45 +121,53 @@ export function ReportingCard({
 const Wrapper = styled.div<{
   isInfractionSuspicion?: boolean
 }>`
-  background: ${p => (p.isInfractionSuspicion ? '#E1000F1A' : COLORS.gainsboro)} 0% 0% no-repeat padding-box;
+  background: ${p => (p.isInfractionSuspicion ? p.theme.color.maximumRed15 : p.theme.color.gainsboro)} 0% 0% no-repeat
+    padding-box;
   display: flex;
   margin-bottom: 16px;
 `
 
-const Icon = styled.div`
-  width: 45px;
+const StyledAlertIcon = styled(Icon.Alert)`
+  margin: 12px;
+`
+
+const StyledObservationIcon = styled(Icon.Observation)`
+  margin: 12px;
 `
 
 const Body = styled.div<{
   isInfractionSuspicion?: boolean
 }>`
-  color: ${p => (p.isInfractionSuspicion ? COLORS.maximumRed : COLORS.gunMetal)};
+  color: ${p => (p.isInfractionSuspicion ? p.theme.color.maximumRed : p.theme.color.gunMetal)};
   margin-bottom: 12px;
   margin-top: 12px;
   width: 365px;
 `
 
 const Actions = styled.div<{
-  isAlert: boolean
-  isInfractionSuspicion?: boolean
+  hasOccurrences: boolean
 }>`
   border-left: 2px solid ${p => p.theme.color.white};
-  padding-top: ${p => (p.isAlert ? 8 : 3)}px;
-  padding-left: 1px;
+  padding-top: ${p => (p.hasOccurrences ? 8 : 3)}px;
   text-align: center;
-  width: 29px;
+  width: 32px;
   margin-left: auto;
 `
 
-const NumberOfAlerts = styled.span`
-  background: ${COLORS.maximumRed} 0% 0% no-repeat padding-box;
+const NumberOfAlerts = styled.span<{
+  isArchived?: boolean | undefined
+}>`
+  margin-top: ${p => (p.isArchived ? 8 : 0)}px;
+  margin-right: ${p => (p.isArchived ? '8px' : 'unset')};
+  margin-left: ${p => (p.isArchived ? 'auto' : 'unset')};
+  background: ${p => p.theme.color.maximumRed} 0% 0% no-repeat padding-box;
   border-radius: 2px;
-  color: ${COLORS.white};
+  color: ${p => p.theme.color.white};
   display: inline-block;
-  font-weight: 500;
-  height: 17px;
+  font-weight: 700;
+  height: 18px;
   line-height: 16px;
-  padding: 0 5.5px;
+  padding: 0 5.1px;
 `
 
 const Title = styled.div`
@@ -163,8 +179,8 @@ const Date = styled.span`
 `
 
 const Natinf = styled.div`
-  background: ${COLORS.white};
-  color: ${COLORS.gunMetal};
+  background: ${p => p.theme.color.white};
+  color: ${p => p.theme.color.gunMetal};
   font: normal normal medium 13px/18px Marianne;
   margin-top: 10px;
   padding: 2px 8px;
@@ -172,45 +188,13 @@ const Natinf = styled.div`
 `
 
 const Description = styled.div`
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   font: normal normal bold 13px/18px Marianne;
   margin-top: 10px;
   white-space: normal;
 `
 
 const Author = styled.div`
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   font: normal normal normal 13px/18px Marianne;
-`
-
-const ObservationIcon = styled(ObservationIconSVG)`
-  margin-left: 10px;
-  margin-top: 13px;
-  width: 25px;
-`
-
-const InfractionSuspicionIcon = styled(InfractionSuspicionIconSVG)`
-  margin-left: 12px;
-  margin-top: 12px;
-  width: 20px;
-`
-
-const ArchiveButton = styled(ArchiveIconSVG)<{
-  $isAlert: boolean
-}>`
-  cursor: pointer;
-  margin-top: ${p => (p.$isAlert ? 11 : 7)}px;
-`
-
-const EditButton = styled(EditIconSVG)`
-  cursor: pointer;
-  margin-top: 7px;
-`
-
-const DeleteButton = styled(DeleteIconSVG)`
-  cursor: pointer;
-  height: 15px;
-  margin-bottom: 10px;
-  margin-top: 7px;
-  width: 15px;
 `

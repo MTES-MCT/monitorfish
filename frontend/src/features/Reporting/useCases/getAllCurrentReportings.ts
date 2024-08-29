@@ -1,4 +1,5 @@
-import { getAllCurrentReportingsFromAPI } from '../../../api/reporting'
+import { getAllCurrentReportingsFromAPI } from '@api/reporting'
+
 import { removeError, setError } from '../../../domain/shared_slices/Global'
 import { setCurrentReportings } from '../slice'
 

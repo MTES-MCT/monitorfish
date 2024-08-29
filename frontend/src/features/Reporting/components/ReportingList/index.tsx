@@ -1,4 +1,7 @@
+import { ErrorWall } from '@components/ErrorWall'
 import { SeafrontGroup } from '@constants/seafront'
+import { ReportingType } from '@features/Reporting/types'
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Accent, Icon, IconButton, THEME } from '@mtes-mct/monitor-ui'
 import dayjs from 'dayjs'
 import countries from 'i18n-iso-countries'
@@ -10,7 +13,6 @@ import * as timeago from 'timeago.js'
 import { REPORTING_LIST_TABLE_OPTIONS } from './constants'
 import { getReportingOrigin, getReportingTitle } from './utils'
 import { ALERTS_MENU_SEAFRONT_TO_SEAFRONTS } from '../../../../domain/entities/alerts/constants'
-import { ReportingType } from '../../../../domain/types/reporting'
 import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
 import { useForceUpdate } from '../../../../hooks/useForceUpdate'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
@@ -26,14 +28,14 @@ import { downloadAsCsv } from '../../../../utils/downloadAsCsv'
 import { EditReporting } from '../../../SideWindow/Alert/AlertListAndReportingList/EditReporting'
 import { Flag } from '../../../VesselList/tableCells'
 import { setEditedReportingInSideWindow } from '../../slice'
-import archiveReportings from '../../useCases/archiveReportings'
-import deleteReportings from '../../useCases/deleteReportings'
+import { archiveReportings } from '../../useCases/archiveReportings'
+import { deleteReportings } from '../../useCases/deleteReportings'
 
 import type {
-  ObservationReporting,
   InfractionSuspicionReporting,
+  ObservationReporting,
   PendingAlertReporting
-} from '../../../../domain/types/reporting'
+} from '@features/Reporting/types'
 import type { CSSProperties, MutableRefObject } from 'react'
 
 type ReportingListProps = Readonly<{
@@ -43,6 +45,10 @@ export function ReportingList({ selectedSeafrontGroup }: ReportingListProps) {
   const dispatch = useMainAppDispatch()
   const searchInputRef = useRef() as MutableRefObject<HTMLInputElement>
   const currentReportings = useMainAppSelector(state => state.reporting.currentReportings)
+  const displayedError = useMainAppSelector(
+    state => state.displayedError[DisplayedErrorKey.SIDE_WINDOW_REPORTING_LIST_ERROR]
+  )
+
   const { forceDebouncedUpdate } = useForceUpdate()
 
   const baseUrl = useMemo(() => window.location.origin, [])
@@ -133,6 +139,14 @@ CFR: ${reporting.internalReferenceNumber || ''}
 MARQUAGE EXT.: ${reporting.externalReferenceNumber || ''}
 IRCS: ${reporting.ircs || ''}
 MMSI: ${reporting.mmsi || ''}`
+  }
+
+  if (displayedError) {
+    return (
+      <Content>
+        <ErrorWall displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_REPORTING_LIST_ERROR} isAbsolute />
+      </Content>
+    )
   }
 
   return (
@@ -273,7 +287,7 @@ const RightAligned = styled.div`
   flex-grow: 1;
   justify-content: flex-end;
 
-  div:not(:last-child) {
+  > button:not(:last-child) {
     margin-right: 10px;
   }
 `

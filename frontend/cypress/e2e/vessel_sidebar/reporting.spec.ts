@@ -64,7 +64,7 @@ context('Vessel sidebar reporting tab', () => {
 
     // Create an new Observation
     cy.clickButton('Ouvrir un signalement')
-    cy.fill('Type', 'Observation')
+    cy.fill('Type de signalement', 'Observation')
     cy.fill('Origine', 'Unité')
     cy.fill("Choisir l'unité", 'OFB SD 56 (Office Français de la Biodiversité)')
     cy.fill('Nom et contact (numéro, mail…) de l’émetteur', 'Jean Bon (0612365896)')
@@ -77,7 +77,7 @@ context('Vessel sidebar reporting tab', () => {
 
     cy.intercept('*update*').as('updateReporting')
     cy.get('*[data-cy^="edit-reporting-card"]').first().click({ timeout: 10000 })
-    cy.get('*[data-cy="new-reporting-select-infraction-reporting-type"]').click({ timeout: 10000 })
+    cy.fill('Type de signalement', 'Infraction (suspicion)')
     cy.fill('Natinf', '7059')
     cy.clickButton('Valider')
     cy.wait('@updateReporting')

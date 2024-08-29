@@ -1,6 +1,6 @@
 import { ControlUnit, customDayjs } from '@mtes-mct/monitor-ui'
 
-import type { Reporting } from '../../../../../domain/types/reporting'
+import type { Reporting } from '@features/Reporting/types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
 export const mapControlUnitsToUniqueSortedIdsAsOptions = (controlUnits: ControlUnit.ControlUnit[]): Option<number>[] =>

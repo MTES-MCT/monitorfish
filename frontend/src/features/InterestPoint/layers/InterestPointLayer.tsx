@@ -12,7 +12,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
 import { getInterestPointStyle, POIStyle } from './interestPoint.style'
-import { InterestPointLine } from './interestPointLine'
+import { InterestPointLine } from './InterestPointLine'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { MapBox, OPENLAYERS_PROJECTION } from '../../../domain/entities/map/constants'
 import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'

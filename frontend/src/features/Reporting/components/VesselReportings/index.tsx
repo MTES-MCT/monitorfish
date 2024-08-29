@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import { Archived } from './Archived'
 import { Current } from './Current'
 import { vesselsAreEquals } from '../../../../domain/entities/vessel/vessel'
-import { getVesselReportings } from '../../../../domain/use_cases/vessel/getVesselReportings'
+import { getVesselReportings } from '../../useCases/getVesselReportings'
 
 const ReportingTab = {
   CURRENT_REPORTING: 'CURRENT_REPORTING',
@@ -77,6 +77,7 @@ const CurrentOrHistoryButton = styled.div<{
   flex-grow: 1;
   padding: 6px 0 8px 0;
   text-align: center;
+  user-select: none;
 `
 
 const Menu = styled.div`

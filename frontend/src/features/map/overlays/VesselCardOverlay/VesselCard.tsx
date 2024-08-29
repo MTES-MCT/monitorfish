@@ -1,16 +1,15 @@
 /* eslint-disable no-nested-ternary */
 
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { Icon } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
 import { marginsWithOneWarning, marginsWithoutAlert, marginsWithThreeWarning, marginsWithTwoWarning } from './constants'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
-import { COLORS } from '../../../../constants/constants'
 import { getCoordinates } from '../../../../coordinates'
 import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { timeagoFrenchLocale } from '../../../../utils'
-import AlertSVG from '../../../icons/Icone_alertes.svg?react'
 import BeaconMalfunctionSVG from '../../../icons/Icone_VMS_dark.svg?react'
 import { getAlertNameFromType } from '../../../SideWindow/Alert/AlertListAndReportingList/utils'
 import { OverlayPosition } from '../Overlay'
@@ -31,11 +30,11 @@ export function VesselCard({ feature, numberOfWarnings, overlayPosition }) {
   return (
     <>
       <VesselCardHeader>
-        {vesselProperties.flagState ? (
+        {!!vesselProperties.flagState && (
           <>
             <Flag rel="preload" src={`flags/${vesselProperties.flagState.toLowerCase()}.svg`} />{' '}
           </>
-        ) : null}
+        )}
         <VesselCardTitle data-cy="vessel-card-name">
           {vesselProperties.vesselName ? vesselProperties.vesselName : 'NOM INCONNU'}{' '}
           {vesselProperties.flagState ? <>({vesselProperties.flagState.toUpperCase()})</> : ''}
@@ -54,17 +53,17 @@ export function VesselCard({ feature, numberOfWarnings, overlayPosition }) {
       </VesselCardHeader>
       {isSuperUser && !!vesselProperties.alerts?.length && (
         <VesselCardAlert data-cy="vessel-card-alert">
-          <AlertIcon />
+          <AlertIcon size={17} />
           {vesselProperties.alerts?.length === 1
             ? getAlertNameFromType(vesselProperties.alerts[0])
             : `${vesselProperties.alerts?.length} alertes`}
         </VesselCardAlert>
       )}
       {isSuperUser && vesselProperties.hasInfractionSuspicion && (
-        <VesselCardAlert>
-          <AlertIcon />
+        <VesselCardInfractionSuspicion>
+          <AlertIcon size={17} />
           Suspicion d&apos;infraction
-        </VesselCardAlert>
+        </VesselCardInfractionSuspicion>
       )}
       {isSuperUser && !!vesselProperties.beaconMalfunctionId && (
         <VesselCardBeaconMalfunction data-cy="vessel-card-beacon-malfunction">
@@ -178,21 +177,19 @@ export function VesselCard({ feature, numberOfWarnings, overlayPosition }) {
         </ColumnOne>
       </VesselCardBottom>
       <TrianglePointer>
-        {overlayPosition === OverlayPosition.BOTTOM ? (
-          <BottomTriangleShadow numberOfWarnings={numberOfWarnings} />
-        ) : null}
-        {overlayPosition === OverlayPosition.TOP ? <TopTriangleShadow numberOfWarnings={numberOfWarnings} /> : null}
-        {overlayPosition === OverlayPosition.RIGHT ? <RightTriangleShadow numberOfWarnings={numberOfWarnings} /> : null}
-        {overlayPosition === OverlayPosition.LEFT ? <LeftTriangleShadow numberOfWarnings={numberOfWarnings} /> : null}
+        {overlayPosition === OverlayPosition.BOTTOM && <BottomTriangleShadow numberOfWarnings={numberOfWarnings} />}
+        {overlayPosition === OverlayPosition.TOP && <TopTriangleShadow numberOfWarnings={numberOfWarnings} />}
+        {overlayPosition === OverlayPosition.RIGHT && <RightTriangleShadow numberOfWarnings={numberOfWarnings} />}
+        {overlayPosition === OverlayPosition.LEFT && <LeftTriangleShadow numberOfWarnings={numberOfWarnings} />}
       </TrianglePointer>
     </>
   )
 }
 
-const AlertIcon = styled(AlertSVG)`
-  width: 18px;
-  height: 18px;
-  margin-bottom: -4px;
+const AlertIcon = styled(Icon.Alert)`
+  width: 17px;
+  height: 17px;
+  margin-bottom: -3px;
   margin-right: 5px;
 `
 
@@ -204,11 +201,21 @@ const BeaconMalfunctionIcon = styled(BeaconMalfunctionSVG)`
 `
 
 const VesselCardAlert = styled.div`
-  /* TODO Replace with theme color. */
-  background: #e1000f;
+  background: ${p => p.theme.color.maximumRed};
   font-weight: 500;
   font-size: 13px;
   color: ${p => p.theme.color.white};
+  text-transform: uppercase;
+  width: 100%;
+  text-align: center;
+  padding: 5px 0;
+`
+
+const VesselCardInfractionSuspicion = styled.div`
+  background: ${p => p.theme.color.maximumRed15};
+  font-weight: 500;
+  font-size: 13px;
+  color: ${p => p.theme.color.maximumRed};
   text-transform: uppercase;
   width: 100%;
   text-align: center;
@@ -219,7 +226,7 @@ const VesselCardBeaconMalfunction = styled.div`
   background: ${p => p.theme.color.goldenPoppy};
   font-weight: 500;
   font-size: 13px;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   text-transform: uppercase;
   width: 100%;
   text-align: center;
@@ -252,9 +259,9 @@ const LogbookOK = styled.span`
 
 const Logbook = styled.span`
   border-radius: 11px;
-  background: ${COLORS.gainsboro};
+  background: ${p => p.theme.color.gainsboro};
   font-size: 11px;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   margin: 3px 7px 7px 3px;
   height: 17px;
   padding: 3px 5px 0px 2px;
@@ -288,7 +295,7 @@ const Field = styled.tr`
 `
 
 const Key = styled.th`
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   flex: initial;
   display: inline-block;
   margin: 0;
@@ -304,7 +311,7 @@ const Key = styled.th`
 
 const Value = styled.td`
   font-size: 13px;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   font-weight: 500;
   margin: 0;
   text-align: left;
@@ -333,7 +340,7 @@ const BottomTriangleShadow = styled.div<{
   height: 0;
   border-style: solid;
   border-width: 11px 6px 0 6px;
-  border-color: ${COLORS.gainsboro} transparent transparent transparent;
+  border-color: ${p => p.theme.color.gainsboro} transparent transparent transparent;
   margin-left: ${props => {
     if (props.numberOfWarnings === 1) {
       return -marginsWithOneWarning.xMiddle - 6
@@ -361,7 +368,7 @@ const TopTriangleShadow = styled.div<{
   height: 0;
   border-top: transparent;
   border-right: 6px solid transparent;
-  border-bottom: 11px solid ${COLORS.gainsboro};
+  border-bottom: 11px solid ${p => p.theme.color.gainsboro};
   border-left: 6px solid transparent;
   margin-left: ${props => {
     if (props.numberOfWarnings === 1) {
@@ -405,7 +412,7 @@ const RightTriangleShadow = styled.div<{
   border-right: transparent;
   border-top: 6px solid transparent;
   border-bottom: 6px solid transparent;
-  border-left: 11px solid ${COLORS.gainsboro};
+  border-left: 11px solid ${p => p.theme.color.gainsboro};
   margin-left: ${props => {
     if (props.numberOfWarnings === 1) {
       return -marginsWithOneWarning.xRight - 20
@@ -447,7 +454,7 @@ const LeftTriangleShadow = styled.div<{
   height: 0;
   border-style: solid;
   border-top: 6px solid transparent;
-  border-right: 11px solid ${COLORS.gainsboro};
+  border-right: 11px solid ${p => p.theme.color.gainsboro};
   border-bottom: 6px solid transparent;
   border-left: transparent;
   margin-left: -11px;
@@ -470,7 +477,7 @@ const LeftTriangleShadow = styled.div<{
 `
 
 const NoValue = styled.span`
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   font-weight: 300;
   margin: 0;
   line-height: normal;
@@ -497,13 +504,13 @@ const VesselCardBottom = styled.div`
 
 const FieldName = styled.div`
   margin-top: 9px;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   font-size: 13px;
   font-weight: normal;
 `
 
 const FieldValue = styled.div`
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   font-size: 13px;
   font-weight: 500;
   margin-top: 2px;
@@ -538,8 +545,8 @@ const Position = styled.div`
 `
 
 const VesselCardHeader = styled.div`
-  background: ${COLORS.charcoal};
-  color: ${COLORS.gainsboro};
+  background: ${p => p.theme.color.charcoal};
+  color: ${p => p.theme.color.gainsboro};
   padding: 4px 5px 5px 5px;
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;

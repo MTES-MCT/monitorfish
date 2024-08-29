@@ -1,5 +1,7 @@
+import { ErrorWall } from '@components/ErrorWall'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { THEME } from '@mtes-mct/monitor-ui'
 import { useCallback } from 'react'
 import styled from 'styled-components'
@@ -14,10 +16,21 @@ export function EditReporting() {
   const dispatch = useMainAppDispatch()
   const baseUrl = window.location.origin
   const editedReportingInSideWindow = useMainAppSelector(state => state.reporting.editedReportingInSideWindow)
+  const displayedError = useMainAppSelector(
+    state => state.displayedError[DisplayedErrorKey.SIDE_WINDOW_REPORTING_FORM_ERROR]
+  )
 
   const closeForm = useCallback(() => {
     dispatch(setEditedReportingInSideWindow())
   }, [dispatch])
+
+  if (displayedError) {
+    return (
+      <EditReportingWrapper isEditedInSideWindow={!!editedReportingInSideWindow}>
+        <ErrorWall displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_REPORTING_FORM_ERROR} isAbsolute />
+      </EditReportingWrapper>
+    )
+  }
 
   return (
     <EditReportingWrapper
@@ -46,17 +59,15 @@ export function EditReporting() {
         </Row>
       </Header>
       <Line />
-      <ReportingFormWrapper>
-        {editedReportingInSideWindow && (
-          <ReportingForm
-            closeForm={closeForm}
-            editedReporting={editedReportingInSideWindow}
-            hasWhiteBackground
-            isFromSideWindow
-            selectedVesselIdentity={getOnlyVesselIdentityProperties(editedReportingInSideWindow)}
-          />
-        )}
-      </ReportingFormWrapper>
+      {editedReportingInSideWindow && (
+        <StyledReportingForm
+          closeForm={closeForm}
+          editedReporting={editedReportingInSideWindow}
+          hasWhiteBackground
+          isFromSideWindow
+          selectedVesselIdentity={getOnlyVesselIdentityProperties(editedReportingInSideWindow)}
+        />
+      )}
     </EditReportingWrapper>
   )
 }
@@ -75,8 +86,8 @@ const EditReportingWrapper = styled.div<{
   z-index: 999;
 `
 
-const ReportingFormWrapper = styled.div`
-  padding: 10px 25px 20px 25px;
+const StyledReportingForm = styled(ReportingForm)`
+  margin: 20px 25px 20px 25px;
 `
 
 const Line = styled.div`

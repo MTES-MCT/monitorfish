@@ -1,18 +1,19 @@
-import { ReportingOriginActor } from '@features/Reporting/types'
+import { ReportingOriginActor, ReportingType } from '@features/Reporting/types'
 
-import { ReportingType } from '../../../../domain/types/reporting'
+import type { EditedReporting, InfractionSuspicion, Observation } from '@features/Reporting/types'
 
-import type { EditedReporting, InfractionSuspicion, Observation } from '../../../../domain/types/reporting'
-
-export function getFormFields(editedOrSavedReporting: InfractionSuspicion | Observation | undefined): EditedReporting {
+export function getFormFields(
+  editedOrSavedReporting: InfractionSuspicion | Observation | undefined,
+  type: ReportingType.OBSERVATION | ReportingType.INFRACTION_SUSPICION | undefined
+): EditedReporting {
   const base = {
     authorContact: editedOrSavedReporting?.authorContact ?? undefined,
     authorTrigram: editedOrSavedReporting?.authorTrigram ?? undefined,
     controlUnitId: editedOrSavedReporting?.controlUnitId ?? undefined,
     description: editedOrSavedReporting?.description,
-    reportingActor: editedOrSavedReporting?.reportingActor ?? 'OPS',
+    reportingActor: editedOrSavedReporting?.reportingActor ?? ReportingOriginActor.OPS,
     title: editedOrSavedReporting?.title ?? '',
-    type: editedOrSavedReporting?.type ?? ReportingType.INFRACTION_SUSPICION
+    type: type ?? ReportingType.INFRACTION_SUSPICION
   }
 
   if (base.type === ReportingType.INFRACTION_SUSPICION) {
@@ -32,31 +33,31 @@ export function updateReportingActor(
     setFieldValue('reportingActor', nextReportingActor)
 
     switch (nextReportingActor) {
-      case ReportingOriginActor.OPS.code: {
+      case ReportingOriginActor.OPS: {
         setFieldValue('controlUnitId', undefined)
         setFieldValue('authorContact', undefined)
         break
       }
-      case ReportingOriginActor.SIP.code: {
+      case ReportingOriginActor.SIP: {
         setFieldValue('controlUnitId', undefined)
         setFieldValue('authorContact', undefined)
         break
       }
-      case ReportingOriginActor.UNIT.code: {
+      case ReportingOriginActor.UNIT: {
         setFieldValue('authorTrigram', undefined)
         break
       }
-      case ReportingOriginActor.DML.code: {
+      case ReportingOriginActor.DML: {
         setFieldValue('controlUnitId', undefined)
         setFieldValue('authorTrigram', undefined)
         break
       }
-      case ReportingOriginActor.DIRM.code: {
+      case ReportingOriginActor.DIRM: {
         setFieldValue('controlUnitId', undefined)
         setFieldValue('authorTrigram', undefined)
         break
       }
-      case ReportingOriginActor.OTHER.code: {
+      case ReportingOriginActor.OTHER: {
         setFieldValue('controlUnitId', undefined)
         setFieldValue('authorTrigram', undefined)
         break

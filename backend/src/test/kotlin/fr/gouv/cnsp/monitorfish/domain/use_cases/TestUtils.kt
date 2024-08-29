@@ -1,12 +1,13 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
 import com.neovisionaries.i18n.CountryCode
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.*
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront.*
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingValue
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionCategory
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.ZoneOffset.UTC
@@ -20,7 +21,46 @@ object TestUtils {
         hasLogbookEsacapt = false,
     )
 
-    fun getDummyReportings(): List<Reporting> {
+    fun createCurrentReporting(
+        internalReferenceNumber: String,
+        id: Int,
+        validationDate: ZonedDateTime,
+        type: ReportingType,
+        alertType: AlertTypeMapping?,
+    ): Reporting {
+        return Reporting(
+            id = id,
+            validationDate = validationDate,
+            creationDate = ZonedDateTime.now().minusDays(1),
+            type = type,
+            isArchived = false,
+            isDeleted = false,
+            infraction = Infraction(
+                natinfCode = 2610,
+                infractionCategory = InfractionCategory.FISHING,
+            ),
+            value = when (alertType) {
+                AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT -> throw IllegalArgumentException("Unhandled test case")
+                AlertTypeMapping.THREE_MILES_TRAWLING_ALERT -> ThreeMilesTrawlingAlert(seaFront = NAMO.toString())
+                AlertTypeMapping.FRENCH_EEZ_FISHING_ALERT -> FrenchEEZFishingAlert(seaFront = NAMO.toString())
+                AlertTypeMapping.TWELVE_MILES_FISHING_ALERT -> TwelveMilesFishingAlert(seaFront = NAMO.toString())
+                AlertTypeMapping.MISSING_FAR_ALERT -> MissingFARAlert(seaFront = NAMO.toString())
+                AlertTypeMapping.MISSING_FAR_48_HOURS_ALERT -> MissingFAR48HoursAlert(seaFront = NAMO.toString())
+                else -> InfractionSuspicion(
+                    ReportingActor.OPS,
+                    natinfCode = 123456,
+                    authorTrigram = "LTH",
+                    title = "A title",
+                )
+            },
+            underCharter = null,
+            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            internalReferenceNumber = internalReferenceNumber,
+            flagState = CountryCode.FR,
+        )
+    }
+
+    fun getDummyReportings(dateTime: ZonedDateTime): List<Reporting> {
         return listOf(
             Reporting(
                 id = 1,
@@ -31,14 +71,14 @@ object TestUtils {
                 ircs = "IRCS",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
-                creationDate = ZonedDateTime.now(),
-                validationDate = ZonedDateTime.now(),
+                creationDate = dateTime,
+                validationDate = dateTime,
                 value = ThreeMilesTrawlingAlert() as ReportingValue,
                 isArchived = false,
                 isDeleted = false,
             ),
             Reporting(
-                id = 1,
+                id = 2,
                 type = ReportingType.ALERT,
                 vesselName = "BIDUBULE",
                 internalReferenceNumber = "FR224226850",
@@ -46,8 +86,8 @@ object TestUtils {
                 ircs = "IRCS",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
-                creationDate = ZonedDateTime.now(),
-                validationDate = ZonedDateTime.now(),
+                creationDate = dateTime,
+                validationDate = dateTime,
                 value = ThreeMilesTrawlingAlert() as ReportingValue,
                 isArchived = false,
                 isDeleted = false,
@@ -61,8 +101,8 @@ object TestUtils {
                 ircs = "IRCS",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
-                creationDate = ZonedDateTime.now().minusYears(1),
-                validationDate = ZonedDateTime.now().minusYears(1),
+                creationDate = dateTime.minusYears(1),
+                validationDate = dateTime.minusYears(1),
                 value = ThreeMilesTrawlingAlert() as ReportingValue,
                 isArchived = true,
                 isDeleted = false,

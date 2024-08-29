@@ -1,10 +1,10 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.CurrentAndArchivedReportings
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionOrObservationType
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NatinfCodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.InfractionRepository
@@ -40,45 +40,111 @@ class GetVesselReportings(
             externalReferenceNumber,
         )
 
-        val current = reportings
-            .filter { !it.isArchived }
-            .map { report ->
-                report.value.natinfCode?.let {
-                    try {
-                        report.infraction = infractionRepository.findInfractionByNatinfCode(it)
-                    } catch (e: NatinfCodeNotFoundException) {
-                        logger.warn(e.message)
-                    }
-                }
-
-                if (report.type == ReportingType.ALERT) {
-                    return@map Pair(report, null)
-                }
-
-                val controlUnitId = (report.value as InfractionSuspicionOrObservationType).controlUnitId
-                return@map Pair(report, controlUnits.find { it.id == controlUnitId })
+        val current = getReportingsAndOccurrences(reportings.filter { !it.isArchived })
+            .sortedWith(compareByDescending { it.reporting.validationDate ?: it.reporting.creationDate })
+            .map { reportingAndOccurrences ->
+                enrichWithInfractionAndControlUnit(reportingAndOccurrences, controlUnits)
             }
 
-        val archived = reportings
-            .filter { it.isArchived }
-            .map { report ->
-                report.value.natinfCode?.let {
-                    try {
-                        report.infraction = infractionRepository.findInfractionByNatinfCode(it)
-                    } catch (e: NatinfCodeNotFoundException) {
-                        logger.warn(e.message)
-                    }
-                }
+        val yearsRange = fromDate.year..ZonedDateTime.now().year
+        val archivedYearsToReportings = yearsRange.associateWith { year ->
+            val reportingsOfYear = reportings
+                .filter { it.isArchived }
+                .filter { filterByYear(it, year) }
 
-                if (report.type == ReportingType.ALERT) {
-                    return@map Pair(report, null)
+            getReportingsAndOccurrences(reportingsOfYear)
+                .sortedWith(compareByDescending { it.reporting.validationDate ?: it.reporting.creationDate })
+                .map { reportingAndOccurrences ->
+                    enrichWithInfractionAndControlUnit(reportingAndOccurrences, controlUnits)
                 }
+        }
 
-                val controlUnitId = (report.value as InfractionSuspicionOrObservationType).controlUnitId
-                return@map Pair(report, controlUnits.find { it.id == controlUnitId })
+        return CurrentAndArchivedReportings(current, archivedYearsToReportings)
+    }
+
+    private fun filterByYear(
+        reporting: Reporting,
+        year: Int,
+    ): Boolean {
+        if (reporting.validationDate != null) {
+            return reporting.validationDate.year == year
+        }
+
+        return reporting.creationDate.year == year
+    }
+
+    private fun enrichWithInfractionAndControlUnit(
+        reportingAndOccurrences: ReportingAndOccurrences,
+        controlUnits: List<ControlUnit>,
+    ): ReportingAndOccurrences {
+        val updatedInfraction = reportingAndOccurrences.reporting.value.natinfCode?.let { natinfCode ->
+            try {
+                infractionRepository.findInfractionByNatinfCode(natinfCode)
+            } catch (e: NatinfCodeNotFoundException) {
+                logger.warn(e.message)
+                null
+            }
+        }
+
+        val updatedReporting = reportingAndOccurrences.reporting.copy(
+            infraction = updatedInfraction ?: reportingAndOccurrences.reporting.infraction,
+        )
+        val updatedReportingAndOccurrences = reportingAndOccurrences.copy(
+            reporting = updatedReporting,
+        )
+
+        if (updatedReporting.type == ReportingType.ALERT) {
+            return updatedReportingAndOccurrences
+        }
+
+        val controlUnitId = (updatedReporting.value as? InfractionSuspicionOrObservationType)?.controlUnitId
+        val foundControlUnit = controlUnits.find { it.id == controlUnitId }
+
+        return updatedReportingAndOccurrences.copy(controlUnit = foundControlUnit)
+    }
+
+    private fun getReportingsAndOccurrences(reportings: List<Reporting>): List<ReportingAndOccurrences> {
+        val reportingsWithoutAlerts: List<ReportingAndOccurrences> = reportings
+            .filter { it.type != ReportingType.ALERT }
+            .map { reporting ->
+                ReportingAndOccurrences(
+                    otherOccurrencesOfSameAlert = emptyList(),
+                    reporting = reporting,
+                    controlUnit = null,
+                )
             }
 
-        return CurrentAndArchivedReportings(current, archived)
+        val alertTypeToAlertsOccurrences: Map<AlertTypeMapping, List<Reporting>> = reportings
+            .filter { it.type == ReportingType.ALERT }
+            .groupBy { (it.value as AlertType).type }
+            .withDefault { emptyList() }
+
+        val alertTypeToLastAlertAndOccurrences: List<ReportingAndOccurrences> = alertTypeToAlertsOccurrences
+            .flatMap { (_, alerts) ->
+                if (alerts.isEmpty()) {
+                    return@flatMap listOf()
+                }
+
+                val lastAlert = alerts.maxByOrNull {
+                    checkNotNull(it.validationDate) {
+                        "An alert must have a validation date: alert ${it.id} has no validation date ($it)."
+                    }
+
+                    it.validationDate
+                }
+                checkNotNull(lastAlert) { "Last alert cannot be null" }
+                val otherOccurrencesOfSameAlert = alerts.filter { it.id != lastAlert.id }
+
+                return@flatMap listOf(
+                    ReportingAndOccurrences(
+                        otherOccurrencesOfSameAlert = otherOccurrencesOfSameAlert,
+                        reporting = lastAlert,
+                        controlUnit = null,
+                    ),
+                )
+            }
+
+        return (reportingsWithoutAlerts + alertTypeToLastAlertAndOccurrences)
     }
 
     private fun findReportings(

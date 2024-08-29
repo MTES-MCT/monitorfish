@@ -1,18 +1,17 @@
+import { setEditedReporting } from '@features/Reporting/slice'
+import { ReportingType } from '@features/Reporting/types'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { Accent, Button, THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { ConfirmDeletionModal } from './ConfirmDeletionModal'
-import { CreateOrEditReporting } from './CreateOrEditReporting'
-import { sortByValidationOrCreationDateDesc } from './utils'
-import { COLORS } from '../../../../../constants/constants'
-import { operationalAlertTypes } from '../../../../../domain/entities/alerts/constants'
-import { ReportingType } from '../../../../../domain/types/reporting'
-import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { EditReporting } from './EditReporting'
 import { deleteReporting } from '../../../useCases/deleteReporting'
 import { ReportingCard } from '../ReportingCard'
 
-import type { Reporting } from '../../../../../domain/types/reporting'
+import type { ReportingAndOccurrences } from '@features/Reporting/types'
 
 export function Current() {
   const dispatch = useMainAppDispatch()
@@ -20,74 +19,71 @@ export function Current() {
     state => state.reporting.currentAndArchivedReportingsOfSelectedVessel
   )
   const editedReporting = useMainAppSelector(state => state.reporting.editedReporting)
-  const [deletionModalIsOpenForId, setDeletionModalIsOpenForId] = useState<number | undefined>(undefined)
+  const [isNewReportingFormOpen, setIsNewReportingFormOpen] = useState(false)
+  const [isDeletionModalOpened, setIsDeletionModalOpened] = useState<
+    { id: number; reportingType: ReportingType } | undefined
+  >(undefined)
 
-  const getAlertsDesc = useCallback(
-    alertType =>
-      currentAndArchivedReportingsOfSelectedVessel?.current
-        ?.filter(reporting => reporting.type === ReportingType.ALERT && reporting.value.type === alertType.code)
-        ?.sort((a, b) => sortByValidationOrCreationDateDesc(a, b)) || [],
-    [currentAndArchivedReportingsOfSelectedVessel]
-  )
+  const closeForm = useCallback(() => {
+    setIsNewReportingFormOpen(false)
+    dispatch(setEditedReporting(null))
+  }, [dispatch])
 
-  const reportingsWithoutAlerts: Reporting[] = useMemo(
+  const reportingsWithoutEdited: ReportingAndOccurrences[] = useMemo(
     () =>
-      (currentAndArchivedReportingsOfSelectedVessel?.current || [])
-        .filter(reporting => reporting.type !== ReportingType.ALERT)
-        .filter(reporting => reporting.id !== editedReporting?.id)
-        .sort((a, b) => sortByValidationOrCreationDateDesc(a, b)),
+      (currentAndArchivedReportingsOfSelectedVessel?.current || []).filter(
+        reportingAndOccurrences => reportingAndOccurrences.reporting.id !== editedReporting?.id
+      ),
     [currentAndArchivedReportingsOfSelectedVessel, editedReporting]
   )
 
   return (
     <Wrapper>
-      <CreateOrEditReporting />
-      {operationalAlertTypes.map(alertType => {
-        const alertReportings = getAlertsDesc(alertType)
-        if (!alertReportings.length) {
-          return null
-        }
-
-        const lastValidatedAlert = alertReportings[0]
-        if (!lastValidatedAlert) {
-          return null
-        }
-
-        return (
-          <ReportingCard
-            key={lastValidatedAlert.id}
-            numberOfAlerts={alertReportings.length}
-            openConfirmDeletionModalForId={setDeletionModalIsOpenForId}
-            reporting={lastValidatedAlert}
-          />
-        )
-      })}
-      {reportingsWithoutAlerts.map(reporting => (
+      {!currentAndArchivedReportingsOfSelectedVessel?.current?.length && !isNewReportingFormOpen && (
+        <NoReporting>Pas de signalement ouvert sur ce navire.</NoReporting>
+      )}
+      {!isNewReportingFormOpen && !editedReporting && (
+        <NewReportingButton
+          accent={Accent.PRIMARY}
+          data-cy="vessel-sidebar-open-reporting"
+          onClick={() => setIsNewReportingFormOpen(true)}
+        >
+          Ouvrir un signalement
+        </NewReportingButton>
+      )}
+      {(isNewReportingFormOpen || editedReporting) && <EditReporting closeForm={closeForm} />}
+      {reportingsWithoutEdited.map(reporting => (
         <ReportingCard
-          key={reporting.id}
-          openConfirmDeletionModalForId={setDeletionModalIsOpenForId}
-          reporting={reporting}
+          key={reporting.reporting.id}
+          numberOfOccurrences={reporting.otherOccurrencesOfSameAlert.length + 1}
+          openConfirmDeletionModal={setIsDeletionModalOpened}
+          reporting={reporting.reporting}
         />
       ))}
-      {!currentAndArchivedReportingsOfSelectedVessel?.current?.length && <NoReporting>Aucun signalement</NoReporting>}
       <ConfirmDeletionModal
-        closeModal={() => setDeletionModalIsOpenForId(undefined)}
-        isOpened={deletionModalIsOpenForId}
-        validateCallback={() => deletionModalIsOpenForId && dispatch(deleteReporting(deletionModalIsOpenForId))}
+        closeModal={() => setIsDeletionModalOpened(undefined)}
+        isOpened={!!isDeletionModalOpened}
+        validateCallback={() =>
+          isDeletionModalOpened &&
+          dispatch(deleteReporting(isDeletionModalOpened.id, isDeletionModalOpened.reportingType))
+        }
       />
     </Wrapper>
   )
 }
 
+const NewReportingButton = styled(Button)`
+  margin: 0px 10px 10px 0px;
+`
+
 const Wrapper = styled.div`
-  background: ${COLORS.white};
+  background: ${THEME.color.white};
   margin: 10px 5px 5px 5px;
   padding: 16px 16px 1px 16px;
   text-align: left;
-  color: ${COLORS.slateGray};
+  color: ${THEME.color.slateGray};
 `
 
 const NoReporting = styled.div`
-  margin: 10px;
-  text-align: center;
+  margin-bottom: 16px;
 `

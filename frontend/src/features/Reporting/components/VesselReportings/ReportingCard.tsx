@@ -85,15 +85,17 @@ export function ReportingCard({
       ) : (
         <Actions hasOccurrences={numberOfOccurrences > 1}>
           {numberOfOccurrences > 1 && <NumberOfAlerts>{numberOfOccurrences}</NumberOfAlerts>}
-          <IconButton
-            accent={Accent.TERTIARY}
-            color={THEME.color.charcoal}
-            data-cy={`edit-reporting-card-${reporting.id}`}
-            Icon={Icon.EditUnbordered}
-            iconSize={20}
-            onClick={() => dispatch(setEditedReporting(reporting))}
-            title="Editer"
-          />
+          {reporting.type !== ReportingType.ALERT && (
+            <IconButton
+              accent={Accent.TERTIARY}
+              color={THEME.color.charcoal}
+              data-cy={`edit-reporting-card-${reporting.id}`}
+              Icon={Icon.EditUnbordered}
+              iconSize={20}
+              onClick={() => dispatch(setEditedReporting(reporting))}
+              title="Editer"
+            />
+          )}
           <IconButton
             accent={Accent.TERTIARY}
             color={THEME.color.charcoal}

@@ -32,12 +32,6 @@ const Button = styled.button`
   height: 30px;
 `
 
-const BackofficeButton = styled.button`
-  font-size: 13px;
-  padding: 6px 12px;
-  margin: 15px ${props => props.isLast ? '20px' : '0'} 15px 10px;
-`
-
 export const PrimaryButton = styled(Button)`
   ${basePrimaryButton}
 `

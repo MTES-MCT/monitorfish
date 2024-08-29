@@ -26,7 +26,7 @@ export const deleteReporting =
         })
       )
 
-      await dispatch(getVesselReportings(false))
+      await dispatch(getVesselReportings(true))
     } catch (error) {
       dispatch(
         displayOrLogError(

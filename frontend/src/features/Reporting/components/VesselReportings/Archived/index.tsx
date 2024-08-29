@@ -1,7 +1,8 @@
+import { getVesselReportings } from '@features/Reporting/useCases/getVesselReportings'
 import { Header, Zone } from '@features/VesselSidebar/common_styles/common.style'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { THEME } from '@mtes-mct/monitor-ui'
+import { Accent, THEME, Button } from '@mtes-mct/monitor-ui'
 import dayjs from 'dayjs'
 import styled from 'styled-components'
 
@@ -19,10 +20,11 @@ export function Archived() {
 
   const yearsToReportings = currentAndArchivedReportingsOfSelectedVessel?.archived
 
-  function seeMore() {
+  const seeMore = () => {
     const nextDate = dayjs(archivedReportingsFromDate).subtract(1, 'year').toDate()
 
     dispatch(setArchivedReportingsFromDate(nextDate))
+    dispatch(getVesselReportings(false))
   }
 
   return (
@@ -50,12 +52,9 @@ export function Archived() {
         </NoReporting>
       )}
       <SeeMoreBackground>
-        <SeeMore
-          /* eslint-disable-next-line react/jsx-no-bind */
-          onClick={seeMore}
-        >
+        <Button accent={Accent.SECONDARY} onClick={seeMore}>
           Afficher plus de signalements
-        </SeeMore>
+        </Button>
       </SeeMoreBackground>
     </Zone>
   )
@@ -81,17 +80,4 @@ const SeeMoreBackground = styled.div`
   padding: 10px 0 5px 0;
   text-align: center;
   width: 100%;
-`
-
-const SeeMore = styled.div`
-  border: 1px solid ${THEME.color.charcoal};
-  color: ${THEME.color.gunMetal};
-  padding: 5px 10px 5px 10px;
-  width: max-content;
-  font-size: 13px;
-  cursor: pointer;
-  margin-left: auto;
-  margin-right: auto;
-  user-select: none;
-  background: ${THEME.color.white};
 `

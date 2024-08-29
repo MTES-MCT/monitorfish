@@ -10,15 +10,14 @@ import {
   setCurrentAndArchivedReportingsOfSelectedVessel
 } from '../slice'
 
-export const getVesselReportings = (isFromUserAction: boolean) => async (dispatch, getState) => {
+export const getVesselReportings = (isLoaderShowed: boolean) => async (dispatch, getState) => {
   const { selectedVesselIdentity } = getState().vessel
   const { archivedReportingsFromDate, isLoadingReporting } = getState().reporting
-
   if (!selectedVesselIdentity || !archivedReportingsFromDate || isLoadingReporting) {
     return
   }
 
-  if (isFromUserAction) {
+  if (isLoaderShowed) {
     dispatch(displayedErrorActions.unset(DisplayedErrorKey.VESSEL_SIDEBAR_ERROR))
     dispatch(loadReporting())
   }
@@ -40,8 +39,8 @@ export const getVesselReportings = (isFromUserAction: boolean) => async (dispatc
     dispatch(
       displayOrLogError(
         error as Error,
-        () => getVesselReportings(isFromUserAction),
-        isFromUserAction,
+        () => getVesselReportings(isLoaderShowed),
+        isLoaderShowed,
         DisplayedErrorKey.VESSEL_SIDEBAR_ERROR
       )
     )

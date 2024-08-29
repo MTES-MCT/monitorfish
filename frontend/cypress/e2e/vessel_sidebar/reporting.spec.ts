@@ -121,6 +121,29 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 10000 }).click()
   })
 
+  it('Reporting Should be showed for more years', () => {
+    // Given
+    cy.get('*[data-cy="vessel-search-input"]', { timeout: 10000 }).type('FRAIS avis')
+    cy.get('*[data-cy="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
+    cy.wait(50)
+    cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
+    cy.intercept('GET', '/bff/v1/vessels/reporting*').as('reporting')
+    cy.get('*[data-cy="vessel-menu-reporting"]').click({ timeout: 10000 })
+    cy.get('*[data-cy="vessel-reporting"]', { timeout: 10000 }).should('be.visible')
+    cy.wait('@reporting')
+    cy.wait(100)
+
+    // When
+    cy.get('*[data-cy="vessel-sidebar-reporting-tab-history-button"]').click()
+    cy.get('*[data-cy="vessel-sidebar-reporting-tab-history"]').should('exist')
+    cy.get('*[data-cy="vessel-sidebar-reporting-tab-archive-year"]').should('have.length', 6)
+    cy.clickButton('Afficher plus de signalements')
+
+    // Then
+    cy.wait('@reporting')
+    cy.get('*[data-cy="vessel-sidebar-reporting-tab-archive-year"]').should('have.length', 7)
+  })
+
   it('Reporting Should be deleted', () => {
     cy.intercept(
       'GET',

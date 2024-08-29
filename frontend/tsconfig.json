@@ -48,15 +48,20 @@
     "verbatimModuleSyntax": true
   },
   "include": [
+    "**/*.cjs",
+    "**/*.cts",
     "**/*.js",
     "**/*.jsx",
-    "**/*.mjs",
-    "**/*.mts",
     "**/*.ts",
     "**/*.tsx",
     "src/vite-env-override.d.ts",
     "src/ui/styled.d.ts",
-    "vite.config.mts"
+    "vite.config.ts"
   ],
-  "exclude": ["node_modules/*"]
+  "exclude": ["node_modules/*"],
+  "ts-node": {
+    "esm": true,
+    "swc": true,
+    "transpileOnly": true
+  }
 }

@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   clearMocks: true,
   collectCoverageFrom: ['**/{hooks,libs,utils}/**/*.t{s,sx}', '**/utils.ts'],
   globalSetup: '<rootDir>/config/jest.global.js',

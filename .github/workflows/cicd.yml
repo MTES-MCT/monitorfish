@@ -214,7 +214,7 @@ jobs:
       - uses: cypress-io/github-action@v6
         with:
           browser: firefox
-          config-file: config/cypress.config.js
+          config-file: config/cypress.config.ts
           env: PORT=8880
           install: true
           install-command: npm ci

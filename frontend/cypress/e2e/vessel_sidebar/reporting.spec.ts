@@ -136,12 +136,12 @@ context('Vessel sidebar reporting tab', () => {
     // When
     cy.get('*[data-cy="vessel-sidebar-reporting-tab-history-button"]').click()
     cy.get('*[data-cy="vessel-sidebar-reporting-tab-history"]').should('exist')
-    cy.get('*[data-cy="vessel-sidebar-reporting-tab-archive-year"]').should('have.length', 7)
+    cy.get('*[data-cy="vessel-sidebar-reporting-tab-archive-year"]').should('have.length', 6)
     cy.clickButton('Afficher plus de signalements')
 
     // Then
     cy.wait('@reporting')
-    cy.get('*[data-cy="vessel-sidebar-reporting-tab-archive-year"]').should('have.length', 8)
+    cy.get('*[data-cy="vessel-sidebar-reporting-tab-archive-year"]').should('have.length', 7)
   })
 
   it('Reporting Should be deleted', () => {

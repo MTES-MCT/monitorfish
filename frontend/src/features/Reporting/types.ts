@@ -71,7 +71,7 @@ export type EditedReporting = Partial<InfractionSuspicion | Observation> & {
 type Year = number
 
 export type ReportingAndOccurrences = {
-  otherOccurrences: Reporting[]
+  otherOccurrencesOfSameAlert: Reporting[]
   reporting: Reporting
 }
 

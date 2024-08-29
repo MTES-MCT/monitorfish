@@ -705,12 +705,12 @@ class VesselControllerITests {
                 CurrentAndArchivedReportings(
                     current = listOf(
                         ReportingAndOccurrences(
-                            otherOccurrences = listOf(),
+                            otherOccurrencesOfSameAlert = listOf(),
                             reporting = currentReporting,
                             controlUnit = null,
                         ),
                         ReportingAndOccurrences(
-                            otherOccurrences = listOf(),
+                            otherOccurrencesOfSameAlert = listOf(),
                             reporting = currentReporting,
                             controlUnit = null,
                         ),
@@ -718,15 +718,15 @@ class VesselControllerITests {
                     archived = mapOf(
                         2024 to listOf(
                             ReportingAndOccurrences(
-                                otherOccurrences = listOf(),
+                                otherOccurrencesOfSameAlert = listOf(),
                                 reporting = archivedReporting,
                                 controlUnit = null,
                             ),
                         ),
                         2023 to emptyList(),
                         2022 to emptyList(),
-                        2021 to emptyList()
-                    )
+                        2021 to emptyList(),
+                    ),
                 ),
             )
 

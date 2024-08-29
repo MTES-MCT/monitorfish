@@ -108,7 +108,7 @@ class GetVesselReportings(
             .filter { it.type != ReportingType.ALERT }
             .map { reporting ->
                 ReportingAndOccurrences(
-                    otherOccurrences = emptyList(),
+                    otherOccurrencesOfSameAlert = emptyList(),
                     reporting = reporting,
                     controlUnit = null,
                 )
@@ -133,11 +133,11 @@ class GetVesselReportings(
                     it.validationDate
                 }
                 checkNotNull(lastAlert) { "Last alert cannot be null" }
-                val otherOccurrences = alerts.filter { it.id != lastAlert.id }
+                val otherOccurrencesOfSameAlert = alerts.filter { it.id != lastAlert.id }
 
                 return@flatMap listOf(
                     ReportingAndOccurrences(
-                        otherOccurrences = otherOccurrences,
+                        otherOccurrencesOfSameAlert = otherOccurrencesOfSameAlert,
                         reporting = lastAlert,
                         controlUnit = null,
                     ),

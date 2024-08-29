@@ -29,10 +29,10 @@ class GetAllCurrentReportings(
                 types = listOf(ReportingType.ALERT, ReportingType.INFRACTION_SUSPICION),
             )
 
-        val currents = reportingRepository.findAll(filter)
+        val currentReportings = reportingRepository.findAll(filter)
         val controlUnits = getAllControlUnits.execute()
 
-        val currentsWithUnderCharter = currents.map { reporting ->
+        val currentReportingsWithCharterInfo = currentReportings.map { reporting ->
             val underCharter = try {
                 when (reporting.vesselIdentifier) {
                     VesselIdentifier.INTERNAL_REFERENCE_NUMBER -> {
@@ -75,7 +75,7 @@ class GetAllCurrentReportings(
             reporting.copy(underCharter = underCharter)
         }
 
-        return currentsWithUnderCharter.map { reporting ->
+        return currentReportingsWithCharterInfo.map { reporting ->
             if (reporting.type == ReportingType.ALERT) {
                 return@map Pair(reporting, null)
             }

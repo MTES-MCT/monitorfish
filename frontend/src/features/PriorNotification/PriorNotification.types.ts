@@ -159,6 +159,16 @@ export namespace PriorNotification {
     name: string
   }
 
+  export type Upload = {
+    createdAt: string
+    fileName: string
+    id: string
+    isManualPriorNotification: boolean
+    mimeType: string
+    reportId: string
+    updatedAt: string
+  }
+
   export enum PurposeCode {
     ACS = 'ACS',
     ECY = 'ECY',

@@ -143,6 +143,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Appréhension et déroutement
     cy.fill('Appréhension d’engin(s)', true)
     cy.fill('Appréhension d’espèce(s)', true)
+    cy.fill('Quantités saisies (kg)', 6289.5)
     cy.fill('Appréhension et déroutement du navire', true)
 
     // Infractions
@@ -259,6 +260,7 @@ context('Side Window > Mission Form > Sea Control', () => {
           speciesOnboard: [
             { controlledWeight: 20, declaredWeight: 10, nbFish: null, speciesCode: 'COD', underSized: true }
           ],
+          speciesQuantitySeized: 6289.5,
           speciesSizeControlled: false,
           speciesWeightControlled: true,
           unitWithoutOmegaGauge: true,

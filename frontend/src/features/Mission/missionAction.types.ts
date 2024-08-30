@@ -48,6 +48,7 @@ export namespace MissionAction {
     speciesInfractions: Infraction[]
     speciesObservations: string | undefined
     speciesOnboard: SpeciesControl[]
+    speciesQuantitySeized: number | undefined
     speciesSizeControlled: boolean | undefined
     speciesWeightControlled: boolean | undefined
     unitWithoutOmegaGauge: boolean | undefined

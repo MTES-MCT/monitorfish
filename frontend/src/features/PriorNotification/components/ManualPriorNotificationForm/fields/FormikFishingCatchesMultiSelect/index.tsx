@@ -30,19 +30,11 @@ export function FormikFishingCatchesMultiSelect({ isReadOnly }: FormikFishingCat
 
   const validationError = getFishingsCatchesValidationError(errors)
 
-  const filteredSpeciesAsOptions = useMemo(
-    () =>
-      speciesAsOptions?.filter(specyOption =>
-        values.fishingCatches.every(fishingCatch => fishingCatch.specyCode !== specyOption.value.code)
-      ) ?? [],
-    [speciesAsOptions, values.fishingCatches]
-  )
-
   const customSearch = useMemo(
     () =>
-      filteredSpeciesAsOptions.length
+      speciesAsOptions?.length
         ? new CustomSearch(
-            filteredSpeciesAsOptions,
+            speciesAsOptions,
             [
               {
                 name: 'value.code',
@@ -56,10 +48,17 @@ export function FormikFishingCatchesMultiSelect({ isReadOnly }: FormikFishingCat
             { cacheKey: 'PNO_SPECIES_AS_OPTIONS', isStrict: true }
           )
         : undefined,
-    [filteredSpeciesAsOptions]
+    [speciesAsOptions]
   )
 
   const add = (nextSpecy: Specy | undefined) => {
+    const specyIsAlreadyInCatches = values.fishingCatches?.find(
+      fishingCatch => fishingCatch.specyCode === nextSpecy?.code
+    )
+    if (specyIsAlreadyInCatches) {
+      return
+    }
+
     const specyOption = speciesAsOptions?.find(({ value }) => value.code === nextSpecy?.code)
     if (!specyOption) {
       return
@@ -89,22 +88,24 @@ export function FormikFishingCatchesMultiSelect({ isReadOnly }: FormikFishingCat
     setFieldValue('fishingCatches', nextFishingCatches)
   }
 
-  if (!filteredSpeciesAsOptions.length || !customSearch) {
+  if (!speciesAsOptions?.length || !customSearch) {
     return <FieldsetGroupSpinner isLight legend="Espèces à bord et à débarquer" />
   }
 
   return (
     <>
       <Select
+        key={String(values.fishingCatches?.length)}
         customSearch={customSearch}
-        disabled={!filteredSpeciesAsOptions}
+        disabled={!speciesAsOptions}
         error={validationError}
         label="Espèces à bord et à débarquer"
         name="fishingCatches"
         onChange={add}
-        options={filteredSpeciesAsOptions ?? []}
+        options={speciesAsOptions ?? []}
         optionValueKey="code"
         readOnly={isReadOnly}
+        searchable
         virtualized
       />
 
@@ -120,7 +121,7 @@ export function FormikFishingCatchesMultiSelect({ isReadOnly }: FormikFishingCat
 
                   {!values.hasGlobalFaoArea && (
                     <FormikSelect
-                      disabled={!filteredSpeciesAsOptions}
+                      disabled={!speciesAsOptions}
                       isErrorMessageHidden
                       isLabelHidden
                       label={`Zone de capture (${fishingCatch.specyCode})`}

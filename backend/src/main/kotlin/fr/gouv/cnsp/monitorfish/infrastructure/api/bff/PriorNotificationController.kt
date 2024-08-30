@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter.ISO_DATE_TIME
 
@@ -28,14 +29,18 @@ import java.time.format.DateTimeFormatter.ISO_DATE_TIME
 class PriorNotificationController(
     private val computeManualPriorNotification: ComputeManualPriorNotification,
     private val createOrUpdateManualPriorNotification: CreateOrUpdateManualPriorNotification,
+    private val createPriorNotificationUpload: CreatePriorNotificationUpload,
+    private val deletePriorNotificationUpload: DeletePriorNotificationUpload,
     private val getPriorNotification: GetPriorNotification,
     private val getPriorNotificationPdfDocument: GetPriorNotificationPdfDocument,
+    private val getPriorNotificationUpload: GetPriorNotificationUpload,
+    private val getPriorNotificationUploads: GetPriorNotificationUploads,
     private val getPriorNotifications: GetPriorNotifications,
     private val getNumberToVerify: GetNumberToVerify,
     private val getPriorNotificationTypes: GetPriorNotificationTypes,
+    private val invalidatePriorNotification: InvalidatePriorNotification,
     private val updateLogbookPriorNotification: UpdateLogbookPriorNotification,
     private val verifyAndSendPriorNotification: VerifyAndSendPriorNotification,
-    private val invalidatePriorNotification: InvalidatePriorNotification,
 ) {
     data class Status(val status: String)
 
@@ -282,7 +287,7 @@ class PriorNotificationController(
     }
 
     @GetMapping("/{reportId}/pdf")
-    @Operation(summary = "Get the PDF document")
+    @Operation(summary = "Get the PNO PDF document")
     fun getPdfDocument(
         @PathParam("Logbook message `reportId`")
         @PathVariable(name = "reportId")
@@ -356,5 +361,72 @@ class PriorNotificationController(
             )
 
         return PriorNotificationDataOutput.fromPriorNotification(updatedPriorNotification)
+    }
+
+    @GetMapping("/{reportId}/uploads/{priorNotificationUploadId}")
+    @Operation(summary = "Download a prior notification attachment")
+    fun getUploads(
+        @PathParam("Logbook message `reportId`")
+        @PathVariable(name = "reportId")
+        reportId: String,
+        @PathParam("Prior notification upload ID`")
+        @PathVariable(name = "priorNotificationUploadId")
+        priorNotificationUploadId: String,
+    ): ResponseEntity<ByteArray> {
+        val document = getPriorNotificationUpload.execute(priorNotificationUploadId)
+
+        val headers = HttpHeaders().apply {
+            contentType = MediaType.parseMediaType(document.mimeType)
+            setContentDispositionFormData("attachment", document.fileName)
+        }
+
+        return ResponseEntity(document.content, headers, HttpStatus.OK)
+    }
+
+    @GetMapping("/{reportId}/uploads")
+    @Operation(summary = "Get all the attachment documents for a given prior notification")
+    fun getUploads(
+        @PathParam("Logbook message `reportId`")
+        @PathVariable(name = "reportId")
+        reportId: String,
+    ): List<PriorNotificationUploadDataOutput> {
+        return getPriorNotificationUploads.execute(reportId)
+            .map { PriorNotificationUploadDataOutput.fromPriorNotificationDocument(it) }
+    }
+
+    @PostMapping("/{reportId}/uploads")
+    @Operation(summary = "Attach a document to a prior notification")
+    fun createUpload(
+        @PathParam("Logbook message `reportId`")
+        @PathVariable(name = "reportId")
+        reportId: String,
+        @Parameter(description = "Is the prior notification manually created?")
+        @RequestParam(name = "isManualPriorNotification")
+        isManualPriorNotification: Boolean,
+        @RequestParam("file")
+        file: MultipartFile,
+    ): ResponseEntity<*> {
+        if (file.isEmpty) {
+            return ResponseEntity("Please select a file to upload", HttpStatus.BAD_REQUEST)
+        }
+
+        createPriorNotificationUpload.execute(reportId, isManualPriorNotification, file)
+
+        return ResponseEntity("File uploaded successfully: " + file.originalFilename, HttpStatus.OK)
+    }
+
+    @DeleteMapping("/{reportId}/uploads/{priorNotificationUploadId}")
+    @Operation(summary = "Delete a prior notification attachment")
+    fun deleteUpload(
+        @PathParam("Logbook message `reportId`")
+        @PathVariable(name = "reportId")
+        reportId: String,
+        @PathParam("Prior notification upload ID")
+        @PathVariable(name = "priorNotificationUploadId")
+        priorNotificationUploadId: String,
+    ): ResponseEntity<Unit> {
+        deletePriorNotificationUpload.execute(priorNotificationUploadId)
+
+        return ResponseEntity(HttpStatus.NO_CONTENT)
     }
 }

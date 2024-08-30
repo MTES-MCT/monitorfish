@@ -12,5 +12,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.exceptions
  * **Don't forget to mirror any update here in the corresponding Frontend enum.**
  */
 enum class BackendRequestErrorCode {
+    MISSING_UPLOADED_FILE_NAME,
+    MISSING_UPLOADED_FILE_TYPE,
     WRONG_BODY_PARAMETER_TYPE,
 }

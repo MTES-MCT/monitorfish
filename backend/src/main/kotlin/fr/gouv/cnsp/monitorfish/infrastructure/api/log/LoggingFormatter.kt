@@ -27,7 +27,7 @@ class LoggingFormatter {
             } else {
                 stringBuilder.append(" ")
             }
-            stringBuilder.append(buildHeadersMap(httpServletRequest)).append(" ")
+//            stringBuilder.append(buildHeadersMap(httpServletRequest)).append(" ")
 
             if (body != null) {
                 stringBuilder.append(mapper.writeValueAsString(body))

@@ -682,6 +682,18 @@ expected_loaded_mission_actions_df = pd.merge(
                 [],
                 [],
             ],
+            "species_quantity_seized": [
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+            ],
             "species_observations": [
                 None,
                 None,

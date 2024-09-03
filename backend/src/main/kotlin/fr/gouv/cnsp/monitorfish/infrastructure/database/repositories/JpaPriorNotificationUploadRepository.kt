@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional
 class JpaPriorNotificationUploadRepository(
     private val dbPriorNotificationUploadRepository: DBPriorNotificationUploadRepository,
 ) : PriorNotificationUploadRepository {
+    @Transactional
     override fun deleteById(id: String) {
         dbPriorNotificationUploadRepository.deleteById(id)
     }

@@ -81,7 +81,11 @@ export function Form({ detail, initialFormValues }: FormProps) {
 
           <hr />
 
-          <UploadFiles isManualPriorNotification={false} reportId={detail.reportId} />
+          <UploadFiles
+            isManualPriorNotification={false}
+            operationDate={detail.operationDate}
+            reportId={detail.reportId}
+          />
         </>
       </Formik>
 

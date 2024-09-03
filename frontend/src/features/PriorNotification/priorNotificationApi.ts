@@ -57,11 +57,22 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(CREATE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
     }),
 
-    deletePriorNotificationUpload: builder.mutation<void, { priorNotificationUploadId; reportId: string }>({
+    deletePriorNotificationUpload: builder.mutation<
+      void,
+      {
+        isManualPriorNotification: boolean
+        operationDate: string
+        priorNotificationUploadId: string
+        reportId: string
+      }
+    >({
       invalidatesTags: [{ type: RtkCacheTagType.PriorNotificationDocuments }],
-      query: ({ priorNotificationUploadId, reportId }) => ({
+      query: ({ isManualPriorNotification, operationDate, priorNotificationUploadId, reportId }) => ({
         method: 'DELETE',
-        url: `/prior_notifications/${reportId}/uploads/${priorNotificationUploadId}`
+        url: getUrlOrPathWithQueryParams(`/prior_notifications/${reportId}uploads/${priorNotificationUploadId}`, {
+          isManualPriorNotification,
+          operationDate
+        })
       }),
       transformErrorResponse: response => new FrontendApiError(DELETE_PRIOR_NOTIFICATION_UPLOAD_ERROR_MESSAGE, response)
     }),

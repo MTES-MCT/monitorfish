@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.SeafrontGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationState
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.sorters.PriorNotificationsSortColumn
@@ -9,6 +10,8 @@ import fr.gouv.cnsp.monitorfish.infrastructure.api.input.LogbookPriorNotificatio
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationComputeDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationFormDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
+import fr.gouv.cnsp.monitorfish.infrastructure.exceptions.BackendRequestErrorCode
+import fr.gouv.cnsp.monitorfish.infrastructure.exceptions.BackendRequestException
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -400,17 +403,25 @@ class PriorNotificationController(
         @PathParam("Logbook message `reportId`")
         @PathVariable(name = "reportId")
         reportId: String,
+        @Parameter(description = "Operation date (to optimize SQL query via Timescale).")
+        @RequestParam(name = "operationDate")
+        operationDate: ZonedDateTime,
         @Parameter(description = "Is the prior notification manually created?")
         @RequestParam(name = "isManualPriorNotification")
         isManualPriorNotification: Boolean,
         @RequestParam("file")
         file: MultipartFile,
     ): ResponseEntity<*> {
-        if (file.isEmpty) {
-            return ResponseEntity("Please select a file to upload", HttpStatus.BAD_REQUEST)
-        }
+        val content = file.bytes
+            ?: throw BackendRequestException(BackendRequestErrorCode.EMPTY_UPLOADED_FILE)
+        val fileName = file.originalFilename
+            ?: throw BackendRequestException(BackendRequestErrorCode.MISSING_UPLOADED_FILE_NAME)
+        val mimeType = file.contentType
+            ?: throw BackendRequestException(BackendRequestErrorCode.MISSING_UPLOADED_FILE_TYPE)
 
-        createPriorNotificationUpload.execute(reportId, isManualPriorNotification, file)
+        val identifier = PriorNotificationIdentifier(reportId, operationDate, isManualPriorNotification)
+
+        createPriorNotificationUpload.execute(identifier, content, fileName, mimeType)
 
         return ResponseEntity("File uploaded successfully: " + file.originalFilename, HttpStatus.OK)
     }
@@ -421,11 +432,19 @@ class PriorNotificationController(
         @PathParam("Logbook message `reportId`")
         @PathVariable(name = "reportId")
         reportId: String,
+        @Parameter(description = "Operation date (to optimize SQL query via Timescale).")
+        @RequestParam(name = "operationDate")
+        operationDate: ZonedDateTime,
+        @Parameter(description = "Is the prior notification manually created?")
+        @RequestParam(name = "isManualPriorNotification")
+        isManualPriorNotification: Boolean,
         @PathParam("Prior notification upload ID")
         @PathVariable(name = "priorNotificationUploadId")
         priorNotificationUploadId: String,
     ): ResponseEntity<Unit> {
-        deletePriorNotificationUpload.execute(priorNotificationUploadId)
+        val identifier = PriorNotificationIdentifier(reportId, operationDate, isManualPriorNotification)
+
+        deletePriorNotificationUpload.execute(identifier, priorNotificationUploadId)
 
         return ResponseEntity(HttpStatus.NO_CONTENT)
     }

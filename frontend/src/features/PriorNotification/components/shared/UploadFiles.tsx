@@ -17,13 +17,14 @@ import type { FileType } from 'rsuite/esm/Uploader'
 
 type UploadFilesProps = Readonly<{
   isManualPriorNotification: boolean
+  operationDate: string
   reportId: string
 }>
-export function UploadFiles({ isManualPriorNotification, reportId }: UploadFilesProps) {
+export function UploadFiles({ isManualPriorNotification, operationDate, reportId }: UploadFilesProps) {
   const dispatch = useMainAppDispatch()
   const headers = useAuthRequestHeaders()
 
-  const action = `/bff/v1/prior_notifications/${reportId}/uploads?isManualPriorNotification=${isManualPriorNotification}`
+  const action = `/bff/v1/prior_notifications/${reportId}/uploads?isManualPriorNotification=${isManualPriorNotification}&operationDate=${operationDate}`
   const { data: uploads } = useGetPriorNotificationUploadsQuery(reportId)
 
   const key = useKey([uploads])
@@ -59,14 +60,18 @@ export function UploadFiles({ isManualPriorNotification, reportId }: UploadFiles
 
   const remove = useCallback(
     async (file: FileType) => {
+      assertNotNullish(file.fileKey)
+
       await dispatch(
         priorNotificationApi.endpoints.deletePriorNotificationUpload.initiate({
-          priorNotificationUploadId: file.fileKey,
+          isManualPriorNotification,
+          operationDate,
+          priorNotificationUploadId: String(file.fileKey),
           reportId
         })
       ).unwrap()
     },
-    [dispatch, reportId]
+    [dispatch, isManualPriorNotification, operationDate, reportId]
   )
 
   if (!headers || !uploadAsFileTypes) {

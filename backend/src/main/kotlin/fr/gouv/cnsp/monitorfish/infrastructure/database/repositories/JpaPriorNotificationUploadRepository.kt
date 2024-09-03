@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
 @Repository
-class JpaPriorUploadRepository(
+class JpaPriorNotificationUploadRepository(
     private val dbPriorNotificationUploadRepository: DBPriorNotificationUploadRepository,
 ) : PriorNotificationUploadRepository {
     override fun deleteById(id: String) {
@@ -30,8 +30,8 @@ class JpaPriorUploadRepository(
     }
 
     @Transactional
-    override fun save(newPriorNotificationDocument: PriorNotificationDocument) {
-        dbPriorNotificationUploadRepository
-            .save(PriorNotificationUploadEntity.fromDocument(newPriorNotificationDocument))
+    override fun save(newPriorNotificationDocument: PriorNotificationDocument): PriorNotificationDocument {
+        return dbPriorNotificationUploadRepository
+            .save(PriorNotificationUploadEntity.fromDocument(newPriorNotificationDocument)).toDocument()
     }
 }

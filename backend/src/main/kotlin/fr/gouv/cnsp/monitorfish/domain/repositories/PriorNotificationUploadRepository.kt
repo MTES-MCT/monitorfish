@@ -7,7 +7,7 @@ interface PriorNotificationUploadRepository {
 
     fun findById(id: String): PriorNotificationDocument
 
-    fun save(newPriorNotificationDocument: PriorNotificationDocument)
+    fun save(newPriorNotificationDocument: PriorNotificationDocument): PriorNotificationDocument
 
     fun deleteById(id: String)
 }

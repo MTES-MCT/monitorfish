@@ -16,7 +16,7 @@ class JpaPriorNotificationPdfDocumentRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findByReportId Should return a pdf document`() {
+    fun `findByReportId Should return the expected PDF document`() {
         // Given
         val reportId = "FAKE_OPERATION_102"
 
@@ -32,7 +32,7 @@ class JpaPriorNotificationPdfDocumentRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `deleteByReportId Should delete a pdf document`() {
+    fun `deleteByReportId Should delete the expected PDF document`() {
         // Given
         val reportId = "FAKE_OPERATION_102"
 

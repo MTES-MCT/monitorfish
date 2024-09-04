@@ -67,7 +67,7 @@ jobs:
         run: echo "MONITORFISH_VERSION=${VERSION}" >> $GITHUB_ENV
 
       - name: Download image
-        uses: ishworkh/container-image-artifact-download@v1.1.1
+        uses: ishworkh/container-image-artifact-download@v2.0.0
         with:
           commit_sha: ${{ github.event.workflow_run.head_commit.id }}
           image: monitorfish-app:${{ env.VERSION }}
@@ -169,7 +169,7 @@ jobs:
         run: echo "MONITORFISH_VERSION=${VERSION}" >> $GITHUB_ENV
 
       - name: Download image
-        uses: ishworkh/container-image-artifact-download@v1.1.1
+        uses: ishworkh/container-image-artifact-download@v2.0.0
         with:
           commit_sha: ${{ github.event.workflow_run.head_commit.id }}
           image: monitorfish-app:${{ env.VERSION }}

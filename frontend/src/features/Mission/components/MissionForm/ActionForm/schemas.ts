@@ -3,7 +3,7 @@
 import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { customDayjs } from '@mtes-mct/monitor-ui'
-import { mainStore } from '@store/index'
+import { mainStore } from '@store'
 import { array, boolean, number, object, string } from 'yup'
 
 // -----------------------------------------------------------------------------
@@ -108,6 +108,12 @@ export const LandControlFormCompletionSchema = LandControlFormLiveSchema.concat(
     speciesSizeControlled: boolean().required(HIDDEN_ERROR),
     separateStowageOfPreservedSpecies: string().required(HIDDEN_ERROR),
 
+    // Quantités saisies
+    speciesQuantitySeized: number().when('hasSomeSpeciesSeized', {
+      is: (hasSomeSpeciesSeized?: boolean) => hasSomeSpeciesSeized === true,
+      then: schema => schema.required(HIDDEN_ERROR)
+    }),
+
     // Engins à bord
     gearOnboard: array().of(GearOnboardSchema).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR),
 
@@ -145,6 +151,12 @@ export const SeaControlFormCompletionSchema = SeaControlFormLiveSchema.concat(
 
     // Engins à bord
     gearOnboard: array().of(GearOnboardSchema).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR),
+
+    // Quantités saisies
+    speciesQuantitySeized: number().when('hasSomeSpeciesSeized', {
+      is: (hasSomeSpeciesSeized?: boolean) => hasSomeSpeciesSeized === true,
+      then: schema => schema.required(HIDDEN_ERROR)
+    }),
 
     // Qualité du contrôle
     vesselTargeted: string().required(HIDDEN_ERROR),

@@ -62,6 +62,7 @@ data class MissionAction(
     val isDeleted: Boolean,
     val hasSomeGearsSeized: Boolean,
     val hasSomeSpeciesSeized: Boolean,
+    val speciesQuantitySeized: Int? = null,
     val completedBy: String? = null,
     val completion: Completion,
     val isAdministrativeControl: Boolean? = null,

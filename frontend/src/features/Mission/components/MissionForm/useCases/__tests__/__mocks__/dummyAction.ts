@@ -76,6 +76,7 @@ export const dummyAction = {
       underSized: false
     }
   ],
+  speciesQuantitySeized: undefined,
   speciesSizeControlled: undefined,
   speciesWeightControlled: undefined,
   unitWithoutOmegaGauge: false,

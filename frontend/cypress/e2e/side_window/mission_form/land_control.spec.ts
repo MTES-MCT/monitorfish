@@ -80,6 +80,7 @@ context('Side Window > Mission Form > Land Control', () => {
     // Appréhensions
     cy.fill('Appréhension d’engin(s)', true)
     cy.fill('Appréhension d’espèce(s)', true)
+    cy.fill('Quantités saisies (kg)', 6289.5)
     cy.fill('Appréhension du navire', true)
 
     // Infractions
@@ -199,6 +200,7 @@ context('Side Window > Mission Form > Land Control', () => {
             { controlledWeight: null, declaredWeight: 13.46, nbFish: null, speciesCode: 'BLI', underSized: false },
             { controlledWeight: null, declaredWeight: null, nbFish: null, speciesCode: 'COD', underSized: false }
           ],
+          speciesQuantitySeized: 6289.5,
           speciesSizeControlled: false,
           speciesWeightControlled: true,
           unitWithoutOmegaGauge: true,

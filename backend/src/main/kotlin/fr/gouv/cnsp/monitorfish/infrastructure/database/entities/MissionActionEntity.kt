@@ -129,6 +129,8 @@ class MissionActionEntity(
     val hasSomeGearsSeized: Boolean,
     @Column(name = "has_some_species_seized")
     val hasSomeSpeciesSeized: Boolean,
+    @Column(name = "species_quantity_seized")
+    val speciesQuantitySeized: Int? = null,
     @Column(name = "completed_by")
     val completedBy: String? = null,
     @Enumerated(EnumType.STRING)
@@ -200,6 +202,7 @@ class MissionActionEntity(
                 isDeleted = missionAction.isDeleted,
                 hasSomeGearsSeized = missionAction.hasSomeGearsSeized,
                 hasSomeSpeciesSeized = missionAction.hasSomeSpeciesSeized,
+                speciesQuantitySeized = missionAction.speciesQuantitySeized,
                 completedBy = missionAction.completedBy,
                 completion = missionAction.completion,
                 isAdministrativeControl = missionAction.isAdministrativeControl,
@@ -278,6 +281,7 @@ class MissionActionEntity(
             isDeleted = isDeleted,
             hasSomeGearsSeized = hasSomeGearsSeized,
             hasSomeSpeciesSeized = hasSomeSpeciesSeized,
+            speciesQuantitySeized = speciesQuantitySeized,
             completedBy = completedBy,
             completion = completion,
             isFromPoseidon = isFromPoseidon,

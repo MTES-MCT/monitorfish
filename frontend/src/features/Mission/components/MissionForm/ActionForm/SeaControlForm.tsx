@@ -1,5 +1,6 @@
 import { ActionFormHeader } from '@features/Mission/components/MissionForm/ActionForm/shared/ActionFormHeader'
 import { DatePickerField } from '@features/Mission/components/MissionForm/ActionForm/shared/DatePickerField'
+import { FormikSpeciesQuantitySeized } from '@features/Mission/components/MissionForm/ActionForm/shared/FormikSpeciesQuantitySeized'
 import { UpdateMissionActionCompletionEffect } from '@features/Mission/components/MissionForm/ActionForm/shared/UpdateMissionActionCompletionEffect'
 import { useIsMissionEnded } from '@features/Mission/components/MissionForm/hooks/useIsMissionEnded'
 import { FormikCheckbox, FormikEffect, FormikTextarea, Icon } from '@mtes-mct/monitor-ui'
@@ -63,6 +64,7 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
             <SeizureFieldsetGroup isLight legend="Appréhension et déroutement">
               <FormikCheckbox label="Appréhension d’engin(s)" name="hasSomeGearsSeized" />
               <FormikCheckbox label="Appréhension d’espèce(s)" name="hasSomeSpeciesSeized" />
+              <FormikSpeciesQuantitySeized />
               <FormikCheckbox label="Appréhension et déroutement du navire" name="seizureAndDiversion" />
             </SeizureFieldsetGroup>
 

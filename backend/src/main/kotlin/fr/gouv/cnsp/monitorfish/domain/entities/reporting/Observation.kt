@@ -10,22 +10,23 @@ class Observation(
     override val title: String,
     override val description: String? = null,
 ) : InfractionSuspicionOrObservationType(
-    reportingActor = reportingActor,
-    natinfCode = null,
-    title = title,
-    type = ReportingTypeMapping.OBSERVATION,
-    authorTrigram = authorTrigram,
-) {
+        reportingActor = reportingActor,
+        natinfCode = null,
+        title = title,
+        type = ReportingTypeMapping.OBSERVATION,
+        authorTrigram = authorTrigram,
+    ) {
     companion object {
         fun fromUpdatedReporting(
             updatedInfractionSuspicionOrObservation: UpdatedInfractionSuspicionOrObservation,
-        ): Observation = Observation(
-            reportingActor = updatedInfractionSuspicionOrObservation.reportingActor,
-            controlUnitId = updatedInfractionSuspicionOrObservation.controlUnitId,
-            authorTrigram = updatedInfractionSuspicionOrObservation.authorTrigram,
-            authorContact = updatedInfractionSuspicionOrObservation.authorContact,
-            title = updatedInfractionSuspicionOrObservation.title,
-            description = updatedInfractionSuspicionOrObservation.description,
-        )
+        ): Observation =
+            Observation(
+                reportingActor = updatedInfractionSuspicionOrObservation.reportingActor,
+                controlUnitId = updatedInfractionSuspicionOrObservation.controlUnitId,
+                authorTrigram = updatedInfractionSuspicionOrObservation.authorTrigram,
+                authorContact = updatedInfractionSuspicionOrObservation.authorContact,
+                title = updatedInfractionSuspicionOrObservation.title,
+                description = updatedInfractionSuspicionOrObservation.description,
+            )
     }
 }

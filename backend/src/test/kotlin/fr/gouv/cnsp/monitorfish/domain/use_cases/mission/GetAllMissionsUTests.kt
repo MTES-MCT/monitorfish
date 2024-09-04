@@ -14,7 +14,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
 class GetAllMissionsUTests {
-
     @MockBean
     private lateinit var missionActionsRepository: MissionActionsRepository
 
@@ -55,20 +54,21 @@ class GetAllMissionsUTests {
             .willReturn(getDummyMissionActions(fourthChunk))
 
         // When
-        val missionsAndActions = GetAllMissions(
-            missionRepository,
-            missionActionsRepository,
-            databaseProperties,
-        ).execute(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-        )
+        val missionsAndActions =
+            GetAllMissions(
+                missionRepository,
+                missionActionsRepository,
+                databaseProperties,
+            ).execute(
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+            )
 
         // Then
         assertThat(missionsAndActions).hasSize(20)

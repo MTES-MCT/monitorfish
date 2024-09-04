@@ -335,7 +335,9 @@ class CreateOrUpdateManualPriorNotificationITests : AbstractDBTests() {
     @ParameterizedTest
     @MethodSource("getOutOfVerificationScopeTestCases")
     @Transactional
-    fun `Should transition manual prior notification states as expected (out of verification scope)`(testCase: TestCase) {
+    fun `Should transition manual prior notification states as expected (out of verification scope)`(
+        testCase: TestCase,
+    ) {
         // Given
         val reportId = testCase.reportId
 
@@ -351,24 +353,24 @@ class CreateOrUpdateManualPriorNotificationITests : AbstractDBTests() {
             )
 
         // When
-        val afterPriorNotification = createOrUpdateManualPriorNotification.execute(
-            reportId = reportId,
-
-            authorTrigram = "ABC",
-            didNotFishAfterZeroNotice = false,
-            expectedArrivalDate = ZonedDateTime.now(),
-            expectedLandingDate = ZonedDateTime.now(),
-            globalFaoArea = "FAKE_FAO_AREA",
-            fishingCatches = emptyList(),
-            hasPortEntranceAuthorization = false,
-            hasPortLandingAuthorization = false,
-            note = null,
-            portLocode = "FRVNE",
-            purpose = LogbookMessagePurpose.LAN,
-            sentAt = ZonedDateTime.now(),
-            tripGearCodes = emptyList(),
-            vesselId = 1,
-        )
+        val afterPriorNotification =
+            createOrUpdateManualPriorNotification.execute(
+                reportId = reportId,
+                authorTrigram = "ABC",
+                didNotFishAfterZeroNotice = false,
+                expectedArrivalDate = ZonedDateTime.now(),
+                expectedLandingDate = ZonedDateTime.now(),
+                globalFaoArea = "FAKE_FAO_AREA",
+                fishingCatches = emptyList(),
+                hasPortEntranceAuthorization = false,
+                hasPortLandingAuthorization = false,
+                note = null,
+                portLocode = "FRVNE",
+                purpose = LogbookMessagePurpose.LAN,
+                sentAt = ZonedDateTime.now(),
+                tripGearCodes = emptyList(),
+                vesselId = 1,
+            )
 
         // Then
         val afterPnoValue = afterPriorNotification.logbookMessageAndValue.value
@@ -400,24 +402,24 @@ class CreateOrUpdateManualPriorNotificationITests : AbstractDBTests() {
             )
 
         // When
-        val afterPriorNotification = createOrUpdateManualPriorNotification.execute(
-            reportId = reportId,
-
-            authorTrigram = "ABC",
-            didNotFishAfterZeroNotice = false,
-            expectedArrivalDate = ZonedDateTime.now(),
-            expectedLandingDate = ZonedDateTime.now(),
-            globalFaoArea = "FAKE_FAO_AREA",
-            fishingCatches = emptyList(),
-            hasPortEntranceAuthorization = false,
-            hasPortLandingAuthorization = false,
-            note = null,
-            portLocode = "FRVNE",
-            purpose = LogbookMessagePurpose.LAN,
-            sentAt = ZonedDateTime.now(),
-            tripGearCodes = emptyList(),
-            vesselId = 1,
-        )
+        val afterPriorNotification =
+            createOrUpdateManualPriorNotification.execute(
+                reportId = reportId,
+                authorTrigram = "ABC",
+                didNotFishAfterZeroNotice = false,
+                expectedArrivalDate = ZonedDateTime.now(),
+                expectedLandingDate = ZonedDateTime.now(),
+                globalFaoArea = "FAKE_FAO_AREA",
+                fishingCatches = emptyList(),
+                hasPortEntranceAuthorization = false,
+                hasPortLandingAuthorization = false,
+                note = null,
+                portLocode = "FRVNE",
+                purpose = LogbookMessagePurpose.LAN,
+                sentAt = ZonedDateTime.now(),
+                tripGearCodes = emptyList(),
+                vesselId = 1,
+            )
 
         // Then
         val afterPnoValue = afterPriorNotification.logbookMessageAndValue.value

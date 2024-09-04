@@ -8,8 +8,7 @@ import java.time.ZonedDateTime
 
 data class LastPosition(
     val id: Int? = null,
-
-    /* Vessel identification properties */
+    // Vessel identification properties
     val vesselId: Int? = null,
     // Unique code composed by the contracting party/cooperating non-contracting party expressed as 3-alpha
     // country code followed by the vessel registration number as recorded in the national fleet register
@@ -23,7 +22,6 @@ data class LastPosition(
     val vesselName: String? = null,
     val flagState: CountryCode,
     val positionType: PositionType,
-
     val latitude: Double? = null,
     val longitude: Double? = null,
     val estimatedCurrentLatitude: Double? = null,
@@ -32,7 +30,6 @@ data class LastPosition(
     val course: Double? = null,
     val dateTime: ZonedDateTime,
     val tripNumber: String? = null,
-
     val emissionPeriod: Duration? = null,
     val lastLogbookMessageDateTime: ZonedDateTime? = null,
     val departureDateTime: ZonedDateTime? = null,

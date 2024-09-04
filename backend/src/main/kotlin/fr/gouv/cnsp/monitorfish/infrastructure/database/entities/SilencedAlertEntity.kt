@@ -47,7 +47,6 @@ data class SilencedAlertEntity(
     @Column(name = "was_validated")
     val wasValidated: Boolean? = null,
 ) {
-
     fun toSilencedAlert(mapper: ObjectMapper): SilencedAlert {
         return SilencedAlert(
             id = id,

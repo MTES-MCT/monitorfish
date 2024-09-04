@@ -19,12 +19,13 @@ data class EnvMissionActionDataResponse(
     val actionType: EnvMissionActionType,
     val observations: String? = null,
 ) {
-    fun toEnvMissionAction() = EnvMissionAction(
-        id = id,
-        actionStartDateTimeUtc = actionStartDateTimeUtc?.let { ZonedDateTime.parse(it) },
-        actionType = actionType,
-        observations = observations,
-    )
+    fun toEnvMissionAction() =
+        EnvMissionAction(
+            id = id,
+            actionStartDateTimeUtc = actionStartDateTimeUtc?.let { ZonedDateTime.parse(it) },
+            actionType = actionType,
+            observations = observations,
+        )
 }
 
 object UUIDSerializer : KSerializer<UUID> {
@@ -34,7 +35,10 @@ object UUIDSerializer : KSerializer<UUID> {
         return UUID.fromString(decoder.decodeString())
     }
 
-    override fun serialize(encoder: Encoder, value: UUID) {
+    override fun serialize(
+        encoder: Encoder,
+        value: UUID,
+    ) {
         encoder.encodeString(value.toString())
     }
 }

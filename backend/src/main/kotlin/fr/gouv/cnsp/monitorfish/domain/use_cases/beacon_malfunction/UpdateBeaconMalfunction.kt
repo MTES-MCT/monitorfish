@@ -34,32 +34,36 @@ class UpdateBeaconMalfunction(
 
         beaconMalfunctionsRepository.update(id, vesselStatus, stage, endOfBeaconMalfunctionReason, updateDateTime)
 
-        var propertyName: BeaconMalfunctionActionPropertyName? = vesselStatus?.let {
-            BeaconMalfunctionActionPropertyName.VESSEL_STATUS
-        }
+        var propertyName: BeaconMalfunctionActionPropertyName? =
+            vesselStatus?.let {
+                BeaconMalfunctionActionPropertyName.VESSEL_STATUS
+            }
         propertyName = stage?.let { BeaconMalfunctionActionPropertyName.STAGE } ?: propertyName
 
         require(propertyName != null) {
             "The property to update could not be identified"
         }
 
-        val previousValue = when (propertyName) {
-            BeaconMalfunctionActionPropertyName.STAGE -> previousBeaconMalfunction.stage.name
-            BeaconMalfunctionActionPropertyName.VESSEL_STATUS -> previousBeaconMalfunction.vesselStatus.name
-        }
+        val previousValue =
+            when (propertyName) {
+                BeaconMalfunctionActionPropertyName.STAGE -> previousBeaconMalfunction.stage.name
+                BeaconMalfunctionActionPropertyName.VESSEL_STATUS -> previousBeaconMalfunction.vesselStatus.name
+            }
 
-        val nextValue = when (propertyName) {
-            BeaconMalfunctionActionPropertyName.STAGE -> stage!!.name
-            BeaconMalfunctionActionPropertyName.VESSEL_STATUS -> vesselStatus!!.name
-        }
+        val nextValue =
+            when (propertyName) {
+                BeaconMalfunctionActionPropertyName.STAGE -> stage!!.name
+                BeaconMalfunctionActionPropertyName.VESSEL_STATUS -> vesselStatus!!.name
+            }
 
-        val beaconMalfunctionAction = BeaconMalfunctionAction(
-            beaconMalfunctionId = id,
-            propertyName = propertyName,
-            previousValue = previousValue,
-            nextValue = nextValue,
-            dateTime = updateDateTime,
-        )
+        val beaconMalfunctionAction =
+            BeaconMalfunctionAction(
+                beaconMalfunctionId = id,
+                propertyName = propertyName,
+                previousValue = previousValue,
+                nextValue = nextValue,
+                dateTime = updateDateTime,
+            )
 
         beaconMalfunctionActionsRepository.save(beaconMalfunctionAction)
 

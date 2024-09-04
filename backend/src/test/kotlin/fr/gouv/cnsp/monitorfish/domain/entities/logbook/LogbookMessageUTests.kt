@@ -41,16 +41,18 @@ class LogbookMessageUTests {
     @Test
     fun `setAcknowledge should create a new successful acknowledgment when current is null`() {
         // Given
-        val logbookMessage = getFakeLogbookMessage(
-            LogbookOperationType.DAT,
-            ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC),
-        )
-        val newAcknowledgmentMessage = getFakeLogbookMessage(
-            LogbookOperationType.RET,
-            ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC),
-            logbookMessage.reportId,
-            Acknowledgment(returnStatus = "000"),
-        )
+        val logbookMessage =
+            getFakeLogbookMessage(
+                LogbookOperationType.DAT,
+                ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC),
+            )
+        val newAcknowledgmentMessage =
+            getFakeLogbookMessage(
+                LogbookOperationType.RET,
+                ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC),
+                logbookMessage.reportId,
+                Acknowledgment(returnStatus = "000"),
+            )
 
         // When
         logbookMessage.setAcknowledge(newAcknowledgmentMessage)
@@ -64,16 +66,18 @@ class LogbookMessageUTests {
     @Test
     fun `setAcknowledge should create a new unsuccessful acknowledgment when current is null`() {
         // Given
-        val logbookMessage = getFakeLogbookMessage(
-            LogbookOperationType.DAT,
-            ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC),
-        )
-        val newAcknowledgmentMessage = getFakeLogbookMessage(
-            LogbookOperationType.RET,
-            ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC),
-            logbookMessage.reportId,
-            Acknowledgment(returnStatus = "001"),
-        )
+        val logbookMessage =
+            getFakeLogbookMessage(
+                LogbookOperationType.DAT,
+                ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC),
+            )
+        val newAcknowledgmentMessage =
+            getFakeLogbookMessage(
+                LogbookOperationType.RET,
+                ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC),
+                logbookMessage.reportId,
+                Acknowledgment(returnStatus = "001"),
+            )
 
         // When
         logbookMessage.setAcknowledge(newAcknowledgmentMessage)
@@ -87,21 +91,24 @@ class LogbookMessageUTests {
     @Test
     fun `setAcknowledge should update to a new acknowledgment when it's a SUCCESSFUL one while the current is a FAILED one, whenever it happened`() {
         // Given
-        val firstLogbookMessage = getFakeLogbookMessage(
-            LogbookOperationType.DAT,
-            ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC),
-        ).copy(
-            acknowledgment = Acknowledgment(
-                isSuccess = false,
-                dateTime = ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC),
-            ),
-        )
-        val firstNewAcknowledgmentMessage = getFakeLogbookMessage(
-            LogbookOperationType.RET,
-            ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC),
-            firstLogbookMessage.reportId,
-            Acknowledgment(returnStatus = "000"),
-        )
+        val firstLogbookMessage =
+            getFakeLogbookMessage(
+                LogbookOperationType.DAT,
+                ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC),
+            ).copy(
+                acknowledgment =
+                    Acknowledgment(
+                        isSuccess = false,
+                        dateTime = ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC),
+                    ),
+            )
+        val firstNewAcknowledgmentMessage =
+            getFakeLogbookMessage(
+                LogbookOperationType.RET,
+                ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC),
+                firstLogbookMessage.reportId,
+                Acknowledgment(returnStatus = "000"),
+            )
 
         // When
         firstLogbookMessage.setAcknowledge(firstNewAcknowledgmentMessage)
@@ -112,21 +119,24 @@ class LogbookMessageUTests {
             .isEqualTo(ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC))
 
         // Given
-        val secondLogbookMessage = getFakeLogbookMessage(
-            LogbookOperationType.DAT,
-            ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC),
-        ).copy(
-            acknowledgment = Acknowledgment(
-                isSuccess = false,
-                dateTime = ZonedDateTime.of(2024, 1, 1, 0, 0, 3, 0, ZoneOffset.UTC),
-            ),
-        )
-        val secondNewAcknowledgmentMessage = getFakeLogbookMessage(
-            LogbookOperationType.RET,
-            ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC),
-            secondLogbookMessage.reportId,
-            Acknowledgment(returnStatus = "000"),
-        )
+        val secondLogbookMessage =
+            getFakeLogbookMessage(
+                LogbookOperationType.DAT,
+                ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC),
+            ).copy(
+                acknowledgment =
+                    Acknowledgment(
+                        isSuccess = false,
+                        dateTime = ZonedDateTime.of(2024, 1, 1, 0, 0, 3, 0, ZoneOffset.UTC),
+                    ),
+            )
+        val secondNewAcknowledgmentMessage =
+            getFakeLogbookMessage(
+                LogbookOperationType.RET,
+                ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC),
+                secondLogbookMessage.reportId,
+                Acknowledgment(returnStatus = "000"),
+            )
 
         // When
         secondLogbookMessage.setAcknowledge(secondNewAcknowledgmentMessage)
@@ -140,22 +150,25 @@ class LogbookMessageUTests {
     @Test
     fun `setAcknowledge should update to a new acknowledgement when it's more recent FAILED one than the current FAILED one`() {
         // Given
-        val logbookMessage = getFakeLogbookMessage(
-            LogbookOperationType.DAT,
-            ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC),
-        ).copy(
-            acknowledgment = Acknowledgment(
-                isSuccess = false,
-                dateTime = ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC),
-                returnStatus = "001",
-            ),
-        )
-        val firstNewAcknowledgmentMessage = getFakeLogbookMessage(
-            LogbookOperationType.RET,
-            ZonedDateTime.of(2024, 1, 1, 0, 0, 3, 0, ZoneOffset.UTC),
-            logbookMessage.reportId,
-            Acknowledgment(returnStatus = "002"),
-        )
+        val logbookMessage =
+            getFakeLogbookMessage(
+                LogbookOperationType.DAT,
+                ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC),
+            ).copy(
+                acknowledgment =
+                    Acknowledgment(
+                        isSuccess = false,
+                        dateTime = ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC),
+                        returnStatus = "001",
+                    ),
+            )
+        val firstNewAcknowledgmentMessage =
+            getFakeLogbookMessage(
+                LogbookOperationType.RET,
+                ZonedDateTime.of(2024, 1, 1, 0, 0, 3, 0, ZoneOffset.UTC),
+                logbookMessage.reportId,
+                Acknowledgment(returnStatus = "002"),
+            )
 
         // When
         logbookMessage.setAcknowledge(firstNewAcknowledgmentMessage)
@@ -167,12 +180,13 @@ class LogbookMessageUTests {
         assertThat(logbookMessage.acknowledgment?.returnStatus).isEqualTo("002")
 
         // Given
-        val secondNewAcknowledgmentMessage = getFakeLogbookMessage(
-            LogbookOperationType.RET,
-            ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC),
-            logbookMessage.reportId,
-            Acknowledgment(returnStatus = "001"),
-        )
+        val secondNewAcknowledgmentMessage =
+            getFakeLogbookMessage(
+                LogbookOperationType.RET,
+                ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC),
+                logbookMessage.reportId,
+                Acknowledgment(returnStatus = "001"),
+            )
 
         // When
         logbookMessage.setAcknowledge(secondNewAcknowledgmentMessage)
@@ -187,22 +201,25 @@ class LogbookMessageUTests {
     @Test
     fun `setAcknowledge should NOT update to a new acknowledgement when it's more recent SUCCESSFUL one than the current SUCCESSFUL one`() {
         // Given
-        val logbookMessage = getFakeLogbookMessage(
-            LogbookOperationType.DAT,
-            ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC),
-        ).copy(
-            acknowledgment = Acknowledgment(
-                isSuccess = true,
-                dateTime = ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC),
-                returnStatus = "000",
-            ),
-        )
-        val newAcknowledgmentMessage = getFakeLogbookMessage(
-            LogbookOperationType.RET,
-            ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC),
-            logbookMessage.reportId,
-            Acknowledgment(returnStatus = "000"),
-        )
+        val logbookMessage =
+            getFakeLogbookMessage(
+                LogbookOperationType.DAT,
+                ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC),
+            ).copy(
+                acknowledgment =
+                    Acknowledgment(
+                        isSuccess = true,
+                        dateTime = ZonedDateTime.of(2024, 1, 1, 0, 0, 1, 0, ZoneOffset.UTC),
+                        returnStatus = "000",
+                    ),
+            )
+        val newAcknowledgmentMessage =
+            getFakeLogbookMessage(
+                LogbookOperationType.RET,
+                ZonedDateTime.of(2024, 1, 1, 0, 0, 2, 0, ZoneOffset.UTC),
+                logbookMessage.reportId,
+                Acknowledgment(returnStatus = "000"),
+            )
 
         // When
         logbookMessage.setAcknowledge(newAcknowledgmentMessage)

@@ -60,7 +60,6 @@ data class ReportingEntity(
     @Column(name = "longitude")
     val longitude: Double? = null,
 ) {
-
     fun toReporting(mapper: ObjectMapper): Reporting {
         return Reporting(
             id = id,
@@ -105,7 +104,10 @@ data class ReportingEntity(
             longitude = alert.longitude,
         )
 
-        fun fromReporting(reporting: Reporting, mapper: ObjectMapper) = ReportingEntity(
+        fun fromReporting(
+            reporting: Reporting,
+            mapper: ObjectMapper,
+        ) = ReportingEntity(
             vesselName = reporting.vesselName,
             vesselId = reporting.vesselId,
             type = reporting.type,

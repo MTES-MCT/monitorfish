@@ -25,16 +25,16 @@ data class ControlObjectivesEntity(
     @Column(name = "control_priority_level")
     val controlPriorityLevel: Double,
 ) {
-
-    fun toControlObjective() = ControlObjective(
-        id = id,
-        facade = Seafront.from(facade).toString(),
-        segment = segment,
-        year = year,
-        targetNumberOfControlsAtSea = targetNumberOfControlsAtSea,
-        targetNumberOfControlsAtPort = targetNumberOfControlsAtPort,
-        controlPriorityLevel = controlPriorityLevel,
-    )
+    fun toControlObjective() =
+        ControlObjective(
+            id = id,
+            facade = Seafront.from(facade).toString(),
+            segment = segment,
+            year = year,
+            targetNumberOfControlsAtSea = targetNumberOfControlsAtSea,
+            targetNumberOfControlsAtPort = targetNumberOfControlsAtPort,
+            controlPriorityLevel = controlPriorityLevel,
+        )
 
     companion object {
         fun fromControlObjective(controlObjective: ControlObjective): ControlObjectivesEntity {

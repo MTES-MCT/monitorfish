@@ -28,18 +28,19 @@ abstract class AbstractDBTests {
 
     companion object {
         @JvmStatic
-        val container = GenericContainer("ghcr.io/mtes-mct/monitorfish/monitorfish-database:pg16-ts2.14.2-postgis3.4.2")
-            .apply {
-                withExposedPorts(5432)
-                withEnv("POSTGRES_DB", "testdb")
-                withEnv("POSTGRES_USER", "postgres")
-                withEnv("POSTGRES_PASSWORD", "postgres")
-                waitingFor(
-                    Wait.forLogMessage(".*ready to accept connections.*\\s", 2),
-                )
-                withStartupTimeout(Duration.of(60L, ChronoUnit.SECONDS))
-                this.start()
-            }
+        val container =
+            GenericContainer("ghcr.io/mtes-mct/monitorfish/monitorfish-database:pg16-ts2.14.2-postgis3.4.2")
+                .apply {
+                    withExposedPorts(5432)
+                    withEnv("POSTGRES_DB", "testdb")
+                    withEnv("POSTGRES_USER", "postgres")
+                    withEnv("POSTGRES_PASSWORD", "postgres")
+                    waitingFor(
+                        Wait.forLogMessage(".*ready to accept connections.*\\s", 2),
+                    )
+                    withStartupTimeout(Duration.of(60L, ChronoUnit.SECONDS))
+                    this.start()
+                }
 
         @JvmStatic
         @DynamicPropertySource
@@ -51,9 +52,10 @@ abstract class AbstractDBTests {
             val toStringConsumer = ToStringConsumer()
             container.followOutput(toStringConsumer, OutputFrame.OutputType.STDOUT)
 
-            return "jdbc:postgresql://" + container.host + ":" + container.getMappedPort(
-                PostgreSQLContainer.POSTGRESQL_PORT,
-            ).toString() + "/testdb?user=postgres&password=postgres"
+            return "jdbc:postgresql://" + container.host + ":" +
+                container.getMappedPort(
+                    PostgreSQLContainer.POSTGRESQL_PORT,
+                ).toString() + "/testdb?user=postgres&password=postgres"
         }
     }
 }

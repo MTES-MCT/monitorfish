@@ -19,59 +19,73 @@ class GetVesselVoyage(
 ) {
     private val logger = LoggerFactory.getLogger(GetVesselVoyage::class.java)
 
-    fun execute(internalReferenceNumber: String, voyageRequest: VoyageRequest, tripNumber: String?): Voyage {
-        val trip = try {
-            when (voyageRequest) {
-                VoyageRequest.LAST -> logbookReportRepository.findLastTripBeforeDateTime(
-                    internalReferenceNumber,
-                    /**
-                     * This 4-hour buffer prevents incorrect message datetime to be filtered.
-                     * Sometimes, vessel inboard computers might have offset datetime.
-                     */
-                    ZonedDateTime.now().plusHours(4),
+    fun execute(
+        internalReferenceNumber: String,
+        voyageRequest: VoyageRequest,
+        tripNumber: String?,
+    ): Voyage {
+        val trip =
+            try {
+                when (voyageRequest) {
+                    VoyageRequest.LAST ->
+                        logbookReportRepository.findLastTripBeforeDateTime(
+                            internalReferenceNumber,
+                            /**
+                             * This 4-hour buffer prevents incorrect message datetime to be filtered.
+                             * Sometimes, vessel inboard computers might have offset datetime.
+                             */
+                            ZonedDateTime.now().plusHours(4),
+                        )
+                    VoyageRequest.PREVIOUS -> {
+                        require(tripNumber != null) {
+                            "Current trip number parameter must be not null"
+                        }
+
+                        logbookReportRepository.findTripBeforeTripNumber(internalReferenceNumber, tripNumber)
+                    }
+                    VoyageRequest.NEXT -> {
+                        require(tripNumber != null) {
+                            "Current trip number parameter must be not null"
+                        }
+
+                        logbookReportRepository.findTripAfterTripNumber(internalReferenceNumber, tripNumber)
+                    }
+
+                    VoyageRequest.EQUALS -> {
+                        require(tripNumber != null) {
+                            "trip number parameter must be not null"
+                        }
+
+                        logbookReportRepository.findFirstAndLastOperationsDatesOfTrip(
+                            internalReferenceNumber,
+                            tripNumber,
+                        )
+                    }
+                }
+            } catch (e: IllegalArgumentException) {
+                throw NoLogbookFishingTripFound(
+                    "Could not fetch voyage for request \"${voyageRequest}\": ${e.message}",
+                    e,
                 )
-                VoyageRequest.PREVIOUS -> {
-                    require(tripNumber != null) {
-                        "Current trip number parameter must be not null"
-                    }
-
-                    logbookReportRepository.findTripBeforeTripNumber(internalReferenceNumber, tripNumber)
-                }
-                VoyageRequest.NEXT -> {
-                    require(tripNumber != null) {
-                        "Current trip number parameter must be not null"
-                    }
-
-                    logbookReportRepository.findTripAfterTripNumber(internalReferenceNumber, tripNumber)
-                }
-
-                VoyageRequest.EQUALS -> {
-                    require(tripNumber != null) {
-                        "trip number parameter must be not null"
-                    }
-
-                    logbookReportRepository.findFirstAndLastOperationsDatesOfTrip(internalReferenceNumber, tripNumber)
-                }
             }
-        } catch (e: IllegalArgumentException) {
-            throw NoLogbookFishingTripFound("Could not fetch voyage for request \"${voyageRequest}\": ${e.message}", e)
-        }
 
         val isLastVoyage = getIsLastVoyage(tripNumber, voyageRequest, internalReferenceNumber, trip.tripNumber)
         val isFirstVoyage = getIsFirstVoyage(internalReferenceNumber, trip.tripNumber)
 
-        val alerts = PNOAndLANAlertRepository.findAlertsOfTypes(
-            listOf(AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT),
-            internalReferenceNumber,
-            trip.tripNumber,
-        )
+        val alerts =
+            PNOAndLANAlertRepository.findAlertsOfTypes(
+                listOf(AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT),
+                internalReferenceNumber,
+                trip.tripNumber,
+            )
 
-        val logbookMessages = getLogbookMessages.execute(
-            internalReferenceNumber,
-            trip.startDate,
-            trip.endDate,
-            trip.tripNumber,
-        )
+        val logbookMessages =
+            getLogbookMessages.execute(
+                internalReferenceNumber,
+                trip.startDate,
+                trip.endDate,
+                trip.tripNumber,
+            )
 
         return Voyage(
             isLastVoyage,

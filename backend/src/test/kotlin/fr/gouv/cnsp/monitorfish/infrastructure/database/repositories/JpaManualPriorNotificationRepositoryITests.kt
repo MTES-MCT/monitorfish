@@ -28,10 +28,11 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
 
     private var allManualPriorNotificationsLength: Int = 0
 
-    val defaultPriorNotificationsFilter = PriorNotificationsFilter(
-        willArriveAfter = "2000-01-01T00:00:00Z",
-        willArriveBefore = "2099-12-31T00:00:00Z",
-    )
+    val defaultPriorNotificationsFilter =
+        PriorNotificationsFilter(
+            willArriveAfter = "2000-01-01T00:00:00Z",
+            willArriveBefore = "2099-12-31T00:00:00Z",
+        )
 
     @BeforeEach
     fun beforeEach() {
@@ -60,11 +61,12 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(result).hasSizeBetween(1, allManualPriorNotificationsLength - 1)
-        val resultVessels = result.mapNotNull {
-            jpaVesselRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
-            )
-        }
+        val resultVessels =
+            result.mapNotNull {
+                jpaVesselRepository.findFirstByInternalReferenceNumber(
+                    it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
+                )
+            }
         assertThat(resultVessels).hasSize(result.size)
         assertThat(resultVessels.all { listOf(CountryCode.BE, CountryCode.IT).contains(it.flagState) }).isTrue()
     }
@@ -113,11 +115,12 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         val firstResult = jpaManualPriorNotificationRepository.findAll(firstFilter)
 
         // Then
-        val firstResultVessels = firstResult.mapNotNull {
-            jpaVesselRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
-            )
-        }
+        val firstResultVessels =
+            firstResult.mapNotNull {
+                jpaVesselRepository.findFirstByInternalReferenceNumber(
+                    it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
+                )
+            }
         assertThat(firstResultVessels).hasSize(firstResult.size)
         assertThat(firstResultVessels.all { it.length!! < 12 }).isTrue()
 
@@ -129,11 +132,12 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
 
         // Then
 
-        val secondResultVessels = secondResult.mapNotNull {
-            jpaVesselRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
-            )
-        }
+        val secondResultVessels =
+            secondResult.mapNotNull {
+                jpaVesselRepository.findFirstByInternalReferenceNumber(
+                    it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
+                )
+            }
         assertThat(secondResultVessels).hasSize(secondResult.size)
         assertThat(secondResultVessels.all { it.length!! >= 12 }).isTrue()
     }
@@ -149,11 +153,12 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(firstResult).hasSizeBetween(1, allManualPriorNotificationsLength - 1)
-        val firstResultRiskFactors = firstResult.mapNotNull {
-            jpaRiskFactorRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
-            )
-        }
+        val firstResultRiskFactors =
+            firstResult.mapNotNull {
+                jpaRiskFactorRepository.findFirstByInternalReferenceNumber(
+                    it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
+                )
+            }
         assertThat(firstResultRiskFactors).hasSize(firstResult.size)
         assertThat(
             firstResultRiskFactors.all {
@@ -169,11 +174,12 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(secondResult).hasSizeBetween(1, allManualPriorNotificationsLength - 1)
-        val secondResultRiskFactors = secondResult.mapNotNull {
-            jpaRiskFactorRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
-            )
-        }
+        val secondResultRiskFactors =
+            secondResult.mapNotNull {
+                jpaRiskFactorRepository.findFirstByInternalReferenceNumber(
+                    it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
+                )
+            }
         assertThat(secondResultRiskFactors).hasSize(secondResult.size)
         assertThat(
             secondResultRiskFactors.all {
@@ -214,11 +220,12 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         assertThat(
             firstResult.all { it.logbookMessageAndValue.logbookMessage.vesselName == "NAVIRE RENOMMÉ (ANCIEN NOM)" },
         ).isTrue()
-        val firstResultVessels = firstResult.mapNotNull {
-            jpaVesselRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
-            )
-        }
+        val firstResultVessels =
+            firstResult.mapNotNull {
+                jpaVesselRepository.findFirstByInternalReferenceNumber(
+                    it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
+                )
+            }
         assertThat(firstResultVessels).hasSize(firstResult.size)
         assertThat(firstResultVessels.all { it.vesselName == "NAVIRE RENOMMÉ (NOUVEAU NOM)" }).isTrue()
 
@@ -233,11 +240,12 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         assertThat(
             secondResult.all { it.logbookMessageAndValue.logbookMessage.vesselName == "NAVIRE RENOMMÉ (ANCIEN NOM)" },
         ).isTrue()
-        val secondResultVessels = secondResult.mapNotNull {
-            jpaVesselRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
-            )
-        }
+        val secondResultVessels =
+            secondResult.mapNotNull {
+                jpaVesselRepository.findFirstByInternalReferenceNumber(
+                    it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
+                )
+            }
         assertThat(secondResultVessels).hasSize(secondResult.size)
         assertThat(secondResultVessels.all { it.vesselName == "NAVIRE RENOMMÉ (NOUVEAU NOM)" }).isTrue()
     }
@@ -256,11 +264,12 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         assertThat(
             firstResult.all { it.logbookMessageAndValue.logbookMessage.vesselName == "NAVIRE RENOMMÉ (ANCIEN NOM)" },
         ).isTrue()
-        val firstResultVessels = firstResult.mapNotNull {
-            jpaVesselRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
-            )
-        }
+        val firstResultVessels =
+            firstResult.mapNotNull {
+                jpaVesselRepository.findFirstByInternalReferenceNumber(
+                    it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
+                )
+            }
         assertThat(firstResultVessels).hasSize(firstResult.size)
         assertThat(firstResultVessels.all { it.vesselName == "NAVIRE RENOMMÉ (NOUVEAU NOM)" }).isTrue()
 
@@ -275,11 +284,12 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         assertThat(
             secondResult.all { it.logbookMessageAndValue.logbookMessage.vesselName == "NAVIRE RENOMMÉ (ANCIEN NOM)" },
         ).isTrue()
-        val secondResultVessels = secondResult.mapNotNull {
-            jpaVesselRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
-            )
-        }
+        val secondResultVessels =
+            secondResult.mapNotNull {
+                jpaVesselRepository.findFirstByInternalReferenceNumber(
+                    it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
+                )
+            }
         assertThat(secondResultVessels).hasSize(secondResult.size)
         assertThat(secondResultVessels.all { it.vesselName == "NAVIRE RENOMMÉ (NOUVEAU NOM)" }).isTrue()
     }
@@ -375,10 +385,11 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAll Should return manual prior notifications for vessels arriving after or before January 1st, 2024`() {
         // Given
-        val firstFilter = PriorNotificationsFilter(
-            willArriveAfter = "2024-01-01T00:00:00Z",
-            willArriveBefore = "2100-01-01T00:00:00Z",
-        )
+        val firstFilter =
+            PriorNotificationsFilter(
+                willArriveAfter = "2024-01-01T00:00:00Z",
+                willArriveBefore = "2100-01-01T00:00:00Z",
+            )
 
         // When
         val firstResult = jpaManualPriorNotificationRepository.findAll(firstFilter)
@@ -393,10 +404,11 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         ).isTrue()
 
         // Given
-        val secondFilter = PriorNotificationsFilter(
-            willArriveAfter = "2000-01-01T00:00:00Z",
-            willArriveBefore = "2024-01-01T00:00:00Z",
-        )
+        val secondFilter =
+            PriorNotificationsFilter(
+                willArriveAfter = "2000-01-01T00:00:00Z",
+                willArriveBefore = "2024-01-01T00:00:00Z",
+            )
 
         // When
         val secondResult = jpaManualPriorNotificationRepository.findAll(secondFilter)
@@ -415,10 +427,11 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAll Should return the expected manual prior notifications with multiple filters`() {
         // Given
-        val filter = defaultPriorNotificationsFilter.copy(
-            priorNotificationTypes = listOf("Préavis type A", "Préavis type C"),
-            tripGearCodes = listOf("OTT", "TB"),
-        )
+        val filter =
+            defaultPriorNotificationsFilter.copy(
+                priorNotificationTypes = listOf("Préavis type A", "Préavis type C"),
+                tripGearCodes = listOf("OTT", "TB"),
+            )
 
         // When
         val result = jpaManualPriorNotificationRepository.findAll(filter)
@@ -462,9 +475,10 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
     @Test
     @Transactional
     fun `save Should create and update a manual prior notification`() {
-        val originalPriorNotificationsSize = jpaManualPriorNotificationRepository
-            .findAll(defaultPriorNotificationsFilter)
-            .size
+        val originalPriorNotificationsSize =
+            jpaManualPriorNotificationRepository
+                .findAll(defaultPriorNotificationsFilter)
+                .size
 
         // Given
         val newPriorNotification =
@@ -473,46 +487,48 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
                 createdAt = null,
                 didNotFishAfterZeroNotice = false,
                 isManuallyCreated = false,
-                logbookMessageAndValue = LogbookMessageAndValue(
-                    LogbookMessage(
-                        id = null,
-                        internalReferenceNumber = "CFR123",
-                        ircs = "123",
-                        externalReferenceNumber = "456",
-                        // Replaced by the generated `createdAt` during the save operation.
-                        integrationDateTime = ZonedDateTime.now(),
-                        message = PNO().apply {
-                            authorTrigram = "ABC"
-                            catchOnboard = emptyList()
-                            catchToLand = emptyList()
-                            economicZone = null
-                            effortZone = null
-                            faoZone = null
-                            latitude = null
-                            longitude = null
-                            pnoTypes = emptyList()
-                            port = "FRVNE"
-                            portName = "Vannes"
-                            predictedArrivalDatetimeUtc = ZonedDateTime.now().withZoneSameInstant(ZoneOffset.UTC)
-                            predictedLandingDatetimeUtc = ZonedDateTime.now().withZoneSameInstant(ZoneOffset.UTC)
-                            purpose = LogbookMessagePurpose.LAN
-                            riskFactor = 2.1
-                            statisticalRectangle = null
-                            tripStartDate = null
-                        },
-                        messageType = "PNO",
-                        // Replaced by the generated `createdAt` during the save operation.
-                        operationDateTime = ZonedDateTime.now(),
-                        operationNumber = null,
-                        operationType = LogbookOperationType.DAT,
-                        // Replaced by the generated `sentAt` during the save operation.
-                        reportDateTime = ZonedDateTime.now(),
-                        transmissionFormat = null,
-                        vesselName = "Vessel Name",
-                        vesselId = 123,
+                logbookMessageAndValue =
+                    LogbookMessageAndValue(
+                        LogbookMessage(
+                            id = null,
+                            internalReferenceNumber = "CFR123",
+                            ircs = "123",
+                            externalReferenceNumber = "456",
+                            // Replaced by the generated `createdAt` during the save operation.
+                            integrationDateTime = ZonedDateTime.now(),
+                            message =
+                                PNO().apply {
+                                    authorTrigram = "ABC"
+                                    catchOnboard = emptyList()
+                                    catchToLand = emptyList()
+                                    economicZone = null
+                                    effortZone = null
+                                    faoZone = null
+                                    latitude = null
+                                    longitude = null
+                                    pnoTypes = emptyList()
+                                    port = "FRVNE"
+                                    portName = "Vannes"
+                                    predictedArrivalDatetimeUtc = ZonedDateTime.now().withZoneSameInstant(ZoneOffset.UTC)
+                                    predictedLandingDatetimeUtc = ZonedDateTime.now().withZoneSameInstant(ZoneOffset.UTC)
+                                    purpose = LogbookMessagePurpose.LAN
+                                    riskFactor = 2.1
+                                    statisticalRectangle = null
+                                    tripStartDate = null
+                                },
+                            messageType = "PNO",
+                            // Replaced by the generated `createdAt` during the save operation.
+                            operationDateTime = ZonedDateTime.now(),
+                            operationNumber = null,
+                            operationType = LogbookOperationType.DAT,
+                            // Replaced by the generated `sentAt` during the save operation.
+                            reportDateTime = ZonedDateTime.now(),
+                            transmissionFormat = null,
+                            vesselName = "Vessel Name",
+                            vesselId = 123,
+                        ),
+                        PNO::class.java,
                     ),
-                    PNO::class.java,
-                ),
                 port = null,
                 reportingCount = null,
                 seafront = null,
@@ -524,9 +540,10 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
 
         // When
         val createdPriorNotification = jpaManualPriorNotificationRepository.save(newPriorNotification)
-        val priorNotifications = jpaManualPriorNotificationRepository
-            .findAll(defaultPriorNotificationsFilter)
-            .sortedBy { it.createdAt }
+        val priorNotifications =
+            jpaManualPriorNotificationRepository
+                .findAll(defaultPriorNotificationsFilter)
+                .sortedBy { it.createdAt }
 
         // Then
         val lastPriorNotification = priorNotifications.last()
@@ -548,8 +565,9 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `updateState Should update writable state values for an existing PNO logbook report`() {
         // Given
-        val currentManualPriorNotification = jpaManualPriorNotificationRepository
-            .findByReportId("00000000-0000-4000-0000-000000000001")!!
+        val currentManualPriorNotification =
+            jpaManualPriorNotificationRepository
+                .findByReportId("00000000-0000-4000-0000-000000000001")!!
         assertThat(currentManualPriorNotification.logbookMessageAndValue.value.isBeingSent).isEqualTo(false)
         assertThat(currentManualPriorNotification.logbookMessageAndValue.value.isVerified).isEqualTo(false)
 
@@ -562,8 +580,9 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         )
 
         // Then
-        val updatedManualPriorNotification = jpaManualPriorNotificationRepository
-            .findByReportId("00000000-0000-4000-0000-000000000001")!!
+        val updatedManualPriorNotification =
+            jpaManualPriorNotificationRepository
+                .findByReportId("00000000-0000-4000-0000-000000000001")!!
         assertThat(updatedManualPriorNotification.logbookMessageAndValue.value.isBeingSent).isEqualTo(true)
         assertThat(updatedManualPriorNotification.logbookMessageAndValue.value.isSent).isEqualTo(false)
         assertThat(updatedManualPriorNotification.logbookMessageAndValue.value.isVerified).isEqualTo(true)
@@ -586,8 +605,9 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `invalidate Should invalidate an existing PNO logbook report`() {
         // Given
-        val currentManualPriorNotification = jpaManualPriorNotificationRepository
-            .findByReportId("00000000-0000-4000-0000-000000000001")!!
+        val currentManualPriorNotification =
+            jpaManualPriorNotificationRepository
+                .findByReportId("00000000-0000-4000-0000-000000000001")!!
         assertThat(currentManualPriorNotification.logbookMessageAndValue.value.isInvalidated).isNull()
 
         // When
@@ -596,8 +616,9 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
         )
 
         // Then
-        val updatedManualPriorNotification = jpaManualPriorNotificationRepository
-            .findByReportId("00000000-0000-4000-0000-000000000001")!!
+        val updatedManualPriorNotification =
+            jpaManualPriorNotificationRepository
+                .findByReportId("00000000-0000-4000-0000-000000000001")!!
         assertThat(updatedManualPriorNotification.logbookMessageAndValue.value.isInvalidated).isEqualTo(true)
     }
 }

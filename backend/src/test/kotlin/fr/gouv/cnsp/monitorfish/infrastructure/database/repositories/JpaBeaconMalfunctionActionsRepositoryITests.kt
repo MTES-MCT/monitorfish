@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.ZonedDateTime
 
 class JpaBeaconMalfunctionActionsRepositoryITests : AbstractDBTests() {
-
     @Autowired
     private lateinit var jpaBeaconMalfunctionActionsRepository: JpaBeaconMalfunctionActionsRepository
 
@@ -36,14 +35,15 @@ class JpaBeaconMalfunctionActionsRepositoryITests : AbstractDBTests() {
         assertThat(jpaBeaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(1)).hasSize(1)
 
         // When
-        val action = BeaconMalfunctionAction(
-            null,
-            1,
-            BeaconMalfunctionActionPropertyName.STAGE,
-            Stage.FOUR_HOUR_REPORT.toString(),
-            Stage.FOUR_HOUR_REPORT.toString(),
-            ZonedDateTime.now(),
-        )
+        val action =
+            BeaconMalfunctionAction(
+                null,
+                1,
+                BeaconMalfunctionActionPropertyName.STAGE,
+                Stage.FOUR_HOUR_REPORT.toString(),
+                Stage.FOUR_HOUR_REPORT.toString(),
+                ZonedDateTime.now(),
+            )
         jpaBeaconMalfunctionActionsRepository.save(action)
 
         // Then

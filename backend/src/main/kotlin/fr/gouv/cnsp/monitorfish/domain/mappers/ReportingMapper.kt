@@ -13,7 +13,11 @@ import org.springframework.stereotype.Component
 object ReportingMapper {
     private const val jsonbNullString = "null"
 
-    fun getReportingValueFromJSON(mapper: ObjectMapper, message: String?, reportingType: ReportingType): ReportingValue {
+    fun getReportingValueFromJSON(
+        mapper: ObjectMapper,
+        message: String?,
+        reportingType: ReportingType,
+    ): ReportingValue {
         return try {
             if (!message.isNullOrEmpty() && message != jsonbNullString) {
                 when (reportingType) {

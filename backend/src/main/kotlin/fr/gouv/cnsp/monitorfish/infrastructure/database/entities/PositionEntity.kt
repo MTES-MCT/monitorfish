@@ -16,7 +16,6 @@ data class PositionEntity(
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "position_id_seq")
     @Column(name = "id")
     val id: Int? = null,
-
     // Optional fields
     @Column(name = "internal_reference_number")
     val internalReferenceNumber: String? = null,
@@ -48,7 +47,6 @@ data class PositionEntity(
     @Column(name = "network_type")
     @Enumerated(EnumType.STRING)
     val networkType: NetworkType? = null,
-
     // Mandatory fields
     @Enumerated(EnumType.STRING)
     @Column(name = "position_type")
@@ -64,29 +62,29 @@ data class PositionEntity(
     @Column(name = "date_time")
     val dateTime: ZonedDateTime,
 ) {
-
-    fun toPosition() = Position(
-        id = id,
-        internalReferenceNumber = internalReferenceNumber,
-        ircs = ircs,
-        mmsi = mmsi,
-        externalReferenceNumber = externalReferenceNumber,
-        dateTime = dateTime,
-        latitude = latitude,
-        longitude = longitude,
-        vesselName = vesselName,
-        speed = speed,
-        course = course,
-        flagState = flagState,
-        destination = destination,
-        from = from,
-        tripNumber = tripNumber,
-        positionType = positionType,
-        isManual = isManual,
-        isFishing = isFishing,
-        isAtPort = isAtPort,
-        networkType = networkType,
-    )
+    fun toPosition() =
+        Position(
+            id = id,
+            internalReferenceNumber = internalReferenceNumber,
+            ircs = ircs,
+            mmsi = mmsi,
+            externalReferenceNumber = externalReferenceNumber,
+            dateTime = dateTime,
+            latitude = latitude,
+            longitude = longitude,
+            vesselName = vesselName,
+            speed = speed,
+            course = course,
+            flagState = flagState,
+            destination = destination,
+            from = from,
+            tripNumber = tripNumber,
+            positionType = positionType,
+            isManual = isManual,
+            isFishing = isFishing,
+            isAtPort = isAtPort,
+            networkType = networkType,
+        )
 
     companion object {
         fun fromPosition(position: Position): PositionEntity {

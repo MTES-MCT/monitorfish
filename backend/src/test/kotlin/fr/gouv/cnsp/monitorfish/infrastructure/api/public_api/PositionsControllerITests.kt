@@ -20,7 +20,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = [(PositionsController::class)])
 class PositionsControllerITests {
-
     @Autowired
     private lateinit var api: MockMvc
 
@@ -33,10 +32,11 @@ class PositionsControllerITests {
         given(parseAndSavePosition.execute(anyString())).willAnswer { throw NAFMessageParsingException("ARGH", "NAF") }
 
         // When
-        val body = api.perform(post("/api/v1/positions").content("TEST"))
-            // Then
-            .andExpect(status().isOk)
-            .andReturn().response.contentAsString
+        val body =
+            api.perform(post("/api/v1/positions").content("TEST"))
+                // Then
+                .andExpect(status().isOk)
+                .andReturn().response.contentAsString
 
         assertThat(body).contains("ARGH for NAF message")
     }

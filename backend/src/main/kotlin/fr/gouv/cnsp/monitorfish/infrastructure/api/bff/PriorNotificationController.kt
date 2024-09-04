@@ -81,14 +81,12 @@ class PriorNotificationController(
         @Parameter(description = "Vessels that will arrive before the given date.")
         @RequestParam(name = "willArriveBefore")
         willArriveBefore: String,
-
         @Parameter(description = "Seafront group.")
         @RequestParam(name = "seafrontGroup")
         seafrontGroup: SeafrontGroup,
         @Parameter(description = "States.")
         @RequestParam(name = "states")
         states: List<PriorNotificationState>? = null,
-
         @Parameter(description = "Sort column.")
         @RequestParam(name = "sortColumn")
         sortColumn: PriorNotificationsSortColumn,
@@ -102,28 +100,40 @@ class PriorNotificationController(
         @RequestParam(name = "pageNumber")
         pageNumber: Int,
     ): PaginatedListDataOutput<PriorNotificationListItemDataOutput, PriorNotificationsExtraDataOutput> {
-        val priorNotificationsFilter = PriorNotificationsFilter(
-            flagStates = flagStates,
-            hasOneOrMoreReportings = hasOneOrMoreReportings,
-            isLessThanTwelveMetersVessel = isLessThanTwelveMetersVessel,
-            lastControlledAfter = lastControlledAfter,
-            lastControlledBefore = lastControlledBefore,
-            portLocodes = portLocodes,
-            priorNotificationTypes = priorNotificationTypes,
-            searchQuery = searchQuery,
-            specyCodes = specyCodes,
-            tripGearCodes = tripGearCodes,
-            tripSegmentCodes = tripSegmentCodes,
-            willArriveAfter = willArriveAfter,
-            willArriveBefore = willArriveBefore,
-        )
+        val priorNotificationsFilter =
+            PriorNotificationsFilter(
+                flagStates = flagStates,
+                hasOneOrMoreReportings = hasOneOrMoreReportings,
+                isLessThanTwelveMetersVessel = isLessThanTwelveMetersVessel,
+                lastControlledAfter = lastControlledAfter,
+                lastControlledBefore = lastControlledBefore,
+                portLocodes = portLocodes,
+                priorNotificationTypes = priorNotificationTypes,
+                searchQuery = searchQuery,
+                specyCodes = specyCodes,
+                tripGearCodes = tripGearCodes,
+                tripSegmentCodes = tripSegmentCodes,
+                willArriveAfter = willArriveAfter,
+                willArriveBefore = willArriveBefore,
+            )
 
-        val paginatedPriorNotifications = getPriorNotifications
-            .execute(priorNotificationsFilter, seafrontGroup, states, sortColumn, sortDirection, pageNumber, pageSize)
-        val priorNotificationListItemDataOutputs = paginatedPriorNotifications.data
-            .mapNotNull { PriorNotificationListItemDataOutput.fromPriorNotification(it) }
-        val extraDataOutput = PriorNotificationsExtraDataOutput
-            .fromPriorNotificationStats(paginatedPriorNotifications.extraData)
+        val paginatedPriorNotifications =
+            getPriorNotifications
+                .execute(
+                    priorNotificationsFilter,
+                    seafrontGroup,
+                    states,
+                    sortColumn,
+                    sortDirection,
+                    pageNumber,
+                    pageSize,
+                )
+        val priorNotificationListItemDataOutputs =
+            paginatedPriorNotifications.data
+                .mapNotNull { PriorNotificationListItemDataOutput.fromPriorNotification(it) }
+        val extraDataOutput =
+            PriorNotificationsExtraDataOutput
+                .fromPriorNotificationStats(paginatedPriorNotifications.extraData)
 
         return PaginatedListDataOutput(
             priorNotificationListItemDataOutputs,
@@ -147,12 +157,13 @@ class PriorNotificationController(
         @RequestBody
         logbookPriorNotificationFormDataInput: LogbookPriorNotificationFormDataInput,
     ): LogbookPriorNotificationFormDataOutput {
-        val updatedPriorNotification = updateLogbookPriorNotification.execute(
-            reportId = reportId,
-            operationDate = operationDate,
-            authorTrigram = logbookPriorNotificationFormDataInput.authorTrigram,
-            note = logbookPriorNotificationFormDataInput.note,
-        )
+        val updatedPriorNotification =
+            updateLogbookPriorNotification.execute(
+                reportId = reportId,
+                operationDate = operationDate,
+                authorTrigram = logbookPriorNotificationFormDataInput.authorTrigram,
+                note = logbookPriorNotificationFormDataInput.note,
+            )
 
         return LogbookPriorNotificationFormDataOutput.fromPriorNotification(updatedPriorNotification)
     }
@@ -167,13 +178,14 @@ class PriorNotificationController(
     ): ManualPriorNotificationComputedValuesDataOutput {
         val fishingCatches = manualPriorNotificationComputeDataInput.fishingCatches.map { it.toLogbookFishingCatch() }
 
-        val manualPriorNotificationComputedValues = computeManualPriorNotification.execute(
-            fishingCatches = fishingCatches,
-            globalFaoArea = manualPriorNotificationComputeDataInput.globalFaoArea,
-            portLocode = manualPriorNotificationComputeDataInput.portLocode,
-            tripGearCodes = manualPriorNotificationComputeDataInput.tripGearCodes,
-            vesselId = manualPriorNotificationComputeDataInput.vesselId,
-        )
+        val manualPriorNotificationComputedValues =
+            computeManualPriorNotification.execute(
+                fishingCatches = fishingCatches,
+                globalFaoArea = manualPriorNotificationComputeDataInput.globalFaoArea,
+                portLocode = manualPriorNotificationComputeDataInput.portLocode,
+                tripGearCodes = manualPriorNotificationComputeDataInput.tripGearCodes,
+                vesselId = manualPriorNotificationComputeDataInput.vesselId,
+            )
 
         return ManualPriorNotificationComputedValuesDataOutput
             .fromManualPriorNotificationComputedValues(manualPriorNotificationComputedValues)
@@ -185,23 +197,24 @@ class PriorNotificationController(
         @RequestBody
         manualPriorNotificationFormDataInput: ManualPriorNotificationFormDataInput,
     ): ManualPriorNotificationFormDataOutput {
-        val createdPriorNotification = createOrUpdateManualPriorNotification.execute(
-            hasPortEntranceAuthorization = manualPriorNotificationFormDataInput.hasPortEntranceAuthorization,
-            hasPortLandingAuthorization = manualPriorNotificationFormDataInput.hasPortLandingAuthorization,
-            authorTrigram = manualPriorNotificationFormDataInput.authorTrigram,
-            didNotFishAfterZeroNotice = manualPriorNotificationFormDataInput.didNotFishAfterZeroNotice,
-            expectedArrivalDate = manualPriorNotificationFormDataInput.expectedArrivalDate,
-            expectedLandingDate = manualPriorNotificationFormDataInput.expectedLandingDate,
-            globalFaoArea = manualPriorNotificationFormDataInput.globalFaoArea,
-            fishingCatches = manualPriorNotificationFormDataInput.fishingCatches.map { it.toLogbookFishingCatch() },
-            note = manualPriorNotificationFormDataInput.note,
-            portLocode = manualPriorNotificationFormDataInput.portLocode,
-            reportId = null,
-            sentAt = manualPriorNotificationFormDataInput.sentAt,
-            purpose = manualPriorNotificationFormDataInput.purpose,
-            tripGearCodes = manualPriorNotificationFormDataInput.tripGearCodes,
-            vesselId = manualPriorNotificationFormDataInput.vesselId,
-        )
+        val createdPriorNotification =
+            createOrUpdateManualPriorNotification.execute(
+                hasPortEntranceAuthorization = manualPriorNotificationFormDataInput.hasPortEntranceAuthorization,
+                hasPortLandingAuthorization = manualPriorNotificationFormDataInput.hasPortLandingAuthorization,
+                authorTrigram = manualPriorNotificationFormDataInput.authorTrigram,
+                didNotFishAfterZeroNotice = manualPriorNotificationFormDataInput.didNotFishAfterZeroNotice,
+                expectedArrivalDate = manualPriorNotificationFormDataInput.expectedArrivalDate,
+                expectedLandingDate = manualPriorNotificationFormDataInput.expectedLandingDate,
+                globalFaoArea = manualPriorNotificationFormDataInput.globalFaoArea,
+                fishingCatches = manualPriorNotificationFormDataInput.fishingCatches.map { it.toLogbookFishingCatch() },
+                note = manualPriorNotificationFormDataInput.note,
+                portLocode = manualPriorNotificationFormDataInput.portLocode,
+                reportId = null,
+                sentAt = manualPriorNotificationFormDataInput.sentAt,
+                purpose = manualPriorNotificationFormDataInput.purpose,
+                tripGearCodes = manualPriorNotificationFormDataInput.tripGearCodes,
+                vesselId = manualPriorNotificationFormDataInput.vesselId,
+            )
 
         return ManualPriorNotificationFormDataOutput.fromPriorNotification(createdPriorNotification)
     }
@@ -215,23 +228,24 @@ class PriorNotificationController(
         @RequestBody
         manualPriorNotificationFormDataInput: ManualPriorNotificationFormDataInput,
     ): ManualPriorNotificationFormDataOutput {
-        val updatedPriorNotification = createOrUpdateManualPriorNotification.execute(
-            hasPortEntranceAuthorization = manualPriorNotificationFormDataInput.hasPortEntranceAuthorization,
-            hasPortLandingAuthorization = manualPriorNotificationFormDataInput.hasPortLandingAuthorization,
-            authorTrigram = manualPriorNotificationFormDataInput.authorTrigram,
-            didNotFishAfterZeroNotice = manualPriorNotificationFormDataInput.didNotFishAfterZeroNotice,
-            expectedArrivalDate = manualPriorNotificationFormDataInput.expectedArrivalDate,
-            expectedLandingDate = manualPriorNotificationFormDataInput.expectedLandingDate,
-            globalFaoArea = manualPriorNotificationFormDataInput.globalFaoArea,
-            fishingCatches = manualPriorNotificationFormDataInput.fishingCatches.map { it.toLogbookFishingCatch() },
-            note = manualPriorNotificationFormDataInput.note,
-            portLocode = manualPriorNotificationFormDataInput.portLocode,
-            reportId = reportId,
-            sentAt = manualPriorNotificationFormDataInput.sentAt,
-            purpose = manualPriorNotificationFormDataInput.purpose,
-            tripGearCodes = manualPriorNotificationFormDataInput.tripGearCodes,
-            vesselId = manualPriorNotificationFormDataInput.vesselId,
-        )
+        val updatedPriorNotification =
+            createOrUpdateManualPriorNotification.execute(
+                hasPortEntranceAuthorization = manualPriorNotificationFormDataInput.hasPortEntranceAuthorization,
+                hasPortLandingAuthorization = manualPriorNotificationFormDataInput.hasPortLandingAuthorization,
+                authorTrigram = manualPriorNotificationFormDataInput.authorTrigram,
+                didNotFishAfterZeroNotice = manualPriorNotificationFormDataInput.didNotFishAfterZeroNotice,
+                expectedArrivalDate = manualPriorNotificationFormDataInput.expectedArrivalDate,
+                expectedLandingDate = manualPriorNotificationFormDataInput.expectedLandingDate,
+                globalFaoArea = manualPriorNotificationFormDataInput.globalFaoArea,
+                fishingCatches = manualPriorNotificationFormDataInput.fishingCatches.map { it.toLogbookFishingCatch() },
+                note = manualPriorNotificationFormDataInput.note,
+                portLocode = manualPriorNotificationFormDataInput.portLocode,
+                reportId = reportId,
+                sentAt = manualPriorNotificationFormDataInput.sentAt,
+                purpose = manualPriorNotificationFormDataInput.purpose,
+                tripGearCodes = manualPriorNotificationFormDataInput.tripGearCodes,
+                vesselId = manualPriorNotificationFormDataInput.vesselId,
+            )
 
         return ManualPriorNotificationFormDataOutput.fromPriorNotification(updatedPriorNotification)
     }
@@ -274,14 +288,16 @@ class PriorNotificationController(
         @PathVariable(name = "reportId")
         reportId: String,
     ): ResponseEntity<ByteArray?> {
-        val pdfDocument = getPriorNotificationPdfDocument.execute(reportId = reportId, isVerifyingExistence = false)
-            ?: return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null)
+        val pdfDocument =
+            getPriorNotificationPdfDocument.execute(reportId = reportId, isVerifyingExistence = false)
+                ?: return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null)
 
         val fileName = "preavis_debarquement_${pdfDocument.generationDatetimeUtc.format(ISO_DATE_TIME)}.pdf"
-        val headers = HttpHeaders().apply {
-            contentType = MediaType.APPLICATION_PDF
-            setContentDispositionFormData("attachment", fileName)
-        }
+        val headers =
+            HttpHeaders().apply {
+                contentType = MediaType.APPLICATION_PDF
+                setContentDispositionFormData("attachment", fileName)
+            }
         headers.add("x-generation-date", pdfDocument.generationDatetimeUtc.format(ISO_DATE_TIME))
 
         return ResponseEntity(pdfDocument.pdfDocument, headers, HttpStatus.OK)
@@ -332,11 +348,12 @@ class PriorNotificationController(
         @RequestParam(name = "isManuallyCreated")
         isManuallyCreated: Boolean,
     ): PriorNotificationDataOutput {
-        val updatedPriorNotification = invalidatePriorNotification.execute(
-            reportId = reportId,
-            operationDate = operationDate,
-            isManuallyCreated = isManuallyCreated,
-        )
+        val updatedPriorNotification =
+            invalidatePriorNotification.execute(
+                reportId = reportId,
+                operationDate = operationDate,
+                isManuallyCreated = isManuallyCreated,
+            )
 
         return PriorNotificationDataOutput.fromPriorNotification(updatedPriorNotification)
     }

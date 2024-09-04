@@ -15,9 +15,9 @@ data class GearCodeGroupEntity(
     @Column(name = "fishing_gear_group_id")
     val groupId: Int,
 ) {
-
-    fun toGearCodeGroup() = GearCodeGroup(
-        code = code,
-        groupId = groupId,
-    )
+    fun toGearCodeGroup() =
+        GearCodeGroup(
+            code = code,
+            groupId = groupId,
+        )
 }

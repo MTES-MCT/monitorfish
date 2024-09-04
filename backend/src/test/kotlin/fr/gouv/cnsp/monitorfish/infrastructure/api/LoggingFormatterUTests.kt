@@ -34,17 +34,18 @@ class LoggingFormatterUTests {
         request.setContent("TEST".toByteArray())
 
         // When
-        val log = LoggingFormatter.formatRequest(
-            mapper,
-            request,
-            UpdateReportingDataInput(
-                reportingActor = ReportingActor.OPS,
-                type = ReportingType.INFRACTION_SUSPICION,
-                natinfCode = 123456,
-                authorTrigram = "LTH",
-                title = "A title",
-            ),
-        )
+        val log =
+            LoggingFormatter.formatRequest(
+                mapper,
+                request,
+                UpdateReportingDataInput(
+                    reportingActor = ReportingActor.OPS,
+                    type = ReportingType.INFRACTION_SUSPICION,
+                    natinfCode = 123456,
+                    authorTrigram = "LTH",
+                    title = "A title",
+                ),
+            )
 
         // Then
         assertThat(log).isEqualTo(
@@ -68,25 +69,27 @@ class LoggingFormatterUTests {
         val dateTime = ZonedDateTime.of(2019, 1, 18, 7, 19, 45, 45, ZoneOffset.UTC)
 
         // When
-        val log = LoggingFormatter.formatRequest(
-            mapper,
-            request,
-            CreateReportingDataInput(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
-                ircs = "6554fEE",
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                flagState = CountryCode.FR,
-                creationDate = dateTime,
-                value = InfractionSuspicion(
-                    ReportingActor.OPS,
-                    natinfCode = 123456,
-                    authorTrigram = "LTH",
-                    title = "A title",
+        val log =
+            LoggingFormatter.formatRequest(
+                mapper,
+                request,
+                CreateReportingDataInput(
+                    internalReferenceNumber = "FRFGRGR",
+                    externalReferenceNumber = "RGD",
+                    ircs = "6554fEE",
+                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    flagState = CountryCode.FR,
+                    creationDate = dateTime,
+                    value =
+                        InfractionSuspicion(
+                            ReportingActor.OPS,
+                            natinfCode = 123456,
+                            authorTrigram = "LTH",
+                            title = "A title",
+                        ),
+                    type = ReportingType.INFRACTION_SUSPICION,
                 ),
-                type = ReportingType.INFRACTION_SUSPICION,
-            ),
-        )
+            )
 
         // Then
         assertThat(log).isEqualTo(
@@ -121,13 +124,14 @@ class LoggingFormatterUTests {
         val request = MockHttpServletRequest("POST", "/healthcheck")
         val response = MockHttpServletResponse()
         response.status = 201
-        val body = UpdateReportingDataInput(
-            reportingActor = ReportingActor.OPS,
-            type = ReportingType.INFRACTION_SUSPICION,
-            natinfCode = 123456,
-            authorTrigram = "LTH",
-            title = "A title",
-        )
+        val body =
+            UpdateReportingDataInput(
+                reportingActor = ReportingActor.OPS,
+                type = ReportingType.INFRACTION_SUSPICION,
+                natinfCode = 123456,
+                authorTrigram = "LTH",
+                title = "A title",
+            )
 
         // When
         val log = LoggingFormatter.formatResponse(mapper, request, response, body)

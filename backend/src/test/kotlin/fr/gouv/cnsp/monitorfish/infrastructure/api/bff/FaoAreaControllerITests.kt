@@ -23,7 +23,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = [(FaoAreaController::class)])
 class FaoAreaControllerITests {
-
     @Autowired
     private lateinit var api: MockMvc
 

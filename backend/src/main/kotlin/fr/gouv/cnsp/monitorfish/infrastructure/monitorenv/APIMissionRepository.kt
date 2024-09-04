@@ -29,7 +29,10 @@ class APIMissionRepository(
     private val zoneDateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.000X")
 
     @Cacheable(value = ["mission_control_units"])
-    override fun findControlUnitsOfMission(scope: CoroutineScope, missionId: Int): Deferred<List<ControlUnit>> {
+    override fun findControlUnitsOfMission(
+        scope: CoroutineScope,
+        missionId: Int,
+    ): Deferred<List<ControlUnit>> {
         return scope.async {
             val missionsUrl = "${monitorenvProperties.url}/api/v1/missions/$missionId"
 
@@ -54,30 +57,34 @@ class APIMissionRepository(
         seaFronts: List<String>?,
     ): List<Mission> {
         // For these parameters, if the list is null or empty, we don't send the param to the server to avoid filtering results
-        val missionTypesParameter = if (!missionTypes.isNullOrEmpty()) {
-            "missionTypes=${missionTypes.joinToString(
-                ",",
-            )}&"
-        } else {
-            ""
-        }
-        val missionStatusesParameter = if (!missionStatuses.isNullOrEmpty()) {
-            "missionStatus=${missionStatuses.joinToString(
-                ",",
-            )}&"
-        } else {
-            ""
-        }
+        val missionTypesParameter =
+            if (!missionTypes.isNullOrEmpty()) {
+                "missionTypes=${missionTypes.joinToString(
+                    ",",
+                )}&"
+            } else {
+                ""
+            }
+        val missionStatusesParameter =
+            if (!missionStatuses.isNullOrEmpty()) {
+                "missionStatus=${missionStatuses.joinToString(
+                    ",",
+                )}&"
+            } else {
+                ""
+            }
         val seaFrontsParameter = if (!seaFronts.isNullOrEmpty()) "seaFronts=${seaFronts.joinToString(",")}&" else ""
-        val missionSourcesParameter = if (!missionSources.isNullOrEmpty()) {
-            "missionSource=${missionSources.joinToString(
-                ",",
-            )}&"
-        } else {
-            ""
-        }
+        val missionSourcesParameter =
+            if (!missionSources.isNullOrEmpty()) {
+                "missionSource=${missionSources.joinToString(
+                    ",",
+                )}&"
+            } else {
+                ""
+            }
 
-        val missionsUrl = """
+        val missionsUrl =
+            """
             ${monitorenvProperties.url}/api/v1/missions?
                 pageNumber=${pageNumber ?: ""}&
                 pageSize=${pageSize ?: ""}&
@@ -87,7 +94,7 @@ class APIMissionRepository(
                 $missionTypesParameter
                 $missionStatusesParameter
                 $seaFrontsParameter
-        """.trimIndent()
+            """.trimIndent()
 
         logger.info("Fetching missions at URL: $missionsUrl")
         return runBlocking {

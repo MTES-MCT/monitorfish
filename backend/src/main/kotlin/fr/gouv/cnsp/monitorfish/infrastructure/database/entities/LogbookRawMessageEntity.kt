@@ -16,9 +16,10 @@ data class LogbookRawMessageEntity(
     val rawMessage: String? = null,
 ) {
     companion object {
-        fun fromLogbookRawMessage(logbookRawMessage: LogbookRawMessage) = LogbookRawMessageEntity(
-            operationNumber = logbookRawMessage.operationNumber,
-            rawMessage = logbookRawMessage.rawMessage,
-        )
+        fun fromLogbookRawMessage(logbookRawMessage: LogbookRawMessage) =
+            LogbookRawMessageEntity(
+                operationNumber = logbookRawMessage.operationNumber,
+                rawMessage = logbookRawMessage.rawMessage,
+            )
     }
 }

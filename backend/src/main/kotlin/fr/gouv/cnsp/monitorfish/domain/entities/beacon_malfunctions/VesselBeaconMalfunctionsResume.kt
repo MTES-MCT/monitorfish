@@ -14,21 +14,25 @@ data class VesselBeaconMalfunctionsResume(
         ): VesselBeaconMalfunctionsResume {
             val oneYearBefore = ZonedDateTime.now().minusYears(1)
 
-            val lastBeaconMalfunction = beaconMalfunctionsWithDetails
-                .maxByOrNull { it.beaconMalfunction.malfunctionStartDateTime }
+            val lastBeaconMalfunction =
+                beaconMalfunctionsWithDetails
+                    .maxByOrNull { it.beaconMalfunction.malfunctionStartDateTime }
 
-            val lastYearBeaconMalfunctionsWithDetails = beaconMalfunctionsWithDetails.filter {
-                it.beaconMalfunction.malfunctionStartDateTime > oneYearBefore
-            }
+            val lastYearBeaconMalfunctionsWithDetails =
+                beaconMalfunctionsWithDetails.filter {
+                    it.beaconMalfunction.malfunctionStartDateTime > oneYearBefore
+                }
 
-            val numberOfBeaconsAtSea = getNumberOfBeaconsMalfunctionsAt(
-                VesselStatus.AT_SEA,
-                lastYearBeaconMalfunctionsWithDetails,
-            )
-            val numberOfBeaconsAtPort = getNumberOfBeaconsMalfunctionsAt(
-                VesselStatus.AT_PORT,
-                lastYearBeaconMalfunctionsWithDetails,
-            )
+            val numberOfBeaconsAtSea =
+                getNumberOfBeaconsMalfunctionsAt(
+                    VesselStatus.AT_SEA,
+                    lastYearBeaconMalfunctionsWithDetails,
+                )
+            val numberOfBeaconsAtPort =
+                getNumberOfBeaconsMalfunctionsAt(
+                    VesselStatus.AT_PORT,
+                    lastYearBeaconMalfunctionsWithDetails,
+                )
 
             return VesselBeaconMalfunctionsResume(
                 numberOfBeaconsAtSea = numberOfBeaconsAtSea,
@@ -48,8 +52,9 @@ data class VesselBeaconMalfunctionsResume(
         }
 
         private fun getFirstVesselStatus(beaconMalfunctionsWithDetails: BeaconMalfunctionWithDetails): VesselStatus {
-            val beaconMalfunctionVesselStatusActions = beaconMalfunctionsWithDetails.actions
-                .filter { action -> action.propertyName == BeaconMalfunctionActionPropertyName.VESSEL_STATUS }
+            val beaconMalfunctionVesselStatusActions =
+                beaconMalfunctionsWithDetails.actions
+                    .filter { action -> action.propertyName == BeaconMalfunctionActionPropertyName.VESSEL_STATUS }
 
             return when (beaconMalfunctionVesselStatusActions.isEmpty()) {
                 true -> beaconMalfunctionsWithDetails.beaconMalfunction.vesselStatus
@@ -62,9 +67,10 @@ data class VesselBeaconMalfunctionsResume(
         }
 
         private fun getLastVesselStatus(beaconMalfunction: BeaconMalfunctionWithDetails?): VesselStatus? {
-            val lastVesselStatus = beaconMalfunction?.actions?.filter { action ->
-                action.propertyName == BeaconMalfunctionActionPropertyName.VESSEL_STATUS
-            }?.maxByOrNull { action -> action.dateTime }?.nextValue
+            val lastVesselStatus =
+                beaconMalfunction?.actions?.filter { action ->
+                    action.propertyName == BeaconMalfunctionActionPropertyName.VESSEL_STATUS
+                }?.maxByOrNull { action -> action.dateTime }?.nextValue
 
             return lastVesselStatus?.let {
                 VesselStatus.valueOf(lastVesselStatus)

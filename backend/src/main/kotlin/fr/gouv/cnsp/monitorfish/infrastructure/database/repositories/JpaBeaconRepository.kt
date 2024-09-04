@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class JpaBeaconRepository(private val dbBeaconRepository: DBBeaconRepository) : BeaconRepository {
-
     @Cacheable(value = ["search_beacons"])
     override fun search(searched: String): List<Beacon> {
         if (searched.isEmpty()) {

@@ -21,62 +21,72 @@ class GetVesselControls(
 ) {
     private val logger = LoggerFactory.getLogger(GetVesselControls::class.java)
 
-    suspend fun execute(vesselId: Int, afterDateTime: ZonedDateTime): ControlsSummary = coroutineScope {
-        logger.debug("Searching controls for vessel {} after {}", vesselId, afterDateTime)
-        val controls = missionActionsRepository.findVesselMissionActionsAfterDateTime(vesselId, afterDateTime)
-            .filter {
-                it.actionType in setOf(
-                    MissionActionType.SEA_CONTROL,
-                    MissionActionType.AIR_CONTROL,
-                    MissionActionType.LAND_CONTROL,
-                )
-            }
-        logger.debug("Found ${controls.size} controls for vessel $vesselId")
-
-        val controlsWithCodeValues = controls.map { action ->
-            val controlUnits = missionRepository.findControlUnitsOfMission(this, action.missionId)
-
-            Pair(action, controlUnits)
-        }.map { (control, controlUnits) ->
-            control.controlUnits = controlUnits.await()
-
-            control.portLocode?.let { port ->
-                try {
-                    control.portName = portRepository.findByLocode(port).name
-                } catch (e: CodeNotFoundException) {
-                    logger.warn(e.message)
-                }
-            }
-
-            control.gearOnboard.forEach { gearControl ->
-                gearControl.gearCode?.let { gear ->
-                    try {
-                        gearControl.gearName = gearRepository.findByCode(gear).name
-                    } catch (e: CodeNotFoundException) {
-                        logger.warn(e.message)
+    suspend fun execute(
+        vesselId: Int,
+        afterDateTime: ZonedDateTime,
+    ): ControlsSummary =
+        coroutineScope {
+            logger.debug("Searching controls for vessel {} after {}", vesselId, afterDateTime)
+            val controls =
+                missionActionsRepository.findVesselMissionActionsAfterDateTime(vesselId, afterDateTime)
+                    .filter {
+                        it.actionType in
+                            setOf(
+                                MissionActionType.SEA_CONTROL,
+                                MissionActionType.AIR_CONTROL,
+                                MissionActionType.LAND_CONTROL,
+                            )
                     }
+            logger.debug("Found ${controls.size} controls for vessel $vesselId")
+
+            val controlsWithCodeValues =
+                controls.map { action ->
+                    val controlUnits = missionRepository.findControlUnitsOfMission(this, action.missionId)
+
+                    Pair(action, controlUnits)
+                }.map { (control, controlUnits) ->
+                    control.controlUnits = controlUnits.await()
+
+                    control.portLocode?.let { port ->
+                        try {
+                            control.portName = portRepository.findByLocode(port).name
+                        } catch (e: CodeNotFoundException) {
+                            logger.warn(e.message)
+                        }
+                    }
+
+                    control.gearOnboard.forEach { gearControl ->
+                        gearControl.gearCode?.let { gear ->
+                            try {
+                                gearControl.gearName = gearRepository.findByCode(gear).name
+                            } catch (e: CodeNotFoundException) {
+                                logger.warn(e.message)
+                            }
+                        }
+                    }
+
+                    control
                 }
-            }
 
-            control
+            val numberOfDiversions =
+                controlsWithCodeValues
+                    .filter { it.seizureAndDiversion == true }
+                    .size
+            val numberOfControlsWithSomeGearsSeized =
+                controlsWithCodeValues
+                    .filter { it.hasSomeGearsSeized == true }
+                    .size
+            val numberOfControlsWithSomeSpeciesSeized =
+                controlsWithCodeValues
+                    .filter { it.hasSomeSpeciesSeized == true }
+                    .size
+
+            ControlsSummary(
+                vesselId = vesselId,
+                numberOfDiversions = numberOfDiversions,
+                numberOfControlsWithSomeGearsSeized = numberOfControlsWithSomeGearsSeized,
+                numberOfControlsWithSomeSpeciesSeized = numberOfControlsWithSomeSpeciesSeized,
+                controls = controlsWithCodeValues,
+            )
         }
-
-        val numberOfDiversions = controlsWithCodeValues
-            .filter { it.seizureAndDiversion == true }
-            .size
-        val numberOfControlsWithSomeGearsSeized = controlsWithCodeValues
-            .filter { it.hasSomeGearsSeized == true }
-            .size
-        val numberOfControlsWithSomeSpeciesSeized = controlsWithCodeValues
-            .filter { it.hasSomeSpeciesSeized == true }
-            .size
-
-        ControlsSummary(
-            vesselId = vesselId,
-            numberOfDiversions = numberOfDiversions,
-            numberOfControlsWithSomeGearsSeized = numberOfControlsWithSomeGearsSeized,
-            numberOfControlsWithSomeSpeciesSeized = numberOfControlsWithSomeSpeciesSeized,
-            controls = controlsWithCodeValues,
-        )
-    }
 }

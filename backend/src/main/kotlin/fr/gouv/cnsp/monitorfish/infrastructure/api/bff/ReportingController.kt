@@ -22,7 +22,6 @@ class ReportingController(
     private val getAllCurrentReportings: GetAllCurrentReportings,
     private val addReporting: AddReporting,
 ) {
-
     @PostMapping(value = [""], consumes = ["application/json"])
     @Operation(summary = "Create a reporting")
     @ResponseStatus(HttpStatus.CREATED)
@@ -62,17 +61,20 @@ class ReportingController(
         @RequestBody
         updateReportingInput: UpdateReportingDataInput,
     ): ReportingDataOutput {
-        val (updatedReporting, controlUnit) = updateReporting.execute(
-            reportingId,
-            updateReportingInput.toUpdatedReportingValues(),
-        )
+        val (updatedReporting, controlUnit) =
+            updateReporting.execute(
+                reportingId,
+                updateReportingInput.toUpdatedReportingValues(),
+            )
 
         return ReportingDataOutput.fromReporting(updatedReporting, controlUnit)
     }
 
     @PutMapping(value = ["/archive"])
     @Operation(summary = "Archive multiple reportings")
-    fun archiveReportings(@RequestBody ids: List<Int>) {
+    fun archiveReportings(
+        @RequestBody ids: List<Int>,
+    ) {
         archiveReportings.execute(ids)
     }
 
@@ -88,7 +90,9 @@ class ReportingController(
 
     @PutMapping(value = ["/delete"])
     @Operation(summary = "Delete multiple reportings")
-    fun deleteReporting(@RequestBody ids: List<Int>) {
+    fun deleteReporting(
+        @RequestBody ids: List<Int>,
+    ) {
         deleteReportings.execute(ids)
     }
 }

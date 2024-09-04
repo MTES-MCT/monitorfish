@@ -18,7 +18,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice
 class LogResponseWithBody(val mapper: ObjectMapper) : ResponseBodyAdvice<Any?> {
     private val logger = LoggerFactory.getLogger(LogGETRequests::class.java)
 
-    override fun supports(returnType: MethodParameter, converterType: Class<out HttpMessageConverter<*>>): Boolean {
+    override fun supports(
+        returnType: MethodParameter,
+        converterType: Class<out HttpMessageConverter<*>>,
+    ): Boolean {
         return true
     }
 
@@ -31,12 +34,13 @@ class LogResponseWithBody(val mapper: ObjectMapper) : ResponseBodyAdvice<Any?> {
         response: ServerHttpResponse,
     ): Any? {
         if (request.method == PUT || request.method == POST) {
-            val requestLog = LoggingFormatter.formatResponse(
-                mapper,
-                (request as ServletServerHttpRequest).servletRequest,
-                (response as ServletServerHttpResponse).servletResponse,
-                body,
-            )
+            val requestLog =
+                LoggingFormatter.formatResponse(
+                    mapper,
+                    (request as ServletServerHttpRequest).servletRequest,
+                    (response as ServletServerHttpResponse).servletResponse,
+                    body,
+                )
             logger.info(requestLog)
         }
 

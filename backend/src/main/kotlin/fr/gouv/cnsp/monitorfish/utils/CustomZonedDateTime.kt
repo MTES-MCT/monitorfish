@@ -27,9 +27,10 @@ data class CustomZonedDateTime(private val dateAsZonedDateTime: ZonedDateTime) {
         }
 
         fun parse(dateAsString: String): CustomZonedDateTime {
-            val dateAsUtcZonedDateTime = ZonedDateTime
-                .parse(dateAsString, dateTimeFormatter)
-                .withZoneSameInstant(ZoneOffset.UTC)
+            val dateAsUtcZonedDateTime =
+                ZonedDateTime
+                    .parse(dateAsString, dateTimeFormatter)
+                    .withZoneSameInstant(ZoneOffset.UTC)
 
             return CustomZonedDateTime(dateAsUtcZonedDateTime)
         }

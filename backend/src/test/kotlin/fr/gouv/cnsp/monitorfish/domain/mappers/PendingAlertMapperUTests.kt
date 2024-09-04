@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Import
 @Import(MapperConfiguration::class)
 @JsonTest
 class PendingAlertMapperUTests {
-
     @Autowired
     private lateinit var mapper: ObjectMapper
 

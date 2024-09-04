@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class JpaDistrictRepository(private val dbDistrictRepository: DBDistrictRepository) : DistrictRepository {
-
     @Cacheable(value = ["district"])
     override fun find(districtCode: String): District {
         return try {

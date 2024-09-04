@@ -15,16 +15,17 @@ data class UserAuthorizationEntity(
     @Column(name = "is_super_user", nullable = false)
     val isSuperUser: Boolean,
 ) {
-
-    fun toUserAuthorization() = UserAuthorization(
-        hashedEmail = hashedEmail,
-        isSuperUser = isSuperUser,
-    )
+    fun toUserAuthorization() =
+        UserAuthorization(
+            hashedEmail = hashedEmail,
+            isSuperUser = isSuperUser,
+        )
 
     companion object {
-        fun fromUserAuthorization(user: UserAuthorization) = UserAuthorizationEntity(
-            hashedEmail = user.hashedEmail,
-            isSuperUser = user.isSuperUser,
-        )
+        fun fromUserAuthorization(user: UserAuthorization) =
+            UserAuthorizationEntity(
+                hashedEmail = user.hashedEmail,
+                isSuperUser = user.isSuperUser,
+            )
     }
 }

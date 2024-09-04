@@ -8,7 +8,10 @@ import org.springframework.stereotype.Repository
 class JpaPnoSegmentSubscriptionRepository(
     private val dbPnoSegmentsSubscriptionsRepository: DBPnoSegmentsSubscriptionsRepository,
 ) : PnoSegmentSubscriptionRepository {
-    override fun has(portLocode: String, segmentCodes: List<String>): Boolean {
+    override fun has(
+        portLocode: String,
+        segmentCodes: List<String>,
+    ): Boolean {
         return dbPnoSegmentsSubscriptionsRepository.countByPortLocodeAndSegmentCodes(portLocode, segmentCodes) > 0
     }
 }

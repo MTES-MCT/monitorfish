@@ -35,9 +35,10 @@ enum class LogbookSoftware(val software: String) {
         }
 
         fun isVisioCaptureInRealTime(software: String?): Boolean {
-            val isVisioCapture = software?.let {
-                it.startsWith("FT") || it.startsWith("JT")
-            }
+            val isVisioCapture =
+                software?.let {
+                    it.startsWith("FT") || it.startsWith("JT")
+                }
 
             return isVisioCapture ?: false
         }

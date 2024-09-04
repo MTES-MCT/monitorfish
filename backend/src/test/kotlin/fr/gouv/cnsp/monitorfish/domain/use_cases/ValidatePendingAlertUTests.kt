@@ -22,7 +22,6 @@ import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class ValidatePendingAlertUTests {
-
     @MockBean
     private lateinit var pendingAlertRepository: PendingAlertRepository
 
@@ -38,19 +37,20 @@ class ValidatePendingAlertUTests {
     @Test
     fun `execute Should validate a pending alert`() {
         // Given
-        val pendingAlert = PendingAlert(
-            internalReferenceNumber = "FRFGRGR",
-            externalReferenceNumber = "RGD",
-            ircs = "6554fEE",
-            vesselId = 123,
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            flagState = CountryCode.FR,
-            tripNumber = "123456",
-            creationDate = ZonedDateTime.now(),
-            value = ThreeMilesTrawlingAlert(),
-            latitude = 12.123,
-            longitude = -5.5698,
-        )
+        val pendingAlert =
+            PendingAlert(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselId = 123,
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                tripNumber = "123456",
+                creationDate = ZonedDateTime.now(),
+                value = ThreeMilesTrawlingAlert(),
+                latitude = 12.123,
+                longitude = -5.5698,
+            )
         given(pendingAlertRepository.find(any())).willReturn(pendingAlert)
 
         // When

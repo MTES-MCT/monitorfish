@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class JpaPnoTypeRepository(private val dbPnoTypeRepository: DBPnoTypeRepository) : PnoTypeRepository {
-
     @Cacheable(value = ["pno_types"])
     override fun findAll(): List<PnoType> {
         return dbPnoTypeRepository.findAll().map { it.toPnoType() }

@@ -28,7 +28,6 @@ class MissionActionsController(
     private val getMissionAction: GetMissionAction,
     private val getActivityReports: GetActivityReports,
 ) {
-
     @GetMapping("/controls")
     @Operation(summary = "Get vessel's controls")
     fun getVesselControls(

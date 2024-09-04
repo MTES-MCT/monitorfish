@@ -7,7 +7,11 @@ enum class Direction(val direction: String) {
     W("W"),
 }
 
-fun degreeMinuteToDecimal(direction: String, degree: Int, minute: Int): Double {
+fun degreeMinuteToDecimal(
+    direction: String,
+    degree: Int,
+    minute: Int,
+): Double {
     val maxDegree = 180
     val maxMinute = 59
     val secondsInMinute = 60

@@ -46,7 +46,10 @@ interface LogbookReportRepository {
     // Only used in tests
     fun findById(id: Long): LogbookMessage
 
-    fun findAcknowledgedPriorNotificationByReportId(reportId: String, operationDate: ZonedDateTime): PriorNotification?
+    fun findAcknowledgedPriorNotificationByReportId(
+        reportId: String,
+        operationDate: ZonedDateTime,
+    ): PriorNotification?
 
     fun findLastMessageDate(): ZonedDateTime
 
@@ -69,7 +72,6 @@ interface LogbookReportRepository {
     fun updatePriorNotificationState(
         reportId: String,
         operationDate: ZonedDateTime,
-
         isBeingSent: Boolean,
         isSent: Boolean,
         isVerified: Boolean,
@@ -80,12 +82,14 @@ interface LogbookReportRepository {
     fun updatePriorNotificationAuthorTrigramAndNote(
         reportId: String,
         operationDate: ZonedDateTime,
-
         authorTrigram: String?,
         note: String?,
     )
 
-    fun invalidate(reportId: String, operationDate: ZonedDateTime)
+    fun invalidate(
+        reportId: String,
+        operationDate: ZonedDateTime,
+    )
 
     // For test purpose
     fun deleteAll()

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/bff/v1/foreign_fmcs")
 @Tag(name = "APIs for foreign FMCs")
 class ForeignFMCsController(private val getAllForeignFMCs: GetAllForeignFMCs) {
-
     @GetMapping("")
     @Operation(summary = "Get all foreign FMCs")
     fun getAllForeignFMCs(): List<ForeignFMCDataOutput> {

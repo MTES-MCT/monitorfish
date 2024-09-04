@@ -15,7 +15,6 @@ import java.time.format.DateTimeFormatter
 import kotlin.properties.Delegates
 
 class NAFMessageMapper(private val naf: String) {
-
     private val logger: Logger = LoggerFactory.getLogger(NAFMessageMapper::class.java)
 
     private lateinit var dateTime: ZonedDateTime
@@ -53,14 +52,15 @@ class NAFMessageMapper(private val naf: String) {
 
                 try {
                     when (it) {
-                        NAFCode.TYPE_OF_MESSAGE -> when (value) {
-                            positionMessageType -> this.isManual = false
-                            manualMessageType -> {
-                                this.isManual = true
-                                logger.info("Receiving new manual position")
+                        NAFCode.TYPE_OF_MESSAGE ->
+                            when (value) {
+                                positionMessageType -> this.isManual = false
+                                manualMessageType -> {
+                                    this.isManual = true
+                                    logger.info("Receiving new manual position")
+                                }
+                                else -> throw NAFMessageParsingException("Unhandled message type \"$value\"", naf)
                             }
-                            else -> throw NAFMessageParsingException("Unhandled message type \"$value\"", naf)
-                        }
                         NAFCode.INTERNAL_REFERENCE_NUMBER -> this.internalReferenceNumber = value
                         NAFCode.RADIO_CALL_SIGN -> this.ircs = value
                         NAFCode.VESSEL_NAME -> this.vesselName = value

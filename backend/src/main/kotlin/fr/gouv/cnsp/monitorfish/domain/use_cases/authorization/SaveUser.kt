@@ -9,11 +9,15 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.UserAuthorizationRepository
 class SaveUser(
     private val userAuthorizationRepository: UserAuthorizationRepository,
 ) {
-    fun execute(email: String, isSuperUser: Boolean) {
-        val user = UserAuthorization(
-            hashedEmail = hash(email),
-            isSuperUser = isSuperUser,
-        )
+    fun execute(
+        email: String,
+        isSuperUser: Boolean,
+    ) {
+        val user =
+            UserAuthorization(
+                hashedEmail = hash(email),
+                isSuperUser = isSuperUser,
+            )
 
         userAuthorizationRepository.save(user)
     }

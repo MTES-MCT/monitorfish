@@ -16,7 +16,6 @@ import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class GetVesselBeaconMalfunctionsUTests {
-
     @MockBean
     private lateinit var beaconMalfunctionsRepository: BeaconMalfunctionsRepository
 
@@ -75,12 +74,13 @@ class GetVesselBeaconMalfunctionsUTests {
         )
 
         // When
-        val enrichedBeaconMalfunctions = GetVesselBeaconMalfunctions(
-            beaconMalfunctionsRepository,
-            beaconMalfunctionCommentsRepository,
-            beaconMalfunctionActionsRepository,
-        )
-            .execute(1, now.minusYears(1))
+        val enrichedBeaconMalfunctions =
+            GetVesselBeaconMalfunctions(
+                beaconMalfunctionsRepository,
+                beaconMalfunctionCommentsRepository,
+                beaconMalfunctionActionsRepository,
+            )
+                .execute(1, now.minusYears(1))
 
         // Then
         assertThat(enrichedBeaconMalfunctions.history).hasSize(1)

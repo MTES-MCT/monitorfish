@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.ZonedDateTime
 
 class JpaPendingAlertRepositoryITests : AbstractDBTests() {
-
     @Autowired
     private lateinit var jpaPendingAlertRepository: JpaPendingAlertRepository
 
@@ -20,17 +19,18 @@ class JpaPendingAlertRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAlertsOfTypes Should return an alert with the type entered`() {
         // Given
-        val alertOne = PendingAlert(
-            internalReferenceNumber = "FRFGRGR",
-            externalReferenceNumber = "RGD",
-            ircs = "6554fEE",
-            vesselId = 123,
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            flagState = CountryCode.FR,
-            tripNumber = "123456",
-            creationDate = ZonedDateTime.now(),
-            value = ThreeMilesTrawlingAlert(),
-        )
+        val alertOne =
+            PendingAlert(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselId = 123,
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                tripNumber = "123456",
+                creationDate = ZonedDateTime.now(),
+                value = ThreeMilesTrawlingAlert(),
+            )
         jpaPendingAlertRepository.save(alertOne)
 
         // When

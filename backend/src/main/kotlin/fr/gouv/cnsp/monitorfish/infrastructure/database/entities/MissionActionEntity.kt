@@ -148,7 +148,6 @@ class MissionActionEntity(
     @Column(name = "observations_by_unit")
     val observationsByUnit: String? = null,
 ) {
-
     companion object {
         fun fromMissionAction(
             mapper: ObjectMapper,
@@ -225,11 +224,12 @@ class MissionActionEntity(
             flagState = flagState,
             districtCode = districtCode,
             faoAreas = faoAreas ?: listOf(),
-            flightGoals = flightGoals?.map {
-                FlightGoal.valueOf(
-                    it,
-                )
-            } ?: listOf(),
+            flightGoals =
+                flightGoals?.map {
+                    FlightGoal.valueOf(
+                        it,
+                    )
+                } ?: listOf(),
             actionType = actionType,
             actionDatetimeUtc = actionDatetimeUtc.atZone(ZoneOffset.UTC),
             actionEndDatetimeUtc = actionEndDatetimeUtc?.let { it.atZone(ZoneOffset.UTC) },
@@ -240,17 +240,19 @@ class MissionActionEntity(
             speciesWeightControlled = speciesWeightControlled,
             speciesSizeControlled = speciesSizeControlled,
             separateStowageOfPreservedSpecies = separateStowageOfPreservedSpecies,
-            logbookInfractions = deserializeJSONList(
-                mapper,
-                logbookInfractions,
-                LogbookInfraction::class.java,
-            ),
+            logbookInfractions =
+                deserializeJSONList(
+                    mapper,
+                    logbookInfractions,
+                    LogbookInfraction::class.java,
+                ),
             licencesAndLogbookObservations = licencesAndLogbookObservations,
-            gearInfractions = deserializeJSONList(
-                mapper,
-                gearInfractions,
-                GearInfraction::class.java,
-            ),
+            gearInfractions =
+                deserializeJSONList(
+                    mapper,
+                    gearInfractions,
+                    GearInfraction::class.java,
+                ),
             speciesInfractions = deserializeJSONList(mapper, speciesInfractions, SpeciesInfraction::class.java),
             speciesObservations = speciesObservations,
             seizureAndDiversion = seizureAndDiversion,
@@ -260,11 +262,12 @@ class MissionActionEntity(
             controlQualityComments = controlQualityComments,
             feedbackSheetRequired = feedbackSheetRequired,
             userTrigram = userTrigram,
-            segments = deserializeJSONList(
-                mapper,
-                segments,
-                FleetSegment::class.java,
-            ),
+            segments =
+                deserializeJSONList(
+                    mapper,
+                    segments,
+                    FleetSegment::class.java,
+                ),
             facade = facade?.let { Seafront.from(it).toString() },
             longitude = longitude,
             latitude = latitude,
@@ -272,11 +275,12 @@ class MissionActionEntity(
             vesselTargeted = vesselTargeted,
             seizureAndDiversionComments = seizureAndDiversionComments,
             otherComments = otherComments,
-            gearOnboard = deserializeJSONList(
-                mapper,
-                gearOnboard,
-                GearControl::class.java,
-            ),
+            gearOnboard =
+                deserializeJSONList(
+                    mapper,
+                    gearOnboard,
+                    GearControl::class.java,
+                ),
             speciesOnboard = deserializeJSONList(mapper, speciesOnboard, SpeciesControl::class.java),
             isDeleted = isDeleted,
             hasSomeGearsSeized = hasSomeGearsSeized,
@@ -292,13 +296,18 @@ class MissionActionEntity(
             observationsByUnit = observationsByUnit,
         )
 
-    private fun <T> deserializeJSONList(mapper: ObjectMapper, json: String?, clazz: Class<T>): List<T> = json?.let {
-        mapper.readValue(
-            json,
-            mapper.typeFactory
-                .constructCollectionType(MutableList::class.java, clazz),
-        )
-    } ?: listOf()
+    private fun <T> deserializeJSONList(
+        mapper: ObjectMapper,
+        json: String?,
+        clazz: Class<T>,
+    ): List<T> =
+        json?.let {
+            mapper.readValue(
+                json,
+                mapper.typeFactory
+                    .constructCollectionType(MutableList::class.java, clazz),
+            )
+        } ?: listOf()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

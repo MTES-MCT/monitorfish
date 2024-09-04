@@ -17,7 +17,6 @@ class DataReferentialController(
     private val getAllGears: GetAllGears,
     private val getAllSpeciesAndSpeciesGroups: GetAllSpeciesAndSpeciesGroups,
 ) {
-
     @GetMapping("/v1/gears")
     @Operation(summary = "Get FAO fishing gear codes")
     fun getGears(): List<GearDataOutput> {

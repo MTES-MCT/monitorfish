@@ -10,7 +10,6 @@ import org.springframework.cache.CacheManager
 import org.springframework.transaction.annotation.Transactional
 
 class JpaSpeciesRepositoryITests : AbstractDBTests() {
-
     @Autowired
     private lateinit var jpaSpeciesRepository: JpaSpeciesRepository
 

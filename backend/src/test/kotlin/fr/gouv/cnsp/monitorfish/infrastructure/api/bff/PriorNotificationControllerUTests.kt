@@ -119,12 +119,13 @@ class PriorNotificationControllerUTests {
             .willReturn(fakePriorNotification)
 
         // When
-        val requestBody = objectMapper.writeValueAsString(
-            LogbookPriorNotificationFormDataInput(
-                authorTrigram = "ABC",
-                note = "Test !",
-            ),
-        )
+        val requestBody =
+            objectMapper.writeValueAsString(
+                LogbookPriorNotificationFormDataInput(
+                    authorTrigram = "ABC",
+                    note = "Test !",
+                ),
+            )
         val pnoValue = fakePriorNotification.logbookMessageAndValue.value
         api.perform(
             put(
@@ -154,15 +155,16 @@ class PriorNotificationControllerUTests {
             )
 
         // When
-        val requestBody = objectMapper.writeValueAsString(
-            ManualPriorNotificationComputeDataInput(
-                globalFaoArea = "FAO AREA 51",
-                fishingCatches = emptyList(),
-                portLocode = "FRABC",
-                tripGearCodes = emptyList(),
-                vesselId = 42,
-            ),
-        )
+        val requestBody =
+            objectMapper.writeValueAsString(
+                ManualPriorNotificationComputeDataInput(
+                    globalFaoArea = "FAO AREA 51",
+                    fishingCatches = emptyList(),
+                    portLocode = "FRABC",
+                    tripGearCodes = emptyList(),
+                    vesselId = 42,
+                ),
+            )
         api.perform(
             post("/bff/v1/prior_notifications/manual/compute")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -201,24 +203,25 @@ class PriorNotificationControllerUTests {
             .willReturn(fakePriorNotification)
 
         // When
-        val requestBody = objectMapper.writeValueAsString(
-            ManualPriorNotificationFormDataInput(
-                hasPortEntranceAuthorization = true,
-                hasPortLandingAuthorization = true,
-                authorTrigram = "ABC",
-                didNotFishAfterZeroNotice = false,
-                expectedArrivalDate = ZonedDateTime.now(),
-                expectedLandingDate = ZonedDateTime.now(),
-                globalFaoArea = "FAO AREA 51",
-                fishingCatches = emptyList(),
-                note = null,
-                portLocode = "FRABVC",
-                sentAt = ZonedDateTime.now(),
-                purpose = LogbookMessagePurpose.LAN,
-                tripGearCodes = emptyList(),
-                vesselId = 42,
-            ),
-        )
+        val requestBody =
+            objectMapper.writeValueAsString(
+                ManualPriorNotificationFormDataInput(
+                    hasPortEntranceAuthorization = true,
+                    hasPortLandingAuthorization = true,
+                    authorTrigram = "ABC",
+                    didNotFishAfterZeroNotice = false,
+                    expectedArrivalDate = ZonedDateTime.now(),
+                    expectedLandingDate = ZonedDateTime.now(),
+                    globalFaoArea = "FAO AREA 51",
+                    fishingCatches = emptyList(),
+                    note = null,
+                    portLocode = "FRABVC",
+                    sentAt = ZonedDateTime.now(),
+                    purpose = LogbookMessagePurpose.LAN,
+                    tripGearCodes = emptyList(),
+                    vesselId = 42,
+                ),
+            )
         api.perform(
             post("/bff/v1/prior_notifications/manual")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -257,24 +260,25 @@ class PriorNotificationControllerUTests {
             .willReturn(fakePriorNotification)
 
         // When
-        val requestBody = objectMapper.writeValueAsString(
-            ManualPriorNotificationFormDataInput(
-                hasPortEntranceAuthorization = true,
-                hasPortLandingAuthorization = true,
-                authorTrigram = "ABC",
-                didNotFishAfterZeroNotice = false,
-                expectedArrivalDate = ZonedDateTime.now(),
-                expectedLandingDate = ZonedDateTime.now(),
-                globalFaoArea = "FAO AREA 51",
-                fishingCatches = emptyList(),
-                note = null,
-                portLocode = "FRABVC",
-                sentAt = ZonedDateTime.now(),
-                purpose = LogbookMessagePurpose.LAN,
-                tripGearCodes = emptyList(),
-                vesselId = 42,
-            ),
-        )
+        val requestBody =
+            objectMapper.writeValueAsString(
+                ManualPriorNotificationFormDataInput(
+                    hasPortEntranceAuthorization = true,
+                    hasPortLandingAuthorization = true,
+                    authorTrigram = "ABC",
+                    didNotFishAfterZeroNotice = false,
+                    expectedArrivalDate = ZonedDateTime.now(),
+                    expectedLandingDate = ZonedDateTime.now(),
+                    globalFaoArea = "FAO AREA 51",
+                    fishingCatches = emptyList(),
+                    note = null,
+                    portLocode = "FRABVC",
+                    sentAt = ZonedDateTime.now(),
+                    purpose = LogbookMessagePurpose.LAN,
+                    tripGearCodes = emptyList(),
+                    vesselId = 42,
+                ),
+            )
         api.perform(
             put("/bff/v1/prior_notifications/manual/${fakePriorNotification.reportId!!}")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -344,7 +348,8 @@ class PriorNotificationControllerUTests {
 
     @Test
     fun `getPdf Should get the PDF of a prior notification`() {
-        val dummyPdfContent = """
+        val dummyPdfContent =
+            """
             %PDF-1.4
             1 0 obj
             << /Type /Catalog /Pages 2 0 R >>
@@ -377,7 +382,7 @@ class PriorNotificationControllerUTests {
             startxref
             291
             %%EOF
-        """.trimIndent().toByteArray()
+            """.trimIndent().toByteArray()
 
         // Given
         given(getPriorNotificationPdfDocument.execute("REPORT_ID", false))

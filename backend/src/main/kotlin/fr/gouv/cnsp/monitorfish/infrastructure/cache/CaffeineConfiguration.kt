@@ -147,11 +147,12 @@ class CaffeineConfiguration {
         val vesselsCache = buildMinutesCache(vessels, ticker, 120)
         val vesselsAllPositionsCache = buildSecondsCache(vesselsAllPositions, ticker, 30)
         val vesselsPositionsCache = buildSecondsCache(vesselsPositions, ticker, 30)
-        val vesselsPositionsWithBeaconMalfunctionsCache = buildMinutesCache(
-            vesselsPositionsWithBeaconMalfunctions,
-            ticker,
-            1,
-        )
+        val vesselsPositionsWithBeaconMalfunctionsCache =
+            buildMinutesCache(
+                vesselsPositionsWithBeaconMalfunctions,
+                ticker,
+                1,
+            )
         val vesselCharterCache = buildMinutesCache(vesselCharter, ticker, 30)
 
         // Others
@@ -213,7 +214,11 @@ class CaffeineConfiguration {
         return manager
     }
 
-    private fun buildMinutesCache(name: String, ticker: Ticker, minutesToExpire: Int): CaffeineCache {
+    private fun buildMinutesCache(
+        name: String,
+        ticker: Ticker,
+        minutesToExpire: Int,
+    ): CaffeineCache {
         return CaffeineCache(
             name,
             Caffeine.newBuilder()
@@ -224,7 +229,11 @@ class CaffeineConfiguration {
         )
     }
 
-    private fun buildSecondsCache(name: String, ticker: Ticker, secondsToExpire: Int): CaffeineCache {
+    private fun buildSecondsCache(
+        name: String,
+        ticker: Ticker,
+        secondsToExpire: Int,
+    ): CaffeineCache {
         return CaffeineCache(
             name,
             Caffeine.newBuilder()

@@ -12,7 +12,6 @@ import java.time.ZonedDateTime
 class JpaBeaconMalfunctionsRepository(
     private val dbBeaconMalfunctionsRepository: DBBeaconMalfunctionsRepository,
 ) : BeaconMalfunctionsRepository {
-
     override fun findAll(): List<BeaconMalfunction> {
         return dbBeaconMalfunctionsRepository.findAll().map { it.toBeaconMalfunction() }
     }

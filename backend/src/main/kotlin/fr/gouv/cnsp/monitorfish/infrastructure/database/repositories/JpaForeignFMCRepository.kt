@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class JpaForeignFMCRepository(private val dbForeignFMCRepository: DBForeignFMCRepository) : ForeignFMCRepository {
-
     override fun findAll(): List<ForeignFMC> {
         return dbForeignFMCRepository.findAll().map { it.toForeignFMC() }
     }

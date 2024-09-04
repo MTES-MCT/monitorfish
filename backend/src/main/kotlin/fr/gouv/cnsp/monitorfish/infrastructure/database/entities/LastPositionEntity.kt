@@ -36,7 +36,6 @@ data class LastPositionEntity(
     val flagState: String? = null,
     @Column(name = "trip_number")
     val tripNumber: String? = null,
-
     @Column(name = "latitude")
     val latitude: Double? = null,
     @Column(name = "longitude")
@@ -51,7 +50,6 @@ data class LastPositionEntity(
     val course: Double? = null,
     @Column(name = "last_position_datetime_utc")
     val dateTime: ZonedDateTime,
-
     @Column(name = "emission_period")
     val emissionPeriod: Duration? = null,
     @Column(name = "last_logbook_message_datetime_utc")
@@ -106,62 +104,65 @@ data class LastPositionEntity(
     @Column(name = "reportings", columnDefinition = "varchar(200)[]")
     val reportings: List<String>? = listOf(),
 ) : Serializable {
-
-    fun toLastPosition(mapper: ObjectMapper) = LastPosition(
-        vesselId = vesselId,
-        internalReferenceNumber = internalReferenceNumber,
-        ircs = ircs,
-        mmsi = mmsi,
-        externalReferenceNumber = externalReferenceNumber,
-        dateTime = dateTime,
-        latitude = latitude,
-        longitude = longitude,
-        estimatedCurrentLatitude = estimatedCurrentLatitude,
-        estimatedCurrentLongitude = estimatedCurrentLongitude,
-        vesselName = vesselName,
-        speed = speed,
-        course = course,
-        flagState = flagState?.let {
-            try {
-                CountryCode.valueOf(it)
-            } catch (e: IllegalArgumentException) {
-                CountryCode.UNDEFINED
-            }
-        } ?: CountryCode.UNDEFINED,
-        tripNumber = tripNumber,
-        positionType = PositionType.VMS,
-        emissionPeriod = emissionPeriod,
-        lastLogbookMessageDateTime = lastLogbookMessageDateTime,
-        departureDateTime = departureDateTime,
-        width = width,
-        length = length,
-        registryPortName = registryPort,
-        district = district,
-        districtCode = districtCode,
-        gearOnboard = mapper.readValue(
-            gearOnboard,
-            mapper.typeFactory
-                .constructCollectionType(MutableList::class.java, Gear::class.java),
-        ),
-        segments = segments,
-        speciesOnboard = mapper.readValue(
-            speciesOnboard,
-            mapper.typeFactory
-                .constructCollectionType(MutableList::class.java, Species::class.java),
-        ),
-        totalWeightOnboard = totalWeightOnboard,
-        lastControlDateTime = lastControlDateTime,
-        lastControlInfraction = lastControlInfraction,
-        postControlComment = postControlComment,
-        vesselIdentifier = vesselIdentifier,
-        impactRiskFactor = impactRiskFactor,
-        probabilityRiskFactor = probabilityRiskFactor,
-        detectabilityRiskFactor = detectabilityRiskFactor,
-        riskFactor = riskFactor,
-        underCharter = underCharter,
-        isAtPort = isAtPort,
-        alerts = alerts,
-        beaconMalfunctionId = beaconMalfunctionId,
-        reportings = reportings ?: listOf(),
-    )
+    fun toLastPosition(mapper: ObjectMapper) =
+        LastPosition(
+            vesselId = vesselId,
+            internalReferenceNumber = internalReferenceNumber,
+            ircs = ircs,
+            mmsi = mmsi,
+            externalReferenceNumber = externalReferenceNumber,
+            dateTime = dateTime,
+            latitude = latitude,
+            longitude = longitude,
+            estimatedCurrentLatitude = estimatedCurrentLatitude,
+            estimatedCurrentLongitude = estimatedCurrentLongitude,
+            vesselName = vesselName,
+            speed = speed,
+            course = course,
+            flagState =
+                flagState?.let {
+                    try {
+                        CountryCode.valueOf(it)
+                    } catch (e: IllegalArgumentException) {
+                        CountryCode.UNDEFINED
+                    }
+                } ?: CountryCode.UNDEFINED,
+            tripNumber = tripNumber,
+            positionType = PositionType.VMS,
+            emissionPeriod = emissionPeriod,
+            lastLogbookMessageDateTime = lastLogbookMessageDateTime,
+            departureDateTime = departureDateTime,
+            width = width,
+            length = length,
+            registryPortName = registryPort,
+            district = district,
+            districtCode = districtCode,
+            gearOnboard =
+                mapper.readValue(
+                    gearOnboard,
+                    mapper.typeFactory
+                        .constructCollectionType(MutableList::class.java, Gear::class.java),
+                ),
+            segments = segments,
+            speciesOnboard =
+                mapper.readValue(
+                    speciesOnboard,
+                    mapper.typeFactory
+                        .constructCollectionType(MutableList::class.java, Species::class.java),
+                ),
+            totalWeightOnboard = totalWeightOnboard,
+            lastControlDateTime = lastControlDateTime,
+            lastControlInfraction = lastControlInfraction,
+            postControlComment = postControlComment,
+            vesselIdentifier = vesselIdentifier,
+            impactRiskFactor = impactRiskFactor,
+            probabilityRiskFactor = probabilityRiskFactor,
+            detectabilityRiskFactor = detectabilityRiskFactor,
+            riskFactor = riskFactor,
+            underCharter = underCharter,
+            isAtPort = isAtPort,
+            alerts = alerts,
+            beaconMalfunctionId = beaconMalfunctionId,
+            reportings = reportings ?: listOf(),
+        )
 }

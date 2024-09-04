@@ -13,7 +13,6 @@ class JpaPendingAlertRepository(
     private val dbPendingAlertRepository: DBPendingAlertRepository,
     private val mapper: ObjectMapper,
 ) : PendingAlertRepository {
-
     override fun save(alert: PendingAlert) {
         dbPendingAlertRepository.save(PendingAlertEntity.fromPendingAlert(alert, mapper))
     }

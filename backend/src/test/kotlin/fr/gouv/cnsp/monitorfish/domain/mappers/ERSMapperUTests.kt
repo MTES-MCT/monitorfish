@@ -17,7 +17,6 @@ import java.time.ZonedDateTime
 @Import(MapperConfiguration::class)
 @JsonTest
 class ERSMapperUTests {
-
     @Autowired
     private lateinit var mapper: ObjectMapper
 
@@ -80,22 +79,23 @@ class ERSMapperUTests {
     @Test
     fun `getERSMessageValueFromJSON Should deserialize an example FAR message`() {
         // Given
-        val farMessage = "{\"hauls\":[{\"gear\": \"GTN\", \"mesh\": 100.0, \"catches\": [" +
-            "{\"weight\": 2.0, \"conversionFactor\": 1.0, \"nbFish\": null, \"species\": \"SCL\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
-            "{\"weight\": 10.0, \"conversionFactor\": 1.0, \"nbFish\": null, \"species\": \"BRB\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
-            "{\"weight\": 1.5, \"nbFish\": null, \"species\": \"LBE\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
-            "{\"weight\": 18.0, \"nbFish\": null, \"species\": \"BSS\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
-            "{\"weight\": 5.0, \"nbFish\": null, \"species\": \"SWA\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
-            "{\"weight\": 30.0, \"nbFish\": null, \"species\": \"BIB\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
-            "{\"weight\": 8.0, \"nbFish\": null, \"species\": \"COE\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
-            "{\"weight\": 4.0, \"nbFish\": null, \"species\": \"SOL\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
-            "{\"weight\": 1.0, \"nbFish\": null, \"species\": \"MKG\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
-            "{\"weight\": 10.0, \"nbFish\": null, \"species\": \"MNZ\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
-            "{\"weight\": 70.0, \"nbFish\": null, \"species\": \"POL\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
-            "{\"weight\": 40.0, \"nbFish\": null, \"species\": \"USB\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
-            "{\"weight\": 15.0, \"nbFish\": null, \"species\": \"RJH\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
-            "{\"weight\": 15.0, \"nbFish\": null, \"species\": \"WHG\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}], \"farDatetimeUtc\": \"2019-12-05T11:55Z\"" +
-            "}]}"
+        val farMessage =
+            "{\"hauls\":[{\"gear\": \"GTN\", \"mesh\": 100.0, \"catches\": [" +
+                "{\"weight\": 2.0, \"conversionFactor\": 1.0, \"nbFish\": null, \"species\": \"SCL\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
+                "{\"weight\": 10.0, \"conversionFactor\": 1.0, \"nbFish\": null, \"species\": \"BRB\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
+                "{\"weight\": 1.5, \"nbFish\": null, \"species\": \"LBE\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
+                "{\"weight\": 18.0, \"nbFish\": null, \"species\": \"BSS\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
+                "{\"weight\": 5.0, \"nbFish\": null, \"species\": \"SWA\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
+                "{\"weight\": 30.0, \"nbFish\": null, \"species\": \"BIB\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
+                "{\"weight\": 8.0, \"nbFish\": null, \"species\": \"COE\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
+                "{\"weight\": 4.0, \"nbFish\": null, \"species\": \"SOL\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
+                "{\"weight\": 1.0, \"nbFish\": null, \"species\": \"MKG\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
+                "{\"weight\": 10.0, \"nbFish\": null, \"species\": \"MNZ\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
+                "{\"weight\": 70.0, \"nbFish\": null, \"species\": \"POL\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
+                "{\"weight\": 40.0, \"nbFish\": null, \"species\": \"USB\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
+                "{\"weight\": 15.0, \"nbFish\": null, \"species\": \"RJH\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
+                "{\"weight\": 15.0, \"nbFish\": null, \"species\": \"WHG\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}], \"farDatetimeUtc\": \"2019-12-05T11:55Z\"" +
+                "}]}"
 
         // When
         val parsedFARMessage = ERSMapper.getERSMessageValueFromJSON(mapper, farMessage, "FAR", LogbookOperationType.DAT)
@@ -128,9 +128,10 @@ class ERSMapperUTests {
     @Test
     fun `getERSMessageValueFromJSON Should deserialize an example RET message`() {
         // Given
-        val retMessage = "{\"returnStatus\": \"002\", \"rejectionCause\": \"002 MGEN02 Message incorrect : " +
-            "la date/heure de l’événement RTP n° OOF20201105037001 est postérieure à la date/heure courante. " +
-            "Veuillez vérifier la date/heure de l’événement déclaré et renvoyer votre message.\"}"
+        val retMessage =
+            "{\"returnStatus\": \"002\", \"rejectionCause\": \"002 MGEN02 Message incorrect : " +
+                "la date/heure de l’événement RTP n° OOF20201105037001 est postérieure à la date/heure courante. " +
+                "Veuillez vérifier la date/heure de l’événement déclaré et renvoyer votre message.\"}"
 
         // When
         val parsedRETMessage = ERSMapper.getERSMessageValueFromJSON(mapper, retMessage, "", LogbookOperationType.RET)
@@ -208,46 +209,47 @@ class ERSMapperUTests {
     @Test
     fun `second getERSMessageValueFromJSON Should deserialize an example CPS message`() {
         // Given
-        val cpsMessage = "{" +
-            "\"cpsDatetimeUtc\": \"2023-02-28T17:44:00Z\"," +
-            "\"gear\": \"GTR\"," +
-            "\"mesh\": 100.0," +
-            "\"dimensions\": \"50.0;2.0\"," +
-            "\"catches\": [" +
+        val cpsMessage =
             "{" +
-            "\"sex\": \"M\"," +
-            "\"healthState\": \"DEA\"," +
-            "\"careMinutes\": null," +
-            "\"ring\": \"1234567\"," +
-            "\"fate\": \"DIS\"," +
-            "\"comment\": null," +
-            "\"species\": \"DCO\"," +
-            "\"weight\": 60.0," +
-            "\"nbFish\": 1.0," +
-            "\"faoZone\": \"27.8.a\"," +
-            "\"economicZone\": \"FRA\"," +
-            "\"statisticalRectangle\": \"22E7\"," +
-            "\"effortZone\": \"C\"" +
-            "}," +
-            "{" +
-            "\"sex\": \"M\"," +
-            "\"healthState\": \"DEA\"," +
-            "\"careMinutes\": 40," +
-            "\"ring\": \"1234568\"," +
-            "\"fate\": \"DIS\"," +
-            "\"comment\": \"Pov' titi a eu bobo\"," +
-            "\"species\": \"DCO\"," +
-            "\"weight\": 80.0," +
-            "\"nbFish\": 1.0," +
-            "\"faoZone\": \"27.8.a\"," +
-            "\"economicZone\": \"FRA\"," +
-            "\"statisticalRectangle\": \"22E7\"," +
-            "\"effortZone\": \"C\"" +
-            "}" +
-            "]," +
-            "\"latitude\": 46.575," +
-            "\"longitude\": -2.741" +
-            "}"
+                "\"cpsDatetimeUtc\": \"2023-02-28T17:44:00Z\"," +
+                "\"gear\": \"GTR\"," +
+                "\"mesh\": 100.0," +
+                "\"dimensions\": \"50.0;2.0\"," +
+                "\"catches\": [" +
+                "{" +
+                "\"sex\": \"M\"," +
+                "\"healthState\": \"DEA\"," +
+                "\"careMinutes\": null," +
+                "\"ring\": \"1234567\"," +
+                "\"fate\": \"DIS\"," +
+                "\"comment\": null," +
+                "\"species\": \"DCO\"," +
+                "\"weight\": 60.0," +
+                "\"nbFish\": 1.0," +
+                "\"faoZone\": \"27.8.a\"," +
+                "\"economicZone\": \"FRA\"," +
+                "\"statisticalRectangle\": \"22E7\"," +
+                "\"effortZone\": \"C\"" +
+                "}," +
+                "{" +
+                "\"sex\": \"M\"," +
+                "\"healthState\": \"DEA\"," +
+                "\"careMinutes\": 40," +
+                "\"ring\": \"1234568\"," +
+                "\"fate\": \"DIS\"," +
+                "\"comment\": \"Pov' titi a eu bobo\"," +
+                "\"species\": \"DCO\"," +
+                "\"weight\": 80.0," +
+                "\"nbFish\": 1.0," +
+                "\"faoZone\": \"27.8.a\"," +
+                "\"economicZone\": \"FRA\"," +
+                "\"statisticalRectangle\": \"22E7\"," +
+                "\"effortZone\": \"C\"" +
+                "}" +
+                "]," +
+                "\"latitude\": 46.575," +
+                "\"longitude\": -2.741" +
+                "}"
 
         // When
         val parsedCPSMessage = ERSMapper.getERSMessageValueFromJSON(mapper, cpsMessage, "CPS", LogbookOperationType.DAT)

@@ -34,7 +34,6 @@ import java.time.ZonedDateTime
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = [(MissionController::class)])
 class MissionsControllerITests {
-
     @Autowired
     private lateinit var api: MockMvc
 
@@ -61,31 +60,33 @@ class MissionsControllerITests {
         }.willReturn(
             listOf(
                 MissionAndActions(
-                    mission = Mission(
-                        123,
-                        missionTypes = listOf(MissionType.SEA),
-                        missionSource = MissionSource.MONITORFISH,
-                        isGeometryComputedFromControls = false,
-                        startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
-                    ),
-                    actions = listOf(
-                        MissionAction(
-                            id = 3,
-                            vesselId = 1,
-                            missionId = 123,
-                            actionDatetimeUtc = ZonedDateTime.now(),
-                            actionType = MissionActionType.SEA_CONTROL,
-                            seizureAndDiversion = false,
-                            speciesInfractions = listOf(),
-                            isDeleted = false,
-                            hasSomeGearsSeized = false,
-                            hasSomeSpeciesSeized = false,
-                            isFromPoseidon = false,
-                            flagState = CountryCode.FR,
-                            userTrigram = "LTH",
-                            completion = Completion.TO_COMPLETE,
+                    mission =
+                        Mission(
+                            123,
+                            missionTypes = listOf(MissionType.SEA),
+                            missionSource = MissionSource.MONITORFISH,
+                            isGeometryComputedFromControls = false,
+                            startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
                         ),
-                    ),
+                    actions =
+                        listOf(
+                            MissionAction(
+                                id = 3,
+                                vesselId = 1,
+                                missionId = 123,
+                                actionDatetimeUtc = ZonedDateTime.now(),
+                                actionType = MissionActionType.SEA_CONTROL,
+                                seizureAndDiversion = false,
+                                speciesInfractions = listOf(),
+                                isDeleted = false,
+                                hasSomeGearsSeized = false,
+                                hasSomeSpeciesSeized = false,
+                                isFromPoseidon = false,
+                                flagState = CountryCode.FR,
+                                userTrigram = "LTH",
+                                completion = Completion.TO_COMPLETE,
+                            ),
+                        ),
                 ),
             ),
         )
@@ -132,31 +133,33 @@ class MissionsControllerITests {
             getMission.execute(any())
         }.willReturn(
             MissionAndActions(
-                mission = Mission(
-                    123,
-                    missionTypes = listOf(MissionType.SEA),
-                    missionSource = MissionSource.MONITORFISH,
-                    isGeometryComputedFromControls = false,
-                    startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
-                ),
-                actions = listOf(
-                    MissionAction(
-                        id = 3,
-                        vesselId = 1,
-                        missionId = 123,
-                        actionDatetimeUtc = ZonedDateTime.now(),
-                        actionType = MissionActionType.SEA_CONTROL,
-                        seizureAndDiversion = false,
-                        speciesInfractions = listOf(),
-                        isDeleted = false,
-                        hasSomeGearsSeized = false,
-                        hasSomeSpeciesSeized = false,
-                        isFromPoseidon = false,
-                        completion = Completion.TO_COMPLETE,
-                        flagState = CountryCode.FR,
-                        userTrigram = "LTH",
+                mission =
+                    Mission(
+                        123,
+                        missionTypes = listOf(MissionType.SEA),
+                        missionSource = MissionSource.MONITORFISH,
+                        isGeometryComputedFromControls = false,
+                        startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
                     ),
-                ),
+                actions =
+                    listOf(
+                        MissionAction(
+                            id = 3,
+                            vesselId = 1,
+                            missionId = 123,
+                            actionDatetimeUtc = ZonedDateTime.now(),
+                            actionType = MissionActionType.SEA_CONTROL,
+                            seizureAndDiversion = false,
+                            speciesInfractions = listOf(),
+                            isDeleted = false,
+                            hasSomeGearsSeized = false,
+                            hasSomeSpeciesSeized = false,
+                            isFromPoseidon = false,
+                            completion = Completion.TO_COMPLETE,
+                            flagState = CountryCode.FR,
+                            userTrigram = "LTH",
+                        ),
+                    ),
             ),
         )
 

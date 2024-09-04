@@ -9,7 +9,6 @@ import org.springframework.cache.CacheManager
 import org.springframework.transaction.annotation.Transactional
 
 class JpaRiskFactorRepositoryITests : AbstractDBTests() {
-
     @Autowired
     private lateinit var jpaRiskFactorRepository: JpaRiskFactorRepository
 

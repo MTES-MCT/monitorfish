@@ -127,7 +127,7 @@ export function FormikFishingCatchesMultiSelect({ isReadOnly }: FormikFishingCat
                       label={`Zone de capture (${fishingCatch.specyCode})`}
                       name={`fishingCatches[${index}].faoArea`}
                       options={faoAreasAsOptions ?? []}
-                      placeholder="Choisir une zone"
+                      placeholder="Zone"
                       readOnly={isReadOnly}
                       searchable
                       virtualized
@@ -179,6 +179,6 @@ const Row = styled.div`
 
 const SpecyTag = styled(SingleTag)`
   margin-top: 2px;
-  max-width: 220px;
-  min-width: 220px;
+  max-width: 260px;
+  min-width: 260px;
 `

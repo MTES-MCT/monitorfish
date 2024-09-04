@@ -17,9 +17,9 @@ data class SpeciesEntity(
     @Column(name = "species_name")
     val name: String,
 ) {
-
-    fun toSpecies() = Species(
-        code = code,
-        name = name,
-    )
+    fun toSpecies() =
+        Species(
+            code = code,
+            name = name,
+        )
 }

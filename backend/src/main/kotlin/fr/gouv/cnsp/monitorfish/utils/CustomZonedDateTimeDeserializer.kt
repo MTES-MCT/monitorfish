@@ -12,9 +12,10 @@ class CustomZonedDateTimeDeserializer : JsonDeserializer<CustomZonedDateTime>() 
         jsonParser: JsonParser,
         deserializationContext: DeserializationContext,
     ): CustomZonedDateTime {
-        val zonedDateTime = ZonedDateTime
-            .parse(jsonParser.text, DateTimeFormatter.ISO_DATE_TIME)
-            .withZoneSameInstant(ZoneOffset.UTC)
+        val zonedDateTime =
+            ZonedDateTime
+                .parse(jsonParser.text, DateTimeFormatter.ISO_DATE_TIME)
+                .withZoneSameInstant(ZoneOffset.UTC)
 
         return CustomZonedDateTime(zonedDateTime)
     }

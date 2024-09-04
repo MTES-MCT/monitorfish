@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository
 class JpaLogbookRawMessageRepository(
     private val dbLogbookRawMessageRepository: DBLogbookRawMessageRepository,
 ) : LogbookRawMessageRepository {
-
     @Cacheable(value = ["logbook_raw_message"])
     override fun findRawMessage(operationNumber: String): String? {
         return try {

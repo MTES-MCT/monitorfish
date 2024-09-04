@@ -22,5 +22,8 @@ interface VesselRepository {
 
     fun search(searched: String): List<Vessel>
 
-    fun findUnderCharterForVessel(vesselIdentifier: VesselIdentifier, value: String): Boolean
+    fun findUnderCharterForVessel(
+        vesselIdentifier: VesselIdentifier,
+        value: String,
+    ): Boolean
 }

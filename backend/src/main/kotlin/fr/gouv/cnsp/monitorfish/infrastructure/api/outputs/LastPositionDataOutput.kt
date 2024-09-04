@@ -79,11 +79,12 @@ data class LastPositionDataOutput(
                 districtCode = position.districtCode,
                 gearOnboard = position.gearOnboard?.map { GearLastPositionDataOutput.fromGearLastPosition(it) },
                 segments = position.segments,
-                speciesOnboard = position.speciesOnboard?.map {
-                    SpeciesLastPositionDataOutput.fromSpeciesLastPosition(
-                        it,
-                    )
-                },
+                speciesOnboard =
+                    position.speciesOnboard?.map {
+                        SpeciesLastPositionDataOutput.fromSpeciesLastPosition(
+                            it,
+                        )
+                    },
                 totalWeightOnboard = position.totalWeightOnboard,
                 lastControlDateTime = position.lastControlDateTime,
                 lastControlInfraction = position.lastControlInfraction,

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/bff/v1/ports")
 @Tag(name = "APIs for Ports")
 class PortController(private val getActivePorts: GetActivePorts) {
-
     @GetMapping("")
     @Operation(summary = "Get all active ports")
     fun getActivePorts(): List<PortDataOutput> {

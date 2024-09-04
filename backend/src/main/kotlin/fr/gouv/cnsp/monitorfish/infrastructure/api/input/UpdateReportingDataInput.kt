@@ -14,14 +14,15 @@ class UpdateReportingDataInput(
     val description: String? = null,
     val natinfCode: Int? = null,
 ) {
-    fun toUpdatedReportingValues() = UpdatedInfractionSuspicionOrObservation(
-        reportingActor = this.reportingActor,
-        type = this.type,
-        controlUnitId = this.controlUnitId,
-        authorTrigram = this.authorTrigram,
-        authorContact = this.authorContact,
-        title = this.title,
-        description = this.description,
-        natinfCode = this.natinfCode,
-    )
+    fun toUpdatedReportingValues() =
+        UpdatedInfractionSuspicionOrObservation(
+            reportingActor = this.reportingActor,
+            type = this.type,
+            controlUnitId = this.controlUnitId,
+            authorTrigram = this.authorTrigram,
+            authorContact = this.authorContact,
+            title = this.title,
+            description = this.description,
+            natinfCode = this.natinfCode,
+        )
 }

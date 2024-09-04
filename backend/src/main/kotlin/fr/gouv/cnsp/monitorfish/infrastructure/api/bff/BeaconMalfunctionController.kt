@@ -23,7 +23,6 @@ class BeaconMalfunctionController(
     private val saveBeaconMalfunctionComment: SaveBeaconMalfunctionComment,
     private val requestNotification: RequestNotification,
 ) {
-
     @GetMapping(value = [""])
     @Operation(summary = "Get all beacon malfunctions")
     fun getAllBeaconMalfunctions(): List<BeaconMalfunctionDataOutput> {

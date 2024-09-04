@@ -22,7 +22,6 @@ import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class SilencePendingAlertUTests {
-
     @MockBean
     private lateinit var pendingAlertRepository: PendingAlertRepository
 
@@ -35,17 +34,18 @@ class SilencePendingAlertUTests {
     @Test
     fun `execute Should silence a pending alert for one day`() {
         // Given
-        val pendingAlert = PendingAlert(
-            internalReferenceNumber = "FRFGRGR",
-            externalReferenceNumber = "RGD",
-            ircs = "6554fEE",
-            vesselId = 123,
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            flagState = CountryCode.FR,
-            tripNumber = "123456",
-            creationDate = ZonedDateTime.now(),
-            value = ThreeMilesTrawlingAlert(),
-        )
+        val pendingAlert =
+            PendingAlert(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselId = 123,
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                tripNumber = "123456",
+                creationDate = ZonedDateTime.now(),
+                value = ThreeMilesTrawlingAlert(),
+            )
         given(pendingAlertRepository.find(any())).willReturn(pendingAlert)
 
         // When
@@ -74,17 +74,18 @@ class SilencePendingAlertUTests {
     @Test
     fun `execute Should silence a pending alert for a custom period`() {
         // Given
-        val pendingAlert = PendingAlert(
-            internalReferenceNumber = "FRFGRGR",
-            externalReferenceNumber = "RGD",
-            ircs = "6554fEE",
-            vesselId = 123,
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            flagState = CountryCode.FR,
-            tripNumber = "123456",
-            creationDate = ZonedDateTime.now(),
-            value = ThreeMilesTrawlingAlert(),
-        )
+        val pendingAlert =
+            PendingAlert(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselId = 123,
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                tripNumber = "123456",
+                creationDate = ZonedDateTime.now(),
+                value = ThreeMilesTrawlingAlert(),
+            )
         given(pendingAlertRepository.find(any())).willReturn(pendingAlert)
 
         // When
@@ -111,31 +112,33 @@ class SilencePendingAlertUTests {
     @Test
     fun `execute Should throw an exception When silencing a pending alert for a custom period Without after or before dates`() {
         // Given
-        val pendingAlert = PendingAlert(
-            internalReferenceNumber = "FRFGRGR",
-            externalReferenceNumber = "RGD",
-            ircs = "6554fEE",
-            vesselId = 123,
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            flagState = CountryCode.FR,
-            tripNumber = "123456",
-            creationDate = ZonedDateTime.now(),
-            value = ThreeMilesTrawlingAlert(),
-        )
+        val pendingAlert =
+            PendingAlert(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselId = 123,
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                tripNumber = "123456",
+                creationDate = ZonedDateTime.now(),
+                value = ThreeMilesTrawlingAlert(),
+            )
         given(pendingAlertRepository.find(any())).willReturn(pendingAlert)
 
         // When
-        val throwable = catchThrowable {
-            SilencePendingAlert(
-                pendingAlertRepository,
-                silencedAlertRepository,
-                lastPositionRepository,
-            ).execute(
-                666,
-                SilenceAlertPeriod.CUSTOM,
-                null,
-            )
-        }
+        val throwable =
+            catchThrowable {
+                SilencePendingAlert(
+                    pendingAlertRepository,
+                    silencedAlertRepository,
+                    lastPositionRepository,
+                ).execute(
+                    666,
+                    SilenceAlertPeriod.CUSTOM,
+                    null,
+                )
+            }
 
         // Then
         assertThat(throwable).isNotNull

@@ -11,21 +11,30 @@ interface DBControlObjectivesRepository : CrudRepository<ControlObjectivesEntity
         value = "UPDATE control_objectives SET target_number_of_controls_at_sea = :targetNumberOfControlsAtSea WHERE id = :controlObjectiveId",
         nativeQuery = true,
     )
-    fun updateTargetNumberOfControlsAtSea(controlObjectiveId: Int, targetNumberOfControlsAtSea: Int)
+    fun updateTargetNumberOfControlsAtSea(
+        controlObjectiveId: Int,
+        targetNumberOfControlsAtSea: Int,
+    )
 
     @Modifying(clearAutomatically = true)
     @Query(
         value = "UPDATE control_objectives SET target_number_of_controls_at_port = :targetNumberOfControlsAtPort WHERE id = :controlObjectiveId",
         nativeQuery = true,
     )
-    fun updateTargetNumberOfControlsAtPort(controlObjectiveId: Int, targetNumberOfControlsAtPort: Int)
+    fun updateTargetNumberOfControlsAtPort(
+        controlObjectiveId: Int,
+        targetNumberOfControlsAtPort: Int,
+    )
 
     @Modifying(clearAutomatically = true)
     @Query(
         value = "UPDATE control_objectives SET control_priority_level = :controlPriorityLevel WHERE id = :controlObjectiveId",
         nativeQuery = true,
     )
-    fun updateControlPriorityLevel(controlObjectiveId: Int, controlPriorityLevel: Double)
+    fun updateControlPriorityLevel(
+        controlObjectiveId: Int,
+        controlPriorityLevel: Double,
+    )
 
     @Query
     fun findAllByYearEquals(year: Int): List<ControlObjectivesEntity>
@@ -43,7 +52,10 @@ interface DBControlObjectivesRepository : CrudRepository<ControlObjectivesEntity
     """,
         nativeQuery = true,
     )
-    fun duplicateCurrentYearAsNextYear(currentYear: Int, nextYear: Int)
+    fun duplicateCurrentYearAsNextYear(
+        currentYear: Int,
+        nextYear: Int,
+    )
 
     @Modifying(clearAutomatically = true)
     @Query(

@@ -36,17 +36,17 @@ data class BeaconMalfunctionNotificationEntity(
     @Column(name = "error_message")
     val errorMessage: String? = null,
 ) {
-
-    fun toBeaconMalfunctionNotification() = BeaconMalfunctionNotification(
-        id = id,
-        beaconMalfunctionId = beaconMalfunctionId,
-        dateTimeUtc = dateTimeUtc.atZone(ZoneOffset.UTC),
-        notificationType = notificationType,
-        communicationMeans = communicationMeans,
-        recipientFunction = recipientFunction,
-        recipientName = recipientName,
-        recipientAddressOrNumber = recipientAddressOrNumber,
-        success = success,
-        errorMessage = errorMessage,
-    )
+    fun toBeaconMalfunctionNotification() =
+        BeaconMalfunctionNotification(
+            id = id,
+            beaconMalfunctionId = beaconMalfunctionId,
+            dateTimeUtc = dateTimeUtc.atZone(ZoneOffset.UTC),
+            notificationType = notificationType,
+            communicationMeans = communicationMeans,
+            recipientFunction = recipientFunction,
+            recipientName = recipientName,
+            recipientAddressOrNumber = recipientAddressOrNumber,
+            success = success,
+            errorMessage = errorMessage,
+        )
 }

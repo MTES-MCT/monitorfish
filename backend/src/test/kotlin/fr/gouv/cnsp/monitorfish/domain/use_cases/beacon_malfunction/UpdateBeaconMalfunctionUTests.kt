@@ -18,7 +18,6 @@ import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class UpdateBeaconMalfunctionUTests {
-
     @MockBean
     private lateinit var beaconMalfunctionsRepository: BeaconMalfunctionsRepository
 
@@ -34,14 +33,15 @@ class UpdateBeaconMalfunctionUTests {
     @Test
     fun `execute Should throw an exception When no field to update is given`() {
         // When
-        val throwable = catchThrowable {
-            UpdateBeaconMalfunction(
-                beaconMalfunctionsRepository,
-                beaconMalfunctionActionRepository,
-                getBeaconMalfunction,
-            )
-                .execute(1, null, null, null)
-        }
+        val throwable =
+            catchThrowable {
+                UpdateBeaconMalfunction(
+                    beaconMalfunctionsRepository,
+                    beaconMalfunctionActionRepository,
+                    getBeaconMalfunction,
+                )
+                    .execute(1, null, null, null)
+            }
 
         // Then
         assertThat(throwable).isInstanceOf(IllegalArgumentException::class.java)
@@ -51,14 +51,15 @@ class UpdateBeaconMalfunctionUTests {
     @Test
     fun `execute Should throw an exception When the Stage is ARCHIVED but there si no endOfBeaconMalfunctionReason`() {
         // When
-        val throwable = catchThrowable {
-            UpdateBeaconMalfunction(
-                beaconMalfunctionsRepository,
-                beaconMalfunctionActionRepository,
-                getBeaconMalfunction,
-            )
-                .execute(1, null, Stage.ARCHIVED, null)
-        }
+        val throwable =
+            catchThrowable {
+                UpdateBeaconMalfunction(
+                    beaconMalfunctionsRepository,
+                    beaconMalfunctionActionRepository,
+                    getBeaconMalfunction,
+                )
+                    .execute(1, null, Stage.ARCHIVED, null)
+            }
 
         // Then
         assertThat(throwable).isInstanceOf(IllegalArgumentException::class.java)
@@ -93,58 +94,64 @@ class UpdateBeaconMalfunctionUTests {
         given(getBeaconMalfunction.execute(1))
             .willReturn(
                 BeaconMalfunctionResumeAndDetails(
-                    beaconMalfunction = BeaconMalfunction(
-                        1, "CFR", "EXTERNAL_IMMAT", "IRCS",
-                        "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
-                        ZonedDateTime.now(), null, ZonedDateTime.now(),
-                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
-                    ),
-                    comments = listOf(
-                        BeaconMalfunctionComment(
-                            1,
-                            1,
-                            "A comment",
-                            BeaconMalfunctionCommentUserType.SIP,
-                            ZonedDateTime.now(),
+                    beaconMalfunction =
+                        BeaconMalfunction(
+                            1, "CFR", "EXTERNAL_IMMAT", "IRCS",
+                            "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                            ZonedDateTime.now(), null, ZonedDateTime.now(),
+                            beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
                         ),
-                    ),
-                    actions = listOf(
-                        BeaconMalfunctionAction(
-                            1,
-                            1,
-                            BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
-                            "PREVIOUS",
-                            "NEXT",
-                            ZonedDateTime.now(),
-                        ),
-                    ),
-                    notifications = listOf(
-                        BeaconMalfunctionNotifications(
-                            beaconMalfunctionId = 1,
-                            dateTimeUtc = ZonedDateTime.now(),
-                            notificationType = BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
-                            notifications = listOf(
-                                BeaconMalfunctionNotification(
-                                    id = 1, beaconMalfunctionId = 1, dateTimeUtc = ZonedDateTime.now(),
-                                    notificationType = BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
-                                    communicationMeans = CommunicationMeans.SMS,
-                                    recipientFunction = BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
-                                    recipientName = "Jack Sparrow", recipientAddressOrNumber = "0000000000",
-                                    success = false, errorMessage = "This message could not be delivered",
-                                ),
+                    comments =
+                        listOf(
+                            BeaconMalfunctionComment(
+                                1,
+                                1,
+                                "A comment",
+                                BeaconMalfunctionCommentUserType.SIP,
+                                ZonedDateTime.now(),
                             ),
                         ),
-                    ),
+                    actions =
+                        listOf(
+                            BeaconMalfunctionAction(
+                                1,
+                                1,
+                                BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
+                                "PREVIOUS",
+                                "NEXT",
+                                ZonedDateTime.now(),
+                            ),
+                        ),
+                    notifications =
+                        listOf(
+                            BeaconMalfunctionNotifications(
+                                beaconMalfunctionId = 1,
+                                dateTimeUtc = ZonedDateTime.now(),
+                                notificationType = BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
+                                notifications =
+                                    listOf(
+                                        BeaconMalfunctionNotification(
+                                            id = 1, beaconMalfunctionId = 1, dateTimeUtc = ZonedDateTime.now(),
+                                            notificationType = BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
+                                            communicationMeans = CommunicationMeans.SMS,
+                                            recipientFunction = BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
+                                            recipientName = "Jack Sparrow", recipientAddressOrNumber = "0000000000",
+                                            success = false, errorMessage = "This message could not be delivered",
+                                        ),
+                                    ),
+                            ),
+                        ),
                 ),
             )
 
         // When
-        val updatedBeaconMalfunction = UpdateBeaconMalfunction(
-            beaconMalfunctionsRepository,
-            beaconMalfunctionActionRepository,
-            getBeaconMalfunction,
-        )
-            .execute(1, VesselStatus.AT_SEA, null, null)
+        val updatedBeaconMalfunction =
+            UpdateBeaconMalfunction(
+                beaconMalfunctionsRepository,
+                beaconMalfunctionActionRepository,
+                getBeaconMalfunction,
+            )
+                .execute(1, VesselStatus.AT_SEA, null, null)
 
         // Then
         assertThat(updatedBeaconMalfunction.actions).hasSize(1)

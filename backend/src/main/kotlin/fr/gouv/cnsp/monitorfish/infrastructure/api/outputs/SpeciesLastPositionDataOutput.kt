@@ -9,11 +9,12 @@ data class SpeciesLastPositionDataOutput(
     var gear: String? = null,
 ) {
     companion object {
-        fun fromSpeciesLastPosition(species: Species) = SpeciesLastPositionDataOutput(
-            weight = species.weight,
-            species = species.species,
-            faoZone = species.faoZone,
-            gear = species.gear,
-        )
+        fun fromSpeciesLastPosition(species: Species) =
+            SpeciesLastPositionDataOutput(
+                weight = species.weight,
+                species = species.species,
+                faoZone = species.faoZone,
+                gear = species.gear,
+            )
     }
 }

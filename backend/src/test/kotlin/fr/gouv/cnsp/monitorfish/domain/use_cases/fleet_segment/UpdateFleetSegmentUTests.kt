@@ -12,16 +12,16 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
 class UpdateFleetSegmentUTests {
-
     @MockBean
     private lateinit var fleetSegmentRepository: FleetSegmentRepository
 
     @Test
     fun `execute Should throw an exception When there is no fields given`() {
         // When
-        val throwable = catchThrowable {
-            UpdateFleetSegment(fleetSegmentRepository).execute("SEGMENT", CreateOrUpdateFleetSegmentFields(), 2021)
-        }
+        val throwable =
+            catchThrowable {
+                UpdateFleetSegment(fleetSegmentRepository).execute("SEGMENT", CreateOrUpdateFleetSegmentFields(), 2021)
+            }
 
         // Then
         assertThat(throwable).isNotNull

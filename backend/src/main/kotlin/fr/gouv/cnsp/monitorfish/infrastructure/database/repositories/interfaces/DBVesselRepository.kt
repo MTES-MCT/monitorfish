@@ -7,18 +7,23 @@ import org.springframework.data.repository.query.Param
 
 interface DBVesselRepository : CrudRepository<VesselEntity, Int> {
     @Query(
-        value = "SELECT * FROM vessels WHERE cfr LIKE %:searched% " +
-            "OR mmsi LIKE %:searched% " +
-            "OR vessel_name LIKE %:searched% " +
-            "OR external_immatriculation LIKE %:searched% " +
-            "OR ircs LIKE %:searched% limit 50",
+        value =
+            "SELECT * FROM vessels WHERE cfr LIKE %:searched% " +
+                "OR mmsi LIKE %:searched% " +
+                "OR vessel_name LIKE %:searched% " +
+                "OR external_immatriculation LIKE %:searched% " +
+                "OR ircs LIKE %:searched% limit 50",
         nativeQuery = true,
     )
-    fun searchBy(@Param("searched") searched: String): List<VesselEntity>
+    fun searchBy(
+        @Param("searched") searched: String,
+    ): List<VesselEntity>
 
     // Only used in tests
     @Query(value = "SELECT * FROM vessels WHERE cfr = :cfr LIMIT 1", nativeQuery = true)
-    fun findFirstByCfr(@Param("cfr") cfr: String): VesselEntity?
+    fun findFirstByCfr(
+        @Param("cfr") cfr: String,
+    ): VesselEntity?
 
     fun findByInternalReferenceNumber(internalReferenceNumber: String): VesselEntity
 
@@ -58,5 +63,8 @@ interface DBVesselRepository : CrudRepository<VesselEntity, Int> {
         """,
         nativeQuery = true,
     )
-    fun findUnderCharterByVesselIdentifierEquals(vesselIdentifier: String, value: String): Boolean
+    fun findUnderCharterByVesselIdentifierEquals(
+        vesselIdentifier: String,
+        value: String,
+    ): Boolean
 }

@@ -14,7 +14,6 @@ class JpaMissionActionsRepository(
     private val dbMissionActionsRepository: DBMissionActionsRepository,
     private val mapper: ObjectMapper,
 ) : MissionActionsRepository {
-
     override fun findVesselMissionActionsAfterDateTime(
         vesselId: Int,
         afterDateTime: ZonedDateTime,
@@ -50,7 +49,10 @@ class JpaMissionActionsRepository(
         return dbMissionActionsRepository.findById(id).get().toMissionAction(mapper)
     }
 
-    override fun findSeaAndLandControlBetweenDates(beforeDateTime: ZonedDateTime, afterDateTime: ZonedDateTime): List<MissionAction> {
+    override fun findSeaAndLandControlBetweenDates(
+        beforeDateTime: ZonedDateTime,
+        afterDateTime: ZonedDateTime,
+    ): List<MissionAction> {
         return dbMissionActionsRepository.findAllByActionDatetimeUtcBeforeAndActionDatetimeUtcAfterAndIsDeletedIsFalseAndActionTypeIn(
             beforeDateTime.toInstant(),
             afterDateTime.toInstant(),

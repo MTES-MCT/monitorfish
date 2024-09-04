@@ -47,7 +47,7 @@
     "dayjs": "1.11.13",
     "deep-object-diff": "1.1.9",
     "diacritics": "1.3.0",
-    "export-to-csv": "0.2.1",
+    "export-to-csv": "1.4.0",
     "formik": "2.4.6",
     "fuse.js": "7.0.0",
     "hammerjs": "2.0.8",

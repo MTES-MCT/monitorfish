@@ -633,7 +633,7 @@ export const Footer = styled.div`
   padding: 16px;
 `
 const DeleteButton = styled(Button)`
-  :not([disabled]) {
+  &:not([disabled]) {
     svg {
       color: ${p => p.theme.color.maximumRed};
     }

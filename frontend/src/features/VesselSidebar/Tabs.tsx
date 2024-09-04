@@ -122,14 +122,14 @@ const Tab = styled.button<{
   ${props => (!props.isLast ? `border-right: 1px solid ${COLORS.lightGray};` : null)}
   background: ${props => (props.isActive ? props.theme.color.blueGray : props.theme.color.charcoal)};
   color: ${props => (props.isActive ? props.theme.color.white : props.theme.color.lightGray)};
-  :hover,
-  :focus {
+  &:hover,
+  &:focus {
     color: ${p => p.theme.color.white};
     background: ${p => p.theme.color.blueYonder};
     ${props => (!props.isLast ? `border-right: 1px solid ${COLORS.lightGray};` : null)}
   }
 
-  :active {
+  &:active {
     color: ${p => p.theme.color.white};
     background: ${p => p.theme.color.blueGray};
     ${props => (!props.isLast ? `border-right: 1px solid ${COLORS.lightGray};` : null)}

@@ -124,7 +124,7 @@ const Wrapper = styled.li`
   width: -webkit-fill-available;
   width: stretch;
 
-  :hover {
+  &:hover {
     background: ${THEME.color.blueGray['25']};
   }
 `

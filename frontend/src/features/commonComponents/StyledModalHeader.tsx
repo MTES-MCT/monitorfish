@@ -20,7 +20,7 @@ export const StyledModalHeader = styled(Modal.Header)`
     margin: unset;
     padding: unset;
 
-    :hover {
+    &:hover {
       right: 13px;
     }
   }

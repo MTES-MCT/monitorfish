@@ -154,7 +154,7 @@ const StyledDialogBody = styled(Dialog.Body)`
     > .Field-DatePicker {
       margin-left: 12px;
 
-      :first-child {
+      &:first-child {
         margin-right: 12px;
       }
     }

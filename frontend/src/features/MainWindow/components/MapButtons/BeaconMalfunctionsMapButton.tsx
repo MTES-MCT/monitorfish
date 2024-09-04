@@ -54,8 +54,8 @@ const BeaconMalfunctionsButton = styled(MapButton)<{
   height: 40px;
   width: 40px;
 
-  :hover,
-  :focus {
+  &:hover,
+  &:focus {
     background: ${p => (p.$isActive ? p.theme.color.blueGray : p.theme.color.charcoal)};
   }
 `

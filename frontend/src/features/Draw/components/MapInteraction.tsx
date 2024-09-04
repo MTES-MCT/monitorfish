@@ -76,7 +76,7 @@ const Title = styled.h1`
 
 const ButtonGroup = styled.div`
   display: inline-block;
-  & > :not(:last-child) {
+  & > *:not(:last-child) {
     margin-right: 16px;
   }
 `

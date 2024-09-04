@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals'
 
-import { dummyControlUnits } from './__mock__/controlUnits'
 import { getControlUnitsOptionsFromControlUnits } from '../utils'
+import { dummyControlUnits } from './__mock__/controlUnits'
 
 describe('controlUnits/utils', () => {
   it('getControlUnitsOptionsFromControlUnits Should return active control units', async () => {

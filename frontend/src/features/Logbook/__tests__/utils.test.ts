@@ -1,13 +1,6 @@
 import { expect } from '@jest/globals'
 
 import {
-  correctedLANMessage,
-  correctedPNOMessage,
-  dummyCpsMessage,
-  dummyLogbookMessages,
-  dummyLanMessageWithLVRCPresentationSpecies
-} from './__mocks__/logbookMessages'
-import {
   buildCatchArray,
   getCPSDistinctSpecies,
   getDEPMessage,
@@ -21,6 +14,13 @@ import {
   getTotalLANWeight,
   getTotalPNOWeight
 } from '../utils'
+import {
+  correctedLANMessage,
+  correctedPNOMessage,
+  dummyCpsMessage,
+  dummyLogbookMessages,
+  dummyLanMessageWithLVRCPresentationSpecies
+} from './__mocks__/logbookMessages'
 
 describe('Logbook/utils.tsx', () => {
   it('getPNOMessage Should get the first valid PNO message', async () => {

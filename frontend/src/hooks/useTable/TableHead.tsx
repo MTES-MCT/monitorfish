@@ -18,7 +18,7 @@ export type TableHeadProps = {
 }
 export function TableHead({
   columns,
-  isAllChecked,
+  isAllChecked = false,
   isCheckable,
   isSortingDesc,
   onAllCheckChange,
@@ -38,7 +38,7 @@ export function TableHead({
       <FlexboxGrid role="row">
         {isCheckable && (
           <CellWrapper $fixedWidth={36} style={{ padding: 0 }}>
-            <StyledCheckbox checked={isAllChecked || false} onChange={onAllCheckChange} />
+            <StyledCheckbox checked={isAllChecked} onChange={onAllCheckChange} />
           </CellWrapper>
         )}
 
@@ -51,7 +51,7 @@ export function TableHead({
               isSortedColumn={column.key === sortingKey}
               onClick={() => sortByKey(column)}
             >
-              {column.label || ''}
+              {column.label ?? ''}
             </CardTableColumnTitle>
           </CellWrapper>
         ))}

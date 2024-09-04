@@ -173,7 +173,7 @@ export function RegulatoryText({
         <Or>&nbsp;ou</Or>
         <StyledCheckbox
           checked={endDate === INFINITE}
-          label={"jusqu'à nouvel ordre"}
+          label="jusqu'à nouvel ordre"
           name="endDate"
           onChange={isChecked => {
             set('endDate', isChecked ? INFINITE : '')

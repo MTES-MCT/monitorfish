@@ -81,7 +81,7 @@ export function MeasurementMapButton() {
           className=".map-menu"
           data-cy="measurement-multiline"
           onClick={() => makeMeasurement(MeasurementType.MULTILINE)}
-          title={"Mesure d'une distance avec lignes brisées"}
+          title="Mesure d'une distance avec lignes brisées"
         >
           <MultiLineIcon />
         </MeasurementItem>
@@ -89,7 +89,7 @@ export function MeasurementMapButton() {
           className=".map-menu"
           data-cy="measurement-circle-range"
           onClick={() => makeMeasurement(MeasurementType.CIRCLE_RANGE)}
-          title={"Rayon d'action"}
+          title="Rayon d'action"
         >
           <CircleRangeIcon />
         </MeasurementItem>

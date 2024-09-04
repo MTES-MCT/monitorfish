@@ -20,6 +20,6 @@ export const useGetServiceWorker = () => {
   }, [])
 
   return {
-    serviceWorker: registration?.active || registration?.installing
+    serviceWorker: registration?.active ?? registration?.installing
   }
 }

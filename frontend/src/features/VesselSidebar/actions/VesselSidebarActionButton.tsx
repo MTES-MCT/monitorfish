@@ -11,7 +11,7 @@ export const VesselSidebarActionButton = styled(MapButton)<{
   top: ${p => p.top}px;
   height: 30px;
   width: 30px;
-  background: ${p => p.backgroundColor || p.theme.color.charcoal};
+  background: ${p => p.backgroundColor ?? p.theme.color.charcoal};
   position: absolute;
   margin-right: ${p => (p.isSidebarOpen ? 505 : -45)}px;
   opacity: ${p => (p.isSidebarOpen ? 1 : 0)};
@@ -23,8 +23,8 @@ export const VesselSidebarActionButton = styled(MapButton)<{
     all 0.5s,
     right 0.3s;
 
-  :hover,
-  :focus {
-    background: ${p => p.backgroundColor || p.theme.color.charcoal};
+  &:hover,
+  &:focus {
+    background: ${p => p.backgroundColor ?? p.theme.color.charcoal};
   }
 `

@@ -112,7 +112,7 @@ export function SilencedAlerts() {
             <Row
               key={alert.id}
               $isFocused={alert.id === focusedPendingAlertId}
-              $toClose={alert.isReactivated || false}
+              $toClose={!!alert.isReactivated || false}
               index={index + 1}
             >
               {alert.isReactivated && <AlertTransition>L’alerte est réactivée</AlertTransition>}
@@ -145,11 +145,11 @@ export function SilencedAlerts() {
                   </IconColumn>
                   <IconColumn>
                     <ReactivateAlertIcon
-                      alt={"Réactiver l'alerte"}
+                      alt="Réactiver l'alerte"
                       data-cy="side-window-silenced-alerts-delete-silenced-alert"
                       onClick={() => reactivateSilencedAlertCallback(alert.id)}
                       src={`${baseUrl}/Icone_alertes_gris.png`}
-                      title={"Réactiver l'alerte"}
+                      title="Réactiver l'alerte"
                     />
                   </IconColumn>
                 </FlexboxGrid>
@@ -234,7 +234,7 @@ const SearchVesselInput = styled.input<{
   min-width: 280px;
   flex-grow: 0;
 
-  :hover, :focus: {
+  &:hover, &:focus: {
     border-bottom: ${p => `1px ${p.theme.color.lightGray} solid`};
   }
 `

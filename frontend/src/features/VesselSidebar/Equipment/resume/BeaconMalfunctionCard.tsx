@@ -70,7 +70,7 @@ export function BeaconMalfunctionCard({
           })
         )
       }}
-      title={"Afficher les détails de l'avarie"}
+      title="Afficher les détails de l'avarie"
     >
       <Title>
         {getFirstVesselStatus(beaconMalfunctionWithDetails) === BeaconMalfunctionVesselStatus.AT_PORT ? (

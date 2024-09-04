@@ -84,8 +84,8 @@ async function silenceAlertFromAPI(
   silencedAlertPeriodRequest: SilencedAlertPeriodRequest
 ): Promise<LEGACY_SilencedAlert> {
   // TODO Normalize this data before calling the api service rather than here.
-  const silencedAlertPeriod = silencedAlertPeriodRequest.silencedAlertPeriod || ''
-  const beforeDateTime = silencedAlertPeriodRequest.beforeDateTime?.toISOString() || ''
+  const silencedAlertPeriod = silencedAlertPeriodRequest.silencedAlertPeriod ?? ''
+  const beforeDateTime = silencedAlertPeriodRequest.beforeDateTime?.toISOString() ?? ''
 
   try {
     return await monitorfishApiKy

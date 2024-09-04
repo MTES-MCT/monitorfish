@@ -71,7 +71,7 @@ export const JDP_CSV_MAP_BASE: DownloadAsCsvMap<ActivityReportWithId> = {
   },
   objectState: {
     label: 'OBJECT_STATE',
-    transform: activity => toAlpha3(activity.vessel.flagState) || 'UNK'
+    transform: activity => toAlpha3(activity.vessel.flagState) ?? 'UNK'
   },
   vesselNationalIdentifier: 'OBJECT_NATIONAL_ID',
   'vessel.ircs': 'RC',
@@ -80,12 +80,12 @@ export const JDP_CSV_MAP_BASE: DownloadAsCsvMap<ActivityReportWithId> = {
   activityCode: 'ACTIVITY_CODE',
   gearCode: {
     label: 'GEAR_CODE',
-    transform: activity => activity.action.gearOnboard[0]?.gearCode || ''
+    transform: activity => activity.action.gearOnboard[0]?.gearCode ?? ''
   },
   meshSize: {
     label: 'MESH_SIZE',
     transform: activity =>
-      activity.action.gearOnboard[0]?.controlledMesh ?? (activity.action.gearOnboard[0]?.declaredMesh || '')
+      activity.action.gearOnboard[0]?.controlledMesh ?? activity.action.gearOnboard[0]?.declaredMesh ?? ''
   },
   faoArea: {
     label: 'FAO_AREA_CODE',

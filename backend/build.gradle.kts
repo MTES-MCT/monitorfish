@@ -4,7 +4,7 @@ plugins {
     id("org.springframework.boot") version "3.3.1"
     id("org.jetbrains.kotlin.plugin.spring") version "2.0.0"
     kotlin("jvm") version "1.9.23"
-    id("org.jetbrains.kotlin.plugin.allopen") version "1.9.22"
+    id("org.jetbrains.kotlin.plugin.allopen") version "2.0.20"
     kotlin("plugin.noarg") version "1.9.10"
     kotlin("plugin.jpa") version "2.0.0"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.1"

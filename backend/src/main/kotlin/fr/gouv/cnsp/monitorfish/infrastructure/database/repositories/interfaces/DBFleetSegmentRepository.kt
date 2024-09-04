@@ -11,56 +11,90 @@ interface DBFleetSegmentRepository : CrudRepository<FleetSegmentEntity, Long> {
         value = "UPDATE fleet_segments SET segment = :nextSegment WHERE segment = :segment and year = :year",
         nativeQuery = true,
     )
-    fun updateSegment(segment: String, nextSegment: String, year: Int)
+    fun updateSegment(
+        segment: String,
+        nextSegment: String,
+        year: Int,
+    )
 
     @Modifying(clearAutomatically = true)
     @Query(
         value = "UPDATE fleet_segments SET segment_name = :segmentName WHERE segment = :segment and year = :year",
         nativeQuery = true,
     )
-    fun updateSegmentName(segment: String, segmentName: String, year: Int)
+    fun updateSegmentName(
+        segment: String,
+        segmentName: String,
+        year: Int,
+    )
 
     @Modifying(clearAutomatically = true)
     @Query(
         value = "UPDATE fleet_segments SET gears = cast(:gears AS varchar[]) WHERE segment = :segment and year = :year",
         nativeQuery = true,
     )
-    fun updateGears(segment: String, gears: String, year: Int)
+    fun updateGears(
+        segment: String,
+        gears: String,
+        year: Int,
+    )
 
     @Modifying(clearAutomatically = true)
     @Query(
         value = "UPDATE fleet_segments SET fao_areas = cast(:faoAreas AS varchar[]) WHERE segment = :segment and year = :year",
         nativeQuery = true,
     )
-    fun updateFAOAreas(segment: String, faoAreas: String, year: Int)
+    fun updateFAOAreas(
+        segment: String,
+        faoAreas: String,
+        year: Int,
+    )
 
     @Modifying(clearAutomatically = true)
     @Query(
         value = "UPDATE fleet_segments SET target_species = cast(:targetSpecies AS varchar[]) WHERE segment = :segment and year = :year",
         nativeQuery = true,
     )
-    fun updateTargetSpecies(segment: String, targetSpecies: String, year: Int)
+    fun updateTargetSpecies(
+        segment: String,
+        targetSpecies: String,
+        year: Int,
+    )
 
     @Modifying(clearAutomatically = true)
     @Query(
         value = "UPDATE fleet_segments SET bycatch_species = cast(:bycatchSpecies AS varchar[]) WHERE segment = :segment and year = :year",
         nativeQuery = true,
     )
-    fun updateBycatchSpecies(segment: String, bycatchSpecies: String, year: Int)
+    fun updateBycatchSpecies(
+        segment: String,
+        bycatchSpecies: String,
+        year: Int,
+    )
 
     @Modifying(clearAutomatically = true)
     @Query(
         value = "UPDATE fleet_segments SET impact_risk_factor = :impactRiskFactor WHERE segment = :segment and year = :year",
         nativeQuery = true,
     )
-    fun updateImpactRiskFactor(segment: String, impactRiskFactor: Double, year: Int)
+    fun updateImpactRiskFactor(
+        segment: String,
+        impactRiskFactor: Double,
+        year: Int,
+    )
 
     @Query
-    fun findBySegmentAndYearEquals(segment: String, year: Int): FleetSegmentEntity
+    fun findBySegmentAndYearEquals(
+        segment: String,
+        year: Int,
+    ): FleetSegmentEntity
 
     @Modifying(clearAutomatically = true)
     @Query("DELETE FROM fleet_segments where segment = :segment and year = :year", nativeQuery = true)
-    fun deleteBySegmentAndYearEquals(segment: String, year: Int)
+    fun deleteBySegmentAndYearEquals(
+        segment: String,
+        year: Int,
+    )
 
     @Query
     fun findAllByYearEquals(year: Int): List<FleetSegmentEntity>
@@ -78,5 +112,8 @@ interface DBFleetSegmentRepository : CrudRepository<FleetSegmentEntity, Long> {
     """,
         nativeQuery = true,
     )
-    fun duplicateCurrentYearAsNextYear(currentYear: Int, nextYear: Int)
+    fun duplicateCurrentYearAsNextYear(
+        currentYear: Int,
+        nextYear: Int,
+    )
 }

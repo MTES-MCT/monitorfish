@@ -13,7 +13,6 @@ import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
 class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
-
     @Autowired
     private lateinit var jpaBeaconMalfunctionsRepository: JpaBeaconMalfunctionsRepository
 

@@ -13,7 +13,8 @@ data class FaoAreaEntity(
     @Column(name = "f_code")
     val faoCode: String,
 ) {
-    fun toFaoArea() = FaoArea(
-        faoCode = faoCode,
-    )
+    fun toFaoArea() =
+        FaoArea(
+            faoCode = faoCode,
+        )
 }

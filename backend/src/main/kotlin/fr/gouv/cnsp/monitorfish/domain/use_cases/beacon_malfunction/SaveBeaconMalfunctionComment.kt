@@ -18,12 +18,13 @@ class SaveBeaconMalfunctionComment(
         comment: String,
         userType: BeaconMalfunctionCommentUserType,
     ): BeaconMalfunctionResumeAndDetails {
-        val beaconMalfunctionComment = BeaconMalfunctionComment(
-            beaconMalfunctionId = beaconMalfunctionId,
-            comment = comment,
-            userType = userType,
-            dateTime = ZonedDateTime.now(),
-        )
+        val beaconMalfunctionComment =
+            BeaconMalfunctionComment(
+                beaconMalfunctionId = beaconMalfunctionId,
+                comment = comment,
+                userType = userType,
+                dateTime = ZonedDateTime.now(),
+            )
 
         beaconMalfunctionCommentsRepository.save(beaconMalfunctionComment)
 

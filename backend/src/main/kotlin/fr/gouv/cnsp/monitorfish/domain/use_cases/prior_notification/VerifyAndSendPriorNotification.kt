@@ -12,7 +12,11 @@ class VerifyAndSendPriorNotification(
     private val manualPriorNotificationRepository: ManualPriorNotificationRepository,
     private val getPriorNotification: GetPriorNotification,
 ) {
-    fun execute(reportId: String, operationDate: ZonedDateTime, isManuallyCreated: Boolean): PriorNotification {
+    fun execute(
+        reportId: String,
+        operationDate: ZonedDateTime,
+        isManuallyCreated: Boolean,
+    ): PriorNotification {
         if (isManuallyCreated) {
             manualPriorNotificationRepository
                 .updateState(reportId, isBeingSent = true, isSent = false, isVerified = true)

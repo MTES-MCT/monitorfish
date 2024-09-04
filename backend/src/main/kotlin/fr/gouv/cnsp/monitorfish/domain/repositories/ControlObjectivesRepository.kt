@@ -4,7 +4,9 @@ import fr.gouv.cnsp.monitorfish.domain.entities.control_objective.ControlObjecti
 
 interface ControlObjectivesRepository {
     fun findAllByYear(year: Int): List<ControlObjective>
+
     fun findYearEntries(): List<Int>
+
     fun update(
         id: Int,
         targetNumberOfControlsAtSea: Int?,
@@ -13,6 +15,11 @@ interface ControlObjectivesRepository {
     )
 
     fun delete(id: Int)
+
     fun add(controlObjective: ControlObjective): Int
-    fun addYear(currentYear: Int, nextYear: Int)
+
+    fun addYear(
+        currentYear: Int,
+        nextYear: Int,
+    )
 }

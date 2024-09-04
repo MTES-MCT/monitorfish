@@ -5,7 +5,9 @@ import java.time.ZonedDateTime
 
 interface PositionRepository {
     fun findAll(): List<Position>
+
     fun findAllByMmsi(mmsi: String): List<Position>
+
     fun findVesselLastPositionsByIrcs(
         ircs: String,
         from: ZonedDateTime,
@@ -33,5 +35,6 @@ interface PositionRepository {
     ): List<Position>
 
     fun save(position: Position)
+
     fun findLastPositionDate(): ZonedDateTime
 }

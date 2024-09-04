@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class JpaGearRepository(private val dbGearRepository: DBGearRepository) : GearRepository {
-
     @Cacheable(value = ["gears"])
     override fun findAll(): List<Gear> {
         return dbGearRepository.findAll().map {

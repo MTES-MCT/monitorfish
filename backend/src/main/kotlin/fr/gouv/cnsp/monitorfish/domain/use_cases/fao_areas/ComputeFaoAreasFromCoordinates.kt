@@ -9,7 +9,10 @@ import org.locationtech.jts.geom.GeometryFactory
 
 @UseCase
 class ComputeFaoAreasFromCoordinates(private val faoAreaRepository: FaoAreaRepository) {
-    fun execute(longitude: Double, latitude: Double): List<FaoArea> {
+    fun execute(
+        longitude: Double,
+        latitude: Double,
+    ): List<FaoArea> {
         val point = GeometryFactory().createPoint(Coordinate(longitude, latitude))
 
         val allFaoAreas = faoAreaRepository.findByIncluding(point)

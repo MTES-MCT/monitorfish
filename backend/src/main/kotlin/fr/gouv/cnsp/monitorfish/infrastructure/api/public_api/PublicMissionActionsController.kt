@@ -18,7 +18,6 @@ class PublicMissionActionsController(
     private val getMissionActions: GetMissionActions,
     private val patchMissionAction: PatchMissionAction,
 ) {
-
     @GetMapping("")
     @Operation(summary = "Get mission actions of specified mission")
     fun getMissionActions(

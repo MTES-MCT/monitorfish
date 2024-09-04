@@ -22,14 +22,22 @@ interface DBBeaconMalfunctionsRepository : CrudRepository<BeaconMalfunctionEntit
         value = "UPDATE beacon_malfunctions SET vessel_status = CAST(:vesselStatus AS beacon_malfunctions_vessel_status), vessel_status_last_modification_date_utc = :updateDateTime WHERE id = :beaconMalfunctionId",
         nativeQuery = true,
     )
-    fun updateVesselStatus(beaconMalfunctionId: Int, vesselStatus: String, updateDateTime: ZonedDateTime)
+    fun updateVesselStatus(
+        beaconMalfunctionId: Int,
+        vesselStatus: String,
+        updateDateTime: ZonedDateTime,
+    )
 
     @Modifying(clearAutomatically = true)
     @Query(
         value = "UPDATE beacon_malfunctions SET stage = CAST(:stage AS beacon_malfunctions_stage), vessel_status_last_modification_date_utc = :updateDateTime WHERE id = :beaconMalfunctionId",
         nativeQuery = true,
     )
-    fun updateStage(beaconMalfunctionId: Int, stage: String, updateDateTime: ZonedDateTime)
+    fun updateStage(
+        beaconMalfunctionId: Int,
+        stage: String,
+        updateDateTime: ZonedDateTime,
+    )
 
     @Modifying(clearAutomatically = true)
     @Query(
@@ -52,7 +60,10 @@ interface DBBeaconMalfunctionsRepository : CrudRepository<BeaconMalfunctionEntit
         value = "SELECT * FROM beacon_malfunctions WHERE vessel_id = :vesselId AND malfunction_start_date_utc >= :afterDateTime",
         nativeQuery = true,
     )
-    fun findAllByVesselIdEqualsAfterDateTime(vesselId: Int, afterDateTime: Instant): List<BeaconMalfunctionEntity>
+    fun findAllByVesselIdEqualsAfterDateTime(
+        vesselId: Int,
+        afterDateTime: Instant,
+    ): List<BeaconMalfunctionEntity>
 
     @Modifying(clearAutomatically = true)
     @Query(

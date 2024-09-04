@@ -15,7 +15,6 @@ import org.springframework.stereotype.Repository
 class JpaFleetSegmentRepository(
     private val dbFleetSegmentRepository: DBFleetSegmentRepository,
 ) : FleetSegmentRepository {
-
     override fun findAll(): List<FleetSegment> {
         return dbFleetSegmentRepository.findAll().map {
             it.toFleetSegment()
@@ -30,7 +29,11 @@ class JpaFleetSegmentRepository(
     }
 
     @Transactional
-    override fun update(segment: String, fields: CreateOrUpdateFleetSegmentFields, year: Int): FleetSegment {
+    override fun update(
+        segment: String,
+        fields: CreateOrUpdateFleetSegmentFields,
+        year: Int,
+    ): FleetSegment {
         try {
             fields.segmentName?.let {
                 dbFleetSegmentRepository.updateSegmentName(segment, it, year)
@@ -71,7 +74,10 @@ class JpaFleetSegmentRepository(
     }
 
     @Transactional
-    override fun delete(segment: String, year: Int): List<FleetSegment> {
+    override fun delete(
+        segment: String,
+        year: Int,
+    ): List<FleetSegment> {
         try {
             dbFleetSegmentRepository.deleteBySegmentAndYearEquals(segment, year)
 
@@ -92,7 +98,10 @@ class JpaFleetSegmentRepository(
     }
 
     @Transactional
-    override fun addYear(currentYear: Int, nextYear: Int) {
+    override fun addYear(
+        currentYear: Int,
+        nextYear: Int,
+    ) {
         dbFleetSegmentRepository.duplicateCurrentYearAsNextYear(currentYear, nextYear)
     }
 

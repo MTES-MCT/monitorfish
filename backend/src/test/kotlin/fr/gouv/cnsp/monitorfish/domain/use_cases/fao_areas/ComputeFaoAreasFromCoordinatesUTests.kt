@@ -16,7 +16,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
 class ComputeFaoAreasFromCoordinatesUTests {
-
     @MockBean
     private lateinit var faoAreaRepository: FaoAreaRepository
 

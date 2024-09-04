@@ -20,24 +20,25 @@ class JointDeploymentPlanUTests {
         jdp: JointDeploymentPlan,
     ) {
         // Given
-        val control = MissionAction(
-            id = 3,
-            vesselId = 2,
-            missionId = 3,
-            actionDatetimeUtc = ZonedDateTime.now(),
-            actionType = MissionActionType.SEA_CONTROL,
-            faoAreas = listOf("27.4.b", "27.4.c"),
-            seizureAndDiversion = false,
-            speciesOnboard = getSpecies(listOf("HKE", "ANN", "BOR")),
-            speciesInfractions = listOf(),
-            isDeleted = false,
-            hasSomeGearsSeized = false,
-            hasSomeSpeciesSeized = false,
-            isFromPoseidon = false,
-            completion = Completion.TO_COMPLETE,
-            flagState = CountryCode.FR,
-            userTrigram = "LTH",
-        )
+        val control =
+            MissionAction(
+                id = 3,
+                vesselId = 2,
+                missionId = 3,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                actionType = MissionActionType.SEA_CONTROL,
+                faoAreas = listOf("27.4.b", "27.4.c"),
+                seizureAndDiversion = false,
+                speciesOnboard = getSpecies(listOf("HKE", "ANN", "BOR")),
+                speciesInfractions = listOf(),
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
+            )
 
         // When
         val isLandControlApplicable = jdp.isLandControlApplicable(control)
@@ -52,28 +53,27 @@ class JointDeploymentPlanUTests {
 
     @ParameterizedTest
     @EnumSource(JointDeploymentPlan::class)
-    fun `isLandControlApplicable Should return true When it is a LAND control`(
-        jdp: JointDeploymentPlan,
-    ) {
+    fun `isLandControlApplicable Should return true When it is a LAND control`(jdp: JointDeploymentPlan) {
         // Given
-        val control = MissionAction(
-            id = 3,
-            vesselId = 2,
-            missionId = 3,
-            actionDatetimeUtc = ZonedDateTime.now(),
-            actionType = MissionActionType.LAND_CONTROL,
-            faoAreas = listOf("27.7.a"),
-            seizureAndDiversion = false,
-            speciesOnboard = getSpecies(listOf("SOL", "ANF")),
-            speciesInfractions = listOf(),
-            isDeleted = false,
-            hasSomeGearsSeized = false,
-            hasSomeSpeciesSeized = false,
-            isFromPoseidon = false,
-            completion = Completion.COMPLETED,
-            flagState = CountryCode.FR,
-            userTrigram = "LTH",
-        )
+        val control =
+            MissionAction(
+                id = 3,
+                vesselId = 2,
+                missionId = 3,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                actionType = MissionActionType.LAND_CONTROL,
+                faoAreas = listOf("27.7.a"),
+                seizureAndDiversion = false,
+                speciesOnboard = getSpecies(listOf("SOL", "ANF")),
+                speciesInfractions = listOf(),
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                isFromPoseidon = false,
+                completion = Completion.COMPLETED,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
+            )
 
         // When
         val isLandControlApplicable = jdp.isLandControlApplicable(control)
@@ -92,25 +92,26 @@ class JointDeploymentPlanUTests {
         jdp: JointDeploymentPlan,
     ) {
         // Given
-        val control = MissionAction(
-            id = 3,
-            vesselId = 2,
-            missionId = 3,
-            actionDatetimeUtc = ZonedDateTime.now(),
-            actionType = MissionActionType.SEA_CONTROL,
-            faoAreas = listOf("27.4.b", "27.4.c"),
-            seizureAndDiversion = false,
-            // The HKE specy is missing
-            speciesOnboard = getSpecies(listOf("ANN", "BOR")),
-            speciesInfractions = listOf(),
-            isDeleted = false,
-            hasSomeGearsSeized = false,
-            hasSomeSpeciesSeized = false,
-            isFromPoseidon = false,
-            completion = Completion.TO_COMPLETE,
-            flagState = CountryCode.FR,
-            userTrigram = "LTH",
-        )
+        val control =
+            MissionAction(
+                id = 3,
+                vesselId = 2,
+                missionId = 3,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                actionType = MissionActionType.SEA_CONTROL,
+                faoAreas = listOf("27.4.b", "27.4.c"),
+                seizureAndDiversion = false,
+                // The HKE specy is missing
+                speciesOnboard = getSpecies(listOf("ANN", "BOR")),
+                speciesInfractions = listOf(),
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
+            )
 
         // When
         val isLandControlApplicable = jdp.isLandControlApplicable(control)
@@ -129,25 +130,26 @@ class JointDeploymentPlanUTests {
         jdp: JointDeploymentPlan,
     ) {
         // Given
-        val control = MissionAction(
-            id = 3,
-            vesselId = 2,
-            missionId = 3,
-            actionDatetimeUtc = ZonedDateTime.now(),
-            actionType = MissionActionType.SEA_CONTROL,
-            // The "27.4" fao code is missing
-            faoAreas = listOf("27.5.b", "27.5.c"),
-            seizureAndDiversion = false,
-            speciesOnboard = getSpecies(listOf("HKE", "ANN", "BOR")),
-            speciesInfractions = listOf(),
-            isDeleted = false,
-            hasSomeGearsSeized = false,
-            hasSomeSpeciesSeized = false,
-            isFromPoseidon = false,
-            completion = Completion.TO_COMPLETE,
-            flagState = CountryCode.FR,
-            userTrigram = "LTH",
-        )
+        val control =
+            MissionAction(
+                id = 3,
+                vesselId = 2,
+                missionId = 3,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                actionType = MissionActionType.SEA_CONTROL,
+                // The "27.4" fao code is missing
+                faoAreas = listOf("27.5.b", "27.5.c"),
+                seizureAndDiversion = false,
+                speciesOnboard = getSpecies(listOf("HKE", "ANN", "BOR")),
+                speciesInfractions = listOf(),
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
+            )
 
         // When
         val isLandControlApplicable = jdp.isLandControlApplicable(control)
@@ -166,25 +168,26 @@ class JointDeploymentPlanUTests {
         jdp: JointDeploymentPlan,
     ) {
         // Given
-        val control = MissionAction(
-            id = 3,
-            vesselId = 2,
-            missionId = 3,
-            actionDatetimeUtc = ZonedDateTime.now(),
-            actionType = MissionActionType.SEA_CONTROL,
-            faoAreas = listOf("27.5.b", "27.5.c"),
-            seizureAndDiversion = false,
-            // ALB is contained in the quotas
-            speciesOnboard = getSpecies(listOf("HKE", "ANN", "BOR", "ALB")),
-            speciesInfractions = listOf(),
-            isDeleted = false,
-            hasSomeGearsSeized = false,
-            hasSomeSpeciesSeized = false,
-            isFromPoseidon = false,
-            completion = Completion.TO_COMPLETE,
-            flagState = CountryCode.GB,
-            userTrigram = "LTH",
-        )
+        val control =
+            MissionAction(
+                id = 3,
+                vesselId = 2,
+                missionId = 3,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                actionType = MissionActionType.SEA_CONTROL,
+                faoAreas = listOf("27.5.b", "27.5.c"),
+                seizureAndDiversion = false,
+                // ALB is contained in the quotas
+                speciesOnboard = getSpecies(listOf("HKE", "ANN", "BOR", "ALB")),
+                speciesInfractions = listOf(),
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
+                flagState = CountryCode.GB,
+                userTrigram = "LTH",
+            )
 
         // When
         val isLandControlApplicable = jdp.isLandControlApplicable(control)
@@ -203,24 +206,25 @@ class JointDeploymentPlanUTests {
         jdp: JointDeploymentPlan,
     ) {
         // Given
-        val control = MissionAction(
-            id = 3,
-            vesselId = 2,
-            missionId = 3,
-            actionDatetimeUtc = ZonedDateTime.now(),
-            actionType = MissionActionType.SEA_CONTROL,
-            faoAreas = listOf("27.5.b", "27.5.c"),
-            seizureAndDiversion = false,
-            speciesOnboard = getSpecies(listOf("HKE", "ANN", "BOR")),
-            speciesInfractions = listOf(),
-            isDeleted = false,
-            hasSomeGearsSeized = false,
-            hasSomeSpeciesSeized = false,
-            isFromPoseidon = false,
-            completion = Completion.TO_COMPLETE,
-            flagState = CountryCode.GB,
-            userTrigram = "LTH",
-        )
+        val control =
+            MissionAction(
+                id = 3,
+                vesselId = 2,
+                missionId = 3,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                actionType = MissionActionType.SEA_CONTROL,
+                faoAreas = listOf("27.5.b", "27.5.c"),
+                seizureAndDiversion = false,
+                speciesOnboard = getSpecies(listOf("HKE", "ANN", "BOR")),
+                speciesInfractions = listOf(),
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
+                flagState = CountryCode.GB,
+                userTrigram = "LTH",
+            )
 
         // When
         val isLandControlApplicable = jdp.isLandControlApplicable(control)
@@ -239,23 +243,24 @@ class JointDeploymentPlanUTests {
         jdp: JointDeploymentPlan,
     ) {
         // Given
-        val control = MissionAction(
-            id = 3,
-            vesselId = 2,
-            missionId = 3,
-            actionDatetimeUtc = ZonedDateTime.now(),
-            actionType = MissionActionType.SEA_CONTROL,
-            faoAreas = listOf("27.7.b", "27.4.c"),
-            seizureAndDiversion = false,
-            speciesInfractions = listOf(),
-            isDeleted = false,
-            hasSomeGearsSeized = false,
-            hasSomeSpeciesSeized = false,
-            isFromPoseidon = false,
-            completion = Completion.TO_COMPLETE,
-            flagState = CountryCode.FR,
-            userTrigram = "LTH",
-        )
+        val control =
+            MissionAction(
+                id = 3,
+                vesselId = 2,
+                missionId = 3,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                actionType = MissionActionType.SEA_CONTROL,
+                faoAreas = listOf("27.7.b", "27.4.c"),
+                seizureAndDiversion = false,
+                speciesInfractions = listOf(),
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
+            )
 
         // When
         val faoArea = jdp.getFirstFaoAreaIncludedInJdp(control)
@@ -274,23 +279,24 @@ class JointDeploymentPlanUTests {
         jdp: JointDeploymentPlan,
     ) {
         // Given
-        val control = MissionAction(
-            id = 3,
-            vesselId = 2,
-            missionId = 3,
-            actionDatetimeUtc = ZonedDateTime.now(),
-            actionType = MissionActionType.LAND_CONTROL,
-            faoAreas = listOf("27.7.b", "27.4.c"),
-            seizureAndDiversion = false,
-            speciesInfractions = listOf(),
-            isDeleted = false,
-            hasSomeGearsSeized = false,
-            hasSomeSpeciesSeized = false,
-            isFromPoseidon = false,
-            completion = Completion.TO_COMPLETE,
-            flagState = CountryCode.FR,
-            userTrigram = "LTH",
-        )
+        val control =
+            MissionAction(
+                id = 3,
+                vesselId = 2,
+                missionId = 3,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                actionType = MissionActionType.LAND_CONTROL,
+                faoAreas = listOf("27.7.b", "27.4.c"),
+                seizureAndDiversion = false,
+                speciesInfractions = listOf(),
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
+            )
 
         // When
         val faoArea = jdp.getFirstFaoAreaIncludedInJdp(control)
@@ -313,24 +319,25 @@ class JointDeploymentPlanUTests {
         firstSpecy.speciesCode = "BFT"
         val secondSpecy = SpeciesControl()
         secondSpecy.speciesCode = "HKE"
-        val control = MissionAction(
-            id = 3,
-            vesselId = 2,
-            missionId = 3,
-            actionDatetimeUtc = ZonedDateTime.now(),
-            actionType = MissionActionType.SEA_CONTROL,
-            faoAreas = listOf("27.7.b", "27.4.c"),
-            seizureAndDiversion = false,
-            speciesOnboard = listOf(firstSpecy, secondSpecy),
-            speciesInfractions = listOf(),
-            isDeleted = false,
-            hasSomeGearsSeized = false,
-            hasSomeSpeciesSeized = false,
-            isFromPoseidon = false,
-            completion = Completion.TO_COMPLETE,
-            flagState = CountryCode.FR,
-            userTrigram = "LTH",
-        )
+        val control =
+            MissionAction(
+                id = 3,
+                vesselId = 2,
+                missionId = 3,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                actionType = MissionActionType.SEA_CONTROL,
+                faoAreas = listOf("27.7.b", "27.4.c"),
+                seizureAndDiversion = false,
+                speciesOnboard = listOf(firstSpecy, secondSpecy),
+                speciesInfractions = listOf(),
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
+            )
 
         // When
         val faoArea = jdp.getFirstFaoAreaIncludedInJdp(control)
@@ -351,24 +358,25 @@ class JointDeploymentPlanUTests {
         // Given
         val specy = SpeciesControl()
         specy.speciesCode = "HKE"
-        val control = MissionAction(
-            id = 3,
-            vesselId = 2,
-            missionId = 3,
-            actionDatetimeUtc = ZonedDateTime.now(),
-            actionType = MissionActionType.SEA_CONTROL,
-            faoAreas = listOf("27.7.b", "27.4.c"),
-            seizureAndDiversion = false,
-            speciesOnboard = listOf(specy),
-            speciesInfractions = listOf(),
-            isDeleted = false,
-            hasSomeGearsSeized = false,
-            hasSomeSpeciesSeized = false,
-            isFromPoseidon = false,
-            completion = Completion.TO_COMPLETE,
-            flagState = CountryCode.FR,
-            userTrigram = "LTH",
-        )
+        val control =
+            MissionAction(
+                id = 3,
+                vesselId = 2,
+                missionId = 3,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                actionType = MissionActionType.SEA_CONTROL,
+                faoAreas = listOf("27.7.b", "27.4.c"),
+                seizureAndDiversion = false,
+                speciesOnboard = listOf(specy),
+                speciesInfractions = listOf(),
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
+            )
 
         // When
         val faoArea = jdp.getFirstFaoAreaIncludedInJdp(control)
@@ -383,28 +391,27 @@ class JointDeploymentPlanUTests {
 
     @ParameterizedTest
     @EnumSource(JointDeploymentPlan::class)
-    fun `getFirstFaoAreaIncludedInJdp Should return the fao area for a LAND control`(
-        jdp: JointDeploymentPlan,
-    ) {
+    fun `getFirstFaoAreaIncludedInJdp Should return the fao area for a LAND control`(jdp: JointDeploymentPlan) {
         // Given
-        val control = MissionAction(
-            id = 3,
-            vesselId = 2,
-            missionId = 3,
-            actionDatetimeUtc = ZonedDateTime.now(),
-            actionType = MissionActionType.LAND_CONTROL,
-            faoAreas = listOf("27.4.a"),
-            seizureAndDiversion = false,
-            speciesOnboard = getSpecies(listOf("JAX", "CRF")),
-            speciesInfractions = listOf(),
-            isDeleted = false,
-            hasSomeGearsSeized = false,
-            hasSomeSpeciesSeized = false,
-            isFromPoseidon = false,
-            completion = Completion.TO_COMPLETE,
-            flagState = CountryCode.GB,
-            userTrigram = "LTH",
-        )
+        val control =
+            MissionAction(
+                id = 3,
+                vesselId = 2,
+                missionId = 3,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                actionType = MissionActionType.LAND_CONTROL,
+                faoAreas = listOf("27.4.a"),
+                seizureAndDiversion = false,
+                speciesOnboard = getSpecies(listOf("JAX", "CRF")),
+                speciesInfractions = listOf(),
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
+                flagState = CountryCode.GB,
+                userTrigram = "LTH",
+            )
 
         // When
         val faoArea = jdp.getFirstFaoAreaIncludedInJdp(control)

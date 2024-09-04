@@ -29,30 +29,31 @@ data class FleetSegmentEntity(
     @Column(name = "year", nullable = false)
     val year: Int,
 ) {
-
-    fun toFleetSegment() = FleetSegment(
-        segment = this.segment,
-        segmentName = this.segmentName,
-        dirm = this.dirm,
-        gears = this.gears,
-        faoAreas = this.faoAreas,
-        targetSpecies = this.targetSpecies,
-        bycatchSpecies = this.bycatchSpecies,
-        impactRiskFactor = this.impactRiskFactor,
-        year = this.year,
-    )
+    fun toFleetSegment() =
+        FleetSegment(
+            segment = this.segment,
+            segmentName = this.segmentName,
+            dirm = this.dirm,
+            gears = this.gears,
+            faoAreas = this.faoAreas,
+            targetSpecies = this.targetSpecies,
+            bycatchSpecies = this.bycatchSpecies,
+            impactRiskFactor = this.impactRiskFactor,
+            year = this.year,
+        )
 
     companion object {
-        fun fromFleetSegment(fleetSegment: FleetSegment) = FleetSegmentEntity(
-            segment = fleetSegment.segment,
-            segmentName = fleetSegment.segmentName,
-            dirm = fleetSegment.dirm,
-            gears = fleetSegment.gears,
-            faoAreas = fleetSegment.faoAreas,
-            targetSpecies = fleetSegment.targetSpecies,
-            bycatchSpecies = fleetSegment.bycatchSpecies,
-            impactRiskFactor = fleetSegment.impactRiskFactor,
-            year = fleetSegment.year,
-        )
+        fun fromFleetSegment(fleetSegment: FleetSegment) =
+            FleetSegmentEntity(
+                segment = fleetSegment.segment,
+                segmentName = fleetSegment.segmentName,
+                dirm = fleetSegment.dirm,
+                gears = fleetSegment.gears,
+                faoAreas = fleetSegment.faoAreas,
+                targetSpecies = fleetSegment.targetSpecies,
+                bycatchSpecies = fleetSegment.bycatchSpecies,
+                impactRiskFactor = fleetSegment.impactRiskFactor,
+                year = fleetSegment.year,
+            )
     }
 }

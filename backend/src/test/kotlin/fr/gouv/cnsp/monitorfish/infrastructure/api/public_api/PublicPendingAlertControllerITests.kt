@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = [(PublicOperationalAlertController::class)])
 class PublicPendingAlertControllerITests {
-
     @Autowired
     private lateinit var api: MockMvc
 

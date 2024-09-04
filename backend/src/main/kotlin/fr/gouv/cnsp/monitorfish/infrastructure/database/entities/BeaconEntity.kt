@@ -23,15 +23,14 @@ data class BeaconEntity(
     val isCoastal: Boolean? = null,
     @Column(name = "logging_datetime_utc")
     val loggingDatetimeUtc: Instant? = null,
-
 ) {
-
-    fun toBeacon() = Beacon(
-        beaconNumber = beaconNumber,
-        vesselId = vesselId,
-        beaconStatus = beaconStatus,
-        satelliteOperatorId = satelliteOperatorId,
-        isCoastal = isCoastal,
-        loggingDatetimeUtc = loggingDatetimeUtc?.atZone(ZoneOffset.UTC),
-    )
+    fun toBeacon() =
+        Beacon(
+            beaconNumber = beaconNumber,
+            vesselId = vesselId,
+            beaconStatus = beaconStatus,
+            satelliteOperatorId = satelliteOperatorId,
+            isCoastal = isCoastal,
+            loggingDatetimeUtc = loggingDatetimeUtc?.atZone(ZoneOffset.UTC),
+        )
 }

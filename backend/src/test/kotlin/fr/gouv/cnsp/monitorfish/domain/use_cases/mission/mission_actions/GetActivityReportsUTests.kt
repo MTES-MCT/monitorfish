@@ -26,7 +26,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment as Fu
 
 @ExtendWith(SpringExtension::class)
 class GetActivityReportsUTests {
-
     @MockBean
     private lateinit var missionActionsRepository: MissionActionsRepository
 
@@ -52,131 +51,136 @@ class GetActivityReportsUTests {
         val species = SpeciesControl()
         species.speciesCode = "HKE"
 
-        val controls = listOf(
-            MissionAction(
-                id = 1,
-                vesselId = 1,
-                missionId = 1,
-                actionDatetimeUtc = ZonedDateTime.now(),
-                portLocode = "AEFAT",
-                faoAreas = listOf("27.7.b", "27.4.c"),
-                segments = listOf(
-                    FleetSegment("NWW01/02", "Trawl"),
-                    FleetSegment("NS01/03", "North sea"),
+        val controls =
+            listOf(
+                MissionAction(
+                    id = 1,
+                    vesselId = 1,
+                    missionId = 1,
+                    actionDatetimeUtc = ZonedDateTime.now(),
+                    portLocode = "AEFAT",
+                    faoAreas = listOf("27.7.b", "27.4.c"),
+                    segments =
+                        listOf(
+                            FleetSegment("NWW01/02", "Trawl"),
+                            FleetSegment("NS01/03", "North sea"),
+                        ),
+                    actionType = MissionActionType.LAND_CONTROL,
+                    gearOnboard = listOf(),
+                    speciesOnboard = listOf(species),
+                    seizureAndDiversion = true,
+                    isDeleted = false,
+                    hasSomeGearsSeized = false,
+                    hasSomeSpeciesSeized = false,
+                    isFromPoseidon = false,
+                    completion = Completion.TO_COMPLETE,
+                    flagState = CountryCode.FR,
+                    userTrigram = "LTH",
                 ),
-                actionType = MissionActionType.LAND_CONTROL,
-                gearOnboard = listOf(),
-                speciesOnboard = listOf(species),
-                seizureAndDiversion = true,
-                isDeleted = false,
-                hasSomeGearsSeized = false,
-                hasSomeSpeciesSeized = false,
-                isFromPoseidon = false,
-                completion = Completion.TO_COMPLETE,
-                flagState = CountryCode.FR,
-                userTrigram = "LTH",
-            ),
-            MissionAction(
-                id = 2,
-                vesselId = 1,
-                missionId = 2,
-                actionDatetimeUtc = ZonedDateTime.now(),
-                actionType = MissionActionType.SEA_CONTROL,
-                faoAreas = listOf("27.7.b", "27.4.c"),
-                seizureAndDiversion = false,
-                speciesInfractions = listOf(),
-                isDeleted = false,
-                hasSomeGearsSeized = false,
-                hasSomeSpeciesSeized = false,
-                isFromPoseidon = false,
-                flagState = CountryCode.FR,
-                userTrigram = "LTH",
-                completion = Completion.TO_COMPLETE,
-            ),
-            MissionAction(
-                id = 3,
-                vesselId = 2,
-                missionId = 3,
-                actionDatetimeUtc = ZonedDateTime.now(),
-                actionType = MissionActionType.SEA_CONTROL,
-                faoAreas = listOf("27.7.b", "27.4.c"),
-                seizureAndDiversion = false,
-                speciesInfractions = listOf(),
-                isDeleted = false,
-                hasSomeGearsSeized = false,
-                hasSomeSpeciesSeized = false,
-                isFromPoseidon = false,
-                flagState = CountryCode.FR,
-                userTrigram = "LTH",
-                completion = Completion.TO_COMPLETE,
-            ),
-        )
+                MissionAction(
+                    id = 2,
+                    vesselId = 1,
+                    missionId = 2,
+                    actionDatetimeUtc = ZonedDateTime.now(),
+                    actionType = MissionActionType.SEA_CONTROL,
+                    faoAreas = listOf("27.7.b", "27.4.c"),
+                    seizureAndDiversion = false,
+                    speciesInfractions = listOf(),
+                    isDeleted = false,
+                    hasSomeGearsSeized = false,
+                    hasSomeSpeciesSeized = false,
+                    isFromPoseidon = false,
+                    flagState = CountryCode.FR,
+                    userTrigram = "LTH",
+                    completion = Completion.TO_COMPLETE,
+                ),
+                MissionAction(
+                    id = 3,
+                    vesselId = 2,
+                    missionId = 3,
+                    actionDatetimeUtc = ZonedDateTime.now(),
+                    actionType = MissionActionType.SEA_CONTROL,
+                    faoAreas = listOf("27.7.b", "27.4.c"),
+                    seizureAndDiversion = false,
+                    speciesInfractions = listOf(),
+                    isDeleted = false,
+                    hasSomeGearsSeized = false,
+                    hasSomeSpeciesSeized = false,
+                    isFromPoseidon = false,
+                    flagState = CountryCode.FR,
+                    userTrigram = "LTH",
+                    completion = Completion.TO_COMPLETE,
+                ),
+            )
         given(missionActionsRepository.findSeaAndLandControlBetweenDates(any(), any())).willReturn(controls)
 
-        val vessels = listOf(
-            Vessel(
-                id = 1,
-                internalReferenceNumber = "FR00022680",
-                vesselName = "MY AWESOME VESSEL",
-                flagState = CountryCode.FR,
-                declaredFishingGears = listOf("Trémails"),
-                vesselType = "Fishing",
-                districtCode = "AY",
-                hasLogbookEsacapt = false,
-            ),
-            Vessel(
-                id = 2,
-                internalReferenceNumber = "FR00065455",
-                vesselName = "MY SECOND AWESOME VESSEL",
-                flagState = CountryCode.FR,
-                declaredFishingGears = listOf("Trémails"),
-                vesselType = "Fishing",
-                districtCode = "LO",
-                hasLogbookEsacapt = false,
-            ),
-        )
+        val vessels =
+            listOf(
+                Vessel(
+                    id = 1,
+                    internalReferenceNumber = "FR00022680",
+                    vesselName = "MY AWESOME VESSEL",
+                    flagState = CountryCode.FR,
+                    declaredFishingGears = listOf("Trémails"),
+                    vesselType = "Fishing",
+                    districtCode = "AY",
+                    hasLogbookEsacapt = false,
+                ),
+                Vessel(
+                    id = 2,
+                    internalReferenceNumber = "FR00065455",
+                    vesselName = "MY SECOND AWESOME VESSEL",
+                    flagState = CountryCode.FR,
+                    declaredFishingGears = listOf("Trémails"),
+                    vesselType = "Fishing",
+                    districtCode = "LO",
+                    hasLogbookEsacapt = false,
+                ),
+            )
         given(vesselRepository.findVesselsByIds(eq(listOf(1, 2)))).willReturn(vessels)
 
-        val missions = listOf(
-            Mission(
-                1,
-                missionTypes = listOf(MissionType.LAND),
-                missionSource = MissionSource.MONITORFISH,
-                isUnderJdp = false,
-                isGeometryComputedFromControls = false,
-                startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
-            ),
-            Mission(
-                2,
-                missionTypes = listOf(MissionType.SEA),
-                missionSource = MissionSource.MONITORFISH,
-                isUnderJdp = true,
-                isGeometryComputedFromControls = false,
-                startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
-            ),
-            Mission(
-                2,
-                missionTypes = listOf(MissionType.SEA),
-                missionSource = MissionSource.MONITORFISH,
-                isUnderJdp = false,
-                isGeometryComputedFromControls = false,
-                startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
-            ),
-        )
+        val missions =
+            listOf(
+                Mission(
+                    1,
+                    missionTypes = listOf(MissionType.LAND),
+                    missionSource = MissionSource.MONITORFISH,
+                    isUnderJdp = false,
+                    isGeometryComputedFromControls = false,
+                    startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+                ),
+                Mission(
+                    2,
+                    missionTypes = listOf(MissionType.SEA),
+                    missionSource = MissionSource.MONITORFISH,
+                    isUnderJdp = true,
+                    isGeometryComputedFromControls = false,
+                    startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+                ),
+                Mission(
+                    2,
+                    missionTypes = listOf(MissionType.SEA),
+                    missionSource = MissionSource.MONITORFISH,
+                    isUnderJdp = false,
+                    isGeometryComputedFromControls = false,
+                    startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+                ),
+            )
         given(missionRepository.findByIds(listOf(1, 2, 3))).willReturn(missions)
         given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
 
         // When
-        val activityReports = GetActivityReports(
-            missionActionsRepository,
-            portRepository,
-            vesselRepository,
-            missionRepository,
-        ).execute(
-            ZonedDateTime.now(),
-            ZonedDateTime.now().minusDays(1),
-            JointDeploymentPlan.WESTERN_WATERS,
-        )
+        val activityReports =
+            GetActivityReports(
+                missionActionsRepository,
+                portRepository,
+                vesselRepository,
+                missionRepository,
+            ).execute(
+                ZonedDateTime.now(),
+                ZonedDateTime.now().minusDays(1),
+                JointDeploymentPlan.WESTERN_WATERS,
+            )
 
         // Then
         assertThat(activityReports.jdpSpecies).hasSize(35)
@@ -193,131 +197,136 @@ class GetActivityReportsUTests {
         val species = SpeciesControl()
         species.speciesCode = "HKE"
 
-        val controls = listOf(
-            MissionAction(
-                id = 1,
-                vesselId = 1,
-                missionId = 1,
-                actionDatetimeUtc = ZonedDateTime.now(),
-                portLocode = "AEFAT",
-                faoAreas = listOf("27.7.b", "27.4.c"),
-                segments = listOf(
-                    FleetSegment("NWW01/02", "Trawl"),
-                    FleetSegment("NS01/03", "North sea"),
+        val controls =
+            listOf(
+                MissionAction(
+                    id = 1,
+                    vesselId = 1,
+                    missionId = 1,
+                    actionDatetimeUtc = ZonedDateTime.now(),
+                    portLocode = "AEFAT",
+                    faoAreas = listOf("27.7.b", "27.4.c"),
+                    segments =
+                        listOf(
+                            FleetSegment("NWW01/02", "Trawl"),
+                            FleetSegment("NS01/03", "North sea"),
+                        ),
+                    actionType = MissionActionType.LAND_CONTROL,
+                    gearOnboard = listOf(),
+                    speciesOnboard = listOf(species),
+                    seizureAndDiversion = true,
+                    isDeleted = false,
+                    hasSomeGearsSeized = false,
+                    hasSomeSpeciesSeized = false,
+                    isFromPoseidon = false,
+                    completion = Completion.TO_COMPLETE,
+                    flagState = CountryCode.FR,
+                    userTrigram = "LTH",
                 ),
-                actionType = MissionActionType.LAND_CONTROL,
-                gearOnboard = listOf(),
-                speciesOnboard = listOf(species),
-                seizureAndDiversion = true,
-                isDeleted = false,
-                hasSomeGearsSeized = false,
-                hasSomeSpeciesSeized = false,
-                isFromPoseidon = false,
-                completion = Completion.TO_COMPLETE,
-                flagState = CountryCode.FR,
-                userTrigram = "LTH",
-            ),
-            MissionAction(
-                id = 2,
-                vesselId = 1,
-                missionId = 2,
-                actionDatetimeUtc = ZonedDateTime.now(),
-                actionType = MissionActionType.SEA_CONTROL,
-                faoAreas = listOf("27.7.b", "27.4.c"),
-                seizureAndDiversion = false,
-                speciesInfractions = listOf(),
-                isDeleted = false,
-                hasSomeGearsSeized = false,
-                hasSomeSpeciesSeized = false,
-                isFromPoseidon = false,
-                completion = Completion.TO_COMPLETE,
-                flagState = CountryCode.FR,
-                userTrigram = "LTH",
-            ),
-            MissionAction(
-                id = 3,
-                vesselId = 2,
-                missionId = 3,
-                actionDatetimeUtc = ZonedDateTime.now(),
-                actionType = MissionActionType.SEA_CONTROL,
-                faoAreas = listOf("27.7.b", "27.4.c"),
-                seizureAndDiversion = false,
-                speciesInfractions = listOf(),
-                isDeleted = false,
-                hasSomeGearsSeized = false,
-                hasSomeSpeciesSeized = false,
-                isFromPoseidon = false,
-                completion = Completion.TO_COMPLETE,
-                flagState = CountryCode.FR,
-                userTrigram = "LTH",
-            ),
-        )
+                MissionAction(
+                    id = 2,
+                    vesselId = 1,
+                    missionId = 2,
+                    actionDatetimeUtc = ZonedDateTime.now(),
+                    actionType = MissionActionType.SEA_CONTROL,
+                    faoAreas = listOf("27.7.b", "27.4.c"),
+                    seizureAndDiversion = false,
+                    speciesInfractions = listOf(),
+                    isDeleted = false,
+                    hasSomeGearsSeized = false,
+                    hasSomeSpeciesSeized = false,
+                    isFromPoseidon = false,
+                    completion = Completion.TO_COMPLETE,
+                    flagState = CountryCode.FR,
+                    userTrigram = "LTH",
+                ),
+                MissionAction(
+                    id = 3,
+                    vesselId = 2,
+                    missionId = 3,
+                    actionDatetimeUtc = ZonedDateTime.now(),
+                    actionType = MissionActionType.SEA_CONTROL,
+                    faoAreas = listOf("27.7.b", "27.4.c"),
+                    seizureAndDiversion = false,
+                    speciesInfractions = listOf(),
+                    isDeleted = false,
+                    hasSomeGearsSeized = false,
+                    hasSomeSpeciesSeized = false,
+                    isFromPoseidon = false,
+                    completion = Completion.TO_COMPLETE,
+                    flagState = CountryCode.FR,
+                    userTrigram = "LTH",
+                ),
+            )
         given(missionActionsRepository.findSeaAndLandControlBetweenDates(any(), any())).willReturn(controls)
 
-        val vessels = listOf(
-            Vessel(
-                id = 1,
-                internalReferenceNumber = "FR00022680",
-                vesselName = "MY AWESOME VESSEL",
-                flagState = CountryCode.FR,
-                declaredFishingGears = listOf("Trémails"),
-                vesselType = "Fishing",
-                districtCode = "AY",
-                hasLogbookEsacapt = false,
-            ),
-            Vessel(
-                id = 2,
-                internalReferenceNumber = "FR00065455",
-                vesselName = "MY SECOND AWESOME VESSEL",
-                flagState = CountryCode.FR,
-                declaredFishingGears = listOf("Trémails"),
-                vesselType = "Fishing",
-                districtCode = "LO",
-                hasLogbookEsacapt = false,
-            ),
-        )
+        val vessels =
+            listOf(
+                Vessel(
+                    id = 1,
+                    internalReferenceNumber = "FR00022680",
+                    vesselName = "MY AWESOME VESSEL",
+                    flagState = CountryCode.FR,
+                    declaredFishingGears = listOf("Trémails"),
+                    vesselType = "Fishing",
+                    districtCode = "AY",
+                    hasLogbookEsacapt = false,
+                ),
+                Vessel(
+                    id = 2,
+                    internalReferenceNumber = "FR00065455",
+                    vesselName = "MY SECOND AWESOME VESSEL",
+                    flagState = CountryCode.FR,
+                    declaredFishingGears = listOf("Trémails"),
+                    vesselType = "Fishing",
+                    districtCode = "LO",
+                    hasLogbookEsacapt = false,
+                ),
+            )
         given(vesselRepository.findVesselsByIds(eq(listOf(1, 2)))).willReturn(vessels)
 
-        val missions = listOf(
-            Mission(
-                1,
-                missionTypes = listOf(MissionType.LAND),
-                missionSource = MissionSource.MONITORFISH,
-                isUnderJdp = false,
-                isGeometryComputedFromControls = false,
-                startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
-            ),
-            Mission(
-                2,
-                missionTypes = listOf(MissionType.SEA),
-                missionSource = MissionSource.MONITORFISH,
-                isUnderJdp = true,
-                isGeometryComputedFromControls = false,
-                startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
-            ),
-            Mission(
-                2,
-                missionTypes = listOf(MissionType.SEA),
-                missionSource = MissionSource.MONITORFISH,
-                isUnderJdp = false,
-                isGeometryComputedFromControls = false,
-                startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
-            ),
-        )
+        val missions =
+            listOf(
+                Mission(
+                    1,
+                    missionTypes = listOf(MissionType.LAND),
+                    missionSource = MissionSource.MONITORFISH,
+                    isUnderJdp = false,
+                    isGeometryComputedFromControls = false,
+                    startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+                ),
+                Mission(
+                    2,
+                    missionTypes = listOf(MissionType.SEA),
+                    missionSource = MissionSource.MONITORFISH,
+                    isUnderJdp = true,
+                    isGeometryComputedFromControls = false,
+                    startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+                ),
+                Mission(
+                    2,
+                    missionTypes = listOf(MissionType.SEA),
+                    missionSource = MissionSource.MONITORFISH,
+                    isUnderJdp = false,
+                    isGeometryComputedFromControls = false,
+                    startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+                ),
+            )
         given(missionRepository.findByIds(listOf(1, 2, 3))).willReturn(missions)
         given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
 
         // When
-        val activityReports = GetActivityReports(
-            missionActionsRepository,
-            portRepository,
-            vesselRepository,
-            missionRepository,
-        ).execute(
-            ZonedDateTime.now(),
-            ZonedDateTime.now().minusDays(1),
-            JointDeploymentPlan.NORTH_SEA,
-        )
+        val activityReports =
+            GetActivityReports(
+                missionActionsRepository,
+                portRepository,
+                vesselRepository,
+                missionRepository,
+            ).execute(
+                ZonedDateTime.now(),
+                ZonedDateTime.now().minusDays(1),
+                JointDeploymentPlan.NORTH_SEA,
+            )
 
         // Then
         assertThat(activityReports.jdpSpecies).hasSize(38)
@@ -357,70 +366,75 @@ class GetActivityReportsUTests {
             ),
         )
 
-        val controls = listOf(
-            MissionAction(
-                id = 1,
-                vesselId = 1,
-                missionId = 1,
-                actionDatetimeUtc = ZonedDateTime.now(),
-                portLocode = "AEFAT",
-                faoAreas = listOf("27.4.a"),
-                segments = listOf(
-                    FleetSegment("NS01/03", "North Sea"),
+        val controls =
+            listOf(
+                MissionAction(
+                    id = 1,
+                    vesselId = 1,
+                    missionId = 1,
+                    actionDatetimeUtc = ZonedDateTime.now(),
+                    portLocode = "AEFAT",
+                    faoAreas = listOf("27.4.a"),
+                    segments =
+                        listOf(
+                            FleetSegment("NS01/03", "North Sea"),
+                        ),
+                    actionType = MissionActionType.LAND_CONTROL,
+                    gearOnboard = listOf(),
+                    speciesOnboard = listOf(species),
+                    seizureAndDiversion = true,
+                    isDeleted = false,
+                    hasSomeGearsSeized = false,
+                    hasSomeSpeciesSeized = false,
+                    isFromPoseidon = false,
+                    completion = Completion.TO_COMPLETE,
+                    flagState = CountryCode.FR,
+                    userTrigram = "LTH",
                 ),
-                actionType = MissionActionType.LAND_CONTROL,
-                gearOnboard = listOf(),
-                speciesOnboard = listOf(species),
-                seizureAndDiversion = true,
-                isDeleted = false,
-                hasSomeGearsSeized = false,
-                hasSomeSpeciesSeized = false,
-                isFromPoseidon = false,
-                completion = Completion.TO_COMPLETE,
-                flagState = CountryCode.FR,
-                userTrigram = "LTH",
-            ),
-        )
+            )
         given(missionActionsRepository.findSeaAndLandControlBetweenDates(any(), any())).willReturn(controls)
 
-        val vessels = listOf(
-            Vessel(
-                id = 1,
-                internalReferenceNumber = "FR00022680",
-                vesselName = "MY AWESOME VESSEL",
-                flagState = CountryCode.FR,
-                declaredFishingGears = listOf("Trémails"),
-                vesselType = "Fishing",
-                districtCode = "AY",
-                hasLogbookEsacapt = false,
-            ),
-        )
+        val vessels =
+            listOf(
+                Vessel(
+                    id = 1,
+                    internalReferenceNumber = "FR00022680",
+                    vesselName = "MY AWESOME VESSEL",
+                    flagState = CountryCode.FR,
+                    declaredFishingGears = listOf("Trémails"),
+                    vesselType = "Fishing",
+                    districtCode = "AY",
+                    hasLogbookEsacapt = false,
+                ),
+            )
         given(vesselRepository.findVesselsByIds(eq(listOf(1)))).willReturn(vessels)
 
-        val missions = listOf(
-            Mission(
-                1,
-                missionTypes = listOf(MissionType.LAND),
-                missionSource = MissionSource.MONITORFISH,
-                isUnderJdp = false,
-                isGeometryComputedFromControls = false,
-                startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
-            ),
-        )
+        val missions =
+            listOf(
+                Mission(
+                    1,
+                    missionTypes = listOf(MissionType.LAND),
+                    missionSource = MissionSource.MONITORFISH,
+                    isUnderJdp = false,
+                    isGeometryComputedFromControls = false,
+                    startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+                ),
+            )
         given(missionRepository.findByIds(eq(listOf(1)))).willReturn(missions)
         given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
 
         // When
-        val activityReports = GetActivityReports(
-            missionActionsRepository,
-            portRepository,
-            vesselRepository,
-            missionRepository,
-        ).execute(
-            ZonedDateTime.now(),
-            ZonedDateTime.now().minusDays(1),
-            JointDeploymentPlan.NORTH_SEA,
-        )
+        val activityReports =
+            GetActivityReports(
+                missionActionsRepository,
+                portRepository,
+                vesselRepository,
+                missionRepository,
+            ).execute(
+                ZonedDateTime.now(),
+                ZonedDateTime.now().minusDays(1),
+                JointDeploymentPlan.NORTH_SEA,
+            )
 
         // Then
         assertThat(activityReports.activityReports).hasSize(1)
@@ -443,65 +457,69 @@ class GetActivityReportsUTests {
         val species = SpeciesControl()
         species.speciesCode = "HKE"
 
-        val controls = listOf(
-            MissionAction(
-                id = 2,
-                vesselId = 1,
-                missionId = 2,
-                actionDatetimeUtc = ZonedDateTime.now(),
-                actionType = MissionActionType.SEA_CONTROL,
-                // These fao areas are outside WESTERN WATERS
-                faoAreas = listOf("27.4.c", "27.4.b"),
-                seizureAndDiversion = false,
-                speciesInfractions = listOf(),
-                isDeleted = false,
-                hasSomeGearsSeized = false,
-                hasSomeSpeciesSeized = false,
-                isFromPoseidon = false,
-                completion = Completion.TO_COMPLETE,
-                flagState = CountryCode.FR,
-                userTrigram = "LTH",
-            ),
-        )
+        val controls =
+            listOf(
+                MissionAction(
+                    id = 2,
+                    vesselId = 1,
+                    missionId = 2,
+                    actionDatetimeUtc = ZonedDateTime.now(),
+                    actionType = MissionActionType.SEA_CONTROL,
+                    // These fao areas are outside WESTERN WATERS
+                    faoAreas = listOf("27.4.c", "27.4.b"),
+                    seizureAndDiversion = false,
+                    speciesInfractions = listOf(),
+                    isDeleted = false,
+                    hasSomeGearsSeized = false,
+                    hasSomeSpeciesSeized = false,
+                    isFromPoseidon = false,
+                    completion = Completion.TO_COMPLETE,
+                    flagState = CountryCode.FR,
+                    userTrigram = "LTH",
+                ),
+            )
         given(missionActionsRepository.findSeaAndLandControlBetweenDates(any(), any())).willReturn(controls)
 
-        val vessels = listOf(
-            Vessel(
-                id = 1,
-                internalReferenceNumber = "FR00022680",
-                vesselName = "MY AWESOME VESSEL",
-                flagState = CountryCode.FR,
-                declaredFishingGears = listOf("Trémails"),
-                vesselType = "Fishing",
-                districtCode = "AY",
-                hasLogbookEsacapt = false,
-            ),
-        )
+        val vessels =
+            listOf(
+                Vessel(
+                    id = 1,
+                    internalReferenceNumber = "FR00022680",
+                    vesselName = "MY AWESOME VESSEL",
+                    flagState = CountryCode.FR,
+                    declaredFishingGears = listOf("Trémails"),
+                    vesselType = "Fishing",
+                    districtCode = "AY",
+                    hasLogbookEsacapt = false,
+                ),
+            )
         given(vesselRepository.findVesselsByIds(eq(listOf(1)))).willReturn(vessels)
 
-        val missions = listOf(
-            Mission(
-                2,
-                missionTypes = listOf(MissionType.SEA),
-                missionSource = MissionSource.MONITORFISH,
-                isUnderJdp = true,
-                isGeometryComputedFromControls = false,
-                startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
-            ),
-        )
+        val missions =
+            listOf(
+                Mission(
+                    2,
+                    missionTypes = listOf(MissionType.SEA),
+                    missionSource = MissionSource.MONITORFISH,
+                    isUnderJdp = true,
+                    isGeometryComputedFromControls = false,
+                    startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+                ),
+            )
         given(missionRepository.findByIds(listOf(2))).willReturn(missions)
 
         // When
-        val activityReports = GetActivityReports(
-            missionActionsRepository,
-            portRepository,
-            vesselRepository,
-            missionRepository,
-        ).execute(
-            ZonedDateTime.now(),
-            ZonedDateTime.now().minusDays(1),
-            JointDeploymentPlan.WESTERN_WATERS,
-        )
+        val activityReports =
+            GetActivityReports(
+                missionActionsRepository,
+                portRepository,
+                vesselRepository,
+                missionRepository,
+            ).execute(
+                ZonedDateTime.now(),
+                ZonedDateTime.now().minusDays(1),
+                JointDeploymentPlan.WESTERN_WATERS,
+            )
 
         // Then
         assertThat(activityReports.activityReports).hasSize(0)
@@ -517,66 +535,70 @@ class GetActivityReportsUTests {
         val species = SpeciesControl()
         species.speciesCode = "HKE"
 
-        val controls = listOf(
-            MissionAction(
-                id = 2,
-                vesselId = 1,
-                missionId = 2,
-                actionDatetimeUtc = ZonedDateTime.now(),
-                actionType = MissionActionType.SEA_CONTROL,
-                // The first fao area "27.7.c" is within WESTERN_WATERS
-                // The second fao area "27.4.b" is within NORTH_SEA
-                faoAreas = listOf("27.7.c", "27.4.b"),
-                seizureAndDiversion = false,
-                speciesInfractions = listOf(),
-                isDeleted = false,
-                hasSomeGearsSeized = false,
-                hasSomeSpeciesSeized = false,
-                isFromPoseidon = false,
-                completion = Completion.TO_COMPLETE,
-                flagState = CountryCode.FR,
-                userTrigram = "LTH",
-            ),
-        )
+        val controls =
+            listOf(
+                MissionAction(
+                    id = 2,
+                    vesselId = 1,
+                    missionId = 2,
+                    actionDatetimeUtc = ZonedDateTime.now(),
+                    actionType = MissionActionType.SEA_CONTROL,
+                    // The first fao area "27.7.c" is within WESTERN_WATERS
+                    // The second fao area "27.4.b" is within NORTH_SEA
+                    faoAreas = listOf("27.7.c", "27.4.b"),
+                    seizureAndDiversion = false,
+                    speciesInfractions = listOf(),
+                    isDeleted = false,
+                    hasSomeGearsSeized = false,
+                    hasSomeSpeciesSeized = false,
+                    isFromPoseidon = false,
+                    completion = Completion.TO_COMPLETE,
+                    flagState = CountryCode.FR,
+                    userTrigram = "LTH",
+                ),
+            )
         given(missionActionsRepository.findSeaAndLandControlBetweenDates(any(), any())).willReturn(controls)
 
-        val vessels = listOf(
-            Vessel(
-                id = 1,
-                internalReferenceNumber = "FR00022680",
-                vesselName = "MY AWESOME VESSEL",
-                flagState = CountryCode.FR,
-                declaredFishingGears = listOf("Trémails"),
-                vesselType = "Fishing",
-                districtCode = "AY",
-                hasLogbookEsacapt = false,
-            ),
-        )
+        val vessels =
+            listOf(
+                Vessel(
+                    id = 1,
+                    internalReferenceNumber = "FR00022680",
+                    vesselName = "MY AWESOME VESSEL",
+                    flagState = CountryCode.FR,
+                    declaredFishingGears = listOf("Trémails"),
+                    vesselType = "Fishing",
+                    districtCode = "AY",
+                    hasLogbookEsacapt = false,
+                ),
+            )
         given(vesselRepository.findVesselsByIds(eq(listOf(1)))).willReturn(vessels)
 
-        val missions = listOf(
-            Mission(
-                2,
-                missionTypes = listOf(MissionType.SEA),
-                missionSource = MissionSource.MONITORFISH,
-                isUnderJdp = true,
-                isGeometryComputedFromControls = false,
-                startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
-            ),
-        )
+        val missions =
+            listOf(
+                Mission(
+                    2,
+                    missionTypes = listOf(MissionType.SEA),
+                    missionSource = MissionSource.MONITORFISH,
+                    isUnderJdp = true,
+                    isGeometryComputedFromControls = false,
+                    startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+                ),
+            )
         given(missionRepository.findByIds(listOf(2))).willReturn(missions)
 
         // When
-        val activityReports = GetActivityReports(
-            missionActionsRepository,
-            portRepository,
-            vesselRepository,
-            missionRepository,
-        ).execute(
-            ZonedDateTime.now(),
-            ZonedDateTime.now().minusDays(1),
-            JointDeploymentPlan.NORTH_SEA,
-        )
+        val activityReports =
+            GetActivityReports(
+                missionActionsRepository,
+                portRepository,
+                vesselRepository,
+                missionRepository,
+            ).execute(
+                ZonedDateTime.now(),
+                ZonedDateTime.now().minusDays(1),
+                JointDeploymentPlan.NORTH_SEA,
+            )
 
         // Then
         assertThat(activityReports.activityReports).hasSize(1)
@@ -592,118 +614,122 @@ class GetActivityReportsUTests {
         val species = SpeciesControl()
         species.speciesCode = "HKE"
 
-        val controls = listOf(
-            MissionAction(
-                id = 1,
-                vesselId = 1,
-                missionId = 1,
-                actionDatetimeUtc = ZonedDateTime.now(),
-                portLocode = "AEFAT",
-                faoAreas = listOf("27.4.b", "27.4.c"),
-                actionType = MissionActionType.LAND_CONTROL,
-                gearOnboard = listOf(),
-                speciesOnboard = listOf(species),
-                seizureAndDiversion = true,
-                isDeleted = false,
-                hasSomeGearsSeized = false,
-                hasSomeSpeciesSeized = false,
-                isFromPoseidon = false,
-                flagState = CountryCode.FR,
-                userTrigram = "LTH",
-                completion = Completion.TO_COMPLETE,
-            ),
-            MissionAction(
-                id = 2,
-                vesselId = 1,
-                missionId = 2,
-                actionDatetimeUtc = ZonedDateTime.now(),
-                actionType = MissionActionType.SEA_CONTROL,
-                seizureAndDiversion = false,
-                speciesInfractions = listOf(),
-                isDeleted = false,
-                hasSomeGearsSeized = false,
-                hasSomeSpeciesSeized = false,
-                isFromPoseidon = false,
-                flagState = CountryCode.FR,
-                userTrigram = "LTH",
-                completion = Completion.TO_COMPLETE,
-            ),
-            MissionAction(
-                id = 3,
-                vesselId = 2,
-                missionId = 3,
-                actionDatetimeUtc = ZonedDateTime.now(),
-                actionType = MissionActionType.SEA_CONTROL,
-                seizureAndDiversion = false,
-                speciesInfractions = listOf(),
-                isDeleted = false,
-                hasSomeGearsSeized = false,
-                hasSomeSpeciesSeized = false,
-                isFromPoseidon = false,
-                flagState = CountryCode.FR,
-                userTrigram = "LTH",
-                completion = Completion.TO_COMPLETE,
-            ),
-        )
+        val controls =
+            listOf(
+                MissionAction(
+                    id = 1,
+                    vesselId = 1,
+                    missionId = 1,
+                    actionDatetimeUtc = ZonedDateTime.now(),
+                    portLocode = "AEFAT",
+                    faoAreas = listOf("27.4.b", "27.4.c"),
+                    actionType = MissionActionType.LAND_CONTROL,
+                    gearOnboard = listOf(),
+                    speciesOnboard = listOf(species),
+                    seizureAndDiversion = true,
+                    isDeleted = false,
+                    hasSomeGearsSeized = false,
+                    hasSomeSpeciesSeized = false,
+                    isFromPoseidon = false,
+                    flagState = CountryCode.FR,
+                    userTrigram = "LTH",
+                    completion = Completion.TO_COMPLETE,
+                ),
+                MissionAction(
+                    id = 2,
+                    vesselId = 1,
+                    missionId = 2,
+                    actionDatetimeUtc = ZonedDateTime.now(),
+                    actionType = MissionActionType.SEA_CONTROL,
+                    seizureAndDiversion = false,
+                    speciesInfractions = listOf(),
+                    isDeleted = false,
+                    hasSomeGearsSeized = false,
+                    hasSomeSpeciesSeized = false,
+                    isFromPoseidon = false,
+                    flagState = CountryCode.FR,
+                    userTrigram = "LTH",
+                    completion = Completion.TO_COMPLETE,
+                ),
+                MissionAction(
+                    id = 3,
+                    vesselId = 2,
+                    missionId = 3,
+                    actionDatetimeUtc = ZonedDateTime.now(),
+                    actionType = MissionActionType.SEA_CONTROL,
+                    seizureAndDiversion = false,
+                    speciesInfractions = listOf(),
+                    isDeleted = false,
+                    hasSomeGearsSeized = false,
+                    hasSomeSpeciesSeized = false,
+                    isFromPoseidon = false,
+                    flagState = CountryCode.FR,
+                    userTrigram = "LTH",
+                    completion = Completion.TO_COMPLETE,
+                ),
+            )
         given(missionActionsRepository.findSeaAndLandControlBetweenDates(any(), any())).willReturn(controls)
 
-        val vessels = listOf(
-            Vessel(
-                id = 1,
-                internalReferenceNumber = "FR00022680",
-                vesselName = "MY AWESOME VESSEL",
-                flagState = CountryCode.FR,
-                declaredFishingGears = listOf("Trémails"),
-                vesselType = "Fishing",
-                districtCode = "AY",
-                hasLogbookEsacapt = false,
-            ),
-            Vessel(
-                id = 2,
-                internalReferenceNumber = "FR00065455",
-                vesselName = "MY SECOND AWESOME VESSEL",
-                flagState = CountryCode.FR,
-                declaredFishingGears = listOf("Trémails"),
-                vesselType = "Fishing",
-                districtCode = "LO",
-                hasLogbookEsacapt = false,
-            ),
-        )
+        val vessels =
+            listOf(
+                Vessel(
+                    id = 1,
+                    internalReferenceNumber = "FR00022680",
+                    vesselName = "MY AWESOME VESSEL",
+                    flagState = CountryCode.FR,
+                    declaredFishingGears = listOf("Trémails"),
+                    vesselType = "Fishing",
+                    districtCode = "AY",
+                    hasLogbookEsacapt = false,
+                ),
+                Vessel(
+                    id = 2,
+                    internalReferenceNumber = "FR00065455",
+                    vesselName = "MY SECOND AWESOME VESSEL",
+                    flagState = CountryCode.FR,
+                    declaredFishingGears = listOf("Trémails"),
+                    vesselType = "Fishing",
+                    districtCode = "LO",
+                    hasLogbookEsacapt = false,
+                ),
+            )
         given(vesselRepository.findVesselsByIds(eq(listOf(1, 2)))).willReturn(vessels)
 
-        val missions = listOf(
-            Mission(
-                1,
-                missionTypes = listOf(MissionType.LAND),
-                missionSource = MissionSource.MONITORFISH,
-                isUnderJdp = false,
-                isGeometryComputedFromControls = false,
-                startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
-            ),
-            Mission(
-                3,
-                missionTypes = listOf(MissionType.SEA),
-                missionSource = MissionSource.MONITORFISH,
-                isUnderJdp = false,
-                isGeometryComputedFromControls = false,
-                startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
-            ),
-        )
+        val missions =
+            listOf(
+                Mission(
+                    1,
+                    missionTypes = listOf(MissionType.LAND),
+                    missionSource = MissionSource.MONITORFISH,
+                    isUnderJdp = false,
+                    isGeometryComputedFromControls = false,
+                    startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+                ),
+                Mission(
+                    3,
+                    missionTypes = listOf(MissionType.SEA),
+                    missionSource = MissionSource.MONITORFISH,
+                    isUnderJdp = false,
+                    isGeometryComputedFromControls = false,
+                    startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+                ),
+            )
         // The mission id 2 is not returned
         given(missionRepository.findByIds(listOf(1, 2, 3))).willReturn(missions)
         given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
 
         // When
-        val activityReports = GetActivityReports(
-            missionActionsRepository,
-            portRepository,
-            vesselRepository,
-            missionRepository,
-        ).execute(
-            ZonedDateTime.now(),
-            ZonedDateTime.now().minusDays(1),
-            JointDeploymentPlan.NORTH_SEA,
-        )
+        val activityReports =
+            GetActivityReports(
+                missionActionsRepository,
+                portRepository,
+                vesselRepository,
+                missionRepository,
+            ).execute(
+                ZonedDateTime.now(),
+                ZonedDateTime.now().minusDays(1),
+                JointDeploymentPlan.NORTH_SEA,
+            )
 
         // Then
         assertThat(activityReports.jdpSpecies).hasSize(38)
@@ -723,94 +749,98 @@ class GetActivityReportsUTests {
         val species = SpeciesControl()
         species.speciesCode = "HKE"
 
-        val controls = listOf(
-            MissionAction(
-                id = 1,
-                vesselId = 1,
-                missionId = 1,
-                actionDatetimeUtc = ZonedDateTime.now(),
-                portLocode = "AEFAT",
-                faoAreas = listOf("27.4.b", "27.4.c"),
-                actionType = MissionActionType.LAND_CONTROL,
-                gearOnboard = listOf(),
-                speciesOnboard = listOf(species),
-                seizureAndDiversion = true,
-                isDeleted = false,
-                hasSomeGearsSeized = false,
-                hasSomeSpeciesSeized = false,
-                isFromPoseidon = false,
-                flagState = CountryCode.FR,
-                userTrigram = "LTH",
-                completion = Completion.TO_COMPLETE,
-            ),
-            MissionAction(
-                id = 3,
-                vesselId = 2,
-                missionId = 3,
-                actionDatetimeUtc = ZonedDateTime.now(),
-                actionType = MissionActionType.SEA_CONTROL,
-                seizureAndDiversion = false,
-                speciesInfractions = listOf(),
-                isDeleted = false,
-                hasSomeGearsSeized = false,
-                hasSomeSpeciesSeized = false,
-                isFromPoseidon = false,
-                flagState = CountryCode.FR,
-                userTrigram = "LTH",
-                completion = Completion.TO_COMPLETE,
-            ),
-        )
+        val controls =
+            listOf(
+                MissionAction(
+                    id = 1,
+                    vesselId = 1,
+                    missionId = 1,
+                    actionDatetimeUtc = ZonedDateTime.now(),
+                    portLocode = "AEFAT",
+                    faoAreas = listOf("27.4.b", "27.4.c"),
+                    actionType = MissionActionType.LAND_CONTROL,
+                    gearOnboard = listOf(),
+                    speciesOnboard = listOf(species),
+                    seizureAndDiversion = true,
+                    isDeleted = false,
+                    hasSomeGearsSeized = false,
+                    hasSomeSpeciesSeized = false,
+                    isFromPoseidon = false,
+                    flagState = CountryCode.FR,
+                    userTrigram = "LTH",
+                    completion = Completion.TO_COMPLETE,
+                ),
+                MissionAction(
+                    id = 3,
+                    vesselId = 2,
+                    missionId = 3,
+                    actionDatetimeUtc = ZonedDateTime.now(),
+                    actionType = MissionActionType.SEA_CONTROL,
+                    seizureAndDiversion = false,
+                    speciesInfractions = listOf(),
+                    isDeleted = false,
+                    hasSomeGearsSeized = false,
+                    hasSomeSpeciesSeized = false,
+                    isFromPoseidon = false,
+                    flagState = CountryCode.FR,
+                    userTrigram = "LTH",
+                    completion = Completion.TO_COMPLETE,
+                ),
+            )
         given(missionActionsRepository.findSeaAndLandControlBetweenDates(any(), any())).willReturn(controls)
 
-        val vessels = listOf(
-            Vessel(
-                id = 1,
-                internalReferenceNumber = "FR00022680",
-                vesselName = "MY AWESOME VESSEL",
-                flagState = CountryCode.FR,
-                declaredFishingGears = listOf("Trémails"),
-                vesselType = "Fishing",
-                districtCode = "AY",
-                hasLogbookEsacapt = false,
-            ),
-            Vessel(
-                id = 2,
-                internalReferenceNumber = "FR00065455",
-                vesselName = "MY SECOND AWESOME VESSEL",
-                flagState = CountryCode.FR,
-                declaredFishingGears = listOf("Trémails"),
-                vesselType = "Fishing",
-                districtCode = "LO",
-                hasLogbookEsacapt = false,
-            ),
-        )
+        val vessels =
+            listOf(
+                Vessel(
+                    id = 1,
+                    internalReferenceNumber = "FR00022680",
+                    vesselName = "MY AWESOME VESSEL",
+                    flagState = CountryCode.FR,
+                    declaredFishingGears = listOf("Trémails"),
+                    vesselType = "Fishing",
+                    districtCode = "AY",
+                    hasLogbookEsacapt = false,
+                ),
+                Vessel(
+                    id = 2,
+                    internalReferenceNumber = "FR00065455",
+                    vesselName = "MY SECOND AWESOME VESSEL",
+                    flagState = CountryCode.FR,
+                    declaredFishingGears = listOf("Trémails"),
+                    vesselType = "Fishing",
+                    districtCode = "LO",
+                    hasLogbookEsacapt = false,
+                ),
+            )
         given(vesselRepository.findVesselsByIds(eq(listOf(1, 2)))).willReturn(vessels)
 
-        val missions = listOf(
-            Mission(
-                3,
-                missionTypes = listOf(MissionType.SEA),
-                missionSource = MissionSource.MONITORFISH,
-                isUnderJdp = false,
-                isGeometryComputedFromControls = false,
-                startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
-            ),
-        )
+        val missions =
+            listOf(
+                Mission(
+                    3,
+                    missionTypes = listOf(MissionType.SEA),
+                    missionSource = MissionSource.MONITORFISH,
+                    isUnderJdp = false,
+                    isGeometryComputedFromControls = false,
+                    startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+                ),
+            )
         // The mission id 1 is not returned
         given(missionRepository.findByIds(listOf(1, 3))).willReturn(missions)
         given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
 
         // When
-        val activityReports = GetActivityReports(
-            missionActionsRepository,
-            portRepository,
-            vesselRepository,
-            missionRepository,
-        ).execute(
-            ZonedDateTime.now(),
-            ZonedDateTime.now().minusDays(1),
-            JointDeploymentPlan.NORTH_SEA,
-        )
+        val activityReports =
+            GetActivityReports(
+                missionActionsRepository,
+                portRepository,
+                vesselRepository,
+                missionRepository,
+            ).execute(
+                ZonedDateTime.now(),
+                ZonedDateTime.now().minusDays(1),
+                JointDeploymentPlan.NORTH_SEA,
+            )
 
         // Then
         assertThat(activityReports.activityReports).hasSize(0)
@@ -819,71 +849,74 @@ class GetActivityReportsUTests {
     @Test
     fun `execute Should filter a control done by an AECP unit`() {
         // Given
-        val controls = listOf(
-            MissionAction(
-                id = 1,
-                vesselId = 1,
-                missionId = 1,
-                actionDatetimeUtc = ZonedDateTime.now(),
-                portLocode = "AEFAT",
-                faoAreas = listOf("27.4.b", "27.4.c"),
-                actionType = MissionActionType.SEA_CONTROL,
-                gearOnboard = listOf(),
-                controlUnits = listOf(),
-                speciesOnboard = listOf(),
-                seizureAndDiversion = true,
-                isDeleted = false,
-                hasSomeGearsSeized = false,
-                hasSomeSpeciesSeized = false,
-                isFromPoseidon = false,
-                completion = Completion.TO_COMPLETE,
-                flagState = CountryCode.FR,
-                userTrigram = "CPAMOI",
-            ),
-        )
+        val controls =
+            listOf(
+                MissionAction(
+                    id = 1,
+                    vesselId = 1,
+                    missionId = 1,
+                    actionDatetimeUtc = ZonedDateTime.now(),
+                    portLocode = "AEFAT",
+                    faoAreas = listOf("27.4.b", "27.4.c"),
+                    actionType = MissionActionType.SEA_CONTROL,
+                    gearOnboard = listOf(),
+                    controlUnits = listOf(),
+                    speciesOnboard = listOf(),
+                    seizureAndDiversion = true,
+                    isDeleted = false,
+                    hasSomeGearsSeized = false,
+                    hasSomeSpeciesSeized = false,
+                    isFromPoseidon = false,
+                    completion = Completion.TO_COMPLETE,
+                    flagState = CountryCode.FR,
+                    userTrigram = "CPAMOI",
+                ),
+            )
         given(missionActionsRepository.findSeaAndLandControlBetweenDates(any(), any())).willReturn(controls)
 
-        val vessels = listOf(
-            Vessel(
-                id = 1,
-                internalReferenceNumber = "FR00022680",
-                vesselName = "MY AWESOME VESSEL",
-                flagState = CountryCode.FR,
-                declaredFishingGears = listOf("Trémails"),
-                vesselType = "Fishing",
-                districtCode = "AY",
-                hasLogbookEsacapt = false,
-            ),
-        )
+        val vessels =
+            listOf(
+                Vessel(
+                    id = 1,
+                    internalReferenceNumber = "FR00022680",
+                    vesselName = "MY AWESOME VESSEL",
+                    flagState = CountryCode.FR,
+                    declaredFishingGears = listOf("Trémails"),
+                    vesselType = "Fishing",
+                    districtCode = "AY",
+                    hasLogbookEsacapt = false,
+                ),
+            )
         given(vesselRepository.findVesselsByIds(eq(listOf(1)))).willReturn(vessels)
 
-        val missions = listOf(
-            Mission(
-                1,
-                missionTypes = listOf(MissionType.SEA),
-                missionSource = MissionSource.MONITORFISH,
-                isUnderJdp = true,
-                controlUnits = listOf(ControlUnit(123, "AECP", false, "Unit AECP", listOf())),
-                isGeometryComputedFromControls = false,
-                startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
-            ),
-
-        )
+        val missions =
+            listOf(
+                Mission(
+                    1,
+                    missionTypes = listOf(MissionType.SEA),
+                    missionSource = MissionSource.MONITORFISH,
+                    isUnderJdp = true,
+                    controlUnits = listOf(ControlUnit(123, "AECP", false, "Unit AECP", listOf())),
+                    isGeometryComputedFromControls = false,
+                    startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+                ),
+            )
         // The mission id 2 is not returned
         given(missionRepository.findByIds(listOf(1))).willReturn(missions)
         given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
 
         // When
-        val activityReports = GetActivityReports(
-            missionActionsRepository,
-            portRepository,
-            vesselRepository,
-            missionRepository,
-        ).execute(
-            ZonedDateTime.now(),
-            ZonedDateTime.now().minusDays(1),
-            JointDeploymentPlan.NORTH_SEA,
-        )
+        val activityReports =
+            GetActivityReports(
+                missionActionsRepository,
+                portRepository,
+                vesselRepository,
+                missionRepository,
+            ).execute(
+                ZonedDateTime.now(),
+                ZonedDateTime.now().minusDays(1),
+                JointDeploymentPlan.NORTH_SEA,
+            )
 
         // Then
         assertThat(activityReports.jdpSpecies).hasSize(38)

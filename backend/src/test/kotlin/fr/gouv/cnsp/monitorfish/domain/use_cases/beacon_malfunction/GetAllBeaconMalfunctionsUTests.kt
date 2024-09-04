@@ -18,7 +18,6 @@ import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class GetAllBeaconMalfunctionsUTests {
-
     @MockBean
     private lateinit var beaconMalfunctionsRepository: BeaconMalfunctionsRepository
 
@@ -32,34 +31,42 @@ class GetAllBeaconMalfunctionsUTests {
     fun `execute Should return the beacon malfunctions filtered and enriched with the risk factor found in the last position table`() {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
-        val firstPosition = LastPosition(
-            null, null, "FR224226850", "224226850", null, null, null, CountryCode.FR, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, riskFactor = 1.23,
-            dateTime = now.minusHours(
-                4,
-            ),
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-        )
-        val secondPosition = LastPosition(
-            null, null, "FR123456785", "224226850", null, null, null, CountryCode.FR, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, riskFactor = 1.54,
-            dateTime = now.minusHours(
-                3,
-            ),
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-        )
-        val thirdPosition = LastPosition(
-            null, null, "FR224226856", "224226850", null, null, null, CountryCode.FR, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, riskFactor = 1.98,
-            dateTime = now.minusHours(
-                2,
-            ),
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-        )
-        val fourthPosition = LastPosition(
-            null, null, "FR224226857", "224226850", null, null, null, CountryCode.FR, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, riskFactor = 1.24,
-            dateTime = now.minusHours(
-                1,
-            ),
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-        )
+        val firstPosition =
+            LastPosition(
+                null, null, "FR224226850", "224226850", null, null, null, CountryCode.FR, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, riskFactor = 1.23,
+                dateTime =
+                    now.minusHours(
+                        4,
+                    ),
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            )
+        val secondPosition =
+            LastPosition(
+                null, null, "FR123456785", "224226850", null, null, null, CountryCode.FR, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, riskFactor = 1.54,
+                dateTime =
+                    now.minusHours(
+                        3,
+                    ),
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            )
+        val thirdPosition =
+            LastPosition(
+                null, null, "FR224226856", "224226850", null, null, null, CountryCode.FR, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, riskFactor = 1.98,
+                dateTime =
+                    now.minusHours(
+                        2,
+                    ),
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            )
+        val fourthPosition =
+            LastPosition(
+                null, null, "FR224226857", "224226850", null, null, null, CountryCode.FR, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, riskFactor = 1.24,
+                dateTime =
+                    now.minusHours(
+                        1,
+                    ),
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            )
         given(lastPositionRepository.findAll()).willReturn(
             listOf(firstPosition, fourthPosition, secondPosition, thirdPosition),
         )
@@ -99,11 +106,12 @@ class GetAllBeaconMalfunctionsUTests {
         given(beaconRepository.findActivatedBeaconNumbers()).willReturn(listOf("123465", "another active beacon"))
 
         // When
-        val filteredAndEnrichedBeaconMalfunctions = GetAllBeaconMalfunctions(
-            beaconMalfunctionsRepository,
-            lastPositionRepository,
-            beaconRepository,
-        ).execute()
+        val filteredAndEnrichedBeaconMalfunctions =
+            GetAllBeaconMalfunctions(
+                beaconMalfunctionsRepository,
+                lastPositionRepository,
+                beaconRepository,
+            ).execute()
 
         // Then
         assertThat(filteredAndEnrichedBeaconMalfunctions).hasSize(3)

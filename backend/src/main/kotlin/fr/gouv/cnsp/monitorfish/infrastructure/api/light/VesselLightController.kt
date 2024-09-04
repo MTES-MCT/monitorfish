@@ -30,7 +30,6 @@ class VesselLightController(
     private val getVessel: GetVessel,
     private val getVesselVoyage: GetVesselVoyage,
 ) {
-
     companion object {
         const val zoneDateTimePattern = "yyyy-MM-dd'T'HH:mm:ss.000X"
     }
@@ -78,16 +77,17 @@ class VesselLightController(
         beforeDateTime: ZonedDateTime?,
     ): ResponseEntity<VesselAndPositionsDataOutput> {
         return runBlocking {
-            val (vesselTrackHasBeenModified, vesselWithData) = getVessel.execute(
-                vesselId,
-                internalReferenceNumber,
-                externalReferenceNumber,
-                IRCS,
-                trackDepth,
-                vesselIdentifier,
-                afterDateTime,
-                beforeDateTime,
-            )
+            val (vesselTrackHasBeenModified, vesselWithData) =
+                getVessel.execute(
+                    vesselId,
+                    internalReferenceNumber,
+                    externalReferenceNumber,
+                    IRCS,
+                    trackDepth,
+                    vesselIdentifier,
+                    afterDateTime,
+                    beforeDateTime,
+                )
 
             val returnCode = if (vesselTrackHasBeenModified) HttpStatus.ACCEPTED else HttpStatus.OK
 
@@ -103,7 +103,7 @@ class VesselLightController(
         internalReferenceNumber: String,
         @Parameter(
             description =
-            "Voyage request (LAST, PREVIOUS or NEXT) with respect to date",
+                "Voyage request (LAST, PREVIOUS or NEXT) with respect to date",
             required = true,
         )
         @RequestParam(name = "voyageRequest")

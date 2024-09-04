@@ -11,13 +11,14 @@ data class GearControlDataOutput(
     var gearWasControlled: Boolean? = null,
 ) {
     companion object {
-        fun fromGearControl(gearControl: GearControl) = GearControlDataOutput(
-            gearCode = gearControl.gearCode,
-            gearName = gearControl.gearName,
-            declaredMesh = gearControl.declaredMesh,
-            controlledMesh = gearControl.controlledMesh,
-            hasUncontrolledMesh = gearControl.hasUncontrolledMesh,
-            gearWasControlled = gearControl.gearWasControlled,
-        )
+        fun fromGearControl(gearControl: GearControl) =
+            GearControlDataOutput(
+                gearCode = gearControl.gearCode,
+                gearName = gearControl.gearName,
+                declaredMesh = gearControl.declaredMesh,
+                controlledMesh = gearControl.controlledMesh,
+                hasUncontrolledMesh = gearControl.hasUncontrolledMesh,
+                gearWasControlled = gearControl.gearWasControlled,
+            )
     }
 }

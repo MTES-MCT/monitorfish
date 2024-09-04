@@ -43,7 +43,6 @@ import java.time.ZonedDateTime
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = [(VesselLightController::class)])
 class VesselLightControllerITests {
-
     @Autowired
     private lateinit var api: MockMvc
 
@@ -110,72 +109,79 @@ class VesselLightControllerITests {
     }
 
     private fun <T> givenSuspended(block: suspend () -> T) = given(runBlocking { block() })!!
+
     private infix fun <T> BDDMockito.BDDMyOngoingStubbing<T>.willReturn(block: () -> T) = willReturn(block())
 
     @Test
     fun `Should get vessels with last positions`() {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
-        val firstPosition = Position(
-            id = null,
-            internalReferenceNumber = "FR224226850",
-            mmsi = "224226850",
-            ircs = null,
-            externalReferenceNumber = null,
-            vesselName = null,
-            flagState = null,
-            positionType = PositionType.AIS,
-            isManual = false,
-            isFishing = false,
-            course = 16.445,
-            latitude = 48.2525,
-            longitude = 1.8,
-            speed = 180.0,
-            isAtPort = false,
-            dateTime = now.minusHours(
-                4,
-            ),
-        )
-        val secondPosition = Position(
-            id = null,
-            internalReferenceNumber = "FR224226850",
-            mmsi = "224226850",
-            ircs = null,
-            externalReferenceNumber = null,
-            vesselName = null,
-            flagState = null,
-            positionType = PositionType.AIS,
-            isManual = false,
-            isFishing = false,
-            course = 16.445,
-            latitude = 48.2525,
-            longitude = 1.8,
-            speed = 180.0,
-            isAtPort = false,
-            dateTime = now.minusHours(
-                3,
-            ),
-        )
-        val thirdPosition = Position(
-            null,
-            internalReferenceNumber = "FR224226850",
-            mmsi = "224226850",
-            ircs = null,
-            externalReferenceNumber = null,
-            vesselName = null,
-            flagState = null,
-            positionType = PositionType.AIS,
-            isManual = false,
-            isFishing = false,
-            course = 16.445,
-            latitude = 48.2525,
-            longitude = 1.8,
-            speed = 180.0,
-            isAtPort = false,
-            dateTime = now.minusHours(
-                2,
-            ),
-        )
+        val firstPosition =
+            Position(
+                id = null,
+                internalReferenceNumber = "FR224226850",
+                mmsi = "224226850",
+                ircs = null,
+                externalReferenceNumber = null,
+                vesselName = null,
+                flagState = null,
+                positionType = PositionType.AIS,
+                isManual = false,
+                isFishing = false,
+                course = 16.445,
+                latitude = 48.2525,
+                longitude = 1.8,
+                speed = 180.0,
+                isAtPort = false,
+                dateTime =
+                    now.minusHours(
+                        4,
+                    ),
+            )
+        val secondPosition =
+            Position(
+                id = null,
+                internalReferenceNumber = "FR224226850",
+                mmsi = "224226850",
+                ircs = null,
+                externalReferenceNumber = null,
+                vesselName = null,
+                flagState = null,
+                positionType = PositionType.AIS,
+                isManual = false,
+                isFishing = false,
+                course = 16.445,
+                latitude = 48.2525,
+                longitude = 1.8,
+                speed = 180.0,
+                isAtPort = false,
+                dateTime =
+                    now.minusHours(
+                        3,
+                    ),
+            )
+        val thirdPosition =
+            Position(
+                null,
+                internalReferenceNumber = "FR224226850",
+                mmsi = "224226850",
+                ircs = null,
+                externalReferenceNumber = null,
+                vesselName = null,
+                flagState = null,
+                positionType = PositionType.AIS,
+                isManual = false,
+                isFishing = false,
+                course = 16.445,
+                latitude = 48.2525,
+                longitude = 1.8,
+                speed = 180.0,
+                isAtPort = false,
+                dateTime =
+                    now.minusHours(
+                        2,
+                    ),
+            )
         givenSuspended {
             getVessel.execute(eq(123), any(), any(), any(), any(), any(), eq(null), eq(null))
         } willReturn {
@@ -233,14 +239,15 @@ class VesselLightControllerITests {
     @Test
     fun `Should find the last logbook messages of vessels`() {
         // Given
-        val voyage = Voyage(
-            isLastVoyage = true,
-            isFirstVoyage = false,
-            startDate = ZonedDateTime.parse("2021-01-21T10:21:26.617301+01:00"),
-            endDate = null,
-            tripNumber = "1234",
-            logbookMessagesAndAlerts = LogbookMessagesAndAlerts(TestUtils.getDummyLogbookMessages(), listOf()),
-        )
+        val voyage =
+            Voyage(
+                isLastVoyage = true,
+                isFirstVoyage = false,
+                startDate = ZonedDateTime.parse("2021-01-21T10:21:26.617301+01:00"),
+                endDate = null,
+                tripNumber = "1234",
+                logbookMessagesAndAlerts = LogbookMessagesAndAlerts(TestUtils.getDummyLogbookMessages(), listOf()),
+            )
         given(this.getVesselVoyage.execute(any(), any(), anyOrNull())).willReturn(voyage)
 
         // When

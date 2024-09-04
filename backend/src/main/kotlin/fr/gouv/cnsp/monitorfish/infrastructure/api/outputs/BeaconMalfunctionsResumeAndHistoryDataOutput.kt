@@ -11,19 +11,22 @@ data class BeaconMalfunctionsResumeAndHistoryDataOutput(
         fun fromBeaconMalfunctionsResumeAndHistory(
             vesselBeaconMalfunctionsResumeAndHistory: VesselBeaconMalfunctionsResumeAndHistory,
         ) = BeaconMalfunctionsResumeAndHistoryDataOutput(
-            resume = VesselBeaconMalfunctionResumeDataOutput.fromVesselBeaconMalfunctionResume(
-                vesselBeaconMalfunctionsResumeAndHistory.resume,
-            ),
-            current = vesselBeaconMalfunctionsResumeAndHistory.current?.let {
-                BeaconMalfunctionWithDetailsDataOutput.fromBeaconMalfunctionWithDetails(
-                    vesselBeaconMalfunctionsResumeAndHistory.current,
-                )
-            },
-            history = vesselBeaconMalfunctionsResumeAndHistory.history.map {
-                BeaconMalfunctionWithDetailsDataOutput.fromBeaconMalfunctionWithDetails(
-                    it,
-                )
-            },
+            resume =
+                VesselBeaconMalfunctionResumeDataOutput.fromVesselBeaconMalfunctionResume(
+                    vesselBeaconMalfunctionsResumeAndHistory.resume,
+                ),
+            current =
+                vesselBeaconMalfunctionsResumeAndHistory.current?.let {
+                    BeaconMalfunctionWithDetailsDataOutput.fromBeaconMalfunctionWithDetails(
+                        vesselBeaconMalfunctionsResumeAndHistory.current,
+                    )
+                },
+            history =
+                vesselBeaconMalfunctionsResumeAndHistory.history.map {
+                    BeaconMalfunctionWithDetailsDataOutput.fromBeaconMalfunctionWithDetails(
+                        it,
+                    )
+                },
         )
     }
 }

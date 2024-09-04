@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class VersionController(val buildProperties: BuildProperties) {
-
     @GetMapping("/version")
     fun version(): Map<String, String> {
         return mapOf(

@@ -73,11 +73,12 @@ data class MissionAction(
     var observationsByUnit: String? = null,
 ) {
     fun verify() {
-        val controlTypes = listOf(
-            MissionActionType.AIR_CONTROL,
-            MissionActionType.LAND_CONTROL,
-            MissionActionType.SEA_CONTROL,
-        )
+        val controlTypes =
+            listOf(
+                MissionActionType.AIR_CONTROL,
+                MissionActionType.LAND_CONTROL,
+                MissionActionType.SEA_CONTROL,
+            )
 
         if (controlTypes.any { it == this.actionType }) {
             require(this.vesselId != null) {

@@ -7,7 +7,10 @@ class Utils {
          *
          * If both strings are null or empty, they are considered equivalent.
          */
-        fun areStringsEqual(leftString: String?, rightString: String?): Boolean {
+        fun areStringsEqual(
+            leftString: String?,
+            rightString: String?,
+        ): Boolean {
             val normalizedLeftString = leftString?.trim().takeUnless { it.isNullOrEmpty() || it == " " }
             val normalizedRightString = rightString?.trim().takeUnless { it.isNullOrEmpty() || it == " " }
 

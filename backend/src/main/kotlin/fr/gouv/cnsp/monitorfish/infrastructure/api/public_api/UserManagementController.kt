@@ -16,7 +16,6 @@ class UserManagementController(
     private val saveUser: SaveUser,
     private val deleteUser: DeleteUser,
 ) {
-
     @PostMapping(value = [""], consumes = ["application/json"])
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create a new user")

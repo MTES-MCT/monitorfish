@@ -30,7 +30,6 @@ import java.time.ZonedDateTime
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = [(PublicBeaconMalfunctionController::class)])
 class PublicBeaconMalfunctionControllerITests {
-
     @Autowired
     private lateinit var api: MockMvc
 
@@ -48,31 +47,34 @@ class PublicBeaconMalfunctionControllerITests {
         given(this.updateBeaconMalfunction.execute(123, VesselStatus.AT_SEA, null, null))
             .willReturn(
                 BeaconMalfunctionResumeAndDetails(
-                    beaconMalfunction = BeaconMalfunction(
-                        1, "CFR", "EXTERNAL_IMMAT", "IRCS",
-                        "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
-                        ZonedDateTime.now(), null, ZonedDateTime.now(),
-                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
-                    ),
-                    comments = listOf(
-                        BeaconMalfunctionComment(
-                            1,
-                            1,
-                            "A comment",
-                            BeaconMalfunctionCommentUserType.SIP,
-                            ZonedDateTime.now(),
+                    beaconMalfunction =
+                        BeaconMalfunction(
+                            1, "CFR", "EXTERNAL_IMMAT", "IRCS",
+                            "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                            ZonedDateTime.now(), null, ZonedDateTime.now(),
+                            beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
                         ),
-                    ),
-                    actions = listOf(
-                        BeaconMalfunctionAction(
-                            1,
-                            1,
-                            BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
-                            "PREVIOUS",
-                            "NEXT",
-                            ZonedDateTime.now(),
+                    comments =
+                        listOf(
+                            BeaconMalfunctionComment(
+                                1,
+                                1,
+                                "A comment",
+                                BeaconMalfunctionCommentUserType.SIP,
+                                ZonedDateTime.now(),
+                            ),
                         ),
-                    ),
+                    actions =
+                        listOf(
+                            BeaconMalfunctionAction(
+                                1,
+                                1,
+                                BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
+                                "PREVIOUS",
+                                "NEXT",
+                                ZonedDateTime.now(),
+                            ),
+                        ),
                 ),
             )
 

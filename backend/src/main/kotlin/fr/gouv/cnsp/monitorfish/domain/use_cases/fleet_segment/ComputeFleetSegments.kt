@@ -26,19 +26,22 @@ class ComputeFleetSegments(
         val currentYear = ZonedDateTime.now(clock).year
         val fleetSegments = fleetSegmentRepository.findAllByYear(currentYear)
 
-        val computedSegments = fleetSegments.filter { fleetSegment ->
-            val isContainingGearFromList =
-                fleetSegment.gears.isEmpty() || fleetSegment.gears.any { gearCodes.contains(it) }
-            val isContainingSpecyFromList =
-                (fleetSegment.targetSpecies.isEmpty() && fleetSegment.bycatchSpecies.isEmpty()) ||
-                    fleetSegment.targetSpecies.any { specyCodes.contains(it) } ||
-                    fleetSegment.bycatchSpecies.any { specyCodes.contains(it) }
-            val isContainingFaoAreaFromList = fleetSegment.faoAreas.isEmpty() || fleetSegment.faoAreas.any { faoArea ->
-                faoAreas.map { FaoArea(it) }.any { it.hasFaoCodeIncludedIn(faoArea) }
-            }
+        val computedSegments =
+            fleetSegments.filter { fleetSegment ->
+                val isContainingGearFromList =
+                    fleetSegment.gears.isEmpty() || fleetSegment.gears.any { gearCodes.contains(it) }
+                val isContainingSpecyFromList =
+                    (fleetSegment.targetSpecies.isEmpty() && fleetSegment.bycatchSpecies.isEmpty()) ||
+                        fleetSegment.targetSpecies.any { specyCodes.contains(it) } ||
+                        fleetSegment.bycatchSpecies.any { specyCodes.contains(it) }
+                val isContainingFaoAreaFromList =
+                    fleetSegment.faoAreas.isEmpty() ||
+                        fleetSegment.faoAreas.any { faoArea ->
+                            faoAreas.map { FaoArea(it) }.any { it.hasFaoCodeIncludedIn(faoArea) }
+                        }
 
-            return@filter isContainingGearFromList && isContainingSpecyFromList && isContainingFaoAreaFromList
-        }
+                return@filter isContainingGearFromList && isContainingSpecyFromList && isContainingFaoAreaFromList
+            }
 
         return computedSegments
     }

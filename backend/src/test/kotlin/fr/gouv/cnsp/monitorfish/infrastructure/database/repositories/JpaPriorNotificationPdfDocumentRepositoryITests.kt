@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.ZonedDateTime
 
 class JpaPriorNotificationPdfDocumentRepositoryITests : AbstractDBTests() {
-
     @Autowired
     private lateinit var jpaPriorNotificationPdfDocumentRepository: JpaPriorNotificationPdfDocumentRepository
 
@@ -39,9 +38,10 @@ class JpaPriorNotificationPdfDocumentRepositoryITests : AbstractDBTests() {
         jpaPriorNotificationPdfDocumentRepository.deleteByReportId("FAKE_OPERATION_102")
 
         // Then
-        val throwable = catchThrowable {
-            jpaPriorNotificationPdfDocumentRepository.findByReportId("FAKE_OPERATION_102")
-        }
+        val throwable =
+            catchThrowable {
+                jpaPriorNotificationPdfDocumentRepository.findByReportId("FAKE_OPERATION_102")
+            }
 
         // Then
         assertThat(throwable).isNotNull()

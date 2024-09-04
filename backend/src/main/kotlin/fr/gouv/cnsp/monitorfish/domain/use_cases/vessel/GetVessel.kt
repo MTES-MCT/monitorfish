@@ -60,11 +60,12 @@ class GetVessel(
 
             val vessel = vesselFuture.await()
             val beacon = vessel?.id?.let { vesselId -> beaconRepository.findBeaconByVesselId(vesselId) }
-            val logbookSoftware = vessel?.internalReferenceNumber?.let {
-                logbookReportRepository.findLastReportSoftware(
-                    it,
-                )
-            }
+            val logbookSoftware =
+                vessel?.internalReferenceNumber?.let {
+                    logbookReportRepository.findLastReportSoftware(
+                        it,
+                    )
+                }
             val hasVisioCaptures = logbookSoftware?.let { LogbookSoftware.isVisioCaptureInRealTime(logbookSoftware) } ?: false
 
             Pair(

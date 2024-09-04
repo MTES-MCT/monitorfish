@@ -4,5 +4,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infracti
 
 interface InfractionRepository {
     fun findInfractionByNatinfCode(natinfCode: Int): Infraction
+
     fun findAll(): List<Infraction>
 }

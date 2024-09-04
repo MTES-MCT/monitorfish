@@ -42,16 +42,19 @@ class SilenceAlert(
     }
 
     private fun getSilencedAlertWithNatinf(silencedAlert: SilencedAlert): SilencedAlert {
-        val nextValueWithNatinf: AlertType = when (silencedAlert.value.type) {
-            AlertTypeMapping.THREE_MILES_TRAWLING_ALERT -> ThreeMilesTrawlingAlert()
-            AlertTypeMapping.FRENCH_EEZ_FISHING_ALERT -> FrenchEEZFishingAlert()
-            AlertTypeMapping.TWELVE_MILES_FISHING_ALERT -> TwelveMilesFishingAlert()
-            AlertTypeMapping.MISSING_FAR_ALERT -> MissingFARAlert()
-            AlertTypeMapping.MISSING_FAR_48_HOURS_ALERT -> MissingFAR48HoursAlert()
-            else -> {
-                throw IllegalArgumentException("The alert type '${silencedAlert.value.type}' could not be silenced.")
+        val nextValueWithNatinf: AlertType =
+            when (silencedAlert.value.type) {
+                AlertTypeMapping.THREE_MILES_TRAWLING_ALERT -> ThreeMilesTrawlingAlert()
+                AlertTypeMapping.FRENCH_EEZ_FISHING_ALERT -> FrenchEEZFishingAlert()
+                AlertTypeMapping.TWELVE_MILES_FISHING_ALERT -> TwelveMilesFishingAlert()
+                AlertTypeMapping.MISSING_FAR_ALERT -> MissingFARAlert()
+                AlertTypeMapping.MISSING_FAR_48_HOURS_ALERT -> MissingFAR48HoursAlert()
+                else -> {
+                    throw IllegalArgumentException(
+                        "The alert type '${silencedAlert.value.type}' could not be silenced.",
+                    )
+                }
             }
-        }
         return silencedAlert.copy(value = nextValueWithNatinf)
     }
 }

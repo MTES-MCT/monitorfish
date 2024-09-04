@@ -13,18 +13,20 @@ class GetAllGears(
     private val GearCodeGroupRepository: GearCodeGroupRepository,
 ) {
     private val logger = LoggerFactory.getLogger(GetAllGears::class.java)
+
     fun execute(): List<Gear> {
         val allGears = gearRepository.findAll()
-        val allGearsWithGroup = allGears
-            .map {
-                try {
-                    val gearCodeGroup = GearCodeGroupRepository.find(it.code)
-                    it.groupId = gearCodeGroup.groupId
-                } catch (e: CodeNotFoundException) {
-                    logger.warn(e.message)
+        val allGearsWithGroup =
+            allGears
+                .map {
+                    try {
+                        val gearCodeGroup = GearCodeGroupRepository.find(it.code)
+                        it.groupId = gearCodeGroup.groupId
+                    } catch (e: CodeNotFoundException) {
+                        logger.warn(e.message)
+                    }
+                    it
                 }
-                it
-            }
 
         return allGearsWithGroup
     }

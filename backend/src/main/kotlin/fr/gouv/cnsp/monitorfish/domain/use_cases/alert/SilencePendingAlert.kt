@@ -30,26 +30,28 @@ class SilencePendingAlert(
             }
         }
 
-        val before = when (silenceAlertPeriod) {
-            SilenceAlertPeriod.THIS_OCCURRENCE -> ZonedDateTime.now()
-            SilenceAlertPeriod.ONE_HOUR -> ZonedDateTime.now().plusHours(1)
-            SilenceAlertPeriod.TWO_HOURS -> ZonedDateTime.now().plusHours(2)
-            SilenceAlertPeriod.SIX_HOURS -> ZonedDateTime.now().plusHours(6)
-            SilenceAlertPeriod.TWELVE_HOURS -> ZonedDateTime.now().plusHours(12)
-            SilenceAlertPeriod.ONE_DAY -> ZonedDateTime.now().plusDays(1)
-            SilenceAlertPeriod.ONE_WEEK -> ZonedDateTime.now().plusWeeks(1)
-            SilenceAlertPeriod.ONE_MONTH -> ZonedDateTime.now().plusMonths(1)
-            SilenceAlertPeriod.ONE_YEAR -> ZonedDateTime.now().plusYears(1)
-            SilenceAlertPeriod.CUSTOM -> beforeDateTime!!
-        }
+        val before =
+            when (silenceAlertPeriod) {
+                SilenceAlertPeriod.THIS_OCCURRENCE -> ZonedDateTime.now()
+                SilenceAlertPeriod.ONE_HOUR -> ZonedDateTime.now().plusHours(1)
+                SilenceAlertPeriod.TWO_HOURS -> ZonedDateTime.now().plusHours(2)
+                SilenceAlertPeriod.SIX_HOURS -> ZonedDateTime.now().plusHours(6)
+                SilenceAlertPeriod.TWELVE_HOURS -> ZonedDateTime.now().plusHours(12)
+                SilenceAlertPeriod.ONE_DAY -> ZonedDateTime.now().plusDays(1)
+                SilenceAlertPeriod.ONE_WEEK -> ZonedDateTime.now().plusWeeks(1)
+                SilenceAlertPeriod.ONE_MONTH -> ZonedDateTime.now().plusMonths(1)
+                SilenceAlertPeriod.ONE_YEAR -> ZonedDateTime.now().plusYears(1)
+                SilenceAlertPeriod.CUSTOM -> beforeDateTime!!
+            }
 
         val silencedAlert = pendingAlertRepository.find(alertId)
 
-        val savedSilencedAlert = silencedAlertRepository.save(
-            alert = silencedAlert,
-            silencedBeforeDate = before,
-            isValidated = false,
-        )
+        val savedSilencedAlert =
+            silencedAlertRepository.save(
+                alert = silencedAlert,
+                silencedBeforeDate = before,
+                isValidated = false,
+            )
 
         pendingAlertRepository.delete(alertId)
         updateLastPositionBeforePipelineUpdate(silencedAlert)

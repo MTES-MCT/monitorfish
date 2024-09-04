@@ -45,15 +45,16 @@ class VerifyAndSendPriorNotificationUTests {
             .willReturn(fakePriorNotification)
 
         // When
-        val result = VerifyAndSendPriorNotification(
-            logbookReportRepository,
-            manualPriorNotificationRepository,
-            getPriorNotification,
-        ).execute(
-            fakePriorNotification.reportId!!,
-            fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
-            false,
-        )
+        val result =
+            VerifyAndSendPriorNotification(
+                logbookReportRepository,
+                manualPriorNotificationRepository,
+                getPriorNotification,
+            ).execute(
+                fakePriorNotification.reportId!!,
+                fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
+                false,
+            )
 
         // Then
         Assertions.assertThat(result.reportId).isEqualTo(fakePriorNotification.reportId!!)
@@ -83,15 +84,16 @@ class VerifyAndSendPriorNotificationUTests {
             .willReturn(fakePriorNotification)
 
         // When
-        val result = VerifyAndSendPriorNotification(
-            logbookReportRepository,
-            manualPriorNotificationRepository,
-            getPriorNotification,
-        ).execute(
-            fakePriorNotification.reportId!!,
-            fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
-            true,
-        )
+        val result =
+            VerifyAndSendPriorNotification(
+                logbookReportRepository,
+                manualPriorNotificationRepository,
+                getPriorNotification,
+            ).execute(
+                fakePriorNotification.reportId!!,
+                fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
+                true,
+            )
 
         // Then
         Assertions.assertThat(result.reportId).isEqualTo(fakePriorNotification.reportId!!)

@@ -39,7 +39,7 @@ class TestUtils {
                     "isGeometryComputedFromControls":false,
                     "missionSource":"MONITORFISH"
                 }
-            """.trimIndent()
+                """.trimIndent()
         }
 
         fun getDummyMissions(): String {
@@ -331,7 +331,7 @@ class TestUtils {
                     "isGeometryComputedFromControls":false,
                     "missionSource":"MONITORFISH"
                 }]
-            """.trimIndent()
+                """.trimIndent()
         }
     }
 }

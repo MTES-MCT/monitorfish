@@ -10,11 +10,12 @@ class AlertDataOutput(
     val natinfCode: Int? = null,
 ) : ReportingValueDataOutput() {
     companion object {
-        fun fromAlertType(alertType: AlertType) = AlertDataOutput(
-            type = alertType.type,
-            seaFront = alertType.seaFront,
-            dml = alertType.dml,
-            natinfCode = alertType.natinfCode,
-        )
+        fun fromAlertType(alertType: AlertType) =
+            AlertDataOutput(
+                type = alertType.type,
+                seaFront = alertType.seaFront,
+                dml = alertType.dml,
+                natinfCode = alertType.natinfCode,
+            )
     }
 }

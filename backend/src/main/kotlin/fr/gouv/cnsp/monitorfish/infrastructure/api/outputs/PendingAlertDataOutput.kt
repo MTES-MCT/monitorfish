@@ -21,19 +21,20 @@ data class PendingAlertDataOutput(
     var infraction: InfractionDataOutput? = null,
 ) {
     companion object {
-        fun fromPendingAlert(pendingAlert: PendingAlert) = PendingAlertDataOutput(
-            id = pendingAlert.id,
-            vesselId = pendingAlert.vesselId,
-            vesselName = pendingAlert.vesselName,
-            internalReferenceNumber = pendingAlert.internalReferenceNumber,
-            externalReferenceNumber = pendingAlert.externalReferenceNumber,
-            ircs = pendingAlert.ircs,
-            vesselIdentifier = pendingAlert.vesselIdentifier,
-            flagState = pendingAlert.flagState,
-            creationDate = pendingAlert.creationDate,
-            tripNumber = pendingAlert.tripNumber,
-            value = pendingAlert.value,
-            infraction = pendingAlert.infraction?.let { InfractionDataOutput.fromInfraction(it) },
-        )
+        fun fromPendingAlert(pendingAlert: PendingAlert) =
+            PendingAlertDataOutput(
+                id = pendingAlert.id,
+                vesselId = pendingAlert.vesselId,
+                vesselName = pendingAlert.vesselName,
+                internalReferenceNumber = pendingAlert.internalReferenceNumber,
+                externalReferenceNumber = pendingAlert.externalReferenceNumber,
+                ircs = pendingAlert.ircs,
+                vesselIdentifier = pendingAlert.vesselIdentifier,
+                flagState = pendingAlert.flagState,
+                creationDate = pendingAlert.creationDate,
+                tripNumber = pendingAlert.tripNumber,
+                value = pendingAlert.value,
+                infraction = pendingAlert.infraction?.let { InfractionDataOutput.fromInfraction(it) },
+            )
     }
 }

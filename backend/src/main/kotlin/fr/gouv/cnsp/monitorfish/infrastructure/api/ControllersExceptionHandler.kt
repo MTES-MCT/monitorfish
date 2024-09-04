@@ -23,9 +23,7 @@ class ControllersExceptionHandler(val sentryConfig: SentryConfig) {
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(BackendInternalException::class)
-    fun handleBackendInternalException(
-        e: BackendInternalException,
-    ): BackendInternalErrorDataOutput {
+    fun handleBackendInternalException(e: BackendInternalException): BackendInternalErrorDataOutput {
         return BackendInternalErrorDataOutput(code = e.code, message = e.message)
     }
 

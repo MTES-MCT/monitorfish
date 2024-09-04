@@ -7,7 +7,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
 class CountryCodeUTests {
-
     @Test
     fun `from Should return null if not found`() {
         // When

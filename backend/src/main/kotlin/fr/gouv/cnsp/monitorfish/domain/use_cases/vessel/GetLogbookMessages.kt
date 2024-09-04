@@ -28,26 +28,27 @@ class GetLogbookMessages(
         val allPorts = portRepository.findAll()
         val allSpecies = speciesRepository.findAll()
 
-        val messages = logbookReportRepository
-            .findAllMessagesByTripNumberBetweenDates(
-                internalReferenceNumber,
-                afterDepartureDate,
-                beforeDepartureDate,
-                tripNumber,
-            )
-            .sortedBy { it.reportDateTime }
-            .map { logbookMessage ->
-                logbookMessage.operationNumber?.let { operationNumber ->
-                    try {
-                        val rawMessage = logbookRawMessageRepository.findRawMessage(operationNumber)
-                        logbookMessage.rawMessage = rawMessage
-                    } catch (e: NoERSMessagesFound) {
-                        logger.warn(e.message)
+        val messages =
+            logbookReportRepository
+                .findAllMessagesByTripNumberBetweenDates(
+                    internalReferenceNumber,
+                    afterDepartureDate,
+                    beforeDepartureDate,
+                    tripNumber,
+                )
+                .sortedBy { it.reportDateTime }
+                .map { logbookMessage ->
+                    logbookMessage.operationNumber?.let { operationNumber ->
+                        try {
+                            val rawMessage = logbookRawMessageRepository.findRawMessage(operationNumber)
+                            logbookMessage.rawMessage = rawMessage
+                        } catch (e: NoERSMessagesFound) {
+                            logger.warn(e.message)
+                        }
                     }
-                }
 
-                logbookMessage
-            }
+                    logbookMessage
+                }
 
         messages.forEach { it.enrich(messages, allGears, allPorts, allSpecies) }
 

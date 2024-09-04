@@ -22,7 +22,6 @@ import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class AddReportingUTests {
-
     @MockBean
     private lateinit var reportingRepository: ReportingRepository
 
@@ -35,28 +34,30 @@ class AddReportingUTests {
     @Test
     fun `execute Should throw an exception When the reporting is an alert`() {
         // Given
-        val reportingToAdd = Reporting(
-            id = 1,
-            type = ReportingType.ALERT,
-            vesselName = "BIDUBULE",
-            internalReferenceNumber = "FR224226850",
-            externalReferenceNumber = "1236514",
-            ircs = "IRCS",
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            flagState = CountryCode.FR,
-            creationDate = ZonedDateTime.now(),
-            validationDate = ZonedDateTime.now(),
-            value = ThreeMilesTrawlingAlert() as ReportingValue,
-            isArchived = false,
-            isDeleted = false,
-        )
+        val reportingToAdd =
+            Reporting(
+                id = 1,
+                type = ReportingType.ALERT,
+                vesselName = "BIDUBULE",
+                internalReferenceNumber = "FR224226850",
+                externalReferenceNumber = "1236514",
+                ircs = "IRCS",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = ZonedDateTime.now(),
+                validationDate = ZonedDateTime.now(),
+                value = ThreeMilesTrawlingAlert() as ReportingValue,
+                isArchived = false,
+                isDeleted = false,
+            )
 
         // When
-        val throwable = catchThrowable {
-            AddReporting(reportingRepository, getInfractionSuspicionWithDMLAndSeaFront, getAllControlUnits).execute(
-                reportingToAdd,
-            )
-        }
+        val throwable =
+            catchThrowable {
+                AddReporting(reportingRepository, getInfractionSuspicionWithDMLAndSeaFront, getAllControlUnits).execute(
+                    reportingToAdd,
+                )
+            }
 
         // Then
         assertThat(throwable.message).contains("The reporting type must be OBSERVATION or INFRACTION_SUSPICION")
@@ -68,33 +69,36 @@ class AddReportingUTests {
         reportingActor: ReportingActor,
     ) {
         // Given
-        val reportingToAdd = Reporting(
-            id = 1,
-            type = ReportingType.OBSERVATION,
-            vesselName = "BIDUBULE",
-            internalReferenceNumber = "FR224226850",
-            externalReferenceNumber = "1236514",
-            ircs = "IRCS",
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            flagState = CountryCode.FR,
-            creationDate = ZonedDateTime.now(),
-            validationDate = ZonedDateTime.now(),
-            value = Observation(
-                reportingActor = reportingActor,
-                authorTrigram = "LTH",
-                title = "A title",
-            ),
-            isArchived = false,
-            isDeleted = false,
-        )
+        val reportingToAdd =
+            Reporting(
+                id = 1,
+                type = ReportingType.OBSERVATION,
+                vesselName = "BIDUBULE",
+                internalReferenceNumber = "FR224226850",
+                externalReferenceNumber = "1236514",
+                ircs = "IRCS",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = ZonedDateTime.now(),
+                validationDate = ZonedDateTime.now(),
+                value =
+                    Observation(
+                        reportingActor = reportingActor,
+                        authorTrigram = "LTH",
+                        title = "A title",
+                    ),
+                isArchived = false,
+                isDeleted = false,
+            )
         given(reportingRepository.save(any())).willReturn(reportingToAdd)
 
         // When
-        val throwable = catchThrowable {
-            AddReporting(reportingRepository, getInfractionSuspicionWithDMLAndSeaFront, getAllControlUnits).execute(
-                reportingToAdd,
-            )
-        }
+        val throwable =
+            catchThrowable {
+                AddReporting(reportingRepository, getInfractionSuspicionWithDMLAndSeaFront, getAllControlUnits).execute(
+                    reportingToAdd,
+                )
+            }
 
         // Then
         when (reportingActor) {
@@ -120,26 +124,28 @@ class AddReportingUTests {
                 title = "Chalut en boeuf illégal",
             ),
         )
-        val reportingToAdd = Reporting(
-            id = 1,
-            type = ReportingType.INFRACTION_SUSPICION,
-            vesselName = "BIDUBULE",
-            internalReferenceNumber = "FR224226850",
-            externalReferenceNumber = "1236514",
-            ircs = "IRCS",
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            flagState = CountryCode.FR,
-            creationDate = ZonedDateTime.now(),
-            validationDate = ZonedDateTime.now(),
-            value = InfractionSuspicion(
-                reportingActor = ReportingActor.OPS,
-                natinfCode = 1235,
-                authorTrigram = "LTH",
-                title = "Chalut en boeuf illégal",
-            ),
-            isArchived = false,
-            isDeleted = false,
-        )
+        val reportingToAdd =
+            Reporting(
+                id = 1,
+                type = ReportingType.INFRACTION_SUSPICION,
+                vesselName = "BIDUBULE",
+                internalReferenceNumber = "FR224226850",
+                externalReferenceNumber = "1236514",
+                ircs = "IRCS",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = ZonedDateTime.now(),
+                validationDate = ZonedDateTime.now(),
+                value =
+                    InfractionSuspicion(
+                        reportingActor = ReportingActor.OPS,
+                        natinfCode = 1235,
+                        authorTrigram = "LTH",
+                        title = "Chalut en boeuf illégal",
+                    ),
+                isArchived = false,
+                isDeleted = false,
+            )
         given(reportingRepository.save(any())).willReturn(reportingToAdd)
 
         // When

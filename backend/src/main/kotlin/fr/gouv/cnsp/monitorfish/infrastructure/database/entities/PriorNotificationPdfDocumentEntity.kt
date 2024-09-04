@@ -14,26 +14,23 @@ data class PriorNotificationPdfDocumentEntity(
     @Id
     @Column(name = "report_id")
     val reportId: String,
-
     @Column(name = "source", columnDefinition = "prior_notification_source")
     @Enumerated(EnumType.STRING)
     @JdbcType(PostgreSQLEnumJdbcType::class)
     val source: PriorNotificationSource,
-
     @Column(name = "generation_datetime_utc")
     val generationDatetimeUtc: ZonedDateTime,
-
     @Column(name = "pdf_document")
     @JdbcType(BinaryJdbcType::class)
     val pdfDocument: ByteArray?,
 ) {
-
-    fun toPdfDocument() = PdfDocument(
-        reportId = reportId,
-        source = source,
-        generationDatetimeUtc = generationDatetimeUtc,
-        pdfDocument = pdfDocument,
-    )
+    fun toPdfDocument() =
+        PdfDocument(
+            reportId = reportId,
+            source = source,
+            generationDatetimeUtc = generationDatetimeUtc,
+            pdfDocument = pdfDocument,
+        )
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -47,7 +44,9 @@ data class PriorNotificationPdfDocumentEntity(
         if (pdfDocument != null) {
             if (other.pdfDocument == null) return false
             if (!pdfDocument.contentEquals(other.pdfDocument)) return false
-        } else if (other.pdfDocument != null) return false
+        } else if (other.pdfDocument != null) {
+            return false
+        }
 
         return true
     }

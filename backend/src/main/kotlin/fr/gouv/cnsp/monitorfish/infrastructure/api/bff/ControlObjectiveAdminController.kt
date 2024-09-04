@@ -21,7 +21,6 @@ class ControlObjectiveAdminController(
     private val deleteControlObjective: DeleteControlObjective,
     private val addControlObjective: AddControlObjective,
 ) {
-
     @GetMapping("/{year}")
     @Operation(summary = "Get control objectives of a given year")
     fun getControlObjectivesOfYear(

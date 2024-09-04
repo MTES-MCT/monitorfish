@@ -8,10 +8,11 @@ data class ForeignFMCDataOutput(
     var emailAddresses: List<String>? = null,
 ) {
     companion object {
-        fun fromForeignFMC(foreignFMC: ForeignFMC) = ForeignFMCDataOutput(
-            countryCodeIso3 = foreignFMC.countryCodeIso3,
-            countryName = foreignFMC.countryName,
-            emailAddresses = foreignFMC.emailAddresses,
-        )
+        fun fromForeignFMC(foreignFMC: ForeignFMC) =
+            ForeignFMCDataOutput(
+                countryCodeIso3 = foreignFMC.countryCodeIso3,
+                countryName = foreignFMC.countryName,
+                emailAddresses = foreignFMC.emailAddresses,
+            )
     }
 }

@@ -10,29 +10,29 @@ import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class MissionActionUTests {
-
     @Test
     fun `verify Should throw an exception When the vesselId is missing in a control`() {
         // Given
-        val action = MissionAction(
-            id = null,
-            vesselId = null,
-            missionId = 1,
-            longitude = 45.7,
-            latitude = 13.5,
-            actionDatetimeUtc = ZonedDateTime.now(),
-            actionType = MissionActionType.SEA_CONTROL,
-            gearOnboard = listOf(),
-            seizureAndDiversion = true,
-            isDeleted = false,
-            userTrigram = "LTH",
-            hasSomeGearsSeized = false,
-            hasSomeSpeciesSeized = false,
-            completedBy = "XYZ",
-            isFromPoseidon = false,
-            completion = Completion.TO_COMPLETE,
-            flagState = CountryCode.FR,
-        )
+        val action =
+            MissionAction(
+                id = null,
+                vesselId = null,
+                missionId = 1,
+                longitude = 45.7,
+                latitude = 13.5,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                actionType = MissionActionType.SEA_CONTROL,
+                gearOnboard = listOf(),
+                seizureAndDiversion = true,
+                isDeleted = false,
+                userTrigram = "LTH",
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                completedBy = "XYZ",
+                isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
+                flagState = CountryCode.FR,
+            )
 
         // When
         val throwable = catchThrowable { action.verify() }
@@ -45,25 +45,26 @@ class MissionActionUTests {
     @Test
     fun `verify Should throw an exception When the userTrigram is missing in a control`() {
         // Given
-        val action = MissionAction(
-            id = null,
-            vesselId = 1,
-            missionId = 1,
-            longitude = 45.7,
-            latitude = 13.5,
-            actionDatetimeUtc = ZonedDateTime.now(),
-            actionType = MissionActionType.SEA_CONTROL,
-            gearOnboard = listOf(),
-            seizureAndDiversion = true,
-            isDeleted = false,
-            userTrigram = "",
-            hasSomeGearsSeized = false,
-            hasSomeSpeciesSeized = false,
-            completedBy = "XYZ",
-            isFromPoseidon = false,
-            completion = Completion.TO_COMPLETE,
-            flagState = CountryCode.FR,
-        )
+        val action =
+            MissionAction(
+                id = null,
+                vesselId = 1,
+                missionId = 1,
+                longitude = 45.7,
+                latitude = 13.5,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                actionType = MissionActionType.SEA_CONTROL,
+                gearOnboard = listOf(),
+                seizureAndDiversion = true,
+                isDeleted = false,
+                userTrigram = "",
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                completedBy = "XYZ",
+                isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
+                flagState = CountryCode.FR,
+            )
 
         // When
         val throwable = catchThrowable { action.verify() }
@@ -78,27 +79,28 @@ class MissionActionUTests {
     @Test
     fun `verify Should throw an exception When the porLocode is missing in a control`() {
         // Given
-        val action = MissionAction(
-            id = null,
-            vesselId = 1,
-            missionId = 1,
-            longitude = 45.7,
-            latitude = 13.5,
-            actionDatetimeUtc = ZonedDateTime.now(),
-            portLocode = null,
-            portName = "Port Name",
-            actionType = MissionActionType.LAND_CONTROL,
-            gearOnboard = listOf(),
-            seizureAndDiversion = true,
-            isDeleted = false,
-            userTrigram = "LTH",
-            hasSomeGearsSeized = false,
-            hasSomeSpeciesSeized = false,
-            completedBy = "XYZ",
-            isFromPoseidon = false,
-            flagState = CountryCode.FR,
-            completion = Completion.TO_COMPLETE,
-        )
+        val action =
+            MissionAction(
+                id = null,
+                vesselId = 1,
+                missionId = 1,
+                longitude = 45.7,
+                latitude = 13.5,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                portLocode = null,
+                portName = "Port Name",
+                actionType = MissionActionType.LAND_CONTROL,
+                gearOnboard = listOf(),
+                seizureAndDiversion = true,
+                isDeleted = false,
+                userTrigram = "LTH",
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                completedBy = "XYZ",
+                isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                completion = Completion.TO_COMPLETE,
+            )
 
         // When
         val throwable = catchThrowable { action.verify() }
@@ -111,26 +113,27 @@ class MissionActionUTests {
     @Test
     fun `verify Should throw an exception When the longitude is missing in a control`() {
         // Given
-        val action = MissionAction(
-            id = null,
-            vesselId = 1,
-            missionId = 1,
-            longitude = null,
-            latitude = 13.5,
-            actionDatetimeUtc = ZonedDateTime.now(),
-            portLocode = "AEFAT",
-            actionType = MissionActionType.SEA_CONTROL,
-            gearOnboard = listOf(),
-            seizureAndDiversion = true,
-            isDeleted = false,
-            userTrigram = "LTH",
-            hasSomeGearsSeized = false,
-            hasSomeSpeciesSeized = false,
-            completedBy = "XYZ",
-            isFromPoseidon = false,
-            flagState = CountryCode.FR,
-            completion = Completion.TO_COMPLETE,
-        )
+        val action =
+            MissionAction(
+                id = null,
+                vesselId = 1,
+                missionId = 1,
+                longitude = null,
+                latitude = 13.5,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                portLocode = "AEFAT",
+                actionType = MissionActionType.SEA_CONTROL,
+                gearOnboard = listOf(),
+                seizureAndDiversion = true,
+                isDeleted = false,
+                userTrigram = "LTH",
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                completedBy = "XYZ",
+                isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                completion = Completion.TO_COMPLETE,
+            )
 
         // When
         val throwable = catchThrowable { action.verify() }
@@ -143,26 +146,27 @@ class MissionActionUTests {
     @Test
     fun `verify Should throw an exception When the latitude is missing in a control`() {
         // Given
-        val action = MissionAction(
-            id = null,
-            vesselId = 1,
-            missionId = 1,
-            longitude = 45.2,
-            latitude = null,
-            actionDatetimeUtc = ZonedDateTime.now(),
-            portLocode = "AEFAT",
-            actionType = MissionActionType.SEA_CONTROL,
-            gearOnboard = listOf(),
-            seizureAndDiversion = true,
-            isDeleted = false,
-            userTrigram = "LTH",
-            hasSomeGearsSeized = false,
-            hasSomeSpeciesSeized = false,
-            completedBy = "XYZ",
-            isFromPoseidon = false,
-            flagState = CountryCode.FR,
-            completion = Completion.TO_COMPLETE,
-        )
+        val action =
+            MissionAction(
+                id = null,
+                vesselId = 1,
+                missionId = 1,
+                longitude = 45.2,
+                latitude = null,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                portLocode = "AEFAT",
+                actionType = MissionActionType.SEA_CONTROL,
+                gearOnboard = listOf(),
+                seizureAndDiversion = true,
+                isDeleted = false,
+                userTrigram = "LTH",
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                completedBy = "XYZ",
+                isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                completion = Completion.TO_COMPLETE,
+            )
 
         // When
         val throwable = catchThrowable { action.verify() }

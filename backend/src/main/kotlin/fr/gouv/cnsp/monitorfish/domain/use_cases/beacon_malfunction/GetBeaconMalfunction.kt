@@ -19,19 +19,23 @@ class GetBeaconMalfunction(
     fun execute(beaconMalfunctionId: Int): BeaconMalfunctionResumeAndDetails {
         val lastPositions = lastPositionRepository.findAll()
         val beaconMalfunction = beaconMalfunctionsRepository.find(beaconMalfunctionId)
-        val beaconMalfunctionComments = beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(
-            beaconMalfunctionId,
-        )
-        val beaconMalfunctionActions = beaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(
-            beaconMalfunctionId,
-        )
-        val beaconMalfunctionNotifications = beaconMalfunctionNotificationsRepository.findAllByBeaconMalfunctionId(
-            beaconMalfunctionId,
-        )
+        val beaconMalfunctionComments =
+            beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(
+                beaconMalfunctionId,
+            )
+        val beaconMalfunctionActions =
+            beaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(
+                beaconMalfunctionId,
+            )
+        val beaconMalfunctionNotifications =
+            beaconMalfunctionNotificationsRepository.findAllByBeaconMalfunctionId(
+                beaconMalfunctionId,
+            )
 
-        val riskFactor = lastPositions.find(
-            BeaconMalfunction.getVesselFromBeaconMalfunction(beaconMalfunction),
-        )?.riskFactor
+        val riskFactor =
+            lastPositions.find(
+                BeaconMalfunction.getVesselFromBeaconMalfunction(beaconMalfunction),
+            )?.riskFactor
         beaconMalfunction.riskFactor = riskFactor
 
         if (riskFactor == null) {
@@ -41,32 +45,42 @@ class GetBeaconMalfunction(
         }
 
         val oneYearBefore = ZonedDateTime.now().minusYears(1)
-        val vesselBeaconMalfunctions = beaconMalfunctionsRepository.findAllByVesselId(
-            beaconMalfunction.vesselId,
-            oneYearBefore,
-        )
+        val vesselBeaconMalfunctions =
+            beaconMalfunctionsRepository.findAllByVesselId(
+                beaconMalfunction.vesselId,
+                oneYearBefore,
+            )
 
-        val beaconMalfunctionsWithDetails = vesselBeaconMalfunctions.map { vesselBeaconMalfunction ->
-            val comments = beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(vesselBeaconMalfunction.id)
-            val actions = beaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(vesselBeaconMalfunction.id)
+        val beaconMalfunctionsWithDetails =
+            vesselBeaconMalfunctions.map { vesselBeaconMalfunction ->
+                val comments =
+                    beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(
+                        vesselBeaconMalfunction.id,
+                    )
+                val actions =
+                    beaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(
+                        vesselBeaconMalfunction.id,
+                    )
 
-            BeaconMalfunctionWithDetails(vesselBeaconMalfunction, comments, actions)
-        }
-
-        val vesselBeaconMalfunctionsResume = VesselBeaconMalfunctionsResume.fromBeaconMalfunctions(
-            beaconMalfunctionsWithDetails,
-        )
-
-        val notifications = beaconMalfunctionNotifications
-            .groupBy { it.toGroupByKeys() }
-            .map {
-                BeaconMalfunctionNotifications(
-                    dateTimeUtc = it.key.dateTimeUtc,
-                    beaconMalfunctionId = it.key.beaconMalfunctionId,
-                    notificationType = it.key.notificationType,
-                    notifications = it.value,
-                )
+                BeaconMalfunctionWithDetails(vesselBeaconMalfunction, comments, actions)
             }
+
+        val vesselBeaconMalfunctionsResume =
+            VesselBeaconMalfunctionsResume.fromBeaconMalfunctions(
+                beaconMalfunctionsWithDetails,
+            )
+
+        val notifications =
+            beaconMalfunctionNotifications
+                .groupBy { it.toGroupByKeys() }
+                .map {
+                    BeaconMalfunctionNotifications(
+                        dateTimeUtc = it.key.dateTimeUtc,
+                        beaconMalfunctionId = it.key.beaconMalfunctionId,
+                        notificationType = it.key.notificationType,
+                        notifications = it.value,
+                    )
+                }
 
         return BeaconMalfunctionResumeAndDetails(
             beaconMalfunction = beaconMalfunction,

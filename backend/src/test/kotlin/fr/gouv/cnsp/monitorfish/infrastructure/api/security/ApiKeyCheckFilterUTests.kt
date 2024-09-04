@@ -14,7 +14,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
 class ApiKeyCheckFilterUTests {
-
     @Test
     fun `Should return Ok When the token is right`() {
         // Given

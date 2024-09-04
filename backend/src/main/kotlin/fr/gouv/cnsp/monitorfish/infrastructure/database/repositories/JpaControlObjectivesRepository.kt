@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional
 class JpaControlObjectivesRepository(
     private val dbControlObjectivesRepository: DBControlObjectivesRepository,
 ) : ControlObjectivesRepository {
-
     override fun findAllByYear(year: Int): List<ControlObjective> {
         return dbControlObjectivesRepository.findAllByYearEquals(year).map {
             it.toControlObjective()
@@ -75,7 +74,10 @@ class JpaControlObjectivesRepository(
     }
 
     @Transactional
-    override fun addYear(currentYear: Int, nextYear: Int) {
+    override fun addYear(
+        currentYear: Int,
+        nextYear: Int,
+    ) {
         dbControlObjectivesRepository.duplicateCurrentYearAsNextYear(currentYear, nextYear)
     }
 }

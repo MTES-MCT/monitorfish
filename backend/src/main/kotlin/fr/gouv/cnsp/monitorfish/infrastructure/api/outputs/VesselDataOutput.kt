@@ -45,7 +45,11 @@ data class VesselDataOutput(
     val hasVisioCaptures: Boolean? = null,
 ) {
     companion object {
-        fun fromVesselAndRelatedDatas(vessel: Vessel?, beacon: Beacon?, vesselRiskFactor: VesselRiskFactor): VesselDataOutput? {
+        fun fromVesselAndRelatedDatas(
+            vessel: Vessel?,
+            beacon: Beacon?,
+            vesselRiskFactor: VesselRiskFactor,
+        ): VesselDataOutput? {
             if (vessel == null) {
                 return null
             }

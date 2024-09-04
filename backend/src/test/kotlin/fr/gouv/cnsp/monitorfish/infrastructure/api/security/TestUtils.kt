@@ -8,17 +8,19 @@ import io.ktor.utils.io.*
 class TestUtils {
     companion object {
         fun getMockApiClient(): ApiClient {
-            val mockEngine = MockEngine { _ ->
-                respond(
-                    content = ByteReadChannel(
-                        """{
+            val mockEngine =
+                MockEngine { _ ->
+                    respond(
+                        content =
+                            ByteReadChannel(
+                                """{
                       "email": "email@domain-name.com"
                     }""",
-                    ),
-                    status = HttpStatusCode.OK,
-                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
-                )
-            }
+                            ),
+                        status = HttpStatusCode.OK,
+                        headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                    )
+                }
 
             return ApiClient(mockEngine)
         }

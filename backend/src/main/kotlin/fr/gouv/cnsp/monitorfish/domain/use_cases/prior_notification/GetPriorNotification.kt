@@ -20,18 +20,23 @@ class GetPriorNotification(
     private val speciesRepository: SpeciesRepository,
     private val vesselRepository: VesselRepository,
 ) {
-    fun execute(reportId: String, operationDate: ZonedDateTime, isManuallyCreated: Boolean): PriorNotification {
+    fun execute(
+        reportId: String,
+        operationDate: ZonedDateTime,
+        isManuallyCreated: Boolean,
+    ): PriorNotification {
         val allGears = gearRepository.findAll()
         val allPorts = portRepository.findAll()
         val allRiskFactors = riskFactorRepository.findAll()
         val allSpecies = speciesRepository.findAll()
 
-        val priorNotification = if (isManuallyCreated) {
-            manualPriorNotificationRepository.findByReportId(reportId)
-        } else {
-            logbookReportRepository.findAcknowledgedPriorNotificationByReportId(reportId, operationDate)
-        }
-            ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
+        val priorNotification =
+            if (isManuallyCreated) {
+                manualPriorNotificationRepository.findByReportId(reportId)
+            } else {
+                logbookReportRepository.findAcknowledgedPriorNotificationByReportId(reportId, operationDate)
+            }
+                ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
 
         priorNotification.enrich(allRiskFactors, allPorts, isManuallyCreated)
         priorNotification.enrichLogbookMessage(
@@ -46,24 +51,25 @@ class GetPriorNotification(
         return priorNotificationWithVessel
     }
 
-    private fun getPriorNotificationWithVessel(
-        priorNotification: PriorNotification,
-    ): PriorNotification {
-        val vessel = when (priorNotification.isManuallyCreated) {
-            true -> if (priorNotification.logbookMessageAndValue.logbookMessage.vesselId != null) {
-                vesselRepository.findVesselById(priorNotification.logbookMessageAndValue.logbookMessage.vesselId!!)
-            } else {
-                null
-            }
+    private fun getPriorNotificationWithVessel(priorNotification: PriorNotification): PriorNotification {
+        val vessel =
+            when (priorNotification.isManuallyCreated) {
+                true ->
+                    if (priorNotification.logbookMessageAndValue.logbookMessage.vesselId != null) {
+                        vesselRepository.findVesselById(priorNotification.logbookMessageAndValue.logbookMessage.vesselId!!)
+                    } else {
+                        null
+                    }
 
-            false -> if (priorNotification.logbookMessageAndValue.logbookMessage.internalReferenceNumber != null) {
-                vesselRepository.findFirstByInternalReferenceNumber(
-                    priorNotification.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
-                )
-            } else {
-                null
-            }
-        } ?: UNKNOWN_VESSEL
+                false ->
+                    if (priorNotification.logbookMessageAndValue.logbookMessage.internalReferenceNumber != null) {
+                        vesselRepository.findFirstByInternalReferenceNumber(
+                            priorNotification.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
+                        )
+                    } else {
+                        null
+                    }
+            } ?: UNKNOWN_VESSEL
 
         return priorNotification.copy(vessel = vessel)
     }

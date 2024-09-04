@@ -69,16 +69,18 @@ data class RiskFactorsEntity(
             detectabilityRiskFactor = detectabilityRiskFactor,
             riskFactor = riskFactor,
             internalReferenceNumber = cfr,
-            gearOnboard = mapper.readValue(
-                gearOnboard,
-                mapper.typeFactory
-                    .constructCollectionType(MutableList::class.java, Gear::class.java),
-            ),
-            speciesOnboard = mapper.readValue(
-                speciesOnboard,
-                mapper.typeFactory
-                    .constructCollectionType(MutableList::class.java, Species::class.java),
-            ),
+            gearOnboard =
+                mapper.readValue(
+                    gearOnboard,
+                    mapper.typeFactory
+                        .constructCollectionType(MutableList::class.java, Gear::class.java),
+                ),
+            speciesOnboard =
+                mapper.readValue(
+                    speciesOnboard,
+                    mapper.typeFactory
+                        .constructCollectionType(MutableList::class.java, Species::class.java),
+                ),
             segments = segments,
             controlPriorityLevel = controlPriorityLevel,
             segmentHighestImpact = segmentHighestImpact,

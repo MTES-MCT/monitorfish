@@ -13,7 +13,6 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 class JpaMissionActionRepositoryITests : AbstractDBTests() {
-
     @Autowired
     private lateinit var jpaMissionActionsRepository: JpaMissionActionsRepository
 
@@ -35,9 +34,10 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findVesselMissionActionsAfterDateTime Should return all vessel's controls after a date time`() {
         // Given
-        val dateTime = ZonedDateTime.now()
-            .minusYears(1)
-            .minusMonths(1)
+        val dateTime =
+            ZonedDateTime.now()
+                .minusYears(1)
+                .minusMonths(1)
 
         // When
         val controls = jpaMissionActionsRepository.findVesselMissionActionsAfterDateTime(1, dateTime)
@@ -167,9 +167,10 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         val newMission = getDummyMissionAction(dateTime)
 
         // When
-        val throwable = catchThrowable {
-            jpaMissionActionsRepository.save(newMission.copy(facade = "BAD_FACADE"))
-        }
+        val throwable =
+            catchThrowable {
+                jpaMissionActionsRepository.save(newMission.copy(facade = "BAD_FACADE"))
+            }
 
         // Then
         assertThat(throwable).isNotNull()
@@ -205,58 +206,59 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         val existingAction = jpaMissionActionsRepository.findById(expectedId)
         assertThat(existingAction.internalReferenceNumber).isNull()
 
-        val actionToUpdate = MissionAction(
-            actionDatetimeUtc = ZonedDateTime.now(),
-            actionType = MissionActionType.SEA_CONTROL,
-            controlQualityComments = null,
-            controlUnits = listOf(),
-            districtCode = null,
-            emitsAis = null,
-            emitsVms = ControlCheck.NOT_APPLICABLE,
-            externalReferenceNumber = "DONTSINK",
-            facade = "Sud Océan Indien",
-            faoAreas = listOf(),
-            feedbackSheetRequired = false,
-            flagState = CountryCode.FR,
-            flightGoals = listOf(),
-            gearInfractions = listOf(),
-            gearOnboard = listOf(),
-            id = expectedId,
-            internalReferenceNumber = "FAK000999999",
-            ircs = "CALLME",
-            latitude = 49.44,
-            licencesAndLogbookObservations = null,
-            licencesMatchActivity = ControlCheck.NOT_APPLICABLE,
-            logbookInfractions = listOf(),
-            logbookMatchesActivity = ControlCheck.NOT_APPLICABLE,
-            longitude = -0.56,
-            missionId = 34,
-            numberOfVesselsFlownOver = null,
-            otherComments = "Commentaires post contrôle",
-            otherInfractions = listOf(),
-            portLocode = null,
-            portName = null,
-            segments = listOf(),
-            seizureAndDiversion = false,
-            seizureAndDiversionComments = null,
-            separateStowageOfPreservedSpecies = ControlCheck.NO,
-            speciesInfractions = listOf(),
-            speciesObservations = null,
-            speciesOnboard = listOf(),
-            speciesSizeControlled = null,
-            speciesWeightControlled = null,
-            unitWithoutOmegaGauge = false,
-            userTrigram = "JKL",
-            vesselId = 1,
-            vesselName = "PHENOMENE",
-            vesselTargeted = ControlCheck.YES,
-            isDeleted = false,
-            hasSomeGearsSeized = false,
-            hasSomeSpeciesSeized = false,
-            completedBy = "XYZ",
-            isFromPoseidon = false,
-            completion = Completion.TO_COMPLETE,
-        )
+        val actionToUpdate =
+            MissionAction(
+                actionDatetimeUtc = ZonedDateTime.now(),
+                actionType = MissionActionType.SEA_CONTROL,
+                controlQualityComments = null,
+                controlUnits = listOf(),
+                districtCode = null,
+                emitsAis = null,
+                emitsVms = ControlCheck.NOT_APPLICABLE,
+                externalReferenceNumber = "DONTSINK",
+                facade = "Sud Océan Indien",
+                faoAreas = listOf(),
+                feedbackSheetRequired = false,
+                flagState = CountryCode.FR,
+                flightGoals = listOf(),
+                gearInfractions = listOf(),
+                gearOnboard = listOf(),
+                id = expectedId,
+                internalReferenceNumber = "FAK000999999",
+                ircs = "CALLME",
+                latitude = 49.44,
+                licencesAndLogbookObservations = null,
+                licencesMatchActivity = ControlCheck.NOT_APPLICABLE,
+                logbookInfractions = listOf(),
+                logbookMatchesActivity = ControlCheck.NOT_APPLICABLE,
+                longitude = -0.56,
+                missionId = 34,
+                numberOfVesselsFlownOver = null,
+                otherComments = "Commentaires post contrôle",
+                otherInfractions = listOf(),
+                portLocode = null,
+                portName = null,
+                segments = listOf(),
+                seizureAndDiversion = false,
+                seizureAndDiversionComments = null,
+                separateStowageOfPreservedSpecies = ControlCheck.NO,
+                speciesInfractions = listOf(),
+                speciesObservations = null,
+                speciesOnboard = listOf(),
+                speciesSizeControlled = null,
+                speciesWeightControlled = null,
+                unitWithoutOmegaGauge = false,
+                userTrigram = "JKL",
+                vesselId = 1,
+                vesselName = "PHENOMENE",
+                vesselTargeted = ControlCheck.YES,
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                completedBy = "XYZ",
+                isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
+            )
 
         // When
         val updatedMissionAction = jpaMissionActionsRepository.save(actionToUpdate)

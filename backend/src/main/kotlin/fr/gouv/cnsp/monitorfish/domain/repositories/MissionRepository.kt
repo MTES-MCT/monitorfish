@@ -8,7 +8,11 @@ import kotlinx.coroutines.Deferred
 import java.time.ZonedDateTime
 
 interface MissionRepository {
-    fun findControlUnitsOfMission(scope: CoroutineScope, missionId: Int): Deferred<List<ControlUnit>>
+    fun findControlUnitsOfMission(
+        scope: CoroutineScope,
+        missionId: Int,
+    ): Deferred<List<ControlUnit>>
+
     fun findAllMissions(
         pageNumber: Int?,
         pageSize: Int?,
@@ -19,9 +23,8 @@ interface MissionRepository {
         missionStatuses: List<String>?,
         seaFronts: List<String>?,
     ): List<Mission>
-    fun findByIds(
-        ids: List<Int>,
-    ): List<Mission>
+
+    fun findByIds(ids: List<Int>): List<Mission>
 
     @Throws(CouldNotFindException::class)
     fun findById(id: Int): Mission

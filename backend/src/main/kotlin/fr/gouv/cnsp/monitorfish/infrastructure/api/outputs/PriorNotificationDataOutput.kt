@@ -22,32 +22,38 @@ class PriorNotificationDataOutput(
 ) {
     companion object {
         fun fromPriorNotification(priorNotification: PriorNotification): PriorNotificationDataOutput {
-            val reportId = requireNotNull(priorNotification.reportId) {
-                "`reportId` is null."
-            }
+            val reportId =
+                requireNotNull(priorNotification.reportId) {
+                    "`reportId` is null."
+                }
 
-            val asLogbookForm = if (!priorNotification.isManuallyCreated) {
-                LogbookPriorNotificationFormDataOutput.fromPriorNotification(priorNotification)
-            } else {
-                null
-            }
-            val asManualDraft = if (!priorNotification.isManuallyCreated) {
-                ManualPriorNotificationDraftDataOutput.fromPriorNotification(priorNotification)
-            } else {
-                null
-            }
-            val asManualForm = if (priorNotification.isManuallyCreated) {
-                ManualPriorNotificationFormDataOutput.fromPriorNotification(priorNotification)
-            } else {
-                null
-            }
+            val asLogbookForm =
+                if (!priorNotification.isManuallyCreated) {
+                    LogbookPriorNotificationFormDataOutput.fromPriorNotification(priorNotification)
+                } else {
+                    null
+                }
+            val asManualDraft =
+                if (!priorNotification.isManuallyCreated) {
+                    ManualPriorNotificationDraftDataOutput.fromPriorNotification(priorNotification)
+                } else {
+                    null
+                }
+            val asManualForm =
+                if (priorNotification.isManuallyCreated) {
+                    ManualPriorNotificationFormDataOutput.fromPriorNotification(priorNotification)
+                } else {
+                    null
+                }
 
-            val isLessThanTwelveMetersVessel = requireNotNull(priorNotification.vessel) {
-                "`priorNotification.vessel` is null."
-            }.isLessThanTwelveMetersVessel()
-            val isVesselUnderCharter = requireNotNull(priorNotification.vessel) {
-                "`priorNotification.vessel` is null."
-            }.underCharter
+            val isLessThanTwelveMetersVessel =
+                requireNotNull(priorNotification.vessel) {
+                    "`priorNotification.vessel` is null."
+                }.isLessThanTwelveMetersVessel()
+            val isVesselUnderCharter =
+                requireNotNull(priorNotification.vessel) {
+                    "`priorNotification.vessel` is null."
+                }.underCharter
             val logbookMessage = priorNotification.logbookMessageAndValue.logbookMessage
 
             val logbookMessageDataOutput = LogbookMessageDataOutput.fromLogbookMessage(logbookMessage)

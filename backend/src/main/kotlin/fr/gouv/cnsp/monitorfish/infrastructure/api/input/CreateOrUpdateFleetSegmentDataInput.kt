@@ -12,14 +12,15 @@ data class CreateOrUpdateFleetSegmentDataInput(
     var impactRiskFactor: Double? = null,
     var year: Int? = null,
 ) {
-    fun toCreateOrUpdateFleetSegmentFields() = CreateOrUpdateFleetSegmentFields(
-        segment = this.segment,
-        segmentName = this.segmentName,
-        gears = this.gears,
-        faoAreas = this.faoAreas,
-        targetSpecies = this.targetSpecies,
-        bycatchSpecies = this.bycatchSpecies,
-        impactRiskFactor = this.impactRiskFactor,
-        year = this.year,
-    )
+    fun toCreateOrUpdateFleetSegmentFields() =
+        CreateOrUpdateFleetSegmentFields(
+            segment = this.segment,
+            segmentName = this.segmentName,
+            gears = this.gears,
+            faoAreas = this.faoAreas,
+            targetSpecies = this.targetSpecies,
+            bycatchSpecies = this.bycatchSpecies,
+            impactRiskFactor = this.impactRiskFactor,
+            year = this.year,
+        )
 }

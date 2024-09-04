@@ -16,13 +16,13 @@ export function VesselField() {
 
   const defaultValue: VesselIdentity = useMemo(
     () => ({
-      externalReferenceNumber: values.externalReferenceNumber || null,
-      flagState: values.flagState || '',
-      internalReferenceNumber: values.internalReferenceNumber || null,
-      ircs: values.ircs || null,
-      vesselId: values.vesselId || null,
-      vesselIdentifier: values.vesselIdentifier || null,
-      vesselName: values.vesselName || null
+      externalReferenceNumber: values.externalReferenceNumber ?? null,
+      flagState: values.flagState ?? '',
+      internalReferenceNumber: values.internalReferenceNumber ?? null,
+      ircs: values.ircs ?? null,
+      vesselId: values.vesselId ?? null,
+      vesselIdentifier: values.vesselIdentifier ?? null,
+      vesselName: values.vesselName ?? null
     }),
     [
       values.flagState,
@@ -58,11 +58,11 @@ export function VesselField() {
 
     setValues({
       ...values,
-      externalReferenceNumber: nextVessel.externalReferenceNumber || null,
+      externalReferenceNumber: nextVessel.externalReferenceNumber ?? null,
       flagState: nextVessel.flagState?.toUpperCase(),
-      internalReferenceNumber: nextVessel.internalReferenceNumber || null,
-      ircs: nextVessel.ircs || null,
-      vesselId: nextVessel.vesselId || null,
+      internalReferenceNumber: nextVessel.internalReferenceNumber ?? null,
+      ircs: nextVessel.ircs ?? null,
+      vesselId: nextVessel.vesselId ?? null,
       vesselIdentifier: nextVessel.vesselIdentifier ?? undefined,
       vesselName: nextVessel.vesselName
     })

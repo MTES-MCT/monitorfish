@@ -136,7 +136,7 @@ export function EditInterestPoint({ close, isOpen }: EditInterestPointProps) {
             coordinatesFormat={coordinatesFormat}
             defaultValue={coordinates}
             isLabelHidden
-            label={"Coordonnées du point d'intérêt"}
+            label="Coordonnées du point d'intérêt"
             name="interest-point-coordinates"
             onChange={updateCoordinates}
           />

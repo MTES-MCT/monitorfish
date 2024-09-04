@@ -19,7 +19,7 @@ export type TableHeadNextProps = {
 }
 export function TableHeadNext({
   columns,
-  isAllChecked,
+  isAllChecked = false,
   isCheckable,
   isSortingDesc,
   onAllCheckChange,

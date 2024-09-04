@@ -130,7 +130,7 @@ export const getMissionActionFeature = (
   const infractions = getMissionActionInfractionsFromMissionActionFormValues(action)
   const infractionsNatinfs = infractions.map(({ natinf }) => natinf)
 
-  const actionId = action.id || random(1000)
+  const actionId = action.id ?? random(1000)
   const feature = new Feature({
     actionType: action.actionType,
     dateTime: getDateTime(action.actionDatetimeUtc, true),
@@ -159,7 +159,7 @@ export const getMissionActionFeatureZone = (
     return undefined
   }
 
-  const actionId = action.id || random(1000)
+  const actionId = action.id ?? random(1000)
   const feature = new Feature({
     geometry: circular([action.longitude, action.latitude], CONTROL_ZONE_RADIUS, 64).transform(
       WSG84_PROJECTION,

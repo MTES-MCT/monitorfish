@@ -19,9 +19,9 @@ export const computeFleetSegments =
 
     const { data: fleetSegments } = await dispatch(
       fleetSegmentApi.endpoints.computeFleetSegments.initiate({
-        faoAreas: faoAreas || [],
-        gears: gears || [],
-        species: species || []
+        faoAreas: faoAreas ?? [],
+        gears: gears ?? [],
+        species: species ?? []
       })
     )
 

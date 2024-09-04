@@ -115,7 +115,7 @@ export function PendingAlertRow({
               }}
               src={`${baseUrl}/Icone_valider_alerte.png`}
               style={validateAlertIconStyle}
-              title={"Valider l'alerte"}
+              title="Valider l'alerte"
             />
           </FlexboxGrid.Item>
           <FlexboxGrid.Item style={iconStyle}>
@@ -142,7 +142,7 @@ export function PendingAlertRow({
                   : `${baseUrl}/Icone_ignorer_alerte.png`
               }
               style={silenceAlertStyle}
-              title={"Ignorer l'alerte"}
+              title="Ignorer l'alerte"
             />
           </FlexboxGrid.Item>
         </FlexboxGrid>

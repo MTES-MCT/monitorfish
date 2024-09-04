@@ -45,7 +45,7 @@ export function VesselStatusSelect({
       icons.forEach(icon => {
         if (icon?.style) {
           // eslint-disable-next-line no-param-reassign
-          icon.style.color = vesselStatus?.textColor || THEME.color.charcoal
+          icon.style.color = vesselStatus?.textColor ?? THEME.color.charcoal
         }
       })
     }
@@ -59,13 +59,13 @@ export function VesselStatusSelect({
       menuStyle={
         isAbsolute
           ? { marginLeft: 40, marginTop: 120, position: 'absolute' }
-          : { marginLeft: -5, marginTop: marginTop || -67, position: 'relative' }
+          : { marginLeft: -5, marginTop: marginTop ?? -67, position: 'relative' }
       }
       onChange={status => updateVesselStatus(beaconMalfunction, status)}
       placeholder="Statut"
       renderValue={(_, item) => <VesselStatusSelectValue item={item} />}
       searchable={false}
-      value={vesselStatus?.value || null}
+      value={vesselStatus?.value ?? null}
     />
   )
 }

@@ -25,13 +25,13 @@ export function getSilencedAlertFromSilencedAlertFormValues(formValues: Silenced
   }
 
   return {
-    externalReferenceNumber: formValues.externalReferenceNumber || null,
+    externalReferenceNumber: formValues.externalReferenceNumber ?? null,
     flagState: formValues.flagState,
-    internalReferenceNumber: formValues.internalReferenceNumber || null,
-    ircs: formValues.ircs || null,
+    internalReferenceNumber: formValues.internalReferenceNumber ?? null,
+    ircs: formValues.ircs ?? null,
     silencedBeforeDate: formValues.silencedBeforeDate,
     value: formValues.value,
-    vesselId: formValues.vesselId || null,
+    vesselId: formValues.vesselId ?? null,
     vesselIdentifier: formValues.vesselIdentifier,
     vesselName: formValues.vesselName
   }

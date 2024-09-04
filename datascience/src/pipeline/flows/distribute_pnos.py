@@ -651,7 +651,7 @@ def create_email(pno: RenderedPno, test_mode: bool) -> PnoToSend:
             else:
                 return None
         else:
-            to = pno.emails
+            to = pno.emails + ["cnsp@example.org"]
 
         message = create_html_email(
             to=to,

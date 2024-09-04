@@ -1639,7 +1639,7 @@ def test_create_email(
         assert pno_to_send.message["To"] == "pno.test@email.fr"
     else:
         assert (
-            pno_to_send.message["To"] == "alternative@email, some.email@control.unit.4"
+            pno_to_send.message["To"] == "alternative@email, some.email@control.unit.4, cnsp@example.org"
         )
     assert pno_to_send.message["From"] == "monitorfish@test.email"
     assert pno_to_send.message["Cc"] is None

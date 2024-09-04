@@ -8,14 +8,24 @@ type CustomSentryMeasurementValue = {
 }
 
 export enum CustomSentryMeasurementName {
-  LOGBOOK_PRIOR_NOTIFICATION_FORM_DOWNLOAD_BUTTON = 'LOGBOOK_PRIOR_NOTIFICATION_FORM_DOWNLOAD_BUTTON',
   LOGBOOK_PRIOR_NOTIFICATION_FORM_SPINNER = 'LOGBOOK_PRIOR_NOTIFICATION_FORM_SPINNER',
-  MANUAL_PRIOR_NOTIFICATION_FORM_DOWNLOAD_BUTTON = 'MANUAL_PRIOR_NOTIFICATION_FORM_DOWNLOAD_BUTTON',
-  MANUAL_PRIOR_NOTIFICATION_FORM_SPINNER = 'MANUAL_PRIOR_NOTIFICATION_FORM_SPINNER'
+  MANUAL_PRIOR_NOTIFICATION_FORM_SPINNER = 'MANUAL_PRIOR_NOTIFICATION_FORM_SPINNER',
+  PRIOR_NOTIFICATION_CARD_DOWNLOAD_BUTTON = 'PRIOR_NOTIFICATION_CARD_DOWNLOAD_BUTTON'
 }
 
 class CustomSentry {
   mesurements: Map<string, CustomSentryMeasurementValue> = new Map()
+
+  clearMeasurement(name: CustomSentryMeasurementName, id: string) {
+    try {
+      const key = `${name}-${id}`
+      if (!this.mesurements.has(key)) {
+        return
+      }
+
+      this.mesurements.delete(key)
+    } catch (_) {}
+  }
 
   startMeasurement(name: CustomSentryMeasurementName, id: string) {
     try {

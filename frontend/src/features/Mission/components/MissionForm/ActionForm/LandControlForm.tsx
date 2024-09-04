@@ -1,4 +1,5 @@
 import { DatePickerField } from '@features/Mission/components/MissionForm/ActionForm/shared/DatePickerField'
+import { FormikSpeciesQuantitySeized } from '@features/Mission/components/MissionForm/ActionForm/shared/FormikSpeciesQuantitySeized'
 import { UpdateMissionActionCompletionEffect } from '@features/Mission/components/MissionForm/ActionForm/shared/UpdateMissionActionCompletionEffect'
 import { useIsMissionEnded } from '@features/Mission/components/MissionForm/hooks/useIsMissionEnded'
 import { FormikCheckbox, FormikEffect, FormikTextarea, Icon } from '@mtes-mct/monitor-ui'
@@ -63,6 +64,7 @@ export function LandControlForm({ initialValues, onChange }: LandControlFormProp
             <SeizureFieldsetGroup isLight legend="Appréhensions">
               <FormikCheckbox label="Appréhension d’engin(s)" name="hasSomeGearsSeized" />
               <FormikCheckbox label="Appréhension d’espèce(s)" name="hasSomeSpeciesSeized" />
+              <FormikSpeciesQuantitySeized />
               <FormikCheckbox label="Appréhension du navire" name="seizureAndDiversion" />
             </SeizureFieldsetGroup>
 

@@ -162,6 +162,7 @@ describe('features/Mission/components/MissionForm/utils.getMissionActionsDataFro
             underSized: false
           }
         ],
+        speciesQuantitySeized: undefined,
         speciesSizeControlled: undefined,
         speciesWeightControlled: undefined,
         unitWithoutOmegaGauge: false,
@@ -262,6 +263,7 @@ describe('features/Mission/components/MissionForm/utils.getMissionActionsDataFro
             underSized: false
           }
         ],
+        speciesQuantitySeized: undefined,
         speciesSizeControlled: undefined,
         speciesWeightControlled: undefined,
         unitWithoutOmegaGauge: false,
@@ -344,6 +346,7 @@ describe('features/Mission/components/MissionForm/utils.getMissionActionsDataFro
             underSized: false
           }
         ],
+        speciesQuantitySeized: undefined,
         speciesSizeControlled: undefined,
         speciesWeightControlled: undefined,
         unitWithoutOmegaGauge: false,

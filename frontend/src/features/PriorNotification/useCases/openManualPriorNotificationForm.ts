@@ -1,4 +1,5 @@
 import { RtkCacheTagType } from '@api/constants'
+import { customSentry, CustomSentryMeasurementName } from '@libs/customSentry'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { FrontendError } from '@libs/FrontendError'
@@ -24,6 +25,13 @@ export const openManualPriorNotificationForm =
   ): MainAppThunk<Promise<void>> =>
   async dispatch => {
     try {
+      if (identifier) {
+        customSentry.startMeasurement(
+          CustomSentryMeasurementName.LOGBOOK_PRIOR_NOTIFICATION_FORM_SPINNER,
+          identifier.reportId
+        )
+      }
+
       dispatch(displayedErrorActions.unset(DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR))
       dispatch(priorNotificationActions.closePriorNotificationCardAndForm())
       dispatch(priorNotificationActions.openPriorNotification(OpenedPriorNotificationType.ManualForm))

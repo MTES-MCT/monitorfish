@@ -3,6 +3,7 @@ import { verifyAndSendPriorNotification } from '@features/PriorNotification/useC
 import { getPriorNotificationIdentifier } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { customSentry, CustomSentryMeasurementName } from '@libs/customSentry'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { Formik } from 'formik'
@@ -83,6 +84,13 @@ export function ManualPriorNotificationForm() {
       <SideWindowCard onBackgroundClick={close}>
         <LoadingSpinnerWall />
       </SideWindowCard>
+    )
+  }
+
+  if (openedPriorNotificationDetail?.reportId) {
+    customSentry.endMeasurement(
+      CustomSentryMeasurementName.MANUAL_PRIOR_NOTIFICATION_FORM_SPINNER,
+      openedPriorNotificationDetail.reportId
     )
   }
 

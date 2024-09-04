@@ -14,6 +14,7 @@ module.exports = {
   },
   rules: {
     curly: ['error', 'all'],
+    'func-names': ['error', 'always'],
     'newline-before-return': 'error',
     'no-console': ['error', { allow: ['info', 'warn', 'error'] }],
 
@@ -167,6 +168,7 @@ module.exports = {
       files: ['cypress/**/*.js', 'cypress/**/*.ts', 'cypress.config.ts'],
       plugins: ['cypress', 'mocha'],
       rules: {
+        'func-names': ['off'],
         // TODO Check why either Prettier or ESLint auto-formatting does that and why this rule is not enabled.
         // 'max-len': ['warn', { code: 120 }],
 

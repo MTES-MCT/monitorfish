@@ -23,13 +23,13 @@ data class DistrictEntity(
     @Column(name = "facade")
     val facade: String? = null,
 ) {
-
-    fun toDistrict() = District(
-        districtCode = districtCode,
-        district = district,
-        departmentCode = departmentCode,
-        department = department,
-        dml = dml,
-        facade = facade,
-    )
+    fun toDistrict() =
+        District(
+            districtCode = districtCode,
+            district = district,
+            departmentCode = departmentCode,
+            department = department,
+            dml = dml,
+            facade = facade,
+        )
 }

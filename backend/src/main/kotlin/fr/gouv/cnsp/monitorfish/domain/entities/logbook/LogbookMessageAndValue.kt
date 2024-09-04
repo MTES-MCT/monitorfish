@@ -9,11 +9,12 @@ class LogbookMessageAndValue<T : LogbookMessageValue>(
     private val clazz: Class<T>,
 ) {
     val value: T
-        get() = if (clazz.isInstance(logbookMessage.message)) {
-            clazz.cast(logbookMessage.message)
-        } else {
-            throw EntityConversionException(
-                "Logbook message is not of type $clazz (reportId: ${logbookMessage.reportId}).",
-            )
-        }
+        get() =
+            if (clazz.isInstance(logbookMessage.message)) {
+                clazz.cast(logbookMessage.message)
+            } else {
+                throw EntityConversionException(
+                    "Logbook message is not of type $clazz (reportId: ${logbookMessage.reportId}).",
+                )
+            }
 }

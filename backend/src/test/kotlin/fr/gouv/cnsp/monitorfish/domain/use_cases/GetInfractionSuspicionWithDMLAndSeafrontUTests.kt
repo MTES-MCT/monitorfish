@@ -65,13 +65,14 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
         val throwable =
             catchThrowable {
                 GetInfractionSuspicionWithDMLAndSeaFront(vesselRepository, districtRepository).execute(
-                    infractionSuspicion = InfractionSuspicion(
-                        reportingActor = ReportingActor.OPS,
-                        dml = "",
-                        natinfCode = 1235,
-                        authorTrigram = "LTH",
-                        title = "Chalut en boeuf illégal",
-                    ),
+                    infractionSuspicion =
+                        InfractionSuspicion(
+                            reportingActor = ReportingActor.OPS,
+                            dml = "",
+                            natinfCode = 1235,
+                            authorTrigram = "LTH",
+                            title = "Chalut en boeuf illégal",
+                        ),
                     vesselId = null,
                 )
             }
@@ -89,13 +90,14 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
         val throwable =
             catchThrowable {
                 GetInfractionSuspicionWithDMLAndSeaFront(vesselRepository, districtRepository).execute(
-                    infractionSuspicion = InfractionSuspicion(
-                        reportingActor = ReportingActor.OPS,
-                        dml = "",
-                        natinfCode = 1235,
-                        authorTrigram = "LTH",
-                        title = "Chalut en boeuf illégal",
-                    ),
+                    infractionSuspicion =
+                        InfractionSuspicion(
+                            reportingActor = ReportingActor.OPS,
+                            dml = "",
+                            natinfCode = 1235,
+                            authorTrigram = "LTH",
+                            title = "Chalut en boeuf illégal",
+                        ),
                     vesselId = 123,
                 )
             }
@@ -117,13 +119,14 @@ class GetInfractionSuspicionWithDMLAndSeafrontUTests {
         val throwable =
             catchThrowable {
                 GetInfractionSuspicionWithDMLAndSeaFront(vesselRepository, districtRepository).execute(
-                    infractionSuspicion = InfractionSuspicion(
-                        reportingActor = ReportingActor.OPS,
-                        dml = "",
-                        natinfCode = 1235,
-                        authorTrigram = "LTH",
-                        title = "Chalut en boeuf illégal",
-                    ),
+                    infractionSuspicion =
+                        InfractionSuspicion(
+                            reportingActor = ReportingActor.OPS,
+                            dml = "",
+                            natinfCode = 1235,
+                            authorTrigram = "LTH",
+                            title = "Chalut en boeuf illégal",
+                        ),
                     vesselId = 123,
                 )
             }

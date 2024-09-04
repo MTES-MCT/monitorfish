@@ -18,26 +18,30 @@ class GetVesselBeaconMalfunctions(
     private val beaconMalfunctionActionsRepository: BeaconMalfunctionActionsRepository,
 ) {
     private val logger = LoggerFactory.getLogger(GetVesselBeaconMalfunctions::class.java)
+
     fun execute(
         vesselId: Int,
         afterDateTime: ZonedDateTime,
     ): VesselBeaconMalfunctionsResumeAndHistory {
         val beaconMalfunctions = beaconMalfunctionsRepository.findAllByVesselId(vesselId, afterDateTime)
 
-        val beaconMalfunctionsWithDetails = beaconMalfunctions.map {
-            val comments = beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(it.id)
-            val actions = beaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(it.id)
+        val beaconMalfunctionsWithDetails =
+            beaconMalfunctions.map {
+                val comments = beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(it.id)
+                val actions = beaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(it.id)
 
-            BeaconMalfunctionWithDetails(it, comments, actions)
-        }
+                BeaconMalfunctionWithDetails(it, comments, actions)
+            }
 
         val resume = VesselBeaconMalfunctionsResume.fromBeaconMalfunctions(beaconMalfunctionsWithDetails)
-        val currentBeaconMalfunction = beaconMalfunctionsWithDetails.find {
-            it.beaconMalfunction.stage != Stage.ARCHIVED
-        }
-        val history = beaconMalfunctionsWithDetails.filter {
-            it.beaconMalfunction.id != currentBeaconMalfunction?.beaconMalfunction?.id
-        }
+        val currentBeaconMalfunction =
+            beaconMalfunctionsWithDetails.find {
+                it.beaconMalfunction.stage != Stage.ARCHIVED
+            }
+        val history =
+            beaconMalfunctionsWithDetails.filter {
+                it.beaconMalfunction.id != currentBeaconMalfunction?.beaconMalfunction?.id
+            }
 
         return VesselBeaconMalfunctionsResumeAndHistory(
             resume = resume,

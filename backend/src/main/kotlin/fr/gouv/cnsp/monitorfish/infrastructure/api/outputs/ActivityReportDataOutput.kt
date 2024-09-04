@@ -14,14 +14,15 @@ data class ActivityReportDataOutput(
     val vessel: VesselDataOutput,
 ) {
     companion object {
-        fun fromActivityReport(activityReport: ActivityReport) = ActivityReportDataOutput(
-            action = MissionActionDataOutput.fromMissionAction(activityReport.action),
-            activityCode = activityReport.activityCode,
-            faoArea = activityReport.faoArea,
-            segment = activityReport.segment,
-            vesselNationalIdentifier = activityReport.vesselNationalIdentifier,
-            controlUnits = activityReport.controlUnits,
-            vessel = VesselDataOutput.fromVessel(activityReport.vessel),
-        )
+        fun fromActivityReport(activityReport: ActivityReport) =
+            ActivityReportDataOutput(
+                action = MissionActionDataOutput.fromMissionAction(activityReport.action),
+                activityCode = activityReport.activityCode,
+                faoArea = activityReport.faoArea,
+                segment = activityReport.segment,
+                vesselNationalIdentifier = activityReport.vesselNationalIdentifier,
+                controlUnits = activityReport.controlUnits,
+                vessel = VesselDataOutput.fromVessel(activityReport.vessel),
+            )
     }
 }

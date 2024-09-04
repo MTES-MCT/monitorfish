@@ -4,5 +4,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfun
 
 interface BeaconMalfunctionCommentsRepository {
     fun findAllByBeaconMalfunctionId(beaconMalfunctionId: Int): List<BeaconMalfunctionComment>
+
     fun save(beaconMalfunctionComment: BeaconMalfunctionComment)
 }

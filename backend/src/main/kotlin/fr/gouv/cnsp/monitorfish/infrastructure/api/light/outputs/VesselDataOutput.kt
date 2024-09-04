@@ -43,7 +43,10 @@ data class VesselDataOutput(
     val hasVisioCaptures: Boolean? = null,
 ) {
     companion object {
-        fun fromVessel(vessel: Vessel?, beacon: Beacon?): VesselDataOutput? {
+        fun fromVessel(
+            vessel: Vessel?,
+            beacon: Beacon?,
+        ): VesselDataOutput? {
             if (vessel == null) {
                 return null
             }

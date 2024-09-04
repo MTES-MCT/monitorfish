@@ -8,7 +8,6 @@ import org.springframework.cache.CacheManager
 import org.springframework.transaction.annotation.Transactional
 
 class JpaBeaconRepositoryITests : AbstractDBTests() {
-
     @Autowired
     private lateinit var jpaBeaconRepository: JpaBeaconRepository
 

@@ -19,9 +19,9 @@ data class FacadeAreaEntity(
     @Column(name = "geometry", columnDefinition = "Geometry")
     val geometry: Geometry,
 ) {
-
-    fun toFacadeArea() = FacadeArea(
-        facade = Seafront.from(facade).toString(),
-        geometry = geometry,
-    )
+    fun toFacadeArea() =
+        FacadeArea(
+            facade = Seafront.from(facade).toString(),
+            geometry = geometry,
+        )
 }

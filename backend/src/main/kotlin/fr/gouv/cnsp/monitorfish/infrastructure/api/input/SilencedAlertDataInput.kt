@@ -18,15 +18,16 @@ class SilencedAlertDataInput(
     val silencedBeforeDate: ZonedDateTime,
     val value: String,
 ) {
-    fun toSilencedAlert(objectMapper: ObjectMapper) = SilencedAlert(
-        vesselId = this.vesselId,
-        vesselName = this.vesselName,
-        internalReferenceNumber = this.internalReferenceNumber,
-        externalReferenceNumber = this.externalReferenceNumber,
-        ircs = this.ircs,
-        vesselIdentifier = this.vesselIdentifier,
-        flagState = this.flagState,
-        silencedBeforeDate = this.silencedBeforeDate,
-        value = objectMapper.readValue(value, AlertType::class.java),
-    )
+    fun toSilencedAlert(objectMapper: ObjectMapper) =
+        SilencedAlert(
+            vesselId = this.vesselId,
+            vesselName = this.vesselName,
+            internalReferenceNumber = this.internalReferenceNumber,
+            externalReferenceNumber = this.externalReferenceNumber,
+            ircs = this.ircs,
+            vesselIdentifier = this.vesselIdentifier,
+            flagState = this.flagState,
+            silencedBeforeDate = this.silencedBeforeDate,
+            value = objectMapper.readValue(value, AlertType::class.java),
+        )
 }

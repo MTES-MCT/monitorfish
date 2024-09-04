@@ -57,9 +57,10 @@ class GetVesselUTests {
                 longitude = 48.2525,
                 speed = 1.8,
                 course = 180.0,
-                dateTime = now.minusHours(
-                    4,
-                ),
+                dateTime =
+                    now.minusHours(
+                        4,
+                    ),
             )
         val secondPosition =
             Position(
@@ -77,9 +78,10 @@ class GetVesselUTests {
                 longitude = 48.2525,
                 speed = 1.8,
                 course = 180.0,
-                dateTime = now.minusHours(
-                    3,
-                ),
+                dateTime =
+                    now.minusHours(
+                        3,
+                    ),
             )
         val thirdPosition =
             Position(
@@ -97,9 +99,10 @@ class GetVesselUTests {
                 longitude = 48.2525,
                 speed = 1.8,
                 course = 180.0,
-                dateTime = now.minusHours(
-                    2,
-                ),
+                dateTime =
+                    now.minusHours(
+                        2,
+                    ),
             )
         val fourthPosition =
             Position(
@@ -117,9 +120,10 @@ class GetVesselUTests {
                 longitude = 48.2525,
                 speed = 1.8,
                 course = 180.0,
-                dateTime = now.minusHours(
-                    1,
-                ),
+                dateTime =
+                    now.minusHours(
+                        1,
+                    ),
             )
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
             listOf(firstPosition, fourthPosition, secondPosition, thirdPosition),

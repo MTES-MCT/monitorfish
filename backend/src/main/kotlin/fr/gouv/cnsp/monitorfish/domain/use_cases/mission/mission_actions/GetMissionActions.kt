@@ -13,8 +13,9 @@ class GetMissionActions(
 
     fun execute(missionId: Int): List<MissionAction> {
         logger.debug("Searching undeleted actions for mission $missionId")
-        val actions = missionActionsRepository.findByMissionId(missionId)
-            .sortedByDescending { it.actionDatetimeUtc }
+        val actions =
+            missionActionsRepository.findByMissionId(missionId)
+                .sortedByDescending { it.actionDatetimeUtc }
         logger.debug("Found ${actions.size} undeleted actions for mission $missionId")
 
         return actions

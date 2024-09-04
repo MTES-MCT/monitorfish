@@ -10,11 +10,12 @@ data class HealthDataOutput(
     val suddenDropOfPositionsReceived: Boolean,
 ) {
     companion object {
-        fun fromHealth(health: Health) = HealthDataOutput(
-            dateLastPositionUpdatedByPrefect = health.dateLastPositionUpdatedByPrefect,
-            dateLastPositionReceivedByAPI = health.dateLastPositionReceivedByAPI,
-            dateLogbookMessageReceived = health.dateLogbookMessageReceived,
-            suddenDropOfPositionsReceived = health.suddenDropOfPositionsReceived,
-        )
+        fun fromHealth(health: Health) =
+            HealthDataOutput(
+                dateLastPositionUpdatedByPrefect = health.dateLastPositionUpdatedByPrefect,
+                dateLastPositionReceivedByAPI = health.dateLastPositionReceivedByAPI,
+                dateLogbookMessageReceived = health.dateLogbookMessageReceived,
+                suddenDropOfPositionsReceived = health.suddenDropOfPositionsReceived,
+            )
     }
 }

@@ -5,10 +5,18 @@ import java.time.ZonedDateTime
 
 interface BeaconMalfunctionsRepository {
     fun findAll(): List<BeaconMalfunction>
-    fun findAllByVesselId(vesselId: Int, afterDateTime: ZonedDateTime): List<BeaconMalfunction>
+
+    fun findAllByVesselId(
+        vesselId: Int,
+        afterDateTime: ZonedDateTime,
+    ): List<BeaconMalfunction>
+
     fun findAllExceptArchived(): List<BeaconMalfunction>
+
     fun findLastSixtyArchived(): List<BeaconMalfunction>
+
     fun find(beaconMalfunctionId: Int): BeaconMalfunction
+
     fun update(
         id: Int,
         vesselStatus: VesselStatus?,
@@ -16,6 +24,7 @@ interface BeaconMalfunctionsRepository {
         endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason?,
         updateDateTime: ZonedDateTime,
     )
+
     fun requestNotification(
         id: Int,
         notificationType: BeaconMalfunctionNotificationType,

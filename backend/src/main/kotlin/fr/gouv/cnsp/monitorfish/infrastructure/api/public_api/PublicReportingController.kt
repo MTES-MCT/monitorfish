@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController
 class PublicReportingController(
     private val archiveReporting: ArchiveReporting,
 ) {
-
     @PutMapping(value = ["/{reportingId}/archive"])
     @Operation(summary = "Archive a reporting")
     fun archiveReporting(

@@ -16,13 +16,14 @@ class PaginatedListUTests {
     @Test
     fun `new Should return the expected list from the first page`() {
         // Given
-        val items = listOf(
-            FakeCollectionItem(1, "Item 1"),
-            FakeCollectionItem(2, "Item 2"),
-            FakeCollectionItem(3, "Item 3"),
-            FakeCollectionItem(4, "Item 4"),
-            FakeCollectionItem(5, "Item 5"),
-        )
+        val items =
+            listOf(
+                FakeCollectionItem(1, "Item 1"),
+                FakeCollectionItem(2, "Item 2"),
+                FakeCollectionItem(3, "Item 3"),
+                FakeCollectionItem(4, "Item 4"),
+                FakeCollectionItem(5, "Item 5"),
+            )
         val pageNumber = 0
         val pageSize = 2
         val extraData = FakeCollectionExtraData(extraProp = 42)
@@ -33,10 +34,11 @@ class PaginatedListUTests {
         // Then
         assertThat(result).isEqualTo(
             PaginatedList(
-                data = listOf(
-                    FakeCollectionItem(1, "Item 1"),
-                    FakeCollectionItem(2, "Item 2"),
-                ),
+                data =
+                    listOf(
+                        FakeCollectionItem(1, "Item 1"),
+                        FakeCollectionItem(2, "Item 2"),
+                    ),
                 extraData = extraData,
                 lastPageNumber = 2,
                 pageNumber = pageNumber,
@@ -73,13 +75,14 @@ class PaginatedListUTests {
     @Test
     fun `new Should return the expected list from the last page`() {
         // Given
-        val items = listOf(
-            FakeCollectionItem(1, "Item 1"),
-            FakeCollectionItem(2, "Item 2"),
-            FakeCollectionItem(3, "Item 3"),
-            FakeCollectionItem(4, "Item 4"),
-            FakeCollectionItem(5, "Item 5"),
-        )
+        val items =
+            listOf(
+                FakeCollectionItem(1, "Item 1"),
+                FakeCollectionItem(2, "Item 2"),
+                FakeCollectionItem(3, "Item 3"),
+                FakeCollectionItem(4, "Item 4"),
+                FakeCollectionItem(5, "Item 5"),
+            )
         val pageNumber = 2
         val pageSize = 2
         val extraData = FakeCollectionExtraData(extraProp = 42)
@@ -103,11 +106,12 @@ class PaginatedListUTests {
     @Test
     fun `new Should return an empty list when the page number exceeds the last page number`() {
         // Given
-        val items = listOf(
-            FakeCollectionItem(1, "Item 1"),
-            FakeCollectionItem(2, "Item 2"),
-            FakeCollectionItem(3, "Item 3"),
-        )
+        val items =
+            listOf(
+                FakeCollectionItem(1, "Item 1"),
+                FakeCollectionItem(2, "Item 2"),
+                FakeCollectionItem(3, "Item 3"),
+            )
         val pageNumber = 2
         val pageSize = 2
         val extraData = FakeCollectionExtraData(extraProp = 42)
@@ -131,11 +135,12 @@ class PaginatedListUTests {
     @Test
     fun `new Should return null extra data when there is none`() {
         // Given
-        val items = listOf(
-            FakeCollectionItem(1, "Item 1"),
-            FakeCollectionItem(2, "Item 2"),
-            FakeCollectionItem(3, "Item 3"),
-        )
+        val items =
+            listOf(
+                FakeCollectionItem(1, "Item 1"),
+                FakeCollectionItem(2, "Item 2"),
+                FakeCollectionItem(3, "Item 3"),
+            )
         val pageNumber = 1
         val pageSize = 2
 

@@ -13,10 +13,11 @@ class PriorNotificationFaker {
                 createdAt = ZonedDateTime.now(),
                 didNotFishAfterZeroNotice = false,
                 isManuallyCreated = false,
-                logbookMessageAndValue = LogbookMessageAndValue(
-                    clazz = PNO::class.java,
-                    logbookMessage = LogbookMessageFaker.fakePnoLogbookMessage(index),
-                ),
+                logbookMessageAndValue =
+                    LogbookMessageAndValue(
+                        clazz = PNO::class.java,
+                        logbookMessage = LogbookMessageFaker.fakePnoLogbookMessage(index),
+                    ),
                 port = PortFaker.fakePort(),
                 reportingCount = null,
                 seafront = null,

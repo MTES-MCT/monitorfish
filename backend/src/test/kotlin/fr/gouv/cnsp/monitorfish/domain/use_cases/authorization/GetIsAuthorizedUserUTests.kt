@@ -13,7 +13,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
 class GetIsAuthorizedUserUTests {
-
     @MockBean
     private lateinit var userAuthorizationRepository: JpaUserAuthorizationRepository
 
@@ -24,10 +23,11 @@ class GetIsAuthorizedUserUTests {
         )
 
         // When
-        val isAuthorized = GetIsAuthorizedUser(userAuthorizationRepository).execute(
-            "test",
-            true,
-        )
+        val isAuthorized =
+            GetIsAuthorizedUser(userAuthorizationRepository).execute(
+                "test",
+                true,
+            )
 
         // Then
         assertThat(isAuthorized).isTrue()
@@ -40,10 +40,11 @@ class GetIsAuthorizedUserUTests {
         )
 
         // When
-        val isAuthorized = GetIsAuthorizedUser(userAuthorizationRepository).execute(
-            "test",
-            true,
-        )
+        val isAuthorized =
+            GetIsAuthorizedUser(userAuthorizationRepository).execute(
+                "test",
+                true,
+            )
 
         // Then
         assertThat(isAuthorized).isFalse()
@@ -52,10 +53,11 @@ class GetIsAuthorizedUserUTests {
     @Test
     fun `execute Should return true When the path is not super-user protected`() {
         // When
-        val isAuthorized = GetIsAuthorizedUser(userAuthorizationRepository).execute(
-            "test",
-            false,
-        )
+        val isAuthorized =
+            GetIsAuthorizedUser(userAuthorizationRepository).execute(
+                "test",
+                false,
+            )
 
         // Then
         assertThat(isAuthorized).isTrue()
@@ -68,10 +70,11 @@ class GetIsAuthorizedUserUTests {
         )
 
         // When
-        val isAuthorized = GetIsAuthorizedUser(userAuthorizationRepository).execute(
-            "test",
-            true,
-        )
+        val isAuthorized =
+            GetIsAuthorizedUser(userAuthorizationRepository).execute(
+                "test",
+                true,
+            )
 
         // Then
         assertThat(isAuthorized).isFalse()

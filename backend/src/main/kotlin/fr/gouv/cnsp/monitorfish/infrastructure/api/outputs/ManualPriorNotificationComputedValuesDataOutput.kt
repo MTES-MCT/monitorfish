@@ -18,10 +18,12 @@ data class ManualPriorNotificationComputedValuesDataOutput(
         fun fromManualPriorNotificationComputedValues(
             manualPriorNotificationComputedValues: ManualPriorNotificationComputedValues,
         ): ManualPriorNotificationComputedValuesDataOutput {
-            val tripSegmentDataOutputs = manualPriorNotificationComputedValues.tripSegments
-                .map { LogbookMessageTripSegmentDataOutput.fromFleetSegment(it) }
-            val priorNotificationTypeDataOutputs = manualPriorNotificationComputedValues.types
-                .map { PriorNotificationTypeDataOutput.fromPnoType(it) }
+            val tripSegmentDataOutputs =
+                manualPriorNotificationComputedValues.tripSegments
+                    .map { LogbookMessageTripSegmentDataOutput.fromFleetSegment(it) }
+            val priorNotificationTypeDataOutputs =
+                manualPriorNotificationComputedValues.types
+                    .map { PriorNotificationTypeDataOutput.fromPnoType(it) }
 
             return ManualPriorNotificationComputedValuesDataOutput(
                 nextState = manualPriorNotificationComputedValues.nextState,

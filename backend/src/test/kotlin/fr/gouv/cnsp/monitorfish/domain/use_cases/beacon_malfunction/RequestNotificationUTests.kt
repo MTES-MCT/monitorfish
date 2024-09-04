@@ -12,19 +12,19 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
 class RequestNotificationUTests {
-
     @MockBean
     private lateinit var beaconMalfunctionsRepository: BeaconMalfunctionsRepository
 
     @Test
     fun `execute Should throw an exception When notificationRequested is MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC and no foreignFmcCode is given`() {
         // When
-        val throwable = catchThrowable {
-            RequestNotification(
-                beaconMalfunctionsRepository,
-            )
-                .execute(1, BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC, null)
-        }
+        val throwable =
+            catchThrowable {
+                RequestNotification(
+                    beaconMalfunctionsRepository,
+                )
+                    .execute(1, BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC, null)
+            }
 
         // Then
         assertThat(throwable).isInstanceOf(IllegalArgumentException::class.java)

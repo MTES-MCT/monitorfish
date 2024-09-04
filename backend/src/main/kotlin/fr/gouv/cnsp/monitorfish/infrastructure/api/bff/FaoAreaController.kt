@@ -17,7 +17,6 @@ class FaoAreaController(
     private val getFAOAreas: GetFaoAreas,
     private val computeVesselFAOAreas: ComputeVesselFaoAreas,
 ) {
-
     @GetMapping("/v1/fao_areas")
     @Operation(summary = "Get FAO areas")
     fun getFAOAreas(): List<String> {

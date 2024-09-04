@@ -60,11 +60,12 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
         assertThat(fleetSegments.first().segment).isEqualTo("ATL01")
 
         // When
-        val updatedFleetSegment = jpaFleetSegmentRepository.update(
-            "ATL01",
-            CreateOrUpdateFleetSegmentFields("NEXT_ATL01", "A segment name"),
-            currentYear,
-        )
+        val updatedFleetSegment =
+            jpaFleetSegmentRepository.update(
+                "ATL01",
+                CreateOrUpdateFleetSegmentFields("NEXT_ATL01", "A segment name"),
+                currentYear,
+            )
 
         // Then
         assertThat(updatedFleetSegment.segment).isEqualTo("NEXT_ATL01")
@@ -82,11 +83,12 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
         assertThat(fleetSegments.first().segmentName).isEqualTo("All Trawls 3")
 
         // When
-        val updatedFleetSegment = jpaFleetSegmentRepository.update(
-            "ATL01",
-            CreateOrUpdateFleetSegmentFields(segmentName = "All Trawls 666"),
-            currentYear,
-        )
+        val updatedFleetSegment =
+            jpaFleetSegmentRepository.update(
+                "ATL01",
+                CreateOrUpdateFleetSegmentFields(segmentName = "All Trawls 666"),
+                currentYear,
+            )
 
         // Then
         assertThat(updatedFleetSegment.segmentName).isEqualTo("All Trawls 666")
@@ -106,11 +108,12 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
         )
 
         // When
-        val updatedFleetSegment = jpaFleetSegmentRepository.update(
-            "ATL01",
-            CreateOrUpdateFleetSegmentFields(gears = listOf("OTB", "DOF")),
-            currentYear,
-        )
+        val updatedFleetSegment =
+            jpaFleetSegmentRepository.update(
+                "ATL01",
+                CreateOrUpdateFleetSegmentFields(gears = listOf("OTB", "DOF")),
+                currentYear,
+            )
 
         // Then
         assertThat(updatedFleetSegment.segment).isEqualTo("ATL01")
@@ -129,11 +132,12 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
         assertThat(fleetSegments.first().faoAreas).isEqualTo(listOf("27.7", "27.8", "27.9", "27.10"))
 
         // When
-        val updatedFleetSegment = jpaFleetSegmentRepository.update(
-            "ATL01",
-            CreateOrUpdateFleetSegmentFields(faoAreas = listOf("66.6.6", "66.6.7")),
-            currentYear,
-        )
+        val updatedFleetSegment =
+            jpaFleetSegmentRepository.update(
+                "ATL01",
+                CreateOrUpdateFleetSegmentFields(faoAreas = listOf("66.6.6", "66.6.7")),
+                currentYear,
+            )
 
         // Then
         assertThat(updatedFleetSegment.segment).isEqualTo("ATL01")

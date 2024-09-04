@@ -28,15 +28,15 @@ data class BeaconMalfunctionActionEntity(
     @Column(name = "date_time_utc")
     val dateTime: Instant,
 ) {
-
-    fun toBeaconMalfunctionAction() = BeaconMalfunctionAction(
-        id = id!!,
-        beaconMalfunctionId = beaconMalfunctionId,
-        propertyName = propertyName,
-        previousValue = previousValue,
-        nextValue = nextValue,
-        dateTime = dateTime.atZone(ZoneOffset.UTC),
-    )
+    fun toBeaconMalfunctionAction() =
+        BeaconMalfunctionAction(
+            id = id!!,
+            beaconMalfunctionId = beaconMalfunctionId,
+            propertyName = propertyName,
+            previousValue = previousValue,
+            nextValue = nextValue,
+            dateTime = dateTime.atZone(ZoneOffset.UTC),
+        )
 
     companion object {
         fun fromBeaconMalfunctionAction(

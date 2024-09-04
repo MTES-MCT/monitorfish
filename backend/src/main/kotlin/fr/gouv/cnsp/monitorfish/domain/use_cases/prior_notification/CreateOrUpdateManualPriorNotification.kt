@@ -22,7 +22,6 @@ class CreateOrUpdateManualPriorNotification(
     private val portRepository: PortRepository,
     private val priorNotificationPdfDocumentRepository: PriorNotificationPdfDocumentRepository,
     private val vesselRepository: VesselRepository,
-
     private val computeManualPriorNotification: ComputeManualPriorNotification,
     private val getPriorNotification: GetPriorNotification,
 ) {
@@ -30,7 +29,6 @@ class CreateOrUpdateManualPriorNotification(
 
     fun execute(
         reportId: String?,
-
         authorTrigram: String,
         didNotFishAfterZeroNotice: Boolean,
         expectedArrivalDate: ZonedDateTime,
@@ -53,90 +51,95 @@ class CreateOrUpdateManualPriorNotification(
     ): PriorNotification {
         // /!\ Backend computed vessel risk factor is only used as a real time Frontend indicator.
         // The Backend should NEVER update `risk_factors` DB table, only the pipeline is allowed to update it.
-        val computedValues = computeManualPriorNotification.execute(
-            fishingCatches,
-            globalFaoArea,
-            portLocode,
-            tripGearCodes,
-            vesselId,
-        )
+        val computedValues =
+            computeManualPriorNotification.execute(
+                fishingCatches,
+                globalFaoArea,
+                portLocode,
+                tripGearCodes,
+                vesselId,
+            )
 
-        val isPartOfControlUnitSubscriptions = pnoPortSubscriptionRepository.has(portLocode) ||
-            pnoVesselSubscriptionRepository.has(vesselId) ||
-            pnoSegmentSubscriptionRepository.has(portLocode, computedValues.tripSegments.map { it.segment })
+        val isPartOfControlUnitSubscriptions =
+            pnoPortSubscriptionRepository.has(portLocode) ||
+                pnoVesselSubscriptionRepository.has(vesselId) ||
+                pnoSegmentSubscriptionRepository.has(portLocode, computedValues.tripSegments.map { it.segment })
 
-        val fishingCatchesWithFaoArea = globalFaoArea?.let { fishingCatches.map { it.copy(faoZone = globalFaoArea) } }
-            ?: fishingCatches
+        val fishingCatchesWithFaoArea =
+            globalFaoArea?.let { fishingCatches.map { it.copy(faoZone = globalFaoArea) } }
+                ?: fishingCatches
         val tripGears = getTripGears(tripGearCodes)
         val tripSegments = computedValues.tripSegments.map { it.toLogbookTripSegment() }
         val vessel = vesselRepository.findVesselById(vesselId)
         val priorNotificationTypes = computedValues.types.map { it.toPriorNotificationType() }
-        val message = getMessage(
-            authorTrigram = authorTrigram,
-            expectedArrivalDate = expectedArrivalDate,
-            expectedLandingDate = expectedLandingDate,
-            // At the moment, manual prior notifications only have a single global FAO area field in Frontend,
-            // so we transform that single FAO area into an FAO area per fishing catch.
-            fishingCatches = fishingCatchesWithFaoArea,
-            hasPortEntranceAuthorization = hasPortEntranceAuthorization,
-            hasPortLandingAuthorization = hasPortLandingAuthorization,
-            note = note,
-            pnoTypes = priorNotificationTypes,
-            portLocode = portLocode,
-            purpose = purpose,
-            computedVesselFlagCountryCode = vessel?.flagState,
-            computedVesselRiskFactor = computedValues.vesselRiskFactor,
-            isPartOfControlUnitSubscriptions = isPartOfControlUnitSubscriptions,
-        )
+        val message =
+            getMessage(
+                authorTrigram = authorTrigram,
+                expectedArrivalDate = expectedArrivalDate,
+                expectedLandingDate = expectedLandingDate,
+                // At the moment, manual prior notifications only have a single global FAO area field in Frontend,
+                // so we transform that single FAO area into an FAO area per fishing catch.
+                fishingCatches = fishingCatchesWithFaoArea,
+                hasPortEntranceAuthorization = hasPortEntranceAuthorization,
+                hasPortLandingAuthorization = hasPortLandingAuthorization,
+                note = note,
+                pnoTypes = priorNotificationTypes,
+                portLocode = portLocode,
+                purpose = purpose,
+                computedVesselFlagCountryCode = vessel?.flagState,
+                computedVesselRiskFactor = computedValues.vesselRiskFactor,
+                isPartOfControlUnitSubscriptions = isPartOfControlUnitSubscriptions,
+            )
 
-        val pnoLogbookMessage = LogbookMessage(
-            id = null,
-            reportId = reportId,
-            operationNumber = null,
-            tripNumber = null,
-            referencedReportId = null,
-            operationDateTime = ZonedDateTime.now(),
-            internalReferenceNumber = vessel?.internalReferenceNumber,
-            externalReferenceNumber = vessel?.externalReferenceNumber,
-            ircs = vessel?.ircs,
-            vesselName = vessel?.vesselName,
-            vesselId = vesselId,
-            flagState = vessel?.flagState?.alpha3,
-            imo = vessel?.imo,
-            reportDateTime = sentAt,
-            integrationDateTime = ZonedDateTime.now(),
-            rawMessage = null,
-            transmissionFormat = null,
-            software = null,
-            acknowledgment = null,
-            isCorrectedByNewerMessage = false,
-            isDeleted = false,
-            isEnriched = true,
-            isSentByFailoverSoftware = false,
-            message = message,
-            messageType = LogbookMessageTypeMapping.PNO.name,
-            operationType = LogbookOperationType.DAT,
-            tripGears = tripGears,
-            tripSegments = tripSegments,
-        )
+        val pnoLogbookMessage =
+            LogbookMessage(
+                id = null,
+                reportId = reportId,
+                operationNumber = null,
+                tripNumber = null,
+                referencedReportId = null,
+                operationDateTime = ZonedDateTime.now(),
+                internalReferenceNumber = vessel?.internalReferenceNumber,
+                externalReferenceNumber = vessel?.externalReferenceNumber,
+                ircs = vessel?.ircs,
+                vesselName = vessel?.vesselName,
+                vesselId = vesselId,
+                flagState = vessel?.flagState?.alpha3,
+                imo = vessel?.imo,
+                reportDateTime = sentAt,
+                integrationDateTime = ZonedDateTime.now(),
+                rawMessage = null,
+                transmissionFormat = null,
+                software = null,
+                acknowledgment = null,
+                isCorrectedByNewerMessage = false,
+                isDeleted = false,
+                isEnriched = true,
+                isSentByFailoverSoftware = false,
+                message = message,
+                messageType = LogbookMessageTypeMapping.PNO.name,
+                operationType = LogbookOperationType.DAT,
+                tripGears = tripGears,
+                tripSegments = tripSegments,
+            )
         val logbookMessageAndValue = LogbookMessageAndValue(pnoLogbookMessage, PNO::class.java)
 
-        val newOrNextPriorNotification = PriorNotification(
-            reportId = reportId,
-            didNotFishAfterZeroNotice = didNotFishAfterZeroNotice,
-            isManuallyCreated = true,
-            logbookMessageAndValue = logbookMessageAndValue,
-            sentAt = sentAt,
-
-            // All these props are useless for the save operation.
-            createdAt = null,
-            port = null,
-            reportingCount = null,
-            seafront = null,
-            vessel = null,
-            lastControlDateTime = null,
-            updatedAt = null,
-        )
+        val newOrNextPriorNotification =
+            PriorNotification(
+                reportId = reportId,
+                didNotFishAfterZeroNotice = didNotFishAfterZeroNotice,
+                isManuallyCreated = true,
+                logbookMessageAndValue = logbookMessageAndValue,
+                sentAt = sentAt,
+                // All these props are useless for the save operation.
+                createdAt = null,
+                port = null,
+                reportingCount = null,
+                seafront = null,
+                vessel = null,
+                lastControlDateTime = null,
+                updatedAt = null,
+            )
 
         // Any update must trigger a new PDF generation, so we delete the existing PDF document
         // which is re-generated by the Pipeline each time a PDF is deleted
@@ -150,11 +153,12 @@ class CreateOrUpdateManualPriorNotification(
 
         val createdOrUpdatedIncompletePriorNotification =
             manualPriorNotificationRepository.save(newOrNextPriorNotification)
-        val createdOrUpdatedPriorNotification = getPriorNotification.execute(
-            createdOrUpdatedIncompletePriorNotification.reportId!!,
-            createdOrUpdatedIncompletePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
-            true,
-        )
+        val createdOrUpdatedPriorNotification =
+            getPriorNotification.execute(
+                createdOrUpdatedIncompletePriorNotification.reportId!!,
+                createdOrUpdatedIncompletePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
+                true,
+            )
 
         return createdOrUpdatedPriorNotification
     }
@@ -176,8 +180,9 @@ class CreateOrUpdateManualPriorNotification(
     ): PNO {
         val allPorts = portRepository.findAll()
 
-        val isInVerificationScope = ManualPriorNotificationComputedValues
-            .isInVerificationScope(computedVesselFlagCountryCode, computedVesselRiskFactor)
+        val isInVerificationScope =
+            ManualPriorNotificationComputedValues
+                .isInVerificationScope(computedVesselFlagCountryCode, computedVesselRiskFactor)
         // If the prior notification is not in verification scope,
         // we pass `isBeingSent` as `true` in order to ask the workflow to send it.
         val isBeingSent = !isInVerificationScope && isPartOfControlUnitSubscriptions

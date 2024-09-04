@@ -19,7 +19,6 @@ class MissionController(
     private val getAllMissions: GetAllMissions,
     private val getMission: GetMission,
 ) {
-
     @GetMapping("")
     @Operation(summary = "Get all missions")
     fun getAllMissionsController(
@@ -50,16 +49,17 @@ class MissionController(
         @RequestParam(name = "seaFronts", required = false)
         seaFronts: List<String>?,
     ): List<MissionWithActionsDataOutput> {
-        val missionsAndActions = getAllMissions.execute(
-            startedAfterDateTime = startedAfterDateTime,
-            startedBeforeDateTime = startedBeforeDateTime,
-            missionSources = missionSources,
-            missionStatuses = missionStatuses,
-            missionTypes = missionTypes,
-            seaFronts = seaFronts,
-            pageNumber = pageNumber,
-            pageSize = pageSize,
-        )
+        val missionsAndActions =
+            getAllMissions.execute(
+                startedAfterDateTime = startedAfterDateTime,
+                startedBeforeDateTime = startedBeforeDateTime,
+                missionSources = missionSources,
+                missionStatuses = missionStatuses,
+                missionTypes = missionTypes,
+                seaFronts = seaFronts,
+                pageNumber = pageNumber,
+                pageSize = pageSize,
+            )
         return missionsAndActions.map { MissionWithActionsDataOutput.fromMissionAndActions(it) }
     }
 

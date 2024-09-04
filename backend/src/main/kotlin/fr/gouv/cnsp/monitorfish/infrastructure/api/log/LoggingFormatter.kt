@@ -7,7 +7,11 @@ import java.util.*
 
 class LoggingFormatter {
     companion object {
-        fun formatRequest(mapper: ObjectMapper, httpServletRequest: HttpServletRequest?, body: Any? = null): String? {
+        fun formatRequest(
+            mapper: ObjectMapper,
+            httpServletRequest: HttpServletRequest?,
+            body: Any? = null,
+        ): String? {
             if (httpServletRequest == null) {
                 return null
             }

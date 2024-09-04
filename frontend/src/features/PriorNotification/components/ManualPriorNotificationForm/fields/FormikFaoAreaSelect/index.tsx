@@ -3,6 +3,7 @@ import { FormikMultiRadio, FormikSelect, usePrevious } from '@mtes-mct/monitor-u
 import { useFormikContext } from 'formik'
 import { omit } from 'lodash'
 import { useEffect } from 'react'
+import styled from 'styled-components'
 
 import { HAS_GLOBAL_FAO_AREA_AS_OPTIONS } from './constants'
 
@@ -57,6 +58,15 @@ export function FormikFaoAreaSelect({ isReadOnly }: FormikFaoAreaSelectProps) {
         searchable
         virtualized
       />
+      {!values.hasGlobalFaoArea && (
+        <Message>Veuillez saisir les zones de capture lors de l’ajout des espèces à débarquer.</Message>
+      )}
     </>
   )
 }
+
+const Message = styled.p`
+  color: ${p => p.theme.color.slateGray};
+  font-style: italic;
+  margin-top: 8px;
+`

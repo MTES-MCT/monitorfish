@@ -12,11 +12,12 @@ data class EnvMissionActionDataOutput(
     val observations: String? = null,
 ) {
     companion object {
-        fun fromEnvMissionAction(envMissionAction: EnvMissionAction) = EnvMissionActionDataOutput(
-            id = envMissionAction.id,
-            actionStartDateTimeUtc = envMissionAction.actionStartDateTimeUtc,
-            actionType = envMissionAction.actionType,
-            observations = envMissionAction.observations,
-        )
+        fun fromEnvMissionAction(envMissionAction: EnvMissionAction) =
+            EnvMissionActionDataOutput(
+                id = envMissionAction.id,
+                actionStartDateTimeUtc = envMissionAction.actionStartDateTimeUtc,
+                actionType = envMissionAction.actionType,
+                observations = envMissionAction.observations,
+            )
     }
 }

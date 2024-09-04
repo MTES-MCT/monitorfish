@@ -14,7 +14,10 @@ class ObservationDataOutput(
     val description: String? = null,
 ) : ReportingValueDataOutput() {
     companion object {
-        fun fromObservation(observation: Observation, controlUnit: ControlUnit? = null): ObservationDataOutput {
+        fun fromObservation(
+            observation: Observation,
+            controlUnit: ControlUnit? = null,
+        ): ObservationDataOutput {
             return ObservationDataOutput(
                 reportingActor = observation.reportingActor,
                 controlUnitId = observation.controlUnitId,

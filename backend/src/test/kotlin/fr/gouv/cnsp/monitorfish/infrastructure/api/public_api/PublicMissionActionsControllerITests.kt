@@ -32,7 +32,6 @@ import java.time.ZonedDateTime
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = [(PublicMissionActionsController::class)])
 class PublicMissionActionsControllerITests {
-
     @Autowired
     private lateinit var api: MockMvc
 

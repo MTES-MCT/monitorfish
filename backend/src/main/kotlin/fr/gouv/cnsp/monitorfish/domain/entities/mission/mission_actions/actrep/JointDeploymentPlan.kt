@@ -63,41 +63,43 @@ enum class JointDeploymentPlan(
             return false
         }
 
-        val hasSpeciesInJdp = this.species.any { (jdpFaoZones, jdpSpecy) ->
-            val isSpecyFoundInJdpSpecies = speciesOnboardCodes.contains(jdpSpecy)
+        val hasSpeciesInJdp =
+            this.species.any { (jdpFaoZones, jdpSpecy) ->
+                val isSpecyFoundInJdpSpecies = speciesOnboardCodes.contains(jdpSpecy)
 
-            val isFaoZoneFoundInJdpFaoZones = jdpFaoZones
-                .any { jdpFaoCode ->
-                    // The JDP FAO zone is included in at least one trip FAO code
-                    tripFaoCodes.any { tripFaoCode -> tripFaoCode.contains(jdpFaoCode) }
-                }
+                val isFaoZoneFoundInJdpFaoZones =
+                    jdpFaoZones
+                        .any { jdpFaoCode ->
+                            // The JDP FAO zone is included in at least one trip FAO code
+                            tripFaoCodes.any { tripFaoCode -> tripFaoCode.contains(jdpFaoCode) }
+                        }
 
-            return@any isSpecyFoundInJdpSpecies && isFaoZoneFoundInJdpFaoZones
-        }
+                return@any isSpecyFoundInJdpSpecies && isFaoZoneFoundInJdpFaoZones
+            }
 
-        val hasSpeciesInEUQuotas = if (isThirdCountryVessel) {
-            EU_QUOTAS_SPECIES.any { quotaSpecy -> speciesOnboardCodes.contains(quotaSpecy) }
-        } else {
-            false
-        }
+        val hasSpeciesInEUQuotas =
+            if (isThirdCountryVessel) {
+                EU_QUOTAS_SPECIES.any { quotaSpecy -> speciesOnboardCodes.contains(quotaSpecy) }
+            } else {
+                false
+            }
 
         return hasSpeciesInJdp || hasSpeciesInEUQuotas
     }
 
-    fun getFirstFaoAreaIncludedInJdp(
-        control: MissionAction,
-    ): FaoArea? {
+    fun getFirstFaoAreaIncludedInJdp(control: MissionAction): FaoArea? {
         val jdpFaoAreas = this.getOperationalZones()
 
         if (control.actionType == MissionActionType.SEA_CONTROL && !isAttributedJdp(control)) {
             return null
         }
 
-        val firstFaoAreaIncludedInJdp = control.faoAreas
-            .map { FaoArea(it) }
-            .firstOrNull { controlFaoArea ->
-                jdpFaoAreas.any { controlFaoArea.hasFaoCodeIncludedIn(it) }
-            }
+        val firstFaoAreaIncludedInJdp =
+            control.faoAreas
+                .map { FaoArea(it) }
+                .firstOrNull { controlFaoArea ->
+                    jdpFaoAreas.any { controlFaoArea.hasFaoCodeIncludedIn(it) }
+                }
 
         return firstFaoAreaIncludedInJdp
     }
@@ -108,42 +110,40 @@ enum class JointDeploymentPlan(
      * `JointDeploymentPlan.entries.firstOrNull` is the arbitrary rule to attach a control to only one JDP.
      * see: https://github.com/MTES-MCT/monitorfish/issues/3157#issuecomment-2093036583
      */
-    fun isAttributedJdp(
-        control: MissionAction,
-    ) = JointDeploymentPlan.entries
-        .firstOrNull { jdpEntry ->
-            /**
-             * There is an overlap between the `MEDITERRANEAN_AND_EASTERN_ATLANTIC` and the WESTERN_WATERS JDPs.
-             * We add a filter by species to avoid counting all controls done in
-             * `EASTERN_ATLANTIC_OPERATIONAL_ZONES without targeted species in catches.
-             */
-            if (jdpEntry == MEDITERRANEAN_AND_EASTERN_ATLANTIC) {
-                return@firstOrNull isMedJdpAttributed(control)
-            }
+    fun isAttributedJdp(control: MissionAction) =
+        JointDeploymentPlan.entries
+            .firstOrNull { jdpEntry ->
+                /**
+                 * There is an overlap between the `MEDITERRANEAN_AND_EASTERN_ATLANTIC` and the WESTERN_WATERS JDPs.
+                 * We add a filter by species to avoid counting all controls done in
+                 * `EASTERN_ATLANTIC_OPERATIONAL_ZONES without targeted species in catches.
+                 */
+                if (jdpEntry == MEDITERRANEAN_AND_EASTERN_ATLANTIC) {
+                    return@firstOrNull isMedJdpAttributed(control)
+                }
 
-            return@firstOrNull jdpEntry.getOperationalZones().any { jdpFaoArea ->
-                control.faoAreas.any { controlFaoArea ->
-                    FaoArea(controlFaoArea).hasFaoCodeIncludedIn(jdpFaoArea)
+                return@firstOrNull jdpEntry.getOperationalZones().any { jdpFaoArea ->
+                    control.faoAreas.any { controlFaoArea ->
+                        FaoArea(controlFaoArea).hasFaoCodeIncludedIn(jdpFaoArea)
+                    }
+                }
+            } == this
+
+    private fun isMedJdpAttributed(control: MissionAction) =
+        MEDITERRANEAN_AND_EASTERN_ATLANTIC.getOperationalZones().any { jdpFaoArea ->
+            /**
+             * Filter by FAO zone AND `EASTERN_ATLANTIC_SPECY`
+             * if the fao zone is included in the `EASTERN_ATLANTIC_OPERATIONAL_ZONES`
+             */
+            if (EASTERN_ATLANTIC_OPERATIONAL_ZONES.contains(jdpFaoArea)) {
+                return@any control.faoAreas.any { controlFaoArea ->
+                    FaoArea(controlFaoArea).hasFaoCodeIncludedIn(jdpFaoArea) &&
+                        control.speciesOnboard.map { it.speciesCode }.contains(EASTERN_ATLANTIC_SPECY.second)
                 }
             }
-        } == this
 
-    private fun isMedJdpAttributed(
-        control: MissionAction,
-    ) = MEDITERRANEAN_AND_EASTERN_ATLANTIC.getOperationalZones().any { jdpFaoArea ->
-        /**
-         * Filter by FAO zone AND `EASTERN_ATLANTIC_SPECY`
-         * if the fao zone is included in the `EASTERN_ATLANTIC_OPERATIONAL_ZONES`
-         */
-        if (EASTERN_ATLANTIC_OPERATIONAL_ZONES.contains(jdpFaoArea)) {
             return@any control.faoAreas.any { controlFaoArea ->
-                FaoArea(controlFaoArea).hasFaoCodeIncludedIn(jdpFaoArea) &&
-                    control.speciesOnboard.map { it.speciesCode }.contains(EASTERN_ATLANTIC_SPECY.second)
+                FaoArea(controlFaoArea).hasFaoCodeIncludedIn(jdpFaoArea)
             }
         }
-
-        return@any control.faoAreas.any { controlFaoArea ->
-            FaoArea(controlFaoArea).hasFaoCodeIncludedIn(jdpFaoArea)
-        }
-    }
 }

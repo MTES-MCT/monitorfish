@@ -81,17 +81,15 @@ export function Form({ detail, initialFormValues }: FormProps) {
 
       {isSuperUser && (
         <ActionWrapper>
-          {!isInvalidated && (
-            <Button
-              accent={Accent.SECONDARY}
-              color={THEME.color.maximumRed}
-              disabled={isBeingSent}
-              Icon={Icon.Invalid}
-              onClick={openInvalidationConfirmationModal}
-            >
-              Invalider le préavis
-            </Button>
-          )}
+          <Button
+            accent={Accent.SECONDARY}
+            color={THEME.color.maximumRed}
+            disabled={isBeingSent || isInvalidated}
+            Icon={Icon.Invalid}
+            onClick={openInvalidationConfirmationModal}
+          >
+            Invalider le préavis
+          </Button>
           <Button
             accent={Accent.SECONDARY}
             disabled={isBeingSent || !isInvalidated}

@@ -55,7 +55,6 @@ class VerifyAndSendPriorNotificationITests : AbstractDBTests() {
             return Stream.of(
                 // -------------------------------------------------------------
                 // Logbook prior notifications
-
                 // "00000" -> "00101"
                 TestCase(
                     "FAKE_OPERATION_101",
@@ -76,7 +75,6 @@ class VerifyAndSendPriorNotificationITests : AbstractDBTests() {
                     ),
                     PriorNotificationState.PENDING_SEND,
                 ),
-
                 // "00001" -> "00101"
                 TestCase(
                     "FAKE_OPERATION_102",
@@ -97,7 +95,6 @@ class VerifyAndSendPriorNotificationITests : AbstractDBTests() {
                     ),
                     PriorNotificationState.PENDING_SEND,
                 ),
-
                 // "00010" -> "00101"
                 TestCase(
                     "FAKE_OPERATION_103",
@@ -118,7 +115,6 @@ class VerifyAndSendPriorNotificationITests : AbstractDBTests() {
                     ),
                     PriorNotificationState.PENDING_SEND,
                 ),
-
                 // "00100" -> "00101"
                 TestCase(
                     "FAKE_OPERATION_104",
@@ -139,7 +135,6 @@ class VerifyAndSendPriorNotificationITests : AbstractDBTests() {
                     ),
                     PriorNotificationState.PENDING_SEND,
                 ),
-
                 // "00101" -> "00101"
                 TestCase(
                     "FAKE_OPERATION_105",
@@ -160,7 +155,6 @@ class VerifyAndSendPriorNotificationITests : AbstractDBTests() {
                     ),
                     PriorNotificationState.PENDING_SEND,
                 ),
-
                 // "00110" -> "00101"
                 TestCase(
                     "FAKE_OPERATION_106",
@@ -181,7 +175,6 @@ class VerifyAndSendPriorNotificationITests : AbstractDBTests() {
                     ),
                     PriorNotificationState.PENDING_SEND,
                 ),
-
                 // "01000" -> "01101"
                 TestCase(
                     "FAKE_OPERATION_107",
@@ -202,7 +195,6 @@ class VerifyAndSendPriorNotificationITests : AbstractDBTests() {
                     ),
                     PriorNotificationState.PENDING_SEND,
                 ),
-
                 // "01100" -> "01101"
                 TestCase(
                     "FAKE_OPERATION_108",
@@ -223,7 +215,6 @@ class VerifyAndSendPriorNotificationITests : AbstractDBTests() {
                     ),
                     PriorNotificationState.PENDING_SEND,
                 ),
-
                 // "01101" -> "01101"
                 TestCase(
                     "FAKE_OPERATION_109_COR",
@@ -244,7 +235,6 @@ class VerifyAndSendPriorNotificationITests : AbstractDBTests() {
                     ),
                     PriorNotificationState.PENDING_SEND,
                 ),
-
                 // "01110" -> "01101"
                 TestCase(
                     "FAKE_OPERATION_110",
@@ -265,10 +255,8 @@ class VerifyAndSendPriorNotificationITests : AbstractDBTests() {
                     ),
                     PriorNotificationState.PENDING_SEND,
                 ),
-
                 // -------------------------------------------------------------
                 // Manual prior notifications
-
                 // "10000" -> "10101"
                 TestCase(
                     "00000000-0000-4000-0000-000000000001",
@@ -289,7 +277,6 @@ class VerifyAndSendPriorNotificationITests : AbstractDBTests() {
                     ),
                     PriorNotificationState.PENDING_SEND,
                 ),
-
                 // "10001" -> "10101"
                 TestCase(
                     "00000000-0000-4000-0000-000000000002",
@@ -310,7 +297,6 @@ class VerifyAndSendPriorNotificationITests : AbstractDBTests() {
                     ),
                     PriorNotificationState.PENDING_SEND,
                 ),
-
                 // "10010" -> "10101"
                 TestCase(
                     "00000000-0000-4000-0000-000000000003",
@@ -331,7 +317,6 @@ class VerifyAndSendPriorNotificationITests : AbstractDBTests() {
                     ),
                     PriorNotificationState.PENDING_SEND,
                 ),
-
                 // "10100" -> "10101"
                 TestCase(
                     "00000000-0000-4000-0000-000000000004",
@@ -352,7 +337,6 @@ class VerifyAndSendPriorNotificationITests : AbstractDBTests() {
                     ),
                     PriorNotificationState.PENDING_SEND,
                 ),
-
                 // "10101" -> "10101"
                 TestCase(
                     "00000000-0000-4000-0000-000000000005",
@@ -373,7 +357,6 @@ class VerifyAndSendPriorNotificationITests : AbstractDBTests() {
                     ),
                     PriorNotificationState.PENDING_SEND,
                 ),
-
                 // "10110" -> "10101"
                 TestCase(
                     "00000000-0000-4000-0000-000000000006",
@@ -394,7 +377,6 @@ class VerifyAndSendPriorNotificationITests : AbstractDBTests() {
                     ),
                     PriorNotificationState.PENDING_SEND,
                 ),
-
                 // "11000" -> "11101"
                 TestCase(
                     "00000000-0000-4000-0000-000000000007",
@@ -415,7 +397,6 @@ class VerifyAndSendPriorNotificationITests : AbstractDBTests() {
                     ),
                     PriorNotificationState.PENDING_SEND,
                 ),
-
                 // "11100" -> "11101"
                 TestCase(
                     "00000000-0000-4000-0000-000000000008",
@@ -436,7 +417,6 @@ class VerifyAndSendPriorNotificationITests : AbstractDBTests() {
                     ),
                     PriorNotificationState.PENDING_SEND,
                 ),
-
                 // "11101" -> "11101"
                 TestCase(
                     "00000000-0000-4000-0000-000000000009",
@@ -457,7 +437,6 @@ class VerifyAndSendPriorNotificationITests : AbstractDBTests() {
                     ),
                     PriorNotificationState.PENDING_SEND,
                 ),
-
                 // "11110" -> "11101"
                 TestCase(
                     "00000000-0000-4000-0000-000000000010",

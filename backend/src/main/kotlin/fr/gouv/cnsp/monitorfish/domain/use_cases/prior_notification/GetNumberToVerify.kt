@@ -23,22 +23,25 @@ class GetNumberToVerify(
         val manualPriorNotifications = manualPriorNotificationRepository.findAllToVerify()
         val incompletePriorNotifications = automaticPriorNotifications + manualPriorNotifications
 
-        val undeletedPriorNotifications = incompletePriorNotifications
-            .filter { !it.logbookMessageAndValue.logbookMessage.isDeleted }
+        val undeletedPriorNotifications =
+            incompletePriorNotifications
+                .filter { !it.logbookMessageAndValue.logbookMessage.isDeleted }
 
-        val priorNotifications = undeletedPriorNotifications
-            .map { priorNotification ->
-                priorNotification.enrich(allRiskFactors, allPorts, priorNotification.isManuallyCreated)
+        val priorNotifications =
+            undeletedPriorNotifications
+                .map { priorNotification ->
+                    priorNotification.enrich(allRiskFactors, allPorts, priorNotification.isManuallyCreated)
 
-                priorNotification
-            }
+                    priorNotification
+                }
 
         return PriorNotificationStats(
-            perSeafrontGroupCount = SeafrontGroup.entries.associateWith { seafrontGroupEntry ->
-                priorNotifications.count { priorNotification ->
-                    seafrontGroupEntry.hasSeafront(priorNotification.seafront)
-                }
-            },
+            perSeafrontGroupCount =
+                SeafrontGroup.entries.associateWith { seafrontGroupEntry ->
+                    priorNotifications.count { priorNotification ->
+                        seafrontGroupEntry.hasSeafront(priorNotification.seafront)
+                    }
+                },
         )
     }
 }

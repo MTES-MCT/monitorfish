@@ -8,17 +8,18 @@ class CurrentAndArchivedReportingDataOutput(
     val archived: Map<Year, List<ReportingAndOccurrencesDataOutput>>,
 ) {
     companion object {
-        fun fromCurrentAndArchivedReporting(
-            currentAndArchivedReportings: CurrentAndArchivedReportings,
-        ) = CurrentAndArchivedReportingDataOutput(
-            current = currentAndArchivedReportings.current.map {
-                ReportingAndOccurrencesDataOutput.fromReportingAndOccurrences(it)
-            },
-            archived = currentAndArchivedReportings.archived.mapValues { (_, reportingAndOccurrences) ->
-                reportingAndOccurrences.map {
-                    ReportingAndOccurrencesDataOutput.fromReportingAndOccurrences(it)
-                }
-            },
-        )
+        fun fromCurrentAndArchivedReporting(currentAndArchivedReportings: CurrentAndArchivedReportings) =
+            CurrentAndArchivedReportingDataOutput(
+                current =
+                    currentAndArchivedReportings.current.map {
+                        ReportingAndOccurrencesDataOutput.fromReportingAndOccurrences(it)
+                    },
+                archived =
+                    currentAndArchivedReportings.archived.mapValues { (_, reportingAndOccurrences) ->
+                        reportingAndOccurrences.map {
+                            ReportingAndOccurrencesDataOutput.fromReportingAndOccurrences(it)
+                        }
+                    },
+            )
     }
 }

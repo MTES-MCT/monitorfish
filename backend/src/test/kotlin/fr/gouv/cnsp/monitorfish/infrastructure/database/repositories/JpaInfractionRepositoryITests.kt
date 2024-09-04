@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.transaction.annotation.Transactional
 
 class JpaInfractionRepositoryITests : AbstractDBTests() {
-
     @Autowired
     private lateinit var jpaInfractionRepository: JpaInfractionRepository
 
@@ -31,9 +30,10 @@ class JpaInfractionRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findInfractionByNatinfCode Should throw an exception When the natinf code is not found`() {
         // When
-        val throwable = catchThrowable {
-            jpaInfractionRepository.findInfractionByNatinfCode(666)
-        }
+        val throwable =
+            catchThrowable {
+                jpaInfractionRepository.findInfractionByNatinfCode(666)
+            }
 
         // Then
         assertThat(throwable.message).contains("NATINF code 666 not found")

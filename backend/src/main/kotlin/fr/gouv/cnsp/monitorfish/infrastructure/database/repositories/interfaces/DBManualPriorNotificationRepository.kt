@@ -23,7 +23,7 @@ interface DBManualPriorNotificationRepository : JpaRepository<ManualPriorNotific
                     -- This filter helps Timescale optimize the query since `created_at` is indexed
                     mpn.created_at
                         BETWEEN CAST(:willArriveAfter AS TIMESTAMP) - INTERVAL '48 hours'
-                        AND CAST(:willArriveBefore AS TIMESTAMP) + INTERVAL '48 hours'
+                        AND CAST(:willArriveBefore AS TIMESTAMP) + INTERVAL '168 hours'
 
                     -- Flag States
                     AND (:flagStates IS NULL OR mpn.flag_state IN (:flagStates))

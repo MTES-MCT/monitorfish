@@ -58,21 +58,22 @@ class GetPriorNotificationUTests {
             .willReturn(fakePriorNotification)
 
         // When
-        val result = GetPriorNotification(
-            gearRepository,
-            logbookRawMessageRepository,
-            logbookReportRepository,
-            manualPriorNotificationRepository,
-            portRepository,
-            reportingRepository,
-            riskFactorRepository,
-            speciesRepository,
-            vesselRepository,
-        ).execute(
-            fakePriorNotification.reportId!!,
-            fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
-            false,
-        )
+        val result =
+            GetPriorNotification(
+                gearRepository,
+                logbookRawMessageRepository,
+                logbookReportRepository,
+                manualPriorNotificationRepository,
+                portRepository,
+                reportingRepository,
+                riskFactorRepository,
+                speciesRepository,
+                vesselRepository,
+            ).execute(
+                fakePriorNotification.reportId!!,
+                fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
+                false,
+            )
 
         // Then
         assertThat(result.logbookMessageAndValue.logbookMessage.reportId)
@@ -83,28 +84,31 @@ class GetPriorNotificationUTests {
     @Test
     fun `execute Should return a prior notification with a corrected logbook report operation`() {
         val fakeLogbookMessageReferenceReportId = "FAKE_REPORT_ID_1"
-        val fakePriorNotification = PriorNotificationFaker.fakePriorNotification().copy(
-            reportId = null,
-            logbookMessageAndValue = LogbookMessageAndValue(
-                clazz = PNO::class.java,
-                logbookMessage = LogbookMessage(
-                    id = 2,
-                    reportId = null,
-                    referencedReportId = fakeLogbookMessageReferenceReportId,
-                    isDeleted = false,
-                    integrationDateTime = ZonedDateTime.now(),
-                    isCorrectedByNewerMessage = true,
-                    isEnriched = true,
-                    message = PNO(),
-                    messageType = "PNO",
-                    operationDateTime = ZonedDateTime.now(),
-                    operationNumber = "2",
-                    operationType = LogbookOperationType.COR,
-                    reportDateTime = ZonedDateTime.now(),
-                    transmissionFormat = LogbookTransmissionFormat.ERS,
-                ),
-            ),
-        )
+        val fakePriorNotification =
+            PriorNotificationFaker.fakePriorNotification().copy(
+                reportId = null,
+                logbookMessageAndValue =
+                    LogbookMessageAndValue(
+                        clazz = PNO::class.java,
+                        logbookMessage =
+                            LogbookMessage(
+                                id = 2,
+                                reportId = null,
+                                referencedReportId = fakeLogbookMessageReferenceReportId,
+                                isDeleted = false,
+                                integrationDateTime = ZonedDateTime.now(),
+                                isCorrectedByNewerMessage = true,
+                                isEnriched = true,
+                                message = PNO(),
+                                messageType = "PNO",
+                                operationDateTime = ZonedDateTime.now(),
+                                operationNumber = "2",
+                                operationType = LogbookOperationType.COR,
+                                reportDateTime = ZonedDateTime.now(),
+                                transmissionFormat = LogbookTransmissionFormat.ERS,
+                            ),
+                    ),
+            )
 
         // Given
         given(
@@ -116,21 +120,22 @@ class GetPriorNotificationUTests {
             .willReturn(fakePriorNotification)
 
         // When
-        val result = GetPriorNotification(
-            gearRepository,
-            logbookRawMessageRepository,
-            logbookReportRepository,
-            manualPriorNotificationRepository,
-            portRepository,
-            reportingRepository,
-            riskFactorRepository,
-            speciesRepository,
-            vesselRepository,
-        ).execute(
-            fakeLogbookMessageReferenceReportId,
-            fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
-            false,
-        )
+        val result =
+            GetPriorNotification(
+                gearRepository,
+                logbookRawMessageRepository,
+                logbookReportRepository,
+                manualPriorNotificationRepository,
+                portRepository,
+                reportingRepository,
+                riskFactorRepository,
+                speciesRepository,
+                vesselRepository,
+            ).execute(
+                fakeLogbookMessageReferenceReportId,
+                fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
+                false,
+            )
 
         // Then
         assertThat(result.reportId).isNull()

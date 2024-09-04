@@ -14,5 +14,7 @@ interface DBRiskFactorRepository : JpaRepository<RiskFactorsEntity, Int> {
 
     // Only used in tests
     @Query(value = "SELECT * FROM risk_factors WHERE cfr = :cfr LIMIT 1", nativeQuery = true)
-    fun findFirstByCfr(@Param("cfr") cfr: String): RiskFactorsEntity?
+    fun findFirstByCfr(
+        @Param("cfr") cfr: String,
+    ): RiskFactorsEntity?
 }

@@ -18,7 +18,6 @@ class JpaLastPositionRepository(
     private val dbLastPositionRepository: DBLastPositionRepository,
     private val mapper: ObjectMapper,
 ) : LastPositionRepository {
-
     @Cacheable(value = ["vessels_all_position"])
     override fun findAll(): List<LastPosition> {
         return dbLastPositionRepository.findAll()

@@ -19,7 +19,6 @@ import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class SilenceAlertUTests {
-
     @MockBean
     private lateinit var silencedAlertRepository: SilencedAlertRepository
 
@@ -27,16 +26,17 @@ class SilenceAlertUTests {
     fun `execute Should silence an alert`() {
         // Given
         val now = ZonedDateTime.now()
-        val alertToSilence = SilencedAlert(
-            internalReferenceNumber = "FRFGRGR",
-            externalReferenceNumber = "RGD",
-            ircs = "6554fEE",
-            vesselId = 123,
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            flagState = CountryCode.FR,
-            value = ThreeMilesTrawlingAlert(),
-            silencedBeforeDate = now.plusDays(25),
-        )
+        val alertToSilence =
+            SilencedAlert(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselId = 123,
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                value = ThreeMilesTrawlingAlert(),
+                silencedBeforeDate = now.plusDays(25),
+            )
         given(silencedAlertRepository.save(any())).willReturn(alertToSilence)
 
         // When
@@ -57,16 +57,17 @@ class SilenceAlertUTests {
     fun `execute Should silence two alert When a MISSING_FAR_ALERT is silenced`() {
         // Given
         val now = ZonedDateTime.now()
-        val alertToSilence = SilencedAlert(
-            internalReferenceNumber = "FRFGRGR",
-            externalReferenceNumber = "RGD",
-            ircs = "6554fEE",
-            vesselId = 123,
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            flagState = CountryCode.FR,
-            value = MissingFARAlert(),
-            silencedBeforeDate = now.plusDays(25),
-        )
+        val alertToSilence =
+            SilencedAlert(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselId = 123,
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                value = MissingFARAlert(),
+                silencedBeforeDate = now.plusDays(25),
+            )
         given(silencedAlertRepository.save(any())).willReturn(alertToSilence)
 
         // When
@@ -92,16 +93,17 @@ class SilenceAlertUTests {
     fun `execute Should silence two alert When a MISSING_FAR_48_HOURS_ALERT is silenced`() {
         // Given
         val now = ZonedDateTime.now()
-        val alertToSilence = SilencedAlert(
-            internalReferenceNumber = "FRFGRGR",
-            externalReferenceNumber = "RGD",
-            ircs = "6554fEE",
-            vesselId = 123,
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            flagState = CountryCode.FR,
-            value = MissingFAR48HoursAlert(),
-            silencedBeforeDate = now.plusDays(25),
-        )
+        val alertToSilence =
+            SilencedAlert(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselId = 123,
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                value = MissingFAR48HoursAlert(),
+                silencedBeforeDate = now.plusDays(25),
+            )
         given(silencedAlertRepository.save(any())).willReturn(alertToSilence)
 
         // When

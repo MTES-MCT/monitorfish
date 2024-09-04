@@ -44,11 +44,12 @@ class ComputeRiskFactorUTests {
         given(controlObjectivesRepository.findAllByYear(anyInt())).willReturn(listOf())
 
         // When
-        val result = ComputeRiskFactor(riskFactorRepository, portRepository, controlObjectivesRepository, FIXED_CLOCK).execute(
-            portLocode,
-            fleetSegments,
-            vesselCfr,
-        )
+        val result =
+            ComputeRiskFactor(riskFactorRepository, portRepository, controlObjectivesRepository, FIXED_CLOCK).execute(
+                portLocode,
+                fleetSegments,
+                vesselCfr,
+            )
 
         // Then
         assertThat(result).isEqualTo(
@@ -63,26 +64,27 @@ class ComputeRiskFactorUTests {
     fun `execute Should use highest impact risk factor When multiple fleet segments are given`() {
         // Given
         val portLocode = "LOCODE"
-        val fleetSegments = listOf(
-            FleetSegment(
-                segment = "NWW01",
-                segmentName = "A segment",
-                impactRiskFactor = 0.5,
-                year = 2024,
-                gears = listOf(),
-                faoAreas = listOf(),
-                targetSpecies = listOf(),
-            ),
-            FleetSegment(
-                segment = "SW85",
-                segmentName = "Another segment",
-                impactRiskFactor = 1.5,
-                year = 2024,
-                gears = listOf(),
-                faoAreas = listOf(),
-                targetSpecies = listOf(),
-            ),
-        )
+        val fleetSegments =
+            listOf(
+                FleetSegment(
+                    segment = "NWW01",
+                    segmentName = "A segment",
+                    impactRiskFactor = 0.5,
+                    year = 2024,
+                    gears = listOf(),
+                    faoAreas = listOf(),
+                    targetSpecies = listOf(),
+                ),
+                FleetSegment(
+                    segment = "SW85",
+                    segmentName = "Another segment",
+                    impactRiskFactor = 1.5,
+                    year = 2024,
+                    gears = listOf(),
+                    faoAreas = listOf(),
+                    targetSpecies = listOf(),
+                ),
+            )
         val vesselCfr = "CFR"
         val port = Port(locode = portLocode, name = "Port name", facade = "")
         given(portRepository.findByLocode(portLocode)).willReturn(port)
@@ -90,11 +92,12 @@ class ComputeRiskFactorUTests {
         given(controlObjectivesRepository.findAllByYear(anyInt())).willReturn(listOf())
 
         // When
-        val result = ComputeRiskFactor(riskFactorRepository, portRepository, controlObjectivesRepository, FIXED_CLOCK).execute(
-            portLocode,
-            fleetSegments,
-            vesselCfr,
-        )
+        val result =
+            ComputeRiskFactor(riskFactorRepository, portRepository, controlObjectivesRepository, FIXED_CLOCK).execute(
+                portLocode,
+                fleetSegments,
+                vesselCfr,
+            )
 
         // Then
         assertThat(result).isEqualTo(
@@ -109,17 +112,18 @@ class ComputeRiskFactorUTests {
     fun `execute Should use stored risk factors When available`() {
         // Given
         val portLocode = "LOCODE"
-        val fleetSegments = listOf(
-            FleetSegment(
-                segment = "NWW01",
-                segmentName = "A segment",
-                impactRiskFactor = 0.5,
-                year = 2024,
-                gears = listOf(),
-                faoAreas = listOf(),
-                targetSpecies = listOf(),
-            ),
-        )
+        val fleetSegments =
+            listOf(
+                FleetSegment(
+                    segment = "NWW01",
+                    segmentName = "A segment",
+                    impactRiskFactor = 0.5,
+                    year = 2024,
+                    gears = listOf(),
+                    faoAreas = listOf(),
+                    targetSpecies = listOf(),
+                ),
+            )
         val vesselCfr = "CFR"
         val port = Port(locode = portLocode, name = "Port name", facade = "")
         val storedRiskFactor = VesselRiskFactor(probabilityRiskFactor = 0.6, controlRateRiskFactor = 0.7)
@@ -128,11 +132,12 @@ class ComputeRiskFactorUTests {
         given(controlObjectivesRepository.findAllByYear(anyInt())).willReturn(listOf())
 
         // When
-        val result = ComputeRiskFactor(riskFactorRepository, portRepository, controlObjectivesRepository, FIXED_CLOCK).execute(
-            portLocode,
-            fleetSegments,
-            vesselCfr,
-        )
+        val result =
+            ComputeRiskFactor(riskFactorRepository, portRepository, controlObjectivesRepository, FIXED_CLOCK).execute(
+                portLocode,
+                fleetSegments,
+                vesselCfr,
+            )
 
         // Then
         assertThat(result).isEqualTo(
@@ -147,55 +152,58 @@ class ComputeRiskFactorUTests {
     fun `execute Should use highest control priority level When control objectives are available`() {
         // Given
         val portLocode = "LOCODE"
-        val fleetSegments = listOf(
-            FleetSegment(
-                segment = "NWW01",
-                segmentName = "A segment",
-                impactRiskFactor = 0.5,
-                year = 2024,
-                gears = listOf(),
-                faoAreas = listOf(),
-                targetSpecies = listOf(),
-            ),
-        )
+        val fleetSegments =
+            listOf(
+                FleetSegment(
+                    segment = "NWW01",
+                    segmentName = "A segment",
+                    impactRiskFactor = 0.5,
+                    year = 2024,
+                    gears = listOf(),
+                    faoAreas = listOf(),
+                    targetSpecies = listOf(),
+                ),
+            )
         val vesselCfr = "CFR"
-        val controlObjectives = listOf(
-            ControlObjective(
-                facade = "MED",
-                segment = "NWW01",
-                year = ZonedDateTime.now(FIXED_CLOCK).year,
-                controlPriorityLevel = 1.2,
-                targetNumberOfControlsAtSea = 1,
-                targetNumberOfControlsAtPort = 2,
-            ),
-            ControlObjective(
-                facade = "MEMN",
-                segment = "DF23",
-                year = ZonedDateTime.now(FIXED_CLOCK).year,
-                controlPriorityLevel = 1.5,
-                targetNumberOfControlsAtSea = 1,
-                targetNumberOfControlsAtPort = 2,
-            ),
-            ControlObjective(
-                facade = "MED",
-                segment = "NWW01",
-                year = 2021,
-                controlPriorityLevel = 1.2,
-                targetNumberOfControlsAtSea = 1,
-                targetNumberOfControlsAtPort = 2,
-            ),
-        )
+        val controlObjectives =
+            listOf(
+                ControlObjective(
+                    facade = "MED",
+                    segment = "NWW01",
+                    year = ZonedDateTime.now(FIXED_CLOCK).year,
+                    controlPriorityLevel = 1.2,
+                    targetNumberOfControlsAtSea = 1,
+                    targetNumberOfControlsAtPort = 2,
+                ),
+                ControlObjective(
+                    facade = "MEMN",
+                    segment = "DF23",
+                    year = ZonedDateTime.now(FIXED_CLOCK).year,
+                    controlPriorityLevel = 1.5,
+                    targetNumberOfControlsAtSea = 1,
+                    targetNumberOfControlsAtPort = 2,
+                ),
+                ControlObjective(
+                    facade = "MED",
+                    segment = "NWW01",
+                    year = 2021,
+                    controlPriorityLevel = 1.2,
+                    targetNumberOfControlsAtSea = 1,
+                    targetNumberOfControlsAtPort = 2,
+                ),
+            )
         val port = Port(locode = portLocode, name = "Port name", facade = "MED")
         given(portRepository.findByLocode(portLocode)).willReturn(port)
         given(riskFactorRepository.findByInternalReferenceNumber(vesselCfr)).willReturn(null)
         given(controlObjectivesRepository.findAllByYear(anyInt())).willReturn(controlObjectives)
 
         // When
-        val result = ComputeRiskFactor(riskFactorRepository, portRepository, controlObjectivesRepository, FIXED_CLOCK).execute(
-            portLocode,
-            fleetSegments,
-            vesselCfr,
-        )
+        val result =
+            ComputeRiskFactor(riskFactorRepository, portRepository, controlObjectivesRepository, FIXED_CLOCK).execute(
+                portLocode,
+                fleetSegments,
+                vesselCfr,
+            )
 
         // Then
         assertThat(result).isEqualTo(
@@ -210,57 +218,60 @@ class ComputeRiskFactorUTests {
     fun `execute Should return correct risk factor When all factors are combined`() {
         // Given
         val portLocode = "LOCODE"
-        val fleetSegments = listOf(
-            FleetSegment(
-                segment = "NWW01",
-                segmentName = "A segment",
-                impactRiskFactor = 0.5,
-                year = 2024,
-                gears = listOf(),
-                faoAreas = listOf(),
-                targetSpecies = listOf(),
-            ),
-            FleetSegment(
-                segment = "NWW02",
-                segmentName = "Another segment",
-                impactRiskFactor = 2.5,
-                year = 2024,
-                gears = listOf(),
-                faoAreas = listOf(),
-                targetSpecies = listOf(),
-            ),
-        )
+        val fleetSegments =
+            listOf(
+                FleetSegment(
+                    segment = "NWW01",
+                    segmentName = "A segment",
+                    impactRiskFactor = 0.5,
+                    year = 2024,
+                    gears = listOf(),
+                    faoAreas = listOf(),
+                    targetSpecies = listOf(),
+                ),
+                FleetSegment(
+                    segment = "NWW02",
+                    segmentName = "Another segment",
+                    impactRiskFactor = 2.5,
+                    year = 2024,
+                    gears = listOf(),
+                    faoAreas = listOf(),
+                    targetSpecies = listOf(),
+                ),
+            )
         val vesselCfr = "CFR"
         val storedRiskFactor = VesselRiskFactor(probabilityRiskFactor = 0.6, controlRateRiskFactor = 0.7)
-        val controlObjectives = listOf(
-            ControlObjective(
-                facade = "MED",
-                segment = "NWW01",
-                year = ZonedDateTime.now(FIXED_CLOCK).year,
-                controlPriorityLevel = 1.2,
-                targetNumberOfControlsAtSea = 1,
-                targetNumberOfControlsAtPort = 2,
-            ),
-            ControlObjective(
-                facade = "MEMN",
-                segment = "DF23",
-                year = ZonedDateTime.now(FIXED_CLOCK).year,
-                controlPriorityLevel = 1.5,
-                targetNumberOfControlsAtSea = 1,
-                targetNumberOfControlsAtPort = 2,
-            ),
-        )
+        val controlObjectives =
+            listOf(
+                ControlObjective(
+                    facade = "MED",
+                    segment = "NWW01",
+                    year = ZonedDateTime.now(FIXED_CLOCK).year,
+                    controlPriorityLevel = 1.2,
+                    targetNumberOfControlsAtSea = 1,
+                    targetNumberOfControlsAtPort = 2,
+                ),
+                ControlObjective(
+                    facade = "MEMN",
+                    segment = "DF23",
+                    year = ZonedDateTime.now(FIXED_CLOCK).year,
+                    controlPriorityLevel = 1.5,
+                    targetNumberOfControlsAtSea = 1,
+                    targetNumberOfControlsAtPort = 2,
+                ),
+            )
         val port = Port(locode = portLocode, name = "Port name", facade = "MED")
         given(portRepository.findByLocode(portLocode)).willReturn(port)
         given(riskFactorRepository.findByInternalReferenceNumber(vesselCfr)).willReturn(storedRiskFactor)
         given(controlObjectivesRepository.findAllByYear(anyInt())).willReturn(controlObjectives)
 
         // When
-        val result = ComputeRiskFactor(riskFactorRepository, portRepository, controlObjectivesRepository, FIXED_CLOCK).execute(
-            portLocode,
-            fleetSegments,
-            vesselCfr,
-        )
+        val result =
+            ComputeRiskFactor(riskFactorRepository, portRepository, controlObjectivesRepository, FIXED_CLOCK).execute(
+                portLocode,
+                fleetSegments,
+                vesselCfr,
+            )
 
         // Then
         assertThat(result).isEqualTo(

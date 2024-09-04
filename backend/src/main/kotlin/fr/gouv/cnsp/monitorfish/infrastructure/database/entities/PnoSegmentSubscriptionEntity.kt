@@ -6,7 +6,6 @@ import java.io.Serializable
 @Embeddable
 class PnoSegmentSubscriptionId(
     val controlUnitId: Int,
-
     @Column(name = "segment", updatable = false)
     val segmentCode: String,
 ) : Serializable

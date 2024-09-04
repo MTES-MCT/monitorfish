@@ -14,16 +14,16 @@ import org.springframework.context.annotation.Import
 @Import(MapperConfiguration::class)
 @JsonTest
 class ReportingMapperUTests {
-
     @Autowired
     private lateinit var mapper: ObjectMapper
 
     @Test
     fun `getReportingValueFromJSON Should throw an exception When the message value is null`() {
         // When
-        val throwable = catchThrowable {
-            ReportingMapper.getReportingValueFromJSON(mapper, "null", ReportingType.ALERT)
-        }
+        val throwable =
+            catchThrowable {
+                ReportingMapper.getReportingValueFromJSON(mapper, "null", ReportingType.ALERT)
+            }
 
         // Then
         assertThat(throwable).isNotNull
@@ -63,15 +63,16 @@ class ReportingMapperUTests {
     @Test
     fun `readValue Should deserialize an OBSERVATION json`() {
         // Given
-        val observation = "{" +
-            "\"type\": \"OBSERVATION\"," +
-            "\"reportingActor\": \"OPS\"," +
-            "\"unit\": null, " +
-            "\"authorTrigram\": \"LTH\"," +
-            "\"authorContact\": null," +
-            "\"title\": \"A title !\"," +
-            "\"description\": \"A description !\"" +
-            "}"
+        val observation =
+            "{" +
+                "\"type\": \"OBSERVATION\"," +
+                "\"reportingActor\": \"OPS\"," +
+                "\"unit\": null, " +
+                "\"authorTrigram\": \"LTH\"," +
+                "\"authorContact\": null," +
+                "\"title\": \"A title !\"," +
+                "\"description\": \"A description !\"" +
+                "}"
 
         val parsedReporting = mapper.readValue(observation, InfractionSuspicionOrObservationType::class.java)
 
@@ -89,24 +90,26 @@ class ReportingMapperUTests {
     @Test
     fun `getReportingValueFromJSON Should deserialize an INFRACTION_SUSPICION When a legacy flagState property is found`() {
         // Given
-        val infraction = "{" +
-            "\"type\": \"INFRACTION_SUSPICION\"," +
-            "\"reportingActor\": \"OPS\"," +
-            "\"unit\": null, " +
-            "\"authorTrigram\": \"LTH\"," +
-            "\"authorContact\": null," +
-            "\"title\": \"A title !\"," +
-            "\"flagState\": \"FR\"," +
-            "\"description\": \"A description !\"," +
-            "\"natinfCode\": 1234," +
-            "\"dml\": \"DML 56\"" +
-            "}"
+        val infraction =
+            "{" +
+                "\"type\": \"INFRACTION_SUSPICION\"," +
+                "\"reportingActor\": \"OPS\"," +
+                "\"unit\": null, " +
+                "\"authorTrigram\": \"LTH\"," +
+                "\"authorContact\": null," +
+                "\"title\": \"A title !\"," +
+                "\"flagState\": \"FR\"," +
+                "\"description\": \"A description !\"," +
+                "\"natinfCode\": 1234," +
+                "\"dml\": \"DML 56\"" +
+                "}"
 
-        val parsedReporting = ReportingMapper.getReportingValueFromJSON(
-            mapper,
-            infraction,
-            ReportingType.INFRACTION_SUSPICION,
-        )
+        val parsedReporting =
+            ReportingMapper.getReportingValueFromJSON(
+                mapper,
+                infraction,
+                ReportingType.INFRACTION_SUSPICION,
+            )
 
         // Then
         assertThat(parsedReporting).isInstanceOf(InfractionSuspicion::class.java)
@@ -124,17 +127,18 @@ class ReportingMapperUTests {
     @Test
     fun `readValue Should deserialize an INFRACTION_SUSPICION`() {
         // Given
-        val infraction = "{" +
-            "\"type\": \"INFRACTION_SUSPICION\"," +
-            "\"reportingActor\": \"OPS\"," +
-            "\"unit\": null, " +
-            "\"authorTrigram\": \"LTH\"," +
-            "\"authorContact\": null," +
-            "\"title\": \"A title !\"," +
-            "\"description\": \"A description !\"," +
-            "\"natinfCode\": 1234," +
-            "\"dml\": \"DML 56\"" +
-            "}"
+        val infraction =
+            "{" +
+                "\"type\": \"INFRACTION_SUSPICION\"," +
+                "\"reportingActor\": \"OPS\"," +
+                "\"unit\": null, " +
+                "\"authorTrigram\": \"LTH\"," +
+                "\"authorContact\": null," +
+                "\"title\": \"A title !\"," +
+                "\"description\": \"A description !\"," +
+                "\"natinfCode\": 1234," +
+                "\"dml\": \"DML 56\"" +
+                "}"
 
         val parsedReporting = mapper.readValue(infraction, InfractionSuspicionOrObservationType::class.java)
 

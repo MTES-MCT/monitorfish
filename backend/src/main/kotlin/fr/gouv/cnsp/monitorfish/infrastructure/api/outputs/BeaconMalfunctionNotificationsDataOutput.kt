@@ -18,8 +18,9 @@ data class BeaconMalfunctionNotificationsDataOutput(
                 beaconMalfunctionId = beaconMalfunctionNotifications.beaconMalfunctionId,
                 dateTime = beaconMalfunctionNotifications.dateTimeUtc,
                 notificationType = beaconMalfunctionNotifications.notificationType,
-                notifications = beaconMalfunctionNotifications.notifications
-                    .map { BeaconMalfunctionNotificationDataOutput.fromBeaconMalfunctionNotification(it) },
+                notifications =
+                    beaconMalfunctionNotifications.notifications
+                        .map { BeaconMalfunctionNotificationDataOutput.fromBeaconMalfunctionNotification(it) },
             )
     }
 }

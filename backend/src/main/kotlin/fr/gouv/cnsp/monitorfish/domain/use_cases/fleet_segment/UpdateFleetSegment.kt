@@ -9,7 +9,11 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.CreateOrUpdateFleetSegment
 @UseCase
 class UpdateFleetSegment(private val fleetSegmentRepository: FleetSegmentRepository) {
     @Throws(CouldNotUpdateFleetSegmentException::class, IllegalArgumentException::class)
-    fun execute(segment: String, fields: CreateOrUpdateFleetSegmentFields, year: Int): FleetSegment {
+    fun execute(
+        segment: String,
+        fields: CreateOrUpdateFleetSegmentFields,
+        year: Int,
+    ): FleetSegment {
         require(
             fields.segment != null ||
                 fields.bycatchSpecies != null ||

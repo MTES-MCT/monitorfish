@@ -16,7 +16,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
 class ComputeVesselFaoAreasUTests {
-
     @MockBean
     private lateinit var riskFactorRepository: RiskFactorRepository
 
@@ -36,8 +35,9 @@ class ComputeVesselFaoAreasUTests {
         )
 
         // When
-        val faoAreas = ComputeVesselFaoAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
-            .execute(null, 12.5, 45.1, null)
+        val faoAreas =
+            ComputeVesselFaoAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
+                .execute(null, 12.5, 45.1, null)
 
         // Then
         assertThat(faoAreas).isEqualTo(listOf("27.8.c", "27.8"))
@@ -46,8 +46,9 @@ class ComputeVesselFaoAreasUTests {
     @Test
     fun `execute Should return no fao area When a coordinate parameter is null`() {
         // When
-        val faoAreas = ComputeVesselFaoAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
-            .execute(null, null, 45.1, null)
+        val faoAreas =
+            ComputeVesselFaoAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
+                .execute(null, null, 45.1, null)
 
         // Then
         assertThat(faoAreas).isEmpty()
@@ -65,8 +66,9 @@ class ComputeVesselFaoAreasUTests {
         )
 
         // When
-        val faoAreas = ComputeVesselFaoAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
-            .execute("DUMMY_CFR", 12.5, 45.1, null)
+        val faoAreas =
+            ComputeVesselFaoAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
+                .execute("DUMMY_CFR", 12.5, 45.1, null)
 
         // Then
         assertThat(faoAreas).isEqualTo(listOf("27.8.c", "27.8"))
@@ -84,8 +86,9 @@ class ComputeVesselFaoAreasUTests {
         )
 
         // When
-        val faoAreas = ComputeVesselFaoAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
-            .execute("DUMMY_CFR", 12.5, 45.1, null)
+        val faoAreas =
+            ComputeVesselFaoAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
+                .execute("DUMMY_CFR", 12.5, 45.1, null)
 
         // Then
         assertThat(faoAreas).isEqualTo(listOf("27.8.c", "27.8"))
@@ -97,8 +100,9 @@ class ComputeVesselFaoAreasUTests {
             .willReturn(VesselRiskFactor(speciesOnboard = listOf(Species(faoZone = "27.8.c"))))
 
         // When
-        val faoAreas = ComputeVesselFaoAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
-            .execute("DUMMY_CFR", 12.5, 45.1, null)
+        val faoAreas =
+            ComputeVesselFaoAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
+                .execute("DUMMY_CFR", 12.5, 45.1, null)
 
         // Then
         assertThat(faoAreas).isEqualTo(listOf("27.8.c"))
@@ -111,8 +115,9 @@ class ComputeVesselFaoAreasUTests {
         )
 
         // When
-        val faoAreas = ComputeVesselFaoAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
-            .execute(null, null, null, "AEFAT")
+        val faoAreas =
+            ComputeVesselFaoAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
+                .execute(null, null, null, "AEFAT")
 
         // Then
         assertThat(faoAreas).isEqualTo(listOf("27.8.c", "27.8"))
@@ -125,8 +130,9 @@ class ComputeVesselFaoAreasUTests {
         )
 
         // When
-        val faoAreas = ComputeVesselFaoAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
-            .execute("DUMMY_CFR", null, null, "AEFAT")
+        val faoAreas =
+            ComputeVesselFaoAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
+                .execute("DUMMY_CFR", null, null, "AEFAT")
 
         // Then
         assertThat(faoAreas).isEqualTo(listOf("27.8.c", "27.8"))

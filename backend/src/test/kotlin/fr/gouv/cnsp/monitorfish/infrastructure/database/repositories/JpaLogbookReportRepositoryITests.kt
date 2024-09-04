@@ -542,22 +542,24 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports from ESP & FRA vessels`() {
         // Given
-        val filter = PriorNotificationsFilter(
-            flagStates = listOf("ESP", "FRA"),
-            willArriveAfter = "2000-01-01T00:00:00Z",
-            willArriveBefore = "2100-01-01T00:00:00Z",
-        )
+        val filter =
+            PriorNotificationsFilter(
+                flagStates = listOf("ESP", "FRA"),
+                willArriveAfter = "2000-01-01T00:00:00Z",
+                willArriveBefore = "2100-01-01T00:00:00Z",
+            )
 
         // When
         val result = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(filter)
 
         // Then
         assertThat(result).hasSizeGreaterThan(0)
-        val resultVessels = result.mapNotNull {
-            jpaVesselRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
-            )
-        }
+        val resultVessels =
+            result.mapNotNull {
+                jpaVesselRepository.findFirstByInternalReferenceNumber(
+                    it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
+                )
+            }
         assertThat(resultVessels).hasSize(result.size)
         assertThat(resultVessels.all { listOf(CountryCode.ES, CountryCode.FR).contains(it.flagState) }).isTrue()
     }
@@ -568,11 +570,12 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val expectedLogbookReportIdsWithOneOrMoreReportings = listOf(102L, 104L)
 
         // Given
-        val firstFilter = PriorNotificationsFilter(
-            hasOneOrMoreReportings = true,
-            willArriveAfter = "2000-01-01T00:00:00Z",
-            willArriveBefore = "2100-01-01T00:00:00Z",
-        )
+        val firstFilter =
+            PriorNotificationsFilter(
+                hasOneOrMoreReportings = true,
+                willArriveAfter = "2000-01-01T00:00:00Z",
+                willArriveBefore = "2100-01-01T00:00:00Z",
+            )
 
         // When
         val firstResult = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(firstFilter)
@@ -586,11 +589,12 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         ).isTrue()
 
         // Given
-        val secondFilter = PriorNotificationsFilter(
-            hasOneOrMoreReportings = false,
-            willArriveAfter = "2000-01-01T00:00:00Z",
-            willArriveBefore = "2100-01-01T00:00:00Z",
-        )
+        val secondFilter =
+            PriorNotificationsFilter(
+                hasOneOrMoreReportings = false,
+                willArriveAfter = "2000-01-01T00:00:00Z",
+                willArriveBefore = "2100-01-01T00:00:00Z",
+            )
 
         // When
         val secondResult = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(secondFilter)
@@ -608,42 +612,46 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports for less or more than 12 meters long vessels`() {
         // Given
-        val firstFilter = PriorNotificationsFilter(
-            isLessThanTwelveMetersVessel = true,
-            willArriveAfter = "2000-01-01T00:00:00Z",
-            willArriveBefore = "2100-01-01T00:00:00Z",
-        )
+        val firstFilter =
+            PriorNotificationsFilter(
+                isLessThanTwelveMetersVessel = true,
+                willArriveAfter = "2000-01-01T00:00:00Z",
+                willArriveBefore = "2100-01-01T00:00:00Z",
+            )
 
         // When
         val firstResult = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(firstFilter)
 
         // Then
         assertThat(firstResult).hasSizeGreaterThan(0)
-        val firstResultVessels = firstResult.mapNotNull {
-            jpaVesselRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
-            )
-        }
+        val firstResultVessels =
+            firstResult.mapNotNull {
+                jpaVesselRepository.findFirstByInternalReferenceNumber(
+                    it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
+                )
+            }
         assertThat(firstResultVessels).hasSize(firstResult.size)
         assertThat(firstResultVessels.all { it.length!! < 12 }).isTrue()
 
         // Given
-        val secondFilter = PriorNotificationsFilter(
-            isLessThanTwelveMetersVessel = false,
-            willArriveAfter = "2000-01-01T00:00:00Z",
-            willArriveBefore = "2100-01-01T00:00:00Z",
-        )
+        val secondFilter =
+            PriorNotificationsFilter(
+                isLessThanTwelveMetersVessel = false,
+                willArriveAfter = "2000-01-01T00:00:00Z",
+                willArriveBefore = "2100-01-01T00:00:00Z",
+            )
 
         // When
         val secondResult = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(secondFilter)
 
         // Then
         assertThat(secondResult).hasSizeGreaterThan(0)
-        val secondResultVessels = secondResult.mapNotNull {
-            jpaVesselRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
-            )
-        }
+        val secondResultVessels =
+            secondResult.mapNotNull {
+                jpaVesselRepository.findFirstByInternalReferenceNumber(
+                    it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
+                )
+            }
         assertThat(secondResultVessels).hasSize(secondResult.size)
         assertThat(secondResultVessels.all { it.length!! >= 12 }).isTrue()
     }
@@ -652,22 +660,24 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports for vessels controlled after or before January 1st, 2024`() {
         // Given
-        val firstFilter = PriorNotificationsFilter(
-            lastControlledAfter = "2024-01-01T00:00:00Z",
-            willArriveAfter = "2000-01-01T00:00:00Z",
-            willArriveBefore = "2100-01-01T00:00:00Z",
-        )
+        val firstFilter =
+            PriorNotificationsFilter(
+                lastControlledAfter = "2024-01-01T00:00:00Z",
+                willArriveAfter = "2000-01-01T00:00:00Z",
+                willArriveBefore = "2100-01-01T00:00:00Z",
+            )
 
         // When
         val firstResult = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(firstFilter)
 
         // Then
         assertThat(firstResult).hasSizeGreaterThan(0)
-        val firstResultRiskFactors = firstResult.mapNotNull {
-            jpaRiskFactorRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
-            )
-        }
+        val firstResultRiskFactors =
+            firstResult.mapNotNull {
+                jpaRiskFactorRepository.findFirstByInternalReferenceNumber(
+                    it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
+                )
+            }
         assertThat(firstResultRiskFactors).hasSize(firstResult.size)
         assertThat(
             firstResultRiskFactors.all {
@@ -676,22 +686,24 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         ).isTrue()
 
         // Given
-        val secondFilter = PriorNotificationsFilter(
-            lastControlledBefore = "2024-01-01T00:00:00Z",
-            willArriveAfter = "2000-01-01T00:00:00Z",
-            willArriveBefore = "2100-01-01T00:00:00Z",
-        )
+        val secondFilter =
+            PriorNotificationsFilter(
+                lastControlledBefore = "2024-01-01T00:00:00Z",
+                willArriveAfter = "2000-01-01T00:00:00Z",
+                willArriveBefore = "2100-01-01T00:00:00Z",
+            )
 
         // When
         val secondResult = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(secondFilter)
 
         // Then
         assertThat(secondResult).hasSizeGreaterThan(0)
-        val secondResultRiskFactors = secondResult.mapNotNull {
-            jpaRiskFactorRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
-            )
-        }
+        val secondResultRiskFactors =
+            secondResult.mapNotNull {
+                jpaRiskFactorRepository.findFirstByInternalReferenceNumber(
+                    it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
+                )
+            }
         assertThat(secondResultRiskFactors).hasSize(secondResult.size)
         assertThat(
             secondResultRiskFactors.all {
@@ -704,11 +716,12 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports for FRSML & FRVNE ports`() {
         // Given
-        val filter = PriorNotificationsFilter(
-            portLocodes = listOf("FRSML", "FRVNE"),
-            willArriveAfter = "2000-01-01T00:00:00Z",
-            willArriveBefore = "2100-01-01T00:00:00Z",
-        )
+        val filter =
+            PriorNotificationsFilter(
+                portLocodes = listOf("FRSML", "FRVNE"),
+                willArriveAfter = "2000-01-01T00:00:00Z",
+                willArriveBefore = "2100-01-01T00:00:00Z",
+            )
 
         // When
         val result = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(filter)
@@ -726,42 +739,46 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports When using a vessel name`() {
         // Given
-        val firstFilter = PriorNotificationsFilter(
-            searchQuery = "pheno",
-            willArriveAfter = "2000-01-01T00:00:00Z",
-            willArriveBefore = "2100-01-01T00:00:00Z",
-        )
+        val firstFilter =
+            PriorNotificationsFilter(
+                searchQuery = "pheno",
+                willArriveAfter = "2000-01-01T00:00:00Z",
+                willArriveBefore = "2100-01-01T00:00:00Z",
+            )
 
         // When
         val firstResult = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(firstFilter)
 
         // Then
         assertThat(firstResult).hasSizeGreaterThan(0)
-        val firstResultVessels = firstResult.mapNotNull {
-            jpaVesselRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
-            )
-        }
+        val firstResultVessels =
+            firstResult.mapNotNull {
+                jpaVesselRepository.findFirstByInternalReferenceNumber(
+                    it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
+                )
+            }
         assertThat(firstResultVessels).hasSize(firstResult.size)
         assertThat(firstResultVessels.all { it.vesselName == "PHENOMENE" }).isTrue()
 
         // Given
-        val secondFilter = PriorNotificationsFilter(
-            searchQuery = "hénO",
-            willArriveAfter = "2000-01-01T00:00:00Z",
-            willArriveBefore = "2100-01-01T00:00:00Z",
-        )
+        val secondFilter =
+            PriorNotificationsFilter(
+                searchQuery = "hénO",
+                willArriveAfter = "2000-01-01T00:00:00Z",
+                willArriveBefore = "2100-01-01T00:00:00Z",
+            )
 
         // When
         val secondResult = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(secondFilter)
 
         // Then
         assertThat(secondResult).hasSizeGreaterThan(0)
-        val secondResultVessels = secondResult.mapNotNull {
-            jpaVesselRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
-            )
-        }
+        val secondResultVessels =
+            secondResult.mapNotNull {
+                jpaVesselRepository.findFirstByInternalReferenceNumber(
+                    it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
+                )
+            }
         assertThat(secondResultVessels).hasSize(secondResult.size)
         assertThat(secondResultVessels.all { it.vesselName == "PHENOMENE" }).isTrue()
     }
@@ -770,42 +787,46 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports When using a CFR`() {
         // Given
-        val firstFilter = PriorNotificationsFilter(
-            searchQuery = "FAK000999999",
-            willArriveAfter = "2000-01-01T00:00:00Z",
-            willArriveBefore = "2100-01-01T00:00:00Z",
-        )
+        val firstFilter =
+            PriorNotificationsFilter(
+                searchQuery = "FAK000999999",
+                willArriveAfter = "2000-01-01T00:00:00Z",
+                willArriveBefore = "2100-01-01T00:00:00Z",
+            )
 
         // When
         val firstResult = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(firstFilter)
 
         // Then
         assertThat(firstResult).hasSizeGreaterThan(0)
-        val firstResultVessels = firstResult.mapNotNull {
-            jpaVesselRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
-            )
-        }
+        val firstResultVessels =
+            firstResult.mapNotNull {
+                jpaVesselRepository.findFirstByInternalReferenceNumber(
+                    it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
+                )
+            }
         assertThat(firstResultVessels).hasSize(firstResult.size)
         assertThat(firstResultVessels.all { it.vesselName == "PHENOMENE" }).isTrue()
 
         // Given
-        val secondFilter = PriorNotificationsFilter(
-            searchQuery = "999999",
-            willArriveAfter = "2000-01-01T00:00:00Z",
-            willArriveBefore = "2100-01-01T00:00:00Z",
-        )
+        val secondFilter =
+            PriorNotificationsFilter(
+                searchQuery = "999999",
+                willArriveAfter = "2000-01-01T00:00:00Z",
+                willArriveBefore = "2100-01-01T00:00:00Z",
+            )
 
         // When
         val secondResult = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(secondFilter)
 
         // Then
         assertThat(secondResult).hasSizeGreaterThan(0)
-        val secondResultVessels = secondResult.mapNotNull {
-            jpaVesselRepository.findFirstByInternalReferenceNumber(
-                it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
-            )
-        }
+        val secondResultVessels =
+            secondResult.mapNotNull {
+                jpaVesselRepository.findFirstByInternalReferenceNumber(
+                    it.logbookMessageAndValue.logbookMessage.internalReferenceNumber!!,
+                )
+            }
         assertThat(secondResultVessels).hasSize(secondResult.size)
         assertThat(secondResultVessels.all { it.vesselName == "PHENOMENE" }).isTrue()
     }
@@ -814,11 +835,12 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports for COD & HKE species`() {
         // Given
-        val filter = PriorNotificationsFilter(
-            specyCodes = listOf("COD", "HKE"),
-            willArriveAfter = "2000-01-01T00:00:00Z",
-            willArriveBefore = "2100-01-01T00:00:00Z",
-        )
+        val filter =
+            PriorNotificationsFilter(
+                specyCodes = listOf("COD", "HKE"),
+                willArriveAfter = "2000-01-01T00:00:00Z",
+                willArriveBefore = "2100-01-01T00:00:00Z",
+            )
 
         // When
         val result = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(filter)
@@ -837,11 +859,12 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports for Préavis type A & Préavis type C types`() {
         // Given
-        val filter = PriorNotificationsFilter(
-            priorNotificationTypes = listOf("Préavis type A", "Préavis type C"),
-            willArriveAfter = "2000-01-01T00:00:00Z",
-            willArriveBefore = "2100-01-01T00:00:00Z",
-        )
+        val filter =
+            PriorNotificationsFilter(
+                priorNotificationTypes = listOf("Préavis type A", "Préavis type C"),
+                willArriveAfter = "2000-01-01T00:00:00Z",
+                willArriveBefore = "2100-01-01T00:00:00Z",
+            )
 
         // When
         val result = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(filter)
@@ -860,11 +883,12 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports for SWW06 & NWW03 segments`() {
         // Given
-        val filter = PriorNotificationsFilter(
-            tripSegmentCodes = listOf("SWW06", "NWW03"),
-            willArriveAfter = "2000-01-01T00:00:00Z",
-            willArriveBefore = "2100-01-01T00:00:00Z",
-        )
+        val filter =
+            PriorNotificationsFilter(
+                tripSegmentCodes = listOf("SWW06", "NWW03"),
+                willArriveAfter = "2000-01-01T00:00:00Z",
+                willArriveBefore = "2100-01-01T00:00:00Z",
+            )
 
         // When
         val result = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(filter)
@@ -887,11 +911,12 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports for OTT & TB gears`() {
         // Given
-        val filter = PriorNotificationsFilter(
-            tripGearCodes = listOf("OTT", "TB"),
-            willArriveAfter = "2000-01-01T00:00:00Z",
-            willArriveBefore = "2100-01-01T00:00:00Z",
-        )
+        val filter =
+            PriorNotificationsFilter(
+                tripGearCodes = listOf("OTT", "TB"),
+                willArriveAfter = "2000-01-01T00:00:00Z",
+                willArriveBefore = "2100-01-01T00:00:00Z",
+            )
 
         // When
         val result = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(filter)
@@ -910,10 +935,11 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports for vessels arriving after or before January 1st, 2024`() {
         // Given
-        val firstFilter = PriorNotificationsFilter(
-            willArriveAfter = "2024-01-01T00:00:00Z",
-            willArriveBefore = "2100-01-01T00:00:00Z",
-        )
+        val firstFilter =
+            PriorNotificationsFilter(
+                willArriveAfter = "2024-01-01T00:00:00Z",
+                willArriveBefore = "2100-01-01T00:00:00Z",
+            )
 
         // When
         val firstResult = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(firstFilter)
@@ -928,10 +954,11 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         ).isTrue()
 
         // Given
-        val secondFilter = PriorNotificationsFilter(
-            willArriveAfter = "2000-01-01T00:00:00Z",
-            willArriveBefore = "2024-01-01T00:00:00Z",
-        )
+        val secondFilter =
+            PriorNotificationsFilter(
+                willArriveAfter = "2000-01-01T00:00:00Z",
+                willArriveBefore = "2024-01-01T00:00:00Z",
+            )
 
         // When
         val secondResult = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(secondFilter)
@@ -950,12 +977,13 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllPriorNotifications Should return the expected PNO logbook reports with multiple filters`() {
         // Given
-        val filter = PriorNotificationsFilter(
-            priorNotificationTypes = listOf("Préavis type A", "Préavis type C"),
-            tripGearCodes = listOf("OTT", "TB"),
-            willArriveAfter = "2024-01-01T00:00:00Z",
-            willArriveBefore = "2100-01-01T00:00:00Z",
-        )
+        val filter =
+            PriorNotificationsFilter(
+                priorNotificationTypes = listOf("Préavis type A", "Préavis type C"),
+                tripGearCodes = listOf("OTT", "TB"),
+                willArriveAfter = "2024-01-01T00:00:00Z",
+                willArriveBefore = "2100-01-01T00:00:00Z",
+            )
 
         // When
         val result = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(filter)

@@ -17,7 +17,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
 class SearchVesselsUTests {
-
     @MockBean
     private lateinit var vesselRepository: VesselRepository
 

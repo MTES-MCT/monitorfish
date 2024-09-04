@@ -9,7 +9,6 @@ import kotlin.reflect.full.memberProperties
 
 @UseCase
 class PatchEntity<T : Any, S : Any> {
-
     /**
      * Patches the target entity with values from the source entity.
      *
@@ -21,7 +20,10 @@ class PatchEntity<T : Any, S : Any> {
      * @param target The target entity to be patched.
      * @param source The source entity providing the patch values.
      */
-    fun execute(target: T, source: S): T {
+    fun execute(
+        target: T,
+        source: S,
+    ): T {
         val sourceProperties = source::class.memberProperties
         val targetProperties = target::class.memberProperties
 
@@ -31,11 +33,12 @@ class PatchEntity<T : Any, S : Any> {
             if (targetProp != null && targetProp is KMutableProperty<*>) {
                 val sourceValue = sourceProp.getter.call(source)
                 val existingValue = targetProp.getter.call(target)
-                val finalValue = if (sourceValue is Optional<*>) {
-                    getValueFromOptional(existingValue, sourceValue)
-                } else {
-                    sourceValue ?: existingValue
-                }
+                val finalValue =
+                    if (sourceValue is Optional<*>) {
+                        getValueFromOptional(existingValue, sourceValue)
+                    } else {
+                        sourceValue ?: existingValue
+                    }
 
                 targetProp.setter.call(target, finalValue)
             }
@@ -44,7 +47,10 @@ class PatchEntity<T : Any, S : Any> {
         return target
     }
 
-    private fun getValueFromOptional(existingValue: Any?, optional: Optional<*>?): Any? {
+    private fun getValueFromOptional(
+        existingValue: Any?,
+        optional: Optional<*>?,
+    ): Any? {
         return when {
             optional == null -> existingValue
             optional.isPresent -> optional.get()

@@ -10,15 +10,16 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class ApiClient(engine: HttpClientEngine = Java.create()) {
-    val httpClient = HttpClient(engine) {
-        install(ContentNegotiation) {
-            json(
-                Json {
-                    prettyPrint = true
-                    isLenient = true
-                    ignoreUnknownKeys = true
-                },
-            )
+    val httpClient =
+        HttpClient(engine) {
+            install(ContentNegotiation) {
+                json(
+                    Json {
+                        prettyPrint = true
+                        isLenient = true
+                        ignoreUnknownKeys = true
+                    },
+                )
+            }
         }
-    }
 }

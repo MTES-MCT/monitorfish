@@ -7,15 +7,19 @@ data class ReportingAndOccurrencesDataOutput(
     val reporting: ReportingDataOutput,
 ) {
     companion object {
-        fun fromReportingAndOccurrences(reportingAndOccurrences: ReportingAndOccurrences): ReportingAndOccurrencesDataOutput {
+        fun fromReportingAndOccurrences(
+            reportingAndOccurrences: ReportingAndOccurrences,
+        ): ReportingAndOccurrencesDataOutput {
             return ReportingAndOccurrencesDataOutput(
-                otherOccurrencesOfSameAlert = reportingAndOccurrences.otherOccurrencesOfSameAlert.map { reporting ->
-                    ReportingDataOutput.fromReporting(reporting, reportingAndOccurrences.controlUnit)
-                },
-                reporting = ReportingDataOutput.fromReporting(
-                    reportingAndOccurrences.reporting,
-                    reportingAndOccurrences.controlUnit,
-                ),
+                otherOccurrencesOfSameAlert =
+                    reportingAndOccurrences.otherOccurrencesOfSameAlert.map { reporting ->
+                        ReportingDataOutput.fromReporting(reporting, reportingAndOccurrences.controlUnit)
+                    },
+                reporting =
+                    ReportingDataOutput.fromReporting(
+                        reportingAndOccurrences.reporting,
+                        reportingAndOccurrences.controlUnit,
+                    ),
             )
         }
     }

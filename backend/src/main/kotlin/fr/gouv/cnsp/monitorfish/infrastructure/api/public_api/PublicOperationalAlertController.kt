@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController
 class PublicOperationalAlertController(
     private val validatePendingAlert: ValidatePendingAlert,
 ) {
-
     @PutMapping(value = ["/{id}/validate"])
     @Operation(summary = "Validate an operational alert")
     fun validateAlert(

@@ -41,36 +41,37 @@ data class PriorNotification(
         /**
          *  See /adrs/0006-prior-notification-states-specifications.md for more details.
          */
-        get() = run {
-            val pnoValue = logbookMessageAndValue.value
+        get() =
+            run {
+                val pnoValue = logbookMessageAndValue.value
 
-            val isInVerificationScope = pnoValue.isInVerificationScope
-            val isVerified = pnoValue.isVerified
-            val isSent = pnoValue.isSent
-            val isBeingSent = pnoValue.isBeingSent
+                val isInVerificationScope = pnoValue.isInVerificationScope
+                val isVerified = pnoValue.isVerified
+                val isSent = pnoValue.isSent
+                val isBeingSent = pnoValue.isBeingSent
 
-            return when {
-                isInVerificationScope == null || isVerified == null || isSent == null || isBeingSent == null -> null
-                !isInVerificationScope && !isVerified && !isSent && !isBeingSent -> PriorNotificationState.OUT_OF_VERIFICATION_SCOPE
-                !isInVerificationScope && !isVerified && !isSent && isBeingSent -> PriorNotificationState.PENDING_AUTO_SEND
-                !isInVerificationScope && !isVerified && isSent && !isBeingSent -> PriorNotificationState.AUTO_SEND_DONE
-                !isInVerificationScope && isVerified && !isSent && !isBeingSent -> PriorNotificationState.FAILED_SEND
-                !isInVerificationScope && isVerified && !isSent && isBeingSent -> PriorNotificationState.PENDING_SEND
-                !isInVerificationScope && isVerified && isSent && !isBeingSent -> PriorNotificationState.VERIFIED_AND_SENT
-                isInVerificationScope && !isVerified && !isSent && !isBeingSent -> PriorNotificationState.PENDING_VERIFICATION
-                isInVerificationScope && isVerified && !isSent && !isBeingSent -> PriorNotificationState.FAILED_SEND
-                isInVerificationScope && isVerified && !isSent && isBeingSent -> PriorNotificationState.PENDING_SEND
-                isInVerificationScope && isVerified && isSent && !isBeingSent -> PriorNotificationState.VERIFIED_AND_SENT
-                else -> {
-                    logger.error(
-                        "Impossible PriorNotification state: `reportId = $reportId`, isInVerificationScope = $isInVerificationScope`, `isVerified = $isVerified`, `isSent = $isSent`, `isBeingSent = $isBeingSent`.",
-                        BackendInternalErrorCode.UNPROCESSABLE_RESOURCE_DATA,
-                    )
+                return when {
+                    isInVerificationScope == null || isVerified == null || isSent == null || isBeingSent == null -> null
+                    !isInVerificationScope && !isVerified && !isSent && !isBeingSent -> PriorNotificationState.OUT_OF_VERIFICATION_SCOPE
+                    !isInVerificationScope && !isVerified && !isSent && isBeingSent -> PriorNotificationState.PENDING_AUTO_SEND
+                    !isInVerificationScope && !isVerified && isSent && !isBeingSent -> PriorNotificationState.AUTO_SEND_DONE
+                    !isInVerificationScope && isVerified && !isSent && !isBeingSent -> PriorNotificationState.FAILED_SEND
+                    !isInVerificationScope && isVerified && !isSent && isBeingSent -> PriorNotificationState.PENDING_SEND
+                    !isInVerificationScope && isVerified && isSent && !isBeingSent -> PriorNotificationState.VERIFIED_AND_SENT
+                    isInVerificationScope && !isVerified && !isSent && !isBeingSent -> PriorNotificationState.PENDING_VERIFICATION
+                    isInVerificationScope && isVerified && !isSent && !isBeingSent -> PriorNotificationState.FAILED_SEND
+                    isInVerificationScope && isVerified && !isSent && isBeingSent -> PriorNotificationState.PENDING_SEND
+                    isInVerificationScope && isVerified && isSent && !isBeingSent -> PriorNotificationState.VERIFIED_AND_SENT
+                    else -> {
+                        logger.error(
+                            "Impossible PriorNotification state: `reportId = $reportId`, isInVerificationScope = $isInVerificationScope`, `isVerified = $isVerified`, `isSent = $isSent`, `isBeingSent = $isBeingSent`.",
+                            BackendInternalErrorCode.UNPROCESSABLE_RESOURCE_DATA,
+                        )
 
-                    null
+                        null
+                    }
                 }
             }
-        }
 
     fun enrich(
         allRiskFactors: List<VesselRiskFactor>,
@@ -80,21 +81,23 @@ data class PriorNotification(
         val logbookMessage = logbookMessageAndValue.logbookMessage
         val pnoValue = logbookMessageAndValue.value
 
-        port = pnoValue.port?.let { portLocode ->
-            allPorts.find { it.locode == portLocode }
-        }
+        port =
+            pnoValue.port?.let { portLocode ->
+                allPorts.find { it.locode == portLocode }
+            }
 
         seafront = port?.facade?.let { Seafront.from(it) }
 
-        lastControlDateTime = if (isManuallyCreated) {
-            logbookMessage.vesselId?.let { vesselId ->
-                allRiskFactors.find { it.vesselId == vesselId }?.lastControlDatetime
+        lastControlDateTime =
+            if (isManuallyCreated) {
+                logbookMessage.vesselId?.let { vesselId ->
+                    allRiskFactors.find { it.vesselId == vesselId }?.lastControlDatetime
+                }
+            } else {
+                logbookMessage.internalReferenceNumber?.let { vesselInternalReferenceNumber ->
+                    allRiskFactors.find { it.internalReferenceNumber == vesselInternalReferenceNumber }?.lastControlDatetime
+                }
             }
-        } else {
-            logbookMessage.internalReferenceNumber?.let { vesselInternalReferenceNumber ->
-                allRiskFactors.find { it.internalReferenceNumber == vesselInternalReferenceNumber }?.lastControlDatetime
-            }
-        }
     }
 
     fun enrichLogbookMessage(
@@ -104,23 +107,26 @@ data class PriorNotification(
         logbookRawMessageRepository: LogbookRawMessageRepository,
     ) {
         val logbookMessage = logbookMessageAndValue.logbookMessage
-        val logbookMessageWithRawMessage = logbookMessage.operationNumber?.let { operationNumber ->
-            logbookMessage.copy(
-                rawMessage = try {
-                    logbookRawMessageRepository.findRawMessage(operationNumber)
-                } catch (e: NoERSMessagesFound) {
-                    logger.warn(e.message)
+        val logbookMessageWithRawMessage =
+            logbookMessage.operationNumber?.let { operationNumber ->
+                logbookMessage.copy(
+                    rawMessage =
+                        try {
+                            logbookRawMessageRepository.findRawMessage(operationNumber)
+                        } catch (e: NoERSMessagesFound) {
+                            logger.warn(e.message)
 
-                    null
-                },
-            )
-        } ?: logbookMessage
+                            null
+                        },
+                )
+            } ?: logbookMessage
         logbookMessageWithRawMessage.enrichGearPortAndSpecyNames(allGears, allPorts, allSpecies)
 
-        logbookMessageAndValue = LogbookMessageAndValue(
-            logbookMessageWithRawMessage,
-            PNO::class.java,
-        )
+        logbookMessageAndValue =
+            LogbookMessageAndValue(
+                logbookMessageWithRawMessage,
+                PNO::class.java,
+            )
     }
 
     fun enrichReportingCount(reportingRepository: ReportingRepository) {
@@ -140,20 +146,22 @@ data class PriorNotification(
     }
 
     fun markAsAcknowledged() {
-        logbookMessageAndValue = LogbookMessageAndValue(
-            logbookMessageAndValue.logbookMessage.copy(acknowledgment = Acknowledgment(isSuccess = true)),
-            PNO::class.java,
-        )
+        logbookMessageAndValue =
+            LogbookMessageAndValue(
+                logbookMessageAndValue.logbookMessage.copy(acknowledgment = Acknowledgment(isSuccess = true)),
+                PNO::class.java,
+            )
     }
 
     companion object {
         private val logger = LoggerFactory.getLogger(PriorNotification::class.java)
 
         fun fromLogbookMessage(logbookMessage: LogbookMessage): PriorNotification {
-            val logbookMessageAndValue = LogbookMessageAndValue(
-                logbookMessage = logbookMessage,
-                clazz = PNO::class.java,
-            )
+            val logbookMessageAndValue =
+                LogbookMessageAndValue(
+                    logbookMessage = logbookMessage,
+                    clazz = PNO::class.java,
+                )
 
             return PriorNotification(
                 reportId = logbookMessage.reportId,
@@ -163,7 +171,6 @@ data class PriorNotification(
                 logbookMessageAndValue = logbookMessageAndValue,
                 sentAt = logbookMessageAndValue.logbookMessage.reportDateTime,
                 updatedAt = logbookMessage.operationDateTime,
-
                 // These props need to be calculated in the use case
                 port = null,
                 reportingCount = null,

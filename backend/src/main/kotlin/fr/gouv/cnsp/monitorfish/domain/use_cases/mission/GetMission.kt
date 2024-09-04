@@ -16,9 +16,10 @@ class GetMission(
     @Throws(CouldNotFindException::class)
     suspend fun execute(missionId: Int): MissionAndActions {
         return coroutineScope {
-            val missionFuture = async {
-                missionRepository.findById(missionId)
-            }
+            val missionFuture =
+                async {
+                    missionRepository.findById(missionId)
+                }
 
             val actions = getMissionActions.execute(missionId)
 

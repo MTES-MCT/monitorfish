@@ -33,7 +33,6 @@ import java.time.ZonedDateTime
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = [(PendingAlertController::class)])
 class PendingAlertControllerITests {
-
     @Autowired
     private lateinit var api: MockMvc
 

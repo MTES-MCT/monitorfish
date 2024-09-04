@@ -16,7 +16,6 @@ class FleetSegmentController(
     private val getAllFleetSegmentsByYearByYear: GetAllFleetSegmentsByYear,
     private val computeFleetSegments: ComputeFleetSegments,
 ) {
-
     @GetMapping("/{year}")
     @Operation(summary = "Get fleet segments")
     fun getFleetSegments(

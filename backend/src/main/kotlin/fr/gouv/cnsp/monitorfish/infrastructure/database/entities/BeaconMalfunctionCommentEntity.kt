@@ -24,24 +24,23 @@ data class BeaconMalfunctionCommentEntity(
     @Column(name = "date_time_utc")
     val dateTime: Instant,
 ) {
-
-    fun toBeaconMalfunctionComment() = BeaconMalfunctionComment(
-        id = id!!,
-        beaconMalfunctionId = beaconMalfunctionId,
-        comment = comment,
-        userType = userType,
-        dateTime = dateTime.atZone(ZoneOffset.UTC),
-    )
+    fun toBeaconMalfunctionComment() =
+        BeaconMalfunctionComment(
+            id = id!!,
+            beaconMalfunctionId = beaconMalfunctionId,
+            comment = comment,
+            userType = userType,
+            dateTime = dateTime.atZone(ZoneOffset.UTC),
+        )
 
     companion object {
-        fun fromBeaconMalfunctionComment(
-            beaconMalfunctionComment: BeaconMalfunctionComment,
-        ) = BeaconMalfunctionCommentEntity(
-            id = beaconMalfunctionComment.id,
-            beaconMalfunctionId = beaconMalfunctionComment.beaconMalfunctionId,
-            comment = beaconMalfunctionComment.comment,
-            userType = beaconMalfunctionComment.userType,
-            dateTime = beaconMalfunctionComment.dateTime.toInstant(),
-        )
+        fun fromBeaconMalfunctionComment(beaconMalfunctionComment: BeaconMalfunctionComment) =
+            BeaconMalfunctionCommentEntity(
+                id = beaconMalfunctionComment.id,
+                beaconMalfunctionId = beaconMalfunctionComment.beaconMalfunctionId,
+                comment = beaconMalfunctionComment.comment,
+                userType = beaconMalfunctionComment.userType,
+                dateTime = beaconMalfunctionComment.dateTime.toInstant(),
+            )
     }
 }

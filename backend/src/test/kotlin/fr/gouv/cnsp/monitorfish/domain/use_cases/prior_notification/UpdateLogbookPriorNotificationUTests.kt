@@ -35,16 +35,17 @@ class UpdateLogbookPriorNotificationUTests {
         ).willReturn(fakePriorNotification)
 
         // When
-        val result = UpdateLogbookPriorNotification(
-            logbookReportRepository,
-            priorNotificationPdfDocumentRepository,
-            getPriorNotification,
-        ).execute(
-            reportId = fakePriorNotification.reportId!!,
-            operationDate = fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
-            authorTrigram = "ABC",
-            note = null,
-        )
+        val result =
+            UpdateLogbookPriorNotification(
+                logbookReportRepository,
+                priorNotificationPdfDocumentRepository,
+                getPriorNotification,
+            ).execute(
+                reportId = fakePriorNotification.reportId!!,
+                operationDate = fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
+                authorTrigram = "ABC",
+                note = null,
+            )
 
         // Then
         assertThat(result.reportId).isEqualTo(fakePriorNotification.reportId)

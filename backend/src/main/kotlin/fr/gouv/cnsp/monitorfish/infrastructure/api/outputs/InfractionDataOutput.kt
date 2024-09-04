@@ -9,11 +9,12 @@ data class InfractionDataOutput(
     var infraction: String? = null,
 ) {
     companion object {
-        fun fromInfraction(infraction: Infraction) = InfractionDataOutput(
-            natinfCode = infraction.natinfCode,
-            regulation = infraction.regulation,
-            infractionCategory = infraction.infractionCategory.toString(),
-            infraction = infraction.infraction,
-        )
+        fun fromInfraction(infraction: Infraction) =
+            InfractionDataOutput(
+                natinfCode = infraction.natinfCode,
+                regulation = infraction.regulation,
+                infractionCategory = infraction.infractionCategory.toString(),
+                infraction = infraction.infraction,
+            )
     }
 }

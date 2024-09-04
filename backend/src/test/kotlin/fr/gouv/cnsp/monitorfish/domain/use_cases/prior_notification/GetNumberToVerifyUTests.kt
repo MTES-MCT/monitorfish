@@ -48,24 +48,26 @@ class GetNumberToVerifyUTests {
                     createdAt = null,
                     didNotFishAfterZeroNotice = false,
                     isManuallyCreated = false,
-                    logbookMessageAndValue = LogbookMessageAndValue(
-                        clazz = PNO::class.java,
-                        logbookMessage = LogbookMessage(
-                            id = 1,
-                            reportId = "FAKE_REPORT_ID_1",
-                            referencedReportId = null,
-                            integrationDateTime = ZonedDateTime.now(),
-                            isCorrectedByNewerMessage = false,
-                            isDeleted = false,
-                            isEnriched = false,
-                            message = PNO().apply { port = "AEFJR" },
-                            operationDateTime = ZonedDateTime.now(),
-                            operationNumber = "1",
-                            operationType = LogbookOperationType.DAT,
-                            reportDateTime = ZonedDateTime.now(),
-                            transmissionFormat = LogbookTransmissionFormat.ERS,
+                    logbookMessageAndValue =
+                        LogbookMessageAndValue(
+                            clazz = PNO::class.java,
+                            logbookMessage =
+                                LogbookMessage(
+                                    id = 1,
+                                    reportId = "FAKE_REPORT_ID_1",
+                                    referencedReportId = null,
+                                    integrationDateTime = ZonedDateTime.now(),
+                                    isCorrectedByNewerMessage = false,
+                                    isDeleted = false,
+                                    isEnriched = false,
+                                    message = PNO().apply { port = "AEFJR" },
+                                    operationDateTime = ZonedDateTime.now(),
+                                    operationNumber = "1",
+                                    operationType = LogbookOperationType.DAT,
+                                    reportDateTime = ZonedDateTime.now(),
+                                    transmissionFormat = LogbookTransmissionFormat.ERS,
+                                ),
                         ),
-                    ),
                     port = null,
                     reportingCount = null,
                     seafront = null,
@@ -74,30 +76,31 @@ class GetNumberToVerifyUTests {
                     vessel = null,
                     lastControlDateTime = null,
                 ),
-
                 PriorNotification(
                     reportId = "FAKE_REPORT_ID_2",
                     createdAt = null,
                     didNotFishAfterZeroNotice = false,
                     isManuallyCreated = false,
-                    logbookMessageAndValue = LogbookMessageAndValue(
-                        clazz = PNO::class.java,
-                        logbookMessage = LogbookMessage(
-                            id = 1,
-                            reportId = "FAKE_REPORT_ID_2_COR",
-                            referencedReportId = "FAKE_NONEXISTENT_REPORT_ID_2",
-                            integrationDateTime = ZonedDateTime.now(),
-                            isCorrectedByNewerMessage = false,
-                            isDeleted = false,
-                            isEnriched = false,
-                            message = PNO().apply { port = "AEFAT" },
-                            operationDateTime = ZonedDateTime.now(),
-                            operationNumber = "1",
-                            operationType = LogbookOperationType.COR,
-                            reportDateTime = ZonedDateTime.now(),
-                            transmissionFormat = LogbookTransmissionFormat.ERS,
+                    logbookMessageAndValue =
+                        LogbookMessageAndValue(
+                            clazz = PNO::class.java,
+                            logbookMessage =
+                                LogbookMessage(
+                                    id = 1,
+                                    reportId = "FAKE_REPORT_ID_2_COR",
+                                    referencedReportId = "FAKE_NONEXISTENT_REPORT_ID_2",
+                                    integrationDateTime = ZonedDateTime.now(),
+                                    isCorrectedByNewerMessage = false,
+                                    isDeleted = false,
+                                    isEnriched = false,
+                                    message = PNO().apply { port = "AEFAT" },
+                                    operationDateTime = ZonedDateTime.now(),
+                                    operationNumber = "1",
+                                    operationType = LogbookOperationType.COR,
+                                    reportDateTime = ZonedDateTime.now(),
+                                    transmissionFormat = LogbookTransmissionFormat.ERS,
+                                ),
                         ),
-                    ),
                     port = null,
                     reportingCount = null,
                     seafront = null,
@@ -110,12 +113,13 @@ class GetNumberToVerifyUTests {
         )
 
         // When
-        val result = GetNumberToVerify(
-            logbookReportRepository,
-            manualPriorNotificationRepository,
-            portRepository,
-            riskFactorRepository,
-        ).execute()
+        val result =
+            GetNumberToVerify(
+                logbookReportRepository,
+                manualPriorNotificationRepository,
+                portRepository,
+                riskFactorRepository,
+            ).execute()
 
         // Then
         assertThat(result.perSeafrontGroupCount.values).hasSize(8)

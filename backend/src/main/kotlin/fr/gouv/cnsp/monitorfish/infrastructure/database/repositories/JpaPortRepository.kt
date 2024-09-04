@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class JpaPortRepository(private val dbPortRepository: DBPortRepository) : PortRepository {
-
     @Cacheable(value = ["ports"])
     override fun findAll(): List<Port> {
         return dbPortRepository.findAll().map {

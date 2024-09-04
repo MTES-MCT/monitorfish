@@ -11,10 +11,11 @@ class CustomZonedDateTimeSerializer : JsonSerializer<CustomZonedDateTime>() {
         jsonGenerator: JsonGenerator,
         serializerProvider: SerializerProvider,
     ) {
-        val dateAsString = zonedDateTime
-            .toZonedDateTime()
-            .withZoneSameInstant(ZoneOffset.UTC)
-            .format(CustomZonedDateTime.dateTimeFormatter)
+        val dateAsString =
+            zonedDateTime
+                .toZonedDateTime()
+                .withZoneSameInstant(ZoneOffset.UTC)
+                .format(CustomZonedDateTime.dateTimeFormatter)
 
         jsonGenerator.writeString(dateAsString)
     }

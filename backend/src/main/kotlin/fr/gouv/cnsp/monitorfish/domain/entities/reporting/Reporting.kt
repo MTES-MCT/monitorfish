@@ -22,7 +22,6 @@ data class Reporting(
     val isDeleted: Boolean,
     val latitude: Double? = null,
     val longitude: Double? = null,
-
     // Enriched in the use-case
     val infraction: Infraction? = null,
     // Enriched in the use-case

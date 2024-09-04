@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.transaction.annotation.Transactional
 
 class JpaRecentPositionsMetricsRepositoryITests : AbstractDBTests() {
-
     @Autowired
     private lateinit var jpaRecentPositionsMetricsRepository: JpaRecentPositionsMetricsRepository
 

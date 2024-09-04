@@ -38,11 +38,12 @@ class ComputeVesselFaoAreas(
         if (internalReferenceNumber != null) {
             // Get faoZones from speciesOnboard in risk factors table (updated by the pipeline)
             val vesselRiskFactor = riskFactorRepository.findByInternalReferenceNumber(internalReferenceNumber)
-            val faoAreas = vesselRiskFactor?.let {
-                it.speciesOnboard?.let { species ->
-                    species.mapNotNull { specy -> specy.faoZone }
-                }
-            } ?: listOf()
+            val faoAreas =
+                vesselRiskFactor?.let {
+                    it.speciesOnboard?.let { species ->
+                        species.mapNotNull { specy -> specy.faoZone }
+                    }
+                } ?: listOf()
 
             if (faoAreas.isNotEmpty()) {
                 val faoAreasObjects = faoAreas.map { FaoArea(faoCode = it) }

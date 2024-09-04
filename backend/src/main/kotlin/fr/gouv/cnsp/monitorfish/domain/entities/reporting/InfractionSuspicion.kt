@@ -13,15 +13,15 @@ data class InfractionSuspicion(
     val seaFront: String? = null,
     val dml: String? = null,
 ) : InfractionSuspicionOrObservationType(
-    reportingActor = reportingActor,
-    controlUnitId = controlUnitId,
-    authorTrigram = authorTrigram,
-    authorContact = authorContact,
-    title = title,
-    description = description,
-    natinfCode = natinfCode,
-    type = ReportingTypeMapping.INFRACTION_SUSPICION,
-) {
+        reportingActor = reportingActor,
+        controlUnitId = controlUnitId,
+        authorTrigram = authorTrigram,
+        authorContact = authorContact,
+        title = title,
+        description = description,
+        natinfCode = natinfCode,
+        type = ReportingTypeMapping.INFRACTION_SUSPICION,
+    ) {
     companion object {
         fun fromUpdatedReporting(
             updatedInfractionSuspicionOrObservation: UpdatedInfractionSuspicionOrObservation,

@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.ZonedDateTime
 
 class JpaBeaconMalfunctionCommentsRepositoryITests : AbstractDBTests() {
-
     @Autowired
     private lateinit var jpaBeaconMalfunctionCommentsRepository: JpaBeaconMalfunctionCommentsRepository
 
@@ -38,13 +37,14 @@ class JpaBeaconMalfunctionCommentsRepositoryITests : AbstractDBTests() {
         assertThat(jpaBeaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(1)).hasSize(2)
 
         // When
-        val comment = BeaconMalfunctionComment(
-            null,
-            1,
-            "A comment",
-            BeaconMalfunctionCommentUserType.SIP,
-            ZonedDateTime.now(),
-        )
+        val comment =
+            BeaconMalfunctionComment(
+                null,
+                1,
+                "A comment",
+                BeaconMalfunctionCommentUserType.SIP,
+                ZonedDateTime.now(),
+            )
         jpaBeaconMalfunctionCommentsRepository.save(comment)
 
         // Then

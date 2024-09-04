@@ -84,16 +84,17 @@ class VesselController(
         beforeDateTime: ZonedDateTime?,
     ): ResponseEntity<VesselAndPositionsDataOutput> {
         return runBlocking {
-            val (vesselTrackHasBeenModified, vesselWithData) = getVessel.execute(
-                vesselId,
-                internalReferenceNumber,
-                externalReferenceNumber,
-                IRCS,
-                trackDepth,
-                vesselIdentifier,
-                afterDateTime,
-                beforeDateTime,
-            )
+            val (vesselTrackHasBeenModified, vesselWithData) =
+                getVessel.execute(
+                    vesselId,
+                    internalReferenceNumber,
+                    externalReferenceNumber,
+                    IRCS,
+                    trackDepth,
+                    vesselIdentifier,
+                    afterDateTime,
+                    beforeDateTime,
+                )
 
             val returnCode = if (vesselTrackHasBeenModified) HttpStatus.ACCEPTED else HttpStatus.OK
 
@@ -112,10 +113,11 @@ class VesselController(
         @DateTimeFormat(pattern = zoneDateTimePattern)
         afterDateTime: ZonedDateTime,
     ): BeaconMalfunctionsResumeAndHistoryDataOutput {
-        val beaconMalfunctionsWithDetails = getVesselBeaconMalfunctions.execute(
-            vesselId,
-            afterDateTime,
-        )
+        val beaconMalfunctionsWithDetails =
+            getVesselBeaconMalfunctions.execute(
+                vesselId,
+                afterDateTime,
+            )
 
         return BeaconMalfunctionsResumeAndHistoryDataOutput.fromBeaconMalfunctionsResumeAndHistory(
             beaconMalfunctionsWithDetails,
@@ -150,21 +152,23 @@ class VesselController(
         beforeDateTime: ZonedDateTime?,
     ): ResponseEntity<List<PositionDataOutput>> {
         return runBlocking {
-            val (vesselTrackHasBeenModified, positions) = getVesselPositions.execute(
-                internalReferenceNumber,
-                externalReferenceNumber,
-                IRCS,
-                trackDepth,
-                vesselIdentifier,
-                afterDateTime,
-                beforeDateTime,
-            )
+            val (vesselTrackHasBeenModified, positions) =
+                getVesselPositions.execute(
+                    internalReferenceNumber,
+                    externalReferenceNumber,
+                    IRCS,
+                    trackDepth,
+                    vesselIdentifier,
+                    afterDateTime,
+                    beforeDateTime,
+                )
 
             val returnCode = if (vesselTrackHasBeenModified) HttpStatus.ACCEPTED else HttpStatus.OK
 
-            val positionsDataOutput = positions.await().map {
-                PositionDataOutput.fromPosition(it)
-            }
+            val positionsDataOutput =
+                positions.await().map {
+                    PositionDataOutput.fromPosition(it)
+                }
 
             return@runBlocking ResponseEntity.status(returnCode).body(positionsDataOutput)
         }
@@ -197,14 +201,15 @@ class VesselController(
         @DateTimeFormat(pattern = zoneDateTimePattern)
         fromDate: ZonedDateTime,
     ): CurrentAndArchivedReportingDataOutput {
-        val currentAndArchivedReportings = getVesselReportings.execute(
-            vesselId,
-            internalReferenceNumber,
-            externalReferenceNumber,
-            IRCS,
-            vesselIdentifier,
-            fromDate,
-        )
+        val currentAndArchivedReportings =
+            getVesselReportings.execute(
+                vesselId,
+                internalReferenceNumber,
+                externalReferenceNumber,
+                IRCS,
+                vesselIdentifier,
+                fromDate,
+            )
 
         return CurrentAndArchivedReportingDataOutput.fromCurrentAndArchivedReporting(currentAndArchivedReportings)
     }
@@ -214,7 +219,7 @@ class VesselController(
     fun searchVessel(
         @Parameter(
             description =
-            "Vessel internal reference number (CFR), external marker, IRCS, MMSI, name or beacon number",
+                "Vessel internal reference number (CFR), external marker, IRCS, MMSI, name or beacon number",
             required = true,
         )
         @RequestParam(name = "searched")
@@ -233,7 +238,7 @@ class VesselController(
         internalReferenceNumber: String,
         @Parameter(
             description =
-            "Voyage request (LAST, PREVIOUS or NEXT) with respect to date",
+                "Voyage request (LAST, PREVIOUS or NEXT) with respect to date",
             required = true,
         )
         @RequestParam(name = "voyageRequest")

@@ -11,8 +11,8 @@ import type { RegulatedSpecies as RegulatedSpeciesType } from '../../../types'
 export function SpeciesRegulationDisplayed() {
   const regulatory = useMainAppSelector(state => state.regulatory)
 
-  const { speciesRegulation } = regulatory.regulatoryZoneMetadata || {}
-  const { authorized, otherInfo, unauthorized } = speciesRegulation || {}
+  const { speciesRegulation } = regulatory.regulatoryZoneMetadata ?? {}
+  const { authorized, otherInfo, unauthorized } = speciesRegulation ?? {}
   const hasAuthorizedContent = !isRegulatedSpeciesEmpty(authorized)
   const hasUnauthorizedContent = !isRegulatedSpeciesEmpty(unauthorized)
   const areSpeciesRegulationEmpty = !hasAuthorizedContent && !hasUnauthorizedContent && !otherInfo
@@ -25,13 +25,13 @@ export function SpeciesRegulationDisplayed() {
     <>
       <Section>
         {hasAuthorizedContent && (
-          <RegulatedSpecies authorized regulatedSpecies={authorized || DEFAULT_AUTHORIZED_REGULATED_SPECIES} />
+          <RegulatedSpecies authorized regulatedSpecies={authorized ?? DEFAULT_AUTHORIZED_REGULATED_SPECIES} />
         )}
         {hasUnauthorizedContent && (
           <RegulatedSpecies
             authorized={false}
             hasPreviousRegulatedSpeciesBloc={hasAuthorizedContent}
-            regulatedSpecies={unauthorized || DEFAULT_UNAUTHORIZED_REGULATED_SPECIES}
+            regulatedSpecies={unauthorized ?? DEFAULT_UNAUTHORIZED_REGULATED_SPECIES}
           />
         )}
         {otherInfo && (

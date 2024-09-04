@@ -34,7 +34,7 @@ export function UnmemoizedSelectedMissionActionsLayer() {
             missionsAndAction.id === (selectedMissionGeoJSON as GeoJSON.Feature).properties?.missionId
         )
         ?.actions?.map(action => getMissionActionFeature(action))
-        .filter((feature): feature is Feature => Boolean(feature)) || []
+        .filter((feature): feature is Feature => Boolean(feature)) ?? []
     )
   }, [selectedMissionGeoJSON, missions])
 
@@ -55,7 +55,7 @@ export function UnmemoizedSelectedMissionActionsLayer() {
             missionsAndAction.id === (selectedMissionGeoJSON as GeoJSON.Feature).properties?.missionId
         )
         ?.actions?.map(action => getMissionActionFeatureZone(action))
-        .filter((feature): feature is Feature => Boolean(feature)) || []
+        .filter((feature): feature is Feature => Boolean(feature)) ?? []
     )
   }, [selectedMissionGeoJSON, missions])
 
@@ -111,7 +111,7 @@ export function UnmemoizedSelectedMissionActionsLayer() {
     }
 
     const actionFeatures = draft.actionsFormValues
-      .map(action => getMissionActionFeature({ ...action, missionId: missionId || NEW_MISSION_ID }))
+      .map(action => getMissionActionFeature({ ...action, missionId: missionId ?? NEW_MISSION_ID }))
       .filter((action): action is Feature => !!action)
 
     /**

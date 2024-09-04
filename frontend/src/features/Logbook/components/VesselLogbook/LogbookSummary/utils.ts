@@ -28,7 +28,7 @@ export function getTripSegments(
 }
 
 export function getSegmentInfo(segment: Partial<FleetSegment>): string {
-  if (segment.gears || segment.faoAreas || segment.targetSpecies || segment.bycatchSpecies) {
+  if (segment.gears ?? segment.faoAreas ?? segment.targetSpecies ?? segment.bycatchSpecies) {
     const gears = segment.gears?.length ? segment.gears.join(', ') : 'aucun'
     const faoAreas = segment.faoAreas?.length ? segment.faoAreas.join(', ') : 'aucune'
 

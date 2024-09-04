@@ -373,7 +373,7 @@ context('Sidebars > Regulatory Layers', () => {
 
     cy.cleanScreenshots(1)
     cy.getAllLocalStorage().then(localStorage => {
-      expect(localStorage.homepagelayersShowedOnMap || '').to.be.empty
+      expect(localStorage.homepagelayersShowedOnMap ?? '').to.be.empty
     })
 
     // When
@@ -383,7 +383,7 @@ context('Sidebars > Regulatory Layers', () => {
       .eq(0)
       .click({ force: true, timeout: 10000 })
       .then(() => {
-        const showedLayers = JSON.parse(localStorage.getItem('homepagelayersShowedOnMap') || '')
+        const showedLayers = JSON.parse(localStorage.getItem('homepagelayersShowedOnMap') ?? '')
         expect(showedLayers).length(1)
         expect(showedLayers[0].type).equal('eez_areas')
       })
@@ -409,7 +409,7 @@ context('Sidebars > Regulatory Layers', () => {
     cy.get('*[data-cy="administrative-zones-open"]')
       .click({ force: true, timeout: 10000 })
       .then(() => {
-        const showedLayers = JSON.parse(localStorage.getItem('homepagelayersShowedOnMap') || '')
+        const showedLayers = JSON.parse(localStorage.getItem('homepagelayersShowedOnMap') ?? '')
         expect(showedLayers).length(1)
         expect(showedLayers[0].type).equal('eez_areas')
       })

@@ -62,7 +62,7 @@ export function getStyle(color: string | undefined, isSelected: boolean, strokeC
   })
 
   const stroke = new Stroke({
-    color: strokeColor || 'rgba(5, 5, 94, 0.7)',
+    color: strokeColor ?? 'rgba(5, 5, 94, 0.7)',
     width: isSelected ? 3 : 1
   })
 

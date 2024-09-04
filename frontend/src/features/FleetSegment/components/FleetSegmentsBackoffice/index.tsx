@@ -45,7 +45,7 @@ export function FleetSegmentsBackoffice() {
     async (_year?: number) => {
       const { data: nextFleetSegments } = await dispatch(fleetSegmentApi.endpoints.getFleetSegments.initiate(_year))
 
-      setFleetSegments(nextFleetSegments || [])
+      setFleetSegments(nextFleetSegments ?? [])
       if (_year) {
         setYear(_year)
       }
@@ -95,7 +95,7 @@ export function FleetSegmentsBackoffice() {
     async newFleetSegmentData => {
       const nextFleetSegments = await dispatch(createFleetSegment(newFleetSegmentData, fleetSegments))
 
-      setFleetSegments(nextFleetSegments || [])
+      setFleetSegments(nextFleetSegments ?? [])
       closeCreateOrEditFleetSegmentModal()
     },
     [dispatch, fleetSegments, closeCreateOrEditFleetSegmentModal]
@@ -145,11 +145,11 @@ export function FleetSegmentsBackoffice() {
           <Select
             cleanable={false}
             isLabelHidden
-            label={"l'année"}
+            label="l'année"
             name="fleet-segments-add-year"
             onChange={_year => addYearEntry(Number(_year))}
             options={yearsToAdd}
-            placeholder={"l'année"}
+            placeholder="l'année"
             value={undefined}
           />
         </AddYearBox>

@@ -81,10 +81,10 @@ export const getNumberOfInfractions = (
   }
 
   return (
-    (control.gearInfractions?.length || 0) +
-    (control.logbookInfractions?.length || 0) +
-    (control.speciesInfractions?.length || 0) +
-    (control.otherInfractions?.length || 0)
+    (control.gearInfractions?.length ?? 0) +
+    (control.logbookInfractions?.length ?? 0) +
+    (control.speciesInfractions?.length ?? 0) +
+    (control.otherInfractions?.length ?? 0)
   )
 }
 
@@ -101,10 +101,10 @@ export const getNumberOfInfractionsWithRecord = (
   const infractionWithRecordFilter = infraction => infraction.infractionType === InfractionType.WITH_RECORD
 
   return (
-    (control.gearInfractions?.filter(infractionWithRecordFilter).length || 0) +
-    (control.logbookInfractions?.filter(infractionWithRecordFilter).length || 0) +
-    (control.speciesInfractions?.filter(infractionWithRecordFilter).length || 0) +
-    (control.otherInfractions?.filter(infractionWithRecordFilter).length || 0)
+    (control.gearInfractions?.filter(infractionWithRecordFilter).length ?? 0) +
+    (control.logbookInfractions?.filter(infractionWithRecordFilter).length ?? 0) +
+    (control.speciesInfractions?.filter(infractionWithRecordFilter).length ?? 0) +
+    (control.otherInfractions?.filter(infractionWithRecordFilter).length ?? 0)
   )
 }
 

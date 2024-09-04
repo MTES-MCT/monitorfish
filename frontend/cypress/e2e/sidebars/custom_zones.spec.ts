@@ -26,7 +26,7 @@ context('Sidebars > Custom Zones', () => {
     cy.get('*[data-cy="custom-zone-display-button"]')
       .click()
       .then(() => {
-        const customZonesItem = JSON.parse(localStorage.getItem(CUSTOM_ZONES_LOCALSTORAGE_KEY) || '')
+        const customZonesItem = JSON.parse(localStorage.getItem(CUSTOM_ZONES_LOCALSTORAGE_KEY) ?? '')
         const zones = JSON.parse(customZonesItem.zones)
         expect(zones['b2f8aea3-7814-4247-98fa-ddc58c922d09'].isShown).equal(false)
       })

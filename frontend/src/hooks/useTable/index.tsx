@@ -27,7 +27,7 @@ export function useTable<T extends CollectionItem = CollectionItem>(
   const [isSortingDesc, setIsSortingDesc] = useState(Boolean(isDefaultSortingDesc))
   const [sortingKey, setSortingKey] = useState<string | undefined>(defaultSortedKey)
 
-  const rawData = useMemo(() => maybeRawData || [], [maybeRawData])
+  const rawData = useMemo(() => maybeRawData ?? [], [maybeRawData])
 
   const attachIsCheckedProps = useMemo(
     () => columns.map(() => (dataItem: T) => assocPath(['$isChecked'], checkedIds.includes(dataItem.id), dataItem)),
@@ -38,7 +38,7 @@ export function useTable<T extends CollectionItem = CollectionItem>(
     () =>
       columns.map(({ key, labelTransform, transform }) => {
         const keyAsArrayPath = getArrayPathFromStringPath(key)
-        const maybeLabelTransform = labelTransform || transform
+        const maybeLabelTransform = labelTransform ?? transform
 
         return (rawItem: T) =>
           assocPath(
@@ -55,7 +55,7 @@ export function useTable<T extends CollectionItem = CollectionItem>(
       searchableKeys.map(key => {
         const keyAsArrayPath = getArrayPathFromStringPath(key)
         const maybeColumn = columns.find(propEq(key, 'key'))
-        const maybeSearchTransform = maybeColumn && (maybeColumn.searchTransform || maybeColumn.transform)
+        const maybeSearchTransform = maybeColumn && (maybeColumn.searchTransform ?? maybeColumn.transform)
 
         return (rawItem: T) => {
           const searchableValue = maybeSearchTransform
@@ -76,7 +76,7 @@ export function useTable<T extends CollectionItem = CollectionItem>(
         .filter(({ isSortable }) => Boolean(isSortable))
         .map(({ key, sortingTransform, transform }) => {
           const keyAsArrayPath = getArrayPathFromStringPath(key)
-          const maybeSortingTransform = sortingTransform || transform
+          const maybeSortingTransform = sortingTransform ?? transform
 
           return (rawItem: T) =>
             assocPath(

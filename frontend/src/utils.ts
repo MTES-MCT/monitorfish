@@ -121,7 +121,7 @@ const MINUTES = 60
 const HOURS = 24
 const SECONDS_IN_DAY = HOURS * MINUTES * SECONDS
 
-export const timeagoFrenchLocale = function (_, index, totalSec) {
+export function timeagoFrenchLocale(_, index, totalSec) {
   // Between 105s - 120s, round up to 2 minutes
   // Won’t work for already mounted components because won’t update between 60-120s
   if (index === 2 && totalSec >= 105) {

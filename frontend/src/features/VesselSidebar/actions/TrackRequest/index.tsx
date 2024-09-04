@@ -88,7 +88,7 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
         isRightMenuOpen={rightMenuIsOpen}
         isSidebarOpen={isSidebarOpen}
         onClick={() => setIsOpenedFromClick(!isOpenedFromClick)}
-        title={"Paramétrer l'affichage de la piste VMS"}
+        title="Paramétrer l'affichage de la piste VMS"
         top={118}
       >
         <VesselIcon />

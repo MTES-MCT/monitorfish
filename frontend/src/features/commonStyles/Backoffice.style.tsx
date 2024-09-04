@@ -9,7 +9,7 @@ export const ContentLine = styled.div<{
 }>`
   display: flex;
   flex-direction: ${p => (p.isFormOpened && p.isInfoTextShown ? 'column' : 'row')};
-  align-items: ${p => ((p.isFormOpened && p.isInfoTextShown) || p.alignedToTop ? 'flex-start' : 'center')};
+  align-items: ${p => ((!!p.isFormOpened && !!p.isInfoTextShown) || !!p.alignedToTop ? 'flex-start' : 'center')};
   margin-bottom: 12px;
 `
 

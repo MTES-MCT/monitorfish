@@ -109,7 +109,7 @@ export function Identity() {
         secondColumn={[
           {
             key: 'Taille',
-            value: `${selectedVessel?.length || '-'} x ${selectedVessel?.width || '-'}`
+            value: `${selectedVessel?.length ?? '-'} x ${selectedVessel?.width ?? '-'}`
           },
           {
             key: 'Jauge',
@@ -251,7 +251,7 @@ export function Identity() {
               <Key>Contact navire</Key>
               <Value>
                 <PersonalData>
-                  {selectedVessel?.vesselPhones || selectedVessel?.vesselEmails ? (
+                  {(selectedVessel?.vesselPhones ?? selectedVessel?.vesselEmails) ? (
                     <>
                       {selectedVessel?.vesselPhones ? (
                         <>

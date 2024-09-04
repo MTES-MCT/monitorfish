@@ -102,7 +102,7 @@ const Wrapper = styled.div<{
   $width: number | undefined
 }>`
   margin: ${p => (p.$noMargin ? 0 : '12px 0 20px 20px')};
-  width: ${p => p.$width || 197}px;
+  width: ${p => p.$width ?? 197}px;
 
   .rs-picker-daterange {
     background: ${p => (p.$isEmpty ? COLORS.gainsboro : 'transparent')};

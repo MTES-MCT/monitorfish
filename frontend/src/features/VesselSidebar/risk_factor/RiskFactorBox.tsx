@@ -28,7 +28,7 @@ export function RiskFactorBox({
     fontWeight: 500,
     height: isBig ? 20 : 17,
     lineHeight: '14px',
-    marginRight: marginRight || 8,
+    marginRight: marginRight ?? 8,
     paddingTop: isBig ? 4 : 1,
     textAlign: 'center',
     userSelect: 'none',

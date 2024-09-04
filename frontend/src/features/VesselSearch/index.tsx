@@ -264,12 +264,12 @@ const Input = styled.input<{
   background-position-x: 16px;
   padding-left: ${p => (p.$flagState ? 45 : 16)}px;
 
-  :disabled {
+  &:disabled {
     background-color: var(--rs-input-disabled-bg);
   }
 
-  :hover,
-  :focus {
+  &:hover,
+  &:focus {
     border: none;
   }
 `

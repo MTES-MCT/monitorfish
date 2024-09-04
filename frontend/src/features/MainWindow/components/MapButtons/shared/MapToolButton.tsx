@@ -64,8 +64,8 @@ const StyledMapToolButton = styled(MapButton)<{
   background: ${p => (p.$isActive ? p.theme.color.blueGray : p.theme.color.charcoal)};
   transition: all 0.3s;
 
-  :hover,
-  :focus {
+  &:hover,
+  &:focus {
     background: ${p => (p.$isActive ? p.theme.color.blueGray : p.theme.color.charcoal)};
   }
 `

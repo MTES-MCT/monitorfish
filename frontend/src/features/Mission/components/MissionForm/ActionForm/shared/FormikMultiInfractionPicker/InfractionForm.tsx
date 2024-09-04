@@ -99,7 +99,7 @@ const StyledForm = styled(Form)`
   > .Element-Fieldset {
     margin-top: 16px;
 
-    :first-child {
+    &:first-child {
       margin-top: 0px;
     }
   }

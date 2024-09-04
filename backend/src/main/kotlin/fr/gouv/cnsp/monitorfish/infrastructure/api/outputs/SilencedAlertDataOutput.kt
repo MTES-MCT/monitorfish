@@ -19,17 +19,18 @@ class SilencedAlertDataOutput(
     val value: AlertType,
 ) {
     companion object {
-        fun fromSilencedAlert(silencedAlert: SilencedAlert) = SilencedAlertDataOutput(
-            id = silencedAlert.id,
-            vesselId = silencedAlert.vesselId,
-            vesselName = silencedAlert.vesselName,
-            internalReferenceNumber = silencedAlert.internalReferenceNumber,
-            externalReferenceNumber = silencedAlert.externalReferenceNumber,
-            ircs = silencedAlert.ircs,
-            vesselIdentifier = silencedAlert.vesselIdentifier,
-            flagState = silencedAlert.flagState,
-            silencedBeforeDate = silencedAlert.silencedBeforeDate,
-            value = silencedAlert.value,
-        )
+        fun fromSilencedAlert(silencedAlert: SilencedAlert) =
+            SilencedAlertDataOutput(
+                id = silencedAlert.id,
+                vesselId = silencedAlert.vesselId,
+                vesselName = silencedAlert.vesselName,
+                internalReferenceNumber = silencedAlert.internalReferenceNumber,
+                externalReferenceNumber = silencedAlert.externalReferenceNumber,
+                ircs = silencedAlert.ircs,
+                vesselIdentifier = silencedAlert.vesselIdentifier,
+                flagState = silencedAlert.flagState,
+                silencedBeforeDate = silencedAlert.silencedBeforeDate,
+                value = silencedAlert.value,
+            )
     }
 }

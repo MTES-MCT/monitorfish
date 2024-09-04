@@ -12,19 +12,22 @@ data class BeaconMalfunctionWithDetailsDataOutput(
             beaconMalfunctionWithDetails: BeaconMalfunctionWithDetails,
         ): BeaconMalfunctionWithDetailsDataOutput {
             return BeaconMalfunctionWithDetailsDataOutput(
-                beaconMalfunction = BeaconMalfunctionDataOutput.fromBeaconMalfunction(
-                    beaconMalfunctionWithDetails.beaconMalfunction,
-                ),
-                comments = beaconMalfunctionWithDetails.comments.map {
-                    BeaconMalfunctionCommentDataOutput.fromBeaconMalfunctionComment(
-                        it,
-                    )
-                },
-                actions = beaconMalfunctionWithDetails.actions.map {
-                    BeaconMalfunctionActionDataOutput.fromBeaconMalfunctionAction(
-                        it,
-                    )
-                },
+                beaconMalfunction =
+                    BeaconMalfunctionDataOutput.fromBeaconMalfunction(
+                        beaconMalfunctionWithDetails.beaconMalfunction,
+                    ),
+                comments =
+                    beaconMalfunctionWithDetails.comments.map {
+                        BeaconMalfunctionCommentDataOutput.fromBeaconMalfunctionComment(
+                            it,
+                        )
+                    },
+                actions =
+                    beaconMalfunctionWithDetails.actions.map {
+                        BeaconMalfunctionActionDataOutput.fromBeaconMalfunctionAction(
+                            it,
+                        )
+                    },
             )
         }
     }

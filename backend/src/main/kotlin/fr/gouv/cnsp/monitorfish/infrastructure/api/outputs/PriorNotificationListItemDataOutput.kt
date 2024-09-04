@@ -60,14 +60,17 @@ data class PriorNotificationListItemDataOutput(
             val message = priorNotification.logbookMessageAndValue.value
 
             val acknowledgment = logbookMessage.acknowledgment?.let { AcknowledgmentDataOutput.fromAcknowledgment(it) }
-            val onBoardCatches = message.catchOnboard
-                .map { LogbookMessageFishingCatchDataOutput.fromLogbookFishingCatch(it) }
-            val tripGears = logbookMessage.tripGears?.mapNotNull {
-                LogbookMessageGearDataOutput.fromGear(it)
-            } ?: emptyList()
-            val tripSegments = logbookMessage.tripSegments?.map {
-                LogbookMessageTripSegmentDataOutput.fromLogbookTripSegment(it)
-            } ?: emptyList()
+            val onBoardCatches =
+                message.catchOnboard
+                    .map { LogbookMessageFishingCatchDataOutput.fromLogbookFishingCatch(it) }
+            val tripGears =
+                logbookMessage.tripGears?.mapNotNull {
+                    LogbookMessageGearDataOutput.fromGear(it)
+                } ?: emptyList()
+            val tripSegments =
+                logbookMessage.tripSegments?.map {
+                    LogbookMessageTripSegmentDataOutput.fromLogbookTripSegment(it)
+                } ?: emptyList()
             val types = message.pnoTypes.map { PriorNotificationTypeDataOutput.fromPriorNotificationType(it) }
             val vessel = requireNotNull(priorNotification.vessel) { "`vessel` is null." }
 

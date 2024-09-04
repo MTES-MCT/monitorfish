@@ -27,7 +27,6 @@ data class LogbookMessage(
     var rawMessage: String? = null,
     val transmissionFormat: LogbookTransmissionFormat?,
     val software: String? = null,
-
     var acknowledgment: Acknowledgment? = null,
     var isCorrectedByNewerMessage: Boolean = false,
     var isDeleted: Boolean = false,
@@ -51,24 +50,26 @@ data class LogbookMessage(
         val isCurrentAcknowledgementSuccessful = currentAcknowledgement?.isSuccess ?: false
         val isNewAcknowledgementSuccessful = newAcknowledgement.returnStatus == RETReturnErrorCode.SUCCESS.number
 
-        val shouldUpdate = when {
-            // If there is no currently calculated acknowledgement yet, create it
-            currentAcknowledgement?.dateTime == null || currentAcknowledgement.isSuccess == null -> true
-            // Else, if the new acknowledgement message is successful while the currently calculated one is not, replace it
-            isNewAcknowledgementSuccessful && currentAcknowledgement.isSuccess != true -> true
-            // Else, if the new failure acknowledgement message is more recent
-            // than the currently calculated one (also a failure in this case), replace it
-            !isNewAcknowledgementSuccessful &&
-                newLogbookMessageAcknowledgement.reportDateTime != null &&
-                newLogbookMessageAcknowledgement.reportDateTime > currentAcknowledgement.dateTime -> true
+        val shouldUpdate =
+            when {
+                // If there is no currently calculated acknowledgement yet, create it
+                currentAcknowledgement?.dateTime == null || currentAcknowledgement.isSuccess == null -> true
+                // Else, if the new acknowledgement message is successful while the currently calculated one is not, replace it
+                isNewAcknowledgementSuccessful && currentAcknowledgement.isSuccess != true -> true
+                // Else, if the new failure acknowledgement message is more recent
+                // than the currently calculated one (also a failure in this case), replace it
+                !isNewAcknowledgementSuccessful &&
+                    newLogbookMessageAcknowledgement.reportDateTime != null &&
+                    newLogbookMessageAcknowledgement.reportDateTime > currentAcknowledgement.dateTime -> true
 
-            else -> false
-        }
-        if (shouldUpdate) {
-            this.acknowledgment = newAcknowledgement.also {
-                it.isSuccess = isCurrentAcknowledgementSuccessful || isNewAcknowledgementSuccessful
-                it.dateTime = newLogbookMessageAcknowledgement.reportDateTime
+                else -> false
             }
+        if (shouldUpdate) {
+            this.acknowledgment =
+                newAcknowledgement.also {
+                    it.isSuccess = isCurrentAcknowledgementSuccessful || isNewAcknowledgementSuccessful
+                    it.dateTime = newLogbookMessageAcknowledgement.reportDateTime
+                }
         }
     }
 
@@ -180,7 +181,7 @@ data class LogbookMessage(
             it.messageType == messageType && (
                 (reportId.isNullOrEmpty() && it.referencedReportId == reportId) ||
                     (referencedReportId.isNullOrEmpty() && it.referencedReportId == referencedReportId)
-                )
+            )
         }
     }
 
@@ -197,18 +198,23 @@ data class LogbookMessage(
     }
 
     private fun setIsCorrectedByNewerMessage(relatedMessages: List<LogbookMessage>) {
-        isCorrectedByNewerMessage = relatedMessages.any {
-            operationType == LogbookOperationType.COR &&
-                it.reportDateTime != null &&
-                it.reportDateTime > reportDateTime
-        }
+        isCorrectedByNewerMessage =
+            relatedMessages.any {
+                operationType == LogbookOperationType.COR &&
+                    it.reportDateTime != null &&
+                    it.reportDateTime > reportDateTime
+            }
     }
 
-    private fun setNamesFromCodes(message: COE, allSpecies: List<Species>) {
+    private fun setNamesFromCodes(
+        message: COE,
+        allSpecies: List<Species>,
+    ) {
         message.targetSpeciesOnEntry?.let { targetSpeciesOnEntry ->
-            message.targetSpeciesNameOnEntry = EffortTargetSpeciesGroup.entries.find {
-                it.name == targetSpeciesOnEntry
-            }?.value
+            message.targetSpeciesNameOnEntry =
+                EffortTargetSpeciesGroup.entries.find {
+                    it.name == targetSpeciesOnEntry
+                }?.value
 
             if (message.targetSpeciesNameOnEntry == null) {
                 message.targetSpeciesNameOnEntry = allSpecies.find { it.code == targetSpeciesOnEntry }?.name
@@ -216,11 +222,15 @@ data class LogbookMessage(
         }
     }
 
-    private fun setNamesFromCodes(message: COX, allSpecies: List<Species>) {
+    private fun setNamesFromCodes(
+        message: COX,
+        allSpecies: List<Species>,
+    ) {
         message.targetSpeciesOnExit?.let { targetSpeciesOnExit ->
-            message.targetSpeciesNameOnExit = EffortTargetSpeciesGroup.entries.find {
-                it.name == targetSpeciesOnExit
-            }?.value
+            message.targetSpeciesNameOnExit =
+                EffortTargetSpeciesGroup.entries.find {
+                    it.name == targetSpeciesOnExit
+                }?.value
 
             if (message.targetSpeciesNameOnExit == null) {
                 message.targetSpeciesNameOnExit = allSpecies.find { it.code == targetSpeciesOnExit }?.name
@@ -228,11 +238,15 @@ data class LogbookMessage(
         }
     }
 
-    private fun setNamesFromCodes(message: CRO, allSpecies: List<Species>) {
+    private fun setNamesFromCodes(
+        message: CRO,
+        allSpecies: List<Species>,
+    ) {
         message.targetSpeciesOnExit?.let { targetSpeciesOnExit ->
-            message.targetSpeciesNameOnExit = EffortTargetSpeciesGroup.entries.find {
-                it.name == targetSpeciesOnExit
-            }?.value
+            message.targetSpeciesNameOnExit =
+                EffortTargetSpeciesGroup.entries.find {
+                    it.name == targetSpeciesOnExit
+                }?.value
 
             if (message.targetSpeciesNameOnExit == null) {
                 message.targetSpeciesNameOnExit = allSpecies.find { it.code == targetSpeciesOnExit }?.name
@@ -240,9 +254,10 @@ data class LogbookMessage(
         }
 
         message.targetSpeciesOnEntry?.let { targetSpeciesOnEntry ->
-            message.targetSpeciesNameOnEntry = EffortTargetSpeciesGroup.entries.find {
-                it.name == targetSpeciesOnEntry
-            }?.value
+            message.targetSpeciesNameOnEntry =
+                EffortTargetSpeciesGroup.entries.find {
+                    it.name == targetSpeciesOnEntry
+                }?.value
 
             if (message.targetSpeciesNameOnEntry == null) {
                 message.targetSpeciesNameOnEntry = allSpecies.find { it.code == targetSpeciesOnEntry }?.name
@@ -268,7 +283,10 @@ data class LogbookMessage(
         }
     }
 
-    private fun setNamesFromCodes(message: CPS, allSpecies: List<Species>) {
+    private fun setNamesFromCodes(
+        message: CPS,
+        allSpecies: List<Species>,
+    ) {
         message.catches.forEach { catch ->
             addSpeciesName(catch, catch.species, allSpecies)
         }
@@ -297,7 +315,10 @@ data class LogbookMessage(
         }
     }
 
-    private fun setNamesFromCodes(message: DIS, allSpecies: List<Species>) {
+    private fun setNamesFromCodes(
+        message: DIS,
+        allSpecies: List<Species>,
+    ) {
         message.catches.forEach { catch ->
             catch.species?.let { species ->
                 addSpeciesName(catch, species, allSpecies)
@@ -305,7 +326,11 @@ data class LogbookMessage(
         }
     }
 
-    private fun setNamesFromCodes(message: LAN, allPorts: List<Port>, allSpecies: List<Species>) {
+    private fun setNamesFromCodes(
+        message: LAN,
+        allPorts: List<Port>,
+        allSpecies: List<Species>,
+    ) {
         message.port?.let { portLocode ->
             message.portName = allPorts.find { it.locode == portLocode }?.name
         }
@@ -317,7 +342,11 @@ data class LogbookMessage(
         }
     }
 
-    private fun setNamesFromCodes(message: PNO, allPorts: List<Port>, allSpecies: List<Species>) {
+    private fun setNamesFromCodes(
+        message: PNO,
+        allPorts: List<Port>,
+        allSpecies: List<Species>,
+    ) {
         message.port?.let { arrivalPortLocode ->
             message.portName = allPorts.find { it.locode == arrivalPortLocode }?.name
         }
@@ -345,11 +374,19 @@ data class LogbookMessage(
         }
     }
 
-    private fun addSpeciesName(catch: LogbookFishingCatch, species: String, allSpecies: List<Species>) {
+    private fun addSpeciesName(
+        catch: LogbookFishingCatch,
+        species: String,
+        allSpecies: List<Species>,
+    ) {
         catch.speciesName = allSpecies.find { it.code == species }?.name
     }
 
-    private fun addSpeciesName(catch: ProtectedSpeciesCatch, species: String, allSpecies: List<Species>) {
+    private fun addSpeciesName(
+        catch: ProtectedSpeciesCatch,
+        species: String,
+        allSpecies: List<Species>,
+    ) {
         catch.speciesName = allSpecies.find { it.code == species }?.name
     }
 

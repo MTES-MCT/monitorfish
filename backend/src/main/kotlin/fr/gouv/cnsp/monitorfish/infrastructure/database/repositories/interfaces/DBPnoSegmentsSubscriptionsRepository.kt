@@ -15,5 +15,8 @@ interface DBPnoSegmentsSubscriptionsRepository : JpaRepository<PnoSegmentSubscri
         """,
         nativeQuery = true,
     )
-    fun countByPortLocodeAndSegmentCodes(portLocode: String, segmentCodes: List<String>): Long
+    fun countByPortLocodeAndSegmentCodes(
+        portLocode: String,
+        segmentCodes: List<String>,
+    ): Long
 }

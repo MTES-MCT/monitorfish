@@ -14,7 +14,6 @@ import java.time.ZonedDateTime
 
 @Repository
 class JpaPositionRepository(private val dbPositionRepository: DBPositionRepository) : PositionRepository {
-
     private val logger: Logger = LoggerFactory.getLogger(JpaPositionRepository::class.java)
 
     override fun findAll(): List<Position> {

@@ -12,16 +12,17 @@ enum class SeafrontGroup {
     ;
 
     companion object {
-        private val groupToSeafronts = mapOf(
-            ALL to Seafront.entries,
-            MED to listOf(Seafront.CORSE, Seafront.MED),
-            MEMN to listOf(Seafront.MEMN),
-            NAMO to listOf(Seafront.NAMO),
-            OUTREMEROA to listOf(Seafront.GUADELOUPE, Seafront.GUYANE, Seafront.MARTINIQUE),
-            OUTREMEROI to listOf(Seafront.MAYOTTE, Seafront.SUD_OCEAN_INDIEN),
-            SA to listOf(Seafront.SA),
-            NONE to emptyList(),
-        )
+        private val groupToSeafronts =
+            mapOf(
+                ALL to Seafront.entries,
+                MED to listOf(Seafront.CORSE, Seafront.MED),
+                MEMN to listOf(Seafront.MEMN),
+                NAMO to listOf(Seafront.NAMO),
+                OUTREMEROA to listOf(Seafront.GUADELOUPE, Seafront.GUYANE, Seafront.MARTINIQUE),
+                OUTREMEROI to listOf(Seafront.MAYOTTE, Seafront.SUD_OCEAN_INDIEN),
+                SA to listOf(Seafront.SA),
+                NONE to emptyList(),
+            )
 
         fun fromSeafront(seafront: Seafront?): SeafrontGroup {
             return seafront?.let { groupToSeafronts.entries.first { it.key != ALL && it.value.contains(seafront) }.key }

@@ -11,7 +11,6 @@ class PnoPortSubscriptionId(val controlUnitId: Int, val portLocode: String) : Se
 data class PnoPortSubscriptionEntity(
     @EmbeddedId
     val id: PnoPortSubscriptionId,
-
     @Column(name = "receive_all_pnos", updatable = false)
     val receiveAllPnos: Boolean,
 )

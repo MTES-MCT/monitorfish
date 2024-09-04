@@ -68,12 +68,13 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = creationDate,
-                value = InfractionSuspicion(
-                    ReportingActor.OPS,
-                    natinfCode = 123456,
-                    authorTrigram = "LTH",
-                    title = "A title",
-                ),
+                value =
+                    InfractionSuspicion(
+                        ReportingActor.OPS,
+                        natinfCode = 123456,
+                        authorTrigram = "LTH",
+                        title = "A title",
+                    ),
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
@@ -110,12 +111,13 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
                 vesselId = 523,
                 creationDate = creationDate,
                 flagState = CountryCode.FR,
-                value = InfractionSuspicion(
-                    ReportingActor.OPS,
-                    natinfCode = 123456,
-                    authorTrigram = "LTH",
-                    title = "A title",
-                ),
+                value =
+                    InfractionSuspicion(
+                        ReportingActor.OPS,
+                        natinfCode = 123456,
+                        authorTrigram = "LTH",
+                        title = "A title",
+                    ),
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,

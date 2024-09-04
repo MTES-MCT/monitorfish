@@ -33,16 +33,18 @@ class AddReporting(
         newReporting.value as InfractionSuspicionOrObservationType
         newReporting.value.checkReportingActorAndFieldsRequirements()
 
-        val nextReporting = if (newReporting.type === ReportingType.INFRACTION_SUSPICION) {
-            newReporting.value as InfractionSuspicion
-            val nextInfractionSuspicion = getInfractionSuspicionWithDMLAndSeaFront.execute(
-                newReporting.value,
-                newReporting.vesselId,
-            )
-            newReporting.copy(value = nextInfractionSuspicion)
-        } else {
-            newReporting
-        }
+        val nextReporting =
+            if (newReporting.type === ReportingType.INFRACTION_SUSPICION) {
+                newReporting.value as InfractionSuspicion
+                val nextInfractionSuspicion =
+                    getInfractionSuspicionWithDMLAndSeaFront.execute(
+                        newReporting.value,
+                        newReporting.vesselId,
+                    )
+                newReporting.copy(value = nextInfractionSuspicion)
+            } else {
+                newReporting
+            }
 
         val savedReporting = reportingRepository.save(nextReporting)
         val controlUnitId = (savedReporting.value as InfractionSuspicionOrObservationType).controlUnitId

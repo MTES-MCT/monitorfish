@@ -17,10 +17,10 @@ data class ForeignFmcEntity(
     @Column(name = "email_addresses", columnDefinition = "varchar[]")
     var emailAddresses: List<String>? = null,
 ) {
-
-    fun toForeignFMC() = ForeignFMC(
-        countryCodeIso3 = countryCodeIso3,
-        countryName = countryName,
-        emailAddresses = emailAddresses,
-    )
+    fun toForeignFMC() =
+        ForeignFMC(
+            countryCodeIso3 = countryCodeIso3,
+            countryName = countryName,
+            emailAddresses = emailAddresses,
+        )
 }

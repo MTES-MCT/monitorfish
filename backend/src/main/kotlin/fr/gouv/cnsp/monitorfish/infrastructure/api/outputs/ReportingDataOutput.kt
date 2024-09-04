@@ -29,17 +29,22 @@ class ReportingDataOutput(
     val underCharter: Boolean? = null,
 ) {
     companion object {
-        fun fromReporting(reporting: Reporting, controlUnit: ControlUnit?): ReportingDataOutput {
-            val value = when (reporting.value) {
-                is InfractionSuspicion -> InfractionSuspicionDataOutput.fromInfractionSuspicion(
-                    reporting.value,
-                    controlUnit,
-                )
+        fun fromReporting(
+            reporting: Reporting,
+            controlUnit: ControlUnit?,
+        ): ReportingDataOutput {
+            val value =
+                when (reporting.value) {
+                    is InfractionSuspicion ->
+                        InfractionSuspicionDataOutput.fromInfractionSuspicion(
+                            reporting.value,
+                            controlUnit,
+                        )
 
-                is Observation -> ObservationDataOutput.fromObservation(reporting.value, controlUnit)
-                is AlertType -> AlertDataOutput.fromAlertType(reporting.value)
-                else -> throw IllegalArgumentException("Should not happen.")
-            }
+                    is Observation -> ObservationDataOutput.fromObservation(reporting.value, controlUnit)
+                    is AlertType -> AlertDataOutput.fromAlertType(reporting.value)
+                    else -> throw IllegalArgumentException("Should not happen.")
+                }
 
             return ReportingDataOutput(
                 id = reporting.id,

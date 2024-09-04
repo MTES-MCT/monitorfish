@@ -9,14 +9,16 @@ data class VesselAndPositionsDataOutput(
     companion object {
         fun fromVesselInformation(vesselInformation: VesselInformation): VesselAndPositionsDataOutput {
             return VesselAndPositionsDataOutput(
-                vessel = VesselDataOutput.fromVesselAndRelatedDatas(
-                    vesselInformation.vessel,
-                    vesselInformation.beacon,
-                    vesselInformation.vesselRiskFactor,
-                ),
-                positions = vesselInformation.positions.map {
-                    PositionDataOutput.fromPosition(it)
-                },
+                vessel =
+                    VesselDataOutput.fromVesselAndRelatedDatas(
+                        vesselInformation.vessel,
+                        vesselInformation.beacon,
+                        vesselInformation.vesselRiskFactor,
+                    ),
+                positions =
+                    vesselInformation.positions.map {
+                        PositionDataOutput.fromPosition(it)
+                    },
             )
         }
     }

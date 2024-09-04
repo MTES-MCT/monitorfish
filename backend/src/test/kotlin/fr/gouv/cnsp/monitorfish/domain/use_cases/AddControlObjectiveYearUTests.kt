@@ -17,7 +17,6 @@ import java.time.ZoneOffset
 
 @ExtendWith(SpringExtension::class)
 class AddControlObjectiveYearUTests {
-
     @MockBean
     private lateinit var controlObjectivesRepository: ControlObjectivesRepository
 
@@ -61,9 +60,10 @@ class AddControlObjectiveYearUTests {
         given(controlObjectivesRepository.findYearEntries()).willReturn(listOf(nextYear, currentYear, 2020))
 
         // When
-        val throwable = catchThrowable {
-            AddControlObjectiveYear(controlObjectivesRepository, fixedClock).execute()
-        }
+        val throwable =
+            catchThrowable {
+                AddControlObjectiveYear(controlObjectivesRepository, fixedClock).execute()
+            }
 
         // Then
         assertThat(throwable).isNotNull

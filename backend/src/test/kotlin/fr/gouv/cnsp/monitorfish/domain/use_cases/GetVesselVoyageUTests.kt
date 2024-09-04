@@ -21,7 +21,6 @@ import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class GetVesselVoyageUTests {
-
     @MockBean
     private lateinit var logbookReportRepository: LogbookReportRepository
 
@@ -44,8 +43,9 @@ class GetVesselVoyageUTests {
         )
 
         // When
-        val voyage = GetVesselVoyage(logbookReportRepository, PNOAndLANAlertRepository, getLogbookMessages)
-            .execute("FR224226850", VoyageRequest.LAST, null)
+        val voyage =
+            GetVesselVoyage(logbookReportRepository, PNOAndLANAlertRepository, getLogbookMessages)
+                .execute("FR224226850", VoyageRequest.LAST, null)
 
         val (_, alerts) = voyage.logbookMessagesAndAlerts
 
@@ -63,10 +63,11 @@ class GetVesselVoyageUTests {
     @Test
     fun `execute Should throw an Exception When requesting a PREVIOUS voyage with current trip number as null`() {
         // When
-        val throwable = catchThrowable {
-            GetVesselVoyage(logbookReportRepository, PNOAndLANAlertRepository, getLogbookMessages)
-                .execute("FR224226850", VoyageRequest.PREVIOUS, null)
-        }
+        val throwable =
+            catchThrowable {
+                GetVesselVoyage(logbookReportRepository, PNOAndLANAlertRepository, getLogbookMessages)
+                    .execute("FR224226850", VoyageRequest.PREVIOUS, null)
+            }
 
         // Then
         assertThat(throwable).isNotNull
@@ -86,8 +87,9 @@ class GetVesselVoyageUTests {
         )
 
         // When
-        val voyage = GetVesselVoyage(logbookReportRepository, PNOAndLANAlertRepository, getLogbookMessages)
-            .execute("FR224226850", VoyageRequest.LAST, "12345")
+        val voyage =
+            GetVesselVoyage(logbookReportRepository, PNOAndLANAlertRepository, getLogbookMessages)
+                .execute("FR224226850", VoyageRequest.LAST, "12345")
 
         val (_, alerts) = voyage.logbookMessagesAndAlerts
 
@@ -116,8 +118,9 @@ class GetVesselVoyageUTests {
         )
 
         // When
-        val voyage = GetVesselVoyage(logbookReportRepository, PNOAndLANAlertRepository, getLogbookMessages)
-            .execute("FR224226850", VoyageRequest.NEXT, "123456788")
+        val voyage =
+            GetVesselVoyage(logbookReportRepository, PNOAndLANAlertRepository, getLogbookMessages)
+                .execute("FR224226850", VoyageRequest.NEXT, "123456788")
 
         val (_, alerts) = voyage.logbookMessagesAndAlerts
 
@@ -139,8 +142,9 @@ class GetVesselVoyageUTests {
         )
 
         // When
-        val voyage = GetVesselVoyage(logbookReportRepository, PNOAndLANAlertRepository, getLogbookMessages)
-            .execute("FR224226850", VoyageRequest.EQUALS, "123456788")
+        val voyage =
+            GetVesselVoyage(logbookReportRepository, PNOAndLANAlertRepository, getLogbookMessages)
+                .execute("FR224226850", VoyageRequest.EQUALS, "123456788")
 
         val (_, alerts) = voyage.logbookMessagesAndAlerts
 

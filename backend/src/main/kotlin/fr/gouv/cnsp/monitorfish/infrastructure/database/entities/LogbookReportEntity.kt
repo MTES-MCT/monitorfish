@@ -72,7 +72,6 @@ data class LogbookReportEntity(
     val tripSegments: String?,
     @Column(name = "is_test_message")
     val isTestMessage: Boolean = false,
-
 ) {
     companion object {
         fun fromLogbookMessage(
@@ -94,7 +93,6 @@ data class LogbookReportEntity(
             imo = logbookMessage.imo,
             software = logbookMessage.software,
             transmissionFormat = logbookMessage.transmissionFormat,
-
             isEnriched = logbookMessage.isEnriched,
             message = mapper.writeValueAsString(logbookMessage.message),
             messageType = logbookMessage.messageType,
@@ -127,7 +125,6 @@ data class LogbookReportEntity(
             imo = imo,
             software = software,
             transmissionFormat = transmissionFormat,
-
             isEnriched = isEnriched,
             message = message,
             messageType = messageType,

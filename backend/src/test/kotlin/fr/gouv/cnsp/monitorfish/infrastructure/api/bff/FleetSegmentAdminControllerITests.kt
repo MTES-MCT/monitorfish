@@ -27,7 +27,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = [(FleetSegmentAdminController::class)])
 class FleetSegmentAdminControllerITests {
-
     @Autowired
     private lateinit var api: MockMvc
 

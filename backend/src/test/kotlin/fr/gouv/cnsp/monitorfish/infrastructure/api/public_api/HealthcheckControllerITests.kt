@@ -21,7 +21,6 @@ import java.time.ZonedDateTime
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = [(HealthcheckController::class)])
 class HealthcheckControllerITests {
-
     @Autowired
     private lateinit var api: MockMvc
 

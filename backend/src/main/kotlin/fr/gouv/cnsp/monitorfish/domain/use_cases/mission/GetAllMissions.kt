@@ -30,30 +30,33 @@ class GetAllMissions(
         missionStatuses: List<String>?,
         seaFronts: List<String>?,
     ): List<MissionAndActions> {
-        val missions = missionRepository.findAllMissions(
-            pageNumber,
-            pageSize,
-            startedAfterDateTime,
-            startedBeforeDateTime,
-            missionSources,
-            missionTypes,
-            missionStatuses,
-            seaFronts,
-        )
+        val missions =
+            missionRepository.findAllMissions(
+                pageNumber,
+                pageSize,
+                startedAfterDateTime,
+                startedBeforeDateTime,
+                missionSources,
+                missionTypes,
+                missionStatuses,
+                seaFronts,
+            )
 
-        val allMissionsActions = missions
-            .chunked(databaseProperties.missionsActionsChunkSize)
-            .map { chunkedMissions ->
-                val ids = chunkedMissions.map { it.id }
-                return@map missionActionsRepository.findMissionActionsIn(ids)
-            }
-            .flatten()
+        val allMissionsActions =
+            missions
+                .chunked(databaseProperties.missionsActionsChunkSize)
+                .map { chunkedMissions ->
+                    val ids = chunkedMissions.map { it.id }
+                    return@map missionActionsRepository.findMissionActionsIn(ids)
+                }
+                .flatten()
         logger.info("Got ${allMissionsActions.size} mission actions associated to fetched missions.")
 
         return missions.map { mission ->
-            val missionActions = allMissionsActions
-                .filter { it.missionId == mission.id }
-                .sortedByDescending { it.actionDatetimeUtc }
+            val missionActions =
+                allMissionsActions
+                    .filter { it.missionId == mission.id }
+                    .sortedByDescending { it.actionDatetimeUtc }
 
             return@map MissionAndActions(mission, missionActions)
         }

@@ -75,8 +75,9 @@ class JpaManualPriorNotificationRepository(
     @CacheEvict(value = ["manual_pno_to_verify"], allEntries = true)
     override fun save(newOrNextPriorNotification: PriorNotification): PriorNotification {
         try {
-            val manualPriorNotificationEntity = dbManualPriorNotificationRepository
-                .save(ManualPriorNotificationEntity.fromPriorNotification(newOrNextPriorNotification, true))
+            val manualPriorNotificationEntity =
+                dbManualPriorNotificationRepository
+                    .save(ManualPriorNotificationEntity.fromPriorNotification(newOrNextPriorNotification, true))
 
             return manualPriorNotificationEntity.toPriorNotification()
         } catch (e: IllegalArgumentException) {
@@ -89,7 +90,12 @@ class JpaManualPriorNotificationRepository(
 
     @Transactional
     @CacheEvict(value = ["manual_pno_to_verify"], allEntries = true)
-    override fun updateState(reportId: String, isBeingSent: Boolean, isSent: Boolean, isVerified: Boolean) {
+    override fun updateState(
+        reportId: String,
+        isBeingSent: Boolean,
+        isSent: Boolean,
+        isVerified: Boolean,
+    ) {
         val manualPriorNotification =
             dbManualPriorNotificationRepository.findByReportId(reportId) ?: throw BackendUsageException(
                 BackendUsageErrorCode.NOT_FOUND,

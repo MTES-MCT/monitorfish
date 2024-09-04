@@ -16,7 +16,6 @@ import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class GetBeaconMalfunctionUTests {
-
     @MockBean
     private lateinit var beaconMalfunctionsRepository: BeaconMalfunctionsRepository
 
@@ -115,14 +114,15 @@ class GetBeaconMalfunctionUTests {
         )
 
         // When
-        val beaconMalfunctions = GetBeaconMalfunction(
-            beaconMalfunctionsRepository,
-            beaconMalfunctionCommentsRepository,
-            beaconMalfunctionActionsRepository,
-            lastPositionRepository,
-            beaconMalfunctionNotificationsRepository,
-        )
-            .execute(1)
+        val beaconMalfunctions =
+            GetBeaconMalfunction(
+                beaconMalfunctionsRepository,
+                beaconMalfunctionCommentsRepository,
+                beaconMalfunctionActionsRepository,
+                lastPositionRepository,
+                beaconMalfunctionNotificationsRepository,
+            )
+                .execute(1)
 
         // Then
         assertThat(beaconMalfunctions.resume?.numberOfBeaconsAtSea).isEqualTo(1)

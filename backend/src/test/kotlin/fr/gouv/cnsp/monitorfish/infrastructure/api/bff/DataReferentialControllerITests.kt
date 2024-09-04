@@ -25,7 +25,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = [(DataReferentialController::class)])
 class DataReferentialControllerITests {
-
     @Autowired
     private lateinit var api: MockMvc
 

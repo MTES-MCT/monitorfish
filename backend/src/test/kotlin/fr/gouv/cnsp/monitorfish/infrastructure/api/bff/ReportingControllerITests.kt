@@ -35,7 +35,6 @@ import java.time.ZonedDateTime
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = [ReportingController::class])
 class ReportingControllerITests {
-
     @Autowired
     private lateinit var api: MockMvc
 
@@ -114,23 +113,25 @@ class ReportingControllerITests {
     @Test
     fun `Should create a reporting`() {
         // Given
-        val reporting = Reporting(
-            internalReferenceNumber = "FRFGRGR",
-            externalReferenceNumber = "RGD",
-            ircs = "6554fEE",
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            flagState = CountryCode.FR,
-            creationDate = ZonedDateTime.now(),
-            value = InfractionSuspicion(
-                ReportingActor.OPS,
-                natinfCode = 123456,
-                authorTrigram = "LTH",
-                title = "A title",
-            ),
-            type = ReportingType.INFRACTION_SUSPICION,
-            isDeleted = false,
-            isArchived = false,
-        )
+        val reporting =
+            Reporting(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = ZonedDateTime.now(),
+                value =
+                    InfractionSuspicion(
+                        ReportingActor.OPS,
+                        natinfCode = 123456,
+                        authorTrigram = "LTH",
+                        title = "A title",
+                    ),
+                type = ReportingType.INFRACTION_SUSPICION,
+                isDeleted = false,
+                isArchived = false,
+            )
         given(addReporting.execute(any())).willReturn(Pair(reporting, null))
 
         // When
@@ -145,12 +146,13 @@ class ReportingControllerITests {
                             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                             flagState = CountryCode.FR,
                             creationDate = ZonedDateTime.now(),
-                            value = InfractionSuspicion(
-                                ReportingActor.OPS,
-                                natinfCode = 123456,
-                                authorTrigram = "LTH",
-                                title = "A title",
-                            ),
+                            value =
+                                InfractionSuspicion(
+                                    ReportingActor.OPS,
+                                    natinfCode = 123456,
+                                    authorTrigram = "LTH",
+                                    title = "A title",
+                                ),
                             type = ReportingType.INFRACTION_SUSPICION,
                         ),
                     ),
@@ -170,24 +172,26 @@ class ReportingControllerITests {
     @Test
     fun `Should create a reporting And return an augmented payload with the control unit object When a control unit id is given`() {
         // Given
-        val reporting = Reporting(
-            internalReferenceNumber = "FRFGRGR",
-            externalReferenceNumber = "RGD",
-            ircs = "6554fEE",
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            flagState = CountryCode.FR,
-            creationDate = ZonedDateTime.now(),
-            value = InfractionSuspicion(
-                ReportingActor.UNIT,
-                natinfCode = 123456,
-                controlUnitId = 1234,
-                authorTrigram = "LTH",
-                title = "A title",
-            ),
-            type = ReportingType.INFRACTION_SUSPICION,
-            isDeleted = false,
-            isArchived = false,
-        )
+        val reporting =
+            Reporting(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = ZonedDateTime.now(),
+                value =
+                    InfractionSuspicion(
+                        ReportingActor.UNIT,
+                        natinfCode = 123456,
+                        controlUnitId = 1234,
+                        authorTrigram = "LTH",
+                        title = "A title",
+                    ),
+                type = ReportingType.INFRACTION_SUSPICION,
+                isDeleted = false,
+                isArchived = false,
+            )
         given(addReporting.execute(any())).willReturn(
             Pair(reporting, ControlUnit(1234, "DIRM", false, "Cross Etel", listOf())),
         )
@@ -204,13 +208,14 @@ class ReportingControllerITests {
                             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                             flagState = CountryCode.FR,
                             creationDate = ZonedDateTime.now(),
-                            value = InfractionSuspicion(
-                                ReportingActor.OPS,
-                                natinfCode = 123456,
-                                controlUnitId = 1234,
-                                authorTrigram = "LTH",
-                                title = "A title",
-                            ),
+                            value =
+                                InfractionSuspicion(
+                                    ReportingActor.OPS,
+                                    natinfCode = 123456,
+                                    controlUnitId = 1234,
+                                    authorTrigram = "LTH",
+                                    title = "A title",
+                                ),
                             type = ReportingType.INFRACTION_SUSPICION,
                         ),
                     ),
@@ -232,24 +237,26 @@ class ReportingControllerITests {
     @Test
     fun `Should get all current reportings`() {
         // Given
-        val reporting = Reporting(
-            internalReferenceNumber = "FRFGRGR",
-            externalReferenceNumber = "RGD",
-            ircs = "6554fEE",
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            flagState = CountryCode.FR,
-            creationDate = ZonedDateTime.now(),
-            value = InfractionSuspicion(
-                ReportingActor.OPS,
-                natinfCode = 123456,
-                authorTrigram = "LTH",
-                title = "A title",
-            ),
-            type = ReportingType.INFRACTION_SUSPICION,
-            isDeleted = false,
-            isArchived = false,
-            underCharter = true,
-        )
+        val reporting =
+            Reporting(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = ZonedDateTime.now(),
+                value =
+                    InfractionSuspicion(
+                        ReportingActor.OPS,
+                        natinfCode = 123456,
+                        authorTrigram = "LTH",
+                        title = "A title",
+                    ),
+                type = ReportingType.INFRACTION_SUSPICION,
+                isDeleted = false,
+                isArchived = false,
+                underCharter = true,
+            )
         given(getAllCurrentReportings.execute()).willReturn(
             listOf(Pair(reporting, null)),
         )
@@ -268,24 +275,26 @@ class ReportingControllerITests {
     @Test
     fun `Should update a reporting`() {
         // Given
-        val reporting = Reporting(
-            internalReferenceNumber = "FRFGRGR",
-            externalReferenceNumber = "RGD",
-            ircs = "6554fEE",
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            flagState = CountryCode.FR,
-            creationDate = ZonedDateTime.now(),
-            value = InfractionSuspicion(
-                ReportingActor.OPS,
-                natinfCode = 123456,
-                authorTrigram = "LTH",
-                title = "A title",
-            ),
-            type = ReportingType.INFRACTION_SUSPICION,
-            isDeleted = false,
-            isArchived = false,
-            underCharter = true,
-        )
+        val reporting =
+            Reporting(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = ZonedDateTime.now(),
+                value =
+                    InfractionSuspicion(
+                        ReportingActor.OPS,
+                        natinfCode = 123456,
+                        authorTrigram = "LTH",
+                        title = "A title",
+                    ),
+                type = ReportingType.INFRACTION_SUSPICION,
+                isDeleted = false,
+                isArchived = false,
+                underCharter = true,
+            )
         given(updateReporting.execute(any(), any())).willReturn(Pair(reporting, null))
 
         // When
@@ -313,22 +322,24 @@ class ReportingControllerITests {
     @Test
     fun `Should create a reporting When no vesselIdentifier given`() {
         // Given
-        val reporting = Reporting(
-            internalReferenceNumber = "FRFGRGR",
-            externalReferenceNumber = "RGD",
-            flagState = CountryCode.FR,
-            ircs = "6554fEE",
-            creationDate = ZonedDateTime.now(),
-            value = InfractionSuspicion(
-                ReportingActor.OPS,
-                natinfCode = 123456,
-                authorTrigram = "LTH",
-                title = "A title",
-            ),
-            type = ReportingType.INFRACTION_SUSPICION,
-            isDeleted = false,
-            isArchived = false,
-        )
+        val reporting =
+            Reporting(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                flagState = CountryCode.FR,
+                ircs = "6554fEE",
+                creationDate = ZonedDateTime.now(),
+                value =
+                    InfractionSuspicion(
+                        ReportingActor.OPS,
+                        natinfCode = 123456,
+                        authorTrigram = "LTH",
+                        title = "A title",
+                    ),
+                type = ReportingType.INFRACTION_SUSPICION,
+                isDeleted = false,
+                isArchived = false,
+            )
         given(addReporting.execute(any())).willReturn(Pair(reporting, null))
 
         // When
@@ -342,12 +353,13 @@ class ReportingControllerITests {
                             flagState = CountryCode.FR,
                             ircs = "6554fEE",
                             creationDate = ZonedDateTime.now(),
-                            value = InfractionSuspicion(
-                                ReportingActor.OPS,
-                                natinfCode = 123456,
-                                authorTrigram = "LTH",
-                                title = "A title",
-                            ),
+                            value =
+                                InfractionSuspicion(
+                                    ReportingActor.OPS,
+                                    natinfCode = 123456,
+                                    authorTrigram = "LTH",
+                                    title = "A title",
+                                ),
                             type = ReportingType.INFRACTION_SUSPICION,
                         ),
                     ),

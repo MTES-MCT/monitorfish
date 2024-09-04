@@ -7,9 +7,15 @@ data class ActivityReportsDataOutput(
     val jdpSpecies: List<String>,
 ) {
     companion object {
-        fun fromActivityReports(activityReports: ActivityReports) = ActivityReportsDataOutput(
-            activityReports = activityReports.activityReports.map { ActivityReportDataOutput.fromActivityReport(it) },
-            jdpSpecies = activityReports.jdpSpecies,
-        )
+        fun fromActivityReports(activityReports: ActivityReports) =
+            ActivityReportsDataOutput(
+                activityReports =
+                    activityReports.activityReports.map {
+                        ActivityReportDataOutput.fromActivityReport(
+                            it,
+                        )
+                    },
+                jdpSpecies = activityReports.jdpSpecies,
+            )
     }
 }

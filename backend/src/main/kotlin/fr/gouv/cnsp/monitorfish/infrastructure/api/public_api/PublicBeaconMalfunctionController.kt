@@ -17,7 +17,6 @@ class PublicBeaconMalfunctionController(
     private val updateBeaconMalfunction: UpdateBeaconMalfunction,
     private val requestNotification: RequestNotification,
 ) {
-
     @PutMapping(value = ["/{beaconMalfunctionId}"], consumes = ["application/json"])
     @Operation(summary = "Update a beacon malfunction")
     fun updateBeaconMalfunction(

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/v1/infractions")
 @Tag(name = "APIs for Infractions")
 class InfractionController(private val getAllInfractions: GetAllInfractions) {
-
     @GetMapping("")
     @Operation(summary = "Get all infractions")
     fun getAllInfractionsController(): List<InfractionDataOutput> {

@@ -8,10 +8,11 @@ data class GearLastPositionDataOutput(
     var mesh: Double? = null,
 ) {
     companion object {
-        fun fromGearLastPosition(gear: Gear) = GearLastPositionDataOutput(
-            gear = gear.gear,
-            dimensions = gear.dimensions,
-            mesh = gear.mesh,
-        )
+        fun fromGearLastPosition(gear: Gear) =
+            GearLastPositionDataOutput(
+                gear = gear.gear,
+                dimensions = gear.dimensions,
+                mesh = gear.mesh,
+            )
     }
 }

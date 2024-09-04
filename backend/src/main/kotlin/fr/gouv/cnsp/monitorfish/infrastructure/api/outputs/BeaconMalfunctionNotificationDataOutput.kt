@@ -17,7 +17,6 @@ data class BeaconMalfunctionNotificationDataOutput(
     val success: Boolean?,
     val errorMessage: String?,
 ) {
-
     companion object {
         fun fromBeaconMalfunctionNotification(
             beaconMalfunctionNotification: BeaconMalfunctionNotification,

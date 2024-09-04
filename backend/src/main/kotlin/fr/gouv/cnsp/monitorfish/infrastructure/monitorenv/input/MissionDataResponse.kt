@@ -29,30 +29,32 @@ data class MissionDataResponse(
     val hasMissionOrder: Boolean? = false,
     val isUnderJdp: Boolean? = false,
 ) {
-    fun toMission() = Mission(
-        id = id,
-        controlUnits = controlUnits,
-        missionTypes = missionTypes,
-        openBy = openBy,
-        completedBy = completedBy,
-        observationsCacem = observationsCacem,
-        observationsCnsp = observationsCnsp,
-        facade = facade,
-        geom = geom,
-        startDateTimeUtc = ZonedDateTime.parse(startDateTimeUtc),
-        endDateTimeUtc = endDateTimeUtc?.let { ZonedDateTime.parse(endDateTimeUtc) },
-        isGeometryComputedFromControls = isGeometryComputedFromControls,
-        missionSource = missionSource,
-        hasMissionOrder = hasMissionOrder,
-        isUnderJdp = isUnderJdp,
-    )
+    fun toMission() =
+        Mission(
+            id = id,
+            controlUnits = controlUnits,
+            missionTypes = missionTypes,
+            openBy = openBy,
+            completedBy = completedBy,
+            observationsCacem = observationsCacem,
+            observationsCnsp = observationsCnsp,
+            facade = facade,
+            geom = geom,
+            startDateTimeUtc = ZonedDateTime.parse(startDateTimeUtc),
+            endDateTimeUtc = endDateTimeUtc?.let { ZonedDateTime.parse(endDateTimeUtc) },
+            isGeometryComputedFromControls = isGeometryComputedFromControls,
+            missionSource = missionSource,
+            hasMissionOrder = hasMissionOrder,
+            isUnderJdp = isUnderJdp,
+        )
 
     fun toFullMission(): Mission {
-        val mission = toMission().copy(
-            createdAtUtc = createdAtUtc?.let { ZonedDateTime.parse(createdAtUtc) },
-            updatedAtUtc = updatedAtUtc?.let { ZonedDateTime.parse(updatedAtUtc) },
-            envActions = envActions?.map { it.toEnvMissionAction() },
-        )
+        val mission =
+            toMission().copy(
+                createdAtUtc = createdAtUtc?.let { ZonedDateTime.parse(createdAtUtc) },
+                updatedAtUtc = updatedAtUtc?.let { ZonedDateTime.parse(updatedAtUtc) },
+                envActions = envActions?.map { it.toEnvMissionAction() },
+            )
 
         return mission
     }

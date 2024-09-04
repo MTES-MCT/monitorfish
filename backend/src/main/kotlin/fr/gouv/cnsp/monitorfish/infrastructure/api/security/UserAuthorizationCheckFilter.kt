@@ -27,6 +27,7 @@ class UserAuthorizationCheckFilter(
     companion object {
         val EMAIL_HEADER = "EMAIL"
     }
+
     private val CURRENT_USER_AUTHORIZATION_CONTROLLER_PATH = "/bff/v1/authorization/current"
 
     private val BEARER_HEADER_TYPE = "Bearer"
@@ -75,19 +76,21 @@ class UserAuthorizationCheckFilter(
         }
 
         try {
-            val userInfoResponse = apiClient.httpClient.get(
-                oidcProperties.issuerUri!! + oidcProperties.userinfoEndpoint!!,
-            ) {
-                headers {
-                    append(Authorization, authorizationHeaderContent!!)
-                }
-            }.body<UserInfo>()
+            val userInfoResponse =
+                apiClient.httpClient.get(
+                    oidcProperties.issuerUri!! + oidcProperties.userinfoEndpoint!!,
+                ) {
+                    headers {
+                        append(Authorization, authorizationHeaderContent!!)
+                    }
+                }.body<UserInfo>()
 
-            val isSuperUserPath = protectedPathsAPIProperties.superUserPaths?.any {
-                request.requestURI.contains(
-                    it,
-                )
-            } ?: false
+            val isSuperUserPath =
+                protectedPathsAPIProperties.superUserPaths?.any {
+                    request.requestURI.contains(
+                        it,
+                    )
+                } ?: false
             val isAuthorized = getIsAuthorizedUser.execute(userInfoResponse.email, isSuperUserPath)
             if (!isAuthorized) {
                 logger.info("$INSUFFICIENT_AUTHORIZATION_MESSAGE: ${request.requestURI!!} (${userInfoResponse.email})")

@@ -72,35 +72,35 @@ class CreateOrUpdateManualPriorNotificationUTests {
         ).willReturn(fakePriorNotification)
 
         // When
-        val result = CreateOrUpdateManualPriorNotification(
-            gearRepository,
-            manualPriorNotificationRepository,
-            pnoPortSubscriptionRepository,
-            pnoSegmentSubscriptionRepository,
-            pnoVesselSubscriptionRepository,
-            portRepository,
-            priorNotificationPdfDocumentRepository,
-            vesselRepository,
-
-            computeManualPriorNotification,
-            getPriorNotification,
-        ).execute(
-            hasPortEntranceAuthorization = true,
-            hasPortLandingAuthorization = true,
-            purpose = LogbookMessagePurpose.LAN,
-            authorTrigram = "ABC",
-            didNotFishAfterZeroNotice = false,
-            expectedArrivalDate = ZonedDateTime.parse("2024-01-01T00:00:00Z"),
-            expectedLandingDate = ZonedDateTime.parse("2024-01-01T00:00:00Z"),
-            globalFaoArea = "FAKE_FAO_AREA",
-            fishingCatches = emptyList(),
-            note = null,
-            portLocode = "FAKE_PORT_LOCODE",
-            reportId = fakePriorNotification.reportId!!,
-            sentAt = ZonedDateTime.parse("2024-01-01T00:00:00Z"),
-            tripGearCodes = emptyList(),
-            vesselId = 1,
-        )
+        val result =
+            CreateOrUpdateManualPriorNotification(
+                gearRepository,
+                manualPriorNotificationRepository,
+                pnoPortSubscriptionRepository,
+                pnoSegmentSubscriptionRepository,
+                pnoVesselSubscriptionRepository,
+                portRepository,
+                priorNotificationPdfDocumentRepository,
+                vesselRepository,
+                computeManualPriorNotification,
+                getPriorNotification,
+            ).execute(
+                hasPortEntranceAuthorization = true,
+                hasPortLandingAuthorization = true,
+                purpose = LogbookMessagePurpose.LAN,
+                authorTrigram = "ABC",
+                didNotFishAfterZeroNotice = false,
+                expectedArrivalDate = ZonedDateTime.parse("2024-01-01T00:00:00Z"),
+                expectedLandingDate = ZonedDateTime.parse("2024-01-01T00:00:00Z"),
+                globalFaoArea = "FAKE_FAO_AREA",
+                fishingCatches = emptyList(),
+                note = null,
+                portLocode = "FAKE_PORT_LOCODE",
+                reportId = fakePriorNotification.reportId!!,
+                sentAt = ZonedDateTime.parse("2024-01-01T00:00:00Z"),
+                tripGearCodes = emptyList(),
+                vesselId = 1,
+            )
 
         // Then
         assertThat(result.reportId!!).isEqualTo(fakePriorNotification.reportId!!)

@@ -21,7 +21,6 @@ import java.util.*
 
 @ExtendWith(SpringExtension::class)
 class PatchMissionActionUTests {
-
     @MockBean
     private lateinit var missionActionsRepository: MissionActionsRepository
 
@@ -33,31 +32,33 @@ class PatchMissionActionUTests {
         val originalDateTime = ZonedDateTime.now()
         val expectedDateTime = originalDateTime.plusDays(1)
         val expectedEndDateTime = originalDateTime.plusDays(2)
-        val action = MissionAction(
-            id = null,
-            vesselId = null,
-            missionId = 1,
-            actionDatetimeUtc = originalDateTime,
-            portLocode = "AEFAT",
-            actionType = MissionActionType.LAND_CONTROL,
-            gearOnboard = listOf(),
-            seizureAndDiversion = true,
-            isDeleted = false,
-            hasSomeGearsSeized = false,
-            hasSomeSpeciesSeized = false,
-            completedBy = "XYZ",
-            isFromPoseidon = false,
-            flagState = CountryCode.FR,
-            userTrigram = "LTH",
-            completion = Completion.TO_COMPLETE,
-        )
+        val action =
+            MissionAction(
+                id = null,
+                vesselId = null,
+                missionId = 1,
+                actionDatetimeUtc = originalDateTime,
+                portLocode = "AEFAT",
+                actionType = MissionActionType.LAND_CONTROL,
+                gearOnboard = listOf(),
+                seizureAndDiversion = true,
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                completedBy = "XYZ",
+                isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
+                completion = Completion.TO_COMPLETE,
+            )
         given(missionActionsRepository.findById(any())).willReturn(action)
 
-        val patch = PatchableMissionAction(
-            actionDatetimeUtc = Optional.of(expectedDateTime),
-            actionEndDatetimeUtc = Optional.of(expectedEndDateTime),
-            observationsByUnit = Optional.of("An observation"),
-        )
+        val patch =
+            PatchableMissionAction(
+                actionDatetimeUtc = Optional.of(expectedDateTime),
+                actionEndDatetimeUtc = Optional.of(expectedEndDateTime),
+                observationsByUnit = Optional.of("An observation"),
+            )
 
         // When
         PatchMissionAction(missionActionsRepository, patchMissionAction).execute(123, patch)
@@ -79,31 +80,33 @@ class PatchMissionActionUTests {
         // Given
         val originalDateTime = ZonedDateTime.now()
         val expectedEndDateTime = originalDateTime.plusDays(2)
-        val action = MissionAction(
-            id = null,
-            vesselId = null,
-            missionId = 1,
-            actionDatetimeUtc = originalDateTime,
-            portLocode = "AEFAT",
-            actionType = MissionActionType.LAND_CONTROL,
-            gearOnboard = listOf(),
-            seizureAndDiversion = true,
-            isDeleted = false,
-            hasSomeGearsSeized = false,
-            hasSomeSpeciesSeized = false,
-            completedBy = "XYZ",
-            isFromPoseidon = false,
-            flagState = CountryCode.FR,
-            userTrigram = "LTH",
-            completion = Completion.TO_COMPLETE,
-        )
+        val action =
+            MissionAction(
+                id = null,
+                vesselId = null,
+                missionId = 1,
+                actionDatetimeUtc = originalDateTime,
+                portLocode = "AEFAT",
+                actionType = MissionActionType.LAND_CONTROL,
+                gearOnboard = listOf(),
+                seizureAndDiversion = true,
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                completedBy = "XYZ",
+                isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
+                completion = Completion.TO_COMPLETE,
+            )
         given(missionActionsRepository.findById(any())).willReturn(action)
 
-        val patch = PatchableMissionAction(
-            actionDatetimeUtc = null,
-            actionEndDatetimeUtc = Optional.of(expectedEndDateTime),
-            observationsByUnit = null,
-        )
+        val patch =
+            PatchableMissionAction(
+                actionDatetimeUtc = null,
+                actionEndDatetimeUtc = Optional.of(expectedEndDateTime),
+                observationsByUnit = null,
+            )
 
         // When
         PatchMissionAction(missionActionsRepository, patchMissionAction).execute(123, patch)

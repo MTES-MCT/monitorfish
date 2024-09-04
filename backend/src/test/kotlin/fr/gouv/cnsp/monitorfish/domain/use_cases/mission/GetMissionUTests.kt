@@ -23,7 +23,6 @@ import java.util.*
 
 @ExtendWith(SpringExtension::class)
 class GetMissionUTests {
-
     @MockBean
     private lateinit var getMissionActions: GetMissionActions
 
@@ -41,24 +40,26 @@ class GetMissionUTests {
                 startDateTimeUtc = ZonedDateTime.now(),
                 isGeometryComputedFromControls = false,
                 missionSource = MissionSource.MONITORFISH,
-                envActions = listOf(
-                    EnvMissionAction(
-                        id = UUID.randomUUID(),
-                        actionStartDateTimeUtc = ZonedDateTime.now(),
-                        actionType = EnvMissionActionType.CONTROL,
+                envActions =
+                    listOf(
+                        EnvMissionAction(
+                            id = UUID.randomUUID(),
+                            actionStartDateTimeUtc = ZonedDateTime.now(),
+                            actionType = EnvMissionActionType.CONTROL,
+                        ),
                     ),
-                ),
             ),
         )
         given(getMissionActions.execute(any())).willReturn(getDummyMissionActions(listOf(1, 2)))
 
         // When
-        val missionsAndActions = runBlocking {
-            return@runBlocking GetMission(
-                missionRepository,
-                getMissionActions,
-            ).execute(123)
-        }
+        val missionsAndActions =
+            runBlocking {
+                return@runBlocking GetMission(
+                    missionRepository,
+                    getMissionActions,
+                ).execute(123)
+            }
 
         // Then
         assertThat(missionsAndActions.mission.envActions).hasSize(1)
@@ -72,14 +73,15 @@ class GetMissionUTests {
         given(getMissionActions.execute(any())).willReturn(getDummyMissionActions(listOf(123, 456)))
 
         // When
-        val throwable = catchThrowable {
-            runBlocking {
-                GetMission(
-                    missionRepository,
-                    getMissionActions,
-                ).execute(123)
+        val throwable =
+            catchThrowable {
+                runBlocking {
+                    GetMission(
+                        missionRepository,
+                        getMissionActions,
+                    ).execute(123)
+                }
             }
-        }
 
         // Then
         assertThat(throwable).isNotNull()

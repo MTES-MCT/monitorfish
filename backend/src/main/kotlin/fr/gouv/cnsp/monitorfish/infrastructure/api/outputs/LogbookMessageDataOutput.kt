@@ -21,7 +21,6 @@ data class LogbookMessageDataOutput(
     val flagState: String?,
     val imo: String?,
     val rawMessage: String?,
-
     val acknowledgment: Acknowledgment?,
     val isCorrectedByNewerMessage: Boolean,
     val isDeleted: Boolean,
@@ -34,12 +33,14 @@ data class LogbookMessageDataOutput(
 ) {
     companion object {
         fun fromLogbookMessage(logbookMessage: LogbookMessage): LogbookMessageDataOutput {
-            val tripGears = logbookMessage.tripGears?.mapNotNull {
-                LogbookMessageGearDataOutput.fromGear(it)
-            }
-            val tripSegments = logbookMessage.tripSegments?.map {
-                LogbookMessageTripSegmentDataOutput.fromLogbookTripSegment(it)
-            }
+            val tripGears =
+                logbookMessage.tripGears?.mapNotNull {
+                    LogbookMessageGearDataOutput.fromGear(it)
+                }
+            val tripSegments =
+                logbookMessage.tripSegments?.map {
+                    LogbookMessageTripSegmentDataOutput.fromLogbookTripSegment(it)
+                }
 
             return LogbookMessageDataOutput(
                 internalReferenceNumber = logbookMessage.internalReferenceNumber,
@@ -56,7 +57,6 @@ data class LogbookMessageDataOutput(
                 flagState = logbookMessage.flagState,
                 imo = logbookMessage.imo,
                 rawMessage = logbookMessage.rawMessage,
-
                 acknowledgment = logbookMessage.acknowledgment,
                 isCorrectedByNewerMessage = logbookMessage.isCorrectedByNewerMessage,
                 isDeleted = logbookMessage.isDeleted,

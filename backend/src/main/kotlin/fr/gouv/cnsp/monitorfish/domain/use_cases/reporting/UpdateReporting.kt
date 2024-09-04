@@ -16,7 +16,10 @@ class UpdateReporting(
 ) {
     private val logger: Logger = LoggerFactory.getLogger(UpdateReporting::class.java)
 
-    fun execute(reportingId: Int, updatedInfractionSuspicionOrObservation: UpdatedInfractionSuspicionOrObservation): Pair<Reporting, ControlUnit?> {
+    fun execute(
+        reportingId: Int,
+        updatedInfractionSuspicionOrObservation: UpdatedInfractionSuspicionOrObservation,
+    ): Pair<Reporting, ControlUnit?> {
         val currentReporting = reportingRepository.findById(reportingId)
         val controlUnits = getAllControlUnits.execute()
         logger.info("Updating reporting id $reportingId for vessel id ${currentReporting.vesselId}")
@@ -29,9 +32,10 @@ class UpdateReporting(
             ReportingType.OBSERVATION -> {
                 currentReporting.value as InfractionSuspicionOrObservationType
 
-                val nextObservation = Observation.fromUpdatedReporting(
-                    updatedInfractionSuspicionOrObservation,
-                )
+                val nextObservation =
+                    Observation.fromUpdatedReporting(
+                        updatedInfractionSuspicionOrObservation,
+                    )
                 nextObservation.checkReportingActorAndFieldsRequirements()
 
                 val updatedReporting = reportingRepository.update(reportingId, nextObservation)
@@ -42,11 +46,12 @@ class UpdateReporting(
             ReportingType.INFRACTION_SUSPICION -> {
                 currentReporting.value as InfractionSuspicionOrObservationType
 
-                val nextInfractionSuspicion = InfractionSuspicion.fromUpdatedReporting(
-                    updatedInfractionSuspicionOrObservation,
-                ).let {
-                    getInfractionSuspicionWithDMLAndSeaFront.execute(it, currentReporting.vesselId)
-                }
+                val nextInfractionSuspicion =
+                    InfractionSuspicion.fromUpdatedReporting(
+                        updatedInfractionSuspicionOrObservation,
+                    ).let {
+                        getInfractionSuspicionWithDMLAndSeaFront.execute(it, currentReporting.vesselId)
+                    }
                 nextInfractionSuspicion.checkReportingActorAndFieldsRequirements()
 
                 val updatedReporting = reportingRepository.update(reportingId, nextInfractionSuspicion)
@@ -60,7 +65,10 @@ class UpdateReporting(
         }
     }
 
-    fun getControlUnit(reporting: Reporting, controlUnits: List<ControlUnit>): ControlUnit? {
+    fun getControlUnit(
+        reporting: Reporting,
+        controlUnits: List<ControlUnit>,
+    ): ControlUnit? {
         val controlUnitId = (reporting.value as InfractionSuspicionOrObservationType).controlUnitId
         return controlUnits.find { it.id == controlUnitId }
     }

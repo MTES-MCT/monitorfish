@@ -16,15 +16,16 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 class APIMissionRepositoryITest {
-
     @Test
     fun `findControlUnitsByMissionId Should return the mission`() {
         runBlocking {
             // Given
-            val mockEngine = MockEngine { _ ->
-                respond(
-                    content = ByteReadChannel(
-                        """{
+            val mockEngine =
+                MockEngine { _ ->
+                    respond(
+                        content =
+                            ByteReadChannel(
+                                """{
                       "id": 34,
                       "missionTypes": ["SEA"],
                       "controlUnits": [
@@ -131,18 +132,19 @@ class APIMissionRepositoryITest {
                       "missionSource": "MONITORENV",
                       "isUnderJdp": false
                     }""",
-                    ),
-                    status = HttpStatusCode.OK,
-                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
-                )
-            }
+                            ),
+                        status = HttpStatusCode.OK,
+                        headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                    )
+                }
             val apiClient = ApiClient(mockEngine)
             val monitorenvProperties = MonitorenvProperties()
             monitorenvProperties.url = "http://test"
 
             // When
-            val controlUnits = APIMissionRepository(monitorenvProperties, apiClient)
-                .findControlUnitsOfMission(this, 1).await()
+            val controlUnits =
+                APIMissionRepository(monitorenvProperties, apiClient)
+                    .findControlUnitsOfMission(this, 1).await()
 
             // Then
             assertThat(controlUnits).hasSize(3)
@@ -158,19 +160,21 @@ class APIMissionRepositoryITest {
     fun `findControlUnitsByMissionId Should not thrown an exception When the request fail`() {
         runBlocking {
             // Given
-            val mockEngine = MockEngine { _ ->
-                respond(
-                    content = "NOT FOUND",
-                    status = HttpStatusCode.NotFound,
-                )
-            }
+            val mockEngine =
+                MockEngine { _ ->
+                    respond(
+                        content = "NOT FOUND",
+                        status = HttpStatusCode.NotFound,
+                    )
+                }
             val apiClient = ApiClient(mockEngine)
             val monitorenvProperties = MonitorenvProperties()
             monitorenvProperties.url = "http://test"
 
             // When
-            val controlUnits = APIMissionRepository(monitorenvProperties, apiClient)
-                .findControlUnitsOfMission(this, 1).await()
+            val controlUnits =
+                APIMissionRepository(monitorenvProperties, apiClient)
+                    .findControlUnitsOfMission(this, 1).await()
 
             // Then
             assertThat(controlUnits).hasSize(0)
@@ -181,29 +185,31 @@ class APIMissionRepositoryITest {
     fun `findMissions Should return the missions`() {
         runBlocking {
             // Given
-            val mockEngine = MockEngine { _ ->
-                respond(
-                    content = ByteReadChannel(getDummyMissions()),
-                    status = HttpStatusCode.OK,
-                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
-                )
-            }
+            val mockEngine =
+                MockEngine { _ ->
+                    respond(
+                        content = ByteReadChannel(getDummyMissions()),
+                        status = HttpStatusCode.OK,
+                        headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                    )
+                }
             val apiClient = ApiClient(mockEngine)
             val monitorenvProperties = MonitorenvProperties()
             monitorenvProperties.url = "http://test"
 
             // When
-            val missions = APIMissionRepository(monitorenvProperties, apiClient)
-                .findAllMissions(
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                )
+            val missions =
+                APIMissionRepository(monitorenvProperties, apiClient)
+                    .findAllMissions(
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                    )
 
             // Then
             assertThat(missions).hasSize(12)
@@ -218,29 +224,31 @@ class APIMissionRepositoryITest {
     fun `findMissions Should return the missions When some parameters are given`() {
         runBlocking {
             // Given
-            val mockEngine = MockEngine { _ ->
-                respond(
-                    content = ByteReadChannel(getDummyMissions()),
-                    status = HttpStatusCode.OK,
-                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
-                )
-            }
+            val mockEngine =
+                MockEngine { _ ->
+                    respond(
+                        content = ByteReadChannel(getDummyMissions()),
+                        status = HttpStatusCode.OK,
+                        headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                    )
+                }
             val apiClient = ApiClient(mockEngine)
             val monitorenvProperties = MonitorenvProperties()
             monitorenvProperties.url = "http://test"
 
             // When
-            val missions = APIMissionRepository(monitorenvProperties, apiClient)
-                .findAllMissions(
-                    1,
-                    2,
-                    ZonedDateTime.of(2021, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
-                    ZonedDateTime.of(2022, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
-                    listOf("MONITORFISH"),
-                    listOf(MissionType.SEA.toString(), MissionType.LAND.toString()),
-                    listOf(),
-                    listOf("MED"),
-                )
+            val missions =
+                APIMissionRepository(monitorenvProperties, apiClient)
+                    .findAllMissions(
+                        1,
+                        2,
+                        ZonedDateTime.of(2021, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+                        ZonedDateTime.of(2022, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+                        listOf("MONITORFISH"),
+                        listOf(MissionType.SEA.toString(), MissionType.LAND.toString()),
+                        listOf(),
+                        listOf("MED"),
+                    )
 
             // Then
             assertThat(missions).hasSize(12)
@@ -264,20 +272,22 @@ class APIMissionRepositoryITest {
     fun `findAllIncludedIn Should return the missions`() {
         runBlocking {
             // Given
-            val mockEngine = MockEngine { _ ->
-                respond(
-                    content = ByteReadChannel(getDummyMissions()),
-                    status = HttpStatusCode.OK,
-                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
-                )
-            }
+            val mockEngine =
+                MockEngine { _ ->
+                    respond(
+                        content = ByteReadChannel(getDummyMissions()),
+                        status = HttpStatusCode.OK,
+                        headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                    )
+                }
             val apiClient = ApiClient(mockEngine)
             val monitorenvProperties = MonitorenvProperties()
             monitorenvProperties.url = "http://test"
 
             // When
-            val missions = APIMissionRepository(monitorenvProperties, apiClient)
-                .findByIds(listOf(123, 456))
+            val missions =
+                APIMissionRepository(monitorenvProperties, apiClient)
+                    .findByIds(listOf(123, 456))
 
             // Then
             assertThat(missions).hasSize(12)
@@ -292,20 +302,22 @@ class APIMissionRepositoryITest {
     fun `findById Should return a mission`() {
         runBlocking {
             // Given
-            val mockEngine = MockEngine { _ ->
-                respond(
-                    content = ByteReadChannel(getDummyMission()),
-                    status = HttpStatusCode.OK,
-                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
-                )
-            }
+            val mockEngine =
+                MockEngine { _ ->
+                    respond(
+                        content = ByteReadChannel(getDummyMission()),
+                        status = HttpStatusCode.OK,
+                        headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                    )
+                }
             val apiClient = ApiClient(mockEngine)
             val monitorenvProperties = MonitorenvProperties()
             monitorenvProperties.url = "http://test"
 
             // When
-            val mission = APIMissionRepository(monitorenvProperties, apiClient)
-                .findById(123)
+            val mission =
+                APIMissionRepository(monitorenvProperties, apiClient)
+                    .findById(123)
 
             // Then
             assertThat(mission.createdAtUtc.toString()).isEqualTo("2023-04-20T09:57Z")

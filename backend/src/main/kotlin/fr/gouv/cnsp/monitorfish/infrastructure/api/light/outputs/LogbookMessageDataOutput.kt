@@ -31,28 +31,29 @@ data class LogbookMessageDataOutput(
     val isSentByFailoverSoftware: Boolean,
 ) {
     companion object {
-        fun fromLogbookMessage(logbookMessage: LogbookMessage) = LogbookMessageDataOutput(
-            internalReferenceNumber = logbookMessage.internalReferenceNumber,
-            referencedReportId = logbookMessage.referencedReportId,
-            externalReferenceNumber = logbookMessage.externalReferenceNumber,
-            ircs = logbookMessage.ircs,
-            isCorrected = logbookMessage.isCorrectedByNewerMessage,
-            acknowledgment = logbookMessage.acknowledgment,
-            deleted = logbookMessage.isDeleted,
-            operationDateTime = logbookMessage.operationDateTime,
-            reportDateTime = logbookMessage.reportDateTime,
-            integrationDateTime = logbookMessage.integrationDateTime,
-            vesselName = logbookMessage.vesselName,
-            operationType = logbookMessage.operationType,
-            reportId = logbookMessage.reportId,
-            operationNumber = logbookMessage.operationNumber,
-            tripNumber = logbookMessage.tripNumber,
-            flagState = logbookMessage.flagState,
-            imo = logbookMessage.imo,
-            messageType = logbookMessage.messageType,
-            message = logbookMessage.message,
-            rawMessage = null,
-            isSentByFailoverSoftware = logbookMessage.isSentByFailoverSoftware,
-        )
+        fun fromLogbookMessage(logbookMessage: LogbookMessage) =
+            LogbookMessageDataOutput(
+                internalReferenceNumber = logbookMessage.internalReferenceNumber,
+                referencedReportId = logbookMessage.referencedReportId,
+                externalReferenceNumber = logbookMessage.externalReferenceNumber,
+                ircs = logbookMessage.ircs,
+                isCorrected = logbookMessage.isCorrectedByNewerMessage,
+                acknowledgment = logbookMessage.acknowledgment,
+                deleted = logbookMessage.isDeleted,
+                operationDateTime = logbookMessage.operationDateTime,
+                reportDateTime = logbookMessage.reportDateTime,
+                integrationDateTime = logbookMessage.integrationDateTime,
+                vesselName = logbookMessage.vesselName,
+                operationType = logbookMessage.operationType,
+                reportId = logbookMessage.reportId,
+                operationNumber = logbookMessage.operationNumber,
+                tripNumber = logbookMessage.tripNumber,
+                flagState = logbookMessage.flagState,
+                imo = logbookMessage.imo,
+                messageType = logbookMessage.messageType,
+                message = logbookMessage.message,
+                rawMessage = null,
+                isSentByFailoverSoftware = logbookMessage.isSentByFailoverSoftware,
+            )
     }
 }

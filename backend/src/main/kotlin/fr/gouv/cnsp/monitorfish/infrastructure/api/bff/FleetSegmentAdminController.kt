@@ -20,7 +20,6 @@ class FleetSegmentAdminController(
     private val getFleetSegmentYearEntries: GetFleetSegmentYearEntries,
     private val addFleetSegmentYear: AddFleetSegmentYear,
 ) {
-
     @PutMapping(value = [""], consumes = ["application/json"])
     @Operation(summary = "Update a fleet segment")
     fun updateFleetSegment(
@@ -33,11 +32,12 @@ class FleetSegmentAdminController(
         @RequestBody
         createOrUpdateFleetSegmentData: CreateOrUpdateFleetSegmentDataInput,
     ): FleetSegmentDataOutput {
-        val updatedFleetSegment = updateFleetSegment.execute(
-            segment = segment,
-            fields = createOrUpdateFleetSegmentData.toCreateOrUpdateFleetSegmentFields(),
-            year = year,
-        )
+        val updatedFleetSegment =
+            updateFleetSegment.execute(
+                segment = segment,
+                fields = createOrUpdateFleetSegmentData.toCreateOrUpdateFleetSegmentFields(),
+                year = year,
+            )
 
         return FleetSegmentDataOutput.fromFleetSegment(updatedFleetSegment)
     }

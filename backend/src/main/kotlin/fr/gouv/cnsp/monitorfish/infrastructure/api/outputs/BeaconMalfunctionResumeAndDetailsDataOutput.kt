@@ -14,29 +14,34 @@ data class BeaconMalfunctionResumeAndDetailsDataOutput(
             beaconMalfunctionResumeAndDetails: BeaconMalfunctionResumeAndDetails,
         ): BeaconMalfunctionResumeAndDetailsDataOutput {
             return BeaconMalfunctionResumeAndDetailsDataOutput(
-                beaconMalfunction = BeaconMalfunctionDataOutput.fromBeaconMalfunction(
-                    beaconMalfunctionResumeAndDetails.beaconMalfunction,
-                ),
-                resume = beaconMalfunctionResumeAndDetails.resume?.let {
-                    VesselBeaconMalfunctionResumeDataOutput.fromVesselBeaconMalfunctionResume(
-                        beaconMalfunctionResumeAndDetails.resume,
-                    )
-                },
-                comments = beaconMalfunctionResumeAndDetails.comments.map {
-                    BeaconMalfunctionCommentDataOutput.fromBeaconMalfunctionComment(
-                        it,
-                    )
-                },
-                actions = beaconMalfunctionResumeAndDetails.actions.map {
-                    BeaconMalfunctionActionDataOutput.fromBeaconMalfunctionAction(
-                        it,
-                    )
-                },
-                notifications = beaconMalfunctionResumeAndDetails.notifications.map {
-                    BeaconMalfunctionNotificationsDataOutput.fromBeaconMalfunctionNotifications(
-                        it,
-                    )
-                },
+                beaconMalfunction =
+                    BeaconMalfunctionDataOutput.fromBeaconMalfunction(
+                        beaconMalfunctionResumeAndDetails.beaconMalfunction,
+                    ),
+                resume =
+                    beaconMalfunctionResumeAndDetails.resume?.let {
+                        VesselBeaconMalfunctionResumeDataOutput.fromVesselBeaconMalfunctionResume(
+                            beaconMalfunctionResumeAndDetails.resume,
+                        )
+                    },
+                comments =
+                    beaconMalfunctionResumeAndDetails.comments.map {
+                        BeaconMalfunctionCommentDataOutput.fromBeaconMalfunctionComment(
+                            it,
+                        )
+                    },
+                actions =
+                    beaconMalfunctionResumeAndDetails.actions.map {
+                        BeaconMalfunctionActionDataOutput.fromBeaconMalfunctionAction(
+                            it,
+                        )
+                    },
+                notifications =
+                    beaconMalfunctionResumeAndDetails.notifications.map {
+                        BeaconMalfunctionNotificationsDataOutput.fromBeaconMalfunctionNotifications(
+                            it,
+                        )
+                    },
             )
         }
     }

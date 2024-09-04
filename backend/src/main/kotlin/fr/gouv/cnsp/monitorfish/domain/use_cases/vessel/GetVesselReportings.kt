@@ -31,33 +31,37 @@ class GetVesselReportings(
     ): CurrentAndArchivedReportings {
         val controlUnits = getAllControlUnits.execute()
 
-        val reportings = findReportings(
-            vesselId,
-            vesselIdentifier,
-            internalReferenceNumber,
-            fromDate,
-            ircs,
-            externalReferenceNumber,
-        )
+        val reportings =
+            findReportings(
+                vesselId,
+                vesselIdentifier,
+                internalReferenceNumber,
+                fromDate,
+                ircs,
+                externalReferenceNumber,
+            )
 
-        val current = getReportingsAndOccurrences(reportings.filter { !it.isArchived })
-            .sortedWith(compareByDescending { it.reporting.validationDate ?: it.reporting.creationDate })
-            .map { reportingAndOccurrences ->
-                enrichWithInfractionAndControlUnit(reportingAndOccurrences, controlUnits)
-            }
-
-        val yearsRange = fromDate.year..ZonedDateTime.now().year
-        val archivedYearsToReportings = yearsRange.associateWith { year ->
-            val reportingsOfYear = reportings
-                .filter { it.isArchived }
-                .filter { filterByYear(it, year) }
-
-            getReportingsAndOccurrences(reportingsOfYear)
+        val current =
+            getReportingsAndOccurrences(reportings.filter { !it.isArchived })
                 .sortedWith(compareByDescending { it.reporting.validationDate ?: it.reporting.creationDate })
                 .map { reportingAndOccurrences ->
                     enrichWithInfractionAndControlUnit(reportingAndOccurrences, controlUnits)
                 }
-        }
+
+        val yearsRange = fromDate.year..ZonedDateTime.now().year
+        val archivedYearsToReportings =
+            yearsRange.associateWith { year ->
+                val reportingsOfYear =
+                    reportings
+                        .filter { it.isArchived }
+                        .filter { filterByYear(it, year) }
+
+                getReportingsAndOccurrences(reportingsOfYear)
+                    .sortedWith(compareByDescending { it.reporting.validationDate ?: it.reporting.creationDate })
+                    .map { reportingAndOccurrences ->
+                        enrichWithInfractionAndControlUnit(reportingAndOccurrences, controlUnits)
+                    }
+            }
 
         return CurrentAndArchivedReportings(current, archivedYearsToReportings)
     }
@@ -77,21 +81,24 @@ class GetVesselReportings(
         reportingAndOccurrences: ReportingAndOccurrences,
         controlUnits: List<ControlUnit>,
     ): ReportingAndOccurrences {
-        val updatedInfraction = reportingAndOccurrences.reporting.value.natinfCode?.let { natinfCode ->
-            try {
-                infractionRepository.findInfractionByNatinfCode(natinfCode)
-            } catch (e: NatinfCodeNotFoundException) {
-                logger.warn(e.message)
-                null
+        val updatedInfraction =
+            reportingAndOccurrences.reporting.value.natinfCode?.let { natinfCode ->
+                try {
+                    infractionRepository.findInfractionByNatinfCode(natinfCode)
+                } catch (e: NatinfCodeNotFoundException) {
+                    logger.warn(e.message)
+                    null
+                }
             }
-        }
 
-        val updatedReporting = reportingAndOccurrences.reporting.copy(
-            infraction = updatedInfraction ?: reportingAndOccurrences.reporting.infraction,
-        )
-        val updatedReportingAndOccurrences = reportingAndOccurrences.copy(
-            reporting = updatedReporting,
-        )
+        val updatedReporting =
+            reportingAndOccurrences.reporting.copy(
+                infraction = updatedInfraction ?: reportingAndOccurrences.reporting.infraction,
+            )
+        val updatedReportingAndOccurrences =
+            reportingAndOccurrences.copy(
+                reporting = updatedReporting,
+            )
 
         if (updatedReporting.type == ReportingType.ALERT) {
             return updatedReportingAndOccurrences
@@ -104,45 +111,49 @@ class GetVesselReportings(
     }
 
     private fun getReportingsAndOccurrences(reportings: List<Reporting>): List<ReportingAndOccurrences> {
-        val reportingsWithoutAlerts: List<ReportingAndOccurrences> = reportings
-            .filter { it.type != ReportingType.ALERT }
-            .map { reporting ->
-                ReportingAndOccurrences(
-                    otherOccurrencesOfSameAlert = emptyList(),
-                    reporting = reporting,
-                    controlUnit = null,
-                )
-            }
-
-        val alertTypeToAlertsOccurrences: Map<AlertTypeMapping, List<Reporting>> = reportings
-            .filter { it.type == ReportingType.ALERT }
-            .groupBy { (it.value as AlertType).type }
-            .withDefault { emptyList() }
-
-        val alertTypeToLastAlertAndOccurrences: List<ReportingAndOccurrences> = alertTypeToAlertsOccurrences
-            .flatMap { (_, alerts) ->
-                if (alerts.isEmpty()) {
-                    return@flatMap listOf()
+        val reportingsWithoutAlerts: List<ReportingAndOccurrences> =
+            reportings
+                .filter { it.type != ReportingType.ALERT }
+                .map { reporting ->
+                    ReportingAndOccurrences(
+                        otherOccurrencesOfSameAlert = emptyList(),
+                        reporting = reporting,
+                        controlUnit = null,
+                    )
                 }
 
-                val lastAlert = alerts.maxByOrNull {
-                    checkNotNull(it.validationDate) {
-                        "An alert must have a validation date: alert ${it.id} has no validation date ($it)."
+        val alertTypeToAlertsOccurrences: Map<AlertTypeMapping, List<Reporting>> =
+            reportings
+                .filter { it.type == ReportingType.ALERT }
+                .groupBy { (it.value as AlertType).type }
+                .withDefault { emptyList() }
+
+        val alertTypeToLastAlertAndOccurrences: List<ReportingAndOccurrences> =
+            alertTypeToAlertsOccurrences
+                .flatMap { (_, alerts) ->
+                    if (alerts.isEmpty()) {
+                        return@flatMap listOf()
                     }
 
-                    it.validationDate
-                }
-                checkNotNull(lastAlert) { "Last alert cannot be null" }
-                val otherOccurrencesOfSameAlert = alerts.filter { it.id != lastAlert.id }
+                    val lastAlert =
+                        alerts.maxByOrNull {
+                            checkNotNull(it.validationDate) {
+                                "An alert must have a validation date: alert ${it.id} has no validation date ($it)."
+                            }
 
-                return@flatMap listOf(
-                    ReportingAndOccurrences(
-                        otherOccurrencesOfSameAlert = otherOccurrencesOfSameAlert,
-                        reporting = lastAlert,
-                        controlUnit = null,
-                    ),
-                )
-            }
+                            it.validationDate
+                        }
+                    checkNotNull(lastAlert) { "Last alert cannot be null" }
+                    val otherOccurrencesOfSameAlert = alerts.filter { it.id != lastAlert.id }
+
+                    return@flatMap listOf(
+                        ReportingAndOccurrences(
+                            otherOccurrencesOfSameAlert = otherOccurrencesOfSameAlert,
+                            reporting = lastAlert,
+                            controlUnit = null,
+                        ),
+                    )
+                }
 
         return (reportingsWithoutAlerts + alertTypeToLastAlertAndOccurrences)
     }
@@ -177,12 +188,13 @@ class GetVesselReportings(
                     fromDate,
                 )
 
-            else -> reportingRepository.findCurrentAndArchivedWithoutVesselIdentifier(
-                internalReferenceNumber,
-                externalReferenceNumber,
-                ircs,
-                fromDate,
-            )
+            else ->
+                reportingRepository.findCurrentAndArchivedWithoutVesselIdentifier(
+                    internalReferenceNumber,
+                    externalReferenceNumber,
+                    ircs,
+                    fromDate,
+                )
         }
     }
 }

@@ -10,12 +10,13 @@ data class ControlsSummaryDataOutput(
     val controls: List<MissionActionDataOutput>,
 ) {
     companion object {
-        fun fromControlsSummary(controlsSummary: ControlsSummary) = ControlsSummaryDataOutput(
-            vesselId = controlsSummary.vesselId,
-            numberOfDiversions = controlsSummary.numberOfDiversions,
-            numberOfControlsWithSomeGearsSeized = controlsSummary.numberOfControlsWithSomeGearsSeized,
-            numberOfControlsWithSomeSpeciesSeized = controlsSummary.numberOfControlsWithSomeSpeciesSeized,
-            controls = controlsSummary.controls.map { MissionActionDataOutput.fromMissionAction(it) },
-        )
+        fun fromControlsSummary(controlsSummary: ControlsSummary) =
+            ControlsSummaryDataOutput(
+                vesselId = controlsSummary.vesselId,
+                numberOfDiversions = controlsSummary.numberOfDiversions,
+                numberOfControlsWithSomeGearsSeized = controlsSummary.numberOfControlsWithSomeGearsSeized,
+                numberOfControlsWithSomeSpeciesSeized = controlsSummary.numberOfControlsWithSomeSpeciesSeized,
+                controls = controlsSummary.controls.map { MissionActionDataOutput.fromMissionAction(it) },
+            )
     }
 }

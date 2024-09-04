@@ -52,10 +52,11 @@ class JpaLogbookReportRepository(
                 willArriveBefore = filter.willArriveBefore,
             )
 
-        val referencedReportIds = logbookReportsWithDatCorAndDel
-            .filter { it.referencedReportId != null }
-            .map { it.referencedReportId }
-            .toSet()
+        val referencedReportIds =
+            logbookReportsWithDatCorAndDel
+                .filter { it.referencedReportId != null }
+                .map { it.referencedReportId }
+                .toSet()
 
         return logbookReportsWithDatCorAndDel
             .filter { report ->
@@ -73,10 +74,11 @@ class JpaLogbookReportRepository(
 
     @Cacheable(value = ["pno_to_verify"])
     override fun findAllPriorNotificationsToVerify(): List<PriorNotification> {
-        val filter = PriorNotificationsFilter(
-            willArriveAfter = CustomZonedDateTime(ZonedDateTime.now()).toString(),
-            willArriveBefore = CustomZonedDateTime(ZonedDateTime.now().plusHours(24)).toString(),
-        )
+        val filter =
+            PriorNotificationsFilter(
+                willArriveAfter = CustomZonedDateTime(ZonedDateTime.now()).toString(),
+                willArriveBefore = CustomZonedDateTime(ZonedDateTime.now().plusHours(24)).toString(),
+            )
 
         return findAllAcknowledgedPriorNotifications(filter).filter {
             it.logbookMessageAndValue.value.isInVerificationScope == true &&
@@ -95,8 +97,9 @@ class JpaLogbookReportRepository(
         reportId: String,
         operationDate: ZonedDateTime,
     ): PriorNotification? {
-        val logbookReport = dbLogbookReportRepository
-            .findAcknowledgedNonDeletedPnoDatAndCorsByReportId(reportId, operationDate.toString()).firstOrNull()
+        val logbookReport =
+            dbLogbookReportRepository
+                .findAcknowledgedNonDeletedPnoDatAndCorsByReportId(reportId, operationDate.toString()).firstOrNull()
 
         return logbookReport?.let {
             val pno = PriorNotification.fromLogbookMessage(it.toLogbookMessage(objectMapper))
@@ -346,25 +349,26 @@ class JpaLogbookReportRepository(
     override fun updatePriorNotificationState(
         reportId: String,
         operationDate: ZonedDateTime,
-
         isBeingSent: Boolean,
         isSent: Boolean,
         isVerified: Boolean,
     ) {
-        val logbookReport = dbLogbookReportRepository
-            .findAcknowledgedNonDeletedPnoDatAndCorsByReportId(
-                reportId,
-                operationDate.withZoneSameInstant(UTC).toString(),
-            ).firstOrNull()
-            ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
+        val logbookReport =
+            dbLogbookReportRepository
+                .findAcknowledgedNonDeletedPnoDatAndCorsByReportId(
+                    reportId,
+                    operationDate.withZoneSameInstant(UTC).toString(),
+                ).firstOrNull()
+                ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
 
         val pnoValue = objectMapper.readValue(logbookReport.message, PNO::class.java)
 
-        val nextPnoValue = pnoValue.apply {
-            this.isBeingSent = isBeingSent
-            this.isSent = isSent
-            this.isVerified = isVerified
-        }
+        val nextPnoValue =
+            pnoValue.apply {
+                this.isBeingSent = isBeingSent
+                this.isSent = isSent
+                this.isVerified = isVerified
+            }
         val updatedLogbookReport = logbookReport.copy(message = objectMapper.writeValueAsString(nextPnoValue))
 
         dbLogbookReportRepository.save(updatedLogbookReport)
@@ -374,16 +378,16 @@ class JpaLogbookReportRepository(
     override fun updatePriorNotificationAuthorTrigramAndNote(
         reportId: String,
         operationDate: ZonedDateTime,
-
         authorTrigram: String?,
         note: String?,
     ) {
-        val logbookReport = dbLogbookReportRepository
-            .findAcknowledgedNonDeletedPnoDatAndCorsByReportId(
-                reportId,
-                operationDate.withZoneSameInstant(UTC).toString(),
-            ).firstOrNull()
-            ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
+        val logbookReport =
+            dbLogbookReportRepository
+                .findAcknowledgedNonDeletedPnoDatAndCorsByReportId(
+                    reportId,
+                    operationDate.withZoneSameInstant(UTC).toString(),
+                ).firstOrNull()
+                ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
 
         val pnoValue = objectMapper.readValue(logbookReport.message, PNO::class.java)
         if (
@@ -393,18 +397,19 @@ class JpaLogbookReportRepository(
             return
         }
 
-        val nextPnoValue = pnoValue.apply {
-            this.authorTrigram = authorTrigram
-            this.note = note
-            /**
-             * The PNO states are re-initialized:
-             * - the PDF will be re-generated (done in the use case by deleting the old one)
-             * - the PNO will require another verification before sending
-             */
-            this.isBeingSent = false
-            this.isSent = false
-            this.isVerified = false
-        }
+        val nextPnoValue =
+            pnoValue.apply {
+                this.authorTrigram = authorTrigram
+                this.note = note
+                /**
+                 * The PNO states are re-initialized:
+                 * - the PDF will be re-generated (done in the use case by deleting the old one)
+                 * - the PNO will require another verification before sending
+                 */
+                this.isBeingSent = false
+                this.isSent = false
+                this.isVerified = false
+            }
         val updatedLogbookReport = logbookReport.copy(message = objectMapper.writeValueAsString(nextPnoValue))
 
         dbLogbookReportRepository.save(updatedLogbookReport)
@@ -412,19 +417,24 @@ class JpaLogbookReportRepository(
 
     @Transactional
     @CacheEvict(value = ["pno_to_verify"], allEntries = true)
-    override fun invalidate(reportId: String, operationDate: ZonedDateTime) {
-        val logbookReport = dbLogbookReportRepository
-            .findAcknowledgedNonDeletedPnoDatAndCorsByReportId(
-                reportId,
-                operationDate.withZoneSameInstant(UTC).toString(),
-            ).firstOrNull()
-            ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
+    override fun invalidate(
+        reportId: String,
+        operationDate: ZonedDateTime,
+    ) {
+        val logbookReport =
+            dbLogbookReportRepository
+                .findAcknowledgedNonDeletedPnoDatAndCorsByReportId(
+                    reportId,
+                    operationDate.withZoneSameInstant(UTC).toString(),
+                ).firstOrNull()
+                ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
 
         val pnoValue = objectMapper.readValue(logbookReport.message, PNO::class.java)
 
-        val nextPnoValue = pnoValue.apply {
-            this.isInvalidated = true
-        }
+        val nextPnoValue =
+            pnoValue.apply {
+                this.isInvalidated = true
+            }
 
         val updatedLogbookReport = logbookReport.copy(message = objectMapper.writeValueAsString(nextPnoValue))
 

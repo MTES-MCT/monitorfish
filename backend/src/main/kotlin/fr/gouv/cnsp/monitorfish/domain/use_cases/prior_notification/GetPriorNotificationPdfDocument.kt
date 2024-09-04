@@ -9,7 +9,10 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.PriorNotificationPdfDocument
 class GetPriorNotificationPdfDocument(
     private val priorNotificationPdfDocumentRepository: PriorNotificationPdfDocumentRepository,
 ) {
-    fun execute(reportId: String, isVerifyingExistence: Boolean): PdfDocument? {
+    fun execute(
+        reportId: String,
+        isVerifyingExistence: Boolean,
+    ): PdfDocument? {
         return try {
             priorNotificationPdfDocumentRepository.findByReportId(reportId)
         } catch (e: BackendUsageException) {

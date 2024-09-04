@@ -24,7 +24,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = [(ControlObjectiveAdminController::class)])
 class ControlObjectiveAdminControllerITests {
-
     @Autowired
     private lateinit var api: MockMvc
 

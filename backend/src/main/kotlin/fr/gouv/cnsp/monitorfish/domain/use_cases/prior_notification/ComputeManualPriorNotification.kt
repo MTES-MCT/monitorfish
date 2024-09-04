@@ -16,7 +16,6 @@ class ComputeManualPriorNotification(
     private val pnoSegmentSubscriptionRepository: PnoSegmentSubscriptionRepository,
     private val pnoVesselSubscriptionRepository: PnoVesselSubscriptionRepository,
     private val vesselRepository: VesselRepository,
-
     private val computeFleetSegments: ComputeFleetSegments,
     private val computePnoTypes: ComputePnoTypes,
     private val computeRiskFactor: ComputeRiskFactor,
@@ -32,8 +31,9 @@ class ComputeManualPriorNotification(
         val vessel = vesselRepository.findVesselById(vesselId)
 
         val faoAreas = globalFaoArea?.let { listOf(globalFaoArea) } ?: fishingCatches.mapNotNull { it.faoZone }
-        val fishingCatchesWithFaoArea = globalFaoArea?.let { fishingCatches.map { it.copy(faoZone = globalFaoArea) } }
-            ?: fishingCatches
+        val fishingCatchesWithFaoArea =
+            globalFaoArea?.let { fishingCatches.map { it.copy(faoZone = globalFaoArea) } }
+                ?: fishingCatches
         val specyCodes = fishingCatches.mapNotNull { it.species }
         val vesselCfr = vessel?.internalReferenceNumber
         val vesselFlagCountryCode = vessel?.flagState
@@ -42,11 +42,13 @@ class ComputeManualPriorNotification(
         val types = computePnoTypes.execute(fishingCatchesWithFaoArea, tripGearCodes, vesselFlagCountryCode)
         val vesselRiskFactor = computeRiskFactor.execute(portLocode, tripSegments, vesselCfr)
 
-        val isInVerificationScope = ManualPriorNotificationComputedValues
-            .isInVerificationScope(vesselFlagCountryCode, vesselRiskFactor)
-        val isPartOfControlUnitSubscriptions = pnoPortSubscriptionRepository.has(portLocode) ||
-            pnoVesselSubscriptionRepository.has(vesselId) ||
-            pnoSegmentSubscriptionRepository.has(portLocode, tripSegments.map { it.segment })
+        val isInVerificationScope =
+            ManualPriorNotificationComputedValues
+                .isInVerificationScope(vesselFlagCountryCode, vesselRiskFactor)
+        val isPartOfControlUnitSubscriptions =
+            pnoPortSubscriptionRepository.has(portLocode) ||
+                pnoVesselSubscriptionRepository.has(vesselId) ||
+                pnoSegmentSubscriptionRepository.has(portLocode, tripSegments.map { it.segment })
         val nextState = PriorNotification.getNextState(isInVerificationScope, isPartOfControlUnitSubscriptions)
 
         return ManualPriorNotificationComputedValues(

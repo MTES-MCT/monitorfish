@@ -13,8 +13,10 @@ class PatchMissionAction(
     private val missionActionsRepository: MissionActionsRepository,
     private val patchMissionAction: PatchEntity<MissionAction, PatchableMissionAction>,
 ) {
-
-    fun execute(id: Int, patchableEnvActionEntity: PatchableMissionAction): MissionAction {
+    fun execute(
+        id: Int,
+        patchableEnvActionEntity: PatchableMissionAction,
+    ): MissionAction {
         return try {
             val previousMissionAction = missionActionsRepository.findById(id)
 

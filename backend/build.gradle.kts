@@ -97,18 +97,19 @@ springBoot {
 
     buildInfo {
         properties {
-            additional = mapOf(
-                "commit.hash" to "COMMIT_TO_CHANGE",
-            )
+            additional =
+                mapOf(
+                    "commit.hash" to "COMMIT_TO_CHANGE",
+                )
         }
     }
 }
 
-tasks.withType<JavaCompile>() {
+tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
 }
 
-tasks.withType<Javadoc>() {
+tasks.withType<Javadoc> {
     options.encoding = "UTF-8"
 }
 

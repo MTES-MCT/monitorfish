@@ -37,19 +37,21 @@ class ComputeRiskFactor(
             fleetSegments.maxByOrNull { it.impactRiskFactor }?.impactRiskFactor ?: defaultImpactRiskFactor
         val probabilityRiskFactor = storedRiskFactor?.probabilityRiskFactor ?: defaultProbabilityRiskFactor
         val controlRateRiskFactor = storedRiskFactor?.controlRateRiskFactor ?: defaultControlRateRiskFactor
-        val highestControlPriorityLevel = controlObjectivesRepository.findAllByYear(currentYear)
-            .filter { controlObjective ->
-                !facade.isNullOrEmpty() &&
-                    controlObjective.facade == facade &&
-                    fleetSegments.map { it.segment }.contains(controlObjective.segment)
-            }
-            .maxByOrNull { it.controlPriorityLevel }
-            ?.controlPriorityLevel ?: defaultControlPriorityLevel
+        val highestControlPriorityLevel =
+            controlObjectivesRepository.findAllByYear(currentYear)
+                .filter { controlObjective ->
+                    !facade.isNullOrEmpty() &&
+                        controlObjective.facade == facade &&
+                        fleetSegments.map { it.segment }.contains(controlObjective.segment)
+                }
+                .maxByOrNull { it.controlPriorityLevel }
+                ?.controlPriorityLevel ?: defaultControlPriorityLevel
 
-        val computedRiskFactor = highestImpactRiskFactor.pow(impactRiskFactorCoefficient) *
-            probabilityRiskFactor.pow(probabilityRiskFactorCoefficient) *
-            controlRateRiskFactor.pow(controlRateRiskFactorCoefficient) *
-            highestControlPriorityLevel.pow(controlPriorityLevelCoefficient)
+        val computedRiskFactor =
+            highestImpactRiskFactor.pow(impactRiskFactorCoefficient) *
+                probabilityRiskFactor.pow(probabilityRiskFactorCoefficient) *
+                controlRateRiskFactor.pow(controlRateRiskFactorCoefficient) *
+                highestControlPriorityLevel.pow(controlPriorityLevelCoefficient)
 
         return computedRiskFactor
     }

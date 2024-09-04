@@ -20,7 +20,9 @@ data class PdfDocument(
         if (pdfDocument != null) {
             if (other.pdfDocument == null) return false
             if (!pdfDocument.contentEquals(other.pdfDocument)) return false
-        } else if (other.pdfDocument != null) return false
+        } else if (other.pdfDocument != null) {
+            return false
+        }
 
         return true
     }

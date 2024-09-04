@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class JpaSpeciesRepository(private val dbSpeciesRepository: DBSpeciesRepository) : SpeciesRepository {
-
     @Cacheable(value = ["all_species"])
     override fun findAll(): List<Species> {
         return dbSpeciesRepository.findAll().map {

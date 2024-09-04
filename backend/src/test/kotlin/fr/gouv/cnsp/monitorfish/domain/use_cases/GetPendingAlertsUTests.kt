@@ -23,7 +23,6 @@ import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class GetPendingAlertsUTests {
-
     @MockBean
     private lateinit var pendingAlertRepository: PendingAlertRepository
 
@@ -33,17 +32,18 @@ class GetPendingAlertsUTests {
     @Test
     fun `execute Should return alerts with associated infractions`() {
         // Given
-        val pendingAlert = PendingAlert(
-            internalReferenceNumber = "FRFGRGR",
-            externalReferenceNumber = "RGD",
-            ircs = "6554fEE",
-            vesselId = 123,
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            flagState = CountryCode.FR,
-            tripNumber = "123456",
-            creationDate = ZonedDateTime.now(),
-            value = ThreeMilesTrawlingAlert(),
-        )
+        val pendingAlert =
+            PendingAlert(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselId = 123,
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                tripNumber = "123456",
+                creationDate = ZonedDateTime.now(),
+                value = ThreeMilesTrawlingAlert(),
+            )
         given(infractionRepository.findInfractionByNatinfCode(eq(7059))).willReturn(
             Infraction(
                 natinfCode = 7059,

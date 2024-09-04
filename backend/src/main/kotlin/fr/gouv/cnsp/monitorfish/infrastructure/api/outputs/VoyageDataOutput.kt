@@ -19,8 +19,9 @@ data class VoyageDataOutput(
                 startDate = voyage.startDate,
                 endDate = voyage.endDate,
                 tripNumber = voyage.tripNumber,
-                logbookMessagesAndAlerts = LogbookMessagesAndAlertsDataOutput
-                    .fromLogbookMessagesAndAlerts(voyage.logbookMessagesAndAlerts),
+                logbookMessagesAndAlerts =
+                    LogbookMessagesAndAlertsDataOutput
+                        .fromLogbookMessagesAndAlerts(voyage.logbookMessagesAndAlerts),
             )
         }
     }

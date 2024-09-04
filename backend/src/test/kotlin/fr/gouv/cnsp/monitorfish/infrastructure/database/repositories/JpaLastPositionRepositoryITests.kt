@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.ZonedDateTime
 
 class JpaLastPositionRepositoryITests : AbstractDBTests() {
-
     @Autowired
     private lateinit var jpaLastPositionRepository: JpaLastPositionRepository
 
@@ -29,9 +28,10 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         // Then
         val positions = jpaLastPositionRepository.findAll()
 
-        val position = positions.find {
-            it.internalReferenceNumber == "FAK000999999"
-        }
+        val position =
+            positions.find {
+                it.internalReferenceNumber == "FAK000999999"
+            }
         assertThat(position?.gearOnboard).hasSize(1)
         assertThat(position?.gearOnboard?.first()?.dimensions).isEqualTo("45.0")
         assertThat(position?.gearOnboard?.first()?.gear).isEqualTo("OTB")

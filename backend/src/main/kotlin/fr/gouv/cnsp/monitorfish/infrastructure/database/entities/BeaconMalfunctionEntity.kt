@@ -53,24 +53,25 @@ data class BeaconMalfunctionEntity(
     @Column(name = "beacon_status_at_malfunction_creation")
     val beaconStatusAtMalfunctionCreation: BeaconStatus,
 ) {
-    fun toBeaconMalfunction() = BeaconMalfunction(
-        id = id,
-        internalReferenceNumber = internalReferenceNumber,
-        ircs = ircs,
-        externalReferenceNumber = externalReferenceNumber,
-        vesselName = vesselName,
-        flagState = flagState,
-        vesselIdentifier = vesselIdentifier,
-        vesselStatus = vesselStatus,
-        stage = stage,
-        malfunctionStartDateTime = malfunctionStartDateTime.atZone(ZoneOffset.UTC),
-        malfunctionEndDateTime = malfunctionEndDateTime?.atZone(ZoneOffset.UTC),
-        vesselStatusLastModificationDateTime = vesselStatusLastModificationDateTime.atZone(ZoneOffset.UTC),
-        endOfBeaconMalfunctionReason = endOfBeaconMalfunctionReason,
-        vesselId = vesselId,
-        notificationRequested = notificationRequested,
-        requestedNotificationForeignFmcCode = requestedNotificationForeignFmcCode,
-        beaconNumber = beaconNumber,
-        beaconStatusAtMalfunctionCreation = beaconStatusAtMalfunctionCreation,
-    )
+    fun toBeaconMalfunction() =
+        BeaconMalfunction(
+            id = id,
+            internalReferenceNumber = internalReferenceNumber,
+            ircs = ircs,
+            externalReferenceNumber = externalReferenceNumber,
+            vesselName = vesselName,
+            flagState = flagState,
+            vesselIdentifier = vesselIdentifier,
+            vesselStatus = vesselStatus,
+            stage = stage,
+            malfunctionStartDateTime = malfunctionStartDateTime.atZone(ZoneOffset.UTC),
+            malfunctionEndDateTime = malfunctionEndDateTime?.atZone(ZoneOffset.UTC),
+            vesselStatusLastModificationDateTime = vesselStatusLastModificationDateTime.atZone(ZoneOffset.UTC),
+            endOfBeaconMalfunctionReason = endOfBeaconMalfunctionReason,
+            vesselId = vesselId,
+            notificationRequested = notificationRequested,
+            requestedNotificationForeignFmcCode = requestedNotificationForeignFmcCode,
+            beaconNumber = beaconNumber,
+            beaconStatusAtMalfunctionCreation = beaconStatusAtMalfunctionCreation,
+        )
 }

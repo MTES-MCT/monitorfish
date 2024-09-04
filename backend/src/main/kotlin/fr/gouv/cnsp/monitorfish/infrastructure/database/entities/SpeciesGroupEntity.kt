@@ -17,9 +17,9 @@ data class SpeciesGroupEntity(
     @Column(name = "comment")
     val comment: String,
 ) {
-
-    fun toSpeciesGroup() = SpeciesGroup(
-        group = group,
-        comment = comment,
-    )
+    fun toSpeciesGroup() =
+        SpeciesGroup(
+            group = group,
+            comment = comment,
+        )
 }

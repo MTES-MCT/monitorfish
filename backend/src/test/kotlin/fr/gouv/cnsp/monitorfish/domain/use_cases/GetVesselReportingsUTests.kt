@@ -23,7 +23,6 @@ import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class GetVesselReportingsUTests {
-
     @MockBean
     private lateinit var reportingRepository: ReportingRepository
 
@@ -42,18 +41,19 @@ class GetVesselReportingsUTests {
         )
 
         // When
-        val currentAndArchivedReportings = GetVesselReportings(
-            reportingRepository,
-            infractionRepository,
-            getAllControlUnits,
-        ).execute(
-            null,
-            "FR224226850",
-            "1236514",
-            "IRCS",
-            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            expectedDateTime,
-        )
+        val currentAndArchivedReportings =
+            GetVesselReportings(
+                reportingRepository,
+                infractionRepository,
+                getAllControlUnits,
+            ).execute(
+                null,
+                "FR224226850",
+                "1236514",
+                "IRCS",
+                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                expectedDateTime,
+            )
 
         // Then
         val range = expectedDateTime.year..ZonedDateTime.now().year
@@ -76,18 +76,19 @@ class GetVesselReportingsUTests {
         )
 
         // When
-        val currentAndArchivedReportings = GetVesselReportings(
-            reportingRepository,
-            infractionRepository,
-            getAllControlUnits,
-        ).execute(
-            null,
-            "FR224226850",
-            "1236514",
-            "IRCS",
-            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            ZonedDateTime.now().minusYears(1),
-        )
+        val currentAndArchivedReportings =
+            GetVesselReportings(
+                reportingRepository,
+                infractionRepository,
+                getAllControlUnits,
+            ).execute(
+                null,
+                "FR224226850",
+                "1236514",
+                "IRCS",
+                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                ZonedDateTime.now().minusYears(1),
+            )
 
         // Then
         assertThat(currentAndArchivedReportings.current).hasSize(1)
@@ -120,18 +121,19 @@ class GetVesselReportingsUTests {
         )
 
         // When
-        val currentAndArchivedReportings = GetVesselReportings(
-            reportingRepository,
-            infractionRepository,
-            getAllControlUnits,
-        ).execute(
-            123456,
-            "FR224226850",
-            "1236514",
-            "IRCS",
-            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            ZonedDateTime.now().minusYears(1),
-        )
+        val currentAndArchivedReportings =
+            GetVesselReportings(
+                reportingRepository,
+                infractionRepository,
+                getAllControlUnits,
+            ).execute(
+                123456,
+                "FR224226850",
+                "1236514",
+                "IRCS",
+                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                ZonedDateTime.now().minusYears(1),
+            )
 
         // Then
         assertThat(currentAndArchivedReportings.current).hasSize(1)
@@ -141,55 +143,60 @@ class GetVesselReportingsUTests {
     @Test
     fun `execute Should build the last reporting and other occurrences object`() {
         // Given
-        val firstReporting = createCurrentReporting(
-            id = 12345,
-            validationDate = ZonedDateTime.parse("2022-09-15T10:15:30Z"),
-            internalReferenceNumber = "FR224226850",
-            type = ReportingType.ALERT,
-            alertType = AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
-        )
+        val firstReporting =
+            createCurrentReporting(
+                id = 12345,
+                validationDate = ZonedDateTime.parse("2022-09-15T10:15:30Z"),
+                internalReferenceNumber = "FR224226850",
+                type = ReportingType.ALERT,
+                alertType = AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
+            )
 
-        val secondReporting = createCurrentReporting(
-            id = 123456,
-            validationDate = ZonedDateTime.parse("2022-11-20T08:00:00Z"),
-            internalReferenceNumber = "FR224226850",
-            type = ReportingType.ALERT,
-            alertType = AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
-        )
+        val secondReporting =
+            createCurrentReporting(
+                id = 123456,
+                validationDate = ZonedDateTime.parse("2022-11-20T08:00:00Z"),
+                internalReferenceNumber = "FR224226850",
+                type = ReportingType.ALERT,
+                alertType = AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
+            )
 
-        val thirdReporting = createCurrentReporting(
-            id = 1234567,
-            validationDate = ZonedDateTime.parse("2024-12-30T15:08:05.845121Z"),
-            internalReferenceNumber = "FR224226850",
-            type = ReportingType.ALERT,
-            alertType = AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
-        )
+        val thirdReporting =
+            createCurrentReporting(
+                id = 1234567,
+                validationDate = ZonedDateTime.parse("2024-12-30T15:08:05.845121Z"),
+                internalReferenceNumber = "FR224226850",
+                type = ReportingType.ALERT,
+                alertType = AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
+            )
 
-        val fourthReporting = createCurrentReporting(
-            id = 12345678,
-            validationDate = ZonedDateTime.parse("2023-10-30T09:10:00Z"),
-            internalReferenceNumber = "FR224226850",
-            type = ReportingType.ALERT,
-            alertType = AlertTypeMapping.MISSING_FAR_ALERT,
-        )
+        val fourthReporting =
+            createCurrentReporting(
+                id = 12345678,
+                validationDate = ZonedDateTime.parse("2023-10-30T09:10:00Z"),
+                internalReferenceNumber = "FR224226850",
+                type = ReportingType.ALERT,
+                alertType = AlertTypeMapping.MISSING_FAR_ALERT,
+            )
 
         given(reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(any(), any(), any())).willReturn(
             listOf(firstReporting, secondReporting, thirdReporting, fourthReporting),
         )
 
         // When
-        val result = GetVesselReportings(
-            reportingRepository,
-            infractionRepository,
-            getAllControlUnits,
-        ).execute(
-            null,
-            "FR224226850",
-            "1236514",
-            "IRCS",
-            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            ZonedDateTime.now().minusYears(1),
-        )
+        val result =
+            GetVesselReportings(
+                reportingRepository,
+                infractionRepository,
+                getAllControlUnits,
+            ).execute(
+                null,
+                "FR224226850",
+                "1236514",
+                "IRCS",
+                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                ZonedDateTime.now().minusYears(1),
+            )
 
         // Then
         assertThat(result.current).hasSize(2)
@@ -219,55 +226,60 @@ class GetVesselReportingsUTests {
     @Test
     fun `execute Should correctly process mixed ReportingTypes with ALERT and INFRACTION_SUSPICION`() {
         // Given
-        val alertReporting1 = createCurrentReporting(
-            id = 11223,
-            validationDate = ZonedDateTime.parse("2024-01-01T12:00:00Z"),
-            internalReferenceNumber = "FR55667788",
-            type = ReportingType.ALERT,
-            alertType = AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
-        )
+        val alertReporting1 =
+            createCurrentReporting(
+                id = 11223,
+                validationDate = ZonedDateTime.parse("2024-01-01T12:00:00Z"),
+                internalReferenceNumber = "FR55667788",
+                type = ReportingType.ALERT,
+                alertType = AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
+            )
 
-        val alertReporting2 = createCurrentReporting(
-            id = 22334,
-            validationDate = ZonedDateTime.parse("2024-02-01T12:00:00Z"),
-            internalReferenceNumber = "FR55667788",
-            type = ReportingType.ALERT,
-            alertType = AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
-        )
+        val alertReporting2 =
+            createCurrentReporting(
+                id = 22334,
+                validationDate = ZonedDateTime.parse("2024-02-01T12:00:00Z"),
+                internalReferenceNumber = "FR55667788",
+                type = ReportingType.ALERT,
+                alertType = AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
+            )
 
-        val infractionReporting = createCurrentReporting(
-            id = 33445,
-            validationDate = ZonedDateTime.parse("2024-03-01T12:00:00Z"),
-            internalReferenceNumber = "FR55667788",
-            type = ReportingType.INFRACTION_SUSPICION,
-            alertType = null, // Not applicable for INFRACTION_SUSPICION
-        )
+        val infractionReporting =
+            createCurrentReporting(
+                id = 33445,
+                validationDate = ZonedDateTime.parse("2024-03-01T12:00:00Z"),
+                internalReferenceNumber = "FR55667788",
+                type = ReportingType.INFRACTION_SUSPICION,
+                alertType = null, // Not applicable for INFRACTION_SUSPICION
+            )
 
-        val alertReporting3 = createCurrentReporting(
-            id = 44556,
-            validationDate = ZonedDateTime.parse("2024-04-01T12:00:00Z"),
-            internalReferenceNumber = "FR55667788",
-            type = ReportingType.ALERT,
-            alertType = AlertTypeMapping.MISSING_FAR_48_HOURS_ALERT,
-        )
+        val alertReporting3 =
+            createCurrentReporting(
+                id = 44556,
+                validationDate = ZonedDateTime.parse("2024-04-01T12:00:00Z"),
+                internalReferenceNumber = "FR55667788",
+                type = ReportingType.ALERT,
+                alertType = AlertTypeMapping.MISSING_FAR_48_HOURS_ALERT,
+            )
 
         given(reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(any(), any(), any())).willReturn(
             listOf(alertReporting1, alertReporting2, infractionReporting, alertReporting3),
         )
 
         // When
-        val result = GetVesselReportings(
-            reportingRepository,
-            infractionRepository,
-            getAllControlUnits,
-        ).execute(
-            null,
-            "FR55667788",
-            "1234567",
-            "IRCS",
-            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            ZonedDateTime.now().minusYears(1),
-        )
+        val result =
+            GetVesselReportings(
+                reportingRepository,
+                infractionRepository,
+                getAllControlUnits,
+            ).execute(
+                null,
+                "FR55667788",
+                "1234567",
+                "IRCS",
+                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                ZonedDateTime.now().minusYears(1),
+            )
 
         // Then
         assertThat(result.current).hasSize(3)

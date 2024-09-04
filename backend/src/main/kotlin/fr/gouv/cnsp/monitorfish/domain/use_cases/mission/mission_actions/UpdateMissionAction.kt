@@ -12,17 +12,21 @@ class UpdateMissionAction(
 ) {
     private val logger = LoggerFactory.getLogger(UpdateMissionAction::class.java)
 
-    fun execute(actionId: Int, action: MissionAction): MissionAction {
+    fun execute(
+        actionId: Int,
+        action: MissionAction,
+    ): MissionAction {
         logger.info("Updating mission action $actionId")
         action.verify()
 
         // We store the `storedValue` of the enum and not the enum uppercase value
         val facade = getMissionActionFacade.execute(action)?.toString()
 
-        val actionWithId = action.copy(
-            id = actionId,
-            facade = facade,
-        )
+        val actionWithId =
+            action.copy(
+                id = actionId,
+                facade = facade,
+            )
 
         return missionActionsRepository.save(actionWithId)
     }

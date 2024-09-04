@@ -11,25 +11,27 @@ class SearchVessels(
     private val beaconRepository: BeaconRepository,
 ) {
     fun execute(searched: String): List<VesselAndBeacon> {
-        val vessels = vesselRepository.search(searched).filter {
-            !(
-                it.internalReferenceNumber.isNullOrEmpty() &&
-                    it.externalReferenceNumber.isNullOrEmpty() &&
-                    it.ircs.isNullOrEmpty() &&
-                    it.mmsi.isNullOrEmpty()
+        val vessels =
+            vesselRepository.search(searched).filter {
+                !(
+                    it.internalReferenceNumber.isNullOrEmpty() &&
+                        it.externalReferenceNumber.isNullOrEmpty() &&
+                        it.ircs.isNullOrEmpty() &&
+                        it.mmsi.isNullOrEmpty()
                 )
-        }.map { VesselAndBeacon(vessel = it) }
+            }.map { VesselAndBeacon(vessel = it) }
 
         val beacons = beaconRepository.search(searched)
         val beaconsVesselId = beacons.mapNotNull { it.vesselId }
 
-        val vesselsFromBeacons = vesselRepository
-            .findVesselsByIds(beaconsVesselId)
-            .map { vessel ->
-                val beacon = beacons.find { beacon -> beacon.vesselId == vessel.id }
+        val vesselsFromBeacons =
+            vesselRepository
+                .findVesselsByIds(beaconsVesselId)
+                .map { vessel ->
+                    val beacon = beacons.find { beacon -> beacon.vesselId == vessel.id }
 
-                return@map VesselAndBeacon(vessel, beacon)
-            }
+                    return@map VesselAndBeacon(vessel, beacon)
+                }
 
         return (vesselsFromBeacons + vessels)
             .distinctBy { it.vessel.id }

@@ -10,13 +10,15 @@ data class VesselAndPositionsDataOutput(
     companion object {
         fun fromVesselWithData(vesselInformation: VesselInformation): VesselAndPositionsDataOutput {
             return VesselAndPositionsDataOutput(
-                vessel = VesselDataOutput.fromVessel(
-                    vesselInformation.vessel,
-                    vesselInformation.beacon,
-                ),
-                positions = vesselInformation.positions.map {
-                    PositionDataOutput.fromPosition(it)
-                },
+                vessel =
+                    VesselDataOutput.fromVessel(
+                        vesselInformation.vessel,
+                        vesselInformation.beacon,
+                    ),
+                positions =
+                    vesselInformation.positions.map {
+                        PositionDataOutput.fromPosition(it)
+                    },
             )
         }
     }

@@ -20,7 +20,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = [(ForeignFMCsController::class)])
 class ForeignFMCsControllerITests {
-
     @Autowired
     private lateinit var api: MockMvc
 

@@ -15,7 +15,6 @@ import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class UpdateMissionActionUTests {
-
     @MockBean
     private lateinit var missionActionsRepository: MissionActionsRepository
 
@@ -25,28 +24,30 @@ class UpdateMissionActionUTests {
     @Test
     fun `execute Should throw an exception When the vesselId is missing in a control`() {
         // Given
-        val action = MissionAction(
-            id = null,
-            vesselId = null,
-            missionId = 1,
-            actionDatetimeUtc = ZonedDateTime.now(),
-            portLocode = "AEFAT",
-            actionType = MissionActionType.LAND_CONTROL,
-            gearOnboard = listOf(),
-            seizureAndDiversion = true,
-            isDeleted = false,
-            hasSomeGearsSeized = false,
-            hasSomeSpeciesSeized = false,
-            isFromPoseidon = false,
-            flagState = CountryCode.FR,
-            userTrigram = "LTH",
-            completion = Completion.TO_COMPLETE,
-        )
+        val action =
+            MissionAction(
+                id = null,
+                vesselId = null,
+                missionId = 1,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                portLocode = "AEFAT",
+                actionType = MissionActionType.LAND_CONTROL,
+                gearOnboard = listOf(),
+                seizureAndDiversion = true,
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
+                completion = Completion.TO_COMPLETE,
+            )
 
         // When
-        val throwable = catchThrowable {
-            UpdateMissionAction(missionActionsRepository, getMissionActionFacade).execute(123, action)
-        }
+        val throwable =
+            catchThrowable {
+                UpdateMissionAction(missionActionsRepository, getMissionActionFacade).execute(123, action)
+            }
 
         // Then
         assertThat(throwable).isNotNull()

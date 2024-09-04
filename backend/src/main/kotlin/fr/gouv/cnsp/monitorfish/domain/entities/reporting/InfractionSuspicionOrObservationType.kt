@@ -13,19 +13,24 @@ abstract class InfractionSuspicionOrObservationType(
     open val description: String? = null,
     override val natinfCode: Int? = null,
 ) : ReportingValue(natinfCode) {
-    fun checkReportingActorAndFieldsRequirements() = when (reportingActor) {
-        ReportingActor.UNIT -> require(controlUnitId != null) {
-            "An unit must be set"
+    fun checkReportingActorAndFieldsRequirements() =
+        when (reportingActor) {
+            ReportingActor.UNIT ->
+                require(controlUnitId != null) {
+                    "An unit must be set"
+                }
+            ReportingActor.DML ->
+                require(!authorContact.isNullOrEmpty()) {
+                    "An author contact must be set"
+                }
+            ReportingActor.DIRM ->
+                require(!authorContact.isNullOrEmpty()) {
+                    "An author contact must be set"
+                }
+            ReportingActor.OTHER ->
+                require(!authorContact.isNullOrEmpty()) {
+                    "An author contact must be set"
+                }
+            else -> {}
         }
-        ReportingActor.DML -> require(!authorContact.isNullOrEmpty()) {
-            "An author contact must be set"
-        }
-        ReportingActor.DIRM -> require(!authorContact.isNullOrEmpty()) {
-            "An author contact must be set"
-        }
-        ReportingActor.OTHER -> require(!authorContact.isNullOrEmpty()) {
-            "An author contact must be set"
-        }
-        else -> {}
-    }
 }

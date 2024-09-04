@@ -13,7 +13,6 @@ import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class ComputeFleetSegmentsUTests {
-
     @MockBean
     private lateinit var fleetSegmentRepository: FleetSegmentRepository
 
@@ -26,11 +25,12 @@ class ComputeFleetSegmentsUTests {
         given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
 
         // When
-        val segment = ComputeFleetSegments(
-            fleetSegmentRepository,
-            fixedClock,
-        )
-            .execute(listOf("27.1", "27.8.c"), listOf(), listOf("HKE", "SOL"))
+        val segment =
+            ComputeFleetSegments(
+                fleetSegmentRepository,
+                fixedClock,
+            )
+                .execute(listOf("27.1", "27.8.c"), listOf(), listOf("HKE", "SOL"))
 
         // Then
         assertThat(segment).isEmpty()
@@ -41,11 +41,12 @@ class ComputeFleetSegmentsUTests {
         given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
 
         // When
-        val segment = ComputeFleetSegments(
-            fleetSegmentRepository,
-            fixedClock,
-        )
-            .execute(listOf("27.1", "27.8.c"), listOf("OTB", "OTT"), listOf())
+        val segment =
+            ComputeFleetSegments(
+                fleetSegmentRepository,
+                fixedClock,
+            )
+                .execute(listOf("27.1", "27.8.c"), listOf("OTB", "OTT"), listOf())
 
         // Then
         assertThat(segment).isEmpty()
@@ -56,11 +57,12 @@ class ComputeFleetSegmentsUTests {
         given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
 
         // When
-        val segment = ComputeFleetSegments(
-            fleetSegmentRepository,
-            fixedClock,
-        )
-            .execute(listOf("27.1", "27.8.c"), listOf("OTB", "OTT"), listOf("HKE", "SOL"))
+        val segment =
+            ComputeFleetSegments(
+                fleetSegmentRepository,
+                fixedClock,
+            )
+                .execute(listOf("27.1", "27.8.c"), listOf("OTB", "OTT"), listOf("HKE", "SOL"))
 
         // Then
         assertThat(segment).hasSize(1)
@@ -72,11 +74,12 @@ class ComputeFleetSegmentsUTests {
         given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
 
         // When
-        val segment = ComputeFleetSegments(
-            fleetSegmentRepository,
-            fixedClock,
-        )
-            .execute(listOf("27.5.b"), listOf("TB"), listOf("ANF"))
+        val segment =
+            ComputeFleetSegments(
+                fleetSegmentRepository,
+                fixedClock,
+            )
+                .execute(listOf("27.5.b"), listOf("TB"), listOf("ANF"))
 
         // Then
         assertThat(segment).hasSize(1)
@@ -88,11 +91,12 @@ class ComputeFleetSegmentsUTests {
         given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
 
         // When
-        val segment = ComputeFleetSegments(
-            fleetSegmentRepository,
-            fixedClock,
-        )
-            .execute(listOf("27.1", "27.8.c"), listOf("OTB", "OTT", "OTM"), listOf("HKE", "SOL"))
+        val segment =
+            ComputeFleetSegments(
+                fleetSegmentRepository,
+                fixedClock,
+            )
+                .execute(listOf("27.1", "27.8.c"), listOf("OTB", "OTT", "OTM"), listOf("HKE", "SOL"))
 
         // Then
         assertThat(segment).hasSize(2)
@@ -105,11 +109,12 @@ class ComputeFleetSegmentsUTests {
         given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
 
         // When
-        val segment = ComputeFleetSegments(
-            fleetSegmentRepository,
-            fixedClock,
-        )
-            .execute(listOf("27.9"), listOf(), listOf("HKE", "SOL"))
+        val segment =
+            ComputeFleetSegments(
+                fleetSegmentRepository,
+                fixedClock,
+            )
+                .execute(listOf("27.9"), listOf(), listOf("HKE", "SOL"))
 
         // Then
         assertThat(segment).hasSize(1)
@@ -121,11 +126,12 @@ class ComputeFleetSegmentsUTests {
         given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
 
         // When
-        val segment = ComputeFleetSegments(
-            fleetSegmentRepository,
-            fixedClock,
-        )
-            .execute(listOf("27.9"), listOf("SDN"), listOf())
+        val segment =
+            ComputeFleetSegments(
+                fleetSegmentRepository,
+                fixedClock,
+            )
+                .execute(listOf("27.9"), listOf("SDN"), listOf())
 
         // Then
         assertThat(segment).hasSize(1)
@@ -137,11 +143,12 @@ class ComputeFleetSegmentsUTests {
         given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
 
         // When
-        val segment = ComputeFleetSegments(
-            fleetSegmentRepository,
-            fixedClock,
-        )
-            .execute(listOf(), listOf("SDN"), listOf("HKE"))
+        val segment =
+            ComputeFleetSegments(
+                fleetSegmentRepository,
+                fixedClock,
+            )
+                .execute(listOf(), listOf("SDN"), listOf("HKE"))
 
         // Then
         assertThat(segment).hasSize(1)

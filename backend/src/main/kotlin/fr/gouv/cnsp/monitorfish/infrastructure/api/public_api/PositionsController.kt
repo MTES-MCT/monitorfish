@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*
 class PositionsController(
     private val parseAndSavePosition: ParseAndSavePosition,
 ) {
-
     @PostMapping(value = ["/v1/positions"])
     @Operation(summary = "Receive position")
     @ResponseStatus(HttpStatus.CREATED)

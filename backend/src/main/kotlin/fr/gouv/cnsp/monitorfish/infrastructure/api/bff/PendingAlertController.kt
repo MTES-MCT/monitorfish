@@ -23,7 +23,6 @@ class PendingAlertController(
     private val silenceAlert: SilenceAlert,
     private val objectMapper: ObjectMapper,
 ) {
-
     @GetMapping("")
     @Operation(summary = "Get pending operational alerts")
     fun getOperationalAlerts(): List<PendingAlertDataOutput> {
@@ -51,11 +50,12 @@ class PendingAlertController(
         @RequestBody
         silenceOperationalAlertData: SilenceOperationalAlertDataInput,
     ): SilencedAlertDataOutput {
-        val silencedAlert = silencePendingAlert.execute(
-            id,
-            silenceOperationalAlertData.silencedAlertPeriod,
-            silenceOperationalAlertData.beforeDateTime,
-        )
+        val silencedAlert =
+            silencePendingAlert.execute(
+                id,
+                silenceOperationalAlertData.silencedAlertPeriod,
+                silenceOperationalAlertData.beforeDateTime,
+            )
 
         return SilencedAlertDataOutput.fromSilencedAlert(silencedAlert)
     }

@@ -15,7 +15,11 @@ class CorrelationInterceptor : HandlerInterceptor {
         private const val CORRELATION_ID_LOG_VAR_NAME = "correlationId"
     }
 
-    override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
+    override fun preHandle(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        handler: Any,
+    ): Boolean {
         val correlationId = getCorrelationIdFromHeader(request)
         MDC.put(CORRELATION_ID_LOG_VAR_NAME, correlationId)
 

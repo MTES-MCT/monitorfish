@@ -13,7 +13,6 @@ class JpaPNOAndLANAlertRepository(
     private val dbPNOAndLANAlertRepository: DBPNOAndLANAlertRepository,
     private val mapper: ObjectMapper,
 ) : PNOAndLANAlertRepository {
-
     override fun save(alert: PNOAndLANAlert) {
         val alertEntity = PnoAndLanAlertEntity.fromAlert(alert, mapper)
 
@@ -28,7 +27,11 @@ class JpaPNOAndLANAlertRepository(
         )
     }
 
-    override fun findAlertsOfTypes(types: List<AlertTypeMapping>, internalReferenceNumber: String, tripNumber: String): List<PNOAndLANAlert> {
+    override fun findAlertsOfTypes(
+        types: List<AlertTypeMapping>,
+        internalReferenceNumber: String,
+        tripNumber: String,
+    ): List<PNOAndLANAlert> {
         val rulesAsString = types.map { it.name }
 
         return dbPNOAndLANAlertRepository.findAlertsOfRules(rulesAsString, internalReferenceNumber, tripNumber)

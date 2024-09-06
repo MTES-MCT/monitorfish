@@ -198,7 +198,7 @@ export function Row({ row }: RowProps) {
                 </FixedTag>
               )}
 
-              {isSuperUser && (
+              {isSuperUser && priorNotification.reportingCount > 0 && (
                 <FixedTag backgroundColor={THEME.color.maximumRed15} color={THEME.color.maximumRed}>{`${
                   priorNotification.reportingCount
                 } signalement${priorNotification.reportingCount > 1 ? 's' : ''}`}</FixedTag>
@@ -224,7 +224,7 @@ const ExpandableRowCell = styled(TableWithSelectableRows.Td)<{
   cursor: pointer;
   user-select: none;
   color: ${p => (p.$isInvalidated ? p.theme.color.slateGray : p.theme.color.charcoal)};
-  background: ${p => (p.$isInvalidated ? p.theme.color.gainsboro : 'inherit')};
+  background: ${p => (p.$isInvalidated ? p.theme.color.gainsboro : p.theme.color.cultured)};
 `
 
 // TODO Add this feature in monitor-ui.
@@ -234,7 +234,7 @@ const ExpandedRow = styled(TableWithSelectableRows.BodyTr)<{
   > td {
     overflow: hidden !important;
     color: ${p => (p.$isInvalidated ? p.theme.color.slateGray : p.theme.color.charcoal)};
-    background: ${p => (p.$isInvalidated ? p.theme.color.gainsboro : 'inherit')};
+    background: ${p => (p.$isInvalidated ? p.theme.color.gainsboro : p.theme.color.cultured)};
   }
 
   &:hover {

@@ -77,7 +77,7 @@ export function Form({ detail, initialFormValues }: FormProps) {
             <FormikTextarea label="Points d'attention identifiés par le CNSP" name="note" readOnly={isReadOnly} />
           </FieldGroup>
 
-          {isSuperUser && <AuthorTrigramInput label="Par" name="authorTrigram" readOnly={isReadOnly} />}
+          {isSuperUser && <AuthorTrigramInput label="Saisi par" name="authorTrigram" readOnly={isReadOnly} />}
 
           <hr />
 
@@ -151,6 +151,7 @@ const FieldGroup = styled.div.attrs({ className: 'FieldGroup' })`
 `
 
 const AuthorTrigramInput = styled(FormikTextInput)`
+  margin-top: 24px;
   width: 120px;
 `
 

@@ -27,7 +27,7 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
 
     // When
     cy.fill("Points d'attention identifiés par le CNSP", "Un point d'attention.")
-    cy.fill('Par', 'ABC')
+    cy.fill('Saisi par', 'ABC')
 
     cy.wait('@updateLogbookPriorNotification')
 

@@ -15,36 +15,39 @@ class JpaPriorNotificationUploadRepositoryITests : AbstractDBTests() {
     @Autowired
     private lateinit var jpaPriorNotificationUploadRepository: JpaPriorNotificationUploadRepository
 
-    private val firstFakePriorNotificationDocument = PriorNotificationDocument(
-        id = null,
-        content = "%PDF-1.5\n".toByteArray(),
-        createdAt = CustomZonedDateTime.now(),
-        fileName = "fake_file_1.pdf",
-        isManualPriorNotification = true,
-        mimeType = "application/pdf",
-        reportId = "00000000-0000-4000-0000-000000000011",
-        updatedAt = CustomZonedDateTime.now(),
-    )
-    private val secondFakePriorNotificationDocument = PriorNotificationDocument(
-        id = null,
-        content = "%PDF-1.5\n".toByteArray(),
-        createdAt = CustomZonedDateTime.now(),
-        fileName = "fake_file_2.pdf",
-        isManualPriorNotification = true,
-        mimeType = "application/pdf",
-        reportId = "00000000-0000-4000-0000-000000000011",
-        updatedAt = CustomZonedDateTime.now(),
-    )
-    private val thirdFakePriorNotificationDocument = PriorNotificationDocument(
-        id = null,
-        content = "%PDF-1.5\n".toByteArray(),
-        createdAt = CustomZonedDateTime.now(),
-        fileName = "fake_file_3.pdf",
-        isManualPriorNotification = true,
-        mimeType = "application/pdf",
-        reportId = "00000000-0000-4000-0000-000000000012",
-        updatedAt = CustomZonedDateTime.now(),
-    )
+    private val firstFakePriorNotificationDocument =
+        PriorNotificationDocument(
+            id = null,
+            content = "%PDF-1.5\n".toByteArray(),
+            createdAt = CustomZonedDateTime.now(),
+            fileName = "fake_file_1.pdf",
+            isManualPriorNotification = true,
+            mimeType = "application/pdf",
+            reportId = "00000000-0000-4000-0000-000000000011",
+            updatedAt = CustomZonedDateTime.now(),
+        )
+    private val secondFakePriorNotificationDocument =
+        PriorNotificationDocument(
+            id = null,
+            content = "%PDF-1.5\n".toByteArray(),
+            createdAt = CustomZonedDateTime.now(),
+            fileName = "fake_file_2.pdf",
+            isManualPriorNotification = true,
+            mimeType = "application/pdf",
+            reportId = "00000000-0000-4000-0000-000000000011",
+            updatedAt = CustomZonedDateTime.now(),
+        )
+    private val thirdFakePriorNotificationDocument =
+        PriorNotificationDocument(
+            id = null,
+            content = "%PDF-1.5\n".toByteArray(),
+            createdAt = CustomZonedDateTime.now(),
+            fileName = "fake_file_3.pdf",
+            isManualPriorNotification = true,
+            mimeType = "application/pdf",
+            reportId = "00000000-0000-4000-0000-000000000012",
+            updatedAt = CustomZonedDateTime.now(),
+        )
 
     private lateinit var firstFakePriorNotificationDocumentId: String
     private lateinit var secondFakePriorNotificationDocumentId: String
@@ -67,9 +70,10 @@ class JpaPriorNotificationUploadRepositoryITests : AbstractDBTests() {
         jpaPriorNotificationUploadRepository.deleteById(firstFakePriorNotificationDocument.reportId)
 
         // Then
-        val throwable = catchThrowable {
-            jpaPriorNotificationUploadRepository.findById(firstFakePriorNotificationDocument.reportId)
-        }
+        val throwable =
+            catchThrowable {
+                jpaPriorNotificationUploadRepository.findById(firstFakePriorNotificationDocument.reportId)
+            }
         assertThat(throwable).isNotNull()
         assertThat((throwable as BackendUsageException).code).isEqualTo(BackendUsageErrorCode.NOT_FOUND)
     }
@@ -102,16 +106,17 @@ class JpaPriorNotificationUploadRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `save Should return the expected document`() {
         // Given
-        val newDocument = PriorNotificationDocument(
-            id = null,
-            content = "%PDF-1.5\n".toByteArray(),
-            createdAt = CustomZonedDateTime.now(),
-            fileName = "fake_file.pdf",
-            isManualPriorNotification = true,
-            mimeType = "application/pdf",
-            reportId = "00000000-0000-4000-0000-000000000013",
-            updatedAt = CustomZonedDateTime.now(),
-        )
+        val newDocument =
+            PriorNotificationDocument(
+                id = null,
+                content = "%PDF-1.5\n".toByteArray(),
+                createdAt = CustomZonedDateTime.now(),
+                fileName = "fake_file.pdf",
+                isManualPriorNotification = true,
+                mimeType = "application/pdf",
+                reportId = "00000000-0000-4000-0000-000000000013",
+                updatedAt = CustomZonedDateTime.now(),
+            )
 
         // When
         jpaPriorNotificationUploadRepository.save(newDocument)

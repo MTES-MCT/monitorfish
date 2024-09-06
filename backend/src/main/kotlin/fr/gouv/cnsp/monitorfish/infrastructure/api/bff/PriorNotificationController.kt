@@ -56,6 +56,9 @@ class PriorNotificationController(
         @Parameter(description = "Vessels that have one or more reportings.")
         @RequestParam(name = "hasOneOrMoreReportings")
         hasOneOrMoreReportings: Boolean? = null,
+        @Parameter(description = "Include or exclude invalidated prior notifications.")
+        @RequestParam(name = "isInvalidated")
+        isInvalidated: Boolean? = null,
         @Parameter(description = "Vessels that are less than 12 meters in length.")
         @RequestParam(name = "isLessThanTwelveMetersVessel")
         isLessThanTwelveMetersVessel: Boolean? = null,
@@ -129,6 +132,7 @@ class PriorNotificationController(
             getPriorNotifications
                 .execute(
                     priorNotificationsFilter,
+                    isInvalidated,
                     seafrontGroup,
                     states,
                     sortColumn,
@@ -378,10 +382,11 @@ class PriorNotificationController(
     ): ResponseEntity<ByteArray> {
         val document = getPriorNotificationUpload.execute(priorNotificationUploadId)
 
-        val headers = HttpHeaders().apply {
-            contentType = MediaType.parseMediaType(document.mimeType)
-            setContentDispositionFormData("attachment", document.fileName)
-        }
+        val headers =
+            HttpHeaders().apply {
+                contentType = MediaType.parseMediaType(document.mimeType)
+                setContentDispositionFormData("attachment", document.fileName)
+            }
 
         return ResponseEntity(document.content, headers, HttpStatus.OK)
     }
@@ -412,12 +417,15 @@ class PriorNotificationController(
         @RequestParam("file")
         file: MultipartFile,
     ): ResponseEntity<*> {
-        val content = file.bytes
-            ?: throw BackendRequestException(BackendRequestErrorCode.EMPTY_UPLOADED_FILE)
-        val fileName = file.originalFilename
-            ?: throw BackendRequestException(BackendRequestErrorCode.MISSING_UPLOADED_FILE_NAME)
-        val mimeType = file.contentType
-            ?: throw BackendRequestException(BackendRequestErrorCode.MISSING_UPLOADED_FILE_TYPE)
+        val content =
+            file.bytes
+                ?: throw BackendRequestException(BackendRequestErrorCode.EMPTY_UPLOADED_FILE)
+        val fileName =
+            file.originalFilename
+                ?: throw BackendRequestException(BackendRequestErrorCode.MISSING_UPLOADED_FILE_NAME)
+        val mimeType =
+            file.contentType
+                ?: throw BackendRequestException(BackendRequestErrorCode.MISSING_UPLOADED_FILE_TYPE)
 
         val identifier = PriorNotificationIdentifier(reportId, operationDate, isManualPriorNotification)
 

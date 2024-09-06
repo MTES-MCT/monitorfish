@@ -14,30 +14,22 @@ data class PriorNotificationUploadEntity(
     @Column(name = "id", updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: String?,
-
     @Column(name = "content", nullable = false)
     @JdbcType(BinaryJdbcType::class)
     val content: ByteArray,
-
     @Column(name = "created_at", nullable = false)
     val createdAt: ZonedDateTime,
-
     @Column(name = "file_name", nullable = false)
     val fileName: String,
-
     @Column(name = "is_manual_prior_notification", nullable = false)
     val isManualPriorNotification: Boolean,
-
     @Column(name = "mime_type", nullable = false)
     val mimeType: String,
-
     @Column(name = "report_id", nullable = false)
     val reportId: String,
-
     @Column(name = "updated_at", nullable = false)
     val updatedAt: ZonedDateTime,
 ) {
-
     fun toDocument(): PriorNotificationDocument {
         return PriorNotificationDocument(
             id = id!!,

@@ -267,6 +267,7 @@ export namespace LogbookMessage {
   export type ApiFilter = Partial<{
     flagStates: string[] | undefined
     hasOneOrMoreReportings: boolean | undefined
+    isInvalidated: boolean | undefined
     isLessThanTwelveMetersVessel: boolean | undefined
     lastControlledAfter: string | undefined
     lastControlledBefore: string | undefined

@@ -1,7 +1,8 @@
 import { ALL_SEAFRONT_GROUP, SeafrontGroup, type AllSeafrontGroup, type NoSeafrontGroup } from '@constants/seafront'
-import { getOptionsFromLabelledEnum, RichBoolean } from '@mtes-mct/monitor-ui'
+import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
+import { getOptionsFromLabelledEnum, RichBoolean, type Option } from '@mtes-mct/monitor-ui'
 
-import type { ListFilter } from './types'
+import type { FilterStatus, ListFilter } from './types'
 
 /* eslint-disable sort-keys-fix/sort-keys-fix, typescript-sort-keys/string-enum */
 export const SUB_MENU_LABEL: Record<SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup, string> = {
@@ -70,10 +71,25 @@ export const DEFAULT_LIST_FILTER_VALUES: ListFilter = {
   seafrontGroup: ALL_SEAFRONT_GROUP,
   searchQuery: undefined,
   specyCodes: undefined,
-  states: undefined
+  statuses: undefined
 }
 
 export const DEFAULT_PAGE_SIZE = 10
 
 export const COMMUNITY_PRIOR_NOTIFICATION_TYPES = ['Préavis communautaire', 'Préavis navire tiers']
 export const DESIGNATED_PORTS_PRIOR_NOTIFICATION_TYPE_PREFIX = 'Ports désignés'
+
+export const IS_INVALIDATED = 'IS_INVALIDATED'
+export const IS_INVALIDATED_LABEL = 'Invalidé'
+export const FILTER_STATUSES_AS_OPTIONS: Option<FilterStatus>[] = [
+  { label: 'À vérifier (CNSP)', value: PriorNotification.State.PENDING_VERIFICATION },
+  { label: 'Échec de diffusion', value: PriorNotification.State.FAILED_SEND },
+  { label: 'Envoi auto. demandé', value: PriorNotification.State.AUTO_SEND_REQUESTED },
+  { label: 'Envoi auto. fait', value: PriorNotification.State.AUTO_SEND_DONE },
+  { label: 'Hors vérification', value: PriorNotification.State.OUT_OF_VERIFICATION_SCOPE },
+  {
+    label: IS_INVALIDATED_LABEL,
+    value: IS_INVALIDATED
+  },
+  { label: 'Vérifié et diffusé', value: PriorNotification.State.VERIFIED_AND_SENT }
+]

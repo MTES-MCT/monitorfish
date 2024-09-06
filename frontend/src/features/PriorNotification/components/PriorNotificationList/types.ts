@@ -1,4 +1,4 @@
-import type { LastControlPeriod, ExpectedArrivalPeriod } from './constants'
+import type { LastControlPeriod, ExpectedArrivalPeriod, IS_INVALIDATED } from './constants'
 import type { AllSeafrontGroup, NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import type { DateAsStringRange, RichBoolean, UndefineExcept } from '@mtes-mct/monitor-ui'
@@ -20,7 +20,9 @@ export type ListFilter = UndefineExcept<
     seafrontGroup: SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup
     searchQuery: string
     specyCodes: string[]
-    states: PriorNotification.State[]
+    statuses: FilterStatus[]
   },
   'expectedArrivalPeriod' | 'seafrontGroup'
 >
+
+export type FilterStatus = PriorNotification.State | typeof IS_INVALIDATED

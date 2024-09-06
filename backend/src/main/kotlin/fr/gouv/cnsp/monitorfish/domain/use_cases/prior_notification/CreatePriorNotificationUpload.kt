@@ -14,19 +14,25 @@ class CreatePriorNotificationUpload(
     private val manualPriorNotificationRepository: ManualPriorNotificationRepository,
     private val priorNotificationUploadRepository: PriorNotificationUploadRepository,
 ) {
-    fun execute(identifier: PriorNotificationIdentifier, content: ByteArray, fileName: String, mimeType: String) {
+    fun execute(
+        identifier: PriorNotificationIdentifier,
+        content: ByteArray,
+        fileName: String,
+        mimeType: String,
+    ) {
         val createdAt = CustomZonedDateTime.now()
 
-        val newPriorNotificationDocument = PriorNotificationDocument(
-            id = null,
-            content = content,
-            createdAt = createdAt,
-            fileName = fileName,
-            isManualPriorNotification = identifier.isManualPriorNotification,
-            mimeType = mimeType,
-            reportId = identifier.reportId,
-            updatedAt = createdAt,
-        )
+        val newPriorNotificationDocument =
+            PriorNotificationDocument(
+                id = null,
+                content = content,
+                createdAt = createdAt,
+                fileName = fileName,
+                isManualPriorNotification = identifier.isManualPriorNotification,
+                mimeType = mimeType,
+                reportId = identifier.reportId,
+                updatedAt = createdAt,
+            )
 
         priorNotificationUploadRepository.save(newPriorNotificationDocument)
 

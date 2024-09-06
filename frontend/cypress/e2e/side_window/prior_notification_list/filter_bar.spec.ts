@@ -221,9 +221,11 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
   it('Should filter prior notifications by ports', () => {
     openSideWindowPriorNotificationListAsSuperUser()
 
-    cy.intercept('GET', `${apiPathBase}*&portsFRSM,FRVN*`).as('getPriorNotifications')
+    cy.intercept('GET', `${apiPathBase}*portLocodes=FRSML,FRVNE*`).as('getPriorNotifications')
 
     cy.fill('Ports d’arrivée', ['Saint-Malo', 'Vanne'])
+
+    cy.wait('@getPriorNotifications')
 
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 0)
   })
@@ -231,27 +233,32 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
   it('Should filter prior notifications by types', () => {
     openSideWindowPriorNotificationListAsSuperUser()
 
-    cy.intercept('GET', `${apiPathBase}*priorNotificationTypes=Préavis type A,Préavis type C*`).as(
+    cy.intercept('GET', `${apiPathBase}*priorNotificationTypes=${encodeURI('Préavis type A,Préavis type C')}*`).as(
       'getPriorNotifications'
     )
 
     cy.fill('Types de préavis', ['Préavis type A', 'Préavis type C'])
 
+    cy.wait('@getPriorNotifications')
+
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 0)
   })
 
-  it('Should filter prior notifications by states', () => {
+  it('Should filter prior notifications by statuses', () => {
     openSideWindowPriorNotificationListAsSuperUser()
 
     cy.intercept(
       'GET',
-      `${apiPathBase}*states=${PriorNotification.State.PENDING_SEND},${PriorNotification.State.PENDING_AUTO_SEND}*`
+      `${apiPathBase}*isInvalidated=true*states=${PriorNotification.State.AUTO_SEND_DONE},${PriorNotification.State.PENDING_AUTO_SEND},${PriorNotification.State.PENDING_SEND},${PriorNotification.State.VERIFIED_AND_SENT}*`
     ).as('getPriorNotifications')
 
     cy.fill('Statuts de diffusion', [
-      PriorNotification.STATE_LABEL[PriorNotification.State.PENDING_SEND],
-      PriorNotification.STATE_LABEL[PriorNotification.State.PENDING_AUTO_SEND]
+      PriorNotification.STATE_LABEL[PriorNotification.State.AUTO_SEND_DONE],
+      'Invalidé',
+      PriorNotification.STATE_LABEL[PriorNotification.State.VERIFIED_AND_SENT]
     ])
+
+    cy.wait('@getPriorNotifications')
 
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 0)
   })

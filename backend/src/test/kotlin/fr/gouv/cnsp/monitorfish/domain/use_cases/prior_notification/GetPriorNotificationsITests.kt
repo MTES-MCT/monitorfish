@@ -52,6 +52,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             willArriveAfter = "2000-01-01T00:00:00Z",
             willArriveBefore = "2099-12-31T00:00:00Z",
         )
+    private val defaultIsInvalidated = null
     private val defaultSeafrontGroup = SeafrontGroup.ALL
     private val defaultStates = null
     private val defaultSortColumn = PriorNotificationsSortColumn.EXPECTED_ARRIVAL_DATE
@@ -71,6 +72,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             getPriorNotifications
                 .execute(
                     defaultFilter,
+                    defaultIsInvalidated,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -102,6 +104,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             getPriorNotifications
                 .execute(
                     defaultFilter,
+                    defaultIsInvalidated,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -133,6 +136,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             getPriorNotifications
                 .execute(
                     defaultFilter,
+                    defaultIsInvalidated,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -164,6 +168,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             getPriorNotifications
                 .execute(
                     defaultFilter,
+                    defaultIsInvalidated,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -195,6 +200,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             getPriorNotifications
                 .execute(
                     defaultFilter,
+                    defaultIsInvalidated,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -222,6 +228,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             getPriorNotifications
                 .execute(
                     defaultFilter,
+                    defaultIsInvalidated,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -249,6 +256,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             getPriorNotifications
                 .execute(
                     defaultFilter,
+                    defaultIsInvalidated,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -281,6 +289,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             getPriorNotifications
                 .execute(
                     defaultFilter,
+                    defaultIsInvalidated,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -313,6 +322,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             getPriorNotifications
                 .execute(
                     defaultFilter,
+                    defaultIsInvalidated,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -342,6 +352,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             getPriorNotifications
                 .execute(
                     defaultFilter,
+                    defaultIsInvalidated,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -370,6 +381,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             getPriorNotifications
                 .execute(
                     defaultFilter,
+                    defaultIsInvalidated,
                     seafrontGroup,
                     defaultStates,
                     defaultSortColumn,
@@ -394,6 +406,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             getPriorNotifications
                 .execute(
                     defaultFilter,
+                    defaultIsInvalidated,
                     defaultSeafrontGroup,
                     states,
                     defaultSortColumn,
@@ -411,6 +424,63 @@ class GetPriorNotificationsITests : AbstractDBTests() {
                     PriorNotificationState.OUT_OF_VERIFICATION_SCOPE,
                 ).contains(it.state)
             },
+        ).isTrue()
+    }
+
+    @Test
+    @Transactional
+    fun `execute should return a list of invalidated prior notifications`() {
+        // Given
+        val isInvalidated = true
+
+        // When
+        val result =
+            getPriorNotifications
+                .execute(
+                    defaultFilter,
+                    isInvalidated,
+                    defaultSeafrontGroup,
+                    defaultStates,
+                    defaultSortColumn,
+                    defaultSortDirection,
+                    defaultPageNumber,
+                    defaultPageSize,
+                )
+
+        // Then
+        assertThat(result.data).hasSizeGreaterThan(0)
+        assertThat(result.data.all { it.logbookMessageAndValue.value.isInvalidated == true }).isTrue()
+    }
+
+    @Test
+    @Transactional
+    fun `execute should return a list of either pending send or invalidated prior notifications`() {
+        // Given
+        val isInvalidated = true
+        val states = listOf(PriorNotificationState.PENDING_SEND)
+
+        // When
+        val result =
+            getPriorNotifications
+                .execute(
+                    defaultFilter,
+                    isInvalidated,
+                    defaultSeafrontGroup,
+                    states,
+                    defaultSortColumn,
+                    defaultSortDirection,
+                    defaultPageNumber,
+                    defaultPageSize,
+                )
+
+        // Then
+        val invalidatedPriorNotifications = result.data.filter { it.logbookMessageAndValue.value.isInvalidated == true }
+        val pendingSendPriorNotifications = result.data.filter { it.state == PriorNotificationState.PENDING_SEND }
+        val pendingSendPriorNotificationReportIds = pendingSendPriorNotifications.map { it.reportId!! }
+        assertThat(invalidatedPriorNotifications).hasSizeGreaterThan(0)
+        assertThat(pendingSendPriorNotifications).hasSizeGreaterThan(0)
+        assertThat(
+            invalidatedPriorNotifications.none { pendingSendPriorNotificationReportIds.contains(it.reportId!!) },
         ).isTrue()
     }
 }

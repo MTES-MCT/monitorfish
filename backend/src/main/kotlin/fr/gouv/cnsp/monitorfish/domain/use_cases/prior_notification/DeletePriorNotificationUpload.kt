@@ -12,7 +12,10 @@ class DeletePriorNotificationUpload(
     private val manualPriorNotificationRepository: ManualPriorNotificationRepository,
     private val priorNotificationUploadRepository: PriorNotificationUploadRepository,
 ) {
-    fun execute(identifier: PriorNotificationIdentifier, priorNotificationUploadId: String) {
+    fun execute(
+        identifier: PriorNotificationIdentifier,
+        priorNotificationUploadId: String,
+    ) {
         priorNotificationUploadRepository.deleteById(priorNotificationUploadId)
 
         if (identifier.isManualPriorNotification) {

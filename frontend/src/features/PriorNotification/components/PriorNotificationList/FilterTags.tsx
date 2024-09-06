@@ -12,7 +12,7 @@ import { SingleTag, getSelectedOptionFromOptionValueInTree } from '@mtes-mct/mon
 import { isEqual, omit } from 'lodash'
 import styled from 'styled-components'
 
-import { DEFAULT_LIST_FILTER_VALUES } from './constants'
+import { DEFAULT_LIST_FILTER_VALUES, IS_INVALIDATED, IS_INVALIDATED_LABEL } from './constants'
 
 import type { ListFilter } from './types'
 
@@ -33,7 +33,7 @@ export function FilterTags() {
     !!listFilterValues.gearCodes ||
     !!listFilterValues.portLocodes ||
     !!listFilterValues.priorNotificationTypes ||
-    !!listFilterValues.states
+    !!listFilterValues.statuses
   const areListFilterValuesEqualToDefaultOnes = isEqual(
     omit(listFilterValues, ['seafrontGroup']),
     omit(DEFAULT_LIST_FILTER_VALUES, ['seafrontGroup'])
@@ -115,9 +115,9 @@ export function FilterTags() {
               </SingleTag>
             ))}
 
-          {listFilterValues.states?.map(state => (
-            <SingleTag key={`states-${state}`} onDelete={() => remove('states', state)}>
-              {PriorNotification.STATE_LABEL[state]}
+          {listFilterValues.statuses?.map(status => (
+            <SingleTag key={`statuses-${status}`} onDelete={() => remove('statuses', status)}>
+              {status === IS_INVALIDATED ? IS_INVALIDATED_LABEL : PriorNotification.STATE_LABEL[status]}
             </SingleTag>
           ))}
         </Row>

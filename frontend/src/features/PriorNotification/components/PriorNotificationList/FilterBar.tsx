@@ -1,7 +1,6 @@
 import { COUNTRIES_AS_ALPHA3_OPTIONS } from '@constants/index'
 import { useGetFleetSegmentsAsOptions } from '@features/FleetSegment/hooks/useGetFleetSegmentsAsOptions'
 import { useGetPriorNotificationTypesAsOptions } from '@features/PriorNotification/hooks/useGetPriorNotificationTypesAsOptions'
-import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { useGetGearsAsTreeOptions } from '@hooks/useGetGearsAsTreeOptions'
 import { useGetPortsAsTreeOptions } from '@hooks/useGetPortsAsTreeOptions'
 import { useGetSpeciesAsOptions } from '@hooks/useGetSpeciesAsOptions'
@@ -28,10 +27,12 @@ import {
   LAST_CONTROL_PERIODS_AS_OPTIONS,
   LastControlPeriod,
   EXPECTED_ARRIVAL_PERIODS_AS_OPTIONS,
-  ExpectedArrivalPeriod
+  ExpectedArrivalPeriod,
+  FILTER_STATUSES_AS_OPTIONS
 } from './constants'
 import { priorNotificationActions } from '../../slice'
 
+import type { FilterStatus } from './types'
 import type { Promisable } from 'type-fest'
 
 export type FilterBarProps = {
@@ -112,8 +113,8 @@ export function FilterBar() {
     dispatch(priorNotificationActions.setListFilterValues({ specyCodes: nextSpecyCodes }))
   }
 
-  const updateStates = (nextStates: PriorNotification.State[] | undefined) => {
-    dispatch(priorNotificationActions.setListFilterValues({ states: nextStates }))
+  const updateStatuses = (nextStatuses: FilterStatus[] | undefined) => {
+    dispatch(priorNotificationActions.setListFilterValues({ statuses: nextStatuses }))
   }
 
   return (
@@ -274,14 +275,12 @@ export function FilterBar() {
           isLabelHidden
           isTransparent
           label="Statuts de diffusion"
-          name="states"
-          onChange={updateStates}
-          options={PriorNotification.STATE_LABELS_AS_OPTIONS}
+          name="statuses"
+          onChange={updateStatuses}
+          options={FILTER_STATUSES_AS_OPTIONS}
           placeholder="Statuts de diffusion"
-          renderValue={(_, items) =>
-            items.length > 0 ? <SelectValue>Statuts de diffusion ({items.length})</SelectValue> : <></>
-          }
-          value={listFilterValues.states}
+          renderValue={(_, items) => (items.length > 0 ? <SelectValue>Statuts ({items.length})</SelectValue> : <></>)}
+          value={listFilterValues.statuses}
         />
         <RichBooleanCheckbox
           falseOptionLabel="Navires ≥ 12 m"

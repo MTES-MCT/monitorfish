@@ -85,7 +85,18 @@ class PriorNotificationControllerUTests {
         val secondFakePriorNotification = PriorNotificationFaker.fakePriorNotification(2)
 
         // Given
-        given(getPriorNotifications.execute(any(), any(), anyOrNull(), any(), any(), any(), any())).willReturn(
+        given(
+            getPriorNotifications.execute(
+                any(),
+                anyOrNull(),
+                any(),
+                anyOrNull(),
+                any(),
+                any(),
+                any(),
+                any(),
+            ),
+        ).willReturn(
             PaginatedList(
                 data = listOf(firstFakePriorNotification, secondFakePriorNotification),
                 extraData = PriorNotificationStats(perSeafrontGroupCount = emptyMap()),

@@ -52,6 +52,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             willArriveAfter = "2000-01-01T00:00:00Z",
             willArriveBefore = "2099-12-31T00:00:00Z",
         )
+    private val defaultIsInvalidated = null
     private val defaultSeafrontGroup = SeafrontGroup.ALL
     private val defaultStates = null
     private val defaultSortColumn = PriorNotificationsSortColumn.EXPECTED_ARRIVAL_DATE
@@ -71,6 +72,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             getPriorNotifications
                 .execute(
                     defaultFilter,
+                    defaultIsInvalidated,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -102,6 +104,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             getPriorNotifications
                 .execute(
                     defaultFilter,
+                    defaultIsInvalidated,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -133,6 +136,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             getPriorNotifications
                 .execute(
                     defaultFilter,
+                    defaultIsInvalidated,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -164,6 +168,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             getPriorNotifications
                 .execute(
                     defaultFilter,
+                    defaultIsInvalidated,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -195,6 +200,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             getPriorNotifications
                 .execute(
                     defaultFilter,
+                    defaultIsInvalidated,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -222,6 +228,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             getPriorNotifications
                 .execute(
                     defaultFilter,
+                    defaultIsInvalidated,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -249,6 +256,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             getPriorNotifications
                 .execute(
                     defaultFilter,
+                    defaultIsInvalidated,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -281,6 +289,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             getPriorNotifications
                 .execute(
                     defaultFilter,
+                    defaultIsInvalidated,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -313,6 +322,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             getPriorNotifications
                 .execute(
                     defaultFilter,
+                    defaultIsInvalidated,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -342,6 +352,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             getPriorNotifications
                 .execute(
                     defaultFilter,
+                    defaultIsInvalidated,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -370,6 +381,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             getPriorNotifications
                 .execute(
                     defaultFilter,
+                    defaultIsInvalidated,
                     seafrontGroup,
                     defaultStates,
                     defaultSortColumn,
@@ -394,6 +406,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             getPriorNotifications
                 .execute(
                     defaultFilter,
+                    defaultIsInvalidated,
                     defaultSeafrontGroup,
                     states,
                     defaultSortColumn,

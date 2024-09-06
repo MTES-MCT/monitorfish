@@ -198,7 +198,7 @@ export function Row({ row }: RowProps) {
                 </FixedTag>
               )}
 
-              {isSuperUser && (
+              {isSuperUser && priorNotification.reportingCount > 0 && (
                 <FixedTag backgroundColor={THEME.color.maximumRed15} color={THEME.color.maximumRed}>{`${
                   priorNotification.reportingCount
                 } signalement${priorNotification.reportingCount > 1 ? 's' : ''}`}</FixedTag>

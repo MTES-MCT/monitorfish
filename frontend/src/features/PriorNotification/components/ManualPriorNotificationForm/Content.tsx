@@ -192,8 +192,13 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
 
           <Form isReadOnly={isReadOnly} />
 
-          {!!detail && !isInvalidated && !isPendingSend && (
-            <InvalidateButton accent={Accent.SECONDARY} Icon={Icon.Invalid} onClick={openInvalidationConfirmationModal}>
+          {!!detail && (
+            <InvalidateButton
+              accent={Accent.SECONDARY}
+              disabled={isReadOnly}
+              Icon={Icon.Invalid}
+              onClick={openInvalidationConfirmationModal}
+            >
               Invalider le préavis
             </InvalidateButton>
           )}

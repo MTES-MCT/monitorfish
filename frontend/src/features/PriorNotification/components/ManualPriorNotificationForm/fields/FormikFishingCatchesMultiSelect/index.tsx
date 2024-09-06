@@ -136,6 +136,7 @@ export function FormikFishingCatchesMultiSelect({ isReadOnly }: FormikFishingCat
 
                   <InputWithUnit>
                     <FormikNumberInput
+                      areArrowsHidden
                       isErrorMessageHidden
                       isLabelHidden
                       label={`Poids (${fishingCatch.specyCode})`}

@@ -24,6 +24,7 @@ export function FormikExtraField({ allFishingsCatches, fishingsCatchesIndex, spe
               <ExtendedSpecyCode>{extendedSpecyCode}</ExtendedSpecyCode>
               <InputWithUnit>
                 <FormikNumberInput
+                  areArrowsHidden
                   isErrorMessageHidden
                   isLabelHidden
                   label={`Quantité (${extendedSpecyCode})`}
@@ -33,6 +34,7 @@ export function FormikExtraField({ allFishingsCatches, fishingsCatchesIndex, spe
               </InputWithUnit>
               <InputWithUnit>
                 <FormikNumberInput
+                  areArrowsHidden
                   isErrorMessageHidden
                   isLabelHidden
                   label={`Poids (${extendedSpecyCode})`}
@@ -53,6 +55,7 @@ export function FormikExtraField({ allFishingsCatches, fishingsCatchesIndex, spe
       <StyledSubRow key="SWO">
         <InputWithUnit>
           <FormikNumberInput
+            areArrowsHidden
             isLabelHidden
             label={`Quantité (${specyCode})`}
             name={`fishingCatches[${fishingsCatchesIndex}].quantity`}

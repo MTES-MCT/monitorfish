@@ -1,3 +1,4 @@
+import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { SideWindowMenuLabel } from 'domain/entities/sideWindow/constants'
 
@@ -5,8 +6,6 @@ import { openSideWindowPriorNotificationListAsSuperUser } from './utils'
 import { assertAll } from '../../utils/assertAll'
 import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
-
-import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
 context('Side Window > Prior Notification List > Filter Bar', () => {
   const apiPathBase = '/bff/v1/prior_notifications?'
@@ -229,7 +228,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 0)
   })
 
-  it('Should filter prior notifications by type', () => {
+  it('Should filter prior notifications by types', () => {
     openSideWindowPriorNotificationListAsSuperUser()
 
     cy.intercept('GET', `${apiPathBase}*priorNotificationTypes=Préavis type A,Préavis type C*`).as(
@@ -237,6 +236,22 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
     )
 
     cy.fill('Types de préavis', ['Préavis type A', 'Préavis type C'])
+
+    cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 0)
+  })
+
+  it('Should filter prior notifications by states', () => {
+    openSideWindowPriorNotificationListAsSuperUser()
+
+    cy.intercept(
+      'GET',
+      `${apiPathBase}*states=${PriorNotification.State.PENDING_SEND},${PriorNotification.State.PENDING_AUTO_SEND}*`
+    ).as('getPriorNotifications')
+
+    cy.fill('Statuts de diffusion', [
+      PriorNotification.STATE_LABEL[PriorNotification.State.PENDING_SEND],
+      PriorNotification.STATE_LABEL[PriorNotification.State.PENDING_AUTO_SEND]
+    ])
 
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 0)
   })

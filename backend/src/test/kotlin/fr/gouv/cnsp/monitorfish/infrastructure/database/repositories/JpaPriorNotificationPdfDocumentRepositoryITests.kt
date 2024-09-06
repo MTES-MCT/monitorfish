@@ -16,12 +16,15 @@ class JpaPriorNotificationPdfDocumentRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findByReportId Should return a pdf document`() {
+    fun `findByReportId Should return the expected PDF document`() {
+        // Given
+        val reportId = "FAKE_OPERATION_102"
+
         // When
-        val pdfDocument = jpaPriorNotificationPdfDocumentRepository.findByReportId("FAKE_OPERATION_102")
+        val pdfDocument = jpaPriorNotificationPdfDocumentRepository.findByReportId(reportId)
 
         // Then
-        assertThat(pdfDocument.reportId).isEqualTo("FAKE_OPERATION_102")
+        assertThat(pdfDocument.reportId).isEqualTo(reportId)
         assertThat(pdfDocument.source).isEqualTo(PriorNotificationSource.LOGBOOK)
         assertThat(pdfDocument.generationDatetimeUtc).isEqualTo(ZonedDateTime.parse("2024-07-03T14:45:00Z"))
         assertThat(pdfDocument.pdfDocument).isNotNull()
@@ -29,21 +32,17 @@ class JpaPriorNotificationPdfDocumentRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `deleteByReportId Should delete a pdf document`() {
+    fun `deleteByReportId Should delete the expected PDF document`() {
         // Given
-        val existingPdfDocument = jpaPriorNotificationPdfDocumentRepository.findByReportId("FAKE_OPERATION_102")
-        assertThat(existingPdfDocument.reportId).isEqualTo("FAKE_OPERATION_102")
+        val reportId = "FAKE_OPERATION_102"
 
         // When
-        jpaPriorNotificationPdfDocumentRepository.deleteByReportId("FAKE_OPERATION_102")
+        jpaPriorNotificationPdfDocumentRepository.deleteByReportId(reportId)
 
         // Then
-        val throwable =
-            catchThrowable {
-                jpaPriorNotificationPdfDocumentRepository.findByReportId("FAKE_OPERATION_102")
-            }
-
-        // Then
+        val throwable = catchThrowable {
+            jpaPriorNotificationPdfDocumentRepository.findByReportId(reportId)
+        }
         assertThat(throwable).isNotNull()
         assertThat((throwable as BackendUsageException).code).isEqualTo(BackendUsageErrorCode.NOT_FOUND)
     }

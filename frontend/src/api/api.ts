@@ -63,10 +63,10 @@ export const monitorenvApi = createApi({
 
 const AUTHORIZATION_HEADER = 'authorization'
 const CORRELATION_HEADER = 'X-Correlation-Id'
+const { IS_OIDC_ENABLED } = getOIDCConfig()
 
 const setAuthorizationHeader = async headers => {
   const user = getOIDCUser()
-  const { IS_OIDC_ENABLED } = getOIDCConfig()
   const token = user?.access_token
 
   // If we have a token set in state, we pass it.
@@ -191,7 +191,6 @@ export const monitorfishApiKy = ky.extend({
   hooks: {
     beforeRequest: [
       async request => {
-        const { IS_OIDC_ENABLED } = getOIDCConfig()
         const user = getOIDCUser()
         const token = user?.access_token
 
@@ -209,7 +208,6 @@ export const monitorfishApiKy = ky.extend({
     ],
     beforeRetry: [
       async ({ request }) => {
-        const { IS_OIDC_ENABLED } = getOIDCConfig()
         const user = getOIDCUser()
         const token = user?.access_token
 

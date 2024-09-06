@@ -14,6 +14,8 @@ import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
+import { UploadFiles } from '../shared/UploadFiles'
+
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
 type FormProps = Readonly<{
@@ -76,6 +78,14 @@ export function Form({ detail, initialFormValues }: FormProps) {
           </FieldGroup>
 
           {isSuperUser && <AuthorTrigramInput label="Par" name="authorTrigram" readOnly={isReadOnly} />}
+
+          <hr />
+
+          <UploadFiles
+            isManualPriorNotification={false}
+            operationDate={detail.operationDate}
+            reportId={detail.reportId}
+          />
         </>
       </Formik>
 

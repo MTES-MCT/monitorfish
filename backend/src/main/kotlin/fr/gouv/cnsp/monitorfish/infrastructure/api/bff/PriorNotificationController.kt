@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.SeafrontGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationState
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.sorters.PriorNotificationsSortColumn
@@ -9,6 +10,8 @@ import fr.gouv.cnsp.monitorfish.infrastructure.api.input.LogbookPriorNotificatio
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationComputeDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationFormDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
+import fr.gouv.cnsp.monitorfish.infrastructure.exceptions.BackendRequestErrorCode
+import fr.gouv.cnsp.monitorfish.infrastructure.exceptions.BackendRequestException
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -19,6 +22,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter.ISO_DATE_TIME
 
@@ -28,14 +32,18 @@ import java.time.format.DateTimeFormatter.ISO_DATE_TIME
 class PriorNotificationController(
     private val computeManualPriorNotification: ComputeManualPriorNotification,
     private val createOrUpdateManualPriorNotification: CreateOrUpdateManualPriorNotification,
+    private val createPriorNotificationUpload: CreatePriorNotificationUpload,
+    private val deletePriorNotificationUpload: DeletePriorNotificationUpload,
     private val getPriorNotification: GetPriorNotification,
     private val getPriorNotificationPdfDocument: GetPriorNotificationPdfDocument,
+    private val getPriorNotificationUpload: GetPriorNotificationUpload,
+    private val getPriorNotificationUploads: GetPriorNotificationUploads,
     private val getPriorNotifications: GetPriorNotifications,
     private val getNumberToVerify: GetNumberToVerify,
     private val getPriorNotificationTypes: GetPriorNotificationTypes,
+    private val invalidatePriorNotification: InvalidatePriorNotification,
     private val updateLogbookPriorNotification: UpdateLogbookPriorNotification,
     private val verifyAndSendPriorNotification: VerifyAndSendPriorNotification,
-    private val invalidatePriorNotification: InvalidatePriorNotification,
 ) {
     data class Status(val status: String)
 
@@ -282,7 +290,7 @@ class PriorNotificationController(
     }
 
     @GetMapping("/{reportId}/pdf")
-    @Operation(summary = "Get the PDF document")
+    @Operation(summary = "Get the PNO PDF document")
     fun getPdfDocument(
         @PathParam("Logbook message `reportId`")
         @PathVariable(name = "reportId")
@@ -356,5 +364,88 @@ class PriorNotificationController(
             )
 
         return PriorNotificationDataOutput.fromPriorNotification(updatedPriorNotification)
+    }
+
+    @GetMapping("/{reportId}/uploads/{priorNotificationUploadId}")
+    @Operation(summary = "Download a prior notification attachment")
+    fun getUploads(
+        @PathParam("Logbook message `reportId`")
+        @PathVariable(name = "reportId")
+        reportId: String,
+        @PathParam("Prior notification upload ID`")
+        @PathVariable(name = "priorNotificationUploadId")
+        priorNotificationUploadId: String,
+    ): ResponseEntity<ByteArray> {
+        val document = getPriorNotificationUpload.execute(priorNotificationUploadId)
+
+        val headers = HttpHeaders().apply {
+            contentType = MediaType.parseMediaType(document.mimeType)
+            setContentDispositionFormData("attachment", document.fileName)
+        }
+
+        return ResponseEntity(document.content, headers, HttpStatus.OK)
+    }
+
+    @GetMapping("/{reportId}/uploads")
+    @Operation(summary = "Get all the attachment documents for a given prior notification")
+    fun getUploads(
+        @PathParam("Logbook message `reportId`")
+        @PathVariable(name = "reportId")
+        reportId: String,
+    ): List<PriorNotificationUploadDataOutput> {
+        return getPriorNotificationUploads.execute(reportId)
+            .map { PriorNotificationUploadDataOutput.fromPriorNotificationDocument(it) }
+    }
+
+    @PostMapping("/{reportId}/uploads")
+    @Operation(summary = "Attach a document to a prior notification")
+    fun createUpload(
+        @PathParam("Logbook message `reportId`")
+        @PathVariable(name = "reportId")
+        reportId: String,
+        @Parameter(description = "Operation date (to optimize SQL query via Timescale).")
+        @RequestParam(name = "operationDate")
+        operationDate: ZonedDateTime,
+        @Parameter(description = "Is the prior notification manually created?")
+        @RequestParam(name = "isManualPriorNotification")
+        isManualPriorNotification: Boolean,
+        @RequestParam("file")
+        file: MultipartFile,
+    ): ResponseEntity<*> {
+        val content = file.bytes
+            ?: throw BackendRequestException(BackendRequestErrorCode.EMPTY_UPLOADED_FILE)
+        val fileName = file.originalFilename
+            ?: throw BackendRequestException(BackendRequestErrorCode.MISSING_UPLOADED_FILE_NAME)
+        val mimeType = file.contentType
+            ?: throw BackendRequestException(BackendRequestErrorCode.MISSING_UPLOADED_FILE_TYPE)
+
+        val identifier = PriorNotificationIdentifier(reportId, operationDate, isManualPriorNotification)
+
+        createPriorNotificationUpload.execute(identifier, content, fileName, mimeType)
+
+        return ResponseEntity("File uploaded successfully: " + file.originalFilename, HttpStatus.OK)
+    }
+
+    @DeleteMapping("/{reportId}/uploads/{priorNotificationUploadId}")
+    @Operation(summary = "Delete a prior notification attachment")
+    fun deleteUpload(
+        @PathParam("Logbook message `reportId`")
+        @PathVariable(name = "reportId")
+        reportId: String,
+        @Parameter(description = "Operation date (to optimize SQL query via Timescale).")
+        @RequestParam(name = "operationDate")
+        operationDate: ZonedDateTime,
+        @Parameter(description = "Is the prior notification manually created?")
+        @RequestParam(name = "isManualPriorNotification")
+        isManualPriorNotification: Boolean,
+        @PathParam("Prior notification upload ID")
+        @PathVariable(name = "priorNotificationUploadId")
+        priorNotificationUploadId: String,
+    ): ResponseEntity<Unit> {
+        val identifier = PriorNotificationIdentifier(reportId, operationDate, isManualPriorNotification)
+
+        deletePriorNotificationUpload.execute(identifier, priorNotificationUploadId)
+
+        return ResponseEntity(HttpStatus.NO_CONTENT)
     }
 }

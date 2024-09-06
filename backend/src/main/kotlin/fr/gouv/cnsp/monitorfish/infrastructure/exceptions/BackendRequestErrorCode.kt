@@ -12,5 +12,12 @@ package fr.gouv.cnsp.monitorfish.infrastructure.exceptions
  * **Don't forget to mirror any update here in the corresponding Frontend enum.**
  */
 enum class BackendRequestErrorCode {
-    WRONG_BODY_PARAMETER_TYPE,
+    /** The uploaded file is empty. */
+    EMPTY_UPLOADED_FILE,
+
+    /** Couldn't extract the uploaded file name. */
+    MISSING_UPLOADED_FILE_NAME,
+
+    /** Couldn't extract the uploaded file type. */
+    MISSING_UPLOADED_FILE_TYPE,
 }

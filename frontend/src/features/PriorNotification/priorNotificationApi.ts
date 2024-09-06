@@ -13,6 +13,9 @@ import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 const COMPUTE_PRIOR_NOTIFICATION_ERROR_MESSAGE =
   "Nous n'avons pas pu calculer note de risque, segments ou types pour ce préavis."
 const CREATE_PRIOR_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu créé le préavis."
+const DELETE_PRIOR_NOTIFICATION_UPLOAD_ERROR_MESSAGE = "Nous n'avons pas pu supprimer ce document attaché."
+const GET_PRIOR_NOTIFICATION_UPLOADS_ERROR_MESSAGE =
+  "Nous n'avons pas pu récupérer les documents attachés à ce préavis."
 const UPDATE_PRIOR_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu modifier le préavis."
 const GET_PRIOR_NOTIFICATION_DETAIL_ERROR_MESSAGE = "Nous n'avons pas pu récupérer le préavis."
 const GET_PRIOR_NOTIFICATIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la liste des préavis."
@@ -52,6 +55,26 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
         url: `/prior_notifications/manual`
       }),
       transformErrorResponse: response => new FrontendApiError(CREATE_PRIOR_NOTIFICATION_ERROR_MESSAGE, response)
+    }),
+
+    deletePriorNotificationUpload: builder.mutation<
+      void,
+      {
+        isManualPriorNotification: boolean
+        operationDate: string
+        priorNotificationUploadId: string
+        reportId: string
+      }
+    >({
+      invalidatesTags: [{ type: RtkCacheTagType.PriorNotificationDocuments }],
+      query: ({ isManualPriorNotification, operationDate, priorNotificationUploadId, reportId }) => ({
+        method: 'DELETE',
+        url: getUrlOrPathWithQueryParams(`/prior_notifications/${reportId}/uploads/${priorNotificationUploadId}`, {
+          isManualPriorNotification,
+          operationDate
+        })
+      }),
+      transformErrorResponse: response => new FrontendApiError(DELETE_PRIOR_NOTIFICATION_UPLOAD_ERROR_MESSAGE, response)
     }),
 
     getPriorNotificationDetail: builder.query<
@@ -115,6 +138,12 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       providesTags: () => [{ type: RtkCacheTagType.PriorNotificationTypes }],
       query: () => '/prior_notifications/types',
       transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_TYPES_ERROR_MESSAGE, response)
+    }),
+
+    getPriorNotificationUploads: builder.query<PriorNotification.Upload[], string>({
+      providesTags: () => [{ type: RtkCacheTagType.PriorNotificationDocuments }],
+      query: reportId => `/prior_notifications/${reportId}/uploads`,
+      transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_UPLOADS_ERROR_MESSAGE, response)
     }),
 
     invalidatePriorNotification: builder.mutation<
@@ -203,5 +232,6 @@ export const {
   useGetPriorNotificationPdfExistenceQuery,
   useGetPriorNotificationsQuery,
   useGetPriorNotificationsToVerifyQuery,
-  useGetPriorNotificationTypesQuery
+  useGetPriorNotificationTypesQuery,
+  useGetPriorNotificationUploadsQuery
 } = priorNotificationApi

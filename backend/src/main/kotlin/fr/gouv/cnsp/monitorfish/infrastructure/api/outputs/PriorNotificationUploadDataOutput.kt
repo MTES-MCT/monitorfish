@@ -13,10 +13,13 @@ class PriorNotificationUploadDataOutput(
     val updatedAt: CustomZonedDateTime,
 ) {
     companion object {
-        fun fromPriorNotificationDocument(priorNotificationDocument: PriorNotificationDocument): PriorNotificationUploadDataOutput {
-            val id = requireNotNull(priorNotificationDocument.id) {
-                "`id` is null."
-            }
+        fun fromPriorNotificationDocument(
+            priorNotificationDocument: PriorNotificationDocument,
+        ): PriorNotificationUploadDataOutput {
+            val id =
+                requireNotNull(priorNotificationDocument.id) {
+                    "`id` is null."
+                }
 
             return PriorNotificationUploadDataOutput(
                 id = id,

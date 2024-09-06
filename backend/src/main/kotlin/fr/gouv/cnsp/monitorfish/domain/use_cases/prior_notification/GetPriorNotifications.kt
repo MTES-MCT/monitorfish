@@ -30,6 +30,7 @@ class GetPriorNotifications(
 
     fun execute(
         filter: PriorNotificationsFilter,
+        isInvalidated: Boolean?,
         seafrontGroup: SeafrontGroup,
         states: List<PriorNotificationState>?,
         sortColumn: PriorNotificationsSortColumn,
@@ -90,7 +91,13 @@ class GetPriorNotifications(
                             compareByDescending<PriorNotification> { getSortKey(it, sortColumn) }
                                 .thenByDescending { it.logbookMessageAndValue.logbookMessage.id }, // Tie-breaker
                         )
-                }.filter { seafrontGroup.hasSeafront(it.seafront) && (states.isNullOrEmpty() || states.contains(it.state)) }
+                }.filter { priorNotification ->
+                    seafrontGroup.hasSeafront(priorNotification.seafront) && (
+                        (states.isNullOrEmpty() && isInvalidated == null) ||
+                            (!states.isNullOrEmpty() && states.contains(priorNotification.state)) ||
+                            (isInvalidated != null && priorNotification.logbookMessageAndValue.value.isInvalidated == isInvalidated)
+                    )
+                }
             }
         logger.info(
             "TIME_RECORD - 'sortedAndFilteredPriorNotifications' took $sortedAndFilteredPriorNotificationsTimeTaken.",

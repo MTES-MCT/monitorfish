@@ -12,12 +12,13 @@ import {
   COMMUNITY_PRIOR_NOTIFICATION_TYPES,
   DESIGNATED_PORTS_PRIOR_NOTIFICATION_TYPE_PREFIX,
   ExpectedArrivalPeriod,
+  IS_INVALIDATED,
   LastControlPeriod,
   SUB_MENU_LABEL
 } from './constants'
 import { PriorNotification } from '../../PriorNotification.types'
 
-import type { ListFilter } from './types'
+import type { FilterStatus, ListFilter } from './types'
 import type { CSSProperties } from 'react'
 
 function getApiFilterFromExpectedArrivalPeriod(
@@ -170,17 +171,36 @@ export function getExpandableRowCellCustomStyle(columnId: string): CSSProperties
   }
 }
 
+function getStatesFromFilterStatuses(statuses: FilterStatus[] | undefined): PriorNotification.State[] | undefined {
+  if (!statuses) {
+    return undefined
+  }
+
+  const displayedStates = statuses.filter(status => status !== IS_INVALIDATED)
+
+  return [
+    ...displayedStates,
+    ...(displayedStates.includes(PriorNotification.State.VERIFIED_AND_SENT)
+      ? [PriorNotification.State.PENDING_SEND]
+      : []),
+    ...(displayedStates.includes(PriorNotification.State.AUTO_SEND_DONE)
+      ? [PriorNotification.State.PENDING_AUTO_SEND]
+      : [])
+  ]
+}
+
 export function getStaticApiFilterFromListFilter(listFilter: ListFilter): LogbookMessage.ApiFilter {
   return {
     flagStates: listFilter.countryCodes,
     hasOneOrMoreReportings: getMaybeBooleanFromRichBoolean(listFilter.hasOneOrMoreReportings),
+    isInvalidated: listFilter.statuses?.includes(IS_INVALIDATED),
     isLessThanTwelveMetersVessel: getMaybeBooleanFromRichBoolean(listFilter.isLessThanTwelveMetersVessel),
     portLocodes: listFilter.portLocodes,
     priorNotificationTypes: listFilter.priorNotificationTypes,
     seafrontGroup: listFilter.seafrontGroup,
     searchQuery: listFilter.searchQuery,
     specyCodes: listFilter.specyCodes,
-    states: listFilter.states,
+    states: getStatesFromFilterStatuses(listFilter.statuses),
     tripGearCodes: listFilter.gearCodes,
     tripSegmentCodes: listFilter.fleetSegmentSegments,
     ...getApiFilterFromExpectedArrivalPeriod(listFilter.expectedArrivalPeriod, listFilter.expectedArrivalCustomPeriod),

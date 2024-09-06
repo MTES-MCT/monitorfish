@@ -40,9 +40,10 @@ class JpaPriorNotificationPdfDocumentRepositoryITests : AbstractDBTests() {
         jpaPriorNotificationPdfDocumentRepository.deleteByReportId(reportId)
 
         // Then
-        val throwable = catchThrowable {
-            jpaPriorNotificationPdfDocumentRepository.findByReportId(reportId)
-        }
+        val throwable =
+            catchThrowable {
+                jpaPriorNotificationPdfDocumentRepository.findByReportId(reportId)
+            }
         assertThat(throwable).isNotNull()
         assertThat((throwable as BackendUsageException).code).isEqualTo(BackendUsageErrorCode.NOT_FOUND)
     }

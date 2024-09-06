@@ -273,12 +273,14 @@ export function FilterBar() {
         <CheckPicker
           isLabelHidden
           isTransparent
-          label="Statuts"
+          label="Statuts de diffusion"
           name="states"
           onChange={updateStates}
           options={PriorNotification.STATE_LABELS_AS_OPTIONS}
-          placeholder="Statuts"
-          renderValue={(_, items) => (items.length > 0 ? <SelectValue>Statuts ({items.length})</SelectValue> : <></>)}
+          placeholder="Statuts de diffusion"
+          renderValue={(_, items) =>
+            items.length > 0 ? <SelectValue>Statuts de diffusion ({items.length})</SelectValue> : <></>
+          }
           value={listFilterValues.states}
         />
         <RichBooleanCheckbox

@@ -146,11 +146,6 @@ export function Form({ isReadOnly }: FormProps) {
 
       <FieldGroup>
         <FormikTextarea label="Points d'attention identifiés par le CNSP" name="note" readOnly={isReadOnly} />
-        <FormikCheckbox
-          label="pas de pêche après le préavis zéro"
-          name="didNotFishAfterZeroNotice"
-          readOnly={isReadOnly}
-        />
       </FieldGroup>
 
       <AuthorTrigramInput label="Saisi par" maxLength={3} name="authorTrigram" readOnly={isReadOnly} />

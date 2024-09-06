@@ -94,7 +94,7 @@ export function DownloadButton({
   return (
     <>
       {hasAuthorizedLandingDownload && (
-        <Dropdown accent={Accent.SECONDARY} Icon={Icon.Download} placement="topEnd" title="Télécharger les documents">
+        <Dropdown accent={Accent.SECONDARY} Icon={Icon.Download} placement="topEnd" title="Télécharger">
           <>
             {!isPriorNotificationDocumentAvailable && (
               <Dropdown.Item disabled title="Document non généré">

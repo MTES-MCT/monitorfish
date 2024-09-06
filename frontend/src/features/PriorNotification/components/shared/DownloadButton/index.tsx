@@ -8,7 +8,7 @@ import {
 } from '@features/PriorNotification/priorNotificationApi'
 import { customSentry, CustomSentryMeasurementName } from '@libs/customSentry'
 import { Accent, Button, customDayjs, Dropdown, Icon, usePrevious } from '@mtes-mct/monitor-ui'
-import { downloadAsPdf } from '@utils/downloadAsPdf'
+import { downloadFile } from '@utils/downloadFile'
 import printJS from 'print-js'
 import { useEffect, useMemo } from 'react'
 
@@ -74,9 +74,9 @@ export function DownloadButton({
     const response = await monitorfishApiKy.get(url)
     const blob = await response.blob()
     const generationDate = response.headers.get('x-generation-date')
-    const fileName = `preavis_debarquement_${generationDate}`
+    const fileName = `preavis_debarquement_${generationDate}.pdf`
 
-    downloadAsPdf(fileName, blob)
+    downloadFile(fileName, 'application/pdf', blob)
   }
 
   useEffect(() => {

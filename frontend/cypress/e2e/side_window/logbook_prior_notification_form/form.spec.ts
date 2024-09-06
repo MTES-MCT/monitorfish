@@ -49,26 +49,43 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
     })
   })
 
-  it('Should not update the logbook prior notification before the form is filled', () => {
-    cy.intercept('PUT', '/bff/v1/prior_notifications/logbook/FAKE_OPERATION_116*', cy.spy().as('updateForm'))
+  it('Should attach and remove a document to logbook prior notification', () => {
+    cy.intercept('GET', `/bff/v1/prior_notifications/FAKE_OPERATION_115/uploads`).as('getUploads')
+    cy.intercept(
+      'POST',
+      `/bff/v1/prior_notifications/FAKE_OPERATION_115/uploads?isManualPriorNotification=false&operationDate=*`
+    ).as('uploadDocument')
+    cy.intercept('DELETE', `/bff/v1/prior_notifications/FAKE_OPERATION_115/uploads/*`).as('deleteDocument')
 
-    editSideWindowPriorNotification(`LE MARIN`, 'FAKE_OPERATION_116')
+    editSideWindowPriorNotification(`MER À BOIRE`, 'FAKE_OPERATION_115')
 
-    cy.contains(`LE MARIN D'EAU DOUCE (CFR111)`).should('be.visible')
+    cy.wait('@getUploads')
 
-    cy.get('@updateForm').should('not.have.been.called')
+    cy.fixture('sample.pdf').then(fileContent => {
+      cy.get('input[type=file]').selectFile(
+        {
+          contents: Cypress.Buffer.from(fileContent),
+          fileName: 'sample.pdf',
+          mimeType: 'application/pdf'
+        },
+        {
+          action: 'select',
+          force: true
+        }
+      )
 
-    cy.fill("Points d'attention identifiés par le CNSP", 'Une note')
+      cy.wait('@uploadDocument').then(() => {
+        cy.wait('@getUploads').wait(500)
 
-    cy.get('@updateForm').should('have.been.calledOnce')
+        cy.contains('.rs-uploader-file-item', 'sample.pdf')
+          .find('.rs-uploader-file-item-btn-remove .rs-icon')
+          .forceClick()
 
-    // Reset
-    const operationDate = dayjs().subtract(6, 'hours').toISOString()
-    cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_116?operationDate=${operationDate}`, {
-      body: {
-        authorTrigram: null,
-        note: null
-      }
+        cy.wait('@deleteDocument')
+        cy.wait('@getUploads').wait(500)
+
+        cy.contains('sample.pdf').should('not.exist')
+      })
     })
   })
 

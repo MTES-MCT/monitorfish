@@ -44,10 +44,22 @@ class PriorNotificationControllerUTests {
     private lateinit var createOrUpdateManualPriorNotification: CreateOrUpdateManualPriorNotification
 
     @MockBean
+    private lateinit var createPriorNotificationUpload: CreatePriorNotificationUpload
+
+    @MockBean
+    private lateinit var deletePriorNotificationUpload: DeletePriorNotificationUpload
+
+    @MockBean
     private lateinit var getPriorNotification: GetPriorNotification
 
     @MockBean
     private lateinit var getPriorNotificationPdfDocument: GetPriorNotificationPdfDocument
+
+    @MockBean
+    private lateinit var getPriorNotificationUpload: GetPriorNotificationUpload
+
+    @MockBean
+    private lateinit var getPriorNotificationUploads: GetPriorNotificationUploads
 
     @MockBean
     private lateinit var getPriorNotifications: GetPriorNotifications

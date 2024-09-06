@@ -69,7 +69,7 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       invalidatesTags: [{ type: RtkCacheTagType.PriorNotificationDocuments }],
       query: ({ isManualPriorNotification, operationDate, priorNotificationUploadId, reportId }) => ({
         method: 'DELETE',
-        url: getUrlOrPathWithQueryParams(`/prior_notifications/${reportId}uploads/${priorNotificationUploadId}`, {
+        url: getUrlOrPathWithQueryParams(`/prior_notifications/${reportId}/uploads/${priorNotificationUploadId}`, {
           isManualPriorNotification,
           operationDate
         })

@@ -7,7 +7,7 @@ import { VesselLabel } from '../entities/vessel/label/types'
 import { VesselTrackDepth } from '../entities/vesselTrackDepth'
 
 import type { LastPositionVisibility } from '../types/map'
-import type { SelectableVesselTrackDepth } from '@features/VesselSidebar/actions/TrackRequest/types'
+import type { SelectableVesselTrackDepth } from '@features/Vessel/components/VesselSidebar/actions/TrackRequest/types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import type { Extent } from 'ol/extent'
 

@@ -1,41 +1,42 @@
-import { COLORS } from '../../constants/constants'
-import { RiskFactorBox } from '../VesselSidebar/risk_factor/RiskFactorBox'
-import { getRiskFactorColor } from '../../domain/entities/vessel/riskFactor'
-import { useCallback } from 'react'
-import styled from 'styled-components'
-import { SelectPicker, Table } from 'rsuite'
 import { Accent, Icon, IconButton, Tag, THEME } from '@mtes-mct/monitor-ui'
+import { useCallback } from 'react'
+import { SelectPicker, Table } from 'rsuite'
+import styled from 'styled-components'
+
+import { COLORS } from '../../constants/constants'
+import { getRiskFactorColor } from '../../domain/entities/vessel/riskFactor'
 import { theme } from '../../ui/theme'
+import { RiskFactorBox } from '../Vessel/components/VesselSidebar/risk_factor/RiskFactorBox'
 
 const { Cell } = Table
 const rowKey = 'id'
 export const INPUT_TYPE = {
-  STRING: 'STRING',
+  DOUBLE: 'DOUBLE',
   INT: 'INT',
-  DOUBLE: 'DOUBLE'
+  STRING: 'STRING'
 }
 
 /**
  * @param {*} props
  */
-export const ModifiableCell = ({ dataKey, id, inputType, maxLength, onChange, afterChange, isDisabled, ...props }) => {
+export function ModifiableCell({ afterChange, dataKey, id, inputType, isDisabled, maxLength, onChange, ...props }) {
   const { rowData } = props
   const dataCy = `row-${rowData[id]}-${dataKey}`
 
   return (
     <ModifiableCellWrapper>
-      <Cell title={rowData[dataKey]} key={rowData[id]} className={'table-content-editing'} {...props}>
+      <Cell key={rowData[id]} className="table-content-editing" title={rowData[dataKey]} {...props}>
         <FleetSegmentInput
-          isDisabled={isDisabled}
           afterChange={afterChange}
-          withinCell
-          maxLength={maxLength}
-          value={rowData[dataKey]}
-          inputType={inputType}
-          id={rowData[id]}
           dataCy={dataCy}
           dataKey={dataKey}
+          id={rowData[id]}
+          inputType={inputType}
+          isDisabled={isDisabled}
+          maxLength={maxLength}
           onChange={onChange}
+          value={rowData[dataKey]}
+          withinCell
         />
       </Cell>
     </ModifiableCellWrapper>
@@ -53,18 +54,18 @@ const ModifiableCellWrapper = styled.div`
   }
 `
 
-export const FleetSegmentInput = ({
-  maxLength,
-  value,
-  inputType,
-  id,
-  dataKey,
-  withinCell,
-  onChange,
+export function FleetSegmentInput({
+  afterChange,
   dataCy,
+  dataKey,
+  id,
+  inputType,
   isDisabled,
-  afterChange
-}) => {
+  maxLength,
+  onChange,
+  value,
+  withinCell
+}) {
   const onChangeCallback = useCallback(
     event => {
       let value = null
@@ -95,52 +96,52 @@ export const FleetSegmentInput = ({
 
   return (
     <input
+      className="rs-input"
       data-cy={dataCy}
-      id={id}
       disabled={isDisabled}
+      id={id}
+      maxLength={maxLength}
+      onChange={event => onChangeCallback(event)}
       style={{
         fontSize: 13,
-        marginTop: withinCell ? -8 : 5,
+        fontWeight: 500,
         marginBottom: withinCell ? 0 : 20,
         marginLeft: withinCell ? -7 : 0,
         marginRight: 0,
+        marginTop: withinCell ? -8 : 5,
         paddingLeft: 5,
-        paddingRight: 10,
-        fontWeight: 500
+        paddingRight: 10
       }}
       type="text"
-      maxLength={maxLength}
-      className="rs-input"
       value={value}
-      onChange={event => onChangeCallback(event)}
     />
   )
 }
 
-export const ControlPriorityCell = ({ dataKey, onChange, ...props }) => {
+export function ControlPriorityCell({ dataKey, onChange, ...props }) {
   const { rowData } = props
   const dataCy = `row-${rowData.id}-${dataKey}`
 
   return (
-    <Cell key={rowData.id} {...props} className={'table-content-editing'}>
+    <Cell key={rowData.id} {...props} className="table-content-editing">
       <SelectPicker
-        data-cy={dataCy}
-        value={rowData[dataKey]}
-        onChange={value => {
-          const controlPriority = value && !isNaN(parseInt(value)) ? parseInt(value) : ''
-          onChange && onChange(rowData.id, dataKey, controlPriority)
-        }}
+        cleanable={false}
+        creatable={false}
         data={[
           { label: 1, value: 1 },
           { label: 2, value: 2 },
           { label: 3, value: 3 },
           { label: 4, value: 4 }
         ]}
-        style={{ width: 20 }}
-        creatable={false}
-        cleanable={false}
+        data-cy={dataCy}
+        onChange={value => {
+          const controlPriority = value && !isNaN(parseInt(value)) ? parseInt(value) : ''
+          onChange && onChange(rowData.id, dataKey, controlPriority)
+        }}
         searchable={false}
-        size={'xs'}
+        size="xs"
+        style={{ width: 20 }}
+        value={rowData[dataKey]}
       />
     </Cell>
   )
@@ -149,60 +150,63 @@ export const ControlPriorityCell = ({ dataKey, onChange, ...props }) => {
 /**
  * @param {*} props
  */
-export const SegmentCellWithTitle = ({ rowData, dataKey, ...props }) => (
-  <Cell
-    title={`Segment ${rowData[dataKey] || 'inconnu'}`}
-    style={{ background: rowData.segmentName ? 'unset' : theme.color.goldenPoppy }}
-    {...props}
-  >
-    {rowData[dataKey]}
-  </Cell>
-)
+export function SegmentCellWithTitle({ dataKey, rowData, ...props }) {
+  return (
+    <Cell
+      style={{ background: rowData.segmentName ? 'unset' : theme.color.goldenPoppy }}
+      title={`Segment ${rowData[dataKey] || 'inconnu'}`}
+      {...props}
+    >
+      {rowData[dataKey]}
+    </Cell>
+  )
+}
 
 /**
  * @param {*} props
  */
-export const ExpandCell = ({ rowData, dataKey, expandedRowKeys, onChange, ...props }) => (
-  <Cell
-    {...props}
-    onClick={() => {
-      onChange(rowData)
-    }}
-    style={{
-      cursor: 'pointer',
-      width: 35,
-      fontSize: 19,
-      lineHeight: '13px',
-      background: COLORS.gainsboro
-    }}
-  >
-    {expandedRowKeys.some(key => key === rowData[rowKey]) ? '-' : '+'}
-  </Cell>
-)
+export function ExpandCell({ dataKey, expandedRowKeys, onChange, rowData, ...props }) {
+  return (
+    <Cell
+      {...props}
+      onClick={() => {
+        onChange(rowData)
+      }}
+      style={{
+        background: COLORS.gainsboro,
+        cursor: 'pointer',
+        fontSize: 19,
+        lineHeight: '13px',
+        width: 35
+      }}
+    >
+      {expandedRowKeys.some(key => key === rowData[rowKey]) ? '-' : '+'}
+    </Cell>
+  )
+}
 
 /**
  * @param {*} props
  */
-export const ImpactRiskFactorCell = ({ rowData, expandedRowKeys, onChange, ...props }) => (
-  <Cell {...props} style={{ marginLeft: 13 }}>
-    <RiskFactorBox height={8} color={getRiskFactorColor(rowData.impactRiskFactor)}>
-      {rowData.impactRiskFactor}
-    </RiskFactorBox>
-  </Cell>
-)
+export function ImpactRiskFactorCell({ expandedRowKeys, onChange, rowData, ...props }) {
+  return (
+    <Cell {...props} style={{ marginLeft: 13 }}>
+      <RiskFactorBox color={getRiskFactorColor(rowData.impactRiskFactor)} height={8}>
+        {rowData.impactRiskFactor}
+      </RiskFactorBox>
+    </Cell>
+  )
+}
 
-export const TagsCell = ({ dataKey, data, id, ...props }) => {
+export function TagsCell({ data, dataKey, id, ...props }) {
   const { rowData } = props
 
   return (
     <Wrapper>
-      <Cell
-        {...props}
-        title={rowData[dataKey]?.join(', ')}
-      >
+      <Cell {...props} title={rowData[dataKey]?.join(', ')}>
         <TagOnly>
           {rowData[dataKey]?.map(tag => (
-            <Tag backgroundColor={THEME.color.gainsboro} key={tag}>
+            <Tag key={tag} backgroundColor={THEME.color.gainsboro}>
               {tag}
             </Tag>
           ))}
@@ -225,60 +229,58 @@ export function renderTagPickerValue(items) {
 
 const TagOnly = styled.div`
   margin: -3px 0px 0px 0px;
-  whiteSpace: nowrap;
+  whitespace: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
 `
 
-export const renderRowExpanded = rowData => {
-  return (
-    <div
-      style={{
-        background: COLORS.white,
-        padding: '0 20px 20px 40px'
-      }}
-    >
-      <Fields>
-        <TableBody>
-          <tr>
-            <Key>Engins</Key>
-            <Value>{rowData.gears?.join(', ') || <NoValue>-</NoValue>}</Value>
-          </tr>
-          <tr>
-            <Key>Zones FAO</Key>
-            <Value>{rowData.faoAreas?.join(', ') || <NoValue>-</NoValue>}</Value>
-          </tr>
-          <tr>
-            <Key>Espèces cibles</Key>
-            <Value>{rowData.targetSpecies?.join(', ') || <NoValue>-</NoValue>}</Value>
-          </tr>
-          <tr>
-            <Key>Prises accessoires</Key>
-            <Value>{rowData.bycatchSpecies?.join(', ') || <NoValue>-</NoValue>}</Value>
-          </tr>
-        </TableBody>
-      </Fields>
-    </div>
-  )
-}
+export const renderRowExpanded = rowData => (
+  <div
+    style={{
+      background: COLORS.white,
+      padding: '0 20px 20px 40px'
+    }}
+  >
+    <Fields>
+      <TableBody>
+        <tr>
+          <Key>Engins</Key>
+          <Value>{rowData.gears?.join(', ') || <NoValue>-</NoValue>}</Value>
+        </tr>
+        <tr>
+          <Key>Zones FAO</Key>
+          <Value>{rowData.faoAreas?.join(', ') || <NoValue>-</NoValue>}</Value>
+        </tr>
+        <tr>
+          <Key>Espèces cibles</Key>
+          <Value>{rowData.targetSpecies?.join(', ') || <NoValue>-</NoValue>}</Value>
+        </tr>
+        <tr>
+          <Key>Prises accessoires</Key>
+          <Value>{rowData.bycatchSpecies?.join(', ') || <NoValue>-</NoValue>}</Value>
+        </tr>
+      </TableBody>
+    </Fields>
+  </div>
+)
 
-export const EditAndDeleteCell = ({ dataKey, id, onEdit, onDelete, ...props }) => {
+export function EditAndDeleteCell({ dataKey, id, onDelete, onEdit, ...props }) {
   const { rowData } = props
 
   return (
-    <Cell key={rowData[id]} {...props} style={{ padding: '5px 5px', display: 'flex' }}>
+    <Cell key={rowData[id]} {...props} style={{ display: 'flex', padding: '5px 5px' }}>
       <IconButton
         accent={Accent.TERTIARY}
-        Icon={Icon.EditUnbordered}
         data-cy={`edit-row-${rowData[id]}`}
+        Icon={Icon.EditUnbordered}
         iconSize={17}
         onClick={() => onEdit(rowData)}
         title="Editer la ligne"
       />
       <IconButton
         accent={Accent.TERTIARY}
-        Icon={Icon.Delete}
         data-cy={`delete-row-${rowData[id]}`}
+        Icon={Icon.Delete}
         iconSize={17}
         onClick={() => onDelete(rowData[id])}
         title="Supprimer la ligne"
@@ -287,15 +289,15 @@ export const EditAndDeleteCell = ({ dataKey, id, onEdit, onDelete, ...props }) =
   )
 }
 
-export const DeleteCell = ({ dataKey, id, onClick, ...props }) => {
+export function DeleteCell({ dataKey, id, onClick, ...props }) {
   const { rowData } = props
 
   return (
     <Cell key={rowData[id]} {...props} style={{ padding: '5px 2px' }}>
       <IconButton
         accent={Accent.TERTIARY}
-        Icon={Icon.Delete}
         data-cy={`delete-row-${rowData[id]}`}
+        Icon={Icon.Delete}
         iconSize={17}
         onClick={() => onClick(rowData[id], rowData[dataKey])}
         title="Supprimer la ligne"

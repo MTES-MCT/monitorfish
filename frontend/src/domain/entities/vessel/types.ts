@@ -3,8 +3,8 @@
 import { ReportingType } from '@features/Reporting/types'
 
 import type { VesselTrackDepth } from '../vesselTrackDepth'
+import type { SelectableVesselTrackDepth } from '@features/Vessel/components/VesselSidebar/actions/TrackRequest/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
-import type { SelectableVesselTrackDepth } from '@features/VesselSidebar/actions/TrackRequest/types'
 import type Feature from 'ol/Feature'
 import type LineString from 'ol/geom/LineString'
 import type Point from 'ol/geom/Point'

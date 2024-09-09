@@ -5,10 +5,10 @@ export const basePrimaryButton = css`
   background: ${COLORS.charcoal};
   color: ${COLORS.gainsboro};
   ${props => props.width ? `width: ${props.width};` : ''}
-  :hover, :focus {
+  &:hover, &:focus {
     background: ${COLORS.charcoal};
   }
-  :disabled {
+  &:disabled {
     border: 1px solid ${COLORS.lightGray};
     background: ${COLORS.lightGray};
     color: ${COLORS.white};
@@ -19,7 +19,7 @@ const baseSecondaryButton = css`
   border: 1px solid ${COLORS.charcoal};
   color: ${COLORS.gunMetal};
   ${props => props.width ? `width: ${props.width};` : ''}
-  :disabled {
+  &:disabled {
     border: 1px solid ${COLORS.lightGray};
     color: ${COLORS.slateGray};
   }

@@ -49,7 +49,7 @@ const ShowLastPositions = styled.a`
   color: ${p => p.theme.color.gainsboro};
   text-decoration: underline;
 
-  :hover {
+  &:hover {
     color: ${p => p.theme.color.gainsboro};
   }
 `

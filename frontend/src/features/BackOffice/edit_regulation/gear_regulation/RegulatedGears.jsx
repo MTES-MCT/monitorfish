@@ -330,7 +330,7 @@ const DerogationRadio = styled(RadioGroup)`
   ${customRadioGroup}
   padding: 10px !important;
   border: 1.5px solid ${props => props.$isYellow ? props.theme.color.goldenPoppy : props.theme.color.lightGray}!important;
-  :focus {
+  &:focus {
     border: 1.5px solid ${props => props.$isYellow ? props.theme.color.goldenPoppy : props.theme.color.lightGray}!important;
   }
 `

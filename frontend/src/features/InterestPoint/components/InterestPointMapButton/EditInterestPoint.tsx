@@ -195,7 +195,7 @@ const CancelButton = styled.button`
   padding: 5px 12px;
   width: 130px;
 
-  :disabled {
+  &:disabled {
     border: 1px solid ${THEME.color.lightGray};
     color: ${THEME.color.slateGray};
   }
@@ -209,8 +209,8 @@ const OkButton = styled.button`
   padding: 5px 12px;
   width: 130px;
 
-  :hover,
-  :focus {
+  &:hover,
+  &:focus {
     background: ${THEME.color.charcoal};
   }
 `

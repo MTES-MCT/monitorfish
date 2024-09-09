@@ -74,7 +74,7 @@ function UnmemoizedRegulatoryLayerSearchResultTopic({
       return 0
     }
 
-    return regulatoryTopics[regulatoryLayerTopic]?.length || 0
+    return regulatoryTopics[regulatoryLayerTopic]?.length ?? 0
   }, [regulatoryLayerLawType, regulatoryLayerTopic, regulatoryLayerLawTypes])
 
   const areAllZonesAlreadySelected =
@@ -160,7 +160,7 @@ const LayerTopic = styled.div`
   color: ${p => p.theme.color.gunMetal};
   border-bottom: 1px solid ${p => p.theme.color.lightGray};
 
-  :hover {
+  &:hover {
     background: ${p => p.theme.color.blueGray25};
   }
 `

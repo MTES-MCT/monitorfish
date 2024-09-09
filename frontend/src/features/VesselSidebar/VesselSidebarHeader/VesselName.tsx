@@ -66,7 +66,7 @@ export function VesselName({ focusOnVesselSearchInput }) {
         data-cy="sidebar-add-vessel-to-favorites"
         onClick={addOrRemoveToFavorites}
       />
-      <Name title={selectedVesselIdentity?.vesselName || undefined}>{getVesselName(selectedVesselIdentity)}</Name>
+      <Name title={selectedVesselIdentity?.vesselName ?? undefined}>{getVesselName(selectedVesselIdentity)}</Name>
       <CloseIcon data-cy="vessel-search-selected-vessel-close-title" onClick={close} />
     </Wrapper>
   )
@@ -100,8 +100,8 @@ const Wrapper = styled.div<{
   cursor: text;
   transition: width 0.7s ease forwards;
 
-  :hover,
-  :focus {
+  &:hover,
+  &:focus {
     border-bottom: 1px ${p => p.theme.color.lightGray} solid;
   }
 `

@@ -7,7 +7,7 @@ import { SectionTitle, Section, List, Label } from '../RegulatoryMetadata.style'
 export function RegulatoryReferencesDisplayed() {
   const regulatory = useMainAppSelector(state => state.regulatory)
 
-  const { regulatoryReferences } = regulatory.regulatoryZoneMetadata || {}
+  const { regulatoryReferences } = regulatory.regulatoryZoneMetadata ?? {}
 
   return (
     <>
@@ -49,10 +49,10 @@ const Reference = styled.li`
 
 export const Link = styled.a`
   // LVHA-order
-  :link,
-  :visited,
-  :hover,
-  :active {
+  &:link,
+  &:visited,
+  &:hover,
+  &:active {
     color: ${p => p.theme.color.blueGray};
     font-size: 13px;
     cursor: pointer;

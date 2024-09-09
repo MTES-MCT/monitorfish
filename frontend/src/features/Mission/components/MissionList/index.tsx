@@ -294,7 +294,7 @@ const TableBodyRow = styled.div.attrs(() => ({
   background-color: white;
   display: flex;
 
-  :hover {
+  &:hover {
     background-color: ${p => p.theme.color.gainsboro};
   }
 `

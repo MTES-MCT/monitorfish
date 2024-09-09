@@ -146,7 +146,7 @@ export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails,
     } else if (textareaRef.current) {
       textareaRef.current.style.height = '50px'
     }
-    setTextareaHeight(parseInt(textareaRef.current?.style?.height.replace('px', '') || '', 10))
+    setTextareaHeight(parseInt(textareaRef.current?.style?.height.replace('px', '') ?? '', 10))
   }, [comment])
 
   const saveComment = () => {

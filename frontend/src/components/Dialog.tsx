@@ -58,7 +58,7 @@ const StyledDialog = styled(MuiDialog)<{
       > .Element-Button {
         width: 136px;
 
-        :not(:first-child) {
+        &:not(:first-child) {
           margin-left: 8px;
         }
       }

@@ -13,8 +13,9 @@ type LastControlProps = {
 export function LastControl({ field }: LastControlProps) {
   const { control, text } = field
   const controlUnits =
-    control?.controlUnits.map(controlUnit => controlUnit.name.replace('(historique)', '')).join(', ') ??
-    'Unité manquante'
+    !!control && control.controlUnits.length > 0
+      ? control.controlUnits.map(controlUnit => controlUnit.name.replace('(historique)', '')).join(', ')
+      : 'Unité manquante'
 
   const numberOfInfractions = useMemo(() => getNumberOfInfractions(control), [control])
 

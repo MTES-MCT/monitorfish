@@ -54,9 +54,6 @@ export function getHtmlContent(
     imo: pno.imo ?? 'Aucun',
     internalReferenceNumber: pno.internalReferenceNumber ?? 'Aucun',
     ircs: pno.ircs ?? 'Aucun',
-    operationDateTime: pno.operationDateTime
-      ? customDayjs(pno.operationDateTime).utc().format('le DD/MM/YYYY à HH[h]mm UTC')
-      : '-',
     port: pno.message.port,
     portEntranceAuthorization: pno.message.hasPortEntranceAuthorization
       ? `<strong class="authorized">Autorisation donnée d'entrer au port<br/></strong>`
@@ -72,6 +69,7 @@ export function getHtmlContent(
       ? customDayjs(pno.message.predictedLandingDatetimeUtc).utc().format('le DD/MM/YYYY à HH[h]mm UTC')
       : '-',
     purpose: pno.message.purpose ? PriorNotification.PURPOSE_LABEL[pno.message.purpose] : '',
+    reportDateTime: customDayjs(pno.reportDateTime).utc().format('le DD/MM/YYYY à HH[h]mm UTC'),
     vesselName: pno.vesselName
   }
 

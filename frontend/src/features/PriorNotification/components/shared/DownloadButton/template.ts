@@ -30,7 +30,7 @@ export const HTML_TEMPLATE = `
         <table>
           <tr>
             <td class="data-label">Préavis envoyé</td>
-            <td><strong>{operationDateTime}</strong></td>
+            <td><strong>{reportDateTime}</strong></td>
           </tr>
           <tr>
             <td class="data-label">Arrivée estimée</td>

@@ -48,7 +48,7 @@ export function MissionsMenu() {
 
   return (
     <Wrapper>
-      <MissionMenuBox data-cy="missions-menu-box" isLeftBox isOpen={leftMapBoxOpened === MapBox.MISSIONS}>
+      <MissionMenuBox $isLeftBox $isOpen={leftMapBoxOpened === MapBox.MISSIONS} data-cy="missions-menu-box">
         <MissionsMenuWrapper>
           <MissionsMenuHeader>
             <ToggleMissionMenuButton Icon={Icon.Close} onClick={toggleMissionsMenu} size={Size.NORMAL} />

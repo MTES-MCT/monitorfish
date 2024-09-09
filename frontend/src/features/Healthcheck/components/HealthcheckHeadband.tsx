@@ -49,7 +49,7 @@ export function HealthcheckHeadband() {
     <>
       {!!healthcheckTextWarning.length && !previewFilteredVesselsMode && (
         <HealthcheckWarnings
-          hasMultipleWarnings={healthcheckTextWarning.length > 1}
+          $hasMultipleWarnings={healthcheckTextWarning.length > 1}
           onClick={() => setAreAllWarningsOpened(!areAllWarningsOpened)}
         >
           <WarningIcon />
@@ -65,9 +65,9 @@ export function HealthcheckHeadband() {
           <MultipleWarningsHeadband
             // eslint-disable-next-line react/no-array-index-key
             key={`${index}-${warning}`}
-            isLast={healthcheckTextWarning.length === index + 1}
-            isOpen={areAllWarningsOpened}
-            topOffset={index + 1}
+            $isLast={healthcheckTextWarning.length === index + 1}
+            $isOpen={areAllWarningsOpened}
+            $topOffset={index + 1}
           >
             {warning}
           </MultipleWarningsHeadband>
@@ -91,7 +91,7 @@ const WarningIcon = styled(WarningSVG)`
 `
 
 const HealthcheckWarnings = styled.div<{
-  hasMultipleWarnings: boolean
+  $hasMultipleWarnings: boolean
 }>`
   font: normal normal bold 16px/22px Marianne;
   background: ${p => p.theme.color.goldenPoppy} 0% 0% no-repeat padding-box;
@@ -101,26 +101,26 @@ const HealthcheckWarnings = styled.div<{
   padding: 13px;
   border-bottom: 2px solid #e3be05;
   color: ${p => p.theme.color.gunMetal};
-  cursor: ${p => (p.hasMultipleWarnings ? 'pointer' : 'unset')};
+  cursor: ${p => (p.$hasMultipleWarnings ? 'pointer' : 'unset')};
 `
 
 const MultipleWarningsHeadband = styled.div<{
-  isLast: boolean
-  isOpen: boolean
-  topOffset: number
+  $isLast: boolean
+  $isOpen: boolean
+  $topOffset: number
 }>`
   position: absolute;
-  top: ${p => (p.isOpen ? p.topOffset * 50 : 0)}px;
+  top: ${p => (p.$isOpen ? p.$topOffset * 50 : 0)}px;
   background: ${p => p.theme.color.goldenPoppy25} 0% 0% no-repeat padding-box;
   width: 100vw;
-  height: ${p => (p.isOpen ? 22 : 0)}px;
+  height: ${p => (p.$isOpen ? 22 : 0)}px;
   text-align: center;
-  padding: ${p => (p.isOpen ? '13px 0 13px 0' : '0 0 0 0')};
+  padding: ${p => (p.$isOpen ? '13px 0 13px 0' : '0 0 0 0')};
   border-bottom: 2px solid #e3be05;
   color: ${p => p.theme.color.gunMetal};
   z-index: 9999;
   font: normal normal bold 16px/22px Marianne;
   transition: all 0.5s;
-  opacity: ${p => (p.isOpen ? 1 : 0)};
-  ${p => p.isLast && `box-shadow: 0px 2px ${p.isOpen ? 4 : 0}px #707785bf;`}
+  opacity: ${p => (p.$isOpen ? 1 : 0)};
+  ${p => p.$isLast && `box-shadow: 0px 2px ${p.$isOpen ? 4 : 0}px #707785bf;`}
 `

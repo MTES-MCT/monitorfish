@@ -50,20 +50,20 @@ export function LayersSidebar() {
             />
           </SidebarLayersButton>
           <Sidebar
+            $isOpen={leftMapBoxOpened === MapBox.REGULATIONS}
+            $isVisible={leftMapBoxOpened === MapBox.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
             data-cy="layers-sidebar-box"
-            isOpen={leftMapBoxOpened === MapBox.REGULATIONS}
-            isVisible={leftMapBoxOpened === MapBox.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
           >
             <RegulationSearch namespace={namespace} />
-            <Layers hasHealthcheckTextWarning={!!healthcheckTextWarning.length}>
+            <Layers $hasHealthcheckTextWarning={!!healthcheckTextWarning.length}>
               <RegulatoryZones namespace={namespace} />
               <CustomZones namespace={namespace} />
               <AdministrativeZones namespace={namespace} />
               <BaseMaps namespace={namespace} />
             </Layers>
             <RegulatoryZoneMetadataShifter
-              isLeftMapBoxOpened={!!leftMapBoxOpened}
-              isOpen={regulatoryZoneMetadataPanelIsOpen}
+              $isLeftMapBoxOpened={!!leftMapBoxOpened}
+              $isOpen={regulatoryZoneMetadataPanelIsOpen}
             >
               <RegulatoryZoneMetadata />
             </RegulatoryZoneMetadataShifter>
@@ -75,31 +75,31 @@ export function LayersSidebar() {
 }
 
 const RegulatoryZoneMetadataShifter = styled.div<{
-  isLeftMapBoxOpened: boolean
-  isOpen: boolean
+  $isLeftMapBoxOpened: boolean
+  $isOpen: boolean
 }>`
   position: absolute;
   margin-left: ${p => {
-    if (!p.isOpen) {
+    if (!p.$isOpen) {
       return -455
     }
 
-    return p.isLeftMapBoxOpened ? 355 : 371
+    return p.$isLeftMapBoxOpened ? 355 : 371
   }}px;
   margin-top: 45px;
   top: 0px;
-  opacity: ${p => (p.isOpen ? 1 : 0)};
+  opacity: ${p => (p.$isOpen ? 1 : 0)};
   background: linear-gradient(${THEME.color.gainsboro} 70%, rgb(0, 0, 0, 0));
   z-index: -1;
   transition: all 0.5s;
 `
 
 const Sidebar = styled(MapComponent)<{
-  isOpen: boolean
-  isVisible: boolean
+  $isOpen: boolean
+  $isVisible: boolean
 }>`
-  margin-left: ${p => (p.isOpen ? 0 : '-418px')};
-  opacity: ${p => (p.isVisible ? 1 : 0)};
+  margin-left: ${p => (p.$isOpen ? 0 : '-418px')};
+  opacity: ${p => (p.$isVisible ? 1 : 0)};
   top: 10px;
   left: 57px;
   z-index: 999;
@@ -110,11 +110,11 @@ const Sidebar = styled(MapComponent)<{
 `
 
 const Layers = styled.div<{
-  hasHealthcheckTextWarning: boolean
+  $hasHealthcheckTextWarning: boolean
 }>`
   margin-top: 5px;
   width: 350px;
-  max-height: calc(100vh - ${p => (p.hasHealthcheckTextWarning ? '210px' : '160px')});
+  max-height: calc(100vh - ${p => (p.$hasHealthcheckTextWarning ? '210px' : '160px')});
 `
 
 const SidebarLayersButton = styled(MapButton)`

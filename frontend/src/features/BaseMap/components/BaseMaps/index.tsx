@@ -52,11 +52,11 @@ export function BaseMaps({ namespace }) {
 
   return (
     <>
-      <Title isShowed={isBaseLayersShowed} onClick={openOrCloseBaseLayers}>
+      <Title $isShowed={isBaseLayersShowed} onClick={openOrCloseBaseLayers}>
         Fonds de carte <ChevronIcon $isOpen={isBaseLayersShowed} />
       </Title>
       <RadioGroup onChange={showLayer} value={selectedBaseLayer}>
-        <List isShowed={isBaseLayersShowed} layersLength={baseLayers.length}>
+        <List $isShowed={isBaseLayersShowed} $layersLength={baseLayers.length}>
           {baseLayers.map(layer => (
             <BaseMap key={layer} layer={layer} onChange={showLayer} selectedBaseLayer={selectedBaseLayer} />
           ))}
@@ -67,7 +67,7 @@ export function BaseMaps({ namespace }) {
 }
 
 const Title = styled.div<{
-  isShowed: boolean
+  $isShowed: boolean
 }>`
   height: 30px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
@@ -81,8 +81,8 @@ const Title = styled.div<{
   user-select: none;
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
-  border-bottom-left-radius: ${p => (p.isShowed ? '0' : '2px')};
-  border-bottom-right-radius: ${p => (p.isShowed ? '0' : '2px')};
+  border-bottom-left-radius: ${p => (p.$isShowed ? '0' : '2px')};
+  border-bottom-right-radius: ${p => (p.$isShowed ? '0' : '2px')};
 
   .Element-IconBox {
     float: right;
@@ -91,13 +91,13 @@ const Title = styled.div<{
 `
 
 const List = styled.ul<{
-  isShowed: boolean
-  layersLength: number
+  $isShowed: boolean
+  $layersLength: number
 }>`
   margin: 0;
   border-radius: 0;
   padding: 0;
-  height: ${p => (p.isShowed && p.layersLength ? 37 * p.layersLength : 0)}px;
+  height: ${p => (p.$isShowed && p.$layersLength ? 37 * p.$layersLength : 0)}px;
   overflow-y: hidden;
   overflow-x: hidden;
   background: ${p => p.theme.color.white};

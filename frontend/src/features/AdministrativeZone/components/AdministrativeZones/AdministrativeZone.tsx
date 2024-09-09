@@ -16,9 +16,9 @@ type AdministrativeZoneType = {
 export function AdministrativeZone({ isFirst, isGrouped, isShown, showOrHideZone, zone }: AdministrativeZoneType) {
   return (
     <Row
+      $isFirst={isFirst}
+      $isGrouped={isGrouped}
       data-cy="administrative-layer-toggle"
-      isFirst={isFirst}
-      isGrouped={isGrouped}
       onClick={() => showOrHideZone(isShown)}
     >
       <LayerName title={zone.name}>{zone.name}</LayerName>
@@ -41,12 +41,12 @@ const LayerName = styled.span`
 `
 
 const Row = styled.span<{
-  isFirst: boolean | undefined
-  isGrouped: boolean | undefined
+  $isFirst: boolean | undefined
+  $isGrouped: boolean | undefined
 }>`
-  margin-top: ${p => (p.isFirst ? 5 : 0)}px;
+  margin-top: ${p => (p.$isFirst ? 5 : 0)}px;
   padding: 4px 0 4px 20px;
-  padding-left: ${p => (p.isGrouped ? '38px' : '20px')};
+  padding-left: ${p => (p.$isGrouped ? '38px' : '20px')};
   line-height: 20px;
   display: block;
   user-select: none;

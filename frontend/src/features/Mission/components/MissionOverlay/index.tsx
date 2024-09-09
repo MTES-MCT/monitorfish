@@ -118,7 +118,7 @@ export function MissionOverlay({ feature, isSelected = false }) {
   }, [feature, isSelected, selectedMission, setMissionProperties, overlayRef, overlayObjectRef, getNextOverlayPosition])
 
   return (
-    <Wrapper ref={overlayCallback} overlayTopLeftMargin={overlayTopLeftMargin}>
+    <Wrapper ref={overlayCallback} $overlayTopLeftMargin={overlayTopLeftMargin}>
       {missionProperties && (
         <MissionDetails isSelected={isSelected} mission={missionProperties} overlayPosition={overlayPosition} />
       )}
@@ -127,11 +127,11 @@ export function MissionOverlay({ feature, isSelected = false }) {
 }
 
 const Wrapper = styled.div<{
-  overlayTopLeftMargin: [number, number]
+  $overlayTopLeftMargin: [number, number]
 }>`
   position: absolute;
-  top: ${p => p.overlayTopLeftMargin[0]}px;
-  left: ${p => p.overlayTopLeftMargin[1]}px;
+  top: ${p => p.$overlayTopLeftMargin[0]}px;
+  left: ${p => p.$overlayTopLeftMargin[1]}px;
   border-radius: 2px;
   z-index: 1000;
   cursor: grabbing;

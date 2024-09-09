@@ -43,8 +43,8 @@ export function EditVesselVisibility() {
   }
 
   return (
-    <Wrapper isOpen={isOpen}>
-      <Header isFirst>Gérer l&apos;affichage des dernières positions</Header>
+    <Wrapper $isOpen={isOpen}>
+      <Header $isFirst>Gérer l&apos;affichage des dernières positions</Header>
       <Content>
         <LastPositionInfo>
           <VesselHidden /> navires masqués <VesselAlmostHidden /> navires estompés <VesselShowed /> navires normaux
@@ -58,8 +58,8 @@ export function EditVesselVisibility() {
           navires.
         </LastPositionLegend>
       </Content>
-      <Header isFirst={false}>Paramétrer la longueur par défaut des pistes</Header>
-      <Content hasMargin>
+      <Header $isFirst={false}>Paramétrer la longueur par défaut des pistes</Header>
+      <Content $hasMargin>
         <TrackDepthSelection
           defaultValue={defaultVesselTrackDepth}
           label="Afficher depuis"
@@ -141,8 +141,8 @@ const LastPositionInfo = styled.div`
 `
 
 const Wrapper = styled(MapToolBox)<{
-  isHidden?: boolean
-  isOpen: boolean
+  $isHidden?: boolean
+  $isOpen: boolean
 }>`
   top: 172px;
   width: 406px;

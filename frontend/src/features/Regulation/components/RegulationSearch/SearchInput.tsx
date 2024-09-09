@@ -117,7 +117,7 @@ export function SearchInput() {
           title="Ouvrir la recherche avancée"
         />
       </Search>
-      <AdvancedSearchBox advancedSearchIsOpen={advancedSearchIsOpen}>
+      <AdvancedSearchBox $advancedSearchIsOpen={advancedSearchIsOpen}>
         <SearchByGeometry>
           Définir une zone sur la carte <br />
           {selectedOrSelectingZoneIsSquare ? (
@@ -195,13 +195,13 @@ const PolygonFilterSelected = styled(PolygonFilterSelectedSVG)`
 `
 
 const AdvancedSearchBox = styled.div<{
-  advancedSearchIsOpen: boolean
+  $advancedSearchIsOpen: boolean
 }>`
   background-color: white;
-  border-bottom: ${p => (p.advancedSearchIsOpen ? 1 : 0)}px ${p => p.theme.color.lightGray} solid;
-  height: ${p => (p.advancedSearchIsOpen ? 50 : 0)}px;
+  border-bottom: ${p => (p.$advancedSearchIsOpen ? 1 : 0)}px ${p => p.theme.color.lightGray} solid;
+  height: ${p => (p.$advancedSearchIsOpen ? 50 : 0)}px;
   overflow: hidden;
-  padding: ${p => (p.advancedSearchIsOpen ? 10 : 0)}px 15px;
+  padding: ${p => (p.$advancedSearchIsOpen ? 10 : 0)}px 15px;
   text-align: left;
   transition: 0.5s all;
   width: 320px;

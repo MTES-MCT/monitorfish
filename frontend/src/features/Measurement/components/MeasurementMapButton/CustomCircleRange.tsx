@@ -103,7 +103,7 @@ export function CustomCircleRange() {
   }, [dispatch])
 
   return (
-    <Wrapper isOpen={measurementTypeToAdd === MeasurementType.CIRCLE_RANGE}>
+    <Wrapper $isOpen={measurementTypeToAdd === MeasurementType.CIRCLE_RANGE}>
       <Header>Définir une valeur</Header>
       <Body>
         <p>Coordonnées</p>

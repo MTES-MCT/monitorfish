@@ -4,21 +4,21 @@ import styled from 'styled-components'
 import { MapComponent } from '../../../../commonStyles/MapComponent'
 
 export const MapToolBox = styled(MapComponent)<{
-  isHidden?: boolean
-  isLeftBox?: boolean
-  isOpen: boolean
+  $isHidden?: boolean
+  $isLeftBox?: boolean
+  $isOpen: boolean
 }>`
   background: ${COLORS.white};
   ${p => {
-    if (p.isLeftBox) {
-      return `margin-left: ${p.isOpen ? '45px' : '-420px'};`
+    if (p.$isLeftBox) {
+      return `margin-left: ${p.$isOpen ? '45px' : '-420px'};`
     }
 
-    return `margin-right: ${p.isOpen ? '45px' : '-420px'};`
+    return `margin-right: ${p.$isOpen ? '45px' : '-420px'};`
   }}
-  opacity: ${p => (p.isOpen ? '1' : '0')};
+  opacity: ${p => (p.$isOpen ? '1' : '0')};
   ${p => {
-    if (p.isLeftBox) {
+    if (p.$isLeftBox) {
       return 'left: 10px;'
     }
 

@@ -30,16 +30,16 @@ export function FavoriteVessels() {
   return (
     <Wrapper ref={wrapperRef}>
       <FavoriteVesselsNumber
+        $isOpen={leftMapBoxOpened === MapBox.FAVORITE_VESSELS}
         data-cy="favorite-vessels-number"
         isHidden={previewFilteredVesselsMode}
-        isOpen={leftMapBoxOpened === MapBox.FAVORITE_VESSELS}
       >
         {favorites?.length || 0}
       </FavoriteVesselsNumber>
       <FavoriteVesselsIcon
+        $isOpen={leftMapBoxOpened === MapBox.FAVORITE_VESSELS}
         data-cy="favorite-vessels"
         isHidden={!!previewFilteredVesselsMode}
-        isOpen={leftMapBoxOpened === MapBox.FAVORITE_VESSELS}
         onClick={() =>
           dispatch(
             setLeftMapBoxOpened(leftMapBoxOpened === MapBox.FAVORITE_VESSELS ? undefined : MapBox.FAVORITE_VESSELS)
@@ -50,11 +50,11 @@ export function FavoriteVessels() {
         <FavoritesIcon />
       </FavoriteVesselsIcon>
       <FavoriteVesselsBox
+        $isOpen={leftMapBoxOpened === MapBox.FAVORITE_VESSELS}
         data-cy="favorite-vessels-box"
         isHidden={previewFilteredVesselsMode}
-        isOpen={leftMapBoxOpened === MapBox.FAVORITE_VESSELS}
       >
-        <Header isFirst>Mes navires suivis</Header>
+        <Header $isFirst>Mes navires suivis</Header>
         {favorites?.length ? (
           <List>
             {favorites.map((favoriteVessel, index) => {
@@ -96,7 +96,7 @@ export function FavoriteVessels() {
 }
 
 const FavoriteVesselsNumber = styled(MapComponent)<{
-  isOpen: boolean
+  $isOpen: boolean
 }>`
   display: inline-block;
   position: absolute;
@@ -105,9 +105,9 @@ const FavoriteVesselsNumber = styled(MapComponent)<{
   top: 64px;
   line-height: 14px;
   left: 40px;
-  background-color: ${p => (p.isOpen ? p.theme.color.charcoal : p.theme.color.gainsboro)};
+  background-color: ${p => (p.$isOpen ? p.theme.color.charcoal : p.theme.color.gainsboro)};
   transition: all 0.5s;
-  color: ${p => (p.isOpen ? p.theme.color.white : p.theme.color.gunMetal)};
+  color: ${p => (p.$isOpen ? p.theme.color.white : p.theme.color.gunMetal)};
   z-index: 100;
   padding: 0 4px;
   text-align: center;
@@ -138,24 +138,24 @@ const NoVesselInFavorites = styled.div`
 `
 
 const Header = styled.div<{
-  isFirst: boolean
+  $isFirst: boolean
 }>`
   background: ${COLORS.charcoal};
   color: ${COLORS.gainsboro};
   padding: 9px 0 7px 15px;
   font-size: 16px;
   text-align: left;
-  border-top-left-radius: ${p => (p.isFirst ? '2px' : '0')};
-  border-top-right-radius: ${p => (p.isFirst ? '2px' : '0')};
+  border-top-left-radius: ${p => (p.$isFirst ? '2px' : '0')};
+  border-top-right-radius: ${p => (p.$isFirst ? '2px' : '0')};
 `
 
 const FavoriteVesselsBox = styled(MapComponent)<{
-  isOpen: boolean
+  $isOpen: boolean
 }>`
   width: 305px;
   background: ${p => p.theme.color.white};
-  margin-left: ${p => (p.isOpen ? '45px' : '-420px')};
-  opacity: ${p => (p.isOpen ? '1' : '0')};
+  margin-left: ${p => (p.$isOpen ? '45px' : '-420px')};
+  opacity: ${p => (p.$isOpen ? '1' : '0')};
   top: 73px;
   left: 10px;
   border-radius: 2px;
@@ -165,7 +165,7 @@ const FavoriteVesselsBox = styled(MapComponent)<{
 `
 
 const FavoriteVesselsIcon = styled(MapButton)<{
-  isOpen: boolean
+  $isOpen: boolean
 }>`
   position: absolute;
   display: inline-block;
@@ -175,12 +175,12 @@ const FavoriteVesselsIcon = styled(MapButton)<{
   width: 40px;
   border-radius: 2px;
   left: 10px;
-  background: ${p => (p.isOpen ? p.theme.color.blueGray : p.theme.color.charcoal)};
+  background: ${p => (p.$isOpen ? p.theme.color.blueGray : p.theme.color.charcoal)};
   transition: all 0.3s;
 
   &:hover,
   &:focus {
-    background: ${p => (p.isOpen ? p.theme.color.blueGray : p.theme.color.charcoal)};
+    background: ${p => (p.$isOpen ? p.theme.color.blueGray : p.theme.color.charcoal)};
   }
 `
 

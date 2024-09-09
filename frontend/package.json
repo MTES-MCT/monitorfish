@@ -80,7 +80,7 @@
     "rsuite": "5.54.0",
     "rsuite-table": "5.19.1",
     "simplify-geojson": "1.0.5",
-    "styled-components": "5.3.11",
+    "styled-components": "6.1.13",
     "timeago.js": "4.0.2",
     "use-debounce": "9.0.4",
     "uuid": "10.0.0",

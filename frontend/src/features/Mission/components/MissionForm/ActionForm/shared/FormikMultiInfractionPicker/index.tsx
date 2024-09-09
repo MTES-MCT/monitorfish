@@ -230,7 +230,7 @@ const Row = styled.div`
   > legend {
     margin: 12px 0 8px;
 
-    :first-child {
+    &:first-child {
       margin: 0px 0 8px;
     }
   }

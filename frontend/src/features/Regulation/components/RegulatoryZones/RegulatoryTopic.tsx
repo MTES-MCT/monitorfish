@@ -265,7 +265,7 @@ const Topic = styled.span<{
   user-select: none;
   padding-right: 10px;
 
-  :hover {
+  &:hover {
     background: ${p => p.theme.color.blueGray25};
   }
 `

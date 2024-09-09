@@ -178,8 +178,8 @@ const FavoriteVesselsIcon = styled(MapButton)<{
   background: ${p => (p.isOpen ? p.theme.color.blueGray : p.theme.color.charcoal)};
   transition: all 0.3s;
 
-  :hover,
-  :focus {
+  &:hover,
+  &:focus {
     background: ${p => (p.isOpen ? p.theme.color.blueGray : p.theme.color.charcoal)};
   }
 `

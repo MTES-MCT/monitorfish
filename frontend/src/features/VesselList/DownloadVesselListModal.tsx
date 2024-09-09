@@ -132,8 +132,8 @@ export function DownloadVesselListModal({ filteredVessels, isOpen, setIsOpen }) 
         <StyledCheckboxGroup
           inline
           name="checkboxList"
-          onChange={handleChange}
-          value={checkboxState.valuesChecked || []}
+          onChange={handleChange as any}
+          value={checkboxState.valuesChecked}
         >
           <div>
             <Checkbox value={CSVOptions.riskFactor.code}>Note de risque</Checkbox>
@@ -234,7 +234,7 @@ const DownloadButton = styled.button`
   font-size: 13px;
   color: ${COLORS.gainsboro};
 
-  :hover {
+  &:hover {
     background: ${COLORS.charcoal};
   }
 `

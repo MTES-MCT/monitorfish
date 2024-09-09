@@ -95,7 +95,7 @@ const ListItem = styled.li`
   cursor: pointer;
   border-bottom: ${THEME.color.lightGray} 1px solid;
 
-  :hover {
+  &:hover {
     background: ${THEME.color.gainsboro};
   }
 `

@@ -139,7 +139,7 @@ const SaveButton = styled.button`
   color: ${COLORS.gainsboro};
   float: right;
 
-  :hover {
+  &:hover {
     background: ${COLORS.charcoal};
   }
 `
@@ -153,7 +153,7 @@ const CancelButton = styled.button`
   margin: -28px 0px 20px 10px;
   float: right;
 
-  :disabled {
+  &:disabled {
     border: 1px solid ${COLORS.lightGray};
     color: ${COLORS.lightGray};
   }

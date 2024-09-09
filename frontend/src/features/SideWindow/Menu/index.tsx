@@ -84,18 +84,18 @@ const MenuButton = styled(IconButton)<{
   color: ${p => (p.selected ? p.theme.color.white : p.theme.color.gainsboro)};
   padding: 22px;
 
-  :hover,
-  :focus {
+  &:hover,
+  &:focus {
     background: ${p => (p.selected ? p.theme.color.blueGray : 'rgba(255, 255, 255, 0.125)')};
     border: 0;
     border-bottom: solid 1px ${p => p.theme.color.slateGray};
     color: ${p => p.theme.color.white};
   }
 
-  :first-child {
+  &:first-child {
     border-top: solid 1px ${p => p.theme.color.slateGray};
 
-    :hover {
+    &:hover {
       border-top: solid 1px ${p => p.theme.color.slateGray};
     }
   }

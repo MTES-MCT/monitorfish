@@ -40,7 +40,7 @@ const Row = styled.li`
   user-select: none;
   display: flex;
 
-  :hover {
+  &:hover {
     background: ${p => p.theme.color.blueGray25};
   }
 `

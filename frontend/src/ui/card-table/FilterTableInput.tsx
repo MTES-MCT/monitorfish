@@ -19,8 +19,8 @@ export const FilterTableInput = styled.input<{
   background-position: bottom 3px right 5px;
   background-repeat: no-repeat;
 
-  :hover,
-  :focus {
+  &:hover,
+  &:focus {
     border-bottom: 1px ${COLORS.lightGray} solid;
   }
 `

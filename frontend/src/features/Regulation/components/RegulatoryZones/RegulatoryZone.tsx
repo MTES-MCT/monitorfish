@@ -192,7 +192,7 @@ const Zone = styled.span<{
   padding: 6px 10px 6px 16px;
   user-select: none;
 
-  :hover {
+  &:hover {
     background: ${p => p.theme.color.blueGray25};
   }
 `

@@ -11,7 +11,6 @@ import { AdministrativeZones } from '../../AdministrativeZone/components/Adminis
 import { BaseMaps } from '../../BaseMap/components/BaseMaps'
 import { MapComponent } from '../../commonStyles/MapComponent'
 import { CustomZones } from '../../CustomZone/components/CustomZones'
-import { MapButton } from '../../MainWindow/components/MapButtons/MapButton'
 import { RegulationSearch } from '../../Regulation/components/RegulationSearch'
 import { RegulatoryZoneMetadata } from '../../Regulation/components/RegulatoryZoneMetadata'
 import { RegulatoryZones } from '../../Regulation/components/RegulatoryZones'
@@ -36,19 +35,20 @@ export function LayersSidebar() {
     <NamespaceContext.Consumer>
       {namespace => (
         <>
-          <SidebarLayersButton isHidden={!!previewFilteredVesselsMode}>
-            <SidebarLayersIcon
-              $isActive={leftMapBoxOpened === MapBox.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
-              accent={Accent.PRIMARY}
-              aria-label="Arbre des couches"
-              Icon={Icon.MapLayers}
-              onClick={() =>
-                dispatch(setLeftMapBoxOpened(leftMapBoxOpened === MapBox.REGULATIONS ? undefined : MapBox.REGULATIONS))
-              }
-              size={Size.LARGE}
-              title="Arbre des couches"
-            />
-          </SidebarLayersButton>
+          <SidebarLayersIcon
+            $hasHealthcheckTextWarning={!!healthcheckTextWarning.length}
+            $isActive={leftMapBoxOpened === MapBox.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
+            $isHidden={!!previewFilteredVesselsMode}
+            accent={Accent.PRIMARY}
+            aria-label="Arbre des couches"
+            Icon={Icon.MapLayers}
+            onClick={() =>
+              dispatch(setLeftMapBoxOpened(leftMapBoxOpened === MapBox.REGULATIONS ? undefined : MapBox.REGULATIONS))
+            }
+            size={Size.LARGE}
+            title="Arbre des couches"
+          />
+
           <Sidebar
             $isOpen={leftMapBoxOpened === MapBox.REGULATIONS}
             $isVisible={leftMapBoxOpened === MapBox.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
@@ -117,16 +117,19 @@ const Layers = styled.div<{
   max-height: calc(100vh - ${p => (p.$hasHealthcheckTextWarning ? '210px' : '160px')});
 `
 
-const SidebarLayersButton = styled(MapButton)`
-  position: absolute;
-  top: 10px;
-  left: 10px;
-`
-
-const SidebarLayersIcon = styled(IconButton)<{ $isActive: boolean }>`
-  border-radius: 2px;
-  width: 40px;
-  height: 40px;
+const SidebarLayersIcon = styled(IconButton)<{
+  $hasHealthcheckTextWarning: boolean
+  $isActive: boolean
+  $isHidden: boolean
+}>`
   ${p => (p.$isActive ? `background: ${p.theme.color.blueGray};` : '')}
   ${p => (p.$isActive ? `border-color: ${p.theme.color.blueGray};` : '')}
+  border-radius: 2px;
+  height: 40px;
+  left: 10px;
+  margin-top: ${p => (p.$hasHealthcheckTextWarning ? 50 : 0)}px;
+  position: absolute;
+  top: 10px;
+  visibility: ${p => (p.$isHidden ? 'hidden' : 'visible')};
+  width: 40px;
 `

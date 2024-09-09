@@ -1,6 +1,6 @@
 import { useGetGearsQuery } from '@api/gear'
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
-import { FlatKeyValue } from '@features/VesselSidebar/common/FlatKeyValue'
+import { FlatKeyValue } from '@features/Vessel/components/VesselSidebar/common/FlatKeyValue'
 import { uniq } from 'lodash'
 import { useMemo } from 'react'
 import styled from 'styled-components'
@@ -28,7 +28,7 @@ export function PNOMessage({ isManuallyCreated, message, tripGears }: PNOMessage
     }
 
     return tripGears.map(tripGear => {
-      const gearName = getGearsApiQuery.data?.find(gear => gear.code === tripGear.gear)?.name || null
+      const gearName = getGearsApiQuery.data?.find(gear => gear.code === tripGear.gear)?.name ?? null
 
       return { ...tripGear, gearName }
     })

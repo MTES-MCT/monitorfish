@@ -7,8 +7,8 @@ import { getMalfunctionStartDateText } from '../../../../../../domain/entities/b
 import { VESSEL_STATUS } from '../../../../../../domain/entities/beaconMalfunction/constants'
 import updateBeaconMalfunctionFromKanban from '../../../../../../domain/use_cases/beaconMalfunction/updateBeaconMalfunctionFromKanban'
 import { useMainAppDispatch } from '../../../../../../hooks/useMainAppDispatch'
+import TimeAgoSVG from '../../../../../icons/Label_horaire_VMS.svg?react'
 import { VesselStatusSelectValue } from '../../../../../SideWindow/BeaconMalfunctionBoard/VesselStatusSelectValue'
-import TimeAgoSVG from '../../../icons/Label_horaire_VMS.svg?react'
 
 import type { BeaconMalfunctionResumeAndDetails } from '../../../../../../domain/entities/beaconMalfunction/types'
 

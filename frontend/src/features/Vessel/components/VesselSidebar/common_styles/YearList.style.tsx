@@ -1,7 +1,7 @@
+import { COLORS } from '@constants/constants'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../../../constants/constants'
-import ChevronIconSVG from '../../icons/Chevron_simple_gris.svg?react'
+import ChevronIconSVG from '../../../../icons/Chevron_simple_gris.svg?react'
 
 import type { HTMLProps } from 'react'
 

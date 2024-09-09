@@ -1,19 +1,19 @@
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { downloadAsCsv } from '@utils/downloadAsCsv'
+import { getCoordinates } from 'coordinates'
 import dayjs from 'dayjs'
+import { WSG84_PROJECTION } from 'domain/entities/map/constants'
+import { NetworkType } from 'domain/entities/vessel/types'
 import countries from 'i18n-iso-countries'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
+import { getDate } from 'utils'
 
-import { getCoordinates } from '../../../../../../coordinates'
-import { WSG84_PROJECTION } from '../../../../../../domain/entities/map/constants'
-import { NetworkType } from '../../../../../../domain/entities/vessel/types'
-import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
-import { getDate } from '../../../../../../utils'
-import { downloadAsCsv } from '../../../../../../utils/downloadAsCsv'
 import { PrimaryButton } from '../../../../../commonStyles/Buttons.style'
-import ExportSVG from '../../../icons/Bouton_exporter_piste_navire.svg?react'
+import ExportSVG from '../../../../../icons/Bouton_exporter_piste_navire.svg?react'
 
-import type { VesselPosition } from '../../../../../../domain/entities/vessel/types'
-import type { DownloadAsCsvMap } from '../../../../../../utils/downloadAsCsv'
+import type { DownloadAsCsvMap } from '@utils/downloadAsCsv'
+import type { VesselPosition } from 'domain/entities/vessel/types'
 
 type VesselPositionWithId = VesselPosition & {
   id: string

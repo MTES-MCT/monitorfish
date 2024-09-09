@@ -8,7 +8,7 @@ import { getCoordinates } from '../../../../../../coordinates'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../../../../domain/entities/map/constants'
 import { animateToCoordinates } from '../../../../../../domain/shared_slices/Map'
 import { highlightVesselTrackPosition } from '../../../../../../domain/shared_slices/Vessel'
-import ManualPositionSVG from '../../../icons/Pastille_position_manuelle.svg?react'
+import ManualPositionSVG from '../../../../../icons/Pastille_position_manuelle.svg?react'
 
 import type { VesselPosition } from '../../../../../../domain/entities/vessel/types'
 

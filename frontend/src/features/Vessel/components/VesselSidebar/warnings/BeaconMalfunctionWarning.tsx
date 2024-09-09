@@ -1,11 +1,11 @@
+import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { THEME } from '@mtes-mct/monitor-ui'
+import { SideWindowMenuKey } from 'domain/entities/sideWindow/constants'
+import { openBeaconMalfunctionInKanban } from 'domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
 import styled from 'styled-components'
 
-import { SideWindowMenuKey } from '../../../../../domain/entities/sideWindow/constants'
-import { openBeaconMalfunctionInKanban } from '../../../../../domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
-import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
-import { openSideWindowPath } from '../../../../SideWindow/useCases/openSideWindowPath'
-import BeaconMalfunctionSVG from '../../icons/Icone_VMS_dark.svg?react'
+import BeaconMalfunctionSVG from '../../../../icons/Icone_VMS_dark.svg?react'
 
 export function BeaconMalfunctionWarning({ selectedVessel }) {
   const dispatch = useMainAppDispatch()

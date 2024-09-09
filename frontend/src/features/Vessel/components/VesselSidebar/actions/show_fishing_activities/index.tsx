@@ -1,12 +1,12 @@
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { useMainAppDispatch } from '../../../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
+import ShowFishingActivitiesSVG from '../../../../../icons/Bouton_afficher_messages_JPE_sur_piste.svg?react'
 import { useGetLogbookUseCase } from '../../../../../Logbook/hooks/useGetLogbookUseCase'
 import { logbookActions } from '../../../../../Logbook/slice'
-import ShowFishingActivitiesSVG from '../../../icons/Bouton_afficher_messages_JPE_sur_piste.svg?react'
 import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
 
 export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {

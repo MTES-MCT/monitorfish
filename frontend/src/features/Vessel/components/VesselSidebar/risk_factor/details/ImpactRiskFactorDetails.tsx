@@ -1,8 +1,8 @@
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
-import InfoSVG from '../../../icons/Information.svg?react'
+import InfoSVG from '../../../../../icons/Information.svg?react'
 
 export function ImpactRiskFactorDetails({ isOpen }) {
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)

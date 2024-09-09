@@ -1,13 +1,13 @@
+import { COLORS } from '@constants/constants'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { setOpenedBeaconMalfunction } from 'domain/shared_slices/BeaconMalfunction'
 import styled from 'styled-components'
 
 import { CurrentBeaconMalfunctionBody } from './CurrentBeaconMalfunctionBody'
-import { COLORS } from '../../../../../../constants/constants'
-import { setOpenedBeaconMalfunction } from '../../../../../../domain/shared_slices/BeaconMalfunction'
-import { useMainAppDispatch } from '../../../../../../hooks/useMainAppDispatch'
-import ArrowSVG from '../../../icons/Picto_fleche-pleine-droite.svg?react'
+import ArrowSVG from '../../../../../icons/Picto_fleche-pleine-droite.svg?react'
 import { Header, Zone } from '../../common_styles/common.style'
 
-import type { BeaconMalfunctionResumeAndDetails } from '../../../../../../domain/entities/beaconMalfunction/types'
+import type { BeaconMalfunctionResumeAndDetails } from 'domain/entities/beaconMalfunction/types'
 import type { Promisable } from 'type-fest'
 
 type CurrentBeaconMalfunctionProps = {

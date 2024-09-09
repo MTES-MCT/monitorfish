@@ -1,12 +1,12 @@
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { SideWindowMenuKey } from 'domain/entities/sideWindow/constants'
 import { batch } from 'react-redux'
 import styled from 'styled-components'
 
-import { SideWindowMenuKey } from '../../../../../domain/entities/sideWindow/constants'
-import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
+import AlertSVG from '../../../../icons/Icone_alertes.svg?react'
 import { getAlertNameFromType } from '../../../../SideWindow/Alert/AlertListAndReportingList/utils'
 import { focusOnAlert } from '../../../../SideWindow/Alert/slice'
 import { openSideWindowPath } from '../../../../SideWindow/useCases/openSideWindowPath'
-import AlertSVG from '../../icons/Icone_alertes.svg?react'
 
 export function AlertWarning({ selectedVessel }) {
   const dispatch = useMainAppDispatch()

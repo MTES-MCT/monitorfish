@@ -1,15 +1,15 @@
+import { COLORS } from '@constants/constants'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { getVesselCompositeIdentifier } from 'domain/entities/vessel/vessel'
+import { addVesselToFavorites, removeVesselFromFavorites } from 'domain/shared_slices/FavoriteVessel'
+import { unselectVessel } from 'domain/use_cases/vessel/unselectVessel'
 import countries from 'i18n-iso-countries'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../../../constants/constants'
-import { getVesselCompositeIdentifier } from '../../../../../domain/entities/vessel/vessel'
-import { addVesselToFavorites, removeVesselFromFavorites } from '../../../../../domain/shared_slices/FavoriteVessel'
-import { unselectVessel } from '../../../../../domain/use_cases/vessel/unselectVessel'
-import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
-import CloseIconSVG from '../../icons/Croix_grise.svg?react'
-import FavoriteSVG from '../../icons/Etoile_navire_suivi.svg?react'
+import CloseIconSVG from '../../../../icons/Croix_grise.svg?react'
+import FavoriteSVG from '../../../../icons/Etoile_navire_suivi.svg?react'
 
 export function VesselName({ focusOnVesselSearchInput }) {
   const dispatch = useMainAppDispatch()

@@ -1,13 +1,13 @@
 import { Icon } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
+import { theme } from 'ui/theme'
 
 import { InfractionsSummary } from './InfractionsSummary'
 import { LastControl } from './LastControl'
 import { LawReminders } from './LawReminders'
-import { theme } from '../../../../../ui/theme'
 // TODO Add the icon to https://github.com/MTES-MCT/monitor-ui
-import CautionSVG from '../../icons/Attention_controles.svg?react'
-import SeaSVG from '../../icons/Avarie_statut_navire_en_mer.svg?react'
+import CautionSVG from '../../../../icons/Attention_controles.svg?react'
+import SeaSVG from '../../../../icons/Avarie_statut_navire_en_mer.svg?react'
 import { Header, Zone } from '../common_styles/common.style'
 
 import type { MissionAction } from '../../../../Mission/missionAction.types'

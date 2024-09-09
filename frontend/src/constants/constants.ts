@@ -1,3 +1,4 @@
+/** @deprecated Use `monitor-ui` colors. */
 export const COLORS = {
   // TODO Remove this color.
   blue: '#0A18DF',

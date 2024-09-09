@@ -96,10 +96,10 @@ export function AdministrativeZones({ hideLayersListWhenSearching = false, names
 
   return (
     <>
-      <SectionTitle data-cy="administrative-zones-open" isOpened={isOpened} onClick={onSectionTitleClicked}>
+      <SectionTitle $isOpened={isOpened} data-cy="administrative-zones-open" onClick={onSectionTitleClicked}>
         Zones administratives <ChevronIcon $isOpen={isOpened} />
       </SectionTitle>
-      <List isOpened={isOpened} zonesLength={zonesLength}>
+      <List $isOpened={isOpened} $zonesLength={zonesLength}>
         {zones.zones.map(zone => (
           <Row key={zone.code}>
             <AdministrativeZone
@@ -124,7 +124,7 @@ export function AdministrativeZones({ hideLayersListWhenSearching = false, names
 }
 
 const SectionTitle = styled.div<{
-  isOpened: boolean
+  $isOpened: boolean
 }>`
   height: 30px;
   padding-left: 20px;
@@ -138,8 +138,8 @@ const SectionTitle = styled.div<{
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
-  border-bottom-left-radius: ${p => (p.isOpened ? '0' : '2px')};
-  border-bottom-right-radius: ${p => (p.isOpened ? '0' : '2px')};
+  border-bottom-left-radius: ${p => (p.$isOpened ? '0' : '2px')};
+  border-bottom-right-radius: ${p => (p.$isOpened ? '0' : '2px')};
 
   .Element-IconBox {
     float: right;
@@ -148,14 +148,14 @@ const SectionTitle = styled.div<{
 `
 
 const List = styled.ul<{
-  isOpened: boolean
-  zonesLength: number
+  $isOpened: boolean
+  $zonesLength: number
 }>`
   margin: 0;
   padding: 0;
   overflow-x: hidden;
   max-height: 48vh;
-  height: ${p => (p.isOpened && p.zonesLength ? 36 * p.zonesLength : 0)}px;
+  height: ${p => (p.$isOpened && p.$zonesLength ? 36 * p.$zonesLength : 0)}px;
   background: ${COLORS.white};
   transition: 0.5s all;
   border-bottom-left-radius: 2px;

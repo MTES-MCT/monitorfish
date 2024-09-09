@@ -76,7 +76,7 @@ export function MeasurementMapButton() {
       >
         {measurementIcon}
       </MeasurementButton>
-      <MeasurementOptions isOpen={isOpen}>
+      <MeasurementOptions $isOpen={isOpen}>
         <MeasurementItem
           className=".map-menu"
           data-cy="measurement-multiline"
@@ -140,13 +140,13 @@ const Wrapper = styled.div`
 `
 
 const MeasurementOptions = styled(MapComponent)<{
-  isHidden?: boolean
-  isOpen: boolean
+  $isHidden?: boolean
+  $isOpen: boolean
 }>`
   border-radius: 2px;
   display: inline-block;
-  margin-right: ${p => (p.isOpen ? '0px' : '-200px')};
-  opacity: ${p => (p.isOpen ? '1' : '0')};
+  margin-right: ${p => (p.$isOpen ? '0px' : '-200px')};
+  opacity: ${p => (p.$isOpen ? '1' : '0')};
   position: absolute;
   right: 10px;
   top: 316px;

@@ -4,11 +4,11 @@ import Point from 'ol/geom/Point'
 import { transform } from 'ol/proj'
 
 import { LayerProperties } from './layers/constants'
+import { MonitorFishLayer } from './layers/types'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './map/constants'
 import { Vessel } from './vessel/vessel'
 import { COLORS } from '../../constants/constants'
 import { theme } from '../../ui/theme'
-import { MonitorFishLayer } from './layers/types'
 
 class EstimatedPosition {
   static colorProperty = 'color'

@@ -61,7 +61,7 @@ export function VesselLoader() {
           <Text data-cy="first-loader">Chargement...</Text>
         </FirstLoadWrapper>
       )}
-      <UpdateWrapper isVesselSidebarOpen={vesselSidebarIsOpen}>
+      <UpdateWrapper $isVesselSidebarOpen={vesselSidebarIsOpen}>
         {(isFetching || loadingPositions) && isAppLoaded && (
           <>
             <FulfillingBouncingCircleSpinner className="update-vessels" color={COLORS.white} size={30} />
@@ -97,11 +97,11 @@ const BigVessel = styled(VesselSVG)`
 `
 
 const UpdateWrapper = styled(MapComponent)<{
-  isVesselSidebarOpen: boolean
+  $isVesselSidebarOpen: boolean
 }>`
   position: absolute;
   top: 30px;
-  right: ${p => (p.isVesselSidebarOpen ? '510px' : '370px')};
+  right: ${p => (p.$isVesselSidebarOpen ? '510px' : '370px')};
   width: 30px;
   transform: translate(-50%, -50%);
 `

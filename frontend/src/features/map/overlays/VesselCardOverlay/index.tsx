@@ -103,7 +103,7 @@ export function VesselCardOverlay({ feature }) {
   }, [feature, setVesselFeatureToShowOnCard, overlayRef, overlayObjectRef, isSuperUser, getNextOverlayPosition])
 
   return (
-    <VesselCardOverlayComponent ref={overlayCallback} overlayTopLeftMargin={overlayTopLeftMargin}>
+    <VesselCardOverlayComponent ref={overlayCallback} $overlayTopLeftMargin={overlayTopLeftMargin}>
       {vesselFeatureToShowOnCard && (
         <VesselCard
           feature={vesselFeatureToShowOnCard}
@@ -116,11 +116,11 @@ export function VesselCardOverlay({ feature }) {
 }
 
 const VesselCardOverlayComponent = styled.div<{
-  overlayTopLeftMargin: [number, number]
+  $overlayTopLeftMargin: [number, number]
 }>`
   position: absolute;
-  top: ${p => p.overlayTopLeftMargin[0]}px;
-  left: ${p => p.overlayTopLeftMargin[1]}px;
+  top: ${p => p.$overlayTopLeftMargin[0]}px;
+  left: ${p => p.$overlayTopLeftMargin[1]}px;
   width: 387px;
   text-align: left;
   background-color: ${COLORS.gainsboro};

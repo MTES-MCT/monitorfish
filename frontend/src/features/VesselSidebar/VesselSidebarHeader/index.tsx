@@ -45,9 +45,9 @@ export function VesselSidebarHeader() {
   return (
     <>
       <VesselNameOrInput
+        $isRightMenuShrinked={isRightMenuShrinked}
         data-cy="vessel-name"
         isHidden={previewFilteredVesselsMode}
-        isRightMenuShrinked={isRightMenuShrinked}
       >
         {isVesselNameShown && (
           <VesselName focusOnVesselSearchInput={() => dispatch(setIsFocusedOnVesselSearch(true))} />
@@ -68,9 +68,9 @@ export function VesselSidebarHeader() {
         )}
       </VesselNameOrInput>
       <SearchButton
+        $isOpen={!!selectedVessel}
+        $isShrinked={isRightMenuShrinked}
         isHidden={!!previewFilteredVesselsMode}
-        isOpen={!!selectedVessel}
-        isShrinked={isRightMenuShrinked}
         onClick={() => dispatch(setIsFocusedOnVesselSearch(true))}
         onMouseEnter={() => dispatch(expandRightMenu())}
         title="Rechercher un navire"
@@ -82,12 +82,12 @@ export function VesselSidebarHeader() {
 }
 
 const VesselNameOrInput = styled(MapComponent)<{
-  isRightMenuShrinked: boolean
+  $isRightMenuShrinked: boolean
 }>`
   position: absolute;
   display: inline-block;
   top: 10px;
-  right: ${p => (p.isRightMenuShrinked ? 10 : 55)}px;
+  right: ${p => (p.$isRightMenuShrinked ? 10 : 55)}px;
   z-index: 1000;
   color: ${p => p.theme.color.gainsboro};
   text-decoration: none;
@@ -107,8 +107,8 @@ const VesselNameOrInput = styled(MapComponent)<{
 `
 
 const SearchButton = styled(MapButton)<{
-  isOpen: boolean
-  isShrinked: boolean
+  $isOpen: boolean
+  $isShrinked: boolean
 }>`
   width: 40px;
   height: 40px;
@@ -118,15 +118,15 @@ const SearchButton = styled(MapButton)<{
   cursor: pointer;
   border-radius: 2px;
   position: absolute;
-  width: ${p => (p.isShrinked ? 5 : 40)}px;
-  border-radius: ${p => (p.isShrinked ? 1 : 2)}px;
-  right: ${p => (p.isShrinked ? 0 : 10)}px;
-  background: ${p => (p.isOpen ? p.theme.color.blueGray : p.theme.color.charcoal)};
+  width: ${p => (p.$isShrinked ? 5 : 40)}px;
+  border-radius: ${p => (p.$isShrinked ? 1 : 2)}px;
+  right: ${p => (p.$isShrinked ? 0 : 10)}px;
+  background: ${p => (p.$isOpen ? p.theme.color.blueGray : p.theme.color.charcoal)};
   transition: all 0.3s;
 
   &:hover,
   &:focus {
-    background: ${p => (p.isOpen ? p.theme.color.blueGray : p.theme.color.charcoal)};
+    background: ${p => (p.$isOpen ? p.theme.color.blueGray : p.theme.color.charcoal)};
   }
 `
 

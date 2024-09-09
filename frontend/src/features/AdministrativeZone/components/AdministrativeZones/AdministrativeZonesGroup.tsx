@@ -21,13 +21,13 @@ export function AdministrativeZonesGroup({ group, showOrHideZone, zones }: Admin
 
   return (
     <Row>
-      <Zone isOpen={isOpen}>
+      <Zone $isOpen={isOpen}>
         <Text onClick={() => setIsOpen(!isOpen)} title={group.name}>
           {group.name}
         </Text>
         <Chevron $isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
       </Zone>
-      <List isOpen={isOpen} length={zones.length} title={group.name.replace(/\s/g, '-')}>
+      <List $isOpen={isOpen} $length={zones.length} title={group.name.replace(/\s/g, '-')}>
         {zones.map((zone, index) => (
           <AdministrativeZone
             key={zone.code}
@@ -68,7 +68,7 @@ const Text = styled.span`
 `
 
 const Zone = styled.span<{
-  isOpen: boolean
+  $isOpen: boolean
 }>`
   width: 100%;
   width: -moz-available;
@@ -77,7 +77,7 @@ const Zone = styled.span<{
   display: flex;
   user-select: none;
   padding-bottom: 2px;
-  ${p => (!p.isOpen ? null : `border-bottom: 1px solid ${COLORS.lightGray};`)}
+  ${p => (!p.$isOpen ? null : `border-bottom: 1px solid ${COLORS.lightGray};`)}
 
   &:hover {
     background: ${THEME.color.blueGray25};
@@ -85,10 +85,10 @@ const Zone = styled.span<{
 `
 
 const List = styled.div<{
-  isOpen: boolean
-  length: number
+  $isOpen: boolean
+  $length: number
 }>`
-  height: ${p => (p.isOpen && p.length ? p.length * 37 + 10 : 0)}px;
+  height: ${p => (p.$isOpen && p.$length ? p.$length * 37 + 10 : 0)}px;
   overflow: hidden;
   transition: 0.2s all;
 `

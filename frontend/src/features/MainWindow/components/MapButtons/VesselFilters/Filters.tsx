@@ -56,7 +56,7 @@ export function Filters() {
   )
 
   return (
-    <VesselFilterBox isOpen={isOpen}>
+    <VesselFilterBox $isOpen={isOpen}>
       <Header $isFirst>Mes filtres</Header>
       {filters.length > 0 ? (
         <FiltersSelectedList>

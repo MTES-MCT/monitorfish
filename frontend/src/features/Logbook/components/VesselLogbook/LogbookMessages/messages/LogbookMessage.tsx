@@ -73,14 +73,14 @@ export function LogbookMessage({
   )
 
   return (
-    <Wrapper id={logbookMessage.operationNumber} isFirst={isFirst}>
+    <Wrapper $isFirst={isFirst} id={logbookMessage.operationNumber}>
       <Header>
         {!isManuallyCreated && <LogbookMessageTypeText>{getLogbookMessageType(logbookMessage)}</LogbookMessageTypeText>}
         <LogbookMessageHeaderText
-          data-cy="vessel-fishing-message"
-          isShortcut={
+          $isShortcut={
             logbookMessage.isCorrectedByNewerMessage || logbookMessage.isDeleted || !!logbookMessage.referencedReportId
           }
+          data-cy="vessel-fishing-message"
           title={logbookHeaderTitle}
         >
           {logbookHeaderTitle}
@@ -287,9 +287,9 @@ const Body = styled.div`
 `
 
 const Wrapper = styled.div<{
-  isFirst: boolean
+  $isFirst: boolean
 }>`
-  margin-top: ${p => (p.isFirst ? '5' : '10')}px;
+  margin-top: ${p => (p.$isFirst ? '5' : '10')}px;
   font-size: 13px;
   background: ${p => p.theme.color.white};
   text-align: left;
@@ -304,14 +304,14 @@ const Header = styled.div`
 `
 
 const LogbookMessageHeaderText = styled.span<{
-  isShortcut: boolean
+  $isShortcut: boolean
 }>`
   color: ${p => p.theme.color.white};
   flex-grow: 1;
   font-size: 13px;
   font-weight: 500;
   margin: 5px 5px 5px 5px;
-  /* max-width: ${p => (p.isShortcut ? '185px' : '330px')}; */
+  /* max-width: ${p => (p.$isShortcut ? '185px' : '330px')}; */
   overflow: hidden !important;
   padding: 3px 4px 2px 0;
   text-overflow: ellipsis;

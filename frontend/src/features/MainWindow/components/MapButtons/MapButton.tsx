@@ -18,7 +18,7 @@ export function MapButton({ children, isHidden, ...props }: MapButtonType) {
      */
     /* eslint-disable react/jsx-props-no-spreading */
     // @ts-ignore
-    <Wrapper hasHealthcheckTextWarning={!!healthcheckTextWarning.length} isHidden={isHidden} {...props}>
+    <Wrapper $hasHealthcheckTextWarning={!!healthcheckTextWarning.length} $isHidden={isHidden} {...props}>
       {children}
     </Wrapper>
     /* eslint-enable react/jsx-props-no-spreading */
@@ -26,9 +26,9 @@ export function MapButton({ children, isHidden, ...props }: MapButtonType) {
 }
 
 const Wrapper = styled.button<{
-  hasHealthcheckTextWarning?: boolean | undefined
-  isHidden?: boolean | undefined
+  $hasHealthcheckTextWarning?: boolean | undefined
+  $isHidden?: boolean | undefined
 }>`
-  margin-top: ${p => (p.hasHealthcheckTextWarning ? 50 : 0)}px;
-  visibility: ${p => (p.isHidden ? 'hidden' : 'visible')};
+  margin-top: ${p => (p.$hasHealthcheckTextWarning ? 50 : 0)}px;
+  visibility: ${p => (p.$isHidden ? 'hidden' : 'visible')};
 `

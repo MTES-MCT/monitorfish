@@ -44,7 +44,7 @@ export function DEPMessage({ message }: DEPMessageProps) {
             {message.gearOnboard?.length ? (
               message.gearOnboard.map((gear, index) => (
                 // eslint-disable-next-line react/no-array-index-key
-                <Gear key={index} isFirst={index === 0}>
+                <Gear key={index} $isFirst={index === 0}>
                   <SubKey>Engin à bord {index + 1}</SubKey>{' '}
                   <SubValue>{getCodeWithNameOrDash(gear.gear, gear.gearName)}</SubValue>
                   <HorizontalAlign>
@@ -102,11 +102,11 @@ const HorizontalItem = styled.div`
 `
 
 const Gear = styled.div<{
-  isFirst: boolean
+  $isFirst: boolean
 }>`
   width: -moz-available;
   width: -webkit-fill-available;
-  margin-top: ${p => (p.isFirst ? 0 : 5)}px;
+  margin-top: ${p => (p.$isFirst ? 0 : 5)}px;
   line-height: 21px;
 `
 

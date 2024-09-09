@@ -14,9 +14,9 @@ export function MapComponent({ children, className, isHidden, ...props }: MapCom
 
   return (
     <Wrapper
+      $hasHealthcheckTextWarning={!!healthcheckTextWarning.length}
+      $isHidden={isHidden}
       className={className}
-      hasHealthcheckTextWarning={!!healthcheckTextWarning.length}
-      isHidden={isHidden}
       /* eslint-disable-next-line react/jsx-props-no-spreading */
       {...props}
     >
@@ -26,9 +26,9 @@ export function MapComponent({ children, className, isHidden, ...props }: MapCom
 }
 
 const Wrapper = styled.div<{
-  hasHealthcheckTextWarning?: boolean | undefined
-  isHidden?: boolean | undefined
+  $hasHealthcheckTextWarning?: boolean | undefined
+  $isHidden?: boolean | undefined
 }>`
-  margin-top: ${p => (p.hasHealthcheckTextWarning ? 50 : 0)}px;
-  visibility: ${p => (p.isHidden ? 'hidden' : 'visible')};
+  margin-top: ${p => (p.$hasHealthcheckTextWarning ? 50 : 0)}px;
+  visibility: ${p => (p.$isHidden ? 'hidden' : 'visible')};
 `

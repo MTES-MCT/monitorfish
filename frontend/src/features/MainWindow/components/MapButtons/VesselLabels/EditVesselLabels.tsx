@@ -29,9 +29,9 @@ export function EditVesselLabels() {
   const isOpen = useMemo(() => rightMapBoxOpened === MapBox.VESSEL_LABELS, [rightMapBoxOpened])
 
   return (
-    <Wrapper isOpen={isOpen}>
+    <Wrapper $isOpen={isOpen}>
       <Header>Affichage des étiquettes {isSuperUser ? 'et notes des navires' : ''}</Header>
-      <Content hasMargin>
+      <Content $hasMargin>
         <MultiRadio
           label="Choisir le libellé des étiquettes des navires"
           name="vesselLabelRadio"

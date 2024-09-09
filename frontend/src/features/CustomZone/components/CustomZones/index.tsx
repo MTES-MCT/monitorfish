@@ -79,10 +79,10 @@ export function CustomZones({ hideLayersListWhenSearching = false, namespace }: 
 
   return (
     <>
-      <Title data-cy="custom-zones-toggle" isOpened={isOpened} onClick={onSectionTitleClicked}>
+      <Title $isOpened={isOpened} data-cy="custom-zones-toggle" onClick={onSectionTitleClicked}>
         Mes zones importées <ChevronIcon $isOpen={isOpened} />
       </Title>
-      <List isOpened={isOpened} zonesLength={zonesLength}>
+      <List $isOpened={isOpened} $zonesLength={zonesLength}>
         {zoneList.map(zone => (
           <CustomZone
             key={zone.uuid}
@@ -111,7 +111,7 @@ const HowTo = styled.li`
 `
 
 const Title = styled.div<{
-  isOpened: boolean
+  $isOpened: boolean
 }>`
   height: 30px;
   padding-left: 20px;
@@ -125,8 +125,8 @@ const Title = styled.div<{
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
-  border-bottom-left-radius: ${p => (p.isOpened ? '0' : '2px')};
-  border-bottom-right-radius: ${p => (p.isOpened ? '0' : '2px')};
+  border-bottom-left-radius: ${p => (p.$isOpened ? '0' : '2px')};
+  border-bottom-right-radius: ${p => (p.$isOpened ? '0' : '2px')};
 
   .Element-IconBox {
     float: right;
@@ -135,14 +135,14 @@ const Title = styled.div<{
 `
 
 const List = styled.ul<{
-  isOpened: boolean
-  zonesLength: number
+  $isOpened: boolean
+  $zonesLength: number
 }>`
   margin: 0;
   padding: 0;
   overflow-x: hidden;
   max-height: 48vh;
-  height: ${p => (p.isOpened ? 36 * p.zonesLength + 110 : 0)}px;
+  height: ${p => (p.$isOpened ? 36 * p.$zonesLength + 110 : 0)}px;
   background: ${COLORS.white};
   transition: 0.5s all;
   border-bottom-left-radius: 2px;

@@ -11,7 +11,7 @@
   },
   "scripts": {
     "build": "vite build && npm run bundle-sw",
-    "clean": "rm -Rf ./node-modules/.vite ./node-modules/build",
+    "clean": "rm -Rf ./node-modules/.vite ./build",
     "dev": "import-meta-env-prepare -x ./.env.local.defaults && vite --port 3000",
     "dev-cypress": "FRONTEND_OIDC_ENABLED=false import-meta-env-prepare -u -x ./.env.local.defaults && vite --port 3000",
     "dev-monitorenv": "FRONTEND_MONITORENV_URL=//localhost:9880 import-meta-env-prepare -u -x ./.env.local.defaults && vite --port 3000",
@@ -142,9 +142,9 @@
     "ts-jest": "29.2.5",
     "type-fest": "4.26.0",
     "typescript": "5.5.4",
-    "vite": "4.5.3",
+    "vite": "5.4.3",
     "vite-plugin-svgr": "4.2.0",
-    "vite-tsconfig-paths": "4.3.2"
+    "vite-tsconfig-paths": "5.0.1"
   },
   "overrides": {
     "socket.io": ">=2.5.0",

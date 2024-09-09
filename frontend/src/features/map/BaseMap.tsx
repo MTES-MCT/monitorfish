@@ -17,7 +17,7 @@ import type { VectorLayerWithName } from '../../domain/types/layer'
 import type { Coordinates } from '@mtes-mct/monitor-ui'
 import type { FeatureLike } from 'ol/Feature'
 import type { AnimationOptions } from 'ol/View'
-import type { HTMLProps, PropsWithChildren } from 'react'
+import type { PropsWithChildren } from 'react'
 
 let lastEventForPointerMove
 let timeoutForPointerMove
@@ -226,8 +226,8 @@ export function BaseMap({
       <MapContainer
         // @ts-ignore
         ref={mapElement}
-        hasHealthcheckTextWarning={!!healthcheckTextWarning.length}
-        isPreviewFilteredVesselsMode={!!previewFilteredVesselsMode}
+        $hasHealthcheckTextWarning={!!healthcheckTextWarning.length}
+        $isPreviewFilteredVesselsMode={!!previewFilteredVesselsMode}
       />
       {showCoordinates && <MapCoordinatesBox coordinates={cursorCoordinates} />}
       {showAttributions && <MapAttributionsBox />}
@@ -241,13 +241,11 @@ const MapWrapper = styled.div`
   flex: 1;
 `
 
-const MapContainer = styled.div<
-  {
-    hasHealthcheckTextWarning: boolean
-    isPreviewFilteredVesselsMode: boolean
-  } & HTMLProps<HTMLDivElement>
->`
-  height: ${p => (p.hasHealthcheckTextWarning || p.isPreviewFilteredVesselsMode ? 'calc(100vh - 50px)' : '100vh')};
+const MapContainer = styled.div<{
+  $hasHealthcheckTextWarning: boolean
+  $isPreviewFilteredVesselsMode: boolean
+}>`
+  height: ${p => (p.$hasHealthcheckTextWarning || p.$isPreviewFilteredVesselsMode ? 'calc(100vh - 50px)' : '100vh')};
   width: 100%;
   overflow-y: hidden;
   overflow-x: hidden;

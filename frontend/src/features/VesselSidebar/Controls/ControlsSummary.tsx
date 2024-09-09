@@ -33,19 +33,19 @@ export function ControlsSummary({ controlsFromDate, lastControls, summary }: Con
           numberOfControlsWithSomeSpeciesSeized={numberOfControlsWithSomeSpeciesSeized}
           numberOfDiversions={numberOfDiversions}
         />
-        <Columns isFirst>
+        <Columns $isFirst>
           <IconColumn>
             <Sea />
           </IconColumn>
           <LastControl field={lastControls.SEA} />
         </Columns>
-        <Columns isFirst={false}>
+        <Columns $isFirst={false}>
           <IconColumn>
             <Icon.Anchor color={theme.color.slateGray} />
           </IconColumn>
           <LastControl field={lastControls.LAND} />
         </Columns>
-        <Columns isFirst={false}>
+        <Columns $isFirst={false}>
           <IconColumn>
             <Caution />
           </IconColumn>
@@ -63,10 +63,10 @@ const Body = styled.div`
 `
 
 const Columns = styled.div<{
-  isFirst: boolean
+  $isFirst: boolean
 }>`
   display: flex;
-  margin-top: ${p => (p.isFirst ? 6 : 12)}px;
+  margin-top: ${p => (p.$isFirst ? 6 : 12)}px;
 `
 
 const IconColumn = styled.div`

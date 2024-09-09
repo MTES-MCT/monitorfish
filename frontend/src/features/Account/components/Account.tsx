@@ -24,7 +24,7 @@ export function Account() {
 
   return (
     <Wrapper>
-      <MissionMenuBox data-cy="map-account-box" isOpen={rightMapBoxOpened === MapBox.ACCOUNT}>
+      <MissionMenuBox $isOpen={rightMapBoxOpened === MapBox.ACCOUNT} data-cy="map-account-box">
         <StyledContainer>
           <MapMenuDialog.Header>
             <MapMenuDialog.Title>Déconnexion</MapMenuDialog.Title>

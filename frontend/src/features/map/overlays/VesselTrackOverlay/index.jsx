@@ -76,7 +76,7 @@ function VesselTrackOverlay({ feature }) {
   }
 
   return (
-    <VesselTrackCardOverlayComponent ref={overlayCallback} overlayTopLeftMargin={overlayTopLeftMargin}>
+    <VesselTrackCardOverlayComponent ref={overlayCallback} $overlayTopLeftMargin={overlayTopLeftMargin}>
       {vesselFeatureToShowOnCard ? (
         <VesselTrackCard feature={vesselFeatureToShowOnCard} overlayPosition={overlayPosition} />
       ) : null}
@@ -86,8 +86,8 @@ function VesselTrackOverlay({ feature }) {
 
 const VesselTrackCardOverlayComponent = styled.div`
   position: absolute;
-  top: ${props => props.overlayTopLeftMargin[0]}px;
-  left: ${props => props.overlayTopLeftMargin[1]}px;
+  top: ${props => props.$overlayTopLeftMargin[0]}px;
+  left: ${props => props.$overlayTopLeftMargin[1]}px;
   width: 350px;
   text-align: left;
   background-color: ${COLORS.gainsboro};

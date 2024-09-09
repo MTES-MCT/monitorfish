@@ -9,10 +9,10 @@ import { COLORS } from '../../../../../constants/constants'
 import { getNumberOfInfractions } from '../../../../../domain/entities/controls'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { getDate } from '../../../../../utils'
+import GyroRedSVG from '../../../../icons/Gyrophare_controles_rouge.svg?react'
+import GyroGreenSVG from '../../../../icons/Gyrophare_controles_vert.svg?react'
 import { MissionAction } from '../../../../Mission/missionAction.types'
 import { editMission } from '../../../../Mission/useCases/editMission'
-import GyroRedSVG from '../../icons/Gyrophare_controles_rouge.svg?react'
-import GyroGreenSVG from '../../icons/Gyrophare_controles_vert.svg?react'
 
 type ControlProps = Readonly<{
   control: MissionAction.MissionAction

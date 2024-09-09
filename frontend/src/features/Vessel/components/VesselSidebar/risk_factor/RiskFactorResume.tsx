@@ -16,9 +16,9 @@ import {
 } from '../../../../../domain/entities/vessel/riskFactor'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import { ChevronIcon } from '../../../../commonStyles/icons/ChevronIcon.style'
-import RiskFactorControlSVG from '../../icons/Note_de_controle_gyrophare.svg?react'
-import RiskFactorImpactSVG from '../../icons/Note_impact_poisson.svg?react'
-import RiskFactorInfractionsSVG from '../../icons/Note_infraction_stop.svg?react'
+import RiskFactorControlSVG from '../../../../icons/Note_de_controle_gyrophare.svg?react'
+import RiskFactorImpactSVG from '../../../../icons/Note_impact_poisson.svg?react'
+import RiskFactorInfractionsSVG from '../../../../icons/Note_infraction_stop.svg?react'
 
 export function RiskFactorResume() {
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)

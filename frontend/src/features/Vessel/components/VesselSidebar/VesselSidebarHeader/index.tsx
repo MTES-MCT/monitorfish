@@ -1,19 +1,19 @@
+import { MapButton } from '@features/MainWindow/components/MapButtons/MapButton'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { vesselsAreEquals } from 'domain/entities/vessel/vessel'
+import { expandRightMenu } from 'domain/shared_slices/Global'
+import { setIsFocusedOnVesselSearch } from 'domain/shared_slices/Vessel'
+import { showVessel } from 'domain/use_cases/vessel/showVessel'
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { VesselName } from './VesselName'
-import { vesselsAreEquals } from '../../../../../domain/entities/vessel/vessel'
-import { expandRightMenu } from '../../../../../domain/shared_slices/Global'
-import { setIsFocusedOnVesselSearch } from '../../../../../domain/shared_slices/Vessel'
-import { showVessel } from '../../../../../domain/use_cases/vessel/showVessel'
 import { MapComponent } from '../../../../commonStyles/MapComponent'
-import { MapButton } from '../../../../MainWindow/components/MapButtons/MapButton'
+import SearchIconSVG from '../../../../icons/Loupe.svg?react'
 import { VesselSearch } from '../../../../VesselSearch'
-import SearchIconSVG from '../../icons/Loupe.svg?react'
 
-import type { VesselIdentity } from '../../../../../domain/entities/vessel/types'
+import type { VesselIdentity } from 'domain/entities/vessel/types'
 
 export function VesselSidebarHeader() {
   const dispatch = useMainAppDispatch()

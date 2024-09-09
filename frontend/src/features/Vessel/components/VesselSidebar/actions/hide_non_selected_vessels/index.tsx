@@ -1,11 +1,11 @@
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME } from '@mtes-mct/monitor-ui'
+import { setHideNonSelectedVessels } from 'domain/shared_slices/Vessel'
 import styled from 'styled-components'
 
-import { setHideNonSelectedVessels } from '../../../../../../domain/shared_slices/Vessel'
-import { useMainAppDispatch } from '../../../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
-import HidingOtherTracksSVG from '../../../icons/Bouton_masquer_pistes_actif.svg?react'
-import ShowingOtherTracksSVG from '../../../icons/Bouton_masquer_pistes_inactif.svg?react'
+import HidingOtherTracksSVG from '../../../../../icons/Bouton_masquer_pistes_actif.svg?react'
+import ShowingOtherTracksSVG from '../../../../../icons/Bouton_masquer_pistes_inactif.svg?react'
 import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
 
 export function HideNonSelectedVessels({ isSidebarOpen }) {

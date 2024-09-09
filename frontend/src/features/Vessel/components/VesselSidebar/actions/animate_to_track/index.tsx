@@ -1,9 +1,9 @@
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { animateToExtent } from 'domain/shared_slices/Map'
 import styled from 'styled-components'
 
-import { animateToExtent } from '../../../../../../domain/shared_slices/Map'
-import { useMainAppDispatch } from '../../../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
-import ShowTrackSVG from '../../../icons/Bouton_afficher_toute_la_piste.svg?react'
+import ShowTrackSVG from '../../../../../icons/Bouton_afficher_toute_la_piste.svg?react'
 import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
 
 export function AnimateToTrack({ isSidebarOpen }) {

@@ -1,19 +1,13 @@
 import { usePrevious } from '@mtes-mct/monitor-ui'
-import GeoJSON from 'ol/format/GeoJSON'
-import LineString from 'ol/geom/LineString'
+import { useEffect, useRef, useState } from 'react'
+
+import { useDispatch, useSelector } from 'react-redux'
+import VectorSource from 'ol/source/Vector'
+import { MapBox, OPENLAYERS_PROJECTION } from '../../../domain/entities/map/constants'
 import Draw from 'ol/interaction/Draw'
 import VectorLayer from 'ol/layer/Vector'
-import { getLength } from 'ol/sphere'
-import { useEffect, useRef, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { v4 as uuidv4 } from 'uuid'
-
 import { getInterestPointStyle, POIStyle } from './interestPoint.style'
-import { InterestPointLine } from './interestPointLine'
-import { LayerProperties } from '../../../domain/entities/layers/constants'
-import { MapBox, OPENLAYERS_PROJECTION } from '../../../domain/entities/map/constants'
-import saveInterestPointFeature from '../../../domain/use_cases/interestPoint/saveInterestPointFeature'
-import { monitorfishMap } from '../../map/monitorfishMap'
+import { v4 as uuidv4 } from 'uuid'
 import { InterestPointOverlay } from '../components/InterestPointOverlay'
 import {
   deleteInterestPointBeingDrawed,
@@ -24,7 +18,19 @@ import {
   updateInterestPointBeingDrawed,
   updateInterestPointKeyBeingDrawed
 } from '../slice'
-import { coordinatesAreModified, coordinatesOrTypeAreModified, InterestPointType } from '../utils'
+import {
+  coordinatesAreModified,
+  coordinatesOrTypeAreModified,
+  InterestPointType
+} from '../utils'
+import saveInterestPointFeature from '../../../domain/use_cases/interestPoint/saveInterestPointFeature'
+import GeoJSON from 'ol/format/GeoJSON'
+import LineString from 'ol/geom/LineString'
+import { InterestPointLine } from './interestPointLine'
+import { getLength } from 'ol/sphere'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
+import { setRightMapBoxOpened } from '../../../features/MainWindow/slice'
+import { monitorfishMap } from '../../map/monitorfishMap'
 
 const DRAW_START_EVENT = 'drawstart'
 const DRAW_ABORT_EVENT = 'drawabort'
@@ -32,46 +38,44 @@ const DRAW_END_EVENT = 'drawend'
 
 export const MIN_ZOOM = 7
 
-function InterestPointLayer({ mapMovingAndZoomEvent }) {
+const InterestPointLayer = ({ mapMovingAndZoomEvent }) => {
   const dispatch = useDispatch()
 
   const {
-    interestPointBeingDrawed,
-    interestPoints,
-    /** @type {InterestPoint | null} interestPointBeingDrawed */
     isDrawing,
-    /** @type {InterestPoint[]} interestPoints */
     isEditing,
+    /** @type {InterestPoint | null} interestPointBeingDrawed */
+    interestPointBeingDrawed,
+    /** @type {InterestPoint[]} interestPoints */
+    interestPoints,
     triggerInterestPointFeatureDeletion
   } = useSelector(state => state.interestPoint)
 
   const [drawObject, setDrawObject] = useState(null)
 
   const vectorSourceRef = useRef(null)
-  function getVectorSource() {
+  function getVectorSource () {
     if (vectorSourceRef.current === null) {
       vectorSourceRef.current = new VectorSource({
-        projection: OPENLAYERS_PROJECTION,
-        wrapX: false
+        wrapX: false,
+        projection: OPENLAYERS_PROJECTION
       })
     }
-
     return vectorSourceRef.current
   }
 
   const layerRef = useRef(null)
-  function getLayer() {
+  function getLayer () {
     if (layerRef.current === null) {
       layerRef.current = new VectorLayer({
-        renderBuffer: 7,
         source: getVectorSource(),
-        style: (feature, resolution) => getInterestPointStyle(feature, resolution),
+        renderBuffer: 7,
         updateWhileAnimating: true,
         updateWhileInteracting: true,
+        style: (feature, resolution) => getInterestPointStyle(feature, resolution),
         zIndex: LayerProperties.INTEREST_POINT.zIndex
       })
     }
-
     return layerRef.current
   }
 
@@ -80,7 +84,7 @@ function InterestPointLayer({ mapMovingAndZoomEvent }) {
   const previousInterestPointBeingDrawed = usePrevious(interestPointBeingDrawed)
 
   useEffect(() => {
-    function addLayerToMap() {
+    function addLayerToMap () {
       monitorfishMap.getLayers().push(getLayer())
 
       return () => {
@@ -92,24 +96,22 @@ function InterestPointLayer({ mapMovingAndZoomEvent }) {
   }, [])
 
   useEffect(() => {
-    function drawExistingFeaturesOnMap() {
+    function drawExistingFeaturesOnMap () {
       if (interestPoints) {
-        const features = interestPoints
-          .map(interestPoint => {
-            if (interestPoint.feature) {
-              const nextFeature = new GeoJSON({
-                featureProjection: OPENLAYERS_PROJECTION
-              }).readFeature(interestPoint.feature)
+        const features = interestPoints.map(interestPoint => {
+          if (interestPoint.feature) {
+            const nextFeature = new GeoJSON({
+              featureProjection: OPENLAYERS_PROJECTION
+            }).readFeature(interestPoint.feature)
 
-              const { feature, ...interestPointWithoutFeature } = interestPoint
-              nextFeature.setProperties(interestPointWithoutFeature)
+            const { feature, ...interestPointWithoutFeature } = interestPoint
+            nextFeature.setProperties(interestPointWithoutFeature)
 
-              return nextFeature
-            }
+            return nextFeature
+          }
 
-            return null
-          })
-          .filter(feature => feature)
+          return null
+        }).filter(feature => feature)
 
         getVectorSource().addFeatures(features)
       }
@@ -120,23 +122,21 @@ function InterestPointLayer({ mapMovingAndZoomEvent }) {
 
   useEffect(() => {
     if (isDrawing) {
-      function addEmptyNextInterestPoint() {
-        dispatch(
-          updateInterestPointBeingDrawed({
-            coordinates: null,
-            name: null,
-            observations: null,
-            type: InterestPointType.FISHING_VESSEL,
-            uuid: uuidv4()
-          })
-        )
+      function addEmptyNextInterestPoint () {
+        dispatch(updateInterestPointBeingDrawed({
+          uuid: uuidv4(),
+          name: null,
+          type: InterestPointType.FISHING_VESSEL,
+          coordinates: null,
+          observations: null
+        }))
       }
 
-      function drawNewFeatureOnMap() {
+      function drawNewFeatureOnMap () {
         const draw = new Draw({
           source: getVectorSource(),
-          style: POIStyle,
-          type: 'Point'
+          type: 'Point',
+          style: POIStyle
         })
 
         monitorfishMap.addInteraction(draw)
@@ -149,11 +149,11 @@ function InterestPointLayer({ mapMovingAndZoomEvent }) {
   }, [isDrawing])
 
   useEffect(() => {
-    function removeInteraction() {
+    function removeInteraction () {
       if (!isDrawing && drawObject) {
         setDrawObject(null)
 
-        function waitForUnwantedZoomAndQuitInteraction() {
+        function waitForUnwantedZoomAndQuitInteraction () {
           setTimeout(() => {
             monitorfishMap.removeInteraction(drawObject)
           }, 300)
@@ -167,19 +167,17 @@ function InterestPointLayer({ mapMovingAndZoomEvent }) {
   }, [isDrawing])
 
   useEffect(() => {
-    function handleDrawEvents() {
+    function handleDrawEvents () {
       if (drawObject) {
         drawObject.once(DRAW_START_EVENT, event => {
-          function startDrawing(event, type) {
-            dispatch(
-              updateInterestPointBeingDrawed({
-                coordinates: event.feature.getGeometry().getLastCoordinate(),
-                name: null,
-                observations: null,
-                type,
-                uuid: interestPointBeingDrawed.uuid
-              })
-            )
+          function startDrawing (event, type) {
+            dispatch(updateInterestPointBeingDrawed({
+              uuid: interestPointBeingDrawed.uuid,
+              name: null,
+              type: type,
+              coordinates: event.feature.getGeometry().getLastCoordinate(),
+              observations: null
+            }))
           }
 
           if (interestPointBeingDrawed) {
@@ -204,7 +202,7 @@ function InterestPointLayer({ mapMovingAndZoomEvent }) {
   }, [drawObject, interestPointBeingDrawed])
 
   useEffect(() => {
-    function showOrHideInterestPointsOverlays() {
+    function showOrHideInterestPointsOverlays () {
       const currentZoom = monitorfishMap.getView().getZoom().toFixed(2)
       if (currentZoom !== previousMapZoom.current) {
         previousMapZoom.current = currentZoom
@@ -231,7 +229,7 @@ function InterestPointLayer({ mapMovingAndZoomEvent }) {
   }, [triggerInterestPointFeatureDeletion])
 
   useEffect(() => {
-    function modifyFeatureWhenCoordinatesOrTypeModified() {
+    function modifyFeatureWhenCoordinatesOrTypeModified () {
       if (interestPointBeingDrawed?.coordinates?.length && interestPointBeingDrawed?.uuid) {
         const drawingFeatureToUpdate = getVectorSource().getFeatureById(interestPointBeingDrawed.uuid)
 
@@ -240,16 +238,13 @@ function InterestPointLayer({ mapMovingAndZoomEvent }) {
           drawingFeatureToUpdate.getGeometry().setCoordinates(interestPointWithoutFeature.coordinates)
           drawingFeatureToUpdate.setProperties(interestPointWithoutFeature)
 
-          const nextFeature = new GeoJSON().writeFeatureObject(drawingFeatureToUpdate, {
-            featureProjection: OPENLAYERS_PROJECTION
-          })
+          const nextFeature = new GeoJSON()
+            .writeFeatureObject(drawingFeatureToUpdate, { featureProjection: OPENLAYERS_PROJECTION })
 
-          dispatch(
-            updateInterestPointKeyBeingDrawed({
-              key: 'feature',
-              value: nextFeature
-            })
-          )
+          dispatch(updateInterestPointKeyBeingDrawed({
+            key: 'feature',
+            value: nextFeature
+          }))
         }
       }
     }
@@ -258,16 +253,9 @@ function InterestPointLayer({ mapMovingAndZoomEvent }) {
   }, [interestPointBeingDrawed?.coordinates, interestPointBeingDrawed?.type])
 
   useEffect(() => {
-    function initLineWhenInterestPointCoordinatesModified() {
-      if (
-        interestPointBeingDrawed &&
-        previousInterestPointBeingDrawed &&
-        coordinatesAreModified(interestPointBeingDrawed, previousInterestPointBeingDrawed)
-      ) {
-        const line = new LineString([
-          interestPointBeingDrawed.coordinates,
-          previousInterestPointBeingDrawed.coordinates
-        ])
+    function initLineWhenInterestPointCoordinatesModified () {
+      if (interestPointBeingDrawed && previousInterestPointBeingDrawed && coordinatesAreModified(interestPointBeingDrawed, previousInterestPointBeingDrawed)) {
+        const line = new LineString([interestPointBeingDrawed.coordinates, previousInterestPointBeingDrawed.coordinates])
         const distance = getLength(line, { projection: OPENLAYERS_PROJECTION })
 
         if (distance > 10) {
@@ -276,9 +264,7 @@ function InterestPointLayer({ mapMovingAndZoomEvent }) {
             interestPointToCoordinates.delete(featureId)
             const feature = getVectorSource().getFeatureById(featureId)
             if (feature) {
-              feature.setGeometry(
-                new LineString([interestPointBeingDrawed.coordinates, interestPointBeingDrawed.coordinates])
-              )
+              feature.setGeometry(new LineString([interestPointBeingDrawed.coordinates, interestPointBeingDrawed.coordinates]))
             }
           }
         }
@@ -288,7 +274,7 @@ function InterestPointLayer({ mapMovingAndZoomEvent }) {
     initLineWhenInterestPointCoordinatesModified()
   }, [interestPointBeingDrawed])
 
-  function deleteInterestPoint(uuid) {
+  function deleteInterestPoint (uuid) {
     const feature = getVectorSource().getFeatureById(uuid)
     if (feature) {
       getVectorSource().removeFeature(feature)
@@ -304,7 +290,7 @@ function InterestPointLayer({ mapMovingAndZoomEvent }) {
     dispatch(removeInterestPoint(uuid))
   }
 
-  function moveInterestPointLine(uuid, coordinates, nextCoordinates, offset) {
+  function moveInterestPointLine (uuid, coordinates, nextCoordinates, offset) {
     const featureId = InterestPointLine.getFeatureId(uuid)
 
     if (interestPointToCoordinates.has(featureId)) {
@@ -313,13 +299,14 @@ function InterestPointLayer({ mapMovingAndZoomEvent }) {
 
       if (existingLabelLineFeature) {
         if (interestPointFeature) {
-          existingLabelLineFeature.setGeometry(
-            new LineString([interestPointFeature.getGeometry().getCoordinates(), nextCoordinates])
-          )
+          existingLabelLineFeature.setGeometry(new LineString([interestPointFeature.getGeometry().getCoordinates(), nextCoordinates]))
         }
       }
     } else {
-      const interestPointLineFeature = InterestPointLine.getFeature(coordinates, nextCoordinates, featureId)
+      const interestPointLineFeature = InterestPointLine.getFeature(
+        coordinates,
+        nextCoordinates,
+        featureId)
 
       getVectorSource().addFeature(interestPointLineFeature)
     }
@@ -329,12 +316,12 @@ function InterestPointLayer({ mapMovingAndZoomEvent }) {
     setInterestPointToCoordinates(nextVesselToCoordinates)
   }
 
-  function modifyInterestPoint(uuid) {
+  function modifyInterestPoint (uuid) {
     dispatch(editInterestPoint(uuid))
     dispatch(setRightMapBoxOpened(MapBox.INTEREST_POINT))
   }
 
-  function deleteInterestPointBeingDrawedAndCloseTool() {
+  function deleteInterestPointBeingDrawedAndCloseTool () {
     dispatch(endInterestPointDraw())
     dispatch(setRightMapBoxOpened(undefined))
     dispatch(deleteInterestPointBeingDrawed())
@@ -343,37 +330,41 @@ function InterestPointLayer({ mapMovingAndZoomEvent }) {
   return (
     <>
       <div>
-        {interestPoints && Array.isArray(interestPoints)
-          ? interestPoints.map(interestPoint => (
-              <InterestPointOverlay
+        {
+          interestPoints && Array.isArray(interestPoints)
+            ? interestPoints.map(interestPoint => {
+              return <InterestPointOverlay
+                map={monitorfishMap}
                 key={interestPoint.uuid}
+                uuid={interestPoint.uuid}
+                name={interestPoint.name}
+                featureIsShowed={true}
+                observations={interestPoint.observations}
                 coordinates={interestPoint.coordinates}
                 deleteInterestPoint={deleteInterestPoint}
-                featureIsShowed
-                map={monitorfishMap}
                 modifyInterestPoint={modifyInterestPoint}
-                moveLine={moveInterestPointLine}
-                name={interestPoint.name}
-                observations={interestPoint.observations}
-                uuid={interestPoint.uuid}
                 zoomHasChanged={previousMapZoom.current}
+                moveLine={moveInterestPointLine}
               />
-            ))
-          : null}
-        {interestPointBeingDrawed && !isEditing ? (
-          <InterestPointOverlay
-            coordinates={interestPointBeingDrawed.coordinates}
-            deleteInterestPoint={deleteInterestPointBeingDrawedAndCloseTool}
-            featureIsShowed={drawObject}
-            map={monitorfishMap}
-            modifyInterestPoint={() => {}}
-            moveLine={moveInterestPointLine}
-            name={interestPointBeingDrawed.name}
-            observations={interestPointBeingDrawed.observations}
-            uuid={interestPointBeingDrawed.uuid}
-            zoomHasChanged={previousMapZoom.current}
-          />
-        ) : null}
+            })
+            : null
+        }
+        {
+          interestPointBeingDrawed && !isEditing
+            ? <InterestPointOverlay
+              map={monitorfishMap}
+              uuid={interestPointBeingDrawed.uuid}
+              name={interestPointBeingDrawed.name}
+              observations={interestPointBeingDrawed.observations}
+              coordinates={interestPointBeingDrawed.coordinates}
+              featureIsShowed={drawObject}
+              deleteInterestPoint={deleteInterestPointBeingDrawedAndCloseTool}
+              modifyInterestPoint={() => {}}
+              zoomHasChanged={previousMapZoom.current}
+              moveLine={moveInterestPointLine}
+            />
+            : null
+        }
       </div>
     </>
   )

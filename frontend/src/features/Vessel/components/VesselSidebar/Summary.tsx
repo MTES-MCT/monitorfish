@@ -1,6 +1,6 @@
-import { COLORS } from '@constants/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { THEME } from '@mtes-mct/monitor-ui'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import { getCoordinates } from 'coordinates'
 import { WSG84_PROJECTION } from 'domain/entities/map/constants'
@@ -89,8 +89,8 @@ export function VesselSummary() {
           <>
             {selectedVessel?.mmsi ? (
               <Photo
+                $referrerpolicy="no-referrer"
                 onError={() => setPhotoFallback(true)}
-                referrerpolicy="no-referrer"
                 src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${selectedVessel?.mmsi}&size=thumb300`}
               />
             ) : (
@@ -154,37 +154,37 @@ export function VesselSummary() {
       {isSuperUser && <RiskFactorResume />}
     </Body>
   ) : (
-    <FingerprintSpinner className="radar" color={COLORS.charcoal} size={100} />
+    <FingerprintSpinner className="radar" color={THEME.color.charcoal} size={100} />
   )
 }
 
 const Gray = styled.span`
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   font-weight: 300;
 `
 
 const NoVessel = styled(NoVesselSVG)`
   width: 60px;
-  background: ${COLORS.gainsboro};
+  background: ${p => p.theme.color.gainsboro};
   padding: 92px 136px 92px 136px;
 `
 
 const FieldName = styled.div`
   margin-top: 9px;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   font-size: 13px;
   font-weight: normal;
 `
 
 const FieldValue = styled.div`
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   font-size: 13px;
   margin-top: 2px;
   font-weight: 500;
 `
 
 const PhotoZone = styled.div`
-  background: ${COLORS.white};
+  background: ${p => p.theme.color.white};
   display: flex;
   justify-content: center;
   margin: 5px 5px 10px 5px;
@@ -198,7 +198,7 @@ const Body = styled.div`
 `
 
 const Photo = styled.img<{
-  referrerpolicy: string
+  $referrerpolicy: string
 }>`
   max-height: 190px;
   left: auto;
@@ -206,7 +206,7 @@ const Photo = styled.img<{
 `
 
 const NoValue = styled.span`
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   font-weight: 300;
   line-height: normal;
 `
@@ -221,7 +221,7 @@ const ZoneWithoutBackground = styled.div`
 
 const LatLon = styled.div`
   order: 1;
-  background: ${COLORS.white};
+  background: ${p => p.theme.color.white};
   margin: 0;
   padding: 1px 10px 10px 10px;
   text-align: center;
@@ -230,7 +230,7 @@ const LatLon = styled.div`
 
 const Course = styled.div`
   order: 2;
-  background: ${COLORS.white};
+  background: ${p => p.theme.color.white};
   margin: 0 0 0 10px;
   padding: 1px 10px 10px 10px;
   text-align: center;
@@ -239,7 +239,7 @@ const Course = styled.div`
 
 const Position = styled.div`
   order: 3;
-  background: ${COLORS.white};
+  background: ${p => p.theme.color.white};
   margin: 0 0 0 10px;
   padding: 1px 10px 10px 10px;
   text-align: center;

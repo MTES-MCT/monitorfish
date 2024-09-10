@@ -3,11 +3,11 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.control_objective.ControlObjective
 import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
-import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.*
 import fr.gouv.cnsp.monitorfish.domain.repositories.ControlObjectivesRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorRepository
+import fr.gouv.cnsp.monitorfish.fakers.PortFaker
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -38,7 +38,7 @@ class ComputeRiskFactorUTests {
         val portLocode = "LOCODE"
         val fleetSegments = listOf<FleetSegment>()
         val vesselCfr = "CFR"
-        val port = Port(locode = portLocode, name = "Port name", facade = "")
+        val port = PortFaker.fakePort(locode = portLocode, name = "Port name", facade = "")
         given(portRepository.findByLocode(portLocode)).willReturn(port)
         given(riskFactorRepository.findByInternalReferenceNumber(vesselCfr)).willReturn(null)
         given(controlObjectivesRepository.findAllByYear(anyInt())).willReturn(listOf())
@@ -86,7 +86,7 @@ class ComputeRiskFactorUTests {
                 ),
             )
         val vesselCfr = "CFR"
-        val port = Port(locode = portLocode, name = "Port name", facade = "")
+        val port = PortFaker.fakePort(locode = portLocode, name = "Port name", facade = "")
         given(portRepository.findByLocode(portLocode)).willReturn(port)
         given(riskFactorRepository.findByInternalReferenceNumber(vesselCfr)).willReturn(null)
         given(controlObjectivesRepository.findAllByYear(anyInt())).willReturn(listOf())
@@ -125,7 +125,7 @@ class ComputeRiskFactorUTests {
                 ),
             )
         val vesselCfr = "CFR"
-        val port = Port(locode = portLocode, name = "Port name", facade = "")
+        val port = PortFaker.fakePort(locode = portLocode, name = "Port name", facade = "")
         val storedRiskFactor = VesselRiskFactor(probabilityRiskFactor = 0.6, controlRateRiskFactor = 0.7)
         given(portRepository.findByLocode(portLocode)).willReturn(port)
         given(riskFactorRepository.findByInternalReferenceNumber(vesselCfr)).willReturn(storedRiskFactor)
@@ -192,7 +192,7 @@ class ComputeRiskFactorUTests {
                     targetNumberOfControlsAtPort = 2,
                 ),
             )
-        val port = Port(locode = portLocode, name = "Port name", facade = "MED")
+        val port = PortFaker.fakePort(locode = portLocode, name = "Port name", facade = "MED")
         given(portRepository.findByLocode(portLocode)).willReturn(port)
         given(riskFactorRepository.findByInternalReferenceNumber(vesselCfr)).willReturn(null)
         given(controlObjectivesRepository.findAllByYear(anyInt())).willReturn(controlObjectives)
@@ -260,7 +260,7 @@ class ComputeRiskFactorUTests {
                     targetNumberOfControlsAtPort = 2,
                 ),
             )
-        val port = Port(locode = portLocode, name = "Port name", facade = "MED")
+        val port = PortFaker.fakePort(locode = portLocode, name = "Port name", facade = "MED")
         given(portRepository.findByLocode(portLocode)).willReturn(port)
         given(riskFactorRepository.findByInternalReferenceNumber(vesselCfr)).willReturn(storedRiskFactor)
         given(controlObjectivesRepository.findAllByYear(anyInt())).willReturn(controlObjectives)

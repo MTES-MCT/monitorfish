@@ -1,8 +1,8 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
-import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.use_cases.port.GetActivePorts
+import fr.gouv.cnsp.monitorfish.fakers.PortFaker
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
@@ -31,8 +31,8 @@ class PortControllerITests {
         // Given
         given(this.getActivePorts.execute()).willReturn(
             listOf(
-                Port("ET", "Etel", latitude = 47.123, longitude = 0.123),
-                Port("AY", "Auray"),
+                PortFaker.fakePort(locode = "ET", name = "Etel", latitude = 47.123, longitude = 0.123),
+                PortFaker.fakePort(locode = "AY", name = "Auray"),
             ),
         )
 

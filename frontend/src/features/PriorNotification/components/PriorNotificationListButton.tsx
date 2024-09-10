@@ -17,7 +17,7 @@ import { SideWindowMenuKey, SideWindowStatus } from '../../../domain/entities/si
 export function PriorNotificationListButton() {
   const isSuperUser = useIsSuperUser()
   const dispatch = useMainAppDispatch()
-  const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
+  const previewFilteredVesselsMode = useMainAppSelector(state => state.mainWindow.previewFilteredVesselsMode)
   const sideWindow = useMainAppSelector(state => state.sideWindow)
 
   const { data } = useGetPriorNotificationsToVerifyQuery(isSuperUser ? undefined : skipToken, {

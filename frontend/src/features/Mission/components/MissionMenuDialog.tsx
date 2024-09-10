@@ -1,4 +1,5 @@
 import { addMission } from '@features/Mission/useCases/addMission'
+import { sideWindowActions } from '@features/SideWindow/slice'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -9,7 +10,6 @@ import styled from 'styled-components'
 
 import { SideWindowMenuKey, SideWindowStatus } from '../../../domain/entities/sideWindow/constants'
 import { setDisplayedComponents } from '../../../domain/shared_slices/DisplayedComponent'
-import { sideWindowActions } from '../../../domain/shared_slices/SideWindow'
 import { mainWindowActions } from '../../MainWindow/slice'
 
 export function MissionMenuDialog() {

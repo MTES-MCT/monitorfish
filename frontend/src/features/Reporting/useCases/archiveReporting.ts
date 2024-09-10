@@ -2,6 +2,7 @@ import { archiveReportingFromAPI } from '@api/reporting'
 import { ReportingType } from '@features/Reporting/types'
 import { getVesselReportings } from '@features/Reporting/useCases/getVesselReportings'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
+import { assertNotNullish } from '@utils/assertNotNullish'
 
 import { Vessel } from '../../../domain/entities/vessel/vessel'
 import { removeVesselReporting } from '../../../domain/shared_slices/Vessel'
@@ -14,6 +15,7 @@ export const archiveReporting =
   (id: number, type: ReportingType): MainAppThunk =>
   async (dispatch, getState) => {
     const { selectedVesselIdentity } = getState().vessel
+    assertNotNullish(selectedVesselIdentity)
 
     try {
       await archiveReportingFromAPI(id)

@@ -1,6 +1,6 @@
 import { getAllRegulatoryLayersFromAPI } from '@api/geoserver'
+import { setError } from '@features/MainWindow/slice'
 
-import { setError } from '../../../domain/shared_slices/Global'
 import layer from '../../../domain/shared_slices/Layer'
 import { MonitorFishWorker } from '../../../workers/MonitorFishWorker'
 import {

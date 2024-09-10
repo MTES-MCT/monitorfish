@@ -92,11 +92,9 @@ class GetPriorNotifications(
                                 .thenByDescending { it.logbookMessageAndValue.logbookMessage.id }, // Tie-breaker
                         )
                 }.filter { priorNotification ->
-                    seafrontGroup.hasSeafront(priorNotification.seafront) && (
-                        (states.isNullOrEmpty() && isInvalidated == null) ||
-                            (!states.isNullOrEmpty() && states.contains(priorNotification.state)) ||
-                            (isInvalidated != null && priorNotification.logbookMessageAndValue.value.isInvalidated == isInvalidated)
-                    )
+                    excludeForeignPorts(priorNotification) &&
+                        filterBySeafrontGroup(seafrontGroup, priorNotification) &&
+                        filterByStateAndInvalidation(states, isInvalidated, priorNotification)
                 }
             }
         logger.info(
@@ -175,6 +173,27 @@ class GetPriorNotifications(
     }
 
     companion object {
+        private fun excludeForeignPorts(priorNotification: PriorNotification): Boolean {
+            return priorNotification.port?.isFrenchOrUnknown() != false
+        }
+
+        private fun filterBySeafrontGroup(
+            seafrontGroup: SeafrontGroup,
+            priorNotification: PriorNotification,
+        ): Boolean {
+            return seafrontGroup.hasSeafront(priorNotification.seafront)
+        }
+
+        private fun filterByStateAndInvalidation(
+            states: List<PriorNotificationState>?,
+            isInvalidated: Boolean?,
+            priorNotification: PriorNotification,
+        ): Boolean {
+            return (states.isNullOrEmpty() && isInvalidated == null) ||
+                (!states.isNullOrEmpty() && states.contains(priorNotification.state)) ||
+                (isInvalidated != null && priorNotification.logbookMessageAndValue.value.isInvalidated == isInvalidated)
+        }
+
         private fun getSortKey(
             priorNotification: PriorNotification,
             sortColumn: PriorNotificationsSortColumn,

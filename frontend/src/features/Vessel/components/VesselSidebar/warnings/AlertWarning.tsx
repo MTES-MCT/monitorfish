@@ -1,46 +1,41 @@
+import { showAlertInSideWindow } from '@features/Vessel/useCases/showAlertInSideWindow'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { SideWindowMenuKey } from 'domain/entities/sideWindow/constants'
-import { batch } from 'react-redux'
 import styled from 'styled-components'
 
 import AlertSVG from '../../../../icons/Icone_alertes.svg?react'
 import { getAlertNameFromType } from '../../../../SideWindow/Alert/AlertListAndReportingList/utils'
-import { focusOnAlert } from '../../../../SideWindow/Alert/slice'
-import { openSideWindowPath } from '../../../../SideWindow/useCases/openSideWindowPath'
 
-export function AlertWarning({ selectedVessel }) {
+import type { AugmentedSelectedVessel } from 'domain/entities/vessel/types'
+
+export type AlertWarningProps = Readonly<{
+  selectedVessel: AugmentedSelectedVessel
+}>
+export function AlertWarning({ selectedVessel }: AlertWarningProps) {
   const dispatch = useMainAppDispatch()
+
+  const firstAlert = selectedVessel.alerts?.at(0)
+
+  const open = () => {
+    dispatch(showAlertInSideWindow(selectedVessel))
+  }
+
+  if (!selectedVessel.alerts || !firstAlert) {
+    return <></>
+  }
 
   return (
     <>
-      {!!selectedVessel?.alerts?.length && (
-        <Alerts data-cy="vessel-sidebar-alert" onClick={() => showAlertInSideWindow(dispatch, selectedVessel)}>
-          <AlertIcon />
-          {selectedVessel?.alerts.length === 1
-            ? getAlertNameFromType(selectedVessel?.alerts[0])
-            : `${selectedVessel?.alerts.length} alertes`}
-          <SeeAlert>
-            {selectedVessel?.alerts.length === 1 ? "Voir l'alerte dans la liste" : 'Voir les alertes dans la liste'}
-          </SeeAlert>
-        </Alerts>
-      )}
+      <Alerts data-cy="vessel-sidebar-alert" onClick={open}>
+        <AlertIcon />
+        {selectedVessel.alerts.length === 1
+          ? getAlertNameFromType(firstAlert)
+          : `${selectedVessel.alerts.length} alertes`}
+        <SeeAlert>
+          {selectedVessel.alerts.length === 1 ? "Voir l'alerte dans la liste" : 'Voir les alertes dans la liste'}
+        </SeeAlert>
+      </Alerts>
     </>
   )
-}
-
-const showAlertInSideWindow = (dispatch, selectedVessel) => {
-  batch(() => {
-    dispatch(openSideWindowPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }))
-    dispatch(
-      focusOnAlert({
-        externalReferenceNumber: selectedVessel.externalReferenceNumber,
-        flagState: selectedVessel.flagState,
-        internalReferenceNumber: selectedVessel.internalReferenceNumber,
-        ircs: selectedVessel.ircs,
-        name: selectedVessel?.alerts[0]
-      })
-    )
-  })
 }
 
 const SeeAlert = styled.span`

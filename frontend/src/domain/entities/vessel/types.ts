@@ -2,6 +2,7 @@
 
 import { ReportingType } from '@features/Reporting/types'
 
+import type { PendingAlertValueType } from '../alerts/types'
 import type { VesselTrackDepth } from '../vesselTrackDepth'
 import type { SelectableVesselTrackDepth } from '@features/Vessel/components/VesselSidebar/actions/TrackRequest/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
@@ -79,7 +80,7 @@ export type VesselAndPositions = {
 }
 
 export type VesselLastPosition = {
-  alerts: string[] | null
+  alerts: Array<PendingAlertValueType | 'PNO_LAN_WEIGHT_TOLERANCE_ALERT'> | null | undefined
   beaconMalfunctionId: number | null
   beaconNumber?: number | null
   course: number
@@ -249,7 +250,7 @@ export type VesselEnhancedLastPositionWebGLObject = {
 export type VesselLastPositionFeature = Feature<Point> & VesselEnhancedLastPositionWebGLObject
 
 export type VesselEnhancedObject = VesselLastPosition & {
-  alerts: string[]
+  alerts: Array<PendingAlertValueType | 'PNO_LAN_WEIGHT_TOLERANCE_ALERT'>
   flagState: string
   fleetSegmentsArray: string[]
   gearsArray: string[]

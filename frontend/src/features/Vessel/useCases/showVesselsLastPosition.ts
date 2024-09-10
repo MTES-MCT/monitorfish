@@ -4,17 +4,20 @@ import { setVesselsFromAPI, setVesselsSpeciesAndDistricts } from '../../../domai
 import getUniqueSpeciesAndDistricts from '../../../domain/use_cases/species/getUniqueSpeciesAndDistricts'
 
 import type { VesselLastPosition } from '../../../domain/entities/vessel/types'
+import type { MainAppThunk } from '@store'
 
-export const showVesselsLastPosition = (vessels: VesselLastPosition[]) => async dispatch => {
-  dispatch(setVesselsFromAPI(vessels))
-  dispatch(applyFilterToVessels())
+export const showVesselsLastPosition =
+  (vessels: VesselLastPosition[]): MainAppThunk =>
+  async dispatch => {
+    dispatch(setVesselsFromAPI(vessels))
+    dispatch(applyFilterToVessels())
 
-  const speciesAndDistricts = await dispatch(getUniqueSpeciesAndDistricts(vessels))
-  dispatch(
-    setVesselsSpeciesAndDistricts({
-      districts: speciesAndDistricts.districts,
-      species: speciesAndDistricts.species
-    })
-  )
-  dispatch(resetIsUpdatingVessels())
-}
+    const speciesAndDistricts = await dispatch(getUniqueSpeciesAndDistricts(vessels))
+    dispatch(
+      setVesselsSpeciesAndDistricts({
+        districts: speciesAndDistricts.districts,
+        species: speciesAndDistricts.species
+      })
+    )
+    dispatch(resetIsUpdatingVessels())
+  }

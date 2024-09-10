@@ -5,10 +5,10 @@ import styled from 'styled-components'
 import AlertSVG from '../../../../icons/Icone_alertes.svg?react'
 import { getAlertNameFromType } from '../../../../SideWindow/Alert/AlertListAndReportingList/utils'
 
-import type { AugmentedSelectedVessel } from 'domain/entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 export type AlertWarningProps = Readonly<{
-  selectedVessel: AugmentedSelectedVessel
+  selectedVessel: Vessel.AugmentedSelectedVessel
 }>
 export function AlertWarning({ selectedVessel }: AlertWarningProps) {
   const dispatch = useMainAppDispatch()

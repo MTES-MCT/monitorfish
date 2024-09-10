@@ -1,6 +1,7 @@
 import { VesselIdentifier } from '../../domain/entities/vessel/types'
 
-import type { VesselIdentity, VesselEnhancedObject } from '../../domain/entities/vessel/types'
+import type { VesselIdentity } from '../../domain/entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 /**
  * Remove duplicated vessels : keep vessels from APIs when a duplicate is found on either
@@ -26,7 +27,9 @@ export function removeDuplicatedFoundVessels(
   return foundVesselsFromAPI.concat(filteredVesselsFromMap).slice(0, 50)
 }
 
-export function enrichWithVesselIdentifierIfNotFound(identity: VesselEnhancedObject | VesselIdentity): VesselIdentity {
+export function enrichWithVesselIdentifierIfNotFound(
+  identity: Vessel.VesselEnhancedObject | VesselIdentity
+): VesselIdentity {
   if (identity.vesselIdentifier) {
     return identity
   }

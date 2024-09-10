@@ -251,7 +251,7 @@ const vesselSlice = createSlice({
       })
 
       if (state.selectedVessel) {
-        const filteredAlerts = state.selectedVessel.alerts?.filter(alert => alert !== action.payload.alertType) || []
+        const filteredAlerts = state.selectedVessel.alerts?.filter(alert => alert !== action.payload.alertType) ?? []
 
         let reportingsWithAlert: ReportingType[] = []
         if (state.selectedVessel.reportings?.length) {

@@ -9,9 +9,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ExtendWith(SpringExtension::class)
 class PortUTests {
     @Test
-    fun `isFrenchOrUnknown Should return true when port is unknown`() {
+    fun `isFrenchOrUnknown Should return true when its country code is unknown`() {
         // Given
-        val port = PortFaker.fakePort(locode = "FRABC", countryCode = null, name = "Fake Port")
+        val port = PortFaker.fakePort(countryCode = null)
 
         // When
         val result = port.isFrenchOrUnknown()
@@ -21,26 +21,26 @@ class PortUTests {
     }
 
     @Test
-    fun `isFrenchOrUnknown Should return false when country code is not French`() {
+    fun `isFrenchOrUnknown Should return true when its country code is French`() {
         // Given
-        val port = PortFaker.fakePort(locode = "FRABC", countryCode = "US", name = "Fake Port")
+        val port = PortFaker.fakePort(countryCode = "TF")
+
+        // When
+        val result = port.isFrenchOrUnknown()
+
+        // Then
+        assertThat(result).isTrue()
+    }
+
+    @Test
+    fun `isFrenchOrUnknown Should return false when its country code is not French`() {
+        // Given
+        val port = PortFaker.fakePort(countryCode = "US")
 
         // When
         val result = port.isFrenchOrUnknown()
 
         // Then
         assertThat(result).isFalse()
-    }
-
-    @Test
-    fun `isFrenchOrUnknown Should return true when country code is French`() {
-        // Given
-        val port = PortFaker.fakePort(locode = "FRABC", countryCode = "TF", name = "Fake Port")
-
-        // When
-        val result = port.isFrenchOrUnknown()
-
-        // Then
-        assertThat(result).isTrue()
     }
 }

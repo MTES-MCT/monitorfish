@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.domain.use_cases
+package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
@@ -10,9 +10,9 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.InfractionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
+import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.createCurrentReporting
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllControlUnits
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselReportings
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -306,5 +306,123 @@ class GetVesselReportingsUTests {
         assertThat((thirdResult.otherOccurrencesOfSameAlert[0].value as AlertType).type).isEqualTo(
             AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
         )
+    }
+
+    @Test
+    fun `execute Should build the infraction suspicion summary`() {
+        // Given
+        val alertReporting1 =
+            createCurrentReporting(
+                id = 11223,
+                validationDate = ZonedDateTime.parse("2024-01-01T12:00:00Z"),
+                internalReferenceNumber = "FR55667788",
+                type = ReportingType.ALERT,
+                alertType = AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
+                isArchived = true,
+            )
+
+        val alertReporting2 =
+            createCurrentReporting(
+                id = 22334,
+                validationDate = ZonedDateTime.parse("2024-02-01T12:00:00Z"),
+                internalReferenceNumber = "FR55667788",
+                type = ReportingType.ALERT,
+                alertType = AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
+                isArchived = true,
+            )
+
+        val infractionReporting =
+            createCurrentReporting(
+                id = 33445,
+                validationDate = ZonedDateTime.parse("2024-03-01T12:00:00Z"),
+                internalReferenceNumber = "FR55667788",
+                type = ReportingType.INFRACTION_SUSPICION,
+                alertType = null,
+                isArchived = true,
+                natinfCode = 7059,
+            )
+
+        val infractionReporting2 =
+            createCurrentReporting(
+                id = 33456,
+                validationDate = ZonedDateTime.parse("2024-03-01T12:00:00Z"),
+                internalReferenceNumber = "FR55667788",
+                type = ReportingType.INFRACTION_SUSPICION,
+                alertType = null,
+                isArchived = true,
+            )
+
+        val alertReporting3 =
+            createCurrentReporting(
+                id = 44556,
+                validationDate = ZonedDateTime.parse("2024-04-01T12:00:00Z"),
+                internalReferenceNumber = "FR55667788",
+                type = ReportingType.ALERT,
+                alertType = AlertTypeMapping.MISSING_FAR_48_HOURS_ALERT,
+                isArchived = true,
+            )
+
+        val observation =
+            createCurrentReporting(
+                id = 44558,
+                validationDate = ZonedDateTime.parse("2024-04-01T12:00:00Z"),
+                internalReferenceNumber = "FR55667788",
+                type = ReportingType.OBSERVATION,
+                alertType = null,
+                isArchived = true,
+            )
+
+        given(reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(any(), any(), any())).willReturn(
+            listOf(
+                alertReporting1,
+                alertReporting2,
+                infractionReporting,
+                infractionReporting2,
+                alertReporting3,
+                observation,
+            ),
+        )
+
+        given(infractionRepository.findInfractionByNatinfCode(eq(7059))).willReturn(
+            Infraction(
+                natinfCode = 7059,
+                infraction = "Peche maritime non autorisee dans les eaux maritimes ou salees francaises par un navire de pays tiers a l'union europeenne",
+                infractionCategory = InfractionCategory.FISHING,
+            ),
+        )
+
+        // When
+        val result =
+            GetVesselReportings(
+                reportingRepository,
+                infractionRepository,
+                getAllControlUnits,
+            ).execute(
+                null,
+                "FR55667788",
+                "1234567",
+                "IRCS",
+                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                ZonedDateTime.now().minusYears(1),
+            )
+
+        // Then
+        assertThat(result.summary.numberOfInfractionSuspicions).isEqualTo(5)
+        assertThat(result.summary.numberOfObservations).isEqualTo(1)
+
+        val infractionSuspicionsSummary = result.summary.infractionSuspicionsSummary
+        assertThat(result.summary.infractionSuspicionsSummary).hasSize(4)
+        assertThat(infractionSuspicionsSummary[0].numberOfOccurrences).isEqualTo(2)
+        assertThat(infractionSuspicionsSummary[0].title).isEqualTo("12 milles - Pêche sans droits historiques")
+        assertThat(infractionSuspicionsSummary[1].numberOfOccurrences).isEqualTo(1)
+        assertThat(infractionSuspicionsSummary[1].title).isEqualTo("Non-emission de message \"FAR\" en 48h")
+        assertThat(infractionSuspicionsSummary[2].numberOfOccurrences).isEqualTo(1)
+        assertThat(
+            infractionSuspicionsSummary[2].title,
+        ).isEqualTo(
+            "Peche maritime non autorisee dans les eaux maritimes ou salees francaises par un navire de pays tiers a l'union europeenne",
+        )
+        assertThat(infractionSuspicionsSummary[3].numberOfOccurrences).isEqualTo(1)
+        assertThat(infractionSuspicionsSummary[3].title).isEqualTo("NATINF 123456")
     }
 }

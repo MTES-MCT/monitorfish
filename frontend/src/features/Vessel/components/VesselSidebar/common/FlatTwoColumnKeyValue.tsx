@@ -17,7 +17,7 @@ export function FlatTwoColumnKeyValue({ className, firstColumn, secondColumn }: 
       <Fields>
         <TableBody>
           {firstColumn.map(({ key, value }) => (
-            <Field>
+            <Field key={key}>
               <Key>{key}</Key>
               {value ? <Value title={value?.toString()}>{value}</Value> : <NoValue>-</NoValue>}
             </Field>
@@ -27,15 +27,15 @@ export function FlatTwoColumnKeyValue({ className, firstColumn, secondColumn }: 
       <Fields isSecondColumn>
         <TableBody>
           {secondColumn.map(({ key, value }) => (
-            <Field>
+            <Field key={key}>
               <Key>{key}</Key>
               {value ? <Value title={value?.toString()}>{value}</Value> : <NoValue>-</NoValue>}
             </Field>
           ))}
           {/** We add empty item in second column to to not break the first column */}
           {secondColumn.length < firstColumn.length &&
-            range(firstColumn.length - secondColumn.length).map(() => (
-              <Field>
+            range(firstColumn.length - secondColumn.length).map(index => (
+              <Field key={index}>
                 <Key />
                 <Value />
               </Field>

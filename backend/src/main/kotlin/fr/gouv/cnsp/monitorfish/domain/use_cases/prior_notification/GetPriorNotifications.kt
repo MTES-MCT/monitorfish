@@ -63,14 +63,17 @@ class GetPriorNotifications(
 
         val (priorNotifications, enrichedPriorNotificationsTimeTaken) =
             measureTimedValue {
-                incompletePriorNotifications
-                    .map { priorNotification ->
-                        priorNotification.enrich(allRiskFactors, allPorts, priorNotification.isManuallyCreated)
-                        priorNotification.logbookMessageAndValue.logbookMessage
-                            .enrichGearPortAndSpecyNames(allGears, allPorts, allSpecies)
+                val priorNotificationsWithoutVessel =
+                    incompletePriorNotifications
+                        .map { priorNotification ->
+                            priorNotification.enrich(allRiskFactors, allPorts, priorNotification.isManuallyCreated)
+                            priorNotification.logbookMessageAndValue.logbookMessage
+                                .enrichGearPortAndSpecyNames(allGears, allPorts, allSpecies)
 
-                        priorNotification
-                    }
+                            priorNotification
+                        }
+
+                enrichPriorNotificationsWithVessel(priorNotificationsWithoutVessel)
             }
         logger.info("TIME_RECORD - 'priorNotifications' took $enrichedPriorNotificationsTimeTaken.")
 
@@ -125,12 +128,12 @@ class GetPriorNotifications(
             }
         logger.info("TIME_RECORD - 'paginatedList' took $paginatedListTimeTaken.")
 
-        val paginatedListWithVessels = paginatedList.copy(data = getPriorNotificationsWithVessel(paginatedList.data))
+        // val paginatedListWithVessels = paginatedList.copy(data = enrichPriorNotificationsWithVessel(paginatedList.data))
 
         // Enrich the reporting count for each prior notification after pagination to limit the number of queries
         val (enrichedPaginatedList, enrichedPaginatedListTimeTaken) =
             measureTimedValue {
-                paginatedListWithVessels.apply {
+                paginatedList.apply {
                     data.forEach {
                         it.enrichReportingCount(reportingRepository)
                     }
@@ -141,7 +144,9 @@ class GetPriorNotifications(
         return enrichedPaginatedList
     }
 
-    private fun getPriorNotificationsWithVessel(priorNotifications: List<PriorNotification>): List<PriorNotification> {
+    private fun enrichPriorNotificationsWithVessel(
+        priorNotifications: List<PriorNotification>,
+    ): List<PriorNotification> {
         val vesselsIds =
             priorNotifications
                 .filter { it.isManuallyCreated }

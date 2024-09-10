@@ -92,7 +92,7 @@ class GetPriorNotifications(
                                 .thenByDescending { it.logbookMessageAndValue.logbookMessage.id }, // Tie-breaker
                         )
                 }.filter { priorNotification ->
-                    excludeForeignPorts(priorNotification) &&
+                    excludeForeignPortsExceptFrenchVessels(priorNotification) &&
                         filterBySeafrontGroup(seafrontGroup, priorNotification) &&
                         filterByStateAndInvalidation(states, isInvalidated, priorNotification)
                 }
@@ -105,11 +105,11 @@ class GetPriorNotifications(
             measureTimedValue {
                 PriorNotificationStats(
                     perSeafrontGroupCount =
-                        SeafrontGroup.entries.associateWith { seafrontGroupEntry ->
-                            priorNotifications.count { priorNotification ->
-                                seafrontGroupEntry.hasSeafront(priorNotification.seafront)
-                            }
-                        },
+                    SeafrontGroup.entries.associateWith { seafrontGroupEntry ->
+                        priorNotifications.count { priorNotification ->
+                            seafrontGroupEntry.hasSeafront(priorNotification.seafront)
+                        }
+                    },
                 )
             }
         logger.info("TIME_RECORD - 'extraData' took $extraDataTimeTaken.")
@@ -173,8 +173,13 @@ class GetPriorNotifications(
     }
 
     companion object {
-        private fun excludeForeignPorts(priorNotification: PriorNotification): Boolean {
-            return priorNotification.port?.isFrenchOrUnknown() != false
+        private fun excludeForeignPortsExceptFrenchVessels(priorNotification: PriorNotification): Boolean {
+            val port = priorNotification.port // Mutable prop
+            if (port == null || priorNotification.vessel == null) {
+                return true
+            }
+
+            return priorNotification.vessel.isFrench() || port.isFrenchOrUnknown()
         }
 
         private fun filterBySeafrontGroup(

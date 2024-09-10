@@ -10,13 +10,15 @@ import {
   setSelectedRegulatoryZone
 } from '../slice'
 
-export const getAllRegulatoryLayers = () => async (dispatch, getState) => {
+import type { MainAppThunk } from '@store'
+
+export const getAllRegulatoryLayers = (): MainAppThunk<Promise<void>> => async (dispatch, getState) => {
   const monitorFishWorker = await MonitorFishWorker
   const { setShowedLayersWithLocalStorageValues } = layer.homepage.actions
   const { speciesByCode } = getState().species
 
   try {
-    const features = await getAllRegulatoryLayersFromAPI(getState().global.isBackoffice)
+    const features = await getAllRegulatoryLayersFromAPI(getState().mainWindow.isBackoffice)
 
     monitorFishWorker.mapGeoserverToRegulatoryZones(features, speciesByCode).then(regulatoryZones => {
       dispatch(setRegulatoryZones(regulatoryZones))
@@ -28,6 +30,8 @@ export const getAllRegulatoryLayers = () => async (dispatch, getState) => {
     dispatch(setLayersTopicsByRegTerritory(layersTopicsByRegulatoryTerritory))
     dispatch(setRegulatoryLayerLawTypes(layersTopicsByRegulatoryTerritory))
     dispatch(setSelectedRegulatoryZone(layersWithoutGeometry))
+    // TODO Investigate this dubious pattern/line of code.
+    // @ts-ignore
     dispatch(setShowedLayersWithLocalStorageValues?.({ namespace: 'homepage', regulatoryZones: layersWithoutGeometry }))
   } catch (error) {
     console.error(error)

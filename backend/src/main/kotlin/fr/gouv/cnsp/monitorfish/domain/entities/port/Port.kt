@@ -1,5 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.port
 
+import fr.gouv.cnsp.monitorfish.domain.FRENCH_COUNTRY_CODES
+
 data class Port(
     val locode: String,
     /** ISO Alpha-2 country code */
@@ -11,12 +13,7 @@ data class Port(
     val longitude: Double?,
     val region: String?,
 ) {
-    private val FRENCH_PORT_COUNTRY_CODES =
-        listOf<String>(
-            "TF", "MQ", "GF", "YT", "GP", "RE", "NC", "PF", "BL", "MF", "PM", "WF",
-        )
-
     fun isFrenchOrUnknown(): Boolean {
-        return this.countryCode === null || FRENCH_PORT_COUNTRY_CODES.contains(countryCode)
+        return this.countryCode === null || FRENCH_COUNTRY_CODES.contains(countryCode)
     }
 }

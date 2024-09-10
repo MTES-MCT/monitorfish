@@ -15,7 +15,6 @@ import { displayedErrorReducer } from '../domain/shared_slices/DisplayedError'
 import { favoriteVesselReducer } from '../domain/shared_slices/FavoriteVessel'
 import { filterReducer } from '../domain/shared_slices/Filter'
 import { gearReducer } from '../domain/shared_slices/Gear'
-import { globalSliceReducer } from '../domain/shared_slices/Global'
 import { infractionReducer } from '../domain/shared_slices/Infraction'
 import layer from '../domain/shared_slices/Layer'
 import { mapReducer } from '../domain/shared_slices/Map'
@@ -26,6 +25,7 @@ import { controlUnitDialogReducer } from '../features/ControlUnit/components/Con
 import { controlUnitListDialogPersistedReducer } from '../features/ControlUnit/components/ControlUnitListDialog/slice'
 import { customZoneReducer, type CustomZoneState } from '../features/CustomZone/slice'
 import { logbookReducer } from '../features/Logbook/slice'
+import { mainWindowSliceReducer } from '../features/MainWindow/slice'
 import { missionFormReducer } from '../features/Mission/components/MissionForm/slice'
 import { missionListReducer, type MissionListState } from '../features/Mission/components/MissionList/slice'
 import { priorNotificationReducer, type PriorNotificationState } from '../features/PriorNotification/slice'
@@ -56,7 +56,7 @@ const commonReducerList = {
   [monitorfishLightApi.reducerPath]: monitorfishLightApi.reducer,
 
   gear: gearReducer,
-  global: globalSliceReducer,
+  mainWindow: mainWindowSliceReducer,
   map: mapReducer,
   regulatory: regulatoryReducer,
   species: speciesReducer

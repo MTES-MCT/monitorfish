@@ -29,7 +29,7 @@ import LineString from 'ol/geom/LineString'
 import { InterestPointLine } from './interestPointLine'
 import { getLength } from 'ol/sphere'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
-import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
+import { setRightMapBoxOpened } from '../../../features/MainWindow/slice'
 import { monitorfishMap } from '../../map/monitorfishMap'
 
 const DRAW_START_EVENT = 'drawstart'

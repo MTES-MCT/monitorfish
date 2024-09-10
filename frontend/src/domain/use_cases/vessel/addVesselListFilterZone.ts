@@ -21,13 +21,13 @@ export const closeDrawLayerModal = dispatch => {
   dispatch(
     setDisplayedComponents({
       isDrawLayerModalDisplayed: false,
-      isInterestPointMapButtonDisplayed: true,
-      isMeasurementMapButtonDisplayed: true,
-      isVesselFiltersMapButtonDisplayed: true,
-      isVesselLabelsMapButtonDisplayed: true,
+      isInterestPointRightMenuButtonDisplayed: true,
+      isMeasurementRightMenuButtonDisplayed: true,
+      isVesselFiltersRightMenuButtonDisplayed: true,
+      isVesselLabelsRightMenuButtonDisplayed: true,
       isVesselListDisplayed: true,
       isVesselSearchDisplayed: true,
-      isVesselVisibilityMapButtonDisplayed: true
+      isVesselVisibilityRightMenuButtonDisplayed: true
     })
   )
 }

@@ -1,3 +1,4 @@
+import { assertNotNullish } from '@utils/assertNotNullish'
 import countries from 'i18n-iso-countries'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
@@ -29,6 +30,7 @@ export function VesselName({ focusOnVesselSearchInput }) {
   const addOrRemoveToFavorites = useCallback(
     e => {
       e.stopPropagation()
+      assertNotNullish(selectedVesselIdentity)
 
       if (isFavorite) {
         dispatch(removeVesselFromFavorites(getVesselCompositeIdentifier(selectedVesselIdentity)))

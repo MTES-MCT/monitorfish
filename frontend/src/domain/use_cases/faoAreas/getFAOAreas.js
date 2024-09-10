@@ -1,5 +1,5 @@
 import { getFAOAreasFromAPI } from '../../../api/faoAreas'
-import { setError } from '../../shared_slices/Global'
+import { setError } from '../../../features/MainWindow/slice'
 
 const getFAOAreas = () => dispatch =>
   getFAOAreasFromAPI().catch(error => {

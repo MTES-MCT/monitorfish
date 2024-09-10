@@ -1,6 +1,6 @@
 import { getAllBeaconMalfunctionsFromAPI } from '../../../api/beaconMalfunction'
+import { setError } from '../../../features/MainWindow/slice'
 import { setBeaconMalfunctions } from '../../shared_slices/BeaconMalfunction'
-import { setError } from '../../shared_slices/Global'
 
 const getAllBeaconMalfunctions = () => dispatch => {
   getAllBeaconMalfunctionsFromAPI()

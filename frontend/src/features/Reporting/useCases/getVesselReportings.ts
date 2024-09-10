@@ -1,8 +1,8 @@
 import { getVesselReportingsFromAPI } from '@api/vessel'
+import { removeError } from '@features/MainWindow/slice'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { displayedErrorActions } from '../../../domain/shared_slices/DisplayedError'
-import { removeError } from '../../../domain/shared_slices/Global'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
 import {
   loadReporting,

@@ -1,25 +1,36 @@
 import { createSlice } from '@reduxjs/toolkit'
+import {
+  type DisplayedComponentState,
+  INITIAL_STATE as DISPLAYED_COMPONENT_INITIAL_STATE
+} from 'domain/shared_slices/DisplayedComponent'
 
+import { UserType } from '../../domain/entities/beaconMalfunction/constants'
+import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../../domain/entities/vessel/vessel'
 import { getLocalStorageState } from '../../utils'
-import { UserType } from '../entities/beaconMalfunction/constants'
-import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../entities/vessel/vessel'
 
-import type { MapBox } from '../entities/map/constants'
+import type { MapBox } from '../../domain/entities/map/constants'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import type { VesselIdentity } from 'domain/entities/vessel/types'
 
 const userTypeLocalStorageKey = 'userType'
 const lastSearchedVesselsLocalStorageKey = 'lastSearchedVessels'
 
-// TODO Properly type this redux state.
-export type GlobalState = {
+export type MainWindowState = {
   blockVesselsUpdate: boolean
   error: any
   // TODO Rename this prop.
   healthcheckTextWarning: string[]
   isBackoffice: boolean
   isUpdatingVessels: boolean
+  lastDisplayState: DisplayedComponentState
   lastSearchedVessels: any[]
   leftMapBoxOpened: MapBox | undefined
+  openedLeftDialog:
+    | {
+        key: MapBox
+        topPosition: number
+      }
+    | undefined
   // TODO Rename this prop.
   // TODO Investigate that. Should be a defined boolean.
   previewFilteredVesselsMode: boolean | undefined
@@ -28,14 +39,16 @@ export type GlobalState = {
   userType: string
   vesselListModalIsOpen: boolean
 }
-const INITIAL_STATE: GlobalState = {
+const INITIAL_STATE: MainWindowState = {
   blockVesselsUpdate: false,
   error: null,
   healthcheckTextWarning: [],
   isBackoffice: false,
   isUpdatingVessels: false,
+  lastDisplayState: DISPLAYED_COMPONENT_INITIAL_STATE,
   lastSearchedVessels: getLocalStorageState([], lastSearchedVesselsLocalStorageKey),
   leftMapBoxOpened: undefined,
+  openedLeftDialog: undefined,
   previewFilteredVesselsMode: undefined,
   rightMapBoxOpened: undefined,
   rightMenuIsOpen: false,
@@ -43,20 +56,16 @@ const INITIAL_STATE: GlobalState = {
   vesselListModalIsOpen: false
 }
 
-// TODO Properly type this redux reducers.
-export const globalSlice = createSlice({
+export const mainWindowSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'global',
   reducers: {
     /**
      * Adds a vessel to the last searched vessels list showed below
      * the vessel search input on click
-     * @function addLastSearchedVessel
-     * @memberOf GlobalReducer
-     * @param {Object=} state
-     * @param {{payload: VesselIdentity}} action - The last searched vessel
      */
-    addSearchedVessel(state, action) {
+    addSearchedVessel(state, action: PayloadAction<VesselIdentity>) {
+      // TODO Is it useful since it seems we already receive a `VesselIdentity` (if typings are right)?
       const vesselIdentityToAdd = getOnlyVesselIdentityProperties(action.payload)
 
       // Remove vessel if already in the list
@@ -73,6 +82,13 @@ export const globalSlice = createSlice({
       }
 
       window.localStorage.setItem(lastSearchedVesselsLocalStorageKey, JSON.stringify(state.lastSearchedVessels))
+    },
+
+    /**
+     * Close the left dialog.
+     */
+    closeLeftDialog(state) {
+      state.openedLeftDialog = undefined
     },
 
     closeVesselListModal(state) {
@@ -103,10 +119,8 @@ export const globalSlice = createSlice({
     /**
      * Block or not the vessel update cron - The vessel update is blocked when the
      * vessel list table is opened or when vessels filters are previewed
-     * @param {Object=} state
-     * @param {{payload: boolean}} action - blocked when true
      */
-    setBlockVesselsUpdate(state, action) {
+    setBlockVesselsUpdate(state, action: PayloadAction<boolean>) {
       state.blockVesselsUpdate = action.payload
     },
 
@@ -137,6 +151,13 @@ export const globalSlice = createSlice({
     },
 
     /**
+     * @internal Don't use this action directly. Use `hideAllMainWindowComponentsAndSaveDisplayState` dispatcher.
+     */
+    setLastDisplayState(state, action: PayloadAction<DisplayedComponentState>) {
+      state.lastDisplayState = action.payload
+    },
+
+    /**
      * Set the left box, so the other boxes can close
      */
     setLeftMapBoxOpened(state, action: PayloadAction<MapBox | undefined>) {
@@ -161,20 +182,29 @@ export const globalSlice = createSlice({
 
     /**
      * Set the user type as OPS or SIP
-     * @function setUserType
-     * @memberOf GlobalReducer
-     * @param {Object=} state
-     * @param {{payload: string}} action - The user type
      */
-    setUserType(state, action) {
+    setUserType(state, action: PayloadAction<string>) {
       state.userType = action.payload
       window.localStorage.setItem(userTypeLocalStorageKey, JSON.stringify(state.userType))
+    },
+
+    /**
+     * Toggle the left dialog.
+     */
+    toggleLeftDialog(
+      state,
+      action: PayloadAction<{
+        key: MapBox
+        topPosition: number
+      }>
+    ) {
+      state.openedLeftDialog = action.payload.key === state.openedLeftDialog?.key ? undefined : action.payload
     }
   }
 })
 
-export const globalActions = globalSlice.actions
-export const globalSliceReducer = globalSlice.reducer
+export const mainWindowActions = mainWindowSlice.actions
+export const mainWindowSliceReducer = mainWindowSlice.reducer
 
 export const {
   addSearchedVessel,
@@ -193,4 +223,4 @@ export const {
   setPreviewFilteredVesselsMode,
   setRightMapBoxOpened,
   setUserType
-} = globalSlice.actions
+} = mainWindowSlice.actions

@@ -13,7 +13,7 @@ import { getVectorOLLayer } from '../useCases/showAdministrativeZone'
 
 function UnmemoizedAdministrativeLayers() {
   const showedLayers = useMainAppSelector(state => state.layer.showedLayers)
-  const isBackoffice = useMainAppSelector(state => state.global.isBackoffice)
+  const isBackoffice = useMainAppSelector(state => state.mainWindow.isBackoffice)
 
   useEffect(() => {
     if (!showedLayers) {

@@ -8,7 +8,6 @@ import { BeaconMalfunctionDetailsFollowUpRow } from './BeaconMalfunctionDetailsF
 import { BeaconMalfunctionDetailsType, getContent } from './beaconMalfunctions'
 import { COLORS } from '../../../constants/constants'
 import { UserType, VESSEL_STATUS } from '../../../domain/entities/beaconMalfunction/constants'
-import { setUserType } from '../../../domain/shared_slices/Global'
 import saveBeaconMalfunctionCommentFromKanban from '../../../domain/use_cases/beaconMalfunction/saveBeaconMalfunctionCommentFromKanban'
 import { useListenForScroll } from '../../../hooks/useListenForScroll'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
@@ -16,6 +15,7 @@ import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { getDate, mergeObjects } from '../../../utils'
 import { pushToObjectAtIndex } from '../../../utils/pushToObjectAtIndex'
 import CommentsSVG from '../../icons/Commentaires.svg?react'
+import { setUserType } from '../../MainWindow/slice'
 
 import type {
   BeaconMalfunctionFollowUpItem,
@@ -26,7 +26,7 @@ import type { CSSProperties } from 'react'
 export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails, firstStatus, smallSize }) {
   const { actions, beaconMalfunction, comments, notifications } = beaconMalfunctionWithDetails
   const dispatch = useMainAppDispatch()
-  const userType = useMainAppSelector(state => state.global.userType)
+  const userType = useMainAppSelector(state => state.mainWindow.userType)
   const firstVesselStatus = VESSEL_STATUS.find(status => status.value === firstStatus) as BeaconMalfunctionStatusValue
   const [today, setToday] = useState('')
   const [yesterday, setYesterday] = useState('')

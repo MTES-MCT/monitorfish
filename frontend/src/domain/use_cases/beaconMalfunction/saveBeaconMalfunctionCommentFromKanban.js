@@ -1,10 +1,10 @@
 import { saveBeaconMalfunctionCommentFromAPI } from '../../../api/beaconMalfunction'
+import { setError } from '../../../features/MainWindow/slice'
 import {
   setOpenedBeaconMalfunction,
   setOpenedBeaconMalfunctionsInKanban,
   updateVesselBeaconMalfunctionsResumeAndHistory
 } from '../../shared_slices/BeaconMalfunction'
-import { setError } from '../../shared_slices/Global'
 
 /**
  * Save a new comment to a beacon malfunction
@@ -13,7 +13,7 @@ import { setError } from '../../shared_slices/Global'
  * @param {string} comment
  */
 const saveBeaconMalfunctionCommentFromKanban = (beaconMalfunctionId, comment) => (dispatch, getState) => {
-  const { userType } = getState().global
+  const { userType } = getState().mainWindow
   const newCommentInput = {
     comment,
     userType

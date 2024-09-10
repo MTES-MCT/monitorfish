@@ -22,7 +22,7 @@ type TrackRequestProps = {
 }
 export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
   const dispatch = useMainAppDispatch()
-  const { rightMenuIsOpen } = useMainAppSelector(state => state.global)
+  const { rightMenuIsOpen } = useMainAppSelector(state => state.mainWindow)
   const { defaultVesselTrackDepth } = useMainAppSelector(state => state.map)
   const { selectedVesselTrackRequest } = useMainAppSelector(state => state.vessel)
   const { selectedVesselIdentity } = useMainAppSelector(state => state.vessel)

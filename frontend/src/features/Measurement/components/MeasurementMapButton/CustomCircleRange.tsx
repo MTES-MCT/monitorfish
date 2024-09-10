@@ -1,6 +1,7 @@
+import { setRightMapBoxOpened } from '@features/MainWindow/slice'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { CoordinatesInput } from '@mtes-mct/monitor-ui'
+import { CoordinatesInput, type Coordinates } from '@mtes-mct/monitor-ui'
 import { transform } from 'ol/proj'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
@@ -12,7 +13,6 @@ import {
   OPENLAYERS_PROJECTION,
   WSG84_PROJECTION
 } from '../../../../domain/entities/map/constants'
-import { setRightMapBoxOpened } from '../../../../domain/shared_slices/Global'
 import { MapToolBox } from '../../../MainWindow/components/MapButtons/shared/MapToolBox'
 import {
   resetCircleMeasurementInDrawing,
@@ -20,8 +20,6 @@ import {
   setCircleMeasurementToAdd,
   setMeasurementTypeToAdd
 } from '../../slice'
-
-import type { Coordinates } from '@mtes-mct/monitor-ui'
 
 export function CustomCircleRange() {
   const dispatch = useMainAppDispatch()

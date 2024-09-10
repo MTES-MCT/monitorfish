@@ -2,19 +2,19 @@ import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { FIVE_MINUTES } from '../../../api/APIWorker'
-import { setError, setHealthcheckTextWarning } from '../../../domain/shared_slices/Global'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
 import WarningSVG from '../../icons/Picto_alerte.svg?react'
+import { setError, setHealthcheckTextWarning } from '../../MainWindow/slice'
 import { useGetHealthcheckQuery } from '../apis'
 import { useIsOnline } from '../hooks/useIsOnline'
 import { getHealthcheckWarnings } from '../utils'
 
 export function HealthcheckHeadband() {
   const dispatch = useMainAppDispatch()
-  const healthcheckTextWarning = useMainAppSelector(state => state.global.healthcheckTextWarning)
-  const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
+  const healthcheckTextWarning = useMainAppSelector(state => state.mainWindow.healthcheckTextWarning)
+  const previewFilteredVesselsMode = useMainAppSelector(state => state.mainWindow.previewFilteredVesselsMode)
   const isOnline = useIsOnline()
   const {
     data: healthcheck,

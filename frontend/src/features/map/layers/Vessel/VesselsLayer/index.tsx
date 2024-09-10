@@ -30,7 +30,7 @@ function UnmemoizedVesselsLayer() {
   const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
   const vesselsLastPositionVisibility = useMainAppSelector(state => state.map.vesselsLastPositionVisibility)
 
-  const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
+  const previewFilteredVesselsMode = useMainAppSelector(state => state.mainWindow.previewFilteredVesselsMode)
 
   const { filterColor, filters, nonFilteredVesselsAreHidden, showedFilter } = useMainAppSelector(state => {
     const nextShowedFilter = state.filter?.filters?.find(filter => filter.showed)

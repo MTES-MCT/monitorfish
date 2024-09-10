@@ -6,7 +6,7 @@ import { VesselSearchResultItem } from './VesselSearchResultItem'
 import { getVesselCompositeIdentifier } from '../../domain/entities/vessel/vessel'
 
 export function VesselSearchResult({ foundVessels, searchQuery, selectVessel, showLastSearchedVessels }) {
-  const lastSearchedVessels = useMainAppSelector(state => state.global.lastSearchedVessels)
+  const lastSearchedVessels = useMainAppSelector(state => state.mainWindow.lastSearchedVessels)
   const baseUrl = useMemo(() => window.location.origin, [])
 
   return (

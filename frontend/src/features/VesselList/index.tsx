@@ -1,5 +1,6 @@
 import { MapToolButton } from '@features/MainWindow/components/MapButtons/shared/MapToolButton'
 import { SaveVesselFiltersModal } from '@features/MainWindow/components/MapButtons/VesselFilters/SaveVesselFiltersModal'
+import { hideAllMainWindowComponentsAndSaveDisplayState } from '@features/MainWindow/useCases/hideAllMainWindowComponentsAndSaveDisplayState'
 import { THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { batch } from 'react-redux'
@@ -17,7 +18,6 @@ import { InteractionListener, InteractionType } from '../../domain/entities/map/
 import { VesselLocation } from '../../domain/entities/vessel/vessel'
 import { setDisplayedComponents } from '../../domain/shared_slices/DisplayedComponent'
 import { addFilter } from '../../domain/shared_slices/Filter'
-import { setBlockVesselsUpdate, setPreviewFilteredVesselsMode } from '../../domain/shared_slices/Global'
 import { animateToExtent } from '../../domain/shared_slices/Map'
 import { setPreviewFilteredVesselsFeatures } from '../../domain/shared_slices/Vessel'
 import { addVesselListFilterZone } from '../../domain/use_cases/vessel/addVesselListFilterZone'
@@ -36,6 +36,7 @@ import { resetInteraction } from '../Draw/slice'
 import { useGetFleetSegmentsQuery } from '../FleetSegment/apis'
 import VesselListSVG from '../icons/Icone_liste_navires.svg?react'
 import PreviewSVG from '../icons/Oeil_apercu_carte.svg?react'
+import { setBlockVesselsUpdate, setPreviewFilteredVesselsMode } from '../MainWindow/slice'
 import { setProcessingRegulationSearchedZoneExtent } from '../Regulation/slice'
 
 import type { VesselEnhancedLastPositionWebGLObject } from '../../domain/entities/vessel/types'
@@ -64,7 +65,7 @@ type ZoneGroupAndChildren = {
 
 export function VesselList({ namespace }) {
   const dispatch = useMainAppDispatch()
-  const { previewFilteredVesselsMode, rightMenuIsOpen } = useMainAppSelector(state => state.global)
+  const { previewFilteredVesselsMode, rightMenuIsOpen } = useMainAppSelector(state => state.mainWindow)
   const isVesselListModalDisplayed = useMainAppSelector(state => state.displayedComponent.isVesselListModalDisplayed)
   const { drawedGeometry } = useListenForDrawedGeometry(InteractionListener.VESSELS_LIST)
   const {
@@ -285,6 +286,7 @@ export function VesselList({ namespace }) {
     if (vesselFeatureIds?.length) {
       dispatch(setPreviewFilteredVesselsFeatures(vesselFeatureIds))
       dispatch(setPreviewFilteredVesselsMode(true))
+      dispatch(hideAllMainWindowComponentsAndSaveDisplayState())
 
       if (zonesSelected?.length) {
         // TODO Finish that
@@ -424,7 +426,7 @@ export function VesselList({ namespace }) {
                   setDistrictsFiltered
                 }}
                 fleetSegments={{
-                  fleetSegments: getFleetSegmentsQuery.data || [],
+                  fleetSegments: getFleetSegmentsQuery.data ?? [],
                   fleetSegmentsFiltered,
                   setFleetSegmentsFiltered
                 }}

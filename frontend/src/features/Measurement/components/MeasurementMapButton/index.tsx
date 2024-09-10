@@ -1,3 +1,4 @@
+import { setRightMapBoxOpened } from '@features/MainWindow/slice'
 import { useClickOutsideWhenOpenedAndExecute } from '@hooks/useClickOutsideWhenOpenedAndExecute'
 import { useEscapeFromKeyboardAndExecute } from '@hooks/useEscapeFromKeyboardAndExecute'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -7,7 +8,6 @@ import styled from 'styled-components'
 
 import { CustomCircleRange } from './CustomCircleRange'
 import { MapBox, MeasurementType } from '../../../../domain/entities/map/constants'
-import { setRightMapBoxOpened } from '../../../../domain/shared_slices/Global'
 import { MapComponent } from '../../../commonStyles/MapComponent'
 import MultiLineSVG from '../../../icons/standardized/Measure_broken_line.svg?react'
 import CircleRangeSVG from '../../../icons/standardized/Measure_circle.svg?react'
@@ -18,8 +18,8 @@ import { setMeasurementTypeToAdd } from '../../slice'
 export function MeasurementMapButton() {
   const dispatch = useMainAppDispatch()
   const measurementTypeToAdd = useMainAppSelector(state => state.measurement.measurementTypeToAdd)
-  const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
-  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
+  const rightMapBoxOpened = useMainAppSelector(state => state.mainWindow.rightMapBoxOpened)
+  const rightMenuIsOpen = useMainAppSelector(state => state.mainWindow.rightMenuIsOpen)
 
   const isRightMenuShrinked = !rightMenuIsOpen
   const isOpen = useMemo(() => rightMapBoxOpened === MapBox.MEASUREMENT_MENU, [rightMapBoxOpened])

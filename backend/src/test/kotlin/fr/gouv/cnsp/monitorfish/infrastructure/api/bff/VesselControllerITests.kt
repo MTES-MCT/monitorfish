@@ -21,6 +21,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetVesselReportings
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.*
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
@@ -731,7 +732,23 @@ class VesselControllerITests {
             ),
         )
             .willReturn(
-                CurrentAndArchivedReportings(
+                VesselReportings(
+                    summary =
+                        ReportingSummary(
+                            infractionSuspicionsSummary =
+                                listOf(
+                                    ReportingTitleAndNumberOfOccurrences(
+                                        title = "A title",
+                                        numberOfOccurrences = 2,
+                                    ),
+                                    ReportingTitleAndNumberOfOccurrences(
+                                        title = "A title",
+                                        numberOfOccurrences = 2,
+                                    ),
+                                ),
+                            numberOfInfractionSuspicions = 4,
+                            numberOfObservations = 5,
+                        ),
                     current =
                         listOf(
                             ReportingAndOccurrences(
@@ -803,7 +820,13 @@ class VesselControllerITests {
             ),
         )
             .willReturn(
-                CurrentAndArchivedReportings(
+                VesselReportings(
+                    summary =
+                        ReportingSummary(
+                            infractionSuspicionsSummary = listOf(),
+                            numberOfInfractionSuspicions = 0,
+                            numberOfObservations = 0,
+                        ),
                     current = listOf(),
                     archived = mapOf(),
                 ),

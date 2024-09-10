@@ -28,13 +28,15 @@ object TestUtils {
         validationDate: ZonedDateTime,
         type: ReportingType,
         alertType: AlertTypeMapping?,
+        isArchived: Boolean? = false,
+        natinfCode: Int? = null,
     ): Reporting {
         return Reporting(
             id = id,
             validationDate = validationDate,
             creationDate = ZonedDateTime.now().minusDays(1),
             type = type,
-            isArchived = false,
+            isArchived = isArchived ?: false,
             isDeleted = false,
             infraction =
                 Infraction(
@@ -54,7 +56,7 @@ object TestUtils {
                     else ->
                         InfractionSuspicion(
                             ReportingActor.OPS,
-                            natinfCode = 123456,
+                            natinfCode = natinfCode ?: 123456,
                             authorTrigram = "LTH",
                             title = "A title",
                         )

@@ -9,11 +9,11 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.GearCont
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesInfraction
-import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.repositories.GearRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
+import fr.gouv.cnsp.monitorfish.fakers.PortFaker
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -110,7 +110,12 @@ class GetVesselControlsUTests {
             given(missionActionsRepository.findVesselMissionActionsAfterDateTime(any(), any())).willReturn(
                 expectedControls,
             )
-            given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
+            given(portRepository.findByLocode(eq("AEFAT"))).willReturn(
+                PortFaker.fakePort(
+                    locode = "AEFAT",
+                    name = "Al Jazeera Port",
+                ),
+            )
             given(gearRepository.findByCode(eq("OTB"))).willReturn(Gear("OTB", "Chalut de fond"))
 
             // When

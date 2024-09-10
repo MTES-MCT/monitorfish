@@ -7,9 +7,9 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageAndValue
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
-import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
+import fr.gouv.cnsp.monitorfish.fakers.PortFaker
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -36,9 +36,9 @@ class GetNumberToVerifyUTests {
         // Given
         given(portRepository.findAll()).willReturn(
             listOf(
-                Port("AEFJR", "Al Jazeera Port", facade = "NAMO"),
-                Port("AEFAT", "Al Jazeera Port", facade = "Guyane"),
-                Port("AEJAZ", "Arzanah Island", facade = "SA"),
+                PortFaker.fakePort(locode = "AEFJR", name = "Al Jazeera Port", facade = "NAMO"),
+                PortFaker.fakePort(locode = "AEFAT", name = "Al Jazeera Port", facade = "Guyane"),
+                PortFaker.fakePort(locode = "AEJAZ", name = "Arzanah Island", facade = "SA"),
             ),
         )
         given(logbookReportRepository.findAllPriorNotificationsToVerify()).willReturn(

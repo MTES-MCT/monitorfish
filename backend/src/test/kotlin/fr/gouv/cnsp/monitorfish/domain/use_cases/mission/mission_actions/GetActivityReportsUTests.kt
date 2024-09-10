@@ -11,10 +11,10 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.ActivityCode
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.JointDeploymentPlan
-import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.TestUtils
+import fr.gouv.cnsp.monitorfish.fakers.PortFaker
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -167,7 +167,12 @@ class GetActivityReportsUTests {
                 ),
             )
         given(missionRepository.findByIds(listOf(1, 2, 3))).willReturn(missions)
-        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
+        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(
+            PortFaker.fakePort(
+                locode = "AEFAT",
+                name = "Al Jazeera Port",
+            ),
+        )
 
         // When
         val activityReports =
@@ -313,7 +318,12 @@ class GetActivityReportsUTests {
                 ),
             )
         given(missionRepository.findByIds(listOf(1, 2, 3))).willReturn(missions)
-        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
+        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(
+            PortFaker.fakePort(
+                locode = "AEFAT",
+                name = "Al Jazeera Port",
+            ),
+        )
 
         // When
         val activityReports =
@@ -357,7 +367,26 @@ class GetActivityReportsUTests {
                 FullFleetSegment(
                     "NS01/03",
                     "Otter trawls/Seines",
-                    gears = listOf("OTB", "OTT", "TBN", "PTB", "SDN", "SSC", "SPR", "OT", "TBS", "OTM", "PTM", "TMS", "TM", "TX", "TB", "SX", "SV"),
+                    gears =
+                        listOf(
+                            "OTB",
+                            "OTT",
+                            "TBN",
+                            "PTB",
+                            "SDN",
+                            "SSC",
+                            "SPR",
+                            "OT",
+                            "TBS",
+                            "OTM",
+                            "PTM",
+                            "TMS",
+                            "TM",
+                            "TX",
+                            "TB",
+                            "SX",
+                            "SV",
+                        ),
                     targetSpecies = listOf("COD", "HAD", "WHG", "POK", "SOL", "PLE", "NEP", "HKE"),
                     faoAreas = listOf("27.2.a", "27.4.a", "27.4.b", "27.4.c"),
                     year = ZonedDateTime.now().year,
@@ -421,7 +450,12 @@ class GetActivityReportsUTests {
                 ),
             )
         given(missionRepository.findByIds(eq(listOf(1)))).willReturn(missions)
-        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
+        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(
+            PortFaker.fakePort(
+                locode = "AEFAT",
+                name = "Al Jazeera Port",
+            ),
+        )
 
         // When
         val activityReports =
@@ -716,7 +750,12 @@ class GetActivityReportsUTests {
             )
         // The mission id 2 is not returned
         given(missionRepository.findByIds(listOf(1, 2, 3))).willReturn(missions)
-        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
+        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(
+            PortFaker.fakePort(
+                locode = "AEFAT",
+                name = "Al Jazeera Port",
+            ),
+        )
 
         // When
         val activityReports =
@@ -827,7 +866,12 @@ class GetActivityReportsUTests {
             )
         // The mission id 1 is not returned
         given(missionRepository.findByIds(listOf(1, 3))).willReturn(missions)
-        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
+        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(
+            PortFaker.fakePort(
+                locode = "AEFAT",
+                name = "Al Jazeera Port",
+            ),
+        )
 
         // When
         val activityReports =
@@ -903,7 +947,12 @@ class GetActivityReportsUTests {
             )
         // The mission id 2 is not returned
         given(missionRepository.findByIds(listOf(1))).willReturn(missions)
-        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
+        given(portRepository.findByLocode(eq("AEFAT"))).willReturn(
+            PortFaker.fakePort(
+                locode = "AEFAT",
+                name = "Al Jazeera Port",
+            ),
+        )
 
         // When
         val activityReports =

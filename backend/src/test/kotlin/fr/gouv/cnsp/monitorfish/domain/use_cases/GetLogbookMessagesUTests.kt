@@ -4,7 +4,6 @@ import com.nhaarman.mockitokotlin2.any
 import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
-import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyCorrectedLogbookMessages
@@ -12,6 +11,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyFluxAndVisioC
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyLogbookMessages
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyRETLogbookMessages
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetLogbookMessages
+import fr.gouv.cnsp.monitorfish.fakers.PortFaker
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -56,8 +56,8 @@ class GetLogbookMessagesUTests {
         )
         given(portRepository.findAll()).willReturn(
             listOf(
-                Port("AEFAT", "Al Jazeera Port"),
-                Port("AEJAZ", "Arzanah Island"),
+                PortFaker.fakePort(locode = "AEFAT", name = "Al Jazeera Port"),
+                PortFaker.fakePort(locode = "AEJAZ", name = "Arzanah Island"),
             ),
         )
         given(speciesRepository.findAll()).willReturn(
@@ -151,8 +151,8 @@ class GetLogbookMessagesUTests {
         )
         given(portRepository.findAll()).willReturn(
             listOf(
-                Port("AEFAT", "Al Jazeera Port"),
-                Port("AEJAZ", "Arzanah Island"),
+                PortFaker.fakePort(locode = "AEFAT", name = "Al Jazeera Port"),
+                PortFaker.fakePort(locode = "AEJAZ", name = "Arzanah Island"),
             ),
         )
         given(speciesRepository.findAll()).willReturn(
@@ -210,8 +210,8 @@ class GetLogbookMessagesUTests {
         )
         given(portRepository.findAll()).willReturn(
             listOf(
-                Port("AEFAT", "Al Jazeera Port"),
-                Port("AEJAZ", "Arzanah Island"),
+                PortFaker.fakePort(locode = "AEFAT", name = "Al Jazeera Port"),
+                PortFaker.fakePort(locode = "AEJAZ", name = "Arzanah Island"),
             ),
         )
         given(speciesRepository.findAll()).willReturn(
@@ -339,8 +339,8 @@ class GetLogbookMessagesUTests {
         )
         given(portRepository.findAll()).willReturn(
             listOf(
-                Port("AEFAT", "Al Jazeera Port"),
-                Port("AEJAZ", "Arzanah Island"),
+                PortFaker.fakePort(locode = "AEFAT", name = "Al Jazeera Port"),
+                PortFaker.fakePort(locode = "AEJAZ", name = "Arzanah Island"),
             ),
         )
         given(speciesRepository.findAll()).willReturn(
@@ -386,8 +386,8 @@ class GetLogbookMessagesUTests {
         )
         given(portRepository.findAll()).willReturn(
             listOf(
-                Port("AEFAT", "Al Jazeera Port"),
-                Port("AEJAZ", "Arzanah Island"),
+                PortFaker.fakePort(locode = "AEFAT", name = "Al Jazeera Port"),
+                PortFaker.fakePort(locode = "AEJAZ", name = "Arzanah Island"),
             ),
         )
         given(speciesRepository.findAll()).willReturn(
@@ -435,8 +435,8 @@ class GetLogbookMessagesUTests {
         )
         given(portRepository.findAll()).willReturn(
             listOf(
-                Port("AEFAT", "Al Jazeera Port"),
-                Port("AEJAZ", "Arzanah Island"),
+                PortFaker.fakePort(locode = "AEFAT", name = "Al Jazeera Port"),
+                PortFaker.fakePort(locode = "AEJAZ", name = "Arzanah Island"),
             ),
         )
         given(speciesRepository.findAll()).willReturn(

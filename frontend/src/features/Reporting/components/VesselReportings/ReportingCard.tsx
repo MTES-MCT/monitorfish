@@ -1,8 +1,8 @@
-import { getReportingActorLabel } from '@features/Reporting/components/VesselReportings/utils'
+import { getFrenchOrdinal, getReportingActorLabel } from '@features/Reporting/components/VesselReportings/utils'
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { Accent, Icon, IconButton, THEME } from '@mtes-mct/monitor-ui'
-import { useMemo } from 'react'
+import { Accent, Icon, IconButton, THEME, Link } from '@mtes-mct/monitor-ui'
+import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { getDateTime } from '../../../../utils'
@@ -16,21 +16,31 @@ import type { Promisable } from 'type-fest'
 
 export type ReportingCardProps = {
   isArchived?: boolean
-  numberOfOccurrences: number
   openConfirmDeletionModal?: ({ id, reportingType }) => Promisable<void>
+  otherOccurrencesOfSameAlert: Array<Reporting>
   reporting: Reporting
 }
 export function ReportingCard({
   isArchived = false,
-  numberOfOccurrences,
   openConfirmDeletionModal,
+  otherOccurrencesOfSameAlert,
   reporting
 }: ReportingCardProps) {
   const dispatch = useMainAppDispatch()
+  const [isOtherOccurrencesDatesOpened, setIsOtherOccurrencesDatesOpened] = useState(false)
   const isAnInfractionSuspicion = reportingIsAnInfractionSuspicion(reporting.type)
   const reportingName = Object.values(ReportingTypeCharacteristics).find(
     reportingType => reportingType.code === reporting.type
   )?.name
+  const alertDateTime = getDateTime(
+    reporting.type === ReportingType.ALERT ? reporting.validationDate : reporting.creationDate,
+    true
+  )
+  const otherOccurrencesDates = [reporting].concat(otherOccurrencesOfSameAlert).map((alert, index, array) => {
+    const dateTime = getDateTime(alert.validationDate, true)
+
+    return `${getFrenchOrdinal(array.length - (index + 1))} alerte le ${dateTime}`
+  })
 
   const reportingActor = useMemo(() => {
     if (reporting.type === ReportingType.ALERT) {
@@ -53,10 +63,23 @@ export function ReportingCard({
           {reporting.type === ReportingType.ALERT ? getAlertNameFromType(reporting.value.type) : reporting.value.title}
         </Title>
         <Date>
-          {numberOfOccurrences ? 'Dernière alerte le' : 'Le'}{' '}
-          {getDateTime(
-            reporting.type === ReportingType.ALERT ? reporting.validationDate : reporting.creationDate,
-            true
+          {otherOccurrencesOfSameAlert.length > 0 ? 'Dernière alerte le' : 'Le'} {alertDateTime}
+          {otherOccurrencesOfSameAlert.length > 0 && !isOtherOccurrencesDatesOpened && (
+            <OpenOrCloseOtherOccurrenceDates onClick={() => setIsOtherOccurrencesDatesOpened(true)}>
+              Voir les dates des autres alertes
+            </OpenOrCloseOtherOccurrenceDates>
+          )}
+          {isOtherOccurrencesDatesOpened && (
+            <OtherOccurrenceDates>
+              {otherOccurrencesDates.map(dateTime => (
+                <OtherOccurrenceAlertDate>{dateTime}</OtherOccurrenceAlertDate>
+              ))}
+            </OtherOccurrenceDates>
+          )}
+          {otherOccurrencesOfSameAlert.length > 0 && isOtherOccurrencesDatesOpened && (
+            <OpenOrCloseOtherOccurrenceDates onClick={() => setIsOtherOccurrencesDatesOpened(false)}>
+              Masquer les dates des autres alertes
+            </OpenOrCloseOtherOccurrenceDates>
           )}
         </Date>
         {reporting.type !== ReportingType.ALERT && <Description>{reporting.value.description}</Description>}
@@ -81,10 +104,12 @@ export function ReportingCard({
         )}
       </Body>
       {isArchived ? (
-        <>{numberOfOccurrences > 1 && <NumberOfAlerts isArchived>{numberOfOccurrences}</NumberOfAlerts>}</>
+        <NumberOfAlerts isArchived>{otherOccurrencesOfSameAlert.length + 1}</NumberOfAlerts>
       ) : (
-        <Actions hasOccurrences={numberOfOccurrences > 1}>
-          {numberOfOccurrences > 1 && <NumberOfAlerts>{numberOfOccurrences}</NumberOfAlerts>}
+        <Actions hasOccurrences={otherOccurrencesOfSameAlert.length > 0}>
+          {otherOccurrencesOfSameAlert.length > 0 && (
+            <NumberOfAlerts>{otherOccurrencesOfSameAlert.length + 1}</NumberOfAlerts>
+          )}
           {reporting.type !== ReportingType.ALERT && (
             <IconButton
               accent={Accent.TERTIARY}
@@ -127,6 +152,25 @@ const Wrapper = styled.div<{
     padding-box;
   display: flex;
   margin-bottom: 16px;
+`
+
+const OtherOccurrenceAlertDate = styled.span`
+  font-size: 11px;
+  margin-top: 4px;
+  display: block;
+  color: ${p => p.theme.color.gunMetal};
+`
+
+const OtherOccurrenceDates = styled.div`
+  margin-top: 4px;
+  display: block;
+`
+
+const OpenOrCloseOtherOccurrenceDates = styled(Link)`
+  font-size: 11px;
+  display: block;
+  margin-top: 4px;
+  cursor: pointer;
 `
 
 const StyledAlertIcon = styled(Icon.Alert)`
@@ -184,7 +228,7 @@ const Natinf = styled.div`
   background: ${p => p.theme.color.white};
   color: ${p => p.theme.color.gunMetal};
   font: normal normal medium 13px/18px Marianne;
-  margin-top: 10px;
+  margin-top: 12px;
   padding: 2px 8px;
   width: fit-content;
 `

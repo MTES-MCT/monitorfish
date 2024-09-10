@@ -48,7 +48,7 @@ const CloseFormIcon = styled(IconButton)`
 `
 
 const FormWrapper = styled.div`
-  margin-bottom: 10px;
+  margin-bottom: 16px;
   width: 448px;
   display: inline-block;
   background: ${THEME.color.gainsboro} 0% 0% no-repeat padding-box;

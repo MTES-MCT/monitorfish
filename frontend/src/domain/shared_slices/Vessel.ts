@@ -12,9 +12,7 @@ import {
 } from '../entities/vessel/vessel'
 
 import type {
-  AugmentedSelectedVessel,
   FishingActivityShowedOnMap,
-  SelectedVessel,
   ShowedVesselTrack,
   TrackRequest,
   VesselEnhancedLastPositionWebGLObject,
@@ -22,6 +20,7 @@ import type {
   VesselIdentity,
   VesselPosition
 } from '../entities/vessel/types'
+import type { Vessel as VesselTypes } from '@features/Vessel/Vessel.types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 const NOT_FOUND = -1
@@ -63,7 +62,7 @@ export type VesselState = {
   isFocusedOnVesselSearch: boolean
   loadingPositions: boolean | null
   loadingVessel: boolean | null
-  selectedVessel: AugmentedSelectedVessel | null
+  selectedVessel: VesselTypes.AugmentedSelectedVessel | null
   selectedVesselIdentity: VesselIdentity | null
   selectedVesselPositions: VesselPosition[] | null
   selectedVesselTrackRequest: TrackRequest | null
@@ -147,7 +146,7 @@ const vesselSlice = createSlice({
         const nextVesselReportings = reportings.concat(action.payload.reportingType)
 
         state.selectedVessel = {
-          ...(state.selectedVessel as AugmentedSelectedVessel),
+          ...(state.selectedVessel as VesselTypes.AugmentedSelectedVessel),
           hasInfractionSuspicion: nextVesselReportings.some(reportingIsAnInfractionSuspicion),
           reportings: nextVesselReportings
         }
@@ -251,7 +250,7 @@ const vesselSlice = createSlice({
       })
 
       if (state.selectedVessel) {
-        const filteredAlerts = state.selectedVessel.alerts?.filter(alert => alert !== action.payload.alertType) || []
+        const filteredAlerts = state.selectedVessel.alerts?.filter(alert => alert !== action.payload.alertType) ?? []
 
         let reportingsWithAlert: ReportingType[] = []
         if (state.selectedVessel.reportings?.length) {
@@ -259,7 +258,7 @@ const vesselSlice = createSlice({
         }
         reportingsWithAlert = reportingsWithAlert.concat([ReportingType.ALERT])
         state.selectedVessel = {
-          ...(state.selectedVessel as AugmentedSelectedVessel),
+          ...(state.selectedVessel as VesselTypes.AugmentedSelectedVessel),
           alerts: filteredAlerts,
           hasAlert: filteredAlerts && !!filteredAlerts.length,
           hasInfractionSuspicion: reportingsWithAlert.some(reportingType =>
@@ -378,7 +377,7 @@ const vesselSlice = createSlice({
         )
 
         state.selectedVessel = {
-          ...(state.selectedVessel as AugmentedSelectedVessel),
+          ...(state.selectedVessel as VesselTypes.AugmentedSelectedVessel),
           hasInfractionSuspicion: vesselReportingWithoutFirstFoundReportingTypes.some(reportingType =>
             reportingIsAnInfractionSuspicion(reportingType)
           ),
@@ -496,7 +495,7 @@ const vesselSlice = createSlice({
       state,
       action: PayloadAction<{
         positions: VesselPosition[]
-        vessel: SelectedVessel
+        vessel: VesselTypes.SelectedVessel
       }>
     ) {
       state.loadingVessel = null

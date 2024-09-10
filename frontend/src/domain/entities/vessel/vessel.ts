@@ -4,13 +4,7 @@ import { VesselLabel } from './label/types'
 import { BaseLayers } from '../layers/constants'
 import { MonitorFishLayer } from '../layers/types'
 
-import type {
-  SelectedVessel,
-  ShowedVesselTrack,
-  VesselCompositeIdentifier,
-  VesselEnhancedObject,
-  VesselIdentity
-} from './types'
+import type { ShowedVesselTrack, VesselCompositeIdentifier, VesselIdentity } from './types'
 import type { LastPositionVisibility } from '../../types/map'
 import type { Reporting } from '@features/Reporting/types'
 import type { Vessel as VesselTypes } from '@features/Vessel/Vessel.types'
@@ -48,7 +42,7 @@ export class Vessel {
    * @return The label object
    */
   static getVesselFeatureLabel(
-    feature: VesselEnhancedObject,
+    feature: VesselTypes.VesselEnhancedObject,
     options: {
       hideVesselsAtPort: boolean
       isRiskFactorShowed: boolean
@@ -143,7 +137,7 @@ export class Vessel {
 }
 
 export const getOnlyVesselIdentityProperties = (
-  vessel: VesselEnhancedObject | SelectedVessel | VesselTypes.EnrichedVessel | Reporting
+  vessel: VesselTypes.VesselEnhancedObject | VesselTypes.SelectedVessel | VesselTypes.EnrichedVessel | Reporting
 ): VesselIdentity => ({
   beaconNumber: 'beaconNumber' in vessel && !!vessel.beaconNumber ? vessel.beaconNumber : null,
   districtCode: 'districtCode' in vessel && !!vessel.districtCode ? vessel.districtCode : null,

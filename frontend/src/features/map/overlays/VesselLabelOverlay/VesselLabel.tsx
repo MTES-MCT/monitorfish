@@ -50,7 +50,7 @@ export function VesselLabel({
   return previewFilteredVesselsMode ? (
     <>
       {text ? (
-        <ZoneText data-cy="vessel-label-text" isLittle>
+        <ZoneText $isLittle data-cy="vessel-label-text">
           {text}
         </ZoneText>
       ) : null}
@@ -61,7 +61,7 @@ export function VesselLabel({
         <Text>
           {text && (
             <>
-              {flagState ? <Flag rel="preload" src={`flags/${flagState.toLowerCase()}.svg`} /> : null}
+              {flagState ? <Flag $rel="preload" src={`flags/${flagState.toLowerCase()}.svg`} /> : null}
               <ZoneText
                 data-cy="vessel-label-text"
                 onClick={() => {
@@ -77,9 +77,9 @@ export function VesselLabel({
         </Text>
         {riskFactor?.globalRisk && (
           <RiskFactor
+            $hasText={text}
             color={getRiskFactorColor(riskFactor?.globalRisk)}
             data-cy="vessel-label-risk-factor"
-            hasText={text}
             onClick={() => {
               if (!overlayIsPanning.current) {
                 setShowRiskFactorDetails(!showRiskFactorDetails)
@@ -92,7 +92,7 @@ export function VesselLabel({
         )}
       </VesselLabelOverlayElement>
       {riskFactor && showRiskFactorDetails && (
-        <RiskFactorDetails data-cy="vessel-label-risk-factor-details" underCharter={underCharter}>
+        <RiskFactorDetails $underCharter={underCharter} data-cy="vessel-label-risk-factor-details">
           {underCharter && (
             <UnderCharterInfo>
               <UnderCharterText>
@@ -125,19 +125,19 @@ export function VesselLabel({
           </RiskFactorDetail>
         </RiskFactorDetails>
       )}
-      {underCharter && !showRiskFactorDetails && <UnderCharter data-cy={`${text}-under-charter`} hasBoxShadow />}
+      {underCharter && !showRiskFactorDetails && <UnderCharter $hasBoxShadow data-cy={`${text}-under-charter`} />}
     </>
   )
 }
 
 const UnderCharter = styled.span<{
-  hasBoxShadow?: boolean
+  $hasBoxShadow?: boolean
 }>`
   border-radius: 5px;
   width: 10px;
   height: 10px;
   background: ${COLORS.mediumSeaGreen} 0% 0% no-repeat padding-box;
-  ${p => (p.hasBoxShadow ? `box-shadow: 0px 2px 3px ${COLORS.slateGray}` : null)};
+  ${p => (p.$hasBoxShadow ? `box-shadow: 0px 2px 3px ${COLORS.slateGray}` : null)};
   margin-left: -5px;
   margin-top: -5px;
   margin-right: 2px;
@@ -168,12 +168,12 @@ const UnderCharterText = styled.span`
 `
 
 const RiskFactorDetails = styled.div<{
-  underCharter: boolean
+  $underCharter: boolean
 }>`
   box-shadow: 0px 2px 3px ${p => p.theme.color.charcoalShadow};
   background: ${COLORS.white};
   line-height: 18px;
-  height: ${p => (p.underCharter ? 94 : 72)}px;
+  height: ${p => (p.$underCharter ? 94 : 72)}px;
   margin-left: 2px;
   transition: 0.2s all;
   cursor: grabbing;
@@ -214,7 +214,7 @@ const VesselLabelOverlayElement = styled.div`
 `
 
 const Flag = styled.img<{
-  rel?: 'preload'
+  $rel?: 'preload'
 }>`
   vertical-align: bottom;
   height: 13px;
@@ -225,23 +225,23 @@ const Flag = styled.img<{
 `
 
 const ZoneText = styled.span<{
-  isLittle?: boolean
+  $isLittle?: boolean
 }>`
-  margin-bottom: ${p => (p.isLittle ? 0 : 3)}px;
+  margin-bottom: ${p => (p.$isLittle ? 0 : 3)}px;
   margin-right: 6px;
-  font-size: ${p => (p.isLittle ? 8 : 11)}px;
+  font-size: ${p => (p.$isLittle ? 8 : 11)}px;
   font-weight: 500;
   display: inline-block;
   user-select: none;
   color: ${COLORS.gunMetal};
-  line-height: ${p => (p.isLittle ? 35 : 17)}px;
+  line-height: ${p => (p.$isLittle ? 35 : 17)}px;
   cursor: pointer;
   margin-left: 2px;
   vertical-align: middle;
 `
 
 const RiskFactor = styled.span<{
-  hasText: boolean
+  $hasText: boolean
 }>`
   width: 24px;
   height: 19px;
@@ -257,6 +257,6 @@ const RiskFactor = styled.span<{
   line-height: 17px;
   cursor: pointer;
   border-radius: 1px;
-  ${p => (p.hasText ? 'border-bottom-left-radius: 0;' : null)}
-  ${p => (p.hasText ? 'border-top-left-radius: 0;' : null)}
+  ${p => (p.$hasText ? 'border-bottom-left-radius: 0;' : null)}
+  ${p => (p.$hasText ? 'border-top-left-radius: 0;' : null)}
 `

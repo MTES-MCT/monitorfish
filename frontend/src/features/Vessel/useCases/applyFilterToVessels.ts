@@ -3,7 +3,9 @@ import { setAllVesselsAsUnfiltered, setFilteredVesselsFeatures } from '../../../
 import { getFilteredVessels } from '../../../domain/use_cases/vessel/getFilteredVessels'
 import NoVesselsInFilterError from '../../../errors/NoVesselsInFilterError'
 
-export const applyFilterToVessels = () => (dispatch, getState) => {
+import type { MainAppThunk } from '@store'
+
+export const applyFilterToVessels = (): MainAppThunk => (dispatch, getState) => {
   const showedFilter = getState().filter?.filters?.find(filter => filter.showed)
   const { vessels } = getState().vessel
   if (!showedFilter) {

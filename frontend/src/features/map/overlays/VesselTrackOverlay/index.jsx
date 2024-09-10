@@ -1,42 +1,46 @@
+import Overlay from 'ol/Overlay'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import Overlay from 'ol/Overlay'
+
 import VesselTrackCard from './VesselTrackCard'
 import { COLORS } from '../../../../constants/constants'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
-import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from '../Overlay'
-import { getMapResolution } from '../../utils'
 import { monitorfishMap } from '../../monitorfishMap'
+import { getMapResolution } from '../../utils'
+import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from '../Overlay'
 
 const overlayBoxSize = 240
 const margins = {
-  xRight: -397,
-  xMiddle: -175,
   xLeft: 20,
-  yTop: 20,
+  xMiddle: -175,
+  xRight: -397,
+  yBottom: -170,
   yMiddle: -85,
-  yBottom: -170
+  yTop: 20
 }
 
-const VesselTrackOverlay = ({ feature }) => {
+function VesselTrackOverlay({ feature }) {
   const [vesselFeatureToShowOnCard, setVesselFeatureToShowOnCard] = useState(null)
   const overlayRef = useRef(null)
   const overlayObjectRef = useRef(null)
   const [overlayTopLeftMargin, setOverlayTopLeftMargin] = useState([margins.yBottom, margins.xMiddle])
   const [overlayPosition, setOverlayPosition] = useState(OverlayPosition.BOTTOM)
 
-  const overlayCallback = useCallback(ref => {
-    overlayRef.current = ref
-    if (ref) {
-      overlayObjectRef.current = new Overlay({
-        element: ref,
-        autoPan: false,
-        className: 'ol-overlay-container ol-selectable vessel-card'
-      })
-    } else {
-      overlayObjectRef.current = null
-    }
-  }, [overlayRef, overlayObjectRef])
+  const overlayCallback = useCallback(
+    ref => {
+      overlayRef.current = ref
+      if (ref) {
+        overlayObjectRef.current = new Overlay({
+          autoPan: false,
+          className: 'ol-overlay-container ol-selectable vessel-card',
+          element: ref
+        })
+      } else {
+        overlayObjectRef.current = null
+      }
+    },
+    [overlayRef, overlayObjectRef]
+  )
 
   useEffect(() => {
     monitorfishMap.addOverlay(overlayObjectRef.current)
@@ -45,7 +49,10 @@ const VesselTrackOverlay = ({ feature }) => {
   useEffect(() => {
     if (overlayRef.current && overlayObjectRef.current) {
       // TODO Refactor: clean nullish checks & useEffect usage
-      if (feature?.getId()?.toString()?.includes(LayerProperties.VESSEL_TRACK.code) && feature?.getId()?.toString()?.includes('position')) {
+      if (
+        feature?.getId()?.toString()?.includes(LayerProperties.VESSEL_TRACK.code) &&
+        feature?.getId()?.toString()?.includes('position')
+      ) {
         setVesselFeatureToShowOnCard(feature)
         overlayRef.current.style.display = 'block'
         overlayObjectRef.current.setPosition(feature.getGeometry().getCoordinates())
@@ -60,7 +67,7 @@ const VesselTrackOverlay = ({ feature }) => {
     }
   }, [setVesselFeatureToShowOnCard, feature, overlayRef, overlayObjectRef])
 
-  function getNextOverlayPosition () {
+  function getNextOverlayPosition() {
     const [x, y] = feature.getGeometry().getCoordinates()
     const extent = monitorfishMap.getView().calculateExtent()
     const boxSize = getMapResolution() * overlayBoxSize
@@ -69,21 +76,18 @@ const VesselTrackOverlay = ({ feature }) => {
   }
 
   return (
-    <VesselTrackCardOverlayComponent ref={overlayCallback} overlayTopLeftMargin={overlayTopLeftMargin}>
-      {
-        vesselFeatureToShowOnCard
-          ? <VesselTrackCard feature={vesselFeatureToShowOnCard}
-                             overlayPosition={overlayPosition}/>
-          : null
-      }
+    <VesselTrackCardOverlayComponent ref={overlayCallback} $overlayTopLeftMargin={overlayTopLeftMargin}>
+      {vesselFeatureToShowOnCard ? (
+        <VesselTrackCard feature={vesselFeatureToShowOnCard} overlayPosition={overlayPosition} />
+      ) : null}
     </VesselTrackCardOverlayComponent>
   )
 }
 
 const VesselTrackCardOverlayComponent = styled.div`
   position: absolute;
-  top: ${props => props.overlayTopLeftMargin[0]}px;
-  left: ${props => props.overlayTopLeftMargin[1]}px;
+  top: ${props => props.$overlayTopLeftMargin[0]}px;
+  left: ${props => props.$overlayTopLeftMargin[1]}px;
   width: 350px;
   text-align: left;
   background-color: ${COLORS.gainsboro};

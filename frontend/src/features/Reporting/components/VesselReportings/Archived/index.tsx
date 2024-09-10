@@ -1,5 +1,5 @@
 import { getVesselReportings } from '@features/Reporting/useCases/getVesselReportings'
-import { Header, Zone } from '@features/VesselSidebar/common_styles/common.style'
+import { Header, Zone } from '@features/Vessel/components/VesselSidebar/common_styles/common.style'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, THEME, Button } from '@mtes-mct/monitor-ui'

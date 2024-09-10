@@ -106,7 +106,7 @@ export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSumma
     <>
       {fishingActivities ? (
         <Body>
-          <Zone white>
+          <Zone $isWhite>
             <Title>
               <Text>Segment(s) de flotte(s) actuel(s)</Text>
               <TextValue>
@@ -139,7 +139,7 @@ export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSumma
             </Fields>
           </Zone>
           <Zone>
-            <Title hasTwoLines={false}>
+            <Title $hasTwoLines={false}>
               <Text hasTwoLines>Résumé du JPE</Text>
               <TextValue data-cy="vessel-fishing-trip-number" hasTwoLines={false}>
                 <PreviousTrip
@@ -403,11 +403,11 @@ const Body = styled.div`
 const TableBody = styled.tbody``
 
 const Title = styled.div<{
-  hasTwoLines?: boolean
+  $hasTwoLines?: boolean
 }>`
   color: ${p => p.theme.color.slateGray};
   background: ${p => p.theme.color.lightGray};
-  padding: ${p => (p.hasTwoLines ? '7px 10px 7px 20px;' : '8.5px 10px 8px 20px;')};
+  padding: ${p => (p.$hasTwoLines ? '7px 10px 7px 20px;' : '8.5px 10px 8px 20px;')};
   font-size: 13px;
   flex-shrink: 0;
   flex-grow: 2;
@@ -416,9 +416,9 @@ const Title = styled.div<{
 `
 
 const Zone = styled.div<{
-  white?: boolean
+  $isWhite?: boolean
 }>`
-  background: ${p => (p.white ? p.theme.color.white : 'unset')};
+  background: ${p => (p.$isWhite ? p.theme.color.white : 'unset')};
   display: flex;
   flex-wrap: wrap;
   text-align: left;

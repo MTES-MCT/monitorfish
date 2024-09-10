@@ -12,7 +12,8 @@ import { doNotAnimate } from '../../shared_slices/Map'
 import { loadingVessel, resetLoadingVessel, setSelectedVessel } from '../../shared_slices/Vessel'
 import { displayOrLogError } from '../error/displayOrLogError'
 
-import type { SelectedVessel, VesselEnhancedObject, VesselIdentity } from '../../entities/vessel/types'
+import type { VesselIdentity } from '../../entities/vessel/types'
+import type { Vessel as VesselTypes } from '@features/Vessel/Vessel.types'
 
 /**
  * Show a specified vessel track on map and on the vessel right sidebar
@@ -33,7 +34,7 @@ export const showVessel =
       )
 
       const vesselFeatureId = Vessel.getVesselFeatureId(vesselIdentity)
-      const selectedVesselLastPosition: VesselEnhancedObject | undefined = vessels.find(
+      const selectedVesselLastPosition: VesselTypes.VesselEnhancedObject | undefined = vessels.find(
         lastPosition => lastPosition.vesselFeatureId === vesselFeatureId
       )?.vesselProperties
 
@@ -80,7 +81,7 @@ export const showVessel =
       dispatch(
         setSelectedVessel({
           positions: vesselAndPositions.positions,
-          vessel: selectedVessel as SelectedVessel
+          vessel: selectedVessel as VesselTypes.SelectedVessel
         })
       )
     } catch (error) {

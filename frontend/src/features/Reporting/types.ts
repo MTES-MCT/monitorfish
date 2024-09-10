@@ -1,3 +1,5 @@
+// TODO Wrap into a `Reporting` namespace.
+
 import { Seafront } from '@constants/seafront'
 
 import { VesselIdentifier } from '../../domain/entities/vessel/types'

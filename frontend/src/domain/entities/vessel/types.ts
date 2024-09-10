@@ -67,13 +67,6 @@ export type VesselIdentity = {
   vesselName?: string | null
 }
 
-export type SelectedVessel = VesselEnhancedObject & Vessel.EnrichedVessel
-
-export type AugmentedSelectedVessel = SelectedVessel & {
-  hasAlert: boolean
-  hasInfractionSuspicion: boolean
-}
-
 export type VesselAndPositions = {
   positions: VesselPosition[]
   vessel: Vessel.EnrichedVessel
@@ -244,19 +237,7 @@ export type VesselEnhancedLastPositionWebGLObject = {
   lastPositionSentAt: number
   speed: number
   vesselFeatureId: VesselFeatureId
-  vesselProperties: VesselEnhancedObject
+  vesselProperties: Vessel.VesselEnhancedObject
 }
 
 export type VesselLastPositionFeature = Feature<Point> & VesselEnhancedLastPositionWebGLObject
-
-export type VesselEnhancedObject = VesselLastPosition & {
-  alerts: Array<PendingAlertValueType | 'PNO_LAN_WEIGHT_TOLERANCE_ALERT'>
-  flagState: string
-  fleetSegmentsArray: string[]
-  gearsArray: string[]
-  hasAlert: boolean
-  hasInfractionSuspicion: boolean
-  lastControlDateTimeTimestamp: number | string
-  reportings: ReportingType[]
-  speciesArray: string[]
-}

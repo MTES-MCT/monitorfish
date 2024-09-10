@@ -29,4 +29,6 @@ VALUES
     (            'FR',              'MEMN',   '06', 'FRNCE', 'Nice', 43.42, 7.16, null, true),
     (            'FR',              'NAMO',   '35', 'FRSML', 'Saint-Malo', 48.39, 2.01, null, true),
     (            'FR',              'NAMO',   '56', 'FRVNE', 'Vannes', 47.39, 2.46, null, true),
-    (            'RE',  'Sud Océan Indien',  '974', 'REZSE', 'Saint-Denis De La Réunion', -20.88, 55.45, ARRAY ['51.6', '51.7'], true);
+    (            'RE',  'Sud Océan Indien',  '974', 'REZSE', 'Saint-Denis De La Réunion', -20.88, 55.45, ARRAY ['51.6', '51.7'], true),
+    (            'AU',                null,   null, 'AUSYD', 'Sydney', -33.51, 151.12, null, true),
+    (            'BR',                null,   null, 'BROIA', 'Oiapoque', 3.51, -51.49, null, true);

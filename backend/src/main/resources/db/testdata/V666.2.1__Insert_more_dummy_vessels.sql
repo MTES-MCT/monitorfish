@@ -52,3 +52,7 @@ INSERT INTO vessels (id, cfr, mmsi, ircs, external_immatriculation, vessel_name,
 INSERT INTO vessels (id, cfr, mmsi, ircs, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (126, 'CFR126', 'MMSI126', 'IRCS126', 'EXTIMM126', 'THON BEAU', 'FR', 17.8, false);
 
 INSERT INTO vessels (id, cfr, mmsi, ircs, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (127, 'CFR127', 'MMSI127', 'IRCS127', 'EXTIMM127', 'MILLE SABORDS', 'FR', 16.9, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (128, 'CFR128', 'MMSI128', 'IRCS128', 'EXTIMM128', 'THE FLOATING KANGAROO', 'AU', 31, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (129, 'CFR129', 'MMSI129', 'IRCS129', 'EXTIMM129', 'BON VENT', 'FR', 34.5, false);

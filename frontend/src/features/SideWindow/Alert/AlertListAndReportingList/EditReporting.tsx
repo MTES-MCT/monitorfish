@@ -2,7 +2,6 @@ import { ErrorWall } from '@components/ErrorWall'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
-import { THEME } from '@mtes-mct/monitor-ui'
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
@@ -26,7 +25,7 @@ export function EditReporting() {
 
   if (displayedError) {
     return (
-      <EditReportingWrapper isEditedInSideWindow={!!editedReportingInSideWindow}>
+      <EditReportingWrapper $isEditedInSideWindow={!!editedReportingInSideWindow}>
         <ErrorWall displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_REPORTING_FORM_ERROR} isAbsolute />
       </EditReportingWrapper>
     )
@@ -34,16 +33,16 @@ export function EditReporting() {
 
   return (
     <EditReportingWrapper
+      $isEditedInSideWindow={!!editedReportingInSideWindow}
       data-cy="side-window-beacon-malfunctions-detail"
-      isEditedInSideWindow={!!editedReportingInSideWindow}
     >
       <Header>
-        <Row topMargin={0}>
+        <Row $topMargin={0}>
           <AlertsIcon />
           <Title> ÉDITER LE SIGNALEMENT</Title>
           <CloseIcon onClick={() => dispatch(setEditedReportingInSideWindow())} />
         </Row>
-        <Row topMargin={6}>
+        <Row $topMargin={6}>
           {editedReportingInSideWindow && editedReportingInSideWindow.flagState && (
             <Flag rel="preload" src={`${baseUrl}/flags/${editedReportingInSideWindow.flagState.toLowerCase()}.svg`} />
           )}
@@ -73,11 +72,11 @@ export function EditReporting() {
 }
 
 const EditReportingWrapper = styled.div<{
-  isEditedInSideWindow: boolean
+  $isEditedInSideWindow: boolean
 }>`
-  background: ${THEME.color.white};
+  background: ${p => p.theme.color.white};
   height: 100vh;
-  margin-right: ${p => (p.isEditedInSideWindow ? 0 : -490)}px;
+  margin-right: ${p => (p.$isEditedInSideWindow ? 0 : -490)}px;
   position: fixed;
   right: 0px;
   top: 0px;
@@ -91,13 +90,11 @@ const StyledReportingForm = styled(ReportingForm)`
 `
 
 const Line = styled.div`
-  border-bottom: 1px solid ${THEME.color.lightGray};
+  border-bottom: 1px solid ${p => p.theme.color.lightGray};
   width: 100%;
 `
 
-const Flag = styled.img<{
-  rel?: 'preload'
-}>`
+const Flag = styled.img`
   cursor: pointer;
   display: inline-block;
   height: 14;
@@ -106,7 +103,7 @@ const Flag = styled.img<{
 `
 
 const VesselName = styled.div`
-  color: ${THEME.color.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   font: normal normal bold 16px/22px Marianne;
   margin-left: 8px;
   overflow: hidden;
@@ -115,7 +112,7 @@ const VesselName = styled.div`
 `
 
 const InternalReferenceNumber = styled.div`
-  color: ${THEME.color.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   font: normal normal normal 16px/22px Marianne;
   margin-left: 5;
 `
@@ -130,10 +127,10 @@ const CloseIcon = styled(CloseIconSVG)`
 `
 
 const Row = styled.div<{
-  topMargin: number
+  $topMargin: number
 }>`
   display: flex;
-  margin-top: ${p => p.topMargin};
+  margin-top: ${p => p.$topMargin};
 `
 
 const Header = styled.div`
@@ -141,7 +138,7 @@ const Header = styled.div`
 `
 
 const Title = styled.span`
-  color: ${THEME.color.slateGray};
+  color: ${p => p.theme.color.slateGray};
   font: normal normal bold 16px Marianne;
   letter-spacing: 0px;
   margin-left: 10px;

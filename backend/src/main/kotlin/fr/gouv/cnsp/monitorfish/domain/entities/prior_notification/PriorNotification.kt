@@ -37,6 +37,13 @@ data class PriorNotification(
     /** Each prior notification and each of its updates have a unique fingerprint. */
     val fingerprint: String = listOf(reportId, updatedAt, state).joinToString(separator = ".")
 
+    /** Is it a "Préavis Zéro"? */
+    val isPriorNotificationZero: Boolean
+        get() =
+            logbookMessageAndValue.value.catchToLand.isNotEmpty() &&
+                logbookMessageAndValue.value.catchToLand
+                    .all { catchToLand -> catchToLand.weight == null || catchToLand.weight == 0.0 }
+
     val state: PriorNotificationState?
         /**
          *  See /adrs/0006-prior-notification-states-specifications.md for more details.

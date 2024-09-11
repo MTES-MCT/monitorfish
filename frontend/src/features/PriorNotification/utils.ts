@@ -44,7 +44,7 @@ export function getPriorNotificationFishingCatchesFromLogbookMessageFishingCatch
   }))
 }
 
-export function isZeroNotice(
+export function isPriorNotificationZero(
   fishingCatches: PriorNotification.FormDataFishingCatch[] | undefined
 ): boolean | undefined {
   if (fishingCatches === undefined || fishingCatches.length === 0) {

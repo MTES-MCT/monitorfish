@@ -78,11 +78,20 @@ class GetPriorNotifications(
             }
         logger.info("TIME_RECORD - 'priorNotifications' took $enrichedPriorNotificationsTimeTaken.")
 
-        val (sortedAndFilteredPriorNotifications, sortedAndFilteredPriorNotificationsTimeTaken) =
+        val (filteredPriorNotifications, filteredPriorNotificationsTimeTaken) = measureTimedValue {
+            priorNotifications.filter { priorNotification ->
+                excludeForeignPortsExceptFrenchVessels(priorNotification) &&
+                    filterBySeafrontGroup(seafrontGroup, priorNotification) &&
+                    filterByStatus(states, isInvalidated, isPriorNotificationZero, priorNotification)
+            }
+        }
+        logger.info("TIME_RECORD - 'filteredPriorNotifications' took $filteredPriorNotificationsTimeTaken.")
+
+        val (sortedPriorNotifications, sortedPriorNotificationsTimeTaken) =
             measureTimedValue {
                 when (sortDirection) {
                     Sort.Direction.ASC ->
-                        priorNotifications.sortedWith(
+                        filteredPriorNotifications.sortedWith(
                             compareBy(
                                 { getSortKey(it, sortColumn) },
                                 { it.logbookMessageAndValue.logbookMessage.id }, // Tie-breaker
@@ -90,30 +99,24 @@ class GetPriorNotifications(
                         )
 
                     Sort.Direction.DESC ->
-                        priorNotifications.sortedWith(
+                        filteredPriorNotifications.sortedWith(
                             // Only solution found to fix typing issues
                             compareByDescending<PriorNotification> { getSortKey(it, sortColumn) }
                                 .thenByDescending { it.logbookMessageAndValue.logbookMessage.id }, // Tie-breaker
                         )
-                }.filter { priorNotification ->
-                    excludeForeignPortsExceptFrenchVessels(priorNotification) &&
-                        filterBySeafrontGroup(seafrontGroup, priorNotification) &&
-                        filterByStatus(states, isInvalidated, isPriorNotificationZero, priorNotification)
                 }
             }
-        logger.info(
-            "TIME_RECORD - 'sortedAndFilteredPriorNotifications' took $sortedAndFilteredPriorNotificationsTimeTaken.",
-        )
+        logger.info("TIME_RECORD - 'sortedPriorNotifications' took $sortedPriorNotificationsTimeTaken.")
 
         val (extraData, extraDataTimeTaken) =
             measureTimedValue {
                 PriorNotificationStats(
                     perSeafrontGroupCount =
-                        SeafrontGroup.entries.associateWith { seafrontGroupEntry ->
-                            priorNotifications.count { priorNotification ->
-                                seafrontGroupEntry.hasSeafront(priorNotification.seafront)
-                            }
-                        },
+                    SeafrontGroup.entries.associateWith { seafrontGroupEntry ->
+                        priorNotifications.count { priorNotification ->
+                            seafrontGroupEntry.hasSeafront(priorNotification.seafront)
+                        }
+                    },
                 )
             }
         logger.info("TIME_RECORD - 'extraData' took $extraDataTimeTaken.")
@@ -121,7 +124,7 @@ class GetPriorNotifications(
         val (paginatedList, paginatedListTimeTaken) =
             measureTimedValue {
                 PaginatedList.new(
-                    sortedAndFilteredPriorNotifications,
+                    sortedPriorNotifications,
                     pageNumber,
                     pageSize,
                     extraData,

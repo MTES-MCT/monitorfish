@@ -31,6 +31,7 @@ class GetPriorNotifications(
     fun execute(
         filter: PriorNotificationsFilter,
         isInvalidated: Boolean?,
+        isPriorNotificationZero: Boolean?,
         seafrontGroup: SeafrontGroup,
         states: List<PriorNotificationState>?,
         sortColumn: PriorNotificationsSortColumn,
@@ -97,7 +98,7 @@ class GetPriorNotifications(
                 }.filter { priorNotification ->
                     excludeForeignPortsExceptFrenchVessels(priorNotification) &&
                         filterBySeafrontGroup(seafrontGroup, priorNotification) &&
-                        filterByStateAndInvalidation(states, isInvalidated, priorNotification)
+                        filterByStatus(states, isInvalidated, isPriorNotificationZero, priorNotification)
                 }
             }
         logger.info(
@@ -196,14 +197,16 @@ class GetPriorNotifications(
             return seafrontGroup.hasSeafront(priorNotification.seafront)
         }
 
-        private fun filterByStateAndInvalidation(
+        private fun filterByStatus(
             states: List<PriorNotificationState>?,
             isInvalidated: Boolean?,
+            isPriorNotificationZero: Boolean?,
             priorNotification: PriorNotification,
         ): Boolean {
             return (states.isNullOrEmpty() && isInvalidated == null) ||
                 (!states.isNullOrEmpty() && states.contains(priorNotification.state)) ||
-                (isInvalidated != null && priorNotification.logbookMessageAndValue.value.isInvalidated == isInvalidated)
+                (isInvalidated != null && priorNotification.logbookMessageAndValue.value.isInvalidated == isInvalidated) ||
+                (isPriorNotificationZero != null && priorNotification.isPriorNotificationZero == isPriorNotificationZero)
         }
 
         private fun getSortKey(

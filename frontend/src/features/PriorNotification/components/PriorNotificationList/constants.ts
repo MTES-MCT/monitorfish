@@ -83,13 +83,10 @@ export const IS_INVALIDATED = 'IS_INVALIDATED'
 export const IS_INVALIDATED_LABEL = 'Invalidé'
 export const FILTER_STATUSES_AS_OPTIONS: Option<FilterStatus>[] = [
   { label: 'À vérifier (CNSP)', value: PriorNotification.State.PENDING_VERIFICATION },
-  { label: 'Échec de diffusion', value: PriorNotification.State.FAILED_SEND },
+  { label: 'Hors vérification', value: PriorNotification.State.OUT_OF_VERIFICATION_SCOPE },
+  { label: 'Vérifié et diffusé', value: PriorNotification.State.VERIFIED_AND_SENT },
+  { label: IS_INVALIDATED_LABEL, value: IS_INVALIDATED },
   { label: 'Envoi auto. demandé', value: PriorNotification.State.AUTO_SEND_REQUESTED },
   { label: 'Envoi auto. fait', value: PriorNotification.State.AUTO_SEND_DONE },
-  { label: 'Hors vérification', value: PriorNotification.State.OUT_OF_VERIFICATION_SCOPE },
-  {
-    label: IS_INVALIDATED_LABEL,
-    value: IS_INVALIDATED
-  },
-  { label: 'Vérifié et diffusé', value: PriorNotification.State.VERIFIED_AND_SENT }
+  { label: 'Échec de diffusion', value: PriorNotification.State.FAILED_SEND }
 ]

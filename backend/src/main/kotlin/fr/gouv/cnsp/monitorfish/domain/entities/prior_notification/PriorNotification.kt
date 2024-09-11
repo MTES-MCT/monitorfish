@@ -82,7 +82,7 @@ data class PriorNotification(
         val pnoValue = logbookMessageAndValue.value
 
         port =
-            pnoValue.port?.let { portLocode ->
+            pnoValue.port?.let { portLocode: String ->
                 allPorts.find { it.locode == portLocode }
             }
 

@@ -361,6 +361,33 @@
                 "flag_state": "FR",
                 "length": 16.9,
                 "under_charter": false
+            },
+
+            // - Vessel: THE FLOATING KANGAROO
+            // - Flag state: AU
+            {
+                "id": 128,
+                "cfr": "CFR128",
+                "mmsi": "MMSI128",
+                "ircs": "IRCS128",
+                "external_immatriculation": "EXTIMM128",
+                "vessel_name": "THE FLOATING KANGAROO",
+                "flag_state": "AU",
+                "length": 31.0,
+                "under_charter": false
+            },
+
+            // - Vessel: BON VENT
+            {
+                "id": 129,
+                "cfr": "CFR129",
+                "mmsi": "MMSI129",
+                "ircs": "IRCS129",
+                "external_immatriculation": "EXTIMM129",
+                "vessel_name": "BON VENT",
+                "flag_state": "FR",
+                "length": 34.5,
+                "under_charter": false
             }
         ]
     }

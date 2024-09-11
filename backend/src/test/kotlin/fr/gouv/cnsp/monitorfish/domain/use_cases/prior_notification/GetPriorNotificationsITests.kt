@@ -62,7 +62,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `execute should return a list of prior notifications sorted by expected arrival date ascending`() {
+    fun `execute Should return a list of prior notifications sorted by expected arrival date ascending`() {
         // Given
         val sortColumn = PriorNotificationsSortColumn.EXPECTED_ARRIVAL_DATE
         val sortDirection = Sort.Direction.ASC
@@ -94,7 +94,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `execute should return a list of prior notifications sorted by expected arrival date descending`() {
+    fun `execute Should return a list of prior notifications sorted by expected arrival date descending`() {
         // Given
         val sortColumn = PriorNotificationsSortColumn.EXPECTED_ARRIVAL_DATE
         val sortDirection = Sort.Direction.DESC
@@ -126,7 +126,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `execute should return a list of prior notifications sorted by expected landing date ascending`() {
+    fun `execute Should return a list of prior notifications sorted by expected landing date ascending`() {
         // Given
         val sortColumn = PriorNotificationsSortColumn.EXPECTED_LANDING_DATE
         val sortDirection = Sort.Direction.ASC
@@ -158,7 +158,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `execute should return a list of prior notifications sorted by expected landing date descending`() {
+    fun `execute Should return a list of prior notifications sorted by expected landing date descending`() {
         // Given
         val sortColumn = PriorNotificationsSortColumn.EXPECTED_LANDING_DATE
         val sortDirection = Sort.Direction.DESC
@@ -190,7 +190,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `execute should return a list of prior notifications sorted by port name ascending`() {
+    fun `execute Should return a list of prior notifications sorted by port name ascending`() {
         // Given
         val sortColumn = PriorNotificationsSortColumn.PORT_NAME
         val sortDirection = Sort.Direction.ASC
@@ -218,7 +218,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `execute should return a list of prior notifications sorted by port name descending`() {
+    fun `execute Should return a list of prior notifications sorted by port name descending`() {
         // Given
         val sortColumn = PriorNotificationsSortColumn.PORT_NAME
         val sortDirection = Sort.Direction.DESC
@@ -246,7 +246,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `execute should return a list of prior notifications sorted by vessel name ascending`() {
+    fun `execute Should return a list of prior notifications sorted by vessel name ascending`() {
         // Given
         val sortColumn = PriorNotificationsSortColumn.VESSEL_NAME
         val sortDirection = Sort.Direction.ASC
@@ -279,7 +279,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `execute should return a list of prior notifications sorted by vessel name descending`() {
+    fun `execute Should return a list of prior notifications sorted by vessel name descending`() {
         // Given
         val sortColumn = PriorNotificationsSortColumn.VESSEL_NAME
         val sortDirection = Sort.Direction.DESC
@@ -312,7 +312,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `execute should return a list of prior notifications sorted by risk factor ascending`() {
+    fun `execute Should return a list of prior notifications sorted by risk factor ascending`() {
         // Given
         val sortColumn = PriorNotificationsSortColumn.VESSEL_RISK_FACTOR
         val sortDirection = Sort.Direction.ASC
@@ -342,7 +342,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `execute should return a list of prior notifications sorted by vessel risk factor descending`() {
+    fun `execute Should return a list of prior notifications sorted by vessel risk factor descending`() {
         // Given
         val sortColumn = PriorNotificationsSortColumn.VESSEL_RISK_FACTOR
         val sortDirection = Sort.Direction.DESC
@@ -372,7 +372,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `execute should return a list of NAMO seafront group prior notifications`() {
+    fun `execute Should return a list of NAMO seafront group prior notifications`() {
         // Given
         val seafrontGroup = SeafrontGroup.NAMO
 
@@ -397,7 +397,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `execute should return a list of pending sent and out of verification scope prior notifications`() {
+    fun `execute Should return a list of pending sent and out of verification scope prior notifications`() {
         // Given
         val states = listOf(PriorNotificationState.PENDING_SEND, PriorNotificationState.OUT_OF_VERIFICATION_SCOPE)
 
@@ -429,7 +429,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `execute should return a list of invalidated prior notifications`() {
+    fun `execute Should return a list of invalidated prior notifications`() {
         // Given
         val isInvalidated = true
 
@@ -454,7 +454,7 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `execute should return a list of either pending send or invalidated prior notifications`() {
+    fun `execute Should return a list of either pending send or invalidated prior notifications`() {
         // Given
         val isInvalidated = true
         val states = listOf(PriorNotificationState.PENDING_SEND)
@@ -482,5 +482,33 @@ class GetPriorNotificationsITests : AbstractDBTests() {
         assertThat(
             invalidatedPriorNotifications.none { pendingSendPriorNotificationReportIds.contains(it.reportId!!) },
         ).isTrue()
+    }
+
+    @Test
+    @Transactional
+    fun `execute Should exclude foreign ports unless they are French vessels`() {
+        // Given
+        val pageSize = 100
+
+        // When
+        val result =
+            getPriorNotifications
+                .execute(
+                    defaultFilter,
+                    defaultIsInvalidated,
+                    defaultSeafrontGroup,
+                    defaultStates,
+                    defaultSortColumn,
+                    defaultSortDirection,
+                    defaultPageNumber,
+                    pageSize,
+                )
+
+        // Then
+        assertThat(result.data).hasSizeGreaterThan(0)
+        // Australian vessel landing in an Australian port
+        assertThat(result.data.none { it.vessel!!.vesselName == "THE FLOATING KANGAROO" }).isTrue()
+        // French vessel Landing in a Brazilian port
+        assertThat(result.data.any { it.vessel!!.vesselName == "BON VENT" }).isTrue()
     }
 }

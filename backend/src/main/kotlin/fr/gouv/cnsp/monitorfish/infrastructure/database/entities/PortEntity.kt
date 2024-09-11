@@ -33,6 +33,7 @@ data class PortEntity(
     fun toPort() =
         Port(
             locode = locode,
+            countryCode = countryCode,
             name = portName,
             facade = facade?.let { Seafront.from(it).toString() },
             faoAreas = faoAreas ?: listOf(),

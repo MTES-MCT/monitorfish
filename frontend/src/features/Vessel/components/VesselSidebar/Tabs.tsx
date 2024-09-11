@@ -1,7 +1,9 @@
-import { COLORS } from '@constants/constants'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
+import { Figure } from '@mtes-mct/monitor-ui'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import { forbiddenVesselSidebarPaths } from 'domain/entities/authorization/constants'
 import { VesselSidebarTab } from 'domain/entities/vessel/vessel'
@@ -66,9 +68,9 @@ export function Tabs() {
         >
           <ReportingIcon /> <br /> Signalements
           {!!selectedVessel?.reportings?.length && (
-            <ReportingNumber hasInfractionSuspicion={selectedVessel?.hasInfractionSuspicion}>
-              {selectedVessel?.reportings?.length}
-            </ReportingNumber>
+            <BadgeNumber $hasInfractionSuspicion={selectedVessel?.hasInfractionSuspicion}>
+              <Figure>{selectedVessel?.reportings?.length}</Figure>
+            </BadgeNumber>
           )}
         </Tab>
       )}
@@ -91,19 +93,23 @@ export function Tabs() {
   )
 }
 
-const ReportingNumber = styled.span<{
-  hasInfractionSuspicion: boolean
+const BadgeNumber = styled.div<{
+  $hasInfractionSuspicion: boolean
 }>`
-  background: ${props => (props.hasInfractionSuspicion ? COLORS.maximumRed : COLORS.gunMetal)};
-  border-radius: 10px;
-  color: ${p => p.theme.color.white};
+  display: inline-block;
   position: absolute;
+  height: 15px;
+  padding: 0 4.25px;
+  text-align: center;
+  border-radius: 10px;
   top: 6px;
-  right: 189px;
-  width: 14px;
-  height: 14px;
-  line-height: 13px;
+  line-height: 14px;
+  background: ${p => (p.$hasInfractionSuspicion ? p.theme.color.maximumRed : p.theme.color.gunMetal)};
+  color: ${p => p.theme.color.white};
+  font-size: 11px;
+  letter-spacing: 0px;
   font-weight: 700;
+  margin-left: -30px;
 `
 
 const Tab = styled.button<{
@@ -119,27 +125,27 @@ const Tab = styled.button<{
   height: 65px;
   font: normal normal 300 10px/14px Marianne;
   letter-spacing: 0.45px;
-  ${props => (!props.isLast ? `border-right: 1px solid ${COLORS.lightGray};` : null)}
-  background: ${props => (props.isActive ? props.theme.color.blueGray : props.theme.color.charcoal)};
-  color: ${props => (props.isActive ? props.theme.color.white : props.theme.color.lightGray)};
+  ${p => (!p.isLast ? `border-right: 1px solid ${p.theme.color.lightGray};` : null)}
+  background: ${p => (p.isActive ? p.theme.color.blueGray : p.theme.color.charcoal)};
+  color: ${p => (p.isActive ? p.theme.color.white : p.theme.color.lightGray)};
   &:hover,
   &:focus {
     color: ${p => p.theme.color.white};
     background: ${p => p.theme.color.blueYonder};
-    ${props => (!props.isLast ? `border-right: 1px solid ${COLORS.lightGray};` : null)}
+    ${p => (!p.isLast ? `border-right: 1px solid ${p.theme.color.lightGray};` : null)}
   }
 
   &:active {
     color: ${p => p.theme.color.white};
     background: ${p => p.theme.color.blueGray};
-    ${props => (!props.isLast ? `border-right: 1px solid ${COLORS.lightGray};` : null)}
+    ${p => (!p.isLast ? `border-right: 1px solid ${p.theme.color.lightGray};` : null)}
   }
 `
 
 const TabList = styled.div`
   display: flex;
-  background: ${COLORS.charcoal};
-  border-top: 1px solid ${COLORS.lightGray};
+  background: ${p => p.theme.color.charcoal};
+  border-top: 1px solid ${p => p.theme.color.lightGray};
 `
 
 const VesselIDIcon = styled(VesselIDSVG)`

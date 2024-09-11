@@ -1,4 +1,4 @@
-import { Icon } from '@mtes-mct/monitor-ui'
+import { customDayjs, Icon } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 import { theme } from 'ui/theme'
 
@@ -11,22 +11,21 @@ import SeaSVG from '../../../../icons/Avarie_statut_navire_en_mer.svg?react'
 import { Header, Zone } from '../common_styles/common.style'
 
 import type { MissionAction } from '../../../../Mission/missionAction.types'
+import type { Dayjs } from 'dayjs'
 
 type ControlsResumeZoneProps = {
-  controlsFromDate: Date
+  controlsFromDate: Dayjs
   lastControls: MissionAction.LastControls
   summary: MissionAction.MissionControlsSummary
 }
 export function ControlsSummary({ controlsFromDate, lastControls, summary }: ControlsResumeZoneProps) {
   const { controls, numberOfControlsWithSomeGearsSeized, numberOfControlsWithSomeSpeciesSeized, numberOfDiversions } =
     summary
+  const yearsDepth = customDayjs().utc().get('year') - controlsFromDate.get('year') + 1
 
   return (
     <Zone data-cy="vessel-controls-summary">
-      <Header>
-        Derniers contrôles{' '}
-        {controlsFromDate && <>({new Date().getFullYear() - controlsFromDate.getUTCFullYear() - 1} dernières années)</>}
-      </Header>
+      <Header>Derniers contrôles {controlsFromDate && <>({yearsDepth} dernières années)</>}</Header>
       <Body>
         <InfractionsSummary
           numberOfControlsWithSomeGearsSeized={numberOfControlsWithSomeGearsSeized}

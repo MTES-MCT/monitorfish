@@ -3,7 +3,8 @@ import { HttpStatusCode } from './constants'
 import { ApiError } from '../libs/ApiError'
 
 import type { TrackRequest, VesselAndPositions, VesselIdentity, VesselPosition } from '../domain/entities/vessel/types'
-import type { CurrentAndArchivedReportingsOfSelectedVessel } from '@features/Reporting/types'
+import type { VesselReportings } from '@features/Reporting/types'
+import type { Dayjs } from 'dayjs'
 
 const VESSEL_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations du navire"
 const VESSEL_SEARCH_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les navires dans notre base"
@@ -90,7 +91,7 @@ async function searchVesselsFromAPI(searched: string) {
  *
  * @throws {@link ApiError}
  */
-async function getVesselReportingsFromAPI(identity: VesselIdentity, fromDate: Date) {
+async function getVesselReportingsFromAPI(identity: VesselIdentity, fromDate: Dayjs) {
   const { externalReferenceNumber, internalReferenceNumber, ircs, vesselId, vesselIdentifier } =
     getVesselIdentityAsEmptyStringWhenNull(identity)
 
@@ -99,7 +100,7 @@ async function getVesselReportingsFromAPI(identity: VesselIdentity, fromDate: Da
       .get(
         `/bff/v1/vessels/reporting?vesselId=${vesselId}&internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&vesselIdentifier=${vesselIdentifier}&fromDate=${fromDate.toISOString()}`
       )
-      .json<CurrentAndArchivedReportingsOfSelectedVessel>()
+      .json<VesselReportings>()
   } catch (err) {
     throw new ApiError(REPORTING_ERROR_MESSAGE, err)
   }

@@ -5,8 +5,8 @@ import { YearControls } from './YearControls'
 import { COLORS } from '../../../../../constants/constants'
 import { Header, Zone } from '../common_styles/common.style'
 
-import type { Dayjs } from 'dayjs'
 import type { MissionAction } from '../../../../Mission/missionAction.types'
+import type { Dayjs } from 'dayjs'
 
 type YearsToControlListProps = {
   controlsFromDate: Dayjs

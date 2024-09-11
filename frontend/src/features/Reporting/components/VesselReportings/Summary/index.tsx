@@ -1,5 +1,5 @@
 import { InfractionSuspicionSummary } from '@features/Reporting/components/VesselReportings/Summary/InfractionSuspicionSummary'
-import { Header, Zone } from '@features/VesselSidebar/common_styles/common.style'
+import { Header, Zone } from '@features/Vessel/components/VesselSidebar/common_styles/common.style'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { customDayjs, Icon, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'

@@ -122,18 +122,6 @@ export function InterestPointLayer({ mapMovingAndZoomEvent }: InterstPointLayerP
     }, 300)
   }, [drawObject])
 
-  useEffect(() => {
-    function addLayerToMap() {
-      monitorfishMap.getLayers().push(getLayer())
-
-      return () => {
-        monitorfishMap.removeLayer(getLayer())
-      }
-    }
-
-    addLayerToMap()
-  }, [getLayer])
-
   const startDrawing = useCallback(
     (event, type) => {
       dispatch(
@@ -301,6 +289,16 @@ export function InterestPointLayer({ mapMovingAndZoomEvent }: InterstPointLayerP
       }
     }
   }, [getVectorSource, interestPointBeingDrawed, interestPointToCoordinates, previousInterestPointBeingDrawed])
+
+  useEffect(() => {
+    if (!layerRef.current) {
+      monitorfishMap.getLayers().push(getLayer())
+    }
+
+    return () => {
+      monitorfishMap.removeLayer(getLayer())
+    }
+  }, [getLayer])
 
   useEffect(() => {
     function drawExistingFeaturesOnMap() {

@@ -113,11 +113,11 @@ class GetPriorNotifications(
             measureTimedValue {
                 PriorNotificationStats(
                     perSeafrontGroupCount =
-                    SeafrontGroup.entries.associateWith { seafrontGroupEntry ->
-                        priorNotifications.count { priorNotification ->
-                            seafrontGroupEntry.hasSeafront(priorNotification.seafront)
-                        }
-                    },
+                        SeafrontGroup.entries.associateWith { seafrontGroupEntry ->
+                            priorNotifications.count { priorNotification ->
+                                seafrontGroupEntry.hasSeafront(priorNotification.seafront)
+                            }
+                        },
                 )
             }
         logger.info("TIME_RECORD - 'extraData' took $extraDataTimeTaken.")

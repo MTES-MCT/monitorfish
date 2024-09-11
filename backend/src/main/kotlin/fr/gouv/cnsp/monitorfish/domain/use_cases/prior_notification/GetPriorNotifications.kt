@@ -31,6 +31,7 @@ class GetPriorNotifications(
     fun execute(
         filter: PriorNotificationsFilter,
         isInvalidated: Boolean?,
+        isPriorNotificationZero: Boolean?,
         seafrontGroup: SeafrontGroup,
         states: List<PriorNotificationState>?,
         sortColumn: PriorNotificationsSortColumn,
@@ -77,11 +78,21 @@ class GetPriorNotifications(
             }
         logger.info("TIME_RECORD - 'priorNotifications' took $enrichedPriorNotificationsTimeTaken.")
 
-        val (sortedAndFilteredPriorNotifications, sortedAndFilteredPriorNotificationsTimeTaken) =
+        val (filteredPriorNotifications, filteredPriorNotificationsTimeTaken) =
+            measureTimedValue {
+                priorNotifications.filter { priorNotification ->
+                    excludeForeignPortsExceptFrenchVessels(priorNotification) &&
+                        filterBySeafrontGroup(seafrontGroup, priorNotification) &&
+                        filterByStatuses(states, isInvalidated, isPriorNotificationZero, priorNotification)
+                }
+            }
+        logger.info("TIME_RECORD - 'filteredPriorNotifications' took $filteredPriorNotificationsTimeTaken.")
+
+        val (sortedPriorNotifications, sortedPriorNotificationsTimeTaken) =
             measureTimedValue {
                 when (sortDirection) {
                     Sort.Direction.ASC ->
-                        priorNotifications.sortedWith(
+                        filteredPriorNotifications.sortedWith(
                             compareBy(
                                 { getSortKey(it, sortColumn) },
                                 { it.logbookMessageAndValue.logbookMessage.id }, // Tie-breaker
@@ -89,20 +100,14 @@ class GetPriorNotifications(
                         )
 
                     Sort.Direction.DESC ->
-                        priorNotifications.sortedWith(
+                        filteredPriorNotifications.sortedWith(
                             // Only solution found to fix typing issues
                             compareByDescending<PriorNotification> { getSortKey(it, sortColumn) }
                                 .thenByDescending { it.logbookMessageAndValue.logbookMessage.id }, // Tie-breaker
                         )
-                }.filter { priorNotification ->
-                    excludeForeignPortsExceptFrenchVessels(priorNotification) &&
-                        filterBySeafrontGroup(seafrontGroup, priorNotification) &&
-                        filterByStateAndInvalidation(states, isInvalidated, priorNotification)
                 }
             }
-        logger.info(
-            "TIME_RECORD - 'sortedAndFilteredPriorNotifications' took $sortedAndFilteredPriorNotificationsTimeTaken.",
-        )
+        logger.info("TIME_RECORD - 'sortedPriorNotifications' took $sortedPriorNotificationsTimeTaken.")
 
         val (extraData, extraDataTimeTaken) =
             measureTimedValue {
@@ -120,7 +125,7 @@ class GetPriorNotifications(
         val (paginatedList, paginatedListTimeTaken) =
             measureTimedValue {
                 PaginatedList.new(
-                    sortedAndFilteredPriorNotifications,
+                    sortedPriorNotifications,
                     pageNumber,
                     pageSize,
                     extraData,
@@ -196,14 +201,16 @@ class GetPriorNotifications(
             return seafrontGroup.hasSeafront(priorNotification.seafront)
         }
 
-        private fun filterByStateAndInvalidation(
+        private fun filterByStatuses(
             states: List<PriorNotificationState>?,
             isInvalidated: Boolean?,
+            isPriorNotificationZero: Boolean?,
             priorNotification: PriorNotification,
         ): Boolean {
-            return (states.isNullOrEmpty() && isInvalidated == null) ||
+            return (states.isNullOrEmpty() && isInvalidated == null && isPriorNotificationZero == null) ||
                 (!states.isNullOrEmpty() && states.contains(priorNotification.state)) ||
-                (isInvalidated != null && priorNotification.logbookMessageAndValue.value.isInvalidated == isInvalidated)
+                (isInvalidated != null && priorNotification.logbookMessageAndValue.value.isInvalidated == isInvalidated) ||
+                (isPriorNotificationZero != null && priorNotification.isPriorNotificationZero == isPriorNotificationZero)
         }
 
         private fun getSortKey(

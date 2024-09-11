@@ -647,7 +647,7 @@
                     "catchOnboard": [
                         {
                             "faoZone": "21.1.C",
-                            "weight": 0,
+                            "weight": 10,
                             "nbFish": null,
                             "species": "BIB"
                         }
@@ -655,7 +655,7 @@
                     "catchToLand": [
                         {
                             "faoZone": "21.1.C",
-                            "weight": 0,
+                            "weight": 10,
                             "nbFish": null,
                             "species": "BIB"
                         }

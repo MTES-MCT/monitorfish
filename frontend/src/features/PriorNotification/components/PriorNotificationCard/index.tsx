@@ -5,7 +5,7 @@ import { PriorNotification } from '@features/PriorNotification/PriorNotification
 import {
   getPriorNotificationFishingCatchesFromLogbookMessageFishingCatches,
   getPriorNotificationTypesFromLogbookMessagePnoTypes,
-  isZeroNotice
+  isPriorNotificationZero
 } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -88,12 +88,12 @@ export function PriorNotificationCard({
         <Body>
           <TagBar
             isInvalidated={isInvalidated}
-            isVesselUnderCharter={detail.isVesselUnderCharter}
-            isZeroNotice={isZeroNotice(
+            isPriorNotificationZero={isPriorNotificationZero(
               getPriorNotificationFishingCatchesFromLogbookMessageFishingCatches(
                 detail.logbookMessage.message.catchOnboard
               )
             )}
+            isVesselUnderCharter={detail.isVesselUnderCharter}
             riskFactor={detail.riskFactor}
             state={detail.state}
             tripSegments={detail.logbookMessage.tripSegments}

@@ -59,6 +59,9 @@ class PriorNotificationController(
         @Parameter(description = "Include or exclude invalidated prior notifications.")
         @RequestParam(name = "isInvalidated")
         isInvalidated: Boolean? = null,
+        @Parameter(description = "Include or exclude 'Préavis Zéro' prior notifications.")
+        @RequestParam(name = "isPriorNotificationZero")
+        isPriorNotificationZero: Boolean? = null,
         @Parameter(description = "Vessels that are less than 12 meters in length.")
         @RequestParam(name = "isLessThanTwelveMetersVessel")
         isLessThanTwelveMetersVessel: Boolean? = null,
@@ -133,6 +136,7 @@ class PriorNotificationController(
                 .execute(
                     priorNotificationsFilter,
                     isInvalidated,
+                    isPriorNotificationZero,
                     seafrontGroup,
                     states,
                     sortColumn,

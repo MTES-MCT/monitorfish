@@ -78,13 +78,14 @@ class GetPriorNotifications(
             }
         logger.info("TIME_RECORD - 'priorNotifications' took $enrichedPriorNotificationsTimeTaken.")
 
-        val (filteredPriorNotifications, filteredPriorNotificationsTimeTaken) = measureTimedValue {
-            priorNotifications.filter { priorNotification ->
-                excludeForeignPortsExceptFrenchVessels(priorNotification) &&
-                    filterBySeafrontGroup(seafrontGroup, priorNotification) &&
-                    filterByStatus(states, isInvalidated, isPriorNotificationZero, priorNotification)
+        val (filteredPriorNotifications, filteredPriorNotificationsTimeTaken) =
+            measureTimedValue {
+                priorNotifications.filter { priorNotification ->
+                    excludeForeignPortsExceptFrenchVessels(priorNotification) &&
+                        filterBySeafrontGroup(seafrontGroup, priorNotification) &&
+                        filterByStatuses(states, isInvalidated, isPriorNotificationZero, priorNotification)
+                }
             }
-        }
         logger.info("TIME_RECORD - 'filteredPriorNotifications' took $filteredPriorNotificationsTimeTaken.")
 
         val (sortedPriorNotifications, sortedPriorNotificationsTimeTaken) =
@@ -200,13 +201,13 @@ class GetPriorNotifications(
             return seafrontGroup.hasSeafront(priorNotification.seafront)
         }
 
-        private fun filterByStatus(
+        private fun filterByStatuses(
             states: List<PriorNotificationState>?,
             isInvalidated: Boolean?,
             isPriorNotificationZero: Boolean?,
             priorNotification: PriorNotification,
         ): Boolean {
-            return (states.isNullOrEmpty() && isInvalidated == null) ||
+            return (states.isNullOrEmpty() && isInvalidated == null && isPriorNotificationZero == null) ||
                 (!states.isNullOrEmpty() && states.contains(priorNotification.state)) ||
                 (isInvalidated != null && priorNotification.logbookMessageAndValue.value.isInvalidated == isInvalidated) ||
                 (isPriorNotificationZero != null && priorNotification.isPriorNotificationZero == isPriorNotificationZero)

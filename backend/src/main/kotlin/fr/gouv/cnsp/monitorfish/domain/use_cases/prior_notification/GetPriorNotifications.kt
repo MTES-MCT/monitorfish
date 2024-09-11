@@ -128,8 +128,6 @@ class GetPriorNotifications(
             }
         logger.info("TIME_RECORD - 'paginatedList' took $paginatedListTimeTaken.")
 
-        // val paginatedListWithVessels = paginatedList.copy(data = enrichPriorNotificationsWithVessel(paginatedList.data))
-
         // Enrich the reporting count for each prior notification after pagination to limit the number of queries
         val (enrichedPaginatedList, enrichedPaginatedListTimeTaken) =
             measureTimedValue {

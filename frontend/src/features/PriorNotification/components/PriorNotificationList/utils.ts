@@ -191,9 +191,11 @@ export function getStaticApiFilterFromListFilter(listFilter: ListFilter): Logboo
   return {
     flagStates: listFilter.countryCodes,
     hasOneOrMoreReportings: getMaybeBooleanFromRichBoolean(listFilter.hasOneOrMoreReportings),
-    isInvalidated: listFilter.statuses?.includes(IS_INVALIDATED),
+    // We don't want to send `false` when it's unchecked because it would exclude invalidated prior notifications
+    isInvalidated: listFilter.statuses?.includes(IS_INVALIDATED) ? true : undefined,
     isLessThanTwelveMetersVessel: getMaybeBooleanFromRichBoolean(listFilter.isLessThanTwelveMetersVessel),
-    isPriorNotificationZero: listFilter.statuses?.includes(IS_PRIOR_NOTIFICATION_ZERO),
+    // We don't want to send `false` when it's unchecked because it would exclude "Préavis Zéro" prior notifications
+    isPriorNotificationZero: listFilter.statuses?.includes(IS_PRIOR_NOTIFICATION_ZERO) ? true : undefined,
     portLocodes: listFilter.portLocodes,
     priorNotificationTypes: listFilter.priorNotificationTypes,
     seafrontGroup: listFilter.seafrontGroup,

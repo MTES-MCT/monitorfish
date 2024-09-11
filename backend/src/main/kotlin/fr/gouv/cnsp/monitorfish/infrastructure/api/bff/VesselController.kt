@@ -201,7 +201,7 @@ class VesselController(
         @RequestParam(name = "fromDate")
         @DateTimeFormat(pattern = zoneDateTimePattern)
         fromDate: ZonedDateTime,
-    ): CurrentAndArchivedReportingDataOutput {
+    ): VesselReportingsDataOutput {
         val currentAndArchivedReportings =
             getVesselReportings.execute(
                 vesselId,
@@ -212,7 +212,7 @@ class VesselController(
                 fromDate,
             )
 
-        return CurrentAndArchivedReportingDataOutput.fromCurrentAndArchivedReporting(currentAndArchivedReportings)
+        return VesselReportingsDataOutput.fromCurrentAndArchivedReporting(currentAndArchivedReportings)
     }
 
     @GetMapping("/search")

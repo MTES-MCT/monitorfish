@@ -77,9 +77,21 @@ export type ReportingAndOccurrences = {
   reporting: Reporting
 }
 
-export type CurrentAndArchivedReportingsOfSelectedVessel = {
+export type VesselReportings = {
   archived: Record<Year, ReportingAndOccurrences[]>
   current: ReportingAndOccurrences[]
+  summary: ReportingSummary
+}
+
+export type ReportingSummary = {
+  infractionSuspicionsSummary: ReportingTitleAndNumberOfOccurrences[]
+  numberOfInfractionSuspicions: number
+  numberOfObservations: number
+}
+
+export type ReportingTitleAndNumberOfOccurrences = {
+  numberOfOccurrences: number
+  title: string
 }
 
 export type InfractionSuspicion = {

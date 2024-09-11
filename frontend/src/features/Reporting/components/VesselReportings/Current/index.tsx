@@ -15,9 +15,7 @@ import type { ReportingAndOccurrences } from '@features/Reporting/types'
 
 export function Current() {
   const dispatch = useMainAppDispatch()
-  const currentAndArchivedReportingsOfSelectedVessel = useMainAppSelector(
-    state => state.reporting.currentAndArchivedReportingsOfSelectedVessel
-  )
+  const selectedVesselReportings = useMainAppSelector(state => state.reporting.selectedVesselReportings)
   const editedReporting = useMainAppSelector(state => state.reporting.editedReporting)
   const [isNewReportingFormOpen, setIsNewReportingFormOpen] = useState(false)
   const [isDeletionModalOpened, setIsDeletionModalOpened] = useState<
@@ -31,15 +29,15 @@ export function Current() {
 
   const reportingsWithoutEdited: ReportingAndOccurrences[] = useMemo(
     () =>
-      (currentAndArchivedReportingsOfSelectedVessel?.current || []).filter(
+      (selectedVesselReportings?.current || []).filter(
         reportingAndOccurrences => reportingAndOccurrences.reporting.id !== editedReporting?.id
       ),
-    [currentAndArchivedReportingsOfSelectedVessel, editedReporting]
+    [selectedVesselReportings, editedReporting]
   )
 
   return (
     <Wrapper>
-      {!currentAndArchivedReportingsOfSelectedVessel?.current?.length && !isNewReportingFormOpen && (
+      {!selectedVesselReportings?.current?.length && !isNewReportingFormOpen && (
         <NoReporting>Pas de signalement ouvert sur ce navire.</NoReporting>
       )}
       {!isNewReportingFormOpen && !editedReporting && (

@@ -58,8 +58,7 @@ export function Controls() {
   }
 
   const seeMore = useCallback(() => {
-    const nextDate = new Date(controlsFromDate.getTime())
-    nextDate.setMonth(nextDate.getMonth() - 12)
+    const nextDate = controlsFromDate.subtract(1, 'year')
 
     dispatch(setControlFromDate(nextDate))
   }, [dispatch, controlsFromDate])

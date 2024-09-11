@@ -3,7 +3,7 @@ import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { invalidatePriorNotification } from '@features/PriorNotification/useCases/invalidatePriorNotification'
 import { updateManualPriorNotificationComputedValues } from '@features/PriorNotification/useCases/updateManualPriorNotificationComputedValues'
-import { getPriorNotificationIdentifier, isZeroNotice } from '@features/PriorNotification/utils'
+import { getPriorNotificationIdentifier, isPriorNotificationZero } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Button, FormikEffect, Icon, Level, usePrevious } from '@mtes-mct/monitor-ui'
@@ -165,8 +165,8 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
           <TagBar
             hasBeenComputed={!!editedPriorNotificationComputedValues}
             isInvalidated={isInvalidated}
+            isPriorNotificationZero={isPriorNotificationZero(values.fishingCatches)}
             isVesselUnderCharter={editedPriorNotificationComputedValues?.isVesselUnderCharter}
-            isZeroNotice={isZeroNotice(values.fishingCatches)}
             riskFactor={editedPriorNotificationComputedValues?.riskFactor}
             state={applicableState}
             tripSegments={editedPriorNotificationComputedValues?.tripSegments}

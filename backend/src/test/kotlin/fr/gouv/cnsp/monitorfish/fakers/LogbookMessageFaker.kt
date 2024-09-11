@@ -43,7 +43,7 @@ class LogbookMessageFaker {
             )
         }
 
-        private fun fakePnoMessage(): PNO {
+        fun fakePnoMessage(): PNO {
             return PNO().apply {
                 hasPortEntranceAuthorization = null
                 hasPortLandingAuthorization = null

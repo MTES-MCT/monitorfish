@@ -13,6 +13,8 @@ import {
   DESIGNATED_PORTS_PRIOR_NOTIFICATION_TYPE_PREFIX,
   ExpectedArrivalPeriod,
   IS_INVALIDATED,
+  IS_INVALIDATED_LABEL,
+  IS_PRIOR_NOTIFICATION_ZERO,
   LastControlPeriod,
   SUB_MENU_LABEL
 } from './constants'
@@ -176,16 +178,12 @@ function getStatesFromFilterStatuses(statuses: FilterStatus[] | undefined): Prio
     return undefined
   }
 
-  const displayedStates = statuses.filter(status => status !== IS_INVALIDATED)
+  const states = statuses.filter(status => status !== IS_INVALIDATED && status !== IS_PRIOR_NOTIFICATION_ZERO)
 
   return [
-    ...displayedStates,
-    ...(displayedStates.includes(PriorNotification.State.VERIFIED_AND_SENT)
-      ? [PriorNotification.State.PENDING_SEND]
-      : []),
-    ...(displayedStates.includes(PriorNotification.State.AUTO_SEND_DONE)
-      ? [PriorNotification.State.PENDING_AUTO_SEND]
-      : [])
+    ...states,
+    ...(states.includes(PriorNotification.State.VERIFIED_AND_SENT) ? [PriorNotification.State.PENDING_SEND] : []),
+    ...(states.includes(PriorNotification.State.AUTO_SEND_DONE) ? [PriorNotification.State.PENDING_AUTO_SEND] : [])
   ]
 }
 
@@ -193,8 +191,11 @@ export function getStaticApiFilterFromListFilter(listFilter: ListFilter): Logboo
   return {
     flagStates: listFilter.countryCodes,
     hasOneOrMoreReportings: getMaybeBooleanFromRichBoolean(listFilter.hasOneOrMoreReportings),
-    isInvalidated: listFilter.statuses?.includes(IS_INVALIDATED),
+    // We don't want to send `false` when it's unchecked because it would exclude invalidated prior notifications
+    isInvalidated: listFilter.statuses?.includes(IS_INVALIDATED) ? true : undefined,
     isLessThanTwelveMetersVessel: getMaybeBooleanFromRichBoolean(listFilter.isLessThanTwelveMetersVessel),
+    // We don't want to send `false` when it's unchecked because it would exclude "Préavis Zéro" prior notifications
+    isPriorNotificationZero: listFilter.statuses?.includes(IS_PRIOR_NOTIFICATION_ZERO) ? true : undefined,
     portLocodes: listFilter.portLocodes,
     priorNotificationTypes: listFilter.priorNotificationTypes,
     seafrontGroup: listFilter.seafrontGroup,
@@ -205,6 +206,19 @@ export function getStaticApiFilterFromListFilter(listFilter: ListFilter): Logboo
     tripSegmentCodes: listFilter.fleetSegmentSegments,
     ...getApiFilterFromExpectedArrivalPeriod(listFilter.expectedArrivalPeriod, listFilter.expectedArrivalCustomPeriod),
     ...getApiFilterFromLastControlPeriod(listFilter.lastControlPeriod)
+  }
+}
+
+export function getStatusTagLabel(status: FilterStatus): string {
+  switch (status) {
+    case IS_INVALIDATED:
+      return IS_INVALIDATED_LABEL
+
+    case IS_PRIOR_NOTIFICATION_ZERO:
+      return 'Préavis Zéro'
+
+    default:
+      return PriorNotification.STATE_LABEL[status]
   }
 }
 

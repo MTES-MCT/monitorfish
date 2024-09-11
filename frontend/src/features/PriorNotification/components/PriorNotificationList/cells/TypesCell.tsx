@@ -1,7 +1,7 @@
 import { Ellipsised } from '@components/Ellipsised'
 import {
   getPriorNotificationFishingCatchesFromLogbookMessageFishingCatches,
-  isZeroNotice
+  isPriorNotificationZero
 } from '@features/PriorNotification/utils'
 import { Tag, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
@@ -15,7 +15,7 @@ type TypesCellProps = Readonly<{
   priorNotification: PriorNotification.PriorNotification
 }>
 export function TypesCell({ priorNotification }: TypesCellProps) {
-  const hasZeroNoticeTag = isZeroNotice(
+  const hasPriorNotificationZeroTag = isPriorNotificationZero(
     getPriorNotificationFishingCatchesFromLogbookMessageFishingCatches(priorNotification.onBoardCatches)
   )
 
@@ -26,9 +26,9 @@ export function TypesCell({ priorNotification }: TypesCellProps) {
 
   return (
     <Wrapper>
-      {hasZeroNoticeTag && <Tag borderColor={THEME.color.slateGray}>Préavis 0</Tag>}
+      {hasPriorNotificationZeroTag && <Tag borderColor={THEME.color.slateGray}>Préavis 0</Tag>}
       {sortedTypeLabels ? (
-        <Ellipsised maxWidth={hasZeroNoticeTag ? 140 : 220}>{sortedTypeLabels}</Ellipsised>
+        <Ellipsised maxWidth={hasPriorNotificationZeroTag ? 140 : 220}>{sortedTypeLabels}</Ellipsised>
       ) : (
         <None>Aucun type</None>
       )}

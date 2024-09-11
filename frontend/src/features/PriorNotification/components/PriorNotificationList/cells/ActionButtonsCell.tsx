@@ -99,6 +99,8 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
   gap: 8px;
+  height: 20px;
+  margin-bottom: 1px;
 
   > button {
     padding: 0px;

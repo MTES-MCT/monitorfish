@@ -11,8 +11,8 @@ import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 type TagBarProps = Readonly<{
   hasBeenComputed?: boolean | undefined
   isInvalidated: boolean | undefined
+  isPriorNotificationZero: boolean | undefined
   isVesselUnderCharter: boolean | undefined
-  isZeroNotice: boolean | undefined
   riskFactor: number | undefined
   state: PriorNotification.State | undefined
   tripSegments: LogbookMessage.Segment[] | undefined
@@ -21,8 +21,8 @@ type TagBarProps = Readonly<{
 export function TagBar({
   hasBeenComputed = true,
   isInvalidated,
+  isPriorNotificationZero,
   isVesselUnderCharter,
-  isZeroNotice,
   riskFactor,
   state,
   tripSegments,
@@ -74,8 +74,8 @@ export function TagBar({
           </FixedTag>
         )}
 
-        {isZeroNotice && (
-          <FixedTag key="zeroNotice" borderColor={THEME.color.slateGray}>
+        {isPriorNotificationZero && (
+          <FixedTag key="priorNotificationZero" borderColor={THEME.color.slateGray}>
             Préavis Zéro
           </FixedTag>
         )}

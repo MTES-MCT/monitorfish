@@ -271,7 +271,7 @@ export function FilterBar() {
           searchable
           value={listFilterValues.priorNotificationTypes}
         />
-        <CheckPicker
+        <StatusCheckPicker
           isLabelHidden
           isTransparent
           label="Statuts de diffusion"
@@ -342,6 +342,14 @@ const Row = styled.div`
 
   > .Field-MultiCheckbox {
     min-width: 320px;
+  }
+`
+
+const StatusCheckPicker = styled(CheckPicker<FilterStatus>)`
+  [role='listbox'] {
+    > [role='option']:last-child {
+      border-top: 2px solid ${({ theme }) => theme.color.lightGray};
+    }
   }
 `
 

@@ -60,10 +60,12 @@ class JpaVesselRepository(private val dbVesselRepository: DBVesselRepository) : 
         return dbVesselRepository.findFirstByCfr(internalReferenceNumber)?.toVessel()
     }
 
+    @Cacheable(value = ["vessels_by_ids"])
     override fun findVesselsByIds(ids: List<Int>): List<Vessel> {
         return dbVesselRepository.findAllByIds(ids).map { it.toVessel() }
     }
 
+    @Cacheable(value = ["vessels_by_internal_reference_numbers"])
     override fun findVesselsByInternalReferenceNumbers(internalReferenceNumbers: List<String>): List<Vessel> {
         return dbVesselRepository.findAllByInternalReferenceNumbers(internalReferenceNumbers).map { it.toVessel() }
     }

@@ -145,17 +145,21 @@ class GetPriorNotifications(
     private fun enrichPriorNotificationsWithVessel(
         priorNotifications: List<PriorNotification>,
     ): List<PriorNotification> {
-        val vesselsIds =
+        val vesselsViaVesselsIds =
             priorNotifications
                 .filter { it.isManuallyCreated }
                 .mapNotNull { it.logbookMessageAndValue.logbookMessage.vesselId }
-        val internalReferenceNumbers =
+                .chunked(5000)
+                .map { vesselRepository.findVesselsByIds(it) }
+                .flatten()
+        val vesselsViaInternalReferenceNumbers =
             priorNotifications
                 .filter { !it.isManuallyCreated }
                 .mapNotNull { it.logbookMessageAndValue.logbookMessage.internalReferenceNumber }
-        val vessels =
-            vesselRepository.findVesselsByIds(vesselsIds) +
-                vesselRepository.findVesselsByInternalReferenceNumbers(internalReferenceNumbers)
+                .chunked(5000)
+                .map { vesselRepository.findVesselsByInternalReferenceNumbers(it) }
+                .flatten()
+        val vessels = vesselsViaVesselsIds + vesselsViaInternalReferenceNumbers
 
         return priorNotifications.map {
             val isManuallyCreated = it.isManuallyCreated

@@ -41,7 +41,11 @@
             { "operation_number": "FAKE_OPERATION_117", "xml_message": "<Flux>Message FLUX xml</Flux>" },
             { "operation_number": "FAKE_OPERATION_117_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" },
             { "operation_number": "FAKE_OPERATION_118", "xml_message": "<Flux>Message FLUX xml</Flux>" },
-            { "operation_number": "FAKE_OPERATION_118_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" }
+            { "operation_number": "FAKE_OPERATION_118_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" },
+            { "operation_number": "FAKE_OPERATION_119", "xml_message": "<Flux>Message FLUX xml</Flux>" },
+            { "operation_number": "FAKE_OPERATION_119_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" },
+            { "operation_number": "FAKE_OPERATION_120", "xml_message": "<Flux>Message FLUX xml</Flux>" },
+            { "operation_number": "FAKE_OPERATION_120_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" }
         ]
     },
     {
@@ -1370,6 +1374,130 @@
                 "integration_datetime_utc": "2023-12-31 17:15:00",
                 "operation_datetime_utc": "2023-12-31 17:15:00",
                 "operation_number": "FAKE_OPERATION_118_RET",
+                "operation_type": "RET",
+                "transmission_format": "ERS",
+                "value:jsonb": {
+                    "returnStatus": "000"
+                }
+            },
+
+            // - Vessel: THE FLOATING KANGAROO
+            // - Flag state: AU
+            // - Foreign vessel landing in a foreign port
+            {
+                "id": 119,
+                "report_id": "FAKE_OPERATION_119",
+                "referenced_report_id": null,
+                "cfr": "CFR128",
+                "enriched": true,
+                "flag_state": "AUS",
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "log_type": "PNO",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "operation_number": "FAKE_OPERATION_119",
+                "operation_type": "DAT",
+                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "software": "TurboCatch (3.7-1)",
+                "transmission_format": "ERS",
+                "trip_gears": null,
+                "trip_segments": null,
+                "vessel_name": "THE FLOATING KANGAROO",
+                "value:jsonb": {
+                    "riskFactor": 2.9,
+                    "catchOnboard": [
+                        {
+                            "weight": 150.0,
+                            "nbFish": null,
+                            "species": "ANF",
+                            "faoZone": "27.8.a",
+                            "effortZone": "C",
+                            "economicZone": "FRA",
+                            "statisticalRectangle": "23E6"
+                        }
+                    ],
+                    "pnoTypes": [
+                        {
+                            "pnoTypeName": "Préavis type Z",
+                            "minimumNotificationPeriod": 4.0,
+                            "hasDesignatedPorts": false
+                        }
+                    ],
+                    "port": "AUSYD",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "purpose": "LAN",
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                }
+            },
+            {
+                "id": 1119,
+                "report_id": null,
+                "referenced_report_id": "FAKE_OPERATION_119",
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
+                "operation_number": "FAKE_OPERATION_119_RET",
+                "operation_type": "RET",
+                "transmission_format": "ERS",
+                "value:jsonb": {
+                    "returnStatus": "000"
+                }
+            },
+
+            // - Vessel: BON VENT
+            // - Flag state: FR
+            // - French vessel landing in a foreign port
+            {
+                "id": 120,
+                "report_id": "FAKE_OPERATION_120",
+                "referenced_report_id": null,
+                "cfr": "CFR129",
+                "enriched": true,
+                "flag_state": "FRA",
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "log_type": "PNO",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "operation_number": "FAKE_OPERATION_120",
+                "operation_type": "DAT",
+                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "software": "TurboCatch (3.7-1)",
+                "transmission_format": "ERS",
+                "trip_gears": null,
+                "trip_segments": null,
+                "vessel_name": "BON VENT",
+                "value:jsonb": {
+                    "riskFactor": 2.9,
+                    "catchOnboard": [
+                        {
+                            "weight": 150.0,
+                            "nbFish": null,
+                            "species": "ANF",
+                            "faoZone": "27.8.a",
+                            "effortZone": "C",
+                            "economicZone": "FRA",
+                            "statisticalRectangle": "23E6"
+                        }
+                    ],
+                    "pnoTypes": [
+                        {
+                            "pnoTypeName": "Préavis type Z",
+                            "minimumNotificationPeriod": 4.0,
+                            "hasDesignatedPorts": false
+                        }
+                    ],
+                    "port": "BROIA",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "purpose": "LAN",
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                }
+            },
+            {
+                "id": 1120,
+                "report_id": null,
+                "referenced_report_id": "FAKE_OPERATION_120",
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
+                "operation_number": "FAKE_OPERATION_120_RET",
                 "operation_type": "RET",
                 "transmission_format": "ERS",
                 "value:jsonb": {

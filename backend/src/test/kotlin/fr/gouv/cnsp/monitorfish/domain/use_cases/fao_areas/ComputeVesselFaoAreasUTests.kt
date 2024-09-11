@@ -4,10 +4,10 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FaoArea
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Species
-import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorRepository
+import fr.gouv.cnsp.monitorfish.fakers.PortFaker
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -111,7 +111,7 @@ class ComputeVesselFaoAreasUTests {
     @Test
     fun `execute Should return the computed fao areas When the port Locode given`() {
         given(portRepository.findByLocode(any())).willReturn(
-            Port("AEFAT", "Al Jazeera Port", faoAreas = listOf("27.8.c", "27.8")),
+            PortFaker.fakePort(locode = "AEFAT", name = "Al Jazeera Port", faoAreas = listOf("27.8.c", "27.8")),
         )
 
         // When
@@ -126,7 +126,7 @@ class ComputeVesselFaoAreasUTests {
     @Test
     fun `execute Should return the computed fao areas When the CFR and the port Locode are given`() {
         given(portRepository.findByLocode(any())).willReturn(
-            Port("AEFAT", "Al Jazeera Port", faoAreas = listOf("27.8.c", "27.8")),
+            PortFaker.fakePort(locode = "AEFAT", name = "Al Jazeera Port", faoAreas = listOf("27.8.c", "27.8")),
         )
 
         // When

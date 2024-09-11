@@ -59,7 +59,7 @@ stop-stubbed-apis:
 	docker stop cypress-geoserver-1
 
 update-test-data:
-	cd frontend && node ./scripts/generate_test_data_seeds.mjs
+	cd frontend && node ./scripts/generate_test_data_seeds.js
 
 dev-backup-db:
 	@export CONFIG_FILE_PATH=$$(pwd)/infra/dev/database/pg_backup.config; \

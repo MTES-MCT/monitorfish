@@ -8,9 +8,9 @@ import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
-import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.repositories.FacadeAreasRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
+import fr.gouv.cnsp.monitorfish.fakers.PortFaker
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -49,7 +49,13 @@ class GetMissionActionSeafrontUTests {
                 userTrigram = "LTH",
                 completion = Completion.TO_COMPLETE,
             )
-        given(portRepository.findByLocode(any())).willReturn(Port("AEFAT", name = "Dummy name", facade = "NAMO"))
+        given(portRepository.findByLocode(any())).willReturn(
+            PortFaker.fakePort(
+                locode = "AEFAT",
+                name = "Dummy name",
+                facade = "NAMO",
+            ),
+        )
 
         // When
         val facade = GetMissionActionFacade(portRepository, facadeAreasRepository).execute(action)

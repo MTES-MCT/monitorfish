@@ -1,8 +1,8 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.vessel
 
 import com.neovisionaries.i18n.CountryCode
+import fr.gouv.cnsp.monitorfish.fakers.VesselFaker
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -73,5 +73,29 @@ class VesselUTests {
 
         // Then
         assertThat(nationalIdentifier).isEqualTo("AY22680")
+    }
+
+    @Test
+    fun `isFrench Should return true when its flag state is French`() {
+        // Given
+        val vessel = VesselFaker.fakeVessel(flagState = CountryCode.MQ)
+
+        // When
+        val result = vessel.isFrench()
+
+        // Then
+        assertThat(result).isTrue()
+    }
+
+    @Test
+    fun `isFrench Should return false when its flag state is not French`() {
+        // Given
+        val vessel = VesselFaker.fakeVessel(flagState = CountryCode.ES)
+
+        // When
+        val result = vessel.isFrench()
+
+        // Then
+        assertThat(result).isFalse()
     }
 }

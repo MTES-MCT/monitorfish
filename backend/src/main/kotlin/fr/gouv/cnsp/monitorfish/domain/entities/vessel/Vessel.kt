@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.vessel
 
 import com.neovisionaries.i18n.CountryCode
+import fr.gouv.cnsp.monitorfish.domain.FRENCH_COUNTRY_CODES
 import java.util.*
 
 data class Vessel(
@@ -15,7 +16,6 @@ data class Vessel(
     val ircs: String? = null,
     val externalReferenceNumber: String? = null,
     val vesselName: String? = null,
-    /** ISO Alpha-2 country code */
     val flagState: CountryCode,
     val width: Double? = null,
     val length: Double? = null,
@@ -44,16 +44,12 @@ data class Vessel(
     val hasLogbookEsacapt: Boolean,
     val hasVisioCaptures: Boolean? = null,
 ) {
-    fun isLessThanTwelveMetersVessel(): Boolean {
-        return length?.let { it < 12.0 } ?: false
-    }
-
     fun getNationalIdentifier(): String {
         val internalReferenceNumberCountryCode =
             LIKELY_CONTROLLED_COUNTRY_CODES.find { countryAlpha3 ->
                 internalReferenceNumber?.contains(
                     countryAlpha3,
-                ) ?: false
+                ) == true
             }
         val identifier = internalReferenceNumber?.replace("${internalReferenceNumberCountryCode}000", "") ?: ""
 
@@ -62,6 +58,14 @@ data class Vessel(
         }
 
         return "$districtCode$identifier"
+    }
+
+    fun isFrench(): Boolean {
+        return FRENCH_COUNTRY_CODES.contains(flagState.alpha2)
+    }
+
+    fun isLessThanTwelveMetersVessel(): Boolean {
+        return length?.let { it < 12.0 } == true
     }
 }
 

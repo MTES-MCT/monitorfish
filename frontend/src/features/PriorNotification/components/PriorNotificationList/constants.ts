@@ -81,6 +81,8 @@ export const DESIGNATED_PORTS_PRIOR_NOTIFICATION_TYPE_PREFIX = 'Ports désignés
 
 export const IS_INVALIDATED = 'IS_INVALIDATED'
 export const IS_INVALIDATED_LABEL = 'Invalidé'
+export const IS_PRIOR_NOTIFICATION_ZERO = 'IS_PRIOR_NOTIFICATION_ZERO'
+export const IS_PRIOR_NOTIFICATION_ZERO_LABEL = 'Préavis Zéro'
 export const FILTER_STATUSES_AS_OPTIONS: Option<FilterStatus>[] = [
   { label: 'À vérifier (CNSP)', value: PriorNotification.State.PENDING_VERIFICATION },
   { label: 'Hors vérification', value: PriorNotification.State.OUT_OF_VERIFICATION_SCOPE },
@@ -88,5 +90,6 @@ export const FILTER_STATUSES_AS_OPTIONS: Option<FilterStatus>[] = [
   { label: IS_INVALIDATED_LABEL, value: IS_INVALIDATED },
   { label: 'Envoi auto. demandé', value: PriorNotification.State.AUTO_SEND_REQUESTED },
   { label: 'Envoi auto. fait', value: PriorNotification.State.AUTO_SEND_DONE },
-  { label: 'Échec de diffusion', value: PriorNotification.State.FAILED_SEND }
+  { label: 'Échec de diffusion', value: PriorNotification.State.FAILED_SEND },
+  { label: IS_PRIOR_NOTIFICATION_ZERO_LABEL, value: IS_PRIOR_NOTIFICATION_ZERO }
 ]

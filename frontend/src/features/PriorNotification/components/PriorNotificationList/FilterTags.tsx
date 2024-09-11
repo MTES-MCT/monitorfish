@@ -1,7 +1,6 @@
 import { COUNTRIES_AS_ALPHA3_OPTIONS } from '@constants/index'
 import { useGetFleetSegmentsAsOptions } from '@features/FleetSegment/hooks/useGetFleetSegmentsAsOptions'
 import { useGetPriorNotificationTypesAsOptions } from '@features/PriorNotification/hooks/useGetPriorNotificationTypesAsOptions'
-import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { useGetGearsAsTreeOptions } from '@hooks/useGetGearsAsTreeOptions'
 import { useGetPortsAsTreeOptions } from '@hooks/useGetPortsAsTreeOptions'
@@ -12,7 +11,8 @@ import { SingleTag, getSelectedOptionFromOptionValueInTree } from '@mtes-mct/mon
 import { isEqual, omit } from 'lodash'
 import styled from 'styled-components'
 
-import { DEFAULT_LIST_FILTER_VALUES, IS_INVALIDATED, IS_INVALIDATED_LABEL } from './constants'
+import { DEFAULT_LIST_FILTER_VALUES } from './constants'
+import { getStatusTagLabel } from './utils'
 
 import type { ListFilter } from './types'
 
@@ -117,7 +117,7 @@ export function FilterTags() {
 
           {listFilterValues.statuses?.map(status => (
             <SingleTag key={`statuses-${status}`} onDelete={() => remove('statuses', status)}>
-              {status === IS_INVALIDATED ? IS_INVALIDATED_LABEL : PriorNotification.STATE_LABEL[status]}
+              {getStatusTagLabel(status)}
             </SingleTag>
           ))}
         </Row>

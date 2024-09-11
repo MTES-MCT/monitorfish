@@ -30,7 +30,7 @@ import { AdministrativeLayers } from '../AdministrativeZone/layers/Administrativ
 import { BaseLayer } from '../BaseMap/layers/BaseLayer'
 import { DrawLayer } from '../Draw/layer'
 import { InterestPointLayer } from '../InterestPoint/layers/InterestPointLayer'
-import MeasurementLayer from '../Measurement/layers/MeasurementLayer'
+import { MeasurementLayer } from '../Measurement/layers/MeasurementLayer'
 import { MissionOverlay } from '../Mission/components/MissionOverlay'
 import { SelectedMissionOverlay } from '../Mission/components/SelectedMissionOverlay'
 import { MissionHoveredLayer } from '../Mission/layers/HoveredMissionLayer'

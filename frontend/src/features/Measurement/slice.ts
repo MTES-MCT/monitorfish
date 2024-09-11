@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { getLocalStorageState } from '../../utils'
 
 import type { MeasurementType } from '../../domain/entities/map/constants'
+import type { Coordinates } from '@mtes-mct/monitor-ui'
 
 const measurementsLocalStorageKey = 'measurements'
 
@@ -12,8 +13,10 @@ export type MeasurementState = {
     coordinates: number[]
     measurement: any
   } | null
-  // TODO Type this prop.
-  circleMeasurementToAdd: null
+  circleMeasurementToAdd: {
+    circleCoordinatesToAdd: Coordinates
+    circleRadiusToAdd: number
+  } | null
   measurementTypeToAdd: MeasurementType | null
   // TODO Type this prop.
   measurementsDrawed: Record<string, any>[]

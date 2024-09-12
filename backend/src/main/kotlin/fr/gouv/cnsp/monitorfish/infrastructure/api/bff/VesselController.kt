@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetVesselReportings
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
 import io.swagger.v3.oas.annotations.Operation
@@ -200,7 +201,7 @@ class VesselController(
         @RequestParam(name = "fromDate")
         @DateTimeFormat(pattern = zoneDateTimePattern)
         fromDate: ZonedDateTime,
-    ): CurrentAndArchivedReportingDataOutput {
+    ): VesselReportingsDataOutput {
         val currentAndArchivedReportings =
             getVesselReportings.execute(
                 vesselId,
@@ -211,7 +212,7 @@ class VesselController(
                 fromDate,
             )
 
-        return CurrentAndArchivedReportingDataOutput.fromCurrentAndArchivedReporting(currentAndArchivedReportings)
+        return VesselReportingsDataOutput.fromCurrentAndArchivedReporting(currentAndArchivedReportings)
     }
 
     @GetMapping("/search")

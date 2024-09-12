@@ -2,8 +2,7 @@ import { getVesselReportings } from '@features/Reporting/useCases/getVesselRepor
 import { Header, Zone } from '@features/Vessel/components/VesselSidebar/common_styles/common.style'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, THEME, Button } from '@mtes-mct/monitor-ui'
-import dayjs from 'dayjs'
+import { Accent, Button, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { YearReportings } from './YearReportings'
@@ -14,14 +13,12 @@ import type { ReportingAndOccurrences } from '@features/Reporting/types'
 export function Archived() {
   const dispatch = useMainAppDispatch()
   const archivedReportingsFromDate = useMainAppSelector(state => state.reporting.archivedReportingsFromDate)
-  const currentAndArchivedReportingsOfSelectedVessel = useMainAppSelector(
-    state => state.reporting.currentAndArchivedReportingsOfSelectedVessel
-  )
+  const selectedVesselReportings = useMainAppSelector(state => state.reporting.selectedVesselReportings)
 
-  const yearsToReportings = currentAndArchivedReportingsOfSelectedVessel?.archived
+  const yearsToReportings = selectedVesselReportings?.archived
 
   const seeMore = () => {
-    const nextDate = dayjs(archivedReportingsFromDate).subtract(1, 'year').toDate()
+    const nextDate = archivedReportingsFromDate.subtract(1, 'year')
 
     dispatch(setArchivedReportingsFromDate(nextDate))
     dispatch(getVesselReportings(false))
@@ -47,8 +44,7 @@ export function Archived() {
         </List>
       ) : (
         <NoReporting>
-          Aucun signalement{' '}
-          {!!archivedReportingsFromDate && `depuis ${archivedReportingsFromDate.getUTCFullYear() + 1}`}
+          Aucun signalement {!!archivedReportingsFromDate && `depuis ${archivedReportingsFromDate.get('year')}`}
         </NoReporting>
       )}
       <SeeMoreBackground>

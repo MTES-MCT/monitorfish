@@ -1,21 +1,23 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.CurrentAndArchivedReportings
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.VesselReportings
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Year
 
-class CurrentAndArchivedReportingDataOutput(
+class VesselReportingsDataOutput(
+    val summary: ReportingSummaryDataOutput,
     val current: List<ReportingAndOccurrencesDataOutput>,
     val archived: Map<Year, List<ReportingAndOccurrencesDataOutput>>,
 ) {
     companion object {
-        fun fromCurrentAndArchivedReporting(currentAndArchivedReportings: CurrentAndArchivedReportings) =
-            CurrentAndArchivedReportingDataOutput(
+        fun fromCurrentAndArchivedReporting(vesselReportings: VesselReportings) =
+            VesselReportingsDataOutput(
+                summary = ReportingSummaryDataOutput.fromReportingSummary(vesselReportings.summary),
                 current =
-                    currentAndArchivedReportings.current.map {
+                    vesselReportings.current.map {
                         ReportingAndOccurrencesDataOutput.fromReportingAndOccurrences(it)
                     },
                 archived =
-                    currentAndArchivedReportings.archived.mapValues { (_, reportingAndOccurrences) ->
+                    vesselReportings.archived.mapValues { (_, reportingAndOccurrences) ->
                         reportingAndOccurrences.map {
                             ReportingAndOccurrencesDataOutput.fromReportingAndOccurrences(it)
                         }

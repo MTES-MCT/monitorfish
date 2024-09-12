@@ -12,3 +12,11 @@ export const getReportingActorLabel = (
 
   return ReportingOriginActorLabel[reportingActor]
 }
+
+export function getFrenchOrdinal(index: number): string {
+  if (index === 0) {
+    return '1ère'
+  }
+
+  return `${index + 1}è`
+}

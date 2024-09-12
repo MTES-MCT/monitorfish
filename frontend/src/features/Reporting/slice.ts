@@ -1,30 +1,32 @@
+import { customDayjs } from '@mtes-mct/monitor-ui'
 import { createSlice } from '@reduxjs/toolkit'
 
 import type { VesselIdentity } from '../../domain/entities/vessel/types'
 import type {
-  CurrentAndArchivedReportingsOfSelectedVessel,
+  VesselReportings,
   EditableReporting,
   InfractionSuspicionReporting,
   PendingAlertReporting
 } from '@features/Reporting/types'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import type { Dayjs } from 'dayjs'
 
 export type ReportingState = {
-  archivedReportingsFromDate: Date
-  currentAndArchivedReportingsOfSelectedVessel: CurrentAndArchivedReportingsOfSelectedVessel | undefined
+  archivedReportingsFromDate: Dayjs
   currentReportings: Array<InfractionSuspicionReporting | PendingAlertReporting>
   editedReporting: EditableReporting | undefined
   editedReportingInSideWindow: EditableReporting | undefined
   isLoadingReporting: boolean
+  selectedVesselReportings: VesselReportings | undefined
   vesselIdentity: VesselIdentity | undefined
 }
 const INITIAL_STATE: ReportingState = {
-  archivedReportingsFromDate: new Date(new Date().getUTCFullYear() - 5, 0, 1),
-  currentAndArchivedReportingsOfSelectedVessel: undefined,
+  archivedReportingsFromDate: customDayjs().utc().subtract(5, 'year').startOf('year'),
   currentReportings: [],
   editedReporting: undefined,
   editedReportingInSideWindow: undefined,
   isLoadingReporting: false,
+  selectedVesselReportings: undefined,
   vesselIdentity: undefined
 }
 
@@ -72,8 +74,8 @@ const reportingSlice = createSlice({
       )
     },
 
-    resetCurrentAndArchivedReportingsOfSelectedVessel(state) {
-      state.currentAndArchivedReportingsOfSelectedVessel = undefined
+    resetSelectedVesselReportings(state) {
+      state.selectedVesselReportings = undefined
       state.vesselIdentity = undefined
       state.isLoadingReporting = false
     },
@@ -87,22 +89,6 @@ const reportingSlice = createSlice({
      */
     setArchivedReportingsFromDate(state, action) {
       state.archivedReportingsFromDate = action.payload
-    },
-
-    /**
-     * Set current and archived reporting
-     * @function setCurrentAndArchivedReportingsOfSelectedVessel
-     * @memberOf ReportingReducer
-     * @param {Object=} state
-     * @param {{payload: {
-     *   currentAndArchivedReportingsOfSelectedVessel: CurrentAndArchivedReportingsOfSelectedVessel,
-     *   vesselIdentity: VesselIdentity
-     * }}} action - the reporting
-     */
-    setCurrentAndArchivedReportingsOfSelectedVessel(state, action) {
-      state.currentAndArchivedReportingsOfSelectedVessel = action.payload.currentAndArchivedReportingsOfSelectedVessel
-      state.vesselIdentity = action.payload.vesselIdentity
-      state.isLoadingReporting = false
     },
 
     /**
@@ -130,6 +116,15 @@ const reportingSlice = createSlice({
       state.editedReportingInSideWindow = action.payload
     },
 
+    setSelectedVesselReportings(
+      state,
+      action: PayloadAction<{ selectedVesselReportings: VesselReportings; vesselIdentity: VesselIdentity }>
+    ) {
+      state.selectedVesselReportings = action.payload.selectedVesselReportings
+      state.vesselIdentity = action.payload.vesselIdentity
+      state.isLoadingReporting = false
+    },
+
     /**
      * Update a given current reporting
      */
@@ -146,12 +141,12 @@ export const {
   loadReporting,
   removeCurrentReporting,
   removeReportingsIdsFromCurrentReportings,
-  resetCurrentAndArchivedReportingsOfSelectedVessel,
+  resetSelectedVesselReportings,
   setArchivedReportingsFromDate,
-  setCurrentAndArchivedReportingsOfSelectedVessel,
   setCurrentReportings,
   setEditedReporting,
   setEditedReportingInSideWindow,
+  setSelectedVesselReportings,
   updateCurrentReporting
 } = reportingSlice.actions
 

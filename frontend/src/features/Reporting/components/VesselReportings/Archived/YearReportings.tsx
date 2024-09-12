@@ -83,7 +83,7 @@ export function YearReportings({ year, yearReportings }: YearReportingsProps) {
             <ReportingCard
               key={reporting.id}
               isArchived
-              numberOfOccurrences={otherOccurrencesOfSameAlert.length + 1}
+              otherOccurrencesOfSameAlert={otherOccurrencesOfSameAlert}
               reporting={reporting}
             />
           ))}

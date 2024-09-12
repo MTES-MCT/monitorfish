@@ -6,9 +6,10 @@ import { COLORS } from '../../../../../constants/constants'
 import { Header, Zone } from '../common_styles/common.style'
 
 import type { MissionAction } from '../../../../Mission/missionAction.types'
+import type { Dayjs } from 'dayjs'
 
 type YearsToControlListProps = {
-  controlsFromDate: Date
+  controlsFromDate: Dayjs
   yearsToControls: Record<number, MissionAction.MissionAction[]>
 }
 export function YearsToControlList({ controlsFromDate, yearsToControls }: YearsToControlListProps) {
@@ -30,7 +31,7 @@ export function YearsToControlList({ controlsFromDate, yearsToControls }: YearsT
           ))}
         </List>
       ) : (
-        <NoControls>Aucun contrôle {`depuis ${controlsFromDate.getUTCFullYear() + 1}`}</NoControls>
+        <NoControls>Aucun contrôle {`depuis ${controlsFromDate.get('year')}`}</NoControls>
       )}
     </Zone>
   )

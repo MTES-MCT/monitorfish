@@ -1,9 +1,9 @@
+import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { ZonePreview } from '@features/Regulation/components/ZonePreview'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import { useCallback } from 'react'
-import { FingerprintSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
 import { FishingPeriodDisplayed } from './fishingPeriod'

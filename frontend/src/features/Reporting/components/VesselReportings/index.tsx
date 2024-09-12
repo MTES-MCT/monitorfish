@@ -1,9 +1,9 @@
+import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { Summary } from '@features/Reporting/components/VesselReportings/Summary'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME, usePrevious } from '@mtes-mct/monitor-ui'
 import { useEffect, useState } from 'react'
-import { FingerprintSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
 import { Archived } from './Archived'

@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/PriorNotification/components/PriorNotificationList/utils displayOnboardFishingSpecies() should return the expected result 1`] = `
+[
+  <styled.li
+    title="ABC Name (ABC) – 6 kg"
+  >
+    ABC Name (ABC) – 6 kg
+  </styled.li>,
+  <styled.li
+    title="DEF Name (DEF) – 4 kg"
+  >
+    DEF Name (DEF) – 4 kg
+  </styled.li>,
+]
+`;

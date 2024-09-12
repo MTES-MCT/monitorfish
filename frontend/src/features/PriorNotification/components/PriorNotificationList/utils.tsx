@@ -7,6 +7,8 @@ import {
 } from '@constants/seafront'
 import { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 import { THEME, customDayjs, getMaybeBooleanFromRichBoolean, type DateAsStringRange } from '@mtes-mct/monitor-ui'
+import { update } from 'lodash'
+import styled from 'styled-components'
 
 import {
   COMMUNITY_PRIOR_NOTIFICATION_TYPES,
@@ -209,6 +211,46 @@ export function getStaticApiFilterFromListFilter(listFilter: ListFilter): Logboo
   }
 }
 
+export function displayOnboardFishingSpecies(onBoardCatches: LogbookMessage.Catch[]) {
+  const heaviestOnBoardCatches = onBoardCatches
+    .reduce<
+      Array<{
+        specyCode: string
+        specyName: string
+        weight: number
+      }>
+    >((aggregatedCatches, currentCatch) => {
+      const existingCatchSpecyIndex = aggregatedCatches.findIndex(
+        aggregatedCatch => aggregatedCatch.specyCode === currentCatch.species
+      )
+      if (
+        existingCatchSpecyIndex > -1 &&
+        currentCatch.weight !== undefined &&
+        aggregatedCatches[existingCatchSpecyIndex]?.weight !== undefined
+      ) {
+        return update(aggregatedCatches, `[${existingCatchSpecyIndex}].weight`, weight => weight + currentCatch.weight)
+      }
+
+      return [
+        ...aggregatedCatches,
+        {
+          specyCode: currentCatch.species,
+          specyName: currentCatch.speciesName,
+          weight: currentCatch.weight
+        }
+      ]
+    }, [])
+    .sort((a, b) => b.weight - a.weight)
+    .slice(0, 5)
+
+  return heaviestOnBoardCatches.map(({ specyCode, specyName, weight }) => (
+    <StyledLi
+      key={specyCode}
+      title={`${specyName} (${specyCode}) – ${weight} kg`}
+    >{`${specyName} (${specyCode}) – ${weight} kg`}</StyledLi>
+  ))
+}
+
 export function getStatusTagLabel(status: FilterStatus): string {
   switch (status) {
     case IS_INVALIDATED:
@@ -254,3 +296,10 @@ export function getTitle(seafrontGroup: SeafrontGroup | AllSeafrontGroup | NoSea
       return `Préavis en ${SUB_MENU_LABEL[seafrontGroup]}`
   }
 }
+
+const StyledLi = styled.li`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 215px;
+`

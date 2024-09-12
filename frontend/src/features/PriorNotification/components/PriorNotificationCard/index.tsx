@@ -101,7 +101,7 @@ export function PriorNotificationCard({
           />
 
           {isPendingVerification && <Intro>Le préavis doit être vérifié par le CNSP avant sa diffusion.</Intro>}
-          <Intro hasNoTopMargin={isPendingVerification}>
+          <Intro $hasNoTopMargin={isPendingVerification}>
             Le navire doit respecter un délai d’envoi{hasDesignatedPorts && ' et débarquer dans un port désigné'}.
           </Intro>
 
@@ -155,9 +155,9 @@ const Body = styled.div`
 `
 
 const Intro = styled.p<{
-  hasNoTopMargin?: boolean
+  $hasNoTopMargin?: boolean
 }>`
-  ${p => p.hasNoTopMargin && 'margin-top: 2px;'}
+  ${p => p.$hasNoTopMargin && 'margin-top: 2px;'}
   color: ${p => p.theme.color.slateGray};
   font-style: italic;
 `

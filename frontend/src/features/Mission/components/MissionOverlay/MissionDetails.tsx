@@ -68,7 +68,7 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
           />
         )}
         <Body>
-          <Title isSelected={isSelected}>
+          <Title $isSelected={isSelected}>
             {mission.controlUnits.length === 1 &&
               mission.controlUnits.map((controlUnit: LegacyControlUnit.LegacyControlUnit) => (
                 <Fragment key={controlUnit.id}>
@@ -176,12 +176,12 @@ const Details = styled.div`
 `
 
 const Title = styled.div<{
-  isSelected: boolean
+  $isSelected: boolean
 }>`
   height: 40px;
   font: normal normal bold 13px/18px Marianne;
   color: ${p => p.theme.color.gunMetal};
-  width: ${p => (p.isSelected ? 90 : 100)}%;
+  width: ${p => (p.$isSelected ? 90 : 100)}%;
 `
 
 const Wrapper = styled.div`

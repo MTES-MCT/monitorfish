@@ -39,14 +39,14 @@ export function AlertListAndReportingList({
   return (
     <Wrapper>
       <Title
-        isSelected={selectedTab === AlertAndReportingTab.ALERT}
+        $isSelected={selectedTab === AlertAndReportingTab.ALERT}
         onClick={() => setSelectedTab(AlertAndReportingTab.ALERT)}
       >
         Alertes
       </Title>
       <Title
+        $isSelected={selectedTab === AlertAndReportingTab.REPORTING}
         data-cy="side-window-reporting-tab"
-        isSelected={selectedTab === AlertAndReportingTab.REPORTING}
         onClick={() => setSelectedTab(AlertAndReportingTab.REPORTING)}
       >
         Signalements
@@ -75,9 +75,9 @@ const Wrapper = styled.div`
 
 // TODO This should be a `<a />` or a `<button />`.
 const Title = styled.h2<{
-  isSelected: boolean
+  $isSelected: boolean
 }>`
-  border-bottom: 5px solid ${p => (p.isSelected ? p.theme.color.charcoal : p.theme.color.white)};
+  border-bottom: 5px solid ${p => (p.$isSelected ? p.theme.color.charcoal : p.theme.color.white)};
   color: ${p => p.theme.color.gunMetal};
   cursor: pointer;
   display: inline-block;

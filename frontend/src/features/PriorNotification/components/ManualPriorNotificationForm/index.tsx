@@ -90,7 +90,8 @@ export function ManualPriorNotificationForm() {
   if (openedPriorNotificationDetail?.reportId) {
     customSentry.endMeasurement(
       CustomSentryMeasurementName.MANUAL_PRIOR_NOTIFICATION_FORM_SPINNER,
-      openedPriorNotificationDetail.reportId
+      openedPriorNotificationDetail.reportId,
+      2000
     )
   }
 

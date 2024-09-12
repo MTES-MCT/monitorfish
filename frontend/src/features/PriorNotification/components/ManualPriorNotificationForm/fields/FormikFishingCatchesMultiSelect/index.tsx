@@ -52,6 +52,15 @@ export function FormikFishingCatchesMultiSelect({ isReadOnly }: FormikFishingCat
   )
 
   const add = (nextSpecy: Specy | undefined) => {
+    if (values.hasGlobalFaoArea) {
+      const isSpecyCodeAlreadyInCatches = values.fishingCatches?.find(
+        fishingCatch => fishingCatch.specyCode === nextSpecy?.code
+      )
+      if (isSpecyCodeAlreadyInCatches) {
+        return
+      }
+    }
+
     const specyOption = speciesAsOptions?.find(({ value }) => value.code === nextSpecy?.code)
     if (!specyOption) {
       return

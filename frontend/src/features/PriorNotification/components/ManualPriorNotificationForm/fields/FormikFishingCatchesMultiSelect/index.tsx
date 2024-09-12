@@ -52,13 +52,6 @@ export function FormikFishingCatchesMultiSelect({ isReadOnly }: FormikFishingCat
   )
 
   const add = (nextSpecy: Specy | undefined) => {
-    const specyIsAlreadyInCatches = values.fishingCatches?.find(
-      fishingCatch => fishingCatch.specyCode === nextSpecy?.code
-    )
-    if (specyIsAlreadyInCatches) {
-      return
-    }
-
     const specyOption = speciesAsOptions?.find(({ value }) => value.code === nextSpecy?.code)
     if (!specyOption) {
       return

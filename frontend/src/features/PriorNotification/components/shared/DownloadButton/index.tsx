@@ -7,7 +7,7 @@ import {
   useGetPriorNotificationPdfExistenceQuery
 } from '@features/PriorNotification/priorNotificationApi'
 import { customSentry, CustomSentryMeasurementName } from '@libs/customSentry'
-import { Accent, Button, customDayjs, Dropdown, Icon, usePrevious } from '@mtes-mct/monitor-ui'
+import { Accent, Button, customDayjs, Dropdown, Icon } from '@mtes-mct/monitor-ui'
 import { downloadFile } from '@utils/downloadFile'
 import printJS from 'print-js'
 import { useMemo } from 'react'

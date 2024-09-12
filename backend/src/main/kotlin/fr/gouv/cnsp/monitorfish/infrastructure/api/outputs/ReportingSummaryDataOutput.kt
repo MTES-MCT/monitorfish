@@ -8,12 +8,14 @@ data class ReportingSummaryDataOutput(
     val numberOfObservations: Int,
 ) {
     companion object {
-        fun fromReportingSummary(reportingSummary: ReportingSummary) = ReportingSummaryDataOutput(
-            infractionSuspicionsSummary = reportingSummary.infractionSuspicionsSummary.map {
-                ReportingTitleAndNumberOfOccurrencesDataOutput.fromReportingTitleAndNumberOfOccurrences(it)
-            },
-            numberOfInfractionSuspicions = reportingSummary.numberOfInfractionSuspicions,
-            numberOfObservations = reportingSummary.numberOfObservations
-        )
+        fun fromReportingSummary(reportingSummary: ReportingSummary) =
+            ReportingSummaryDataOutput(
+                infractionSuspicionsSummary =
+                    reportingSummary.infractionSuspicionsSummary.map {
+                        ReportingTitleAndNumberOfOccurrencesDataOutput.fromReportingTitleAndNumberOfOccurrences(it)
+                    },
+                numberOfInfractionSuspicions = reportingSummary.numberOfInfractionSuspicions,
+                numberOfObservations = reportingSummary.numberOfObservations,
+            )
     }
 }

@@ -14,6 +14,7 @@ import { useListSorting } from '@hooks/useListSorting'
 import { useLoadingState } from '@hooks/useLoadingState'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { customSentry, CustomSentryMeasurementName } from '@libs/customSentry'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Accent, Button, Icon, Size, TableWithSelectableRows, usePrevious } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
@@ -143,6 +144,12 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
       table.resetExpanded()
     }
   }, [previousListFilter, listFilter, table])
+
+  if (isBodyLoaderVisible) {
+    customSentry.startMeasurement(CustomSentryMeasurementName.PRIOR_NOTIFICATION_LIST_BODY_SPINNER, '0')
+  } else {
+    customSentry.endMeasurement(CustomSentryMeasurementName.PRIOR_NOTIFICATION_LIST_BODY_SPINNER, '0', 2000)
+  }
 
   return (
     <>

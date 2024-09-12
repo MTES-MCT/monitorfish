@@ -64,22 +64,25 @@ export function ReportingCard({
         </Title>
         <Date>
           {otherOccurrencesOfSameAlert.length > 0 ? 'Dernière alerte le' : 'Le'} {alertDateTime}
-          {otherOccurrencesOfSameAlert.length > 0 && !isOtherOccurrencesDatesOpened && (
-            <OpenOrCloseOtherOccurrenceDates onClick={() => setIsOtherOccurrencesDatesOpened(true)}>
-              Voir les dates des autres alertes
-            </OpenOrCloseOtherOccurrenceDates>
-          )}
-          {isOtherOccurrencesDatesOpened && (
-            <OtherOccurrenceDates>
-              {otherOccurrencesDates.map(dateTime => (
-                <OtherOccurrenceAlertDate>{dateTime}</OtherOccurrenceAlertDate>
-              ))}
-            </OtherOccurrenceDates>
-          )}
-          {otherOccurrencesOfSameAlert.length > 0 && isOtherOccurrencesDatesOpened && (
-            <OpenOrCloseOtherOccurrenceDates onClick={() => setIsOtherOccurrencesDatesOpened(false)}>
-              Masquer les dates des autres alertes
-            </OpenOrCloseOtherOccurrenceDates>
+          {otherOccurrencesOfSameAlert.length > 0 && (
+            <>
+              {isOtherOccurrencesDatesOpened ? (
+                <>
+                  <OtherOccurrenceDates>
+                    {otherOccurrencesDates.map(dateTime => (
+                      <OtherOccurrenceAlertDate>{dateTime}</OtherOccurrenceAlertDate>
+                    ))}
+                  </OtherOccurrenceDates>
+                  <OpenOrCloseOtherOccurrenceDates onClick={() => setIsOtherOccurrencesDatesOpened(false)}>
+                    Masquer les dates des autres alertes
+                  </OpenOrCloseOtherOccurrenceDates>
+                </>
+              ) : (
+                <OpenOrCloseOtherOccurrenceDates onClick={() => setIsOtherOccurrencesDatesOpened(true)}>
+                  Voir les dates des autres alertes
+                </OpenOrCloseOtherOccurrenceDates>
+              )}
+            </>
           )}
         </Date>
         {reporting.type !== ReportingType.ALERT && <Description>{reporting.value.description}</Description>}

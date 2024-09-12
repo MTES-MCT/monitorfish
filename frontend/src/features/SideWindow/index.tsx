@@ -1,4 +1,5 @@
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
+import { FulfillingBouncingCircleSpinner } from '@components/FulfillingBouncingCircleSpinner'
 import { MissionForm } from '@features/Mission/components/MissionForm'
 import { useListenToAllMissionEventsUpdates } from '@features/Mission/components/MissionForm/hooks/useListenToAllMissionEventsUpdates'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
@@ -14,7 +15,6 @@ import {
   useState,
   Fragment
 } from 'react'
-import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import styled, { createGlobalStyle, css, StyleSheetManager } from 'styled-components'
 
 import { Alert } from './Alert'

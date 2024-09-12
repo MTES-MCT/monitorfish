@@ -1,8 +1,8 @@
 import { FIVE_MINUTES } from '@api/APIWorker'
+import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useCallback, useEffect, useState } from 'react'
-import { FingerprintSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
 import { LogbookMessages } from './LogbookMessages'

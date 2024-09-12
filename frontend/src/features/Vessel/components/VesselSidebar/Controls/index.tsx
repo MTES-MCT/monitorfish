@@ -1,5 +1,5 @@
+import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { useCallback, useEffect, useMemo } from 'react'
-import { FingerprintSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
 import { ControlsSummary } from './ControlsSummary'

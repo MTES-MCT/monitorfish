@@ -1,9 +1,9 @@
+import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { FlatKeyValue } from '@features/Vessel/components/VesselSidebar/common/FlatKeyValue'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
-import { FingerprintSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
 import { BeaconMalfunctionsResume } from './BeaconMalfunctionsResume'

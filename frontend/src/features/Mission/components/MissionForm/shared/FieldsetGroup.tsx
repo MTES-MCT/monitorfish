@@ -1,5 +1,5 @@
+import { LoopingRhombusesSpinner } from '@components/LoopingRhombusesSpinner'
 import { Fieldset, THEME } from '@mtes-mct/monitor-ui'
-import { LoopingRhombusesSpinner } from 'react-epic-spinners'
 import styled, { css } from 'styled-components'
 
 import type { FieldsetProps } from '@mtes-mct/monitor-ui'

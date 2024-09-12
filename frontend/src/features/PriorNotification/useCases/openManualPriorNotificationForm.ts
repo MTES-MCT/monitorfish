@@ -27,7 +27,7 @@ export const openManualPriorNotificationForm =
     try {
       if (identifier) {
         customSentry.startMeasurement(
-          CustomSentryMeasurementName.LOGBOOK_PRIOR_NOTIFICATION_FORM_SPINNER,
+          CustomSentryMeasurementName.MANUAL_PRIOR_NOTIFICATION_FORM_SPINNER,
           identifier.reportId
         )
       }

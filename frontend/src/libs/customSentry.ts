@@ -19,8 +19,6 @@ class CustomSentry {
   mesurements: Map<string, CustomSentryMeasurementValue> = new Map()
 
   clearMeasurement(name: CustomSentryMeasurementName, id: string) {
-    console.info('startMeasurement')
-
     try {
       const key = `${name}-${id}`
       if (!this.mesurements.has(key)) {
@@ -32,8 +30,6 @@ class CustomSentry {
   }
 
   startMeasurement(name: CustomSentryMeasurementName, id: string) {
-    console.info('startMeasurement')
-
     try {
       const startDate = Date.now()
       const key = `${name}-${id}`
@@ -61,8 +57,6 @@ class CustomSentry {
   }
 
   endMeasurement(name: CustomSentryMeasurementName, id: string, maxExpectedDurationInMs?: number) {
-    console.info('endMeasurement')
-
     try {
       const key = `${name}-${id}`
       const measurement = this.mesurements.get(key)
@@ -73,20 +67,22 @@ class CustomSentry {
       measurement.span.end()
 
       const durationInMs = Date.now() - measurement.startDate
-      if (maxExpectedDurationInMs && durationInMs > maxExpectedDurationInMs) {
+      if (maxExpectedDurationInMs !== undefined && durationInMs > maxExpectedDurationInMs) {
         const messageScope = new Scope()
         messageScope.setTags({
           side: 'frontend',
           type: 'performance'
         })
 
-        const message = captureMessage(`${name} took more than ${maxExpectedDurationInMs / 1000}s.`, {
+        const message = `${name} took more than ${maxExpectedDurationInMs / 1000}s.`
+        captureMessage(message, {
           level: 'warning',
           tags: {
             side: 'frontend',
             type: 'performance'
           }
         })
+
         console.warn('[MonitorFish]', message)
       }
 

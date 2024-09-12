@@ -1,10 +1,10 @@
+import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { FlatTwoColumnKeyValue } from '@features/Vessel/components/VesselSidebar/common/FlatTwoColumnKeyValue'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME } from '@mtes-mct/monitor-ui'
 import countries from 'i18n-iso-countries'
 import { useEffect, useMemo } from 'react'
-import { FingerprintSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
 import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'

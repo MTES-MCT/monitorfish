@@ -44,7 +44,8 @@ export function LogbookPriorNotificationForm() {
 
   customSentry.endMeasurement(
     CustomSentryMeasurementName.LOGBOOK_PRIOR_NOTIFICATION_FORM_SPINNER,
-    openedPriorNotificationDetail.reportId
+    openedPriorNotificationDetail.reportId,
+    2000
   )
 
   return (

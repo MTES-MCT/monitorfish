@@ -1,6 +1,6 @@
+import { FulfillingBouncingCircleSpinner } from '@components/FulfillingBouncingCircleSpinner'
 import { Accent, Button, Icon, THEME } from '@mtes-mct/monitor-ui'
 import { useEffect, useMemo, useState } from 'react'
-import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import { Progress } from 'rsuite'
 import styled from 'styled-components'
 

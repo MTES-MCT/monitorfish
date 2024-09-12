@@ -1,5 +1,5 @@
+import { FulfillingBouncingCircleSpinner } from '@components/FulfillingBouncingCircleSpinner'
 import { THEME } from '@mtes-mct/monitor-ui'
-import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
 import VesselSVG from '../features/icons/Icone_navire.svg?react'

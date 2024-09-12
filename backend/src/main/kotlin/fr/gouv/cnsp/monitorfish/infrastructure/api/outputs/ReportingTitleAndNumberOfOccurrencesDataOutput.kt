@@ -7,7 +7,9 @@ data class ReportingTitleAndNumberOfOccurrencesDataOutput(
     val numberOfOccurrences: Int,
 ) {
     companion object {
-        fun fromReportingTitleAndNumberOfOccurrences(reportingTitleAndNumberOfOccurrences: ReportingTitleAndNumberOfOccurrences) = ReportingTitleAndNumberOfOccurrencesDataOutput(
+        fun fromReportingTitleAndNumberOfOccurrences(
+            reportingTitleAndNumberOfOccurrences: ReportingTitleAndNumberOfOccurrences,
+        ) = ReportingTitleAndNumberOfOccurrencesDataOutput(
             title = reportingTitleAndNumberOfOccurrences.title,
             numberOfOccurrences = reportingTitleAndNumberOfOccurrences.numberOfOccurrences,
         )

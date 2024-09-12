@@ -1,7 +1,7 @@
+import { FulfillingBouncingCircleSpinner } from '@components/FulfillingBouncingCircleSpinner'
 import { useIsInLightMode } from '@hooks/useIsInLightMode'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useEffect, useState } from 'react'
-import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
 import { FIVE_MINUTES, TWENTY_MINUTES } from '../../../api/APIWorker'

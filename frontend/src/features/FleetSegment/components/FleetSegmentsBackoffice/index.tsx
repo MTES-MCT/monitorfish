@@ -1,9 +1,9 @@
+import { FulfillingBouncingCircleSpinner } from '@components/FulfillingBouncingCircleSpinner'
 import { fleetSegmentApi } from '@features/FleetSegment/apis'
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import { Button, customDayjs, Select, THEME } from '@mtes-mct/monitor-ui'
 import _ from 'lodash'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
 import { CreateOrEditFleetSegmentModal } from './CreateOrEditFleetSegmentModal'

@@ -1,6 +1,6 @@
+import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { usePrevious } from '@mtes-mct/monitor-ui'
 import { useEffect, useState } from 'react'
-import { FingerprintSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
 import { BeaconMalfunctionDetails } from './details/BeaconMalfunctionDetails'

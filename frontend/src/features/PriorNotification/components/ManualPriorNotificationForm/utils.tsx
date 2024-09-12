@@ -1,6 +1,7 @@
+import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES } from '@features/PriorNotification/constants'
 import { pick } from 'lodash'
 
-import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES, INITIAL_FORM_VALUES } from './constants'
+import { INITIAL_FORM_VALUES } from './constants'
 import { PriorNotification } from '../../PriorNotification.types'
 
 import type { ManualPriorNotificationFormValues } from './types'

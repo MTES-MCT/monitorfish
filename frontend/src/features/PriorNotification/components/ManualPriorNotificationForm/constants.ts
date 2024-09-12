@@ -6,8 +6,6 @@ import type { ManualPriorNotificationFormValues } from './types'
 
 import PurposeCode = PriorNotification.PurposeCode
 
-export const BLUEFIN_TUNA_EXTENDED_SPECY_CODES = ['BF1', 'BF2', 'BF3']
-
 const FISHING_CATCH_VALIDATION_SCHEMA: ObjectSchema<PriorNotification.FormDataFishingCatch> = object({
   faoArea: string().when('$hasGlobalFaoArea', {
     is: false,

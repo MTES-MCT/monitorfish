@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
+package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
@@ -28,7 +28,7 @@ class GetVesselReportings(
         ircs: String,
         vesselIdentifier: VesselIdentifier?,
         fromDate: ZonedDateTime,
-    ): CurrentAndArchivedReportings {
+    ): VesselReportings {
         val controlUnits = getAllControlUnits.execute()
 
         val reportings =
@@ -63,7 +63,62 @@ class GetVesselReportings(
                     }
             }
 
-        return CurrentAndArchivedReportings(current, archivedYearsToReportings)
+        val infractionSuspicionsSummary = getInfractionSuspicionsSummary(reportings.filter { it.isArchived })
+        val numberOfInfractionSuspicions = infractionSuspicionsSummary.sumOf { it.numberOfOccurrences }
+        val numberOfObservation =
+            reportings
+                .filter { it.isArchived && it.type == ReportingType.OBSERVATION }
+                .size
+
+        val reportingSummary =
+            ReportingSummary(
+                infractionSuspicionsSummary = infractionSuspicionsSummary,
+                numberOfInfractionSuspicions = numberOfInfractionSuspicions,
+                numberOfObservations = numberOfObservation,
+            )
+
+        return VesselReportings(
+            current = current,
+            archived = archivedYearsToReportings,
+            summary = reportingSummary,
+        )
+    }
+
+    private fun getInfractionSuspicionsSummary(
+        reportings: List<Reporting>,
+    ): List<ReportingTitleAndNumberOfOccurrences> {
+        val alertsSummary =
+            reportings
+                .filter { it.type == ReportingType.ALERT }
+                .groupBy { (it.value as AlertType).type }
+                .map { (type, reportings) ->
+                    ReportingTitleAndNumberOfOccurrences(
+                        title = type.alertName,
+                        numberOfOccurrences = reportings.size,
+                    )
+                }
+
+        val infractionSuspicionsSummary =
+            reportings
+                .filter { it.type == ReportingType.INFRACTION_SUSPICION }
+                .groupBy { (it.value as InfractionSuspicion).natinfCode }
+                .map { (natinfCode, reportings) ->
+                    val infraction =
+                        try {
+                            infractionRepository.findInfractionByNatinfCode(natinfCode)
+                        } catch (e: NatinfCodeNotFoundException) {
+                            logger.warn(e.message)
+
+                            null
+                        }
+
+                    return@map ReportingTitleAndNumberOfOccurrences(
+                        title = infraction?.infraction ?: "NATINF $natinfCode",
+                        numberOfOccurrences = reportings.size,
+                    )
+                }
+
+        return (alertsSummary + infractionSuspicionsSummary).sortedByDescending { it.numberOfOccurrences }
     }
 
     private fun filterByYear(

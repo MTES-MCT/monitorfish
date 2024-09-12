@@ -21,6 +21,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetVesselReportings
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.*
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
@@ -731,7 +732,23 @@ class VesselControllerITests {
             ),
         )
             .willReturn(
-                CurrentAndArchivedReportings(
+                VesselReportings(
+                    summary =
+                        ReportingSummary(
+                            infractionSuspicionsSummary =
+                                listOf(
+                                    ReportingTitleAndNumberOfOccurrences(
+                                        title = "A title",
+                                        numberOfOccurrences = 2,
+                                    ),
+                                    ReportingTitleAndNumberOfOccurrences(
+                                        title = "A title",
+                                        numberOfOccurrences = 2,
+                                    ),
+                                ),
+                            numberOfInfractionSuspicions = 4,
+                            numberOfObservations = 5,
+                        ),
                     current =
                         listOf(
                             ReportingAndOccurrences(
@@ -773,6 +790,9 @@ class VesselControllerITests {
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.current.length()", equalTo(2)))
             .andExpect(jsonPath("$.current[0].reporting.id", equalTo(1)))
+            .andExpect(jsonPath("$.summary.numberOfInfractionSuspicions", equalTo(4)))
+            .andExpect(jsonPath("$.summary.infractionSuspicionsSummary[0].title", equalTo("A title")))
+            .andExpect(jsonPath("$.summary.infractionSuspicionsSummary[0].numberOfOccurrences", equalTo(2)))
             .andExpect(jsonPath("$.current[0].reporting.flagState", equalTo("FR")))
             .andExpect(jsonPath("$.current[0].reporting.internalReferenceNumber", equalTo("FR224226850")))
             .andExpect(jsonPath("$.current[0].reporting.externalReferenceNumber", equalTo("1236514")))
@@ -803,7 +823,13 @@ class VesselControllerITests {
             ),
         )
             .willReturn(
-                CurrentAndArchivedReportings(
+                VesselReportings(
+                    summary =
+                        ReportingSummary(
+                            infractionSuspicionsSummary = listOf(),
+                            numberOfInfractionSuspicions = 0,
+                            numberOfObservations = 0,
+                        ),
                     current = listOf(),
                     archived = mapOf(),
                 ),

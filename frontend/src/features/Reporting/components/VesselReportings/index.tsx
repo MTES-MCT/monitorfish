@@ -1,3 +1,4 @@
+import { Summary } from '@features/Reporting/components/VesselReportings/Summary'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME, usePrevious } from '@mtes-mct/monitor-ui'
@@ -19,9 +20,7 @@ export function VesselReportings() {
   const dispatch = useMainAppDispatch()
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
 
-  const currentAndArchivedReportingsOfSelectedVessel = useMainAppSelector(
-    state => state.reporting.currentAndArchivedReportingsOfSelectedVessel
-  )
+  const selectedVesselReportings = useMainAppSelector(state => state.reporting.selectedVesselReportings)
   const isLoadingReporting = useMainAppSelector(state => state.reporting.isLoadingReporting)
 
   const [reportingTab, setReportingTab] = useState(ReportingTab.CURRENT_REPORTING)
@@ -48,7 +47,7 @@ export function VesselReportings() {
               isActive={reportingTab === ReportingTab.CURRENT_REPORTING}
               onClick={() => setReportingTab(ReportingTab.CURRENT_REPORTING)}
             >
-              Signalements en cours ({currentAndArchivedReportingsOfSelectedVessel?.current?.length})
+              Signalements en cours ({selectedVesselReportings?.current?.length})
             </CurrentOrHistoryButton>
             <CurrentOrHistoryButton
               data-cy="vessel-sidebar-reporting-tab-history-button"
@@ -59,7 +58,12 @@ export function VesselReportings() {
             </CurrentOrHistoryButton>
           </Menu>
           {reportingTab === ReportingTab.CURRENT_REPORTING && <Current />}
-          {reportingTab === ReportingTab.REPORTING_HISTORY && <Archived />}
+          {reportingTab === ReportingTab.REPORTING_HISTORY && (
+            <>
+              <Summary />
+              <Archived />
+            </>
+          )}
         </Body>
       ) : (
         <FingerprintSpinner className="radar" color={THEME.color.charcoal} size={100} />

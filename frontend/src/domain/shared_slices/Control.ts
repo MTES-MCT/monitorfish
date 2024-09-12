@@ -1,16 +1,18 @@
+import { customDayjs } from '@mtes-mct/monitor-ui'
 import { createSlice } from '@reduxjs/toolkit'
 
 import type { MissionAction } from '@features/Mission/missionAction.types'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import type { Dayjs } from 'dayjs'
 
 export type ControlState = {
-  controlsFromDate: Date
+  controlsFromDate: Dayjs
   currentControlSummary: MissionAction.MissionControlsSummary | null
   loadingControls: boolean
   nextControlSummary: MissionAction.MissionControlsSummary | null
 }
 const INITIAL_STATE: ControlState = {
-  controlsFromDate: new Date(new Date().getUTCFullYear() - 5, 0, 1),
+  controlsFromDate: customDayjs().utc().subtract(5, 'year').startOf('year'),
   currentControlSummary: null,
   loadingControls: false,
   nextControlSummary: null
@@ -41,7 +43,7 @@ const controlSlice = createSlice({
     /**
      * Set the date since controls are fetched
      */
-    setControlFromDate(state, action: PayloadAction<Date>) {
+    setControlFromDate(state, action: PayloadAction<Dayjs>) {
       state.controlsFromDate = action.payload
     },
 

@@ -413,14 +413,14 @@ class GetVesselReportingsUTests {
         val infractionSuspicionsSummary = result.summary.infractionSuspicionsSummary
         assertThat(result.summary.infractionSuspicionsSummary).hasSize(4)
         assertThat(infractionSuspicionsSummary[0].numberOfOccurrences).isEqualTo(2)
-        assertThat(infractionSuspicionsSummary[0].title).isEqualTo("12 milles - Pêche sans droits historiques")
+        assertThat(infractionSuspicionsSummary[0].title).isEqualTo("12 milles - Pêche sans droits historiques (NATINF 2610)")
         assertThat(infractionSuspicionsSummary[1].numberOfOccurrences).isEqualTo(1)
-        assertThat(infractionSuspicionsSummary[1].title).isEqualTo("Non-emission de message \"FAR\" en 48h")
+        assertThat(infractionSuspicionsSummary[1].title).isEqualTo("Non-emission de message \"FAR\" en 48h (NATINF 27689)")
         assertThat(infractionSuspicionsSummary[2].numberOfOccurrences).isEqualTo(1)
         assertThat(
             infractionSuspicionsSummary[2].title,
         ).isEqualTo(
-            "Peche maritime non autorisee dans les eaux maritimes ou salees francaises par un navire de pays tiers a l'union europeenne",
+            "Peche maritime non autorisee dans les eaux maritimes ou salees francaises par un navire de pays tiers a l'union europeenne (NATINF 7059)",
         )
         assertThat(infractionSuspicionsSummary[3].numberOfOccurrences).isEqualTo(1)
         assertThat(infractionSuspicionsSummary[3].title).isEqualTo("NATINF 123456")

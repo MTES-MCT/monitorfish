@@ -154,7 +154,7 @@ const Wrapper = styled.div<{
   isInfractionSuspicion?: boolean
 }>`
   background: ${p => (p.isInfractionSuspicion ? p.theme.color.maximumRed15 : p.theme.color.gainsboro)} 0% 0% no-repeat
-  padding-box;
+    padding-box;
   display: flex;
   margin-bottom: 16px;
 `

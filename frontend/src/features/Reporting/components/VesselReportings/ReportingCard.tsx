@@ -36,7 +36,7 @@ export function ReportingCard({
     reporting.type === ReportingType.ALERT ? reporting.validationDate : reporting.creationDate,
     true
   )
-  const otherOccurrencesDates = [reporting].concat(otherOccurrencesOfSameAlert).map((alert, index, array) => {
+  const otherOccurrencesDates = otherOccurrencesOfSameAlert.map((alert, index, array) => {
     const dateTime = getDateTime(alert.validationDate, true)
 
     return `${getFrenchOrdinal(array.length - (index + 1))} alerte le ${dateTime}`
@@ -107,14 +107,16 @@ export function ReportingCard({
         )}
       </Body>
       {isArchived ? (
-        <NumberOfAlerts isArchived>{otherOccurrencesOfSameAlert.length + 1}</NumberOfAlerts>
+        otherOccurrencesOfSameAlert.length > 0 && (
+          <NumberOfAlerts isArchived>{otherOccurrencesOfSameAlert.length + 1}</NumberOfAlerts>
+        )
       ) : (
         <Actions hasOccurrences={otherOccurrencesOfSameAlert.length > 0}>
           {otherOccurrencesOfSameAlert.length > 0 && (
             <NumberOfAlerts>{otherOccurrencesOfSameAlert.length + 1}</NumberOfAlerts>
           )}
           {reporting.type !== ReportingType.ALERT && (
-            <IconButton
+            <StyledIconButton
               accent={Accent.TERTIARY}
               color={THEME.color.charcoal}
               data-cy={`edit-reporting-card-${reporting.id}`}
@@ -124,7 +126,7 @@ export function ReportingCard({
               title="Editer"
             />
           )}
-          <IconButton
+          <StyledIconButton
             accent={Accent.TERTIARY}
             color={THEME.color.charcoal}
             data-cy="archive-reporting-card"
@@ -133,7 +135,7 @@ export function ReportingCard({
             onClick={() => dispatch(archiveReporting(reporting.id, reporting.type))}
             title="Archiver"
           />
-          <IconButton
+          <StyledIconButton
             accent={Accent.TERTIARY}
             color={THEME.color.charcoal}
             data-cy="delete-reporting-card"
@@ -155,6 +157,10 @@ const Wrapper = styled.div<{
     padding-box;
   display: flex;
   margin-bottom: 16px;
+`
+
+const StyledIconButton = styled(IconButton)`
+  padding-top: 8px;
 `
 
 const OtherOccurrenceAlertDate = styled.span`
@@ -206,7 +212,7 @@ const Actions = styled.div<{
 const NumberOfAlerts = styled.span<{
   isArchived?: boolean | undefined
 }>`
-  margin-top: ${p => (p.isArchived ? 8 : 0)}px;
+  margin-top: 8px;
   margin-right: ${p => (p.isArchived ? '8px' : 'unset')};
   margin-left: ${p => (p.isArchived ? 'auto' : 'unset')};
   background: ${p => p.theme.color.maximumRed} 0% 0% no-repeat padding-box;

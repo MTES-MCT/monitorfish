@@ -141,7 +141,7 @@ context('Vessel sidebar reporting tab', () => {
     // Then
     // Summary
     cy.get('[data-cy="vessel-reporting-summary"]').contains('Résumé des derniers signalements (6 dernières années)')
-    cy.get('[data-cy="vessel-reporting-summary"]').contains('Signalements "3 milles - Chaluts"')
+    cy.get('[data-cy="vessel-reporting-summary"]').contains('Signalements "3 milles - Chaluts (NATINF 7059)"')
 
     // Dates occurrences of an alert
     cy.get('*[data-cy="vessel-sidebar-reporting-tab-archive-year"]').eq(0).click()

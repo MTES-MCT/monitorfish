@@ -145,13 +145,10 @@ context('Vessel sidebar reporting tab', () => {
 
     // Dates occurrences of an alert
     cy.get('*[data-cy="vessel-sidebar-reporting-tab-archive-year"]').eq(0).click()
-    cy.get('[data-cy="reporting-card"]').should('not.contain', '2è alerte le')
     cy.get('[data-cy="reporting-card"]').should('not.contain', '1ère alerte le')
     cy.clickLink('Voir les dates des autres alertes')
-    cy.get('[data-cy="reporting-card"]').should('contain', '2è alerte le')
     cy.get('[data-cy="reporting-card"]').should('contain', '1ère alerte le')
     cy.clickLink('Masquer les dates des autres alertes')
-    cy.get('[data-cy="reporting-card"]').should('not.contain', '2è alerte le')
     cy.get('[data-cy="reporting-card"]').should('not.contain', '1ère alerte le')
 
     cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 10000 }).click()

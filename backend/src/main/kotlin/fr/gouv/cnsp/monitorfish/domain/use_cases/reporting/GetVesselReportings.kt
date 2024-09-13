@@ -12,6 +12,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllControlUnits
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
+import kotlin.time.measureTimedValue
 
 @UseCase
 class GetVesselReportings(
@@ -29,41 +30,51 @@ class GetVesselReportings(
         vesselIdentifier: VesselIdentifier?,
         fromDate: ZonedDateTime,
     ): VesselReportings {
-        val controlUnits = getAllControlUnits.execute()
 
-        val reportings =
-            findReportings(
+        val (controlUnits, controlUnitsTimeTaken) = measureTimedValue { getAllControlUnits.execute() }
+        logger.info("TIME_RECORD - 'getAllControlUnits' took $controlUnitsTimeTaken")
+
+        val (reportings, reportingsTimeTaken) =
+            measureTimedValue { findReportings(
                 vesselId,
                 vesselIdentifier,
                 internalReferenceNumber,
                 fromDate,
                 ircs,
                 externalReferenceNumber,
-            )
+            ) }
+        logger.info("TIME_RECORD - 'findReportings' took $reportingsTimeTaken")
 
-        val current =
-            getReportingsAndOccurrences(reportings.filter { !it.isArchived })
-                .sortedWith(compareByDescending { it.reporting.validationDate ?: it.reporting.creationDate })
-                .map { reportingAndOccurrences ->
-                    enrichWithInfractionAndControlUnit(reportingAndOccurrences, controlUnits)
-                }
-
-        val yearsRange = fromDate.year..ZonedDateTime.now().year
-        val archivedYearsToReportings =
-            yearsRange.associateWith { year ->
-                val reportingsOfYear =
-                    reportings
-                        .filter { it.isArchived }
-                        .filter { filterByYear(it, year) }
-
-                getReportingsAndOccurrences(reportingsOfYear)
+        val (current, currentTimeTaken) =
+            measureTimedValue {
+                getReportingsAndOccurrences(reportings.filter { !it.isArchived })
                     .sortedWith(compareByDescending { it.reporting.validationDate ?: it.reporting.creationDate })
                     .map { reportingAndOccurrences ->
                         enrichWithInfractionAndControlUnit(reportingAndOccurrences, controlUnits)
                     }
             }
+        logger.info("TIME_RECORD - 'current' took $currentTimeTaken")
 
-        val infractionSuspicionsSummary = getInfractionSuspicionsSummary(reportings.filter { it.isArchived })
+        val yearsRange = fromDate.year..ZonedDateTime.now().year
+        val (archivedYearsToReportings, archivedYearsToReportingsTimeTaken) =
+            measureTimedValue {
+                yearsRange.associateWith { year ->
+                    val reportingsOfYear =
+                        reportings
+                            .filter { it.isArchived }
+                            .filter { filterByYear(it, year) }
+
+                    getReportingsAndOccurrences(reportingsOfYear)
+                        .sortedWith(compareByDescending { it.reporting.validationDate ?: it.reporting.creationDate })
+                        .map { reportingAndOccurrences ->
+                            enrichWithInfractionAndControlUnit(reportingAndOccurrences, controlUnits)
+                        }
+                }
+            }
+        logger.info("TIME_RECORD - 'archivedYearsToReportings' took $archivedYearsToReportingsTimeTaken")
+
+        val (infractionSuspicionsSummary, infractionSuspicionsSummaryTimeTaken) = measureTimedValue { getInfractionSuspicionsSummary(reportings.filter { it.isArchived }) }
+        logger.info("TIME_RECORD - 'infractionSuspicionsSummary' took $infractionSuspicionsSummaryTimeTaken")
         val numberOfInfractionSuspicions = infractionSuspicionsSummary.sumOf { it.numberOfOccurrences }
         val numberOfObservation =
             reportings
@@ -93,7 +104,7 @@ class GetVesselReportings(
                 .groupBy { (it.value as AlertType).type }
                 .map { (type, reportings) ->
                     ReportingTitleAndNumberOfOccurrences(
-                        title = type.alertName,
+                        title = "${type.alertName} (NATINF ${reportings[0].value.natinfCode})",
                         numberOfOccurrences = reportings.size,
                     )
                 }
@@ -113,7 +124,7 @@ class GetVesselReportings(
                         }
 
                     return@map ReportingTitleAndNumberOfOccurrences(
-                        title = infraction?.infraction ?: "NATINF $natinfCode",
+                        title = infraction?.infraction?.let {"$it (NATINF $natinfCode)"} ?: "NATINF $natinfCode",
                         numberOfOccurrences = reportings.size,
                     )
                 }

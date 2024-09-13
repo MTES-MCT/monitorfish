@@ -154,7 +154,7 @@ const Wrapper = styled.div<{
   isInfractionSuspicion?: boolean
 }>`
   background: ${p => (p.isInfractionSuspicion ? p.theme.color.maximumRed15 : p.theme.color.gainsboro)} 0% 0% no-repeat
-    padding-box;
+  padding-box;
   display: flex;
   margin-bottom: 16px;
 `
@@ -212,7 +212,7 @@ const Actions = styled.div<{
 const NumberOfAlerts = styled.span<{
   isArchived?: boolean | undefined
 }>`
-  margin-top: ${p => (p.isArchived ? 8 : 8)}px;
+  margin-top: 8px;
   margin-right: ${p => (p.isArchived ? '8px' : 'unset')};
   margin-left: ${p => (p.isArchived ? 'auto' : 'unset')};
   background: ${p => p.theme.color.maximumRed} 0% 0% no-repeat padding-box;

@@ -76,13 +76,13 @@ export function EquipmentResume({ setIsCurrentBeaconMalfunctionDetails }: Beacon
                   value: beaconType
                 },
                 {
-                  key: 'Date de loggage',
+                  key: 'Date loggage',
                   value:
                     !!selectedVessel?.beacon?.loggingDatetimeUtc &&
                     getDateTime(selectedVessel.beacon.loggingDatetimeUtc)
                 }
               ]}
-              valueEllipsisedForWidth={100}
+              valueEllipsisedForWidth={110}
             />
             <StyledFlatKeyValue
               column={[
@@ -95,15 +95,15 @@ export function EquipmentResume({ setIsCurrentBeaconMalfunctionDetails }: Beacon
                   value: selectedVessel?.logbookSoftware ?? '-'
                 },
                 {
-                  key: 'Équipé e-Sacapt',
+                  key: 'E-Sacapt',
                   value: selectedVessel?.hasLogbookEsacapt ? 'Oui' : 'Non'
                 },
                 {
-                  key: 'Équipé VisioCaptures',
+                  key: 'VisioCaptures',
                   value: selectedVessel?.hasVisioCaptures ? 'Oui' : 'Non'
                 }
               ]}
-              valueEllipsisedForWidth={70}
+              valueEllipsisedForWidth={110}
             />
           </Columns>
           {isSuperUser && (

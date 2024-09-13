@@ -1,7 +1,37 @@
 INFRA_FOLDER="$(shell pwd)/infra/configurations/"
 HOST_MIGRATIONS_FOLDER=$(shell pwd)/backend/src/main/resources/db/migration
 
-.PHONY: clean install test
+SHELL := /bin/bash
+.SHELLFLAGS = -ec
+.SILENT:
+MAKEFLAGS += --silent
+.ONESHELL:
+
+.DEFAULT_GOAL: help
+
+.PHONY: help ##OTHER 🛟 To display this prompts. This will list all available targets with their documentation
+help:
+	echo "❓ Use \`make <target>' where <target> is one of 👇"
+	echo ""
+	echo -e "\033[1mLocal Development\033[0m:"
+	grep -E '^\.PHONY: [a-zA-Z0-9_-]+ .*?##LOCAL' $(MAKEFILE_LIST) | \
+		awk 'BEGIN {FS = "(: |##LOCAL)"}; {printf "\033[36m%-30s\033[0m %s\n", $$2, $$3}'
+	echo ""
+	echo -e "\033[1mTesting\033[0m:"
+	grep -E '^\.PHONY: [a-zA-Z0-9_-]+ .*?##TEST' $(MAKEFILE_LIST) | \
+		awk 'BEGIN {FS = "(: |##TEST)"}; {printf "\033[36m%-30s\033[0m %s\n", $$2, $$3}'
+	echo ""
+	echo -e "\033[1mCommands for RUN (STAGING and PROD)\033[0m:"
+	grep -E '^\.PHONY: [a-zA-Z0-9_-]+ .*?##RUN' $(MAKEFILE_LIST) | \
+		awk 'BEGIN {FS = "(: |##RUN)"}; {printf "\033[36m%-30s\033[0m %s\n", $$2, $$3}'
+	echo ""
+	echo -e "\033[1mOther commands\033[0m:"
+	grep -E '^\.PHONY: [a-zA-Z0-9_-]+ .*?##OTHER' $(MAKEFILE_LIST) | \
+		awk 'BEGIN {FS = "(: |##OTHER)"}; {printf "\033[36m%-30s\033[0m %s\n", $$2, $$3}'
+	echo ""
+	echo "Tips 💡"
+	echo "	- use tab for auto-completion"
+	echo "	- use the dry run option '-n' to show what make is attempting to do. example: environmentName=dev make -n deploy"
 
 docker-env:
 	cd ./infra/docker && ../../frontend/node_modules/.bin/import-meta-env-prepare -u -x ./.env.local.defaults\
@@ -10,9 +40,11 @@ docker-env:
 ################################################################################
 # Local Development
 
-check-clean-archi:
+.PHONY: check-clean-archi ##LOCAL Check clean architecture imports
+check-clean-archi: 
 	cd backend/tools && ./check-clean-architecture.sh
 
+.PHONY: clean ##LOCAL Clean all backend assets and stop docker containers
 clean: docker-env
 	rm -Rf ./backend/target
 	docker compose down -v
@@ -26,30 +58,38 @@ compile-back:
 init-local-sig:
 	./infra/local/postgis_insert_layers.sh && ./infra/init/geoserver_init_layers.sh
 
+.PHONY: install-front ##LOCAL ⬇️  Install frontend dependencies
 install-front:
 	cd ./frontend && npm i
 
+.PHONY: run-back ##LOCAL ▶️  Run backend API
 run-back: run-stubbed-apis
 	docker compose up -d --quiet-pull --wait db keycloak
 	cd backend && ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
 
-run-back-for-cypress: run-stubbed-apis
-	docker compose up -d --quiet-pull --wait db keycloak
-	cd backend && MONITORFISH_OIDC_ENABLED=false ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
+.PHONY: run-front ##LOCAL ▶️  Run frontend for development
+run-front:
+	cd ./frontend && npm run dev
 
+.PHONY: run-back-with-monitorenv ##LOCAL ▶️  Run backend API when running MonitorEnv app (in another terminal)
 run-back-with-monitorenv: run-monitorenv
 	docker compose up -d --quiet-pull --wait db
 	cd backend && MONITORENV_URL=http://localhost:9880 ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
 
-run-front:
-	cd ./frontend && npm run dev
-
+.PHONY: run-monitorenv ##LOCAL ▶️  Run MonitorEnv app containers
 run-monitorenv: docker-env
 	docker compose \
 		--project-directory ./infra/docker \
 		--env-file ./infra/docker/.env \
 		-f ./infra/docker/docker-compose.monitorenv.dev.yml \
 		up -d monitorenv_app
+
+.PHONY: lint-back ##LOCAL 🪮 ✨  Lint and format backend code
+lint-back:
+	cd ./backend && ./gradlew ktlintFormat | grep -v \
+		-e "Exceeded max line length" \
+		-e "Package name must not contain underscore" \
+		-e "Wildcard import"
 
 run-stubbed-apis:
 	docker compose stop geoserver-monitorenv-stubs
@@ -71,6 +111,72 @@ dev-restore-db:
 	@export CONFIG_FILE_PATH=$$(pwd)/infra/dev/database/pg_backup.config; \
 		./infra/remote/backup/pg_restore.sh -t "$(TAG)"
 
+################################################################################
+# Testing
+
+.PHONY: test ##TEST ✅ Run all tests
+test: test-back
+	cd frontend && CI=true npm run test:unit -- --coverage
+
+.PHONY: run-back-for-cypress ##TEST ▶️  Run backend API when using Cypress 📝
+run-back-for-cypress: run-stubbed-apis
+	docker compose up -d --quiet-pull --wait db keycloak
+	cd backend && MONITORFISH_OIDC_ENABLED=false ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
+
+.PHONY: run-front-for-cypress ##TEST ▶️  Run frontend when using Cypress 📝
+run-front-for-cypress:
+	cd ./frontend && npm run dev-cypress
+
+.PHONY: run-cypress ##TEST ▶️  Run Cypress 📝
+run-cypress:
+	cd ./frontend && npm run test:e2e:open
+
+test-back: check-clean-archi
+	@if [ -z "$(class)" ]; then \
+		echo "Running all Backend tests..."; \
+		cd backend && ./gradlew clean test; \
+	else \
+		echo "Running single Backend test class $(class)..."; \
+		cd backend && ./gradlew test --console plain --no-continue --parallel --tests "$(class)"; \
+	fi
+
+.PHONY: test-back-watch ##TEST ✅ Watch backend tests
+test-back-watch:
+	./backend/scripts/test-watch.sh
+
+.PHONY: run-back-for-puppeteer ##TEST ▶️  Run backend API when using Puppeteer 📝
+run-back-for-puppeteer: docker-env run-stubbed-apis
+	docker compose up -d --quiet-pull --wait db
+	docker compose -f ./infra/docker/docker-compose.puppeteer.yml up -d monitorenv-app
+	cd backend && MONITORENV_URL=http://localhost:9880 ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
+
+.PHONY: run-front-for-puppeteer ##TEST ▶️  Run frontend when using Puppeteer 📝
+run-front-for-puppeteer:
+	cd ./frontend && npm run dev-puppeteer
+
+################################################################################
+# Remote (Integration / Production)
+
+# ----------------------------------------------------------
+# Remote: Run commands
+
+.PHONY: restart-remote-app ##RUN ▶️  Restart app
+restart-remote-app:
+	cd infra/remote && docker compose pull && docker compose up -d --build app --force-recreate
+
+.PHONY: register-pipeline-flows-prod ##RUN ▶️  Register pipeline flows in PROD 
+register-pipeline-flows-prod:
+	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH_VERSION) && \
+	infra/remote/data-pipeline/register-flows-prod.sh
+
+.PHONY: register-pipeline-flows-int ##RUN ▶️  Register pipeline flows in STAGING
+register-pipeline-flows-int:
+	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH_VERSION) && \
+	infra/remote/data-pipeline/register-flows-int.sh
+
+.PHONY: init-remote-sig ##RUN Initialize Geoserver layers
+init-remote-sig:
+	./infra/remote/postgis_insert_layers.sh && ./infra/init/geoserver_init_layers.sh
 
 ################################################################################
 # Database upgrade
@@ -112,38 +218,6 @@ add_timescaledb_to_shared_preload_libraries:
 		debian:buster \
 		bash -c "echo \"shared_preload_libraries = 'timescaledb'\" >> /var/lib/postgresql/data/postgresql.conf";
 
-
-################################################################################
-# Testing
-
-test: test-back
-	cd frontend && CI=true npm run test:unit -- --coverage
-
-test-back: check-clean-archi
-	@if [ -z "$(class)" ]; then \
-		echo "Running all Backend tests..."; \
-		cd backend && ./gradlew clean test; \
-	else \
-		echo "Running single Backend test class $(class)..."; \
-		cd backend && ./gradlew test --console plain --no-continue --parallel --tests "$(class)"; \
-	fi
-
-test-back-watch:
-	./backend/scripts/test-watch.sh
-
-lint-back:
-	cd ./backend && ./gradlew ktlintFormat | grep -v \
-		-e "Exceeded max line length" \
-		-e "Package name must not contain underscore" \
-		-e "Wildcard import"
-
-run-back-for-puppeteer: docker-env run-stubbed-apis
-	docker compose up -d --quiet-pull --wait db
-	docker compose -f ./infra/docker/docker-compose.puppeteer.yml up -d monitorenv-app
-	cd backend && MONITORENV_URL=http://localhost:9880 ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
-
-run-front-for-puppeteer:
-	cd ./frontend && npm run dev-puppeteer
 
 
 ################################################################################
@@ -195,23 +269,6 @@ docker-push-pipeline:
 	docker push docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(VERSION)
 
 
-################################################################################
-# Remote (Integration / Production)
-
-# ----------------------------------------------------------
-# Remote: Run commands
-
-init-remote-sig:
-	./infra/remote/postgis_insert_layers.sh && ./infra/init/geoserver_init_layers.sh
-restart-remote-app:
-	cd infra/remote && docker compose pull && docker compose up -d --build app --force-recreate
-
-register-pipeline-flows-prod:
-	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH_VERSION) && \
-	infra/remote/data-pipeline/register-flows-prod.sh
-register-pipeline-flows-int:
-	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH_VERSION) && \
-	infra/remote/data-pipeline/register-flows-int.sh
 
 # ----------------------------------------------------------
 # Remote: Pipeline commands

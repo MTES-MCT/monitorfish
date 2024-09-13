@@ -17,7 +17,15 @@ export function SendNotification({ beaconMalfunction }) {
   const selectMenuRef = useRef<HTMLDivElement>()
   const [isSendingNotification, setIsSendingNotification] = useState<string | null>('')
   const [isShowingForeignFmcList, setIsShowingForeignFmcList] = useState<boolean>(false)
-  const notificationTypes = Object.keys(NOTIFICATION_TYPE)
+  /* eslint-enable sort-keys-fix/sort-keys-fix */
+  const notificationTypes: Array<keyof typeof NOTIFICATION_TYPE> = [
+    'MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION',
+    'MALFUNCTION_AT_PORT_REMINDER',
+    'MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION',
+    'MALFUNCTION_AT_SEA_REMINDER',
+    'MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC'
+  ]
+  /* eslint-disable sort-keys-fix/sort-keys-fix */
 
   const foreignFmcsAsOptions: Option[] = useMemo(() => {
     if (!getForeignFmcsApiQuery.data) {

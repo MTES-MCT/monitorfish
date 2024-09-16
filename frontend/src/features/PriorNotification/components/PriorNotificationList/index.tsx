@@ -146,6 +146,7 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
   }, [previousListFilter, listFilter, table])
 
   if (isBodyLoaderVisible) {
+    customSentry.startMeasurement(CustomSentryMeasurementName.PRIOR_NOTIFICATION_LIST_BODY_LOADING, '0')
     customSentry.startMeasurement(CustomSentryMeasurementName.PRIOR_NOTIFICATION_LIST_BODY_SPINNER, '0')
   } else {
     customSentry.endMeasurement(CustomSentryMeasurementName.PRIOR_NOTIFICATION_LIST_BODY_SPINNER, '0', 2000)

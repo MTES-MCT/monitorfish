@@ -21,12 +21,18 @@ export const openLogbookPriorNotificationForm =
   async dispatch => {
     try {
       customSentry.startMeasurement(
+        CustomSentryMeasurementName.LOGBOOK_PRIOR_NOTIFICATION_FORM_LOADING,
+        identifier.reportId
+      )
+      customSentry.startMeasurement(
         CustomSentryMeasurementName.LOGBOOK_PRIOR_NOTIFICATION_FORM_SPINNER,
         identifier.reportId
       )
 
       dispatch(displayedErrorActions.unset(DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR))
       dispatch(priorNotificationActions.closePriorNotificationCardAndForm())
+      // TODO Remove this function once loading / spinner perfs tests are removed.
+      dispatch(priorNotificationActions.setEditedPriorNotificationId(identifier.reportId))
       dispatch(priorNotificationActions.openPriorNotification(OpenedPriorNotificationType.LogbookForm))
 
       const logbookPriorNotification = await dispatch(

@@ -27,6 +27,10 @@ export const openManualPriorNotificationForm =
     try {
       if (identifier) {
         customSentry.startMeasurement(
+          CustomSentryMeasurementName.MANUAL_PRIOR_NOTIFICATION_FORM_LOADING,
+          identifier.reportId
+        )
+        customSentry.startMeasurement(
           CustomSentryMeasurementName.MANUAL_PRIOR_NOTIFICATION_FORM_SPINNER,
           identifier.reportId
         )
@@ -34,6 +38,10 @@ export const openManualPriorNotificationForm =
 
       dispatch(displayedErrorActions.unset(DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR))
       dispatch(priorNotificationActions.closePriorNotificationCardAndForm())
+      // TODO Remove this function once loading / spinner perfs tests are removed.
+      if (identifier) {
+        dispatch(priorNotificationActions.setEditedPriorNotificationId(identifier.reportId))
+      }
       dispatch(priorNotificationActions.openPriorNotification(OpenedPriorNotificationType.ManualForm))
 
       if (!identifier) {

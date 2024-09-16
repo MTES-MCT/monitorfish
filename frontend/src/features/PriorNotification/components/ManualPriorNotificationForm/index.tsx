@@ -28,6 +28,7 @@ export function ManualPriorNotificationForm() {
   const editedManualPriorNotificationFormValues = useMainAppSelector(
     state => state.priorNotification.editedManualPriorNotificationFormValues
   )
+  const editedPriorNotificationId = useMainAppSelector(state => state.priorNotification.editedPriorNotificationId)
   const openedPriorNotificationDetail = useMainAppSelector(
     state => state.priorNotification.openedPriorNotificationDetail
   )
@@ -80,16 +81,24 @@ export function ManualPriorNotificationForm() {
   }
 
   if (!editedManualPriorNotificationFormValues || isLoading) {
+    const customSentryProps = editedPriorNotificationId
+      ? {
+          id: editedPriorNotificationId,
+          maxExpectedDurationInMs: 2000,
+          name: CustomSentryMeasurementName.MANUAL_PRIOR_NOTIFICATION_FORM_SPINNER
+        }
+      : undefined
+
     return (
       <SideWindowCard onBackgroundClick={close}>
-        <LoadingSpinnerWall />
+        <LoadingSpinnerWall customSentryProps={customSentryProps} />
       </SideWindowCard>
     )
   }
 
   if (openedPriorNotificationDetail?.reportId) {
     customSentry.endMeasurement(
-      CustomSentryMeasurementName.MANUAL_PRIOR_NOTIFICATION_FORM_SPINNER,
+      CustomSentryMeasurementName.MANUAL_PRIOR_NOTIFICATION_FORM_LOADING,
       openedPriorNotificationDetail.reportId,
       2000
     )

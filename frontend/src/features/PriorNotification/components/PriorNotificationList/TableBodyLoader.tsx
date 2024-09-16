@@ -1,4 +1,6 @@
+import { customSentry, CustomSentryMeasurementName } from '@libs/customSentry'
 import { TableWithSelectableRows } from '@mtes-mct/monitor-ui'
+import { useEffect } from 'react'
 import styled from 'styled-components'
 
 import { getTableColumns } from './columns'
@@ -10,6 +12,10 @@ type TableBodyLoaderProps = Readonly<{
 export function TableBodyLoader({ isFromUrl }: TableBodyLoaderProps) {
   const emptyRows = new Array(DEFAULT_PAGE_SIZE).fill(undefined)
   const tableColumns = getTableColumns(isFromUrl)
+
+  useEffect(() => () => {
+    customSentry.endMeasurement(CustomSentryMeasurementName.MANUAL_PRIOR_NOTIFICATION_FORM_SPINNER, '0', 2000)
+  })
 
   return (
     <tbody>

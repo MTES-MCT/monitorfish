@@ -9,6 +9,7 @@ import {
 } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { CustomSentryMeasurementName } from '@libs/customSentry'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Accent, Button, Level } from '@mtes-mct/monitor-ui'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
@@ -40,6 +41,7 @@ export function PriorNotificationCard({
   const displayedError = useMainAppSelector(
     state => state.displayedError[DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_CARD_ERROR]
   )
+  const editedPriorNotificationId = useMainAppSelector(state => state.priorNotification.editedPriorNotificationId)
   const isSuperUser = useIsSuperUser()
 
   const controlledDisplayedErrorKey = displayedError
@@ -62,9 +64,17 @@ export function PriorNotificationCard({
   }
 
   if (!detail || isLoading) {
+    const customSentryProps = editedPriorNotificationId
+      ? {
+          id: editedPriorNotificationId,
+          maxExpectedDurationInMs: 2000,
+          name: CustomSentryMeasurementName.LOGBOOK_PRIOR_NOTIFICATION_FORM_SPINNER
+        }
+      : undefined
+
     return (
       <StyledCard $isSuperUser={isSuperUser} onBackgroundClick={close}>
-        <LoadingSpinnerWall />
+        <LoadingSpinnerWall customSentryProps={customSentryProps} />
       </StyledCard>
     )
   }

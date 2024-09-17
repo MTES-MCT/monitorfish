@@ -3,11 +3,10 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { customDayjs, Icon, TableWithSelectableRows, Tag, THEME } from '@mtes-mct/monitor-ui'
 import { flexRender, type Row as RowType } from '@tanstack/react-table'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
-import { orderBy } from 'lodash'
 import styled from 'styled-components'
 
 import { FixedTag, None } from './styles'
-import { getColorsFromState, getExpandableRowCellCustomStyle } from './utils'
+import { displayOnboardFishingSpecies, getColorsFromState, getExpandableRowCellCustomStyle } from './utils'
 import { PriorNotification } from '../../PriorNotification.types'
 import { openManualPriorNotificationForm } from '../../useCases/openManualPriorNotificationForm'
 import { openPriorNotificationCard } from '../../useCases/openPriorNotificationCard'
@@ -20,7 +19,6 @@ export function Row({ row }: RowProps) {
   const isSuperUser = useIsSuperUser()
 
   const priorNotification = row.original
-  const firstFiveOnBoardCatchesByWeight = orderBy(priorNotification.onBoardCatches, ['weight'], ['desc']).slice(0, 5)
 
   const openCard = () => {
     if (priorNotification.isManuallyCreated) {
@@ -161,14 +159,7 @@ export function Row({ row }: RowProps) {
           <ExpandedRowCell>
             <ExpandedRowLabel>Principales espèces à bord :</ExpandedRowLabel>
             {priorNotification.onBoardCatches.length > 0 ? (
-              <ExpandedRowList>
-                {firstFiveOnBoardCatchesByWeight.map(({ species, speciesName, weight }) => (
-                  <StyledLi
-                    key={species}
-                    title={`${speciesName} (${species}) – ${weight} kg`}
-                  >{`${speciesName} (${species}) – ${weight} kg`}</StyledLi>
-                ))}
-              </ExpandedRowList>
+              <ExpandedRowList>{displayOnboardFishingSpecies(priorNotification.onBoardCatches)}</ExpandedRowList>
             ) : (
               <None>Aucune capture à bord.</None>
             )}
@@ -210,13 +201,6 @@ export function Row({ row }: RowProps) {
     </>
   )
 }
-
-const StyledLi = styled.li`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  width: 215px;
-  white-space: nowrap;
-`
 
 const ExpandableRowCell = styled(TableWithSelectableRows.Td)<{
   $isInvalidated: boolean

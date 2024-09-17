@@ -1,5 +1,6 @@
 import { COUNTRIES_AS_ALPHA3_OPTIONS } from '@constants/index'
 import { useGetFleetSegmentsAsOptions } from '@features/FleetSegment/hooks/useGetFleetSegmentsAsOptions'
+import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES, BLUEFIN_TUNA_SPECY_CODE } from '@features/PriorNotification/constants'
 import { useGetPriorNotificationTypesAsOptions } from '@features/PriorNotification/hooks/useGetPriorNotificationTypesAsOptions'
 import { useGetGearsAsTreeOptions } from '@hooks/useGetGearsAsTreeOptions'
 import { useGetPortsAsTreeOptions } from '@hooks/useGetPortsAsTreeOptions'
@@ -20,6 +21,7 @@ import {
   useNewWindow
 } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
+import { uniq } from 'lodash'
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
@@ -110,7 +112,11 @@ export function FilterBar() {
   }
 
   const updateSpecyCodes = (nextSpecyCodes: string[] | undefined) => {
-    dispatch(priorNotificationActions.setListFilterValues({ specyCodes: nextSpecyCodes }))
+    const normalizedNextSpecyCodes = nextSpecyCodes?.includes(BLUEFIN_TUNA_SPECY_CODE)
+      ? uniq([...nextSpecyCodes, ...BLUEFIN_TUNA_EXTENDED_SPECY_CODES])
+      : nextSpecyCodes
+
+    dispatch(priorNotificationActions.setListFilterValues({ specyCodes: normalizedNextSpecyCodes }))
   }
 
   const updateStatuses = (nextStatuses: FilterStatus[] | undefined) => {

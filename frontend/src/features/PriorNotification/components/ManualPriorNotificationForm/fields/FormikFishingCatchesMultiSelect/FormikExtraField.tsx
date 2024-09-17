@@ -2,7 +2,7 @@ import { FormikNumberInput } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { InputWithUnit, SubRow } from './styles'
-import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES } from '../../constants'
+import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES } from '../../../../constants'
 
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 

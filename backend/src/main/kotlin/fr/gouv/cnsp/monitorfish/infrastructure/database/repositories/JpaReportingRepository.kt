@@ -2,12 +2,14 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Observation
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
+import fr.gouv.cnsp.monitorfish.domain.mappers.ReportingMapper
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ReportingEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBReportingRepository
@@ -164,6 +166,23 @@ class JpaReportingRepository(
     @Transactional
     override fun archive(id: Int) {
         dbReportingRepository.archiveReporting(id)
+    }
+
+    override fun findUnarchivedReportings(): List<Pair<Int, AlertType>> {
+        return dbReportingRepository.findAllUnarchivedAfterDEPLogbookMessage().map { result ->
+            Pair(
+                result[0] as Int,
+                ReportingMapper.getReportingValueFromJSON(
+                    mapper,
+                    result[1] as String?,
+                    ReportingType.ALERT,
+                ) as AlertType,
+            )
+        }
+    }
+
+    override fun archiveReportings(ids: List<Int>): Int {
+        return dbReportingRepository.archiveReportings(ids)
     }
 
     @Transactional

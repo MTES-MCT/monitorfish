@@ -18,7 +18,9 @@ import java.time.temporal.ChronoUnit
 
 @Testcontainers
 @TestPropertySource("classpath:/application.properties")
-@SpringBootTest
+@SpringBootTest(
+    properties = ["monitorfish.scheduling.enabled=false"],
+)
 abstract class AbstractDBTests {
     @MockBean
     private lateinit var jwtDecoder: JwtDecoder

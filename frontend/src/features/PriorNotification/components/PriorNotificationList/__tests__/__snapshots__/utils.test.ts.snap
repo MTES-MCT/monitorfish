@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/PriorNotification/components/PriorNotificationList/utils displayOnboardFishingSpecies() should return the expected result 1`] = `
+[
+  <styled.li
+    title="Thon rouge de l'Atlantique (BFT) – 18 kg"
+  >
+    Thon rouge de l'Atlantique (BFT) – 18 kg
+  </styled.li>,
+  <styled.li
+    title="DEF Name (DEF) – 7 kg"
+  >
+    DEF Name (DEF) – 7 kg
+  </styled.li>,
+  <styled.li
+    title="ABC Name (ABC) – 3 kg"
+  >
+    ABC Name (ABC) – 3 kg
+  </styled.li>,
+]
+`;

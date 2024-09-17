@@ -6,7 +6,14 @@ import {
   type AllSeafrontGroup
 } from '@constants/seafront'
 import { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
+import {
+  BLUEFIN_TUNA_EXTENDED_SPECY_CODES,
+  BLUEFIN_TUNA_NAME_FR,
+  BLUEFIN_TUNA_SPECY_CODE
+} from '@features/PriorNotification/constants'
 import { THEME, customDayjs, getMaybeBooleanFromRichBoolean, type DateAsStringRange } from '@mtes-mct/monitor-ui'
+import { update } from 'lodash'
+import styled from 'styled-components'
 
 import {
   COMMUNITY_PRIOR_NOTIFICATION_TYPES,
@@ -22,6 +29,51 @@ import { PriorNotification } from '../../PriorNotification.types'
 
 import type { FilterStatus, ListFilter } from './types'
 import type { CSSProperties } from 'react'
+
+export function displayOnboardFishingSpecies(onBoardCatches: LogbookMessage.Catch[]) {
+  const heaviestOnBoardCatches = onBoardCatches
+    .reduce<
+      Array<{
+        specyCode: string
+        specyName: string
+        weight: number
+      }>
+    >((aggregatedCatches, currentCatch) => {
+      const [normalizedSpecyCode, normalizedSpecyName] = BLUEFIN_TUNA_EXTENDED_SPECY_CODES.includes(
+        currentCatch.species
+      )
+        ? [BLUEFIN_TUNA_SPECY_CODE, BLUEFIN_TUNA_NAME_FR]
+        : [currentCatch.species, currentCatch.speciesName]
+      const existingCatchSpecyIndex = aggregatedCatches.findIndex(
+        aggregatedCatch => aggregatedCatch.specyCode === normalizedSpecyCode
+      )
+      if (
+        existingCatchSpecyIndex > -1 &&
+        currentCatch.weight !== undefined &&
+        aggregatedCatches[existingCatchSpecyIndex]?.weight !== undefined
+      ) {
+        return update(aggregatedCatches, `[${existingCatchSpecyIndex}].weight`, weight => weight + currentCatch.weight)
+      }
+
+      return [
+        ...aggregatedCatches,
+        {
+          specyCode: normalizedSpecyCode,
+          specyName: normalizedSpecyName,
+          weight: currentCatch.weight
+        }
+      ]
+    }, [])
+    .sort((a, b) => b.weight - a.weight)
+    .slice(0, 5)
+
+  return heaviestOnBoardCatches.map(({ specyCode, specyName, weight }) => (
+    <StyledLi
+      key={specyCode}
+      title={`${specyName} (${specyCode}) – ${weight} kg`}
+    >{`${specyName} (${specyCode}) – ${weight} kg`}</StyledLi>
+  ))
+}
 
 function getApiFilterFromExpectedArrivalPeriod(
   period: ExpectedArrivalPeriod,
@@ -254,3 +306,10 @@ export function getTitle(seafrontGroup: SeafrontGroup | AllSeafrontGroup | NoSea
       return `Préavis en ${SUB_MENU_LABEL[seafrontGroup]}`
   }
 }
+
+const StyledLi = styled.li`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 215px;
+`

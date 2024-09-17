@@ -1,5 +1,6 @@
 import { useGetSpeciesQuery } from '@api/specy'
 import { FieldsetGroupSpinner } from '@features/Mission/components/MissionForm/shared/FieldsetGroup'
+import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES } from '@features/PriorNotification/constants'
 import { useGetFaoAreasAsOptions } from '@hooks/useGetFaoAreasAsOptions'
 import { useGetSpeciesAsOptions } from '@hooks/useGetSpeciesAsOptions'
 import { CustomSearch, FormikNumberInput, FormikSelect, Select, SingleTag } from '@mtes-mct/monitor-ui'
@@ -12,7 +13,6 @@ import styled from 'styled-components'
 import { FormikExtraField } from './FormikExtraField'
 import { InputWithUnit, SubRow } from './styles'
 import { getFishingsCatchesValidationError } from './utils'
-import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES } from '../../constants'
 import { getFishingsCatchesInitialValues } from '../../utils'
 
 import type { Specy } from '../../../../../../domain/types/specy'
@@ -52,11 +52,13 @@ export function FormikFishingCatchesMultiSelect({ isReadOnly }: FormikFishingCat
   )
 
   const add = (nextSpecy: Specy | undefined) => {
-    const specyIsAlreadyInCatches = values.fishingCatches?.find(
-      fishingCatch => fishingCatch.specyCode === nextSpecy?.code
-    )
-    if (specyIsAlreadyInCatches) {
-      return
+    if (values.hasGlobalFaoArea) {
+      const isSpecyCodeAlreadyInCatches = values.fishingCatches?.find(
+        fishingCatch => fishingCatch.specyCode === nextSpecy?.code
+      )
+      if (isSpecyCodeAlreadyInCatches) {
+        return
+      }
     }
 
     const specyOption = speciesAsOptions?.find(({ value }) => value.code === nextSpecy?.code)

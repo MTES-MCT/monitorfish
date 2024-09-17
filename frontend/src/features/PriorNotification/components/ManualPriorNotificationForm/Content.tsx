@@ -23,6 +23,7 @@ import { PriorNotification } from '../../PriorNotification.types'
 import { CardBanner } from '../shared/CardBanner'
 import { DownloadButton } from '../shared/DownloadButton'
 import { TagBar } from '../shared/TagBar'
+import { UploadFiles } from '../shared/UploadFiles'
 
 import type { ManualPriorNotificationFormValues } from './types'
 import type { Promisable } from 'type-fest'
@@ -191,6 +192,14 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
           <hr />
 
           <Form isReadOnly={isReadOnly} />
+
+          {detail && (
+            <>
+              <hr style={{ marginBottom: 24 }} />
+
+              <UploadFiles isManualPriorNotification operationDate={detail.operationDate} reportId={detail.reportId} />
+            </>
+          )}
 
           {!!detail && (
             <InvalidateButton

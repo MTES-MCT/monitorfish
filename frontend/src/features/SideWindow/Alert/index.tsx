@@ -59,12 +59,14 @@ export function Alert({ baseRef }: AlertProps) {
         options={ALERT_SUB_MENU_OPTIONS}
         value={subMenu}
       />
-      <AlertListAndReportingList
-        baseRef={baseRef as MutableRefObject<HTMLDivElement>}
-        selectedSeafrontGroup={isSeafrontGroupMenu ? (subMenu as SeafrontGroup) : SeafrontGroup.MEMN}
-        selectedTab={selectedTab}
-        setSelectedTab={setSelectedTab}
-      />
+      {subMenu !== AdditionalSubMenu.SUSPENDED_ALERTS && (
+        <AlertListAndReportingList
+          baseRef={baseRef as MutableRefObject<HTMLDivElement>}
+          selectedSeafrontGroup={isSeafrontGroupMenu ? (subMenu as SeafrontGroup) : SeafrontGroup.MEMN}
+          selectedTab={selectedTab}
+          setSelectedTab={setSelectedTab}
+        />
+      )}
       {subMenu === AdditionalSubMenu.SUSPENDED_ALERTS && <SilencedAlerts />}
     </>
   )

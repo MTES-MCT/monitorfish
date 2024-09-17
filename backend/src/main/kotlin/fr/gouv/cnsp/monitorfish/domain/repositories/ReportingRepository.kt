@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Observation
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
@@ -48,7 +49,11 @@ interface ReportingRepository {
         fromDate: ZonedDateTime,
     ): List<Reporting>
 
+    fun findUnarchivedReportings(): List<Pair<Int, AlertType>>
+
     fun archive(id: Int)
+
+    fun archiveReportings(ids: List<Int>): Int
 
     fun delete(id: Int)
 }

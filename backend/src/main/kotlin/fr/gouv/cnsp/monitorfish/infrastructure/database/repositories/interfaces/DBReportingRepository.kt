@@ -75,6 +75,67 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
     )
     fun archiveReporting(id: Int)
 
+    /**
+     * Search for unarchived reportings (created for max 1 hour ago) after vessels' have started a new trip.
+     * (a DEP logbook message is received after the reporting validation_date)
+     */
+    @Query(
+        value = """
+        WITH recent_dep_messages AS (
+            SELECT lr.cfr, lr.ircs, lr.external_identification, lr.operation_number, MAX(lr.operation_datetime_utc) as last_dep_date_time
+            FROM logbook_reports lr
+            WHERE
+                lr.operation_datetime_utc > NOW() - INTERVAL '1 hour' AND
+                lr.log_type = 'DEP'
+            GROUP BY lr.cfr, lr.ircs, lr.external_identification, lr.operation_number
+        ),
+
+        acknowledged_report_ids AS (
+            SELECT DISTINCT referenced_report_id
+            FROM logbook_reports lr
+            WHERE
+                lr.operation_datetime_utc > NOW() - INTERVAL '1 hour' AND
+                lr.operation_type = 'RET' AND
+                lr.value->>'returnStatus' = '000'
+        )
+
+        SELECT
+            r.id as id,
+            r.value as value
+        FROM
+            reportings r
+        INNER JOIN
+            (select * from recent_dep_messages) rdp
+            ON CASE
+                WHEN r.vessel_identifier = 'INTERNAL_REFERENCE_NUMBER' THEN r.internal_reference_number = rdp.cfr
+                WHEN r.vessel_identifier = 'IRCS' THEN r.ircs = rdp.ircs
+                WHEN r.vessel_identifier = 'EXTERNAL_REFERENCE_NUMBER' THEN r.external_reference_number = rdp.external_identification
+            END
+
+        WHERE
+            r.archived is false AND
+            r.deleted is false AND
+            rdp.last_dep_date_time >= r.validation_date AND
+            rdp.operation_number IN (SELECT referenced_report_id FROM acknowledged_report_ids)
+        """,
+        nativeQuery = true,
+    )
+    fun findAllUnarchivedAfterDEPLogbookMessage(): List<Array<Any>>
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query(
+        value = """
+        UPDATE
+            reportings
+        SET
+            archived = TRUE
+        WHERE
+            id IN (:ids)
+    """,
+        nativeQuery = true,
+    )
+    fun archiveReportings(ids: List<Int>): Int
+
     @Modifying(clearAutomatically = true)
     @Query(
         value = """

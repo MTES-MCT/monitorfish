@@ -23,7 +23,7 @@ import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 
 @Import(MapperConfiguration::class)
-@SpringBootTest(properties = ["monitorfish.scheduling.enable=false"])
+@SpringBootTest
 class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Autowired
     private lateinit var jpaLogbookReportRepository: JpaLogbookReportRepository

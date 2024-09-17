@@ -2,7 +2,7 @@ TRUNCATE TABLE reportings RESTART IDENTITY CASCADE;
 INSERT INTO reportings (type, vessel_name, internal_reference_number, external_reference_number, ircs,
                         vessel_identifier, flag_state, creation_date, validation_date, archived, deleted, value, latitude, longitude, vessel_id)
 VALUES ('ALERT', 'MARIAGE ÎLE HASARD', 'ABC000180832', 'VP374069', 'CG1312', 'INTERNAL_REFERENCE_NUMBER', 'FR',
-        NOW() - ('1 DAY')::interval, NOW(), false, false, ('{' ||
+        NOW() - ('1 DAY')::interval, NOW() - ('30 MINUTES')::interval, false, false, ('{' ||
                                                            '"seaFront": "NAMO",' ||
                                                            '"riskFactor": 3.5647,' ||
                                                            '"type": "THREE_MILES_TRAWLING_ALERT",' ||

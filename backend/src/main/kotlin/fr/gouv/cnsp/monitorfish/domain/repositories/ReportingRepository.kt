@@ -5,7 +5,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Observation
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingValue
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.ZonedDateTime
@@ -50,7 +49,7 @@ interface ReportingRepository {
         fromDate: ZonedDateTime,
     ): List<Reporting>
 
-    fun findUnarchivedReportingsAfterNewVesselTrip(): List<Pair<Int, AlertType>>
+    fun findUnarchivedReportings(): List<Pair<Int, AlertType>>
 
     fun archive(id: Int)
 

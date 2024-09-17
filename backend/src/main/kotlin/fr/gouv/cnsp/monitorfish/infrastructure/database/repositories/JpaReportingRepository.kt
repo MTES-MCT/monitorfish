@@ -168,11 +168,16 @@ class JpaReportingRepository(
         dbReportingRepository.archiveReporting(id)
     }
 
-    override fun findUnarchivedReportingsAfterNewVesselTrip(): List<Pair<Int, AlertType>> {
+    override fun findUnarchivedReportings(): List<Pair<Int, AlertType>> {
         return dbReportingRepository.findAllUnarchivedAfterDEPLogbookMessage().map { result ->
             Pair(
                 result[0] as Int,
-                ReportingMapper.getReportingValueFromJSON(mapper, result[1] as String?, ReportingType.ALERT) as AlertType)
+                ReportingMapper.getReportingValueFromJSON(
+                    mapper,
+                    result[1] as String?,
+                    ReportingType.ALERT,
+                ) as AlertType,
+            )
         }
     }
 

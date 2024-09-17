@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilter
@@ -423,11 +424,23 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findReportingUnarchivedAfterDEPLogbookMessage Should return archive candidates`() {
+    fun `findUnarchivedReportings Should return archive candidates`() {
         // When
-        val reportings = jpaReportingRepository.findUnarchivedReportingsAfterNewVesselTrip()
+        val reportings = jpaReportingRepository.findUnarchivedReportings()
 
         // Then
         assertThat(reportings).hasSize(1)
+        assertThat(reportings.first().first).isEqualTo(1)
+        assertThat(reportings.first().second.type).isEqualTo(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT)
+    }
+
+    @Test
+    @Transactional
+    fun `archiveReportings Should archive reportings`() {
+        // When
+        val archivedReportings = jpaReportingRepository.archiveReportings(listOf(1))
+
+        // Then
+        assertThat(archivedReportings).isEqualTo(1)
     }
 }

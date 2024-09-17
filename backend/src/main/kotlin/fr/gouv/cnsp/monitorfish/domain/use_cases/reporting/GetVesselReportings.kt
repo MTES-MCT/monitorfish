@@ -30,19 +30,20 @@ class GetVesselReportings(
         vesselIdentifier: VesselIdentifier?,
         fromDate: ZonedDateTime,
     ): VesselReportings {
-
         val (controlUnits, controlUnitsTimeTaken) = measureTimedValue { getAllControlUnits.execute() }
         logger.info("TIME_RECORD - 'getAllControlUnits' took $controlUnitsTimeTaken")
 
         val (reportings, reportingsTimeTaken) =
-            measureTimedValue { findReportings(
-                vesselId,
-                vesselIdentifier,
-                internalReferenceNumber,
-                fromDate,
-                ircs,
-                externalReferenceNumber,
-            ) }
+            measureTimedValue {
+                findReportings(
+                    vesselId,
+                    vesselIdentifier,
+                    internalReferenceNumber,
+                    fromDate,
+                    ircs,
+                    externalReferenceNumber,
+                )
+            }
         logger.info("TIME_RECORD - 'findReportings' took $reportingsTimeTaken")
 
         val (current, currentTimeTaken) =
@@ -73,7 +74,10 @@ class GetVesselReportings(
             }
         logger.info("TIME_RECORD - 'archivedYearsToReportings' took $archivedYearsToReportingsTimeTaken")
 
-        val (infractionSuspicionsSummary, infractionSuspicionsSummaryTimeTaken) = measureTimedValue { getInfractionSuspicionsSummary(reportings.filter { it.isArchived }) }
+        val (infractionSuspicionsSummary, infractionSuspicionsSummaryTimeTaken) =
+            measureTimedValue {
+                getInfractionSuspicionsSummary(reportings.filter { it.isArchived })
+            }
         logger.info("TIME_RECORD - 'infractionSuspicionsSummary' took $infractionSuspicionsSummaryTimeTaken")
         val numberOfInfractionSuspicions = infractionSuspicionsSummary.sumOf { it.numberOfOccurrences }
         val numberOfObservation =
@@ -124,7 +128,7 @@ class GetVesselReportings(
                         }
 
                     return@map ReportingTitleAndNumberOfOccurrences(
-                        title = infraction?.infraction?.let {"$it (NATINF $natinfCode)"} ?: "NATINF $natinfCode",
+                        title = infraction?.infraction?.let { "$it (NATINF $natinfCode)" } ?: "NATINF $natinfCode",
                         numberOfOccurrences = reportings.size,
                     )
                 }

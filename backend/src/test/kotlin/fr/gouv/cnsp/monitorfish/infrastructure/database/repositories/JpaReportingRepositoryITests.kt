@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.neovisionaries.i18n.CountryCode
+import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
@@ -9,9 +10,11 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Import
 import org.springframework.transaction.annotation.Transactional
 import java.time.ZonedDateTime
 
+@Import(MapperConfiguration::class)
 class JpaReportingRepositoryITests : AbstractDBTests() {
     @Autowired
     private lateinit var jpaReportingRepository: JpaReportingRepository
@@ -416,5 +419,15 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat((reporting.value as Observation).authorContact).isEqualTo(updatedReporting.authorContact)
         assertThat((reporting.value as Observation).title).isEqualTo(updatedReporting.title)
         assertThat((reporting.value as Observation).description).isEqualTo(updatedReporting.description)
+    }
+
+    @Test
+    @Transactional
+    fun `findReportingUnarchivedAfterDEPLogbookMessage Should return archive candidates`() {
+        // When
+        val reportings = jpaReportingRepository.findUnarchivedReportingsAfterNewVesselTrip()
+
+        // Then
+        assertThat(reportings).hasSize(1)
     }
 }

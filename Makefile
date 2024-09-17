@@ -52,6 +52,10 @@ clean: docker-env
 	docker compose --env-file ./infra/docker/.env -f ./infra/docker/docker-compose.cypress.yml down -v
 	docker compose -f ./infra/docker/docker-compose.puppeteer.yml down -v
 
+.PHONY: generate-test-data ##LOCAL Generate test data (SQL files from .jsonc)
+generate-test-data:
+	cd frontend && npm run generate:testdata
+
 compile-back:
 	cd backend && ./gradlew assemble
 

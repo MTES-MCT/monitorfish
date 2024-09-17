@@ -45,7 +45,9 @@
             { "operation_number": "FAKE_OPERATION_119", "xml_message": "<Flux>Message FLUX xml</Flux>" },
             { "operation_number": "FAKE_OPERATION_119_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" },
             { "operation_number": "FAKE_OPERATION_120", "xml_message": "<Flux>Message FLUX xml</Flux>" },
-            { "operation_number": "FAKE_OPERATION_120_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" }
+            { "operation_number": "FAKE_OPERATION_121", "xml_message": "<Flux>Message FLUX xml</Flux>" },
+            { "operation_number": "FAKE_OPERATION_120_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" },
+            { "operation_number": "FAKE_OPERATION_121_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" }
         ]
     },
     {
@@ -1498,6 +1500,48 @@
                 "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "operation_number": "FAKE_OPERATION_120_RET",
+                "operation_type": "RET",
+                "transmission_format": "ERS",
+                "value:jsonb": {
+                    "returnStatus": "000"
+                }
+            },
+
+            // - Vessel: MARIAGE ÎLE HASARD
+            // - Flag state: FR
+            {
+                "id": 121,
+                "report_id": "FAKE_OPERATION_121",
+                "referenced_report_id": null,
+                "cfr": "ABC000180832",
+                "enriched": true,
+                "flag_state": "FRA",
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "log_type": "DEP",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "operation_number": "FAKE_OPERATION_121",
+                "operation_type": "DAT",
+                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "software": "TurboCatch (3.7-1)",
+                "transmission_format": "ERS",
+                "trip_gears": null,
+                "trip_segments": null,
+                "vessel_name": "MARIAGE ÎLE HASARD",
+                "value:jsonb": {
+                    "gearOnboard": [{"gear": "GTR", "mesh": 100.0}],
+                    "departurePort": "AEJAZ",
+                    "anticipatedActivity": "FSH",
+                    "tripStartDate": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                    "departureDatetimeUtc": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'"
+                }
+            },
+            {
+                "id": 1120,
+                "report_id": null,
+                "referenced_report_id": "FAKE_OPERATION_121",
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
+                "operation_number": "FAKE_OPERATION_121_RET",
                 "operation_type": "RET",
                 "transmission_format": "ERS",
                 "value:jsonb": {

@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.scheduling.annotation.EnableScheduling
 
 @ConditionalOnProperty(
-    value = ["monitorfish.scheduling.enable"],
+    value = ["monitorfish.scheduling.enabled"],
     havingValue = "true",
     matchIfMissing = true,
 )

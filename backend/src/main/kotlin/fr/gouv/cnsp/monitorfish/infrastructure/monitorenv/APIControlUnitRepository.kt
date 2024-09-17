@@ -6,9 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
 import fr.gouv.cnsp.monitorfish.domain.repositories.ControlUnitRepository
 import io.ktor.client.call.*
 import io.ktor.client.request.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.cache.annotation.Cacheable
@@ -22,8 +20,8 @@ class APIControlUnitRepository(
     private val logger: Logger = LoggerFactory.getLogger(APIControlUnitRepository::class.java)
 
     @Cacheable(value = ["control_units"])
-    override fun findAll(scope: CoroutineScope): Deferred<List<ControlUnit>> {
-        return scope.async {
+    override fun findAll(): List<ControlUnit> =
+        runBlocking {
             val missionsUrl = "${monitorenvProperties.url}/api/v1/control_units"
 
             try {
@@ -34,5 +32,4 @@ class APIControlUnitRepository(
                 listOf()
             }
         }
-    }
 }

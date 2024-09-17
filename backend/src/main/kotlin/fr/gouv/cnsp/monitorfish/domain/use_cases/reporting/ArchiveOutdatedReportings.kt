@@ -7,8 +7,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.transaction.annotation.Transactional
 
-// TODO TEST
-
 @UseCase
 class ArchiveOutdatedReportings(private val reportingRepository: ReportingRepository) {
     private val logger = LoggerFactory.getLogger(ArchiveOutdatedReportings::class.java)
@@ -17,16 +15,17 @@ class ArchiveOutdatedReportings(private val reportingRepository: ReportingReposi
     @Scheduled(fixedDelay = 300000, initialDelay = 6000)
     @Transactional
     fun execute() {
-        val reportingCandidatesToArchive = reportingRepository.findUnarchivedReportingsAfterNewVesselTrip()
+        val reportingCandidatesToArchive = reportingRepository.findUnarchivedReportings()
 
-        val filteredReportingIdsToArchive = reportingCandidatesToArchive.filter {
-            it.second.type == AlertTypeMapping.MISSING_FAR_ALERT ||
-            it.second.type == AlertTypeMapping.THREE_MILES_TRAWLING_ALERT
-        }.map { it.first }
+        val filteredReportingIdsToArchive =
+            reportingCandidatesToArchive.filter {
+                it.second.type == AlertTypeMapping.MISSING_FAR_ALERT ||
+                    it.second.type == AlertTypeMapping.THREE_MILES_TRAWLING_ALERT
+            }.map { it.first }
 
         logger.info("Found ${filteredReportingIdsToArchive.size} reportings to archive.")
-        //val numberOfArchivedReportings = reportingRepository.archiveReportings(filteredReportingIdsToArchive)
+        val numberOfArchivedReportings = reportingRepository.archiveReportings(filteredReportingIdsToArchive)
 
-        //logger.info("Archived $numberOfArchivedReportings reportings")
+        logger.info("Archived $numberOfArchivedReportings reportings")
     }
 }

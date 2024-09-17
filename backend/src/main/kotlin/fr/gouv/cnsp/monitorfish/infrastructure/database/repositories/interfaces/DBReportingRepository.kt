@@ -85,7 +85,7 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
             SELECT lr.cfr, lr.ircs, lr.external_identification, lr.operation_number, MAX(lr.operation_datetime_utc) as last_dep_date_time
             FROM logbook_reports lr
             WHERE
-                lr.operation_datetime_utc > NOW() - INTERVAL '1 day' AND
+                lr.operation_datetime_utc > NOW() - INTERVAL '1 hour' AND
                 lr.log_type = 'DEP'
             GROUP BY lr.cfr, lr.ircs, lr.external_identification, lr.operation_number
         ),
@@ -94,7 +94,7 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
             SELECT DISTINCT referenced_report_id
             FROM logbook_reports lr
             WHERE
-                lr.operation_datetime_utc > NOW() - INTERVAL '1 day' AND
+                lr.operation_datetime_utc > NOW() - INTERVAL '1 hour' AND
                 lr.operation_type = 'RET' AND
                 lr.value->>'returnStatus' = '000'
         )
@@ -115,16 +115,12 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
         WHERE
             r.archived is false AND
             r.deleted is false AND
-            rdp.last_dep_date_time >= r.validation_date
-
+            rdp.last_dep_date_time >= r.validation_date AND
+            rdp.operation_number IN (SELECT referenced_report_id FROM acknowledged_report_ids)
         """,
         nativeQuery = true,
     )
     fun findAllUnarchivedAfterDEPLogbookMessage(): List<Array<Any>>
-    /*
-
-            rdp.operation_number IN (SELECT referenced_report_id FROM acknowledged_report_ids)
-     */
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query(

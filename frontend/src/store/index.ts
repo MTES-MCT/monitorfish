@@ -44,11 +44,16 @@ export const mainStore = configureStore({
       // TODO Replace all Redux state Dates by strings & Error by a strict-typed POJO.
       serializableCheck: false
     }).concat(
-      createStateSyncMiddleware(),
       monitorenvApi.middleware,
       monitorfishApi.middleware,
       monitorfishPublicApi.middleware,
-      monitorfishLightApi.middleware
+      monitorfishLightApi.middleware,
+      createStateSyncMiddleware({
+        actionFilter: action =>
+          !['persist/PERSIST'].includes(action.type) &&
+          !action.type.startsWith('monitorfishApi/') &&
+          !action.type.startsWith('monitorfishPublicApi/')
+      })
     ),
   reducer: persistedMainReducer
 })

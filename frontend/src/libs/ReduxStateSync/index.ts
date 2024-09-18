@@ -1,4 +1,7 @@
-import { BroadcastChannel } from 'broadcast-channel'
+import { BroadcastChannel, type BroadcastChannelOptions } from 'broadcast-channel'
+
+import type { AnyObject } from '@mtes-mct/monitor-ui'
+import type { MainAppDispatch } from '@store'
 
 let lastUuid = 0
 export const GET_INIT_STATE = '&_GET_INIT_STATE'
@@ -6,14 +9,20 @@ export const SEND_INIT_STATE = '&_SEND_INIT_STATE'
 export const RECEIVE_INIT_STATE = '&_RECEIVE_INIT_STATE'
 export const INIT_MESSAGE_LISTENER = '&_INIT_MESSAGE_LISTENER'
 
-const defaultConfig = {
-  blacklist: [],
-  broadcastChannelOption: undefined,
-  channel: 'redux_state_sync',
-  predicate: null,
+const BROADCAST_CHANNEL_NAME = 'monitorfish-channel'
+
+interface ReduxStateSyncOptions {
+  actionFilter: (action: { type: string }) => boolean
+  broadcastChannelOptions: BroadcastChannelOptions
+  prepareState: <State extends AnyObject>(state: State) => State
+  receiveState: <State extends AnyObject>(_prevState: State, nextState: State) => State
+}
+
+const DEFAULT_OPTIONS: ReduxStateSyncOptions = {
+  actionFilter: () => true,
+  broadcastChannelOptions: {},
   prepareState: state => state,
-  receiveState: (_prevState, nextState) => nextState,
-  whitelist: []
+  receiveState: (_prevState, nextState) => nextState
 }
 
 const getIniteState = () => ({ type: GET_INIT_STATE })
@@ -41,26 +50,19 @@ export function generateUuidForAction(action) {
 
   return stampedAction
 }
-// export for test
-export function isActionAllowed({ blacklist, predicate, whitelist }) {
-  let allowed: any = () => true
 
-  if (predicate && typeof predicate === 'function') {
-    allowed = predicate
-  } else if (Array.isArray(blacklist)) {
-    allowed = action => blacklist.indexOf(action.type) < 0
-  } else if (Array.isArray(whitelist)) {
-    allowed = action => whitelist.indexOf(action.type) >= 0
+function MessageListener(
+  this: any,
+  {
+    actionFilter,
+    channel,
+    dispatch
+  }: {
+    actionFilter: (action: { type: string }) => boolean
+    channel: BroadcastChannel
+    dispatch: MainAppDispatch
   }
-
-  return allowed
-}
-// export for test
-export function isActionSynced(action) {
-  return !!action.$isSync
-}
-// export for test
-export function MessageListener(this: any, { allowed, channel, dispatch }) {
+) {
   let isSynced = false
   const tabs = {}
   this.handleOnMessage = stampedAction => {
@@ -82,7 +84,7 @@ export function MessageListener(this: any, { allowed, channel, dispatch }) {
           isSynced = true
           dispatch(receiveIniteState(stampedAction.payload))
         }
-      } else if (allowed(stampedAction)) {
+      } else if (actionFilter(stampedAction)) {
         lastUuid = stampedAction.$uuid
         dispatch(
           Object.assign(stampedAction, {
@@ -96,20 +98,24 @@ export function MessageListener(this: any, { allowed, channel, dispatch }) {
   this.messageChannel.onmessage = this.handleOnMessage
 }
 
-export const createStateSyncMiddleware = (config = defaultConfig) => {
-  const allowed = isActionAllowed(config)
-  const channel = new BroadcastChannel(config.channel, config.broadcastChannelOption)
-  const prepareState = config.prepareState || defaultConfig.prepareState
+export const createStateSyncMiddleware = (options: Partial<ReduxStateSyncOptions>) => {
+  const controlledOptions = { ...DEFAULT_OPTIONS, ...options }
+
+  const channel = new BroadcastChannel(BROADCAST_CHANNEL_NAME, controlledOptions.broadcastChannelOptions)
+  const prepareState = options.prepareState ?? controlledOptions.prepareState
   let messageListener = null
 
   return ({ dispatch, getState }) =>
     next =>
     action => {
-      // create message receiver
       if (!messageListener) {
-        messageListener = new MessageListener({ allowed, channel, dispatch })
+        messageListener = new MessageListener({
+          actionFilter: controlledOptions.actionFilter,
+          channel,
+          dispatch
+        })
       }
-      // post messages
+
       if (action && !action.$uuid) {
         const stampedAction = generateUuidForAction(action)
         lastUuid = stampedAction.$uuid
@@ -117,12 +123,14 @@ export const createStateSyncMiddleware = (config = defaultConfig) => {
           if (action.type === SEND_INIT_STATE) {
             if (getState()) {
               stampedAction.payload = prepareState(getState())
+
               channel.postMessage(stampedAction)
             }
 
             return next(action)
           }
-          if (allowed(stampedAction) || action.type === GET_INIT_STATE) {
+
+          if (controlledOptions.actionFilter(stampedAction) || action.type === GET_INIT_STATE) {
             channel.postMessage(stampedAction)
           }
         } catch (e) {
@@ -140,7 +148,7 @@ export const createStateSyncMiddleware = (config = defaultConfig) => {
 
 // eslint-disable-next-line max-len
 export const createReduxStateSync =
-  (appReducer, receiveState = defaultConfig.receiveState) =>
+  (appReducer, receiveState = DEFAULT_OPTIONS.receiveState) =>
   (state, action) => {
     let initState = state
     if (action.type === RECEIVE_INIT_STATE) {

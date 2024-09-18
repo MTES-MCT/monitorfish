@@ -1,4 +1,4 @@
-import { Legend, useNewWindow } from '@mtes-mct/monitor-ui'
+import { Legend } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import { useMemo } from 'react'
 import styled from 'styled-components'
@@ -12,7 +12,6 @@ import type { SilencedAlertFormValues } from '../types'
 
 export function VesselField() {
   const { errors, setValues, values } = useFormikContext<SilencedAlertFormValues>()
-  const { newWindowContainerRef } = useNewWindow()
 
   const defaultValue: VesselIdentity = useMemo(
     () => ({
@@ -74,7 +73,6 @@ export function VesselField() {
         <StyledLegend>Navire</StyledLegend>
         <Field>
           <StyledVesselSearch
-            baseRef={newWindowContainerRef}
             defaultValue={defaultValue}
             disabled={values.vesselId === UNKNOWN_VESSEL.vesselId}
             extendedWidth={400}

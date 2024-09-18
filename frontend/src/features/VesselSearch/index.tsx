@@ -1,4 +1,4 @@
-import { useClickOutsideWhenOpenedWithinRef } from '@hooks/useClickOutsideWhenOpenedWithinRef'
+import { useClickOutsideWhenOpened } from '@hooks/useClickOutsideWhenOpened'
 import { useEscapeFromKeyboard } from '@hooks/useEscapeFromKeyboard'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -16,11 +16,10 @@ import { searchVessels as searchVesselsAction } from '../../domain/use_cases/ves
 import { showVessel } from '../../domain/use_cases/vessel/showVessel'
 
 import type { VesselIdentity } from '../../domain/entities/vessel/types'
-import type { ChangeEvent, InputHTMLAttributes, MutableRefObject } from 'react'
+import type { ChangeEvent, InputHTMLAttributes } from 'react'
 import type { Promisable } from 'type-fest'
 
 type VesselSearchProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'defaultValue' | 'onChange'> & {
-  baseRef?: MutableRefObject<HTMLDivElement | undefined> | undefined
   defaultValue?: VesselIdentity | undefined
   extendedWidth?: number | undefined
   hasError?: boolean | undefined
@@ -33,7 +32,6 @@ type VesselSearchProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'defaultVal
   onInputClick?: () => Promisable<void>
 }
 export function VesselSearch({
-  baseRef,
   className,
   defaultValue,
   extendedWidth,
@@ -60,7 +58,7 @@ export function VesselSearch({
   const [showLastSearchedVessels, setShowLastSearchedVessels] = useState(false)
 
   const escapeFromKeyboard = useEscapeFromKeyboard()
-  const clickedOutsideComponent = useClickOutsideWhenOpenedWithinRef(wrapperRef, isExtended, baseRef)
+  const clickedOutsideComponent = useClickOutsideWhenOpened(wrapperRef, isExtended)
 
   useEffect(() => {
     setSelectedVessel(defaultValue)
@@ -181,12 +179,10 @@ export function VesselSearch({
       <InputWrapper>
         <Input
           key={controlledKey}
-          // Disable this behavior when VesselSearch is used within side window
-          // (`baseRef` prop is only provided in side window case)
           $baseUrl={baseUrl}
           $flagState={flagState}
           $hasError={hasError}
-          autoFocus={!baseRef && !!selectedVesselIdentity}
+          autoFocus={!!selectedVesselIdentity}
           data-cy="vessel-search-input"
           defaultValue={vesselName}
           onChange={handleChange}

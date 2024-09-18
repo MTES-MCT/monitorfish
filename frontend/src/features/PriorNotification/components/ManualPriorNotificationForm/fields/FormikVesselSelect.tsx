@@ -1,7 +1,7 @@
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { VesselSearch } from '@features/VesselSearch'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { Field, FieldError, logSoftError, useKey, useNewWindow } from '@mtes-mct/monitor-ui'
+import { Field, FieldError, logSoftError, useKey } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -17,7 +17,6 @@ export function FormikVesselSelect({ onChange, readOnly }: FormikVesselSelectPro
 
   const dispatch = useMainAppDispatch()
   const [input, meta, helper] = useField<number | undefined>('vesselId')
-  const { newWindowContainerRef } = useNewWindow()
 
   const [isLoading, setIsLoading] = useState(true)
 
@@ -92,7 +91,6 @@ export function FormikVesselSelect({ onChange, readOnly }: FormikVesselSelectPro
     <Field>
       <StyledVesselSearch
         key={key}
-        baseRef={newWindowContainerRef}
         defaultValue={defaultValueRef.current}
         disabled={isLoading || readOnly}
         hasError={!!meta.error}

@@ -1,12 +1,11 @@
 import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
-import { FieldError, FormikDatePicker, useNewWindow } from '@mtes-mct/monitor-ui'
+import { FieldError, FormikDatePicker } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import styled from 'styled-components'
 
 import type { MissionMainFormValues } from '../types'
 
 export function FormikDoubleDatePicker() {
-  const { newWindowContainerRef } = useNewWindow()
   const { errors } = useFormikContext<MissionMainFormValues>()
 
   const error = errors.endDateTimeUtc ?? errors.startDateTimeUtc
@@ -15,7 +14,6 @@ export function FormikDoubleDatePicker() {
     <Wrapper>
       <div>
         <FormikDatePicker
-          baseContainer={newWindowContainerRef.current}
           isCompact
           isErrorMessageHidden
           isRequired
@@ -25,7 +23,6 @@ export function FormikDoubleDatePicker() {
           withTime
         />
         <FormikDatePicker
-          baseContainer={newWindowContainerRef.current}
           isCompact
           isEndDate
           isErrorMessageHidden

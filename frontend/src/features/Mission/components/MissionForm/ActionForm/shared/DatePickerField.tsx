@@ -1,12 +1,11 @@
 import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
 import { useGetMissionActionFormikUsecases } from '@features/Mission/components/MissionForm/hooks/useGetMissionActionFormikUsecases'
-import { DatePicker, useNewWindow } from '@mtes-mct/monitor-ui'
+import { DatePicker } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 
 import type { MissionActionFormValues } from '../../types'
 
 export function DatePickerField() {
-  const { newWindowContainerRef } = useNewWindow()
   const { updateMissionLocation } = useGetMissionActionFormikUsecases()
   const { errors, setFieldValue, values } = useFormikContext<MissionActionFormValues>()
 
@@ -20,7 +19,6 @@ export function DatePickerField() {
 
   return (
     <DatePicker
-      baseContainer={newWindowContainerRef.current}
       defaultValue={values.actionDatetimeUtc}
       error={error}
       isErrorMessageHidden={error === HIDDEN_ERROR}

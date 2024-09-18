@@ -1,4 +1,4 @@
-import { Accent, Button, Dialog, FormikDatePicker, Icon, useNewWindow } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Dialog, FormikDatePicker, Icon } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { useState } from 'react'
 import styled from 'styled-components'
@@ -17,7 +17,6 @@ type DeletionConfirmationDialogProps = {
   onConfirm: (nextSilencedAlert: SilencedAlertData) => Promisable<void>
 }
 export function AddSilencedAlertDialog({ onCancel, onConfirm }: DeletionConfirmationDialogProps) {
-  const { newWindowContainerRef } = useNewWindow()
   const [isValidatingOnChange, setIsValidatingOnChange] = useState(false)
 
   return (
@@ -37,12 +36,7 @@ export function AddSilencedAlertDialog({ onCancel, onConfirm }: DeletionConfirma
             <>
               <VesselField />
               <AlertTypeField />
-              <StyledFormikDatePicker
-                baseContainer={newWindowContainerRef.current}
-                isStringDate
-                label="Date de reprise"
-                name="silencedBeforeDate"
-              />
+              <StyledFormikDatePicker isStringDate label="Date de reprise" name="silencedBeforeDate" />
             </>
           </StyledBody>
 

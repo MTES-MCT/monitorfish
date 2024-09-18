@@ -1,14 +1,5 @@
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import {
-  Accent,
-  Button,
-  DatePicker,
-  Dialog,
-  FieldError,
-  getUtcizedDayjs,
-  Select,
-  useNewWindow
-} from '@mtes-mct/monitor-ui'
+import { Accent, Button, DatePicker, Dialog, FieldError, getUtcizedDayjs, Select } from '@mtes-mct/monitor-ui'
 import { useState } from 'react'
 import styled from 'styled-components'
 
@@ -21,7 +12,6 @@ type ExportActivityReportsDialogProps = {
   onExit: () => Promisable<void>
 }
 export function ExportActivityReportsDialog({ onExit }: ExportActivityReportsDialogProps) {
-  const { newWindowContainerRef } = useNewWindow()
   const dispatch = useMainAppDispatch()
 
   const [afterDateTimeUtc, setAfterDateTimeUtc] = useState<Date | undefined>()
@@ -66,7 +56,6 @@ export function ExportActivityReportsDialog({ onExit }: ExportActivityReportsDia
         <div>
           Du
           <DatePicker
-            baseContainer={newWindowContainerRef.current}
             isCompact
             isErrorMessageHidden
             isHistorical
@@ -77,7 +66,6 @@ export function ExportActivityReportsDialog({ onExit }: ExportActivityReportsDia
           />
           au
           <DatePicker
-            baseContainer={newWindowContainerRef.current}
             isCompact
             isErrorMessageHidden
             isHistorical

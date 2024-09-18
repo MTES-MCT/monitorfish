@@ -1,7 +1,7 @@
 import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
 import { useGetVesselQuery } from '@features/Vessel/apis'
 import { VesselSearch } from '@features/VesselSearch'
-import { Checkbox, useNewWindow } from '@mtes-mct/monitor-ui'
+import { Checkbox } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { UNKNOWN_VESSEL } from 'domain/entities/vessel/vessel'
 import { useFormikContext } from 'formik'
@@ -16,8 +16,6 @@ import type { VesselIdentity } from 'domain/entities/vessel/types'
 export function VesselField() {
   const { errors, setValues, values } = useFormikContext<MissionActionFormValues>()
   const { updateFieldsControlledByVessel } = useGetMissionActionFormikUsecases()
-
-  const { newWindowContainerRef } = useNewWindow()
 
   const { data: vessel, isFetching } = useGetVesselQuery(values.vesselId ?? skipToken)
 
@@ -100,7 +98,6 @@ export function VesselField() {
       <Wrapper>
         <Field>
           <StyledVesselSearch
-            baseRef={newWindowContainerRef}
             defaultValue={defaultValue}
             disabled={values.vesselId === UNKNOWN_VESSEL.vesselId}
             extendedWidth={400}

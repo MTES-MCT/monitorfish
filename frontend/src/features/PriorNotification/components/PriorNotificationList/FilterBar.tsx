@@ -17,8 +17,7 @@ import {
   Size,
   TextInput,
   type DateAsStringRange,
-  CheckPicker,
-  useNewWindow
+  CheckPicker
 } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { uniq } from 'lodash'
@@ -42,7 +41,6 @@ export type FilterBarProps = {
   searchQuery: string | undefined
 }
 export function FilterBar() {
-  const { newWindowContainerRef } = useNewWindow()
   const listFilterValues = useMainAppSelector(store => store.priorNotification.listFilterValues)
   const dispatch = useMainAppDispatch()
 
@@ -303,7 +301,6 @@ export function FilterBar() {
       {listFilterValues.expectedArrivalPeriod === ExpectedArrivalPeriod.CUSTOM && (
         <Row>
           <DateRangePicker
-            baseContainer={newWindowContainerRef.current}
             defaultValue={listFilterValues.expectedArrivalCustomPeriod}
             isStringDate
             isTransparent

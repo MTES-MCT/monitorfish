@@ -7,7 +7,11 @@ import type { MainAppThunk } from '../../../store'
 import type { SideWindow } from '../SideWindow.types'
 
 export const openSideWindowPath =
-  (path: SideWindow.Path, withoutConfirmation: boolean = false): MainAppThunk<Promise<boolean>> =>
+  (
+    path: SideWindow.Path,
+    withoutConfirmation: boolean = false,
+    isSameWindow: boolean = false
+  ): MainAppThunk<Promise<boolean>> =>
   async (dispatch, getState) => {
     const { missionForm, sideWindow } = getState()
 
@@ -23,6 +27,10 @@ export const openSideWindowPath =
     }
 
     await dispatch(sideWindowActions.openOrFocusAndGoTo(getFullPathFromPath(path)))
+
+    if (!isSameWindow) {
+      window.open('/side_window', 'MonitorFish', `height=1200,width=${window.innerWidth}`)
+    }
 
     return true
   }

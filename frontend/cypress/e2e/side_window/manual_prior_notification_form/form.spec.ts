@@ -143,16 +143,16 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
   })
 
   it('Should attach and remove a document to a manual prior notification', () => {
-    cy.intercept('GET', `/bff/v1/prior_notifications/00000000-0000-4000-0000-000000000002/uploads`).as('getUploads')
+    cy.intercept('GET', `/bff/v1/prior_notifications/00000000-0000-4000-0000-000000000008/uploads`).as('getUploads')
     cy.intercept(
       'POST',
-      `/bff/v1/prior_notifications/00000000-0000-4000-0000-000000000002/uploads?isManualPriorNotification=false&operationDate=*`
+      `/bff/v1/prior_notifications/00000000-0000-4000-0000-000000000008/uploads?isManualPriorNotification=true&operationDate=*`
     ).as('uploadDocument')
-    cy.intercept('DELETE', `/bff/v1/prior_notifications/00000000-0000-4000-0000-000000000002/uploads/*`).as(
+    cy.intercept('DELETE', `/bff/v1/prior_notifications/00000000-0000-4000-0000-000000000008/uploads/*`).as(
       'deleteDocument'
     )
 
-    editSideWindowPriorNotification(`DOS FIN`, '00000000-0000-4000-0000-000000000002')
+    editSideWindowPriorNotification(`DÉVOILÉ`, '00000000-0000-4000-0000-000000000008')
 
     cy.wait('@getUploads')
 

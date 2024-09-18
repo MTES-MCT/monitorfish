@@ -67,7 +67,7 @@ context('Side Window > Reporting List > Actions', () => {
     cy.getDataCy('side-window-reporting-search').type('RENCONTRER')
 
     // Then there is only the searched vessel
-    cy.getDataCy('ReportingList-reporting').first().contains('RENCONTRER VEILLER APPARTEMENT"')
+    cy.getDataCy('ReportingList-reporting').first().contains('RENCONTRER VEILLER APPARTEMENT')
     cy.getDataCy('ReportingList-reporting').should('have.length', 1)
   })
 

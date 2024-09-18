@@ -121,7 +121,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 10000 }).click()
   })
 
-  it('Dates occurrences of an alert and reporting summary should be displayed', () => {
+  it('Reporting summary of reportings should be displayed', () => {
     // Given
     cy.get('*[data-cy="vessel-search-input"]', { timeout: 10000 }).type('mariage ile hasard')
     cy.get('*[data-cy="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
@@ -133,23 +133,18 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="vessel-menu-reporting"]').click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-reporting"]', { timeout: 10000 }).should('be.visible')
     cy.wait('@reporting')
+    createReporting()
     cy.get('[data-cy="archive-reporting-card"]').eq(0).click()
-    cy.get('*[data-cy="reporting-card"]').should('not.exist')
     cy.get('*[data-cy="vessel-sidebar-reporting-tab-history-button"]').click()
     cy.get('*[data-cy="vessel-sidebar-reporting-tab-history"]').should('exist')
 
     // Then
     // Summary
     cy.get('[data-cy="vessel-reporting-summary"]').contains('Résumé des derniers signalements (6 dernières années)')
-    cy.get('[data-cy="vessel-reporting-summary"]').contains('Signalements "3 milles - Chaluts (NATINF 7059)"')
-
-    // Dates occurrences of an alert
-    cy.get('*[data-cy="vessel-sidebar-reporting-tab-archive-year"]').eq(0).click()
-    cy.get('[data-cy="reporting-card"]').should('not.contain', '1ère alerte le')
-    cy.clickLink('Voir les dates des autres alertes')
-    cy.get('[data-cy="reporting-card"]').should('contain', '1ère alerte le')
-    cy.clickLink('Masquer les dates des autres alertes')
-    cy.get('[data-cy="reporting-card"]').should('not.contain', '1ère alerte le')
+    cy.get('[data-cy="vessel-reporting-summary"]').contains('Signalement "3 milles - Chaluts (NATINF 7059)"')
+    cy.get('[data-cy="vessel-reporting-summary"]').contains(
+      "Peche maritime non autorisee dans les eaux maritimes ou salees francaises par un navire de pays tiers a l'union europeenne (NATINF 2608)"
+    )
 
     cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 10000 }).click()
   })

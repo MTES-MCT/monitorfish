@@ -1,0 +1,346 @@
+[
+    {
+        "table": "reportings",
+        "afterAll": "SELECT setval('reportings_id_seq', (SELECT MAX(id) FROM reportings));",
+        "beforeAll": "TRUNCATE TABLE reportings RESTART IDENTITY CASCADE;",
+        "data": [
+            // - Vessel: MARIAGE ÎLE HASARD
+            // - With 3 reportings
+            {
+                "id": 1,
+                "archived": false,
+                "creation_date:sql": "NOW() - INTERVAL '1 day'",
+                "deleted": false,
+                "external_reference_number": "VP374069",
+                "flag_state": "FR",
+                "internal_reference_number": "ABC000180832",
+                "ircs": "CG1312",
+                "latitude": 41.569,
+                "longitude": 37.28,
+                "type": "ALERT",
+                "validation_date:sql": "NOW() - INTERVAL '30 minutes'",
+                "value:jsonb": {
+                    "seaFront": "NAMO",
+                    "riskFactor": 3.5647,
+                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "natinfCode": 7059
+                },
+                "vessel_id": 123456,
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "vessel_name": "MARIAGE ÎLE HASARD"
+            },
+            {
+                "id": 2,
+                "archived": true,
+                "creation_date:sql": "NOW() - INTERVAL '3 day'",
+                "deleted": false,
+                "external_reference_number": "VP374069",
+                "flag_state": "FR",
+                "internal_reference_number": "ABC000180832",
+                "ircs": "CG1312",
+                "latitude": null,
+                "longitude": null,
+                "type": "ALERT",
+                "validation_date:sql": "NOW() - INTERVAL '4 day'",
+                "value:jsonb": {
+                    "seaFront": "NAMO",
+                    "riskFactor": 3.3647,
+                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "natinfCode": 7059
+                },
+                "vessel_id": 123456,
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "vessel_name": "MARIAGE ÎLE HASARD"
+            },
+            {
+                "id": 3,
+                "archived": true,
+                "creation_date:sql": "NOW() - INTERVAL '4 day'",
+                "deleted": true,
+                "external_reference_number": "VP374069",
+                "flag_state": "FR",
+                "internal_reference_number": "ABC000180832",
+                "ircs": "CG1312",
+                "latitude": -5.569,
+                "longitude": 71.569,
+                "type": "ALERT",
+                "validation_date:sql": "NOW() - INTERVAL '5 day'",
+                "value:jsonb": {
+                    "seaFront": "NAMO",
+                    "riskFactor": 3.6947,
+                    "type": "MISSING_FAR_ALERT",
+                    "natinfCode": 27689
+                },
+                "vessel_id": 123456,
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "vessel_name": "MARIAGE ÎLE HASARD"
+            },
+
+            // - Vessel: PROMETTRE INTÉRIEUR SAINT
+            // - With 1 reporting
+            {
+                "id": 4,
+                "archived": false,
+                "creation_date:sql": "NOW() - INTERVAL '1 day'",
+                "deleted": false,
+                "external_reference_number": "ZJ472279",
+                "flag_state": "FR",
+                "internal_reference_number": "ABC000232227",
+                "ircs": "TMG5756",
+                "latitude": 1.123,
+                "longitude": -12.569,
+                "type": "ALERT",
+                "validation_date:sql": "NOW()",
+                "value:jsonb": {
+                    "seaFront": "SA",
+                    "riskFactor": 2.647,
+                    "type": "TWELVE_MILES_FISHING_ALERT",
+                    "natinfCode": 2610
+                },
+                "vessel_id": null,
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "vessel_name": "PROMETTRE INTÉRIEUR SAINT"
+            },
+
+            // - Vessel: HAÏR GAUCHE VIVRE
+            // - With 1 reporting
+            {
+                "id": 5,
+                "archived": false,
+                "creation_date:sql": "NOW() - INTERVAL '2 day'",
+                "deleted": false,
+                "external_reference_number": "HK498094",
+                "flag_state": "FR",
+                "internal_reference_number": "ABC000591595",
+                "ircs": "KF0313",
+                "latitude": null,
+                "longitude": null,
+                "type": "ALERT",
+                "validation_date:sql": "NOW() - INTERVAL '1 day'",
+                "value:jsonb": {
+                    "seaFront": "MEMN",
+                    "flagState": "FR",
+                    "riskFactor": 1.389,
+                    "type": "MISSING_FAR_ALERT",
+                    "natinfCode": 27689
+                },
+                "vessel_id": null,
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "vessel_name": "HAÏR GAUCHE VIVRE"
+            },
+
+            // - Vessel: COURANT MAIN PROFESSEUR
+            // - With 1 reporting
+            {
+                "id": 6,
+                "archived": false,
+                "creation_date:sql": "NOW() - INTERVAL '1 day'",
+                "deleted": false,
+                "external_reference_number": "IW783219",
+                "flag_state": "FR",
+                "internal_reference_number": "ABC000042310",
+                "ircs": "QD0506",
+                "latitude": null,
+                "longitude": null,
+                "type": "INFRACTION_SUSPICION",
+                "validation_date:sql": "NOW() - INTERVAL '1 day'",
+                "value:jsonb": {
+                    "reportingActor": "OPS",
+                    "controlUnitId": null,
+                    "authorTrigram": "LTH",
+                    "authorContact": "",
+                    "title": "Suspicion de chalutage dans les 3 milles",
+                    "description": "Chalutage dans les 3 milles (vitesse & parcours pêche) le 22/08/22 à 22h56",
+                    "natinfCode": 23588,
+                    "dml": "DML 29",
+                    "type": "INFRACTION_SUSPICION",
+                    "seaFront": "NAMO"
+                },
+                "vessel_id": 10,
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "vessel_name": "COURANT MAIN PROFESSEUR"
+            },
+
+            // - Vessel: RENCONTRER VEILLER APPARTEMENT
+            // - With 2 reportings
+            {
+                "id": 7,
+                "archived": false,
+                "creation_date:sql": "NOW() - INTERVAL '1 day 1 hour'",
+                "deleted": false,
+                "external_reference_number": "JL026591",
+                "flag_state": "FR",
+                "internal_reference_number": "ABC000597493",
+                "ircs": "CMQ7994",
+                "latitude": null,
+                "longitude": null,
+                "type": "INFRACTION_SUSPICION",
+                "validation_date": null,
+                "value:jsonb": {
+                    "reportingActor": "UNIT",
+                    "controlUnitId": 10012,
+                    "authorTrigram": "LTH",
+                    "authorContact": "Jean Bon (0600000000)",
+                    "title": "Pêche sans VMS ni JPE",
+                    "description": "Pêche thon rouge sans VMS détecté ni JPE",
+                    "natinfCode": 27689,
+                    "dml": "DML 29",
+                    "type": "INFRACTION_SUSPICION",
+                    "seaFront": "NAMO"
+                },
+                "vessel_id": 11,
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "vessel_name": "RENCONTRER VEILLER APPARTEMENT"
+            },
+            {
+                "id": 8,
+                "archived": false,
+                "creation_date:sql": "NOW() - INTERVAL '1 day 1 hour'",
+                "deleted": false,
+                "external_reference_number": "JL026591",
+                "flag_state": "FR",
+                "internal_reference_number": "ABC000597493",
+                "ircs": "CMQ7994",
+                "latitude": null,
+                "longitude": null,
+                "type": "OBSERVATION",
+                "validation_date:sql": "NOW() - INTERVAL '1 day 1 hour'",
+                "value:jsonb": {
+                    "reportingActor": "UNIT",
+                    "controlUnitId": 10012,
+                    "authorTrigram": "",
+                    "authorContact": "Jean Bon (0600000000)",
+                    "title": "OBSERVATION: Pêche sans VMS ni JPE",
+                    "description": "OBSERVATION: Pêche thon rouge sans VMS détecté ni JPE",
+                    "type": "OBSERVATION",
+                    "seaFront": "NAMO"
+                },
+                "vessel_id": 11,
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "vessel_name": "RENCONTRER VEILLER APPARTEMENT"
+            },
+
+            // - Vessel: VIVA ESPANA
+            // - With 2 reportings
+            {
+                "id": 9,
+                "archived": false,
+                "creation_date:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '10 days'",
+                "deleted": false,
+                "external_reference_number": "EXTIMM101",
+                "flag_state": "FR",
+                "internal_reference_number": "CFR101",
+                "ircs": "IRCS101",
+                "latitude": null,
+                "longitude": null,
+                "type": "INFRACTION_SUSPICION",
+                "validation_date": null,
+                "value:jsonb": {
+                    "authorContact": "Jean Bon (0623456789)",
+                    "authorTrigram": "LTH",
+                    "controlUnitId": 10012,
+                    "description": "Une description d'infraction.",
+                    "dml": "DML 29",
+                    "natinfCode": 27689,
+                    "reportingActor": "OPS",
+                    "seaFront": "NAMO",
+                    "title": "Suspicion d'infraction 9",
+                    "type": "INFRACTION_SUSPICION"
+                },
+                "vessel_id": 101,
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "vessel_name": "VIVA ESPANA"
+            },
+            {
+                "id": 10,
+                "archived": false,
+                "creation_date:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 days'",
+                "deleted": false,
+                "external_reference_number": "EXTIMM101",
+                "flag_state": "FR",
+                "internal_reference_number": "CFR101",
+                "ircs": "IRCS101",
+                "latitude": null,
+                "longitude": null,
+                "type": "INFRACTION_SUSPICION",
+                "validation_date": null,
+                "value:jsonb": {
+                    "authorContact": "Jean Bon (0623456789)",
+                    "authorTrigram": "LTH",
+                    "controlUnitId": 10012,
+                    "description": "Une description d'infraction.",
+                    "dml": "DML 29",
+                    "natinfCode": 27689,
+                    "reportingActor": "OPS",
+                    "seaFront": "NAMO",
+                    "title": "Suspicion d'infraction 10",
+                    "type": "INFRACTION_SUSPICION"
+                },
+                "vessel_id": 101,
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "vessel_name": "VIVA ESPANA"
+            },
+
+            // - Vessel: DOS FIN
+            // - With 2 reportings
+            {
+                "id": 11,
+                "archived": false,
+                "creation_date:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '20 days'",
+                "deleted": false,
+                "external_reference_number": "EXTIMM115",
+                "flag_state": "FR",
+                "internal_reference_number": "CFR115",
+                "ircs": "IRCS115",
+                "latitude": null,
+                "longitude": null,
+                "type": "INFRACTION_SUSPICION",
+                "validation_date": null,
+                "value:jsonb": {
+                    "authorContact": "Jean Bon (0623456789)",
+                    "authorTrigram": "LTH",
+                    "controlUnitId": 10012,
+                    "description": "Une description d'infraction.",
+                    "dml": "DML 29",
+                    "natinfCode": 27689,
+                    "reportingActor": "OPS",
+                    "seaFront": "NAMO",
+                    "title": "Suspicion d'infraction 11",
+                    "type": "INFRACTION_SUSPICION"
+                },
+                "vessel_id": 115,
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "vessel_name": "DOS FIN"
+            },
+            {
+                "id": 12,
+                "archived": false,
+                "creation_date:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '25 days'",
+                "deleted": false,
+                "external_reference_number": "EXTIMM115",
+                "flag_state": "FR",
+                "internal_reference_number": "CFR115",
+                "ircs": "IRCS115",
+                "latitude": null,
+                "longitude": null,
+                "type": "INFRACTION_SUSPICION",
+                "validation_date": null,
+                "value:jsonb": {
+                    "authorContact": "Jean Bon (0623456789)",
+                    "authorTrigram": "LTH",
+                    "controlUnitId": 10012,
+                    "description": "Une description d'infraction.",
+                    "dml": "DML 29",
+                    "natinfCode": 27689,
+                    "reportingActor": "OPS",
+                    "seaFront": "NAMO",
+                    "title": "Suspicion d'infraction 212",
+                    "type": "INFRACTION_SUSPICION"
+                },
+                "vessel_id": 115,
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "vessel_name": "DOS FIN"
+            }
+        ]
+    }
+]

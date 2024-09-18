@@ -38,6 +38,7 @@ const TableBody = styled.tbody``
 const Zone = styled.div`
   background: ${p => p.theme.color.white};
   display: flex;
+  flex-direction: column;
 `
 
 const Fields = styled.table<{

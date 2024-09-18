@@ -51,13 +51,13 @@ export function ReportingCard({
   }, [reporting, reportingName])
 
   return (
-    <Wrapper data-cy="reporting-card" isInfractionSuspicion={isAnInfractionSuspicion}>
+    <Wrapper $isInfractionSuspicion={isAnInfractionSuspicion} data-cy="reporting-card">
       {isAnInfractionSuspicion ? (
         <StyledAlertIcon color={THEME.color.maximumRed} />
       ) : (
         <StyledObservationIcon color={THEME.color.charcoal} />
       )}
-      <Body isInfractionSuspicion={isAnInfractionSuspicion}>
+      <Body $isInfractionSuspicion={isAnInfractionSuspicion}>
         <Title>
           {reportingActor} /{' '}
           {reporting.type === ReportingType.ALERT ? getAlertNameFromType(reporting.value.type) : reporting.value.title}
@@ -70,15 +70,15 @@ export function ReportingCard({
                 <>
                   <OtherOccurrenceDates>
                     {otherOccurrencesDates.map(dateTime => (
-                      <OtherOccurrenceAlertDate>{dateTime}</OtherOccurrenceAlertDate>
+                      <OtherOccurrenceAlertDate key={dateTime}>{dateTime}</OtherOccurrenceAlertDate>
                     ))}
                   </OtherOccurrenceDates>
-                  <OpenOrCloseOtherOccurrenceDates onClick={() => setIsOtherOccurrencesDatesOpened(false)}>
+                  <OpenOrCloseOtherOccurrenceDates onClick={() => setIsOtherOccurrencesDatesOpened(false)} role="link">
                     Masquer les dates des autres alertes
                   </OpenOrCloseOtherOccurrenceDates>
                 </>
               ) : (
-                <OpenOrCloseOtherOccurrenceDates onClick={() => setIsOtherOccurrencesDatesOpened(true)}>
+                <OpenOrCloseOtherOccurrenceDates onClick={() => setIsOtherOccurrencesDatesOpened(true)} role="link">
                   Voir les dates des autres alertes
                 </OpenOrCloseOtherOccurrenceDates>
               )}
@@ -111,7 +111,7 @@ export function ReportingCard({
           <NumberOfAlerts isArchived>{otherOccurrencesOfSameAlert.length + 1}</NumberOfAlerts>
         )
       ) : (
-        <Actions hasOccurrences={otherOccurrencesOfSameAlert.length > 0}>
+        <Actions $hasOccurrences={otherOccurrencesOfSameAlert.length > 0}>
           {otherOccurrencesOfSameAlert.length > 0 && (
             <NumberOfAlerts>{otherOccurrencesOfSameAlert.length + 1}</NumberOfAlerts>
           )}
@@ -151,9 +151,9 @@ export function ReportingCard({
 }
 
 const Wrapper = styled.div<{
-  isInfractionSuspicion?: boolean
+  $isInfractionSuspicion?: boolean
 }>`
-  background: ${p => (p.isInfractionSuspicion ? p.theme.color.maximumRed15 : p.theme.color.gainsboro)} 0% 0% no-repeat
+  background: ${p => (p.$isInfractionSuspicion ? p.theme.color.maximumRed15 : p.theme.color.gainsboro)} 0% 0% no-repeat
     padding-box;
   display: flex;
   margin-bottom: 16px;
@@ -191,19 +191,19 @@ const StyledObservationIcon = styled(Icon.Observation)`
 `
 
 const Body = styled.div<{
-  isInfractionSuspicion?: boolean
+  $isInfractionSuspicion?: boolean
 }>`
-  color: ${p => (p.isInfractionSuspicion ? p.theme.color.maximumRed : p.theme.color.gunMetal)};
+  color: ${p => (p.$isInfractionSuspicion ? p.theme.color.maximumRed : p.theme.color.gunMetal)};
   margin-bottom: 12px;
   margin-top: 12px;
   width: 365px;
 `
 
 const Actions = styled.div<{
-  hasOccurrences: boolean
+  $hasOccurrences: boolean
 }>`
   border-left: 2px solid ${p => p.theme.color.white};
-  padding-top: ${p => (p.hasOccurrences ? 8 : 3)}px;
+  padding-top: ${p => (p.$hasOccurrences ? 8 : 3)}px;
   text-align: center;
   width: 32px;
   margin-left: auto;

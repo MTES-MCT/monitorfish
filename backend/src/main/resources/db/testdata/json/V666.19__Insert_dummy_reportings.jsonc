@@ -7,6 +7,7 @@
             // - Vessel: MARIAGE ÎLE HASARD
             // - With 3 reportings
             {
+                "id": 1,
                 "archived": false,
                 "creation_date:sql": "NOW() - INTERVAL '1 day'",
                 "deleted": false,
@@ -29,6 +30,7 @@
                 "vessel_name": "MARIAGE ÎLE HASARD"
             },
             {
+                "id": 2,
                 "archived": true,
                 "creation_date:sql": "NOW() - INTERVAL '3 day'",
                 "deleted": false,
@@ -51,6 +53,7 @@
                 "vessel_name": "MARIAGE ÎLE HASARD"
             },
             {
+                "id": 3,
                 "archived": true,
                 "creation_date:sql": "NOW() - INTERVAL '4 day'",
                 "deleted": true,
@@ -76,6 +79,7 @@
             // - Vessel: PROMETTRE INTÉRIEUR SAINT
             // - With 1 reporting
             {
+                "id": 4,
                 "archived": false,
                 "creation_date:sql": "NOW() - INTERVAL '1 day'",
                 "deleted": false,
@@ -101,6 +105,7 @@
             // - Vessel: HAÏR GAUCHE VIVRE
             // - With 1 reporting
             {
+                "id": 5,
                 "archived": false,
                 "creation_date:sql": "NOW() - INTERVAL '2 day'",
                 "deleted": false,
@@ -127,6 +132,7 @@
             // - Vessel: COURANT MAIN PROFESSEUR
             // - With 1 reporting
             {
+                "id": 6,
                 "archived": false,
                 "creation_date:sql": "NOW() - INTERVAL '1 day'",
                 "deleted": false,
@@ -158,6 +164,7 @@
             // - Vessel: RENCONTRER VEILLER APPARTEMENT
             // - With 2 reportings
             {
+                "id": 7,
                 "archived": false,
                 "creation_date:sql": "NOW() - INTERVAL '1 day 1 hour'",
                 "deleted": false,
@@ -186,6 +193,7 @@
                 "vessel_name": "RENCONTRER VEILLER APPARTEMENT"
             },
             {
+                "id": 8,
                 "archived": false,
                 "creation_date:sql": "NOW() - INTERVAL '1 day 1 hour'",
                 "deleted": false,

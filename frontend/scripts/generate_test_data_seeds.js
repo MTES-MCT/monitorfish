@@ -123,7 +123,7 @@ for (const file of jsonFiles) {
       const { afterAll, beforeAll, data: rows, id, table } = dataTable
 
       return [
-        beforeAll,
+        beforeAll?.concat('\n'),
         ...rows.map(row => {
           const insertStatement = generateInsertStatement(row, table)
           const updateStatements = generateUpdateStatements(row, table, id)

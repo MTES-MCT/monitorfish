@@ -20,7 +20,7 @@ export function Menu({ selectedMenu }: MenuProps) {
         data-cy="side-window-menu-mission-list"
         Icon={Icon.MissionAction}
         iconSize={26}
-        onClick={() => dispatch(openSideWindowPath({ menu: SideWindowMenuKey.MISSION_LIST }, false, false))}
+        onClick={() => dispatch(openSideWindowPath({ menu: SideWindowMenuKey.MISSION_LIST }, false, true))}
         role="menuitem"
         selected={selectedMenu === SideWindowMenuKey.MISSION_LIST}
         title={SideWindowMenuLabel.MISSION_LIST}
@@ -30,7 +30,7 @@ export function Menu({ selectedMenu }: MenuProps) {
         Icon={Icon.Alert}
         iconSize={26}
         onClick={() =>
-          dispatch(openSideWindowPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }, false, false))
+          dispatch(openSideWindowPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }, false, true))
         }
         role="menuitem"
         selected={selectedMenu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST}
@@ -41,9 +41,7 @@ export function Menu({ selectedMenu }: MenuProps) {
           aria-label={SideWindowMenuKey.PRIOR_NOTIFICATION_LIST}
           Icon={Icon.Fishery}
           iconSize={26}
-          onClick={() =>
-            dispatch(openSideWindowPath({ menu: SideWindowMenuKey.PRIOR_NOTIFICATION_LIST }, false, false))
-          }
+          onClick={() => dispatch(openSideWindowPath({ menu: SideWindowMenuKey.PRIOR_NOTIFICATION_LIST }, false, true))}
           role="menuitem"
           selected={selectedMenu === SideWindowMenuKey.PRIOR_NOTIFICATION_LIST}
           title={SideWindowMenuLabel.PRIOR_NOTIFICATION_LIST}
@@ -53,7 +51,7 @@ export function Menu({ selectedMenu }: MenuProps) {
         data-cy="side-window-menu-beacon-malfunctions"
         Icon={Icon.Vms}
         iconSize={26}
-        onClick={() => dispatch(openSideWindowPath({ menu: SideWindowMenuKey.BEACON_MALFUNCTION_BOARD }, false, false))}
+        onClick={() => dispatch(openSideWindowPath({ menu: SideWindowMenuKey.BEACON_MALFUNCTION_BOARD }, false, true))}
         role="menuitem"
         selected={selectedMenu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD}
         title={SideWindowMenuLabel.BEACON_MALFUNCTION_BOARD}

@@ -17,10 +17,11 @@ import type { FileType } from 'rsuite/esm/Uploader'
 
 type UploadFilesProps = Readonly<{
   isManualPriorNotification: boolean
+  isReadOnly: boolean
   operationDate: string
   reportId: string
 }>
-export function UploadFiles({ isManualPriorNotification, operationDate, reportId }: UploadFilesProps) {
+export function UploadFiles({ isManualPriorNotification, isReadOnly, operationDate, reportId }: UploadFilesProps) {
   const dispatch = useMainAppDispatch()
   const headers = useAuthRequestHeaders()
 
@@ -89,8 +90,13 @@ export function UploadFiles({ isManualPriorNotification, operationDate, reportId
         onPreview={download}
         onRemove={remove}
         onSuccess={refetch}
+        readOnly={isReadOnly}
       >
-        <File>Glissez ou déposez des fichier à ajouter au préavis.</File>
+        <File>
+          {isReadOnly
+            ? `Ce préavis est en lecture seule, vous ne pouvez pas y déposer de fichier pour l'instant.`
+            : `Glissez ou déposez des fichier à ajouter au préavis.`}
+        </File>
       </Uploader>
     </Wrapper>
   )

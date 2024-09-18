@@ -142,6 +142,48 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     })
   })
 
+  it('Should attach and remove a document to a manual prior notification', () => {
+    cy.intercept('GET', `/bff/v1/prior_notifications/00000000-0000-4000-0000-000000000008/uploads`).as('getUploads')
+    cy.intercept(
+      'POST',
+      `/bff/v1/prior_notifications/00000000-0000-4000-0000-000000000008/uploads?isManualPriorNotification=true&operationDate=*`
+    ).as('uploadDocument')
+    cy.intercept('DELETE', `/bff/v1/prior_notifications/00000000-0000-4000-0000-000000000008/uploads/*`).as(
+      'deleteDocument'
+    )
+
+    editSideWindowPriorNotification(`DÉVOILÉ`, '00000000-0000-4000-0000-000000000008')
+
+    cy.wait('@getUploads')
+
+    cy.fixture('sample.pdf').then(fileContent => {
+      cy.get('input[type=file]').selectFile(
+        {
+          contents: Cypress.Buffer.from(fileContent),
+          fileName: 'sample.pdf',
+          mimeType: 'application/pdf'
+        },
+        {
+          action: 'select',
+          force: true
+        }
+      )
+
+      cy.wait('@uploadDocument').then(() => {
+        cy.wait('@getUploads').wait(500)
+
+        cy.contains('.rs-uploader-file-item', 'sample.pdf')
+          .find('.rs-uploader-file-item-btn-remove .rs-icon')
+          .forceClick()
+
+        cy.wait('@deleteDocument')
+        cy.wait('@getUploads').wait(500)
+
+        cy.contains('sample.pdf').should('not.exist')
+      })
+    })
+  })
+
   it('Should display the expected manual prior notification form validation errors', () => {
     // -------------------------------------------------------------------------
     // Base form validation errors

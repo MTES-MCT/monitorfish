@@ -141,7 +141,7 @@ context('Vessel sidebar reporting tab', () => {
     // Then
     // Summary
     cy.get('[data-cy="vessel-reporting-summary"]').contains('Résumé des derniers signalements (6 dernières années)')
-    cy.get('[data-cy="vessel-reporting-summary"]').contains('Signalements "3 milles - Chaluts (NATINF 7059)"')
+    cy.get('[data-cy="vessel-reporting-summary"]').contains('Signalement "3 milles - Chaluts (NATINF 7059)"')
     cy.get('[data-cy="vessel-reporting-summary"]').contains(
       "Peche maritime non autorisee dans les eaux maritimes ou salees francaises par un navire de pays tiers a l'union europeenne (NATINF 2608)"
     )

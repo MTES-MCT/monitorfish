@@ -11,7 +11,7 @@ export function useCustomAuth(): {
   isLoading: boolean
   userAccount: UserAccountContextType | undefined
 } {
-  // `| undefined` because it's undefined if the OICD is disabled which is the case for Cypress tests
+  // `| undefined` because it's undefined if the OIDC is disabled which is the case for Cypress tests
   const auth = useAuth() as AuthContextProps | undefined
 
   const [userAuthorization, setUserAuthorization] = useState<UserAuthorization | undefined>(undefined)
@@ -47,8 +47,10 @@ export function useCustomAuth(): {
 
   useEffect(
     () =>
-      // the `return` is important - addAccessTokenExpiring() returns a cleanup function
-      auth?.events?.addAccessTokenExpiring(() => {
+      // the `return` is important - addAccessTokenExpired() returns a cleanup function
+      auth?.events?.addAccessTokenExpired(() => {
+        // eslint-disable-next-line no-console
+        console.log('Renewing token...')
         auth?.signinSilent()
       }),
     [auth]

@@ -6,12 +6,9 @@ import styled from 'styled-components'
 import { getTableColumns } from './columns'
 import { DEFAULT_PAGE_SIZE } from './constants'
 
-type TableBodyLoaderProps = Readonly<{
-  isFromUrl: boolean
-}>
-export function TableBodyLoader({ isFromUrl }: TableBodyLoaderProps) {
+export function TableBodyLoader() {
   const emptyRows = new Array(DEFAULT_PAGE_SIZE).fill(undefined)
-  const tableColumns = getTableColumns(isFromUrl)
+  const tableColumns = getTableColumns()
 
   useEffect(() => () => {
     customSentry.endMeasurement(CustomSentryMeasurementName.MANUAL_PRIOR_NOTIFICATION_FORM_SPINNER, '0', 2000)

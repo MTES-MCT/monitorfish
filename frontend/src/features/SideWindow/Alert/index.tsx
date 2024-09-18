@@ -11,12 +11,8 @@ import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { SubMenu } from '../SubMenu'
 
 import type { AlertSubMenu } from './constants'
-import type { MutableRefObject, RefObject } from 'react'
 
-type AlertProps = Readonly<{
-  baseRef: RefObject<HTMLDivElement>
-}>
-export function Alert({ baseRef }: AlertProps) {
+export function Alert() {
   const dispatch = useMainAppDispatch()
   const { pendingAlerts, subMenu } = useMainAppSelector(state => state.alert)
   const currentReportings = useMainAppSelector(state => state.reporting.currentReportings)
@@ -61,7 +57,6 @@ export function Alert({ baseRef }: AlertProps) {
       />
       {subMenu !== AdditionalSubMenu.SUSPENDED_ALERTS && (
         <AlertListAndReportingList
-          baseRef={baseRef as MutableRefObject<HTMLDivElement>}
           selectedSeafrontGroup={isSeafrontGroupMenu ? (subMenu as SeafrontGroup) : SeafrontGroup.MEMN}
           selectedTab={selectedTab}
           setSelectedTab={setSelectedTab}

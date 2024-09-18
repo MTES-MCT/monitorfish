@@ -1,3 +1,4 @@
+import { useClickOutsideWhenOpened } from '@hooks/useClickOutsideWhenOpened'
 import { THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useRef } from 'react'
 import DatePicker from 'rsuite/DatePicker'
@@ -6,7 +7,6 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
 import { SilencedAlertPeriod } from '../../../../domain/entities/alerts/constants'
-import { useClickOutsideWhenOpenedWithinRef } from '../../../../hooks/useClickOutsideWhenOpenedWithinRef'
 import { useForceUpdate } from '../../../../hooks/useForceUpdate'
 import { DATE_RANGE_PICKER_LOCALE } from '../../../Vessel/components/VesselSidebar/actions/TrackRequest/DateRange'
 
@@ -15,7 +15,6 @@ import type { CSSProperties, MutableRefObject } from 'react'
 import type { Promisable } from 'type-fest'
 
 export type SilenceAlertMenuProps = {
-  baseRef: any
   id: string
   scrollableContainer: MutableRefObject<HTMLDivElement>
   setShowSilencedAlertForIndex: (index?: number) => Promisable<void>
@@ -26,7 +25,6 @@ export type SilenceAlertMenuProps = {
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
  */
 export function SilenceAlertMenu({
-  baseRef,
   id,
   scrollableContainer,
   setShowSilencedAlertForIndex,
@@ -34,7 +32,7 @@ export function SilenceAlertMenu({
   silenceAlert
 }: SilenceAlertMenuProps) {
   const silencedAlertRef = useRef() as MutableRefObject<HTMLDivElement>
-  const clickedOutside = useClickOutsideWhenOpenedWithinRef(silencedAlertRef, showSilencedAlertForIndex, baseRef)
+  const clickedOutside = useClickOutsideWhenOpened(silencedAlertRef, showSilencedAlertForIndex)
   const { forceUpdate } = useForceUpdate()
 
   useEffect(() => {

@@ -8,16 +8,12 @@ import { ALERTS_MENU_SEAFRONT_TO_SEAFRONTS } from '../../../../domain/entities/a
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { ReportingList } from '../../../Reporting/components/ReportingList'
 
-import type { RefObject } from 'react'
-
 type AlertListAndReportingListProps = {
-  baseRef: RefObject<HTMLDivElement>
   selectedSeafrontGroup: SeafrontGroup
   selectedTab: any
   setSelectedTab: any
 }
 export function AlertListAndReportingList({
-  baseRef,
   selectedSeafrontGroup,
   selectedTab,
   setSelectedTab
@@ -54,7 +50,6 @@ export function AlertListAndReportingList({
       {selectedTab === AlertAndReportingTab.ALERT && (
         <>
           <PendingAlertsList
-            baseRef={baseRef}
             numberOfSilencedAlerts={filteredSilencedAlerts.length}
             selectedSeafrontGroup={selectedSeafrontGroup}
           />

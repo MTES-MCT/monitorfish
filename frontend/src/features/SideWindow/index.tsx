@@ -3,19 +3,9 @@ import { FulfillingBouncingCircleSpinner } from '@components/FulfillingBouncingC
 import { MissionForm } from '@features/Mission/components/MissionForm'
 import { useListenToAllMissionEventsUpdates } from '@features/Mission/components/MissionForm/hooks/useListenToAllMissionEventsUpdates'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
-import { THEME, type NewWindowContextValue, NewWindowContext, Notifier } from '@mtes-mct/monitor-ui'
-import {
-  type CSSProperties,
-  type HTMLAttributes,
-  type MutableRefObject,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  Fragment
-} from 'react'
-import styled, { createGlobalStyle, css, StyleSheetManager } from 'styled-components'
+import { THEME, Notifier } from '@mtes-mct/monitor-ui'
+import { type CSSProperties, useCallback, useEffect, useMemo, useState, Fragment } from 'react'
+import styled from 'styled-components'
 
 import { Alert } from './Alert'
 import { BeaconMalfunctionBoard } from './BeaconMalfunctionBoard'
@@ -38,14 +28,9 @@ import { PriorNotificationList } from '../PriorNotification/components/PriorNoti
 import { setEditedReportingInSideWindow } from '../Reporting/slice'
 import { getAllCurrentReportings } from '../Reporting/useCases/getAllCurrentReportings'
 
-export type SideWindowProps = HTMLAttributes<HTMLDivElement> & {
-  isFromURL: boolean
-}
-export function SideWindow({ isFromURL }: SideWindowProps) {
+export function SideWindow() {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
-  // eslint-disable-next-line no-null/no-null
-  const wrapperRef = useRef<HTMLDivElement | null>(null)
 
   const openedBeaconMalfunctionInKanban = useMainAppSelector(
     state => state.beaconMalfunction.openedBeaconMalfunctionInKanban
@@ -54,7 +39,6 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
   const selectedPath = useMainAppSelector(state => state.sideWindow.selectedPath)
   const missionEvent = useListenToAllMissionEventsUpdates()
 
-  const [isFirstRender, setIsFirstRender] = useState(true)
   const [isOverlayed, setIsOverlayed] = useState(false)
   const [isPreloading, setIsPreloading] = useState(true)
 
@@ -74,18 +58,6 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
       zIndex: isOverlayed ? 11 : -9999
     }),
     [isOverlayed]
-  )
-
-  const newWindowContextProviderValue: NewWindowContextValue = useMemo(
-    () => ({
-      newWindowContainerRef: wrapperRef.current
-        ? (wrapperRef as MutableRefObject<HTMLDivElement>)
-        : {
-            current: window.document.createElement('div')
-          }
-    }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isFirstRender]
   )
 
   const closeRightSidebar = useCallback(() => {
@@ -110,143 +82,58 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
   }, [openedBeaconMalfunctionInKanban, editedReportingInSideWindow, selectedPath.menu])
 
   useEffect(() => {
-    if (!isFromURL) {
-      return
-    }
-
     dispatch(getOperationalAlerts())
     dispatch(getAllBeaconMalfunctions())
     dispatch(getSilencedAlerts())
     dispatch(getAllCurrentReportings())
     dispatch(getInfractions())
     dispatch(getAllGearCodes())
-  }, [dispatch, isFromURL])
-
-  useEffect(() => {
-    setIsFirstRender(false)
-  }, [])
+  }, [dispatch])
 
   return (
-    <StyleSheetManager target={wrapperRef.current ?? undefined}>
-      <Wrapper ref={wrapperRef}>
-        {!isFirstRender && (
-          <NewWindowContext.Provider value={newWindowContextProviderValue}>
-            <GlobalStyle $isFromURL={isFromURL} />
+    <Wrapper>
+      <BannerStack />
 
-            <BannerStack />
-
-            {isSuperUser && <Menu selectedMenu={selectedPath.menu} />}
-            {(selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD ||
-              selectedPath.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST) && (
-              <GrayOverlay onClick={closeRightSidebar} style={grayOverlayStyle} />
-            )}
-            <FrontendErrorBoundary>
-              {isPreloading && (
-                <Loading>
-                  <FulfillingBouncingCircleSpinner
-                    className="update-vessels"
-                    color={THEME.color.lightGray}
-                    size={100}
-                  />
-                  <Text data-cy="first-loader">Chargement...</Text>
-                </Loading>
-              )}
-              {!isPreloading && (
-                <Content>
-                  {selectedPath.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST && (
-                    <Alert baseRef={wrapperRef as MutableRefObject<HTMLDivElement>} />
-                  )}
-                  {selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD && <BeaconMalfunctionBoard />}
-                  {selectedPath.menu === SideWindowMenuKey.PRIOR_NOTIFICATION_LIST && (
-                    <PriorNotificationList isFromUrl={isFromURL} />
-                  )}
-                  {selectedPath.menu === SideWindowMenuKey.MISSION_LIST && <MissionList />}
-
-                  {selectedPath.menu === SideWindowMenuKey.MISSION_FORM && (
-                    <>
-                      {selectedPath.isLoading ? (
-                        <MissionFormLoader />
-                      ) : (
-                        <Fragment key={selectedPath.id ?? selectedPath.key}>
-                          <MissionEventContext.Provider value={missionEvent}>
-                            <MissionForm />
-                          </MissionEventContext.Provider>
-                        </Fragment>
-                      )}
-                    </>
-                  )}
-                </Content>
-              )}
-            </FrontendErrorBoundary>
-            <Notifier isSideWindow />
-          </NewWindowContext.Provider>
+      {isSuperUser && <Menu selectedMenu={selectedPath.menu} />}
+      {(selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD ||
+        selectedPath.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST) && (
+        <GrayOverlay onClick={closeRightSidebar} style={grayOverlayStyle} />
+      )}
+      <FrontendErrorBoundary>
+        {isPreloading && (
+          <Loading>
+            <FulfillingBouncingCircleSpinner className="update-vessels" color={THEME.color.lightGray} size={100} />
+            <Text data-cy="first-loader">Chargement...</Text>
+          </Loading>
         )}
-      </Wrapper>
-    </StyleSheetManager>
+        {!isPreloading && (
+          <Content>
+            {selectedPath.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST && <Alert />}
+            {selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD && <BeaconMalfunctionBoard />}
+            {selectedPath.menu === SideWindowMenuKey.PRIOR_NOTIFICATION_LIST && <PriorNotificationList />}
+            {selectedPath.menu === SideWindowMenuKey.MISSION_LIST && <MissionList />}
+
+            {selectedPath.menu === SideWindowMenuKey.MISSION_FORM && (
+              <>
+                {selectedPath.isLoading ? (
+                  <MissionFormLoader />
+                ) : (
+                  <Fragment key={selectedPath.id ?? selectedPath.key}>
+                    <MissionEventContext.Provider value={missionEvent}>
+                      <MissionForm />
+                    </MissionEventContext.Provider>
+                  </Fragment>
+                )}
+              </>
+            )}
+          </Content>
+        )}
+      </FrontendErrorBoundary>
+
+      <Notifier isSideWindow />
+    </Wrapper>
   )
 }
-
-const GlobalStyle = createGlobalStyle<{
-  $isFromURL: boolean
-}>`
-  html, body, #root {
-    height: 100%;
-  }
-
-  /*
-    Hack to fix the strange checkbox vertical position inconsistency
-    between the side window access via /side_window and the one opened as a new window.
-    The position is correct when accessed via /side_window (and not when opened as a new window).
-  */
-  ${p =>
-    !p.$isFromURL &&
-    css`
-      .rs-checkbox {
-        > .rs-checkbox-checker {
-          > label {
-            line-height: inherit;
-          }
-        }
-      }
-      .Table-SimpleTable {
-        > thead {
-          > tr {
-            > th:first-child {
-              > .rs-checkbox {
-                > .rs-checkbox-checker {
-                  > label {
-                    .rs-checkbox-wrapper {
-                      top: -8px;
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-        > tbody {
-          > tr {
-            > td {
-              > .Element-Tag {
-                vertical-align: middle;
-              }
-            }
-            > td:first-child {
-              > .rs-checkbox {
-                > .rs-checkbox-checker {
-                  > label {
-                    .rs-checkbox-wrapper {
-                      top: -13px;
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    `}
-`
 
 // All containers within this SideWindow root wrapper should now only use flexboxes
 const Wrapper = styled.div`

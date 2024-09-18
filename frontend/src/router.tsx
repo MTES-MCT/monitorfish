@@ -76,7 +76,7 @@ export const routes = [
     children: [
       {
         index: true,
-        element: <SideWindow isFromURL />
+        element: <SideWindow />
       }
     ]
   }

@@ -18,17 +18,16 @@ import { SUB_MENU_LABEL } from '../constants'
 import { resetFocusOnPendingAlert } from '../slice'
 
 import type { SilencedAlertPeriodRequest } from '../../../../domain/entities/alerts/types'
-import type { CSSProperties, MutableRefObject, RefObject } from 'react'
+import type { CSSProperties, MutableRefObject } from 'react'
 
 export type PendingAlertsListProps = Readonly<{
-  baseRef: RefObject<HTMLDivElement>
   numberOfSilencedAlerts: number
   selectedSeafrontGroup: SeafrontGroup
 }>
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
  */
-export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSeafrontGroup }: PendingAlertsListProps) {
+export function PendingAlertsList({ numberOfSilencedAlerts, selectedSeafrontGroup }: PendingAlertsListProps) {
   const dispatch = useMainAppDispatch()
   const focusedPendingAlertId = useMainAppSelector(state => state.alert.focusedPendingAlertId)
   const pendingAlerts = useMainAppSelector(state => state.alert.pendingAlerts)
@@ -184,7 +183,6 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
         </ScrollableContainer>
         {showSilencedAlertForIndex && silencedAlertId && (
           <SilenceAlertMenu
-            baseRef={baseRef}
             id={silencedAlertId}
             scrollableContainer={scrollableContainerRef}
             setShowSilencedAlertForIndex={setShowSilencedAlertForIndex}

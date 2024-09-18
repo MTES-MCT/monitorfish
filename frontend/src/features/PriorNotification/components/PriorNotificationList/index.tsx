@@ -39,10 +39,7 @@ import { ManualPriorNotificationForm } from '../ManualPriorNotificationForm'
 
 import type { AllSeafrontGroup, NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 
-type PriorNotificationListProps = Readonly<{
-  isFromUrl: boolean
-}>
-export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps) {
+export function PriorNotificationList() {
   const dispatch = useMainAppDispatch()
   const listFilter = useMainAppSelector(state => state.priorNotification.listFilterValues)
   const openedPriorNotificationDetail = useMainAppSelector(
@@ -116,7 +113,7 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
   )
 
   const table = useReactTable({
-    columns: getTableColumns(isFromUrl),
+    columns: getTableColumns(),
     data: priorNotifications ?? [],
     enableRowSelection: true,
     enableSortingRemoval: false,
@@ -172,8 +169,8 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
           <FilterBar />
           <FilterTags />
 
-          <TableOuterWrapper $isFromUrl={isFromUrl}>
-            <TableTop $isFromUrl={isFromUrl}>
+          <TableOuterWrapper>
+            <TableTop>
               <TableLegend>{`${
                 isBodyLoaderVisible || isError || totalLength === undefined ? '...' : totalLength
               } préavis (tous les horaires sont en UTC)`}</TableLegend>
@@ -219,7 +216,7 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
                     ))}
                   </TableWithSelectableRows.Head>
 
-                  {isBodyLoaderVisible && <TableBodyLoader isFromUrl={isFromUrl} />}
+                  {isBodyLoaderVisible && <TableBodyLoader />}
                   {isBodyEmptyDataVisible && <TableBodyEmptyData />}
                   {!isBodyLoaderVisible && !isBodyEmptyDataVisible && (
                     <tbody>
@@ -269,9 +266,7 @@ const LoadMore = styled(Button)`
   margin-right: auto;
 `
 
-const TableOuterWrapper = styled.div<{
-  $isFromUrl: boolean
-}>`
+const TableOuterWrapper = styled.div`
   align-self: flex-start;
   box-sizing: border-box;
   display: flex;
@@ -282,14 +277,12 @@ const TableOuterWrapper = styled.div<{
   }
 `
 
-const TableTop = styled.div<{
-  $isFromUrl: boolean
-}>`
+const TableTop = styled.div`
   align-items: flex-end;
   display: flex;
   justify-content: space-between;
   margin: 8px 0;
-  width: ${p => (!p.$isFromUrl && isLegacyFirefox() ? 1396 : 1391)}px; /* = table width */
+  width: 1391px; /* = table width */
 `
 
 const TableLegend = styled.p`

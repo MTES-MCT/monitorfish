@@ -1,5 +1,4 @@
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
-import { FulfillingBouncingCircleSpinner } from '@components/FulfillingBouncingCircleSpinner'
 import { MissionForm } from '@features/Mission/components/MissionForm'
 import { useListenToAllMissionEventsUpdates } from '@features/Mission/components/MissionForm/hooks/useListenToAllMissionEventsUpdates'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
@@ -40,13 +39,12 @@ export function SideWindow() {
   const missionEvent = useListenToAllMissionEventsUpdates()
 
   const [isOverlayed, setIsOverlayed] = useState(false)
-  const [isPreloading, setIsPreloading] = useState(true)
 
   useEffect(() => {
-    if (!isSuperUser && selectedPath?.menu !== SideWindowMenuKey.PRIOR_NOTIFICATION_LIST) {
+    if (!isSuperUser && selectedPath.menu !== SideWindowMenuKey.PRIOR_NOTIFICATION_LIST) {
       dispatch(openSideWindowPath({ menu: SideWindowMenuKey.PRIOR_NOTIFICATION_LIST }))
     }
-  }, [dispatch, isSuperUser, selectedPath?.menu])
+  }, [dispatch, isSuperUser, selectedPath.menu])
 
   const grayOverlayStyle: CSSProperties = useMemo(
     () => ({
@@ -64,12 +62,6 @@ export function SideWindow() {
     dispatch(closeBeaconMalfunctionInKanban())
     dispatch(setEditedReportingInSideWindow())
   }, [dispatch])
-
-  useEffect(() => {
-    setTimeout(() => {
-      setIsPreloading(false)
-    }, 500)
-  }, [])
 
   useEffect(() => {
     if (editedReportingInSideWindow ?? openedBeaconMalfunctionInKanban) {
@@ -100,34 +92,26 @@ export function SideWindow() {
         <GrayOverlay onClick={closeRightSidebar} style={grayOverlayStyle} />
       )}
       <FrontendErrorBoundary>
-        {isPreloading && (
-          <Loading>
-            <FulfillingBouncingCircleSpinner className="update-vessels" color={THEME.color.lightGray} size={100} />
-            <Text data-cy="first-loader">Chargement...</Text>
-          </Loading>
-        )}
-        {!isPreloading && (
-          <Content>
-            {selectedPath.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST && <Alert />}
-            {selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD && <BeaconMalfunctionBoard />}
-            {selectedPath.menu === SideWindowMenuKey.PRIOR_NOTIFICATION_LIST && <PriorNotificationList />}
-            {selectedPath.menu === SideWindowMenuKey.MISSION_LIST && <MissionList />}
+        <Content>
+          {selectedPath.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST && <Alert />}
+          {selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD && <BeaconMalfunctionBoard />}
+          {selectedPath.menu === SideWindowMenuKey.PRIOR_NOTIFICATION_LIST && <PriorNotificationList />}
+          {selectedPath.menu === SideWindowMenuKey.MISSION_LIST && <MissionList />}
 
-            {selectedPath.menu === SideWindowMenuKey.MISSION_FORM && (
-              <>
-                {selectedPath.isLoading ? (
-                  <MissionFormLoader />
-                ) : (
-                  <Fragment key={selectedPath.id ?? selectedPath.key}>
-                    <MissionEventContext.Provider value={missionEvent}>
-                      <MissionForm />
-                    </MissionEventContext.Provider>
-                  </Fragment>
-                )}
-              </>
-            )}
-          </Content>
-        )}
+          {selectedPath.menu === SideWindowMenuKey.MISSION_FORM && (
+            <>
+              {selectedPath.isLoading ? (
+                <MissionFormLoader />
+              ) : (
+                <Fragment key={selectedPath.id ?? selectedPath.key}>
+                  <MissionEventContext.Provider value={missionEvent}>
+                    <MissionForm />
+                  </MissionEventContext.Provider>
+                </Fragment>
+              )}
+            </>
+          )}
+        </Content>
       </FrontendErrorBoundary>
 
       <Notifier isSideWindow />
@@ -205,16 +189,3 @@ const Content = styled.div`
 `
 
 const GrayOverlay = styled.div``
-
-const Loading = styled.div`
-  margin-left: 550px;
-  margin-top: 350px;
-`
-
-const Text = styled.span`
-  bottom: -17px;
-  color: ${p => p.theme.color.slateGray};
-  font-size: 13px;
-  margin-top: 10px;
-  position: relative;
-`

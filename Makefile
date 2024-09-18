@@ -125,7 +125,7 @@ test: test-back
 .PHONY: run-back-for-cypress ##TEST ▶️  Run backend API when using Cypress 📝
 run-back-for-cypress: run-stubbed-apis
 	docker compose up -d --quiet-pull --wait db keycloak
-	cd backend && MONITORFISH_OIDC_ENABLED=false ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
+	cd backend && MONITORFISH_OIDC_ENABLED=false MONITORFISH_SCHEDULING_ENABLED=false ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
 
 .PHONY: run-front-for-cypress ##TEST ▶️  Run frontend when using Cypress 📝
 run-front-for-cypress:

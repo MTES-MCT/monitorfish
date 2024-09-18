@@ -19,10 +19,10 @@ context('Vessel sidebar ers/vms tab', () => {
     // Then
     cy.get('*[data-cy="N° balise VMS"]').contains('FGEDX85')
     cy.get('*[data-cy="Type de balise"]').contains('Côtier')
-    cy.get('*[data-cy="Date de loggage"]').contains('12/05/2021 à 12h23:00')
+    cy.get('*[data-cy="Date loggage"]').contains('12/05/2021 à 12h23:00')
     cy.get('*[data-cy="Statut JPE"]').contains('Equipé')
-    cy.get('*[data-cy="Équipé e-Sacapt"]').contains('Non')
-    cy.get('*[data-cy="Équipé VisioCaptures"]').contains('Oui')
+    cy.get('*[data-cy="E-Sacapt"]').contains('Non')
+    cy.get('*[data-cy="VisioCaptures"]').contains('Oui')
     cy.get('*[data-cy="Logiciel JPE"]').contains('JT/VISIOCaptures V1.4.7')
   })
 

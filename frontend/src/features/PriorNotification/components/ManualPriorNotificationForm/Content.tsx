@@ -197,7 +197,12 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
             <>
               <hr style={{ marginBottom: 24 }} />
 
-              <UploadFiles isManualPriorNotification operationDate={detail.operationDate} reportId={detail.reportId} />
+              <UploadFiles
+                isManualPriorNotification
+                isReadOnly={isReadOnly}
+                operationDate={detail.operationDate}
+                reportId={detail.reportId}
+              />
             </>
           )}
 

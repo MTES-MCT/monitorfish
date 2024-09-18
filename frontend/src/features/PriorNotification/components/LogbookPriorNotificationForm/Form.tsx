@@ -83,6 +83,7 @@ export function Form({ detail, initialFormValues }: FormProps) {
 
           <UploadFiles
             isManualPriorNotification={false}
+            isReadOnly={isReadOnly}
             operationDate={detail.operationDate}
             reportId={detail.reportId}
           />

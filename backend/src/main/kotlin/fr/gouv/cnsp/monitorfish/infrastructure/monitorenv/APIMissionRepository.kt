@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.monitorenv
 
+import com.github.benmanes.caffeine.cache.Caffeine
 import fr.gouv.cnsp.monitorfish.config.ApiClient
 import fr.gouv.cnsp.monitorfish.config.MonitorenvProperties
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
@@ -15,10 +16,10 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import java.util.concurrent.TimeUnit
 
 @Repository
 class APIMissionRepository(
@@ -28,16 +29,30 @@ class APIMissionRepository(
     private val logger: Logger = LoggerFactory.getLogger(APIMissionRepository::class.java)
     private val zoneDateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.000X")
 
-    @Cacheable(value = ["mission_control_units"])
+    private val cache =
+        Caffeine.newBuilder()
+            .maximumSize(500)
+            .expireAfterWrite(1, TimeUnit.DAYS)
+            .build<String, List<ControlUnit>>()
+
     override fun findControlUnitsOfMission(
         scope: CoroutineScope,
         missionId: Int,
     ): Deferred<List<ControlUnit>> {
+        val cacheKey = "control_units_$missionId"
+        val cachedControlUnits = cache.getIfPresent(cacheKey)
+
+        cachedControlUnits?.let { return@findControlUnitsOfMission scope.async { it } }
+
         return scope.async {
             val missionsUrl = "${monitorenvProperties.url}/api/v1/missions/$missionId"
 
             try {
-                apiClient.httpClient.get(missionsUrl).body<MissionDataResponse>().controlUnits
+                val controlUnits = apiClient.httpClient.get(missionsUrl).body<MissionDataResponse>().controlUnits
+
+                cache.put(cacheKey, controlUnits)
+
+                return@async controlUnits
             } catch (e: Exception) {
                 logger.error("Could not fetch control units for mission $missionId at $missionsUrl", e)
 

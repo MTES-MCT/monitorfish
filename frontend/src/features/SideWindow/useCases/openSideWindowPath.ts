@@ -7,12 +7,8 @@ import type { MainAppThunk } from '../../../store'
 import type { SideWindow } from '../SideWindow.types'
 
 export const openSideWindowPath =
-  (
-    path: SideWindow.Path,
-    withoutConfirmation: boolean = false,
-    isSameWindow: boolean = false
-  ): MainAppThunk<Promise<boolean>> =>
-  async (dispatch, getState) => {
+  (path: SideWindow.Path, withoutConfirmation: boolean = false): MainAppThunk<boolean> =>
+  (dispatch, getState) => {
     const { missionForm, sideWindow } = getState()
 
     if (
@@ -21,14 +17,14 @@ export const openSideWindowPath =
       sideWindow.status !== SideWindowStatus.CLOSED &&
       missionForm.isDraftDirty
     ) {
-      await dispatch(askForSideWindowDraftCancellationConfirmation(path))
+      dispatch(askForSideWindowDraftCancellationConfirmation(path))
 
       return false
     }
 
-    await dispatch(sideWindowActions.openOrFocusAndGoTo(getFullPathFromPath(path)))
+    dispatch(sideWindowActions.openOrFocusAndGoTo(getFullPathFromPath(path)))
 
-    if (!isSameWindow) {
+    if (sideWindow.status === SideWindowStatus.CLOSED && !window.location.href.includes('side_window')) {
       window.open('/side_window', 'MonitorFish', `height=1200,width=${window.innerWidth}`)
     }
 

@@ -5,6 +5,7 @@
  * @see https://redux-toolkit.js.org/tutorials/rtk-query#add-the-service-to-your-store
  */
 
+import { createStateSyncMiddleware, initMessageListener } from '@libs/ReduxStateSync'
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query'
 import { createTransform, FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE } from 'redux-persist'
@@ -43,6 +44,7 @@ export const mainStore = configureStore({
       // TODO Replace all Redux state Dates by strings & Error by a strict-typed POJO.
       serializableCheck: false
     }).concat(
+      createStateSyncMiddleware(),
       monitorenvApi.middleware,
       monitorfishApi.middleware,
       monitorfishPublicApi.middleware,
@@ -51,6 +53,7 @@ export const mainStore = configureStore({
   reducer: persistedMainReducer
 })
 setupListeners(mainStore.dispatch)
+initMessageListener(mainStore)
 
 export const mainStorePersistor = persistStore(mainStore)
 

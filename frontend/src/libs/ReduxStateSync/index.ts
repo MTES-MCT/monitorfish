@@ -47,14 +47,12 @@ class ReduxStateSync {
         }
 
         if ('$id' in action) {
-          if (action.$isReduxStateSyncAction) {
-            if (action.type === InternalActionType.SendStateToOtherTab) {
-              this.#channel.postMessage({
-                state: omit(getState(), '_persist'),
-                tabId: this.#tabId,
-                type: MessageType.SendInitialState
-              } satisfies Message)
-            }
+          if (action.type === InternalActionType.SendStateToOtherTab) {
+            this.#channel.postMessage({
+              state: omit(getState(), '_persist'),
+              tabId: this.#tabId,
+              type: MessageType.SendInitialState
+            } satisfies Message)
           }
 
           return next(action)

@@ -36,6 +36,7 @@ class PriorNotificationController(
     private val deletePriorNotificationUpload: DeletePriorNotificationUpload,
     private val getPriorNotification: GetPriorNotification,
     private val getPriorNotificationPdfDocument: GetPriorNotificationPdfDocument,
+    private val getPriorNotificationSentMessages: GetPriorNotificationSentMessages,
     private val getPriorNotificationUpload: GetPriorNotificationUpload,
     private val getPriorNotificationUploads: GetPriorNotificationUploads,
     private val getPriorNotifications: GetPriorNotifications,
@@ -372,6 +373,17 @@ class PriorNotificationController(
             )
 
         return PriorNotificationDataOutput.fromPriorNotification(updatedPriorNotification)
+    }
+
+    @GetMapping("/{reportId}/sent_messages")
+    @Operation(summary = "Get all sent messages for a given prior notification")
+    fun getSentMessages(
+        @PathParam("Logbook message `reportId`")
+        @PathVariable(name = "reportId")
+        reportId: String,
+    ): List<PriorNotificationSentMessageDataOutput> {
+        return getPriorNotificationSentMessages.execute(reportId)
+            .map { PriorNotificationSentMessageDataOutput.fromPriorNotificationSentMessage(it) }
     }
 
     @GetMapping("/{reportId}/uploads/{priorNotificationUploadId}")

@@ -159,6 +159,14 @@ export namespace PriorNotification {
     name: string
   }
 
+  export type SentMessage = {
+    communicationMeans: 'EMAIL' | 'FAX' | 'SMS'
+    dateTimeUtc: string
+    errorMessage: string | undefined
+    recipientAddressOrNumber: string
+    success: boolean
+  }
+
   export type Upload = {
     createdAt: string
     fileName: string

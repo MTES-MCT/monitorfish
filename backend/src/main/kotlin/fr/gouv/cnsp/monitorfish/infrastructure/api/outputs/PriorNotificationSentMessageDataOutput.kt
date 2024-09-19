@@ -13,15 +13,15 @@ data class PriorNotificationSentMessageDataOutput(
 ) {
     companion object {
         fun fromPriorNotificationSentMessage(
-            domain: PriorNotificationSentMessage,
+            priorNotificationSentMessage: PriorNotificationSentMessage,
         ): PriorNotificationSentMessageDataOutput {
             return PriorNotificationSentMessageDataOutput(
-                id = domain.id,
-                communicationMeans = domain.communicationMeans,
-                dateTimeUtc = domain.dateTimeUtc,
-                errorMessage = domain.errorMessage,
-                recipientAddressOrNumber = domain.recipientAddressOrNumber,
-                success = domain.success,
+                id = priorNotificationSentMessage.id,
+                communicationMeans = priorNotificationSentMessage.communicationMeans,
+                dateTimeUtc = priorNotificationSentMessage.dateTimeUtc,
+                errorMessage = priorNotificationSentMessage.errorMessage,
+                recipientAddressOrNumber = priorNotificationSentMessage.recipientAddressOrNumber,
+                success = priorNotificationSentMessage.success,
             )
         }
     }

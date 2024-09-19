@@ -10,6 +10,7 @@ import { Alert } from './Alert'
 import { BeaconMalfunctionBoard } from './BeaconMalfunctionBoard'
 import { BannerStack } from './components/BannerStack'
 import { Menu } from './Menu'
+import { sideWindowActions } from './slice'
 import { useIsSuperUser } from '../../auth/hooks/useIsSuperUser'
 import { MissionEventContext } from '../../context/MissionEventContext'
 import { SideWindowMenuKey } from '../../domain/entities/sideWindow/constants'
@@ -80,6 +81,10 @@ export function SideWindow() {
     dispatch(getAllCurrentReportings())
     dispatch(getInfractions())
     dispatch(getAllGearCodes())
+
+    window.addEventListener('beforeunload', () => {
+      dispatch(sideWindowActions.close())
+    })
   }, [dispatch])
 
   return (

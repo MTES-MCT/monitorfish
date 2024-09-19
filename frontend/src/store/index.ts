@@ -5,8 +5,8 @@
  * @see https://redux-toolkit.js.org/tutorials/rtk-query#add-the-service-to-your-store
  */
 
-import { createStateSyncMiddleware, initMessageListener } from '@libs/ReduxStateSync'
-import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import { reduxStateSync, withReduxStateSync } from '@libs/ReduxStateSync'
+import { combineReducers, configureStore, type Action } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query'
 import { createTransform, FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE } from 'redux-persist'
 import persistReducer from 'redux-persist/es/persistReducer'
@@ -19,7 +19,6 @@ import { monitorenvApi, monitorfishApi, monitorfishLightApi, monitorfishPublicAp
 import { mapToProcessingRegulation } from '../features/Regulation/utils'
 
 import type { RegulationState } from '../features/BackOffice/slice'
-import type { AnyAction } from '@reduxjs/toolkit'
 import type { PersistConfig } from 'redux-persist'
 import type { ThunkAction } from 'redux-thunk'
 
@@ -34,7 +33,7 @@ const persistedMainReducerConfig: PersistConfig<typeof backofficeReducer> = {
 }
 const persistedMainReducer = persistReducer(
   persistedMainReducerConfig,
-  combineReducers(mainReducer) as any
+  withReduxStateSync(combineReducers(mainReducer)) as any
 ) as unknown as typeof mainReducer
 
 export const mainStore = configureStore({
@@ -48,24 +47,23 @@ export const mainStore = configureStore({
       monitorfishApi.middleware,
       monitorfishPublicApi.middleware,
       monitorfishLightApi.middleware,
-      createStateSyncMiddleware({
+      reduxStateSync.createStateSyncMiddleware({
         actionFilter: action =>
-          !['persist/PERSIST'].includes(action.type) &&
+          !action.type.startsWith('persist/') &&
           !action.type.startsWith('monitorfishApi/') &&
           !action.type.startsWith('monitorfishPublicApi/')
-      })
+      }) as any
     ),
   reducer: persistedMainReducer
 })
 setupListeners(mainStore.dispatch)
-initMessageListener(mainStore)
 
 export const mainStorePersistor = persistStore(mainStore)
 
 // https://react-redux.js.org/using-react-redux/usage-with-typescript#define-root-state-and-dispatch-types
 // Infer the `MainRootState` and `AppDispatch` types from the store itself
 export type MainAppDispatch = typeof mainStore.dispatch
-export type MainAppThunk<ReturnType = void> = ThunkAction<ReturnType, MainRootState, undefined, AnyAction>
+export type MainAppThunk<ReturnType = void> = ThunkAction<ReturnType, MainRootState, undefined, Action>
 export type MainRootState = ReturnType<typeof mainStore.getState>
 export type MainAppUseCase = () => MainAppThunk
 
@@ -114,5 +112,5 @@ export const backofficeStorePersistor = persistStore(backofficeStore)
 
 // https://react-redux.js.org/using-react-redux/usage-with-typescript#define-root-state-and-dispatch-types
 export type BackofficeAppDispatch = typeof backofficeStore.dispatch
-export type BackofficeAppThunk<ReturnType = void> = ThunkAction<ReturnType, BackofficeRootState, unknown, AnyAction>
+export type BackofficeAppThunk<ReturnType = void> = ThunkAction<ReturnType, BackofficeRootState, unknown, Action>
 export type BackofficeRootState = ReturnType<typeof backofficeStore.getState>

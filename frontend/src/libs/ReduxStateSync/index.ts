@@ -7,6 +7,7 @@ import { initializeStateFromOtherTab, sendStateToOtherTab, stampAction } from '.
 import type { InternalAction, Message, ReduxStateSyncOptions, StampedAction } from './types'
 import type { MainAppDispatch } from '@store'
 import type { Action } from 'redux'
+import type { AnyObject } from 'yup'
 
 class ReduxStateSync {
   #channel: BroadcastChannel
@@ -116,9 +117,15 @@ class ReduxStateSync {
 
 export const reduxStateSync = new ReduxStateSync()
 
-export const withReduxStateSync = appReducer => (state, action: Action | InternalAction) => {
+export const withReduxStateSync = appReducer => (state: AnyObject, action: Action | InternalAction) => {
   if ('payload' in action && action.type === InternalActionType.InitializeStateFromOtherTab) {
-    return appReducer(action.payload, action)
+    return appReducer(
+      {
+        ...state,
+        ...action.payload
+      },
+      action
+    )
   }
 
   return appReducer(state, action)

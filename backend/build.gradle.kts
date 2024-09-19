@@ -60,7 +60,7 @@ dependencies {
     api("org.flywaydb:flyway-database-postgresql:10.15.2")
     api("org.springdoc:springdoc-openapi-ui:1.8.0")
     api("org.jetbrains.kotlin:kotlin-reflect:1.9.23")
-    api("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10")
+    api("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.0.20")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
     api("com.neovisionaries:nv-i18n:1.29")
     api("com.github.ben-manes.caffeine:caffeine:3.1.8")

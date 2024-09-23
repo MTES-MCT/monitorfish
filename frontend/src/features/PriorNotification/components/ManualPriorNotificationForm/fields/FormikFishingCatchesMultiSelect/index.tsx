@@ -152,6 +152,7 @@ export function FormikFishingCatchesMultiSelect({ isReadOnly }: FormikFishingCat
                 <FormikExtraField
                   allFishingsCatches={values.fishingCatches}
                   fishingsCatchesIndex={index}
+                  isReadOnly={isReadOnly}
                   specyCode={fishingCatch.specyCode}
                 />
               </Row>

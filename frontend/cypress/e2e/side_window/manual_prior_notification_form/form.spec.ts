@@ -35,7 +35,6 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.fill('Espèces à bord et à débarquer', 'AAX')
     cy.fill('Poids (AAX)', 25)
     cy.fill('Espèces à bord et à débarquer', 'BFT')
-    cy.fill('Poids (BFT)', 150)
     cy.fill('Quantité (BF1)', 4)
     cy.fill('Poids (BF1)', 40)
     cy.fill('Quantité (BF2)', 5)

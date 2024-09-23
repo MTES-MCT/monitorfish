@@ -95,8 +95,11 @@ jobs:
         working-directory: ./frontend
 
       - name: Upload coverage
-        run: npx codecov
-        working-directory: ./frontend
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          verbose: true
+          working-directory: ./frontend
 
   build:
     name: Build and package

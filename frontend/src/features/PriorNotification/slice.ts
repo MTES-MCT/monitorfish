@@ -12,6 +12,8 @@ export interface PriorNotificationState {
   editedLogbookPriorNotificationFormValues: PriorNotification.LogbookForm | undefined
   editedManualPriorNotificationComputedValues: Undefine<PriorNotification.ManualComputedValues> | undefined
   editedManualPriorNotificationFormValues: ManualPriorNotificationFormValues | undefined
+  // TODO Remove this prop once loading / spinner perfs tests are removed.
+  editedPriorNotificationId: string | undefined
   isPriorNotificationFormDirty: boolean
   listFilterValues: ListFilter
   openedPriorNotificationComponentType: OpenedPriorNotificationType | undefined
@@ -22,6 +24,8 @@ const INITIAL_STATE: PriorNotificationState = {
   editedLogbookPriorNotificationFormValues: undefined,
   editedManualPriorNotificationComputedValues: undefined,
   editedManualPriorNotificationFormValues: undefined,
+  // TODO Remove this prop once loading / spinner perfs tests are removed.
+  editedPriorNotificationId: undefined,
   isPriorNotificationFormDirty: false,
   listFilterValues: DEFAULT_LIST_FILTER_VALUES,
   openedPriorNotificationComponentType: undefined,
@@ -34,6 +38,7 @@ const priorNotificationSlice = createSlice({
   reducers: {
     closePriorNotificationCardAndForm(state) {
       state.editedLogbookPriorNotificationFormValues = undefined
+      state.editedPriorNotificationId = undefined
       state.editedManualPriorNotificationComputedValues = undefined
       state.editedManualPriorNotificationFormValues = undefined
       state.isPriorNotificationFormDirty = false
@@ -58,6 +63,11 @@ const priorNotificationSlice = createSlice({
 
     setEditedManualPriorNotificationFormValues(state, action: PayloadAction<ManualPriorNotificationFormValues>) {
       state.editedManualPriorNotificationFormValues = action.payload
+    },
+
+    // TODO Remove this function once loading / spinner perfs tests are removed.
+    setEditedPriorNotificationId(state, action: PayloadAction<string>) {
+      state.editedPriorNotificationId = action.payload
     },
 
     setIsPriorNotificationFormDirty(state, action: PayloadAction<boolean>) {

@@ -43,7 +43,7 @@ export function LogbookPriorNotificationForm() {
   }
 
   customSentry.endMeasurement(
-    CustomSentryMeasurementName.LOGBOOK_PRIOR_NOTIFICATION_FORM_SPINNER,
+    CustomSentryMeasurementName.LOGBOOK_PRIOR_NOTIFICATION_FORM_LOADING,
     openedPriorNotificationDetail.reportId,
     2000
   )

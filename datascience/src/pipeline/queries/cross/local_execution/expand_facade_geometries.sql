@@ -21,6 +21,7 @@ facades_polygons_without_holes AS (
     SELECT
         id,
         prod.facade_areas_unextended.facade,
+        prod.facade_areas_unextended.email_address,
         ST_Difference(ST_MakePolygon(ST_ExteriorRing((ST_Dump(geom)).geom)), other_facades_geom) AS geom
     FROM prod.facade_areas_unextended
     JOIN other_unexpanded_facades
@@ -32,9 +33,10 @@ facades_multipolygons AS (
     SELECT 
         id,
         facade,
+        email_address,
         ST_Multi(ST_Union(geom)) AS geom
     FROM facades_polygons_without_holes
-    GROUP BY id, facade
+    GROUP BY id, facade, email_address
 ),
 
 all_facades AS (
@@ -45,6 +47,7 @@ all_facades AS (
 expanded_facades AS (
     SELECT
         facade,
+        email_address,
         ST_Difference(
             ST_Buffer(geom, 0.1),
             ST_Difference(
@@ -69,6 +72,7 @@ expanded_facades_without_overlap AS (
     SELECT
         ef.facade AS facade_cnsp,
         CASE WHEN ef.facade = 'Corse' THEN 'MED' ELSE ef.facade END AS facade_cacem,
+        email_address,
         ST_Difference(
             ef.expanded_geometry,
             other_expanded_facades_geom

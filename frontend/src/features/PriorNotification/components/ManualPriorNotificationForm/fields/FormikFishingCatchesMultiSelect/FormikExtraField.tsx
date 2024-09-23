@@ -12,9 +12,15 @@ import type { PriorNotification } from '@features/PriorNotification/PriorNotific
 type FormikExtraFieldProps = Readonly<{
   allFishingsCatches: PriorNotification.FormDataFishingCatch[]
   fishingsCatchesIndex: number
+  isReadOnly: boolean
   specyCode: string
 }>
-export function FormikExtraField({ allFishingsCatches, fishingsCatchesIndex, specyCode }: FormikExtraFieldProps) {
+export function FormikExtraField({
+  allFishingsCatches,
+  fishingsCatchesIndex,
+  isReadOnly,
+  specyCode
+}: FormikExtraFieldProps) {
   const [input, , helper] = useField<PriorNotification.FormDataFishingCatch[]>('fishingCatches')
 
   const updateBluefinTunaWeightAndTotal = useCallback(
@@ -71,6 +77,7 @@ export function FormikExtraField({ allFishingsCatches, fishingsCatchesIndex, spe
                   isLabelHidden
                   label={`Quantité (${extendedSpecyCode})`}
                   name={`fishingCatches[${index}].quantity`}
+                  readOnly={isReadOnly}
                 />
                 pc
               </InputWithUnit>
@@ -82,6 +89,7 @@ export function FormikExtraField({ allFishingsCatches, fishingsCatchesIndex, spe
                   label={`Poids (${extendedSpecyCode})`}
                   name={`fishingCatches[${index}].weight`}
                   onChange={nextWeight => updateBluefinTunaWeightAndTotal(index, nextWeight)}
+                  readOnly={isReadOnly}
                   value={input.value[index]?.weight}
                 />
                 kg
@@ -103,6 +111,7 @@ export function FormikExtraField({ allFishingsCatches, fishingsCatchesIndex, spe
             isLabelHidden
             label={`Quantité (${specyCode})`}
             name={`fishingCatches[${fishingsCatchesIndex}].quantity`}
+            readOnly={isReadOnly}
           />
           pc
         </InputWithUnit>

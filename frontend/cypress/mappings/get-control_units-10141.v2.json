@@ -34,49 +34,63 @@
           "controlUnitId": 10141,
           "email": null,
           "name": "ONBOARD_PHONE",
-          "phone": "+881 677 121 122"
+          "phone": "+881 677 121 122",
+          "isEmailSubscriptionContact": false,
+          "isSmsSubscriptionContact": false
         },
         {
           "id": 335,
           "controlUnitId": 10141,
           "email": "pam.dirm-med@mer.gouv.fr",
           "name": "COMMANDER_A",
-          "phone": "07 64 45 13 62"
+          "phone": "07 64 45 13 62",
+          "isEmailSubscriptionContact": false,
+          "isSmsSubscriptionContact": false
         },
         {
           "id": 336,
           "controlUnitId": 10141,
           "email": "pam.dirm-med@mer.gouv.fr",
           "name": "COMMANDER_B",
-          "phone": "06 19 42 86 03"
+          "phone": "06 19 42 86 03",
+          "isEmailSubscriptionContact": false,
+          "isSmsSubscriptionContact": false
         },
         {
           "id": 333,
           "controlUnitId": 10141,
           "email": "aurelia.sargeot@mer.gouv.fr",
           "name": "OPERATIONAL_CENTER",
-          "phone": "04 86 94 67 48"
+          "phone": "04 86 94 67 48",
+          "isEmailSubscriptionContact": false,
+          "isSmsSubscriptionContact": false
         },
         {
           "id": 334,
           "controlUnitId": 10141,
           "email": "aurelia.sargeot@mer.gouv.fr",
           "name": "OPERATIONAL_CENTER",
-          "phone": "06 69 17 61 82"
+          "phone": "06 69 17 61 82",
+          "isEmailSubscriptionContact": true,
+          "isSmsSubscriptionContact": false
         },
         {
           "id": 337,
           "controlUnitId": 10141,
           "email": null,
           "name": "PERMANENT_CONTACT_ONBOARD",
-          "phone": "+47 23 41 25 84"
+          "phone": "+47 23 41 25 84",
+          "isEmailSubscriptionContact": false,
+          "isSmsSubscriptionContact": true
         },
         {
           "id": 338,
           "controlUnitId": 10141,
           "email": null,
           "name": "PERMANENT_CONTACT_ONBOARD",
-          "phone": "+47 23 41 25 85"
+          "phone": "+47 23 41 25 85",
+          "isEmailSubscriptionContact": false,
+          "isSmsSubscriptionContact": false
         }
       ],
       "controlUnitResourceIds": [

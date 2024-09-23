@@ -32,35 +32,45 @@
           "controlUnitId": 10455,
           "email": "pgmarc720.lorient@gendarmerie.defense.gouv.fr",
           "name": "UNKNOWN",
-          "phone": "06 84 76 97 62"
+          "phone": "06 84 76 97 62",
+          "isEmailSubscriptionContact": false,
+          "isSmsSubscriptionContact": false
         },
         {
           "id": 1019,
           "controlUnitId": 10455,
           "email": "pgmarc720.lorient@gendarmerie.defense.gouv.fr",
           "name": "UNKNOWN",
-          "phone": "06 85 72 02 20"
+          "phone": "06 85 72 02 20",
+          "isEmailSubscriptionContact": false,
+          "isSmsSubscriptionContact": false
         },
         {
           "id": 1015,
           "controlUnitId": 10455,
           "email": "ggmaratlan@gendarmerie.defense.gouv.fr",
           "name": "OPERATIONAL_CENTER",
-          "phone": "02 98 22 22 17"
+          "phone": "02 98 22 22 17",
+          "isEmailSubscriptionContact": false,
+          "isSmsSubscriptionContact": false
         },
         {
           "id": 1016,
           "controlUnitId": 10455,
           "email": null,
           "name": "PERMANENT_CONTACT_ONBOARD",
-          "phone": "06 84 76 97 62"
+          "phone": "06 84 76 97 62",
+          "isEmailSubscriptionContact": false,
+          "isSmsSubscriptionContact": false
         },
         {
           "id": 1017,
           "controlUnitId": 10455,
           "email": null,
           "name": "PERMANENT_CONTACT_ONBOARD",
-          "phone": "06 85 72 02 20"
+          "phone": "06 85 72 02 20",
+          "isEmailSubscriptionContact": false,
+          "isSmsSubscriptionContact": false
         }
       ],
       "controlUnitResourceIds": [

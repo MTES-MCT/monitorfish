@@ -1,5 +1,6 @@
 import { drawReducer } from '@features/Draw/slice'
 import { interestPointReducer } from '@features/InterestPoint/slice'
+import { mainWindowReducer } from '@features/MainWindow/slice'
 import { measurementReducer } from '@features/Measurement/slice'
 import createMigrate from 'redux-persist/es/createMigrate'
 import persistReducer from 'redux-persist/es/persistReducer'
@@ -86,6 +87,7 @@ export const mainReducer = {
   infraction: infractionReducer,
   interestPoint: interestPointReducer,
   layer: layer.homepage.reducer,
+  mainWindow: mainWindowReducer,
   measurement: measurementReducer,
   missionForm: missionFormReducer,
   missionList: persistReducerTyped(

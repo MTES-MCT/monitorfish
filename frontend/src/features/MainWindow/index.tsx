@@ -1,3 +1,4 @@
+import { BannerStack } from '@features/MainWindow/components/BannerStack'
 import { useCallback } from 'react'
 import { useBeforeUnload } from 'react-router-dom'
 import styled from 'styled-components'
@@ -59,6 +60,7 @@ export function MainWindow() {
       <PreviewFilteredVessels />
 
       <Wrapper id="mainWindowWrapper">
+        <BannerStack />
         <Map />
 
         <LegacyRsuiteComponentsWrapper>

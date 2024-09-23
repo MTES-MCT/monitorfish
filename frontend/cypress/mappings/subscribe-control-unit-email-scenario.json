@@ -1,0 +1,1041 @@
+{
+  "mappings": [
+    {
+      "priority": 1,
+      "scenarioName": "subscribe-control-unit-email",
+      "requiredScenarioState": "Started",
+      "newScenarioState": "control-unit-contact-updated",
+      "request": {
+        "method": "POST",
+        "url": "/api/v2/control_unit_contacts",
+        "bodyPatterns" : [ {
+          "matches": ".*\"first.contact@example.org\".*"
+        } ]
+      },
+      "response": {
+        "status": 201,
+        "headers": {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*"
+        },
+        "jsonBody": {
+          "id": 1077,
+          "controlUnitId": 10484,
+          "email": "first.contact@example.org",
+          "isEmailSubscriptionContact": false,
+          "isSmsSubscriptionContact": false,
+          "name": "ADJUNCT",
+          "phone": "0111111111"
+        }
+      }
+    },
+    {
+      "priority": 1,
+      "scenarioName": "subscribe-control-unit-email",
+      "requiredScenarioState": "control-unit-contact-updated",
+      "newScenarioState": "get-control-unit-contact-updated",
+      "request": {
+        "method": "GET",
+        "url": "/api/v2/control_units/10484"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*"
+        },
+        "jsonBody": {
+          "id": 10484,
+          "areaNote": "Morbihan (56)",
+          "administration": {
+            "id": 2,
+            "isArchived": false,
+            "name": "Douane"
+          },
+          "administrationId": 2,
+          "controlUnitContactIds": [
+            1076,
+            1073,
+            1074,
+            1075
+          ],
+          "controlUnitContacts": [
+            {
+              "id": 1076,
+              "controlUnitId": 10484,
+              "email": "bgc-lorient@douane.finances.gouv.fr",
+              "name": "UNKNOWN",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "phone": "09 70 27 46 12"
+            },
+            {
+              "id": 1073,
+              "controlUnitId": 10484,
+              "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
+              "name": "OPERATIONAL_CENTER",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "phone": "06 64 57 64 04"
+            },
+            {
+              "id": 1074,
+              "controlUnitId": 10484,
+              "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
+              "name": "OPERATIONAL_CENTER",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "phone": "09 70 27 51 94"
+            },
+            {
+              "id": 1075,
+              "controlUnitId": 10484,
+              "email": null,
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "name": "PERMANENT_CONTACT_ONBOARD",
+              "phone": "06 64 57 64 58"
+            },
+            {
+              "id": 1077,
+              "controlUnitId": 10484,
+              "email": "first.contact@example.org",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "name": "ADJUNCT",
+              "phone": "0111111111"
+            }
+          ],
+          "controlUnitResourceIds": [
+            553
+          ],
+          "controlUnitResources": [
+            {
+              "id": 553,
+              "controlUnit": {
+                "id": 10484,
+                "areaNote": "Morbihan (56)",
+                "administrationId": 2,
+                "departmentAreaInseeCode": null,
+                "isArchived": false,
+                "name": "BGC Lorient - DF 36 Kan An Avel",
+                "termsNote": "COD Manche Mer du Nord Atlantique"
+              },
+              "controlUnitId": 10484,
+              "isArchived": false,
+              "name": "DF 36 Kan An Avel",
+              "note": null,
+              "photo": null,
+              "station": {
+                "id": 153,
+                "latitude": 47.7482524,
+                "longitude": -3.3702449,
+                "name": "Lorient"
+              },
+              "stationId": 153,
+              "type": "FAST_BOAT"
+            }
+          ],
+          "departmentArea": null,
+          "departmentAreaInseeCode": null,
+          "isArchived": false,
+          "name": "BGC Lorient - DF 36 Kan An Avel",
+          "termsNote": "COD Manche Mer du Nord Atlantique"
+        }
+      }
+    },
+    {
+      "priority": 1,
+      "scenarioName": "subscribe-control-unit-email",
+      "requiredScenarioState": "get-control-unit-contact-updated",
+      "newScenarioState": "control-unit-contact-updated-2",
+      "request": {
+        "method": "POST",
+        "url": "/api/v2/control_unit_contacts",
+        "bodyPatterns" : [ {
+          "matches": ".*\"second.contact@example.org\".*"
+        } ]
+      },
+      "response": {
+        "status": 201,
+        "headers": {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*"
+        },
+        "jsonBody": {
+          "id": 1078,
+          "controlUnitId": 10484,
+          "email": "second.contact@example.org",
+          "isEmailSubscriptionContact": false,
+          "isSmsSubscriptionContact": false,
+          "name": "ADJUNCT",
+          "phone": "0222222222"
+        }
+      }
+    },
+    {
+      "priority": 1,
+      "scenarioName": "subscribe-control-unit-email",
+      "requiredScenarioState": "control-unit-contact-updated-2",
+      "newScenarioState": "get-control-unit-contact-updated-2",
+      "request": {
+        "method": "GET",
+        "url": "/api/v2/control_units/10484"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*"
+        },
+        "jsonBody": {
+          "id": 10484,
+          "areaNote": "Morbihan (56)",
+          "administration": {
+            "id": 2,
+            "isArchived": false,
+            "name": "Douane"
+          },
+          "administrationId": 2,
+          "controlUnitContactIds": [
+            1076,
+            1073,
+            1074,
+            1075
+          ],
+          "controlUnitContacts": [
+            {
+              "id": 1076,
+              "controlUnitId": 10484,
+              "email": "bgc-lorient@douane.finances.gouv.fr",
+              "name": "UNKNOWN",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "phone": "09 70 27 46 12"
+            },
+            {
+              "id": 1073,
+              "controlUnitId": 10484,
+              "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
+              "name": "OPERATIONAL_CENTER",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "phone": "06 64 57 64 04"
+            },
+            {
+              "id": 1074,
+              "controlUnitId": 10484,
+              "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
+              "name": "OPERATIONAL_CENTER",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "phone": "09 70 27 51 94"
+            },
+            {
+              "id": 1075,
+              "controlUnitId": 10484,
+              "email": null,
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "name": "PERMANENT_CONTACT_ONBOARD",
+              "phone": "06 64 57 64 58"
+            },
+            {
+              "id": 1077,
+              "controlUnitId": 10484,
+              "email": "first.contact@example.org",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "name": "ADJUNCT",
+              "phone": "0111111111"
+            },
+            {
+              "id": 1078,
+              "controlUnitId": 10484,
+              "email": "second.contact@example.org",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "name": "ADJUNCT",
+              "phone": "0222222222"
+            }
+          ],
+          "controlUnitResourceIds": [
+            553
+          ],
+          "controlUnitResources": [
+            {
+              "id": 553,
+              "controlUnit": {
+                "id": 10484,
+                "areaNote": "Morbihan (56)",
+                "administrationId": 2,
+                "departmentAreaInseeCode": null,
+                "isArchived": false,
+                "name": "BGC Lorient - DF 36 Kan An Avel",
+                "termsNote": "COD Manche Mer du Nord Atlantique"
+              },
+              "controlUnitId": 10484,
+              "isArchived": false,
+              "name": "DF 36 Kan An Avel",
+              "note": null,
+              "photo": null,
+              "station": {
+                "id": 153,
+                "latitude": 47.7482524,
+                "longitude": -3.3702449,
+                "name": "Lorient"
+              },
+              "stationId": 153,
+              "type": "FAST_BOAT"
+            }
+          ],
+          "departmentArea": null,
+          "departmentAreaInseeCode": null,
+          "isArchived": false,
+          "name": "BGC Lorient - DF 36 Kan An Avel",
+          "termsNote": "COD Manche Mer du Nord Atlantique"
+        }
+      }
+    },
+    {
+      "priority": 1,
+      "scenarioName": "subscribe-control-unit-email",
+      "requiredScenarioState": "get-control-unit-contact-updated-2",
+      "newScenarioState": "control-unit-contact-patched",
+      "request": {
+        "method": "PATCH",
+        "urlPattern": "/api/v1/control_unit_contacts/1077",
+        "bodyPatterns" : [ {
+          "matches": ".*\"first.contact@example.org\".*"
+        } ]
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Access-Control-Allow-Headers": "*",
+          "Access-Control-Allow-Methods": "*",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Request-Headers": "*",
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "id": 1077,
+          "controlUnitId": 10484,
+          "email": "first.contact@example.org",
+          "isEmailSubscriptionContact": true,
+          "isSmsSubscriptionContact": true,
+          "name": "ADJUNCT",
+          "phone": "0111111111"
+        }
+      }
+    },
+    {
+      "priority": 1,
+      "scenarioName": "subscribe-control-unit-email",
+      "requiredScenarioState": "control-unit-contact-patched",
+      "newScenarioState": "get-control-unit-contact-patched",
+      "request": {
+        "method": "GET",
+        "url": "/api/v2/control_units/10484"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*"
+        },
+        "jsonBody": {
+          "id": 10484,
+          "areaNote": "Morbihan (56)",
+          "administration": {
+            "id": 2,
+            "isArchived": false,
+            "name": "Douane"
+          },
+          "administrationId": 2,
+          "controlUnitContactIds": [
+            1076,
+            1073,
+            1074,
+            1075
+          ],
+          "controlUnitContacts": [
+            {
+              "id": 1076,
+              "controlUnitId": 10484,
+              "email": "bgc-lorient@douane.finances.gouv.fr",
+              "name": "UNKNOWN",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "phone": "09 70 27 46 12"
+            },
+            {
+              "id": 1073,
+              "controlUnitId": 10484,
+              "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
+              "name": "OPERATIONAL_CENTER",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "phone": "06 64 57 64 04"
+            },
+            {
+              "id": 1074,
+              "controlUnitId": 10484,
+              "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
+              "name": "OPERATIONAL_CENTER",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "phone": "09 70 27 51 94"
+            },
+            {
+              "id": 1075,
+              "controlUnitId": 10484,
+              "email": null,
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "name": "PERMANENT_CONTACT_ONBOARD",
+              "phone": "06 64 57 64 58"
+            },
+            {
+              "id": 1077,
+              "controlUnitId": 10484,
+              "email": "first.contact@example.org",
+              "isEmailSubscriptionContact": true,
+              "isSmsSubscriptionContact": true,
+              "name": "ADJUNCT",
+              "phone": "0111111111"
+            },
+            {
+              "id": 1078,
+              "controlUnitId": 10484,
+              "email": "second.contact@example.org",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "name": "ADJUNCT",
+              "phone": "0222222222"
+            }
+          ],
+          "controlUnitResourceIds": [
+            553
+          ],
+          "controlUnitResources": [
+            {
+              "id": 553,
+              "controlUnit": {
+                "id": 10484,
+                "areaNote": "Morbihan (56)",
+                "administrationId": 2,
+                "departmentAreaInseeCode": null,
+                "isArchived": false,
+                "name": "BGC Lorient - DF 36 Kan An Avel",
+                "termsNote": "COD Manche Mer du Nord Atlantique"
+              },
+              "controlUnitId": 10484,
+              "isArchived": false,
+              "name": "DF 36 Kan An Avel",
+              "note": null,
+              "photo": null,
+              "station": {
+                "id": 153,
+                "latitude": 47.7482524,
+                "longitude": -3.3702449,
+                "name": "Lorient"
+              },
+              "stationId": 153,
+              "type": "FAST_BOAT"
+            }
+          ],
+          "departmentArea": null,
+          "departmentAreaInseeCode": null,
+          "isArchived": false,
+          "name": "BGC Lorient - DF 36 Kan An Avel",
+          "termsNote": "COD Manche Mer du Nord Atlantique"
+        }
+      }
+    },
+    {
+      "priority": 1,
+      "scenarioName": "subscribe-control-unit-email",
+      "requiredScenarioState": "get-control-unit-contact-patched",
+      "newScenarioState": "control-unit-contact-patched-2",
+      "request": {
+        "method": "PATCH",
+        "urlPattern": "/api/v1/control_unit_contacts/1078",
+        "bodyPatterns" : [ {
+          "matches": ".*\"second.contact@example.org\".*"
+        } ]
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Access-Control-Allow-Headers": "*",
+          "Access-Control-Allow-Methods": "*",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Request-Headers": "*",
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "id": 1078,
+          "controlUnitId": 10484,
+          "email": "second.contact@example.org",
+          "isEmailSubscriptionContact": true,
+          "isSmsSubscriptionContact": true,
+          "name": "ADJUNCT",
+          "phone": "0222222222"
+        }
+      }
+    },
+    {
+      "priority": 1,
+      "scenarioName": "subscribe-control-unit-email",
+      "requiredScenarioState": "control-unit-contact-patched-2",
+      "newScenarioState": "get-control-unit-contact-patched-2",
+      "request": {
+        "method": "GET",
+        "url": "/api/v2/control_units/10484"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*"
+        },
+        "jsonBody": {
+          "id": 10484,
+          "areaNote": "Morbihan (56)",
+          "administration": {
+            "id": 2,
+            "isArchived": false,
+            "name": "Douane"
+          },
+          "administrationId": 2,
+          "controlUnitContactIds": [
+            1076,
+            1073,
+            1074,
+            1075
+          ],
+          "controlUnitContacts": [
+            {
+              "id": 1076,
+              "controlUnitId": 10484,
+              "email": "bgc-lorient@douane.finances.gouv.fr",
+              "name": "UNKNOWN",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "phone": "09 70 27 46 12"
+            },
+            {
+              "id": 1073,
+              "controlUnitId": 10484,
+              "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
+              "name": "OPERATIONAL_CENTER",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "phone": "06 64 57 64 04"
+            },
+            {
+              "id": 1074,
+              "controlUnitId": 10484,
+              "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
+              "name": "OPERATIONAL_CENTER",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "phone": "09 70 27 51 94"
+            },
+            {
+              "id": 1075,
+              "controlUnitId": 10484,
+              "email": null,
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "name": "PERMANENT_CONTACT_ONBOARD",
+              "phone": "06 64 57 64 58"
+            },
+            {
+              "id": 1077,
+              "controlUnitId": 10484,
+              "email": "first.contact@example.org",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "name": "ADJUNCT",
+              "phone": "0111111111"
+            },
+            {
+              "id": 1078,
+              "controlUnitId": 10484,
+              "email": "second.contact@example.org",
+              "isEmailSubscriptionContact": true,
+              "isSmsSubscriptionContact": true,
+              "name": "ADJUNCT",
+              "phone": "0222222222"
+            }
+          ],
+          "controlUnitResourceIds": [
+            553
+          ],
+          "controlUnitResources": [
+            {
+              "id": 553,
+              "controlUnit": {
+                "id": 10484,
+                "areaNote": "Morbihan (56)",
+                "administrationId": 2,
+                "departmentAreaInseeCode": null,
+                "isArchived": false,
+                "name": "BGC Lorient - DF 36 Kan An Avel",
+                "termsNote": "COD Manche Mer du Nord Atlantique"
+              },
+              "controlUnitId": 10484,
+              "isArchived": false,
+              "name": "DF 36 Kan An Avel",
+              "note": null,
+              "photo": null,
+              "station": {
+                "id": 153,
+                "latitude": 47.7482524,
+                "longitude": -3.3702449,
+                "name": "Lorient"
+              },
+              "stationId": 153,
+              "type": "FAST_BOAT"
+            }
+          ],
+          "departmentArea": null,
+          "departmentAreaInseeCode": null,
+          "isArchived": false,
+          "name": "BGC Lorient - DF 36 Kan An Avel",
+          "termsNote": "COD Manche Mer du Nord Atlantique"
+        }
+      }
+    },
+    {
+      "priority": 1,
+      "scenarioName": "subscribe-control-unit-email",
+      "requiredScenarioState": "get-control-unit-contact-patched-2",
+      "newScenarioState": "control-unit-contact-patched-3",
+      "request": {
+        "method": "PATCH",
+        "urlPattern": "/api/v1/control_unit_contacts/1078",
+        "bodyPatterns" : [ {
+          "matches": ".*\"second.contact@example.org\".*"
+        } ]
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Access-Control-Allow-Headers": "*",
+          "Access-Control-Allow-Methods": "*",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Request-Headers": "*",
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "id": 1078,
+          "controlUnitId": 10484,
+          "email": "second.contact@example.org",
+          "isEmailSubscriptionContact": false,
+          "isSmsSubscriptionContact": false,
+          "name": "ADJUNCT",
+          "phone": "0222222222"
+        }
+      }
+    },
+    {
+      "priority": 1,
+      "scenarioName": "subscribe-control-unit-email",
+      "requiredScenarioState": "control-unit-contact-patched-3",
+      "newScenarioState": "get-control-unit-contact-patched-3",
+      "request": {
+        "method": "GET",
+        "url": "/api/v2/control_units/10484"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*"
+        },
+        "jsonBody": {
+          "id": 10484,
+          "areaNote": "Morbihan (56)",
+          "administration": {
+            "id": 2,
+            "isArchived": false,
+            "name": "Douane"
+          },
+          "administrationId": 2,
+          "controlUnitContactIds": [
+            1076,
+            1073,
+            1074,
+            1075
+          ],
+          "controlUnitContacts": [
+            {
+              "id": 1076,
+              "controlUnitId": 10484,
+              "email": "bgc-lorient@douane.finances.gouv.fr",
+              "name": "UNKNOWN",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "phone": "09 70 27 46 12"
+            },
+            {
+              "id": 1073,
+              "controlUnitId": 10484,
+              "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
+              "name": "OPERATIONAL_CENTER",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "phone": "06 64 57 64 04"
+            },
+            {
+              "id": 1074,
+              "controlUnitId": 10484,
+              "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
+              "name": "OPERATIONAL_CENTER",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "phone": "09 70 27 51 94"
+            },
+            {
+              "id": 1075,
+              "controlUnitId": 10484,
+              "email": null,
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "name": "PERMANENT_CONTACT_ONBOARD",
+              "phone": "06 64 57 64 58"
+            },
+            {
+              "id": 1077,
+              "controlUnitId": 10484,
+              "email": "first.contact@example.org",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "name": "ADJUNCT",
+              "phone": "0111111111"
+            },
+            {
+              "id": 1078,
+              "controlUnitId": 10484,
+              "email": "second.contact@example.org",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "name": "ADJUNCT",
+              "phone": "0222222222"
+            }
+          ],
+          "controlUnitResourceIds": [
+            553
+          ],
+          "controlUnitResources": [
+            {
+              "id": 553,
+              "controlUnit": {
+                "id": 10484,
+                "areaNote": "Morbihan (56)",
+                "administrationId": 2,
+                "departmentAreaInseeCode": null,
+                "isArchived": false,
+                "name": "BGC Lorient - DF 36 Kan An Avel",
+                "termsNote": "COD Manche Mer du Nord Atlantique"
+              },
+              "controlUnitId": 10484,
+              "isArchived": false,
+              "name": "DF 36 Kan An Avel",
+              "note": null,
+              "photo": null,
+              "station": {
+                "id": 153,
+                "latitude": 47.7482524,
+                "longitude": -3.3702449,
+                "name": "Lorient"
+              },
+              "stationId": 153,
+              "type": "FAST_BOAT"
+            }
+          ],
+          "departmentArea": null,
+          "departmentAreaInseeCode": null,
+          "isArchived": false,
+          "name": "BGC Lorient - DF 36 Kan An Avel",
+          "termsNote": "COD Manche Mer du Nord Atlantique"
+        }
+      }
+    },
+    {
+      "priority": 1,
+      "scenarioName": "subscribe-control-unit-email",
+      "requiredScenarioState": "get-control-unit-contact-patched-3",
+      "newScenarioState": "control-unit-contact-delete",
+      "request": {
+        "method": "DELETE",
+        "urlPattern": "/api/v1/control_unit_contacts/1077"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Access-Control-Allow-Headers": "*",
+          "Access-Control-Allow-Methods": "*",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Request-Headers": "*",
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {}
+      }
+    },
+    {
+      "priority": 1,
+      "scenarioName": "subscribe-control-unit-email",
+      "requiredScenarioState": "control-unit-contact-delete",
+      "newScenarioState": "get-control-unit-contact-delete",
+      "request": {
+        "method": "GET",
+        "url": "/api/v2/control_units/10484"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*"
+        },
+        "jsonBody": {
+          "id": 10484,
+          "areaNote": "Morbihan (56)",
+          "administration": {
+            "id": 2,
+            "isArchived": false,
+            "name": "Douane"
+          },
+          "administrationId": 2,
+          "controlUnitContactIds": [
+            1076,
+            1073,
+            1074,
+            1075
+          ],
+          "controlUnitContacts": [
+            {
+              "id": 1076,
+              "controlUnitId": 10484,
+              "email": "bgc-lorient@douane.finances.gouv.fr",
+              "name": "UNKNOWN",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "phone": "09 70 27 46 12"
+            },
+            {
+              "id": 1073,
+              "controlUnitId": 10484,
+              "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
+              "name": "OPERATIONAL_CENTER",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "phone": "06 64 57 64 04"
+            },
+            {
+              "id": 1074,
+              "controlUnitId": 10484,
+              "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
+              "name": "OPERATIONAL_CENTER",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "phone": "09 70 27 51 94"
+            },
+            {
+              "id": 1075,
+              "controlUnitId": 10484,
+              "email": null,
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "name": "PERMANENT_CONTACT_ONBOARD",
+              "phone": "06 64 57 64 58"
+            },
+            {
+              "id": 1078,
+              "controlUnitId": 10484,
+              "email": "second.contact@example.org",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "name": "ADJUNCT",
+              "phone": "0222222222"
+            }
+          ],
+          "controlUnitResourceIds": [
+            553
+          ],
+          "controlUnitResources": [
+            {
+              "id": 553,
+              "controlUnit": {
+                "id": 10484,
+                "areaNote": "Morbihan (56)",
+                "administrationId": 2,
+                "departmentAreaInseeCode": null,
+                "isArchived": false,
+                "name": "BGC Lorient - DF 36 Kan An Avel",
+                "termsNote": "COD Manche Mer du Nord Atlantique"
+              },
+              "controlUnitId": 10484,
+              "isArchived": false,
+              "name": "DF 36 Kan An Avel",
+              "note": null,
+              "photo": null,
+              "station": {
+                "id": 153,
+                "latitude": 47.7482524,
+                "longitude": -3.3702449,
+                "name": "Lorient"
+              },
+              "stationId": 153,
+              "type": "FAST_BOAT"
+            }
+          ],
+          "departmentArea": null,
+          "departmentAreaInseeCode": null,
+          "isArchived": false,
+          "name": "BGC Lorient - DF 36 Kan An Avel",
+          "termsNote": "COD Manche Mer du Nord Atlantique"
+        }
+      }
+    },
+    {
+      "priority": 1,
+      "scenarioName": "subscribe-control-unit-email",
+      "requiredScenarioState": "get-control-unit-contact-delete",
+      "newScenarioState": "control-unit-contact-delete-2",
+      "request": {
+        "method": "DELETE",
+        "urlPattern": "/api/v1/control_unit_contacts/1078"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Access-Control-Allow-Headers": "*",
+          "Access-Control-Allow-Methods": "*",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Request-Headers": "*",
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {}
+      }
+    },
+    {
+      "priority": 1,
+      "scenarioName": "subscribe-control-unit-email",
+      "requiredScenarioState": "control-unit-contact-delete-2",
+      "newScenarioState": "get-control-unit-contact-delete-2",
+      "request": {
+        "method": "GET",
+        "url": "/api/v2/control_units/10484"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*"
+        },
+        "jsonBody": {
+          "id": 10484,
+          "areaNote": "Morbihan (56)",
+          "administration": {
+            "id": 2,
+            "isArchived": false,
+            "name": "Douane"
+          },
+          "administrationId": 2,
+          "controlUnitContactIds": [
+            1076,
+            1073,
+            1074,
+            1075
+          ],
+          "controlUnitContacts": [
+            {
+              "id": 1076,
+              "controlUnitId": 10484,
+              "email": "bgc-lorient@douane.finances.gouv.fr",
+              "name": "UNKNOWN",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "phone": "09 70 27 46 12"
+            },
+            {
+              "id": 1073,
+              "controlUnitId": 10484,
+              "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
+              "name": "OPERATIONAL_CENTER",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "phone": "06 64 57 64 04"
+            },
+            {
+              "id": 1074,
+              "controlUnitId": 10484,
+              "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
+              "name": "OPERATIONAL_CENTER",
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "phone": "09 70 27 51 94"
+            },
+            {
+              "id": 1075,
+              "controlUnitId": 10484,
+              "email": null,
+              "isEmailSubscriptionContact": false,
+              "isSmsSubscriptionContact": false,
+              "name": "PERMANENT_CONTACT_ONBOARD",
+              "phone": "06 64 57 64 58"
+            }
+          ],
+          "controlUnitResourceIds": [
+            553
+          ],
+          "controlUnitResources": [
+            {
+              "id": 553,
+              "controlUnit": {
+                "id": 10484,
+                "areaNote": "Morbihan (56)",
+                "administrationId": 2,
+                "departmentAreaInseeCode": null,
+                "isArchived": false,
+                "name": "BGC Lorient - DF 36 Kan An Avel",
+                "termsNote": "COD Manche Mer du Nord Atlantique"
+              },
+              "controlUnitId": 10484,
+              "isArchived": false,
+              "name": "DF 36 Kan An Avel",
+              "note": null,
+              "photo": null,
+              "station": {
+                "id": 153,
+                "latitude": 47.7482524,
+                "longitude": -3.3702449,
+                "name": "Lorient"
+              },
+              "stationId": 153,
+              "type": "FAST_BOAT"
+            }
+          ],
+          "departmentArea": null,
+          "departmentAreaInseeCode": null,
+          "isArchived": false,
+          "name": "BGC Lorient - DF 36 Kan An Avel",
+          "termsNote": "COD Manche Mer du Nord Atlantique"
+        }
+      }
+    }
+  ]
+}

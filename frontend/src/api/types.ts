@@ -7,7 +7,7 @@ export type RTKBaseQueryArgs =
   // Mutation
   | {
       body?: AnyObject
-      method: 'GET' | 'DELETE' | 'POST' | 'PUT'
+      method: 'GET' | 'DELETE' | 'POST' | 'PATCH' | 'PUT'
       /** URL Path (and not full URL). */
       url: string
     }

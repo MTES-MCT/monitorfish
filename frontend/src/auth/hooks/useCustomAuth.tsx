@@ -21,7 +21,7 @@ export function useCustomAuth(): {
       const nextUserAuthorization = await getCurrentUserAuthorization()
 
       setUserAuthorization(nextUserAuthorization)
-    }, 250)
+    }, 500)
   }, [])
 
   const logout = useCallback(() => {

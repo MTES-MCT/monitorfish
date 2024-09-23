@@ -21,8 +21,8 @@ export const CONTROL_UNIT_CONTACT_FORM_SCHEMA = object().shape(
 export const INITIAL_CONTROL_UNIT_CONTACT_FORM_VALUES: ControlUnitContactFormValues = {
   controlUnitId: undefined,
   email: undefined,
-  isEmailSubscriptionContact: undefined,
-  isSmsSubscriptionContact: undefined,
+  isEmailSubscriptionContact: false,
+  isSmsSubscriptionContact: false,
   name: undefined,
   phone: undefined
 }

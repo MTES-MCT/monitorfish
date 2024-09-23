@@ -1,4 +1,4 @@
-import { Accent, ControlUnit, Icon, IconButton } from '@mtes-mct/monitor-ui'
+import { Accent, ControlUnit, Icon, IconButton, Link } from '@mtes-mct/monitor-ui'
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
@@ -14,18 +14,24 @@ export function Item({ controlUnitContact, onEdit }: ItemProps) {
   }, [controlUnitContact.id, onEdit])
 
   return (
-    <Wrapper data-cy="ControlUnitDialog-control-unit-contact">
+    <Wrapper data-cy="ControlUnitDialog-control-unit-contact" data-id={controlUnitContact.id}>
       <Left>
         <p>
           <Name>
             {ControlUnit.ControlUnitContactPredefinedName[controlUnitContact.name] || controlUnitContact.name}
           </Name>
           <Phone>{controlUnitContact.phone}</Phone>
+          {controlUnitContact.isSmsSubscriptionContact && (
+            <Icon.Subscription size={14} title="Numéro de diffusion pour les préavis et les rapports de contrôle" />
+          )}
         </p>
         <p>
-          <a href={`mailto:${controlUnitContact.email}`} rel="noreferrer" target="_blank">
+          <Link href={`mailto:${controlUnitContact.email}`} rel="noreferrer" target="_blank">
             {controlUnitContact.email}
-          </a>
+          </Link>
+          {controlUnitContact.isEmailSubscriptionContact && (
+            <Icon.Subscription size={14} title="Adresse de diffusion pour les préavis et les rapports de contrôle" />
+          )}
         </p>
       </Left>
       <Right>
@@ -49,6 +55,16 @@ const Wrapper = styled.div`
 
 const Left = styled.div`
   flex-grow: 1;
+
+  > p {
+    align-items: center;
+    display: flex;
+    line-height: 18px;
+    > .Element-IconBox {
+      margin-left: 8px;
+      margin-bottom: -1px;
+    }
+  }
 `
 
 const Right = styled.div``

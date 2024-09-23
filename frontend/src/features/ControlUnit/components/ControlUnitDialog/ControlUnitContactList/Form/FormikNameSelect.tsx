@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import {
   CONTROL_UNIT_CONTACT_PREDEFINED_NAMES,
   SORTED_CONTROL_UNIT_CONTACT_PREDEFINED_NAMES_AS_OPTIONS
-} from './constants'
+} from '../constants'
 
 export function FormikNameSelect() {
   const [field, meta, helpers] = useField<string | undefined>('name')

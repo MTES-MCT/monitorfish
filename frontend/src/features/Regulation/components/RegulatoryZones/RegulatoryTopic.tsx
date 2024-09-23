@@ -225,12 +225,12 @@ const Icons = styled.div`
 `
 
 const getFirstRegulatoryZoneTopic = (regulatoryZones: RegulatoryZoneType[]): string => {
-  const firstRefulatoryZone = regulatoryZones[0]
-  if (!firstRefulatoryZone) {
+  const firstRegulatoryZone = regulatoryZones[0]
+  if (!firstRegulatoryZone) {
     throw new FrontendError('`firstRegulatoryZone` is undefined.')
   }
 
-  return firstRefulatoryZone.topic
+  return firstRegulatoryZone.topic
 }
 
 const Text = styled.span`

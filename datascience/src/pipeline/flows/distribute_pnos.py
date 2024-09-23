@@ -113,6 +113,15 @@ def extract_pnos_to_generate(
 
 
 @task(checkpoint=False)
+def extract_facade_email_addresses() -> dict:
+    df = extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/facade_email_addresses.sql",
+    )
+    return df.set_index("facade").email_address.to_dict()
+
+
+@task(checkpoint=False)
 def to_pnos_to_render(pnos: pd.DataFrame) -> List[PnoToRender]:
     records = pnos.to_dict(orient="records")
     return [PnoToRender(**record) for record in records]
@@ -247,6 +256,7 @@ def pre_render_pno(
         catch_onboard=sum_by_species,
         port_locode=pno.port_locode,
         port_name=pno.port_name,
+        facade=pno.facade,
         predicted_arrival_datetime_utc=pno.predicted_arrival_datetime_utc,
         predicted_landing_datetime_utc=pno.predicted_landing_datetime_utc,
         trip_gears=trip_gears,
@@ -474,6 +484,7 @@ def render_pno(
         is_being_sent=pno.is_being_sent,
         trip_segments=pno.trip_segments,
         port_locode=pno.port_locode,
+        facade=pno.facade,
         source=pno.source,
         html_for_pdf=html_for_pdf,
         pdf_document=pdf,
@@ -536,6 +547,7 @@ def attribute_addressees(
     units_targeting_vessels: pd.DataFrame,
     units_ports_and_segments_subscriptions: pd.DataFrame,
     control_units_contacts: pd.DataFrame,
+    facade_email_addresses: dict,
 ) -> RenderedPno:
     """
     Returns a copy of the input `RenderedPno`'s with its `control_unit_ids`,
@@ -560,6 +572,9 @@ def attribute_addressees(
           `unit_subscribed_segments`
         control_units_contacts (pd.DataFrame): DataFrame with columns
           `control_unit_id`, `emails` and `phone_numbers`
+        facade_email_addresses (dict): dictionnary with facade names as keys and FMC
+          facade email addresses as values. The email address of the corresponding
+          facade will be added to addressees in PNO emails.
 
     Returns:
         RenderedPno: copy of the input `pno_to_distribute` with addressees added
@@ -622,6 +637,10 @@ def attribute_addressees(
             )
         )
     )
+    if emails:
+        facade_email_address = facade_email_addresses.get(pno_to_distribute.facade)
+        if facade_email_address:
+            emails.append(facade_email_address)
 
     phone_numbers = sorted(
         set(
@@ -995,11 +1014,14 @@ with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
 
             with case(distribution_needed, True):
                 # Distribute PNOs
+                facade_email_addresses = extract_facade_email_addresses()
+
                 pnos_with_addressees = attribute_addressees.map(
                     pnos_to_distribute,
                     unmapped(units_targeting_vessels),
                     unmapped(units_ports_and_segments_subscriptions),
                     control_units_contacts=unmapped(control_units_contacts),
+                    facade_email_addresses=unmapped(facade_email_addresses),
                 )
 
                 email = create_email.map(

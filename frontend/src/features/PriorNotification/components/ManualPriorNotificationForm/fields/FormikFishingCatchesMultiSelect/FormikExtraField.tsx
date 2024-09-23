@@ -1,17 +1,54 @@
 import { FormikNumberInput } from '@mtes-mct/monitor-ui'
+import { useField } from 'formik'
+import { sum } from 'lodash/fp'
+import { useEffect } from 'react'
 import styled from 'styled-components'
+import { useDebouncedCallback } from 'use-debounce'
 
 import { InputWithUnit, SubRow } from './styles'
-import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES } from '../../../../constants'
+import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES, BLUEFIN_TUNA_SPECY_CODE } from '../../../../constants'
 
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
 type FormikExtraFieldProps = Readonly<{
   allFishingsCatches: PriorNotification.FormDataFishingCatch[]
   fishingsCatchesIndex: number
+  isReadOnly: boolean
   specyCode: string
 }>
-export function FormikExtraField({ allFishingsCatches, fishingsCatchesIndex, specyCode }: FormikExtraFieldProps) {
+export function FormikExtraField({
+  allFishingsCatches,
+  fishingsCatchesIndex,
+  isReadOnly,
+  specyCode
+}: FormikExtraFieldProps) {
+  const [input, , helper] = useField<PriorNotification.FormDataFishingCatch[]>('fishingCatches')
+
+  const updateBluefinTunaWeightAndTotal = useDebouncedCallback(() => {
+    const totalWeight = sum(
+      input.value
+        .filter(fishingCatch => BLUEFIN_TUNA_EXTENDED_SPECY_CODES.includes(fishingCatch.specyCode))
+        .map(({ weight }) => weight ?? 0)
+    )
+
+    const nextFishingCatchesWithTotal = input.value.map(fichingCatch => {
+      if (fichingCatch.specyCode === BLUEFIN_TUNA_SPECY_CODE) {
+        return {
+          ...fichingCatch,
+          weight: totalWeight
+        }
+      }
+
+      return fichingCatch
+    })
+
+    helper.setValue(nextFishingCatchesWithTotal)
+  }, 250)
+
+  useEffect(() => {
+    updateBluefinTunaWeightAndTotal()
+  }, [input.value, updateBluefinTunaWeightAndTotal])
+
   // BFT - Bluefin Tuna => + BF1, BF2, BF3
   if (specyCode === 'BFT') {
     return (
@@ -29,6 +66,7 @@ export function FormikExtraField({ allFishingsCatches, fishingsCatchesIndex, spe
                   isLabelHidden
                   label={`Quantité (${extendedSpecyCode})`}
                   name={`fishingCatches[${index}].quantity`}
+                  readOnly={isReadOnly}
                 />
                 pc
               </InputWithUnit>
@@ -39,6 +77,7 @@ export function FormikExtraField({ allFishingsCatches, fishingsCatchesIndex, spe
                   isLabelHidden
                   label={`Poids (${extendedSpecyCode})`}
                   name={`fishingCatches[${index}].weight`}
+                  readOnly={isReadOnly}
                 />
                 kg
               </InputWithUnit>
@@ -59,6 +98,7 @@ export function FormikExtraField({ allFishingsCatches, fishingsCatchesIndex, spe
             isLabelHidden
             label={`Quantité (${specyCode})`}
             name={`fishingCatches[${fishingsCatchesIndex}].quantity`}
+            readOnly={isReadOnly}
           />
           pc
         </InputWithUnit>

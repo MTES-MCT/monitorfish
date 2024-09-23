@@ -1,6 +1,6 @@
 import { useGetSpeciesQuery } from '@api/specy'
 import { FieldsetGroupSpinner } from '@features/Mission/components/MissionForm/shared/FieldsetGroup'
-import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES } from '@features/PriorNotification/constants'
+import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES, BLUEFIN_TUNA_SPECY_CODE } from '@features/PriorNotification/constants'
 import { useGetFaoAreasAsOptions } from '@hooks/useGetFaoAreasAsOptions'
 import { useGetSpeciesAsOptions } from '@hooks/useGetSpeciesAsOptions'
 import { CustomSearch, FormikNumberInput, FormikSelect, Select, SingleTag } from '@mtes-mct/monitor-ui'
@@ -143,7 +143,7 @@ export function FormikFishingCatchesMultiSelect({ isReadOnly }: FormikFishingCat
                       isLabelHidden
                       label={`Poids (${fishingCatch.specyCode})`}
                       name={`fishingCatches[${index}].weight`}
-                      readOnly={isReadOnly}
+                      readOnly={isReadOnly || fishingCatch.specyCode === BLUEFIN_TUNA_SPECY_CODE}
                     />
                     kg
                   </InputWithUnit>
@@ -152,6 +152,7 @@ export function FormikFishingCatchesMultiSelect({ isReadOnly }: FormikFishingCat
                 <FormikExtraField
                   allFishingsCatches={values.fishingCatches}
                   fishingsCatchesIndex={index}
+                  isReadOnly={isReadOnly}
                   specyCode={fishingCatch.specyCode}
                 />
               </Row>

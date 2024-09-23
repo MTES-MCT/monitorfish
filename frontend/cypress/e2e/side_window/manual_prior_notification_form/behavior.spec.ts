@@ -131,4 +131,36 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
     cy.contains('button', 'Enregistrer').should('be.disabled')
     cy.contains('button', 'Diffuser').should('be.disabled')
   })
+
+  it('Should recalculate BFT total weight a manual prior notification', () => {
+    addManualSideWindowPriorNotification()
+
+    cy.fill('Espèces à bord et à débarquer', 'AAX')
+    cy.fill('Poids (AAX)', 25)
+    cy.fill('Espèces à bord et à débarquer', 'BFT')
+
+    cy.fill('Poids (BF1)', 40)
+
+    cy.get('[id="fishingCatches[1].weight"]').should('have.value', '40')
+
+    cy.fill('Poids (BF1)', 30)
+
+    cy.get('[id="fishingCatches[1].weight"]').should('have.value', '30')
+    cy.fill('Poids (BF1)', undefined)
+
+    cy.get('[id="fishingCatches[1].weight"]').should('have.value', '0')
+
+    cy.fill('Poids (BF1)', 20)
+    cy.fill('Poids (BF2)', 30)
+
+    cy.get('[id="fishingCatches[1].weight"]').should('have.value', '50')
+
+    cy.fill('Poids (BF3)', 40)
+
+    cy.get('[id="fishingCatches[1].weight"]').should('have.value', '90')
+
+    cy.fill('Poids (BF3)', undefined)
+
+    cy.get('[id="fishingCatches[1].weight"]').should('have.value', '50')
+  })
 })

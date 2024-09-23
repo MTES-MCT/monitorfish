@@ -448,7 +448,7 @@ def render_pno(
     sms_content = sms_template.render(
         vessel_name=pno.vessel_name,
         cfr=pno.cfr,
-        trip_segments=", ".join([f"{s.code}" for s in pno.trip_segments]),
+        trip_segments=", ".join([f"{s.name} ({s.code})" for s in pno.trip_segments]),
         risk_factor=pno.risk_factor,
         predicted_landing_datetime_utc=format_nullable_datetime(
             pno.predicted_landing_datetime_utc, format=sms_date_format

@@ -32,6 +32,7 @@ from src.pipeline.flows.distribute_pnos import (
     attribute_addressees,
     create_email,
     create_sms,
+    extract_facade_email_addresses,
     extract_fishing_gear_names,
     extract_pnos_to_generate,
     extract_species_names,
@@ -415,6 +416,7 @@ def extracted_pnos() -> pd.DataFrame:
                 "Somewhere over the swell",
                 "Somewhere over the ocean",
             ],
+            "facade": ["NAMO", "SA", "NAMO", "SA", None, "SA", None, "NAMO", "SA"],
             "predicted_arrival_datetime_utc": [
                 datetime(2020, 5, 6, 11, 41, 3, 340000),
                 datetime(2020, 5, 6, 11, 41, 3, 340000),
@@ -685,6 +687,7 @@ def pno_to_render_1() -> PnoToRender:
         ],
         port_locode="FRCQF",
         port_name="Somewhere over the rainbow",
+        facade="NAMO",
         predicted_arrival_datetime_utc=datetime(2020, 5, 6, 11, 41, 3, 340000),
         predicted_landing_datetime_utc=datetime(2020, 5, 6, 16, 40),
         trip_gears=[
@@ -778,6 +781,7 @@ def pre_rendered_pno_1(pre_rendered_pno_1_catch_onboard) -> PreRenderedPno:
         catch_onboard=pre_rendered_pno_1_catch_onboard,
         port_locode="FRCQF",
         port_name="Somewhere over the rainbow",
+        facade="NAMO",
         predicted_arrival_datetime_utc=datetime(2020, 5, 6, 11, 41, 3, 340000),
         predicted_landing_datetime_utc=datetime(2020, 5, 6, 16, 40),
         trip_gears=[
@@ -832,6 +836,7 @@ def pno_to_render_2() -> PnoToRender:
         catch_onboard=None,
         port_locode="FRZJZ",
         port_name="Somewhere over the top",
+        facade="SA",
         predicted_arrival_datetime_utc=datetime(2020, 5, 6, 11, 41, 3, 340000),
         predicted_landing_datetime_utc=pd.NaT,
         trip_gears=[],
@@ -869,6 +874,7 @@ def pre_rendered_pno_2() -> PreRenderedPno:
         catch_onboard=None,
         port_locode="FRZJZ",
         port_name="Somewhere over the top",
+        facade="SA",
         predicted_arrival_datetime_utc=datetime(2020, 5, 6, 11, 41, 3, 340000),
         predicted_landing_datetime_utc=None,
         trip_gears=[],
@@ -903,6 +909,7 @@ def pno_pdf_document_to_distribute_targeted_vessel_and_segments() -> RenderedPno
             FleetSegment("NWW02", "Autres"),
         ],
         port_locode="FRZJZ",
+        facade="NAMO",
         source=PnoSource.MANUAL,
         generation_datetime_utc=datetime(2023, 5, 6, 23, 52, 0),
         pdf_document=b"PDF Document",
@@ -920,7 +927,7 @@ def pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned(
         pno_pdf_document_to_distribute_targeted_vessel_and_segments,
         control_unit_ids={1, 2, 3},
         phone_numbers=["'00 11 22 33 44 55", "44 44 44 44 44"],
-        emails=["alternative@email", "some.email@control.unit.4"],
+        emails=["alternative@email", "some.email@control.unit.4", "namo@email"],
     )
 
 
@@ -935,6 +942,7 @@ def pno_pdf_document_to_distribute_receive_all_pnos_from_port() -> RenderedPno:
         is_being_sent=True,
         trip_segments=[],
         port_locode="FRDPE",
+        facade="Unknown facade",
         source=PnoSource.MANUAL,
         generation_datetime_utc=datetime(2023, 6, 6, 23, 50, 0),
         pdf_document=b"PDF Document",
@@ -965,6 +973,7 @@ def pno_pdf_document_to_distribute_without_addressees() -> RenderedPno:
         is_being_sent=True,
         trip_segments=[],
         port_locode="FRDKK",
+        facade="SA",
         source=PnoSource.MANUAL,
         generation_datetime_utc=datetime(2023, 6, 6, 23, 50, 0),
         pdf_document=b"PDF Document",
@@ -995,6 +1004,7 @@ def pno_pdf_document_to_distribute_verified() -> RenderedPno:
         is_being_sent=True,
         trip_segments=[],
         port_locode="FRLEH",
+        facade="NAMO",
         source=PnoSource.MANUAL,
         generation_datetime_utc=datetime(2023, 6, 6, 23, 50, 0),
         pdf_document=b"PDF Document",
@@ -1009,7 +1019,7 @@ def pno_pdf_document_to_distribute_verified_assigned(
     return dataclasses.replace(
         pno_pdf_document_to_distribute_verified,
         control_unit_ids={2, 3},
-        emails=["alternative@email", "some.email@control.unit.4"],
+        emails=["alternative@email", "some.email@control.unit.4", "namo@email"],
         phone_numbers=["'00 11 22 33 44 55", "44 44 44 44 44"],
     )
 
@@ -1055,6 +1065,7 @@ def logbook_rendered_pno():
         is_being_sent=True,
         trip_segments=["Segment1", "Segment2"],
         port_locode="FRBOL",
+        facade="NAMO",
         source=PnoSource.LOGBOOK,
         html_for_pdf="<html>Html for PDF</html>",
         pdf_document=b"PDF document",
@@ -1078,6 +1089,7 @@ def manual_rendered_pno():
         is_being_sent=True,
         trip_segments=["Segment3"],
         port_locode="FRBOL",
+        facade="SA",
         source=PnoSource.MANUAL,
         html_for_pdf="<html>Html for PDF manual</html>",
         pdf_document=b"PDF document manual",
@@ -1222,6 +1234,11 @@ def pnos_to_reset() -> List[RenderedPno]:
     return [RenderedPno()]
 
 
+@pytest.fixture
+def facade_email_addresses() -> dict:
+    return {"NAMO": "namo@email", "SA": "sa@email"}
+
+
 def test_extract_pnos_to_generate(reset_test_data, extracted_pnos):
     approximate_datetime_columns = [
         "operation_datetime_utc",
@@ -1254,6 +1271,11 @@ def test_extract_species_names(reset_test_data, species_names):
 def test_extract_fishing_gear_names(reset_test_data, fishing_gear_names):
     res = extract_fishing_gear_names.run()
     assert res == fishing_gear_names
+
+
+def test_extract_facade_email_addresses(reset_test_data, facade_email_addresses):
+    res = extract_facade_email_addresses.run()
+    assert res == facade_email_addresses
 
 
 def test_to_pnos_to_render(extracted_pnos):
@@ -1481,6 +1503,7 @@ def test_load_pno_pdf_documents(reset_test_data):
                 is_being_sent=is_being_sent,
                 trip_segments=[],
                 port_locode="FRBOL",
+                facade="NAMO",
                 source=PnoSource.LOGBOOK,
                 generation_datetime_utc=datetime(2020, 5, 6, 8, 52, 42),
                 pdf_document=pdf,
@@ -1557,12 +1580,14 @@ def test_attribute_addressees_uses_target_vessels_and_segments(
     pno_units_targeting_vessels,
     pno_units_ports_and_segments_subscriptions,
     control_units_contacts,
+    facade_email_addresses,
 ):
     res = attribute_addressees.run(
         pno_pdf_document_to_distribute_targeted_vessel_and_segments,
         pno_units_targeting_vessels,
         pno_units_ports_and_segments_subscriptions,
         control_units_contacts,
+        facade_email_addresses,
     )
     assert res == pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned
 
@@ -1573,12 +1598,14 @@ def test_attribute_addressees_uses_receive_all_pnos_from_port(
     pno_units_targeting_vessels,
     pno_units_ports_and_segments_subscriptions,
     control_units_contacts,
+    facade_email_addresses,
 ):
     res = attribute_addressees.run(
         pno_pdf_document_to_distribute_receive_all_pnos_from_port,
         pno_units_targeting_vessels,
         pno_units_ports_and_segments_subscriptions,
         control_units_contacts,
+        facade_email_addresses,
     )
     assert res == pno_pdf_document_to_distribute_receive_all_pnos_from_port_assigned
 
@@ -1589,12 +1616,14 @@ def test_attribute_addressees_returns_empty_addressees(
     pno_units_targeting_vessels,
     pno_units_ports_and_segments_subscriptions,
     control_units_contacts,
+    facade_email_addresses,
 ):
     res = attribute_addressees.run(
         pno_pdf_document_to_distribute_without_addressees,
         pno_units_targeting_vessels,
         pno_units_ports_and_segments_subscriptions,
         control_units_contacts,
+        facade_email_addresses,
     )
     assert res == pno_pdf_document_to_distribute_without_addressees_assigned
 
@@ -1605,12 +1634,14 @@ def test_attribute_addressees_when_is_verified(
     pno_units_targeting_vessels,
     pno_units_ports_and_segments_subscriptions,
     control_units_contacts,
+    facade_email_addresses,
 ):
     res = attribute_addressees.run(
         pno_pdf_document_to_distribute_verified,
         pno_units_targeting_vessels,
         pno_units_ports_and_segments_subscriptions,
         control_units_contacts,
+        facade_email_addresses,
     )
     assert res == pno_pdf_document_to_distribute_verified_assigned
 
@@ -1639,7 +1670,8 @@ def test_create_email(
         assert pno_to_send.message["To"] == "pno.test@email.fr"
     else:
         assert (
-            pno_to_send.message["To"] == "alternative@email, some.email@control.unit.4"
+            pno_to_send.message["To"]
+            == "alternative@email, some.email@control.unit.4, namo@email"
         )
     assert pno_to_send.message["From"] == "monitorfish@test.email"
     assert pno_to_send.message["Cc"] is None
@@ -1972,7 +2004,7 @@ def test_flow(
     assert len(initial_pdf_documents) == 8
     assert len(initial_sent_messages) == 0
     assert len(final_pdf_documents) == 14
-    assert len(final_sent_messages) == 12
+    assert len(final_sent_messages) == 15
 
     if is_integration:
         assert final_sent_messages.success.all()
@@ -1995,7 +2027,7 @@ def test_flow(
                     == CommunicationMeans.EMAIL.value
                 ]
             )
-            == 7
+            == 10
         )
         assert final_sent_messages.loc[
             (

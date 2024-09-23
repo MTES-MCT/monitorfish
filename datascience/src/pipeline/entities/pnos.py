@@ -46,6 +46,7 @@ class PnoToRender:
     catch_onboard: List[dict]
     port_locode: str
     port_name: str
+    facade: str
     predicted_arrival_datetime_utc: datetime
     predicted_landing_datetime_utc: datetime
     trip_gears: List[dict]
@@ -113,6 +114,7 @@ class PreRenderedPno:
     catch_onboard: pd.DataFrame
     port_locode: str
     port_name: str
+    facade: str
     predicted_arrival_datetime_utc: datetime
     predicted_landing_datetime_utc: datetime
     trip_gears: List[FishingGear]
@@ -204,6 +206,7 @@ class RenderedPno:
     is_being_sent: bool
     trip_segments: list
     port_locode: str
+    facade: str
     source: PnoSource
     html_for_pdf: Optional[str] = None
     pdf_document: Optional[bytes] = None

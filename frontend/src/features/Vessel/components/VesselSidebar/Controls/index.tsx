@@ -1,4 +1,5 @@
 import { FingerprintSpinner } from '@components/FingerprintSpinner'
+import { customDayjs } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -58,7 +59,7 @@ export function Controls() {
   }
 
   const seeMore = useCallback(() => {
-    const nextDate = controlsFromDate.subtract(1, 'year')
+    const nextDate = customDayjs(controlsFromDate).subtract(1, 'year').toISOString()
 
     dispatch(setControlFromDate(nextDate))
   }, [dispatch, controlsFromDate])

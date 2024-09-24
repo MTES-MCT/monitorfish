@@ -51,6 +51,7 @@ export const mainStore = configureStore({
         actionFilter: action =>
           !action.type.startsWith('persist/') &&
           !action.type.startsWith('monitorfishApi/') &&
+          !action.type.startsWith('monitorfishLightApi/') &&
           !action.type.startsWith('monitorfishPublicApi/')
       }) as any
     ),

@@ -31,17 +31,9 @@ function UnmemoizedVesselsLayer() {
   const vesselsLastPositionVisibility = useMainAppSelector(state => state.map.vesselsLastPositionVisibility)
 
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
-
-  const { filterColor, filters, nonFilteredVesselsAreHidden, showedFilter } = useMainAppSelector(state => {
-    const nextShowedFilter = state.filter?.filters?.find(filter => filter.showed)
-
-    return {
-      filterColor: nextShowedFilter?.color,
-      filters: state.filter?.filters,
-      nonFilteredVesselsAreHidden: state.filter?.nonFilteredVesselsAreHidden,
-      showedFilter: nextShowedFilter
-    }
-  })
+  const filters = useMainAppSelector(state => state.filter.filters)
+  const nonFilteredVesselsAreHidden = useMainAppSelector(state => state.filter.nonFilteredVesselsAreHidden)
+  const showedFilter = filters?.find(filter => filter.showed)
 
   const vesselsVectorSourceRef = useRef<VectorSource<Feature<Point>>>()
   const vesselWebGLPointsLayerRef = useRef<WebGLPointsLayerWithName>()
@@ -60,7 +52,9 @@ function UnmemoizedVesselsLayer() {
     const isLight = Vessel.iconIsLight(selectedBaseLayer)
     const { vesselIsHidden, vesselIsOpacityReduced } =
       getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
-    const filterColorRGBArray = customHexToRGB(!!filterColor || isLight ? theme.color.lightGray : COLORS.charcoal)
+    const filterColorRGBArray = customHexToRGB(
+      !!showedFilter?.color || isLight ? theme.color.lightGray : COLORS.charcoal
+    )
     const initStyles = {
       filterColorBlue: filterColorRGBArray[2],
       filterColorGreen: filterColorRGBArray[1],
@@ -132,8 +126,8 @@ function UnmemoizedVesselsLayer() {
     getVesselsVectorSource()?.clear(true)
     getVesselsVectorSource()?.addFeatures(features)
 
-    if (filterColor) {
-      const rgb = customHexToRGB(filterColor)
+    if (showedFilter?.color) {
+      const rgb = customHexToRGB(showedFilter?.color)
 
       style.current.variables = {
         ...style.current.variables,
@@ -169,13 +163,13 @@ function UnmemoizedVesselsLayer() {
 
   useEffect(() => {
     dispatch(applyFilterToVessels())
-    if (filterColor) {
-      const [red, green, blue] = customHexToRGB(filterColor)
+    if (showedFilter?.color) {
+      const [red, green, blue] = customHexToRGB(showedFilter?.color)
       style.current.variables.filterColorRed = red
       style.current.variables.filterColorGreen = green
       style.current.variables.filterColorBlue = blue
     }
-  }, [filterColor, filters, showedFilter, dispatch])
+  }, [showedFilter?.color, filters, showedFilter, dispatch])
 
   useEffect(() => {
     const { vesselIsHidden, vesselIsOpacityReduced } =

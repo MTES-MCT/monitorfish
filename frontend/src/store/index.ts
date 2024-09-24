@@ -50,8 +50,10 @@ export const mainStore = configureStore({
       reduxStateSync.createStateSyncMiddleware({
         actionFilter: action =>
           !action.type.startsWith('persist/') &&
+          !action.type.startsWith('__rtkq/') &&
           !action.type.startsWith('monitorfishApi/') &&
           !action.type.startsWith('monitorfishLightApi/') &&
+          !action.type.startsWith('monitorenvApi/') &&
           !action.type.startsWith('monitorfishPublicApi/')
       }) as any
     ),

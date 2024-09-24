@@ -2,8 +2,8 @@ import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { MissionForm } from '@features/Mission/components/MissionForm'
 import { useListenToAllMissionEventsUpdates } from '@features/Mission/components/MissionForm/hooks/useListenToAllMissionEventsUpdates'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
-import { THEME, Notifier } from '@mtes-mct/monitor-ui'
-import { type CSSProperties, useCallback, useEffect, useMemo, useState, Fragment } from 'react'
+import { Notifier, THEME } from '@mtes-mct/monitor-ui'
+import { type CSSProperties, Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { Alert } from './Alert'
@@ -15,18 +15,12 @@ import { useIsSuperUser } from '../../auth/hooks/useIsSuperUser'
 import { MissionEventContext } from '../../context/MissionEventContext'
 import { SideWindowMenuKey } from '../../domain/entities/sideWindow/constants'
 import { closeBeaconMalfunctionInKanban } from '../../domain/shared_slices/BeaconMalfunction'
-import { getOperationalAlerts } from '../../domain/use_cases/alert/getOperationalAlerts'
-import { getSilencedAlerts } from '../../domain/use_cases/alert/getSilencedAlerts'
-import getAllBeaconMalfunctions from '../../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
-import getAllGearCodes from '../../domain/use_cases/gearCode/getAllGearCodes'
-import { getInfractions } from '../../domain/use_cases/infraction/getInfractions'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { Loader as MissionFormLoader } from '../Mission/components/MissionForm/Loader'
 import { MissionList } from '../Mission/components/MissionList'
 import { PriorNotificationList } from '../PriorNotification/components/PriorNotificationList'
 import { setEditedReportingInSideWindow } from '../Reporting/slice'
-import { getAllCurrentReportings } from '../Reporting/useCases/getAllCurrentReportings'
 
 export function SideWindow() {
   const dispatch = useMainAppDispatch()
@@ -75,13 +69,6 @@ export function SideWindow() {
   }, [openedBeaconMalfunctionInKanban, editedReportingInSideWindow, selectedPath.menu])
 
   useEffect(() => {
-    dispatch(getOperationalAlerts())
-    dispatch(getAllBeaconMalfunctions())
-    dispatch(getSilencedAlerts())
-    dispatch(getAllCurrentReportings())
-    dispatch(getInfractions())
-    dispatch(getAllGearCodes())
-
     window.addEventListener('beforeunload', () => {
       dispatch(sideWindowActions.close())
     })

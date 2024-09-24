@@ -26,7 +26,8 @@ import { saveMeasurement } from '../useCases/saveMeasurement'
 import type { VectorLayerWithName } from '../../../domain/types/layer'
 import type { MeasurementInProgress } from '@features/Measurement/types'
 import type { Coordinate } from 'ol/coordinate'
-import type Geometry, { Type } from 'ol/geom/Geometry'
+import type Geometry from 'ol/geom/Geometry'
+import type { Type } from 'ol/geom/Geometry'
 import type { MutableRefObject } from 'react'
 
 const DRAW_START_EVENT = 'drawstart'
@@ -90,17 +91,17 @@ function UnmemoizedMeasurementLayer() {
 
   useEffect(() => {
     function drawExistingFeaturesOnMap() {
-      if (measurementsDrawed) {
-        measurementsDrawed.forEach(measurement => {
-          const feature = new GeoJSON({
-            featureProjection: OPENLAYERS_PROJECTION
-          }).readFeature(measurement.geometry)
+      measurementsDrawed.forEach(measurement => {
+        const feature = new GeoJSON({
+          featureProjection: OPENLAYERS_PROJECTION
+        }).readFeature(measurement.geometry)
+        feature.setId(measurement.id)
 
-          getVectorSource().addFeature(feature)
-        })
-      }
+        getVectorSource().addFeature(feature)
+      })
     }
 
+    getVectorSource().clear(true)
     drawExistingFeaturesOnMap()
   }, [getVectorSource, measurementsDrawed])
 
@@ -242,18 +243,14 @@ function UnmemoizedMeasurementLayer() {
     }
   }, [dispatch, measurementInProgress])
 
-  const deleteFeature = useCallback(
-    featureId => {
-      const feature = getVectorSource().getFeatureById(featureId)
-      if (feature) {
-        getVectorSource().removeFeature(feature)
-        getVectorSource().changed()
-      }
-
+  const deleteFeature = featureId => {
+    const feature = getVectorSource().getFeatureById(featureId)
+    if (feature) {
+      getVectorSource().removeFeature(feature)
+      getVectorSource().changed()
       dispatch(removeMeasurementDrawed(featureId))
-    },
-    [dispatch, getVectorSource]
-  )
+    }
+  }
 
   function startDrawing(event) {
     setMeasurementInProgress({

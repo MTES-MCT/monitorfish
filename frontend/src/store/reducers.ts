@@ -1,14 +1,29 @@
+import { monitorenvApi, monitorfishApi, monitorfishLightApi, monitorfishPublicApi } from '@api/api'
+import { regulationReducer } from '@features/BackOffice/slice'
+import { controlUnitDialogReducer } from '@features/ControlUnit/components/ControlUnitDialog/slice'
+import { controlUnitListDialogPersistedReducer } from '@features/ControlUnit/components/ControlUnitListDialog/slice'
+import { customZoneReducer, type CustomZoneState } from '@features/CustomZone/slice'
 import { drawReducer } from '@features/Draw/slice'
 import { interestPointReducer } from '@features/InterestPoint/slice'
+import { logbookReducer } from '@features/Logbook/slice'
 import { mainWindowReducer } from '@features/MainWindow/slice'
-import { measurementReducer } from '@features/Measurement/slice'
+import { measurementReducer, type MeasurementState } from '@features/Measurement/slice'
+import { missionFormReducer } from '@features/Mission/components/MissionForm/slice'
+import { missionListReducer, type MissionListState } from '@features/Mission/components/MissionList/slice'
+import { priorNotificationReducer, type PriorNotificationState } from '@features/PriorNotification/slice'
+import { regulatoryLayerSearchReducer } from '@features/Regulation/components/RegulationSearch/slice'
+import { regulatoryReducer } from '@features/Regulation/slice'
+import { reportingReducer } from '@features/Reporting/slice'
+import { alertReducer } from '@features/SideWindow/Alert/slice'
+import { sideWindowReducer } from '@features/SideWindow/slice'
+import { stationReducer } from '@features/Station/slice'
+import { vesselListReducer } from '@features/VesselList/slice'
 import createMigrate from 'redux-persist/es/createMigrate'
 import persistReducer from 'redux-persist/es/persistReducer'
 import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2'
 import storage from 'redux-persist/es/storage' // LocalStorage
 
 import { MAIN_PERSISTOR_MISSION_MIGRATIONS } from './migrations'
-import { monitorenvApi, monitorfishApi, monitorfishLightApi, monitorfishPublicApi } from '../api/api'
 import { beaconMalfunctionReducer } from '../domain/shared_slices/BeaconMalfunction'
 import { controlReducer } from '../domain/shared_slices/Control'
 import { displayedComponentReducer } from '../domain/shared_slices/DisplayedComponent'
@@ -22,21 +37,6 @@ import layer from '../domain/shared_slices/Layer'
 import { mapReducer } from '../domain/shared_slices/Map'
 import { speciesReducer } from '../domain/shared_slices/Species'
 import { vesselSliceReducer } from '../domain/shared_slices/Vessel'
-import { regulationReducer } from '../features/BackOffice/slice'
-import { controlUnitDialogReducer } from '../features/ControlUnit/components/ControlUnitDialog/slice'
-import { controlUnitListDialogPersistedReducer } from '../features/ControlUnit/components/ControlUnitListDialog/slice'
-import { customZoneReducer, type CustomZoneState } from '../features/CustomZone/slice'
-import { logbookReducer } from '../features/Logbook/slice'
-import { missionFormReducer } from '../features/Mission/components/MissionForm/slice'
-import { missionListReducer, type MissionListState } from '../features/Mission/components/MissionList/slice'
-import { priorNotificationReducer, type PriorNotificationState } from '../features/PriorNotification/slice'
-import { regulatoryLayerSearchReducer } from '../features/Regulation/components/RegulationSearch/slice'
-import { regulatoryReducer } from '../features/Regulation/slice'
-import { reportingReducer } from '../features/Reporting/slice'
-import { alertReducer } from '../features/SideWindow/Alert/slice'
-import { sideWindowReducer } from '../features/SideWindow/slice'
-import { stationReducer } from '../features/Station/slice'
-import { vesselListReducer } from '../features/VesselList/slice'
 
 import type { Reducer } from 'redux'
 import type { PersistConfig } from 'redux-persist'
@@ -88,7 +88,10 @@ export const mainReducer = {
   interestPoint: interestPointReducer,
   layer: layer.homepage.reducer,
   mainWindow: mainWindowReducer,
-  measurement: measurementReducer,
+  measurement: persistReducerTyped(
+    { ...getCommonPersistReducerConfig<MeasurementState>('mainPersistorMeasurement', ['measurementsDrawed']) },
+    measurementReducer
+  ),
   missionForm: missionFormReducer,
   missionList: persistReducerTyped(
     {

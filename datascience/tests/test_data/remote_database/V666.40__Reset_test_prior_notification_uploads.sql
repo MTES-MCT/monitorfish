@@ -1,3 +1,4 @@
+DELETE FROM prior_notification_uploads;
 INSERT INTO prior_notification_uploads (
                                   report_id, is_manual_prior_notification,                    file_name,                                                                   mime_type,                        content,                                                           created_at,                                                           updated_at
 ) VALUES

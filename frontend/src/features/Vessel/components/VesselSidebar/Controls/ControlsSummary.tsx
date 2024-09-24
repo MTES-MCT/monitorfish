@@ -24,7 +24,7 @@ export function ControlsSummary({ controlsFromDate, lastControls, summary }: Con
 
   return (
     <Zone data-cy="vessel-controls-summary">
-      <Header>Derniers contrôles {yearsDepth && <>({yearsDepth} dernières années)</>}</Header>
+      <Header>Derniers contrôles ({yearsDepth} dernières années)</Header>
       <Body>
         <InfractionsSummary
           numberOfControlsWithSomeGearsSeized={numberOfControlsWithSomeGearsSeized}

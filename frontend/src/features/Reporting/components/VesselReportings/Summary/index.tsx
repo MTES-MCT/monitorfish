@@ -11,7 +11,7 @@ export function Summary() {
 
   return (
     <Zone data-cy="vessel-reporting-summary">
-      <Header>Résumé des derniers signalements {yearsDepth && <>({yearsDepth} dernières années)</>}</Header>
+      <Header>Résumé des derniers signalements ({yearsDepth} dernières années)</Header>
       <Body>
         <Columns $isFirst>
           <IconColumn>

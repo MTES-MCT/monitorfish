@@ -1,8 +1,10 @@
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { MissionForm } from '@features/Mission/components/MissionForm'
 import { useListenToAllMissionEventsUpdates } from '@features/Mission/components/MissionForm/hooks/useListenToAllMissionEventsUpdates'
+import { getAllCurrentReportings } from '@features/Reporting/useCases/getAllCurrentReportings'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { Notifier, THEME } from '@mtes-mct/monitor-ui'
+import { isCypress } from '@utils/isCypress'
 import { type CSSProperties, Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -15,6 +17,11 @@ import { useIsSuperUser } from '../../auth/hooks/useIsSuperUser'
 import { MissionEventContext } from '../../context/MissionEventContext'
 import { SideWindowMenuKey } from '../../domain/entities/sideWindow/constants'
 import { closeBeaconMalfunctionInKanban } from '../../domain/shared_slices/BeaconMalfunction'
+import { getOperationalAlerts } from '../../domain/use_cases/alert/getOperationalAlerts'
+import { getSilencedAlerts } from '../../domain/use_cases/alert/getSilencedAlerts'
+import getAllBeaconMalfunctions from '../../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
+import getAllGearCodes from '../../domain/use_cases/gearCode/getAllGearCodes'
+import { getInfractions } from '../../domain/use_cases/infraction/getInfractions'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { Loader as MissionFormLoader } from '../Mission/components/MissionForm/Loader'
@@ -69,6 +76,15 @@ export function SideWindow() {
   }, [openedBeaconMalfunctionInKanban, editedReportingInSideWindow, selectedPath.menu])
 
   useEffect(() => {
+    if (isCypress()) {
+      dispatch(getOperationalAlerts())
+      dispatch(getAllBeaconMalfunctions())
+      dispatch(getSilencedAlerts())
+      dispatch(getAllCurrentReportings())
+      dispatch(getInfractions())
+      dispatch(getAllGearCodes())
+    }
+
     window.addEventListener('beforeunload', () => {
       dispatch(sideWindowActions.close())
     })

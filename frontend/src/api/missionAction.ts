@@ -53,10 +53,10 @@ export const MISSION_ACTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer le
  * @throws {@link ApiError}
  *
  */
-export async function getVesselControlsFromAPI(vesselId: number, fromDate: Date) {
+export async function getVesselControlsFromAPI(vesselId: number, fromDate: string) {
   try {
     return await monitorfishApiKy
-      .get(`/bff/v1/mission_actions/controls?vesselId=${vesselId}&afterDateTime=${fromDate.toISOString()}`)
+      .get(`/bff/v1/mission_actions/controls?vesselId=${vesselId}&afterDateTime=${fromDate}`)
       .json<MissionAction.MissionControlsSummary>()
   } catch (err) {
     throw new ApiError(MISSION_ACTIONS_ERROR_MESSAGE, err)

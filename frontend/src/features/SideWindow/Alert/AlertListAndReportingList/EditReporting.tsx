@@ -100,7 +100,7 @@ const Flag = styled.img<{
 }>`
   cursor: pointer;
   display: inline-block;
-  height: 14;
+  height: 14px;
   margin-top: 5px;
   vertical-align: middle;
 `

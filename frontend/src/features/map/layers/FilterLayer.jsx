@@ -11,14 +11,10 @@ import { COLORS } from '../../../constants/constants'
 import { monitorfishMap } from '../monitorfishMap'
 
 const FilterLayer = () => {
-  const { showedFilter, filterColor } = useSelector((state) => {
-    const _showedFilter = state.filter?.filters?.find(filter => filter.showed)
-    return {
-      showedFilter: _showedFilter,
-      filterColor: _showedFilter ? _showedFilter.color : null
-    }
-  })
-  const { zonesSelected } = useSelector(state => state.vesselList)
+  const filters = useSelector(state => state.filter.filters)
+  const zonesSelected = useSelector(state => state.vesselList.zonesSelected)
+
+  const showedFilter = filters?.find(filter => filter.showed)
   const currentDrawnFilterZone = zonesSelected && zonesSelected[0]?.feature
   const filterFeature = currentDrawnFilterZone || showedFilter?.filters?.zonesSelected[0]?.feature
 
@@ -48,7 +44,7 @@ const FilterLayer = () => {
         updateWhileInteracting: true,
         style: new Style({
           stroke: new Stroke({
-            color: filterColor,
+            color: showedFilter?.filterColor,
             width: 2,
             lineDash: [4, 8]
           })
@@ -78,12 +74,12 @@ const FilterLayer = () => {
   useEffect(() => {
     layerRef?.current.setStyle(new Style({
       stroke: new Stroke({
-        color: currentDrawnFilterZone ? COLORS.charcoal : filterColor,
+        color: currentDrawnFilterZone ? COLORS.charcoal : showedFilter?.filterColor,
         width: 2,
         lineDash: [4, 8]
       })
     }))
-  }, [filterColor, currentDrawnFilterZone])
+  }, [showedFilter?.filterColor, currentDrawnFilterZone])
 
   return null
 }

@@ -9,10 +9,9 @@ import type {
   PendingAlertReporting
 } from '@features/Reporting/types'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import type { Dayjs } from 'dayjs'
 
 export type ReportingState = {
-  archivedReportingsFromDate: Dayjs
+  archivedReportingsFromDate: string
   currentReportings: Array<InfractionSuspicionReporting | PendingAlertReporting>
   editedReporting: EditableReporting | undefined
   editedReportingInSideWindow: EditableReporting | undefined
@@ -21,7 +20,7 @@ export type ReportingState = {
   vesselIdentity: VesselIdentity | undefined
 }
 const INITIAL_STATE: ReportingState = {
-  archivedReportingsFromDate: customDayjs().utc().subtract(5, 'year').startOf('year'),
+  archivedReportingsFromDate: customDayjs().utc().subtract(5, 'year').startOf('year').toISOString(),
   currentReportings: [],
   editedReporting: undefined,
   editedReportingInSideWindow: undefined,
@@ -82,12 +81,8 @@ const reportingSlice = createSlice({
 
     /**
      * Set the date since archived reporting are fetched
-     * @function setArchivedReportingsFromDate
-     * @memberOf ReportingReducer
-     * @param {Object=} state
-     * @param {{payload: Date}} action - The "from" date
      */
-    setArchivedReportingsFromDate(state, action) {
+    setArchivedReportingsFromDate(state, action: PayloadAction<string>) {
       state.archivedReportingsFromDate = action.payload
     },
 

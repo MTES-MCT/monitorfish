@@ -485,17 +485,17 @@ export function VesselList({ namespace }) {
               Aperçu sur la carte
             </PreviewButton>
             <BlackButton
+              $isLast={false}
               data-cy="save-filter-modal"
               disabled={hasNoFilter()}
-              isLast={false}
               onClick={() => saveFilter()}
             >
               Enregistrer le filtre
             </BlackButton>
             <BlackButton
+              $isLast
               data-cy="download-vessels-modal"
               disabled={!filteredVessels?.some(vessel => vessel.checked)}
-              isLast
               onClick={() => download()}
             >
               Télécharger le tableau
@@ -540,9 +540,9 @@ const PreviewButton = styled(SecondaryButton)`
 `
 
 const BlackButton = styled(PrimaryButton)<{
-  isLast: boolean
+  $isLast: boolean
 }>`
-  margin: 20px ${p => (p.isLast ? '20px' : '0')} 20px 10px;
+  margin: 20px ${p => (p.$isLast ? '20px' : '0')} 20px 10px;
   font-size: 13px;
   color: ${COLORS.gainsboro};
 `

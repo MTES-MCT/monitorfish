@@ -15,6 +15,8 @@ import sqlalchemy
 from dateutil.relativedelta import relativedelta
 from jinja2 import Template
 from requests import Response
+from sqlalchemy import BOOLEAN, TIMESTAMP, VARCHAR, Column, MetaData, Table
+from sqlalchemy.dialects.postgresql import BYTEA
 
 from config import EMAIL_IMAGES_LOCATION, TEST_DATA_LOCATION, default_risk_factors
 from src.db_config import create_engine
@@ -32,6 +34,7 @@ from src.pipeline.flows.distribute_pnos import (
     attribute_addressees,
     create_email,
     create_sms,
+    execute_prior_notification_attachments_query,
     extract_facade_email_addresses,
     extract_fishing_gear_names,
     extract_pnos_to_generate,
@@ -43,6 +46,7 @@ from src.pipeline.flows.distribute_pnos import (
     load_pno_pdf_documents,
     load_prior_notification_sent_messages,
     make_manual_prior_notifications_statement,
+    make_prior_notification_attachments_query,
     make_update_logbook_reports_statement,
     pre_render_pno,
     render_pno,
@@ -898,7 +902,7 @@ def pre_rendered_pno_2() -> PreRenderedPno:
 @pytest.fixture
 def pno_pdf_document_to_distribute_targeted_vessel_and_segments() -> RenderedPno:
     return RenderedPno(
-        report_id="123-abc-pno",
+        report_id="00000000-0000-4000-0000-000000000003",
         vessel_id=4,
         cfr="123-abc",
         vessel_name="Le navire 123-abc",
@@ -965,7 +969,7 @@ def pno_pdf_document_to_distribute_receive_all_pnos_from_port_assigned(
 @pytest.fixture
 def pno_pdf_document_to_distribute_without_addressees() -> RenderedPno:
     return RenderedPno(
-        report_id="456-def",
+        report_id="789-ghi",
         vessel_id=1,
         cfr="ABC000306959",
         vessel_name="ÉTABLIR IMPRESSION LORSQUE",
@@ -996,7 +1000,7 @@ def pno_pdf_document_to_distribute_without_addressees_assigned(
 @pytest.fixture
 def pno_pdf_document_to_distribute_verified() -> RenderedPno:
     return RenderedPno(
-        report_id="456-def",
+        report_id="11",
         vessel_id=1,
         cfr="ABC000306959",
         vessel_name="ÉTABLIR IMPRESSION LORSQUE",
@@ -1005,7 +1009,7 @@ def pno_pdf_document_to_distribute_verified() -> RenderedPno:
         trip_segments=[],
         port_locode="FRLEH",
         facade="NAMO",
-        source=PnoSource.MANUAL,
+        source=PnoSource.LOGBOOK,
         generation_datetime_utc=datetime(2023, 6, 6, 23, 50, 0),
         pdf_document=b"PDF Document",
         control_unit_ids=None,
@@ -1022,6 +1026,21 @@ def pno_pdf_document_to_distribute_verified_assigned(
         emails=["alternative@email", "some.email@control.unit.4", "namo@email"],
         phone_numbers=["'00 11 22 33 44 55", "44 44 44 44 44"],
     )
+
+
+@pytest.fixture
+def rendered_pnos(
+    pno_pdf_document_to_distribute_targeted_vessel_and_segments,
+    pno_pdf_document_to_distribute_receive_all_pnos_from_port,
+    pno_pdf_document_to_distribute_without_addressees,
+    pno_pdf_document_to_distribute_verified,
+) -> List[RenderedPno]:
+    return [
+        pno_pdf_document_to_distribute_targeted_vessel_and_segments,
+        pno_pdf_document_to_distribute_receive_all_pnos_from_port,
+        pno_pdf_document_to_distribute_without_addressees,
+        pno_pdf_document_to_distribute_verified,
+    ]
 
 
 def test_get_html_for_pdf_template():
@@ -1237,6 +1256,48 @@ def pnos_to_reset() -> List[RenderedPno]:
 @pytest.fixture
 def facade_email_addresses() -> dict:
     return {"NAMO": "namo@email", "SA": "sa@email"}
+
+
+@pytest.fixture
+def prior_notification_uploads_table() -> Table:
+    return Table(
+        "prior_notification_uploads",
+        MetaData(),
+        Column("id", VARCHAR(length=36), primary_key=True, nullable=False),
+        Column("report_id", VARCHAR(length=255), nullable=False),
+        Column("is_manual_prior_notification", BOOLEAN(), nullable=False),
+        Column("file_name", VARCHAR(length=255), nullable=False),
+        Column("mime_type", VARCHAR(length=255), nullable=False),
+        Column("content", BYTEA(), nullable=False),
+        Column("created_at", TIMESTAMP(timezone=True), nullable=False),
+        Column("updated_at", TIMESTAMP(timezone=True), nullable=False),
+        schema="public",
+    )
+
+
+@pytest.fixture
+def pnos_query_string() -> str:
+    return (
+        "SELECT "
+        "public.prior_notification_uploads.report_id, "
+        "public.prior_notification_uploads.file_name, "
+        "public.prior_notification_uploads.content "
+        "\nFROM public.prior_notification_uploads "
+        "\nWHERE "
+        "public.prior_notification_uploads.report_id IN "
+        "('00000000-0000-4000-0000-000000000003', '11', '456-def', '789-ghi')"
+    )
+
+
+@pytest.fixture
+def prior_notification_attachments() -> dict:
+    return {
+        "00000000-0000-4000-0000-000000000003": [
+            ("Uploaded document n°1.pdf", b"PDF"),
+            ("Uploaded document n°2.docx", b"Text Document"),
+        ],
+        "11": [("Uploaded document n°3.xlsx", b"Spreadsheet")],
+    }
 
 
 def test_extract_pnos_to_generate(reset_test_data, extracted_pnos):
@@ -1644,6 +1705,32 @@ def test_attribute_addressees_when_is_verified(
         facade_email_addresses,
     )
     assert res == pno_pdf_document_to_distribute_verified_assigned
+
+
+def test_make_prior_notification_attachments_query(
+    rendered_pnos, prior_notification_uploads_table, pnos_query_string
+):
+    # With non empty input
+    query = make_prior_notification_attachments_query.run(
+        rendered_pnos, prior_notification_uploads_table
+    )
+    query_string = str(query.compile(compile_kwargs={"literal_binds": True}))
+    assert query_string == pnos_query_string
+
+    # With empty input
+    query = make_prior_notification_attachments_query.run(
+        [], prior_notification_uploads_table
+    )
+    assert query is None
+
+
+def test_execute_prior_notification_attachments_query(
+    reset_test_data, pnos_query_string, prior_notification_attachments
+):
+    attachments = execute_prior_notification_attachments_query.run(
+        sqlalchemy.text(pnos_query_string)
+    )
+    assert attachments == prior_notification_attachments
 
 
 @pytest.mark.parametrize("test_mode", [False, True])

@@ -177,10 +177,10 @@ export function VesselCard({ feature, numberOfWarnings, overlayPosition }) {
         </ColumnOne>
       </VesselCardBottom>
       <TrianglePointer>
-        {overlayPosition === OverlayPosition.BOTTOM && <BottomTriangleShadow numberOfWarnings={numberOfWarnings} />}
-        {overlayPosition === OverlayPosition.TOP && <TopTriangleShadow numberOfWarnings={numberOfWarnings} />}
-        {overlayPosition === OverlayPosition.RIGHT && <RightTriangleShadow numberOfWarnings={numberOfWarnings} />}
-        {overlayPosition === OverlayPosition.LEFT && <LeftTriangleShadow numberOfWarnings={numberOfWarnings} />}
+        {overlayPosition === OverlayPosition.BOTTOM && <BottomTriangleShadow $numberOfWarnings={numberOfWarnings} />}
+        {overlayPosition === OverlayPosition.TOP && <TopTriangleShadow $numberOfWarnings={numberOfWarnings} />}
+        {overlayPosition === OverlayPosition.RIGHT && <RightTriangleShadow $numberOfWarnings={numberOfWarnings} />}
+        {overlayPosition === OverlayPosition.LEFT && <LeftTriangleShadow $numberOfWarnings={numberOfWarnings} />}
       </TrianglePointer>
     </>
   )
@@ -333,7 +333,7 @@ const TrianglePointer = styled.div`
 `
 
 const BottomTriangleShadow = styled.div<{
-  numberOfWarnings: number
+  $numberOfWarnings: number
 }>`
   position: absolute;
   width: 0;
@@ -341,16 +341,16 @@ const BottomTriangleShadow = styled.div<{
   border-style: solid;
   border-width: 11px 6px 0 6px;
   border-color: ${p => p.theme.color.gainsboro} transparent transparent transparent;
-  margin-left: ${props => {
-    if (props.numberOfWarnings === 1) {
+  margin-left: ${p => {
+    if (p.$numberOfWarnings === 1) {
       return -marginsWithOneWarning.xMiddle - 6
     }
 
-    if (props.numberOfWarnings === 2) {
+    if (p.$numberOfWarnings === 2) {
       return -marginsWithTwoWarning.xMiddle - 6
     }
 
-    if (props.numberOfWarnings === 3) {
+    if (p.$numberOfWarnings === 3) {
       return -marginsWithThreeWarning.xMiddle - 6
     }
 
@@ -361,7 +361,7 @@ const BottomTriangleShadow = styled.div<{
 `
 
 const TopTriangleShadow = styled.div<{
-  numberOfWarnings: number
+  $numberOfWarnings: number
 }>`
   position: absolute;
   width: 0;
@@ -370,31 +370,31 @@ const TopTriangleShadow = styled.div<{
   border-right: 6px solid transparent;
   border-bottom: 11px solid ${p => p.theme.color.gainsboro};
   border-left: 6px solid transparent;
-  margin-left: ${props => {
-    if (props.numberOfWarnings === 1) {
+  margin-left: ${p => {
+    if (p.$numberOfWarnings === 1) {
       return -marginsWithOneWarning.xMiddle - 6
     }
 
-    if (props.numberOfWarnings === 2) {
+    if (p.$numberOfWarnings === 2) {
       return -marginsWithTwoWarning.xMiddle - 6
     }
 
-    if (props.numberOfWarnings === 3) {
+    if (p.$numberOfWarnings === 3) {
       return -marginsWithThreeWarning.xMiddle - 6
     }
 
     return -marginsWithoutAlert.xMiddle - 6
   }}px;
-  margin-top: ${props => {
-    if (props.numberOfWarnings === 1) {
+  margin-top: ${p => {
+    if (p.$numberOfWarnings === 1) {
       return marginsWithOneWarning.yBottom + 18
     }
 
-    if (props.numberOfWarnings === 2) {
+    if (p.$numberOfWarnings === 2) {
       return marginsWithTwoWarning.yBottom + 18
     }
 
-    if (props.numberOfWarnings === 3) {
+    if (p.$numberOfWarnings === 3) {
       return marginsWithThreeWarning.yBottom + 18
     }
 
@@ -404,7 +404,7 @@ const TopTriangleShadow = styled.div<{
 `
 
 const RightTriangleShadow = styled.div<{
-  numberOfWarnings: number
+  $numberOfWarnings: number
 }>`
   position: absolute;
   width: 0;
@@ -413,31 +413,31 @@ const RightTriangleShadow = styled.div<{
   border-top: 6px solid transparent;
   border-bottom: 6px solid transparent;
   border-left: 11px solid ${p => p.theme.color.gainsboro};
-  margin-left: ${props => {
-    if (props.numberOfWarnings === 1) {
+  margin-left: ${p => {
+    if (p.$numberOfWarnings === 1) {
       return -marginsWithOneWarning.xRight - 20
     }
 
-    if (props.numberOfWarnings === 2) {
+    if (p.$numberOfWarnings === 2) {
       return -marginsWithTwoWarning.xRight - 20
     }
 
-    if (props.numberOfWarnings === 3) {
+    if (p.$numberOfWarnings === 3) {
       return -marginsWithThreeWarning.xRight - 20
     }
 
     return -marginsWithoutAlert.xRight - 20
   }}px;
-  margin-top: ${props => {
-    if (props.numberOfWarnings === 1) {
+  margin-top: ${p => {
+    if (p.$numberOfWarnings === 1) {
       return marginsWithOneWarning.yMiddle - 6
     }
 
-    if (props.numberOfWarnings === 2) {
+    if (p.$numberOfWarnings === 2) {
       return marginsWithTwoWarning.yMiddle - 6
     }
 
-    if (props.numberOfWarnings === 3) {
+    if (p.$numberOfWarnings === 3) {
       return marginsWithThreeWarning.yMiddle - 6
     }
 
@@ -447,7 +447,7 @@ const RightTriangleShadow = styled.div<{
 `
 
 const LeftTriangleShadow = styled.div<{
-  numberOfWarnings: number
+  $numberOfWarnings: number
 }>`
   position: absolute;
   width: 0;
@@ -458,16 +458,16 @@ const LeftTriangleShadow = styled.div<{
   border-bottom: 6px solid transparent;
   border-left: transparent;
   margin-left: -11px;
-  margin-top: ${props => {
-    if (props.numberOfWarnings === 1) {
+  margin-top: ${p => {
+    if (p.$numberOfWarnings === 1) {
       return marginsWithOneWarning.yMiddle - 6
     }
 
-    if (props.numberOfWarnings === 2) {
+    if (p.$numberOfWarnings === 2) {
       return marginsWithTwoWarning.yMiddle - 6
     }
 
-    if (props.numberOfWarnings === 3) {
+    if (p.$numberOfWarnings === 3) {
       return marginsWithThreeWarning.yMiddle - 6
     }
 

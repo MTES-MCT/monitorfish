@@ -2,6 +2,7 @@ import { addMeasurementDrawed, resetCircleMeasurementInDrawing } from '@features
 import Feature from 'ol/Feature'
 import Circle from 'ol/geom/Circle'
 import { fromCircle } from 'ol/geom/Polygon'
+import { v4 as uuidv4 } from 'uuid'
 
 import { convertToGeoJSONGeometryObject } from '../../../domain/entities/layers'
 import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
@@ -23,10 +24,8 @@ export const saveMeasurement = (feature: Feature, measurement: string) => dispat
   dispatch(
     addMeasurementDrawed({
       coordinates: (geometry as SimpleGeometry).getLastCoordinate(),
-
       geometry: geojsonGeometry,
-      // @ts-ignore
-      id: feature.ol_uid,
+      id: uuidv4(),
       measurement
     })
   )

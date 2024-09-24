@@ -1,12 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { getLocalStorageState } from '../../utils'
-
 import type { MeasurementType } from '../../domain/entities/map/constants'
 import type { CircleMeasurementToAdd, DrawedMeasurement } from '@features/Measurement/types'
 import type { PayloadAction } from '@reduxjs/toolkit'
-
-const measurementsLocalStorageKey = 'measurements'
 
 export type MeasurementState = {
   // TODO Type this prop.
@@ -21,7 +17,7 @@ export type MeasurementState = {
 const INITIAL_STATE: MeasurementState = {
   circleMeasurementInDrawing: null,
   circleMeasurementToAdd: undefined,
-  measurementsDrawed: getLocalStorageState([], measurementsLocalStorageKey),
+  measurementsDrawed: [],
   measurementTypeToAdd: null
 }
 
@@ -30,16 +26,10 @@ const measurementSlice = createSlice({
   name: 'measurement',
   reducers: {
     addMeasurementDrawed(state, action: PayloadAction<DrawedMeasurement>) {
-      const nextMeasurementsDrawed = state.measurementsDrawed.concat(action.payload)
-
-      window.localStorage.setItem(measurementsLocalStorageKey, JSON.stringify(nextMeasurementsDrawed))
-      state.measurementsDrawed = nextMeasurementsDrawed
+      state.measurementsDrawed = state.measurementsDrawed.concat(action.payload)
     },
     removeMeasurementDrawed(state, action: PayloadAction<string>) {
-      const nextMeasurementsDrawed = state.measurementsDrawed.filter(measurement => measurement.id !== action.payload)
-
-      window.localStorage.setItem(measurementsLocalStorageKey, JSON.stringify(nextMeasurementsDrawed))
-      state.measurementsDrawed = nextMeasurementsDrawed
+      state.measurementsDrawed = state.measurementsDrawed.filter(measurement => measurement.id !== action.payload)
     },
     resetCircleMeasurementInDrawing(state) {
       state.circleMeasurementInDrawing = null

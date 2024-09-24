@@ -1,5 +1,5 @@
 import { SeafrontGroup } from '@constants/seafront'
-import { CustomSearch, ExclamationPoint } from '@mtes-mct/monitor-ui'
+import { CustomSearch, ExclamationPoint, THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { FlexboxGrid, List } from 'rsuite'
 import styled from 'styled-components'
@@ -131,7 +131,9 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
           data-cy="side-window-alerts-number-silenced-vessels"
           style={numberOfSilencedAlertsStyle}
         >
-          <StyledExclamationPoint />
+          <StyledExclamationPoint color={THEME.color.white} size={15}>
+            !
+          </StyledExclamationPoint>
           {numberOfAlertsMessage}
         </NumberOfSilencedAlerts>
       )}

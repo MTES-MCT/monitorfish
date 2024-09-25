@@ -1848,19 +1848,16 @@ def test_create_email(
     assert part4.get_content() == marianne_gif
 
 
+@pytest.mark.parametrize("test_mode", [False, True])
 def test_create_email_with_no_email_addressees_returns_none(
     pno_pdf_document_to_distribute_without_addressees_assigned,
     prior_notification_attachments,
+    test_mode,
 ):
-    pno_to_send = create_email.run(
-        pno_pdf_document_to_distribute_without_addressees_assigned, test_mode=False
-    )
-    assert pno_to_send is None
-
     pno_to_send = create_email.run(
         pno_pdf_document_to_distribute_without_addressees_assigned,
         uploaded_attachments=prior_notification_attachments,
-        test_mode=True,
+        test_mode=test_mode,
     )
     assert pno_to_send is None
 

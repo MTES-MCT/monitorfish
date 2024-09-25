@@ -7,6 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.cache.annotation.Cacheable
 import java.time.ZonedDateTime
 
 /**
@@ -20,6 +21,7 @@ class GetAllMissions(
 ) {
     private val logger: Logger = LoggerFactory.getLogger(GetAllMissions::class.java)
 
+    @Cacheable(value = ["missions"])
     fun execute(
         pageNumber: Int?,
         pageSize: Int?,

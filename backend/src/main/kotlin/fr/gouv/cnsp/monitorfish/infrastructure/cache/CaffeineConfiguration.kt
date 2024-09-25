@@ -46,6 +46,7 @@ class CaffeineConfiguration {
 
     // Missions
     val missionControlUnits = "mission_control_units"
+    val missions = "missions"
 
     // Ports
     val activePorts = "active_ports"
@@ -123,6 +124,7 @@ class CaffeineConfiguration {
 
         // Missions
         val missionControlUnitsCache = buildMinutesCache(missionControlUnits, ticker, 120)
+        val missionsCache = buildMinutesCache(missions, ticker, 1)
 
         // Ports
         val portsCache = buildMinutesCache(ports, ticker, oneWeek)
@@ -191,6 +193,7 @@ class CaffeineConfiguration {
                 logbookCache,
                 logbookRawMessageCache,
                 missionControlUnitsCache,
+                missionsCache,
                 nextLogbookCache,
                 pnoTypesCache,
                 logbookPnoTypesCache,

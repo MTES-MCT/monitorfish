@@ -23,6 +23,16 @@
       })();
     </script>
     <!-- End Matomo Code -->
+
+    <!-- This script is used to inject the chat in the main window -->
+    <script>
+      if (window.location.pathname !== "/side_window") {
+        let script = document.createElement('script')
+        script.src = "https://embed.small.chat/T0176BBUCEQC01SV3W4464.js"
+        script.async = true
+        document.head.appendChild(script)
+      }
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -42,9 +52,6 @@
       g.async=true; g.src='https://audience-sites.e2.rie.gouv.fr/js/container_JF5tSs4R.js'; s.parentNode.insertBefore(g,s);
     </script>
     <!-- End Matomo Tag Manager -->
-    
-    <!-- This script is used to inject the chat -->
-    <script async src="https://embed.small.chat/T0176BBUCEQC01SV3W4464.js"></script>
     <script type="module" src="/src/index.tsx"></script>
   </body>
 </html>

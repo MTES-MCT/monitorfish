@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
-import { InputWithUnit, SubRow } from './styles'
+import { SubRow } from './styles'
 import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES, BLUEFIN_TUNA_SPECY_CODE } from '../../../../constants'
 
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
@@ -75,30 +75,28 @@ export function FormikExtraField({
           return (
             <StyledSubRow key={extendedSpecyCode}>
               <ExtendedSpecyCode>{extendedSpecyCode}</ExtendedSpecyCode>
-              <InputWithUnit>
-                <FormikNumberInput
-                  key={`quantity-${extendedSpecyCode}-${index})`}
-                  areArrowsHidden
-                  isErrorMessageHidden
-                  isLabelHidden
-                  label={`Quantité (${extendedSpecyCode})`}
-                  name={`fishingCatches[${index}].quantity`}
-                  readOnly={isReadOnly}
-                />
-                pc
-              </InputWithUnit>
-              <InputWithUnit>
-                <FormikNumberInput
-                  key={`weight-${extendedSpecyCode}-${index})`}
-                  areArrowsHidden
-                  isErrorMessageHidden
-                  isLabelHidden
-                  label={`Poids (${extendedSpecyCode})`}
-                  name={`fishingCatches[${index}].weight`}
-                  readOnly={isReadOnly}
-                />
-                kg
-              </InputWithUnit>
+
+              <FormikNumberInput
+                key={`quantity-${extendedSpecyCode}-${index})`}
+                areArrowsHidden
+                isErrorMessageHidden
+                isLabelHidden
+                label={`Quantité (${extendedSpecyCode})`}
+                name={`fishingCatches[${index}].quantity`}
+                readOnly={isReadOnly}
+                unit="pc"
+              />
+
+              <FormikNumberInput
+                key={`weight-${extendedSpecyCode}-${index})`}
+                areArrowsHidden
+                isErrorMessageHidden
+                isLabelHidden
+                label={`Poids (${extendedSpecyCode})`}
+                name={`fishingCatches[${index}].weight`}
+                readOnly={isReadOnly}
+                unit="kg"
+              />
             </StyledSubRow>
           )
         })}
@@ -110,16 +108,14 @@ export function FormikExtraField({
   if (specyCode === 'SWO') {
     return (
       <StyledSubRow key="SWO">
-        <InputWithUnit>
-          <FormikNumberInput
-            areArrowsHidden
-            isLabelHidden
-            label={`Quantité (${specyCode})`}
-            name={`fishingCatches[${fishingsCatchesIndex}].quantity`}
-            readOnly={isReadOnly}
-          />
-          pc
-        </InputWithUnit>
+        <FormikNumberInput
+          areArrowsHidden
+          isLabelHidden
+          label={`Quantité (${specyCode})`}
+          name={`fishingCatches[${fishingsCatchesIndex}].quantity`}
+          readOnly={isReadOnly}
+          unit="pc"
+        />
       </StyledSubRow>
     )
   }

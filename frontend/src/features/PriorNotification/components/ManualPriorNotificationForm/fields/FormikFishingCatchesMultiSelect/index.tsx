@@ -11,7 +11,7 @@ import { Fragment } from 'react/jsx-runtime'
 import styled from 'styled-components'
 
 import { FormikExtraField } from './FormikExtraField'
-import { InputWithUnit, SubRow } from './styles'
+import { SubRow } from './styles'
 import { getFishingsCatchesValidationError } from './utils'
 import { getFishingsCatchesInitialValues } from '../../utils'
 
@@ -136,17 +136,16 @@ export function FormikFishingCatchesMultiSelect({ isReadOnly }: FormikFishingCat
                     />
                   )}
 
-                  <InputWithUnit>
-                    <FormikNumberInput
-                      areArrowsHidden
-                      isErrorMessageHidden
-                      isLabelHidden
-                      label={`Poids (${fishingCatch.specyCode})`}
-                      name={`fishingCatches[${index}].weight`}
-                      readOnly={isReadOnly || fishingCatch.specyCode === BLUEFIN_TUNA_SPECY_CODE}
-                    />
-                    kg
-                  </InputWithUnit>
+                  <FormikNumberInput
+                    areArrowsHidden
+                    isErrorMessageHidden
+                    isLabelHidden
+                    isLight
+                    label={`Poids (${fishingCatch.specyCode})`}
+                    name={`fishingCatches[${index}].weight`}
+                    readOnly={isReadOnly || fishingCatch.specyCode === BLUEFIN_TUNA_SPECY_CODE}
+                    unit="kg"
+                  />
                 </SubRow>
 
                 <FormikExtraField

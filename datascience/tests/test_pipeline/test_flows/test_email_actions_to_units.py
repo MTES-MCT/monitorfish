@@ -17,9 +17,9 @@ from config import (
     TEST_DATA_LOCATION,
 )
 from src.pipeline.entities.control_units import (
+    ControlUnit,
     ControlUnitActions,
     ControlUnitActionsSentMessage,
-    ControlUnitWithEmails,
 )
 from src.pipeline.entities.missions import FlightGoal
 from src.pipeline.flows.email_actions_to_units import (
@@ -49,6 +49,11 @@ def mock_fetch_control_units_contacts():
         {
             "control_unit_id": [3, 5, 8],
             "control_unit_name": ["Unité 3", "Unité 5", "Unité 8"],
+            "administration": [
+                "Administration 1",
+                "Administration 2",
+                "Administration 3",
+            ],
             "emails": [
                 ["alternative@email", "some.email@control.unit.4"],
                 [],
@@ -310,44 +315,39 @@ def expected_control_unit_ids() -> List[int]:
 @pytest.fixture
 def sample_control_units() -> pd.DataFrame:
     return [
-        ControlUnitWithEmails(
+        ControlUnit(
             control_unit_id=3,
             control_unit_name="Unité 3",
+            administration="Administration 1",
             emails=["unité_3@email.fr", "unité_3_bis@email.fr"],
+            phone_numbers=[],
         ),
-        ControlUnitWithEmails(
-            control_unit_id=5, control_unit_name="Unité 5", emails=["unité_5@email.fr"]
+        ControlUnit(
+            control_unit_id=5,
+            control_unit_name="Unité 5",
+            administration="Administration 3",
+            emails=["unité_5@email.fr"],
+            phone_numbers=["0600"],
         ),
-        ControlUnitWithEmails(
+        ControlUnit(
             control_unit_id=8,
             control_unit_name="Unité 8",
+            administration="Administration 2",
             emails=["unité_8@email.fr", "unité_8_bis@email.fr"],
+            phone_numbers=["0700"],
         ),
     ]
 
 
 @pytest.fixture
-def expected_all_control_units() -> pd.DataFrame:
-    return pd.DataFrame(
-        {
-            "control_unit_id": [10002, 10018, 10019],
-            "control_unit_name": ["DML – DDTM 59", "P602 Verdon", "BN Toulon"],
-            "email_addresses": [
-                ["dml59@surveillance.fr"],
-                ["diffusion.p602@email.fr", "diffusion_bis.p602@email.fr"],
-                ["bn_toulon@email.fr"],
-            ],
-        }
-    )
-
-
-@pytest.fixture
 def sample_control_unit_actions(sample_mission_actions) -> ControlUnitActions:
     return ControlUnitActions(
-        control_unit=ControlUnitWithEmails(
+        control_unit=ControlUnit(
             control_unit_id=13,
             control_unit_name="Nom de l'unité",
+            administration="Administration 1",
             emails=["email@email.com", "email2@email.com"],
+            phone_numbers=[],
         ),
         period=Period(
             start=datetime(2020, 6, 23, 0, 0, 0),
@@ -499,10 +499,12 @@ def test_filter_control_units_contacts(control_units_contacts):
     )
 
     assert res == [
-        ControlUnitWithEmails(
+        ControlUnit(
             control_unit_id=2,
             control_unit_name="Unité 2",
+            administration="Administration 1",
             emails=["alternative@email", "some.email@control.unit.4"],
+            phone_numbers=["'00 11 22 33 44 55"],
         )
     ]
 

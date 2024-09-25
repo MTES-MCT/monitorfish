@@ -15,7 +15,16 @@ import sqlalchemy
 from dateutil.relativedelta import relativedelta
 from jinja2 import Template
 from requests import Response
-from sqlalchemy import BOOLEAN, TIMESTAMP, VARCHAR, Column, MetaData, Table
+from sqlalchemy import (
+    BOOLEAN,
+    TIMESTAMP,
+    VARCHAR,
+    Column,
+    MetaData,
+    Select,
+    Table,
+    select,
+)
 from sqlalchemy.dialects.postgresql import BYTEA
 
 from config import EMAIL_IMAGES_LOCATION, TEST_DATA_LOCATION, default_risk_factors
@@ -1276,31 +1285,25 @@ def prior_notification_uploads_table() -> Table:
 
 
 @pytest.fixture
-def pnos_query_string() -> str:
-    return (
-        "SELECT "
-        "public.prior_notification_uploads.report_id, "
-        "public.prior_notification_uploads.file_name, "
-        "public.prior_notification_uploads.content "
-        "\nFROM public.prior_notification_uploads "
-        "\nWHERE "
-        "public.prior_notification_uploads.report_id IN "
-        "('00000000-0000-4000-0000-000000000003', '11', '456-def', '789-ghi')"
-    )
+def pnos_query(prior_notification_uploads_table) -> Select:
+    pno_ids = ["00000000-0000-4000-0000-000000000003", "11", "456-def", "789-ghi"]
+
+    return select(
+        prior_notification_uploads_table.c.report_id,
+        prior_notification_uploads_table.c.file_name,
+        prior_notification_uploads_table.c.content,
+    ).where(prior_notification_uploads_table.c.report_id.in_(pno_ids))
 
 
 @pytest.fixture
-def pnos_query_string_empty_result() -> str:
-    return (
-        "SELECT "
-        "public.prior_notification_uploads.report_id, "
-        "public.prior_notification_uploads.file_name, "
-        "public.prior_notification_uploads.content "
-        "\nFROM public.prior_notification_uploads "
-        "\nWHERE "
-        "public.prior_notification_uploads.report_id IN "
-        "('Does', 'Not', 'Exist')"
-    )
+def pnos_query_empty_result(prior_notification_uploads_table) -> Select:
+    pno_ids = ["Does", "Not", "Exist"]
+
+    return select(
+        prior_notification_uploads_table.c.report_id,
+        prior_notification_uploads_table.c.file_name,
+        prior_notification_uploads_table.c.content,
+    ).where(prior_notification_uploads_table.c.report_id.in_(pno_ids))
 
 
 @pytest.fixture
@@ -1722,14 +1725,15 @@ def test_attribute_addressees_when_is_verified(
 
 
 def test_make_prior_notification_attachments_query(
-    rendered_pnos, prior_notification_uploads_table, pnos_query_string
+    rendered_pnos, prior_notification_uploads_table, pnos_query
 ):
     # With non empty input
     query = make_prior_notification_attachments_query.run(
         rendered_pnos, prior_notification_uploads_table
     )
-    query_string = str(query.compile(compile_kwargs={"literal_binds": True}))
-    assert query_string == pnos_query_string
+    assert str(query.compile(compile_kwargs={"literal_binds": True})) == str(
+        pnos_query.compile(compile_kwargs={"literal_binds": True})
+    )
 
     # With empty input
     query = make_prior_notification_attachments_query.run(
@@ -1739,33 +1743,39 @@ def test_make_prior_notification_attachments_query(
 
 
 def test_execute_prior_notification_attachments_query(
-    reset_test_data, pnos_query_string, prior_notification_attachments
+    reset_test_data, pnos_query, prior_notification_attachments
 ):
-    attachments = execute_prior_notification_attachments_query.run(
-        sqlalchemy.text(pnos_query_string)
-    )
+    attachments = execute_prior_notification_attachments_query.run(pnos_query)
     assert attachments == prior_notification_attachments
 
 
 def test_execute_prior_notification_attachments_query_when_result_is_empty(
-    reset_test_data, pnos_query_string_empty_result
+    reset_test_data, pnos_query_empty_result
 ):
     attachments = execute_prior_notification_attachments_query.run(
-        sqlalchemy.text(pnos_query_string_empty_result)
+        pnos_query_empty_result
     )
     assert attachments == dict()
 
 
-@pytest.mark.parametrize("test_mode", [False, True])
+@pytest.mark.parametrize(
+    "test_mode,pno_has_uploaded_attachments",
+    [(False, False), (False, True), (True, False), (True, True)],
+)
 def test_create_email(
     pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned,
     cnsp_crossa_cacem_logos,
     marianne_gif,
     liberte_egalite_fraternite_gif,
+    prior_notification_attachments,
     test_mode,
+    pno_has_uploaded_attachments,
 ):
     pno_to_send = create_email.run(
         pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned,
+        uploaded_attachments=prior_notification_attachments
+        if pno_has_uploaded_attachments
+        else dict(),
         test_mode=test_mode,
     )
 
@@ -1792,10 +1802,22 @@ def test_create_email(
     )
 
     attachments = list(pno_to_send.message.iter_attachments())
-    assert len(attachments) == 1
-    attachment = attachments[0]
-    assert attachment.get_content_type() == "application/octet-stream"
-    assert attachment.get_content() == b"PDF Document"
+    assert len(attachments) == 3 if pno_has_uploaded_attachments else 1
+    attachment_0 = attachments[0]
+    assert attachment_0.get_filename() == "Preavis_Le navire 123-abc.pdf"
+    assert attachment_0.get_content_type() == "application/octet-stream"
+    assert attachment_0.get_content() == b"PDF Document"
+
+    if pno_has_uploaded_attachments:
+        attachment_1 = attachments[1]
+        assert attachment_1.get_filename() == "Uploaded document n°1.pdf"
+        assert attachment_1.get_content_type() == "application/octet-stream"
+        assert attachment_1.get_content() == b"PDF"
+
+        attachment_2 = attachments[2]
+        assert attachment_2.get_filename() == "Uploaded document n°2.docx"
+        assert attachment_2.get_content_type() == "application/octet-stream"
+        assert attachment_2.get_content() == b"Text Document"
 
     body = pno_to_send.message.get_body()
     assert body.get_content_type() == "multipart/related"
@@ -1828,6 +1850,7 @@ def test_create_email(
 
 def test_create_email_with_no_email_addressees_returns_none(
     pno_pdf_document_to_distribute_without_addressees_assigned,
+    prior_notification_attachments,
 ):
     pno_to_send = create_email.run(
         pno_pdf_document_to_distribute_without_addressees_assigned, test_mode=False
@@ -1835,7 +1858,9 @@ def test_create_email_with_no_email_addressees_returns_none(
     assert pno_to_send is None
 
     pno_to_send = create_email.run(
-        pno_pdf_document_to_distribute_without_addressees_assigned, test_mode=True
+        pno_pdf_document_to_distribute_without_addressees_assigned,
+        uploaded_attachments=prior_notification_attachments,
+        test_mode=True,
     )
     assert pno_to_send is None
 

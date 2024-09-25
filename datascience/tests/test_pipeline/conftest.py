@@ -54,6 +54,11 @@ def monitorenv_control_units_api_response() -> list:
     return [
         {
             "id": 1,
+            "administration": {
+                "id": 1,
+                "isArchived": False,
+                "name": "Administration 1",
+            },
             "controlUnitContacts": [],
             "isArchived": False,
             "name": "Unité 1",
@@ -62,6 +67,11 @@ def monitorenv_control_units_api_response() -> list:
         },
         {
             "id": 2,
+            "administration": {
+                "id": 1,
+                "isArchived": False,
+                "name": "Administration 1",
+            },
             "controlUnitContacts": [
                 {
                     "id": 559,
@@ -109,6 +119,11 @@ def monitorenv_control_units_api_response() -> list:
         },
         {
             "id": 3,
+            "administration": {
+                "id": 1,
+                "isArchived": False,
+                "name": "Administration 1",
+            },
             "controlUnitContacts": [
                 {
                     "id": 320,
@@ -143,6 +158,11 @@ def monitorenv_control_units_api_response() -> list:
         },
         {
             "id": 4,
+            "administration": {
+                "id": 3,
+                "isArchived": False,
+                "name": "Administration 3",
+            },
             "controlUnitContacts": [
                 {
                     "id": 1182,
@@ -176,6 +196,11 @@ def monitorenv_control_units_api_response() -> list:
         },
         {
             "id": 5,
+            "administration": {
+                "id": 1,
+                "isArchived": False,
+                "name": "Administration 1",
+            },
             "controlUnitContacts": [
                 {
                     "id": 382,
@@ -219,6 +244,11 @@ def monitorenv_control_units_api_response() -> list:
         },
         {
             "id": 6,
+            "administration": {
+                "id": 1,
+                "isArchived": False,
+                "name": "Administration 1",
+            },
             "controlUnitContacts": [
                 {
                     "id": 631,
@@ -252,6 +282,11 @@ def monitorenv_control_units_api_response() -> list:
         },
         {
             "id": 7,
+            "administration": {
+                "id": 1,
+                "isArchived": False,
+                "name": "Administration 1",
+            },
             "controlUnitContacts": [
                 {
                     "id": 1540,
@@ -275,6 +310,11 @@ def control_units_contacts() -> pd.DataFrame:
         {
             "control_unit_id": [2, 3, 4],
             "control_unit_name": ["Unité 2", "Unité 3", "Unité 4"],
+            "administration": [
+                "Administration 1",
+                "Administration 1",
+                "Administration 3",
+            ],
             "emails": [
                 ["alternative@email", "some.email@control.unit.4"],
                 [],

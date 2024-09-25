@@ -718,9 +718,12 @@ def create_email(pno: RenderedPno, test_mode: bool) -> PnoToSend:
                 LIBERTE_EGALITE_FRATERNITE_LOGO_PATH,
                 MARIANNE_LOGO_PATH,
             ],
-            attachments={
-                f"Preavis_{pno.vessel_name if pno.vessel_name else ''}.pdf": pno.pdf_document
-            },
+            attachments=[
+                (
+                    f"Preavis_{pno.vessel_name if pno.vessel_name else ''}.pdf",
+                    pno.pdf_document,
+                )
+            ],
             reply_to=CNSP_FRANCE_EMAIL_ADDRESS,
         )
         return PnoToSend(

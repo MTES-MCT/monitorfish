@@ -1,7 +1,7 @@
 import { createId } from '@paralleldrive/cuid2'
 import { omit } from 'lodash'
 
-import { BROADCAST_CHANNEL_NAME, DEFAULT_OPTIONS, InternalActionType, MessageType } from './constants'
+import { BROADCAST_CHANNEL_NAME, DEFAULT_OPTIONS, InternalActionType, MessageType, TabType } from './constants'
 import { initializeStateFromOtherTab, sendStateToOtherTab, stampAction } from './utils'
 
 import type { InternalAction, Message, ReduxStateSyncOptions, StampedAction } from './types'
@@ -12,13 +12,17 @@ import type { AnyObject } from 'yup'
 class ReduxStateSync {
   #channel: BroadcastChannel
   #dispatch: MainAppDispatch | undefined
+  #isSideWindow: boolean | undefined
   #isSynced: boolean
+  #shouldSynchronize: boolean
   #tabId: string
+  #tabType: TabType | undefined
   #tabs: Record<string, boolean>
 
   constructor() {
     this.#channel = new BroadcastChannel(BROADCAST_CHANNEL_NAME)
     this.#isSynced = false
+    this.#shouldSynchronize = false
     this.#tabId = createId()
     this.#tabs = {}
 
@@ -32,19 +36,54 @@ class ReduxStateSync {
     })
   }
 
+  initialize(isSideWindow: boolean) {
+    this.#isSideWindow = isSideWindow
+
+    if (isSideWindow) {
+      this.#channel.postMessage({
+        tabId: this.#tabId,
+        type: MessageType.CheckForExistingSideWindow
+      } satisfies Message)
+    } else {
+      this.#channel.postMessage({
+        tabId: this.#tabId,
+        type: MessageType.CheckForExistingMainWindow
+      } satisfies Message)
+    }
+
+    window.setTimeout(() => {
+      if (this.#tabType) {
+        return
+      }
+
+      this.#shouldSynchronize = true
+      if (isSideWindow) {
+        this.#tabType = TabType.FirstSideWindow
+      } else {
+        this.#tabType = TabType.FirstMainWindow
+      }
+    }, 250)
+  }
+
   createStateSyncMiddleware(options: Partial<ReduxStateSyncOptions>) {
     const controlledOptions = { ...DEFAULT_OPTIONS, ...options }
 
     return ({ dispatch, getState }) =>
       next =>
       (action: Action | InternalAction | StampedAction) => {
-        if (!this.#dispatch) {
-          this.#dispatch = dispatch
+        if (!this.#shouldSynchronize) {
+          return next(action)
+        }
 
-          this.#channel.postMessage({
-            tabId: this.#tabId,
-            type: MessageType.GetInitialState
-          } satisfies Message)
+        if (!this.#dispatch) {
+          this.#initializeSynchronization(dispatch)
+        }
+
+        if (!this.#isSynced && this.#tabType === TabType.FirstSideWindow) {
+          console.warn(
+            '[ReduxStateSync]',
+            'We are receiving new actions to dispatch while this tab is still waiting for its initial state to be synchronized.'
+          )
         }
 
         if ('$id' in action) {
@@ -76,8 +115,42 @@ class ReduxStateSync {
   #handleBroadcastChannelMessage(event: MessageEvent<Message>) {
     const message = event.data
 
-    // When another tab asks us to send our current Redux Store state
     switch (message.type) {
+      case MessageType.CheckForExistingMainWindow:
+        if (this.#tabType === TabType.FirstMainWindow) {
+          this.#channel.postMessage({
+            tabId: this.#tabId,
+            type: MessageType.DeclareExistingMainWindow
+          } satisfies Message)
+        }
+
+        return
+
+      case MessageType.CheckForExistingSideWindow:
+        if (this.#tabType === TabType.FirstSideWindow) {
+          this.#channel.postMessage({
+            tabId: this.#tabId,
+            type: MessageType.DeclareExistingSideWindow
+          } satisfies Message)
+        }
+
+        return
+
+      case MessageType.DeclareExistingMainWindow:
+        if (!this.#tabType && this.#isSideWindow === false) {
+          this.#tabType = TabType.OtherMainWindow
+        }
+
+        return
+
+      case MessageType.DeclareExistingSideWindow:
+        if (!this.#tabType && this.#isSideWindow === true) {
+          this.#tabType = TabType.OtherSideWindow
+        }
+
+        return
+
+      // When another tab asks us to send our current Redux Store state
       case MessageType.GetInitialState:
         // we check that we haven't already sent it
         if (!this.#tabs[message.tabId]) {
@@ -122,6 +195,15 @@ class ReduxStateSync {
       default:
         break
     }
+  }
+
+  #initializeSynchronization(dispatch: MainAppDispatch) {
+    this.#dispatch = dispatch
+
+    this.#channel.postMessage({
+      tabId: this.#tabId,
+      type: MessageType.GetInitialState
+    } satisfies Message)
   }
 }
 

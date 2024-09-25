@@ -7,6 +7,10 @@ export const DEFAULT_OPTIONS: ReduxStateSyncOptions = {
 }
 
 export enum MessageType {
+  CheckForExistingMainWindow = 'CheckForExistingMainWindow',
+  CheckForExistingSideWindow = 'CheckForExistingSideWindow',
+  DeclareExistingMainWindow = 'DeclareExistingMainWindow',
+  DeclareExistingSideWindow = 'DeclareExistingSideWindow',
   DestroyTab = 'DestroyTab',
   DispatchAction = 'DispatchAction',
   GetInitialState = 'GetInitialState',
@@ -16,4 +20,11 @@ export enum MessageType {
 export enum InternalActionType {
   InitializeStateFromOtherTab = '&_INITIALIZE_STATE_FROM_OTHER_TAB',
   SendStateToOtherTab = '&_SEND_STATE_TO_OTHER_TAB'
+}
+
+export enum TabType {
+  FirstMainWindow = 'FirstMainWindow',
+  FirstSideWindow = 'FirstSideWindow',
+  OtherMainWindow = 'OtherMainWindow',
+  OtherSideWindow = 'OtherSideWindow'
 }

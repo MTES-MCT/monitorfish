@@ -14,7 +14,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom'
 export const routes = [
   {
     path: '/',
-    element: <HomePage />,
+    element: <HomePage isSideWindow={false} />,
     children: [
       {
         index: true,
@@ -72,7 +72,7 @@ export const routes = [
   },
   {
     path: '/side_window',
-    element: <HomePage />,
+    element: <HomePage isSideWindow />,
     children: [
       {
         index: true,

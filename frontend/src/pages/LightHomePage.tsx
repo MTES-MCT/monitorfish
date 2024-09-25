@@ -11,7 +11,7 @@ export function LightHomePage() {
 
   return (
     <LightContext.Provider value>
-      <HomePage />
+      <HomePage isSideWindow={false} />
     </LightContext.Provider>
   )
 }

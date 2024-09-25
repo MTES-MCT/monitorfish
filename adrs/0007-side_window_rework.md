@@ -8,9 +8,13 @@ Résolu
 
 ## Contexte
 
+Nous utilisons la libairie react-new-window dans monitor-ui.
+
 Le ticket [#3211](https://github.com/MTES-MCT/monitorfish/issues/3211) est impactant pour les utilisateurs : il empêche le clic dans un `<Select/>` après avoir scrollé dans une liste. 
 
 Le bug est reproductible seulement dans `window.open()`, avec notre implémentation de `NewWindow`.
+
+Il provient de la librairie `react-window`, utilisée par `rsuite`: [`react-window` désactive `pointer-events` lors du scroll](https://github.com/bvaughn/react-window/issues/128)
 
 > Les portals semblent plus adaptés aux scénarios simples dans un seul contexte DOM, tandis que l'approche avec BroadcastChannel et une nouvelle URL semble plus robuste pour des interfaces complexes réparties sur plusieurs fenêtres.
 
@@ -46,6 +50,8 @@ Inconvénients :
   
 ## Décision
 
-Creuser l'utilisation de l'option 2.
+Nous allons rester sur l'option 1 et fixer le bug avec : https://github.com/MTES-MCT/monitor-ui/pull/1382
 
 ## Conséquences
+
+Nous n'allons pas changer de méthode pour lancer une side-window.

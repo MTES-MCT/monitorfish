@@ -37,11 +37,15 @@ Avantages :
 Inconvénients :
 1. Complexité de la gestion de l’état : Il est nécessaire de gérer la logique de synchronisation entre les fenêtres manuellement, ce qui peut introduire des erreurs si les états deviennent désynchronisés.
 2. Temps de chargement : Ouvrir une nouvelle URL nécessite un chargement complet d’une nouvelle page, ce qui augmente le temps de réponse initial par rapport à un React Portal.
-3. `RTK Query` ne peut pas être synchronisé avec `BroadcastChannel`, à cause des objets passés non-sérialisables
-4. Il faut limiter le nombre de fenêtres pour éviter d'avoir deux fenêtres principales (MainWindow)
-
+3. `RTK Query` ne peut pas être synchronisé avec `BroadcastChannel`, à cause des objets passés non-sérialisables. Cela induit:
+   - Une multiplication des requêtes APIs (dans la side window et main window) lorsqu'il y a un refraichissement demander par une action redux
+   - Une dé-synchronisation des states RTK lorsque des refaichissement passent directement par des hooks RTK et non pas par des actions redux
+4. Il faut limiter le nombre de fenêtres pour éviter:
+   - Une deuxième fenêtre MainWindow peut penser avoir un état (stocké dans redux), mais n'a pas l'état RTK correspondant
+   - Une troisième fenêtre SideWindow ne sera pas synchronisée avec la deuxième fenêtre SideWindow ; cela peut avoir des impacts lors de modifications par APIs 
+  
 ## Décision
 
-_À rédiger._
+Creuser l'utilisation de l'option 2.
 
 ## Conséquences

@@ -17,9 +17,9 @@ from config import (
     EMAIL_TEMPLATES_LOCATION,
 )
 from src.pipeline.entities.control_units import (
+    ControlUnit,
     ControlUnitActions,
     ControlUnitActionsSentMessage,
-    ControlUnitWithEmails,
 )
 from src.pipeline.entities.missions import FlightGoal, MissionActionType
 from src.pipeline.generic_tasks import extract, load
@@ -97,7 +97,7 @@ def get_control_unit_ids(env_action: pd.DataFrame) -> List[int]:
 @task(checkpoint=False)
 def filter_control_units_contacts(
     all_control_units_contacts: pd.DataFrame, control_unit_ids: List[str]
-) -> List[ControlUnitWithEmails]:
+) -> List[ControlUnit]:
     if len(control_unit_ids) == 0:
         raise SKIP("No control units to extract.")
 
@@ -106,17 +106,23 @@ def filter_control_units_contacts(
             all_control_units_contacts.control_unit_id.isin(control_unit_ids)
             & (all_control_units_contacts.emails.map(len) > 0)
         ),
-        ["control_unit_id", "control_unit_name", "emails"],
+        [
+            "control_unit_id",
+            "control_unit_name",
+            "administration",
+            "emails",
+            "phone_numbers",
+        ],
     ]
     records = control_units.to_dict(orient="records")
-    return [ControlUnitWithEmails(**control_unit) for control_unit in records]
+    return [ControlUnit(**control_unit) for control_unit in records]
 
 
 @task(checkpoint=False)
 def to_control_unit_actions(
     mission_actions: pd.DataFrame,
     period: Period,
-    control_units: List[ControlUnitWithEmails],
+    control_units: List[ControlUnit],
 ) -> List[ControlUnitActions]:
     return [
         ControlUnitActions(

@@ -11,11 +11,12 @@ import prefect
 import prefect.engine
 import prefect.engine.signals
 import prefect.exceptions
+import sqlalchemy
 import weasyprint
 from jinja2 import Environment, FileSystemLoader, Template, select_autoescape
 from prefect import Flow, Parameter, case, flatten, task, unmapped
 from prefect.executors import LocalDaskExecutor
-from sqlalchemy import Executable, bindparam, text
+from sqlalchemy import Executable, Select, bindparam, select, text
 
 from config import (
     CNSP_CROSSA_CACEM_LOGOS_PATH,
@@ -60,11 +61,12 @@ from src.pipeline.shared_tasks.control_flow import (
 )
 from src.pipeline.shared_tasks.control_units import fetch_control_units_contacts
 from src.pipeline.shared_tasks.dates import get_utcnow, make_timedelta
-from src.pipeline.shared_tasks.infrastructure import execute_statement
+from src.pipeline.shared_tasks.infrastructure import execute_statement, get_table
 from src.pipeline.shared_tasks.pnos import (
     extract_pno_units_ports_and_segments_subscriptions,
     extract_pno_units_targeting_vessels,
 )
+from src.read_query import read_query
 
 
 @task(checkpoint=False)
@@ -119,6 +121,40 @@ def extract_facade_email_addresses() -> dict:
         query_filepath="monitorfish/facade_email_addresses.sql",
     )
     return df.set_index("facade").email_address.to_dict()
+
+
+@task(checkpoint=False)
+def make_prior_notification_attachments_query(
+    pnos: List[RenderedPno], prior_notification_uploads_table: sqlalchemy.Table
+) -> Select | None:
+    pno_ids = sorted(set([pno.report_id for pno in pnos]))
+
+    if pno_ids:
+        res = select(
+            prior_notification_uploads_table.c.report_id,
+            prior_notification_uploads_table.c.file_name,
+            prior_notification_uploads_table.c.content,
+        ).where(prior_notification_uploads_table.c.report_id.in_(pno_ids))
+    else:
+        res = None
+
+    return res
+
+
+@task(checkpoint=False)
+def execute_prior_notification_attachments_query(
+    query: Select | None,
+) -> dict:
+    if isinstance(query, Select):
+        attachments = read_query(query, db="monitorfish_remote")
+        attachments["filename_content"] = attachments.apply(
+            lambda row: (row["file_name"], row["content"]), axis=1
+        )
+        res = attachments.groupby("report_id")["filename_content"].agg(list).to_dict()
+    else:
+        res = dict()
+
+    return res
 
 
 @task(checkpoint=False)
@@ -662,7 +698,9 @@ def attribute_addressees(
 
 
 @task(checkpoint=False)
-def create_email(pno: RenderedPno, test_mode: bool) -> PnoToSend:
+def create_email(
+    pno: RenderedPno, uploaded_attachments: dict, test_mode: bool
+) -> PnoToSend:
     if pno.emails:
         if test_mode:
             if PNO_TEST_EMAIL:
@@ -671,6 +709,13 @@ def create_email(pno: RenderedPno, test_mode: bool) -> PnoToSend:
                 return None
         else:
             to = pno.emails
+
+        attachments = [
+            (
+                f"Preavis_{pno.vessel_name if pno.vessel_name else ''}.pdf",
+                pno.pdf_document,
+            )
+        ] + (uploaded_attachments.get(pno.report_id) or [])
 
         message = create_html_email(
             to=to,
@@ -682,9 +727,7 @@ def create_email(pno: RenderedPno, test_mode: bool) -> PnoToSend:
                 LIBERTE_EGALITE_FRATERNITE_LOGO_PATH,
                 MARIANNE_LOGO_PATH,
             ],
-            attachments={
-                f"Preavis_{pno.vessel_name if pno.vessel_name else ''}.pdf": pno.pdf_document
-            },
+            attachments=attachments,
             reply_to=CNSP_FRANCE_EMAIL_ADDRESS,
         )
         return PnoToSend(
@@ -1014,6 +1057,14 @@ with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
 
             with case(distribution_needed, True):
                 # Distribute PNOs
+                prior_notification_uploads_table = get_table(
+                    "prior_notification_uploads"
+                )
+                query = make_prior_notification_attachments_query(
+                    pnos_to_distribute, prior_notification_uploads_table
+                )
+                attachments = execute_prior_notification_attachments_query(query)
+
                 facade_email_addresses = extract_facade_email_addresses()
 
                 pnos_with_addressees = attribute_addressees.map(
@@ -1025,7 +1076,9 @@ with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
                 )
 
                 email = create_email.map(
-                    pnos_with_addressees, test_mode=unmapped(test_mode)
+                    pnos_with_addressees,
+                    uploaded_attachments=unmapped(attachments),
+                    test_mode=unmapped(test_mode),
                 )
                 email = filter_results(email)
 
@@ -1073,6 +1126,7 @@ with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
 
 flow.set_reference_tasks(
     [
+        attachments,
         pnos_to_generate,
         pnos_to_distribute,
         pnos_with_addressees,

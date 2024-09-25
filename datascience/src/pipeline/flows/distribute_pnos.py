@@ -16,7 +16,7 @@ import weasyprint
 from jinja2 import Environment, FileSystemLoader, Template, select_autoescape
 from prefect import Flow, Parameter, case, flatten, task, unmapped
 from prefect.executors import LocalDaskExecutor
-from sqlalchemy import Executable, bindparam, select, text
+from sqlalchemy import Executable, Select, bindparam, select, text
 
 from config import (
     CNSP_CROSSA_CACEM_LOGOS_PATH,
@@ -126,7 +126,7 @@ def extract_facade_email_addresses() -> dict:
 @task(checkpoint=False)
 def make_prior_notification_attachments_query(
     pnos: List[RenderedPno], prior_notification_uploads_table: sqlalchemy.Table
-) -> sqlalchemy.Select | None:
+) -> Select | None:
     pno_ids = sorted(set([pno.report_id for pno in pnos]))
 
     if pno_ids:
@@ -143,12 +143,12 @@ def make_prior_notification_attachments_query(
 
 @task(checkpoint=False)
 def execute_prior_notification_attachments_query(
-    query: sqlalchemy.Executable | None,
+    query: Select | None,
 ) -> dict:
-    if isinstance(query, sqlalchemy.Executable):
+    if isinstance(query, Select):
         attachments = read_query(query, db="monitorfish_remote")
         attachments["filename_content"] = attachments.apply(
-            lambda row: (row["file_name"], row["content"].tobytes()), axis=1
+            lambda row: (row["file_name"], row["content"]), axis=1
         )
         res = attachments.groupby("report_id")["filename_content"].agg(list).to_dict()
     else:
@@ -698,7 +698,9 @@ def attribute_addressees(
 
 
 @task(checkpoint=False)
-def create_email(pno: RenderedPno, test_mode: bool) -> PnoToSend:
+def create_email(
+    pno: RenderedPno, uploaded_attachments: dict, test_mode: bool
+) -> PnoToSend:
     if pno.emails:
         if test_mode:
             if PNO_TEST_EMAIL:
@@ -707,6 +709,13 @@ def create_email(pno: RenderedPno, test_mode: bool) -> PnoToSend:
                 return None
         else:
             to = pno.emails
+
+        attachments = [
+            (
+                f"Preavis_{pno.vessel_name if pno.vessel_name else ''}.pdf",
+                pno.pdf_document,
+            )
+        ] + (uploaded_attachments.get(pno.report_id) or [])
 
         message = create_html_email(
             to=to,
@@ -718,12 +727,7 @@ def create_email(pno: RenderedPno, test_mode: bool) -> PnoToSend:
                 LIBERTE_EGALITE_FRATERNITE_LOGO_PATH,
                 MARIANNE_LOGO_PATH,
             ],
-            attachments=[
-                (
-                    f"Preavis_{pno.vessel_name if pno.vessel_name else ''}.pdf",
-                    pno.pdf_document,
-                )
-            ],
+            attachments=attachments,
             reply_to=CNSP_FRANCE_EMAIL_ADDRESS,
         )
         return PnoToSend(
@@ -1072,7 +1076,9 @@ with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
                 )
 
                 email = create_email.map(
-                    pnos_with_addressees, test_mode=unmapped(test_mode)
+                    pnos_with_addressees,
+                    uploaded_attachments=unmapped(attachments),
+                    test_mode=unmapped(test_mode),
                 )
                 email = filter_results(email)
 
@@ -1120,6 +1126,7 @@ with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
 
 flow.set_reference_tasks(
     [
+        attachments,
         pnos_to_generate,
         pnos_to_distribute,
         pnos_with_addressees,

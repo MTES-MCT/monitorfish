@@ -270,7 +270,7 @@ def create_email(
             subject=m.get_notification_subject(),
             html=html,
             images=[CNSP_LOGO_PATH],
-            attachments={"Notification.pdf": pdf},
+            attachments=[("Notification.pdf", pdf)],
             reply_to=CNSP_SIP_DEPARTMENT_EMAIL,
         )
 

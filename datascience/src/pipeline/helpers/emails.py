@@ -14,7 +14,7 @@ from smtplib import (
     SMTPSenderRefused,
 )
 from time import sleep
-from typing import List, Union
+from typing import List, Tuple, Union
 
 import pypdf
 
@@ -45,7 +45,7 @@ def create_html_email(
     cc: Union[str, List[str]] = None,
     bcc: Union[str, List[str]] = None,
     images: List[Path] = None,
-    attachments: dict = None,
+    attachments: List[Tuple[str, bytes]] = None,
     reply_to: str = None,
 ) -> EmailMessage:
     """
@@ -75,9 +75,9 @@ def create_html_email(
             `<img src="cid:my_image_123.png">` in the html message.
 
           Defaults to None.
-        attachments (dict, optional): `dict` of attachments to add to the email.
-          Consists of {filename : bytes} value pairs. Defaults
-          to None.
+        attachments (List[Tuple[str, bytes]], optional): `list` of attachments to add
+          to the email. Elements of the list must be pairs of (filename, content).
+          Defaults to None.
         reply_to (str, optional): if given, added as `Reply-To` header. Defaults to
           None.
 
@@ -131,7 +131,7 @@ def create_html_email(
             msg.attach(img)
 
     if attachments:
-        for filename, filebytes in attachments.items():
+        for filename, filebytes in attachments:
             msg.add_attachment(
                 filebytes,
                 maintype="application",

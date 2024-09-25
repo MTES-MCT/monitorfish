@@ -77,16 +77,20 @@ export function Form({ detail, initialFormValues }: FormProps) {
             <FormikTextarea label="Points d'attention identifiés par le CNSP" name="note" readOnly={isReadOnly} />
           </FieldGroup>
 
-          {isSuperUser && <AuthorTrigramInput label="Saisi par" name="authorTrigram" readOnly={isReadOnly} />}
+          {isSuperUser && (
+            <>
+              <AuthorTrigramInput label="Saisi par" name="authorTrigram" readOnly={isReadOnly} />
 
-          <hr />
+              <hr />
 
-          <UploadFiles
-            isManualPriorNotification={false}
-            isReadOnly={isReadOnly}
-            operationDate={detail.operationDate}
-            reportId={detail.reportId}
-          />
+              <UploadFiles
+                isManualPriorNotification={false}
+                isReadOnly={isReadOnly}
+                operationDate={detail.operationDate}
+                reportId={detail.reportId}
+              />
+            </>
+          )}
         </>
       </Formik>
 

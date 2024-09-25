@@ -1,3 +1,5 @@
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { usePrevious } from '@mtes-mct/monitor-ui'
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
@@ -20,8 +22,6 @@ import {
   updateVesselTrackAsHidden,
   updateVesselTrackAsShowedWithExtend
 } from '../../../../domain/shared_slices/Vessel'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { logbookActions } from '../../../Logbook/slice'
 import { getFishingActivityFeatureOnTrackLine } from '../../../Logbook/utils'
 import { monitorfishMap } from '../../monitorfishMap'
@@ -37,8 +37,10 @@ import type { Geometry } from 'ol/geom'
 
 function VesselsTracksLayer() {
   const dispatch = useMainAppDispatch()
-  const { highlightedVesselTrackPosition, selectedVessel, selectedVesselPositions, vesselsTracksShowed } =
-    useMainAppSelector(state => state.vessel)
+  const highlightedVesselTrackPosition = useMainAppSelector(state => state.vessel.highlightedVesselTrackPosition)
+  const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
+  const selectedVesselPositions = useMainAppSelector(state => state.vessel.selectedVesselPositions)
+  const vesselsTracksShowed = useMainAppSelector(state => state.vessel.vesselsTracksShowed)
   const fishingActivitiesShowedOnMap = useMainAppSelector(state => state.fishingActivities.fishingActivitiesShowedOnMap)
   const redrawFishingActivitiesOnMap = useMainAppSelector(state => state.fishingActivities.redrawFishingActivitiesOnMap)
   const doNotAnimate = useMainAppSelector(state => state.map.doNotAnimate)
@@ -249,7 +251,14 @@ function VesselsTracksLayer() {
         coordinatesFeaturesAndIds.map(coordinatesFeatureAndId => coordinatesFeatureAndId.feature)
       )
       getVectorSource().changed()
-      dispatch(logbookActions.updateShowedOnMapCoordinates(coordinatesFeaturesAndIds))
+      dispatch(
+        logbookActions.updateShowedOnMapCoordinates(
+          coordinatesFeaturesAndIds.map(coordinatesFeatureAndId => ({
+            coordinates: coordinatesFeatureAndId.coordinates,
+            id: coordinatesFeatureAndId.id
+          }))
+        )
+      )
     }
 
     showFishingActivities()

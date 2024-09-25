@@ -1290,6 +1290,20 @@ def pnos_query_string() -> str:
 
 
 @pytest.fixture
+def pnos_query_string_empty_result() -> str:
+    return (
+        "SELECT "
+        "public.prior_notification_uploads.report_id, "
+        "public.prior_notification_uploads.file_name, "
+        "public.prior_notification_uploads.content "
+        "\nFROM public.prior_notification_uploads "
+        "\nWHERE "
+        "public.prior_notification_uploads.report_id IN "
+        "('Does', 'Not', 'Exist')"
+    )
+
+
+@pytest.fixture
 def prior_notification_attachments() -> dict:
     return {
         "00000000-0000-4000-0000-000000000003": [
@@ -1731,6 +1745,15 @@ def test_execute_prior_notification_attachments_query(
         sqlalchemy.text(pnos_query_string)
     )
     assert attachments == prior_notification_attachments
+
+
+def test_execute_prior_notification_attachments_query_when_result_is_empty(
+    reset_test_data, pnos_query_string_empty_result
+):
+    attachments = execute_prior_notification_attachments_query.run(
+        sqlalchemy.text(pnos_query_string_empty_result)
+    )
+    assert attachments == dict()
 
 
 @pytest.mark.parametrize("test_mode", [False, True])

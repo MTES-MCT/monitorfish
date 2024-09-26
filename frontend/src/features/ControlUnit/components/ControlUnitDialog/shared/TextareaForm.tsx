@@ -92,4 +92,5 @@ const TextBox = styled.div`
   cursor: text;
   height: 72px;
   padding: 8px 12px;
+  white-space: pre-wrap;
 `

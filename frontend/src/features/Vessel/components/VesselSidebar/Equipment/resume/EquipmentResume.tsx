@@ -76,6 +76,7 @@ export function EquipmentResume({ setIsCurrentBeaconMalfunctionDetails }: Beacon
                   value: beaconType
                 },
                 {
+                  hasMultipleLines: true,
                   key: 'Date loggage',
                   value:
                     !!selectedVessel?.beacon?.loggingDatetimeUtc &&
@@ -139,8 +140,7 @@ const Columns = styled.div`
 `
 
 const StyledFlatKeyValue = styled(FlatKeyValue)`
-  margin: 5px 5px 0px;
-  margin-top: 10px;
+  margin: 10px 5px 0;
   width: 235px;
 `
 

@@ -1,5 +1,6 @@
-import { FormikNumberInput } from '@mtes-mct/monitor-ui'
+import { FormikNumberInput, usePrevious } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
+import { isEqual } from 'lodash'
 import { sum } from 'lodash/fp'
 import { useEffect } from 'react'
 import styled from 'styled-components'
@@ -24,30 +25,45 @@ export function FormikExtraField({
 }: FormikExtraFieldProps) {
   const [input, , helper] = useField<PriorNotification.FormDataFishingCatch[]>('fishingCatches')
 
-  const updateBluefinTunaWeightAndTotal = useDebouncedCallback(() => {
-    const totalWeight = sum(
-      input.value
-        .filter(fishingCatch => BLUEFIN_TUNA_EXTENDED_SPECY_CODES.includes(fishingCatch.specyCode))
-        .map(({ weight }) => weight ?? 0)
-    )
+  const previousFishingCatches = usePrevious(input.value)
 
-    const nextFishingCatchesWithTotal = input.value.map(fichingCatch => {
-      if (fichingCatch.specyCode === BLUEFIN_TUNA_SPECY_CODE) {
-        return {
-          ...fichingCatch,
-          weight: totalWeight
+  const updateBluefinTunaWeightAndTotal = useDebouncedCallback(
+    () => {
+      const totalWeight = sum(
+        input.value
+          .filter(fishingCatch => BLUEFIN_TUNA_EXTENDED_SPECY_CODES.includes(fishingCatch.specyCode))
+          .map(({ weight }) => weight ?? 0)
+      )
+
+      const nextFishingCatchesWithTotal = input.value.map(fichingCatch => {
+        if (fichingCatch.specyCode === BLUEFIN_TUNA_SPECY_CODE) {
+          return {
+            ...fichingCatch,
+            weight: totalWeight
+          }
         }
-      }
 
-      return fichingCatch
-    })
+        return fichingCatch
+      })
 
-    helper.setValue(nextFishingCatchesWithTotal)
-  }, 250)
+      helper.setValue(nextFishingCatchesWithTotal)
+    },
+    250,
+    {
+      trailing: true
+    }
+  )
 
   useEffect(() => {
+    if (
+      !input.value.find(fishingCatch => fishingCatch.specyCode === BLUEFIN_TUNA_SPECY_CODE) ||
+      isEqual(input.value, previousFishingCatches)
+    ) {
+      return
+    }
+
     updateBluefinTunaWeightAndTotal()
-  }, [input.value, updateBluefinTunaWeightAndTotal])
+  }, [input.value, previousFishingCatches, updateBluefinTunaWeightAndTotal])
 
   // BFT - Bluefin Tuna => + BF1, BF2, BF3
   if (specyCode === 'BFT') {
@@ -61,6 +77,7 @@ export function FormikExtraField({
               <ExtendedSpecyCode>{extendedSpecyCode}</ExtendedSpecyCode>
               <InputWithUnit>
                 <FormikNumberInput
+                  key={`quantity-${extendedSpecyCode}-${index})`}
                   areArrowsHidden
                   isErrorMessageHidden
                   isLabelHidden
@@ -72,6 +89,7 @@ export function FormikExtraField({
               </InputWithUnit>
               <InputWithUnit>
                 <FormikNumberInput
+                  key={`weight-${extendedSpecyCode}-${index})`}
                   areArrowsHidden
                   isErrorMessageHidden
                   isLabelHidden

@@ -1,3 +1,4 @@
+import { formatPhoneNumber } from '@features/ControlUnit/components/ControlUnitDialog/ControlUnitContactList/utils'
 import { Accent, ControlUnit, Icon, IconButton, Link } from '@mtes-mct/monitor-ui'
 import { useCallback } from 'react'
 import styled from 'styled-components'
@@ -13,26 +14,32 @@ export function Item({ controlUnitContact, onEdit }: ItemProps) {
     onEdit(controlUnitContact.id)
   }, [controlUnitContact.id, onEdit])
 
+  const hasLongName =
+    (ControlUnit.ControlUnitContactPredefinedName[controlUnitContact.name]?.length ||
+      controlUnitContact.name?.length) >= 33
+
   return (
     <Wrapper data-cy="ControlUnitDialog-control-unit-contact" data-id={controlUnitContact.id}>
-      <Left>
-        <p>
-          <Name>
+      <Left $hasLongName={hasLongName}>
+        <NameAndContactContainer $hasLongName={hasLongName}>
+          <Name
+            title={ControlUnit.ControlUnitContactPredefinedName[controlUnitContact.name] || controlUnitContact.name}
+          >
             {ControlUnit.ControlUnitContactPredefinedName[controlUnitContact.name] || controlUnitContact.name}
           </Name>
-          <Phone>{controlUnitContact.phone}</Phone>
+          {controlUnitContact.phone && <span>{formatPhoneNumber(controlUnitContact.phone)}</span>}
           {controlUnitContact.isSmsSubscriptionContact && (
             <Icon.Subscription size={14} title="Numéro de diffusion pour les préavis et les rapports de contrôle" />
           )}
-        </p>
-        <p>
+        </NameAndContactContainer>
+        <MailContainer>
           <Link href={`mailto:${controlUnitContact.email}`} rel="noreferrer" target="_blank">
             {controlUnitContact.email}
           </Link>
           {controlUnitContact.isEmailSubscriptionContact && (
             <Icon.Subscription size={14} title="Adresse de diffusion pour les préavis et les rapports de contrôle" />
           )}
-        </p>
+        </MailContainer>
       </Left>
       <Right>
         <IconButton accent={Accent.TERTIARY} Icon={Icon.Edit} onClick={handleEdit} title="Éditer ce contact" />
@@ -46,25 +53,36 @@ const Wrapper = styled.div`
   color: ${p => p.theme.color.slateGray};
   display: flex;
   margin-top: 8px;
-  padding: 8px 16px;
+  gap: 16px;
+  padding: 8px 8px 12px 12px;
 
   > p:not(:first-child) {
     margin: 8px 0 0;
   }
 `
 
-const Left = styled.div`
-  flex-grow: 1;
-
-  > p {
-    align-items: center;
-    display: flex;
-    line-height: 18px;
-    > .Element-IconBox {
-      margin-left: 8px;
-      margin-bottom: -1px;
-    }
+const NameAndContactContainer = styled.p<{ $hasLongName: boolean }>`
+  align-items: end;
+  column-gap: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 16px;
+  > span {
+    line-height: initial;
   }
+`
+
+const MailContainer = styled.p`
+  align-items: end;
+  display: flex;
+  gap: 8px;
+`
+
+const Left = styled.div<{ $hasLongName: boolean }>`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  flex-wrap: wrap;
 `
 
 const Right = styled.div``
@@ -72,8 +90,6 @@ const Right = styled.div``
 const Name = styled.span`
   color: ${p => p.theme.color.gunMetal};
   font-weight: bold;
-`
-
-const Phone = styled.span`
-  margin-left: 16px;
+  overflow-wrap: anywhere;
+  max-width: 450px;
 `

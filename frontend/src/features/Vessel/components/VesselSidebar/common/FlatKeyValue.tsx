@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 type KeyValue = {
+  hasMultipleLines?: boolean
   key: string
   value: boolean | string | number | undefined
 }
@@ -15,11 +16,16 @@ export function FlatKeyValue({ className, column, valueEllipsisedForWidth }: Key
     <Zone className={className}>
       <Fields>
         <TableBody>
-          {column.map(({ key, value }) => (
+          {column.map(({ hasMultipleLines, key, value }) => (
             <Field key={key}>
               <Key>{key}</Key>
               {value ? (
-                <Value data-cy={key} title={value?.toString()} valueEllipsisedForWidth={valueEllipsisedForWidth}>
+                <Value
+                  $hasMultipleLines={!!hasMultipleLines}
+                  $valueEllipsisedForWidth={valueEllipsisedForWidth}
+                  data-cy={key}
+                  title={value?.toString()}
+                >
                   {value}
                 </Value>
               ) : (
@@ -44,7 +50,7 @@ const Zone = styled.div`
 const Fields = styled.table<{
   isSecondColumn?: boolean
 }>`
-  margin: 10px 0px 10px 16px;
+  margin: 8px 8px 8px 16px;
   display: table;
   min-width: 40%;
 `
@@ -67,13 +73,18 @@ const Key = styled.th`
 `
 
 const Value = styled.td<{
-  valueEllipsisedForWidth: number | undefined
+  $hasMultipleLines: boolean
+  $valueEllipsisedForWidth: number | undefined
 }>`
   color: ${p => p.theme.color.gunMetal};
   padding: 1px 5px 5px 5px;
   line-height: normal;
   ${p => {
-    if (p.valueEllipsisedForWidth === undefined) {
+    if (p.$hasMultipleLines) {
+      return null
+    }
+
+    if (p.$valueEllipsisedForWidth === undefined) {
       return null
     }
 
@@ -81,7 +92,7 @@ const Value = styled.td<{
       `text-overflow: ellipsis;` +
       `overflow: hidden !important;` +
       `white-space: nowrap;` +
-      `max-width: ${p.valueEllipsisedForWidth}px;`
+      `max-width: ${p.$valueEllipsisedForWidth}px;`
     )
   }}
   height: 19px;

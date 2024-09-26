@@ -125,10 +125,10 @@ const ActionBar = styled.div`
 `
 
 const ArchiveButton = styled(IconButton)`
-  padding: 0 4px;
+  padding: 4px;
 `
 // TODO Add `borderColor` in Monitor UI.
 const DeleteButton = styled(IconButton)`
   border-color: ${p => p.theme.color.maximumRed};
-  padding: 0 4px;
+  padding: 4px;
 `

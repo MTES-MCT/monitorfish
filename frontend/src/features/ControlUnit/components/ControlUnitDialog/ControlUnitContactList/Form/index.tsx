@@ -100,5 +100,5 @@ const ActionBar = styled.div`
 // TODO Add `borderColor` in Monitor UI.
 const DeleteButton = styled(IconButton)`
   border-color: ${p => p.theme.color.maximumRed};
-  padding: 0 4px;
+  padding: 4px;
 `

@@ -7,11 +7,13 @@ const BareFieldWithIconButton = styled.div<{
 }>`
   align-items: flex-end;
   display: flex;
+
   > *:first-child {
     flex-grow: 1;
     margin-right: 4px;
   }
-  > .Element-IconButton {
+
+  .Element-IconButton {
     margin-bottom: ${p => (p.$hasError ? '22px' : 0)};
   }
 `

@@ -28,7 +28,7 @@ export function Item({ controlUnitResource, onEdit }: ItemProps) {
             <p>{controlUnitResource.station.name}</p>
           </div>
           <div>
-            <IconButton accent={Accent.TERTIARY} Icon={Icon.Edit} onClick={handleEdit} title="Éditer ce moyen" />
+            <StyledIconButton accent={Accent.TERTIARY} Icon={Icon.Edit} onClick={handleEdit} title="Éditer ce moyen" />
           </div>
         </InfoBoxHeader>
         {/* 120 chars ~= 3 lines */}
@@ -47,7 +47,7 @@ const InfoBox = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  padding: 8px 16px;
+  padding: 8px 3px 8px 16px;
 `
 
 const InfoBoxHeader = styled.div`
@@ -64,4 +64,8 @@ const InfoBoxHeader = styled.div`
 
 const Name = styled.p`
   font-weight: bold;
+`
+
+const StyledIconButton = styled(IconButton)`
+  margin-top: -5px;
 `

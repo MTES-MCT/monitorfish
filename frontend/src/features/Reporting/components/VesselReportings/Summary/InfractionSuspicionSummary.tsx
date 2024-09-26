@@ -78,7 +78,7 @@ const Name = styled.span`
   text-overflow: ellipsis;
   overflow: hidden;
   margin-left: 6px;
-  max-width: 400px;
+  max-width: 390px;
   vertical-align: bottom;
 `
 

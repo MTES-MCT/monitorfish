@@ -69,14 +69,15 @@ export function FormikNameSelect() {
 }
 
 const Wrapper = styled.div`
-  align-items: flex-start;
+  align-items: start;
   display: flex;
   margin-bottom: 16px;
 
-  > .Element-Field {
+  .Element-Field {
     flex-grow: 1;
   }
-  > .Element-IconButton {
+
+  .Element-IconButton {
     margin: 22px 0 0 8px;
   }
 `

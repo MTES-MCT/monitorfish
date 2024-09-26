@@ -24,3 +24,21 @@ export function sortControlUnitContactsByQualifiedName(
 
   return [...sortedPredefinedNamedContacts, ...sortedCustomNamedContacts]
 }
+
+export function formatPhoneNumber(phoneNumber: string) {
+  if (phoneNumber.startsWith('00')) {
+    if (phoneNumber.length === 12) {
+      return phoneNumber.match(/.{1,2}/g)?.join(' ')
+    }
+
+    return `00 ${phoneNumber
+      .slice(2)
+      .match(/.{1,3}/g)
+      ?.join(' ')}`
+  }
+  if (phoneNumber.startsWith('0')) {
+    return phoneNumber.match(/.{1,2}/g)?.join(' ')
+  }
+
+  return phoneNumber.match(/.{1,3}/g)?.join(' ')
+}

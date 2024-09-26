@@ -34,6 +34,8 @@ Inconvénients :
 
 ## Option 2 - Nouvelle fenêtre synchronisée avec `BroadcastChannel`
 
+Implémentation dans cette PR : https://github.com/MTES-MCT/monitorfish/pull/3668
+
 Avantages :
 1. Séparation claire des responsabilités : Chaque fenêtre a son propre cycle de vie et son propre DOM, ce qui rend la gestion des deux interfaces plus propre et modulaire.
 2. Communication efficace : BroadcastChannel est conçu pour la synchronisation des états entre différentes fenêtres, ce qui permet une synchronisation rapide et efficace sans prop drilling ou complexité supplémentaire.

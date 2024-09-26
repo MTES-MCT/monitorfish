@@ -26,7 +26,7 @@ from src.pipeline.flows.email_actions_to_units import (
     control_unit_actions_list_to_df,
     create_email,
     extract_mission_actions,
-    filter_control_units_contacts,
+    filter_control_units,
     flow,
     get_actions_period,
     get_control_unit_ids,
@@ -44,33 +44,33 @@ flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_ru
 
 
 @task(checkpoint=False)
-def mock_fetch_control_units_contacts():
-    return pd.DataFrame(
-        {
-            "control_unit_id": [3, 5, 8],
-            "control_unit_name": ["Unité 3", "Unité 5", "Unité 8"],
-            "administration": [
-                "Administration 1",
-                "Administration 2",
-                "Administration 3",
-            ],
-            "emails": [
-                ["alternative@email", "some.email@control.unit.4"],
-                [],
-                ["email8@email.com"],
-            ],
-            "phone_numbers": [
-                ["'00 11 22 33 44 55"],
-                ["44 44 44 44 44"],
-                [],
-            ],
-        }
-    )
+def mock_fetch_control_units():
+    return [
+        ControlUnit(
+            control_unit_id=3,
+            control_unit_name="Unité 3",
+            administration="Administration 1",
+            emails=["alternative@email", "some.email@control.unit.4"],
+            phone_numbers=["'00 11 22 33 44 55"],
+        ),
+        ControlUnit(
+            control_unit_id=5,
+            control_unit_name="Unité 5",
+            administration="Administration 2",
+            emails=[],
+            phone_numbers=["44 44 44 44 44"],
+        ),
+        ControlUnit(
+            control_unit_id=8,
+            control_unit_name="Unité 8",
+            administration="Administration 3",
+            emails=["email8@email.com"],
+            phone_numbers=[],
+        ),
+    ]
 
 
-flow.replace(
-    flow.get_tasks("fetch_control_units_contacts")[0], mock_fetch_control_units_contacts
-)
+flow.replace(flow.get_tasks("fetch_control_units")[0], mock_fetch_control_units)
 
 
 @pytest.fixture
@@ -493,9 +493,9 @@ def test_get_control_unit_ids(expected_mission_actions, expected_control_unit_id
     assert ids == expected_control_unit_ids
 
 
-def test_filter_control_units_contacts(control_units_contacts):
-    res = filter_control_units_contacts.run(
-        all_control_units_contacts=control_units_contacts, control_unit_ids=[2, 3]
+def test_filter_control_units_contacts(monitorenv_control_units):
+    res = filter_control_units.run(
+        all_control_units=monitorenv_control_units, control_unit_ids=[2, 3]
     )
 
     assert res == [

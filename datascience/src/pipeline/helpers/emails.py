@@ -2,7 +2,6 @@ import email
 import io
 import smtplib
 from email.message import EmailMessage
-from enum import Enum
 from logging import Logger
 from mimetypes import guess_type
 from pathlib import Path
@@ -29,12 +28,7 @@ from config import (
     MONITORFISH_SMS_SERVER_PORT,
     MONITORFISH_SMS_SERVER_URL,
 )
-
-
-class CommunicationMeans(Enum):
-    EMAIL = "EMAIL"
-    SMS = "SMS"
-    FAX = "FAX"
+from src.pipeline.entities.communication_means import CommunicationMeans
 
 
 def create_html_email(
@@ -393,6 +387,8 @@ def send_email_or_sms_or_fax_message(
             suffix = ""
 
     send_errors = {k.removesuffix(suffix): v for k, v in send_errors.items()}
+    if send_errors:
+        logger.error(send_errors)
 
     return send_errors
 

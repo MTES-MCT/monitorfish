@@ -1,6 +1,8 @@
 import pandas as pd
 import pytest
 
+from src.pipeline.entities.control_units import ControlUnit
+
 
 @pytest.fixture
 def pno_units_targeting_vessels():
@@ -305,25 +307,27 @@ def monitorenv_control_units_api_response() -> list:
 
 
 @pytest.fixture
-def control_units_contacts() -> pd.DataFrame:
-    return pd.DataFrame(
-        {
-            "control_unit_id": [2, 3, 4],
-            "control_unit_name": ["Unité 2", "Unité 3", "Unité 4"],
-            "administration": [
-                "Administration 1",
-                "Administration 1",
-                "Administration 3",
-            ],
-            "emails": [
-                ["alternative@email", "some.email@control.unit.4"],
-                [],
-                ["email4@email.com"],
-            ],
-            "phone_numbers": [
-                ["'00 11 22 33 44 55"],
-                ["44 44 44 44 44"],
-                [],
-            ],
-        }
-    )
+def monitorenv_control_units() -> pd.DataFrame:
+    return [
+        ControlUnit(
+            control_unit_id=2,
+            control_unit_name="Unité 2",
+            administration="Administration 1",
+            emails=["alternative@email", "some.email@control.unit.4"],
+            phone_numbers=["'00 11 22 33 44 55"],
+        ),
+        ControlUnit(
+            control_unit_id=3,
+            control_unit_name="Unité 3",
+            administration="Administration 1",
+            emails=[],
+            phone_numbers=["44 44 44 44 44"],
+        ),
+        ControlUnit(
+            control_unit_id=4,
+            control_unit_name="Unité 4",
+            administration="Administration 3",
+            emails=["email4@email.com"],
+            phone_numbers=[],
+        ),
+    ]

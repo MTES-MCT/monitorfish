@@ -1,7 +1,6 @@
 import dataclasses
 from datetime import datetime
 from email.policy import EmailPolicy
-from itertools import chain
 from pathlib import Path
 from typing import List, Tuple
 
@@ -35,6 +34,8 @@ from config import (
     STATE_FLAGS_ICONS_LOCATION,
     default_risk_factors,
 )
+from src.pipeline.entities.communication_means import CommunicationMeans
+from src.pipeline.entities.control_units import ControlUnit
 from src.pipeline.entities.fleet_segments import FishingGear, FleetSegment
 from src.pipeline.entities.missions import Infraction
 from src.pipeline.entities.pnos import (
@@ -49,7 +50,6 @@ from src.pipeline.entities.pnos import (
 )
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.helpers.emails import (
-    CommunicationMeans,
     create_html_email,
     create_sms_email,
     resize_pdf_to_A4,
@@ -59,7 +59,7 @@ from src.pipeline.shared_tasks.control_flow import (
     check_flow_not_running,
     filter_results,
 )
-from src.pipeline.shared_tasks.control_units import fetch_control_units_contacts
+from src.pipeline.shared_tasks.control_units import fetch_control_units
 from src.pipeline.shared_tasks.dates import get_utcnow, make_timedelta
 from src.pipeline.shared_tasks.infrastructure import execute_statement, get_table
 from src.pipeline.shared_tasks.pnos import (
@@ -582,13 +582,12 @@ def attribute_addressees(
     pno_to_distribute: RenderedPno,
     units_targeting_vessels: pd.DataFrame,
     units_ports_and_segments_subscriptions: pd.DataFrame,
-    control_units_contacts: pd.DataFrame,
-    facade_email_addresses: dict,
+    control_units: List[ControlUnit],
 ) -> RenderedPno:
     """
-    Returns a copy of the input `RenderedPno`'s with its `control_unit_ids`,
-    `email_addresses` and `phone_numbers` attributes updated, representing control
-    units that should receive the PNO. The control units attributed to the PNO are :
+    Returns a copy of the input `RenderedPno`'s with its `control_units`,
+    attribute updated, representing control units that should receive the PNO.
+    The control units attributed to the PNO are :
 
       - control units who target the vessel
       - control units who subscribed to the port with the "receive all pnos"
@@ -606,11 +605,9 @@ def attribute_addressees(
         units_ports_and_segments_subscriptions (pd.DataFrame): DataFrame with columns
           `control_unit_id`, `port_locode`, `receive_all_pnos_from_port`, and
           `unit_subscribed_segments`
-        control_units_contacts (pd.DataFrame): DataFrame with columns
-          `control_unit_id`, `emails` and `phone_numbers`
-        facade_email_addresses (dict): dictionnary with facade names as keys and FMC
           facade email addresses as values. The email address of the corresponding
           facade will be added to addressees in PNO emails.
+        control_units (List[ControlUnit]): List of all active `ControlUnits`
 
     Returns:
         RenderedPno: copy of the input `pno_to_distribute` with addressees added
@@ -663,52 +660,35 @@ def attribute_addressees(
 
     control_unit_ids = units_subscribed_to_port.union(units_targeting_vessel)
 
-    emails = sorted(
-        set(
-            chain.from_iterable(
-                control_units_contacts.loc[
-                    control_units_contacts.control_unit_id.isin(control_unit_ids),
-                    "emails",
-                ].tolist()
-            )
-        )
-    )
-    if emails:
-        facade_email_address = facade_email_addresses.get(pno_to_distribute.facade)
-        if facade_email_address:
-            emails.append(facade_email_address)
-
-    phone_numbers = sorted(
-        set(
-            chain.from_iterable(
-                control_units_contacts.loc[
-                    control_units_contacts.control_unit_id.isin(control_unit_ids),
-                    "phone_numbers",
-                ].tolist()
-            )
-        )
-    )
-
     return dataclasses.replace(
         pno_to_distribute,
-        control_unit_ids=control_unit_ids,
-        emails=emails,
-        phone_numbers=phone_numbers,
+        control_units=[
+            control_unit
+            for control_unit in control_units
+            if control_unit.control_unit_id in control_unit_ids
+        ],
     )
 
 
 @task(checkpoint=False)
 def create_email(
-    pno: RenderedPno, uploaded_attachments: dict, test_mode: bool
+    pno: RenderedPno,
+    uploaded_attachments: dict,
+    facade_email_addresses: dict,
+    test_mode: bool,
 ) -> PnoToSend:
-    if pno.emails:
+    addressees = pno.get_addressees(CommunicationMeans.EMAIL)
+
+    if addressees:
         if test_mode:
             if PNO_TEST_EMAIL:
                 to = PNO_TEST_EMAIL
+                cc = None
             else:
                 return None
         else:
-            to = pno.emails
+            to = [addressee.email_address_or_number for addressee in addressees]
+            cc = facade_email_addresses.get(pno.facade)
 
         attachments = [
             (
@@ -719,6 +699,7 @@ def create_email(
 
         message = create_html_email(
             to=to,
+            cc=cc,
             subject=f"Préavis de débarquement - {pno.vessel_name}",
             html=pno.html_email_body,
             from_=MONITORFISH_EMAIL_ADDRESS,
@@ -742,14 +723,16 @@ def create_email(
 
 @task(checkpoint=False)
 def create_sms(pno: RenderedPno, test_mode: bool) -> PnoToSend:
-    if pno.phone_numbers:
+    addressees = pno.get_addressees(CommunicationMeans.SMS)
+
+    if addressees:
         if test_mode:
             if CNSP_SIP_DEPARTMENT_MOBILE_PHONE:
                 to = CNSP_SIP_DEPARTMENT_MOBILE_PHONE
             else:
                 return None
         else:
-            to = pno.phone_numbers
+            to = [addressee.email_address_or_number for addressee in addressees]
 
         return PnoToSend(
             pno=pno,
@@ -774,8 +757,10 @@ def send_pno_message(
 
     policy = EmailPolicy()
 
-    for addressee in pno_to_send.get_addressees():
-        formatted_addressee = policy.header_factory("To", addressee)
+    for addressee in pno_to_send.pno.get_addressees(pno_to_send.communication_means):
+        formatted_addressee = policy.header_factory(
+            "To", addressee.email_address_or_number
+        )
 
         if formatted_addressee in send_errors:
             success = False
@@ -790,8 +775,10 @@ def send_pno_message(
                 prior_notification_source=pno_to_send.pno.source,
                 date_time_utc=datetime.utcnow(),
                 communication_means=pno_to_send.communication_means,
-                recipient_address_or_number=addressee,
+                recipient_address_or_number=addressee.email_address_or_number,
                 success=success,
+                recipient_name=addressee.name,
+                recipient_organization=addressee.organization,
                 error_message=error_message,
             )
         )
@@ -1025,16 +1012,11 @@ with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
 
         with case(generation_needed, True):
             # Extract
-            control_units_contacts = fetch_control_units_contacts()
             species_names = extract_species_names()
             fishing_gear_names = extract_fishing_gear_names()
             html_for_pdf_template = get_html_for_pdf_template()
             email_body_template = get_email_body_template()
             sms_template = get_sms_template()
-            units_targeting_vessels = extract_pno_units_targeting_vessels()
-            units_ports_and_segments_subscriptions = (
-                extract_pno_units_ports_and_segments_subscriptions()
-            )
 
             # Render pdf documents
             pnos_to_render = to_pnos_to_render(pnos_to_generate)
@@ -1066,17 +1048,22 @@ with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
                 attachments = execute_prior_notification_attachments_query(query)
 
                 facade_email_addresses = extract_facade_email_addresses()
+                control_units = fetch_control_units()
+                units_targeting_vessels = extract_pno_units_targeting_vessels()
+                units_ports_and_segments_subscriptions = (
+                    extract_pno_units_ports_and_segments_subscriptions()
+                )
 
                 pnos_with_addressees = attribute_addressees.map(
                     pnos_to_distribute,
                     unmapped(units_targeting_vessels),
                     unmapped(units_ports_and_segments_subscriptions),
-                    control_units_contacts=unmapped(control_units_contacts),
-                    facade_email_addresses=unmapped(facade_email_addresses),
+                    control_units=unmapped(control_units),
                 )
 
                 email = create_email.map(
                     pnos_with_addressees,
+                    facade_email_addresses=unmapped(facade_email_addresses),
                     uploaded_attachments=unmapped(attachments),
                     test_mode=unmapped(test_mode),
                 )

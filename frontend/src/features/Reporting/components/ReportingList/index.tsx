@@ -154,7 +154,7 @@ MMSI: ${reporting.mmsi || ''}`
       <CardTableFilters>
         <FilterTableInput
           ref={searchInputRef}
-          baseUrl={baseUrl}
+          $baseUrl={baseUrl}
           data-cy="side-window-reporting-search"
           onChange={forceDebouncedUpdate}
           placeholder="Rechercher un signalement"

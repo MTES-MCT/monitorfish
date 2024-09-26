@@ -1,4 +1,5 @@
 import { browserTracingIntegration, init, replayIntegration } from '@sentry/react'
+import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { AuthProvider } from 'react-oidc-context'
 
@@ -33,11 +34,17 @@ const { IS_OIDC_ENABLED, oidcConfig } = getOIDCConfig()
 
 if (IS_OIDC_ENABLED) {
   root.render(
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    <AuthProvider {...oidcConfig}>
-      <App />
-    </AuthProvider>
+    <StrictMode>
+      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+      <AuthProvider {...oidcConfig}>
+        <App />
+      </AuthProvider>
+    </StrictMode>
   )
 } else {
-  root.render(<App />)
+  root.render(
+    <StrictMode>
+      <App />
+    </StrictMode>
+  )
 }

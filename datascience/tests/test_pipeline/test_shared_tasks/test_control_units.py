@@ -19,4 +19,4 @@ def test_fetch_control_units_contacts(
 
     mock_requests.get.return_value = response
     res = fetch_control_units.run()
-    res == monitorenv_control_units
+    assert res == monitorenv_control_units

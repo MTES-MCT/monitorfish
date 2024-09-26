@@ -246,7 +246,7 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
           </Button>
 
           {!isNewPriorNotification && (
-            <Button
+            <SyledButtonWithIcon
               accent={Accent.PRIMARY}
               disabled={isReadOnly || isVerifiedAndSent}
               Icon={isVerifiedAndSent ? Icon.Check : Icon.Send}
@@ -258,7 +258,7 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
               }
             >
               {isVerifiedAndSent ? 'Diffusé' : 'Diffuser'}
-            </Button>
+            </SyledButtonWithIcon>
           )}
         </Footer>
       </FrontendErrorBoundary>
@@ -327,17 +327,26 @@ const Intro = styled.p<{
 `
 
 const Footer = styled.div`
+  align-items: center;
   border-top: 1px solid ${p => p.theme.color.lightGray};
+  column-gap: 8px;
   display: flex;
   justify-content: flex-end;
   padding: 16px 32px;
-  min-height: 30px;
 
-  > .Element-Button:not(:first-child) {
-    margin-left: 8px;
+  > .Element-Button {
+    > span:last-child {
+      padding-top: 1px;
+    }
   }
+`
 
-  > div {
-    margin-left: 8px;
+const SyledButtonWithIcon = styled(Button)`
+  align-items: stretch;
+  padding: 4px 12px;
+
+  > span {
+    align-items: center;
+    display: flex;
   }
 `

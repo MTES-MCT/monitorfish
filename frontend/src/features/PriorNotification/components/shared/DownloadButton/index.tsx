@@ -11,6 +11,7 @@ import { Accent, Button, customDayjs, Dropdown, Icon } from '@mtes-mct/monitor-u
 import { downloadFile } from '@utils/downloadFile'
 import printJS from 'print-js'
 import { useMemo } from 'react'
+import styled from 'styled-components'
 
 import { HTML_STYLE } from './template'
 import { getHasAuthorizedLandingDownload, getHtmlContent } from './utils'
@@ -86,7 +87,7 @@ export function DownloadButton({
   return (
     <>
       {hasAuthorizedLandingDownload && (
-        <Dropdown accent={Accent.SECONDARY} Icon={Icon.Download} placement="topEnd" title="Télécharger">
+        <StyledDropdown accent={Accent.SECONDARY} Icon={Icon.Download} placement="topEnd" title="Télécharger">
           <>
             {!isPriorNotificationDocumentAvailable && (
               <Dropdown.Item disabled title="Document non généré">
@@ -114,7 +115,7 @@ export function DownloadButton({
               </Dropdown.Item>
             )}
           </>
-        </Dropdown>
+        </StyledDropdown>
       )}
       {!hasAuthorizedLandingDownload && (
         <>
@@ -144,3 +145,15 @@ export function DownloadButton({
     </>
   )
 }
+
+const StyledDropdown = styled(Dropdown)`
+  font-size: 13px;
+
+  * {
+    font-size: 13px;
+  }
+
+  > button {
+    padding: 3px 12px;
+  }
+`

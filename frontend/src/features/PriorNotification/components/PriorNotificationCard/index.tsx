@@ -177,7 +177,6 @@ const Footer = styled.div`
   display: flex;
   justify-content: flex-end;
   padding: 16px 32px;
-  height: 30px;
 
   > .Element-Button:not(:first-child) {
     margin-left: 8px;

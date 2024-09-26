@@ -29,6 +29,8 @@ from sqlalchemy.dialects.postgresql import BYTEA
 
 from config import EMAIL_IMAGES_LOCATION, TEST_DATA_LOCATION, default_risk_factors
 from src.db_config import create_engine
+from src.pipeline.entities.communication_means import CommunicationMeans
+from src.pipeline.entities.control_units import ControlUnit
 from src.pipeline.entities.fleet_segments import FishingGear, FleetSegment
 from src.pipeline.entities.missions import Infraction
 from src.pipeline.entities.pnos import (
@@ -62,7 +64,6 @@ from src.pipeline.flows.distribute_pnos import (
     send_pno_message,
     to_pnos_to_render,
 )
-from src.pipeline.helpers.emails import CommunicationMeans
 from src.read_query import read_query
 from tests.mocks import mock_check_flow_not_running, mock_datetime_utcnow
 
@@ -926,7 +927,6 @@ def pno_pdf_document_to_distribute_targeted_vessel_and_segments() -> RenderedPno
         source=PnoSource.MANUAL,
         generation_datetime_utc=datetime(2023, 5, 6, 23, 52, 0),
         pdf_document=b"PDF Document",
-        control_unit_ids=None,
         sms_content="Message SMS préavis 123-abc",
         html_email_body="<html>Ce navire va débarquer</html>",
     )
@@ -938,9 +938,22 @@ def pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned(
 ) -> RenderedPno:
     return dataclasses.replace(
         pno_pdf_document_to_distribute_targeted_vessel_and_segments,
-        control_unit_ids={1, 2, 3},
-        phone_numbers=["'00 11 22 33 44 55", "44 44 44 44 44"],
-        emails=["alternative@email", "some.email@control.unit.4", "namo@email"],
+        control_units=[
+            ControlUnit(
+                control_unit_id=2,
+                control_unit_name="Unité 2",
+                administration="Administration 1",
+                emails=["alternative@email", "some.email@control.unit.4"],
+                phone_numbers=["'00 11 22 33 44 55"],
+            ),
+            ControlUnit(
+                control_unit_id=3,
+                control_unit_name="Unité 3",
+                administration="Administration 1",
+                emails=[],
+                phone_numbers=["44 44 44 44 44"],
+            ),
+        ],
     )
 
 
@@ -959,7 +972,6 @@ def pno_pdf_document_to_distribute_receive_all_pnos_from_port() -> RenderedPno:
         source=PnoSource.MANUAL,
         generation_datetime_utc=datetime(2023, 6, 6, 23, 50, 0),
         pdf_document=b"PDF Document",
-        control_unit_ids=None,
     )
 
 
@@ -969,9 +981,15 @@ def pno_pdf_document_to_distribute_receive_all_pnos_from_port_assigned(
 ) -> RenderedPno:
     return dataclasses.replace(
         pno_pdf_document_to_distribute_receive_all_pnos_from_port,
-        control_unit_ids={4},
-        emails=["email4@email.com"],
-        phone_numbers=[],
+        control_units=[
+            ControlUnit(
+                control_unit_id=4,
+                control_unit_name="Unité 4",
+                administration="Administration 3",
+                emails=["email4@email.com"],
+                phone_numbers=[],
+            )
+        ],
     )
 
 
@@ -990,7 +1008,6 @@ def pno_pdf_document_to_distribute_without_addressees() -> RenderedPno:
         source=PnoSource.MANUAL,
         generation_datetime_utc=datetime(2023, 6, 6, 23, 50, 0),
         pdf_document=b"PDF Document",
-        control_unit_ids=None,
     )
 
 
@@ -1000,9 +1017,10 @@ def pno_pdf_document_to_distribute_without_addressees_assigned(
 ) -> RenderedPno:
     return dataclasses.replace(
         pno_pdf_document_to_distribute_without_addressees,
-        control_unit_ids=set(),
-        emails=[],
-        phone_numbers=[],
+        control_units=[],
+        # control_unit_ids=set(),
+        # emails=[],
+        # phone_numbers=[],
     )
 
 
@@ -1021,7 +1039,6 @@ def pno_pdf_document_to_distribute_verified() -> RenderedPno:
         source=PnoSource.LOGBOOK,
         generation_datetime_utc=datetime(2023, 6, 6, 23, 50, 0),
         pdf_document=b"PDF Document",
-        control_unit_ids=None,
     )
 
 
@@ -1031,9 +1048,22 @@ def pno_pdf_document_to_distribute_verified_assigned(
 ) -> RenderedPno:
     return dataclasses.replace(
         pno_pdf_document_to_distribute_verified,
-        control_unit_ids={2, 3},
-        emails=["alternative@email", "some.email@control.unit.4", "namo@email"],
-        phone_numbers=["'00 11 22 33 44 55", "44 44 44 44 44"],
+        control_units=[
+            ControlUnit(
+                control_unit_id=2,
+                control_unit_name="Unité 2",
+                administration="Administration 1",
+                emails=["alternative@email", "some.email@control.unit.4"],
+                phone_numbers=["'00 11 22 33 44 55"],
+            ),
+            ControlUnit(
+                control_unit_id=3,
+                control_unit_name="Unité 3",
+                administration="Administration 1",
+                emails=[],
+                phone_numbers=["44 44 44 44 44"],
+            ),
+        ],
     )
 
 
@@ -1100,9 +1130,22 @@ def logbook_rendered_pno():
         generation_datetime_utc=datetime(2023, 5, 6, 12, 52, 12),
         html_email_body="<html>Hello this is a prior notification</html>",
         sms_content="Hello, PNO",
-        control_unit_ids=[1, 2],
-        emails=["email1@control.unit", "email.in.error@control.unit"],
-        phone_numbers=["00000000000"],
+        control_units=[
+            ControlUnit(
+                control_unit_id=1,
+                control_unit_name="Unité de test numero 1",
+                administration="Une Administration quelconque",
+                emails=["email1@control.unit"],
+                phone_numbers=[],
+            ),
+            ControlUnit(
+                control_unit_id=2,
+                control_unit_name="Unité de test numero 2",
+                administration="Une autre Administration",
+                emails=["email.in.error@control.unit"],
+                phone_numbers=["00000000000"],
+            ),
+        ],
     )
 
 
@@ -1124,9 +1167,18 @@ def manual_rendered_pno():
         generation_datetime_utc=datetime(2023, 5, 4, 8, 42, 26),
         html_email_body="<html>Hello this is a manual prior notification</html>",
         sms_content="Hello, PNO manual",
-        control_unit_ids=[3],
-        emails=["manual.email1@control.unit", "manual.email.in.error@control.unit"],
-        phone_numbers=["11111111111"],
+        control_units=[
+            ControlUnit(
+                control_unit_id=3,
+                control_unit_name="Unité n°3",
+                administration="Administration de l'unité 3",
+                emails=[
+                    "manual.email1@control.unit",
+                    "manual.email.in.error@control.unit",
+                ],
+                phone_numbers=["11111111111"],
+            )
+        ],
     )
 
 
@@ -1147,6 +1199,8 @@ def messages_sent_by_email() -> List[PriorNotificationSentMessage]:
             prior_notification_source=PnoSource.LOGBOOK,
             date_time_utc=datetime(2023, 6, 6, 16, 10),
             communication_means=CommunicationMeans.EMAIL,
+            recipient_name="Unité de test numero 1",
+            recipient_organization="Une Administration quelconque",
             recipient_address_or_number="email1@control.unit",
             success=True,
             error_message=None,
@@ -1156,6 +1210,8 @@ def messages_sent_by_email() -> List[PriorNotificationSentMessage]:
             prior_notification_source=PnoSource.LOGBOOK,
             date_time_utc=datetime(2023, 6, 6, 16, 10),
             communication_means=CommunicationMeans.EMAIL,
+            recipient_name="Unité de test numero 2",
+            recipient_organization="Une autre Administration",
             recipient_address_or_number="email.in.error@control.unit",
             success=False,
             error_message="Error when sending email",
@@ -1178,6 +1234,8 @@ def messages_sent_by_sms() -> List[PriorNotificationSentMessage]:
             prior_notification_source=PnoSource.LOGBOOK,
             date_time_utc=datetime(2023, 6, 6, 16, 10),
             communication_means=CommunicationMeans.SMS,
+            recipient_name="Unité de test numero 2",
+            recipient_organization="Une autre Administration",
             recipient_address_or_number="00000000000",
             success=True,
             error_message=None,
@@ -1198,6 +1256,8 @@ def some_more_sent_messages(
                 prior_notification_source=PnoSource.MANUAL,
                 date_time_utc=datetime(2023, 6, 6, 16, 10),
                 communication_means=CommunicationMeans.SMS,
+                recipient_name="Someone",
+                recipient_organization="Somewhere",
                 recipient_address_or_number="00000000000",
                 success=True,
                 error_message=None,
@@ -1207,6 +1267,8 @@ def some_more_sent_messages(
                 prior_notification_source=PnoSource.LOGBOOK,
                 date_time_utc=datetime(2023, 6, 6, 16, 10),
                 communication_means=CommunicationMeans.SMS,
+                recipient_name="Someone",
+                recipient_organization="Somewhere",
                 recipient_address_or_number="00000000000",
                 success=False,
                 error_message=None,
@@ -1216,6 +1278,8 @@ def some_more_sent_messages(
                 prior_notification_source=PnoSource.LOGBOOK,
                 date_time_utc=datetime(2023, 6, 6, 16, 10),
                 communication_means=CommunicationMeans.SMS,
+                recipient_name="Someone",
+                recipient_organization="Somewhere",
                 recipient_address_or_number="00000000000",
                 success=True,
                 error_message=None,
@@ -1225,6 +1289,8 @@ def some_more_sent_messages(
                 prior_notification_source=PnoSource.MANUAL,
                 date_time_utc=datetime(2023, 6, 6, 16, 10),
                 communication_means=CommunicationMeans.SMS,
+                recipient_name="Someone",
+                recipient_organization="Somewhere",
                 recipient_address_or_number="00000000000",
                 success=False,
                 error_message=None,
@@ -1253,6 +1319,16 @@ def loaded_sent_messages() -> pd.DataFrame:
             ],
             "success": [True, False, True],
             "error_message": [None, "Error when sending email", None],
+            "recipient_name": [
+                "Unité de test numero 1",
+                "Unité de test numero 2",
+                "Unité de test numero 2",
+            ],
+            "recipient_organization": [
+                "Une Administration quelconque",
+                "Une autre Administration",
+                "Une autre Administration",
+            ],
         }
     )
 
@@ -1657,15 +1733,13 @@ def test_attribute_addressees_uses_target_vessels_and_segments(
     pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned,
     pno_units_targeting_vessels,
     pno_units_ports_and_segments_subscriptions,
-    control_units_contacts,
-    facade_email_addresses,
+    monitorenv_control_units,
 ):
     res = attribute_addressees.run(
         pno_pdf_document_to_distribute_targeted_vessel_and_segments,
         pno_units_targeting_vessels,
         pno_units_ports_and_segments_subscriptions,
-        control_units_contacts,
-        facade_email_addresses,
+        monitorenv_control_units,
     )
     assert res == pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned
 
@@ -1675,15 +1749,13 @@ def test_attribute_addressees_uses_receive_all_pnos_from_port(
     pno_pdf_document_to_distribute_receive_all_pnos_from_port_assigned,
     pno_units_targeting_vessels,
     pno_units_ports_and_segments_subscriptions,
-    control_units_contacts,
-    facade_email_addresses,
+    monitorenv_control_units,
 ):
     res = attribute_addressees.run(
         pno_pdf_document_to_distribute_receive_all_pnos_from_port,
         pno_units_targeting_vessels,
         pno_units_ports_and_segments_subscriptions,
-        control_units_contacts,
-        facade_email_addresses,
+        monitorenv_control_units,
     )
     assert res == pno_pdf_document_to_distribute_receive_all_pnos_from_port_assigned
 
@@ -1693,15 +1765,13 @@ def test_attribute_addressees_returns_empty_addressees(
     pno_pdf_document_to_distribute_without_addressees_assigned,
     pno_units_targeting_vessels,
     pno_units_ports_and_segments_subscriptions,
-    control_units_contacts,
-    facade_email_addresses,
+    monitorenv_control_units,
 ):
     res = attribute_addressees.run(
         pno_pdf_document_to_distribute_without_addressees,
         pno_units_targeting_vessels,
         pno_units_ports_and_segments_subscriptions,
-        control_units_contacts,
-        facade_email_addresses,
+        monitorenv_control_units,
     )
     assert res == pno_pdf_document_to_distribute_without_addressees_assigned
 
@@ -1711,15 +1781,13 @@ def test_attribute_addressees_when_is_verified(
     pno_pdf_document_to_distribute_verified_assigned,
     pno_units_targeting_vessels,
     pno_units_ports_and_segments_subscriptions,
-    control_units_contacts,
-    facade_email_addresses,
+    monitorenv_control_units,
 ):
     res = attribute_addressees.run(
         pno_pdf_document_to_distribute_verified,
         pno_units_targeting_vessels,
         pno_units_ports_and_segments_subscriptions,
-        control_units_contacts,
-        facade_email_addresses,
+        monitorenv_control_units,
     )
     assert res == pno_pdf_document_to_distribute_verified_assigned
 
@@ -1768,6 +1836,7 @@ def test_create_email(
     marianne_gif,
     liberte_egalite_fraternite_gif,
     prior_notification_attachments,
+    facade_email_addresses,
     test_mode,
     pno_has_uploaded_attachments,
 ):
@@ -1776,6 +1845,7 @@ def test_create_email(
         uploaded_attachments=prior_notification_attachments
         if pno_has_uploaded_attachments
         else dict(),
+        facade_email_addresses=facade_email_addresses,
         test_mode=test_mode,
     )
 
@@ -1788,13 +1858,13 @@ def test_create_email(
     assert isinstance(pno_to_send.message, EmailMessage)
     if test_mode:
         assert pno_to_send.message["To"] == "pno.test@email.fr"
+        assert pno_to_send.message["Cc"] is None
     else:
         assert (
-            pno_to_send.message["To"]
-            == "alternative@email, some.email@control.unit.4, namo@email"
+            pno_to_send.message["To"] == "alternative@email, some.email@control.unit.4"
         )
+        assert pno_to_send.message["Cc"] == "namo@email"
     assert pno_to_send.message["From"] == "monitorfish@test.email"
-    assert pno_to_send.message["Cc"] is None
     assert pno_to_send.message["Bcc"] is None
     assert pno_to_send.message["Reply-To"] == "cnsp.france@test.email"
     assert (
@@ -1852,11 +1922,13 @@ def test_create_email(
 def test_create_email_with_no_email_addressees_returns_none(
     pno_pdf_document_to_distribute_without_addressees_assigned,
     prior_notification_attachments,
+    facade_email_addresses,
     test_mode,
 ):
     pno_to_send = create_email.run(
         pno_pdf_document_to_distribute_without_addressees_assigned,
         uploaded_attachments=prior_notification_attachments,
+        facade_email_addresses=facade_email_addresses,
         test_mode=test_mode,
     )
     assert pno_to_send is None
@@ -2136,7 +2208,7 @@ def test_flow(
     assert len(initial_pdf_documents) == 8
     assert len(initial_sent_messages) == 0
     assert len(final_pdf_documents) == 14
-    assert len(final_sent_messages) == 15
+    assert len(final_sent_messages) == 12
 
     if is_integration:
         assert final_sent_messages.success.all()
@@ -2159,7 +2231,7 @@ def test_flow(
                     == CommunicationMeans.EMAIL.value
                 ]
             )
-            == 10
+            == 7
         )
         assert final_sent_messages.loc[
             (

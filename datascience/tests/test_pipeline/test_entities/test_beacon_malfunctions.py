@@ -11,7 +11,7 @@ from src.pipeline.entities.beacon_malfunctions import (
     BeaconMalfunctionNotificationType,
     BeaconMalfunctionToNotify,
 )
-from src.pipeline.helpers.emails import CommunicationMeans
+from src.pipeline.entities.communication_means import CommunicationMeans
 
 
 @fixture

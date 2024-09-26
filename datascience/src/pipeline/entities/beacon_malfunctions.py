@@ -9,7 +9,7 @@ from config import (
     CNSP_SIP_DEPARTMENT_FAX,
     CNSP_SIP_DEPARTMENT_MOBILE_PHONE,
 )
-from src.pipeline.helpers.emails import CommunicationMeans
+from src.pipeline.entities.communication_means import CommunicationMeans
 
 
 class BeaconStatus(Enum):

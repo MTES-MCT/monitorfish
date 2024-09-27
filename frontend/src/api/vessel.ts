@@ -4,7 +4,6 @@ import { ApiError } from '../libs/ApiError'
 
 import type { TrackRequest, VesselAndPositions, VesselIdentity, VesselPosition } from '../domain/entities/vessel/types'
 import type { VesselReportings } from '@features/Reporting/types'
-import type { Dayjs } from 'dayjs'
 
 const VESSEL_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations du navire"
 const VESSEL_SEARCH_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les navires dans notre base"
@@ -91,14 +90,13 @@ async function searchVesselsFromAPI(searched: string) {
  *
  * @throws {@link ApiError}
  */
-async function getVesselReportingsFromAPI(identity: VesselIdentity, fromDate: Dayjs) {
+async function getVesselReportingsFromAPI(identity: VesselIdentity, fromDate: string) {
   const { externalReferenceNumber, internalReferenceNumber, ircs, vesselId, vesselIdentifier } =
     getVesselIdentityAsEmptyStringWhenNull(identity)
-
   try {
     return await monitorfishApiKy
       .get(
-        `/bff/v1/vessels/reporting?vesselId=${vesselId}&internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&vesselIdentifier=${vesselIdentifier}&fromDate=${fromDate.toISOString()}`
+        `/bff/v1/vessels/reporting?vesselId=${vesselId}&internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&vesselIdentifier=${vesselIdentifier}&fromDate=${fromDate}`
       )
       .json<VesselReportings>()
   } catch (err) {

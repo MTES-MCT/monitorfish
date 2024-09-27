@@ -9,7 +9,7 @@ import { loadReporting, resetSelectedVesselReportings, setSelectedVesselReportin
 export const getVesselReportings = (isLoaderShowed: boolean) => async (dispatch, getState) => {
   const { selectedVesselIdentity } = getState().vessel
   const { archivedReportingsFromDate, isLoadingReporting } = getState().reporting
-  if (!selectedVesselIdentity || !archivedReportingsFromDate || isLoadingReporting) {
+  if (!selectedVesselIdentity || isLoadingReporting) {
     return
   }
 

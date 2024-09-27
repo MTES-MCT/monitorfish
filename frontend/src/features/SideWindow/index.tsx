@@ -2,6 +2,7 @@ import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { FulfillingBouncingCircleSpinner } from '@components/FulfillingBouncingCircleSpinner'
 import { MissionForm } from '@features/Mission/components/MissionForm'
 import { useListenToAllMissionEventsUpdates } from '@features/Mission/components/MissionForm/hooks/useListenToAllMissionEventsUpdates'
+import { getAllCurrentReportings } from '@features/Reporting/useCases/getAllCurrentReportings'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { THEME, type NewWindowContextValue, NewWindowContext, Notifier } from '@mtes-mct/monitor-ui'
 import {
@@ -36,7 +37,6 @@ import { Loader as MissionFormLoader } from '../Mission/components/MissionForm/L
 import { MissionList } from '../Mission/components/MissionList'
 import { PriorNotificationList } from '../PriorNotification/components/PriorNotificationList'
 import { setEditedReportingInSideWindow } from '../Reporting/slice'
-import { getAllCurrentReportings } from '../Reporting/useCases/getAllCurrentReportings'
 
 export type SideWindowProps = HTMLAttributes<HTMLDivElement> & {
   isFromURL: boolean

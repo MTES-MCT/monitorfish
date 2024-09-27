@@ -7,13 +7,11 @@ import styled from 'styled-components'
 export function Summary() {
   const archivedReportingsFromDate = useMainAppSelector(state => state.reporting.archivedReportingsFromDate)
   const summary = useMainAppSelector(state => state.reporting.selectedVesselReportings?.summary)
-  const yearsDepth = customDayjs().utc().get('year') - archivedReportingsFromDate.get('year') + 1
+  const yearsDepth = customDayjs().utc().get('year') - customDayjs(archivedReportingsFromDate).get('year') + 1
 
   return (
     <Zone data-cy="vessel-reporting-summary">
-      <Header>
-        Résumé des derniers signalements {archivedReportingsFromDate && <>({yearsDepth} dernières années)</>}
-      </Header>
+      <Header>Résumé des derniers signalements ({yearsDepth} dernières années)</Header>
       <Body>
         <Columns $isFirst>
           <IconColumn>

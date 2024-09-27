@@ -65,6 +65,7 @@ class GetPendingAlertsUTests {
                 AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
                 AlertTypeMapping.FRENCH_EEZ_FISHING_ALERT,
                 AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
+                AlertTypeMapping.MISSING_DEP_ALERT,
                 AlertTypeMapping.MISSING_FAR_48_HOURS_ALERT,
             ),
         )

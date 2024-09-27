@@ -83,7 +83,7 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
         isManuallyCreated: boolean
       }
     >({
-      providesTags: (_, __, { reportId }) => [{ id: reportId, type: RtkCacheTagType.PriorNotification }],
+      forceRefetch: () => true,
       query: ({ isManuallyCreated, operationDate, reportId }) =>
         getUrlOrPathWithQueryParams(`/prior_notifications/${reportId}`, { isManuallyCreated, operationDate }),
       transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_DETAIL_ERROR_MESSAGE, response)
@@ -152,10 +152,7 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
         isManuallyCreated: boolean
       }
     >({
-      invalidatesTags: (_, __, { reportId }) => [
-        { type: RtkCacheTagType.PriorNotifications },
-        { id: reportId, type: RtkCacheTagType.PriorNotification }
-      ],
+      invalidatesTags: () => [{ type: RtkCacheTagType.PriorNotifications }],
       query: ({ isManuallyCreated, operationDate, reportId }) => ({
         method: 'PUT',
         url: getUrlOrPathWithQueryParams(`/prior_notifications/${reportId}/invalidate`, {
@@ -174,10 +171,7 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
         reportId: string
       }
     >({
-      invalidatesTags: (_, __, { reportId }) => [
-        { type: RtkCacheTagType.PriorNotifications },
-        { id: reportId, type: RtkCacheTagType.PriorNotification }
-      ],
+      invalidatesTags: () => [{ type: RtkCacheTagType.PriorNotifications }],
       query: ({ data, operationDate, reportId }) => ({
         body: data,
         method: 'PUT',
@@ -193,10 +187,7 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
         reportId: string
       }
     >({
-      invalidatesTags: (_, __, { reportId }) => [
-        { type: RtkCacheTagType.PriorNotifications },
-        { id: reportId, type: RtkCacheTagType.PriorNotification }
-      ],
+      invalidatesTags: () => [{ type: RtkCacheTagType.PriorNotifications }],
       query: ({ data, reportId }) => ({
         body: data,
         method: 'PUT',
@@ -211,10 +202,7 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
         isManuallyCreated: boolean
       }
     >({
-      invalidatesTags: (_, __, { reportId }) => [
-        { type: RtkCacheTagType.PriorNotifications },
-        { id: reportId, type: RtkCacheTagType.PriorNotification }
-      ],
+      invalidatesTags: () => [{ type: RtkCacheTagType.PriorNotifications }],
       query: ({ isManuallyCreated, operationDate, reportId }) => ({
         method: 'POST',
         url: getUrlOrPathWithQueryParams(`/prior_notifications/${reportId}/verify_and_send`, {

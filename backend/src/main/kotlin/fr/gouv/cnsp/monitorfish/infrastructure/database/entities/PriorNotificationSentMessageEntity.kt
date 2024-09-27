@@ -25,6 +25,10 @@ data class PriorNotificationSentMessageEntity(
     val priorNotificationSource: String,
     @Column(name = "recipient_address_or_number", nullable = false)
     val recipientAddressOrNumber: String,
+    @Column(name = "recipient_name", nullable = false)
+    val recipientName: String,
+    @Column(name = "recipient_organization", nullable = false)
+    val recipientOrganization: String,
     @Column(name = "success", nullable = false)
     val success: Boolean,
 ) {
@@ -37,6 +41,8 @@ data class PriorNotificationSentMessageEntity(
             priorNotificationReportId = priorNotificationReportId,
             priorNotificationSource = priorNotificationSource,
             recipientAddressOrNumber = recipientAddressOrNumber,
+            recipientName = recipientName,
+            recipientOrganization = recipientOrganization,
             success = success,
         )
     }

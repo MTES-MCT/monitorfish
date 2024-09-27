@@ -117,7 +117,6 @@ def test_get_dates():
 
 
 def test_make_positions_at_sea_query():
-
     # Setup
 
     from_date = datetime(2020, 12, 4, 12, 23, 0)
@@ -235,7 +234,6 @@ def test_make_positions_at_sea_query():
 
 
 def test_extract_vessels_that_emitted_fars(reset_test_data):
-
     now = datetime.utcnow()
 
     vessels_that_emitted_fars = extract_vessels_that_emitted_fars.run(
@@ -401,7 +399,6 @@ def test_get_vessels_with_missing_fars_raises_if_share_is_exceeded():
 
 
 def test_flow_when_an_alert_is_silenced(reset_test_data):
-
     initial_pending_alerts = read_query(
         "SELECT * FROM pending_alerts", db="monitorfish_remote"
     )
@@ -426,9 +423,9 @@ def test_flow_when_an_alert_is_silenced(reset_test_data):
 
     assert len(initial_pending_alerts) == 1
     # Only one alert (out of the two) is kept, as one alert is filtered by the
-    # filter_silenced_alerts task
+    # filter_alerts task
     assert len(state.result[flow.get_tasks("make_alerts")[0]].result) == 2
-    filtered_alerts = state.result[flow.get_tasks("filter_silenced_alerts")[0]].result
+    filtered_alerts = state.result[flow.get_tasks("filter_alerts")[0]].result
     expected_filtered_alerts = pd.DataFrame(
         {
             "vessel_name": ["PLACE SPECTACLE SUBIR"],
@@ -462,7 +459,6 @@ def test_flow_when_an_alert_is_silenced(reset_test_data):
 
 
 def test_flow_fails_if_share_of_vessels_with_missing_far_is_too_large(reset_test_data):
-
     max_share_of_vessels_with_missing_fars = 0.23
 
     flow.schedule = None

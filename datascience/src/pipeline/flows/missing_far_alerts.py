@@ -497,7 +497,7 @@ with Flow("Missing FAR alerts", executor=LocalDaskExecutor()) as flow:
             districts_columns_to_add=["dml"],
         )
         alerts = make_alerts(vessels_with_missing_fars, alert_type, alert_config_name)
-        silenced_alerts = extract_silenced_alerts()
+        silenced_alerts = extract_silenced_alerts(alert_type)
         alert_without_silenced = filter_silenced_alerts(alerts, silenced_alerts)
 
         # Load

@@ -9,6 +9,8 @@ data class PriorNotificationSentMessageDataOutput(
     val dateTimeUtc: ZonedDateTime,
     val errorMessage: String?,
     val recipientAddressOrNumber: String,
+    val recipientName: String,
+    val recipientOrganization: String,
     val success: Boolean,
 ) {
     companion object {
@@ -21,6 +23,8 @@ data class PriorNotificationSentMessageDataOutput(
                 dateTimeUtc = priorNotificationSentMessage.dateTimeUtc,
                 errorMessage = priorNotificationSentMessage.errorMessage,
                 recipientAddressOrNumber = priorNotificationSentMessage.recipientAddressOrNumber,
+                recipientName = priorNotificationSentMessage.recipientName,
+                recipientOrganization = priorNotificationSentMessage.recipientOrganization,
                 success = priorNotificationSentMessage.success,
             )
         }

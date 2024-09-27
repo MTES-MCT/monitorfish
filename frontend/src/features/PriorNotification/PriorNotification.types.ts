@@ -164,6 +164,8 @@ export namespace PriorNotification {
     dateTimeUtc: string
     errorMessage: string | undefined
     recipientAddressOrNumber: string
+    recipientName: string
+    recipientOrganization: string
     success: boolean
   }
 

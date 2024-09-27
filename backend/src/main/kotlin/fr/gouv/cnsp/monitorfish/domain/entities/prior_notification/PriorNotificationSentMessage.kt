@@ -10,5 +10,7 @@ data class PriorNotificationSentMessage(
     val priorNotificationReportId: String?,
     val priorNotificationSource: String,
     val recipientAddressOrNumber: String,
+    val recipientName: String,
+    val recipientOrganization: String,
     val success: Boolean,
 )

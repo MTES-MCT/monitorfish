@@ -11,7 +11,7 @@ import { Fragment } from 'react/jsx-runtime'
 import styled from 'styled-components'
 
 import { FormikExtraField } from './FormikExtraField'
-import { InputWithUnit, SubRow } from './styles'
+import { SubRow } from './styles'
 import { getFishingsCatchesValidationError } from './utils'
 import { getFishingsCatchesInitialValues } from '../../utils'
 
@@ -136,17 +136,20 @@ export function FormikFishingCatchesMultiSelect({ isReadOnly }: FormikFishingCat
                     />
                   )}
 
-                  <InputWithUnit>
-                    <FormikNumberInput
-                      areArrowsHidden
-                      isErrorMessageHidden
-                      isLabelHidden
-                      label={`Poids (${fishingCatch.specyCode})`}
-                      name={`fishingCatches[${index}].weight`}
-                      readOnly={isReadOnly || fishingCatch.specyCode === BLUEFIN_TUNA_SPECY_CODE}
-                    />
-                    kg
-                  </InputWithUnit>
+                  <FormikNumberInput
+                    areArrowsHidden
+                    isErrorMessageHidden
+                    isLabelHidden
+                    label={`Poids (${fishingCatch.specyCode})`}
+                    name={`fishingCatches[${index}].weight`}
+                    readOnly={isReadOnly || fishingCatch.specyCode === BLUEFIN_TUNA_SPECY_CODE}
+                    title={
+                      fishingCatch.specyCode === BLUEFIN_TUNA_SPECY_CODE
+                        ? 'Le poids total est calculé à partir des poids saisis dans les cases BF1, BF2, BF3'
+                        : undefined
+                    }
+                    unit="kg"
+                  />
                 </SubRow>
 
                 <FormikExtraField
@@ -179,6 +182,11 @@ const Row = styled.div`
   flex-direction: column;
   margin-top: 24px;
   row-gap: 8px;
+
+  .Field-NumberInput {
+    max-width: 96px;
+    min-width: 96px;
+  }
 `
 
 const SpecyTag = styled(SingleTag)`

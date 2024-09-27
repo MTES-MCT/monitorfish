@@ -194,7 +194,7 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
 
     cy.wait('@createPriorNotification')
 
-    cy.contains('.Component-SingleTag', 'SWO – ESPADON').find('.Element-IconButton').click()
+    cy.contains('.Element-SingleTag', 'SWO – ESPADON').find('button').click()
 
     cy.contains('SWO – ESPADON').should('not.exist')
 

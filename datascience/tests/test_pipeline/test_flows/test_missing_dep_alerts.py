@@ -93,10 +93,7 @@ def test_flow(reset_test_data_missing_dep_alerts):
     initial_pending_alerts = read_query(query, db="monitorfish_remote")
 
     flow.schedule = None
-    state = flow.run(
-        alert_type="MISSING_DEP_ALERT",
-        alert_config_name="MISSING_DEP_ALERT",
-    )
+    state = flow.run()
     assert state.is_successful()
 
     final_pending_alerts = read_query(query, db="monitorfish_remote")

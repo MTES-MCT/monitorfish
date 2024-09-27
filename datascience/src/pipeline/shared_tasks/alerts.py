@@ -35,6 +35,21 @@ def extract_silenced_alerts(alert_type: str) -> pd.DataFrame:
 
 
 @task(checkpoint=False)
+def extract_active_reportings(alert_type: str) -> pd.DataFrame:
+    """
+    Return DataFrame of vessels with active (non archived) reporting originating from
+    alerts of the given type.
+    """
+
+    alert_type = AlertType(alert_type)
+    return extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/active_reportings.sql",
+        params={"alert_type": alert_type.value},
+    )
+
+
+@task(checkpoint=False)
 def extract_pending_alerts_ids_of_type(alert_type: str) -> List[int]:
     """
     Return ids of pending alerts corresponding to `alert_type`
@@ -171,12 +186,17 @@ def make_alerts(
 
 
 @task(checkpoint=False)
-def filter_silenced_alerts(
-    alerts: pd.DataFrame, silenced_alerts: pd.DataFrame
+def filter_alerts(
+    alerts: pd.DataFrame,
+    vessels_with_silenced_alerts: pd.DataFrame,
+    vessels_with_active_reportings: pd.DataFrame = None,
 ) -> pd.DataFrame:
     """
-    Filters `alerts` to keep only alerts that are not in `silenced_alerts`. Both input
-    DataFrames must have columns :
+    Filters `alerts` to keep only alerts of vessels that are not in
+    `vessels_with_silenced_alerts`. If `vessels_with_active_reportings` is provided,
+    alerts of vessels that are in this DataFrame are also removed.
+
+    All input DataFrames must have columns :
 
       - internal_reference_number
       - external_reference_number
@@ -197,16 +217,25 @@ def filter_silenced_alerts(
 
     Args:
         alerts (pd.DataFrame): positions alerts.
-        silenced_alerts (pd.DataFrame): silenced alerts.
+        vessels_with_silenced_alerts (pd.DataFrame): vessels with silenced alerts.
 
     Returns:
         pd.DataFrame: same as input with some rows removed.
     """
     vessel_id_cols = ["internal_reference_number", "external_reference_number", "ircs"]
 
+    if isinstance(vessels_with_active_reportings, pd.DataFrame):
+        vessels_to_remove = (
+            pd.concat([vessels_with_silenced_alerts, vessels_with_active_reportings])
+            .drop_duplicates()
+            .reset_index(drop=True)
+        )
+    else:
+        vessels_to_remove = vessels_with_silenced_alerts
+
     alerts = alerts.loc[
         ~left_isin_right_by_decreasing_priority(
-            alerts[vessel_id_cols], silenced_alerts[vessel_id_cols]
+            alerts[vessel_id_cols], vessels_to_remove[vessel_id_cols]
         ),
         [
             "vessel_name",

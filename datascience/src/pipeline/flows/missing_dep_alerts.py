@@ -1,12 +1,14 @@
 from pathlib import Path
 
-from prefect import Flow, Parameter, case, task
+from prefect import Flow, case, task
 from prefect.executors import LocalDaskExecutor
 
+from src.pipeline.entities.alerts import AlertType
 from src.pipeline.generic_tasks import extract
 from src.pipeline.shared_tasks.alerts import (
+    extract_active_reportings,
     extract_silenced_alerts,
-    filter_silenced_alerts,
+    filter_alerts,
     load_alerts,
     make_alerts,
 )
@@ -23,16 +25,20 @@ def extract_missing_deps():
 with Flow("Missing DEP alerts", executor=LocalDaskExecutor()) as flow:
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
-        alert_type = Parameter("alert_type")
-        alert_config_name = Parameter("alert_config_name")
-
         vessels_with_missing_deps = extract_missing_deps()
 
-        alerts = make_alerts(vessels_with_missing_deps, alert_type, alert_config_name)
-        silenced_alerts = extract_silenced_alerts(alert_type)
-        alert_without_silenced = filter_silenced_alerts(alerts, silenced_alerts)
+        alerts = make_alerts(
+            vessels_with_missing_deps,
+            AlertType.MISSING_DEP_ALERT.value,
+            AlertType.MISSING_DEP_ALERT.value,
+        )
+        silenced_alerts = extract_silenced_alerts(AlertType.MISSING_DEP_ALERT.value)
+        active_reportings = extract_active_reportings(AlertType.MISSING_DEP_ALERT.value)
+        filtered_alerts = filter_alerts(alerts, silenced_alerts, active_reportings)
 
         # Load
-        load_alerts(alert_without_silenced, alert_config_name=alert_config_name)
+        load_alerts(
+            filtered_alerts, alert_config_name=AlertType.MISSING_DEP_ALERT.value
+        )
 
 flow.file_name = Path(__file__).name

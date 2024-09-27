@@ -6,10 +6,11 @@ import pandas as pd
 from src.pipeline.entities.alerts import AlertType
 from src.pipeline.shared_tasks.alerts import (
     archive_reporting,
+    extract_active_reportings,
     extract_non_archived_reportings_ids_of_type,
     extract_pending_alerts_ids_of_type,
     extract_silenced_alerts,
-    filter_silenced_alerts,
+    filter_alerts,
     load_alerts,
     make_alerts,
     validate_pending_alert,
@@ -40,6 +41,23 @@ def test_extract_silenced_alerts(reset_test_data):
         }
     )
     pd.testing.assert_frame_equal(silenced_alerts, expected_silenced_alerts)
+
+
+def test_extract_active_reportings(reset_test_data):
+    active_reportings = extract_active_reportings.run(
+        AlertType.THREE_MILES_TRAWLING_ALERT.value
+    )
+    expected_active_reportings = pd.DataFrame(
+        {
+            "internal_reference_number": [None],
+            "external_reference_number": ["ZZTOPACDC"],
+            "ircs": ["ZZ000000"],
+        }
+    )
+    pd.testing.assert_frame_equal(active_reportings, expected_active_reportings)
+
+    active_reportings = extract_active_reportings.run(AlertType.MISSING_FAR_ALERT.value)
+    pd.testing.assert_frame_equal(active_reportings, expected_active_reportings.head(0))
 
 
 def test_extract_pending_alerts_ids_of_type(reset_test_data):
@@ -173,7 +191,7 @@ def test_make_alerts():
     pd.testing.assert_frame_equal(alerts, expected_alerts)
 
 
-def test_filter_silenced_alerts():
+def test_filter_alerts():
     now = datetime(2020, 1, 1, 0, 0, 0)
     td = timedelta(hours=1)
     alert_type = "USER_DEFINED_ALERT_TYPE"
@@ -232,7 +250,7 @@ def test_filter_silenced_alerts():
         }
     )
 
-    active_alerts = filter_silenced_alerts.run(alerts, silenced_alerts)
+    active_alerts = filter_alerts.run(alerts, silenced_alerts)
 
     expected_active_alerts = pd.DataFrame(
         {

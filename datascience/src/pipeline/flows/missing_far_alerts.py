@@ -15,7 +15,7 @@ from src.pipeline.generic_tasks import extract, read_query_task
 from src.pipeline.processing import join_on_multiple_keys
 from src.pipeline.shared_tasks.alerts import (
     extract_silenced_alerts,
-    filter_silenced_alerts,
+    filter_alerts,
     load_alerts,
     make_alerts,
 )
@@ -498,7 +498,7 @@ with Flow("Missing FAR alerts", executor=LocalDaskExecutor()) as flow:
         )
         alerts = make_alerts(vessels_with_missing_fars, alert_type, alert_config_name)
         silenced_alerts = extract_silenced_alerts(alert_type)
-        alert_without_silenced = filter_silenced_alerts(alerts, silenced_alerts)
+        alert_without_silenced = filter_alerts(alerts, silenced_alerts)
 
         # Load
         load_alerts(alert_without_silenced, alert_config_name=alert_config_name)

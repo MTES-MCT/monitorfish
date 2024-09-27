@@ -39,6 +39,9 @@ Implémentation dans cette PR : https://github.com/MTES-MCT/monitorfish/pull/366
 Avantages :
 1. Séparation claire des responsabilités : Chaque fenêtre a son propre cycle de vie et son propre DOM, ce qui rend la gestion des deux interfaces plus propre et modulaire.
 2. Communication efficace : BroadcastChannel est conçu pour la synchronisation des états entre différentes fenêtres, ce qui permet une synchronisation rapide et efficace sans prop drilling ou complexité supplémentaire.
+3. Permet d'utiliser des urls pour ouvrir directement les entités (`*/mission/123...`).
+4. Permet le passage à Next (ou équivalent SSR) en bénéficiant du SSR aussi sur la side-window.
+5. Permet de visualiser la side window dans les replays Sentry (?).
 
 Inconvénients :
 1. Complexité de la gestion de l’état : Il est nécessaire de gérer la logique de synchronisation entre les fenêtres manuellement, ce qui peut introduire des erreurs si les états deviennent désynchronisés.

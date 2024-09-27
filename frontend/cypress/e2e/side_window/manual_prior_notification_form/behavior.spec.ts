@@ -132,7 +132,7 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
     cy.contains('button', 'Diffuser').should('be.disabled')
   })
 
-  it('Should recalculate BFT total weight a manual prior notification', () => {
+  it('Should recalculate BFT total weight in a manual prior notification', () => {
     addManualSideWindowPriorNotification()
 
     cy.fill('Espèces à bord et à débarquer', 'AAX')
@@ -162,5 +162,52 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
     cy.fill('Poids (BF3)', undefined)
 
     cy.get('[id="fishingCatches[1].weight"]').should('have.value', '50')
+  })
+
+  // Non-regression test
+  // https://github.com/MTES-MCT/monitorfish/issues/3683
+  it('Should create a manual prior notification Zero, remove a specy and calculate BFT total weight', () => {
+    const { utcDateTupleWithTime: arrivalDateTupleWithTime } = getUtcDateInMultipleFormats(
+      customDayjs().add(2, 'hours').startOf('minute').toISOString()
+    )
+
+    cy.intercept('POST', '/bff/v1/prior_notifications/manual').as('createPriorNotification')
+
+    addManualSideWindowPriorNotification()
+
+    cy.getDataCy('vessel-search-input').click().wait(500)
+    cy.getDataCy('vessel-search-input').type('PHENO', { delay: 100 })
+    cy.getDataCy('vessel-search-item').first().click()
+
+    cy.fill("Date et heure estimées d'arrivée au port (UTC)", arrivalDateTupleWithTime)
+    cy.fill("équivalentes à celles de l'arrivée au port", true)
+    cy.fill("Port d'arrivée", 'Vannes')
+    cy.fill('Zone globale de capture', '21.4.T')
+
+    cy.fill('Espèces à bord et à débarquer', 'SWO')
+    cy.fill('Espèces à bord et à débarquer', 'BFT')
+
+    cy.fill('Engins utilisés', ['OTP'], { index: 1 })
+    cy.fill('Saisi par', 'BOB')
+
+    cy.clickButton('Créer le préavis')
+
+    cy.wait('@createPriorNotification')
+
+    cy.contains('.Component-SingleTag', 'SWO – ESPADON').find('.Element-IconButton').click()
+
+    cy.contains('SWO – ESPADON').should('not.exist')
+
+    cy.fill('Poids (BF1)', 40)
+
+    cy.get('[id="fishingCatches[0].weight"]').should('have.value', '40')
+
+    cy.fill('Poids (BF2)', 30)
+
+    cy.get('[id="fishingCatches[0].weight"]').should('have.value', '70')
+
+    cy.fill('Poids (BF3)', 20)
+
+    cy.get('[id="fishingCatches[0].weight"]').should('have.value', '90')
   })
 })

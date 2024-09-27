@@ -62,6 +62,7 @@ export namespace PriorNotification {
     reportId: string
     riskFactor: number | undefined
     state: State | undefined
+    vesselId: number
   } & (
     | {
         asLogbookForm: LogbookForm

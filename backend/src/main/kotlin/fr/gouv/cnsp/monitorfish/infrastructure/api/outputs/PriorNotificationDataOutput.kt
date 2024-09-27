@@ -19,6 +19,7 @@ class PriorNotificationDataOutput(
     val operationDate: ZonedDateTime,
     val state: PriorNotificationState?,
     val riskFactor: Double?,
+    val vesselId: Int,
 ) {
     companion object {
         fun fromPriorNotification(priorNotification: PriorNotification): PriorNotificationDataOutput {
@@ -55,6 +56,10 @@ class PriorNotificationDataOutput(
                     "`priorNotification.vessel` is null."
                 }.underCharter
             val logbookMessage = priorNotification.logbookMessageAndValue.logbookMessage
+            val vesselId =
+                requireNotNull(priorNotification.vessel) {
+                    "`priorNotification.vessel` is null."
+                }.id
 
             val logbookMessageDataOutput = LogbookMessageDataOutput.fromLogbookMessage(logbookMessage)
 
@@ -71,6 +76,7 @@ class PriorNotificationDataOutput(
                 operationDate = logbookMessage.operationDateTime,
                 state = priorNotification.state,
                 riskFactor = priorNotification.logbookMessageAndValue.value.riskFactor,
+                vesselId = vesselId,
             )
         }
     }

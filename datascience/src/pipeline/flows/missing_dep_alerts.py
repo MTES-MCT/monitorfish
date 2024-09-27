@@ -29,7 +29,7 @@ with Flow("Missing DEP alerts", executor=LocalDaskExecutor()) as flow:
         vessels_with_missing_deps = extract_missing_deps()
 
         alerts = make_alerts(vessels_with_missing_deps, alert_type, alert_config_name)
-        silenced_alerts = extract_silenced_alerts()
+        silenced_alerts = extract_silenced_alerts(alert_type)
         alert_without_silenced = filter_silenced_alerts(alerts, silenced_alerts)
 
         # Load

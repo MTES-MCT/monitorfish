@@ -2,7 +2,6 @@ import { MissionAction } from '@features/Mission/missionAction.types'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
-import type { Dayjs } from 'dayjs'
 
 import InfractionType = MissionAction.InfractionType
 
@@ -43,12 +42,12 @@ export const getLastControls = (yearsToControls: {
  * Get mission actions for each years : Years are keys and actions are values
  */
 export const getYearsToActions = (
-  controlsFromDate: Dayjs,
+  controlsFromDate: string,
   controls: MissionAction.MissionAction[]
 ): Record<string, MissionAction.MissionAction[]> => {
   const nextYearsToControls = {}
 
-  let fromYear = controlsFromDate.year()
+  let fromYear = customDayjs(controlsFromDate).year()
   const toYear = customDayjs().utc().year()
   while (fromYear <= toYear) {
     nextYearsToControls[fromYear] = []

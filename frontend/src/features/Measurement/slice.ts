@@ -1,10 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { getLocalStorageState } from '../../utils'
-
 import type { MeasurementType } from '../../domain/entities/map/constants'
-
-const measurementsLocalStorageKey = 'measurements'
+import type { CircleMeasurementToAdd, DrawedMeasurement } from '@features/Measurement/types'
+import type { PayloadAction } from '@reduxjs/toolkit'
 
 export type MeasurementState = {
   // TODO Type this prop.
@@ -12,16 +10,14 @@ export type MeasurementState = {
     coordinates: number[]
     measurement: any
   } | null
-  // TODO Type this prop.
-  circleMeasurementToAdd: null
+  circleMeasurementToAdd: CircleMeasurementToAdd | undefined
   measurementTypeToAdd: MeasurementType | null
-  // TODO Type this prop.
-  measurementsDrawed: Record<string, any>[]
+  measurementsDrawed: DrawedMeasurement[]
 }
 const INITIAL_STATE: MeasurementState = {
   circleMeasurementInDrawing: null,
-  circleMeasurementToAdd: null,
-  measurementsDrawed: getLocalStorageState([], measurementsLocalStorageKey),
+  circleMeasurementToAdd: undefined,
+  measurementsDrawed: [],
   measurementTypeToAdd: null
 }
 
@@ -29,25 +25,17 @@ const measurementSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'measurement',
   reducers: {
-    addMeasurementDrawed(state, action) {
-      const nextMeasurementsDrawed = state.measurementsDrawed.concat(action.payload)
-
-      window.localStorage.setItem(measurementsLocalStorageKey, JSON.stringify(nextMeasurementsDrawed))
-      state.measurementsDrawed = nextMeasurementsDrawed
+    addMeasurementDrawed(state, action: PayloadAction<DrawedMeasurement>) {
+      state.measurementsDrawed = state.measurementsDrawed.concat(action.payload)
     },
-    removeMeasurementDrawed(state, action) {
-      const nextMeasurementsDrawed = state.measurementsDrawed.filter(
-        measurement => measurement.feature.id !== action.payload
-      )
-
-      window.localStorage.setItem(measurementsLocalStorageKey, JSON.stringify(nextMeasurementsDrawed))
-      state.measurementsDrawed = nextMeasurementsDrawed
+    removeMeasurementDrawed(state, action: PayloadAction<string>) {
+      state.measurementsDrawed = state.measurementsDrawed.filter(measurement => measurement.id !== action.payload)
     },
     resetCircleMeasurementInDrawing(state) {
       state.circleMeasurementInDrawing = null
     },
     resetCircleMeasurementToAdd(state) {
-      state.circleMeasurementToAdd = null
+      state.circleMeasurementToAdd = undefined
     },
 
     resetMeasurementTypeToAdd(state) {
@@ -71,15 +59,8 @@ const measurementSlice = createSlice({
 
     /**
      * Add a circle measurement to the measurements list from the measurement input form
-     * @param {Object=} state
-     * @param {{
-     *  payload: {
-          circleCoordinatesToAdd: string
-          circleRadiusToAdd: string
-        }
-     * }} action - The coordinates and radius of the measurement
      */
-    setCircleMeasurementToAdd(state, action) {
+    setCircleMeasurementToAdd(state, action: PayloadAction<CircleMeasurementToAdd>) {
       state.circleMeasurementToAdd = action.payload
     },
 

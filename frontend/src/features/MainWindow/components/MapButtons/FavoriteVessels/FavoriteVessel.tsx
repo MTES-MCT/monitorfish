@@ -48,7 +48,7 @@ export function FavoriteVessel({
   }
 
   return (
-    <Wrapper isLastItem={isLastItem}>
+    <Wrapper $isLastItem={isLastItem}>
       <CountryFlag countryCode={favorite.flagState} size={[20, 14]} />
       <VesselName data-cy="favorite-vessel-name" title={favorite.vesselName ?? undefined}>
         {favorite.vesselName}
@@ -126,12 +126,12 @@ const VesselName = styled.span`
 `
 
 const Wrapper = styled.li<{
-  isLastItem: boolean
+  $isLastItem: boolean
 }>`
   height: 36px;
   display: flex;
   align-items: center;
-  border-bottom: ${p => (p.isLastItem ? 'unset' : `1px solid ${p.theme.color.lightGray}`)};
+  border-bottom: ${p => (p.$isLastItem ? 'unset' : `1px solid ${p.theme.color.lightGray}`)};
   padding-left: 12px;
   padding-right: 10px;
 `

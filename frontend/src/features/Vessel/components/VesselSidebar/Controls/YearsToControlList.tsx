@@ -1,3 +1,4 @@
+import { customDayjs } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -6,10 +7,9 @@ import { COLORS } from '../../../../../constants/constants'
 import { Header, Zone } from '../common_styles/common.style'
 
 import type { MissionAction } from '../../../../Mission/missionAction.types'
-import type { Dayjs } from 'dayjs'
 
 type YearsToControlListProps = {
-  controlsFromDate: Dayjs
+  controlsFromDate: string
   yearsToControls: Record<number, MissionAction.MissionAction[]>
 }
 export function YearsToControlList({ controlsFromDate, yearsToControls }: YearsToControlListProps) {
@@ -31,7 +31,7 @@ export function YearsToControlList({ controlsFromDate, yearsToControls }: YearsT
           ))}
         </List>
       ) : (
-        <NoControls>Aucun contrôle {`depuis ${controlsFromDate.get('year')}`}</NoControls>
+        <NoControls>Aucun contrôle {`depuis ${customDayjs(controlsFromDate).get('year')}`}</NoControls>
       )}
     </Zone>
   )

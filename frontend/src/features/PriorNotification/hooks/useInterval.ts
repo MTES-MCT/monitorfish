@@ -19,7 +19,7 @@ export function useInterval(callback: () => void, condition: boolean, delay: num
       }
     }
 
-    intervalId.current = setInterval(tick, delay)
+    intervalId.current = window.setInterval(tick, delay)
 
     return () => clearInterval(intervalId.current)
   }, [condition, delay])

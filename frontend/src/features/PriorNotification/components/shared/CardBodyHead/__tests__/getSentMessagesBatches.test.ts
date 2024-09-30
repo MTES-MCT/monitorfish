@@ -131,7 +131,7 @@ describe('features/PriorNotification/components/shared/CardBodyHead > getSentMes
     expect(result).toHaveLength(1)
 
     expect(result[0]!.sendStatus).toEqual(SentMessagesBatchStatus.PARTIAL_FAILURE)
-    expect(result[0]!.statusMessage).toEqual('Échec de la diffusion pour le(s) contact(s): email2@example.com.')
+    expect(result[0]!.statusMessage).toEqual('Échec de la diffusion pour le contact: <b>email2@example.com</b>.')
   })
 
   it('Should set `sendStatus` to `TOTAL_FAILURE` when all messages fail', () => {
@@ -162,7 +162,7 @@ describe('features/PriorNotification/components/shared/CardBodyHead > getSentMes
 
     expect(result[0]!.sendStatus).toEqual(SentMessagesBatchStatus.TOTAL_FAILURE)
     expect(result[0]!.statusMessage).toEqual(
-      'Échec de la diffusion pour tous les contacts: email1@example.com, email2@example.com.'
+      'Échec de la diffusion pour tous les contacts: <b>email1@example.com</b>, <b>email2@example.com</b>.'
     )
   })
 
@@ -213,11 +213,11 @@ describe('features/PriorNotification/components/shared/CardBodyHead > getSentMes
     expect(result[0]!.firstMessageDate).toEqual(new Date('2023-10-01T10:01:05Z'))
     expect(result[0]!.messages).toEqual([sentMessages[2], sentMessages[3]])
     expect(result[0]!.sendStatus).toEqual(SentMessagesBatchStatus.PARTIAL_FAILURE)
-    expect(result[0]!.statusMessage).toEqual('Échec de la diffusion pour le(s) contact(s): email3@example.com.')
+    expect(result[0]!.statusMessage).toEqual('Échec de la diffusion pour le contact: <b>email3@example.com</b>.')
 
     expect(result[1]!.firstMessageDate).toEqual(new Date('2023-10-01T10:00:00Z'))
     expect(result[1]!.messages).toEqual([sentMessages[0], sentMessages[1]])
     expect(result[1]!.sendStatus).toEqual(SentMessagesBatchStatus.PARTIAL_FAILURE)
-    expect(result[1]!.statusMessage).toEqual('Échec de la diffusion pour le(s) contact(s): email2@example.com.')
+    expect(result[1]!.statusMessage).toEqual('Échec de la diffusion pour le contact: <b>email2@example.com</b>.')
   })
 })

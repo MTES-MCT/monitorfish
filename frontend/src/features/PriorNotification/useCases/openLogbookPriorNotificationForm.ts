@@ -1,5 +1,5 @@
 import { RtkCacheTagType } from '@api/constants'
-import { addMainWindowBanner } from '@features/SideWindow/useCases/addMainWindowBanner'
+import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { customSentry, CustomSentryMeasurementName } from '@libs/customSentry'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
@@ -54,7 +54,7 @@ export const openLogbookPriorNotificationForm =
       if (logbookPriorNotification.logbookMessage.isDeleted) {
         dispatch(priorNotificationActions.closePriorNotificationCardAndForm())
         dispatch(
-          addMainWindowBanner({
+          addSideWindowBanner({
             children: 'Ce préavis a été supprimé (entre temps).',
             closingDelay: 5000,
             isClosable: true,

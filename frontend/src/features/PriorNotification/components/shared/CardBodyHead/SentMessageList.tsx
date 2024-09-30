@@ -1,6 +1,5 @@
 import { useGetPriorNotificationSentNessagesQuery } from '@features/PriorNotification/priorNotificationApi'
-import { customDayjs, Icon, LinkButton } from '@mtes-mct/monitor-ui'
-import { useState } from 'react'
+import { customDayjs, Icon } from '@mtes-mct/monitor-ui'
 import { Steps } from 'rsuite'
 import styled from 'styled-components'
 
@@ -13,28 +12,10 @@ type SentMessageListProps = Readonly<{
   detail: PriorNotification.Detail
 }>
 export function SentMessageList({ detail }: SentMessageListProps) {
-  const [isExpanded, setIsExpanded] = useState(false)
-
   const { data: sentMessages, isError } = useGetPriorNotificationSentNessagesQuery(detail.reportId)
 
   const subscribers = sentMessages ? getSubscribersFromSentMessages(sentMessages) : undefined
   const sentMessagesBatches = sentMessages ? getSentMessagesBatches(sentMessages) : undefined
-
-  const collapse = () => {
-    setIsExpanded(false)
-  }
-
-  const expand = () => {
-    setIsExpanded(true)
-  }
-
-  if (!isExpanded) {
-    return (
-      <>
-        <StyledLinkButton onClick={expand}>Voir les détails de la diffusion du préavis</StyledLinkButton>
-      </>
-    )
-  }
 
   return (
     <>
@@ -70,11 +51,12 @@ export function SentMessageList({ detail }: SentMessageListProps) {
             )}
           </>
           {sentMessagesBatches && (
-            <StyledSteps current={sentMessagesBatches.length} vertical>
+            <History current={sentMessagesBatches.length} vertical>
               {sentMessagesBatches.map(sentMessagesBatch => (
-                <StyledStepsItem
+                <HistoryItem
                   key={+sentMessagesBatch.firstMessageDate}
                   $isSuccess={sentMessagesBatch.sendStatus === SentMessagesBatchStatus.SUCCESS}
+                  data-cy="SentMessageList-historyItem"
                   icon={
                     sentMessagesBatch.sendStatus === SentMessagesBatchStatus.SUCCESS ? (
                       <Icon.Confirm />
@@ -92,12 +74,10 @@ export function SentMessageList({ detail }: SentMessageListProps) {
                   }
                 />
               ))}
-            </StyledSteps>
+            </History>
           )}
         </>
       )}
-
-      <StyledLinkButton onClick={collapse}>Masquer les détails de la diffusion du préavis</StyledLinkButton>
     </>
   )
 }
@@ -121,7 +101,7 @@ const SubscriberRowBody = styled.p`
   margin-top: 2px;
 `
 
-const StyledSteps = styled(Steps)`
+const History = styled(Steps)`
   background-color: ${p => p.theme.color.gainsboro};
   margin-top: 4px;
   min-height: unset;
@@ -136,7 +116,7 @@ const StyledSteps = styled(Steps)`
   }
 `
 
-const StyledStepsItem = styled(Steps.Item)<{
+const HistoryItem = styled(Steps.Item)<{
   $isSuccess: boolean
 }>`
   padding-bottom: 16px;
@@ -160,8 +140,4 @@ const StepDate = styled.p`
 `
 const StepStatus = styled.p`
   margin-top: 0;
-`
-
-const StyledLinkButton = styled(LinkButton)`
-  margin-top: 16px;
 `

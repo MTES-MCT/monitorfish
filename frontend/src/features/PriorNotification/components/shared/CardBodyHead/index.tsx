@@ -1,5 +1,6 @@
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
-import { type Undefine } from '@mtes-mct/monitor-ui'
+import { LinkButton, type Undefine } from '@mtes-mct/monitor-ui'
+import { useState } from 'react'
 import styled from 'styled-components'
 
 import { SentMessageList } from './SentMessageList'
@@ -31,9 +32,19 @@ export function CardBodyHead({
   tripSegments,
   types
 }: CardBodyHeadProps) {
+  const [isSentMessageListExpanded, setIsSentMessageListExpanded] = useState(false)
+
   const hasDesignatedPorts = detail?.logbookMessage.message.pnoTypes?.find(type => type.hasDesignatedPorts)
   const isInvalidated = detail?.logbookMessage.message.isInvalidated
   const isPendingVerification = detail?.state === PriorNotification.State.PENDING_VERIFICATION
+
+  const collapseSentMessageList = () => {
+    setIsSentMessageListExpanded(false)
+  }
+
+  const expandSentMessageList = () => {
+    setIsSentMessageListExpanded(true)
+  }
 
   return (
     <>
@@ -63,7 +74,18 @@ export function CardBodyHead({
         </Intro>
       )}
 
-      {!!detail && <SentMessageList detail={detail} />}
+      {!isSentMessageListExpanded && !!detail && (
+        <StyledLinkButton onClick={expandSentMessageList}>Voir les détails de la diffusion du préavis</StyledLinkButton>
+      )}
+      {isSentMessageListExpanded && !!detail && (
+        <>
+          <SentMessageList detail={detail} />
+
+          <StyledLinkButton onClick={collapseSentMessageList}>
+            Masquer les détails de la diffusion du préavis
+          </StyledLinkButton>
+        </>
+      )}
     </>
   )
 }
@@ -74,4 +96,8 @@ const Intro = styled.p<{
   ${p => p.$withTopMargin && 'margin-top: 2px;'}
   color: ${p => p.theme.color.slateGray};
   font-style: italic;
+`
+
+const StyledLinkButton = styled(LinkButton)`
+  margin-top: 16px;
 `

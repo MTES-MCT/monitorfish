@@ -46,3 +46,11 @@ WHERE ncp.est_actif = 1 AND
         'BE', 'BG', 'CY', 'DE', 'DK', 'EE', 'ES', 'FI', 'GB', 'GR', 'HR', 'IE', 'IT', 'LT',
         'LV', 'MT', 'NL', 'PL', 'PT', 'RO', 'SE', 'SI', 'AT', 'HU', 'LU', 'CZ', 'SK'
     )
+    -- Add some GB vessels which are marked as `est_actif = false` for some reason
+    OR f.num_cfr IN (
+        'GBR000J10102',
+        'GBR000J10178',
+        'GBR000J10346',
+        'GBR000J10070',
+        'GBR000J10359'
+    )

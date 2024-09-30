@@ -1,10 +1,11 @@
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
+import { type Undefine } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
+import { SentMessageList } from './SentMessageList'
 import { TagBar } from './TagBar'
 
 import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
-import type { Undefine } from '@mtes-mct/monitor-ui'
 
 type CardBodyHeadProps = Readonly<{
   detail: PriorNotification.Detail | undefined
@@ -61,6 +62,8 @@ export function CardBodyHead({
           Le navire doit respecter un délai d’envoi{hasDesignatedPorts && ' et débarquer dans un port désigné'}.
         </Intro>
       )}
+
+      {!!detail && <SentMessageList detail={detail} />}
     </>
   )
 }

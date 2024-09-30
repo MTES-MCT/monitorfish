@@ -239,6 +239,7 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
 
 export const {
   useGetPriorNotificationPdfExistenceQuery,
+  useGetPriorNotificationSentNessagesQuery,
   useGetPriorNotificationsQuery,
   useGetPriorNotificationsToVerifyQuery,
   useGetPriorNotificationTypesQuery,

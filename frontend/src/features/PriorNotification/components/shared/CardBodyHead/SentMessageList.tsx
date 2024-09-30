@@ -26,18 +26,17 @@ export function SentMessageList({ detail }: SentMessageListProps) {
         <>
           {!subscribers && <p>Chargement en cours...</p>}
           {subscribers && subscribers.length === 0 && <p>Aucun message n’a été envoyé pour ce préavis.</p>}
-          {subscribers &&
-            subscribers.map(subsriber => (
-              <SubscriberRow>
-                <p>
-                  <b>{subsriber.name}</b> ({subsriber.organization})
-                </p>
-                <SubscriberRowBody>
-                  {subsriber.email && <span>{subsriber.email}</span>}
-                  {subsriber.phone && <span>{subsriber.phone}</span>}
-                </SubscriberRowBody>
-              </SubscriberRow>
-            ))}
+          {subscribers?.map(subsriber => (
+            <SubscriberRow key={`${subsriber.organization}-${subsriber.name}`}>
+              <p>
+                <b>{subsriber.name}</b> ({subsriber.organization})
+              </p>
+              <SubscriberRowBody>
+                {subsriber.email && <span>{subsriber.email}</span>}
+                {subsriber.phone && <span>{subsriber.phone}</span>}
+              </SubscriberRowBody>
+            </SubscriberRow>
+          ))}
         </>
       )}
 

@@ -50,7 +50,7 @@ context('Side Window > Logbook Prior Notification Form > Error Handling', () => 
 
     editSideWindowPriorNotification(`CALAMARO`, 'FAKE_OPERATION_108')
 
-    cy.clickButton('Voir les détails de la diffusion du préavis')
+    cy.clickButton('Voir les détails de la diffusion du préavis', { withoutScroll: true })
 
     for (let i = 1; i <= failedQueryCount; i += 1) {
       cy.wait('@getPriorNotificationSentMessagesWithError')

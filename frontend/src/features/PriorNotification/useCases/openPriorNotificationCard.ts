@@ -1,5 +1,5 @@
 import { RtkCacheTagType } from '@api/constants'
-import { addMainWindowBanner } from '@features/SideWindow/useCases/addMainWindowBanner'
+import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { Level } from '@mtes-mct/monitor-ui'
@@ -43,7 +43,7 @@ export const openPriorNotificationCard =
       if (priorNotificationDetail.logbookMessage.isDeleted) {
         dispatch(priorNotificationActions.closePriorNotificationCardAndForm())
         dispatch(
-          addMainWindowBanner({
+          addSideWindowBanner({
             children: 'Ce préavis a été supprimé (entre temps).',
             closingDelay: 5000,
             isClosable: true,

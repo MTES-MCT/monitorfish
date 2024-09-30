@@ -1,15 +1,15 @@
 import { bannerStackAdapter, sideWindowActions } from '../slice'
 
 import type { SideWindow } from '../SideWindow.types'
-import type { MainAppThunk } from '@store/index'
+import type { MainAppThunk } from '@store'
 
 /**
- * Add a banner to the main window.
+ * Add a banner to the side window.
  *
  * @param props Component props of the `<Banner />` to add.
  * @returns ID of the added banner (used to remove it if needed).
  */
-export const addMainWindowBanner =
+export const addSideWindowBanner =
   (props: SideWindow.BannerStackItemProps): MainAppThunk<number> =>
   (dispatch, getState) => {
     const { bannerStack } = getState().sideWindow

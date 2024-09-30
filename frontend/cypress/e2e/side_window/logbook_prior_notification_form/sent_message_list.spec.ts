@@ -20,9 +20,9 @@ context('Side Window > Logbook Prior Notification Form > Sent Message List', () 
     cy.get('address').eq(1).contains('ggmaratlan@gendarmerie.defense.gouv.fr')
     cy.get('address').eq(1).contains('+33987654321')
 
-    cy.get('address').eq(2).contains('Unité 5 (DDTM 40)')
-    cy.get('address').eq(2).contains('unite5@ddtm-40.gouv.fr')
-    cy.get('address').eq(2).contains('+33000000000')
+    // The last sent message doesn't include this unit contact details,
+    // they should not be displayed since they likely were unsubscribed in the meantime.
+    cy.get('address').contains('Unité 5 (DDTM 40)').should('not.exist')
 
     cy.getDataCy('SentMessageList-historyItem')
       .eq(0)

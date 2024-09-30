@@ -47,9 +47,10 @@ class PriorNotificationDataOutput(
                     null
                 }
 
-            val vessel = requireNotNull(priorNotification.vessel) {
-                "`priorNotification.vessel` is null."
-            }
+            val vessel =
+                requireNotNull(priorNotification.vessel) {
+                    "`priorNotification.vessel` is null."
+                }
             val isLessThanTwelveMetersVessel = vessel.isLessThanTwelveMetersVessel()
             val isVesselUnderCharter = vessel.underCharter
             val logbookMessage = priorNotification.logbookMessageAndValue.logbookMessage

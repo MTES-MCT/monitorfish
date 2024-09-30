@@ -38,6 +38,7 @@ export enum RtkCacheTagType {
   PriorNotification = 'PriorNotification',
   PriorNotificationDocuments = 'PriorNotificationDocuments',
   PriorNotificationSentMessages = 'PriorNotificationSentMessages',
+  PriorNotificationSubscribers = 'PriorNotificationSubscribers',
   PriorNotificationTypes = 'PriorNotificationTypes',
   PriorNotifications = 'PriorNotifications',
   PriorNotificationsToVerify = 'PriorNotificationsToVerify',

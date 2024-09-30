@@ -35,7 +35,6 @@ export enum HttpStatusCode {
 }
 
 export enum RtkCacheTagType {
-  PriorNotification = 'PriorNotification',
   PriorNotificationDocuments = 'PriorNotificationDocuments',
   PriorNotificationTypes = 'PriorNotificationTypes',
   PriorNotifications = 'PriorNotifications',

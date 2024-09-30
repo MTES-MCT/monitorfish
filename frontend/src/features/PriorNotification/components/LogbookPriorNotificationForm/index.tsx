@@ -1,3 +1,6 @@
+import { useInterval } from '@features/PriorNotification/hooks/useInterval'
+import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
+import { refreshPriorNotification } from '@features/PriorNotification/useCases/refreshPriorNotification'
 import { verifyAndSendPriorNotification } from '@features/PriorNotification/useCases/verifyAndSendPriorNotification'
 import { getPriorNotificationIdentifier } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -22,6 +25,26 @@ export function LogbookPriorNotificationForm() {
   )
   const openedPriorNotificationDetail = useMainAppSelector(
     state => state.priorNotification.openedPriorNotificationDetail
+  )
+
+  const isBeingSent =
+    openedPriorNotificationDetail?.state === PriorNotification.State.PENDING_SEND ||
+    openedPriorNotificationDetail?.state === PriorNotification.State.PENDING_AUTO_SEND
+
+  useInterval(
+    () => {
+      assertNotNullish(openedPriorNotificationDetail)
+
+      dispatch(
+        refreshPriorNotification(
+          getPriorNotificationIdentifier(openedPriorNotificationDetail),
+          openedPriorNotificationDetail.fingerprint,
+          openedPriorNotificationDetail.isManuallyCreated
+        )
+      )
+    },
+    isBeingSent,
+    5000
   )
 
   const displayedErrorKey = displayedError ? DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR : undefined

@@ -1,4 +1,6 @@
 import { ErrorWall } from '@components/ErrorWall'
+import { useInterval } from '@features/PriorNotification/hooks/useInterval'
+import { refreshPriorNotification } from '@features/PriorNotification/useCases/refreshPriorNotification'
 import { verifyAndSendPriorNotification } from '@features/PriorNotification/useCases/verifyAndSendPriorNotification'
 import { getPriorNotificationIdentifier } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -14,11 +16,11 @@ import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
 import { FORM_VALIDATION_SCHEMA } from './constants'
 import { Content } from './Content'
 import { SideWindowCard } from '../../../../components/SideWindowCard'
+import { PriorNotification } from '../../PriorNotification.types'
 import { priorNotificationActions } from '../../slice'
 import { createOrUpdateManualPriorNotification } from '../../useCases/createOrUpdateManualPriorNotification'
 
 import type { ManualPriorNotificationFormValues } from './types'
-import type { PriorNotification } from '../../PriorNotification.types'
 
 export function ManualPriorNotificationForm() {
   const dispatch = useMainAppDispatch()
@@ -31,6 +33,26 @@ export function ManualPriorNotificationForm() {
   const editedPriorNotificationId = useMainAppSelector(state => state.priorNotification.editedPriorNotificationId)
   const openedPriorNotificationDetail = useMainAppSelector(
     state => state.priorNotification.openedPriorNotificationDetail
+  )
+
+  const isBeingSent =
+    openedPriorNotificationDetail?.state === PriorNotification.State.PENDING_SEND ||
+    openedPriorNotificationDetail?.state === PriorNotification.State.PENDING_AUTO_SEND
+
+  useInterval(
+    () => {
+      assertNotNullish(openedPriorNotificationDetail)
+
+      dispatch(
+        refreshPriorNotification(
+          getPriorNotificationIdentifier(openedPriorNotificationDetail),
+          openedPriorNotificationDetail.fingerprint,
+          openedPriorNotificationDetail.isManuallyCreated
+        )
+      )
+    },
+    isBeingSent,
+    5000
   )
 
   const [shouldValidateOnChange, setShouldValidateOnChange] = useState(false)

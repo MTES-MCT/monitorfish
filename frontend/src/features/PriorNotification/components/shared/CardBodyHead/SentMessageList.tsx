@@ -59,9 +59,9 @@ export function SentMessageList({ detail }: SentMessageListProps) {
                   data-cy="SentMessageList-historyItem"
                   icon={
                     sentMessagesBatch.sendStatus === SentMessagesBatchStatus.SUCCESS ? (
-                      <Icon.Confirm />
+                      <Icon.Confirm size={16} />
                     ) : (
-                      <Icon.Reject />
+                      <Icon.Reject size={16} />
                     )
                   }
                   title={
@@ -105,13 +105,13 @@ const History = styled(Steps)`
   background-color: ${p => p.theme.color.gainsboro};
   margin-top: 4px;
   min-height: unset;
-  padding: 12px 16px 12px 8px;
+  padding: 12px 16px 0 8px;
 
   > .rs-steps-item:not(:first-child) {
     padding-bottom: 12px;
 
     &:not(:first-child) {
-      margin-top: 4px;
+      margin-top: 0px;
     }
   }
 `
@@ -120,10 +120,18 @@ const HistoryItem = styled(Steps.Item)<{
   $isSuccess: boolean
 }>`
   padding-bottom: 16px;
+  padding-left: 34px;
+
+  > .rs-steps-item-icon-wrapper {
+    border-radius: 0;
+    width: 16px;
+  }
 
   > .rs-steps-item-tail {
     border-color: ${p => p.theme.color.slateGray};
-    top: 26px;
+    border-width: 2px;
+    left: 7px;
+    top: 24px;
   }
 
   .rs-steps-item-custom-icon {

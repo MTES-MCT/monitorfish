@@ -92,6 +92,7 @@
     "@import-meta-env/prepare": "0.2.0",
     "@import-meta-env/unplugin": "0.6.0",
     "@jest/globals": "29.7.0",
+    "@rollup/plugin-replace": "6.0.1",
     "@swc/core": "1.7.23",
     "@swc/jest": "0.2.36",
     "@testing-library/react": "15.0.7",

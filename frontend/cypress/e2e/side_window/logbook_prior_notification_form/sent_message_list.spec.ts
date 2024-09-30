@@ -33,7 +33,7 @@ context('Side Window > Logbook Prior Notification Form > Sent Message List', () 
     cy.getDataCy('SentMessageList-historyItem')
       .eq(1)
       .contains(
-        'Échec de la diffusion pour le(s) contact(s): +33000000000, +33987654321, unite5@ddtm-40.gouv.fr, pgmarc720.lorient@gendarmerie.defense.gouv.fr.'
+        'Échec de la diffusion pour les contacts: +33000000000, +33987654321, unite5@ddtm-40.gouv.fr, pgmarc720.lorient@gendarmerie.defense.gouv.fr.'
       )
 
     cy.getDataCy('SentMessageList-historyItem').eq(2).contains('Préavis diffusé avec succès à tous les contacts.')

@@ -69,7 +69,7 @@ export function SentMessageList({ detail }: SentMessageListProps) {
                       <StepDate>
                         {customDayjs(sentMessagesBatch.firstMessageDate).format('[Le] DD/MM/YYYY [à] HH[h]mm [(UTC)]')}
                       </StepDate>
-                      <StepStatus>{sentMessagesBatch.statusMessage}</StepStatus>
+                      <StepStatus dangerouslySetInnerHTML={{ __html: sentMessagesBatch.statusMessage }} />
                     </StepTitle>
                   }
                 />

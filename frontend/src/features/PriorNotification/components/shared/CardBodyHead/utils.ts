@@ -1,3 +1,4 @@
+import { pluralize } from '@mtes-mct/monitor-ui'
 import dayjs from 'dayjs'
 
 import { SentMessagesBatchStatus } from './constants'
@@ -71,12 +72,13 @@ export function getSentMessagesBatches(sentMessages: PriorNotification.SentMessa
 }
 
 function processBatch(messages: PriorNotification.SentMessage[]): SentMessageBatch {
-  const failedSentMessageEmailsOrPhones = messages
+  const failedEmailsAndPhones = messages
     .filter(({ success }) => !success)
     .map(({ recipientAddressOrNumber }) => recipientAddressOrNumber)
+  const failedEmailsAndPhonesAsHtml = failedEmailsAndPhones.map(emailOrPhone => `<b>${emailOrPhone}</b>`).join(', ')
 
-  const isPartialFailure = failedSentMessageEmailsOrPhones.length > 0
-  const isTotalFailure = failedSentMessageEmailsOrPhones.length === messages.length
+  const isPartialFailure = failedEmailsAndPhones.length > 0
+  const isTotalFailure = failedEmailsAndPhones.length === messages.length
 
   // eslint-disable-next-line no-nested-ternary
   const sendStatus = isTotalFailure
@@ -86,9 +88,9 @@ function processBatch(messages: PriorNotification.SentMessage[]): SentMessageBat
       : SentMessagesBatchStatus.SUCCESS
   // eslint-disable-next-line no-nested-ternary
   const statusMessage = isTotalFailure
-    ? `Échec de la diffusion pour tous les contacts: ${failedSentMessageEmailsOrPhones.join(', ')}.`
+    ? `Échec de la diffusion pour tous les contacts: ${failedEmailsAndPhonesAsHtml}.`
     : isPartialFailure
-      ? `Échec de la diffusion pour le(s) contact(s): ${failedSentMessageEmailsOrPhones.join(', ')}.`
+      ? `Échec de la diffusion pour ${pluralize('le', failedEmailsAndPhones.length)} ${pluralize('contact', failedEmailsAndPhones.length)}: ${failedEmailsAndPhonesAsHtml}.`
       : 'Préavis diffusé avec succès à tous les contacts.'
 
   return {

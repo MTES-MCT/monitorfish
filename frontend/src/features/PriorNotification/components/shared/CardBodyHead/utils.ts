@@ -30,6 +30,9 @@ export function getSubscribersFromSentMessages(sentMessages: PriorNotification.S
   return Object.values(subscribersMap)
 }
 
+/**
+ * Get sent messages batches from a list of sent messages grouped by batch of 30s and ordered by date descending.
+ */
 export function getSentMessagesBatches(sentMessages: PriorNotification.SentMessage[]): SentMessageBatch[] {
   const sentMessagesSortedByDateAsc = [...sentMessages].sort((a, b) => (a.dateTimeUtc < b.dateTimeUtc ? -1 : 1))
 
@@ -64,7 +67,7 @@ export function getSentMessagesBatches(sentMessages: PriorNotification.SentMessa
     sentMessageBatches.push(processBatch(currentBatch))
   }
 
-  return sentMessageBatches
+  return sentMessageBatches.reverse()
 }
 
 function processBatch(messages: PriorNotification.SentMessage[]): SentMessageBatch {

@@ -14,8 +14,9 @@ type SentMessageListProps = Readonly<{
 export function SentMessageList({ detail }: SentMessageListProps) {
   const { data: sentMessages, isError } = useGetPriorNotificationSentNessagesQuery(detail.reportId)
 
-  const subscribers = sentMessages ? getSubscribersFromSentMessages(sentMessages) : undefined
   const sentMessagesBatches = sentMessages ? getSentMessagesBatches(sentMessages) : undefined
+  const lastSentMessagesBatch = sentMessagesBatches ? sentMessagesBatches[sentMessagesBatches.length - 1] : undefined
+  const subscribers = lastSentMessagesBatch ? getSubscribersFromSentMessages(lastSentMessagesBatch.messages) : undefined
 
   return (
     <>

@@ -46,15 +46,15 @@ export function SentMessageList({ detail }: SentMessageListProps) {
           {subscribers && subscribers.length === 0 && <p>Aucun message n’a été envoyé pour ce préavis.</p>}
           {subscribers &&
             subscribers.map(subsriber => (
-              <Row>
+              <SubscriberRow>
                 <p>
                   <b>{subsriber.name}</b> ({subsriber.organization})
                 </p>
-                <p>
+                <SubscriberRowBody>
                   {subsriber.email && <span>{subsriber.email}</span>}
                   {subsriber.phone && <span>{subsriber.phone}</span>}
-                </p>
-              </Row>
+                </SubscriberRowBody>
+              </SubscriberRow>
             ))}
         </>
       )}
@@ -107,13 +107,18 @@ const Title = styled.p`
   margin: 16px 0 0;
 `
 
-const Row = styled.address`
+const SubscriberRow = styled.address`
   background-color: ${p => p.theme.color.gainsboro};
   display: flex;
   flex-direction: column;
   font-style: normal;
   margin-top: 4px;
   padding: 16px 12px;
+`
+const SubscriberRowBody = styled.p`
+  display: flex;
+  flex-direction: column;
+  margin-top: 2px;
 `
 
 const StyledSteps = styled(Steps)`

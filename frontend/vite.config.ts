@@ -15,6 +15,7 @@ export default defineConfig({
     outDir: './build',
     sourcemap: true,
     rollupOptions: {
+      input: ['index.html', 'index.backoffice.html'],
       plugins: replace({
         'pointerEvents: isScrolling ? "none" : void 0': 'pointerEvents: null',
         preventAssignment: true

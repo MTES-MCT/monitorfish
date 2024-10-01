@@ -13,8 +13,6 @@ Proposition
 #### Avant
 
 ```sh
-➜  frontend git:(master) npm run build
-
 ✓ 4934 modules transformed.
 build/index.html                                    2.28 kB │ gzip:     1.04 kB
 build/assets/MonitorFishWebWorker-D86GuQRD.js      78.38 kB
@@ -26,8 +24,6 @@ build/assets/index-CfgwUvEZ.js                 11,269.00 kB │ gzip: 2,369.71 k
 #### Après
 
 ```sh
-➜  frontend git:(master) ✗ npm run build
-
 ✓ 4938 modules transformed.
 build/index.backoffice.html                        2.24 kB │ gzip:     1.00 kB
 build/index.html                                   2.37 kB │ gzip:     1.07 kB
@@ -41,7 +37,19 @@ build/assets/rsuite-override-DXirIGCf.js       7,046.93 kB │ gzip: 1,716.01 kB
 
 ### Proposition 2 - Remplacer l'image de fond au chargement par un CSS-in-HTML
 
-...
+```sh
+✓ 4938 modules transformed.
+build/index.backoffice.html                        2.24 kB │ gzip:     1.00 kB
+build/index.html                                   2.36 kB │ gzip:     1.05 kB
+build/assets/MonitorFishWebWorker-D86GuQRD.js     78.38 kB
+build/assets/rsuite-override-CYpSx5zc.css        442.36 kB │ gzip:    55.75 kB
+build/assets/index.backoffice-DoKtUHz1.js        207.76 kB │ gzip:    40.40 kB │ map:    349.94 kB
+build/assets/index-DmodrGjC.js                 3,025.83 kB │ gzip:   588.70 kB │ map:  5,740.64 kB
+build/assets/rsuite-override-C5DkGkJY.js       7,046.74 kB │ gzip: 1,715.95 kB │ map: 15,572.03 kB
+✓ built in 30.55s
+```
+
+### Proposition 3 - Lazy-loader les composants non-utilisés immédiatement
 
 ## Résultats
 

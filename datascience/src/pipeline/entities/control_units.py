@@ -8,10 +8,12 @@ from src.pipeline.helpers.dates import Period
 
 
 @dataclass
-class ControlUnitWithEmails:
+class ControlUnit:
     control_unit_id: int
     control_unit_name: str
+    administration: str
     emails: List[str]
+    phone_numbers: List[str]
 
 
 @dataclass
@@ -20,7 +22,7 @@ class ControlUnitActions:
     Control unit and its fisheries control actions between two dates.
     """
 
-    control_unit: ControlUnitWithEmails
+    control_unit: ControlUnit
     period: Period
     land_controls: pd.DataFrame
     sea_controls: pd.DataFrame

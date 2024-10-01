@@ -56,6 +56,9 @@ class PriorNotificationControllerUTests {
     private lateinit var getPriorNotificationPdfDocument: GetPriorNotificationPdfDocument
 
     @MockBean
+    private lateinit var getPriorNotificationSentMessages: GetPriorNotificationSentMessages
+
+    @MockBean
     private lateinit var getPriorNotificationUpload: GetPriorNotificationUpload
 
     @MockBean
@@ -496,5 +499,48 @@ class PriorNotificationControllerUTests {
                 ),
             )
             .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
+    }
+
+    @Test
+    fun `getSentMessages Should get a list of prior notification sent messages`() {
+        val fakeReportId = "FAKE_REPORT_ID"
+
+        // Given
+        given(getPriorNotificationSentMessages.execute(fakeReportId)).willReturn(
+            listOf(
+                PriorNotificationSentMessage(
+                    id = 1,
+                    communicationMeans = "EMAIL",
+                    dateTimeUtc = ZonedDateTime.now(),
+                    errorMessage = null,
+                    priorNotificationReportId = fakeReportId,
+                    priorNotificationSource = "LOGBOOK",
+                    recipientAddressOrNumber = "dreal01@example.org",
+                    recipientName = "DREAL 01",
+                    recipientOrganization = "DREAL",
+                    success = true,
+                ),
+                PriorNotificationSentMessage(
+                    id = 2,
+                    communicationMeans = "SMS",
+                    dateTimeUtc = ZonedDateTime.now(),
+                    errorMessage = null,
+                    priorNotificationReportId = fakeReportId,
+                    priorNotificationSource = "MANUAL",
+                    recipientAddressOrNumber = "+33123456789",
+                    recipientName = "DREAL 02",
+                    recipientOrganization = "DREAL",
+                    success = true,
+                ),
+            ),
+        )
+
+        // When
+        api.perform(get("/bff/v1/prior_notifications/$fakeReportId/sent_messages"))
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()", equalTo(2)))
+            .andExpect(jsonPath("$[0].communicationMeans", equalTo("EMAIL")))
+            .andExpect(jsonPath("$[1].communicationMeans", equalTo("SMS")))
     }
 }

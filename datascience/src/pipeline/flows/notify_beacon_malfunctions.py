@@ -26,9 +26,9 @@ from src.pipeline.entities.beacon_malfunctions import (
     BeaconMalfunctionNotificationType,
     BeaconMalfunctionToNotify,
 )
+from src.pipeline.entities.communication_means import CommunicationMeans
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.helpers.emails import (
-    CommunicationMeans,
     create_fax_email,
     create_html_email,
     create_sms_email,

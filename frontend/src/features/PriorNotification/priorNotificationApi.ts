@@ -16,6 +16,8 @@ const CREATE_PRIOR_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu créé le p
 const DELETE_PRIOR_NOTIFICATION_UPLOAD_ERROR_MESSAGE = "Nous n'avons pas pu supprimer ce document attaché."
 const GET_PRIOR_NOTIFICATION_UPLOADS_ERROR_MESSAGE =
   "Nous n'avons pas pu récupérer les documents attachés à ce préavis."
+const GET_PRIOR_NOTIFICATION_SENT_MESSAGES_ERROR_MESSAGE =
+  "Nous n'avons pas pu récupérer la liste des envois correspondant à ce préavis."
 const UPDATE_PRIOR_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu modifier le préavis."
 const GET_PRIOR_NOTIFICATION_DETAIL_ERROR_MESSAGE = "Nous n'avons pas pu récupérer le préavis."
 const GET_PRIOR_NOTIFICATIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la liste des préavis."
@@ -128,6 +130,13 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATIONS_ERROR_MESSAGE, response)
     }),
 
+    getPriorNotificationSentNessages: builder.query<PriorNotification.SentMessage[], string>({
+      providesTags: () => [{ type: RtkCacheTagType.PriorNotificationSentMessages }],
+      query: reportId => `/prior_notifications/${reportId}/sent_messages`,
+      transformErrorResponse: response =>
+        new FrontendApiError(GET_PRIOR_NOTIFICATION_SENT_MESSAGES_ERROR_MESSAGE, response)
+    }),
+
     getPriorNotificationsToVerify: builder.query<LogbookMessage.ApiListExtraData, void>({
       providesTags: () => [{ type: RtkCacheTagType.PriorNotificationsToVerify }],
       query: () => '/prior_notifications/to_verify',
@@ -218,6 +227,7 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
 
 export const {
   useGetPriorNotificationPdfExistenceQuery,
+  useGetPriorNotificationSentNessagesQuery,
   useGetPriorNotificationsQuery,
   useGetPriorNotificationsToVerifyQuery,
   useGetPriorNotificationTypesQuery,

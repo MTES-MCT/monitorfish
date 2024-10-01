@@ -302,14 +302,14 @@ const TableInnerWrapper = styled.div<{
   $hasError: boolean
 }>`
   align-items: flex-start;
-  height: ${() => (isLegacyFirefox() ? 518 : 513)}px; /* = table height - 5px */
+  height: 519px; /* = table height - 5px (negative margin-top) + 1px for Chrome compatibility */
   min-width: 1407px; /* = table width + right padding + scrollbar width (8px) */
   padding-right: 8px;
   overflow-y: scroll;
   width: auto;
 
   > table {
-    margin-top: -4.5px;
+    margin-top: -5px;
   }
 
   ${p =>

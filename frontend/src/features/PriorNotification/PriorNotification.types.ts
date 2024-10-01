@@ -62,6 +62,7 @@ export namespace PriorNotification {
     reportId: string
     riskFactor: number | undefined
     state: State | undefined
+    vesselId: number
   } & (
     | {
         asLogbookForm: LogbookForm
@@ -157,6 +158,16 @@ export namespace PriorNotification {
     hasDesignatedPorts: boolean
     minimumNotificationPeriod: number
     name: string
+  }
+
+  export type SentMessage = {
+    communicationMeans: 'EMAIL' | 'FAX' | 'SMS'
+    dateTimeUtc: string
+    errorMessage: string | undefined
+    recipientAddressOrNumber: string
+    recipientName: string
+    recipientOrganization: string
+    success: boolean
   }
 
   export type Upload = {

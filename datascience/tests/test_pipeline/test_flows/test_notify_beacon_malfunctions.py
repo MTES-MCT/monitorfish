@@ -21,6 +21,7 @@ from src.pipeline.entities.beacon_malfunctions import (
     BeaconMalfunctionNotificationType,
     BeaconMalfunctionToNotify,
 )
+from src.pipeline.entities.communication_means import CommunicationMeans
 from src.pipeline.flows.notify_beacon_malfunctions import (
     create_email,
     create_fax,
@@ -35,7 +36,6 @@ from src.pipeline.flows.notify_beacon_malfunctions import (
     send_beacon_malfunction_message,
     to_malfunctions_to_notify_list,
 )
-from src.pipeline.helpers.emails import CommunicationMeans
 from src.read_query import read_query
 from tests.mocks import mock_check_flow_not_running, mock_datetime_utcnow
 

@@ -21,8 +21,8 @@ import { getPartialComputationRequestData } from './utils'
 import { SideWindowCard } from '../../../../components/SideWindowCard'
 import { PriorNotification } from '../../PriorNotification.types'
 import { CardBanner } from '../shared/CardBanner'
+import { CardBodyHead } from '../shared/CardBodyHead'
 import { DownloadButton } from '../shared/DownloadButton'
-import { TagBar } from '../shared/TagBar'
 import { UploadFiles } from '../shared/UploadFiles'
 
 import type { ManualPriorNotificationFormValues } from './types'
@@ -54,10 +54,8 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
   const isPendingSend =
     !!detail?.state &&
     [PriorNotification.State.PENDING_AUTO_SEND, PriorNotification.State.PENDING_SEND].includes(detail?.state)
-  const isPendingVerification = detail?.state === PriorNotification.State.PENDING_VERIFICATION
   const isReadOnly = isPendingSend || isInvalidated
   const isVerifiedAndSent = detail?.state === PriorNotification.State.VERIFIED_AND_SENT
-  const hasDesignatedPorts = editedPriorNotificationComputedValues?.types?.find(type => type.hasDesignatedPorts)
   const priorNotificationIdentifier = getPriorNotificationIdentifier(detail)
 
   const closeCancellationConfirmationModal = () => {
@@ -163,9 +161,11 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
         <Header detail={detail} onClose={handleClose} vesselId={values.vesselId} />
 
         <Body data-cy="ManualPriorNotificationForm-Body">
-          <TagBar
+          <CardBodyHead
+            detail={detail}
+            editedPriorNotificationComputedValues={editedPriorNotificationComputedValues}
             hasBeenComputed={!!editedPriorNotificationComputedValues}
-            isInvalidated={isInvalidated}
+            isNewPriorNotification={isNewPriorNotification}
             isPriorNotificationZero={isPriorNotificationZero(values.fishingCatches)}
             isVesselUnderCharter={editedPriorNotificationComputedValues?.isVesselUnderCharter}
             riskFactor={editedPriorNotificationComputedValues?.riskFactor}
@@ -173,21 +173,6 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
             tripSegments={editedPriorNotificationComputedValues?.tripSegments}
             types={editedPriorNotificationComputedValues?.types}
           />
-
-          {isNewPriorNotification && !editedPriorNotificationComputedValues && (
-            <Intro>
-              Veuillez renseigner les champs du formulaire pour définir le type de préavis et son statut, ainsi que le
-              segment de flotte et la note de risque du navire.
-            </Intro>
-          )}
-          {!isNewPriorNotification && isPendingVerification && (
-            <Intro>Le préavis doit être vérifié par le CNSP avant sa diffusion.</Intro>
-          )}
-          {(!!editedPriorNotificationComputedValues || !!detail) && (
-            <Intro $withTopMargin={!isNewPriorNotification && isPendingVerification}>
-              Le navire doit respecter un délai d’envoi{hasDesignatedPorts && ' et débarquer dans un port désigné'}.
-            </Intro>
-          )}
 
           <hr />
 
@@ -316,14 +301,6 @@ const Body = styled.div`
   > .FieldGroup {
     margin-top: 24px;
   }
-`
-
-const Intro = styled.p<{
-  $withTopMargin?: boolean
-}>`
-  ${p => p.$withTopMargin && 'margin-top: 2px;'}
-  color: ${p => p.theme.color.slateGray};
-  font-style: italic;
 `
 
 const Footer = styled.div`

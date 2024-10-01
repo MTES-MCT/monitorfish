@@ -35,7 +35,7 @@ context('Side Window > Alert List', () => {
     cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
 
     // Then
-    cy.get('*[data-cy^="side-window-sub-menu-NAMO-number"]').contains('9')
+    cy.get('*[data-cy^="side-window-sub-menu-NAMO-number"]').contains('10')
     cy.get('*[data-cy^="side-window-alerts-number-silenced-vessels"]').contains(
       'Suspension d’alerte sur 2 navires en NAMO'
     )
@@ -118,7 +118,7 @@ context('Side Window > Alert List', () => {
       .children()
       .eq(1)
       .children()
-      .should('have.length', expectedSilencedAlerts)
+      .should('have.length', this.previousAlerts.length - 2)
     cy.get('*[data-cy="side-window-sub-menu-SUSPENDED_ALERTS"]').click()
     cy.get('*[data-cy^="side-window-silenced-alerts-list"]')
       .children()

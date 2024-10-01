@@ -3,12 +3,14 @@ from unittest.mock import patch
 
 import pandas as pd
 
+from src.pipeline.entities.alerts import AlertType
 from src.pipeline.shared_tasks.alerts import (
     archive_reporting,
+    extract_active_reportings,
     extract_non_archived_reportings_ids_of_type,
     extract_pending_alerts_ids_of_type,
     extract_silenced_alerts,
-    filter_silenced_alerts,
+    filter_alerts,
     load_alerts,
     make_alerts,
     validate_pending_alert,
@@ -18,16 +20,44 @@ from tests.mocks import mock_datetime_utcnow
 
 
 def test_extract_silenced_alerts(reset_test_data):
-    silenced_alerts = extract_silenced_alerts.run()
+    silenced_alerts = extract_silenced_alerts.run(
+        AlertType.THREE_MILES_TRAWLING_ALERT.value
+    )
     expected_silenced_alerts = pd.DataFrame(
         {
-            "internal_reference_number": ["ABC000658985", "ABC000542519"],
-            "external_reference_number": ["OHMYGOSH", "RO237719"],
-            "ircs": ["OGMJ", "FQ7058"],
-            "type": ["THREE_MILES_TRAWLING_ALERT", "MISSING_FAR_ALERT"],
+            "internal_reference_number": ["ABC000658985"],
+            "external_reference_number": ["OHMYGOSH"],
+            "ircs": ["OGMJ"],
         }
     )
     pd.testing.assert_frame_equal(silenced_alerts, expected_silenced_alerts)
+
+    silenced_alerts = extract_silenced_alerts.run(AlertType.MISSING_FAR_ALERT.value)
+    expected_silenced_alerts = pd.DataFrame(
+        {
+            "internal_reference_number": ["ABC000542519"],
+            "external_reference_number": ["RO237719"],
+            "ircs": ["FQ7058"],
+        }
+    )
+    pd.testing.assert_frame_equal(silenced_alerts, expected_silenced_alerts)
+
+
+def test_extract_active_reportings(reset_test_data):
+    active_reportings = extract_active_reportings.run(
+        AlertType.THREE_MILES_TRAWLING_ALERT.value
+    )
+    expected_active_reportings = pd.DataFrame(
+        {
+            "internal_reference_number": [None],
+            "external_reference_number": ["ZZTOPACDC"],
+            "ircs": ["ZZ000000"],
+        }
+    )
+    pd.testing.assert_frame_equal(active_reportings, expected_active_reportings)
+
+    active_reportings = extract_active_reportings.run(AlertType.MISSING_FAR_ALERT.value)
+    pd.testing.assert_frame_equal(active_reportings, expected_active_reportings.head(0))
 
 
 def test_extract_pending_alerts_ids_of_type(reset_test_data):
@@ -161,7 +191,7 @@ def test_make_alerts():
     pd.testing.assert_frame_equal(alerts, expected_alerts)
 
 
-def test_filter_silenced_alerts():
+def test_filter_alerts():
     now = datetime(2020, 1, 1, 0, 0, 0)
     td = timedelta(hours=1)
     alert_type = "USER_DEFINED_ALERT_TYPE"
@@ -214,14 +244,13 @@ def test_filter_silenced_alerts():
 
     silenced_alerts = pd.DataFrame(
         {
-            "internal_reference_number": ["A", "B_ANOTHER_VESSEL", "C"],
-            "external_reference_number": ["AA", "BB_ANOTHER_VESSEL", "CC"],
-            "ircs": ["AAA", "BBB", "CCC"],
-            "type": [alert_type, alert_type, "ANOTHER_ALERT_TYPE"],
+            "internal_reference_number": ["A", "B_ANOTHER_VESSEL"],
+            "external_reference_number": ["AA", "BB_ANOTHER_VESSEL"],
+            "ircs": ["AAA", "BBB"],
         }
     )
 
-    active_alerts = filter_silenced_alerts.run(alerts, silenced_alerts)
+    active_alerts = filter_alerts.run(alerts, silenced_alerts)
 
     expected_active_alerts = pd.DataFrame(
         {

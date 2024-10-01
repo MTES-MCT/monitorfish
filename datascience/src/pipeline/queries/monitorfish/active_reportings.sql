@@ -2,7 +2,7 @@ SELECT DISTINCT
     internal_reference_number,
     external_reference_number,
     ircs
-FROM silenced_alerts
+FROM reportings
 WHERE
-    NOW() < silenced_before_date
+    NOT archived
     AND value->>'type' = :alert_type

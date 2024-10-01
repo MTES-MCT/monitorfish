@@ -24,6 +24,11 @@ export const COMMON_ALERT_TYPE_OPTION: Record<
     isOperationalAlert: true,
     name: 'Pêche en ZEE française par un navire tiers'
   },
+  MISSING_DEP_ALERT: {
+    code: PendingAlertValueType.MISSING_DEP_ALERT,
+    isOperationalAlert: true,
+    name: 'Sortie en mer sans émission de message "DEP"'
+  },
   MISSING_FAR_48_HOURS_ALERT: {
     code: PendingAlertValueType.MISSING_FAR_48_HOURS_ALERT,
     isOperationalAlert: true,

@@ -18,7 +18,7 @@ from src.pipeline.generic_tasks import extract, read_query_task
 from src.pipeline.processing import coalesce, join_on_multiple_keys
 from src.pipeline.shared_tasks.alerts import (
     extract_silenced_alerts,
-    filter_silenced_alerts,
+    filter_alerts,
     load_alerts,
     make_alerts,
 )
@@ -503,8 +503,8 @@ with Flow("Position alert", executor=LocalDaskExecutor()) as flow:
             districts_columns_to_add=["dml"],
         )
         alerts = make_alerts(vessels_in_alert, alert_type, alert_config_name)
-        silenced_alerts = extract_silenced_alerts()
-        alert_without_silenced = filter_silenced_alerts(alerts, silenced_alerts)
+        silenced_alerts = extract_silenced_alerts(alert_type)
+        alert_without_silenced = filter_alerts(alerts, silenced_alerts)
         load_alerts(alert_without_silenced, alert_config_name)
 
 flow.file_name = Path(__file__).name

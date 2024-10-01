@@ -11,23 +11,41 @@ from config import (
     REPORTING_ARCHIVING_ENDPOINT_TEMPLATE,
 )
 from src.db_config import create_engine
+from src.pipeline.entities.alerts import AlertType
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.processing import (
     df_to_dict_series,
-    get_unused_col_name,
-    join_on_multiple_keys,
+    left_isin_right_by_decreasing_priority,
 )
 from src.pipeline.utils import delete_rows, get_table
 
 
 @task(checkpoint=False)
-def extract_silenced_alerts() -> pd.DataFrame:
+def extract_silenced_alerts(alert_type: str) -> pd.DataFrame:
     """
-    Return active silenced alerts
+    Return DataFrame of vessels with active silenced alerts of the given type.
     """
+
+    alert_type = AlertType(alert_type)
     return extract(
         db_name="monitorfish_remote",
         query_filepath="monitorfish/silenced_alerts.sql",
+        params={"alert_type": alert_type.value},
+    )
+
+
+@task(checkpoint=False)
+def extract_active_reportings(alert_type: str) -> pd.DataFrame:
+    """
+    Return DataFrame of vessels with active (non archived) reporting originating from
+    alerts of the given type.
+    """
+
+    alert_type = AlertType(alert_type)
+    return extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/active_reportings.sql",
+        params={"alert_type": alert_type.value},
     )
 
 
@@ -168,17 +186,21 @@ def make_alerts(
 
 
 @task(checkpoint=False)
-def filter_silenced_alerts(
-    alerts: pd.DataFrame, silenced_alerts: pd.DataFrame
+def filter_alerts(
+    alerts: pd.DataFrame,
+    vessels_with_silenced_alerts: pd.DataFrame,
+    vessels_with_active_reportings: pd.DataFrame = None,
 ) -> pd.DataFrame:
     """
-    Filters `alerts` to keep only alerts that are not in `silenced_alerts`. Both input
-    DataFrames must have columns :
+    Filters `alerts` to keep only alerts of vessels that are not in
+    `vessels_with_silenced_alerts`. If `vessels_with_active_reportings` is provided,
+    alerts of vessels that are in this DataFrame are also removed.
+
+    All input DataFrames must have columns :
 
       - internal_reference_number
       - external_reference_number
       - ircs
-      - type
 
     In addition, the `alerts` DataFrame must have columns :
 
@@ -195,32 +217,26 @@ def filter_silenced_alerts(
 
     Args:
         alerts (pd.DataFrame): positions alerts.
-        silenced_alerts (pd.DataFrame): silenced positions alerts.
+        vessels_with_silenced_alerts (pd.DataFrame): vessels with silenced alerts.
 
     Returns:
         pd.DataFrame: same as input with some rows removed.
     """
     vessel_id_cols = ["internal_reference_number", "external_reference_number", "ircs"]
-    alert_id_cols = ["type"]
 
-    id_col_name = get_unused_col_name("id", alerts)
-    alerts[id_col_name] = range(len(alerts))
+    if isinstance(vessels_with_active_reportings, pd.DataFrame):
+        vessels_to_remove = (
+            pd.concat([vessels_with_silenced_alerts, vessels_with_active_reportings])
+            .drop_duplicates()
+            .reset_index(drop=True)
+        )
+    else:
+        vessels_to_remove = vessels_with_silenced_alerts
 
-    alerts_to_remove = join_on_multiple_keys(
-        alerts,
-        silenced_alerts,
-        or_join_keys=vessel_id_cols,
-        how="inner",
-        and_join_keys=alert_id_cols,
-    )
-
-    alert_ids_to_remove = set(alerts_to_remove[id_col_name])
-
-    alerts = alerts.loc[~alerts[id_col_name].isin(alert_ids_to_remove)].reset_index(
-        drop=True
-    )
-
-    return alerts[
+    alerts = alerts.loc[
+        ~left_isin_right_by_decreasing_priority(
+            alerts[vessel_id_cols], vessels_to_remove[vessel_id_cols]
+        ),
         [
             "vessel_name",
             "internal_reference_number",
@@ -234,8 +250,10 @@ def filter_silenced_alerts(
             "longitude",
             "value",
             "alert_config_name",
-        ]
-    ]
+        ],
+    ].reset_index(drop=True)
+
+    return alerts
 
 
 @task(checkpoint=False)
@@ -269,7 +287,6 @@ def load_alerts(alerts: pd.DataFrame, alert_config_name: str):
     e = create_engine("monitorfish_remote")
 
     with e.begin() as connection:
-
         table = get_table(
             table_name=table_name, schema=schema, conn=connection, logger=logger
         )

@@ -31,7 +31,7 @@ describe('features/PriorNotification/components/shared/CardBodyHead > getSentMes
 
     expect(result).toHaveLength(1)
 
-    expect(result[0]!.firstMessageDate).toEqual(new Date('2023-10-01T10:00:00Z'))
+    expect(result[0]!.fistMessageHumanizedDate).toEqual('Le 01/10/2023 à 10h00 (UTC)')
     expect(result[0]!.messages).toEqual(sentMessages)
     expect(result[0]!.sendStatus).toEqual(SentMessagesBatchStatus.SUCCESS)
     expect(result[0]!.statusMessage).toEqual('Préavis diffusé avec succès à tous les contacts.')
@@ -63,7 +63,7 @@ describe('features/PriorNotification/components/shared/CardBodyHead > getSentMes
 
     expect(result).toHaveLength(1)
 
-    expect(result[0]!.firstMessageDate).toEqual(new Date('2023-10-01T10:00:00Z'))
+    expect(result[0]!.fistMessageHumanizedDate).toEqual('Le 01/10/2023 à 10h00 (UTC)')
     expect(result[0]!.messages).toEqual(sentMessages)
     expect(result[0]!.sendStatus).toEqual(SentMessagesBatchStatus.SUCCESS)
     expect(result[0]!.statusMessage).toEqual('Préavis diffusé avec succès à tous les contacts.')
@@ -95,11 +95,11 @@ describe('features/PriorNotification/components/shared/CardBodyHead > getSentMes
 
     expect(result).toHaveLength(2)
 
-    expect(result[0]!.firstMessageDate).toEqual(new Date('2023-10-01T10:00:31Z'))
+    expect(result[0]!.fistMessageHumanizedDate).toEqual('Le 01/10/2023 à 10h00 (UTC)')
     expect(result[0]!.messages).toEqual([sentMessages[1]])
     expect(result[0]!.sendStatus).toEqual(SentMessagesBatchStatus.SUCCESS)
 
-    expect(result[1]!.firstMessageDate).toEqual(new Date('2023-10-01T10:00:00Z'))
+    expect(result[1]!.fistMessageHumanizedDate).toEqual('Le 01/10/2023 à 10h00 (UTC)')
     expect(result[1]!.messages).toEqual([sentMessages[0]])
     expect(result[1]!.sendStatus).toEqual(SentMessagesBatchStatus.SUCCESS)
   })
@@ -210,12 +210,12 @@ describe('features/PriorNotification/components/shared/CardBodyHead > getSentMes
 
     expect(result).toHaveLength(2)
 
-    expect(result[0]!.firstMessageDate).toEqual(new Date('2023-10-01T10:01:05Z'))
+    expect(result[0]!.fistMessageHumanizedDate).toEqual('Le 01/10/2023 à 10h01 (UTC)')
     expect(result[0]!.messages).toEqual([sentMessages[2], sentMessages[3]])
     expect(result[0]!.sendStatus).toEqual(SentMessagesBatchStatus.PARTIAL_FAILURE)
     expect(result[0]!.statusMessage).toEqual('Échec de la diffusion pour le contact: <b>email3@example.com</b>.')
 
-    expect(result[1]!.firstMessageDate).toEqual(new Date('2023-10-01T10:00:00Z'))
+    expect(result[1]!.fistMessageHumanizedDate).toEqual('Le 01/10/2023 à 10h00 (UTC)')
     expect(result[1]!.messages).toEqual([sentMessages[0], sentMessages[1]])
     expect(result[1]!.sendStatus).toEqual(SentMessagesBatchStatus.PARTIAL_FAILURE)
     expect(result[1]!.statusMessage).toEqual('Échec de la diffusion pour le contact: <b>email2@example.com</b>.')

@@ -9,7 +9,7 @@ export type Subscriber = {
 }
 
 export type SentMessageBatch = {
-  firstMessageDate: Date
+  fistMessageHumanizedDate: string
   messages: PriorNotification.SentMessage[]
   sendStatus: SentMessagesBatchStatus
   statusMessage: string

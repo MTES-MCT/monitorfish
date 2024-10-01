@@ -1,5 +1,5 @@
 import { useGetPriorNotificationSentNessagesQuery } from '@features/PriorNotification/priorNotificationApi'
-import { customDayjs, Icon } from '@mtes-mct/monitor-ui'
+import { Icon } from '@mtes-mct/monitor-ui'
 import { Steps } from 'rsuite'
 import styled from 'styled-components'
 
@@ -54,7 +54,7 @@ export function SentMessageList({ detail }: SentMessageListProps) {
             <History current={sentMessagesBatches.length} vertical>
               {sentMessagesBatches.map(sentMessagesBatch => (
                 <HistoryItem
-                  key={+sentMessagesBatch.firstMessageDate}
+                  key={sentMessagesBatch.fistMessageHumanizedDate}
                   $isSuccess={sentMessagesBatch.sendStatus === SentMessagesBatchStatus.SUCCESS}
                   data-cy="SentMessageList-historyItem"
                   icon={
@@ -66,9 +66,7 @@ export function SentMessageList({ detail }: SentMessageListProps) {
                   }
                   title={
                     <StepTitle>
-                      <StepDate>
-                        {customDayjs(sentMessagesBatch.firstMessageDate).format('[Le] DD/MM/YYYY [à] HH[h]mm [(UTC)]')}
-                      </StepDate>
+                      <StepDate>{sentMessagesBatch.fistMessageHumanizedDate}</StepDate>
                       <StepStatus dangerouslySetInnerHTML={{ __html: sentMessagesBatch.statusMessage }} />
                     </StepTitle>
                   }

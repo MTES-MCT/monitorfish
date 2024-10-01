@@ -45,22 +45,26 @@ export function getSentMessagesBatches(sentMessages: PriorNotification.SentMessa
     if (!currentBatchFirstSentMessageDate) {
       currentBatchFirstSentMessageDate = sentMessage.dateTimeUtc
       currentBatch.push(sentMessage)
-    } else {
-      const timeDifference = dayjs(sentMessage.dateTimeUtc).diff(dayjs(currentBatchFirstSentMessageDate), 'second')
 
-      if (timeDifference <= 30) {
-        // If this message was sent less than 30s after the first message of the current batch,
-        // we consider it as part of the same batch
-        currentBatch.push(sentMessage)
-      } else {
-        // Otherwise, we consider the current batch as complete
-        sentMessageBatches.push(processBatch(currentBatch))
-
-        // and we start a new one
-        currentBatch = [sentMessage]
-        currentBatchFirstSentMessageDate = sentMessage.dateTimeUtc
-      }
+      return
     }
+
+    const timeDifference = dayjs(sentMessage.dateTimeUtc).diff(dayjs(currentBatchFirstSentMessageDate), 'second')
+
+    // If this message was sent less than 30s after the first message of the current batch,
+    // we consider it as part of the same batch
+    if (timeDifference <= 30) {
+      currentBatch.push(sentMessage)
+
+      return
+    }
+
+    // Otherwise, we consider the current batch as complete
+    sentMessageBatches.push(processBatch(currentBatch))
+
+    // and we start a new one
+    currentBatch = [sentMessage]
+    currentBatchFirstSentMessageDate = sentMessage.dateTimeUtc
   })
 
   // Let's not forget to process the last batch since it's not followed by another batch

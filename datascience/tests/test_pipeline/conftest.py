@@ -1,6 +1,8 @@
 import pandas as pd
 import pytest
 
+from src.pipeline.entities.control_units import ControlUnit
+
 
 @pytest.fixture
 def pno_units_targeting_vessels():
@@ -54,6 +56,11 @@ def monitorenv_control_units_api_response() -> list:
     return [
         {
             "id": 1,
+            "administration": {
+                "id": 1,
+                "isArchived": False,
+                "name": "Administration 1",
+            },
             "controlUnitContacts": [],
             "isArchived": False,
             "name": "Unité 1",
@@ -62,6 +69,11 @@ def monitorenv_control_units_api_response() -> list:
         },
         {
             "id": 2,
+            "administration": {
+                "id": 1,
+                "isArchived": False,
+                "name": "Administration 1",
+            },
             "controlUnitContacts": [
                 {
                     "id": 559,
@@ -109,6 +121,11 @@ def monitorenv_control_units_api_response() -> list:
         },
         {
             "id": 3,
+            "administration": {
+                "id": 1,
+                "isArchived": False,
+                "name": "Administration 1",
+            },
             "controlUnitContacts": [
                 {
                     "id": 320,
@@ -143,6 +160,11 @@ def monitorenv_control_units_api_response() -> list:
         },
         {
             "id": 4,
+            "administration": {
+                "id": 3,
+                "isArchived": False,
+                "name": "Administration 3",
+            },
             "controlUnitContacts": [
                 {
                     "id": 1182,
@@ -176,6 +198,11 @@ def monitorenv_control_units_api_response() -> list:
         },
         {
             "id": 5,
+            "administration": {
+                "id": 1,
+                "isArchived": False,
+                "name": "Administration 1",
+            },
             "controlUnitContacts": [
                 {
                     "id": 382,
@@ -219,6 +246,11 @@ def monitorenv_control_units_api_response() -> list:
         },
         {
             "id": 6,
+            "administration": {
+                "id": 1,
+                "isArchived": False,
+                "name": "Administration 1",
+            },
             "controlUnitContacts": [
                 {
                     "id": 631,
@@ -252,6 +284,11 @@ def monitorenv_control_units_api_response() -> list:
         },
         {
             "id": 7,
+            "administration": {
+                "id": 1,
+                "isArchived": False,
+                "name": "Administration 1",
+            },
             "controlUnitContacts": [
                 {
                     "id": 1540,
@@ -270,20 +307,27 @@ def monitorenv_control_units_api_response() -> list:
 
 
 @pytest.fixture
-def control_units_contacts() -> pd.DataFrame:
-    return pd.DataFrame(
-        {
-            "control_unit_id": [2, 3, 4],
-            "control_unit_name": ["Unité 2", "Unité 3", "Unité 4"],
-            "emails": [
-                ["alternative@email", "some.email@control.unit.4"],
-                [],
-                ["email4@email.com"],
-            ],
-            "phone_numbers": [
-                ["'00 11 22 33 44 55"],
-                ["44 44 44 44 44"],
-                [],
-            ],
-        }
-    )
+def monitorenv_control_units() -> pd.DataFrame:
+    return [
+        ControlUnit(
+            control_unit_id=2,
+            control_unit_name="Unité 2",
+            administration="Administration 1",
+            emails=["alternative@email", "some.email@control.unit.4"],
+            phone_numbers=["'00 11 22 33 44 55"],
+        ),
+        ControlUnit(
+            control_unit_id=3,
+            control_unit_name="Unité 3",
+            administration="Administration 1",
+            emails=[],
+            phone_numbers=["44 44 44 44 44"],
+        ),
+        ControlUnit(
+            control_unit_id=4,
+            control_unit_name="Unité 4",
+            administration="Administration 3",
+            emails=["email4@email.com"],
+            phone_numbers=[],
+        ),
+    ]

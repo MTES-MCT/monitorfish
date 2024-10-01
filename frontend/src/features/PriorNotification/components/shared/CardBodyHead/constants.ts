@@ -1,0 +1,5 @@
+export enum SentMessagesBatchStatus {
+  PARTIAL_FAILURE = 'PARTIAL_FAILURE',
+  SUCCESS = 'SUCCESS',
+  TOTAL_FAILURE = 'TOTAL_FAILURE'
+}

@@ -16,16 +16,16 @@ from config import (
     EMAIL_STYLESHEETS_LOCATION,
     EMAIL_TEMPLATES_LOCATION,
 )
+from src.pipeline.entities.communication_means import CommunicationMeans
 from src.pipeline.entities.control_units import (
+    ControlUnit,
     ControlUnitActions,
     ControlUnitActionsSentMessage,
-    ControlUnitWithEmails,
 )
 from src.pipeline.entities.missions import FlightGoal, MissionActionType
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.helpers.dates import Period
 from src.pipeline.helpers.emails import (
-    CommunicationMeans,
     create_html_email,
     send_email_or_sms_or_fax_message,
 )
@@ -33,7 +33,7 @@ from src.pipeline.shared_tasks.control_flow import (
     check_flow_not_running,
     filter_results,
 )
-from src.pipeline.shared_tasks.control_units import fetch_control_units_contacts
+from src.pipeline.shared_tasks.control_units import fetch_control_units
 from src.pipeline.shared_tasks.dates import get_utcnow
 
 
@@ -95,28 +95,29 @@ def get_control_unit_ids(env_action: pd.DataFrame) -> List[int]:
 
 
 @task(checkpoint=False)
-def filter_control_units_contacts(
-    all_control_units_contacts: pd.DataFrame, control_unit_ids: List[str]
-) -> List[ControlUnitWithEmails]:
+def filter_control_units(
+    all_control_units: List[ControlUnit], control_unit_ids: List[str]
+) -> List[ControlUnit]:
     if len(control_unit_ids) == 0:
         raise SKIP("No control units to extract.")
 
-    control_units = all_control_units_contacts.loc[
-        (
-            all_control_units_contacts.control_unit_id.isin(control_unit_ids)
-            & (all_control_units_contacts.emails.map(len) > 0)
-        ),
-        ["control_unit_id", "control_unit_name", "emails"],
+    filtered_control_units = [
+        control_unit
+        for control_unit in all_control_units
+        if (
+            (len(control_unit.emails) > 0)
+            and (control_unit.control_unit_id in control_unit_ids)
+        )
     ]
-    records = control_units.to_dict(orient="records")
-    return [ControlUnitWithEmails(**control_unit) for control_unit in records]
+
+    return filtered_control_units
 
 
 @task(checkpoint=False)
 def to_control_unit_actions(
     mission_actions: pd.DataFrame,
     period: Period,
-    control_units: List[ControlUnitWithEmails],
+    control_units: List[ControlUnit],
 ) -> List[ControlUnitActions]:
     return [
         ControlUnitActions(
@@ -451,15 +452,15 @@ with Flow("Email actions to units", executor=LocalDaskExecutor()) as flow:
             end_days_ago=end_days_ago,
         )
         mission_actions = extract_mission_actions(period=period)
-        all_control_units_contacts = fetch_control_units_contacts()
+        all_control_units = fetch_control_units()
 
         control_unit_ids = get_control_unit_ids(mission_actions)
-        control_units_emails = filter_control_units_contacts(
-            all_control_units_contacts, control_unit_ids
+        control_units_with_emails = filter_control_units(
+            all_control_units, control_unit_ids
         )
 
         control_unit_actions = to_control_unit_actions(
-            mission_actions, period, control_units_emails
+            mission_actions, period, control_units_with_emails
         )
 
         html = render.map(control_unit_actions, template=unmapped(template))

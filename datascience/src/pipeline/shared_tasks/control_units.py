@@ -1,13 +1,16 @@
+from typing import List
+
 import pandas as pd
 import requests
 from prefect import task
 
 from config import MONITORENV_API_ENDPOINT
+from src.pipeline.entities.control_units import ControlUnit
 from src.pipeline.processing import remove_nones_from_list
 
 
 @task(checkpoint=False)
-def fetch_control_units_contacts() -> pd.DataFrame:
+def fetch_control_units() -> List[ControlUnit]:
     r = requests.get(MONITORENV_API_ENDPOINT + "control_units")
 
     r.raise_for_status()
@@ -18,14 +21,21 @@ def fetch_control_units_contacts() -> pd.DataFrame:
         "name": "control_unit_name",
         "controlUnitContacts": "control_unit_contacts",
         "isArchived": "is_archived",
+        "administration": "administration",
     }
 
     df = df[columns.keys()].rename(columns=columns)
+    df["administration"] = df.administration.map(lambda d: d.get("name"))
 
     contacts = (
         df.loc[
             ~df.is_archived,
-            ["control_unit_id", "control_unit_name", "control_unit_contacts"],
+            [
+                "control_unit_id",
+                "control_unit_name",
+                "administration",
+                "control_unit_contacts",
+            ],
         ]
         .explode("control_unit_contacts")
         .dropna()
@@ -44,9 +54,11 @@ def fetch_control_units_contacts() -> pd.DataFrame:
     )
 
     email_and_phone_contacts = (
-        contacts[["control_unit_id", "control_unit_name", "email", "phone"]]
+        contacts[
+            ["control_unit_id", "control_unit_name", "administration", "email", "phone"]
+        ]
         .dropna(subset=["email", "phone"], how="all")
-        .groupby(["control_unit_id", "control_unit_name"])
+        .groupby(["control_unit_id", "control_unit_name", "administration"])
         .agg({"email": "unique", "phone": "unique"})
         .rename(columns={"email": "emails", "phone": "phone_numbers"})
         .map(remove_nones_from_list)
@@ -54,4 +66,5 @@ def fetch_control_units_contacts() -> pd.DataFrame:
         .reset_index()
     )
 
-    return email_and_phone_contacts
+    records = email_and_phone_contacts.to_dict(orient="records")
+    return [ControlUnit(**control_unit) for control_unit in records]

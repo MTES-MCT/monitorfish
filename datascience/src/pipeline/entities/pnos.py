@@ -6,9 +6,10 @@ from typing import List, Optional
 
 import pandas as pd
 
+from src.pipeline.entities.communication_means import CommunicationMeans
+from src.pipeline.entities.control_units import ControlUnit
 from src.pipeline.entities.fleet_segments import FishingGear, FleetSegment
 from src.pipeline.entities.missions import Infraction
-from src.pipeline.helpers.emails import CommunicationMeans
 
 
 @dataclass(kw_only=True)
@@ -197,6 +198,13 @@ class ReturnToPortPurpose(Enum):
 
 
 @dataclass
+class PnoAddressee:
+    name: str
+    organization: str
+    email_address_or_number: str
+
+
+@dataclass
 class RenderedPno:
     report_id: str
     vessel_id: int
@@ -208,14 +216,45 @@ class RenderedPno:
     port_locode: str
     facade: str
     source: PnoSource
-    html_for_pdf: Optional[str] = None
-    pdf_document: Optional[bytes] = None
-    generation_datetime_utc: Optional[datetime] = None
-    html_email_body: Optional[str] = None
-    sms_content: Optional[str] = None
-    control_unit_ids: Optional[list] = None
-    emails: Optional[list] = None
-    phone_numbers: Optional[list] = None
+    html_for_pdf: str | None = None
+    pdf_document: bytes | None = None
+    generation_datetime_utc: datetime | None = None
+    html_email_body: str | None = None
+    sms_content: str | None = None
+    control_units: List[ControlUnit] | None = None
+
+    def get_addressees(
+        self, communication_means: CommunicationMeans
+    ) -> List[PnoAddressee]:
+        if self.control_units:
+            if communication_means == CommunicationMeans.EMAIL:
+                addressees = [
+                    PnoAddressee(
+                        name=control_unit.control_unit_name,
+                        organization=control_unit.administration,
+                        email_address_or_number=email,
+                    )
+                    for control_unit in self.control_units
+                    for email in control_unit.emails
+                ]
+            elif communication_means == CommunicationMeans.SMS:
+                addressees = [
+                    PnoAddressee(
+                        name=control_unit.control_unit_name,
+                        organization=control_unit.administration,
+                        email_address_or_number=phone_number,
+                    )
+                    for control_unit in self.control_units
+                    for phone_number in control_unit.phone_numbers
+                ]
+            else:
+                raise ValueError(
+                    f"Unexpected communication_means {communication_means}"
+                )
+
+        else:
+            addressees = []
+        return addressees
 
 
 @dataclass
@@ -223,16 +262,6 @@ class PnoToSend:
     pno: RenderedPno
     message: EmailMessage
     communication_means: CommunicationMeans
-
-    def get_addressees(self):
-        if self.communication_means == CommunicationMeans.EMAIL:
-            return self.pno.emails
-        elif self.communication_means == CommunicationMeans.SMS:
-            return self.pno.phone_numbers
-        else:
-            raise ValueError(
-                f"Unexpected communication_means {self.communication_means}"
-            )
 
 
 @dataclass
@@ -243,4 +272,6 @@ class PriorNotificationSentMessage:
     communication_means: CommunicationMeans
     recipient_address_or_number: str
     success: bool
+    recipient_name: str
+    recipient_organization: str
     error_message: Optional[str] = None

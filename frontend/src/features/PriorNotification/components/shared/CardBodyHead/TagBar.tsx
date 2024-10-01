@@ -2,9 +2,9 @@ import { VesselRiskFactor } from '@features/Vessel/components/VesselRiskFactor'
 import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import { PriorNotification } from '../../PriorNotification.types'
-import { FixedTag } from '../PriorNotificationList/styles'
-import { getColorsFromState } from '../PriorNotificationList/utils'
+import { PriorNotification } from '../../../PriorNotification.types'
+import { FixedTag } from '../../PriorNotificationList/styles'
+import { getColorsFromState } from '../../PriorNotificationList/utils'
 
 import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 

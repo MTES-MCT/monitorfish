@@ -72,31 +72,36 @@ export function getSentMessagesBatches(sentMessages: PriorNotification.SentMessa
 }
 
 function processBatch(messages: PriorNotification.SentMessage[]): SentMessageBatch {
-  const failedEmailsAndPhones = messages
-    .filter(({ success }) => !success)
-    .map(({ recipientAddressOrNumber }) => recipientAddressOrNumber)
-  const failedEmailsAndPhonesAsHtml = failedEmailsAndPhones.map(emailOrPhone => `<b>${emailOrPhone}</b>`).join(', ')
-
-  const isPartialFailure = failedEmailsAndPhones.length > 0
-  const isTotalFailure = failedEmailsAndPhones.length === messages.length
-
-  // eslint-disable-next-line no-nested-ternary
-  const sendStatus = isTotalFailure
-    ? SentMessagesBatchStatus.TOTAL_FAILURE
-    : isPartialFailure
-      ? SentMessagesBatchStatus.PARTIAL_FAILURE
-      : SentMessagesBatchStatus.SUCCESS
-  // eslint-disable-next-line no-nested-ternary
-  const statusMessage = isTotalFailure
-    ? `Échec de la diffusion pour tous les contacts: ${failedEmailsAndPhonesAsHtml}.`
-    : isPartialFailure
-      ? `Échec de la diffusion pour ${pluralize('le', failedEmailsAndPhones.length)} ${pluralize('contact', failedEmailsAndPhones.length)}: ${failedEmailsAndPhonesAsHtml}.`
-      : 'Préavis diffusé avec succès à tous les contacts.'
+  const [sendStatus, statusMessage] = getStatusAndStatusMessage(messages)
 
   return {
     firstMessageDate: new Date(messages[0]!.dateTimeUtc),
     messages,
     sendStatus,
     statusMessage
+  }
+}
+
+function getStatusAndStatusMessage(messages: PriorNotification.SentMessage[]): [SentMessagesBatchStatus, string] {
+  const failedEmailsAndPhones = messages
+    .filter(({ success }) => !success)
+    .map(({ recipientAddressOrNumber }) => recipientAddressOrNumber)
+  const failedEmailsAndPhonesAsHtml = failedEmailsAndPhones.map(emailOrPhone => `<b>${emailOrPhone}</b>`).join(', ')
+
+  switch (true) {
+    case failedEmailsAndPhones.length === messages.length:
+      return [
+        SentMessagesBatchStatus.TOTAL_FAILURE,
+        `Échec de la diffusion pour tous les contacts: ${failedEmailsAndPhonesAsHtml}.`
+      ]
+
+    case failedEmailsAndPhones.length > 0:
+      return [
+        SentMessagesBatchStatus.PARTIAL_FAILURE,
+        `Échec de la diffusion pour ${pluralize('le', failedEmailsAndPhones.length)} ${pluralize('contact', failedEmailsAndPhones.length)}: ${failedEmailsAndPhonesAsHtml}.`
+      ]
+
+    default:
+      return [SentMessagesBatchStatus.SUCCESS, 'Préavis diffusé avec succès à tous les contacts.']
   }
 }

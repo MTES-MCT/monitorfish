@@ -5,7 +5,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring") version "2.0.20"
     kotlin("jvm") version "1.9.23"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.9.22"
-    kotlin("plugin.noarg") version "1.9.10"
+    kotlin("plugin.noarg") version "2.0.20"
     kotlin("plugin.jpa") version "2.0.20"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
     kotlin("plugin.serialization") version "2.0.20"

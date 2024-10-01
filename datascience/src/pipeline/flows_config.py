@@ -46,6 +46,7 @@ from src.pipeline.flows import (
     init_species_groups,
     last_positions,
     logbook,
+    missing_dep_alerts,
     missing_far_alerts,
     missing_trip_numbers,
     missions,
@@ -145,6 +146,7 @@ last_positions.flow.schedule = Schedule(
     ]
 )
 logbook.flow.schedule = CronSchedule("0,5,10,15,20,25,30,35,40,45,50,55 * * * *")
+missing_dep_alerts.flow.schedule = CronSchedule("1,16,31,46 * * * *")
 missing_far_alerts.flow.schedule = Schedule(
     clocks=[
         clocks.CronClock(
@@ -327,6 +329,7 @@ flows_to_register = [
     init_pno_subscriptions.flow,
     init_species_groups.flow,
     last_positions.flow,
+    missing_dep_alerts.flow,
     missing_far_alerts.flow,
     missing_trip_numbers.flow,
     missions.flow,

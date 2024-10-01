@@ -47,6 +47,7 @@ class SilenceAlert(
                 AlertTypeMapping.THREE_MILES_TRAWLING_ALERT -> ThreeMilesTrawlingAlert()
                 AlertTypeMapping.FRENCH_EEZ_FISHING_ALERT -> FrenchEEZFishingAlert()
                 AlertTypeMapping.TWELVE_MILES_FISHING_ALERT -> TwelveMilesFishingAlert()
+                AlertTypeMapping.MISSING_DEP_ALERT -> MissingDEPAlert()
                 AlertTypeMapping.MISSING_FAR_ALERT -> MissingFARAlert()
                 AlertTypeMapping.MISSING_FAR_48_HOURS_ALERT -> MissingFAR48HoursAlert()
                 else -> {

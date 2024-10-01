@@ -30,7 +30,7 @@ context('Side Window > Alert List', () => {
     cy.get('[data-cy="side-window-sub-menu-NAMO"]').should('have.css', 'background', 'rgb(204, 207, 214)')
   })
 
-  it('Nine alerts Should be shown When clicking on the NAMO menu', () => {
+  it('Ten alerts Should be shown When clicking on the NAMO menu', () => {
     // When
     cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
 
@@ -39,11 +39,11 @@ context('Side Window > Alert List', () => {
     cy.get('*[data-cy^="side-window-alerts-number-silenced-vessels"]').contains(
       'Suspension d’alerte sur 2 navires en NAMO'
     )
-    cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 9)
+    cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 10)
 
-    cy.get(':nth-child(9)').contains('3 milles - Chaluts')
-    cy.get(':nth-child(9)').contains('LE b@TO')
-    cy.get(':nth-child(9)').contains('7059')
+    cy.get(':nth-child(10)').contains('3 milles - Chaluts')
+    cy.get(':nth-child(10)').contains('LE b@TO')
+    cy.get(':nth-child(10)').contains('7059')
 
     // Show vessel on map
     cy.intercept(
@@ -114,7 +114,11 @@ context('Side Window > Alert List', () => {
     cy.visit('/side_window')
     cy.wait(200)
     cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
-    cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 7)
+    cy.get('*[data-cy^="side-window-alerts-list"]')
+      .children()
+      .eq(1)
+      .children()
+      .should('have.length', expectedSilencedAlerts)
     cy.get('*[data-cy="side-window-sub-menu-SUSPENDED_ALERTS"]').click()
     cy.get('*[data-cy^="side-window-silenced-alerts-list"]')
       .children()

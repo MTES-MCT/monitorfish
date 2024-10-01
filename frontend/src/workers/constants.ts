@@ -9,7 +9,8 @@ export const INFRACTIONS = '/api/v1/infractions'
 export const WHITELISTED_BASE_MAPS_PATHS = [CARTOCDN_BASEMAP, MAPBOX_BASEMAP, OPENSTREETMAP_BASEMAP, SHOM_BASEMAP]
 export const WHITELISTED_AND_READ_ONLY_PATHS = [REGULATIONS, INFRACTIONS]
 
-export const STATIC_ASSETS = ['/landing_background.png']
+// TODO Remove Service Worker cache mechanism all together if we don't use that anymore.
+export const STATIC_ASSETS = []
 
 export const APPLICATION_ROUTES = [
   '/light',

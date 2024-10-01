@@ -31,10 +31,4 @@ const Wrapper = styled.div`
   padding-top: 43vh;
   height: 100vh;
   overflow: hidden;
-
-  background: url('landing_background.png') no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
 `

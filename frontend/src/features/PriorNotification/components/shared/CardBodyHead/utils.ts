@@ -1,4 +1,4 @@
-import { pluralize } from '@mtes-mct/monitor-ui'
+import { customDayjs, pluralize } from '@mtes-mct/monitor-ui'
 import dayjs from 'dayjs'
 
 import { SentMessagesBatchStatus } from './constants'
@@ -72,10 +72,13 @@ export function getSentMessagesBatches(sentMessages: PriorNotification.SentMessa
 }
 
 function processBatch(messages: PriorNotification.SentMessage[]): SentMessageBatch {
+  const fistMessageHumanizedDate = customDayjs
+    .utc(messages[0]!.dateTimeUtc)
+    .format('[Le] DD/MM/YYYY [à] HH[h]mm [(UTC)]')
   const [sendStatus, statusMessage] = getStatusAndStatusMessage(messages)
 
   return {
-    firstMessageDate: new Date(messages[0]!.dateTimeUtc),
+    fistMessageHumanizedDate,
     messages,
     sendStatus,
     statusMessage

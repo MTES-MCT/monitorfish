@@ -1,4 +1,5 @@
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { useTracking } from '@hooks/useTracking'
 import { ExportToCsv } from 'export-to-csv'
 import countries from 'i18n-iso-countries'
 import { useEffect, useState } from 'react'
@@ -28,6 +29,8 @@ const csvExporter = new ExportToCsv(optionsCSV)
 
 export function DownloadVesselListModal({ filteredVessels, isOpen, setIsOpen }) {
   const { coordinatesFormat } = useMainAppSelector(state => state.map)
+  const { trackEvent } = useTracking()
+
   const [checkboxState, setCheckboxState] = useState<{
     checkAll: boolean
     indeterminate: boolean
@@ -117,6 +120,12 @@ export function DownloadVesselListModal({ filteredVessels, isOpen, setIsOpen }) 
       const date = new Date()
       csvExporter.options.filename = `export_vms_${getDate(date.toISOString())}_${Math.floor(Math.random() * 100) + 1}`
       csvExporter.generateCsv(objectsToExports)
+
+      trackEvent({
+        action: 'VESSEL_LIST',
+        category: 'DOWNLOAD',
+        name: csvExporter.options.filename
+      })
     }
   }
 

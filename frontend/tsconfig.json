@@ -56,7 +56,8 @@
     "**/*.tsx",
     "src/vite-env-override.d.ts",
     "src/ui/styled.d.ts",
-    "vite.config.ts"
+    "vite.config.ts",
+    "src/matomo.d.ts"
   ],
   "exclude": ["node_modules/*"],
   "ts-node": {

@@ -5,6 +5,7 @@ import { verifyAndSendPriorNotification } from '@features/PriorNotification/useC
 import { getPriorNotificationIdentifier } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { useTracking } from '@hooks/useTracking'
 import { customSentry, CustomSentryMeasurementName } from '@libs/customSentry'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { assertNotNullish } from '@utils/assertNotNullish'
@@ -17,6 +18,7 @@ import { PriorNotificationCard } from '../PriorNotificationCard'
 export function LogbookPriorNotificationForm() {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
+  const { trackPage } = useTracking()
   const displayedError = useMainAppSelector(
     state => state.displayedError[DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR]
   )
@@ -70,6 +72,8 @@ export function LogbookPriorNotificationForm() {
     openedPriorNotificationDetail.reportId,
     2000
   )
+
+  trackPage(`/pnos/${openedPriorNotificationDetail.reportId}`)
 
   return (
     <PriorNotificationCard

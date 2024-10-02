@@ -1,4 +1,5 @@
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { useTracking } from '@hooks/useTracking'
 import { downloadAsCsv } from '@utils/downloadAsCsv'
 import { getCoordinates } from 'coordinates'
 import dayjs from 'dayjs'
@@ -24,6 +25,7 @@ type VesselPositionWithId = VesselPosition & {
 export function ExportTrack() {
   const { coordinatesFormat } = useMainAppSelector(state => state.map)
   const { selectedVesselPositions } = useMainAppSelector(state => state.vessel)
+  const { trackEvent } = useTracking()
 
   const exportedPositions: VesselPositionWithId[] = useMemo(
     () =>
@@ -49,57 +51,65 @@ export function ExportTrack() {
     [selectedVesselPositions, coordinatesFormat]
   )
 
-  const downloadCSV = useCallback(positions => {
-    if (!positions?.length) {
-      return
-    }
+  const downloadCSV = useCallback(
+    positions => {
+      if (!positions?.length) {
+        return
+      }
 
-    const vesselIdentifier = positions[0].internalReferenceNumber
-      ? positions[0].internalReferenceNumber
-      : positions[0].ircs
-    const date = getDate(dayjs().toISOString())
-    const randomNumber = Math.floor(Math.random() * 100) + 1
-    const fileName = `export_${vesselIdentifier}_vms_${date}_${randomNumber}`
+      const vesselIdentifier = positions[0].internalReferenceNumber
+        ? positions[0].internalReferenceNumber
+        : positions[0].ircs
+      const date = getDate(dayjs().toISOString())
+      const randomNumber = Math.floor(Math.random() * 100) + 1
+      const fileName = `export_${vesselIdentifier}_vms_${date}_${randomNumber}`
 
-    /* eslint-disable sort-keys-fix/sort-keys-fix */
-    const csvMap: DownloadAsCsvMap<VesselPositionWithId> = {
-      vesselName: 'Nom',
-      externalReferenceNumber: 'Marq. Ext.',
-      ircs: 'C/S',
-      mmsi: 'MMSI',
-      internalReferenceNumber: 'CFR',
-      flagState: {
-        label: 'Pavillon',
-        transform: position => countries.getName(position.flagState.toLowerCase(), 'fr')?.toString()
-      },
-      dateTime: 'GDH (UTC)',
-      latitude: 'Latitude',
-      longitude: 'Longitude',
-      course: 'Cap',
-      speed: 'Vitesse',
-      isAtPort: {
-        label: 'Au port',
-        transform: position => (position.isAtPort ? 'Oui' : 'Non')
-      },
-      networkType: {
-        label: 'Type de réseau',
-        transform: position => {
-          if (position.networkType === NetworkType.CELLULAR) {
-            return 'Cellulaire'
+      /* eslint-disable sort-keys-fix/sort-keys-fix */
+      const csvMap: DownloadAsCsvMap<VesselPositionWithId> = {
+        vesselName: 'Nom',
+        externalReferenceNumber: 'Marq. Ext.',
+        ircs: 'C/S',
+        mmsi: 'MMSI',
+        internalReferenceNumber: 'CFR',
+        flagState: {
+          label: 'Pavillon',
+          transform: position => countries.getName(position.flagState.toLowerCase(), 'fr')?.toString()
+        },
+        dateTime: 'GDH (UTC)',
+        latitude: 'Latitude',
+        longitude: 'Longitude',
+        course: 'Cap',
+        speed: 'Vitesse',
+        isAtPort: {
+          label: 'Au port',
+          transform: position => (position.isAtPort ? 'Oui' : 'Non')
+        },
+        networkType: {
+          label: 'Type de réseau',
+          transform: position => {
+            if (position.networkType === NetworkType.CELLULAR) {
+              return 'Cellulaire'
+            }
+
+            if (position.networkType === NetworkType.SATELLITE) {
+              return 'Satellite'
+            }
+
+            return 'Inconnu'
           }
-
-          if (position.networkType === NetworkType.SATELLITE) {
-            return 'Satellite'
-          }
-
-          return 'Inconnu'
         }
       }
-    }
-    /* eslint-enable sort-keys-fix/sort-keys-fix */
+      /* eslint-enable sort-keys-fix/sort-keys-fix */
 
-    downloadAsCsv(fileName, positions, csvMap)
-  }, [])
+      trackEvent({
+        action: 'VESSEL_TRACK',
+        category: 'DOWNLOAD',
+        name: fileName
+      })
+      downloadAsCsv(fileName, positions, csvMap)
+    },
+    [trackEvent]
+  )
 
   return (
     <ExportTrackButton

@@ -208,11 +208,11 @@ class GetVesselReportingsUTests {
         )
 
         assertThat(firstResult.otherOccurrencesOfSameAlert).hasSize(2)
-        assertThat(firstResult.otherOccurrencesOfSameAlert[0].id).isEqualTo(12345)
+        assertThat(firstResult.otherOccurrencesOfSameAlert[0].id).isEqualTo(123456)
         assertThat((firstResult.otherOccurrencesOfSameAlert[0].value as AlertType).type).isEqualTo(
             AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
         )
-        assertThat(firstResult.otherOccurrencesOfSameAlert[1].id).isEqualTo(123456)
+        assertThat(firstResult.otherOccurrencesOfSameAlert[1].id).isEqualTo(12345)
         assertThat((firstResult.otherOccurrencesOfSameAlert[1].value as AlertType).type).isEqualTo(
             AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
         )

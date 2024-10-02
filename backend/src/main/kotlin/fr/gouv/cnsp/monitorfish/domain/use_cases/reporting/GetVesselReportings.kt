@@ -65,7 +65,7 @@ class GetVesselReportings(
                             .filter { it.isArchived }
                             .filter { filterByYear(it, year) }
 
-                    getReportingsAndOccurrences(reportingsOfYear)
+                    return@associateWith getReportingsAndOccurrences(reportingsOfYear)
                         .sortedWith(compareByDescending { it.reporting.validationDate ?: it.reporting.creationDate })
                         .map { reportingAndOccurrences ->
                             enrichWithInfractionAndControlUnit(reportingAndOccurrences, controlUnits)
@@ -214,7 +214,10 @@ class GetVesselReportings(
                             it.validationDate
                         }
                     checkNotNull(lastAlert) { "Last alert cannot be null" }
-                    val otherOccurrencesOfSameAlert = alerts.filter { it.id != lastAlert.id }
+                    val otherOccurrencesOfSameAlert =
+                        alerts
+                            .filter { it.id != lastAlert.id }
+                            .sortedWith(compareByDescending { it.validationDate ?: it.creationDate })
 
                     return@flatMap listOf(
                         ReportingAndOccurrences(

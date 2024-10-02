@@ -1,18 +1,18 @@
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { ResultZone } from './ResultZone'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 
 export type RegulatoryLayerSearchResultZonesProps = {
+  areZonesOpened: any
   regulatoryLayerLawType: any
   regulatoryLayerTopic: any
-  zonesAreOpen: any
 }
 export function ResultZones({
+  areZonesOpened,
   regulatoryLayerLawType,
-  regulatoryLayerTopic,
-  zonesAreOpen
+  regulatoryLayerTopic
 }: RegulatoryLayerSearchResultZonesProps) {
   const { regulatoryLayersSearchResult } = useMainAppSelector(state => state.regulatoryLayerSearch)
 
@@ -29,9 +29,9 @@ export function ResultZones({
   }, [regulatoryLayersSearchResult, regulatoryLayerLawType, regulatoryLayerTopic])
 
   return (
-    <RegulatoryZones $isOpen={zonesAreOpen} $length={getRegulatoryZones().length}>
+    <RegulatoryZones $isOpen={areZonesOpened} $length={getRegulatoryZones().length}>
       {getRegulatoryZones().map(regulatoryZone => (
-        <ResultZone key={regulatoryZone.id} isOpen={zonesAreOpen} regulatoryZone={regulatoryZone} />
+        <ResultZone key={regulatoryZone.id} isOpen={areZonesOpened} regulatoryZone={regulatoryZone} />
       ))}
     </RegulatoryZones>
   )
@@ -41,7 +41,8 @@ const RegulatoryZones = styled.div<{
   $isOpen: boolean
   $length: number
 }>`
-  height: ${p => (p.$isOpen && p.$length ? p.$length * 35 : 0)}px;
+  height: ${p => (p.$isOpen && p.$length ? p.$length * 36 : 0)}px;
   overflow: hidden;
   transition: 0.5s all;
+  border-bottom: ${p => (p.$isOpen ? `1px solid ${p.theme.color.lightGray}` : 'unset')};
 `

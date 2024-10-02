@@ -1,3 +1,4 @@
+import { useTracking } from '@hooks/useTracking'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { hasAuthParams, useAuth, type AuthContextProps } from 'react-oidc-context'
 
@@ -13,7 +14,7 @@ export function useCustomAuth(): {
 } {
   // `| undefined` because it's undefined if the OIDC is disabled which is the case for Cypress tests
   const auth = useAuth() as AuthContextProps | undefined
-
+  const { trackUserId } = useTracking()
   const [userAuthorization, setUserAuthorization] = useState<UserAuthorization | undefined>(undefined)
 
   useEffect(() => {
@@ -23,6 +24,12 @@ export function useCustomAuth(): {
       setUserAuthorization(nextUserAuthorization)
     }, 500)
   }, [])
+
+  useEffect(() => {
+    if (auth?.user?.profile?.email) {
+      trackUserId(auth?.user?.profile?.email)
+    }
+  }, [trackUserId, auth?.user?.profile?.email])
 
   const logout = useCallback(() => {
     if (!auth) {

@@ -1,3 +1,5 @@
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { useTracking } from '@hooks/useTracking'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
@@ -7,14 +9,22 @@ import { ShowFishingActivitiesOnMap } from './actions/show_fishing_activities'
 import { TrackRequest } from './actions/TrackRequest'
 import { Body } from './Body'
 import { Tabs } from './Tabs'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { Vessel } from '../../../../domain/entities/vessel/vessel'
 import { MapComponent } from '../../../commonStyles/MapComponent'
 
 export function VesselSidebar() {
   const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
   const isFocusedOnVesselSearch = useMainAppSelector(state => state.vessel.isFocusedOnVesselSearch)
+  const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
+  const { trackPage } = useTracking()
 
   const [isFirstLoad, setIsFirstLoad] = useState(false)
+
+  useEffect(() => {
+    if (selectedVessel) {
+      trackPage(Vessel.getVesselFeatureId(selectedVessel))
+    }
+  }, [trackPage, selectedVessel])
 
   // Used to propagate prop `isSidebarOpen` to children, for animation purpose
   useEffect(() => {

@@ -59,16 +59,35 @@ class JpaLogbookReportRepository(
                 .toSet()
 
         return logbookReportsWithDatCorAndDel
-            .filter { report ->
-                // Exclude reports that are referenced by other reports or have a DEL operation type
-                report.operationType != LogbookOperationType.DEL && report.reportId !in referencedReportIds
-            }
+            // Exclude reports that are referenced by other reports or have a DEL operation type
+            .filter { it.operationType != LogbookOperationType.DEL && it.reportId !in referencedReportIds }
             .map { report ->
                 val pno = PriorNotification.fromLogbookMessage(report.toLogbookMessage(objectMapper))
                 // All messages returned from the SQL query are acknowledged
                 pno.markAsAcknowledged()
 
                 return@map pno
+            }
+            // We filter by predicted arrival date here rather than in the SQL query
+            // because the DAT or COR predicted arrival dates can be far away from each other
+            // which is quite complicated to handle in pure SQL.
+            //
+            // Example: if a DAT that has a `predictedArrivalDatetimeUtc` on DAY 2 at 4pm
+            // is corrected by a COR with a `predictedArrivalDatetimeUtc` on DAY 1 at 4pm,
+            // filtering (in the SQL) between `willArriveAfter` = DAY 2 at 3pm and `willArriveBefore` = DAY 2 at 5pm
+            // would only return the DAT without including the related COR.
+            //
+            // /!\ This is not foolproof:
+            // A difference of more than 48h between DAT and COR `predictedArrivalDatetimeUtc` will still cause issues.
+            .filter {
+                it.logbookMessageAndValue.value.predictedArrivalDatetimeUtc?.let { predictedArrivalDatetimeUtc ->
+                    Utils.isZonedDateTimeBetween(
+                        predictedArrivalDatetimeUtc,
+                        ZonedDateTime.parse(filter.willArriveAfter),
+                        ZonedDateTime.parse(filter.willArriveBefore),
+                        isInclusive = true,
+                    )
+                } == true
             }
     }
 

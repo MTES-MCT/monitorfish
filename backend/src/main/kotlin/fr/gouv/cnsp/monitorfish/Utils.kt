@@ -1,5 +1,7 @@
 package fr.gouv.cnsp.monitorfish
 
+import java.time.ZonedDateTime
+
 class Utils {
     companion object {
         /**
@@ -15,6 +17,22 @@ class Utils {
             val normalizedRightString = rightString?.trim().takeUnless { it.isNullOrEmpty() || it == " " }
 
             return normalizedLeftString == normalizedRightString
+        }
+
+        /**
+         * Checks if the ZonedDateTime is between the start and end times.
+         */
+        fun isZonedDateTimeBetween(
+            zonedDateTime: ZonedDateTime,
+            start: ZonedDateTime,
+            end: ZonedDateTime,
+            isInclusive: Boolean = false,
+        ): Boolean {
+            return if (isInclusive) {
+                zonedDateTime >= start && zonedDateTime <= end
+            } else {
+                zonedDateTime > start && zonedDateTime < end
+            }
         }
     }
 }

@@ -825,6 +825,19 @@
                 "flag_state": "FR",
                 "length": 34.5,
                 "under_charter": false
+            },
+
+            // - Vessel: L'HIPPO CAMPE
+            {
+                "id": 130,
+                "cfr": "CFR130",
+                "mmsi": "MMSI130",
+                "ircs": "IRCS130",
+                "external_immatriculation": "EXTIMM130",
+                "vessel_name": "L'HIPPO CAMPE",
+                "flag_state": "FR",
+                "length": 19.2,
+                "under_charter": false
             }
         ]
     }

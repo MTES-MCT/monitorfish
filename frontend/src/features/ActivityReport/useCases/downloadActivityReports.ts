@@ -10,34 +10,38 @@ import type { ActivityReports } from '../types'
 
 export const NO_ACTIVITY_REPORT = 'NO_ACTIVITY_REPORT'
 
-export const downloadActivityReports = (afterDateTime: string, beforeDateTime: string, jdp: JDP) => async dispatch => {
-  const {
-    data: { activityReports, jdpSpecies }
-  }: { data: ActivityReports } = await dispatch(
-    activityReportApi.endpoints.getActivityReports.initiate({
-      afterDateTime,
-      beforeDateTime,
-      jdp
-    })
-  )
+export const downloadActivityReports =
+  (afterDateTime: string, beforeDateTime: string, jdp: JDP) =>
+  async (dispatch): Promise<string> => {
+    const {
+      data: { activityReports, jdpSpecies }
+    }: { data: ActivityReports } = await dispatch(
+      activityReportApi.endpoints.getActivityReports.initiate({
+        afterDateTime,
+        beforeDateTime,
+        jdp
+      })
+    )
 
-  if (!activityReports?.length) {
-    throw new Error(NO_ACTIVITY_REPORT)
+    if (!activityReports?.length) {
+      throw new Error(NO_ACTIVITY_REPORT)
+    }
+
+    const activityReportsWithId = activityReports.map((activity, index) => ({
+      ...activity,
+      action: {
+        ...activity.action,
+        speciesOnboard: getSpeciesOnboardWithUntargetedSpeciesGrouped(activity.action.speciesOnboard, jdpSpecies)
+      },
+      id: index
+    }))
+    const fileName = getCsvFileName(jdp)
+
+    const csvMap = getJDPCsvMap(JDP_CSV_MAP_BASE, jdp)
+    downloadAsCsv(fileName, activityReportsWithId, csvMap)
+
+    return fileName
   }
-
-  const activityReportsWithId = activityReports.map((activity, index) => ({
-    ...activity,
-    action: {
-      ...activity.action,
-      speciesOnboard: getSpeciesOnboardWithUntargetedSpeciesGrouped(activity.action.speciesOnboard, jdpSpecies)
-    },
-    id: index
-  }))
-  const fileName = getCsvFileName(jdp)
-
-  const csvMap = getJDPCsvMap(JDP_CSV_MAP_BASE, jdp)
-  downloadAsCsv(fileName, activityReportsWithId, csvMap)
-}
 
 function getCsvFileName(jdp: JDP) {
   const today = customDayjs()

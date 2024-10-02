@@ -1,4 +1,5 @@
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useTracking } from '@hooks/useTracking'
 import {
   Accent,
   Button,
@@ -23,6 +24,7 @@ type ExportActivityReportsDialogProps = {
 export function ExportActivityReportsDialog({ onExit }: ExportActivityReportsDialogProps) {
   const { newWindowContainerRef } = useNewWindow()
   const dispatch = useMainAppDispatch()
+  const { trackEvent } = useTracking()
 
   const [afterDateTimeUtc, setAfterDateTimeUtc] = useState<Date | undefined>()
   const [beforeDateTimeUtc, setBeforeDateTimeUtc] = useState<Date | undefined>()
@@ -38,7 +40,14 @@ export function ExportActivityReportsDialog({ onExit }: ExportActivityReportsDia
     const beforeDateTimeEndOfDayUtc = getUtcizedDayjs(beforeDateTimeUtc).endOf('day').millisecond(0).toISOString()
 
     try {
-      await dispatch(downloadActivityReports(afterDateTimeStartOfDayUtc, beforeDateTimeEndOfDayUtc, jdp))
+      const fileName = await dispatch(
+        downloadActivityReports(afterDateTimeStartOfDayUtc, beforeDateTimeEndOfDayUtc, jdp)
+      )
+      trackEvent({
+        action: 'ACTIVITY_REPORTS',
+        category: 'DOWNLOAD',
+        name: fileName
+      })
     } catch (e) {
       // @ts-ignore
       if (e.message === NO_ACTIVITY_REPORT) {

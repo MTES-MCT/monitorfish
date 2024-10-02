@@ -2,6 +2,7 @@ import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { ZonePreview } from '@features/Regulation/components/ZonePreview'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { useTracking } from '@hooks/useTracking'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import { useCallback } from 'react'
 import styled from 'styled-components'
@@ -18,6 +19,7 @@ import { getTitle } from '../../utils'
 
 export function RegulatoryZoneMetadata() {
   const dispatch = useMainAppDispatch()
+  const { trackPage } = useTracking()
 
   const regulatoryZoneMetadata = useMainAppSelector(state => state.regulatory.regulatoryZoneMetadata)
   const regulatoryZoneMetadataPanelIsOpen = useMainAppSelector(state => state.regulatory.regulatoryZoneMetadata)
@@ -25,6 +27,8 @@ export function RegulatoryZoneMetadata() {
   const onCloseIconClicked = useCallback(() => {
     dispatch(closeRegulatoryZoneMetadata())
   }, [dispatch])
+
+  trackPage(`/regulation_metadata/${regulatoryZoneMetadata?.topic}/${regulatoryZoneMetadata?.zone}`)
 
   return (
     <Wrapper $regulatoryZoneMetadataPanelIsOpen={!!regulatoryZoneMetadataPanelIsOpen}>

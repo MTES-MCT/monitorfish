@@ -120,9 +120,9 @@ function UnmemoizedRegulatoryLayerSearchResultTopic({
         />
       </LayerTopic>
       <ResultZones
+        areZonesOpened={areZonesOpened}
         regulatoryLayerLawType={regulatoryLayerLawType}
         regulatoryLayerTopic={regulatoryLayerTopic}
-        zonesAreOpen={areZonesOpened}
       />
     </>
   )

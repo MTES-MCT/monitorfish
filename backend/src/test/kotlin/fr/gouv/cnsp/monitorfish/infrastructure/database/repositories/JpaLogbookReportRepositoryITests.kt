@@ -540,7 +540,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllPriorNotifications Should return PNO logbook reports from ESP & FRA vessels`() {
+    fun `findAllAcknowledgedPriorNotifications Should return PNO logbook reports from ESP & FRA vessels`() {
         // Given
         val filter =
             PriorNotificationsFilter(
@@ -566,7 +566,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllPriorNotifications Should return PNO logbook reports with or without reportings`() {
+    fun `findAllAcknowledgedPriorNotifications Should return PNO logbook reports with or without reportings`() {
         val expectedLogbookReportIdsWithOneOrMoreReportings = listOf(102L, 104L)
 
         // Given
@@ -610,7 +610,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllPriorNotifications Should return PNO logbook reports for less or more than 12 meters long vessels`() {
+    fun `findAllAcknowledgedPriorNotifications Should return PNO logbook reports for less or more than 12 meters long vessels`() {
         // Given
         val firstFilter =
             PriorNotificationsFilter(
@@ -658,7 +658,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllPriorNotifications Should return PNO logbook reports for vessels controlled after or before January 1st, 2024`() {
+    fun `findAllAcknowledgedPriorNotifications Should return PNO logbook reports for vessels controlled after or before January 1st, 2024`() {
         // Given
         val firstFilter =
             PriorNotificationsFilter(
@@ -714,7 +714,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllPriorNotifications Should return PNO logbook reports for FRSML & FRVNE ports`() {
+    fun `findAllAcknowledgedPriorNotifications Should return PNO logbook reports for FRSML & FRVNE ports`() {
         // Given
         val filter =
             PriorNotificationsFilter(
@@ -737,7 +737,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllPriorNotifications Should return PNO logbook reports When using a vessel name`() {
+    fun `findAllAcknowledgedPriorNotifications Should return PNO logbook reports When using a vessel name`() {
         // Given
         val firstFilter =
             PriorNotificationsFilter(
@@ -785,7 +785,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllPriorNotifications Should return PNO logbook reports When using a CFR`() {
+    fun `findAllAcknowledgedPriorNotifications Should return PNO logbook reports When using a CFR`() {
         // Given
         val firstFilter =
             PriorNotificationsFilter(
@@ -833,7 +833,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllPriorNotifications Should return PNO logbook reports for COD & HKE species`() {
+    fun `findAllAcknowledgedPriorNotifications Should return PNO logbook reports for COD & HKE species`() {
         // Given
         val filter =
             PriorNotificationsFilter(
@@ -857,7 +857,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllPriorNotifications Should return PNO logbook reports for Préavis type A & Préavis type C types`() {
+    fun `findAllAcknowledgedPriorNotifications Should return PNO logbook reports for Préavis type A & Préavis type C types`() {
         // Given
         val filter =
             PriorNotificationsFilter(
@@ -881,7 +881,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllPriorNotifications Should return PNO logbook reports for SWW06 & NWW03 segments`() {
+    fun `findAllAcknowledgedPriorNotifications Should return PNO logbook reports for SWW06 & NWW03 segments`() {
         // Given
         val filter =
             PriorNotificationsFilter(
@@ -909,7 +909,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllPriorNotifications Should return PNO logbook reports for OTT & TB gears`() {
+    fun `findAllAcknowledgedPriorNotifications Should return PNO logbook reports for OTT & TB gears`() {
         // Given
         val filter =
             PriorNotificationsFilter(
@@ -933,7 +933,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllPriorNotifications Should return PNO logbook reports for vessels arriving after or before January 1st, 2024`() {
+    fun `findAllAcknowledgedPriorNotifications Should return PNO logbook reports for vessels arriving after or before January 1st, 2024`() {
         // Given
         val firstFilter =
             PriorNotificationsFilter(
@@ -975,7 +975,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllPriorNotifications Should return the expected PNO logbook reports with multiple filters`() {
+    fun `findAllAcknowledgedPriorNotifications Should return the expected PNO logbook reports with multiple filters`() {
         // Given
         val filter =
             PriorNotificationsFilter(
@@ -1010,9 +1010,45 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         ).isTrue()
     }
 
+    // Non-regression test
     @Test
     @Transactional
-    fun `findPriorNotificationsToVerify Should return logbook reports PNO to verify`() {
+    fun `findAllAcknowledgedPriorNotifications Should return the expected result with a COR predicted arrival date far away from the DAT one`() {
+        // FAKE_OPERATION_122 `predictedArrivalDatetimeUtc` is 2024-09-02T21:00:00Z
+        // FAKE_OPERATION_122_COR `predictedArrivalDatetimeUtc` is 2024-09-01T15:00:00Z
+
+        // Given
+        val firstFilter =
+            PriorNotificationsFilter(
+                willArriveAfter = "2024-09-01T13:00:00Z",
+                willArriveBefore = "2024-09-01T17:00:00Z",
+            )
+
+        // When
+        val firstResult = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(firstFilter)
+
+        // Then
+        assertThat(firstResult).hasSize(1)
+        val firstResultPriorNotification = firstResult.first()
+        assertThat(firstResultPriorNotification.reportId).isEqualTo("FAKE_OPERATION_122_COR")
+
+        // Given
+        val secondFilter =
+            PriorNotificationsFilter(
+                willArriveAfter = "2024-09-02T19:00:00Z",
+                willArriveBefore = "2024-09-02T23:00:00Z",
+            )
+
+        // When
+        val secondResult = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(secondFilter)
+
+        // Then
+        assertThat(secondResult).isEmpty()
+    }
+
+    @Test
+    @Transactional
+    fun `findAllPriorNotificationsToVerify Should return logbook reports PNO to verify`() {
         // When
         val result = jpaLogbookReportRepository.findAllPriorNotificationsToVerify()
 

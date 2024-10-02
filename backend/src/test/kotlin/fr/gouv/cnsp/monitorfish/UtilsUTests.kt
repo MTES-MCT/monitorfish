@@ -65,23 +65,25 @@ class UtilsUTests {
         val isInclusive = false
 
         // When
-        val firstResult = Utils.isZonedDateTimeBetween(
-            ZonedDateTime.parse("2024-01-01T12:00:00Z"),
-            defaultStart,
-            defaultEnd,
-            isInclusive,
-        )
+        val firstResult =
+            Utils.isZonedDateTimeBetween(
+                ZonedDateTime.parse("2024-01-01T12:00:00Z"),
+                defaultStart,
+                defaultEnd,
+                isInclusive,
+            )
 
         // Then
         assertThat(firstResult).isFalse
 
         // When
-        val secondResult = Utils.isZonedDateTimeBetween(
-            ZonedDateTime.parse("2024-01-01T14:00:00Z"),
-            defaultStart,
-            defaultEnd,
-            isInclusive,
-        )
+        val secondResult =
+            Utils.isZonedDateTimeBetween(
+                ZonedDateTime.parse("2024-01-01T14:00:00Z"),
+                defaultStart,
+                defaultEnd,
+                isInclusive,
+            )
 
         // Then
         assertThat(secondResult).isFalse
@@ -93,23 +95,25 @@ class UtilsUTests {
         val isInclusive = true
 
         // When
-        val firstResult = Utils.isZonedDateTimeBetween(
-            ZonedDateTime.parse("2024-01-01T12:00:00Z"),
-            defaultStart,
-            defaultEnd,
-            isInclusive,
-        )
+        val firstResult =
+            Utils.isZonedDateTimeBetween(
+                ZonedDateTime.parse("2024-01-01T12:00:00Z"),
+                defaultStart,
+                defaultEnd,
+                isInclusive,
+            )
 
         // Then
         assertThat(firstResult).isTrue
 
         // When
-        val secondResult = Utils.isZonedDateTimeBetween(
-            ZonedDateTime.parse("2024-01-01T14:00:00Z"),
-            defaultStart,
-            defaultEnd,
-            isInclusive,
-        )
+        val secondResult =
+            Utils.isZonedDateTimeBetween(
+                ZonedDateTime.parse("2024-01-01T14:00:00Z"),
+                defaultStart,
+                defaultEnd,
+                isInclusive,
+            )
 
         // Then
         assertThat(secondResult).isTrue

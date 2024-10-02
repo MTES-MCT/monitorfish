@@ -47,7 +47,11 @@
             { "operation_number": "FAKE_OPERATION_120", "xml_message": "<Flux>Message FLUX xml</Flux>" },
             { "operation_number": "FAKE_OPERATION_121", "xml_message": "<Flux>Message FLUX xml</Flux>" },
             { "operation_number": "FAKE_OPERATION_120_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" },
-            { "operation_number": "FAKE_OPERATION_121_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" }
+            { "operation_number": "FAKE_OPERATION_121_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" },
+            { "operation_number": "FAKE_OPERATION_122", "xml_message": "<Flux>Message FLUX xml</Flux>" },
+            { "operation_number": "FAKE_OPERATION_122_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" },
+            { "operation_number": "FAKE_OPERATION_122_COR", "xml_message": "<Flux>Message FLUX xml</Flux>" },
+            { "operation_number": "FAKE_OPERATION_122_COR_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" }
         ]
     },
     {
@@ -1528,7 +1532,7 @@
                 "trip_segments": null,
                 "vessel_name": "MARIAGE ÎLE HASARD",
                 "value:jsonb": {
-                    "gearOnboard": [{"gear": "GTR", "mesh": 100.0}],
+                    "gearOnboard": [{ "gear": "GTR", "mesh": 100.0 }],
                     "departurePort": "AEJAZ",
                     "anticipatedActivity": "FSH",
                     "tripStartDate": "NOW() - INTERVAL '15 minutes'",
@@ -1542,6 +1546,126 @@
                 "integration_datetime_utc:sql": "NOW() - INTERVAL '14 minutes'",
                 "operation_datetime_utc:sql": "NOW() - INTERVAL '14 minutes'",
                 "operation_number": "FAKE_OPERATION_121_RET",
+                "operation_type": "RET",
+                "transmission_format": "ERS",
+                "value:jsonb": {
+                    "returnStatus": "000"
+                }
+            },
+
+            // - Vessel: L'HIPPO CAMPE
+            // - Flag state: FR
+            // - DAT with a predicted arrival date 30h after the COR predicted arrival
+            {
+                "id": 122,
+                "report_id": "FAKE_OPERATION_122",
+                "referenced_report_id": null,
+                "cfr": "CFR130",
+                "enriched": true,
+                "flag_state": "FRA",
+                "integration_datetime_utc": "2024-09-01 13:00:00",
+                "log_type": "PNO",
+                "operation_datetime_utc": "2024-09-01 13:00:00",
+                "operation_number": "FAKE_OPERATION_122",
+                "operation_type": "DAT",
+                "report_datetime_utc": "2024-09-01 13:00:00",
+                "software": "TurboCatch (3.7-1)",
+                "transmission_format": "ERS",
+                "trip_gears": null,
+                "trip_segments": null,
+                "vessel_name": "L'HIPPO CAMPE",
+                "value:jsonb": {
+                    "riskFactor": 2.9,
+                    "catchOnboard": [
+                        {
+                            "weight": 150.0,
+                            "nbFish": null,
+                            "species": "ANF",
+                            "faoZone": "27.8.a",
+                            "effortZone": "C",
+                            "economicZone": "FRA",
+                            "statisticalRectangle": "23E6"
+                        }
+                    ],
+                    "pnoTypes": [
+                        {
+                            "pnoTypeName": "Préavis type Z",
+                            "minimumNotificationPeriod": 4.0,
+                            "hasDesignatedPorts": false
+                        }
+                    ],
+                    "port": "BROIA",
+                    "predictedArrivalDatetimeUtc": "2024-09-02T21:00:00Z",
+                    "predictedLandingDatetimeUtc": "2024-09-02T21:30:00Z",
+                    "purpose": "LAN",
+                    "tripStartDate": "2024-09-01T06:00:00Z"
+                }
+            },
+            {
+                "id": 1122,
+                "report_id": null,
+                "referenced_report_id": "FAKE_OPERATION_122",
+                "integration_datetime_utc": "2024-09-01 13:05:00",
+                "operation_datetime_utc": "2024-09-01 13:05:00",
+                "operation_number": "FAKE_OPERATION_122_RET",
+                "operation_type": "RET",
+                "transmission_format": "ERS",
+                "value:jsonb": {
+                    "returnStatus": "000"
+                }
+            },
+            {
+                "id": 2122,
+                "report_id": "FAKE_OPERATION_122_COR",
+                "referenced_report_id": "FAKE_OPERATION_122",
+                "cfr": "CFR130",
+                "enriched": true,
+                "flag_state": "FRA",
+                "integration_datetime_utc": "2024-09-01 13:20:00",
+                "log_type": "PNO",
+                "operation_datetime_utc": "2024-09-01 13:20:00",
+                "operation_number": "FAKE_OPERATION_122",
+                "operation_type": "COR",
+                "report_datetime_utc": "2024-09-01 13:20:00",
+                "software": "TurboCatch (3.7-1)",
+                "transmission_format": "ERS",
+                "trip_gears": null,
+                "trip_segments": null,
+                "vessel_name": "L'HIPPO CAMPE",
+                "value:jsonb": {
+                    "riskFactor": 2.9,
+                    "catchOnboard": [
+                        {
+                            "weight": 150.0,
+                            "nbFish": null,
+                            "species": "ANF",
+                            "faoZone": "27.8.a",
+                            "effortZone": "C",
+                            "economicZone": "FRA",
+                            "statisticalRectangle": "23E6"
+                        }
+                    ],
+                    "pnoTypes": [
+                        {
+                            "pnoTypeName": "Préavis type Z",
+                            "minimumNotificationPeriod": 4.0,
+                            "hasDesignatedPorts": false
+                        }
+                    ],
+                    "port": "BROIA",
+                    "predictedArrivalDatetimeUtc": "2024-09-01T15:00:00Z",
+                    "predictedLandingDatetimeUtc": "2024-09-01T15:30:00Z",
+                    "purpose": "LAN",
+                    "tripStartDate": "2024-09-01T06:00:00Z"
+                }
+            },
+            {
+                "id": 3122,
+                "report_id": null,
+                "referenced_report_id": "FAKE_OPERATION_122_COR",
+                "integration_datetime_utc": "2024-09-01 13:25:00",
+                "operation_datetime_utc": "2024-09-01 13:25:00",
+                "operation_number": "FAKE_OPERATION_122_COR_RET",
                 "operation_type": "RET",
                 "transmission_format": "ERS",
                 "value:jsonb": {

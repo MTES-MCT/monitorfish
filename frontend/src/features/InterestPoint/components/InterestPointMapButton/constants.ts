@@ -8,7 +8,7 @@ export const INTEREST_POINTS_OPTIONS: Array<Option<InterestPointType>> = [
     value: InterestPointType.CONTROL_ENTITY
   },
   {
-    label: 'Moyen de contrôle',
+    label: 'Navire de pêche',
     value: InterestPointType.FISHING_VESSEL
   },
   {

@@ -13,7 +13,6 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
     // Given
     const pno: LogbookMessage.PnoLogbookMessage = {
       acknowledgment: undefined,
-      createdAt: '2024-06-14T06:52:22.978603Z',
       externalReferenceNumber: undefined,
       flagState: 'ESP',
       imo: undefined,
@@ -188,7 +187,6 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
           name: 'Chalut à perche'
         }
       ],
-      updatedAt: '2024-06-14T06:52:22.978603Z',
       vesselName: 'VIVA ESPANA'
     }
     const gears = [

@@ -5,7 +5,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { SelectPicker } from 'rsuite'
 import styled from 'styled-components'
 
-import { NOTIFICATION_TYPE } from '../../../domain/entities/beaconMalfunction/constants'
+import { NOTIFICATION_TYPE, SELECTABLE_NOTIFICATION_TYPES } from '../../../domain/entities/beaconMalfunction/constants'
 import { sendNotification } from '../../../domain/use_cases/beaconMalfunction/sendNotification'
 
 import type { CSSProperties } from 'react'
@@ -16,13 +16,6 @@ export function SendNotification({ beaconMalfunction }) {
   const selectMenuRef = useRef<HTMLDivElement>()
   const [isSendingNotification, setIsSendingNotification] = useState<string | null>('')
   const [isShowingForeignFmcList, setIsShowingForeignFmcList] = useState<boolean>(false)
-  /* eslint-enable sort-keys-fix/sort-keys-fix */
-  const notificationTypes: Array<keyof typeof NOTIFICATION_TYPE> = [
-    'MALFUNCTION_AT_PORT_REMINDER',
-    'MALFUNCTION_AT_SEA_REMINDER',
-    'MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC'
-  ]
-  /* eslint-disable sort-keys-fix/sort-keys-fix */
 
   const foreignFmcsAsOptions: Option[] = useMemo(() => {
     if (!getForeignFmcsApiQuery.data) {
@@ -105,7 +98,7 @@ export function SendNotification({ beaconMalfunction }) {
       <SelectPicker
         cleanable={false}
         container={() => selectMenuRef.current as any}
-        data={notificationTypes.map(type => ({
+        data={SELECTABLE_NOTIFICATION_TYPES.map(type => ({
           label: NOTIFICATION_TYPE[type].followUpMessage,
           value: type
         }))}

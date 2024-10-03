@@ -251,6 +251,14 @@ const NOTIFICATION_TYPE = {
   }
 }
 
+/* eslint-enable sort-keys-fix/sort-keys-fix */
+export const SELECTABLE_NOTIFICATION_TYPES: Array<keyof typeof NOTIFICATION_TYPE> = [
+  'MALFUNCTION_AT_PORT_REMINDER',
+  'MALFUNCTION_AT_SEA_REMINDER',
+  'MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC'
+]
+/* eslint-disable sort-keys-fix/sort-keys-fix */
+
 const COMMUNICATION_MEAN = {
   EMAIL: {
     addresseePreposition: 'à',

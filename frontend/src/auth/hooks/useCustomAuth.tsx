@@ -1,4 +1,5 @@
 import { useTracking } from '@hooks/useTracking'
+import { setUser } from '@sentry/react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { hasAuthParams, useAuth, type AuthContextProps } from 'react-oidc-context'
 
@@ -27,7 +28,8 @@ export function useCustomAuth(): {
 
   useEffect(() => {
     if (auth?.user?.profile?.email) {
-      trackUserId(auth?.user?.profile?.email)
+      trackUserId(auth.user.profile.email)
+      setUser({ email: auth.user.profile.email })
     }
   }, [trackUserId, auth?.user?.profile?.email])
 

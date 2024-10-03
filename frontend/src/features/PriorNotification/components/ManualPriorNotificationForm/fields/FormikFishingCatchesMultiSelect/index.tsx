@@ -96,21 +96,6 @@ export function FormikFishingCatchesMultiSelect({ isReadOnly }: FormikFishingCat
 
   return (
     <>
-      <Select
-        key={String(values.fishingCatches?.length)}
-        customSearch={customSearch}
-        disabled={!speciesAsOptions}
-        error={validationError}
-        label="Espèces à bord et à débarquer"
-        name="fishingCatches"
-        onChange={add}
-        options={speciesAsOptions ?? []}
-        optionValueKey="code"
-        readOnly={isReadOnly}
-        searchable
-        virtualized
-      />
-
       <Wrapper>
         {values.fishingCatches.map((fishingCatch, index) => (
           <Fragment key={fishingCatch.specyCode}>
@@ -163,6 +148,21 @@ export function FormikFishingCatchesMultiSelect({ isReadOnly }: FormikFishingCat
           </Fragment>
         ))}
       </Wrapper>
+
+      <Select
+        key={String(values.fishingCatches?.length)}
+        customSearch={customSearch}
+        disabled={!speciesAsOptions}
+        error={validationError}
+        label="Espèces à bord et à débarquer"
+        name="fishingCatches"
+        onChange={add}
+        options={speciesAsOptions ?? []}
+        optionValueKey="code"
+        readOnly={isReadOnly}
+        searchable
+        virtualized
+      />
     </>
   )
 }

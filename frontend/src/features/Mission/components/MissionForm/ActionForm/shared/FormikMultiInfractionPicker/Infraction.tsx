@@ -25,7 +25,9 @@ export function Infraction({ data, index, onDelete, onEdit }: InfractionProps) {
           <TagGroup>
             <Tag accent={Accent.PRIMARY}>{MissionAction.INFRACTION_TYPE_LABEL[data.infractionType]}</Tag>
             {data.infractionType !== MissionAction.InfractionType.PENDING && (
-              <Tag accent={Accent.PRIMARY}>NATINF : {data.label ?? data.natinf}</Tag>
+              <StyledTag accent={Accent.PRIMARY} title={data.label ?? String(data.natinf)}>
+                NATINF : {data.label ?? data.natinf}
+              </StyledTag>
             )}
           </TagGroup>
 
@@ -56,6 +58,14 @@ export function Infraction({ data, index, onDelete, onEdit }: InfractionProps) {
     </>
   )
 }
+
+const StyledTag = styled(Tag)`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 400px;
+  display: inline-block;
+`
 
 const InnerWrapper = styled.div`
   > div {

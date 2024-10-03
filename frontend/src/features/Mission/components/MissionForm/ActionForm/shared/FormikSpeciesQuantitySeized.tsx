@@ -1,16 +1,27 @@
-import { FormikNumberInput } from '@mtes-mct/monitor-ui'
+import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
+import { FieldError, FormikNumberInput } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import styled from 'styled-components'
 
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 
 export function FormikSpeciesQuantitySeized() {
-  const { values } = useFormikContext<MissionActionFormValues>()
+  const { errors, values } = useFormikContext<MissionActionFormValues>()
 
   return (
-    !!values.hasSomeSpeciesSeized && (
-      <StyledFormikNumberInput isRequired label="Quantités saisies (kg)" name="speciesQuantitySeized" />
-    )
+    <>
+      {!!values.hasSomeSpeciesSeized && (
+        <StyledFormikNumberInput
+          isErrorMessageHidden
+          isRequired
+          label="Quantités saisies (kg)"
+          name="speciesQuantitySeized"
+        />
+      )}
+      {typeof errors.speciesQuantitySeized === 'string' && errors.speciesQuantitySeized !== HIDDEN_ERROR && (
+        <FieldError>{errors.speciesQuantitySeized}</FieldError>
+      )}
+    </>
   )
 }
 

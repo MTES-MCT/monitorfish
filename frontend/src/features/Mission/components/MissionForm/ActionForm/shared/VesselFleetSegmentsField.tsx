@@ -1,10 +1,9 @@
 import { useGetFleetSegmentsQuery } from '@features/FleetSegment/apis'
-import { FrontendError } from '@libs/FrontendError'
-import { Field, Label, SingleTag, TagGroup } from '@mtes-mct/monitor-ui'
+import { Accent, Field, Label, SingleTag, Tag, TagGroup } from '@mtes-mct/monitor-ui'
 import { sortByAscendingValue } from '@utils/sortByAscendingValue'
 import { useFormikContext } from 'formik'
-import { remove as ramdaRemove, uniq } from 'ramda'
-import { useCallback, useMemo } from 'react'
+import { uniq } from 'ramda'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActionFormikUsecases'
@@ -30,26 +29,6 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
     updateSegments({ ...values, faoAreas: nextFaoAreas })
   }
 
-  const removeFleetSegment = useCallback(
-    (fleetSegmentIndex: number | undefined) => {
-      if (!values.segments) {
-        throw new FrontendError('`segments` is undefined')
-      }
-
-      if (fleetSegmentIndex === undefined) {
-        throw new FrontendError('`fleetSegmentIndex` is undefined')
-      }
-
-      const nextFleetSegments = ramdaRemove(fleetSegmentIndex, 1, values.segments)
-      const normalizedNextSegments = nextFleetSegments.length > 0 ? nextFleetSegments : undefined
-
-      setFieldValue('segments', normalizedNextSegments)
-    },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [values.segments]
-  )
-
   const faoAreaTags = () => {
     if (!values.faoAreas) {
       return []
@@ -67,14 +46,11 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
   const fleetSegmentTags = useMemo(
     () =>
       values.segments
-        ? values.segments.map(({ segment, segmentName }, index) => (
-            <SingleTag
-              key={segment}
-              onDelete={() => removeFleetSegment(index)}
-            >{`${segment} - ${segmentName}`}</SingleTag>
+        ? values.segments.map(({ segment, segmentName }) => (
+            <Tag key={segment} accent={Accent.PRIMARY}>{`${segment} - ${segmentName}`}</Tag>
           ))
         : [],
-    [values.segments, removeFleetSegment]
+    [values.segments]
   )
 
   if (isLoading) {
@@ -95,14 +71,14 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
           {faoAreaTags.length > 0 && (
             <Field>
               <Label>Zones de pêche de la marée (issues des FAR)</Label>
-              <TagGroup>{faoAreaTags()}</TagGroup>
+              <StyledTagGroup>{faoAreaTags()}</StyledTagGroup>
             </Field>
           )}
 
           {fleetSegmentTags.length > 0 && (
             <Field>
               <Label>Segment de flotte de la marée</Label>
-              <TagGroup>{fleetSegmentTags}</TagGroup>
+              <StyledTagGroup>{fleetSegmentTags}</StyledTagGroup>
             </Field>
           )}
         </>
@@ -110,6 +86,10 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
     </FieldsetGroup>
   )
 }
+
+const StyledTagGroup = styled(TagGroup)`
+  padding-top: 8px;
+`
 
 const Helper = styled.p`
   color: ${p => p.theme.color.slateGray};

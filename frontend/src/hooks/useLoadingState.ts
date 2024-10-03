@@ -17,6 +17,12 @@ export type LoadingState = {
   isReloading: boolean
 }
 
+const NO_LOADING_STATE: LoadingState = {
+  isLoadingNewPage: false,
+  isLoadingNextPage: false,
+  isReloading: false
+}
+
 export function useLoadingState(
   isFetching: boolean,
   filterAndSortingState: AnyObject,
@@ -49,38 +55,36 @@ export function useLoadingState(
       isFirstFetchRef.current = false
     }
 
-    lastLoadingStateRef.current = {
-      isLoadingNewPage: false,
-      isLoadingNextPage: false,
-      isReloading: false
-    }
-  } else {
-    const hasFilterAndSortingStateChanged =
-      isFirstFetchRef.current !== undefined && !isEqual(filterAndSortingState, previousFilterAndSortingState)
-    const hasPaginationStateChanged =
-      isFirstFetchRef.current !== undefined && !isEqual(paginationState, previousPaginationState)
+    lastLoadingStateRef.current = NO_LOADING_STATE
 
-    if (isFirstFetchRef.current === undefined) {
-      isFirstFetchRef.current = true
-    } else if (isFirstFetchRef.current && (hasFilterAndSortingStateChanged || hasPaginationStateChanged)) {
-      isFirstFetchRef.current = false
-    }
+    return lastLoadingStateRef.current
+  }
 
-    // If the data is still been fetched with the same filter/sorting & pagination states,
-    // while not being a first load, this means the loading state is the same as the last one.
-    if (!isFirstFetchRef.current && wasFetching && !hasFilterAndSortingStateChanged && !hasPaginationStateChanged) {
-      return lastLoadingStateRef.current
-    }
+  const hasNewFilterAndSortingState =
+    isFirstFetchRef.current !== undefined && !isEqual(filterAndSortingState, previousFilterAndSortingState)
+  const hasNewPaginationState =
+    isFirstFetchRef.current !== undefined && !isEqual(paginationState, previousPaginationState)
 
-    const isLoadingNewPage = isFirstFetchRef.current || hasFilterAndSortingStateChanged
-    const isLoadingNextPage = !isLoadingNewPage && !hasFilterAndSortingStateChanged && hasPaginationStateChanged
-    const isReloading = !isFirstFetchRef.current && !hasFilterAndSortingStateChanged && !hasPaginationStateChanged
+  if (isFirstFetchRef.current === undefined) {
+    isFirstFetchRef.current = true
+  } else if (isFirstFetchRef.current && (hasNewFilterAndSortingState || hasNewPaginationState)) {
+    isFirstFetchRef.current = false
+  }
 
-    lastLoadingStateRef.current = {
-      isLoadingNewPage,
-      isLoadingNextPage,
-      isReloading
-    }
+  // If the data is still been fetched with the same filter/sorting & pagination states,
+  // while not being a first load, this means the loading state is the same as the last one.
+  if (!isFirstFetchRef.current && wasFetching && !hasNewFilterAndSortingState && !hasNewPaginationState) {
+    return lastLoadingStateRef.current
+  }
+
+  const isLoadingNewPage = isFirstFetchRef.current || hasNewFilterAndSortingState
+  const isLoadingNextPage = !isLoadingNewPage && !hasNewFilterAndSortingState && hasNewPaginationState
+  const isReloading = !isFirstFetchRef.current && !hasNewFilterAndSortingState && !hasNewPaginationState
+
+  lastLoadingStateRef.current = {
+    isLoadingNewPage,
+    isLoadingNextPage,
+    isReloading
   }
 
   return lastLoadingStateRef.current

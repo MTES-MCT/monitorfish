@@ -1,3 +1,4 @@
+import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { useGetPriorNotificationSentNessagesQuery } from '@features/PriorNotification/priorNotificationApi'
 import { Icon } from '@mtes-mct/monitor-ui'
 import { Steps } from 'rsuite'
@@ -6,17 +7,16 @@ import styled from 'styled-components'
 import { SentMessagesBatchStatus } from './constants'
 import { getSentMessagesBatches, getSubscribersFromSentMessages } from './utils'
 
-import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
-
 type SentMessageListProps = Readonly<{
   detail: PriorNotification.Detail
+  state: PriorNotification.State | undefined
 }>
-export function SentMessageList({ detail }: SentMessageListProps) {
-  const { data: sentMessages, isError } = useGetPriorNotificationSentNessagesQuery(detail.reportId)
+export function SentMessageList({ detail, state }: SentMessageListProps) {
+  const { data: sentMessages, isError, isFetching } = useGetPriorNotificationSentNessagesQuery(detail.reportId)
 
-  const sentMessagesBatches = sentMessages ? getSentMessagesBatches(sentMessages) : undefined
+  const sentMessagesBatches = sentMessages ? getSentMessagesBatches(sentMessages) : []
   const lastSentMessagesBatch = sentMessagesBatches ? sentMessagesBatches[sentMessagesBatches.length - 1] : undefined
-  const subscribers = lastSentMessagesBatch ? getSubscribersFromSentMessages(lastSentMessagesBatch.messages) : undefined
+  const subscribers = lastSentMessagesBatch ? getSubscribersFromSentMessages(lastSentMessagesBatch.messages) : []
 
   return (
     <>
@@ -24,19 +24,26 @@ export function SentMessageList({ detail }: SentMessageListProps) {
       {isError && <p>Impossible de récupérer la liste.</p>}
       {!isError && (
         <>
-          {!subscribers && <p>Chargement en cours...</p>}
-          {subscribers && subscribers.length === 0 && <p>Aucun message n’a été envoyé pour ce préavis.</p>}
-          {subscribers?.map(subsriber => (
-            <SubscriberRow key={`${subsriber.organization}-${subsriber.name}`}>
-              <p>
-                <b>{subsriber.name}</b> ({subsriber.organization})
-              </p>
-              <SubscriberRowBody>
-                {subsriber.email && <span>{subsriber.email}</span>}
-                {subsriber.phone && <span>{subsriber.phone}</span>}
-              </SubscriberRowBody>
-            </SubscriberRow>
-          ))}
+          {isFetching && <p>Chargement en cours...</p>}
+          {!isFetching && subscribers.length === 0 && (
+            <p>
+              {state === PriorNotification.State.FAILED_SEND
+                ? `Aucune unité n'est inscrite à ce préavis.`
+                : `Aucun message n’a été envoyé pour ce préavis.`}
+            </p>
+          )}
+          {!isFetching &&
+            subscribers.map(subsriber => (
+              <SubscriberRow key={`${subsriber.organization}-${subsriber.name}`}>
+                <p>
+                  <b>{subsriber.name}</b> ({subsriber.organization})
+                </p>
+                <SubscriberRowBody>
+                  {subsriber.email && <span>{subsriber.email}</span>}
+                  {subsriber.phone && <span>{subsriber.phone}</span>}
+                </SubscriberRowBody>
+              </SubscriberRow>
+            ))}
         </>
       )}
 
@@ -44,13 +51,9 @@ export function SentMessageList({ detail }: SentMessageListProps) {
       {isError && <p>Impossible de récupérer l’historique.</p>}
       {!isError && (
         <>
-          {!sentMessagesBatches && <p>Chargement en cours...</p>}
-          <>
-            {sentMessagesBatches && sentMessagesBatches.length === 0 && (
-              <p>Aucun message n’a été envoyé pour ce préavis.</p>
-            )}
-          </>
-          {sentMessagesBatches && (
+          {isFetching && <p>Chargement en cours...</p>}
+          {!isFetching && sentMessagesBatches.length === 0 && <p>Aucun message n’a été envoyé pour ce préavis.</p>}
+          {!isFetching && sentMessagesBatches.length > 0 && (
             <History current={sentMessagesBatches.length} vertical>
               {sentMessagesBatches.map(sentMessagesBatch => (
                 <HistoryItem

@@ -162,6 +162,7 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
 
         <Body data-cy="ManualPriorNotificationForm-Body">
           <CardBodyHead
+            applicableState={applicableState}
             detail={detail}
             editedPriorNotificationComputedValues={editedPriorNotificationComputedValues}
             hasBeenComputed={!!editedPriorNotificationComputedValues}
@@ -169,7 +170,6 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
             isPriorNotificationZero={isPriorNotificationZero(values.fishingCatches)}
             isVesselUnderCharter={editedPriorNotificationComputedValues?.isVesselUnderCharter}
             riskFactor={editedPriorNotificationComputedValues?.riskFactor}
-            state={applicableState}
             tripSegments={editedPriorNotificationComputedValues?.tripSegments}
             types={editedPriorNotificationComputedValues?.types}
           />

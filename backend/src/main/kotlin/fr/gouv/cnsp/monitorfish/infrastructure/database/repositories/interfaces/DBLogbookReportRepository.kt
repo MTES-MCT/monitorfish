@@ -59,12 +59,6 @@ interface DBLogbookReportRepository :
                         unaccent(lower(lr.vessel_name)) ILIKE CONCAT('%', unaccent(lower(:searchQuery)), '%') OR
                         lower(lr.cfr) ILIKE CONCAT('%', lower(:searchQuery), '%')
                     )
-
-                    -- Will Arrive After
-                    AND lr.value->>'predictedArrivalDatetimeUtc' >= :willArriveAfter
-
-                    -- Will Arrive Before
-                    AND lr.value->>'predictedArrivalDatetimeUtc' <= :willArriveBefore
             ),
 
             distinct_cfrs AS (
@@ -203,7 +197,6 @@ interface DBLogbookReportRepository :
             ),
 
            dels_targeting_searched_pno AS (
-
                -- A DEL message has no flag_state, which we need to acknowledge messages of non french vessels.
                -- So we use the flag_state of the deleted message.
                SELECT del.referenced_report_id, del.operation_number, searched_pno.flag_state

@@ -124,12 +124,27 @@ describe('hooks/useLoadingState()', () => {
       })
     })
 
+    // Next page fetch starts
+    act(() => {
+      rerender({
+        filterAndSortingState: { filter: 'initial' },
+        isFetching: true,
+        paginationState: { pageIndex: 1, pageSize: 10 }
+      })
+    })
+
+    expect(result.current).toEqual({
+      isLoadingNewPage: false,
+      isLoadingNextPage: true,
+      isReloading: false
+    })
+
     // New page fetch starts
     act(() => {
       rerender({
         filterAndSortingState: { filter: 'changed' },
         isFetching: true,
-        paginationState: { pageIndex: 1, pageSize: 10 }
+        paginationState: { pageIndex: 0, pageSize: 10 }
       })
     })
 

@@ -32,19 +32,16 @@ import {
   ExpectedArrivalPeriod,
   FILTER_STATUSES_AS_OPTIONS
 } from './constants'
+import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { priorNotificationActions } from '../../slice'
 
 import type { FilterStatus } from './types'
-import type { Promisable } from 'type-fest'
 
-export type FilterBarProps = {
-  onQueryChange: (nextQuery: string | undefined) => Promisable<void>
-  searchQuery: string | undefined
-}
 export function FilterBar() {
+  const dispatch = useMainAppDispatch()
+  const isSuperUser = useIsSuperUser()
   const { newWindowContainerRef } = useNewWindow()
   const listFilterValues = useMainAppSelector(store => store.priorNotification.listFilterValues)
-  const dispatch = useMainAppDispatch()
 
   const { fleetSegmentsAsOptions } = useGetFleetSegmentsAsOptions()
   const { gearsAsTreeOptions } = useGetGearsAsTreeOptions()
@@ -219,16 +216,18 @@ export function FilterBar() {
           style={{ minWidth: 224 }}
           value={listFilterValues.lastControlPeriod}
         />
-        <RichBooleanCheckbox
-          falseOptionLabel="Sans signalement"
-          isInline
-          isLabelHidden
-          label="Signalements"
-          name="hasOneOrMoreReportings"
-          onChange={updateHasOneOrMoreReportings}
-          trueOptionLabel="Avec signalements"
-          value={listFilterValues.hasOneOrMoreReportings}
-        />
+        {isSuperUser && (
+          <RichBooleanCheckbox
+            falseOptionLabel="Sans signalement"
+            isInline
+            isLabelHidden
+            label="Signalements"
+            name="hasOneOrMoreReportings"
+            onChange={updateHasOneOrMoreReportings}
+            trueOptionLabel="Avec signalements"
+            value={listFilterValues.hasOneOrMoreReportings}
+          />
+        )}
       </Row>
 
       <Row>

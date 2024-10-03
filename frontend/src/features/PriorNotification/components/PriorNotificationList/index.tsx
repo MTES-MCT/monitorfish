@@ -14,14 +14,13 @@ import { useListSorting } from '@hooks/useListSorting'
 import { useLoadingState } from '@hooks/useLoadingState'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { customSentry, CustomSentryMeasurementName } from '@libs/customSentry'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Accent, Button, Icon, Size, TableWithSelectableRows, usePrevious } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { flexRender, getCoreRowModel, getExpandedRowModel, useReactTable } from '@tanstack/react-table'
 import { isLegacyFirefox } from '@utils/isLegacyFirefox'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import { getTableColumns } from './columns'
@@ -43,6 +42,8 @@ type PriorNotificationListProps = Readonly<{
   isFromUrl: boolean
 }>
 export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps) {
+  const lastFetchStartDateRef = useRef<number | undefined>(undefined)
+
   const dispatch = useMainAppDispatch()
   const listFilter = useMainAppSelector(state => state.priorNotification.listFilterValues)
   const openedPriorNotificationDetail = useMainAppSelector(
@@ -54,6 +55,7 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
   const isSuperUser = useIsSuperUser()
 
   const [rowSelection, setRowSelection] = useState({})
+  const [lastFetchDuration, setLastFetchDuration] = useState<number | undefined>(undefined)
 
   const { apiPaginationParams, reactTablePaginationState, setReactTablePaginationState } = useListPagination(
     DEFAULT_PAGE_SIZE,
@@ -145,12 +147,17 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
     }
   }, [previousListFilter, listFilter, table])
 
-  if (isBodyLoaderVisible) {
-    customSentry.startMeasurement(CustomSentryMeasurementName.PRIOR_NOTIFICATION_LIST_BODY_LOADING, '0')
-    customSentry.startMeasurement(CustomSentryMeasurementName.PRIOR_NOTIFICATION_LIST_BODY_SPINNER, '0')
-  } else {
-    customSentry.endMeasurement(CustomSentryMeasurementName.PRIOR_NOTIFICATION_LIST_BODY_SPINNER, '0', 2000)
-  }
+  useEffect(() => {
+    if (isFetching) {
+      lastFetchStartDateRef.current = Date.now()
+
+      return
+    }
+
+    if (lastFetchStartDateRef.current) {
+      setLastFetchDuration(Date.now() - lastFetchStartDateRef.current)
+    }
+  }, [isFetching])
 
   return (
     <>
@@ -176,7 +183,7 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
             <TableTop $isFromUrl={isFromUrl}>
               <TableLegend>{`${
                 isBodyLoaderVisible || isError || totalLength === undefined ? '...' : totalLength
-              } préavis (tous les horaires sont en UTC)`}</TableLegend>
+              } préavis (tous les horaires sont en UTC) en ${isBodyLoaderVisible || isError || lastFetchDuration === undefined ? '...' : `${lastFetchDuration / 1000}s`}`}</TableLegend>
 
               {isSuperUser && (
                 <Button

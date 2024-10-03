@@ -36,12 +36,7 @@ import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { priorNotificationActions } from '../../slice'
 
 import type { FilterStatus } from './types'
-import type { Promisable } from 'type-fest'
 
-export type FilterBarProps = {
-  onQueryChange: (nextQuery: string | undefined) => Promisable<void>
-  searchQuery: string | undefined
-}
 export function FilterBar() {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()

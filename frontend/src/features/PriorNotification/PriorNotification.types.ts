@@ -11,14 +11,10 @@ export namespace PriorNotification {
     expectedLandingDate: string | undefined
     /** Unique identifier concatenating all the DAT, COR, RET & DEL operations `id` used for data consolidation. */
     fingerprint: string
-    hasVesselRiskFactorSegments: boolean | undefined
-    isBeingSent: boolean
     isCorrection: boolean
-    isInVerificationScope: boolean
     isInvalidated: boolean | undefined
     isManuallyCreated: boolean
-    isSent: boolean
-    isVerified: boolean
+    isPriorNotificationZero: boolean
     isVesselUnderCharter: boolean | undefined
     onBoardCatches: LogbookMessage.Catch[]
     operationDate: string
@@ -92,7 +88,6 @@ export namespace PriorNotification {
     purpose: PurposeCode | undefined
     sentAt: string | undefined
     tripGearCodes: string[]
-    updatedAt: string | undefined
     vesselId: number | undefined
   }
 
@@ -164,6 +159,7 @@ export namespace PriorNotification {
     communicationMeans: 'EMAIL' | 'FAX' | 'SMS'
     dateTimeUtc: string
     errorMessage: string | undefined
+    id: number
     recipientAddressOrNumber: string
     recipientName: string
     recipientOrganization: string

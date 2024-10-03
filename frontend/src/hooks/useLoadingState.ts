@@ -54,7 +54,7 @@ export function useLoadingState(
     !isEqual(paginationState, previousPaginationState) && !isEqual(paginationState, initialPaginationState)
 
   // If the data is still been fetched with the same filter/sorting & pagination states,
-  // while not being a first load, this means the loading state is the same as the last one.
+  // this means the loading state is the same as the last one.
   if (wasFetching && !hasNewFilterAndSortingState && !hasNewPaginationState) {
     return lastLoadingStateRef.current
   }

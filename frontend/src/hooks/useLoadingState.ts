@@ -28,6 +28,7 @@ export function useLoadingState(
   filterAndSortingState: AnyObject,
   paginationState: AnyObject
 ): LoadingState {
+  const initialPaginationState = useRef(paginationState)
   const lastLoadingStateRef = useRef<LoadingState>({
     isLoadingNewPage: isFetching,
     isLoadingNextPage: false,
@@ -49,7 +50,8 @@ export function useLoadingState(
   }
 
   const hasNewFilterAndSortingState = !isEqual(filterAndSortingState, previousFilterAndSortingState)
-  const hasNewPaginationState = !isEqual(paginationState, previousPaginationState)
+  const hasNewPaginationState =
+    !isEqual(paginationState, previousPaginationState) && !isEqual(paginationState, initialPaginationState)
 
   // If the data is still been fetched with the same filter/sorting & pagination states,
   // while not being a first load, this means the loading state is the same as the last one.
@@ -58,8 +60,8 @@ export function useLoadingState(
   }
 
   const isLoadingNewPage = hasNewFilterAndSortingState
-  const isLoadingNextPage = !isLoadingNewPage && !hasNewFilterAndSortingState && hasNewPaginationState
   const isReloading = !hasNewFilterAndSortingState && !hasNewPaginationState
+  const isLoadingNextPage = !isLoadingNewPage && !isReloading
 
   lastLoadingStateRef.current = {
     isLoadingNewPage,

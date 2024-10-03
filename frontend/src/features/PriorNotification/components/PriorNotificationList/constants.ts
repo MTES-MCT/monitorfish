@@ -74,7 +74,7 @@ export const DEFAULT_LIST_FILTER_VALUES: ListFilter = {
   statuses: undefined
 }
 
-export const DEFAULT_PAGE_SIZE = 10
+export const DEFAULT_PAGE_SIZE = 50
 
 export const COMMUNITY_PRIOR_NOTIFICATION_TYPES = ['Préavis communautaire', 'Préavis navire tiers']
 export const DESIGNATED_PORTS_PRIOR_NOTIFICATION_TYPE_PREFIX = 'Ports désignés'

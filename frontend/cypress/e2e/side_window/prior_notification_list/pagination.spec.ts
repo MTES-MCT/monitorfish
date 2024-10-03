@@ -20,29 +20,31 @@ context('Side Window > Prior Notification List > Pagination', () => {
         LogbookMessage.ApiListExtraData
       > = interception.response!.body
 
-      const fakeData = [
-        ...responseBody.data,
-        ...responseBody.data.map(priorNotification => ({ ...priorNotification, id: getPseudoRandomString() }))
-      ]
+      const fakeData = Array.from({ length: 100 }).flatMap(() =>
+        responseBody.data.map(priorNotification => ({
+          ...priorNotification,
+          id: getPseudoRandomString()
+        }))
+      )
 
-      cy.intercept('GET', `${apiPathBase}*pageNumber=0&pageSize=10*`, {
+      cy.intercept('GET', `${apiPathBase}*pageNumber=0&pageSize=50*`, {
         body: {
           ...responseBody,
-          data: fakeData.slice(0, 10),
+          data: fakeData.slice(0, 50),
           lastPageNumber: 1,
           pageNumber: 0,
-          pageSize: 10,
-          totalLength: 20
+          pageSize: 50,
+          totalLength: 100
         }
       }).as('getPriorNotificationsFirstPage')
-      cy.intercept('GET', `${apiPathBase}*pageNumber=0&pageSize=20*`, {
+      cy.intercept('GET', `${apiPathBase}*pageNumber=0&pageSize=100*`, {
         body: {
           ...responseBody,
-          data: fakeData.slice(0, 10),
+          data: fakeData.slice(0, 100),
           lastPageNumber: 1,
           pageNumber: 0,
-          pageSize: 20,
-          totalLength: 20
+          pageSize: 100,
+          totalLength: 100
         }
       }).as('getPriorNotificationsSecondPage')
 
@@ -50,11 +52,11 @@ context('Side Window > Prior Notification List > Pagination', () => {
 
       cy.wait('@getPriorNotificationsFirstPage')
 
-      cy.get('button').contains('Charger les 10 préavis suivants').click()
+      cy.get('button').contains('Charger les 50 préavis suivants').click()
 
       cy.wait('@getPriorNotificationsSecondPage')
 
-      cy.get('button').contains('Charger les 10 préavis suivants').should('not.exist')
+      cy.get('button').contains('Charger les 50 préavis suivants').should('not.exist')
     })
   })
 })

@@ -131,7 +131,7 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
     }),
 
     getPriorNotificationSentNessages: builder.query<PriorNotification.SentMessage[], string>({
-      providesTags: () => [{ type: RtkCacheTagType.PriorNotificationSentMessages }],
+      providesTags: () => [{ type: RtkCacheTagType.PriorNotifications }],
       query: reportId => `/prior_notifications/${reportId}/sent_messages`,
       transformErrorResponse: response =>
         new FrontendApiError(GET_PRIOR_NOTIFICATION_SENT_MESSAGES_ERROR_MESSAGE, response)

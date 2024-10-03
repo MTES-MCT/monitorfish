@@ -94,6 +94,7 @@ export function PriorNotificationCard({
 
         <Body>
           <CardBodyHead
+            applicableState={detail.state}
             detail={detail}
             hasBeenComputed
             isNewPriorNotification={false}
@@ -104,7 +105,6 @@ export function PriorNotificationCard({
             )}
             isVesselUnderCharter={detail.isVesselUnderCharter}
             riskFactor={detail.riskFactor}
-            state={detail.state}
             tripSegments={detail.logbookMessage.tripSegments}
             types={getPriorNotificationTypesFromLogbookMessagePnoTypes(detail.logbookMessage.message.pnoTypes)}
           />

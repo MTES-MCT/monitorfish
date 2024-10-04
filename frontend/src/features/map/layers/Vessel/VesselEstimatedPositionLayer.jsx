@@ -7,14 +7,16 @@ import { getVesselLastPositionVisibilityDates, Vessel, vesselIsShowed } from '..
 import { Vector } from 'ol/layer'
 import { getEstimatedPositionStyle } from '../styles/vesselEstimatedPosition.style'
 import { monitorfishMap } from '../../monitorfishMap'
+import { vesselsAdapter } from '../../../../domain/shared_slices/Vessel'
 
 const VesselEstimatedPositionLayer = () => {
   const {
-    vessels,
     hideNonSelectedVessels,
     vesselsTracksShowed,
     selectedVesselIdentity
   } = useSelector(state => state.vessel)
+  const vesselsSelector = useSelector(state => state.vessel.vessels)
+  const vessels = vesselsAdapter.getSelectors().selectAll(vesselsSelector)
 
   const {
     nonFilteredVesselsAreHidden

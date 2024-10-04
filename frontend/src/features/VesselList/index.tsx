@@ -19,7 +19,7 @@ import { setDisplayedComponents } from '../../domain/shared_slices/DisplayedComp
 import { addFilter } from '../../domain/shared_slices/Filter'
 import { setBlockVesselsUpdate, setPreviewFilteredVesselsMode } from '../../domain/shared_slices/Global'
 import { animateToExtent } from '../../domain/shared_slices/Map'
-import { setPreviewFilteredVesselsFeatures } from '../../domain/shared_slices/Vessel'
+import {setPreviewFilteredVesselsFeatures, vesselsAdapter} from '../../domain/shared_slices/Vessel'
 import { addVesselListFilterZone } from '../../domain/use_cases/vessel/addVesselListFilterZone'
 import { getFilteredVessels } from '../../domain/use_cases/vessel/getFilteredVessels'
 import { unselectVessel } from '../../domain/use_cases/vessel/unselectVessel'
@@ -70,8 +70,9 @@ export function VesselList({ namespace }) {
   const {
     uniqueVesselsDistricts: districts,
     uniqueVesselsSpecies: species,
-    vessels
   } = useMainAppSelector(state => state.vessel)
+  const vesselsSelector = useMainAppSelector(state => state.vessel.vessels)
+  const vessels = vesselsAdapter.getSelectors().selectAll(vesselsSelector)
   const getFleetSegmentsQuery = useGetFleetSegmentsQuery()
   const gears = useMainAppSelector(state => state.gear.gears)
 

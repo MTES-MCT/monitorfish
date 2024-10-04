@@ -7,6 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageAndValue
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledgment
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
@@ -147,6 +148,18 @@ data class PriorNotification(
                         types = listOf(ReportingType.INFRACTION_SUSPICION),
                     ),
                 )
+            }
+
+        reportingCount = currentReportings?.count() ?: 0
+    }
+
+    fun enrichReportingCount(
+        internalReferenceNumber: String?,
+        reportings: List<Reporting>,
+    ) {
+        val currentReportings =
+            internalReferenceNumber?.let { vesselInternalReferenceNumber ->
+                reportings.filter { it.internalReferenceNumber == vesselInternalReferenceNumber }
             }
 
         reportingCount = currentReportings?.count() ?: 0

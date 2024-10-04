@@ -7,6 +7,9 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotifica
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationStats
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.sorters.PriorNotificationsSortColumn
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.UNKNOWN_VESSEL
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import fr.gouv.cnsp.monitorfish.domain.utils.PaginatedList
@@ -68,10 +71,8 @@ class GetPriorNotifications(
                     incompletePriorNotifications
                         .map { priorNotification ->
                             priorNotification.enrich(allRiskFactors, allPorts, priorNotification.isManuallyCreated)
-                            priorNotification.logbookMessageAndValue.logbookMessage
-                                .enrichGearPortAndSpecyNames(allGears, allPorts, allSpecies)
 
-                            priorNotification
+                            return@map priorNotification
                         }
 
                 enrichPriorNotificationsWithVessel(priorNotificationsWithoutVessel)
@@ -137,8 +138,12 @@ class GetPriorNotifications(
         val (enrichedPaginatedList, enrichedPaginatedListTimeTaken) =
             measureTimedValue {
                 paginatedList.apply {
+                    val reportings = getReportings()
+
                     data.forEach {
-                        it.enrichReportingCount(reportingRepository)
+                        it.enrichReportingCount(it.vessel?.internalReferenceNumber, reportings)
+                        it.logbookMessageAndValue.logbookMessage
+                            .enrichGearPortAndSpecyNames(allGears, allPorts, allSpecies)
                     }
                 }
             }
@@ -147,23 +152,44 @@ class GetPriorNotifications(
         return enrichedPaginatedList
     }
 
+    private fun PaginatedList<PriorNotification, PriorNotificationStats>.getReportings(): List<Reporting> {
+        val internalReferenceNumbers = data.mapNotNull { it.vessel?.internalReferenceNumber }
+        val reportings =
+            reportingRepository.findAll(
+                ReportingFilter(
+                    vesselInternalReferenceNumbers = internalReferenceNumbers,
+                    isArchived = false,
+                    isDeleted = false,
+                    types = listOf(ReportingType.INFRACTION_SUSPICION),
+                ),
+            )
+
+        return reportings
+    }
+
     private fun enrichPriorNotificationsWithVessel(
         priorNotifications: List<PriorNotification>,
     ): List<PriorNotification> {
         val vesselsViaVesselsIds =
             priorNotifications
+                .asSequence()
                 .filter { it.isManuallyCreated }
                 .mapNotNull { it.logbookMessageAndValue.logbookMessage.vesselId }
+                .distinct()
                 .chunked(5000)
                 .map { vesselRepository.findVesselsByIds(it) }
                 .flatten()
+                .toList()
         val vesselsViaInternalReferenceNumbers =
             priorNotifications
+                .asSequence()
                 .filter { !it.isManuallyCreated }
                 .mapNotNull { it.logbookMessageAndValue.logbookMessage.internalReferenceNumber }
+                .distinct()
                 .chunked(5000)
                 .map { vesselRepository.findVesselsByInternalReferenceNumbers(it) }
                 .flatten()
+                .toList()
         val vessels = vesselsViaVesselsIds + vesselsViaInternalReferenceNumbers
 
         return priorNotifications.map {

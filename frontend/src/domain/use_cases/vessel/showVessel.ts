@@ -9,7 +9,7 @@ import { displayedComponentActions } from '../../shared_slices/DisplayedComponen
 import { displayedErrorActions } from '../../shared_slices/DisplayedError'
 import { addSearchedVessel, removeError, setError } from '../../shared_slices/Global'
 import { doNotAnimate } from '../../shared_slices/Map'
-import { loadingVessel, resetLoadingVessel, setSelectedVessel } from '../../shared_slices/Vessel'
+import {loadingVessel, resetLoadingVessel, setSelectedVessel, vesselsAdapter} from '../../shared_slices/Vessel'
 import { displayOrLogError } from '../error/displayOrLogError'
 
 import type { VesselIdentity } from '../../entities/vessel/types'
@@ -22,7 +22,10 @@ export const showVessel =
   (vesselIdentity: VesselIdentity, isFromSearch: boolean, isFromUserAction: boolean) => async (dispatch, getState) => {
     try {
       const { fishingActivities, map, vessel } = getState()
-      const { selectedVesselTrackRequest, vessels } = vessel
+      const selectedVesselTrackRequest = vessel.selectedVesselTrackRequest
+      const vesselsSelector = vessel.vessels
+      const vessels = vesselsAdapter.getSelectors().selectAll(vesselsSelector)
+      console.log(vessels)
       const { defaultVesselTrackDepth } = map
       const { areFishingActivitiesShowedOnMap } = fishingActivities
       // TODO How to handle both the control unit dialog and the vessel sidebar ?

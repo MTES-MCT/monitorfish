@@ -10,15 +10,17 @@ import { getVesselAlertAndBeaconMalfunctionStyle } from './style'
 import { getVesselCompositeIdentifier, vesselIsShowed } from '../../../../domain/entities/vessel/vessel'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { monitorfishMap } from '../../monitorfishMap'
+import { vesselsAdapter } from '../../../../domain/shared_slices/Vessel'
 
 const VesselAlertAndBeaconMalfunctionLayer = () => {
   const isSuperUser = useIsSuperUser()
   const {
-    vessels,
     hideNonSelectedVessels,
     selectedVesselIdentity,
     vesselsTracksShowed
   } = useSelector(state => state.vessel)
+  const vesselsSelector = useSelector(state => state.vessel.vessels)
+  const vessels = vesselsAdapter.getSelectors().selectAll(vesselsSelector)
 
   const {
     nonFilteredVesselsAreHidden

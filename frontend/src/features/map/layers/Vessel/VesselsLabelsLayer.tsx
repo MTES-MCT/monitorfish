@@ -24,6 +24,7 @@ import type { VectorLayerWithName } from '../../../../domain/types/layer'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
 import type { MutableRefObject } from 'react'
+import {vesselsAdapter} from "../../../../domain/shared_slices/Vessel";
 
 const MAX_LABELS_DISPLAYED = 200
 const MAX_LABELS_DISPLAYED_IN_PREVIEW = 400
@@ -36,7 +37,8 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
 
   const hideNonSelectedVessels = useMainAppSelector(state => state.vessel.hideNonSelectedVessels)
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
-  const vessels = useMainAppSelector(state => state.vessel.vessels)
+  const vesselsSelector = useMainAppSelector(state => state.vessel.vessels)
+  const vessels = vesselsAdapter.getSelectors().selectAll(vesselsSelector)
   const vesselsTracksShowed = useMainAppSelector(state => state.vessel.vesselsTracksShowed)
   const areVesselsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselsDisplayed)
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)

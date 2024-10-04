@@ -18,6 +18,7 @@ import { showVessel } from '../../domain/use_cases/vessel/showVessel'
 import type { VesselIdentity } from '../../domain/entities/vessel/types'
 import type { ChangeEvent, InputHTMLAttributes, MutableRefObject } from 'react'
 import type { Promisable } from 'type-fest'
+import {vesselsAdapter} from "../../domain/shared_slices/Vessel";
 
 type VesselSearchProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'defaultValue' | 'onChange'> & {
   baseRef?: MutableRefObject<HTMLDivElement | undefined> | undefined
@@ -51,7 +52,8 @@ export function VesselSearch({
   const dispatch = useMainAppDispatch()
   const baseUrl = window.location.origin
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
-  const vessels = useMainAppSelector(state => state.vessel.vessels)
+  const vesselsSelector = useMainAppSelector(state => state.vessel.vessels)
+  const vessels = vesselsAdapter.getSelectors().selectAll(vesselsSelector)
   const searchQueryRef = useRef('')
   const wrapperRef = useRef(null)
 

@@ -6,12 +6,14 @@ import MapMenuOverlay from './overlays/MapMenuOverlay'
 import { HIT_PIXEL_TO_TOLERANCE } from '../../constants/constants'
 import { LayerProperties } from '../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../domain/entities/layers/types'
-import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 
 import type { VesselEnhancedLastPositionWebGLObject } from '../../domain/entities/vessel/types'
+import {vesselsAdapter} from "../../domain/shared_slices/Vessel";
+import {useMainAppSelector} from "@hooks/useMainAppSelector";
 
 export function MapMenu() {
-  const { vessels } = useMainAppSelector(state => state.vessel)
+  const vesselsSelector = useMainAppSelector(state => state.vessel.vessels)
+  const vessels = vesselsAdapter.getSelectors().selectAll(vesselsSelector)
   const [coordinates, setCoordinates] = useState<number[]>([])
   const vessel = useRef<VesselEnhancedLastPositionWebGLObject | undefined>()
 

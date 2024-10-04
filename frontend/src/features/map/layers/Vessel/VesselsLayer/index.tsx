@@ -18,13 +18,15 @@ import { getWebGLVesselStyle } from '../style'
 
 import type { VesselLastPositionFeature } from '../../../../../domain/entities/vessel/types'
 import type { WebGLPointsLayerWithName } from '../../../../../domain/types/layer'
+import {vesselsAdapter} from "../../../../../domain/shared_slices/Vessel";
 
 function UnmemoizedVesselsLayer() {
   const dispatch = useMainAppDispatch()
   const areVesselsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselsDisplayed)
 
   const hideNonSelectedVessels = useMainAppSelector(state => state.vessel.hideNonSelectedVessels)
-  const vessels = useMainAppSelector(state => state.vessel.vessels)
+  const vesselsSelector = useMainAppSelector(state => state.vessel.vessels)
+  const vessels = vesselsAdapter.getSelectors().selectAll(vesselsSelector)
 
   const hideVesselsAtPort = useMainAppSelector(state => state.map.hideVesselsAtPort)
   const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
@@ -100,16 +102,17 @@ function UnmemoizedVesselsLayer() {
   }, [areVesselsDisplayed])
 
   useEffect(() => {
+    console.log('here! ')
     const features = vessels.map(vessel => {
       const propertiesUsedForStyling = {
         coordinates: vessel.coordinates,
-        course: vessel.course,
+        course: vessel.vesselProperties.course,
         filterPreview: vessel.filterPreview,
         hasBeaconMalfunction: vessel.hasBeaconMalfunction,
-        isAtPort: vessel.isAtPort,
+        isAtPort: vessel.vesselProperties.isAtPort,
         isFiltered: vessel.isFiltered,
         lastPositionSentAt: vessel.lastPositionSentAt,
-        speed: vessel.speed
+        speed: vessel.vesselProperties.speed
       }
 
       const feature = new Feature({

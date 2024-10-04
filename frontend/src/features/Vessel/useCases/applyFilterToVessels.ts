@@ -1,5 +1,9 @@
 import { setError } from '../../../domain/shared_slices/Global'
-import { setAllVesselsAsUnfiltered, setFilteredVesselsFeatures } from '../../../domain/shared_slices/Vessel'
+import {
+  setAllVesselsAsUnfiltered,
+  setFilteredVesselsFeatures,
+  vesselsAdapter
+} from '../../../domain/shared_slices/Vessel'
 import { getFilteredVessels } from '../../../domain/use_cases/vessel/getFilteredVessels'
 import NoVesselsInFilterError from '../../../errors/NoVesselsInFilterError'
 
@@ -7,7 +11,11 @@ import type { MainAppThunk } from '@store'
 
 export const applyFilterToVessels = (): MainAppThunk => (dispatch, getState) => {
   const showedFilter = getState().filter?.filters?.find(filter => filter.showed)
-  const { vessels } = getState().vessel
+  const vesselsSelector = getState().vessel.vessels
+  if (!vesselsSelector) {
+    return
+  }
+  const vessels = vesselsAdapter.getSelectors().selectAll(vesselsSelector)
   if (!showedFilter) {
     return dispatch(setAllVesselsAsUnfiltered())
   }

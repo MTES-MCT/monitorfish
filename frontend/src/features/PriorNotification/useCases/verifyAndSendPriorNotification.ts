@@ -17,6 +17,9 @@ export const verifyAndSendPriorNotification =
   ): MainAppThunk<Promise<void>> =>
   async dispatch => {
     try {
+      dispatch(priorNotificationActions.unsetOpenedPriorNotificationDetail())
+      dispatch(priorNotificationActions.unsetEditedPriorNotificationComputedValues())
+
       const priorNotificationDetail = await dispatch(
         priorNotificationApi.endpoints.verifyAndSendPriorNotification.initiate({
           ...priorNotificationIdentifier,

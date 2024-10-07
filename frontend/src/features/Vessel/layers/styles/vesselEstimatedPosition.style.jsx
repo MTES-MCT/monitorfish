@@ -2,8 +2,8 @@ import Style from 'ol/style/Style'
 import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
 import CircleStyle from 'ol/style/Circle'
-import { EstimatedPosition } from '../../../../domain/entities/estimatedPosition'
-import { getColorWithAlpha } from './utils'
+import { EstimatedPosition } from '../../../../domain/entities/estimatedPosition.js'
+import { getColorWithAlpha } from '../../../map/layers/styles/utils.ts'
 
 const estimatedPositionStyleCache = new Map()
 

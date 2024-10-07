@@ -6,7 +6,7 @@ import { DataTable } from '@mtes-mct/monitor-ui'
 import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
-import { highlightVesselTrackPosition } from '../../../../../../domain/shared_slices/Vessel'
+import { highlightVesselTrackPosition } from '../../../../slice'
 
 export function PositionsTable({ openBox }) {
   const dispatch = useMainAppDispatch()

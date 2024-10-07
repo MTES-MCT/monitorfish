@@ -73,5 +73,5 @@ export type SilenceAlertQueueItem = {
 }
 
 export type AlertNameAndVesselIdentity = VesselIdentity & {
-  name: string | null
+  name: string | null | undefined
 }

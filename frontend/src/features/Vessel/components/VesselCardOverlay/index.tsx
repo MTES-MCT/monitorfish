@@ -1,3 +1,4 @@
+import { COLORS } from '@constants/constants'
 import Overlay from 'ol/Overlay'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -5,11 +6,10 @@ import styled from 'styled-components'
 import { marginsWithOneWarning, marginsWithoutAlert, marginsWithThreeWarning, marginsWithTwoWarning } from './constants'
 import { VesselCard } from './VesselCard'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
-import { COLORS } from '../../../../constants/constants'
 import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
-import { monitorfishMap } from '../../monitorfishMap'
-import { getMapResolution } from '../../utils'
-import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from '../Overlay'
+import { monitorfishMap } from '../../../map/monitorfishMap'
+import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from '../../../map/overlays/Overlay'
+import { getMapResolution } from '../../../map/utils'
 
 const overlayHeight = 260
 

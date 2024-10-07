@@ -1,3 +1,4 @@
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Point } from 'ol/geom'
 import { useEffect, useRef, useState } from 'react'
 
@@ -6,10 +7,9 @@ import MapMenuOverlay from './overlays/MapMenuOverlay'
 import { HIT_PIXEL_TO_TOLERANCE } from '../../constants/constants'
 import { LayerProperties } from '../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../domain/entities/layers/types'
+import { vesselsAdapter } from '../Vessel/slice'
 
 import type { VesselEnhancedLastPositionWebGLObject } from '../../domain/entities/vessel/types'
-import {vesselsAdapter} from "../../domain/shared_slices/Vessel";
-import {useMainAppSelector} from "@hooks/useMainAppSelector";
 
 export function MapMenu() {
   const vesselsSelector = useMainAppSelector(state => state.vessel.vessels)

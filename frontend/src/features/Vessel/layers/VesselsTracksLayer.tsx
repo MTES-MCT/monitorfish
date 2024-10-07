@@ -5,7 +5,7 @@ import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 
-import { LayerProperties } from '../../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
 import {
   fishingActivityIsWithinTrackLineDates,
   getFeaturesFromPositions,
@@ -14,23 +14,19 @@ import {
   removeFishingActivitiesFeatures,
   removeVesselTrackFeatures,
   updateTrackCircleStyle
-} from '../../../../domain/entities/vessel/track'
-import { getVesselCompositeIdentifier } from '../../../../domain/entities/vessel/vessel'
-import { animateToCoordinates } from '../../../../domain/shared_slices/Map'
-import {
-  setVesselTrackExtent,
-  updateVesselTrackAsHidden,
-  updateVesselTrackAsShowedWithExtend
-} from '../../../../domain/shared_slices/Vessel'
-import { logbookActions } from '../../../Logbook/slice'
-import { getFishingActivityFeatureOnTrackLine } from '../../../Logbook/utils'
-import { monitorfishMap } from '../../monitorfishMap'
-import CloseVesselTrackOverlay from '../../overlays/CloseVesselTrackOverlay'
-import FishingActivityOverlay from '../../overlays/FishingActivityOverlay'
+} from '../../../domain/entities/vessel/track'
+import { getVesselCompositeIdentifier } from '../../../domain/entities/vessel/vessel'
+import { animateToCoordinates } from '../../../domain/shared_slices/Map'
+import { logbookActions } from '../../Logbook/slice'
+import { getFishingActivityFeatureOnTrackLine } from '../../Logbook/utils'
+import { monitorfishMap } from '../../map/monitorfishMap'
+import CloseVesselTrackOverlay from '../../map/overlays/CloseVesselTrackOverlay'
+import FishingActivityOverlay from '../../map/overlays/FishingActivityOverlay'
+import { setVesselTrackExtent, updateVesselTrackAsHidden, updateVesselTrackAsShowedWithExtend } from '../slice'
 
-import type { FishingActivityShowedOnMap } from '../../../../domain/entities/vessel/types'
-import type { VectorLayerWithName } from '../../../../domain/types/layer'
-import type { FishingActivityFeatureIdAndCoordinates } from '../../../Logbook/types'
+import type { FishingActivityShowedOnMap } from '../../../domain/entities/vessel/types'
+import type { VectorLayerWithName } from '../../../domain/types/layer'
+import type { FishingActivityFeatureIdAndCoordinates } from '../../Logbook/types'
 import type { Feature } from 'ol'
 import type { Coordinate } from 'ol/coordinate'
 import type { Geometry } from 'ol/geom'

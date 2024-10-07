@@ -4,20 +4,21 @@ import VectorSource from 'ol/source/Vector'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 import { Vector } from 'ol/layer'
-import { LayerProperties } from '../../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../domain/entities/layers/constants.js'
 
-import { getVesselAlertAndBeaconMalfunctionStyle } from './style'
-import { getVesselCompositeIdentifier, vesselIsShowed } from '../../../../domain/entities/vessel/vessel'
-import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
-import { monitorfishMap } from '../../monitorfishMap'
-import { vesselsAdapter } from '../../../../domain/shared_slices/Vessel'
+import { getVesselBeaconMalfunctionStyle } from './style.js'
+import { getVesselCompositeIdentifier, vesselIsShowed } from '../../../domain/entities/vessel/vessel.js'
+import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser.js'
+import { monitorfishMap } from '../../map/monitorfishMap.js'
+import { vesselsAdapter } from '../slice.ts'
 
-const VesselAlertAndBeaconMalfunctionLayer = () => {
+const VesselBeaconMalfunctionLayer = () => {
   const isSuperUser = useIsSuperUser()
+
   const {
     hideNonSelectedVessels,
-    selectedVesselIdentity,
-    vesselsTracksShowed
+    vesselsTracksShowed,
+    selectedVesselIdentity
   } = useSelector(state => state.vessel)
   const vesselsSelector = useSelector(state => state.vessel.vessels)
   const vessels = vesselsAdapter.getSelectors().selectAll(vesselsSelector)
@@ -53,7 +54,7 @@ const VesselAlertAndBeaconMalfunctionLayer = () => {
         zIndex: LayerProperties.VESSEL_BEACON_MALFUNCTION.zIndex,
         updateWhileAnimating: true,
         updateWhileInteracting: true,
-        style: (_, resolution) => getVesselAlertAndBeaconMalfunctionStyle(resolution)
+        style: (_, resolution) => getVesselBeaconMalfunctionStyle(resolution)
       })
     }
     return layerRef.current
@@ -74,7 +75,7 @@ const VesselAlertAndBeaconMalfunctionLayer = () => {
     if (isSuperUser && vessels?.length) {
       const features = vessels.reduce((_features, vessel) => {
         if (!vessel.hasBeaconMalfunction) return _features
-        if (!vessel.vesselProperties.hasAlert) return _features
+        if (vessel.vesselProperties.hasAlert) return _features
         if (nonFilteredVesselsAreHidden && !vessel.isFiltered) return _features
         if (previewFilteredVesselsMode && !vessel.filterPreview) return _features
         if (hideVesselsAtPort && vessel.isAtPort) return _features
@@ -106,4 +107,4 @@ const VesselAlertAndBeaconMalfunctionLayer = () => {
   return null
 }
 
-export default React.memo(VesselAlertAndBeaconMalfunctionLayer)
+export default React.memo(VesselBeaconMalfunctionLayer)

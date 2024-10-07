@@ -1,3 +1,4 @@
+import { showVesselSidebarTab } from '@features/Vessel/slice'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
@@ -6,7 +7,6 @@ import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import { forbiddenVesselSidebarPaths } from 'domain/entities/authorization/constants'
 import { VesselSidebarTab } from 'domain/entities/vessel/vessel'
 import { displayedErrorActions } from 'domain/shared_slices/DisplayedError'
-import { showVesselSidebarTab } from 'domain/shared_slices/Vessel'
 import { useEffect } from 'react'
 import styled from 'styled-components'
 

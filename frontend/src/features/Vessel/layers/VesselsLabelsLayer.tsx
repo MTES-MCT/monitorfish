@@ -1,30 +1,30 @@
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { usePrevious } from '@mtes-mct/monitor-ui'
 import LineString from 'ol/geom/LineString'
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
-import { LayerProperties } from '../../../../domain/entities/layers/constants'
-import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
-import { drawMovedLabelLineIfFoundAndReturnOffset } from '../../../../domain/entities/vessel/label'
+import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
+import { MonitorFishLayer } from '../../../domain/entities/layers/types'
+import { drawMovedLabelLineIfFoundAndReturnOffset } from '../../../domain/entities/vessel/label'
 import {
   getVesselCompositeIdentifier,
   getVesselLastPositionVisibilityDates,
   Vessel
-} from '../../../../domain/entities/vessel/vessel'
-import { VesselLabelLine } from '../../../../domain/entities/vesselLabelLine'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { monitorfishMap } from '../../monitorfishMap'
-import { VesselLabelOverlay } from '../../overlays/VesselLabelOverlay'
-import { getLabelLineStyle } from '../styles/labelLine.style'
+} from '../../../domain/entities/vessel/vessel'
+import { VesselLabelLine } from '../../../domain/entities/vesselLabelLine'
+import { getLabelLineStyle } from '../../map/layers/styles/labelLine.style'
+import { monitorfishMap } from '../../map/monitorfishMap'
+import { VesselLabelOverlay } from '../components/VesselLabelOverlay'
+import { vesselsAdapter } from '../slice'
 
-import type { VesselLastPositionFeature } from '../../../../domain/entities/vessel/types'
-import type { VectorLayerWithName } from '../../../../domain/types/layer'
+import type { VesselLastPositionFeature } from '../../../domain/entities/vessel/types'
+import type { VectorLayerWithName } from '../../../domain/types/layer'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
 import type { MutableRefObject } from 'react'
-import {vesselsAdapter} from "../../../../domain/shared_slices/Vessel";
 
 const MAX_LABELS_DISPLAYED = 200
 const MAX_LABELS_DISPLAYED_IN_PREVIEW = 400

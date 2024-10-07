@@ -1,16 +1,13 @@
-import {reportingIsAnInfractionSuspicion} from '@features/Reporting/utils'
-import type {PayloadAction} from '@reduxjs/toolkit'
-import {createEntityAdapter, createSlice, type EntityState} from '@reduxjs/toolkit'
-import {transform} from 'ol/proj'
+import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
+import { createEntityAdapter, createSlice, type EntityState, type PayloadAction } from '@reduxjs/toolkit'
 
-import {ReportingType, ReportingTypeCharacteristics} from '../../features/Reporting/types'
-import {OPENLAYERS_PROJECTION, WSG84_PROJECTION} from '../entities/map/constants'
 import {
   atLeastOneVesselSelected,
   getOnlyVesselIdentityProperties,
   Vessel,
   VesselSidebarTab
-} from '../entities/vessel/vessel'
+} from '../../domain/entities/vessel/vessel'
+import { ReportingType, ReportingTypeCharacteristics } from '../Reporting/types'
 
 import type {
   FishingActivityShowedOnMap,
@@ -19,17 +16,16 @@ import type {
   VesselEnhancedLastPositionWebGLObject,
   VesselFeatureId,
   VesselIdentity,
-  VesselLastPosition,
   VesselPosition
-} from '../entities/vessel/types'
-import type {Vessel as VesselTypes} from '@features/Vessel/Vessel.types'
+} from '../../domain/entities/vessel/types'
+import type { Vessel as VesselTypes } from '@features/Vessel/Vessel.types'
 
 const NOT_FOUND = -1
 
 export const vesselsAdapter = createEntityAdapter({
   selectId: (vessel: VesselEnhancedLastPositionWebGLObject) => vessel.vesselFeatureId,
   sortComparer: false
-});
+})
 
 // TODO Properly type this redux state.
 export type VesselState = {
@@ -91,24 +87,23 @@ const vesselSlice = createSlice({
         vesselFeatureId: VesselFeatureId
       }>
     ) {
-      state.vessels = state.vessels.map(vessel => {
-        if (vessel.vesselFeatureId !== action.payload.vesselFeatureId) {
-          return vessel
-        }
+      const vessel = vesselsAdapter.getSelectors().selectById(state.vessels, action.payload.vesselFeatureId)
 
-        const nextVesselReportings = vessel.vesselProperties.reportings?.concat(action.payload.reportingType)
-
-        return {
+      if (vessel) {
+        const nextVesselReportings = vessel?.vesselProperties?.reportings?.concat(action.payload.reportingType)
+        const nextVessel = {
           ...vessel,
           vesselProperties: {
             ...vessel.vesselProperties,
-            hasInfractionSuspicion: nextVesselReportings.some(reportingType =>
+            hasInfractionSuspicion: !!nextVesselReportings?.some(reportingType =>
               reportingIsAnInfractionSuspicion(reportingType)
             ),
-            reportings: nextVesselReportings
+            reportings: nextVesselReportings ?? []
           }
         }
-      })
+
+        vesselsAdapter.setOne(state.vessels, nextVessel)
+      }
 
       if (
         state.selectedVesselIdentity &&
@@ -193,38 +188,41 @@ const vesselSlice = createSlice({
         vesselFeatureId: VesselFeatureId
       }>
     ) {
-      state.vessels = state.vessels.map(vessel => {
-        if (vessel.vesselFeatureId !== action.payload.vesselFeatureId) {
-          return vessel
-        }
-        const filteredAlerts = vessel.vesselProperties.alerts?.filter(alert => alert !== action.payload.alertType)
+      const vessel = vesselsAdapter.getSelectors().selectById(state.vessels, action.payload.vesselFeatureId)
+
+      if (vessel) {
+        const filteredAlerts = vessel?.vesselProperties?.alerts?.filter(alert => alert !== action.payload.alertType)
 
         if (action.payload.isValidated) {
           const addedReportings = vessel.vesselProperties.reportings?.concat(ReportingTypeCharacteristics.ALERT.code)
 
-          return {
+          const nextVessel = {
             ...vessel,
             vesselProperties: {
               ...vessel.vesselProperties,
               alerts: filteredAlerts,
-              hasAlert: !!filteredAlerts.length,
+              hasAlert: !!filteredAlerts?.length,
               hasInfractionSuspicion: addedReportings.some(reportingType =>
                 reportingIsAnInfractionSuspicion(reportingType)
               ),
               reportings: addedReportings
             }
           }
-        }
 
-        return {
-          ...vessel,
-          vesselProperties: {
-            ...vessel.vesselProperties,
-            alerts: filteredAlerts,
-            hasAlert: !!filteredAlerts.length
+          vesselsAdapter.setOne(state.vessels, nextVessel)
+        } else {
+          const nextVessel = {
+            ...vessel,
+            vesselProperties: {
+              ...vessel.vesselProperties,
+              alerts: filteredAlerts,
+              hasAlert: !!filteredAlerts?.length
+            }
           }
+
+          vesselsAdapter.setOne(state.vessels, nextVessel)
         }
-      })
+      }
 
       if (state.selectedVessel) {
         const filteredAlerts = state.selectedVessel.alerts?.filter(alert => alert !== action.payload.alertType) ?? []
@@ -237,7 +235,7 @@ const vesselSlice = createSlice({
         state.selectedVessel = {
           ...(state.selectedVessel as VesselTypes.AugmentedSelectedVessel),
           alerts: filteredAlerts,
-          hasAlert: filteredAlerts && !!filteredAlerts.length,
+          hasAlert: !!filteredAlerts?.length,
           hasInfractionSuspicion: reportingsWithAlert.some(reportingType =>
             reportingIsAnInfractionSuspicion(reportingType)
           ),
@@ -256,17 +254,14 @@ const vesselSlice = createSlice({
         vesselFeatureId: VesselFeatureId
       }>
     ) {
-      state.vessels = state.vessels.map(vessel => {
-        if (vessel.vesselFeatureId !== action.payload.vesselFeatureId) {
-          return vessel
-        }
-
+      const vessel = vesselsAdapter.getSelectors().selectById(state.vessels, action.payload.vesselFeatureId)
+      if (vessel) {
         const vesselReportingWithoutFirstFoundReportingType = vessel.vesselProperties.reportings?.reduce(
           filterFirstFoundReportingType(action.payload.reportingType),
           []
         )
 
-        return {
+        const nextVessel = {
           ...vessel,
           vesselProperties: {
             ...vessel.vesselProperties,
@@ -276,7 +271,9 @@ const vesselSlice = createSlice({
             reportings: vesselReportingWithoutFirstFoundReportingType
           }
         }
-      })
+
+        vesselsAdapter.setOne(state.vessels, nextVessel)
+      }
 
       if (
         state.selectedVessel &&
@@ -311,30 +308,35 @@ const vesselSlice = createSlice({
      */
     removeVesselReportings(state, action) {
       const vesselsFeatureIds = action.payload.map(reporting => reporting.vesselFeatureId)
-      state.vessels = state.vessels.map(vessel => {
-        if (!vesselsFeatureIds.find(vesselFeatureId => vessel.vesselFeatureId === vesselFeatureId)) {
-          return vessel
-        }
+      const vessels = vesselsAdapter.getSelectors().selectAll(state.vessels)
 
-        const vesselReportingsToRemove = action.payload.filter(
-          reporting => vessel.vesselFeatureId === reporting.vesselFeatureId
-        )
-        const vesselReportingWithoutFirstFoundReportingTypes = filterFirstFoundReportingTypes(
-          vessel.vesselProperties.reportings,
-          vesselReportingsToRemove
-        )
-
-        return {
-          ...vessel,
-          vesselProperties: {
-            ...vessel.vesselProperties,
-            hasInfractionSuspicion: vesselReportingWithoutFirstFoundReportingTypes.some(reportingType =>
-              reportingIsAnInfractionSuspicion(reportingType)
-            ),
-            reportings: vesselReportingWithoutFirstFoundReportingTypes
+      vesselsAdapter.setMany(
+        state.vessels,
+        vessels.map(vessel => {
+          if (!vesselsFeatureIds.find(vesselFeatureId => vessel.vesselFeatureId === vesselFeatureId)) {
+            return vessel
           }
-        }
-      })
+
+          const vesselReportingsToRemove = action.payload.filter(
+            reporting => vessel.vesselFeatureId === reporting.vesselFeatureId
+          )
+          const vesselReportingWithoutFirstFoundReportingTypes = filterFirstFoundReportingTypes(
+            vessel.vesselProperties.reportings,
+            vesselReportingsToRemove
+          )
+
+          return {
+            ...vessel,
+            vesselProperties: {
+              ...vessel.vesselProperties,
+              hasInfractionSuspicion: vesselReportingWithoutFirstFoundReportingTypes.some(reportingType =>
+                reportingIsAnInfractionSuspicion(reportingType)
+              ),
+              reportings: vesselReportingWithoutFirstFoundReportingTypes
+            }
+          }
+        })
+      )
 
       if (!state.selectedVesselIdentity) {
         return
@@ -384,15 +386,24 @@ const vesselSlice = createSlice({
     },
 
     setAllVesselsAsUnfiltered(state) {
+      const vessels = vesselsAdapter.getSelectors().selectAll(state.vessels)
+      const vesselIds = vesselsAdapter.getSelectors().selectIds(state.vessels)
+
       // Check if any vessel has `isFiltered` set to true
-      if (!Object.values(state.vessels).some(vessel => vessel.isFiltered)) {
-        return;
+      if (!vessels.some(vessel => vessel.isFiltered)) {
+        return
       }
 
       // Update all vessels' `isFiltered` field to 0
-      vesselsAdapter.updateAll(state.vessels, {
-        changes: { isFiltered: 0 }
-      })
+      vesselsAdapter.updateMany(
+        state.vessels,
+        vesselIds.map(vesselId => ({
+          changes: {
+            isFiltered: 0
+          },
+          id: vesselId
+        }))
+      )
     },
 
     setFilteredVesselsFeatures(state, action: PayloadAction<VesselFeatureId>) {
@@ -403,10 +414,10 @@ const vesselSlice = createSlice({
       vesselsAdapter.updateMany(
         state.vessels,
         vesselIds.map(vesselId => ({
-          id: vesselId,
           changes: {
             isFiltered: filteredVesselsFeaturesUids.includes(vesselId) ? 1 : 0
-          }
+          },
+          id: vesselId
         }))
       )
     },
@@ -434,19 +445,18 @@ const vesselSlice = createSlice({
      */
     setPreviewFilteredVesselsFeatures(state, action) {
       const previewFilteredVesselsFeaturesUids = action.payload
-      state.vessels = state.vessels.map(vessel => {
-        if (previewFilteredVesselsFeaturesUids.indexOf(vessel.vesselFeatureId) !== NOT_FOUND) {
-          return {
-            ...vessel,
-            filterPreview: 1
-          }
-        }
+      const vesselIds = vesselsAdapter.getSelectors().selectIds(state.vessels)
 
-        return {
-          ...vessel,
-          filterPreview: 0
-        }
-      })
+      // Update only the vessels that match the filtered IDs
+      vesselsAdapter.updateMany(
+        state.vessels,
+        vesselIds.map(vesselId => ({
+          changes: {
+            filterPreview: previewFilteredVesselsFeaturesUids.indexOf(vesselId) !== NOT_FOUND ? 1 : 0
+          },
+          id: vesselId
+        }))
+      )
     },
 
     /**
@@ -482,38 +492,16 @@ const vesselSlice = createSlice({
       state.selectedVesselTrackRequest = action.payload
     },
 
-    setVesselsEstimatedPositions(state, action) {
-      state.vesselsEstimatedPositions = action.payload
-    },
-
-    setVesselsFromAPI(state, action: PayloadAction<VesselLastPosition>) {
+    setVessels(state, action: PayloadAction<VesselEnhancedLastPositionWebGLObject[]>) {
       if (!action.payload || !Array.isArray(action.payload)) {
         return
       }
 
-      vesselsAdapter.setMany(state.vessels, action.payload.map(vessel => ({
-        vesselFeatureId: Vessel.getVesselFeatureId(vessel),
-        coordinates: transform([vessel.longitude, vessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION),
-        filterPreview: 0,
-        hasBeaconMalfunction: !!vessel.beaconMalfunctionId,
-        isFiltered: 0,
-        lastPositionSentAt: new Date(vessel.dateTime).getTime(),
-        vesselProperties: {
-          ...vessel,
-          flagState: vessel.flagState,
-          fleetSegmentsArray: vessel.segments ? vessel.segments.map(segment => segment.replace(' ', '')) : [],
-          gearsArray: vessel.gearOnboard ? Array.from(new Set(vessel.gearOnboard.map(gear => gear.gear))) : [],
-          hasAlert: !!vessel.alerts?.length,
-          hasInfractionSuspicion:
-            vessel.reportings?.some(reportingType => reportingIsAnInfractionSuspicion(reportingType)) || false,
-          lastControlDateTimeTimestamp: vessel.lastControlDateTime
-            ? new Date(vessel.lastControlDateTime).getTime()
-            : '',
-          speciesArray: vessel.speciesOnboard
-            ? Array.from(new Set(vessel.speciesOnboard.map(species => species.species)))
-            : []
-        }
-      })));
+      vesselsAdapter.setMany(state.vessels, action.payload)
+    },
+
+    setVesselsEstimatedPositions(state, action) {
+      state.vesselsEstimatedPositions = action.payload
     },
 
     setVesselsSpeciesAndDistricts(state, action) {
@@ -667,7 +655,7 @@ export const {
   setPreviewFilteredVesselsFeatures,
   setSelectedVessel,
   setSelectedVesselCustomTrackRequest,
-  setVesselsFromAPI,
+  setVessels,
   setVesselsSpeciesAndDistricts,
   setVesselTrackExtent,
   showVesselSidebarTab,

@@ -9,6 +9,7 @@ import { TagBar } from './TagBar'
 import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 
 type CardBodyHeadProps = Readonly<{
+  applicableState: PriorNotification.State | undefined
   detail: PriorNotification.Detail | undefined
   editedPriorNotificationComputedValues?: Undefine<PriorNotification.ManualComputedValues> | undefined
   hasBeenComputed: boolean
@@ -16,11 +17,11 @@ type CardBodyHeadProps = Readonly<{
   isPriorNotificationZero: boolean | undefined
   isVesselUnderCharter: boolean | undefined
   riskFactor: number | undefined
-  state: PriorNotification.State | undefined
   tripSegments: LogbookMessage.Segment[] | undefined
   types: PriorNotification.Type[] | undefined
 }>
 export function CardBodyHead({
+  applicableState,
   detail,
   editedPriorNotificationComputedValues,
   hasBeenComputed,
@@ -28,7 +29,6 @@ export function CardBodyHead({
   isPriorNotificationZero,
   isVesselUnderCharter,
   riskFactor,
-  state,
   tripSegments,
   types
 }: CardBodyHeadProps) {
@@ -54,7 +54,7 @@ export function CardBodyHead({
         isPriorNotificationZero={isPriorNotificationZero}
         isVesselUnderCharter={isVesselUnderCharter}
         riskFactor={riskFactor}
-        state={state}
+        state={applicableState}
         tripSegments={tripSegments}
         types={types}
       />
@@ -79,7 +79,7 @@ export function CardBodyHead({
       )}
       {isSentMessageListExpanded && !!detail && (
         <>
-          <SentMessageList detail={detail} />
+          <SentMessageList detail={detail} state={applicableState} />
 
           <StyledLinkButton onClick={collapseSentMessageList}>
             Masquer les détails de la diffusion du préavis

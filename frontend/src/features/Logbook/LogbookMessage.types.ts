@@ -6,7 +6,6 @@ export namespace LogbookMessage {
 
   interface LogbookMessageBase {
     acknowledgment: Acknowledgment | undefined
-    createdAt: string
     externalReferenceNumber: string | undefined
     flagState: string | undefined
     imo: string | undefined
@@ -21,14 +20,13 @@ export namespace LogbookMessage {
     operationDateTime: string
     operationNumber: string | undefined
     operationType: OperationType
-    rawMessage: string
+    rawMessage: string | undefined
     referencedReportId: string | undefined
     reportDateTime: string
     reportId: string
     tripGears: Gear[] | undefined
     tripNumber: string | undefined
     tripSegments: Segment[] | undefined
-    updatedAt: string
     vesselName: string
   }
   export interface PnoLogbookMessage extends LogbookMessageBase {
@@ -67,12 +65,12 @@ export namespace LogbookMessage {
     weight: number | undefined
   }
 
+  // TODO Replace `| null` by `| undefined` after deleting Gear in logbook.types.ts
   export type Gear = {
-    dimensions: string
-    gear: string
-    // TODO Replace null by undefined after deleting Gear in logbook.types.ts
+    dimensions: string | null
+    gear: string | null
     gearName: string | null
-    mesh: number
+    mesh: number | null
   }
 
   interface MessageBase {}

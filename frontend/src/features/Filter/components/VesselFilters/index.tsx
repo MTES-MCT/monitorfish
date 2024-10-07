@@ -6,10 +6,10 @@ import { useCallback, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
 import { Filters } from './Filters'
-import { MapBox } from '../../../../../domain/entities/map/constants'
-import { setRightMapBoxOpened } from '../../../../../domain/shared_slices/Global'
-import FilterSVG from '../../../../icons/standardized/Filter.svg?react'
-import { MapToolButton } from '../shared/MapToolButton'
+import { MapBox } from '../../../../domain/entities/map/constants'
+import { setRightMapBoxOpened } from '../../../../domain/shared_slices/Global'
+import FilterSVG from '../../../icons/standardized/Filter.svg?react'
+import { MapToolButton } from '../../../MainWindow/components/MapButtons/shared/MapToolButton'
 
 export function VesselFiltersMapButton() {
   const dispatch = useMainAppDispatch()

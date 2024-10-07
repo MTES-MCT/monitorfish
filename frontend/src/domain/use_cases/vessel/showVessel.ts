@@ -1,6 +1,6 @@
 import { getVesselFromAPI } from '@api/vessel'
 import { logbookActions } from '@features/Logbook/slice'
-import { loadingVessel, resetLoadingVessel, setSelectedVessel, vesselsAdapter } from '@features/Vessel/slice'
+import { loadingVessel, resetLoadingVessel, setSelectedVessel, vesselSelectors } from '@features/Vessel/slice'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { captureMessage } from '@sentry/react'
 
@@ -23,8 +23,7 @@ export const showVessel =
     try {
       const { fishingActivities, map, vessel } = getState()
       const { selectedVesselTrackRequest } = vessel
-      const vesselsSelector = vessel.vessels
-      const vessels = vesselsAdapter.getSelectors().selectAll(vesselsSelector)
+      const vessels = vesselSelectors.selectAll(getState())
       const { defaultVesselTrackDepth } = map
       const { areFishingActivitiesShowedOnMap } = fishingActivities
       // TODO How to handle both the control unit dialog and the vessel sidebar ?

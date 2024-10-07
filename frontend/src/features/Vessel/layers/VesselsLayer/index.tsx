@@ -1,10 +1,8 @@
 import { COLORS } from '@constants/constants'
 import { VESSELS_VECTOR_LAYER } from '@features/Vessel/layers/VesselsLayer/constants'
-import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { memo, useEffect } from 'react'
 
-import { applyFilterToVessels } from './useCases/applyFilterToVessels'
 import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
 import { getVesselLastPositionVisibilityDates, Vessel } from '../../../../domain/entities/vessel/vessel'
 import { theme } from '../../../../ui/theme'
@@ -13,11 +11,8 @@ import { monitorfishMap } from '../../../map/monitorfishMap'
 import { getWebGLVesselStyleVariables } from '../style'
 
 function UnmemoizedVesselsLayer() {
-  const dispatch = useMainAppDispatch()
   const areVesselsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselsDisplayed)
-
   const hideNonSelectedVessels = useMainAppSelector(state => state.vessel.hideNonSelectedVessels)
-
   const hideVesselsAtPort = useMainAppSelector(state => state.map.hideVesselsAtPort)
   const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
   const vesselsLastPositionVisibility = useMainAppSelector(state => state.map.vesselsLastPositionVisibility)
@@ -82,12 +77,6 @@ function UnmemoizedVesselsLayer() {
   }, [hideNonSelectedVessels])
 
   useEffect(() => {
-    VESSELS_VECTOR_LAYER.updateStyleVariables({
-      nonFilteredVesselsAreHidden: booleanToInt(nonFilteredVesselsAreHidden)
-    })
-  }, [nonFilteredVesselsAreHidden])
-
-  useEffect(() => {
     VESSELS_VECTOR_LAYER.updateStyleVariables({ previewFilteredVesselsMode: booleanToInt(previewFilteredVesselsMode) })
   }, [previewFilteredVesselsMode])
 
@@ -95,18 +84,6 @@ function UnmemoizedVesselsLayer() {
     const isLight = Vessel.iconIsLight(selectedBaseLayer)
     VESSELS_VECTOR_LAYER.updateStyleVariables({ isLight: booleanToInt(isLight) })
   }, [selectedBaseLayer])
-
-  useEffect(() => {
-    dispatch(applyFilterToVessels())
-    if (showedFilter?.color) {
-      const [red, green, blue] = customHexToRGB(showedFilter?.color)
-      VESSELS_VECTOR_LAYER.updateStyleVariables({
-        filterColorBlue: blue,
-        filterColorGreen: green,
-        filterColorRed: red
-      })
-    }
-  }, [showedFilter?.color, filters, showedFilter, dispatch])
 
   useEffect(() => {
     const { vesselIsHidden, vesselIsOpacityReduced } =

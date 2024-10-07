@@ -4,6 +4,7 @@ import { controlUnitDialogReducer } from '@features/ControlUnit/components/Contr
 import { controlUnitListDialogPersistedReducer } from '@features/ControlUnit/components/ControlUnitListDialog/slice'
 import { customZoneReducer, type CustomZoneState } from '@features/CustomZone/slice'
 import { drawReducer } from '@features/Draw/slice'
+import { filterReducer, type FilterState } from '@features/Filter/slice'
 import { interestPointReducer } from '@features/InterestPoint/slice'
 import { logbookReducer } from '@features/Logbook/slice'
 import { mainWindowReducer } from '@features/MainWindow/slice'
@@ -30,7 +31,6 @@ import { controlReducer } from '../domain/shared_slices/Control'
 import { displayedComponentReducer } from '../domain/shared_slices/DisplayedComponent'
 import { displayedErrorReducer } from '../domain/shared_slices/DisplayedError'
 import { favoriteVesselReducer } from '../domain/shared_slices/FavoriteVessel'
-import { filterReducer } from '../domain/shared_slices/Filter'
 import { gearReducer } from '../domain/shared_slices/Gear'
 import { globalSliceReducer } from '../domain/shared_slices/Global'
 import { infractionReducer } from '../domain/shared_slices/Infraction'
@@ -82,7 +82,12 @@ export const mainReducer = {
   displayedError: displayedErrorReducer,
   draw: drawReducer,
   favoriteVessel: favoriteVesselReducer,
-  filter: filterReducer,
+  filter: persistReducerTyped(
+    {
+      ...getCommonPersistReducerConfig<FilterState>('mainPersistorFilter', ['filters', 'nonFilteredVesselsAreHidden'])
+    },
+    filterReducer
+  ),
   fishingActivities: logbookReducer,
   infraction: infractionReducer,
   interestPoint: interestPointReducer,

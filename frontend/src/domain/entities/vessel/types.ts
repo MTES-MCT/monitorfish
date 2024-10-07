@@ -229,10 +229,13 @@ export type TrackTypeRecordItem = {
 
 export type VesselEnhancedLastPositionWebGLObject = {
   coordinates: number[]
+  course: number
   filterPreview: number // 0 is False, 1 is True - for WebGL
   hasBeaconMalfunction: boolean
+  isAtPort: boolean
   isFiltered: number // 0 is False, 1 is True - for WebGL
   lastPositionSentAt: number
+  speed: number
   vesselFeatureId: VesselFeatureId
   vesselProperties: Vessel.VesselEnhancedObject
 }

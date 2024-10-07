@@ -16,18 +16,3 @@ export const addVesselListFilterZone = (interactionType: InteractionType) => dis
     })
   )
 }
-
-export const closeDrawLayerModal = dispatch => {
-  dispatch(
-    setDisplayedComponents({
-      isDrawLayerModalDisplayed: false,
-      isInterestPointMapButtonDisplayed: true,
-      isMeasurementMapButtonDisplayed: true,
-      isVesselFiltersMapButtonDisplayed: true,
-      isVesselLabelsMapButtonDisplayed: true,
-      isVesselListDisplayed: true,
-      isVesselSearchDisplayed: true,
-      isVesselVisibilityMapButtonDisplayed: true
-    })
-  )
-}

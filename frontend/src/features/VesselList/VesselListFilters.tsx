@@ -1,4 +1,4 @@
-import { FilterTag } from '@features/MainWindow/components/MapButtons/VesselFilters/FilterTag'
+import { FilterTag } from '@features/Filter/components/VesselFilters/FilterTag'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Checkbox, CheckboxGroup, MultiCascader, SelectPicker, Tag, TagPicker } from 'rsuite'
 import styled from 'styled-components'
@@ -98,7 +98,7 @@ function UnmemoizedVesselListFilters({
     }))
   }, [districts.districts])
 
-  const { callRemoveZoneSelected, zonesSelected } = zones
+  const { zonesSelected } = zones
   const showZonesSelected = useCallback(
     () =>
       zonesSelected?.length && zonesSelected.find(zone => zone.code === LayersType.FREE_DRAW)
@@ -109,16 +109,17 @@ function UnmemoizedVesselListFilters({
                 <FilterTag
                   key={zoneSelected.code}
                   iconElement={undefined}
-                  removeTagFromFilter={() => callRemoveZoneSelected(zoneSelected)}
+                  tag={{
+                    type: 'zonesSelected',
+                    value: 'Effacer la zone définie'
+                  }}
                   text="Effacer la zone définie"
-                  type={undefined}
                   uuid={undefined}
-                  value="Effacer la zone définie"
                 />
               </InlineTagWrapper>
             ))
         : null,
-    [zonesSelected, callRemoveZoneSelected]
+    [zonesSelected]
   )
 
   const getZones = useCallback(async () => {

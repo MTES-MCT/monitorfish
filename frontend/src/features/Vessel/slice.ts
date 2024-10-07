@@ -27,6 +27,9 @@ export const vesselsAdapter = createEntityAdapter({
   sortComparer: false
 })
 
+// @ts-ignore
+export const vesselSelectors = vesselsAdapter.getSelectors(state => state.vessel.vessels)
+
 // TODO Properly type this redux state.
 export type VesselState = {
   fishingActivitiesShowedOnMap: FishingActivityShowedOnMap[]
@@ -87,7 +90,7 @@ const vesselSlice = createSlice({
         vesselFeatureId: VesselFeatureId
       }>
     ) {
-      const vessel = vesselsAdapter.getSelectors().selectById(state.vessels, action.payload.vesselFeatureId)
+      const vessel = vesselSelectors.selectById(state.vessels, action.payload.vesselFeatureId)
 
       if (vessel) {
         const nextVesselReportings = vessel?.vesselProperties?.reportings?.concat(action.payload.reportingType)
@@ -188,7 +191,7 @@ const vesselSlice = createSlice({
         vesselFeatureId: VesselFeatureId
       }>
     ) {
-      const vessel = vesselsAdapter.getSelectors().selectById(state.vessels, action.payload.vesselFeatureId)
+      const vessel = vesselSelectors.selectById(state.vessels, action.payload.vesselFeatureId)
 
       if (vessel) {
         const filteredAlerts = vessel?.vesselProperties?.alerts?.filter(alert => alert !== action.payload.alertType)
@@ -254,7 +257,7 @@ const vesselSlice = createSlice({
         vesselFeatureId: VesselFeatureId
       }>
     ) {
-      const vessel = vesselsAdapter.getSelectors().selectById(state.vessels, action.payload.vesselFeatureId)
+      const vessel = vesselSelectors.selectById(state.vessels, action.payload.vesselFeatureId)
       if (vessel) {
         const vesselReportingWithoutFirstFoundReportingType = vessel.vesselProperties.reportings?.reduce(
           filterFirstFoundReportingType(action.payload.reportingType),
@@ -308,7 +311,7 @@ const vesselSlice = createSlice({
      */
     removeVesselReportings(state, action) {
       const vesselsFeatureIds = action.payload.map(reporting => reporting.vesselFeatureId)
-      const vessels = vesselsAdapter.getSelectors().selectAll(state.vessels)
+      const vessels = vesselSelectors.selectAll(state.vessels)
 
       vesselsAdapter.setMany(
         state.vessels,
@@ -386,8 +389,8 @@ const vesselSlice = createSlice({
     },
 
     setAllVesselsAsUnfiltered(state) {
-      const vessels = vesselsAdapter.getSelectors().selectAll(state.vessels)
-      const vesselIds = vesselsAdapter.getSelectors().selectIds(state.vessels)
+      const vessels = vesselSelectors.selectAll(state.vessels)
+      const vesselIds = vesselSelectors.selectIds(state.vessels)
 
       // Check if any vessel has `isFiltered` set to true
       if (!vessels.some(vessel => vessel.isFiltered)) {
@@ -408,7 +411,7 @@ const vesselSlice = createSlice({
 
     setFilteredVesselsFeatures(state, action: PayloadAction<VesselFeatureId>) {
       const filteredVesselsFeaturesUids = action.payload
-      const vesselIds = vesselsAdapter.getSelectors().selectIds(state.vessels)
+      const vesselIds = vesselSelectors.selectIds(state.vessels)
 
       // Update only the vessels that match the filtered IDs
       vesselsAdapter.updateMany(
@@ -445,7 +448,7 @@ const vesselSlice = createSlice({
      */
     setPreviewFilteredVesselsFeatures(state, action) {
       const previewFilteredVesselsFeaturesUids = action.payload
-      const vesselIds = vesselsAdapter.getSelectors().selectIds(state.vessels)
+      const vesselIds = vesselSelectors.selectIds(state.vessels)
 
       // Update only the vessels that match the filtered IDs
       vesselsAdapter.updateMany(

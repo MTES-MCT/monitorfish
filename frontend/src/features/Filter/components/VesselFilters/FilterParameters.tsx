@@ -1,20 +1,16 @@
+import { hideOrShowNonFilteredVessels } from '@features/Filter/useCases/hideOrShowNonFilteredVessels'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import styled from 'styled-components'
 
-import { setDisplayedComponents } from '../../../../../domain/shared_slices/DisplayedComponent'
-import { MapPropertyTrigger } from '../../../../commonComponents/MapPropertyTrigger'
-import HidingOtherVesselsSVG from '../../../../icons/Bouton_masquer_pistes_actif.svg?react'
-import ShowingOtherVesselsSVG from '../../../../icons/Bouton_masquer_pistes_inactif.svg?react'
+import { setDisplayedComponents } from '../../../../domain/shared_slices/DisplayedComponent'
+import { MapPropertyTrigger } from '../../../commonComponents/MapPropertyTrigger'
+import HidingOtherVesselsSVG from '../../../icons/Bouton_masquer_pistes_actif.svg?react'
+import ShowingOtherVesselsSVG from '../../../icons/Bouton_masquer_pistes_inactif.svg?react'
 
-type FilterParametersProps = Readonly<{
-  nonFilteredVesselsAreHidden: boolean
-  setNonFilteredVesselsAreHidden: (isChecked: boolean) => void
-}>
-export function FilterParameters({
-  nonFilteredVesselsAreHidden,
-  setNonFilteredVesselsAreHidden
-}: FilterParametersProps) {
+export function FilterParameters() {
   const dispatch = useMainAppDispatch()
+  const nonFilteredVesselsAreHidden = useMainAppSelector(state => state.filter.nonFilteredVesselsAreHidden)
 
   const handleCreateFilter = () => {
     dispatch(
@@ -35,7 +31,7 @@ export function FilterParameters({
         Icon={nonFilteredVesselsAreHidden ? ShowingOtherVesselsSVG : HidingOtherVesselsSVG}
         inverse
         text="les autres navires"
-        updateBooleanProperty={isChecked => setNonFilteredVesselsAreHidden(isChecked)}
+        updateBooleanProperty={isChecked => dispatch(hideOrShowNonFilteredVessels(isChecked))}
       />
     </Wrapper>
   )

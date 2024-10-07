@@ -18,7 +18,7 @@ import { VesselLabelLine } from '../../../domain/entities/vesselLabelLine'
 import { getLabelLineStyle } from '../../map/layers/styles/labelLine.style'
 import { monitorfishMap } from '../../map/monitorfishMap'
 import { VesselLabelOverlay } from '../components/VesselLabelOverlay'
-import { vesselsAdapter } from '../slice'
+import { vesselSelectors } from '../slice'
 
 import type { VesselLastPositionFeature } from '../../../domain/entities/vessel/types'
 import type { VectorLayerWithName } from '../../../domain/types/layer'
@@ -37,8 +37,8 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
 
   const hideNonSelectedVessels = useMainAppSelector(state => state.vessel.hideNonSelectedVessels)
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
-  const vesselsSelector = useMainAppSelector(state => state.vessel.vessels)
-  const vessels = vesselsAdapter.getSelectors().selectAll(vesselsSelector)
+  const vessels = useMainAppSelector(vesselSelectors.selectAll)
+
   const vesselsTracksShowed = useMainAppSelector(state => state.vessel.vesselsTracksShowed)
   const areVesselsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselsDisplayed)
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)

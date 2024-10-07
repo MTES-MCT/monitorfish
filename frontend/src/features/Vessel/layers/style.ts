@@ -85,7 +85,8 @@ export const getWebGLVesselStyle = (): WebGLStyle => {
     'icon-rotation': ['*', ['get', 'course'], Math.PI / 180],
     'icon-scale': 0.8,
     'icon-size': [25, 25],
-    'icon-src': 'boat_icons.png'
+    'icon-src': 'boat_icons.png',
+    variables: {}
   }
 }
 
@@ -104,8 +105,10 @@ export const getWebGLVesselStyleVariables = ({
   filterColorBlue,
   filterColorGreen,
   filterColorRed,
+  filterPreview: 0,
   hideNonSelectedVessels: booleanToInt(hideNonSelectedVessels),
   hideVesselsAtPort: booleanToInt(hideVesselsAtPort),
+  isFiltered: 0,
   isLight: booleanToInt(isLight),
   nonFilteredVesselsAreHidden: booleanToInt(nonFilteredVesselsAreHidden),
   previewFilteredVesselsMode: booleanToInt(previewFilteredVesselsMode),

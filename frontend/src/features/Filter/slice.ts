@@ -2,83 +2,66 @@ import { createSlice } from '@reduxjs/toolkit'
 
 import { getLocalStorageState } from '../../utils'
 
-import type { VesselFilter } from '../types/filter'
+import type { FilterTag, VesselFilter } from './types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
-const vesselsFiltersLocalStorageKey = 'vesselsFilters'
-const nonFilteredVesselsAreHiddenLocalStorageKey = 'nonFilteredVesselsAreHidden'
+/**
+ * @deprecated Replaced by `persistReducer`.
+ * See and `reducer.ts` and `MAIN_PERSISTOR_FILTER_MIGRATIONS`
+ */
+export const vesselsFiltersLocalStorageKey = 'vesselsFilters'
+
+/**
+ * @deprecated Replaced by `persistReducer`.
+ * See and `reducer.ts` and `MAIN_PERSISTOR_FILTER_MIGRATIONS`
+ */
+export const nonFilteredVesselsAreHiddenLocalStorageKey = 'nonFilteredVesselsAreHidden'
 
 export type FilterState = {
   filters: VesselFilter[]
   nonFilteredVesselsAreHidden: boolean
 }
-const INITIAL_STATE: FilterState = {
+export const INITIAL_STATE: FilterState = {
+  // TODO Remove after init of `persistReducer` (used for migration from localstorage).
   filters: getLocalStorageState([], vesselsFiltersLocalStorageKey),
+  // TODO Remove after init of `persistReducer` (used for migration from localstorage).
   nonFilteredVesselsAreHidden: getLocalStorageState(false, nonFilteredVesselsAreHiddenLocalStorageKey)
 }
-
 const filterSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'filter',
   reducers: {
-    /**
-     * Add a new filter
-     * @function addFilter
-     * @memberOf FilterReducer
-     * @param {Object=} state
-     * @param {{payload: VesselFilter}} action - The filter to add
-     */
-    addFilter(state, action) {
+    filterAdded(state, action: PayloadAction<VesselFilter>) {
       state.filters = state.filters.map(filter => {
         filter.showed = false
 
         return filter
       })
       state.filters = state.filters.concat(action.payload)
-      window.localStorage.setItem(vesselsFiltersLocalStorageKey, JSON.stringify(state.filters))
     },
 
-    /**
-     * Hide all filters
-     * @function hideFilters
-     * @memberOf FilterReducer
-     * @param {Object=} state
-     */
-    hideFilters(state) {
-      state.filters = state.filters.map(filter => ({ ...filter, showed: false }))
-      window.localStorage.setItem(vesselsFiltersLocalStorageKey, JSON.stringify(state.filters))
-      // prevents no filters shown & nonFilteredVesselsAreHidden = true leading to empty map
-      state.nonFilteredVesselsAreHidden = false
-      window.localStorage.setItem(
-        nonFilteredVesselsAreHiddenLocalStorageKey,
-        JSON.stringify(state.nonFilteredVesselsAreHidden)
-      )
-    },
-
-    /**
-     * Delete a given filter
-     * @function removeFilter
-     * @memberOf FilterReducer
-     * @param {Object=} state
-     * @param {{payload: string}} action - The filter UUID
-     */
-    removeFilter(state, action) {
+    filterRemoved(state, action: PayloadAction<string>) {
       const uuidToRemove = action.payload
       state.filters = state.filters.filter(filter => filter.uuid !== uuidToRemove)
-      window.localStorage.setItem(vesselsFiltersLocalStorageKey, JSON.stringify(state.filters))
+    },
+
+    filtersHidden(state) {
+      state.filters = state.filters.map(filter => ({ ...filter, showed: false }))
+
+      // prevents no filters shown & nonFilteredVesselsAreHidden = true leading to empty map
+      state.nonFilteredVesselsAreHidden = false
+    },
+
+    filterShowed(state, action: PayloadAction<string>) {
+      const uuidToShow = action.payload
+
+      state.filters = state.filters.map(filter => ({ ...filter, showed: filter.uuid === uuidToShow }))
     },
 
     /**
      * Remove tag from a given filter and delete filter if the filter contains no tag
      */
-    removeTagFromFilter(
-      state,
-      action: PayloadAction<{
-        type: string
-        uuid: string
-        value: string
-      }>
-    ) {
+    filterTagRemoved(state, action: PayloadAction<FilterTag>) {
       const filterUUID = action.payload.uuid
       const tagType = action.payload.type
       const tagValue = action.payload.value
@@ -110,41 +93,21 @@ const filterSlice = createSlice({
 
         return [...filtersPile, filter as VesselFilter]
       }, [])
-
-      window.localStorage.setItem(vesselsFiltersLocalStorageKey, JSON.stringify(state.filters))
     },
 
-    /**
-     * Hide non filtered vessels
-     * @function setNonFilteredVesselsAreHidden
-     * @memberOf FilterReducer
-     * @param {Object=} state
-     * @param {{
-     * payload: boolean
-     * }} action - The boolean
-     */
-    setNonFilteredVesselsAreHidden(state, action) {
+    setNonFilteredVesselsAreHidden(state, action: PayloadAction<boolean>) {
       state.nonFilteredVesselsAreHidden = action.payload
-      window.localStorage.setItem(nonFilteredVesselsAreHiddenLocalStorageKey, JSON.stringify(action.payload))
-    },
-
-    /**
-     * Show a given filter
-     * @function showFilter
-     * @memberOf FilterReducer
-     * @param {Object=} state
-     * @param {{payload: string}} action - The filter UUID
-     */
-    showFilter(state, action) {
-      const uuidToShow = action.payload
-
-      state.filters = state.filters.map(filter => ({ ...filter, showed: filter.uuid === uuidToShow }))
-      window.localStorage.setItem(vesselsFiltersLocalStorageKey, JSON.stringify(state.filters))
     }
   }
 })
 
-export const { addFilter, hideFilters, removeFilter, removeTagFromFilter, setNonFilteredVesselsAreHidden, showFilter } =
-  filterSlice.actions
+export const {
+  filterAdded,
+  filterRemoved,
+  filtersHidden,
+  filterShowed,
+  filterTagRemoved,
+  setNonFilteredVesselsAreHidden
+} = filterSlice.actions
 
 export const filterReducer = filterSlice.reducer

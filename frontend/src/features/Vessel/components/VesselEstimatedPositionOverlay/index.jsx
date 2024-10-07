@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import Overlay from 'ol/Overlay'
-import { COLORS } from '@constants/constants.js'
-import { LayerProperties } from '../../../../domain/entities/layers/constants.js'
-import VesselEstimatedPositionCard from './VesselEstimatedPositionCard.jsx'
-import { getCoordinates } from '../../../../coordinates.js'
-import { WSG84_PROJECTION } from '../../../../domain/entities/map/constants.js'
+import { COLORS } from '@constants/constants'
+import { LayerProperties } from '../../../../domain/entities/layers/constants'
+import VesselEstimatedPositionCard from './VesselEstimatedPositionCard'
+import { getCoordinates } from '../../../../coordinates'
+import { WSG84_PROJECTION } from '../../../../domain/entities/map/constants'
 import { useSelector } from 'react-redux'
-import { monitorfishMap } from '../../../map/monitorfishMap.js'
+import { monitorfishMap } from '../../../map/monitorfishMap'
 
 const VesselEstimatedPositionOverlay = ({ pointerMoveEventPixel, feature }) => {
   const { coordinatesFormat } = useSelector(state => state.map)

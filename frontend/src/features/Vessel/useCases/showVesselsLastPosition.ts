@@ -1,22 +1,17 @@
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
 import { VESSELS_VECTOR_LAYER, VESSELS_VECTOR_SOURCE } from '@features/Vessel/layers/VesselsLayer/constants'
-import Feature from 'ol/Feature'
-import Point from 'ol/geom/Point'
+import { buildFeature } from '@features/Vessel/utils'
 import { transform } from 'ol/proj'
 
 import { applyFilterToVessels } from './applyFilterToVessels'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../../../domain/entities/map/constants'
-import { Vessel } from '../../../../../domain/entities/vessel/vessel'
-import { resetIsUpdatingVessels } from '../../../../../domain/shared_slices/Global'
-import getUniqueSpeciesAndDistricts from '../../../../../domain/use_cases/species/getUniqueSpeciesAndDistricts'
-import { customHexToRGB } from '../../../../../utils'
-import { setVessels, setVesselsSpeciesAndDistricts } from '../../../slice'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map/constants'
+import { Vessel } from '../../../domain/entities/vessel/vessel'
+import { resetIsUpdatingVessels } from '../../../domain/shared_slices/Global'
+import getUniqueSpeciesAndDistricts from '../../../domain/use_cases/species/getUniqueSpeciesAndDistricts'
+import { customHexToRGB } from '../../../utils'
+import { setVessels, setVesselsSpeciesAndDistricts } from '../slice'
 
-import type {
-  VesselEnhancedLastPositionWebGLObject,
-  VesselLastPosition,
-  VesselLastPositionFeature
-} from '../../../../../domain/entities/vessel/types'
+import type { VesselEnhancedLastPositionWebGLObject, VesselLastPosition } from '../../../domain/entities/vessel/types'
 import type { MainAppThunk } from '@store'
 
 export const showVesselsLastPosition =
@@ -56,10 +51,13 @@ export const showVesselsLastPosition =
 function convertToEnhancedLastPositions(vessels: VesselLastPosition[]): VesselEnhancedLastPositionWebGLObject[] {
   return vessels.map(vessel => ({
     coordinates: transform([vessel.longitude, vessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION),
+    course: vessel.course,
     filterPreview: 0,
     hasBeaconMalfunction: !!vessel.beaconMalfunctionId,
+    isAtPort: vessel.isAtPort,
     isFiltered: 0,
     lastPositionSentAt: new Date(vessel.dateTime).getTime(),
+    speed: vessel.speed,
     vesselFeatureId: Vessel.getVesselFeatureId(vessel),
     vesselProperties: {
       ...vessel,
@@ -75,27 +73,4 @@ function convertToEnhancedLastPositions(vessels: VesselLastPosition[]): VesselEn
         : []
     }
   }))
-}
-
-function buildFeature(vessel: VesselEnhancedLastPositionWebGLObject): VesselLastPositionFeature {
-  const propertiesUsedForStyling = {
-    coordinates: vessel.coordinates,
-    course: vessel.vesselProperties.course,
-    filterPreview: vessel.filterPreview,
-    hasBeaconMalfunction: vessel.hasBeaconMalfunction,
-    isAtPort: vessel.vesselProperties.isAtPort,
-    isFiltered: vessel.isFiltered,
-    lastPositionSentAt: vessel.lastPositionSentAt,
-    speed: vessel.vesselProperties.speed
-  }
-
-  const feature = new Feature({
-    vesselFeatureId: vessel.vesselFeatureId,
-    ...propertiesUsedForStyling,
-    geometry: new Point(vessel.coordinates)
-  }) as VesselLastPositionFeature
-  feature.setId(vessel.vesselFeatureId)
-  feature.vesselProperties = vessel.vesselProperties
-
-  return feature
 }

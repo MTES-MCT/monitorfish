@@ -6,12 +6,12 @@ import Point from 'ol/geom/Point'
 import { Vector } from 'ol/layer'
 import { transform } from 'ol/proj'
 
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map/constants.js'
-import { LayerProperties } from '../../../domain/entities/layers/constants.js'
-import { Vessel } from '../../../domain/entities/vessel/vessel.js'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map/constants'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
+import { Vessel } from '../../../domain/entities/vessel/vessel'
 
-import { getSelectedVesselStyle } from './style.js'
-import { monitorfishMap } from '../../map/monitorfishMap.js'
+import { getSelectedVesselStyle } from './style'
+import { monitorfishMap } from '../../map/monitorfishMap'
 
 const VesselSelectedLayer = () => {
   const { selectedVessel, vesselsTracksShowed } = useSelector(state => state.vessel)

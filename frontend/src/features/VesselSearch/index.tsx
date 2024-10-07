@@ -14,7 +14,7 @@ import { VesselSearchResult } from './VesselSearchResult'
 import { getOnlyVesselIdentityProperties } from '../../domain/entities/vessel/vessel'
 import { searchVessels as searchVesselsAction } from '../../domain/use_cases/vessel/searchVessels'
 import { showVessel } from '../../domain/use_cases/vessel/showVessel'
-import { vesselsAdapter } from '../Vessel/slice'
+import { vesselSelectors } from '../Vessel/slice'
 
 import type { VesselIdentity } from '../../domain/entities/vessel/types'
 import type { ChangeEvent, InputHTMLAttributes, MutableRefObject } from 'react'
@@ -52,8 +52,7 @@ export function VesselSearch({
   const dispatch = useMainAppDispatch()
   const baseUrl = window.location.origin
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
-  const vesselsSelector = useMainAppSelector(state => state.vessel.vessels)
-  const vessels = vesselsAdapter.getSelectors().selectAll(vesselsSelector)
+  const vessels = useMainAppSelector(vesselSelectors.selectAll)
   const searchQueryRef = useRef('')
   const wrapperRef = useRef(null)
 

@@ -1,38 +1,27 @@
 import { COLORS } from '@constants/constants'
+import { hideAllFilters } from '@features/Filter/useCases/hideAllFilters'
+import { removeFilter } from '@features/Filter/useCases/removeFilter'
+import { showFilter } from '@features/Filter/useCases/showFilter'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useState } from 'react'
 import styled from 'styled-components'
 
 import { TagList } from './TagList'
-import ChevronIconSVG from '../../../../icons/Chevron_simple_gris.svg?react'
-import CloseIconSVG from '../../../../icons/Croix_grise.svg?react'
-import FilterSVG from '../../../../icons/Icone_filtres_dark.svg?react'
-import ShowIconSVG from '../../../../icons/oeil_affiche.svg?react'
-import HideIconSVG from '../../../../icons/oeil_masque.svg?react'
+import ChevronIconSVG from '../../../icons/Chevron_simple_gris.svg?react'
+import CloseIconSVG from '../../../icons/Croix_grise.svg?react'
+import FilterSVG from '../../../icons/Icone_filtres_dark.svg?react'
+import ShowIconSVG from '../../../icons/oeil_affiche.svg?react'
+import HideIconSVG from '../../../icons/oeil_masque.svg?react'
 
-import type { VesselFilter } from 'domain/types/filter'
+import type { VesselFilter } from '../../types'
 
 type FilterProps = Readonly<{
   filter: VesselFilter
-  hideFilters: () => void
   index: number
   isLastItem: boolean
-  removeFilter: (uuid: string) => void
-  removeTagFromFilter: (removeObject: {
-    type: string | undefined
-    uuid: string | undefined
-    value: number | string
-  }) => void
-  showFilter: (uuid: string) => void
 }>
-export function Filter({
-  filter,
-  hideFilters,
-  index,
-  isLastItem,
-  removeFilter,
-  removeTagFromFilter,
-  showFilter
-}: FilterProps) {
+export function Filter({ filter, index, isLastItem }: FilterProps) {
+  const dispatch = useMainAppDispatch()
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -44,14 +33,14 @@ export function Filter({
           {filter.name ? filter.name.replace(/_/g, ' ') : `Filtre n°${index}`}
         </Text>
         {filter.showed ? (
-          <ShowIcon onClick={() => hideFilters()} title="Cacher le filtre" />
+          <ShowIcon onClick={() => dispatch(hideAllFilters())} title="Cacher le filtre" />
         ) : (
-          <HideIcon onClick={() => showFilter(filter.uuid)} title="Afficher le filtre" />
+          <HideIcon onClick={() => dispatch(showFilter(filter.uuid))} title="Afficher le filtre" />
         )}
-        <CloseIcon onClick={() => removeFilter(filter.uuid)} title="Supprimer le filtre de ma sélection" />
+        <CloseIcon onClick={() => dispatch(removeFilter(filter.uuid))} title="Supprimer le filtre de ma sélection" />
       </FilterItem>
       <FilterTags $isLastItem={isLastItem} $isOpen={isOpen}>
-        <TagList filters={filter.filters} removeTagFromFilter={removeTagFromFilter} uuid={filter.uuid} />
+        <TagList filters={filter.filters} uuid={filter.uuid} />
       </FilterTags>
     </FilterWrapper>
   )

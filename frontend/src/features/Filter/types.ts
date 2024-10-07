@@ -1,4 +1,4 @@
-import type { GeoJSON } from './GeoJSON'
+import type { GeoJSON } from '../../domain/types/GeoJSON'
 
 export type VesselFilter = {
   color: string
@@ -23,4 +23,10 @@ export type ZoneSelected = {
   code: string
   feature: GeoJSON.Feature
   name: string
+}
+
+export type FilterTag = {
+  type: string
+  uuid?: string | undefined
+  value: string | number
 }

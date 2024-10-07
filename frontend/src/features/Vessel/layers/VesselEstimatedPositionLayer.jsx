@@ -1,13 +1,13 @@
 import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
-import { LayerProperties } from '../../../domain/entities/layers/constants.js'
-import { EstimatedPosition } from '../../../domain/entities/estimatedPosition.js'
-import { getVesselLastPositionVisibilityDates, Vessel, vesselIsShowed } from '../../../domain/entities/vessel/vessel.js'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
+import { EstimatedPosition } from '../../../domain/entities/estimatedPosition'
+import { getVesselLastPositionVisibilityDates, Vessel, vesselIsShowed } from '../../../domain/entities/vessel/vessel'
 import { Vector } from 'ol/layer'
-import { getEstimatedPositionStyle } from './styles/vesselEstimatedPosition.style.jsx'
-import { monitorfishMap } from '../../map/monitorfishMap.js'
-import { vesselsAdapter } from '../slice.ts'
+import { getEstimatedPositionStyle } from './styles/vesselEstimatedPosition.style'
+import { monitorfishMap } from '../../map/monitorfishMap'
+import { vesselsAdapter, vesselSelectors } from '../slice'
 
 const VesselEstimatedPositionLayer = () => {
   const {
@@ -15,8 +15,7 @@ const VesselEstimatedPositionLayer = () => {
     vesselsTracksShowed,
     selectedVesselIdentity
   } = useSelector(state => state.vessel)
-  const vesselsSelector = useSelector(state => state.vessel.vessels)
-  const vessels = vesselsAdapter.getSelectors().selectAll(vesselsSelector)
+  const vessels = useSelector(vesselSelectors.selectAll)
 
   const {
     nonFilteredVesselsAreHidden

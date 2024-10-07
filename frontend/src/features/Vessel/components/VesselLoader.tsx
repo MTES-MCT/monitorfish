@@ -1,5 +1,5 @@
 import { FulfillingBouncingCircleSpinner } from '@components/FulfillingBouncingCircleSpinner'
-import { showVesselsLastPosition } from '@features/Vessel/layers/VesselsLayer/useCases/showVesselsLastPosition'
+import { showVesselsLastPosition } from '@features/Vessel/useCases/showVesselsLastPosition'
 import { useIsInLightMode } from '@hooks/useIsInLightMode'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useEffect, useState } from 'react'

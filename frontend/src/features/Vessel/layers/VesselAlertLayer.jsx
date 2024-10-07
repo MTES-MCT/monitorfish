@@ -4,18 +4,18 @@ import VectorSource from 'ol/source/Vector'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 import { Vector } from 'ol/layer'
-import { LayerProperties } from '../../../domain/entities/layers/constants.js'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
 
-import { getVesselAlertStyle } from './style.js'
+import { getVesselAlertStyle } from './style'
 import {
   getVesselCompositeIdentifier,
   getVesselLastPositionVisibilityDates,
   Vessel,
   vesselIsShowed
-} from '../../../domain/entities/vessel/vessel.js'
-import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser.js'
-import { monitorfishMap } from '../../map/monitorfishMap.js'
-import { vesselsAdapter } from '../slice.ts'
+} from '../../../domain/entities/vessel/vessel'
+import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser'
+import { monitorfishMap } from '../../map/monitorfishMap'
+import { vesselsAdapter, vesselSelectors } from '../slice'
 
 const VesselAlertLayer = () => {
   const isSuperUser = useIsSuperUser()
@@ -25,8 +25,7 @@ const VesselAlertLayer = () => {
     selectedVesselIdentity,
     vesselsTracksShowed
   } = useSelector(state => state.vessel)
-  const vesselsSelector = useSelector(state => state.vessel.vessels)
-  const vessels = vesselsAdapter.getSelectors().selectAll(vesselsSelector)
+  const vessels = useSelector(vesselSelectors.selectAll)
 
   const {
     nonFilteredVesselsAreHidden

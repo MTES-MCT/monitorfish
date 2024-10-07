@@ -1,5 +1,5 @@
+import { SaveVesselFiltersModal } from '@features/Filter/components/SaveVesselFiltersModal'
 import { MapToolButton } from '@features/MainWindow/components/MapButtons/shared/MapToolButton'
-import { SaveVesselFiltersModal } from '@features/MainWindow/components/MapButtons/VesselFilters/SaveVesselFiltersModal'
 import { THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { batch } from 'react-redux'
@@ -16,7 +16,6 @@ import { LayerType as LayersType, LayerType } from '../../domain/entities/layers
 import { InteractionListener, InteractionType } from '../../domain/entities/map/constants'
 import { VesselLocation } from '../../domain/entities/vessel/vessel'
 import { setDisplayedComponents } from '../../domain/shared_slices/DisplayedComponent'
-import { addFilter } from '../../domain/shared_slices/Filter'
 import { setBlockVesselsUpdate, setPreviewFilteredVesselsMode } from '../../domain/shared_slices/Global'
 import { animateToExtent } from '../../domain/shared_slices/Map'
 import { addVesselListFilterZone } from '../../domain/use_cases/vessel/addVesselListFilterZone'
@@ -36,7 +35,7 @@ import { useGetFleetSegmentsQuery } from '../FleetSegment/apis'
 import VesselListSVG from '../icons/Icone_liste_navires.svg?react'
 import PreviewSVG from '../icons/Oeil_apercu_carte.svg?react'
 import { setProcessingRegulationSearchedZoneExtent } from '../Regulation/slice'
-import { setPreviewFilteredVesselsFeatures, vesselsAdapter } from '../Vessel/slice'
+import { setPreviewFilteredVesselsFeatures, vesselSelectors } from '../Vessel/slice'
 
 import type { VesselEnhancedLastPositionWebGLObject } from '../../domain/entities/vessel/types'
 
@@ -68,8 +67,7 @@ export function VesselList({ namespace }) {
   const isVesselListModalDisplayed = useMainAppSelector(state => state.displayedComponent.isVesselListModalDisplayed)
   const { drawedGeometry } = useListenForDrawedGeometry(InteractionListener.VESSELS_LIST)
   const { uniqueVesselsDistricts: districts, uniqueVesselsSpecies: species } = useMainAppSelector(state => state.vessel)
-  const vesselsSelector = useMainAppSelector(state => state.vessel.vessels)
-  const vessels = vesselsAdapter.getSelectors().selectAll(vesselsSelector)
+  const vessels = useMainAppSelector(vesselSelectors.selectAll)
   const getFleetSegmentsQuery = useGetFleetSegmentsQuery()
   const gears = useMainAppSelector(state => state.gear.gears)
 
@@ -241,25 +239,14 @@ export function VesselList({ namespace }) {
     dispatch(resetZonesSelected())
   }, [dispatch])
 
-  const addFilterCallback = useCallback(
-    filter => {
-      dispatch(addFilter(filter))
-    },
-    [dispatch]
-  )
-
   const selectBox = useCallback(() => {
-    batch(() => {
-      dispatch(addVesselListFilterZone(InteractionType.SQUARE))
-      dispatch(setBlockVesselsUpdate(true))
-    })
+    dispatch(addVesselListFilterZone(InteractionType.SQUARE))
+    dispatch(setBlockVesselsUpdate(true))
   }, [dispatch])
 
   const selectPolygon = useCallback(() => {
-    batch(() => {
-      dispatch(addVesselListFilterZone(InteractionType.POLYGON))
-      dispatch(setBlockVesselsUpdate(true))
-    })
+    dispatch(addVesselListFilterZone(InteractionType.POLYGON))
+    dispatch(setBlockVesselsUpdate(true))
   }, [dispatch])
 
   const callRemoveZoneSelected = useCallback(
@@ -508,7 +495,6 @@ export function VesselList({ namespace }) {
         setIsOpen={setDownloadVesselListModalIsOpen}
       />
       <SaveVesselFiltersModal
-        addFilter={addFilterCallback}
         closeAndResetVesselList={closeAndResetVesselList}
         filters={{
           countriesFiltered,

@@ -6,27 +6,22 @@ import styled from 'styled-components'
 
 import { FilterTag } from './FilterTag'
 import { IconTypes } from './TagIconType'
-import { vesselSize } from '../../../../../domain/entities/vessel/vessel'
+import { vesselSize } from '../../../../domain/entities/vessel/vessel'
 
-import type { FilterValues } from 'domain/types/filter'
+import type { FilterValues } from '../../types'
 
 type TagListProps = Readonly<{
   className?: string | undefined
   filters: FilterValues
-  removeTagFromFilter?: (removeObject: {
-    type: string | undefined
-    uuid: string | undefined
-    value: number | string
-  }) => void
   uuid?: string
 }>
-export function TagList({ className, filters, removeTagFromFilter, uuid }: TagListProps) {
+export function TagList({ className, filters, uuid }: TagListProps) {
   const [tags, setTags] = useState<
     Array<{
       iconElement: JSX.Element
       text: string
       type: string
-      value: number | string
+      value: string | number
     }>
   >([])
 
@@ -35,7 +30,7 @@ export function TagList({ className, filters, removeTagFromFilter, uuid }: TagLi
       iconElement: JSX.Element
       text: string
       type: string
-      value: number | string
+      value: string | number
     }> = []
 
     if (filters.countriesFiltered?.length) {
@@ -140,15 +135,7 @@ export function TagList({ className, filters, removeTagFromFilter, uuid }: TagLi
       {tags?.length ? (
         <>
           {tags.map(tag => (
-            <FilterTag
-              key={tag.text}
-              iconElement={tag.iconElement}
-              removeTagFromFilter={removeTagFromFilter}
-              text={tag.text}
-              type={tag.type}
-              uuid={uuid}
-              value={tag.value}
-            />
+            <FilterTag key={tag.text} iconElement={tag.iconElement} tag={tag} text={tag.text} uuid={uuid} />
           ))}
         </>
       ) : (

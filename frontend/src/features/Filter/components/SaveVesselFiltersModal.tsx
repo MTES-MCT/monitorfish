@@ -1,28 +1,29 @@
 import { COLORS } from '@constants/constants'
 import { StyledModalHeader } from '@features/commonComponents/StyledModalHeader'
-import { TextInput, Icon, Size } from '@mtes-mct/monitor-ui'
+import { addFilter } from '@features/Filter/useCases/addFilter'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { Icon, Size, TextInput } from '@mtes-mct/monitor-ui'
 import { useState } from 'react'
 import { CirclePicker } from 'react-color'
 import { Modal } from 'rsuite'
 import styled from 'styled-components'
 import { v4 as uuidv4 } from 'uuid'
 
-import { TagList } from './TagList'
+import { TagList } from './VesselFilters/TagList'
 
 type SaveVesselFiltersModalProps = Readonly<{
-  addFilter: (filter: { color: string; filters: any; name: string; showed: boolean; uuid: string }) => void
   closeAndResetVesselList: () => void
   filters: any
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
 }>
 export function SaveVesselFiltersModal({
-  addFilter,
   closeAndResetVesselList,
   filters,
   isOpen,
   setIsOpen
 }: SaveVesselFiltersModalProps) {
+  const dispatch = useMainAppDispatch()
   const [filterName, setFilterName] = useState<string | undefined>(undefined)
   const [filterColor, setFilterColor] = useState('#2c6e49')
 
@@ -39,7 +40,7 @@ export function SaveVesselFiltersModal({
       uuid: uuidv4()
     }
 
-    addFilter(filter)
+    dispatch(addFilter(filter))
 
     setIsOpen(false)
     setFilterName('')

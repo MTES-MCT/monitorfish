@@ -26,11 +26,11 @@ export function SentMessageList({ detail, state }: SentMessageListProps) {
         <>
           {isFetching && <p>Chargement en cours...</p>}
           {!isFetching && subscribers.length === 0 && (
-            <p>
+            <InfoMessage>
               {state === PriorNotification.State.FAILED_SEND
                 ? `Aucune unité n'est inscrite à ce préavis.`
                 : `Aucun message n’a été envoyé pour ce préavis.`}
-            </p>
+            </InfoMessage>
           )}
           {!isFetching &&
             subscribers.map(subsriber => (
@@ -52,7 +52,9 @@ export function SentMessageList({ detail, state }: SentMessageListProps) {
       {!isError && (
         <>
           {isFetching && <p>Chargement en cours...</p>}
-          {!isFetching && sentMessagesBatches.length === 0 && <p>Aucun message n’a été envoyé pour ce préavis.</p>}
+          {!isFetching && sentMessagesBatches.length === 0 && (
+            <InfoMessage>Aucun message n’a été envoyé pour ce préavis.</InfoMessage>
+          )}
           {!isFetching && sentMessagesBatches.length > 0 && (
             <History current={sentMessagesBatches.length} vertical>
               {sentMessagesBatches.map(sentMessagesBatch => (
@@ -88,6 +90,11 @@ const Title = styled.p`
   margin: 16px 0 0;
 `
 
+const InfoMessage = styled.p`
+  color: ${p => p.theme.color.slateGray};
+  font-style: italic;
+`
+
 const SubscriberRow = styled.address`
   background-color: ${p => p.theme.color.gainsboro};
   display: flex;
@@ -121,7 +128,7 @@ const HistoryItem = styled(Steps.Item)<{
   $isSuccess: boolean
 }>`
   padding-bottom: 16px;
-  padding-left: 34px;
+  padding-left: 24px;
 
   > .rs-steps-item-icon-wrapper {
     border-radius: 0;

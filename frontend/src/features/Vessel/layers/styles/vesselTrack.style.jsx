@@ -2,8 +2,8 @@ import { Icon, Style } from 'ol/style'
 import CircleStyle from 'ol/style/Circle'
 import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
-import { COLORS } from '../../../../constants/constants'
-import { theme } from '../../../../ui/theme'
+import { COLORS } from '@constants/constants.ts'
+import { theme } from '../../../../ui/theme.ts'
 
 const trackLineStyleCache = new Map()
 

@@ -4,8 +4,8 @@ import { getVesselReportings } from '@features/Reporting/useCases/getVesselRepor
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { Vessel } from '../../../domain/entities/vessel/vessel'
-import { removeVesselReporting } from '../../../domain/shared_slices/Vessel'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
+import { removeVesselReporting } from '../../Vessel/slice'
 import { removeReportingsIdsFromCurrentReportings } from '../slice'
 
 import type { MainAppThunk } from '@store'

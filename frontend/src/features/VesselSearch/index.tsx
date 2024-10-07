@@ -14,11 +14,11 @@ import { VesselSearchResult } from './VesselSearchResult'
 import { getOnlyVesselIdentityProperties } from '../../domain/entities/vessel/vessel'
 import { searchVessels as searchVesselsAction } from '../../domain/use_cases/vessel/searchVessels'
 import { showVessel } from '../../domain/use_cases/vessel/showVessel'
+import { vesselsAdapter } from '../Vessel/slice'
 
 import type { VesselIdentity } from '../../domain/entities/vessel/types'
 import type { ChangeEvent, InputHTMLAttributes, MutableRefObject } from 'react'
 import type { Promisable } from 'type-fest'
-import {vesselsAdapter} from "../../domain/shared_slices/Vessel";
 
 type VesselSearchProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'defaultValue' | 'onChange'> & {
   baseRef?: MutableRefObject<HTMLDivElement | undefined> | undefined

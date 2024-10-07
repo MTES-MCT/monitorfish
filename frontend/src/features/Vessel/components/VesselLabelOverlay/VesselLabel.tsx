@@ -1,7 +1,8 @@
+import { COLORS } from '@constants/constants'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../../constants/constants'
 import {
   getDetectabilityRiskFactorText,
   getImpactRiskFactorText,
@@ -9,7 +10,6 @@ import {
   getRiskFactorColor
 } from '../../../../domain/entities/vessel/riskFactor'
 import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 
 export function VesselLabel({
   featureId,

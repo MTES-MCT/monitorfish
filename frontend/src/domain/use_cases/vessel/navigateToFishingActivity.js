@@ -1,6 +1,6 @@
 import { logbookActions } from '../../../features/Logbook/slice'
 import { FishingActivitiesTab, VesselSidebarTab } from '../../entities/vessel/vessel'
-import { showVesselSidebarTab } from '../../shared_slices/Vessel'
+import { showVesselSidebarTab } from '@features/Vessel/slice.ts'
 
 const navigateToFishingActivity = id => (dispatch, getState) => {
   const { vesselSidebarTab } = getState().vessel

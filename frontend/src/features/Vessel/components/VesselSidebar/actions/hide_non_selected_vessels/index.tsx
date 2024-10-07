@@ -1,7 +1,7 @@
+import { setHideNonSelectedVessels } from '@features/Vessel/slice'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME } from '@mtes-mct/monitor-ui'
-import { setHideNonSelectedVessels } from 'domain/shared_slices/Vessel'
 import styled from 'styled-components'
 
 import HidingOtherTracksSVG from '../../../../../icons/Bouton_masquer_pistes_actif.svg?react'

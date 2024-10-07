@@ -11,8 +11,8 @@ import { getCoordinates } from '../../../../coordinates'
 import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
 import { timeagoFrenchLocale } from '../../../../utils'
 import BeaconMalfunctionSVG from '../../../icons/Icone_VMS_dark.svg?react'
+import { OverlayPosition } from '../../../map/overlays/Overlay'
 import { getAlertNameFromType } from '../../../SideWindow/Alert/AlertListAndReportingList/utils'
-import { OverlayPosition } from '../Overlay'
 
 // @ts-ignore
 timeago.register('fr', timeagoFrenchLocale)

@@ -3,8 +3,8 @@ import { getVesselReportings } from '@features/Reporting/useCases/getVesselRepor
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { Vessel } from '../../../domain/entities/vessel/vessel'
-import { addVesselReporting } from '../../../domain/shared_slices/Vessel'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
+import { addVesselReporting } from '../../Vessel/slice'
 import { addReportingToCurrentReportings } from '../slice'
 
 import type { ReportingCreation } from '@features/Reporting/types'

@@ -4,18 +4,18 @@ import VectorSource from 'ol/source/Vector'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 import { Vector } from 'ol/layer'
-import { LayerProperties } from '../../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../domain/entities/layers/constants.js'
 
-import { getVesselInfractionSuspicionStyle } from './style'
+import { getVesselInfractionSuspicionStyle } from './style.js'
 import {
   getVesselCompositeIdentifier,
   getVesselLastPositionVisibilityDates,
   Vessel,
   vesselIsShowed
-} from '../../../../domain/entities/vessel/vessel'
-import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
-import { monitorfishMap } from '../../monitorfishMap'
-import { vesselsAdapter } from '../../../../domain/shared_slices/Vessel'
+} from '../../../domain/entities/vessel/vessel.js'
+import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser.js'
+import { monitorfishMap } from '../../map/monitorfishMap.js'
+import { vesselsAdapter } from '../slice.ts'
 
 const VesselInfractionSuspicionLayer = () => {
   const isSuperUser = useIsSuperUser()

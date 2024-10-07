@@ -1,12 +1,12 @@
+import { useMoveOverlayWhenDragging } from '@hooks/useMoveOverlayWhenDragging'
+import { useMoveOverlayWhenZooming } from '@hooks/useMoveOverlayWhenZooming'
 import Overlay from 'ol/Overlay'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { VesselLabel } from './VesselLabel'
 import { getVesselCompositeIdentifier } from '../../../../domain/entities/vessel/vessel'
-import { useMoveOverlayWhenDragging } from '../../../../hooks/useMoveOverlayWhenDragging'
-import { useMoveOverlayWhenZooming } from '../../../../hooks/useMoveOverlayWhenZooming'
-import { monitorfishMap } from '../../monitorfishMap'
+import { monitorfishMap } from '../../../map/monitorfishMap'
 
 import type { MutableRefObject } from 'react'
 

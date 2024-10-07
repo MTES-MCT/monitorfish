@@ -9,10 +9,10 @@ import {
   VESSEL_BEACON_MALFUNCTION_STYLE,
   VESSEL_INFRACTION_SUSPICION_STYLE,
   VESSEL_SELECTOR_STYLE
-} from '../../../../domain/entities/vessel/vessel'
-import { theme } from '../../../../ui/theme'
-import { booleanToInt } from '../../../../utils'
-import { featureHas, featureHasNot, stateIs } from '../styles/utils/webgl'
+} from '../../../domain/entities/vessel/vessel'
+import { theme } from '../../../ui/theme'
+import { booleanToInt } from '../../../utils'
+import { featureHas, featureHasNot, stateIs } from '../../map/layers/styles/utils/webgl'
 
 import type { WebGLStyle } from 'ol/style/webgl'
 
@@ -45,18 +45,7 @@ const hideDeprecatedPositionsCondition = [
 
 const showOnlyNonFilteredVessels = ['case', stateIs('nonFilteredVesselsAreHidden'), featureHas('isFiltered'), true]
 
-export const getWebGLVesselStyle = ({
-  filterColorBlue,
-  filterColorGreen,
-  filterColorRed,
-  hideNonSelectedVessels,
-  hideVesselsAtPort,
-  isLight,
-  nonFilteredVesselsAreHidden,
-  previewFilteredVesselsMode,
-  vesselIsHiddenTimeThreshold,
-  vesselIsOpacityReducedTimeThreshold
-}): WebGLStyle => {
+export const getWebGLVesselStyle = (): WebGLStyle => {
   const filterColor = ['color', ['var', 'filterColorRed'], ['var', 'filterColorGreen'], ['var', 'filterColorBlue']]
   const defaultVesselColor = ['case', stateIs('isLight'), theme.color.lightGray, theme.color.charcoal]
   const booleanFilter = [
@@ -96,21 +85,33 @@ export const getWebGLVesselStyle = ({
     'icon-rotation': ['*', ['get', 'course'], Math.PI / 180],
     'icon-scale': 0.8,
     'icon-size': [25, 25],
-    'icon-src': 'boat_icons.png',
-    variables: {
-      filterColorBlue,
-      filterColorGreen,
-      filterColorRed,
-      hideNonSelectedVessels: booleanToInt(hideNonSelectedVessels),
-      hideVesselsAtPort: booleanToInt(hideVesselsAtPort),
-      isLight: booleanToInt(isLight),
-      nonFilteredVesselsAreHidden: booleanToInt(nonFilteredVesselsAreHidden),
-      previewFilteredVesselsMode: booleanToInt(previewFilteredVesselsMode),
-      vesselIsHiddenTimeThreshold,
-      vesselIsOpacityReducedTimeThreshold
-    }
+    'icon-src': 'boat_icons.png'
   }
 }
+
+export const getWebGLVesselStyleVariables = ({
+  filterColorBlue,
+  filterColorGreen,
+  filterColorRed,
+  hideNonSelectedVessels,
+  hideVesselsAtPort,
+  isLight,
+  nonFilteredVesselsAreHidden,
+  previewFilteredVesselsMode,
+  vesselIsHiddenTimeThreshold,
+  vesselIsOpacityReducedTimeThreshold
+}) => ({
+  filterColorBlue,
+  filterColorGreen,
+  filterColorRed,
+  hideNonSelectedVessels: booleanToInt(hideNonSelectedVessels),
+  hideVesselsAtPort: booleanToInt(hideVesselsAtPort),
+  isLight: booleanToInt(isLight),
+  nonFilteredVesselsAreHidden: booleanToInt(nonFilteredVesselsAreHidden),
+  previewFilteredVesselsMode: booleanToInt(previewFilteredVesselsMode),
+  vesselIsHiddenTimeThreshold,
+  vesselIsOpacityReducedTimeThreshold
+})
 
 export const getSelectedVesselStyle =
   ({ isLight }) =>

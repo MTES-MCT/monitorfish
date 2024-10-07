@@ -5,10 +5,10 @@ import GeoJSON from 'ol/format/GeoJSON'
 import { Vector } from 'ol/layer'
 import { Stroke, Style } from 'ol/style'
 
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map/constants'
-import { LayerProperties } from '../../../domain/entities/layers/constants'
-import { COLORS } from '../../../constants/constants'
-import { monitorfishMap } from '../monitorfishMap'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map/constants.ts'
+import { LayerProperties } from '../../../domain/entities/layers/constants.ts'
+import { COLORS } from '@constants/constants.ts'
+import { monitorfishMap } from '../../map/monitorfishMap.ts'
 
 const FilterLayer = () => {
   const filters = useSelector(state => state.filter.filters)

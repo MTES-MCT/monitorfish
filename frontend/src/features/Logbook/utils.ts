@@ -1,10 +1,10 @@
+import { getFishingActivityCircleStyle } from '@features/Vessel/layers/styles/vesselTrack.style'
 import { Feature } from 'ol'
 import Point from 'ol/geom/Point'
 
 import { LogbookMessageType, LogbookOperationType } from './constants'
 import { LayerProperties } from '../../domain/entities/layers/constants'
 import { undefinedize } from '../../utils/undefinedize'
-import { getFishingActivityCircleStyle } from '../map/layers/styles/vesselTrack.style'
 
 import type { CatchProperty, CatchWithProperties, ProtectedCatchWithProperties } from './components/VesselLogbook/types'
 import type { LogbookCatch, LogbookMessage, PNOMessageValue, ProtectedSpeciesCatch } from './Logbook.types'

@@ -1,13 +1,13 @@
 import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
-import { LayerProperties } from '../../../../domain/entities/layers/constants'
-import { EstimatedPosition } from '../../../../domain/entities/estimatedPosition'
-import { getVesselLastPositionVisibilityDates, Vessel, vesselIsShowed } from '../../../../domain/entities/vessel/vessel'
+import { LayerProperties } from '../../../domain/entities/layers/constants.js'
+import { EstimatedPosition } from '../../../domain/entities/estimatedPosition.js'
+import { getVesselLastPositionVisibilityDates, Vessel, vesselIsShowed } from '../../../domain/entities/vessel/vessel.js'
 import { Vector } from 'ol/layer'
-import { getEstimatedPositionStyle } from '../styles/vesselEstimatedPosition.style'
-import { monitorfishMap } from '../../monitorfishMap'
-import { vesselsAdapter } from '../../../../domain/shared_slices/Vessel'
+import { getEstimatedPositionStyle } from './styles/vesselEstimatedPosition.style.jsx'
+import { monitorfishMap } from '../../map/monitorfishMap.js'
+import { vesselsAdapter } from '../slice.ts'
 
 const VesselEstimatedPositionLayer = () => {
   const {

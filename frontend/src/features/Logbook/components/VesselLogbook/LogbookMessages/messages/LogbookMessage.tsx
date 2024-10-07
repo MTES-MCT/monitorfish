@@ -107,7 +107,7 @@ export function LogbookMessage({
 
         {!isManuallyCreated && logbookMessage.rawMessage && (
           <Xml
-            onClick={() => openXML(logbookMessage.rawMessage)}
+            onClick={() => openXML(logbookMessage.rawMessage!)}
             style={{ cursor: 'pointer' }}
             title="Ouvrir le message XML brut"
           />

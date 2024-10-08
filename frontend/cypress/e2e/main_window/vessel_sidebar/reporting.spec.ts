@@ -1,5 +1,7 @@
 /* eslint-disable no-undef */
 
+import { addAndCreateReportingWithinVesselSidebar } from './utils'
+
 context('Vessel sidebar reporting tab', () => {
   beforeEach(() => {
     cy.loadPath('/#@-824534.42,6082993.21,8.70')
@@ -19,7 +21,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.wait('@getVesselReportings')
     cy.wait(100)
 
-    createReporting()
+    addAndCreateReportingWithinVesselSidebar()
     cy.wait('@getVesselReportings')
 
     // Then
@@ -98,7 +100,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.wait('@getVesselReportings')
     cy.wait(100)
 
-    createReporting()
+    addAndCreateReportingWithinVesselSidebar()
 
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('OFB SD 56 / Sortie non autorisée')
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('NATINF 2608')
@@ -125,7 +127,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="vessel-menu-reporting"]').click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-reporting"]', { timeout: 10000 }).should('be.visible')
     cy.wait('@getVesselReportings')
-    createReporting()
+    addAndCreateReportingWithinVesselSidebar()
     cy.get('[data-cy="archive-reporting-card"]').eq(0).click()
     cy.get('*[data-cy="vessel-sidebar-reporting-tab-history-button"]').click()
     cy.get('*[data-cy="vessel-sidebar-reporting-tab-history"]').should('exist')
@@ -177,7 +179,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.wait('@getVesselReportings')
     cy.wait(100)
 
-    createReporting()
+    addAndCreateReportingWithinVesselSidebar()
 
     // When
     cy.get('*[data-cy="vessel-menu-reporting"]').contains(1)
@@ -192,21 +194,4 @@ context('Vessel sidebar reporting tab', () => {
     // Then
     cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 10000 }).click()
   })
-
-  function createReporting() {
-    cy.intercept('*reporting*').as('createReporting')
-
-    cy.clickButton('Ouvrir un signalement')
-
-    cy.fill('Origine', 'Unité')
-    cy.fill("Choisir l'unité", 'OFB SD 56 (Office Français de la Biodiversité)')
-    cy.fill('Nom et contact (numéro, mail…) de l’émetteur', 'Jean Bon (0612365896)')
-    cy.fill('Titre', 'Sortie non autorisée')
-    cy.fill('Description', "Ce navire ne devrait pas être en mer, il n'a plus de points sur son permis")
-    cy.fill('Natinf', '2608')
-    cy.fill('Saisi par', 'LTH')
-
-    cy.clickButton('Valider')
-    cy.wait('@createReporting')
-  }
 })

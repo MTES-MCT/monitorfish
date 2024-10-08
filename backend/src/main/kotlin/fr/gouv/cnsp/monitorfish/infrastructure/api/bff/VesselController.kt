@@ -179,9 +179,9 @@ class VesselController(
         const val zoneDateTimePattern = "yyyy-MM-dd'T'HH:mm:ss.000X"
     }
 
-    @GetMapping("/reporting")
+    @GetMapping("/reportings")
     @Operation(summary = "Get vessel's reporting")
-    fun getVesselReporting(
+    fun getReportingsByVesselIdentity(
         @Parameter(description = "Vessel id")
         @RequestParam(name = "vesselId")
         vesselId: Int?,
@@ -272,5 +272,22 @@ class VesselController(
         val riskFactor = getVesselRiskFactor.execute(internalReferenceNumber)
 
         return RiskFactorDataOutput.fromVesselRiskFactor(riskFactor)
+    }
+
+    @GetMapping("/{vesselId}/reportings")
+    @Operation(summary = "Get vessel's reporting")
+    fun getReportings(
+        @PathParam("Vessel ID")
+        @PathVariable(name = "vesselId")
+        vesselId: Int,
+    ): VesselReportingsDataOutput {
+        val currentAndArchivedReportings =
+            getVesselReportings.execute(
+                vesselId,
+                // TODO Check that value.
+                fromDate = ZonedDateTime.now().minusYears(3),
+            )
+
+        return VesselReportingsDataOutput.fromCurrentAndArchivedReporting(currentAndArchivedReportings)
     }
 }

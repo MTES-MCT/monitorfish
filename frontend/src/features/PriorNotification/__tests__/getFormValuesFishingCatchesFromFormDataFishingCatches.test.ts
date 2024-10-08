@@ -60,8 +60,8 @@ describe('features/PriorNotification > getFormValuesFishingCatchesFromFormDataFi
     expect(result).toEqual([
       {
         $bluefinTunaExtendedCatch: {
-          BF1: { quantity: 5, weight: 50 },
-          BF2: { quantity: 3, weight: 30 }
+          BF1: { quantity: 5, specyName: "Thon rouge de l'Atlantique (Calibre 1)", weight: 50 },
+          BF2: { quantity: 3, specyName: "Thon rouge de l'Atlantique (Calibre 2)", weight: 30 }
         } as any,
         faoArea: 'FA1',
         quantity: 20,
@@ -87,7 +87,7 @@ describe('features/PriorNotification > getFormValuesFishingCatchesFromFormDataFi
         faoArea: 'FA2',
         quantity: 4,
         specyCode: 'BF3',
-        specyName: "Thon rouge de l'Atlantique (Calibre 2)",
+        specyName: "Thon rouge de l'Atlantique (Calibre 3)",
         weight: 40
       },
       { faoArea: 'FA2', quantity: 5, specyCode: 'COD', specyName: 'Cod', weight: 50 }
@@ -98,7 +98,7 @@ describe('features/PriorNotification > getFormValuesFishingCatchesFromFormDataFi
     expect(result).toEqual([
       {
         $bluefinTunaExtendedCatch: {
-          BF1: { quantity: 2, weight: 20 }
+          BF1: { quantity: 2, specyName: "Thon rouge de l'Atlantique (Calibre 1)", weight: 20 }
         } as any,
         faoArea: 'FA1',
         quantity: 10,
@@ -108,7 +108,7 @@ describe('features/PriorNotification > getFormValuesFishingCatchesFromFormDataFi
       },
       {
         $bluefinTunaExtendedCatch: {
-          BF3: { quantity: 4, weight: 40 }
+          BF3: { quantity: 4, specyName: "Thon rouge de l'Atlantique (Calibre 3)", weight: 40 }
         },
         faoArea: 'FA2',
         quantity: 15,
@@ -123,7 +123,7 @@ describe('features/PriorNotification > getFormValuesFishingCatchesFromFormDataFi
   it('Should handle undefined faoArea correctly', () => {
     const formDataFishingCatches: PriorNotification.FormDataFishingCatch[] = [
       { quantity: 10, specyCode: 'BFT', specyName: "Thon rouge de l'Atlantique", weight: 100 },
-      { quantity: 2, specyCode: 'BF2', specyName: "Thon rouge de l'Atlantique (Calibre 1)", weight: 20 },
+      { quantity: 2, specyCode: 'BF2', specyName: "Thon rouge de l'Atlantique (Calibre 2)", weight: 20 },
       { quantity: 5, specyCode: 'SAL', specyName: 'Salmon', weight: 50 }
     ]
 
@@ -132,7 +132,7 @@ describe('features/PriorNotification > getFormValuesFishingCatchesFromFormDataFi
     expect(result).toEqual([
       {
         $bluefinTunaExtendedCatch: {
-          BF2: { quantity: 2, weight: 20 }
+          BF2: { quantity: 2, specyName: "Thon rouge de l'Atlantique (Calibre 2)", weight: 20 }
         } as any,
         quantity: 10,
         specyCode: 'BFT',
@@ -153,7 +153,7 @@ describe('features/PriorNotification > getFormValuesFishingCatchesFromFormDataFi
         weight: 80
       },
       { faoArea: 'FA1', quantity: 12, specyCode: 'BFT', specyName: "Thon rouge de l'Atlantique", weight: 120 },
-      { faoArea: 'FA1', quantity: 6, specyCode: 'BF3', specyName: "Thon rouge de l'Atlantique (Calibre 2)", weight: 60 }
+      { faoArea: 'FA1', quantity: 6, specyCode: 'BF3', specyName: "Thon rouge de l'Atlantique (Calibre 3)", weight: 60 }
     ]
 
     const result = getFormValuesFishingCatchesFromFormDataFishingCatches(formDataFishingCatches)
@@ -161,8 +161,8 @@ describe('features/PriorNotification > getFormValuesFishingCatchesFromFormDataFi
     expect(result).toEqual([
       {
         $bluefinTunaExtendedCatch: {
-          BF1: { quantity: 8, weight: 80 },
-          BF3: { quantity: 6, weight: 60 }
+          BF1: { quantity: 8, specyName: "Thon rouge de l'Atlantique (Calibre 1)", weight: 80 },
+          BF3: { quantity: 6, specyName: "Thon rouge de l'Atlantique (Calibre 3)", weight: 60 }
         } as any,
         faoArea: 'FA1',
         quantity: 12,
@@ -185,7 +185,7 @@ describe('features/PriorNotification > getFormValuesFishingCatchesFromFormDataFi
     expect(result).toEqual([
       {
         $bluefinTunaExtendedCatch: {
-          BF1: { quantity: 2, weight: 20 }
+          BF1: { quantity: 2, specyName: "Thon rouge de l'Atlantique (Calibre 1)", weight: 20 }
         } as any,
         faoArea: 'FA1',
         quantity: 3,
@@ -207,7 +207,7 @@ describe('features/PriorNotification > getFormValuesFishingCatchesFromFormDataFi
     expect(result).toEqual([
       {
         $bluefinTunaExtendedCatch: {
-          BF1: { quantity: 2, weight: 20 }
+          BF1: { quantity: 2, specyName: "Thon rouge de l'Atlantique (Calibre 1)", weight: 20 }
         } as any,
         faoArea: 'FA1',
         quantity: undefined,

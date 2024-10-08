@@ -1,118 +1,148 @@
 import { FormikNumberInput, usePrevious } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
 import { isEqual } from 'lodash'
-import { sum } from 'lodash/fp'
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import styled from 'styled-components'
-import { useDebouncedCallback } from 'use-debounce'
 
 import { SubRow } from './styles'
-import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES, BLUEFIN_TUNA_SPECY_CODE } from '../../../../constants'
+import { BLUEFIN_TUNA_SPECY_CODE, SWORDFISH_SPECY_CODE } from '../../../../constants'
 
+import type { ManualPriorNotificationFormValuesFishingCatch } from '../../types'
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
 type FormikExtraFieldProps = Readonly<{
-  allFishingsCatches: PriorNotification.FormDataFishingCatch[]
-  fishingsCatchesIndex: number
+  fishingCatchIndex: number
   isReadOnly: boolean
-  specyCode: string
 }>
-export function FormikExtraField({
-  allFishingsCatches,
-  fishingsCatchesIndex,
-  isReadOnly,
-  specyCode
-}: FormikExtraFieldProps) {
-  const [input, , helper] = useField<PriorNotification.FormDataFishingCatch[]>('fishingCatches')
+export function FormikExtraField({ fishingCatchIndex, isReadOnly }: FormikExtraFieldProps) {
+  const [input, , helper] = useField<ManualPriorNotificationFormValuesFishingCatch>(
+    `fishingCatches[${fishingCatchIndex}]`
+  )
 
-  const previousFishingCatches = usePrevious(input.value)
+  const fishingCatch = input.value
+  const previousFishingCatch = usePrevious(fishingCatch)
 
-  const updateBluefinTunaWeightAndTotal = useDebouncedCallback(
-    () => {
-      const totalWeight = sum(
-        input.value
-          .filter(fishingCatch => BLUEFIN_TUNA_EXTENDED_SPECY_CODES.includes(fishingCatch.specyCode))
-          .map(({ weight }) => weight ?? 0)
-      )
+  const updateBluefinTunaWeightAndTotal = useCallback(
+    (fishinCatch: ManualPriorNotificationFormValuesFishingCatch) => {
+      if (!fishinCatch.$bluefinTunaExtendedCatch) {
+        return
+      }
 
-      const nextFishingCatchesWithTotal = input.value.map(fichingCatch => {
-        if (fichingCatch.specyCode === BLUEFIN_TUNA_SPECY_CODE) {
-          return {
-            ...fichingCatch,
-            weight: totalWeight
-          }
-        }
+      const totalWeight =
+        (fishinCatch.$bluefinTunaExtendedCatch.BF1.weight ?? 0) +
+        (fishinCatch.$bluefinTunaExtendedCatch.BF2.weight ?? 0) +
+        (fishinCatch.$bluefinTunaExtendedCatch.BF3.weight ?? 0)
 
-        return fichingCatch
-      })
+      const nextFishingCatch: PriorNotification.FormDataFishingCatch = {
+        ...fishinCatch,
+        weight: totalWeight
+      }
 
-      helper.setValue(nextFishingCatchesWithTotal)
+      helper.setValue(nextFishingCatch)
     },
-    250,
-    {
-      trailing: true
-    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
   )
 
   useEffect(() => {
-    if (
-      !input.value.find(fishingCatch => fishingCatch.specyCode === BLUEFIN_TUNA_SPECY_CODE) ||
-      isEqual(input.value, previousFishingCatches)
-    ) {
+    if (fishingCatch?.specyCode !== BLUEFIN_TUNA_SPECY_CODE || isEqual(fishingCatch, previousFishingCatch)) {
       return
     }
 
-    updateBluefinTunaWeightAndTotal()
-  }, [input.value, previousFishingCatches, updateBluefinTunaWeightAndTotal])
+    updateBluefinTunaWeightAndTotal(fishingCatch)
+  }, [fishingCatch, previousFishingCatch, updateBluefinTunaWeightAndTotal])
+
+  if (!fishingCatch) {
+    return <></>
+  }
 
   // BFT - Bluefin Tuna => + BF1, BF2, BF3
-  if (specyCode === 'BFT') {
+  if (fishingCatch.specyCode === BLUEFIN_TUNA_SPECY_CODE) {
     return (
       <>
-        {BLUEFIN_TUNA_EXTENDED_SPECY_CODES.map(extendedSpecyCode => {
-          const index = allFishingsCatches.findIndex(fishingCatch => fishingCatch.specyCode === extendedSpecyCode)
+        <StyledSubRow>
+          <ExtendedSpecyCode>BF1</ExtendedSpecyCode>
 
-          return (
-            <StyledSubRow key={extendedSpecyCode}>
-              <ExtendedSpecyCode>{extendedSpecyCode}</ExtendedSpecyCode>
+          <FormikNumberInput
+            areArrowsHidden
+            isErrorMessageHidden
+            isLabelHidden
+            label="Quantité (BF1)"
+            name={`fishingCatches[${fishingCatchIndex}].$bluefinTunaExtendedCatch.BF1.quantity`}
+            readOnly={isReadOnly}
+            unit="pc"
+          />
 
-              <FormikNumberInput
-                key={`quantity-${extendedSpecyCode}-${index})`}
-                areArrowsHidden
-                isErrorMessageHidden
-                isLabelHidden
-                label={`Quantité (${extendedSpecyCode})`}
-                name={`fishingCatches[${index}].quantity`}
-                readOnly={isReadOnly}
-                unit="pc"
-              />
+          <FormikNumberInput
+            areArrowsHidden
+            isErrorMessageHidden
+            isLabelHidden
+            label="Poids (BF1)"
+            name={`fishingCatches[${fishingCatchIndex}].$bluefinTunaExtendedCatch.BF1.weight`}
+            readOnly={isReadOnly}
+            unit="kg"
+          />
+        </StyledSubRow>
+        <StyledSubRow>
+          <ExtendedSpecyCode>BF2</ExtendedSpecyCode>
 
-              <FormikNumberInput
-                key={`weight-${extendedSpecyCode}-${index})`}
-                areArrowsHidden
-                isErrorMessageHidden
-                isLabelHidden
-                label={`Poids (${extendedSpecyCode})`}
-                name={`fishingCatches[${index}].weight`}
-                readOnly={isReadOnly}
-                unit="kg"
-              />
-            </StyledSubRow>
-          )
-        })}
+          <FormikNumberInput
+            areArrowsHidden
+            isErrorMessageHidden
+            isLabelHidden
+            label="Quantité (BF2)"
+            name={`fishingCatches[${fishingCatchIndex}].$bluefinTunaExtendedCatch.BF2.quantity`}
+            readOnly={isReadOnly}
+            unit="pc"
+          />
+
+          <FormikNumberInput
+            areArrowsHidden
+            isErrorMessageHidden
+            isLabelHidden
+            label="Poids (BF2)"
+            name={`fishingCatches[${fishingCatchIndex}].$bluefinTunaExtendedCatch.BF2.weight`}
+            readOnly={isReadOnly}
+            unit="kg"
+          />
+        </StyledSubRow>
+        <StyledSubRow>
+          <ExtendedSpecyCode>BF3</ExtendedSpecyCode>
+
+          <FormikNumberInput
+            areArrowsHidden
+            isErrorMessageHidden
+            isLabelHidden
+            label="Quantité (BF3)"
+            name={`fishingCatches[${fishingCatchIndex}].$bluefinTunaExtendedCatch.BF3.quantity`}
+            readOnly={isReadOnly}
+            unit="pc"
+          />
+
+          <FormikNumberInput
+            areArrowsHidden
+            isErrorMessageHidden
+            isLabelHidden
+            label="Poids (BF3)"
+            name={`fishingCatches[${fishingCatchIndex}].$bluefinTunaExtendedCatch.BF3.weight`}
+            readOnly={isReadOnly}
+            unit="kg"
+          />
+        </StyledSubRow>
       </>
     )
   }
 
   // SWO - Swordfish
-  if (specyCode === 'SWO') {
+  if (fishingCatch.specyCode === SWORDFISH_SPECY_CODE) {
     return (
       <StyledSubRow key="SWO">
         <FormikNumberInput
           areArrowsHidden
           isLabelHidden
-          label={`Quantité (${specyCode})`}
-          name={`fishingCatches[${fishingsCatchesIndex}].quantity`}
+          label="Quantité (SWO)"
+          name={`fishingCatches[${fishingCatchIndex}].quantity`}
           readOnly={isReadOnly}
           unit="pc"
         />

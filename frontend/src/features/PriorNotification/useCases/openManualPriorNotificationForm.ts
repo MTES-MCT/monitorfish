@@ -12,7 +12,10 @@ import { getInitialFormValues } from '../components/ManualPriorNotificationForm/
 import { OpenedPriorNotificationType } from '../constants'
 import { priorNotificationApi } from '../priorNotificationApi'
 import { priorNotificationActions } from '../slice'
-import { getPriorNotificationTypesFromLogbookMessagePnoTypes } from '../utils'
+import {
+  getFormValuesFishingCatchesFromFormDataFishingCatches,
+  getPriorNotificationTypesFromLogbookMessagePnoTypes
+} from '../utils'
 
 import type { ManualPriorNotificationFormValues } from '../components/ManualPriorNotificationForm/types'
 import type { PriorNotification } from '../PriorNotification.types'
@@ -76,11 +79,15 @@ export const openManualPriorNotificationForm =
       }
 
       const nextHasGlobalFaoArea = !!manualPriorNotification.asManualForm.globalFaoArea
+      const nextFishingCatches = getFormValuesFishingCatchesFromFormDataFishingCatches(
+        manualPriorNotification.asManualForm.fishingCatches
+      )
       const nextIsExpectedLandingDateSameAsExpectedArrivalDate =
         manualPriorNotification.asManualForm.expectedLandingDate ===
         manualPriorNotification.asManualForm.expectedArrivalDate
       const nextFormValues: ManualPriorNotificationFormValues = {
         ...manualPriorNotification.asManualForm,
+        fishingCatches: nextFishingCatches,
         hasGlobalFaoArea: nextHasGlobalFaoArea,
         isExpectedLandingDateSameAsExpectedArrivalDate: nextIsExpectedLandingDateSameAsExpectedArrivalDate
       }

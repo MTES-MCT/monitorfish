@@ -466,4 +466,43 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
       'Échec de la diffusion pour tous les contacts: unite3@organisation3.gouv.fr, unite2@organisation2.gouv.fr, unite1@organisation1.gouv.fr.'
     )
   })
+
+  // Non-regression test
+  // https://github.com/MTES-MCT/monitorfish/issues/3683
+  it('Should create a manual prior notification Zero, remove a specy and calculate BFT total weight', () => {
+    const { utcDateTupleWithTime: arrivalDateTupleWithTime } = getUtcDateInMultipleFormats(
+      customDayjs().add(2, 'hours').startOf('minute').toISOString()
+    )
+
+    cy.intercept('POST', '/bff/v1/prior_notifications/manual').as('createPriorNotification')
+
+    addManualSideWindowPriorNotification()
+
+    cy.getDataCy('vessel-search-input').click().wait(500)
+    cy.getDataCy('vessel-search-input').type('PHENO', { delay: 100 })
+    cy.getDataCy('vessel-search-item').first().click()
+
+    cy.fill("Date et heure estimées d'arrivée au port (UTC)", arrivalDateTupleWithTime)
+    cy.fill("équivalentes à celles de l'arrivée au port", true)
+    cy.fill("Port d'arrivée", 'Vannes')
+    cy.fill('Zone globale de capture', '21.4.T')
+
+    cy.fill('Espèces à bord et à débarquer', 'BFT')
+    cy.fill('Espèces à bord et à débarquer', 'SWO')
+
+    cy.fill('Engins utilisés', ['OTP'], { index: 1 })
+    cy.fill('Saisi par', 'BOB')
+
+    cy.clickButton('Créer le préavis')
+
+    cy.wait('@createPriorNotification')
+
+    cy.contains('.Element-SingleTag', 'BFT – THON ROUGE').find('button').click()
+
+    cy.contains('BFT – THON ROUGE').should('not.exist')
+
+    cy.fill('Poids (SWO)', 10)
+
+    cy.get('[id="fishingCatches[0].weight"]').should('have.value', '10')
+  })
 })

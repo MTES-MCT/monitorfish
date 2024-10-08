@@ -84,6 +84,16 @@ VALUES ('OOF20190126059903', '<ers:OPS AD="FRA" FR="OOE" ON="OOF20190126059903" 
 </ers:ERS>
 </ers:DAT>
 </ers:OPS>'),
+       ('OOF20190223059905', '<ers:OPS AD="FRA" FR="OOF" ON="OOF20190223059905" OD="2021-01-28" OT="23:52" EVL="IKTUS 4.5.8">
+<ers:DAT TM="CU">
+<ers:ERS RN="OOF20210129058100" RD="2021-01-28" RT="23:52">
+<ers:LOG IR="FRA000911294" RC="FIZX" XR="CC911294" NA="ROSELEND" MA="jaffrezic" MD="hameau de keroulas pendruc - 299010 tregunc" FS="FRA">
+<ers:EOF DA="2021-01-27" TI="14:00"/>
+<ers:ELOG Type="nat" TN="20210001"/>
+</ers:LOG>
+</ers:ERS>
+</ers:DAT>
+</ers:OPS>'),
        ('OOF20190227059900', '<ers:OPS AD="FRA" FR="OOE" ON="OOE20210128028606" OD="2021-01-28" OT="23:49" EVL="TurboCatch (3.6-1)">
 <ers:DAT TM="CU">
 <ers:ERS RN="OOE20210128028606" RD="2021-01-28" RT="23:49">
@@ -193,6 +203,7 @@ VALUES ('OOF20190126059903', '<ers:OPS AD="FRA" FR="OOE" ON="OOF20190126059903" 
        ('OOF22113048321388', ''),
        ('OOF20190617056738', ''),
        ('OOF22103048321399', ''),
+       ('OOF20190223059906', ''),
        ('OOF20190430059918', ''),
        ('OOF22103048321388', ''),
        ('OOF69850430059918', ''),
@@ -312,8 +323,17 @@ VALUES ('OOF20190265896325', 9463701, 'OOF', '2018-02-17T01:05:00Z', 'DAT', 'OOF
         'FAK000999999', 'CALLME', 'DONTSINK', 'PHENOMENE', 'FRA', null, 'FAR',
         '{"hauls": [{"gear": "GTN", "mesh": 100.0, "catches": [], "farDatetimeUtc": "2019-01-17T12:35Z"}]}',
         '2021-01-18T07:17:29.361198Z', 'ERS', 'TurboCatch (3.7-1)'),
+       ('OOF20190223059905', 9463713, 'OOF', '2019-01-23T08:08:00Z', 'DAT', 'OOF20190223059905', null,
+        '2019-01-23T08:08:00Z',
+        'FAK000999999', 'CALLME', 'DONTSINK', 'PHENOMENE', 'FRA', null, 'PNO',
+        '{"isInvalidated": true, "port": "AEJAZ", "purpose": "LAN", "catchOnboard": [{"weight": 25.0, "nbFish": null, "species": "SOL", "faoZone": "27.8.a", "effortZone": "C", "economicZone": "FRA", "statisticalRectangle": "23E6"}], "tripStartDate": "2019-01-17T18:00:00Z", "predictedArrivalDatetimeUtc": "2019-01-23T12:00Z"}',
+        '2019-01-23T13:30:00Z', 'ERS', 'TurboCatch (3.7-1)'),
+       ('OOF20190223059906', 9463713, 'OOF', '2019-01-23T08:12:00Z', 'RET', null, 'OOF20190223059905',
+        '2019-01-23T13:12:00Z',
+        null, null, null, null, null, null, '', '{"returnStatus": "000"}', '2019-01-23T13:12:00Z', 'ERS',
+        'TurboCatch (3.7-1)'),
        ('OOF20190223059904', 9463713, 'OOF', '2019-02-23T13:08:00Z', 'DAT', 'OOF20190223059904', null,
-        '2019-01-23T13:08:00Z',
+        '2019-02-23T13:08:00Z',
         'FAK000999999', 'CALLME', 'DONTSINK', 'PHENOMENE', 'FRA', null, 'EOF',
         '{"endOfFishingDatetimeUtc": "2019-01-23T13:08Z"}', '2021-01-18T07:17:18.130726Z', 'ERS', 'TurboCatch (3.7-1)'),
        ('OOF20190227059999', 9463714, 'OOF', '2019-02-17T01:05:00Z', 'DAT', 'OOF20190227059999', null,

@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import org.slf4j.LoggerFactory
@@ -52,9 +53,24 @@ class GetLogbookMessages(
 
         messages.forEach { it.enrich(messages, allGears, allPorts, allSpecies) }
 
-        return messages.filter {
-            it.operationType == LogbookOperationType.DAT ||
-                it.operationType == LogbookOperationType.COR
+        return messages.filter { shouldBeIncluded(it) }
+    }
+
+    private fun shouldBeIncluded(logbookMessage: LogbookMessage): Boolean {
+        if (!listOf(LogbookOperationType.DAT, LogbookOperationType.COR).contains(logbookMessage.operationType)) {
+            return false
+        }
+
+        if (logbookMessage.messageType != "PNO") {
+            return true
+        }
+
+        try {
+            logbookMessage.message as PNO
+
+            return logbookMessage.message.isInvalidated != true
+        } catch (e: Exception) {
+            return true
         }
     }
 }

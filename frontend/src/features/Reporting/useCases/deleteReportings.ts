@@ -6,7 +6,7 @@ import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Vessel } from '../../../domain/entities/vessel/vessel'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
 import { removeVesselReportings } from '../../Vessel/slice'
-import { removeReportingsIdsFromCurrentReportings } from '../slice'
+import { mainWindowReportingActions } from '../mainWindowReporting.slice'
 
 import type { InfractionSuspicionReporting, PendingAlertReporting } from '@features/Reporting/types'
 import type { MainAppThunk } from '@store'
@@ -14,13 +14,13 @@ import type { MainAppThunk } from '@store'
 export const deleteReportings =
   (ids: number[]): MainAppThunk =>
   async (dispatch, getState) => {
-    const { currentReportings } = getState().reporting
+    const { currentReportings } = getState().mainWindowReporting
     const reportingsInformation = getReportingsInformationFromIds(ids, currentReportings)
 
     try {
       await deleteReportingsFromAPI(ids)
 
-      dispatch(removeReportingsIdsFromCurrentReportings(ids))
+      dispatch(mainWindowReportingActions.removeReportingsIdsFromCurrentReportings(ids))
       dispatch(removeVesselReportings(reportingsInformation))
       dispatch(renderVesselFeatures())
 

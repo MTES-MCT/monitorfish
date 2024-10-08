@@ -10,18 +10,18 @@ import { getOnlyVesselIdentityProperties } from '../../../../domain/entities/ves
 import CloseIconSVG from '../../../icons/Croix_grise.svg?react'
 import AlertsSVG from '../../../icons/Icone_alertes_gris.svg?react'
 import { ReportingForm } from '../../../Reporting/components/ReportingForm'
-import { setEditedReportingInSideWindow } from '../../../Reporting/slice'
+import { mainWindowReportingActions } from '../../../Reporting/mainWindowReporting.slice'
 
 export function EditReporting() {
   const dispatch = useMainAppDispatch()
   const baseUrl = window.location.origin
-  const editedReportingInSideWindow = useMainAppSelector(state => state.reporting.editedReportingInSideWindow)
+  const editedReportingInSideWindow = useMainAppSelector(state => state.mainWindowReporting.editedReportingInSideWindow)
   const displayedError = useMainAppSelector(
     state => state.displayedError[DisplayedErrorKey.SIDE_WINDOW_REPORTING_FORM_ERROR]
   )
 
   const closeForm = useCallback(() => {
-    dispatch(setEditedReportingInSideWindow())
+    dispatch(mainWindowReportingActions.setEditedReportingInSideWindow())
   }, [dispatch])
 
   if (displayedError) {
@@ -41,7 +41,7 @@ export function EditReporting() {
         <Row topMargin={0}>
           <AlertsIcon />
           <Title> ÉDITER LE SIGNALEMENT</Title>
-          <CloseIcon onClick={() => dispatch(setEditedReportingInSideWindow())} />
+          <CloseIcon onClick={() => dispatch(mainWindowReportingActions.setEditedReportingInSideWindow())} />
         </Row>
         <Row topMargin={6}>
           {editedReportingInSideWindow && editedReportingInSideWindow.flagState && (

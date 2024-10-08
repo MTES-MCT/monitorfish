@@ -7,7 +7,7 @@ import styled from 'styled-components'
 const DEFAULT_INFRACTIONS_DISPLAYED = 5
 
 export function InfractionSuspicionSummary() {
-  const summary = useMainAppSelector(state => state.reporting.selectedVesselReportings?.summary)
+  const summary = useMainAppSelector(state => state.mainWindowReporting.selectedVesselReportings?.summary)
   const [areAllInfractionsSuspicionShowed, setAreAllInfractionsSuspicionShowed] = useState(false)
 
   const displayedInfractionsSuspicion =

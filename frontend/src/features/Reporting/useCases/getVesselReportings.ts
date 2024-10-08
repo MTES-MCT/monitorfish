@@ -4,7 +4,7 @@ import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { displayedErrorActions } from '../../../domain/shared_slices/DisplayedError'
 import { removeError } from '../../../domain/shared_slices/Global'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
-import { loadReporting, resetSelectedVesselReportings, setSelectedVesselReportings } from '../slice'
+import { mainWindowReportingActions } from '../mainWindowReporting.slice'
 
 export const getVesselReportings = (isLoaderShowed: boolean) => async (dispatch, getState) => {
   const { selectedVesselIdentity } = getState().vessel
@@ -15,7 +15,7 @@ export const getVesselReportings = (isLoaderShowed: boolean) => async (dispatch,
 
   if (isLoaderShowed) {
     dispatch(displayedErrorActions.unset(DisplayedErrorKey.VESSEL_SIDEBAR_ERROR))
-    dispatch(loadReporting())
+    dispatch(mainWindowReportingActions.loadReporting())
   }
 
   try {
@@ -24,7 +24,7 @@ export const getVesselReportings = (isLoaderShowed: boolean) => async (dispatch,
       archivedReportingsFromDate
     )
     dispatch(
-      setSelectedVesselReportings({
+      mainWindowReportingActions.setSelectedVesselReportings({
         selectedVesselReportings: nextSelectedVesselReportings,
         vesselIdentity: selectedVesselIdentity
       })
@@ -40,6 +40,6 @@ export const getVesselReportings = (isLoaderShowed: boolean) => async (dispatch,
         DisplayedErrorKey.VESSEL_SIDEBAR_ERROR
       )
     )
-    dispatch(resetSelectedVesselReportings())
+    dispatch(mainWindowReportingActions.resetSelectedVesselReportings())
   }
 }

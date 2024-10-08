@@ -29,7 +29,7 @@ const INITIAL_STATE: ReportingState = {
   vesselIdentity: undefined
 }
 
-const reportingSlice = createSlice({
+const mainWindowReportingSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'reporting',
   reducers: {
@@ -131,18 +131,5 @@ const reportingSlice = createSlice({
   }
 })
 
-export const {
-  addReportingToCurrentReportings,
-  loadReporting,
-  removeCurrentReporting,
-  removeReportingsIdsFromCurrentReportings,
-  resetSelectedVesselReportings,
-  setArchivedReportingsFromDate,
-  setCurrentReportings,
-  setEditedReporting,
-  setEditedReportingInSideWindow,
-  setSelectedVesselReportings,
-  updateCurrentReporting
-} = reportingSlice.actions
-
-export const reportingReducer = reportingSlice.reducer
+export const mainWindowReportingActions = mainWindowReportingSlice.actions
+export const mainWindowsReportingReducer = mainWindowReportingSlice.reducer

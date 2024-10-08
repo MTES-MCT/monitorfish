@@ -7,7 +7,7 @@ import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Vessel } from '../../../domain/entities/vessel/vessel'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
 import { addVesselReporting, removeVesselReporting } from '../../Vessel/slice'
-import { removeCurrentReporting, updateCurrentReporting } from '../slice'
+import { mainWindowReportingActions } from '../mainWindowReporting.slice'
 
 import type { VesselIdentity } from '../../../domain/entities/vessel/types'
 import type { EditedReporting, InfractionSuspicionReporting } from '@features/Reporting/types'
@@ -22,20 +22,20 @@ export const updateReporting =
     isFromSideWindow: boolean
   ): MainAppThunk<Promise<void>> =>
   async (dispatch, getState) => {
-    const { vesselIdentity } = getState().reporting
+    const { vesselIdentity } = getState().mainWindowReporting
 
     try {
       const updatedReporting = await updateReportingFromAPI(id, nextReporting)
 
       if (nextReporting.type === ReportingType.INFRACTION_SUSPICION) {
-        dispatch(updateCurrentReporting(updatedReporting as InfractionSuspicionReporting))
+        dispatch(mainWindowReportingActions.updateCurrentReporting(updatedReporting as InfractionSuspicionReporting))
       }
 
       if (
         nextReporting.type === ReportingType.OBSERVATION &&
         previousReportingType === ReportingType.INFRACTION_SUSPICION
       ) {
-        dispatch(removeCurrentReporting(id))
+        dispatch(mainWindowReportingActions.removeCurrentReporting(id))
       }
 
       // We update the reportings of the last positions vessels state

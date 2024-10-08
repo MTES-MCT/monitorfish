@@ -1,5 +1,6 @@
 import { fleetSegmentApi } from '@features/FleetSegment/apis'
 import { getAllRegulatoryLayers } from '@features/Regulation/useCases/getAllRegulatoryLayers'
+import { reportingApi } from '@features/Reporting/reportingApi'
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { useEffect, useRef, useState } from 'react'
 
@@ -17,7 +18,6 @@ import { getInfractions } from '../domain/use_cases/infraction/getInfractions'
 import { getVesselControls } from '../domain/use_cases/mission/getVesselControls'
 import getAllSpecies from '../domain/use_cases/species/getAllSpecies'
 import { updateVesselTracks } from '../domain/use_cases/vessel/updateVesselTracks'
-import { getAllCurrentReportings } from '../features/Reporting/useCases/getAllCurrentReportings'
 import { useMainAppDispatch } from '../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../hooks/useMainAppSelector'
 
@@ -54,10 +54,11 @@ export function APIWorker() {
     dispatch(getAllSpecies()).then(() => dispatch(getAllRegulatoryLayers()))
     dispatch(getAllGearCodes())
 
+    // TODO Use a RTK query hook with polling, within a global hook if really necessary.
     if (isSuperUser) {
       dispatch(fleetSegmentApi.endpoints.getFleetSegments.initiate())
       dispatch(getOperationalAlerts())
-      dispatch(getAllCurrentReportings())
+      dispatch(reportingApi.endpoints.getReportings.initiate())
       dispatch(getSilencedAlerts())
       dispatch(getAllBeaconMalfunctions())
     }
@@ -82,10 +83,10 @@ export function APIWorker() {
         clearInterval(sideWindowInterval.current)
       }
 
+      // TODO Use a RTK query hook with polling, within a global hook if really necessary.
       sideWindowInterval.current = setInterval(() => {
         dispatch(getAllBeaconMalfunctions())
         dispatch(getOperationalAlerts())
-        dispatch(getAllCurrentReportings())
         dispatch(getSilencedAlerts())
       }, THIRTY_SECONDS) as any
     }

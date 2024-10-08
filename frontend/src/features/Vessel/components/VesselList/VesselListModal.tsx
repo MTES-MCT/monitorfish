@@ -1,17 +1,15 @@
 import getAdministrativeZoneGeometry from '@features/AdministrativeZone/useCases/getAdministrativeZoneGeometry'
 import { StyledModalHeader } from '@features/commonComponents/StyledModalHeader'
 import { PrimaryButton, SecondaryButton } from '@features/commonStyles/Buttons.style'
-import { resetInteraction } from '@features/Draw/slice'
 import { SaveVesselFiltersModal } from '@features/Filter/components/SaveVesselFiltersModal'
 import { useGetFleetSegmentsQuery } from '@features/FleetSegment/apis'
 import { DownloadVesselListModal } from '@features/Vessel/components/VesselList/DownloadVesselListModal'
 import { VesselIcon } from '@features/Vessel/components/VesselList/index'
-import { addZoneSelected, removeZoneSelected, setZonesSelected } from '@features/Vessel/components/VesselList/slice'
+import { removeZoneSelected, setZonesSelected } from '@features/Vessel/components/VesselList/slice'
 import { VesselListFilters } from '@features/Vessel/components/VesselList/VesselListFilters'
 import { VesselListTable } from '@features/Vessel/components/VesselList/VesselListTable'
 import { vesselSelectors } from '@features/Vessel/slice'
 import { previewVessels } from '@features/Vessel/useCases/previewVessels'
-import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME } from '@mtes-mct/monitor-ui'
@@ -20,9 +18,8 @@ import { Modal } from 'rsuite'
 import styled from 'styled-components'
 
 import { LayerType } from '../../../../domain/entities/layers/constants'
-import { InteractionListener, InteractionType } from '../../../../domain/entities/map/constants'
+import { InteractionType } from '../../../../domain/entities/map/constants'
 import { VesselLocation } from '../../../../domain/entities/vessel/vessel'
-import { setDisplayedComponents } from '../../../../domain/shared_slices/DisplayedComponent'
 import { setBlockVesselsUpdate } from '../../../../domain/shared_slices/Global'
 import { addVesselListFilterZone } from '../../../../domain/use_cases/vessel/addVesselListFilterZone'
 import { getFilteredVessels } from '../../../../domain/use_cases/vessel/getFilteredVessels'
@@ -56,7 +53,6 @@ type ZoneGroupAndChildren = {
 
 export function VesselListModal({ namespace, onClose }) {
   const dispatch = useMainAppDispatch()
-  const { drawedGeometry } = useListenForDrawedGeometry(InteractionListener.VESSELS_LIST)
   const { uniqueVesselsDistricts: districts, uniqueVesselsSpecies: species } = useMainAppSelector(state => state.vessel)
   const vessels = useMainAppSelector(state => vesselSelectors.selectAll(state.vessel.vessels))
   const getFleetSegmentsQuery = useGetFleetSegmentsQuery()
@@ -120,26 +116,6 @@ export function VesselListModal({ namespace, onClose }) {
     !districtsFiltered?.length &&
     !vesselsSizeValuesChecked?.length &&
     vesselsLocationFilter?.length === 2
-
-  useEffect(() => {
-    if (!drawedGeometry) {
-      return
-    }
-
-    dispatch(
-      addZoneSelected({
-        code: LayerType.FREE_DRAW,
-        feature: drawedGeometry,
-        name: 'Tracé libre'
-      })
-    )
-    dispatch(
-      setDisplayedComponents({
-        isVesselListModalDisplayed: true
-      })
-    )
-    dispatch(resetInteraction())
-  }, [dispatch, drawedGeometry])
 
   const checkedVessels = useMemo(
     () =>

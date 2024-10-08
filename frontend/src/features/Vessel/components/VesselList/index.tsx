@@ -1,13 +1,17 @@
+import { resetInteraction } from '@features/Draw/slice'
 import { MapToolButton } from '@features/MainWindow/components/MapButtons/shared/MapToolButton'
-import { resetZonesSelected } from '@features/Vessel/components/VesselList/slice'
+import { addZoneSelected, resetZonesSelected } from '@features/Vessel/components/VesselList/slice'
 import { VesselListModal } from '@features/Vessel/components/VesselList/VesselListModal'
+import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME } from '@mtes-mct/monitor-ui'
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { Modal } from 'rsuite'
 import styled from 'styled-components'
 
+import { LayerType } from '../../../../domain/entities/layers/constants'
+import { InteractionListener } from '../../../../domain/entities/map/constants'
 import { setDisplayedComponents } from '../../../../domain/shared_slices/DisplayedComponent'
 import { setBlockVesselsUpdate } from '../../../../domain/shared_slices/Global'
 import { MapComponent } from '../../../commonStyles/MapComponent'
@@ -15,9 +19,30 @@ import VesselListSVG from '../../../icons/Icone_liste_navires.svg?react'
 
 export function VesselList({ namespace }) {
   const dispatch = useMainAppDispatch()
+  const { drawedGeometry } = useListenForDrawedGeometry(InteractionListener.VESSELS_LIST)
   const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
   const isVesselListModalDisplayed = useMainAppSelector(state => state.displayedComponent.isVesselListModalDisplayed)
   const isRightMenuShrinked = !rightMenuIsOpen
+
+  useEffect(() => {
+    if (!drawedGeometry) {
+      return
+    }
+
+    dispatch(
+      addZoneSelected({
+        code: LayerType.FREE_DRAW,
+        feature: drawedGeometry,
+        name: 'Tracé libre'
+      })
+    )
+    dispatch(
+      setDisplayedComponents({
+        isVesselListModalDisplayed: true
+      })
+    )
+    dispatch(resetInteraction())
+  }, [dispatch, drawedGeometry])
 
   const onClose = useCallback(() => {
     dispatch(

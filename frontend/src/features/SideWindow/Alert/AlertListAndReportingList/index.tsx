@@ -1,5 +1,6 @@
 import { WindowContext } from '@api/constants'
 import { SeafrontGroup } from '@constants/seafront'
+import { useGetReportingsQuery } from '@features/Reporting/reportingApi'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { useMemo } from 'react'
 import styled from 'styled-components'
@@ -24,11 +25,12 @@ export function AlertListAndReportingList({
   selectedTab,
   setSelectedTab
 }: AlertListAndReportingListProps) {
-  const currentReportings = useMainAppSelector(state => state.mainWindowReporting.currentReportings)
   const displayedError = useMainAppSelector(
     state => state.displayedError[DisplayedErrorKey.SIDE_WINDOW_REPORTING_LIST_ERROR]
   )
   const silencedAlerts = useMainAppSelector(state => state.alert.silencedAlerts)
+
+  const { data: currentReportings } = useGetReportingsQuery()
 
   const filteredSilencedAlerts = useMemo(
     () =>
@@ -69,10 +71,10 @@ export function AlertListAndReportingList({
       )}
       {selectedTab === AlertAndReportingTab.REPORTING && (
         <ReportingList
-          currentReportings={currentReportings}
+          currentReportings={currentReportings ?? []}
           displayedError={displayedError}
           selectedSeafrontGroup={selectedSeafrontGroup}
-          windowContext={WindowContext.MainWindow}
+          windowContext={WindowContext.SideWindow}
         />
       )}
     </Wrapper>

@@ -90,3 +90,5 @@ export const reportingApi = monitorfishApi.injectEndpoints({
     })
   })
 })
+
+export const { useGetReportingsQuery } = reportingApi

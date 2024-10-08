@@ -914,7 +914,7 @@ class VesselControllerITests {
         api.perform(
             get(
                 "/bff/v1/vessels/reportings?vesselId=123456&internalReferenceNumber=FR224226850" +
-                    "&externalReferenceNumber=123&IRCS=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&fromDate=2021-03-24T22:07:00.000Z",
+                    "&externalReferenceNumber=123&ircs=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&fromDate=2021-03-24T22:07:00.000Z",
             ),
         )
             // Then
@@ -970,7 +970,7 @@ class VesselControllerITests {
         api.perform(
             get(
                 "/bff/v1/vessels/reportings?vesselId=&internalReferenceNumber=FR224226850" +
-                    "&externalReferenceNumber=123&IRCS=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&fromDate=2021-03-24T22:07:00.000Z",
+                    "&externalReferenceNumber=123&ircs=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&fromDate=2021-03-24T22:07:00.000Z",
             ),
         )
             // Then

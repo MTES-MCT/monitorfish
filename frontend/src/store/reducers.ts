@@ -14,6 +14,7 @@ import { priorNotificationReducer, type PriorNotificationState } from '@features
 import { regulatoryLayerSearchReducer } from '@features/Regulation/components/RegulationSearch/slice'
 import { regulatoryReducer } from '@features/Regulation/slice'
 import { mainWindowReportingReducer } from '@features/Reporting/mainWindowReporting.slice'
+import { sideWindowReportingReducer } from '@features/Reporting/sideWindowReporting.slice'
 import { alertReducer } from '@features/SideWindow/Alert/slice'
 import { sideWindowReducer } from '@features/SideWindow/slice'
 import { stationReducer } from '@features/Station/slice'
@@ -119,6 +120,7 @@ export const mainReducer = {
   ),
   regulatoryLayerSearch: regulatoryLayerSearchReducer,
   sideWindow: sideWindowReducer,
+  sideWindowReporting: sideWindowReportingReducer,
   station: stationReducer,
   vessel: vesselSliceReducer,
   vesselList: vesselListReducer

@@ -1,13 +1,25 @@
 import { InfractionSuspicionSummary } from '@features/Reporting/components/VesselReportings/Summary/InfractionSuspicionSummary'
 import { Header, Zone } from '@features/Vessel/components/VesselSidebar/common_styles/common.style'
+import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { customDayjs, Icon, THEME } from '@mtes-mct/monitor-ui'
+import { skipToken } from '@reduxjs/toolkit/query'
 import styled from 'styled-components'
 
 export function Summary() {
   const archivedReportingsFromDate = useMainAppSelector(state => state.mainWindowReporting.archivedReportingsFromDate)
-  const summary = useMainAppSelector(state => state.mainWindowReporting.selectedVesselReportings?.summary)
+  const vesselIdentity = useMainAppSelector(state => state.mainWindowReporting.vesselIdentity)
   const yearsDepth = customDayjs().utc().get('year') - customDayjs(archivedReportingsFromDate).get('year') + 1
+
+  const { data: selectedVesselReportings } = useGetVesselReportingsByVesselIdentityQuery(
+    vesselIdentity
+      ? {
+          fromDate: archivedReportingsFromDate,
+          vesselIdentity
+        }
+      : skipToken
+  )
+  const summary = selectedVesselReportings?.summary
 
   return (
     <Zone data-cy="vessel-reporting-summary">

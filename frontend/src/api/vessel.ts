@@ -3,13 +3,11 @@ import { HttpStatusCode } from './constants'
 import { ApiError } from '../libs/ApiError'
 
 import type { TrackRequest, VesselAndPositions, VesselIdentity, VesselPosition } from '../domain/entities/vessel/types'
-import type { VesselReportings } from '@features/Reporting/types'
 
 const VESSEL_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations du navire"
 const VESSEL_SEARCH_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les navires dans notre base"
-const REPORTING_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les signalements de ce navire"
 
-function getVesselIdentityAsEmptyStringWhenNull(identity: VesselIdentity) {
+export function getVesselIdentityAsEmptyStringWhenNull(identity: VesselIdentity) {
   const vesselId = identity.vesselId ?? ''
   const internalReferenceNumber = identity.internalReferenceNumber ?? ''
   const externalReferenceNumber = identity.externalReferenceNumber ?? ''
@@ -85,23 +83,4 @@ async function searchVesselsFromAPI(searched: string) {
   }
 }
 
-/**
- * Get vessel reporting
- *
- * @throws {@link ApiError}
- */
-async function getVesselReportingsFromAPI(identity: VesselIdentity, fromDate: string) {
-  const { externalReferenceNumber, internalReferenceNumber, ircs, vesselId, vesselIdentifier } =
-    getVesselIdentityAsEmptyStringWhenNull(identity)
-  try {
-    return await monitorfishApiKy
-      .get(
-        `/bff/v1/vessels/reportings?vesselId=${vesselId}&internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&vesselIdentifier=${vesselIdentifier}&fromDate=${fromDate}`
-      )
-      .json<VesselReportings>()
-  } catch (err) {
-    throw new ApiError(REPORTING_ERROR_MESSAGE, err)
-  }
-}
-
-export { searchVesselsFromAPI, getVesselPositionsFromAPI, getVesselFromAPI, getVesselReportingsFromAPI }
+export { searchVesselsFromAPI, getVesselPositionsFromAPI, getVesselFromAPI }

@@ -1,8 +1,10 @@
 import { mainWindowReportingActions } from '@features/Reporting/mainWindowReporting.slice'
 import { ReportingType } from '@features/Reporting/types'
+import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Button, THEME } from '@mtes-mct/monitor-ui'
+import { skipToken } from '@reduxjs/toolkit/query'
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -15,8 +17,19 @@ import type { ReportingAndOccurrences } from '@features/Reporting/types'
 
 export function Current() {
   const dispatch = useMainAppDispatch()
-  const selectedVesselReportings = useMainAppSelector(state => state.mainWindowReporting.selectedVesselReportings)
+  const archivedReportingsFromDate = useMainAppSelector(state => state.mainWindowReporting.archivedReportingsFromDate)
   const editedReporting = useMainAppSelector(state => state.mainWindowReporting.editedReporting)
+  const vesselIdentity = useMainAppSelector(state => state.mainWindowReporting.vesselIdentity)
+
+  const { data: selectedVesselReportings } = useGetVesselReportingsByVesselIdentityQuery(
+    vesselIdentity
+      ? {
+          fromDate: archivedReportingsFromDate,
+          vesselIdentity
+        }
+      : skipToken
+  )
+
   const [isNewReportingFormOpen, setIsNewReportingFormOpen] = useState(false)
   const [isDeletionModalOpened, setIsDeletionModalOpened] = useState<
     { id: number; reportingType: ReportingType } | undefined

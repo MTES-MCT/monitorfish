@@ -45,6 +45,10 @@ const sideWindowReportingSlice = createSlice({
      */
     setEditedReporting(state, action: PayloadAction<Reporting.EditableReporting>) {
       state.editedReporting = action.payload
+    },
+
+    unsetEditedReporting(state) {
+      state.editedReporting = undefined
     }
   }
 })

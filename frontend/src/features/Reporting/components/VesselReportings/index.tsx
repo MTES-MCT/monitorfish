@@ -1,15 +1,15 @@
 import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { Summary } from '@features/Reporting/components/VesselReportings/Summary'
-import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME, usePrevious } from '@mtes-mct/monitor-ui'
+import { skipToken } from '@reduxjs/toolkit/query'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { Archived } from './Archived'
 import { Current } from './Current'
 import { vesselsAreEquals } from '../../../../domain/entities/vessel/vessel'
-import { getVesselReportings } from '../../useCases/getVesselReportings'
 
 const ReportingTab = {
   CURRENT_REPORTING: 'CURRENT_REPORTING',
@@ -17,20 +17,21 @@ const ReportingTab = {
 }
 
 export function VesselReportings() {
-  const dispatch = useMainAppDispatch()
+  const archivedReportingsFromDate = useMainAppSelector(state => state.mainWindowReporting.archivedReportingsFromDate)
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
+  const vesselIdentity = useMainAppSelector(state => state.mainWindowReporting.vesselIdentity)
 
-  const selectedVesselReportings = useMainAppSelector(state => state.mainWindowReporting.selectedVesselReportings)
-  const isLoadingReporting = useMainAppSelector(state => state.mainWindowReporting.isLoadingReporting)
+  const { data: selectedVesselReportings } = useGetVesselReportingsByVesselIdentityQuery(
+    vesselIdentity
+      ? {
+          fromDate: archivedReportingsFromDate,
+          vesselIdentity
+        }
+      : skipToken
+  )
 
   const [reportingTab, setReportingTab] = useState(ReportingTab.CURRENT_REPORTING)
   const previousSelectedVesselIdentity = usePrevious(selectedVesselIdentity)
-
-  useEffect(() => {
-    if (!previousSelectedVesselIdentity || !vesselsAreEquals(previousSelectedVesselIdentity, selectedVesselIdentity)) {
-      dispatch(getVesselReportings(true))
-    }
-  }, [dispatch, previousSelectedVesselIdentity, selectedVesselIdentity])
 
   useEffect(() => {
     if (!vesselsAreEquals(previousSelectedVesselIdentity, selectedVesselIdentity)) {
@@ -40,14 +41,15 @@ export function VesselReportings() {
 
   return (
     <>
-      {!isLoadingReporting ? (
+      {!selectedVesselReportings && <FingerprintSpinner className="radar" color={THEME.color.charcoal} size={100} />}
+      {selectedVesselReportings && (
         <Body data-cy="vessel-reporting">
           <Menu>
             <CurrentOrHistoryButton
               $isActive={reportingTab === ReportingTab.CURRENT_REPORTING}
               onClick={() => setReportingTab(ReportingTab.CURRENT_REPORTING)}
             >
-              Signalements en cours ({selectedVesselReportings?.current?.length})
+              Signalements en cours ({selectedVesselReportings.current.length})
             </CurrentOrHistoryButton>
             <CurrentOrHistoryButton
               $isActive={reportingTab === ReportingTab.REPORTING_HISTORY}
@@ -65,8 +67,6 @@ export function VesselReportings() {
             </>
           )}
         </Body>
-      ) : (
-        <FingerprintSpinner className="radar" color={THEME.color.charcoal} size={100} />
       )}
     </>
   )

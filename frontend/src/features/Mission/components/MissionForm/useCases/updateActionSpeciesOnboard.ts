@@ -1,6 +1,6 @@
 import { getSummedSpeciesOnBoard } from '@features/Logbook/utils'
 import { MissionAction } from '@features/Mission/missionAction.types'
-import { vesselApi } from '@features/Vessel/apis'
+import { vesselApi } from '@features/Vessel/vesselApi'
 
 import type { RiskFactor } from '../../../../../domain/entities/vessel/riskFactor/types'
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'

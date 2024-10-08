@@ -1,5 +1,7 @@
+import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Link } from '@mtes-mct/monitor-ui'
+import { skipToken } from '@reduxjs/toolkit/query'
 import { pluralize } from '@utils/pluralize'
 import { useState } from 'react'
 import styled from 'styled-components'
@@ -7,9 +9,21 @@ import styled from 'styled-components'
 const DEFAULT_INFRACTIONS_DISPLAYED = 5
 
 export function InfractionSuspicionSummary() {
-  const summary = useMainAppSelector(state => state.mainWindowReporting.selectedVesselReportings?.summary)
+  const archivedReportingsFromDate = useMainAppSelector(state => state.mainWindowReporting.archivedReportingsFromDate)
+  const vesselIdentity = useMainAppSelector(state => state.mainWindowReporting.vesselIdentity)
+
+  const { data: selectedVesselReportings } = useGetVesselReportingsByVesselIdentityQuery(
+    vesselIdentity
+      ? {
+          fromDate: archivedReportingsFromDate,
+          vesselIdentity
+        }
+      : skipToken
+  )
+
   const [areAllInfractionsSuspicionShowed, setAreAllInfractionsSuspicionShowed] = useState(false)
 
+  const summary = selectedVesselReportings?.summary
   const displayedInfractionsSuspicion =
     summary?.infractionSuspicionsSummary.slice(
       0,

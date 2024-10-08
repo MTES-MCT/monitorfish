@@ -1,5 +1,5 @@
 import { MissionAction } from '@features/Mission/missionAction.types'
-import { vesselApi } from '@features/Vessel/apis'
+import { vesselApi } from '@features/Vessel/vesselApi'
 import { FrontendError } from '@libs/FrontendError'
 
 import type { Gear } from '../../../../../domain/types/Gear'

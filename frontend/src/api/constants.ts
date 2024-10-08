@@ -40,5 +40,11 @@ export enum RtkCacheTagType {
   PriorNotificationTypes = 'PriorNotificationTypes',
   PriorNotifications = 'PriorNotifications',
   PriorNotificationsToVerify = 'PriorNotificationsToVerify',
+  Reportings = 'Reportings',
   Vessel = 'Vessel'
+}
+
+export enum WindowContext {
+  MainWindow = 'MainWindow',
+  SideWindow = 'SideWindow'
 }

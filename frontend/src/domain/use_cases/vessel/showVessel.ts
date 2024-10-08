@@ -1,5 +1,6 @@
 import { getVesselFromAPI } from '@api/vessel'
 import { logbookActions } from '@features/Logbook/slice'
+import { mainWindowReportingActions } from '@features/Reporting/mainWindowReporting.slice'
 import { loadingVessel, resetLoadingVessel, setSelectedVessel, vesselSelectors } from '@features/Vessel/slice'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { captureMessage } from '@sentry/react'
@@ -98,7 +99,7 @@ export const showVessel =
     }
   }
 
-function dispatchLoadingVessel(dispatch, isFromUserAction: boolean, vesselIdentity) {
+function dispatchLoadingVessel(dispatch, isFromUserAction: boolean, vesselIdentity: VesselIdentity) {
   dispatch(doNotAnimate(!isFromUserAction))
   dispatch(removeError())
   dispatch(
@@ -107,4 +108,5 @@ function dispatchLoadingVessel(dispatch, isFromUserAction: boolean, vesselIdenti
       vesselIdentity
     })
   )
+  dispatch(mainWindowReportingActions.setVesselIdentity(vesselIdentity))
 }

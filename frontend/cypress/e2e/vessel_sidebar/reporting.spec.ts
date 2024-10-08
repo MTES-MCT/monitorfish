@@ -13,16 +13,14 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
-    cy.intercept(
-      'GET',
-      '/bff/v1/vessels/reportings?vesselId=6&internalReferenceNumber=ABC000939217&externalReferenceNumber=RU460262&IRCS=SC6082&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*'
-    ).as('reporting')
+    cy.intercept('GET', '/bff/v1/vessels/reportings?*').as('getVesselReportings')
     cy.get('*[data-cy="vessel-menu-reporting"]').click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-reporting"]', { timeout: 10000 }).should('be.visible')
-    cy.wait('@reporting')
+    cy.wait('@getVesselReportings')
     cy.wait(100)
 
     createReporting()
+    cy.wait('@getVesselReportings')
 
     // Then
     cy.get('*[data-cy="vessel-menu-reporting"]').contains(1)
@@ -53,13 +51,10 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
-    cy.intercept(
-      'GET',
-      '/bff/v1/vessels/reportings?vesselId=11&internalReferenceNumber=ABC000597493&externalReferenceNumber=CMQ7994&IRCS=JL026591&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*'
-    ).as('reporting')
+    cy.intercept('GET', '/bff/v1/vessels/reportings?*').as('getVesselReportings')
     cy.get('*[data-cy="vessel-menu-reporting"]').click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-reporting"]', { timeout: 10000 }).should('be.visible')
-    cy.wait('@reporting')
+    cy.wait('@getVesselReportings')
     cy.wait(100)
 
     // Create an new Observation
@@ -97,13 +92,10 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
-    cy.intercept(
-      'GET',
-      '/bff/v1/vessels/reportings?vesselId=6&internalReferenceNumber=ABC000939217&externalReferenceNumber=RU460262&IRCS=SC6082&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*'
-    ).as('reporting')
+    cy.intercept('GET', '/bff/v1/vessels/reportings?*').as('getVesselReportings')
     cy.get('*[data-cy="vessel-menu-reporting"]').click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-reporting"]', { timeout: 10000 }).should('be.visible')
-    cy.wait('@reporting')
+    cy.wait('@getVesselReportings')
     cy.wait(100)
 
     createReporting()
@@ -129,10 +121,10 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
-    cy.intercept('GET', '/bff/v1/vessels/reportings*').as('reporting')
+    cy.intercept('GET', '/bff/v1/vessels/reportings*').as('getVesselReportings')
     cy.get('*[data-cy="vessel-menu-reporting"]').click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-reporting"]', { timeout: 10000 }).should('be.visible')
-    cy.wait('@reporting')
+    cy.wait('@getVesselReportings')
     createReporting()
     cy.get('[data-cy="archive-reporting-card"]').eq(0).click()
     cy.get('*[data-cy="vessel-sidebar-reporting-tab-history-button"]').click()
@@ -155,10 +147,10 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
     cy.wait(50)
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
-    cy.intercept('GET', '/bff/v1/vessels/reportings*').as('reporting')
+    cy.intercept('GET', '/bff/v1/vessels/reportings*').as('getVesselReportings')
     cy.get('*[data-cy="vessel-menu-reporting"]').click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-reporting"]', { timeout: 10000 }).should('be.visible')
-    cy.wait('@reporting')
+    cy.wait('@getVesselReportings')
     cy.wait(100)
 
     // When
@@ -168,15 +160,12 @@ context('Vessel sidebar reporting tab', () => {
     cy.clickButton('Afficher plus de signalements')
 
     // Then
-    cy.wait('@reporting')
+    cy.wait('@getVesselReportings')
     cy.get('*[data-cy="vessel-sidebar-reporting-tab-archive-year"]').should('have.length', 7)
   })
 
   it('Reporting Should be deleted', () => {
-    cy.intercept(
-      'GET',
-      '/bff/v1/vessels/reportings?vesselId=6&internalReferenceNumber=ABC000939217&externalReferenceNumber=RU460262&IRCS=SC6082&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*'
-    ).as('reporting')
+    cy.intercept('GET', '/bff/v1/vessels/reportings?*').as('getVesselReportings')
     cy.get('*[data-cy="vessel-search-input"]', { timeout: 10000 }).type('FRAIS avis')
     cy.get('*[data-cy="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
     cy.wait(50)
@@ -185,7 +174,7 @@ context('Vessel sidebar reporting tab', () => {
     // When
     cy.get('*[data-cy="vessel-menu-reporting"]').click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-reporting"]', { timeout: 10000 }).should('be.visible')
-    cy.wait('@reporting')
+    cy.wait('@getVesselReportings')
     cy.wait(100)
 
     createReporting()

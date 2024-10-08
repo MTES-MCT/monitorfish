@@ -5,6 +5,7 @@ import {
   getReportingValue,
   updateReportingActor
 } from '@features/Reporting/components/ReportingForm/utils'
+import { sortArrayByColumn } from '@features/Vessel/components/VesselList/tableSort'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import {
@@ -22,7 +23,6 @@ import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { getOnlyVesselIdentityProperties } from '../../../../domain/entities/vessel/vessel'
-import { sortArrayByColumn } from '../../../VesselList/tableSort'
 import {
   ReportingOriginActor,
   ReportingOriginActorLabel,

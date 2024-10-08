@@ -1,3 +1,5 @@
+import { COLORS } from '@constants/constants'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import React, { useCallback, useMemo } from 'react'
 import { Table } from 'rsuite'
 import styled from 'styled-components'
@@ -12,12 +14,10 @@ import {
   TimeAgoCell
 } from './tableCells'
 import { sortVesselsByProperty } from './tableSort'
-import { useIsSuperUser } from '../../auth/hooks/useIsSuperUser'
-import { COLORS } from '../../constants/constants'
-import { getCoordinates } from '../../coordinates'
-import { OPENLAYERS_PROJECTION } from '../../domain/entities/map/constants'
-import { useMainAppSelector } from '../../hooks/useMainAppSelector'
-import FlagSVG from '../icons/flag.svg?react'
+import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
+import { getCoordinates } from '../../../../coordinates'
+import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
+import FlagSVG from '../../../icons/flag.svg?react'
 
 import type { SortType } from 'rsuite-table'
 

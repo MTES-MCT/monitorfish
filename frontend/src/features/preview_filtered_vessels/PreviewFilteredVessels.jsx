@@ -3,20 +3,18 @@ import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../constants/constants'
 import BackToVesselsListSVG from '../icons/Fleche_navigation_marees_gainsboro.svg?react'
-import { setPreviewFilteredVesselsMode } from '../../domain/shared_slices/Global'
+import { undoPreviewVessels } from '@features/Vessel/useCases/undoPreviewVessels.js'
 
 const PreviewFilteredVessels = () => {
   const dispatch = useDispatch()
 
-  const { previewFilteredVesselsMode } = useSelector(state => state.global)
+  const previewFilteredVesselsMode = useSelector(state => state.global.previewFilteredVesselsMode)
 
   return (
     <>
       {previewFilteredVesselsMode ? (
         <Preview
-          onClick={() => {
-            dispatch(setPreviewFilteredVesselsMode(false))
-          }}
+          onClick={() => dispatch(undoPreviewVessels())}
           data-cy={'back-to-vessels-list'}
         >
           <Text>

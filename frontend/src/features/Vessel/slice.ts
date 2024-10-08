@@ -28,7 +28,9 @@ export const vesselsAdapter = createEntityAdapter({
 })
 
 // @ts-ignore
-export const vesselSelectors = vesselsAdapter.getSelectors(state => state.vessel.vessels)
+export const vesselSelectors = vesselsAdapter.getSelectors(
+  state => state.vessel?.vessels ?? vesselsAdapter.getInitialState()
+)
 
 // TODO Properly type this redux state.
 export type VesselState = {
@@ -500,7 +502,7 @@ const vesselSlice = createSlice({
         return
       }
 
-      vesselsAdapter.setMany(state.vessels, action.payload)
+      vesselsAdapter.setAll(state.vessels, action.payload)
     },
 
     setVesselsEstimatedPositions(state, action) {

@@ -7,7 +7,7 @@ import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Vessel } from '../../../domain/entities/vessel/vessel'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
 import { removeVesselReporting } from '../../Vessel/slice'
-import { removeReportingsIdsFromCurrentReportings } from '../slice'
+import { mainWindowReportingActions } from '../mainWindowReporting.slice'
 
 import type { MainAppThunk } from '@store'
 
@@ -19,7 +19,7 @@ export const deleteReporting =
     try {
       await deleteReportingFromAPI(id)
 
-      dispatch(removeReportingsIdsFromCurrentReportings([id]))
+      dispatch(mainWindowReportingActions.removeReportingsIdsFromCurrentReportings([id]))
       dispatch(
         removeVesselReporting({
           reportingType,

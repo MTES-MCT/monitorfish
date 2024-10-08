@@ -5,8 +5,8 @@ import { customDayjs, Icon, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 export function Summary() {
-  const archivedReportingsFromDate = useMainAppSelector(state => state.reporting.archivedReportingsFromDate)
-  const summary = useMainAppSelector(state => state.reporting.selectedVesselReportings?.summary)
+  const archivedReportingsFromDate = useMainAppSelector(state => state.mainWindowReporting.archivedReportingsFromDate)
+  const summary = useMainAppSelector(state => state.mainWindowReporting.selectedVesselReportings?.summary)
   const yearsDepth = customDayjs().utc().get('year') - customDayjs(archivedReportingsFromDate).get('year') + 1
 
   return (

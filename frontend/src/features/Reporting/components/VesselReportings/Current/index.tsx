@@ -1,4 +1,4 @@
-import { setEditedReporting } from '@features/Reporting/slice'
+import { mainWindowReportingActions } from '@features/Reporting/mainWindowReporting.slice'
 import { ReportingType } from '@features/Reporting/types'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -15,8 +15,8 @@ import type { ReportingAndOccurrences } from '@features/Reporting/types'
 
 export function Current() {
   const dispatch = useMainAppDispatch()
-  const selectedVesselReportings = useMainAppSelector(state => state.reporting.selectedVesselReportings)
-  const editedReporting = useMainAppSelector(state => state.reporting.editedReporting)
+  const selectedVesselReportings = useMainAppSelector(state => state.mainWindowReporting.selectedVesselReportings)
+  const editedReporting = useMainAppSelector(state => state.mainWindowReporting.editedReporting)
   const [isNewReportingFormOpen, setIsNewReportingFormOpen] = useState(false)
   const [isDeletionModalOpened, setIsDeletionModalOpened] = useState<
     { id: number; reportingType: ReportingType } | undefined
@@ -24,12 +24,12 @@ export function Current() {
 
   const closeForm = useCallback(() => {
     setIsNewReportingFormOpen(false)
-    dispatch(setEditedReporting(null))
+    dispatch(mainWindowReportingActions.setEditedReporting(null))
   }, [dispatch])
 
   const reportingsWithoutEdited: ReportingAndOccurrences[] = useMemo(
     () =>
-      (selectedVesselReportings?.current || []).filter(
+      (selectedVesselReportings?.current ?? []).filter(
         reportingAndOccurrences => reportingAndOccurrences.reporting.id !== editedReporting?.id
       ),
     [selectedVesselReportings, editedReporting]

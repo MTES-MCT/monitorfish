@@ -51,27 +51,25 @@ export const showVesselsLastPosition =
 
 function convertToEnhancedLastPositions(vessels: VesselLastPosition[]): VesselEnhancedLastPositionWebGLObject[] {
   return vessels.map(vessel => ({
+    ...vessel,
     coordinates: transform([vessel.longitude, vessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION),
     course: vessel.course,
     filterPreview: 0,
+    flagState: vessel.flagState,
+    fleetSegmentsArray: vessel.segments ? vessel.segments.map(segment => segment.replace(' ', '')) : [],
+    gearsArray: vessel.gearOnboard ? Array.from(new Set(vessel.gearOnboard.map(gear => gear.gear))) : [],
+    hasAlert: !!vessel.alerts?.length,
     hasBeaconMalfunction: !!vessel.beaconMalfunctionId,
+    hasInfractionSuspicion:
+      vessel.reportings?.some(reportingType => reportingIsAnInfractionSuspicion(reportingType)) || false,
     isAtPort: vessel.isAtPort,
     isFiltered: 0,
+    lastControlDateTimeTimestamp: vessel.lastControlDateTime ? new Date(vessel.lastControlDateTime).getTime() : '',
     lastPositionSentAt: new Date(vessel.dateTime).getTime(),
+    speciesArray: vessel.speciesOnboard
+      ? Array.from(new Set(vessel.speciesOnboard.map(species => species.species)))
+      : [],
     speed: vessel.speed,
-    vesselFeatureId: Vessel.getVesselFeatureId(vessel),
-    vesselProperties: {
-      ...vessel,
-      flagState: vessel.flagState,
-      fleetSegmentsArray: vessel.segments ? vessel.segments.map(segment => segment.replace(' ', '')) : [],
-      gearsArray: vessel.gearOnboard ? Array.from(new Set(vessel.gearOnboard.map(gear => gear.gear))) : [],
-      hasAlert: !!vessel.alerts?.length,
-      hasInfractionSuspicion:
-        vessel.reportings?.some(reportingType => reportingIsAnInfractionSuspicion(reportingType)) || false,
-      lastControlDateTimeTimestamp: vessel.lastControlDateTime ? new Date(vessel.lastControlDateTime).getTime() : '',
-      speciesArray: vessel.speciesOnboard
-        ? Array.from(new Set(vessel.speciesOnboard.map(species => species.species)))
-        : []
-    }
+    vesselFeatureId: Vessel.getVesselFeatureId(vessel)
   }))
 }

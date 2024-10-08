@@ -20,25 +20,14 @@ import { vesselsAdapter, vesselSelectors } from '../slice'
 const VesselAlertLayer = () => {
   const isSuperUser = useIsSuperUser()
 
-  const {
-    hideNonSelectedVessels,
-    selectedVesselIdentity,
-    vesselsTracksShowed
-  } = useSelector(state => state.vessel)
+  const hideNonSelectedVessels = useSelector(state => state.vessel.hideNonSelectedVessels)
+  const vesselsTracksShowed = useSelector(state => state.vessel.vesselsTracksShowed)
+  const selectedVesselIdentity = useSelector(state => state.vessel.selectedVesselIdentity)
   const vessels = useSelector(state => vesselSelectors.selectAll(state.vessel.vessels))
-
-  const {
-    nonFilteredVesselsAreHidden
-  } = useSelector(state => state.filter)
-
-  const {
-    previewFilteredVesselsMode
-  } = useSelector(state => state.global)
-
-  const {
-    vesselsLastPositionVisibility,
-    hideVesselsAtPort
-  } = useSelector(state => state.map)
+  const nonFilteredVesselsAreHidden = useSelector(state => state.filter.nonFilteredVesselsAreHidden)
+  const previewFilteredVesselsMode = useSelector(state => state.global.previewFilteredVesselsMode)
+  const hideVesselsAtPort = useSelector(state => state.map.hideVesselsAtPort)
+  const vesselsLastPositionVisibility = useSelector(state => state.map.vesselsLastPositionVisibility)
 
   const vectorSourceRef = useRef(null)
   const layerRef = useRef(null)
@@ -82,18 +71,18 @@ const VesselAlertLayer = () => {
       const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
 
       const features = vessels.reduce((features, vessel) => {
-        if (!vessel.vesselProperties.hasAlert) return features
+        if (!vessel.hasAlert) return features
         if (vessel.hasBeaconMalfunction) return features
         if (nonFilteredVesselsAreHidden && !vessel.isFiltered) return features
         if (previewFilteredVesselsMode && !vessel.filterPreview) return features
         if (hideVesselsAtPort && vessel.isAtPort) return features
-        if (hideNonSelectedVessels && !vesselIsShowed(vessel.vesselProperties, vesselsTracksShowed, selectedVesselIdentity)) return features
-        if (!Vessel.getVesselOpacity(vessel.vesselProperties.dateTime, vesselIsHidden, vesselIsOpacityReduced)) return features
+        if (hideNonSelectedVessels && !vesselIsShowed(vessel, vesselsTracksShowed, selectedVesselIdentity)) return features
+        if (!Vessel.getVesselOpacity(vessel.dateTime, vesselIsHidden, vesselIsOpacityReduced)) return features
 
         const feature = new Feature({
           geometry: new Point(vessel.coordinates)
         })
-        feature.setId(`${LayerProperties.VESSEL_ALERT.code}:${getVesselCompositeIdentifier(vessel.vesselProperties)}`)
+        feature.setId(`${LayerProperties.VESSEL_ALERT.code}:${getVesselCompositeIdentifier(vessel)}`)
         features.push(feature)
 
         return features

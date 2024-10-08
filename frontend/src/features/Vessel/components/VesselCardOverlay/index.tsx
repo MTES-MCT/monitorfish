@@ -74,9 +74,9 @@ export function VesselCardOverlay({ feature }) {
 
     setVesselFeatureToShowOnCard(feature)
     numberOfWarningsRef.current = isSuperUser
-      ? Number(feature?.vesselProperties?.hasAlert) +
-        Number(!!feature?.vesselProperties?.beaconMalfunctionId) +
-        Number(feature?.vesselProperties?.hasInfractionSuspicion)
+      ? Number(feature?.get('hasAlert')) +
+        Number(!!feature?.get('beaconMalfunctionId')) +
+        Number(feature?.get('hasInfractionSuspicion'))
       : 0
     overlayRef.current.style.display = 'block'
     overlayObjectRef.current.setPosition(feature.getGeometry().getCoordinates())

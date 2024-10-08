@@ -168,10 +168,7 @@ export function VesselListModal({ namespace, onClose }) {
         dispatch(getFilteredVessels(checkedVessels, filters)).then(_filteredVessels => {
           const nextVessels = _filteredVessels.map(vessel => ({
             ...vessel,
-            vesselProperties: {
-              ...vessel.vesselProperties,
-              flagState: vessel.vesselProperties.flagState.toLowerCase()
-            }
+            flagState: vessel.flagState.toLowerCase()
           }))
           setFilteredVessels(nextVessels)
           setVesselsCountShowed(_filteredVessels.length)

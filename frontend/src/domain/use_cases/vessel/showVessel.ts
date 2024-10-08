@@ -37,7 +37,7 @@ export const showVessel =
       const vesselFeatureId = Vessel.getVesselFeatureId(vesselIdentity)
       const selectedVesselLastPosition: VesselTypes.VesselEnhancedObject | undefined = vessels.find(
         lastPosition => lastPosition.vesselFeatureId === vesselFeatureId
-      )?.vesselProperties
+      )
 
       dispatchLoadingVessel(dispatch, isFromUserAction, vesselIdentity)
       const nextTrackRequest = getCustomOrDefaultTrackRequest(

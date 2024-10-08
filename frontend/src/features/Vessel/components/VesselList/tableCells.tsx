@@ -14,7 +14,7 @@ type CellUsingVesselPropertyProps = InnerCellProps<any, any> & {
   vesselProperty: string
 }
 export function CellUsingVesselProperty({ vesselProperty, ...props }: CellUsingVesselPropertyProps) {
-  return <Cell {...props}>{rowData => rowData.vesselProperties[vesselProperty]}</Cell>
+  return <Cell {...props}>{rowData => rowData[vesselProperty]}</Cell>
 }
 
 type CheckedCellProps = CellProps<any> & {
@@ -54,8 +54,8 @@ export function FlagCell({ baseUrl, rowData, vesselProperty, ...props }: FlagCel
     <Cell style={{ padding: 0 }} {...props}>
       <Flag
         rel="preload"
-        src={`${baseUrl ? `${baseUrl}/` : ''}flags/${rowData?.vesselProperties[vesselProperty]}.svg`}
-        title={countries.getName(rowData?.vesselProperties[vesselProperty], 'fr')}
+        src={`${baseUrl ? `${baseUrl}/` : ''}flags/${rowData[vesselProperty]}.svg`}
+        title={countries.getName(rowData[vesselProperty], 'fr')}
       />
     </Cell>
   )
@@ -67,8 +67,8 @@ export function TimeAgoCell({ dataKey, rowData, ...props }: InnerCellProps<any, 
 
 export function CellWithTitle({ dataKey, rowData, ...props }: CellProps<any>) {
   return (
-    <Cell title={dataKey && rowData.vesselProperties[dataKey]} {...props}>
-      {dataKey && rowData.vesselProperties[dataKey]}
+    <Cell title={dataKey && rowData[dataKey]} {...props}>
+      {dataKey && rowData[dataKey]}
     </Cell>
   )
 }

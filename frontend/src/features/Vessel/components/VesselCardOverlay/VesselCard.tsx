@@ -20,12 +20,25 @@ timeago.register('fr', timeagoFrenchLocale)
 export function VesselCard({ feature, numberOfWarnings, overlayPosition }) {
   const isSuperUser = useIsSuperUser()
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
-  const { vesselProperties } = feature
-  const featureCoordinates = feature.getGeometry().getCoordinates()
-
-  if (!vesselProperties) {
-    return null
+  const vesselProperties = {
+    alerts: feature.get('alerts'),
+    beaconMalfunctionId: feature.get('beaconMalfunctionId'),
+    course: feature.get('course'),
+    dateTime: feature.get('dateTime'),
+    emissionPeriod: feature.get('emissionPeriod'),
+    externalReferenceNumber: feature.get('externalReferenceNumber'),
+    flagState: feature.get('flagState'),
+    hasInfractionSuspicion: feature.get('hasInfractionSuspicion'),
+    internalReferenceNumber: feature.get('internalReferenceNumber'),
+    ircs: feature.get('ircs'),
+    lastLogbookMessageDateTime: feature.get('lastLogbookMessageDateTime'),
+    length: feature.get('length'),
+    mmsi: feature.get('mmsi'),
+    speed: feature.get('speed'),
+    vesselName: feature.get('vesselName'),
+    width: feature.get('width')
   }
+  const featureCoordinates = feature.getGeometry().getCoordinates()
 
   return (
     <>

@@ -17,8 +17,8 @@ import type { Promisable } from 'type-fest'
 export type ReportingCardProps = {
   isArchived?: boolean
   openConfirmDeletionModal?: ({ id, reportingType }) => Promisable<void>
-  otherOccurrencesOfSameAlert: Array<Reporting>
-  reporting: Reporting
+  otherOccurrencesOfSameAlert: Array<Reporting.Reporting>
+  reporting: Reporting.Reporting
 }
 export function ReportingCard({
   isArchived = false,

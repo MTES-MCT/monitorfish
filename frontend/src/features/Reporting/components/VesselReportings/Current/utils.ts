@@ -16,7 +16,7 @@ export const mapControlUnitsToUniqueSortedIdsAsOptions = (controlUnits: ControlU
  * -  `1`: the second argument is before the second argument
  * - `-1`: the first argument is before the second argument
  */
-export function sortByValidationOrCreationDateDesc(a: Reporting, b: Reporting) {
+export function sortByValidationOrCreationDateDesc(a: Reporting.Reporting, b: Reporting.Reporting) {
   if (a.validationDate && b.validationDate) {
     return customDayjs(a.validationDate).isBefore(customDayjs(b.validationDate)) ? 1 : -1
   }

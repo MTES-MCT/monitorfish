@@ -13,7 +13,7 @@ import { missionListReducer, type MissionListState } from '@features/Mission/com
 import { priorNotificationReducer, type PriorNotificationState } from '@features/PriorNotification/slice'
 import { regulatoryLayerSearchReducer } from '@features/Regulation/components/RegulationSearch/slice'
 import { regulatoryReducer } from '@features/Regulation/slice'
-import { reportingReducer } from '@features/Reporting/slice'
+import { mainWindowsReportingReducer } from '@features/Reporting/mainWindowReporting.slice'
 import { alertReducer } from '@features/SideWindow/Alert/slice'
 import { sideWindowReducer } from '@features/SideWindow/slice'
 import { stationReducer } from '@features/Station/slice'
@@ -96,6 +96,7 @@ export const mainReducer = {
   interestPoint: interestPointReducer,
   layer: layer.homepage.reducer,
   mainWindow: mainWindowReducer,
+  mainWindowReporting: mainWindowsReportingReducer,
   measurement: persistReducerTyped(
     { ...getCommonPersistReducerConfig<MeasurementState>('mainPersistorMeasurement', ['measurementsDrawed']) },
     measurementReducer
@@ -117,7 +118,6 @@ export const mainReducer = {
     priorNotificationReducer
   ),
   regulatoryLayerSearch: regulatoryLayerSearchReducer,
-  reporting: reportingReducer,
   sideWindow: sideWindowReducer,
   station: stationReducer,
   vessel: vesselSliceReducer,

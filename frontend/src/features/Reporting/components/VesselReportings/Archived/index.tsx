@@ -6,21 +6,21 @@ import { Accent, Button, customDayjs, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { YearReportings } from './YearReportings'
-import { setArchivedReportingsFromDate } from '../../../slice'
+import { mainWindowReportingActions } from '../../../mainWindowReporting.slice'
 
 import type { ReportingAndOccurrences } from '@features/Reporting/types'
 
 export function Archived() {
   const dispatch = useMainAppDispatch()
-  const archivedReportingsFromDate = useMainAppSelector(state => state.reporting.archivedReportingsFromDate)
-  const selectedVesselReportings = useMainAppSelector(state => state.reporting.selectedVesselReportings)
+  const archivedReportingsFromDate = useMainAppSelector(state => state.mainWindowReporting.archivedReportingsFromDate)
+  const selectedVesselReportings = useMainAppSelector(state => state.mainWindowReporting.selectedVesselReportings)
 
   const yearsToReportings = selectedVesselReportings?.archived
 
   const seeMore = () => {
     const nextDate = customDayjs(archivedReportingsFromDate).subtract(1, 'year').toISOString()
 
-    dispatch(setArchivedReportingsFromDate(nextDate))
+    dispatch(mainWindowReportingActions.setArchivedReportingsFromDate(nextDate))
     dispatch(getVesselReportings(false))
   }
 

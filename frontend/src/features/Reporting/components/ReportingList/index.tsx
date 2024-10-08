@@ -27,7 +27,7 @@ import { CardTableRow } from '../../../../ui/card-table/CardTableRow'
 import { EmptyCardTable } from '../../../../ui/card-table/EmptyCardTable'
 import { FilterTableInput } from '../../../../ui/card-table/FilterTableInput'
 import { EditReporting } from '../../../SideWindow/Alert/AlertListAndReportingList/EditReporting'
-import { setEditedReportingInSideWindow } from '../../slice'
+import { mainWindowReportingActions } from '../../mainWindowReporting.slice'
 import { archiveReportings } from '../../useCases/archiveReportings'
 import { deleteReportings } from '../../useCases/deleteReportings'
 
@@ -44,7 +44,7 @@ type ReportingListProps = Readonly<{
 export function ReportingList({ selectedSeafrontGroup }: ReportingListProps) {
   const dispatch = useMainAppDispatch()
   const searchInputRef = useRef() as MutableRefObject<HTMLInputElement>
-  const currentReportings = useMainAppSelector(state => state.reporting.currentReportings)
+  const currentReportings = useMainAppSelector(state => state.mainWindowReporting.currentReportings)
   const displayedError = useMainAppSelector(
     state => state.displayedError[DisplayedErrorKey.SIDE_WINDOW_REPORTING_LIST_ERROR]
   )
@@ -112,7 +112,7 @@ export function ReportingList({ selectedSeafrontGroup }: ReportingListProps) {
   const edit = useCallback(
     (isDisabled: boolean, reporting: InfractionSuspicionReporting | ObservationReporting) => {
       if (!isDisabled) {
-        dispatch(setEditedReportingInSideWindow(reporting))
+        dispatch(mainWindowReportingActions.setEditedReportingInSideWindow(reporting))
       }
     },
     [dispatch]

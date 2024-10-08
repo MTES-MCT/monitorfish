@@ -7,7 +7,7 @@ import styled from 'styled-components'
 
 import { getDateTime } from '../../../../utils'
 import { getAlertNameFromType } from '../../../SideWindow/Alert/AlertListAndReportingList/utils'
-import { setEditedReporting } from '../../slice'
+import { mainWindowReportingActions } from '../../mainWindowReporting.slice'
 import { ReportingType, ReportingTypeCharacteristics } from '../../types'
 import { archiveReporting } from '../../useCases/archiveReporting'
 
@@ -122,7 +122,7 @@ export function ReportingCard({
               data-cy={`edit-reporting-card-${reporting.id}`}
               Icon={Icon.EditUnbordered}
               iconSize={20}
-              onClick={() => dispatch(setEditedReporting(reporting))}
+              onClick={() => dispatch(mainWindowReportingActions.setEditedReporting(reporting))}
               title="Editer"
             />
           )}

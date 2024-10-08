@@ -36,7 +36,7 @@ import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { Loader as MissionFormLoader } from '../Mission/components/MissionForm/Loader'
 import { MissionList } from '../Mission/components/MissionList'
 import { PriorNotificationList } from '../PriorNotification/components/PriorNotificationList'
-import { setEditedReportingInSideWindow } from '../Reporting/slice'
+import { mainWindowReportingActions } from '../Reporting/mainWindowReporting.slice'
 
 export type SideWindowProps = HTMLAttributes<HTMLDivElement> & {
   isFromURL: boolean
@@ -50,7 +50,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
   const openedBeaconMalfunctionInKanban = useMainAppSelector(
     state => state.beaconMalfunction.openedBeaconMalfunctionInKanban
   )
-  const editedReportingInSideWindow = useMainAppSelector(state => state.reporting.editedReportingInSideWindow)
+  const editedReportingInSideWindow = useMainAppSelector(state => state.mainWindowReporting.editedReportingInSideWindow)
   const selectedPath = useMainAppSelector(state => state.sideWindow.selectedPath)
   const missionEvent = useListenToAllMissionEventsUpdates()
 
@@ -90,7 +90,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
 
   const closeRightSidebar = useCallback(() => {
     dispatch(closeBeaconMalfunctionInKanban())
-    dispatch(setEditedReportingInSideWindow())
+    dispatch(mainWindowReportingActions.setEditedReportingInSideWindow())
   }, [dispatch])
 
   useEffect(() => {

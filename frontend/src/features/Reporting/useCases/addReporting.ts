@@ -6,7 +6,7 @@ import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Vessel } from '../../../domain/entities/vessel/vessel'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
 import { addVesselReporting } from '../../Vessel/slice'
-import { addReportingToCurrentReportings } from '../slice'
+import { mainWindowReportingActions } from '../mainWindowReporting.slice'
 
 import type { ReportingCreation } from '@features/Reporting/types'
 import type { MainAppThunk } from '@store'
@@ -19,7 +19,7 @@ export const addReporting =
     try {
       const reporting = await addReportingFromAPI(newReporting)
 
-      dispatch(addReportingToCurrentReportings(reporting))
+      dispatch(mainWindowReportingActions.addReportingToCurrentReportings(reporting))
       dispatch(
         addVesselReporting({
           reportingType: newReporting?.type,

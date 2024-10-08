@@ -11,7 +11,7 @@ type EditReportingProps = {
 export function EditReporting({ closeForm }: EditReportingProps) {
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
   assertNotNullish(selectedVesselIdentity)
-  const editedReporting = useMainAppSelector(state => state.reporting.editedReporting)
+  const editedReporting = useMainAppSelector(state => state.mainWindowReporting.editedReporting)
 
   return (
     <FormWrapper>

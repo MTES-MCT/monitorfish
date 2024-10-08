@@ -1,17 +1,17 @@
+import { COLORS } from '@constants/constants'
+import { COUNTRIES_AS_ALPHA2_OPTIONS } from '@constants/index'
 import { FilterTag } from '@features/Filter/components/VesselFilters/FilterTag'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Checkbox, CheckboxGroup, MultiCascader, SelectPicker, Tag, TagPicker } from 'rsuite'
 import styled from 'styled-components'
 
 import { lastControlAfterLabels, lastPositionTimeAgoLabels } from './dataFormatting'
-import { COUNTRIES_AS_ALPHA2_OPTIONS } from '../../constants'
-import { COLORS } from '../../constants/constants'
-import { LayerType as LayersType } from '../../domain/entities/layers/constants'
-import { VesselLocation, vesselSize } from '../../domain/entities/vessel/vessel'
-import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
-import { getZonesAndSubZonesPromises } from '../AdministrativeZone/useCases/getZonesAndSubZonesPromises'
-import PolygonFilterSVG from '../icons/Filtre_zone_polygone.svg?react'
-import BoxFilterSVG from '../icons/Filtre_zone_rectangle.svg?react'
+import { LayerType as LayersType } from '../../../../domain/entities/layers/constants'
+import { VesselLocation, vesselSize } from '../../../../domain/entities/vessel/vessel'
+import { getZonesAndSubZonesPromises } from '../../../AdministrativeZone/useCases/getZonesAndSubZonesPromises'
+import PolygonFilterSVG from '../../../icons/Filtre_zone_polygone.svg?react'
+import BoxFilterSVG from '../../../icons/Filtre_zone_rectangle.svg?react'
 
 function renderTagPickerMenuItem(item) {
   return <Label data-cy={`select-picker-menu-item-${item.label}`}>{item.label}</Label>

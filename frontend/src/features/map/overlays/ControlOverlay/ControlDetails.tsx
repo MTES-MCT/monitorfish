@@ -1,3 +1,4 @@
+import { Flag } from '@features/Vessel/components/VesselList/tableCells'
 import { Accent, Icon, IconButton, Tag, THEME } from '@mtes-mct/monitor-ui'
 import countries from 'i18n-iso-countries'
 import { useMemo } from 'react'
@@ -8,7 +9,6 @@ import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { pluralize } from '../../../../utils/pluralize'
 import { GreenCircle, RedCircle } from '../../../commonStyles/Circle.style'
 import { missionFormActions } from '../../../Mission/components/MissionForm/slice'
-import { Flag } from '../../../VesselList/tableCells'
 import { OverlayPosition } from '../Overlay'
 
 import type { Mission } from '../../../Mission/mission.types'

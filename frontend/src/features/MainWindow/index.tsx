@@ -19,10 +19,10 @@ import { LayersSidebar } from '../LayersSidebar/components'
 import { Map } from '../map/Map'
 import PreviewFilteredVessels from '../preview_filtered_vessels/PreviewFilteredVessels'
 import { SideWindowLauncher } from '../SideWindow/SideWindowLauncher'
+import { VesselList } from '../Vessel/components/VesselList'
 import { VesselLoader } from '../Vessel/components/VesselLoader'
 import { VesselSidebar } from '../Vessel/components/VesselSidebar'
 import { VesselSidebarHeader } from '../Vessel/components/VesselSidebar/VesselSidebarHeader'
-import { VesselList } from '../VesselList'
 
 export function MainWindow() {
   const isControlUnitDialogDisplayed = useMainAppSelector(

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import type { GeoJSON } from '../../domain/types/GeoJSON'
+import type { GeoJSON } from '../../../../domain/types/GeoJSON'
 
 type ZoneSelected = {
   code: string

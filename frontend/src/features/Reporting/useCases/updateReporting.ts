@@ -1,6 +1,7 @@
 import { updateReportingFromAPI } from '@api/reporting'
 import { ReportingType } from '@features/Reporting/types'
 import { getVesselReportings } from '@features/Reporting/useCases/getVesselReportings'
+import { renderVessels } from '@features/Vessel/useCases/renderVessels'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { Vessel } from '../../../domain/entities/vessel/vessel'
@@ -53,6 +54,7 @@ export const updateReporting =
             vesselFeatureId
           })
         )
+        await dispatch(renderVessels())
       }
 
       // If the update is done from the Reporting tab of the vessel sidebar

@@ -1,4 +1,5 @@
 import { removeVesselAlertAndUpdateReporting } from '@features/Vessel/slice'
+import { renderVessels } from '@features/Vessel/useCases/renderVessels'
 
 import { silenceAlertFromAPI } from '../../../api/alert'
 import {
@@ -19,7 +20,7 @@ import type { SilencedAlertPeriodRequest } from '../../entities/alerts/types'
  */
 export const silenceAlert =
   (silencedAlertPeriodRequest: SilencedAlertPeriodRequest, pendingAlertId: string): MainAppThunk =>
-  (dispatch, getState) => {
+  async (dispatch, getState) => {
     const previousPendingAlerts = getState().alert.pendingAlerts
     const previousSilencedAlerts = getState().alert.silencedAlerts
 
@@ -36,24 +37,24 @@ export const silenceAlert =
       dispatch(removeFromSilencedAlertsQueue(pendingAlertId))
     }, 3200)
 
-    silenceAlertFromAPI(pendingAlertId, silencedAlertPeriodRequest)
-      .then(silencedAlert => {
-        dispatch(
-          removeVesselAlertAndUpdateReporting({
-            alertType: silencedAlert.value.type,
-            isValidated: false,
-            vesselFeatureId: Vessel.getVesselFeatureId(silencedAlert)
-          })
-        )
+    try {
+      const silencedAlert = await silenceAlertFromAPI(pendingAlertId, silencedAlertPeriodRequest)
+      dispatch(
+        removeVesselAlertAndUpdateReporting({
+          alertType: silencedAlert.value.type,
+          isValidated: false,
+          vesselFeatureId: Vessel.getVesselFeatureId(silencedAlert)
+        })
+      )
 
-        const nextSilencedAlerts = [silencedAlert, ...previousSilencedAlerts]
-        dispatch(setSilencedAlerts(nextSilencedAlerts))
-      })
-      .catch(error => {
-        clearTimeout(timeout)
+      const nextSilencedAlerts = [silencedAlert, ...previousSilencedAlerts]
+      dispatch(setSilencedAlerts(nextSilencedAlerts))
+      await dispatch(renderVessels())
+    } catch (error) {
+      clearTimeout(timeout)
 
-        dispatch(setPendingAlerts(previousPendingAlerts))
-        dispatch(setSilencedAlerts(previousSilencedAlerts))
-        dispatch(setError(error))
-      })
+      dispatch(setPendingAlerts(previousPendingAlerts))
+      dispatch(setSilencedAlerts(previousSilencedAlerts))
+      dispatch(setError(error))
+    }
   }

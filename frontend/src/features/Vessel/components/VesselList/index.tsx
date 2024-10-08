@@ -1,43 +1,39 @@
+import { COLORS } from '@constants/constants'
 import { SaveVesselFiltersModal } from '@features/Filter/components/SaveVesselFiltersModal'
 import { MapToolButton } from '@features/MainWindow/components/MapButtons/shared/MapToolButton'
+import { previewVessels } from '@features/Vessel/useCases/previewVessels'
+import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { batch } from 'react-redux'
 import { Modal } from 'rsuite'
 import styled from 'styled-components'
-import { LegacyRsuiteComponentsWrapper } from 'ui/LegacyRsuiteComponentsWrapper'
 
 import { DownloadVesselListModal } from './DownloadVesselListModal'
 import { addZoneSelected, removeZoneSelected, resetZonesSelected, setZonesSelected } from './slice'
 import { VesselListFilters } from './VesselListFilters'
 import { VesselListTable } from './VesselListTable'
-import { COLORS } from '../../constants/constants'
-import { LayerType as LayersType, LayerType } from '../../domain/entities/layers/constants'
-import { InteractionListener, InteractionType } from '../../domain/entities/map/constants'
-import { VesselLocation } from '../../domain/entities/vessel/vessel'
-import { setDisplayedComponents } from '../../domain/shared_slices/DisplayedComponent'
-import { setBlockVesselsUpdate, setPreviewFilteredVesselsMode } from '../../domain/shared_slices/Global'
-import { animateToExtent } from '../../domain/shared_slices/Map'
-import { addVesselListFilterZone } from '../../domain/use_cases/vessel/addVesselListFilterZone'
-import { getFilteredVessels } from '../../domain/use_cases/vessel/getFilteredVessels'
-import { unselectVessel } from '../../domain/use_cases/vessel/unselectVessel'
-import { useListenForDrawedGeometry } from '../../hooks/useListenForDrawing'
-import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../hooks/useMainAppSelector'
-import { getExtentFromGeoJSON } from '../../utils'
-import { isNumeric } from '../../utils/isNumeric'
-import getAdministrativeZoneGeometry from '../AdministrativeZone/useCases/getAdministrativeZoneGeometry'
-import { StyledModalHeader } from '../commonComponents/StyledModalHeader'
-import { PrimaryButton, SecondaryButton } from '../commonStyles/Buttons.style'
-import { MapComponent } from '../commonStyles/MapComponent'
-import { resetInteraction } from '../Draw/slice'
-import { useGetFleetSegmentsQuery } from '../FleetSegment/apis'
-import VesselListSVG from '../icons/Icone_liste_navires.svg?react'
-import PreviewSVG from '../icons/Oeil_apercu_carte.svg?react'
-import { setProcessingRegulationSearchedZoneExtent } from '../Regulation/slice'
-import { setPreviewFilteredVesselsFeatures, vesselSelectors } from '../Vessel/slice'
+import { LayerType as LayersType, LayerType } from '../../../../domain/entities/layers/constants'
+import { InteractionListener, InteractionType } from '../../../../domain/entities/map/constants'
+import { VesselLocation } from '../../../../domain/entities/vessel/vessel'
+import { setDisplayedComponents } from '../../../../domain/shared_slices/DisplayedComponent'
+import { setBlockVesselsUpdate } from '../../../../domain/shared_slices/Global'
+import { addVesselListFilterZone } from '../../../../domain/use_cases/vessel/addVesselListFilterZone'
+import { getFilteredVessels } from '../../../../domain/use_cases/vessel/getFilteredVessels'
+import { unselectVessel } from '../../../../domain/use_cases/vessel/unselectVessel'
+import { LegacyRsuiteComponentsWrapper } from '../../../../ui/LegacyRsuiteComponentsWrapper'
+import getAdministrativeZoneGeometry from '../../../AdministrativeZone/useCases/getAdministrativeZoneGeometry'
+import { StyledModalHeader } from '../../../commonComponents/StyledModalHeader'
+import { PrimaryButton, SecondaryButton } from '../../../commonStyles/Buttons.style'
+import { MapComponent } from '../../../commonStyles/MapComponent'
+import { resetInteraction } from '../../../Draw/slice'
+import { useGetFleetSegmentsQuery } from '../../../FleetSegment/apis'
+import VesselListSVG from '../../../icons/Icone_liste_navires.svg?react'
+import PreviewSVG from '../../../icons/Oeil_apercu_carte.svg?react'
+import { vesselSelectors } from '../../slice'
 
-import type { VesselEnhancedLastPositionWebGLObject } from '../../domain/entities/vessel/types'
+import type { VesselEnhancedLastPositionWebGLObject } from '../../../../domain/entities/vessel/types'
 
 const NOT_FOUND = -1
 
@@ -63,7 +59,7 @@ type ZoneGroupAndChildren = {
 
 export function VesselList({ namespace }) {
   const dispatch = useMainAppDispatch()
-  const { previewFilteredVesselsMode, rightMenuIsOpen } = useMainAppSelector(state => state.global)
+  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
   const isVesselListModalDisplayed = useMainAppSelector(state => state.displayedComponent.isVesselListModalDisplayed)
   const { drawedGeometry } = useListenForDrawedGeometry(InteractionListener.VESSELS_LIST)
   const { uniqueVesselsDistricts: districts, uniqueVesselsSpecies: species } = useMainAppSelector(state => state.vessel)
@@ -265,42 +261,8 @@ export function VesselList({ namespace }) {
   }, [])
 
   const previewFilteredVessels = useCallback(() => {
-    const vesselFeatureIds = filteredVessels.map(vessel => vessel.vesselFeatureId)
-
-    if (vesselFeatureIds?.length) {
-      dispatch(setPreviewFilteredVesselsFeatures(vesselFeatureIds))
-      dispatch(setPreviewFilteredVesselsMode(true))
-
-      if (zonesSelected?.length) {
-        // TODO Finish that
-        // @ts-ignore
-        const extent = getExtentFromGeoJSON(zonesSelected[0]?.feature)
-        if (extent?.length && !isNumeric(extent[0]) && !isNumeric(extent[1])) {
-          batch(() => {
-            dispatch(setProcessingRegulationSearchedZoneExtent(extent))
-            dispatch(animateToExtent())
-          })
-        }
-      }
-    }
-  }, [dispatch, filteredVessels, zonesSelected])
-
-  useEffect(() => {
-    if (previewFilteredVesselsMode) {
-      dispatch(
-        setDisplayedComponents({
-          isVesselListModalDisplayed: false
-        })
-      )
-      // TODO Investigate that. Should be a defined boolean.
-    } else if (previewFilteredVesselsMode !== undefined) {
-      dispatch(
-        setDisplayedComponents({
-          isVesselListModalDisplayed: true
-        })
-      )
-    }
-  }, [dispatch, previewFilteredVesselsMode])
+    dispatch(previewVessels(filteredVessels))
+  }, [dispatch, filteredVessels])
 
   const setAdministrativeZonesFiltered = useCallback(
     (nextAdministrativeZonesFiltered: string[]) => {

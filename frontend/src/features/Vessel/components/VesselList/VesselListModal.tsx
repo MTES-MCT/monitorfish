@@ -58,7 +58,7 @@ export function VesselListModal({ namespace, onClose }) {
   const dispatch = useMainAppDispatch()
   const { drawedGeometry } = useListenForDrawedGeometry(InteractionListener.VESSELS_LIST)
   const { uniqueVesselsDistricts: districts, uniqueVesselsSpecies: species } = useMainAppSelector(state => state.vessel)
-  const vessels = useMainAppSelector(vesselSelectors.selectAll)
+  const vessels = useMainAppSelector(state => vesselSelectors.selectAll(state.vessel.vessels))
   const getFleetSegmentsQuery = useGetFleetSegmentsQuery()
   const gears = useMainAppSelector(state => state.gear.gears)
 

@@ -7,7 +7,7 @@ import type { MainAppThunk } from '@store'
 
 export const applyFilterToVessels = (): MainAppThunk => async (dispatch, getState) => {
   const showedFilter = getState().filter?.filters?.find(filter => filter.showed)
-  const vessels = vesselSelectors.selectAll(getState())
+  const vessels = vesselSelectors.selectAll(getState().vessel.vessels)
   if (!showedFilter) {
     dispatch(setAllVesselsAsUnfiltered())
 

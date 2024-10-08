@@ -12,7 +12,7 @@ import { vesselSelectors } from '../Vessel/slice'
 import type { VesselEnhancedLastPositionWebGLObject } from '../../domain/entities/vessel/types'
 
 export function MapMenu() {
-  const vessels = useMainAppSelector(vesselSelectors.selectAll)
+  const vessels = useMainAppSelector(state => vesselSelectors.selectAll(state.vessel.vessels))
   const [coordinates, setCoordinates] = useState<number[]>([])
   const vessel = useRef<VesselEnhancedLastPositionWebGLObject | undefined>()
 

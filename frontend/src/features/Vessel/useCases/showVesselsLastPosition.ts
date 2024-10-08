@@ -33,7 +33,7 @@ export const showVesselsLastPosition =
       })
     }
 
-    const filteredVessels = vesselSelectors.selectAll(getState())
+    const filteredVessels = vesselSelectors.selectAll(getState().vessel.vessels)
     const features = filteredVessels.map(vessel => buildFeature(vessel))
 
     VESSELS_VECTOR_SOURCE.clear(true)

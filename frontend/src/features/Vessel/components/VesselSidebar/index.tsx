@@ -44,8 +44,8 @@ export function VesselSidebar() {
       <AnimateToTrack isSidebarOpen={isFirstLoad} />
       <HideNonSelectedVessels isSidebarOpen={isFirstLoad} />
       <ShowFishingActivitiesOnMap isSidebarOpen={isFirstLoad} />
-      <Wrapper data-cy="vessel-sidebar" isRightMenuOpen={rightMenuIsOpen} isSidebarOpen={isFirstLoad}>
-        <GrayOverlay isOverlayed={isFocusedOnVesselSearch && isFirstLoad} />
+      <Wrapper $isRightMenuOpen={rightMenuIsOpen} $isSidebarOpen={isFirstLoad} data-cy="vessel-sidebar">
+        <GrayOverlay $isOverlayed={isFocusedOnVesselSearch && isFirstLoad} />
         <div>
           <Tabs />
           <Body />
@@ -56,9 +56,9 @@ export function VesselSidebar() {
 }
 
 const GrayOverlay = styled.div<{
-  isOverlayed: boolean
+  $isOverlayed: boolean
 }>`
-  animation: ${p => (p.isOverlayed ? 'opacity-up' : 'opacity-down')} 0.5s ease forwards;
+  animation: ${p => (p.$isOverlayed ? 'opacity-up' : 'opacity-down')} 0.5s ease forwards;
   background: ${p => p.theme.color.charcoal};
   height: 100%;
   opacity: 0;
@@ -87,17 +87,17 @@ const GrayOverlay = styled.div<{
 `
 
 const Wrapper = styled(MapComponent)<{
-  isRightMenuOpen: boolean
-  isSidebarOpen: boolean
+  $isRightMenuOpen: boolean
+  $isSidebarOpen: boolean
 }>`
   background: ${p => p.theme.color.gainsboro};
-  margin-right: ${p => (p.isSidebarOpen ? 0 : -510)}px;
+  margin-right: ${p => (p.$isSidebarOpen ? 0 : -510)}px;
   max-height: 93vh;
-  opacity: ${p => (p.isSidebarOpen ? 1 : 0)};
+  opacity: ${p => (p.$isSidebarOpen ? 1 : 0)};
   overflow: hidden;
   padding: 0;
   position: absolute;
-  right: ${p => (p.isRightMenuOpen && p.isSidebarOpen ? 55 : 10)}px;
+  right: ${p => (p.$isRightMenuOpen && p.$isSidebarOpen ? 55 : 10)}px;
   top: 50px;
   transition:
     all 0.5s,

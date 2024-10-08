@@ -27,8 +27,8 @@ export const vesselsAdapter = createEntityAdapter({
   sortComparer: false
 })
 
-// @ts-ignore
 export const vesselSelectors = vesselsAdapter.getSelectors(
+  // @ts-ignore
   state => state.vessel?.vessels ?? vesselsAdapter.getInitialState()
 )
 

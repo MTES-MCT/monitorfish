@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../constants/constants'
 import BackToVesselsListSVG from '../icons/Fleche_navigation_marees_gainsboro.svg?react'
-import { undoPreviewVessels } from '@features/Vessel/useCases/undoPreviewVessels.js'
+import { undoPreviewVessels } from '@features/Vessel/useCases/undoPreviewVessels'
 
 const PreviewFilteredVessels = () => {
   const dispatch = useDispatch()

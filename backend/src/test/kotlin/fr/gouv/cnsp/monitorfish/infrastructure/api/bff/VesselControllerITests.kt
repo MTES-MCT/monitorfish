@@ -584,8 +584,11 @@ class VesselControllerITests {
                                         stage = Stage.ARCHIVED,
                                         malfunctionStartDateTime = ZonedDateTime.now(),
                                         malfunctionEndDateTime = null,
-                                        vesselStatusLastModificationDateTime = ZonedDateTime.now(), endOfBeaconMalfunctionReason = EndOfBeaconMalfunctionReason.RESUMED_TRANSMISSION,
-                                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
+                                        vesselStatusLastModificationDateTime = ZonedDateTime.now(),
+                                        endOfBeaconMalfunctionReason = EndOfBeaconMalfunctionReason.RESUMED_TRANSMISSION,
+                                        beaconNumber = "123465",
+                                        beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
+                                        vesselId = 123,
                                     ),
                                 comments =
                                     listOf(
@@ -624,7 +627,9 @@ class VesselControllerITests {
                                     malfunctionStartDateTime = ZonedDateTime.now(),
                                     malfunctionEndDateTime = null,
                                     vesselStatusLastModificationDateTime = ZonedDateTime.now(),
-                                    beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
+                                    beaconNumber = "123465",
+                                    beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
+                                    vesselId = 123,
                                 ),
                             comments =
                                 listOf(
@@ -680,7 +685,133 @@ class VesselControllerITests {
     }
 
     @Test
-    fun `Should get vessel's reporting`() {
+    fun `Should get vessel's reportings by vessel ID`() {
+        // Given
+        val currentReporting =
+            Reporting(
+                id = 1,
+                type = ReportingType.ALERT,
+                vesselName = "BIDUBULE",
+                internalReferenceNumber = "FR224226850",
+                externalReferenceNumber = "1236514",
+                ircs = "IRCS",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = ZonedDateTime.now(),
+                validationDate = ZonedDateTime.now(),
+                value = ThreeMilesTrawlingAlert() as ReportingValue,
+                isArchived = false,
+                isDeleted = false,
+                infraction =
+                    Infraction(
+                        natinfCode = 7059,
+                        infractionCategory = InfractionCategory.FISHING,
+                    ),
+            )
+
+        val archivedReporting =
+            Reporting(
+                id = 666,
+                type = ReportingType.ALERT,
+                vesselName = "BIDUBULE",
+                internalReferenceNumber = "FR224226850",
+                externalReferenceNumber = "1236514",
+                ircs = "IRCS",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = ZonedDateTime.now().minusYears(1),
+                validationDate = ZonedDateTime.now().minusYears(1),
+                value = ThreeMilesTrawlingAlert() as ReportingValue,
+                isArchived = true,
+                isDeleted = false,
+            )
+
+        given(
+            this.getVesselReportings.execute(
+                eq(123456),
+                eq(null),
+                eq(null),
+                eq(null),
+                eq(null),
+                any(),
+            ),
+        )
+            .willReturn(
+                VesselReportings(
+                    summary =
+                        ReportingSummary(
+                            infractionSuspicionsSummary =
+                                listOf(
+                                    ReportingTitleAndNumberOfOccurrences(
+                                        title = "A title",
+                                        numberOfOccurrences = 2,
+                                    ),
+                                    ReportingTitleAndNumberOfOccurrences(
+                                        title = "A title",
+                                        numberOfOccurrences = 2,
+                                    ),
+                                ),
+                            numberOfInfractionSuspicions = 4,
+                            numberOfObservations = 5,
+                        ),
+                    current =
+                        listOf(
+                            ReportingAndOccurrences(
+                                otherOccurrencesOfSameAlert = listOf(),
+                                reporting = currentReporting,
+                                controlUnit = null,
+                            ),
+                            ReportingAndOccurrences(
+                                otherOccurrencesOfSameAlert = listOf(),
+                                reporting = currentReporting,
+                                controlUnit = null,
+                            ),
+                        ),
+                    archived =
+                        mapOf(
+                            2024 to
+                                listOf(
+                                    ReportingAndOccurrences(
+                                        otherOccurrencesOfSameAlert = listOf(),
+                                        reporting = archivedReporting,
+                                        controlUnit = null,
+                                    ),
+                                ),
+                            2023 to emptyList(),
+                            2022 to emptyList(),
+                            2021 to emptyList(),
+                        ),
+                ),
+            )
+
+        // When
+        api.perform(get("/bff/v1/vessels/123456/reportings"))
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.current.length()", equalTo(2)))
+            .andExpect(jsonPath("$.current[0].reporting.id", equalTo(1)))
+            .andExpect(jsonPath("$.summary.numberOfInfractionSuspicions", equalTo(4)))
+            .andExpect(jsonPath("$.summary.infractionSuspicionsSummary[0].title", equalTo("A title")))
+            .andExpect(jsonPath("$.summary.infractionSuspicionsSummary[0].numberOfOccurrences", equalTo(2)))
+            .andExpect(jsonPath("$.current[0].reporting.flagState", equalTo("FR")))
+            .andExpect(jsonPath("$.current[0].reporting.internalReferenceNumber", equalTo("FR224226850")))
+            .andExpect(jsonPath("$.current[0].reporting.externalReferenceNumber", equalTo("1236514")))
+            .andExpect(jsonPath("$.current[0].reporting.type", equalTo("ALERT")))
+            .andExpect(jsonPath("$.current[0].reporting.isArchived", equalTo(false)))
+            .andExpect(jsonPath("$.current[0].reporting.isDeleted", equalTo(false)))
+            .andExpect(jsonPath("$.current[0].reporting.infraction.natinfCode", equalTo(7059)))
+            .andExpect(jsonPath("$.current[0].reporting.value.type", equalTo("THREE_MILES_TRAWLING_ALERT")))
+            .andExpect(jsonPath("$.current[0].reporting.value.natinfCode", equalTo(7059)))
+            .andExpect(jsonPath("$.archived.2024[0].reporting.id", equalTo(666)))
+            .andExpect(jsonPath("$.archived.2024[0].reporting.internalReferenceNumber", equalTo("FR224226850")))
+            .andExpect(jsonPath("$.archived.2024[0].reporting.externalReferenceNumber", equalTo("1236514")))
+            .andExpect(jsonPath("$.archived.2024[0].reporting.type", equalTo("ALERT")))
+            .andExpect(jsonPath("$.archived.2024[0].reporting.isArchived", equalTo(true)))
+            .andExpect(jsonPath("$.archived.2024[0].reporting.isDeleted", equalTo(false)))
+    }
+
+    @Test
+    fun `Should get vessel's reportings by vessel identity with vessel ID`() {
         // Given
         val currentReporting =
             Reporting(
@@ -782,7 +913,7 @@ class VesselControllerITests {
         // When
         api.perform(
             get(
-                "/bff/v1/vessels/reporting?vesselId=123456&internalReferenceNumber=FR224226850" +
+                "/bff/v1/vessels/reportings?vesselId=123456&internalReferenceNumber=FR224226850" +
                     "&externalReferenceNumber=123&IRCS=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&fromDate=2021-03-24T22:07:00.000Z",
             ),
         )
@@ -811,7 +942,7 @@ class VesselControllerITests {
     }
 
     @Test
-    fun `Should get vessel's reporting with an empty vessel id`() {
+    fun `Should get vessel's reporting by vessel identity without vessel ID`() {
         given(
             this.getVesselReportings.execute(
                 eq(null),
@@ -838,7 +969,7 @@ class VesselControllerITests {
         // When
         api.perform(
             get(
-                "/bff/v1/vessels/reporting?vesselId=&internalReferenceNumber=FR224226850" +
+                "/bff/v1/vessels/reportings?vesselId=&internalReferenceNumber=FR224226850" +
                     "&externalReferenceNumber=123&IRCS=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&fromDate=2021-03-24T22:07:00.000Z",
             ),
         )

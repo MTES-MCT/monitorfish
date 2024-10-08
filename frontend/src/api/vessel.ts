@@ -96,7 +96,7 @@ async function getVesselReportingsFromAPI(identity: VesselIdentity, fromDate: st
   try {
     return await monitorfishApiKy
       .get(
-        `/bff/v1/vessels/reporting?vesselId=${vesselId}&internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&vesselIdentifier=${vesselIdentifier}&fromDate=${fromDate}`
+        `/bff/v1/vessels/reportings?vesselId=${vesselId}&internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&vesselIdentifier=${vesselIdentifier}&fromDate=${fromDate}`
       )
       .json<VesselReportings>()
   } catch (err) {

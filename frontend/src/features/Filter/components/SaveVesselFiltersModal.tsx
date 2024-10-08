@@ -12,17 +12,12 @@ import { v4 as uuidv4 } from 'uuid'
 import { TagList } from './VesselFilters/TagList'
 
 type SaveVesselFiltersModalProps = Readonly<{
-  closeAndResetVesselList: () => void
   filters: any
   isOpen: boolean
+  onClose: () => void
   setIsOpen: (isOpen: boolean) => void
 }>
-export function SaveVesselFiltersModal({
-  closeAndResetVesselList,
-  filters,
-  isOpen,
-  setIsOpen
-}: SaveVesselFiltersModalProps) {
+export function SaveVesselFiltersModal({ filters, isOpen, onClose, setIsOpen }: SaveVesselFiltersModalProps) {
   const dispatch = useMainAppDispatch()
   const [filterName, setFilterName] = useState<string | undefined>(undefined)
   const [filterColor, setFilterColor] = useState('#2c6e49')
@@ -46,7 +41,7 @@ export function SaveVesselFiltersModal({
     setFilterName('')
     setFilterColor('#2c6e49')
 
-    closeAndResetVesselList()
+    onClose()
   }
 
   const cancel = () => {

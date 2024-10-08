@@ -27,11 +27,6 @@ export const vesselsAdapter = createEntityAdapter({
   sortComparer: false
 })
 
-export const vesselSelectors = vesselsAdapter.getSelectors(
-  // @ts-ignore
-  state => state.vessel?.vessels ?? vesselsAdapter.getInitialState()
-)
-
 // TODO Properly type this redux state.
 export type VesselState = {
   fishingActivitiesShowedOnMap: FishingActivityShowedOnMap[]
@@ -392,7 +387,7 @@ const vesselSlice = createSlice({
 
     setAllVesselsAsUnfiltered(state) {
       const vessels = vesselSelectors.selectAll(state.vessels)
-      const vesselIds = vesselSelectors.selectIds(state.vessels)
+      const vesselIds = state.vessels.ids
 
       // Check if any vessel has `isFiltered` set to true
       if (!vessels.some(vessel => vessel.isFiltered)) {
@@ -413,7 +408,7 @@ const vesselSlice = createSlice({
 
     setFilteredVesselsFeatures(state, action: PayloadAction<VesselFeatureId>) {
       const filteredVesselsFeaturesUids = action.payload
-      const vesselIds = vesselSelectors.selectIds(state.vessels)
+      const vesselIds = state.vessels.ids
 
       // Update only the vessels that match the filtered IDs
       vesselsAdapter.updateMany(
@@ -450,7 +445,7 @@ const vesselSlice = createSlice({
      */
     setPreviewFilteredVesselsFeatures(state, action) {
       const previewFilteredVesselsFeaturesUids = action.payload
-      const vesselIds = vesselSelectors.selectIds(state.vessels)
+      const vesselIds = state.vessels.ids
 
       // Update only the vessels that match the filtered IDs
       vesselsAdapter.updateMany(
@@ -673,3 +668,4 @@ export const {
 } = vesselSlice.actions
 
 export const vesselSliceReducer = vesselSlice.reducer
+export const vesselSelectors = vesselsAdapter.getSelectors()

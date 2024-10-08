@@ -37,7 +37,7 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
 
   const hideNonSelectedVessels = useMainAppSelector(state => state.vessel.hideNonSelectedVessels)
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
-  const vessels = useMainAppSelector(vesselSelectors.selectAll)
+  const vessels = useMainAppSelector(state => vesselSelectors.selectAll(state.vessel.vessels))
 
   const vesselsTracksShowed = useMainAppSelector(state => state.vessel.vesselsTracksShowed)
   const areVesselsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselsDisplayed)

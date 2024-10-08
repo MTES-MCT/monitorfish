@@ -52,7 +52,7 @@ export function VesselSearch({
   const dispatch = useMainAppDispatch()
   const baseUrl = window.location.origin
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
-  const vessels = useMainAppSelector(vesselSelectors.selectAll)
+  const vessels = useMainAppSelector(state => vesselSelectors.selectAll(state.vessel.vessels))
   const searchQueryRef = useRef('')
   const wrapperRef = useRef(null)
 

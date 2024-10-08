@@ -23,7 +23,7 @@ export const showVessel =
     try {
       const { fishingActivities, map, vessel } = getState()
       const { selectedVesselTrackRequest } = vessel
-      const vessels = vesselSelectors.selectAll(getState())
+      const vessels = vesselSelectors.selectAll(getState().vessel.vessels)
       const { defaultVesselTrackDepth } = map
       const { areFishingActivitiesShowedOnMap } = fishingActivities
       // TODO How to handle both the control unit dialog and the vessel sidebar ?

@@ -19,7 +19,7 @@ const VesselAlertAndBeaconMalfunctionLayer = () => {
     selectedVesselIdentity,
     vesselsTracksShowed
   } = useSelector(state => state.vessel)
-  const vessels = useSelector(vesselSelectors.selectAll)
+  const vessels = useSelector(state => vesselSelectors.selectAll(state.vessel.vessels))
 
   const {
     nonFilteredVesselsAreHidden

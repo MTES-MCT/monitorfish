@@ -44,14 +44,14 @@ export function VesselReportings() {
         <Body data-cy="vessel-reporting">
           <Menu>
             <CurrentOrHistoryButton
-              isActive={reportingTab === ReportingTab.CURRENT_REPORTING}
+              $isActive={reportingTab === ReportingTab.CURRENT_REPORTING}
               onClick={() => setReportingTab(ReportingTab.CURRENT_REPORTING)}
             >
               Signalements en cours ({selectedVesselReportings?.current?.length})
             </CurrentOrHistoryButton>
             <CurrentOrHistoryButton
+              $isActive={reportingTab === ReportingTab.REPORTING_HISTORY}
               data-cy="vessel-sidebar-reporting-tab-history-button"
-              isActive={reportingTab === ReportingTab.REPORTING_HISTORY}
               onClick={() => setReportingTab(ReportingTab.REPORTING_HISTORY)}
             >
               Historique des signalements
@@ -73,10 +73,10 @@ export function VesselReportings() {
 }
 
 const CurrentOrHistoryButton = styled.div<{
-  isActive: boolean
+  $isActive: boolean
 }>`
-  background: ${p => (p.isActive ? p.theme.color.charcoal : 'unset')};
-  color: ${p => (p.isActive ? p.theme.color.gainsboro : p.theme.color.gunMetal)};
+  background: ${p => (p.$isActive ? p.theme.color.charcoal : 'unset')};
+  color: ${p => (p.$isActive ? p.theme.color.gainsboro : p.theme.color.gunMetal)};
   cursor: pointer;
   flex-grow: 1;
   padding: 6px 0 8px 0;

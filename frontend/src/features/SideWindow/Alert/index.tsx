@@ -1,4 +1,5 @@
 import { SEAFRONT_GROUP_SEAFRONTS, SeafrontGroup } from '@constants/seafront'
+import { isNotObservationReporting } from '@features/Reporting/utils'
 import { useCallback, useState } from 'react'
 
 import { AlertListAndReportingList } from './AlertListAndReportingList'
@@ -41,7 +42,9 @@ export function Alert({ baseRef }: AlertProps) {
       }
 
       if (selectedTab === AlertAndReportingTab.REPORTING) {
-        return currentReportings.filter(reporting => seafronts.includes(reporting.value.seaFront)).length
+        return currentReportings.filter(
+          reporting => isNotObservationReporting(reporting) && seafronts.includes(reporting.value.seaFront)
+        ).length
       }
 
       return 0

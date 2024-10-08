@@ -34,13 +34,13 @@ import { updateReporting } from '../../useCases/updateReporting'
 import { mapControlUnitsToUniqueSortedIdsAsOptions } from '../VesselReportings/Current/utils'
 
 import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
-import type { EditableReporting, EditedReporting, InfractionSuspicion } from '../../types'
+import type { EditedReporting, InfractionSuspicion, Reporting } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
 type ReportingFormProps = {
   className?: string | undefined
   closeForm: () => void
-  editedReporting: EditableReporting | undefined
+  editedReporting: Reporting.EditableReporting | undefined
   hasWhiteBackground: boolean
   isFromSideWindow: boolean
   selectedVesselIdentity: VesselIdentity

@@ -3,7 +3,7 @@ import { ReportingOriginActor, ReportingType } from '../../types'
 
 import type { Reporting } from '../../types'
 
-export const getReportingOrigin = (reporting: Reporting, isHovering: boolean = false): string => {
+export const getReportingOrigin = (reporting: Reporting.Reporting, isHovering: boolean = false): string => {
   if (reporting.type === ReportingType.ALERT) {
     return 'Alerte auto.'
   }
@@ -30,7 +30,7 @@ export const getReportingOrigin = (reporting: Reporting, isHovering: boolean = f
   }
 }
 
-export function getReportingTitle(reporting: Reporting, isHovering: boolean = false): string {
+export function getReportingTitle(reporting: Reporting.Reporting, isHovering: boolean = false): string {
   if (reporting.type === ReportingType.ALERT) {
     return getAlertNameFromType(reporting.value.type)
   }

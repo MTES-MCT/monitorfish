@@ -1,20 +1,16 @@
 import { customDayjs } from '@mtes-mct/monitor-ui'
 import { createSlice } from '@reduxjs/toolkit'
 
+import type { VesselReportings, Reporting } from './types'
 import type { VesselIdentity } from '../../domain/entities/vessel/types'
-import type {
-  VesselReportings,
-  EditableReporting,
-  InfractionSuspicionReporting,
-  PendingAlertReporting
-} from '@features/Reporting/types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 export type ReportingState = {
   archivedReportingsFromDate: string
-  currentReportings: Array<InfractionSuspicionReporting | PendingAlertReporting>
-  editedReporting: EditableReporting | undefined
-  editedReportingInSideWindow: EditableReporting | undefined
+  currentReportings: Reporting.Reporting[]
+  editedReporting: Reporting.EditableReporting | undefined
+  // TODO Use `sideWindowReportingSlice.ts` instead of this prop.
+  editedReportingInSideWindow: Reporting.EditableReporting | undefined
   isLoadingReporting: boolean
   selectedVesselReportings: VesselReportings | undefined
   vesselIdentity: VesselIdentity | undefined
@@ -35,11 +31,8 @@ const mainWindowReportingSlice = createSlice({
   reducers: {
     /**
      * Add a new reporting
-     * @function setCurrentReportings
-     * @param {Object=} state
-     * @param {{payload: Reporting}} action
      */
-    addReportingToCurrentReportings(state, action) {
+    addReportingToCurrentReportings(state, action: PayloadAction<Reporting.Reporting>) {
       state.currentReportings = state.currentReportings.concat(action.payload)
     },
 
@@ -62,12 +55,8 @@ const mainWindowReportingSlice = createSlice({
 
     /**
      * Remove reporting from current reporting
-     * @function removeReportingsIdsFromCurrentReportings
-     * @memberOf ReportingReducer
-     * @param {Object=} state
-     * @param {{payload: number[]}} action - the ids of the reporting to remove
      */
-    removeReportingsIdsFromCurrentReportings(state, action) {
+    removeReportingsIdsFromCurrentReportings(state, action: PayloadAction<number[]>) {
       state.currentReportings = state.currentReportings.filter(
         reporting => !action.payload.find(reportingId => reportingId === reporting.id)
       )
@@ -89,25 +78,21 @@ const mainWindowReportingSlice = createSlice({
     /**
      * Set current reporting
      */
-    setCurrentReportings(state, action: PayloadAction<Array<InfractionSuspicionReporting | PendingAlertReporting>>) {
+    setCurrentReportings(state, action: PayloadAction<Reporting.Reporting[]>) {
       state.currentReportings = action.payload
     },
 
     /**
      * Set the edited reporting
-     * @function setEditedReporting
-     * @memberOf ReportingReducer
-     * @param {Object=} state
-     * @param {{payload: boolean}} action
      */
-    setEditedReporting(state, action) {
+    setEditedReporting(state, action: PayloadAction<Reporting.EditableReporting | undefined>) {
       state.editedReporting = action.payload
     },
 
     /**
      * Set the edited reporting in side window
      */
-    setEditedReportingInSideWindow(state, action: PayloadAction<EditableReporting | undefined>) {
+    setEditedReportingInSideWindow(state, action: PayloadAction<Reporting.EditableReporting | undefined>) {
       state.editedReportingInSideWindow = action.payload
     },
 
@@ -123,7 +108,7 @@ const mainWindowReportingSlice = createSlice({
     /**
      * Update a given current reporting
      */
-    updateCurrentReporting(state, action: PayloadAction<InfractionSuspicionReporting>) {
+    updateCurrentReporting(state, action: PayloadAction<Reporting.Reporting>) {
       state.currentReportings = state.currentReportings
         .filter(reporting => reporting.id !== action.payload.id)
         .concat(action.payload)
@@ -132,4 +117,4 @@ const mainWindowReportingSlice = createSlice({
 })
 
 export const mainWindowReportingActions = mainWindowReportingSlice.actions
-export const mainWindowsReportingReducer = mainWindowReportingSlice.reducer
+export const mainWindowReportingReducer = mainWindowReportingSlice.reducer

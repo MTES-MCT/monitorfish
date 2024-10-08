@@ -11,7 +11,6 @@ import { VesselIdentifier } from '../../../../../domain/entities/vessel/types'
 
 import type { PendingAlertReporting } from '@features/Reporting/types'
 
-// TODO Remove these @ts-ignore
 // @ts-ignore
 jest.mock('../../../useCases/archiveReporting', () => () => ({ archiveReporting: jest.fn() }))
 // @ts-ignore

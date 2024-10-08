@@ -24,7 +24,7 @@ export function Current() {
 
   const closeForm = useCallback(() => {
     setIsNewReportingFormOpen(false)
-    dispatch(mainWindowReportingActions.setEditedReporting(null))
+    dispatch(mainWindowReportingActions.setEditedReporting(undefined))
   }, [dispatch])
 
   const reportingsWithoutEdited: ReportingAndOccurrences[] = useMemo(

@@ -8,7 +8,7 @@ import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogE
 import { removeVesselReportings } from '../../Vessel/slice'
 import { mainWindowReportingActions } from '../mainWindowReporting.slice'
 
-import type { InfractionSuspicionReporting, PendingAlertReporting } from '@features/Reporting/types'
+import type { Reporting } from '@features/Reporting/types'
 import type { MainAppThunk } from '@store'
 
 export const deleteReportings =
@@ -37,10 +37,7 @@ export const deleteReportings =
     }
   }
 
-function getReportingsInformationFromIds(
-  ids: number[],
-  currentReportings: Array<InfractionSuspicionReporting | PendingAlertReporting>
-) {
+function getReportingsInformationFromIds(ids: number[], currentReportings: Reporting.Reporting[]) {
   return ids
     .map(id => {
       const foundReporting = currentReportings.find(reporting => reporting.id === id)

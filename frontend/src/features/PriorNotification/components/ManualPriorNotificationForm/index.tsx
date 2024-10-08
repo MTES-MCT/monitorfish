@@ -2,7 +2,10 @@ import { ErrorWall } from '@components/ErrorWall'
 import { useInterval } from '@features/PriorNotification/hooks/useInterval'
 import { refreshPriorNotification } from '@features/PriorNotification/useCases/refreshPriorNotification'
 import { verifyAndSendPriorNotification } from '@features/PriorNotification/useCases/verifyAndSendPriorNotification'
-import { getPriorNotificationIdentifier } from '@features/PriorNotification/utils'
+import {
+  getFormDataFishingCatchesFromFormValuesFishingCatches,
+  getPriorNotificationIdentifier
+} from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { customSentry, CustomSentryMeasurementName } from '@libs/customSentry'
@@ -68,14 +71,16 @@ export function ManualPriorNotificationForm() {
   const submit = async (nextFormValues: ManualPriorNotificationFormValues) => {
     setIsLoading(true)
 
-    const { isExpectedLandingDateSameAsExpectedArrivalDate, ...priorNotificationData } = omit(nextFormValues, [
-      'hasGlobalFaoArea'
-    ])
+    const { fishingCatches, isExpectedLandingDateSameAsExpectedArrivalDate, ...priorNotificationData } = omit(
+      nextFormValues,
+      ['hasGlobalFaoArea']
+    )
     const newOrNextPriorNotificationData = {
       ...priorNotificationData,
       expectedLandingDate: isExpectedLandingDateSameAsExpectedArrivalDate
         ? priorNotificationData.expectedArrivalDate
-        : priorNotificationData.expectedLandingDate
+        : priorNotificationData.expectedLandingDate,
+      fishingCatches: getFormDataFishingCatchesFromFormValuesFishingCatches(fishingCatches)
     } as PriorNotification.NewManualForm
 
     await dispatch(

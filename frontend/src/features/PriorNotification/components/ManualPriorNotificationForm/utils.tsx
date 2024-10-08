@@ -1,10 +1,15 @@
-import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES } from '@features/PriorNotification/constants'
+import {
+  BLUEFIN_TUNA_NAME_FR_SIZE_1,
+  BLUEFIN_TUNA_NAME_FR_SIZE_2,
+  BLUEFIN_TUNA_NAME_FR_SIZE_3,
+  BLUEFIN_TUNA_SPECY_CODE,
+  SWORDFISH_SPECY_CODE
+} from '@features/PriorNotification/constants'
 import { pick } from 'lodash'
 
 import { INITIAL_FORM_VALUES } from './constants'
-import { PriorNotification } from '../../PriorNotification.types'
 
-import type { ManualPriorNotificationFormValues } from './types'
+import type { ManualPriorNotificationFormValues, ManualPriorNotificationFormValuesFishingCatch } from './types'
 
 export function getPartialComputationRequestData(formValues: ManualPriorNotificationFormValues) {
   return pick(formValues, ['fishingCatches', 'globalFaoArea', 'portLocode', 'tripGearCodes', 'vesselId'])
@@ -13,43 +18,48 @@ export function getPartialComputationRequestData(formValues: ManualPriorNotifica
 export function getFishingsCatchesInitialValues(
   specyCode: string,
   specyName: string
-): PriorNotification.FormDataFishingCatch[] {
+): ManualPriorNotificationFormValuesFishingCatch {
   switch (specyCode) {
     case 'BFT':
-      return [
-        {
-          quantity: undefined,
-          specyCode: 'BFT',
-          specyName,
-          weight: 0
+      return {
+        $bluefinTunaExtendedCatch: {
+          BF1: {
+            quantity: 0,
+            specyName: BLUEFIN_TUNA_NAME_FR_SIZE_1,
+            weight: 0
+          },
+          BF2: {
+            quantity: 0,
+            specyName: BLUEFIN_TUNA_NAME_FR_SIZE_2,
+            weight: 0
+          },
+          BF3: {
+            quantity: 0,
+            specyName: BLUEFIN_TUNA_NAME_FR_SIZE_3,
+            weight: 0
+          }
         },
-        ...BLUEFIN_TUNA_EXTENDED_SPECY_CODES.map(extendedSpecyCode => ({
-          quantity: 0,
-          specyCode: extendedSpecyCode,
-          specyName,
-          weight: 0
-        }))
-      ]
+        quantity: undefined,
+        specyCode: BLUEFIN_TUNA_SPECY_CODE,
+        specyName,
+        weight: 0
+      }
 
     case 'SWO':
-      return [
-        {
-          quantity: 0,
-          specyCode: 'SWO',
-          specyName,
-          weight: 0
-        }
-      ]
+      return {
+        quantity: 0,
+        specyCode: SWORDFISH_SPECY_CODE,
+        specyName,
+        weight: 0
+      }
 
     default:
-      return [
-        {
-          quantity: undefined,
-          specyCode,
-          specyName,
-          weight: 0
-        }
-      ]
+      return {
+        quantity: undefined,
+        specyCode,
+        specyName,
+        weight: 0
+      }
   }
 }
 

@@ -1,6 +1,7 @@
 import { ErrorWall } from '@components/ErrorWall'
 import { SeafrontGroup } from '@constants/seafront'
 import { ReportingType } from '@features/Reporting/types'
+import { isNotObservationReporting } from '@features/Reporting/utils'
 import { Flag } from '@features/Vessel/components/VesselList/tableCells'
 import { useForceUpdate } from '@hooks/useForceUpdate'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -55,12 +56,14 @@ export function ReportingList({ selectedSeafrontGroup }: ReportingListProps) {
 
   const currentSeafrontReportings = useMemo(
     () =>
-      currentReportings.filter(
-        reporting =>
-          ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup] &&
-          reporting.value.seaFront &&
-          ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup].seafronts.includes(reporting.value.seaFront)
-      ),
+      currentReportings
+        .filter(isNotObservationReporting)
+        .filter(
+          reporting =>
+            ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup] &&
+            reporting.value.seaFront &&
+            ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup].seafronts.includes(reporting.value.seaFront)
+        ),
     [currentReportings, selectedSeafrontGroup]
   )
 

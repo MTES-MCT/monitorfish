@@ -78,13 +78,13 @@ async function deleteReportingsFromAPI(ids: number[]) {
  *
  * @throws {@link ApiError}
  */
-async function addReportingFromAPI(newReporting: ReportingCreation): Promise<Reporting> {
+async function addReportingFromAPI(newReporting: ReportingCreation): Promise<Reporting.Reporting> {
   try {
     return await monitorfishApiKy
       .post(`/bff/v1/reportings`, {
         json: newReporting
       })
-      .json<Reporting>()
+      .json<Reporting.Reporting>()
   } catch (err) {
     throw new ApiError(ADD_REPORTING_ERROR_MESSAGE, err)
   }
@@ -95,13 +95,13 @@ async function addReportingFromAPI(newReporting: ReportingCreation): Promise<Rep
  *
  * @throws {@link ApiError}
  */
-async function updateReportingFromAPI(id: number, nextReporting: EditedReporting): Promise<Reporting> {
+async function updateReportingFromAPI(id: number, nextReporting: EditedReporting): Promise<Reporting.Reporting> {
   try {
     return await monitorfishApiKy
       .put(`/bff/v1/reportings/${id}/update`, {
         json: nextReporting
       })
-      .json<Reporting>()
+      .json<Reporting.Reporting>()
   } catch (err) {
     throw new ApiError(UPDATE_REPORTING_ERROR_MESSAGE, err)
   }

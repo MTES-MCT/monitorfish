@@ -9,19 +9,16 @@ export type ReportingState = {
   archivedReportingsFromDate: string
   currentReportings: Reporting.Reporting[]
   editedReporting: Reporting.EditableReporting | undefined
-  // TODO Use `sideWindowReportingSlice.ts` instead of this prop.
-  editedReportingInSideWindow: Reporting.EditableReporting | undefined
   vesselIdentity: VesselIdentity | undefined
 }
 const INITIAL_STATE: ReportingState = {
   archivedReportingsFromDate: customDayjs().utc().subtract(5, 'year').startOf('year').toISOString(),
   currentReportings: [],
   editedReporting: undefined,
-  editedReportingInSideWindow: undefined,
   vesselIdentity: undefined
 }
 
-const mainWindowReportingSlice = createSlice({
+const sideWindowReportingSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'reporting',
   reducers: {
@@ -46,22 +43,11 @@ const mainWindowReportingSlice = createSlice({
     /**
      * Set the edited reporting
      */
-    setEditedReporting(state, action: PayloadAction<Reporting.EditableReporting | undefined>) {
+    setEditedReporting(state, action: PayloadAction<Reporting.EditableReporting>) {
       state.editedReporting = action.payload
-    },
-
-    /**
-     * Set the edited reporting in side window
-     */
-    setEditedReportingInSideWindow(state, action: PayloadAction<Reporting.EditableReporting | undefined>) {
-      state.editedReportingInSideWindow = action.payload
-    },
-
-    setVesselIdentity(state, action: PayloadAction<VesselIdentity>) {
-      state.vesselIdentity = action.payload
     }
   }
 })
 
-export const mainWindowReportingActions = mainWindowReportingSlice.actions
-export const mainWindowReportingReducer = mainWindowReportingSlice.reducer
+export const sideWindowReportingActions = sideWindowReportingSlice.actions
+export const sideWindowReportingReducer = sideWindowReportingSlice.reducer

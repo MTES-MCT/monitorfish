@@ -1,11 +1,12 @@
+import { WindowContext } from '@api/constants'
 import { ErrorWall } from '@components/ErrorWall'
 import { SeafrontGroup } from '@constants/seafront'
+import { sideWindowReportingActions } from '@features/Reporting/sideWindowReporting.slice'
 import { ReportingType } from '@features/Reporting/types'
 import { isNotObservationReporting } from '@features/Reporting/utils'
 import { Flag } from '@features/Vessel/components/VesselList/tableCells'
 import { useForceUpdate } from '@hooks/useForceUpdate'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useTable } from '@hooks/useTable'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Accent, Icon, IconButton, THEME } from '@mtes-mct/monitor-ui'
@@ -35,20 +36,26 @@ import { deleteReportings } from '../../useCases/deleteReportings'
 import type {
   InfractionSuspicionReporting,
   ObservationReporting,
-  PendingAlertReporting
+  PendingAlertReporting,
+  Reporting
 } from '@features/Reporting/types'
+import type { DisplayedErrorStateValue } from 'domain/shared_slices/DisplayedError'
 import type { CSSProperties, MutableRefObject } from 'react'
 
 type ReportingListProps = Readonly<{
+  currentReportings: Reporting.Reporting[]
+  displayedError: DisplayedErrorStateValue | undefined
   selectedSeafrontGroup: SeafrontGroup
+  windowContext: WindowContext
 }>
-export function ReportingList({ selectedSeafrontGroup }: ReportingListProps) {
+export function ReportingList({
+  currentReportings,
+  displayedError,
+  selectedSeafrontGroup,
+  windowContext
+}: ReportingListProps) {
   const dispatch = useMainAppDispatch()
   const searchInputRef = useRef() as MutableRefObject<HTMLInputElement>
-  const currentReportings = useMainAppSelector(state => state.mainWindowReporting.currentReportings)
-  const displayedError = useMainAppSelector(
-    state => state.displayedError[DisplayedErrorKey.SIDE_WINDOW_REPORTING_LIST_ERROR]
-  )
 
   const { forceDebouncedUpdate } = useForceUpdate()
 
@@ -71,13 +78,13 @@ export function ReportingList({ selectedSeafrontGroup }: ReportingListProps) {
     InfractionSuspicionReporting | PendingAlertReporting
   >(currentSeafrontReportings, REPORTING_LIST_TABLE_OPTIONS, [], searchInputRef.current?.value)
 
-  const archive = useCallback(async () => {
+  const archive = useCallback(() => {
     if (!tableCheckedIds.length) {
       return
     }
 
-    await dispatch(archiveReportings(tableCheckedIds.map(Number)))
-  }, [dispatch, tableCheckedIds])
+    dispatch(archiveReportings(currentReportings, tableCheckedIds.map(Number), windowContext))
+  }, [currentReportings, dispatch, tableCheckedIds, windowContext])
 
   const download = useCallback(() => {
     const checkedCurrentSeafrontReportings = getTableCheckedData()
@@ -115,10 +122,15 @@ export function ReportingList({ selectedSeafrontGroup }: ReportingListProps) {
   const edit = useCallback(
     (isDisabled: boolean, reporting: InfractionSuspicionReporting | ObservationReporting) => {
       if (!isDisabled) {
-        dispatch(mainWindowReportingActions.setEditedReportingInSideWindow(reporting))
+        dispatch(
+          (windowContext === WindowContext.MainWindow
+            ? mainWindowReportingActions
+            : sideWindowReportingActions
+          ).setEditedReporting(reporting)
+        )
       }
     },
-    [dispatch]
+    [dispatch, windowContext]
   )
 
   const focusOnMap = useCallback(
@@ -133,21 +145,30 @@ export function ReportingList({ selectedSeafrontGroup }: ReportingListProps) {
       return
     }
 
-    await dispatch(deleteReportings(tableCheckedIds.map(Number)))
-  }, [dispatch, tableCheckedIds])
+    dispatch(deleteReportings(currentReportings, tableCheckedIds.map(Number), windowContext))
+  }, [currentReportings, dispatch, tableCheckedIds, windowContext])
 
   function getVesselNameTitle(reporting) {
-    return `${reporting.vesselName}
-CFR: ${reporting.internalReferenceNumber || ''}
-MARQUAGE EXT.: ${reporting.externalReferenceNumber || ''}
-IRCS: ${reporting.ircs || ''}
-MMSI: ${reporting.mmsi || ''}`
+    return [
+      reporting.vesselName,
+      `CFR: ${reporting.internalReferenceNumber || ''}`,
+      `MARQUAGE EXT.: ${reporting.externalReferenceNumber || ''}`,
+      `IRCS: ${reporting.ircs || ''}`,
+      `MMSI: ${reporting.mmsi || ''}`
+    ].join('\n')
   }
 
   if (displayedError) {
     return (
       <Content>
-        <ErrorWall displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_REPORTING_LIST_ERROR} isAbsolute />
+        <ErrorWall
+          displayedErrorKey={
+            windowContext === WindowContext.MainWindow
+              ? DisplayedErrorKey.MAIN_WINDOW_REPORTING_LIST_ERROR
+              : DisplayedErrorKey.SIDE_WINDOW_REPORTING_LIST_ERROR
+          }
+          isAbsolute
+        />
       </Content>
     )
   }

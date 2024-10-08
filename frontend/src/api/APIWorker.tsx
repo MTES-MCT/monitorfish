@@ -1,6 +1,6 @@
 import { fleetSegmentApi } from '@features/FleetSegment/apis'
 import { getAllRegulatoryLayers } from '@features/Regulation/useCases/getAllRegulatoryLayers'
-import { getVesselReportings } from '@features/Reporting/useCases/getVesselReportings'
+import { vesselApi } from '@features/Vessel/vesselApi'
 import { useEffect, useRef, useState } from 'react'
 
 import { useIsSuperUser } from '../auth/hooks/useIsSuperUser'
@@ -29,6 +29,7 @@ export const THIRTY_SECONDS = 30 * 1000
 export function APIWorker() {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
+  const archivedReportingsFromDate = useMainAppSelector(state => state.mainWindowReporting.archivedReportingsFromDate)
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
   const vesselSidebarTab = useMainAppSelector(state => state.vessel.vesselSidebarTab)
   const sideWindow = useMainAppSelector(state => state.sideWindow)
@@ -133,14 +134,26 @@ export function APIWorker() {
 
     if (vesselSidebarTab === VesselSidebarTab.CONTROLS) {
       dispatch(getVesselControls(false))
-    } else if (vesselSidebarTab === VesselSidebarTab.REPORTING) {
-      dispatch(getVesselReportings(false))
+    } else if (vesselSidebarTab === VesselSidebarTab.REPORTING && selectedVesselIdentity) {
+      dispatch(
+        vesselApi.endpoints.getVesselReportingsByVesselIdentity.initiate({
+          fromDate: archivedReportingsFromDate,
+          vesselIdentity: selectedVesselIdentity
+        })
+      )
     } else if (isSuperUser && vesselSidebarTab === VesselSidebarTab.ERSVMS) {
       dispatch(getVesselBeaconMalfunctions(false))
     }
 
     setUpdateVesselSidebarTab(false)
-  }, [dispatch, isSuperUser, selectedVesselIdentity, updateVesselSidebarTab, vesselSidebarTab])
+  }, [
+    archivedReportingsFromDate,
+    dispatch,
+    isSuperUser,
+    selectedVesselIdentity,
+    updateVesselSidebarTab,
+    vesselSidebarTab
+  ])
 
   return null
 }

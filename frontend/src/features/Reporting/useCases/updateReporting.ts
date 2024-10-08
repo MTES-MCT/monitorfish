@@ -1,16 +1,17 @@
+import { RtkCacheTagType } from '@api/constants'
 import { updateReportingFromAPI } from '@api/reporting'
 import { ReportingType } from '@features/Reporting/types'
-import { getVesselReportings } from '@features/Reporting/useCases/getVesselReportings'
 import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
+import { vesselApi } from '@features/Vessel/vesselApi'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { Vessel } from '../../../domain/entities/vessel/vessel'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
 import { addVesselReporting, removeVesselReporting } from '../../Vessel/slice'
-import { mainWindowReportingActions } from '../mainWindowReporting.slice'
+import { reportingApi } from '../reportingApi'
 
 import type { VesselIdentity } from '../../../domain/entities/vessel/types'
-import type { EditedReporting, InfractionSuspicionReporting } from '@features/Reporting/types'
+import type { EditedReporting } from '@features/Reporting/types'
 import type { MainAppThunk } from '@store'
 
 export const updateReporting =
@@ -21,22 +22,11 @@ export const updateReporting =
     previousReportingType: ReportingType,
     isFromSideWindow: boolean
   ): MainAppThunk<Promise<void>> =>
-  async (dispatch, getState) => {
-    const { vesselIdentity } = getState().mainWindowReporting
-
+  async dispatch => {
     try {
-      const updatedReporting = await updateReportingFromAPI(id, nextReporting)
-
-      if (nextReporting.type === ReportingType.INFRACTION_SUSPICION) {
-        dispatch(mainWindowReportingActions.updateCurrentReporting(updatedReporting as InfractionSuspicionReporting))
-      }
-
-      if (
-        nextReporting.type === ReportingType.OBSERVATION &&
-        previousReportingType === ReportingType.INFRACTION_SUSPICION
-      ) {
-        dispatch(mainWindowReportingActions.removeCurrentReporting(id))
-      }
+      await updateReportingFromAPI(id, nextReporting)
+      dispatch(reportingApi.util.invalidateTags([RtkCacheTagType.Reportings]))
+      dispatch(vesselApi.util.invalidateTags([RtkCacheTagType.Reportings]))
 
       // We update the reportings of the last positions vessels state
       if (previousReportingType !== nextReporting.type) {
@@ -54,12 +44,8 @@ export const updateReporting =
             vesselFeatureId
           })
         )
-        dispatch(renderVesselFeatures())
-      }
 
-      // If the update is done from the Reporting tab of the vessel sidebar
-      if (vesselIdentity) {
-        await dispatch(getVesselReportings(true))
+        dispatch(renderVesselFeatures())
       }
     } catch (error) {
       dispatch(

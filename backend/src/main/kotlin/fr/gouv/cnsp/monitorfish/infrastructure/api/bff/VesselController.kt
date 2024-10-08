@@ -192,8 +192,8 @@ class VesselController(
         @RequestParam(name = "externalReferenceNumber")
         externalReferenceNumber: String,
         @Parameter(description = "Vessel IRCS")
-        @RequestParam(name = "IRCS")
-        IRCS: String,
+        @RequestParam(name = "ircs")
+        ircs: String,
         @Parameter(description = "Vessel positions identifier")
         @RequestParam(name = "vesselIdentifier")
         vesselIdentifier: VesselIdentifier?,
@@ -207,7 +207,7 @@ class VesselController(
                 vesselId,
                 internalReferenceNumber,
                 externalReferenceNumber,
-                IRCS,
+                ircs,
                 vesselIdentifier,
                 fromDate,
             )

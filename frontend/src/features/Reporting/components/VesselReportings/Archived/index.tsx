@@ -1,8 +1,9 @@
-import { getVesselReportings } from '@features/Reporting/useCases/getVesselReportings'
 import { Header, Zone } from '@features/Vessel/components/VesselSidebar/common_styles/common.style'
+import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Button, customDayjs, THEME } from '@mtes-mct/monitor-ui'
+import { skipToken } from '@reduxjs/toolkit/query'
 import styled from 'styled-components'
 
 import { YearReportings } from './YearReportings'
@@ -13,7 +14,16 @@ import type { ReportingAndOccurrences } from '@features/Reporting/types'
 export function Archived() {
   const dispatch = useMainAppDispatch()
   const archivedReportingsFromDate = useMainAppSelector(state => state.mainWindowReporting.archivedReportingsFromDate)
-  const selectedVesselReportings = useMainAppSelector(state => state.mainWindowReporting.selectedVesselReportings)
+  const vesselIdentity = useMainAppSelector(state => state.mainWindowReporting.vesselIdentity)
+
+  const { data: selectedVesselReportings } = useGetVesselReportingsByVesselIdentityQuery(
+    vesselIdentity
+      ? {
+          fromDate: archivedReportingsFromDate,
+          vesselIdentity
+        }
+      : skipToken
+  )
 
   const yearsToReportings = selectedVesselReportings?.archived
 
@@ -21,7 +31,6 @@ export function Archived() {
     const nextDate = customDayjs(archivedReportingsFromDate).subtract(1, 'year').toISOString()
 
     dispatch(mainWindowReportingActions.setArchivedReportingsFromDate(nextDate))
-    dispatch(getVesselReportings(false))
   }
 
   return (

@@ -17,7 +17,7 @@ export const previewVessels =
     const { zonesSelected } = getState().vesselList
     const vesselFeatureIds = filteredVessels.map(vessel => vessel.vesselFeatureId)
 
-    if (vesselFeatureIds?.length) {
+    if (!vesselFeatureIds?.length) {
       return
     }
 

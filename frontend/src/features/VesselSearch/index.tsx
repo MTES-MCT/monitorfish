@@ -109,9 +109,7 @@ export function VesselSearch({
 
   const findVessels = useCallback(
     async (searchQuery: string) => {
-      const vesselsFromMap = fuse
-        .search(searchQuery)
-        .map(result => getOnlyVesselIdentityProperties(result.item.vesselProperties))
+      const vesselsFromMap = fuse.search(searchQuery).map(result => getOnlyVesselIdentityProperties(result.item))
 
       const nextFoundVesselsFromAPI = await dispatch(searchVesselsAction(searchQuery.toUpperCase()))
       if (!nextFoundVesselsFromAPI) {

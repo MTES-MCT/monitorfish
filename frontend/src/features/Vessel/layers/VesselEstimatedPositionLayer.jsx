@@ -7,30 +7,19 @@ import { getVesselLastPositionVisibilityDates, Vessel, vesselIsShowed } from '..
 import { Vector } from 'ol/layer'
 import { getEstimatedPositionStyle } from './styles/vesselEstimatedPosition.style'
 import { monitorfishMap } from '../../map/monitorfishMap'
-import { vesselsAdapter, vesselSelectors } from '../slice'
+import { vesselSelectors } from '../slice'
 
 const VesselEstimatedPositionLayer = () => {
-  const {
-    hideNonSelectedVessels,
-    vesselsTracksShowed,
-    selectedVesselIdentity
-  } = useSelector(state => state.vessel)
+  const hideNonSelectedVessels = useSelector(state => state.vessel.hideNonSelectedVessels)
+  const vesselsTracksShowed = useSelector(state => state.vessel.vesselsTracksShowed)
+  const selectedVesselIdentity = useSelector(state => state.vessel.selectedVesselIdentity)
   const vessels = useSelector(state => vesselSelectors.selectAll(state.vessel.vessels))
-
-  const {
-    nonFilteredVesselsAreHidden
-  } = useSelector(state => state.filter)
-
-  const {
-    previewFilteredVesselsMode
-  } = useSelector(state => state.global)
-
-  const {
-    selectedBaseLayer,
-    showingVesselsEstimatedPositions,
-    vesselsLastPositionVisibility,
-    hideVesselsAtPort
-  } = useSelector(state => state.map)
+  const nonFilteredVesselsAreHidden = useSelector(state => state.filter.nonFilteredVesselsAreHidden)
+  const previewFilteredVesselsMode = useSelector(state => state.global.previewFilteredVesselsMode)
+  const hideVesselsAtPort = useSelector(state => state.map.hideVesselsAtPort)
+  const vesselsLastPositionVisibility = useSelector(state => state.map.vesselsLastPositionVisibility)
+  const selectedBaseLayer = useSelector(state => state.map.selectedBaseLayer)
+  const showingVesselsEstimatedPositions = useSelector(state => state.map.showingVesselsEstimatedPositions)
 
   const vectorSourceRef = useRef(null)
   const layerRef = useRef(null)
@@ -89,7 +78,7 @@ const VesselEstimatedPositionLayer = () => {
         if (previewFilteredVesselsMode && !filterPreview) return null
         if (hideVesselsAtPort && isAtPort) return null
 
-        options.hideNonSelectedVessels = hideNonSelectedVessels && !vesselIsShowed(vessel.vesselProperties, vesselsTracksShowed, selectedVesselIdentity)
+        options.hideNonSelectedVessels = hideNonSelectedVessels && !vesselIsShowed(vessel, vesselsTracksShowed, selectedVesselIdentity)
         return EstimatedPosition.getFeatures(vessel, options)
       }
 

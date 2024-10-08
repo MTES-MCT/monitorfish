@@ -20,7 +20,6 @@ import { monitorfishMap } from '../../map/monitorfishMap'
 import { VesselLabelOverlay } from '../components/VesselLabelOverlay'
 import { vesselSelectors } from '../slice'
 
-import type { VesselLastPositionFeature } from '../../../domain/entities/vessel/types'
 import type { VectorLayerWithName } from '../../../domain/types/layer'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
@@ -205,9 +204,13 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
       // @ts-ignore
       ?.getSource()
     vesselsLayer?.current?.forEachFeatureInExtent(monitorfishMap.getView().calculateExtent(), vesselFeature => {
-      const { vesselProperties } = vesselFeature as VesselLastPositionFeature
-      const opacity = Vessel.getVesselOpacity(vesselProperties.dateTime, vesselIsHidden, vesselIsOpacityReduced)
-      const labelLineFeatureId = VesselLabelLine.getFeatureId(vesselProperties)
+      const opacity = Vessel.getVesselOpacity(vesselFeature.get('dateTime'), vesselIsHidden, vesselIsOpacityReduced)
+      const identity = {
+        externalReferenceNumber: vesselFeature.get('externalReferenceNumber'),
+        internalReferenceNumber: vesselFeature.get('internalReferenceNumber'),
+        ircs: vesselFeature.get('ircs')
+      }
+      const labelLineFeatureId = VesselLabelLine.getFeatureId(identity)
       const feature = vectorSourceRef?.current?.getFeatureById(labelLineFeatureId)
       if (feature) {
         feature.set(VesselLabelLine.opacityProperty, opacity)
@@ -230,7 +233,23 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
       }
 
       const nextFeaturesAndLabels = features.map(feature => {
-        const { vesselProperties } = feature
+        const vesselProperties = {
+          beaconMalfunctionId: feature.get('beaconMalfunctionId'),
+          dateTime: feature.get('dateTime'),
+          detectabilityRiskFactor: feature.get('detectabilityRiskFactor'),
+          flagState: feature.get('flagState'),
+          impactRiskFactor: feature.get('impactRiskFactor'),
+          internalReferenceNumber: feature.get('internalReferenceNumber'),
+          isAtPort: feature.get('isAtPort'),
+          lastControlDateTime: feature.get('lastControlDateTime'),
+          probabilityRiskFactor: feature.get('probabilityRiskFactor'),
+          riskFactor: feature.get('riskFactor'),
+          segments: feature.get('segments'),
+          underCharter: feature.get('underCharter'),
+          vesselId: feature.get('vesselId'),
+          vesselIdentifier: feature.get('vesselIdentifier'),
+          vesselName: feature.get('vesselName')
+        }
         const label = Vessel.getVesselFeatureLabel(vesselProperties, {
           hideVesselsAtPort,
           isRiskFactorShowed: isSuperUser && riskFactorShowedOnMap,
@@ -238,10 +257,15 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
           vesselLabelsShowedOnMap,
           vesselsLastPositionVisibility
         })
-        const labelLineFeatureId = VesselLabelLine.getFeatureId(vesselProperties)
+        const identity = {
+          externalReferenceNumber: feature.get('externalReferenceNumber'),
+          internalReferenceNumber: feature.get('internalReferenceNumber'),
+          ircs: feature.get('ircs')
+        }
+        const labelLineFeatureId = VesselLabelLine.getFeatureId(identity)
         const opacity =
           Vessel.getVesselOpacity(vesselProperties.dateTime, vesselIsHidden, vesselIsOpacityReduced) ||
-          vesselProperties?.beaconMalfunctionId
+          vesselProperties.beaconMalfunctionId
             ? 1
             : 0
         const offset = drawMovedLabelLineIfFoundAndReturnOffset(
@@ -257,10 +281,10 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
           featureId: labelLineFeatureId,
           identity: {
             coordinates: feature.getGeometry().getCoordinates(),
-            externalReferenceNumber: vesselProperties.externalReferenceNumber,
+            externalReferenceNumber: identity.externalReferenceNumber,
             flagState: vesselProperties.flagState,
-            internalReferenceNumber: vesselProperties.internalReferenceNumber,
-            ircs: vesselProperties.ircs,
+            internalReferenceNumber: identity.internalReferenceNumber,
+            ircs: identity.ircs,
             key: feature.ol_uid,
             vesselId: vesselProperties.vesselId,
             vesselIdentifier: vesselProperties.vesselIdentifier,

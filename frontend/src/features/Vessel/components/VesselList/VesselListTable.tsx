@@ -83,7 +83,7 @@ function UnmemoizedVesselListTable({
         {isSuperUser ? (
           <Column fixed resizable sortable width={95}>
             <HeaderCell>N. de risque</HeaderCell>
-            <Cell dataKey="riskFactor">{rowData => parseFloat(rowData?.vesselProperties?.riskFactor).toFixed(1)}</Cell>
+            <Cell dataKey="riskFactor">{rowData => parseFloat(rowData?.riskFactor).toFixed(1)}</Cell>
           </Column>
         ) : null}
         <Column fixed resizable sortable width={170}>
@@ -108,23 +108,15 @@ function UnmemoizedVesselListTable({
         </Column>
         <Column resizable width={120}>
           <HeaderCell>Seg. flotte</HeaderCell>
-          <Cell>
-            {rowData => (
-              <ContentWithEllipsis>{rowData.vesselProperties?.fleetSegmentsArray?.join(', ')}</ContentWithEllipsis>
-            )}
-          </Cell>
+          <Cell>{rowData => <ContentWithEllipsis>{rowData.fleetSegmentsArray?.join(', ')}</ContentWithEllipsis>}</Cell>
         </Column>
         <Column resizable width={120}>
           <HeaderCell>Engins à bord</HeaderCell>
-          <Cell>
-            {rowData => <ContentWithEllipsis>{rowData.vesselProperties?.gearsArray?.join(', ')}</ContentWithEllipsis>}
-          </Cell>
+          <Cell>{rowData => <ContentWithEllipsis>{rowData.gearsArray?.join(', ')}</ContentWithEllipsis>}</Cell>
         </Column>
         <Column resizable width={115}>
           <HeaderCell>Espèces à bord</HeaderCell>
-          <Cell>
-            {rowData => <ContentWithEllipsis>{rowData.vesselProperties?.speciesArray?.join(', ')}</ContentWithEllipsis>}
-          </Cell>
+          <Cell>{rowData => <ContentWithEllipsis>{rowData.speciesArray?.join(', ')}</ContentWithEllipsis>}</Cell>
         </Column>
         <Column resizable sortable width={50}>
           <HeaderCell>
@@ -158,9 +150,7 @@ function UnmemoizedVesselListTable({
         </Column>
         <Column sortable width={50}>
           <HeaderCell>Infr.</HeaderCell>
-          <Cell dataKey="lastControlInfraction">
-            {rowData => (rowData?.vesselProperties?.lastControlInfraction ? 'Oui' : 'Non')}
-          </Cell>
+          <Cell dataKey="lastControlInfraction">{rowData => (rowData?.lastControlInfraction ? 'Oui' : 'Non')}</Cell>
         </Column>
         <Column resizable sortable width={300}>
           <HeaderCell>Observations</HeaderCell>

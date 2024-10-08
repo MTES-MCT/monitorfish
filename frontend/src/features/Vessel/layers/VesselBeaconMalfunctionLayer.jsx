@@ -14,25 +14,13 @@ import { vesselsAdapter, vesselSelectors } from '../slice'
 
 const VesselBeaconMalfunctionLayer = () => {
   const isSuperUser = useIsSuperUser()
-
-  const {
-    hideNonSelectedVessels,
-    vesselsTracksShowed,
-    selectedVesselIdentity
-  } = useSelector(state => state.vessel)
+  const hideNonSelectedVessels = useSelector(state => state.vessel.hideNonSelectedVessels)
+  const vesselsTracksShowed = useSelector(state => state.vessel.vesselsTracksShowed)
+  const selectedVesselIdentity = useSelector(state => state.vessel.selectedVesselIdentity)
   const vessels = useSelector(state => vesselSelectors.selectAll(state.vessel.vessels))
-
-  const {
-    nonFilteredVesselsAreHidden
-  } = useSelector(state => state.filter)
-
-  const {
-    previewFilteredVesselsMode
-  } = useSelector(state => state.global)
-
-  const {
-    hideVesselsAtPort
-  } = useSelector(state => state.map)
+  const nonFilteredVesselsAreHidden = useSelector(state => state.filter.nonFilteredVesselsAreHidden)
+  const previewFilteredVesselsMode = useSelector(state => state.global.previewFilteredVesselsMode)
+  const hideVesselsAtPort = useSelector(state => state.map.hideVesselsAtPort)
 
   const vectorSourceRef = useRef(null)
   function getVectorSource () {
@@ -74,16 +62,16 @@ const VesselBeaconMalfunctionLayer = () => {
     if (isSuperUser && vessels?.length) {
       const features = vessels.reduce((_features, vessel) => {
         if (!vessel.hasBeaconMalfunction) return _features
-        if (vessel.vesselProperties.hasAlert) return _features
+        if (vessel.hasAlert) return _features
         if (nonFilteredVesselsAreHidden && !vessel.isFiltered) return _features
         if (previewFilteredVesselsMode && !vessel.filterPreview) return _features
         if (hideVesselsAtPort && vessel.isAtPort) return _features
-        if (hideNonSelectedVessels && !vesselIsShowed(vessel.vesselProperties, vesselsTracksShowed, selectedVesselIdentity)) return _features
+        if (hideNonSelectedVessels && !vesselIsShowed(vessel, vesselsTracksShowed, selectedVesselIdentity)) return _features
 
         const feature = new Feature({
           geometry: new Point(vessel.coordinates)
         })
-        feature.setId(`${LayerProperties.VESSEL_BEACON_MALFUNCTION.code}:${getVesselCompositeIdentifier(vessel.vesselProperties)}`)
+        feature.setId(`${LayerProperties.VESSEL_BEACON_MALFUNCTION.code}:${getVesselCompositeIdentifier(vessel)}`)
         _features.push(feature)
 
         return _features

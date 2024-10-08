@@ -85,28 +85,26 @@ export function DownloadVesselListModal({ filteredVessels, isOpen, setIsOpen }) 
       .filter(vessel => vessel.checked)
       .map(vessel => {
         // eslint-disable-next-line no-param-reassign
-        vessel.vesselProperties.latitude = getCoordinates(
-          vessel.coordinates,
-          OPENLAYERS_PROJECTION,
-          coordinatesFormat
-        )[0]?.replace(/ /g, '')
+        vessel.latitude = getCoordinates(vessel.coordinates, OPENLAYERS_PROJECTION, coordinatesFormat)[0]?.replace(
+          / /g,
+          ''
+        )
         // eslint-disable-next-line no-param-reassign
-        vessel.vesselProperties.longitude = getCoordinates(
-          vessel.coordinates,
-          OPENLAYERS_PROJECTION,
-          coordinatesFormat
-        )[1]?.replace(/ /g, '')
+        vessel.longitude = getCoordinates(vessel.coordinates, OPENLAYERS_PROJECTION, coordinatesFormat)[1]?.replace(
+          / /g,
+          ''
+        )
 
         const filteredVesselObject: Record<string, string> = {}
         checkboxState.valuesChecked.forEach(valueChecked => {
           switch (valueChecked) {
             case CSVOptions.flagState.code:
-              filteredVesselObject[CSVOptions.flagState.code] = vessel?.vesselProperties?.flagState
-                ? (countries.getName(vessel?.vesselProperties?.flagState, 'fr') ?? '')
+              filteredVesselObject[CSVOptions.flagState.code] = vessel?.flagState
+                ? (countries.getName(vessel?.flagState, 'fr') ?? '')
                 : ''
               break
             default: {
-              const value = vessel[valueChecked] || vessel?.vesselProperties[valueChecked] || ''
+              const value = vessel[valueChecked] || ''
               const stringValue = Array.isArray(value) ? value.join(', ') : value.toString()
               filteredVesselObject[valueChecked] = stringValue
             }

@@ -14,8 +14,9 @@ import { getSelectedVesselStyle } from './style'
 import { monitorfishMap } from '../../map/monitorfishMap'
 
 const VesselSelectedLayer = () => {
-  const { selectedVessel, vesselsTracksShowed } = useSelector(state => state.vessel)
-  const { selectedBaseLayer } = useSelector(state => state.map)
+  const selectedVessel = useSelector(state => state.vessel.selectedVessel)
+  const vesselsTracksShowed = useSelector(state => state.vessel.vesselsTracksShowed)
+  const selectedBaseLayer = useSelector(state => state.map.selectedBaseLayer)
 
   const vectorSourceRef = useRef(new VectorSource({
     features: [],

@@ -1,14 +1,34 @@
-import { COLORS } from '@constants/constants'
 import { COUNTRIES_AS_ALPHA2_OPTIONS } from '@constants/index'
+import getAdministrativeZoneGeometry from '@features/AdministrativeZone/useCases/getAdministrativeZoneGeometry'
 import { FilterTag } from '@features/Filter/components/VesselFilters/FilterTag'
+import { useGetFleetSegmentsQuery } from '@features/FleetSegment/apis'
+import {
+  removeZoneSelected,
+  setCountriesFiltered,
+  setDistrictsFiltered,
+  setFleetSegmentsFiltered,
+  setGearsFiltered,
+  setLastControlMonthsAgo,
+  setLastPositionTimeAgoFilter,
+  setSpeciesFiltered,
+  setVesselsLocationFilter,
+  setVesselsSizeValuesChecked,
+  setZonesFilter,
+  setZonesSelected
+} from '@features/Vessel/components/VesselList/slice'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { THEME } from '@mtes-mct/monitor-ui'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Checkbox, CheckboxGroup, MultiCascader, SelectPicker, Tag, TagPicker } from 'rsuite'
 import styled from 'styled-components'
 
 import { lastControlAfterLabels, lastPositionTimeAgoLabels } from './dataFormatting'
-import { LayerType as LayersType } from '../../../../domain/entities/layers/constants'
+import { LayerType, LayerType as LayersType } from '../../../../domain/entities/layers/constants'
+import { InteractionType } from '../../../../domain/entities/map/constants'
 import { VesselLocation, vesselSize } from '../../../../domain/entities/vessel/vessel'
+import { setBlockVesselsUpdate } from '../../../../domain/shared_slices/Global'
+import { addVesselListFilterZone } from '../../../../domain/use_cases/vessel/addVesselListFilterZone'
 import { getZonesAndSubZonesPromises } from '../../../AdministrativeZone/useCases/getZonesAndSubZonesPromises'
 import PolygonFilterSVG from '../../../icons/Filtre_zone_polygone.svg?react'
 import BoxFilterSVG from '../../../icons/Filtre_zone_rectangle.svg?react'
@@ -24,81 +44,91 @@ function renderTagPickerValue(items) {
 const tagPickerStyle = { margin: '3px 10px 10px 0', verticalAlign: 'top', width: 160 }
 
 type VesselListFiltersProps = Readonly<{
-  controls: any
-  countries: any
-  districts: any
-  fleetSegments: any
-  gears: any
-  geometrySelection: any
-  lastPositionTimeAgo: any
-  location: any
-  seeMore: any
-  size: any
-  species: any
-  zones: any
+  namespace: string
+  seeMoreIsOpen: any
+  setSeeMoreIsOpen: any
 }>
-function UnmemoizedVesselListFilters({
-  controls,
-  countries,
-  districts,
-  fleetSegments,
-  gears,
-  geometrySelection,
-  lastPositionTimeAgo,
-  location,
-  seeMore,
-  size,
-  species,
-  zones
-}: VesselListFiltersProps) {
+function UnmemoizedVesselListFilters({ namespace, seeMoreIsOpen, setSeeMoreIsOpen }: VesselListFiltersProps) {
   const dispatch = useMainAppDispatch()
+  const {
+    countriesFiltered,
+    districtsFiltered,
+    fleetSegmentsFiltered,
+    gearsFiltered,
+    lastControlMonthsAgo,
+    lastPositionTimeAgoFilter,
+    speciesFiltered,
+    vesselsLocationFilter,
+    vesselsSizeValuesChecked,
+    zonesFilter,
+    zonesSelected
+  } = useMainAppSelector(state => state.vesselList)
+  const { uniqueVesselsDistricts: districts, uniqueVesselsSpecies: species } = useMainAppSelector(state => state.vessel)
+  const gears = useMainAppSelector(state => state.gear.gears)
+  const getFleetSegmentsQuery = useGetFleetSegmentsQuery()
   const [zoneGroups, setZoneGroups] = useState<string[]>([])
 
   const fleetSegmentsField = useMemo(() => {
-    if (!fleetSegments.fleetSegments?.length) {
+    if (!getFleetSegmentsQuery?.data?.length) {
       return []
     }
 
-    return fleetSegments.fleetSegments.map(segment => ({
+    return getFleetSegmentsQuery.data.map(segment => ({
       label: `${segment.segment} (${segment.segmentName})`,
       value: segment.segment
     }))
-  }, [fleetSegments.fleetSegments])
+  }, [getFleetSegmentsQuery])
 
   const gearsField = useMemo(() => {
-    if (!gears.gears?.length) {
+    if (!gears?.length) {
       return []
     }
 
-    return gears.gears.map(gear => ({
+    return gears.map(gear => ({
       label: `${gear.code} (${gear.name})`,
       value: gear.code
     }))
-  }, [gears.gears])
+  }, [gears])
 
   const speciesField = useMemo(() => {
-    if (!species.species?.length) {
+    if (!species?.length) {
       return []
     }
 
-    return species.species.map(_species => ({
+    return species.map(_species => ({
       label: _species,
       value: _species
     }))
-  }, [species.species])
+  }, [species])
 
   const districtsField = useMemo(() => {
-    if (!districts.districts || districts.districts.length === 0) {
+    if (!districts || districts.length === 0) {
       return []
     }
 
-    return districts.districts.map(district => ({
+    return districts.map(district => ({
       label: `${district.district} (${district.districtCode})`,
       value: district.district
     }))
-  }, [districts.districts])
+  }, [districts])
 
-  const { zonesSelected } = zones
+  const selectBox = useCallback(() => {
+    dispatch(addVesselListFilterZone(InteractionType.SQUARE))
+    dispatch(setBlockVesselsUpdate(true))
+  }, [dispatch])
+
+  const selectPolygon = useCallback(() => {
+    dispatch(addVesselListFilterZone(InteractionType.POLYGON))
+    dispatch(setBlockVesselsUpdate(true))
+  }, [dispatch])
+
+  const callRemoveZoneSelected = useCallback(
+    zoneSelectedToRemove => {
+      dispatch(removeZoneSelected(zoneSelectedToRemove.code))
+    },
+    [dispatch]
+  )
+
   const showZonesSelected = useCallback(
     () =>
       zonesSelected?.length && zonesSelected.find(zone => zone.code === LayersType.FREE_DRAW)
@@ -109,6 +139,7 @@ function UnmemoizedVesselListFilters({
                 <FilterTag
                   key={zoneSelected.code}
                   iconElement={undefined}
+                  remove={() => callRemoveZoneSelected(zoneSelected)}
                   tag={{
                     type: 'zonesSelected',
                     value: 'Effacer la zone définie'
@@ -119,9 +150,53 @@ function UnmemoizedVesselListFilters({
               </InlineTagWrapper>
             ))
         : null,
+    [zonesSelected, callRemoveZoneSelected]
+  )
+
+  const administrativeZonesFiltered = useMemo(
+    () =>
+      zonesSelected
+        .filter(zoneSelected => zoneSelected.code !== LayerType.FREE_DRAW)
+        .map(zoneSelected => zoneSelected.code),
     [zonesSelected]
   )
 
+  // TODO Export to a thunk use-case
+  const setAdministrativeZonesFiltered = useCallback(
+    (nextAdministrativeZonesFiltered: string[]) => {
+      const withoutAdministrativeZones = zonesSelected.filter(zoneSelected => {
+        if (zoneSelected.code === LayerType.FREE_DRAW) {
+          return true
+        }
+
+        return nextAdministrativeZonesFiltered.find(zoneFiltered => zoneFiltered === zoneSelected.code)
+      })
+      dispatch(setZonesSelected(withoutAdministrativeZones))
+
+      const zonesGeometryToFetch = nextAdministrativeZonesFiltered.map(zoneName =>
+        zonesFilter
+          .map(group => group.children)
+          .flat()
+          .filter(zone => zone)
+          .find(zone => zone.code === zoneName)
+      )
+
+      zonesGeometryToFetch.forEach(zoneToFetch => {
+        if (!zoneToFetch) {
+          return
+        }
+
+        if (zoneToFetch.isSubZone) {
+          dispatch(getAdministrativeZoneGeometry(zoneToFetch.groupCode, zoneToFetch.code, zoneToFetch.name, namespace))
+        } else {
+          dispatch(getAdministrativeZoneGeometry(zoneToFetch.code, null, zoneToFetch.name, namespace))
+        }
+      })
+    },
+    [dispatch, namespace, zonesFilter, zonesSelected]
+  )
+
+  // TODO Export to a thunk use-case
   const getZones = useCallback(async () => {
     const nextZonesPromises = dispatch(getZonesAndSubZonesPromises())
     const nextZones = await Promise.all(nextZonesPromises)
@@ -137,10 +212,8 @@ function UnmemoizedVesselListFilters({
       value: group
     }))
 
-    zones.setZonesFilter(nextZonesWithoutNulls)
-    // Having a dependency on `zones` trigger an infinite re-render
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, zones.setZonesFilter])
+    dispatch(setZonesFilter(nextZonesWithoutNulls))
+  }, [dispatch])
 
   useEffect(() => {
     getZones()
@@ -152,73 +225,73 @@ function UnmemoizedVesselListFilters({
       <SelectWrapper>
         <SelectPicker
           data={lastPositionTimeAgoLabels}
-          onChange={lastPositionTimeAgo.setLastPositionTimeAgoFilter}
+          onChange={nextValue => dispatch(setLastPositionTimeAgoFilter(nextValue as number))}
           placeholder="x heures..."
           searchable={false}
-          value={lastPositionTimeAgo.lastPositionTimeAgoFilter}
+          value={lastPositionTimeAgoFilter}
         />
       </SelectWrapper>
       <TagPicker
         data={COUNTRIES_AS_ALPHA2_OPTIONS}
         data-cy="vessel-list-country-filter"
-        onChange={countries.setCountriesFiltered}
+        onChange={nextValue => dispatch(setCountriesFiltered(nextValue))}
         placeholder="Nationalité"
         renderMenuItem={(_, item) => renderTagPickerMenuItem(item)}
         renderValue={(_, items) => renderTagPickerValue(items)}
         style={tagPickerStyle}
-        value={countries.countriesFiltered}
+        value={countriesFiltered}
       />
       <TagPicker
         data={fleetSegmentsField}
         data-cy="vessel-list-fleet-segment-filter"
-        onChange={fleetSegments.setFleetSegmentsFiltered}
+        onChange={nextValue => dispatch(setFleetSegmentsFiltered(nextValue))}
         placeholder="Seg. de flotte"
         renderMenuItem={(_, item) => renderTagPickerMenuItem(item)}
         renderValue={(_, items) => renderTagPickerValue(items)}
         style={tagPickerStyle}
-        value={fleetSegments.fleetSegmentsFiltered}
+        value={fleetSegmentsFiltered}
       />
       <TagPicker
         data={gearsField}
-        onChange={gears.setGearsFiltered}
+        onChange={nextValue => dispatch(setGearsFiltered(nextValue))}
         placeholder="Engins à bord"
         renderMenuItem={(_, item) => renderTagPickerMenuItem(item)}
         renderValue={(_, items) => renderTagPickerValue(items)}
         style={tagPickerStyle}
-        value={gears.gearsFiltered}
+        value={gearsFiltered}
       />
       <TagPicker
         data={speciesField}
-        onChange={species.setSpeciesFiltered}
+        onChange={nextValue => dispatch(setSpeciesFiltered(nextValue))}
         placeholder="Espèces à bord"
         renderMenuItem={(_, item) => renderTagPickerMenuItem(item)}
         renderValue={(_, items) => renderTagPickerValue(items)}
         style={tagPickerStyle}
-        value={species.speciesFiltered}
+        value={speciesFiltered}
       />
       <ZoneFilter>
         <MultiCascader
-          data={zones.zonesFilter}
+          data={zonesFilter}
           menuWidth={250}
-          onChange={zones.setAdministrativeZonesFiltered}
-          onClean={() => zones.setAdministrativeZonesFiltered([])}
+          onChange={nextValue => setAdministrativeZonesFiltered(nextValue as string[])}
+          onClean={() => setAdministrativeZonesFiltered([])}
           placeholder="Filtrer avec une zone existante"
           style={{ margin: '0 10px 10px -10px', verticalAlign: 'top', width: 200 }}
           uncheckableItemValues={zoneGroups}
-          value={zones.administrativeZonesFiltered}
+          value={administrativeZonesFiltered}
         />
         <CustomZone>ou définir une zone</CustomZone>
-        <BoxFilter data-cy="vessels-list-box-filter" onClick={geometrySelection.selectBox} />
-        <PolygonFilter onClick={geometrySelection.selectPolygon} />
+        <BoxFilter data-cy="vessels-list-box-filter" onClick={selectBox} />
+        <PolygonFilter onClick={selectPolygon} />
         {showZonesSelected()}
       </ZoneFilter>
       <br />
       <CheckboxGroup
         inline
         name="checkboxList"
-        onChange={location.setVesselsLocationFilter}
-        style={{ color: COLORS.slateGray, display: 'inline-block', height: 40 }}
-        value={location.vesselsLocationFilter}
+        onChange={nextValue => dispatch(setVesselsLocationFilter(nextValue as VesselLocation[]))}
+        style={{ color: THEME.color.slateGray, display: 'inline-block', height: 40 }}
+        value={vesselsLocationFilter}
       >
         <Checkbox value={VesselLocation.SEA}>
           <Gray>Navires en mer</Gray>
@@ -228,35 +301,35 @@ function UnmemoizedVesselListFilters({
         </Checkbox>
       </CheckboxGroup>
       <br />
-      {seeMore.seeMoreIsOpen ? (
+      {seeMoreIsOpen ? (
         <>
           <FilterDesc>Dernier contrôle il y a plus de </FilterDesc>
           <SelectWrapper>
             <SelectPicker
               data={lastControlAfterLabels}
-              onChange={controls.setLastControlMonthsAgo}
+              onChange={nextValue => dispatch(setLastControlMonthsAgo(nextValue))}
               placeholder="x mois..."
               searchable={false}
               style={{ margin: '2px 10px 10px 0', width: 70 }}
-              value={controls.lastControlMonthsAgo}
+              value={lastControlMonthsAgo}
             />
           </SelectWrapper>
           <TagPicker
             data={districtsField}
-            onChange={districts.setDistrictsFiltered}
+            onChange={nextValue => dispatch(setDistrictsFiltered(nextValue))}
             placeholder="Quartiers"
             renderMenuItem={(_, item) => renderTagPickerMenuItem(item)}
             renderValue={(_, items) => renderTagPickerValue(items)}
             style={tagPickerStyle}
-            value={districts.districtsFiltered}
+            value={districtsFiltered}
           />
           <VesselSize>Taille du navire</VesselSize>
           <CheckboxGroup
             inline
             name="checkboxList"
-            onChange={size.setVesselsSizeValuesChecked}
-            style={{ color: COLORS.slateGray, display: 'inline-block' }}
-            value={size.vesselsSizeValuesChecked}
+            onChange={nextValue => dispatch(setVesselsSizeValuesChecked(nextValue as string[]))}
+            style={{ color: THEME.color.slateGray, display: 'inline-block' }}
+            value={vesselsSizeValuesChecked}
           >
             <Checkbox value={vesselSize.BELOW_TEN_METERS.code}>
               <Gray>Moins de 10 m</Gray>
@@ -271,8 +344,8 @@ function UnmemoizedVesselListFilters({
           <br />
         </>
       ) : null}
-      <SeeMore onClick={() => seeMore.setSeeMoreIsOpen(!seeMore.seeMoreIsOpen)}>
-        Voir {seeMore.seeMoreIsOpen ? 'moins' : 'plus'} de critères
+      <SeeMore onClick={() => setSeeMoreIsOpen(!seeMoreIsOpen)}>
+        Voir {seeMoreIsOpen ? 'moins' : 'plus'} de critères
       </SeeMore>
     </Filters>
   )
@@ -284,7 +357,7 @@ const InlineTagWrapper = styled.div`
 `
 
 const Gray = styled.span`
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   margin-left: 2px;
   margin-right: 5px;
 `
@@ -299,7 +372,7 @@ const VesselSize = styled.span`
 
 const SeeMore = styled.span`
   text-decoration: underline;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   cursor: pointer;
 `
 
@@ -331,7 +404,7 @@ const FilterDesc = styled.span`
 `
 
 const Filters = styled.div`
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   font-size: 13px;
   margin-top: 15px;
   margin-bottom: 15px;

@@ -1,11 +1,8 @@
-import getAdministrativeZoneGeometry from '@features/AdministrativeZone/useCases/getAdministrativeZoneGeometry'
 import { StyledModalHeader } from '@features/commonComponents/StyledModalHeader'
 import { PrimaryButton, SecondaryButton } from '@features/commonStyles/Buttons.style'
 import { SaveVesselFiltersModal } from '@features/Filter/components/SaveVesselFiltersModal'
-import { useGetFleetSegmentsQuery } from '@features/FleetSegment/apis'
 import { DownloadVesselListModal } from '@features/Vessel/components/VesselList/DownloadVesselListModal'
 import { VesselIcon } from '@features/Vessel/components/VesselList/index'
-import { removeZoneSelected, setZonesSelected } from '@features/Vessel/components/VesselList/slice'
 import { VesselListFilters } from '@features/Vessel/components/VesselList/VesselListFilters'
 import { VesselListTable } from '@features/Vessel/components/VesselList/VesselListTable'
 import { vesselSelectors } from '@features/Vessel/slice'
@@ -17,11 +14,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Modal } from 'rsuite'
 import styled from 'styled-components'
 
-import { LayerType } from '../../../../domain/entities/layers/constants'
-import { InteractionType } from '../../../../domain/entities/map/constants'
-import { VesselLocation } from '../../../../domain/entities/vessel/vessel'
 import { setBlockVesselsUpdate } from '../../../../domain/shared_slices/Global'
-import { addVesselListFilterZone } from '../../../../domain/use_cases/vessel/addVesselListFilterZone'
 import { getFilteredVessels } from '../../../../domain/use_cases/vessel/getFilteredVessels'
 import { unselectVessel } from '../../../../domain/use_cases/vessel/unselectVessel'
 import { LegacyRsuiteComponentsWrapper } from '../../../../ui/LegacyRsuiteComponentsWrapper'
@@ -35,28 +28,9 @@ type CheckedVesselEnhancedLastPositionWebGLObject = VesselEnhancedLastPositionWe
   checked?: boolean
 }
 
-type ZoneChildren = {
-  code: string
-  group: string
-  groupCode: string
-  isSubZone: boolean
-  label: string
-  name: string
-  value: string
-}
-
-type ZoneGroupAndChildren = {
-  children: ZoneChildren[]
-  label: string
-  value: string
-}
-
 export function VesselListModal({ namespace, onClose }) {
   const dispatch = useMainAppDispatch()
-  const { uniqueVesselsDistricts: districts, uniqueVesselsSpecies: species } = useMainAppSelector(state => state.vessel)
   const vessels = useMainAppSelector(state => vesselSelectors.selectAll(state.vessel.vessels))
-  const getFleetSegmentsQuery = useGetFleetSegmentsQuery()
-  const gears = useMainAppSelector(state => state.gear.gears)
 
   const firstUpdate = useRef(true)
 
@@ -82,29 +56,18 @@ export function VesselListModal({ namespace, onClose }) {
   const [allVesselsChecked, setAllVesselsChecked] = useState(true)
 
   // Filters
-  const zonesSelected = useMainAppSelector(state => state.vesselList.zonesSelected)
-  const administrativeZonesFiltered = useMemo(
-    () =>
-      zonesSelected
-        .filter(zoneSelected => zoneSelected.code !== LayerType.FREE_DRAW)
-        .map(zoneSelected => zoneSelected.code),
-    [zonesSelected]
-  )
-
-  const [zonesFilter, setZonesFilter] = useState<ZoneGroupAndChildren[]>([])
-  const setZonesFilterCallback = useCallback(filter => {
-    setZonesFilter(filter)
-  }, [])
-
-  const [lastPositionTimeAgoFilter, setLastPositionTimeAgoFilter] = useState(3)
-  const [lastControlMonthsAgo, setLastControlMonthsAgo] = useState(null)
-  const [countriesFiltered, setCountriesFiltered] = useState([])
-  const [fleetSegmentsFiltered, setFleetSegmentsFiltered] = useState([])
-  const [gearsFiltered, setGearsFiltered] = useState([])
-  const [speciesFiltered, setSpeciesFiltered] = useState([])
-  const [districtsFiltered, setDistrictsFiltered] = useState([])
-  const [vesselsSizeValuesChecked, setVesselsSizeValuesChecked] = useState([])
-  const [vesselsLocationFilter, setVesselsLocationFilter] = useState([VesselLocation.SEA, VesselLocation.PORT])
+  const {
+    countriesFiltered,
+    districtsFiltered,
+    fleetSegmentsFiltered,
+    gearsFiltered,
+    lastControlMonthsAgo,
+    lastPositionTimeAgoFilter,
+    speciesFiltered,
+    vesselsLocationFilter,
+    vesselsSizeValuesChecked,
+    zonesSelected
+  } = useMainAppSelector(state => state.vesselList)
 
   const hasNoFilter = () =>
     !lastControlMonthsAgo &&
@@ -140,6 +103,7 @@ export function VesselListModal({ namespace, onClose }) {
         vesselsSizeValuesChecked,
         zonesSelected
       }
+
       setTimeout(() => {
         dispatch(getFilteredVessels(checkedVessels, filters)).then(_filteredVessels => {
           const nextVessels = _filteredVessels.map(vessel => ({
@@ -185,88 +149,6 @@ export function VesselListModal({ namespace, onClose }) {
     [_vessels, setVessels]
   )
 
-  const selectBox = useCallback(() => {
-    dispatch(addVesselListFilterZone(InteractionType.SQUARE))
-    dispatch(setBlockVesselsUpdate(true))
-  }, [dispatch])
-
-  const selectPolygon = useCallback(() => {
-    dispatch(addVesselListFilterZone(InteractionType.POLYGON))
-    dispatch(setBlockVesselsUpdate(true))
-  }, [dispatch])
-
-  const callRemoveZoneSelected = useCallback(
-    zoneSelectedToRemove => {
-      dispatch(removeZoneSelected(zoneSelectedToRemove.code))
-    },
-    [dispatch]
-  )
-
-  const download = useCallback(() => {
-    setDownloadVesselListModalIsOpen(true)
-  }, [])
-
-  const saveFilter = useCallback(() => {
-    setSaveVesselFilterModalIsOpen(true)
-  }, [])
-
-  const previewFilteredVessels = useCallback(() => {
-    dispatch(previewVessels(filteredVessels))
-  }, [dispatch, filteredVessels])
-
-  const setAdministrativeZonesFiltered = useCallback(
-    (nextAdministrativeZonesFiltered: string[]) => {
-      const withoutAdministrativeZones = zonesSelected.filter(zoneSelected => {
-        if (zoneSelected.code === LayerType.FREE_DRAW) {
-          return true
-        }
-
-        return nextAdministrativeZonesFiltered.find(zoneFiltered => zoneFiltered === zoneSelected.code)
-      })
-      dispatch(setZonesSelected(withoutAdministrativeZones))
-
-      const zonesGeometryToFetch = nextAdministrativeZonesFiltered.map(zoneName =>
-        zonesFilter
-          .map(group => group.children)
-          .flat()
-          .filter(zone => zone)
-          .find(zone => zone.code === zoneName)
-      )
-
-      zonesGeometryToFetch.forEach(zoneToFetch => {
-        if (!zoneToFetch) {
-          return
-        }
-
-        if (zoneToFetch.isSubZone) {
-          dispatch(getAdministrativeZoneGeometry(zoneToFetch.groupCode, zoneToFetch.code, zoneToFetch.name, namespace))
-        } else {
-          dispatch(getAdministrativeZoneGeometry(zoneToFetch.code, null, zoneToFetch.name, namespace))
-        }
-      })
-    },
-    [dispatch, namespace, zonesFilter, zonesSelected]
-  )
-
-  const zones = useMemo(
-    () => ({
-      administrativeZonesFiltered,
-      callRemoveZoneSelected,
-      setAdministrativeZonesFiltered,
-      setZonesFilter: setZonesFilterCallback,
-      zonesFilter,
-      zonesSelected
-    }),
-    [
-      administrativeZonesFiltered,
-      callRemoveZoneSelected,
-      setAdministrativeZonesFiltered,
-      setZonesFilterCallback,
-      zonesFilter,
-      zonesSelected
-    ]
-  )
-
   return (
     <>
       <StyledModalHeader $isFull>
@@ -278,64 +160,10 @@ export function VesselListModal({ namespace, onClose }) {
       <Modal.Body>
         <LegacyRsuiteComponentsWrapper>
           <Title>FILTRER LA LISTE</Title>
-          <VesselListFilters
-            controls={{
-              lastControlMonthsAgo,
-              setLastControlMonthsAgo
-            }}
-            countries={{
-              countriesFiltered,
-              setCountriesFiltered
-            }}
-            districts={{
-              districts,
-              districtsFiltered,
-              setDistrictsFiltered
-            }}
-            fleetSegments={{
-              fleetSegments: getFleetSegmentsQuery.data || [],
-              fleetSegmentsFiltered,
-              setFleetSegmentsFiltered
-            }}
-            gears={{
-              gears,
-              gearsFiltered,
-              setGearsFiltered
-            }}
-            geometrySelection={{
-              selectBox,
-              selectPolygon
-            }}
-            lastPositionTimeAgo={{
-              lastPositionTimeAgoFilter,
-              setLastPositionTimeAgoFilter
-            }}
-            location={{
-              setVesselsLocationFilter,
-              vesselsLocationFilter
-            }}
-            seeMore={{
-              seeMoreIsOpen,
-              setSeeMoreIsOpen
-            }}
-            size={{
-              setVesselsSizeValuesChecked,
-              vesselsSizeValuesChecked
-            }}
-            species={{
-              setSpeciesFiltered,
-              species,
-              speciesFiltered
-            }}
-            zones={zones}
-          />
+          <VesselListFilters namespace={namespace} seeMoreIsOpen={seeMoreIsOpen} setSeeMoreIsOpen={setSeeMoreIsOpen} />
           <VesselListTable
             allVesselsChecked={allVesselsChecked}
             filteredVessels={filteredVessels}
-            filters={{
-              districtsFiltered,
-              vesselsSizeValuesChecked
-            }}
             seeMoreIsOpen={seeMoreIsOpen}
             setAllVesselsChecked={setAllVesselsChecked}
             toggleSelectRow={toggleSelectRow}
@@ -348,19 +176,24 @@ export function VesselListModal({ namespace, onClose }) {
         <PreviewButton
           data-cy="preview-filtered-vessels"
           disabled={!(filteredVessels && filteredVessels.length)}
-          onClick={previewFilteredVessels}
+          onClick={() => dispatch(previewVessels(filteredVessels))}
         >
           <Preview />
           Aperçu sur la carte
         </PreviewButton>
-        <BlackButton $isLast={false} data-cy="save-filter-modal" disabled={hasNoFilter()} onClick={() => saveFilter()}>
+        <BlackButton
+          $isLast={false}
+          data-cy="save-filter-modal"
+          disabled={hasNoFilter()}
+          onClick={() => setSaveVesselFilterModalIsOpen(true)}
+        >
           Enregistrer le filtre
         </BlackButton>
         <BlackButton
           $isLast
           data-cy="download-vessels-modal"
           disabled={!filteredVessels?.some(vessel => vessel.checked)}
-          onClick={() => download()}
+          onClick={() => setDownloadVesselListModalIsOpen(true)}
         >
           Télécharger le tableau
         </BlackButton>

@@ -108,7 +108,7 @@ export function ReportingCard({
       </Body>
       {isArchived ? (
         otherOccurrencesOfSameAlert.length > 0 && (
-          <NumberOfAlerts isArchived>{otherOccurrencesOfSameAlert.length + 1}</NumberOfAlerts>
+          <NumberOfAlerts $isArchived>{otherOccurrencesOfSameAlert.length + 1}</NumberOfAlerts>
         )
       ) : (
         <Actions $hasOccurrences={otherOccurrencesOfSameAlert.length > 0}>
@@ -210,11 +210,11 @@ const Actions = styled.div<{
 `
 
 const NumberOfAlerts = styled.span<{
-  isArchived?: boolean | undefined
+  $isArchived?: boolean | undefined
 }>`
   margin-top: 8px;
-  margin-right: ${p => (p.isArchived ? '8px' : 'unset')};
-  margin-left: ${p => (p.isArchived ? 'auto' : 'unset')};
+  margin-right: ${p => (p.$isArchived ? '8px' : 'unset')};
+  margin-left: ${p => (p.$isArchived ? 'auto' : 'unset')};
   background: ${p => p.theme.color.maximumRed} 0% 0% no-repeat padding-box;
   border-radius: 2px;
   color: ${p => p.theme.color.white};

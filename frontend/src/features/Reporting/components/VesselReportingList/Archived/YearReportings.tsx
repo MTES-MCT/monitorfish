@@ -13,10 +13,10 @@ import { ReportingCard } from '../ReportingCard'
 
 import type { ReportingAndOccurrences } from '@features/Reporting/types'
 
-type YearReportingsProps = {
+type YearReportingsProps = Readonly<{
   reportingAndOccurences: ReportingAndOccurrences[]
   year: string
-}
+}>
 export function YearReportings({ reportingAndOccurences, year }: YearReportingsProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
 

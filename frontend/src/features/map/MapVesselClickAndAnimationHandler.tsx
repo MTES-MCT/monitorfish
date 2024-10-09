@@ -3,9 +3,9 @@ import { useEffect } from 'react'
 import { monitorfishMap } from './monitorfishMap'
 import { getMapResolution, getMapZoom } from './utils'
 import { resetAnimateToCoordinates, resetAnimateToExtent, resetFitToExtent } from '../../domain/shared_slices/Map'
-import { updateVesselTrackAsZoomed } from '../../domain/shared_slices/Vessel'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
+import { updateVesselTrackAsZoomed } from '../Vessel/slice'
 
 /**
  * Handle map animations

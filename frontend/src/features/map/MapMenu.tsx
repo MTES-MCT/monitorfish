@@ -1,3 +1,4 @@
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Point } from 'ol/geom'
 import { useEffect, useRef, useState } from 'react'
 
@@ -6,12 +7,12 @@ import MapMenuOverlay from './overlays/MapMenuOverlay'
 import { HIT_PIXEL_TO_TOLERANCE } from '../../constants/constants'
 import { LayerProperties } from '../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../domain/entities/layers/types'
-import { useMainAppSelector } from '../../hooks/useMainAppSelector'
+import { vesselSelectors } from '../Vessel/slice'
 
 import type { VesselEnhancedLastPositionWebGLObject } from '../../domain/entities/vessel/types'
 
 export function MapMenu() {
-  const { vessels } = useMainAppSelector(state => state.vessel)
+  const vessels = useMainAppSelector(state => vesselSelectors.selectAll(state.vessel.vessels))
   const [coordinates, setCoordinates] = useState<number[]>([])
   const vessel = useRef<VesselEnhancedLastPositionWebGLObject | undefined>()
 

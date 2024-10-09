@@ -1,14 +1,15 @@
-import { getVesselPositionsFromAPI } from '../../../api/vessel'
-import { logbookActions } from '../../../features/Logbook/slice'
-import { throwCustomErrorFromAPIFeedback } from '../../entities/vesselTrackDepth'
-import { removeError, setError } from '../../shared_slices/Global'
-import { animateToExtent, doNotAnimate } from '../../shared_slices/Map'
 import {
   resetLoadingVessel,
   setSelectedVesselCustomTrackRequest,
   updateSelectedVesselPositions,
   updatingVesselTrackDepth
-} from '../../shared_slices/Vessel'
+} from '@features/Vessel/slice'
+
+import { getVesselPositionsFromAPI } from '../../../api/vessel'
+import { logbookActions } from '../../../features/Logbook/slice'
+import { throwCustomErrorFromAPIFeedback } from '../../entities/vesselTrackDepth'
+import { removeError, setError } from '../../shared_slices/Global'
+import { animateToExtent, doNotAnimate } from '../../shared_slices/Map'
 
 import type { MainAppDispatch, MainAppThunk } from '../../../store'
 import type { TrackRequest, VesselIdentity } from '../../entities/vessel/types'

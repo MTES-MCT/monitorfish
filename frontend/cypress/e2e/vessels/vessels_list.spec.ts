@@ -19,11 +19,11 @@ context('Vessels list', () => {
     cy.get('.rs-modal-title').click({ force: true })
     cy.wait(200)
     cy.get('*[data-cy^="vessels-list-box-filter"]').click({ timeout: 10000 })
-    cy.wait(200)
+    cy.wait(500)
     cy.get('body').click(60, 230, { timeout: 10000 })
-    cy.wait(200)
+    cy.wait(500)
     cy.get('body').click(700, 650, { timeout: 10000 })
-    cy.wait(200)
+    cy.wait(500)
     cy.get('*[data-cy^="vessel-list-table-count"]').contains('12 navires')
 
     // When

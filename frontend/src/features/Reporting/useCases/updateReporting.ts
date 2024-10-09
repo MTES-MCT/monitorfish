@@ -1,11 +1,12 @@
 import { updateReportingFromAPI } from '@api/reporting'
 import { ReportingType } from '@features/Reporting/types'
 import { getVesselReportings } from '@features/Reporting/useCases/getVesselReportings'
+import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { Vessel } from '../../../domain/entities/vessel/vessel'
-import { addVesselReporting, removeVesselReporting } from '../../../domain/shared_slices/Vessel'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
+import { addVesselReporting, removeVesselReporting } from '../../Vessel/slice'
 import { removeCurrentReporting, updateCurrentReporting } from '../slice'
 
 import type { VesselIdentity } from '../../../domain/entities/vessel/types'
@@ -53,6 +54,7 @@ export const updateReporting =
             vesselFeatureId
           })
         )
+        dispatch(renderVesselFeatures())
       }
 
       // If the update is done from the Reporting tab of the vessel sidebar

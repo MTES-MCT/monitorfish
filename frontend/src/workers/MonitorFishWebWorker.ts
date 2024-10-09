@@ -228,9 +228,7 @@ export class MonitorFishWebWorker {
     if (countriesFiltered?.length) {
       // For performance reason
       // eslint-disable-next-line no-param-reassign
-      vessels = vessels.filter(vessel =>
-        countriesFiltered.some(country => vessel.vesselProperties?.flagState === country)
-      )
+      vessels = vessels.filter(vessel => countriesFiltered.some(country => vessel?.flagState === country))
     }
 
     if (lastPositionTimeAgoFilter) {
@@ -240,7 +238,7 @@ export class MonitorFishWebWorker {
       // For performance reason
       // eslint-disable-next-line no-param-reassign
       vessels = vessels.filter(vessel => {
-        if (vessel.vesselProperties?.beaconMalfunctionId) {
+        if (vessel?.beaconMalfunctionId) {
           return true
         }
 
@@ -256,7 +254,7 @@ export class MonitorFishWebWorker {
       // For performance reason
       // eslint-disable-next-line no-param-reassign
       vessels = vessels.filter(vessel => {
-        const vesselDate = new Date(vessel.vesselProperties?.lastControlDateTimeTimestamp)
+        const vesselDate = new Date(vessel?.lastControlDateTimeTimestamp)
 
         return vesselDate < controlBefore
       })
@@ -266,37 +264,33 @@ export class MonitorFishWebWorker {
       // For performance reason
       // eslint-disable-next-line no-param-reassign
       vessels = vessels.filter(vessel =>
-        fleetSegmentsFiltered.some(fleetSegment => vessel.vesselProperties?.fleetSegmentsArray.includes(fleetSegment))
+        fleetSegmentsFiltered.some(fleetSegment => vessel?.fleetSegmentsArray.includes(fleetSegment))
       )
     }
 
     if (gearsFiltered?.length) {
       // For performance reason
       // eslint-disable-next-line no-param-reassign
-      vessels = vessels.filter(vessel => gearsFiltered.some(gear => vessel.vesselProperties?.gearsArray.includes(gear)))
+      vessels = vessels.filter(vessel => gearsFiltered.some(gear => vessel?.gearsArray.includes(gear)))
     }
 
     if (speciesFiltered?.length) {
       // For performance reason
       // eslint-disable-next-line no-param-reassign
-      vessels = vessels.filter(vessel =>
-        speciesFiltered.some(species => vessel.vesselProperties?.speciesArray.includes(species))
-      )
+      vessels = vessels.filter(vessel => speciesFiltered.some(species => vessel?.speciesArray.includes(species)))
     }
 
     if (districtsFiltered?.length) {
       // For performance reason
       // eslint-disable-next-line no-param-reassign
-      vessels = vessels.filter(vessel =>
-        districtsFiltered.some(district => vessel.vesselProperties?.district === district)
-      )
+      vessels = vessels.filter(vessel => districtsFiltered.some(district => vessel?.district === district))
     }
 
     if (vesselsSizeValuesChecked?.length) {
       // For performance reason
       // eslint-disable-next-line no-param-reassign
       vessels = vessels.filter(vessel =>
-        MonitorFishWebWorker.evaluateVesselsSize(vesselsSizeValuesChecked, vessel.vesselProperties?.length)
+        MonitorFishWebWorker.evaluateVesselsSize(vesselsSizeValuesChecked, vessel?.length)
       )
     }
 

@@ -12,7 +12,7 @@ import { showVessel } from '../vessel/showVessel'
 import { showVesselTrack } from '../vessel/showVesselTrack'
 
 import type { MainAppThunk } from '../../../store'
-import type { VesselLastPositionFeature } from '../../entities/vessel/types'
+import type { VesselIdentity, VesselLastPositionFeature } from '../../entities/vessel/types'
 import type { MapClick } from '../../types/map'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
@@ -73,7 +73,7 @@ export const clickOnMapFeature =
     }
 
     if (clickedFeatureId.includes(MonitorFishLayer.VESSELS)) {
-      const clickedVessel = (mapClick.feature as VesselLastPositionFeature).vesselProperties
+      const clickedVessel = (mapClick.feature as VesselLastPositionFeature).getProperties() as VesselIdentity
 
       if (mapClick.ctrlKeyPressed) {
         dispatch(showVesselTrack(clickedVessel, true, null))

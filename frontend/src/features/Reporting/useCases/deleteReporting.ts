@@ -1,11 +1,12 @@
 import { deleteReportingFromAPI } from '@api/reporting'
 import { ReportingType } from '@features/Reporting/types'
 import { getVesselReportings } from '@features/Reporting/useCases/getVesselReportings'
+import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { Vessel } from '../../../domain/entities/vessel/vessel'
-import { removeVesselReporting } from '../../../domain/shared_slices/Vessel'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
+import { removeVesselReporting } from '../../Vessel/slice'
 import { removeReportingsIdsFromCurrentReportings } from '../slice'
 
 import type { MainAppThunk } from '@store'
@@ -25,6 +26,7 @@ export const deleteReporting =
           vesselFeatureId: Vessel.getVesselFeatureId(selectedVesselIdentity)
         })
       )
+      dispatch(renderVesselFeatures())
 
       await dispatch(getVesselReportings(true))
     } catch (error) {

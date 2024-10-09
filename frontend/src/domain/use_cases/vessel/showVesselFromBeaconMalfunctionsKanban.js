@@ -2,7 +2,7 @@ import { showVessel } from './showVessel'
 import { END_OF_MALFUNCTION_REASON_RECORD } from '../../entities/beaconMalfunction/constants'
 import { VesselSidebarTab } from '../../entities/vessel/vessel'
 import { VesselTrackDepth } from '../../entities/vesselTrackDepth'
-import { setSelectedVesselCustomTrackRequest, showVesselSidebarTab } from '../../shared_slices/Vessel'
+import { setSelectedVesselCustomTrackRequest, showVesselSidebarTab } from '@features/Vessel/slice.ts'
 
 /**
  * Show the selected vessel on map.

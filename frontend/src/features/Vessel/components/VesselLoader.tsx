@@ -1,4 +1,5 @@
 import { FulfillingBouncingCircleSpinner } from '@components/FulfillingBouncingCircleSpinner'
+import { showVesselsLastPosition } from '@features/Vessel/useCases/showVesselsLastPosition'
 import { useIsInLightMode } from '@hooks/useIsInLightMode'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useEffect, useState } from 'react'
@@ -12,7 +13,6 @@ import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { MapComponent } from '../../commonStyles/MapComponent'
 import VesselSVG from '../../icons/Icone_navire.svg?react'
 import { useGetVesselsLastPositionsApi } from '../hooks/useGetVesselsLastPositionsApi'
-import { showVesselsLastPosition } from '../useCases/showVesselsLastPosition'
 
 export function VesselLoader() {
   const useGetVesselsLastPositionsQuery = useGetVesselsLastPositionsApi()

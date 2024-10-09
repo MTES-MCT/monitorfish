@@ -1,5 +1,3 @@
-import type { ReportingType } from '@features/Reporting/types'
-import type { PendingAlertValueType } from 'domain/entities/alerts/types'
 import type { RiskFactor } from 'domain/entities/vessel/riskFactor/types'
 import type { VesselLastPosition } from 'domain/entities/vessel/types'
 
@@ -54,14 +52,11 @@ export namespace Vessel {
   }
 
   export type VesselEnhancedObject = VesselLastPosition & {
-    alerts: Array<PendingAlertValueType | 'PNO_LAN_WEIGHT_TOLERANCE_ALERT'>
-    flagState: string
     fleetSegmentsArray: string[]
     gearsArray: string[]
     hasAlert: boolean
     hasInfractionSuspicion: boolean
     lastControlDateTimeTimestamp: number | string
-    reportings: ReportingType[]
     speciesArray: string[]
   }
 

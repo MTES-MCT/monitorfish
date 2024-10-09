@@ -227,7 +227,7 @@ export type TrackTypeRecordItem = {
   description: string
 }
 
-export type VesselEnhancedLastPositionWebGLObject = {
+export type VesselEnhancedLastPositionWebGLObject = Vessel.VesselEnhancedObject & {
   coordinates: number[]
   course: number
   filterPreview: number // 0 is False, 1 is True - for WebGL
@@ -237,7 +237,6 @@ export type VesselEnhancedLastPositionWebGLObject = {
   lastPositionSentAt: number
   speed: number
   vesselFeatureId: VesselFeatureId
-  vesselProperties: Vessel.VesselEnhancedObject
 }
 
 export type VesselLastPositionFeature = Feature<Point> & VesselEnhancedLastPositionWebGLObject

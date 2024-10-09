@@ -12,13 +12,13 @@ import {
   setVesselsLastPositionVisibility,
   showVesselsEstimatedPositions
 } from '../../../../../domain/shared_slices/Map'
-import { setHideNonSelectedVessels } from '../../../../../domain/shared_slices/Vessel'
 import { updateDefaultVesselTrackDepth } from '../../../../../domain/use_cases/vessel/updateDefaultVesselTrackDepth'
 import { MapPropertyTrigger } from '../../../../commonComponents/MapPropertyTrigger'
 import HidingOtherTracksSVG from '../../../../icons/Bouton_masquer_pistes_actif.svg?react'
 import ShowingOtherTracksSVG from '../../../../icons/Bouton_masquer_pistes_inactif.svg?react'
 import HideVesselsAtPortSVG from '../../../../icons/Masquer_navires_au_port.svg?react'
 import EstimatedPositionSVG from '../../../../icons/Positions_estimees.svg?react'
+import { setHideNonSelectedVessels } from '../../../../Vessel/slice'
 import { MapToolBox } from '../shared/MapToolBox'
 import { Header, Content } from '../shared/styles'
 

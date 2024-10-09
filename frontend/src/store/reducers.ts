@@ -17,7 +17,9 @@ import { reportingReducer } from '@features/Reporting/slice'
 import { alertReducer } from '@features/SideWindow/Alert/slice'
 import { sideWindowReducer } from '@features/SideWindow/slice'
 import { stationReducer } from '@features/Station/slice'
-import { vesselListReducer } from '@features/VesselList/slice'
+import { vesselListReducer } from '@features/Vessel/components/VesselList/slice'
+import { vesselSliceReducer } from '@features/Vessel/slice'
+import { filterReducer, type VesselFilterState } from '@features/VesselFilter/slice'
 import createMigrate from 'redux-persist/es/createMigrate'
 import persistReducer from 'redux-persist/es/persistReducer'
 import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2'
@@ -29,14 +31,12 @@ import { controlReducer } from '../domain/shared_slices/Control'
 import { displayedComponentReducer } from '../domain/shared_slices/DisplayedComponent'
 import { displayedErrorReducer } from '../domain/shared_slices/DisplayedError'
 import { favoriteVesselReducer } from '../domain/shared_slices/FavoriteVessel'
-import { filterReducer } from '../domain/shared_slices/Filter'
 import { gearReducer } from '../domain/shared_slices/Gear'
 import { globalSliceReducer } from '../domain/shared_slices/Global'
 import { infractionReducer } from '../domain/shared_slices/Infraction'
 import layer from '../domain/shared_slices/Layer'
 import { mapReducer } from '../domain/shared_slices/Map'
 import { speciesReducer } from '../domain/shared_slices/Species'
-import { vesselSliceReducer } from '../domain/shared_slices/Vessel'
 
 import type { Reducer } from 'redux'
 import type { PersistConfig } from 'redux-persist'
@@ -82,7 +82,15 @@ export const mainReducer = {
   displayedError: displayedErrorReducer,
   draw: drawReducer,
   favoriteVessel: favoriteVesselReducer,
-  filter: filterReducer,
+  filter: persistReducerTyped(
+    {
+      ...getCommonPersistReducerConfig<VesselFilterState>('mainPersistorFilter', [
+        'filters',
+        'nonFilteredVesselsAreHidden'
+      ])
+    },
+    filterReducer
+  ),
   fishingActivities: logbookReducer,
   infraction: infractionReducer,
   interestPoint: interestPointReducer,

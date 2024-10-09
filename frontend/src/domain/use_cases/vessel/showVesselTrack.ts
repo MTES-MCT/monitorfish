@@ -1,3 +1,4 @@
+import { addVesselTrackShowed, resetLoadingVessel } from '@features/Vessel/slice'
 import { transform } from 'ol/proj'
 
 import { getVesselPositionsFromAPI } from '../../../api/vessel'
@@ -6,7 +7,6 @@ import { getVesselCompositeIdentifier } from '../../entities/vessel/vessel'
 import { getCustomOrDefaultTrackRequest, throwCustomErrorFromAPIFeedback } from '../../entities/vesselTrackDepth'
 import { removeError, setError } from '../../shared_slices/Global'
 import { doNotAnimate } from '../../shared_slices/Map'
-import { addVesselTrackShowed, resetLoadingVessel } from '../../shared_slices/Vessel'
 
 import type { TrackRequest, VesselIdentity } from '../../entities/vessel/types'
 

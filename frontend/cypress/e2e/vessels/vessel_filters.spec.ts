@@ -3,7 +3,7 @@ context('Vessel filters', () => {
     cy.loadPath('/#@-824534.42,6082993.21,8.70')
   })
 
-  it('A Filter Should be created and added on the map', () => {
+  it('A VesselFilter Should be created and added on the map', () => {
     // Given
     cy.get('*[data-cy^="vessel-list"]').click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-list-country-filter"]').click({ force: true })

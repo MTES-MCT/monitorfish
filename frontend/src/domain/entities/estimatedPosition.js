@@ -29,7 +29,7 @@ class EstimatedPosition {
    */
   static getFeatures(vessel, options) {
     const { dateTime, estimatedCurrentLatitude, estimatedCurrentLongitude, latitude, longitude } =
-      vessel.vesselProperties
+      vessel
 
     if (!longitude || !latitude || !estimatedCurrentLongitude || !estimatedCurrentLatitude) {
       return null

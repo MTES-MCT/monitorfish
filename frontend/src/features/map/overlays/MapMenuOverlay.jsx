@@ -59,7 +59,7 @@ function MapMenuOverlay({ coordinates, vessel }) {
         trackDepth: VesselTrackDepth.CUSTOM
       }
 
-      dispatch(showVesselTrack(vessel.vesselProperties, true, trackRequest))
+      dispatch(showVesselTrack(vessel, true, trackRequest))
 
       monitorfishMap.removeOverlay(getOverlay())
       setIsOpen(false)
@@ -82,7 +82,7 @@ function MapMenuOverlay({ coordinates, vessel }) {
 
     const trackRequest = getTrackRequestFromTrackDepth(selectedTrackDepth)
 
-    dispatch(showVesselTrack(vessel.vesselProperties, true, trackRequest))
+    dispatch(showVesselTrack(vessel, true, trackRequest))
 
     monitorfishMap.removeOverlay(getOverlay())
     setIsOpen(false)
@@ -132,7 +132,7 @@ function MapMenuOverlay({ coordinates, vessel }) {
                     <FirstColumnMenu>
                       <Menu
                         data-cy="add-vessel-to-favorites"
-                        onClick={() => dispatch(addVesselToFavorites(vessel.vesselProperties)) && setIsOpen(false)}
+                        onClick={() => dispatch(addVesselToFavorites(vessel)) && setIsOpen(false)}
                         onMouseEnter={() => setShowTrackDepthSubMenu(false)}
                       >
                         Ajouter le navire aux navires suivis

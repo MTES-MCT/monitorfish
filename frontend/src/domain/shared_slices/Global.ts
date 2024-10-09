@@ -75,10 +75,6 @@ export const globalSlice = createSlice({
       window.localStorage.setItem(lastSearchedVesselsLocalStorageKey, JSON.stringify(state.lastSearchedVessels))
     },
 
-    closeVesselListModal(state) {
-      state.vesselListModalIsOpen = false
-    },
-
     contractRightMenu(state) {
       state.rightMenuIsOpen = false
     },
@@ -178,10 +174,8 @@ export const globalSliceReducer = globalSlice.reducer
 
 export const {
   addSearchedVessel,
-  closeVesselListModal,
   contractRightMenu,
   expandRightMenu,
-  openVesselListModal,
   removeError,
   resetIsUpdatingVessels,
   setBlockVesselsUpdate,

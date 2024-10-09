@@ -1,3 +1,4 @@
+import { extractVesselPropertiesFromFeature } from '@features/Vessel/utils'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { usePrevious } from '@mtes-mct/monitor-ui'
 import LineString from 'ol/geom/LineString'
@@ -233,23 +234,23 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
       }
 
       const nextFeaturesAndLabels = features.map(feature => {
-        const vesselProperties = {
-          beaconMalfunctionId: feature.get('beaconMalfunctionId'),
-          dateTime: feature.get('dateTime'),
-          detectabilityRiskFactor: feature.get('detectabilityRiskFactor'),
-          flagState: feature.get('flagState'),
-          impactRiskFactor: feature.get('impactRiskFactor'),
-          internalReferenceNumber: feature.get('internalReferenceNumber'),
-          isAtPort: feature.get('isAtPort'),
-          lastControlDateTime: feature.get('lastControlDateTime'),
-          probabilityRiskFactor: feature.get('probabilityRiskFactor'),
-          riskFactor: feature.get('riskFactor'),
-          segments: feature.get('segments'),
-          underCharter: feature.get('underCharter'),
-          vesselId: feature.get('vesselId'),
-          vesselIdentifier: feature.get('vesselIdentifier'),
-          vesselName: feature.get('vesselName')
-        }
+        const vesselProperties = extractVesselPropertiesFromFeature(feature, [
+          'beaconMalfunctionId',
+          'dateTime',
+          'detectabilityRiskFactor',
+          'flagState',
+          'impactRiskFactor',
+          'internalReferenceNumber',
+          'isAtPort',
+          'lastControlDateTime',
+          'probabilityRiskFactor',
+          'riskFactor',
+          'segments',
+          'underCharter',
+          'vesselId',
+          'vesselIdentifier',
+          'vesselName'
+        ])
         const label = Vessel.getVesselFeatureLabel(vesselProperties, {
           hideVesselsAtPort,
           isRiskFactorShowed: isSuperUser && riskFactorShowedOnMap,

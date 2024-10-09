@@ -1,6 +1,6 @@
 import { getVesselReportings } from '@features/Reporting/useCases/getVesselReportings'
 import { removeVesselAlertAndUpdateReporting } from '@features/Vessel/slice'
-import { renderVessels } from '@features/Vessel/useCases/renderVessels'
+import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 
 import { validateAlertFromAPI } from '../../../api/alert'
 import { setPendingAlerts } from '../../../features/SideWindow/Alert/slice'
@@ -42,7 +42,7 @@ export const validateAlert =
           vesselFeatureId: Vessel.getVesselFeatureId(validatedAlert)
         })
       )
-      await dispatch(renderVessels())
+      dispatch(renderVesselFeatures())
     } catch (error) {
       clearTimeout(timeout)
       dispatch(setPendingAlerts(previousAlerts))

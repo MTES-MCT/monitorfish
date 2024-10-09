@@ -2,8 +2,7 @@ import { Icon, Style } from 'ol/style'
 import CircleStyle from 'ol/style/Circle'
 import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
-import { COLORS } from '@constants/constants.ts'
-import { theme } from '../../../../ui/theme.ts'
+import { THEME } from '@mtes-mct/monitor-ui'
 
 const trackLineStyleCache = new Map()
 
@@ -17,7 +16,7 @@ export const getLineStyle = (isTimeEllipsis, trackType) => {
         weight: 4
       }),
       stroke: new Stroke({
-        color: isTimeEllipsis ? theme.color.charcoalShadow : trackType.color,
+        color: isTimeEllipsis ? THEME.color.charcoalShadow : trackType.color,
         width: 3,
         lineDash: isTimeEllipsis ? [0.1, 5] : []
       })
@@ -76,10 +75,10 @@ export const getFishingActivityCircleStyle = () => {
       image: new CircleStyle({
         radius: 3,
         fill: new Fill({
-          color: COLORS.gainsboro
+          color: THEME.color.gainsboro
         }),
         stroke: new Stroke({
-          color: COLORS.charcoal,
+          color: THEME.color.charcoal,
           width: 2
         })
       })

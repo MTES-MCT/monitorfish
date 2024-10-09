@@ -1,5 +1,5 @@
 import { removeVesselAlertAndUpdateReporting } from '@features/Vessel/slice'
-import { renderVessels } from '@features/Vessel/useCases/renderVessels'
+import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 
 import { silenceAlertFromAPI } from '../../../api/alert'
 import {
@@ -49,7 +49,7 @@ export const silenceAlert =
 
       const nextSilencedAlerts = [silencedAlert, ...previousSilencedAlerts]
       dispatch(setSilencedAlerts(nextSilencedAlerts))
-      await dispatch(renderVessels())
+      dispatch(renderVesselFeatures())
     } catch (error) {
       clearTimeout(timeout)
 

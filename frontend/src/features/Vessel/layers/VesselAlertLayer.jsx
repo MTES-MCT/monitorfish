@@ -15,7 +15,7 @@ import {
 } from '../../../domain/entities/vessel/vessel'
 import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser'
 import { monitorfishMap } from '../../map/monitorfishMap'
-import { vesselsAdapter, vesselSelectors } from '../slice'
+import { vesselSelectors } from '../slice'
 
 const VesselAlertLayer = () => {
   const isSuperUser = useIsSuperUser()

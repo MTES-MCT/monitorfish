@@ -1,6 +1,6 @@
-import { setNonFilteredVesselsAreHidden } from '@features/Filter/slice'
 import { VESSELS_VECTOR_LAYER } from '@features/Vessel/layers/VesselsLayer/constants'
-import { renderVessels } from '@features/Vessel/useCases/renderVessels'
+import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
+import { setNonFilteredVesselsAreHidden } from '@features/VesselFilter/slice'
 
 import { booleanToInt } from '../../../utils'
 
@@ -15,5 +15,5 @@ export const hideOrShowNonFilteredVessels =
       nonFilteredVesselsAreHidden: booleanToInt(areHidden)
     })
 
-    dispatch(renderVessels())
+    dispatch(renderVesselFeatures())
   }

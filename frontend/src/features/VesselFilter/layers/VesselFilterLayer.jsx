@@ -7,10 +7,10 @@ import { Stroke, Style } from 'ol/style'
 
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map/constants.ts'
 import { LayerProperties } from '../../../domain/entities/layers/constants.ts'
-import { COLORS } from '@constants/constants.ts'
 import { monitorfishMap } from '../../map/monitorfishMap.ts'
+import { THEME } from '@mtes-mct/monitor-ui'
 
-const FilterLayer = () => {
+const VesselFilterLayer = () => {
   const filters = useSelector(state => state.filter.filters)
   const zonesSelected = useSelector(state => state.vesselList.zonesSelected)
 
@@ -74,7 +74,7 @@ const FilterLayer = () => {
   useEffect(() => {
     layerRef?.current.setStyle(new Style({
       stroke: new Stroke({
-        color: currentDrawnFilterZone ? COLORS.charcoal : showedFilter?.filterColor,
+        color: currentDrawnFilterZone ? THEME.color.charcoal : showedFilter?.filterColor,
         width: 2,
         lineDash: [4, 8]
       })
@@ -84,4 +84,4 @@ const FilterLayer = () => {
   return null
 }
 
-export default React.memo(FilterLayer)
+export default React.memo(VesselFilterLayer)

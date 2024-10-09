@@ -1,6 +1,5 @@
 import { COLORS } from '@constants/constants'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { Filter } from './Filter'
@@ -12,7 +11,7 @@ export function Filters() {
   const filters = useMainAppSelector(state => state.filter.filters)
   const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
 
-  const isOpen = useMemo(() => rightMapBoxOpened === MapBox.FILTERS, [rightMapBoxOpened])
+  const isOpen = rightMapBoxOpened === MapBox.FILTERS
 
   return (
     <VesselFilterBox $isOpen={isOpen}>

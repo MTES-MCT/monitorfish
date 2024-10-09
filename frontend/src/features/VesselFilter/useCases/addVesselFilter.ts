@@ -1,16 +1,16 @@
-import { filterAdded } from '@features/Filter/slice'
 import { applyFilterToVessels } from '@features/Vessel/useCases/applyFilterToVessels'
-import { renderVessels } from '@features/Vessel/useCases/renderVessels'
+import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
+import { filterAdded } from '@features/VesselFilter/slice'
 
-import type { VesselFilter } from '@features/Filter/types'
+import type { VesselFilter } from '@features/VesselFilter/types'
 import type { MainAppThunk } from '@store'
 
-export const addFilter =
+export const addVesselFilter =
   (filter: VesselFilter): MainAppThunk =>
   async dispatch => {
     await dispatch(filterAdded(filter))
 
     await dispatch(applyFilterToVessels())
 
-    dispatch(renderVessels())
+    dispatch(renderVesselFeatures())
   }

@@ -223,7 +223,7 @@ class VesselController(
     fun searchVessel(
         @Parameter(
             description =
-                "Vessel internal reference number (CFR), external marker, IRCS, MMSI, name or beacon number",
+            "Vessel internal reference number (CFR), external marker, IRCS, MMSI, name or beacon number",
             required = true,
         )
         @RequestParam(name = "searched")
@@ -242,7 +242,7 @@ class VesselController(
         internalReferenceNumber: String,
         @Parameter(
             description =
-                "Voyage request (LAST, PREVIOUS or NEXT) with respect to date",
+            "Voyage request (LAST, PREVIOUS or NEXT) with respect to date",
             required = true,
         )
         @RequestParam(name = "voyageRequest")
@@ -291,7 +291,7 @@ class VesselController(
                 .with(TemporalAdjusters.firstDayOfYear())
                 .truncatedTo(ChronoUnit.DAYS)
 
-        val currentAndArchivedReportings = getVesselReportings.execute(vesselId, fromDate)
+        val currentAndArchivedReportings = getVesselReportings.execute(vesselId, fromDate = fromDate)
 
         return VesselReportingsDataOutput.fromCurrentAndArchivedReporting(currentAndArchivedReportings)
     }

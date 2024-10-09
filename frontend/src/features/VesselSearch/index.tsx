@@ -14,6 +14,7 @@ import { VesselSearchResult } from './VesselSearchResult'
 import { getOnlyVesselIdentityProperties } from '../../domain/entities/vessel/vessel'
 import { searchVessels as searchVesselsAction } from '../../domain/use_cases/vessel/searchVessels'
 import { showVessel } from '../../domain/use_cases/vessel/showVessel'
+import { vesselSelectors } from '../Vessel/slice'
 
 import type { VesselIdentity } from '../../domain/entities/vessel/types'
 import type { ChangeEvent, InputHTMLAttributes, MutableRefObject } from 'react'
@@ -51,7 +52,7 @@ export function VesselSearch({
   const dispatch = useMainAppDispatch()
   const baseUrl = window.location.origin
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
-  const vessels = useMainAppSelector(state => state.vessel.vessels)
+  const vessels = useMainAppSelector(state => vesselSelectors.selectAll(state.vessel.vessels))
   const searchQueryRef = useRef('')
   const wrapperRef = useRef(null)
 
@@ -108,9 +109,7 @@ export function VesselSearch({
 
   const findVessels = useCallback(
     async (searchQuery: string) => {
-      const vesselsFromMap = fuse
-        .search(searchQuery)
-        .map(result => getOnlyVesselIdentityProperties(result.item.vesselProperties))
+      const vesselsFromMap = fuse.search(searchQuery).map(result => getOnlyVesselIdentityProperties(result.item))
 
       const nextFoundVesselsFromAPI = await dispatch(searchVesselsAction(searchQuery.toUpperCase()))
       if (!nextFoundVesselsFromAPI) {

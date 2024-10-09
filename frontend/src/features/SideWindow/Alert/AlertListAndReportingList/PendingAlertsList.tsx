@@ -1,4 +1,5 @@
 import { SeafrontGroup } from '@constants/seafront'
+import { sortArrayByColumn, SortType } from '@features/Vessel/components/VesselList/tableSort'
 import { CustomSearch, ExclamationPoint, THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { FlexboxGrid, List } from 'rsuite'
@@ -13,7 +14,6 @@ import { silenceAlert } from '../../../../domain/use_cases/alert/silenceAlert'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import SearchIconSVG from '../../../icons/Loupe_dark.svg?react'
-import { sortArrayByColumn, SortType } from '../../../VesselList/tableSort'
 import { SUB_MENU_LABEL } from '../constants'
 import { resetFocusOnPendingAlert } from '../slice'
 

@@ -221,17 +221,6 @@ const regulatorySlice = createSlice({
       state.regulatoryZoneMetadataPanelIsOpen = true
     },
 
-    /**
-     * Set the regulation searched zone extent - used to fit the extent into the OpenLayers view
-     * @function setProcessingRegulationSearchedZoneExtent
-     * @memberOf RegulatoryReducer
-     * @param {Object=} state
-     * @param {{payload: number[]}} action - the extent
-     */
-    setProcessingRegulationSearchedZoneExtent(state, action) {
-      state.regulationSearchedZoneExtent = action.payload
-    },
-
     setRegulatoryGeometriesToPreview(state, action: PayloadAction<Partial<RegulatoryZone>[]>) {
       state.regulatoryZonesToPreview = action.payload
     },
@@ -313,6 +302,17 @@ const regulatorySlice = createSlice({
       state.regulatoryZones = action.payload
     },
 
+    /**
+     * Set the regulation searched zone extent - used to fit the extent into the OpenLayers view
+     * @function setSearchedRegulationZoneExtent
+     * @memberOf RegulatoryReducer
+     * @param {Object=} state
+     * @param {{payload: number[]}} action - the extent
+     */
+    setSearchedRegulationZoneExtent(state, action) {
+      state.regulationSearchedZoneExtent = action.payload
+    },
+
     setSelectedRegulatoryZone(state, action) {
       if (action.payload?.length) {
         const regulatoryLayers = action.payload
@@ -369,20 +369,18 @@ export const {
   addRegulatoryZonesToMyLayers,
   closeRegulatoryZoneMetadataPanel,
   removeRegulatoryTopicOpened,
-  removeSelectedZoneById,
-  removeSelectedZonesByTopic,
   resetLoadingRegulatoryZoneMetadata,
   resetRegulatoryGeometriesToPreview,
   setLawTypeOpened,
   setLayersTopicsByRegTerritory,
   setLoadingRegulatoryZoneMetadata,
-  setProcessingRegulationSearchedZoneExtent,
   setRegulatoryGeometriesToPreview,
   setRegulatoryLayerLawTypes,
   setRegulatoryTopics,
   setRegulatoryTopicsOpened,
   setRegulatoryZoneMetadata,
   setRegulatoryZones,
+  setSearchedRegulationZoneExtent,
   setSelectedRegulatoryZone,
   showSimplifiedGeometries,
   showWholeGeometries

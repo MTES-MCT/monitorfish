@@ -7,7 +7,7 @@ import { assertAll } from '../../utils/assertAll'
 import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 
-context('Side Window > Prior Notification List > Filter Bar', () => {
+context('Side Window > Prior Notification List > VesselFilter Bar', () => {
   const apiPathBase = '/bff/v1/prior_notifications?'
 
   it('Should filter prior notifications by seafront group', () => {

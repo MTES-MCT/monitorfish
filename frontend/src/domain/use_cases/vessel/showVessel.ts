@@ -1,15 +1,15 @@
+import { getVesselFromAPI } from '@api/vessel'
+import { logbookActions } from '@features/Logbook/slice'
+import { loadingVessel, resetLoadingVessel, setSelectedVessel, vesselSelectors } from '@features/Vessel/slice'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { captureMessage } from '@sentry/react'
 
-import { getVesselFromAPI } from '../../../api/vessel'
-import { logbookActions } from '../../../features/Logbook/slice'
 import { Vessel } from '../../entities/vessel/vessel'
 import { getCustomOrDefaultTrackRequest, throwCustomErrorFromAPIFeedback } from '../../entities/vesselTrackDepth'
 import { displayedComponentActions } from '../../shared_slices/DisplayedComponent'
 import { displayedErrorActions } from '../../shared_slices/DisplayedError'
 import { addSearchedVessel, removeError, setError } from '../../shared_slices/Global'
 import { doNotAnimate } from '../../shared_slices/Map'
-import { loadingVessel, resetLoadingVessel, setSelectedVessel } from '../../shared_slices/Vessel'
 import { displayOrLogError } from '../error/displayOrLogError'
 
 import type { VesselIdentity } from '../../entities/vessel/types'
@@ -22,7 +22,8 @@ export const showVessel =
   (vesselIdentity: VesselIdentity, isFromSearch: boolean, isFromUserAction: boolean) => async (dispatch, getState) => {
     try {
       const { fishingActivities, map, vessel } = getState()
-      const { selectedVesselTrackRequest, vessels } = vessel
+      const { selectedVesselTrackRequest } = vessel
+      const vessels = vesselSelectors.selectAll(getState().vessel.vessels)
       const { defaultVesselTrackDepth } = map
       const { areFishingActivitiesShowedOnMap } = fishingActivities
       // TODO How to handle both the control unit dialog and the vessel sidebar ?
@@ -36,7 +37,7 @@ export const showVessel =
       const vesselFeatureId = Vessel.getVesselFeatureId(vesselIdentity)
       const selectedVesselLastPosition: VesselTypes.VesselEnhancedObject | undefined = vessels.find(
         lastPosition => lastPosition.vesselFeatureId === vesselFeatureId
-      )?.vesselProperties
+      )
 
       dispatchLoadingVessel(dispatch, isFromUserAction, vesselIdentity)
       const nextTrackRequest = getCustomOrDefaultTrackRequest(

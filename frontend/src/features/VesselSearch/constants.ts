@@ -5,12 +5,6 @@ export const VESSEL_SEARCH_OPTIONS: IFuseOptions<VesselEnhancedLastPositionWebGL
   distance: 50,
   // eslint-disable-next-line @typescript-eslint/naming-convention
   includeScore: true,
-  keys: [
-    ['vesselProperties', 'vesselName'],
-    ['vesselProperties', 'internalReferenceNumber'],
-    ['vesselProperties', 'externalReferenceNumber'],
-    ['vesselProperties', 'mmsi'],
-    ['vesselProperties', 'ircs']
-  ],
+  keys: ['vesselName', 'internalReferenceNumber', 'externalReferenceNumber', 'mmsi', 'ircs'],
   threshold: 0.4
 }

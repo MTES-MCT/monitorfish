@@ -8,12 +8,12 @@ import styled from 'styled-components'
 
 import { FavoriteVessel } from './FavoriteVessel'
 import { getVesselCompositeIdentifier } from '../../../../../domain/entities/vessel/vessel'
-import { setHideNonSelectedVessels } from '../../../../../domain/shared_slices/Vessel'
 import { MapPropertyTrigger } from '../../../../commonComponents/MapPropertyTrigger'
 import { MapComponent } from '../../../../commonStyles/MapComponent'
 import HidingOtherTracksSVG from '../../../../icons/Bouton_masquer_pistes_actif.svg?react'
 import ShowingOtherTracksSVG from '../../../../icons/Bouton_masquer_pistes_inactif.svg?react'
 import FavoriteSVG from '../../../../icons/favorite.svg?react'
+import { setHideNonSelectedVessels } from '../../../../Vessel/slice'
 import { MapButton } from '../MapButton'
 
 export function FavoriteVessels() {

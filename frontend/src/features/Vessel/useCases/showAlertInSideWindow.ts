@@ -15,7 +15,7 @@ export const showAlertInSideWindow =
         flagState: selectedVessel.flagState,
         internalReferenceNumber: selectedVessel.internalReferenceNumber,
         ircs: selectedVessel.ircs,
-        name: selectedVessel?.alerts[0] ?? null
+        name: selectedVessel.alerts?.length ? selectedVessel?.alerts[0] : null
       })
     )
   }

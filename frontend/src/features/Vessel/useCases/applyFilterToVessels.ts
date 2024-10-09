@@ -1,22 +1,26 @@
 import { setError } from '../../../domain/shared_slices/Global'
-import { setAllVesselsAsUnfiltered, setFilteredVesselsFeatures } from '../../../domain/shared_slices/Vessel'
 import { getFilteredVessels } from '../../../domain/use_cases/vessel/getFilteredVessels'
 import NoVesselsInFilterError from '../../../errors/NoVesselsInFilterError'
+import { setAllVesselsAsUnfiltered, setFilteredVesselsFeatures, vesselSelectors } from '../slice'
 
 import type { MainAppThunk } from '@store'
 
-export const applyFilterToVessels = (): MainAppThunk => (dispatch, getState) => {
+export const applyFilterToVessels = (): MainAppThunk => async (dispatch, getState) => {
   const showedFilter = getState().filter?.filters?.find(filter => filter.showed)
-  const { vessels } = getState().vessel
+  const vessels = vesselSelectors.selectAll(getState().vessel.vessels)
   if (!showedFilter) {
-    return dispatch(setAllVesselsAsUnfiltered())
+    dispatch(setAllVesselsAsUnfiltered())
+
+    return
   }
 
-  return dispatch(getFilteredVessels(vessels, showedFilter.filters)).then(filteredVessels => {
-    if (!filteredVessels?.length) {
-      dispatch(setError(new NoVesselsInFilterError("Il n'y a pas de navire dans ce filtre")))
-    }
-    const filteredVesselsUids = filteredVessels.map(vessel => vessel.vesselFeatureId)
-    dispatch(setFilteredVesselsFeatures(filteredVesselsUids))
-  })
+  const filteredVessels = await dispatch(getFilteredVessels(vessels, showedFilter.filters))
+  if (!filteredVessels?.length) {
+    dispatch(setError(new NoVesselsInFilterError("Il n'y a pas de navire dans ce filtre")))
+
+    return
+  }
+
+  const filteredVesselsUids = filteredVessels.map(vessel => vessel.vesselFeatureId)
+  dispatch(setFilteredVesselsFeatures(filteredVesselsUids))
 }

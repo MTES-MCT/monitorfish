@@ -1,3 +1,4 @@
+import { Flag } from '@features/Vessel/components/VesselList/tableCells'
 import countries from 'i18n-iso-countries'
 import { useEffect, useMemo, useRef } from 'react'
 import { batch } from 'react-redux'
@@ -12,7 +13,6 @@ import { validateAlert } from '../../../../domain/use_cases/alert/validateAlert'
 import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { Flag } from '../../../VesselList/tableCells'
 
 import type { LEGACY_PendingAlert } from '../../../../domain/entities/alerts/types'
 import type { MutableRefObject, CSSProperties } from 'react'

@@ -1,4 +1,4 @@
-import { updateVesselTrackAsToHide } from '../../shared_slices/Vessel'
+import { updateVesselTrackAsToHide } from '@features/Vessel/slice'
 
 import type { VesselCompositeIdentifier } from '../../entities/vessel/types'
 

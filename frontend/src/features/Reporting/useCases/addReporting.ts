@@ -1,10 +1,11 @@
 import { addReportingFromAPI } from '@api/reporting'
 import { getVesselReportings } from '@features/Reporting/useCases/getVesselReportings'
+import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { Vessel } from '../../../domain/entities/vessel/vessel'
-import { addVesselReporting } from '../../../domain/shared_slices/Vessel'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
+import { addVesselReporting } from '../../Vessel/slice'
 import { addReportingToCurrentReportings } from '../slice'
 
 import type { ReportingCreation } from '@features/Reporting/types'
@@ -25,6 +26,7 @@ export const addReporting =
           vesselFeatureId: Vessel.getVesselFeatureId(selectedVesselIdentity)
         })
       )
+      dispatch(renderVesselFeatures())
       await dispatch(getVesselReportings(true))
     } catch (error) {
       dispatch(

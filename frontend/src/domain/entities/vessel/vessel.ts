@@ -5,6 +5,7 @@ import { BaseLayers } from '../layers/constants'
 import { MonitorFishLayer } from '../layers/types'
 
 import type { ShowedVesselTrack, VesselCompositeIdentifier, VesselIdentity } from './types'
+import type { PartialExcept } from '../../../types'
 import type { LastPositionVisibility } from '../../types/map'
 import type { Reporting } from '@features/Reporting/types'
 import type { Vessel as VesselTypes } from '@features/Vessel/Vessel.types'
@@ -42,7 +43,24 @@ export class Vessel {
    * @return The label object
    */
   static getVesselFeatureLabel(
-    feature: VesselTypes.VesselEnhancedObject,
+    feature: PartialExcept<
+      VesselTypes.VesselEnhancedObject,
+      | 'beaconMalfunctionId'
+      | 'dateTime'
+      | 'detectabilityRiskFactor'
+      | 'flagState'
+      | 'impactRiskFactor'
+      | 'internalReferenceNumber'
+      | 'isAtPort'
+      | 'lastControlDateTime'
+      | 'probabilityRiskFactor'
+      | 'riskFactor'
+      | 'segments'
+      | 'underCharter'
+      | 'vesselId'
+      | 'vesselIdentifier'
+      | 'vesselName'
+    >,
     options: {
       hideVesselsAtPort: boolean
       isRiskFactorShowed: boolean

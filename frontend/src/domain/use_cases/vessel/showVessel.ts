@@ -1,6 +1,5 @@
 import { getVesselFromAPI } from '@api/vessel'
 import { logbookActions } from '@features/Logbook/slice'
-import { mainWindowReportingActions } from '@features/Reporting/mainWindowReporting.slice'
 import { loadingVessel, resetLoadingVessel, setSelectedVessel, vesselSelectors } from '@features/Vessel/slice'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { captureMessage } from '@sentry/react'
@@ -110,5 +109,4 @@ function dispatchLoadingVessel(dispatch, isFromUserAction: boolean, vesselIdenti
       vesselIdentity
     })
   )
-  dispatch(mainWindowReportingActions.setVesselIdentity(vesselIdentity))
 }

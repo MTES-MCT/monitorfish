@@ -4,6 +4,7 @@ import { reportingApi } from '@features/Reporting/reportingApi'
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { useEffect, useRef, useState } from 'react'
 
+import { RtkCacheTagType } from './constants'
 import { useIsSuperUser } from '../auth/hooks/useIsSuperUser'
 import { SideWindowStatus } from '../domain/entities/sideWindow/constants'
 import { VesselSidebarTab } from '../domain/entities/vessel/vessel'
@@ -29,7 +30,6 @@ export const THIRTY_SECONDS = 30 * 1000
 export function APIWorker() {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
-  const archivedReportingsFromDate = useMainAppSelector(state => state.mainWindowReporting.archivedReportingsFromDate)
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
   const vesselSidebarTab = useMainAppSelector(state => state.vessel.vesselSidebarTab)
   const sideWindow = useMainAppSelector(state => state.sideWindow)
@@ -136,25 +136,13 @@ export function APIWorker() {
     if (vesselSidebarTab === VesselSidebarTab.CONTROLS) {
       dispatch(getVesselControls(false))
     } else if (vesselSidebarTab === VesselSidebarTab.REPORTING && selectedVesselIdentity) {
-      dispatch(
-        vesselApi.endpoints.getVesselReportingsByVesselIdentity.initiate({
-          fromDate: archivedReportingsFromDate,
-          vesselIdentity: selectedVesselIdentity
-        })
-      )
+      dispatch(vesselApi.util.invalidateTags([RtkCacheTagType.Reportings]))
     } else if (isSuperUser && vesselSidebarTab === VesselSidebarTab.ERSVMS) {
       dispatch(getVesselBeaconMalfunctions(false))
     }
 
     setUpdateVesselSidebarTab(false)
-  }, [
-    archivedReportingsFromDate,
-    dispatch,
-    isSuperUser,
-    selectedVesselIdentity,
-    updateVesselSidebarTab,
-    vesselSidebarTab
-  ])
+  }, [dispatch, isSuperUser, selectedVesselIdentity, updateVesselSidebarTab, vesselSidebarTab])
 
   return null
 }

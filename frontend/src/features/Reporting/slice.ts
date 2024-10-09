@@ -16,7 +16,7 @@ const INITIAL_STATE: ReportingState = {
   vesselIdentity: undefined
 }
 
-const mainWindowReportingSlice = createSlice({
+const reportingSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'reporting',
   reducers: {
@@ -34,15 +34,15 @@ const mainWindowReportingSlice = createSlice({
     /**
      * Set the edited reporting
      */
-    setEditedReporting(state, action: PayloadAction<Reporting.EditableReporting | undefined>) {
+    setEditedReporting(state, action: PayloadAction<Reporting.EditableReporting>) {
       state.editedReporting = action.payload
     },
 
-    setVesselIdentity(state, action: PayloadAction<VesselIdentity>) {
-      state.vesselIdentity = action.payload
+    unsetEditedReporting(state) {
+      state.editedReporting = undefined
     }
   }
 })
 
-export const mainWindowReportingActions = mainWindowReportingSlice.actions
-export const mainWindowReportingReducer = mainWindowReportingSlice.reducer
+export const reportingActions = reportingSlice.actions
+export const reportingReducer = reportingSlice.reducer

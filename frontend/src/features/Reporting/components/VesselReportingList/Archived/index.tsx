@@ -1,64 +1,39 @@
 import { Header, Zone } from '@features/Vessel/components/VesselSidebar/common_styles/common.style'
-import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
-import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Button, customDayjs, THEME } from '@mtes-mct/monitor-ui'
-import { skipToken } from '@reduxjs/toolkit/query'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { YearReportings } from './YearReportings'
-import { mainWindowReportingActions } from '../../../mainWindowReporting.slice'
 
-import type { ReportingAndOccurrences } from '@features/Reporting/types'
+import type { VesselReportings } from '@features/Reporting/types'
+import type { Promisable } from 'type-fest'
 
-export function Archived() {
-  const dispatch = useMainAppDispatch()
-  const archivedReportingsFromDate = useMainAppSelector(state => state.mainWindowReporting.archivedReportingsFromDate)
-  const vesselIdentity = useMainAppSelector(state => state.mainWindowReporting.vesselIdentity)
-
-  const { data: selectedVesselReportings } = useGetVesselReportingsByVesselIdentityQuery(
-    vesselIdentity
-      ? {
-          fromDate: archivedReportingsFromDate,
-          vesselIdentity
-        }
-      : skipToken
+type ArchivedProps = Readonly<{
+  fromDate: Date
+  onMore: (() => Promisable<void>) | undefined
+  vesselReportings: VesselReportings
+}>
+export function Archived({ fromDate, onMore, vesselReportings }: ArchivedProps) {
+  const reportingsByYearAsPairs = useMemo(
+    () => Object.entries(vesselReportings.archived).sort(([a], [b]) => Number(b) - Number(a)),
+    [vesselReportings.archived]
   )
-
-  const yearsToReportings = selectedVesselReportings?.archived
-
-  const seeMore = () => {
-    const nextDate = customDayjs(archivedReportingsFromDate).subtract(1, 'year').toISOString()
-
-    dispatch(mainWindowReportingActions.setArchivedReportingsFromDate(nextDate))
-  }
 
   return (
     <Zone data-cy="vessel-sidebar-reporting-tab-history">
       <Header>Historique des signalements</Header>
-      {yearsToReportings && Object.keys(yearsToReportings)?.length ? (
+      {reportingsByYearAsPairs.length === 0 && (
+        <NoReporting>{`Aucun signalement depuis ${customDayjs(fromDate).get('year')}`}</NoReporting>
+      )}
+      {reportingsByYearAsPairs.length > 0 && (
         <List>
-          {Object.keys(yearsToReportings)
-            .sort((a, b) => Number(b) - Number(a))
-            .map(
-              year =>
-                yearsToReportings[year] && (
-                  <YearReportings
-                    key={year}
-                    year={Number(year)}
-                    yearReportings={yearsToReportings[year] as ReportingAndOccurrences[]}
-                  />
-                )
-            )}
+          {reportingsByYearAsPairs.map(([year, reportingAndOccurences]) => (
+            <YearReportings key={year} reportingAndOccurences={reportingAndOccurences} year={year} />
+          ))}
         </List>
-      ) : (
-        <NoReporting>
-          Aucun signalement{' '}
-          {!!archivedReportingsFromDate && `depuis ${customDayjs(archivedReportingsFromDate).get('year')}`}
-        </NoReporting>
       )}
       <SeeMoreBackground>
-        <Button accent={Accent.SECONDARY} onClick={seeMore}>
+        <Button accent={Accent.SECONDARY} onClick={onMore}>
           Afficher plus de signalements
         </Button>
       </SeeMoreBackground>

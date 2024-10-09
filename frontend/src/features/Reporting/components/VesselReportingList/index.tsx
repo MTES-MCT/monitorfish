@@ -1,6 +1,7 @@
 import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { Summary } from '@features/Reporting/components/VesselReportingList/Summary'
 import { THEME } from '@mtes-mct/monitor-ui'
+import { useState } from 'react'
 import styled from 'styled-components'
 
 import { Archived } from './Archived'
@@ -8,19 +9,27 @@ import { VesselReportingListTab } from './constants'
 import { Current } from './Current'
 
 import type { VesselReportings } from '@features/Reporting/types'
+import type { VesselIdentity } from 'domain/entities/vessel/types'
+import type { Promisable } from 'type-fest'
 
 type VesselReportingListProps = Readonly<{
-  onTabChange?: (nextTab: VesselReportingListTab) => void
-  selectedTab?: VesselReportingListTab
+  defaultTab?: VesselReportingListTab
+  fromDate: Date
+  onMore?: () => Promisable<void>
+  vesselIdOrIdentity: number | VesselIdentity
   vesselReportings: VesselReportings | undefined
   withTabs?: boolean
 }>
 export function VesselReportingList({
-  onTabChange,
-  selectedTab = VesselReportingListTab.CURRENT_REPORTING,
+  defaultTab = VesselReportingListTab.CURRENT_REPORTING,
+  fromDate,
+  onMore,
+  vesselIdOrIdentity,
   vesselReportings,
   withTabs = false
 }: VesselReportingListProps) {
+  const [selectedTab, setSelectedTab] = useState<VesselReportingListTab>(defaultTab)
+
   return (
     <>
       {!vesselReportings && <FingerprintSpinner className="radar" color={THEME.color.charcoal} size={100} />}
@@ -30,24 +39,26 @@ export function VesselReportingList({
             <Menu>
               <CurrentOrHistoryButton
                 $isActive={selectedTab === VesselReportingListTab.CURRENT_REPORTING}
-                onClick={() => (onTabChange ? onTabChange(VesselReportingListTab.CURRENT_REPORTING) : undefined)}
+                onClick={() => setSelectedTab(VesselReportingListTab.CURRENT_REPORTING)}
               >
                 Signalements en cours ({vesselReportings.current.length})
               </CurrentOrHistoryButton>
               <CurrentOrHistoryButton
                 $isActive={selectedTab === VesselReportingListTab.REPORTING_HISTORY}
                 data-cy="vessel-sidebar-reporting-tab-history-button"
-                onClick={() => (onTabChange ? onTabChange(VesselReportingListTab.REPORTING_HISTORY) : undefined)}
+                onClick={() => setSelectedTab(VesselReportingListTab.REPORTING_HISTORY)}
               >
                 Historique des signalements
               </CurrentOrHistoryButton>
             </Menu>
           )}
-          {selectedTab === VesselReportingListTab.CURRENT_REPORTING && <Current />}
+          {selectedTab === VesselReportingListTab.CURRENT_REPORTING && (
+            <Current vesselIdOrIdentity={vesselIdOrIdentity} vesselReportings={vesselReportings} />
+          )}
           {selectedTab === VesselReportingListTab.REPORTING_HISTORY && (
             <>
-              <Summary />
-              <Archived />
+              <Summary fromDate={fromDate} vesselReportings={vesselReportings} />
+              <Archived fromDate={fromDate} onMore={onMore} vesselReportings={vesselReportings} />
             </>
           )}
         </Body>

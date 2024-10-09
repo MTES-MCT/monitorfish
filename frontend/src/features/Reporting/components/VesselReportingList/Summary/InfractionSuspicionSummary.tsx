@@ -1,52 +1,42 @@
-import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Link } from '@mtes-mct/monitor-ui'
-import { skipToken } from '@reduxjs/toolkit/query'
 import { pluralize } from '@utils/pluralize'
 import { useState } from 'react'
 import styled from 'styled-components'
 
+import type { ReportingSummary } from '@features/Reporting/types'
+
 const DEFAULT_INFRACTIONS_DISPLAYED = 5
 
-export function InfractionSuspicionSummary() {
-  const archivedReportingsFromDate = useMainAppSelector(state => state.mainWindowReporting.archivedReportingsFromDate)
-  const vesselIdentity = useMainAppSelector(state => state.mainWindowReporting.vesselIdentity)
-
-  const { data: selectedVesselReportings } = useGetVesselReportingsByVesselIdentityQuery(
-    vesselIdentity
-      ? {
-          fromDate: archivedReportingsFromDate,
-          vesselIdentity
-        }
-      : skipToken
-  )
-
+type InfractionSuspicionSummaryProps = Readonly<{
+  reportingSummary: ReportingSummary
+}>
+export function InfractionSuspicionSummary({ reportingSummary }: InfractionSuspicionSummaryProps) {
   const [areAllInfractionsSuspicionShowed, setAreAllInfractionsSuspicionShowed] = useState(false)
 
-  const summary = selectedVesselReportings?.summary
   const displayedInfractionsSuspicion =
-    summary?.infractionSuspicionsSummary.slice(
+    reportingSummary.infractionSuspicionsSummary.slice(
       0,
       areAllInfractionsSuspicionShowed
-        ? (summary?.infractionSuspicionsSummary?.length ?? DEFAULT_INFRACTIONS_DISPLAYED)
+        ? (reportingSummary.infractionSuspicionsSummary?.length ?? DEFAULT_INFRACTIONS_DISPLAYED)
         : DEFAULT_INFRACTIONS_DISPLAYED
     ) ?? []
 
   return (
     <Wrapper>
       <Label>
-        Suspicions d&apos;infraction <LabelNumber>{summary?.numberOfInfractionSuspicions}</LabelNumber>
+        Suspicions d&apos;infraction <LabelNumber>{reportingSummary.numberOfInfractionSuspicions}</LabelNumber>
       </Label>
-      {displayedInfractionsSuspicion.map(infractionSuspicion => (
-        <InfractionSuspicion>
+      {displayedInfractionsSuspicion.map((infractionSuspicion, index) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <InfractionSuspicion key={`${infractionSuspicion.title}-${index}`}>
           <BadgeNumber>{infractionSuspicion.numberOfOccurrences}</BadgeNumber>
           <Name title={infractionSuspicion.title}>
             {pluralize('Signalement', infractionSuspicion.numberOfOccurrences)} &quot;{infractionSuspicion.title}&quot;
           </Name>
         </InfractionSuspicion>
       ))}
-      {!!summary?.infractionSuspicionsSummary &&
-        summary.infractionSuspicionsSummary.length > DEFAULT_INFRACTIONS_DISPLAYED && (
+      {!!reportingSummary.infractionSuspicionsSummary &&
+        reportingSummary.infractionSuspicionsSummary.length > DEFAULT_INFRACTIONS_DISPLAYED && (
           <OpenAllInfractionsSuspicion
             onClick={() => setAreAllInfractionsSuspicionShowed(!areAllInfractionsSuspicionShowed)}
           >

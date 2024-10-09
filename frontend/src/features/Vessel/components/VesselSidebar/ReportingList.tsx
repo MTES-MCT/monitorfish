@@ -1,5 +1,5 @@
-import { CardReportingList } from '@features/Reporting/components/CardReportingList'
-import { ReportingTab } from '@features/Reporting/components/CardReportingList/constants'
+import { VesselReportingList } from '@features/Reporting/components/VesselReportingList'
+import { ReportingTab } from '@features/Reporting/components/VesselReportingList/constants'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { usePrevious } from '@mtes-mct/monitor-ui'
 import { useEffect, useState } from 'react'
@@ -22,7 +22,7 @@ export function ReportingList() {
   }, [previousSelectedVesselIdentity, selectedVesselIdentity])
 
   return (
-    <CardReportingList
+    <VesselReportingList
       fromDate={archivedReportingsFromDate}
       onTabChange={setSelectedReportingTab}
       selectedReportingTab={selectedReportingTab}

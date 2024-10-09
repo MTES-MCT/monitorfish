@@ -1,39 +1,26 @@
 import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { Summary } from '@features/Reporting/components/VesselReportingList/Summary'
-import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
 import { THEME } from '@mtes-mct/monitor-ui'
-import { skipToken } from '@reduxjs/toolkit/query'
 import styled from 'styled-components'
 
 import { Archived } from './Archived'
 import { VesselReportingListTab } from './constants'
 import { Current } from './Current'
 
-import type { VesselIdentity } from 'domain/entities/vessel/types'
+import type { VesselReportings } from '@features/Reporting/types'
 
 type VesselReportingListProps = Readonly<{
-  fromDate: string
   onTabChange?: (nextTab: VesselReportingListTab) => void
-  selectedTab: VesselReportingListTab
-  vesselIdentity: VesselIdentity | undefined
+  selectedTab?: VesselReportingListTab
+  vesselReportings: VesselReportings | undefined
   withTabs?: boolean
 }>
 export function VesselReportingList({
-  fromDate,
   onTabChange,
-  selectedTab,
-  vesselIdentity,
+  selectedTab = VesselReportingListTab.CURRENT_REPORTING,
+  vesselReportings,
   withTabs = false
 }: VesselReportingListProps) {
-  const { data: vesselReportings } = useGetVesselReportingsByVesselIdentityQuery(
-    vesselIdentity
-      ? {
-          fromDate,
-          vesselIdentity
-        }
-      : skipToken
-  )
-
   return (
     <>
       {!vesselReportings && <FingerprintSpinner className="radar" color={THEME.color.charcoal} size={100} />}

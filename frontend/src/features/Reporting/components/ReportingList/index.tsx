@@ -1,7 +1,7 @@
 import { WindowContext } from '@api/constants'
 import { ErrorWall } from '@components/ErrorWall'
 import { SeafrontGroup } from '@constants/seafront'
-import { sideWindowReportingActions } from '@features/Reporting/sideWindowReporting.slice'
+import { reportingActions } from '@features/Reporting/slice'
 import { ReportingType } from '@features/Reporting/types'
 import { isNotObservationReporting } from '@features/Reporting/utils'
 import { Flag } from '@features/Vessel/components/VesselList/tableCells'
@@ -29,7 +29,6 @@ import { CardTableRow } from '../../../../ui/card-table/CardTableRow'
 import { EmptyCardTable } from '../../../../ui/card-table/EmptyCardTable'
 import { FilterTableInput } from '../../../../ui/card-table/FilterTableInput'
 import { EditReporting } from '../../../SideWindow/Alert/AlertListAndReportingList/EditReporting'
-import { mainWindowReportingActions } from '../../mainWindowReporting.slice'
 import { archiveReportings } from '../../useCases/archiveReportings'
 import { deleteReportings } from '../../useCases/deleteReportings'
 
@@ -46,14 +45,8 @@ type ReportingListProps = Readonly<{
   currentReportings: Reporting.Reporting[]
   displayedError: DisplayedErrorStateValue | undefined
   selectedSeafrontGroup: SeafrontGroup
-  windowContext: WindowContext
 }>
-export function ReportingList({
-  currentReportings,
-  displayedError,
-  selectedSeafrontGroup,
-  windowContext
-}: ReportingListProps) {
+export function ReportingList({ currentReportings, displayedError, selectedSeafrontGroup }: ReportingListProps) {
   const dispatch = useMainAppDispatch()
   const searchInputRef = useRef() as MutableRefObject<HTMLInputElement>
 
@@ -83,8 +76,8 @@ export function ReportingList({
       return
     }
 
-    dispatch(archiveReportings(currentReportings, tableCheckedIds.map(Number), windowContext))
-  }, [currentReportings, dispatch, tableCheckedIds, windowContext])
+    dispatch(archiveReportings(currentReportings, tableCheckedIds.map(Number), WindowContext.SideWindow))
+  }, [currentReportings, dispatch, tableCheckedIds])
 
   const download = useCallback(() => {
     const checkedCurrentSeafrontReportings = getTableCheckedData()
@@ -120,17 +113,14 @@ export function ReportingList({
 
   // TODO Rather use a reporting id here than passing a copy of the whole Reporting object.
   const edit = useCallback(
-    (isDisabled: boolean, reporting: InfractionSuspicionReporting | ObservationReporting) => {
-      if (!isDisabled) {
-        dispatch(
-          (windowContext === WindowContext.MainWindow
-            ? mainWindowReportingActions
-            : sideWindowReportingActions
-          ).setEditedReporting(reporting)
-        )
+    (isDisabled: boolean, reporting: Reporting.EditableReporting) => {
+      if (isDisabled) {
+        return
       }
+
+      dispatch(reportingActions.setEditedReporting(reporting))
     },
-    [dispatch, windowContext]
+    [dispatch]
   )
 
   const focusOnMap = useCallback(
@@ -145,8 +135,8 @@ export function ReportingList({
       return
     }
 
-    dispatch(deleteReportings(currentReportings, tableCheckedIds.map(Number), windowContext))
-  }, [currentReportings, dispatch, tableCheckedIds, windowContext])
+    dispatch(deleteReportings(currentReportings, tableCheckedIds.map(Number), WindowContext.SideWindow))
+  }, [currentReportings, dispatch, tableCheckedIds])
 
   function getVesselNameTitle(reporting) {
     return [
@@ -161,14 +151,7 @@ export function ReportingList({
   if (displayedError) {
     return (
       <Content>
-        <ErrorWall
-          displayedErrorKey={
-            windowContext === WindowContext.MainWindow
-              ? DisplayedErrorKey.MAIN_WINDOW_REPORTING_LIST_ERROR
-              : DisplayedErrorKey.SIDE_WINDOW_REPORTING_LIST_ERROR
-          }
-          isAbsolute
-        />
+        <ErrorWall displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_REPORTING_LIST_ERROR} isAbsolute />
       </Content>
     )
   }

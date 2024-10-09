@@ -1,18 +1,36 @@
 import { WindowContext } from '@api/constants'
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { getVesselIdentityFromVessel } from '@features/Vessel/utils'
+import { useGetVesselQuery } from '@features/Vessel/vesselApi'
 import { Accent, Icon, IconButton, Size, THEME } from '@mtes-mct/monitor-ui'
-import { assertNotNullish } from '@utils/assertNotNullish'
+import { skipToken } from '@reduxjs/toolkit/query'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { ReportingForm } from '../../ReportingForm'
 
-type EditReportingProps = {
+import type { Reporting } from '@features/Reporting/types'
+import type { VesselIdentity } from 'domain/entities/vessel/types'
+
+type EditReportingProps = Readonly<{
   closeForm: () => void
-}
-export function EditReporting({ closeForm }: EditReportingProps) {
-  const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
-  assertNotNullish(selectedVesselIdentity)
-  const editedReporting = useMainAppSelector(state => state.mainWindowReporting.editedReporting)
+  editedReporting: Reporting.EditableReporting | undefined
+  vesselIdOrIdentity: number | VesselIdentity
+}>
+export function EditReporting({ closeForm, editedReporting, vesselIdOrIdentity }: EditReportingProps) {
+  const { data: vessel } = useGetVesselQuery(typeof vesselIdOrIdentity === 'number' ? vesselIdOrIdentity : skipToken)
+
+  const vesselIdentity = useMemo(() => {
+    switch (true) {
+      case typeof vesselIdOrIdentity === 'number':
+        return vessel ? getVesselIdentityFromVessel(vessel) : undefined
+
+      case !vesselIdOrIdentity:
+        return undefined
+
+      default:
+        return vesselIdOrIdentity
+    }
+  }, [vessel, vesselIdOrIdentity])
 
   return (
     <FormWrapper>
@@ -27,13 +45,16 @@ export function EditReporting({ closeForm }: EditReportingProps) {
           title="Fermer le formulaire"
         />
       </Header>
-      <StyledReportingForm
-        closeForm={closeForm}
-        editedReporting={editedReporting}
-        hasWhiteBackground={false}
-        selectedVesselIdentity={selectedVesselIdentity}
-        windowContext={WindowContext.MainWindow}
-      />
+      {!vesselIdentity && <p>Chargement en cours...</p>}
+      {vesselIdentity && (
+        <StyledReportingForm
+          closeForm={closeForm}
+          editedReporting={editedReporting}
+          hasWhiteBackground={false}
+          vesselIdentity={vesselIdentity}
+          windowContext={WindowContext.MainWindow}
+        />
+      )}
     </FormWrapper>
   )
 }

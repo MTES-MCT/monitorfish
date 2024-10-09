@@ -1,41 +1,41 @@
 import { VesselReportingList } from '@features/Reporting/components/VesselReportingList'
-import { VesselReportingListTab } from '@features/Reporting/components/VesselReportingList/constants'
+import { getDefaultReportingsStartDate } from '@features/Reporting/utils'
 import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { usePrevious } from '@mtes-mct/monitor-ui'
+import { customDayjs, useKey } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
-import { useEffect, useState } from 'react'
-
-import { vesselsAreEquals } from '../../../../domain/entities/vessel/vessel'
+import { useState } from 'react'
 
 export function ReportingList() {
-  const archivedReportingsFromDate = useMainAppSelector(state => state.mainWindowReporting.archivedReportingsFromDate)
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
-  const vesselIdentity = useMainAppSelector(state => state.mainWindowReporting.vesselIdentity)
+  const key = useKey([selectedVesselIdentity])
+
+  const [startDate, setStartDate] = useState(getDefaultReportingsStartDate())
 
   const { data: vesselReportings } = useGetVesselReportingsByVesselIdentityQuery(
-    vesselIdentity
+    selectedVesselIdentity
       ? {
-          fromDate: archivedReportingsFromDate,
-          vesselIdentity
+          fromDate: startDate.toISOString(),
+          vesselIdentity: selectedVesselIdentity
         }
       : skipToken
   )
 
-  const [selectedTab, setSelectedTab] = useState(VesselReportingListTab.CURRENT_REPORTING)
+  const showMore = () => {
+    setStartDate(customDayjs(startDate).subtract(5, 'year').toDate())
+  }
 
-  const previousSelectedVesselIdentity = usePrevious(selectedVesselIdentity)
-
-  useEffect(() => {
-    if (!vesselsAreEquals(previousSelectedVesselIdentity, selectedVesselIdentity)) {
-      setSelectedTab(VesselReportingListTab.CURRENT_REPORTING)
-    }
-  }, [previousSelectedVesselIdentity, selectedVesselIdentity])
+  if (!selectedVesselIdentity) {
+    return <p>Chargement en cours...</p>
+  }
 
   return (
     <VesselReportingList
-      onTabChange={setSelectedTab}
-      selectedTab={selectedTab}
+      // This key resets the default tab when `selectedVesselIdentity` changes
+      key={key}
+      fromDate={startDate}
+      onMore={showMore}
+      vesselIdOrIdentity={selectedVesselIdentity}
       vesselReportings={vesselReportings}
       withTabs
     />

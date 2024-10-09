@@ -5,6 +5,7 @@ import { afterAll, describe, expect, it } from '@jest/globals'
 import { THEME, ThemeProvider } from '@mtes-mct/monitor-ui'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { noop } from 'lodash'
 
 import { PendingAlertValueType } from '../../../../../domain/entities/alerts/types'
 import { VesselIdentifier } from '../../../../../domain/entities/vessel/types'
@@ -59,6 +60,7 @@ describe('ReportingCard()', () => {
       <ThemeProvider theme={THEME}>
         <ReportingCard
           isArchived={false}
+          onEdit={noop}
           otherOccurrencesOfSameAlert={[
             { ...reporting, validationDate: '2024-10-30T15:08:05.845121Z' },
             { ...reporting, validationDate: '2025-10-30T15:08:05.845121Z' }

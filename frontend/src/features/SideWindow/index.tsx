@@ -3,7 +3,7 @@ import { FulfillingBouncingCircleSpinner } from '@components/FulfillingBouncingC
 import { MissionForm } from '@features/Mission/components/MissionForm'
 import { useListenToAllMissionEventsUpdates } from '@features/Mission/components/MissionForm/hooks/useListenToAllMissionEventsUpdates'
 import { reportingApi } from '@features/Reporting/reportingApi'
-import { sideWindowReportingActions } from '@features/Reporting/sideWindowReporting.slice'
+import { reportingActions } from '@features/Reporting/slice'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { THEME, type NewWindowContextValue, NewWindowContext, Notifier } from '@mtes-mct/monitor-ui'
 import {
@@ -50,7 +50,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
   const openedBeaconMalfunctionInKanban = useMainAppSelector(
     state => state.beaconMalfunction.openedBeaconMalfunctionInKanban
   )
-  const editedReporting = useMainAppSelector(state => state.sideWindowReporting.editedReporting)
+  const editedReporting = useMainAppSelector(state => state.reporting.editedReporting)
   const selectedPath = useMainAppSelector(state => state.sideWindow.selectedPath)
   const missionEvent = useListenToAllMissionEventsUpdates()
 
@@ -90,7 +90,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
 
   const closeRightSidebar = useCallback(() => {
     dispatch(closeBeaconMalfunctionInKanban())
-    dispatch(sideWindowReportingActions.unsetEditedReporting())
+    dispatch(reportingActions.unsetEditedReporting())
   }, [dispatch])
 
   useEffect(() => {

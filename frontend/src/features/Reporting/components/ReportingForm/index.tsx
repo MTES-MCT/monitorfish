@@ -43,7 +43,7 @@ type ReportingFormProps = {
   closeForm: () => void
   editedReporting: Reporting.EditableReporting | undefined
   hasWhiteBackground: boolean
-  selectedVesselIdentity: VesselIdentity
+  vesselIdentity: VesselIdentity
   windowContext: WindowContext
 }
 export function ReportingForm({
@@ -51,10 +51,11 @@ export function ReportingForm({
   closeForm,
   editedReporting,
   hasWhiteBackground,
-  selectedVesselIdentity,
+  vesselIdentity,
   windowContext
 }: ReportingFormProps) {
   const dispatch = useMainAppDispatch()
+  // TODO Replace that with a `useInfractionsAsOptions()` hook with RTK query.
   const infractions = useMainAppSelector(state => state.infraction.infractions)
   const controlUnitsQuery = useGetControlUnitsQuery(undefined)
 
@@ -99,25 +100,25 @@ export function ReportingForm({
 
       const nextReportingWithMissingProperties = {
         creationDate: new Date().toISOString(),
-        externalReferenceNumber: selectedVesselIdentity.externalReferenceNumber,
-        flagState: selectedVesselIdentity.flagState.toUpperCase(),
-        internalReferenceNumber: selectedVesselIdentity.internalReferenceNumber,
-        ircs: selectedVesselIdentity.ircs,
+        externalReferenceNumber: vesselIdentity.externalReferenceNumber,
+        flagState: vesselIdentity.flagState.toUpperCase(),
+        internalReferenceNumber: vesselIdentity.internalReferenceNumber,
+        ircs: vesselIdentity.ircs,
         type: nextReportingValue.type,
         validationDate: null,
         value: {
           ...nextReportingValue
         },
-        vesselId: selectedVesselIdentity.vesselId ?? null,
-        vesselIdentifier: selectedVesselIdentity.vesselIdentifier ?? null,
-        vesselName: selectedVesselIdentity.vesselName ?? null
+        vesselId: vesselIdentity.vesselId ?? null,
+        vesselIdentifier: vesselIdentity.vesselIdentifier ?? null,
+        vesselName: vesselIdentity.vesselName ?? null
       }
 
       dispatch(addReporting(nextReportingWithMissingProperties))
 
       closeForm()
     },
-    [dispatch, closeForm, editedReporting, selectedVesselIdentity, windowContext]
+    [dispatch, closeForm, editedReporting, vesselIdentity, windowContext]
   )
 
   return (

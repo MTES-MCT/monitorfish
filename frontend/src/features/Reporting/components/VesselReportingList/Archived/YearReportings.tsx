@@ -14,55 +14,54 @@ import { ReportingCard } from '../ReportingCard'
 import type { ReportingAndOccurrences } from '@features/Reporting/types'
 
 type YearReportingsProps = {
-  year: number
-  yearReportings: ReportingAndOccurrences[]
+  reportingAndOccurences: ReportingAndOccurrences[]
+  year: string
 }
-export function YearReportings({ year, yearReportings }: YearReportingsProps) {
+export function YearReportings({ reportingAndOccurences, year }: YearReportingsProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const numberOfReportings = useMemo(
     () =>
-      yearReportings.reduce(
+      reportingAndOccurences.reduce(
         (accumulator, reportingAndOccurrences) =>
+          // TODO Check if there is not an error here.
           accumulator + reportingAndOccurrences.otherOccurrencesOfSameAlert.length + 1,
         0
       ),
-    [yearReportings]
+    [reportingAndOccurences]
   )
 
-  const numberOfInfractionsSuspicion = useMemo(() => {
-    if (!yearReportings.length) {
-      return 0
-    }
+  const numberOfInfractionsSuspicion = useMemo(
+    () =>
+      reportingAndOccurences.reduce((accumulator, reportingAndOccurrences) => {
+        const reportingCount = reportingIsAnInfractionSuspicion(reportingAndOccurrences.reporting.type) ? 1 : 0
+        const otherOccurrencesCount = reportingAndOccurrences.otherOccurrencesOfSameAlert
+          .map(reporting => (reportingIsAnInfractionSuspicion(reporting.type) ? Number(1) : Number(0)))
+          .reduce((acc, val) => acc + val, 0)
 
-    return yearReportings.reduce((accumulator, reportingAndOccurrences) => {
-      const reportingCount = reportingIsAnInfractionSuspicion(reportingAndOccurrences.reporting.type) ? 1 : 0
-      const otherOccurrencesCount = reportingAndOccurrences.otherOccurrencesOfSameAlert
-        .map(reporting => (reportingIsAnInfractionSuspicion(reporting.type) ? Number(1) : Number(0)))
-        .reduce((acc, val) => acc + val, 0)
-
-      return accumulator + reportingCount + otherOccurrencesCount
-    }, 0)
-  }, [yearReportings])
+        return accumulator + reportingCount + otherOccurrencesCount
+      }, 0),
+    [reportingAndOccurences]
+  )
 
   const numberOfObservations = numberOfReportings - numberOfInfractionsSuspicion
 
   return (
     <Row>
       <YearListTitle
+        $isEmpty={reportingAndOccurences.length === 0}
+        $isOpen={isOpen}
         data-cy="vessel-sidebar-reporting-tab-archive-year"
-        isEmpty={yearReportings.length === 0}
-        isOpen={isOpen}
       >
         <YearListTitleText
-          isEmpty={yearReportings.length === 0}
-          onClick={() => yearReportings.length && setIsOpen(!isOpen)}
+          $isEmpty={reportingAndOccurences.length === 0}
+          onClick={() => reportingAndOccurences.length && setIsOpen(!isOpen)}
           title={year.toString()}
         >
-          {!!yearReportings.length && <YearListChevronIcon $isOpen={isOpen} />}
+          {!!reportingAndOccurences.length && <YearListChevronIcon $isOpen={isOpen} />}
           <Year>{year}</Year>
           <YearResume data-cy="vessel-reporting-year">
-            {!yearReportings.length && 'Pas de signalement'}
+            {!reportingAndOccurences.length && 'Pas de signalement'}
             {!!numberOfInfractionsSuspicion && (
               <>
                 {numberOfInfractionsSuspicion} suspicion{numberOfInfractionsSuspicion > 1 ? 's' : ''} d&apos;infraction
@@ -79,7 +78,7 @@ export function YearReportings({ year, yearReportings }: YearReportingsProps) {
       </YearListTitle>
       {isOpen && (
         <YearListContentWithPadding name={year.toString()}>
-          {yearReportings.map(({ otherOccurrencesOfSameAlert, reporting }) => (
+          {reportingAndOccurences.map(({ otherOccurrencesOfSameAlert, reporting }) => (
             <ReportingCard
               key={reporting.id}
               isArchived

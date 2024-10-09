@@ -1,25 +1,16 @@
 import { InfractionSuspicionSummary } from '@features/Reporting/components/VesselReportingList/Summary/InfractionSuspicionSummary'
 import { Header, Zone } from '@features/Vessel/components/VesselSidebar/common_styles/common.style'
-import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { customDayjs, Icon, THEME } from '@mtes-mct/monitor-ui'
-import { skipToken } from '@reduxjs/toolkit/query'
 import styled from 'styled-components'
 
-export function Summary() {
-  const archivedReportingsFromDate = useMainAppSelector(state => state.mainWindowReporting.archivedReportingsFromDate)
-  const vesselIdentity = useMainAppSelector(state => state.mainWindowReporting.vesselIdentity)
-  const yearsDepth = customDayjs().utc().get('year') - customDayjs(archivedReportingsFromDate).get('year') + 1
+import type { VesselReportings } from '@features/Reporting/types'
 
-  const { data: selectedVesselReportings } = useGetVesselReportingsByVesselIdentityQuery(
-    vesselIdentity
-      ? {
-          fromDate: archivedReportingsFromDate,
-          vesselIdentity
-        }
-      : skipToken
-  )
-  const summary = selectedVesselReportings?.summary
+type SummaryProps = Readonly<{
+  fromDate: Date
+  vesselReportings: VesselReportings
+}>
+export function Summary({ fromDate, vesselReportings }: SummaryProps) {
+  const yearsDepth = customDayjs().utc().get('year') - customDayjs(fromDate).get('year') + 1
 
   return (
     <Zone data-cy="vessel-reporting-summary">
@@ -29,14 +20,14 @@ export function Summary() {
           <IconColumn>
             <Icon.Alert color={THEME.color.slateGray} />
           </IconColumn>
-          <InfractionSuspicionSummary />
+          <InfractionSuspicionSummary reportingSummary={vesselReportings.summary} />
         </Columns>
         <Columns $isFirst={false}>
           <IconColumn>
             <Icon.Observation color={THEME.color.slateGray} />
           </IconColumn>
           <Label>
-            Observations <LabelNumber>{summary?.numberOfObservations}</LabelNumber>
+            Observations <LabelNumber>{vesselReportings.summary?.numberOfObservations}</LabelNumber>
           </Label>
         </Columns>
       </Body>

@@ -1,6 +1,6 @@
 import { WindowContext } from '@api/constants'
 import { ErrorWall } from '@components/ErrorWall'
-import { sideWindowReportingActions } from '@features/Reporting/sideWindowReporting.slice'
+import { reportingActions } from '@features/Reporting/slice'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
@@ -15,14 +15,16 @@ import { ReportingForm } from '../../../Reporting/components/ReportingForm'
 
 export function EditReporting() {
   const dispatch = useMainAppDispatch()
-  const baseUrl = window.location.origin
-  const editedReporting = useMainAppSelector(state => state.sideWindowReporting.editedReporting)
+  const editedReporting = useMainAppSelector(state => state.reporting.editedReporting)
   const displayedError = useMainAppSelector(
     state => state.displayedError[DisplayedErrorKey.SIDE_WINDOW_REPORTING_FORM_ERROR]
   )
 
+  const baseUrl = window.location.origin
+  const vesselIdentity = editedReporting ? getOnlyVesselIdentityProperties(editedReporting) : undefined
+
   const closeForm = useCallback(() => {
-    dispatch(sideWindowReportingActions.unsetEditedReporting())
+    dispatch(reportingActions.unsetEditedReporting())
   }, [dispatch])
 
   if (displayedError) {
@@ -57,12 +59,12 @@ export function EditReporting() {
         </Row>
       </Header>
       <Line />
-      {editedReporting && (
+      {editedReporting && vesselIdentity && (
         <StyledReportingForm
           closeForm={closeForm}
           editedReporting={editedReporting}
           hasWhiteBackground
-          selectedVesselIdentity={getOnlyVesselIdentityProperties(editedReporting)}
+          vesselIdentity={vesselIdentity}
           windowContext={WindowContext.SideWindow}
         />
       )}

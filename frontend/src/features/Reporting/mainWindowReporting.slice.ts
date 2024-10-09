@@ -7,13 +7,11 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 
 export type ReportingState = {
   archivedReportingsFromDate: string
-  currentReportings: Reporting.Reporting[]
   editedReporting: Reporting.EditableReporting | undefined
   vesselIdentity: VesselIdentity | undefined
 }
 const INITIAL_STATE: ReportingState = {
   archivedReportingsFromDate: customDayjs().utc().subtract(5, 'year').startOf('year').toISOString(),
-  currentReportings: [],
   editedReporting: undefined,
   vesselIdentity: undefined
 }
@@ -31,13 +29,6 @@ const mainWindowReportingSlice = createSlice({
      */
     setArchivedReportingsFromDate(state, action: PayloadAction<string>) {
       state.archivedReportingsFromDate = action.payload
-    },
-
-    /**
-     * Set current reporting
-     */
-    setCurrentReportings(state, action: PayloadAction<Reporting.Reporting[]>) {
-      state.currentReportings = action.payload
     },
 
     /**

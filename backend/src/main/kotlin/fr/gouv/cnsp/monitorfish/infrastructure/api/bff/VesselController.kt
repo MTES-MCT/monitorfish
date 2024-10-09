@@ -15,7 +15,10 @@ import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
+import java.time.temporal.TemporalAdjusters
 
 @RestController
 @RequestMapping("/bff/v1/vessels")
@@ -281,12 +284,14 @@ class VesselController(
         @PathVariable(name = "vesselId")
         vesselId: Int,
     ): VesselReportingsDataOutput {
-        val currentAndArchivedReportings =
-            getVesselReportings.execute(
-                vesselId,
-                // TODO Check that value.
-                fromDate = ZonedDateTime.now().minusYears(3),
-            )
+        // TODO Check that value.
+        val fromDate =
+            ZonedDateTime.now(ZoneOffset.UTC)
+                .minusYears(5)
+                .with(TemporalAdjusters.firstDayOfYear())
+                .truncatedTo(ChronoUnit.DAYS)
+
+        val currentAndArchivedReportings = getVesselReportings.execute(vesselId, fromDate)
 
         return VesselReportingsDataOutput.fromCurrentAndArchivedReporting(currentAndArchivedReportings)
     }

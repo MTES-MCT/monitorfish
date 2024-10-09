@@ -265,6 +265,8 @@ const StyledForm = styled(Form)<{
 
     return p.$isInfractionSuspicion ? p.theme.color.maximumRed15 : p.theme.color.gainsboro
   }};
+  padding-right: 16px;
+  padding-left: 16px;
 
   * {
     box-sizing: border-box !important;
@@ -278,7 +280,4 @@ const StyledForm = styled(Form)<{
   > .Field-MultiRadio > legend {
     margin-bottom: 8px;
   }
-
-  padding-right: 16px;
-  padding-left: 16px;
 `

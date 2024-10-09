@@ -300,9 +300,9 @@ const Cell = styled(FlexboxGrid.Item).attrs(() => ({
 
 const UnderCharter = styled.div`
   background: ${p => p.theme.color.mediumSeaGreen} 0% 0% no-repeat padding-box;
-  padding: 2px 8px;
   border-radius: 1px;
   color: ${p => p.theme.color.gunMetal};
+  padding: 2px 8px;
   white-space: nowrap;
 `
 const RightAligned = styled.div`

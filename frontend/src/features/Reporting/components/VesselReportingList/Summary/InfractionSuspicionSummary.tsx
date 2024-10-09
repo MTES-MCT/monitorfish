@@ -58,10 +58,10 @@ export function InfractionSuspicionSummary() {
 }
 
 const OpenAllInfractionsSuspicion = styled(Link)`
-  font-size: 13px;
-  display: block;
-  margin-top: 6px;
   cursor: pointer;
+  display: block;
+  font-size: 13px;
+  margin-top: 6px;
 `
 
 const Wrapper = styled.div`
@@ -81,31 +81,31 @@ const LabelNumber = styled.span`
 
 const InfractionSuspicion = styled.div`
   display: block;
-  margin-top: 4px;
   font-weight: 500;
+  margin-top: 4px;
 `
 
 const Name = styled.span`
-  display: inline-block;
   color: ${p => p.theme.color.gunMetal};
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+  display: inline-block;
   margin-left: 6px;
   max-width: 390px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   vertical-align: bottom;
+  white-space: nowrap;
 `
 
 const BadgeNumber = styled.div`
+  background: ${p => p.theme.color.maximumRed};
+  border-radius: 10px;
+  color: ${p => p.theme.color.white};
   display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
   height: 15px;
+  letter-spacing: 0px;
+  line-height: 14px;
   padding: 0 4px;
   text-align: center;
-  border-radius: 10px;
-  line-height: 14px;
-  background: ${p => p.theme.color.maximumRed};
-  color: ${p => p.theme.color.white};
-  font-size: 12px;
-  letter-spacing: 0px;
-  font-weight: 700;
 `

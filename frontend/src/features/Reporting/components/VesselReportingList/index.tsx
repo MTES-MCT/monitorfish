@@ -82,14 +82,14 @@ const CurrentOrHistoryButton = styled.div<{
 `
 
 const Menu = styled.div`
-  margin: 5px;
   border: 1px solid ${p => p.theme.color.charcoal};
   display: flex;
+  margin: 5px;
   width: 480px;
 `
 
 const Body = styled.div`
-  padding: 5px;
-  overflow-x: hidden;
   max-height: 670px;
+  overflow-x: hidden;
+  padding: 5px;
 `

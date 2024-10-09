@@ -94,22 +94,22 @@ export function YearReportings({ year, yearReportings }: YearReportingsProps) {
 }
 
 const Red = styled.span`
-  height: 8px;
-  width: 8px;
-  margin-left: 5px;
-  margin-right: 10px;
-  background-color: #e1000f;
+  background-color: ${p => p.theme.color.maximumRed};
   border-radius: 50%;
   display: inline-block;
+  height: 8px;
+  margin-left: 5px;
+  margin-right: 10px;
+  width: 8px;
 `
 
 const Opal = styled.span`
-  height: 8px;
-  width: 8px;
-  margin-left: 5px;
   background-color: ${THEME.color.opal};
   border-radius: 50%;
   display: inline-block;
+  height: 8px;
+  margin-left: 5px;
+  width: 8px;
 `
 
 const Year = styled.span`
@@ -125,15 +125,15 @@ const YearResume = styled.span`
 `
 
 const Row = styled.div`
-  margin: 0;
-  text-align: left;
-  width: 100%;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden !important;
   background: ${p => p.theme.color.white};
-  color: ${p => p.theme.color.gunMetal};
   border-bottom: 1px solid ${p => p.theme.color.lightGray};
+  color: ${p => p.theme.color.gunMetal};
+  margin: 0;
+  overflow: hidden !important;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
 `
 
 const YearListContentWithPadding = styled(YearListContent)`

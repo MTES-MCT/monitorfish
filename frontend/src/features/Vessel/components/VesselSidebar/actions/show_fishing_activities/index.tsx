@@ -45,15 +45,15 @@ export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
 
   return (
     <VesselSidebarActionButton
-      backgroundColor={areFishingActivitiesReallyShowedOnMap ? THEME.color.blueGray : THEME.color.charcoal}
+      $backgroundColor={areFishingActivitiesReallyShowedOnMap ? THEME.color.blueGray : THEME.color.charcoal}
+      $isRightMenuOpen={rightMenuIsOpen}
+      $isSidebarOpen={isSidebarOpen}
+      $top={223}
       data-cy="show-all-fishing-activities-on-map"
       disabled={!selectedVesselPositions?.length}
       isHidden={false}
-      isRightMenuOpen={rightMenuIsOpen}
-      isSidebarOpen={isSidebarOpen}
       onClick={showOrHideFishingActivities}
       title={`${areFishingActivitiesReallyShowedOnMap ? 'Cacher' : 'Afficher'} les messages du JPE sur la piste`}
-      top={223}
     >
       <ShowFishingActivities />
     </VesselSidebarActionButton>

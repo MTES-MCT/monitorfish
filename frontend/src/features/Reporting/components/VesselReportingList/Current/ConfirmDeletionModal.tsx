@@ -1,7 +1,6 @@
 import { Modal } from 'rsuite'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../../../constants/constants'
 import { StyledModalHeader } from '../../../../commonComponents/StyledModalHeader'
 import { CancelButton, ValidateButton } from '../../../../commonStyles/Buttons.style'
 
@@ -45,7 +44,7 @@ export function ConfirmDeletionModal({ closeModal, isOpened, validateCallback })
 const Title = styled.div`
   font-size: 16px;
   line-height: 30px;
-  color: ${COLORS.gainsboro};
+  color: ${p => p.theme.color.gainsboro};
 `
 
 const Body = styled(Modal.Body)`

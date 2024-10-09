@@ -73,10 +73,10 @@ const List = styled.ul`
 `
 
 const NoReporting = styled.div`
-  text-align: center;
-  padding: 10px 0 10px 0;
   color: ${THEME.color.gunMetal};
   font-size: 13px;
+  padding: 10px 0 10px 0;
+  text-align: center;
   width: 100%;
 `
 

@@ -68,7 +68,7 @@ const Columns = styled.div<{
 `
 
 const IconColumn = styled.div`
+  flex-shrink: 0;
   margin-left: 6px;
   width: 30px;
-  flex-shrink: 0;
 `

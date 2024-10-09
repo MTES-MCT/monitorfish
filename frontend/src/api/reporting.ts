@@ -1,13 +1,7 @@
 import { monitorfishApiKy } from './api'
 import { ApiError } from '../libs/ApiError'
 
-import type {
-  EditedReporting,
-  InfractionSuspicionReporting,
-  PendingAlertReporting,
-  Reporting,
-  ReportingCreation
-} from '@features/Reporting/types'
+import type { EditedReporting, Reporting, ReportingCreation } from '@features/Reporting/types'
 
 export const ARCHIVE_REPORTING_ERROR_MESSAGE = "Nous n'avons pas pu archiver le signalement"
 export const ARCHIVE_REPORTINGS_ERROR_MESSAGE = "Nous n'avons pas pu archiver les signalements"
@@ -107,27 +101,11 @@ async function updateReportingFromAPI(id: number, nextReporting: EditedReporting
   }
 }
 
-/**
- * Get all current reportings
- *
- * @throws {@link ApiError}
- */
-async function getAllCurrentReportingsFromAPI(): Promise<Array<InfractionSuspicionReporting | PendingAlertReporting>> {
-  try {
-    return await monitorfishApiKy
-      .get(`/bff/v1/reportings`)
-      .json<Array<InfractionSuspicionReporting | PendingAlertReporting>>()
-  } catch (err) {
-    throw new ApiError(GET_REPORTINGS_ERROR_MESSAGE, err)
-  }
-}
-
 export {
   archiveReportingFromAPI,
   archiveReportingsFromAPI,
   deleteReportingFromAPI,
   deleteReportingsFromAPI,
   addReportingFromAPI,
-  updateReportingFromAPI,
-  getAllCurrentReportingsFromAPI
+  updateReportingFromAPI
 }

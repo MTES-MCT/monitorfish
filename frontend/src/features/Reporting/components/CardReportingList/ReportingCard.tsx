@@ -1,4 +1,4 @@
-import { getFrenchOrdinal, getReportingActorLabel } from '@features/Reporting/components/VesselReportings/utils'
+import { getFrenchOrdinal, getReportingActorLabel } from '@features/Reporting/components/CardReportingList/utils'
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Icon, IconButton, THEME, Link } from '@mtes-mct/monitor-ui'

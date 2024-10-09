@@ -1,5 +1,5 @@
 import { Seafront } from '@constants/seafront'
-import { ReportingCard } from '@features/Reporting/components/VesselReportings/ReportingCard'
+import { ReportingCard } from '@features/Reporting/components/CardReportingList/ReportingCard'
 import { ReportingType } from '@features/Reporting/types'
 import { afterAll, describe, expect, it } from '@jest/globals'
 import { THEME, ThemeProvider } from '@mtes-mct/monitor-ui'

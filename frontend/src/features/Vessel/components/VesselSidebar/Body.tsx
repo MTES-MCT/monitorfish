@@ -14,7 +14,7 @@ import { BeaconMalfunctionWarning } from './warnings/BeaconMalfunctionWarning'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { VesselSidebarTab } from '../../../../domain/entities/vessel/vessel'
 import { VesselLogbook } from '../../../Logbook/components/VesselLogbook'
-import { VesselReportings } from '../../../Reporting/components/VesselReportings'
+import { CardReportingList } from '../../../Reporting/components/CardReportingList'
 
 export function Body() {
   const isSuperUser = useIsSuperUser()
@@ -50,7 +50,7 @@ export function Body() {
       {vesselSidebarTab === VesselSidebarTab.IDENTITY && <Identity />}
       {vesselSidebarTab === VesselSidebarTab.VOYAGES && <VesselLogbook />}
       {vesselSidebarTab === VesselSidebarTab.CONTROLS && <Controls />}
-      {isSuperUser && vesselSidebarTab === VesselSidebarTab.REPORTING && <VesselReportings />}
+      {isSuperUser && vesselSidebarTab === VesselSidebarTab.REPORTING && <CardReportingList />}
       {vesselSidebarTab === VesselSidebarTab.ERSVMS && <VesselEquipment />}
     </Wrapper>
   )

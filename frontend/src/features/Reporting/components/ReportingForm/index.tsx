@@ -32,7 +32,7 @@ import {
 } from '../../types'
 import { addReporting } from '../../useCases/addReporting'
 import { updateReporting } from '../../useCases/updateReporting'
-import { mapControlUnitsToUniqueSortedIdsAsOptions } from '../VesselReportings/Current/utils'
+import { mapControlUnitsToUniqueSortedIdsAsOptions } from '../CardReportingList/Current/utils'
 
 import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
 import type { EditedReporting, InfractionSuspicion, Reporting } from '../../types'

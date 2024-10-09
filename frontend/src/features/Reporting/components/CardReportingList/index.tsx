@@ -1,5 +1,5 @@
 import { FingerprintSpinner } from '@components/FingerprintSpinner'
-import { Summary } from '@features/Reporting/components/VesselReportings/Summary'
+import { Summary } from '@features/Reporting/components/CardReportingList/Summary'
 import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME, usePrevious } from '@mtes-mct/monitor-ui'
@@ -16,7 +16,7 @@ const ReportingTab = {
   REPORTING_HISTORY: 'REPORTING_HISTORY'
 }
 
-export function VesselReportings() {
+export function CardReportingList() {
   const archivedReportingsFromDate = useMainAppSelector(state => state.mainWindowReporting.archivedReportingsFromDate)
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
   const vesselIdentity = useMainAppSelector(state => state.mainWindowReporting.vesselIdentity)

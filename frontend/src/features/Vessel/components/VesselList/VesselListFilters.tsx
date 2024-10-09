@@ -41,7 +41,7 @@ function renderTagPickerValue(items) {
   return items.map(tag => <Tag key={tag.label}>{tag.label}</Tag>)
 }
 
-const tagPickerStyle = { margin: '3px 10px 10px 0', verticalAlign: 'top', width: 160 }
+const tagPickerStyle = { margin: '3px 10px 10px 0', verticalAlign: 'top', width: 150 }
 
 type VesselListFiltersProps = Readonly<{
   namespace: string
@@ -270,16 +270,19 @@ function UnmemoizedVesselListFilters({ namespace, seeMoreIsOpen, setSeeMoreIsOpe
         value={speciesFiltered}
       />
       <ZoneFilter>
-        <MultiCascader
-          data={zonesFilter}
-          menuWidth={250}
-          onChange={nextValue => setAdministrativeZonesFiltered(nextValue as string[])}
-          onClean={() => setAdministrativeZonesFiltered([])}
-          placeholder="Filtrer avec une zone existante"
-          style={{ margin: '0 10px 10px -10px', verticalAlign: 'top', width: 200 }}
-          uncheckableItemValues={zoneGroups}
-          value={administrativeZonesFiltered}
-        />
+        {!!zonesFilter.length && !!zoneGroups?.length && (
+          <MultiCascader
+            // TODO A deep copy is required to prevent error : "can't define property "parent": Object is not extensible"
+            data={zonesFilter.map(zone => JSON.parse(JSON.stringify(zone)))}
+            menuWidth={250}
+            onChange={nextValue => setAdministrativeZonesFiltered(nextValue as string[])}
+            onClean={() => setAdministrativeZonesFiltered([])}
+            placeholder="Filtrer avec une zone existante"
+            style={{ margin: '0 10px 10px -10px', verticalAlign: 'top', width: 200 }}
+            uncheckableItemValues={zoneGroups}
+            value={administrativeZonesFiltered}
+          />
+        )}
         <CustomZone>ou définir une zone</CustomZone>
         <BoxFilter data-cy="vessels-list-box-filter" onClick={selectBox} />
         <PolygonFilter onClick={selectPolygon} />

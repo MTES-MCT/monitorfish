@@ -1,5 +1,4 @@
 import { Seafront } from '@constants/seafront'
-import { ReportingCard } from '@features/Reporting/components/VesselReportingList/ReportingCard'
 import { ReportingType } from '@features/Reporting/types'
 import { afterAll, describe, expect, it } from '@jest/globals'
 import { THEME, ThemeProvider } from '@mtes-mct/monitor-ui'
@@ -9,6 +8,7 @@ import { noop } from 'lodash'
 
 import { PendingAlertValueType } from '../../../../../domain/entities/alerts/types'
 import { VesselIdentifier } from '../../../../../domain/entities/vessel/types'
+import { ReportingCard } from '../ReportingCard'
 
 import type { PendingAlertReporting } from '@features/Reporting/types'
 
@@ -17,7 +17,7 @@ jest.mock('../../../useCases/archiveReporting', () => () => ({ archiveReporting:
 // @ts-ignore
 jest.mock('../../../../../hooks/useMainAppDispatch', () => ({ useMainAppDispatch: () => {} }))
 
-describe('ReportingCard()', () => {
+describe('ReportingCard()s', () => {
   afterAll(() => {
     // Reset module registry to clear the mock
     // @ts-ignore
@@ -70,7 +70,7 @@ describe('ReportingCard()', () => {
       </ThemeProvider>
     )
 
-    const linkElement = screen.getByRole('link', { name: /Voir les dates des autres alertes/i })
+    const linkElement = screen.getByText(/Voir les dates des autres alertes/i)
 
     // When
     await userEvent.click(linkElement)

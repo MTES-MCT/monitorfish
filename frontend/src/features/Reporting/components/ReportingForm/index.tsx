@@ -1,3 +1,4 @@
+import { WindowContext } from '@api/constants'
 import { useGetControlUnitsQuery } from '@features/ControlUnit/controlUnitApi'
 import { CreateOrEditReportingSchema } from '@features/Reporting/components/ReportingForm/schemas'
 import {
@@ -42,16 +43,16 @@ type ReportingFormProps = {
   closeForm: () => void
   editedReporting: Reporting.EditableReporting | undefined
   hasWhiteBackground: boolean
-  isFromSideWindow: boolean
   selectedVesselIdentity: VesselIdentity
+  windowContext: WindowContext
 }
 export function ReportingForm({
   className,
   closeForm,
   editedReporting,
   hasWhiteBackground,
-  isFromSideWindow,
-  selectedVesselIdentity
+  selectedVesselIdentity,
+  windowContext
 }: ReportingFormProps) {
   const dispatch = useMainAppDispatch()
   const infractions = useMainAppSelector(state => state.infraction.infractions)
@@ -87,7 +88,7 @@ export function ReportingForm({
             editedReporting.id,
             nextReportingValue,
             editedReporting.type,
-            isFromSideWindow
+            windowContext
           )
         )
 
@@ -112,10 +113,11 @@ export function ReportingForm({
         vesselName: selectedVesselIdentity.vesselName ?? null
       }
 
-      await dispatch(addReporting(nextReportingWithMissingProperties))
+      dispatch(addReporting(nextReportingWithMissingProperties))
+
       closeForm()
     },
-    [dispatch, closeForm, editedReporting, isFromSideWindow, selectedVesselIdentity]
+    [dispatch, closeForm, editedReporting, selectedVesselIdentity, windowContext]
   )
 
   return (
@@ -207,7 +209,7 @@ export function ReportingForm({
                 label="Natinf"
                 name="natinfCode"
                 options={infractionsAsOptions}
-                placement={!isFromSideWindow ? 'topStart' : undefined}
+                placement={windowContext === WindowContext.MainWindow ? 'topStart' : undefined}
                 searchable
                 // @ts-ignore
                 title={infractionTitle}

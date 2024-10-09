@@ -1,7 +1,5 @@
-import { RtkCacheTagType, WindowContext } from '@api/constants'
-import { deleteReportingsFromAPI } from '@api/reporting'
+import { WindowContext } from '@api/constants'
 import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
-import { vesselApi } from '@features/Vessel/vesselApi'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { Vessel } from '../../../domain/entities/vessel/vessel'
@@ -13,14 +11,12 @@ import type { Reporting } from '@features/Reporting/types'
 import type { MainAppThunk } from '@store'
 
 export const deleteReportings =
-  (reportings: Reporting.Reporting[], reportingIdsToDelete: number[], windowContext: WindowContext): MainAppThunk =>
+  (reportings: Reporting.Reporting[], ids: number[], windowContext: WindowContext): MainAppThunk =>
   async dispatch => {
-    const reportingsInformation = getReportingsInformationFromIds(reportingIdsToDelete, reportings)
+    const reportingsInformation = getReportingsInformationFromIds(ids, reportings)
 
     try {
-      await deleteReportingsFromAPI(reportingIdsToDelete)
-      dispatch(reportingApi.util.invalidateTags([RtkCacheTagType.Reportings]))
-      dispatch(vesselApi.util.invalidateTags([RtkCacheTagType.Reportings]))
+      await dispatch(reportingApi.endpoints.deleteReportings.initiate(ids)).unwrap()
 
       dispatch(removeVesselReportings(reportingsInformation))
 
@@ -29,7 +25,7 @@ export const deleteReportings =
       dispatch(
         displayOrLogError(
           error as Error,
-          () => deleteReportings(reportings, reportingIdsToDelete, windowContext),
+          () => deleteReportings(reportings, ids, windowContext),
           true,
           windowContext === WindowContext.MainWindow
             ? DisplayedErrorKey.MAIN_WINDOW_REPORTING_LIST_ERROR

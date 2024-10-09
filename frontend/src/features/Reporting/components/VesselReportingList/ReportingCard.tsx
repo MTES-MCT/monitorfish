@@ -1,33 +1,36 @@
 import { getFrenchOrdinal, getReportingActorLabel } from '@features/Reporting/components/VesselReportingList/utils'
+import { deleteReporting } from '@features/Reporting/useCases/deleteReporting'
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Icon, IconButton, THEME, Link } from '@mtes-mct/monitor-ui'
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
+import { DeletionConfirmationModal } from './DeletionConfirmationModal'
 import { getDateTime } from '../../../../utils'
 import { getAlertNameFromType } from '../../../SideWindow/Alert/AlertListAndReportingList/utils'
-import { mainWindowReportingActions } from '../../mainWindowReporting.slice'
 import { ReportingType, ReportingTypeCharacteristics } from '../../types'
 import { archiveReporting } from '../../useCases/archiveReporting'
 
 import type { Reporting } from '../../types'
-import type { Promisable } from 'type-fest'
 
 export type ReportingCardProps = {
   isArchived?: boolean
-  openConfirmDeletionModal?: ({ id, reportingType }) => Promisable<void>
+  onEdit?: (nextEditedReporting: Reporting.EditableReporting) => void
   otherOccurrencesOfSameAlert: Array<Reporting.Reporting>
   reporting: Reporting.Reporting
 }
 export function ReportingCard({
   isArchived = false,
-  openConfirmDeletionModal,
+  onEdit,
   otherOccurrencesOfSameAlert,
   reporting
 }: ReportingCardProps) {
   const dispatch = useMainAppDispatch()
+
+  const [isDeletionConfirmationModalOpen, setIsDeletionConfirmationModalOpen] = useState(false)
   const [isOtherOccurrencesDatesOpened, setIsOtherOccurrencesDatesOpened] = useState(false)
+
   const isAnInfractionSuspicion = reportingIsAnInfractionSuspicion(reporting.type)
   const reportingName = Object.values(ReportingTypeCharacteristics).find(
     reportingType => reportingType.code === reporting.type
@@ -50,103 +53,141 @@ export function ReportingCard({
     return getReportingActorLabel(reporting.value.reportingActor, reporting.value.controlUnit)
   }, [reporting, reportingName])
 
+  const archive = () => {
+    dispatch(archiveReporting(reporting.id, reporting.type))
+  }
+
+  const askForDeletionConfirmation = () => {
+    setIsDeletionConfirmationModalOpen(true)
+  }
+
+  const closeDeletionConfirmationModal = () => {
+    setIsDeletionConfirmationModalOpen(false)
+  }
+
+  const confirmDeletion = () => {
+    closeDeletionConfirmationModal()
+
+    dispatch(deleteReporting(reporting.id, reporting.type))
+  }
+
+  const handleEdit = () => {
+    if (!onEdit || reporting.type === ReportingType.ALERT) {
+      return
+    }
+
+    onEdit(reporting)
+  }
+
   return (
-    <Wrapper $isInfractionSuspicion={isAnInfractionSuspicion} data-cy="reporting-card">
-      {isAnInfractionSuspicion ? (
-        <StyledAlertIcon color={THEME.color.maximumRed} />
-      ) : (
-        <StyledObservationIcon color={THEME.color.charcoal} />
-      )}
-      <Body $isInfractionSuspicion={isAnInfractionSuspicion}>
-        <Title>
-          {reportingActor} /{' '}
-          {reporting.type === ReportingType.ALERT ? getAlertNameFromType(reporting.value.type) : reporting.value.title}
-        </Title>
-        <Date>
-          {otherOccurrencesOfSameAlert.length > 0 ? 'Dernière alerte le' : 'Le'} {alertDateTime}
-          {otherOccurrencesOfSameAlert.length > 0 && (
-            <>
-              {isOtherOccurrencesDatesOpened ? (
-                <>
-                  <OtherOccurrenceDates>
-                    {otherOccurrencesDates.map(dateTime => (
-                      <OtherOccurrenceAlertDate key={dateTime}>{dateTime}</OtherOccurrenceAlertDate>
-                    ))}
-                  </OtherOccurrenceDates>
-                  <OpenOrCloseOtherOccurrenceDates onClick={() => setIsOtherOccurrencesDatesOpened(false)} role="link">
-                    Masquer les dates des autres alertes
+    <>
+      <Wrapper $isInfractionSuspicion={isAnInfractionSuspicion} data-cy="reporting-card">
+        {isAnInfractionSuspicion ? (
+          <StyledAlertIcon color={THEME.color.maximumRed} />
+        ) : (
+          <StyledObservationIcon color={THEME.color.charcoal} />
+        )}
+
+        <Body $isInfractionSuspicion={isAnInfractionSuspicion}>
+          <Title>
+            {reportingActor} /{' '}
+            {reporting.type === ReportingType.ALERT
+              ? getAlertNameFromType(reporting.value.type)
+              : reporting.value.title}
+          </Title>
+          <Date>
+            {otherOccurrencesOfSameAlert.length > 0 ? 'Dernière alerte le' : 'Le'} {alertDateTime}
+            {otherOccurrencesOfSameAlert.length > 0 && (
+              <>
+                {isOtherOccurrencesDatesOpened ? (
+                  <>
+                    <OtherOccurrenceDates>
+                      {otherOccurrencesDates.map(dateTime => (
+                        <OtherOccurrenceAlertDate key={dateTime}>{dateTime}</OtherOccurrenceAlertDate>
+                      ))}
+                    </OtherOccurrenceDates>
+                    <OpenOrCloseOtherOccurrenceDates
+                      onClick={() => setIsOtherOccurrencesDatesOpened(false)}
+                      role="link"
+                    >
+                      Masquer les dates des autres alertes
+                    </OpenOrCloseOtherOccurrenceDates>
+                  </>
+                ) : (
+                  <OpenOrCloseOtherOccurrenceDates onClick={() => setIsOtherOccurrencesDatesOpened(true)} role="link">
+                    Voir les dates des autres alertes
                   </OpenOrCloseOtherOccurrenceDates>
-                </>
-              ) : (
-                <OpenOrCloseOtherOccurrenceDates onClick={() => setIsOtherOccurrencesDatesOpened(true)} role="link">
-                  Voir les dates des autres alertes
-                </OpenOrCloseOtherOccurrenceDates>
-              )}
-            </>
+                )}
+              </>
+            )}
+          </Date>
+          {reporting.type !== ReportingType.ALERT && <Description>{reporting.value.description}</Description>}
+          {reporting.type !== ReportingType.ALERT && !!reporting.value.authorContact && (
+            <Author>Émetteur: {reporting.value.authorContact}</Author>
           )}
-        </Date>
-        {reporting.type !== ReportingType.ALERT && <Description>{reporting.value.description}</Description>}
-        {reporting.type !== ReportingType.ALERT && !!reporting.value.authorContact && (
-          <Author>Émetteur: {reporting.value.authorContact}</Author>
-        )}
-        {reporting.type !== ReportingType.ALERT && !!reporting.value.authorTrigram && (
-          <Author>Saisi par: {reporting.value.authorTrigram}</Author>
-        )}
-        {reporting.type !== ReportingType.OBSERVATION && !Number.isNaN(reporting.value.natinfCode) && (
-          <Natinf
-            title={
-              reporting.infraction
-                ? `${reporting.infraction?.natinfCode || null}: ${
-                    reporting.infraction?.infraction || ''
-                  } (réglementation "${reporting.infraction?.regulation || ''}")`
-                : ''
-            }
-          >
-            NATINF {reporting.value.natinfCode}
-          </Natinf>
-        )}
-      </Body>
-      {isArchived ? (
-        otherOccurrencesOfSameAlert.length > 0 && (
+          {reporting.type !== ReportingType.ALERT && !!reporting.value.authorTrigram && (
+            <Author>Saisi par: {reporting.value.authorTrigram}</Author>
+          )}
+          {reporting.type !== ReportingType.OBSERVATION && !Number.isNaN(reporting.value.natinfCode) && (
+            <Natinf
+              title={
+                reporting.infraction
+                  ? `${reporting.infraction?.natinfCode || null}: ${
+                      reporting.infraction?.infraction || ''
+                    } (réglementation "${reporting.infraction?.regulation || ''}")`
+                  : ''
+              }
+            >
+              NATINF {reporting.value.natinfCode}
+            </Natinf>
+          )}
+        </Body>
+
+        {isArchived && otherOccurrencesOfSameAlert.length > 0 && (
           <NumberOfAlerts $isArchived>{otherOccurrencesOfSameAlert.length + 1}</NumberOfAlerts>
-        )
-      ) : (
-        <Actions $hasOccurrences={otherOccurrencesOfSameAlert.length > 0}>
-          {otherOccurrencesOfSameAlert.length > 0 && (
-            <NumberOfAlerts>{otherOccurrencesOfSameAlert.length + 1}</NumberOfAlerts>
-          )}
-          {reporting.type !== ReportingType.ALERT && (
+        )}
+        {!isArchived && (
+          <Actions $hasOccurrences={otherOccurrencesOfSameAlert.length > 0}>
+            {otherOccurrencesOfSameAlert.length > 0 && (
+              <NumberOfAlerts>{otherOccurrencesOfSameAlert.length + 1}</NumberOfAlerts>
+            )}
+            {reporting.type !== ReportingType.ALERT && onEdit && (
+              <StyledIconButton
+                accent={Accent.TERTIARY}
+                color={THEME.color.charcoal}
+                data-cy={`edit-reporting-card-${reporting.id}`}
+                Icon={Icon.EditUnbordered}
+                iconSize={20}
+                onClick={handleEdit}
+                title="Editer"
+              />
+            )}
             <StyledIconButton
               accent={Accent.TERTIARY}
               color={THEME.color.charcoal}
-              data-cy={`edit-reporting-card-${reporting.id}`}
-              Icon={Icon.EditUnbordered}
+              data-cy="archive-reporting-card"
+              Icon={Icon.Archive}
               iconSize={20}
-              onClick={() => dispatch(mainWindowReportingActions.setEditedReporting(reporting))}
-              title="Editer"
+              onClick={archive}
+              title="Archiver"
             />
-          )}
-          <StyledIconButton
-            accent={Accent.TERTIARY}
-            color={THEME.color.charcoal}
-            data-cy="archive-reporting-card"
-            Icon={Icon.Archive}
-            iconSize={20}
-            onClick={() => dispatch(archiveReporting(reporting.id, reporting.type))}
-            title="Archiver"
-          />
-          <StyledIconButton
-            accent={Accent.TERTIARY}
-            color={THEME.color.charcoal}
-            data-cy="delete-reporting-card"
-            Icon={Icon.Delete}
-            iconSize={20}
-            onClick={() => openConfirmDeletionModal?.({ id: reporting.id, reportingType: reporting.type })}
-            title="Supprimer"
-          />
-        </Actions>
+            <StyledIconButton
+              accent={Accent.TERTIARY}
+              color={THEME.color.charcoal}
+              data-cy="delete-reporting-card"
+              Icon={Icon.Delete}
+              iconSize={20}
+              onClick={askForDeletionConfirmation}
+              title="Supprimer"
+            />
+          </Actions>
+        )}
+      </Wrapper>
+
+      {isDeletionConfirmationModalOpen && (
+        <DeletionConfirmationModal onCancel={closeDeletionConfirmationModal} onConfirm={confirmDeletion} />
       )}
-    </Wrapper>
+    </>
   )
 }
 

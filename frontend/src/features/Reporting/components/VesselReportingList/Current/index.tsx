@@ -1,56 +1,37 @@
-import { mainWindowReportingActions } from '@features/Reporting/mainWindowReporting.slice'
-import { ReportingType } from '@features/Reporting/types'
-import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
-import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, THEME } from '@mtes-mct/monitor-ui'
-import { skipToken } from '@reduxjs/toolkit/query'
+import { Accent, Button } from '@mtes-mct/monitor-ui'
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { ConfirmDeletionModal } from './ConfirmDeletionModal'
 import { EditReporting } from './EditReporting'
-import { deleteReporting } from '../../../useCases/deleteReporting'
 import { ReportingCard } from '../ReportingCard'
 
-import type { ReportingAndOccurrences } from '@features/Reporting/types'
+import type { Reporting, ReportingAndOccurrences, VesselReportings } from '@features/Reporting/types'
+import type { VesselIdentity } from 'domain/entities/vessel/types'
 
-export function Current() {
-  const dispatch = useMainAppDispatch()
-  const archivedReportingsFromDate = useMainAppSelector(state => state.mainWindowReporting.archivedReportingsFromDate)
-  const editedReporting = useMainAppSelector(state => state.mainWindowReporting.editedReporting)
-  const vesselIdentity = useMainAppSelector(state => state.mainWindowReporting.vesselIdentity)
-
-  const { data: selectedVesselReportings } = useGetVesselReportingsByVesselIdentityQuery(
-    vesselIdentity
-      ? {
-          fromDate: archivedReportingsFromDate,
-          vesselIdentity
-        }
-      : skipToken
-  )
-
+type CurrentProps = Readonly<{
+  vesselIdOrIdentity: number | VesselIdentity
+  vesselReportings: VesselReportings
+}>
+export function Current({ vesselIdOrIdentity, vesselReportings }: CurrentProps) {
+  const [editedReporting, setEditedReporting] = useState<Reporting.EditableReporting | undefined>()
   const [isNewReportingFormOpen, setIsNewReportingFormOpen] = useState(false)
-  const [isDeletionModalOpened, setIsDeletionModalOpened] = useState<
-    { id: number; reportingType: ReportingType } | undefined
-  >(undefined)
 
   const closeForm = useCallback(() => {
     setIsNewReportingFormOpen(false)
-    dispatch(mainWindowReportingActions.setEditedReporting(undefined))
-  }, [dispatch])
+    setEditedReporting(undefined)
+  }, [])
 
   const reportingsWithoutEdited: ReportingAndOccurrences[] = useMemo(
     () =>
-      (selectedVesselReportings?.current ?? []).filter(
+      (vesselReportings.current ?? []).filter(
         reportingAndOccurrences => reportingAndOccurrences.reporting.id !== editedReporting?.id
       ),
-    [selectedVesselReportings, editedReporting]
+    [vesselReportings, editedReporting]
   )
 
   return (
     <Wrapper>
-      {!selectedVesselReportings?.current?.length && !isNewReportingFormOpen && (
+      {!vesselReportings.current.length && !isNewReportingFormOpen && (
         <NoReporting>Pas de signalement ouvert sur ce navire.</NoReporting>
       )}
       {!isNewReportingFormOpen && !editedReporting && (
@@ -62,23 +43,21 @@ export function Current() {
           Ouvrir un signalement
         </NewReportingButton>
       )}
-      {(isNewReportingFormOpen || editedReporting) && <EditReporting closeForm={closeForm} />}
+      {(isNewReportingFormOpen || editedReporting) && (
+        <EditReporting
+          closeForm={closeForm}
+          editedReporting={editedReporting}
+          vesselIdOrIdentity={vesselIdOrIdentity}
+        />
+      )}
       {reportingsWithoutEdited.map(reporting => (
         <ReportingCard
           key={reporting.reporting.id}
-          openConfirmDeletionModal={setIsDeletionModalOpened}
+          onEdit={setEditedReporting}
           otherOccurrencesOfSameAlert={reporting.otherOccurrencesOfSameAlert}
           reporting={reporting.reporting}
         />
       ))}
-      <ConfirmDeletionModal
-        closeModal={() => setIsDeletionModalOpened(undefined)}
-        isOpened={!!isDeletionModalOpened}
-        validateCallback={() =>
-          isDeletionModalOpened &&
-          dispatch(deleteReporting(isDeletionModalOpened.id, isDeletionModalOpened.reportingType))
-        }
-      />
     </Wrapper>
   )
 }
@@ -88,11 +67,11 @@ const NewReportingButton = styled(Button)`
 `
 
 const Wrapper = styled.div`
-  background: ${THEME.color.white};
+  background: ${p => p.theme.color.white};
   margin: 10px 5px 5px 5px;
   padding: 16px 16px 1px 16px;
   text-align: left;
-  color: ${THEME.color.slateGray};
+  color: ${p => p.theme.color.slateGray};
 `
 
 const NoReporting = styled.div`

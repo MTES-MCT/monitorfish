@@ -1,3 +1,5 @@
+import { customDayjs } from '@mtes-mct/monitor-ui'
+
 import {
   ReportingType,
   ReportingTypeCharacteristics,
@@ -5,6 +7,10 @@ import {
   type PendingAlertReporting,
   type Reporting
 } from './types'
+
+export function getDefaultReportingsStartDate(): Date {
+  return customDayjs().utc().subtract(5, 'year').startOf('year').toDate()
+}
 
 // TODO This should be named differently to avoid confusion with `ReportingType.INFRACTION_SUSPICION` type.
 export const infractionSuspicionReportingTypes = Object.values(ReportingTypeCharacteristics)

@@ -1,4 +1,3 @@
-import { WindowContext } from '@api/constants'
 import { SeafrontGroup } from '@constants/seafront'
 import { useGetReportingsQuery } from '@features/Reporting/reportingApi'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
@@ -74,7 +73,6 @@ export function AlertListAndReportingList({
           currentReportings={currentReportings ?? []}
           displayedError={displayedError}
           selectedSeafrontGroup={selectedSeafrontGroup}
-          windowContext={WindowContext.SideWindow}
         />
       )}
     </Wrapper>

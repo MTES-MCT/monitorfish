@@ -1,10 +1,14 @@
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 
-import type {
-  VesselEnhancedLastPositionWebGLObject,
-  VesselLastPositionFeature
+import {
+  VesselIdentifier,
+  type VesselEnhancedLastPositionWebGLObject,
+  type VesselIdentity,
+  type VesselLastPositionFeature
 } from '../../domain/entities/vessel/types'
+
+import type { Vessel } from './Vessel.types'
 
 export function buildFeature(vessel: VesselEnhancedLastPositionWebGLObject): VesselLastPositionFeature {
   /**
@@ -70,4 +74,18 @@ export function extractVesselPropertiesFromFeature<K extends keyof VesselEnhance
   })
 
   return vesselProperties as VesselProperties<K>
+}
+
+// TODO Check if there is another function doing the same thing somewhere else.
+// TODO Check the `vesselIdentifier` prop value.
+export function getVesselIdentityFromVessel(vessel: Vessel.Vessel): VesselIdentity {
+  return {
+    externalReferenceNumber: vessel.externalReferenceNumber ?? null,
+    flagState: vessel.flagState,
+    internalReferenceNumber: vessel.internalReferenceNumber ?? null,
+    ircs: vessel.ircs ?? null,
+    vesselId: vessel.vesselId ?? null,
+    vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselName: vessel.vesselName ?? null
+  }
 }

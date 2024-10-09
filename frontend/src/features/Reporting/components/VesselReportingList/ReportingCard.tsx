@@ -14,12 +14,12 @@ import { archiveReporting } from '../../useCases/archiveReporting'
 
 import type { Reporting } from '../../types'
 
-export type ReportingCardProps = {
+export type ReportingCardProps = Readonly<{
   isArchived?: boolean
   onEdit?: (nextEditedReporting: Reporting.EditableReporting) => void
   otherOccurrencesOfSameAlert: Array<Reporting.Reporting>
   reporting: Reporting.Reporting
-}
+}>
 export function ReportingCard({
   isArchived = false,
   onEdit,
@@ -95,7 +95,7 @@ export function ReportingCard({
               ? getAlertNameFromType(reporting.value.type)
               : reporting.value.title}
           </Title>
-          <Date>
+          <DateText>
             {otherOccurrencesOfSameAlert.length > 0 ? 'Dernière alerte le' : 'Le'} {alertDateTime}
             {otherOccurrencesOfSameAlert.length > 0 && (
               <>
@@ -106,21 +106,18 @@ export function ReportingCard({
                         <OtherOccurrenceAlertDate key={dateTime}>{dateTime}</OtherOccurrenceAlertDate>
                       ))}
                     </OtherOccurrenceDates>
-                    <OpenOrCloseOtherOccurrenceDates
-                      onClick={() => setIsOtherOccurrencesDatesOpened(false)}
-                      role="link"
-                    >
+                    <OpenOrCloseOtherOccurrenceDates onClick={() => setIsOtherOccurrencesDatesOpened(false)}>
                       Masquer les dates des autres alertes
                     </OpenOrCloseOtherOccurrenceDates>
                   </>
                 ) : (
-                  <OpenOrCloseOtherOccurrenceDates onClick={() => setIsOtherOccurrencesDatesOpened(true)} role="link">
+                  <OpenOrCloseOtherOccurrenceDates onClick={() => setIsOtherOccurrencesDatesOpened(true)}>
                     Voir les dates des autres alertes
                   </OpenOrCloseOtherOccurrenceDates>
                 )}
               </>
             )}
-          </Date>
+          </DateText>
           {reporting.type !== ReportingType.ALERT && <Description>{reporting.value.description}</Description>}
           {reporting.type !== ReportingType.ALERT && !!reporting.value.authorContact && (
             <Author>Émetteur: {reporting.value.authorContact}</Author>
@@ -270,7 +267,7 @@ const Title = styled.div`
   font: normal normal bold 13px/18px Marianne;
 `
 
-const Date = styled.span`
+const DateText = styled.span`
   font: normal normal normal 11px/15px Marianne;
 `
 

@@ -1,6 +1,7 @@
 import { getFrenchOrdinal, getReportingActorLabel } from '@features/Reporting/components/VesselReportingList/utils'
 import { deleteReporting } from '@features/Reporting/useCases/deleteReporting'
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
+import { getAlertNameFromType } from '@features/SideWindow/Alert/AlertListAndReportingList/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Icon, IconButton, THEME, Link } from '@mtes-mct/monitor-ui'
 import { useMemo, useState } from 'react'
@@ -8,7 +9,6 @@ import styled from 'styled-components'
 
 import { DeletionConfirmationModal } from './DeletionConfirmationModal'
 import { getDateTime } from '../../../../utils'
-import { getAlertNameFromType } from '../../../SideWindow/Alert/AlertListAndReportingList/utils'
 import { ReportingType, ReportingTypeCharacteristics } from '../../types'
 import { archiveReporting } from '../../useCases/archiveReporting'
 

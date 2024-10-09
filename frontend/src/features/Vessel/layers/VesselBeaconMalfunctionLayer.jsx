@@ -10,7 +10,7 @@ import { getVesselBeaconMalfunctionStyle } from './style'
 import { getVesselCompositeIdentifier, vesselIsShowed } from '../../../domain/entities/vessel/vessel'
 import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser'
 import { monitorfishMap } from '../../map/monitorfishMap'
-import { vesselsAdapter, vesselSelectors } from '../slice'
+import { vesselSelectors } from '../slice'
 
 const VesselBeaconMalfunctionLayer = () => {
   const isSuperUser = useIsSuperUser()

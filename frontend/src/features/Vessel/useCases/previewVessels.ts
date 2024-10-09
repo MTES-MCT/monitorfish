@@ -1,5 +1,5 @@
-import { setProcessingRegulationSearchedZoneExtent } from '@features/Regulation/slice'
-import { renderVessels } from '@features/Vessel/useCases/renderVessels'
+import { setSearchedRegulationZoneExtent } from '@features/Regulation/slice'
+import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 import { isNumeric } from '@utils/isNumeric'
 
 import { setDisplayedComponents } from '../../../domain/shared_slices/DisplayedComponent'
@@ -29,7 +29,8 @@ export const previewVessels =
       // @ts-ignore
       const extent = getExtentFromGeoJSON(zonesSelected[0]?.feature)
       if (extent?.length && !isNumeric(extent[0]) && !isNumeric(extent[1])) {
-        dispatch(setProcessingRegulationSearchedZoneExtent(extent))
+        // TODO Migrate to `setSearchedRegulationZoneExtent(nextExtent: [...], withAnimation: true)`
+        dispatch(setSearchedRegulationZoneExtent(extent))
         dispatch(animateToExtent())
       }
     }
@@ -40,5 +41,5 @@ export const previewVessels =
       })
     )
 
-    dispatch(renderVessels())
+    dispatch(renderVesselFeatures())
   }

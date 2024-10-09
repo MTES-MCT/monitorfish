@@ -1,6 +1,6 @@
 import { COLORS } from '@constants/constants'
 import { StyledModalHeader } from '@features/commonComponents/StyledModalHeader'
-import { addFilter } from '@features/Filter/useCases/addFilter'
+import { addVesselFilter } from '@features/VesselFilter/useCases/addVesselFilter'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Icon, Size, TextInput } from '@mtes-mct/monitor-ui'
 import { useState } from 'react'
@@ -35,7 +35,7 @@ export function SaveVesselFiltersModal({ filters, isOpen, onClose, setIsOpen }: 
       uuid: uuidv4()
     }
 
-    dispatch(addFilter(filter))
+    dispatch(addVesselFilter(filter))
 
     setIsOpen(false)
     setFilterName('')

@@ -1,4 +1,4 @@
-import { renderVessels } from '@features/Vessel/useCases/renderVessels'
+import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 
 import { setDisplayedComponents } from '../../../domain/shared_slices/DisplayedComponent'
 import { setPreviewFilteredVesselsMode } from '../../../domain/shared_slices/Global'
@@ -14,5 +14,5 @@ export const undoPreviewVessels = (): MainAppThunk => async dispatch => {
     })
   )
 
-  dispatch(renderVessels())
+  dispatch(renderVesselFeatures())
 }

@@ -1,9 +1,9 @@
-import { removeTagFromFilter } from '@features/Filter/useCases/removeTagFromFilter'
+import { removeTagFromVesselFilter } from '@features/VesselFilter/useCases/removeTagFromVesselFilter'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import type { FilterTag as FilterTagType } from '@features/Filter/types'
+import type { FilterTag as FilterTagType } from '@features/VesselFilter/types'
 
 type FilterTagProps = Readonly<{
   iconElement: JSX.Element | undefined
@@ -22,7 +22,7 @@ export function FilterTag({ iconElement, remove, tag, text, uuid }: FilterTagPro
       <CloseIcon
         color={THEME.color.gunMetal}
         data-cy="vessel-filter-remove-tag"
-        onClick={() => (remove ? remove() : dispatch(removeTagFromFilter({ ...tag, uuid })))}
+        onClick={() => (remove ? remove() : dispatch(removeTagFromVesselFilter({ ...tag, uuid })))}
         size={10}
       />
     </TagWrapper>

@@ -17,19 +17,19 @@ export const vesselsFiltersLocalStorageKey = 'vesselsFilters'
  */
 export const nonFilteredVesselsAreHiddenLocalStorageKey = 'nonFilteredVesselsAreHidden'
 
-export type FilterState = {
+export type VesselFilterState = {
   filters: VesselFilter[]
   nonFilteredVesselsAreHidden: boolean
 }
-export const INITIAL_STATE: FilterState = {
+export const INITIAL_STATE: VesselFilterState = {
   // TODO Remove after init of `persistReducer` (used for migration from localstorage).
   filters: getLocalStorageState([], vesselsFiltersLocalStorageKey),
   // TODO Remove after init of `persistReducer` (used for migration from localstorage).
   nonFilteredVesselsAreHidden: getLocalStorageState(false, nonFilteredVesselsAreHiddenLocalStorageKey)
 }
-const filterSlice = createSlice({
+const vesselFilterSlice = createSlice({
   initialState: INITIAL_STATE,
-  name: 'filter',
+  name: 'vesselFilter',
   reducers: {
     filterAdded(state, action: PayloadAction<VesselFilter>) {
       state.filters = state.filters.map(filter => {
@@ -108,6 +108,6 @@ export const {
   filterShowed,
   filterTagRemoved,
   setNonFilteredVesselsAreHidden
-} = filterSlice.actions
+} = vesselFilterSlice.actions
 
-export const filterReducer = filterSlice.reducer
+export const filterReducer = vesselFilterSlice.reducer

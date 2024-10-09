@@ -2,7 +2,7 @@ import { useClickOutsideWhenOpenedAndExecute } from '@hooks/useClickOutsideWhenO
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { usePrevious } from '@mtes-mct/monitor-ui'
-import { useCallback, useMemo, useRef } from 'react'
+import { useCallback, useRef } from 'react'
 import styled from 'styled-components'
 
 import { Filters } from './Filters'
@@ -19,7 +19,7 @@ export function VesselFiltersMapButton() {
   const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
 
   const isRightMenuShrinked = !rightMenuIsOpen
-  const isOpen = useMemo(() => rightMapBoxOpened === MapBox.FILTERS, [rightMapBoxOpened])
+  const isOpen = rightMapBoxOpened === MapBox.FILTERS
   const wrapperRef = useRef(null)
 
   useClickOutsideWhenOpenedAndExecute(wrapperRef, isOpen, () => {

@@ -1,11 +1,11 @@
-import { filterTagRemoved } from '@features/Filter/slice'
 import { applyFilterToVessels } from '@features/Vessel/useCases/applyFilterToVessels'
-import { renderVessels } from '@features/Vessel/useCases/renderVessels'
+import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
+import { filterTagRemoved } from '@features/VesselFilter/slice'
 
-import type { FilterTag } from '@features/Filter/types'
+import type { FilterTag } from '@features/VesselFilter/types'
 import type { MainAppThunk } from '@store'
 
-export const removeTagFromFilter =
+export const removeTagFromVesselFilter =
   (tag: FilterTag): MainAppThunk =>
   async dispatch => {
     if (!tag.uuid) {
@@ -22,5 +22,5 @@ export const removeTagFromFilter =
 
     await dispatch(applyFilterToVessels())
 
-    dispatch(renderVessels())
+    dispatch(renderVesselFeatures())
   }

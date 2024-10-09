@@ -52,3 +52,22 @@ export function buildFeature(vessel: VesselEnhancedLastPositionWebGLObject): Ves
 
   return feature
 }
+
+// Type to enforce strong typing: properties specified in `K` will be required, others will remain optional
+type VesselProperties<K extends keyof VesselEnhancedLastPositionWebGLObject> = Required<
+  Pick<VesselEnhancedLastPositionWebGLObject, K>
+> &
+  Partial<Omit<VesselEnhancedLastPositionWebGLObject, K>>
+
+export function extractVesselPropertiesFromFeature<K extends keyof VesselEnhancedLastPositionWebGLObject>(
+  feature: VesselLastPositionFeature,
+  requiredProperties: K[]
+): VesselProperties<K> {
+  const vesselProperties: any = {}
+
+  requiredProperties.forEach(property => {
+    vesselProperties[property] = feature.get(property)
+  })
+
+  return vesselProperties as VesselProperties<K>
+}

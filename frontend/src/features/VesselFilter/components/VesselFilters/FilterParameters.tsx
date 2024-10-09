@@ -1,4 +1,4 @@
-import { hideOrShowNonFilteredVessels } from '@features/Filter/useCases/hideOrShowNonFilteredVessels'
+import { hideOrShowNonFilteredVessels } from '@features/VesselFilter/useCases/hideOrShowNonFilteredVessels'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import styled from 'styled-components'

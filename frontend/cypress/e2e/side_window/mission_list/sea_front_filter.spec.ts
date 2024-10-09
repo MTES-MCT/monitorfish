@@ -1,6 +1,6 @@
 import { openSideWindowMissionList } from './utils'
 
-context('Side Window > Mission List > Sea Front Filter (= submenu)', () => {
+context('Side Window > Mission List > Sea Front VesselFilter (= submenu)', () => {
   beforeEach(() => {
     openSideWindowMissionList()
   })

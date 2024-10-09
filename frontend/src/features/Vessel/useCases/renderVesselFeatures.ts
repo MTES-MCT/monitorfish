@@ -4,7 +4,7 @@ import { buildFeature } from '@features/Vessel/utils'
 
 import type { MainAppThunk } from '@store'
 
-export const renderVessels = (): MainAppThunk => async (_, getState) => {
+export const renderVesselFeatures = (): MainAppThunk => (_, getState) => {
   const vessels = vesselSelectors.selectAll(getState().vessel.vessels)
   const features = vessels.map(vessel => buildFeature(vessel))
 

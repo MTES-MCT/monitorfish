@@ -1,13 +1,13 @@
-import { filterShowed } from '@features/Filter/slice'
 import { VESSELS_VECTOR_LAYER } from '@features/Vessel/layers/VesselsLayer/constants'
 import { applyFilterToVessels } from '@features/Vessel/useCases/applyFilterToVessels'
-import { renderVessels } from '@features/Vessel/useCases/renderVessels'
+import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
+import { filterShowed } from '@features/VesselFilter/slice'
 
 import { customHexToRGB } from '../../../utils'
 
 import type { MainAppThunk } from '@store'
 
-export const showFilter =
+export const showVesselFilter =
   (filterUUID: string): MainAppThunk =>
   async (dispatch, getState) => {
     await dispatch(filterShowed(filterUUID))
@@ -24,5 +24,5 @@ export const showFilter =
       })
     }
 
-    dispatch(renderVessels())
+    dispatch(renderVesselFeatures())
   }

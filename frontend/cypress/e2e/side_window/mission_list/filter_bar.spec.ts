@@ -3,7 +3,7 @@ import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 
 // TODO Add search query, custom period and filter reset E2E tests.
-context('Side Window > Mission List > Filter Bar', () => {
+context('Side Window > Mission List > VesselFilter Bar', () => {
   beforeEach(() => {
     openSideWindowMissionList()
   })

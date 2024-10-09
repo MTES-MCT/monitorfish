@@ -1,4 +1,5 @@
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
+import FilterLayer from '@features/VesselFilter/layers/VesselFilterLayer'
 import { Feature } from 'ol'
 import { useState } from 'react'
 
@@ -17,7 +18,6 @@ import { FeatureWithCodeAndEntityId } from '../../libs/FeatureWithCodeAndEntityI
 import { AdministrativeLayers } from '../AdministrativeZone/layers/AdministrativeLayers'
 import { BaseLayer } from '../BaseMap/layers/BaseLayer'
 import { DrawLayer } from '../Draw/layer'
-import FilterLayer from '../Filter/layers/FilterLayer'
 import InterestPointLayer from '../InterestPoint/layers/InterestPointLayer'
 import { MeasurementLayer } from '../Measurement/layers/MeasurementLayer'
 import { MissionOverlay } from '../Mission/components/MissionOverlay'

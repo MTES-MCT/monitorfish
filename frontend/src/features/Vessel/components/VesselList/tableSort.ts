@@ -47,8 +47,8 @@ export function sortArrayByColumn(a, b, sortColumn, sortType) {
 }
 
 export function sortVesselsByProperty(a, b, sortColumn, sortType) {
-  let x = a[sortColumn] || a[sortColumn]
-  let y = b[sortColumn] || b[sortColumn]
+  let x = a[sortColumn]
+  let y = b[sortColumn]
 
   if (sortColumn === CSVOptions.flagState.code) {
     x = countries.getName(a[sortColumn], 'fr')

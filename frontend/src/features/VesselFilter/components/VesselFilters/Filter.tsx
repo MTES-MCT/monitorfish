@@ -1,7 +1,7 @@
 import { COLORS } from '@constants/constants'
-import { hideAllFilters } from '@features/Filter/useCases/hideAllFilters'
-import { removeFilter } from '@features/Filter/useCases/removeFilter'
-import { showFilter } from '@features/Filter/useCases/showFilter'
+import { hideAllVesselFilters } from '@features/VesselFilter/useCases/hideAllVesselFilters'
+import { removeVesselFilter } from '@features/VesselFilter/useCases/removeVesselFilter'
+import { showVesselFilter } from '@features/VesselFilter/useCases/showVesselFilter'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useState } from 'react'
 import styled from 'styled-components'
@@ -33,11 +33,14 @@ export function Filter({ filter, index, isLastItem }: FilterProps) {
           {filter.name ? filter.name.replace(/_/g, ' ') : `Filtre n°${index}`}
         </Text>
         {filter.showed ? (
-          <ShowIcon onClick={() => dispatch(hideAllFilters())} title="Cacher le filtre" />
+          <ShowIcon onClick={() => dispatch(hideAllVesselFilters())} title="Cacher le filtre" />
         ) : (
-          <HideIcon onClick={() => dispatch(showFilter(filter.uuid))} title="Afficher le filtre" />
+          <HideIcon onClick={() => dispatch(showVesselFilter(filter.uuid))} title="Afficher le filtre" />
         )}
-        <CloseIcon onClick={() => dispatch(removeFilter(filter.uuid))} title="Supprimer le filtre de ma sélection" />
+        <CloseIcon
+          onClick={() => dispatch(removeVesselFilter(filter.uuid))}
+          title="Supprimer le filtre de ma sélection"
+        />
       </FilterItem>
       <FilterTags $isLastItem={isLastItem} $isOpen={isOpen}>
         <TagList filters={filter.filters} uuid={filter.uuid} />

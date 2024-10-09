@@ -4,7 +4,6 @@ import { controlUnitDialogReducer } from '@features/ControlUnit/components/Contr
 import { controlUnitListDialogPersistedReducer } from '@features/ControlUnit/components/ControlUnitListDialog/slice'
 import { customZoneReducer, type CustomZoneState } from '@features/CustomZone/slice'
 import { drawReducer } from '@features/Draw/slice'
-import { filterReducer, type FilterState } from '@features/Filter/slice'
 import { interestPointReducer } from '@features/InterestPoint/slice'
 import { logbookReducer } from '@features/Logbook/slice'
 import { mainWindowReducer } from '@features/MainWindow/slice'
@@ -20,6 +19,7 @@ import { sideWindowReducer } from '@features/SideWindow/slice'
 import { stationReducer } from '@features/Station/slice'
 import { vesselListReducer } from '@features/Vessel/components/VesselList/slice'
 import { vesselSliceReducer } from '@features/Vessel/slice'
+import { filterReducer, type VesselFilterState } from '@features/VesselFilter/slice'
 import createMigrate from 'redux-persist/es/createMigrate'
 import persistReducer from 'redux-persist/es/persistReducer'
 import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2'
@@ -84,7 +84,10 @@ export const mainReducer = {
   favoriteVessel: favoriteVesselReducer,
   filter: persistReducerTyped(
     {
-      ...getCommonPersistReducerConfig<FilterState>('mainPersistorFilter', ['filters', 'nonFilteredVesselsAreHidden'])
+      ...getCommonPersistReducerConfig<VesselFilterState>('mainPersistorFilter', [
+        'filters',
+        'nonFilteredVesselsAreHidden'
+      ])
     },
     filterReducer
   ),

@@ -1,6 +1,6 @@
 import { addReportingFromAPI } from '@api/reporting'
 import { getVesselReportings } from '@features/Reporting/useCases/getVesselReportings'
-import { renderVessels } from '@features/Vessel/useCases/renderVessels'
+import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { Vessel } from '../../../domain/entities/vessel/vessel'
@@ -26,7 +26,7 @@ export const addReporting =
           vesselFeatureId: Vessel.getVesselFeatureId(selectedVesselIdentity)
         })
       )
-      await dispatch(renderVessels())
+      dispatch(renderVesselFeatures())
       await dispatch(getVesselReportings(true))
     } catch (error) {
       dispatch(

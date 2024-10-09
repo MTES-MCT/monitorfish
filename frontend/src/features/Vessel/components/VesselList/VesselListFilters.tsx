@@ -1,6 +1,5 @@
 import { COUNTRIES_AS_ALPHA2_OPTIONS } from '@constants/index'
 import getAdministrativeZoneGeometry from '@features/AdministrativeZone/useCases/getAdministrativeZoneGeometry'
-import { FilterTag } from '@features/Filter/components/VesselFilters/FilterTag'
 import { useGetFleetSegmentsQuery } from '@features/FleetSegment/apis'
 import {
   removeZoneSelected,
@@ -16,6 +15,7 @@ import {
   setZonesFilter,
   setZonesSelected
 } from '@features/Vessel/components/VesselList/slice'
+import { FilterTag } from '@features/VesselFilter/components/VesselFilters/FilterTag'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { THEME } from '@mtes-mct/monitor-ui'

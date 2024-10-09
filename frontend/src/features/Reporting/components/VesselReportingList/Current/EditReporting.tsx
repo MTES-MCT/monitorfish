@@ -1,12 +1,9 @@
 import { WindowContext } from '@api/constants'
-import { getVesselIdentityFromVessel } from '@features/Vessel/utils'
-import { useGetVesselQuery } from '@features/Vessel/vesselApi'
 import { Accent, Icon, IconButton, Size, THEME } from '@mtes-mct/monitor-ui'
-import { skipToken } from '@reduxjs/toolkit/query'
-import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { ReportingForm } from '../../ReportingForm'
+import { Loader as ReportingFormLoader } from '../../ReportingForm/Loader'
 
 import type { Reporting } from '@features/Reporting/types'
 import type { VesselIdentity } from 'domain/entities/vessel/types'
@@ -14,24 +11,9 @@ import type { VesselIdentity } from 'domain/entities/vessel/types'
 type EditReportingProps = Readonly<{
   closeForm: () => void
   editedReporting: Reporting.EditableReporting | undefined
-  vesselIdOrIdentity: number | VesselIdentity
+  vesselIdentity: VesselIdentity
 }>
-export function EditReporting({ closeForm, editedReporting, vesselIdOrIdentity }: EditReportingProps) {
-  const { data: vessel } = useGetVesselQuery(typeof vesselIdOrIdentity === 'number' ? vesselIdOrIdentity : skipToken)
-
-  const vesselIdentity = useMemo(() => {
-    switch (true) {
-      case typeof vesselIdOrIdentity === 'number':
-        return vessel ? getVesselIdentityFromVessel(vessel) : undefined
-
-      case !vesselIdOrIdentity:
-        return undefined
-
-      default:
-        return vesselIdOrIdentity
-    }
-  }, [vessel, vesselIdOrIdentity])
-
+export function EditReporting({ closeForm, editedReporting, vesselIdentity }: EditReportingProps) {
   return (
     <FormWrapper>
       <Header>
@@ -45,12 +27,12 @@ export function EditReporting({ closeForm, editedReporting, vesselIdOrIdentity }
           title="Fermer le formulaire"
         />
       </Header>
-      {!vesselIdentity && <p>Chargement en cours...</p>}
+
+      {!vesselIdentity && <ReportingFormLoader />}
       {vesselIdentity && (
         <StyledReportingForm
           closeForm={closeForm}
           editedReporting={editedReporting}
-          hasWhiteBackground={false}
           vesselIdentity={vesselIdentity}
           windowContext={WindowContext.MainWindow}
         />
@@ -60,8 +42,8 @@ export function EditReporting({ closeForm, editedReporting, vesselIdOrIdentity }
 }
 
 const StyledReportingForm = styled(ReportingForm)`
-  padding-top: 16px;
   padding-bottom: 16px;
+  padding-top: 16px;
 `
 
 const CloseFormIcon = styled(IconButton)`
@@ -70,20 +52,20 @@ const CloseFormIcon = styled(IconButton)`
 `
 
 const FormWrapper = styled.div`
+  background: ${p => p.theme.color.gainsboro} 0% 0% no-repeat padding-box;
+  color: ${p => p.theme.color.slateGray};
+  display: flex;
+  flex-direction: column;
   margin-bottom: 16px;
-  width: 448px;
-  display: inline-block;
-  background: ${THEME.color.gainsboro} 0% 0% no-repeat padding-box;
-  color: ${THEME.color.slateGray};
 `
 
 const Header = styled.div`
-  border-bottom: 2px solid ${THEME.color.white};
+  border-bottom: 2px solid ${p => p.theme.color.white};
   display: flex;
   height: 32px;
 `
 
 const HeaderText = styled.span`
-  margin: 7px 15px;
   font: normal normal medium 13px/18px Marianne;
+  margin: 7px 15px;
 `

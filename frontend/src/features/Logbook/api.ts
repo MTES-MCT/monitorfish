@@ -31,7 +31,7 @@ export async function getVesselLogbookFromAPI(
   isInLightMode: boolean,
   vesselIdentity: VesselIdentity,
   voyageRequest: NavigateTo | undefined,
-  tripNumber: number | undefined
+  tripNumber: string | number | undefined
 ) {
   const internalReferenceNumber = vesselIdentity.internalReferenceNumber ?? ''
   const nextTripNumber = tripNumber ?? ''

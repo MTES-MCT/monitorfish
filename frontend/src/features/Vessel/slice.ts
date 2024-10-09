@@ -35,8 +35,8 @@ export type VesselState = {
   isFocusedOnVesselSearch: boolean
   loadingPositions: boolean | null
   loadingVessel: boolean | null
-  selectedVessel: VesselTypes.AugmentedSelectedVessel | null
-  selectedVesselIdentity: VesselIdentity | null
+  selectedVessel: VesselTypes.AugmentedSelectedVessel | undefined
+  selectedVesselIdentity: VesselIdentity | undefined
   selectedVesselPositions: VesselPosition[] | null
   selectedVesselTrackRequest: TrackRequest | null
   tripMessagesLastToFormerDEPDateTimes: any[]
@@ -56,8 +56,8 @@ const INITIAL_STATE: VesselState = {
   isFocusedOnVesselSearch: false,
   loadingPositions: null,
   loadingVessel: null,
-  selectedVessel: null,
-  selectedVesselIdentity: null,
+  selectedVessel: undefined,
+  selectedVesselIdentity: undefined,
   selectedVesselPositions: null,
   selectedVesselTrackRequest: null,
   tripMessagesLastToFormerDEPDateTimes: [],
@@ -141,8 +141,8 @@ const vesselSlice = createSlice({
 
     closeVesselSidebar(state) {
       state.vesselSidebarIsOpen = false
-      state.selectedVessel = null
-      state.selectedVesselIdentity = null
+      state.selectedVessel = undefined
+      state.selectedVesselIdentity = undefined
       state.selectedVesselTrackRequest = null
       state.isFocusedOnVesselSearch = false
       state.tripMessagesLastToFormerDEPDateTimes = []
@@ -167,7 +167,7 @@ const vesselSlice = createSlice({
       state.selectedVesselIdentity = action.payload.vesselIdentity
       state.vesselSidebarIsOpen = true
       if (!action.payload.calledFromCron) {
-        state.selectedVessel = null
+        state.selectedVessel = undefined
         state.loadingVessel = true
         state.loadingPositions = true
       }
@@ -365,8 +365,8 @@ const vesselSlice = createSlice({
     },
 
     resetSelectedVessel(state) {
-      state.selectedVessel = null
-      state.selectedVesselIdentity = null
+      state.selectedVessel = undefined
+      state.selectedVesselIdentity = undefined
       state.selectedVesselPositions = null
     },
 

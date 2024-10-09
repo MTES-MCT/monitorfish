@@ -1,3 +1,4 @@
+import { WindowContext } from '@api/constants'
 import { ErrorWall } from '@components/ErrorWall'
 import { sideWindowReportingActions } from '@features/Reporting/sideWindowReporting.slice'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -61,8 +62,8 @@ export function EditReporting() {
           closeForm={closeForm}
           editedReporting={editedReporting}
           hasWhiteBackground
-          isFromSideWindow
           selectedVesselIdentity={getOnlyVesselIdentityProperties(editedReporting)}
+          windowContext={WindowContext.SideWindow}
         />
       )}
     </EditReportingWrapper>

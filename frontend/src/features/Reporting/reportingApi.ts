@@ -79,12 +79,13 @@ export const reportingApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(GET_REPORTINGS_ERROR_MESSAGE, response)
     }),
 
-    updateReporting: builder.mutation<Reporting.Reporting, { data: EditedReporting; id: number }>({
+    // TODO Remove the useless "/update" route part in Backend.
+    updateReporting: builder.mutation<Reporting.Reporting, { id: number; nextReportingFormData: EditedReporting }>({
       invalidatesTags: [{ type: RtkCacheTagType.Reportings }],
-      query: ({ data, id }) => ({
-        body: data,
+      query: ({ id, nextReportingFormData }) => ({
+        body: nextReportingFormData,
         method: 'PUT',
-        url: `/reportings/${id}`
+        url: `/reportings/${id}/update`
       }),
       transformErrorResponse: response => new FrontendApiError(UPDATE_REPORTING_ERROR_MESSAGE, response)
     })

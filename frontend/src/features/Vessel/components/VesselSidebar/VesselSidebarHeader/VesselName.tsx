@@ -50,8 +50,8 @@ export function VesselName({ focusOnVesselSearchInput }) {
 
   return (
     <Wrapper
+      $isOpen={vesselSidebarIsOpen}
       data-cy="vessel-search-selected-vessel-title"
-      isOpen={vesselSidebarIsOpen}
       onClick={() => focusOnVesselSearchInput(true)}
     >
       {selectedVesselIdentity?.flagState && (
@@ -82,7 +82,7 @@ function getVesselName(selectedVesselIdentity) {
 }
 
 const Wrapper = styled.div<{
-  isOpen: boolean
+  $isOpen: boolean
 }>`
   font-weight: bolder;
   margin: 0;
@@ -93,7 +93,7 @@ const Wrapper = styled.div<{
   border-top-right-radius: 2px;
   color: ${COLORS.gainsboro};
   height: 40px;
-  width: ${p => (p.isOpen ? 490 : 320)}px;
+  width: ${p => (p.$isOpen ? 490 : 320)}px;
   padding: 0 0 0 10px;
   flex: 3;
   text-align: left;

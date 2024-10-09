@@ -6,27 +6,25 @@ import ChevronIconSVG from '../../../../icons/Chevron_simple_gris.svg?react'
 import type { HTMLProps } from 'react'
 
 export const YearListTitle = styled.div<{
-  isEmpty: boolean
-  isOpen: boolean
+  $isEmpty: boolean
+  $isOpen: boolean
 }>`
   padding: 7px 5px 5px 16px;
   width: 100%;
   display: flex;
   user-select: none;
-  ${p => (p.isEmpty ? null : 'cursor: pointer;')}
-  ${p => (!p.isOpen ? null : `border-bottom: 1px solid ${p.theme.color.lightGray};`)}
+  ${p => (p.$isEmpty ? null : 'cursor: pointer;')}
+  ${p => (!p.$isOpen ? null : `border-bottom: 1px solid ${p.theme.color.lightGray};`)}
 `
 
-export const YearListTitleText = styled.div<
-  {
-    isEmpty: boolean
-  } & HTMLProps<HTMLDivElement>
->`
+export const YearListTitleText = styled.div<{
+  $isEmpty: boolean
+}>`
   color: ${COLORS.slateGray};
   font-size: 13px;
   font-weight: 500;
   width: 95%;
-  ${p => (p.isEmpty ? null : 'cursor: pointer;')}
+  ${p => (p.$isEmpty ? null : 'cursor: pointer;')}
 `
 
 export const YearListContent = styled.div<HTMLProps<HTMLDivElement>>`

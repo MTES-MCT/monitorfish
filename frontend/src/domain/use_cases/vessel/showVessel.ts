@@ -15,12 +15,14 @@ import { displayOrLogError } from '../error/displayOrLogError'
 
 import type { VesselIdentity } from '../../entities/vessel/types'
 import type { Vessel as VesselTypes } from '@features/Vessel/Vessel.types'
+import type { MainAppThunk } from '@store'
 
 /**
  * Show a specified vessel track on map and on the vessel right sidebar
  */
 export const showVessel =
-  (vesselIdentity: VesselIdentity, isFromSearch: boolean, isFromUserAction: boolean) => async (dispatch, getState) => {
+  (vesselIdentity: VesselIdentity, isFromSearch: boolean, isFromUserAction: boolean): MainAppThunk<Promise<void>> =>
+  async (dispatch, getState) => {
     try {
       const { fishingActivities, map, vessel } = getState()
       const { selectedVesselTrackRequest } = vessel

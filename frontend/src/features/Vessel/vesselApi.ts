@@ -1,7 +1,10 @@
 import { RtkCacheTagType } from '@api/constants'
 import { getVesselIdentityAsEmptyStringWhenNull } from '@api/vessel'
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { getUrlOrPathWithQueryParams } from '@utils/getUrlOrPathWithQueryParams'
+import { displayedErrorActions } from 'domain/shared_slices/DisplayedError'
+import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
 
 import { monitorfishApi } from '../../api/api'
 
@@ -36,6 +39,25 @@ export const vesselApi = monitorfishApi.injectEndpoints({
       VesselReportings,
       { fromDate: string; vesselIdentity: VesselIdentity }
     >({
+      // TODO Create a common generic handler since this pattern could be used with a few other RTK query hooks.
+      onQueryStarted: async (_args, { dispatch, queryFulfilled }) => {
+        try {
+          await queryFulfilled
+        } catch (err) {
+          dispatch(
+            displayOrLogError(
+              err, // `err` can only be a `FrontendApiError` that's what `transformErrorResponse()` always returns
+              () => () => {
+                // TODO Maybe `displayOrLogError()` should automatically unset the error boundary in the retryable use case?
+                dispatch(displayedErrorActions.unset(DisplayedErrorKey.VESSEL_SIDEBAR_ERROR))
+                dispatch(vesselApi.util.invalidateTags([RtkCacheTagType.Reportings]))
+              },
+              true,
+              DisplayedErrorKey.VESSEL_SIDEBAR_ERROR
+            )
+          )
+        }
+      },
       providesTags: () => [{ type: RtkCacheTagType.Reportings }],
       query: ({ fromDate, vesselIdentity }) =>
         getUrlOrPathWithQueryParams('/vessels/reportings', {

@@ -69,7 +69,7 @@ export function VesselCard({ feature, numberOfWarnings, overlayPosition }) {
         <VesselCardAlert data-cy="vessel-card-alert">
           <AlertIcon size={17} />
           {vesselProperties.alerts?.length === 1
-            ? getAlertNameFromType(vesselProperties.alerts[0])
+            ? getAlertNameFromType(vesselProperties.alerts[0]!)
             : `${vesselProperties.alerts?.length} alertes`}
         </VesselCardAlert>
       )}

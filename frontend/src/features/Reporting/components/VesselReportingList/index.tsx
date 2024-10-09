@@ -1,5 +1,5 @@
 import { FingerprintSpinner } from '@components/FingerprintSpinner'
-import { Summary } from '@features/Reporting/components/CardReportingList/Summary'
+import { Summary } from '@features/Reporting/components/VesselReportingList/Summary'
 import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
 import { THEME } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
@@ -11,20 +11,20 @@ import { Current } from './Current'
 
 import type { VesselIdentity } from 'domain/entities/vessel/types'
 
-type CardReportingListProp = Readonly<{
+type VesselReportingListProps = Readonly<{
   fromDate: string
   onTabChange?: (nextTab: ReportingTab) => void
   selectedReportingTab: ReportingTab
   vesselIdentity: VesselIdentity | undefined
   withTabs?: boolean
 }>
-export function CardReportingList({
+export function VesselReportingList({
   fromDate,
   onTabChange,
   selectedReportingTab,
   vesselIdentity,
   withTabs = false
-}: CardReportingListProp) {
+}: VesselReportingListProps) {
   const { data: vesselReportings } = useGetVesselReportingsByVesselIdentityQuery(
     vesselIdentity
       ? {

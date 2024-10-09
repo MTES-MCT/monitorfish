@@ -7,11 +7,12 @@ import type { FilterTag as FilterTagType } from '@features/Filter/types'
 
 type FilterTagProps = Readonly<{
   iconElement: JSX.Element | undefined
+  remove?: () => void
   tag: FilterTagType
   text: string
   uuid: string | undefined
 }>
-export function FilterTag({ iconElement, tag, text, uuid }: FilterTagProps) {
+export function FilterTag({ iconElement, remove, tag, text, uuid }: FilterTagProps) {
   const dispatch = useMainAppDispatch()
 
   return (
@@ -21,7 +22,7 @@ export function FilterTag({ iconElement, tag, text, uuid }: FilterTagProps) {
       <CloseIcon
         color={THEME.color.gunMetal}
         data-cy="vessel-filter-remove-tag"
-        onClick={() => dispatch(removeTagFromFilter({ ...tag, uuid }))}
+        onClick={() => (remove ? remove() : dispatch(removeTagFromFilter({ ...tag, uuid })))}
         size={10}
       />
     </TagWrapper>

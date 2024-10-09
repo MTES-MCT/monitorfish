@@ -1,6 +1,6 @@
 import { resetInteraction } from '@features/Draw/slice'
 import { MapToolButton } from '@features/MainWindow/components/MapButtons/shared/MapToolButton'
-import { addZoneSelected, resetZonesSelected } from '@features/Vessel/components/VesselList/slice'
+import { addZoneSelected, reset } from '@features/Vessel/components/VesselList/slice'
 import { VesselListModal } from '@features/Vessel/components/VesselList/VesselListModal'
 import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -51,7 +51,7 @@ export function VesselList({ namespace }) {
       })
     )
     dispatch(setBlockVesselsUpdate(false))
-    dispatch(resetZonesSelected())
+    dispatch(reset())
   }, [dispatch])
 
   return (

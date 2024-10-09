@@ -26,15 +26,16 @@ const { Cell, Column, HeaderCell } = Table
 function UnmemoizedVesselListTable({
   allVesselsChecked,
   filteredVessels,
-  filters,
   seeMoreIsOpen,
   setAllVesselsChecked,
   toggleSelectRow,
   vesselsCountShowed,
   vesselsCountTotal
 }) {
+  const districtsFiltered = useMainAppSelector(state => state.vesselList.districtsFiltered)
+  const vesselsSizeValuesChecked = useMainAppSelector(state => state.vesselList.vesselsSizeValuesChecked)
   const isSuperUser = useIsSuperUser()
-  const { coordinatesFormat } = useMainAppSelector(state => state.map)
+  const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
   const [sortColumn, setSortColumn] = React.useState<string | undefined>(undefined)
   const [sortType, setSortType] = React.useState<SortType | undefined>(undefined)
 
@@ -156,13 +157,13 @@ function UnmemoizedVesselListTable({
           <HeaderCell>Observations</HeaderCell>
           <CellWithTitle dataKey="postControlComment" />
         </Column>
-        {filters.districtsFiltered?.length ? (
+        {districtsFiltered?.length ? (
           <Column resizable sortable width={100}>
             <HeaderCell>Quartier</HeaderCell>
             <CellUsingVesselProperty dataKey="district" vesselProperty="district" />
           </Column>
         ) : null}
-        {filters.vesselsSizeValuesChecked?.length ? (
+        {vesselsSizeValuesChecked?.length ? (
           <Column resizable sortable width={100}>
             <HeaderCell>Longueur</HeaderCell>
             <CellUsingVesselProperty dataKey="length" vesselProperty="length" />

@@ -121,7 +121,7 @@ context('Favorite Vessel', () => {
       }
     })
 
-    cy.get('*[data-cy^="close-vessel-track"]').click()
+    cy.get('*[data-cy^="close-vessel-track"]').click({ force: true })
     cy.get('*[data-cy^="close-vessel-track"]').should('not.exist')
 
     cy.cleanScreenshots(2)

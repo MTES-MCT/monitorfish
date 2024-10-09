@@ -1,3 +1,4 @@
+import { WindowContext } from '@api/constants'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Icon, IconButton, Size, THEME } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
@@ -30,8 +31,8 @@ export function EditReporting({ closeForm }: EditReportingProps) {
         closeForm={closeForm}
         editedReporting={editedReporting}
         hasWhiteBackground={false}
-        isFromSideWindow={false}
         selectedVesselIdentity={selectedVesselIdentity}
+        windowContext={WindowContext.MainWindow}
       />
     </FormWrapper>
   )

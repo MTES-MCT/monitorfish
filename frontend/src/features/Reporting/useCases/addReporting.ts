@@ -1,7 +1,4 @@
-import { RtkCacheTagType } from '@api/constants'
-import { addReportingFromAPI } from '@api/reporting'
 import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
-import { vesselApi } from '@features/Vessel/vesselApi'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { Vessel } from '../../../domain/entities/vessel/vessel'
@@ -18,9 +15,7 @@ export const addReporting =
     const { selectedVesselIdentity } = getState().vessel
 
     try {
-      await addReportingFromAPI(newReporting)
-      dispatch(reportingApi.util.invalidateTags([RtkCacheTagType.Reportings]))
-      dispatch(vesselApi.util.invalidateTags([RtkCacheTagType.Reportings]))
+      await dispatch(reportingApi.endpoints.createReporting.initiate(newReporting)).unwrap()
 
       dispatch(
         addVesselReporting({

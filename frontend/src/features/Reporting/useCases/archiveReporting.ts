@@ -1,8 +1,4 @@
-import { RtkCacheTagType } from '@api/constants'
-import { archiveReportingFromAPI } from '@api/reporting'
-import { ReportingType } from '@features/Reporting/types'
 import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
-import { vesselApi } from '@features/Vessel/vesselApi'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { Vessel } from '../../../domain/entities/vessel/vessel'
@@ -10,6 +6,7 @@ import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogE
 import { removeVesselReporting } from '../../Vessel/slice'
 import { reportingApi } from '../reportingApi'
 
+import type { ReportingType } from '@features/Reporting/types'
 import type { MainAppThunk } from '@store'
 
 export const archiveReporting =
@@ -18,9 +15,7 @@ export const archiveReporting =
     const { selectedVesselIdentity } = getState().vessel
 
     try {
-      await archiveReportingFromAPI(id)
-      dispatch(reportingApi.util.invalidateTags([RtkCacheTagType.Reportings]))
-      dispatch(vesselApi.util.invalidateTags([RtkCacheTagType.Reportings]))
+      await dispatch(reportingApi.endpoints.archiveReporting.initiate(id)).unwrap()
 
       dispatch(
         removeVesselReporting({

@@ -1,8 +1,6 @@
-import { RtkCacheTagType } from '@api/constants'
-import { updateReportingFromAPI } from '@api/reporting'
+import { WindowContext } from '@api/constants'
 import { ReportingType } from '@features/Reporting/types'
 import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
-import { vesselApi } from '@features/Vessel/vesselApi'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { Vessel } from '../../../domain/entities/vessel/vessel'
@@ -16,21 +14,24 @@ import type { MainAppThunk } from '@store'
 
 export const updateReporting =
   (
-    selectedVesselIdentity: VesselIdentity,
+    vesselIdentity: VesselIdentity,
     id: number,
-    nextReporting: EditedReporting,
+    nextReportingFormData: EditedReporting,
     previousReportingType: ReportingType,
-    isFromSideWindow: boolean
+    windowContext: WindowContext
   ): MainAppThunk<Promise<void>> =>
   async dispatch => {
     try {
-      await updateReportingFromAPI(id, nextReporting)
-      dispatch(reportingApi.util.invalidateTags([RtkCacheTagType.Reportings]))
-      dispatch(vesselApi.util.invalidateTags([RtkCacheTagType.Reportings]))
+      await dispatch(
+        reportingApi.endpoints.updateReporting.initiate({
+          id,
+          nextReportingFormData
+        })
+      ).unwrap()
 
       // We update the reportings of the last positions vessels state
-      if (previousReportingType !== nextReporting.type) {
-        const vesselFeatureId = Vessel.getVesselFeatureId(selectedVesselIdentity)
+      if (previousReportingType !== nextReportingFormData.type) {
+        const vesselFeatureId = Vessel.getVesselFeatureId(vesselIdentity)
 
         dispatch(
           removeVesselReporting({
@@ -40,7 +41,7 @@ export const updateReporting =
         )
         dispatch(
           addVesselReporting({
-            reportingType: nextReporting.type,
+            reportingType: nextReportingFormData.type,
             vesselFeatureId
           })
         )
@@ -51,9 +52,11 @@ export const updateReporting =
       dispatch(
         displayOrLogError(
           error as Error,
-          () => updateReporting(selectedVesselIdentity, id, nextReporting, previousReportingType, isFromSideWindow),
+          () => updateReporting(vesselIdentity, id, nextReportingFormData, previousReportingType, windowContext),
           true,
-          isFromSideWindow ? DisplayedErrorKey.SIDE_WINDOW_REPORTING_FORM_ERROR : DisplayedErrorKey.VESSEL_SIDEBAR_ERROR
+          windowContext === WindowContext.MainWindow
+            ? DisplayedErrorKey.VESSEL_SIDEBAR_ERROR
+            : DisplayedErrorKey.SIDE_WINDOW_REPORTING_FORM_ERROR
         )
       )
     }

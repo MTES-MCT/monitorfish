@@ -1,7 +1,5 @@
-import { RtkCacheTagType, WindowContext } from '@api/constants'
-import { archiveReportingsFromAPI } from '@api/reporting'
+import { WindowContext } from '@api/constants'
 import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
-import { vesselApi } from '@features/Vessel/vesselApi'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { Vessel } from '../../../domain/entities/vessel/vessel'
@@ -13,14 +11,12 @@ import type { Reporting } from '@features/Reporting/types'
 import type { MainAppThunk } from '@store'
 
 export const archiveReportings =
-  (reportings: Reporting.Reporting[], reportingIdsToArchive: number[], windowContext: WindowContext): MainAppThunk =>
+  (reportings: Reporting.Reporting[], ids: number[], windowContext: WindowContext): MainAppThunk =>
   async dispatch => {
-    const reportingsInformation = getReportingsInformationFromIds(reportingIdsToArchive, reportings)
+    const reportingsInformation = getReportingsInformationFromIds(ids, reportings)
 
     try {
-      await archiveReportingsFromAPI(reportingIdsToArchive)
-      dispatch(reportingApi.util.invalidateTags([RtkCacheTagType.Reportings]))
-      dispatch(vesselApi.util.invalidateTags([RtkCacheTagType.Reportings]))
+      await dispatch(reportingApi.endpoints.archiveReportings.initiate(ids)).unwrap()
 
       dispatch(removeVesselReportings(reportingsInformation))
 
@@ -29,7 +25,7 @@ export const archiveReportings =
       dispatch(
         displayOrLogError(
           error as Error,
-          () => archiveReportings(reportings, reportingIdsToArchive, windowContext),
+          () => archiveReportings(reportings, ids, windowContext),
           true,
           windowContext === WindowContext.MainWindow
             ? DisplayedErrorKey.MAIN_WINDOW_REPORTING_LIST_ERROR

@@ -83,18 +83,18 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
   return (
     <>
       <VesselSidebarActionButton
-        backgroundColor={isOpen ? THEME.color.blueGray : THEME.color.charcoal}
+        $backgroundColor={isOpen ? THEME.color.blueGray : THEME.color.charcoal}
+        $isRightMenuOpen={rightMenuIsOpen}
+        $isSidebarOpen={isSidebarOpen}
+        $top={118}
         data-cy="vessel-track-depth-selection"
-        isRightMenuOpen={rightMenuIsOpen}
-        isSidebarOpen={isSidebarOpen}
         onClick={() => setIsOpenedFromClick(!isOpenedFromClick)}
         title="Paramétrer l'affichage de la piste VMS"
-        top={118}
       >
         <VesselIcon />
       </VesselSidebarActionButton>
       {isOpen && (
-        <TrackRequestBody isRightMenuOpen={rightMenuIsOpen} isSidebarOpen={isSidebarOpen}>
+        <TrackRequestBody $isRightMenuOpen={rightMenuIsOpen} $isSidebarOpen={isSidebarOpen}>
           <Header>Paramétrer l&apos;affichage de la piste VMS</Header>
           <Section>
             <Field>
@@ -153,8 +153,8 @@ const Field = styled.div`
 `
 
 const TrackRequestBody = styled(MapComponent)<{
-  isRightMenuOpen: boolean
-  isSidebarOpen: boolean
+  $isRightMenuOpen: boolean
+  $isSidebarOpen: boolean
 }>`
   background: ${p => p.theme.color.white};
   border-radius: 2px;
@@ -164,7 +164,7 @@ const TrackRequestBody = styled(MapComponent)<{
   font-size: 13px;
   margin-right: 540px;
   position: absolute;
-  right: ${p => (p.isRightMenuOpen && p.isSidebarOpen ? 55 : 10)}px;
+  right: ${p => (p.$isRightMenuOpen && p.$isSidebarOpen ? 55 : 10)}px;
   text-align: left;
   top: 118px;
   transition: all 0.3s;

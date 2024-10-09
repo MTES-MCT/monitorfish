@@ -15,7 +15,7 @@ context('Side Window > Reporting List > Actions', () => {
         const numberOfReportings = $reportingRows.length
 
         // When
-        cy.get('.rs-checkbox-wrapper').first().click()
+        cy.get('.rs-checkbox-wrapper').eq(1).click()
         cy.getDataCy('archive-reporting-cards').click({ force: true })
 
         cy.wait('@archiveReportings').then(archiveInterception => {
@@ -85,7 +85,7 @@ context('Side Window > Reporting List > Actions', () => {
         const numberOfReportings = $reportingRows.length
 
         // When
-        cy.get('.rs-checkbox-wrapper').first().click()
+        cy.get('.rs-checkbox-wrapper').eq(1).click()
         cy.getDataCy('delete-reporting-cards').click({ force: true })
 
         cy.wait('@deleteReportings').then(archiveInterception => {

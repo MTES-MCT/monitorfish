@@ -45,7 +45,7 @@ ON lp.cfr = d.cfr
 WHERE
     dep_rank = 1
     AND (
-        ABS(EXTRACT(epoch FROM date_time - departure_datetime_utc)) / 3600 > 3
+        (EXTRACT(epoch FROM date_time - departure_datetime_utc)) / 3600 > 6
         OR departure_datetime_utc IS NULL
     )
     AND NOT lp.is_at_port

@@ -6,22 +6,22 @@ import { skipToken } from '@reduxjs/toolkit/query'
 import styled from 'styled-components'
 
 import { Archived } from './Archived'
-import { ReportingTab } from './constants'
+import { VesselReportingListTab } from './constants'
 import { Current } from './Current'
 
 import type { VesselIdentity } from 'domain/entities/vessel/types'
 
 type VesselReportingListProps = Readonly<{
   fromDate: string
-  onTabChange?: (nextTab: ReportingTab) => void
-  selectedReportingTab: ReportingTab
+  onTabChange?: (nextTab: VesselReportingListTab) => void
+  selectedTab: VesselReportingListTab
   vesselIdentity: VesselIdentity | undefined
   withTabs?: boolean
 }>
 export function VesselReportingList({
   fromDate,
   onTabChange,
-  selectedReportingTab,
+  selectedTab,
   vesselIdentity,
   withTabs = false
 }: VesselReportingListProps) {
@@ -42,22 +42,22 @@ export function VesselReportingList({
           {withTabs && (
             <Menu>
               <CurrentOrHistoryButton
-                $isActive={selectedReportingTab === ReportingTab.CURRENT_REPORTING}
-                onClick={() => (onTabChange ? onTabChange(ReportingTab.CURRENT_REPORTING) : undefined)}
+                $isActive={selectedTab === VesselReportingListTab.CURRENT_REPORTING}
+                onClick={() => (onTabChange ? onTabChange(VesselReportingListTab.CURRENT_REPORTING) : undefined)}
               >
                 Signalements en cours ({vesselReportings.current.length})
               </CurrentOrHistoryButton>
               <CurrentOrHistoryButton
-                $isActive={selectedReportingTab === ReportingTab.REPORTING_HISTORY}
+                $isActive={selectedTab === VesselReportingListTab.REPORTING_HISTORY}
                 data-cy="vessel-sidebar-reporting-tab-history-button"
-                onClick={() => (onTabChange ? onTabChange(ReportingTab.REPORTING_HISTORY) : undefined)}
+                onClick={() => (onTabChange ? onTabChange(VesselReportingListTab.REPORTING_HISTORY) : undefined)}
               >
                 Historique des signalements
               </CurrentOrHistoryButton>
             </Menu>
           )}
-          {selectedReportingTab === ReportingTab.CURRENT_REPORTING && <Current />}
-          {selectedReportingTab === ReportingTab.REPORTING_HISTORY && (
+          {selectedTab === VesselReportingListTab.CURRENT_REPORTING && <Current />}
+          {selectedTab === VesselReportingListTab.REPORTING_HISTORY && (
             <>
               <Summary />
               <Archived />

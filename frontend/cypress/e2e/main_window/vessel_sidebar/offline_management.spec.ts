@@ -136,7 +136,7 @@ context('Offline management', () => {
       {
         method: 'GET',
         pathname: '/bff/v1/vessels/reportings',
-        times: 1
+        times: 3
       },
       { statusCode: 400 }
     ).as('getReportingsStubbed')

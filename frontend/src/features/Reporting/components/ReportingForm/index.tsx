@@ -42,7 +42,7 @@ type ReportingFormProps = {
   className?: string | undefined
   closeForm: () => void
   editedReporting: Reporting.EditableReporting | undefined
-  hasWhiteBackground: boolean
+  hasWhiteBackground?: boolean
   vesselIdentity: VesselIdentity
   windowContext: WindowContext
 }
@@ -50,7 +50,7 @@ export function ReportingForm({
   className,
   closeForm,
   editedReporting,
-  hasWhiteBackground,
+  hasWhiteBackground = false,
   vesselIdentity,
   windowContext
 }: ReportingFormProps) {
@@ -165,7 +165,7 @@ export function ReportingForm({
               value={values.reportingActor}
             />
             {values.reportingActor === ReportingOriginActor.UNIT && (
-              <StyledFormikSelect
+              <FormikSelect
                 isLight={!hasWhiteBackground}
                 label="Choisir l'unité"
                 name="controlUnitId"
@@ -177,14 +177,14 @@ export function ReportingForm({
               values.reportingActor === ReportingOriginActor.DML ||
               values.reportingActor === ReportingOriginActor.DIRM ||
               values.reportingActor === ReportingOriginActor.OTHER) && (
-              <StyledFormikTextInput
+              <FormikTextInput
                 isLight={!hasWhiteBackground}
                 label="Nom et contact (numéro, mail…) de l’émetteur"
                 name="authorContact"
                 placeholder="Ex: Yannick Attal (06 24 25 01 91)"
               />
             )}
-            <StyledFormikTextInput
+            <FormikTextInput
               isLight={!hasWhiteBackground}
               label="Titre"
               name="title"
@@ -194,7 +194,7 @@ export function ReportingForm({
                   : 'Ex: Infraction maille cul de chalut'
               }
             />
-            <StyledFormikTextarea
+            <FormikTextarea
               isLight={!hasWhiteBackground}
               label="Description"
               name="description"
@@ -205,7 +205,7 @@ export function ReportingForm({
               }
             />
             {values.type === ReportingTypeCharacteristics.INFRACTION_SUSPICION.code && (
-              <StyledFormikSelect
+              <FormikSelect
                 isLight={!hasWhiteBackground}
                 label="Natinf"
                 name="natinfCode"
@@ -216,7 +216,7 @@ export function ReportingForm({
                 title={infractionTitle}
               />
             )}
-            <StyledFormikTextInput
+            <FormikTextInput
               isLight={!hasWhiteBackground}
               label="Saisi par"
               name="authorTrigram"
@@ -234,18 +234,6 @@ export function ReportingForm({
     </Formik>
   )
 }
-
-const StyledFormikSelect = styled(FormikSelect)`
-  width: 416px;
-`
-
-const StyledFormikTextInput = styled(FormikTextInput)`
-  width: 416px;
-`
-
-const StyledFormikTextarea = styled(FormikTextarea)`
-  width: 416px;
-`
 
 const ValidateButton = styled(Button)`
   margin: 24px 10px 0px 0px;

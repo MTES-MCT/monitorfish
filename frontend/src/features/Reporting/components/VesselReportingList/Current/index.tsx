@@ -9,12 +9,13 @@ import type { Reporting, ReportingAndOccurrences, VesselReportings } from '@feat
 import type { VesselIdentity } from 'domain/entities/vessel/types'
 
 type CurrentProps = Readonly<{
-  vesselIdOrIdentity: number | VesselIdentity
+  vesselIdentity: VesselIdentity
   vesselReportings: VesselReportings
+  withOpenedNewReportingForm: boolean
 }>
-export function Current({ vesselIdOrIdentity, vesselReportings }: CurrentProps) {
+export function Current({ vesselIdentity, vesselReportings, withOpenedNewReportingForm }: CurrentProps) {
   const [editedReporting, setEditedReporting] = useState<Reporting.EditableReporting | undefined>()
-  const [isNewReportingFormOpen, setIsNewReportingFormOpen] = useState(false)
+  const [isNewReportingFormOpen, setIsNewReportingFormOpen] = useState(withOpenedNewReportingForm)
 
   const closeForm = useCallback(() => {
     setIsNewReportingFormOpen(false)
@@ -44,11 +45,7 @@ export function Current({ vesselIdOrIdentity, vesselReportings }: CurrentProps) 
         </NewReportingButton>
       )}
       {(isNewReportingFormOpen || editedReporting) && (
-        <EditReporting
-          closeForm={closeForm}
-          editedReporting={editedReporting}
-          vesselIdOrIdentity={vesselIdOrIdentity}
-        />
+        <EditReporting closeForm={closeForm} editedReporting={editedReporting} vesselIdentity={vesselIdentity} />
       )}
       {reportingsWithoutEdited.map(reporting => (
         <ReportingCard
@@ -68,10 +65,12 @@ const NewReportingButton = styled(Button)`
 
 const Wrapper = styled.div`
   background: ${p => p.theme.color.white};
+  color: ${p => p.theme.color.slateGray};
+  display: flex;
+  flex-direction: column;
   margin: 10px 5px 5px 5px;
   padding: 16px 16px 1px 16px;
   text-align: left;
-  color: ${p => p.theme.color.slateGray};
 `
 
 const NoReporting = styled.div`

@@ -127,15 +127,14 @@ const vesselSlice = createSlice({
      * In the ShowedVesselTrack object,
      * - The `toShow` property trigger the layer to show the track
      * - The `toHide` property trigger the layer to hide the track
-     * @function addVesselTrackShowed
-     *
-     * @param {Object} state
-     * @param {{payload: {
-     *   vesselCompositeIdentifier: string,
-     *   showedVesselTrack: ShowedVesselTrack
-     *  }}} action - the vessel positions to show on map
      */
-    addVesselTrackShowed(state, action) {
+    addVesselTrackShowed(
+      state,
+      action: PayloadAction<{
+        showedVesselTrack: ShowedVesselTrack
+        vesselCompositeIdentifier: string
+      }>
+    ) {
       state.vesselsTracksShowed[action.payload.vesselCompositeIdentifier] = action.payload.showedVesselTrack
     },
 
@@ -154,12 +153,8 @@ const vesselSlice = createSlice({
 
     /**
      * Highlight a vessel position on map from the vessel track positions table
-     * @function highlightVesselTrackPosition
-     *
-     * @param {Object} state
-     * @param {{payload: VesselPosition | null}} action - The position
      */
-    highlightVesselTrackPosition(state, action) {
+    highlightVesselTrackPosition(state, action: PayloadAction<VesselPosition | null>) {
       state.highlightedVesselTrackPosition = action.payload
     },
 
@@ -282,19 +277,18 @@ const vesselSlice = createSlice({
       }
     },
     /**
-     * Remove multiple reportings from vessels array
-     * before the /vessels API is fetched from the cron
-     * @function removeVesselReporting
-     * @param {Object} state
-     * @param {{
-     *   payload: {
-     *     id: number
-     *     type: string
-     *     vesselFeatureId: string
-     *   }[]
-     * }} action - the reportings to remove
+     * Remove multiple reportings from vessels array before the /vessels API is fetched from the cron
      */
-    removeVesselReportings(state, action) {
+    removeVesselReportings(
+      state,
+      action: PayloadAction<
+        Array<{
+          id: number
+          type: string
+          vesselFeatureId: string
+        }>
+      >
+    ) {
       const vesselsFeatureIds = action.payload.map(reporting => reporting.vesselFeatureId)
       const vessels = vesselSelectors.selectAll(state.vessels)
 
@@ -351,9 +345,6 @@ const vesselSlice = createSlice({
     },
     /**
      * Reset the highlighted vessel position
-     * @function resetHighlightedVesselTrackPosition
-     *
-     * @param {Object} state
      */
     resetHighlightedVesselTrackPosition(state) {
       state.highlightedVesselTrackPosition = null
@@ -409,12 +400,8 @@ const vesselSlice = createSlice({
 
     /**
      * Show or hide other vessels (than the selected vessel)
-     * @function setHideNonSelectedVessels
-     *
-     * @param {Object} state
-     * @param {{payload: boolean}} action - hide (true) or show (false)
      */
-    setHideNonSelectedVessels(state, action) {
+    setHideNonSelectedVessels(state, action: PayloadAction<boolean>) {
       state.hideNonSelectedVessels = action.payload
     },
 
@@ -424,11 +411,8 @@ const vesselSlice = createSlice({
 
     /**
      * Set  previewed vessel features
-     * @function setPreviewFilteredVesselsFeatures
-     * @param {Object} state
-     * @param {{payload: string[]}} action - the previewed vessel features uids
      */
-    setPreviewFilteredVesselsFeatures(state, action) {
+    setPreviewFilteredVesselsFeatures(state, action: PayloadAction<string[]>) {
       const previewFilteredVesselsFeaturesUids = action.payload
       const vesselIds = state.vessels.ids
 
@@ -468,12 +452,8 @@ const vesselSlice = createSlice({
      *  afterDateTime: 00h00
      *  beforeDateTime: 23h59
      * When fetching the track from the API
-     *
-     * @function setSelectedVesselCustomTrackRequest
-     * @param {Object} state
-     * @param {{payload: TrackRequest}} action - The track request
      */
-    setSelectedVesselCustomTrackRequest(state, action) {
+    setSelectedVesselCustomTrackRequest(state, action: PayloadAction<TrackRequest>) {
       state.selectedVesselTrackRequest = action.payload
     },
 
@@ -496,45 +476,30 @@ const vesselSlice = createSlice({
 
     /**
      * Set the vessel track features extent - used to fit the extent into the OpenLayers view
-     * @function setVesselTrackExtent
-     *
-     * @param {Object} state
-     * @param {{payload: number[]}} action - the extent
      */
-    setVesselTrackExtent(state, action) {
+    setVesselTrackExtent(state, action: PayloadAction<number[]>) {
       state.vesselTrackExtent = action.payload
     },
 
     /**
      * Show the specified vessel tab
-     * @function showVesselSidebarTab
-     * @param {Object} state
-     * @param {{payload: number}} action - The tab (VesselSidebarTab)
      */
-    showVesselSidebarTab(state, action) {
+    showVesselSidebarTab(state, action: PayloadAction<VesselSidebarTab>) {
       state.vesselSidebarTab = action.payload
     },
 
     /**
      * Update the positions of the vessel
-     * @function updateSelectedVesselPositions
-     *
-     * @param {Object} state
-     * @param {{payload: VesselPosition[]}} action - The positions
      */
-    updateSelectedVesselPositions(state, action) {
+    updateSelectedVesselPositions(state, action: PayloadAction<VesselPosition[]>) {
       state.loadingPositions = null
       state.selectedVesselPositions = action.payload
     },
 
     /**
      * Remove the vessel track to the list
-     * @function updateVesselTrackAsHidden
-     *
-     * @param {Object} state
-     * @param {{payload: string}} action - the vessel id
      */
-    updateVesselTrackAsHidden(state, action) {
+    updateVesselTrackAsHidden(state, action: PayloadAction<string>) {
       delete state.vesselsTracksShowed[action.payload]
 
       if (!atLeastOneVesselSelected(state.vesselsTracksShowed, state.selectedVesselIdentity)) {
@@ -563,9 +528,6 @@ const vesselSlice = createSlice({
 
     /**
      * Update a given vessel track as to be hidden by the layer
-     * @function updateVesselTrackAsShowed
-     * @param {Object} state
-     * @param {{payload: string}} action - the vessel id
      */
     updateVesselTrackAsToHide(state, action: PayloadAction<string>) {
       if (state.vesselsTracksShowed[action.payload]) {
@@ -575,12 +537,8 @@ const vesselSlice = createSlice({
 
     /**
      * Update a given vessel track as zoomed
-     * @function updateVesselTrackAsZoomed
-     *
-     * @param {Object} state
-     * @param {{payload: string}} action - the vessel Composite Identifier
      */
-    updateVesselTrackAsZoomed(state, action) {
+    updateVesselTrackAsZoomed(state, action: PayloadAction<string>) {
       if (state.vesselsTracksShowed[action.payload]) {
         state.vesselsTracksShowed[action.payload]!.toZoom = false
       }
@@ -592,10 +550,10 @@ const vesselSlice = createSlice({
   }
 })
 
-function filterFirstFoundReportingType(reportingType) {
+function filterFirstFoundReportingType(reportingType: string) {
   let reportingTypeHasBeenRemoved = false
 
-  return (acc, returnedReportingType) => {
+  return (acc: ReportingType[], returnedReportingType: ReportingType) => {
     if (returnedReportingType === reportingType && !reportingTypeHasBeenRemoved) {
       reportingTypeHasBeenRemoved = true
 
@@ -608,14 +566,20 @@ function filterFirstFoundReportingType(reportingType) {
   }
 }
 
-function filterFirstFoundReportingTypes(reportingTypes, vesselReportingsToRemove) {
+function filterFirstFoundReportingTypes(
+  reportingTypes: ReportingType[],
+  vesselReportingsToRemove: Array<{
+    id: number
+    type: string
+    vesselFeatureId: string
+  }>
+): ReportingType[] {
   let vesselReportingWithoutFirstFoundReportingTypes = reportingTypes
 
   vesselReportingsToRemove.forEach(reportingToRemove => {
-    vesselReportingWithoutFirstFoundReportingTypes = vesselReportingWithoutFirstFoundReportingTypes.reduce(
-      filterFirstFoundReportingType(reportingToRemove.type),
-      []
-    )
+    vesselReportingWithoutFirstFoundReportingTypes = vesselReportingWithoutFirstFoundReportingTypes.reduce<
+      ReportingType[]
+    >(filterFirstFoundReportingType(reportingToRemove.type), [])
   })
 
   return vesselReportingWithoutFirstFoundReportingTypes

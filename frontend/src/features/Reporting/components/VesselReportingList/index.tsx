@@ -1,3 +1,4 @@
+import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { Summary } from '@features/Reporting/components/VesselReportingList/Summary'
 import { getDefaultReportingsStartDate } from '@features/Reporting/utils'
@@ -40,7 +41,8 @@ export function VesselReportingList({
           fromDate: startDate.toISOString(),
           vesselIdentity
         }
-      : skipToken
+      : skipToken,
+    RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS
   )
 
   const decreaseStartDate = () => {

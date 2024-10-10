@@ -18,6 +18,7 @@ import type {
   VesselIdentity,
   VesselPosition
 } from '../../domain/entities/vessel/types'
+import type { VesselReportingListTab } from '@features/Reporting/components/VesselReportingList/constants'
 import type { Vessel as VesselTypes } from '@features/Vessel/Vessel.types'
 
 const NOT_FOUND = -1
@@ -38,12 +39,13 @@ export type VesselState = {
   selectedVessel: VesselTypes.AugmentedSelectedVessel | undefined
   selectedVesselIdentity: VesselIdentity | undefined
   selectedVesselPositions: VesselPosition[] | null
+  selectedVesselSidebarReportingListTab: VesselReportingListTab | undefined
+  selectedVesselSidebarTab: VesselSidebarTab
   selectedVesselTrackRequest: TrackRequest | null
   tripMessagesLastToFormerDEPDateTimes: any[]
   uniqueVesselsDistricts: any[]
   uniqueVesselsSpecies: any[]
   vesselSidebarIsOpen: boolean
-  vesselSidebarTab: VesselSidebarTab
   vesselTrackExtent: any | null
   vessels: EntityState<VesselEnhancedLastPositionWebGLObject, VesselFeatureId>
   vesselsEstimatedPositions: any[]
@@ -59,6 +61,8 @@ const INITIAL_STATE: VesselState = {
   selectedVessel: undefined,
   selectedVesselIdentity: undefined,
   selectedVesselPositions: null,
+  selectedVesselSidebarReportingListTab: undefined,
+  selectedVesselSidebarTab: VesselSidebarTab.SUMMARY,
   selectedVesselTrackRequest: null,
   tripMessagesLastToFormerDEPDateTimes: [],
   uniqueVesselsDistricts: [],
@@ -66,7 +70,6 @@ const INITIAL_STATE: VesselState = {
   vessels: vesselsAdapter.getInitialState(),
   vesselsEstimatedPositions: [],
   vesselSidebarIsOpen: false,
-  vesselSidebarTab: VesselSidebarTab.SUMMARY,
   vesselsTracksShowed: {},
   vesselTrackExtent: null
 }
@@ -457,6 +460,17 @@ const vesselSlice = createSlice({
       state.selectedVesselTrackRequest = action.payload
     },
 
+    setSelectedVesselSidebarReportingListTab(state, action: PayloadAction<VesselReportingListTab>) {
+      state.selectedVesselSidebarReportingListTab = action.payload
+    },
+
+    setSelectedVesselSidebarTab(state, action: PayloadAction<VesselSidebarTab>) {
+      state.selectedVesselSidebarTab = action.payload
+      if (state.selectedVesselSidebarTab !== VesselSidebarTab.REPORTING) {
+        state.selectedVesselSidebarReportingListTab = undefined
+      }
+    },
+
     setVessels(state, action: PayloadAction<VesselEnhancedLastPositionWebGLObject[]>) {
       if (!action.payload || !Array.isArray(action.payload)) {
         return
@@ -479,13 +493,6 @@ const vesselSlice = createSlice({
      */
     setVesselTrackExtent(state, action: PayloadAction<number[]>) {
       state.vesselTrackExtent = action.payload
-    },
-
-    /**
-     * Show the specified vessel tab
-     */
-    showVesselSidebarTab(state, action: PayloadAction<VesselSidebarTab>) {
-      state.vesselSidebarTab = action.payload
     },
 
     /**
@@ -604,10 +611,10 @@ export const {
   setPreviewFilteredVesselsFeatures,
   setSelectedVessel,
   setSelectedVesselCustomTrackRequest,
+  setSelectedVesselSidebarTab,
   setVessels,
   setVesselsSpeciesAndDistricts,
   setVesselTrackExtent,
-  showVesselSidebarTab,
   updateSelectedVesselPositions,
   updateVesselTrackAsHidden,
   updateVesselTrackAsShowedWithExtend,
@@ -616,5 +623,6 @@ export const {
   updatingVesselTrackDepth
 } = vesselSlice.actions
 
-export const vesselSliceReducer = vesselSlice.reducer
+export const vesselActions = vesselSlice.actions
+export const vesselReducer = vesselSlice.reducer
 export const vesselSelectors = vesselsAdapter.getSelectors()

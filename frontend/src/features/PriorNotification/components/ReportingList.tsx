@@ -1,10 +1,7 @@
 import { SideWindowCard } from '@components/SideWindowCard'
 import { VesselReportingList } from '@features/Reporting/components/VesselReportingList'
-import { getVesselIdentityFromVessel } from '@features/Vessel/utils'
-import { useGetVesselQuery } from '@features/Vessel/vesselApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { skipToken } from '@reduxjs/toolkit/query'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import styled from 'styled-components'
 
@@ -19,8 +16,7 @@ export function ReportingList() {
   const isSuperUser = useIsSuperUser()
 
   const vesselId = openedPriorNotificationDetail?.vesselId
-  const { data: vessel } = useGetVesselQuery(vesselId ?? skipToken)
-  const vesselIdentity = vessel ? getVesselIdentityFromVessel(vessel) : undefined
+  const vesselIdentity = openedPriorNotificationDetail?.vesselIdentity
 
   const close = () => {
     dispatch(priorNotificationActions.setIsReportingListOpened(false))

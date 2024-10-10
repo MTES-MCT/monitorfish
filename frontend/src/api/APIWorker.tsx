@@ -31,7 +31,7 @@ export function APIWorker() {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
-  const vesselSidebarTab = useMainAppSelector(state => state.vessel.vesselSidebarTab)
+  const selectedVesselSidebarTab = useMainAppSelector(state => state.vessel.selectedVesselSidebarTab)
   const sideWindow = useMainAppSelector(state => state.sideWindow)
   const openedBeaconMalfunctionInKanban = useMainAppSelector(
     state => state.beaconMalfunction.openedBeaconMalfunctionInKanban
@@ -133,16 +133,16 @@ export function APIWorker() {
       return
     }
 
-    if (vesselSidebarTab === VesselSidebarTab.CONTROLS) {
+    if (selectedVesselSidebarTab === VesselSidebarTab.CONTROLS) {
       dispatch(getVesselControls(false))
-    } else if (vesselSidebarTab === VesselSidebarTab.REPORTING && selectedVesselIdentity) {
+    } else if (selectedVesselSidebarTab === VesselSidebarTab.REPORTING && selectedVesselIdentity) {
       dispatch(vesselApi.util.invalidateTags([RtkCacheTagType.Reportings]))
-    } else if (isSuperUser && vesselSidebarTab === VesselSidebarTab.ERSVMS) {
+    } else if (isSuperUser && selectedVesselSidebarTab === VesselSidebarTab.ERSVMS) {
       dispatch(getVesselBeaconMalfunctions(false))
     }
 
     setUpdateVesselSidebarTab(false)
-  }, [dispatch, isSuperUser, selectedVesselIdentity, updateVesselSidebarTab, vesselSidebarTab])
+  }, [dispatch, isSuperUser, selectedVesselIdentity, updateVesselSidebarTab, selectedVesselSidebarTab])
 
   return null
 }

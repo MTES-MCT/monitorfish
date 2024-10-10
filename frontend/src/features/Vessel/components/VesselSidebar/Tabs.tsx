@@ -1,4 +1,4 @@
-import { showVesselSidebarTab } from '@features/Vessel/slice'
+import { setSelectedVesselSidebarTab } from '@features/Vessel/slice'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
@@ -22,37 +22,37 @@ export function Tabs() {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
-  const vesselSidebarTab = useMainAppSelector(state => state.vessel.vesselSidebarTab)
+  const selectedVesselSidebarTab = useMainAppSelector(state => state.vessel.selectedVesselSidebarTab)
 
   useEffect(() => {
-    if (!isSuperUser && forbiddenVesselSidebarPaths.includes(vesselSidebarTab)) {
-      dispatch(showVesselSidebarTab(VesselSidebarTab.IDENTITY))
+    if (!isSuperUser && forbiddenVesselSidebarPaths.includes(selectedVesselSidebarTab)) {
+      dispatch(setSelectedVesselSidebarTab(VesselSidebarTab.IDENTITY))
     }
-  }, [dispatch, isSuperUser, vesselSidebarTab])
+  }, [dispatch, isSuperUser, selectedVesselSidebarTab])
 
   function showTab(tab: VesselSidebarTab) {
     dispatch(displayedErrorActions.unset(DisplayedErrorKey.VESSEL_SIDEBAR_ERROR))
-    dispatch(showVesselSidebarTab(tab))
+    dispatch(setSelectedVesselSidebarTab(tab))
   }
 
   return (
     <TabList>
       <Tab
-        $isActive={vesselSidebarTab === VesselSidebarTab.SUMMARY}
+        $isActive={selectedVesselSidebarTab === VesselSidebarTab.SUMMARY}
         data-cy="vessel-menu-summary"
         onClick={() => showTab(VesselSidebarTab.SUMMARY)}
       >
         <SummaryIcon /> <br /> Résumé
       </Tab>
       <Tab
-        $isActive={vesselSidebarTab === VesselSidebarTab.IDENTITY}
+        $isActive={selectedVesselSidebarTab === VesselSidebarTab.IDENTITY}
         data-cy="vessel-menu-identity"
         onClick={() => showTab(VesselSidebarTab.IDENTITY)}
       >
         <VesselIDIcon /> <br /> Identité
       </Tab>
       <Tab
-        $isActive={vesselSidebarTab === VesselSidebarTab.VOYAGES}
+        $isActive={selectedVesselSidebarTab === VesselSidebarTab.VOYAGES}
         data-cy="vessel-menu-fishing"
         onClick={() => showTab(VesselSidebarTab.VOYAGES)}
       >
@@ -60,7 +60,7 @@ export function Tabs() {
       </Tab>
       {isSuperUser && (
         <Tab
-          $isActive={vesselSidebarTab === VesselSidebarTab.REPORTING}
+          $isActive={selectedVesselSidebarTab === VesselSidebarTab.REPORTING}
           data-cy="vessel-menu-reporting"
           onClick={() => showTab(VesselSidebarTab.REPORTING)}
         >
@@ -73,14 +73,14 @@ export function Tabs() {
         </Tab>
       )}
       <Tab
-        $isActive={vesselSidebarTab === VesselSidebarTab.CONTROLS}
+        $isActive={selectedVesselSidebarTab === VesselSidebarTab.CONTROLS}
         data-cy="vessel-menu-controls"
         onClick={() => showTab(VesselSidebarTab.CONTROLS)}
       >
         <ControlsIcon /> <br /> Contrôles
       </Tab>
       <Tab
-        $isActive={vesselSidebarTab === VesselSidebarTab.ERSVMS}
+        $isActive={selectedVesselSidebarTab === VesselSidebarTab.ERSVMS}
         $isLast
         data-cy="vessel-menu-ers-vms"
         onClick={() => showTab(VesselSidebarTab.ERSVMS)}

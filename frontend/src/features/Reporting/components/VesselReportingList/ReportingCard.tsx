@@ -156,7 +156,7 @@ export function ReportingCard({
                 Icon={Icon.EditUnbordered}
                 iconSize={20}
                 onClick={handleEdit}
-                title="Editer"
+                title="Éditer ce signalement"
               />
             )}
             <StyledIconButton
@@ -166,7 +166,7 @@ export function ReportingCard({
               Icon={Icon.Archive}
               iconSize={20}
               onClick={archive}
-              title="Archiver"
+              title="Archiver ce signalement"
             />
             <StyledIconButton
               accent={Accent.TERTIARY}
@@ -175,7 +175,7 @@ export function ReportingCard({
               Icon={Icon.Delete}
               iconSize={20}
               onClick={askForDeletionConfirmation}
-              title="Supprimer"
+              title="Supprimer ce signalement"
             />
           </Actions>
         )}

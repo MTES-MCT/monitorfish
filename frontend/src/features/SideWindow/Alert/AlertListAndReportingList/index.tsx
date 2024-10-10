@@ -1,3 +1,4 @@
+import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { SeafrontGroup } from '@constants/seafront'
 import { useGetReportingsQuery } from '@features/Reporting/reportingApi'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
@@ -29,7 +30,7 @@ export function AlertListAndReportingList({
   )
   const silencedAlerts = useMainAppSelector(state => state.alert.silencedAlerts)
 
-  const { data: currentReportings } = useGetReportingsQuery()
+  const { data: currentReportings } = useGetReportingsQuery(undefined, RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS)
 
   const filteredSilencedAlerts = useMemo(
     () =>

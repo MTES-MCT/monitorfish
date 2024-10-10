@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import com.neovisionaries.i18n.CountryCode
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselAndBeacon
 
 data class VesselIdentityDataOutput(
@@ -16,6 +17,20 @@ data class VesselIdentityDataOutput(
     val beaconNumber: String? = null,
 ) {
     companion object {
+        fun fromVessel(vessel: Vessel): VesselIdentityDataOutput {
+            return VesselIdentityDataOutput(
+                internalReferenceNumber = vessel.internalReferenceNumber,
+                districtCode = vessel.districtCode,
+                vesselId = vessel.id,
+                imo = vessel.imo,
+                ircs = vessel.ircs,
+                mmsi = vessel.mmsi,
+                externalReferenceNumber = vessel.externalReferenceNumber,
+                vesselName = vessel.vesselName,
+                flagState = vessel.flagState,
+            )
+        }
+
         fun fromVesselAndBeacon(vesselAndBeacon: VesselAndBeacon): VesselIdentityDataOutput {
             return VesselIdentityDataOutput(
                 internalReferenceNumber = vesselAndBeacon.vessel.internalReferenceNumber,

@@ -145,7 +145,8 @@
     "typescript": "5.6.2",
     "vite": "5.4.8",
     "vite-plugin-svgr": "4.2.0",
-    "vite-tsconfig-paths": "5.0.1"
+    "vite-tsconfig-paths": "5.0.1",
+    "whatwg-fetch": "3.6.20"
   },
   "overrides": {
     "socket.io": ">=2.5.0",

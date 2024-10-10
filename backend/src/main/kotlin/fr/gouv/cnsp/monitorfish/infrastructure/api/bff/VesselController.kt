@@ -15,7 +15,10 @@ import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
+import java.time.temporal.TemporalAdjusters
 
 @RestController
 @RequestMapping("/bff/v1/vessels")
@@ -179,9 +182,9 @@ class VesselController(
         const val zoneDateTimePattern = "yyyy-MM-dd'T'HH:mm:ss.000X"
     }
 
-    @GetMapping("/reporting")
+    @GetMapping("/reportings")
     @Operation(summary = "Get vessel's reporting")
-    fun getVesselReporting(
+    fun getReportingsByVesselIdentity(
         @Parameter(description = "Vessel id")
         @RequestParam(name = "vesselId")
         vesselId: Int?,
@@ -192,8 +195,8 @@ class VesselController(
         @RequestParam(name = "externalReferenceNumber")
         externalReferenceNumber: String,
         @Parameter(description = "Vessel IRCS")
-        @RequestParam(name = "IRCS")
-        IRCS: String,
+        @RequestParam(name = "ircs")
+        ircs: String,
         @Parameter(description = "Vessel positions identifier")
         @RequestParam(name = "vesselIdentifier")
         vesselIdentifier: VesselIdentifier?,
@@ -207,7 +210,7 @@ class VesselController(
                 vesselId,
                 internalReferenceNumber,
                 externalReferenceNumber,
-                IRCS,
+                ircs,
                 vesselIdentifier,
                 fromDate,
             )
@@ -272,5 +275,24 @@ class VesselController(
         val riskFactor = getVesselRiskFactor.execute(internalReferenceNumber)
 
         return RiskFactorDataOutput.fromVesselRiskFactor(riskFactor)
+    }
+
+    @GetMapping("/{vesselId}/reportings")
+    @Operation(summary = "Get vessel's reporting")
+    fun getReportings(
+        @PathParam("Vessel ID")
+        @PathVariable(name = "vesselId")
+        vesselId: Int,
+    ): VesselReportingsDataOutput {
+        // TODO Check that value.
+        val fromDate =
+            ZonedDateTime.now(ZoneOffset.UTC)
+                .minusYears(5)
+                .with(TemporalAdjusters.firstDayOfYear())
+                .truncatedTo(ChronoUnit.DAYS)
+
+        val currentAndArchivedReportings = getVesselReportings.execute(vesselId, fromDate = fromDate)
+
+        return VesselReportingsDataOutput.fromCurrentAndArchivedReporting(currentAndArchivedReportings)
     }
 }

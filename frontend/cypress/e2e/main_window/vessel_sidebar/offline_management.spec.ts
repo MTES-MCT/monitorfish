@@ -53,11 +53,7 @@ context('Offline management', () => {
     cy.get('*[data-cy="vessel-sidebar-error"]').contains("Nous n'avons pas pu récupérer les messages JPE de ce navire")
 
     // When clicking on Reporting tab
-    cy.intercept(
-      'GET',
-      '/bff/v1/vessels/reporting?vesselId=1&internalReferenceNumber=FAK000999999&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*',
-      { statusCode: 400 }
-    ).as('getReportings')
+    cy.intercept('GET', '/bff/v1/vessels/reportings?*', { statusCode: 400 }).as('getReportings')
     cy.get('*[data-cy="vessel-menu-reporting"').click()
     cy.wait('@getReportings')
     cy.get('*[data-cy="vessel-sidebar-error"]').contains("Nous n'avons pas pu récupérer les signalements de ce navire")
@@ -139,17 +135,15 @@ context('Offline management', () => {
     cy.intercept(
       {
         method: 'GET',
-        pathname: '/bff/v1/vessels/reporting',
-        times: 1
+        pathname: '/bff/v1/vessels/reportings',
+        times: 3
       },
       { statusCode: 400 }
     ).as('getReportingsStubbed')
     cy.get('*[data-cy="vessel-menu-reporting"').click()
     cy.wait('@getReportingsStubbed')
     cy.get('*[data-cy="vessel-sidebar-error"]').contains("Nous n'avons pas pu récupérer les signalements de ce navire")
-    cy.intercept(
-      '/bff/v1/vessels/reporting?vesselId=1&internalReferenceNumber=FAK000999999&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*'
-    ).as('getReportings')
+    cy.intercept('/bff/v1/vessels/reportings?*').as('getReportings')
     cy.clickButton('Réessayer')
     cy.wait('@getReportings')
     cy.get('*[data-cy="vessel-sidebar-error"]').should('not.exist')

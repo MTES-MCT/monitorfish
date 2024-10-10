@@ -1,13 +1,16 @@
-import { InfractionSuspicionSummary } from '@features/Reporting/components/VesselReportings/Summary/InfractionSuspicionSummary'
+import { InfractionSuspicionSummary } from '@features/Reporting/components/VesselReportingList/Summary/InfractionSuspicionSummary'
 import { Header, Zone } from '@features/Vessel/components/VesselSidebar/common_styles/common.style'
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { customDayjs, Icon, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-export function Summary() {
-  const archivedReportingsFromDate = useMainAppSelector(state => state.reporting.archivedReportingsFromDate)
-  const summary = useMainAppSelector(state => state.reporting.selectedVesselReportings?.summary)
-  const yearsDepth = customDayjs().utc().get('year') - customDayjs(archivedReportingsFromDate).get('year') + 1
+import type { VesselReportings } from '@features/Reporting/types'
+
+type SummaryProps = Readonly<{
+  fromDate: Date
+  vesselReportings: VesselReportings
+}>
+export function Summary({ fromDate, vesselReportings }: SummaryProps) {
+  const yearsDepth = customDayjs().utc().get('year') - customDayjs(fromDate).get('year') + 1
 
   return (
     <Zone data-cy="vessel-reporting-summary">
@@ -17,14 +20,14 @@ export function Summary() {
           <IconColumn>
             <Icon.Alert color={THEME.color.slateGray} />
           </IconColumn>
-          <InfractionSuspicionSummary />
+          <InfractionSuspicionSummary reportingSummary={vesselReportings.summary} />
         </Columns>
         <Columns $isFirst={false}>
           <IconColumn>
             <Icon.Observation color={THEME.color.slateGray} />
           </IconColumn>
           <Label>
-            Observations <LabelNumber>{summary?.numberOfObservations}</LabelNumber>
+            Observations <LabelNumber>{vesselReportings.summary?.numberOfObservations}</LabelNumber>
           </Label>
         </Columns>
       </Body>
@@ -56,7 +59,7 @@ const Columns = styled.div<{
 `
 
 const IconColumn = styled.div`
+  flex-shrink: 0;
   margin-left: 6px;
   width: 30px;
-  flex-shrink: 0;
 `

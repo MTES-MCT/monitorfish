@@ -1,38 +1,42 @@
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Link } from '@mtes-mct/monitor-ui'
 import { pluralize } from '@utils/pluralize'
 import { useState } from 'react'
 import styled from 'styled-components'
 
+import type { ReportingSummary } from '@features/Reporting/types'
+
 const DEFAULT_INFRACTIONS_DISPLAYED = 5
 
-export function InfractionSuspicionSummary() {
-  const summary = useMainAppSelector(state => state.reporting.selectedVesselReportings?.summary)
+type InfractionSuspicionSummaryProps = Readonly<{
+  reportingSummary: ReportingSummary
+}>
+export function InfractionSuspicionSummary({ reportingSummary }: InfractionSuspicionSummaryProps) {
   const [areAllInfractionsSuspicionShowed, setAreAllInfractionsSuspicionShowed] = useState(false)
 
   const displayedInfractionsSuspicion =
-    summary?.infractionSuspicionsSummary.slice(
+    reportingSummary.infractionSuspicionsSummary.slice(
       0,
       areAllInfractionsSuspicionShowed
-        ? (summary?.infractionSuspicionsSummary?.length ?? DEFAULT_INFRACTIONS_DISPLAYED)
+        ? (reportingSummary.infractionSuspicionsSummary?.length ?? DEFAULT_INFRACTIONS_DISPLAYED)
         : DEFAULT_INFRACTIONS_DISPLAYED
     ) ?? []
 
   return (
     <Wrapper>
       <Label>
-        Suspicions d&apos;infraction <LabelNumber>{summary?.numberOfInfractionSuspicions}</LabelNumber>
+        Suspicions d&apos;infraction <LabelNumber>{reportingSummary.numberOfInfractionSuspicions}</LabelNumber>
       </Label>
-      {displayedInfractionsSuspicion.map(infractionSuspicion => (
-        <InfractionSuspicion>
+      {displayedInfractionsSuspicion.map((infractionSuspicion, index) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <InfractionSuspicion key={`${infractionSuspicion.title}-${index}`}>
           <BadgeNumber>{infractionSuspicion.numberOfOccurrences}</BadgeNumber>
           <Name title={infractionSuspicion.title}>
             {pluralize('Signalement', infractionSuspicion.numberOfOccurrences)} &quot;{infractionSuspicion.title}&quot;
           </Name>
         </InfractionSuspicion>
       ))}
-      {!!summary?.infractionSuspicionsSummary &&
-        summary.infractionSuspicionsSummary.length > DEFAULT_INFRACTIONS_DISPLAYED && (
+      {!!reportingSummary.infractionSuspicionsSummary &&
+        reportingSummary.infractionSuspicionsSummary.length > DEFAULT_INFRACTIONS_DISPLAYED && (
           <OpenAllInfractionsSuspicion
             onClick={() => setAreAllInfractionsSuspicionShowed(!areAllInfractionsSuspicionShowed)}
           >
@@ -44,10 +48,10 @@ export function InfractionSuspicionSummary() {
 }
 
 const OpenAllInfractionsSuspicion = styled(Link)`
-  font-size: 13px;
-  display: block;
-  margin-top: 6px;
   cursor: pointer;
+  display: block;
+  font-size: 13px;
+  margin-top: 6px;
 `
 
 const Wrapper = styled.div`
@@ -67,31 +71,31 @@ const LabelNumber = styled.span`
 
 const InfractionSuspicion = styled.div`
   display: block;
-  margin-top: 4px;
   font-weight: 500;
+  margin-top: 4px;
 `
 
 const Name = styled.span`
-  display: inline-block;
   color: ${p => p.theme.color.gunMetal};
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+  display: inline-block;
   margin-left: 6px;
   max-width: 390px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   vertical-align: bottom;
+  white-space: nowrap;
 `
 
 const BadgeNumber = styled.div`
+  background: ${p => p.theme.color.maximumRed};
+  border-radius: 10px;
+  color: ${p => p.theme.color.white};
   display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
   height: 15px;
+  letter-spacing: 0px;
+  line-height: 14px;
   padding: 0 4px;
   text-align: center;
-  border-radius: 10px;
-  line-height: 14px;
-  background: ${p => p.theme.color.maximumRed};
-  color: ${p => p.theme.color.white};
-  font-size: 12px;
-  letter-spacing: 0px;
-  font-weight: 700;
 `

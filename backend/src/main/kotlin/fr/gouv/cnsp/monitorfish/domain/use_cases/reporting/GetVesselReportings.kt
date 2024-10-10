@@ -24,10 +24,10 @@ class GetVesselReportings(
 
     fun execute(
         vesselId: Int?,
-        internalReferenceNumber: String,
-        externalReferenceNumber: String,
-        ircs: String,
-        vesselIdentifier: VesselIdentifier?,
+        internalReferenceNumber: String? = null,
+        externalReferenceNumber: String? = null,
+        ircs: String? = null,
+        vesselIdentifier: VesselIdentifier? = null,
         fromDate: ZonedDateTime,
     ): VesselReportings {
         val (controlUnits, controlUnitsTimeTaken) = measureTimedValue { getAllControlUnits.execute() }
@@ -35,8 +35,24 @@ class GetVesselReportings(
 
         val (reportings, reportingsTimeTaken) =
             measureTimedValue {
-                findReportings(
-                    vesselId,
+                if (vesselId != null) {
+                    return@measureTimedValue findReportingsByVesselId(vesselId, fromDate)
+                }
+
+                requireNotNull(vesselIdentifier) {
+                    "Vessel identifier must be not null when vessel id is null."
+                }
+                requireNotNull(internalReferenceNumber) {
+                    "Internal reference number must be not null when vessel id is null."
+                }
+                requireNotNull(ircs) {
+                    "IRCS must be not null when vessel id is null."
+                }
+                requireNotNull(externalReferenceNumber) {
+                    "External reference number must be not null when vessel id is null."
+                }
+
+                findReportingsByVesselIdentity(
                     vesselIdentifier,
                     internalReferenceNumber,
                     fromDate,
@@ -231,18 +247,20 @@ class GetVesselReportings(
         return (reportingsWithoutAlerts + alertTypeToLastAlertAndOccurrences)
     }
 
-    private fun findReportings(
-        vesselId: Int?,
+    private fun findReportingsByVesselId(
+        vesselId: Int,
+        fromDate: ZonedDateTime,
+    ): List<Reporting> {
+        return reportingRepository.findCurrentAndArchivedByVesselIdEquals(vesselId, fromDate)
+    }
+
+    private fun findReportingsByVesselIdentity(
         vesselIdentifier: VesselIdentifier?,
         internalReferenceNumber: String,
         fromDate: ZonedDateTime,
         ircs: String,
         externalReferenceNumber: String,
     ): List<Reporting> {
-        if (vesselId != null) {
-            return reportingRepository.findCurrentAndArchivedByVesselIdEquals(vesselId, fromDate)
-        }
-
         return when (vesselIdentifier) {
             VesselIdentifier.INTERNAL_REFERENCE_NUMBER ->
                 reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(

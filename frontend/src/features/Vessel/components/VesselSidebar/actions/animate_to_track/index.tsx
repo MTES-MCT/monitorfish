@@ -13,13 +13,13 @@ export function AnimateToTrack({ isSidebarOpen }) {
 
   return (
     <VesselSidebarActionButton
+      $isRightMenuOpen={rightMenuIsOpen}
+      $isSidebarOpen={isSidebarOpen}
+      $top={153}
       data-cy="animate-to-track"
       disabled={!selectedVesselPositions?.length}
-      isRightMenuOpen={rightMenuIsOpen}
-      isSidebarOpen={isSidebarOpen}
       onClick={() => dispatch(animateToExtent())}
       title="Centrer sur la piste"
-      top={153}
     >
       <ShowTrackIcon />
     </VesselSidebarActionButton>

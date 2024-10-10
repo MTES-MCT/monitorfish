@@ -1,11 +1,21 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { HALF_A_SECOND } from '@constants/index'
+import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { duplicateLogbookPriorNotification } from '@features/PriorNotification/useCases/duplicateLogbookPriorNotification'
 import { invalidatePriorNotification } from '@features/PriorNotification/useCases/invalidatePriorNotification'
 import { updateLogbookPriorNotification } from '@features/PriorNotification/useCases/updateLogbookPriorNotification'
 import { getPriorNotificationIdentifier } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { Accent, Button, FormikEffect, FormikTextarea, FormikTextInput, Icon, THEME } from '@mtes-mct/monitor-ui'
+import {
+  Accent,
+  Button,
+  FormikEffect,
+  FormikTextarea,
+  FormikTextInput,
+  Icon,
+  LinkButton,
+  THEME
+} from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import { Formik } from 'formik'
@@ -51,6 +61,10 @@ export function Form({ detail, initialFormValues }: FormProps) {
     setIsInvalidationConfirmationModalOpen(true)
   }
 
+  const openVesselReportingList = () => {
+    dispatch(priorNotificationActions.setIsReportingListOpened(true))
+  }
+
   const updateFormCallback = useCallback(
     async (nextValues: PriorNotification.LogbookForm) => {
       if (isEqual(nextValues, initialFormValues)) {
@@ -75,6 +89,8 @@ export function Form({ detail, initialFormValues }: FormProps) {
 
           <FieldGroup>
             <FormikTextarea label="Points d'attention identifiés par le CNSP" name="note" readOnly={isReadOnly} />
+
+            <LinkButton onClick={openVesselReportingList}>Ouvrir un signalement sur le navire</LinkButton>
           </FieldGroup>
 
           {isSuperUser && (

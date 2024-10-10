@@ -1,3 +1,4 @@
+import { WindowContext } from '@api/constants'
 import { useGetControlUnitsQuery } from '@features/ControlUnit/controlUnitApi'
 import { CreateOrEditReportingSchema } from '@features/Reporting/components/ReportingForm/schemas'
 import {
@@ -31,29 +32,30 @@ import {
 } from '../../types'
 import { addReporting } from '../../useCases/addReporting'
 import { updateReporting } from '../../useCases/updateReporting'
-import { mapControlUnitsToUniqueSortedIdsAsOptions } from '../VesselReportings/Current/utils'
+import { mapControlUnitsToUniqueSortedIdsAsOptions } from '../VesselReportingList/Current/utils'
 
 import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
-import type { EditableReporting, EditedReporting, InfractionSuspicion } from '../../types'
+import type { EditedReporting, InfractionSuspicion, Reporting } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
 type ReportingFormProps = {
   className?: string | undefined
   closeForm: () => void
-  editedReporting: EditableReporting | undefined
-  hasWhiteBackground: boolean
-  isFromSideWindow: boolean
-  selectedVesselIdentity: VesselIdentity
+  editedReporting: Reporting.EditableReporting | undefined
+  hasWhiteBackground?: boolean
+  vesselIdentity: VesselIdentity
+  windowContext: WindowContext
 }
 export function ReportingForm({
   className,
   closeForm,
   editedReporting,
-  hasWhiteBackground,
-  isFromSideWindow,
-  selectedVesselIdentity
+  hasWhiteBackground = false,
+  vesselIdentity,
+  windowContext
 }: ReportingFormProps) {
   const dispatch = useMainAppDispatch()
+  // TODO Replace that with a `useInfractionsAsOptions()` hook with RTK query.
   const infractions = useMainAppSelector(state => state.infraction.infractions)
   const controlUnitsQuery = useGetControlUnitsQuery(undefined)
 
@@ -87,7 +89,7 @@ export function ReportingForm({
             editedReporting.id,
             nextReportingValue,
             editedReporting.type,
-            isFromSideWindow
+            windowContext
           )
         )
 
@@ -98,24 +100,25 @@ export function ReportingForm({
 
       const nextReportingWithMissingProperties = {
         creationDate: new Date().toISOString(),
-        externalReferenceNumber: selectedVesselIdentity.externalReferenceNumber,
-        flagState: selectedVesselIdentity.flagState.toUpperCase(),
-        internalReferenceNumber: selectedVesselIdentity.internalReferenceNumber,
-        ircs: selectedVesselIdentity.ircs,
+        externalReferenceNumber: vesselIdentity.externalReferenceNumber,
+        flagState: vesselIdentity.flagState.toUpperCase(),
+        internalReferenceNumber: vesselIdentity.internalReferenceNumber,
+        ircs: vesselIdentity.ircs,
         type: nextReportingValue.type,
         validationDate: null,
         value: {
           ...nextReportingValue
         },
-        vesselId: selectedVesselIdentity.vesselId ?? null,
-        vesselIdentifier: selectedVesselIdentity.vesselIdentifier ?? null,
-        vesselName: selectedVesselIdentity.vesselName ?? null
+        vesselId: vesselIdentity.vesselId ?? null,
+        vesselIdentifier: vesselIdentity.vesselIdentifier ?? null,
+        vesselName: vesselIdentity.vesselName ?? null
       }
 
-      await dispatch(addReporting(nextReportingWithMissingProperties))
+      dispatch(addReporting(nextReportingWithMissingProperties))
+
       closeForm()
     },
-    [dispatch, closeForm, editedReporting, isFromSideWindow, selectedVesselIdentity]
+    [dispatch, closeForm, editedReporting, vesselIdentity, windowContext]
   )
 
   return (
@@ -162,7 +165,7 @@ export function ReportingForm({
               value={values.reportingActor}
             />
             {values.reportingActor === ReportingOriginActor.UNIT && (
-              <StyledFormikSelect
+              <FormikSelect
                 isLight={!hasWhiteBackground}
                 label="Choisir l'unité"
                 name="controlUnitId"
@@ -174,14 +177,14 @@ export function ReportingForm({
               values.reportingActor === ReportingOriginActor.DML ||
               values.reportingActor === ReportingOriginActor.DIRM ||
               values.reportingActor === ReportingOriginActor.OTHER) && (
-              <StyledFormikTextInput
+              <FormikTextInput
                 isLight={!hasWhiteBackground}
                 label="Nom et contact (numéro, mail…) de l’émetteur"
                 name="authorContact"
                 placeholder="Ex: Yannick Attal (06 24 25 01 91)"
               />
             )}
-            <StyledFormikTextInput
+            <FormikTextInput
               isLight={!hasWhiteBackground}
               label="Titre"
               name="title"
@@ -191,7 +194,7 @@ export function ReportingForm({
                   : 'Ex: Infraction maille cul de chalut'
               }
             />
-            <StyledFormikTextarea
+            <FormikTextarea
               isLight={!hasWhiteBackground}
               label="Description"
               name="description"
@@ -202,18 +205,18 @@ export function ReportingForm({
               }
             />
             {values.type === ReportingTypeCharacteristics.INFRACTION_SUSPICION.code && (
-              <StyledFormikSelect
+              <FormikSelect
                 isLight={!hasWhiteBackground}
                 label="Natinf"
                 name="natinfCode"
                 options={infractionsAsOptions}
-                placement={!isFromSideWindow ? 'topStart' : undefined}
+                placement={windowContext === WindowContext.MainWindow ? 'topStart' : undefined}
                 searchable
                 // @ts-ignore
                 title={infractionTitle}
               />
             )}
-            <StyledFormikTextInput
+            <FormikTextInput
               isLight={!hasWhiteBackground}
               label="Saisi par"
               name="authorTrigram"
@@ -231,18 +234,6 @@ export function ReportingForm({
     </Formik>
   )
 }
-
-const StyledFormikSelect = styled(FormikSelect)`
-  width: 416px;
-`
-
-const StyledFormikTextInput = styled(FormikTextInput)`
-  width: 416px;
-`
-
-const StyledFormikTextarea = styled(FormikTextarea)`
-  width: 416px;
-`
 
 const ValidateButton = styled(Button)`
   margin: 24px 10px 0px 0px;
@@ -263,6 +254,8 @@ const StyledForm = styled(Form)<{
 
     return p.$isInfractionSuspicion ? p.theme.color.maximumRed15 : p.theme.color.gainsboro
   }};
+  padding-right: 16px;
+  padding-left: 16px;
 
   * {
     box-sizing: border-box !important;
@@ -276,7 +269,4 @@ const StyledForm = styled(Form)<{
   > .Field-MultiRadio > legend {
     margin-bottom: 8px;
   }
-
-  padding-right: 16px;
-  padding-left: 16px;
 `

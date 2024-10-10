@@ -87,6 +87,9 @@ export function MapVesselClickAndAnimationHandler() {
         }
 
         const { extent } = vesselsTracksShowed[vesselCompositeIdentifier]!
+        if (!extent) {
+          return
+        }
 
         monitorfishMap.getView().fit(extent, {
           callback: () => {

@@ -1,8 +1,9 @@
+import { setSelectedVesselCustomTrackRequest, setSelectedVesselSidebarTab } from '@features/Vessel/slice.ts'
+
 import { showVessel } from './showVessel'
 import { END_OF_MALFUNCTION_REASON_RECORD } from '../../entities/beaconMalfunction/constants'
 import { VesselSidebarTab } from '../../entities/vessel/vessel'
 import { VesselTrackDepth } from '../../entities/vesselTrackDepth'
-import { setSelectedVesselCustomTrackRequest, showVesselSidebarTab } from '@features/Vessel/slice.ts'
 
 /**
  * Show the selected vessel on map.
@@ -27,7 +28,7 @@ export const showVesselFromBeaconMalfunctionsKanban = (beaconMalfunction, openVM
   await dispatch(showVessel(beaconMalfunction, false, true))
 
   if (openVMRERSTab) {
-    dispatch(showVesselSidebarTab(VesselSidebarTab.ERSVMS))
+    dispatch(setSelectedVesselSidebarTab(VesselSidebarTab.ERSVMS))
   }
 }
 

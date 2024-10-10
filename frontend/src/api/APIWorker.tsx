@@ -1,8 +1,10 @@
 import { fleetSegmentApi } from '@features/FleetSegment/apis'
 import { getAllRegulatoryLayers } from '@features/Regulation/useCases/getAllRegulatoryLayers'
-import { getVesselReportings } from '@features/Reporting/useCases/getVesselReportings'
+import { reportingApi } from '@features/Reporting/reportingApi'
+import { vesselApi } from '@features/Vessel/vesselApi'
 import { useEffect, useRef, useState } from 'react'
 
+import { RtkCacheTagType } from './constants'
 import { useIsSuperUser } from '../auth/hooks/useIsSuperUser'
 import { SideWindowStatus } from '../domain/entities/sideWindow/constants'
 import { VesselSidebarTab } from '../domain/entities/vessel/vessel'
@@ -17,7 +19,6 @@ import { getInfractions } from '../domain/use_cases/infraction/getInfractions'
 import { getVesselControls } from '../domain/use_cases/mission/getVesselControls'
 import getAllSpecies from '../domain/use_cases/species/getAllSpecies'
 import { updateVesselTracks } from '../domain/use_cases/vessel/updateVesselTracks'
-import { getAllCurrentReportings } from '../features/Reporting/useCases/getAllCurrentReportings'
 import { useMainAppDispatch } from '../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../hooks/useMainAppSelector'
 
@@ -30,7 +31,7 @@ export function APIWorker() {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
-  const vesselSidebarTab = useMainAppSelector(state => state.vessel.vesselSidebarTab)
+  const selectedVesselSidebarTab = useMainAppSelector(state => state.vessel.selectedVesselSidebarTab)
   const sideWindow = useMainAppSelector(state => state.sideWindow)
   const openedBeaconMalfunctionInKanban = useMainAppSelector(
     state => state.beaconMalfunction.openedBeaconMalfunctionInKanban
@@ -53,10 +54,11 @@ export function APIWorker() {
     dispatch(getAllSpecies()).then(() => dispatch(getAllRegulatoryLayers()))
     dispatch(getAllGearCodes())
 
+    // TODO Use a RTK query hook with polling, within a global hook if really necessary.
     if (isSuperUser) {
       dispatch(fleetSegmentApi.endpoints.getFleetSegments.initiate())
       dispatch(getOperationalAlerts())
-      dispatch(getAllCurrentReportings())
+      dispatch(reportingApi.endpoints.getReportings.initiate())
       dispatch(getSilencedAlerts())
       dispatch(getAllBeaconMalfunctions())
     }
@@ -81,10 +83,10 @@ export function APIWorker() {
         clearInterval(sideWindowInterval.current)
       }
 
+      // TODO Use a RTK query hook with polling, within a global hook if really necessary.
       sideWindowInterval.current = setInterval(() => {
         dispatch(getAllBeaconMalfunctions())
         dispatch(getOperationalAlerts())
-        dispatch(getAllCurrentReportings())
         dispatch(getSilencedAlerts())
       }, THIRTY_SECONDS) as any
     }
@@ -131,16 +133,16 @@ export function APIWorker() {
       return
     }
 
-    if (vesselSidebarTab === VesselSidebarTab.CONTROLS) {
+    if (selectedVesselSidebarTab === VesselSidebarTab.CONTROLS) {
       dispatch(getVesselControls(false))
-    } else if (vesselSidebarTab === VesselSidebarTab.REPORTING) {
-      dispatch(getVesselReportings(false))
-    } else if (isSuperUser && vesselSidebarTab === VesselSidebarTab.ERSVMS) {
+    } else if (selectedVesselSidebarTab === VesselSidebarTab.REPORTING && selectedVesselIdentity) {
+      dispatch(vesselApi.util.invalidateTags([RtkCacheTagType.Reportings]))
+    } else if (isSuperUser && selectedVesselSidebarTab === VesselSidebarTab.ERSVMS) {
       dispatch(getVesselBeaconMalfunctions(false))
     }
 
     setUpdateVesselSidebarTab(false)
-  }, [dispatch, isSuperUser, selectedVesselIdentity, updateVesselSidebarTab, vesselSidebarTab])
+  }, [dispatch, isSuperUser, selectedVesselIdentity, updateVesselSidebarTab, selectedVesselSidebarTab])
 
   return null
 }

@@ -2,7 +2,8 @@ import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { FulfillingBouncingCircleSpinner } from '@components/FulfillingBouncingCircleSpinner'
 import { MissionForm } from '@features/Mission/components/MissionForm'
 import { useListenToAllMissionEventsUpdates } from '@features/Mission/components/MissionForm/hooks/useListenToAllMissionEventsUpdates'
-import { getAllCurrentReportings } from '@features/Reporting/useCases/getAllCurrentReportings'
+import { reportingApi } from '@features/Reporting/reportingApi'
+import { reportingActions } from '@features/Reporting/slice'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { THEME, type NewWindowContextValue, NewWindowContext, Notifier } from '@mtes-mct/monitor-ui'
 import {
@@ -36,7 +37,6 @@ import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { Loader as MissionFormLoader } from '../Mission/components/MissionForm/Loader'
 import { MissionList } from '../Mission/components/MissionList'
 import { PriorNotificationList } from '../PriorNotification/components/PriorNotificationList'
-import { setEditedReportingInSideWindow } from '../Reporting/slice'
 
 export type SideWindowProps = HTMLAttributes<HTMLDivElement> & {
   isFromURL: boolean
@@ -50,7 +50,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
   const openedBeaconMalfunctionInKanban = useMainAppSelector(
     state => state.beaconMalfunction.openedBeaconMalfunctionInKanban
   )
-  const editedReportingInSideWindow = useMainAppSelector(state => state.reporting.editedReportingInSideWindow)
+  const editedReporting = useMainAppSelector(state => state.reporting.editedReporting)
   const selectedPath = useMainAppSelector(state => state.sideWindow.selectedPath)
   const missionEvent = useListenToAllMissionEventsUpdates()
 
@@ -90,7 +90,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
 
   const closeRightSidebar = useCallback(() => {
     dispatch(closeBeaconMalfunctionInKanban())
-    dispatch(setEditedReportingInSideWindow())
+    dispatch(reportingActions.unsetEditedReporting())
   }, [dispatch])
 
   useEffect(() => {
@@ -100,14 +100,14 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
   }, [])
 
   useEffect(() => {
-    if (editedReportingInSideWindow ?? openedBeaconMalfunctionInKanban) {
+    if (editedReporting ?? openedBeaconMalfunctionInKanban) {
       setIsOverlayed(true)
 
       return
     }
 
     setIsOverlayed(false)
-  }, [openedBeaconMalfunctionInKanban, editedReportingInSideWindow, selectedPath.menu])
+  }, [openedBeaconMalfunctionInKanban, editedReporting, selectedPath.menu])
 
   useEffect(() => {
     if (!isFromURL) {
@@ -117,7 +117,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
     dispatch(getOperationalAlerts())
     dispatch(getAllBeaconMalfunctions())
     dispatch(getSilencedAlerts())
-    dispatch(getAllCurrentReportings())
+    dispatch(reportingApi.endpoints.getReportings.initiate())
     dispatch(getInfractions())
     dispatch(getAllGearCodes())
   }, [dispatch, isFromURL])

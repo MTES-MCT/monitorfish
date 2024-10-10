@@ -1,4 +1,4 @@
-import { showVesselSidebarTab } from '@features/Vessel/slice'
+import { setSelectedVesselSidebarTab } from '@features/Vessel/slice'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
@@ -22,46 +22,46 @@ export function Tabs() {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
-  const vesselSidebarTab = useMainAppSelector(state => state.vessel.vesselSidebarTab)
+  const selectedVesselSidebarTab = useMainAppSelector(state => state.vessel.selectedVesselSidebarTab)
 
   useEffect(() => {
-    if (!isSuperUser && forbiddenVesselSidebarPaths.includes(vesselSidebarTab)) {
-      dispatch(showVesselSidebarTab(VesselSidebarTab.IDENTITY))
+    if (!isSuperUser && forbiddenVesselSidebarPaths.includes(selectedVesselSidebarTab)) {
+      dispatch(setSelectedVesselSidebarTab(VesselSidebarTab.IDENTITY))
     }
-  }, [dispatch, isSuperUser, vesselSidebarTab])
+  }, [dispatch, isSuperUser, selectedVesselSidebarTab])
 
   function showTab(tab: VesselSidebarTab) {
     dispatch(displayedErrorActions.unset(DisplayedErrorKey.VESSEL_SIDEBAR_ERROR))
-    dispatch(showVesselSidebarTab(tab))
+    dispatch(setSelectedVesselSidebarTab(tab))
   }
 
   return (
     <TabList>
       <Tab
+        $isActive={selectedVesselSidebarTab === VesselSidebarTab.SUMMARY}
         data-cy="vessel-menu-summary"
-        isActive={vesselSidebarTab === VesselSidebarTab.SUMMARY}
         onClick={() => showTab(VesselSidebarTab.SUMMARY)}
       >
         <SummaryIcon /> <br /> Résumé
       </Tab>
       <Tab
+        $isActive={selectedVesselSidebarTab === VesselSidebarTab.IDENTITY}
         data-cy="vessel-menu-identity"
-        isActive={vesselSidebarTab === VesselSidebarTab.IDENTITY}
         onClick={() => showTab(VesselSidebarTab.IDENTITY)}
       >
         <VesselIDIcon /> <br /> Identité
       </Tab>
       <Tab
+        $isActive={selectedVesselSidebarTab === VesselSidebarTab.VOYAGES}
         data-cy="vessel-menu-fishing"
-        isActive={vesselSidebarTab === VesselSidebarTab.VOYAGES}
         onClick={() => showTab(VesselSidebarTab.VOYAGES)}
       >
         <FisheriesIcon /> <br /> Pêche
       </Tab>
       {isSuperUser && (
         <Tab
+          $isActive={selectedVesselSidebarTab === VesselSidebarTab.REPORTING}
           data-cy="vessel-menu-reporting"
-          isActive={vesselSidebarTab === VesselSidebarTab.REPORTING}
           onClick={() => showTab(VesselSidebarTab.REPORTING)}
         >
           <ReportingIcon /> <br /> Signalements
@@ -73,16 +73,16 @@ export function Tabs() {
         </Tab>
       )}
       <Tab
+        $isActive={selectedVesselSidebarTab === VesselSidebarTab.CONTROLS}
         data-cy="vessel-menu-controls"
-        isActive={vesselSidebarTab === VesselSidebarTab.CONTROLS}
         onClick={() => showTab(VesselSidebarTab.CONTROLS)}
       >
         <ControlsIcon /> <br /> Contrôles
       </Tab>
       <Tab
+        $isActive={selectedVesselSidebarTab === VesselSidebarTab.ERSVMS}
+        $isLast
         data-cy="vessel-menu-ers-vms"
-        isActive={vesselSidebarTab === VesselSidebarTab.ERSVMS}
-        isLast
         onClick={() => showTab(VesselSidebarTab.ERSVMS)}
       >
         <VMSIcon /> <br /> VMS/JPE
@@ -111,8 +111,8 @@ const BadgeNumber = styled.div<{
 `
 
 const Tab = styled.button<{
-  isActive: boolean
-  isLast?: boolean
+  $isActive: boolean
+  $isLast?: boolean
 }>`
   padding-top: 5px;
   display: inline-block;
@@ -123,20 +123,20 @@ const Tab = styled.button<{
   height: 65px;
   font: normal normal 300 10px/14px Marianne;
   letter-spacing: 0.45px;
-  ${p => (!p.isLast ? `border-right: 1px solid ${p.theme.color.lightGray};` : null)}
-  background: ${p => (p.isActive ? p.theme.color.blueGray : p.theme.color.charcoal)};
-  color: ${p => (p.isActive ? p.theme.color.white : p.theme.color.lightGray)};
+  ${p => (!p.$isLast ? `border-right: 1px solid ${p.theme.color.lightGray};` : null)}
+  background: ${p => (p.$isActive ? p.theme.color.blueGray : p.theme.color.charcoal)};
+  color: ${p => (p.$isActive ? p.theme.color.white : p.theme.color.lightGray)};
   &:hover,
   &:focus {
     color: ${p => p.theme.color.white};
     background: ${p => p.theme.color.blueYonder};
-    ${p => (!p.isLast ? `border-right: 1px solid ${p.theme.color.lightGray};` : null)}
+    ${p => (!p.$isLast ? `border-right: 1px solid ${p.theme.color.lightGray};` : null)}
   }
 
   &:active {
     color: ${p => p.theme.color.white};
     background: ${p => p.theme.color.blueGray};
-    ${p => (!p.isLast ? `border-right: 1px solid ${p.theme.color.lightGray};` : null)}
+    ${p => (!p.$isLast ? `border-right: 1px solid ${p.theme.color.lightGray};` : null)}
   }
 `
 

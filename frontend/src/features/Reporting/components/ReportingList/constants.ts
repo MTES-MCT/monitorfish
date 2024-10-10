@@ -1,16 +1,16 @@
 import { getReportingOrigin, getReportingTitle } from './utils'
 
-import type { InfractionSuspicionReporting, PendingAlertReporting } from '@features/Reporting/types'
+import type { Reporting } from '@features/Reporting/types'
 import type { TableOptions } from '@hooks/useTable/types'
 
-export const REPORTING_LIST_TABLE_OPTIONS: TableOptions<InfractionSuspicionReporting | PendingAlertReporting> = {
+export const REPORTING_LIST_TABLE_OPTIONS: TableOptions<Reporting.Reporting> = {
   columns: [
     {
       fixedWidth: 130,
       isSortable: true,
       key: 'validationDate',
       label: 'Ouvert il y a...',
-      sortingTransform: item => item.validationDate || item.creationDate
+      sortingTransform: item => item.validationDate ?? item.creationDate
     },
     {
       fixedWidth: 130,

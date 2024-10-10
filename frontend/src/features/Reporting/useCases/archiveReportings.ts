@@ -1,46 +1,42 @@
-import { archiveReportingsFromAPI } from '@api/reporting'
-import { getVesselReportings } from '@features/Reporting/useCases/getVesselReportings'
+import { WindowContext } from '@api/constants'
 import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
+import { isNotNullish } from '@utils/isNotNullish'
 
 import { Vessel } from '../../../domain/entities/vessel/vessel'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
 import { removeVesselReportings } from '../../Vessel/slice'
-import { removeReportingsIdsFromCurrentReportings } from '../slice'
+import { reportingApi } from '../reportingApi'
 
-import type { InfractionSuspicionReporting, PendingAlertReporting } from '@features/Reporting/types'
+import type { Reporting } from '@features/Reporting/types'
 import type { MainAppThunk } from '@store'
 
 export const archiveReportings =
-  (ids: number[]): MainAppThunk =>
-  async (dispatch, getState) => {
-    const { currentReportings } = getState().reporting
-    const reportingsInformation = getReportingsInformationFromIds(ids, currentReportings)
+  (reportings: Reporting.Reporting[], ids: number[], windowContext: WindowContext): MainAppThunk<Promise<void>> =>
+  async dispatch => {
+    const reportingsInformation = getReportingsInformationFromIds(ids, reportings)
 
     try {
-      await archiveReportingsFromAPI(ids)
+      await dispatch(reportingApi.endpoints.archiveReportings.initiate(ids)).unwrap()
 
-      dispatch(removeReportingsIdsFromCurrentReportings(ids))
       dispatch(removeVesselReportings(reportingsInformation))
-      dispatch(renderVesselFeatures())
 
-      await dispatch(getVesselReportings(false))
+      dispatch(renderVesselFeatures())
     } catch (error) {
       dispatch(
         displayOrLogError(
           error as Error,
-          () => archiveReportings(ids),
+          () => archiveReportings(reportings, ids, windowContext),
           true,
-          DisplayedErrorKey.SIDE_WINDOW_REPORTING_LIST_ERROR
+          windowContext === WindowContext.MainWindow
+            ? DisplayedErrorKey.MAIN_WINDOW_REPORTING_LIST_ERROR
+            : DisplayedErrorKey.SIDE_WINDOW_REPORTING_LIST_ERROR
         )
       )
     }
   }
 
-function getReportingsInformationFromIds(
-  ids: number[],
-  currentReportings: Array<InfractionSuspicionReporting | PendingAlertReporting>
-) {
+function getReportingsInformationFromIds(ids: number[], currentReportings: Reporting.Reporting[]) {
   return ids
     .map(id => {
       const foundReporting = currentReportings.find(reporting => reporting.id === id)
@@ -54,5 +50,5 @@ function getReportingsInformationFromIds(
         vesselFeatureId: Vessel.getVesselFeatureId(foundReporting)
       }
     })
-    .filter(reporting => reporting)
+    .filter(isNotNullish)
 }

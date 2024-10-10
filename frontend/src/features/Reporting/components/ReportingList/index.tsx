@@ -1,10 +1,12 @@
+import { WindowContext } from '@api/constants'
 import { ErrorWall } from '@components/ErrorWall'
 import { SeafrontGroup } from '@constants/seafront'
+import { reportingActions } from '@features/Reporting/slice'
 import { ReportingType } from '@features/Reporting/types'
+import { isNotObservationReporting } from '@features/Reporting/utils'
 import { Flag } from '@features/Vessel/components/VesselList/tableCells'
 import { useForceUpdate } from '@hooks/useForceUpdate'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useTable } from '@hooks/useTable'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Accent, Icon, IconButton, THEME } from '@mtes-mct/monitor-ui'
@@ -27,27 +29,26 @@ import { CardTableRow } from '../../../../ui/card-table/CardTableRow'
 import { EmptyCardTable } from '../../../../ui/card-table/EmptyCardTable'
 import { FilterTableInput } from '../../../../ui/card-table/FilterTableInput'
 import { EditReporting } from '../../../SideWindow/Alert/AlertListAndReportingList/EditReporting'
-import { setEditedReportingInSideWindow } from '../../slice'
 import { archiveReportings } from '../../useCases/archiveReportings'
 import { deleteReportings } from '../../useCases/deleteReportings'
 
 import type {
   InfractionSuspicionReporting,
   ObservationReporting,
-  PendingAlertReporting
+  PendingAlertReporting,
+  Reporting
 } from '@features/Reporting/types'
+import type { DisplayedErrorStateValue } from 'domain/shared_slices/DisplayedError'
 import type { CSSProperties, MutableRefObject } from 'react'
 
 type ReportingListProps = Readonly<{
+  currentReportings: Reporting.Reporting[]
+  displayedError: DisplayedErrorStateValue | undefined
   selectedSeafrontGroup: SeafrontGroup
 }>
-export function ReportingList({ selectedSeafrontGroup }: ReportingListProps) {
+export function ReportingList({ currentReportings, displayedError, selectedSeafrontGroup }: ReportingListProps) {
   const dispatch = useMainAppDispatch()
   const searchInputRef = useRef() as MutableRefObject<HTMLInputElement>
-  const currentReportings = useMainAppSelector(state => state.reporting.currentReportings)
-  const displayedError = useMainAppSelector(
-    state => state.displayedError[DisplayedErrorKey.SIDE_WINDOW_REPORTING_LIST_ERROR]
-  )
 
   const { forceDebouncedUpdate } = useForceUpdate()
 
@@ -55,12 +56,14 @@ export function ReportingList({ selectedSeafrontGroup }: ReportingListProps) {
 
   const currentSeafrontReportings = useMemo(
     () =>
-      currentReportings.filter(
-        reporting =>
-          ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup] &&
-          reporting.value.seaFront &&
-          ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup].seafronts.includes(reporting.value.seaFront)
-      ),
+      currentReportings
+        .filter(isNotObservationReporting)
+        .filter(
+          reporting =>
+            ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup] &&
+            reporting.value.seaFront &&
+            ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup].seafronts.includes(reporting.value.seaFront)
+        ),
     [currentReportings, selectedSeafrontGroup]
   )
 
@@ -68,13 +71,13 @@ export function ReportingList({ selectedSeafrontGroup }: ReportingListProps) {
     InfractionSuspicionReporting | PendingAlertReporting
   >(currentSeafrontReportings, REPORTING_LIST_TABLE_OPTIONS, [], searchInputRef.current?.value)
 
-  const archive = useCallback(async () => {
+  const archive = useCallback(() => {
     if (!tableCheckedIds.length) {
       return
     }
 
-    await dispatch(archiveReportings(tableCheckedIds.map(Number)))
-  }, [dispatch, tableCheckedIds])
+    dispatch(archiveReportings(currentReportings, tableCheckedIds.map(Number), WindowContext.SideWindow))
+  }, [currentReportings, dispatch, tableCheckedIds])
 
   const download = useCallback(() => {
     const checkedCurrentSeafrontReportings = getTableCheckedData()
@@ -110,10 +113,12 @@ export function ReportingList({ selectedSeafrontGroup }: ReportingListProps) {
 
   // TODO Rather use a reporting id here than passing a copy of the whole Reporting object.
   const edit = useCallback(
-    (isDisabled: boolean, reporting: InfractionSuspicionReporting | ObservationReporting) => {
-      if (!isDisabled) {
-        dispatch(setEditedReportingInSideWindow(reporting))
+    (isDisabled: boolean, reporting: Reporting.EditableReporting) => {
+      if (isDisabled) {
+        return
       }
+
+      dispatch(reportingActions.setEditedReporting(reporting))
     },
     [dispatch]
   )
@@ -130,15 +135,17 @@ export function ReportingList({ selectedSeafrontGroup }: ReportingListProps) {
       return
     }
 
-    await dispatch(deleteReportings(tableCheckedIds.map(Number)))
-  }, [dispatch, tableCheckedIds])
+    dispatch(deleteReportings(currentReportings, tableCheckedIds.map(Number), WindowContext.SideWindow))
+  }, [currentReportings, dispatch, tableCheckedIds])
 
   function getVesselNameTitle(reporting) {
-    return `${reporting.vesselName}
-CFR: ${reporting.internalReferenceNumber || ''}
-MARQUAGE EXT.: ${reporting.externalReferenceNumber || ''}
-IRCS: ${reporting.ircs || ''}
-MMSI: ${reporting.mmsi || ''}`
+    return [
+      reporting.vesselName,
+      `CFR: ${reporting.internalReferenceNumber || ''}`,
+      `MARQUAGE EXT.: ${reporting.externalReferenceNumber || ''}`,
+      `IRCS: ${reporting.ircs || ''}`,
+      `MMSI: ${reporting.mmsi || ''}`
+    ].join('\n')
   }
 
   if (displayedError) {
@@ -154,7 +161,7 @@ MMSI: ${reporting.mmsi || ''}`
       <CardTableFilters>
         <FilterTableInput
           ref={searchInputRef}
-          baseUrl={baseUrl}
+          $baseUrl={baseUrl}
           data-cy="side-window-reporting-search"
           onChange={forceDebouncedUpdate}
           placeholder="Rechercher un signalement"
@@ -276,9 +283,9 @@ const Cell = styled(FlexboxGrid.Item).attrs(() => ({
 
 const UnderCharter = styled.div`
   background: ${p => p.theme.color.mediumSeaGreen} 0% 0% no-repeat padding-box;
-  padding: 2px 8px;
   border-radius: 1px;
   color: ${p => p.theme.color.gunMetal};
+  padding: 2px 8px;
   white-space: nowrap;
 `
 const RightAligned = styled.div`

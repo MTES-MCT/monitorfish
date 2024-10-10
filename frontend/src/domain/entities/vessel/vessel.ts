@@ -155,7 +155,11 @@ export class Vessel {
 }
 
 export const getOnlyVesselIdentityProperties = (
-  vessel: VesselTypes.VesselEnhancedObject | VesselTypes.SelectedVessel | VesselTypes.EnrichedVessel | Reporting
+  vessel:
+    | VesselTypes.VesselEnhancedObject
+    | VesselTypes.SelectedVessel
+    | VesselTypes.EnrichedVessel
+    | Reporting.Reporting
 ): VesselIdentity => ({
   beaconNumber: 'beaconNumber' in vessel && !!vessel.beaconNumber ? vessel.beaconNumber : null,
   districtCode: 'districtCode' in vessel && !!vessel.districtCode ? vessel.districtCode : null,

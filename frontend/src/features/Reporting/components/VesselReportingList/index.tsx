@@ -44,8 +44,9 @@ export function VesselReportingList({
   )
 
   const decreaseStartDate = () => {
-    setStartDate(customDayjs(startDate).subtract(5, 'year').toDate())
+    setStartDate(customDayjs(startDate).subtract(1, 'year').toDate())
   }
+
   const selectMainMapVessel = async () => {
     if (!vesselIdentity) {
       return

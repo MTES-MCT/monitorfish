@@ -22,7 +22,7 @@ export function Body() {
   const healthcheckTextWarning = useMainAppSelector(state => state.global.healthcheckTextWarning)
   const vesselSidebarError = useMainAppSelector(state => state.displayedError.vesselSidebarError)
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
-  const vesselSidebarTab = useMainAppSelector(state => state.vessel.vesselSidebarTab)
+  const selectedVesselSidebarTab = useMainAppSelector(state => state.vessel.selectedVesselSidebarTab)
 
   const handleRetry = () => {
     DisplayedError.retryUseCase(dispatch, DisplayedErrorKey.VESSEL_SIDEBAR_ERROR)
@@ -46,12 +46,12 @@ export function Body() {
     <Wrapper $hasHealthcheckTextWarning={!!healthcheckTextWarning.length}>
       {isSuperUser && selectedVessel && <AlertWarning selectedVessel={selectedVessel} />}
       {isSuperUser && <BeaconMalfunctionWarning selectedVessel={selectedVessel} />}
-      {vesselSidebarTab === VesselSidebarTab.SUMMARY && <VesselSummary />}
-      {vesselSidebarTab === VesselSidebarTab.IDENTITY && <Identity />}
-      {vesselSidebarTab === VesselSidebarTab.VOYAGES && <VesselLogbook />}
-      {vesselSidebarTab === VesselSidebarTab.CONTROLS && <Controls />}
-      {isSuperUser && vesselSidebarTab === VesselSidebarTab.REPORTING && <ReportingList />}
-      {vesselSidebarTab === VesselSidebarTab.ERSVMS && <VesselEquipment />}
+      {selectedVesselSidebarTab === VesselSidebarTab.SUMMARY && <VesselSummary />}
+      {selectedVesselSidebarTab === VesselSidebarTab.IDENTITY && <Identity />}
+      {selectedVesselSidebarTab === VesselSidebarTab.VOYAGES && <VesselLogbook />}
+      {selectedVesselSidebarTab === VesselSidebarTab.CONTROLS && <Controls />}
+      {isSuperUser && selectedVesselSidebarTab === VesselSidebarTab.REPORTING && <ReportingList />}
+      {selectedVesselSidebarTab === VesselSidebarTab.ERSVMS && <VesselEquipment />}
     </Wrapper>
   )
 }

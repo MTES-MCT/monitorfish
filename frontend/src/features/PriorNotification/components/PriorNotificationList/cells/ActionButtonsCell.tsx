@@ -46,7 +46,7 @@ export function ActionButtonsCell({ priorNotification }: ActionButtonsCellProps)
     )
   }
 
-  const selectMainMapVessel = () => {
+  const selectMainMapVessel = async () => {
     const vesselIdentity: VesselIdentity = {
       beaconNumber: null,
       districtCode: null,
@@ -57,6 +57,7 @@ export function ActionButtonsCell({ priorNotification }: ActionButtonsCellProps)
       ircs: priorNotification.vesselIrcs ?? null,
       mmsi: priorNotification.vesselMmsi ?? null,
       vesselId: priorNotification.vesselId,
+      // TODO Check that.
       vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
       vesselName: priorNotification.vesselName ?? null
     }

@@ -1,9 +1,13 @@
 import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { Summary } from '@features/Reporting/components/VesselReportingList/Summary'
 import { getDefaultReportingsStartDate } from '@features/Reporting/utils'
+import { vesselActions } from '@features/Vessel/slice'
 import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
-import { customDayjs, THEME } from '@mtes-mct/monitor-ui'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { customDayjs, LinkButton, THEME } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
+import { VesselSidebarTab } from 'domain/entities/vessel/vessel'
+import { showVessel } from 'domain/use_cases/vessel/showVessel'
 import { useState } from 'react'
 import styled from 'styled-components'
 
@@ -14,16 +18,20 @@ import { Current } from './Current'
 import type { VesselIdentity } from 'domain/entities/vessel/types'
 
 type VesselReportingListProps = Readonly<{
+  defaultSelectedTab?: VesselReportingListTab | undefined
   vesselIdentity: VesselIdentity | undefined
   withOpenedNewReportingForm?: boolean
   withTabs?: boolean
 }>
 export function VesselReportingList({
+  defaultSelectedTab = VesselReportingListTab.CURRENT_REPORTING,
   vesselIdentity,
   withOpenedNewReportingForm = false,
   withTabs = false
 }: VesselReportingListProps) {
-  const [selectedTab, setSelectedTab] = useState<VesselReportingListTab>(VesselReportingListTab.CURRENT_REPORTING)
+  const dispatch = useMainAppDispatch()
+
+  const [selectedTab, setSelectedTab] = useState<VesselReportingListTab>(defaultSelectedTab)
   const [startDate, setStartDate] = useState(getDefaultReportingsStartDate())
 
   const { data: vesselReportings } = useGetVesselReportingsByVesselIdentityQuery(
@@ -37,6 +45,15 @@ export function VesselReportingList({
 
   const decreaseStartDate = () => {
     setStartDate(customDayjs(startDate).subtract(5, 'year').toDate())
+  }
+  const selectMainMapVessel = async () => {
+    if (!vesselIdentity) {
+      return
+    }
+
+    dispatch(showVessel(vesselIdentity, false, true))
+    dispatch(vesselActions.setSelectedVesselSidebarTab(VesselSidebarTab.REPORTING))
+    dispatch(vesselActions.setSelectedVesselSidebarReportingListTab(VesselReportingListTab.REPORTING_HISTORY))
   }
 
   if (!vesselIdentity || !vesselReportings) {
@@ -75,6 +92,12 @@ export function VesselReportingList({
           <Archived fromDate={startDate} onMore={decreaseStartDate} vesselReportings={vesselReportings} />
         </>
       )}
+
+      {!withTabs && (
+        <LinkButton onClick={selectMainMapVessel}>
+          Voir tout l’historique des signalements dans la fiche navire
+        </LinkButton>
+      )}
     </Body>
   )
 }
@@ -99,7 +122,13 @@ const Menu = styled.div`
 `
 
 const Body = styled.div`
-  max-height: 670px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
   overflow-x: hidden;
   padding: 5px;
+
+  > .Element-LinkButton {
+    margin-left: 21px;
+  }
 `

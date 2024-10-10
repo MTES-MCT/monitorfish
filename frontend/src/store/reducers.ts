@@ -18,7 +18,7 @@ import { alertReducer } from '@features/SideWindow/Alert/slice'
 import { sideWindowReducer } from '@features/SideWindow/slice'
 import { stationReducer } from '@features/Station/slice'
 import { vesselListReducer } from '@features/Vessel/components/VesselList/slice'
-import { vesselSliceReducer } from '@features/Vessel/slice'
+import { vesselReducer } from '@features/Vessel/slice'
 import { filterReducer, type VesselFilterState } from '@features/VesselFilter/slice'
 import createMigrate from 'redux-persist/es/createMigrate'
 import persistReducer from 'redux-persist/es/persistReducer'
@@ -120,7 +120,7 @@ export const mainReducer = {
   reporting: reportingReducer,
   sideWindow: sideWindowReducer,
   station: stationReducer,
-  vessel: vesselSliceReducer,
+  vessel: vesselReducer,
   vesselList: vesselListReducer
 }
 

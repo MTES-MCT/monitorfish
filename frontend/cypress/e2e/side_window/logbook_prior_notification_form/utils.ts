@@ -8,8 +8,40 @@ import { openSideWindowPriorNotificationListAsSuperUser } from '../prior_notific
 
 import type { OrUndefinedToOrNull } from '../../types'
 import type { BackendApi } from '@api/BackendApi.types'
+import type { Reporting } from '@features/Reporting/types'
 
-// Both logbook and manual prior notifications
+/**
+ * For both logbook and manual prior notifications.
+ *
+ * @returns Created reporting ID.
+ */
+export const createReportingFromPriorNotificationForm = (vesselName: string, reportId: string) => {
+  cy.intercept('GET', '/bff/v1/vessels/reportings?*').as('getVesselReportings')
+  cy.intercept('POST', '/bff/v1/reportings').as('createReporting')
+
+  editSideWindowPriorNotification(vesselName, reportId)
+
+  cy.clickButton('Ouvrir un signalement sur le navire')
+  cy.wait('@getVesselReportings')
+
+  cy.fill('Titre', faker.word.words(3))
+  cy.fill('Natinf', '23588')
+  cy.fill('Saisi par', 'BOB', { index: 1 })
+
+  cy.clickButton('Valider')
+
+  return cy.wait('@createReporting').then(createInterception => {
+    if (!createInterception.response) {
+      assert.fail('`createInterception.response` is undefined.')
+    }
+
+    const createdPriorNotification: Reporting.Reporting = createInterception.response.body
+
+    return createdPriorNotification.id
+  })
+}
+
+// For both logbook and manual prior notifications
 export const editSideWindowPriorNotification = (vesselName: string, reportId: string) => {
   openSideWindowPriorNotificationListAsSuperUser()
 

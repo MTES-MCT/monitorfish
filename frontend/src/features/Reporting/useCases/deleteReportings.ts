@@ -1,6 +1,7 @@
 import { WindowContext } from '@api/constants'
 import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
+import { isNotNullish } from '@utils/isNotNullish'
 
 import { Vessel } from '../../../domain/entities/vessel/vessel'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
@@ -11,7 +12,7 @@ import type { Reporting } from '@features/Reporting/types'
 import type { MainAppThunk } from '@store'
 
 export const deleteReportings =
-  (reportings: Reporting.Reporting[], ids: number[], windowContext: WindowContext): MainAppThunk =>
+  (reportings: Reporting.Reporting[], ids: number[], windowContext: WindowContext): MainAppThunk<Promise<void>> =>
   async dispatch => {
     const reportingsInformation = getReportingsInformationFromIds(ids, reportings)
 
@@ -49,5 +50,5 @@ function getReportingsInformationFromIds(ids: number[], currentReportings: Repor
         vesselFeatureId: Vessel.getVesselFeatureId(foundReporting)
       }
     })
-    .filter(reporting => reporting)
+    .filter(isNotNullish)
 }

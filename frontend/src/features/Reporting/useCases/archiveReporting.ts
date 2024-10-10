@@ -10,7 +10,7 @@ import type { ReportingType } from '@features/Reporting/types'
 import type { MainAppThunk } from '@store'
 
 export const archiveReporting =
-  (id: number, type: ReportingType): MainAppThunk =>
+  (id: number, type: ReportingType): MainAppThunk<Promise<void>> =>
   async (dispatch, getState) => {
     const { selectedVesselIdentity } = getState().vessel
 

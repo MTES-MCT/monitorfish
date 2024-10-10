@@ -10,7 +10,7 @@ import type { ReportingType } from '@features/Reporting/types'
 import type { MainAppThunk } from '@store'
 
 export const deleteReporting =
-  (id: number, reportingType: ReportingType): MainAppThunk =>
+  (id: number, reportingType: ReportingType): MainAppThunk<Promise<void>> =>
   async (dispatch, getState) => {
     const { selectedVesselIdentity } = getState().vessel
 

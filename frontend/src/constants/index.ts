@@ -24,3 +24,5 @@ export const COUNTRIES_AS_ALPHA3_OPTIONS: Option<string>[] = Object.keys(Countri
   label: Countries.getName(code, 'fr') ?? code,
   value: code
 }))
+
+export const UNKNOWN_COUNTRY_CODE = 'UNKNOWN'

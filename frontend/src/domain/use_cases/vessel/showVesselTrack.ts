@@ -9,12 +9,18 @@ import { removeError, setError } from '../../shared_slices/Global'
 import { doNotAnimate } from '../../shared_slices/Map'
 
 import type { TrackRequest, VesselIdentity } from '../../entities/vessel/types'
+import type { MainAppThunk } from '@store'
 
 /**
  * Show a specified vessel track on map
  */
 export const showVesselTrack =
-  (vesselIdentity: VesselIdentity, isFromUserAction: boolean, trackRequest: TrackRequest | null, hasZoom?: boolean) =>
+  (
+    vesselIdentity: VesselIdentity,
+    isFromUserAction: boolean,
+    trackRequest: TrackRequest | null,
+    hasZoom: boolean = false
+  ): MainAppThunk<Promise<void>> =>
   async (dispatch, getState) => {
     try {
       const { defaultVesselTrackDepth } = getState().map

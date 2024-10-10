@@ -6,6 +6,7 @@ import type { PendingAlertValueType } from '../alerts/types'
 import type { VesselTrackDepth } from '../vesselTrackDepth'
 import type { SelectableVesselTrackDepth } from '@features/Vessel/components/VesselSidebar/actions/TrackRequest/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
+import type { Coordinate } from 'ol/coordinate'
 import type Feature from 'ol/Feature'
 import type LineString from 'ol/geom/LineString'
 import type Point from 'ol/geom/Point'
@@ -164,9 +165,9 @@ export type DeclaredLogbookGear = {
 }
 
 export type ShowedVesselTrack = {
-  coordinates: string[]
+  coordinates: Coordinate
   course: number
-  extent: number[]
+  extent: number[] | null
   isDefaultTrackDepth: boolean
   positions: VesselPosition[]
   toHide: boolean

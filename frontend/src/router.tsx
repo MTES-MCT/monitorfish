@@ -8,81 +8,135 @@ import { BackofficePage } from '@pages/BackofficePage'
 import { HomePage } from '@pages/HomePage'
 import { LightBackoffice } from '@pages/LightBackoffice'
 import { LightHomePage } from '@pages/LightHomePage'
+import { LoginPage } from '@pages/LoginPage'
 import { createBrowserRouter, Navigate } from 'react-router-dom'
+
+import { Login } from './auth/components/Login'
+import { Register } from './auth/components/Register'
+import { RequireAuth } from './auth/components/RequireAuth'
+import { paths } from './paths'
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 export const routes = [
   {
-    path: '/',
+    path: paths.home,
     element: <HomePage />,
     children: [
       {
         index: true,
-        element: <MainWindow />
+        element: (
+          <RequireAuth redirect>
+            <MainWindow />
+          </RequireAuth>
+        )
       }
     ]
   },
   {
-    path: '/light',
+    path: paths.light,
     element: <LightHomePage />,
     children: [
       {
         index: true,
-        element: <MainWindow />
+        element: (
+          <RequireAuth redirect>
+            <MainWindow />
+          </RequireAuth>
+        )
       }
     ]
   },
   {
-    path: '/load_light',
+    path: paths.login,
+    element: <LoginPage />,
+    children: [
+      {
+        index: true,
+        element: <Login />
+      }
+    ]
+  },
+  {
+    path: paths.register,
+    element: <Register />
+  },
+  {
+    path: paths.loadLight,
     element: <LightBackoffice />
   },
   {
-    path: '/backoffice',
+    path: paths.backoffice,
     element: <BackofficePage />,
     children: [
       {
         index: true,
-        element: <Backoffice />
+        element: (
+          <RequireAuth redirect requireSuperUser>
+            <Backoffice />
+          </RequireAuth>
+        )
       },
       {
-        path: 'regulation',
-        element: <Backoffice />
+        path: paths.regulation,
+        element: (
+          <RequireAuth redirect requireSuperUser>
+            <Backoffice />
+          </RequireAuth>
+        )
       },
       {
-        path: 'regulation/new',
-        element: <EditRegulation isEdition={false} title="Saisir une nouvelle réglementation" />
+        path: paths.newRegulation,
+        element: (
+          <RequireAuth redirect requireSuperUser>
+            <EditRegulation isEdition={false} title="Saisir une nouvelle réglementation" />
+          </RequireAuth>
+        )
       },
       {
-        path: 'regulation/edit',
-        element: <EditRegulation isEdition title="Modifier la réglementation de la zone" />
+        path: paths.editRegulation,
+        element: (
+          <RequireAuth redirect requireSuperUser>
+            <EditRegulation isEdition title="Modifier la réglementation de la zone" />
+          </RequireAuth>
+        )
       },
       {
-        path: 'control_objectives',
-        element: <ControlObjectiveTable />
+        path: paths.controlObjectives,
+        element: (
+          <RequireAuth redirect requireSuperUser>
+            <ControlObjectiveTable />
+          </RequireAuth>
+        )
       },
       {
-        path: 'fleet_segments',
-        element: <FleetSegmentsBackoffice />
+        path: paths.fleetSegments,
+        element: (
+          <RequireAuth redirect requireSuperUser>
+            <FleetSegmentsBackoffice />
+          </RequireAuth>
+        )
       }
     ]
   },
   {
-    path: '/ext',
+    path: paths.ext,
     element: <Navigate replace to="/" />
   },
   {
-    path: '/side_window',
+    path: paths.sideWindow,
     element: <HomePage />,
     children: [
       {
         index: true,
-        element: <SideWindow isFromURL />
+        element: (
+          <RequireAuth redirect>
+            <SideWindow isFromURL />
+          </RequireAuth>
+        )
       }
     ]
   }
 ]
 /* eslint-enable sort-keys-fix/sort-keys-fix */
-
-export const routesPaths = routes.map(route => route.path)
 
 export const router = createBrowserRouter(routes)

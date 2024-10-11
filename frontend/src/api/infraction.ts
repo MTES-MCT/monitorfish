@@ -1,5 +1,6 @@
+import { FrontendApiError } from '@libs/FrontendApiError'
+
 import { monitorfishApiKy, monitorfishPublicApi } from './api'
-import { ApiError } from '../libs/ApiError'
 
 import type { Infraction } from '../domain/types/infraction'
 
@@ -19,13 +20,13 @@ export const INFRACTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les NA
 /**
  * Get fishing infractions
  *
- * @throws {ApiError}
+ * @throws {FrontendApiError}
  */
 async function getInfractionsFromAPI() {
   try {
     return await monitorfishApiKy.get(`/api/v1/infractions`).json<Array<Infraction>>()
   } catch (err) {
-    throw new ApiError(INFRACTIONS_ERROR_MESSAGE, err)
+    throw new FrontendApiError(INFRACTIONS_ERROR_MESSAGE, (err as FrontendApiError).originalError)
   }
 }
 

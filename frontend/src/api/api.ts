@@ -5,7 +5,7 @@ import { FrontendApiError } from '@libs/FrontendApiError'
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react'
 import { setMeasurement, startSpan } from '@sentry/react'
 import { sha256 } from '@utils/sha256'
-import ky from 'ky'
+import ky, { HTTPError } from 'ky'
 
 import { RTK_MAX_RETRIES, RtkCacheTagType } from './constants'
 import { getOIDCConfig } from '../auth/getOIDCConfig'
@@ -193,22 +193,36 @@ export const monitorfishPublicApi = createApi({
 
 export const monitorfishApiKy = ky.extend({
   hooks: {
-    afterResponse: [
-      async (request, _, response) => {
-        if (!response.ok) {
-          const error: CustomResponseError = {
-            path: response.url,
-            requestData: await request.json(),
-            responseData: await response.json(),
-            status: response.status
-          }
+    beforeError: [
+      async error => {
+        const { request, response } = error
 
-          redirectToLoginIfUnauthorized(error)
-
-          throw new FrontendApiError(error.status.toString(), error)
+        let requestData
+        try {
+          requestData = await request.json()
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.error('Could not parse request data', error)
         }
 
-        return response
+        let responseData
+        try {
+          responseData = await response.json()
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.error('Could not parse response data', error)
+        }
+
+        const customError: CustomResponseError = {
+          path: response.url,
+          requestData,
+          responseData,
+          status: response.status
+        }
+        redirectToLoginIfUnauthorized(customError)
+
+        // `beforeError` hook expect an HTTPError, so we fake it with `as unknown as HTTPError`
+        return new FrontendApiError(customError.status.toString(), customError) as unknown as HTTPError
       }
     ],
     beforeRequest: [

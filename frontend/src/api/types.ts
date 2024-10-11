@@ -15,6 +15,6 @@ export type RTKBaseQueryArgs =
 export interface CustomResponseError {
   path: string
   requestData: AnyObject | undefined
-  responseData: BackendApi.ResponseBodyError
+  responseData: BackendApi.ResponseBodyError | undefined
   status: number | 'FETCH_ERROR' | 'PARSING_ERROR' | 'TIMEOUT_ERROR' | 'CUSTOM_ERROR'
 }

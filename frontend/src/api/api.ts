@@ -1,6 +1,7 @@
 // https://redux-toolkit.js.org/rtk-query/usage/cache-behavior
 // https://redux-toolkit.js.org/rtk-query/usage/automated-refetching#cache-tags
 
+import { FrontendApiError } from '@libs/FrontendApiError'
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react'
 import { setMeasurement, startSpan } from '@sentry/react'
 import { sha256 } from '@utils/sha256'
@@ -9,10 +10,11 @@ import ky from 'ky'
 import { RTK_MAX_RETRIES, RtkCacheTagType } from './constants'
 import { getOIDCConfig } from '../auth/getOIDCConfig'
 import { getOIDCUser } from '../auth/getOIDCUser'
+import { redirectToLoginIfUnauthorized } from '../auth/utils'
 import { normalizeRtkBaseQuery } from '../utils/normalizeRtkBaseQuery'
 
 import type { BackendApi } from './BackendApi.types'
-import type { CustomRTKResponseError, RTKBaseQueryArgs } from './types'
+import type { CustomResponseError, RTKBaseQueryArgs } from './types'
 
 // Using local MonitorEnv stubs:
 export const MONITORENV_API_URL = import.meta.env.FRONTEND_MONITORENV_URL
@@ -40,7 +42,7 @@ export const monitorenvApi = createApi({
       setMeasurement(spanName, Date.now() - measurementStart, 'millisecond')
 
       if (result.error) {
-        const error: CustomRTKResponseError = {
+        const error: CustomResponseError = {
           path: typeof args === 'string' ? args : args.url,
           requestData: typeof args === 'string' ? undefined : args.body,
           responseData: result.error.data as BackendApi.ResponseBodyError,
@@ -104,12 +106,14 @@ export const monitorfishApi = createApi({
       setMeasurement(spanName, Date.now() - measurementStart, 'millisecond')
 
       if (result.error) {
-        const error: CustomRTKResponseError = {
+        const error: CustomResponseError = {
           path: typeof args === 'string' ? args : args.url,
           requestData: typeof args === 'string' ? undefined : args.body,
           responseData: result.error.data as BackendApi.ResponseBodyError,
           status: result.error.status
         }
+
+        redirectToLoginIfUnauthorized(error)
 
         return { error }
       }
@@ -170,7 +174,7 @@ export const monitorfishPublicApi = createApi({
   baseQuery: async (args: RTKBaseQueryArgs, api, extraOptions) => {
     const result = await normalizeRtkBaseQuery(monitorfishPublicBaseQuery)(args, api, extraOptions)
     if (result.error) {
-      const error: CustomRTKResponseError = {
+      const error: CustomResponseError = {
         path: typeof args === 'string' ? args : args.url,
         requestData: typeof args === 'string' ? undefined : args.body,
         responseData: result.error.data as BackendApi.ResponseBodyError,
@@ -189,6 +193,24 @@ export const monitorfishPublicApi = createApi({
 
 export const monitorfishApiKy = ky.extend({
   hooks: {
+    afterResponse: [
+      async (request, _, response) => {
+        if (!response.ok) {
+          const error: CustomResponseError = {
+            path: response.url,
+            requestData: await request.json(),
+            responseData: await response.json(),
+            status: response.status
+          }
+
+          redirectToLoginIfUnauthorized(error)
+
+          throw new FrontendApiError(error.status.toString(), error)
+        }
+
+        return response
+      }
+    ],
     beforeRequest: [
       async request => {
         const user = getOIDCUser()

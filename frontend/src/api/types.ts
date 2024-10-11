@@ -12,7 +12,7 @@ export type RTKBaseQueryArgs =
       url: string
     }
 
-export interface CustomRTKResponseError {
+export interface CustomResponseError {
   path: string
   requestData: AnyObject | undefined
   responseData: BackendApi.ResponseBodyError

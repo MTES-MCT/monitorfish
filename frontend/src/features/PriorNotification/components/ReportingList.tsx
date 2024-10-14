@@ -23,7 +23,7 @@ export function ReportingList() {
   }
 
   return (
-    <StyledCard $isSuperUser={isSuperUser}>
+    <StyledCard $isSuperUser={isSuperUser} onBackgroundClick={close}>
       <Header detail={openedPriorNotificationDetail} onClose={close} vesselId={vesselId} />
 
       <VesselReportingList vesselIdentity={vesselIdentity} withOpenedNewReportingForm />

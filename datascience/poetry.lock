@@ -3066,19 +3066,21 @@ traitlets = "*"
 
 [[package]]
 name = "matplotlib-venn"
-version = "0.11.10"
+version = "1.1.1"
 description = "Functions for plotting area-proportional two- and three-way Venn diagrams in matplotlib."
 optional = false
 python-versions = "*"
 files = [
-    {file = "matplotlib-venn-0.11.10.tar.gz", hash = "sha256:90d0cfb279c5dbbdf7dfd722c0e2515a37f535e949bcad174483bc777e372e65"},
-    {file = "matplotlib_venn-0.11.10-py3-none-any.whl", hash = "sha256:85650429baff7a812b2785540979e6bf0abcc747e7fe5ffd2a972cb917a826d6"},
+    {file = "matplotlib-venn-1.1.1.tar.gz", hash = "sha256:d885bc015f5091a4b8a8138ff20a7ed166c33b5c36dbc0489f95a5cbc76a2ae5"},
 ]
 
 [package.dependencies]
 matplotlib = "*"
 numpy = "*"
 scipy = "*"
+
+[package.extras]
+shapely = ["shapely"]
 
 [[package]]
 name = "mccabe"
@@ -6221,4 +6223,4 @@ test = ["pytest"]
 [metadata]
 lock-version = "2.0"
 python-versions = "3.11.6"
-content-hash = "7de075854777b8ae5f967c5b1f0d17d1c7ff3a9060c6971eeae51e2ef7b31c99"
+content-hash = "164f5e4205ecaf225a5ace96a1650861a3a0f1055cdd7b419df9b62eaa94c8a7"

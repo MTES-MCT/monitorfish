@@ -16,7 +16,7 @@ import type { LogbookMessage } from '../../../../LegacyLogbook.types'
 import type { Logbook as LogbookMessageNamespace } from '../../../../Logbook.types'
 
 export function getComponentFromMessageType(
-  logbookMessage: LogbookMessage | LogbookMessageNamespace.LogbookMessage,
+  logbookMessage: LogbookMessage | LogbookMessageNamespace.Message,
   isManuallyCreated: boolean
 ) {
   switch (logbookMessage.messageType) {

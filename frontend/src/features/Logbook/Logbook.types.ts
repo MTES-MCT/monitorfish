@@ -2,9 +2,9 @@ import type { AllSeafrontGroup, NoSeafrontGroup, SeafrontGroup } from '@constant
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
 export namespace Logbook {
-  export type LogbookMessage = PnoLogbookMessage | RetOperationLogbookMessage
+  export type Message = PnoMessage | RetOperationMessage
 
-  interface LogbookMessageBase {
+  interface MessageBase {
     acknowledgment: Acknowledgment | undefined
     externalReferenceNumber: string | undefined
     flagState: string | undefined
@@ -15,7 +15,7 @@ export namespace Logbook {
     isCorrectedByNewerMessage: boolean
     isDeleted: boolean
     isSentByFailoverSoftware: boolean
-    message: MessageBase | undefined
+    message: MessageValue | undefined
     messageType: MessageType
     operationDateTime: string
     operationNumber: string | undefined
@@ -29,13 +29,15 @@ export namespace Logbook {
     tripSegments: Segment[] | undefined
     vesselName: string
   }
-  export interface PnoLogbookMessage extends LogbookMessageBase {
+
+  export interface PnoMessage extends MessageBase {
     acknowledgment: undefined
-    message: PnoMessage
+    message: PnoMessageValue
     messageType: MessageType.PNO
     operationType: OperationType.COR | OperationType.DAT
   }
-  export interface RetOperationLogbookMessage extends LogbookMessageBase {
+
+  export interface RetOperationMessage extends MessageBase {
     acknowledgment: Acknowledgment
     message: undefined
     messageType: MessageType
@@ -73,8 +75,8 @@ export namespace Logbook {
     mesh: number | null
   }
 
-  interface MessageBase {}
-  export interface PnoMessage extends MessageBase {
+  type MessageValue = PnoMessageValue
+  export interface PnoMessageValue {
     authorTrigram: string | undefined
     catchOnboard: Catch[] | undefined
     catchToLand: Catch[] | undefined

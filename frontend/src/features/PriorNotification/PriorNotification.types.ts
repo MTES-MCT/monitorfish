@@ -52,7 +52,7 @@ export namespace PriorNotification {
     fingerprint: string
     isLessThanTwelveMetersVessel: boolean
     isVesselUnderCharter: boolean | undefined
-    logbookMessage: Logbook.PnoLogbookMessage
+    logbookMessage: Logbook.PnoMessage
     operationDate: string
     /** Logbook message `reportId`. */
     reportId: string

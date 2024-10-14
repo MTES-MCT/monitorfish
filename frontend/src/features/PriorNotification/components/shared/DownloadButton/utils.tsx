@@ -9,7 +9,7 @@ import type { Logbook } from '@features/Logbook/Logbook.types'
 import type { TemplateData } from '@features/PriorNotification/components/PriorNotificationCard/types'
 
 export function getHtmlContent(
-  pno: Logbook.PnoLogbookMessage | undefined,
+  pno: Logbook.PnoMessage | undefined,
   gearsWithName: Array<Logbook.Gear & { gearName: string | null }>
 ): string {
   if (!pno) {

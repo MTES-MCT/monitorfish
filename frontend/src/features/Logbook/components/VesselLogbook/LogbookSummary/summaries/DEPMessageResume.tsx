@@ -6,7 +6,7 @@ import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../consta
 import { getCodeWithNameOrDash } from '../../LogbookMessages/messages/utils'
 import { LogbookMessageResumeHeader } from '../LogbookMessageResumeHeader'
 
-import type { DEPMessageValue } from '../../../../Logbook.types'
+import type { DEPMessageValue } from '../../../../LegacyLogbook.types'
 import type { Promisable } from 'type-fest'
 
 type DEPMessageResumeProps = Readonly<{

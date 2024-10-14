@@ -19,7 +19,7 @@ import {
   Zone
 } from '../styles'
 
-import type { DISMessageValue } from '../../../../Logbook.types'
+import type { DISMessageValue } from '../../../../LegacyLogbook.types'
 
 type DISMessageProps = Readonly<{
   message: DISMessageValue

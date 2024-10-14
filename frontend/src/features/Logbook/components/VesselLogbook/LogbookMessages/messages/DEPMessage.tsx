@@ -4,7 +4,7 @@ import { getCodeWithNameOrDash, getDatetimeOrDash } from './utils'
 import { LogbookMessageActivityType } from '../../../../constants'
 import { NoValue, Table, TableBody, TableKey, TableRow, TableValue, Zone } from '../styles'
 
-import type { DEPMessageValue } from '../../../../Logbook.types'
+import type { DEPMessageValue } from '../../../../LegacyLogbook.types'
 
 type DEPMessageProps = Readonly<{
   message: DEPMessageValue

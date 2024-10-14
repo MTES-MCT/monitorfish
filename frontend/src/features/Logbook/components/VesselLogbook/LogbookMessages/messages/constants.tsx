@@ -12,7 +12,7 @@ import { PNOMessage } from './PNOMessage'
 import { RTPMessage } from './RTPMessage'
 import { LogbookMessageType } from '../../../../constants'
 
-import type { LogbookMessage } from '../../../../Logbook.types'
+import type { LogbookMessage } from '../../../../LegacyLogbook.types'
 import type { LogbookMessage as LogbookMessageNamespace } from '../../../../LogbookMessage.types'
 
 export function getComponentFromMessageType(

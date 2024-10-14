@@ -4,7 +4,7 @@ import { DOWNLOAD_LOGBOOK_MESSAGES_COLUMNS, DOWNLOAD_LOGBOOK_MESSAGES_OPTIONS } 
 import { getDate } from '../../../../../utils'
 import { formatAsCSVColumns } from '../../../../../utils/formatAsCSVColumns'
 
-import type { LogbookMessage } from '../../../Logbook.types'
+import type { LogbookMessage } from '../../../LegacyLogbook.types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
 export const downloadMessages = (logbookMessages: LogbookMessage[], tripNumber: string | null) => {

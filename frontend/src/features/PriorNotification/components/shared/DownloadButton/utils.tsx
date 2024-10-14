@@ -4,7 +4,7 @@ import { HTML_TEMPLATE } from '@features/PriorNotification/components/shared/Dow
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
-import type { LogbookCatch } from '@features/Logbook/Logbook.types'
+import type { LogbookCatch } from '@features/Logbook/LegacyLogbook.types'
 import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 import type { TemplateData } from '@features/PriorNotification/components/PriorNotificationCard/types'
 

@@ -9,7 +9,7 @@ import {
 import { NoValue, Table, TableBody, TableKey, TableRow, TableValue } from '../../styles'
 import { getCountryName, getCountryNameOrDash, getValueOrDash } from '../utils'
 
-import type { ProtectedSpeciesCatch } from '../../../../../Logbook.types'
+import type { ProtectedSpeciesCatch } from '../../../../../LegacyLogbook.types'
 
 export type ProtectedCatchDetailsProps = {
   specyCatch: ProtectedSpeciesCatch

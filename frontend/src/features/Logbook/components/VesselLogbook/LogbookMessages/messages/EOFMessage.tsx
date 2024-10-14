@@ -1,7 +1,7 @@
 import { getDatetimeOrDash } from './utils'
 import { Table, TableBody, TableKey, TableRow, TableValue, Zone } from '../styles'
 
-import type { EOFMessageValue } from '../../../../Logbook.types'
+import type { EOFMessageValue } from '../../../../LegacyLogbook.types'
 
 type EOFMessageProps = {
   message: EOFMessageValue

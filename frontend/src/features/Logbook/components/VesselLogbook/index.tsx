@@ -13,7 +13,7 @@ import { NavigateTo } from '../../constants'
 import { useGetLogbookUseCase } from '../../hooks/useGetLogbookUseCase'
 import { logbookActions } from '../../slice'
 
-import type { FishingActivities } from '../../Logbook.types'
+import type { FishingActivities } from '../../LegacyLogbook.types'
 
 export function VesselLogbook() {
   const dispatch = useMainAppDispatch()

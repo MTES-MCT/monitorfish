@@ -5,12 +5,12 @@ import { PriorNotification } from '@features/PriorNotification/PriorNotification
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
 import type { LogbookCatch } from '@features/Logbook/LegacyLogbook.types'
-import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
+import type { Logbook } from '@features/Logbook/Logbook.types'
 import type { TemplateData } from '@features/PriorNotification/components/PriorNotificationCard/types'
 
 export function getHtmlContent(
-  pno: LogbookMessage.PnoLogbookMessage | undefined,
-  gearsWithName: Array<LogbookMessage.Gear & { gearName: string | null }>
+  pno: Logbook.PnoLogbookMessage | undefined,
+  gearsWithName: Array<Logbook.Gear & { gearName: string | null }>
 ): string {
   if (!pno) {
     return ''

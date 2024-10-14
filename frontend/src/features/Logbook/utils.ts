@@ -8,7 +8,7 @@ import { undefinedize } from '../../utils/undefinedize'
 
 import type { CatchProperty, CatchWithProperties, ProtectedCatchWithProperties } from './components/VesselLogbook/types'
 import type { LogbookCatch, LogbookMessage, PNOMessageValue, ProtectedSpeciesCatch } from './LegacyLogbook.types'
-import type { LogbookMessage as LogbookMessageNamespace } from './LogbookMessage.types'
+import type { Logbook as LogbookMessageNamespace } from './Logbook.types'
 import type { SpeciesInsight, SpeciesToSpeciesInsight, SpeciesToSpeciesInsightList } from './types'
 import type { DeclaredLogbookSpecies, FishingActivityShowedOnMap } from '../../domain/entities/vessel/types'
 

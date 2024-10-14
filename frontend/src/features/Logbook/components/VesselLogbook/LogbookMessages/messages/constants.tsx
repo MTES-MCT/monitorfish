@@ -13,7 +13,7 @@ import { RTPMessage } from './RTPMessage'
 import { LogbookMessageType } from '../../../../constants'
 
 import type { LogbookMessage } from '../../../../LegacyLogbook.types'
-import type { LogbookMessage as LogbookMessageNamespace } from '../../../../LogbookMessage.types'
+import type { Logbook as LogbookMessageNamespace } from '../../../../Logbook.types'
 
 export function getComponentFromMessageType(
   logbookMessage: LogbookMessage | LogbookMessageNamespace.LogbookMessage,

@@ -11,7 +11,7 @@ import XMLSVG from '../../../../../icons/Picto_XML.svg?react'
 import ShowActivitySVG from '../../../../../icons/Position_message_JPE_Pin_gris_clair.svg?react'
 import HideActivitySVG from '../../../../../icons/Position_message_JPE_Pin_masquer.svg?react'
 import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../constants'
-import { LogbookMessage as LogbookMessageNamespace } from '../../../../LogbookMessage.types'
+import { Logbook as LogbookMessageNamespace } from '../../../../Logbook.types'
 import { logbookActions } from '../../../../slice'
 import { getLogbookMessageType } from '../../../../utils'
 

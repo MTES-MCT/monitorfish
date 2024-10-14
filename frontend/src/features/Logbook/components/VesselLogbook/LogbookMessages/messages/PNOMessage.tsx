@@ -12,17 +12,17 @@ import { buildCatchArray, getTotalPNOWeight } from '../../../../utils'
 import { WeightType } from '../constants'
 import { NoValue, SpeciesList, Table, TableBody, TableKey, TableRow, TableValue, Zone } from '../styles'
 
-import type { Gear, PNOMessageValue } from '../../../../LegacyLogbook.types'
+import type { Logbook } from '@features/Logbook/Logbook.types'
 
 type PNOMessageProps = Readonly<{
   isManuallyCreated: boolean
-  message: PNOMessageValue
-  tripGears: Gear[] | undefined
+  messageValue: Logbook.PnoMessageValue
+  tripGears: Logbook.Gear[] | undefined
 }>
-export function PNOMessage({ isManuallyCreated, message, tripGears }: PNOMessageProps) {
+export function PNOMessage({ isManuallyCreated, messageValue, tripGears }: PNOMessageProps) {
   const getGearsApiQuery = useGetGearsQuery()
 
-  const gearsWithName: Array<Gear> = useMemo(() => {
+  const gearsWithName: Logbook.Gear[] = useMemo(() => {
     if (!getGearsApiQuery.data || !tripGears) {
       return []
     }
@@ -35,52 +35,52 @@ export function PNOMessage({ isManuallyCreated, message, tripGears }: PNOMessage
   }, [getGearsApiQuery.data, tripGears])
 
   const catchesWithProperties = useMemo(() => {
-    if (!message?.catchOnboard) {
+    if (!messageValue?.catchOnboard) {
       return []
     }
 
-    return buildCatchArray(message.catchOnboard)
-  }, [message])
+    return buildCatchArray(messageValue.catchOnboard)
+  }, [messageValue])
 
   const totalPNOWeight = useMemo(() => {
-    if (!message?.catchOnboard) {
+    if (!messageValue?.catchOnboard) {
       return undefined
     }
 
-    return getTotalPNOWeight(message)
-  }, [message])
+    return getTotalPNOWeight(messageValue)
+  }, [messageValue])
 
   return (
     <>
-      {message && (
+      {messageValue && (
         <>
           <Zone>
             <Table>
               <TableBody>
                 <TableRow>
                   <TableKey>Date estimée d’arrivée</TableKey>
-                  <TableValue>{getDatetimeOrDash(message.predictedArrivalDatetimeUtc)}</TableValue>
+                  <TableValue>{getDatetimeOrDash(messageValue.predictedArrivalDatetimeUtc)}</TableValue>
                 </TableRow>
                 <TableRow>
                   <TableKey>Date prévue de débarque</TableKey>
-                  <TableValue>{getDatetimeOrDash(message.predictedLandingDatetimeUtc)}</TableValue>
+                  <TableValue>{getDatetimeOrDash(messageValue.predictedLandingDatetimeUtc)}</TableValue>
                 </TableRow>
                 {!isManuallyCreated && (
                   <TableRow>
                     <TableKey>Date de début de la marée</TableKey>
-                    <TableValue>{getDatetimeOrDash(message.tripStartDate)}</TableValue>
+                    <TableValue>{getDatetimeOrDash(messageValue.tripStartDate)}</TableValue>
                   </TableRow>
                 )}
                 <TableRow>
                   <TableKey>Port d’arrivée</TableKey>
-                  <TableValue>{getCodeWithNameOrDash(message.port, message.portName)}</TableValue>
+                  <TableValue>{getCodeWithNameOrDash(messageValue.port, messageValue.portName)}</TableValue>
                 </TableRow>
                 <TableRow>
                   <TableKey>Raison du préavis</TableKey>
                   <TableValue>
-                    {message.purpose ? (
+                    {messageValue.purpose ? (
                       <>
-                        {PriorNotification.PURPOSE_LABEL[message.purpose]} ({message.purpose})
+                        {PriorNotification.PURPOSE_LABEL[messageValue.purpose]} ({messageValue.purpose})
                       </>
                     ) : (
                       <NoValue>-</NoValue>
@@ -105,7 +105,7 @@ export function PNOMessage({ isManuallyCreated, message, tripGears }: PNOMessage
                 },
                 {
                   key: 'Zones de pêche',
-                  value: uniq(message.catchOnboard.map(aCatch => aCatch.faoZone)).join(', ')
+                  value: uniq(messageValue.catchOnboard?.map(aCatch => aCatch.faoZone) ?? []).join(', ')
                 }
               ]}
             />

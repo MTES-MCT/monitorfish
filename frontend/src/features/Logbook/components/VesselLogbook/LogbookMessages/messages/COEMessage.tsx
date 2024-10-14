@@ -9,40 +9,40 @@ import {
 import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
 import { FirstInlineKey, SecondInlineKey, Table, TableBody, TableKey, TableRow, TableValue, Zone } from '../styles'
 
-import type { COEMessageValue } from '../../../../LegacyLogbook.types'
+import type { Logbook } from '@features/Logbook/Logbook.types'
 
 type COEMessageProps = {
-  message: COEMessageValue
+  messageValue: Logbook.CoeMessageValue
 }
-export function COEMessage({ message }: COEMessageProps) {
+export function COEMessage({ messageValue }: COEMessageProps) {
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
 
   return (
     <>
-      {message && (
+      {messageValue && (
         <>
           <Zone>
             <Table>
               <TableBody>
                 <TableRow>
                   <TableKey>Date d&apos;entrée</TableKey>
-                  <TableValue>{getDatetimeOrDash(message.effortZoneEntryDatetimeUtc)}</TableValue>
+                  <TableValue>{getDatetimeOrDash(messageValue.effortZoneEntryDatetimeUtc)}</TableValue>
                 </TableRow>
                 <TableRow>
                   <TableKey>Position d&apos;entrée</TableKey>
                   <TableValue>
                     <FirstInlineKey>Lat.</FirstInlineKey>{' '}
-                    {getLatitudeOrDash(coordinatesFormat, message.latitudeEntered, message.longitudeEntered)}
+                    {getLatitudeOrDash(coordinatesFormat, messageValue.latitudeEntered, messageValue.longitudeEntered)}
                     <SecondInlineKey>Lon.</SecondInlineKey>{' '}
-                    {getLongitudeOrDash(coordinatesFormat, message.latitudeEntered, message.longitudeEntered)}
+                    {getLongitudeOrDash(coordinatesFormat, messageValue.latitudeEntered, messageValue.longitudeEntered)}
                     <br />
-                    <FirstInlineKey>ZEE</FirstInlineKey> {getCountryNameOrDash(message.economicZoneEntered)}
+                    <FirstInlineKey>ZEE</FirstInlineKey> {getCountryNameOrDash(messageValue.economicZoneEntered)}
                     <br />
                     <FirstInlineKey>Zone FAO</FirstInlineKey>
-                    {getValueOrDash(message.faoZoneEntered)}
+                    {getValueOrDash(messageValue.faoZoneEntered)}
                     <br />
                     <FirstInlineKey>Rect. stat.</FirstInlineKey>
-                    {getValueOrDash(message.statisticalRectangleEntered)}
+                    {getValueOrDash(messageValue.statisticalRectangleEntered)}
                     <br />
                   </TableValue>
                 </TableRow>
@@ -55,7 +55,7 @@ export function COEMessage({ message }: COEMessageProps) {
                 <TableRow>
                   <TableKey>Espèces ciblées</TableKey>
                   <TableValue>
-                    {getCodeWithNameOrDash(message.targetSpeciesOnEntry, message.targetSpeciesNameOnEntry)}
+                    {getCodeWithNameOrDash(messageValue.targetSpeciesOnEntry, messageValue.targetSpeciesNameOnEntry)}
                   </TableValue>
                 </TableRow>
               </TableBody>

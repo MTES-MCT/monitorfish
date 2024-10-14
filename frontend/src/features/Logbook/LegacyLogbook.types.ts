@@ -1,6 +1,5 @@
 import type { VesselIdentity } from '../../domain/entities/vessel/types'
-import type { Logbook as LogbookMessageNamespace } from '@features/Logbook/Logbook.types'
-import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
+import type { Logbook } from '@features/Logbook/Logbook.types'
 
 export type VesselVoyage = {
   endDate: string | null
@@ -17,7 +16,7 @@ export type FishingActivities = {
   logbookMessages: LogbookMessage[]
 }
 
-/** @deprecated Replace with Logbook.Message`` */
+/** @deprecated Replace with `Logbook.Message` . */
 // Can be done after using RTK in `getVesselLogbookFromAPI()` since undefined !== null.
 export type LogbookMessage = {
   acknowledgment: {
@@ -46,7 +45,7 @@ export type LogbookMessage = {
   reportId: string
   tripGears: Gear[] | undefined
   tripNumber: string
-  tripSegments: LogbookMessageNamespace.Segment[] | undefined
+  tripSegments: Logbook.Segment[] | undefined
   vesselName: string
 }
 
@@ -70,7 +69,7 @@ export type PNOAndLANWeightToleranceAlertValue = {
   type: 'PNO_LAN_WEIGHT_TOLERANCE_ALERT'
 }
 
-// TODO Replace this type with `LogbookMessage.Catch`.
+/** @deprecated Replace with `Logbook.Catch`. */
 // Can be done after using RTK in `getVesselLogbookFromAPI()` since undefined !== null.
 export type LogbookCatch = {
   conversionFactor: number | null
@@ -88,7 +87,7 @@ export type LogbookCatch = {
   weight: number | null
 }
 
-// TODO Replace this type with `LogbookMessage.Gear`.
+/** @deprecated Replace with `Logbook.Gear`. */
 // Can be done after using RTK in `getVesselLogbookFromAPI()` since undefined !== null.
 export type Gear = {
   dimensions: string | null
@@ -101,98 +100,6 @@ export type Gear = {
 export type PNOAndLANWeightToleranceAlertValueCatches = {
   lan: Object
   pno: Object
-}
-
-export type COEMessageValue = {
-  economicZoneEntered: string
-  effortZoneEntryDatetimeUtc: string
-  faoZoneEntered: string
-  latitudeEntered: number
-  longitudeEntered: number
-  statisticalRectangleEntered: string
-  targetSpeciesNameOnEntry: string
-  targetSpeciesOnEntry: string
-}
-
-export type COXMessageValue = {
-  economicZoneExited: string
-  effortZoneExitDatetimeUtc: string
-  faoZoneExited: string
-  latitudeExited: number
-  longitudeExited: number
-  statisticalRectangleExited: string
-  targetSpeciesNameOnExit: string
-  targetSpeciesOnExit: string
-}
-
-export type CROMessageValue = {
-  effortZoneEntryDatetimeUtc: string
-  effortZoneExitDatetimeUtc: string
-  latitudeEntered: number
-  latitudeExited: number
-  longitudeEntered: number
-  longitudeExited: number
-}
-
-export type DISMessageValue = {
-  catches: LogbookCatch[]
-  discardDatetimeUtc: string
-  latitude: number
-  longitude: number
-}
-
-export type EOFMessageValue = {
-  endOfFishingDatetimeUtc: string
-}
-
-export type DEPMessageValue = {
-  anticipatedActivity: string
-  departureDatetimeUtc: string
-  departurePort: string
-  departurePortName: string
-  gearOnboard: Gear[]
-  speciesOnboard: {
-    species: string
-    speciesName: string
-    weight: number
-  }[]
-}
-
-export type PNOMessageValue = {
-  catchOnboard: LogbookCatch[]
-  port: string
-  portName: string
-  predictedArrivalDatetimeUtc: string
-  predictedLandingDatetimeUtc: string
-  purpose: PriorNotification.PurposeCode
-  tripStartDate: string
-}
-
-export type RTPMessageValue = {
-  gearOnboard: Gear[]
-  port: string
-  portName: string
-  reasonOfReturn: string
-  returnDatetimeUtc: string
-}
-
-export type CPSMessageValue = {
-  catches: ProtectedSpeciesCatch[]
-  cpsDatetimeUtc?: string
-  dimensions?: string
-  gear?: string
-  gearName?: string
-  latitude?: number
-  longitude?: number
-  mesh?: number
-}
-
-export type LANMessageValue = {
-  catchLanded: LogbookCatch[]
-  landingDatetimeUtc: string
-  port: string
-  portName?: string
-  sender?: string
 }
 
 export type ProtectedSpeciesCatch = {

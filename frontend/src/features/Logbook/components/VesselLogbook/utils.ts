@@ -131,7 +131,7 @@ export function getUniqueGears(gearOnboard: Gear[] | undefined): Gear[] {
       }
 
       return acc
-    }, []) || []
+    }, []) ?? []
   )
 }
 

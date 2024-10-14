@@ -21,39 +21,39 @@ export function getComponentFromMessageType(
 ) {
   switch (logbookMessage.messageType) {
     case LogbookMessageType.DEP.code:
-      return <DEPMessage message={logbookMessage.message} />
+      return <DEPMessage messageValue={logbookMessage.message} />
     case LogbookMessageType.FAR.code:
       return <FARMessage message={logbookMessage.message} />
     case LogbookMessageType.PNO.code:
       return (
         <PNOMessage
           isManuallyCreated={isManuallyCreated}
-          message={logbookMessage.message}
+          messageValue={logbookMessage.message}
           tripGears={logbookMessage.tripGears}
         />
       )
     case LogbookMessageType.LAN.code:
-      return <LANMessage message={logbookMessage.message} />
+      return <LANMessage messageValue={logbookMessage.message} />
     case LogbookMessageType.RTP.code:
-      return <RTPMessage message={logbookMessage.message} />
+      return <RTPMessage messageValue={logbookMessage.message} />
     case LogbookMessageType.EOF.code:
-      return <EOFMessage message={logbookMessage.message} />
+      return <EOFMessage messageValue={logbookMessage.message} />
     case LogbookMessageType.COE.code:
-      return <COEMessage message={logbookMessage.message} />
+      return <COEMessage messageValue={logbookMessage.message} />
     case LogbookMessageType.CPS.code:
       return <CPSMessage message={logbookMessage.message} />
     case LogbookMessageType.NOT_COE.code:
-      return <COEMessage message={logbookMessage.message} />
+      return <COEMessage messageValue={logbookMessage.message} />
     case LogbookMessageType.COX.code:
-      return <COXMessage message={logbookMessage.message} />
+      return <COXMessage messageValue={logbookMessage.message} />
     case LogbookMessageType.NOT_COX.code:
-      return <COXMessage message={logbookMessage.message} />
+      return <COXMessage messageValue={logbookMessage.message} />
     case LogbookMessageType.JFO.code:
       return <NotImplementedMessage />
     case LogbookMessageType.CRO.code:
-      return <CROMessage message={logbookMessage.message} />
+      return <CROMessage messageValue={logbookMessage.message} />
     case LogbookMessageType.DIS.code:
-      return <DISMessage message={logbookMessage.message} />
+      return <DISMessage messageValue={logbookMessage.message} />
     case LogbookMessageType.RLC.code:
       return <NotImplementedMessage />
     case LogbookMessageType.TRA.code:

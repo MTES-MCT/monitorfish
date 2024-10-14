@@ -7,12 +7,12 @@ import { LayerProperties } from '../../domain/entities/layers/constants'
 import { undefinedize } from '../../utils/undefinedize'
 
 import type { CatchProperty, CatchWithProperties, ProtectedCatchWithProperties } from './components/VesselLogbook/types'
-import type { LogbookCatch, LogbookMessage, PNOMessageValue, ProtectedSpeciesCatch } from './LegacyLogbook.types'
-import type { Logbook as LogbookMessageNamespace } from './Logbook.types'
+import type { LogbookCatch, LogbookMessage, ProtectedSpeciesCatch } from './LegacyLogbook.types'
+import type { Logbook, Logbook as LogbookMessageNamespace } from './Logbook.types'
 import type { SpeciesInsight, SpeciesToSpeciesInsight, SpeciesToSpeciesInsightList } from './types'
 import type { DeclaredLogbookSpecies, FishingActivityShowedOnMap } from '../../domain/entities/vessel/types'
 
-function getCatchPropertiesObject(logbookCatch: LogbookCatch): CatchProperty {
+function getCatchPropertiesObject(logbookCatch: Logbook.Catch): CatchProperty {
   return {
     conversionFactor: undefinedize(logbookCatch.conversionFactor),
     economicZone: undefinedize(logbookCatch.economicZone),
@@ -27,7 +27,7 @@ function getCatchPropertiesObject(logbookCatch: LogbookCatch): CatchProperty {
   }
 }
 
-export function buildCatchArray(catches: LogbookCatch[]): CatchWithProperties[] {
+export function buildCatchArray(catches: Logbook.Catch[]): CatchWithProperties[] {
   const NOT_FOUND = -1
 
   return catches
@@ -256,10 +256,10 @@ export const getTotalLANWeight = (logbookMessage: LogbookMessage | undefined): n
 /**
  * The PNO message weight are LIVE, so we must NOT apply the conversion factor
  */
-export const getTotalPNOWeight = (logbookMessage: PNOMessageValue | undefined): number =>
-  logbookMessage ? getSumOfCatches(logbookMessage.catchOnboard, false) : 0
+export const getTotalPNOWeight = (logbookMessageValue: Logbook.PnoMessageValue | undefined): number =>
+  logbookMessageValue ? getSumOfCatches(logbookMessageValue?.catchOnboard ?? [], false) : 0
 
-function getSumOfCatches(arrayOfCatches: LogbookCatch[], hasConversionFactorApplied = false): number {
+function getSumOfCatches(arrayOfCatches: Logbook.Catch[], hasConversionFactorApplied = false): number {
   const sum = arrayOfCatches.reduce((subAccumulator, speciesCatch) => {
     const conversionFactor =
       hasConversionFactorApplied && speciesCatch.conversionFactor ? speciesCatch.conversionFactor : 1

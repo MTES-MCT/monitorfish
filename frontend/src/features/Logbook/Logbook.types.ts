@@ -1,3 +1,4 @@
+import type { ProtectedSpeciesCatch } from './LegacyLogbook.types'
 import type { AllSeafrontGroup, NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
@@ -75,7 +76,91 @@ export namespace Logbook {
     mesh: number | null
   }
 
-  type MessageValue = PnoMessageValue
+  type MessageValue =
+    | CoeMessageValue
+    | CoxMessageValue
+    | CpsMessageValue
+    | CroMessageValue
+    | DepMessageValue
+    | DisMessageValue
+    | EofMessageValue
+    | LanMessageValue
+    | PnoMessageValue
+    | RtpMessageValue
+
+  export interface CoeMessageValue {
+    economicZoneEntered: string
+    effortZoneEntryDatetimeUtc: string
+    faoZoneEntered: string
+    latitudeEntered: number
+    longitudeEntered: number
+    statisticalRectangleEntered: string
+    targetSpeciesNameOnEntry: string
+    targetSpeciesOnEntry: string
+  }
+
+  export interface CoxMessageValue {
+    economicZoneExited: string
+    effortZoneExitDatetimeUtc: string
+    faoZoneExited: string
+    latitudeExited: number
+    longitudeExited: number
+    statisticalRectangleExited: string
+    targetSpeciesNameOnExit: string
+    targetSpeciesOnExit: string
+  }
+
+  export interface CpsMessageValue {
+    catches: ProtectedSpeciesCatch[]
+    cpsDatetimeUtc?: string
+    dimensions?: string
+    gear?: string
+    gearName?: string
+    latitude?: number
+    longitude?: number
+    mesh?: number
+  }
+
+  export interface CroMessageValue {
+    effortZoneEntryDatetimeUtc: string
+    effortZoneExitDatetimeUtc: string
+    latitudeEntered: number
+    latitudeExited: number
+    longitudeEntered: number
+    longitudeExited: number
+  }
+
+  export interface DepMessageValue {
+    anticipatedActivity: string
+    departureDatetimeUtc: string
+    departurePort: string
+    departurePortName: string
+    gearOnboard: Gear[]
+    speciesOnboard: {
+      species: string
+      speciesName: string
+      weight: number
+    }[]
+  }
+
+  export interface DisMessageValue {
+    catches: Catch[]
+    discardDatetimeUtc: string
+    latitude: number
+    longitude: number
+  }
+
+  export interface EofMessageValue {
+    endOfFishingDatetimeUtc: string
+  }
+  export interface LanMessageValue {
+    catchLanded: Catch[]
+    landingDatetimeUtc: string
+    port: string
+    portName?: string
+    sender?: string
+  }
+
   export interface PnoMessageValue {
     authorTrigram: string | undefined
     catchOnboard: Catch[] | undefined
@@ -103,6 +188,14 @@ export namespace Logbook {
     riskFactor: number | undefined
     statisticalRectangle: string | undefined
     tripStartDate: string | undefined
+  }
+
+  export interface RtpMessageValue {
+    gearOnboard: Gear[]
+    port: string
+    portName: string
+    reasonOfReturn: string
+    returnDatetimeUtc: string
   }
 
   export type MessagePnoType = {

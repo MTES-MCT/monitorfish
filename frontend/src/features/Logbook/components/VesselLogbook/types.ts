@@ -1,10 +1,11 @@
-import type { CPSMessageValue, LogbookMessage, ProtectedSpeciesCatch } from '../../LegacyLogbook.types'
+import type { LogbookMessage, ProtectedSpeciesCatch } from '../../LegacyLogbook.types'
 import type { SpeciesToSpeciesInsight, SpeciesToSpeciesInsightList } from '../../types'
+import type { Logbook } from '@features/Logbook/Logbook.types'
 
 export type LogbookTripSummary = {
   cps: {
     areAllMessagesNotAcknowledged: boolean
-    logs: CPSMessageValue[]
+    logs: Logbook.CpsMessageValue[]
     numberOfSpecies: number
   }
   dep: {

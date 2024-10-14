@@ -5,33 +5,33 @@ import { getCodeWithNameOrDash, getDatetimeOrDash } from './utils'
 import { COLORS } from '../../../../../../constants/constants'
 import { NoValue, Table, TableBody, TableKey, TableRow, TableValue, Zone } from '../styles'
 
-import type { RTPMessageValue } from '../../../../LegacyLogbook.types'
+import type { Logbook } from '@features/Logbook/Logbook.types'
 
 type RTPMessageProps = Readonly<{
-  message: RTPMessageValue
+  messageValue: Logbook.RtpMessageValue
 }>
-export function RTPMessage({ message }: RTPMessageProps) {
+export function RTPMessage({ messageValue }: RTPMessageProps) {
   return (
     <>
-      {message && (
+      {messageValue && (
         <>
           <Zone>
             <Table>
               <TableBody>
                 <TableRow>
                   <TableKey>Date de retour</TableKey>
-                  <TableValue>{getDatetimeOrDash(message.returnDatetimeUtc)}</TableValue>
+                  <TableValue>{getDatetimeOrDash(messageValue.returnDatetimeUtc)}</TableValue>
                 </TableRow>
                 <TableRow>
                   <TableKey>Port d&apos;arrivée</TableKey>
-                  <TableValue>{getCodeWithNameOrDash(message.port, message.portName)}</TableValue>
+                  <TableValue>{getCodeWithNameOrDash(messageValue.port, messageValue.portName)}</TableValue>
                 </TableRow>
                 <TableRow>
                   <TableKey>Raison du retour</TableKey>
                   <TableValue>
-                    {message.reasonOfReturn ? (
+                    {messageValue.reasonOfReturn ? (
                       <>
-                        {PriorNotification.PURPOSE_LABEL[message.reasonOfReturn]} ({message.reasonOfReturn})
+                        {PriorNotification.PURPOSE_LABEL[messageValue.reasonOfReturn]} ({messageValue.reasonOfReturn})
                       </>
                     ) : (
                       <NoValue>-</NoValue>
@@ -42,8 +42,8 @@ export function RTPMessage({ message }: RTPMessageProps) {
             </Table>
           </Zone>
           <Zone>
-            {message.gearOnboard?.length ? (
-              message.gearOnboard.map((gear, index) => (
+            {messageValue.gearOnboard?.length ? (
+              messageValue.gearOnboard.map((gear, index) => (
                 // eslint-disable-next-line react/no-array-index-key
                 <Gear key={index}>
                   <SubKey>Engin à bord {index + 1}</SubKey>{' '}

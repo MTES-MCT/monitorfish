@@ -2,32 +2,32 @@ import { getDatetimeOrDash, getLatitudeOrDash, getLongitudeOrDash } from './util
 import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
 import { FirstInlineKey, SecondInlineKey, Table, TableBody, TableKey, TableRow, TableValue, Zone } from '../styles'
 
-import type { CROMessageValue } from '../../../../LegacyLogbook.types'
+import type { Logbook } from '@features/Logbook/Logbook.types'
 
 type CROMessageProps = {
-  message: CROMessageValue
+  messageValue: Logbook.CroMessageValue
 }
-export function CROMessage({ message }: CROMessageProps) {
+export function CROMessage({ messageValue }: CROMessageProps) {
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
 
   return (
     <>
-      {message && (
+      {messageValue && (
         <>
           <Zone>
             <Table>
               <TableBody>
                 <TableRow>
                   <TableKey>Date d&apos;entrée</TableKey>
-                  <TableValue>{getDatetimeOrDash(message.effortZoneEntryDatetimeUtc)}</TableValue>
+                  <TableValue>{getDatetimeOrDash(messageValue.effortZoneEntryDatetimeUtc)}</TableValue>
                 </TableRow>
                 <TableRow>
                   <TableKey>Position d&apos;entrée</TableKey>
                   <TableValue>
                     <FirstInlineKey>Lat.</FirstInlineKey>{' '}
-                    {getLatitudeOrDash(coordinatesFormat, message.latitudeEntered, message.longitudeEntered)}
+                    {getLatitudeOrDash(coordinatesFormat, messageValue.latitudeEntered, messageValue.longitudeEntered)}
                     <SecondInlineKey>Lon.</SecondInlineKey>{' '}
-                    {getLongitudeOrDash(coordinatesFormat, message.latitudeEntered, message.longitudeEntered)}
+                    {getLongitudeOrDash(coordinatesFormat, messageValue.latitudeEntered, messageValue.longitudeEntered)}
                   </TableValue>
                 </TableRow>
               </TableBody>
@@ -38,15 +38,15 @@ export function CROMessage({ message }: CROMessageProps) {
               <TableBody>
                 <TableRow>
                   <TableKey>Date de sortie</TableKey>
-                  <TableValue>{getDatetimeOrDash(message.effortZoneExitDatetimeUtc)}</TableValue>
+                  <TableValue>{getDatetimeOrDash(messageValue.effortZoneExitDatetimeUtc)}</TableValue>
                 </TableRow>
                 <TableRow>
                   <TableKey>Position de sortie</TableKey>
                   <TableValue>
                     <FirstInlineKey>Lat.</FirstInlineKey>{' '}
-                    {getLatitudeOrDash(coordinatesFormat, message.latitudeExited, message.longitudeExited)}
+                    {getLatitudeOrDash(coordinatesFormat, messageValue.latitudeExited, messageValue.longitudeExited)}
                     <SecondInlineKey>Lon.</SecondInlineKey>{' '}
-                    {getLongitudeOrDash(coordinatesFormat, message.latitudeExited, message.longitudeExited)}
+                    {getLongitudeOrDash(coordinatesFormat, messageValue.latitudeExited, messageValue.longitudeExited)}
                   </TableValue>
                 </TableRow>
               </TableBody>

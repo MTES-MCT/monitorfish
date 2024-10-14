@@ -11,30 +11,30 @@ import { getCodeWithNameOrDash, getValueOrDash } from '../../LogbookMessages/mes
 import { FirstInlineKey, SecondInlineKey } from '../../LogbookMessages/styles'
 import { LogbookMessageResumeHeader } from '../LogbookMessageResumeHeader'
 
-import type { CPSMessageValue } from '../../../../LegacyLogbook.types'
+import type { Logbook } from '@features/Logbook/Logbook.types'
 import type { Promisable } from 'type-fest'
 
 type CPSMessageResumeProps = {
-  cpsMessages: CPSMessageValue[]
   hasNoMessageAcknowledged: boolean
+  messageValues: Logbook.CpsMessageValue[]
   numberOfSpecies: number
   showLogbookMessages: (messageType: string) => Promisable<void>
 }
 export function CPSMessageResume({
-  cpsMessages,
   hasNoMessageAcknowledged,
+  messageValues,
   numberOfSpecies,
   showLogbookMessages
 }: CPSMessageResumeProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const species = cpsMessages.map(cps => cps.catches).flat()
+  const species = messageValues.map(cps => cps.catches).flat()
 
   const resumeTitleText = hasNoMessageAcknowledged
-    ? `${cpsMessages.length} ${pluralize('message', cpsMessages.length)} non ${pluralize(
+    ? `${messageValues.length} ${pluralize('message', messageValues.length)} non ${pluralize(
         'acquitté',
-        cpsMessages.length
+        messageValues.length
       )}`
-    : `${cpsMessages.length} ${pluralize('message', cpsMessages.length)} - ${numberOfSpecies} ${pluralize(
+    : `${messageValues.length} ${pluralize('message', messageValues.length)} - ${numberOfSpecies} ${pluralize(
         'espèces',
         numberOfSpecies
       )}`
@@ -43,7 +43,7 @@ export function CPSMessageResume({
     <>
       <Wrapper>
         <LogbookMessageResumeHeader
-          hasNoMessage={cpsMessages.length === 0}
+          hasNoMessage={messageValues.length === 0}
           isNotAcknowledged={hasNoMessageAcknowledged}
           isOpen={isOpen}
           messageType={LogbookMessageTypeEnum.CPS.code}
@@ -52,7 +52,7 @@ export function CPSMessageResume({
           showLogbookMessages={showLogbookMessages}
           title={resumeTitleText}
         />
-        {!!cpsMessages.length && (
+        {!!messageValues.length && (
           <LogbookMessageContent $isOpen={isOpen} data-cy="cps-message-resume" numberOfSpecies={species.length}>
             {species.map((specy, index) => (
               // eslint-disable-next-line react/no-array-index-key

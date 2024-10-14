@@ -6,22 +6,22 @@ import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../consta
 import { getCodeWithNameOrDash } from '../../LogbookMessages/messages/utils'
 import { LogbookMessageResumeHeader } from '../LogbookMessageResumeHeader'
 
-import type { DEPMessageValue } from '../../../../LegacyLogbook.types'
+import type { Logbook } from '@features/Logbook/Logbook.types'
 import type { Promisable } from 'type-fest'
 
 type DEPMessageResumeProps = Readonly<{
-  depMessage: DEPMessageValue
   hasNoMessage?: boolean
   isDeleted: boolean
   isNotAcknowledged: boolean
+  messageValue: Logbook.DepMessageValue
   rejectionCause: string | undefined
   showLogbookMessages: (messageType: string) => Promisable<void>
 }>
 export function DEPMessageResume({
-  depMessage,
   hasNoMessage = false,
   isDeleted,
   isNotAcknowledged,
+  messageValue,
   rejectionCause,
   showLogbookMessages
 }: DEPMessageResumeProps) {
@@ -35,15 +35,15 @@ export function DEPMessageResume({
   }, [isOpen])
 
   const getDEPMessageResumeTitleText = () =>
-    `${depMessage.departurePortName ? depMessage.departurePortName : depMessage.departurePort} le ${getDateTime(
-      depMessage.departureDatetimeUtc,
+    `${messageValue.departurePortName ? messageValue.departurePortName : messageValue.departurePort} le ${getDateTime(
+      messageValue.departureDatetimeUtc,
       true
     )} (UTC)`
 
   const getDEPMessageResumeTitle = () => (
     <>
-      {depMessage.departurePortName ? depMessage.departurePortName : depMessage.departurePort} le{' '}
-      {getDateTime(depMessage.departureDatetimeUtc, true)} <Gray>(UTC)</Gray>
+      {messageValue.departurePortName ? messageValue.departurePortName : messageValue.departurePort} le{' '}
+      {getDateTime(messageValue.departureDatetimeUtc, true)} <Gray>(UTC)</Gray>
     </>
   )
 
@@ -63,13 +63,13 @@ export function DEPMessageResume({
       />
       {!hasNoMessage && (
         <LogbookMessageContent
-          $gearOnboard={depMessage.gearOnboard ? depMessage.gearOnboard.length : 1}
+          $gearOnboard={messageValue.gearOnboard ? messageValue.gearOnboard.length : 1}
           $isOpen={isOpen}
-          speciesOnboard={depMessage.speciesOnboard?.length > 0 ? depMessage.speciesOnboard.length : 1}
+          speciesOnboard={messageValue.speciesOnboard?.length > 0 ? messageValue.speciesOnboard.length : 1}
         >
           <Zone>
-            {depMessage.gearOnboard?.length ? (
-              depMessage.gearOnboard.map((gear, index) => (
+            {messageValue.gearOnboard?.length ? (
+              messageValue.gearOnboard.map((gear, index) => (
                 // eslint-disable-next-line react/no-array-index-key
                 <Gear key={`${gear.gear}-${index}`}>
                   <SubKey>Engin à bord {index + 1}</SubKey>{' '}
@@ -90,8 +90,8 @@ export function DEPMessageResume({
                 <Field>
                   <Key>Captures à bord</Key>
                   <Value>
-                    {depMessage.speciesOnboard?.length ? (
-                      depMessage.speciesOnboard.map(speciesCatch => (
+                    {messageValue.speciesOnboard?.length ? (
+                      messageValue.speciesOnboard.map(speciesCatch => (
                         <span key={speciesCatch.species}>
                           {getCodeWithNameOrDash(speciesCatch.species, speciesCatch.speciesName)}- {speciesCatch.weight}{' '}
                           kg

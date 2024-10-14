@@ -2,6 +2,7 @@ import { SideWindowCard } from '@components/SideWindowCard'
 import { VesselReportingList } from '@features/Reporting/components/VesselReportingList'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { Icon, LinkButton } from '@mtes-mct/monitor-ui'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import styled from 'styled-components'
 
@@ -24,7 +25,11 @@ export function ReportingList() {
 
   return (
     <StyledCard $isSuperUser={isSuperUser} onBackgroundClick={close}>
-      <Header detail={openedPriorNotificationDetail} onClose={close} vesselId={vesselId} />
+      <Header detail={openedPriorNotificationDetail} onClose={close} vesselId={vesselId}>
+        <StyledLinkButton Icon={Icon.Chevron} onClick={close}>
+          Retourner au préavis
+        </StyledLinkButton>
+      </Header>
 
       <VesselReportingList vesselIdentity={vesselIdentity} withOpenedNewReportingForm />
     </StyledCard>
@@ -36,4 +41,8 @@ const StyledCard = styled(SideWindowCard)<{
 }>`
   left: ${p => (p.$isSuperUser ? '70px' : 0)};
   z-index: 1001;
+`
+
+const StyledLinkButton = styled(LinkButton)`
+  margin-top: 8px;
 `

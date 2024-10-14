@@ -5,13 +5,15 @@ import { skipToken } from '@reduxjs/toolkit/query'
 import styled, { keyframes } from 'styled-components'
 
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
+import type { ReactNode } from 'react'
 
 type HeaderProps = Readonly<{
+  children?: ReactNode
   detail: PriorNotification.Detail | undefined
   onClose: () => void
   vesselId: number | undefined
 }>
-export function Header({ detail, onClose, vesselId }: HeaderProps) {
+export function Header({ children, detail, onClose, vesselId }: HeaderProps) {
   const { data: vessel } = useGetVesselQuery(vesselId ?? skipToken)
 
   const isNewPriorNotification = !detail
@@ -49,6 +51,8 @@ export function Header({ detail, onClose, vesselId }: HeaderProps) {
             )}
           </TitleRow>
         )}
+
+        {children}
       </Title>
 
       <IconButton accent={Accent.TERTIARY} Icon={Icon.Close} isCompact onClick={onClose} title="Fermer le formulaire" />

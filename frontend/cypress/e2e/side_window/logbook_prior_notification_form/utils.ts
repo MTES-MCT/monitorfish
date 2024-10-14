@@ -1,6 +1,6 @@
 import { Seafront } from '@constants/seafront'
 import { faker } from '@faker-js/faker'
-import { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
+import { Logbook } from '@features/Logbook/Logbook.types'
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import dayjs from 'dayjs'
 
@@ -32,7 +32,7 @@ export function getPriorNotificationsFakeResponse({
   updatedAt: string
 }): BackendApi.ResponseBodyPaginatedList<
   OrUndefinedToOrNull<PriorNotification.PriorNotification>,
-  LogbookMessage.ApiListExtraData
+  Logbook.ApiListExtraData
 > {
   const reportId = isManuallyCreated ? '00000000-0000-4000-0000-000000000000' : 'FAKE_OPERATION_000'
   const createdAt = dayjs().subtract(1, 'hour').toISOString()
@@ -204,10 +204,10 @@ export function getPriorNotificationFakeResponse({
         statisticalRectangle: null,
         tripStartDate
       },
-      messageType: LogbookMessage.MessageType.PNO,
+      messageType: Logbook.MessageType.PNO,
       operationDateTime: updatedAt,
       operationNumber: null,
-      operationType: LogbookMessage.OperationType.DAT,
+      operationType: Logbook.OperationType.DAT,
       rawMessage: null,
       referencedReportId: null,
       reportDateTime: updatedAt,

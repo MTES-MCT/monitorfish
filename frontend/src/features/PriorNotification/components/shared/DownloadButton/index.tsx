@@ -16,12 +16,12 @@ import { HTML_STYLE } from './template'
 import { getHasAuthorizedLandingDownload, getHtmlContent } from './utils'
 import { useIsSuperUser } from '../../../../../auth/hooks/useIsSuperUser'
 
-import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
+import type { Logbook } from '@features/Logbook/Logbook.types'
 
 type DownloadButtonProps = Readonly<{
   isDisabled?: boolean
   isManuallyCreated: boolean
-  pnoLogbookMessage: LogbookMessage.PnoLogbookMessage
+  pnoLogbookMessage: Logbook.PnoLogbookMessage
   reportId: string
 }>
 export function DownloadButton({

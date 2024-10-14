@@ -2,7 +2,7 @@ import { describe, expect, it } from '@jest/globals'
 
 import { displayOnboardFishingSpecies } from '../utils'
 
-import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
+import type { Logbook } from '@features/Logbook/Logbook.types'
 
 describe('features/PriorNotification/components/PriorNotificationList/utils', () => {
   it('displayOnboardFishingSpecies() should return the expected result', () => {
@@ -15,7 +15,7 @@ describe('features/PriorNotification/components/PriorNotificationList/utils', ()
       { species: 'DEF', speciesName: `DEF Name`, weight: 5 },
       { species: 'BF2', speciesName: `Thon rouge de l'Atlantique (Calibre 2)`, weight: 6 },
       { species: 'BF3', speciesName: `Thon rouge de l'Atlantique (Calibre 3)`, weight: 7 }
-    ] as LogbookMessage.Catch[]
+    ] as Logbook.Catch[]
 
     const result = displayOnboardFishingSpecies(onboardCatches)
 

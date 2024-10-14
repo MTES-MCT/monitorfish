@@ -1,7 +1,7 @@
 import type { AllSeafrontGroup, NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
-export namespace LogbookMessage {
+export namespace Logbook {
   export type LogbookMessage = PnoLogbookMessage | RetOperationLogbookMessage
 
   interface LogbookMessageBase {

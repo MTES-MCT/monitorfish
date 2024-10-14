@@ -1,5 +1,5 @@
 import type { VesselIdentity } from '../../domain/entities/vessel/types'
-import type { LogbookMessage as LogbookMessageNamespace } from '@features/Logbook/LogbookMessage.types'
+import type { Logbook as LogbookMessageNamespace } from '@features/Logbook/Logbook.types'
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
 export type VesselVoyage = {

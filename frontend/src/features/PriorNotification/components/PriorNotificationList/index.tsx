@@ -1,7 +1,7 @@
 import { BackendApi } from '@api/BackendApi.types'
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS, RtkCacheTagType } from '@api/constants'
 import { ErrorWall } from '@components/ErrorWall'
-import { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
+import { Logbook } from '@features/Logbook/Logbook.types'
 import { OpenedPriorNotificationType } from '@features/PriorNotification/constants'
 import { openManualPriorNotificationForm } from '@features/PriorNotification/useCases/openManualPriorNotificationForm'
 import { Body } from '@features/SideWindow/components/Body'
@@ -61,11 +61,10 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
     DEFAULT_PAGE_SIZE,
     listFilter
   )
-  const { apiSortingParams, reactTableSortingState, setReactTableSortingState } =
-    useListSorting<LogbookMessage.ApiSortColumn>(
-      LogbookMessage.ApiSortColumn.EXPECTED_ARRIVAL_DATE,
-      BackendApi.SortDirection.DESC
-    )
+  const { apiSortingParams, reactTableSortingState, setReactTableSortingState } = useListSorting<Logbook.ApiSortColumn>(
+    Logbook.ApiSortColumn.EXPECTED_ARRIVAL_DATE,
+    BackendApi.SortDirection.DESC
+  )
 
   const rtkQueryParams = {
     apiPaginationParams,

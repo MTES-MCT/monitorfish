@@ -6,7 +6,7 @@ import { PriorNotification } from '../../../PriorNotification.types'
 import { FixedTag } from '../../PriorNotificationList/styles'
 import { getColorsFromState } from '../../PriorNotificationList/utils'
 
-import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
+import type { Logbook } from '@features/Logbook/Logbook.types'
 
 type TagBarProps = Readonly<{
   hasBeenComputed?: boolean | undefined
@@ -15,7 +15,7 @@ type TagBarProps = Readonly<{
   isVesselUnderCharter: boolean | undefined
   riskFactor: number | undefined
   state: PriorNotification.State | undefined
-  tripSegments: LogbookMessage.Segment[] | undefined
+  tripSegments: Logbook.Segment[] | undefined
   types: PriorNotification.Type[] | undefined
 }>
 export function TagBar({

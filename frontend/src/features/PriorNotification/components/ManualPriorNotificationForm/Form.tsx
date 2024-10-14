@@ -29,9 +29,10 @@ import type { ManualPriorNotificationFormValues } from './types'
 import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
 
 type FormProps = Readonly<{
+  isNewPriorNotification: boolean
   isReadOnly: boolean
 }>
-export function Form({ isReadOnly }: FormProps) {
+export function Form({ isNewPriorNotification, isReadOnly }: FormProps) {
   const { values } = useFormikContext<ManualPriorNotificationFormValues>()
 
   const dispatch = useMainAppDispatch()
@@ -152,7 +153,9 @@ export function Form({ isReadOnly }: FormProps) {
       <FieldGroup>
         <FormikTextarea label="Points d'attention identifiés par le CNSP" name="note" readOnly={isReadOnly} />
 
-        <LinkButton onClick={openVesselReportingList}>Ouvrir un signalement sur le navire</LinkButton>
+        {!isNewPriorNotification && (
+          <LinkButton onClick={openVesselReportingList}>Ouvrir un signalement sur le navire</LinkButton>
+        )}
       </FieldGroup>
 
       <AuthorTrigramInput label="Saisi par" maxLength={3} name="authorTrigram" readOnly={isReadOnly} />

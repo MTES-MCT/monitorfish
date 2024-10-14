@@ -176,7 +176,7 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
 
           <hr />
 
-          <Form isReadOnly={isReadOnly} />
+          <Form isNewPriorNotification={isNewPriorNotification} isReadOnly={isReadOnly} />
 
           {detail && (
             <>

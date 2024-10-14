@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.domain.use_cases
+package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
@@ -7,7 +7,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Beacon
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.SearchVessels
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

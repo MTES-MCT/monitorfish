@@ -9,7 +9,7 @@ import {
 import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
 import { FirstInlineKey, SecondInlineKey, Table, TableBody, TableKey, TableRow, TableValue, Zone } from '../styles'
 
-import type { COXMessageValue } from '../../../../Logbook.types'
+import type { COXMessageValue } from '../../../../LegacyLogbook.types'
 
 type COXMessageProps = {
   message: COXMessageValue

@@ -22,7 +22,7 @@ import {
 } from '../../utils'
 
 import type { LogbookTripSummary } from './types'
-import type { FishingActivities, Gear } from '../../Logbook.types'
+import type { FishingActivities, Gear } from '../../LegacyLogbook.types'
 
 export const EMPTY_LOGBOOK_TRIP_SUMMARY = {
   cps: {

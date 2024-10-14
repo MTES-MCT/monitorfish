@@ -9,7 +9,7 @@ import {
 import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
 import { FirstInlineKey, SecondInlineKey, Table, TableBody, TableKey, TableRow, TableValue, Zone } from '../styles'
 
-import type { COEMessageValue } from '../../../../Logbook.types'
+import type { COEMessageValue } from '../../../../LegacyLogbook.types'
 
 type COEMessageProps = {
   message: COEMessageValue

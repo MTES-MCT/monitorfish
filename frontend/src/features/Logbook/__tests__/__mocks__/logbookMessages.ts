@@ -1,4 +1,4 @@
-import type { LogbookMessage } from '../../Logbook.types'
+import type { LogbookMessage } from '../../LegacyLogbook.types'
 
 export const correctedLANMessage: LogbookMessage = {
   acknowledgment: {

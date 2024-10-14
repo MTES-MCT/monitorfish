@@ -12,7 +12,7 @@ import { buildCatchArray, getTotalPNOWeight } from '../../../../utils'
 import { WeightType } from '../constants'
 import { NoValue, SpeciesList, Table, TableBody, TableKey, TableRow, TableValue, Zone } from '../styles'
 
-import type { Gear, PNOMessageValue } from '../../../../Logbook.types'
+import type { Gear, PNOMessageValue } from '../../../../LegacyLogbook.types'
 
 type PNOMessageProps = Readonly<{
   isManuallyCreated: boolean

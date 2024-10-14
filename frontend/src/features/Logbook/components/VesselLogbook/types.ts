@@ -1,4 +1,4 @@
-import type { CPSMessageValue, LogbookMessage, ProtectedSpeciesCatch } from '../../Logbook.types'
+import type { CPSMessageValue, LogbookMessage, ProtectedSpeciesCatch } from '../../LegacyLogbook.types'
 import type { SpeciesToSpeciesInsight, SpeciesToSpeciesInsightList } from '../../types'
 
 export type LogbookTripSummary = {

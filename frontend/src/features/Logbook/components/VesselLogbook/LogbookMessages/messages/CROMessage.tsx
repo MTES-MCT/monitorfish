@@ -2,7 +2,7 @@ import { getDatetimeOrDash, getLatitudeOrDash, getLongitudeOrDash } from './util
 import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
 import { FirstInlineKey, SecondInlineKey, Table, TableBody, TableKey, TableRow, TableValue, Zone } from '../styles'
 
-import type { CROMessageValue } from '../../../../Logbook.types'
+import type { CROMessageValue } from '../../../../LegacyLogbook.types'
 
 type CROMessageProps = {
   message: CROMessageValue

@@ -5,7 +5,7 @@ import { getCodeWithNameOrDash, getDatetimeOrDash } from './utils'
 import { COLORS } from '../../../../../../constants/constants'
 import { NoValue, Table, TableBody, TableKey, TableRow, TableValue, Zone } from '../styles'
 
-import type { RTPMessageValue } from '../../../../Logbook.types'
+import type { RTPMessageValue } from '../../../../LegacyLogbook.types'
 
 type RTPMessageProps = Readonly<{
   message: RTPMessageValue

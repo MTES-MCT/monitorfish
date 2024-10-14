@@ -15,7 +15,7 @@ import { LogbookMessage as LogbookMessageNamespace } from '../../../../LogbookMe
 import { logbookActions } from '../../../../slice'
 import { getLogbookMessageType } from '../../../../utils'
 
-import type { LogbookMessage as LogbookMessageType } from '../../../../Logbook.types'
+import type { LogbookMessage as LogbookMessageType } from '../../../../LegacyLogbook.types'
 
 type LogbookMessageComponentProps = Readonly<{
   isFirst: boolean

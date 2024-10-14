@@ -8,7 +8,7 @@ import { buildCatchArray } from '../../../../utils'
 import { WeightType } from '../constants'
 import { NoValue, Table, TableBody, TableKey, TableRow, TableValue, Zone, SpeciesList } from '../styles'
 
-import type { LANMessageValue } from '@features/Logbook/Logbook.types'
+import type { LANMessageValue } from '@features/Logbook/LegacyLogbook.types'
 
 type LANMessageProps = Readonly<{
   message: LANMessageValue

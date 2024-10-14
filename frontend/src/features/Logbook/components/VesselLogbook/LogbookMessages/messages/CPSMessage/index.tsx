@@ -7,7 +7,7 @@ import { SpeciesList } from '../../styles'
 import { CatchMessageZone } from '../common/CatchMessageZone'
 import { SpecyCatch } from '../common/SpecyCatch'
 
-import type { CPSMessageValue } from '../../../../../Logbook.types'
+import type { CPSMessageValue } from '../../../../../LegacyLogbook.types'
 
 type CPSMessageProps = Readonly<{
   message: CPSMessageValue

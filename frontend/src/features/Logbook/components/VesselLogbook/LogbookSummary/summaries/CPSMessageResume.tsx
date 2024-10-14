@@ -11,7 +11,7 @@ import { getCodeWithNameOrDash, getValueOrDash } from '../../LogbookMessages/mes
 import { FirstInlineKey, SecondInlineKey } from '../../LogbookMessages/styles'
 import { LogbookMessageResumeHeader } from '../LogbookMessageResumeHeader'
 
-import type { CPSMessageValue } from '../../../../Logbook.types'
+import type { CPSMessageValue } from '../../../../LegacyLogbook.types'
 import type { Promisable } from 'type-fest'
 
 type CPSMessageResumeProps = {

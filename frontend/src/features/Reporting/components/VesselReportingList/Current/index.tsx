@@ -60,6 +60,7 @@ export function Current({ vesselIdentity, vesselReportings, withOpenedNewReporti
 }
 
 const NewReportingButton = styled(Button)`
+  align-self: flex-start;
   margin: 0px 10px 10px 0px;
 `
 

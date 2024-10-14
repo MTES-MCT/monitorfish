@@ -90,7 +90,9 @@ export function Form({ detail, initialFormValues }: FormProps) {
           <FieldGroup>
             <FormikTextarea label="Points d'attention identifiés par le CNSP" name="note" readOnly={isReadOnly} />
 
-            <LinkButton onClick={openVesselReportingList}>Ouvrir un signalement sur le navire</LinkButton>
+            {isSuperUser && (
+              <LinkButton onClick={openVesselReportingList}>Ouvrir un signalement sur le navire</LinkButton>
+            )}
           </FieldGroup>
 
           {isSuperUser && (

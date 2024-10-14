@@ -17,7 +17,7 @@ export type FishingActivities = {
   logbookMessages: LogbookMessage[]
 }
 
-// TODO Replace with `LogbookMessage.LogbookMessage`.
+/** @deprecated Replace with Logbook.Message`` */
 // Can be done after using RTK in `getVesselLogbookFromAPI()` since undefined !== null.
 export type LogbookMessage = {
   acknowledgment: {

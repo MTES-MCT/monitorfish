@@ -558,7 +558,7 @@ export const getFishingActivityFeatureOnTrackLine = (
 /**
  * Get the logbook message type - used to handle the specific DIM message type case
  */
-export const getLogbookMessageType = (message: LogbookMessage | LogbookMessageNamespace.LogbookMessage): string => {
+export const getLogbookMessageType = (message: LogbookMessage | LogbookMessageNamespace.Message): string => {
   if (
     message.messageType === LogbookMessageType.DIS.code &&
     message.message.catches.some(aCatch => aCatch.presentation === LogbookMessageType.DIM.code)

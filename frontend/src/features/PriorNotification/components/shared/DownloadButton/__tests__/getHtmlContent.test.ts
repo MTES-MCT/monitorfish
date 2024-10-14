@@ -11,7 +11,7 @@ import OperationType = Logbook.OperationType
 describe('PriorNotificationCard/utils.getHtmlContent()', () => {
   it('Should format the HTML template', () => {
     // Given
-    const pno: Logbook.PnoLogbookMessage = {
+    const pno: Logbook.PnoMessage = {
       acknowledgment: undefined,
       externalReferenceNumber: undefined,
       flagState: 'ESP',

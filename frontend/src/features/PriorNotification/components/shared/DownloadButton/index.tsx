@@ -21,7 +21,7 @@ import type { Logbook } from '@features/Logbook/Logbook.types'
 type DownloadButtonProps = Readonly<{
   isDisabled?: boolean
   isManuallyCreated: boolean
-  pnoLogbookMessage: Logbook.PnoLogbookMessage
+  pnoLogbookMessage: Logbook.PnoMessage
   reportId: string
 }>
 export function DownloadButton({

@@ -1,6 +1,6 @@
 import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { FingerprintSpinner } from '@components/FingerprintSpinner'
-import { Current } from '@features/Reporting/components/Current'
+import { VesselReportingList as ReportingVesselReportingList } from '@features/Reporting/components/VesselReportingList'
 import { getDefaultReportingsStartDate } from '@features/Reporting/utils'
 import { Summary } from '@features/Vessel/components/VesselSidebar/VesselReportingList/Summary'
 import { vesselActions } from '@features/Vessel/slice'
@@ -83,7 +83,7 @@ export function VesselReportingList({
         </Menu>
       )}
       {selectedTab === VesselReportingListTab.CURRENT_REPORTING && (
-        <Current
+        <ReportingVesselReportingList
           vesselIdentity={vesselIdentity}
           vesselReportings={vesselReportings}
           withOpenedNewReportingForm={withOpenedNewReportingForm}

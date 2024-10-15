@@ -8,12 +8,16 @@ import { ReportingCard } from '../ReportingCard'
 import type { Reporting, ReportingAndOccurrences, VesselReportings } from '@features/Reporting/types'
 import type { VesselIdentity } from 'domain/entities/vessel/types'
 
-type CurrentProps = Readonly<{
+type VesselReportingListProps = Readonly<{
   vesselIdentity: VesselIdentity
   vesselReportings: VesselReportings
   withOpenedNewReportingForm: boolean
 }>
-export function Current({ vesselIdentity, vesselReportings, withOpenedNewReportingForm }: CurrentProps) {
+export function VesselReportingList({
+  vesselIdentity,
+  vesselReportings,
+  withOpenedNewReportingForm
+}: VesselReportingListProps) {
   const [editedReporting, setEditedReporting] = useState<Reporting.EditableReporting | undefined>()
   const [isNewReportingFormOpen, setIsNewReportingFormOpen] = useState(withOpenedNewReportingForm)
 

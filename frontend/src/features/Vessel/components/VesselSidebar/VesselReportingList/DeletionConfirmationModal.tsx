@@ -1,8 +1,8 @@
 import { Modal } from 'rsuite'
 import styled from 'styled-components'
 
-import { StyledModalHeader } from '../../../commonComponents/StyledModalHeader'
-import { CancelButton, ValidateButton } from '../../../commonStyles/Buttons.style'
+import { StyledModalHeader } from '../../../../commonComponents/StyledModalHeader'
+import { CancelButton, ValidateButton } from '../../../../commonStyles/Buttons.style'
 
 // TODO Delete this component and use generic `<ConfirmationModal />` component.
 export function DeletionConfirmationModal({ onCancel, onConfirm }) {

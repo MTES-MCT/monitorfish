@@ -1,3 +1,4 @@
+import { ReportingCard } from '@features/Reporting/components/ReportingCard'
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
 import {
   YearListChevronIcon,
@@ -8,8 +9,6 @@ import {
 import { THEME } from '@mtes-mct/monitor-ui'
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
-
-import { ReportingCard } from '../../ReportingCard'
 
 import type { ReportingAndOccurrences } from '@features/Reporting/types'
 

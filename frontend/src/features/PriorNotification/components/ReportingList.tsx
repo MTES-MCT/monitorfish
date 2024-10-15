@@ -31,7 +31,7 @@ export function ReportingList() {
         </StyledLinkButton>
       </CardHeader>
 
-      <VesselReportingList vesselIdentity={vesselIdentity} withOpenedNewReportingForm />
+      <VesselReportingList vesselIdentity={vesselIdentity} withOpenedNewReportingForm withVesselSidebarHistoryLink />
     </StyledCard>
   )
 }

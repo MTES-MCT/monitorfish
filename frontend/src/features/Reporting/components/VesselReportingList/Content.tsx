@@ -1,5 +1,9 @@
-import { FingerprintSpinner } from '@components/FingerprintSpinner'
-import { Accent, Button, THEME } from '@mtes-mct/monitor-ui'
+import { VesselReportingListTab } from '@features/Vessel/components/VesselSidebar/VesselReportingList/constants'
+import { vesselActions } from '@features/Vessel/slice'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { Accent, Button, LinkButton } from '@mtes-mct/monitor-ui'
+import { VesselSidebarTab } from 'domain/entities/vessel/vessel'
+import { showVessel } from 'domain/use_cases/vessel/showVessel'
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -13,8 +17,16 @@ type ContentProps = Readonly<{
   vesselIdentity: VesselIdentity
   vesselReportings: VesselReportings
   withOpenedNewReportingForm: boolean
+  withVesselSidebarHistoryLink: boolean
 }>
-export function Content({ vesselIdentity, vesselReportings, withOpenedNewReportingForm }: ContentProps) {
+export function Content({
+  vesselIdentity,
+  vesselReportings,
+  withOpenedNewReportingForm,
+  withVesselSidebarHistoryLink
+}: ContentProps) {
+  const dispatch = useMainAppDispatch()
+
   const [editedReporting, setEditedReporting] = useState<Reporting.EditableReporting | undefined>()
   const [isNewReportingFormOpen, setIsNewReportingFormOpen] = useState(withOpenedNewReportingForm)
 
@@ -31,36 +43,50 @@ export function Content({ vesselIdentity, vesselReportings, withOpenedNewReporti
     [vesselReportings, editedReporting]
   )
 
-  if (!vesselIdentity || !vesselReportings) {
-    return <FingerprintSpinner className="radar" color={THEME.color.charcoal} size={100} />
+  const selectMainMapVessel = async () => {
+    if (!vesselIdentity) {
+      return
+    }
+
+    dispatch(showVessel(vesselIdentity, false, true))
+    dispatch(vesselActions.setSelectedVesselSidebarTab(VesselSidebarTab.REPORTING))
+    dispatch(vesselActions.setSelectedVesselSidebarReportingListTab(VesselReportingListTab.REPORTING_HISTORY))
   }
 
   return (
-    <Wrapper>
-      {!vesselReportings.current.length && !isNewReportingFormOpen && (
-        <NoReporting>Pas de signalement ouvert sur ce navire.</NoReporting>
+    <>
+      <Wrapper>
+        {!vesselReportings.current.length && !isNewReportingFormOpen && (
+          <NoReporting>Pas de signalement ouvert sur ce navire.</NoReporting>
+        )}
+        {!isNewReportingFormOpen && !editedReporting && (
+          <NewReportingButton
+            accent={Accent.PRIMARY}
+            data-cy="vessel-sidebar-open-reporting"
+            onClick={() => setIsNewReportingFormOpen(true)}
+          >
+            Ouvrir un signalement
+          </NewReportingButton>
+        )}
+        {(isNewReportingFormOpen || editedReporting) && (
+          <EditReporting closeForm={closeForm} editedReporting={editedReporting} vesselIdentity={vesselIdentity} />
+        )}
+        {reportingsWithoutEdited.map(reporting => (
+          <ReportingCard
+            key={reporting.reporting.id}
+            onEdit={setEditedReporting}
+            otherOccurrencesOfSameAlert={reporting.otherOccurrencesOfSameAlert}
+            reporting={reporting.reporting}
+          />
+        ))}
+      </Wrapper>
+
+      {withVesselSidebarHistoryLink && (
+        <LinkButton onClick={selectMainMapVessel}>
+          Voir tout l’historique des signalements dans la fiche navire
+        </LinkButton>
       )}
-      {!isNewReportingFormOpen && !editedReporting && (
-        <NewReportingButton
-          accent={Accent.PRIMARY}
-          data-cy="vessel-sidebar-open-reporting"
-          onClick={() => setIsNewReportingFormOpen(true)}
-        >
-          Ouvrir un signalement
-        </NewReportingButton>
-      )}
-      {(isNewReportingFormOpen || editedReporting) && (
-        <EditReporting closeForm={closeForm} editedReporting={editedReporting} vesselIdentity={vesselIdentity} />
-      )}
-      {reportingsWithoutEdited.map(reporting => (
-        <ReportingCard
-          key={reporting.reporting.id}
-          onEdit={setEditedReporting}
-          otherOccurrencesOfSameAlert={reporting.otherOccurrencesOfSameAlert}
-          reporting={reporting.reporting}
-        />
-      ))}
-    </Wrapper>
+    </>
   )
 }
 

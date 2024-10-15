@@ -1,83 +1,43 @@
-import { Accent, Button } from '@mtes-mct/monitor-ui'
-import { useCallback, useMemo, useState } from 'react'
-import styled from 'styled-components'
+import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
+import { FingerprintSpinner } from '@components/FingerprintSpinner'
+import { getDefaultReportingsStartDate } from '@features/Reporting/utils'
+import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
+import { THEME } from '@mtes-mct/monitor-ui'
+import { skipToken } from '@reduxjs/toolkit/query'
 
-import { EditReporting } from './EditReporting'
-import { ReportingCard } from '../ReportingCard'
+import { Content } from './Content'
 
-import type { Reporting, ReportingAndOccurrences, VesselReportings } from '@features/Reporting/types'
 import type { VesselIdentity } from 'domain/entities/vessel/types'
 
 type VesselReportingListProps = Readonly<{
-  vesselIdentity: VesselIdentity
-  vesselReportings: VesselReportings
+  startDate?: Date
+  vesselIdentity: VesselIdentity | undefined
   withOpenedNewReportingForm: boolean
 }>
 export function VesselReportingList({
+  startDate = getDefaultReportingsStartDate(),
   vesselIdentity,
-  vesselReportings,
   withOpenedNewReportingForm
 }: VesselReportingListProps) {
-  const [editedReporting, setEditedReporting] = useState<Reporting.EditableReporting | undefined>()
-  const [isNewReportingFormOpen, setIsNewReportingFormOpen] = useState(withOpenedNewReportingForm)
-
-  const closeForm = useCallback(() => {
-    setIsNewReportingFormOpen(false)
-    setEditedReporting(undefined)
-  }, [])
-
-  const reportingsWithoutEdited: ReportingAndOccurrences[] = useMemo(
-    () =>
-      (vesselReportings.current ?? []).filter(
-        reportingAndOccurrences => reportingAndOccurrences.reporting.id !== editedReporting?.id
-      ),
-    [vesselReportings, editedReporting]
+  const { data: vesselReportings } = useGetVesselReportingsByVesselIdentityQuery(
+    vesselIdentity
+      ? {
+          fromDate: startDate.toISOString(),
+          vesselIdentity
+        }
+      : skipToken,
+    RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS
   )
+
+  if (!vesselIdentity || !vesselReportings) {
+    return <FingerprintSpinner className="radar" color={THEME.color.charcoal} size={100} />
+  }
 
   return (
-    <Wrapper>
-      {!vesselReportings.current.length && !isNewReportingFormOpen && (
-        <NoReporting>Pas de signalement ouvert sur ce navire.</NoReporting>
-      )}
-      {!isNewReportingFormOpen && !editedReporting && (
-        <NewReportingButton
-          accent={Accent.PRIMARY}
-          data-cy="vessel-sidebar-open-reporting"
-          onClick={() => setIsNewReportingFormOpen(true)}
-        >
-          Ouvrir un signalement
-        </NewReportingButton>
-      )}
-      {(isNewReportingFormOpen || editedReporting) && (
-        <EditReporting closeForm={closeForm} editedReporting={editedReporting} vesselIdentity={vesselIdentity} />
-      )}
-      {reportingsWithoutEdited.map(reporting => (
-        <ReportingCard
-          key={reporting.reporting.id}
-          onEdit={setEditedReporting}
-          otherOccurrencesOfSameAlert={reporting.otherOccurrencesOfSameAlert}
-          reporting={reporting.reporting}
-        />
-      ))}
-    </Wrapper>
+    <Content
+      vesselIdentity={vesselIdentity}
+      vesselReportings={vesselReportings}
+      withOpenedNewReportingForm={withOpenedNewReportingForm}
+    />
   )
 }
-
-const NewReportingButton = styled(Button)`
-  align-self: flex-start;
-  margin: 0px 10px 10px 0px;
-`
-
-const Wrapper = styled.div`
-  background: ${p => p.theme.color.white};
-  color: ${p => p.theme.color.slateGray};
-  display: flex;
-  flex-direction: column;
-  margin: 10px 5px 5px 5px;
-  padding: 16px 16px 1px 16px;
-  text-align: left;
-`
-
-const NoReporting = styled.div`
-  margin-bottom: 16px;
-`

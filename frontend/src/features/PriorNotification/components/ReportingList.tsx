@@ -1,5 +1,5 @@
 import { SideWindowCard } from '@components/SideWindowCard'
-import { VesselReportingList } from '@features/Vessel/components/VesselSidebar/VesselReportingList'
+import { VesselReportingList } from '@features/Reporting/components/VesselReportingList'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon, LinkButton } from '@mtes-mct/monitor-ui'

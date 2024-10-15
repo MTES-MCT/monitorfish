@@ -49,23 +49,21 @@ export const reportingApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(CREATE_REPORTING_ERROR_MESSAGE, response)
     }),
 
-    // TODO Replace Backend route with a DELETE instead of a PUT.
     deleteReporting: builder.mutation<void, number>({
       invalidatesTags: [{ type: RtkCacheTagType.Reportings }],
       query: reportingId => ({
-        method: 'PUT',
-        url: `/reportings/${reportingId}/delete`
+        method: 'DELETE',
+        url: `/reportings/${reportingId}`
       }),
       transformErrorResponse: response => new FrontendApiError(DELETE_REPORTING_ERROR_MESSAGE, response)
     }),
 
-    // TODO Replace Backend route with a DELETE instead of a PUT.
     deleteReportings: builder.mutation<void, number[]>({
       invalidatesTags: [{ type: RtkCacheTagType.Reportings }],
       query: reportingIds => ({
         body: reportingIds,
-        method: 'PUT',
-        url: `/reportings/delete`
+        method: 'DELETE',
+        url: `/reportings`
       }),
       transformErrorResponse: response => new FrontendApiError(DELETE_REPORTINGS_ERROR_MESSAGE, response)
     }),
@@ -79,13 +77,12 @@ export const reportingApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(GET_REPORTINGS_ERROR_MESSAGE, response)
     }),
 
-    // TODO Remove the useless "/update" route part in Backend.
     updateReporting: builder.mutation<Reporting.Reporting, { id: number; nextReportingFormData: EditedReporting }>({
       invalidatesTags: [{ type: RtkCacheTagType.Reportings }],
       query: ({ id, nextReportingFormData }) => ({
         body: nextReportingFormData,
         method: 'PUT',
-        url: `/reportings/${id}/update`
+        url: `/reportings/${id}`
       }),
       transformErrorResponse: response => new FrontendApiError(UPDATE_REPORTING_ERROR_MESSAGE, response)
     })

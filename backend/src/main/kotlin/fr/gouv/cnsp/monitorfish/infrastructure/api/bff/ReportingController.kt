@@ -52,7 +52,7 @@ class ReportingController(
         archiveReporting.execute(reportingId)
     }
 
-    @PutMapping(value = ["/{reportingId}/update"], consumes = ["application/json"])
+    @PutMapping(value = ["/{reportingId}"], consumes = ["application/json"])
     @Operation(summary = "Update a reporting")
     fun updateReporting(
         @PathParam("Reporting id")
@@ -78,7 +78,7 @@ class ReportingController(
         archiveReportings.execute(ids)
     }
 
-    @PutMapping(value = ["/{reportingId}/delete"])
+    @DeleteMapping(value = ["/{reportingId}"])
     @Operation(summary = "Delete a reporting")
     fun deleteReporting(
         @PathParam("Reporting id")
@@ -88,7 +88,7 @@ class ReportingController(
         deleteReporting.execute(reportingId)
     }
 
-    @PutMapping(value = ["/delete"])
+    @DeleteMapping(value = [""])
     @Operation(summary = "Delete multiple reportings")
     fun deleteReporting(
         @RequestBody ids: List<Int>,

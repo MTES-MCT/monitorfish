@@ -2,6 +2,8 @@
 
 import { addAndCreateReportingWithinVesselSidebar } from './utils'
 
+import type { Reporting } from '@features/Reporting/types'
+
 context('Vessel sidebar reporting tab', () => {
   beforeEach(() => {
     cy.loadPath('/#@-824534.42,6082993.21,8.70')
@@ -46,6 +48,8 @@ context('Vessel sidebar reporting tab', () => {
   })
 
   it('An observation reporting should be modified to an Infraction suspicion', () => {
+    cy.intercept('POST', '/bff/v1/reportings').as('createReporting')
+
     // Given
     cy.get('*[data-cy="vessel-search-input"]', { timeout: 10000 }).type('ABC000597493')
     cy.get('*[data-cy="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
@@ -68,22 +72,30 @@ context('Vessel sidebar reporting tab', () => {
     cy.fill('Titre', 'Observation: Sortie non autorisée')
     cy.fill('Description', 'Ce navire ne devrait pas être en mer, mais ceci est une observation.')
     cy.fill('Saisi par', 'NTP')
-    cy.intercept('*reporting*').as('createReporting')
-    cy.clickButton('Valider')
-    cy.wait('@createReporting')
 
-    cy.intercept('*update*').as('updateReporting')
-    cy.get('*[data-cy^="edit-reporting-card"]').first().click({ timeout: 10000 })
-    cy.fill('Type de signalement', 'Infraction (suspicion)')
-    cy.fill('Natinf', '7059')
     cy.clickButton('Valider')
-    cy.wait('@updateReporting')
-    cy.wait(50)
 
-    cy.get('*[data-cy="reporting-card"]').first().contains('NATINF 7059')
-    cy.get('*[data-cy="delete-reporting-card"]').eq(0).click()
-    // Then, we confirm the reporting deletion
-    cy.clickButton('Supprimer')
+    cy.wait('@createReporting').then(createInterception => {
+      if (!createInterception.response) {
+        assert.fail('`createInterception.response` is undefined.')
+      }
+
+      const createdPriorNotification: Reporting.Reporting = createInterception.response.body
+
+      cy.intercept('PUT', `/bff/v1/reportings/${createdPriorNotification.id}`).as('updateReporting')
+
+      cy.get('*[data-cy^="edit-reporting-card"]').first().click({ timeout: 10000 })
+      cy.fill('Type de signalement', 'Infraction (suspicion)')
+      cy.fill('Natinf', '7059')
+      cy.clickButton('Valider')
+      cy.wait('@updateReporting')
+      cy.wait(50)
+
+      cy.get('*[data-cy="reporting-card"]').first().contains('NATINF 7059')
+      cy.get('*[data-cy="delete-reporting-card"]').eq(0).click()
+      // Then, we confirm the reporting deletion
+      cy.clickButton('Supprimer')
+    })
   })
 
   it('Reporting Should be archived', () => {

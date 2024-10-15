@@ -7,12 +7,12 @@ import { Accent, Icon, IconButton, THEME, Link } from '@mtes-mct/monitor-ui'
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { DeletionConfirmationModal } from './DeletionConfirmationModal'
-import { getDateTime } from '../../../../utils'
-import { ReportingType, ReportingTypeCharacteristics } from '../../types'
-import { archiveReporting } from '../../useCases/archiveReporting'
+import { DeletionConfirmationModal } from './VesselReportingList/DeletionConfirmationModal'
+import { getDateTime } from '../../../utils'
+import { ReportingType, ReportingTypeCharacteristics } from '../types'
+import { archiveReporting } from '../useCases/archiveReporting'
 
-import type { Reporting } from '../../types'
+import type { Reporting } from '../types'
 
 export type ReportingCardProps = Readonly<{
   isArchived?: boolean

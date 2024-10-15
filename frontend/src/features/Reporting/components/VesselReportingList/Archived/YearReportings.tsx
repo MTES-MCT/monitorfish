@@ -9,7 +9,7 @@ import { THEME } from '@mtes-mct/monitor-ui'
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { ReportingCard } from '../ReportingCard'
+import { ReportingCard } from '../../ReportingCard'
 
 import type { ReportingAndOccurrences } from '@features/Reporting/types'
 

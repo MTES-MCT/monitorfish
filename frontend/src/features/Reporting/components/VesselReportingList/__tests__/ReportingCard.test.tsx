@@ -8,7 +8,7 @@ import { noop } from 'lodash'
 
 import { PendingAlertValueType } from '../../../../../domain/entities/alerts/types'
 import { VesselIdentifier } from '../../../../../domain/entities/vessel/types'
-import { ReportingCard } from '../ReportingCard'
+import { ReportingCard } from '../../ReportingCard'
 
 import type { PendingAlertReporting } from '@features/Reporting/types'
 

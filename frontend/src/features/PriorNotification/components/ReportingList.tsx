@@ -1,6 +1,6 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { SideWindowCard } from '@components/SideWindowCard'
-import { VesselReportingList } from '@features/Reporting/components/VesselReportingList'
+import { CurrentReportingList } from '@features/Reporting/components/CurrentReportingList'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon, LinkButton } from '@mtes-mct/monitor-ui'
@@ -58,7 +58,7 @@ export function ReportingList() {
           </StyledLinkButton>
         </CardHeader>
 
-        <VesselReportingList
+        <CurrentReportingList
           onIsDirty={handleIsDirty}
           vesselIdentity={vesselIdentity}
           withOpenedNewReportingForm

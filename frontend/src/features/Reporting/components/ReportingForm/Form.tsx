@@ -23,7 +23,7 @@ import {
   ReportingType,
   ReportingTypeCharacteristics
 } from '../../types'
-import { mapControlUnitsToUniqueSortedIdsAsOptions } from '../VesselReportingList/utils'
+import { mapControlUnitsToUniqueSortedIdsAsOptions } from '../CurrentReportingList/utils'
 
 import type { EditedReporting, InfractionSuspicion } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'

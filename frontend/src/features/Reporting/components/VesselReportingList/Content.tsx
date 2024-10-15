@@ -14,12 +14,14 @@ import type { Reporting, ReportingAndOccurrences, VesselReportings } from '@feat
 import type { VesselIdentity } from 'domain/entities/vessel/types'
 
 type ContentProps = Readonly<{
+  onIsDirty: ((isDirty: boolean) => void) | undefined
   vesselIdentity: VesselIdentity
   vesselReportings: VesselReportings
   withOpenedNewReportingForm: boolean
   withVesselSidebarHistoryLink: boolean
 }>
 export function Content({
+  onIsDirty,
   vesselIdentity,
   vesselReportings,
   withOpenedNewReportingForm,
@@ -68,7 +70,12 @@ export function Content({
         </NewReportingButton>
       )}
       {(isNewReportingFormOpen || editedReporting) && (
-        <EditReporting closeForm={closeForm} editedReporting={editedReporting} vesselIdentity={vesselIdentity} />
+        <EditReporting
+          editedReporting={editedReporting}
+          onClose={closeForm}
+          onIsDirty={onIsDirty}
+          vesselIdentity={vesselIdentity}
+        />
       )}
       {reportingsWithoutEdited.map(reporting => (
         <ReportingCard

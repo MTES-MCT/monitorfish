@@ -61,9 +61,9 @@ export function EditReporting() {
       <Line />
       {editedReporting && vesselIdentity && (
         <StyledReportingForm
-          closeForm={closeForm}
           editedReporting={editedReporting}
           hasWhiteBackground
+          onClose={closeForm}
           vesselIdentity={vesselIdentity}
           windowContext={WindowContext.SideWindow}
         />

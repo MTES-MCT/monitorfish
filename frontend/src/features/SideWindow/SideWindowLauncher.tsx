@@ -11,7 +11,12 @@ import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 
 export function SideWindowLauncher() {
-  const isDraftDirty = useMainAppSelector(store => store.missionForm.isDraftDirty)
+  const hasUnsavedChanges = useMainAppSelector(
+    store =>
+      store.missionForm.isDraftDirty ||
+      store.priorNotification.isPriorNotificationFormDirty ||
+      store.priorNotification.isReportingFormDirty
+  )
   const status = useMainAppSelector(store => store.sideWindow.status)
   const dispatch = useMainAppDispatch()
   const { forceUpdate } = useForceUpdate()
@@ -44,7 +49,7 @@ export function SideWindowLauncher() {
       onChangeFocus={handleChangeFocus}
       onUnload={handleUnload}
       shouldHaveFocus={status === SideWindowStatus.FOCUSED}
-      showPrompt={isDraftDirty}
+      showPrompt={hasUnsavedChanges}
       title="MonitorFish"
     >
       <SideWindow isFromURL={false} />

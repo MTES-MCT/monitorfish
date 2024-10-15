@@ -28,13 +28,13 @@ import { mapControlUnitsToUniqueSortedIdsAsOptions } from '../VesselReportingLis
 import type { EditedReporting, InfractionSuspicion } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
-type FormProps = {
+type FormProps = Readonly<{
   className: string | undefined
   hasWhiteBackground: boolean
   onClose: () => void
   onIsDirty: ((isDirty: boolean) => void) | undefined
   windowContext: WindowContext
-}
+}>
 export function Form({ className, hasWhiteBackground, onClose, onIsDirty, windowContext }: FormProps) {
   const { dirty, setFieldValue, values } = useFormikContext<EditedReporting>()
 

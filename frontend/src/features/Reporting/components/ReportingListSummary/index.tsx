@@ -1,15 +1,16 @@
 import { Header, Zone } from '@features/Vessel/components/VesselSidebar/common_styles/common.style'
-import { InfractionSuspicionSummary } from '@features/Vessel/components/VesselSidebar/ReportingList/Summary/InfractionSuspicionSummary'
 import { customDayjs, Icon, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
+import { InfractionSuspicionSummary } from './InfractionSuspicionSummary'
+
 import type { VesselReportings } from '@features/Reporting/types'
 
-type SummaryProps = Readonly<{
+type ReportingListSummaryProps = Readonly<{
   fromDate: Date
   vesselReportings: VesselReportings
 }>
-export function Summary({ fromDate, vesselReportings }: SummaryProps) {
+export function ReportingListSummary({ fromDate, vesselReportings }: ReportingListSummaryProps) {
   const yearsDepth = customDayjs().utc().get('year') - customDayjs(fromDate).get('year') + 1
 
   return (

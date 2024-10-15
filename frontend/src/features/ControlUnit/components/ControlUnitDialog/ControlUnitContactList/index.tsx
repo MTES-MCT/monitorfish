@@ -39,7 +39,7 @@ export function ControlUnitContactList({ controlUnit, onSubmit }: ControlUnitCon
 
   const editedControlUnitContact = useMemo(
     () =>
-      sortedControlUnitContacts.find(({ id }) => id === editedControlUnitContactId) || {
+      sortedControlUnitContacts.find(({ id }) => id === editedControlUnitContactId) ?? {
         ...INITIAL_CONTROL_UNIT_CONTACT_FORM_VALUES,
         controlUnitId: controlUnit.id
       },

@@ -92,9 +92,9 @@ export function SpeciesAndWeightChart({
             <Wrapper key={speciesAndWeight.species}>
               <SpeciesAndWeight>
                 <Weight
-                  hasPresentation={!!speciesPresentationAndWeightArray}
-                  height={speciesAndWeight.height}
-                  isLast={
+                  $hasPresentation={!!speciesPresentationAndWeightArray}
+                  $height={speciesAndWeight.height}
+                  $isLast={
                     index === speciesAndWeightArrayWithHeight.length - 1 &&
                     speciesAndWeight.species !== speciesPresentationOpened
                   }
@@ -113,8 +113,8 @@ export function SpeciesAndWeightChart({
                   ) : null}
                 </Weight>
                 <Species
-                  height={speciesAndWeight.height}
-                  isLast={
+                  $height={speciesAndWeight.height}
+                  $isLast={
                     index === speciesAndWeightArrayWithHeight.length - 1 &&
                     speciesAndWeight.species !== speciesPresentationOpened
                   }
@@ -128,12 +128,12 @@ export function SpeciesAndWeightChart({
                   )}
                 </Species>
               </SpeciesAndWeight>
-              <PresentationWrapper isOpen={speciesAndWeight.species === speciesPresentationOpened}>
+              <PresentationWrapper $isOpen={speciesAndWeight.species === speciesPresentationOpened}>
                 {speciesPresentationAndWeightArray && speciesPresentationAndWeightArray[index]
                   ? speciesPresentationAndWeightArray[index]?.map((speciesAndPresentation, presentationIndex) => (
                       <SpeciesAndPresentation key={speciesAndPresentation.presentation}>
                         <PresentationWeight
-                          isLast={presentationIndex === Number(speciesPresentationAndWeightArray[index]?.length) - 1}
+                          $isLast={presentationIndex === Number(speciesPresentationAndWeightArray[index]?.length) - 1}
                         >
                           {speciesAndPresentation.weight} kg
                           <Percents>
@@ -197,25 +197,25 @@ const SpeciesAndPresentation = styled.div`
 `
 
 const PresentationWrapper = styled.div<{
-  isOpen: boolean
+  $isOpen: boolean
 }>`
-  visibility: ${props => (props.isOpen ? 'visible' : 'hidden')};
-  height: ${props => (props.isOpen ? 'inherit' : '0px')};
+  visibility: ${props => (props.$isOpen ? 'visible' : 'hidden')};
+  height: ${props => (props.$isOpen ? 'inherit' : '0px')};
 `
 
 const Species = styled.div<{
-  height: number
-  isLast: boolean
+  $height: number
+  $isLast: boolean
 }>`
   display: flex;
-  height: ${props => props.height}px;
+  height: ${props => props.$height}px;
   min-height: 20px;
   max-height: 90px;
   align-items: center;
   color: ${p => p.theme.color.gunMetal};
   font-size: 13px;
   margin: 2px 0 0 10px;
-  ${p => (p.isLast ? 'margin-bottom: 2px ;' : '')}
+  ${p => (p.$isLast ? 'margin-bottom: 2px ;' : '')}
   font-weight: 500;
   max-width: 260px;
   white-space: nowrap;
@@ -225,9 +225,9 @@ const Species = styled.div<{
 const WeightText = styled.span``
 
 const Weight = styled.div<{
-  hasPresentation: boolean
-  height: number
-  isLast: boolean
+  $hasPresentation: boolean
+  $height: number
+  $isLast: boolean
 }>`
   width: 130px;
   background: ${p => p.theme.color.gainsboro} 0% 0% no-repeat padding-box;
@@ -235,8 +235,8 @@ const Weight = styled.div<{
   border-left: 2px solid ${p => p.theme.color.slateGray};
   border-right: 2px solid ${p => p.theme.color.slateGray};
   border-top: 2px solid ${p => p.theme.color.slateGray};
-  ${p => (p.isLast ? `border-bottom: 2px solid ${p.theme.color.slateGray};` : '')}
-  height: ${p => p.height}px;
+  ${p => (p.$isLast ? `border-bottom: 2px solid ${p.theme.color.slateGray};` : '')}
+  height: ${p => p.$height}px;
   min-height: 20px;
   max-height: 90px;
   color: ${p => p.theme.color.gunMetal};
@@ -245,19 +245,19 @@ const Weight = styled.div<{
   align-items: center;
   text-align: left;
   padding-left: 10px;
-  ${p => (p.hasPresentation ? 'cursor: pointer;' : null)}
+  ${p => (p.$hasPresentation ? 'cursor: pointer;' : null)}
 `
 
 const PresentationWeight = styled.div<{
-  isLast: boolean
+  $isLast: boolean
 }>`
   width: 130px;
   font-weight: normal;
   border-left: 2px solid ${p => p.theme.color.slateGray};
   border-right: 2px solid ${p => p.theme.color.slateGray};
   border-top: 2px solid ${p => p.theme.color.slateGray};
-  ${p => (p.isLast ? `border-bottom: 2px solid ${p.theme.color.slateGray};` : '')}
-  ${p => (p.isLast ? 'margin-bottom: 4px;' : '')}
+  ${p => (p.$isLast ? `border-bottom: 2px solid ${p.theme.color.slateGray};` : '')}
+  ${p => (p.$isLast ? 'margin-bottom: 4px;' : '')}
   height: 20px;
   font-size: 11px;
   display: flex;

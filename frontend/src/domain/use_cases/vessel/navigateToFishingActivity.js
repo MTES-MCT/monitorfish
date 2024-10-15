@@ -1,13 +1,14 @@
+import { setSelectedVesselSidebarTab } from '@features/Vessel/slice.ts'
+
 import { logbookActions } from '../../../features/Logbook/slice'
 import { FishingActivitiesTab, VesselSidebarTab } from '../../entities/vessel/vessel'
-import { showVesselSidebarTab } from '@features/Vessel/slice.ts'
 
 const navigateToFishingActivity = id => (dispatch, getState) => {
-  const { vesselSidebarTab } = getState().vessel
+  const { selectedVesselSidebarTab } = getState().vessel
 
   const { fishingActivitiesTab } = getState().fishingActivities
 
-  if (vesselSidebarTab === VesselSidebarTab.VOYAGES && fishingActivitiesTab === FishingActivitiesTab.MESSAGES) {
+  if (selectedVesselSidebarTab === VesselSidebarTab.VOYAGES && fishingActivitiesTab === FishingActivitiesTab.MESSAGES) {
     const element = document.getElementById(id)
     if (element) {
       scrollTo(element)
@@ -16,8 +17,8 @@ const navigateToFishingActivity = id => (dispatch, getState) => {
     }
   }
 
-  if (vesselSidebarTab !== VesselSidebarTab.VOYAGES) {
-    dispatch(showVesselSidebarTab(VesselSidebarTab.VOYAGES))
+  if (selectedVesselSidebarTab !== VesselSidebarTab.VOYAGES) {
+    dispatch(setSelectedVesselSidebarTab(VesselSidebarTab.VOYAGES))
   }
   if (fishingActivitiesTab !== FishingActivitiesTab.MESSAGES) {
     dispatch(logbookActions.setTab(FishingActivitiesTab.MESSAGES))

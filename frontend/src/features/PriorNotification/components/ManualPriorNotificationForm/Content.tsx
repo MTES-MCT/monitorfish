@@ -16,12 +16,12 @@ import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { Form } from './Form'
-import { Header } from './Header'
 import { getPartialComputationRequestData } from './utils'
 import { SideWindowCard } from '../../../../components/SideWindowCard'
 import { PriorNotification } from '../../PriorNotification.types'
 import { CardBanner } from '../shared/CardBanner'
 import { CardBodyHead } from '../shared/CardBodyHead'
+import { CardHeader } from '../shared/CardHeader'
 import { DownloadButton } from '../shared/DownloadButton'
 import { UploadFiles } from '../shared/UploadFiles'
 
@@ -158,7 +158,7 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
       )}
 
       <FrontendErrorBoundary>
-        <Header detail={detail} onClose={handleClose} vesselId={values.vesselId} />
+        <CardHeader detail={detail} onClose={handleClose} vesselId={values.vesselId} withCloseButton />
 
         <Body data-cy="ManualPriorNotificationForm-Body">
           <CardBodyHead
@@ -176,7 +176,7 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
 
           <hr />
 
-          <Form isReadOnly={isReadOnly} />
+          <Form isNewPriorNotification={isNewPriorNotification} isReadOnly={isReadOnly} />
 
           {detail && (
             <>

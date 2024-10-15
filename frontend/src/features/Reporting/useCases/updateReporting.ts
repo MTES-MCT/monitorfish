@@ -1,46 +1,37 @@
-import { updateReportingFromAPI } from '@api/reporting'
+import { WindowContext } from '@api/constants'
 import { ReportingType } from '@features/Reporting/types'
-import { getVesselReportings } from '@features/Reporting/useCases/getVesselReportings'
 import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { Vessel } from '../../../domain/entities/vessel/vessel'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
 import { addVesselReporting, removeVesselReporting } from '../../Vessel/slice'
-import { removeCurrentReporting, updateCurrentReporting } from '../slice'
+import { reportingApi } from '../reportingApi'
 
 import type { VesselIdentity } from '../../../domain/entities/vessel/types'
-import type { EditedReporting, InfractionSuspicionReporting } from '@features/Reporting/types'
+import type { EditedReporting } from '@features/Reporting/types'
 import type { MainAppThunk } from '@store'
 
 export const updateReporting =
   (
-    selectedVesselIdentity: VesselIdentity,
+    vesselIdentity: VesselIdentity,
     id: number,
-    nextReporting: EditedReporting,
+    nextReportingFormData: EditedReporting,
     previousReportingType: ReportingType,
-    isFromSideWindow: boolean
+    windowContext: WindowContext
   ): MainAppThunk<Promise<void>> =>
-  async (dispatch, getState) => {
-    const { vesselIdentity } = getState().reporting
-
+  async dispatch => {
     try {
-      const updatedReporting = await updateReportingFromAPI(id, nextReporting)
-
-      if (nextReporting.type === ReportingType.INFRACTION_SUSPICION) {
-        dispatch(updateCurrentReporting(updatedReporting as InfractionSuspicionReporting))
-      }
-
-      if (
-        nextReporting.type === ReportingType.OBSERVATION &&
-        previousReportingType === ReportingType.INFRACTION_SUSPICION
-      ) {
-        dispatch(removeCurrentReporting(id))
-      }
+      await dispatch(
+        reportingApi.endpoints.updateReporting.initiate({
+          id,
+          nextReportingFormData
+        })
+      ).unwrap()
 
       // We update the reportings of the last positions vessels state
-      if (previousReportingType !== nextReporting.type) {
-        const vesselFeatureId = Vessel.getVesselFeatureId(selectedVesselIdentity)
+      if (previousReportingType !== nextReportingFormData.type) {
+        const vesselFeatureId = Vessel.getVesselFeatureId(vesselIdentity)
 
         dispatch(
           removeVesselReporting({
@@ -50,24 +41,22 @@ export const updateReporting =
         )
         dispatch(
           addVesselReporting({
-            reportingType: nextReporting.type,
+            reportingType: nextReportingFormData.type,
             vesselFeatureId
           })
         )
-        dispatch(renderVesselFeatures())
-      }
 
-      // If the update is done from the Reporting tab of the vessel sidebar
-      if (vesselIdentity) {
-        await dispatch(getVesselReportings(true))
+        dispatch(renderVesselFeatures())
       }
     } catch (error) {
       dispatch(
         displayOrLogError(
           error as Error,
-          () => updateReporting(selectedVesselIdentity, id, nextReporting, previousReportingType, isFromSideWindow),
+          () => updateReporting(vesselIdentity, id, nextReportingFormData, previousReportingType, windowContext),
           true,
-          isFromSideWindow ? DisplayedErrorKey.SIDE_WINDOW_REPORTING_FORM_ERROR : DisplayedErrorKey.VESSEL_SIDEBAR_ERROR
+          windowContext === WindowContext.MainWindow
+            ? DisplayedErrorKey.VESSEL_SIDEBAR_ERROR
+            : DisplayedErrorKey.SIDE_WINDOW_REPORTING_FORM_ERROR
         )
       )
     }

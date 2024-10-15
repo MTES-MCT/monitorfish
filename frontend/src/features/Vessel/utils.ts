@@ -1,9 +1,9 @@
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 
-import type {
-  VesselEnhancedLastPositionWebGLObject,
-  VesselLastPositionFeature
+import {
+  type VesselEnhancedLastPositionWebGLObject,
+  type VesselLastPositionFeature
 } from '../../domain/entities/vessel/types'
 
 export function buildFeature(vessel: VesselEnhancedLastPositionWebGLObject): VesselLastPositionFeature {

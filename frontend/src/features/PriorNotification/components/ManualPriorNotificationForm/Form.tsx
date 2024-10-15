@@ -14,7 +14,8 @@ import {
   FormikSelect,
   FormikTextarea,
   FormikTextInput,
-  getOptionsFromLabelledEnum
+  getOptionsFromLabelledEnum,
+  LinkButton
 } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import { useRef } from 'react'
@@ -28,9 +29,10 @@ import type { ManualPriorNotificationFormValues } from './types'
 import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
 
 type FormProps = Readonly<{
+  isNewPriorNotification: boolean
   isReadOnly: boolean
 }>
-export function Form({ isReadOnly }: FormProps) {
+export function Form({ isNewPriorNotification, isReadOnly }: FormProps) {
   const { values } = useFormikContext<ManualPriorNotificationFormValues>()
 
   const dispatch = useMainAppDispatch()
@@ -47,6 +49,10 @@ export function Form({ isReadOnly }: FormProps) {
     }
 
     isThirdPartyVessel.current = false
+  }
+
+  const openVesselReportingList = () => {
+    dispatch(priorNotificationActions.setIsReportingListOpened(true))
   }
 
   const updateIsDirty = (isDirty: boolean) => {
@@ -146,6 +152,10 @@ export function Form({ isReadOnly }: FormProps) {
 
       <FieldGroup>
         <FormikTextarea label="Points d'attention identifiés par le CNSP" name="note" readOnly={isReadOnly} />
+
+        {!isNewPriorNotification && (
+          <LinkButton onClick={openVesselReportingList}>Ouvrir un signalement sur le navire</LinkButton>
+        )}
       </FieldGroup>
 
       <AuthorTrigramInput label="Saisi par" maxLength={3} name="authorTrigram" readOnly={isReadOnly} />

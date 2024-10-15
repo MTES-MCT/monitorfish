@@ -1,4 +1,7 @@
+import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { SEAFRONT_GROUP_SEAFRONTS, SeafrontGroup } from '@constants/seafront'
+import { useGetReportingsQuery } from '@features/Reporting/reportingApi'
+import { isNotObservationReporting } from '@features/Reporting/utils'
 import { useCallback, useState } from 'react'
 
 import { AlertListAndReportingList } from './AlertListAndReportingList'
@@ -19,8 +22,9 @@ type AlertProps = Readonly<{
 export function Alert({ baseRef }: AlertProps) {
   const dispatch = useMainAppDispatch()
   const { pendingAlerts, subMenu } = useMainAppSelector(state => state.alert)
-  const currentReportings = useMainAppSelector(state => state.reporting.currentReportings)
   const [selectedTab, setSelectedTab] = useState(AlertAndReportingTab.ALERT)
+
+  const { data: currentReportings } = useGetReportingsQuery(undefined, RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS)
 
   const handleSubMenuChange = useCallback(
     (nextSubMenu: AlertSubMenu) => {
@@ -41,7 +45,11 @@ export function Alert({ baseRef }: AlertProps) {
       }
 
       if (selectedTab === AlertAndReportingTab.REPORTING) {
-        return currentReportings.filter(reporting => seafronts.includes(reporting.value.seaFront)).length
+        return (
+          currentReportings?.filter(
+            reporting => isNotObservationReporting(reporting) && seafronts.includes(reporting.value.seaFront)
+          ).length ?? 0
+        )
       }
 
       return 0

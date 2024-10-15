@@ -8,7 +8,6 @@ import styled, { css } from 'styled-components'
 import * as timeago from 'timeago.js'
 
 import { AddSilencedAlertDialog } from './AddSilencedAlertDialog'
-import { COLORS } from '../../../../constants/constants'
 import { addSilencedAlert } from '../../../../domain/use_cases/alert/addSilencedAlert'
 import { reactivateSilencedAlert } from '../../../../domain/use_cases/alert/reactivateSilencedAlert'
 import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
@@ -86,7 +85,7 @@ export function SilencedAlerts() {
       <Title>Suspension d’alertes</Title>
       <Filters>
         <SearchVesselInput
-          baseUrl={baseUrl}
+          $baseUrl={baseUrl}
           data-cy="side-window-silenced-alerts-search-vessel"
           onChange={e => setSearchQuery(e.target.value)}
           placeholder="Rechercher un navire ou une alerte"
@@ -97,7 +96,7 @@ export function SilencedAlerts() {
           Ajouter une nouvelle suspension
         </AddSilencedAlert>
       </Filters>
-      <StyledList count={sortedAlerts?.length} data-cy="side-window-silenced-alerts-list">
+      <StyledList $count={sortedAlerts?.length} data-cy="side-window-silenced-alerts-list">
         <Row key={0} $isHeader index={0}>
           <FlexboxGrid>
             <VesselName>Navire</VesselName>
@@ -183,7 +182,7 @@ const Filters = styled.div`
 `
 
 const Title = styled.h2`
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   font-size: 22px;
   font-weight: 700;
   margin: 30px 0px;
@@ -215,10 +214,10 @@ const NoAlerts = styled.div`
 `
 
 const SearchVesselInput = styled.input<{
-  baseUrl: string
+  $baseUrl: string
 }>`
   background-color: ${p => p.theme.color.white};
-  background-image: ${p => `url(${p.baseUrl}${SearchIconSVG})`};
+  background-image: ${p => `url(${p.$baseUrl}${SearchIconSVG})`};
   background-position: bottom 3px right 5px;
   background-repeat: no-repeat;
   background-size: 25px;
@@ -271,12 +270,12 @@ const styleCenter = css`
 // The width of the scrolling bar is 16 px. When we have more than
 // 9 items, the scrolling bar is showed
 const StyledList = styled(List)<{
-  count?: number
+  $count?: number
 }>`
   box-shadow: unset;
   color: ${p => p.theme.color.gunMetal};
   font-weight: 500;
-  width: ${p => (p.count && p.count > 9 ? 1260 + 16 : 1260)}px;
+  width: ${p => (p.$count && p.$count > 9 ? 1260 + 16 : 1260)}px;
   margin-bottom: 10px;
   margin-top: 10px;
   overflow: 'visible';

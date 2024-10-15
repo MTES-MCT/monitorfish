@@ -89,7 +89,7 @@ class ReportingControllerITests {
     @Test
     fun `Should delete a reporting`() {
         // When
-        api.perform(put("/bff/v1/reportings/123/delete"))
+        api.perform(delete("/bff/v1/reportings/123"))
             // Then
             .andExpect(status().isOk)
 
@@ -100,7 +100,7 @@ class ReportingControllerITests {
     fun `Should delete multiple reportings`() {
         // When
         api.perform(
-            put("/bff/v1/reportings/delete")
+            delete("/bff/v1/reportings")
                 .content(objectMapper.writeValueAsString(listOf(1, 2, 3)))
                 .contentType(MediaType.APPLICATION_JSON),
         )
@@ -299,7 +299,7 @@ class ReportingControllerITests {
 
         // When
         api.perform(
-            put("/bff/v1/reportings/123/update")
+            put("/bff/v1/reportings/123")
                 .content(
                     objectMapper.writeValueAsString(
                         UpdateReportingDataInput(

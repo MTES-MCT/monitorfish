@@ -4,6 +4,7 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon, LinkButton } from '@mtes-mct/monitor-ui'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
+import { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { priorNotificationActions } from '../slice'
@@ -23,6 +24,13 @@ export function ReportingList() {
     dispatch(priorNotificationActions.setIsReportingListOpened(false))
   }
 
+  const handleIsDirty = useCallback(
+    (isDirty: boolean) => {
+      dispatch(priorNotificationActions.setIsReportingFormDirty(isDirty))
+    },
+    [dispatch]
+  )
+
   return (
     <StyledCard $isSuperUser={isSuperUser} onBackgroundClick={close}>
       <CardHeader detail={openedPriorNotificationDetail} onClose={close} vesselId={vesselId}>
@@ -31,7 +39,12 @@ export function ReportingList() {
         </StyledLinkButton>
       </CardHeader>
 
-      <VesselReportingList vesselIdentity={vesselIdentity} withOpenedNewReportingForm withVesselSidebarHistoryLink />
+      <VesselReportingList
+        onIsDirty={handleIsDirty}
+        vesselIdentity={vesselIdentity}
+        withOpenedNewReportingForm
+        withVesselSidebarHistoryLink
+      />
     </StyledCard>
   )
 }

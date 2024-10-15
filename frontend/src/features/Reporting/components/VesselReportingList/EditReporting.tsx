@@ -9,11 +9,12 @@ import type { Reporting } from '@features/Reporting/types'
 import type { VesselIdentity } from 'domain/entities/vessel/types'
 
 type EditReportingProps = Readonly<{
-  closeForm: () => void
   editedReporting: Reporting.EditableReporting | undefined
+  onClose: () => void
+  onIsDirty: ((isDirty: boolean) => void) | undefined
   vesselIdentity: VesselIdentity
 }>
-export function EditReporting({ closeForm, editedReporting, vesselIdentity }: EditReportingProps) {
+export function EditReporting({ editedReporting, onClose, onIsDirty, vesselIdentity }: EditReportingProps) {
   return (
     <FormWrapper>
       <Header>
@@ -22,7 +23,7 @@ export function EditReporting({ closeForm, editedReporting, vesselIdentity }: Ed
           accent={Accent.TERTIARY}
           color={THEME.color.slateGray}
           Icon={Icon.Close}
-          onClick={closeForm}
+          onClick={onClose}
           size={Size.SMALL}
           title="Fermer le formulaire"
         />
@@ -31,8 +32,9 @@ export function EditReporting({ closeForm, editedReporting, vesselIdentity }: Ed
       {!vesselIdentity && <ReportingFormLoader />}
       {vesselIdentity && (
         <StyledReportingForm
-          closeForm={closeForm}
           editedReporting={editedReporting}
+          onClose={onClose}
+          onIsDirty={onIsDirty}
           vesselIdentity={vesselIdentity}
           windowContext={WindowContext.MainWindow}
         />

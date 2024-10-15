@@ -10,12 +10,14 @@ import { Content } from './Content'
 import type { VesselIdentity } from 'domain/entities/vessel/types'
 
 type VesselReportingListProps = Readonly<{
+  onIsDirty?: (isDirty: boolean) => void
   startDate?: Date
   vesselIdentity: VesselIdentity | undefined
   withOpenedNewReportingForm?: boolean
   withVesselSidebarHistoryLink?: boolean
 }>
 export function VesselReportingList({
+  onIsDirty,
   startDate = getDefaultReportingsStartDate(),
   vesselIdentity,
   withOpenedNewReportingForm = false,
@@ -37,6 +39,7 @@ export function VesselReportingList({
 
   return (
     <Content
+      onIsDirty={onIsDirty}
       vesselIdentity={vesselIdentity}
       vesselReportings={vesselReportings}
       withOpenedNewReportingForm={withOpenedNewReportingForm}

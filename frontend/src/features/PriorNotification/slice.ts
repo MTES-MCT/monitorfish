@@ -15,6 +15,7 @@ export interface PriorNotificationState {
   // TODO Remove this prop once loading / spinner perfs tests are removed.
   editedPriorNotificationId: string | undefined
   isPriorNotificationFormDirty: boolean
+  isReportingFormDirty: boolean
   isReportingListOpened: boolean
   listFilterValues: ListFilter
   openedPriorNotificationComponentType: OpenedPriorNotificationType | undefined
@@ -28,6 +29,7 @@ const INITIAL_STATE: PriorNotificationState = {
   // TODO Remove this prop once loading / spinner perfs tests are removed.
   editedPriorNotificationId: undefined,
   isPriorNotificationFormDirty: false,
+  isReportingFormDirty: false,
   isReportingListOpened: false,
   listFilterValues: DEFAULT_LIST_FILTER_VALUES,
   openedPriorNotificationComponentType: undefined,
@@ -74,6 +76,10 @@ const priorNotificationSlice = createSlice({
 
     setIsPriorNotificationFormDirty(state, action: PayloadAction<boolean>) {
       state.isPriorNotificationFormDirty = action.payload
+    },
+
+    setIsReportingFormDirty(state, action: PayloadAction<boolean>) {
+      state.isReportingFormDirty = action.payload
     },
 
     setIsReportingListOpened(state, action: PayloadAction<boolean>) {

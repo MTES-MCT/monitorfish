@@ -34,7 +34,7 @@ export function ControlUnitResourceList({ controlUnit }: ControlUnitResourceList
   const [isNewControlUnitResourceFormOpen, setIsNewControlUnitResourceFormOpen] = useState(false)
 
   const activeControlUnitResources = controlUnit.controlUnitResources.filter(isNotArchived)
-  const editedControlUnitResource = activeControlUnitResources.find(({ id }) => id === editedControlUnitResourceId) || {
+  const editedControlUnitResource = activeControlUnitResources.find(({ id }) => id === editedControlUnitResourceId) ?? {
     ...INITIAL_CONTROL_UNIT_RESOURCE_FORM_VALUES,
     controlUnitId: controlUnit.id
   }

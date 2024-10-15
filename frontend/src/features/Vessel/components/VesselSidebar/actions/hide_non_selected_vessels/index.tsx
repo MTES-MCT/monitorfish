@@ -16,14 +16,14 @@ export function HideNonSelectedVessels({ isSidebarOpen }) {
 
   return (
     <VesselSidebarActionButton
-      backgroundColor={hideNonSelectedVessels ? THEME.color.blueGray : THEME.color.charcoal}
+      $backgroundColor={hideNonSelectedVessels ? THEME.color.blueGray : THEME.color.charcoal}
+      $isRightMenuOpen={rightMenuIsOpen}
+      $isSidebarOpen={isSidebarOpen}
+      $top={188}
       data-cy="trigger-hide-other-vessels-from-sidebar"
       disabled={!selectedVesselPositions?.length}
-      isRightMenuOpen={rightMenuIsOpen}
-      isSidebarOpen={isSidebarOpen}
       onClick={() => dispatch(setHideNonSelectedVessels(!hideNonSelectedVessels))}
       title={`${hideNonSelectedVessels ? 'Afficher' : 'Cacher'} les autres navires`}
-      top={188}
     >
       {hideNonSelectedVessels ? <HidingOtherTracks /> : <ShowingOtherTracks />}
     </VesselSidebarActionButton>

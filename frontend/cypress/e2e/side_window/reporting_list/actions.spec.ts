@@ -1,40 +1,40 @@
+import { createReportingFromVesselSidebar } from '../../main_window/vessel_sidebar/utils'
+
 context('Side Window > Reporting List > Actions', () => {
-  beforeEach(() => {
-    cy.visit('/side_window')
-  })
-
   it('Reportings Should be archived', () => {
-    // Given
-    cy.intercept('PUT', 'bff/v1/reportings/archive', {
-      body: {
-        id: 1
-      },
-      statusCode: 200
-    }).as('archiveReportings')
-    cy.getDataCy('side-window-reporting-tab').click()
-    cy.getDataCy('ReportingList-reporting').should('have.length', 1)
+    createReportingFromVesselSidebar('COURANT MAIN PROFESSEUR').then(createdReportingId => {
+      cy.intercept('PUT', '/bff/v1/reportings/archive').as('archiveReportings')
 
-    // When
-    // Select and archive a reporting
-    cy.get('.rs-checkbox-wrapper').first().click()
-    cy.getDataCy('archive-reporting-cards').click({ force: true })
-    cy.wait('@archiveReportings').then(({ request }) => {
-      expect(request.body.toString()).contains('5')
+      // Given
+      cy.visit('/side_window')
+      cy.getDataCy('side-window-reporting-tab').click()
+      cy.getDataCy('side-window-sub-menu-NAMO').click()
+      cy.getDataCy('table-order-by-validationDate').click().wait(250).click()
+
+      cy.getDataCy('ReportingList-reporting').then($reportingRows => {
+        const numberOfReportings = $reportingRows.length
+
+        // When
+        cy.get('.rs-checkbox-wrapper').eq(1).click()
+        cy.getDataCy('archive-reporting-cards').click({ force: true })
+
+        cy.wait('@archiveReportings').then(archiveInterception => {
+          if (!archiveInterception.request) {
+            assert.fail('`createInterception.response` is undefined.')
+          }
+
+          // Then
+          assert.deepEqual(archiveInterception.request.body, [createdReportingId])
+
+          cy.getDataCy('ReportingList-reporting').should('have.length', numberOfReportings - 1)
+        })
+      })
     })
-
-    // Then
-    // Should delete the row
-    cy.getDataCy('ReportingList-reporting').should('have.length', 0)
   })
 
   it('Reportings Should be searched and ordered by date', () => {
     // Given
-    cy.intercept('PUT', 'bff/v1/reportings/delete', {
-      body: {
-        id: 1
-      },
-      statusCode: 200
-    }).as('deleteReportings')
+    cy.visit('/side_window')
     cy.getDataCy('side-window-reporting-tab').click()
     cy.getDataCy('side-window-sub-menu-NAMO').click()
     cy.wait(200)
@@ -72,40 +72,41 @@ context('Side Window > Reporting List > Actions', () => {
   })
 
   it('Reportings Should be deleted', () => {
-    // Given
-    cy.intercept('PUT', 'bff/v1/reportings/delete', {
-      body: {
-        id: 1
-      },
-      statusCode: 200
-    }).as('deleteReportings')
-    cy.getDataCy('side-window-reporting-tab').click()
-    cy.getDataCy('side-window-sub-menu-NAMO').click()
+    cy.intercept('DELETE', '/bff/v1/reportings').as('deleteReportings')
 
-    cy.getDataCy('ReportingList-reporting').then($reportingRows => {
-      const numberOfReportings = $reportingRows.length
+    createReportingFromVesselSidebar('COURANT MAIN PROFESSEUR').then(createdReportingId => {
+      // Given
+      cy.visit('/side_window')
+      cy.getDataCy('side-window-reporting-tab').click()
+      cy.getDataCy('side-window-sub-menu-NAMO').click()
+      cy.getDataCy('table-order-by-validationDate').click().wait(250).click()
 
-      // When
-      // Select reporting
-      cy.get('.rs-checkbox-wrapper').eq(1).click()
-      // Select reporting
-      cy.get('.rs-checkbox-wrapper').last().click()
-      // Delete two reportings
-      cy.getDataCy('delete-reporting-cards').click({ force: true })
-      cy.wait('@deleteReportings').then(({ request, response }) => {
-        expect(request.body).to.have.length(2)
-        expect(response && response.statusCode).equal(200)
+      cy.getDataCy('ReportingList-reporting').then($reportingRows => {
+        const numberOfReportings = $reportingRows.length
+
+        // When
+        cy.get('.rs-checkbox-wrapper').eq(1).click()
+        cy.getDataCy('delete-reporting-cards').click({ force: true })
+
+        cy.wait('@deleteReportings').then(archiveInterception => {
+          if (!archiveInterception.request) {
+            assert.fail('`createInterception.response` is undefined.')
+          }
+
+          // Then
+          assert.deepEqual(archiveInterception.request.body, [createdReportingId])
+
+          cy.getDataCy('ReportingList-reporting').should('have.length', numberOfReportings - 1)
+        })
       })
-
-      // Then
-      // Should delete the row
-      cy.getDataCy('ReportingList-reporting').should('have.length', numberOfReportings - 2)
     })
   })
 
   it('A Reporting Should be edited', () => {
+    cy.intercept('PUT', 'bff/v1/reportings/6').as('updateReporting')
+
     // Given
-    cy.intercept('PUT', 'bff/v1/reportings/6/update').as('updateReporting')
+    cy.visit('/side_window')
     cy.getDataCy('side-window-reporting-tab').click()
     cy.getDataCy('side-window-sub-menu-NAMO').click()
 
@@ -131,8 +132,10 @@ context('Side Window > Reporting List > Actions', () => {
   })
 
   it('A Reporting Should be edited with the reporting type modified ', () => {
+    cy.intercept('PUT', 'bff/v1/reportings/6').as('updateReporting')
+
     // Given
-    cy.intercept('PUT', 'bff/v1/reportings/6/update').as('updateReporting')
+    cy.visit('/side_window')
     cy.getDataCy('side-window-reporting-tab').click()
     cy.getDataCy('side-window-sub-menu-NAMO').click()
 
@@ -163,6 +166,7 @@ context('Side Window > Reporting List > Actions', () => {
     cy.cleanDownloadedFiles()
 
     // Given
+    cy.visit('/side_window')
     cy.getDataCy('side-window-reporting-tab').click()
 
     // There should be one reporting either in SA or NAME sea front, depending of the previous

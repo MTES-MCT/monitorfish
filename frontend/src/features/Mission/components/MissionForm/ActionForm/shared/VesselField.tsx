@@ -1,5 +1,5 @@
 import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
-import { useGetVesselQuery } from '@features/Vessel/apis'
+import { useGetVesselQuery } from '@features/Vessel/vesselApi'
 import { VesselSearch } from '@features/VesselSearch'
 import { Checkbox, useNewWindow } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'

@@ -35,8 +35,11 @@ class GetVesselReportings(
 
         val (reportings, reportingsTimeTaken) =
             measureTimedValue {
-                findReportings(
-                    vesselId,
+                if (vesselId != null) {
+                    return@measureTimedValue findReportingsByVesselId(vesselId, fromDate)
+                }
+
+                findReportingsByVesselIdentity(
                     vesselIdentifier,
                     internalReferenceNumber,
                     fromDate,
@@ -231,18 +234,20 @@ class GetVesselReportings(
         return (reportingsWithoutAlerts + alertTypeToLastAlertAndOccurrences)
     }
 
-    private fun findReportings(
-        vesselId: Int?,
+    private fun findReportingsByVesselId(
+        vesselId: Int,
+        fromDate: ZonedDateTime,
+    ): List<Reporting> {
+        return reportingRepository.findCurrentAndArchivedByVesselIdEquals(vesselId, fromDate)
+    }
+
+    private fun findReportingsByVesselIdentity(
         vesselIdentifier: VesselIdentifier?,
         internalReferenceNumber: String,
         fromDate: ZonedDateTime,
         ircs: String,
         externalReferenceNumber: String,
     ): List<Reporting> {
-        if (vesselId != null) {
-            return reportingRepository.findCurrentAndArchivedByVesselIdEquals(vesselId, fromDate)
-        }
-
         return when (vesselIdentifier) {
             VesselIdentifier.INTERNAL_REFERENCE_NUMBER ->
                 reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(

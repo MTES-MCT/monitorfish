@@ -1,6 +1,7 @@
-import { getVesselReportings } from '@features/Reporting/useCases/getVesselReportings'
+import { RtkCacheTagType } from '@api/constants'
 import { removeVesselAlertAndUpdateReporting } from '@features/Vessel/slice'
 import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
+import { vesselApi } from '@features/Vessel/vesselApi'
 
 import { validateAlertFromAPI } from '../../../api/alert'
 import { setPendingAlerts } from '../../../features/SideWindow/Alert/slice'
@@ -28,7 +29,7 @@ export const validateAlert =
       await validateAlertFromAPI(id)
       // We dispatch this action to update the reporting list
       // since it depends on the alerts list that we just updated
-      await dispatch(getVesselReportings(true))
+      dispatch(vesselApi.util.invalidateTags([RtkCacheTagType.Reportings]))
 
       const validatedAlert = previousAlertsWithValidatedFlag.find(alert => alert.id === id)
       if (!validatedAlert) {

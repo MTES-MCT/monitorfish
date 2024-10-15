@@ -8,6 +8,12 @@ import type { PendingAlertValue } from '../../domain/entities/alerts/types'
 import type { Infraction } from '../../domain/types/infraction'
 import type { LegacyControlUnit } from '../../domain/types/legacyControlUnit'
 
+// TODO Move other types into new `Reporting` namespace.
+export namespace Reporting {
+  export type Reporting = InfractionSuspicionReporting | ObservationReporting | PendingAlertReporting
+  export type EditableReporting = InfractionSuspicionReporting | ObservationReporting
+}
+
 export enum ReportingType {
   // TODO Should be renamed 'PENDING_ALERT'.
   ALERT = 'ALERT',
@@ -62,10 +68,6 @@ export type ReportingCreation = BaseReportingCreation & {
   value: EditedReporting
 }
 
-export type Reporting = InfractionSuspicionReporting | ObservationReporting | PendingAlertReporting
-
-export type EditableReporting = InfractionSuspicionReporting | ObservationReporting
-
 export type EditedReporting = Partial<InfractionSuspicion | Observation> & {
   type: ReportingType.INFRACTION_SUSPICION | ReportingType.OBSERVATION
 }
@@ -73,8 +75,8 @@ export type EditedReporting = Partial<InfractionSuspicion | Observation> & {
 type Year = number
 
 export type ReportingAndOccurrences = {
-  otherOccurrencesOfSameAlert: Reporting[]
-  reporting: Reporting
+  otherOccurrencesOfSameAlert: Reporting.Reporting[]
+  reporting: Reporting.Reporting
 }
 
 export type VesselReportings = {

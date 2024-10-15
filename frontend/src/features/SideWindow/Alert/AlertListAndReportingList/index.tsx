@@ -1,4 +1,7 @@
+import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { SeafrontGroup } from '@constants/seafront'
+import { useGetReportingsQuery } from '@features/Reporting/reportingApi'
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -6,7 +9,7 @@ import { AlertAndReportingTab } from './constants'
 import { PendingAlertsList } from './PendingAlertsList'
 import { ALERTS_MENU_SEAFRONT_TO_SEAFRONTS } from '../../../../domain/entities/alerts/constants'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { ReportingList } from '../../../Reporting/components/ReportingList'
+import { ReportingTable } from '../../../Reporting/components/ReportingTable'
 
 import type { RefObject } from 'react'
 
@@ -22,7 +25,12 @@ export function AlertListAndReportingList({
   selectedTab,
   setSelectedTab
 }: AlertListAndReportingListProps) {
+  const displayedError = useMainAppSelector(
+    state => state.displayedError[DisplayedErrorKey.SIDE_WINDOW_REPORTING_LIST_ERROR]
+  )
   const silencedAlerts = useMainAppSelector(state => state.alert.silencedAlerts)
+
+  const { data: currentReportings } = useGetReportingsQuery(undefined, RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS)
 
   const filteredSilencedAlerts = useMemo(
     () =>
@@ -51,6 +59,7 @@ export function AlertListAndReportingList({
       >
         Signalements
       </Title>
+
       {selectedTab === AlertAndReportingTab.ALERT && (
         <>
           <PendingAlertsList
@@ -61,7 +70,11 @@ export function AlertListAndReportingList({
         </>
       )}
       {selectedTab === AlertAndReportingTab.REPORTING && (
-        <ReportingList selectedSeafrontGroup={selectedSeafrontGroup} />
+        <ReportingTable
+          currentReportings={currentReportings ?? []}
+          displayedError={displayedError}
+          selectedSeafrontGroup={selectedSeafrontGroup}
+        />
       )}
     </Wrapper>
   )

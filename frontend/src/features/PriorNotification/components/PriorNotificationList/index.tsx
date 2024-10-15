@@ -35,6 +35,7 @@ import { useGetPriorNotificationsQuery, useGetPriorNotificationsToVerifyQuery } 
 import { priorNotificationActions } from '../../slice'
 import { LogbookPriorNotificationForm } from '../LogbookPriorNotificationForm'
 import { ManualPriorNotificationForm } from '../ManualPriorNotificationForm'
+import { ReportingList } from '../ReportingList'
 
 import type { AllSeafrontGroup, NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 
@@ -45,12 +46,13 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
   const lastFetchStartDateRef = useRef<number | undefined>(undefined)
 
   const dispatch = useMainAppDispatch()
+  const isReportingListOpened = useMainAppSelector(state => state.priorNotification.isReportingListOpened)
   const listFilter = useMainAppSelector(state => state.priorNotification.listFilterValues)
-  const openedPriorNotificationDetail = useMainAppSelector(
-    state => state.priorNotification.openedPriorNotificationDetail
-  )
   const openedPriorNotificationComponentType = useMainAppSelector(
     state => state.priorNotification.openedPriorNotificationComponentType
+  )
+  const openedPriorNotificationDetail = useMainAppSelector(
+    state => state.priorNotification.openedPriorNotificationDetail
   )
   const isSuperUser = useIsSuperUser()
 
@@ -264,6 +266,7 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
       {openedPriorNotificationComponentType === OpenedPriorNotificationType.ManualForm && (
         <ManualPriorNotificationForm key={openedPriorNotificationDetail?.fingerprint} />
       )}
+      {isReportingListOpened && <ReportingList />}
     </>
   )
 }

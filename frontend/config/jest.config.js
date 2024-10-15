@@ -3,8 +3,11 @@ export default {
   collectCoverageFrom: ['**/{hooks,libs,utils}/**/*.t{s,sx}', '**/utils.ts'],
   globalSetup: '<rootDir>/config/jest.global.js',
   maxWorkers: '50%',
+  moduleNameMapper: {
+    '\\.svg\\?react$': '<rootDir>/config/jest.svgImportTransformer.js'
+  },
   rootDir: '..',
-  setupFiles: ['dotenv/config'],
+  setupFiles: ['dotenv/config', '<rootDir>/config/jest.setup.js'],
   testEnvironment: 'jsdom',
   testMatch: ['<rootDir>/**/*.test.t{s,sx}'],
   transform: {
@@ -41,7 +44,7 @@ export default {
       }
     ],
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-      '<rootDir>/config/fileTransformer.js'
+      '<rootDir>/config/jest.fileTransformer.js'
   },
   transformIgnorePatterns: ['node_modules/(?!ol)/']
 }

@@ -1,4 +1,6 @@
+import { WindowContext } from '@api/constants'
 import { ErrorWall } from '@components/ErrorWall'
+import { reportingActions } from '@features/Reporting/slice'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
@@ -10,62 +12,60 @@ import { getOnlyVesselIdentityProperties } from '../../../../domain/entities/ves
 import CloseIconSVG from '../../../icons/Croix_grise.svg?react'
 import AlertsSVG from '../../../icons/Icone_alertes_gris.svg?react'
 import { ReportingForm } from '../../../Reporting/components/ReportingForm'
-import { setEditedReportingInSideWindow } from '../../../Reporting/slice'
 
 export function EditReporting() {
   const dispatch = useMainAppDispatch()
-  const baseUrl = window.location.origin
-  const editedReportingInSideWindow = useMainAppSelector(state => state.reporting.editedReportingInSideWindow)
+  const editedReporting = useMainAppSelector(state => state.reporting.editedReporting)
   const displayedError = useMainAppSelector(
     state => state.displayedError[DisplayedErrorKey.SIDE_WINDOW_REPORTING_FORM_ERROR]
   )
 
+  const baseUrl = window.location.origin
+  const vesselIdentity = editedReporting ? getOnlyVesselIdentityProperties(editedReporting) : undefined
+
   const closeForm = useCallback(() => {
-    dispatch(setEditedReportingInSideWindow())
+    dispatch(reportingActions.unsetEditedReporting())
   }, [dispatch])
 
   if (displayedError) {
     return (
-      <EditReportingWrapper isEditedInSideWindow={!!editedReportingInSideWindow}>
+      <EditReportingWrapper $isEditedInSideWindow={!!editedReporting}>
         <ErrorWall displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_REPORTING_FORM_ERROR} isAbsolute />
       </EditReportingWrapper>
     )
   }
 
   return (
-    <EditReportingWrapper
-      data-cy="side-window-beacon-malfunctions-detail"
-      isEditedInSideWindow={!!editedReportingInSideWindow}
-    >
+    <EditReportingWrapper $isEditedInSideWindow={!!editedReporting} data-cy="side-window-beacon-malfunctions-detail">
       <Header>
-        <Row topMargin={0}>
+        <Row $topMargin={0}>
           <AlertsIcon />
           <Title> ÉDITER LE SIGNALEMENT</Title>
-          <CloseIcon onClick={() => dispatch(setEditedReportingInSideWindow())} />
+          <CloseIcon onClick={closeForm} />
         </Row>
-        <Row topMargin={6}>
-          {editedReportingInSideWindow && editedReportingInSideWindow.flagState && (
-            <Flag rel="preload" src={`${baseUrl}/flags/${editedReportingInSideWindow.flagState.toLowerCase()}.svg`} />
+        <Row $topMargin={6}>
+          {editedReporting && editedReporting.flagState && (
+            <Flag rel="preload" src={`${baseUrl}/flags/${editedReporting.flagState.toLowerCase()}.svg`} />
           )}
           <VesselName
             data-cy="side-window-beacon-malfunctions-detail-vessel-name"
-            title={editedReportingInSideWindow?.vesselName ?? 'Aucun nom'}
+            title={editedReporting?.vesselName ?? 'Aucun nom'}
           >
-            {editedReportingInSideWindow?.vesselName ?? 'Aucun nom'}
+            {editedReporting?.vesselName ?? 'Aucun nom'}
           </VesselName>
           <InternalReferenceNumber data-cy="side-window-beacon-malfunctions-detail-cfr">
-            ({editedReportingInSideWindow?.internalReferenceNumber ?? 'Aucun CFR'})
+            ({editedReporting?.internalReferenceNumber ?? 'Aucun CFR'})
           </InternalReferenceNumber>
         </Row>
       </Header>
       <Line />
-      {editedReportingInSideWindow && (
+      {editedReporting && vesselIdentity && (
         <StyledReportingForm
-          closeForm={closeForm}
-          editedReporting={editedReportingInSideWindow}
+          editedReporting={editedReporting}
           hasWhiteBackground
-          isFromSideWindow
-          selectedVesselIdentity={getOnlyVesselIdentityProperties(editedReportingInSideWindow)}
+          onClose={closeForm}
+          vesselIdentity={vesselIdentity}
+          windowContext={WindowContext.SideWindow}
         />
       )}
     </EditReportingWrapper>
@@ -73,11 +73,11 @@ export function EditReporting() {
 }
 
 const EditReportingWrapper = styled.div<{
-  isEditedInSideWindow: boolean
+  $isEditedInSideWindow: boolean
 }>`
   background: ${THEME.color.white};
   height: 100vh;
-  margin-right: ${p => (p.isEditedInSideWindow ? 0 : -490)}px;
+  margin-right: ${p => (p.$isEditedInSideWindow ? 0 : -490)}px;
   position: fixed;
   right: 0px;
   top: 0px;
@@ -95,9 +95,7 @@ const Line = styled.div`
   width: 100%;
 `
 
-const Flag = styled.img<{
-  rel?: 'preload'
-}>`
+const Flag = styled.img`
   cursor: pointer;
   display: inline-block;
   height: 14px;
@@ -130,10 +128,10 @@ const CloseIcon = styled(CloseIconSVG)`
 `
 
 const Row = styled.div<{
-  topMargin: number
+  $topMargin: number
 }>`
   display: flex;
-  margin-top: ${p => p.topMargin};
+  margin-top: ${p => p.$topMargin};
 `
 
 const Header = styled.div`

@@ -584,8 +584,11 @@ class VesselControllerITests {
                                         stage = Stage.ARCHIVED,
                                         malfunctionStartDateTime = ZonedDateTime.now(),
                                         malfunctionEndDateTime = null,
-                                        vesselStatusLastModificationDateTime = ZonedDateTime.now(), endOfBeaconMalfunctionReason = EndOfBeaconMalfunctionReason.RESUMED_TRANSMISSION,
-                                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
+                                        vesselStatusLastModificationDateTime = ZonedDateTime.now(),
+                                        endOfBeaconMalfunctionReason = EndOfBeaconMalfunctionReason.RESUMED_TRANSMISSION,
+                                        beaconNumber = "123465",
+                                        beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
+                                        vesselId = 123,
                                     ),
                                 comments =
                                     listOf(
@@ -624,7 +627,9 @@ class VesselControllerITests {
                                     malfunctionStartDateTime = ZonedDateTime.now(),
                                     malfunctionEndDateTime = null,
                                     vesselStatusLastModificationDateTime = ZonedDateTime.now(),
-                                    beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
+                                    beaconNumber = "123465",
+                                    beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
+                                    vesselId = 123,
                                 ),
                             comments =
                                 listOf(
@@ -680,7 +685,7 @@ class VesselControllerITests {
     }
 
     @Test
-    fun `Should get vessel's reporting`() {
+    fun `Should get vessel's reportings by vessel identity with vessel ID`() {
         // Given
         val currentReporting =
             Reporting(
@@ -782,8 +787,8 @@ class VesselControllerITests {
         // When
         api.perform(
             get(
-                "/bff/v1/vessels/reporting?vesselId=123456&internalReferenceNumber=FR224226850" +
-                    "&externalReferenceNumber=123&IRCS=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&fromDate=2021-03-24T22:07:00.000Z",
+                "/bff/v1/vessels/reportings?vesselId=123456&internalReferenceNumber=FR224226850" +
+                    "&externalReferenceNumber=123&ircs=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&fromDate=2021-03-24T22:07:00.000Z",
             ),
         )
             // Then
@@ -811,7 +816,7 @@ class VesselControllerITests {
     }
 
     @Test
-    fun `Should get vessel's reporting with an empty vessel id`() {
+    fun `Should get vessel's reporting by vessel identity without vessel ID`() {
         given(
             this.getVesselReportings.execute(
                 eq(null),
@@ -838,8 +843,8 @@ class VesselControllerITests {
         // When
         api.perform(
             get(
-                "/bff/v1/vessels/reporting?vesselId=&internalReferenceNumber=FR224226850" +
-                    "&externalReferenceNumber=123&IRCS=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&fromDate=2021-03-24T22:07:00.000Z",
+                "/bff/v1/vessels/reportings?vesselId=&internalReferenceNumber=FR224226850" +
+                    "&externalReferenceNumber=123&ircs=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&fromDate=2021-03-24T22:07:00.000Z",
             ),
         )
             // Then

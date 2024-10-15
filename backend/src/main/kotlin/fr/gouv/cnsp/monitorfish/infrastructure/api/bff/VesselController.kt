@@ -179,9 +179,9 @@ class VesselController(
         const val zoneDateTimePattern = "yyyy-MM-dd'T'HH:mm:ss.000X"
     }
 
-    @GetMapping("/reporting")
+    @GetMapping("/reportings")
     @Operation(summary = "Get vessel's reporting")
-    fun getVesselReporting(
+    fun getReportingsByVesselIdentity(
         @Parameter(description = "Vessel id")
         @RequestParam(name = "vesselId")
         vesselId: Int?,
@@ -192,8 +192,8 @@ class VesselController(
         @RequestParam(name = "externalReferenceNumber")
         externalReferenceNumber: String,
         @Parameter(description = "Vessel IRCS")
-        @RequestParam(name = "IRCS")
-        IRCS: String,
+        @RequestParam(name = "ircs")
+        ircs: String,
         @Parameter(description = "Vessel positions identifier")
         @RequestParam(name = "vesselIdentifier")
         vesselIdentifier: VesselIdentifier?,
@@ -207,7 +207,7 @@ class VesselController(
                 vesselId,
                 internalReferenceNumber,
                 externalReferenceNumber,
-                IRCS,
+                ircs,
                 vesselIdentifier,
                 fromDate,
             )

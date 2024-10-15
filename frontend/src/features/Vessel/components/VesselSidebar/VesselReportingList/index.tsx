@@ -3,43 +3,33 @@ import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { VesselReportingList as ReportingVesselReportingList } from '@features/Reporting/components/VesselReportingList'
 import { getDefaultReportingsStartDate } from '@features/Reporting/utils'
 import { Summary } from '@features/Vessel/components/VesselSidebar/VesselReportingList/Summary'
-import { vesselActions } from '@features/Vessel/slice'
 import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
-import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { customDayjs, LinkButton, THEME } from '@mtes-mct/monitor-ui'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { customDayjs, THEME, useKey } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
-import { VesselSidebarTab } from 'domain/entities/vessel/vessel'
-import { showVessel } from 'domain/use_cases/vessel/showVessel'
 import { useState } from 'react'
 import styled from 'styled-components'
 
 import { Archived } from './Archived'
 import { VesselReportingListTab } from './constants'
 
-import type { VesselIdentity } from 'domain/entities/vessel/types'
+export function VesselReportingList() {
+  const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
+  const selectedVesselSidebarReportingListTab = useMainAppSelector(
+    state => state.vessel.selectedVesselSidebarReportingListTab
+  )
+  const key = useKey([selectedVesselIdentity, selectedVesselSidebarReportingListTab])
 
-type VesselReportingListProps = Readonly<{
-  defaultSelectedTab?: VesselReportingListTab | undefined
-  vesselIdentity: VesselIdentity | undefined
-  withOpenedNewReportingForm?: boolean
-  withTabs?: boolean
-}>
-export function VesselReportingList({
-  defaultSelectedTab = VesselReportingListTab.CURRENT_REPORTING,
-  vesselIdentity,
-  withOpenedNewReportingForm = false,
-  withTabs = false
-}: VesselReportingListProps) {
-  const dispatch = useMainAppDispatch()
-
-  const [selectedTab, setSelectedTab] = useState<VesselReportingListTab>(defaultSelectedTab)
+  const [selectedTab, setSelectedTab] = useState<VesselReportingListTab>(
+    selectedVesselSidebarReportingListTab ?? VesselReportingListTab.CURRENT_REPORTING
+  )
   const [startDate, setStartDate] = useState(getDefaultReportingsStartDate())
 
   const { data: vesselReportings } = useGetVesselReportingsByVesselIdentityQuery(
-    vesselIdentity
+    selectedVesselIdentity
       ? {
           fromDate: startDate.toISOString(),
-          vesselIdentity
+          vesselIdentity: selectedVesselIdentity
         }
       : skipToken,
     RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS
@@ -49,57 +39,40 @@ export function VesselReportingList({
     setStartDate(customDayjs(startDate).subtract(1, 'year').toDate())
   }
 
-  const selectMainMapVessel = async () => {
-    if (!vesselIdentity) {
-      return
-    }
-
-    dispatch(showVessel(vesselIdentity, false, true))
-    dispatch(vesselActions.setSelectedVesselSidebarTab(VesselSidebarTab.REPORTING))
-    dispatch(vesselActions.setSelectedVesselSidebarReportingListTab(VesselReportingListTab.REPORTING_HISTORY))
-  }
-
-  if (!vesselIdentity || !vesselReportings) {
+  if (!selectedVesselIdentity || !vesselReportings) {
     return <FingerprintSpinner className="radar" color={THEME.color.charcoal} size={100} />
   }
 
   return (
-    <Body data-cy="vessel-reporting">
-      {withTabs && (
-        <Menu>
-          <CurrentOrHistoryButton
-            $isActive={selectedTab === VesselReportingListTab.CURRENT_REPORTING}
-            onClick={() => setSelectedTab(VesselReportingListTab.CURRENT_REPORTING)}
-          >
-            Signalements en cours ({vesselReportings.current.length})
-          </CurrentOrHistoryButton>
-          <CurrentOrHistoryButton
-            $isActive={selectedTab === VesselReportingListTab.REPORTING_HISTORY}
-            data-cy="vessel-sidebar-reporting-tab-history-button"
-            onClick={() => setSelectedTab(VesselReportingListTab.REPORTING_HISTORY)}
-          >
-            Historique des signalements
-          </CurrentOrHistoryButton>
-        </Menu>
-      )}
+    <Body
+      // This key resets the default tab when `selectedVesselIdentity` changes
+      key={key}
+      data-cy="vessel-reporting"
+    >
+      <Menu>
+        <CurrentOrHistoryButton
+          $isActive={selectedTab === VesselReportingListTab.CURRENT_REPORTING}
+          onClick={() => setSelectedTab(VesselReportingListTab.CURRENT_REPORTING)}
+        >
+          Signalements en cours ({vesselReportings.current.length})
+        </CurrentOrHistoryButton>
+        <CurrentOrHistoryButton
+          $isActive={selectedTab === VesselReportingListTab.REPORTING_HISTORY}
+          data-cy="vessel-sidebar-reporting-tab-history-button"
+          onClick={() => setSelectedTab(VesselReportingListTab.REPORTING_HISTORY)}
+        >
+          Historique des signalements
+        </CurrentOrHistoryButton>
+      </Menu>
+
       {selectedTab === VesselReportingListTab.CURRENT_REPORTING && (
-        <ReportingVesselReportingList
-          startDate={startDate}
-          vesselIdentity={vesselIdentity}
-          withOpenedNewReportingForm={withOpenedNewReportingForm}
-        />
+        <ReportingVesselReportingList startDate={startDate} vesselIdentity={selectedVesselIdentity} />
       )}
       {selectedTab === VesselReportingListTab.REPORTING_HISTORY && (
         <>
           <Summary fromDate={startDate} vesselReportings={vesselReportings} />
           <Archived fromDate={startDate} onMore={decreaseStartDate} vesselReportings={vesselReportings} />
         </>
-      )}
-
-      {!withTabs && (
-        <LinkButton onClick={selectMainMapVessel}>
-          Voir tout l’historique des signalements dans la fiche navire
-        </LinkButton>
       )}
     </Body>
   )

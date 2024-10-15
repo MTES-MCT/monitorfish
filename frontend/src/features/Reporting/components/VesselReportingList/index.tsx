@@ -12,12 +12,14 @@ import type { VesselIdentity } from 'domain/entities/vessel/types'
 type VesselReportingListProps = Readonly<{
   startDate?: Date
   vesselIdentity: VesselIdentity | undefined
-  withOpenedNewReportingForm: boolean
+  withOpenedNewReportingForm?: boolean
+  withVesselSidebarHistoryLink?: boolean
 }>
 export function VesselReportingList({
   startDate = getDefaultReportingsStartDate(),
   vesselIdentity,
-  withOpenedNewReportingForm
+  withOpenedNewReportingForm = false,
+  withVesselSidebarHistoryLink = false
 }: VesselReportingListProps) {
   const { data: vesselReportings } = useGetVesselReportingsByVesselIdentityQuery(
     vesselIdentity
@@ -38,6 +40,7 @@ export function VesselReportingList({
       vesselIdentity={vesselIdentity}
       vesselReportings={vesselReportings}
       withOpenedNewReportingForm={withOpenedNewReportingForm}
+      withVesselSidebarHistoryLink={withVesselSidebarHistoryLink}
     />
   )
 }

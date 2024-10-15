@@ -51,7 +51,7 @@ context('Side Window > Manual Prior Notification Form  > Reporting List', () => 
     // Given
     createReportingFromPriorNotificationForm('POISSON PAS NET', '00000000-0000-4000-0000-000000000001').then(
       createdReportingId => {
-        cy.intercept('PUT', `/bff/v1/reportings/${createdReportingId}/update`).as('updateReporting')
+        cy.intercept('PUT', `/bff/v1/reportings/${createdReportingId}`).as('updateReporting')
 
         cy.getDataCy('reporting-card').should('have.length', 1)
 
@@ -109,7 +109,7 @@ context('Side Window > Manual Prior Notification Form  > Reporting List', () => 
     // Given
     createReportingFromPriorNotificationForm('POISSON PAS NET', '00000000-0000-4000-0000-000000000001').then(
       createdReportingId => {
-        cy.intercept('PUT', `/bff/v1/reportings/${createdReportingId}/delete`).as('deleteReporting')
+        cy.intercept('DELETE', `/bff/v1/reportings/${createdReportingId}`).as('deleteReporting')
 
         cy.getDataCy('reporting-card').should('have.length', 1)
 

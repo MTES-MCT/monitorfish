@@ -8,8 +8,8 @@ import styled from 'styled-components'
 import { Controls } from './Controls'
 import { VesselEquipment } from './Equipment/VesselEquipment'
 import { Identity } from './Identity'
+import { ReportingList } from './ReportingList'
 import { VesselSummary } from './Summary'
-import { VesselReportingList } from './VesselReportingList'
 import { AlertWarning } from './warnings/AlertWarning'
 import { BeaconMalfunctionWarning } from './warnings/BeaconMalfunctionWarning'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
@@ -50,7 +50,7 @@ export function Body() {
       {selectedVesselSidebarTab === VesselSidebarTab.IDENTITY && <Identity />}
       {selectedVesselSidebarTab === VesselSidebarTab.VOYAGES && <VesselLogbook />}
       {selectedVesselSidebarTab === VesselSidebarTab.CONTROLS && <Controls />}
-      {isSuperUser && selectedVesselSidebarTab === VesselSidebarTab.REPORTING && <VesselReportingList />}
+      {isSuperUser && selectedVesselSidebarTab === VesselSidebarTab.REPORTING && <ReportingList />}
       {selectedVesselSidebarTab === VesselSidebarTab.ERSVMS && <VesselEquipment />}
     </Wrapper>
   )

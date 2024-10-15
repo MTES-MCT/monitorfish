@@ -1,10 +1,11 @@
+import { ConfirmationModal } from '@components/ConfirmationModal'
 import { SideWindowCard } from '@components/SideWindowCard'
 import { VesselReportingList } from '@features/Reporting/components/VesselReportingList'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon, LinkButton } from '@mtes-mct/monitor-ui'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import styled from 'styled-components'
 
 import { priorNotificationActions } from '../slice'
@@ -15,13 +16,30 @@ export function ReportingList() {
   const openedPriorNotificationDetail = useMainAppSelector(
     store => store.priorNotification.openedPriorNotificationDetail
   )
+  const isReportingFormDirty = useMainAppSelector(store => store.priorNotification.isReportingFormDirty)
   const isSuperUser = useIsSuperUser()
+
+  const [isCancellationConfirmationModalOpen, setIsCancellationConfirmationModalOpen] = useState(false)
 
   const vesselId = openedPriorNotificationDetail?.vesselId
   const vesselIdentity = openedPriorNotificationDetail?.vesselIdentity
 
   const close = () => {
     dispatch(priorNotificationActions.setIsReportingListOpened(false))
+  }
+
+  const closeCancellationConfirmationModal = () => {
+    setIsCancellationConfirmationModalOpen(false)
+  }
+
+  const handleClose = () => {
+    if (isReportingFormDirty) {
+      setIsCancellationConfirmationModalOpen(true)
+
+      return
+    }
+
+    close()
   }
 
   const handleIsDirty = useCallback(
@@ -32,20 +50,32 @@ export function ReportingList() {
   )
 
   return (
-    <StyledCard $isSuperUser={isSuperUser} onBackgroundClick={close}>
-      <CardHeader detail={openedPriorNotificationDetail} onClose={close} vesselId={vesselId}>
-        <StyledLinkButton Icon={Icon.Chevron} onClick={close}>
-          Retourner au préavis
-        </StyledLinkButton>
-      </CardHeader>
+    <>
+      <StyledCard $isSuperUser={isSuperUser} onBackgroundClick={handleClose}>
+        <CardHeader detail={openedPriorNotificationDetail} onClose={handleClose} vesselId={vesselId}>
+          <StyledLinkButton Icon={Icon.Chevron} onClick={handleClose}>
+            Retourner au préavis
+          </StyledLinkButton>
+        </CardHeader>
 
-      <VesselReportingList
-        onIsDirty={handleIsDirty}
-        vesselIdentity={vesselIdentity}
-        withOpenedNewReportingForm
-        withVesselSidebarHistoryLink
-      />
-    </StyledCard>
+        <VesselReportingList
+          onIsDirty={handleIsDirty}
+          vesselIdentity={vesselIdentity}
+          withOpenedNewReportingForm
+          withVesselSidebarHistoryLink
+        />
+      </StyledCard>
+
+      {isCancellationConfirmationModalOpen && (
+        <ConfirmationModal
+          confirmationButtonLabel="Quitter sans enregistrer"
+          message="Vous êtes en train d’abandonner la création ou l’édition d’un signalement."
+          onCancel={closeCancellationConfirmationModal}
+          onConfirm={close}
+          title="Abandon de signalement"
+        />
+      )}
+    </>
   )
 }
 

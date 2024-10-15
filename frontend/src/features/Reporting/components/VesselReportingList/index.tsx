@@ -14,7 +14,7 @@ import styled from 'styled-components'
 
 import { Archived } from './Archived'
 import { VesselReportingListTab } from './constants'
-import { Current } from './Current'
+import { Current } from '../Current'
 
 import type { VesselIdentity } from 'domain/entities/vessel/types'
 

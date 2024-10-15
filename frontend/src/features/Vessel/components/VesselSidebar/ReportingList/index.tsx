@@ -3,9 +3,11 @@ import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { VesselReportingList } from '@features/Reporting/components/VesselReportingList'
 import { getDefaultReportingsStartDate } from '@features/Reporting/utils'
 import { Summary } from '@features/Vessel/components/VesselSidebar/ReportingList/Summary'
+import { vesselActions } from '@features/Vessel/slice'
 import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { customDayjs, THEME, useKey } from '@mtes-mct/monitor-ui'
+import { customDayjs, THEME } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useState } from 'react'
 import styled from 'styled-components'
@@ -14,15 +16,12 @@ import { Archived } from './Archived'
 import { VesselReportingListTab } from './constants'
 
 export function ReportingList() {
+  const dispatch = useMainAppDispatch()
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
   const selectedVesselSidebarReportingListTab = useMainAppSelector(
     state => state.vessel.selectedVesselSidebarReportingListTab
   )
-  const key = useKey([selectedVesselIdentity, selectedVesselSidebarReportingListTab])
 
-  const [selectedTab, setSelectedTab] = useState<VesselReportingListTab>(
-    selectedVesselSidebarReportingListTab ?? VesselReportingListTab.CURRENT_REPORTING
-  )
   const [startDate, setStartDate] = useState(getDefaultReportingsStartDate())
 
   const { data: vesselReportings } = useGetVesselReportingsByVesselIdentityQuery(
@@ -39,25 +38,25 @@ export function ReportingList() {
     setStartDate(customDayjs(startDate).subtract(1, 'year').toDate())
   }
 
+  const setSelectedTab = (nextTab: VesselReportingListTab) => {
+    dispatch(vesselActions.setSelectedVesselSidebarReportingListTab(nextTab))
+  }
+
   if (!selectedVesselIdentity || !vesselReportings) {
     return <FingerprintSpinner className="radar" color={THEME.color.charcoal} size={100} />
   }
 
   return (
-    <Body
-      // This key resets the default tab when `selectedVesselIdentity` changes
-      key={key}
-      data-cy="vessel-reporting"
-    >
+    <Body data-cy="vessel-reporting">
       <Menu>
         <CurrentOrHistoryButton
-          $isActive={selectedTab === VesselReportingListTab.CURRENT_REPORTING}
+          $isActive={selectedVesselSidebarReportingListTab === VesselReportingListTab.CURRENT_REPORTING}
           onClick={() => setSelectedTab(VesselReportingListTab.CURRENT_REPORTING)}
         >
           Signalements en cours ({vesselReportings.current.length})
         </CurrentOrHistoryButton>
         <CurrentOrHistoryButton
-          $isActive={selectedTab === VesselReportingListTab.REPORTING_HISTORY}
+          $isActive={selectedVesselSidebarReportingListTab === VesselReportingListTab.REPORTING_HISTORY}
           data-cy="vessel-sidebar-reporting-tab-history-button"
           onClick={() => setSelectedTab(VesselReportingListTab.REPORTING_HISTORY)}
         >
@@ -65,10 +64,10 @@ export function ReportingList() {
         </CurrentOrHistoryButton>
       </Menu>
 
-      {selectedTab === VesselReportingListTab.CURRENT_REPORTING && (
+      {selectedVesselSidebarReportingListTab === VesselReportingListTab.CURRENT_REPORTING && (
         <VesselReportingList startDate={startDate} vesselIdentity={selectedVesselIdentity} />
       )}
-      {selectedTab === VesselReportingListTab.REPORTING_HISTORY && (
+      {selectedVesselSidebarReportingListTab === VesselReportingListTab.REPORTING_HISTORY && (
         <>
           <Summary fromDate={startDate} vesselReportings={vesselReportings} />
           <Archived fromDate={startDate} onMore={decreaseStartDate} vesselReportings={vesselReportings} />

@@ -1,4 +1,5 @@
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
+import { VesselReportingListTab } from '@features/Vessel/components/VesselSidebar/ReportingList/constants'
 import { createEntityAdapter, createSlice, type EntityState, type PayloadAction } from '@reduxjs/toolkit'
 
 import {
@@ -18,7 +19,6 @@ import type {
   VesselIdentity,
   VesselPosition
 } from '../../domain/entities/vessel/types'
-import type { VesselReportingListTab } from '@features/Vessel/components/VesselSidebar/ReportingList/constants'
 import type { Vessel as VesselTypes } from '@features/Vessel/Vessel.types'
 
 const NOT_FOUND = -1
@@ -40,7 +40,7 @@ export type VesselState = {
   selectedVesselIdentity: VesselIdentity | undefined
   selectedVesselPositions: VesselPosition[] | null
   /** Used to open vessel sidebar reporting history from prior notification form reporting list. */
-  selectedVesselSidebarReportingListTab: VesselReportingListTab | undefined
+  selectedVesselSidebarReportingListTab: VesselReportingListTab
   selectedVesselSidebarTab: VesselSidebarTab
   selectedVesselTrackRequest: TrackRequest | null
   tripMessagesLastToFormerDEPDateTimes: any[]
@@ -62,7 +62,7 @@ const INITIAL_STATE: VesselState = {
   selectedVessel: undefined,
   selectedVesselIdentity: undefined,
   selectedVesselPositions: null,
-  selectedVesselSidebarReportingListTab: undefined,
+  selectedVesselSidebarReportingListTab: VesselReportingListTab.CURRENT_REPORTING,
   selectedVesselSidebarTab: VesselSidebarTab.SUMMARY,
   selectedVesselTrackRequest: null,
   tripMessagesLastToFormerDEPDateTimes: [],
@@ -162,7 +162,13 @@ const vesselSlice = createSlice({
       state.highlightedVesselTrackPosition = action.payload
     },
 
-    loadingVessel(state, action) {
+    loadingVessel(
+      state,
+      action: PayloadAction<{
+        calledFromCron: boolean
+        vesselIdentity: VesselIdentity
+      }>
+    ) {
       state.selectedVesselIdentity = action.payload.vesselIdentity
       state.vesselSidebarIsOpen = true
       if (!action.payload.calledFromCron) {
@@ -468,7 +474,7 @@ const vesselSlice = createSlice({
     setSelectedVesselSidebarTab(state, action: PayloadAction<VesselSidebarTab>) {
       state.selectedVesselSidebarTab = action.payload
       if (state.selectedVesselSidebarTab !== VesselSidebarTab.REPORTING) {
-        state.selectedVesselSidebarReportingListTab = undefined
+        state.selectedVesselSidebarReportingListTab = VesselReportingListTab.CURRENT_REPORTING
       }
     },
 

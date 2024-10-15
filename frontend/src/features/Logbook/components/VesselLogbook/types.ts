@@ -1,4 +1,4 @@
-import type { LogbookMessage, ProtectedSpeciesCatch } from '../../LegacyLogbook.types'
+import type { LogbookMessage } from '../../LegacyLogbook.types'
 import type { SpeciesToSpeciesInsight, SpeciesToSpeciesInsightList } from '../../types'
 import type { Logbook } from '@features/Logbook/Logbook.types'
 
@@ -48,7 +48,7 @@ export type CatchWithProperties = {
 
 export type ProtectedCatchWithProperties = {
   nbFish: number
-  properties: ProtectedSpeciesCatch[]
+  properties: Logbook.ProtectedSpeciesCatch[]
   species: string
   speciesName: string | undefined
   weight: number

@@ -7,7 +7,7 @@ import { LayerProperties } from '../../domain/entities/layers/constants'
 import { undefinedize } from '../../utils/undefinedize'
 
 import type { CatchProperty, CatchWithProperties, ProtectedCatchWithProperties } from './components/VesselLogbook/types'
-import type { LogbookCatch, LogbookMessage, ProtectedSpeciesCatch } from './LegacyLogbook.types'
+import type { LogbookCatch, LogbookMessage } from './LegacyLogbook.types'
 import type { Logbook, Logbook as LogbookMessageNamespace } from './Logbook.types'
 import type { SpeciesInsight, SpeciesToSpeciesInsight, SpeciesToSpeciesInsightList } from './types'
 import type { DeclaredLogbookSpecies, FishingActivityShowedOnMap } from '../../domain/entities/vessel/types'
@@ -57,7 +57,7 @@ export function buildCatchArray(catches: Logbook.Catch[]): CatchWithProperties[]
     .sort((catchA, catchB) => catchB.weight - catchA.weight)
 }
 
-export function buildProtectedCatchArray(catches: ProtectedSpeciesCatch[]): ProtectedCatchWithProperties[] {
+export function buildProtectedCatchArray(catches: Logbook.ProtectedSpeciesCatch[]): ProtectedCatchWithProperties[] {
   const NOT_FOUND = -1
 
   return catches

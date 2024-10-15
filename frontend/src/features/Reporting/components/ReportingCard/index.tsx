@@ -1,3 +1,4 @@
+import { ConfirmationModal } from '@components/ConfirmationModal'
 import { deleteReporting } from '@features/Reporting/useCases/deleteReporting'
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
 import { getAlertNameFromType } from '@features/SideWindow/Alert/AlertListAndReportingList/utils'
@@ -6,7 +7,6 @@ import { Accent, Icon, IconButton, THEME, Link } from '@mtes-mct/monitor-ui'
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { DeletionConfirmationModal } from './DeletionConfirmationModal'
 import { getFrenchOrdinal, getReportingActorLabel } from './utils'
 import { getDateTime } from '../../../../utils'
 import { ReportingType, ReportingTypeCharacteristics } from '../../types'
@@ -182,7 +182,15 @@ export function ReportingCard({
       </Wrapper>
 
       {isDeletionConfirmationModalOpen && (
-        <DeletionConfirmationModal onCancel={closeDeletionConfirmationModal} onConfirm={confirmDeletion} />
+        <ConfirmationModal
+          color={THEME.color.maximumRed}
+          confirmationButtonLabel="Supprimer"
+          iconName="Delete"
+          message="Êtes-vous sûr de vouloir supprimer ce signalement ?"
+          onCancel={closeDeletionConfirmationModal}
+          onConfirm={confirmDeletion}
+          title="Suppression du signalement"
+        />
       )}
     </>
   )

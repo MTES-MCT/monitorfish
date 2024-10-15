@@ -41,12 +41,12 @@ import type {
 import type { DisplayedErrorStateValue } from 'domain/shared_slices/DisplayedError'
 import type { CSSProperties, MutableRefObject } from 'react'
 
-type ReportingListProps = Readonly<{
+type ReportingTableProps = Readonly<{
   currentReportings: Reporting.Reporting[]
   displayedError: DisplayedErrorStateValue | undefined
   selectedSeafrontGroup: SeafrontGroup
 }>
-export function ReportingList({ currentReportings, displayedError, selectedSeafrontGroup }: ReportingListProps) {
+export function ReportingTable({ currentReportings, displayedError, selectedSeafrontGroup }: ReportingTableProps) {
   const dispatch = useMainAppDispatch()
   const searchInputRef = useRef() as MutableRefObject<HTMLInputElement>
 

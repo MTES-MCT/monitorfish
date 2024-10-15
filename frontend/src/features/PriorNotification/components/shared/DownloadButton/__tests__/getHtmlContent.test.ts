@@ -1,17 +1,17 @@
-import { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
+import { Logbook } from '@features/Logbook/Logbook.types'
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { expect } from '@jest/globals'
 
 import { getHtmlContent } from '../utils'
 
 import PurposeCode = PriorNotification.PurposeCode
-import MessageType = LogbookMessage.MessageType
-import OperationType = LogbookMessage.OperationType
+import MessageType = Logbook.MessageType
+import OperationType = Logbook.OperationType
 
 describe('PriorNotificationCard/utils.getHtmlContent()', () => {
   it('Should format the HTML template', () => {
     // Given
-    const pno: LogbookMessage.PnoLogbookMessage = {
+    const pno: Logbook.PnoMessage = {
       acknowledgment: undefined,
       externalReferenceNumber: undefined,
       flagState: 'ESP',

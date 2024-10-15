@@ -2,18 +2,18 @@ import { FIVE_MINUTES } from '@api/APIWorker'
 import { FingerprintSpinner } from '@components/FingerprintSpinner'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { LogbookMessages } from './LogbookMessages'
 import { LogbookSummary } from './LogbookSummary'
-import { COLORS } from '../../../../constants/constants'
 import { FishingActivitiesTab, vesselsAreEquals } from '../../../../domain/entities/vessel/vessel'
 import { NavigateTo } from '../../constants'
 import { useGetLogbookUseCase } from '../../hooks/useGetLogbookUseCase'
 import { logbookActions } from '../../slice'
 
-import type { FishingActivities } from '../../Logbook.types'
+import type { Logbook } from '@features/Logbook/Logbook.types'
 
 export function VesselLogbook() {
   const dispatch = useMainAppDispatch()
@@ -70,7 +70,7 @@ export function VesselLogbook() {
     showedLogbookIsOutdated
   ])
 
-  const updateFishingActivities = (_nextFishingActivities: FishingActivities) => {
+  const updateFishingActivities = (_nextFishingActivities: Logbook.FishingActivities) => {
     if (!_nextFishingActivities) {
       return
     }
@@ -84,7 +84,7 @@ export function VesselLogbook() {
   const goToLastTrip = () => dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.LAST, true))
 
   if (loadingFishingActivities) {
-    return <FingerprintSpinner className="radar" color={COLORS.charcoal} size={100} />
+    return <FingerprintSpinner className="radar" color={THEME.color.charcoal} size={100} />
   }
 
   if (!fishingActivities) {
@@ -140,7 +140,7 @@ const Wrapper = styled.div`
 `
 
 const UpdateFishingActivities = styled.div`
-  background: ${COLORS.white};
+  background: ${p => p.theme.color.white};
   position: absolute;
   opacity: 0.7;
   position: absolute;
@@ -152,10 +152,10 @@ const UpdateFishingActivities = styled.div`
 `
 
 const UpdateFishingActivitiesButton = styled.div`
-  background: ${COLORS.charcoal};
+  background: ${p => p.theme.color.charcoal};
   border-radius: 15px;
   font-size: 13px;
-  color: ${COLORS.gainsboro};
+  color: ${p => p.theme.color.gainsboro};
   position: absolute;
   padding: 5px 10px 5px 10px;
   margin-top: 13px;

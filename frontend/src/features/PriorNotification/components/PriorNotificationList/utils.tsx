@@ -5,7 +5,7 @@ import {
   ALL_SEAFRONT_GROUP,
   type AllSeafrontGroup
 } from '@constants/seafront'
-import { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
+import { Logbook } from '@features/Logbook/Logbook.types'
 import {
   BLUEFIN_TUNA_EXTENDED_SPECY_CODES,
   BLUEFIN_TUNA_NAME_FR,
@@ -30,7 +30,7 @@ import { PriorNotification } from '../../PriorNotification.types'
 import type { FilterStatus, ListFilter } from './types'
 import type { CSSProperties } from 'react'
 
-export function displayOnboardFishingSpecies(onBoardCatches: LogbookMessage.Catch[]) {
+export function displayOnboardFishingSpecies(onBoardCatches: Logbook.Catch[]) {
   const heaviestOnBoardCatches = onBoardCatches
     .reduce<
       Array<{
@@ -78,7 +78,7 @@ export function displayOnboardFishingSpecies(onBoardCatches: LogbookMessage.Catc
 function getApiFilterFromExpectedArrivalPeriod(
   period: ExpectedArrivalPeriod,
   customPeriod: DateAsStringRange | undefined
-): LogbookMessage.ApiFilter {
+): Logbook.ApiFilter {
   if (customPeriod) {
     return {
       willArriveAfter: customPeriod[0],
@@ -130,7 +130,7 @@ function getApiFilterFromExpectedArrivalPeriod(
   }
 }
 
-function getApiFilterFromLastControlPeriod(period: LastControlPeriod | undefined): LogbookMessage.ApiFilter {
+function getApiFilterFromLastControlPeriod(period: LastControlPeriod | undefined): Logbook.ApiFilter {
   switch (period) {
     case LastControlPeriod.AFTER_ONE_MONTH_AGO:
       return {
@@ -213,7 +213,7 @@ export function getColorsFromState(state: PriorNotification.State | undefined): 
 
 export function getExpandableRowCellCustomStyle(columnId: string): CSSProperties {
   switch (columnId) {
-    case LogbookMessage.ApiSortColumn.VESSEL_RISK_FACTOR:
+    case Logbook.ApiSortColumn.VESSEL_RISK_FACTOR:
     case 'actions':
       return { verticalAlign: 'bottom' }
 
@@ -239,7 +239,7 @@ function getStatesFromFilterStatuses(statuses: FilterStatus[] | undefined): Prio
   ]
 }
 
-export function getStaticApiFilterFromListFilter(listFilter: ListFilter): LogbookMessage.ApiFilter {
+export function getStaticApiFilterFromListFilter(listFilter: ListFilter): Logbook.ApiFilter {
   return {
     flagStates: listFilter.countryCodes,
     hasOneOrMoreReportings: getMaybeBooleanFromRichBoolean(listFilter.hasOneOrMoreReportings),

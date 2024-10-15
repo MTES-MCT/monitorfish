@@ -4,19 +4,18 @@ import { HTML_TEMPLATE } from '@features/PriorNotification/components/shared/Dow
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
-import type { LogbookCatch } from '@features/Logbook/Logbook.types'
-import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
+import type { Logbook } from '@features/Logbook/Logbook.types'
 import type { TemplateData } from '@features/PriorNotification/components/PriorNotificationCard/types'
 
 export function getHtmlContent(
-  pno: LogbookMessage.PnoLogbookMessage | undefined,
-  gearsWithName: Array<LogbookMessage.Gear & { gearName: string | null }>
+  pno: Logbook.PnoMessage | undefined,
+  gearsWithName: Array<Logbook.Gear & { gearName: string | null }>
 ): string {
   if (!pno) {
     return ''
   }
 
-  const catches = pno.message.catchOnboard ? buildCatchArray(pno.message.catchOnboard as LogbookCatch[]) : []
+  const catches = pno.message.catchOnboard ? buildCatchArray(pno.message.catchOnboard) : []
 
   const gearDetails = gearsWithName
     .map(gear => {

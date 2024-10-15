@@ -181,11 +181,11 @@ export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSumma
               <LogbookMessages>
                 {logbookTrip.dep.log ? (
                   <DEPMessageResume
-                    depMessage={logbookTrip.dep.log.message}
                     isDeleted={logbookTrip.dep.log.isDeleted}
                     isNotAcknowledged={
                       !!logbookTrip.dep.log.acknowledgment && logbookTrip.dep.log.acknowledgment?.isSuccess === false
                     }
+                    messageValue={logbookTrip.dep.log.message}
                     rejectionCause={logbookTrip.dep.log.acknowledgment?.rejectionCause ?? undefined}
                     showLogbookMessages={showLogbookMessages}
                   />
@@ -211,8 +211,8 @@ export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSumma
 
                 {logbookTrip.cps.logs.length ? (
                   <CPSMessageResume
-                    cpsMessages={logbookTrip.cps.logs}
                     hasNoMessageAcknowledged={logbookTrip.cps.areAllMessagesNotAcknowledged}
+                    messageValues={logbookTrip.cps.logs}
                     numberOfSpecies={logbookTrip.cps.numberOfSpecies}
                     showLogbookMessages={showLogbookMessages}
                   />

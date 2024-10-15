@@ -1,11 +1,11 @@
 import { HTTPError } from 'ky'
 
 import { NavigateTo } from './constants'
+import { Logbook } from './Logbook.types'
 import { monitorfishApi, monitorfishApiKy } from '../../api/api'
 import { HttpStatusCode } from '../../api/constants'
 import { ApiError } from '../../libs/ApiError'
 
-import type { VesselVoyage } from './Logbook.types'
 import type { VesselIdentity } from '../../domain/entities/vessel/types'
 
 const LOGBOOK_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les messages JPE de ce navire"
@@ -44,7 +44,7 @@ export async function getVesselLogbookFromAPI(
           isInLightMode ? 'light' : 'bff'
         }/v1/vessels/logbook/find?internalReferenceNumber=${internalReferenceNumber}&voyageRequest=${nextVoyageRequest}&tripNumber=${nextTripNumber}`
       )
-      .json<VesselVoyage>()
+      .json<Logbook.VesselVoyage>()
   } catch (err) {
     if (err instanceof HTTPError && err.response.status === HttpStatusCode.NOT_FOUND) {
       return undefined

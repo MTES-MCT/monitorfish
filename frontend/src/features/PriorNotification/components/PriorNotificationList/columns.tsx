@@ -1,6 +1,6 @@
 import { Ellipsised } from '@components/Ellipsised'
 import { Titled } from '@components/Titled'
-import { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
+import { Logbook } from '@features/Logbook/Logbook.types'
 import { customDayjs, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
 import { isLegacyFirefox } from '@utils/isLegacyFirefox'
 
@@ -46,7 +46,7 @@ export function getTableColumns(isFromUrl: boolean): Array<ColumnDef<PriorNotifi
       },
       enableSorting: true,
       header: () => 'Arrivée estimée',
-      id: LogbookMessage.ApiSortColumn.EXPECTED_ARRIVAL_DATE,
+      id: Logbook.ApiSortColumn.EXPECTED_ARRIVAL_DATE,
       size: 160 + legacyFirefoxOffset
     },
     {
@@ -58,7 +58,7 @@ export function getTableColumns(isFromUrl: boolean): Array<ColumnDef<PriorNotifi
       },
       enableSorting: true,
       header: () => 'Débarque prévue',
-      id: LogbookMessage.ApiSortColumn.EXPECTED_LANDING_DATE,
+      id: Logbook.ApiSortColumn.EXPECTED_LANDING_DATE,
       size: 160 + legacyFirefoxOffset
     },
     {
@@ -68,7 +68,7 @@ export function getTableColumns(isFromUrl: boolean): Array<ColumnDef<PriorNotifi
       ),
       enableSorting: true,
       header: () => "Port d'arrivée",
-      id: LogbookMessage.ApiSortColumn.PORT_NAME,
+      id: Logbook.ApiSortColumn.PORT_NAME,
       size: 192 + legacyFirefoxOffset
     },
     {
@@ -87,7 +87,7 @@ export function getTableColumns(isFromUrl: boolean): Array<ColumnDef<PriorNotifi
       },
       enableSorting: true,
       header: () => 'Note',
-      id: LogbookMessage.ApiSortColumn.VESSEL_RISK_FACTOR,
+      id: Logbook.ApiSortColumn.VESSEL_RISK_FACTOR,
       size: 95 + legacyFirefoxOffset
     },
     {
@@ -104,7 +104,7 @@ export function getTableColumns(isFromUrl: boolean): Array<ColumnDef<PriorNotifi
       },
       enableSorting: true,
       header: () => 'Nom',
-      id: LogbookMessage.ApiSortColumn.VESSEL_NAME,
+      id: Logbook.ApiSortColumn.VESSEL_NAME,
       size: 204 + legacyFirefoxOffset
     },
     {

@@ -107,6 +107,15 @@ context('Vessel sidebar logbook tab', () => {
     cy.get('*[data-cy="vessel-fishing-message"]').eq(12).contains('Débarquement')
     cy.get('*[data-cy="vessel-fishing-message"]').eq(12).siblings().eq(1).contains('MESSAGE SUPPRIMÉ')
     cy.get('*[data-cy="vessel-fishing-message-body"]').eq(12).contains('BONITE A DOS RAYE (BON)')
+
+    // Invalidated PNO message
+    cy.getDataCy('vessel-fishing-previous-trip').click()
+    cy.contains('Marée n°9463714').should('be.visible')
+    cy.getDataCy('vessel-fishing-previous-trip').click()
+    cy.contains('Marée n°9463713').should('be.visible')
+
+    cy.getDataCy('vessel-fishing-message').eq(1).contains('Préavis (notification de retour au port)')
+    cy.getDataCy('vessel-fishing-message').eq(1).siblings().eq(1).contains('MESSAGE INVALIDÉ')
   })
 
   it('Fishing Should contain the vessel FLUX logbook messages', () => {

@@ -19,40 +19,40 @@ import {
   Zone
 } from '../styles'
 
-import type { DISMessageValue } from '../../../../Logbook.types'
+import type { Logbook } from '@features/Logbook/Logbook.types'
 
 type DISMessageProps = Readonly<{
-  message: DISMessageValue
+  messageValue: Logbook.DisMessageValue
 }>
-export function DISMessage({ message }: DISMessageProps) {
+export function DISMessage({ messageValue }: DISMessageProps) {
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
 
   const catchesWithProperties = useMemo(() => {
-    if (!message?.catches) {
+    if (!messageValue?.catches) {
       return []
     }
 
-    return buildCatchArray(message.catches)
-  }, [message])
+    return buildCatchArray(messageValue.catches)
+  }, [messageValue])
 
   return (
     <>
-      {message && (
+      {messageValue && (
         <>
           <Zone>
             <Table>
               <TableBody>
                 <TableRow>
                   <TableKey>Date opération</TableKey>
-                  <TableValue>{getDateTime(message.discardDatetimeUtc)}</TableValue>
+                  <TableValue>{getDateTime(messageValue.discardDatetimeUtc)}</TableValue>
                 </TableRow>
                 <TableRow>
                   <TableKey>Position opération</TableKey>
                   <TableValue>
                     <FirstInlineKey>Lat.</FirstInlineKey>{' '}
-                    {getLatitudeOrDash(coordinatesFormat, message.latitude, message.longitude)}
+                    {getLatitudeOrDash(coordinatesFormat, messageValue.latitude, messageValue.longitude)}
                     <SecondInlineKey>Lon.</SecondInlineKey>{' '}
-                    {getLongitudeOrDash(coordinatesFormat, message.latitude, message.longitude)}
+                    {getLongitudeOrDash(coordinatesFormat, messageValue.latitude, messageValue.longitude)}
                   </TableValue>
                 </TableRow>
               </TableBody>

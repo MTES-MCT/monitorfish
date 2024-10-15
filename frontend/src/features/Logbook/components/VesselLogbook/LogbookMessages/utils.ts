@@ -1,11 +1,12 @@
+import { Logbook } from '@features/Logbook/Logbook.types'
+import { type Option } from '@mtes-mct/monitor-ui'
 import { ExportToCsv } from 'export-to-csv'
 
 import { DOWNLOAD_LOGBOOK_MESSAGES_COLUMNS, DOWNLOAD_LOGBOOK_MESSAGES_OPTIONS } from './constants'
 import { getDate } from '../../../../../utils'
 import { formatAsCSVColumns } from '../../../../../utils/formatAsCSVColumns'
 
-import type { LogbookMessage } from '../../../Logbook.types'
-import type { Option } from '@mtes-mct/monitor-ui'
+import type { LogbookMessage } from '@features/Logbook/LegacyLogbook.types'
 
 export const downloadMessages = (logbookMessages: LogbookMessage[], tripNumber: string | null) => {
   const csvExporter = new ExportToCsv(DOWNLOAD_LOGBOOK_MESSAGES_OPTIONS)
@@ -25,4 +26,8 @@ export const filterBySelectedType = (logbookMessage: LogbookMessage, selectedMes
   }
 
   return true
+}
+
+export function isPnoMessage(logbookMessage: LogbookMessage | Logbook.Message): logbookMessage is Logbook.PnoMessage {
+  return logbookMessage.messageType === Logbook.MessageType.PNO
 }

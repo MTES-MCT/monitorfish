@@ -11,16 +11,17 @@ import XMLSVG from '../../../../../icons/Picto_XML.svg?react'
 import ShowActivitySVG from '../../../../../icons/Position_message_JPE_Pin_gris_clair.svg?react'
 import HideActivitySVG from '../../../../../icons/Position_message_JPE_Pin_masquer.svg?react'
 import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../constants'
-import { LogbookMessage as LogbookMessageNamespace } from '../../../../LogbookMessage.types'
+import { Logbook } from '../../../../Logbook.types'
 import { logbookActions } from '../../../../slice'
 import { getLogbookMessageType } from '../../../../utils'
+import { isPnoMessage } from '../utils'
 
-import type { LogbookMessage as LogbookMessageType } from '../../../../Logbook.types'
+import type { LogbookMessage as LegacyLogbookMessage } from '../../../../LegacyLogbook.types'
 
 type LogbookMessageComponentProps = Readonly<{
   isFirst: boolean
   isManuallyCreated?: boolean
-  logbookMessage: LogbookMessageType | LogbookMessageNamespace.LogbookMessage
+  logbookMessage: LegacyLogbookMessage | Logbook.Message
   withMapControls?: boolean
 }>
 export function LogbookMessage({
@@ -92,13 +93,19 @@ export function LogbookMessage({
             <OperationTagLabel>ANCIEN MESSAGE</OperationTagLabel>
           </OperationTag>
         )}
+        {isPnoMessage(logbookMessage) && !!logbookMessage.message.isInvalidated && (
+          <OperationTag>
+            <OperationTagDangerBullet />
+            <OperationTagLabel>MESSAGE INVALIDÉ</OperationTagLabel>
+          </OperationTag>
+        )}
         {logbookMessage.isDeleted && (
           <OperationTag>
             <OperationTagDangerBullet />
             <OperationTagLabel>MESSAGE SUPPRIMÉ</OperationTagLabel>
           </OperationTag>
         )}
-        {logbookMessage.operationType === LogbookMessageNamespace.OperationType.COR && (
+        {logbookMessage.operationType === Logbook.OperationType.COR && (
           <OperationTag>
             <OperationTagWarningBullet />
             <OperationTagLabel>MESSAGE CORRIGÉ</OperationTagLabel>

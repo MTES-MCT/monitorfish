@@ -41,8 +41,8 @@ export const createReportingFromVesselSidebar = (vesselName: string) => {
 
 export const deleteReporting = (reportId: number) => {
   cy.request({
-    method: 'PUT',
-    url: `/bff/v1/reportings/${reportId}/delete`
+    method: 'DELETE',
+    url: `/bff/v1/reportings/${reportId}`
   })
 }
 

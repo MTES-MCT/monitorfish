@@ -72,7 +72,7 @@ context('Side Window > Reporting List > Actions', () => {
   })
 
   it('Reportings Should be deleted', () => {
-    cy.intercept('PUT', '/bff/v1/reportings/delete').as('deleteReportings')
+    cy.intercept('DELETE', '/bff/v1/reportings').as('deleteReportings')
 
     createReportingFromVesselSidebar('COURANT MAIN PROFESSEUR').then(createdReportingId => {
       // Given
@@ -103,7 +103,7 @@ context('Side Window > Reporting List > Actions', () => {
   })
 
   it('A Reporting Should be edited', () => {
-    cy.intercept('PUT', 'bff/v1/reportings/6/update').as('updateReporting')
+    cy.intercept('PUT', 'bff/v1/reportings/6').as('updateReporting')
 
     // Given
     cy.visit('/side_window')
@@ -132,7 +132,7 @@ context('Side Window > Reporting List > Actions', () => {
   })
 
   it('A Reporting Should be edited with the reporting type modified ', () => {
-    cy.intercept('PUT', 'bff/v1/reportings/6/update').as('updateReporting')
+    cy.intercept('PUT', 'bff/v1/reportings/6').as('updateReporting')
 
     // Given
     cy.visit('/side_window')

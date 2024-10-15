@@ -9,7 +9,7 @@ import { AlertAndReportingTab } from './constants'
 import { PendingAlertsList } from './PendingAlertsList'
 import { ALERTS_MENU_SEAFRONT_TO_SEAFRONTS } from '../../../../domain/entities/alerts/constants'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { ReportingList } from '../../../Reporting/components/ReportingList'
+import { ReportingTable } from '../../../Reporting/components/ReportingTable'
 
 import type { RefObject } from 'react'
 
@@ -70,7 +70,7 @@ export function AlertListAndReportingList({
         </>
       )}
       {selectedTab === AlertAndReportingTab.REPORTING && (
-        <ReportingList
+        <ReportingTable
           currentReportings={currentReportings ?? []}
           displayedError={displayedError}
           selectedSeafrontGroup={selectedSeafrontGroup}

@@ -84,8 +84,8 @@ export function VesselReportingList({
       )}
       {selectedTab === VesselReportingListTab.CURRENT_REPORTING && (
         <ReportingVesselReportingList
+          startDate={startDate}
           vesselIdentity={vesselIdentity}
-          vesselReportings={vesselReportings}
           withOpenedNewReportingForm={withOpenedNewReportingForm}
         />
       )}

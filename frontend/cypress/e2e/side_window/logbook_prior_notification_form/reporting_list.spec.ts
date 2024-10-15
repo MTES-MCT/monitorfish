@@ -114,7 +114,7 @@ context('Side Window > Logbook Prior Notification Form  > Reporting List', () =>
         cy.clickButton('Supprimer ce signalement')
 
         // Then
-        cy.contains('VÊtes-vous sûr de vouloir supprimer ce signalement ?').should('be.visible')
+        cy.contains('Êtes-vous sûr de vouloir supprimer ce signalement ?').should('be.visible')
 
         // When
         cy.clickButton('Supprimer')

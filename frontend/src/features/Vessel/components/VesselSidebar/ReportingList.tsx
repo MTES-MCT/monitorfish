@@ -1,4 +1,4 @@
-import { VesselReportingList } from '@features/Reporting/components/VesselReportingList'
+import { VesselReportingList } from '@features/Vessel/components/VesselSidebar/VesselReportingList'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useKey } from '@mtes-mct/monitor-ui'
 

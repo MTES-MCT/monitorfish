@@ -1,7 +1,8 @@
 import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { FingerprintSpinner } from '@components/FingerprintSpinner'
-import { Summary } from '@features/Reporting/components/VesselReportingList/Summary'
+import { Current } from '@features/Reporting/components/Current'
 import { getDefaultReportingsStartDate } from '@features/Reporting/utils'
+import { Summary } from '@features/Vessel/components/VesselSidebar/VesselReportingList/Summary'
 import { vesselActions } from '@features/Vessel/slice'
 import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -14,7 +15,6 @@ import styled from 'styled-components'
 
 import { Archived } from './Archived'
 import { VesselReportingListTab } from './constants'
-import { Current } from '../Current'
 
 import type { VesselIdentity } from 'domain/entities/vessel/types'
 

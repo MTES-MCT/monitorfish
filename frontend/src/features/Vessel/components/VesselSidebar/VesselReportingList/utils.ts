@@ -1,6 +1,6 @@
 import { ReportingOriginActor, ReportingOriginActorLabel } from '@features/Reporting/types'
 
-import type { LegacyControlUnit } from '../../../../domain/types/legacyControlUnit'
+import type { LegacyControlUnit } from '../../../../../domain/types/legacyControlUnit'
 
 export const getReportingActorLabel = (
   reportingActor: ReportingOriginActor,

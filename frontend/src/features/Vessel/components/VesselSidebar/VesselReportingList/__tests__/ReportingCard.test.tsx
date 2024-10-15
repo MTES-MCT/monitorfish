@@ -1,4 +1,5 @@
 import { Seafront } from '@constants/seafront'
+import { ReportingCard } from '@features/Reporting/components/ReportingCard'
 import { ReportingType } from '@features/Reporting/types'
 import { afterAll, describe, expect, it } from '@jest/globals'
 import { THEME, ThemeProvider } from '@mtes-mct/monitor-ui'
@@ -6,9 +7,8 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { noop } from 'lodash'
 
-import { PendingAlertValueType } from '../../../../../domain/entities/alerts/types'
-import { VesselIdentifier } from '../../../../../domain/entities/vessel/types'
-import { ReportingCard } from '../../ReportingCard'
+import { PendingAlertValueType } from '../../../../../../domain/entities/alerts/types'
+import { VesselIdentifier } from '../../../../../../domain/entities/vessel/types'
 
 import type { PendingAlertReporting } from '@features/Reporting/types'
 

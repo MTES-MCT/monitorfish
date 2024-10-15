@@ -18,7 +18,7 @@ import type {
   VesselIdentity,
   VesselPosition
 } from '../../domain/entities/vessel/types'
-import type { VesselReportingListTab } from '@features/Reporting/components/VesselReportingList/constants'
+import type { VesselReportingListTab } from '@features/Vessel/components/VesselSidebar/VesselReportingList/constants'
 import type { Vessel as VesselTypes } from '@features/Vessel/Vessel.types'
 
 const NOT_FOUND = -1

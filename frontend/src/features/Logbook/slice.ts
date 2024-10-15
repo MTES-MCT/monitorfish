@@ -3,21 +3,21 @@ import { createSlice } from '@reduxjs/toolkit'
 import { getEffectiveDateTimeFromMessage, getLogbookMessageType } from './utils'
 import { FishingActivitiesTab } from '../../domain/entities/vessel/vessel'
 
-import type { FishingActivities, VesselVoyage } from './LegacyLogbook.types'
+import type { Logbook } from './Logbook.types'
 import type { FishingActivityShowedOnMap, VesselIdentity } from '../../domain/entities/vessel/types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 // TODO Properly type this redux state.
 export type LogbookState = {
   areFishingActivitiesShowedOnMap: boolean
-  fishingActivities: FishingActivities | undefined
+  fishingActivities: Logbook.FishingActivities | undefined
   fishingActivitiesShowedOnMap: FishingActivityShowedOnMap[]
   fishingActivitiesTab: FishingActivitiesTab
   isFirstVoyage: boolean | null
   isLastVoyage: boolean | null
-  lastFishingActivities: FishingActivities
+  lastFishingActivities: Logbook.FishingActivities
   loadingFishingActivities: boolean
-  nextFishingActivities: FishingActivities | null
+  nextFishingActivities: Logbook.FishingActivities | null
   redrawFishingActivitiesOnMap: boolean
   tripNumber: string | null
   vesselIdentity: VesselIdentity | undefined
@@ -118,7 +118,7 @@ const logbookSlice = createSlice({
     /**
      * Set fishing activities
      */
-    setFishingActivities(state, action: PayloadAction<FishingActivities>) {
+    setFishingActivities(state, action: PayloadAction<Logbook.FishingActivities>) {
       state.fishingActivities = action.payload
       state.loadingFishingActivities = false
     },
@@ -135,7 +135,7 @@ const logbookSlice = createSlice({
      * Set selected vessel last voyage - This voyage is saved to be able to compare it
      * with new last voyages we will receive from the CRON
      */
-    setLastVoyage(state, action: PayloadAction<VesselVoyage>) {
+    setLastVoyage(state, action: PayloadAction<Logbook.VesselVoyage>) {
       state.lastFishingActivities = action.payload.logbookMessagesAndAlerts
       state.fishingActivities = action.payload.logbookMessagesAndAlerts
       state.isLastVoyage = action.payload.isLastVoyage
@@ -165,7 +165,7 @@ const logbookSlice = createSlice({
     /**
      * Set selected vessel voyage
      */
-    setVoyage(state, action: PayloadAction<VesselVoyage>) {
+    setVoyage(state, action: PayloadAction<Logbook.VesselVoyage>) {
       const { isFirstVoyage, isLastVoyage, logbookMessagesAndAlerts, tripNumber, vesselIdentity } = action.payload
 
       state.fishingActivities = logbookMessagesAndAlerts

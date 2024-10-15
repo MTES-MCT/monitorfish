@@ -39,6 +39,7 @@ export type VesselState = {
   selectedVessel: VesselTypes.AugmentedSelectedVessel | undefined
   selectedVesselIdentity: VesselIdentity | undefined
   selectedVesselPositions: VesselPosition[] | null
+  /** Used to open vessel sidebar reporting history from prior notification form reporting list. */
   selectedVesselSidebarReportingListTab: VesselReportingListTab | undefined
   selectedVesselSidebarTab: VesselSidebarTab
   selectedVesselTrackRequest: TrackRequest | null

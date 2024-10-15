@@ -17,7 +17,7 @@ jest.mock('../../../useCases/archiveReporting', () => () => ({ archiveReporting:
 // @ts-ignore
 jest.mock('../../../../../hooks/useMainAppDispatch', () => ({ useMainAppDispatch: () => {} }))
 
-describe('ReportingCard()s', () => {
+describe('ReportingCard()', () => {
   afterAll(() => {
     // Reset module registry to clear the mock
     // @ts-ignore

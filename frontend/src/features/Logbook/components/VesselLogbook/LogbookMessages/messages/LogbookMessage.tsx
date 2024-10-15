@@ -14,6 +14,7 @@ import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../consta
 import { Logbook } from '../../../../Logbook.types'
 import { logbookActions } from '../../../../slice'
 import { getLogbookMessageType } from '../../../../utils'
+import { isPnoMessage } from '../utils'
 
 import type { LogbookMessage as LegacyLogbookMessage } from '../../../../LegacyLogbook.types'
 
@@ -90,6 +91,12 @@ export function LogbookMessage({
           <OperationTag>
             <OperationTagDangerBullet />
             <OperationTagLabel>ANCIEN MESSAGE</OperationTagLabel>
+          </OperationTag>
+        )}
+        {isPnoMessage(logbookMessage) && !!logbookMessage.message.isInvalidated && (
+          <OperationTag>
+            <OperationTagDangerBullet />
+            <OperationTagLabel>MESSAGE INVALIDÉ</OperationTagLabel>
           </OperationTag>
         )}
         {logbookMessage.isDeleted && (

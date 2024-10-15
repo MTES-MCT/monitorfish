@@ -24,10 +24,10 @@ class GetVesselReportings(
 
     fun execute(
         vesselId: Int?,
-        internalReferenceNumber: String? = null,
-        externalReferenceNumber: String? = null,
-        ircs: String? = null,
-        vesselIdentifier: VesselIdentifier? = null,
+        internalReferenceNumber: String,
+        externalReferenceNumber: String,
+        ircs: String,
+        vesselIdentifier: VesselIdentifier?,
         fromDate: ZonedDateTime,
     ): VesselReportings {
         val (controlUnits, controlUnitsTimeTaken) = measureTimedValue { getAllControlUnits.execute() }
@@ -37,19 +37,6 @@ class GetVesselReportings(
             measureTimedValue {
                 if (vesselId != null) {
                     return@measureTimedValue findReportingsByVesselId(vesselId, fromDate)
-                }
-
-                requireNotNull(vesselIdentifier) {
-                    "Vessel identifier must be not null when vessel id is null."
-                }
-                requireNotNull(internalReferenceNumber) {
-                    "Internal reference number must be not null when vessel id is null."
-                }
-                requireNotNull(ircs) {
-                    "IRCS must be not null when vessel id is null."
-                }
-                requireNotNull(externalReferenceNumber) {
-                    "External reference number must be not null when vessel id is null."
                 }
 
                 findReportingsByVesselIdentity(

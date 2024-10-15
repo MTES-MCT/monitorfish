@@ -29,13 +29,6 @@ export const vesselApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(GET_VESSEL_ERROR_MESSAGE, response)
     }),
 
-    // TODO Delete that and use `getVesselReportingsByVesselIdentity`.
-    getVesselReportings: builder.query<VesselReportings, number>({
-      providesTags: () => [{ type: RtkCacheTagType.Reportings }],
-      query: vesselId => `/vessels/${vesselId}/reportings`,
-      transformErrorResponse: response => new FrontendApiError(GET_VESSEL_REPORTINGS_ERROR_MESSAGE, response)
-    }),
-
     getVesselReportingsByVesselIdentity: builder.query<
       VesselReportings,
       { fromDate: string; vesselIdentity: VesselIdentity }
@@ -78,6 +71,5 @@ export const {
   useGetRiskFactorQuery,
   useGetVesselQuery,
   useGetVesselReportingsByVesselIdentityQuery,
-  useGetVesselReportingsQuery,
   useGetVesselsLastPositionsQuery
 } = vesselApi

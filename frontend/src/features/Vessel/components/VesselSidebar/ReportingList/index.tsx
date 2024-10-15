@@ -12,8 +12,8 @@ import { skipToken } from '@reduxjs/toolkit/query'
 import { useState } from 'react'
 import styled from 'styled-components'
 
-import { Archived } from './Archived'
 import { VesselReportingListTab } from './constants'
+import { ArchivedReportingList } from '../../../../Reporting/components/ArchivedReportingList'
 
 export function ReportingList() {
   const dispatch = useMainAppDispatch()
@@ -70,7 +70,7 @@ export function ReportingList() {
       {selectedVesselSidebarReportingListTab === VesselReportingListTab.REPORTING_HISTORY && (
         <>
           <Summary fromDate={startDate} vesselReportings={vesselReportings} />
-          <Archived fromDate={startDate} onMore={decreaseStartDate} vesselReportings={vesselReportings} />
+          <ArchivedReportingList fromDate={startDate} onMore={decreaseStartDate} vesselReportings={vesselReportings} />
         </>
       )}
     </Body>

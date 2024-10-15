@@ -8,12 +8,12 @@ import { YearReportings } from './YearReportings'
 import type { VesselReportings } from '@features/Reporting/types'
 import type { Promisable } from 'type-fest'
 
-type ArchivedProps = Readonly<{
+type ArchivedReportingListProps = Readonly<{
   fromDate: Date
   onMore: (() => Promisable<void>) | undefined
   vesselReportings: VesselReportings
 }>
-export function Archived({ fromDate, onMore, vesselReportings }: ArchivedProps) {
+export function ArchivedReportingList({ fromDate, onMore, vesselReportings }: ArchivedReportingListProps) {
   const reportingsByYearAsPairs = useMemo(
     () => Object.entries(vesselReportings.archived).sort(([a], [b]) => Number(b) - Number(a)),
     [vesselReportings.archived]

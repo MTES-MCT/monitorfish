@@ -44,5 +44,10 @@ const StyledCard = styled(SideWindowCard)<{
 `
 
 const StyledLinkButton = styled(LinkButton)`
+  font-size: 13px;
   margin-top: 8px;
+
+  > .Element-IconBox {
+    rotate: 90deg;
+  }
 `

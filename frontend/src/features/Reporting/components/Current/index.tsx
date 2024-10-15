@@ -3,7 +3,7 @@ import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { EditReporting } from './EditReporting'
-import { ReportingCard } from '../VesselReportingList/ReportingCard'
+import { ReportingCard } from '../ReportingCard'
 
 import type { Reporting, ReportingAndOccurrences, VesselReportings } from '@features/Reporting/types'
 import type { VesselIdentity } from 'domain/entities/vessel/types'

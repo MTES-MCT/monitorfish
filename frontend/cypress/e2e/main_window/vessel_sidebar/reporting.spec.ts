@@ -186,7 +186,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('OFB SD 56 / Sortie non autorisée')
     cy.get('*[data-cy="delete-reporting-card"]').eq(0).click()
     // First, we do not confirm the reporting deletion
-    cy.clickButton('Annuler')
+    cy.clickButton('Annuler', { withinSelector: '.Component-Dialog' })
     cy.get('*[data-cy="delete-reporting-card"]').eq(0).click()
     // Then, we confirm the reporting deletion
     cy.clickButton('Supprimer')

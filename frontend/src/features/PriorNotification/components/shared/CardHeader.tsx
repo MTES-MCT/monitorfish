@@ -7,13 +7,14 @@ import styled, { keyframes } from 'styled-components'
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import type { ReactNode } from 'react'
 
-type HeaderProps = Readonly<{
+type CardHeaderProps = Readonly<{
   children?: ReactNode
   detail: PriorNotification.Detail | undefined
   onClose: () => void
   vesselId: number | undefined
+  withCloseButton?: boolean
 }>
-export function Header({ children, detail, onClose, vesselId }: HeaderProps) {
+export function CardHeader({ children, detail, onClose, vesselId, withCloseButton = false }: CardHeaderProps) {
   const { data: vessel } = useGetVesselQuery(vesselId ?? skipToken)
 
   const isNewPriorNotification = !detail
@@ -55,7 +56,15 @@ export function Header({ children, detail, onClose, vesselId }: HeaderProps) {
         {children}
       </Title>
 
-      <IconButton accent={Accent.TERTIARY} Icon={Icon.Close} isCompact onClick={onClose} title="Fermer le formulaire" />
+      {withCloseButton && (
+        <IconButton
+          accent={Accent.TERTIARY}
+          Icon={Icon.Close}
+          isCompact
+          onClick={onClose}
+          title="Fermer le formulaire"
+        />
+      )}
     </Wrapper>
   )
 }

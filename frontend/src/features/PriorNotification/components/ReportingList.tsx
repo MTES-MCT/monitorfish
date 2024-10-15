@@ -7,7 +7,7 @@ import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import styled from 'styled-components'
 
 import { priorNotificationActions } from '../slice'
-import { Header } from './ManualPriorNotificationForm/Header'
+import { CardHeader } from './shared/CardHeader'
 
 export function ReportingList() {
   const dispatch = useMainAppDispatch()
@@ -25,11 +25,11 @@ export function ReportingList() {
 
   return (
     <StyledCard $isSuperUser={isSuperUser} onBackgroundClick={close}>
-      <Header detail={openedPriorNotificationDetail} onClose={close} vesselId={vesselId}>
+      <CardHeader detail={openedPriorNotificationDetail} onClose={close} vesselId={vesselId}>
         <StyledLinkButton Icon={Icon.Chevron} onClick={close}>
           Retourner au préavis
         </StyledLinkButton>
-      </Header>
+      </CardHeader>
 
       <VesselReportingList vesselIdentity={vesselIdentity} withOpenedNewReportingForm />
     </StyledCard>

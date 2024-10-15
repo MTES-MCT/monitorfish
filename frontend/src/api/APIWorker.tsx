@@ -1,10 +1,8 @@
 import { fleetSegmentApi } from '@features/FleetSegment/apis'
 import { getAllRegulatoryLayers } from '@features/Regulation/useCases/getAllRegulatoryLayers'
 import { reportingApi } from '@features/Reporting/reportingApi'
-import { vesselApi } from '@features/Vessel/vesselApi'
 import { useEffect, useRef, useState } from 'react'
 
-import { RtkCacheTagType } from './constants'
 import { useIsSuperUser } from '../auth/hooks/useIsSuperUser'
 import { SideWindowStatus } from '../domain/entities/sideWindow/constants'
 import { VesselSidebarTab } from '../domain/entities/vessel/vessel'
@@ -135,8 +133,6 @@ export function APIWorker() {
 
     if (selectedVesselSidebarTab === VesselSidebarTab.CONTROLS) {
       dispatch(getVesselControls(false))
-    } else if (selectedVesselSidebarTab === VesselSidebarTab.REPORTING && selectedVesselIdentity) {
-      dispatch(vesselApi.util.invalidateTags([RtkCacheTagType.Reportings]))
     } else if (isSuperUser && selectedVesselSidebarTab === VesselSidebarTab.ERSVMS) {
       dispatch(getVesselBeaconMalfunctions(false))
     }

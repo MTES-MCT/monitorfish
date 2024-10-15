@@ -1,8 +1,8 @@
 import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { FingerprintSpinner } from '@components/FingerprintSpinner'
-import { VesselReportingList as ReportingVesselReportingList } from '@features/Reporting/components/VesselReportingList'
+import { VesselReportingList } from '@features/Reporting/components/VesselReportingList'
 import { getDefaultReportingsStartDate } from '@features/Reporting/utils'
-import { Summary } from '@features/Vessel/components/VesselSidebar/VesselReportingList/Summary'
+import { Summary } from '@features/Vessel/components/VesselSidebar/ReportingList/Summary'
 import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { customDayjs, THEME, useKey } from '@mtes-mct/monitor-ui'
@@ -13,7 +13,7 @@ import styled from 'styled-components'
 import { Archived } from './Archived'
 import { VesselReportingListTab } from './constants'
 
-export function VesselReportingList() {
+export function ReportingList() {
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
   const selectedVesselSidebarReportingListTab = useMainAppSelector(
     state => state.vessel.selectedVesselSidebarReportingListTab
@@ -66,7 +66,7 @@ export function VesselReportingList() {
       </Menu>
 
       {selectedTab === VesselReportingListTab.CURRENT_REPORTING && (
-        <ReportingVesselReportingList startDate={startDate} vesselIdentity={selectedVesselIdentity} />
+        <VesselReportingList startDate={startDate} vesselIdentity={selectedVesselIdentity} />
       )}
       {selectedTab === VesselReportingListTab.REPORTING_HISTORY && (
         <>

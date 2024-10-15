@@ -1,11 +1,8 @@
 import { deleteReporting } from '@features/Reporting/useCases/deleteReporting'
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
 import { getAlertNameFromType } from '@features/SideWindow/Alert/AlertListAndReportingList/utils'
-import { DeletionConfirmationModal } from '@features/Vessel/components/VesselSidebar/VesselReportingList/DeletionConfirmationModal'
-import {
-  getFrenchOrdinal,
-  getReportingActorLabel
-} from '@features/Vessel/components/VesselSidebar/VesselReportingList/utils'
+import { DeletionConfirmationModal } from '@features/Vessel/components/VesselSidebar/ReportingList/DeletionConfirmationModal'
+import { getFrenchOrdinal, getReportingActorLabel } from '@features/Vessel/components/VesselSidebar/ReportingList/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Icon, IconButton, THEME, Link } from '@mtes-mct/monitor-ui'
 import { useMemo, useState } from 'react'

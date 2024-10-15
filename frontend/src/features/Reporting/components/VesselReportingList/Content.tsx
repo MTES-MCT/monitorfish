@@ -1,4 +1,4 @@
-import { VesselReportingListTab } from '@features/Vessel/components/VesselSidebar/VesselReportingList/constants'
+import { VesselReportingListTab } from '@features/Vessel/components/VesselSidebar/ReportingList/constants'
 import { vesselActions } from '@features/Vessel/slice'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Button, LinkButton } from '@mtes-mct/monitor-ui'

@@ -9,10 +9,10 @@ import {
 import { NoValue, Table, TableBody, TableKey, TableRow, TableValue } from '../../styles'
 import { getCountryName, getCountryNameOrDash, getValueOrDash } from '../utils'
 
-import type { ProtectedSpeciesCatch } from '../../../../../Logbook.types'
+import type { Logbook } from '@features/Logbook/Logbook.types'
 
 export type ProtectedCatchDetailsProps = {
-  specyCatch: ProtectedSpeciesCatch
+  specyCatch: Logbook.ProtectedSpeciesCatch
 }
 export function ProtectedCatchDetails({ specyCatch }: ProtectedCatchDetailsProps) {
   function careMinutesText() {

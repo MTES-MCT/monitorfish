@@ -9,40 +9,40 @@ import {
 import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
 import { FirstInlineKey, SecondInlineKey, Table, TableBody, TableKey, TableRow, TableValue, Zone } from '../styles'
 
-import type { COXMessageValue } from '../../../../Logbook.types'
+import type { Logbook } from '@features/Logbook/Logbook.types'
 
 type COXMessageProps = {
-  message: COXMessageValue
+  messageValue: Logbook.CoxMessageValue
 }
-export function COXMessage({ message }: COXMessageProps) {
+export function COXMessage({ messageValue }: COXMessageProps) {
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
 
   return (
     <>
-      {message && (
+      {messageValue && (
         <>
           <Zone>
             <Table>
               <TableBody>
                 <TableRow>
                   <TableKey>Date de sortie</TableKey>
-                  <TableValue>{getDatetimeOrDash(message.effortZoneExitDatetimeUtc)}</TableValue>
+                  <TableValue>{getDatetimeOrDash(messageValue.effortZoneExitDatetimeUtc)}</TableValue>
                 </TableRow>
                 <TableRow>
                   <TableKey>Position de sortie</TableKey>
                   <TableValue>
                     <FirstInlineKey>Lat.</FirstInlineKey>{' '}
-                    {getLatitudeOrDash(coordinatesFormat, message.latitudeExited, message.longitudeExited)}
+                    {getLatitudeOrDash(coordinatesFormat, messageValue.latitudeExited, messageValue.longitudeExited)}
                     <SecondInlineKey>Lon.</SecondInlineKey>{' '}
-                    {getLongitudeOrDash(coordinatesFormat, message.latitudeExited, message.longitudeExited)}
+                    {getLongitudeOrDash(coordinatesFormat, messageValue.latitudeExited, messageValue.longitudeExited)}
                     <br />
-                    <FirstInlineKey>ZEE</FirstInlineKey> {getCountryNameOrDash(message.economicZoneExited)}
+                    <FirstInlineKey>ZEE</FirstInlineKey> {getCountryNameOrDash(messageValue.economicZoneExited)}
                     <br />
                     <FirstInlineKey>Zone FAO</FirstInlineKey>
-                    {getValueOrDash(message.faoZoneExited)}
+                    {getValueOrDash(messageValue.faoZoneExited)}
                     <br />
                     <FirstInlineKey>Rect. stat.</FirstInlineKey>
-                    {getValueOrDash(message.statisticalRectangleExited)}
+                    {getValueOrDash(messageValue.statisticalRectangleExited)}
                     <br />
                   </TableValue>
                 </TableRow>
@@ -55,7 +55,7 @@ export function COXMessage({ message }: COXMessageProps) {
                 <TableRow>
                   <TableKey>Espèces ciblées</TableKey>
                   <TableValue>
-                    {getCodeWithNameOrDash(message.targetSpeciesOnExit, message.targetSpeciesNameOnExit)}
+                    {getCodeWithNameOrDash(messageValue.targetSpeciesOnExit, messageValue.targetSpeciesNameOnExit)}
                   </TableValue>
                 </TableRow>
               </TableBody>

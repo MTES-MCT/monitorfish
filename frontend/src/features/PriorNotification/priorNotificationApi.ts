@@ -8,7 +8,7 @@ import { getStaticApiFilterFromListFilter } from './components/PriorNotification
 import { PriorNotification } from './PriorNotification.types'
 
 import type { ListFilter } from './components/PriorNotificationList/types'
-import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
+import type { Logbook } from '@features/Logbook/Logbook.types'
 
 const COMPUTE_PRIOR_NOTIFICATION_ERROR_MESSAGE =
   "Nous n'avons pas pu calculer note de risque, segments ou types pour ce préavis."
@@ -102,10 +102,10 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
     }),
 
     getPriorNotifications: builder.query<
-      BackendApi.ResponseBodyPaginatedList<PriorNotification.PriorNotification, LogbookMessage.ApiListExtraData>,
+      BackendApi.ResponseBodyPaginatedList<PriorNotification.PriorNotification, Logbook.ApiListExtraData>,
       {
         apiPaginationParams: BackendApi.RequestPaginationParams
-        apiSortingParams: BackendApi.RequestSortingParams<LogbookMessage.ApiSortColumn>
+        apiSortingParams: BackendApi.RequestSortingParams<Logbook.ApiSortColumn>
         listFilter: ListFilter
       }
     >({
@@ -116,7 +116,7 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
         listFilter
       }: {
         apiPaginationParams: BackendApi.RequestPaginationParams
-        apiSortingParams: BackendApi.RequestSortingParams<LogbookMessage.ApiSortColumn>
+        apiSortingParams: BackendApi.RequestSortingParams<Logbook.ApiSortColumn>
         listFilter: ListFilter
       }) => {
         const queryParams = {
@@ -137,7 +137,7 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
         new FrontendApiError(GET_PRIOR_NOTIFICATION_SENT_MESSAGES_ERROR_MESSAGE, response)
     }),
 
-    getPriorNotificationsToVerify: builder.query<LogbookMessage.ApiListExtraData, void>({
+    getPriorNotificationsToVerify: builder.query<Logbook.ApiListExtraData, void>({
       providesTags: () => [{ type: RtkCacheTagType.PriorNotificationsToVerify }],
       query: () => '/prior_notifications/to_verify',
       transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_TYPES_ERROR_MESSAGE, response)

@@ -4,33 +4,36 @@ import { getCodeWithNameOrDash, getDatetimeOrDash } from './utils'
 import { LogbookMessageActivityType } from '../../../../constants'
 import { NoValue, Table, TableBody, TableKey, TableRow, TableValue, Zone } from '../styles'
 
-import type { DEPMessageValue } from '../../../../Logbook.types'
+import type { Logbook } from '@features/Logbook/Logbook.types'
 
 type DEPMessageProps = Readonly<{
-  message: DEPMessageValue
+  messageValue: Logbook.DepMessageValue
 }>
-export function DEPMessage({ message }: DEPMessageProps) {
+export function DEPMessage({ messageValue }: DEPMessageProps) {
   return (
     <>
-      {message && (
+      {messageValue && (
         <>
           <Zone>
             <Table>
               <TableBody>
                 <TableRow>
                   <TableKey>Date de départ</TableKey>
-                  <TableValue>{getDatetimeOrDash(message.departureDatetimeUtc)}</TableValue>
+                  <TableValue>{getDatetimeOrDash(messageValue.departureDatetimeUtc)}</TableValue>
                 </TableRow>
                 <TableRow>
                   <TableKey>Port de départ</TableKey>
-                  <TableValue>{getCodeWithNameOrDash(message.departurePort, message.departurePortName)}</TableValue>
+                  <TableValue>
+                    {getCodeWithNameOrDash(messageValue.departurePort, messageValue.departurePortName)}
+                  </TableValue>
                 </TableRow>
                 <TableRow>
                   <TableKey>Activité prévue</TableKey>
                   <TableValue>
-                    {message.anticipatedActivity ? (
+                    {messageValue.anticipatedActivity ? (
                       <>
-                        {LogbookMessageActivityType[message.anticipatedActivity]} ({message.anticipatedActivity})
+                        {LogbookMessageActivityType[messageValue.anticipatedActivity]} (
+                        {messageValue.anticipatedActivity})
                       </>
                     ) : (
                       <NoValue>-</NoValue>
@@ -41,8 +44,8 @@ export function DEPMessage({ message }: DEPMessageProps) {
             </Table>
           </Zone>
           <Zone>
-            {message.gearOnboard?.length ? (
-              message.gearOnboard.map((gear, index) => (
+            {messageValue.gearOnboard?.length ? (
+              messageValue.gearOnboard.map((gear, index) => (
                 // eslint-disable-next-line react/no-array-index-key
                 <Gear key={index} $isFirst={index === 0}>
                   <SubKey>Engin à bord {index + 1}</SubKey>{' '}
@@ -69,8 +72,8 @@ export function DEPMessage({ message }: DEPMessageProps) {
                 <TableRow>
                   <TableKey>Captures à bord</TableKey>
                   <TableValue>
-                    {message.speciesOnboard?.length ? (
-                      message.speciesOnboard.map(speciesCatch => (
+                    {messageValue.speciesOnboard?.length ? (
+                      messageValue.speciesOnboard.map(speciesCatch => (
                         <span key={speciesCatch.species}>
                           {getCodeWithNameOrDash(speciesCatch.species, speciesCatch.speciesName)}- {speciesCatch.weight}{' '}
                           kg

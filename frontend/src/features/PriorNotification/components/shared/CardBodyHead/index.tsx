@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { SentMessageList } from './SentMessageList'
 import { TagBar } from './TagBar'
 
-import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
+import type { Logbook } from '@features/Logbook/Logbook.types'
 
 type CardBodyHeadProps = Readonly<{
   applicableState: PriorNotification.State | undefined
@@ -17,7 +17,7 @@ type CardBodyHeadProps = Readonly<{
   isPriorNotificationZero: boolean | undefined
   isVesselUnderCharter: boolean | undefined
   riskFactor: number | undefined
-  tripSegments: LogbookMessage.Segment[] | undefined
+  tripSegments: Logbook.Segment[] | undefined
   types: PriorNotification.Type[] | undefined
 }>
 export function CardBodyHead({

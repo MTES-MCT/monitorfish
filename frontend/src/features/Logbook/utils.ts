@@ -7,12 +7,12 @@ import { LayerProperties } from '../../domain/entities/layers/constants'
 import { undefinedize } from '../../utils/undefinedize'
 
 import type { CatchProperty, CatchWithProperties, ProtectedCatchWithProperties } from './components/VesselLogbook/types'
-import type { LogbookCatch, LogbookMessage, PNOMessageValue, ProtectedSpeciesCatch } from './Logbook.types'
-import type { LogbookMessage as LogbookMessageNamespace } from './LogbookMessage.types'
+import type { LogbookCatch, LogbookMessage } from './LegacyLogbook.types'
+import type { Logbook, Logbook as LogbookMessageNamespace } from './Logbook.types'
 import type { SpeciesInsight, SpeciesToSpeciesInsight, SpeciesToSpeciesInsightList } from './types'
 import type { DeclaredLogbookSpecies, FishingActivityShowedOnMap } from '../../domain/entities/vessel/types'
 
-function getCatchPropertiesObject(logbookCatch: LogbookCatch): CatchProperty {
+function getCatchPropertiesObject(logbookCatch: Logbook.Catch): CatchProperty {
   return {
     conversionFactor: undefinedize(logbookCatch.conversionFactor),
     economicZone: undefinedize(logbookCatch.economicZone),
@@ -27,7 +27,7 @@ function getCatchPropertiesObject(logbookCatch: LogbookCatch): CatchProperty {
   }
 }
 
-export function buildCatchArray(catches: LogbookCatch[]): CatchWithProperties[] {
+export function buildCatchArray(catches: Logbook.Catch[]): CatchWithProperties[] {
   const NOT_FOUND = -1
 
   return catches
@@ -57,7 +57,7 @@ export function buildCatchArray(catches: LogbookCatch[]): CatchWithProperties[] 
     .sort((catchA, catchB) => catchB.weight - catchA.weight)
 }
 
-export function buildProtectedCatchArray(catches: ProtectedSpeciesCatch[]): ProtectedCatchWithProperties[] {
+export function buildProtectedCatchArray(catches: Logbook.ProtectedSpeciesCatch[]): ProtectedCatchWithProperties[] {
   const NOT_FOUND = -1
 
   return catches
@@ -256,10 +256,10 @@ export const getTotalLANWeight = (logbookMessage: LogbookMessage | undefined): n
 /**
  * The PNO message weight are LIVE, so we must NOT apply the conversion factor
  */
-export const getTotalPNOWeight = (logbookMessage: PNOMessageValue | undefined): number =>
-  logbookMessage ? getSumOfCatches(logbookMessage.catchOnboard, false) : 0
+export const getTotalPNOWeight = (logbookMessageValue: Logbook.PnoMessageValue | undefined): number =>
+  logbookMessageValue ? getSumOfCatches(logbookMessageValue?.catchOnboard ?? [], false) : 0
 
-function getSumOfCatches(arrayOfCatches: LogbookCatch[], hasConversionFactorApplied = false): number {
+function getSumOfCatches(arrayOfCatches: Logbook.Catch[], hasConversionFactorApplied = false): number {
   const sum = arrayOfCatches.reduce((subAccumulator, speciesCatch) => {
     const conversionFactor =
       hasConversionFactorApplied && speciesCatch.conversionFactor ? speciesCatch.conversionFactor : 1
@@ -558,7 +558,7 @@ export const getFishingActivityFeatureOnTrackLine = (
 /**
  * Get the logbook message type - used to handle the specific DIM message type case
  */
-export const getLogbookMessageType = (message: LogbookMessage | LogbookMessageNamespace.LogbookMessage): string => {
+export const getLogbookMessageType = (message: LogbookMessage | LogbookMessageNamespace.Message): string => {
   if (
     message.messageType === LogbookMessageType.DIS.code &&
     message.message.catches.some(aCatch => aCatch.presentation === LogbookMessageType.DIM.code)

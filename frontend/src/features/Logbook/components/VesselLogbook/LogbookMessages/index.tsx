@@ -88,6 +88,7 @@ export function LogbookMessages({ messageTypeFilter, navigation }: LogbookMessag
         />
         <Navigation>
           <PreviousTrip
+            data-cy="vessel-fishing-previous-trip"
             disabled={!!isFirstVoyage}
             onClick={!isFirstVoyage ? navigation.goToPreviousTrip : undefined}
             title="Marée précédente"

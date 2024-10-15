@@ -1,11 +1,11 @@
-import { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
+import { Logbook } from '@features/Logbook/Logbook.types'
 import { getOptionsFromLabelledEnum } from '@mtes-mct/monitor-ui'
 
 import type { Seafront } from '@constants/seafront'
 
 export namespace PriorNotification {
   export interface PriorNotification {
-    acknowledgment: LogbookMessage.Acknowledgment | undefined
+    acknowledgment: Logbook.Acknowledgment | undefined
     createdAt: string
     expectedArrivalDate: string | undefined
     expectedLandingDate: string | undefined
@@ -16,7 +16,7 @@ export namespace PriorNotification {
     isManuallyCreated: boolean
     isPriorNotificationZero: boolean
     isVesselUnderCharter: boolean | undefined
-    onBoardCatches: LogbookMessage.Catch[]
+    onBoardCatches: Logbook.Catch[]
     operationDate: string
     portLocode: string | undefined
     portName: string | undefined
@@ -27,8 +27,8 @@ export namespace PriorNotification {
     seafront: Seafront | undefined
     sentAt: string | undefined
     state: State | undefined
-    tripGears: LogbookMessage.Gear[]
-    tripSegments: LogbookMessage.Segment[]
+    tripGears: Logbook.Gear[]
+    tripSegments: Logbook.Segment[]
     types: Type[]
     updatedAt: string
     vesselExternalReferenceNumber: string | undefined
@@ -52,7 +52,7 @@ export namespace PriorNotification {
     fingerprint: string
     isLessThanTwelveMetersVessel: boolean
     isVesselUnderCharter: boolean | undefined
-    logbookMessage: LogbookMessage.PnoLogbookMessage
+    logbookMessage: Logbook.PnoMessage
     operationDate: string
     /** Logbook message `reportId`. */
     reportId: string

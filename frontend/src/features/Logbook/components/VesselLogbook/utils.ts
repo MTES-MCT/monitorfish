@@ -22,7 +22,8 @@ import {
 } from '../../utils'
 
 import type { LogbookTripSummary } from './types'
-import type { FishingActivities, Gear } from '../../Logbook.types'
+import type { Gear } from '../../LegacyLogbook.types'
+import type { Logbook } from '@features/Logbook/Logbook.types'
 
 export const EMPTY_LOGBOOK_TRIP_SUMMARY = {
   cps: {
@@ -60,7 +61,7 @@ export const EMPTY_LOGBOOK_TRIP_SUMMARY = {
   }
 }
 
-export function getLogbookTripSummary(fishingActivities: FishingActivities | undefined): LogbookTripSummary {
+export function getLogbookTripSummary(fishingActivities: Logbook.FishingActivities | undefined): LogbookTripSummary {
   if (!fishingActivities?.logbookMessages?.length) {
     return EMPTY_LOGBOOK_TRIP_SUMMARY
   }
@@ -131,7 +132,7 @@ export function getUniqueGears(gearOnboard: Gear[] | undefined): Gear[] {
       }
 
       return acc
-    }, []) || []
+    }, []) ?? []
   )
 }
 

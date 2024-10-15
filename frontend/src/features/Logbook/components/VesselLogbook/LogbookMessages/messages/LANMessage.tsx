@@ -8,41 +8,41 @@ import { buildCatchArray } from '../../../../utils'
 import { WeightType } from '../constants'
 import { NoValue, Table, TableBody, TableKey, TableRow, TableValue, Zone, SpeciesList } from '../styles'
 
-import type { LANMessageValue } from '@features/Logbook/Logbook.types'
+import type { Logbook } from '@features/Logbook/Logbook.types'
 
 type LANMessageProps = Readonly<{
-  message: LANMessageValue
+  messageValue: Logbook.LanMessageValue
 }>
-export function LANMessage({ message }: LANMessageProps) {
+export function LANMessage({ messageValue }: LANMessageProps) {
   const catchesWithProperties = useMemo(() => {
-    if (!message?.catchLanded) {
+    if (!messageValue?.catchLanded) {
       return []
     }
 
-    return buildCatchArray(message.catchLanded)
-  }, [message])
+    return buildCatchArray(messageValue.catchLanded)
+  }, [messageValue])
 
   return (
     <>
-      {message && (
+      {messageValue && (
         <>
           <Zone>
             <Table>
               <TableBody>
                 <TableRow>
                   <TableKey>Date de fin de débarquement</TableKey>
-                  <TableValue>{getDatetimeOrDash(message.landingDatetimeUtc)}</TableValue>
+                  <TableValue>{getDatetimeOrDash(messageValue.landingDatetimeUtc)}</TableValue>
                 </TableRow>
                 <TableRow>
                   <TableKey>Port de débarquement</TableKey>
-                  <TableValue>{getCodeWithNameOrDash(message.port, message.portName)}</TableValue>
+                  <TableValue>{getCodeWithNameOrDash(messageValue.port, messageValue.portName)}</TableValue>
                 </TableRow>
                 <TableRow>
                   <TableKey>Émetteur du message</TableKey>
                   <TableValue>
-                    {message.sender ? (
+                    {messageValue.sender ? (
                       <>
-                        {LogbookMessageSender[message.sender]} ({message.sender})
+                        {LogbookMessageSender[messageValue.sender]} ({messageValue.sender})
                       </>
                     ) : (
                       <NoValue>-</NoValue>

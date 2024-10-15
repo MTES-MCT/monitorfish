@@ -3,7 +3,7 @@ import { getPseudoRandomString } from '@mtes-mct/monitor-ui'
 import { openSideWindowPriorNotificationListAsSuperUser } from './utils'
 
 import type { BackendApi } from '@api/BackendApi.types'
-import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
+import type { Logbook } from '@features/Logbook/Logbook.types'
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
 context('Side Window > Prior Notification List > Pagination', () => {
@@ -17,7 +17,7 @@ context('Side Window > Prior Notification List > Pagination', () => {
     cy.wait('@getPriorNotifications').then(interception => {
       const responseBody: BackendApi.ResponseBodyPaginatedList<
         PriorNotification.PriorNotification,
-        LogbookMessage.ApiListExtraData
+        Logbook.ApiListExtraData
       > = interception.response!.body
 
       const fakeData = Array.from({ length: 100 }).flatMap(() =>

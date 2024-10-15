@@ -7,10 +7,10 @@ import { SpeciesList } from '../../styles'
 import { CatchMessageZone } from '../common/CatchMessageZone'
 import { SpecyCatch } from '../common/SpecyCatch'
 
-import type { CPSMessageValue } from '../../../../../Logbook.types'
+import type { Logbook } from '@features/Logbook/Logbook.types'
 
 type CPSMessageProps = Readonly<{
-  message: CPSMessageValue
+  message: Logbook.CpsMessageValue
 }>
 export function CPSMessage({ message }: CPSMessageProps) {
   const catchesWithProperties = useMemo(() => {

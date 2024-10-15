@@ -2,7 +2,7 @@ import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES, BLUEFIN_TUNA_NAME_FR, BLUEFIN_TUNA_S
 
 import type { ManualPriorNotificationFormValuesFishingCatch } from './components/ManualPriorNotificationForm/types'
 import type { PriorNotification } from './PriorNotification.types'
-import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
+import type { Logbook } from '@features/Logbook/Logbook.types'
 
 type PriorNotificationData = {
   operationDate: string
@@ -28,7 +28,7 @@ export function getPriorNotificationIdentifier(
 }
 
 export function getPriorNotificationTypesFromLogbookMessagePnoTypes(
-  logbookMessagePnoTypes: LogbookMessage.MessagePnoType[] | undefined
+  logbookMessagePnoTypes: Logbook.MessagePnoType[] | undefined
 ): PriorNotification.Type[] | undefined {
   return logbookMessagePnoTypes?.map(({ pnoTypeName, ...rest }) => ({
     ...rest,
@@ -37,7 +37,7 @@ export function getPriorNotificationTypesFromLogbookMessagePnoTypes(
 }
 
 export function getPriorNotificationFishingCatchesFromLogbookMessageFishingCatches(
-  logbookMessageFishingCatches: LogbookMessage.Catch[] | undefined
+  logbookMessageFishingCatches: Logbook.Catch[] | undefined
 ): PriorNotification.FormDataFishingCatch[] | undefined {
   return logbookMessageFishingCatches?.map(({ species, speciesName, weight, ...rest }) => ({
     ...rest,

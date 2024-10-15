@@ -103,8 +103,4 @@ const Body = styled.div`
   flex-grow: 1;
   overflow-x: hidden;
   padding: 5px;
-
-  > .Element-LinkButton {
-    margin-left: 21px;
-  }
 `

@@ -111,9 +111,9 @@ export function Form({ detail, initialFormValues }: FormProps) {
                 <>
                   <hr />
 
-                  <p
+                  <LastUpdateText
                     title={detail.operationDate}
-                  >{`Dernière modification par ${detail.logbookMessage.message.updatedBy} ${customDayjs(detail.operationDate).fromNow()}.`}</p>
+                  >{`Dernière modification par ${detail.logbookMessage.message.updatedBy} ${customDayjs(detail.operationDate).fromNow()}.`}</LastUpdateText>
                 </>
               )}
             </>
@@ -185,6 +185,12 @@ const FieldGroup = styled.div.attrs({ className: 'FieldGroup' })`
 const AuthorTrigramInput = styled(FormikTextInput)`
   margin-top: 24px;
   width: 120px;
+`
+
+const LastUpdateText = styled.p`
+  color: ${p => p.theme.color.slateGray};
+  font-style: italic;
+  margin-top: 16px;
 `
 
 const ActionWrapper = styled.div`

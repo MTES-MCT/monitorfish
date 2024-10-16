@@ -206,9 +206,9 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
             <>
               <hr />
 
-              <p
+              <LastUpdateText
                 title={detail.operationDate}
-              >{`Dernière modification par ${detail.logbookMessage.message.updatedBy} ${customDayjs(detail.operationDate).fromNow()}.`}</p>
+              >{`Dernière modification par ${detail.logbookMessage.message.updatedBy} ${customDayjs(detail.operationDate).fromNow()}.`}</LastUpdateText>
             </>
           )}
         </Body>
@@ -311,6 +311,12 @@ const Body = styled.div`
   > .FieldGroup {
     margin-top: 24px;
   }
+`
+
+const LastUpdateText = styled.p`
+  color: ${p => p.theme.color.slateGray};
+  font-style: italic;
+  margin-top: 16px;
 `
 
 const Footer = styled.div`

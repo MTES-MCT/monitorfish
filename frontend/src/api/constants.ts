@@ -3,7 +3,7 @@ import { FIVE_MINUTES, ONE_MINUTE, THIRTY_SECONDS } from '../constants'
 import type { RefetchConfigOptions } from '@reduxjs/toolkit'
 import type { StartQueryActionCreatorOptions, SubscriptionOptions } from '@reduxjs/toolkit/query'
 
-export const RTK_MAX_RETRIES = 2
+export const RTK_MAX_RETRIES = 1
 
 export const RTK_THIRTY_SECONDS_POLLING_QUERY_OPTIONS: SubscriptionOptions & Partial<RefetchConfigOptions> = {
   pollingInterval: THIRTY_SECONDS,
@@ -32,7 +32,8 @@ export enum HttpStatusCode {
   CREATED = 201,
   ACCEPTED = 202,
   NOT_FOUND = 404,
-  UNAUTHORIZED = 401
+  UNAUTHORIZED = 401,
+  FORBIDDEN = 403
 }
 
 export enum RtkCacheTagType {

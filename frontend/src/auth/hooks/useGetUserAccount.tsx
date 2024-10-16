@@ -1,5 +1,6 @@
 import { useTracking } from '@hooks/useTracking'
 import { setUser } from '@sentry/react'
+import { isCypress } from '@utils/isCypress'
 import { useCallback, useEffect, useMemo } from 'react'
 import { type AuthContextProps, useAuth } from 'react-oidc-context'
 
@@ -7,11 +8,16 @@ import { useGetCurrentUserAuthorizationQueryOverride } from './useGetCurrentUser
 
 import type { UserAccountContextType } from '../../context/UserAccountContext'
 
+const IS_CYPRESS = isCypress() || true
+
+/**
+ * When using Cypress, we stub `useAuth()`
+ */
 export function useGetUserAccount(): UserAccountContextType {
   // `| undefined` because it's undefined if the OIDC is disabled which is the case for Cypress tests
   const auth = useAuth() as AuthContextProps | undefined
   const { trackUserId } = useTracking()
-  const { data: user } = useGetCurrentUserAuthorizationQueryOverride({ skip: !auth?.isAuthenticated })
+  const { data: user } = useGetCurrentUserAuthorizationQueryOverride({ skip: !IS_CYPRESS && !auth?.isAuthenticated })
 
   useEffect(() => {
     if (auth?.user?.profile?.email) {
@@ -31,15 +37,23 @@ export function useGetUserAccount(): UserAccountContextType {
     auth.signoutRedirect({ id_token_hint: idTokenHint ?? '' })
   }, [auth])
 
-  const userAccount = useMemo(
-    () => ({
+  const userAccount = useMemo(() => {
+    if (IS_CYPRESS) {
+      return {
+        email: 'dummy@cypress.test',
+        isAuthenticated: true,
+        isSuperUser: user?.isSuperUser ?? false,
+        logout
+      }
+    }
+
+    return {
       email: auth?.user?.profile?.email,
       isAuthenticated: auth?.isAuthenticated ?? false,
       isSuperUser: user?.isSuperUser ?? false,
       logout
-    }),
-    [logout, user, auth?.isAuthenticated, auth?.user?.profile?.email]
-  )
+    }
+  }, [logout, user, auth?.isAuthenticated, auth?.user?.profile?.email])
 
   useEffect(
     () =>

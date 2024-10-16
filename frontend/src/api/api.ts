@@ -1,9 +1,11 @@
 // https://redux-toolkit.js.org/rtk-query/usage/cache-behavior
 // https://redux-toolkit.js.org/rtk-query/usage/automated-refetching#cache-tags
 
+import { isUnauthorizedOrForbidden } from '@api/utils'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react'
 import { setMeasurement, startSpan } from '@sentry/react'
+import { normalizeRtkBaseQuery } from '@utils/normalizeRtkBaseQuery'
 import { sha256 } from '@utils/sha256'
 import ky, { HTTPError } from 'ky'
 
@@ -11,7 +13,6 @@ import { RTK_MAX_RETRIES, RtkCacheTagType } from './constants'
 import { getOIDCConfig } from '../auth/getOIDCConfig'
 import { getOIDCUser } from '../auth/getOIDCUser'
 import { redirectToLoginIfUnauthorized } from '../auth/utils'
-import { normalizeRtkBaseQuery } from '../utils/normalizeRtkBaseQuery'
 
 import type { BackendApi } from './BackendApi.types'
 import type { CustomResponseError, RTKBaseQueryArgs } from './types'
@@ -243,7 +244,14 @@ export const monitorfishApiKy = ky.extend({
       }
     ],
     beforeRetry: [
-      async ({ request }) => {
+      async ({ error, request }) => {
+        if (error) {
+          // Retry is not necessary when request is unauthorized
+          if (isUnauthorizedOrForbidden((error as HTTPError).response?.status)) {
+            return ky.stop
+          }
+        }
+
         const user = getOIDCUser()
         const token = user?.access_token
 
@@ -257,8 +265,10 @@ export const monitorfishApiKy = ky.extend({
             request.headers.set(CORRELATION_HEADER, hashedToken)
           }
         }
+
+        return undefined
       }
     ]
   },
-  retry: RTK_MAX_RETRIES + 1
+  retry: RTK_MAX_RETRIES
 })

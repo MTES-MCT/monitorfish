@@ -19,7 +19,6 @@ class UpdateLogbookPriorNotification(
     fun execute(
         reportId: String,
         operationDate: ZonedDateTime,
-        authorTrigram: String?,
         note: String?,
         updatedBy: String?,
     ): PriorNotification {
@@ -31,10 +30,9 @@ class UpdateLogbookPriorNotification(
             logger.warn("Could not delete existing PDF document", e)
         }
 
-        logbookReportRepository.updatePriorNotificationAuthorTrigramAndNote(
+        logbookReportRepository.updatePriorNotificationNote(
             reportId = reportId,
             operationDate = operationDate,
-            authorTrigram = authorTrigram,
             note = note,
             updatedBy = updatedBy,
         )

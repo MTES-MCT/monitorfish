@@ -181,7 +181,6 @@ class PriorNotificationController(
             updateLogbookPriorNotification.execute(
                 reportId = reportId,
                 operationDate = operationDate,
-                authorTrigram = logbookPriorNotificationFormDataInput.authorTrigram,
                 note = logbookPriorNotificationFormDataInput.note,
                 updatedBy = response.getHeader(UserAuthorizationCheckFilter.EMAIL_HEADER),
             )

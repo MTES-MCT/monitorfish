@@ -8,14 +8,13 @@ import java.time.ZonedDateTime
 
 data class ManualPriorNotificationFormDataOutput(
     val reportId: String,
-    val hasPortEntranceAuthorization: Boolean,
-    val hasPortLandingAuthorization: Boolean,
-    val authorTrigram: String,
     val didNotFishAfterZeroNotice: Boolean,
     val expectedArrivalDate: String,
     val expectedLandingDate: String,
     val fishingCatches: List<ManualPriorNotificationFishingCatchDataOutput>,
     val globalFaoArea: String?,
+    val hasPortEntranceAuthorization: Boolean,
+    val hasPortLandingAuthorization: Boolean,
     val note: String?,
     val portLocode: String,
     val sentAt: ZonedDateTime,
@@ -29,10 +28,6 @@ data class ManualPriorNotificationFormDataOutput(
             val logbookMessage = priorNotification.logbookMessageAndValue.logbookMessage
             val pnoValue = priorNotification.logbookMessageAndValue.value
 
-            val authorTrigram =
-                requireNotNull(pnoValue.authorTrigram) {
-                    "`pnoValue.authorTrigram` is null."
-                }
             val expectedArrivalDate =
                 CustomZonedDateTime.fromZonedDateTime(
                     requireNotNull(pnoValue.predictedArrivalDatetimeUtc) {
@@ -64,8 +59,8 @@ data class ManualPriorNotificationFormDataOutput(
                     "`priorNotification.vessel` is null."
                 }.id
 
-            val hasPortEntranceAuthorization = pnoValue.hasPortEntranceAuthorization ?: true
-            val hasPortLandingAuthorization = pnoValue.hasPortLandingAuthorization ?: true
+            val hasPortEntranceAuthorization = pnoValue.hasPortEntranceAuthorization != false
+            val hasPortLandingAuthorization = pnoValue.hasPortLandingAuthorization != false
             // In Frontend form, manual prior notifications can:
             // - either have a single global FAO area field
             // - or have an FAO area field per fishing catch
@@ -85,7 +80,6 @@ data class ManualPriorNotificationFormDataOutput(
 
             return ManualPriorNotificationFormDataOutput(
                 reportId = reportId,
-                authorTrigram = authorTrigram,
                 didNotFishAfterZeroNotice = priorNotification.didNotFishAfterZeroNotice,
                 expectedArrivalDate = expectedArrivalDate,
                 expectedLandingDate = expectedLandingDate,

@@ -122,7 +122,6 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
     cy.get('.Component-Banner').contains(`Le préavis est en cours de diffusion.`)
 
     cy.get('textarea[name=note]').should('have.attr', 'readonly')
-    cy.get('input[name=authorTrigram]').should('have.attr', 'readonly')
 
     cy.contains('button', 'Enregistrer').should('be.disabled')
     cy.contains('button', 'Diffuser').should('be.disabled')
@@ -134,7 +133,6 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
     cy.get('.Component-Banner').contains(`Le préavis est en cours d’envoi aux unités qui l’ont demandé.`)
 
     cy.get('textarea[name=note]').should('have.attr', 'readonly')
-    cy.get('input[name=authorTrigram]').should('have.attr', 'readonly')
 
     cy.contains('button', 'Enregistrer').should('be.disabled')
     cy.contains('button', 'Diffuser').should('be.disabled')

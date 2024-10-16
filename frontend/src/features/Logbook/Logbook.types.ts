@@ -163,6 +163,11 @@ export namespace Logbook {
   }
 
   export interface PnoMessageValue {
+    /**
+     * @deprecated
+     * Kept because some historical messages used a manually entered trigram to identify the author of the message.
+     * It's now automated via `createdBy` and `updatedBy` fields.
+     */
     authorTrigram: string | undefined
     catchOnboard: Catch[] | undefined
     catchToLand: Catch[] | undefined

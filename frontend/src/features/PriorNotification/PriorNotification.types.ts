@@ -77,7 +77,6 @@ export namespace PriorNotification {
   )
 
   export type ManualDraft = {
-    authorTrigram: string
     didNotFishAfterZeroNotice: boolean
     expectedArrivalDate: string | undefined
     expectedLandingDate: string | undefined
@@ -94,12 +93,10 @@ export namespace PriorNotification {
   }
 
   export type LogbookForm = {
-    authorTrigram: string | undefined
     note: string | undefined
   }
 
   export type ManualForm = {
-    authorTrigram: string
     didNotFishAfterZeroNotice: boolean
     expectedArrivalDate: string
     expectedLandingDate: string

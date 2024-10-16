@@ -16,7 +16,6 @@ context('Side Window > Logbook Prior Notification Form > Behavior', () => {
     cy.get('.Component-Banner').contains(`Le préavis est en cours de diffusion.`)
 
     cy.get('textarea[name=note]').should('have.attr', 'readonly')
-    cy.get('input[name=authorTrigram]').should('have.attr', 'readonly')
 
     cy.contains('button', 'Télécharger').should('be.disabled')
     cy.contains('button', 'Diffuser').should('be.disabled')
@@ -39,7 +38,6 @@ context('Side Window > Logbook Prior Notification Form > Behavior', () => {
     const operationDate = dayjs().subtract(6, 'hours').toISOString()
     cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_116?operationDate=${operationDate}`, {
       body: {
-        authorTrigram: null,
         note: null
       }
     })

@@ -139,7 +139,6 @@ class PriorNotificationControllerUTests {
             updateLogbookPriorNotification.execute(
                 reportId = anyOrNull(),
                 operationDate = anyOrNull(),
-                authorTrigram = anyOrNull(),
                 note = anyOrNull(),
                 updatedBy = anyOrNull(),
             ),
@@ -147,13 +146,7 @@ class PriorNotificationControllerUTests {
             .willReturn(fakePriorNotification)
 
         // When
-        val requestBody =
-            objectMapper.writeValueAsString(
-                LogbookPriorNotificationFormDataInput(
-                    authorTrigram = "ABC",
-                    note = "Test !",
-                ),
-            )
+        val requestBody = objectMapper.writeValueAsString(LogbookPriorNotificationFormDataInput(note = "Test !"))
         val pnoValue = fakePriorNotification.logbookMessageAndValue.value
         api.perform(
             put(
@@ -164,7 +157,6 @@ class PriorNotificationControllerUTests {
         )
             // Then
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.authorTrigram", equalTo(pnoValue.authorTrigram)))
             .andExpect(jsonPath("$.note", equalTo(pnoValue.note)))
     }
 

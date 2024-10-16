@@ -84,6 +84,7 @@ interface LogbookReportRepository {
         operationDate: ZonedDateTime,
         authorTrigram: String?,
         note: String?,
+        updatedBy: String?,
     )
 
     fun invalidate(

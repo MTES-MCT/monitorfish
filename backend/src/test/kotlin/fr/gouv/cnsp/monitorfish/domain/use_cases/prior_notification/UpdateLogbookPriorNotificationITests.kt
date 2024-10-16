@@ -269,7 +269,8 @@ class UpdateLogbookPriorNotificationITests : AbstractDBTests() {
         val operationDate = CustomZonedDateTime.now().toZonedDateTime()
 
         // When
-        val afterPriorNotification = updateLogbookPriorNotification.execute(reportId, operationDate, "ABC", "Une note.")
+        val afterPriorNotification =
+            updateLogbookPriorNotification.execute(reportId, operationDate, "ABC", "Une note.", "bob@example.org")
 
         // Then
         val afterPnoValue = afterPriorNotification.logbookMessageAndValue.value

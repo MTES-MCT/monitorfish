@@ -47,6 +47,7 @@ class CreateOrUpdateManualPriorNotification(
         sentAt: ZonedDateTime,
         purpose: LogbookMessagePurpose,
         tripGearCodes: List<String>,
+        updatedBy: String?,
         vesselId: Int,
     ): PriorNotification {
         // /!\ Backend computed vessel risk factor is only used as a real time Frontend indicator.
@@ -86,6 +87,7 @@ class CreateOrUpdateManualPriorNotification(
                 pnoTypes = priorNotificationTypes,
                 portLocode = portLocode,
                 purpose = purpose,
+                updatedBy = updatedBy,
                 computedVesselFlagCountryCode = vessel?.flagState,
                 computedVesselRiskFactor = computedValues.vesselRiskFactor,
                 isPartOfControlUnitSubscriptions = isPartOfControlUnitSubscriptions,
@@ -174,6 +176,7 @@ class CreateOrUpdateManualPriorNotification(
         note: String?,
         pnoTypes: List<PriorNotificationType>,
         portLocode: String,
+        updatedBy: String?,
         computedVesselFlagCountryCode: CountryCode?,
         computedVesselRiskFactor: Double?,
         isPartOfControlUnitSubscriptions: Boolean,
@@ -218,6 +221,7 @@ class CreateOrUpdateManualPriorNotification(
             this.statisticalRectangle = null
             this.tripStartDate = null
             this.riskFactor = computedVesselRiskFactor
+            this.updatedBy = updatedBy
         }
     }
 

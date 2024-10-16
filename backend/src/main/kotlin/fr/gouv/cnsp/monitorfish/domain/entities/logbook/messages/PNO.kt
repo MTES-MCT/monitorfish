@@ -69,4 +69,6 @@ class PNO() : LogbookMessageValue {
     @JsonDeserialize(using = ZonedDateTimeDeserializer::class)
     @JsonSerialize(using = ZonedDateTimeSerializer::class)
     var tripStartDate: ZonedDateTime? = null
+
+    var updatedBy: String? = null
 }

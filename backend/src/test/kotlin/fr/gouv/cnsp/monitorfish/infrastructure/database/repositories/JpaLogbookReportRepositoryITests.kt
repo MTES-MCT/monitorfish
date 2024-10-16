@@ -1127,15 +1127,17 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // When
         jpaLogbookReportRepository.updatePriorNotificationAuthorTrigramAndNote(
-            "FAKE_OPERATION_109_COR",
-            ZonedDateTime.now().minusMinutes(15),
-            "ABC",
-            "A wonderful note",
+            reportId = "FAKE_OPERATION_109_COR",
+            operationDate = ZonedDateTime.now().minusMinutes(15),
+            authorTrigram = "ABC",
+            note = "A wonderful note",
+            updatedBy = "bob@example.org",
         )
 
         // Then
         val updatedCorReport = jpaLogbookReportRepository.findById(2109)
         assertThat((updatedCorReport.message as PNO).note).isEqualTo("A wonderful note")
+        assertThat((updatedCorReport.message as PNO).updatedBy).isEqualTo("bob@example.org")
         assertThat((updatedCorReport.message as PNO).isBeingSent).isEqualTo(false)
         assertThat((updatedCorReport.message as PNO).isVerified).isEqualTo(false)
         assertThat((updatedCorReport.message as PNO).isSent).isEqualTo(false)

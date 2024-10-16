@@ -6,7 +6,7 @@ import { updateManualPriorNotificationComputedValues } from '@features/PriorNoti
 import { getPriorNotificationIdentifier, isPriorNotificationZero } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, FormikEffect, Icon, Level, usePrevious } from '@mtes-mct/monitor-ui'
+import { Accent, Button, customDayjs, FormikEffect, Icon, Level, usePrevious } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { getDefinedObject } from '@utils/getDefinedObject'
 import { useFormikContext } from 'formik'
@@ -200,6 +200,16 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
             >
               Invalider le préavis
             </InvalidateButton>
+          )}
+
+          {!!detail?.logbookMessage.message.updatedBy && (
+            <>
+              <hr />
+
+              <p
+                title={detail.operationDate}
+              >{`Dernière modification par ${detail.logbookMessage.message.updatedBy} ${customDayjs(detail.operationDate).fromNow()}.`}</p>
+            </>
           )}
         </Body>
 

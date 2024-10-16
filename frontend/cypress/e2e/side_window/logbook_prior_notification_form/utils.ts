@@ -234,7 +234,8 @@ export function getPriorNotificationFakeResponse({
         purpose: PriorNotification.PurposeCode.LAN,
         riskFactor: 3.2,
         statisticalRectangle: null,
-        tripStartDate
+        tripStartDate,
+        updatedBy: null
       },
       messageType: Logbook.MessageType.PNO,
       operationDateTime: updatedAt,

@@ -369,6 +369,7 @@ class CreateOrUpdateManualPriorNotificationITests : AbstractDBTests() {
                 purpose = LogbookMessagePurpose.LAN,
                 sentAt = ZonedDateTime.now(),
                 tripGearCodes = emptyList(),
+                updatedBy = "bob@example.org",
                 vesselId = 1,
             )
 
@@ -418,6 +419,7 @@ class CreateOrUpdateManualPriorNotificationITests : AbstractDBTests() {
                 purpose = LogbookMessagePurpose.LAN,
                 sentAt = ZonedDateTime.now(),
                 tripGearCodes = emptyList(),
+                updatedBy = "bob@example.org",
                 vesselId = 1,
             )
 

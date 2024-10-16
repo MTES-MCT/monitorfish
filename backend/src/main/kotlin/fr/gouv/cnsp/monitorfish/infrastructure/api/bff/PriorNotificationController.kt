@@ -220,14 +220,13 @@ class PriorNotificationController(
     ): ManualPriorNotificationFormDataOutput {
         val createdPriorNotification =
             createOrUpdateManualPriorNotification.execute(
-                hasPortEntranceAuthorization = manualPriorNotificationFormDataInput.hasPortEntranceAuthorization,
-                hasPortLandingAuthorization = manualPriorNotificationFormDataInput.hasPortLandingAuthorization,
-                authorTrigram = manualPriorNotificationFormDataInput.authorTrigram,
                 didNotFishAfterZeroNotice = manualPriorNotificationFormDataInput.didNotFishAfterZeroNotice,
                 expectedArrivalDate = manualPriorNotificationFormDataInput.expectedArrivalDate,
                 expectedLandingDate = manualPriorNotificationFormDataInput.expectedLandingDate,
-                globalFaoArea = manualPriorNotificationFormDataInput.globalFaoArea,
                 fishingCatches = manualPriorNotificationFormDataInput.fishingCatches.map { it.toLogbookFishingCatch() },
+                globalFaoArea = manualPriorNotificationFormDataInput.globalFaoArea,
+                hasPortEntranceAuthorization = manualPriorNotificationFormDataInput.hasPortEntranceAuthorization,
+                hasPortLandingAuthorization = manualPriorNotificationFormDataInput.hasPortLandingAuthorization,
                 note = manualPriorNotificationFormDataInput.note,
                 portLocode = manualPriorNotificationFormDataInput.portLocode,
                 reportId = null,
@@ -253,14 +252,13 @@ class PriorNotificationController(
     ): ManualPriorNotificationFormDataOutput {
         val updatedPriorNotification =
             createOrUpdateManualPriorNotification.execute(
-                hasPortEntranceAuthorization = manualPriorNotificationFormDataInput.hasPortEntranceAuthorization,
-                hasPortLandingAuthorization = manualPriorNotificationFormDataInput.hasPortLandingAuthorization,
-                authorTrigram = manualPriorNotificationFormDataInput.authorTrigram,
                 didNotFishAfterZeroNotice = manualPriorNotificationFormDataInput.didNotFishAfterZeroNotice,
                 expectedArrivalDate = manualPriorNotificationFormDataInput.expectedArrivalDate,
                 expectedLandingDate = manualPriorNotificationFormDataInput.expectedLandingDate,
-                globalFaoArea = manualPriorNotificationFormDataInput.globalFaoArea,
                 fishingCatches = manualPriorNotificationFormDataInput.fishingCatches.map { it.toLogbookFishingCatch() },
+                globalFaoArea = manualPriorNotificationFormDataInput.globalFaoArea,
+                hasPortEntranceAuthorization = manualPriorNotificationFormDataInput.hasPortEntranceAuthorization,
+                hasPortLandingAuthorization = manualPriorNotificationFormDataInput.hasPortLandingAuthorization,
                 note = manualPriorNotificationFormDataInput.note,
                 portLocode = manualPriorNotificationFormDataInput.portLocode,
                 reportId = reportId,

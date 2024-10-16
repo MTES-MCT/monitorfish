@@ -29,7 +29,6 @@ class CreateOrUpdateManualPriorNotification(
 
     fun execute(
         reportId: String?,
-        authorTrigram: String,
         didNotFishAfterZeroNotice: Boolean,
         expectedArrivalDate: ZonedDateTime,
         expectedLandingDate: ZonedDateTime,
@@ -75,7 +74,6 @@ class CreateOrUpdateManualPriorNotification(
         val priorNotificationTypes = computedValues.types.map { it.toPriorNotificationType() }
         val message =
             getMessage(
-                authorTrigram = authorTrigram,
                 expectedArrivalDate = expectedArrivalDate,
                 expectedLandingDate = expectedLandingDate,
                 // At the moment, manual prior notifications only have a single global FAO area field in Frontend,
@@ -166,7 +164,6 @@ class CreateOrUpdateManualPriorNotification(
     }
 
     private fun getMessage(
-        authorTrigram: String,
         purpose: LogbookMessagePurpose,
         expectedArrivalDate: ZonedDateTime,
         expectedLandingDate: ZonedDateTime,

@@ -103,7 +103,6 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         weight: 200.0
       })
       assert.deepInclude(createdPriorNotification, {
-        authorTrigram: 'BOB',
         didNotFishAfterZeroNotice: false,
         expectedArrivalDate: arrivalDateAsString,
         expectedLandingDate: landingDateAsString,
@@ -334,7 +333,6 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         weight: 5000.0
       })
       assert.deepInclude(createdPriorNotification, {
-        authorTrigram: 'BOB',
         didNotFishAfterZeroNotice: false,
         expectedArrivalDate: arrivalDateAsString,
         // Should be the same as the arrival date since we checked "équivalentes à celles de l'arrivée au port"
@@ -556,7 +554,6 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         weight: 50.0
       })
       assert.deepInclude(createdPriorNotification, {
-        authorTrigram: 'BOB',
         didNotFishAfterZeroNotice: false,
         expectedArrivalDate: arrivalDateAsString,
         expectedLandingDate: arrivalDateAsString, // Checked "équivalentes à celles de l'arrivée au port"
@@ -602,7 +599,6 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
           weight: 50.0
         })
         assert.deepInclude(firstUpdatedPriorNotification, {
-          authorTrigram: 'BOB',
           didNotFishAfterZeroNotice: false,
           expectedArrivalDate: arrivalDateAsString,
           expectedLandingDate: arrivalDateAsString, // Checked "équivalentes à celles de l'arrivée au port"
@@ -643,7 +639,6 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
             weight: 50.0
           })
           assert.deepInclude(secondUpdatedPriorNotification, {
-            authorTrigram: 'BOB',
             didNotFishAfterZeroNotice: false,
             expectedArrivalDate: arrivalDateAsString,
             expectedLandingDate: arrivalDateAsString, // Checked "équivalentes à celles de l'arrivée au port"

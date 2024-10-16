@@ -14,6 +14,12 @@ class PNO() : LogbookMessageValue {
     var hasPortEntranceAuthorization: Boolean? = null
     var hasPortLandingAuthorization: Boolean? = null
 
+    @Deprecated(
+        """
+        Kept because some historical messages used a manually entered trigram to identify the author of the message.
+        It's now automated via `createdBy` and `updatedBy` fields.
+        """,
+    )
     var authorTrigram: String? = null
     var catchOnboard: List<LogbookFishingCatch> = emptyList()
     var catchToLand: List<LogbookFishingCatch> = emptyList()

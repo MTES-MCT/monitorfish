@@ -13,7 +13,6 @@ import {
   FormikMultiSelect,
   FormikSelect,
   FormikTextarea,
-  FormikTextInput,
   getOptionsFromLabelledEnum,
   LinkButton
 } from '@mtes-mct/monitor-ui'
@@ -157,8 +156,6 @@ export function Form({ isNewPriorNotification, isReadOnly }: FormProps) {
           <LinkButton onClick={openVesselReportingList}>Ouvrir un signalement sur le navire</LinkButton>
         )}
       </FieldGroup>
-
-      <AuthorTrigramInput label="Saisi par" maxLength={3} name="authorTrigram" readOnly={isReadOnly} />
     </>
   )
 }
@@ -167,10 +164,6 @@ const StyledFormikMultiRadio = styled(FormikMultiRadio)`
   legend {
     margin-bottom: 8px;
   }
-`
-
-const AuthorTrigramInput = styled(FormikTextInput)`
-  width: 120px;
 `
 
 const FieldGroup = styled.div.attrs({ className: 'FieldGroup' })`

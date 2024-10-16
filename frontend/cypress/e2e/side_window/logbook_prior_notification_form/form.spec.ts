@@ -10,7 +10,6 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
     const operationDate = dayjs().subtract(6, 'hours').toISOString()
     cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_115?operationDate=${operationDate}`, {
       body: {
-        authorTrigram: null,
         note: null
       }
     })
@@ -23,7 +22,6 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
     )
 
     cy.get('[name="note"]').should('have.value', '')
-    cy.get('[name="authorTrigram"]').should('have.value', '')
 
     // When
     cy.fill("Points d'attention identifiés par le CNSP", "Un point d'attention.")
@@ -38,12 +36,10 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
     editSideWindowPriorNotification(`MER À BOIRE`, 'FAKE_OPERATION_115')
 
     cy.get('[name="note"]').should('have.value', "Un point d'attention.")
-    cy.get('[name="authorTrigram"]').should('have.value', 'ABC')
 
     // Reset
     cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_115?operationDate=${operationDate}`, {
       body: {
-        authorTrigram: null,
         note: null
       }
     })

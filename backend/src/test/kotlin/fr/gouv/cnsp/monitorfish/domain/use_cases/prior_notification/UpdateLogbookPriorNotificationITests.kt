@@ -270,7 +270,7 @@ class UpdateLogbookPriorNotificationITests : AbstractDBTests() {
 
         // When
         val afterPriorNotification =
-            updateLogbookPriorNotification.execute(reportId, operationDate, "ABC", "Une note.", "bob@example.org")
+            updateLogbookPriorNotification.execute(reportId, operationDate, "ABC", "editor@example.org")
 
         // Then
         val afterPnoValue = afterPriorNotification.logbookMessageAndValue.value

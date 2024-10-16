@@ -178,7 +178,7 @@ export function getPriorNotificationFakeResponse({
       isDeleted: false,
       isSentByFailoverSoftware: false,
       message: {
-        authorTrigram: 'ABC',
+        authorTrigram: null,
         catchOnboard: [
           {
             conversionFactor: null,
@@ -235,7 +235,7 @@ export function getPriorNotificationFakeResponse({
         riskFactor: 3.2,
         statisticalRectangle: null,
         tripStartDate,
-        updatedBy: null
+        updatedBy: 'editor@example.org'
       },
       messageType: Logbook.MessageType.PNO,
       operationDateTime: updatedAt,
@@ -272,11 +272,9 @@ export function getPriorNotificationFakeResponse({
     return {
       ...commonData,
       asLogbookForm: {
-        authorTrigram: 'ABC',
         note: null
       },
       asManualDraft: {
-        authorTrigram: 'ABC',
         didNotFishAfterZeroNotice: false,
         expectedArrivalDate,
         expectedLandingDate: expectedArrivalDate,
@@ -303,7 +301,6 @@ export function getPriorNotificationFakeResponse({
     asLogbookForm: null,
     asManualDraft: null,
     asManualForm: {
-      authorTrigram: 'ABC',
       didNotFishAfterZeroNotice: false,
       expectedArrivalDate,
       expectedLandingDate: expectedArrivalDate,

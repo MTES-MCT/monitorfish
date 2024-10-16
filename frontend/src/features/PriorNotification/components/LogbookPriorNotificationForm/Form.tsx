@@ -12,7 +12,6 @@ import {
   customDayjs,
   FormikEffect,
   FormikTextarea,
-  FormikTextInput,
   Icon,
   LinkButton,
   THEME
@@ -96,8 +95,6 @@ export function Form({ detail, initialFormValues }: FormProps) {
 
           {isSuperUser && (
             <>
-              <AuthorTrigramInput label="Saisi par" name="authorTrigram" readOnly={isReadOnly} />
-
               <hr />
 
               <UploadFiles
@@ -180,11 +177,6 @@ const FieldGroup = styled.div.attrs({ className: 'FieldGroup' })`
   textarea {
     box-sizing: border-box !important;
   }
-`
-
-const AuthorTrigramInput = styled(FormikTextInput)`
-  margin-top: 24px;
-  width: 120px;
 `
 
 const LastUpdateText = styled.p`

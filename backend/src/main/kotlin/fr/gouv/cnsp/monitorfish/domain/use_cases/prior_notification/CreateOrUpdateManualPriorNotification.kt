@@ -192,7 +192,6 @@ class CreateOrUpdateManualPriorNotification(
         val portName = allPorts.find { it.locode == portLocode }?.name
 
         return PNO().apply {
-            this.authorTrigram = authorTrigram
             this.catchOnboard = fishingCatches
             this.catchToLand = fishingCatches
             this.economicZone = null

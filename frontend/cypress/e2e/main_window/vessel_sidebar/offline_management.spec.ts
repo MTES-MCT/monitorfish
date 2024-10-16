@@ -135,7 +135,7 @@ context('Offline management', () => {
     cy.intercept(
       {
         method: 'GET',
-        pathname: '/bff/v1/vessels/reporting',
+        pathname: '/bff/v1/vessels/reportings',
         times: 2
       },
       { statusCode: 400 }

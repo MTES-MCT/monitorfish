@@ -8,12 +8,12 @@ import { useGetCurrentUserAuthorizationQueryOverride } from './useGetCurrentUser
 
 import type { UserAccountContextType } from '../../context/UserAccountContext'
 
-const IS_CYPRESS = isCypress() || true
+const IS_CYPRESS = isCypress()
 
 /**
  * When using Cypress, we stub `useAuth()`
  */
-export function useGetUserAccount(): UserAccountContextType {
+export function useGetUserAccount(): UserAccountContextType | undefined {
   // `| undefined` because it's undefined if the OIDC is disabled which is the case for Cypress tests
   const auth = useAuth() as AuthContextProps | undefined
   const { trackUserId } = useTracking()
@@ -38,6 +38,10 @@ export function useGetUserAccount(): UserAccountContextType {
   }, [auth])
 
   const userAccount = useMemo(() => {
+    if (!user) {
+      return undefined
+    }
+
     if (IS_CYPRESS) {
       return {
         email: 'dummy@cypress.test',

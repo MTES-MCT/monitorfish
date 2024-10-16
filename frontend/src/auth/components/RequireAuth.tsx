@@ -2,11 +2,9 @@ import { Navigate } from 'react-router-dom'
 
 import { UserAccountContext } from '../../context/UserAccountContext'
 import { paths } from '../../paths'
-import { getOIDCConfig } from '../getOIDCConfig'
 import { useGetUserAccount } from '../hooks/useGetUserAccount'
 
 export function RequireAuth({ children, redirect = false, requireSuperUser = false }) {
-  const oidcConfig = getOIDCConfig()
   const userAccount = useGetUserAccount()
 
   const handleRedirect = (path: string, shouldRedirect: boolean) => {
@@ -15,10 +13,6 @@ export function RequireAuth({ children, redirect = false, requireSuperUser = fal
     }
 
     return null
-  }
-
-  if (!oidcConfig.IS_OIDC_ENABLED) {
-    return <UserAccountContext.Provider value={userAccount}>{children}</UserAccountContext.Provider>
   }
 
   if (!userAccount.isAuthenticated) {

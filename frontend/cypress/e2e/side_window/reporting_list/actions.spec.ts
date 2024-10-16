@@ -154,6 +154,7 @@ context('Side Window > Reporting List > Actions', () => {
       // Then
       cy.wait('@updateReporting').then(({ request, response }) => {
         expect(request.body.type).contains('OBSERVATION')
+        expect(request.body.authorTrigram).contains('LTH')
         expect(response && response.statusCode).equal(200)
 
         cy.getDataCy('ReportingList-reporting').should('have.length', numberOfReportings - 1)

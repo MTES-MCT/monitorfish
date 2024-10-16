@@ -26,7 +26,7 @@ export const createReportingFromPriorNotificationForm = (vesselName: string, rep
 
   cy.fill('Titre', faker.word.words(3))
   cy.fill('Natinf', '23588')
-  cy.fill('Saisi par', 'BOB', { index: 1 })
+  cy.fill('Saisi par', 'BOB')
 
   cy.clickButton('Valider')
 
@@ -213,6 +213,7 @@ export function getPriorNotificationFakeResponse({
             weight: 50.0
           }
         ],
+        createdBy: 'creator@example.org',
         economicZone: null,
         effortZone: null,
         faoZone: null,

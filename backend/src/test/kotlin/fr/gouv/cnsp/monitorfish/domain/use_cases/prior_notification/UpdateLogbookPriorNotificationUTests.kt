@@ -45,6 +45,7 @@ class UpdateLogbookPriorNotificationUTests {
                 operationDate = fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
                 authorTrigram = "ABC",
                 note = null,
+                updatedBy = "bob@example.org",
             )
 
         // Then

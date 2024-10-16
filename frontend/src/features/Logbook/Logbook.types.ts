@@ -189,6 +189,7 @@ export namespace Logbook {
     riskFactor: number | undefined
     statisticalRectangle: string | undefined
     tripStartDate: string | undefined
+    updatedBy: string | undefined
   }
 
   export interface RtpMessageValue {

@@ -141,6 +141,7 @@ class PriorNotificationControllerUTests {
                 operationDate = anyOrNull(),
                 authorTrigram = anyOrNull(),
                 note = anyOrNull(),
+                updatedBy = anyOrNull(),
             ),
         )
             .willReturn(fakePriorNotification)
@@ -225,6 +226,7 @@ class PriorNotificationControllerUTests {
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
+                anyOrNull(),
             ),
         )
             .willReturn(fakePriorNotification)
@@ -281,6 +283,7 @@ class PriorNotificationControllerUTests {
                 sentAt = anyOrNull(),
                 purpose = anyOrNull(),
                 tripGearCodes = anyOrNull(),
+                updatedBy = anyOrNull(),
                 vesselId = anyOrNull(),
             ),
         )

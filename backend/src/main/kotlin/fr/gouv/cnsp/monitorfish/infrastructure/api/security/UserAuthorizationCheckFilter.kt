@@ -34,7 +34,8 @@ class UserAuthorizationCheckFilter(
     private val MALFORMED_BEARER_MESSAGE = "Malformed authorization header, header type should be 'Bearer'"
     private val MISSING_OIDC_ENDPOINT_MESSAGE = "Missing OIDC user info endpoint"
     private val MISSING_OIDC_ISSUER_ENDPOINT_MESSAGE = "Missing issuer URI endpoint"
-    private val COULD_NOT_FETCH_USER_INFO_MESSAGE = "Could not fetch user info at ${oidcProperties.issuerUri + oidcProperties.userinfoEndpoint}"
+    private val COULD_NOT_FETCH_USER_INFO_MESSAGE =
+        "Could not fetch user info at ${oidcProperties.issuerUri + oidcProperties.userinfoEndpoint}"
     private val INSUFFICIENT_AUTHORIZATION_MESSAGE = "Insufficient authorization"
 
     override fun doFilterInternal(
@@ -90,7 +91,7 @@ class UserAuthorizationCheckFilter(
                     request.requestURI.contains(
                         it,
                     )
-                } ?: false
+                } == true
             val isAuthorized = getIsAuthorizedUser.execute(userInfoResponse.email, isSuperUserPath)
             if (!isAuthorized) {
                 logger.info("$INSUFFICIENT_AUTHORIZATION_MESSAGE: ${request.requestURI!!} (${userInfoResponse.email})")
@@ -105,10 +106,8 @@ class UserAuthorizationCheckFilter(
                 ).toString(),
             )
 
-            if (request.requestURI == CURRENT_USER_AUTHORIZATION_CONTROLLER_PATH) {
-                // The email is added as a header so the email will be known by the controller
-                response.addHeader(EMAIL_HEADER, userInfoResponse.email)
-            }
+            // The email is added as a header so the email will be known by the controller
+            response.addHeader(EMAIL_HEADER, userInfoResponse.email)
 
             filterChain.doFilter(request, response)
         } catch (e: Exception) {

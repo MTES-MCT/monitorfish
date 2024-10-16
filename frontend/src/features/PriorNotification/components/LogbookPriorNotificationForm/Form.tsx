@@ -9,6 +9,7 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import {
   Accent,
   Button,
+  customDayjs,
   FormikEffect,
   FormikTextarea,
   FormikTextInput,
@@ -16,7 +17,6 @@ import {
   LinkButton,
   THEME
 } from '@mtes-mct/monitor-ui'
-import { assertNotNullish } from '@utils/assertNotNullish'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import { Formik } from 'formik'
 import { noop, isEqual } from 'lodash'
@@ -39,7 +39,6 @@ export function Form({ detail, initialFormValues }: FormProps) {
   const [isInvalidationConfirmationModalOpen, setIsInvalidationConfirmationModalOpen] = useState(false)
 
   const priorNotificationIdentifier = useMemo(() => getPriorNotificationIdentifier(detail), [detail])
-  assertNotNullish(priorNotificationIdentifier)
 
   const isBeingSent = !!detail.logbookMessage.message.isBeingSent
   const isInvalidated = !!detail.logbookMessage.message.isInvalidated
@@ -107,6 +106,16 @@ export function Form({ detail, initialFormValues }: FormProps) {
                 operationDate={detail.operationDate}
                 reportId={detail.reportId}
               />
+
+              {!!detail?.logbookMessage.message.updatedBy && (
+                <>
+                  <hr />
+
+                  <p
+                    title={detail.operationDate}
+                  >{`Dernière modification par ${detail.logbookMessage.message.updatedBy} ${customDayjs(detail.operationDate).fromNow()}.`}</p>
+                </>
+              )}
             </>
           )}
         </>

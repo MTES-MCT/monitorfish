@@ -10,11 +10,13 @@ import fr.gouv.cnsp.monitorfish.infrastructure.api.input.LogbookPriorNotificatio
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationComputeDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationFormDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
+import fr.gouv.cnsp.monitorfish.infrastructure.api.security.UserAuthorizationCheckFilter
 import fr.gouv.cnsp.monitorfish.infrastructure.exceptions.BackendRequestErrorCode
 import fr.gouv.cnsp.monitorfish.infrastructure.exceptions.BackendRequestException
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.servlet.http.HttpServletResponse
 import jakarta.websocket.server.PathParam
 import org.springframework.data.domain.Sort
 import org.springframework.http.HttpHeaders
@@ -165,6 +167,7 @@ class PriorNotificationController(
     @PutMapping("/logbook/{reportId}")
     @Operation(summary = "Update a logbook prior notification by its `reportId`")
     fun updateLogbook(
+        response: HttpServletResponse,
         @PathParam("Logbook message `reportId`")
         @PathVariable(name = "reportId")
         reportId: String,
@@ -180,6 +183,7 @@ class PriorNotificationController(
                 operationDate = operationDate,
                 authorTrigram = logbookPriorNotificationFormDataInput.authorTrigram,
                 note = logbookPriorNotificationFormDataInput.note,
+                updatedBy = response.getHeader(UserAuthorizationCheckFilter.EMAIL_HEADER),
             )
 
         return LogbookPriorNotificationFormDataOutput.fromPriorNotification(updatedPriorNotification)
@@ -211,6 +215,7 @@ class PriorNotificationController(
     @PostMapping("/manual")
     @Operation(summary = "Create a new manual prior notification")
     fun createManual(
+        response: HttpServletResponse,
         @RequestBody
         manualPriorNotificationFormDataInput: ManualPriorNotificationFormDataInput,
     ): ManualPriorNotificationFormDataOutput {
@@ -230,6 +235,7 @@ class PriorNotificationController(
                 sentAt = manualPriorNotificationFormDataInput.sentAt,
                 purpose = manualPriorNotificationFormDataInput.purpose,
                 tripGearCodes = manualPriorNotificationFormDataInput.tripGearCodes,
+                updatedBy = response.getHeader(UserAuthorizationCheckFilter.EMAIL_HEADER),
                 vesselId = manualPriorNotificationFormDataInput.vesselId,
             )
 
@@ -239,6 +245,7 @@ class PriorNotificationController(
     @PutMapping("/manual/{reportId}")
     @Operation(summary = "Update a manual prior notification by its `reportId`")
     fun updateManual(
+        response: HttpServletResponse,
         @PathParam("Logbook message `reportId`")
         @PathVariable(name = "reportId")
         reportId: String,
@@ -261,6 +268,7 @@ class PriorNotificationController(
                 sentAt = manualPriorNotificationFormDataInput.sentAt,
                 purpose = manualPriorNotificationFormDataInput.purpose,
                 tripGearCodes = manualPriorNotificationFormDataInput.tripGearCodes,
+                updatedBy = response.getHeader(UserAuthorizationCheckFilter.EMAIL_HEADER),
                 vesselId = manualPriorNotificationFormDataInput.vesselId,
             )
 

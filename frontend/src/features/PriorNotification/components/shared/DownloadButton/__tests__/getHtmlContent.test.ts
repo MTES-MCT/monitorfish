@@ -160,7 +160,8 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
         purpose: PurposeCode.LAN,
         riskFactor: 1.2,
         statisticalRectangle: undefined,
-        tripStartDate: '2024-06-13T21:07:22Z'
+        tripStartDate: '2024-06-13T21:07:22Z',
+        updatedBy: undefined
       },
       messageType: MessageType.PNO as MessageType.PNO,
       operationDateTime: '2024-06-14T06:52:22.978603Z',

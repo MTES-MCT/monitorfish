@@ -399,6 +399,7 @@ class JpaLogbookReportRepository(
         operationDate: ZonedDateTime,
         authorTrigram: String?,
         note: String?,
+        updatedBy: String?,
     ) {
         val logbookReport =
             dbLogbookReportRepository
@@ -420,6 +421,8 @@ class JpaLogbookReportRepository(
             pnoValue.apply {
                 this.authorTrigram = authorTrigram
                 this.note = note
+                this.updatedBy = updatedBy
+
                 /**
                  * The PNO states are re-initialized:
                  * - the PDF will be re-generated (done in the use case by deleting the old one)

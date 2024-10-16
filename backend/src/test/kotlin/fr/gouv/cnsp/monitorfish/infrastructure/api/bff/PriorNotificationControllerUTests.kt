@@ -218,7 +218,6 @@ class PriorNotificationControllerUTests {
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
-                anyOrNull(),
             ),
         )
             .willReturn(fakePriorNotification)
@@ -262,12 +261,11 @@ class PriorNotificationControllerUTests {
         given(
             createOrUpdateManualPriorNotification.execute(
                 reportId = any(),
-                authorTrigram = anyOrNull(),
                 didNotFishAfterZeroNotice = anyOrNull(),
                 expectedArrivalDate = anyOrNull(),
                 expectedLandingDate = anyOrNull(),
-                globalFaoArea = anyOrNull(),
                 fishingCatches = anyOrNull(),
+                globalFaoArea = anyOrNull(),
                 hasPortEntranceAuthorization = anyOrNull(),
                 hasPortLandingAuthorization = anyOrNull(),
                 note = anyOrNull(),

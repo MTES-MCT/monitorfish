@@ -80,7 +80,7 @@ context('External MonitorFish', () => {
     cy.get('*[data-cy="missions-menu-box"]').should('not.exist')
 
     // Given
-    cy.loadPath('/ext#@-188008.06,6245230.27,8.70')
+    cy.loadPath('/#@-188008.06,6245230.27,8.70')
 
     // Then
     // No missions

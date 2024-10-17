@@ -26,6 +26,10 @@ export function getCreationLabel(priorNotificationDetail: PriorNotification.Deta
 }
 
 export function getLasUpdateLabel(priorNotificationDetail: PriorNotification.Detail) {
+  if (priorNotificationDetail.updatedAt === priorNotificationDetail.createdAt) {
+    return undefined
+  }
+
   const updatedByLabel =
     priorNotificationDetail.logbookMessage.message.updatedBy ??
     priorNotificationDetail.logbookMessage.message.authorTrigram

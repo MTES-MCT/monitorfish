@@ -29,6 +29,7 @@ class CreateOrUpdateManualPriorNotification(
 
     fun execute(
         reportId: String?,
+        author: String?,
         didNotFishAfterZeroNotice: Boolean,
         expectedArrivalDate: ZonedDateTime,
         expectedLandingDate: ZonedDateTime,
@@ -43,10 +44,9 @@ class CreateOrUpdateManualPriorNotification(
         hasPortLandingAuthorization: Boolean,
         note: String?,
         portLocode: String,
-        sentAt: ZonedDateTime,
         purpose: LogbookMessagePurpose,
+        sentAt: ZonedDateTime,
         tripGearCodes: List<String>,
-        updatedBy: String?,
         vesselId: Int,
     ): PriorNotification {
         val existingMessageValue: PNO? =
@@ -54,8 +54,6 @@ class CreateOrUpdateManualPriorNotification(
                 val manualPriorNotfication = manualPriorNotificationRepository.findByReportId(reportId)
                 manualPriorNotfication?.logbookMessageAndValue?.logbookMessage?.message as PNO
             }
-
-        println("existingMessageValue: $existingMessageValue")
 
         // /!\ Backend computed vessel risk factor is only used as a real time Frontend indicator.
         // The Backend should NEVER update `risk_factors` DB table, only the pipeline is allowed to update it.
@@ -94,7 +92,7 @@ class CreateOrUpdateManualPriorNotification(
                 pnoTypes = priorNotificationTypes,
                 portLocode = portLocode,
                 purpose = purpose,
-                updatedBy = updatedBy,
+                author = author,
                 computedVesselFlagCountryCode = vessel?.flagState,
                 computedVesselRiskFactor = computedValues.vesselRiskFactor,
                 isPartOfControlUnitSubscriptions = isPartOfControlUnitSubscriptions,
@@ -183,7 +181,7 @@ class CreateOrUpdateManualPriorNotification(
         note: String?,
         pnoTypes: List<PriorNotificationType>,
         portLocode: String,
-        updatedBy: String?,
+        author: String?,
         computedVesselFlagCountryCode: CountryCode?,
         computedVesselRiskFactor: Double?,
         isPartOfControlUnitSubscriptions: Boolean,
@@ -191,7 +189,7 @@ class CreateOrUpdateManualPriorNotification(
         val allPorts = portRepository.findAll()
 
         val authorTrigram = existingMessageValue?.authorTrigram
-        val createdBy = existingMessageValue?.createdBy ?: updatedBy
+        val createdBy = existingMessageValue?.createdBy ?: author
         val isInVerificationScope =
             ManualPriorNotificationComputedValues
                 .isInVerificationScope(computedVesselFlagCountryCode, computedVesselRiskFactor)
@@ -199,6 +197,7 @@ class CreateOrUpdateManualPriorNotification(
         // we pass `isBeingSent` as `true` in order to ask the workflow to send it.
         val isBeingSent = !isInVerificationScope && isPartOfControlUnitSubscriptions
         val portName = allPorts.find { it.locode == portLocode }?.name
+        val updatedBy = if (existingMessageValue != null) author else null
 
         return PNO().apply {
             this.authorTrigram = authorTrigram

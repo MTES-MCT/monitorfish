@@ -85,7 +85,7 @@ class CreateOrUpdateManualPriorNotificationUTests {
                 computeManualPriorNotification,
                 getPriorNotification,
             ).execute(
-                purpose = LogbookMessagePurpose.LAN,
+                author = "creator@example.org",
                 didNotFishAfterZeroNotice = false,
                 expectedArrivalDate = ZonedDateTime.parse("2024-01-01T00:00:00Z"),
                 expectedLandingDate = ZonedDateTime.parse("2024-01-01T00:00:00Z"),
@@ -95,10 +95,10 @@ class CreateOrUpdateManualPriorNotificationUTests {
                 hasPortLandingAuthorization = true,
                 note = null,
                 portLocode = "FAKE_PORT_LOCODE",
+                purpose = LogbookMessagePurpose.LAN,
                 reportId = null,
                 sentAt = ZonedDateTime.parse("2024-01-01T00:00:00Z"),
                 tripGearCodes = emptyList(),
-                updatedBy = "editor@example.org",
                 vesselId = 1,
             )
 
@@ -148,7 +148,7 @@ class CreateOrUpdateManualPriorNotificationUTests {
                 computeManualPriorNotification,
                 getPriorNotification,
             ).execute(
-                purpose = LogbookMessagePurpose.LAN,
+                author = "editor@example.org",
                 didNotFishAfterZeroNotice = false,
                 expectedArrivalDate = ZonedDateTime.parse("2024-01-01T00:00:00Z"),
                 expectedLandingDate = ZonedDateTime.parse("2024-01-01T00:00:00Z"),
@@ -158,10 +158,10 @@ class CreateOrUpdateManualPriorNotificationUTests {
                 hasPortLandingAuthorization = true,
                 note = null,
                 portLocode = "FAKE_PORT_LOCODE",
+                purpose = LogbookMessagePurpose.LAN,
                 reportId = existingFakePriorNotification.reportId!!,
                 sentAt = ZonedDateTime.parse("2024-01-01T00:00:00Z"),
                 tripGearCodes = emptyList(),
-                updatedBy = "editor@example.org",
                 vesselId = 1,
             )
 

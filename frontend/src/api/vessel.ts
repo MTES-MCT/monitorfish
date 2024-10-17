@@ -1,6 +1,7 @@
+import { FrontendApiError } from '@libs/FrontendApiError'
+
 import { monitorfishApiKy } from './api'
 import { HttpStatusCode } from './constants'
-import { ApiError } from '../libs/ApiError'
 
 import type { TrackRequest, VesselAndPositions, VesselIdentity, VesselPosition } from '../domain/entities/vessel/types'
 
@@ -20,7 +21,7 @@ export function getVesselIdentityAsEmptyStringWhenNull(identity: VesselIdentity)
 /**
  * Get vessel information and positions
  *
- * @throws {@link ApiError}
+ * @throws {@link FrontendApiError}
  */
 async function getVesselFromAPI(identity: VesselIdentity, trackRequest: TrackRequest) {
   const { externalReferenceNumber, internalReferenceNumber, ircs, vesselId, vesselIdentifier } =
@@ -41,14 +42,14 @@ async function getVesselFromAPI(identity: VesselIdentity, trackRequest: TrackReq
         }))
       )
   } catch (err) {
-    throw new ApiError(VESSEL_POSITIONS_ERROR_MESSAGE, err)
+    throw new FrontendApiError(VESSEL_POSITIONS_ERROR_MESSAGE, (err as FrontendApiError).originalError)
   }
 }
 
 /**
  * Get vessel positions
  *
- * @throws {@link ApiError}
+ * @throws {@link FrontendApiError}
  */
 async function getVesselPositionsFromAPI(identity: VesselIdentity, trackRequest: TrackRequest) {
   const { externalReferenceNumber, internalReferenceNumber, ircs, vesselIdentifier } =
@@ -69,7 +70,7 @@ async function getVesselPositionsFromAPI(identity: VesselIdentity, trackRequest:
         }))
       )
   } catch (err) {
-    throw new ApiError(VESSEL_POSITIONS_ERROR_MESSAGE, err)
+    throw new FrontendApiError(VESSEL_POSITIONS_ERROR_MESSAGE, (err as FrontendApiError).originalError)
   }
 }
 
@@ -79,7 +80,7 @@ async function searchVesselsFromAPI(searched: string) {
   try {
     return await monitorfishApiKy.get(`/bff/v1/vessels/search?searched=${encodedSearched}`).json<VesselIdentity[]>()
   } catch (err) {
-    throw new ApiError(VESSEL_SEARCH_ERROR_MESSAGE, err)
+    throw new FrontendApiError(VESSEL_SEARCH_ERROR_MESSAGE, (err as FrontendApiError).originalError)
   }
 }
 

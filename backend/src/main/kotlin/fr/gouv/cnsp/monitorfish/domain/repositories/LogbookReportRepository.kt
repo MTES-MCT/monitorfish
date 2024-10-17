@@ -79,11 +79,11 @@ interface LogbookReportRepository {
 
     fun findAllPriorNotificationsToVerify(): List<PriorNotification>
 
-    fun updatePriorNotificationAuthorTrigramAndNote(
+    fun updatePriorNotificationNote(
         reportId: String,
         operationDate: ZonedDateTime,
-        authorTrigram: String?,
         note: String?,
+        updatedBy: String?,
     )
 
     fun invalidate(

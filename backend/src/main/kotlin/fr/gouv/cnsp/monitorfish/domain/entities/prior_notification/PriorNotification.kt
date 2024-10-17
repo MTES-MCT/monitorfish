@@ -190,7 +190,7 @@ data class PriorNotification(
                 isManuallyCreated = false,
                 logbookMessageAndValue = logbookMessageAndValue,
                 sentAt = logbookMessageAndValue.logbookMessage.reportDateTime,
-                updatedAt = logbookMessage.operationDateTime,
+                updatedAt = logbookMessageAndValue.value.updatedAt ?: logbookMessage.operationDateTime,
                 // These props need to be calculated in the use case
                 port = null,
                 reportingCount = null,

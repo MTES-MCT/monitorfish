@@ -6,7 +6,6 @@ import java.time.ZonedDateTime
 data class ManualPriorNotificationFormDataInput(
     val hasPortEntranceAuthorization: Boolean,
     val hasPortLandingAuthorization: Boolean,
-    val authorTrigram: String,
     val didNotFishAfterZeroNotice: Boolean,
     val expectedArrivalDate: ZonedDateTime,
     val expectedLandingDate: ZonedDateTime,

@@ -26,7 +26,7 @@ export const createReportingFromPriorNotificationForm = (vesselName: string, rep
 
   cy.fill('Titre', faker.word.words(3))
   cy.fill('Natinf', '23588')
-  cy.fill('Saisi par', 'BOB', { index: 1 })
+  cy.fill('Saisi par', 'BOB')
 
   cy.clickButton('Valider')
 
@@ -75,7 +75,6 @@ export function getPriorNotificationsFakeResponse({
     data: [
       {
         acknowledgment: null,
-        createdAt,
         expectedArrivalDate,
         expectedLandingDate: expectedArrivalDate,
         fingerprint,
@@ -114,7 +113,6 @@ export function getPriorNotificationsFakeResponse({
         tripGears: [{ dimensions: null, gear: 'OTT', gearName: null, mesh: null }],
         tripSegments: [{ code: 'MED01', name: 'All Trawls 1' }],
         types: [{ hasDesignatedPorts: false, minimumNotificationPeriod: 4.0, name: 'Préavis type A' }],
-        updatedAt,
         vesselExternalReferenceNumber: 'EXTIMM121',
         vesselFlagCountryCode: 'FR',
         vesselId: 121,
@@ -163,6 +161,7 @@ export function getPriorNotificationFakeResponse({
   const commonData: OrUndefinedToOrNull<
     Omit<PriorNotification.Detail, 'asLogbookForm' | 'asManualDraft' | 'asManualForm' | 'isManuallyCreated'>
   > = {
+    createdAt,
     fingerprint,
     isLessThanTwelveMetersVessel: true,
     isVesselUnderCharter: false,
@@ -178,7 +177,7 @@ export function getPriorNotificationFakeResponse({
       isDeleted: false,
       isSentByFailoverSoftware: false,
       message: {
-        authorTrigram: 'ABC',
+        authorTrigram: null,
         catchOnboard: [
           {
             conversionFactor: null,
@@ -213,6 +212,7 @@ export function getPriorNotificationFakeResponse({
             weight: 50.0
           }
         ],
+        createdBy: 'creator@example.org',
         economicZone: null,
         effortZone: null,
         faoZone: null,
@@ -234,7 +234,9 @@ export function getPriorNotificationFakeResponse({
         purpose: PriorNotification.PurposeCode.LAN,
         riskFactor: 3.2,
         statisticalRectangle: null,
-        tripStartDate
+        tripStartDate,
+        updatedAt,
+        updatedBy: 'editor@example.org'
       },
       messageType: Logbook.MessageType.PNO,
       operationDateTime: updatedAt,
@@ -253,6 +255,7 @@ export function getPriorNotificationFakeResponse({
     reportId,
     riskFactor: 3.2,
     state,
+    updatedAt,
     vesselId: 121,
     vesselIdentity: {
       beaconNumber: null,
@@ -271,11 +274,9 @@ export function getPriorNotificationFakeResponse({
     return {
       ...commonData,
       asLogbookForm: {
-        authorTrigram: 'ABC',
         note: null
       },
       asManualDraft: {
-        authorTrigram: 'ABC',
         didNotFishAfterZeroNotice: false,
         expectedArrivalDate,
         expectedLandingDate: expectedArrivalDate,
@@ -302,7 +303,6 @@ export function getPriorNotificationFakeResponse({
     asLogbookForm: null,
     asManualDraft: null,
     asManualForm: {
-      authorTrigram: 'ABC',
       didNotFishAfterZeroNotice: false,
       expectedArrivalDate,
       expectedLandingDate: expectedArrivalDate,

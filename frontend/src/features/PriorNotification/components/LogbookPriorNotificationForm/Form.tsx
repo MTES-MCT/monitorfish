@@ -6,17 +6,7 @@ import { invalidatePriorNotification } from '@features/PriorNotification/useCase
 import { updateLogbookPriorNotification } from '@features/PriorNotification/useCases/updateLogbookPriorNotification'
 import { getPriorNotificationIdentifier } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import {
-  Accent,
-  Button,
-  FormikEffect,
-  FormikTextarea,
-  FormikTextInput,
-  Icon,
-  LinkButton,
-  THEME
-} from '@mtes-mct/monitor-ui'
-import { assertNotNullish } from '@utils/assertNotNullish'
+import { Accent, Button, FormikEffect, FormikTextarea, Icon, LinkButton, THEME } from '@mtes-mct/monitor-ui'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import { Formik } from 'formik'
 import { noop, isEqual } from 'lodash'
@@ -24,6 +14,7 @@ import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
+import { EditHistory } from '../shared/EditHistory'
 import { UploadFiles } from '../shared/UploadFiles'
 
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
@@ -39,7 +30,6 @@ export function Form({ detail, initialFormValues }: FormProps) {
   const [isInvalidationConfirmationModalOpen, setIsInvalidationConfirmationModalOpen] = useState(false)
 
   const priorNotificationIdentifier = useMemo(() => getPriorNotificationIdentifier(detail), [detail])
-  assertNotNullish(priorNotificationIdentifier)
 
   const isBeingSent = !!detail.logbookMessage.message.isBeingSent
   const isInvalidated = !!detail.logbookMessage.message.isInvalidated
@@ -97,8 +87,6 @@ export function Form({ detail, initialFormValues }: FormProps) {
 
           {isSuperUser && (
             <>
-              <AuthorTrigramInput label="Saisi par" name="authorTrigram" readOnly={isReadOnly} />
-
               <hr />
 
               <UploadFiles
@@ -107,6 +95,10 @@ export function Form({ detail, initialFormValues }: FormProps) {
                 operationDate={detail.operationDate}
                 reportId={detail.reportId}
               />
+
+              <hr style={{ margin: '8px 0 24px' }} />
+
+              <EditHistory priorNotificationDetail={detail} />
             </>
           )}
         </>
@@ -171,11 +163,6 @@ const FieldGroup = styled.div.attrs({ className: 'FieldGroup' })`
   textarea {
     box-sizing: border-box !important;
   }
-`
-
-const AuthorTrigramInput = styled(FormikTextInput)`
-  margin-top: 24px;
-  width: 120px;
 `
 
 const ActionWrapper = styled.div`

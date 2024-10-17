@@ -24,7 +24,7 @@ context('Side Window > Manual Prior Notification Form  > Reporting List', () => 
     cy.fill('Titre', 'Sortie non autorisée')
     cy.fill('Description', 'Ce navire ne devrait pas être en mer.')
     cy.fill('Natinf', '2608')
-    cy.fill('Saisi par', 'LTH', { index: 1 })
+    cy.fill('Saisi par', 'LTH')
 
     cy.clickButton('Valider')
 
@@ -64,7 +64,7 @@ context('Side Window > Manual Prior Notification Form  > Reporting List', () => 
         cy.fill('Titre', 'Sortie non autorisée')
         cy.fill('Description', 'Ce navire ne devrait pas être en mer.')
         cy.fill('Natinf', '2608')
-        cy.fill('Saisi par', 'LTH', { index: 1 })
+        cy.fill('Saisi par', 'LTH')
 
         cy.clickButton('Valider')
 

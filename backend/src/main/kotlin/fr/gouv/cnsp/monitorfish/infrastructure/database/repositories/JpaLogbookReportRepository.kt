@@ -394,11 +394,11 @@ class JpaLogbookReportRepository(
     }
 
     @Transactional
-    override fun updatePriorNotificationAuthorTrigramAndNote(
+    override fun updatePriorNotificationNote(
         reportId: String,
         operationDate: ZonedDateTime,
-        authorTrigram: String?,
         note: String?,
+        updatedBy: String?,
     ) {
         val logbookReport =
             dbLogbookReportRepository
@@ -409,17 +409,16 @@ class JpaLogbookReportRepository(
                 ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
 
         val pnoValue = objectMapper.readValue(logbookReport.message, PNO::class.java)
-        if (
-            Utils.areStringsEqual(authorTrigram, pnoValue.authorTrigram) &&
-            Utils.areStringsEqual(note, pnoValue.note)
-        ) {
+        if (Utils.areStringsEqual(note, pnoValue.note)) {
             return
         }
 
         val nextPnoValue =
             pnoValue.apply {
-                this.authorTrigram = authorTrigram
                 this.note = note
+                this.updatedAt = ZonedDateTime.now()
+                this.updatedBy = updatedBy
+
                 /**
                  * The PNO states are re-initialized:
                  * - the PDF will be re-generated (done in the use case by deleting the old one)

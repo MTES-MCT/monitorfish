@@ -14,7 +14,6 @@ export const openSideWindowAsUser = () => {
   if (document.querySelector('[data-cy="first-loader"]')) {
     cy.getDataCy('first-loader').should('not.be.visible')
   }
-  cy.clickButton(SideWindowMenuLabel.PRIOR_NOTIFICATION_LIST)
 }
 
 export const openSideWindowAsSuperUser = () => {

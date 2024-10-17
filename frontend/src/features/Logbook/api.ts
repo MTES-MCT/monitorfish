@@ -1,10 +1,9 @@
-import { HTTPError } from 'ky'
+import { FrontendApiError } from '@libs/FrontendApiError'
 
 import { NavigateTo } from './constants'
 import { Logbook } from './Logbook.types'
 import { monitorfishApi, monitorfishApiKy } from '../../api/api'
 import { HttpStatusCode } from '../../api/constants'
-import { ApiError } from '../../libs/ApiError'
 
 import type { VesselIdentity } from '../../domain/entities/vessel/types'
 
@@ -25,7 +24,7 @@ export const { useGetLastLogbookTripsQuery } = logbookApi
  * Get vessel logbook.
  * If the vessel has no logbook, an NOT_FOUND (404) API http code is returned from the API.
  *
- * @throws {@link ApiError}
+ * @throws {@link FrontendApiError}
  */
 export async function getVesselLogbookFromAPI(
   isInLightMode: boolean,
@@ -46,10 +45,10 @@ export async function getVesselLogbookFromAPI(
       )
       .json<Logbook.VesselVoyage>()
   } catch (err) {
-    if (err instanceof HTTPError && err.response.status === HttpStatusCode.NOT_FOUND) {
+    if (err instanceof FrontendApiError && err.originalError.status === HttpStatusCode.NOT_FOUND) {
       return undefined
     }
 
-    throw new ApiError(LOGBOOK_ERROR_MESSAGE, err)
+    throw new FrontendApiError(LOGBOOK_ERROR_MESSAGE, (err as FrontendApiError).originalError)
   }
 }

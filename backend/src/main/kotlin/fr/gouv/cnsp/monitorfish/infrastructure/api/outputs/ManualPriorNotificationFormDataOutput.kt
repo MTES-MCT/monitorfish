@@ -6,6 +6,7 @@ import fr.gouv.cnsp.monitorfish.utils.CustomZonedDateTime
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
+@Suppress("NullableBooleanElvis")
 data class ManualPriorNotificationFormDataOutput(
     val reportId: String,
     val didNotFishAfterZeroNotice: Boolean,
@@ -59,8 +60,8 @@ data class ManualPriorNotificationFormDataOutput(
                     "`priorNotification.vessel` is null."
                 }.id
 
-            val hasPortEntranceAuthorization = pnoValue.hasPortEntranceAuthorization != false
-            val hasPortLandingAuthorization = pnoValue.hasPortLandingAuthorization != false
+            val hasPortEntranceAuthorization = pnoValue.hasPortEntranceAuthorization ?: true
+            val hasPortLandingAuthorization = pnoValue.hasPortLandingAuthorization ?: true
             // In Frontend form, manual prior notifications can:
             // - either have a single global FAO area field
             // - or have an FAO area field per fishing catch

@@ -220,6 +220,7 @@ class PriorNotificationController(
     ): ManualPriorNotificationFormDataOutput {
         val createdPriorNotification =
             createOrUpdateManualPriorNotification.execute(
+                author = response.getHeader(UserAuthorizationCheckFilter.EMAIL_HEADER),
                 didNotFishAfterZeroNotice = manualPriorNotificationFormDataInput.didNotFishAfterZeroNotice,
                 expectedArrivalDate = manualPriorNotificationFormDataInput.expectedArrivalDate,
                 expectedLandingDate = manualPriorNotificationFormDataInput.expectedLandingDate,
@@ -233,7 +234,6 @@ class PriorNotificationController(
                 sentAt = manualPriorNotificationFormDataInput.sentAt,
                 purpose = manualPriorNotificationFormDataInput.purpose,
                 tripGearCodes = manualPriorNotificationFormDataInput.tripGearCodes,
-                updatedBy = response.getHeader(UserAuthorizationCheckFilter.EMAIL_HEADER),
                 vesselId = manualPriorNotificationFormDataInput.vesselId,
             )
 
@@ -252,6 +252,7 @@ class PriorNotificationController(
     ): ManualPriorNotificationFormDataOutput {
         val updatedPriorNotification =
             createOrUpdateManualPriorNotification.execute(
+                author = response.getHeader(UserAuthorizationCheckFilter.EMAIL_HEADER),
                 didNotFishAfterZeroNotice = manualPriorNotificationFormDataInput.didNotFishAfterZeroNotice,
                 expectedArrivalDate = manualPriorNotificationFormDataInput.expectedArrivalDate,
                 expectedLandingDate = manualPriorNotificationFormDataInput.expectedLandingDate,
@@ -265,7 +266,6 @@ class PriorNotificationController(
                 sentAt = manualPriorNotificationFormDataInput.sentAt,
                 purpose = manualPriorNotificationFormDataInput.purpose,
                 tripGearCodes = manualPriorNotificationFormDataInput.tripGearCodes,
-                updatedBy = response.getHeader(UserAuthorizationCheckFilter.EMAIL_HEADER),
                 vesselId = manualPriorNotificationFormDataInput.vesselId,
             )
 

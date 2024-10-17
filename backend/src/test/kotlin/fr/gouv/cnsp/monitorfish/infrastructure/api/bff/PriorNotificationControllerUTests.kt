@@ -260,6 +260,7 @@ class PriorNotificationControllerUTests {
         given(
             createOrUpdateManualPriorNotification.execute(
                 reportId = any(),
+                author = anyOrNull(),
                 didNotFishAfterZeroNotice = anyOrNull(),
                 expectedArrivalDate = anyOrNull(),
                 expectedLandingDate = anyOrNull(),
@@ -272,7 +273,6 @@ class PriorNotificationControllerUTests {
                 sentAt = anyOrNull(),
                 purpose = anyOrNull(),
                 tripGearCodes = anyOrNull(),
-                updatedBy = anyOrNull(),
                 vesselId = anyOrNull(),
             ),
         )

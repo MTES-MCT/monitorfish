@@ -356,6 +356,7 @@ class CreateOrUpdateManualPriorNotificationITests : AbstractDBTests() {
         val afterPriorNotification =
             createOrUpdateManualPriorNotification.execute(
                 reportId = reportId,
+                author = "editor@example.org",
                 didNotFishAfterZeroNotice = false,
                 expectedArrivalDate = ZonedDateTime.now(),
                 expectedLandingDate = ZonedDateTime.now(),
@@ -368,7 +369,6 @@ class CreateOrUpdateManualPriorNotificationITests : AbstractDBTests() {
                 purpose = LogbookMessagePurpose.LAN,
                 sentAt = ZonedDateTime.now(),
                 tripGearCodes = emptyList(),
-                updatedBy = "editor@example.org",
                 vesselId = 1,
             )
 
@@ -405,6 +405,7 @@ class CreateOrUpdateManualPriorNotificationITests : AbstractDBTests() {
         val afterPriorNotification =
             createOrUpdateManualPriorNotification.execute(
                 reportId = reportId,
+                author = "editor@example.org",
                 didNotFishAfterZeroNotice = false,
                 expectedArrivalDate = ZonedDateTime.now(),
                 expectedLandingDate = ZonedDateTime.now(),
@@ -417,7 +418,6 @@ class CreateOrUpdateManualPriorNotificationITests : AbstractDBTests() {
                 purpose = LogbookMessagePurpose.LAN,
                 sentAt = ZonedDateTime.now(),
                 tripGearCodes = emptyList(),
-                updatedBy = "editor@example.org",
                 vesselId = 1,
             )
 

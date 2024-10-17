@@ -8,7 +8,7 @@ context('New Regulation', () => {
 
   it('Select, change and remove law type Reg. MEMN', () => {
     cy.get('[id="Choisir un ensemble"]').click()
-    cy.get('[id="Choisir un ensemble-listbox"] > div').should('have.length', 18)
+    cy.get('[id="Choisir un ensemble-listbox"] > div').should('have.length', 19)
     cy.get('[id="Choisir un ensemble-listbox"]').type('{esc}')
 
     // Open menu and select "Reg. MEMN",  the tag is displayed

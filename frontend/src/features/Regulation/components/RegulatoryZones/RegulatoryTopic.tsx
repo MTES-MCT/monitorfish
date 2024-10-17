@@ -1,10 +1,9 @@
-import RegulatoryTopicInput from '@features/BackOffice/list_regulation/RegulatoryTopicInput'
+import { RegulatoryTopicInput } from '@features/BackOffice/list_regulation/RegulatoryTopicInput'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { RegulatoryZone } from './RegulatoryZone'
-import { COLORS } from '../../../../constants/constants'
 import { NamespaceContext } from '../../../../context/NamespaceContext'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
@@ -29,7 +28,7 @@ export type RegulatoryTopicProps = {
   onRemoveByTopic: (topic: string, numberOfZones: number) => Promisable<void>
   regulatoryTopic: string
   regulatoryZones: RegulatoryZoneType[] | undefined
-  updateLayerName?: (topic: string, value: string) => Promisable<void>
+  updateLayerName?: (previousTopic: string, nextTopic: string) => void
 }
 function UnmemoizedRegulatoryTopic({
   allowRemoveZone,
@@ -248,7 +247,7 @@ const Name = styled.span`
 `
 
 const ZonesNumber = styled.span`
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   font-size: 11px;
   margin-right: 4px;
 `

@@ -60,8 +60,7 @@ const updateSelectedRegulatoryLayers = (
 }
 
 export type RegulatoryState = {
-  // TODO Type this prop.
-  lawTypeOpened: Record<string, any> | null
+  lawTypeOpened: string | null
   // TODO Type this prop.
   layersTopicsByRegTerritory: Record<string, any>
   loadingRegulatoryZoneMetadata: boolean

@@ -220,6 +220,7 @@ const REG_OUTRE_MER = 'Reg. Outre-mer'
 const RUE_2019 = 'R(UE) 2019/1241'
 const RUE_1380 = 'R(UE) 1380/2013'
 const RUE_2022 = 'R(UE) 2022/1614'
+const RUE_2024 = 'R(UE) 2024/2594'
 const RUE_494 = 'R(CE) 494/2002'
 const RUE_2017 = 'R(CE) 2017/118'
 
@@ -248,6 +249,7 @@ export const LAWTYPES_TO_TERRITORY = {
   [RUE_2017]: UE,
   [RUE_2019]: UE,
   [RUE_2022]: UE,
+  [RUE_2024]: UE,
   [RUE_494]: UE
 }
 

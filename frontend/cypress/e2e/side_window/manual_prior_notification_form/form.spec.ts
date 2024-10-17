@@ -117,6 +117,9 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
 
       editSideWindowPriorNotification('PAGEOT JO', createdPriorNotification.reportId)
 
+      cy.contains('Créé il y a quelques secondes.').should('exist')
+      cy.contains('Dernière mise à jour il y a quelques secondes.').should('exist')
+
       cy.intercept('PUT', `/bff/v1/prior_notifications/manual/${createdPriorNotification.reportId}`).as(
         'updateManualPriorNotification'
       )
@@ -763,5 +766,22 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     // Then
     cy.clickButton('Fermer')
     cy.getTableRowById('00000000-0000-4000-0000-000000000001').find('[title="Préavis invalidé"]').should('exist')
+  })
+
+  it('Should display manual prior notification edit history as expected', () => {
+    editSideWindowPriorNotification('POISSON PAS NET', '00000000-0000-4000-0000-000000000001')
+
+    cy.contains('Créé par BOB il y a').should('exist')
+    cy.contains('Dernière mise à jour par BOB il y a').should('exist')
+
+    editSideWindowPriorNotification('DOS FIN', '00000000-0000-4000-0000-000000000002')
+
+    cy.contains('Créé par creator@example.org il y a').should('exist')
+    cy.contains('Dernière mise à jour par editor@example.org il y a').should('exist')
+
+    editSideWindowPriorNotification('QUEUE DE POISSON', '00000000-0000-4000-0000-000000000003')
+
+    cy.contains('Créé par creator@example.org il y a').should('exist')
+    cy.contains('Dernière mise à jour').should('not.exist')
   })
 })

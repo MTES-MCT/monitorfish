@@ -10,6 +10,7 @@
 
             // - State: 10000
             // - Vessel: POISSON PAS NET
+            // - Updated by BOB (using legacy `authorTrigram`)
             {
                 "report_id": "00000000-0000-4000-0000-000000000001",
                 "cfr": "CFR112",
@@ -20,10 +21,11 @@
                 "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
                 "trip_gears:jsonb": [{ "gear": "LNP" }],
                 "trip_segments:jsonb": [{ "segment": "NWW09", "segmentName": "Lignes" }],
-                "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '10 minutes'",
                 "vessel_name": "POISSON PAS NET",
                 "value:jsonb": {
-                    "authorTrigram": "ABC",
+                    "authorTrigram": "BOB",
+                    "createdBy": null,
                     "riskFactor": 2.1,
                     "catchOnboard": [
                         {
@@ -58,7 +60,8 @@
                     "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
-                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "updatedBy": null
                 }
             },
 
@@ -69,6 +72,7 @@
             // - Under charter
             // - With 2 reportings
             // - Flag state: BEL
+            // - Created by editor@example.org and updated by editor@example.org
             {
                 "report_id": "00000000-0000-4000-0000-000000000002",
                 "cfr": "CFR115",
@@ -82,10 +86,11 @@
                     { "segment": "NWW03", "segmentName": "Chalut de fond en eau profonde" },
                     { "segment": "NWW05", "segmentName": "Chalut à perche" }
                 ],
-                "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '10 minutes'",
                 "vessel_name": "DOS FIN",
                 "value:jsonb": {
-                    "authorTrigram": "ABC",
+                    "authorTrigram": null,
+                    "createdBy": "creator@example.org",
                     "riskFactor": 2.7,
                     // Unsorted on purpose
                     "catchOnboard": [
@@ -174,7 +179,8 @@
                     "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '4 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
-                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "updatedBy": "editor@example.org"
                 }
             },
 
@@ -189,7 +195,7 @@
                 "report_id": "00000000-0000-4000-0000-000000000003",
                 "cfr": "CFR117",
                 "vessel_id": 117,
-                "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '50 minutes'",
+                "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "did_not_fish_after_zero_notice": true,
                 "flag_state": "FRA",
                 "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
@@ -198,10 +204,11 @@
                     { "segment": "MED01", "segmentName": "All Trawls 1" },
                     { "segment": "MED02", "segmentName": "All Trawls 2" }
                 ],
-                "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '5 minutes'",
+                "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "QUEUE DE POISSON",
                 "value:jsonb": {
-                    "authorTrigram": "ABC",
+                    "authorTrigram": null,
+                    "createdBy": "creator@example.org",
                     "riskFactor": 3.1,
                     "catchOnboard": [
                         {
@@ -236,7 +243,8 @@
                     "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
-                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "updatedBy": null
                 }
             },
 
@@ -256,7 +264,8 @@
                 "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "NAVIRE RENOMMÉ (ANCIEN NOM)",
                 "value:jsonb": {
-                    "authorTrigram": "ABC",
+                    "authorTrigram": null,
+                    "createdBy": "creator@example.org",
                     "riskFactor": 1.5,
                     "catchOnboard": [
                         {
@@ -292,7 +301,8 @@
                     "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
-                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "updatedBy": null
                 }
             },
 
@@ -314,7 +324,8 @@
                 "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "VIVA L'ITALIA",
                 "value:jsonb": {
-                    "authorTrigram": "ABC",
+                    "authorTrigram": null,
+                    "createdBy": "creator@example.org",
                     "riskFactor": 3.2,
                     "catchOnboard": [
                         {
@@ -349,7 +360,8 @@
                     "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
-                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "updatedBy": null
                 }
             },
 
@@ -368,7 +380,8 @@
                 "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "MARE ET BASS",
                 "value:jsonb": {
-                    "authorTrigram": "ABC",
+                    "authorTrigram": null,
+                    "createdBy": "creator@example.org",
                     "riskFactor": 3.2,
                     "catchOnboard": [
                         {
@@ -403,7 +416,8 @@
                     "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
-                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "updatedBy": null
                 }
             },
 
@@ -422,7 +436,8 @@
                 "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "FILET DOUX",
                 "value:jsonb": {
-                    "authorTrigram": "ABC",
+                    "authorTrigram": null,
+                    "createdBy": "creator@example.org",
                     "riskFactor": 3.2,
                     "catchOnboard": [
                         {
@@ -457,7 +472,8 @@
                     "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
-                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "updatedBy": null
                 }
             },
 
@@ -476,7 +492,8 @@
                 "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "DÉVOILÉ",
                 "value:jsonb": {
-                    "authorTrigram": "ABC",
+                    "authorTrigram": null,
+                    "createdBy": "creator@example.org",
                     "riskFactor": 3.2,
                     "catchOnboard": [
                         {
@@ -511,7 +528,8 @@
                     "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
-                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "updatedBy": null
                 }
             },
 
@@ -530,7 +548,8 @@
                 "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "MAT QUILLE",
                 "value:jsonb": {
-                    "authorTrigram": "ABC",
+                    "authorTrigram": null,
+                    "createdBy": "creator@example.org",
                     "riskFactor": 3.2,
                     "catchOnboard": [
                         {
@@ -565,7 +584,8 @@
                     "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
-                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "updatedBy": null
                 }
             },
 
@@ -584,7 +604,8 @@
                 "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "BEAU SÉANT",
                 "value:jsonb": {
-                    "authorTrigram": "ABC",
+                    "authorTrigram": null,
+                    "createdBy": "creator@example.org",
                     "riskFactor": 3.2,
                     "catchOnboard": [
                         {
@@ -619,7 +640,8 @@
                     "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
-                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "updatedBy": null
                 }
             },
 
@@ -642,7 +664,8 @@
                 "updated_at": "2023-01-01T08:45:00",
                 "vessel_name": "GOUJON BOUGON",
                 "value:jsonb": {
-                    "authorTrigram": "ABC",
+                    "authorTrigram": null,
+                    "createdBy": "creator@example.org",
                     "riskFactor": 3.8,
                     "catchOnboard": [
                         {
@@ -677,7 +700,8 @@
                     "predictedArrivalDatetimeUtc": "2023-01-01T10:00:00Z",
                     "predictedLandingDatetimeUtc": "2023-01-01T10:30:00Z",
                     "purpose": "LAN",
-                    "tripStartDate": "2023-01-01T08:00:00Z"
+                    "tripStartDate": "2023-01-01T08:00:00Z",
+                    "updatedBy": null
                 }
             }
         ]

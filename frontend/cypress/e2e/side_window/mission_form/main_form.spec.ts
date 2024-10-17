@@ -450,7 +450,7 @@ context('Side Window > Mission Form > Main Form', () => {
     ).as('getMissionStubbed')
     editSideWindowMissionListMissionWithId(6, SeafrontGroup.MED)
     cy.wait(200)
-    cy.get('@getMissionStubbed.all').should('have.length', 3)
+    cy.get('@getMissionStubbed.all').should('have.length', 2)
     cy.get('*[data-cy="mission-form-error"]').contains("Nous n'avons pas pu récupérer la mission")
   })
 

@@ -1,7 +1,4 @@
-import { isCypress } from '@utils/isCypress'
 import { WebStorageStateStore } from 'oidc-client-ts'
-
-const IS_CYPRESS = isCypress()
 
 export function getOIDCConfig() {
   const IS_OIDC_ENABLED = import.meta.env.FRONTEND_OIDC_ENABLED === 'true'
@@ -30,7 +27,7 @@ export function getOIDCConfig() {
 
   return {
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    IS_OIDC_ENABLED: IS_CYPRESS ? false : IS_OIDC_ENABLED,
+    IS_OIDC_ENABLED,
     oidcConfig
   }
 }

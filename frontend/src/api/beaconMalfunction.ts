@@ -1,5 +1,6 @@
+import { FrontendApiError } from '@libs/FrontendApiError'
+
 import { monitorfishApiKy } from './api'
-import { ApiError } from '../libs/ApiError'
 
 import type { NOTIFICATION_TYPE, UserType } from '../domain/entities/beaconMalfunction/constants'
 import type {
@@ -22,20 +23,20 @@ export const SEND_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu envoyer la n
 /**
  * Get all beacon malfunctions
  *
- * @throws {@link ApiError}
+ * @throws {@link FrontendApiError}
  */
 async function getAllBeaconMalfunctionsFromAPI(): Promise<BeaconMalfunction[]> {
   try {
     return await monitorfishApiKy.get('/bff/v1/beacon_malfunctions').json<BeaconMalfunction[]>()
   } catch (err) {
-    throw new ApiError(GET_BEACON_MALFUNCTIONS_ERROR_MESSAGE, err)
+    throw new FrontendApiError(GET_BEACON_MALFUNCTIONS_ERROR_MESSAGE, (err as FrontendApiError).originalError)
   }
 }
 
 /**
  * Update a beacon malfunction
  *
- * @throws {@link ApiError}
+ * @throws {@link FrontendApiError}
  */
 async function updateBeaconMalfunctionFromAPI(
   id: number,
@@ -48,27 +49,27 @@ async function updateBeaconMalfunctionFromAPI(
       })
       .json<BeaconMalfunctionResumeAndDetails>()
   } catch (err) {
-    throw new ApiError(UPDATE_BEACON_MALFUNCTIONS_ERROR_MESSAGE, err)
+    throw new FrontendApiError(UPDATE_BEACON_MALFUNCTIONS_ERROR_MESSAGE, (err as FrontendApiError).originalError)
   }
 }
 
 /**
  * Get a beacon malfunction
  *
- * @throws {@link ApiError}
+ * @throws {@link FrontendApiError}
  */
 async function getBeaconMalfunctionFromAPI(id: number): Promise<BeaconMalfunctionResumeAndDetails> {
   try {
     return await monitorfishApiKy.get(`/bff/v1/beacon_malfunctions/${id}`).json<BeaconMalfunctionResumeAndDetails>()
   } catch (err) {
-    throw new ApiError(GET_BEACON_MALFUNCTION_ERROR_MESSAGE, err)
+    throw new FrontendApiError(GET_BEACON_MALFUNCTION_ERROR_MESSAGE, (err as FrontendApiError).originalError)
   }
 }
 
 /**
  * Save a new comment attached to a beacon malfunction
  *
- * @throws {@link ApiError}
+ * @throws {@link FrontendApiError}
  */
 async function saveBeaconMalfunctionCommentFromAPI(
   id: number,
@@ -81,14 +82,14 @@ async function saveBeaconMalfunctionCommentFromAPI(
       })
       .json<BeaconMalfunctionResumeAndDetails>()
   } catch (err) {
-    throw new ApiError(SAVE_BEACON_MALFUNCTION_COMMENT_ERROR_MESSAGE, err)
+    throw new FrontendApiError(SAVE_BEACON_MALFUNCTION_COMMENT_ERROR_MESSAGE, (err as FrontendApiError).originalError)
   }
 }
 
 /**
  * Get vessel beacon malfunctions
  *
- * @throws {@link ApiError}
+ * @throws {@link FrontendApiError}
  */
 async function getVesselBeaconsMalfunctionsFromAPI(
   vesselId: VesselId,
@@ -99,14 +100,14 @@ async function getVesselBeaconsMalfunctionsFromAPI(
       .get(`/bff/v1/vessels/beacon_malfunctions?vesselId=${vesselId}&afterDateTime=${fromDate.toISOString()}`)
       .json<VesselBeaconMalfunctionsResumeAndHistory>()
   } catch (err) {
-    throw new ApiError(GET_VESSEL_BEACON_MALFUNCTIONS_ERROR_MESSAGE, err)
+    throw new FrontendApiError(GET_VESSEL_BEACON_MALFUNCTIONS_ERROR_MESSAGE, (err as FrontendApiError).originalError)
   }
 }
 
 /**
  * Send a notification - Update the request notification column to asynchronously send the message
  *
- * @throws {@link ApiError}
+ * @throws {@link FrontendApiError}
  */
 async function sendNotificationFromAPI(
   id: number,
@@ -118,7 +119,7 @@ async function sendNotificationFromAPI(
       `/bff/v1/beacon_malfunctions/${id}/${notificationType}?requestedNotificationForeignFmcCode=${foreignFmcCode}`
     )
   } catch (err) {
-    throw new ApiError(SEND_NOTIFICATION_ERROR_MESSAGE, err)
+    throw new FrontendApiError(SEND_NOTIFICATION_ERROR_MESSAGE, (err as FrontendApiError).originalError)
   }
 }
 

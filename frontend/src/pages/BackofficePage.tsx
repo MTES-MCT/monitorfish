@@ -1,3 +1,4 @@
+import { BackofficeMode } from '@api/BackofficeMode'
 import countries from 'i18n-iso-countries'
 import COUNTRIES_FR from 'i18n-iso-countries/langs/fr.json'
 import { Provider } from 'react-redux'
@@ -6,9 +7,6 @@ import { PersistGate } from 'redux-persist/integration/react'
 import styled from 'styled-components'
 import { LegacyRsuiteComponentsWrapper } from 'ui/LegacyRsuiteComponentsWrapper'
 
-import { LandingPage } from './LandingPage'
-import { BackofficeMode } from '../api/BackofficeMode'
-import { useGetUserAuthorization } from '../auth/hooks/useGetUserAuthorization'
 import { NamespaceContext } from '../context/NamespaceContext'
 import { LayerSliceNamespace } from '../domain/entities/layers/types'
 import { BackOfficeMenu } from '../features/BackOffice/components/BackofficeMenu'
@@ -18,12 +16,6 @@ import { backofficeStore, backofficeStorePersistor } from '../store'
 countries.registerLocale(COUNTRIES_FR)
 
 export function BackofficePage() {
-  const userAuthorization = useGetUserAuthorization()
-
-  if (!userAuthorization?.isSuperUser) {
-    return <LandingPage />
-  }
-
   return (
     <Provider store={backofficeStore}>
       {/* eslint-disable-next-line no-null/no-null */}

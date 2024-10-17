@@ -1,18 +1,21 @@
 // https://redux-toolkit.js.org/rtk-query/usage/cache-behavior
 // https://redux-toolkit.js.org/rtk-query/usage/automated-refetching#cache-tags
 
+import { isUnauthorizedOrForbidden } from '@api/utils'
+import { FrontendApiError } from '@libs/FrontendApiError'
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react'
 import { setMeasurement, startSpan } from '@sentry/react'
+import { normalizeRtkBaseQuery } from '@utils/normalizeRtkBaseQuery'
 import { sha256 } from '@utils/sha256'
-import ky from 'ky'
+import ky, { HTTPError } from 'ky'
 
 import { RTK_MAX_RETRIES, RtkCacheTagType } from './constants'
 import { getOIDCConfig } from '../auth/getOIDCConfig'
 import { getOIDCUser } from '../auth/getOIDCUser'
-import { normalizeRtkBaseQuery } from '../utils/normalizeRtkBaseQuery'
+import { redirectToLoginIfUnauthorized } from '../auth/utils'
 
 import type { BackendApi } from './BackendApi.types'
-import type { CustomRTKResponseError, RTKBaseQueryArgs } from './types'
+import type { CustomResponseError, RTKBaseQueryArgs } from './types'
 
 // Using local MonitorEnv stubs:
 export const MONITORENV_API_URL = import.meta.env.FRONTEND_MONITORENV_URL
@@ -40,7 +43,7 @@ export const monitorenvApi = createApi({
       setMeasurement(spanName, Date.now() - measurementStart, 'millisecond')
 
       if (result.error) {
-        const error: CustomRTKResponseError = {
+        const error: CustomResponseError = {
           path: typeof args === 'string' ? args : args.url,
           requestData: typeof args === 'string' ? undefined : args.body,
           responseData: result.error.data as BackendApi.ResponseBodyError,
@@ -61,8 +64,8 @@ export const monitorenvApi = createApi({
 // =============================================================================
 // Monitorfish API
 
-const AUTHORIZATION_HEADER = 'authorization'
-const CORRELATION_HEADER = 'X-Correlation-Id'
+export const AUTHORIZATION_HEADER = 'authorization'
+export const CORRELATION_HEADER = 'X-Correlation-Id'
 const { IS_OIDC_ENABLED } = getOIDCConfig()
 
 const setAuthorizationHeader = async headers => {
@@ -104,12 +107,14 @@ export const monitorfishApi = createApi({
       setMeasurement(spanName, Date.now() - measurementStart, 'millisecond')
 
       if (result.error) {
-        const error: CustomRTKResponseError = {
+        const error: CustomResponseError = {
           path: typeof args === 'string' ? args : args.url,
           requestData: typeof args === 'string' ? undefined : args.body,
           responseData: result.error.data as BackendApi.ResponseBodyError,
           status: result.error.status
         }
+
+        redirectToLoginIfUnauthorized(error)
 
         return { error }
       }
@@ -170,7 +175,7 @@ export const monitorfishPublicApi = createApi({
   baseQuery: async (args: RTKBaseQueryArgs, api, extraOptions) => {
     const result = await normalizeRtkBaseQuery(monitorfishPublicBaseQuery)(args, api, extraOptions)
     if (result.error) {
-      const error: CustomRTKResponseError = {
+      const error: CustomResponseError = {
         path: typeof args === 'string' ? args : args.url,
         requestData: typeof args === 'string' ? undefined : args.body,
         responseData: result.error.data as BackendApi.ResponseBodyError,
@@ -189,6 +194,38 @@ export const monitorfishPublicApi = createApi({
 
 export const monitorfishApiKy = ky.extend({
   hooks: {
+    beforeError: [
+      async error => {
+        const { request, response } = error
+
+        let requestData
+        try {
+          requestData = await request.json()
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.error('Could not parse request data', error)
+        }
+
+        let responseData
+        try {
+          responseData = await response.json()
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.error('Could not parse response data', error)
+        }
+
+        const customError: CustomResponseError = {
+          path: response.url,
+          requestData,
+          responseData,
+          status: response.status
+        }
+        redirectToLoginIfUnauthorized(customError)
+
+        // `beforeError` hook expect an HTTPError, so we fake it with `as unknown as HTTPError`
+        return new FrontendApiError(customError.status.toString(), customError) as unknown as HTTPError
+      }
+    ],
     beforeRequest: [
       async request => {
         const user = getOIDCUser()
@@ -207,7 +244,14 @@ export const monitorfishApiKy = ky.extend({
       }
     ],
     beforeRetry: [
-      async ({ request }) => {
+      async ({ error, request }) => {
+        if (error) {
+          // Retry is not necessary when request is unauthorized
+          if (isUnauthorizedOrForbidden((error as HTTPError).response?.status)) {
+            return ky.stop
+          }
+        }
+
         const user = getOIDCUser()
         const token = user?.access_token
 
@@ -221,8 +265,10 @@ export const monitorfishApiKy = ky.extend({
             request.headers.set(CORRELATION_HEADER, hashedToken)
           }
         }
+
+        return undefined
       }
     ]
   },
-  retry: RTK_MAX_RETRIES + 1
+  retry: RTK_MAX_RETRIES
 })

@@ -4,7 +4,8 @@ export default {
   globalSetup: '<rootDir>/config/jest.global.js',
   maxWorkers: '50%',
   moduleNameMapper: {
-    '\\.svg\\?react$': '<rootDir>/config/jest.svgImportTransformer.js'
+    '\\.svg\\?react$': '<rootDir>/config/jest.svgImportTransformer.js',
+    '\\?worker$': '<rootDir>/config/jest.noopImportTransformer.js'
   },
   rootDir: '..',
   setupFiles: ['dotenv/config', '<rootDir>/config/jest.setup.js'],

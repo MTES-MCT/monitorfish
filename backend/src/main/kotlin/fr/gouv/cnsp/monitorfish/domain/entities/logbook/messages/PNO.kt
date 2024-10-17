@@ -23,6 +23,7 @@ class PNO() : LogbookMessageValue {
     var authorTrigram: String? = null
     var catchOnboard: List<LogbookFishingCatch> = emptyList()
     var catchToLand: List<LogbookFishingCatch> = emptyList()
+    var createdBy: String? = null
     var economicZone: String? = null
     var effortZone: String? = null
 
@@ -76,5 +77,8 @@ class PNO() : LogbookMessageValue {
     @JsonSerialize(using = ZonedDateTimeSerializer::class)
     var tripStartDate: ZonedDateTime? = null
 
+    @JsonDeserialize(using = ZonedDateTimeDeserializer::class)
+    @JsonSerialize(using = ZonedDateTimeSerializer::class)
+    var updatedAt: ZonedDateTime? = null
     var updatedBy: String? = null
 }

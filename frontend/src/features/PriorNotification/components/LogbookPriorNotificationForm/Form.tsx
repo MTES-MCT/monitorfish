@@ -6,16 +6,7 @@ import { invalidatePriorNotification } from '@features/PriorNotification/useCase
 import { updateLogbookPriorNotification } from '@features/PriorNotification/useCases/updateLogbookPriorNotification'
 import { getPriorNotificationIdentifier } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import {
-  Accent,
-  Button,
-  customDayjs,
-  FormikEffect,
-  FormikTextarea,
-  Icon,
-  LinkButton,
-  THEME
-} from '@mtes-mct/monitor-ui'
+import { Accent, Button, FormikEffect, FormikTextarea, Icon, LinkButton, THEME } from '@mtes-mct/monitor-ui'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import { Formik } from 'formik'
 import { noop, isEqual } from 'lodash'
@@ -23,6 +14,7 @@ import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
+import { EditHistory } from '../shared/EditHistory'
 import { UploadFiles } from '../shared/UploadFiles'
 
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
@@ -104,15 +96,9 @@ export function Form({ detail, initialFormValues }: FormProps) {
                 reportId={detail.reportId}
               />
 
-              {!!detail?.logbookMessage.message.updatedBy && (
-                <>
-                  <hr />
+              <hr style={{ margin: '8px 0 24px' }} />
 
-                  <LastUpdateText
-                    title={detail.operationDate}
-                  >{`Dernière modification par ${detail.logbookMessage.message.updatedBy} ${customDayjs(detail.operationDate).fromNow()}.`}</LastUpdateText>
-                </>
-              )}
+              <EditHistory priorNotificationDetail={detail} />
             </>
           )}
         </>
@@ -177,12 +163,6 @@ const FieldGroup = styled.div.attrs({ className: 'FieldGroup' })`
   textarea {
     box-sizing: border-box !important;
   }
-`
-
-const LastUpdateText = styled.p`
-  color: ${p => p.theme.color.slateGray};
-  font-style: italic;
-  margin-top: 16px;
 `
 
 const ActionWrapper = styled.div`

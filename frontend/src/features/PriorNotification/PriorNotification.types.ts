@@ -7,7 +7,6 @@ import type { VesselIdentity } from 'domain/entities/vessel/types'
 export namespace PriorNotification {
   export interface PriorNotification {
     acknowledgment: Logbook.Acknowledgment | undefined
-    createdAt: string
     expectedArrivalDate: string | undefined
     expectedLandingDate: string | undefined
     /** Unique identifier concatenating all the DAT, COR, RET & DEL operations `id` used for data consolidation. */
@@ -31,7 +30,6 @@ export namespace PriorNotification {
     tripGears: Logbook.Gear[]
     tripSegments: Logbook.Segment[]
     types: Type[]
-    updatedAt: string
     vesselExternalReferenceNumber: string | undefined
     vesselFlagCountryCode: string | undefined
     vesselId: number
@@ -50,6 +48,7 @@ export namespace PriorNotification {
   }
 
   export type Detail = {
+    createdAt: string
     fingerprint: string
     isLessThanTwelveMetersVessel: boolean
     isVesselUnderCharter: boolean | undefined
@@ -59,6 +58,7 @@ export namespace PriorNotification {
     reportId: string
     riskFactor: number | undefined
     state: State | undefined
+    updatedAt: string
     vesselId: number
     vesselIdentity: VesselIdentity
   } & (

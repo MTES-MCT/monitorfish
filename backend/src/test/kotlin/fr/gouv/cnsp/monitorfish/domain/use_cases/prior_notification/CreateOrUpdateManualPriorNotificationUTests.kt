@@ -48,8 +48,8 @@ class CreateOrUpdateManualPriorNotificationUTests {
     private lateinit var getPriorNotification: GetPriorNotification
 
     @Test
-    fun `execute Should update a manual prior notification`() {
-        val fakePriorNotification = PriorNotificationFaker.fakePriorNotification()
+    fun `execute Should create a manual prior notification`() {
+        val newFakePriorNotification = PriorNotificationFaker.fakePriorNotification()
 
         // Given
         given(vesselRepository.findVesselById(any())).willReturn(VesselFaker.fakeVessel())
@@ -62,14 +62,14 @@ class CreateOrUpdateManualPriorNotificationUTests {
                 vesselRiskFactor = null,
             ),
         )
-        given(manualPriorNotificationRepository.save(any())).willReturn(fakePriorNotification)
+        given(manualPriorNotificationRepository.save(any())).willReturn(newFakePriorNotification)
         given(
             getPriorNotification.execute(
-                fakePriorNotification.reportId!!,
-                fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
+                newFakePriorNotification.reportId!!,
+                newFakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
                 true,
             ),
-        ).willReturn(fakePriorNotification)
+        ).willReturn(newFakePriorNotification)
 
         // When
         val result =
@@ -95,7 +95,7 @@ class CreateOrUpdateManualPriorNotificationUTests {
                 hasPortLandingAuthorization = true,
                 note = null,
                 portLocode = "FAKE_PORT_LOCODE",
-                reportId = fakePriorNotification.reportId!!,
+                reportId = null,
                 sentAt = ZonedDateTime.parse("2024-01-01T00:00:00Z"),
                 tripGearCodes = emptyList(),
                 updatedBy = "editor@example.org",
@@ -103,6 +103,69 @@ class CreateOrUpdateManualPriorNotificationUTests {
             )
 
         // Then
-        assertThat(result.reportId!!).isEqualTo(fakePriorNotification.reportId!!)
+        assertThat(result.reportId!!).isEqualTo(newFakePriorNotification.reportId!!)
+    }
+
+    @Test
+    fun `execute Should update a manual prior notification`() {
+        val existingFakePriorNotification = PriorNotificationFaker.fakePriorNotification()
+        val updatedFakePriorNotification = existingFakePriorNotification.copy(updatedAt = ZonedDateTime.now())
+
+        // Given
+        given(manualPriorNotificationRepository.findByReportId(existingFakePriorNotification.reportId!!)).willReturn(
+            existingFakePriorNotification,
+        )
+        given(vesselRepository.findVesselById(any())).willReturn(VesselFaker.fakeVessel())
+        given(computeManualPriorNotification.execute(any(), any(), any(), any(), any())).willReturn(
+            ManualPriorNotificationComputedValues(
+                isVesselUnderCharter = null,
+                nextState = PriorNotificationState.OUT_OF_VERIFICATION_SCOPE,
+                tripSegments = emptyList(),
+                types = emptyList(),
+                vesselRiskFactor = null,
+            ),
+        )
+        given(manualPriorNotificationRepository.save(any())).willReturn(updatedFakePriorNotification)
+        given(
+            getPriorNotification.execute(
+                existingFakePriorNotification.reportId!!,
+                existingFakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
+                true,
+            ),
+        ).willReturn(updatedFakePriorNotification)
+
+        // When
+        val result =
+            CreateOrUpdateManualPriorNotification(
+                gearRepository,
+                manualPriorNotificationRepository,
+                pnoPortSubscriptionRepository,
+                pnoSegmentSubscriptionRepository,
+                pnoVesselSubscriptionRepository,
+                portRepository,
+                priorNotificationPdfDocumentRepository,
+                vesselRepository,
+                computeManualPriorNotification,
+                getPriorNotification,
+            ).execute(
+                purpose = LogbookMessagePurpose.LAN,
+                didNotFishAfterZeroNotice = false,
+                expectedArrivalDate = ZonedDateTime.parse("2024-01-01T00:00:00Z"),
+                expectedLandingDate = ZonedDateTime.parse("2024-01-01T00:00:00Z"),
+                fishingCatches = emptyList(),
+                globalFaoArea = "FAKE_FAO_AREA",
+                hasPortEntranceAuthorization = true,
+                hasPortLandingAuthorization = true,
+                note = null,
+                portLocode = "FAKE_PORT_LOCODE",
+                reportId = existingFakePriorNotification.reportId!!,
+                sentAt = ZonedDateTime.parse("2024-01-01T00:00:00Z"),
+                tripGearCodes = emptyList(),
+                updatedBy = "editor@example.org",
+                vesselId = 1,
+            )
+
+        // Then
+        assertThat(result.reportId!!).isEqualTo(existingFakePriorNotification.reportId!!)
     }
 }

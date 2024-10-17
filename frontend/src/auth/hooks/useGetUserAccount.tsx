@@ -5,9 +5,11 @@ import { useCallback, useEffect, useMemo } from 'react'
 import { type AuthContextProps, useAuth } from 'react-oidc-context'
 
 import { useGetCurrentUserAuthorizationQueryOverride } from './useGetCurrentUserAuthorizationQueryOverride'
+import { getOIDCConfig } from '../getOIDCConfig'
 
 import type { UserAccountContextType } from '../../context/UserAccountContext'
 
+const { IS_OIDC_ENABLED } = getOIDCConfig()
 const IS_CYPRESS = isCypress()
 
 /**
@@ -42,9 +44,9 @@ export function useGetUserAccount(): UserAccountContextType | undefined {
       return undefined
     }
 
-    if (IS_CYPRESS) {
+    if (IS_CYPRESS || !IS_OIDC_ENABLED) {
       return {
-        email: 'dummy@cypress.test',
+        email: '',
         isAuthenticated: true,
         isSuperUser: user?.isSuperUser ?? false,
         logout

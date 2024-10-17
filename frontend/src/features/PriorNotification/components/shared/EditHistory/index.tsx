@@ -8,11 +8,18 @@ type EditHistoryProps = Readonly<{
   priorNotificationDetail: PriorNotification.Detail
 }>
 export function EditHistory({ priorNotificationDetail }: EditHistoryProps) {
+  const creationLabel = getCreationLabel(priorNotificationDetail)
+  const lastUpdateLabel = getLasUpdateLabel(priorNotificationDetail)
+
   return (
     <Box>
-      <span title={priorNotificationDetail.createdAt}>{getCreationLabel(priorNotificationDetail)}</span>
-      <br />
-      <span title={priorNotificationDetail.updatedAt}>{getLasUpdateLabel(priorNotificationDetail)}</span>
+      <span title={priorNotificationDetail.createdAt}>{creationLabel}</span>
+      {lastUpdateLabel && (
+        <>
+          <br />
+          <span title={priorNotificationDetail.updatedAt}>{lastUpdateLabel}</span>
+        </>
+      )}
     </Box>
   )
 }

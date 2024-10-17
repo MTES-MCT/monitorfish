@@ -29,7 +29,7 @@ class CreateOrUpdateManualPriorNotification(
 
     fun execute(
         reportId: String?,
-        authorTrigram: String,
+        author: String?,
         didNotFishAfterZeroNotice: Boolean,
         expectedArrivalDate: ZonedDateTime,
         expectedLandingDate: ZonedDateTime,
@@ -44,11 +44,17 @@ class CreateOrUpdateManualPriorNotification(
         hasPortLandingAuthorization: Boolean,
         note: String?,
         portLocode: String,
-        sentAt: ZonedDateTime,
         purpose: LogbookMessagePurpose,
+        sentAt: ZonedDateTime,
         tripGearCodes: List<String>,
         vesselId: Int,
     ): PriorNotification {
+        val existingMessageValue: PNO? =
+            reportId?.let {
+                val manualPriorNotfication = manualPriorNotificationRepository.findByReportId(reportId)
+                manualPriorNotfication?.logbookMessageAndValue?.logbookMessage?.message as PNO
+            }
+
         // /!\ Backend computed vessel risk factor is only used as a real time Frontend indicator.
         // The Backend should NEVER update `risk_factors` DB table, only the pipeline is allowed to update it.
         val computedValues =
@@ -72,9 +78,9 @@ class CreateOrUpdateManualPriorNotification(
         val tripSegments = computedValues.tripSegments.map { it.toLogbookTripSegment() }
         val vessel = vesselRepository.findVesselById(vesselId)
         val priorNotificationTypes = computedValues.types.map { it.toPriorNotificationType() }
-        val message =
-            getMessage(
-                authorTrigram = authorTrigram,
+        val messageValue =
+            getMessageValue(
+                existingMessageValue = existingMessageValue,
                 expectedArrivalDate = expectedArrivalDate,
                 expectedLandingDate = expectedLandingDate,
                 // At the moment, manual prior notifications only have a single global FAO area field in Frontend,
@@ -86,6 +92,7 @@ class CreateOrUpdateManualPriorNotification(
                 pnoTypes = priorNotificationTypes,
                 portLocode = portLocode,
                 purpose = purpose,
+                author = author,
                 computedVesselFlagCountryCode = vessel?.flagState,
                 computedVesselRiskFactor = computedValues.vesselRiskFactor,
                 isPartOfControlUnitSubscriptions = isPartOfControlUnitSubscriptions,
@@ -116,7 +123,7 @@ class CreateOrUpdateManualPriorNotification(
                 isDeleted = false,
                 isEnriched = true,
                 isSentByFailoverSoftware = false,
-                message = message,
+                message = messageValue,
                 messageType = LogbookMessageTypeMapping.PNO.name,
                 operationType = LogbookOperationType.DAT,
                 tripGears = tripGears,
@@ -163,8 +170,8 @@ class CreateOrUpdateManualPriorNotification(
         return createdOrUpdatedPriorNotification
     }
 
-    private fun getMessage(
-        authorTrigram: String,
+    private fun getMessageValue(
+        existingMessageValue: PNO?,
         purpose: LogbookMessagePurpose,
         expectedArrivalDate: ZonedDateTime,
         expectedLandingDate: ZonedDateTime,
@@ -174,12 +181,15 @@ class CreateOrUpdateManualPriorNotification(
         note: String?,
         pnoTypes: List<PriorNotificationType>,
         portLocode: String,
+        author: String?,
         computedVesselFlagCountryCode: CountryCode?,
         computedVesselRiskFactor: Double?,
         isPartOfControlUnitSubscriptions: Boolean,
     ): PNO {
         val allPorts = portRepository.findAll()
 
+        val authorTrigram = existingMessageValue?.authorTrigram
+        val createdBy = existingMessageValue?.createdBy ?: author
         val isInVerificationScope =
             ManualPriorNotificationComputedValues
                 .isInVerificationScope(computedVesselFlagCountryCode, computedVesselRiskFactor)
@@ -187,11 +197,13 @@ class CreateOrUpdateManualPriorNotification(
         // we pass `isBeingSent` as `true` in order to ask the workflow to send it.
         val isBeingSent = !isInVerificationScope && isPartOfControlUnitSubscriptions
         val portName = allPorts.find { it.locode == portLocode }?.name
+        val updatedBy = if (existingMessageValue != null) author else null
 
         return PNO().apply {
             this.authorTrigram = authorTrigram
             this.catchOnboard = fishingCatches
             this.catchToLand = fishingCatches
+            this.createdBy = createdBy
             this.economicZone = null
             this.effortZone = null
             // At the moment, manual prior notifications only have a single global FAO area field in Frontend,
@@ -218,6 +230,7 @@ class CreateOrUpdateManualPriorNotification(
             this.statisticalRectangle = null
             this.tripStartDate = null
             this.riskFactor = computedVesselRiskFactor
+            this.updatedBy = updatedBy
         }
     }
 

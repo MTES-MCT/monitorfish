@@ -47,7 +47,6 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
 
     cy.fill('Engins utilisés', ['OTP', 'PTB'], { index: 1 })
     cy.fill("Points d'attention identifiés par le CNSP", "Un point d'attention.")
-    cy.fill('Saisi par', 'BOB')
 
     cy.clickButton('Créer le préavis')
 
@@ -103,7 +102,6 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         weight: 200.0
       })
       assert.deepInclude(createdPriorNotification, {
-        authorTrigram: 'BOB',
         didNotFishAfterZeroNotice: false,
         expectedArrivalDate: arrivalDateAsString,
         expectedLandingDate: landingDateAsString,
@@ -118,6 +116,9 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
       // Edit
 
       editSideWindowPriorNotification('PAGEOT JO', createdPriorNotification.reportId)
+
+      cy.contains('Créé il y a quelques secondes.').should('exist')
+      cy.contains('Dernière mise à jour il y a quelques secondes.').should('exist')
 
       cy.intercept('PUT', `/bff/v1/prior_notifications/manual/${createdPriorNotification.reportId}`).as(
         'updateManualPriorNotification'
@@ -203,7 +204,6 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.contains('Veuillez sélectionner au moins une espèce.').should('exist')
     cy.contains('Veuillez sélectionner au moins un engin.').should('exist')
     cy.contains('Veuillez indiquer la zone FAO.').should('exist')
-    cy.contains('Veuillez indiquer votre trigramme.').should('exist')
     cy.contains('Créer le préavis').should('be.disabled')
 
     cy.getDataCy('vessel-search-input').click().wait(500)
@@ -239,10 +239,6 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.fill('Engins utilisés', ['OTP'], { index: 1 })
 
     cy.contains('Veuillez sélectionner au moins un engin.').should('not.exist')
-
-    cy.fill('Saisi par', 'BOB')
-
-    cy.contains('Veuillez indiquer votre trigramme.').should('not.exist')
 
     cy.contains('Créer le préavis').should('be.enabled')
 
@@ -307,7 +303,6 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.fill('Poids (COD)', 5000)
 
     cy.fill('Engins utilisés', ['OTB'], { index: 1 })
-    cy.fill('Saisi par', 'BOB')
 
     cy.wait('@computePriorNotification')
     cy.getDataCy('VesselRiskFactor').contains('1.9').should('exist')
@@ -334,7 +329,6 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         weight: 5000.0
       })
       assert.deepInclude(createdPriorNotification, {
-        authorTrigram: 'BOB',
         didNotFishAfterZeroNotice: false,
         expectedArrivalDate: arrivalDateAsString,
         // Should be the same as the arrival date since we checked "équivalentes à celles de l'arrivée au port"
@@ -446,10 +440,6 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.fill("Points d'attention identifiés par le CNSP", "Un point d'attention.")
 
     cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 1)
-
-    cy.fill('Saisi par', 'BOB')
-
-    cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 1)
   })
 
   it('Should only recalculate manual prior notification fleet segments, risk factor & types when necessary (edition)', () => {
@@ -494,10 +484,6 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
 
     cy.fill("Points d'attention identifiés par le CNSP", "Un point d'attention.")
 
-    // cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 6)
-
-    cy.fill('Saisi par', 'BOB')
-
     cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 6)
   })
 
@@ -528,7 +514,6 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.fill('Poids (POH)', 50)
 
     cy.fill('Engins utilisés', ['OTP'], { index: 1 })
-    cy.fill('Saisi par', 'BOB')
 
     cy.clickButton('Créer le préavis')
 
@@ -556,7 +541,6 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         weight: 50.0
       })
       assert.deepInclude(createdPriorNotification, {
-        authorTrigram: 'BOB',
         didNotFishAfterZeroNotice: false,
         expectedArrivalDate: arrivalDateAsString,
         expectedLandingDate: arrivalDateAsString, // Checked "équivalentes à celles de l'arrivée au port"
@@ -602,7 +586,6 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
           weight: 50.0
         })
         assert.deepInclude(firstUpdatedPriorNotification, {
-          authorTrigram: 'BOB',
           didNotFishAfterZeroNotice: false,
           expectedArrivalDate: arrivalDateAsString,
           expectedLandingDate: arrivalDateAsString, // Checked "équivalentes à celles de l'arrivée au port"
@@ -643,7 +626,6 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
             weight: 50.0
           })
           assert.deepInclude(secondUpdatedPriorNotification, {
-            authorTrigram: 'BOB',
             didNotFishAfterZeroNotice: false,
             expectedArrivalDate: arrivalDateAsString,
             expectedLandingDate: arrivalDateAsString, // Checked "équivalentes à celles de l'arrivée au port"
@@ -665,8 +647,10 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
       '/bff/v1/prior_notifications/00000000-0000-4000-0000-000000000010/verify_and_send?isManuallyCreated=true&operationDate=*'
     ).as('verifyAndSendPriorNotification')
     editSideWindowPriorNotification('BEAU SÉANT', '00000000-0000-4000-0000-000000000010')
+
     cy.get('button').contains('Diffusé')
-    cy.fill('Saisi par', 'BOB')
+
+    cy.fill("Points d'attention identifiés par le CNSP", "Un point d'attention mis à jour.")
 
     // When
     cy.clickButton('Enregistrer')
@@ -705,7 +689,6 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
 
     cy.fill('Engins utilisés', ['OTB'], { index: 1 })
     cy.fill('Zone globale de capture', '27.7.d')
-    cy.fill('Saisi par', 'BOB')
 
     cy.clickButton('Créer le préavis')
 
@@ -783,5 +766,22 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     // Then
     cy.clickButton('Fermer')
     cy.getTableRowById('00000000-0000-4000-0000-000000000001').find('[title="Préavis invalidé"]').should('exist')
+  })
+
+  it('Should display manual prior notification edit history as expected', () => {
+    editSideWindowPriorNotification('POISSON PAS NET', '00000000-0000-4000-0000-000000000001')
+
+    cy.contains('Créé par BOB il y a').should('exist')
+    cy.contains('Dernière mise à jour par BOB il y a').should('exist')
+
+    editSideWindowPriorNotification('DOS FIN', '00000000-0000-4000-0000-000000000002')
+
+    cy.contains('Créé par creator@example.org il y a').should('exist')
+    cy.contains('Dernière mise à jour par editor@example.org il y a').should('exist')
+
+    editSideWindowPriorNotification('QUEUE DE POISSON', '00000000-0000-4000-0000-000000000003')
+
+    cy.contains('Créé par creator@example.org il y a').should('exist')
+    cy.contains('Dernière mise à jour').should('not.exist')
   })
 })

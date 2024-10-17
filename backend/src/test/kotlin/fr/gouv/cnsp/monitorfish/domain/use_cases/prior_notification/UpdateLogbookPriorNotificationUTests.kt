@@ -43,8 +43,8 @@ class UpdateLogbookPriorNotificationUTests {
             ).execute(
                 reportId = fakePriorNotification.reportId!!,
                 operationDate = fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
-                authorTrigram = "ABC",
                 note = null,
+                updatedBy = "editor@example.org",
             )
 
         // Then

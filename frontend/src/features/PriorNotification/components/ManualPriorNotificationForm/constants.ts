@@ -18,7 +18,6 @@ const FISHING_CATCH_VALIDATION_SCHEMA: ObjectSchema<PriorNotification.FormDataFi
 })
 
 export const FORM_VALIDATION_SCHEMA: ObjectSchema<ManualPriorNotificationFormValues> = object({
-  authorTrigram: string().trim().required('Veuillez indiquer votre trigramme.'),
   didNotFishAfterZeroNotice: boolean().required(),
   expectedArrivalDate: string().required("Veuillez indiquer la date d'arrivée estimée."),
   expectedLandingDate: string().when('$isExpectedLandingDateSameAsExpectedArrivalDate', {
@@ -49,7 +48,6 @@ export const FORM_VALIDATION_SCHEMA: ObjectSchema<ManualPriorNotificationFormVal
 })
 
 export const INITIAL_FORM_VALUES: ManualPriorNotificationFormValues = {
-  authorTrigram: undefined,
   didNotFishAfterZeroNotice: false,
   expectedArrivalDate: undefined,
   expectedLandingDate: undefined,

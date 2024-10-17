@@ -73,7 +73,6 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
     cy.fill('Poids (AAX)', 25)
     cy.fill('Engins utilisés', ['OTP'], { index: 1 })
     cy.fill('Zone globale de capture', '21.4.T')
-    cy.fill('Saisi par', 'ABC')
 
     cy.clickButton('Créer le préavis')
 
@@ -122,7 +121,6 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
     cy.get('.Component-Banner').contains(`Le préavis est en cours de diffusion.`)
 
     cy.get('textarea[name=note]').should('have.attr', 'readonly')
-    cy.get('input[name=authorTrigram]').should('have.attr', 'readonly')
 
     cy.contains('button', 'Enregistrer').should('be.disabled')
     cy.contains('button', 'Diffuser').should('be.disabled')
@@ -134,7 +132,6 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
     cy.get('.Component-Banner').contains(`Le préavis est en cours d’envoi aux unités qui l’ont demandé.`)
 
     cy.get('textarea[name=note]').should('have.attr', 'readonly')
-    cy.get('input[name=authorTrigram]').should('have.attr', 'readonly')
 
     cy.contains('button', 'Enregistrer').should('be.disabled')
     cy.contains('button', 'Diffuser').should('be.disabled')
@@ -196,7 +193,6 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
     cy.fill('Espèces à bord et à débarquer', 'BFT')
 
     cy.fill('Engins utilisés', ['OTP'], { index: 1 })
-    cy.fill('Saisi par', 'BOB')
 
     cy.clickButton('Créer le préavis')
 
@@ -491,7 +487,6 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
     cy.fill('Espèces à bord et à débarquer', 'SWO')
 
     cy.fill('Engins utilisés', ['OTP'], { index: 1 })
-    cy.fill('Saisi par', 'BOB')
 
     cy.clickButton('Créer le préavis')
 

@@ -23,6 +23,7 @@ import { CardBanner } from '../shared/CardBanner'
 import { CardBodyHead } from '../shared/CardBodyHead'
 import { CardHeader } from '../shared/CardHeader'
 import { DownloadButton } from '../shared/DownloadButton'
+import { EditHistory } from '../shared/EditHistory'
 import { UploadFiles } from '../shared/UploadFiles'
 
 import type { ManualPriorNotificationFormValues } from './types'
@@ -178,7 +179,7 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
 
           <Form isNewPriorNotification={isNewPriorNotification} isReadOnly={isReadOnly} />
 
-          {detail && (
+          {!!detail && (
             <>
               <hr style={{ marginBottom: 24 }} />
 
@@ -188,18 +189,22 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
                 operationDate={detail.operationDate}
                 reportId={detail.reportId}
               />
-            </>
-          )}
 
-          {!!detail && (
-            <InvalidateButton
-              accent={Accent.SECONDARY}
-              disabled={isReadOnly}
-              Icon={Icon.Invalid}
-              onClick={openInvalidationConfirmationModal}
-            >
-              Invalider le préavis
-            </InvalidateButton>
+              <hr style={{ margin: '8px 0 24px' }} />
+
+              <EditHistory priorNotificationDetail={detail} />
+
+              <hr />
+
+              <InvalidateButton
+                accent={Accent.SECONDARY}
+                disabled={isReadOnly}
+                Icon={Icon.Invalid}
+                onClick={openInvalidationConfirmationModal}
+              >
+                Invalider le préavis
+              </InvalidateButton>
+            </>
           )}
         </Body>
 

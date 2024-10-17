@@ -163,9 +163,16 @@ export namespace Logbook {
   }
 
   export interface PnoMessageValue {
+    /**
+     * @deprecated
+     * Kept because some historical messages used a manually entered trigram to identify the author of the message.
+     *
+     * It's now automated via `createdBy` and `updatedBy` fields.
+     */
     authorTrigram: string | undefined
     catchOnboard: Catch[] | undefined
     catchToLand: Catch[] | undefined
+    createdBy: string | undefined
     economicZone: string | undefined
     effortZone: string | undefined
     faoZone: string | undefined
@@ -189,6 +196,14 @@ export namespace Logbook {
     riskFactor: number | undefined
     statisticalRectangle: string | undefined
     tripStartDate: string | undefined
+    /**
+     * @internal
+     * This `updatedAt` field is only used internally for logbook PNOs. It's always `undefined` for manual ones.
+     *
+     * /!\ Use `PriorNotification.PriorNotification.updatedAt` or `PriorNotification.Detail.updatedAt` instead.
+     */
+    updatedAt: string | undefined
+    updatedBy: string | undefined
   }
 
   export interface RtpMessageValue {

@@ -10,7 +10,6 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
     const operationDate = dayjs().subtract(6, 'hours').toISOString()
     cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_115?operationDate=${operationDate}`, {
       body: {
-        authorTrigram: null,
         note: null
       }
     })
@@ -23,11 +22,9 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
     )
 
     cy.get('[name="note"]').should('have.value', '')
-    cy.get('[name="authorTrigram"]').should('have.value', '')
 
     // When
     cy.fill("Points d'attention identifiés par le CNSP", "Un point d'attention.")
-    cy.fill('Saisi par', 'ABC')
 
     cy.wait('@updateLogbookPriorNotification')
 
@@ -38,12 +35,10 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
     editSideWindowPriorNotification(`MER À BOIRE`, 'FAKE_OPERATION_115')
 
     cy.get('[name="note"]').should('have.value', "Un point d'attention.")
-    cy.get('[name="authorTrigram"]').should('have.value', 'ABC')
 
     // Reset
     cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_115?operationDate=${operationDate}`, {
       body: {
-        authorTrigram: null,
         note: null
       }
     })
@@ -200,6 +195,23 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
     cy.clickButton('Fermer')
 
     cy.getTableRowById('FAKE_OPERATION_114').find('[title="Préavis invalidé"]').should('exist')
+  })
+
+  it('Should display logbook prior notification edit history as expected', () => {
+    editSideWindowPriorNotification('PHENOMENE', 'FAKE_OPERATION_101')
+
+    cy.contains('Créé il y a').should('exist')
+    cy.contains('Dernière mise à jour par BOB il y a').should('exist')
+
+    editSideWindowPriorNotification('COURANT MAIN PROFESSEUR', 'FAKE_OPERATION_102')
+
+    cy.contains('Créé il y a').should('exist')
+    cy.contains('Dernière mise à jour par editor@example.org il y a').should('exist')
+
+    editSideWindowPriorNotification('VIVA ESPANA', 'FAKE_OPERATION_104')
+
+    cy.contains('Créé il y a').should('exist')
+    cy.contains('Dernière mise à jour').should('not.exist')
   })
 
   it('Should download a logbook prior notification as a PDF document', { retries: 0 }, () => {

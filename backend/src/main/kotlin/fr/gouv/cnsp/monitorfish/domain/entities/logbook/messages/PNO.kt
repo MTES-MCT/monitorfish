@@ -14,9 +14,16 @@ class PNO() : LogbookMessageValue {
     var hasPortEntranceAuthorization: Boolean? = null
     var hasPortLandingAuthorization: Boolean? = null
 
+    @Deprecated(
+        """
+        Kept because some historical messages used a manually entered trigram to identify the author of the message.
+        It's now automated via `createdBy` and `updatedBy` fields.
+        """,
+    )
     var authorTrigram: String? = null
     var catchOnboard: List<LogbookFishingCatch> = emptyList()
     var catchToLand: List<LogbookFishingCatch> = emptyList()
+    var createdBy: String? = null
     var economicZone: String? = null
     var effortZone: String? = null
 
@@ -69,4 +76,9 @@ class PNO() : LogbookMessageValue {
     @JsonDeserialize(using = ZonedDateTimeDeserializer::class)
     @JsonSerialize(using = ZonedDateTimeSerializer::class)
     var tripStartDate: ZonedDateTime? = null
+
+    @JsonDeserialize(using = ZonedDateTimeDeserializer::class)
+    @JsonSerialize(using = ZonedDateTimeSerializer::class)
+    var updatedAt: ZonedDateTime? = null
+    var updatedBy: String? = null
 }

@@ -10,6 +10,7 @@ class PriorNotificationDataOutput(
     val asLogbookForm: LogbookPriorNotificationFormDataOutput?,
     val asManualDraft: ManualPriorNotificationDraftDataOutput?,
     val asManualForm: ManualPriorNotificationFormDataOutput?,
+    val createdAt: ZonedDateTime,
     /** Unique identifier concatenating all the DAT, COR, RET & DEL operations `id` used for data consolidation. */
     val fingerprint: String,
     val isLessThanTwelveMetersVessel: Boolean,
@@ -19,6 +20,7 @@ class PriorNotificationDataOutput(
     val operationDate: ZonedDateTime,
     val state: PriorNotificationState?,
     val riskFactor: Double?,
+    val updatedAt: ZonedDateTime,
     val vesselId: Int,
     val vesselIdentity: VesselIdentityDataOutput,
 ) {
@@ -52,9 +54,18 @@ class PriorNotificationDataOutput(
                 requireNotNull(priorNotification.vessel) {
                     "`priorNotification.vessel` is null."
                 }
+
+            val createdAt =
+                requireNotNull(priorNotification.createdAt) {
+                    "`priorNotification.createdAt` is null."
+                }
             val isLessThanTwelveMetersVessel = vessel.isLessThanTwelveMetersVessel()
             val isVesselUnderCharter = vessel.underCharter
             val logbookMessage = priorNotification.logbookMessageAndValue.logbookMessage
+            val updatedAt =
+                requireNotNull(priorNotification.updatedAt) {
+                    "`priorNotification.updatedAt` is null."
+                }
             val vesselIdentity = VesselIdentityDataOutput.fromVessel(vessel)
             val vesselId = vessel.id
 
@@ -65,6 +76,7 @@ class PriorNotificationDataOutput(
                 asLogbookForm = asLogbookForm,
                 asManualDraft = asManualDraft,
                 asManualForm = asManualForm,
+                createdAt = createdAt,
                 fingerprint = priorNotification.fingerprint,
                 isLessThanTwelveMetersVessel = isLessThanTwelveMetersVessel,
                 isManuallyCreated = priorNotification.isManuallyCreated,
@@ -73,6 +85,7 @@ class PriorNotificationDataOutput(
                 operationDate = logbookMessage.operationDateTime,
                 state = priorNotification.state,
                 riskFactor = priorNotification.logbookMessageAndValue.value.riskFactor,
+                updatedAt = updatedAt,
                 vesselId = vesselId,
                 vesselIdentity = vesselIdentity,
             )

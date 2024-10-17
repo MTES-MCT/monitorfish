@@ -416,6 +416,7 @@ class JpaLogbookReportRepository(
         val nextPnoValue =
             pnoValue.apply {
                 this.note = note
+                this.updatedAt = ZonedDateTime.now()
                 this.updatedBy = updatedBy
 
                 /**

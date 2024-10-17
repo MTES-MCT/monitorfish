@@ -226,14 +226,13 @@ class PriorNotificationControllerUTests {
         val requestBody =
             objectMapper.writeValueAsString(
                 ManualPriorNotificationFormDataInput(
-                    hasPortEntranceAuthorization = true,
-                    hasPortLandingAuthorization = true,
-                    authorTrigram = "ABC",
                     didNotFishAfterZeroNotice = false,
                     expectedArrivalDate = ZonedDateTime.now(),
                     expectedLandingDate = ZonedDateTime.now(),
-                    globalFaoArea = "FAO AREA 51",
                     fishingCatches = emptyList(),
+                    globalFaoArea = "FAO AREA 51",
+                    hasPortEntranceAuthorization = true,
+                    hasPortLandingAuthorization = true,
                     note = null,
                     portLocode = "FRABVC",
                     sentAt = ZonedDateTime.now(),
@@ -283,14 +282,13 @@ class PriorNotificationControllerUTests {
         val requestBody =
             objectMapper.writeValueAsString(
                 ManualPriorNotificationFormDataInput(
-                    hasPortEntranceAuthorization = true,
-                    hasPortLandingAuthorization = true,
-                    authorTrigram = "ABC",
                     didNotFishAfterZeroNotice = false,
                     expectedArrivalDate = ZonedDateTime.now(),
                     expectedLandingDate = ZonedDateTime.now(),
-                    globalFaoArea = "FAO AREA 51",
                     fishingCatches = emptyList(),
+                    globalFaoArea = "FAO AREA 51",
+                    hasPortEntranceAuthorization = true,
+                    hasPortLandingAuthorization = true,
                     note = null,
                     portLocode = "FRABVC",
                     sentAt = ZonedDateTime.now(),

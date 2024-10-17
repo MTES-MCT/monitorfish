@@ -6,7 +6,7 @@ import { updateManualPriorNotificationComputedValues } from '@features/PriorNoti
 import { getPriorNotificationIdentifier, isPriorNotificationZero } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, customDayjs, FormikEffect, Icon, Level, usePrevious } from '@mtes-mct/monitor-ui'
+import { Accent, Button, FormikEffect, Icon, Level, usePrevious } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { getDefinedObject } from '@utils/getDefinedObject'
 import { useFormikContext } from 'formik'
@@ -23,6 +23,7 @@ import { CardBanner } from '../shared/CardBanner'
 import { CardBodyHead } from '../shared/CardBodyHead'
 import { CardHeader } from '../shared/CardHeader'
 import { DownloadButton } from '../shared/DownloadButton'
+import { EditHistory } from '../shared/EditHistory'
 import { UploadFiles } from '../shared/UploadFiles'
 
 import type { ManualPriorNotificationFormValues } from './types'
@@ -178,7 +179,7 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
 
           <Form isNewPriorNotification={isNewPriorNotification} isReadOnly={isReadOnly} />
 
-          {detail && (
+          {!!detail && (
             <>
               <hr style={{ marginBottom: 24 }} />
 
@@ -188,27 +189,21 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
                 operationDate={detail.operationDate}
                 reportId={detail.reportId}
               />
-            </>
-          )}
 
-          {!!detail && (
-            <InvalidateButton
-              accent={Accent.SECONDARY}
-              disabled={isReadOnly}
-              Icon={Icon.Invalid}
-              onClick={openInvalidationConfirmationModal}
-            >
-              Invalider le préavis
-            </InvalidateButton>
-          )}
+              <hr style={{ margin: '8px 0 24px' }} />
 
-          {!!detail?.logbookMessage.message.updatedBy && (
-            <>
+              <EditHistory priorNotificationDetail={detail} />
+
               <hr />
 
-              <LastUpdateText
-                title={detail.operationDate}
-              >{`Dernière modification par ${detail.logbookMessage.message.updatedBy} ${customDayjs(detail.operationDate).fromNow()}.`}</LastUpdateText>
+              <InvalidateButton
+                accent={Accent.SECONDARY}
+                disabled={isReadOnly}
+                Icon={Icon.Invalid}
+                onClick={openInvalidationConfirmationModal}
+              >
+                Invalider le préavis
+              </InvalidateButton>
             </>
           )}
         </Body>
@@ -311,12 +306,6 @@ const Body = styled.div`
   > .FieldGroup {
     margin-top: 24px;
   }
-`
-
-const LastUpdateText = styled.p`
-  color: ${p => p.theme.color.slateGray};
-  font-style: italic;
-  margin-top: 16px;
 `
 
 const Footer = styled.div`

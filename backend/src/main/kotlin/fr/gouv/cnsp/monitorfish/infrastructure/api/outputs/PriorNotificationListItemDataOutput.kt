@@ -12,7 +12,6 @@ import java.time.ZonedDateTime
 data class PriorNotificationListItemDataOutput(
     val reportId: String,
     val acknowledgment: AcknowledgmentDataOutput?,
-    val createdAt: ZonedDateTime?,
     val expectedArrivalDate: ZonedDateTime?,
     val expectedLandingDate: ZonedDateTime?,
     /** Unique identifier concatenating all the DAT, COR, RET & DEL operations `id` used for data consolidation. */
@@ -36,7 +35,6 @@ data class PriorNotificationListItemDataOutput(
     val tripGears: List<LogbookMessageGearDataOutput>,
     val tripSegments: List<LogbookMessageTripSegmentDataOutput>,
     val types: List<PriorNotificationTypeDataOutput>,
-    val updatedAt: ZonedDateTime?,
     val vesselId: Int?,
     val vesselExternalReferenceNumber: String?,
     val vesselFlagCountryCode: CountryCode,
@@ -78,7 +76,6 @@ data class PriorNotificationListItemDataOutput(
             return PriorNotificationListItemDataOutput(
                 reportId = priorNotification.reportId,
                 acknowledgment = acknowledgment,
-                createdAt = priorNotification.createdAt,
                 expectedArrivalDate = message.predictedArrivalDatetimeUtc,
                 expectedLandingDate = message.predictedLandingDatetimeUtc,
                 fingerprint = priorNotification.fingerprint,
@@ -99,7 +96,6 @@ data class PriorNotificationListItemDataOutput(
                 tripGears = tripGears,
                 tripSegments = tripSegments,
                 types = types,
-                updatedAt = priorNotification.updatedAt,
                 vesselId = vessel.id,
                 vesselExternalReferenceNumber = vessel.externalReferenceNumber,
                 vesselFlagCountryCode = vessel.flagState,

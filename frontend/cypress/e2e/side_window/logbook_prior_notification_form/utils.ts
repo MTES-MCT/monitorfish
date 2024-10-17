@@ -75,7 +75,6 @@ export function getPriorNotificationsFakeResponse({
     data: [
       {
         acknowledgment: null,
-        createdAt,
         expectedArrivalDate,
         expectedLandingDate: expectedArrivalDate,
         fingerprint,
@@ -114,7 +113,6 @@ export function getPriorNotificationsFakeResponse({
         tripGears: [{ dimensions: null, gear: 'OTT', gearName: null, mesh: null }],
         tripSegments: [{ code: 'MED01', name: 'All Trawls 1' }],
         types: [{ hasDesignatedPorts: false, minimumNotificationPeriod: 4.0, name: 'Préavis type A' }],
-        updatedAt,
         vesselExternalReferenceNumber: 'EXTIMM121',
         vesselFlagCountryCode: 'FR',
         vesselId: 121,
@@ -163,6 +161,7 @@ export function getPriorNotificationFakeResponse({
   const commonData: OrUndefinedToOrNull<
     Omit<PriorNotification.Detail, 'asLogbookForm' | 'asManualDraft' | 'asManualForm' | 'isManuallyCreated'>
   > = {
+    createdAt,
     fingerprint,
     isLessThanTwelveMetersVessel: true,
     isVesselUnderCharter: false,
@@ -236,6 +235,7 @@ export function getPriorNotificationFakeResponse({
         riskFactor: 3.2,
         statisticalRectangle: null,
         tripStartDate,
+        updatedAt,
         updatedBy: 'editor@example.org'
       },
       messageType: Logbook.MessageType.PNO,
@@ -255,6 +255,7 @@ export function getPriorNotificationFakeResponse({
     reportId,
     riskFactor: 3.2,
     state,
+    updatedAt,
     vesselId: 121,
     vesselIdentity: {
       beaconNumber: null,

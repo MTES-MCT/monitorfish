@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { batch } from 'react-redux'
 import styled from 'styled-components'
 
-import LawType from './list_regulation/LawType'
+import { LawType } from './list_regulation/LawType'
 import { SearchRegulations } from './list_regulation/SearchRegulations'
 import { setProcessingRegulationSaved } from './slice'
 import layer from '../../domain/shared_slices/Layer'

@@ -4,7 +4,7 @@ import { assertNotNullish } from '@utils/assertNotNullish'
 import { useFormikContext, type ArrayHelpers } from 'formik'
 import styled from 'styled-components'
 
-import { FormikExtraField } from './FormikExtraField'
+import { FormikExtraField, StyledSubRow } from './FormikExtraField'
 import { SubRow } from './styles'
 import { getFishingsCatchesValidationError } from './utils'
 import { getFishingsCatchesInitialValues } from '../../utils'
@@ -64,6 +64,7 @@ export function FormikMainField({
           <Row key={`extra-field-${fishingCatch.specyCode}-${fishingCatch.faoArea}-${index}`}>
             <SubRow>
               <SpecyTag
+                $isSqueezed={fishingCatch.specyCode === SWORDFISH_SPECY_CODE && !values.hasGlobalFaoArea}
                 onDelete={() => onArrayHelperRemove(index)}
               >{`${fishingCatch.specyCode} – ${fishingCatch.specyName}`}</SpecyTag>
 
@@ -82,6 +83,19 @@ export function FormikMainField({
                 />
               )}
 
+              {fishingCatch.specyCode === SWORDFISH_SPECY_CODE && (
+                <StyledSubRow key="SWO">
+                  <FormikNumberInput
+                    areArrowsHidden
+                    isLabelHidden
+                    label="Quantité (SWO)"
+                    name={`fishingCatches[${index}].quantity`}
+                    readOnly={isReadOnly}
+                    unit="pc"
+                  />
+                </StyledSubRow>
+              )}
+
               <FormikNumberInput
                 areArrowsHidden
                 isErrorMessageHidden
@@ -98,7 +112,7 @@ export function FormikMainField({
               />
             </SubRow>
 
-            {[BLUEFIN_TUNA_SPECY_CODE, SWORDFISH_SPECY_CODE].includes(fishingCatch.specyCode) && (
+            {fishingCatch.specyCode === BLUEFIN_TUNA_SPECY_CODE && (
               <FormikExtraField fishingCatchIndex={index} isReadOnly={isReadOnly} />
             )}
           </Row>
@@ -145,8 +159,11 @@ const Row = styled.div`
   }
 `
 
-const SpecyTag = styled(SingleTag)`
+const SpecyTag = styled(SingleTag)<{
+  $isSqueezed: boolean
+}>`
+  flex-grow: 1;
   margin-top: 2px;
-  max-width: 260px;
-  min-width: 260px;
+  max-width: ${p => (p.$isSqueezed ? 160 : 288)}px;
+  min-width: ${p => (p.$isSqueezed ? 160 : 288)}px;
 `

@@ -46,7 +46,7 @@ export function LogbookPriorNotificationForm() {
       )
     },
     isBeingSent,
-    5000
+    1000
   )
 
   const displayedErrorKey = displayedError ? DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR : undefined

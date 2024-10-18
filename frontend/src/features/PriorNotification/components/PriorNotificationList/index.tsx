@@ -22,6 +22,7 @@ import { isLegacyFirefox } from '@utils/isLegacyFirefox'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
+import { useDebounce } from 'use-debounce'
 
 import { getTableColumns } from './columns'
 import { DEFAULT_PAGE_SIZE, SUB_MENUS_AS_OPTIONS } from './constants'
@@ -68,11 +69,14 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
     BackendApi.SortDirection.DESC
   )
 
-  const rtkQueryParams = {
-    apiPaginationParams,
-    apiSortingParams,
-    listFilter
-  }
+  const [rtkQueryParams] = useDebounce(
+    {
+      apiPaginationParams,
+      apiSortingParams,
+      listFilter
+    },
+    1000
+  )
   // `!!error` !== `isError` because `isError` is `false` when the query is fetching.
   const { data, error, isError, isFetching } = useGetPriorNotificationsQuery(rtkQueryParams, {
     ...RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS,

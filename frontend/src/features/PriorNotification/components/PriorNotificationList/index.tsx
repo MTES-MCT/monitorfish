@@ -25,7 +25,7 @@ import styled, { css } from 'styled-components'
 import { useDebounce } from 'use-debounce'
 
 import { getTableColumns } from './columns'
-import { DEFAULT_PAGE_SIZE, SUB_MENUS_AS_OPTIONS } from './constants'
+import { DEFAULT_PAGE_SIZE, ExpectedArrivalPeriod, SUB_MENUS_AS_OPTIONS } from './constants'
 import { FilterBar } from './FilterBar'
 import { FilterTags } from './FilterTags'
 import { Row } from './Row'
@@ -77,11 +77,18 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
     },
     1000
   )
+  const areRtkQueryParamsValid = !(
+    rtkQueryParams.listFilter.expectedArrivalPeriod === ExpectedArrivalPeriod.CUSTOM &&
+    !rtkQueryParams.listFilter.expectedArrivalCustomPeriod
+  )
   // `!!error` !== `isError` because `isError` is `false` when the query is fetching.
-  const { data, error, isError, isFetching } = useGetPriorNotificationsQuery(rtkQueryParams, {
-    ...RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS,
-    ...RTK_FORCE_REFETCH_QUERY_OPTIONS
-  })
+  const { data, error, isError, isFetching } = useGetPriorNotificationsQuery(
+    areRtkQueryParamsValid ? rtkQueryParams : skipToken,
+    {
+      ...RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS,
+      ...RTK_FORCE_REFETCH_QUERY_OPTIONS
+    }
+  )
   useHandleFrontendApiError(
     DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_LIST_ERROR,
     error,

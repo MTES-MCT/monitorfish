@@ -1,3 +1,4 @@
+import { RTK_DEFAULT_REFETCH_QUERY_OPTIONS } from '@api/constants'
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { useGetPriorNotificationSentNessagesQuery } from '@features/PriorNotification/priorNotificationApi'
 import { Icon } from '@mtes-mct/monitor-ui'
@@ -12,7 +13,11 @@ type SentMessageListProps = Readonly<{
   state: PriorNotification.State | undefined
 }>
 export function SentMessageList({ detail, state }: SentMessageListProps) {
-  const { data: sentMessages, isError, isFetching } = useGetPriorNotificationSentNessagesQuery(detail.reportId)
+  const {
+    data: sentMessages,
+    isError,
+    isFetching
+  } = useGetPriorNotificationSentNessagesQuery(detail.reportId, RTK_DEFAULT_REFETCH_QUERY_OPTIONS)
 
   const sentMessagesBatches = sentMessages ? getSentMessagesBatches(sentMessages) : []
   const lastSentMessagesBatch = sentMessagesBatches ? sentMessagesBatches[sentMessagesBatches.length - 1] : undefined

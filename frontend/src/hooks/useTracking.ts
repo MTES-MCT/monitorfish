@@ -11,7 +11,7 @@ type Tracking = {
 }
 
 /**
- * Wrapper of Matomo script injected in `index.html`.
+ * Wrapper of UseMatomo script injected in `index.html`.
  *
  *
  * @see https://developer.matomo.org/guides/tracking-javascript-guide

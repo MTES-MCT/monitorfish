@@ -5,22 +5,24 @@ import type { StartQueryActionCreatorOptions, SubscriptionOptions } from '@redux
 
 export const RTK_MAX_RETRIES = 1
 
-export const RTK_THIRTY_SECONDS_POLLING_QUERY_OPTIONS: SubscriptionOptions & Partial<RefetchConfigOptions> = {
-  pollingInterval: THIRTY_SECONDS,
+export const RTK_DEFAULT_REFETCH_QUERY_OPTIONS: Partial<RefetchConfigOptions> = {
   refetchOnMountOrArgChange: true,
   refetchOnReconnect: true
+}
+
+export const RTK_THIRTY_SECONDS_POLLING_QUERY_OPTIONS: SubscriptionOptions & Partial<RefetchConfigOptions> = {
+  ...RTK_DEFAULT_REFETCH_QUERY_OPTIONS,
+  pollingInterval: THIRTY_SECONDS
 }
 
 export const RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS: SubscriptionOptions & Partial<RefetchConfigOptions> = {
-  pollingInterval: ONE_MINUTE,
-  refetchOnMountOrArgChange: true,
-  refetchOnReconnect: true
+  ...RTK_DEFAULT_REFETCH_QUERY_OPTIONS,
+  pollingInterval: ONE_MINUTE
 }
 
 export const RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS: SubscriptionOptions & Partial<RefetchConfigOptions> = {
-  pollingInterval: FIVE_MINUTES,
-  refetchOnMountOrArgChange: true,
-  refetchOnReconnect: true
+  ...RTK_DEFAULT_REFETCH_QUERY_OPTIONS,
+  pollingInterval: FIVE_MINUTES
 }
 
 export const RTK_FORCE_REFETCH_QUERY_OPTIONS: StartQueryActionCreatorOptions = {

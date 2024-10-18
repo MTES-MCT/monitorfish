@@ -5,7 +5,7 @@ import { useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 
 import { SubRow } from './styles'
-import { BLUEFIN_TUNA_SPECY_CODE, SWORDFISH_SPECY_CODE } from '../../../../constants'
+import { BLUEFIN_TUNA_SPECY_CODE } from '../../../../constants'
 
 import type { ManualPriorNotificationFormValuesFishingCatch } from '../../types'
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
@@ -57,103 +57,82 @@ export function FormikExtraField({ fishingCatchIndex, isReadOnly }: FormikExtraF
     return <></>
   }
 
-  // BFT - Bluefin Tuna => + BF1, BF2, BF3
-  if (fishingCatch.specyCode === BLUEFIN_TUNA_SPECY_CODE) {
-    return (
-      <>
-        <StyledSubRow>
-          <ExtendedSpecyCode>BF1</ExtendedSpecyCode>
+  return (
+    <>
+      <StyledSubRow>
+        <ExtendedSpecyCode>BF1</ExtendedSpecyCode>
 
-          <FormikNumberInput
-            areArrowsHidden
-            isErrorMessageHidden
-            isLabelHidden
-            label="Quantité (BF1)"
-            name={`fishingCatches[${fishingCatchIndex}].$bluefinTunaExtendedCatch.BF1.quantity`}
-            readOnly={isReadOnly}
-            unit="pc"
-          />
-
-          <FormikNumberInput
-            areArrowsHidden
-            isErrorMessageHidden
-            isLabelHidden
-            label="Poids (BF1)"
-            name={`fishingCatches[${fishingCatchIndex}].$bluefinTunaExtendedCatch.BF1.weight`}
-            readOnly={isReadOnly}
-            unit="kg"
-          />
-        </StyledSubRow>
-        <StyledSubRow>
-          <ExtendedSpecyCode>BF2</ExtendedSpecyCode>
-
-          <FormikNumberInput
-            areArrowsHidden
-            isErrorMessageHidden
-            isLabelHidden
-            label="Quantité (BF2)"
-            name={`fishingCatches[${fishingCatchIndex}].$bluefinTunaExtendedCatch.BF2.quantity`}
-            readOnly={isReadOnly}
-            unit="pc"
-          />
-
-          <FormikNumberInput
-            areArrowsHidden
-            isErrorMessageHidden
-            isLabelHidden
-            label="Poids (BF2)"
-            name={`fishingCatches[${fishingCatchIndex}].$bluefinTunaExtendedCatch.BF2.weight`}
-            readOnly={isReadOnly}
-            unit="kg"
-          />
-        </StyledSubRow>
-        <StyledSubRow>
-          <ExtendedSpecyCode>BF3</ExtendedSpecyCode>
-
-          <FormikNumberInput
-            areArrowsHidden
-            isErrorMessageHidden
-            isLabelHidden
-            label="Quantité (BF3)"
-            name={`fishingCatches[${fishingCatchIndex}].$bluefinTunaExtendedCatch.BF3.quantity`}
-            readOnly={isReadOnly}
-            unit="pc"
-          />
-
-          <FormikNumberInput
-            areArrowsHidden
-            isErrorMessageHidden
-            isLabelHidden
-            label="Poids (BF3)"
-            name={`fishingCatches[${fishingCatchIndex}].$bluefinTunaExtendedCatch.BF3.weight`}
-            readOnly={isReadOnly}
-            unit="kg"
-          />
-        </StyledSubRow>
-      </>
-    )
-  }
-
-  // SWO - Swordfish
-  if (fishingCatch.specyCode === SWORDFISH_SPECY_CODE) {
-    return (
-      <StyledSubRow key="SWO">
         <FormikNumberInput
           areArrowsHidden
+          isErrorMessageHidden
           isLabelHidden
-          label="Quantité (SWO)"
-          name={`fishingCatches[${fishingCatchIndex}].quantity`}
+          label="Quantité (BF1)"
+          name={`fishingCatches[${fishingCatchIndex}].$bluefinTunaExtendedCatch.BF1.quantity`}
           readOnly={isReadOnly}
           unit="pc"
         />
-      </StyledSubRow>
-    )
-  }
 
-  return <></>
+        <FormikNumberInput
+          areArrowsHidden
+          isErrorMessageHidden
+          isLabelHidden
+          label="Poids (BF1)"
+          name={`fishingCatches[${fishingCatchIndex}].$bluefinTunaExtendedCatch.BF1.weight`}
+          readOnly={isReadOnly}
+          unit="kg"
+        />
+      </StyledSubRow>
+      <StyledSubRow>
+        <ExtendedSpecyCode>BF2</ExtendedSpecyCode>
+
+        <FormikNumberInput
+          areArrowsHidden
+          isErrorMessageHidden
+          isLabelHidden
+          label="Quantité (BF2)"
+          name={`fishingCatches[${fishingCatchIndex}].$bluefinTunaExtendedCatch.BF2.quantity`}
+          readOnly={isReadOnly}
+          unit="pc"
+        />
+
+        <FormikNumberInput
+          areArrowsHidden
+          isErrorMessageHidden
+          isLabelHidden
+          label="Poids (BF2)"
+          name={`fishingCatches[${fishingCatchIndex}].$bluefinTunaExtendedCatch.BF2.weight`}
+          readOnly={isReadOnly}
+          unit="kg"
+        />
+      </StyledSubRow>
+      <StyledSubRow>
+        <ExtendedSpecyCode>BF3</ExtendedSpecyCode>
+
+        <FormikNumberInput
+          areArrowsHidden
+          isErrorMessageHidden
+          isLabelHidden
+          label="Quantité (BF3)"
+          name={`fishingCatches[${fishingCatchIndex}].$bluefinTunaExtendedCatch.BF3.quantity`}
+          readOnly={isReadOnly}
+          unit="pc"
+        />
+
+        <FormikNumberInput
+          areArrowsHidden
+          isErrorMessageHidden
+          isLabelHidden
+          label="Poids (BF3)"
+          name={`fishingCatches[${fishingCatchIndex}].$bluefinTunaExtendedCatch.BF3.weight`}
+          readOnly={isReadOnly}
+          unit="kg"
+        />
+      </StyledSubRow>
+    </>
+  )
 }
 
-const StyledSubRow = styled(SubRow)`
+export const StyledSubRow = styled(SubRow)`
   align-items: center;
   justify-content: flex-end;
 `

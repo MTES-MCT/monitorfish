@@ -115,6 +115,7 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
                 label="Plage de temps sur mesure"
                 name="dateRange"
                 onChange={handleDateRangePickerChange}
+                withFullDayDefaults
                 withTime
               />
             </Field>

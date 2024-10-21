@@ -9,6 +9,7 @@ import 'cypress-plugin-snapshots/commands'
 import './commands'
 import './commands/dragTo'
 import './commands/loadPath'
+import type { LoadPathOptions } from './commands/loadPath'
 
 declare global {
   namespace Cypress {
@@ -26,7 +27,7 @@ declare global {
       ): void
       getComputedStyle(dataCy: string, backUpToParentNumber?: number): Cypress.Chainable<CSSStyleDeclaration>
       getDownloadedFileContent(callback: (content: Cypress.Chainable<any>) => void): void
-      loadPath(path: string): void
+      loadPath(path: string, options?: LoadPathOptions): void
       resetCountRequestsByAlias(alias: string): void
 
       /* eslint-disable typescript-sort-keys/interface */

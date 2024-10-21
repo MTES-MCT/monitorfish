@@ -417,7 +417,7 @@ context('Sidebars > Regulatory Layers', () => {
 
   it('Should unselect one of the selected topic zone layers', () => {
     // Focus the map on Corsica
-    cy.visit('/#@997505.75,5180266.24,8.70')
+    cy.loadPath('/#@997505.75,5180266.24,8.70')
 
     // TODO Investigate why there is white space in the Cypress iframe when hiding vessels which breaks the entire test.
     // cy.clickButton('Affichage des dernières positions')

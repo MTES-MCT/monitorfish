@@ -5,7 +5,7 @@ context('Control objectives', () => {
     const currentYear = new Date().getFullYear()
     cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear}`).as('fleetSegments')
     cy.intercept('GET', `/bff/v1/admin/control_objectives/${currentYear}`).as('controlObjectives')
-    cy.visit('/backoffice/control_objectives')
+    cy.loadPath('/backoffice/control_objectives')
     cy.wait('@fleetSegments')
     cy.wait('@controlObjectives')
   })
@@ -59,7 +59,7 @@ context('Control objectives', () => {
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', '/bff/v1/admin/control_objectives').as('controlObjectives')
-    cy.visit('/backoffice/control_objectives')
+    cy.loadPath('/backoffice/control_objectives')
     cy.wait('@controlObjectives')
     cy.wait(50)
     cy.get('*[data-cy="row-78-targetNumberOfControlsAtPort"]').should('have.value', '23')
@@ -81,7 +81,7 @@ context('Control objectives', () => {
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', '/bff/v1/admin/control_objectives').as('controlObjectives')
-    cy.visit('/backoffice/control_objectives')
+    cy.loadPath('/backoffice/control_objectives')
     cy.wait('@controlObjectives')
     cy.wait(50)
     cy.get('*[data-cy="row-78-targetNumberOfControlsAtSea"]').should('have.value', '23')
@@ -101,7 +101,7 @@ context('Control objectives', () => {
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', '/bff/v1/admin/control_objectives').as('controlObjectives')
-    cy.visit('/backoffice/control_objectives')
+    cy.loadPath('/backoffice/control_objectives')
     cy.wait('@controlObjectives')
     cy.wait(50)
     cy.get('[data-cy="row-78-controlPriorityLevel"]').should('exist')
@@ -122,7 +122,7 @@ context('Control objectives', () => {
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', '/bff/v1/admin/control_objectives').as('controlObjectives')
-    cy.visit('/backoffice/control_objectives')
+    cy.loadPath('/backoffice/control_objectives')
     cy.wait('@controlObjectives')
     cy.wait(50)
     cy.get('.rs-table-row').should('have.length', 66)
@@ -156,7 +156,7 @@ context('Control objectives', () => {
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', '/bff/v1/admin/control_objectives').as('controlObjectives')
-    cy.visit('/backoffice/control_objectives')
+    cy.loadPath('/backoffice/control_objectives')
     cy.wait('@controlObjectives')
     cy.wait(50)
     cy.get('.rs-table-row').should('have.length', 67)

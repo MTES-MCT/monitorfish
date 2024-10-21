@@ -6,7 +6,7 @@ context('Side Window > Reporting List > Actions', () => {
       cy.intercept('PUT', '/bff/v1/reportings/archive').as('archiveReportings')
 
       // Given
-      cy.visit('/side_window')
+      cy.loadPath('/side_window')
       cy.getDataCy('side-window-reporting-tab').click()
       cy.getDataCy('side-window-sub-menu-NAMO').click()
       cy.getDataCy('table-order-by-validationDate').click().wait(250).click()
@@ -34,7 +34,7 @@ context('Side Window > Reporting List > Actions', () => {
 
   it('Reportings Should be searched and ordered by date', () => {
     // Given
-    cy.visit('/side_window')
+    cy.loadPath('/side_window')
     cy.getDataCy('side-window-reporting-tab').click()
     cy.getDataCy('side-window-sub-menu-NAMO').click()
     cy.wait(200)
@@ -76,7 +76,7 @@ context('Side Window > Reporting List > Actions', () => {
 
     createReportingFromVesselSidebar('COURANT MAIN PROFESSEUR').then(createdReportingId => {
       // Given
-      cy.visit('/side_window')
+      cy.loadPath('/side_window')
       cy.getDataCy('side-window-reporting-tab').click()
       cy.getDataCy('side-window-sub-menu-NAMO').click()
       cy.getDataCy('table-order-by-validationDate').click().wait(250).click()
@@ -106,7 +106,7 @@ context('Side Window > Reporting List > Actions', () => {
     cy.intercept('PUT', 'bff/v1/reportings/6').as('updateReporting')
 
     // Given
-    cy.visit('/side_window')
+    cy.loadPath('/side_window')
     cy.getDataCy('side-window-reporting-tab').click()
     cy.getDataCy('side-window-sub-menu-NAMO').click()
 
@@ -135,7 +135,7 @@ context('Side Window > Reporting List > Actions', () => {
     cy.intercept('PUT', 'bff/v1/reportings/6').as('updateReporting')
 
     // Given
-    cy.visit('/side_window')
+    cy.loadPath('/side_window')
     cy.getDataCy('side-window-reporting-tab').click()
     cy.getDataCy('side-window-sub-menu-NAMO').click()
 
@@ -166,7 +166,7 @@ context('Side Window > Reporting List > Actions', () => {
     cy.cleanDownloadedFiles()
 
     // Given
-    cy.visit('/side_window')
+    cy.loadPath('/side_window')
     cy.getDataCy('side-window-reporting-tab').click()
 
     // There should be one reporting either in SA or NAME sea front, depending of the previous

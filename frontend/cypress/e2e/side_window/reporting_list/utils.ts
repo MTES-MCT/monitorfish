@@ -1,5 +1,5 @@
 export const openSideWindowReportingList = () => {
-  cy.visit('/side_window')
+  cy.loadPath('/side_window')
 
   cy.wait(500)
 

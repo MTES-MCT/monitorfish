@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it } from '@jest/globals'
 import { platform } from 'os'
 import { Page } from 'puppeteer'
 
-import { consoleListener, getFirstTab, getInputContent, wait, waitForSelectorWithText } from './utils'
+import { consoleListener, getFirstTab, getInputContent, login, wait, waitForSelectorWithText } from './utils'
 // /!\ Do not shorten imports, it will fail the run
 import { SeafrontGroup } from '../../src/constants/seafront'
 
@@ -28,7 +28,7 @@ describe('Missions Form', () => {
 
     /* eslint-disable no-restricted-syntax */
     for (const page of [pageA, pageB]) {
-      await page.goto(URL, { waitUntil: 'domcontentloaded' })
+      await login(page, URL)
       await wait(2000)
 
       await page.waitForSelector('[title="Missions et contrôles"]')
@@ -64,14 +64,14 @@ describe('Missions Form', () => {
       await wait(2000)
       const controlUnitContact = await pageA.waitForSelector('[name="mission_control_unit_contact_0"]')
       // Modify contact on first page
-      await controlUnitContact.click({ clickCount: 3, delay: 50 })
+      await controlUnitContact.click({ count: 3, delay: 50 })
       await controlUnitContact.type('A new tel. number', { delay: 50 })
       // Wait for the update to be sent
       await wait(1000)
       // Should send the update to the second page
       expect(await getInputContent(pageB, '[name="mission_control_unit_contact_0"]')).toBe('A new tel. number')
       // Erase the value
-      await controlUnitContact.click({ clickCount: 3, delay: 50 })
+      await controlUnitContact.click({ count: 3, delay: 50 })
       await controlUnitContact.type('contact', { delay: 50 })
       await wait(1000)
 
@@ -82,7 +82,7 @@ describe('Missions Form', () => {
       await pageA.focus('[name="observationsCnsp"]')
       const observationsCnsp = await pageB.waitForSelector('[name="observationsCnsp"]')
       // Modify contact on first page
-      await observationsCnsp.click({ clickCount: 3, delay: 50 })
+      await observationsCnsp.click({ count: 3, delay: 50 })
       await observationsCnsp.type("A new observation, as I'm not sure of the purpose of this mission.", { delay: 25 })
       // Wait for the update to be sent
       await wait(1000)
@@ -91,7 +91,7 @@ describe('Missions Form', () => {
         "A new observation, as I'm not sure of the purpose of this mission."
       )
       // Erase the value
-      await observationsCnsp.click({ clickCount: 3, delay: 50 })
+      await observationsCnsp.click({ count: 3, delay: 50 })
       await observationsCnsp.type('Aucune', { delay: 50 })
       await wait(1000)
 
@@ -102,14 +102,14 @@ describe('Missions Form', () => {
       await pageB.focus('[name="observationsCacem"]')
       const observationsCacem = await pageA.waitForSelector('[name="observationsCacem"]')
       // Modify contact on first page
-      await observationsCacem.click({ clickCount: 3 })
+      await observationsCacem.click({ count: 3 })
       await observationsCacem.type('A new observation for this mission.', { delay: 25 })
       // Wait for the update to be sent
       await wait(1000)
       // Should send the update to the second page
       expect(await getInputContent(pageB, '[name="observationsCacem"]')).toBe('A new observation for this mission.')
       // Erase the value
-      await observationsCacem.click({ clickCount: 3 })
+      await observationsCacem.click({ count: 3 })
       await observationsCacem.type('Aucune', { delay: 50 })
       await wait(1000)
 
@@ -120,14 +120,14 @@ describe('Missions Form', () => {
       await pageB.focus('[name="openBy"]')
       const openBy = await pageB.waitForSelector('[name="openBy"]')
       // Modify contact on first page
-      await openBy.click({ clickCount: 3 })
+      await openBy.click({ count: 3 })
       await openBy.type('LTH', { delay: 50 })
       // Wait for the update to be sent
       await wait(1000)
       // Should send the update to the second page
       expect(await getInputContent(pageA, '[name="openBy"]')).toBe('LTH')
       // Erase the value
-      await openBy.click({ clickCount: 3 })
+      await openBy.click({ count: 3 })
       await openBy.type('FDJ', { delay: 50 })
       await wait(2000)
     },

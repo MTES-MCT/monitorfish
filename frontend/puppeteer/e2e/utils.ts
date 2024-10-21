@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { Page, Browser, type FrameWaitForFunctionOptions } from 'puppeteer'
+import { Browser, type FrameWaitForFunctionOptions, Page } from 'puppeteer'
 
 class ConsoleListener {
   #isStopped = false
@@ -69,6 +69,30 @@ export async function getInputContent(page: Page, selector: string) {
   //    By default it is typed as Element[], but you may need to provide a more specific sub-type
   // @ts-ignore
   return element && element.evaluate((el: HTMLInputElement) => el.value)
+}
+
+export async function login(page: Page, path: string) {
+  await page.goto(path, { waitUntil: 'domcontentloaded' })
+  const url = page.url()
+
+  if (url.includes('login')) {
+    const loginButton = await page.waitForSelector('[title="Se connecter avec Cerbère"]')
+    await loginButton.click()
+
+    // Login with Keycloak
+    const username = await page.waitForSelector('[name="username"]')
+    await username.type('superuser', { delay: 50 })
+    const password = await page.waitForSelector('[name="password"]')
+    await password.type('fish', { delay: 50 })
+
+    const submitButton = await page.waitForSelector('[name="login"]')
+    await submitButton.click()
+
+    // There is a redirect to `/` after successful login
+    await wait(500)
+
+    await page.goto(path, { waitUntil: 'domcontentloaded' })
+  }
 }
 
 export async function getFirstTab(browser: Browser) {

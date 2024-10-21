@@ -40,7 +40,7 @@ export function useGetUserAccount(): UserAccountContextType | undefined {
   }, [auth])
 
   const userAccount = useMemo(() => {
-    if (!user) {
+    if (auth?.isAuthenticated && !user) {
       return undefined
     }
 

@@ -309,6 +309,7 @@ export function FilterBar() {
             label="Arrivée estimée du navire entre deux dates"
             name="expectedArrivalCustomPeriod"
             onChange={updateExpectedArrivalCustomPeriod}
+            withFullDayDefaults
             withTime
           />
         </Row>

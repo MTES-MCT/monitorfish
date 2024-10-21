@@ -112,27 +112,18 @@ context('Vessel sidebar controls buttons', () => {
     // When
     cy.intercept('GET', '/bff/v1/vessels/positions*').as('getPositions')
     cy.getDataCy('vessel-track-depth-selection').click()
-    cy.fill('Plage de temps sur mesure', [
-      [
-        startDateAsDayjs.year(),
-        startDateAsDayjs.month() + 1,
-        startDateAsDayjs.date(),
-        startDateAsDayjs.hour(),
-        startDateAsDayjs.minute()
-      ],
-      [
-        endDateAsDayjs.year(),
-        endDateAsDayjs.month() + 1,
-        endDateAsDayjs.date(),
-        endDateAsDayjs.hour(),
-        endDateAsDayjs.minute()
-      ]
-    ])
+
+    cy.get('input[aria-label="Jour de début"]').type(startDateAsDayjs.format('DD'))
+    cy.get('input[aria-label="Mois de début"]').type(startDateAsDayjs.format('MM'))
+    cy.get('input[aria-label="Année de début"]').type(startDateAsDayjs.format('YYYY'))
+    cy.get('input[aria-label="Jour de fin"]').type(endDateAsDayjs.format('DD'))
+    cy.get('input[aria-label="Mois de fin"]').type(endDateAsDayjs.format('MM'))
+    cy.get('input[aria-label="Année de fin"]').type(endDateAsDayjs.format('YYYY'))
 
     // Then
     cy.wait('@getPositions').then(({ request }) => {
-      expect(request.url).contains(`${startDateAsDayjs.format('DD')}T01:02:00.000Z`)
-      expect(request.url).contains(`${endDateAsDayjs.format('DD')}T03:04:59.000Z`)
+      expect(request.url).contains(`${startDateAsDayjs.format('DD')}T00:00:00.000Z`)
+      expect(request.url).contains(`${endDateAsDayjs.format('DD')}T23:59:59.000Z`)
     })
 
     cy.wait(200)

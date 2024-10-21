@@ -54,13 +54,13 @@ services:
       - FRONTEND_GEOSERVER_REMOTE_URL=http://0.0.0.0:8081
       - FRONTEND_MAPBOX_KEY=pk.eyJ1IjoibW9uaXRvcmZpc2giLCJhIjoiY2tsdHJ6dHhhMGZ0eDJ2bjhtZmJlOHJmZiJ9.bdi1cO-cUcZKXdkEkqAoZQ
       - FRONTEND_MONITORENV_URL=http://0.0.0.0:9880
-      - FRONTEND_OIDC_AUTHORITY=http://localhost:8085/realms/monitor
+      - FRONTEND_OIDC_AUTHORITY=http://0.0.0.0:8085/realms/monitor
       - FRONTEND_OIDC_CLIENT_ID=monitorfish
       - MONITORFISH_OIDC_ENABLED=false
       - MONITORFISH_SCHEDULING_ENABLED=false
       - FRONTEND_OIDC_ENABLED=false
-      - FRONTEND_OIDC_REDIRECT_URI=http://localhost:8880
-      - FRONTEND_OIDC_LOGOUT_REDIRECT_URI=http://localhost:8880/login
+      - FRONTEND_OIDC_REDIRECT_URI=http://0.0.0.0:8880
+      - FRONTEND_OIDC_LOGOUT_REDIRECT_URI=http://0.0.0.0:8880/login
       - FRONTEND_MONITORFISH_VERSION=
       - FRONTEND_SENTRY_DSN=https://a5f3272efa794bb9ada2ffea90f2fec5@sentry.incubateur.net/8
       - FRONTEND_SENTRY_TRACING_ORIGINS=
@@ -132,6 +132,20 @@ services:
       driver: "json-file"
       options:
         max-size: "1024m"
+
+  keycloak:
+    container_name: monitorfish_keycloak
+    image: quay.io/keycloak/keycloak:latest
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    ports:
+      - "8085:8080"
+    volumes:
+      - ../dev/keycloak:/opt/keycloak/data/import
+    command:
+      - start-dev
+      - --import-realm
 
   geoserver-stubs:
     image: rodolpheche/wiremock

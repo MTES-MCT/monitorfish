@@ -9,9 +9,8 @@ const currentYear = dayjs().utc().year()
 context('Fleet segments', () => {
   beforeEach(() => {
     cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear}`).as('fleetSegments')
-    cy.visit('/backoffice/fleet_segments')
+    cy.loadPath('/backoffice/fleet_segments')
     cy.wait('@fleetSegments')
-    cy.wait(1000)
   })
 
   it('Should list and update fleet segments', () => {
@@ -76,7 +75,7 @@ context('Fleet segments', () => {
     cy.get('[aria-rowindex="2"]').find('[aria-colindex="7"]').contains('21.0.A')
 
     cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear}`).as('fleetSegments')
-    cy.visit('/backoffice/fleet_segments')
+    cy.loadPath('/backoffice/fleet_segments')
     cy.wait('@fleetSegments')
 
     cy.get('.rs-table-row').should('have.length', 44)
@@ -121,7 +120,7 @@ context('Fleet segments', () => {
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear}`).as('fleetSegments')
-    cy.visit('/backoffice/fleet_segments')
+    cy.loadPath('/backoffice/fleet_segments')
     cy.wait('@fleetSegments')
     cy.get('[aria-rowindex="2"]').find('[aria-colindex="1"]').contains('2.7')
     cy.get('[aria-rowindex="2"]').find('[aria-colindex="2"]').contains('ABC123')

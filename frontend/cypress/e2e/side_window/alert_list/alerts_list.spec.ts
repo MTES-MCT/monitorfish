@@ -80,7 +80,7 @@ context('Side Window > Alert List', () => {
     cy.wait('@validateAlert').then(({ response }) => expect(response && response.statusCode).equal(200))
 
     // The value is saved in database when I refresh the page
-    cy.visit('/side_window')
+    cy.loadPath('/side_window')
     cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
     cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', expectedAlerts)
     // As the alert is validated, it will be silenced for 4 hours but not shown in the silenced alerts table
@@ -111,7 +111,7 @@ context('Side Window > Alert List', () => {
       .should('have.length', expectedSilencedAlerts)
 
     // The value is saved in database when I refresh the page
-    cy.visit('/side_window')
+    cy.loadPath('/side_window')
     cy.wait(200)
     cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
     cy.get('*[data-cy^="side-window-alerts-list"]')
@@ -171,7 +171,7 @@ context('Side Window > Alert List', () => {
       .should('have.length', expectedSilencedAlerts)
 
     // The value is saved in database when I refresh the page
-    cy.visit('/side_window')
+    cy.loadPath('/side_window')
     cy.wait(200)
     cy.get('*[data-cy="side-window-sub-menu-SUSPENDED_ALERTS"]').click()
     cy.get('*[data-cy^="side-window-silenced-alerts-list"]')

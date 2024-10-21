@@ -1,14 +1,9 @@
 context('Light MonitorFish', () => {
   it('Should have some features removed When not logged as super user', () => {
     // Given
-    cy.intercept('/bff/v1/authorization/current', {
-      body: {
-        isSuperUser: false
-      },
-      statusCode: 200
-    }).as('getIsSuperUser')
-    cy.visit('/light#@-824534.42,6082993.21,8.70')
-    cy.wait('@getIsSuperUser')
+    cy.loadPath('/light#@-824534.42,6082993.21,8.70', {
+      isSuperUser: false
+    })
     cy.wait(200)
 
     // Then

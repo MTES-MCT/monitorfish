@@ -137,7 +137,7 @@ context('Side Window > Prior Notification List > VesselFilter Bar', () => {
     const expectedBeforeDate = customDayjs.utc().add(4, 'hours').toISOString()
 
     cy.viewport(1920, 1080)
-    cy.visit('/side_window')
+    cy.loadPath('/side_window')
     cy.wait(500)
     if (document.querySelector('[data-cy="first-loader"]')) {
       cy.getDataCy('first-loader').should('not.be.visible')

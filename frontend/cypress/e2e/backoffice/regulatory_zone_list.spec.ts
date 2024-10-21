@@ -2,7 +2,7 @@
 
 context('Backoffice', () => {
   beforeEach(() => {
-    cy.visit('/backoffice/regulation')
+    cy.loadPath('/backoffice/regulation')
     cy.wait(200)
   })
 

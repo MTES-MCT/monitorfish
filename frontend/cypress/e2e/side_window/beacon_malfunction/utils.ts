@@ -3,7 +3,7 @@ import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/
 export const openSideWindowBeaconMalfunctionBoard = () => {
   cy.viewport(1920, 1080)
 
-  cy.visit('/side_window')
+  cy.loadPath('/side_window')
 
   cy.wait(500)
 

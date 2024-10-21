@@ -36,7 +36,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('NATINF 2608')
 
     // The reporting should be found in the reporting tab of the side window
-    cy.visit('/side_window')
+    cy.loadPath('/side_window')
     cy.get('*[data-cy="side-window-reporting-tab"]').click()
     cy.get('[data-cy="side-window-sub-menu-NAMO"]').click()
     cy.wait(200)

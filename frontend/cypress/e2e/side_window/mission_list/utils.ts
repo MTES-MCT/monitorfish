@@ -6,10 +6,12 @@ import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/
 export const openSideWindowMissionList = () => {
   cy.viewport(1920, 1080)
 
-  cy.visit('/side_window', {
-    onBeforeLoad(window) {
-      Object.defineProperty(window, 'EventSource', { value: EventSource })
-      Object.defineProperty(window, 'mockEventSources', { value: sources })
+  cy.loadPath('/side_window', {
+    visitOptions: {
+      onBeforeLoad(window) {
+        Object.defineProperty(window, 'EventSource', { value: EventSource })
+        Object.defineProperty(window, 'mockEventSources', { value: sources })
+      }
     }
   })
 

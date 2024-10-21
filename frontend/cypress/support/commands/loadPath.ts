@@ -11,7 +11,7 @@ Cypress.Commands.add('loadPath', (path: string, options?: LoadPathOptions): void
       cy.clickButton('Se connecter avec Cerbère')
 
       cy.origin(
-        'http://localhost:8085/realms/monitor',
+        'http://0.0.0.0:8085/realms/monitor',
         { args: { isSuperUser: options?.isSuperUser } },
         ({ isSuperUser }) => {
           // Login with Keycloak

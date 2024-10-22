@@ -3,15 +3,13 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.proxy
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.cloud.gateway.mvc.ProxyExchange
-import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 
 /**
- * Used for EE tests
+ * Used for E2E tests
  */
 @RestController
 @ConditionalOnProperty(
@@ -32,7 +30,7 @@ class KeycloakProxyController {
         if (params.isNotEmpty()) {
             targetUri.append("?")
             params.entries.joinToString("&") { (key, values) ->
-                "${key}=${values.joinToString(",")}"
+                "$key=${values.joinToString(",")}"
             }.let { targetUri.append(it) }
         }
 

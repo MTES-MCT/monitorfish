@@ -10,6 +10,7 @@ import { Content } from './Content'
 import type { VesselIdentity } from 'domain/entities/vessel/types'
 
 type CurrentReportingListProps = Readonly<{
+  className?: string
   onIsDirty?: (isDirty: boolean) => void
   startDate?: Date
   vesselIdentity: VesselIdentity | undefined
@@ -17,6 +18,7 @@ type CurrentReportingListProps = Readonly<{
   withVesselSidebarHistoryLink?: boolean
 }>
 export function CurrentReportingList({
+  className,
   onIsDirty,
   startDate = getDefaultReportingsStartDate(),
   vesselIdentity,
@@ -39,6 +41,7 @@ export function CurrentReportingList({
 
   return (
     <Content
+      className={className}
       onIsDirty={onIsDirty}
       vesselIdentity={vesselIdentity}
       vesselReportings={vesselReportings}

@@ -58,7 +58,7 @@ export function ReportingList() {
           </StyledLinkButton>
         </CardHeader>
 
-        <CurrentReportingList
+        <StyledCurrentReportingList
           onIsDirty={handleIsDirty}
           vesselIdentity={vesselIdentity}
           withOpenedNewReportingForm
@@ -93,4 +93,9 @@ const StyledLinkButton = styled(LinkButton)`
   > .Element-IconBox {
     rotate: 90deg;
   }
+`
+
+const StyledCurrentReportingList = styled(CurrentReportingList)`
+  flex-grow: 1;
+  overflow-y: auto;
 `

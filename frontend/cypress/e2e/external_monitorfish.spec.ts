@@ -1,18 +1,16 @@
 context('External MonitorFish', () => {
   it('Should redirect to /', () => {
     // Given
-    cy.loadPath('/ext#@-824534.42,6082993.21,8.70', {
-      isSuperUser: false
-    })
+    cy.login('user')
+    cy.visit('/ext#@-824534.42,6082993.21,8.70')
 
     cy.url().should('not.contain', 'ext')
   })
 
   it('Should have some features removed When not logged as super user', () => {
     // Given
-    cy.loadPath('/#@-824534.42,6082993.21,8.70', {
-      isSuperUser: false
-    })
+    cy.login('user')
+    cy.visit('/#@-824534.42,6082993.21,8.70')
     cy.wait(200)
 
     // Then
@@ -70,7 +68,7 @@ context('External MonitorFish', () => {
     cy.get('*[data-cy="missions-menu-box"]').should('not.exist')
 
     // Given
-    cy.loadPath('/#@-188008.06,6245230.27,8.70')
+    cy.visit('/#@-188008.06,6245230.27,8.70')
 
     // Then
     // No missions

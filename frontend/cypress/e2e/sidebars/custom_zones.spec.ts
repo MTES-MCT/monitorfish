@@ -4,7 +4,8 @@ const CUSTOM_ZONES_LOCALSTORAGE_KEY = 'persist:mainPersistorCustomZone'
 
 context('Sidebars > Custom Zones', () => {
   it('A custom zone Should be showed and hidden', () => {
-    cy.loadPath('/#@-9649561.29,3849836.62,7.84')
+    cy.login('superuser')
+    cy.visit('/#@-9649561.29,3849836.62,7.84')
 
     cy.cleanScreenshots(1)
 
@@ -52,7 +53,8 @@ context('Sidebars > Custom Zones', () => {
   })
 
   it('A custom zone Should be edited', () => {
-    cy.loadPath('/#@-9649561.29,3849836.62,7.84')
+    cy.login('superuser')
+    cy.visit('/#@-9649561.29,3849836.62,7.84')
     cy.get('[title="Arbre des couches"]').click()
     cy.get('*[data-cy="custom-zones-toggle"]').click()
 

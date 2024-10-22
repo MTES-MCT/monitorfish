@@ -3,7 +3,8 @@ import { getUtcizedDayjs } from '../utils/getUtcizedDayjs'
 
 context('Vessels Track', () => {
   beforeEach(() => {
-    cy.loadPath('/#@-824534.42,6082993.21,8.70')
+    cy.login('superuser')
+    cy.visit('/#@-824534.42,6082993.21,8.70')
   })
 
   it('Last position card with Alert Should be seen on the map on pointer move', () => {

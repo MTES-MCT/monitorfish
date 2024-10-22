@@ -2,7 +2,8 @@
 
 context('Vessels list', () => {
   beforeEach(() => {
-    cy.loadPath('/#@-824534.42,6082993.21,7.70')
+    cy.login('superuser')
+    cy.visit('/#@-824534.42,6082993.21,7.70')
   })
 
   it('Vessels Should be filtered and previewed on the map', () => {

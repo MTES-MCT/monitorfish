@@ -2,7 +2,8 @@ import dayjs from 'dayjs'
 
 context('Vessel sidebar controls tab', () => {
   beforeEach(() => {
-    cy.loadPath('/#@-824534.42,6082993.21,8.70')
+    cy.login('superuser')
+    cy.visit('/#@-824534.42,6082993.21,8.70')
   })
 
   it('Controls Should contain the controls summary and history', () => {

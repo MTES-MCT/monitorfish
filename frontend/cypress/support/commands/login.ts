@@ -5,6 +5,7 @@ export function login(user: string) {
 
     cy.postLoginToKeycloak(user)
 
+    cy.wait(2000)
     cy.clickButton('Se connecter avec Cerbère')
     cy.wait(2000)
   })

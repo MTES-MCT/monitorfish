@@ -45,6 +45,9 @@ class SecurityConfig(
                     authorize.requestMatchers(
                         "/",
                         "/backoffice",
+                        "/side_window",
+                        "/login",
+                        "/register",
                         "/backoffice/**",
                         "/ext",
                         "/light",

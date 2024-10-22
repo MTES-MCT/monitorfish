@@ -16,7 +16,7 @@ export default defineConfig({
     specPattern: 'cypress/e2e/**/*.spec.ts'
   },
   env: {
-    "auth_base_url": `http://${IS_CI ? '0.0.0.0' : 'localhost'}:8085`,
+    "auth_base_url": `http://${IS_CI ? 'localhost' : 'localhost'}:8085`,
     "auth_realm": "monitor",
     "auth_client_id": "monitorfish",
     'cypress-plugin-snapshots': {

@@ -7,12 +7,10 @@
       "enabled": true,
       "protocol": "openid-connect",
       "redirectUris": [
-        "http://localhost:3000/*",
-        "http://0.0.0.0:8880/*"
+        "*"
       ],
       "webOrigins": [
-        "http://localhost:3000",
-        "http://0.0.0.0:8880"
+        "*"
       ],
       "publicClient": true
     }

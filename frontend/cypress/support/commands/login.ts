@@ -1,11 +1,11 @@
-Cypress.Commands.add('login', (user: string): void => {
+export function login(user: string) {
   cy.session(user, () => {
     cy.visit('/login')
     cy.wait(500)
 
-    cy.kcLogin(user)
+    cy.postLoginToKeycloak(user)
 
     cy.clickButton('Se connecter avec Cerbère')
     cy.wait(2000)
   })
-})
+}

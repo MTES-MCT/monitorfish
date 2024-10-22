@@ -100,6 +100,7 @@ const Body = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  max-height: 700px;
   overflow-x: hidden;
   padding: 5px;
 `

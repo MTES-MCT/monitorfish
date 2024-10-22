@@ -31,18 +31,16 @@ const Wrapper = styled.div`
   flex-direction: column;
   letter-spacing: 0.5px;
   line-height: 1;
-  min-width: 130px;
   padding: 16px 24px;
+  width: 200px;
 `
 
 const StyledNavLink = styled(NavLink)`
   align-items: center;
   color: ${p => p.theme.color.gainsboro};
   display: flex;
-  height: 55px;
+  height: 45px;
   text-align: left;
-  line-height: 17px;
-  width: 140px;
 
   && {
     color: ${p => p.theme.color.gainsboro};

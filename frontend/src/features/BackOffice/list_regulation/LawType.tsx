@@ -1,33 +1,36 @@
-import React, { useState, useEffect } from 'react'
-import { useSelector, useDispatch, batch } from 'react-redux'
+import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
+import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
+import { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { EmptyResult } from '../../commonStyles/Text.style'
-import { RegulatoryTopic as RegulatoryLayerTopic } from '../../Regulation/components/RegulatoryZones/RegulatoryTopic'
+
 import { COLORS } from '../../../constants/constants'
+import { EmptyResult } from '../../commonStyles/Text.style'
 import ChevronIconSVG from '../../icons/Chevron_simple_gris.svg?react'
-import {
-  setLawTypeOpened,
-  setRegulatoryTopicsOpened,
-  closeRegulatoryZoneMetadataPanel
-} from '../../Regulation/slice'
+import { RegulatoryTopic } from '../../Regulation/components/RegulatoryZones/RegulatoryTopic'
+import { setLawTypeOpened, setRegulatoryTopicsOpened, closeRegulatoryZoneMetadataPanel } from '../../Regulation/slice'
 import updateTopicForAllZones from '../../Regulation/useCases/updateTopicForAllZones'
 
-const LawType = props => {
-  const dispatch = useDispatch()
+type LawTypeProps = Readonly<{
+  isEditable: boolean
+  lawType: string
+  regZoneByLawType: Record<string, Record<string, string[]>>
+  territory: string
+}>
+export function LawType({ isEditable, lawType, regZoneByLawType, territory }: LawTypeProps) {
+  const dispatch = useBackofficeAppDispatch()
   const [numberOfZonesOpened, setNumberOfZonesOpened] = useState(0)
-  const lawTypeOpened = useSelector(state => state.regulatory.lawTypeOpened)
-  const { lawType, regZoneByLawType, isEditable, territory } = props
+  const lawTypeOpened = useBackofficeAppSelector(state => state.regulatory.lawTypeOpened)
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     setIsOpen(lawTypeOpened === lawType)
   }, [lawType, lawTypeOpened, setIsOpen])
 
-  function increaseNumberOfZonesOpened(number) {
+  const increaseNumberOfZonesOpened = number => {
     setNumberOfZonesOpened(numberOfZonesOpened + number)
   }
 
-  function decreaseNumberOfZonesOpened(number) {
+  const decreaseNumberOfZonesOpened = number => {
     const value = numberOfZonesOpened - number
     if (value < 0) {
       setNumberOfZonesOpened(0)
@@ -36,40 +39,35 @@ const LawType = props => {
     }
   }
 
-  function updateLayerName(oldLayerName, newLayerName) {
-    dispatch(updateTopicForAllZones(territory, lawType, oldLayerName, newLayerName))
+  const updateLayerName = (previousTopic: string, nextTopic: string) => {
+    dispatch(updateTopicForAllZones(territory, lawType, previousTopic, nextTopic))
   }
 
-  const displayRegulatoryTopics = regulatoryTopics => {
-    return regulatoryTopics && Object.keys(regulatoryTopics).length > 0 ? (
+  const displayRegulatoryTopics = regulatoryTopics =>
+    regulatoryTopics && Object.keys(regulatoryTopics).length > 0 ? (
       Object.keys(regulatoryTopics)
         .sort()
-        .map((regulatoryTopic, index) => {
-          return (
-            <RegulatoryLayerTopic
-              key={regulatoryTopic}
-              increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
-              decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
-              regulatoryTopic={regulatoryTopic}
-              regulatoryZones={regulatoryTopics[regulatoryTopic]}
-              isLastItem={Object.keys(regulatoryTopics).length === index + 1}
-              allowRemoveZone={false}
-              isEditable={isEditable}
-              updateLayerName={updateLayerName}
-            />
-          )
-        })
+        .map((regulatoryTopic, index) => (
+          <RegulatoryTopic
+            key={regulatoryTopic}
+            allowRemoveZone={false}
+            decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
+            increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
+            isEditable={isEditable}
+            isLastItem={Object.keys(regulatoryTopics).length === index + 1}
+            regulatoryTopic={regulatoryTopic}
+            regulatoryZones={regulatoryTopics[regulatoryTopic]}
+            updateLayerName={updateLayerName}
+          />
+        ))
     ) : (
       <EmptyResult>Aucun résultat</EmptyResult>
     )
-  }
 
   const openLawTypeList = () => {
     if (isOpen) {
-      batch(() => {
-        dispatch(setLawTypeOpened(null))
-        dispatch(setRegulatoryTopicsOpened([]))
-      })
+      dispatch(setLawTypeOpened(null))
+      dispatch(setRegulatoryTopicsOpened([]))
     } else {
       dispatch(setLawTypeOpened(lawType))
     }
@@ -79,12 +77,12 @@ const LawType = props => {
 
   return (
     <LawTypeContainer data-cy="law-type">
-      <LawTypeName onClick={openLawTypeList} data-cy={lawType}>
+      <LawTypeName data-cy={lawType} onClick={openLawTypeList}>
         <LawTypeText>{lawType}</LawTypeText>
         <ChevronIcon $isOpen={isOpen} />
       </LawTypeName>
       {isOpen && (
-        <RegulatoryZoneLayerList isOpen={isOpen}>
+        <RegulatoryZoneLayerList $isOpen={isOpen}>
           {displayRegulatoryTopics(regZoneByLawType[lawType])}
         </RegulatoryZoneLayerList>
       )}
@@ -119,7 +117,9 @@ const LawTypeText = styled.div`
   text-overflow: ellipsis;
 `
 
-const RegulatoryZoneLayerList = styled.ul`
+const RegulatoryZoneLayerList = styled.ul<{
+  $isOpen: boolean
+}>`
   margin: 0;
   overflow-y: auto;
   overflow-x: unset;
@@ -130,14 +130,16 @@ const RegulatoryZoneLayerList = styled.ul`
   border-bottom-right-radius: 2px;
   padding: 0;
   color: ${COLORS.gunMetal};
-  height: ${props => (props.isOpen ? 'unset' : '0')};
-  opacity: ${props => (props.isOpen ? '1' : '0')};
+  height: ${props => (props.$isOpen ? 'unset' : '0')};
+  opacity: ${props => (props.$isOpen ? '1' : '0')};
   transition: all 0.5s;
   overflow-x: hidden;
   max-width: 100%;
 `
 
-const ChevronIcon = styled(ChevronIconSVG)`
+const ChevronIcon = styled(ChevronIconSVG)<{
+  $isOpen: boolean
+}>`
   transform: ${props => (props.$isOpen ? 'rotate(0deg)' : 'rotate(180deg)')};
   width: 17px;
   float: right;
@@ -145,5 +147,3 @@ const ChevronIcon = styled(ChevronIconSVG)`
   margin-top: 5px;
   transition: all 0.5s;
 `
-
-export default LawType

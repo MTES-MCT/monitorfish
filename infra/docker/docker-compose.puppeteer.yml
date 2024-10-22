@@ -54,7 +54,7 @@ services:
       - FRONTEND_GEOSERVER_REMOTE_URL=http://0.0.0.0:8081
       - FRONTEND_MAPBOX_KEY=pk.eyJ1IjoibW9uaXRvcmZpc2giLCJhIjoiY2tsdHJ6dHhhMGZ0eDJ2bjhtZmJlOHJmZiJ9.bdi1cO-cUcZKXdkEkqAoZQ
       - FRONTEND_MONITORENV_URL=http://0.0.0.0:9880
-      - FRONTEND_OIDC_AUTHORITY=http://0.0.0.0:8085/realms/monitor
+      - FRONTEND_OIDC_AUTHORITY=http://0.0.0.0:8880/realms/monitor
       - FRONTEND_OIDC_CLIENT_ID=monitorfish
       - MONITORFISH_OIDC_ENABLED=false
       - MONITORFISH_SCHEDULING_ENABLED=false

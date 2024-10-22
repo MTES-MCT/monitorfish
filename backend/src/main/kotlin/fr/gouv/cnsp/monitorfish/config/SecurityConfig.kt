@@ -49,6 +49,8 @@ class SecurityConfig(
                         "/login",
                         "/register",
                         "/backoffice/**",
+                        "/realms/**",
+                        "/resources/**",
                         "/ext",
                         "/light",
                         "/load_light",

@@ -26,8 +26,8 @@ declare global {
       ): void
       getComputedStyle(dataCy: string, backUpToParentNumber?: number): Cypress.Chainable<CSSStyleDeclaration>
       getDownloadedFileContent(callback: (content: Cypress.Chainable<any>) => void): void
-      kcLogin(user: string): void
       login(user: string): void
+      postLoginToKeycloak(user: string): void
       resetCountRequestsByAlias(alias: string): void
 
       /* eslint-disable typescript-sort-keys/interface */

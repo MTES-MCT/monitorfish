@@ -82,7 +82,7 @@ services:
       - KEYCLOAK_ADMIN_PASSWORD=admin
       - KC_HOSTNAME_STRICT=false
       - KC_HTTP_ENABLED=true
-      - KC_HOSTNAME=http://localhost:8880
+      - KC_HOSTNAME=http://0.0.0.0:8880
       - PROXY_ADDRESS_FORWARDING=true
     ports:
       - "8085:8080"

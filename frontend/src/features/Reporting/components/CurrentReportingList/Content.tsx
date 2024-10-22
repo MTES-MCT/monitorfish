@@ -4,7 +4,7 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Button, LinkButton } from '@mtes-mct/monitor-ui'
 import { VesselSidebarTab } from 'domain/entities/vessel/vessel'
 import { showVessel } from 'domain/use_cases/vessel/showVessel'
-import { useCallback, useMemo, useState, type CSSProperties } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { EditReporting } from './EditReporting'
@@ -16,7 +16,6 @@ import type { VesselIdentity } from 'domain/entities/vessel/types'
 type ContentProps = Readonly<{
   className: string | undefined
   onIsDirty: ((isDirty: boolean) => void) | undefined
-  style: CSSProperties | undefined
   vesselIdentity: VesselIdentity
   vesselReportings: VesselReportings
   withOpenedNewReportingForm: boolean
@@ -25,7 +24,6 @@ type ContentProps = Readonly<{
 export function Content({
   className,
   onIsDirty,
-  style,
   vesselIdentity,
   vesselReportings,
   withOpenedNewReportingForm,
@@ -60,7 +58,7 @@ export function Content({
   }
 
   return (
-    <Wrapper className={className} style={style}>
+    <Wrapper className={className}>
       {!vesselReportings.current.length && !isNewReportingFormOpen && (
         <NoReporting>Pas de signalement ouvert sur ce navire.</NoReporting>
       )}

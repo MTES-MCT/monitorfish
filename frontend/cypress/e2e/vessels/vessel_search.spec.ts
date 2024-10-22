@@ -2,7 +2,8 @@
 
 context('VesselSearch', () => {
   beforeEach(() => {
-    cy.loadPath('/#@-824534.42,6082993.21,8.70')
+    cy.login('superuser')
+    cy.visit('/#@-824534.42,6082993.21,8.70')
   })
 
   it('Vessel from last positions and vessels table Should be searched from the search bar', () => {

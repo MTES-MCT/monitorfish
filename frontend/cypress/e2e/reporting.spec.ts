@@ -1,6 +1,7 @@
 context('Reporting', () => {
   beforeEach(() => {
-    cy.loadPath('/#@-582151.17,6006980.16,10.94')
+    cy.login('superuser')
+    cy.visit('/#@-582151.17,6006980.16,10.94')
   })
 
   it('Should be showed on map When vessels have infraction suspicions', () => {

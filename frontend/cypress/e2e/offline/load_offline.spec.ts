@@ -5,7 +5,7 @@ context('Load offline', () => {
   // eslint-disable-next-line mocha/no-skipped-tests
   it.skip('Should download tiles in the Cache API with the Service Worker', () => {
     // Given
-    cy.loadPath('/load_offline')
+    cy.visit('/load_offline')
     cy.get('*[data-cy="load-offline-downloaded-tiles"]').eq(0).contains('0 tuiles sauvegardées')
 
     // When

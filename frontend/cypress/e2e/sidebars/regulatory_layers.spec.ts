@@ -2,7 +2,8 @@
 
 context('Sidebars > Regulatory Layers', () => {
   it('The number of zones searched and total zones in law type should be displayed', () => {
-    cy.loadPath('/#@-224002.65,6302673.54,8.70')
+    cy.login('superuser')
+    cy.visit('/#@-224002.65,6302673.54,8.70')
 
     cy.request(
       'GET',
@@ -20,7 +21,8 @@ context('Sidebars > Regulatory Layers', () => {
   })
 
   it('A regulation Should be searched, added to My Zones and showed on the map with the Zone button', () => {
-    cy.loadPath('/#@-224002.65,6302673.54,8.70')
+    cy.login('superuser')
+    cy.visit('/#@-224002.65,6302673.54,8.70')
 
     cy.request(
       'GET',
@@ -94,7 +96,8 @@ context('Sidebars > Regulatory Layers', () => {
   })
 
   it('A regulation Should be searched and the result Should be kept When we go to My Zones section', () => {
-    cy.loadPath('/#@-224002.65,6302673.54,8.70')
+    cy.login('superuser')
+    cy.visit('/#@-224002.65,6302673.54,8.70')
 
     cy.request(
       'GET',
@@ -126,7 +129,8 @@ context('Sidebars > Regulatory Layers', () => {
   })
 
   it('A regulation Should be searched, added to My Zones and showed on the map with the Topic button', () => {
-    cy.loadPath('/#@-224002.65,6302673.54,8.70')
+    cy.login('superuser')
+    cy.visit('/#@-224002.65,6302673.54,8.70')
 
     cy.request(
       'GET',
@@ -171,7 +175,8 @@ context('Sidebars > Regulatory Layers', () => {
   })
 
   it('The Cotentin regulation metadata Should be opened', () => {
-    cy.loadPath('/#@-224002.65,6302673.54,8.70')
+    cy.login('superuser')
+    cy.visit('/#@-224002.65,6302673.54,8.70')
 
     cy.request(
       'GET',
@@ -232,7 +237,8 @@ context('Sidebars > Regulatory Layers', () => {
   })
 
   it('The Armor regulation metadata Should be opened', () => {
-    cy.loadPath('/#@-224002.65,6302673.54,8.70')
+    cy.login('superuser')
+    cy.visit('/#@-224002.65,6302673.54,8.70')
 
     cy.request(
       'GET',
@@ -283,7 +289,8 @@ context('Sidebars > Regulatory Layers', () => {
   })
 
   it('A regulation Should be searched with a rectangle', () => {
-    cy.loadPath('/#@-224002.65,6302673.54,8.70')
+    cy.login('superuser')
+    cy.visit('/#@-224002.65,6302673.54,8.70')
 
     cy.request(
       'GET',
@@ -326,7 +333,8 @@ context('Sidebars > Regulatory Layers', () => {
   })
 
   it('A regulation Should be searched with a polygon', () => {
-    cy.loadPath('/#@-224002.65,6302673.54,8.70')
+    cy.login('superuser')
+    cy.visit('/#@-224002.65,6302673.54,8.70')
 
     cy.request(
       'GET',
@@ -357,7 +365,8 @@ context('Sidebars > Regulatory Layers', () => {
   })
 
   it('An administrative zone Should be showed and hidden', () => {
-    cy.loadPath('/#@-224002.65,6302673.54,8.70')
+    cy.login('superuser')
+    cy.visit('/#@-224002.65,6302673.54,8.70')
 
     cy.request(
       'GET',
@@ -403,7 +412,8 @@ context('Sidebars > Regulatory Layers', () => {
     cy.cleanScreenshots(1)
 
     // Refresh and check the item in local storage is not deleted
-    cy.loadPath('/#@-224002.65,6302673.54,8.70')
+    cy.login('superuser')
+    cy.visit('/#@-224002.65,6302673.54,8.70')
     cy.wait(500)
     cy.get('[title="Arbre des couches"]').click()
     cy.get('*[data-cy="administrative-zones-open"]')
@@ -417,7 +427,8 @@ context('Sidebars > Regulatory Layers', () => {
 
   it('Should unselect one of the selected topic zone layers', () => {
     // Focus the map on Corsica
-    cy.loadPath('/#@997505.75,5180266.24,8.70')
+    cy.login('superuser')
+    cy.visit('/#@997505.75,5180266.24,8.70')
 
     // TODO Investigate why there is white space in the Cypress iframe when hiding vessels which breaks the entire test.
     // cy.clickButton('Affichage des dernières positions')
@@ -457,7 +468,8 @@ context('Sidebars > Regulatory Layers', () => {
 
   it('Should toggle the selected topic zone layers', () => {
     // Focus the map on Corsica
-    cy.loadPath('/#@997505.75,5180266.24,8.70')
+    cy.login('superuser')
+    cy.visit('/#@997505.75,5180266.24,8.70')
 
     // Select all the "Corse - Chaluts" regulation zones
     cy.get('[title="Arbre des couches"]').click()

@@ -1,6 +1,7 @@
 context('Missions overlay', () => {
   beforeEach(() => {
-    cy.loadPath('/#@-188008.06,6245230.27,8.70')
+    cy.login('superuser')
+    cy.visit('/#@-188008.06,6245230.27,8.70')
   })
 
   it('An overlay Should be showed and closed', () => {

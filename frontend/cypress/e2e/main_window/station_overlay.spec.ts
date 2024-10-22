@@ -1,6 +1,7 @@
 context('Main Window > Station Overlay', () => {
   beforeEach(() => {
-    cy.loadPath(`/#@-282045.85,6101658.31,9.11`)
+    cy.login('superuser')
+    cy.visit(`/#@-282045.85,6101658.31,9.11`)
     cy.wait(5000)
 
     cy.clickButton('Liste des unités de contrôle')

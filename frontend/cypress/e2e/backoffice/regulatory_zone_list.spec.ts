@@ -2,7 +2,8 @@
 
 context('Backoffice', () => {
   beforeEach(() => {
-    cy.loadPath('/backoffice/regulation')
+    cy.login('superuser')
+    cy.visit('/backoffice/regulation')
     cy.wait(200)
   })
 

@@ -7,7 +7,7 @@ const DEFAULT_PORT = IS_CI ? 8880 : 3000
 
 export default defineConfig({
   e2e: {
-    baseUrl: `http://localhost:${DEFAULT_PORT}`,
+    baseUrl: `http://${IS_CI ? '0.0.0.0' : 'localhost'}:${DEFAULT_PORT}`,
     excludeSpecPattern: ['**/__snapshots__/*', '**/__image_snapshots__/*'],
     setupNodeEvents(on, config) {
       initCypressMousePositionPlugin(on)
@@ -16,7 +16,7 @@ export default defineConfig({
     specPattern: 'cypress/e2e/**/*.spec.ts'
   },
   env: {
-    "auth_base_url": `http://${IS_CI ? 'localhost' : 'localhost'}:8085`,
+    "auth_base_url": `http://${IS_CI ? '0.0.0.0' : 'localhost'}:8085`,
     "auth_realm": "monitor",
     "auth_client_id": "monitorfish",
     'cypress-plugin-snapshots': {

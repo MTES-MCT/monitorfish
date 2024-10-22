@@ -1,6 +1,7 @@
 context('Favorite Vessel', () => {
   beforeEach(() => {
-    cy.loadPath('/#@-824534.42,6082993.21,8.70')
+    cy.login('superuser')
+    cy.visit('/#@-824534.42,6082993.21,8.70')
   })
 
   it('Opening the box Should close other boxes', () => {

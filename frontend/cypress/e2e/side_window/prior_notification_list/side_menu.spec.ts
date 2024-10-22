@@ -3,7 +3,8 @@ import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/
 context('Side Window > Prior Notification List > Side Menu', () => {
   beforeEach(() => {
     cy.viewport(1920, 1080)
-    cy.loadPath('/side_window')
+    cy.login('superuser')
+    cy.visit('/side_window')
     cy.wait(500)
 
     if (document.querySelector('[data-cy="first-loader"]')) {

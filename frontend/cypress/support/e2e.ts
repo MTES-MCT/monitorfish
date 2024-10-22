@@ -8,8 +8,7 @@ import 'cypress-plugin-snapshots/commands'
 
 import './commands'
 import './commands/dragTo'
-import './commands/loadPath'
-import type { LoadPathOptions } from './commands/loadPath'
+import './commands/login'
 
 declare global {
   namespace Cypress {
@@ -27,7 +26,8 @@ declare global {
       ): void
       getComputedStyle(dataCy: string, backUpToParentNumber?: number): Cypress.Chainable<CSSStyleDeclaration>
       getDownloadedFileContent(callback: (content: Cypress.Chainable<any>) => void): void
-      loadPath(path: string, options?: LoadPathOptions): void
+      kcLogin(user: string): void
+      login(user: string): void
       resetCountRequestsByAlias(alias: string): void
 
       /* eslint-disable typescript-sort-keys/interface */
@@ -103,14 +103,6 @@ beforeEach(() => {
     cy.window().then(window => {
       window.localStorage.setItem('IS_CYPRESS', 'true')
     })
-  })
-
-  // Fake Authorization
-  cy.intercept('/bff/v1/authorization/current', {
-    body: {
-      isSuperUser: true
-    },
-    statusCode: 200
   })
 
   // DEV :: FRONTEND_SENTRY_DSN

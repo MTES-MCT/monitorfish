@@ -6,7 +6,8 @@ import type { Reporting } from '@features/Reporting/types'
 
 context('Vessel sidebar reporting tab', () => {
   beforeEach(() => {
-    cy.loadPath('/#@-824534.42,6082993.21,8.70')
+    cy.login('superuser')
+    cy.visit('/#@-824534.42,6082993.21,8.70')
   })
 
   it('An infraction suspicion reporting Should be added from the reporting form', () => {
@@ -36,7 +37,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('NATINF 2608')
 
     // The reporting should be found in the reporting tab of the side window
-    cy.loadPath('/side_window')
+    cy.visit('/side_window')
     cy.get('*[data-cy="side-window-reporting-tab"]').click()
     cy.get('[data-cy="side-window-sub-menu-NAMO"]').click()
     cy.wait(200)

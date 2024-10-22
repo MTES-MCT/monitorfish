@@ -34,6 +34,7 @@ const MapHistory = ({ setShouldUpdateView, shouldUpdateView, historyMoveTrigger 
       if (window.location.hash !== '') {
         const hash = window.location.hash.replace('@', '').replace('#', '')
         const viewParts = hash.split(',')
+        console.log(viewParts)
         if (viewParts.length === 3 && isNumeric(viewParts[0]) && isNumeric(viewParts[1]) && isNumeric(viewParts[2])) {
           monitorfishMap.getView().setCenter([parseFloat(viewParts[0]), parseFloat(viewParts[1])])
           monitorfishMap.getView().setZoom(parseFloat(viewParts[2]))

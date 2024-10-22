@@ -2,10 +2,9 @@ import { stubSideWindowOptions } from '../../support/commands'
 
 context('Controls overlay', () => {
   beforeEach(() => {
+    cy.login('superuser')
     cy.intercept('GET', `/bff/v1/missions*`).as('missions')
-    cy.loadPath('/#@-27112.04,6363415.43,10.02', {
-      visitOptions: stubSideWindowOptions
-    })
+    cy.visit('/#@-27112.04,6363415.43,10.02', stubSideWindowOptions)
     cy.wait('@missions')
     cy.wait(500)
   })

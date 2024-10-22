@@ -44,7 +44,7 @@ export function useGetUserAccount(): UserAccountContextType | undefined {
       }
     }
 
-    if (auth?.isAuthenticated && !user) {
+    if (auth?.isLoading || (auth?.isAuthenticated && !user)) {
       return undefined
     }
 
@@ -54,7 +54,7 @@ export function useGetUserAccount(): UserAccountContextType | undefined {
       isSuperUser: user?.isSuperUser ?? false,
       logout
     }
-  }, [logout, user, auth?.isAuthenticated, auth?.user?.profile?.email])
+  }, [logout, user, auth?.isAuthenticated, auth?.isLoading, auth?.user?.profile?.email])
 
   useEffect(
     () =>

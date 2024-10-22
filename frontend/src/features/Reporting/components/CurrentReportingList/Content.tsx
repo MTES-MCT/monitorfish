@@ -14,6 +14,7 @@ import type { Reporting, ReportingAndOccurrences, VesselReportings } from '@feat
 import type { VesselIdentity } from 'domain/entities/vessel/types'
 
 type ContentProps = Readonly<{
+  className: string | undefined
   onIsDirty: ((isDirty: boolean) => void) | undefined
   vesselIdentity: VesselIdentity
   vesselReportings: VesselReportings
@@ -21,6 +22,7 @@ type ContentProps = Readonly<{
   withVesselSidebarHistoryLink: boolean
 }>
 export function Content({
+  className,
   onIsDirty,
   vesselIdentity,
   vesselReportings,
@@ -56,7 +58,7 @@ export function Content({
   }
 
   return (
-    <Wrapper>
+    <Wrapper className={className}>
       {!vesselReportings.current.length && !isNewReportingFormOpen && (
         <NoReporting>Pas de signalement ouvert sur ce navire.</NoReporting>
       )}
@@ -101,7 +103,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin: 10px 5px 5px 5px;
-  padding: 16px 16px 1px 16px;
+  padding: 16px;
   text-align: left;
 `
 

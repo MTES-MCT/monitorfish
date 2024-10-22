@@ -8,13 +8,11 @@ import { skipToken } from '@reduxjs/toolkit/query'
 import { Content } from './Content'
 
 import type { VesselIdentity } from 'domain/entities/vessel/types'
-import type { CSSProperties } from 'react'
 
 type CurrentReportingListProps = Readonly<{
   className?: string
   onIsDirty?: (isDirty: boolean) => void
   startDate?: Date
-  style?: CSSProperties
   vesselIdentity: VesselIdentity | undefined
   withOpenedNewReportingForm?: boolean
   withVesselSidebarHistoryLink?: boolean
@@ -23,7 +21,6 @@ export function CurrentReportingList({
   className,
   onIsDirty,
   startDate = getDefaultReportingsStartDate(),
-  style,
   vesselIdentity,
   withOpenedNewReportingForm = false,
   withVesselSidebarHistoryLink = false
@@ -46,7 +43,6 @@ export function CurrentReportingList({
     <Content
       className={className}
       onIsDirty={onIsDirty}
-      style={style}
       vesselIdentity={vesselIdentity}
       vesselReportings={vesselReportings}
       withOpenedNewReportingForm={withOpenedNewReportingForm}

@@ -65,6 +65,7 @@ class SecurityConfig(
                         "/flags/**",
                         "/robots.txt",
                         "/favicon-32.ico",
+                        "/favicon.ico",
                         "/asset-manifest.json",
                         "/swagger-ui/**",
                         // Used to redirect to the frontend SPA, see SpaController.kt

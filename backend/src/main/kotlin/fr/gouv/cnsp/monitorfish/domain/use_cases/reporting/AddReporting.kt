@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionOrObservationType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
@@ -19,7 +19,7 @@ class AddReporting(
 ) {
     private val logger: Logger = LoggerFactory.getLogger(AddReporting::class.java)
 
-    fun execute(newReporting: Reporting): Pair<Reporting, ControlUnit?> {
+    fun execute(newReporting: Reporting): Pair<Reporting, LegacyControlUnit?> {
         logger.info(
             "Adding reporting for vessel ${newReporting.internalReferenceNumber}/${newReporting.ircs}/${newReporting.externalReferenceNumber}",
         )

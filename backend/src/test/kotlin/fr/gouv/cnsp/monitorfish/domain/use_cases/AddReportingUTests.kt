@@ -86,11 +86,11 @@ class AddReportingUTests {
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
                 value =
-                Observation(
-                    reportingActor = reportingActor,
-                    authorTrigram = "LTH",
-                    title = "A title",
-                ),
+                    Observation(
+                        reportingActor = reportingActor,
+                        authorTrigram = "LTH",
+                        title = "A title",
+                    ),
                 isArchived = false,
                 isDeleted = false,
             )
@@ -145,12 +145,12 @@ class AddReportingUTests {
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
                 value =
-                InfractionSuspicion(
-                    reportingActor = ReportingActor.OPS,
-                    natinfCode = 1235,
-                    authorTrigram = "LTH",
-                    title = "Chalut en boeuf illégal",
-                ),
+                    InfractionSuspicion(
+                        reportingActor = ReportingActor.OPS,
+                        natinfCode = 1235,
+                        authorTrigram = "LTH",
+                        title = "Chalut en boeuf illégal",
+                    ),
                 isArchived = false,
                 isDeleted = false,
             )

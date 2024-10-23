@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import com.neovisionaries.i18n.CountryCode
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import java.time.ZonedDateTime
@@ -49,7 +49,7 @@ data class MissionActionDataOutput(
     val otherComments: String? = null,
     val gearOnboard: List<GearControl> = listOf(),
     val speciesOnboard: List<SpeciesControl> = listOf(),
-    val controlUnits: List<ControlUnit> = listOf(),
+    val legacyControlUnits: List<LegacyControlUnit> = listOf(),
     val userTrigram: String,
     val vesselTargeted: ControlCheck? = null,
     val hasSomeGearsSeized: Boolean,
@@ -109,7 +109,7 @@ data class MissionActionDataOutput(
                 otherComments = missionAction.otherComments,
                 gearOnboard = missionAction.gearOnboard,
                 speciesOnboard = missionAction.speciesOnboard,
-                controlUnits = missionAction.controlUnits,
+                legacyControlUnits = missionAction.legacyControlUnits,
                 userTrigram = missionAction.userTrigram,
                 vesselTargeted = missionAction.vesselTargeted,
                 hasSomeGearsSeized = missionAction.hasSomeGearsSeized,

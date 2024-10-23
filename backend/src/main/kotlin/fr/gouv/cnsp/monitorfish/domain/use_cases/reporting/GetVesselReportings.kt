@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NatinfCodeNotFoundException
@@ -152,7 +152,7 @@ class GetVesselReportings(
 
     private fun enrichWithInfractionAndControlUnit(
         reportingAndOccurrences: ReportingAndOccurrences,
-        controlUnits: List<ControlUnit>,
+        legacyControlUnits: List<LegacyControlUnit>,
     ): ReportingAndOccurrences {
         val updatedInfraction =
             reportingAndOccurrences.reporting.value.natinfCode?.let { natinfCode ->
@@ -178,9 +178,9 @@ class GetVesselReportings(
         }
 
         val controlUnitId = (updatedReporting.value as? InfractionSuspicionOrObservationType)?.controlUnitId
-        val foundControlUnit = controlUnits.find { it.id == controlUnitId }
+        val foundControlUnit = legacyControlUnits.find { it.id == controlUnitId }
 
-        return updatedReportingAndOccurrences.copy(controlUnit = foundControlUnit)
+        return updatedReportingAndOccurrences.copy(legacyControlUnit = foundControlUnit)
     }
 
     private fun getReportingsAndOccurrences(reportings: List<Reporting>): List<ReportingAndOccurrences> {
@@ -191,7 +191,7 @@ class GetVesselReportings(
                     ReportingAndOccurrences(
                         otherOccurrencesOfSameAlert = emptyList(),
                         reporting = reporting,
-                        controlUnit = null,
+                        legacyControlUnit = null,
                     )
                 }
 
@@ -226,7 +226,7 @@ class GetVesselReportings(
                         ReportingAndOccurrences(
                             otherOccurrencesOfSameAlert = otherOccurrencesOfSameAlert,
                             reporting = lastAlert,
-                            controlUnit = null,
+                            legacyControlUnit = null,
                         ),
                     )
                 }

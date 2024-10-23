@@ -35,7 +35,7 @@ class GetMissionUTests {
         given(missionRepository.findById(any())).willReturn(
             Mission(
                 id = 123,
-                controlUnits = listOf(),
+                legacyControlUnits = listOf(),
                 missionTypes = listOf(MissionType.SEA),
                 startDateTimeUtc = ZonedDateTime.now(),
                 isGeometryComputedFromControls = false,

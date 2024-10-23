@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.*
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.ActivityCode
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.JointDeploymentPlan
@@ -374,7 +374,7 @@ class MissionActionsControllerITests {
                                 ),
                             activityCode = ActivityCode.FIS,
                             vesselNationalIdentifier = "AYFR000654",
-                            controlUnits = listOf(ControlUnit(1234, "DIRM", false, "Cross Etel", listOf())),
+                            legacyControlUnits = listOf(LegacyControlUnit(1234, "DIRM", false, "Cross Etel", listOf())),
                             faoArea = "27.7.c",
                             segment = "NS01/03",
                             vessel =

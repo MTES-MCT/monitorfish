@@ -87,12 +87,12 @@ class UpdateReportingUTests {
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
                 value =
-                InfractionSuspicion(
-                    reportingActor = ReportingActor.UNIT,
-                    authorTrigram = "LTH",
-                    title = "Test",
-                    natinfCode = 1234,
-                ) as ReportingValue,
+                    InfractionSuspicion(
+                        reportingActor = ReportingActor.UNIT,
+                        authorTrigram = "LTH",
+                        title = "Test",
+                        natinfCode = 1234,
+                    ) as ReportingValue,
                 isArchived = false,
                 isDeleted = false,
             ),
@@ -138,12 +138,12 @@ class UpdateReportingUTests {
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
                 value =
-                InfractionSuspicion(
-                    reportingActor = ReportingActor.UNIT,
-                    authorTrigram = "LTH",
-                    title = "Test",
-                    natinfCode = 1234,
-                ) as ReportingValue,
+                    InfractionSuspicion(
+                        reportingActor = ReportingActor.UNIT,
+                        authorTrigram = "LTH",
+                        title = "Test",
+                        natinfCode = 1234,
+                    ) as ReportingValue,
                 isArchived = false,
                 isDeleted = false,
             )
@@ -201,12 +201,12 @@ class UpdateReportingUTests {
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
                 value =
-                InfractionSuspicion(
-                    reportingActor = ReportingActor.UNIT,
-                    authorTrigram = "LTH",
-                    title = "Test",
-                    natinfCode = 1234,
-                ) as ReportingValue,
+                    InfractionSuspicion(
+                        reportingActor = ReportingActor.UNIT,
+                        authorTrigram = "LTH",
+                        title = "Test",
+                        natinfCode = 1234,
+                    ) as ReportingValue,
                 isArchived = false,
                 isDeleted = false,
             ),
@@ -306,12 +306,12 @@ class UpdateReportingUTests {
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
                 value =
-                InfractionSuspicion(
-                    reportingActor = ReportingActor.UNIT,
-                    authorTrigram = "LTH",
-                    title = "Test",
-                    natinfCode = 1234,
-                ) as ReportingValue,
+                    InfractionSuspicion(
+                        reportingActor = ReportingActor.UNIT,
+                        authorTrigram = "LTH",
+                        title = "Test",
+                        natinfCode = 1234,
+                    ) as ReportingValue,
                 isArchived = false,
                 isDeleted = false,
             )
@@ -362,12 +362,12 @@ class UpdateReportingUTests {
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
                 value =
-                InfractionSuspicion(
-                    reportingActor = ReportingActor.UNIT,
-                    title = "Test",
-                    natinfCode = 1234,
-                    authorTrigram = "LTH",
-                ) as ReportingValue,
+                    InfractionSuspicion(
+                        reportingActor = ReportingActor.UNIT,
+                        title = "Test",
+                        natinfCode = 1234,
+                        authorTrigram = "LTH",
+                    ) as ReportingValue,
                 isArchived = false,
                 isDeleted = false,
             )
@@ -427,11 +427,11 @@ class UpdateReportingUTests {
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
                 value =
-                Observation(
-                    reportingActor = ReportingActor.UNIT,
-                    title = "Test",
-                    authorTrigram = "LTH",
-                ) as ReportingValue,
+                    Observation(
+                        reportingActor = ReportingActor.UNIT,
+                        title = "Test",
+                        authorTrigram = "LTH",
+                    ) as ReportingValue,
                 isArchived = false,
                 isDeleted = false,
             )
@@ -477,11 +477,11 @@ class UpdateReportingUTests {
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
                 value =
-                Observation(
-                    reportingActor = ReportingActor.UNIT,
-                    title = "Test",
-                    authorTrigram = "LTH",
-                ) as ReportingValue,
+                    Observation(
+                        reportingActor = ReportingActor.UNIT,
+                        title = "Test",
+                        authorTrigram = "LTH",
+                    ) as ReportingValue,
                 isArchived = false,
                 isDeleted = false,
             )

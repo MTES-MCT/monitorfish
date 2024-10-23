@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllLegacyControlUnits
@@ -19,7 +19,7 @@ class UpdateReporting(
     fun execute(
         reportingId: Int,
         updatedInfractionSuspicionOrObservation: UpdatedInfractionSuspicionOrObservation,
-    ): Pair<Reporting, ControlUnit?> {
+    ): Pair<Reporting, LegacyControlUnit?> {
         val currentReporting = reportingRepository.findById(reportingId)
         val controlUnits = getAllLegacyControlUnits.execute()
         logger.info("Updating reporting id $reportingId for vessel id ${currentReporting.vesselId}")
@@ -69,9 +69,9 @@ class UpdateReporting(
 
     fun getControlUnit(
         reporting: Reporting,
-        controlUnits: List<ControlUnit>,
-    ): ControlUnit? {
+        legacyControlUnits: List<LegacyControlUnit>,
+    ): LegacyControlUnit? {
         val controlUnitId = (reporting.value as InfractionSuspicionOrObservationType).controlUnitId
-        return controlUnits.find { it.id == controlUnitId }
+        return legacyControlUnits.find { it.id == controlUnitId }
     }
 }

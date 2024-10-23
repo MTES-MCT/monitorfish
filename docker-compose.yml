@@ -48,14 +48,17 @@ services:
 
   keycloak:
     container_name: monitorfish_keycloak
-    image: quay.io/keycloak/keycloak:latest
+    image: quay.io/keycloak/keycloak:23.0.0
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
       - KC_HOSTNAME_STRICT=false
       - KC_HTTP_ENABLED=true
-      - KC_HOSTNAME=http://localhost:8085
+      - KC_HOSTNAME=0.0.0.0:8880
       - PROXY_ADDRESS_FORWARDING=true
+      - KC_LOG_LEVEL=DEBUG
+      - KC_PROXY=edge
+      - KC_PROXY_HEADERS=forwarded
     ports:
       - "8085:8080"
     volumes:

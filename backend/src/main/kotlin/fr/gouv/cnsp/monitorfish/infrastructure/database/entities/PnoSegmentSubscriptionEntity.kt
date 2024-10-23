@@ -21,6 +21,7 @@ data class PnoSegmentSubscriptionEntity(
         return PriorNotificationSegmentSubscription(
             controlUnitId = id.controlUnitId,
             segmentCode = id.segmentCode,
+            segmentName = null,
         )
     }
 }

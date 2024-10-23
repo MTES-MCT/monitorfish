@@ -93,13 +93,35 @@ class KeycloakProxyController (
         return proxy.uri(targetUri).get()
     }
 
-    @PostMapping("/realms/**")
+    @PostMapping(value = ["/realms/**"], consumes = ["application/x-www-form-urlencoded", "application/x-www-form-urlencoded;charset=UTF-8"])
     @Throws(Exception::class)
     fun post(
         proxy: ProxyExchange<ByteArray?>,
         request: HttpServletRequest,
     ): ResponseEntity<*> {
         val targetUri = "${oidcProperties.proxyUrl}${request.requestURI}"
+
+        // Extract cookies from the request
+        val cookies = request.cookies
+        if (cookies != null) {
+            val cookieHeader = cookies.joinToString("; ") { "${it.name}=${it.value}" }
+            logger.info("With cookies $cookieHeader")
+            // Set the cookies in the proxy request headers
+            proxy.header("Cookie", cookieHeader)
+        }
+
+        // Forward all headers from the incoming request to the proxy
+        val headerNames = request.headerNames
+        while (headerNames.hasMoreElements()) {
+            val headerName = headerNames.nextElement()
+            val headerValues = request.getHeaders(headerName)
+            logger.info("Header is $headerName")
+
+            // Forward all values for each header
+            while (headerValues.hasMoreElements()) {
+                proxy.header(headerName, headerValues.nextElement())
+            }
+        }
 
         return proxy.uri(targetUri).post()
     }

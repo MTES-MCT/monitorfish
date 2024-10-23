@@ -1,16 +1,18 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.proxy
 
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
-import fr.gouv.cnsp.monitorfish.infrastructure.monitorenv.APIControlUnitRepository
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.cloud.gateway.mvc.ProxyExchange
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.client.RestTemplate
+
 
 /**
  * Used for E2E tests
@@ -26,6 +28,10 @@ class KeycloakProxyController (
 ) {
     private val logger: Logger = LoggerFactory.getLogger(KeycloakProxyController::class.java)
 
+    @Autowired
+    private val restTemplate: RestTemplate? = null
+
+
     @GetMapping("/realms/**")
     @Throws(Exception::class)
     fun get(
@@ -33,7 +39,7 @@ class KeycloakProxyController (
         request: HttpServletRequest,
     ): ResponseEntity<*> {
         val params = request.parameterMap
-        val targetUri = StringBuilder("${oidcProperties.proxyUrl}/${request.requestURI}")
+        val targetUri = StringBuilder("${oidcProperties.proxyUrl}${request.requestURI}")
 
         if (params.isNotEmpty()) {
             targetUri.append("?")
@@ -41,23 +47,23 @@ class KeycloakProxyController (
                 "$key=${values.joinToString(",")}"
             }.let { targetUri.append(it) }
         }
-        logger.info("Forwarding $request to $targetUri")
-        logger.info("With cookies ${request.cookies}")
+        logger.info("Forwarding ${request.requestURI} to $targetUri")
 
         // Extract cookies from the request
         val cookies = request.cookies
         if (cookies != null) {
             val cookieHeader = cookies.joinToString("; ") { "${it.name}=${it.value}" }
+            logger.info("With cookies $cookieHeader")
             // Set the cookies in the proxy request headers
             proxy.header("Cookie", cookieHeader)
         }
 
         // Forward all headers from the incoming request to the proxy
         val headerNames = request.headerNames
-        logger.info("Headers are $headerNames")
         while (headerNames.hasMoreElements()) {
             val headerName = headerNames.nextElement()
             val headerValues = request.getHeaders(headerName)
+            logger.info("Header is $headerName")
 
             // Forward all values for each header
             while (headerValues.hasMoreElements()) {
@@ -66,7 +72,14 @@ class KeycloakProxyController (
         }
 
         logger.info("Sending $proxy")
-        return proxy.uri(targetUri.toString()).get()
+        val response = proxy.uri(targetUri.toString())
+            .get()
+
+        // Log the response details
+        logger.debug("Proxied response status: {}", response.statusCode)
+        logger.debug("Proxied response headers: {}", response.headers)
+
+        return response
     }
 
     @GetMapping("/resources/**")
@@ -75,7 +88,7 @@ class KeycloakProxyController (
         proxy: ProxyExchange<ByteArray?>,
         request: HttpServletRequest,
     ): ResponseEntity<*> {
-        val targetUri = "${oidcProperties.proxyUrl}/${request.requestURI}"
+        val targetUri = "${oidcProperties.proxyUrl}${request.requestURI}"
 
         return proxy.uri(targetUri).get()
     }
@@ -86,7 +99,7 @@ class KeycloakProxyController (
         proxy: ProxyExchange<ByteArray?>,
         request: HttpServletRequest,
     ): ResponseEntity<*> {
-        val targetUri = "${oidcProperties.proxyUrl}/${request.requestURI}"
+        val targetUri = "${oidcProperties.proxyUrl}${request.requestURI}"
 
         return proxy.uri(targetUri).post()
     }

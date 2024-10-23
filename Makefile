@@ -69,7 +69,7 @@ install-front:
 .PHONY: run-back ##LOCAL ▶️  Run backend API
 run-back: run-stubbed-apis
 	docker compose up -d --quiet-pull --wait db keycloak
-	cd backend && MONITORFISH_KEYCLOAK_PROXY_ENABLED=true ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
+	cd backend && MONITORFISH_KEYCLOAK_PROXY_ENABLED=true FRONTEND_OIDC_PROXY_URL=http://localhost:8085 ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
 
 .PHONY: run-front ##LOCAL ▶️  Run frontend for development
 run-front:

@@ -41,7 +41,7 @@ services:
       - FRONTEND_OIDC_AUTHORITY=http://0.0.0.0:8880/realms/monitor
       - FRONTEND_OIDC_CLIENT_ID=monitorfish
       - MONITORFISH_OIDC_ENABLED=true
-      - MONITORFISH_OIDC_PROXY_URL=http://keycloak:8085
+      - MONITORFISH_OIDC_PROXY_URL=http://keycloak:8080
       - MONITORFISH_KEYCLOAK_PROXY_ENABLED=true
       - FRONTEND_OIDC_ENABLED=true
       - MONITORFISH_SCHEDULING_ENABLED=false

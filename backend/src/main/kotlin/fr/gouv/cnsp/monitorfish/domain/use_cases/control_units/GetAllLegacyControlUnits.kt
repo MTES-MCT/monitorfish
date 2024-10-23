@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.control_units
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.LegacyControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.control_units.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.repositories.LegacyControlUnitRepository
 
 @UseCase

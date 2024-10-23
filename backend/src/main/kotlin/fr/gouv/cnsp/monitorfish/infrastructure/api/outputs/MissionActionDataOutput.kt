@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import com.neovisionaries.i18n.CountryCode
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.LegacyControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.control_units.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import java.time.ZonedDateTime

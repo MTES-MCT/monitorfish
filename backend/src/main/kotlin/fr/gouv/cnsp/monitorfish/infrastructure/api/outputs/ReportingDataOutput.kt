@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Observation
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
@@ -31,17 +31,17 @@ class ReportingDataOutput(
     companion object {
         fun fromReporting(
             reporting: Reporting,
-            controlUnit: ControlUnit?,
+            legacyControlUnit: LegacyControlUnit?,
         ): ReportingDataOutput {
             val value =
                 when (reporting.value) {
                     is InfractionSuspicion ->
                         InfractionSuspicionDataOutput.fromInfractionSuspicion(
                             reporting.value,
-                            controlUnit,
+                            legacyControlUnit,
                         )
 
-                    is Observation -> ObservationDataOutput.fromObservation(reporting.value, controlUnit)
+                    is Observation -> ObservationDataOutput.fromObservation(reporting.value, legacyControlUnit)
                     is AlertType -> AlertDataOutput.fromAlertType(reporting.value)
                     else -> throw IllegalArgumentException("Should not happen.")
                 }

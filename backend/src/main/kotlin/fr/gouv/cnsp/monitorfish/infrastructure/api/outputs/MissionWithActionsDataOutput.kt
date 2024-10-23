@@ -25,7 +25,7 @@ data class MissionWithActionsDataOutput(
     val missionSource: MissionSource,
     val hasMissionOrder: Boolean? = false,
     val isUnderJdp: Boolean? = false,
-    val controlUnits: List<ControlUnit> = listOf(),
+    val legacyControlUnits: List<LegacyControlUnit> = listOf(),
     val actions: List<MissionActionDataOutput>,
 ) {
     companion object {
@@ -50,7 +50,7 @@ data class MissionWithActionsDataOutput(
                 missionSource = missionAndActions.mission.missionSource,
                 hasMissionOrder = missionAndActions.mission.hasMissionOrder,
                 isUnderJdp = missionAndActions.mission.isUnderJdp,
-                controlUnits = missionAndActions.mission.controlUnits,
+                legacyControlUnits = missionAndActions.mission.legacyControlUnits,
                 actions = missionAndActions.actions.map { MissionActionDataOutput.fromMissionAction(it) },
             )
     }

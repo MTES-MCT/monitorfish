@@ -126,7 +126,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(firstControl.speciesOnboard.first().controlledWeight).isEqualTo(450.0)
         assertThat(firstControl.speciesOnboard.first().nbFish).isNull()
         assertThat(firstControl.speciesOnboard.first().underSized).isTrue
-        assertThat(firstControl.controlUnits).hasSize(0)
+        assertThat(firstControl.legacyControlUnits).hasSize(0)
         assertThat(firstControl.actionType).isEqualTo(MissionActionType.SEA_CONTROL)
     }
 
@@ -211,7 +211,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
                 actionDatetimeUtc = ZonedDateTime.now(),
                 actionType = MissionActionType.SEA_CONTROL,
                 controlQualityComments = null,
-                controlUnits = listOf(),
+                legacyControlUnits = listOf(),
                 districtCode = null,
                 emitsAis = null,
                 emitsVms = ControlCheck.NOT_APPLICABLE,

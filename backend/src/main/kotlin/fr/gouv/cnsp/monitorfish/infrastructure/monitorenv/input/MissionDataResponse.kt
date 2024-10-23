@@ -5,13 +5,13 @@ import kotlinx.serialization.Serializable
 import java.time.ZonedDateTime
 
 /**
- @see monitorenv/backend/src/main/kotlin/fr/gouv/cacem/monitorenv/domain/entities/missions/MissionEntity.kt
- for the full entity structure
+@see monitorenv/backend/src/main/kotlin/fr/gouv/cacem/monitorenv/domain/entities/missions/MissionEntity.kt
+for the full entity structure
  */
 @Serializable
 data class MissionDataResponse(
     val id: Int,
-    val controlUnits: List<ControlUnit> = listOf(),
+    val legacyControlUnits: List<LegacyControlUnit> = listOf(),
     val missionTypes: List<MissionType>,
     val openBy: String? = null,
     val completedBy: String? = null,
@@ -32,7 +32,7 @@ data class MissionDataResponse(
     fun toMission() =
         Mission(
             id = id,
-            controlUnits = controlUnits,
+            legacyControlUnits = legacyControlUnits,
             missionTypes = missionTypes,
             openBy = openBy,
             completedBy = completedBy,

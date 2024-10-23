@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionOrObservationType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
@@ -21,7 +21,7 @@ class GetAllCurrentReportings(
 ) {
     private val logger: Logger = LoggerFactory.getLogger(GetAllCurrentReportings::class.java)
 
-    fun execute(): List<Pair<Reporting, ControlUnit?>> {
+    fun execute(): List<Pair<Reporting, LegacyControlUnit?>> {
         val filter =
             ReportingFilter(
                 isArchived = false,

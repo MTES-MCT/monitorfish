@@ -45,7 +45,7 @@ class GetVesselControls(
 
                     Pair(action, controlUnits)
                 }.map { (control, controlUnits) ->
-                    control.controlUnits = controlUnits.await()
+                    control.legacyControlUnits = controlUnits.await()
 
                     control.portLocode?.let { port ->
                         try {

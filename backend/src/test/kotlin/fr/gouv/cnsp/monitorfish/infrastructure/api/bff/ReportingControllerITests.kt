@@ -7,7 +7,7 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
@@ -193,7 +193,7 @@ class ReportingControllerITests {
                 isArchived = false,
             )
         given(addReporting.execute(any())).willReturn(
-            Pair(reporting, ControlUnit(1234, "DIRM", false, "Cross Etel", listOf())),
+            Pair(reporting, LegacyControlUnit(1234, "DIRM", false, "Cross Etel", listOf())),
         )
 
         // When

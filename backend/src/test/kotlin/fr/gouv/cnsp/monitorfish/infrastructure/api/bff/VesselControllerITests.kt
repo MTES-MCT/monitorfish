@@ -759,12 +759,12 @@ class VesselControllerITests {
                             ReportingAndOccurrences(
                                 otherOccurrencesOfSameAlert = listOf(),
                                 reporting = currentReporting,
-                                controlUnit = null,
+                                legacyControlUnit = null,
                             ),
                             ReportingAndOccurrences(
                                 otherOccurrencesOfSameAlert = listOf(),
                                 reporting = currentReporting,
-                                controlUnit = null,
+                                legacyControlUnit = null,
                             ),
                         ),
                     archived =
@@ -774,7 +774,7 @@ class VesselControllerITests {
                                     ReportingAndOccurrences(
                                         otherOccurrencesOfSameAlert = listOf(),
                                         reporting = archivedReporting,
-                                        controlUnit = null,
+                                        legacyControlUnit = null,
                                     ),
                                 ),
                             2023 to emptyList(),

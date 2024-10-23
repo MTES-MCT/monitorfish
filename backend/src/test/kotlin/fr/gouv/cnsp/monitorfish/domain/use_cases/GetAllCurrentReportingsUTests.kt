@@ -44,12 +44,12 @@ class GetAllCurrentReportingsUTests {
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
                 value =
-                InfractionSuspicion(
-                    ReportingActor.OPS,
-                    natinfCode = 123456,
-                    authorTrigram = "LTH",
-                    title = "A title",
-                ),
+                    InfractionSuspicion(
+                        ReportingActor.OPS,
+                        natinfCode = 123456,
+                        authorTrigram = "LTH",
+                        title = "A title",
+                    ),
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
@@ -90,12 +90,12 @@ class GetAllCurrentReportingsUTests {
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
                 value =
-                InfractionSuspicion(
-                    ReportingActor.OPS,
-                    natinfCode = 123456,
-                    authorTrigram = "LTH",
-                    title = "A title",
-                ),
+                    InfractionSuspicion(
+                        ReportingActor.OPS,
+                        natinfCode = 123456,
+                        authorTrigram = "LTH",
+                        title = "A title",
+                    ),
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,

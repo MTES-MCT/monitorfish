@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationSegmentSubscription
 import jakarta.persistence.*
 import java.io.Serializable
 
@@ -15,4 +16,11 @@ class PnoSegmentSubscriptionId(
 data class PnoSegmentSubscriptionEntity(
     @EmbeddedId
     val id: PnoSegmentSubscriptionId,
-)
+) {
+    fun toPriorNotificationSegmentSubscription(): PriorNotificationSegmentSubscription {
+        return PriorNotificationSegmentSubscription(
+            controlUnitId = id.controlUnitId,
+            segmentCode = id.segmentCode,
+        )
+    }
+}

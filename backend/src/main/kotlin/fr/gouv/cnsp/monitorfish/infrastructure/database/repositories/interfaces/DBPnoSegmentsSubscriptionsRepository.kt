@@ -19,4 +19,14 @@ interface DBPnoSegmentsSubscriptionsRepository : JpaRepository<PnoSegmentSubscri
         portLocode: String,
         segmentCodes: List<String>,
     ): Long
+
+    @Query(
+        """
+        SELECT *
+        FROM pno_segments_subscriptions
+        WHERE control_unit_id = :controlUnitId
+        """,
+        nativeQuery = true,
+    )
+    fun findByControlUnitId(controlUnitId: Int): List<PnoSegmentSubscriptionEntity>
 }

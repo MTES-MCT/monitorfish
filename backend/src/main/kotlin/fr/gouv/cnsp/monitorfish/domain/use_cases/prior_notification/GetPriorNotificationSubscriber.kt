@@ -8,7 +8,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.dtos.PriorNo
 
 @UseCase
 class GetPriorNotificationSubscriber(
-    private val controlUnitRepository: LegacyControlUnitRepository,
+    private val controlUnitRepository: ControlUnitRepository,
     private val pnoPortSubscriptionRepository: PnoPortSubscriptionRepository,
     private val pnoSegmentSubscriptionRepository: PnoSegmentSubscriptionRepository,
     private val pnoVesselSubscriptionRepository: PnoVesselSubscriptionRepository,

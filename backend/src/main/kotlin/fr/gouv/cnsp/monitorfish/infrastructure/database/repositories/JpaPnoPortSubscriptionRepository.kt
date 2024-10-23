@@ -9,6 +9,11 @@ import org.springframework.stereotype.Repository
 class JpaPnoPortSubscriptionRepository(
     private val dbPnoPortsSubscriptionsRepository: DBPnoPortsSubscriptionsRepository,
 ) : PnoPortSubscriptionRepository {
+    override fun findAll(): List<PriorNotificationPortSubscription> {
+        return dbPnoPortsSubscriptionsRepository.findAll()
+            .map { it.toPriorNotificationPortSubscription() }
+    }
+
     override fun findByControlUnitId(controlUnitId: Int): List<PriorNotificationPortSubscription> {
         return dbPnoPortsSubscriptionsRepository.findByControlUnitId(controlUnitId)
             .map { it.toPriorNotificationPortSubscription() }

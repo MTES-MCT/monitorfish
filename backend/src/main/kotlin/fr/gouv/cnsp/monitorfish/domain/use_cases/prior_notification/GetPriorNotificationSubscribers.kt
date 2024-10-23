@@ -21,10 +21,7 @@ class GetPriorNotificationSubscribers(
     ): List<PriorNotificationSubscriber> {
         val priorNotificationSubscribers = getPriorNotificationSubscribers()
         val filteredPriorNotificationSubscribers =
-            filterPriorNotificationSubscribers(
-                subscribers = priorNotificationSubscribers,
-                filter = filter,
-            )
+            filterPriorNotificationSubscribers(subscribers = priorNotificationSubscribers, filter = filter)
 
         return sortPriorNotificationSubscribers(
             subscribers = filteredPriorNotificationSubscribers,
@@ -34,10 +31,24 @@ class GetPriorNotificationSubscribers(
     }
 
     private fun getPriorNotificationSubscribers(): List<PriorNotificationSubscriber> {
-        return controlUnitRepository.findAll().map { controlUnit ->
-            val portSubscriptions = pnoPortSubscriptionRepository.findByControlUnitId(controlUnit.id)
-            val segmentSubscriptions = pnoSegmentSubscriptionRepository.findByControlUnitId(controlUnit.id)
-            val vesselSubscriptions = pnoVesselSubscriptionRepository.findByControlUnitId(controlUnit.id)
+        val allControlUnits = controlUnitRepository.findAll()
+        val allPortSubscriptions = pnoPortSubscriptionRepository.findAll()
+        val allSegmentSubscriptions = pnoSegmentSubscriptionRepository.findAll()
+        val allVesselSubscriptions = pnoVesselSubscriptionRepository.findAll()
+
+        return allControlUnits.map { controlUnit ->
+            val portSubscriptions =
+                allPortSubscriptions.filter { portSubscription ->
+                    portSubscription.controlUnitId == controlUnit.id
+                }
+            val segmentSubscriptions =
+                allSegmentSubscriptions.filter { segmentSubscription ->
+                    segmentSubscription.controlUnitId == controlUnit.id
+                }
+            val vesselSubscriptions =
+                allVesselSubscriptions.filter { vesselSubscription ->
+                    vesselSubscription.controlUnitId == controlUnit.id
+                }
 
             PriorNotificationSubscriber(
                 controlUnit = controlUnit,

@@ -20,6 +20,7 @@ data class PnoVesselSubscriptionEntity(
         return PriorNotificationVesselSubscription(
             controlUnitId = id.controlUnitId,
             vesselId = id.vesselId,
+            vesselName = null,
         )
     }
 }

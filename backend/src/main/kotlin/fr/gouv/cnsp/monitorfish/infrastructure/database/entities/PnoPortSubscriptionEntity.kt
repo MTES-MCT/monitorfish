@@ -19,6 +19,7 @@ data class PnoPortSubscriptionEntity(
         return PriorNotificationPortSubscription(
             controlUnitId = id.controlUnitId,
             portLocode = id.portLocode,
+            portName = null,
             hasSubscribedToAllPriorNotifications = receiveAllPnos,
         )
     }

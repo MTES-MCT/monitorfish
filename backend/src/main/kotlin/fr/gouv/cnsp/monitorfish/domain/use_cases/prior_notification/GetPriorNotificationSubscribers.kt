@@ -10,9 +10,12 @@ import org.springframework.data.domain.Sort
 @UseCase
 class GetPriorNotificationSubscribers(
     private val controlUnitRepository: ControlUnitRepository,
+    private val fleetSegmentRepository: FleetSegmentRepository,
     private val pnoPortSubscriptionRepository: PnoPortSubscriptionRepository,
     private val pnoSegmentSubscriptionRepository: PnoSegmentSubscriptionRepository,
     private val pnoVesselSubscriptionRepository: PnoVesselSubscriptionRepository,
+    private val portRepository: PortRepository,
+    private val vesselRepository: VesselRepository,
 ) {
     fun execute(
         filter: PriorNotificationSubscribersFilter,
@@ -31,6 +34,10 @@ class GetPriorNotificationSubscribers(
     }
 
     private fun getPriorNotificationSubscribers(): List<PriorNotificationSubscriber> {
+        val allFleetSegments = fleetSegmentRepository.findAll()
+        val allPorts = portRepository.findAll()
+        val allVessels = vesselRepository.findAll()
+
         val allControlUnits = controlUnitRepository.findAll()
         val allPortSubscriptions = pnoPortSubscriptionRepository.findAll()
         val allSegmentSubscriptions = pnoSegmentSubscriptionRepository.findAll()
@@ -50,11 +57,14 @@ class GetPriorNotificationSubscribers(
                     vesselSubscription.controlUnitId == controlUnit.id
                 }
 
-            PriorNotificationSubscriber(
-                controlUnit = controlUnit,
-                portSubscriptions = portSubscriptions,
-                segmentSubscriptions = segmentSubscriptions,
-                vesselSubscriptions = vesselSubscriptions,
+            return@map GetPriorNotificationSubscriber.enrich(
+                controlUnit,
+                portSubscriptions,
+                segmentSubscriptions,
+                vesselSubscriptions,
+                allFleetSegments,
+                allPorts,
+                allVessels,
             )
         }
     }

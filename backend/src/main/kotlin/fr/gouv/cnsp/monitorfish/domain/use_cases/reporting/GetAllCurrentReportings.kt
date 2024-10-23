@@ -9,7 +9,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilte
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllControlUnits
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllLegacyControlUnits
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory
 class GetAllCurrentReportings(
     private val reportingRepository: ReportingRepository,
     private val vesselRepository: VesselRepository,
-    private val getAllControlUnits: GetAllControlUnits,
+    private val getAllLegacyControlUnits: GetAllLegacyControlUnits,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(GetAllCurrentReportings::class.java)
 
@@ -30,7 +30,7 @@ class GetAllCurrentReportings(
             )
 
         val currentReportings = reportingRepository.findAll(filter)
-        val controlUnits = getAllControlUnits.execute()
+        val controlUnits = getAllLegacyControlUnits.execute()
 
         val currentReportingsWithCharterInfo =
             currentReportings.map { reporting ->

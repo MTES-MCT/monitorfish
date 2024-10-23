@@ -12,7 +12,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.InfractionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.createCurrentReporting
-import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllControlUnits
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllLegacyControlUnits
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -30,7 +30,7 @@ class GetVesselReportingsUTests {
     private lateinit var infractionRepository: InfractionRepository
 
     @MockBean
-    private lateinit var getAllControlUnits: GetAllControlUnits
+    private lateinit var getAllLegacyControlUnits: GetAllLegacyControlUnits
 
     @Test
     fun `execute Should return a map of years for archived`() {
@@ -45,7 +45,7 @@ class GetVesselReportingsUTests {
             GetVesselReportings(
                 reportingRepository,
                 infractionRepository,
-                getAllControlUnits,
+                getAllLegacyControlUnits,
             ).execute(
                 null,
                 "FR224226850",
@@ -80,7 +80,7 @@ class GetVesselReportingsUTests {
             GetVesselReportings(
                 reportingRepository,
                 infractionRepository,
-                getAllControlUnits,
+                getAllLegacyControlUnits,
             ).execute(
                 null,
                 "FR224226850",
@@ -125,7 +125,7 @@ class GetVesselReportingsUTests {
             GetVesselReportings(
                 reportingRepository,
                 infractionRepository,
-                getAllControlUnits,
+                getAllLegacyControlUnits,
             ).execute(
                 123456,
                 "FR224226850",
@@ -188,7 +188,7 @@ class GetVesselReportingsUTests {
             GetVesselReportings(
                 reportingRepository,
                 infractionRepository,
-                getAllControlUnits,
+                getAllLegacyControlUnits,
             ).execute(
                 null,
                 "FR224226850",
@@ -271,7 +271,7 @@ class GetVesselReportingsUTests {
             GetVesselReportings(
                 reportingRepository,
                 infractionRepository,
-                getAllControlUnits,
+                getAllLegacyControlUnits,
             ).execute(
                 null,
                 "FR55667788",
@@ -396,7 +396,7 @@ class GetVesselReportingsUTests {
             GetVesselReportings(
                 reportingRepository,
                 infractionRepository,
-                getAllControlUnits,
+                getAllLegacyControlUnits,
             ).execute(
                 null,
                 "FR55667788",

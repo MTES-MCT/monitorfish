@@ -7,7 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionOrO
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllControlUnits
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllLegacyControlUnits
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory
 class AddReporting(
     private val reportingRepository: ReportingRepository,
     private val getInfractionSuspicionWithDMLAndSeaFront: GetInfractionSuspicionWithDMLAndSeaFront,
-    private val getAllControlUnits: GetAllControlUnits,
+    private val getAllLegacyControlUnits: GetAllLegacyControlUnits,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(AddReporting::class.java)
 
@@ -28,7 +28,7 @@ class AddReporting(
             "The reporting type must be OBSERVATION or INFRACTION_SUSPICION"
         }
 
-        val controlUnits = getAllControlUnits.execute()
+        val controlUnits = getAllLegacyControlUnits.execute()
 
         newReporting.value as InfractionSuspicionOrObservationType
         newReporting.value.checkReportingActorAndFieldsRequirements()

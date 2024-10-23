@@ -9,7 +9,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NatinfCodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.InfractionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllControlUnits
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllLegacyControlUnits
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 import kotlin.time.measureTimedValue
@@ -18,7 +18,7 @@ import kotlin.time.measureTimedValue
 class GetVesselReportings(
     private val reportingRepository: ReportingRepository,
     private val infractionRepository: InfractionRepository,
-    private val getAllControlUnits: GetAllControlUnits,
+    private val getAllLegacyControlUnits: GetAllLegacyControlUnits,
 ) {
     private val logger = LoggerFactory.getLogger(GetVesselReportings::class.java)
 
@@ -30,7 +30,7 @@ class GetVesselReportings(
         vesselIdentifier: VesselIdentifier?,
         fromDate: ZonedDateTime,
     ): VesselReportings {
-        val (controlUnits, controlUnitsTimeTaken) = measureTimedValue { getAllControlUnits.execute() }
+        val (controlUnits, controlUnitsTimeTaken) = measureTimedValue { getAllLegacyControlUnits.execute() }
         logger.info("TIME_RECORD - 'getAllControlUnits' took $controlUnitsTimeTaken")
 
         val (reportings, reportingsTimeTaken) =

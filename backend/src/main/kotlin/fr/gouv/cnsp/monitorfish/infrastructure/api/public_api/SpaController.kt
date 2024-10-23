@@ -17,7 +17,19 @@ class SpaController : ErrorController {
         request: HttpServletRequest,
         response: HttpServletResponse,
     ): Any {
-        if (response.status != HttpStatus.UNAUTHORIZED.value()) {
+        val appPaths = listOf(
+            "/backoffice",
+            "/side_window",
+            "/login",
+            "/register",
+            "/backoffice/**",
+            "/ext",
+            "/light",
+            "/load_light"
+        )
+
+        if (response.status != HttpStatus.UNAUTHORIZED.value() &&
+            appPaths.any { path -> request.requestURI.contains(path) } ) {
             response.status = HttpStatus.OK.value()
             return "forward:/index.html"
         }

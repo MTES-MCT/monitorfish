@@ -6,9 +6,9 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.LegacyControlUnitRepository
 
 @UseCase
 class GetAllLegacyControlUnits(
-    private val legacyControlUnitsRepository: LegacyControlUnitRepository,
+    private val controlUnitsRepository: LegacyControlUnitRepository,
 ) {
     fun execute(): List<LegacyControlUnit> {
-        return legacyControlUnitsRepository.findAll()
+        return controlUnitsRepository.findAll()
     }
 }

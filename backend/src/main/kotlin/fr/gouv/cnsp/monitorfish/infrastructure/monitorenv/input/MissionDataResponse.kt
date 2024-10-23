@@ -12,7 +12,7 @@ for the full entity structure
 @Serializable
 data class MissionDataResponse(
     val id: Int,
-    val legacyControlUnits: List<LegacyControlUnit> = listOf(),
+    val controlUnits: List<LegacyControlUnit> = listOf(),
     val missionTypes: List<MissionType>,
     val openBy: String? = null,
     val completedBy: String? = null,
@@ -33,7 +33,7 @@ data class MissionDataResponse(
     fun toMission() =
         Mission(
             id = id,
-            controlUnits = legacyControlUnits,
+            controlUnits = controlUnits,
             missionTypes = missionTypes,
             openBy = openBy,
             completedBy = completedBy,

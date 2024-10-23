@@ -158,29 +158,29 @@ class MissionActionsControllerITests {
                             vesselId = 2,
                             actionType = MissionActionType.SEA_CONTROL,
                             logbookInfractions =
-                            listOf(
-                                LogbookInfraction(
-                                    InfractionType.WITH_RECORD,
-                                    27689,
-                                    "Poids à bord MNZ supérieur de 50% au poids déclaré",
+                                listOf(
+                                    LogbookInfraction(
+                                        InfractionType.WITH_RECORD,
+                                        27689,
+                                        "Poids à bord MNZ supérieur de 50% au poids déclaré",
+                                    ),
                                 ),
-                            ),
                             faoAreas = listOf("25.6.9", "25.7.9"),
                             segments =
-                            listOf(
-                                FleetSegment(
-                                    segment = "WWSS10",
-                                    segmentName = "World Wide Segment",
+                                listOf(
+                                    FleetSegment(
+                                        segment = "WWSS10",
+                                        segmentName = "World Wide Segment",
+                                    ),
                                 ),
-                            ),
                             gearInfractions =
-                            listOf(
-                                GearInfraction(
-                                    InfractionType.WITH_RECORD,
-                                    27689,
-                                    "Maille trop petite",
+                                listOf(
+                                    GearInfraction(
+                                        InfractionType.WITH_RECORD,
+                                        27689,
+                                        "Maille trop petite",
+                                    ),
                                 ),
-                            ),
                             hasSomeGearsSeized = false,
                             hasSomeSpeciesSeized = false,
                             isAdministrativeControl = true,
@@ -242,29 +242,29 @@ class MissionActionsControllerITests {
                             vesselId = 2,
                             actionType = MissionActionType.SEA_CONTROL,
                             logbookInfractions =
-                            listOf(
-                                LogbookInfraction(
-                                    InfractionType.WITH_RECORD,
-                                    27689,
-                                    "Poids à bord MNZ supérieur de 50% au poids déclaré",
+                                listOf(
+                                    LogbookInfraction(
+                                        InfractionType.WITH_RECORD,
+                                        27689,
+                                        "Poids à bord MNZ supérieur de 50% au poids déclaré",
+                                    ),
                                 ),
-                            ),
                             faoAreas = listOf("25.6.9", "25.7.9"),
                             segments =
-                            listOf(
-                                FleetSegment(
-                                    segment = "WWSS10",
-                                    segmentName = "World Wide Segment",
+                                listOf(
+                                    FleetSegment(
+                                        segment = "WWSS10",
+                                        segmentName = "World Wide Segment",
+                                    ),
                                 ),
-                            ),
                             gearInfractions =
-                            listOf(
-                                GearInfraction(
-                                    InfractionType.WITH_RECORD,
-                                    27689,
-                                    "Maille trop petite",
+                                listOf(
+                                    GearInfraction(
+                                        InfractionType.WITH_RECORD,
+                                        27689,
+                                        "Maille trop petite",
+                                    ),
                                 ),
-                            ),
                             gearOnboard = listOf(gearControl),
                             hasSomeGearsSeized = false,
                             hasSomeSpeciesSeized = false,
@@ -355,41 +355,41 @@ class MissionActionsControllerITests {
         given(getActivityReports.execute(any(), any(), any())).willReturn(
             ActivityReports(
                 activityReports =
-                listOf(
-                    ActivityReport(
-                        action =
-                        MissionAction(
-                            1,
-                            1,
-                            1,
-                            actionType = MissionActionType.SEA_CONTROL,
-                            actionDatetimeUtc = ZonedDateTime.now(),
-                            isDeleted = false,
-                            hasSomeGearsSeized = false,
-                            hasSomeSpeciesSeized = false,
-                            isFromPoseidon = true,
-                            flagState = CountryCode.FR,
-                            userTrigram = "LTH",
-                            completion = Completion.TO_COMPLETE,
-                        ),
-                        activityCode = ActivityCode.FIS,
-                        vesselNationalIdentifier = "AYFR000654",
-                        controlUnits = listOf(LegacyControlUnit(1234, "DIRM", false, "Cross Etel", listOf())),
-                        faoArea = "27.7.c",
-                        segment = "NS01/03",
-                        vessel =
-                        Vessel(
-                            id = 1,
-                            internalReferenceNumber = "FR00022680",
-                            vesselName = "MY AWESOME VESSEL",
-                            flagState = CountryCode.FR,
-                            declaredFishingGears = listOf("Trémails"),
-                            vesselType = "Fishing",
-                            districtCode = "AY",
-                            hasLogbookEsacapt = false,
+                    listOf(
+                        ActivityReport(
+                            action =
+                                MissionAction(
+                                    1,
+                                    1,
+                                    1,
+                                    actionType = MissionActionType.SEA_CONTROL,
+                                    actionDatetimeUtc = ZonedDateTime.now(),
+                                    isDeleted = false,
+                                    hasSomeGearsSeized = false,
+                                    hasSomeSpeciesSeized = false,
+                                    isFromPoseidon = true,
+                                    flagState = CountryCode.FR,
+                                    userTrigram = "LTH",
+                                    completion = Completion.TO_COMPLETE,
+                                ),
+                            activityCode = ActivityCode.FIS,
+                            vesselNationalIdentifier = "AYFR000654",
+                            controlUnits = listOf(LegacyControlUnit(1234, "DIRM", false, "Cross Etel", listOf())),
+                            faoArea = "27.7.c",
+                            segment = "NS01/03",
+                            vessel =
+                                Vessel(
+                                    id = 1,
+                                    internalReferenceNumber = "FR00022680",
+                                    vesselName = "MY AWESOME VESSEL",
+                                    flagState = CountryCode.FR,
+                                    declaredFishingGears = listOf("Trémails"),
+                                    vesselType = "Fishing",
+                                    districtCode = "AY",
+                                    hasLogbookEsacapt = false,
+                                ),
                         ),
                     ),
-                ),
                 jdpSpecies = listOf("BSS", "MAK", "LTH"),
             ),
         )

@@ -31,17 +31,17 @@ class ReportingDataOutput(
     companion object {
         fun fromReporting(
             reporting: Reporting,
-            legacyControlUnit: LegacyControlUnit?,
+            controlUnit: LegacyControlUnit?,
         ): ReportingDataOutput {
             val value =
                 when (reporting.value) {
                     is InfractionSuspicion ->
                         InfractionSuspicionDataOutput.fromInfractionSuspicion(
                             reporting.value,
-                            legacyControlUnit,
+                            controlUnit,
                         )
 
-                    is Observation -> ObservationDataOutput.fromObservation(reporting.value, legacyControlUnit)
+                    is Observation -> ObservationDataOutput.fromObservation(reporting.value, controlUnit)
                     is AlertType -> AlertDataOutput.fromAlertType(reporting.value)
                     else -> throw IllegalArgumentException("Should not happen.")
                 }

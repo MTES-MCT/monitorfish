@@ -152,7 +152,7 @@ class GetVesselReportings(
 
     private fun enrichWithInfractionAndControlUnit(
         reportingAndOccurrences: ReportingAndOccurrences,
-        legacyControlUnits: List<LegacyControlUnit>,
+        controlUnits: List<LegacyControlUnit>,
     ): ReportingAndOccurrences {
         val updatedInfraction =
             reportingAndOccurrences.reporting.value.natinfCode?.let { natinfCode ->
@@ -178,7 +178,7 @@ class GetVesselReportings(
         }
 
         val controlUnitId = (updatedReporting.value as? InfractionSuspicionOrObservationType)?.controlUnitId
-        val foundControlUnit = legacyControlUnits.find { it.id == controlUnitId }
+        val foundControlUnit = controlUnits.find { it.id == controlUnitId }
 
         return updatedReportingAndOccurrences.copy(controlUnit = foundControlUnit)
     }

@@ -6,7 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotifica
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationVesselSubscription
 
 data class PriorNotificationSubscriber(
-    val legacyControlUnit: LegacyControlUnit,
+    val controlUnit: LegacyControlUnit,
     val portSubscriptions: List<PriorNotificationPortSubscription>,
     val segmentSubscriptions: List<PriorNotificationSegmentSubscription>,
     val vesselSubscriptions: List<PriorNotificationVesselSubscription>,

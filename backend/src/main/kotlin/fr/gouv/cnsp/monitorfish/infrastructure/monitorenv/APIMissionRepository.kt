@@ -48,7 +48,7 @@ class APIMissionRepository(
             val missionsUrl = "${monitorenvProperties.url}/api/v1/missions/$missionId"
 
             try {
-                val controlUnits = apiClient.httpClient.get(missionsUrl).body<MissionDataResponse>().legacyControlUnits
+                val controlUnits = apiClient.httpClient.get(missionsUrl).body<MissionDataResponse>().controlUnits
 
                 cache.put(cacheKey, controlUnits)
 

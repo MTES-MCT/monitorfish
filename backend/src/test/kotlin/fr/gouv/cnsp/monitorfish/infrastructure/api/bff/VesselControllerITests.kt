@@ -111,9 +111,9 @@ class VesselControllerITests {
                 course = 180.0,
                 dateTime = farPastFixedDateTime, vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 gearOnboard =
-                listOf(
-                    gear,
-                ),
+                    listOf(
+                        gear,
+                    ),
             )
         given(this.getLastPositions.execute()).willReturn(listOf(position))
 
@@ -167,9 +167,9 @@ class VesselControllerITests {
                 speed = 1.8,
                 course = 180.0,
                 dateTime =
-                now.minusHours(
-                    4,
-                ),
+                    now.minusHours(
+                        4,
+                    ),
             )
         val secondPosition =
             Position(
@@ -188,9 +188,9 @@ class VesselControllerITests {
                 speed = 1.8,
                 course = 180.0,
                 dateTime =
-                now.minusHours(
-                    3,
-                ),
+                    now.minusHours(
+                        3,
+                    ),
             )
         val thirdPosition =
             Position(
@@ -209,9 +209,9 @@ class VesselControllerITests {
                 speed = 1.8,
                 course = 180.0,
                 dateTime =
-                now.minusHours(
-                    2,
-                ),
+                    now.minusHours(
+                        2,
+                    ),
             )
         givenSuspended {
             getVessel.execute(eq(123), any(), any(), any(), any(), any(), eq(null), eq(null))
@@ -220,16 +220,16 @@ class VesselControllerITests {
                 false,
                 VesselInformation(
                     vessel =
-                    Vessel(
-                        id = 123,
-                        internalReferenceNumber = "FR224226850",
-                        vesselName = "MY AWESOME VESSEL",
-                        flagState = CountryCode.FR,
-                        declaredFishingGears = listOf("Trémails"),
-                        vesselType = "Fishing",
-                        underCharter = true,
-                        hasLogbookEsacapt = false,
-                    ),
+                        Vessel(
+                            id = 123,
+                            internalReferenceNumber = "FR224226850",
+                            vesselName = "MY AWESOME VESSEL",
+                            flagState = CountryCode.FR,
+                            declaredFishingGears = listOf("Trémails"),
+                            vesselType = "Fishing",
+                            underCharter = true,
+                            hasLogbookEsacapt = false,
+                        ),
                     beacon = null,
                     positions = listOf(firstPosition, secondPosition, thirdPosition),
                     vesselRiskFactor = VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
@@ -356,9 +356,9 @@ class VesselControllerITests {
                 speed = 1.8,
                 course = 180.0,
                 dateTime =
-                now.minusHours(
-                    4,
-                ),
+                    now.minusHours(
+                        4,
+                    ),
             )
         val secondPosition =
             Position(
@@ -377,9 +377,9 @@ class VesselControllerITests {
                 speed = 1.8,
                 course = 180.0,
                 dateTime =
-                now.minusHours(
-                    3,
-                ),
+                    now.minusHours(
+                        3,
+                    ),
             )
         val thirdPosition =
             Position(
@@ -398,9 +398,9 @@ class VesselControllerITests {
                 speed = 1.8,
                 course = 180.0,
                 dateTime =
-                now.minusHours(
-                    2,
-                ),
+                    now.minusHours(
+                        2,
+                    ),
             )
         givenSuspended {
             getVesselPositions.execute(any(), any(), any(), any(), any(), eq(null), eq(null))
@@ -438,28 +438,28 @@ class VesselControllerITests {
             listOf(
                 VesselAndBeacon(
                     vessel =
-                    Vessel(
-                        id = 1,
-                        internalReferenceNumber = "FR224226850",
-                        vesselName = "MY AWESOME VESSEL",
-                        flagState = CountryCode.FR,
-                        declaredFishingGears = listOf("Trémails"),
-                        vesselType = "Fishing",
-                        hasLogbookEsacapt = false,
-                    ),
+                        Vessel(
+                            id = 1,
+                            internalReferenceNumber = "FR224226850",
+                            vesselName = "MY AWESOME VESSEL",
+                            flagState = CountryCode.FR,
+                            declaredFishingGears = listOf("Trémails"),
+                            vesselType = "Fishing",
+                            hasLogbookEsacapt = false,
+                        ),
                     beacon = Beacon(beaconNumber = "123456", vesselId = 1),
                 ),
                 VesselAndBeacon(
                     vessel =
-                    Vessel(
-                        id = 2,
-                        internalReferenceNumber = "GBR21555445",
-                        vesselName = "ANOTHER VESSEL",
-                        flagState = CountryCode.GB,
-                        declaredFishingGears = listOf("Trémails"),
-                        vesselType = "Fishing",
-                        hasLogbookEsacapt = false,
-                    ),
+                        Vessel(
+                            id = 2,
+                            internalReferenceNumber = "GBR21555445",
+                            vesselName = "ANOTHER VESSEL",
+                            flagState = CountryCode.GB,
+                            declaredFishingGears = listOf("Trémails"),
+                            vesselType = "Fishing",
+                            hasLogbookEsacapt = false,
+                        ),
                     beacon = null,
                 ),
             ),
@@ -569,88 +569,88 @@ class VesselControllerITests {
                 VesselBeaconMalfunctionsResumeAndHistory(
                     resume = VesselBeaconMalfunctionsResume(1, 2, null, null),
                     history =
-                    listOf(
+                        listOf(
+                            BeaconMalfunctionWithDetails(
+                                beaconMalfunction =
+                                    BeaconMalfunction(
+                                        id = 1,
+                                        internalReferenceNumber = "FR224226850",
+                                        externalReferenceNumber = "1236514",
+                                        ircs = "IRCS",
+                                        flagState = "fr",
+                                        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                                        vesselName = "BIDUBULE",
+                                        vesselStatus = VesselStatus.AT_SEA,
+                                        stage = Stage.ARCHIVED,
+                                        malfunctionStartDateTime = ZonedDateTime.now(),
+                                        malfunctionEndDateTime = null,
+                                        vesselStatusLastModificationDateTime = ZonedDateTime.now(),
+                                        endOfBeaconMalfunctionReason = EndOfBeaconMalfunctionReason.RESUMED_TRANSMISSION,
+                                        beaconNumber = "123465",
+                                        beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
+                                        vesselId = 123,
+                                    ),
+                                comments =
+                                    listOf(
+                                        BeaconMalfunctionComment(
+                                            beaconMalfunctionId = 1,
+                                            comment = "A comment",
+                                            userType = BeaconMalfunctionCommentUserType.SIP,
+                                            dateTime = now,
+                                        ),
+                                    ),
+                                actions =
+                                    listOf(
+                                        BeaconMalfunctionAction(
+                                            beaconMalfunctionId = 1,
+                                            propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
+                                            nextValue = "A VALUE",
+                                            previousValue = "A VALUE",
+                                            dateTime = now,
+                                        ),
+                                    ),
+                            ),
+                        ),
+                    current =
                         BeaconMalfunctionWithDetails(
                             beaconMalfunction =
-                            BeaconMalfunction(
-                                id = 1,
-                                internalReferenceNumber = "FR224226850",
-                                externalReferenceNumber = "1236514",
-                                ircs = "IRCS",
-                                flagState = "fr",
-                                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                                vesselName = "BIDUBULE",
-                                vesselStatus = VesselStatus.AT_SEA,
-                                stage = Stage.ARCHIVED,
-                                malfunctionStartDateTime = ZonedDateTime.now(),
-                                malfunctionEndDateTime = null,
-                                vesselStatusLastModificationDateTime = ZonedDateTime.now(),
-                                endOfBeaconMalfunctionReason = EndOfBeaconMalfunctionReason.RESUMED_TRANSMISSION,
-                                beaconNumber = "123465",
-                                beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
-                                vesselId = 123,
-                            ),
+                                BeaconMalfunction(
+                                    id = 2,
+                                    internalReferenceNumber = "FR224226850",
+                                    externalReferenceNumber = "1236514",
+                                    ircs = "IRCS",
+                                    flagState = "fr",
+                                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                                    vesselName = "BIDUBULE",
+                                    vesselStatus = VesselStatus.AT_SEA,
+                                    stage = Stage.INITIAL_ENCOUNTER,
+                                    malfunctionStartDateTime = ZonedDateTime.now(),
+                                    malfunctionEndDateTime = null,
+                                    vesselStatusLastModificationDateTime = ZonedDateTime.now(),
+                                    beaconNumber = "123465",
+                                    beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
+                                    vesselId = 123,
+                                ),
                             comments =
-                            listOf(
-                                BeaconMalfunctionComment(
-                                    beaconMalfunctionId = 1,
-                                    comment = "A comment",
-                                    userType = BeaconMalfunctionCommentUserType.SIP,
-                                    dateTime = now,
+                                listOf(
+                                    BeaconMalfunctionComment(
+                                        beaconMalfunctionId = 1,
+                                        comment = "A comment",
+                                        userType = BeaconMalfunctionCommentUserType.SIP,
+                                        dateTime = now,
+                                    ),
                                 ),
-                            ),
                             actions =
-                            listOf(
-                                BeaconMalfunctionAction(
-                                    beaconMalfunctionId = 1,
-                                    propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
-                                    nextValue = "A VALUE",
-                                    previousValue = "A VALUE",
-                                    dateTime = now,
+                                listOf(
+                                    BeaconMalfunctionAction(
+                                        beaconMalfunctionId = 1,
+                                        propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
+                                        nextValue = "A VALUE",
+                                        previousValue = "A VALUE",
+                                        dateTime = now,
+                                    ),
                                 ),
-                            ),
                         ),
-                    ),
-                    current =
-                    BeaconMalfunctionWithDetails(
-                        beaconMalfunction =
-                        BeaconMalfunction(
-                            id = 2,
-                            internalReferenceNumber = "FR224226850",
-                            externalReferenceNumber = "1236514",
-                            ircs = "IRCS",
-                            flagState = "fr",
-                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                            vesselName = "BIDUBULE",
-                            vesselStatus = VesselStatus.AT_SEA,
-                            stage = Stage.INITIAL_ENCOUNTER,
-                            malfunctionStartDateTime = ZonedDateTime.now(),
-                            malfunctionEndDateTime = null,
-                            vesselStatusLastModificationDateTime = ZonedDateTime.now(),
-                            beaconNumber = "123465",
-                            beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
-                            vesselId = 123,
-                        ),
-                        comments =
-                        listOf(
-                            BeaconMalfunctionComment(
-                                beaconMalfunctionId = 1,
-                                comment = "A comment",
-                                userType = BeaconMalfunctionCommentUserType.SIP,
-                                dateTime = now,
-                            ),
-                        ),
-                        actions =
-                        listOf(
-                            BeaconMalfunctionAction(
-                                beaconMalfunctionId = 1,
-                                propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
-                                nextValue = "A VALUE",
-                                previousValue = "A VALUE",
-                                dateTime = now,
-                            ),
-                        ),
-                    ),
                 ),
             )
 
@@ -703,10 +703,10 @@ class VesselControllerITests {
                 isArchived = false,
                 isDeleted = false,
                 infraction =
-                Infraction(
-                    natinfCode = 7059,
-                    infractionCategory = InfractionCategory.FISHING,
-                ),
+                    Infraction(
+                        natinfCode = 7059,
+                        infractionCategory = InfractionCategory.FISHING,
+                    ),
             )
 
         val archivedReporting =
@@ -739,48 +739,48 @@ class VesselControllerITests {
             .willReturn(
                 VesselReportings(
                     summary =
-                    ReportingSummary(
-                        infractionSuspicionsSummary =
-                        listOf(
-                            ReportingTitleAndNumberOfOccurrences(
-                                title = "A title",
-                                numberOfOccurrences = 2,
-                            ),
-                            ReportingTitleAndNumberOfOccurrences(
-                                title = "A title",
-                                numberOfOccurrences = 2,
-                            ),
-                        ),
-                        numberOfInfractionSuspicions = 4,
-                        numberOfObservations = 5,
-                    ),
-                    current =
-                    listOf(
-                        ReportingAndOccurrences(
-                            otherOccurrencesOfSameAlert = listOf(),
-                            reporting = currentReporting,
-                            controlUnit = null,
-                        ),
-                        ReportingAndOccurrences(
-                            otherOccurrencesOfSameAlert = listOf(),
-                            reporting = currentReporting,
-                            controlUnit = null,
-                        ),
-                    ),
-                    archived =
-                    mapOf(
-                        2024 to
-                            listOf(
-                                ReportingAndOccurrences(
-                                    otherOccurrencesOfSameAlert = listOf(),
-                                    reporting = archivedReporting,
-                                    controlUnit = null,
+                        ReportingSummary(
+                            infractionSuspicionsSummary =
+                                listOf(
+                                    ReportingTitleAndNumberOfOccurrences(
+                                        title = "A title",
+                                        numberOfOccurrences = 2,
+                                    ),
+                                    ReportingTitleAndNumberOfOccurrences(
+                                        title = "A title",
+                                        numberOfOccurrences = 2,
+                                    ),
                                 ),
+                            numberOfInfractionSuspicions = 4,
+                            numberOfObservations = 5,
+                        ),
+                    current =
+                        listOf(
+                            ReportingAndOccurrences(
+                                otherOccurrencesOfSameAlert = listOf(),
+                                reporting = currentReporting,
+                                controlUnit = null,
                             ),
-                        2023 to emptyList(),
-                        2022 to emptyList(),
-                        2021 to emptyList(),
-                    ),
+                            ReportingAndOccurrences(
+                                otherOccurrencesOfSameAlert = listOf(),
+                                reporting = currentReporting,
+                                controlUnit = null,
+                            ),
+                        ),
+                    archived =
+                        mapOf(
+                            2024 to
+                                listOf(
+                                    ReportingAndOccurrences(
+                                        otherOccurrencesOfSameAlert = listOf(),
+                                        reporting = archivedReporting,
+                                        controlUnit = null,
+                                    ),
+                                ),
+                            2023 to emptyList(),
+                            2022 to emptyList(),
+                            2021 to emptyList(),
+                        ),
                 ),
             )
 
@@ -830,11 +830,11 @@ class VesselControllerITests {
             .willReturn(
                 VesselReportings(
                     summary =
-                    ReportingSummary(
-                        infractionSuspicionsSummary = listOf(),
-                        numberOfInfractionSuspicions = 0,
-                        numberOfObservations = 0,
-                    ),
+                        ReportingSummary(
+                            infractionSuspicionsSummary = listOf(),
+                            numberOfInfractionSuspicions = 0,
+                            numberOfObservations = 0,
+                        ),
                     current = listOf(),
                     archived = mapOf(),
                 ),

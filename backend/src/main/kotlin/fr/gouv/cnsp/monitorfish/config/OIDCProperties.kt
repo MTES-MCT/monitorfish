@@ -9,5 +9,5 @@ class OIDCProperties {
     var enabled: Boolean? = false
     var userinfoEndpoint: String? = null
     var issuerUri: String? = null
-    var proxyURL: String? = null
+    var proxyUrl: String? = null
 }

@@ -1,17 +1,22 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.proxy
 
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
+import io.ktor.client.request.forms.*
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.cloud.gateway.mvc.ProxyExchange
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.client.RestTemplate
+import java.nio.charset.StandardCharsets
+import java.util.stream.Collectors
 
 
 /**
@@ -99,7 +104,16 @@ class KeycloakProxyController (
         proxy: ProxyExchange<ByteArray?>,
         request: HttpServletRequest,
     ): ResponseEntity<*> {
-        val targetUri = "${oidcProperties.proxyUrl}${request.requestURI}"
+        val params = request.parameterMap
+        val targetUri = StringBuilder("${oidcProperties.proxyUrl}${request.requestURI}")
+
+        if (params.isNotEmpty()) {
+            targetUri.append("?")
+            params.entries.joinToString("&") { (key, values) ->
+                "$key=${values.joinToString(",")}"
+            }.let { targetUri.append(it) }
+        }
+        logger.info("Forwarding ${request.requestURI} to $targetUri")
 
         // Extract cookies from the request
         val cookies = request.cookies
@@ -123,6 +137,15 @@ class KeycloakProxyController (
             }
         }
 
-        return proxy.uri(targetUri).post()
+        val formData = "username=${params["username"]?.joinToString(",")}&password=${params["password"]?.joinToString(",")}&credentialId=${params["credentialId"]?.joinToString(",")}"
+
+        logger.info("Raw Form Data: $formData")
+        val formDataBytes = formData.toByteArray(StandardCharsets.UTF_8)
+
+        // Ensure the content length matches the size of the byte array
+        proxy.header("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+            .header("Content-Length", formDataBytes.size.toString())  // Set correct content length
+
+        return proxy.uri(targetUri.toString()).body(formDataBytes).post()
     }
 }

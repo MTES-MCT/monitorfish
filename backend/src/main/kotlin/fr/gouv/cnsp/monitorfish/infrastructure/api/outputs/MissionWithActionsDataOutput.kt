@@ -43,15 +43,15 @@ data class MissionWithActionsDataOutput(
                 createdAtUtc = missionAndActions.mission.createdAtUtc,
                 updatedAtUtc = missionAndActions.mission.updatedAtUtc,
                 envActions =
-                    missionAndActions.mission.envActions
-                        ?.map { EnvMissionActionDataOutput.fromEnvMissionAction(it) } ?: listOf(),
+                missionAndActions.mission.envActions
+                    ?.map { EnvMissionActionDataOutput.fromEnvMissionAction(it) } ?: listOf(),
                 startDateTimeUtc = missionAndActions.mission.startDateTimeUtc,
                 endDateTimeUtc = missionAndActions.mission.endDateTimeUtc,
                 isGeometryComputedFromControls = missionAndActions.mission.isGeometryComputedFromControls,
                 missionSource = missionAndActions.mission.missionSource,
                 hasMissionOrder = missionAndActions.mission.hasMissionOrder,
                 isUnderJdp = missionAndActions.mission.isUnderJdp,
-                legacyControlUnits = missionAndActions.mission.legacyControlUnits,
+                legacyControlUnits = missionAndActions.mission.controlUnits,
                 actions = missionAndActions.actions.map { MissionActionDataOutput.fromMissionAction(it) },
             )
     }

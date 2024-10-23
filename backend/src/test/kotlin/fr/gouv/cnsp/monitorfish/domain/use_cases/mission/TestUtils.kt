@@ -16,7 +16,7 @@ object TestUtils {
         return ids.map {
             return@map Mission(
                 id = it,
-                legacyControlUnits = listOf(),
+                controlUnits = listOf(),
                 missionTypes = listOf(MissionType.SEA),
                 startDateTimeUtc = ZonedDateTime.now(),
                 isGeometryComputedFromControls = false,

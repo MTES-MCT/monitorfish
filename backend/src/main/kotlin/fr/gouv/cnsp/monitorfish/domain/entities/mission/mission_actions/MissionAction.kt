@@ -58,7 +58,7 @@ data class MissionAction(
      * This field is only used by the `GetVesselControls` use-case.
      * /!\ Do not use it to get `controlUnits` as the field will be empty be default.
      */
-    var legacyControlUnits: List<LegacyControlUnit> = listOf(),
+    var controlUnits: List<LegacyControlUnit> = listOf(),
     val isDeleted: Boolean,
     val hasSomeGearsSeized: Boolean,
     val hasSomeSpeciesSeized: Boolean,

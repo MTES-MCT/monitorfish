@@ -33,7 +33,7 @@ data class MissionDataResponse(
     fun toMission() =
         Mission(
             id = id,
-            legacyControlUnits = legacyControlUnits,
+            controlUnits = legacyControlUnits,
             missionTypes = missionTypes,
             openBy = openBy,
             completedBy = completedBy,

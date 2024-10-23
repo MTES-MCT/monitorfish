@@ -180,7 +180,7 @@ class GetVesselReportings(
         val controlUnitId = (updatedReporting.value as? InfractionSuspicionOrObservationType)?.controlUnitId
         val foundControlUnit = legacyControlUnits.find { it.id == controlUnitId }
 
-        return updatedReportingAndOccurrences.copy(legacyControlUnit = foundControlUnit)
+        return updatedReportingAndOccurrences.copy(controlUnit = foundControlUnit)
     }
 
     private fun getReportingsAndOccurrences(reportings: List<Reporting>): List<ReportingAndOccurrences> {
@@ -191,7 +191,7 @@ class GetVesselReportings(
                     ReportingAndOccurrences(
                         otherOccurrencesOfSameAlert = emptyList(),
                         reporting = reporting,
-                        legacyControlUnit = null,
+                        controlUnit = null,
                     )
                 }
 
@@ -226,7 +226,7 @@ class GetVesselReportings(
                         ReportingAndOccurrences(
                             otherOccurrencesOfSameAlert = otherOccurrencesOfSameAlert,
                             reporting = lastAlert,
-                            legacyControlUnit = null,
+                            controlUnit = null,
                         ),
                     )
                 }

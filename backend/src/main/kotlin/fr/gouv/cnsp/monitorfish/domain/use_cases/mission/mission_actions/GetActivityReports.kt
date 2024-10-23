@@ -75,7 +75,7 @@ class GetActivityReports(
                 val controlMission = missions.firstOrNull { mission -> mission.id == control.missionId }
                 // All AECP reports are excluded from the response
                 // see: https://github.com/MTES-MCT/monitorfish/issues/3194
-                return@filter controlMission?.legacyControlUnits?.any { controlUnit ->
+                return@filter controlMission?.controlUnits?.any { controlUnit ->
                     controlUnit.administration == "AECP"
                 } != true
             }
@@ -122,7 +122,7 @@ class GetActivityReports(
                 ActivityReport(
                     action = control,
                     activityCode = activityCode,
-                    legacyControlUnits = controlMission.legacyControlUnits,
+                    controlUnits = controlMission.controlUnits,
                     faoArea = faoArea?.faoCode,
                     /**
                      * The fleet segment is set as null, as we need to integrate the EFCA segments referential

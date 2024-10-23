@@ -109,7 +109,7 @@ data class MissionActionDataOutput(
                 otherComments = missionAction.otherComments,
                 gearOnboard = missionAction.gearOnboard,
                 speciesOnboard = missionAction.speciesOnboard,
-                legacyControlUnits = missionAction.legacyControlUnits,
+                legacyControlUnits = missionAction.controlUnits,
                 userTrigram = missionAction.userTrigram,
                 vesselTargeted = missionAction.vesselTargeted,
                 hasSomeGearsSeized = missionAction.hasSomeGearsSeized,

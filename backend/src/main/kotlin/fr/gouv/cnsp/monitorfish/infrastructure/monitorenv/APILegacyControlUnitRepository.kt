@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.monitorenv
 
 import fr.gouv.cnsp.monitorfish.config.ApiClient
 import fr.gouv.cnsp.monitorfish.config.MonitorenvProperties
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.LegacyControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.control_units.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.repositories.LegacyControlUnitRepository
 import io.ktor.client.call.*
 import io.ktor.client.request.*

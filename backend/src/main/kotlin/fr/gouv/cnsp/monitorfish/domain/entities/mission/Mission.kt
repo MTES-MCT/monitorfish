@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.mission
 
+import fr.gouv.cnsp.monitorfish.domain.entities.control_units.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.env_mission_action.EnvMissionAction
 import java.time.ZonedDateTime
 

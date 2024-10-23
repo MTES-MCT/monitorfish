@@ -4,7 +4,7 @@ import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.given
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.LegacyControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.control_units.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.Mission
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionSource
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionType

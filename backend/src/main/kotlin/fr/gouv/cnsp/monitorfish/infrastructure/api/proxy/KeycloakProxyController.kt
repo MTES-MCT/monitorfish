@@ -1,7 +1,10 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.proxy
 
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
+import fr.gouv.cnsp.monitorfish.infrastructure.monitorenv.APIControlUnitRepository
 import jakarta.servlet.http.HttpServletRequest
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.cloud.gateway.mvc.ProxyExchange
 import org.springframework.http.ResponseEntity
@@ -21,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController
 class KeycloakProxyController (
     private val oidcProperties: OIDCProperties,
 ) {
+    private val logger: Logger = LoggerFactory.getLogger(KeycloakProxyController::class.java)
+
     @GetMapping("/realms/**")
     @Throws(Exception::class)
     fun get(
@@ -36,6 +41,8 @@ class KeycloakProxyController (
                 "$key=${values.joinToString(",")}"
             }.let { targetUri.append(it) }
         }
+        logger.info("Forwarding $request to $targetUri")
+        logger.info("With cookies ${request.cookies}")
 
         // Extract cookies from the request
         val cookies = request.cookies
@@ -45,6 +52,20 @@ class KeycloakProxyController (
             proxy.header("Cookie", cookieHeader)
         }
 
+        // Forward all headers from the incoming request to the proxy
+        val headerNames = request.headerNames
+        logger.info("Headers are $headerNames")
+        while (headerNames.hasMoreElements()) {
+            val headerName = headerNames.nextElement()
+            val headerValues = request.getHeaders(headerName)
+
+            // Forward all values for each header
+            while (headerValues.hasMoreElements()) {
+                proxy.header(headerName, headerValues.nextElement())
+            }
+        }
+
+        logger.info("Sending $proxy")
         return proxy.uri(targetUri.toString()).get()
     }
 

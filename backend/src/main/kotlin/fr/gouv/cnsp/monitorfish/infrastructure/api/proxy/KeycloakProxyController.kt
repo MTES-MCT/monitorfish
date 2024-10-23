@@ -46,7 +46,7 @@ class KeycloakProxyController (
         proxy: ProxyExchange<ByteArray?>,
         request: HttpServletRequest,
     ): ResponseEntity<*> {
-        val targetUri = "${oidcProperties.proxyUrl}${request.requestURI}"
+        val targetUri = "${oidcProperties.proxyUrl}/${request.requestURI}"
 
         return proxy.uri(targetUri).get()
     }
@@ -57,7 +57,7 @@ class KeycloakProxyController (
         proxy: ProxyExchange<ByteArray?>,
         request: HttpServletRequest,
     ): ResponseEntity<*> {
-        val targetUri = "${oidcProperties.proxyUrl}${request.requestURI}"
+        val targetUri = "${oidcProperties.proxyUrl}/${request.requestURI}"
 
         return proxy.uri(targetUri).post()
     }

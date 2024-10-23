@@ -37,6 +37,14 @@ class KeycloakProxyController (
             }.let { targetUri.append(it) }
         }
 
+        // Extract cookies from the request
+        val cookies = request.cookies
+        if (cookies != null) {
+            val cookieHeader = cookies.joinToString("; ") { "${it.name}=${it.value}" }
+            // Set the cookies in the proxy request headers
+            proxy.header("Cookie", cookieHeader)
+        }
+
         return proxy.uri(targetUri.toString()).get()
     }
 

@@ -8,7 +8,7 @@ import io.ktor.utils.io.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class APIControlUnitRepositoryITests {
+class APILegacyControlUnitRepositoryITests {
     @Test
     fun `findAll Should return control units`() {
         // Given
@@ -54,7 +54,7 @@ class APIControlUnitRepositoryITests {
 
         // When
         val controlUnits =
-            APIControlUnitRepository(monitorenvProperties, apiClient)
+            APILegacyControlUnitRepository(monitorenvProperties, apiClient)
                 .findAll()
 
         assertThat(controlUnits).hasSize(3)

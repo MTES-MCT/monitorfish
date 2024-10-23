@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.monitorenv
 import fr.gouv.cnsp.monitorfish.config.ApiClient
 import fr.gouv.cnsp.monitorfish.config.MonitorenvProperties
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
-import fr.gouv.cnsp.monitorfish.domain.repositories.ControlUnitRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.LegacyControlUnitRepository
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.runBlocking
@@ -13,11 +13,11 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
 
 @Repository
-class APIControlUnitRepository(
+class APILegacyControlUnitRepository(
     val monitorenvProperties: MonitorenvProperties,
     val apiClient: ApiClient,
-) : ControlUnitRepository {
-    private val logger: Logger = LoggerFactory.getLogger(APIControlUnitRepository::class.java)
+) : LegacyControlUnitRepository {
+    private val logger: Logger = LoggerFactory.getLogger(APILegacyControlUnitRepository::class.java)
 
     @Cacheable(value = ["control_units"])
     override fun findAll(): List<ControlUnit> =

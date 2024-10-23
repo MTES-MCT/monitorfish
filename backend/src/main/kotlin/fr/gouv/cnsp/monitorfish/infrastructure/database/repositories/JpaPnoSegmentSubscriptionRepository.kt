@@ -9,6 +9,11 @@ import org.springframework.stereotype.Repository
 class JpaPnoSegmentSubscriptionRepository(
     private val dbPnoSegmentsSubscriptionsRepository: DBPnoSegmentsSubscriptionsRepository,
 ) : PnoSegmentSubscriptionRepository {
+    override fun findAll(): List<PriorNotificationSegmentSubscription> {
+        return dbPnoSegmentsSubscriptionsRepository.findAll()
+            .map { it.toPriorNotificationSegmentSubscription() }
+    }
+
     override fun findByControlUnitId(controlUnitId: Int): List<PriorNotificationSegmentSubscription> {
         return dbPnoSegmentsSubscriptionsRepository.findByControlUnitId(controlUnitId)
             .map { it.toPriorNotificationSegmentSubscription() }

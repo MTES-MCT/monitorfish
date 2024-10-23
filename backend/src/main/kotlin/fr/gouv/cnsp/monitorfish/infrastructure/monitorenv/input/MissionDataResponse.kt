@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.monitorenv.input
 
-import fr.gouv.cnsp.monitorfish.domain.entities.control_units.LegacyControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.*
 import kotlinx.serialization.Serializable
 import java.time.ZonedDateTime

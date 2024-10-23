@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.monitorenv
 import com.github.benmanes.caffeine.cache.Caffeine
 import fr.gouv.cnsp.monitorfish.config.ApiClient
 import fr.gouv.cnsp.monitorfish.config.MonitorenvProperties
-import fr.gouv.cnsp.monitorfish.domain.entities.control_units.LegacyControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.Mission
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotFindException
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository

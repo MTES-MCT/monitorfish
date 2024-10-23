@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
-import fr.gouv.cnsp.monitorfish.domain.entities.control_units.LegacyControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NatinfCodeNotFoundException

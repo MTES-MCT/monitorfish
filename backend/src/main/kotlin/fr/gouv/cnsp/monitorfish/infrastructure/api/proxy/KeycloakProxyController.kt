@@ -28,7 +28,7 @@ class KeycloakProxyController (
         request: HttpServletRequest,
     ): ResponseEntity<*> {
         val params = request.parameterMap
-        val targetUri = StringBuilder("${oidcProperties.proxyURL}/${request.requestURI}")
+        val targetUri = StringBuilder("${oidcProperties.proxyUrl}/${request.requestURI}")
 
         if (params.isNotEmpty()) {
             targetUri.append("?")

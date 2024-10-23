@@ -21,7 +21,7 @@ data class ActivityReportDataOutput(
                 faoArea = activityReport.faoArea,
                 segment = activityReport.segment,
                 vesselNationalIdentifier = activityReport.vesselNationalIdentifier,
-                legacyControlUnits = activityReport.legacyControlUnits,
+                legacyControlUnits = activityReport.controlUnits,
                 vessel = VesselDataOutput.fromVessel(activityReport.vessel),
             )
     }

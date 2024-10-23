@@ -12,14 +12,14 @@ data class ReportingAndOccurrencesDataOutput(
         ): ReportingAndOccurrencesDataOutput {
             return ReportingAndOccurrencesDataOutput(
                 otherOccurrencesOfSameAlert =
-                    reportingAndOccurrences.otherOccurrencesOfSameAlert.map { reporting ->
-                        ReportingDataOutput.fromReporting(reporting, reportingAndOccurrences.legacyControlUnit)
-                    },
+                reportingAndOccurrences.otherOccurrencesOfSameAlert.map { reporting ->
+                    ReportingDataOutput.fromReporting(reporting, reportingAndOccurrences.controlUnit)
+                },
                 reporting =
-                    ReportingDataOutput.fromReporting(
-                        reportingAndOccurrences.reporting,
-                        reportingAndOccurrences.legacyControlUnit,
-                    ),
+                ReportingDataOutput.fromReporting(
+                    reportingAndOccurrences.reporting,
+                    reportingAndOccurrences.controlUnit,
+                ),
             )
         }
     }

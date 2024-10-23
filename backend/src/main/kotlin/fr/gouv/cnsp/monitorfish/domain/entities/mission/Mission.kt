@@ -26,5 +26,5 @@ data class Mission(
     val missionSource: MissionSource,
     val hasMissionOrder: Boolean? = false,
     val isUnderJdp: Boolean? = false,
-    val legacyControlUnits: List<LegacyControlUnit> = listOf(),
+    val controlUnits: List<LegacyControlUnit> = listOf(),
 )

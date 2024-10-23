@@ -11,7 +11,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllControlUnits
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllLegacyControlUnits
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetAllCurrentReportings
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
@@ -30,7 +30,7 @@ class GetAllCurrentReportingsUTests {
     private lateinit var vesselRepository: VesselRepository
 
     @MockBean
-    private lateinit var getAllControlUnits: GetAllControlUnits
+    private lateinit var getAllLegacyControlUnits: GetAllLegacyControlUnits
 
     @Test
     fun `execute Should get all reportings with the underCharter field`() {
@@ -44,12 +44,12 @@ class GetAllCurrentReportingsUTests {
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
                 value =
-                    InfractionSuspicion(
-                        ReportingActor.OPS,
-                        natinfCode = 123456,
-                        authorTrigram = "LTH",
-                        title = "A title",
-                    ),
+                InfractionSuspicion(
+                    ReportingActor.OPS,
+                    natinfCode = 123456,
+                    authorTrigram = "LTH",
+                    title = "A title",
+                ),
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
@@ -68,7 +68,7 @@ class GetAllCurrentReportingsUTests {
             GetAllCurrentReportings(
                 reportingRepository,
                 vesselRepository,
-                getAllControlUnits,
+                getAllLegacyControlUnits,
             ).execute()
 
         // Then
@@ -90,12 +90,12 @@ class GetAllCurrentReportingsUTests {
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
                 value =
-                    InfractionSuspicion(
-                        ReportingActor.OPS,
-                        natinfCode = 123456,
-                        authorTrigram = "LTH",
-                        title = "A title",
-                    ),
+                InfractionSuspicion(
+                    ReportingActor.OPS,
+                    natinfCode = 123456,
+                    authorTrigram = "LTH",
+                    title = "A title",
+                ),
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
@@ -105,7 +105,7 @@ class GetAllCurrentReportingsUTests {
         // When
         val throwable =
             catchThrowable {
-                GetAllCurrentReportings(reportingRepository, vesselRepository, getAllControlUnits).execute()
+                GetAllCurrentReportings(reportingRepository, vesselRepository, getAllLegacyControlUnits).execute()
             }
 
         // Then

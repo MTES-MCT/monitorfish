@@ -5,7 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
 import fr.gouv.cnsp.monitorfish.domain.repositories.LegacyControlUnitRepository
 
 @UseCase
-class GetAllControlUnits(
+class GetAllLegacyControlUnits(
     private val legacyControlUnitsRepository: LegacyControlUnitRepository,
 ) {
     fun execute(): List<ControlUnit> {

@@ -4,7 +4,7 @@ import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllControlUnits
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllLegacyControlUnits
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory
 class UpdateReporting(
     private val reportingRepository: ReportingRepository,
     private val getInfractionSuspicionWithDMLAndSeaFront: GetInfractionSuspicionWithDMLAndSeaFront,
-    private val getAllControlUnits: GetAllControlUnits,
+    private val getAllLegacyControlUnits: GetAllLegacyControlUnits,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(UpdateReporting::class.java)
 
@@ -21,7 +21,7 @@ class UpdateReporting(
         updatedInfractionSuspicionOrObservation: UpdatedInfractionSuspicionOrObservation,
     ): Pair<Reporting, ControlUnit?> {
         val currentReporting = reportingRepository.findById(reportingId)
-        val controlUnits = getAllControlUnits.execute()
+        val controlUnits = getAllLegacyControlUnits.execute()
         logger.info("Updating reporting id $reportingId for vessel id ${currentReporting.vesselId}")
 
         require(currentReporting.type != ReportingType.ALERT) {
@@ -43,6 +43,7 @@ class UpdateReporting(
 
                 Pair(updatedReporting, controlUnit)
             }
+
             ReportingType.INFRACTION_SUSPICION -> {
                 currentReporting.value as InfractionSuspicionOrObservationType
 
@@ -59,6 +60,7 @@ class UpdateReporting(
 
                 Pair(updatedReporting, controlUnit)
             }
+
             else -> throw IllegalArgumentException(
                 "The new reporting type must be an INFRACTION_SUSPICION or an OBSERVATION",
             )

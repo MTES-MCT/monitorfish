@@ -7,7 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
 data class InfractionSuspicionDataOutput(
     val reportingActor: ReportingActor,
     val controlUnitId: Int? = null,
-    val legacyControlUnit: LegacyControlUnit? = null,
+    val controlUnit: LegacyControlUnit? = null,
     val authorTrigram: String,
     val authorContact: String? = null,
     val title: String,
@@ -19,12 +19,12 @@ data class InfractionSuspicionDataOutput(
     companion object {
         fun fromInfractionSuspicion(
             infractionSuspicion: InfractionSuspicion,
-            legacyControlUnit: LegacyControlUnit? = null,
+            controlUnit: LegacyControlUnit? = null,
         ): InfractionSuspicionDataOutput {
             return InfractionSuspicionDataOutput(
                 reportingActor = infractionSuspicion.reportingActor,
                 controlUnitId = infractionSuspicion.controlUnitId,
-                legacyControlUnit = legacyControlUnit,
+                controlUnit = controlUnit,
                 authorTrigram = infractionSuspicion.authorTrigram,
                 authorContact = infractionSuspicion.authorContact,
                 title = infractionSuspicion.title,

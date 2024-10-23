@@ -7,7 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
 class ObservationDataOutput(
     val reportingActor: ReportingActor,
     val controlUnitId: Int? = null,
-    val legacyControlUnit: LegacyControlUnit? = null,
+    val controlUnit: LegacyControlUnit? = null,
     val authorTrigram: String,
     val authorContact: String? = null,
     val title: String,
@@ -16,12 +16,12 @@ class ObservationDataOutput(
     companion object {
         fun fromObservation(
             observation: Observation,
-            legacyControlUnit: LegacyControlUnit? = null,
+            controlUnit: LegacyControlUnit? = null,
         ): ObservationDataOutput {
             return ObservationDataOutput(
                 reportingActor = observation.reportingActor,
                 controlUnitId = observation.controlUnitId,
-                legacyControlUnit = legacyControlUnit,
+                controlUnit = controlUnit,
                 authorTrigram = observation.authorTrigram,
                 authorContact = observation.authorContact,
                 title = observation.title,

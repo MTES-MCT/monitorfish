@@ -8,13 +8,13 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.dtos.PriorNo
 
 @UseCase
 class GetPriorNotificationSubscriber(
-    private val legacyControlUnitRepository: LegacyControlUnitRepository,
+    private val controlUnitRepository: LegacyControlUnitRepository,
     private val pnoPortSubscriptionRepository: PnoPortSubscriptionRepository,
     private val pnoSegmentSubscriptionRepository: PnoSegmentSubscriptionRepository,
     private val pnoVesselSubscriptionRepository: PnoVesselSubscriptionRepository,
 ) {
     fun execute(id: Int): PriorNotificationSubscriber {
-        val controlUnit = legacyControlUnitRepository.findAll().find { it.id == id }
+        val controlUnit = controlUnitRepository.findAll().find { it.id == id }
         if (controlUnit == null) {
             throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
         }
@@ -24,7 +24,7 @@ class GetPriorNotificationSubscriber(
         val vesselSubscriptions = pnoVesselSubscriptionRepository.findByControlUnitId(id)
 
         return PriorNotificationSubscriber(
-            legacyControlUnit = controlUnit,
+            controlUnit = controlUnit,
             portSubscriptions = portSubscriptions,
             segmentSubscriptions = segmentSubscriptions,
             vesselSubscriptions = vesselSubscriptions,

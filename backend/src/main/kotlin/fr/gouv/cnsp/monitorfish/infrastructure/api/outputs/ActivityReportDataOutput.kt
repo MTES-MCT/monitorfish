@@ -10,7 +10,7 @@ data class ActivityReportDataOutput(
     val faoArea: String?,
     val segment: String?,
     val vesselNationalIdentifier: String,
-    val legacyControlUnits: List<LegacyControlUnit>,
+    val controlUnits: List<LegacyControlUnit>,
     val vessel: VesselDataOutput,
 ) {
     companion object {
@@ -21,7 +21,7 @@ data class ActivityReportDataOutput(
                 faoArea = activityReport.faoArea,
                 segment = activityReport.segment,
                 vesselNationalIdentifier = activityReport.vesselNationalIdentifier,
-                legacyControlUnits = activityReport.controlUnits,
+                controlUnits = activityReport.controlUnits,
                 vessel = VesselDataOutput.fromVessel(activityReport.vessel),
             )
     }

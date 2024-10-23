@@ -41,13 +41,13 @@ class GetMissionUTests {
                 isGeometryComputedFromControls = false,
                 missionSource = MissionSource.MONITORFISH,
                 envActions =
-                listOf(
-                    EnvMissionAction(
-                        id = UUID.randomUUID(),
-                        actionStartDateTimeUtc = ZonedDateTime.now(),
-                        actionType = EnvMissionActionType.CONTROL,
+                    listOf(
+                        EnvMissionAction(
+                            id = UUID.randomUUID(),
+                            actionStartDateTimeUtc = ZonedDateTime.now(),
+                            actionType = EnvMissionActionType.CONTROL,
+                        ),
                     ),
-                ),
             ),
         )
         given(getMissionActions.execute(any())).willReturn(getDummyMissionActions(listOf(1, 2)))

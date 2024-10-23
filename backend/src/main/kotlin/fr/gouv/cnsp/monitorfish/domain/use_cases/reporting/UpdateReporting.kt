@@ -69,9 +69,9 @@ class UpdateReporting(
 
     fun getControlUnit(
         reporting: Reporting,
-        legacyControlUnits: List<LegacyControlUnit>,
+        controlUnits: List<LegacyControlUnit>,
     ): LegacyControlUnit? {
         val controlUnitId = (reporting.value as InfractionSuspicionOrObservationType).controlUnitId
-        return legacyControlUnits.find { it.id == controlUnitId }
+        return controlUnits.find { it.id == controlUnitId }
     }
 }

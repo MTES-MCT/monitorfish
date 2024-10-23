@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.proxy
 
+import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.cloud.gateway.mvc.ProxyExchange
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.RestController
     havingValue = "true",
     matchIfMissing = false,
 )
-class KeycloakProxyController {
+class KeycloakProxyController (
+    private val oidcProperties: OIDCProperties,
+) {
     @GetMapping("/realms/**")
     @Throws(Exception::class)
     fun get(
@@ -25,7 +28,7 @@ class KeycloakProxyController {
         request: HttpServletRequest,
     ): ResponseEntity<*> {
         val params = request.parameterMap
-        val targetUri = StringBuilder("http://0.0.0.0:8085/${request.requestURI}")
+        val targetUri = StringBuilder("${oidcProperties.proxyURL}/${request.requestURI}")
 
         if (params.isNotEmpty()) {
             targetUri.append("?")

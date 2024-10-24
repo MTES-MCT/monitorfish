@@ -100,7 +100,7 @@ class GetPriorNotificationSubscribers(
     ): List<PriorNotificationSubscriber> {
         val comparator =
             when (sortColumn) {
-                PriorNotificationSubscribersSortColumn.NAME ->
+                PriorNotificationSubscribersSortColumn.CONTROL_UNIT_NAME ->
                     compareBy<PriorNotificationSubscriber> { it.controlUnit.name }
             }
 

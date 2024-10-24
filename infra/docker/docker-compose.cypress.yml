@@ -42,10 +42,12 @@ services:
       - FRONTEND_OIDC_CLIENT_ID=monitorfish
       - MONITORFISH_OIDC_ENABLED=true
       - MONITORFISH_OIDC_PROXY_URL=http://keycloak:8080
+      - MONITORFISH_OIDC_ISSUER_URI=http://0.0.0.0:8880/realms/monitor
       - MONITORFISH_KEYCLOAK_PROXY_ENABLED=true
       - FRONTEND_OIDC_ENABLED=true
       - MONITORFISH_SCHEDULING_ENABLED=false
       - FRONTEND_OIDC_REDIRECT_URI=http://0.0.0.0:8880
+      - SPRING_CLOUD_GATEWAY_MVC_FORM_FILTER_ENABLED=false
       - FRONTEND_OIDC_LOGOUT_REDIRECT_URI=http://0.0.0.0:8880/login
       - FRONTEND_MONITORFISH_VERSION=
       - FRONTEND_SENTRY_DSN=https://a5f3272efa794bb9ada2ffea90f2fec5@sentry.incubateur.net/8
@@ -68,7 +70,7 @@ services:
       geoserver-monitorenv-stubs:
         condition: service_healthy
       keycloak:
-        condition: service_started
+        condition: service_healthy
     restart: always
     logging:
       driver: "json-file"
@@ -83,13 +85,10 @@ services:
       - KEYCLOAK_ADMIN_PASSWORD=admin
       - KC_HOSTNAME_STRICT=false
       - KC_HTTP_ENABLED=true
-      - KC_HOSTNAME=0.0.0.0:8880
       - PROXY_ADDRESS_FORWARDING=true
       - KC_PROXY=edge
       - KC_PROXY_HEADERS=forwarded
-      #- KC_PROXY_ADDRESS_FORWARDING=true
-      - KC_HOSTNAME_DEBUG=true
-      - KC_LOG_LEVEL=DEBUG
+      - KC_HEALTH_ENABLED=true
     ports:
       - "8085:8080"
     volumes:
@@ -97,6 +96,12 @@ services:
     command:
       - start-dev
       - --import-realm
+    healthcheck:
+      test: [ "CMD-SHELL",
+              "exec 3<>/dev/tcp/localhost/8080 && echo -e 'GET /health/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && cat <&3 | grep -q '200 OK'" ]
+      interval: 30s
+      timeout: 5s
+      retries: 20
 
   geoserver-monitorenv-stubs:
     image: rodolpheche/wiremock

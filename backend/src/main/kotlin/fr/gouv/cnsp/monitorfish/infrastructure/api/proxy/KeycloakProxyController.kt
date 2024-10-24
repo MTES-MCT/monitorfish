@@ -5,7 +5,6 @@ import io.ktor.client.request.forms.*
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.cloud.gateway.mvc.ProxyExchange
 import org.springframework.http.MediaType
@@ -13,7 +12,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.client.RestTemplate
 import java.nio.charset.StandardCharsets
 
 /**
@@ -30,9 +28,6 @@ class KeycloakProxyController(
 ) {
     private val logger: Logger = LoggerFactory.getLogger(KeycloakProxyController::class.java)
 
-    @Autowired
-    private val restTemplate: RestTemplate? = null
-
     @GetMapping("/realms/**")
     @Throws(Exception::class)
     fun get(
@@ -42,21 +37,13 @@ class KeycloakProxyController(
         val targetUri = StringBuilder("${oidcProperties.proxyUrl}${request.requestURI}?${request.queryString}")
         logger.info("Forwarding ${request.requestURI} to $targetUri")
 
-        // Extract cookies from the request
-        val cookies = request.cookies
-        if (cookies != null) {
-            val cookieHeader = cookies.joinToString("; ") { "${it.name}=${it.value}" }
-            // Set the cookies in the proxy request headers
-            proxy.header("Cookie", cookieHeader)
-        }
-
-        // Forward all headers from the incoming request to the proxy
+        // TODO Use properties to pass all sensitive headers
+        // @see https://docs.spring.io/spring-cloud-gateway/reference/appendix.html
         val headerNames = request.headerNames
         while (headerNames.hasMoreElements()) {
             val headerName = headerNames.nextElement()
             val headerValues = request.getHeaders(headerName)
 
-            // Forward all values for each header
             while (headerValues.hasMoreElements()) {
                 proxy.header(headerName, headerValues.nextElement())
             }
@@ -89,26 +76,20 @@ class KeycloakProxyController(
         val targetUri = StringBuilder("${oidcProperties.proxyUrl}${request.requestURI}?${request.queryString}")
         logger.info("Forwarding ${request.requestURI} to $targetUri")
 
-        // Extract cookies from the request
-        val cookies = request.cookies
-        if (cookies != null) {
-            val cookieHeader = cookies.joinToString("; ") { "${it.name}=${it.value}" }
-            // Set the cookies in the proxy request headers
-            proxy.header("Cookie", cookieHeader)
-        }
-
-        // Forward all headers from the incoming request to the proxy
+        // TODO Use properties to pass all sensitive headers
+        // @see https://docs.spring.io/spring-cloud-gateway/reference/appendix.html
         val headerNames = request.headerNames
         while (headerNames.hasMoreElements()) {
             val headerName = headerNames.nextElement()
             val headerValues = request.getHeaders(headerName)
 
-            // Forward all values for each header
             while (headerValues.hasMoreElements()) {
                 proxy.header(headerName, headerValues.nextElement())
             }
         }
 
+        // TODO Use properties to pass form data
+        // @see spring.cloud.gateway.mvc.form-filter.enabled=false
         val formData = StringBuilder()
         if (params.isNotEmpty()) {
             params.entries.joinToString("&") { (key, values) ->

@@ -25,14 +25,13 @@ import java.nio.charset.StandardCharsets
     havingValue = "true",
     matchIfMissing = false,
 )
-class KeycloakProxyController (
+class KeycloakProxyController(
     private val oidcProperties: OIDCProperties,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(KeycloakProxyController::class.java)
 
     @Autowired
     private val restTemplate: RestTemplate? = null
-
 
     @GetMapping("/realms/**")
     @Throws(Exception::class)
@@ -41,14 +40,12 @@ class KeycloakProxyController (
         request: HttpServletRequest,
     ): ResponseEntity<*> {
         val targetUri = StringBuilder("${oidcProperties.proxyUrl}${request.requestURI}?${request.queryString}")
-
         logger.info("Forwarding ${request.requestURI} to $targetUri")
 
         // Extract cookies from the request
         val cookies = request.cookies
         if (cookies != null) {
             val cookieHeader = cookies.joinToString("; ") { "${it.name}=${it.value}" }
-            logger.info("With cookies $cookieHeader")
             // Set the cookies in the proxy request headers
             proxy.header("Cookie", cookieHeader)
         }
@@ -58,7 +55,6 @@ class KeycloakProxyController (
         while (headerNames.hasMoreElements()) {
             val headerName = headerNames.nextElement()
             val headerValues = request.getHeaders(headerName)
-            logger.info("Header is $headerName")
 
             // Forward all values for each header
             while (headerValues.hasMoreElements()) {
@@ -66,15 +62,7 @@ class KeycloakProxyController (
             }
         }
 
-        logger.info("Sending $proxy")
-        val response = proxy.uri(targetUri.toString())
-            .get()
-
-        // Log the response details
-        logger.debug("Proxied response status: {}", response.statusCode)
-        logger.debug("Proxied response headers: {}", response.headers)
-
-        return response
+        return proxy.uri(targetUri.toString()).get()
     }
 
     @GetMapping("/resources/**")
@@ -88,7 +76,10 @@ class KeycloakProxyController (
         return proxy.uri(targetUri).get()
     }
 
-    @PostMapping(value = ["/realms/**"], consumes = ["application/x-www-form-urlencoded", "application/x-www-form-urlencoded;charset=UTF-8"])
+    @PostMapping(
+        value = ["/realms/**"],
+        consumes = ["application/x-www-form-urlencoded", "application/x-www-form-urlencoded;charset=UTF-8"],
+    )
     @Throws(Exception::class)
     fun post(
         proxy: ProxyExchange<ByteArray?>,
@@ -102,7 +93,6 @@ class KeycloakProxyController (
         val cookies = request.cookies
         if (cookies != null) {
             val cookieHeader = cookies.joinToString("; ") { "${it.name}=${it.value}" }
-            logger.info("With cookies $cookieHeader")
             // Set the cookies in the proxy request headers
             proxy.header("Cookie", cookieHeader)
         }
@@ -112,7 +102,6 @@ class KeycloakProxyController (
         while (headerNames.hasMoreElements()) {
             val headerName = headerNames.nextElement()
             val headerValues = request.getHeaders(headerName)
-            logger.info("Header is $headerName")
 
             // Forward all values for each header
             while (headerValues.hasMoreElements()) {
@@ -127,13 +116,11 @@ class KeycloakProxyController (
             }.let { formData.append(it) }
         }
 
-        logger.info("Raw Form Data: $formData")
         val formDataBytes = formData.toString().toByteArray(StandardCharsets.UTF_8)
 
         // Ensure the content length matches the size of the byte array
         proxy.header("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-            .header("Content-Length", formDataBytes.size.toString())  // Set correct content length
-
+            .header("Content-Length", formDataBytes.size.toString())
         return proxy.uri(targetUri.toString()).body(formDataBytes).post()
     }
 }

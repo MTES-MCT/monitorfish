@@ -21,20 +21,21 @@ class SpaController : ErrorController {
         request: HttpServletRequest,
         response: HttpServletResponse,
     ): Any {
-        val appPaths = listOf(
-            "/backoffice",
-            "/side_window",
-            "/login",
-            "/register",
-            "/backoffice/**",
-            "/ext",
-            "/light",
-            "favicon",
-            "/load_light"
-        )
+        val appPaths =
+            listOf(
+                "/backoffice",
+                "/side_window",
+                "/login",
+                "/register",
+                "/backoffice/**",
+                "/ext",
+                "/light",
+                "favicon",
+                "/load_light",
+            )
         val originalUri = request.getAttribute(RequestDispatcher.ERROR_REQUEST_URI).toString()
         logger.info(originalUri)
-        if (response.status != HttpStatus.UNAUTHORIZED.value() && !originalUri.contains("realms") ) {
+        if (response.status != HttpStatus.UNAUTHORIZED.value() && !originalUri.contains("realms")) {
             response.status = HttpStatus.OK.value()
             return "forward:/index.html"
         }

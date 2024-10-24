@@ -21,7 +21,15 @@ class RestTemplateConfig {
         restTemplate.interceptors.add(
             ClientHttpRequestInterceptor { request, body, execution ->
                 // Convert the body to a String if it's small enough (for logging purposes)
-                val bodyString = if (body.size <= 1024) String(body, Charsets.UTF_8) else "Request body too large to display"
+                val bodyString =
+                    if (body.size <= 1024) {
+                        String(
+                            body,
+                            Charsets.UTF_8,
+                        )
+                    } else {
+                        "Request body too large to display"
+                    }
                 logger.info("OUT PROXIED REQUEST ${request.method} ${request.uri} ${request.headers} $bodyString")
 
                 // Proceed with the request

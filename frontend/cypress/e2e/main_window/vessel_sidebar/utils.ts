@@ -11,6 +11,7 @@ export const createReportingFromVesselSidebar = (vesselName: string) => {
 
   cy.login('superuser')
   cy.visit('/#@-824534.42,6082993.21,8.70')
+  cy.wait(500)
 
   cy.getDataCy('vessel-search-input').type(vesselName)
   cy.getDataCy('vessel-search-item').eq(0).click()

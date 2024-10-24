@@ -2,6 +2,7 @@ context('InterestPoint', () => {
   beforeEach(() => {
     cy.login('superuser')
     cy.visit('/#@-824534.42,6082993.21,8.70')
+    cy.wait(500)
   })
 
   it('An interest point Should be created When clicking on the map', () => {

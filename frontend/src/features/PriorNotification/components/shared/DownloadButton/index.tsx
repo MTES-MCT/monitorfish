@@ -1,11 +1,9 @@
 import { monitorfishApiKy } from '@api/api'
+import { BackendApi } from '@api/BackendApi.types'
 import { RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { useGetGearsQuery } from '@api/gear'
 import { getAlpha2CodeFromAlpha2or3Code } from '@components/CountryFlag/utils'
-import {
-  StatusBodyEnum,
-  useGetPriorNotificationPdfExistenceQuery
-} from '@features/PriorNotification/priorNotificationApi'
+import { useGetPriorNotificationPdfExistenceQuery } from '@features/PriorNotification/priorNotificationApi'
 import { customSentry, CustomSentryMeasurementName } from '@libs/customSentry'
 import { Accent, Button, customDayjs, Dropdown, Icon } from '@mtes-mct/monitor-ui'
 import { downloadFile } from '@utils/downloadFile'
@@ -34,7 +32,10 @@ export function DownloadButton({
   const getGearsApiQuery = useGetGearsQuery()
   const { data } = useGetPriorNotificationPdfExistenceQuery(reportId, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS)
 
-  const isPriorNotificationDocumentAvailable = useMemo(() => data?.status === StatusBodyEnum.FOUND, [data])
+  const isPriorNotificationDocumentAvailable = useMemo(
+    () => data?.status === BackendApi.ResponseBodyStatusEnum.FOUND,
+    [data]
+  )
 
   const hasAuthorizedLandingDownload =
     isSuperUser &&

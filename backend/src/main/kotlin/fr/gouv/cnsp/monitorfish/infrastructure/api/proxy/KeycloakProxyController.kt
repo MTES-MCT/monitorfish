@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.client.RestTemplate
-import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
 /**
@@ -41,15 +40,8 @@ class KeycloakProxyController (
         proxy: ProxyExchange<ByteArray?>,
         request: HttpServletRequest,
     ): ResponseEntity<*> {
-        val params = request.parameterMap
-        val targetUri = StringBuilder("${oidcProperties.proxyUrl}${request.requestURI}")
+        val targetUri = StringBuilder("${oidcProperties.proxyUrl}${request.requestURI}?${request.queryString}")
 
-        if (params.isNotEmpty()) {
-            targetUri.append("?")
-            params.entries.joinToString("&") { (key, values) ->
-                "${URLEncoder.encode(key, Charsets.UTF_8)}=${URLEncoder.encode(values.joinToString(","), Charsets.UTF_8)}"
-            }.let { targetUri.append(it) }
-        }
         logger.info("Forwarding ${request.requestURI} to $targetUri")
 
         // Extract cookies from the request
@@ -103,14 +95,7 @@ class KeycloakProxyController (
         request: HttpServletRequest,
     ): ResponseEntity<*> {
         val params = request.parameterMap
-        val targetUri = StringBuilder("${oidcProperties.proxyUrl}${request.requestURI}")
-
-        if (params.isNotEmpty()) {
-            targetUri.append("?")
-            params.entries.joinToString("&") { (key, values) ->
-                "$key=${values.joinToString(",")}"
-            }.let { targetUri.append(it) }
-        }
+        val targetUri = StringBuilder("${oidcProperties.proxyUrl}${request.requestURI}?${request.queryString}")
         logger.info("Forwarding ${request.requestURI} to $targetUri")
 
         // Extract cookies from the request
@@ -135,10 +120,15 @@ class KeycloakProxyController (
             }
         }
 
-        val formData = "username=${params["username"]?.joinToString(",")}&password=${params["password"]?.joinToString(",")}&credentialId=${params["credentialId"]?.joinToString(",")}"
+        val formData = StringBuilder()
+        if (params.isNotEmpty()) {
+            params.entries.joinToString("&") { (key, values) ->
+                "$key=${values.joinToString(",")}"
+            }.let { formData.append(it) }
+        }
 
         logger.info("Raw Form Data: $formData")
-        val formDataBytes = formData.toByteArray(StandardCharsets.UTF_8)
+        val formDataBytes = formData.toString().toByteArray(StandardCharsets.UTF_8)
 
         // Ensure the content length matches the size of the byte array
         proxy.header("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE)

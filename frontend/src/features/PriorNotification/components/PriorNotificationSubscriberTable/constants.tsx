@@ -1,0 +1,62 @@
+import { BackOfficeIconLink } from '@features/BackOffice/components/BackOfficeIconLink'
+import { BACK_OFFICE_MENU_PATH, BackOfficeMenuKey } from '@features/BackOffice/components/BackofficeMenu/constants'
+import { Icon, Size } from '@mtes-mct/monitor-ui'
+
+import { getSubscriberPortNames, getSubscriberPortNamesWithAllNotifications } from './utils'
+
+import type { TableFilter } from './types'
+import type { PriorNotificationSubscriber } from '@features/PriorNotification/PriorNotificationSubscriber.types'
+import type { ColumnDef } from '@tanstack/react-table'
+
+export const DEFAULT_TABLE_FILTER_VALUES: TableFilter = {
+  administrationId: undefined,
+  portLocode: undefined,
+  searchQuery: undefined
+}
+
+export const TABLE_COLUMNS: Array<ColumnDef<PriorNotificationSubscriber.Subscriber, any>> = [
+  {
+    accessorFn: row => row.id,
+    enableSorting: false,
+    header: () => 'ID',
+    id: 'id',
+    size: 64
+  },
+  {
+    accessorFn: row => `${row.controlUnit.name} (${row.controlUnit.administration.name})`,
+    enableSorting: true,
+    header: () => 'Unité (administration)',
+    id: 'name'
+  },
+  {
+    accessorFn: row => row.portSubscriptions,
+    cell: getSubscriberPortNames,
+    enableSorting: false,
+    header: () => 'Ports de diffusion',
+    id: 'ports',
+    size: 400
+  },
+  {
+    accessorFn: row => row.portSubscriptions,
+    cell: getSubscriberPortNamesWithAllNotifications,
+    enableSorting: false,
+    header: () => 'Ports de diffusion avec préavis supplémentaires',
+    id: 'portsWithAllNotifications',
+    size: 400
+  },
+  {
+    accessorFn: row => row.controlUnit.id,
+    cell: info => (
+      <BackOfficeIconLink
+        Icon={Icon.Edit}
+        size={Size.SMALL}
+        title="Éditer la diffusion pour cette unité de contrôle"
+        to={`/backoffice${BACK_OFFICE_MENU_PATH[BackOfficeMenuKey.PRIOR_NOTIFICATION_SUBSCRIBER_LIST]}/${info.getValue<number>()}`}
+      />
+    ),
+    enableSorting: false,
+    header: () => '',
+    id: 'edit',
+    size: 44
+  }
+]

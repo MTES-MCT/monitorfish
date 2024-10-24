@@ -10,6 +10,7 @@ import { mainWindowReducer } from '@features/MainWindow/slice'
 import { measurementReducer, type MeasurementState } from '@features/Measurement/slice'
 import { missionFormReducer } from '@features/Mission/components/MissionForm/slice'
 import { missionListReducer, type MissionListState } from '@features/Mission/components/MissionList/slice'
+import { backofficePriorNotificationReducer } from '@features/PriorNotification/backoffice.slice'
 import { priorNotificationReducer, type PriorNotificationState } from '@features/PriorNotification/slice'
 import { regulatoryLayerSearchReducer } from '@features/Regulation/components/RegulationSearch/slice'
 import { regulatoryReducer } from '@features/Regulation/slice'
@@ -52,6 +53,7 @@ const getCommonPersistReducerConfig = <S>(key: string, whitelist?: Array<keyof S
 })
 
 const commonReducerList = {
+  [monitorenvApi.reducerPath]: monitorenvApi.reducer,
   [monitorfishApi.reducerPath]: monitorfishApi.reducer,
   [monitorfishPublicApi.reducerPath]: monitorfishPublicApi.reducer,
   [monitorfishLightApi.reducerPath]: monitorfishLightApi.reducer,
@@ -64,14 +66,11 @@ const commonReducerList = {
 }
 
 export const mainReducer = {
-  [monitorenvApi.reducerPath]: monitorenvApi.reducer,
-
   ...commonReducerList,
   alert: alertReducer,
   beaconMalfunction: beaconMalfunctionReducer,
   //  TODO Pass that to singular.
   controls: controlReducer,
-
   controlUnitDialog: controlUnitDialogReducer,
   controlUnitListDialog: controlUnitListDialogPersistedReducer,
   customZone: persistReducerTyped(
@@ -127,5 +126,6 @@ export const mainReducer = {
 export const backofficeReducer = {
   ...commonReducerList,
   layer: layer.backoffice.reducer,
+  priorNotification: backofficePriorNotificationReducer,
   regulation: regulationReducer
 }

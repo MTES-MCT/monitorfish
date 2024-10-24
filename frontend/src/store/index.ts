@@ -98,7 +98,7 @@ export const backofficeStore = configureStore({
         // TODO Replace all Redux state Dates by strings & Error by a strict-typed POJO.
         serializableCheck: false
       }
-    }).concat(monitorfishApi.middleware),
+    }).concat(monitorenvApi.middleware, monitorfishApi.middleware),
   reducer: persistedBackofficeReducer
 })
 

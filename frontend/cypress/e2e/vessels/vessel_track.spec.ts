@@ -5,7 +5,7 @@ context('Vessels Track', () => {
   beforeEach(() => {
     cy.login('superuser')
     cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.wait(500)
+    cy.wait(2000)
   })
 
   it('Last position card with Alert Should be seen on the map on pointer move', () => {

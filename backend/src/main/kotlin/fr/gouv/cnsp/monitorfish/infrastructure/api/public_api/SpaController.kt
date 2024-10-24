@@ -1,6 +1,5 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.public_api
 
-import jakarta.servlet.RequestDispatcher
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
@@ -21,21 +20,8 @@ class SpaController : ErrorController {
         request: HttpServletRequest,
         response: HttpServletResponse,
     ): Any {
-        val appPaths =
-            listOf(
-                "/backoffice",
-                "/side_window",
-                "/login",
-                "/register",
-                "/backoffice/**",
-                "/ext",
-                "/light",
-                "favicon",
-                "/load_light",
-            )
-        val originalUri = request.getAttribute(RequestDispatcher.ERROR_REQUEST_URI).toString()
-        logger.info(originalUri)
-        if (response.status != HttpStatus.UNAUTHORIZED.value() && !originalUri.contains("realms")) {
+        // TODO Do not return the `index.html` when an assets GET fail
+        if (response.status != HttpStatus.UNAUTHORIZED.value()) {
             response.status = HttpStatus.OK.value()
             return "forward:/index.html"
         }

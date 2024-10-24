@@ -1,5 +1,13 @@
 export function login(user: string) {
   cy.session(user, () => {
+    // We use a Cypress session to inject a Local Storage key
+    // so that we can detect when the browser app is running in Cypress.
+    // https://docs.cypress.io/faq/questions/using-cypress-faq#How-do-I-preserve-cookies--localStorage-in-between-my-tests
+    cy.window().then(window => {
+      window.localStorage.setItem('IS_CYPRESS', 'true')
+    })
+    cy.wait(100)
+
     cy.visit('/login')
     cy.wait(500)
 

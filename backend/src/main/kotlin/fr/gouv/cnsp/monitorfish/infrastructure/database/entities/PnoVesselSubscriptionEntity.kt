@@ -23,4 +23,18 @@ data class PnoVesselSubscriptionEntity(
             vesselName = null,
         )
     }
+
+    companion object {
+        fun fromPriorNotificationVesselSubscription(
+            priorNotificationVesselSubscription: PriorNotificationVesselSubscription,
+        ): PnoVesselSubscriptionEntity {
+            return PnoVesselSubscriptionEntity(
+                id =
+                    PnoVesselSubscriptionId(
+                        controlUnitId = priorNotificationVesselSubscription.controlUnitId,
+                        vesselId = priorNotificationVesselSubscription.vesselId,
+                    ),
+            )
+        }
+    }
 }

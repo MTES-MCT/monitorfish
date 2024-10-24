@@ -23,4 +23,19 @@ data class PnoPortSubscriptionEntity(
             hasSubscribedToAllPriorNotifications = receiveAllPnos,
         )
     }
+
+    companion object {
+        fun fromPriorNotificationPortSubscription(
+            priorNotificationPortSubscription: PriorNotificationPortSubscription,
+        ): PnoPortSubscriptionEntity {
+            return PnoPortSubscriptionEntity(
+                id =
+                    PnoPortSubscriptionId(
+                        controlUnitId = priorNotificationPortSubscription.controlUnitId,
+                        portLocode = priorNotificationPortSubscription.portLocode,
+                    ),
+                receiveAllPnos = priorNotificationPortSubscription.hasSubscribedToAllPriorNotifications,
+            )
+        }
+    }
 }

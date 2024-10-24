@@ -9,13 +9,9 @@ interface DBPnoVesselsSubscriptionsRepository : JpaRepository<PnoVesselSubscript
     @Query("SELECT COUNT(*) FROM pno_vessels_subscriptions WHERE vessel_id = :vesselId", nativeQuery = true)
     fun countByVesselId(vesselId: Int): Long
 
-    @Query(
-        """
-        SELECT *
-        FROM pno_vessels_subscriptions
-        WHERE control_unit_id = :controlUnitId
-        """,
-        nativeQuery = true,
-    )
+    @Query("DELETE FROM pno_vessels_subscriptions WHERE control_unit_id = :controlUnitId", nativeQuery = true)
+    fun deleteByControlUnitId(controlUnitId: Int)
+
+    @Query("SELECT * FROM pno_vessels_subscriptions WHERE control_unit_id = :controlUnitId", nativeQuery = true)
     fun findByControlUnitId(controlUnitId: Int): List<PnoVesselSubscriptionEntity>
 }

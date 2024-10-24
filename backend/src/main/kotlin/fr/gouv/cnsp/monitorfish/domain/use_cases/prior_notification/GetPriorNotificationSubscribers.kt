@@ -57,7 +57,7 @@ class GetPriorNotificationSubscribers(
                     vesselSubscription.controlUnitId == controlUnit.id
                 }
 
-            return@map GetPriorNotificationSubscriber.enrich(
+            return@map PriorNotificationSubscriber.create(
                 controlUnit,
                 portSubscriptions,
                 segmentSubscriptions,

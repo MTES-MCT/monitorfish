@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationVesselSubscription
 import fr.gouv.cnsp.monitorfish.domain.repositories.PnoVesselSubscriptionRepository
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.PnoVesselSubscriptionEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBPnoVesselsSubscriptionsRepository
 import org.springframework.stereotype.Repository
 
@@ -9,6 +10,10 @@ import org.springframework.stereotype.Repository
 class JpaPnoVesselSubscriptionRepository(
     private val dbPnoVesselsSubscriptionsRepository: DBPnoVesselsSubscriptionsRepository,
 ) : PnoVesselSubscriptionRepository {
+    override fun deleteByControlUnitId(controlUnitId: Int) {
+        dbPnoVesselsSubscriptionsRepository.deleteByControlUnitId(controlUnitId)
+    }
+
     override fun findAll(): List<PriorNotificationVesselSubscription> {
         return dbPnoVesselsSubscriptionsRepository.findAll()
             .map { it.toPriorNotificationVesselSubscription() }
@@ -21,5 +26,18 @@ class JpaPnoVesselSubscriptionRepository(
 
     override fun has(vesselId: Int): Boolean {
         return dbPnoVesselsSubscriptionsRepository.countByVesselId(vesselId) > 0
+    }
+
+    override fun saveAll(
+        priorNotificationVesselSubscriptions: List<PriorNotificationVesselSubscription>,
+    ): List<PriorNotificationVesselSubscription> {
+        return dbPnoVesselsSubscriptionsRepository.saveAll(
+            priorNotificationVesselSubscriptions.map {
+                PnoVesselSubscriptionEntity.fromPriorNotificationVesselSubscription(
+                    it,
+                )
+            },
+        )
+            .map { it.toPriorNotificationVesselSubscription() }
     }
 }

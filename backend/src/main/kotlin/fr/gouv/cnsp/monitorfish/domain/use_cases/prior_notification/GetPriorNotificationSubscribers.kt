@@ -86,7 +86,14 @@ class GetPriorNotificationSubscribers(
 
             val searchQueryMatches =
                 filter.searchQuery?.let {
-                    subscriber.controlUnit.name.contains(it, ignoreCase = true)
+                    subscriber.controlUnit.name.contains(it, ignoreCase = true) ||
+                        subscriber.controlUnit.administration.name.contains(it, ignoreCase = true) ||
+                        subscriber.portSubscriptions.any { portSubscription ->
+                            portSubscription.portName?.contains(
+                                it,
+                                ignoreCase = true,
+                            ) == true
+                        }
                 } != false
 
             administrationIdMatches && portLocodeMatches && searchQueryMatches

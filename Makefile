@@ -41,7 +41,7 @@ docker-env:
 # Local Development
 
 .PHONY: check-clean-archi ##LOCAL Check clean architecture imports
-check-clean-archi: 
+check-clean-archi:
 	cd backend/tools && ./check-clean-architecture.sh
 
 .PHONY: clean ##LOCAL Clean all backend assets and stop docker containers
@@ -148,6 +148,11 @@ test-back: check-clean-archi
 test-back-watch:
 	./backend/scripts/test-watch.sh
 
+.PHONY: run-back-with-monitorenv-for-cypress ##TEST ▶️  Run backend API when using Cypress connected to a local MonitorEnv app 📝
+run-back-with-monitorenv-for-cypress: run-monitorenv run-stubbed-apis
+	docker compose up -d --quiet-pull --wait db keycloak
+	cd backend && MONITORENV_URL=http://localhost:9880 MONITORFISH_OIDC_ENABLED=false MONITORFISH_SCHEDULING_ENABLED=false ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
+
 .PHONY: run-back-for-puppeteer ##TEST ▶️  Run backend API when using Puppeteer 📝
 run-back-for-puppeteer: docker-env run-stubbed-apis
 	docker compose up -d --quiet-pull --wait db
@@ -168,7 +173,7 @@ run-front-for-puppeteer:
 restart-remote-app:
 	cd infra/remote && docker compose pull && docker compose up -d --build app --force-recreate
 
-.PHONY: register-pipeline-flows-prod ##RUN ▶️  Register pipeline flows in PROD 
+.PHONY: register-pipeline-flows-prod ##RUN ▶️  Register pipeline flows in PROD
 register-pipeline-flows-prod:
 	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH_VERSION) && \
 	infra/remote/data-pipeline/register-flows-prod.sh

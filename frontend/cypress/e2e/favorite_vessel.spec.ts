@@ -2,6 +2,7 @@ context('Favorite Vessel', () => {
   beforeEach(() => {
     cy.login('superuser')
     cy.visit('/#@-824534.42,6082993.21,8.70')
+    cy.wait(500)
   })
 
   it('Opening the box Should close other boxes', () => {

@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it } from '@jest/globals'
 import { platform } from 'os'
 import { Page } from 'puppeteer'
 
-import { consoleListener, getFirstTab, getInputContent, login, wait, waitForSelectorWithText } from './utils'
+import { consoleListener, getFirstTab, getInputContent, wait, waitForSelectorWithText } from './utils'
 // /!\ Do not shorten imports, it will fail the run
 import { SeafrontGroup } from '../../src/constants/seafront'
 
@@ -28,7 +28,7 @@ describe('Missions Form', () => {
 
     /* eslint-disable no-restricted-syntax */
     for (const page of [pageA, pageB]) {
-      await page.goto(path, { waitUntil: 'domcontentloaded' })
+      await page.goto(URL, { waitUntil: 'domcontentloaded' })
       await wait(2000)
 
       await page.waitForSelector('[title="Missions et contrôles"]')

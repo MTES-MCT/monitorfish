@@ -4,6 +4,7 @@ context('Vessel sidebar logbook tab', () => {
   beforeEach(() => {
     cy.login('superuser')
     cy.visit('/#@-824534.42,6082993.21,8.70')
+    cy.wait(500)
   })
 
   it('FAR and DIS messages resume Should notify that all messages are not acknowledged', () => {

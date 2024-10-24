@@ -2,6 +2,7 @@ context('Beacon malfunction', () => {
   beforeEach(() => {
     cy.login('superuser')
     cy.visit('/#@-689844.87,6014092.52,10.57')
+    cy.wait(500)
   })
 
   it('Vessels with beacon malfunction Should be showed on map with a yellow circle', () => {

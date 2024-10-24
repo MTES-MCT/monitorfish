@@ -10,6 +10,6 @@ export function login(user: string) {
     cy.get('[name="password"]').type('fish')
     cy.get('[name="login"]').click()
 
-    cy.wait(2000)
+    cy.wait(5000)
   })
 }

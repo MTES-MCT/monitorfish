@@ -19,6 +19,10 @@ export function BackOfficeMenu() {
         <Icon.FleetSegment />
         {BACK_OFFICE_MENU_LABEL[BackOfficeMenuKey.FLEET_SEGMENT_LIST]}
       </StyledNavLink>
+      <StyledNavLink to={`/backoffice${BACK_OFFICE_MENU_PATH[BackOfficeMenuKey.PRIOR_NOTIFICATION_SUBSCRIBER_LIST]}`}>
+        <Icon.Fishery />
+        {BACK_OFFICE_MENU_LABEL[BackOfficeMenuKey.PRIOR_NOTIFICATION_SUBSCRIBER_LIST]}
+      </StyledNavLink>
     </Wrapper>
   )
 }

@@ -3,6 +3,7 @@ import { EditRegulation } from '@features/BackOffice/edit_regulation/EditRegulat
 import { ControlObjectiveTable } from '@features/ControlObjective/components/ControlObjectiveTable'
 import { FleetSegmentsBackoffice } from '@features/FleetSegment/components/FleetSegmentsBackoffice'
 import { MainWindow } from '@features/MainWindow'
+import { PriorNotificationSubscriberTable } from '@features/PriorNotification/components/PriorNotificationSubscriberTable'
 import { SideWindow } from '@features/SideWindow'
 import { BackofficePage } from '@pages/BackofficePage'
 import { HomePage } from '@pages/HomePage'
@@ -113,6 +114,14 @@ export const routes = [
         element: (
           <RequireAuth redirect requireSuperUser>
             <FleetSegmentsBackoffice />
+          </RequireAuth>
+        )
+      },
+      {
+        path: paths.controlUnitSubscribers,
+        element: (
+          <RequireAuth redirect requireSuperUser>
+            <PriorNotificationSubscriberTable />
           </RequireAuth>
         )
       }

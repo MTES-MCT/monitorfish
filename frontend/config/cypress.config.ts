@@ -2,7 +2,7 @@ import {defineConfig} from 'cypress'
 import initCypressMousePositionPlugin from 'cypress-mouse-position/plugin'
 import {initPlugin} from 'cypress-plugin-snapshots/plugin'
 
-const IS_CI = Boolean(process.env.CI)
+const IS_CI = Boolean(process.env.CI) || true
 
 export default defineConfig({
   e2e: {

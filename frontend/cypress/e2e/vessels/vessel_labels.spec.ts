@@ -2,6 +2,7 @@ context('Vessel labels', () => {
   beforeEach(() => {
     cy.login('superuser')
     cy.visit('/#@-824534.42,6082993.21,8.70')
+    cy.wait(500)
   })
 
   it('Risk factors Should be showed on the map', () => {

@@ -2,6 +2,7 @@ context('Missions overlay', () => {
   beforeEach(() => {
     cy.login('superuser')
     cy.visit('/#@-188008.06,6245230.27,8.70')
+    cy.wait(500)
   })
 
   it('An overlay Should be showed and closed', () => {

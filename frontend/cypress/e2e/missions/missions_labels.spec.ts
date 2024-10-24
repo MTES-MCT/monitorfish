@@ -1,6 +1,8 @@
 context('Missions labels', () => {
   beforeEach(() => {
-    cy.loadPath('/#@-188008.06,6245230.27,8.70')
+    cy.login('superuser')
+    cy.visit('/#@-188008.06,6245230.27,8.70')
+    cy.wait(500)
   })
 
   it('Missions labels Should be showed on map and movable', () => {

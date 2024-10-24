@@ -1,6 +1,8 @@
 context('Vessel visibility', () => {
   beforeEach(() => {
-    cy.loadPath('/#@-487249.11,6076055.47,15.77')
+    cy.login('superuser')
+    cy.visit('/#@-487249.11,6076055.47,15.77')
+    cy.wait(500)
   })
 
   it('Vessels at port Should be hidden and showed', () => {

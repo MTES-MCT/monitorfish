@@ -3,6 +3,7 @@ import { customDayjs } from '../utils/customDayjs'
 
 context('Update Regulation', () => {
   beforeEach(() => {
+    cy.login('superuser')
     cy.visit('/backoffice/regulation')
     cy.clearLocalStorage(/persist/)
 

@@ -106,7 +106,9 @@ context('Side Window > Reporting List > Actions', () => {
     cy.intercept('PUT', 'bff/v1/reportings/6').as('updateReporting')
 
     // Given
+    cy.login('superuser')
     cy.visit('/side_window')
+    cy.wait(500)
     cy.getDataCy('side-window-reporting-tab').click()
     cy.getDataCy('side-window-sub-menu-NAMO').click()
 
@@ -135,7 +137,9 @@ context('Side Window > Reporting List > Actions', () => {
     cy.intercept('PUT', 'bff/v1/reportings/6').as('updateReporting')
 
     // Given
+    cy.login('superuser')
     cy.visit('/side_window')
+    cy.wait(500)
     cy.getDataCy('side-window-reporting-tab').click()
     cy.getDataCy('side-window-sub-menu-NAMO').click()
 
@@ -166,7 +170,9 @@ context('Side Window > Reporting List > Actions', () => {
     cy.cleanDownloadedFiles()
 
     // Given
+    cy.login('superuser')
     cy.visit('/side_window')
+    cy.wait(500)
     cy.getDataCy('side-window-reporting-tab').click()
 
     // There should be one reporting either in SA or NAME sea front, depending of the previous

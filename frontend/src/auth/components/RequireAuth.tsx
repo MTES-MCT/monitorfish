@@ -8,7 +8,6 @@ import { useGetUserAccount } from '../hooks/useGetUserAccount'
 
 export function RequireAuth({ children, redirect = false, requireSuperUser = false }) {
   const userAccount = useGetUserAccount()
-
   if (!userAccount) {
     return (
       <LoginBackground>

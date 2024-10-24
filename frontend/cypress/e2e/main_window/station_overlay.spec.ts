@@ -1,6 +1,8 @@
 context('Main Window > Station Overlay', () => {
   beforeEach(() => {
-    cy.visit(`/#@-282045.85,6101658.31,9.11`).wait(5000)
+    cy.login('superuser')
+    cy.visit(`/#@-282045.85,6101658.31,9.11`)
+    cy.wait(5000)
 
     cy.clickButton('Liste des unités de contrôle')
     cy.clickButton('Afficher les bases').wait(1000)

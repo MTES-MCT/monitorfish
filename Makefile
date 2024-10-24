@@ -69,7 +69,7 @@ install-front:
 .PHONY: run-back ##LOCAL ▶️  Run backend API
 run-back: run-stubbed-apis
 	docker compose up -d --quiet-pull --wait db keycloak
-	cd backend && ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
+	cd backend && MONITORFISH_KEYCLOAK_PROXY_ENABLED=true MONITORFISH_OIDC_PROXY_URL=http://localhost:8085 ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
 
 .PHONY: run-front ##LOCAL ▶️  Run frontend for development
 run-front:
@@ -122,15 +122,6 @@ dev-restore-db:
 test: test-back
 	cd frontend && CI=true npm run test:unit -- --coverage
 
-.PHONY: run-back-for-cypress ##TEST ▶️  Run backend API when using Cypress 📝
-run-back-for-cypress: run-stubbed-apis
-	docker compose up -d --quiet-pull --wait db keycloak
-	cd backend && MONITORFISH_OIDC_ENABLED=false MONITORFISH_SCHEDULING_ENABLED=false ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
-
-.PHONY: run-front-for-cypress ##TEST ▶️  Run frontend when using Cypress 📝
-run-front-for-cypress:
-	cd ./frontend && npm run dev-cypress
-
 .PHONY: run-cypress ##TEST ▶️  Run Cypress 📝
 run-cypress:
 	cd ./frontend && npm run test:e2e:open
@@ -156,7 +147,7 @@ test-back-watch:
 run-back-for-puppeteer: docker-env run-stubbed-apis
 	docker compose up -d --quiet-pull --wait db
 	docker compose -f ./infra/docker/docker-compose.puppeteer.yml up -d monitorenv-app
-	cd backend && MONITORFISH_OIDC_ENABLED=false MONITORENV_URL=http://localhost:9880 ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
+	cd backend && MONITORENV_URL=http://localhost:9880 ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
 
 .PHONY: run-front-for-puppeteer ##TEST ▶️  Run frontend when using Puppeteer 📝
 run-front-for-puppeteer:

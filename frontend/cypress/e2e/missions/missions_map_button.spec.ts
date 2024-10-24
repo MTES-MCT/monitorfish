@@ -1,6 +1,8 @@
 context('Missions Map Button', () => {
   beforeEach(() => {
-    cy.loadPath('/#@-47979.79,6309598.10,8.70')
+    cy.login('superuser')
+    cy.visit('/#@-47979.79,6309598.10,8.70')
+    cy.wait(500)
   })
 
   it('Mission layer Should be showed and hidden', () => {

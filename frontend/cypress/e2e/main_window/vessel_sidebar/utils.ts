@@ -9,7 +9,9 @@ export const createReportingFromVesselSidebar = (vesselName: string) => {
   cy.intercept('GET', '/bff/v1/vessels/reportings?*').as('getVesselReportings')
   cy.intercept('POST', '/bff/v1/reportings').as('createReporting')
 
-  cy.loadPath('/#@-824534.42,6082993.21,8.70')
+  cy.login('superuser')
+  cy.visit('/#@-824534.42,6082993.21,8.70')
+  cy.wait(500)
 
   cy.getDataCy('vessel-search-input').type(vesselName)
   cy.getDataCy('vessel-search-item').eq(0).click()

@@ -26,6 +26,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.time.ZonedDateTime
+import kotlin.text.Charsets.UTF_8
 
 @Import(SentryConfig::class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -153,7 +154,8 @@ class PriorNotificationControllerUTests {
                 "/bff/v1/prior_notifications/logbook/${fakePriorNotification.reportId!!}?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}",
             )
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody),
+                .content(requestBody)
+                .characterEncoding(UTF_8),
         )
             // Then
             .andExpect(status().isOk)

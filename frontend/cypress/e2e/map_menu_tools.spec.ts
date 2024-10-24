@@ -1,6 +1,8 @@
 context('Map menu tools', () => {
   beforeEach(() => {
-    cy.loadPath('/#@-824534.42,6082993.21,8.70')
+    cy.login('superuser')
+    cy.visit('/#@-824534.42,6082993.21,8.70')
+    cy.wait(500)
   })
 
   it('Opening a tool should close the previous tool opened and open the selected tool', () => {

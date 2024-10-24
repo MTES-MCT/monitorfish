@@ -2,7 +2,9 @@
 
 context('Vessel sidebar resume tab', () => {
   beforeEach(() => {
-    cy.loadPath('/#@-824534.42,6082993.21,8.70')
+    cy.login('superuser')
+    cy.visit('/#@-824534.42,6082993.21,8.70')
+    cy.wait(500)
   })
 
   it('Resume Should be opened When clicking on a vessel', () => {

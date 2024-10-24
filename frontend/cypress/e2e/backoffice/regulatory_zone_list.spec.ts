@@ -2,6 +2,7 @@
 
 context('Backoffice', () => {
   beforeEach(() => {
+    cy.login('superuser')
     cy.visit('/backoffice/regulation')
     cy.wait(200)
   })

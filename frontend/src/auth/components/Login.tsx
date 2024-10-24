@@ -56,7 +56,9 @@ export function Login() {
             <Title>MonitorFish</Title>
           </Head>
 
-          <Button onClick={() => auth?.signinRedirect()}>Se connecter avec Cerbère</Button>
+          <Button onClick={() => auth?.signinRedirect()} title="Se connecter avec Cerbère">
+            Se connecter avec Cerbère
+          </Button>
           <Warning>
             Vous accédez à une application réservée aux services de l&apos;Etat.
             <br />

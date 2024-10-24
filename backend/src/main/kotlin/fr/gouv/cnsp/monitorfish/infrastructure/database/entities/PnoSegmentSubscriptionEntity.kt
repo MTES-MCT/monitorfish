@@ -24,4 +24,18 @@ data class PnoSegmentSubscriptionEntity(
             segmentName = null,
         )
     }
+
+    companion object {
+        fun fromPriorNotificationSegmentSubscription(
+            priorNotificationSegmentSubscription: PriorNotificationSegmentSubscription,
+        ): PnoSegmentSubscriptionEntity {
+            return PnoSegmentSubscriptionEntity(
+                id =
+                    PnoSegmentSubscriptionId(
+                        controlUnitId = priorNotificationSegmentSubscription.controlUnitId,
+                        segmentCode = priorNotificationSegmentSubscription.segmentCode,
+                    ),
+            )
+        }
+    }
 }

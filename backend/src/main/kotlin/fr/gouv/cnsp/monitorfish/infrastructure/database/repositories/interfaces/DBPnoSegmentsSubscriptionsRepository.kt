@@ -20,13 +20,9 @@ interface DBPnoSegmentsSubscriptionsRepository : JpaRepository<PnoSegmentSubscri
         segmentCodes: List<String>,
     ): Long
 
-    @Query(
-        """
-        SELECT *
-        FROM pno_segments_subscriptions
-        WHERE control_unit_id = :controlUnitId
-        """,
-        nativeQuery = true,
-    )
+    @Query("DELETE FROM pno_segments_subscriptions WHERE control_unit_id = :controlUnitId", nativeQuery = true)
+    fun deleteByControlUnitId(controlUnitId: Int)
+
+    @Query("SELECT * FROM pno_segments_subscriptions WHERE control_unit_id = :controlUnitId", nativeQuery = true)
     fun findByControlUnitId(controlUnitId: Int): List<PnoSegmentSubscriptionEntity>
 }

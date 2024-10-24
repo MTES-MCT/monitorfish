@@ -12,13 +12,9 @@ interface DBPnoPortsSubscriptionsRepository : JpaRepository<PnoPortSubscriptionE
     )
     fun countByPortLocode(portLocode: String): Long
 
-    @Query(
-        """
-        SELECT *
-        FROM pno_ports_subscriptions
-        WHERE control_unit_id = :controlUnitId
-        """,
-        nativeQuery = true,
-    )
+    @Query("DELETE FROM pno_ports_subscriptions WHERE control_unit_id = :controlUnitId", nativeQuery = true)
+    fun deleteByControlUnitId(controlUnitId: Int)
+
+    @Query("SELECT * FROM pno_ports_subscriptions WHERE control_unit_id = :controlUnitId", nativeQuery = true)
     fun findByControlUnitId(controlUnitId: Int): List<PnoPortSubscriptionEntity>
 }

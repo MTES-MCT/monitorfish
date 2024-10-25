@@ -122,6 +122,11 @@ dev-restore-db:
 test: test-back
 	cd frontend && CI=true npm run test:unit -- --coverage
 
+.PHONY: run-back-for-cypress ##TEST ▶️ Run backend API when using Cypress 📝
+run-back-for-cypress: run-stubbed-apis
+	docker compose up -d --quiet-pull --wait db keycloak
+	cd backend && MONITORFISH_SCHEDULING_ENABLED=false ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
+
 .PHONY: run-cypress ##TEST ▶️  Run Cypress 📝
 run-cypress:
 	cd ./frontend && npm run test:e2e:open

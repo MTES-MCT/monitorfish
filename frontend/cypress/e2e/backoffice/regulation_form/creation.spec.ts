@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 
-context('New Regulation', () => {
+context('BackOffice > Regulation Form > Creation', () => {
   beforeEach(() => {
     cy.login('superuser')
     cy.visit('/backoffice/regulation/new')

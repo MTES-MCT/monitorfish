@@ -6,7 +6,7 @@ import utc from 'dayjs/plugin/utc'
 dayjs.extend(utc)
 
 const currentYear = dayjs().utc().year()
-context('Fleet segments', () => {
+context('BackOffice > Fleet Segments Table', () => {
   beforeEach(() => {
     cy.login('superuser')
     cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear}`).as('fleetSegments')

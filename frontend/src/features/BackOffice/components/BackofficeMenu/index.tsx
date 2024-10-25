@@ -35,6 +35,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   letter-spacing: 0.5px;
   line-height: 1;
+  min-width: 200px;
   padding: 16px 24px;
   width: 200px;
 `

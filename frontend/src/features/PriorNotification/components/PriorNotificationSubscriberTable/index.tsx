@@ -1,11 +1,11 @@
 import { BackendApi } from '@api/BackendApi.types'
 import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { BackOfficeBody } from '@features/BackOffice/components/BackofficeBody'
+import { BackOfficeTitle } from '@features/BackOffice/components/BackOfficeTitle'
 import { PriorNotificationSubscriber } from '@features/PriorNotification/PriorNotificationSubscriber.types'
 import { useGetPriorNotificationSubscribersQuery } from '@features/PriorNotification/priorNotificationSubscriberApi'
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
 import { DataTable } from '@mtes-mct/monitor-ui'
-import styled from 'styled-components'
 
 import { TABLE_COLUMNS } from './constants'
 import { FilterBar } from './FilterBar'
@@ -29,7 +29,7 @@ export function PriorNotificationSubscriberTable() {
 
   return (
     <BackOfficeBody>
-      <Title>Diffusion des préavis auprès des unités de contrôle</Title>
+      <BackOfficeTitle>Diffusion des préavis auprès des unités de contrôle</BackOfficeTitle>
 
       <FilterBar />
 
@@ -37,9 +37,3 @@ export function PriorNotificationSubscriberTable() {
     </BackOfficeBody>
   )
 }
-
-const Title = styled.h1`
-  line-height: 1;
-  font-size: 24px;
-  margin: 0 0 24px;
-`

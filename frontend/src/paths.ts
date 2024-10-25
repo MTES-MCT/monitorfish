@@ -2,8 +2,7 @@ export const paths = {
   backendForFrontend: '/bff',
   backoffice: '/backoffice',
   controlObjectives: 'control_objectives',
-  controlUnitSubscribers: 'control_unit_subscribers',
-  editControlUnitSubscriber: 'control_unit_subscribers/:controlUnitId',
+  editPriorNotificationSubscriber: 'prior_notification_subscribers/:controlUnitId',
   editRegulation: 'regulation/edit',
   ext: '/ext',
   fleetSegments: 'fleet_segments',
@@ -12,6 +11,7 @@ export const paths = {
   loadLight: '/load_light',
   login: '/login',
   newRegulation: 'regulation/new',
+  priorNotificationSubscribers: 'prior_notification_subscribers',
   register: '/register',
   regulation: 'regulation',
   sideWindow: '/side_window'

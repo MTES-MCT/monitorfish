@@ -9,14 +9,14 @@ export namespace PriorNotificationSubscriber {
   /** @internal Only used within this namespace. */
   type Administration = {
     id: number
-    name: String
+    name: string
   }
 
   /** @internal Only used within this namespace. */
   type ControlUnit = {
     administration: Administration
     id: number
-    name: String
+    name: string
   }
 
   export type FleetSegmentSubscription = {

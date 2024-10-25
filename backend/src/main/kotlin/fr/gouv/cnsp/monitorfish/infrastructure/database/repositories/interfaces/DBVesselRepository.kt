@@ -8,11 +8,11 @@ import org.springframework.data.repository.query.Param
 interface DBVesselRepository : CrudRepository<VesselEntity, Int> {
     @Query(
         value =
-            "SELECT * FROM vessels WHERE cfr LIKE %:searched% " +
-                "OR mmsi LIKE %:searched% " +
-                "OR vessel_name LIKE %:searched% " +
-                "OR external_immatriculation LIKE %:searched% " +
-                "OR ircs LIKE %:searched% limit 50",
+        "SELECT * FROM vessels WHERE cfr LIKE %:searched% " +
+            "OR mmsi LIKE %:searched% " +
+            "OR vessel_name LIKE %:searched% " +
+            "OR external_immatriculation LIKE %:searched% " +
+            "OR ircs LIKE %:searched% limit 50",
         nativeQuery = true,
     )
     fun searchBy(
@@ -36,7 +36,7 @@ interface DBVesselRepository : CrudRepository<VesselEntity, Int> {
 
     @Query(value = "SELECT * FROM vessels WHERE cfr in (:cfr)", nativeQuery = true)
     fun findAllByInternalReferenceNumbers(cfr: List<String>): List<VesselEntity>
-
+    
     @Query(
         value = """
         SELECT under_charter

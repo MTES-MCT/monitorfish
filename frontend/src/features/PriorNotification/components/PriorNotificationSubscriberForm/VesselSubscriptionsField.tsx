@@ -25,7 +25,7 @@ export function VesselSubscriptionsField({
   const key = useKey([vesselSubscriptions])
 
   const add = (newVesselIdentity: VesselIdentity | undefined) => {
-    if (!newVesselIdentity || !newVesselIdentity.vesselId) {
+    if (!newVesselIdentity?.vesselId) {
       return
     }
 

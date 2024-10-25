@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.PnoSegmentSubscriptionEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.PnoSegmentSubscriptionId
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 
 interface DBPnoSegmentsSubscriptionsRepository : JpaRepository<PnoSegmentSubscriptionEntity, PnoSegmentSubscriptionId> {
@@ -20,6 +21,7 @@ interface DBPnoSegmentsSubscriptionsRepository : JpaRepository<PnoSegmentSubscri
         segmentCodes: List<String>,
     ): Long
 
+    @Modifying
     @Query("DELETE FROM pno_segments_subscriptions WHERE control_unit_id = :controlUnitId", nativeQuery = true)
     fun deleteByControlUnitId(controlUnitId: Int)
 

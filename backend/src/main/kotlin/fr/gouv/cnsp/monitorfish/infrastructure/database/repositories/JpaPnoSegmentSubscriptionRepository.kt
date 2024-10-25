@@ -4,12 +4,14 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotifica
 import fr.gouv.cnsp.monitorfish.domain.repositories.PnoSegmentSubscriptionRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.PnoSegmentSubscriptionEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBPnoSegmentsSubscriptionsRepository
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Repository
 
 @Repository
 class JpaPnoSegmentSubscriptionRepository(
     private val dbPnoSegmentsSubscriptionsRepository: DBPnoSegmentsSubscriptionsRepository,
 ) : PnoSegmentSubscriptionRepository {
+    @Transactional
     override fun deleteByControlUnitId(controlUnitId: Int) {
         dbPnoSegmentsSubscriptionsRepository.deleteByControlUnitId(controlUnitId)
     }
@@ -31,6 +33,7 @@ class JpaPnoSegmentSubscriptionRepository(
         return dbPnoSegmentsSubscriptionsRepository.countByPortLocodeAndSegmentCodes(portLocode, segmentCodes) > 0
     }
 
+    @Transactional
     override fun saveAll(
         priorNotificationSegmentSubscriptions: List<PriorNotificationSegmentSubscription>,
     ): List<PriorNotificationSegmentSubscription> {

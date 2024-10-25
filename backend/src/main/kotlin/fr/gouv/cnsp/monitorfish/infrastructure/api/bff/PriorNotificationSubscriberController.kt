@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationSubscribersFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.sorters.PriorNotificationSubscribersSortColumn
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.*
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.LogbookPriorNotificationFormDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.PriorNotificationSubscriberDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*
 class PriorNotificationSubscriberController(
     private val getPriorNotificationSubscriber: GetPriorNotificationSubscriber,
     private val getPriorNotificationSubscribers: GetPriorNotificationSubscribers,
+    private val updatePriorNotificationSubscriber: UpdatePriorNotificationSubscriber,
 ) {
     @GetMapping("")
     @Operation(summary = "Get all prior notification subscribers")
@@ -71,10 +72,24 @@ class PriorNotificationSubscriberController(
     fun updateOne(
         @PathParam("Control unit ID")
         @PathVariable(name = "controlUnitId")
-        controlUnitId: String,
+        controlUnitId: Int,
         @RequestBody
-        logbookPriorNotificationFormDataInput: LogbookPriorNotificationFormDataInput,
-    ) {
-        return
+        priorNotificationSubscriberDataInput: PriorNotificationSubscriberDataInput,
+    ): PriorNotificationSubscriberDataOutput {
+        val (portSubscriptions, segmentSubscriptions, vesselSubscriptions) =
+            priorNotificationSubscriberDataInput.toSubscriptions()
+
+        println("controlUnitId: $controlUnitId")
+        val updatedPriorNotificationSubscriber =
+            updatePriorNotificationSubscriber.execute(
+                controlUnitId,
+                portSubscriptions,
+                segmentSubscriptions,
+                vesselSubscriptions,
+            )
+
+        return PriorNotificationSubscriberDataOutput.fromPriorNotificationSubscriber(
+            updatedPriorNotificationSubscriber,
+        )
     }
 }

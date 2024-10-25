@@ -5,6 +5,10 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotifica
 data class PriorNotificationVesselSubscriptionDataOutput(
     val controlUnitId: Int,
     val vesselId: Int,
+    val vesselCallSign: String?,
+    val vesselCfr: String?,
+    val vesselExternalMarking: String?,
+    val vesselMmsi: String?,
     val vesselName: String?,
 ) {
     companion object {
@@ -14,6 +18,10 @@ data class PriorNotificationVesselSubscriptionDataOutput(
             return PriorNotificationVesselSubscriptionDataOutput(
                 controlUnitId = priorNotificationFleetVesselSubscription.controlUnitId,
                 vesselId = priorNotificationFleetVesselSubscription.vesselId,
+                vesselCallSign = priorNotificationFleetVesselSubscription.vesselCallSign,
+                vesselCfr = priorNotificationFleetVesselSubscription.vesselCfr,
+                vesselExternalMarking = priorNotificationFleetVesselSubscription.vesselExternalMarking,
+                vesselMmsi = priorNotificationFleetVesselSubscription.vesselMmsi,
                 vesselName = priorNotificationFleetVesselSubscription.vesselName,
             )
         }

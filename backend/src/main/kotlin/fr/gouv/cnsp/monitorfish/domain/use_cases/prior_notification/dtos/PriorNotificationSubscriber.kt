@@ -26,30 +26,36 @@ data class PriorNotificationSubscriber(
         ): PriorNotificationSubscriber {
             portSubscriptions.any { portSubscription -> portSubscription.hasSubscribedToAllPriorNotifications }
 
-            val namedFleetSegmentSubscriptions =
+            val enrichedFleetSegmentSubscriptions =
                 fleetSegmentSubscriptions.map { fleetSegmentSubscription ->
                     val fleetSegment = allFleetSegments.find { it.segment == fleetSegmentSubscription.segmentCode }
 
                     return@map fleetSegmentSubscription.copy(segmentName = fleetSegment?.segmentName)
                 }
-            val namedPortSubscriptions =
+            val enrichedPortSubscriptions =
                 portSubscriptions.map { portSubscription ->
                     val port = allPorts.find { it.locode == portSubscription.portLocode }
 
                     return@map portSubscription.copy(portName = port?.name)
                 }
-            val namedVesselSubscriptions =
+            val enrichedVesselSubscriptions =
                 vesselSubscriptions.map { vesselSubscription ->
                     val vessel = allVessels.find { it.id == vesselSubscription.vesselId }
 
-                    return@map vesselSubscription.copy(vesselName = vessel?.vesselName)
+                    return@map vesselSubscription.copy(
+                        vesselCallSign = vessel?.ircs,
+                        vesselCfr = vessel?.internalReferenceNumber,
+                        vesselExternalMarking = vessel?.externalReferenceNumber,
+                        vesselMmsi = vessel?.mmsi,
+                        vesselName = vessel?.vesselName,
+                    )
                 }
 
             return PriorNotificationSubscriber(
                 controlUnit,
-                fleetSegmentSubscriptions = namedFleetSegmentSubscriptions,
-                portSubscriptions = namedPortSubscriptions,
-                vesselSubscriptions = namedVesselSubscriptions,
+                fleetSegmentSubscriptions = enrichedFleetSegmentSubscriptions,
+                portSubscriptions = enrichedPortSubscriptions,
+                vesselSubscriptions = enrichedVesselSubscriptions,
             )
         }
     }

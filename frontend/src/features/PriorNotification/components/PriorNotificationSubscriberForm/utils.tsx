@@ -1,8 +1,23 @@
 import { Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
+import styled from 'styled-components'
 
 import type { PriorNotificationSubscriber } from '@features/PriorNotification/PriorNotificationSubscriber.types'
 import type { CellContext, ColumnDef } from '@tanstack/react-table'
 import type { Promisable } from 'type-fest'
+
+export function getFormDataFromSubscriber(
+  subscriber: PriorNotificationSubscriber.Subscriber
+): PriorNotificationSubscriber.FormData {
+  return {
+    controlUnitId: subscriber.controlUnit.id,
+    fleetSegmentCodes: subscriber.fleetSegmentSubscriptions.map(subscription => subscription.segmentCode),
+    portLocodes: subscriber.portSubscriptions.map(subscription => subscription.portLocode),
+    portLocodesWithFullSubscription: subscriber.portSubscriptions
+      .filter(subscription => subscription.hasSubscribedToAllPriorNotifications)
+      .map(subscription => subscription.portLocode),
+    vesselIds: subscriber.vesselSubscriptions.map(subscription => subscription.vesselId)
+  }
+}
 
 export function getPortSubscriptionTableColumns(
   onRemove: (portLocodeToRemove: string) => Promisable<void>,
@@ -70,7 +85,46 @@ export function getVesselSubscriptionTableColumns(
     {
       accessorFn: row => row.vesselName,
       header: () => 'Navire',
-      id: 'vesselName'
+      id: 'vesselName',
+      size: 320
+    },
+    {
+      accessorFn: row => row,
+      cell: (
+        context: CellContext<
+          PriorNotificationSubscriber.VesselSubscription,
+          PriorNotificationSubscriber.VesselSubscription
+        >
+      ) => {
+        const vesselSubscription = context.getValue()
+
+        return (
+          <span>
+            {vesselSubscription.vesselCfr && (
+              <>
+                {vesselSubscription.vesselCfr} <VesselIdentifierLabel>(CFR)</VesselIdentifierLabel> -
+              </>
+            )}
+            {vesselSubscription.vesselMmsi && (
+              <>
+                {vesselSubscription.vesselMmsi} <VesselIdentifierLabel>(MMSI)</VesselIdentifierLabel> -
+              </>
+            )}
+            {vesselSubscription.vesselExternalMarking && (
+              <>
+                {vesselSubscription.vesselExternalMarking} <VesselIdentifierLabel>(Marq. ext.)</VesselIdentifierLabel> -
+              </>
+            )}
+            {vesselSubscription.vesselCallSign && (
+              <>
+                {vesselSubscription.vesselCallSign} <VesselIdentifierLabel>(Call Sign)</VesselIdentifierLabel>
+              </>
+            )}
+          </span>
+        )
+      },
+      header: () => 'Immatriculations',
+      id: 'vesselIdentity'
     },
     {
       accessorFn: row => row.vesselId,
@@ -90,3 +144,7 @@ export function getVesselSubscriptionTableColumns(
     }
   ]
 }
+
+const VesselIdentifierLabel = styled.span`
+  color: ${p => p.theme.color.slateGray};
+`

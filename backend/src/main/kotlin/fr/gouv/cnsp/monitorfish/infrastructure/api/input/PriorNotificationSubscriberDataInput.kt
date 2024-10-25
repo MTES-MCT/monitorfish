@@ -24,7 +24,15 @@ data class PriorNotificationSubscriberDataInput(
             }
         val vesselSubscriptions =
             vesselIds.map { vesselId ->
-                PriorNotificationVesselSubscription(controlUnitId, vesselId, null)
+                PriorNotificationVesselSubscription(
+                    controlUnitId,
+                    vesselId,
+                    vesselCallSign = null,
+                    vesselCfr = null,
+                    vesselExternalMarking = null,
+                    vesselMmsi = null,
+                    vesselName = null,
+                )
             }
 
         return Triple(

@@ -35,7 +35,11 @@ export namespace PriorNotificationSubscriber {
 
   export type VesselSubscription = {
     controlUnitId: number
+    vesselCallSign: string | undefined
+    vesselCfr: string | undefined
+    vesselExternalMarking: string | undefined
     vesselId: number
+    vesselMmsi: string | undefined
     vesselName: string | undefined
   }
 

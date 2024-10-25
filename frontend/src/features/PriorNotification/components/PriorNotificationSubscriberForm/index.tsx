@@ -10,8 +10,8 @@ import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
 
+import { AllPortSubscriptionsField } from './AllPortSubscriptionsField'
 import { FullPortSubscriptionsField } from './FullPortSubscriptionsField'
-import { LimitedPortSubscriptionsField } from './LimitedPortSubscriptionsField'
 import { SegmentSubscriptionsField } from './SegmentSubscriptionsField'
 import { getFormDataFromSubscriber } from './utils'
 import { VesselSubscriptionsField } from './VesselSubscriptionsField'
@@ -39,9 +39,9 @@ export function PriorNotificationSubscriberForm() {
     dispatch(priorNotificationSubscriberApi.endpoints.updatePriorNotificationSubscriber.initiate(nextFormData)).unwrap()
   }
 
-  const addPortSubscription = (newPortLocode: string, isAllNotificationSubscription: boolean) => {
+  const addPortSubscription = (newPortLocode: string, isFullPortSubscription: boolean) => {
     const nextPortLocodes = [...formData.portLocodes, newPortLocode]
-    const nextPortLocodesWithAllNotifications = isAllNotificationSubscription
+    const nextPortLocodesWithAllNotifications = isFullPortSubscription
       ? [...formData.portLocodesWithFullSubscription, newPortLocode]
       : formData.portLocodesWithFullSubscription
 
@@ -70,8 +70,8 @@ export function PriorNotificationSubscriberForm() {
     })
   }
 
-  const removePortSubscription = (portLocodeToRemove: string, isAllNotificationSubscription: boolean) => {
-    const nextPortLocodes = isAllNotificationSubscription
+  const removePortSubscription = (portLocodeToRemove: string, isFullPortSubscription: boolean) => {
+    const nextPortLocodes = isFullPortSubscription
       ? formData.portLocodes
       : formData.portLocodes.filter(portLocode => portLocode !== portLocodeToRemove)
     const nextPortLocodesWithAllNotifications = formData.portLocodesWithFullSubscription.filter(
@@ -107,7 +107,7 @@ export function PriorNotificationSubscriberForm() {
     <Wrapper>
       <BackOfficeTitle>{`${subscriber.controlUnit.name} (${subscriber.controlUnit.administration.name}) – Paramétrage de la diffusion des préavis`}</BackOfficeTitle>
 
-      <LimitedPortSubscriptionsField
+      <AllPortSubscriptionsField
         isDisabled={isFetching}
         onAdd={addPortSubscription}
         onRemove={removePortSubscription}

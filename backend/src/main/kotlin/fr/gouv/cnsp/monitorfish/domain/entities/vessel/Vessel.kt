@@ -7,14 +7,17 @@ import java.util.*
 // TODO Remove all default values.
 data class Vessel(
     val id: Int,
-    /** CFR (Community Fleet Register Number). */
+    // TODO Rename to either `cfr` (domain naming) or `commonFleetRegisterNumber` (ex: https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX%3A32017R0218).
+    /** CFR (Common Fleet Register Number). */
     val internalReferenceNumber: String? = null,
     /** IMO (International Maritime Organization). IMO is one of multiple UVI (Unique Vessel Identifier) types. */
     val imo: String? = null,
     /** MMSI (Maritime Mobile Service Identity). */
     val mmsi: String? = null,
+    // TODO Rename to either `callSign` (domain naming) or `internationRadioCallSign`.
     /** IRCS (International Radio Call Sign). */
     val ircs: String? = null,
+    // TODO Rename to `externalMarking` (domaim naming + correct translation, ex: https://mer.gouv.fr/sites/default/files/2022-10/EU_Vessel_List_for_Jersey_Waters_Access_sept_22.pdf).
     val externalReferenceNumber: String? = null,
     // TODO Rename to `name`.
     val vesselName: String? = null,

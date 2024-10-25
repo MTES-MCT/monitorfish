@@ -100,11 +100,19 @@ class GetPriorNotificationSubscribersUTests {
                 PriorNotificationVesselSubscription(
                     controlUnitId = 1,
                     vesselId = 1,
+                    vesselCallSign = null,
+                    vesselCfr = null,
+                    vesselExternalMarking = null,
+                    vesselMmsi = null,
                     vesselName = null,
                 ),
                 PriorNotificationVesselSubscription(
                     controlUnitId = 2,
                     vesselId = 2,
+                    vesselCallSign = null,
+                    vesselCfr = null,
+                    vesselExternalMarking = null,
+                    vesselMmsi = null,
                     vesselName = null,
                 ),
             )

@@ -3,8 +3,8 @@ import { VesselSearch } from '@features/Vessel/components/VesselSearch'
 import { DataTable, useKey } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import { getVesselSubscriptionTableColumns } from './columns'
 import { Info } from './shared/Info'
+import { getVesselSubscriptionTableColumns } from './utils'
 
 import type { PriorNotificationSubscriber } from '@features/PriorNotification/PriorNotificationSubscriber.types'
 import type { VesselIdentity } from 'domain/entities/vessel/types'
@@ -47,20 +47,29 @@ export function VesselSubscriptionsField({
         Tous les préavis de ces navires seront diffusés, sans faire partie du périmètre de vérification du CNSP.
       </Info>
 
-      <DataTable
-        columns={columns}
-        data={vesselSubscriptions}
-        initialSorting={[{ desc: false, id: 'vesselName' }]}
-        tableOptions={{
-          getRowId: originalRow => `${originalRow.controlUnitId}-${originalRow.vesselId}`
-        }}
-        withoutHead
-      />
+      <DataTableWrapper>
+        <DataTable
+          columns={columns}
+          data={vesselSubscriptions}
+          initialSorting={[{ desc: false, id: 'vesselName' }]}
+          tableOptions={{
+            getRowId: originalRow => `${originalRow.controlUnitId}-${originalRow.vesselId}`
+          }}
+          withoutHead
+        />
+      </DataTableWrapper>
 
       <StyledVesselSearch key={key} disabled={isDisabled} onChange={add} />
     </>
   )
 }
+
+const DataTableWrapper = styled.div`
+  > .Table-SimpleTable {
+    margin-bottom: 16px;
+    width: 1000px;
+  }
+`
 
 const StyledVesselSearch = styled(VesselSearch)`
   border: solid 1px ${p => p.theme.color.lightGray};

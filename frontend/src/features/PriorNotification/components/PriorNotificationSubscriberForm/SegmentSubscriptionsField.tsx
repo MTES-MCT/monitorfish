@@ -2,8 +2,8 @@ import { BackOfficeSubtitle } from '@features/BackOffice/components/BackOfficeSu
 import { useGetFleetSegmentsAsOptions } from '@features/FleetSegment/hooks/useGetFleetSegmentsAsOptions'
 import { DataTable, Select } from '@mtes-mct/monitor-ui'
 
-import { getSegmentSubscriptionTableColumns } from './columns'
 import { Info } from './shared/Info'
+import { getSegmentSubscriptionTableColumns } from './utils'
 
 import type { PriorNotificationSubscriber } from '@features/PriorNotification/PriorNotificationSubscriber.types'
 import type { Promisable } from 'type-fest'

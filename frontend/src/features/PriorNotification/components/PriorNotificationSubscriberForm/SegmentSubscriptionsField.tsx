@@ -12,7 +12,7 @@ type SegmentSubscriptionsFieldProps = Readonly<{
   isDisabled: boolean
   onAdd: (newSegmentCode: string) => Promisable<void>
   onRemove: (segmentCodeToRemove: string) => Promisable<void>
-  segmentSubscriptions: PriorNotificationSubscriber.SegmentSubscription[]
+  segmentSubscriptions: PriorNotificationSubscriber.FleetSegmentSubscription[]
 }>
 export function SegmentSubscriptionsField({
   isDisabled,
@@ -49,7 +49,7 @@ export function SegmentSubscriptionsField({
       <DataTable
         columns={columns}
         data={segmentSubscriptions}
-        initialSorting={[{ desc: false, id: 'segmentName' }]}
+        initialSorting={[{ desc: false, id: 'name' }]}
         tableOptions={{
           getRowId: originalRow => `${originalRow.controlUnitId}-${originalRow.segmentCode}`
         }}

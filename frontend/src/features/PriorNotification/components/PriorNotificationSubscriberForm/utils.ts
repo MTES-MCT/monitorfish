@@ -1,15 +1,15 @@
 import type { PriorNotificationSubscriber } from '@features/PriorNotification/PriorNotificationSubscriber.types'
 
-export function getSubscriberFormDataFromSubscriber(
+export function getFormDataFromSubscriber(
   subscriber: PriorNotificationSubscriber.Subscriber
 ): PriorNotificationSubscriber.FormData {
   return {
-    controlUnitId: subscriber.id,
+    controlUnitId: subscriber.controlUnit.id,
+    fleetSegmentCodes: subscriber.fleetSegmentSubscriptions.map(subscription => subscription.segmentCode),
     portLocodes: subscriber.portSubscriptions.map(subscription => subscription.portLocode),
-    portLocodesWithAllNotifications: subscriber.portSubscriptions
+    portLocodesWithFullSubscription: subscriber.portSubscriptions
       .filter(subscription => subscription.hasSubscribedToAllPriorNotifications)
       .map(subscription => subscription.portLocode),
-    segmentCodes: subscriber.segmentSubscriptions.map(subscription => subscription.segmentCode),
     vesselIds: subscriber.vesselSubscriptions.map(subscription => subscription.vesselId)
   }
 }

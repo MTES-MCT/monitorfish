@@ -4,8 +4,8 @@ import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.ManualPriorNotificationComputedValues
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
+import fr.gouv.cnsp.monitorfish.domain.repositories.PnoFleetSegmentSubscriptionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PnoPortSubscriptionRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.PnoSegmentSubscriptionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PnoVesselSubscriptionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.ComputeFleetSegments
@@ -13,7 +13,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.ComputeFleetSegme
 @UseCase
 class ComputeManualPriorNotification(
     private val pnoPortSubscriptionRepository: PnoPortSubscriptionRepository,
-    private val pnoSegmentSubscriptionRepository: PnoSegmentSubscriptionRepository,
+    private val pnoFleetSegmentSubscriptionRepository: PnoFleetSegmentSubscriptionRepository,
     private val pnoVesselSubscriptionRepository: PnoVesselSubscriptionRepository,
     private val vesselRepository: VesselRepository,
     private val computeFleetSegments: ComputeFleetSegments,
@@ -48,7 +48,7 @@ class ComputeManualPriorNotification(
         val isPartOfControlUnitSubscriptions =
             pnoPortSubscriptionRepository.has(portLocode) ||
                 pnoVesselSubscriptionRepository.has(vesselId) ||
-                pnoSegmentSubscriptionRepository.has(portLocode, tripSegments.map { it.segment })
+                pnoFleetSegmentSubscriptionRepository.has(portLocode, tripSegments.map { it.segment })
         val nextState = PriorNotification.getNextState(isInVerificationScope, isPartOfControlUnitSubscriptions)
 
         return ManualPriorNotificationComputedValues(

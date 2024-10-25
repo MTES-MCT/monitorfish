@@ -16,8 +16,8 @@ import java.time.ZonedDateTime
 class CreateOrUpdateManualPriorNotification(
     private val gearRepository: GearRepository,
     private val manualPriorNotificationRepository: ManualPriorNotificationRepository,
+    private val pnoFleetSegmentSubscriptionRepository: PnoFleetSegmentSubscriptionRepository,
     private val pnoPortSubscriptionRepository: PnoPortSubscriptionRepository,
-    private val pnoSegmentSubscriptionRepository: PnoSegmentSubscriptionRepository,
     private val pnoVesselSubscriptionRepository: PnoVesselSubscriptionRepository,
     private val portRepository: PortRepository,
     private val priorNotificationPdfDocumentRepository: PriorNotificationPdfDocumentRepository,
@@ -69,7 +69,7 @@ class CreateOrUpdateManualPriorNotification(
         val isPartOfControlUnitSubscriptions =
             pnoPortSubscriptionRepository.has(portLocode) ||
                 pnoVesselSubscriptionRepository.has(vesselId) ||
-                pnoSegmentSubscriptionRepository.has(portLocode, computedValues.tripSegments.map { it.segment })
+                pnoFleetSegmentSubscriptionRepository.has(portLocode, computedValues.tripSegments.map { it.segment })
 
         val fishingCatchesWithFaoArea =
             globalFaoArea?.let { fishingCatches.map { it.copy(faoZone = globalFaoArea) } }

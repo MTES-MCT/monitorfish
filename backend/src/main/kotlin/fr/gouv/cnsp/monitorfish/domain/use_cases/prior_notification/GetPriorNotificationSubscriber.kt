@@ -11,7 +11,7 @@ class GetPriorNotificationSubscriber(
     private val controlUnitRepository: ControlUnitRepository,
     private val fleetSegmentRepository: FleetSegmentRepository,
     private val pnoPortSubscriptionRepository: PnoPortSubscriptionRepository,
-    private val pnoSegmentSubscriptionRepository: PnoSegmentSubscriptionRepository,
+    private val pnoFleetSegmentSubscriptionRepository: PnoFleetSegmentSubscriptionRepository,
     private val pnoVesselSubscriptionRepository: PnoVesselSubscriptionRepository,
     private val portRepository: PortRepository,
     private val vesselRepository: VesselRepository,
@@ -26,14 +26,14 @@ class GetPriorNotificationSubscriber(
             throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
         }
 
+        val fleetSegmentSubscriptions = pnoFleetSegmentSubscriptionRepository.findByControlUnitId(id)
         val portSubscriptions = pnoPortSubscriptionRepository.findByControlUnitId(id)
-        val segmentSubscriptions = pnoSegmentSubscriptionRepository.findByControlUnitId(id)
         val vesselSubscriptions = pnoVesselSubscriptionRepository.findByControlUnitId(id)
 
         return PriorNotificationSubscriber.create(
             controlUnit,
+            fleetSegmentSubscriptions,
             portSubscriptions,
-            segmentSubscriptions,
             vesselSubscriptions,
             allFleetSegments,
             allPorts,

@@ -12,7 +12,7 @@ class GetPriorNotificationSubscribers(
     private val controlUnitRepository: ControlUnitRepository,
     private val fleetSegmentRepository: FleetSegmentRepository,
     private val pnoPortSubscriptionRepository: PnoPortSubscriptionRepository,
-    private val pnoSegmentSubscriptionRepository: PnoSegmentSubscriptionRepository,
+    private val pnoFleetSegmentSubscriptionRepository: PnoFleetSegmentSubscriptionRepository,
     private val pnoVesselSubscriptionRepository: PnoVesselSubscriptionRepository,
     private val portRepository: PortRepository,
     private val vesselRepository: VesselRepository,
@@ -39,18 +39,18 @@ class GetPriorNotificationSubscribers(
         val allVessels = vesselRepository.findAll()
 
         val allControlUnits = controlUnitRepository.findAll()
+        val allFleetSegmentSubscriptions = pnoFleetSegmentSubscriptionRepository.findAll()
         val allPortSubscriptions = pnoPortSubscriptionRepository.findAll()
-        val allSegmentSubscriptions = pnoSegmentSubscriptionRepository.findAll()
         val allVesselSubscriptions = pnoVesselSubscriptionRepository.findAll()
 
         return allControlUnits.map { controlUnit ->
+            val fleetSegmentSubscriptions =
+                allFleetSegmentSubscriptions.filter { segmentSubscription ->
+                    segmentSubscription.controlUnitId == controlUnit.id
+                }
             val portSubscriptions =
                 allPortSubscriptions.filter { portSubscription ->
                     portSubscription.controlUnitId == controlUnit.id
-                }
-            val segmentSubscriptions =
-                allSegmentSubscriptions.filter { segmentSubscription ->
-                    segmentSubscription.controlUnitId == controlUnit.id
                 }
             val vesselSubscriptions =
                 allVesselSubscriptions.filter { vesselSubscription ->
@@ -59,8 +59,8 @@ class GetPriorNotificationSubscribers(
 
             return@map PriorNotificationSubscriber.create(
                 controlUnit,
+                fleetSegmentSubscriptions,
                 portSubscriptions,
-                segmentSubscriptions,
                 vesselSubscriptions,
                 allFleetSegments,
                 allPorts,

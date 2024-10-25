@@ -3,11 +3,9 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.dtos.PriorNotificationSubscriber
 
 data class PriorNotificationSubscriberDataOutput(
-    /** Control unit ID. */
-    val id: Int,
     val controlUnit: ControlUnitDataOutput,
+    val fleetSegmentSubscriptions: List<PriorNotificationFleetSegmentSubscriptionDataOutput>,
     val portSubscriptions: List<PriorNotificationPortSubscriptionDataOutput>,
-    val segmentSubscriptions: List<PriorNotificationSegmentSubscriptionDataOutput>,
     val vesselSubscriptions: List<PriorNotificationVesselSubscriptionDataOutput>,
 ) {
     companion object {
@@ -15,13 +13,13 @@ data class PriorNotificationSubscriberDataOutput(
             priorNotificationSubscriber: PriorNotificationSubscriber,
         ): PriorNotificationSubscriberDataOutput {
             val controlUnit = ControlUnitDataOutput.fromFullControlUnit(priorNotificationSubscriber.controlUnit)
+            val fleetSegmentSubscriptions =
+                priorNotificationSubscriber.fleetSegmentSubscriptions.map {
+                    PriorNotificationFleetSegmentSubscriptionDataOutput.fromPriorNotificationSegmentSubscription(it)
+                }
             val portSubscriptions =
                 priorNotificationSubscriber.portSubscriptions.map {
                     PriorNotificationPortSubscriptionDataOutput.fromPriorNotificationPortSubscription(it)
-                }
-            val segmentSubscriptions =
-                priorNotificationSubscriber.segmentSubscriptions.map {
-                    PriorNotificationSegmentSubscriptionDataOutput.fromPriorNotificationSegmentSubscription(it)
                 }
             val vesselSubscriptions =
                 priorNotificationSubscriber.vesselSubscriptions.map {
@@ -29,10 +27,9 @@ data class PriorNotificationSubscriberDataOutput(
                 }
 
             return PriorNotificationSubscriberDataOutput(
-                id = controlUnit.id,
                 controlUnit,
+                fleetSegmentSubscriptions,
                 portSubscriptions,
-                segmentSubscriptions,
                 vesselSubscriptions,
             )
         }

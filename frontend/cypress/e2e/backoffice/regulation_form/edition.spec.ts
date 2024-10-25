@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
-import { customDayjs } from '../utils/customDayjs'
+import { customDayjs } from '../../utils/customDayjs'
 
-context('Update Regulation', () => {
+context('BackOffice > Regulation Form > Edition', () => {
   beforeEach(() => {
     cy.login('superuser')
     cy.visit('/backoffice/regulation')

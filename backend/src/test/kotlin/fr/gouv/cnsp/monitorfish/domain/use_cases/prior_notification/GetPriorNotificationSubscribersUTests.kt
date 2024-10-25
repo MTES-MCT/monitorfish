@@ -57,8 +57,24 @@ class GetPriorNotificationSubscribersUTests {
         val fakePort2 = PortFaker.fakePort(locode = "ESXYZ", name = "Port XYZ")
         given(portRepository.findAll()).willReturn(listOf(fakePort1, fakePort2))
 
-        val fakeVessel1 = VesselFaker.fakeVessel(id = 1, vesselName = "Vessel 1")
-        val fakeVessel2 = VesselFaker.fakeVessel(id = 2, vesselName = "Vessel 2")
+        val fakeVessel1 =
+            VesselFaker.fakeVessel(
+                id = 1,
+                internalReferenceNumber = "CFR001",
+                ircs = "CALLSIGN01",
+                externalReferenceNumber = "EXT001",
+                mmsi = "MMSI01",
+                vesselName = "Vessel 1",
+            )
+        val fakeVessel2 =
+            VesselFaker.fakeVessel(
+                id = 2,
+                internalReferenceNumber = "CFR002",
+                ircs = "CALLSIGN02",
+                externalReferenceNumber = "EXT002",
+                mmsi = "MMSI02",
+                vesselName = "Vessel 2",
+            )
         given(vesselRepository.findAll()).willReturn(listOf(fakeVessel1, fakeVessel2))
 
         val fakeFleetSegmentSubscriptions =
@@ -149,7 +165,15 @@ class GetPriorNotificationSubscribersUTests {
             listOf(fakePortSubscriptions[0].copy(portName = "Port ABC")),
         )
         assertThat(result[0].vesselSubscriptions).isEqualTo(
-            listOf(fakeVesselSubscriptions[0].copy(vesselName = "Vessel 1")),
+            listOf(
+                fakeVesselSubscriptions[0].copy(
+                    vesselCallSign = "CALLSIGN01",
+                    vesselCfr = "CFR001",
+                    vesselExternalMarking = "EXT001",
+                    vesselMmsi = "MMSI01",
+                    vesselName = "Vessel 1",
+                ),
+            ),
         )
 
         assertThat(result[1].controlUnit).isEqualTo(fakeFullControlUnit2)
@@ -160,7 +184,15 @@ class GetPriorNotificationSubscribersUTests {
             listOf(fakePortSubscriptions[1].copy(portName = "Port XYZ")),
         )
         assertThat(result[1].vesselSubscriptions).isEqualTo(
-            listOf(fakeVesselSubscriptions[1].copy(vesselName = "Vessel 2")),
+            listOf(
+                fakeVesselSubscriptions[1].copy(
+                    vesselCallSign = "CALLSIGN02",
+                    vesselCfr = "CFR002",
+                    vesselExternalMarking = "EXT002",
+                    vesselMmsi = "MMSI02",
+                    vesselName = "Vessel 2",
+                ),
+            ),
         )
     }
 

@@ -64,8 +64,22 @@ class GetPriorNotificationSubscriberUTests {
 
         val allFakeVessels =
             listOf(
-                VesselFaker.fakeVessel(id = 1, vesselName = "Vessel 1"),
-                VesselFaker.fakeVessel(id = 2, vesselName = "Vessel 2"),
+                VesselFaker.fakeVessel(
+                    id = 1,
+                    vesselName = "Vessel 1",
+                    internalReferenceNumber = "CFR001",
+                    externalReferenceNumber = "EXT001",
+                    ircs = "CALLSIGN01",
+                    mmsi = "MMSI01",
+                ),
+                VesselFaker.fakeVessel(
+                    id = 2,
+                    vesselName = "Vessel 2",
+                    internalReferenceNumber = "CFR002",
+                    externalReferenceNumber = "EXT002",
+                    ircs = "CALLSIGN02",
+                    mmsi = "MMSI02",
+                ),
             )
         given(vesselRepository.findAll()).willReturn(allFakeVessels)
 
@@ -126,7 +140,15 @@ class GetPriorNotificationSubscriberUTests {
             fakeFleetSegmentSubscriptions[0].copy(segmentName = "Segment 1"),
         )
         assertThat(result.portSubscriptions).containsExactly(portSubscriptions[0].copy(portName = "Port 1"))
-        assertThat(result.vesselSubscriptions).containsExactly(vesselSubscriptions[0].copy(vesselName = "Vessel 1"))
+        assertThat(result.vesselSubscriptions).containsExactly(
+            vesselSubscriptions[0].copy(
+                vesselCallSign = "CALLSIGN01",
+                vesselCfr = "CFR001",
+                vesselExternalMarking = "EXT001",
+                vesselMmsi = "MMSI01",
+                vesselName = "Vessel 1",
+            ),
+        )
     }
 
     @Test

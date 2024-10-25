@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.dtos
 
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.ControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.ControlUnitResourceType
-import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.ControlUnitStation
+import fr.gouv.cnsp.monitorfish.domain.entities.station.Station
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -14,7 +14,7 @@ data class FullControlUnitResource(
     val name: String,
     val note: String?,
     val photo: ByteArray?,
-    val station: ControlUnitStation,
+    val station: Station,
     val stationId: Int,
     val type: ControlUnitResourceType,
 )

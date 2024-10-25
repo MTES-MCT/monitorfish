@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.fakers
 
 import fr.gouv.cnsp.monitorfish.domain.entities.administration.Administration
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.*
+import fr.gouv.cnsp.monitorfish.domain.entities.station.Station
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.dtos.FullControlUnit
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.dtos.FullControlUnitResource
 
@@ -79,7 +80,7 @@ class FullControlUnitFaker {
             name: String = "Fake Resource Name",
             note: String? = "Default Resource Note",
             photo: ByteArray? = null,
-            station: ControlUnitStation = fakeControlUnitStation(),
+            station: Station = StationFaker.fakeStation(),
             stationId: Int = station.id,
             type: ControlUnitResourceType = ControlUnitResourceType.FRIGATE,
         ): FullControlUnitResource {
@@ -123,20 +124,6 @@ class FullControlUnitFaker {
         ): ControlUnitDepartmentArea {
             return ControlUnitDepartmentArea(
                 inseeCode = inseeCode,
-                name = name,
-            )
-        }
-
-        private fun fakeControlUnitStation(
-            id: Int = 1,
-            latitude: Double = 48.8566,
-            longitude: Double = 2.3522,
-            name: String = "Fake Station Name",
-        ): ControlUnitStation {
-            return ControlUnitStation(
-                id = id,
-                latitude = latitude,
-                longitude = longitude,
                 name = name,
             )
         }

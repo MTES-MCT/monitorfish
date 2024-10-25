@@ -41,6 +41,14 @@ export namespace PriorNotificationSubscriber {
     vesselName: string | undefined
   }
 
+  export type FormData = {
+    controlUnitId: number
+    portLocodes: string[]
+    portLocodesWithAllNotifications: string[]
+    segmentCodes: string[]
+    vesselIds: number[]
+  }
+
   export enum ApiSortColumn {
     CONTROL_UNIT_NAME = 'CONTROL_UNIT_NAME'
   }

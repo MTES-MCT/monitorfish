@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.Prior
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.sorters.PriorNotificationSubscribersSortColumn
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.dtos.PriorNotificationSubscriber
+import fr.gouv.cnsp.monitorfish.utils.StringUtils
 import org.springframework.data.domain.Sort
 
 @UseCase
@@ -85,15 +86,28 @@ class GetPriorNotificationSubscribers(
                 } != false
 
             val searchQueryMatches =
-                filter.searchQuery?.let {
-                    subscriber.controlUnit.name.contains(it, ignoreCase = true) ||
-                        subscriber.controlUnit.administration.name.contains(it, ignoreCase = true) ||
+                filter.searchQuery?.let { query ->
+                    val normalizedQuery = StringUtils.removeAccents(query).lowercase()
+
+                    val controlUnitNameMatches =
+                        StringUtils.removeAccents(subscriber.controlUnit.name)
+                            .lowercase()
+                            .contains(normalizedQuery)
+
+                    val administrationNameMatches =
+                        StringUtils.removeAccents(subscriber.controlUnit.administration.name)
+                            .lowercase()
+                            .contains(normalizedQuery)
+
+                    val portNameMatches =
                         subscriber.portSubscriptions.any { portSubscription ->
-                            portSubscription.portName?.contains(
-                                it,
-                                ignoreCase = true,
-                            ) == true
+                            portSubscription.portName
+                                ?.let(StringUtils::removeAccents)
+                                ?.lowercase()
+                                ?.contains(normalizedQuery) == true
                         }
+
+                    controlUnitNameMatches || administrationNameMatches || portNameMatches
                 } != false
 
             administrationIdMatches && portLocodeMatches && searchQueryMatches

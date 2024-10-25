@@ -4,12 +4,14 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotifica
 import fr.gouv.cnsp.monitorfish.domain.repositories.PnoVesselSubscriptionRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.PnoVesselSubscriptionEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBPnoVesselsSubscriptionsRepository
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Repository
 
 @Repository
 class JpaPnoVesselSubscriptionRepository(
     private val dbPnoVesselsSubscriptionsRepository: DBPnoVesselsSubscriptionsRepository,
 ) : PnoVesselSubscriptionRepository {
+    @Transactional
     override fun deleteByControlUnitId(controlUnitId: Int) {
         dbPnoVesselsSubscriptionsRepository.deleteByControlUnitId(controlUnitId)
     }
@@ -28,6 +30,7 @@ class JpaPnoVesselSubscriptionRepository(
         return dbPnoVesselsSubscriptionsRepository.countByVesselId(vesselId) > 0
     }
 
+    @Transactional
     override fun saveAll(
         priorNotificationVesselSubscriptions: List<PriorNotificationVesselSubscription>,
     ): List<PriorNotificationVesselSubscription> {

@@ -49,15 +49,14 @@ context('New Regulation', () => {
   it('Region list should be enabled or disabled depending on the law type', () => {
     // Select a French law type
     cy.fill('Choisir un ensemble', 'Reg. MED')
-    cy.get('[id="Choisir une région"]').click()
+    cy.get('[id="Choisir une région"]').parent().click()
     // Region list length should be equal to 18
     cy.get('[id="Choisir une région-listbox"] > div').should('have.length', 18)
 
     // Select a EU law type
     cy.fill('Choisir un ensemble', '2019')
-    cy.get('[data-key="R(UE) 2019/1241"]').eq(0).click({ force: true })
     // Region select picker should be disabled
-    cy.get('[id="Choisir une région"]').click().should('have.attr', 'aria-disabled', 'true')
+    cy.get('[id="Choisir une région"]').forceClick().should('have.attr', 'aria-disabled', 'true')
   })
 
   it('Select "Grand Est" and "Auvergne-Rhône-Alpes" region and remove it', () => {
@@ -191,7 +190,7 @@ context('New Regulation', () => {
     cy.get('[data-cy="regulatory-gears-section"]').scrollIntoView().click()
     cy.get('[data-cy="authorized-all-towed-gears-option"] > div > label').click()
     cy.get('*[data-cy^="open-regulated-species"]').scrollIntoView().click({ force: true }).scrollIntoView()
-    cy.get('.rs-picker-toggle-placeholder').filter(':contains("catégories d\'espèces")').eq(0).click({ timeout: 10000 })
+    cy.get('.rs-picker-toggle-placeholder').filter(':contains("catégories d\'espèces")').eq(0).parent().click()
     cy.wait(200)
     cy.get('.rs-search-box-input').type('Espèce{enter}', { force: true })
     cy.get('.rs-picker-toggle-placeholder').filter(':contains("des espèces")').eq(0).click({ timeout: 10000 })

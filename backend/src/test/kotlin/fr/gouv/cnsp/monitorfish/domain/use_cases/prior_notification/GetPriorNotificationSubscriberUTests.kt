@@ -117,15 +117,11 @@ class GetPriorNotificationSubscriberUTests {
 
         // Then
         assertThat(result.controlUnit).isEqualTo(fakeControlUnit)
-
-        val expectedFleetSegmentSubscription = fakeFleetSegmentSubscriptions[0].copy(segmentName = "Segment 1")
-        assertThat(result.fleetSegmentSubscriptions).containsExactly(expectedFleetSegmentSubscription)
-
-        val expectedPortSubscription = portSubscriptions[0].copy(portName = "Port 1")
-        assertThat(result.portSubscriptions).containsExactly(expectedPortSubscription)
-
-        val expectedVesselSubscription = vesselSubscriptions[0].copy(vesselName = "Vessel 1")
-        assertThat(result.vesselSubscriptions).containsExactly(expectedVesselSubscription)
+        assertThat(result.fleetSegmentSubscriptions).containsExactly(
+            fakeFleetSegmentSubscriptions[0].copy(segmentName = "Segment 1"),
+        )
+        assertThat(result.portSubscriptions).containsExactly(portSubscriptions[0].copy(portName = "Port 1"))
+        assertThat(result.vesselSubscriptions).containsExactly(vesselSubscriptions[0].copy(vesselName = "Vessel 1"))
     }
 
     @Test

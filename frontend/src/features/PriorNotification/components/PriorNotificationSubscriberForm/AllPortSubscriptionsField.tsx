@@ -34,7 +34,7 @@ export function AllPortSubscriptionsField({
     onRemove(portLocodeToRemove, false)
   }
 
-  const columns = getPortSubscriptionTableColumns(remove, isDisabled)
+  const columns = getPortSubscriptionTableColumns(remove, false, isDisabled)
 
   return (
     <>

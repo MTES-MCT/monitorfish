@@ -21,6 +21,7 @@ export function getFormDataFromSubscriber(
 
 export function getPortSubscriptionTableColumns(
   onRemove: (portLocodeToRemove: string) => Promisable<void>,
+  isFullPortSubscription: boolean,
   isDisabled: boolean
 ): Array<ColumnDef<PriorNotificationSubscriber.PortSubscription, any>> {
   return [
@@ -37,7 +38,11 @@ export function getPortSubscriptionTableColumns(
           Icon={Icon.Delete}
           onClick={() => onRemove(context.getValue())}
           size={Size.SMALL}
-          title="Désinsrire l'unité des préavis liés à ce port"
+          title={
+            isFullPortSubscription
+              ? "Désinscrire l'unité des préavis liés à ce port pour les navires dont la note de risque est supérieure à 2,3"
+              : "Désinscrire l'unité de tous les préavis liés à ce port"
+          }
         />
       ),
       enableSorting: false,
@@ -66,7 +71,7 @@ export function getSegmentSubscriptionTableColumns(
           Icon={Icon.Delete}
           onClick={() => onRemove(context.getValue())}
           size={Size.SMALL}
-          title="Désinsrire l'unité des préavis liés à ce segment de flotte"
+          title="Désinscrire l'unité de tous les préavis liés à ce segment de flotte"
         />
       ),
       enableSorting: false,
@@ -134,7 +139,7 @@ export function getVesselSubscriptionTableColumns(
           Icon={Icon.Delete}
           onClick={() => onRemove(context.getValue())}
           size={Size.SMALL}
-          title="Désinsrire l'unité des préavis liés à ce navire"
+          title="Désinscrire l'unité de tous les préavis liés à ce navire"
         />
       ),
       enableSorting: false,

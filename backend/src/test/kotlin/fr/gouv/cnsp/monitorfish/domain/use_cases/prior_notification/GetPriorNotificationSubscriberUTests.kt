@@ -97,7 +97,12 @@ class GetPriorNotificationSubscriberUTests {
                 PriorNotificationVesselSubscription(
                     controlUnitId = fakeControlUnitId,
                     vesselId = 1,
-                    vesselName = null, // Expecting the use case to populate this
+                    // Expecting the use case to populate these
+                    vesselCallSign = null,
+                    vesselCfr = null,
+                    vesselExternalMarking = null,
+                    vesselMmsi = null,
+                    vesselName = null,
                 ),
             )
         given(pnoVesselSubscriptionRepository.findByControlUnitId(fakeControlUnitId))

@@ -2,16 +2,16 @@ import { BackOfficeSubtitle } from '@features/BackOffice/components/BackOfficeSu
 import { useGetPortsAsOptions } from '@hooks/useGetPortsAsOptions'
 import { DataTable, Select } from '@mtes-mct/monitor-ui'
 
-import { getPortSubscriptionTableColumns } from './columns'
 import { Info } from './shared/Info'
+import { getPortSubscriptionTableColumns } from './utils'
 
 import type { PriorNotificationSubscriber } from '@features/PriorNotification/PriorNotificationSubscriber.types'
 import type { Promisable } from 'type-fest'
 
 type FullPortSubscriptionsFieldProps = Readonly<{
   isDisabled: boolean
-  onAdd: (newPortLocode: string, isAllNotificationSubscription: boolean) => Promisable<void>
-  onRemove: (portLocodeToRemove: string, isAllNotificationSubscription: boolean) => Promisable<void>
+  onAdd: (newPortLocode: string, isFullPortSubscription: boolean) => Promisable<void>
+  onRemove: (portLocodeToRemove: string, isFullPortSubscription: boolean) => Promisable<void>
   portSubscriptions: PriorNotificationSubscriber.PortSubscription[]
 }>
 export function FullPortSubscriptionsField({

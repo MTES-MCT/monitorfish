@@ -33,7 +33,7 @@ export function ConfirmationModal({
             <SelectedIcon color={color} size={30} />
           </Picto>
         )}
-        <Message $color={color}>{message}</Message>
+        {typeof message === 'string' ? <Message $color={color}>{message}</Message> : message}
       </Dialog.Body>
       <Dialog.Action>
         <Button onClick={onConfirm}>{confirmationButtonLabel}</Button>
@@ -48,9 +48,25 @@ export function ConfirmationModal({
 // TODO Allow direct `width` prop control in MUI.
 // This is a mess. I wonder if we should add inner classes in MUI.
 const StyledDialog = styled(Dialog)`
+  ${Dialog.Title} {
+    font-size: 23px;
+  }
+
+  ${Dialog.Body} {
+    b,
+    p {
+      font-size: 16px;
+      line-height: 22px;
+    }
+
+    > p:not(:first-child) {
+      margin-top: 24px;
+    }
+  }
+
   > div:last-child {
-    max-width: 440px;
-    min-width: 440px;
+    max-width: 600px;
+    min-width: 600px;
 
     /* Dialog.Body */
     > div:nth-child(2) {

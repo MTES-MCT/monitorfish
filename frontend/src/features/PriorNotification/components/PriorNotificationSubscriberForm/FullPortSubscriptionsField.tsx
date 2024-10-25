@@ -1,6 +1,8 @@
+import { ConfirmationModal } from '@components/ConfirmationModal'
 import { BackOfficeSubtitle } from '@features/BackOffice/components/BackOfficeSubtitle'
 import { useGetPortsAsOptions } from '@hooks/useGetPortsAsOptions'
 import { DataTable, Select } from '@mtes-mct/monitor-ui'
+import { useState } from 'react'
 
 import { Info } from './shared/Info'
 import { getPortSubscriptionTableColumns } from './utils'
@@ -22,6 +24,10 @@ export function FullPortSubscriptionsField({
 }: FullPortSubscriptionsFieldProps) {
   const { portsAsOptions } = useGetPortsAsOptions()
 
+  const [unsubscriptionConfirmationModalPortLocode, setUnsubscriptionConfirmationModalPortLocode] = useState<
+    string | undefined
+  >(undefined)
+
   const add = (newPortLocode: string | undefined) => {
     if (!newPortLocode) {
       return
@@ -30,11 +36,23 @@ export function FullPortSubscriptionsField({
     onAdd(newPortLocode, true)
   }
 
-  const remove = (portLocodeToRemove: string) => {
-    onRemove(portLocodeToRemove, true)
+  const askForRemovalConfirmation = (portLocodeToRemove: string) => {
+    setUnsubscriptionConfirmationModalPortLocode(portLocodeToRemove)
   }
 
-  const columns = getPortSubscriptionTableColumns(remove, isDisabled)
+  const closeRemovalConfirmationModal = () => {
+    setUnsubscriptionConfirmationModalPortLocode(undefined)
+  }
+
+  const remove = () => {
+    if (!unsubscriptionConfirmationModalPortLocode) {
+      return
+    }
+
+    onRemove(unsubscriptionConfirmationModalPortLocode, true)
+  }
+
+  const columns = getPortSubscriptionTableColumns(askForRemovalConfirmation, true, isDisabled)
 
   return (
     <>
@@ -63,6 +81,26 @@ export function FullPortSubscriptionsField({
         onChange={add}
         options={portsAsOptions ?? []}
       />
+
+      {unsubscriptionConfirmationModalPortLocode && (
+        <ConfirmationModal
+          confirmationButtonLabel="Confirmer la suppression"
+          message={
+            <>
+              <p>
+                <b>Êtes-vous sûr de vouloir supprimer ce port de diffusion ?</b>
+              </p>
+              <p>
+                L’unité ne recevra plus les préavis des navires ayant une note de risque supérieure à 2,3 lorsqu’ils
+                débarquent dans ce port.
+              </p>
+            </>
+          }
+          onCancel={closeRemovalConfirmationModal}
+          onConfirm={remove}
+          title="Supprimer un port de diffusion"
+        />
+      )}
     </>
   )
 }

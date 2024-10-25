@@ -21,7 +21,6 @@ export namespace PriorNotificationSubscriber {
 
   export type FleetSegmentSubscription = {
     controlUnitId: number
-    hasSubscribedToAllPriorNotifications: boolean
     segmentCode: string
     segmentName: string | undefined
   }

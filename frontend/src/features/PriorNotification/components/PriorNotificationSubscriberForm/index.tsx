@@ -1,12 +1,14 @@
 import { BackOfficeBody } from '@features/BackOffice/components/BackofficeBody'
+import { BACK_OFFICE_MENU_PATH, BackOfficeMenuKey } from '@features/BackOffice/components/BackofficeMenu/constants'
 import { BackOfficeTitle } from '@features/BackOffice/components/BackOfficeTitle'
 import {
   priorNotificationSubscriberApi,
   useGetPriorNotificationSubscriberQuery
 } from '@features/PriorNotification/priorNotificationSubscriberApi'
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
+import { Accent, Button } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
 
@@ -19,9 +21,11 @@ import { VesselSubscriptionsField } from './VesselSubscriptionsField'
 import type { PriorNotificationSubscriber } from '@features/PriorNotification/PriorNotificationSubscriber.types'
 
 export function PriorNotificationSubscriberForm() {
-  const dispatch = useBackofficeAppDispatch()
   const { controlUnitId } = useParams()
   assertNotNullish(controlUnitId)
+
+  const dispatch = useBackofficeAppDispatch()
+  const navigate = useNavigate()
 
   const { data: subscriber, isFetching } = useGetPriorNotificationSubscriberQuery(Number(controlUnitId))
 
@@ -34,6 +38,10 @@ export function PriorNotificationSubscriberForm() {
   const fullPortSubscriptions = subscriber.portSubscriptions.filter(
     portSubscription => portSubscription.hasSubscribedToAllPriorNotifications
   )
+
+  const goBackToList = () => {
+    navigate(`/backoffice${BACK_OFFICE_MENU_PATH[BackOfficeMenuKey.PRIOR_NOTIFICATION_SUBSCRIBER_LIST]}`)
+  }
 
   const update = (nextFormData: PriorNotificationSubscriber.FormData) => {
     dispatch(priorNotificationSubscriberApi.endpoints.updatePriorNotificationSubscriber.initiate(nextFormData)).unwrap()
@@ -134,6 +142,14 @@ export function PriorNotificationSubscriberForm() {
         onRemove={removeVesselSubscription}
         vesselSubscriptions={subscriber.vesselSubscriptions}
       />
+
+      <hr />
+
+      <div>
+        <Button accent={Accent.SECONDARY} onClick={goBackToList}>
+          Revenir à la liste
+        </Button>
+      </div>
     </Wrapper>
   )
 }

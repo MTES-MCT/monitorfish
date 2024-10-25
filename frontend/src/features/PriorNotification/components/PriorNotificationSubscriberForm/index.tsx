@@ -13,7 +13,7 @@ import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
 import { FullPortSubscriptionsField } from './FullPortSubscriptionsField'
 import { LimitedPortSubscriptionsField } from './LimitedPortSubscriptionsField'
 import { SegmentSubscriptionsField } from './SegmentSubscriptionsField'
-import { getSubscriberFormDataFromSubscriber } from './utils'
+import { getFormDataFromSubscriber } from './utils'
 import { VesselSubscriptionsField } from './VesselSubscriptionsField'
 
 import type { PriorNotificationSubscriber } from '@features/PriorNotification/PriorNotificationSubscriber.types'
@@ -29,7 +29,7 @@ export function PriorNotificationSubscriberForm() {
     return <LoadingSpinnerWall />
   }
 
-  const formData = getSubscriberFormDataFromSubscriber(subscriber)
+  const formData = getFormDataFromSubscriber(subscriber)
   const limitedPortSubscriptions = subscriber.portSubscriptions
   const fullPortSubscriptions = subscriber.portSubscriptions.filter(
     portSubscription => portSubscription.hasSubscribedToAllPriorNotifications
@@ -42,22 +42,22 @@ export function PriorNotificationSubscriberForm() {
   const addPortSubscription = (newPortLocode: string, isAllNotificationSubscription: boolean) => {
     const nextPortLocodes = [...formData.portLocodes, newPortLocode]
     const nextPortLocodesWithAllNotifications = isAllNotificationSubscription
-      ? [...formData.portLocodesWithAllNotifications, newPortLocode]
-      : formData.portLocodesWithAllNotifications
+      ? [...formData.portLocodesWithFullSubscription, newPortLocode]
+      : formData.portLocodesWithFullSubscription
 
     update({
       ...formData,
       portLocodes: nextPortLocodes,
-      portLocodesWithAllNotifications: nextPortLocodesWithAllNotifications
+      portLocodesWithFullSubscription: nextPortLocodesWithAllNotifications
     })
   }
 
   const addSegmentSubscription = (newSegmentCode: string) => {
-    const nextSegmentCodes = [...formData.segmentCodes, newSegmentCode]
+    const nextSegmentCodes = [...formData.fleetSegmentCodes, newSegmentCode]
 
     update({
       ...formData,
-      segmentCodes: nextSegmentCodes
+      fleetSegmentCodes: nextSegmentCodes
     })
   }
 
@@ -74,23 +74,23 @@ export function PriorNotificationSubscriberForm() {
     const nextPortLocodes = isAllNotificationSubscription
       ? formData.portLocodes
       : formData.portLocodes.filter(portLocode => portLocode !== portLocodeToRemove)
-    const nextPortLocodesWithAllNotifications = formData.portLocodesWithAllNotifications.filter(
+    const nextPortLocodesWithAllNotifications = formData.portLocodesWithFullSubscription.filter(
       portLocode => portLocode !== portLocodeToRemove
     )
 
     update({
       ...formData,
       portLocodes: nextPortLocodes,
-      portLocodesWithAllNotifications: nextPortLocodesWithAllNotifications
+      portLocodesWithFullSubscription: nextPortLocodesWithAllNotifications
     })
   }
 
   const removeSegementSubscription = (segmentCodeToRemove: string) => {
-    const nextSegmentCodes = formData.segmentCodes.filter(segmentCode => segmentCode !== segmentCodeToRemove)
+    const nextSegmentCodes = formData.fleetSegmentCodes.filter(segmentCode => segmentCode !== segmentCodeToRemove)
 
     update({
       ...formData,
-      segmentCodes: nextSegmentCodes
+      fleetSegmentCodes: nextSegmentCodes
     })
   }
 
@@ -126,7 +126,7 @@ export function PriorNotificationSubscriberForm() {
         isDisabled={isFetching}
         onAdd={addSegmentSubscription}
         onRemove={removeSegementSubscription}
-        segmentSubscriptions={subscriber.segmentSubscriptions}
+        segmentSubscriptions={subscriber.fleetSegmentSubscriptions}
       />
       <VesselSubscriptionsField
         isDisabled={isFetching}

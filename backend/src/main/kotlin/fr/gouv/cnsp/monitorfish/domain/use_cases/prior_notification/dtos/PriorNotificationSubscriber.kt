@@ -2,23 +2,23 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.dtos
 
 import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationFleetSegmentSubscription
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationPortSubscription
-import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationSegmentSubscription
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationVesselSubscription
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.dtos.FullControlUnit
 
 data class PriorNotificationSubscriber(
     val controlUnit: FullControlUnit,
+    val fleetSegmentSubscriptions: List<PriorNotificationFleetSegmentSubscription>,
     val portSubscriptions: List<PriorNotificationPortSubscription>,
-    val segmentSubscriptions: List<PriorNotificationSegmentSubscription>,
     val vesselSubscriptions: List<PriorNotificationVesselSubscription>,
 ) {
     companion object {
         fun create(
             controlUnit: FullControlUnit,
+            fleetSegmentSubscriptions: List<PriorNotificationFleetSegmentSubscription>,
             portSubscriptions: List<PriorNotificationPortSubscription>,
-            segmentSubscriptions: List<PriorNotificationSegmentSubscription>,
             vesselSubscriptions: List<PriorNotificationVesselSubscription>,
             allFleetSegments: List<FleetSegment>,
             allPorts: List<Port>,
@@ -26,17 +26,17 @@ data class PriorNotificationSubscriber(
         ): PriorNotificationSubscriber {
             portSubscriptions.any { portSubscription -> portSubscription.hasSubscribedToAllPriorNotifications }
 
+            val namedFleetSegmentSubscriptions =
+                fleetSegmentSubscriptions.map { fleetSegmentSubscription ->
+                    val fleetSegment = allFleetSegments.find { it.segment == fleetSegmentSubscription.segmentCode }
+
+                    return@map fleetSegmentSubscription.copy(segmentName = fleetSegment?.segmentName)
+                }
             val namedPortSubscriptions =
                 portSubscriptions.map { portSubscription ->
                     val port = allPorts.find { it.locode == portSubscription.portLocode }
 
                     return@map portSubscription.copy(portName = port?.name)
-                }
-            val namedSegmentSubscriptions =
-                segmentSubscriptions.map { fleetSegmentSubscription ->
-                    val fleetSegment = allFleetSegments.find { it.segment == fleetSegmentSubscription.segmentCode }
-
-                    return@map fleetSegmentSubscription.copy(segmentName = fleetSegment?.segmentName)
                 }
             val namedVesselSubscriptions =
                 vesselSubscriptions.map { vesselSubscription ->
@@ -47,8 +47,8 @@ data class PriorNotificationSubscriber(
 
             return PriorNotificationSubscriber(
                 controlUnit,
+                fleetSegmentSubscriptions = namedFleetSegmentSubscriptions,
                 portSubscriptions = namedPortSubscriptions,
-                segmentSubscriptions = namedSegmentSubscriptions,
                 vesselSubscriptions = namedVesselSubscriptions,
             )
         }

@@ -1,10 +1,8 @@
 export namespace PriorNotificationSubscriber {
   export interface Subscriber {
     controlUnit: ControlUnit
-    /** Control unit ID. */
-    id: number
+    fleetSegmentSubscriptions: FleetSegmentSubscription[]
     portSubscriptions: PortSubscription[]
-    segmentSubscriptions: SegmentSubscription[]
     vesselSubscriptions: VesselSubscription[]
   }
 
@@ -21,18 +19,18 @@ export namespace PriorNotificationSubscriber {
     name: String
   }
 
+  export type FleetSegmentSubscription = {
+    controlUnitId: number
+    hasSubscribedToAllPriorNotifications: boolean
+    segmentCode: string
+    segmentName: string | undefined
+  }
+
   export type PortSubscription = {
     controlUnitId: number
     hasSubscribedToAllPriorNotifications: boolean
     portLocode: string
     portName: string | undefined
-  }
-
-  export type SegmentSubscription = {
-    controlUnitId: number
-    hasSubscribedToAllPriorNotifications: boolean
-    segmentCode: string
-    segmentName: string | undefined
   }
 
   export type VesselSubscription = {
@@ -43,9 +41,9 @@ export namespace PriorNotificationSubscriber {
 
   export type FormData = {
     controlUnitId: number
+    fleetSegmentCodes: string[]
     portLocodes: string[]
-    portLocodesWithAllNotifications: string[]
-    segmentCodes: string[]
+    portLocodesWithFullSubscription: string[]
     vesselIds: number[]
   }
 

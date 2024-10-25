@@ -38,7 +38,7 @@ class CreateOrUpdateManualPriorNotificationITests : AbstractDBTests() {
     private lateinit var pnoPortSubscriptionRepository: PnoPortSubscriptionRepository
 
     @Autowired
-    private lateinit var pnoSegmentSubscriptionRepository: PnoSegmentSubscriptionRepository
+    private lateinit var pnoFleetSegmentSubscriptionRepository: PnoFleetSegmentSubscriptionRepository
 
     @Autowired
     private lateinit var pnoVesselSubscriptionRepository: PnoVesselSubscriptionRepository

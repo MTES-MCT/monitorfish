@@ -36,7 +36,7 @@ export function getPortSubscriptionTableColumns(
 export function getSegmentSubscriptionTableColumns(
   onRemove: (segmentCodeToRemove: string) => Promisable<void>,
   isDisabled: boolean
-): Array<ColumnDef<PriorNotificationSubscriber.SegmentSubscription, any>> {
+): Array<ColumnDef<PriorNotificationSubscriber.FleetSegmentSubscription, any>> {
   return [
     {
       accessorFn: row => `${row.segmentCode} (${row.segmentName})`,
@@ -45,7 +45,7 @@ export function getSegmentSubscriptionTableColumns(
     },
     {
       accessorFn: row => row.segmentCode,
-      cell: (context: CellContext<PriorNotificationSubscriber.SegmentSubscription, string>) => (
+      cell: (context: CellContext<PriorNotificationSubscriber.FleetSegmentSubscription, string>) => (
         <IconButton
           disabled={isDisabled}
           Icon={Icon.Delete}

@@ -16,13 +16,6 @@ export const DEFAULT_TABLE_FILTER_VALUES: TableFilter = {
 
 export const TABLE_COLUMNS: Array<ColumnDef<PriorNotificationSubscriber.Subscriber, any>> = [
   {
-    accessorFn: row => row.id,
-    enableSorting: false,
-    header: () => 'ID',
-    id: 'id',
-    size: 64
-  },
-  {
     accessorFn: row => `${row.controlUnit.name} (${row.controlUnit.administration.name})`,
     enableSorting: true,
     header: () => 'Unité (administration)',

@@ -4,6 +4,7 @@ import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.FRENCH_COUNTRY_CODES
 import java.util.*
 
+// TODO Remove all default values.
 data class Vessel(
     val id: Int,
     /** CFR (Community Fleet Register Number). */
@@ -15,6 +16,7 @@ data class Vessel(
     /** IRCS (International Radio Call Sign). */
     val ircs: String? = null,
     val externalReferenceNumber: String? = null,
+    // TODO Rename to `name`.
     val vesselName: String? = null,
     val flagState: CountryCode,
     val width: Double? = null,

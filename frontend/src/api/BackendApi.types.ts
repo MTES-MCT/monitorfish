@@ -46,24 +46,16 @@ export namespace BackendApi {
 
   export interface ResponseBodyError {
     code: ErrorCode | null
-    data: any
     type: ErrorCode | null
   }
 
   // Don't forget to mirror any update here in the backend enum.
   export enum ErrorCode {
-    AUTHENTICATION_REQUIRED = 'AUTHENTICATION_REQUIRED',
     EXISTING_MISSION_ACTION = 'EXISTING_MISSION_ACTION',
     /** Thrown when attempting to delete an entity which has  to non-archived children. */
     FOREIGN_KEY_CONSTRAINT = 'FOREIGN_KEY_CONSTRAINT',
 
     /** Thrown when attempting to archive an entity linked to non-archived children. */
     UNARCHIVED_CHILD = 'UNARCHIVED_CHILD'
-  }
-}
-
-export interface Meta {
-  response?: {
-    headers: Headers
   }
 }

@@ -1,5 +1,7 @@
 import { faker } from '@faker-js/faker'
 
+import { getAuthorizationHeader } from '../../../support/commands/getAuthorizationHeader'
+
 import type { Reporting } from '@features/Reporting/types'
 
 /**
@@ -9,7 +11,6 @@ export const createReportingFromVesselSidebar = (vesselName: string) => {
   cy.intercept('GET', '/bff/v1/vessels/reportings?*').as('getVesselReportings')
   cy.intercept('POST', '/bff/v1/reportings').as('createReporting')
 
-  cy.login('superuser')
   cy.visit('/#@-824534.42,6082993.21,8.70')
   cy.wait(500)
 
@@ -42,9 +43,14 @@ export const createReportingFromVesselSidebar = (vesselName: string) => {
 }
 
 export const deleteReporting = (reportId: number) => {
-  cy.request({
-    method: 'DELETE',
-    url: `/bff/v1/reportings/${reportId}`
+  getAuthorizationHeader().then(authorization => {
+    cy.request({
+      headers: {
+        authorization
+      },
+      method: 'DELETE',
+      url: `/bff/v1/reportings/${reportId}`
+    })
   })
 }
 

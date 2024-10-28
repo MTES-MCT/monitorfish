@@ -1,6 +1,10 @@
 import { createReportingFromVesselSidebar } from '../../main_window/vessel_sidebar/utils'
 
 context('Side Window > Reporting List > Actions', () => {
+  beforeEach(() => {
+    cy.login('superuser')
+  })
+
   it('Reportings Should be archived', () => {
     createReportingFromVesselSidebar('COURANT MAIN PROFESSEUR').then(createdReportingId => {
       cy.intercept('PUT', '/bff/v1/reportings/archive').as('archiveReportings')

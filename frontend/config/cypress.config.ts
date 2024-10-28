@@ -18,6 +18,9 @@ export default defineConfig({
     "auth_base_url": `http://${IS_CI ? '0.0.0.0:8880' : 'localhost:8085'}`,
     "auth_realm": "monitor",
     "auth_client_id": "monitorfish",
+    "FRONTEND_OIDC_AUTHORITY": `http://${IS_CI ? '0.0.0.0:8880' : 'localhost:8880'}/realms/monitor`,
+    "FRONTEND_OIDC_CLIENT_ID": "monitorfish",
+    "LOCALSTORAGE_URL": `http://${IS_CI ? '0.0.0.0:8880' : 'localhost:3000'}`,
     'cypress-plugin-snapshots': {
       imageConfig: {
         threshold: 20,

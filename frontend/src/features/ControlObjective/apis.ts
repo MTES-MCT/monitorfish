@@ -1,7 +1,7 @@
-import { FrontendApiError } from '@libs/FrontendApiError'
 import { ascend, identity } from 'ramda'
 
 import { monitorfishApi } from '../../api/api'
+import { ApiError } from '../../libs/ApiError'
 
 import type { ControlObjective, CreateControlObjectivePayload, UpdateControlObjective } from './types'
 
@@ -19,7 +19,7 @@ export const controlObjectiveApi = monitorfishApi.injectEndpoints({
         method: 'POST',
         url: '/admin/control_objectives'
       }),
-      transformErrorResponse: response => new FrontendApiError(ADD_CONTROL_OBJECTIVES_ERROR_MESSAGE, response)
+      transformErrorResponse: response => new ApiError(ADD_CONTROL_OBJECTIVES_ERROR_MESSAGE, response)
     }),
     addControlObjectiveYear: builder.mutation<void, void>({
       invalidatesTags: [{ type: 'ControlObjectivesYears' }],
@@ -27,7 +27,7 @@ export const controlObjectiveApi = monitorfishApi.injectEndpoints({
         method: 'POST',
         url: '/admin/control_objectives/years'
       }),
-      transformErrorResponse: response => new FrontendApiError(ADD_CONTROL_OBJECTIVES_YEAR_ERROR_MESSAGE, response)
+      transformErrorResponse: response => new ApiError(ADD_CONTROL_OBJECTIVES_YEAR_ERROR_MESSAGE, response)
     }),
     deleteControlObjective: builder.mutation<void, number>({
       invalidatesTags: [{ type: 'ControlObjectives' }],
@@ -35,7 +35,7 @@ export const controlObjectiveApi = monitorfishApi.injectEndpoints({
         method: 'DELETE',
         url: `/admin/control_objectives/${id}`
       }),
-      transformErrorResponse: response => new FrontendApiError(DELETE_CONTROL_OBJECTIVES_ERROR_MESSAGE, response)
+      transformErrorResponse: response => new ApiError(DELETE_CONTROL_OBJECTIVES_ERROR_MESSAGE, response)
     }),
     getControlObjectives: builder.query<ControlObjective[], number>({
       providesTags: () => [{ type: 'ControlObjectives' }],
@@ -53,7 +53,7 @@ export const controlObjectiveApi = monitorfishApi.injectEndpoints({
         method: 'PUT',
         url: `/admin/control_objectives/${id}`
       }),
-      transformErrorResponse: response => new FrontendApiError(UPDATE_CONTROL_OBJECTIVES_ERROR_MESSAGE, response)
+      transformErrorResponse: response => new ApiError(UPDATE_CONTROL_OBJECTIVES_ERROR_MESSAGE, response)
     })
   })
 })

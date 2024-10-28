@@ -12,9 +12,9 @@ export type RTKBaseQueryArgs =
       url: string
     }
 
-export interface CustomResponseError {
+export interface CustomRTKResponseError {
   path: string
   requestData: AnyObject | undefined
-  responseData: BackendApi.ResponseBodyError | undefined
+  responseData: BackendApi.ResponseBodyError
   status: number | 'FETCH_ERROR' | 'PARSING_ERROR' | 'TIMEOUT_ERROR' | 'CUSTOM_ERROR'
 }

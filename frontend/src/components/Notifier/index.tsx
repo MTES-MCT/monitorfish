@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { ToastContainer, toast, type ToastContainerProps } from 'react-toastify'
 import styled from 'styled-components'
 
-import { NotifierEvent } from './NotifierEvent'
+import { NotifierEvent } from './NotifiierEvent'
 import { Dialog } from '../Dialog'
 
 export { NotifierEvent as NotificationEvent }

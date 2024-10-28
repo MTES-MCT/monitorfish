@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
 
-import { NotifierEvent } from '@components/Notifier/NotifierEvent'
 import { Scope } from '@sentry/react'
 
 import { FrontendError } from './FrontendError'
 import { UsageError } from './UsageError'
+import { NotifierEvent } from '../components/Notifier/NotifiierEvent'
 
-import type { CustomResponseError } from '@api/types'
+import type { CustomRTKResponseError } from '../api/types'
 
 /**
  * Unexpected error handled in Frontend API code.
@@ -15,7 +15,7 @@ export class FrontendApiError extends FrontendError {
   constructor(
     /** User-friendly message expliciting which operation failed. */
     public userMessage: string,
-    originalError: CustomResponseError
+    originalError: CustomRTKResponseError
   ) {
     super(userMessage, originalError)
 
@@ -60,6 +60,6 @@ export class FrontendApiError extends FrontendError {
     }
 
     // Extra safety check. This should never happen.
-    throw new FrontendError('Unexpected error.', error)
+    throw new FrontendError('Unexpected RTK error.', error)
   }
 }

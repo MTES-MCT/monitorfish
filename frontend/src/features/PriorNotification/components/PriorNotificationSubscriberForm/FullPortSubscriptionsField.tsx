@@ -49,6 +49,8 @@ export function FullPortSubscriptionsField({
       return
     }
 
+    closeRemovalConfirmationModal()
+
     onRemove(unsubscriptionConfirmationModalPortLocode, true)
   }
 

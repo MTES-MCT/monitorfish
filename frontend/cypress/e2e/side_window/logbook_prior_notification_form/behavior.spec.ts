@@ -170,9 +170,8 @@ context('Side Window > Logbook Prior Notification Form > Behavior', () => {
     cy.wait('@getFakePriorNotification')
 
     // -------------------------------------------------------------------------
-    // Superuser opens the prior notification sent messages
+    // The prior notification sent message list is now updated with an error
 
-    cy.clickButton('Voir les détails de la diffusion du préavis', { withoutScroll: true })
     cy.wait('@getFakePriorNotificationSentMessages2')
 
     cy.contains('Échec de diffusion').should('be.visible')
@@ -259,13 +258,11 @@ context('Side Window > Logbook Prior Notification Form > Behavior', () => {
     ).as('getFakePriorNotificationSentMessages3')
 
     cy.wait('@getFakePriorNotification')
-    // Fingerprint has changed which should trigger refetching
-    cy.wait('@getFakePriorNotificationSentMessages3')
 
     // -------------------------------------------------------------------------
-    // Superuser opens the prior notification sent messages
+    // The prior notification sent message list is now updated with a new successful send (and the previous failed one)
 
-    cy.clickButton('Voir les détails de la diffusion du préavis', { withoutScroll: true })
+    cy.wait('@getFakePriorNotificationSentMessages3')
 
     cy.contains('Vérifié et diffusé').should('be.visible')
     cy.contains('Unité 1 (Organisation 1)').should('be.visible')

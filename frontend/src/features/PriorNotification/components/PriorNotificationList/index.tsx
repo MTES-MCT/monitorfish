@@ -261,7 +261,7 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
       </Page>
 
       {openedPriorNotificationComponentType === OpenedPriorNotificationType.LogbookForm && (
-        <LogbookPriorNotificationForm key={openedPriorNotificationDetail?.fingerprint} />
+        <LogbookPriorNotificationForm />
       )}
       {openedPriorNotificationComponentType === OpenedPriorNotificationType.ManualForm && (
         <ManualPriorNotificationForm key={openedPriorNotificationDetail?.fingerprint} />

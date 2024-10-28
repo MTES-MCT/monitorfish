@@ -33,7 +33,14 @@ export function PriorNotificationSubscriberTable() {
 
       <FilterBar />
 
-      <DataTable columns={TABLE_COLUMNS} data={subscribers} initialSorting={[{ desc: false, id: 'name' }]} />
+      <DataTable
+        columns={TABLE_COLUMNS}
+        data={subscribers}
+        initialSorting={[{ desc: false, id: 'name' }]}
+        tableOptions={{
+          getRowId: subscriber => String(subscriber.controlUnit.id)
+        }}
+      />
     </BackOfficeBody>
   )
 }

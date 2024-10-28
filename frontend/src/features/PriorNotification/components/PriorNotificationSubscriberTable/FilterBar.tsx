@@ -47,31 +47,29 @@ export function FilterBar() {
         value={tableFilterValues.searchQuery}
       />
 
-      {administrationsAsOptions && (
-        <Select
-          isLabelHidden
-          label="Administration"
-          name="administrationId"
-          onChange={updateAdministrationId}
-          options={administrationsAsOptions}
-          placeholder="Administration"
-          searchable
-          value={tableFilterValues.administrationId}
-        />
-      )}
+      <Select
+        disabled={!portsAsOptions}
+        isLabelHidden
+        label="Administration"
+        name="administrationId"
+        onChange={updateAdministrationId}
+        options={administrationsAsOptions ?? []}
+        placeholder="Administration"
+        searchable
+        value={tableFilterValues.administrationId}
+      />
 
-      {portsAsOptions && (
-        <Select
-          isLabelHidden
-          label="Port de diffusion"
-          name="portLocode"
-          onChange={updatePortLocode}
-          options={portsAsOptions}
-          placeholder="Port de diffusion"
-          searchable
-          value={tableFilterValues.portLocode}
-        />
-      )}
+      <Select
+        disabled={!portsAsOptions}
+        isLabelHidden
+        label="Port de diffusion"
+        name="portLocode"
+        onChange={updatePortLocode}
+        options={portsAsOptions ?? []}
+        placeholder="Port de diffusion"
+        searchable
+        value={tableFilterValues.portLocode}
+      />
     </Wrapper>
   )
 }

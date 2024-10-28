@@ -78,7 +78,7 @@ context('Offline management', () => {
         path:
           '/bff/v1/vessels/find?vesselId=1&internalReferenceNumber=FAK000999999&externalReferenceNumber=DONTSINK' +
           '&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=TWELVE_HOURS&afterDateTime=&beforeDateTime=',
-        times: 2
+        times: 1
       },
       { statusCode: 400 }
     ).as('openVesselStubbed')
@@ -117,7 +117,7 @@ context('Offline management', () => {
       {
         method: 'GET',
         path: '/bff/v1/vessels/logbook/find?internalReferenceNumber=FAK000999999&voyageRequest=LAST&tripNumber=',
-        times: 2
+        times: 1
       },
       { statusCode: 400 }
     ).as('getLogbookStubbed')
@@ -136,7 +136,7 @@ context('Offline management', () => {
       {
         method: 'GET',
         pathname: '/bff/v1/vessels/reportings',
-        times: 2
+        times: 3
       },
       { statusCode: 400 }
     ).as('getReportingsStubbed')

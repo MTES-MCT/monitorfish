@@ -4,6 +4,7 @@ import { useMatomo } from '@hooks/useMatomo'
 import { GlobalStyle, THEME, ThemeProvider } from '@mtes-mct/monitor-ui'
 import { UnsupportedBrowserPage } from '@pages/UnsupportedBrowserPage'
 import { isBrowserSupported } from '@utils/isBrowserSupported'
+import { UserAccountContext } from 'context/UserAccountContext'
 import countries from 'i18n-iso-countries'
 import COUNTRIES_FR from 'i18n-iso-countries/langs/fr.json'
 import { RouterProvider } from 'react-router-dom'
@@ -22,15 +23,17 @@ export function App() {
   }
 
   return (
-    <ThemeProvider theme={THEME}>
-      <GlobalStyle />
-      <CustomGlobalStyle />
+    <UserAccountContext.Provider value={userAccount}>
+      <ThemeProvider theme={THEME}>
+        <GlobalStyle />
+        <CustomGlobalStyle />
 
-      <RsuiteCustomProvider locale={rsuiteFrFr}>
-        <FrontendErrorBoundary>
-          <RouterProvider router={router} />
-        </FrontendErrorBoundary>
-      </RsuiteCustomProvider>
-    </ThemeProvider>
+        <RsuiteCustomProvider locale={rsuiteFrFr}>
+          <FrontendErrorBoundary>
+            <RouterProvider router={router} />
+          </FrontendErrorBoundary>
+        </RsuiteCustomProvider>
+      </ThemeProvider>
+    </UserAccountContext.Provider>
   )
 }

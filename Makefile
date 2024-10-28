@@ -135,10 +135,6 @@ run-front-for-cypress:
 run-cypress:
 	cd ./frontend && npm run test:e2e:open
 
-.PHONY: run-puppeteer ##TEST ▶️  Run Puppeteer 📝
-run-puppeteer:
-	cd ./frontend && npm run test:multi-windows:open
-
 test-back: check-clean-archi
 	@if [ -z "$(class)" ]; then \
 		echo "Running all Backend tests..."; \
@@ -156,7 +152,7 @@ test-back-watch:
 run-back-for-puppeteer: docker-env run-stubbed-apis
 	docker compose up -d --quiet-pull --wait db
 	docker compose -f ./infra/docker/docker-compose.puppeteer.yml up -d monitorenv-app
-	cd backend && MONITORFISH_OIDC_ENABLED=false MONITORENV_URL=http://localhost:9880 ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
+	cd backend && MONITORENV_URL=http://localhost:9880 ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
 
 .PHONY: run-front-for-puppeteer ##TEST ▶️  Run frontend when using Puppeteer 📝
 run-front-for-puppeteer:

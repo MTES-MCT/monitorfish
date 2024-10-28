@@ -1,3 +1,5 @@
+import { openVesselBySearch } from './main_window/utils'
+
 context('Map menu tools', () => {
   beforeEach(() => {
     cy.login('superuser')
@@ -7,9 +9,7 @@ context('Map menu tools', () => {
 
   it('Opening a tool should close the previous tool opened and open the selected tool', () => {
     // When
-    cy.get('*[data-cy^="vessel-search-input"]', { timeout: 10000 }).type('Pheno')
-    cy.get('*[data-cy^="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
-    cy.wait(200)
+    openVesselBySearch('Pheno')
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
     cy.get('#root').click(880, 760, { timeout: 10000 })
 

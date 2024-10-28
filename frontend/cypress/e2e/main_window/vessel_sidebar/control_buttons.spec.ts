@@ -1,5 +1,7 @@
 import dayjs from 'dayjs'
 
+import { openVesselBySearch } from '../utils'
+
 context('Vessel sidebar controls buttons', () => {
   beforeEach(() => {
     cy.login('superuser')
@@ -82,8 +84,7 @@ context('Vessel sidebar controls buttons', () => {
 
   it('Vessel track dates Should be changed When walking in fishing trips', () => {
     // Given
-    cy.get('.VESSELS_POINTS').click(460, 460, { force: true, timeout: 10000 })
-    cy.wait(200)
+    openVesselBySearch('Pheno')
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
@@ -107,8 +108,7 @@ context('Vessel sidebar controls buttons', () => {
     const endDateAsDayjs = dayjs().hour(3).minute(4)
 
     // Given
-    cy.get('.VESSELS_POINTS').click(460, 460, { force: true })
-    cy.wait(200)
+    openVesselBySearch('Pheno')
     cy.getDataCy('vessel-sidebar').should('be.visible')
 
     // When
@@ -143,8 +143,7 @@ context('Vessel sidebar controls buttons', () => {
   it('Fishing activities Should be seen on the vessel track and showed from the map', () => {
     // Given
     cy.wait(50)
-    cy.get('.VESSELS_POINTS').click(460, 460, { force: true, timeout: 10000 })
-    cy.wait(200)
+    openVesselBySearch('Pheno')
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 10000 })
     cy.fill('Afficher la piste VMS depuis', '3 jours')
@@ -173,8 +172,7 @@ context('Vessel sidebar controls buttons', () => {
     cy.cleanScreenshots(1)
 
     // Given
-    cy.get('.VESSELS_POINTS').click(460, 460, { force: true, timeout: 10000 })
-    cy.wait(200)
+    openVesselBySearch('Pheno')
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When

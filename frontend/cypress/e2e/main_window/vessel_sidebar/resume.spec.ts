@@ -1,5 +1,7 @@
 /* eslint-disable no-undef */
 
+import { openVesselBySearch } from '../utils'
+
 context('Vessel sidebar resume tab', () => {
   beforeEach(() => {
     cy.login('superuser')
@@ -9,8 +11,7 @@ context('Vessel sidebar resume tab', () => {
 
   it('Resume Should be opened When clicking on a vessel', () => {
     // When
-    cy.get('.VESSELS_POINTS').click(460, 460, { force: true, timeout: 10000 })
-    cy.wait(200)
+    openVesselBySearch('Pheno')
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // Then

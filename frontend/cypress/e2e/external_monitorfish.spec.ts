@@ -1,3 +1,5 @@
+import { openVesselBySearch } from './main_window/utils'
+
 context('External MonitorFish', () => {
   it('Should redirect to /', () => {
     // Given
@@ -16,10 +18,7 @@ context('External MonitorFish', () => {
 
     // Then
     // Vessel sidebar is minimized
-    cy.get('*[data-cy^="vessel-search-input"]', { timeout: 10000 }).type('Pheno')
-    cy.get('*[data-cy^="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
-    cy.wait(200)
-    cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
+    openVesselBySearch('Pheno')
     cy.get('*[data-cy="global-risk-factor"]').should('not.exist')
     cy.get('*[data-cy="vessel-sidebar-alert"]').should('not.exist')
     cy.get('*[data-cy="vessel-sidebar-beacon-malfunction"]').should('not.exist')

@@ -1,5 +1,7 @@
 /* eslint-disable no-undef */
 
+import { openVesselBySearch } from '../utils'
+
 context('Vessel sidebar identity tab', () => {
   beforeEach(() => {
     cy.login('superuser')
@@ -9,8 +11,7 @@ context('Vessel sidebar identity tab', () => {
 
   it('Identity Should contain the vessel identity', () => {
     // Given
-    cy.get('.VESSELS_POINTS').click(460, 460, { force: true, timeout: 10000 })
-    cy.wait(200)
+    openVesselBySearch('Pheno')
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When

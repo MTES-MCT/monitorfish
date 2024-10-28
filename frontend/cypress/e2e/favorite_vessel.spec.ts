@@ -1,3 +1,5 @@
+import { openVesselBySearch } from './main_window/utils'
+
 context('Favorite Vessel', () => {
   beforeEach(() => {
     cy.login('superuser')
@@ -46,7 +48,7 @@ context('Favorite Vessel', () => {
     cy.get('*[data-cy="favorite-vessel-name"]').should('not.exist')
 
     // When
-    cy.get('.VESSELS_POINTS').click(460, 460, { force: true, timeout: 10000 })
+    openVesselBySearch('Pheno')
     cy.get('*[data-cy="sidebar-add-vessel-to-favorites"]').click()
     cy.get('*[data-cy="sidebar-add-vessel-to-favorites"]').children().should('have.css', 'fill', 'rgb(229, 229, 235)')
 

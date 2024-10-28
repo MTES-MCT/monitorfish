@@ -1,5 +1,5 @@
 import { monitorfishApi, monitorfishApiKy } from '@api/api'
-import { FrontendApiError } from '@libs/FrontendApiError'
+import { ApiError } from '@libs/ApiError'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
 import type { FleetSegment, UpdateFleetSegment } from '@features/FleetSegment/types'
@@ -44,7 +44,7 @@ export const ADD_FLEET_SEGMENT_YEAR_ERROR_MESSAGE =
 /**
  * Update a fleet segment
  *
- * @throws {@link FrontendApiError}
+ * @throws {@link ApiError}
  */
 async function updateFleetSegmentFromAPI(
   segment: string,
@@ -58,14 +58,14 @@ async function updateFleetSegmentFromAPI(
       })
       .json<FleetSegment>()
   } catch (err) {
-    throw new FrontendApiError(UPDATE_FLEET_SEGMENT_ERROR_MESSAGE, (err as FrontendApiError).originalError)
+    throw new ApiError(UPDATE_FLEET_SEGMENT_ERROR_MESSAGE, err)
   }
 }
 
 /**
  * Delete a fleet segment
  *
- * @throws {@link FrontendApiError}
+ * @throws {@link ApiError}
  */
 async function deleteFleetSegmentFromAPI(segment: string, year: number): Promise<FleetSegment[]> {
   try {
@@ -73,14 +73,14 @@ async function deleteFleetSegmentFromAPI(segment: string, year: number): Promise
       .delete(`/bff/v1/admin/fleet_segments?year=${year}&segment=${segment}`)
       .json<FleetSegment[]>()
   } catch (err) {
-    throw new FrontendApiError(DELETE_FLEET_SEGMENT_ERROR_MESSAGE, (err as FrontendApiError).originalError)
+    throw new ApiError(DELETE_FLEET_SEGMENT_ERROR_MESSAGE, err)
   }
 }
 
 /**
  * Create a fleet segment
  *
- * @throws {@link FrontendApiError}
+ * @throws {@link ApiError}
  */
 async function createFleetSegmentFromAPI(segmentFields: UpdateFleetSegment): Promise<FleetSegment> {
   try {
@@ -90,33 +90,33 @@ async function createFleetSegmentFromAPI(segmentFields: UpdateFleetSegment): Pro
       })
       .json<FleetSegment>()
   } catch (err) {
-    throw new FrontendApiError(CREATE_FLEET_SEGMENT_ERROR_MESSAGE, (err as FrontendApiError).originalError)
+    throw new ApiError(CREATE_FLEET_SEGMENT_ERROR_MESSAGE, err)
   }
 }
 
 /**
  * Add a new fleet segments year
  *
- * @throws {@link FrontendApiError}
+ * @throws {@link ApiError}
  */
 async function addFleetSegmentYearFromAPI(nextYear: number) {
   try {
     return await monitorfishApiKy.post(`/bff/v1/admin/fleet_segments/${nextYear}`)
   } catch (err) {
-    throw new FrontendApiError(ADD_FLEET_SEGMENT_YEAR_ERROR_MESSAGE, (err as FrontendApiError).originalError)
+    throw new ApiError(ADD_FLEET_SEGMENT_YEAR_ERROR_MESSAGE, err)
   }
 }
 
 /**
  * Get fleet segment year entries
  *
- * @throws {@link FrontendApiError}
+ * @throws {@link ApiError}
  */
 async function getFleetSegmentYearEntriesFromAPI(): Promise<number[]> {
   try {
     return await monitorfishApiKy.get('/bff/v1/admin/fleet_segments/years').json<number[]>()
   } catch (err) {
-    throw new FrontendApiError(GET_FLEET_SEGMENT_YEAR_ENTRIES_ERROR_MESSAGE, (err as FrontendApiError).originalError)
+    throw new ApiError(GET_FLEET_SEGMENT_YEAR_ENTRIES_ERROR_MESSAGE, err)
   }
 }
 

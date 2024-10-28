@@ -1,6 +1,5 @@
-import { FrontendApiError } from '@libs/FrontendApiError'
-
 import { monitorfishApiKy } from './api'
+import { ApiError } from '../libs/ApiError'
 
 import type { Gear } from '../domain/types/Gear'
 
@@ -10,7 +9,7 @@ async function getAllGearsFromAPI() {
   try {
     return await monitorfishApiKy.get(`/bff/v1/gears`).json<Array<Gear>>()
   } catch (err) {
-    throw new FrontendApiError(GEAR_CODES_ERROR_MESSAGE, (err as FrontendApiError).originalError)
+    throw new ApiError(GEAR_CODES_ERROR_MESSAGE, err)
   }
 }
 

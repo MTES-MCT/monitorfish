@@ -51,7 +51,7 @@ export const monitorenvControlUnitResourceApi = monitorenvApi.injectEndpoints({
         url: `/v1/control_unit_resources/${controlUnitResourceId}`
       }),
       transformErrorResponse: response => {
-        if (response.responseData?.type === BackendApi.ErrorCode.FOREIGN_KEY_CONSTRAINT) {
+        if (response.responseData.type === BackendApi.ErrorCode.FOREIGN_KEY_CONSTRAINT) {
           return new UsageError(IMPOSSIBLE_CONTROL_UNIT_RESOURCE_DELETION_ERROR_MESSAGE)
         }
 

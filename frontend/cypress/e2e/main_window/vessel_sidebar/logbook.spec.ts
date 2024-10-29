@@ -122,9 +122,7 @@ context('Vessel sidebar logbook tab', () => {
 
   it('Fishing Should contain the vessel FLUX logbook messages', () => {
     // Given
-    cy.get('.VESSELS_POINTS').click(460, 15, { force: true, timeout: 10000 })
-    cy.wait(200)
-    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
+    openVesselBySearch('SOCRATE')
 
     // When
     cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 10000 })

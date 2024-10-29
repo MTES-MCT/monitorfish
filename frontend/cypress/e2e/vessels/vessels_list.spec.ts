@@ -4,7 +4,7 @@ context('Vessels list', () => {
   beforeEach(() => {
     cy.login('superuser')
     cy.visit('/#@-824534.42,6082993.21,7.70')
-    cy.wait(500)
+    cy.wait(1000)
   })
 
   it('Vessels Should be filtered and previewed on the map', () => {

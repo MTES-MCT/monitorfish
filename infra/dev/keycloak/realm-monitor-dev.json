@@ -1,6 +1,12 @@
 {
   "realm": "monitor",
   "enabled": true,
+  "accessTokenLifespan": 600,
+  "accessTokenLifespanForImplicitFlow": 9000,
+  "ssoSessionMaxLifespan": 360000,
+  "accessCodeLifespan": 600,
+  "accessCodeLifespanUserAction": 3000,
+  "accessCodeLifespanLogin": 18000,
   "clients": [
     {
       "clientId": "monitorfish",

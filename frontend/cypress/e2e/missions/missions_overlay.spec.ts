@@ -2,11 +2,11 @@ context('Missions overlay', () => {
   beforeEach(() => {
     cy.login('superuser')
     cy.visit('/#@-188008.06,6245230.27,8.70')
-    cy.wait(500)
+    cy.wait(3000)
   })
 
   it('An overlay Should be showed and closed', () => {
-    cy.get('#root').click(337, 869)
+    cy.get('#root').click(337, 819)
 
     cy.get('*[data-cy="mission-overlay"]').contains('BGC LORIENT')
     cy.get('*[data-cy="mission-overlay"]').contains('Mission Air / Terre')

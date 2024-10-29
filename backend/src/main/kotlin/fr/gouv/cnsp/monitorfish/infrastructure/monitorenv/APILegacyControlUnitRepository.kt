@@ -22,12 +22,12 @@ class APILegacyControlUnitRepository(
     @Cacheable(value = ["legacy_control_units"])
     override fun findAll(): List<LegacyControlUnit> =
         runBlocking {
-            val missionsUrl = "${monitorenvProperties.url}/api/v1/control_units"
+            val legacyControlUnitsUrl = "${monitorenvProperties.url}/api/v1/control_units"
 
             try {
-                apiClient.httpClient.get(missionsUrl).body()
+                apiClient.httpClient.get(legacyControlUnitsUrl).body()
             } catch (e: Exception) {
-                logger.error("Could not fetch control units at $missionsUrl", e)
+                logger.error("Could not fetch legacy control units at $legacyControlUnitsUrl", e)
 
                 listOf()
             }

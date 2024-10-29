@@ -1,6 +1,7 @@
 import { BackOfficeIconLink } from '@features/BackOffice/components/BackOfficeIconLink'
-import { BACK_OFFICE_MENU_PATH, BackOfficeMenuKey } from '@features/BackOffice/components/BackofficeMenu/constants'
+import { BackOfficeMenuKey, BackOfficeMenuPath } from '@features/BackOffice/components/BackofficeMenu/constants'
 import { Icon, Size } from '@mtes-mct/monitor-ui'
+import { ROUTER_PATHS } from 'paths'
 
 import { getSubscriberPortNames, getSubscriberPortNamesWithAllNotifications } from './utils'
 
@@ -44,7 +45,7 @@ export const TABLE_COLUMNS: Array<ColumnDef<PriorNotificationSubscriber.Subscrib
         Icon={Icon.Edit}
         size={Size.SMALL}
         title="Éditer la diffusion pour cette unité de contrôle"
-        to={`/backoffice${BACK_OFFICE_MENU_PATH[BackOfficeMenuKey.PRIOR_NOTIFICATION_SUBSCRIBER_LIST]}/${info.getValue<number>()}`}
+        to={`${ROUTER_PATHS.backoffice}/${BackOfficeMenuPath[BackOfficeMenuKey.PRIOR_NOTIFICATION_SUBSCRIBER_TABLE]}/${info.getValue<number>()}`}
       />
     ),
     enableSorting: false,

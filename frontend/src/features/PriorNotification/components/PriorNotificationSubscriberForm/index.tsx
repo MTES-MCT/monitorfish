@@ -1,5 +1,4 @@
 import { BackOfficeBody } from '@features/BackOffice/components/BackofficeBody'
-import { BACK_OFFICE_MENU_PATH, BackOfficeMenuKey } from '@features/BackOffice/components/BackofficeMenu/constants'
 import { BackOfficeTitle } from '@features/BackOffice/components/BackOfficeTitle'
 import {
   priorNotificationSubscriberApi,
@@ -8,6 +7,7 @@ import {
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import { Accent, Button } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
+import { ROUTER_PATHS } from 'paths'
 import { useNavigate, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
@@ -40,7 +40,7 @@ export function PriorNotificationSubscriberForm() {
   )
 
   const goBackToList = () => {
-    navigate(`/backoffice${BACK_OFFICE_MENU_PATH[BackOfficeMenuKey.PRIOR_NOTIFICATION_SUBSCRIBER_LIST]}`)
+    navigate(`${ROUTER_PATHS.backoffice}/${ROUTER_PATHS.priorNotificationSubscribers}`)
   }
 
   const update = (nextFormData: PriorNotificationSubscriber.FormData) => {

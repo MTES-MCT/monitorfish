@@ -1,27 +1,32 @@
 import { Icon } from '@mtes-mct/monitor-ui'
+import { ROUTER_PATHS } from 'paths'
 import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { BACK_OFFICE_MENU_LABEL, BACK_OFFICE_MENU_PATH, BackOfficeMenuKey } from './constants'
+import { BACK_OFFICE_MENU_LABEL, BackOfficeMenuKey, BackOfficeMenuPath } from './constants'
 
 export function BackOfficeMenu() {
   return (
     <Wrapper>
-      <StyledNavLink to={`/backoffice${BACK_OFFICE_MENU_PATH[BackOfficeMenuKey.REGULATORY_ZONE_LIST]}`}>
+      <StyledNavLink to={`${ROUTER_PATHS.backoffice}/${BackOfficeMenuPath[BackOfficeMenuKey.REGULATORY_ZONE_TABLE]}`}>
         <Icon.MapLayers />
-        {BACK_OFFICE_MENU_LABEL[BackOfficeMenuKey.REGULATORY_ZONE_LIST]}
+        {BACK_OFFICE_MENU_LABEL[BackOfficeMenuKey.REGULATORY_ZONE_TABLE]}
       </StyledNavLink>
-      <StyledNavLink to={`/backoffice${BACK_OFFICE_MENU_PATH[BackOfficeMenuKey.CONTROL_OBJECTIVE_LIST]}`}>
+      <StyledNavLink
+        to={`${ROUTER_PATHS.backoffice}/${BackOfficeMenuPath[BackOfficeMenuKey.CONTROL_OBJECTIVE_TABLES]}`}
+      >
         <Icon.ControlUnit />
-        {BACK_OFFICE_MENU_LABEL[BackOfficeMenuKey.CONTROL_OBJECTIVE_LIST]}
+        {BACK_OFFICE_MENU_LABEL[BackOfficeMenuKey.CONTROL_OBJECTIVE_TABLES]}
       </StyledNavLink>
-      <StyledNavLink to={`/backoffice${BACK_OFFICE_MENU_PATH[BackOfficeMenuKey.FLEET_SEGMENT_LIST]}`}>
+      <StyledNavLink to={`${ROUTER_PATHS.backoffice}/${BackOfficeMenuPath[BackOfficeMenuKey.FLEET_SEGMENT_TABLE]}`}>
         <Icon.FleetSegment />
-        {BACK_OFFICE_MENU_LABEL[BackOfficeMenuKey.FLEET_SEGMENT_LIST]}
+        {BACK_OFFICE_MENU_LABEL[BackOfficeMenuKey.FLEET_SEGMENT_TABLE]}
       </StyledNavLink>
-      <StyledNavLink to={`/backoffice${BACK_OFFICE_MENU_PATH[BackOfficeMenuKey.PRIOR_NOTIFICATION_SUBSCRIBER_LIST]}`}>
+      <StyledNavLink
+        to={`${ROUTER_PATHS.backoffice}/${BackOfficeMenuPath[BackOfficeMenuKey.PRIOR_NOTIFICATION_SUBSCRIBER_TABLE]}`}
+      >
         <Icon.Fishery />
-        {BACK_OFFICE_MENU_LABEL[BackOfficeMenuKey.PRIOR_NOTIFICATION_SUBSCRIBER_LIST]}
+        {BACK_OFFICE_MENU_LABEL[BackOfficeMenuKey.PRIOR_NOTIFICATION_SUBSCRIBER_TABLE]}
       </StyledNavLink>
     </Wrapper>
   )

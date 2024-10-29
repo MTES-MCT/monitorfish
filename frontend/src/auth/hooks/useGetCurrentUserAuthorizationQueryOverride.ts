@@ -1,4 +1,4 @@
-import { paths } from '../../paths'
+import { ROUTER_PATHS } from '../../paths'
 import { useGetCurrentUserAuthorizationQuery } from '../apis'
 import { getOIDCConfig } from '../getOIDCConfig'
 
@@ -20,7 +20,7 @@ export const useGetCurrentUserAuthorizationQueryOverride = (options: UseQueryOpt
    * is not activated, as the app is only protected by the entrypoint path.
    */
   if (!oidcConfig.IS_OIDC_ENABLED) {
-    if (pathname === paths.ext) {
+    if (pathname === ROUTER_PATHS.ext) {
       return { data: { isAuthenticated: true, isSuperUser: false }, isLoading: false, isSuccess: true }
     }
 

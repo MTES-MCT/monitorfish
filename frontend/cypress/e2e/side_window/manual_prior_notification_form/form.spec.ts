@@ -117,8 +117,8 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
 
       editSideWindowPriorNotification('PAGEOT JO', createdPriorNotification.reportId)
 
-      cy.contains('Créé par dummy@email.gouv.fr y a quelques secondes.').should('exist')
-      cy.contains('Dernière mise à jour il y a quelques secondes.').should('exist')
+      cy.contains('Créé par dummy@email.gouv.fr il y a').should('exist')
+      cy.contains('Dernière mise à jour il y a').should('exist')
 
       cy.intercept('PUT', `/bff/v1/prior_notifications/manual/${createdPriorNotification.reportId}`).as(
         'updateManualPriorNotification'

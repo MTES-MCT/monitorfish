@@ -1,0 +1,474 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/v1/administrations"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*"
+    },
+    "jsonBody": [
+      { "id": 1001, "controlUnitIds": [], "controlUnits": [], "isArchived": false, "name": "-" },
+      { "id": 1007, "controlUnitIds": [], "controlUnits": [], "isArchived": false, "name": "AECP" },
+      { "id": 1002, "controlUnitIds": [], "controlUnits": [], "isArchived": false, "name": "AFB" },
+      { "id": 21, "controlUnitIds": [], "controlUnits": [], "isArchived": true, "name": "Administration Archivée 1" },
+      {
+        "id": 22,
+        "controlUnitIds": [10033],
+        "controlUnits": [
+          {
+            "id": 10033,
+            "areaNote": null,
+            "administrationId": 22,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Unité archivée",
+            "termsNote": null
+          }
+        ],
+        "isArchived": true,
+        "name": "Administration Archivée 2"
+      },
+      { "id": 5, "controlUnitIds": [], "controlUnits": [], "isArchived": false, "name": "Administration Étrangère" },
+      { "id": 1, "controlUnitIds": [], "controlUnits": [], "isArchived": false, "name": "Affaires Maritimes" },
+      { "id": 8, "controlUnitIds": [], "controlUnits": [], "isArchived": false, "name": "Armée Air" },
+      { "id": 2003, "controlUnitIds": [], "controlUnits": [], "isArchived": false, "name": "Autre" },
+      {
+        "id": 1012,
+        "controlUnitIds": [],
+        "controlUnits": [],
+        "isArchived": false,
+        "name": "Comité Régional des Pêches Maritimes"
+      },
+      {
+        "id": 1003,
+        "controlUnitIds": [],
+        "controlUnits": [],
+        "isArchived": false,
+        "name": "Conservatoire du littoral"
+      },
+      {
+        "id": 1005,
+        "controlUnitIds": [10000, 10001, 10002, 10003, 10004, 10005, 10006, 10007, 10008, 10032],
+        "controlUnits": [
+          {
+            "id": 10000,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cultures marines – DDTM 40",
+            "termsNote": null
+          },
+          {
+            "id": 10001,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DML – DDTM 59",
+            "termsNote": null
+          },
+          {
+            "id": 10002,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DML 2A",
+            "termsNote": null
+          },
+          {
+            "id": 10003,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM – DDTM 14",
+            "termsNote": null
+          },
+          {
+            "id": 10004,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM – DDTM 35",
+            "termsNote": null
+          },
+          {
+            "id": 10005,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM – DDTM 44",
+            "termsNote": null
+          },
+          {
+            "id": 10006,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "SML 33",
+            "termsNote": null
+          },
+          {
+            "id": 10007,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "SML 50",
+            "termsNote": null
+          },
+          {
+            "id": 10008,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Police de l'eau – DDTM 11",
+            "termsNote": null
+          },
+          {
+            "id": 10032,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cultures marines – DDTM 30",
+            "termsNote": null
+          }
+        ],
+        "isArchived": false,
+        "name": "DDTM"
+      },
+      { "id": 1016, "controlUnitIds": [], "controlUnits": [], "isArchived": false, "name": "DEAL Réunion" },
+      { "id": 2001, "controlUnitIds": [], "controlUnits": [], "isArchived": false, "name": "DGTM" },
+      {
+        "id": 1009,
+        "controlUnitIds": [10011, 10012, 10121, 10080],
+        "controlUnits": [
+          {
+            "id": 10011,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cross Etel",
+            "termsNote": null
+          },
+          {
+            "id": 10012,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cross Gris Nez",
+            "termsNote": null
+          },
+          {
+            "id": 10121,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "PAM Jeanne Barret",
+            "termsNote": null
+          },
+          {
+            "id": 10080,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "PAM Themis",
+            "termsNote": null
+          }
+        ],
+        "isArchived": false,
+        "name": "DIRM / DM"
+      },
+      { "id": 2000, "controlUnitIds": [], "controlUnits": [], "isArchived": false, "name": "DMLC" },
+      {
+        "id": 1008,
+        "controlUnitIds": [10018],
+        "controlUnits": [
+          {
+            "id": 10018,
+            "areaNote": null,
+            "administrationId": 1008,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DREAL Pays-de-La-Loire",
+            "termsNote": null
+          }
+        ],
+        "isArchived": false,
+        "name": "DREAL / DEAL"
+      },
+      {
+        "id": 2,
+        "controlUnitIds": [10013, 10014, 10015, 10016, 10017],
+        "controlUnits": [
+          {
+            "id": 10013,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "BGC Ajaccio",
+            "termsNote": null
+          },
+          {
+            "id": 10014,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "BGC Bastia",
+            "termsNote": null
+          },
+          {
+            "id": 10015,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSN Ste Maxime",
+            "termsNote": null
+          },
+          {
+            "id": 10016,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DF 25 Libecciu",
+            "termsNote": null
+          },
+          {
+            "id": 10017,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DF 61 Port-de-Bouc",
+            "termsNote": null
+          }
+        ],
+        "isArchived": false,
+        "name": "Douane"
+      },
+      { "id": 2006, "controlUnitIds": [], "controlUnits": [], "isArchived": false, "name": "FOSIT" },
+      {
+        "id": 4,
+        "controlUnitIds": [10019],
+        "controlUnits": [
+          {
+            "id": 10019,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "P602 Verdon",
+            "termsNote": null
+          }
+        ],
+        "isArchived": false,
+        "name": "Gendarmerie Maritime"
+      },
+      {
+        "id": 6,
+        "controlUnitIds": [10020, 10021],
+        "controlUnits": [
+          {
+            "id": 10020,
+            "areaNote": null,
+            "administrationId": 6,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BN Toulon",
+            "termsNote": null
+          },
+          {
+            "id": 10021,
+            "areaNote": null,
+            "administrationId": 6,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Brigade fluviale de Rouen",
+            "termsNote": null
+          }
+        ],
+        "isArchived": false,
+        "name": "Gendarmerie Nationale"
+      },
+      {
+        "id": 1013,
+        "controlUnitIds": [10022],
+        "controlUnits": [
+          {
+            "id": 10022,
+            "areaNote": null,
+            "administrationId": 1013,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Natura 2000 Côte Bleue Marine",
+            "termsNote": null
+          }
+        ],
+        "isArchived": false,
+        "name": "Gestionnaire AMP"
+      },
+      { "id": 1000, "controlUnitIds": [], "controlUnits": [], "isArchived": false, "name": "Inter administration" },
+      {
+        "id": 3,
+        "controlUnitIds": [10023],
+        "controlUnits": [
+          {
+            "id": 10023,
+            "areaNote": null,
+            "administrationId": 3,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "A636 Maïto",
+            "termsNote": null
+          }
+        ],
+        "isArchived": false,
+        "name": "Marine Nationale"
+      },
+      { "id": 9, "controlUnitIds": [], "controlUnits": [], "isArchived": false, "name": "ONCFS" },
+      {
+        "id": 1011,
+        "controlUnitIds": [10024, 10025],
+        "controlUnits": [
+          {
+            "id": 10024,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB Sd 85",
+            "termsNote": null
+          },
+          {
+            "id": 10025,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD974 Brigade Nature – SOI",
+            "termsNote": null
+          }
+        ],
+        "isArchived": false,
+        "name": "Office Français de la Biodiversité"
+      },
+      {
+        "id": 10,
+        "controlUnitIds": [10027],
+        "controlUnits": [
+          {
+            "id": 10027,
+            "areaNote": null,
+            "administrationId": 10,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Parc National de Guadeloupe",
+            "termsNote": null
+          }
+        ],
+        "isArchived": false,
+        "name": "Parcs Nationaux"
+      },
+      {
+        "id": 1006,
+        "controlUnitIds": [10028],
+        "controlUnits": [
+          {
+            "id": 10028,
+            "areaNote": null,
+            "administrationId": 1006,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "PNM Martinique",
+            "termsNote": null
+          }
+        ],
+        "isArchived": false,
+        "name": "Parcs Naturels Marins"
+      },
+      {
+        "id": 1014,
+        "controlUnitIds": [10026],
+        "controlUnits": [
+          {
+            "id": 10026,
+            "areaNote": null,
+            "administrationId": 1014,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Parc Naturel Régional Martinique",
+            "termsNote": null
+          }
+        ],
+        "isArchived": false,
+        "name": "Parcs Naturels Régionaux"
+      },
+      { "id": 2002, "controlUnitIds": [], "controlUnits": [], "isArchived": false, "name": "Parquet" },
+      {
+        "id": 1015,
+        "controlUnitIds": [10029],
+        "controlUnits": [
+          {
+            "id": 10029,
+            "areaNote": null,
+            "administrationId": 1015,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Police Municipale Le Marin 972",
+            "termsNote": null
+          }
+        ],
+        "isArchived": false,
+        "name": "Police Municipale"
+      },
+      { "id": 7, "controlUnitIds": [], "controlUnits": [], "isArchived": false, "name": "Police Nationale" },
+      { "id": 2005, "controlUnitIds": [], "controlUnits": [], "isArchived": false, "name": "Port" },
+      {
+        "id": 1004,
+        "controlUnitIds": [10030, 10031],
+        "controlUnits": [
+          {
+            "id": 10030,
+            "areaNote": null,
+            "administrationId": 1004,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Réserve Naturelle  de L'Ilot M'Bouzi",
+            "termsNote": null
+          },
+          {
+            "id": 10031,
+            "areaNote": null,
+            "administrationId": 1004,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Réserve Naturelle 7 Iles",
+            "termsNote": null
+          }
+        ],
+        "isArchived": false,
+        "name": "Réserves Naturelles"
+      },
+      { "id": 2004, "controlUnitIds": [], "controlUnits": [], "isArchived": false, "name": "Sécurité Civile" }
+    ]
+  }
+}

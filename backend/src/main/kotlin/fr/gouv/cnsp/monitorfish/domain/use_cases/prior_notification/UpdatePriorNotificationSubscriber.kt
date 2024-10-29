@@ -6,13 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotifica
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationVesselSubscription
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
-import fr.gouv.cnsp.monitorfish.domain.repositories.ControlUnitRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.FleetSegmentRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.PnoFleetSegmentSubscriptionRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.PnoPortSubscriptionRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.PnoVesselSubscriptionRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.dtos.PriorNotificationSubscriber
 
 @UseCase
@@ -40,18 +34,21 @@ class UpdatePriorNotificationSubscriber(
             throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
         }
 
-        pnoPortSubscriptionRepository.deleteByControlUnitId(controlUnitId)
         pnoFleetSegmentSubscriptionRepository.deleteByControlUnitId(controlUnitId)
+        pnoPortSubscriptionRepository.deleteByControlUnitId(controlUnitId)
         pnoVesselSubscriptionRepository.deleteByControlUnitId(controlUnitId)
-        pnoFleetSegmentSubscriptionRepository.saveAll(fleetSegmentSubscriptions)
-        pnoPortSubscriptionRepository.saveAll(portSubscriptions)
-        pnoVesselSubscriptionRepository.saveAll(vesselSubscriptions)
+        val updatedPnoFleetSegmentSubscriptions =
+            pnoFleetSegmentSubscriptionRepository.saveAll(fleetSegmentSubscriptions.distinctBy { it.segmentCode })
+        val updatedPnoPortSubscriptions =
+            pnoPortSubscriptionRepository.saveAll(portSubscriptions.distinctBy { it.portLocode })
+        val updatedPnoVesselSubscriptions =
+            pnoVesselSubscriptionRepository.saveAll(vesselSubscriptions.distinctBy { it.vesselId })
 
         return PriorNotificationSubscriber.create(
             controlUnit,
-            fleetSegmentSubscriptions,
-            portSubscriptions,
-            vesselSubscriptions,
+            fleetSegmentSubscriptions = updatedPnoFleetSegmentSubscriptions,
+            portSubscriptions = updatedPnoPortSubscriptions,
+            vesselSubscriptions = updatedPnoVesselSubscriptions,
             allFleetSegments,
             allPorts,
             allVessels,

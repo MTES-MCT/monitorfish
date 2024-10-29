@@ -373,6 +373,7 @@ context('Sidebars > Regulatory Layers', () => {
   })
 
   it('An administrative zone Should be showed and hidden', () => {
+    const LOCALSTORAGE_URL = Cypress.env('LOCALSTORAGE_URL')
     cy.login('superuser')
     cy.visit('/#@-224002.65,6302673.54,8.70')
     cy.wait(500)
@@ -390,8 +391,10 @@ context('Sidebars > Regulatory Layers', () => {
     // cy.clickButton('Affichage des dernières positions')
 
     cy.cleanScreenshots(1)
-    cy.getAllLocalStorage().then(localStorage => {
-      expect(localStorage.homepagelayersShowedOnMap ?? '').to.be.empty
+    cy.getAllLocalStorage().then(localStorages => {
+      const testLocalStorage = localStorages[LOCALSTORAGE_URL]
+      const showedLayers = JSON.parse(testLocalStorage?.homepagelayersShowedOnMap as string)
+      expect(showedLayers).to.be.empty
     })
 
     // When
@@ -401,9 +404,12 @@ context('Sidebars > Regulatory Layers', () => {
       .eq(0)
       .click({ force: true, timeout: 10000 })
       .then(() => {
-        const showedLayers = JSON.parse(localStorage.getItem('homepagelayersShowedOnMap') ?? '')
-        expect(showedLayers).length(1)
-        expect(showedLayers[0].type).equal('eez_areas')
+        cy.getAllLocalStorage().then(localStorages => {
+          const testLocalStorage = localStorages[LOCALSTORAGE_URL]
+          const showedLayers = JSON.parse(testLocalStorage?.homepagelayersShowedOnMap as string)
+          expect(showedLayers).length(1)
+          expect(showedLayers[0].type).equal('eez_areas')
+        })
       })
     cy.wait(500)
 
@@ -421,16 +427,18 @@ context('Sidebars > Regulatory Layers', () => {
     cy.cleanScreenshots(1)
 
     // Refresh and check the item in local storage is not deleted
-    cy.login('superuser')
-    cy.visit('/#@-224002.65,6302673.54,8.70')
-    cy.wait(500)
+    cy.reload()
+    cy.wait(2000)
     cy.get('[title="Arbre des couches"]').click()
     cy.get('*[data-cy="administrative-zones-open"]')
       .click({ force: true, timeout: 10000 })
       .then(() => {
-        const showedLayers = JSON.parse(localStorage.getItem('homepagelayersShowedOnMap') ?? '')
-        expect(showedLayers).length(1)
-        expect(showedLayers[0].type).equal('eez_areas')
+        cy.getAllLocalStorage().then(localStorages => {
+          const testLocalStorage = localStorages[LOCALSTORAGE_URL]
+          const showedLayers = JSON.parse(testLocalStorage?.homepagelayersShowedOnMap as string)
+          expect(showedLayers).length(1)
+          expect(showedLayers[0].type).equal('eez_areas')
+        })
       })
   })
 

@@ -47,6 +47,7 @@ export const editSideWindowPriorNotification = (vesselName: string, reportId: st
 
   cy.get('[data-cy="side-window-sub-menu-ALL"]').click()
   cy.fill('Rechercher un navire', vesselName)
+  cy.wait(500)
 
   cy.getTableRowById(reportId).clickButton('Éditer le préavis')
   if (document.querySelector('[data-cy="first-loader"]')) {

@@ -7,8 +7,10 @@ import { openSideWindowPriorNotificationListAsSuperUser } from '../prior_notific
 
 context('Side Window > Logbook Prior Notification Form > Form', () => {
   it('Should update a logbook prior notification', () => {
-    // Reset
+    // Given
     const operationDate = dayjs().subtract(6, 'hours').toISOString()
+    editSideWindowPriorNotification(`MER À BOIRE`, 'FAKE_OPERATION_115')
+    // Reset
     getAuthorizationHeader().then(authorization => {
       cy.request({
         body: {
@@ -21,9 +23,6 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
         url: `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_115?operationDate=${operationDate}`
       })
     })
-
-    // Given
-    editSideWindowPriorNotification(`MER À BOIRE`, 'FAKE_OPERATION_115')
 
     cy.intercept('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_115?operationDate=*`).as(
       'updateLogbookPriorNotification'

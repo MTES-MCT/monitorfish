@@ -4,9 +4,9 @@ import type { PriorNotificationSubscriber } from '@features/PriorNotification/Pr
 
 context('BackOffice > Prior Notification Form > Form', () => {
   it('Should add and remove both partial and full port subscriptions', () => {
-    cy.intercept('PUT', '/bff/v1/prior_notification_subscribers/10023').as('updatePriorNotificationSubscriber')
+    cy.intercept('PUT', '/bff/v1/prior_notification_subscribers/10484').as('updatePriorNotificationSubscriber')
 
-    editBackOfficePriorNotificationSubscriber(10023)
+    editBackOfficePriorNotificationSubscriber(10484)
 
     cy.get('td:visible:contains("Vannes")').should('have.length', 0)
     cy.get('td:visible:contains("Saint-Malo")').should('have.length', 0)
@@ -25,7 +25,7 @@ context('BackOffice > Prior Notification Form > Form', () => {
         updateInterception1.response.body
 
       assert.deepEqual(updatedPriorNotificationSubscriber1.portSubscriptions, [
-        { controlUnitId: 10023, hasSubscribedToAllPriorNotifications: false, portLocode: 'FRVNE', portName: 'Vannes' }
+        { controlUnitId: 10484, hasSubscribedToAllPriorNotifications: false, portLocode: 'FRVNE', portName: 'Vannes' }
       ])
 
       cy.get('td:visible:contains("Vannes")').should('have.length', 1)
@@ -46,13 +46,13 @@ context('BackOffice > Prior Notification Form > Form', () => {
 
         assert.deepEqual(updatedPriorNotificationSubscriber2.portSubscriptions, [
           {
-            controlUnitId: 10023,
+            controlUnitId: 10484,
             hasSubscribedToAllPriorNotifications: false,
             portLocode: 'FRVNE',
             portName: 'Vannes'
           },
           {
-            controlUnitId: 10023,
+            controlUnitId: 10484,
             hasSubscribedToAllPriorNotifications: true,
             portLocode: 'FRSML',
             portName: 'Saint-Malo'
@@ -80,7 +80,7 @@ context('BackOffice > Prior Notification Form > Form', () => {
 
           assert.deepEqual(updatedPriorNotificationSubscriber3.portSubscriptions, [
             {
-              controlUnitId: 10023,
+              controlUnitId: 10484,
               hasSubscribedToAllPriorNotifications: false,
               portLocode: 'FRVNE',
               portName: 'Vannes'
@@ -117,9 +117,9 @@ context('BackOffice > Prior Notification Form > Form', () => {
   })
 
   it('Should add, upgrade, downgrade and remove a port subscription', () => {
-    cy.intercept('PUT', '/bff/v1/prior_notification_subscribers/10023').as('updatePriorNotificationSubscriber')
+    cy.intercept('PUT', '/bff/v1/prior_notification_subscribers/10484').as('updatePriorNotificationSubscriber')
 
-    editBackOfficePriorNotificationSubscriber(10023)
+    editBackOfficePriorNotificationSubscriber(10484)
 
     cy.get('td:visible:contains("Nice")').should('have.length', 0)
 
@@ -137,7 +137,7 @@ context('BackOffice > Prior Notification Form > Form', () => {
         updateInterception1.response.body
 
       assert.deepEqual(updatedPriorNotificationSubscriber1.portSubscriptions, [
-        { controlUnitId: 10023, hasSubscribedToAllPriorNotifications: false, portLocode: 'FRNCE', portName: 'Nice' }
+        { controlUnitId: 10484, hasSubscribedToAllPriorNotifications: false, portLocode: 'FRNCE', portName: 'Nice' }
       ])
 
       cy.get('td:visible:contains("Nice")').should('have.length', 1)
@@ -156,7 +156,7 @@ context('BackOffice > Prior Notification Form > Form', () => {
           updateInterception2.response.body
 
         assert.deepEqual(updatedPriorNotificationSubscriber2.portSubscriptions, [
-          { controlUnitId: 10023, hasSubscribedToAllPriorNotifications: true, portLocode: 'FRNCE', portName: 'Nice' }
+          { controlUnitId: 10484, hasSubscribedToAllPriorNotifications: true, portLocode: 'FRNCE', portName: 'Nice' }
         ])
 
         cy.get('td:visible:contains("Nice")').should('have.length', 2)
@@ -184,7 +184,7 @@ context('BackOffice > Prior Notification Form > Form', () => {
             updateInterception3.response.body
 
           assert.deepEqual(updatedPriorNotificationSubscriber3.portSubscriptions, [
-            { controlUnitId: 10023, hasSubscribedToAllPriorNotifications: false, portLocode: 'FRNCE', portName: 'Nice' }
+            { controlUnitId: 10484, hasSubscribedToAllPriorNotifications: false, portLocode: 'FRNCE', portName: 'Nice' }
           ])
 
           cy.get('td:visible:contains("Nice")').should('have.length', 1)
@@ -215,9 +215,9 @@ context('BackOffice > Prior Notification Form > Form', () => {
   })
 
   it('Should add and remove a fleet segment subscription', () => {
-    cy.intercept('PUT', '/bff/v1/prior_notification_subscribers/10023').as('updatePriorNotificationSubscriber')
+    cy.intercept('PUT', '/bff/v1/prior_notification_subscribers/10484').as('updatePriorNotificationSubscriber')
 
-    editBackOfficePriorNotificationSubscriber(10023)
+    editBackOfficePriorNotificationSubscriber(10484)
 
     cy.get('td:visible:contains("MED01 (All Trawls 1)")').should('have.length', 0)
 
@@ -235,7 +235,7 @@ context('BackOffice > Prior Notification Form > Form', () => {
         updateInterception1.response.body
 
       assert.deepEqual(updatedPriorNotificationSubscriber1.fleetSegmentSubscriptions, [
-        { controlUnitId: 10023, segmentCode: 'MED01', segmentName: 'All Trawls 1' }
+        { controlUnitId: 10484, segmentCode: 'MED01', segmentName: 'All Trawls 1' }
       ])
 
       cy.get('td:visible:contains("MED01 (All Trawls 1)")').should('have.length', 1)
@@ -263,9 +263,9 @@ context('BackOffice > Prior Notification Form > Form', () => {
   })
 
   it('Should add and remove a vessel subscription', () => {
-    cy.intercept('PUT', '/bff/v1/prior_notification_subscribers/10023').as('updatePriorNotificationSubscriber')
+    cy.intercept('PUT', '/bff/v1/prior_notification_subscribers/10484').as('updatePriorNotificationSubscriber')
 
-    editBackOfficePriorNotificationSubscriber(10023)
+    editBackOfficePriorNotificationSubscriber(10484)
 
     cy.get('td:visible:contains("PHENOMENE")').should('have.length', 0)
 
@@ -285,7 +285,7 @@ context('BackOffice > Prior Notification Form > Form', () => {
 
       assert.deepEqual(updatedPriorNotificationSubscriber1.vesselSubscriptions, [
         {
-          controlUnitId: 10023,
+          controlUnitId: 10484,
           vesselCallSign: 'CALLME',
           vesselCfr: 'FAK000999999',
           vesselExternalMarking: 'DONTSINK',

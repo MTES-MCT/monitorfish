@@ -35,14 +35,14 @@ class GetPriorNotificationSubscribers(
     }
 
     private fun getPriorNotificationSubscribers(): List<PriorNotificationSubscriber> {
-        val allFleetSegments = fleetSegmentRepository.findAll()
-        val allPorts = portRepository.findAll()
-        val allVessels = vesselRepository.findAll()
-
         val activeControlUnits = controlUnitRepository.findAll().filter { !it.isArchived }
         val allFleetSegmentSubscriptions = pnoFleetSegmentSubscriptionRepository.findAll()
         val allPortSubscriptions = pnoPortSubscriptionRepository.findAll()
         val allVesselSubscriptions = pnoVesselSubscriptionRepository.findAll()
+
+        val allFleetSegments = fleetSegmentRepository.findAll()
+        val allPorts = portRepository.findAll()
+        val vessels = vesselRepository.findVesselsByIds(allVesselSubscriptions.map { it.vesselId }.distinct())
 
         return activeControlUnits.map { controlUnit ->
             val fleetSegmentSubscriptions =
@@ -65,7 +65,7 @@ class GetPriorNotificationSubscribers(
                 vesselSubscriptions,
                 allFleetSegments,
                 allPorts,
-                allVessels,
+                allVessels = vessels,
             )
         }
     }

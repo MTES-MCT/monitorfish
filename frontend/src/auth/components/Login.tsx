@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import styled from 'styled-components'
 
-import { paths } from '../../paths'
+import { ROUTER_PATHS } from '../../paths'
 import { LoadingSpinnerWall } from '../../ui/LoadingSpinnerWall'
 import { getOIDCConfig } from '../getOIDCConfig'
 import { useGetCurrentUserAuthorizationQueryOverride } from '../hooks/useGetCurrentUserAuthorizationQueryOverride'
@@ -22,7 +22,7 @@ export function Login() {
   }
 
   if (auth?.isAuthenticated && isSuccess) {
-    return <Navigate to={paths.home} />
+    return <Navigate to={ROUTER_PATHS.home} />
   }
 
   switch (auth?.activeNavigator) {

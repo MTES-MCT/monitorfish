@@ -11,23 +11,23 @@ context('BackOffice > Prior Notification Table > Filter Bar', () => {
   })
 
   it('Should filter subscribers by search query', () => {
-    cy.intercept('GET', '/bff/v1/prior_notification_subscribers?*searchQuery=abc*').as(
-      'getPriorNotificationSubscribers'
-    )
+    cy.contains('A636 Maïto (Marine Nationale)').should('be.visible')
 
-    cy.fill('Rechercher...', 'abc')
+    cy.fill('Rechercher...', 'natu')
 
-    cy.wait('@getPriorNotificationSubscribers')
+    cy.contains('A636 Maïto (Marine Nationale)').should('not.exist')
+    cy.contains('Natura 2000 Côte Bleue Marine (Gestionnaire AMP)').should('be.visible')
+    cy.contains('PNM Martinique (Parcs Naturels Marins)').should('be.visible')
   })
 
   it('Should filter subscribers by administration', () => {
-    cy.intercept('GET', '/bff/v1/prior_notification_subscribers?*administrationId=1*').as(
-      'getPriorNotificationSubscribers'
-    )
+    cy.contains('A636 Maïto (Marine Nationale)').should('be.visible')
 
-    cy.fill('Administration', 'Administration 1')
+    cy.fill('Administration', 'Gendarmerie Nationale')
 
-    cy.wait('@getPriorNotificationSubscribers')
+    cy.contains('A636 Maïto (Marine Nationale)').should('not.exist')
+    cy.contains('BN Toulon (Gendarmerie Nationale)').should('be.visible')
+    cy.contains('Brigade fluviale de Rouen (Gendarmerie Nationale)').should('be.visible')
   })
 
   it('Should filter subscribers by port', () => {

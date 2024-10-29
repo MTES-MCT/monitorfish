@@ -1,6 +1,5 @@
-package fr.gouv.cnsp.monitorfish.infrastructure.monitorenv.input
+package fr.gouv.cnsp.monitorfish.infrastructure.monitorenv.responses
 
-import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.*
 import kotlinx.serialization.Serializable
 import java.time.ZonedDateTime
@@ -12,7 +11,7 @@ for the full entity structure
 @Serializable
 data class MissionDataResponse(
     val id: Int,
-    val controlUnits: List<LegacyControlUnit> = listOf(),
+    val controlUnits: List<LegacyControlUnitDataResponse> = listOf(),
     val missionTypes: List<MissionType>,
     val openBy: String? = null,
     val completedBy: String? = null,
@@ -33,7 +32,7 @@ data class MissionDataResponse(
     fun toMission() =
         Mission(
             id = id,
-            controlUnits = controlUnits,
+            controlUnits = controlUnits.map { it.toLegacyControlUnit() },
             missionTypes = missionTypes,
             openBy = openBy,
             completedBy = completedBy,

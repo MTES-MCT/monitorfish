@@ -4,6 +4,7 @@ import fr.gouv.cnsp.monitorfish.config.ApiClient
 import fr.gouv.cnsp.monitorfish.config.MonitorenvProperties
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.repositories.LegacyControlUnitRepository
+import fr.gouv.cnsp.monitorfish.infrastructure.monitorenv.responses.LegacyControlUnitDataResponse
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.runBlocking
@@ -25,7 +26,8 @@ class APILegacyControlUnitRepository(
             val legacyControlUnitsUrl = "${monitorenvProperties.url}/api/v1/control_units"
 
             try {
-                apiClient.httpClient.get(legacyControlUnitsUrl).body()
+                apiClient.httpClient.get(legacyControlUnitsUrl).body<List<LegacyControlUnitDataResponse>>()
+                    .map { it.toLegacyControlUnit() }
             } catch (e: Exception) {
                 logger.error("Could not fetch legacy control units at $legacyControlUnitsUrl", e)
 

@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.infrastructure.monitorenv.input
+package fr.gouv.cnsp.monitorfish.infrastructure.monitorenv.responses
 
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.env_mission_action.EnvMissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.env_mission_action.EnvMissionActionType

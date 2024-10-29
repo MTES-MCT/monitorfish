@@ -190,8 +190,6 @@ context('Side Window > Prior Notification List > VesselFilter Bar', () => {
   it('Should filter prior notifications by arrival date (custom)', () => {
     openSideWindowPriorNotificationListAsSuperUser()
 
-    cy.intercept('GET', `${apiPathBase}*`).as('getPriorNotifications')
-
     cy.fill('Date d’arrivée estimée', 'Période spécifique')
 
     cy.get('input[aria-label="Jour de début"]').type('01')
@@ -199,6 +197,7 @@ context('Side Window > Prior Notification List > VesselFilter Bar', () => {
     cy.get('input[aria-label="Année de début"]').type('2023')
     cy.get('input[aria-label="Jour de fin"]').type('31')
     cy.get('input[aria-label="Mois de fin"]').type('12')
+    cy.intercept('GET', `${apiPathBase}*`).as('getPriorNotifications')
     cy.get('input[aria-label="Année de fin"]').type('2023')
 
     cy.wait('@getPriorNotifications').then(interception => {

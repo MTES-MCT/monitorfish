@@ -319,7 +319,11 @@ jobs:
     needs:
       [
         version,
-        build,
+        unit_test_backend,
+        unit_test_frontend,
+        e2e_test,
+        e2e_multi_windows_test,
+        generate_and_upload_source_maps,
       ]
     runs-on: ubuntu-22.04
     if: needs.version.outputs.IS_RELEASE && !contains(github.ref, 'dependabot')

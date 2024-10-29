@@ -60,7 +60,7 @@ export function VesselSearch({
   const escapeFromKeyboard = useEscapeFromKeyboard()
   const clickedOutsideComponent = useClickOutsideWhenOpenedWithinRef(wrapperRef, isExtended, baseRef)
 
-  const { controlledOnChange, controlledValue: selectedVessel } = useFieldControl(value, onChange)
+  const { controlledOnChange: handleOnChange, controlledValue: selectedVessel } = useFieldControl(value, onChange)
 
   const key = useKey([selectedVessel])
   const flagState = selectedVessel?.flagState
@@ -72,8 +72,8 @@ export function VesselSearch({
     setFoundVessels([])
     setShowLastSearchedVessels(false)
 
-    controlledOnChange(undefined)
-  }, [controlledOnChange])
+    handleOnChange(undefined)
+  }, [handleOnChange])
 
   const selectVessel = useCallback(
     vesselIdentity => {
@@ -82,9 +82,9 @@ export function VesselSearch({
       setShowLastSearchedVessels(false)
       setFoundVessels([])
 
-      controlledOnChange(vesselWithIdentifier)
+      handleOnChange(vesselWithIdentifier)
     },
-    [controlledOnChange]
+    [handleOnChange]
   )
 
   const onVesselInputClick = useCallback(() => {

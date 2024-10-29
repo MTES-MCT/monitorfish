@@ -8,7 +8,7 @@ export function VesselSearchResultItem({ baseUrl, searchQuery, selectVessel, ves
   const { vesselName } = vessel
 
   return (
-    <ListItem data-cy="vessel-search-item" onClick={() => selectVessel(vessel)}>
+    <ListItem data-cy="VesselSearch-item" onClick={() => selectVessel(vessel)}>
       <div>
         {!!flagState && (
           <Flag

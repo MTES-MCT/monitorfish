@@ -175,7 +175,7 @@ export function VesselSearch({
           $baseUrl={baseUrl}
           $flagState={flagState}
           $hasError={hasError}
-          data-cy="vessel-search-input"
+          data-cy="VesselSearch-input"
           onChange={handleChange}
           onClick={onVesselInputClick}
           placeholder="Rechercher un navire..."

@@ -7,7 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.Mission
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotFindException
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
-import fr.gouv.cnsp.monitorfish.infrastructure.monitorenv.input.MissionDataResponse
+import fr.gouv.cnsp.monitorfish.infrastructure.monitorenv.responses.MissionDataResponse
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.CoroutineScope
@@ -48,7 +48,9 @@ class APIMissionRepository(
             val missionsUrl = "${monitorenvProperties.url}/api/v1/missions/$missionId"
 
             try {
-                val controlUnits = apiClient.httpClient.get(missionsUrl).body<MissionDataResponse>().controlUnits
+                val controlUnits =
+                    apiClient.httpClient.get(missionsUrl)
+                        .body<MissionDataResponse>().controlUnits.map { it.toLegacyControlUnit() }
 
                 cache.put(cacheKey, controlUnits)
 

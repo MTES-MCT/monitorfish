@@ -3,9 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.dtos
 import fr.gouv.cnsp.monitorfish.domain.entities.administration.Administration
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.ControlUnitContact
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.ControlUnitDepartmentArea
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class FullControlUnit(
     val id: Int,
     val areaNote: String?,

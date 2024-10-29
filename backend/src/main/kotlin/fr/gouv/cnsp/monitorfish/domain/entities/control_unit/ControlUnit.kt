@@ -1,8 +1,5 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.control_unit
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class ControlUnit(
     val id: Int,
     val areaNote: String?,

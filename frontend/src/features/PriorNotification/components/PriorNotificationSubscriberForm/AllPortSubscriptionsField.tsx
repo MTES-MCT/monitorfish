@@ -59,7 +59,7 @@ export function AllPortSubscriptionsField({
       <Select
         disabled={!portsAsOptions || isDisabled}
         isLabelHidden
-        label="Ajouter un port de diffusion"
+        label="Ajouter un port de diffusion partielle"
         name="portSubscription"
         onChange={add}
         options={portsAsOptions ?? []}

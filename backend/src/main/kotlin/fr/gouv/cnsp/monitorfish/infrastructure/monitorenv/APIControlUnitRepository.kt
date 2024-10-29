@@ -22,12 +22,12 @@ class APIControlUnitRepository(
     @Cacheable(value = ["control_units"])
     override fun findAll(): List<FullControlUnit> =
         runBlocking {
-            val missionsUrl = "${monitorenvProperties.url}/api/v2/control_units"
+            val controlUnitsUrl = "${monitorenvProperties.url}/api/v2/control_units"
 
             try {
-                apiClient.httpClient.get(missionsUrl).body()
+                apiClient.httpClient.get(controlUnitsUrl).body()
             } catch (e: Exception) {
-                logger.error("Could not fetch control units at $missionsUrl", e)
+                logger.error("Could not fetch control units at $controlUnitsUrl", e)
 
                 listOf()
             }

@@ -58,7 +58,12 @@ data class ManualPriorNotificationDraftDataOutput(
                 }
             val fishingCatchDataOutputs =
                 pnoValue.catchOnboard.map {
-                    ManualPriorNotificationFishingCatchDataOutput.fromLogbookFishingCatch(it, !hasGlobalFaoArea)
+                    val catchWithNormalizedWeight = it.copy(weight = it.weight ?: 0.0)
+
+                    ManualPriorNotificationFishingCatchDataOutput.fromLogbookFishingCatch(
+                        catchWithNormalizedWeight,
+                        !hasGlobalFaoArea,
+                    )
                 }
 
             return ManualPriorNotificationDraftDataOutput(

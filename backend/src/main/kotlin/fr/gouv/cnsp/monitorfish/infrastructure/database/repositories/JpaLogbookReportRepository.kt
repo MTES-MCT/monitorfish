@@ -95,7 +95,7 @@ class JpaLogbookReportRepository(
     override fun findAllPriorNotificationsToVerify(): List<PriorNotification> {
         val filter =
             PriorNotificationsFilter(
-                willArriveAfter = CustomZonedDateTime(ZonedDateTime.now()).toString(),
+                willArriveAfter = CustomZonedDateTime(ZonedDateTime.now().minusHours(24)).toString(),
                 willArriveBefore = CustomZonedDateTime(ZonedDateTime.now().plusHours(24)).toString(),
             )
 

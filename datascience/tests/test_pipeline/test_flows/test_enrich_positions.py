@@ -477,7 +477,7 @@ def test_extract_enrich_load(reset_test_data):
 
     # The number of positions in the positions table should not change
     assert len(positions_after) == len(positions_before)
-    assert len(positions_after) == 29
+    assert len(positions_after) == 31
 
     # Positions outside of the selected Period should not be affected
     assert (
@@ -556,6 +556,8 @@ def test_extract_enrich_load(reset_test_data):
                 timedelta(days=1, hours=3, minutes=30),
                 None,
             ],
+            [13634203, "RV348407", 1.107, True, timedelta(), True],
+            [13634204, "RV348407", 1.107, True, timedelta(), True],
             [13634205, "RV348407", 1.107, False, timedelta(), False],
             [13637054, "RV348407", 0.355284, False, timedelta(hours=1), False],
             [13639642, "RV348407", 0.286178, False, timedelta(hours=2), True],
@@ -729,10 +731,10 @@ def test_flow_can_compute_in_chunks(reset_test_data):
 
     flow.schedule = None
     state = flow.run(
-        start_hours_ago=48,
+        start_hours_ago=96,
         end_hours_ago=0,
-        minutes_per_chunk=30 * 60,
-        chunk_overlap_minutes=6 * 60,
+        minutes_per_chunk=60 * 60,
+        chunk_overlap_minutes=24 * 60,
         minimum_consecutive_positions=2,
         minimum_minutes_of_emission_at_sea=60,
         min_fishing_speed_threshold=0.1,
@@ -746,10 +748,10 @@ def test_flow_can_compute_in_chunks(reset_test_data):
 
     flow.schedule = None
     state = flow.run(
-        start_hours_ago=48,
+        start_hours_ago=96,
         end_hours_ago=0,
-        minutes_per_chunk=48 * 60,
-        chunk_overlap_minutes=6 * 60,
+        minutes_per_chunk=96 * 60,
+        chunk_overlap_minutes=24 * 60,
         minimum_consecutive_positions=2,
         minimum_minutes_of_emission_at_sea=60,
         min_fishing_speed_threshold=0.1,

@@ -44,7 +44,7 @@ def current_segments() -> pd.DataFrame:
             ],
             "departure_datetime_utc": [
                 pd.NaT,
-                datetime.datetime(2018, 2, 27, 1, 5),
+                now - datetime.timedelta(days=2),
                 now - datetime.timedelta(weeks=1, days=5),
                 pd.NaT,
                 pd.NaT,

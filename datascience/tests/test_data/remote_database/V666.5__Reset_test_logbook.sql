@@ -118,22 +118,6 @@ VALUES
     ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 3 days 23 hours 48 minutes')::TIMESTAMP, NULL, 'ERS'
 );
 
-UPDATE logbook_reports
-SET value = jsonb_set(
-    value, 
-    '{departureDatetimeUtc}',
-    ('"' || to_char(CURRENT_TIMESTAMP - INTERVAL '1 month 5 days', 'YYYY-MM-DD') || 'T' || to_char(CURRENT_TIMESTAMP - INTERVAL '1 week 5 days', 'HH24:MI:SS') || 'Z"')::jsonb
-)
-WHERE operation_number = '3';
-
-UPDATE logbook_reports
-SET value = jsonb_set(
-    value, 
-    '{departureDatetimeUtc}',
-    ('"' || to_char(CURRENT_TIMESTAMP - INTERVAL '1 week 5 days', 'YYYY-MM-DD') || 'T' || to_char(CURRENT_TIMESTAMP - INTERVAL '1 week 5 days', 'HH24:MI:SS') || 'Z"')::jsonb
-)
-WHERE operation_number = '5';
-
 
 -- Add FLUX test data
 INSERT INTO logbook_reports (
@@ -287,3 +271,84 @@ INSERT INTO logbook_reports (
     false, NULL, NULL
 )
 ;
+--WHEN log_type = 'FAR' THEN (SELECT MIN((haul->>'farDatetimeUtc')::TIMESTAMPTZ) AT TIME ZONE 'UTC' FROM jsonb_array_elements(value->'hauls') haul)
+-- Set activity timestamps to operation_datetime_utc
+UPDATE logbook_reports
+SET value = jsonb_set(
+        value,
+        CASE
+            WHEN log_type = 'DEP' THEN '{departureDatetimeUtc}'
+            WHEN log_type = 'COE' THEN '{effortZoneEntryDatetimeUtc}'
+            WHEN log_type = 'CPS' THEN '{cpsDatetimeUtc}'
+            WHEN log_type = 'DIS' THEN '{discardDatetimeUtc}'
+            WHEN log_type = 'COX' THEN '{effortZoneExitDatetimeUtc}'
+            WHEN log_type = 'CRO' THEN '{effortZoneExitDatetimeUtc}'
+            WHEN log_type = 'EOF' THEN '{endOfFishingDatetimeUtc}'
+            WHEN log_type = 'PNO' THEN '{predictedArrivalDatetimeUtc}'
+            WHEN log_type = 'LAN' THEN '{landingDatetimeUtc}'
+            WHEN log_type = 'RTP' THEN '{returnDatetimeUtc}'
+        END::VARCHAR[],
+        ('"' || to_char(operation_datetime_utc + CASE WHEN log_type = 'PNO' THEN INTERVAL '4 hours' ELSE INTERVAL '0' END, 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') || '"')::jsonb
+    )
+WHERE
+    transmission_format = 'ERS'
+    AND log_type IN ('DEP', 'COE', 'CPS', 'DIS', 'COX', 'CRO', 'EOF', 'PNO', 'LAN', 'RTP');
+
+
+UPDATE logbook_reports
+SET value = jsonb_set(
+        value,
+        '{predictedLandingDatetimeUtc}'
+        ,
+        ('"' || to_char(operation_datetime_utc + INTERVAL '4 hours', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') || '"')::jsonb
+    )
+WHERE
+    transmission_format = 'ERS'
+    AND log_type = 'PNO';
+
+
+WITH updated_hauls AS (
+    SELECT
+        report_id,
+        jsonb_agg(
+            jsonb_set(
+                haul,
+                '{farDatetimeUtc}',
+                ('"' || to_char(operation_datetime_utc, 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') || '"')::jsonb
+            )
+        ) AS hauls
+    FROM logbook_reports, jsonb_array_elements(value->'hauls') haul
+    WHERE
+        transmission_format = 'ERS'
+        AND log_type = 'FAR'
+    GROUP BY report_id
+)
+
+UPDATE logbook_reports lr
+SET value = jsonb_set(
+        value,
+        '{hauls}',
+        hauls
+    )
+FROM updated_hauls uh
+WHERE uh.report_id = lr.report_id;
+
+-- Add activity_datetime_utc values
+UPDATE logbook_reports
+SET activity_datetime_utc = CASE
+       WHEN log_type = 'DEP' THEN (value->>'departureDatetimeUtc')::TIMESTAMPTZ AT TIME ZONE 'UTC'
+       WHEN log_type = 'NOT-COE' THEN (value->>'effortZoneEntryDatetimeUtc')::TIMESTAMPTZ AT TIME ZONE 'UTC'
+       WHEN log_type = 'COE' THEN (value->>'effortZoneEntryDatetimeUtc')::TIMESTAMPTZ AT TIME ZONE 'UTC'
+       WHEN log_type = 'FAR' THEN (SELECT MIN((haul->>'farDatetimeUtc')::TIMESTAMPTZ) AT TIME ZONE 'UTC' FROM jsonb_array_elements(value->'hauls') haul)
+       WHEN log_type = 'CPS' THEN (value->>'cpsDatetimeUtc')::TIMESTAMPTZ AT TIME ZONE 'UTC'
+       WHEN log_type = 'DIS' THEN (value->>'discardDatetimeUtc')::TIMESTAMPTZ AT TIME ZONE 'UTC'
+       WHEN log_type = 'NOT-COX' THEN (value->>'effortZoneExitDatetimeUtc')::TIMESTAMPTZ AT TIME ZONE 'UTC'
+       WHEN log_type = 'COX' THEN (value->>'effortZoneExitDatetimeUtc')::TIMESTAMPTZ AT TIME ZONE 'UTC'
+       WHEN log_type = 'CRO' THEN (value->>'effortZoneExitDatetimeUtc')::TIMESTAMPTZ AT TIME ZONE 'UTC'
+       WHEN log_type = 'EOF' THEN (value->>'endOfFishingDatetimeUtc')::TIMESTAMPTZ AT TIME ZONE 'UTC'
+       WHEN log_type = 'PNO' THEN (value->>'predictedArrivalDatetimeUtc')::TIMESTAMPTZ AT TIME ZONE 'UTC'
+       WHEN log_type = 'LAN' THEN (value->>'landingDatetimeUtc')::TIMESTAMPTZ AT TIME ZONE 'UTC'
+       WHEN log_type = 'RTP' THEN (value->>'returnDatetimeUtc')::TIMESTAMPTZ AT TIME ZONE 'UTC'
+       ELSE NULL
+   END
+WHERE log_type IS NOT NULL;

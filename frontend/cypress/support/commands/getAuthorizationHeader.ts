@@ -19,6 +19,10 @@ function getOIDCUser() {
   const LOCALSTORAGE_URL = Cypress.config().baseUrl
 
   return cy.getAllLocalStorage().then(localStorages => {
+    if (!LOCALSTORAGE_URL) {
+      return Promise.resolve(undefined)
+    }
+
     const testLocalStorage = localStorages[LOCALSTORAGE_URL]
     if (!testLocalStorage) {
       return Promise.resolve(undefined)

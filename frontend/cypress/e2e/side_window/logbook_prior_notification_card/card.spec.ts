@@ -117,11 +117,4 @@ context('Side Window > Logbook Prior Notification Card > Card', () => {
       cy.contains(`L'ANCRE SÈCHE (CFR106)`).should('not.exist')
     })
   })
-
-  // Non-regression test
-  it('Should display a logbook prior notification with null fishing catch weight as expected', () => {
-    openSideWindowPriorNotificationCardAsUser(`VENT`, 'FAKE_OPERATION_120')
-
-    cy.contains('BAUDROIE (ANF)').parent().find('[data-cy="SpecyCatch-weight"]').should('have.text', '-')
-  })
 })

@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationFleetSegmentSubscription
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationPortSubscription
@@ -62,7 +63,7 @@ class GetPriorNotificationSubscriberUTests {
             )
         given(portRepository.findAll()).willReturn(allFakePorts)
 
-        val allFakeVessels =
+        val fakeVessels =
             listOf(
                 VesselFaker.fakeVessel(
                     id = 1,
@@ -81,7 +82,7 @@ class GetPriorNotificationSubscriberUTests {
                     mmsi = "MMSI02",
                 ),
             )
-        given(vesselRepository.findAll()).willReturn(allFakeVessels)
+        given(vesselRepository.findVesselsByIds(any())).willReturn(fakeVessels)
 
         val fakeFleetSegmentSubscriptions =
             listOf(

@@ -1,7 +1,7 @@
 import { Seafront } from '@constants/seafront'
 import { ReportingCard } from '@features/Reporting/components/ReportingCard'
 import { ReportingType } from '@features/Reporting/types'
-import { afterAll, describe, expect, it } from '@jest/globals'
+import { afterAll, describe, expect, it, jest } from '@jest/globals'
 import { THEME, ThemeProvider } from '@mtes-mct/monitor-ui'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -12,15 +12,13 @@ import { PendingAlertValueType } from '../../../../Alert/types'
 
 import type { PendingAlertReporting } from '@features/Reporting/types'
 
-// @ts-ignore
-jest.mock('../../../useCases/archiveReporting', () => () => ({ archiveReporting: jest.fn() }))
-// @ts-ignore
+jest.mock('../../../useCases/archiveReporting', () => ({ archiveReporting: jest.fn() }))
 jest.mock('../../../../../hooks/useMainAppDispatch', () => ({ useMainAppDispatch: () => {} }))
+jest.mock('../../../useCases/deleteReporting', () => ({ deleteReporting: jest.fn() }))
 
 describe('ReportingCard()', () => {
   afterAll(() => {
     // Reset module registry to clear the mock
-    // @ts-ignore
     jest.resetModules()
   })
 

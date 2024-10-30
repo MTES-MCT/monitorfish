@@ -8,6 +8,7 @@ import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { getFrenchOrdinal, getReportingActorLabel } from './utils'
+import { PendingAlertValueType } from '../../../../domain/entities/alerts/types'
 import { getDateTime } from '../../../../utils'
 import { ReportingType, ReportingTypeCharacteristics } from '../../types'
 import { archiveReporting } from '../../useCases/archiveReporting'
@@ -35,6 +36,8 @@ export function ReportingCard({
   const reportingName = Object.values(ReportingTypeCharacteristics).find(
     reportingType => reportingType.code === reporting.type
   )?.name
+  const isAlertUnarchivable =
+    reporting.type === ReportingType.ALERT && reporting.value.type === PendingAlertValueType.MISSING_FAR_48_HOURS_ALERT
   const alertDateTime = getDateTime(
     reporting.type === ReportingType.ALERT ? reporting.validationDate : reporting.creationDate,
     true
@@ -54,7 +57,7 @@ export function ReportingCard({
   }, [reporting, reportingName])
 
   const archive = () => {
-    dispatch(archiveReporting(reporting.id, reporting.type))
+    dispatch(archiveReporting(reporting))
   }
 
   const askForDeletionConfirmation = () => {
@@ -166,7 +169,11 @@ export function ReportingCard({
               Icon={Icon.Archive}
               iconSize={20}
               onClick={archive}
-              title="Archiver ce signalement"
+              title={
+                isAlertUnarchivable
+                  ? `Ce signalement sera archivé sous la forme de 2 alertes "Absence de message FAR en 24h"`
+                  : 'Archiver ce signalement'
+              }
             />
             <StyledIconButton
               accent={Accent.TERTIARY}

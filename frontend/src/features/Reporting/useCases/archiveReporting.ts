@@ -1,25 +1,37 @@
+import { ReportingType } from '@features/Reporting/types'
+import { deleteReporting } from '@features/Reporting/useCases/deleteReporting'
 import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
+import { PendingAlertValueType } from '../../../domain/entities/alerts/types'
 import { Vessel } from '../../../domain/entities/vessel/vessel'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
 import { removeVesselReporting } from '../../Vessel/slice'
 import { reportingApi } from '../reportingApi'
 
-import type { ReportingType } from '@features/Reporting/types'
+import type { Reporting } from '@features/Reporting/types'
 import type { MainAppThunk } from '@store'
 
 export const archiveReporting =
-  (id: number, type: ReportingType): MainAppThunk<Promise<void>> =>
+  (reporting: Reporting.Reporting): MainAppThunk<Promise<void>> =>
   async (dispatch, getState) => {
     const { selectedVesselIdentity } = getState().vessel
 
     try {
-      await dispatch(reportingApi.endpoints.archiveReporting.initiate(id)).unwrap()
+      if (
+        reporting.type === ReportingType.ALERT &&
+        reporting.value.type === PendingAlertValueType.MISSING_FAR_48_HOURS_ALERT
+      ) {
+        await dispatch(deleteReporting(reporting.id, reporting.type))
+
+        return
+      }
+
+      await dispatch(reportingApi.endpoints.archiveReporting.initiate(reporting.id)).unwrap()
 
       dispatch(
         removeVesselReporting({
-          reportingType: type,
+          reportingType: reporting.type,
           vesselFeatureId: Vessel.getVesselFeatureId(selectedVesselIdentity)
         })
       )
@@ -29,7 +41,7 @@ export const archiveReporting =
       dispatch(
         displayOrLogError(
           error as Error,
-          () => archiveReporting(id, type),
+          () => archiveReporting(reporting),
           true,
           DisplayedErrorKey.VESSEL_SIDEBAR_ERROR
         )

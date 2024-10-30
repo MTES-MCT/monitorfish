@@ -1510,6 +1510,7 @@
             // - Vessel: BON VENT
             // - Flag state: FR
             // - French vessel landing in a foreign port
+            // - `null` weight in fishing catches
             {
                 "id": 120,
                 "report_id": "FAKE_OPERATION_120",
@@ -1627,7 +1628,6 @@
 
             // - Vessel: L'HIPPO CAMPE
             // - Flag state: FR
-            // - `null` weight in fishing catches
             // - DAT with a predicted arrival date 30h after the COR predicted arrival
             {
                 "id": 122,

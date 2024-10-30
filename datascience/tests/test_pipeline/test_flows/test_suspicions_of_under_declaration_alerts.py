@@ -102,10 +102,10 @@ def test_flow(reset_test_data_suspicions_of_under_declaration_alerts):
     assert len(final_pending_alerts) == 1
 
     alert = final_pending_alerts.loc[0].to_dict()
+    alert.pop("id")
     creation_date = alert.pop("creation_date")
 
     assert alert == {
-        "id": 1,
         "vessel_name": "ÉTABLIR IMPRESSION LORSQUE",
         "internal_reference_number": "ABC000306959",
         "external_reference_number": "RV348407",

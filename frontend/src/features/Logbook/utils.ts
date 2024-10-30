@@ -130,6 +130,10 @@ export const getLANMessage = (logbookMessages: LogbookMessage[]): LogbookMessage
   return logbookMessages.find(message => message.messageType === LogbookMessageType.LAN.code)
 }
 
+function isValidMessage() {
+  return message => !message.isCorrectedByNewerMessage && !message.isDeleted && !!message.acknowledgment?.isSuccess
+}
+
 /**
  * Notes :
  * - The DIS message weight are LIVE, so we must NOT apply the conversion factor
@@ -137,7 +141,7 @@ export const getLANMessage = (logbookMessages: LogbookMessage[]): LogbookMessage
  */
 export const getTotalDISWeight = (logbookMessages: LogbookMessage[]): number => {
   const weight = logbookMessages
-    .filter(message => !message.isCorrectedByNewerMessage && !message.isDeleted && !!message.acknowledgment?.isSuccess)
+    .filter(isValidMessage())
     .reduce((accumulator, logbookMessage) => {
       const sumOfCatches = getSumOfCatches(logbookMessage.message.catches, false)
 
@@ -154,7 +158,7 @@ export const getTotalDISWeight = (logbookMessages: LogbookMessage[]): number => 
  */
 export const getCPSDistinctSpecies = (logbookMessages: LogbookMessage[]): number => {
   const species: string[] = logbookMessages
-    .filter(message => !message.isCorrectedByNewerMessage && !message.isDeleted && !!message.acknowledgment?.isSuccess)
+    .filter(isValidMessage())
     .reduce(
       (accumulator: string[], logbookMessage) =>
         accumulator.concat(logbookMessage.message.catches.map(specyCatch => specyCatch.species)),
@@ -179,7 +183,7 @@ export const getTotalFARWeight = (logbookMessages: LogbookMessage[]): number => 
   }
 
   const weight = logbookMessages
-    .filter(message => !message.isCorrectedByNewerMessage && !message.isDeleted && !!message.acknowledgment?.isSuccess)
+    .filter(isValidMessage())
     .reduce((accumulator, logbookMessage) => {
       const sumOfCatches = logbookMessage.message.hauls.reduce(
         (subAccumulator, haul) => subAccumulator + getSumOfCatches(haul.catches, false),
@@ -320,15 +324,13 @@ export const getFARSpeciesInsightRecord = (
 ): SpeciesToSpeciesInsight | undefined => {
   const speciesToWeightObject: SpeciesToSpeciesInsight = {}
 
-  messages
-    .filter(message => !message.isCorrectedByNewerMessage && !message.isDeleted && !!message.acknowledgment?.isSuccess)
-    .forEach(message => {
-      message.message.hauls.forEach(haul => {
-        haul.catches.forEach(speciesCatch =>
-          setSpeciesToWeightObject(speciesToWeightObject, speciesCatch, totalWeight, false)
-        )
-      })
+  messages.filter(isValidMessage()).forEach(message => {
+    message.message.hauls.forEach(haul => {
+      haul.catches.forEach(speciesCatch =>
+        setSpeciesToWeightObject(speciesToWeightObject, speciesCatch, totalWeight, false)
+      )
     })
+  })
 
   return speciesToWeightObject
 }
@@ -339,13 +341,11 @@ export const getDISSpeciesInsightRecord = (
 ): SpeciesToSpeciesInsight | undefined => {
   const speciesToWeightObject: SpeciesToSpeciesInsight = {}
 
-  messages
-    .filter(message => !message.isCorrectedByNewerMessage && !message.isDeleted && !!message.acknowledgment?.isSuccess)
-    .forEach(message => {
-      message.message.catches.forEach(speciesCatch => {
-        setSpeciesToWeightObject(speciesToWeightObject, speciesCatch, totalWeight, false)
-      })
+  messages.filter(isValidMessage()).forEach(message => {
+    message.message.catches.forEach(speciesCatch => {
+      setSpeciesToWeightObject(speciesToWeightObject, speciesCatch, totalWeight, false)
     })
+  })
 
   return speciesToWeightObject
 }
@@ -359,15 +359,13 @@ export const getFARSpeciesInsightListRecord = (
 
   const speciesAndPresentationToWeightFARObject = {}
 
-  farMessages
-    .filter(message => !message.isCorrectedByNewerMessage && !message.isDeleted && !!message.acknowledgment?.isSuccess)
-    .forEach(message => {
-      message.message.hauls.forEach(haul => {
-        haul.catches.forEach(speciesCatch => {
-          getSpeciesAndPresentationToWeightObject(speciesAndPresentationToWeightFARObject, speciesCatch)
-        })
+  farMessages.filter(isValidMessage()).forEach(message => {
+    message.message.hauls.forEach(haul => {
+      haul.catches.forEach(speciesCatch => {
+        getSpeciesAndPresentationToWeightObject(speciesAndPresentationToWeightFARObject, speciesCatch)
       })
     })
+  })
 
   return speciesAndPresentationToWeightFARObject
 }

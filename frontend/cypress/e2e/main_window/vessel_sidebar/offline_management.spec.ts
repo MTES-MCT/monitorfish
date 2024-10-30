@@ -6,7 +6,7 @@ context('Offline management', () => {
   beforeEach(() => {
     cy.login('superuser')
     cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.wait(500)
+    cy.wait(1000)
   })
 
   it('An error message should be showed in the vessel sidebar When a request has failed', () => {

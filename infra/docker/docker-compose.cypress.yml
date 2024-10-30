@@ -83,7 +83,7 @@ services:
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
-      - KC_HOSTNAME_STRICT=false
+      - KC_HOSTNAME_STRICT=false # See https://www.keycloak.org/server/reverseproxy for vars below
       - KC_HTTP_ENABLED=true
       - PROXY_ADDRESS_FORWARDING=true
       - KC_PROXY=edge

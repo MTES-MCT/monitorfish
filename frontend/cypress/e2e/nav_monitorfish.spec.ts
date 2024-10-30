@@ -5,7 +5,7 @@ context('Light MonitorFish', () => {
     // Given
     cy.login('user')
     cy.visit('/light#@-824534.42,6082993.21,8.70')
-    cy.wait(200)
+    cy.wait(1000)
 
     // Then
     // Vessel sidebar is minimized

@@ -2,7 +2,7 @@ context('Measurement', () => {
   beforeEach(() => {
     cy.login('superuser')
     cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.wait(500)
+    cy.wait(1000)
   })
 
   it('A circle range measurement Should be created When clicking on the map', () => {

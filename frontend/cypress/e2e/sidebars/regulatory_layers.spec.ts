@@ -4,7 +4,7 @@ context('Sidebars > Regulatory Layers', () => {
   it('The number of zones searched and total zones in law type should be displayed', () => {
     cy.login('superuser')
     cy.visit('/#@-224002.65,6302673.54,8.70')
-    cy.wait(500)
+    cy.wait(1000)
 
     cy.request(
       'GET',
@@ -24,7 +24,7 @@ context('Sidebars > Regulatory Layers', () => {
   it('A regulation Should be searched, added to My Zones and showed on the map with the Zone button', () => {
     cy.login('superuser')
     cy.visit('/#@-224002.65,6302673.54,8.70')
-    cy.wait(500)
+    cy.wait(1000)
 
     cy.request(
       'GET',
@@ -100,7 +100,7 @@ context('Sidebars > Regulatory Layers', () => {
   it('A regulation Should be searched and the result Should be kept When we go to My Zones section', () => {
     cy.login('superuser')
     cy.visit('/#@-224002.65,6302673.54,8.70')
-    cy.wait(500)
+    cy.wait(1000)
 
     cy.request(
       'GET',
@@ -134,7 +134,7 @@ context('Sidebars > Regulatory Layers', () => {
   it('A regulation Should be searched, added to My Zones and showed on the map with the Topic button', () => {
     cy.login('superuser')
     cy.visit('/#@-224002.65,6302673.54,8.70')
-    cy.wait(500)
+    cy.wait(1000)
 
     cy.request(
       'GET',
@@ -181,7 +181,7 @@ context('Sidebars > Regulatory Layers', () => {
   it('The Cotentin regulation metadata Should be opened', () => {
     cy.login('superuser')
     cy.visit('/#@-224002.65,6302673.54,8.70')
-    cy.wait(500)
+    cy.wait(1000)
 
     cy.request(
       'GET',
@@ -244,7 +244,7 @@ context('Sidebars > Regulatory Layers', () => {
   it('The Armor regulation metadata Should be opened', () => {
     cy.login('superuser')
     cy.visit('/#@-224002.65,6302673.54,8.70')
-    cy.wait(500)
+    cy.wait(1000)
 
     cy.request(
       'GET',
@@ -297,7 +297,7 @@ context('Sidebars > Regulatory Layers', () => {
   it('A regulation Should be searched with a rectangle', () => {
     cy.login('superuser')
     cy.visit('/#@-224002.65,6302673.54,8.70')
-    cy.wait(500)
+    cy.wait(1000)
 
     cy.request(
       'GET',
@@ -342,7 +342,7 @@ context('Sidebars > Regulatory Layers', () => {
   it('A regulation Should be searched with a polygon', () => {
     cy.login('superuser')
     cy.visit('/#@-224002.65,6302673.54,8.70')
-    cy.wait(500)
+    cy.wait(1000)
 
     cy.request(
       'GET',
@@ -373,10 +373,10 @@ context('Sidebars > Regulatory Layers', () => {
   })
 
   it('An administrative zone Should be showed and hidden', () => {
-    const LOCALSTORAGE_URL = Cypress.env('LOCALSTORAGE_URL')
+    const LOCALSTORAGE_URL = Cypress.config().baseUrl
     cy.login('superuser')
     cy.visit('/#@-224002.65,6302673.54,8.70')
-    cy.wait(500)
+    cy.wait(1000)
 
     cy.request(
       'GET',

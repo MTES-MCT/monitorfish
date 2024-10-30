@@ -42,6 +42,7 @@ export enum ExpectedArrivalPeriod {
   IN_LESS_THAN_TWELVE_HOURS = 'IN_LESS_THAN_TWELVE_HOURS',
   IN_LESS_THAN_ONE_DAY = 'IN_LESS_THAN_ONE_DAY',
   IN_LESS_THAN_ONE_MONTH = 'IN_LESS_THAN_ONE_MONTH',
+  LAST_DAY = 'LAST_DAY',
   CUSTOM = 'CUSTOM'
 }
 export const EXPECTED_ARRIVAL_PERIOD_LABEL: Record<ExpectedArrivalPeriod, string> = {
@@ -51,6 +52,7 @@ export const EXPECTED_ARRIVAL_PERIOD_LABEL: Record<ExpectedArrivalPeriod, string
   IN_LESS_THAN_TWELVE_HOURS: 'Arrivée estimée dans moins de 12h',
   IN_LESS_THAN_ONE_DAY: 'Arrivée estimée dans moins de 24h',
   IN_LESS_THAN_ONE_MONTH: 'Arrivée estimée dans moins d’un mois',
+  LAST_DAY: 'Arrivée estimée ces dernières 24h',
   CUSTOM: 'Période spécifique'
 }
 export const EXPECTED_ARRIVAL_PERIODS_AS_OPTIONS = getOptionsFromLabelledEnum(EXPECTED_ARRIVAL_PERIOD_LABEL)

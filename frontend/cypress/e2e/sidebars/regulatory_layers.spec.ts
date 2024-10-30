@@ -374,6 +374,10 @@ context('Sidebars > Regulatory Layers', () => {
 
   it('An administrative zone Should be showed and hidden', () => {
     const LOCALSTORAGE_URL = Cypress.config().baseUrl
+    if (!LOCALSTORAGE_URL) {
+      throw new Error('`baseUrl` is not defined')
+    }
+
     cy.login('superuser')
     cy.visit('/#@-224002.65,6302673.54,8.70')
     cy.wait(1000)

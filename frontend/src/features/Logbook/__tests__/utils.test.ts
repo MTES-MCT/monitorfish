@@ -1,3 +1,4 @@
+import { logbookMessagesWithCorrections } from '@features/Logbook/__tests__/__mocks__/logbookMessageWithCorrections'
 import { expect } from '@jest/globals'
 
 import {
@@ -6,6 +7,7 @@ import {
   getDEPMessage,
   getDISMessages,
   getFARMessages,
+  getFARSpeciesInsightRecord,
   getLANMessage,
   getPNOMessage,
   getTotalDEPWeight,
@@ -177,5 +179,19 @@ describe('Logbook/utils.tsx', () => {
       speciesName: 'Baudroies, etc. nca',
       weight: 10977.220000000001
     })
+  })
+
+  it('getFARSpeciesInsightRecord Should compute insight of species', async () => {
+    // Given
+    const dummyTotalWeight = 6000000
+
+    // When
+    const catches = getFARSpeciesInsightRecord(logbookMessagesWithCorrections, dummyTotalWeight)
+    expect(catches).toBeDefined()
+
+    // Then
+    expect(catches!.BET?.weight).toEqual(28000)
+    expect(catches!.YFT?.weight).toEqual(174000)
+    expect(catches!.SKJ?.weight).toEqual(98000)
   })
 })

@@ -27,7 +27,7 @@ class CreateOrUpdateManualPriorNotificationUTests {
     private lateinit var pnoPortSubscriptionRepository: PnoPortSubscriptionRepository
 
     @MockBean
-    private lateinit var pnoSegmentSubscriptionRepository: PnoSegmentSubscriptionRepository
+    private lateinit var pnoFleetSegmentSubscriptionRepository: PnoFleetSegmentSubscriptionRepository
 
     @MockBean
     private lateinit var pnoVesselSubscriptionRepository: PnoVesselSubscriptionRepository
@@ -76,8 +76,8 @@ class CreateOrUpdateManualPriorNotificationUTests {
             CreateOrUpdateManualPriorNotification(
                 gearRepository,
                 manualPriorNotificationRepository,
+                pnoFleetSegmentSubscriptionRepository,
                 pnoPortSubscriptionRepository,
-                pnoSegmentSubscriptionRepository,
                 pnoVesselSubscriptionRepository,
                 portRepository,
                 priorNotificationPdfDocumentRepository,
@@ -139,8 +139,8 @@ class CreateOrUpdateManualPriorNotificationUTests {
             CreateOrUpdateManualPriorNotification(
                 gearRepository,
                 manualPriorNotificationRepository,
+                pnoFleetSegmentSubscriptionRepository,
                 pnoPortSubscriptionRepository,
-                pnoSegmentSubscriptionRepository,
                 pnoVesselSubscriptionRepository,
                 portRepository,
                 priorNotificationPdfDocumentRepository,

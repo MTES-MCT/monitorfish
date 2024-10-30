@@ -4,7 +4,7 @@ import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.given
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.Mission
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionSource
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionType
@@ -940,7 +940,7 @@ class GetActivityReportsUTests {
                     missionTypes = listOf(MissionType.SEA),
                     missionSource = MissionSource.MONITORFISH,
                     isUnderJdp = true,
-                    controlUnits = listOf(ControlUnit(123, "AECP", false, "Unit AECP", listOf())),
+                    controlUnits = listOf(LegacyControlUnit(123, "AECP", false, "Unit AECP", listOf())),
                     isGeometryComputedFromControls = false,
                     startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
                 ),

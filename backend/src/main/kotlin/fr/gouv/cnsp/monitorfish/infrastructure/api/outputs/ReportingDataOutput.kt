@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Observation
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
@@ -31,7 +31,7 @@ class ReportingDataOutput(
     companion object {
         fun fromReporting(
             reporting: Reporting,
-            controlUnit: ControlUnit?,
+            controlUnit: LegacyControlUnit?,
         ): ReportingDataOutput {
             val value =
                 when (reporting.value) {

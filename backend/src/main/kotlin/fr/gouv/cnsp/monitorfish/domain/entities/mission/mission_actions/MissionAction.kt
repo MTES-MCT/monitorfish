@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.config.Patchable
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import java.time.ZonedDateTime
 
 data class MissionAction(
@@ -58,7 +58,7 @@ data class MissionAction(
      * This field is only used by the `GetVesselControls` use-case.
      * /!\ Do not use it to get `controlUnits` as the field will be empty be default.
      */
-    var controlUnits: List<ControlUnit> = listOf(),
+    var controlUnits: List<LegacyControlUnit> = listOf(),
     val isDeleted: Boolean,
     val hasSomeGearsSeized: Boolean,
     val hasSomeSpeciesSeized: Boolean,

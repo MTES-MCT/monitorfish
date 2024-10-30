@@ -3,7 +3,9 @@ package fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTripSegment
 
 data class FleetSegment(
+    // TODO Rename that to `code`.
     val segment: String,
+    // TODO Rename that to `name`.
     val segmentName: String,
     val dirm: List<String> = listOf(),
     val gears: List<String>,

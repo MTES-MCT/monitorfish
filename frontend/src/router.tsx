@@ -3,6 +3,8 @@ import { EditRegulation } from '@features/BackOffice/edit_regulation/EditRegulat
 import { ControlObjectiveTable } from '@features/ControlObjective/components/ControlObjectiveTable'
 import { FleetSegmentsBackoffice } from '@features/FleetSegment/components/FleetSegmentsBackoffice'
 import { MainWindow } from '@features/MainWindow'
+import { PriorNotificationSubscriberForm } from '@features/PriorNotification/components/PriorNotificationSubscriberForm'
+import { PriorNotificationSubscriberTable } from '@features/PriorNotification/components/PriorNotificationSubscriberTable'
 import { SideWindow } from '@features/SideWindow'
 import { BackofficePage } from '@pages/BackofficePage'
 import { HomePage } from '@pages/HomePage'
@@ -14,12 +16,12 @@ import { createBrowserRouter, Navigate } from 'react-router-dom'
 import { Login } from './auth/components/Login'
 import { Register } from './auth/components/Register'
 import { RequireAuth } from './auth/components/RequireAuth'
-import { paths } from './paths'
+import { ROUTER_PATHS } from './paths'
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 export const routes = [
   {
-    path: paths.home,
+    path: ROUTER_PATHS.home,
     element: <HomePage />,
     children: [
       {
@@ -33,7 +35,7 @@ export const routes = [
     ]
   },
   {
-    path: paths.light,
+    path: ROUTER_PATHS.light,
     element: <LightHomePage />,
     children: [
       {
@@ -47,7 +49,7 @@ export const routes = [
     ]
   },
   {
-    path: paths.login,
+    path: ROUTER_PATHS.login,
     element: <LoginPage />,
     children: [
       {
@@ -57,15 +59,15 @@ export const routes = [
     ]
   },
   {
-    path: paths.register,
+    path: ROUTER_PATHS.register,
     element: <Register />
   },
   {
-    path: paths.loadLight,
+    path: ROUTER_PATHS.loadLight,
     element: <LightBackoffice />
   },
   {
-    path: paths.backoffice,
+    path: ROUTER_PATHS.backoffice,
     element: <BackofficePage />,
     children: [
       {
@@ -77,7 +79,7 @@ export const routes = [
         )
       },
       {
-        path: paths.regulation,
+        path: ROUTER_PATHS.regulations,
         element: (
           <RequireAuth redirect requireSuperUser>
             <Backoffice />
@@ -85,7 +87,7 @@ export const routes = [
         )
       },
       {
-        path: paths.newRegulation,
+        path: ROUTER_PATHS.newRegulation,
         element: (
           <RequireAuth redirect requireSuperUser>
             <EditRegulation isEdition={false} title="Saisir une nouvelle réglementation" />
@@ -93,7 +95,7 @@ export const routes = [
         )
       },
       {
-        path: paths.editRegulation,
+        path: ROUTER_PATHS.editRegulation,
         element: (
           <RequireAuth redirect requireSuperUser>
             <EditRegulation isEdition title="Modifier la réglementation de la zone" />
@@ -101,7 +103,7 @@ export const routes = [
         )
       },
       {
-        path: paths.controlObjectives,
+        path: ROUTER_PATHS.controlObjectives,
         element: (
           <RequireAuth redirect requireSuperUser>
             <ControlObjectiveTable />
@@ -109,21 +111,37 @@ export const routes = [
         )
       },
       {
-        path: paths.fleetSegments,
+        path: ROUTER_PATHS.fleetSegments,
         element: (
           <RequireAuth redirect requireSuperUser>
             <FleetSegmentsBackoffice />
+          </RequireAuth>
+        )
+      },
+      {
+        path: ROUTER_PATHS.priorNotificationSubscribers,
+        element: (
+          <RequireAuth redirect requireSuperUser>
+            <PriorNotificationSubscriberTable />
+          </RequireAuth>
+        )
+      },
+      {
+        path: ROUTER_PATHS.editPriorNotificationSubscriber,
+        element: (
+          <RequireAuth redirect requireSuperUser>
+            <PriorNotificationSubscriberForm />
           </RequireAuth>
         )
       }
     ]
   },
   {
-    path: paths.ext,
+    path: ROUTER_PATHS.ext,
     element: <Navigate replace to="/" />
   },
   {
-    path: paths.sideWindow,
+    path: ROUTER_PATHS.sideWindow,
     element: <HomePage />,
     children: [
       {

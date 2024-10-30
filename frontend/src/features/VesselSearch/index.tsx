@@ -33,6 +33,7 @@ type VesselSearchProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'defaultVal
   onClickOutsideOrEscape?: () => Promisable<void>
   onInputClick?: () => Promisable<void>
 }
+/** @deprecated Use `@features/Vessel/components/VesselSearch` instead. */
 export function VesselSearch({
   baseRef,
   className,

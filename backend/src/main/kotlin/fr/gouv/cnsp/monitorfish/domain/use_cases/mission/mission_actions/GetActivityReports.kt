@@ -75,12 +75,9 @@ class GetActivityReports(
                 val controlMission = missions.firstOrNull { mission -> mission.id == control.missionId }
                 // All AECP reports are excluded from the response
                 // see: https://github.com/MTES-MCT/monitorfish/issues/3194
-                return@filter !(
-                    controlMission?.controlUnits?.any {
-                            controlUnit ->
-                        controlUnit.administration == "AECP"
-                    } ?: false
-                )
+                return@filter controlMission?.controlUnits?.any { controlUnit ->
+                    controlUnit.administration == "AECP"
+                } != true
             }
         logger.info("Found ${filteredControls.size} controls to report.")
 

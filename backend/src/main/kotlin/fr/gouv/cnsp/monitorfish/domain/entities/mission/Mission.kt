@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.mission
 
+import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.env_mission_action.EnvMissionAction
 import java.time.ZonedDateTime
 
@@ -25,5 +26,5 @@ data class Mission(
     val missionSource: MissionSource,
     val hasMissionOrder: Boolean? = false,
     val isUnderJdp: Boolean? = false,
-    val controlUnits: List<ControlUnit> = listOf(),
+    val controlUnits: List<LegacyControlUnit> = listOf(),
 )

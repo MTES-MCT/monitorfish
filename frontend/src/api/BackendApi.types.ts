@@ -60,6 +60,15 @@ export namespace BackendApi {
     /** Thrown when attempting to archive an entity linked to non-archived children. */
     UNARCHIVED_CHILD = 'UNARCHIVED_CHILD'
   }
+
+  export enum ResponseBodyStatusEnum {
+    FOUND = 'FOUND',
+    NO_CONTENT = 'NO_CONTENT'
+  }
+
+  export type ResponseBodyStatus = {
+    status: ResponseBodyStatusEnum
+  }
 }
 
 export interface Meta {

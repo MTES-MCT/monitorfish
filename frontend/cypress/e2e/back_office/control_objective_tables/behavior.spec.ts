@@ -3,8 +3,12 @@
 context('BackOffice > Control Objective Tables > Behavior', () => {
   beforeEach(() => {
     const currentYear = new Date().getFullYear()
+
     cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear}`).as('fleetSegments')
     cy.intercept('GET', `/bff/v1/admin/control_objectives/${currentYear}`).as('controlObjectives')
+
+    cy.login('superuser')
+
     cy.visit('/backoffice/control_objectives')
     cy.wait('@fleetSegments')
     cy.wait('@controlObjectives')

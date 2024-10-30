@@ -2,7 +2,10 @@
 
 context('BackOffice > Regulation Table > Behavior', () => {
   beforeEach(() => {
+    cy.login('superuser')
+
     cy.visit('/backoffice/regulation')
+
     cy.wait(200)
   })
 

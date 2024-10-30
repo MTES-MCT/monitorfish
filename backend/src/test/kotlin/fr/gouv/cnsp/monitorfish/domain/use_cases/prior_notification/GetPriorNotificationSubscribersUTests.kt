@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.administration.Administration
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationFleetSegmentSubscription
@@ -57,25 +58,26 @@ class GetPriorNotificationSubscribersUTests {
         val fakePort2 = PortFaker.fakePort(locode = "ESXYZ", name = "Port XYZ")
         given(portRepository.findAll()).willReturn(listOf(fakePort1, fakePort2))
 
-        val fakeVessel1 =
-            VesselFaker.fakeVessel(
-                id = 1,
-                internalReferenceNumber = "CFR001",
-                ircs = "CALLSIGN01",
-                externalReferenceNumber = "EXT001",
-                mmsi = "MMSI01",
-                vesselName = "Vessel 1",
+        val fakeVessels =
+            listOf(
+                VesselFaker.fakeVessel(
+                    id = 1,
+                    internalReferenceNumber = "CFR001",
+                    ircs = "CALLSIGN01",
+                    externalReferenceNumber = "EXT001",
+                    mmsi = "MMSI01",
+                    vesselName = "Vessel 1",
+                ),
+                VesselFaker.fakeVessel(
+                    id = 2,
+                    internalReferenceNumber = "CFR002",
+                    ircs = "CALLSIGN02",
+                    externalReferenceNumber = "EXT002",
+                    mmsi = "MMSI02",
+                    vesselName = "Vessel 2",
+                ),
             )
-        val fakeVessel2 =
-            VesselFaker.fakeVessel(
-                id = 2,
-                internalReferenceNumber = "CFR002",
-                ircs = "CALLSIGN02",
-                externalReferenceNumber = "EXT002",
-                mmsi = "MMSI02",
-                vesselName = "Vessel 2",
-            )
-        given(vesselRepository.findAll()).willReturn(listOf(fakeVessel1, fakeVessel2))
+        given(vesselRepository.findVesselsByIds(any())).willReturn(fakeVessels)
 
         val fakeFleetSegmentSubscriptions =
             listOf(
@@ -267,7 +269,7 @@ class GetPriorNotificationSubscribersUTests {
         `when`(pnoFleetSegmentSubscriptionRepository.findAll()).thenReturn(emptyList())
         `when`(pnoVesselSubscriptionRepository.findAll()).thenReturn(emptyList())
         `when`(portRepository.findAll()).thenReturn(listOf(fakePort1, fakePort2))
-        `when`(vesselRepository.findAll()).thenReturn(listOf(fakeVessel1, fakeVessel2))
+        `when`(vesselRepository.findVesselsByIds(any())).thenReturn(listOf(fakeVessel1, fakeVessel2))
 
         var testCases: List<Triple<PriorNotificationSubscribersFilter, List<FullControlUnit>, String>> = emptyList()
 

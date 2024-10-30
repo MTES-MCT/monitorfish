@@ -38,7 +38,9 @@ export function SpecyCatch({
         <SpecyName title={specyFullName}>{specyFullName}</SpecyName>
         <SpecyWeight title={`${specyCatch.weight} kg (${weightType})`}>
           <SpecyWeightLabel>Poids total ({weightType})</SpecyWeightLabel>
-          <SpecyWeightValue>{specyCatch.weight || <NoValue>-</NoValue>} kg</SpecyWeightValue>
+          <SpecyWeightValue data-cy="SpecyCatch-weight">
+            {specyCatch.weight ? `${specyCatch.weight} kg` : <NoValue>-</NoValue>}
+          </SpecyWeightValue>
         </SpecyWeight>
         {specyCatch.nbFish > 0 && (
           <SpecyWeight title={`${specyCatch.nbFish} pièces`}>
@@ -161,6 +163,5 @@ const NoValue = styled.span`
   color: ${p => p.theme.color.slateGray};
   font-weight: 300;
   line-height: normal;
-  width: 50px;
   display: inline-block;
 `

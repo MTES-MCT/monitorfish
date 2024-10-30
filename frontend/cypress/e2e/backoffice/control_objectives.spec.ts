@@ -2,6 +2,7 @@
 
 context('Control objectives', () => {
   beforeEach(() => {
+    cy.login('superuser')
     const currentYear = new Date().getFullYear()
     cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear}`).as('fleetSegments')
     cy.intercept('GET', `/bff/v1/admin/control_objectives/${currentYear}`).as('controlObjectives')

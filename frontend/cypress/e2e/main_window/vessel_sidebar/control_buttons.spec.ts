@@ -1,8 +1,12 @@
 import dayjs from 'dayjs'
 
+import { openVesselBySearch } from '../utils'
+
 context('Vessel sidebar controls buttons', () => {
   beforeEach(() => {
-    cy.loadPath('/#@-824534.42,6082993.21,8.70')
+    cy.login('superuser')
+    cy.visit('/#@-824534.42,6082993.21,8.70')
+    cy.wait(2000)
   })
 
   it('Control buttons should be disabled When vessel has no positions', () => {
@@ -80,8 +84,7 @@ context('Vessel sidebar controls buttons', () => {
 
   it('Vessel track dates Should be changed When walking in fishing trips', () => {
     // Given
-    cy.get('.VESSELS_POINTS').click(460, 460, { force: true, timeout: 10000 })
-    cy.wait(200)
+    openVesselBySearch('Pheno')
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
@@ -105,34 +108,24 @@ context('Vessel sidebar controls buttons', () => {
     const endDateAsDayjs = dayjs().hour(3).minute(4)
 
     // Given
-    cy.get('.VESSELS_POINTS').click(460, 460, { force: true })
-    cy.wait(200)
+    openVesselBySearch('Pheno')
     cy.getDataCy('vessel-sidebar').should('be.visible')
 
     // When
     cy.intercept('GET', '/bff/v1/vessels/positions*').as('getPositions')
     cy.getDataCy('vessel-track-depth-selection').click()
-    cy.fill('Plage de temps sur mesure', [
-      [
-        startDateAsDayjs.year(),
-        startDateAsDayjs.month() + 1,
-        startDateAsDayjs.date(),
-        startDateAsDayjs.hour(),
-        startDateAsDayjs.minute()
-      ],
-      [
-        endDateAsDayjs.year(),
-        endDateAsDayjs.month() + 1,
-        endDateAsDayjs.date(),
-        endDateAsDayjs.hour(),
-        endDateAsDayjs.minute()
-      ]
-    ])
+
+    cy.get('input[aria-label="Jour de début"]').type(startDateAsDayjs.format('DD'))
+    cy.get('input[aria-label="Mois de début"]').type(startDateAsDayjs.format('MM'))
+    cy.get('input[aria-label="Année de début"]').type(startDateAsDayjs.format('YYYY'))
+    cy.get('input[aria-label="Jour de fin"]').type(endDateAsDayjs.format('DD'))
+    cy.get('input[aria-label="Mois de fin"]').type(endDateAsDayjs.format('MM'))
+    cy.get('input[aria-label="Année de fin"]').type(endDateAsDayjs.format('YYYY'))
 
     // Then
     cy.wait('@getPositions').then(({ request }) => {
-      expect(request.url).contains(`${startDateAsDayjs.format('DD')}T01:02:00.000Z`)
-      expect(request.url).contains(`${endDateAsDayjs.format('DD')}T03:04:59.000Z`)
+      expect(request.url).contains(`${startDateAsDayjs.format('DD')}T00:00:00.000Z`)
+      expect(request.url).contains(`${endDateAsDayjs.format('DD')}T23:59:59.000Z`)
     })
 
     cy.wait(200)
@@ -150,8 +143,7 @@ context('Vessel sidebar controls buttons', () => {
   it('Fishing activities Should be seen on the vessel track and showed from the map', () => {
     // Given
     cy.wait(50)
-    cy.get('.VESSELS_POINTS').click(460, 460, { force: true, timeout: 10000 })
-    cy.wait(200)
+    openVesselBySearch('Pheno')
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 10000 })
     cy.fill('Afficher la piste VMS depuis', '3 jours')
@@ -180,8 +172,7 @@ context('Vessel sidebar controls buttons', () => {
     cy.cleanScreenshots(1)
 
     // Given
-    cy.get('.VESSELS_POINTS').click(460, 460, { force: true, timeout: 10000 })
-    cy.wait(200)
+    openVesselBySearch('Pheno')
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When

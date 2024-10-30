@@ -39,6 +39,7 @@ context('Side Window > Manual Prior Notification Card > Card', () => {
       cy.reload()
 
       cy.fill('Rechercher un navire', `POISSON`)
+      cy.wait(500)
 
       cy.intercept('GET', url, { body: updatedPriorNotificationDetailStub }).as('getUpdatedPriorNotification')
       cy.intercept('GET', '/bff/v1/prior_notifications?*').as('getPriorNotifications')

@@ -1,8 +1,12 @@
 /* eslint-disable no-undef */
 
+import { openVesselBySearch } from '../utils'
+
 context('Offline management', () => {
   beforeEach(() => {
-    cy.loadPath('/#@-824534.42,6082993.21,8.70')
+    cy.login('superuser')
+    cy.visit('/#@-824534.42,6082993.21,8.70')
+    cy.wait(1000)
   })
 
   it('An error message should be showed in the vessel sidebar When a request has failed', () => {
@@ -13,7 +17,7 @@ context('Offline management', () => {
         '&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=TWELVE_HOURS&afterDateTime=&beforeDateTime=',
       { statusCode: 400 }
     ).as('openVessel')
-    cy.get('.VESSELS_POINTS').click(460, 460, { force: true })
+    openVesselBySearch('Pheno')
     cy.wait('@openVessel')
     cy.get('*[data-cy="vessel-sidebar"]').should('be.visible')
 
@@ -82,7 +86,7 @@ context('Offline management', () => {
       },
       { statusCode: 400 }
     ).as('openVesselStubbed')
-    cy.get('.VESSELS_POINTS').click(460, 460, { force: true })
+    openVesselBySearch('Pheno')
     cy.wait('@openVesselStubbed')
     cy.get('*[data-cy="vessel-sidebar"]').should('be.visible')
 

@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { Page, Browser, type FrameWaitForFunctionOptions } from 'puppeteer'
+import { Browser, type FrameWaitForFunctionOptions, Page } from 'puppeteer'
 
 class ConsoleListener {
   #isStopped = false

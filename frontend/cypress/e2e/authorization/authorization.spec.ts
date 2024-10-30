@@ -2,7 +2,9 @@
 
 context('Authorization', () => {
   beforeEach(() => {
-    cy.loadPath('/#@-824534.42,6082993.21,8.70')
+    cy.login('superuser')
+    cy.visit('/#@-824534.42,6082993.21,8.70')
+    cy.wait(1000)
   })
 
   it('Should redirect to login page if an API request is Unauthorized', () => {

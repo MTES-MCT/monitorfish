@@ -6,7 +6,9 @@ import type { Reporting } from '@features/Reporting/types'
 
 context('Vessel sidebar reporting tab', () => {
   beforeEach(() => {
-    cy.loadPath('/#@-824534.42,6082993.21,8.70')
+    cy.login('superuser')
+    cy.visit('/#@-824534.42,6082993.21,8.70')
+    cy.wait(1000)
   })
 
   it('An infraction suspicion reporting Should be added from the reporting form', () => {

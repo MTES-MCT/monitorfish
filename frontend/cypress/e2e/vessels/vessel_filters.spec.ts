@@ -1,6 +1,8 @@
 context('Vessel filters', () => {
   beforeEach(() => {
-    cy.loadPath('/#@-824534.42,6082993.21,8.70')
+    cy.login('superuser')
+    cy.visit('/#@-824534.42,6082993.21,8.70')
+    cy.wait(1000)
   })
 
   it('A VesselFilter Should be created and added on the map', () => {

@@ -98,8 +98,10 @@ context('Side Window > Logbook Prior Notification Card > Card', () => {
       }
 
       cy.reload()
+      cy.wait(2000)
 
       cy.fill('Rechercher un navire', `L'ANCRE`)
+      cy.wait(1000)
 
       cy.intercept('GET', url, { body: deletedPriorNotificationDetailStub }).as('getDeletedPriorNotification')
       cy.intercept('GET', '/bff/v1/prior_notifications?*').as('getPriorNotifications')

@@ -8,7 +8,7 @@ import 'cypress-plugin-snapshots/commands'
 
 import './commands'
 import './commands/dragTo'
-import './commands/loadPath'
+import './commands/login'
 
 declare global {
   namespace Cypress {
@@ -26,7 +26,8 @@ declare global {
       ): void
       getComputedStyle(dataCy: string, backUpToParentNumber?: number): Cypress.Chainable<CSSStyleDeclaration>
       getDownloadedFileContent(callback: (content: Cypress.Chainable<any>) => void): void
-      loadPath(path: string): void
+      login(user: string): void
+      postLoginToKeycloak(user: string): void
       resetCountRequestsByAlias(alias: string): void
 
       /* eslint-disable typescript-sort-keys/interface */
@@ -95,23 +96,6 @@ Cypress.on('uncaught:exception', err => {
 
 // Run before each spec
 beforeEach(() => {
-  // We use a Cypress session to inject a Local Storage key
-  // so that we can detect when the browser app is running in Cypress.
-  // https://docs.cypress.io/faq/questions/using-cypress-faq#How-do-I-preserve-cookies--localStorage-in-between-my-tests
-  cy.session('cypress', () => {
-    cy.window().then(window => {
-      window.localStorage.setItem('IS_CYPRESS', 'true')
-    })
-  })
-
-  // Fake Authorization
-  cy.intercept('/bff/v1/authorization/current', {
-    body: {
-      isSuperUser: true
-    },
-    statusCode: 200
-  })
-
   // DEV :: FRONTEND_SENTRY_DSN
   // PROD :: FRONTEND_SENTRY_DSN
   cy.intercept(

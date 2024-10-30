@@ -5,7 +5,6 @@ import { SideWindowMenuLabel } from 'domain/entities/sideWindow/constants'
 import { openSideWindowPriorNotificationListAsSuperUser } from './utils'
 import { assertAll } from '../../utils/assertAll'
 import { customDayjs } from '../../utils/customDayjs'
-import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 
 context('Side Window > Prior Notification List > VesselFilter Bar', () => {
   const apiPathBase = '/bff/v1/prior_notifications?'
@@ -138,6 +137,7 @@ context('Side Window > Prior Notification List > VesselFilter Bar', () => {
     const expectedBeforeDate = customDayjs.utc().add(4, 'hours').toISOString()
 
     cy.viewport(1920, 1080)
+    cy.login('superuser')
     cy.visit('/side_window')
     cy.wait(500)
     if (document.querySelector('[data-cy="first-loader"]')) {
@@ -190,18 +190,15 @@ context('Side Window > Prior Notification List > VesselFilter Bar', () => {
   it('Should filter prior notifications by arrival date (custom)', () => {
     openSideWindowPriorNotificationListAsSuperUser()
 
-    cy.intercept('GET', `${apiPathBase}*`).as('getPriorNotifications')
-
     cy.fill('Date d’arrivée estimée', 'Période spécifique')
-    cy.wait('@getPriorNotifications')
 
-    const startDate = getUtcDateInMultipleFormats('2023-01-01T00:00:00Z')
-    const endDate = getUtcDateInMultipleFormats('2023-12-31T23:59:59Z')
-
-    cy.fill('Arrivée estimée du navire entre deux dates', [
-      startDate.utcDateTupleWithTime,
-      endDate.utcDateTupleWithTime
-    ])
+    cy.get('input[aria-label="Jour de début"]').type('01')
+    cy.get('input[aria-label="Mois de début"]').type('01')
+    cy.get('input[aria-label="Année de début"]').type('2023')
+    cy.get('input[aria-label="Jour de fin"]').type('31')
+    cy.get('input[aria-label="Mois de fin"]').type('12')
+    cy.intercept('GET', `${apiPathBase}*`).as('getPriorNotifications')
+    cy.get('input[aria-label="Année de fin"]').type('2023')
 
     cy.wait('@getPriorNotifications').then(interception => {
       const priorNotifications: PriorNotification.PriorNotification[] = interception.response?.body.data
@@ -212,8 +209,8 @@ context('Side Window > Prior Notification List > VesselFilter Bar', () => {
       assertAll(
         priorNotifications,
         priorNotification =>
-          customDayjs(priorNotification.expectedArrivalDate).isSameOrAfter(startDate.utcDateAsDayjs) &&
-          customDayjs(priorNotification.expectedArrivalDate).isSameOrBefore(endDate.utcDateAsDayjs)
+          customDayjs(priorNotification.expectedArrivalDate).isSameOrAfter('2023-01-01T00:00:00.000Z') &&
+          customDayjs(priorNotification.expectedArrivalDate).isSameOrBefore('2023-12-31T23:59:59.000Z')
       )
     })
   })

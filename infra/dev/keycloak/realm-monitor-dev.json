@@ -1,16 +1,22 @@
 {
   "realm": "monitor",
   "enabled": true,
+  "accessTokenLifespan": 600,
+  "accessTokenLifespanForImplicitFlow": 9000,
+  "ssoSessionMaxLifespan": 360000,
+  "accessCodeLifespan": 600,
+  "accessCodeLifespanUserAction": 3000,
+  "accessCodeLifespanLogin": 18000,
   "clients": [
     {
       "clientId": "monitorfish",
       "enabled": true,
       "protocol": "openid-connect",
       "redirectUris": [
-        "http://localhost:3000/*"
+        "*"
       ],
       "webOrigins": [
-        "http://localhost:3000"
+        "*"
       ],
       "publicClient": true
     }

@@ -1,13 +1,12 @@
-import { defineConfig } from 'cypress'
+import {defineConfig} from 'cypress'
 import initCypressMousePositionPlugin from 'cypress-mouse-position/plugin'
-import { initPlugin } from 'cypress-plugin-snapshots/plugin'
+import {initPlugin} from 'cypress-plugin-snapshots/plugin'
 
 const IS_CI = Boolean(process.env.CI)
-const DEFAULT_PORT = IS_CI ? 8880 : 3000
 
 export default defineConfig({
   e2e: {
-    baseUrl: `http://localhost:${DEFAULT_PORT}`,
+    baseUrl: `http://${IS_CI ? '0.0.0.0:8880' : 'localhost:3000'}`,
     excludeSpecPattern: ['**/__snapshots__/*', '**/__image_snapshots__/*'],
     setupNodeEvents(on, config) {
       initCypressMousePositionPlugin(on)
@@ -16,6 +15,8 @@ export default defineConfig({
     specPattern: 'cypress/e2e/**/*.spec.ts'
   },
   env: {
+    "FRONTEND_OIDC_AUTHORITY": `http://${IS_CI ? '0.0.0.0:8880' : 'localhost:8880'}/realms/monitor`,
+    "FRONTEND_OIDC_CLIENT_ID": "monitorfish",
     'cypress-plugin-snapshots': {
       imageConfig: {
         threshold: 20,

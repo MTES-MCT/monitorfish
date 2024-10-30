@@ -2,7 +2,7 @@ import { getFishingActivityCircleStyle } from '@features/Vessel/layers/styles/ve
 import { Feature } from 'ol'
 import Point from 'ol/geom/Point'
 
-import { LogbookMessageType, LogbookOperationType } from './constants'
+import { LogbookMessageType } from './constants'
 import { LayerProperties } from '../../domain/entities/layers/constants'
 import { undefinedize } from '../../utils/undefinedize'
 
@@ -130,41 +130,20 @@ export const getLANMessage = (logbookMessages: LogbookMessage[]): LogbookMessage
   return logbookMessages.find(message => message.messageType === LogbookMessageType.LAN.code)
 }
 
-function sortByCorrectedMessagesFirst() {
-  return (x: LogbookMessage, y: LogbookMessage) => {
-    if (x.operationType === LogbookOperationType.COR) {
-      return -1
-    }
-
-    if (y.operationType === LogbookOperationType.COR) {
-      return 1
-    }
-
-    return 0
-  }
+function isValidMessage() {
+  return message => !message.isCorrectedByNewerMessage && !message.isDeleted && !!message.acknowledgment?.isSuccess
 }
 
 /**
  * Notes :
  * - The DIS message weight are LIVE, so we must NOT apply the conversion factor
- * - If the message is corrected (hence his `reportId` is contained in the `correctedMessagesReferencedIds` array),
- *    only the correcting message will be taken
+ * - Only uncorrected and undeleted messages are taken
  */
 export const getTotalDISWeight = (logbookMessages: LogbookMessage[]): number => {
-  let correctedMessagesReferencedIds: string[] = []
-
   const weight = logbookMessages
-    .sort(sortByCorrectedMessagesFirst())
+    .filter(isValidMessage())
     .reduce((accumulator, logbookMessage) => {
-      if (logbookMessage.operationType === LogbookOperationType.COR && logbookMessage.referencedReportId) {
-        correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(logbookMessage.referencedReportId)
-      }
-
-      const isMessageNotCorrectedAndAcknowledged =
-        !correctedMessagesReferencedIds.includes(logbookMessage.reportId) && logbookMessage.acknowledgment?.isSuccess
-      const sumOfCatches = isMessageNotCorrectedAndAcknowledged
-        ? getSumOfCatches(logbookMessage.message.catches, false)
-        : 0
+      const sumOfCatches = getSumOfCatches(logbookMessage.message.catches, false)
 
       return accumulator + sumOfCatches
     }, 0)
@@ -175,28 +154,16 @@ export const getTotalDISWeight = (logbookMessages: LogbookMessage[]): number => 
 
 /**
  * Notes :
- * - If the message is corrected (hence his `reportId` is contained in the `correctedMessagesReferencedIds` array),
- *    only the correcting message will be taken
+ * - Only uncorrected and undeleted messages are taken
  */
 export const getCPSDistinctSpecies = (logbookMessages: LogbookMessage[]): number => {
-  let correctedMessagesReferencedIds: string[] = []
-
   const species: string[] = logbookMessages
-    .sort(sortByCorrectedMessagesFirst())
-    .reduce((accumulator: string[], logbookMessage) => {
-      if (logbookMessage.operationType === LogbookOperationType.COR && logbookMessage.referencedReportId) {
-        correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(logbookMessage.referencedReportId)
-      }
-
-      const isMessageNotCorrectedAndAcknowledged =
-        !correctedMessagesReferencedIds.includes(logbookMessage.reportId) && logbookMessage.acknowledgment?.isSuccess
-
-      if (!isMessageNotCorrectedAndAcknowledged) {
-        return accumulator
-      }
-
-      return accumulator.concat(logbookMessage.message.catches.map(specyCatch => specyCatch.species))
-    }, [])
+    .filter(isValidMessage())
+    .reduce(
+      (accumulator: string[], logbookMessage) =>
+        accumulator.concat(logbookMessage.message.catches.map(specyCatch => specyCatch.species)),
+      []
+    )
 
   return Array.from(new Set(species)).length
 }
@@ -207,32 +174,21 @@ export const areAllMessagesNotAcknowledged = (logbookMessages: LogbookMessage[])
 /**
  * Notes :
  * - The FAR message weight are LIVE, so we must NOT apply the conversion factor
- * - If the message is corrected (hence his `reportId` is contained in the `correctedMessagesReferencedIds` array),
- *    only the correcting message will be taken
- * - A FAR message contain a array of `Haul` which then contains an array of `Catch`
+ * - Only uncorrected and undeleted messages are taken
+ * - A FAR message contain an array of `Haul` which then contains an array of `Catch`
  */
 export const getTotalFARWeight = (logbookMessages: LogbookMessage[]): number => {
   if (!logbookMessages.length) {
     return 0
   }
 
-  let correctedMessagesReferencedIds: string[] = []
-
   const weight = logbookMessages
-    .sort(sortByCorrectedMessagesFirst())
+    .filter(isValidMessage())
     .reduce((accumulator, logbookMessage) => {
-      if (logbookMessage.operationType === LogbookOperationType.COR && logbookMessage.referencedReportId) {
-        correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(logbookMessage.referencedReportId)
-      }
-
-      const isMessageNotCorrectedAndAcknowledged =
-        !correctedMessagesReferencedIds.includes(logbookMessage.reportId) && logbookMessage.acknowledgment?.isSuccess
-      const sumOfCatches = isMessageNotCorrectedAndAcknowledged
-        ? logbookMessage.message.hauls.reduce(
-            (subAccumulator, haul) => subAccumulator + getSumOfCatches(haul.catches, false),
-            0
-          )
-        : 0
+      const sumOfCatches = logbookMessage.message.hauls.reduce(
+        (subAccumulator, haul) => subAccumulator + getSumOfCatches(haul.catches, false),
+        0
+      )
 
       return accumulator + sumOfCatches
     }, 0)
@@ -367,24 +323,13 @@ export const getFARSpeciesInsightRecord = (
   totalWeight: number
 ): SpeciesToSpeciesInsight | undefined => {
   const speciesToWeightObject: SpeciesToSpeciesInsight = {}
-  let correctedMessagesReferencedIds: string[] = []
 
-  messages.sort(sortByCorrectedMessagesFirst()).forEach(message => {
-    if (message.operationType === LogbookOperationType.COR && message.referencedReportId) {
-      correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(message.referencedReportId)
-    }
-
-    if (
-      !correctedMessagesReferencedIds.includes(message.reportId) &&
-      message.acknowledgment &&
-      message.acknowledgment.isSuccess
-    ) {
-      message.message.hauls.forEach(haul => {
-        haul.catches.forEach(speciesCatch =>
-          setSpeciesToWeightObject(speciesToWeightObject, speciesCatch, totalWeight, false)
-        )
-      })
-    }
+  messages.filter(isValidMessage()).forEach(message => {
+    message.message.hauls.forEach(haul => {
+      haul.catches.forEach(speciesCatch =>
+        setSpeciesToWeightObject(speciesToWeightObject, speciesCatch, totalWeight, false)
+      )
+    })
   })
 
   return speciesToWeightObject
@@ -395,22 +340,11 @@ export const getDISSpeciesInsightRecord = (
   totalWeight: number
 ): SpeciesToSpeciesInsight | undefined => {
   const speciesToWeightObject: SpeciesToSpeciesInsight = {}
-  let correctedMessagesReferencedIds: string[] = []
 
-  messages.sort(sortByCorrectedMessagesFirst()).forEach(message => {
-    if (message.operationType === LogbookOperationType.COR && message.referencedReportId) {
-      correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(message.referencedReportId)
-    }
-
-    if (
-      !correctedMessagesReferencedIds.includes(message.reportId) &&
-      message.acknowledgment &&
-      message.acknowledgment.isSuccess
-    ) {
-      message.message.catches.forEach(speciesCatch => {
-        setSpeciesToWeightObject(speciesToWeightObject, speciesCatch, totalWeight, false)
-      })
-    }
+  messages.filter(isValidMessage()).forEach(message => {
+    message.message.catches.forEach(speciesCatch => {
+      setSpeciesToWeightObject(speciesToWeightObject, speciesCatch, totalWeight, false)
+    })
   })
 
   return speciesToWeightObject
@@ -424,24 +358,13 @@ export const getFARSpeciesInsightListRecord = (
   }
 
   const speciesAndPresentationToWeightFARObject = {}
-  let correctedMessagesReferencedIds: string[] = []
 
-  farMessages.sort(sortByCorrectedMessagesFirst()).forEach(message => {
-    if (message.operationType === LogbookOperationType.COR && message.referencedReportId) {
-      correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(message.referencedReportId)
-    }
-
-    if (
-      !correctedMessagesReferencedIds.includes(message.reportId) &&
-      message.acknowledgment &&
-      message.acknowledgment.isSuccess
-    ) {
-      message.message.hauls.forEach(haul => {
-        haul.catches.forEach(speciesCatch => {
-          getSpeciesAndPresentationToWeightObject(speciesAndPresentationToWeightFARObject, speciesCatch)
-        })
+  farMessages.filter(isValidMessage()).forEach(message => {
+    message.message.hauls.forEach(haul => {
+      haul.catches.forEach(speciesCatch => {
+        getSpeciesAndPresentationToWeightObject(speciesAndPresentationToWeightFARObject, speciesCatch)
       })
-    }
+    })
   })
 
   return speciesAndPresentationToWeightFARObject

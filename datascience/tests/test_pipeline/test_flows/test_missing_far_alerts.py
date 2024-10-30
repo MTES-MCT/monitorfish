@@ -239,8 +239,8 @@ def test_extract_vessels_that_emitted_fars(reset_test_data):
     vessels_that_emitted_fars = extract_vessels_that_emitted_fars.run(
         declaration_min_datetime_utc=now - timedelta(days=2),
         declaration_max_datetime_utc=now - timedelta(days=1),
-        fishing_operation_min_datetime_utc=datetime(year=2018, month=7, day=21),
-        fishing_operation_max_datetime_utc=datetime(year=2018, month=7, day=22),
+        fishing_operation_min_datetime_utc=now - timedelta(days=2),
+        fishing_operation_max_datetime_utc=now - timedelta(days=1),
     )
     assert vessels_that_emitted_fars == {"ABC000306959"}
 
@@ -253,18 +253,18 @@ def test_extract_vessels_that_emitted_fars(reset_test_data):
     assert vessels_that_emitted_fars == set()
 
     vessels_that_emitted_fars = extract_vessels_that_emitted_fars.run(
-        declaration_min_datetime_utc=now - timedelta(days=5),
-        declaration_max_datetime_utc=now - timedelta(days=4),
-        fishing_operation_min_datetime_utc=datetime(year=2018, month=7, day=21),
-        fishing_operation_max_datetime_utc=datetime(year=2018, month=7, day=22),
+        declaration_min_datetime_utc=datetime(year=2015, month=7, day=21),
+        declaration_max_datetime_utc=datetime(year=2015, month=7, day=22),
+        fishing_operation_min_datetime_utc=now - timedelta(weeks=2),
+        fishing_operation_max_datetime_utc=now - timedelta(days=1),
     )
     assert vessels_that_emitted_fars == set()
 
     vessels_that_emitted_fars = extract_vessels_that_emitted_fars.run(
         declaration_min_datetime_utc=now - timedelta(weeks=2),
         declaration_max_datetime_utc=now - timedelta(days=1),
-        fishing_operation_min_datetime_utc=datetime(year=2018, month=7, day=21),
-        fishing_operation_max_datetime_utc=datetime(year=2018, month=7, day=22),
+        fishing_operation_min_datetime_utc=now - timedelta(weeks=2),
+        fishing_operation_max_datetime_utc=now - timedelta(days=1),
     )
 
     assert vessels_that_emitted_fars == {"ABC000306959", "ABC000542519"}

@@ -7,7 +7,7 @@ INSERT INTO public.vessels (
     declared_fishing_gears, nav_licence_expiration_date, 
     vessel_emails, vessel_phones, proprietor_name, proprietor_phones, proprietor_emails, operator_name, operator_phones,     
     under_charter,
-    operator_mobile_phone, vessel_mobile_phone, vessel_telex, vessel_fax, operator_fax, operator_email
+    operator_mobile_phone, vessel_mobile_phone, vessel_telex, vessel_fax, operator_fax, operator_email, logbook_equipment_status
 ) VALUES 
 (  
     1,
@@ -16,7 +16,7 @@ INSERT INTO public.vessels (
     '{GNS,GTR,LLS}', (NOW() AT TIME ZONE 'UTC')::TIMESTAMP + INTERVAL '2 months',
     '{}', '{}', NULL, '{}', '{}', 'Le pêcheur de poissons', '{1234567890,"06 06 06 06 06"}', 
     false,
-    null, null, null, null, null, 'write_to_me@gmail.com'
+    null, null, null, null, null, 'write_to_me@gmail.com', 'Equipé'
 ),
 (
     2,
@@ -25,7 +25,7 @@ INSERT INTO public.vessels (
     '{DRB,PS1}', (NOW() AT TIME ZONE 'UTC')::TIMESTAMP + INTERVAL '3 months',
     '{figure@conscience.fr, figure2@conscience.fr}', '{}', NULL, '{}', '{}', 'Le pêcheur de crevettes', '{9876543210}', 
     true,
-    '0600000000', null, null, '0100000000', '0200000000', 'address@email.bzh'
+    '0600000000', null, null, '0100000000', '0200000000', 'address@email.bzh', 'Equipé'
 ),
 (
     3,
@@ -34,7 +34,7 @@ INSERT INTO public.vessels (
     '{OTM,OTB,OTT}', NULL,
     '{}', '{}', NULL, '{}', '{}', 'Le pêcheur de fonds', '{0000000000}', 
     false,
-    null, null, null, null, null, 'address@email.nl'
+    null, null, null, null, null, 'address@email.nl', 'Equipé'
 ),
 (
     4,
@@ -43,7 +43,7 @@ INSERT INTO public.vessels (
     '{OTM,OTB,OTT}', NULL,
     '{}', '{}', NULL, '{}', '{}', 'Le pêcheur', '{11111111111}', 
     false,
-    null, '0111111111', null, null, null, 'pecheur@poissecaille.fr'
+    null, '0111111111', null, null, null, 'pecheur@poissecaille.fr', 'Equipé'
 ),
 (
     5,
@@ -52,7 +52,7 @@ INSERT INTO public.vessels (
     '{OTT}', NULL,
     '{}', '{}', NULL, '{}', '{}', 'Le pêcheur qui se cache', '{2222222222}', 
     false,
-    null, null, null, null, null, 'discrete@cache-cache.fish'
+    null, null, null, null, null, 'discrete@cache-cache.fish', 'Equipé'
 ),
 (
     6,
@@ -61,7 +61,7 @@ INSERT INTO public.vessels (
     '{OTT}', NULL,
     '{}', '{}', NULL, '{}', '{}', 'Le pêcheur qui se fait ses 4h reports', '{3333333333}', 
     false,
-    null, null, null, null, null, 'reglo@bateau.fr'
+    null, null, null, null, null, 'reglo@bateau.fr', 'Equipé'
 ),
 (
     7,
@@ -70,6 +70,6 @@ INSERT INTO public.vessels (
     '{LLS}', NULL,
     '{}', '{}', NULL, '{}', '{}', 'Pêchou', '{9546458753}',
     false,
-    null, null, null, null, null, 'target@me'
+    null, null, null, null, null, 'target@me', 'Equipé'
 )
 ;

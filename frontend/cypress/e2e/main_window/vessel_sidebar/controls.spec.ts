@@ -1,8 +1,12 @@
 import dayjs from 'dayjs'
 
+import { openVesselBySearch } from '../utils'
+
 context('Vessel sidebar controls tab', () => {
   beforeEach(() => {
-    cy.loadPath('/#@-824534.42,6082993.21,8.70')
+    cy.login('superuser')
+    cy.visit('/#@-824534.42,6082993.21,8.70')
+    cy.wait(1000)
   })
 
   it('Controls Should contain the controls summary and history', () => {
@@ -10,9 +14,7 @@ context('Vessel sidebar controls tab', () => {
     const currentYear = dayjs().year()
 
     // Given
-    cy.get('.VESSELS_POINTS').click(460, 460, { force: true, timeout: 10000 })
-    cy.wait(200)
-    cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
+    openVesselBySearch('Pheno')
 
     // When
     cy.get('*[data-cy="vessel-menu-controls"]').click({ timeout: 10000 })
@@ -145,9 +147,7 @@ context('Vessel sidebar controls tab', () => {
 
   it('A control mission Should be opened in the side window', () => {
     // Given
-    cy.get('.VESSELS_POINTS').click(460, 460, { force: true, timeout: 10000 })
-    cy.wait(200)
-    cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
+    openVesselBySearch('Pheno')
 
     // When
     cy.get('*[data-cy="vessel-menu-controls"]').click({ timeout: 10000 })

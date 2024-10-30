@@ -1,6 +1,10 @@
+import { openVesselBySearch } from './main_window/utils'
+
 context('Favorite Vessel', () => {
   beforeEach(() => {
-    cy.loadPath('/#@-824534.42,6082993.21,8.70')
+    cy.login('superuser')
+    cy.visit('/#@-824534.42,6082993.21,8.70')
+    cy.wait(3000)
   })
 
   it('Opening the box Should close other boxes', () => {
@@ -44,7 +48,7 @@ context('Favorite Vessel', () => {
     cy.get('*[data-cy="favorite-vessel-name"]').should('not.exist')
 
     // When
-    cy.get('.VESSELS_POINTS').click(460, 460, { force: true, timeout: 10000 })
+    openVesselBySearch('Pheno')
     cy.get('*[data-cy="sidebar-add-vessel-to-favorites"]').click()
     cy.get('*[data-cy="sidebar-add-vessel-to-favorites"]').children().should('have.css', 'fill', 'rgb(229, 229, 235)')
 
@@ -62,8 +66,10 @@ context('Favorite Vessel', () => {
   it('A favorite vessel track Should be shown and then the vessel sidebar opened', () => {
     // Given
     cy.get('*[data-cy="favorite-vessels"]').click()
-    cy.get('.VESSELS_POINTS').rightclick(460, 460, { force: true, timeout: 10000 })
-    cy.get('*[data-cy="add-vessel-to-favorites"]').click()
+    openVesselBySearch('Pheno')
+    cy.get('*[data-cy="sidebar-add-vessel-to-favorites"]').click()
+    cy.get('*[data-cy="vessel-search-selected-vessel-close-title"]').click()
+
     cy.get('*[data-cy="favorite-vessel-show-vessel-track"]').click()
     cy.get('*[data-cy="close-vessel-track"]').should('have.length', 1)
 

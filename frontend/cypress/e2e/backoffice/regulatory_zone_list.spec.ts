@@ -2,8 +2,9 @@
 
 context('Backoffice', () => {
   beforeEach(() => {
+    cy.login('superuser')
     cy.visit('/backoffice/regulation')
-    cy.wait(200)
+    cy.wait(1000)
   })
 
   it('regulatory zones are displayed by layer name and law types', () => {

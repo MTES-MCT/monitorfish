@@ -1,8 +1,12 @@
 /* eslint-disable no-undef */
 
+import { openVesselBySearch } from '../utils'
+
 context('Vessel sidebar logbook tab', () => {
   beforeEach(() => {
-    cy.loadPath('/#@-824534.42,6082993.21,8.70')
+    cy.login('superuser')
+    cy.visit('/#@-824534.42,6082993.21,8.70')
+    cy.wait(1000)
   })
 
   it('FAR and DIS messages resume Should notify that all messages are not acknowledged', () => {
@@ -34,8 +38,7 @@ context('Vessel sidebar logbook tab', () => {
 
   it('Fishing Should contain the vessel fishing resume', () => {
     // Given
-    cy.get('.VESSELS_POINTS').click(460, 460, { force: true, timeout: 10000 })
-    cy.wait(200)
+    openVesselBySearch('Pheno')
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
@@ -56,8 +59,7 @@ context('Vessel sidebar logbook tab', () => {
 
   it('Fishing Should contain the vessel ERS logbook messages', () => {
     // Given
-    cy.get('.VESSELS_POINTS').click(460, 460, { force: true, timeout: 10000 })
-    cy.wait(200)
+    openVesselBySearch('Pheno')
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
@@ -120,9 +122,7 @@ context('Vessel sidebar logbook tab', () => {
 
   it('Fishing Should contain the vessel FLUX logbook messages', () => {
     // Given
-    cy.get('.VESSELS_POINTS').click(460, 15, { force: true, timeout: 10000 })
-    cy.wait(200)
-    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
+    openVesselBySearch('SOCRATE')
 
     // When
     cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 10000 })
@@ -142,8 +142,7 @@ context('Vessel sidebar logbook tab', () => {
 
   it('Fishing activities Should be changed according to the actual trip When walking in fishing trips', () => {
     // Given
-    cy.get('.VESSELS_POINTS').click(460, 460, { force: true, timeout: 10000 })
-    cy.wait(200)
+    openVesselBySearch('Pheno')
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ force: true, timeout: 10000 })
     cy.fill('Afficher la piste VMS depuis', '3 jours')
@@ -197,8 +196,7 @@ context('Vessel sidebar logbook tab', () => {
 
   it('Single fishing activity Should be seen on map When clicking on the position icon', () => {
     // Given
-    cy.get('.VESSELS_POINTS').click(460, 460, { force: true, timeout: 10000 })
-    cy.wait(200)
+    openVesselBySearch('Pheno')
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ force: true, timeout: 10000 })
     cy.fill('Afficher la piste VMS depuis', '3 jours')

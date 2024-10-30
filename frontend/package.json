@@ -13,7 +13,6 @@
     "build": "vite build && npm run bundle-sw",
     "clean": "rm -Rf ./node-modules/.vite ./build",
     "dev": "import-meta-env-prepare -x ./.env.local.defaults && vite --port 3000",
-    "dev-cypress": "FRONTEND_OIDC_ENABLED=false import-meta-env-prepare -u -x ./.env.local.defaults && vite --port 3000",
     "dev-monitorenv": "FRONTEND_MONITORENV_URL=//localhost:9880 import-meta-env-prepare -u -x ./.env.local.defaults && vite --port 3000",
     "dev-puppeteer": "FRONTEND_OIDC_ENABLED=false FRONTEND_MONITORENV_URL=//localhost:9880 import-meta-env-prepare -u -x ./.env.local.defaults && vite --port 3000",
     "bundle-sw": "esbuild src/workers/serviceWorker.ts --bundle --outfile=public/service-worker.js",
@@ -37,7 +36,7 @@
   "dependencies": {
     "@dnd-kit/core": "6.1.0",
     "@dnd-kit/modifiers": "6.0.1",
-    "@mtes-mct/monitor-ui": "24.1.1",
+    "@mtes-mct/monitor-ui": "24.2.1",
     "@reduxjs/toolkit": "2.2.7",
     "@sentry/react": "8.32.0",
     "@tanstack/react-table": "8.20.5",
@@ -174,6 +173,5 @@
       "eslint --config=./.eslintrc.cjs --fix",
       "bash -c 'npm run test:type'"
     ]
-  },
-  "proxy": "http://localhost:8880"
+  }
 }

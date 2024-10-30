@@ -8,6 +8,8 @@ export const openSideWindowPriorNotificationCardAsUser = (vesselName: string, re
 
   cy.get('[data-cy="side-window-sub-menu-ALL"]').click()
   cy.fill('Rechercher un navire', vesselName)
+  // There is a debounce in the search
+  cy.wait(1000)
 
   cy.getTableRowById(reportId as any).clickButton('Consulter le préavis')
   if (document.querySelector('[data-cy="first-loader"]')) {

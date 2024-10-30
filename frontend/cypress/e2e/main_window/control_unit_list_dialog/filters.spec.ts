@@ -1,6 +1,8 @@
 context('Main Window > Control Unit List Dialog > Filters', () => {
   beforeEach(() => {
-    cy.visit(`/`).wait(1000)
+    cy.login('superuser')
+    cy.visit(`/`)
+    cy.wait(1000)
 
     cy.clickButton('Liste des unités de contrôle')
   })

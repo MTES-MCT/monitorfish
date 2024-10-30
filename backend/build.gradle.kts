@@ -9,10 +9,18 @@ plugins {
     kotlin("plugin.jpa") version "2.0.20"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
     kotlin("plugin.serialization") version "2.0.20"
+    id("io.spring.dependency-management") version "1.1.6"
+}
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2023.0.2")
+    }
 }
 
 repositories {
     mavenCentral()
+    gradlePluginPortal()
 }
 
 kotlin {
@@ -69,6 +77,7 @@ dependencies {
     api("org.hibernate:hibernate-spatial:6.6.1.Final")
     api("io.sentry:sentry:7.14.0")
     api("io.sentry:sentry-log4j2:7.14.0")
+    implementation("org.springframework.cloud:spring-cloud-gateway-mvc:4.1.5")
     runtimeOnly("org.postgresql:postgresql:42.7.4")
     testImplementation("io.ktor:ktor-client-mock-jvm:2.3.12")
     testImplementation("org.assertj:assertj-core:3.26.3")

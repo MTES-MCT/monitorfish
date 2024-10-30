@@ -2,20 +2,27 @@ import { PriorNotification } from '@features/PriorNotification/PriorNotification
 import dayjs from 'dayjs'
 
 import { editSideWindowPriorNotification } from './utils'
+import { getAuthorizationHeader } from '../../../support/commands/getAuthorizationHeader'
 import { openSideWindowPriorNotificationListAsSuperUser } from '../prior_notification_list/utils'
 
 context('Side Window > Logbook Prior Notification Form > Form', () => {
   it('Should update a logbook prior notification', () => {
-    // Reset
-    const operationDate = dayjs().subtract(6, 'hours').toISOString()
-    cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_115?operationDate=${operationDate}`, {
-      body: {
-        note: null
-      }
-    })
-
     // Given
+    const operationDate = dayjs().subtract(6, 'hours').toISOString()
     editSideWindowPriorNotification(`MER À BOIRE`, 'FAKE_OPERATION_115')
+    // Reset
+    getAuthorizationHeader().then(authorization => {
+      cy.request({
+        body: {
+          note: null
+        },
+        headers: {
+          authorization
+        },
+        method: 'PUT',
+        url: `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_115?operationDate=${operationDate}`
+      })
+    })
 
     cy.intercept('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_115?operationDate=*`).as(
       'updateLogbookPriorNotification'
@@ -37,10 +44,17 @@ context('Side Window > Logbook Prior Notification Form > Form', () => {
     cy.get('[name="note"]').should('have.value', "Un point d'attention.")
 
     // Reset
-    cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_115?operationDate=${operationDate}`, {
-      body: {
-        note: null
-      }
+    getAuthorizationHeader().then(authorization => {
+      cy.request({
+        body: {
+          note: null
+        },
+        headers: {
+          authorization
+        },
+        method: 'PUT',
+        url: `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_115?operationDate=${operationDate}`
+      })
     })
   })
 

@@ -7,6 +7,7 @@ import {
   editSideWindowPriorNotification,
   getPriorNotificationSentMessagesFakeResponse
 } from './utils'
+import { getAuthorizationHeader } from '../../../support/commands/getAuthorizationHeader'
 import { openSideWindowPriorNotificationListAsSuperUser } from '../prior_notification_list/utils'
 
 context('Side Window > Logbook Prior Notification Form > Behavior', () => {
@@ -36,10 +37,17 @@ context('Side Window > Logbook Prior Notification Form > Behavior', () => {
 
     // Reset
     const operationDate = dayjs().subtract(6, 'hours').toISOString()
-    cy.request('PUT', `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_116?operationDate=${operationDate}`, {
-      body: {
-        note: null
-      }
+    getAuthorizationHeader().then(authorization => {
+      cy.request({
+        body: {
+          note: null
+        },
+        headers: {
+          authorization
+        },
+        method: 'PUT',
+        url: `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_116?operationDate=${operationDate}`
+      })
     })
   })
 

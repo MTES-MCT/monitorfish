@@ -45,7 +45,12 @@ class SecurityConfig(
                     authorize.requestMatchers(
                         "/",
                         "/backoffice",
+                        "/side_window",
+                        "/login",
+                        "/register",
                         "/backoffice/**",
+                        "/realms/**",
+                        "/resources/**",
                         "/ext",
                         "/light",
                         "/load_light",
@@ -60,6 +65,7 @@ class SecurityConfig(
                         "/flags/**",
                         "/robots.txt",
                         "/favicon-32.ico",
+                        "/favicon.ico",
                         "/asset-manifest.json",
                         "/swagger-ui/**",
                         // Used to redirect to the frontend SPA, see SpaController.kt

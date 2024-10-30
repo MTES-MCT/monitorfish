@@ -1,6 +1,10 @@
+import { openVesselBySearch } from '../main_window/utils'
+
 context('Vessel visibility', () => {
   beforeEach(() => {
-    cy.loadPath('/#@-487249.11,6076055.47,15.77')
+    cy.login('superuser')
+    cy.visit('/#@-487249.11,6076055.47,15.77')
+    cy.wait(1000)
   })
 
   it('Vessels at port Should be hidden and showed', () => {
@@ -26,9 +30,7 @@ context('Vessel visibility', () => {
     cy.get('*[data-cy="vessel-visibility"]').click()
 
     // When
-    cy.get('*[data-cy^="vessel-search-input"]', { timeout: 10000 }).type('Pheno')
-    cy.get('*[data-cy^="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
-    cy.wait(200)
+    openVesselBySearch('Pheno')
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // Then

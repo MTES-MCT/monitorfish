@@ -114,13 +114,16 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
       return
     }
 
-    dispatch(getOperationalAlerts())
-    dispatch(getAllBeaconMalfunctions())
-    dispatch(getSilencedAlerts())
-    dispatch(reportingApi.endpoints.getReportings.initiate())
+    if (isSuperUser) {
+      dispatch(getOperationalAlerts())
+      dispatch(getAllBeaconMalfunctions())
+      dispatch(getSilencedAlerts())
+      dispatch(reportingApi.endpoints.getReportings.initiate())
+    }
+
     dispatch(getInfractions())
     dispatch(getAllGearCodes())
-  }, [dispatch, isFromURL])
+  }, [dispatch, isFromURL, isSuperUser])
 
   useEffect(() => {
     setIsFirstRender(false)

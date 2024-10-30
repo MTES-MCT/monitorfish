@@ -1,36 +1,24 @@
+import { openVesselBySearch } from './main_window/utils'
+
 context('External MonitorFish', () => {
   it('Should redirect to /', () => {
     // Given
-    cy.intercept('/bff/v1/authorization/current', {
-      body: {
-        isSuperUser: false
-      },
-      statusCode: 200
-    }).as('getIsSuperUser')
+    cy.login('user')
     cy.visit('/ext#@-824534.42,6082993.21,8.70')
-    cy.wait('@getIsSuperUser')
 
     cy.url().should('not.contain', 'ext')
   })
 
   it('Should have some features removed When not logged as super user', () => {
     // Given
-    cy.intercept('/bff/v1/authorization/current', {
-      body: {
-        isSuperUser: false
-      },
-      statusCode: 200
-    }).as('getIsSuperUser')
+    cy.login('user')
     cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.wait('@getIsSuperUser')
+    cy.wait(1000)
     cy.wait(200)
 
     // Then
     // Vessel sidebar is minimized
-    cy.get('*[data-cy^="vessel-search-input"]', { timeout: 10000 }).type('Pheno')
-    cy.get('*[data-cy^="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
-    cy.wait(200)
-    cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
+    openVesselBySearch('Pheno')
     cy.get('*[data-cy="global-risk-factor"]').should('not.exist')
     cy.get('*[data-cy="vessel-sidebar-alert"]').should('not.exist')
     cy.get('*[data-cy="vessel-sidebar-beacon-malfunction"]').should('not.exist')
@@ -80,7 +68,7 @@ context('External MonitorFish', () => {
     cy.get('*[data-cy="missions-menu-box"]').should('not.exist')
 
     // Given
-    cy.loadPath('/#@-188008.06,6245230.27,8.70')
+    cy.visit('/#@-188008.06,6245230.27,8.70')
 
     // Then
     // No missions

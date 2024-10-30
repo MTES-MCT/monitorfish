@@ -8,28 +8,26 @@ import { PendingAlertValueType } from '../../../../domain/entities/alerts/types'
 import { VesselIdentifier } from '../../../../domain/entities/vessel/types'
 
 jest.mock('../../reportingApi', () => jest.fn())
-
 jest.mock('../deleteReporting', () => ({
   __esModule: true,
   deleteReporting: () => jest.fn()
 }))
-
 jest.spyOn(deleteReporting, 'deleteReporting')
 
-const INITIAL_STATE = {
-  vessel: {
-    selectedVesselIdentity: {
-      externalReferenceNumber: '',
-      flagState: 'ES',
-      internalReferenceNumber: 'FR04504564',
-      vesselId: 1234568,
-      vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-      vesselName: 'A VESSEL'
+describe('archiveReporting()', () => {
+  const INITIAL_STATE = {
+    vessel: {
+      selectedVesselIdentity: {
+        externalReferenceNumber: '',
+        flagState: '',
+        internalReferenceNumber: '',
+        vesselId: 1234568,
+        vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+        vesselName: ''
+      }
     }
   }
-}
 
-describe('archiveReporting()', () => {
   afterAll(() => {
     // Reset module registry to clear the mock
     jest.resetModules()

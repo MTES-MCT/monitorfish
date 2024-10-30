@@ -8,7 +8,7 @@ context('Vessel sidebar reporting tab', () => {
   beforeEach(() => {
     cy.login('superuser')
     cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.wait(500)
+    cy.wait(1000)
   })
 
   it('An infraction suspicion reporting Should be added from the reporting form', () => {

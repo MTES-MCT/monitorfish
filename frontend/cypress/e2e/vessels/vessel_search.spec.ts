@@ -4,7 +4,7 @@ context('VesselSearch', () => {
   beforeEach(() => {
     cy.login('superuser')
     cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.wait(500)
+    cy.wait(1000)
   })
 
   it('Vessel from last positions and vessels table Should be searched from the search bar', () => {

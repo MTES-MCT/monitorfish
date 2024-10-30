@@ -16,7 +16,7 @@ export function getAuthorizationHeader() {
 function getOIDCUser() {
   const OIDC_AUTHORITY = Cypress.env('FRONTEND_OIDC_AUTHORITY')
   const OIDC_CLIENT_ID = Cypress.env('FRONTEND_OIDC_CLIENT_ID')
-  const LOCALSTORAGE_URL = Cypress.env('LOCALSTORAGE_URL')
+  const LOCALSTORAGE_URL = Cypress.config().baseUrl
 
   return cy.getAllLocalStorage().then(localStorages => {
     const testLocalStorage = localStorages[LOCALSTORAGE_URL]

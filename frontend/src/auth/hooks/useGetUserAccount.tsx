@@ -44,7 +44,7 @@ export function useGetUserAccount(): UserAccountContextType | undefined {
       }
     }
 
-    if (auth?.isLoading || (auth?.isAuthenticated && !user)) {
+    if (!!auth?.isLoading || (auth?.isAuthenticated && !user)) {
       return undefined
     }
 

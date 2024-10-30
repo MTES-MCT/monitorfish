@@ -3,8 +3,8 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 
 data class PortDataOutput(
-    val locode: String?,
-    val name: String?,
+    val locode: String,
+    val name: String,
     val latitude: Double?,
     val longitude: Double?,
     val region: String?,

@@ -19,6 +19,7 @@ class CaffeineConfiguration {
 
     // Control Units
     val controlUnits = "control_units"
+    val legacyControlUnits = "legacy_control_units"
 
     // FAO Areas
     val faoAreas = "fao_areas"
@@ -95,6 +96,7 @@ class CaffeineConfiguration {
 
         // Control Units
         val controlUnitsCache = buildMinutesCache(controlUnits, ticker, oneDay)
+        val legacyControlUnitsCache = buildMinutesCache(legacyControlUnits, ticker, oneDay)
 
         // FAO Areas
         val faoAreasCache = buildMinutesCache(faoAreas, ticker, oneWeek)
@@ -188,6 +190,7 @@ class CaffeineConfiguration {
                 gearsCache,
                 infractionCache,
                 infractionsCache,
+                legacyControlUnitsCache,
                 logbookCache,
                 logbookRawMessageCache,
                 missionControlUnitsCache,

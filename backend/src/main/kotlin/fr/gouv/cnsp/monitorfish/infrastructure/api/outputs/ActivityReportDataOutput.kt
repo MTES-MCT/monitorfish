@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.ActivityCode
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.ActivityReport
 
@@ -10,7 +10,7 @@ data class ActivityReportDataOutput(
     val faoArea: String?,
     val segment: String?,
     val vesselNationalIdentifier: String,
-    val controlUnits: List<ControlUnit>,
+    val controlUnits: List<LegacyControlUnit>,
     val vessel: VesselDataOutput,
 ) {
     companion object {

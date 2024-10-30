@@ -2,7 +2,7 @@ import { Navigate } from 'react-router-dom'
 
 import { LoginBackground } from './Login'
 import { UserAccountContext } from '../../context/UserAccountContext'
-import { paths } from '../../paths'
+import { ROUTER_PATHS } from '../../paths'
 import { LoadingSpinnerWall } from '../../ui/LoadingSpinnerWall'
 import { useGetUserAccount } from '../hooks/useGetUserAccount'
 
@@ -25,11 +25,11 @@ export function RequireAuth({ children, redirect = false, requireSuperUser = fal
   }
 
   if (!userAccount.isAuthenticated) {
-    return handleRedirect(paths.login, redirect)
+    return handleRedirect(ROUTER_PATHS.login, redirect)
   }
 
   if (requireSuperUser && !userAccount.isSuperUser) {
-    return handleRedirect(paths.register, redirect)
+    return handleRedirect(ROUTER_PATHS.register, redirect)
   }
 
   return <UserAccountContext.Provider value={userAccount}>{children}</UserAccountContext.Provider>

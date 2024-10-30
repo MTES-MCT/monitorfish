@@ -2,8 +2,9 @@ package fr.gouv.cnsp.monitorfish.infrastructure.monitorenv
 
 import fr.gouv.cnsp.monitorfish.config.ApiClient
 import fr.gouv.cnsp.monitorfish.config.MonitorenvProperties
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
 import fr.gouv.cnsp.monitorfish.domain.repositories.ControlUnitRepository
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.dtos.FullControlUnit
+import fr.gouv.cnsp.monitorfish.infrastructure.monitorenv.responses.FullControlUnitDataResponse
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.runBlocking
@@ -20,14 +21,15 @@ class APIControlUnitRepository(
     private val logger: Logger = LoggerFactory.getLogger(APIControlUnitRepository::class.java)
 
     @Cacheable(value = ["control_units"])
-    override fun findAll(): List<ControlUnit> =
+    override fun findAll(): List<FullControlUnit> =
         runBlocking {
-            val missionsUrl = "${monitorenvProperties.url}/api/v1/control_units"
+            val controlUnitsUrl = "${monitorenvProperties.url}/api/v2/control_units"
 
             try {
-                apiClient.httpClient.get(missionsUrl).body()
+                apiClient.httpClient.get(controlUnitsUrl).body<List<FullControlUnitDataResponse>>()
+                    .map { it.toFullControlUnit() }
             } catch (e: Exception) {
-                logger.error("Could not fetch control units at $missionsUrl", e)
+                logger.error("Could not fetch control units at $controlUnitsUrl", e)
 
                 listOf()
             }

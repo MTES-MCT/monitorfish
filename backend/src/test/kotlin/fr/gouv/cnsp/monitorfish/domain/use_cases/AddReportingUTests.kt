@@ -6,7 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAl
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllControlUnits
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllLegacyControlUnits
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.AddReporting
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetInfractionSuspicionWithDMLAndSeaFront
 import org.assertj.core.api.Assertions.assertThat
@@ -29,7 +29,7 @@ class AddReportingUTests {
     private lateinit var getInfractionSuspicionWithDMLAndSeaFront: GetInfractionSuspicionWithDMLAndSeaFront
 
     @Mock
-    private lateinit var getAllControlUnits: GetAllControlUnits
+    private lateinit var getAllLegacyControlUnits: GetAllLegacyControlUnits
 
     @Test
     fun `execute Should throw an exception When the reporting is an alert`() {
@@ -54,7 +54,11 @@ class AddReportingUTests {
         // When
         val throwable =
             catchThrowable {
-                AddReporting(reportingRepository, getInfractionSuspicionWithDMLAndSeaFront, getAllControlUnits).execute(
+                AddReporting(
+                    reportingRepository,
+                    getInfractionSuspicionWithDMLAndSeaFront,
+                    getAllLegacyControlUnits,
+                ).execute(
                     reportingToAdd,
                 )
             }
@@ -95,7 +99,11 @@ class AddReportingUTests {
         // When
         val throwable =
             catchThrowable {
-                AddReporting(reportingRepository, getInfractionSuspicionWithDMLAndSeaFront, getAllControlUnits).execute(
+                AddReporting(
+                    reportingRepository,
+                    getInfractionSuspicionWithDMLAndSeaFront,
+                    getAllLegacyControlUnits,
+                ).execute(
                     reportingToAdd,
                 )
             }
@@ -149,7 +157,7 @@ class AddReportingUTests {
         given(reportingRepository.save(any())).willReturn(reportingToAdd)
 
         // When
-        AddReporting(reportingRepository, getInfractionSuspicionWithDMLAndSeaFront, getAllControlUnits).execute(
+        AddReporting(reportingRepository, getInfractionSuspicionWithDMLAndSeaFront, getAllLegacyControlUnits).execute(
             reportingToAdd,
         )
 

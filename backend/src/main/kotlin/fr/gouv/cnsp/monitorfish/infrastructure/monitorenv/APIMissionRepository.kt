@@ -3,11 +3,11 @@ package fr.gouv.cnsp.monitorfish.infrastructure.monitorenv
 import com.github.benmanes.caffeine.cache.Caffeine
 import fr.gouv.cnsp.monitorfish.config.ApiClient
 import fr.gouv.cnsp.monitorfish.config.MonitorenvProperties
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.Mission
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotFindException
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
-import fr.gouv.cnsp.monitorfish.infrastructure.monitorenv.input.MissionDataResponse
+import fr.gouv.cnsp.monitorfish.infrastructure.monitorenv.responses.MissionDataResponse
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.CoroutineScope
@@ -33,12 +33,12 @@ class APIMissionRepository(
         Caffeine.newBuilder()
             .maximumSize(500)
             .expireAfterWrite(1, TimeUnit.DAYS)
-            .build<String, List<ControlUnit>>()
+            .build<String, List<LegacyControlUnit>>()
 
     override fun findControlUnitsOfMission(
         scope: CoroutineScope,
         missionId: Int,
-    ): Deferred<List<ControlUnit>> {
+    ): Deferred<List<LegacyControlUnit>> {
         val cacheKey = "control_units_$missionId"
         val cachedControlUnits = cache.getIfPresent(cacheKey)
 
@@ -48,7 +48,9 @@ class APIMissionRepository(
             val missionsUrl = "${monitorenvProperties.url}/api/v1/missions/$missionId"
 
             try {
-                val controlUnits = apiClient.httpClient.get(missionsUrl).body<MissionDataResponse>().controlUnits
+                val controlUnits =
+                    apiClient.httpClient.get(missionsUrl)
+                        .body<MissionDataResponse>().controlUnits.map { it.toLegacyControlUnit() }
 
                 cache.put(cacheKey, controlUnits)
 
@@ -74,26 +76,32 @@ class APIMissionRepository(
         // For these parameters, if the list is null or empty, we don't send the param to the server to avoid filtering results
         val missionTypesParameter =
             if (!missionTypes.isNullOrEmpty()) {
-                "missionTypes=${missionTypes.joinToString(
-                    ",",
-                )}&"
+                "missionTypes=${
+                    missionTypes.joinToString(
+                        ",",
+                    )
+                }&"
             } else {
                 ""
             }
         val missionStatusesParameter =
             if (!missionStatuses.isNullOrEmpty()) {
-                "missionStatus=${missionStatuses.joinToString(
-                    ",",
-                )}&"
+                "missionStatus=${
+                    missionStatuses.joinToString(
+                        ",",
+                    )
+                }&"
             } else {
                 ""
             }
         val seaFrontsParameter = if (!seaFronts.isNullOrEmpty()) "seaFronts=${seaFronts.joinToString(",")}&" else ""
         val missionSourcesParameter =
             if (!missionSources.isNullOrEmpty()) {
-                "missionSource=${missionSources.joinToString(
-                    ",",
-                )}&"
+                "missionSource=${
+                    missionSources.joinToString(
+                        ",",
+                    )
+                }&"
             } else {
                 ""
             }

@@ -1,13 +1,13 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionOrObservationType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllControlUnits
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllLegacyControlUnits
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -15,11 +15,11 @@ import org.slf4j.LoggerFactory
 class AddReporting(
     private val reportingRepository: ReportingRepository,
     private val getInfractionSuspicionWithDMLAndSeaFront: GetInfractionSuspicionWithDMLAndSeaFront,
-    private val getAllControlUnits: GetAllControlUnits,
+    private val getAllLegacyControlUnits: GetAllLegacyControlUnits,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(AddReporting::class.java)
 
-    fun execute(newReporting: Reporting): Pair<Reporting, ControlUnit?> {
+    fun execute(newReporting: Reporting): Pair<Reporting, LegacyControlUnit?> {
         logger.info(
             "Adding reporting for vessel ${newReporting.internalReferenceNumber}/${newReporting.ircs}/${newReporting.externalReferenceNumber}",
         )
@@ -28,7 +28,7 @@ class AddReporting(
             "The reporting type must be OBSERVATION or INFRACTION_SUSPICION"
         }
 
-        val controlUnits = getAllControlUnits.execute()
+        val controlUnits = getAllLegacyControlUnits.execute()
 
         newReporting.value as InfractionSuspicionOrObservationType
         newReporting.value.checkReportingActorAndFieldsRequirements()

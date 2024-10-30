@@ -5,10 +5,13 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.SeafrontGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageAndValue
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagePurpose
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.*
 import fr.gouv.cnsp.monitorfish.domain.utils.PaginatedList
+import fr.gouv.cnsp.monitorfish.fakers.LogbookMessageFaker
 import fr.gouv.cnsp.monitorfish.fakers.PriorNotificationFaker
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.LogbookPriorNotificationFormDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationComputeDataInput
@@ -364,6 +367,59 @@ class PriorNotificationControllerUTests {
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
+    }
+
+    // Non-regression test
+    @Test
+    fun `getOne Should get a logbook prior notification including a null weight in its fishing catches`() {
+        val fakePriorNotification =
+            PriorNotificationFaker.fakePriorNotification().copy(
+                logbookMessageAndValue =
+                    LogbookMessageAndValue(
+                        logbookMessage =
+                            LogbookMessageFaker.fakePnoLogbookMessage(
+                                reportId = "FAKE_OPERATION_001",
+                                message =
+                                    LogbookMessageFaker.fakePnoMessage().apply {
+                                        catchOnboard =
+                                            listOf(
+                                                LogbookMessageFaker.fakeLogbookFishingCatch(species = "COD", weight = 12.0),
+                                                LogbookMessageFaker.fakeLogbookFishingCatch(species = "HKE", weight = null),
+                                            )
+                                        catchToLand =
+                                            listOf(
+                                                LogbookMessageFaker.fakeLogbookFishingCatch(species = "COD", weight = 12.0),
+                                                LogbookMessageFaker.fakeLogbookFishingCatch(species = "HKE", weight = null),
+                                            )
+                                    },
+                            ),
+                        clazz = PNO::class.java,
+                    ),
+            )
+
+        // Given
+        given(
+            getPriorNotification.execute(
+                fakePriorNotification.reportId!!,
+                fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
+                false,
+            ),
+        )
+            .willReturn(fakePriorNotification)
+
+        // When
+        api.perform(
+            get(
+                "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}&isManuallyCreated=false",
+            ),
+        )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId!!)))
+            .andExpect(jsonPath("$.asManualDraft.fishingCatches[0].weight", equalTo(12.0)))
+            .andExpect(jsonPath("$.asManualDraft.fishingCatches[1].weight", equalTo(0.0)))
+            .andExpect(jsonPath("$.logbookMessage.message.catchOnboard[0].weight", equalTo(12.0)))
+            .andExpect(jsonPath("$.logbookMessage.message.catchToLand[1].weight", equalTo(null)))
     }
 
     @Test

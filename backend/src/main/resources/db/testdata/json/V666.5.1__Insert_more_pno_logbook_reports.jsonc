@@ -1510,6 +1510,7 @@
             // - Vessel: BON VENT
             // - Flag state: FR
             // - French vessel landing in a foreign port
+            // - `null` weight in fishing catches
             {
                 "id": 120,
                 "report_id": "FAKE_OPERATION_120",
@@ -1533,13 +1534,22 @@
                     "riskFactor": 2.9,
                     "catchOnboard": [
                         {
-                            "weight": 150.0,
+                            "economicZone": "FRA",
+                            "effortZone": "C",
+                            "faoZone": "27.8.a",
                             "nbFish": null,
                             "species": "ANF",
-                            "faoZone": "27.8.a",
-                            "effortZone": "C",
+                            "statisticalRectangle": "23E6",
+                            "weight": null
+                        },
+                        {
                             "economicZone": "FRA",
-                            "statisticalRectangle": "23E6"
+                            "effortZone": "C",
+                            "faoZone": "27.8.a",
+                            "nbFish": null,
+                            "species": "COD",
+                            "statisticalRectangle": "23E6",
+                            "weight": 25.0
                         }
                     ],
                     "pnoTypes": [

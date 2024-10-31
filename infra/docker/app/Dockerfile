@@ -8,7 +8,7 @@ ARG VERSION=NO_VERSION
 ########################################
 # Build monitorfish backend with maven #
 ########################################
-FROM gradle:8.4-jdk17 AS buildBack
+FROM gradle:8.4-jdk17 AS build-back
 
 ARG GITHUB_SHA
 ARG VERSION
@@ -29,7 +29,7 @@ RUN gradle assemble
 ###########################
 # Build frontend with npm #
 ###########################
-FROM node:20-alpine AS buildFront
+FROM node:20-alpine AS build-front
 
 ARG VERSION
 ARG ENV_PROFILE
@@ -85,18 +85,18 @@ ENV JAVA_TOOL_OPTIONS="-Dcom.sun.management.jmxremote.ssl=false \
   -Djava.rmi.server.hostname=0.0.0.0"
 
 # Copy files for the back
-COPY --from=buildBack /tmp/build/libs/monitorfish-${VERSION}.jar /home/monitorfish
+COPY --from=build-back /tmp/build/libs/monitorfish-${VERSION}.jar /home/monitorfish
 COPY infra/configurations /home/monitorfish/configurations/
 
 USER monitorfish
 # Copy files for the front
 RUN mkdir /home/monitorfish/public
-COPY --from=buildFront /tmp/frontend/build /home/monitorfish/public/
+COPY --from=build-front /tmp/frontend/build /home/monitorfish/public/
 
 # Copy import-meta-env
-COPY --from=buildFront /tmp/frontend/import-meta-env /home/monitorfish/
-COPY --from=buildFront /tmp/frontend/.env.example /home/monitorfish/
-COPY --from=buildFront /tmp/infra/docker/app/env.sh /home/monitorfish/
+COPY --from=build-front /tmp/frontend/import-meta-env /home/monitorfish/
+COPY --from=build-front /tmp/frontend/.env.example /home/monitorfish/
+COPY --from=build-front /tmp/infra/docker/app/env.sh /home/monitorfish/
 
 # Add logs folder to be mounted as volume
 RUN mkdir /home/monitorfish/logs

@@ -12,7 +12,8 @@ import type {
   RegulatoryLawTypes,
   RegulatoryZone,
   SpeciesRegulation,
-  RegulatoryText
+  RegulatoryText,
+  DateInterval
 } from './types'
 import type { Specy } from '../../domain/types/specy'
 
@@ -290,15 +291,15 @@ export const getRegulatoryZoneTextTypeAsText = textTypeList =>
       : `${regulatoryZoneTextType(textTypeList[0])}`
   } de zone`
 
-export const DEFAULT_REGULATORY_TEXT = {
+export const DEFAULT_REGULATORY_TEXT: RegulatoryText = {
   endDate: undefined,
   reference: '',
-  startDate: new Date().getTime(),
+  startDate: new Date(),
   textType: [],
   url: ''
 }
 
-export const DEFAULT_DATE_RANGE = {
+export const DEFAULT_DATE_RANGE: DateInterval = {
   endDate: undefined,
   startDate: undefined
 }
@@ -710,7 +711,7 @@ export const convertTimeToString = date => {
  * @param {FishingPeriod} fishingPeriod
  * @returns {string} - fishing period convert to string
  */
-export const fishingPeriodToString = fishingPeriod => {
+export const fishingPeriodToString = (fishingPeriod): string | undefined => {
   if (!fishingPeriod) {
     return ''
   }
@@ -794,7 +795,7 @@ export const fishingPeriodToString = fishingPeriod => {
     return `Pêche ${authorized ? 'autorisée' : 'interdite'} `.concat(textArray.join(', '))
   }
 
-  return null
+  return undefined
 }
 
 /**

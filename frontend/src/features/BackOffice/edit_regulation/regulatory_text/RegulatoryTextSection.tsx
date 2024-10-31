@@ -1,23 +1,21 @@
-import React from 'react'
+import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import styled from 'styled-components'
+
+import { RegulatoryTextContent } from './RegulatoryTextContent'
 import { COLORS } from '../../../../constants/constants'
 import { Section, Title } from '../../../commonStyles/Backoffice.style'
 import { ValidateButton } from '../../../commonStyles/Buttons.style'
-import { RegulatoryText } from './RegulatoryText'
 import { DEFAULT_REGULATORY_TEXT, REGULATORY_REFERENCE_KEYS } from '../../../Regulation/utils'
 import { updateProcessingRegulationByKey } from '../../slice'
-import { useDispatch } from 'react-redux'
 
-/**
- * @typedef {object} Props
- * @prop {[RegulatoryText]} regulatoryTextList
- * @prop {Function} setRegulatoryTextList
- * @prop {RegulatoryTextSource} source
- * @prop {Boolean} saveForm
- */
-const RegulatoryTextSection = props => {
-  const { regulatoryTextList, source, saveForm } = props
-  const dispatch = useDispatch()
+import type { RegulatoryText } from '@features/Regulation/types'
+
+type RegulatoryTextSectionProps = Readonly<{
+  regulatoryTextList: RegulatoryText[]
+  saveForm: boolean
+}>
+export function RegulatoryTextSection({ regulatoryTextList, saveForm }: RegulatoryTextSectionProps) {
+  const dispatch = useBackofficeAppDispatch()
 
   const setRegulatoryTextList = texts =>
     dispatch(
@@ -27,7 +25,7 @@ const RegulatoryTextSection = props => {
       })
     )
 
-  const addOrRemoveRegulatoryTextInList = id => {
+  const addOrRemoveRegulatoryTextInList = (id?: number) => {
     let newRegulatoryTextList = regulatoryTextList ? [...regulatoryTextList] : []
 
     if (id === undefined) {
@@ -45,7 +43,7 @@ const RegulatoryTextSection = props => {
     addOrRemoveRegulatoryTextInList()
   }
 
-  const setRegulatoryText = (id, regulatoryText) => {
+  const setRegulatoryText = (id: number, regulatoryText: RegulatoryText) => {
     const newRegulatoryTextList = regulatoryTextList ? [...regulatoryTextList] : []
     newRegulatoryTextList[id] = regulatoryText
     setRegulatoryTextList(newRegulatoryTextList)
@@ -55,28 +53,24 @@ const RegulatoryTextSection = props => {
     <Section show>
       <Title>références réglementaires en vigueur</Title>
       {regulatoryTextList && regulatoryTextList.length > 0 ? (
-        regulatoryTextList.map((regulatoryText, id) => {
-          return (
-            <RegulatoryText
-              key={regulatoryText}
-              id={id}
-              regulatoryText={regulatoryText}
-              addOrRemoveRegulatoryTextInList={addOrRemoveRegulatoryTextInList}
-              source={source}
-              listLength={regulatoryTextList.length}
-              saveForm={saveForm}
-              setRegulatoryText={setRegulatoryText}
-            />
-          )
-        })
+        regulatoryTextList.map((regulatoryText, id) => (
+          <RegulatoryTextContent
+            key={JSON.stringify(regulatoryText)}
+            addOrRemoveRegulatoryTextInList={addOrRemoveRegulatoryTextInList}
+            id={id}
+            listLength={regulatoryTextList.length}
+            regulatoryText={regulatoryText}
+            saveForm={saveForm}
+            setRegulatoryText={setRegulatoryText}
+          />
+        ))
       ) : (
-        <RegulatoryText
-          regulatoryText={DEFAULT_REGULATORY_TEXT}
+        <RegulatoryTextContent
           key={0}
-          id={0}
           addOrRemoveRegulatoryTextInList={addOrRemoveRegulatoryTextInList}
-          source={source}
+          id={0}
           listLength={0}
+          regulatoryText={DEFAULT_REGULATORY_TEXT}
           saveForm={saveForm}
           setRegulatoryText={setRegulatoryText}
         />
@@ -95,5 +89,3 @@ const ButtonLine = styled.div`
   flex-direction: row;
   background-color: ${COLORS.white};
 `
-
-export default RegulatoryTextSection

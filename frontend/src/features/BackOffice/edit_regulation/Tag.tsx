@@ -1,29 +1,25 @@
-import React from 'react'
 import styled from 'styled-components'
-import CloseIconSVG from '../../icons/Croix_grise.svg?react'
-import { COLORS } from '../../../constants/constants'
+
 import { Link } from '../../commonStyles/Backoffice.style'
+import CloseIconSVG from '../../icons/Croix_grise.svg?react'
 
-/**
- * @typedef Props
- * @prop {String} tagValue
- * @prop {Function} onCloseIconClicked
- * @prop {URL} tagUrl
- */
-const Tag = props => {
-  const { tagValue, tagUrl, onCloseIconClicked, onClickText } = props
-
+type TagProps = Readonly<{
+  onClickText?: () => void
+  onCloseIconClicked: (tagValue: string) => void
+  tagUrl?: string
+  tagValue: string
+}>
+export function Tag({ onClickText, onCloseIconClicked, tagUrl, tagValue }: TagProps) {
   return (
     <TagWrapper data-cy={`tag-${tagValue}`}>
-      {tagUrl ? (
-        <Link tagUrl href={tagUrl} target={'_blank'}>
+      {tagUrl && (
+        <Link href={tagUrl} tagUrl target="_blank">
           {tagValue}
         </Link>
-      ) : onClickText ? (
-        <Link onClick={onClickText}>{tagValue}</Link>
-      ) : (
-        <SelectedValue>{tagValue}</SelectedValue>
       )}
+      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      {!tagUrl && onClickText && <Link onClick={onClickText}>{tagValue}</Link>}
+      {!tagUrl && !onClickText && <SelectedValue>{tagValue}</SelectedValue>}
       <CloseIcon data-cy={`close-tag-${tagValue}`} onClick={_ => onCloseIconClicked(tagValue)} />
     </TagWrapper>
   )
@@ -33,7 +29,7 @@ const TagWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: ${COLORS.gainsboro};
+  background-color: ${p => p.theme.color.gainsboro};
   border-radius: 2px;
   margin-right: 8px;
 `
@@ -41,7 +37,7 @@ const TagWrapper = styled.div`
 const SelectedValue = styled.span`
   font-size: 13px;
   padding: 3px 8px;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   font-weight: 500;
 `
 
@@ -52,5 +48,3 @@ const CloseIcon = styled(CloseIconSVG)`
   border-left: 1px solid white;
   padding: 6px 6px 6px 5px;
 `
-
-export default Tag

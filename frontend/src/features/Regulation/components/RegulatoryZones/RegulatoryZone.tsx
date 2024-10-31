@@ -25,7 +25,7 @@ export type RegulatoryZoneProps = {
   isEditable: boolean
   isLast: boolean
   namespace: LayerSliceNamespace
-  onRemove: (id: number | string) => Promisable<void>
+  onRemove?: ((id: number | string) => Promisable<void>) | undefined
   regulatoryTopic: string
   regulatoryZone: RegulatoryZoneType
 }
@@ -150,7 +150,9 @@ function UnmemoizedRegulatoryZone({
           <Icon.Close
             color={THEME.color.slateGray}
             onClick={() => {
-              onRemove(regulatoryZone.id)
+              if (onRemove) {
+                onRemove(regulatoryZone.id)
+              }
             }}
             size={15}
             title={`Supprimer la zone "${regulatoryZone.zone}" de ma sélection`}

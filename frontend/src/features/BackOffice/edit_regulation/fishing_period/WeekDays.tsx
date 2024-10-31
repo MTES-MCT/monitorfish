@@ -1,13 +1,15 @@
-import React from 'react'
+import { DayPicker } from './DayPicker'
 import { Row } from '../../../commonStyles/FishingPeriod.style'
 import { Label } from '../../../commonStyles/Input.style'
-import DayPicker from './DayPicker'
 
-const WeekDays = ({ disabled }) => {
-  return <Row>
-    <Label>Jours de la semaine</Label>
-    <DayPicker disabled={disabled} />
-  </Row>
+type WeekDaysProps = Readonly<{
+  disabled: boolean
+}>
+export function WeekDays({ disabled }: WeekDaysProps) {
+  return (
+    <Row>
+      <Label>Jours de la semaine</Label>
+      <DayPicker disabled={disabled} />
+    </Row>
+  )
 }
-
-export default WeekDays

@@ -1,39 +1,37 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
+import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import RegulatedGears from './RegulatedGears'
-import SectionTitle from '../../SectionTitle'
-import { Label, CustomInput } from '../../../commonStyles/Input.style'
+
+import { RegulatedGears } from './RegulatedGears'
+import { GEAR_REGULATION_KEYS, prepareCategoriesAndGearsToDisplay } from '../../../../domain/entities/backoffice'
+import getAllGearCodes from '../../../../domain/use_cases/gearCode/getAllGearCodes'
 import { Section, OtherRemark, VerticalLine } from '../../../commonStyles/Backoffice.style'
-import { updateProcessingRegulationByKeyAndSubKey } from '../../slice'
+import { Label, CustomInput } from '../../../commonStyles/Input.style'
 import {
   DEFAULT_AUTHORIZED_REGULATED_GEARS,
   DEFAULT_UNAUTHORIZED_REGULATED_GEARS,
   REGULATORY_REFERENCE_KEYS
 } from '../../../Regulation/utils'
-import { GEAR_REGULATION_KEYS, prepareCategoriesAndGearsToDisplay } from '../../../../domain/entities/backoffice'
-import getAllGearCodes from '../../../../domain/use_cases/gearCode/getAllGearCodes'
+import { SectionTitle } from '../../SectionTitle'
+import { updateProcessingRegulationByKeyAndSubKey } from '../../slice'
 
-const GearRegulation = () => {
-  const dispatch = useDispatch()
-  const { gearRegulation } = useSelector(state => state.regulation.processingRegulation)
-
-  const {
-    /** @type {Object.<string, Gear[]>} */
-    categoriesToGears,
-    groupsToCategories,
-    gearsByCode
-  } = useSelector(state => state.gear)
+export function GearRegulation() {
+  const dispatch = useBackofficeAppDispatch()
+  const processingRegulation = useBackofficeAppSelector(state => state.regulation.processingRegulation)
+  const categoriesToGears = useBackofficeAppSelector(state => state.gear.categoriesToGears)
+  const gearsByCode = useBackofficeAppSelector(state => state.gear.gearsByCode)
+  const groupsToCategories = useBackofficeAppSelector(state => state.gear.groupsToCategories)
 
   const [show, setShow] = useState(false)
   /** @type {string[]} */
-  const [formattedAndFilteredCategoriesToGears, setFormattedAndFilteredCategoriesToGears] = useState([])
+  const [formattedAndFilteredCategoriesToGears, setFormattedAndFilteredCategoriesToGears] = useState<any[]>([])
 
   useEffect(() => {
     if (!categoriesToGears || !groupsToCategories || gearsByCode) {
       dispatch(getAllGearCodes())
     }
-  }, [])
+  }, [categoriesToGears, dispatch, gearsByCode, groupsToCategories])
 
   useEffect(() => {
     if (categoriesToGears) {
@@ -41,11 +39,14 @@ const GearRegulation = () => {
     }
   }, [categoriesToGears])
 
-  const setGearRegulation = (property, value) => {
+  // TODO Impossible to type and make this code safe as it is, should be refactored?
+  const setGearRegulation = (subKey: any, value: any) => {
     dispatch(
       updateProcessingRegulationByKeyAndSubKey({
-        key: REGULATORY_REFERENCE_KEYS.GEAR_REGULATION,
-        subKey: property,
+        key: REGULATORY_REFERENCE_KEYS.GEAR_REGULATION as 'gearRegulation',
+        // @ts-ignore
+        subKey,
+        // @ts-ignore
         value
       })
     )
@@ -63,41 +64,36 @@ const GearRegulation = () => {
 
   return (
     <Section show>
-      <SectionTitle
-        title={'Engins Réglementés'}
-        isOpen={show}
-        setIsOpen={setShow}
-        dataCy={'regulatory-gears-section'}
-      />
+      <SectionTitle dataCy="regulatory-gears-section" isOpen={show} setIsOpen={setShow} title="Engins Réglementés" />
       <RegulatedGearsForms>
         <RegulatedGears
-          show={show}
-          authorized={true}
-          regulatedGearsObject={gearRegulation[GEAR_REGULATION_KEYS.AUTHORIZED] || DEFAULT_AUTHORIZED_REGULATED_GEARS}
-          setRegulatedGearsObject={setRegulatedGears}
+          authorized
           formattedAndFilteredCategoriesToGears={formattedAndFilteredCategoriesToGears}
+          regulatedGearsObject={processingRegulation.gearRegulation?.authorized ?? DEFAULT_AUTHORIZED_REGULATED_GEARS}
+          setRegulatedGearsObject={setRegulatedGears}
+          show={show}
         />
         <VerticalLine />
         <RegulatedGears
-          show={show}
           authorized={false}
+          formattedAndFilteredCategoriesToGears={formattedAndFilteredCategoriesToGears}
           regulatedGearsObject={
-            gearRegulation[GEAR_REGULATION_KEYS.UNAUTHORIZED] || DEFAULT_UNAUTHORIZED_REGULATED_GEARS
+            processingRegulation.gearRegulation?.unauthorized ?? DEFAULT_UNAUTHORIZED_REGULATED_GEARS
           }
           setRegulatedGearsObject={setRegulatedGears}
-          formattedAndFilteredCategoriesToGears={formattedAndFilteredCategoriesToGears}
+          show={show}
         />
       </RegulatedGearsForms>
       <OtherRemark show={show}>
         <Label>Remarques</Label>
         <CustomInput
+          $isGray={!!processingRegulation.gearRegulation?.otherInfo}
           as="textarea"
-          rows={2}
-          placeholder=""
-          value={gearRegulation?.otherInfo || ''}
           onChange={event => setOtherInfo(event.target.value)}
-          width={'500px'}
-          $isGray={gearRegulation?.otherInfo && gearRegulation?.otherInfo !== ''}
+          placeholder=""
+          rows={2}
+          value={processingRegulation.gearRegulation?.otherInfo ?? ''}
+          width="500px"
         />
       </OtherRemark>
     </Section>
@@ -107,5 +103,3 @@ const GearRegulation = () => {
 const RegulatedGearsForms = styled.div`
   display: flex;
 `
-
-export default GearRegulation

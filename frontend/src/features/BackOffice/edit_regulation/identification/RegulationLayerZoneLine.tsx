@@ -8,7 +8,7 @@ import { Label } from '../../../commonStyles/Input.style'
 import { REGULATORY_REFERENCE_KEYS } from '../../../Regulation/utils'
 import { INFO_TEXT } from '../../constants'
 import { updateProcessingRegulationByKey } from '../../slice'
-import InfoBox from '../InfoBox'
+import { InfoBox } from '../InfoBox'
 
 export function RegulationLayerZoneLine() {
   const dispatch = useBackofficeAppDispatch()
@@ -31,7 +31,7 @@ export function RegulationLayerZoneLine() {
         name="Nom de la zone"
         onChange={setZoneName}
         placeholder="Nom de la zone"
-        value={(zone || undefined) as unknown as string}
+        value={zone}
         width="200px"
       />
       <InfoBox pointer>

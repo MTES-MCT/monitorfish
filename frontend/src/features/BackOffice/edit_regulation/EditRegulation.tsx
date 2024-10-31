@@ -1,23 +1,22 @@
 // TODO Remove temporary `as any` and `@ts-ignore` (fresh migration to TS).
 
-import FishingPeriodSection from '@features/BackOffice/edit_regulation/fishing_period/FishingPeriodSection'
-import GearRegulation from '@features/BackOffice/edit_regulation/gear_regulation/GearRegulation'
+import { FishingPeriodSection } from '@features/BackOffice/edit_regulation/fishing_period/FishingPeriodSection'
+import { GearRegulation } from '@features/BackOffice/edit_regulation/gear_regulation/GearRegulation'
 import { RegulationGeometryLine } from '@features/BackOffice/edit_regulation/identification/RegulationGeometryLine'
 import { RegulationLawTypeLine } from '@features/BackOffice/edit_regulation/identification/RegulationLawTypeLine'
 import { RegulationLayerZoneLine } from '@features/BackOffice/edit_regulation/identification/RegulationLayerZoneLine'
 import { RegulationRegionLine } from '@features/BackOffice/edit_regulation/identification/RegulationRegionLine'
 import { RegulationTopicLine } from '@features/BackOffice/edit_regulation/identification/RegulationTopicLine'
-import RegulatoryTextSection from '@features/BackOffice/edit_regulation/regulatory_text/RegulatoryTextSection'
-import RemoveRegulationModal from '@features/BackOffice/edit_regulation/regulatory_text/RemoveRegulationModal'
+import { RegulatoryTextSection } from '@features/BackOffice/edit_regulation/regulatory_text/RegulatoryTextSection'
+import { RemoveRegulationModal } from '@features/BackOffice/edit_regulation/regulatory_text/RemoveRegulationModal'
 import { formatDataForSelectPicker } from '@features/BackOffice/utils'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { batch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
-import ConfirmRegulationModal from './ConfirmRegulationModal'
-import SpeciesRegulation from './species_regulation/SpeciesRegulation'
-import { COLORS } from '../../../constants/constants'
+import { ConfirmRegulationModal } from './ConfirmRegulationModal'
+import { SpeciesRegulation } from './species_regulation/SpeciesRegulation'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { setError } from '../../../domain/shared_slices/Global'
 import getAllSpecies from '../../../domain/use_cases/species/getAllSpecies'
@@ -349,7 +348,7 @@ const Validate = styled.div`
 `
 
 const ErrorMessage = styled.div`
-  color: ${COLORS.maximumRed};
+  color: ${p => p.theme.color.maximumRed};
   width: 250px;
   margin-bottom: 10px;
 `
@@ -375,7 +374,7 @@ const CreateRegulationWrapper = styled.div`
   flex: 2;
   flex-direction: column;
   padding: 11px 27px 11px 27px;
-  background-color: ${COLORS.white};
+  background-color: ${p => p.theme.color.white};
   height: 100vh;
 `
 
@@ -395,10 +394,10 @@ const BackLink = styled.a`
   text-decoration: underline;
   font: normal normal normal 13px;
   letter-spacing: 0px;
-  color: ${COLORS.slateGray}!important;
+  color: ${p => p.theme.color.slateGray}!important;
   align-self: center;
   &:visited {
-    color: ${COLORS.slateGray}!important;
+    color: ${p => p.theme.color.slateGray}!important;
   }
 `
 
@@ -406,7 +405,7 @@ const HeaderTitle = styled.span`
   text-align: center;
   font-weight: bold;
   font-size: 16px;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   text-transform: uppercase;
 `
 

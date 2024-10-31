@@ -11,21 +11,24 @@ import { checkURL, RegulatoryTextType } from '../../../Regulation/utils'
 import { INFINITE } from '../../constants'
 import { addObjectToRegulatoryTextCheckedMap } from '../../slice'
 
-/**
- * @typedef {object} Props
- * @prop {Number} id
- * @prop {RegulatoryText} regulatoryText
- * @prop {Function} addOrRemoveRegulatoryTextInList
- * @prop {Boolean} saveForm
- */
-export function RegulatoryText({
+import type { RegulatoryText } from '@features/Regulation/types'
+
+type RegulatoryTextContentProps = Readonly<{
+  addOrRemoveRegulatoryTextInList: (id: number) => void
+  id: number
+  listLength: number
+  regulatoryText: RegulatoryText
+  saveForm: boolean
+  setRegulatoryText: (id: number, regulatoryText: RegulatoryText) => void
+}>
+export function RegulatoryTextContent({
   addOrRemoveRegulatoryTextInList,
   id,
   listLength,
   regulatoryText,
   saveForm,
   setRegulatoryText
-}) {
+}: RegulatoryTextContentProps) {
   const { endDate, reference, startDate, textType, url } = regulatoryText
 
   const dispatch = useBackofficeAppDispatch()
@@ -159,7 +162,7 @@ export function RegulatoryText({
       <ContentLine>
         <Label>Fin de validité</Label>
         <DatePicker
-          defaultValue={endDate || undefined}
+          defaultValue={endDate ?? undefined}
           disabled={endDate === INFINITE}
           error={endDate ? undefined : 'Fin de validité requis'}
           isErrorMessageHidden

@@ -1,16 +1,15 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
+import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../constants/constants'
-import { setIsConfirmModalOpen, setSaveOrUpdateRegulation } from '../slice'
-import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
 import { FooterButton } from '../../commonStyles/Backoffice.style'
+import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
 import CloseIconSVG from '../../icons/Croix_grise_clair.svg?react'
+import { setIsConfirmModalOpen, setSaveOrUpdateRegulation } from '../slice'
 
-const ConfirmRegulationModal = ({ goBackofficeHome }) => {
-  const dispatch = useDispatch()
-  const { isConfirmModalOpen } = useSelector(state => state.regulation)
+export function ConfirmRegulationModal({ goBackofficeHome }) {
+  const dispatch = useBackofficeAppDispatch()
+  const { isConfirmModalOpen } = useBackofficeAppSelector(state => state.regulation)
 
   const save = () => {
     dispatch(setIsConfirmModalOpen(false))
@@ -35,10 +34,10 @@ const ConfirmRegulationModal = ({ goBackofficeHome }) => {
         </Body>
         <Footer>
           <FooterButton>
-            <ValidateButton onClick={save} width={'120px'} data-cy="confirm-modal-confirm-button">
+            <ValidateButton data-cy="confirm-modal-confirm-button" onClick={save} style={{ width: 120 }}>
               Oui
             </ValidateButton>
-            <CancelButton onClick={goBackofficeHome} width={'120px'} data-cy="confirm-modal-cancel-button">
+            <CancelButton data-cy="confirm-modal-cancel-button" onClick={goBackofficeHome} style={{ width: 120 }}>
               Non
             </CancelButton>
           </FooterButton>
@@ -56,8 +55,8 @@ const Body = styled.div`
 `
 
 const Footer = styled.div`
-  background-color: ${COLORS.white};
-  border-top: 1px solid ${COLORS.lightGray};
+  background-color: ${p => p.theme.color.white};
+  border-top: 1px solid ${p => p.theme.color.lightGray};
 `
 
 const CloseIcon = styled(CloseIconSVG)`
@@ -67,8 +66,10 @@ const CloseIcon = styled(CloseIconSVG)`
   float: right;
 `
 
-const RegulationModal = styled.div`
-  display: ${props => (props.$isOpen ? 'block' : 'none')};
+const RegulationModal = styled.div<{
+  $isOpen: boolean
+}>`
+  display: ${p => (p.$isOpen ? 'block' : 'none')};
   overflow: none;
   width: 100%;
   height: 100vh;
@@ -84,23 +85,21 @@ const ModalContent = styled.div`
   top: 33%;
   width: 400px;
   box-sizing: border-box;
-  background-color: ${COLORS.white};
+  background-color: ${p => p.theme.color.white};
   overflow: hidden;
 `
 
 const ModalTitle = styled.div`
-  background-color: ${COLORS.charcoal};
+  background-color: ${p => p.theme.color.charcoal};
   text-align: center;
   padding: 9px;
   font-size: 13px;
   box-sizing: border-box;
   width: 100%;
-  color: ${COLORS.white};
+  color: ${p => p.theme.color.white};
 `
 
 const Section = styled.div`
   padding: 35px 42px;
   text-align: center;
 `
-
-export default ConfirmRegulationModal

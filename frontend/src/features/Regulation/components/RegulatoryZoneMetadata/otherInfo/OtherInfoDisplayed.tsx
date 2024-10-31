@@ -6,7 +6,7 @@ import { Section } from '../RegulatoryMetadata.style'
 export function OtherInfoDisplayed() {
   const regulatory = useMainAppSelector(state => state.regulatory)
 
-  const { otherInfo } = regulatory.regulatoryZoneMetadata || {}
+  const { otherInfo } = regulatory.regulatoryZoneMetadata ?? {}
 
   return (
     <>

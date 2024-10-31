@@ -1,19 +1,26 @@
-import React, { useState } from 'react'
+import { THEME } from '@mtes-mct/monitor-ui'
+import { useState } from 'react'
 import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
+
 import { InfoPoint } from './InfoPoint'
 
-const InfoBox = props => {
-  const {
-    isInfoTextShown,
-    setIsInfoTextShown,
-    isFormOpened,
-    pointer,
-    className,
-    children
-  } = props
-
-  const [isShown, setIsShown] = useState(isInfoTextShown !== undefined ? isInfoTextShown : false)
+type InfoBoxProps = Readonly<{
+  children: any
+  className?: string
+  isFormOpened?: boolean
+  isInfoTextShown?: boolean
+  pointer: boolean
+  setIsInfoTextShown?: (status: boolean) => void
+}>
+export function InfoBox({
+  children,
+  className,
+  isFormOpened = false,
+  isInfoTextShown = false,
+  pointer,
+  setIsInfoTextShown
+}: InfoBoxProps) {
+  const [isShown, setIsShown] = useState(isInfoTextShown ?? false)
 
   const onMouseLeave = () => {
     if (!isFormOpened) {
@@ -27,52 +34,48 @@ const InfoBox = props => {
     }
     setIsShown(status)
   }
-  return <InfoTextParent
-        isInfoTextShown={isShown}
-        isFormOpened={isFormOpened}
-        onMouseLeave={onMouseLeave}
-        pointer={pointer}
-        className={className}
-      >
-        {isShown || isFormOpened
-          ? <InfoTextWrapper
-            isInfoTextShown={isShown}
-            isFormOpened={isFormOpened}
-            onMouseLeave={onMouseLeave}
-            >
-            <InfoPoint
-              margin={isShown || isFormOpened ? '3px 0 0 0' : '0px'}
-              backgroundColor={isShown || isFormOpened ? COLORS.charcoal : COLORS.slateGray}
-            >!</InfoPoint>
-            {children}
-          </InfoTextWrapper>
-          : <InfoPoint
-            onMouseEnter={() => changeDisplayStatus(true)}
-            onMouseOut={() => changeDisplayStatus(true)}
-          >!</InfoPoint>}
-      </InfoTextParent>
+
+  return (
+    <InfoTextParent $isFormOpened={isFormOpened} $pointer={pointer} className={className} onMouseLeave={onMouseLeave}>
+      {isShown || isFormOpened ? (
+        <InfoTextWrapper $isFormOpened={isFormOpened} $isInfoTextShown={isShown} onMouseLeave={onMouseLeave}>
+          <InfoPoint
+            backgroundColor={isShown || isFormOpened ? THEME.color.charcoal : THEME.color.slateGray}
+            margin={isShown || isFormOpened ? '3px 0 0 0' : '0px'}
+          />
+          {children}
+        </InfoTextWrapper>
+      ) : (
+        <InfoPoint onMouseEnter={() => changeDisplayStatus(true)} onMouseOut={() => changeDisplayStatus(true)} />
+      )}
+    </InfoTextParent>
+  )
 }
 
-const InfoTextParent = styled.div`
+const InfoTextParent = styled.div<{
+  $isFormOpened: boolean
+  $pointer: boolean
+}>`
   display: flex;
   min-height: 14px;
   min-width: 14px;
   position: relative;
-  cursor: ${props => props.pointer ? 'pointer' : 'default'};
-  ${props => props.isFormOpened ? 'left: 384px' : ''};
-  ${props => props.isFormOpened ? 'margin-top: 8px' : ''};
+  cursor: ${p => (p.$pointer ? 'pointer' : 'default')};
+  ${p => (p.$isFormOpened ? 'left: 384px' : '')};
+  ${p => (p.$isFormOpened ? 'margin-top: 8px' : '')};
 `
 
-const InfoTextWrapper = styled.div`
+const InfoTextWrapper = styled.div<{
+  $isFormOpened: boolean
+  $isInfoTextShown: boolean
+}>`
   display: flex;
-  ${props => props.isFormOpened ? '' : 'position: absolute;'};
-  border: 1px solid ${COLORS.lightGray};
-  background: ${COLORS.gainsboro} 0% 0% no-repeat padding-box;
+  ${p => (p.$isFormOpened ? '' : 'position: absolute;')};
+  border: 1px solid ${p => p.theme.color.lightGray};
+  background: ${p => p.theme.color.gainsboro} 0% 0% no-repeat padding-box;
   border-radius: 2px;
   padding: 8px 20px 9px 8px;
-  ${props => props.isInfoTextShown && !props.isFormOpened ? 'margin-top: -10px;' : ''}
+  ${p => (p.$isInfoTextShown && !p.$isFormOpened ? 'margin-top: -10px;' : '')}
   box-sizing: border-box;
   z-index: 30;
 `
-
-export default InfoBox

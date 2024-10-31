@@ -27,7 +27,7 @@ export type EditedRegulatoryZone = RegulatoryZone & {
 
 export type RegulatoryText = {
   // TODO Use `Infinity`
-  endDate: Date | 'infinite'
+  endDate: Date | 'infinite' | undefined
   reference: string
   startDate: Date
   // TODO Doesn't exist.
@@ -40,13 +40,13 @@ export type RegulatoryText = {
 export type RegulatoryLawTypes = Record<string, Record<string, RegulatoryZone[]>>
 
 export type DateInterval = {
-  endDate: string | Date
-  startDate: string | Date
+  endDate: string | Date | undefined
+  startDate: string | Date | undefined
 }
 
 export type TimeInterval = {
-  from: Date
-  to: Date
+  from: Date | undefined
+  to: Date | undefined
 }
 
 export type FishingPeriod = {

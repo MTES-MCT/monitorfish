@@ -1,69 +1,73 @@
-import React, { useCallback, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
+import { useCallback, useEffect } from 'react'
 import styled from 'styled-components'
-import { COLORS } from '../../../../constants/constants'
-import { FISHING_PERIOD_KEYS, WEEKDAYS } from '../../../Regulation/utils'
-import useSetFishingPeriod from '../../../../hooks/fishingPeriod/useSetFishingPeriod'
 
-const DayPicker = ({ disabled }) => {
-  const { weekdays } = useSelector(state => state.regulation.processingRegulation.fishingPeriod)
+import { useSetFishingPeriod } from '../../../../hooks/fishingPeriod/useSetFishingPeriod'
+import { FISHING_PERIOD_KEYS, WEEKDAYS } from '../../../Regulation/utils'
+
+type DayPickerProps = Readonly<{
+  disabled: boolean
+}>
+export function DayPicker({ disabled }: DayPickerProps) {
+  const processingRegulation = useBackofficeAppSelector(state => state.regulation.processingRegulation)
   const setWeekdays = useSetFishingPeriod(FISHING_PERIOD_KEYS.WEEKDAYS)
 
   useEffect(() => {
     if (disabled) {
       setWeekdays([])
     }
-  }, [disabled])
+  }, [disabled, setWeekdays])
 
-  const onClick = useCallback(e => {
-    let newSelectedList
-    const value = e.currentTarget.getAttribute('value')
-    if (weekdays?.includes(value)) {
-      newSelectedList = weekdays.filter(elem => elem !== value)
-    } else {
-      newSelectedList = [
-        ...weekdays,
-        value
-      ]
-    }
-    setWeekdays(newSelectedList)
-  }, [weekdays, setWeekdays])
+  const onClick = useCallback(
+    e => {
+      let newSelectedList
+      const value = e.currentTarget.getAttribute('value')
+      if (processingRegulation.fishingPeriod?.weekdays?.includes(value)) {
+        newSelectedList = processingRegulation.fishingPeriod?.weekdays.filter(elem => elem !== value)
+      } else {
+        newSelectedList = [...(processingRegulation.fishingPeriod?.weekdays ?? []), value]
+      }
+      setWeekdays(newSelectedList)
+    },
+    [processingRegulation.fishingPeriod?.weekdays, setWeekdays]
+  )
 
-  return <>
-    {
-      Object.keys(WEEKDAYS).map(weekday => {
-        return <Circle
+  return (
+    <>
+      {Object.keys(WEEKDAYS).map(weekday => (
+        <Circle
           key={weekday}
-          disabled={disabled}
-          value={weekday}
-          $isGray={weekdays?.includes(weekday)}
-          onClick={onClick}>
-            {WEEKDAYS[weekday]}
-          </Circle>
-      })
-    }
-  </>
+          $disabled={disabled}
+          $isGray={!!processingRegulation.fishingPeriod?.weekdays?.includes(weekday)}
+          onClick={onClick}
+        >
+          {WEEKDAYS[weekday]}
+        </Circle>
+      ))}
+    </>
+  )
 }
 
-const Circle = styled.a`
+const Circle = styled.a<{
+  $disabled: boolean
+  $isGray: boolean
+}>`
   display: inline-block;
   height: 30px;
   width: 30px;
   border-radius: 50%;
   font-size: 13px;
-  border: 1px solid ${COLORS.lightGray};
+  border: 1px solid ${p => p.theme.color.lightGray};
   margin-right: 5px;
   text-align: center;
   line-height: 2em;
-  color: ${p => p.$isGray ? p.theme.color.gunMetal : p.theme.color.lightGray};
-  ${p => p.$isGray ? `background-color: ${COLORS.gainsboro}` : ''};
+  color: ${p => (p.$isGray ? p.theme.color.gunMetal : p.theme.color.lightGray)};
+  ${p => (p.$isGray ? `background-color: ${p.theme.color.gainsboro}` : '')};
   text-decoration: none;
-  cursor: ${p => p.disabled ? 'not-allowed' : 'pointer'};
-  opacity: ${p => p.disabled ? '0.4' : '1'};
+  cursor: ${p => (p.$disabled ? 'not-allowed' : 'pointer')};
+  opacity: ${p => (p.$disabled ? '0.4' : '1')};
   &:hover {
     text-decoration: none;
-    color: ${COLORS.slateGray};
+    color: ${p => p.theme.color.slateGray};
   }
 `
-
-export default DayPicker

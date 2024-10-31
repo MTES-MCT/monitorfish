@@ -18,7 +18,7 @@ type LawTypeProps = Readonly<{
 }>
 export function LawType({ isEditable, lawType, regZoneByLawType, territory }: LawTypeProps) {
   const dispatch = useBackofficeAppDispatch()
-  const [numberOfZonesOpened, setNumberOfZonesOpened] = useState(0)
+  // const [numberOfZonesOpened, setNumberOfZonesOpened] = useState(0)
   const lawTypeOpened = useBackofficeAppSelector(state => state.regulatory.lawTypeOpened)
   const [isOpen, setIsOpen] = useState(false)
 
@@ -26,18 +26,18 @@ export function LawType({ isEditable, lawType, regZoneByLawType, territory }: La
     setIsOpen(lawTypeOpened === lawType)
   }, [lawType, lawTypeOpened, setIsOpen])
 
-  const increaseNumberOfZonesOpened = number => {
-    setNumberOfZonesOpened(numberOfZonesOpened + number)
-  }
+  // const increaseNumberOfZonesOpened = number => {
+  //   setNumberOfZonesOpened(numberOfZonesOpened + number)
+  // }
 
-  const decreaseNumberOfZonesOpened = number => {
-    const value = numberOfZonesOpened - number
-    if (value < 0) {
-      setNumberOfZonesOpened(0)
-    } else {
-      setNumberOfZonesOpened(value)
-    }
-  }
+  // const decreaseNumberOfZonesOpened = number => {
+  //   const value = numberOfZonesOpened - number
+  //   if (value < 0) {
+  //     setNumberOfZonesOpened(0)
+  //   } else {
+  //     setNumberOfZonesOpened(value)
+  //   }
+  // }
 
   const updateLayerName = (previousTopic: string, nextTopic: string) => {
     dispatch(updateTopicForAllZones(territory, lawType, previousTopic, nextTopic))
@@ -51,8 +51,9 @@ export function LawType({ isEditable, lawType, regZoneByLawType, territory }: La
           <RegulatoryTopic
             key={regulatoryTopic}
             allowRemoveZone={false}
-            decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
-            increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
+            // TODO These props don't exist, check if we can remove them or if they are missing (BUG).
+            // decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
+            // increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
             isEditable={isEditable}
             isLastItem={Object.keys(regulatoryTopics).length === index + 1}
             regulatoryTopic={regulatoryTopic}

@@ -3,7 +3,7 @@ import { Checkbox } from '@mtes-mct/monitor-ui'
 import { useEffect } from 'react'
 import styled from 'styled-components'
 
-import useSetFishingPeriod from '../../../../hooks/fishingPeriod/useSetFishingPeriod'
+import { useSetFishingPeriod } from '../../../../hooks/fishingPeriod/useSetFishingPeriod'
 import { TimeRow } from '../../../commonStyles/FishingPeriod.style'
 import { FISHING_PERIOD_KEYS } from '../../../Regulation/utils'
 

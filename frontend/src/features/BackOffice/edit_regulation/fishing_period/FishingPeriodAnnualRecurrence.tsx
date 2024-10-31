@@ -1,43 +1,49 @@
-import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import styled from 'styled-components'
+import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
+import { useEffect } from 'react'
 import { Radio, RadioGroup } from 'rsuite'
+import styled from 'styled-components'
+
+import { useSetFishingPeriod } from '../../../../hooks/fishingPeriod/useSetFishingPeriod'
 import { Label } from '../../../commonStyles/Input.style'
-import { COLORS } from '../../../../constants/constants'
-import useSetFishingPeriod from '../../../../hooks/fishingPeriod/useSetFishingPeriod'
 import { FISHING_PERIOD_KEYS } from '../../../Regulation/utils'
 
-const FishingPeriodAnnualRecurrence = ({ disabled }) => {
-  const { annualRecurrence } = useSelector(state => state.regulation.processingRegulation.fishingPeriod)
+type FishingPeriodAnnualRecurrenceProps = Readonly<{
+  disabled: boolean | undefined
+}>
+export function FishingPeriodAnnualRecurrence({ disabled = false }: FishingPeriodAnnualRecurrenceProps) {
+  const processingRegulation = useBackofficeAppSelector(state => state.regulation.processingRegulation)
   const onAnnualRecurrenceChange = useSetFishingPeriod(FISHING_PERIOD_KEYS.ANNUAL_RECURRENCE)
 
   useEffect(() => {
     if (disabled) {
       onAnnualRecurrenceChange(undefined)
     }
-  }, [disabled])
+  }, [disabled, onAnnualRecurrenceChange])
 
-  return <AnnualRecurrence disabled={disabled}>
-    <Label>Récurrence annuelle</Label>
-    <RadioGroup
-      inline
-      onChange={value => onAnnualRecurrenceChange(value === 'true')}
-      value={
-        annualRecurrence === undefined
-          ? ''
-          : annualRecurrence === true
-            ? 'true'
-            : 'false'
-      }
-    >
-      <CustomRadio disabled={disabled} value={'true'}>
-        oui
-      </CustomRadio>
-      <CustomRadio disabled={disabled} value={'false'}>
-        non
-      </CustomRadio>
-    </RadioGroup>
-  </AnnualRecurrence>
+  return (
+    <AnnualRecurrence $disabled={disabled}>
+      <Label>Récurrence annuelle</Label>
+      <RadioGroup
+        inline
+        onChange={value => onAnnualRecurrenceChange(value === 'true')}
+        value={
+          // eslint-disable-next-line no-nested-ternary
+          processingRegulation.fishingPeriod?.annualRecurrence === undefined
+            ? ''
+            : processingRegulation.fishingPeriod?.annualRecurrence === true
+              ? 'true'
+              : 'false'
+        }
+      >
+        <CustomRadio disabled={disabled} value="true">
+          oui
+        </CustomRadio>
+        <CustomRadio disabled={disabled} value="false">
+          non
+        </CustomRadio>
+      </RadioGroup>
+    </AnnualRecurrence>
+  )
 }
 
 const CustomRadio = styled(Radio)`
@@ -60,15 +66,15 @@ const CustomRadio = styled(Radio)`
   .rs-radio-checker > label {
     font-size: 13px;
     vertical-align: sub;
-    color: ${COLORS.gunMetal};
+    color: ${p => p.theme.color.gunMetal};
   }
 `
 
-const AnnualRecurrence = styled.div`
+const AnnualRecurrence = styled.div<{
+  $disabled?: boolean
+}>`
   .rs-radio-group {
     margin-left: -10px;
   }
-  opacity: ${props => props.disabled ? '0.4' : '1'};
+  opacity: ${p => (p.$disabled ? '0.4' : '1')};
 `
-
-export default FishingPeriodAnnualRecurrence

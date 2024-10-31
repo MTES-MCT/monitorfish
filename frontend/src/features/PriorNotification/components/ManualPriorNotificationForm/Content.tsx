@@ -27,6 +27,7 @@ import { EditHistory } from '../shared/EditHistory'
 import { UploadFiles } from '../shared/UploadFiles'
 
 import type { ManualPriorNotificationFormValues } from './types'
+import type { VesselIdentity } from 'domain/entities/vessel/types'
 import type { Promisable } from 'type-fest'
 
 type ContentProps = Readonly<{
@@ -46,6 +47,9 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
 
   const [isCancellationConfirmationModalOpen, setIsCancellationConfirmationModalOpen] = useState(false)
   const [isInvalidationConfirmationModalOpen, setIsInvalidationConfirmationModalOpen] = useState(false)
+  const [selectedVesselIdentity, setSelectedVesselIdentity] = useState<VesselIdentity | undefined>(
+    detail?.vesselIdentity
+  )
 
   const previousPartialComputationRequestData = usePrevious(getPartialComputationRequestData(values))
 
@@ -159,7 +163,13 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
       )}
 
       <FrontendErrorBoundary>
-        <CardHeader detail={detail} onClose={handleClose} vesselId={values.vesselId} withCloseButton />
+        <CardHeader
+          detail={detail}
+          onClose={handleClose}
+          selectedVesselIdentity={selectedVesselIdentity}
+          withCloseButton
+          withFirstTitleRow
+        />
 
         <Body data-cy="ManualPriorNotificationForm-Body">
           <CardBodyHead
@@ -177,7 +187,13 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
 
           <hr />
 
-          <Form isNewPriorNotification={isNewPriorNotification} isReadOnly={isReadOnly} />
+          <Form
+            detail={detail}
+            isNewPriorNotification={isNewPriorNotification}
+            isReadOnly={isReadOnly}
+            onVesselChange={setSelectedVesselIdentity}
+            selectedVesselIdentity={selectedVesselIdentity}
+          />
 
           {!!detail && (
             <>

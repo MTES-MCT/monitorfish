@@ -7,6 +7,7 @@ export const FixedTag = styled(Tag)<{
   $isFullWidth?: boolean
 }>`
   align-items: baseline;
+  cursor: ${p => (p.onClick ? 'pointer' : 'default')};
   display: inline-block;
   line-height: 22px;
   max-width: ${p => (p.$isFullWidth ? 'auto' : '130px')};

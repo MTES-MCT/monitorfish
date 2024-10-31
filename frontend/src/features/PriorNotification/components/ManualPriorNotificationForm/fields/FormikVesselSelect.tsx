@@ -9,14 +9,17 @@ import styled from 'styled-components'
 import type { VesselIdentity } from 'domain/entities/vessel/types'
 
 type FormikVesselSelectProps = Readonly<{
+  initialVesselIdentity: VesselIdentity | undefined
   onChange: (nextVessel: VesselIdentity | undefined) => void
   readOnly?: boolean | undefined
 }>
-export function FormikVesselSelect({ onChange, readOnly }: FormikVesselSelectProps) {
-  const defaultValueRef = useRef<VesselIdentity | undefined>(undefined)
+export function FormikVesselSelect({ initialVesselIdentity, onChange, readOnly }: FormikVesselSelectProps) {
+  const [input, meta, helper] = useField<number | undefined>('vesselId')
+
+  const defaultValueRef = useRef<VesselIdentity | undefined>(initialVesselIdentity)
+  const isFirstRenderRef = useRef<boolean>(true)
 
   const dispatch = useMainAppDispatch()
-  const [input, meta, helper] = useField<number | undefined>('vesselId')
   const { newWindowContainerRef } = useNewWindow()
 
   const [isLoading, setIsLoading] = useState(true)
@@ -56,11 +59,12 @@ export function FormikVesselSelect({ onChange, readOnly }: FormikVesselSelectPro
 
       const vessel = await dispatch(vesselApi.endpoints.getVessel.initiate(vesselId)).unwrap()
 
-      const nextVessel = {
+      const nextVessel: VesselIdentity = {
         externalReferenceNumber: vessel.externalReferenceNumber ?? null,
         flagState: vessel.flagState ?? null,
-        internalReferenceNumber: null,
+        internalReferenceNumber: vessel.internalReferenceNumber ?? null,
         ircs: vessel.ircs ?? null,
+        mmsi: vessel.mmsi ?? null,
         vesselId: vessel.vesselId ?? null,
         vesselName: vessel.vesselName ?? null
       }
@@ -74,7 +78,11 @@ export function FormikVesselSelect({ onChange, readOnly }: FormikVesselSelectPro
 
   useEffect(
     () => {
-      if (!input.value) {
+      if (!input.value || isFirstRenderRef.current) {
+        if (isFirstRenderRef.current) {
+          isFirstRenderRef.current = false
+        }
+
         setIsLoading(false)
 
         return

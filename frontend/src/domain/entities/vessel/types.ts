@@ -55,6 +55,7 @@ export enum NetworkType {
   SATELLITE = 'SATELLITE'
 }
 
+// TODO Replace `| null` with `| undefined`.
 export type VesselIdentity = {
   beaconNumber?: number | null
   districtCode?: string | null

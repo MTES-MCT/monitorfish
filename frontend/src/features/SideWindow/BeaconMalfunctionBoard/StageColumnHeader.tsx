@@ -20,7 +20,7 @@ export function StageColumnHeader({ description, numberOfItems, stage }: StageCo
             : numberOfItems}
         </NumberOfItems>
       </Row>
-      <Description>{description || ''}</Description>
+      <Description>{description ?? ''}</Description>
     </Wrapper>
   )
 }

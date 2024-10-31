@@ -26,7 +26,7 @@ export const remove =
       layer
         .getSource()
         ?.getFeatures()
-        .filter(feature => feature.get('uuid') === uuid) || []
+        .filter(feature => feature.get('uuid') === uuid) ?? []
     features.forEach(feature => layer.getSource()?.removeFeature(feature))
 
     dispatch(customZoneActions.remove(uuid))

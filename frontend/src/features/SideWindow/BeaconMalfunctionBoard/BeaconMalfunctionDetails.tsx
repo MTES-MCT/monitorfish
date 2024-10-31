@@ -322,7 +322,7 @@ const closeIconStyle = {
 const Row = styled.div``
 const rowStyle: (topMargin?: number) => CSSProperties = (topMargin?: number) => ({
   display: 'flex',
-  marginTop: topMargin || 0
+  marginTop: topMargin ?? 0
 })
 
 const FirstHeader = styled.div``

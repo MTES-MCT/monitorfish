@@ -30,7 +30,7 @@ export const editName =
       layer
         .getSource()
         ?.getFeatures()
-        .filter(feature => feature.get('uuid') === uuid) || []
+        .filter(feature => feature.get('uuid') === uuid) ?? []
     features.forEach(feature => feature.set('name', nextName))
 
     dispatch(

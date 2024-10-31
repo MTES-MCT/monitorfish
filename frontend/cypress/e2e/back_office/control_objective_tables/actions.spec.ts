@@ -130,24 +130,51 @@ context('BackOffice > Control Objective Tables > Actions', () => {
     cy.get('.rs-table-row').should('have.length', 67)
   })
 
-  it('Should add the next control objective year', () => {
-    // Given
-    cy.get('.rs-table-row').should('have.length', 67)
-    cy.get('*[data-cy^="control-objectives-year"]').click()
-    cy.get('.rs-picker-select-menu-item').should('have.length', 2)
+  it('Should handle new year as expected', () => {
+    const currentYear = new Date().getFullYear()
+    const nextYear = currentYear + 1
+
+    cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear}`).as('fleetSegments')
+    cy.intercept('GET', `/bff/v1/admin/control_objectives/${currentYear}`).as('controlObjectives')
     cy.intercept('POST', '/bff/v1/admin/control_objectives/years').as('addObjectiveYear')
+
+    cy.log('Should allow adding a control objective for a year that has not yet been added')
+
+    // Given
+    cy.clock(new Date(nextYear, 3, 14).getTime())
+
+    cy.getDataCy('control-objectives-year').contains(currentYear)
+    cy.get('.rs-table-row').should('have.length', 67)
+
+    // When
+    cy.getDataCy('control-objectives-year').click()
+
+    // Then
+    cy.get('.rs-picker-select-menu-item').should('have.length', 2)
+    cy.get('*[data-cy="control-objectives-add-year"]').contains(nextYear)
+
+    cy.log('Should add the next control objective year')
+
+    // Given
+    cy.clock(new Date().getTime())
+
+    cy.get('.rs-table-row').should('have.length', 67)
+
+    cy.getDataCy('control-objectives-year').click()
+
+    cy.get('.rs-picker-select-menu-item').should('have.length', 2)
 
     // When
     cy.get('*[data-cy="control-objectives-add-year"]').click()
+
     cy.wait('@addObjectiveYear')
 
     // Then
     cy.wait(50)
-    const nextYear = new Date().getFullYear() + 1
-    cy.get('*[data-cy^="control-objectives-year"]').contains(nextYear)
-    cy.get('*[data-cy^="control-objectives-year"]').click()
+    cy.getDataCy('control-objectives-year').contains(nextYear)
+    cy.getDataCy('control-objectives-year').click()
     cy.get('.rs-picker-select-menu-item').should('have.length', 3)
     cy.get('.rs-table-row').should('have.length', 67)
-    cy.get('*[data-cy="control-objectives-add-year"]').should('be.not.visible')
+    cy.getDataCy('control-objectives-add-year').should('be.not.visible')
   })
 })

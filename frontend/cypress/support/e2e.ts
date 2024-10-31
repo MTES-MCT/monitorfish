@@ -67,12 +67,6 @@ Cypress.on('uncaught:exception', err => {
     return false
   }
 
-  // We ignore uncaught exceptions `TypeError: NetworkError when attempting to fetch resource`
-  // if (err.message.includes('NetworkError when attempting to fetch resource') ) {
-  //  console.log(`Error skipped: ${err}`)
-  //  return false // return false to make test continue
-  // }
-
   // We ignore uncaught exceptions `AbortError: The operation was aborted`
   // This error happens after using `reload()` in Cypress
   if (err.message.includes('The operation was aborted')) {

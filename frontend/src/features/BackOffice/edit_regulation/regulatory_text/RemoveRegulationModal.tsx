@@ -1,19 +1,18 @@
-import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
+import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
+import Feature from 'ol/Feature'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../../constants/constants'
-import { setIsRemoveModalOpen } from '../../slice'
-import { ValidateButton, CancelButton } from '../../../commonStyles/Buttons.style'
 import { FooterButton } from '../../../commonStyles/Backoffice.style'
+import { ValidateButton, CancelButton } from '../../../commonStyles/Buttons.style'
 import CloseIconSVG from '../../../icons/Croix_grise_clair.svg?react'
 import updateRegulation from '../../../Regulation/useCases/updateRegulation'
-import Feature from 'ol/Feature'
 import { REGULATION_ACTION_TYPE, getRegulatoryFeatureId } from '../../../Regulation/utils'
+import { setIsRemoveModalOpen } from '../../slice'
 
-const RemoveRegulationModal = () => {
-  const dispatch = useDispatch()
-  const { isRemoveModalOpen, processingRegulation } = useSelector(state => state.regulation)
+export function RemoveRegulationModal() {
+  const dispatch = useBackofficeAppDispatch()
+  const { isRemoveModalOpen, processingRegulation } = useBackofficeAppSelector(state => state.regulation)
 
   const deleteRegulation = () => {
     const feature = new Feature({})
@@ -22,7 +21,7 @@ const RemoveRegulationModal = () => {
   }
 
   return (
-    <RegulationModal isOpen={isRemoveModalOpen}>
+    <RegulationModal $isOpen={isRemoveModalOpen}>
       <ModalContent>
         <Body>
           <ModalTitle>
@@ -37,10 +36,10 @@ const RemoveRegulationModal = () => {
         </Body>
         <Footer>
           <FooterButton>
-            <ValidateButton onClick={deleteRegulation} width={'120px'}>
+            <ValidateButton onClick={deleteRegulation} style={{ width: 120 }}>
               Oui
             </ValidateButton>
-            <CancelButton onClick={() => dispatch(setIsRemoveModalOpen(false))} width={'120px'}>
+            <CancelButton onClick={() => dispatch(setIsRemoveModalOpen(false))} style={{ width: 120 }}>
               Annuler
             </CancelButton>
           </FooterButton>
@@ -58,8 +57,8 @@ const Body = styled.div`
 `
 
 const Footer = styled.div`
-  background-color: ${COLORS.white};
-  border-top: 1px solid ${COLORS.lightGray};
+  background-color: ${p => p.theme.color.white};
+  border-top: 1px solid ${p => p.theme.color.lightGray};
 `
 
 const CloseIcon = styled(CloseIconSVG)`
@@ -69,8 +68,10 @@ const CloseIcon = styled(CloseIconSVG)`
   float: right;
 `
 
-const RegulationModal = styled.div`
-  display: ${props => (props.isOpen ? 'block' : 'none')};
+const RegulationModal = styled.div<{
+  $isOpen: boolean
+}>`
+  display: ${p => (p.$isOpen ? 'block' : 'none')};
   overflow: none;
   width: 100%;
   height: 100vh;
@@ -86,23 +87,21 @@ const ModalContent = styled.div`
   top: 33%;
   width: 400px;
   box-sizing: border-box;
-  background-color: ${COLORS.white};
+  background-color: ${p => p.theme.color.white};
   overflow: hidden;
 `
 
 const ModalTitle = styled.div`
-  background-color: ${COLORS.charcoal};
+  background-color: ${p => p.theme.color.charcoal};
   text-align: center;
   padding: 9px;
   font-size: 13px;
   box-sizing: border-box;
   width: 100%;
-  color: ${COLORS.white};
+  color: ${p => p.theme.color.white};
 `
 
 const Section = styled.div`
   padding: 35px 42px;
   text-align: center;
 `
-
-export default RemoveRegulationModal

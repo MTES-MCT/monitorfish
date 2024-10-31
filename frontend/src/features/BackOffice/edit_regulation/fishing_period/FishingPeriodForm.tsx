@@ -1,94 +1,99 @@
-import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { COLORS } from '../../../../constants/constants'
+
+import { Always } from './Always'
+import { DayTimeCheckbox } from './DayTimeCheckbox'
+import { FishingPeriodAnnualRecurrence } from './FishingPeriodAnnualRecurrence'
+import { FishingPeriodDates } from './FishingPeriodDates'
+import { FishingPeriodTimeSection } from './FishingPeriodTimeSection'
 import { Delimiter, FormContent, FormSection, RegulatorySectionTitle } from '../../../commonStyles/Backoffice.style'
 import { fishingPeriodToString } from '../../../Regulation/utils'
-import AuthorizedRadioButtonGroup from '../AuthorizedRadioButtonGroup'
-import FishingPeriodDateRanges from './FishingPeriodDateRanges'
-import HolidayCheckbox from './HolidayCheckbox'
-import { DayTimeCheckbox } from './DayTimeCheckbox'
-import FishingPeriodTimeSection from './FishingPeriodTimeSection'
-import WeekDays from './WeekDays'
-import FishingPeriodDates from './FishingPeriodDates'
-import FishingPeriodAnnualRecurrence from './FishingPeriodAnnualRecurrence'
-import Always from './Always'
+import { AuthorizedRadioButtonGroup } from '../AuthorizedRadioButtonGroup'
+import { FishingPeriodDateRanges } from './FishingPeriodDateRanges'
+import { HolidayCheckbox } from './HolidayCheckbox'
+import { WeekDays } from './WeekDays'
 
-const FishingPeriodForm = ({ show }) => {
-  const { fishingPeriod } = useSelector(state => state.regulation.processingRegulation)
-
-  const {
-    always,
-    authorized,
-    annualRecurrence,
-    dateRanges,
-    dates,
-    weekdays,
-    holidays,
-    daytime,
-    timeIntervals
-  } = fishingPeriod
+type FishingPeriodFormProps = Readonly<{
+  show: boolean
+}>
+export function FishingPeriodForm({ show }: FishingPeriodFormProps) {
+  const processingRegulation = useBackofficeAppSelector(state => state.regulation.processingRegulation)
 
   const [displayForm, setDisplayForm] = useState(false)
   const [disabled, setDisabled] = useState(true)
-  const [fishingPeriodAsString, setFishingPeriodAsString] = useState()
+  const [fishingPeriodAsString, setFishingPeriodAsString] = useState<string | undefined>(undefined)
   const [timeIsDisabled, setTimeIsDisabled] = useState(true)
 
   useEffect(() => {
-    const atLeastOneDateElementIsCompleted = dateRanges?.length > 0 || dates?.length > 0 || weekdays?.length > 0 || holidays !== undefined
+    const atLeastOneDateElementIsCompleted =
+      processingRegulation.fishingPeriod &&
+      (processingRegulation.fishingPeriod.dateRanges?.length > 0 ||
+        processingRegulation.fishingPeriod.dates?.length > 0 ||
+        processingRegulation.fishingPeriod.weekdays?.length > 0 ||
+        processingRegulation.fishingPeriod.holidays !== undefined)
     setTimeIsDisabled(!atLeastOneDateElementIsCompleted)
-  }, [fishingPeriod, timeIsDisabled, dateRanges, dates, weekdays, holidays])
+  }, [processingRegulation.fishingPeriod, timeIsDisabled])
 
   useEffect(() => {
-    if (!displayForm && authorized !== undefined) {
+    if (!displayForm && processingRegulation.fishingPeriod?.authorized !== undefined) {
       setDisplayForm(true)
     }
-  }, [displayForm, authorized])
+  }, [displayForm, processingRegulation.fishingPeriod])
 
   useEffect(() => {
-    if (always) {
+    if (processingRegulation.fishingPeriod?.always) {
       setDisabled(true)
-    } else if (disabled && annualRecurrence !== undefined) {
+    } else if (disabled && processingRegulation.fishingPeriod?.annualRecurrence !== undefined) {
       setDisabled(false)
     }
-  }, [disabled, annualRecurrence, always])
+  }, [disabled, processingRegulation.fishingPeriod])
 
   useEffect(() => {
-    if (dateRanges?.length || dates?.length || weekdays?.length || timeIntervals?.length || daytime || always !== undefined) {
-      setFishingPeriodAsString(fishingPeriodToString(fishingPeriod))
+    if (
+      processingRegulation.fishingPeriod &&
+      (processingRegulation.fishingPeriod.dateRanges?.length ||
+        !!processingRegulation.fishingPeriod.dates?.length ||
+        !!processingRegulation.fishingPeriod.weekdays?.length ||
+        !!processingRegulation.fishingPeriod.timeIntervals?.length ||
+        !!processingRegulation.fishingPeriod.daytime ||
+        processingRegulation.fishingPeriod.always !== undefined)
+    ) {
+      setFishingPeriodAsString(fishingPeriodToString(processingRegulation.fishingPeriod))
     } else {
       setFishingPeriodAsString(undefined)
     }
-  }, [fishingPeriod, dateRanges, dates, weekdays, timeIntervals, daytime, always, fishingPeriodAsString])
+  }, [fishingPeriodAsString, processingRegulation.fishingPeriod])
 
-  return <FormSection show={show}>
-    <RegulatorySectionTitle >
-      <AuthorizedRadioButtonGroup title={'Périodes'} />
-    </RegulatorySectionTitle>
-    <Delimiter width='523' />
-    <FormContent display={displayForm} authorized={authorized}>
-      <Always authorized={authorized} />
-      <FishingPeriodAnnualRecurrence disabled={always}/>
-      <DateTime>
-        <ConditionalLines $display={displayForm} disabled={disabled}>
-          <FishingPeriodDateRanges disabled={disabled} />
-          <FishingPeriodDates disabled={disabled} />
-          <WeekDays disabled={disabled} />
-          <HolidayCheckbox disabled={disabled} />
-          <TimeTitle>Horaires {authorized ? 'autorisés' : 'interdits'}</TimeTitle>
-          <Delimiter width='500' />
-          <FishingPeriodTimeSection timeIsDisabled={timeIsDisabled} disabled={disabled} />
-          <DayTimeCheckbox timeIsDisabled={timeIsDisabled} disabled={disabled} />
-        </ConditionalLines>
-      </DateTime>
-      {fishingPeriodAsString &&
-      <PeriodAsStringWrapper >
-        <PeriodAsString>
-          {fishingPeriodAsString}
-        </PeriodAsString>
-      </PeriodAsStringWrapper>}
-    </FormContent>
-  </FormSection>
+  return (
+    <FormSection show={show}>
+      <RegulatorySectionTitle>
+        <AuthorizedRadioButtonGroup title="Périodes" />
+      </RegulatorySectionTitle>
+      <Delimiter width={523} />
+      <FormContent display={displayForm}>
+        <Always authorized={processingRegulation.fishingPeriod?.authorized} />
+        <FishingPeriodAnnualRecurrence disabled={processingRegulation.fishingPeriod?.always} />
+        <DateTime>
+          <ConditionalLines $disabled={disabled} $display={displayForm}>
+            <FishingPeriodDateRanges disabled={disabled} />
+            <FishingPeriodDates disabled={disabled} />
+            <WeekDays disabled={disabled} />
+            <HolidayCheckbox disabled={disabled} />
+            <TimeTitle>Horaires {processingRegulation.fishingPeriod?.authorized ? 'autorisés' : 'interdits'}</TimeTitle>
+            <Delimiter width={500} />
+            <FishingPeriodTimeSection disabled={disabled} timeIsDisabled={timeIsDisabled} />
+            <DayTimeCheckbox disabled={disabled} timeIsDisabled={timeIsDisabled} />
+          </ConditionalLines>
+        </DateTime>
+        {fishingPeriodAsString && (
+          <PeriodAsStringWrapper>
+            <PeriodAsString>{fishingPeriodAsString}</PeriodAsString>
+          </PeriodAsStringWrapper>
+        )}
+      </FormContent>
+    </FormSection>
+  )
 }
 
 const PeriodAsStringWrapper = styled.div`
@@ -97,15 +102,18 @@ const PeriodAsStringWrapper = styled.div`
 const PeriodAsString = styled.div`
   width: 420px;
   font-size: 13px;
-  color: ${COLORS.gunMetal};
-  background: ${COLORS.gainsboro};
+  color: ${p => p.theme.color.gunMetal};
+  background: ${p => p.theme.color.gainsboro};
   padding: 10px;
   text-align: left;
 `
 
-const ConditionalLines = styled.div`
-  display: ${props => props.$display ? 'flex' : 'none'};
-  opacity: ${props => props.disabled ? '0.4' : '1'};
+const ConditionalLines = styled.div<{
+  $disabled: boolean
+  $display: boolean
+}>`
+  display: ${p => (p.$display ? 'flex' : 'none')};
+  opacity: ${p => (p.$disabled ? '0.4' : '1')};
   flex-direction: column;
 `
 
@@ -118,5 +126,3 @@ const DateTime = styled.div`
 const TimeTitle = styled(RegulatorySectionTitle)`
   margin-top: 30px;
 `
-
-export default FishingPeriodForm

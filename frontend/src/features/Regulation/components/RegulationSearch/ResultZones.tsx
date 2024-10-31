@@ -21,7 +21,7 @@ export function ResultZones({
       const regulatoryLayer = regulatoryLayersSearchResult[regulatoryLayerLawType]
 
       if (regulatoryLayer) {
-        return regulatoryLayer[regulatoryLayerTopic] || []
+        return regulatoryLayer[regulatoryLayerTopic] ?? []
       }
     }
 

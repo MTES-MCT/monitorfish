@@ -25,7 +25,7 @@ export const DateRanges = styled.div`
 `
 
 export const ContentWrapper = styled.div<{
-  alignSelf?: boolean
+  alignSelf?: string
 }>`
   display: flex;
   flex-direction: row;

@@ -10,7 +10,7 @@ import { Section } from '../RegulatoryMetadata.style'
 export function GearRegulationDisplayed() {
   const regulatory = useMainAppSelector(state => state.regulatory)
 
-  const { gearRegulation } = regulatory.regulatoryZoneMetadata || {}
+  const { gearRegulation } = regulatory.regulatoryZoneMetadata ?? {}
   if (!gearRegulation) {
     throw new FrontendError('`gearRegulation` is undefined.')
   }

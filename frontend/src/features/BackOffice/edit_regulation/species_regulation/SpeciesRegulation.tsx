@@ -1,40 +1,44 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import SectionTitle from '../../SectionTitle'
-import { CustomInput, Label } from '../../../commonStyles/Input.style'
-import RegulatedSpecies from './RegulatedSpecies'
-import { updateProcessingRegulationByKeyAndSubKey } from '../../slice'
+import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
+import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
+import { useEffect, useState } from 'react'
+import styled from 'styled-components'
+
+import { RegulatedSpecies } from './RegulatedSpecies'
+import { SPECIES_REGULATION_KEYS } from '../../../../domain/entities/backoffice'
 import { OtherRemark, Section, VerticalLine } from '../../../commonStyles/Backoffice.style'
+import { CustomInput, Label } from '../../../commonStyles/Input.style'
 import {
   DEFAULT_AUTHORIZED_REGULATED_SPECIES,
   DEFAULT_UNAUTHORIZED_REGULATED_SPECIES,
   REGULATORY_REFERENCE_KEYS
 } from '../../../Regulation/utils'
-import { SPECIES_REGULATION_KEYS } from '../../../../domain/entities/backoffice'
-import styled from 'styled-components'
+import { SectionTitle } from '../../SectionTitle'
+import { updateProcessingRegulationByKeyAndSubKey } from '../../slice'
 
-const SpeciesRegulation = () => {
-  const dispatch = useDispatch()
+import type { Option } from '@mtes-mct/monitor-ui'
+
+export function SpeciesRegulation() {
+  const dispatch = useBackofficeAppDispatch()
 
   /** @type {Map<string, Species>} speciesByCode */
-  const speciesByCode = useSelector(state => state.species.speciesByCode)
-  const speciesGroups = useSelector(state => state.species.speciesGroups)
-  const [formattedSpecies, setFormattedSpecies] = useState([])
-  const [formattedSpeciesGroups, setFormattedSpeciesGroups] = useState([])
+  const speciesByCode = useBackofficeAppSelector(state => state.species.speciesByCode)
+  const speciesGroups = useBackofficeAppSelector(state => state.species.speciesGroups)
+  const [formattedSpecies, setFormattedSpecies] = useState<Option[]>([])
+  const [formattedSpeciesGroups, setFormattedSpeciesGroups] = useState<Option[]>([])
 
   useEffect(() => {
-    const formattedSpeciesGroups = [...speciesGroups]
+    const nextFormattedSpeciesGroups = [...speciesGroups]
       ?.sort((speciesA, speciesB) => speciesA.group?.localeCompare(speciesB.group))
       .map(speciesGroup => ({
         label: speciesGroup.group,
         value: speciesGroup.group
       }))
 
-    setFormattedSpeciesGroups(formattedSpeciesGroups)
+    setFormattedSpeciesGroups(nextFormattedSpeciesGroups)
   }, [speciesGroups])
 
   useEffect(() => {
-    const formattedSpecies = speciesByCode
+    const nextFormattedSpecies = speciesByCode
       ? Object.values(speciesByCode)
           .sort((speciesA, speciesB) => speciesA.name?.localeCompare(speciesB.name))
           .map(_species => ({
@@ -43,17 +47,20 @@ const SpeciesRegulation = () => {
           }))
       : []
 
-    setFormattedSpecies(formattedSpecies)
+    setFormattedSpecies(nextFormattedSpecies)
   }, [speciesByCode])
 
-  const { speciesRegulation } = useSelector(state => state.regulation.processingRegulation)
+  const processingRegulation = useBackofficeAppSelector(state => state.regulation.processingRegulation)
   const [show, setShow] = useState(false)
 
-  const setSpeciesRegulation = (property, value) => {
+  // TODO Impossible to type and make this code safe as it is, should be refactored?
+  const setSpeciesRegulation = (subKey: any, value: any) => {
     dispatch(
       updateProcessingRegulationByKeyAndSubKey({
-        key: REGULATORY_REFERENCE_KEYS.SPECIES_REGULATION,
-        subKey: property,
+        key: REGULATORY_REFERENCE_KEYS.SPECIES_REGULATION as 'speciesRegulation',
+        // @ts-ignore
+        subKey,
+        // @ts-ignore
         value
       })
     )
@@ -71,48 +78,44 @@ const SpeciesRegulation = () => {
 
   return (
     <Section show>
-      <SectionTitle
-        dataCy={'open-regulated-species'}
-        title={'ESPÈCES RÉGLEMENTÉES'}
-        isOpen={show}
-        setIsOpen={setShow}
-      />
+      <SectionTitle dataCy="open-regulated-species" isOpen={show} setIsOpen={setShow} title="ESPÈCES RÉGLEMENTÉES" />
       <RegulatedSpeciesForms>
         <RegulatedSpecies
-          show={show}
-          authorized={true}
-          regulatedSpecies={
-            speciesRegulation[SPECIES_REGULATION_KEYS.AUTHORIZED] || DEFAULT_AUTHORIZED_REGULATED_SPECIES
-          }
-          setRegulatedSpecies={setRegulatedSpecies}
-          speciesByCode={speciesByCode}
-          formattedSpeciesGroups={formattedSpeciesGroups}
+          authorized
           formattedSpecies={formattedSpecies}
+          formattedSpeciesGroups={formattedSpeciesGroups}
+          regulatedSpecies={processingRegulation.speciesRegulation?.authorized ?? DEFAULT_AUTHORIZED_REGULATED_SPECIES}
+          setRegulatedSpecies={setRegulatedSpecies}
+          show={show}
+          speciesByCode={speciesByCode}
         />
         <VerticalLine />
         <RegulatedSpecies
-          show={show}
           authorized={false}
+          formattedSpecies={formattedSpecies}
+          formattedSpeciesGroups={formattedSpeciesGroups}
           regulatedSpecies={
-            speciesRegulation[SPECIES_REGULATION_KEYS.UNAUTHORIZED] || DEFAULT_UNAUTHORIZED_REGULATED_SPECIES
+            processingRegulation.speciesRegulation?.unauthorized ?? DEFAULT_UNAUTHORIZED_REGULATED_SPECIES
           }
           setRegulatedSpecies={setRegulatedSpecies}
+          show={show}
           speciesByCode={speciesByCode}
-          formattedSpeciesGroups={formattedSpeciesGroups}
-          formattedSpecies={formattedSpecies}
         />
       </RegulatedSpeciesForms>
       <OtherRemark show={show}>
         <Label>Remarques</Label>
         <CustomInput
-          data-cy={'regulatory-species-other-info'}
+          $isGray={
+            processingRegulation.speciesRegulation?.otherInfo &&
+            processingRegulation.speciesRegulation?.otherInfo !== ''
+          }
           as="textarea"
-          rows={2}
-          placeholder=""
-          value={speciesRegulation?.otherInfo || ''}
+          data-cy="regulatory-species-other-info"
           onChange={event => setOtherInfo(event.target.value)}
-          width={'500px'}
-          $isGray={speciesRegulation?.otherInfo && speciesRegulation?.otherInfo !== ''}
+          placeholder=""
+          rows={2}
+          value={processingRegulation.speciesRegulation?.otherInfo ?? ''}
+          width="500px"
         />
       </OtherRemark>
     </Section>
@@ -122,5 +125,3 @@ const SpeciesRegulation = () => {
 const RegulatedSpeciesForms = styled.div`
   display: flex;
 `
-
-export default SpeciesRegulation

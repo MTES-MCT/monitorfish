@@ -11,7 +11,7 @@ export function FishingPeriodDisplayed() {
     fishingPeriodText: fishingPeriodToString(state.regulatory.regulatoryZoneMetadata?.fishingPeriod)
   }))
 
-  return !!fishingPeriod && fishingPeriod.authorized !== undefined && (fishingPeriodText || fishingPeriod.otherInfo) ? (
+  return !!fishingPeriod && fishingPeriod.authorized !== undefined && (fishingPeriodText ?? fishingPeriod.otherInfo) ? (
     <Section data-cy="regulatory-layers-metadata-fishing-period">
       <SectionTitle>
         {fishingPeriod.authorized ? <GreenCircle margin="0 5px 0 0" /> : <RedCircle margin="0 5px 0 0" />}

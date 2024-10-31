@@ -1,102 +1,123 @@
-import React from 'react'
 import styled from 'styled-components'
-import { Label, CustomInput } from '../../../commonStyles/Input.style'
-import { ContentLine } from '../../../commonStyles/Backoffice.style'
-import CustomSelectComponent from '../custom_form/CustomSelectComponent'
-import Tag from '../Tag'
-import MenuItem from '../custom_form/MenuItem'
+
 import { GearMeshSizeEqualityComparator } from '../../../../domain/entities/backoffice'
+import { ContentLine } from '../../../commonStyles/Backoffice.style'
+import { Label, CustomInput } from '../../../commonStyles/Input.style'
+import { CustomSelectComponent } from '../custom_form/CustomSelectComponent'
+import { MenuItem } from '../custom_form/MenuItem'
+import { Tag } from '../Tag'
 
-const RegulatedGear = props => {
-  const {
-    id,
-    label,
-    code,
-    allowMesh,
-    onChange,
-    onCloseIconClicked,
-    meshType,
-    mesh,
-    remarks
-  } = props
-
-  return (<Wrapper>
-      <ContentLine data-cy='regulatory-gear-line'>
+type RegulatedGearProps = Readonly<{
+  allowMesh: boolean
+  code?: string
+  id: number
+  label: string
+  mesh: number[]
+  meshType: GearMeshSizeEqualityComparator
+  onChange: (key: string, value: any) => void
+  onCloseIconClicked: (tagValue: string) => void
+  remarks: string
+}>
+export function RegulatedGear({
+  allowMesh,
+  code,
+  id,
+  label,
+  mesh,
+  meshType,
+  onChange,
+  onCloseIconClicked,
+  remarks
+}: RegulatedGearProps) {
+  return (
+    <Wrapper>
+      <ContentLine data-cy="regulatory-gear-line">
         <Label>{code ? `Engin ${id + 1}` : `Catégorie ${id + 1}`}</Label>
-        <Tag
-          tagValue={`${label}${code ? ` (${code})` : ''}`}
-          onCloseIconClicked={onCloseIconClicked}
-        />
+        <Tag onCloseIconClicked={onCloseIconClicked} tagValue={`${label}${code ? ` (${code})` : ''}`} />
       </ContentLine>
-      {allowMesh && <ContentLine>
-        <Label data-cy='mesh-label'>Maillage</Label>
-        <CustomSelectComponent
-          value={meshType || GearMeshSizeEqualityComparator.greaterThan}
-          onChange={value => onChange('meshType', value)}
-          data={[
-            {
-              value: GearMeshSizeEqualityComparator.greaterThan,
-              label: 'supérieur à'
-            },
-            {
-              value: GearMeshSizeEqualityComparator.greaterThanOrEqualTo,
-              label: 'supérieur ou égal à'
-            },
-            {
-              value: GearMeshSizeEqualityComparator.lowerThan,
-              label: 'inférieur à'
-            },
-            {
-              value: GearMeshSizeEqualityComparator.lowerThanOrEqualTo,
-              label: 'inférieur ou égal à'
-            },
-            {
-              value: GearMeshSizeEqualityComparator.equal,
-              label: 'égal à'
-            },
-            {
-              value: GearMeshSizeEqualityComparator.between,
-              label: 'entre'
-            }
-          ]}
-          renderMenuItem={(_, item) => <MenuItem item={item} />}
-          valueIsMissing={false}
-          cleanable={false}
-          searchable={false}
-          width={165}
-        />
-        <CustomInput
-          width={'60px'}
-          $isGray={mesh && mesh[0] !== ''}
-          value={mesh?.length > 0 ? mesh[0] : ''}
-          onChange={intervalValue => {
-            const nextIntervalValue = mesh ? [...mesh] : []
-            nextIntervalValue[0] = intervalValue
-            onChange('mesh', nextIntervalValue)
-          }} />
-        {
-          meshType && meshType === 'between' &&
-          <>{'et'}<SecondCustomInput
-          $isGray={mesh && mesh.length === 2 && mesh[1] !== ''}
-          width={'60px'}
-          value={mesh && mesh.length === 2 ? mesh[1] : ''}
-          onChange={value => {
-            onChange('mesh', [mesh[0], value])
-          }} /></>
-        }
-        {'mm'}
-      </ContentLine>}
+
+      {allowMesh && (
+        <ContentLine>
+          <Label data-cy="mesh-label">Maillage</Label>
+          <CustomSelectComponent
+            cleanable={false}
+            data={[
+              {
+                label: 'supérieur à',
+                value: GearMeshSizeEqualityComparator.greaterThan
+              },
+              {
+                label: 'supérieur ou égal à',
+                value: GearMeshSizeEqualityComparator.greaterThanOrEqualTo
+              },
+              {
+                label: 'inférieur à',
+                value: GearMeshSizeEqualityComparator.lowerThan
+              },
+              {
+                label: 'inférieur ou égal à',
+                value: GearMeshSizeEqualityComparator.lowerThanOrEqualTo
+              },
+              {
+                label: 'égal à',
+                value: GearMeshSizeEqualityComparator.equal
+              },
+              {
+                label: 'entre',
+                value: GearMeshSizeEqualityComparator.between
+              }
+            ]}
+            onChange={value => onChange('meshType', value)}
+            renderMenuItem={(_, item) => <MenuItem item={item} />}
+            searchable={false}
+            value={meshType || GearMeshSizeEqualityComparator.greaterThan}
+            valueIsMissing={false}
+            width={165}
+          />
+          <CustomInput
+            //  TODO Is this a `number[]`, a `string[]`, both?
+            // @ts-ignore
+            $isGray={mesh && mesh[0] !== ''}
+            onChange={intervalValue => {
+              const nextIntervalValue = mesh ? [...mesh] : []
+              //  TODO Is this a `number[]`, a `string[]`, both?
+              // @ts-ignore
+              nextIntervalValue[0] = intervalValue
+              onChange('mesh', nextIntervalValue)
+            }}
+            value={mesh?.length > 0 ? mesh[0] : ''}
+            width="60px"
+          />
+          {meshType && meshType === 'between' && (
+            <>
+              et
+              <SecondCustomInput
+                //  TODO Is this a `number[]`, a `string[]`, both?
+                // @ts-ignore
+                $isGray={mesh && mesh.length === 2 && mesh[1] !== ''}
+                onChange={value => {
+                  onChange('mesh', [mesh[0], value])
+                }}
+                value={mesh && mesh.length === 2 ? mesh[1] : ''}
+                width="60px"
+              />
+            </>
+          )}
+          mm
+        </ContentLine>
+      )}
+
       <ContentLine alignedToTop>
         <Label>Remarques</Label>
         <CustomInput
-          data-cy={'regulatory-gears-remarks'}
-          as="textarea"
-          rows={2}
-          placeholder=''
-          value={remarks || ''}
-          onChange={event => onChange('remarks', event.target.value)}
-          width={'300px'}
           $isGray={remarks}
+          as="textarea"
+          data-cy="regulatory-gears-remarks"
+          onChange={event => onChange('remarks', event.target.value)}
+          placeholder=""
+          rows={2}
+          value={remarks || ''}
+          width="300px"
         />
       </ContentLine>
     </Wrapper>
@@ -112,5 +133,3 @@ const Wrapper = styled.div`
 const SecondCustomInput = styled(CustomInput)`
   margin-left: 10px;
 `
-
-export default RegulatedGear

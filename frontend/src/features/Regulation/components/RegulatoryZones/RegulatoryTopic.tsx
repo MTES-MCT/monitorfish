@@ -23,9 +23,9 @@ export type RegulatoryTopicProps = {
   isEditable: boolean
   isLastItem: boolean
   /** Remove a single regulation zone layer. */
-  onRemoveById: (id: number | string) => Promisable<void>
+  onRemoveById?: (id: number | string) => Promisable<void>
   /** Remove all the regulation zone layers for the given topic. */
-  onRemoveByTopic: (topic: string, numberOfZones: number) => Promisable<void>
+  onRemoveByTopic?: (topic: string, numberOfZones: number) => Promisable<void>
   regulatoryTopic: string
   regulatoryZones: RegulatoryZoneType[] | undefined
   updateLayerName?: (previousTopic: string, nextTopic: string) => void
@@ -179,7 +179,11 @@ function UnmemoizedRegulatoryTopic({
               {allowRemoveZone && (
                 <Icon.Close
                   color={THEME.color.slateGray}
-                  onClick={() => onRemoveByTopic(getFirstRegulatoryZoneTopic(regulatoryZones), regulatoryZones.length)}
+                  onClick={
+                    onRemoveByTopic
+                      ? () => onRemoveByTopic(getFirstRegulatoryZoneTopic(regulatoryZones), regulatoryZones.length)
+                      : undefined
+                  }
                   size={15}
                   title="Supprimer la thématique de ma sélection"
                 />

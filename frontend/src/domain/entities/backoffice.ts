@@ -1,4 +1,9 @@
+import { isNotNullish } from '@utils/isNotNullish'
+
 import { RegulatorySearchProperty } from '../../features/Regulation/utils'
+
+import type { Option } from '@mtes-mct/monitor-ui'
+import type { Gear } from 'domain/types/Gear'
 
 export const BACKOFFICE_SEARCH_PROPERTIES = [
   RegulatorySearchProperty.TOPIC,
@@ -61,16 +66,11 @@ export const SORTED_CATEGORY_LIST = [
 
 const CATEGORIES_TO_HIDE = ['engins inconnus', "pas d'engin", 'engins de pêche récréative']
 
-/**
- *
- * @param {Object.<string, Gear[]>} categoriesToGears
- * @returns
- */
-export const prepareCategoriesAndGearsToDisplay = categoriesToGears =>
+export const prepareCategoriesAndGearsToDisplay = (categoriesToGears: Record<string, Gear[]>) =>
   SORTED_CATEGORY_LIST.map(category => {
     if (!CATEGORIES_TO_HIDE.includes(category) && categoriesToGears[category]) {
       const categoryGearList = [...categoriesToGears[category]]
-      const gears = categoryGearList
+      const gears: Option[] = categoryGearList
         .sort((gearA, gearB) => {
           if (gearA.code < gearB.code) {
             return -1
@@ -94,7 +94,7 @@ export const prepareCategoriesAndGearsToDisplay = categoriesToGears =>
     }
 
     return null
-  }).filter(gears => gears)
+  }).filter(isNotNullish)
 
 export const getGroupCategories = (option, groupsToCategories) => {
   switch (option) {

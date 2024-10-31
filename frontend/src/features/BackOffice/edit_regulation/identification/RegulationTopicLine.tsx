@@ -1,5 +1,5 @@
 import { INFO_TEXT } from '@features/BackOffice/constants'
-import InfoBox from '@features/BackOffice/edit_regulation/InfoBox'
+import { InfoBox } from '@features/BackOffice/edit_regulation/InfoBox'
 import { formatDataForSelectPicker } from '@features/BackOffice/utils'
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'

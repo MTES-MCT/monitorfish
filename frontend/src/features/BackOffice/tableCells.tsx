@@ -1,12 +1,16 @@
+// TODO Re-enable ESLint for this old file which has been migrated from JSX to TSX.
+/* eslint-disable */
+
 import { Accent, Icon, IconButton, Tag, THEME } from '@mtes-mct/monitor-ui'
-import { useCallback } from 'react'
+import { useCallback, type ChangeEvent } from 'react'
 import { SelectPicker, Table } from 'rsuite'
 import styled from 'styled-components'
 
-import { COLORS } from '../../constants/constants'
 import { getRiskFactorColor } from '../../domain/entities/vessel/riskFactor'
 import { theme } from '../../ui/theme'
 import { RiskFactorBox } from '../Vessel/components/VesselSidebar/risk_factor/RiskFactorBox'
+
+import type { InnerCellProps } from 'rsuite-table/lib/Cell'
 
 const { Cell } = Table
 const rowKey = 'id'
@@ -16,11 +20,30 @@ export const INPUT_TYPE = {
   STRING: 'STRING'
 }
 
-/**
- * @param {*} props
- */
-export function ModifiableCell({ afterChange, dataKey, id, inputType, isDisabled, maxLength, onChange, ...props }) {
-  const { rowData } = props
+type ModifiableCellProps = Readonly<
+  Omit<InnerCellProps<any, any>, 'onChange' | 'rowData'> &
+    React.RefAttributes<HTMLDivElement> & {
+      afterChange?: any
+      dataKey: string
+      id: string
+      inputType: any
+      isDisabled?: boolean
+      maxLength: number
+      onChange: any
+      rowData?: any
+    }
+>
+export function ModifiableCell({
+  afterChange,
+  dataKey,
+  id,
+  inputType,
+  isDisabled = false,
+  maxLength,
+  onChange,
+  rowData,
+  ...props
+}: ModifiableCellProps) {
   const dataCy = `row-${rowData[id]}-${dataKey}`
 
   return (
@@ -45,8 +68,8 @@ export function ModifiableCell({ afterChange, dataKey, id, inputType, isDisabled
 
 const ModifiableCellWrapper = styled.div`
   .rs-input:focus {
-    background: ${COLORS.charcoal};
-    color: ${COLORS.white};
+    background: ${p => p.theme.color.charcoal};
+    color: ${p => p.theme.color.white};
   }
 
   .rs-input {
@@ -67,8 +90,8 @@ export function FleetSegmentInput({
   withinCell
 }) {
   const onChangeCallback = useCallback(
-    event => {
-      let value = null
+    (event: ChangeEvent<HTMLInputElement>) => {
+      let value: number | string | null = null
       switch (inputType) {
         case INPUT_TYPE.INT: {
           value = event.target.value && !isNaN(parseInt(event.target.value)) ? parseInt(event.target.value) : 0
@@ -126,7 +149,6 @@ export function ControlPriorityCell({ dataKey, onChange, ...props }) {
     <Cell key={rowData.id} {...props} className="table-content-editing">
       <SelectPicker
         cleanable={false}
-        creatable={false}
         data={[
           { label: 1, value: 1 },
           { label: 2, value: 2 },
@@ -147,10 +169,14 @@ export function ControlPriorityCell({ dataKey, onChange, ...props }) {
   )
 }
 
-/**
- * @param {*} props
- */
-export function SegmentCellWithTitle({ dataKey, rowData, ...props }) {
+type SegmentCellWithTitleProps = Readonly<
+  Omit<InnerCellProps<any, any>, 'rowData'> &
+    React.RefAttributes<HTMLDivElement> & {
+      dataKey: string
+      rowData?: any
+    }
+>
+export function SegmentCellWithTitle({ dataKey, rowData, ...props }: SegmentCellWithTitleProps) {
   return (
     <Cell
       style={{ background: rowData.segmentName ? 'unset' : theme.color.goldenPoppy }}
@@ -162,10 +188,15 @@ export function SegmentCellWithTitle({ dataKey, rowData, ...props }) {
   )
 }
 
-/**
- * @param {*} props
- */
-export function ExpandCell({ dataKey, expandedRowKeys, onChange, rowData, ...props }) {
+type ExpandCellProps = Readonly<
+  Omit<InnerCellProps<any, any>, 'onChange' | 'rowData'> &
+    React.RefAttributes<HTMLDivElement> & {
+      expandedRowKeys: (number | string)[]
+      onChange: (rowData: any) => void
+      rowData?: any
+    }
+>
+export function ExpandCell({ dataKey, expandedRowKeys, onChange, rowData, ...props }: ExpandCellProps) {
   return (
     <Cell
       {...props}
@@ -173,7 +204,7 @@ export function ExpandCell({ dataKey, expandedRowKeys, onChange, rowData, ...pro
         onChange(rowData)
       }}
       style={{
-        background: COLORS.gainsboro,
+        background: THEME.color.gainsboro,
         cursor: 'pointer',
         fontSize: 19,
         lineHeight: '13px',
@@ -185,13 +216,17 @@ export function ExpandCell({ dataKey, expandedRowKeys, onChange, rowData, ...pro
   )
 }
 
-/**
- * @param {*} props
- */
-export function ImpactRiskFactorCell({ expandedRowKeys, onChange, rowData, ...props }) {
+type RiskFactorCellProps = Readonly<
+  Omit<InnerCellProps<any, any>, 'rowData'> & {
+    expandedRowKeys?: (number | string)[]
+    onChange?: any
+    rowData?: any
+  }
+>
+export function ImpactRiskFactorCell({ expandedRowKeys, onChange, rowData, ...props }: RiskFactorCellProps) {
   return (
     <Cell {...props} style={{ marginLeft: 13 }}>
-      <RiskFactorBox color={getRiskFactorColor(rowData.impactRiskFactor)} height={8}>
+      <RiskFactorBox color={getRiskFactorColor(rowData.impactRiskFactor)} style={{ height: 8 }}>
         {rowData.impactRiskFactor}
       </RiskFactorBox>
     </Cell>
@@ -229,7 +264,7 @@ export function renderTagPickerValue(items) {
 
 const TagOnly = styled.div`
   margin: -3px 0px 0px 0px;
-  whitespace: nowrap;
+  white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
 `
@@ -237,7 +272,7 @@ const TagOnly = styled.div`
 export const renderRowExpanded = rowData => (
   <div
     style={{
-      background: COLORS.white,
+      background: THEME.color.white,
       padding: '0 20px 20px 40px'
     }}
   >

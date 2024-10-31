@@ -1,83 +1,111 @@
-import React from 'react'
-import styled from 'styled-components'
+import { THEME } from '@mtes-mct/monitor-ui'
 import { SelectPicker } from 'rsuite'
-import { COLORS } from '../../../../constants/constants'
+import styled from 'styled-components'
 
-const CustomSelectComponent = props => {
-  const {
-    searchable,
-    placeholder,
-    value,
-    onChange,
-    data,
-    renderMenuItem,
-    menuStyle,
-    valueIsMissing,
-    groupBy,
-    disabled,
-    emptyMessage,
-    placement,
-    cleanable,
-    style,
-    menuClassName,
-    padding,
-    width,
-    dataCy
-  } = props
+import type { CSSProperties, ReactNode } from 'react'
+import type { TypeAttributes } from 'rsuite/esm/@types/common'
 
-  const DEFAULT_SELECT_PICKER_STYLE = {
-    width: width || 200,
-    margin: '0',
-    borderColor: COLORS.lightGray,
+type CustomSelectComponentProps = Readonly<{
+  cleanable?: boolean
+  data: any[]
+  dataCy?: string
+  disabled?: boolean
+  emptyMessage?: string
+  groupBy?: string
+  menuClassName?: string
+  menuStyle?: CSSProperties
+  onChange: (value: any) => void
+  padding?: string
+  placeholder?: string
+  placement?: TypeAttributes.Placement
+  renderMenuItem?: (label: ReactNode, item: any) => JSX.Element
+  searchable: boolean
+  style?: CSSProperties
+  value: any
+  valueIsMissing?: boolean
+  width?: number
+}>
+export function CustomSelectComponent({
+  cleanable,
+  data,
+  dataCy,
+  disabled = false,
+  emptyMessage,
+  groupBy,
+  menuClassName,
+  menuStyle,
+  onChange,
+  padding,
+  placeholder,
+  placement,
+  renderMenuItem,
+  searchable,
+  style,
+  value,
+  valueIsMissing,
+  width
+}: CustomSelectComponentProps) {
+  const DEFAULT_SELECT_PICKER_STYLE: CSSProperties = {
+    borderColor: THEME.color.lightGray,
     boxSizing: 'border-box',
-    textOverflow: 'ellipsis'
+    margin: '0',
+    textOverflow: 'ellipsis',
+    width: width ?? 200
   }
+
   return (
-    <SelectWrapper padding={padding}>
+    <SelectWrapper $padding={padding}>
       <CustomSelectPicker
-        virtualized
-        style={style || DEFAULT_SELECT_PICKER_STYLE}
-        searchable={searchable}
-        cleanable={cleanable}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        data={data}
-        renderMenuItem={renderMenuItem}
-        menuStyle={menuStyle}
-        menuClassName={menuClassName}
         $valueIsMissing={valueIsMissing}
-        locale={{
-          noResultsText: emptyMessage,
-          emptyMessage: emptyMessage
-        }}
-        groupBy={groupBy}
-        disabled={disabled}
-        placement={placement || 'auto'}
+        cleanable={cleanable as any}
+        data={data}
         data-cy={dataCy}
+        disabled={disabled}
+        groupBy={groupBy as any}
+        locale={
+          {
+            emptyMessage,
+            noResultsText: emptyMessage
+          } as any
+        }
+        menuClassName={menuClassName as any}
+        menuStyle={menuStyle as any}
+        onChange={onChange}
+        placeholder={placeholder}
+        placement={placement ?? 'auto'}
+        renderMenuItem={renderMenuItem as any}
+        searchable={searchable}
+        style={style ?? DEFAULT_SELECT_PICKER_STYLE}
+        value={value}
+        virtualized
       />
     </SelectWrapper>
   )
 }
 
-const SelectWrapper = styled.div`
+const SelectWrapper = styled.div<{
+  $padding: string | undefined
+}>`
   display: inline-block;
-  margin: ${props => props.padding ? props.padding : '0px 10px 0px 0px'};
+  margin: ${p => (p.$padding ? p.$padding : '0px 10px 0px 0px')};
   vertical-align: sub;
 `
 
-const CustomSelectPicker = styled(SelectPicker)`
+const CustomSelectPicker = styled(SelectPicker)<{
+  $valueIsMissing: boolean | undefined
+  $width?: number
+}>`
   a {
     box-sizing: border-box;
-    border-color: ${props => props.$valueIsMissing ? COLORS.maximumRed : COLORS.lightGray}!important;
+    border-color: ${p => (p.$valueIsMissing ? p.theme.color.maximumRed : p.theme.color.lightGray)}!important;
   }
 
   .rs-btn-default.rs-picker-toggle:hover {
-    border-color: ${props => props.$valueIsMissing ? COLORS.maximumRed : COLORS.lightGray}!important;
+    border-color: ${p => (p.$valueIsMissing ? p.theme.color.maximumRed : p.theme.color.lightGray)}!important;
   }
 
   .rs-btn-default.rs-picker-toggle:focus {
-    border-color: ${props => props.$valueIsMissing ? COLORS.maximumRed : COLORS.lightGray}!important;
+    border-color: ${p => (p.$valueIsMissing ? p.theme.color.maximumRed : p.theme.color.lightGray)}!important;
   }
 
   .grouped.rs-picker-select-menu-item {
@@ -85,8 +113,6 @@ const CustomSelectPicker = styled(SelectPicker)`
   }
 
   .rs-picker-toggle {
-    width: ${p => p.width ? p.width - 40 : 160}px;
+    width: ${p => (p.$width ? p.$width - 40 : 160)}px;
   }
 `
-
-export default CustomSelectComponent

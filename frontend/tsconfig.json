@@ -57,7 +57,8 @@
     "src/vite-env-override.d.ts",
     "src/ui/styled.d.ts",
     "vite.config.ts",
-    "src/matomo.d.ts"
+    "src/matomo.d.ts",
+    "src/hooks/fishingPeriod/usePushArrayInFishingPeriod.tsx"
   ],
   "exclude": ["node_modules/*"],
   "ts-node": {

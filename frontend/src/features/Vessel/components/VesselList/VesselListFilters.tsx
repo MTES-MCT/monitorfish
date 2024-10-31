@@ -236,8 +236,8 @@ function UnmemoizedVesselListFilters({ namespace, seeMoreIsOpen, setSeeMoreIsOpe
         data-cy="vessel-list-country-filter"
         onChange={nextValue => dispatch(setCountriesFiltered(nextValue))}
         placeholder="Nationalité"
-        renderMenuItem={(_, item) => renderTagPickerMenuItem(item)}
-        renderValue={(_, items) => renderTagPickerValue(items)}
+        renderMenuItem={(_label, item) => renderTagPickerMenuItem(item)}
+        renderValue={(_value, items) => renderTagPickerValue(items)}
         style={tagPickerStyle}
         value={countriesFiltered}
       />
@@ -246,8 +246,8 @@ function UnmemoizedVesselListFilters({ namespace, seeMoreIsOpen, setSeeMoreIsOpe
         data-cy="vessel-list-fleet-segment-filter"
         onChange={nextValue => dispatch(setFleetSegmentsFiltered(nextValue))}
         placeholder="Seg. de flotte"
-        renderMenuItem={(_, item) => renderTagPickerMenuItem(item)}
-        renderValue={(_, items) => renderTagPickerValue(items)}
+        renderMenuItem={(_label, item) => renderTagPickerMenuItem(item)}
+        renderValue={(_value, items) => renderTagPickerValue(items)}
         style={tagPickerStyle}
         value={fleetSegmentsFiltered}
       />
@@ -255,8 +255,8 @@ function UnmemoizedVesselListFilters({ namespace, seeMoreIsOpen, setSeeMoreIsOpe
         data={gearsField}
         onChange={nextValue => dispatch(setGearsFiltered(nextValue))}
         placeholder="Engins à bord"
-        renderMenuItem={(_, item) => renderTagPickerMenuItem(item)}
-        renderValue={(_, items) => renderTagPickerValue(items)}
+        renderMenuItem={(_label, item) => renderTagPickerMenuItem(item)}
+        renderValue={(_value, items) => renderTagPickerValue(items)}
         style={tagPickerStyle}
         value={gearsFiltered}
       />
@@ -264,8 +264,8 @@ function UnmemoizedVesselListFilters({ namespace, seeMoreIsOpen, setSeeMoreIsOpe
         data={speciesField}
         onChange={nextValue => dispatch(setSpeciesFiltered(nextValue))}
         placeholder="Espèces à bord"
-        renderMenuItem={(_, item) => renderTagPickerMenuItem(item)}
-        renderValue={(_, items) => renderTagPickerValue(items)}
+        renderMenuItem={(_label, item) => renderTagPickerMenuItem(item)}
+        renderValue={(_value, items) => renderTagPickerValue(items)}
         style={tagPickerStyle}
         value={speciesFiltered}
       />
@@ -321,8 +321,8 @@ function UnmemoizedVesselListFilters({ namespace, seeMoreIsOpen, setSeeMoreIsOpe
             data={districtsField}
             onChange={nextValue => dispatch(setDistrictsFiltered(nextValue))}
             placeholder="Quartiers"
-            renderMenuItem={(_, item) => renderTagPickerMenuItem(item)}
-            renderValue={(_, items) => renderTagPickerValue(items)}
+            renderMenuItem={(_label, item) => renderTagPickerMenuItem(item)}
+            renderValue={(_value, items) => renderTagPickerValue(items)}
             style={tagPickerStyle}
             value={districtsFiltered}
           />

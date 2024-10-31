@@ -165,7 +165,9 @@ export function RiskFactorExplanationModal({ isOpen, setIsOpen }: RiskFactorExpl
   )
 }
 
-const DocumentationLink = styled.a`
+const DocumentationLink = styled.a<{
+  width?: string
+}>`
   ${basePrimaryButton}
   color: ${p => p.theme.color.gainsboro} !important;
   font-size: 13px;

@@ -65,7 +65,7 @@ export function isForbiddenPeriod(feature: Feature | undefined, currentDate: Day
      *  - hasForbiddenWeekDay is true
      */
     case false: {
-      const isAlwaysForbidden = fishingPeriod.always
+      const isAlwaysForbidden = !!fishingPeriod.always
 
       const hasForbiddenRange = !!fishingPeriod.dateRanges?.find(dateRange => {
         if (fishingPeriod.annualRecurrence) {

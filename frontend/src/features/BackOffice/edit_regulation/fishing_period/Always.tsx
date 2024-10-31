@@ -1,40 +1,39 @@
-import React, { useCallback, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
+import { useCallback, useEffect } from 'react'
 import styled from 'styled-components'
-import useSetFishingPeriod from '../../../../hooks/fishingPeriod/useSetFishingPeriod'
-import { FISHING_PERIOD_KEYS } from '../../../Regulation/utils'
+
+import { useSetFishingPeriod } from '../../../../hooks/fishingPeriod/useSetFishingPeriod'
+import { CustomCheckbox } from '../../../commonStyles/Backoffice.style'
 import { Row } from '../../../commonStyles/FishingPeriod.style'
 import { Label } from '../../../commonStyles/Input.style'
-import { CustomCheckbox } from '../../../commonStyles/Backoffice.style'
+import { FISHING_PERIOD_KEYS } from '../../../Regulation/utils'
 
-const Always = ({ authorized }) => {
-  const { always } = useSelector(state => state.regulation.processingRegulation.fishingPeriod)
+export function Always({ authorized }) {
+  const processingRegulation = useBackofficeAppSelector(state => state.regulation.processingRegulation)
   const setAlways = useSetFishingPeriod(FISHING_PERIOD_KEYS.ALWAYS)
-  const onChange = useCallback(_ => setAlways(!always), [setAlways, always])
+  const onChange = useCallback(
+    _ => setAlways(!processingRegulation.fishingPeriod?.always),
+    [setAlways, processingRegulation.fishingPeriod?.always]
+  )
 
   useEffect(() => {
     if (authorized) {
       setAlways(undefined)
     }
-  }, [authorized])
+  }, [authorized, setAlways])
 
-  return <>
-    {
-      !authorized
-        ? <Row>
+  return (
+    <>
+      {!authorized ? (
+        <Row>
           <Label>En tous temps</Label>
-          <AlwaysCheckbox
-            onChange={onChange}
-            checked={always}
-          />
+          <AlwaysCheckbox checked={!!processingRegulation.fishingPeriod?.always} onChange={onChange} />
         </Row>
-        : null
-    }
-  </>
+      ) : null}
+    </>
+  )
 }
 
 const AlwaysCheckbox = styled(CustomCheckbox)`
   margin-top: 0px;
 `
-
-export default Always

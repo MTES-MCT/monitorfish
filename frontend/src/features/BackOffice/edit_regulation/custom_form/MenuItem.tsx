@@ -1,26 +1,32 @@
-import React from 'react'
-import styled from 'styled-components'
-import { COLORS } from '../../../../constants/constants'
 import { Radio, Checkbox } from 'rsuite'
+import styled from 'styled-components'
 
-const MenuItem = ({ checked, item, tag }) => {
+type MenuItemProps = Readonly<{
+  checked?: boolean
+  item: any
+  tag?: string
+}>
+export function MenuItem({ checked = false, item, tag }: MenuItemProps) {
   const { label } = item
   const labelToDisplay = label
-  return <>{
-    tag === 'Radio'
-      ? <CustomRadio
-          checked={checked}
-          title={labelToDisplay}
-        >{labelToDisplay}
-        </CustomRadio>
-      : tag === 'Checkbox'
-        ? <CustomCheckbox
-            checked={checked}
-            title={labelToDisplay}
-          >{labelToDisplay}
-          </CustomCheckbox>
-        : <Text>{labelToDisplay}</Text>
-    }</>
+
+  if (tag === 'Radio') {
+    return (
+      <CustomRadio checked={checked} title={labelToDisplay}>
+        {labelToDisplay}
+      </CustomRadio>
+    )
+  }
+
+  if (tag === 'Checkbox') {
+    return (
+      <CustomCheckbox checked={checked} title={labelToDisplay}>
+        {labelToDisplay}
+      </CustomCheckbox>
+    )
+  }
+
+  return <Text>{labelToDisplay}</Text>
 }
 
 const Text = styled.span`
@@ -41,10 +47,10 @@ const CustomRadio = styled(Radio)`
       box-sizing: border-box;
     }
   }
-  
+
   .rs-radio-checker > label {
     font-size: 13px;
-    color: ${COLORS.slateGray};
+    color: ${p => p.theme.color.slateGray};
   }
 `
 
@@ -63,20 +69,18 @@ const CustomCheckbox = styled(Checkbox)`
 
   .rs-checkbox-checker > label {
     font-size: 13px;
-    color: ${COLORS.slateGray};
+    color: ${p => p.theme.color.slateGray};
   }
 
   .rs-checkbox-wrapper .rs-checkbox-inner {
     &:before {
-      border: 1px solid ${COLORS.lightGray} !important;
+      border: 1px solid ${p => p.theme.color.lightGray} !important;
       box-sizing: border-box;
     }
-    
+
     &:after {
       margin-top: 0px !important;
       margin-left: 4px !important;
     }
   }
 `
-
-export default MenuItem

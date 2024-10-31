@@ -1,10 +1,13 @@
+// TODO Move that into BackOffice feature.
+
+import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import { useCallback } from 'react'
-import { useDispatch } from 'react-redux'
 
 import { setFishingPeriod } from '../../features/BackOffice/slice'
 
-const useSetFishingPeriod = key => {
-  const dispatch = useDispatch()
+export function useSetFishingPeriod(key: string) {
+  const dispatch = useBackofficeAppDispatch()
+
   const set = useCallback(
     value => {
       dispatch(setFishingPeriod({ key, value }))
@@ -14,5 +17,3 @@ const useSetFishingPeriod = key => {
 
   return set
 }
-
-export default useSetFishingPeriod

@@ -51,7 +51,7 @@ const regulationSlice = createSlice({
 
       // TODO Clean this type.
       ;(state as any).regulatoryTextCheckedMap = {
-        ...(state.regulatoryTextCheckedMap || {}),
+        ...(state.regulatoryTextCheckedMap ?? {}),
         [id]: complete
       }
     },

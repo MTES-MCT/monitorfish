@@ -1,6 +1,6 @@
-import {defineConfig} from 'cypress'
+import { defineConfig } from 'cypress'
 import initCypressMousePositionPlugin from 'cypress-mouse-position/plugin'
-import {initPlugin} from 'cypress-plugin-snapshots/plugin'
+import { initPlugin } from 'cypress-plugin-snapshots/plugin'
 
 const IS_CI = Boolean(process.env.CI)
 
@@ -15,8 +15,6 @@ export default defineConfig({
     specPattern: 'cypress/e2e/**/*.spec.ts'
   },
   env: {
-    "FRONTEND_OIDC_AUTHORITY": `http://${IS_CI ? '0.0.0.0:8880' : 'localhost:8880'}/realms/monitor`,
-    "FRONTEND_OIDC_CLIENT_ID": "monitorfish",
     'cypress-plugin-snapshots': {
       imageConfig: {
         threshold: 20,
@@ -28,7 +26,9 @@ export default defineConfig({
      * When running Cypress tests, we modify this env var in spec file, so we use `window.Cypress.env()`
      * instead of `import.meta.env` in application code.
      */
-    FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED: true
+    FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED: true,
+    FRONTEND_OIDC_AUTHORITY: `http://${IS_CI ? '0.0.0.0:8880' : 'localhost:8880'}/realms/monitor`,
+    FRONTEND_OIDC_CLIENT_ID: 'monitorfish'
   },
   projectId: '9b7q8z',
   retries: {

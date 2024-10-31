@@ -22,7 +22,7 @@ export const fitToView = (uuid: string) => {
     layer
       .getSource()
       ?.getFeatures()
-      .filter(feature => feature.get('uuid') === uuid) || []
+      .filter(feature => feature.get('uuid') === uuid) ?? []
 
   fitViewToFeatures(features)
 }

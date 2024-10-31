@@ -209,7 +209,7 @@ function UnmemoizedMeasurementLayer() {
   }, [dispatch, circleMeasurementToAdd])
 
   useEffect(() => {
-    if (measurementInProgress?.center || measurementInProgress?.measurement) {
+    if (!!measurementInProgress?.center || !!measurementInProgress?.measurement) {
       dispatch(
         setCircleMeasurementInDrawing({
           coordinates: measurementInProgress.center,

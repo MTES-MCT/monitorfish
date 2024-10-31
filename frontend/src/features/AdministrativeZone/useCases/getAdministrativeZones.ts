@@ -43,7 +43,7 @@ export const getAdministrativeZones =
               group: zone.group,
               hasFetchableZones: zone.hasFetchableZones!,
               name:
-                (zone.zoneNamePropertyKey && feature.properties?.[zone.zoneNamePropertyKey]?.toString()) || 'Aucun nom',
+                (zone.zoneNamePropertyKey && feature.properties?.[zone.zoneNamePropertyKey]?.toString()) ?? 'Aucun nom',
               type: LayerType.ADMINISTRATIVE
             }))
 

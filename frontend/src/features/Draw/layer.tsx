@@ -32,7 +32,7 @@ function UnmemoizedDrawLayer() {
   const { drawedGeometry, initialGeometry, interactionType, listener } = useMainAppSelector(state => state.draw)
 
   const feature = useMemo(() => {
-    const currentGeometry = drawedGeometry || initialGeometry
+    const currentGeometry = drawedGeometry ?? initialGeometry
     if (!currentGeometry) {
       return undefined
     }

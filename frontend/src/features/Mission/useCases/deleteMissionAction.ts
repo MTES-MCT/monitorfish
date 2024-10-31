@@ -46,7 +46,7 @@ export const deleteMissionAction =
           missionAction.actionType === MissionAction.MissionActionType.LAND_CONTROL ||
           missionAction.actionType === MissionAction.MissionActionType.SEA_CONTROL
       )
-      .filter(missionAction => missionAction.portLocode || (missionAction.latitude && missionAction.longitude))
+      .filter(missionAction => !!missionAction.portLocode || (missionAction.latitude && missionAction.longitude))
       .sort((a, b) =>
         a.actionDatetimeUtc && b.actionDatetimeUtc && a.actionDatetimeUtc < b.actionDatetimeUtc ? 1 : -1
       )

@@ -112,7 +112,7 @@ module.exports = {
         caughtErrorsIgnorePattern: '^_'
       }
     ],
-    '@typescript-eslint/prefer-nullish-coalescing': 'warn',
+    '@typescript-eslint/prefer-nullish-coalescing': 'error',
 
     'typescript-sort-keys/interface': 'error',
     'typescript-sort-keys/string-enum': 'error'

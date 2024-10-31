@@ -196,12 +196,6 @@ export namespace Logbook {
     riskFactor: number | undefined
     statisticalRectangle: string | undefined
     tripStartDate: string | undefined
-    /**
-     * @internal
-     * This `updatedAt` field is only used internally for logbook PNOs. It's always `undefined` for manual ones.
-     *
-     * /!\ Use `PriorNotification.PriorNotification.updatedAt` or `PriorNotification.Detail.updatedAt` instead.
-     */
     updatedAt: string | undefined
     updatedBy: string | undefined
   }

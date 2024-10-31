@@ -2,9 +2,13 @@ import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 
 import {
+  VesselIdentifier,
   type VesselEnhancedLastPositionWebGLObject,
+  type VesselIdentity,
   type VesselLastPositionFeature
 } from '../../domain/entities/vessel/types'
+
+import type { Vessel } from './Vessel.types'
 
 export function buildFeature(vessel: VesselEnhancedLastPositionWebGLObject): VesselLastPositionFeature {
   /**
@@ -70,4 +74,44 @@ export function extractVesselPropertiesFromFeature<K extends keyof VesselEnhance
   })
 
   return vesselProperties as VesselProperties<K>
+}
+
+export function getVesselIdentityFromVessel(vessel: Vessel.Vessel): VesselIdentity {
+  const vesselIdentifier = getVesselIdentifier(vessel)
+
+  return {
+    districtCode: vessel.districtCode ?? null,
+    externalReferenceNumber: vessel.externalReferenceNumber ?? null,
+    flagState: vessel.flagState,
+    internalReferenceNumber: vessel.internalReferenceNumber ?? null,
+    ircs: vessel.ircs ?? null,
+    mmsi: vessel.mmsi ?? null,
+    vesselId: vessel.vesselId ?? null,
+    vesselIdentifier: vesselIdentifier ?? null,
+    vesselName: vessel.vesselName ?? null
+  }
+}
+
+export function getVesselIdentifier({
+  externalReferenceNumber,
+  internalReferenceNumber,
+  ircs
+}: {
+  externalReferenceNumber: string | undefined
+  internalReferenceNumber: string | undefined
+  ircs: string | undefined
+}): VesselIdentifier | undefined {
+  switch (true) {
+    case !!internalReferenceNumber:
+      return VesselIdentifier.INTERNAL_REFERENCE_NUMBER
+
+    case !!externalReferenceNumber:
+      return VesselIdentifier.EXTERNAL_REFERENCE_NUMBER
+
+    case !!ircs:
+      return VesselIdentifier.IRCS
+
+    default:
+      return undefined
+  }
 }

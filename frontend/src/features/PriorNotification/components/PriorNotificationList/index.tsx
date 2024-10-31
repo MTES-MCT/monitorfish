@@ -46,13 +46,15 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
   const lastFetchStartDateRef = useRef<number | undefined>(undefined)
 
   const dispatch = useMainAppDispatch()
-  const isReportingListOpened = useMainAppSelector(state => state.priorNotification.isReportingListOpened)
   const listFilter = useMainAppSelector(state => state.priorNotification.listFilterValues)
   const openedPriorNotificationComponentType = useMainAppSelector(
     state => state.priorNotification.openedPriorNotificationComponentType
   )
   const openedPriorNotificationDetail = useMainAppSelector(
     state => state.priorNotification.openedPriorNotificationDetail
+  )
+  const openedReportingListVesselIdentity = useMainAppSelector(
+    state => state.priorNotification.openedReportingListVesselIdentity
   )
   const isSuperUser = useIsSuperUser()
 
@@ -266,7 +268,7 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
       {openedPriorNotificationComponentType === OpenedPriorNotificationType.ManualForm && (
         <ManualPriorNotificationForm key={openedPriorNotificationDetail?.fingerprint} />
       )}
-      {isReportingListOpened && <ReportingList />}
+      {openedReportingListVesselIdentity && <ReportingList />}
     </>
   )
 }

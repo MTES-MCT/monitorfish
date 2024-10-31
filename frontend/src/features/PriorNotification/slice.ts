@@ -7,6 +7,7 @@ import type { ManualPriorNotificationFormValues } from './components/ManualPrior
 import type { ListFilter } from './components/PriorNotificationList/types'
 import type { OpenedPriorNotificationType } from './constants'
 import type { Undefine } from '@mtes-mct/monitor-ui'
+import type { VesselIdentity } from 'domain/entities/vessel/types'
 
 export interface PriorNotificationState {
   editedLogbookPriorNotificationFormValues: PriorNotification.LogbookForm | undefined
@@ -16,11 +17,11 @@ export interface PriorNotificationState {
   editedPriorNotificationId: string | undefined
   isPriorNotificationFormDirty: boolean
   isReportingFormDirty: boolean
-  isReportingListOpened: boolean
   listFilterValues: ListFilter
   openedPriorNotificationComponentType: OpenedPriorNotificationType | undefined
-  /** Used for both prior notification forms & card. */
+  /** Used for prior notification forms, card and reporting list. */
   openedPriorNotificationDetail: PriorNotification.Detail | undefined
+  openedReportingListVesselIdentity: VesselIdentity | undefined
 }
 const INITIAL_STATE: PriorNotificationState = {
   editedLogbookPriorNotificationFormValues: undefined,
@@ -30,10 +31,10 @@ const INITIAL_STATE: PriorNotificationState = {
   editedPriorNotificationId: undefined,
   isPriorNotificationFormDirty: false,
   isReportingFormDirty: false,
-  isReportingListOpened: false,
   listFilterValues: DEFAULT_LIST_FILTER_VALUES,
   openedPriorNotificationComponentType: undefined,
-  openedPriorNotificationDetail: undefined
+  openedPriorNotificationDetail: undefined,
+  openedReportingListVesselIdentity: undefined
 }
 
 const priorNotificationSlice = createSlice({
@@ -48,6 +49,11 @@ const priorNotificationSlice = createSlice({
       state.isPriorNotificationFormDirty = false
       state.openedPriorNotificationComponentType = undefined
       state.openedPriorNotificationDetail = undefined
+    },
+
+    closeReportingList(state) {
+      state.isReportingFormDirty = false
+      state.openedReportingListVesselIdentity = undefined
     },
 
     openPriorNotification(state, action: PayloadAction<OpenedPriorNotificationType>) {
@@ -82,10 +88,6 @@ const priorNotificationSlice = createSlice({
       state.isReportingFormDirty = action.payload
     },
 
-    setIsReportingListOpened(state, action: PayloadAction<boolean>) {
-      state.isReportingListOpened = action.payload
-    },
-
     setListFilterValues(state, action: PayloadAction<Partial<ListFilter>>) {
       state.listFilterValues = {
         ...state.listFilterValues,
@@ -102,6 +104,10 @@ const priorNotificationSlice = createSlice({
 
     setOpenedPriorNotificationDetail(state, action: PayloadAction<PriorNotification.Detail>) {
       state.openedPriorNotificationDetail = action.payload
+    },
+
+    setReportingListVesselIdentity(state, action: PayloadAction<VesselIdentity>) {
+      state.openedReportingListVesselIdentity = action.payload
     },
 
     unsetEditedPriorNotificationComputedValues(state) {

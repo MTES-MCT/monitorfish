@@ -1,3 +1,5 @@
+import { openPriorNotificationCard } from '@features/PriorNotification/useCases/openPriorNotificationCard'
+import { openPriorNotificationReportingList } from '@features/PriorNotification/useCases/openPriorNotificationReportingList'
 import { getPriorNotificationIdentifier } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { customDayjs, Icon, TableWithSelectableRows, Tag, THEME } from '@mtes-mct/monitor-ui'
@@ -6,10 +8,14 @@ import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import styled from 'styled-components'
 
 import { FixedTag, None } from './styles'
-import { displayOnboardFishingSpecies, getColorsFromState, getExpandableRowCellCustomStyle } from './utils'
+import {
+  displayOnboardFishingSpecies,
+  getColorsFromState,
+  getExpandableRowCellCustomStyle,
+  getVesselIdentityFromPriorNotification
+} from './utils'
 import { PriorNotification } from '../../PriorNotification.types'
 import { openManualPriorNotificationForm } from '../../useCases/openManualPriorNotificationForm'
-import { openPriorNotificationCard } from '../../useCases/openPriorNotificationCard'
 
 type RowProps = Readonly<{
   row: RowType<PriorNotification.PriorNotification>
@@ -39,6 +45,12 @@ export function Row({ row }: RowProps) {
         priorNotification.isManuallyCreated
       )
     )
+  }
+
+  const openReportingList = () => {
+    const vesselIdentity = getVesselIdentityFromPriorNotification(row.original)
+
+    dispatch(openPriorNotificationReportingList(vesselIdentity))
   }
 
   return (
@@ -190,7 +202,11 @@ export function Row({ row }: RowProps) {
               )}
 
               {isSuperUser && priorNotification.reportingCount > 0 && (
-                <FixedTag backgroundColor={THEME.color.maximumRed15} color={THEME.color.maximumRed}>{`${
+                <FixedTag
+                  backgroundColor={THEME.color.maximumRed15}
+                  color={THEME.color.maximumRed}
+                  onClick={openReportingList}
+                >{`${
                   priorNotification.reportingCount
                 } signalement${priorNotification.reportingCount > 1 ? 's' : ''}`}</FixedTag>
               )}

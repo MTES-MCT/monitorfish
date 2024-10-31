@@ -7,7 +7,7 @@ context('Side Window > Manual Prior Notification Card > Card', () => {
     openSideWindowPriorNotificationCardAsUser(`POISSON PAS NET`, '00000000-0000-4000-0000-000000000001')
 
     // Title
-    cy.contains(`Préavis navire < 12 M`).should('be.visible')
+    cy.contains(`PRÉAVIS NAVIRE < 12 M`).should('be.visible')
     cy.contains(`POISSON PAS NET (CFR112)`).should('be.visible')
 
     // Message Header

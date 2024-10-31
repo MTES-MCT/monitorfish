@@ -1,11 +1,12 @@
 import { getAlpha2CodeFromAlpha2or3Code } from '@components/CountryFlag/utils'
 import { buildCatchArray } from '@features/Logbook/utils'
-import { HTML_TEMPLATE } from '@features/PriorNotification/components/shared/DownloadButton/template'
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
+import { HTML_TEMPLATE } from './template'
+
+import type { TemplateData } from './types'
 import type { Logbook } from '@features/Logbook/Logbook.types'
-import type { TemplateData } from '@features/PriorNotification/components/PriorNotificationCard/types'
 
 export function getHtmlContent(
   pno: Logbook.PnoMessage | undefined,

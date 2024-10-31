@@ -7,7 +7,7 @@ context('Side Window > Logbook Prior Notification Card > Card', () => {
     openSideWindowPriorNotificationCardAsUser(`L'ANCRE`, 'FAKE_OPERATION_109_COR')
 
     // Title
-    cy.contains(`Préavis navire < 12 M`).should('be.visible')
+    cy.contains(`PRÉAVIS NAVIRE < 12 M`).should('be.visible')
     cy.contains(`L'ANCRE SÈCHE (CFR106)`).should('be.visible')
 
     // Message Header
@@ -26,7 +26,7 @@ context('Side Window > Logbook Prior Notification Card > Card', () => {
     openSideWindowPriorNotificationCardAsUser(`BARS`, 'FAKE_OPERATION_107')
 
     // Title
-    cy.contains(`Préavis navire ≥ 12 M`).should('be.visible')
+    cy.contains(`PRÉAVIS NAVIRE ≥ 12 M`).should('be.visible')
     cy.contains(`DES BARS (CFR104)`).should('be.visible')
 
     // Message Header

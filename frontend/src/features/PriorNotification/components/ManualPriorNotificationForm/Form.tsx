@@ -17,7 +17,7 @@ import {
   LinkButton
 } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
-import { useRef } from 'react'
+import { useCallback, useRef } from 'react'
 import styled from 'styled-components'
 
 import { FormikFaoAreaSelect } from './fields/FormikFaoAreaSelect'
@@ -28,10 +28,19 @@ import type { ManualPriorNotificationFormValues } from './types'
 import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
 
 type FormProps = Readonly<{
+  detail: PriorNotification.Detail | undefined
   isNewPriorNotification: boolean
   isReadOnly: boolean
+  onVesselChange: (nextVessel: VesselIdentity | undefined) => void
+  selectedVesselIdentity: VesselIdentity | undefined
 }>
-export function Form({ isNewPriorNotification, isReadOnly }: FormProps) {
+export function Form({
+  detail,
+  isNewPriorNotification,
+  isReadOnly,
+  onVesselChange,
+  selectedVesselIdentity
+}: FormProps) {
   const { values } = useFormikContext<ManualPriorNotificationFormValues>()
 
   const dispatch = useMainAppDispatch()
@@ -40,18 +49,27 @@ export function Form({ isNewPriorNotification, isReadOnly }: FormProps) {
 
   const isThirdPartyVessel = useRef<boolean>(false)
 
-  const onChange = (nextVessel: VesselIdentity | undefined) => {
-    if (getHasAuthorizedLandingDownload(nextVessel?.flagState, nextVessel?.externalReferenceNumber)) {
-      isThirdPartyVessel.current = true
+  const handleVesselChange = useCallback(
+    (nextVessel: VesselIdentity | undefined) => {
+      if (getHasAuthorizedLandingDownload(nextVessel?.flagState, nextVessel?.externalReferenceNumber)) {
+        isThirdPartyVessel.current = true
 
+        return
+      }
+
+      isThirdPartyVessel.current = false
+
+      onVesselChange(nextVessel)
+    },
+    [onVesselChange]
+  )
+
+  const openVesselReportingList = () => {
+    if (!selectedVesselIdentity) {
       return
     }
 
-    isThirdPartyVessel.current = false
-  }
-
-  const openVesselReportingList = () => {
-    dispatch(priorNotificationActions.setIsReportingListOpened(true))
+    dispatch(priorNotificationActions.setReportingListVesselIdentity(selectedVesselIdentity))
   }
 
   const updateIsDirty = (isDirty: boolean) => {
@@ -62,7 +80,11 @@ export function Form({ isNewPriorNotification, isReadOnly }: FormProps) {
 
   return (
     <>
-      <FormikVesselSelect onChange={onChange} readOnly={isReadOnly} />
+      <FormikVesselSelect
+        initialVesselIdentity={detail?.vesselIdentity}
+        onChange={handleVesselChange}
+        readOnly={isReadOnly}
+      />
 
       <FormikSelect
         isCleanable={false}

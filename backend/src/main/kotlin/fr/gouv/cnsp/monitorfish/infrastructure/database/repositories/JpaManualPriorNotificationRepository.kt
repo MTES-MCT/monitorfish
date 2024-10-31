@@ -77,7 +77,7 @@ class JpaManualPriorNotificationRepository(
         try {
             val manualPriorNotificationEntity =
                 dbManualPriorNotificationRepository
-                    .save(ManualPriorNotificationEntity.fromPriorNotification(newOrNextPriorNotification, true))
+                    .save(ManualPriorNotificationEntity.fromPriorNotification(newOrNextPriorNotification))
 
             return manualPriorNotificationEntity.toPriorNotification()
         } catch (e: IllegalArgumentException) {

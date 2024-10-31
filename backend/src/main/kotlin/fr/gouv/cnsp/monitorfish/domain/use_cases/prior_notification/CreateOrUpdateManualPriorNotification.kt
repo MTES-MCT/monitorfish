@@ -49,11 +49,11 @@ class CreateOrUpdateManualPriorNotification(
         tripGearCodes: List<String>,
         vesselId: Int,
     ): PriorNotification {
-        val existingMessageValue: PNO? =
+        val existingManualPriorNotification =
             reportId?.let {
-                val manualPriorNotfication = manualPriorNotificationRepository.findByReportId(reportId)
-                manualPriorNotfication?.logbookMessageAndValue?.logbookMessage?.message as PNO
+                manualPriorNotificationRepository.findByReportId(reportId)
             }
+        val existingMessageValue: PNO? = existingManualPriorNotification?.logbookMessageAndValue?.logbookMessage?.message as PNO?
 
         // /!\ Backend computed vessel risk factor is only used as a real time Frontend indicator.
         // The Backend should NEVER update `risk_factors` DB table, only the pipeline is allowed to update it.
@@ -138,8 +138,8 @@ class CreateOrUpdateManualPriorNotification(
                 isManuallyCreated = true,
                 logbookMessageAndValue = logbookMessageAndValue,
                 sentAt = sentAt,
+                createdAt = existingManualPriorNotification?.createdAt,
                 // All these props are useless for the save operation.
-                createdAt = null,
                 port = null,
                 reportingCount = null,
                 seafront = null,
@@ -198,6 +198,7 @@ class CreateOrUpdateManualPriorNotification(
         val isBeingSent = !isInVerificationScope && isPartOfControlUnitSubscriptions
         val portName = allPorts.find { it.locode == portLocode }?.name
         val updatedBy = if (existingMessageValue != null) author else null
+        val updatedAt = if (existingMessageValue != null) ZonedDateTime.now() else null
 
         return PNO().apply {
             this.authorTrigram = authorTrigram
@@ -231,6 +232,7 @@ class CreateOrUpdateManualPriorNotification(
             this.tripStartDate = null
             this.riskFactor = computedVesselRiskFactor
             this.updatedBy = updatedBy
+            this.updatedAt = updatedAt
         }
     }
 

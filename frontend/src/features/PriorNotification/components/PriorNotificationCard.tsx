@@ -77,7 +77,8 @@ export function PriorNotificationCard({
   }
 
   return (
-    <StyledCard $isSuperUser={isSuperUser} onBackgroundClick={close}>
+    // This `key` is used to force the re-render of this component, as using React.createPortal might introduce render issues
+    <StyledCard key={JSON.stringify(detail)} $isSuperUser={isSuperUser} onBackgroundClick={close}>
       {detail?.state === PriorNotification.State.PENDING_SEND && (
         <CardBanner isCollapsible level={Level.WARNING} top="100px">
           Le préavis est en cours de diffusion.

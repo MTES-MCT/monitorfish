@@ -182,7 +182,11 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
           <FilterBar />
           <FilterTags />
 
-          <TableOuterWrapper $isFromUrl={isFromUrl}>
+          <TableOuterWrapper
+            // This `key` is used to force the re-render of this component, as using React.createPortal might introduce render issues
+            key={`${JSON.stringify(listFilter)}-${isFetching}-${openedPriorNotificationComponentType}-${JSON.stringify(rowSelection)}-${JSON.stringify(rows)}`}
+            $isFromUrl={isFromUrl}
+          >
             <TableTop $isFromUrl={isFromUrl}>
               <TableLegend>{`${
                 isBodyLoaderVisible || isError || totalLength === undefined ? '...' : totalLength

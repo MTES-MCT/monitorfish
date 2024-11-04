@@ -130,6 +130,11 @@ def get_alert_type_zones_table(alert_type: str) -> ZonesTable:
             "filter_column": "iso_sov1",
             "geometry_column": "wkb_geometry",
         },
+        "RTC_FISHING_ALERT": {
+            "table": "regulations",
+            "filter_column": "law_type",
+            "geometry_column": "geometry",
+        },
     }
 
     logger = prefect.context.get("logger")

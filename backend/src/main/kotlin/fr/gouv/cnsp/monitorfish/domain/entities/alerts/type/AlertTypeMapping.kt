@@ -32,6 +32,10 @@ enum class AlertTypeMapping(
         clazz = MissingFAR48HoursAlert::class.java,
         alertName = "Non-emission de message \"FAR\" en 48h",
     ),
+    SUSPICION_OF_UNDER_DECLARATION_ALERT(
+        clazz = SuspicionOfUnderDeclarationAlert::class.java,
+        alertName = "Suspicion de sous-déclaration",
+    ),
     ;
 
     override fun getImplementation(): Class<out AlertType> {

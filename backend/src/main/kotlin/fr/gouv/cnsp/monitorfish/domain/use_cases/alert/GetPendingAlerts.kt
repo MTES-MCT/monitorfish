@@ -23,6 +23,7 @@ class GetPendingAlerts(
                 AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
                 AlertTypeMapping.MISSING_DEP_ALERT,
                 AlertTypeMapping.MISSING_FAR_48_HOURS_ALERT,
+                AlertTypeMapping.SUSPICION_OF_UNDER_DECLARATION_ALERT,
             ),
         ).map { pendingAlert ->
             pendingAlert.value.natinfCode?.let {

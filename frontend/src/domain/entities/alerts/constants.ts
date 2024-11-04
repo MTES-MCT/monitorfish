@@ -46,6 +46,11 @@ export const COMMON_ALERT_TYPE_OPTION: Record<
     nameWithAlertDetails: (percentOfTolerance, minimumWeightThreshold) =>
       `Tolérance de ${percentOfTolerance}% non respectée, appliquée pour un poids minimum de ${minimumWeightThreshold}kg.`
   },
+  SUSPICION_OF_UNDER_DECLARATION_ALERT: {
+    code: PendingAlertValueType.SUSPICION_OF_UNDER_DECLARATION_ALERT,
+    isOperationalAlert: true,
+    name: 'Suspicion de sous-déclaration'
+  },
   THREE_MILES_TRAWLING_ALERT: {
     code: PendingAlertValueType.THREE_MILES_TRAWLING_ALERT,
     isOperationalAlert: true,

@@ -189,7 +189,7 @@ class CreateOrUpdateManualPriorNotification(
         val allPorts = portRepository.findAll()
 
         val authorTrigram = existingMessageValue?.authorTrigram
-        val createdBy = existingMessageValue?.createdBy ?: author
+        val createdBy = existingMessageValue?.createdBy ?: existingMessageValue?.authorTrigram ?: author
         val isInVerificationScope =
             ManualPriorNotificationComputedValues
                 .isInVerificationScope(computedVesselFlagCountryCode, computedVesselRiskFactor)
@@ -197,8 +197,6 @@ class CreateOrUpdateManualPriorNotification(
         // we pass `isBeingSent` as `true` in order to ask the workflow to send it.
         val isBeingSent = !isInVerificationScope && isPartOfControlUnitSubscriptions
         val portName = allPorts.find { it.locode == portLocode }?.name
-        val updatedBy = if (existingMessageValue != null) author else null
-        val updatedAt = if (existingMessageValue != null) ZonedDateTime.now() else null
 
         return PNO().apply {
             this.authorTrigram = authorTrigram
@@ -231,8 +229,8 @@ class CreateOrUpdateManualPriorNotification(
             this.statisticalRectangle = null
             this.tripStartDate = null
             this.riskFactor = computedVesselRiskFactor
-            this.updatedBy = updatedBy
-            this.updatedAt = updatedAt
+            this.updatedBy = author
+            this.updatedAt = ZonedDateTime.now()
         }
     }
 

@@ -57,7 +57,7 @@ dependencies {
     runtimeOnly("org.springframework.boot:spring-boot-devtools:3.3.5")
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
     api("io.ktor:ktor-client-core-jvm:2.3.12")
-    api("io.ktor:ktor-client-java-jvm:2.3.12")
+    api("io.ktor:ktor-client-java-jvm:3.0.1")
     api("io.ktor:ktor-client-content-negotiation-jvm:2.3.12")
     api("io.ktor:ktor-serialization-kotlinx-json-jvm:2.3.12")
     api("org.hibernate.validator:hibernate-validator:8.0.1.Final")

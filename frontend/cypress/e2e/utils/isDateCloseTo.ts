@@ -6,7 +6,7 @@ export function isDateCloseTo(
   thresholdInSeconds: number
 ): boolean {
   const leftDateAsDayjs: Dayjs = isDayjs(leftDate) ? leftDate : dayjs(leftDate)
-  const rightDateAsDayjs: Dayjs = isDayjs(rightDate) ? rightDate : dayjs(leftDate)
+  const rightDateAsDayjs: Dayjs = isDayjs(rightDate) ? rightDate : dayjs(rightDate)
 
   return Math.abs(leftDateAsDayjs.diff(rightDateAsDayjs, 'second')) <= thresholdInSeconds
 }

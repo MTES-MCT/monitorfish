@@ -503,6 +503,7 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
                                     catchToLand = emptyList()
                                     economicZone = null
                                     effortZone = null
+                                    createdBy = "ABC"
                                     faoZone = null
                                     latitude = null
                                     longitude = null

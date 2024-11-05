@@ -40,8 +40,6 @@ data class ManualPriorNotificationEntity(
     @Column(name = "trip_segments", nullable = true, columnDefinition = "jsonb")
     @Type(JsonBinaryType::class)
     val tripSegments: List<LogbookTripSegment>?,
-    @Column(name = "updated_at")
-    val updatedAt: ZonedDateTime,
     @Column(name = "value", nullable = true, columnDefinition = "jsonb")
     @Type(JsonBinaryType::class)
     val value: PNO,
@@ -49,20 +47,11 @@ data class ManualPriorNotificationEntity(
     val vesselName: String?,
 ) {
     companion object {
-        fun fromPriorNotification(
-            priorNotification: PriorNotification,
-            isUpdate: Boolean = false,
-        ): ManualPriorNotificationEntity {
+        fun fromPriorNotification(priorNotification: PriorNotification): ManualPriorNotificationEntity {
             try {
                 val pnoLogbookMessage = priorNotification.logbookMessageAndValue.logbookMessage
                 val pnoLogbookMessageValue = priorNotification.logbookMessageAndValue.value
                 val createdAt = priorNotification.createdAt ?: ZonedDateTime.now()
-                val updatedAt =
-                    if (isUpdate || priorNotification.updatedAt == null) {
-                        ZonedDateTime.now()
-                    } else {
-                        priorNotification.updatedAt
-                    }
 
                 val sentAt = requireNotNull(priorNotification.sentAt) { "`sentAt` is null." }
                 val vesselId = requireNotNull(pnoLogbookMessage.vesselId) { "`vesselId` is null." }
@@ -78,7 +67,6 @@ data class ManualPriorNotificationEntity(
                     sentAt = sentAt,
                     tripGears = pnoLogbookMessage.tripGears,
                     tripSegments = pnoLogbookMessage.tripSegments,
-                    updatedAt = updatedAt,
                     value = pnoLogbookMessageValue,
                     vesselName = pnoLogbookMessage.vesselName,
                     vesselId = vesselId,
@@ -129,7 +117,7 @@ data class ManualPriorNotificationEntity(
                 logbookMessageAndValue = logbookMessageAndValue,
                 reportId = reportId,
                 sentAt = sentAt,
-                updatedAt = updatedAt,
+                updatedAt = logbookMessageAndValue.value.updatedAt,
                 // These props need to be calculated in the use case
                 port = null,
                 reportingCount = null,

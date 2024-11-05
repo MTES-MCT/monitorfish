@@ -1,9 +1,12 @@
+import { VesselSearch } from '@features/Vessel/components/VesselSearch'
+import { vesselSelectors } from '@features/Vessel/slice'
 import { vesselApi } from '@features/Vessel/vesselApi'
-import { VesselSearch } from '@features/VesselSearch'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { Field, FieldError, logSoftError, useKey, useNewWindow } from '@mtes-mct/monitor-ui'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { Field, FieldError, logSoftError, useNewWindow } from '@mtes-mct/monitor-ui'
+import { getOnlyVesselIdentityProperties } from 'domain/entities/vessel/vessel'
 import { useField } from 'formik'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import type { VesselIdentity } from 'domain/entities/vessel/types'
@@ -16,19 +19,24 @@ type FormikVesselSelectProps = Readonly<{
 export function FormikVesselSelect({ initialVesselIdentity, onChange, readOnly }: FormikVesselSelectProps) {
   const [input, meta, helper] = useField<number | undefined>('vesselId')
 
-  const defaultValueRef = useRef<VesselIdentity | undefined>(initialVesselIdentity)
-  const isFirstRenderRef = useRef<boolean>(true)
+  const valueRef = useRef<VesselIdentity | undefined>(initialVesselIdentity)
 
   const dispatch = useMainAppDispatch()
+  const cachedVesselEnhancedLastPositionWebGLObjects = useMainAppSelector(state =>
+    vesselSelectors.selectAll(state.vessel.vessels)
+  )
   const { newWindowContainerRef } = useNewWindow()
 
   const [isLoading, setIsLoading] = useState(true)
 
-  const key = useKey([defaultValueRef.current, isLoading])
+  const cachedVesselIdentities = useMemo(
+    () => cachedVesselEnhancedLastPositionWebGLObjects.map(getOnlyVesselIdentityProperties),
+    [cachedVesselEnhancedLastPositionWebGLObjects]
+  )
 
   const handleVesselSearchChange = async (nextVessel: VesselIdentity | undefined) => {
     if (!nextVessel) {
-      defaultValueRef.current = undefined
+      valueRef.current = undefined
 
       helper.setValue(undefined)
       onChange(undefined)
@@ -47,13 +55,13 @@ export function FormikVesselSelect({ initialVesselIdentity, onChange, readOnly }
       return
     }
 
-    await setDefaultValue(nextVessel.vesselId)
+    await setValue(nextVessel.vesselId)
 
     helper.setValue(nextVessel.vesselId)
     onChange(nextVessel)
   }
 
-  const setDefaultValue = useCallback(
+  const setValue = useCallback(
     async (vesselId: number) => {
       setIsLoading(true)
 
@@ -68,7 +76,7 @@ export function FormikVesselSelect({ initialVesselIdentity, onChange, readOnly }
         vesselId: vessel.vesselId ?? null,
         vesselName: vessel.vesselName ?? null
       }
-      defaultValueRef.current = nextVessel
+      valueRef.current = nextVessel
       onChange(nextVessel)
 
       setIsLoading(false)
@@ -78,34 +86,30 @@ export function FormikVesselSelect({ initialVesselIdentity, onChange, readOnly }
 
   useEffect(
     () => {
-      if (!input.value || isFirstRenderRef.current) {
-        if (isFirstRenderRef.current) {
-          isFirstRenderRef.current = false
-        }
-
+      if (!input.value) {
         setIsLoading(false)
 
         return
       }
 
-      setDefaultValue(input.value)
+      setValue(input.value)
     },
 
     // Ignore `input.value` change since it should only be called on mount.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [setDefaultValue]
+    [setValue]
   )
 
   return (
     <Field>
       <StyledVesselSearch
-        key={key}
         baseRef={newWindowContainerRef}
-        defaultValue={defaultValueRef.current}
+        cachedVesselIdentities={cachedVesselIdentities}
         disabled={isLoading || readOnly}
         hasError={!!meta.error}
         isVesselIdRequiredFromResults
         onChange={handleVesselSearchChange}
+        value={valueRef.current}
       />
 
       {!!meta.error && <FieldError>{meta.error}</FieldError>}

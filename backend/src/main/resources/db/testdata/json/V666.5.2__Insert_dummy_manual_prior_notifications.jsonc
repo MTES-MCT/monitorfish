@@ -21,9 +21,9 @@
                 "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
                 "trip_gears:jsonb": [{ "gear": "LNP" }],
                 "trip_segments:jsonb": [{ "segment": "NWW09", "segmentName": "Lignes" }],
-                "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '10 minutes'",
                 "vessel_name": "POISSON PAS NET",
                 "value:jsonb": {
+                    "updatedAt:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 minutes', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "authorTrigram": "BOB",
                     "createdBy": null,
                     "riskFactor": 2.1,
@@ -86,9 +86,9 @@
                     { "segment": "NWW03", "segmentName": "Chalut de fond en eau profonde" },
                     { "segment": "NWW05", "segmentName": "Chalut à perche" }
                 ],
-                "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '10 minutes'",
                 "vessel_name": "DOS FIN",
                 "value:jsonb": {
+                    "updatedAt:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 minutes', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "authorTrigram": null,
                     "createdBy": "creator@example.org",
                     "riskFactor": 2.7,
@@ -204,9 +204,9 @@
                     { "segment": "MED01", "segmentName": "All Trawls 1" },
                     { "segment": "MED02", "segmentName": "All Trawls 2" }
                 ],
-                "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "QUEUE DE POISSON",
                 "value:jsonb": {
+                    "updatedAt:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "authorTrigram": null,
                     "createdBy": "creator@example.org",
                     "riskFactor": 3.1,
@@ -261,9 +261,9 @@
                 "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
                 "trip_gears:jsonb": [{ "gear": "OTT" }],
                 "trip_segments:jsonb": [{ "segment": "MED01", "segmentName": "All Trawls 1" }],
-                "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "NAVIRE RENOMMÉ (ANCIEN NOM)",
                 "value:jsonb": {
+                    "updatedAt:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "authorTrigram": null,
                     "createdBy": "creator@example.org",
                     "riskFactor": 1.5,
@@ -321,9 +321,9 @@
                 "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
                 "trip_gears:jsonb": [{ "gear": "OTT" }],
                 "trip_segments:jsonb": [{ "segment": "MED01", "segmentName": "All Trawls 1" }],
-                "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "VIVA L'ITALIA",
                 "value:jsonb": {
+                    "updatedAt:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "authorTrigram": null,
                     "createdBy": "creator@example.org",
                     "riskFactor": 3.2,
@@ -377,9 +377,9 @@
                 "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
                 "trip_gears:jsonb": [{ "gear": "OTT" }],
                 "trip_segments:jsonb": [{ "segment": "MED01", "segmentName": "All Trawls 1" }],
-                "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "MARE ET BASS",
                 "value:jsonb": {
+                    "updatedAt:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "authorTrigram": null,
                     "createdBy": "creator@example.org",
                     "riskFactor": 3.2,
@@ -433,9 +433,9 @@
                 "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
                 "trip_gears:jsonb": [{ "gear": "OTT" }],
                 "trip_segments:jsonb": [{ "segment": "MED01", "segmentName": "All Trawls 1" }],
-                "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "FILET DOUX",
                 "value:jsonb": {
+                    "updatedAt:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "authorTrigram": null,
                     "createdBy": "creator@example.org",
                     "riskFactor": 3.2,
@@ -489,9 +489,9 @@
                 "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
                 "trip_gears:jsonb": [{ "gear": "OTT" }],
                 "trip_segments:jsonb": [{ "segment": "MED01", "segmentName": "All Trawls 1" }],
-                "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "DÉVOILÉ",
                 "value:jsonb": {
+                    "updatedAt:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "authorTrigram": null,
                     "createdBy": "creator@example.org",
                     "riskFactor": 3.2,
@@ -545,9 +545,9 @@
                 "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
                 "trip_gears:jsonb": [{ "gear": "OTT" }],
                 "trip_segments:jsonb": [{ "segment": "MED01", "segmentName": "All Trawls 1" }],
-                "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "MAT QUILLE",
                 "value:jsonb": {
+                    "updatedAt:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "authorTrigram": null,
                     "createdBy": "creator@example.org",
                     "riskFactor": 3.2,
@@ -601,9 +601,9 @@
                 "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '30 minutes'",
                 "trip_gears:jsonb": [{ "gear": "OTT" }],
                 "trip_segments:jsonb": [{ "segment": "MED01", "segmentName": "All Trawls 1" }],
-                "updated_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "vessel_name": "BEAU SÉANT",
                 "value:jsonb": {
+                    "updatedAt:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "authorTrigram": null,
                     "createdBy": "creator@example.org",
                     "riskFactor": 3.2,
@@ -661,9 +661,9 @@
                 "sent_at": "2023-01-01T08:30:00",
                 "trip_gears:jsonb": [{ "gear": "OTB" }],
                 "trip_segments:jsonb": [{ "segment": "MED01", "segmentName": "All Trawls 1" }],
-                "updated_at": "2023-01-01T08:45:00",
                 "vessel_name": "GOUJON BOUGON",
                 "value:jsonb": {
+                    "updatedAt": "2023-01-01T08:45:00Z",
                     "authorTrigram": null,
                     "createdBy": "creator@example.org",
                     "riskFactor": 3.8,

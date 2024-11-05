@@ -5,13 +5,26 @@ import styled from 'styled-components'
 import { VesselSearchResultItem } from './VesselSearchResultItem'
 import { getVesselCompositeIdentifier } from '../../../../domain/entities/vessel/vessel'
 
-export function VesselSearchResult({ foundVessels, searchQuery, selectVessel, showLastSearchedVessels }) {
+import type { VesselIdentity } from 'domain/entities/vessel/types'
+
+type VesselSearchResultProps = Readonly<{
+  foundVessels: VesselIdentity[]
+  onSelect: (vessel: VesselIdentity) => void
+  searchQuery: string | undefined
+  showLastSearchedVessels: boolean
+}>
+export function VesselSearchResult({
+  foundVessels,
+  onSelect,
+  searchQuery,
+  showLastSearchedVessels
+}: VesselSearchResultProps) {
   const lastSearchedVessels = useMainAppSelector(state => state.global.lastSearchedVessels)
   const baseUrl = useMemo(() => window.location.origin, [])
 
   return (
     <>
-      {!!foundVessels?.length && (
+      {foundVessels.length > 0 && (
         <Results>
           <List>
             {foundVessels.map(featureOrIdentity => {
@@ -21,8 +34,8 @@ export function VesselSearchResult({ foundVessels, searchQuery, selectVessel, sh
                 <VesselSearchResultItem
                   key={vesselCompositeIdentifier}
                   baseUrl={baseUrl}
+                  onClick={onSelect}
                   searchQuery={searchQuery}
-                  selectVessel={selectVessel}
                   vessel={featureOrIdentity}
                 />
               )
@@ -30,7 +43,7 @@ export function VesselSearchResult({ foundVessels, searchQuery, selectVessel, sh
           </List>
         </Results>
       )}
-      {!foundVessels?.length && showLastSearchedVessels && (
+      {!foundVessels.length && showLastSearchedVessels && (
         <Results>
           <List>
             {lastSearchedVessels.map(vessel => {
@@ -40,8 +53,8 @@ export function VesselSearchResult({ foundVessels, searchQuery, selectVessel, sh
                 <VesselSearchResultItem
                   key={vesselCompositeIdentifier}
                   baseUrl={baseUrl}
+                  onClick={onSelect}
                   searchQuery={searchQuery}
-                  selectVessel={() => selectVessel(vessel)}
                   vessel={vessel}
                 />
               )

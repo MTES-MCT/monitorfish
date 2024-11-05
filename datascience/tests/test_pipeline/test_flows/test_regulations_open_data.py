@@ -26,6 +26,7 @@ def regulations_open_data() -> gpd.GeoDataFrame:
                 "Reg. Facade 2",
                 "Reg. Facade 2",
                 "Reg. Facade 2",
+                "Reg. RTC",
             ],
             "thematique": [
                 "Morbihan - bivalves",
@@ -33,6 +34,7 @@ def regulations_open_data() -> gpd.GeoDataFrame:
                 "Mediterranée - filets",
                 "Mediterranée - filets",
                 "Mediterranée - filets",
+                "Zone RTC DNK",
             ],
             "zone": [
                 "Secteur 1",
@@ -40,6 +42,7 @@ def regulations_open_data() -> gpd.GeoDataFrame:
                 "Zone A",
                 "Zone B",
                 "Zone C",
+                "Zone RTC",
             ],
             "reglementations": [
                 "External regulation",
@@ -47,6 +50,7 @@ def regulations_open_data() -> gpd.GeoDataFrame:
                 None,
                 "Med regulation",
                 "Dead link regulation",
+                None,
             ],
             "geometry": [
                 make_square_multipolygon(0, 0, 10, 10),
@@ -54,6 +58,7 @@ def regulations_open_data() -> gpd.GeoDataFrame:
                 make_square_multipolygon(-60, 10, 5, 10),
                 make_square_multipolygon(-10, 45, 180, 5),
                 make_square_multipolygon(-110, 60, 10, 10),
+                make_square_multipolygon(-1, 49, 1, 1),
             ],
             "wkt": [
                 "MULTIPOLYGON(((0 0,10 0,10 10,0 10,0 0)))",
@@ -61,6 +66,7 @@ def regulations_open_data() -> gpd.GeoDataFrame:
                 "MULTIPOLYGON(((-60 10,-55 10,-55 20,-60 20,-60 10)))",
                 "MULTIPOLYGON(((-10 45,170 45,170 50,-10 50,-10 45)))",
                 "MULTIPOLYGON(((-110 60,-100 60,-100 70,-110 70,-110 60)))",
+                "MULTIPOLYGON(((-1 49,0 49,0 50,-1 50,-1 49)))",
             ],
         }
     )
@@ -76,6 +82,7 @@ def regulations_for_csv() -> pd.DataFrame:
                 "Reg. Facade 2",
                 "Reg. Facade 2",
                 "Reg. Facade 2",
+                "Reg. RTC",
             ],
             "thematique": [
                 "Morbihan - bivalves",
@@ -83,6 +90,7 @@ def regulations_for_csv() -> pd.DataFrame:
                 "Mediterranée - filets",
                 "Mediterranée - filets",
                 "Mediterranée - filets",
+                "Zone RTC DNK",
             ],
             "zone": [
                 "Secteur 1",
@@ -90,6 +98,7 @@ def regulations_for_csv() -> pd.DataFrame:
                 "Zone A",
                 "Zone B",
                 "Zone C",
+                "Zone RTC",
             ],
             "reglementations": [
                 "External regulation",
@@ -97,6 +106,7 @@ def regulations_for_csv() -> pd.DataFrame:
                 None,
                 "Med regulation",
                 "Dead link regulation",
+                None,
             ],
             "wkt": [
                 "MULTIPOLYGON(((0 0,10 0,10 10,0 10,0 0)))",
@@ -104,6 +114,7 @@ def regulations_for_csv() -> pd.DataFrame:
                 "MULTIPOLYGON(((-60 10,-55 10,-55 20,-60 20,-60 10)))",
                 "MULTIPOLYGON(((-10 45,170 45,170 50,-10 50,-10 45)))",
                 "MULTIPOLYGON(((-110 60,-100 60,-100 70,-110 70,-110 60)))",
+                "MULTIPOLYGON(((-1 49,0 49,0 50,-1 50,-1 49)))",
             ],
         }
     )
@@ -119,6 +130,7 @@ def regulations_for_geopackage() -> gpd.GeoDataFrame:
                 "Reg. Facade 2",
                 "Reg. Facade 2",
                 "Reg. Facade 2",
+                "Reg. RTC",
             ],
             "thematique": [
                 "Morbihan - bivalves",
@@ -126,6 +138,7 @@ def regulations_for_geopackage() -> gpd.GeoDataFrame:
                 "Mediterranée - filets",
                 "Mediterranée - filets",
                 "Mediterranée - filets",
+                "Zone RTC DNK",
             ],
             "zone": [
                 "Secteur 1",
@@ -133,6 +146,7 @@ def regulations_for_geopackage() -> gpd.GeoDataFrame:
                 "Zone A",
                 "Zone B",
                 "Zone C",
+                "Zone RTC",
             ],
             "reglementations": [
                 "External regulation",
@@ -140,6 +154,7 @@ def regulations_for_geopackage() -> gpd.GeoDataFrame:
                 None,
                 "Med regulation",
                 "Dead link regulation",
+                None,
             ],
             "geometry": [
                 make_square_multipolygon(0, 0, 10, 10),
@@ -147,6 +162,7 @@ def regulations_for_geopackage() -> gpd.GeoDataFrame:
                 make_square_multipolygon(-60, 10, 5, 10),
                 make_square_multipolygon(-10, 45, 180, 5),
                 make_square_multipolygon(-110, 60, 10, 10),
+                make_square_multipolygon(-1, 49, 1, 1),
             ],
         }
     )
@@ -191,7 +207,7 @@ def test_flow(reset_test_data, regulations_for_csv, regulations_for_geopackage):
     ].result
     assert isinstance(geopackage_file_object, BytesIO)
 
-    layers = ["Reg. Facade 1", "Reg. Facade 2"]
+    layers = ["Reg. Facade 1", "Reg. Facade 2", "Reg. RTC"]
     gdfs = []
     for layer in layers:
         geopackage_file_object.seek(0)

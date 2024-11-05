@@ -21,9 +21,9 @@ e AS (
         id_adm_entreprise AS id_adm,
         raison_sociale AS name,
         email,
-        telephone AS phone,
-        tel_mobile AS mobile_phone,
-        fax
+        REPLACE(telephone, ' ', '') AS phone,
+        REPLACE(tel_mobile, ' ', '') AS mobile_phone,
+        REPLACE(fax, ' ', '') AS fax
     FROM ADM.ADM_ENTREPRISE
 ), 
 
@@ -31,10 +31,10 @@ a AS (
     SELECT
         id_adm_administre AS id_adm,
         nom || DECODE(prenom, NULL, '', ' ') || prenom as name,
-        email, 
-        telephone AS phone, 
-        tel_mobile AS mobile_phone,
-        fax
+        email,
+        REPLACE(telephone, ' ', '') AS phone,
+        REPLACE(tel_mobile, ' ', '') AS mobile_phone,
+        REPLACE(fax, ' ', '') AS fax
     FROM ADM.ADM_ADMINISTRE
 ),
 
@@ -74,11 +74,11 @@ SELECT
 	nf.largeur AS width,
 	nf.jauge_londres AS gauge,
 	nf.puissance_propulsive AS power,
-	nf.num_telephone AS vessel_phone_1,
-	nf.tel_fixe_2_contact_navire AS vessel_phone_2,
-	nf.tel_fixe_3_contact_navire AS vessel_phone_3,
-	nf.tel_mobile_contact_navire AS vessel_mobile_phone,
-    nf.fax AS vessel_fax,
+	REPLACE(nf.num_telephone, ' ', '') AS vessel_phone_1,
+	REPLACE(nf.tel_fixe_2_contact_navire, ' ', '') AS vessel_phone_2,
+	REPLACE(nf.tel_fixe_3_contact_navire, ' ', '') AS vessel_phone_3,
+	REPLACE(nf.tel_mobile_contact_navire, ' ', '') AS vessel_mobile_phone,
+    REPLACE(nf.fax, ' ', '') AS vessel_fax,
     nf.telex AS vessel_telex,
 	LOWER(nf.email1) AS vessel_email_1,
 	LOWER(nf.email2) AS vessel_email_2,

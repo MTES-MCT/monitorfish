@@ -74,6 +74,7 @@ def monitorfish_regulations() -> pd.DataFrame:
                 "Reg. Facade 2",
                 "Reg. Facade 2",
                 "Reg. Facade 2",
+                "Reg. RTC",
             ],
             "topic": [
                 "Morbihan - bivalves",
@@ -82,6 +83,7 @@ def monitorfish_regulations() -> pd.DataFrame:
                 "Mediterranée - filets",
                 "Mediterranée - filets",
                 "Mediterranée - filets",
+                "Zone RTC DNK",
             ],
             "zone": [
                 "Secteur 1",
@@ -90,6 +92,7 @@ def monitorfish_regulations() -> pd.DataFrame:
                 "Zone A",
                 "Zone B",
                 "Zone C",
+                "Zone RTC",
             ],
             "url": [
                 "http://external.site.regulation",
@@ -107,6 +110,7 @@ def monitorfish_regulations() -> pd.DataFrame:
                     "http://legipeche.metier.e2"
                     ".rie.gouv.fr/deleted-regulation-a671.html"
                 ),
+                None,
             ],
             "reference": [
                 "External regulation",
@@ -115,6 +119,7 @@ def monitorfish_regulations() -> pd.DataFrame:
                 None,
                 "Med regulation",
                 "Dead link regulation",
+                None,
             ],
             "end_date": [
                 datetime.datetime(2017, 7, 14, 2, 40, 0),
@@ -122,6 +127,7 @@ def monitorfish_regulations() -> pd.DataFrame:
                 datetime.datetime(9999, 12, 31),
                 None,
                 datetime.datetime(2030, 3, 17, 17, 46, 40),
+                None,
                 None,
             ],
         }
@@ -216,7 +222,7 @@ def legipeche_regulations() -> pd.DataFrame:
 @pytest.fixture
 def monitorfish_regulations_with_id(monitorfish_regulations) -> pd.DataFrame:
     regulations = monitorfish_regulations.assign(
-        article_id=[None, "666", "668", None, "689", "671"]
+        article_id=[None, "666", "668", None, "689", "671", None]
     )
     return regulations
 
@@ -281,9 +287,9 @@ def transformed_regulations() -> pd.DataFrame:
 def missing_references() -> pd.DataFrame:
     references = pd.DataFrame(
         {
-            "Type de réglementation": ["Reg. Facade 2"],
-            "Thématique": ["Mediterranée - filets"],
-            "Zone": ["Zone A"],
+            "Type de réglementation": ["Reg. Facade 2", "Reg. RTC"],
+            "Thématique": ["Mediterranée - filets", "Zone RTC DNK"],
+            "Zone": ["Zone A", "Zone RTC"],
         }
     )
     return references
@@ -298,8 +304,10 @@ def unknown_links() -> set:
 
 
 @pytest.fixture
-def dead_links(monitorfish_regulations_with_id) -> pd.DataFrame:
-    return monitorfish_regulations_with_id.iloc[[0, -1]].reset_index(drop=True)
+def dead_links(monitorfish_regulations_with_id, unknown_links) -> pd.DataFrame:
+    return monitorfish_regulations_with_id[
+        monitorfish_regulations_with_id.url.isin(unknown_links)
+    ].reset_index(drop=True)
 
 
 @pytest.fixture

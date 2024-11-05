@@ -1104,7 +1104,6 @@ def test_flow_french_eez_fishing_alert(reset_test_data):
     # With these parameters, 2 french vessels should be in alert.
     alert_type = "FRENCH_EEZ_FISHING_ALERT"
     alert_config_name = "ALERTE_1"
-    alert_config_name = "ALERTE_1"
     zones = ["FRA"]
     hours_from_now = 8
     only_fishing_positions = False
@@ -1180,4 +1179,45 @@ def test_flow_french_eez_fishing_alert(reset_test_data):
         .reset_index(drop=True)
         .drop(columns=["creation_date", "id"]),
         expected_pending_alerts.sort_values("vessel_id").reset_index(drop=True),
+    )
+
+
+def test_flow_rtc_fishing_alert(reset_test_data):
+    # With these parameters, 2 french vessels should be in alert.
+    alert_type = "RTC_FISHING_ALERT"
+    alert_config_name = "RTC_FISHING_ALERT"
+    zones = ["Reg. RTC"]
+    hours_from_now = 8
+    only_fishing_positions = True
+    eez_areas = ["EST"]
+    flag_states = ["FR"]
+
+    flow.schedule = None
+    state = flow.run(
+        alert_type=alert_type,
+        alert_config_name=alert_config_name,
+        zones=zones,
+        hours_from_now=hours_from_now,
+        only_fishing_positions=only_fishing_positions,
+        flag_states=flag_states,
+        eez_areas=eez_areas,
+    )
+
+    assert state.is_successful()
+
+    pending_alerts = read_query(
+        """
+            SELECT *
+            FROM pending_alerts
+            WHERE alert_config_name = 'RTC_FISHING_ALERT'
+        """,
+        db="monitorfish_remote",
+    )
+    assert len(pending_alerts) == 1
+    assert (
+        pending_alerts.loc[
+            pending_alerts.alert_config_name == "RTC_FISHING_ALERT",
+            "internal_reference_number",
+        ].values[0]
+        == "ABC000306959"
     )

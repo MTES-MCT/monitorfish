@@ -212,8 +212,33 @@ position_alerts.flow.schedule = Schedule(
                 "include_vessels_unknown_gear": True,
             },
         ),
+        # RTC alert for vessels flying a FR flag : applies everywhere in the world
+        clocks.CronClock(
+            "2,12,22,32,42,52 * * * *",
+            parameter_defaults={
+                "alert_type": "RTC_FISHING_ALERT",
+                "alert_config_name": "RTC_FISHING_ALERT",
+                "zones": ["Reg. RTC"],
+                "hours_from_now": 8,
+                "flag_states": ["FR"],
+                "only_fishing_positions": True,
+            },
+        ),
+        # RTC alert for vessels flying a non FR flag : applies only in the FRA EEZ
         clocks.CronClock(
             "3,13,23,33,43,53 * * * *",
+            parameter_defaults={
+                "alert_type": "RTC_FISHING_ALERT",
+                "alert_config_name": "RTC_FISHING_ALERT",
+                "zones": ["Reg. RTC"],
+                "hours_from_now": 8,
+                "except_flag_states": ["FR"],
+                "eez_areas": ["FRA"],
+                "only_fishing_positions": True,
+            },
+        ),
+        clocks.CronClock(
+            "4,14,24,34,44,54 * * * *",
             parameter_defaults={
                 "alert_type": "FRENCH_EEZ_FISHING_ALERT",
                 "alert_config_name": "FRENCH_EEZ_FISHING_ALERT",

@@ -118,6 +118,15 @@ def test_make_positions_in_alert_query():
         Column("geometry", Geometry),
     )
 
+    eez_areas_table = Table(
+        "eez_areas",
+        meta,
+        Column("id", Integer),
+        Column("iso_sov1", VARCHAR),
+        Column("some_other_data", VARCHAR),
+        Column("wkb_geometry", Geometry),
+    )
+
     facades_table = Table(
         "facades", meta, Column("facade", VARCHAR), Column("geometry", Geometry)
     )
@@ -145,11 +154,13 @@ def test_make_positions_in_alert_query():
         positions_table=positions_table,
         facades_table=facades_table,
         zones_table=zones_table,
+        eez_areas_table=eez_areas_table,
         only_fishing_positions=only_fishing_positions,
         zones=zones,
         hours_from_now=hours_from_now,
         flag_states=flag_states,
         except_flag_states=except_flag_states,
+        eez_areas=["FRA", "BEL"],
     )
 
     query = str(select_statement.compile(compile_kwargs={"literal_binds": True}))
@@ -171,6 +182,8 @@ def test_make_positions_in_alert_query():
         "ON ST_Intersects(positions.geometry, zones.geometry_col) "
         "LEFT OUTER JOIN facades "
         "ON ST_Intersects(positions.geometry, facades.geometry) "
+        "LEFT OUTER JOIN eez_areas "
+        "ON ST_Intersects(positions.geometry, eez_areas.wkb_geometry) "
         "\nWHERE positions.date_time > '2021-01-01 10:10:00' "
         "AND positions.date_time < '2021-01-01 16:10:00' "
         "AND ("
@@ -180,7 +193,8 @@ def test_make_positions_in_alert_query():
         "AND positions.is_fishing "
         "AND zones.zone_name IN ('Zone A') "
         "AND positions.flag_state IN ('NL, DE') "
-        "AND (positions.flag_state NOT IN ('VE'))"
+        "AND (positions.flag_state NOT IN ('VE')) "
+        "AND eez_areas.iso_sov1 IN ('FRA', 'BEL')"
     )
 
     assert query == expected_query
@@ -190,10 +204,11 @@ def test_make_positions_in_alert_query():
     only_fishing_positions = False
 
     select_statement = make_positions_in_alert_query.run(
-        positions_table,
-        facades_table,
-        zones_table,
-        only_fishing_positions,
+        positions_table=positions_table,
+        facades_table=facades_table,
+        zones_table=zones_table,
+        eez_areas_table=eez_areas_table,
+        only_fishing_positions=only_fishing_positions,
         hours_from_now=hours_from_now,
     )
 
@@ -1089,7 +1104,6 @@ def test_flow_french_eez_fishing_alert(reset_test_data):
     # With these parameters, 2 french vessels should be in alert.
     alert_type = "FRENCH_EEZ_FISHING_ALERT"
     alert_config_name = "ALERTE_1"
-    alert_config_name = "ALERTE_1"
     zones = ["FRA"]
     hours_from_now = 8
     only_fishing_positions = False
@@ -1165,4 +1179,45 @@ def test_flow_french_eez_fishing_alert(reset_test_data):
         .reset_index(drop=True)
         .drop(columns=["creation_date", "id"]),
         expected_pending_alerts.sort_values("vessel_id").reset_index(drop=True),
+    )
+
+
+def test_flow_rtc_fishing_alert(reset_test_data):
+    # With these parameters, 2 french vessels should be in alert.
+    alert_type = "RTC_FISHING_ALERT"
+    alert_config_name = "RTC_FISHING_ALERT"
+    zones = ["Reg. RTC"]
+    hours_from_now = 8
+    only_fishing_positions = True
+    eez_areas = ["EST"]
+    flag_states = ["FR"]
+
+    flow.schedule = None
+    state = flow.run(
+        alert_type=alert_type,
+        alert_config_name=alert_config_name,
+        zones=zones,
+        hours_from_now=hours_from_now,
+        only_fishing_positions=only_fishing_positions,
+        flag_states=flag_states,
+        eez_areas=eez_areas,
+    )
+
+    assert state.is_successful()
+
+    pending_alerts = read_query(
+        """
+            SELECT *
+            FROM pending_alerts
+            WHERE alert_config_name = 'RTC_FISHING_ALERT'
+        """,
+        db="monitorfish_remote",
+    )
+    assert len(pending_alerts) == 1
+    assert (
+        pending_alerts.loc[
+            pending_alerts.alert_config_name == "RTC_FISHING_ALERT",
+            "internal_reference_number",
+        ].values[0]
+        == "ABC000306959"
     )

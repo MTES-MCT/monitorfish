@@ -128,6 +128,8 @@ def create_html_email(
         for filename, filebytes in attachments:
             (mimetype, _) = guess_type(filename)
             try:
+                print(f"filename: {filename}")
+                print(f"attachments: {attachments}")
                 (maintype, subtype) = mimetype.split("/")
             except Exception:
                 print(f"filename: {filename}")

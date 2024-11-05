@@ -46,6 +46,11 @@ export const COMMON_ALERT_TYPE_OPTION: Record<
     nameWithAlertDetails: (percentOfTolerance, minimumWeightThreshold) =>
       `Tolérance de ${percentOfTolerance}% non respectée, appliquée pour un poids minimum de ${minimumWeightThreshold}kg.`
   },
+  RTC_FISHING_ALERT: {
+    code: PendingAlertValueType.RTC_FISHING_ALERT,
+    isOperationalAlert: true,
+    name: 'Pêche en zone RTC'
+  },
   SUSPICION_OF_UNDER_DECLARATION_ALERT: {
     code: PendingAlertValueType.SUSPICION_OF_UNDER_DECLARATION_ALERT,
     isOperationalAlert: true,

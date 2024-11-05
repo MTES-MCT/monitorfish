@@ -130,6 +130,11 @@ def get_alert_type_zones_table(alert_type: str) -> ZonesTable:
             "filter_column": "iso_sov1",
             "geometry_column": "wkb_geometry",
         },
+        "RTC_FISHING_ALERT": {
+            "table": "regulations",
+            "filter_column": "law_type",
+            "geometry_column": "geometry",
+        },
     }
 
     logger = prefect.context.get("logger")
@@ -162,14 +167,17 @@ def get_alert_type_zones_table(alert_type: str) -> ZonesTable:
 
 @task(checkpoint=False)
 def make_positions_in_alert_query(
+    *,
     positions_table: Table,
     facades_table: Table,
     zones_table: ZonesTable,
+    eez_areas_table: Table,
     only_fishing_positions: bool,
     zones: List = None,
     hours_from_now: int = 8,
     flag_states: List = None,
     except_flag_states: List = None,
+    eez_areas: List = None,
 ) -> Select:
     """
     Creates select statement for the query to execute to compute positions in alert.
@@ -178,6 +186,7 @@ def make_positions_in_alert_query(
         positions_table (Table): `SQLAlchemy.Table` of positions.
         facades_table (Table): `SQLAlchemy.Table` of façades.
         zones_table (ZonesTable): `ZonesTable` of zones.
+        eez_areas_table (Table): `SQLAlchemy.Table` of Exclusive Economic Zones.
         only_fishing_positions (bool): If `True`, filters positions to keep only
           positions tagged as `is_fishing`.
         zones (List, optional): If provided, adds a
@@ -196,6 +205,25 @@ def make_positions_in_alert_query(
     now = datetime.utcnow()
     start_date = now - timedelta(hours=hours_from_now)
 
+    from_tables = positions_table.join(
+        zones_table.table,
+        ST_Intersects(
+            positions_table.c.geometry,
+            zones_table.table.c[zones_table.geometry_column],
+        ),
+    ).join(
+        facades_table,
+        ST_Intersects(positions_table.c.geometry, facades_table.c.geometry),
+        isouter=True,
+    )
+
+    if eez_areas:
+        from_tables = from_tables.join(
+            eez_areas_table,
+            ST_Intersects(positions_table.c.geometry, eez_areas_table.c.wkb_geometry),
+            isouter=True,
+        )
+
     q = (
         select(
             positions_table.c.id,
@@ -211,19 +239,7 @@ def make_positions_in_alert_query(
             positions_table.c.longitude,
             facades_table.c.facade,
         )
-        .select_from(
-            positions_table.join(
-                zones_table.table,
-                ST_Intersects(
-                    positions_table.c.geometry,
-                    zones_table.table.c[zones_table.geometry_column],
-                ),
-            ).join(
-                facades_table,
-                ST_Intersects(positions_table.c.geometry, facades_table.c.geometry),
-                isouter=True,
-            )
-        )
+        .select_from(from_tables)
         .where(
             and_(
                 positions_table.c.date_time > start_date,
@@ -248,6 +264,9 @@ def make_positions_in_alert_query(
 
     if except_flag_states:
         q = q.where(positions_table.c.flag_state.notin_(except_flag_states))
+
+    if eez_areas:
+        q = q.where(eez_areas_table.c["iso_sov1"].in_(eez_areas))
 
     return q
 
@@ -443,6 +462,7 @@ with Flow("Position alert", executor=LocalDaskExecutor()) as flow:
         include_vessels_unknown_gear = Parameter(
             "include_vessels_unknown_gear", default=True
         )
+        eez_areas = Parameter("eez_areas", default=None)
 
         must_filter_on_gears = alert_has_gear_parameters(
             fishing_gears, fishing_gear_categories
@@ -451,6 +471,7 @@ with Flow("Position alert", executor=LocalDaskExecutor()) as flow:
         positions_table = get_table("positions")
         vessels_table = get_table("vessels")
         districts_table = get_table("districts")
+        eez_areas_table = get_table("eez_areas")
         zones_table = get_alert_type_zones_table(alert_type)
         facades_table = get_table("facade_areas_subdivided")
 
@@ -458,11 +479,13 @@ with Flow("Position alert", executor=LocalDaskExecutor()) as flow:
             positions_table=positions_table,
             facades_table=facades_table,
             zones_table=zones_table,
+            eez_areas_table=eez_areas_table,
             only_fishing_positions=only_fishing_positions,
             zones=zones,
             hours_from_now=hours_from_now,
             flag_states=flag_states,
             except_flag_states=except_flag_states,
+            eez_areas=eez_areas,
         )
 
         positions_in_alert = read_query_task("monitorfish_remote", positions_query)

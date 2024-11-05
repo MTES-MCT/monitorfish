@@ -51,6 +51,7 @@ object TestUtils {
                     AlertTypeMapping.THREE_MILES_TRAWLING_ALERT -> ThreeMilesTrawlingAlert(seaFront = NAMO.toString())
                     AlertTypeMapping.FRENCH_EEZ_FISHING_ALERT -> FrenchEEZFishingAlert(seaFront = NAMO.toString())
                     AlertTypeMapping.TWELVE_MILES_FISHING_ALERT -> TwelveMilesFishingAlert(seaFront = NAMO.toString())
+                    AlertTypeMapping.RTC_FISHING_ALERT -> RTCFishingAlert(seaFront = NAMO.toString())
                     AlertTypeMapping.MISSING_FAR_ALERT -> MissingFARAlert(seaFront = NAMO.toString())
                     AlertTypeMapping.MISSING_FAR_48_HOURS_ALERT -> MissingFAR48HoursAlert(seaFront = NAMO.toString())
                     else ->

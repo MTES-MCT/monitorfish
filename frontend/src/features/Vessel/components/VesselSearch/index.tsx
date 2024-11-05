@@ -1,7 +1,7 @@
 import { useClickOutsideWhenOpenedWithinRef } from '@hooks/useClickOutsideWhenOpenedWithinRef'
 import { useEscapeFromKeyboard } from '@hooks/useEscapeFromKeyboard'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { Accent, Icon, IconButton, Link, useFieldControl, useKey } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, Link, useFieldControl } from '@mtes-mct/monitor-ui'
 import Fuse from 'fuse.js'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -10,25 +10,24 @@ import { VESSEL_SEARCH_OPTIONS } from './constants'
 import { enrichWithVesselIdentifierIfNotFound, removeDuplicatedFoundVessels } from './utils'
 import { VesselSearchResult } from './VesselSearchResult'
 import { searchVessels as searchVesselsAction } from '../../../../domain/use_cases/vessel/searchVessels'
-import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
 
 import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
 import type { ChangeEvent, InputHTMLAttributes, MutableRefObject } from 'react'
 import type { Promisable } from 'type-fest'
 
 type VesselSearchProps = Readonly<
-  Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'> & {
+  Omit<InputHTMLAttributes<HTMLInputElement>, 'defaultValue' | 'onChange' | 'value'> & {
     baseRef?: MutableRefObject<HTMLDivElement | undefined> | undefined
     cachedVesselIdentities?: VesselIdentity[]
     extendedWidth?: number | undefined
     hasError?: boolean | undefined
     isExtended?: boolean | undefined
     isLastSearchedVesselsShowed?: boolean
-    isLinkToVesselSidebarDisplayed?: boolean
     isVesselIdRequiredFromResults?: boolean
-    onChange: (selectedVessel: VesselIdentity | undefined) => Promisable<void>
-    onClickOutsideOrEscape?: () => Promisable<void>
-    onInputClick?: () => Promisable<void>
+    onBlur?: () => Promisable<void>
+    onChange: (nextVessel: VesselIdentity | undefined) => Promisable<void>
+    onFocus?: () => Promisable<void>
+    onVesselLinkClick?: (vessel: VesselIdentity) => Promisable<void>
     value?: VesselIdentity | undefined
   }
 >
@@ -40,35 +39,35 @@ export function VesselSearch({
   hasError,
   isExtended = false,
   isLastSearchedVesselsShowed = false,
-  isLinkToVesselSidebarDisplayed = false,
   isVesselIdRequiredFromResults = false,
+  onBlur,
   onChange,
-  onClickOutsideOrEscape,
-  onInputClick,
+  onFocus,
+  onVesselLinkClick,
   style,
   value,
   ...inputNativeProps
 }: VesselSearchProps) {
+  const { controlledOnChange: handleOnChange, controlledValue: selectedVessel } = useFieldControl(value, onChange)
+
+  const flagState = selectedVessel?.flagState
+  const vesselName = selectedVessel?.vesselName ?? undefined
+
   const dispatch = useMainAppDispatch()
   const baseUrl = window.location.origin
-  const searchQueryRef = useRef('')
   const wrapperRef = useRef(null)
 
   const [foundVessels, setFoundVessels] = useState<VesselIdentity[]>([])
   const [showLastSearchedVessels, setShowLastSearchedVessels] = useState(false)
+  const [inputValue, setInputValue] = useState(selectedVessel?.vesselName ?? '')
 
-  const escapeFromKeyboard = useEscapeFromKeyboard()
-  const clickedOutsideComponent = useClickOutsideWhenOpenedWithinRef(wrapperRef, isExtended, baseRef)
-
-  const { controlledOnChange: handleOnChange, controlledValue: selectedVessel } = useFieldControl(value, onChange)
-
-  const key = useKey([selectedVessel])
-  const flagState = selectedVessel?.flagState
-  const vesselName = selectedVessel?.vesselName ?? undefined
+  const fuse = useMemo(
+    () => (cachedVesselIdentities ? new Fuse(cachedVesselIdentities, VESSEL_SEARCH_OPTIONS) : undefined),
+    [cachedVesselIdentities]
+  )
 
   const clean = useCallback(async () => {
-    searchQueryRef.current = ''
-
+    setInputValue('')
     setFoundVessels([])
     setShowLastSearchedVessels(false)
 
@@ -79,22 +78,13 @@ export function VesselSearch({
     vesselIdentity => {
       const vesselWithIdentifier = enrichWithVesselIdentifierIfNotFound(vesselIdentity)
 
+      setInputValue(vesselWithIdentifier.vesselName ?? '')
       setShowLastSearchedVessels(false)
       setFoundVessels([])
 
       handleOnChange(vesselWithIdentifier)
     },
     [handleOnChange]
-  )
-
-  const onVesselInputClick = useCallback(() => {
-    setShowLastSearchedVessels(true)
-    onInputClick?.()
-  }, [onInputClick])
-
-  const fuse = useMemo(
-    () => (cachedVesselIdentities ? new Fuse(cachedVesselIdentities, VESSEL_SEARCH_OPTIONS) : undefined),
-    [cachedVesselIdentities]
   )
 
   const findVessels = useCallback(
@@ -121,7 +111,8 @@ export function VesselSearch({
   const handleChange = useCallback(
     async (event: ChangeEvent<HTMLInputElement>) => {
       const searchQuery = event.target.value
-      searchQueryRef.current = searchQuery
+
+      setInputValue(searchQuery)
 
       if (searchQuery.length <= 1) {
         setFoundVessels([])
@@ -130,11 +121,30 @@ export function VesselSearch({
       }
 
       const nextFoundVessels = await findVessels(searchQuery)
+
       setShowLastSearchedVessels(false)
       setFoundVessels(nextFoundVessels)
     },
     [findVessels]
   )
+
+  const handleFocus = useCallback(() => {
+    setShowLastSearchedVessels(true)
+
+    onFocus?.()
+  }, [onFocus])
+
+  function handleShowVessel() {
+    if (!selectedVessel || !onVesselLinkClick) {
+      return
+    }
+
+    onVesselLinkClick(selectedVessel)
+  }
+
+  useEffect(() => {
+    setInputValue(selectedVessel?.vesselName ?? '')
+  }, [selectedVessel])
 
   useEffect(() => {
     if (!isLastSearchedVesselsShowed) {
@@ -144,22 +154,17 @@ export function VesselSearch({
     setShowLastSearchedVessels(isLastSearchedVesselsShowed)
   }, [isLastSearchedVesselsShowed])
 
+  const escapeFromKeyboard = useEscapeFromKeyboard()
+  const clickedOutsideComponent = useClickOutsideWhenOpenedWithinRef(wrapperRef, isExtended, baseRef)
+
   // TODO Replace with existing hooks.
   useEffect(() => {
     if (clickedOutsideComponent ?? escapeFromKeyboard) {
       setShowLastSearchedVessels(false)
 
-      onClickOutsideOrEscape?.()
+      onBlur?.()
     }
-  }, [clickedOutsideComponent, escapeFromKeyboard, onClickOutsideOrEscape])
-
-  function handleShowVessel() {
-    if (!selectedVessel) {
-      return
-    }
-
-    dispatch(showVessel(selectedVessel, false, true))
-  }
+  }, [clickedOutsideComponent, escapeFromKeyboard, onBlur])
 
   return (
     <Wrapper
@@ -171,20 +176,19 @@ export function VesselSearch({
     >
       <InputWrapper>
         <Input
-          key={key}
           $baseUrl={baseUrl}
           $flagState={flagState}
           $hasError={hasError}
           data-cy="VesselSearch-input"
           onChange={handleChange}
-          onClick={onVesselInputClick}
+          onFocus={handleFocus}
           placeholder="Rechercher un navire..."
           type="text"
-          value={vesselName}
+          value={inputValue}
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...inputNativeProps}
         />
-        {vesselName && isLinkToVesselSidebarDisplayed && (
+        {selectedVessel && onVesselLinkClick && (
           <>
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <Link
@@ -207,8 +211,8 @@ export function VesselSearch({
       </InputWrapper>
       <VesselSearchResult
         foundVessels={foundVessels}
-        searchQuery={searchQueryRef.current}
-        selectVessel={selectVessel}
+        onSelect={selectVessel}
+        searchQuery={inputValue}
         showLastSearchedVessels={showLastSearchedVessels}
       />
     </Wrapper>

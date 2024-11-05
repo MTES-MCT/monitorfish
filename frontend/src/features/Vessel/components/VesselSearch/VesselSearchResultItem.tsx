@@ -3,12 +3,20 @@ import countries from 'i18n-iso-countries'
 import Highlighter from 'react-highlight-words'
 import styled from 'styled-components'
 
-export function VesselSearchResultItem({ baseUrl, searchQuery, selectVessel, vessel }) {
+import type { VesselIdentity } from 'domain/entities/vessel/types'
+
+type VesselSearchResultItemProps = Readonly<{
+  baseUrl: string
+  onClick: (vessel: VesselIdentity) => void
+  searchQuery: string | undefined
+  vessel: VesselIdentity
+}>
+export function VesselSearchResultItem({ baseUrl, onClick, searchQuery, vessel }: VesselSearchResultItemProps) {
   const { flagState } = vessel
   const { vesselName } = vessel
 
   return (
-    <ListItem data-cy="VesselSearch-item" onClick={() => selectVessel(vessel)}>
+    <ListItem data-cy="VesselSearch-item" onClick={() => onClick(vessel)}>
       <div>
         {!!flagState && (
           <Flag
@@ -21,8 +29,8 @@ export function VesselSearchResultItem({ baseUrl, searchQuery, selectVessel, ves
           <Highlighter
             autoEscape
             highlightClassName="highlight"
-            searchWords={[searchQuery]}
-            textToHighlight={vesselName || 'SANS NOM'}
+            searchWords={searchQuery ? [searchQuery] : []}
+            textToHighlight={vesselName ?? 'SANS NOM'}
           />
         </Name>
       </div>
@@ -31,7 +39,7 @@ export function VesselSearchResultItem({ baseUrl, searchQuery, selectVessel, ves
   )
 }
 
-const showVesselIdentityData = (vessel, searchQuery) => {
+const showVesselIdentityData = (vessel: VesselIdentity, searchQuery: string | undefined) => {
   const arrayOfInformation = [
     {
       name: 'CFR',
@@ -63,8 +71,8 @@ const showVesselIdentityData = (vessel, searchQuery) => {
           <Highlighter
             autoEscape
             highlightClassName="highlight"
-            searchWords={[searchQuery]}
-            textToHighlight={information.value || ''}
+            searchWords={searchQuery ? [searchQuery] : []}
+            textToHighlight={String(information.value) ?? ''}
           />{' '}
           <Light>({information.name})</Light>
         </>

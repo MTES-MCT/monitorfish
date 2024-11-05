@@ -126,10 +126,13 @@ def create_html_email(
 
     if attachments:
         for filename, filebytes in attachments:
+            (mimetype, _) = guess_type(filename)
+            (maintype, subtype) = mimetype.split("/")
+
             msg.add_attachment(
                 filebytes,
-                maintype="application",
-                subtype="octet-stream",
+                maintype=maintype,
+                subtype=subtype,
                 filename=filename,
             )
 

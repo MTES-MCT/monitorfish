@@ -20,6 +20,10 @@ enum class AlertTypeMapping(
         clazz = TwelveMilesFishingAlert::class.java,
         alertName = "12 milles - Pêche sans droits historiques",
     ),
+    RTC_FISHING_ALERT(
+        clazz = RTCFishingAlert::class.java,
+        alertName = "Pêche en zone RTC",
+    ),
     MISSING_DEP_ALERT(
         clazz = MissingDEPAlert::class.java,
         alertName = "Sortie en mer sans émission de message \"DEP\"",

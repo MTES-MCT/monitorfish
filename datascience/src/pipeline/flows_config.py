@@ -218,7 +218,7 @@ position_alerts.flow.schedule = Schedule(
             "2,12,22,32,42,52 * * * *",
             parameter_defaults={
                 "alert_type": "RTC_FISHING_ALERT",
-                "alert_config_name": "RTC_FISHING_ALERT",
+                "alert_config_name": "RTC_FISHING_ALERT_FR",
                 "zones": ["Reg. RTC"],
                 "hours_from_now": 8,
                 "flag_states": ["FR"],
@@ -230,7 +230,7 @@ position_alerts.flow.schedule = Schedule(
             "3,13,23,33,43,53 * * * *",
             parameter_defaults={
                 "alert_type": "RTC_FISHING_ALERT",
-                "alert_config_name": "RTC_FISHING_ALERT",
+                "alert_config_name": "RTC_FISHING_ALERT_NON_FR",
                 "zones": ["Reg. RTC"],
                 "hours_from_now": 8,
                 "except_flag_states": ["FR"],

@@ -9,6 +9,7 @@ import type { ReactNode } from 'react'
 type CardHeaderProps = Readonly<{
   children?: ReactNode
   detail: PriorNotification.Detail | undefined
+  isNewPriorNotification?: boolean
   onClose: () => void
   selectedVesselIdentity: VesselIdentity | undefined
   withCloseButton?: boolean
@@ -17,13 +18,12 @@ type CardHeaderProps = Readonly<{
 export function CardHeader({
   children,
   detail,
+  isNewPriorNotification = false,
   onClose,
   selectedVesselIdentity,
   withCloseButton = false,
   withFirstTitleRow = false
 }: CardHeaderProps) {
-  const isNewPriorNotification = !detail
-
   return (
     <Wrapper>
       <Title>

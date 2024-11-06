@@ -1877,18 +1877,20 @@ def test_create_email(
     assert len(attachments) == 3 if pno_has_uploaded_attachments else 1
     attachment_0 = attachments[0]
     assert attachment_0.get_filename() == "Preavis_Le navire 123-abc.pdf"
-    assert attachment_0.get_content_type() == "application/octet-stream"
+    assert attachment_0.get_content_type() == "application/pdf"
     assert attachment_0.get_content() == b"PDF Document"
 
     if pno_has_uploaded_attachments:
         attachment_1 = attachments[1]
         assert attachment_1.get_filename() == "Uploaded document n°1.pdf"
-        assert attachment_1.get_content_type() == "application/octet-stream"
+        assert attachment_1.get_content_type() == "application/pdf"
         assert attachment_1.get_content() == b"PDF"
 
         attachment_2 = attachments[2]
         assert attachment_2.get_filename() == "Uploaded document n°2.docx"
-        assert attachment_2.get_content_type() == "application/octet-stream"
+        assert attachment_2.get_content_type() == (
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        )
         assert attachment_2.get_content() == b"Text Document"
 
     body = pno_to_send.message.get_body()

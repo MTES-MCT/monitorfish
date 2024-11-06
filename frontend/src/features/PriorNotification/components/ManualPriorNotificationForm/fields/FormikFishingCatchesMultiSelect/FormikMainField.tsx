@@ -64,7 +64,6 @@ export function FormikMainField({
           <Row key={`extra-field-${fishingCatch.specyCode}-${fishingCatch.faoArea}-${index}`}>
             <SubRow>
               <SpecyTag
-                $isSqueezed={fishingCatch.specyCode === SWORDFISH_SPECY_CODE && !values.hasGlobalFaoArea}
                 onDelete={() => onArrayHelperRemove(index)}
               >{`${fishingCatch.specyCode} – ${fishingCatch.specyName}`}</SpecyTag>
 
@@ -159,11 +158,7 @@ const Row = styled.div`
   }
 `
 
-const SpecyTag = styled(SingleTag)<{
-  $isSqueezed: boolean
-}>`
+const SpecyTag = styled(SingleTag)`
   flex-grow: 1;
   margin-top: 2px;
-  max-width: ${p => (p.$isSqueezed ? 160 : 288)}px;
-  min-width: ${p => (p.$isSqueezed ? 160 : 288)}px;
 `

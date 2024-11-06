@@ -12,7 +12,7 @@ export function SideWindowCard({ children, onBackgroundClick, ...nativeProps }: 
     <Box {...nativeProps}>
       <Overlay data-cy="SideWindowCard-overlay" onClick={onBackgroundClick} />
 
-      <Body>{children}</Body>
+      <Body data-cy="SideWindowCard-body">{children}</Body>
     </Box>
   )
 }

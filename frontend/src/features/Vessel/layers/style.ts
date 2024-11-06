@@ -73,7 +73,7 @@ export const getWebGLVesselStyle = (): WebGLStyle => {
       filterColor,
       defaultVesselColor
     ],
-    'icon-offset': ['case', ['>', ['get', 'speed'], Vessel.vesselIsMovingSpeed], [0, 0], [0, 25]],
+    'icon-offset': ['case', ['>', ['get', 'speed'], Vessel.vesselIsMovingSpeed], [0, 0], [25, 0]],
     'icon-opacity': [
       'case',
       featureHas('hasBeaconMalfunction'),

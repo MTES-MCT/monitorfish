@@ -61,6 +61,7 @@ from src.pipeline.flows import (
     risk_factor,
     scrape_legipeche,
     species,
+    suspicions_of_under_declaration_alerts,
     update_beacon_malfunctions,
     validate_pending_alerts,
     vessels,
@@ -315,6 +316,7 @@ regulations_checkup.flow.schedule = CronSchedule("5 6 * * 1,2,3,4,5")
 regulations_open_data.flow.schedule = CronSchedule("18 1 * * 5")
 risk_factor.flow.schedule = CronSchedule("3,23,43 * * * *")
 scrape_legipeche.flow.schedule = CronSchedule("15 5 * * 1,2,3,4,5")
+suspicions_of_under_declaration_alerts.flow.schedule = CronSchedule("57 6 * * *")
 validate_pending_alerts.flow.schedule = Schedule(
     clocks=[
         clocks.CronClock(
@@ -370,6 +372,7 @@ flows_to_register = [
     risk_factor.flow,
     scrape_legipeche.flow,
     species.flow,
+    suspicions_of_under_declaration_alerts.flow,
     validate_pending_alerts.flow,
     vessels.flow,
 ]

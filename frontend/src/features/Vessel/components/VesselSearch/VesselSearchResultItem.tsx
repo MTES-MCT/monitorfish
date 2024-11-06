@@ -72,7 +72,7 @@ const showVesselIdentityData = (vessel: VesselIdentity, searchQuery: string | un
             autoEscape
             highlightClassName="highlight"
             searchWords={searchQuery ? [searchQuery] : []}
-            textToHighlight={String(information.value) ?? ''}
+            textToHighlight={information.value ? String(information.value) : ''}
           />{' '}
           <Light>({information.name})</Light>
         </>

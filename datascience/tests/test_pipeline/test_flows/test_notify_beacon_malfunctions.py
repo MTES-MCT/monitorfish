@@ -684,7 +684,7 @@ def test_create_email(malfunction_to_notify_data, cnsp_logo, notification_type):
 
     attachment = attachments[0]
     assert attachment.get_content_disposition() == "attachment"
-    assert attachment.get_content_type() == "application/octet-stream"
+    assert attachment.get_content_type() == "application/pdf"
     assert attachment.get_filename() == "Notification.pdf"
     assert attachment.get_content() == pdf
 

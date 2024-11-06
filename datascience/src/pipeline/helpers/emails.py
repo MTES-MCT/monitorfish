@@ -1,5 +1,6 @@
 import email
 import io
+import mimetypes
 import smtplib
 from email.message import EmailMessage
 from logging import Logger
@@ -29,6 +30,18 @@ from config import (
     MONITORFISH_SMS_SERVER_URL,
 )
 from src.pipeline.entities.communication_means import CommunicationMeans
+
+mimetypes.add_type(
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ".docx",
+    strict=True,
+)
+
+mimetypes.add_type(
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    ".xlsx",
+    strict=True,
+)
 
 
 def create_html_email(
@@ -126,10 +139,17 @@ def create_html_email(
 
     if attachments:
         for filename, filebytes in attachments:
+            (mimetype, _) = guess_type(filename)
+            try:
+                (maintype, subtype) = mimetype.split("/")
+            except Exception:
+                maintype = "application"
+                subtype = "octet-stream"
+
             msg.add_attachment(
                 filebytes,
-                maintype="application",
-                subtype="octet-stream",
+                maintype=maintype,
+                subtype=subtype,
                 filename=filename,
             )
 

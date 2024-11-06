@@ -165,6 +165,7 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
       <FrontendErrorBoundary>
         <CardHeader
           detail={detail}
+          isNewPriorNotification={isNewPriorNotification}
           onClose={handleClose}
           selectedVesselIdentity={selectedVesselIdentity}
           withCloseButton

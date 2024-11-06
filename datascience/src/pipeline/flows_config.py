@@ -147,7 +147,7 @@ last_positions.flow.schedule = Schedule(
     ]
 )
 logbook.flow.schedule = CronSchedule("0,5,10,15,20,25,30,35,40,45,50,55 * * * *")
-missing_dep_alerts.flow.schedule = CronSchedule("1,16,31,46 * * * *")
+missing_dep_alerts.flow.schedule = CronSchedule("5,25,45 * * * *")
 missing_far_alerts.flow.schedule = Schedule(
     clocks=[
         clocks.CronClock(

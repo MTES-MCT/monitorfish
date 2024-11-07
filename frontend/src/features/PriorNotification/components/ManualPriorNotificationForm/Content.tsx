@@ -54,6 +54,10 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
   const previousPartialComputationRequestData = usePrevious(getPartialComputationRequestData(values))
 
   const applicableState = editedPriorNotificationComputedValues?.nextState ?? detail?.state
+  const isLessThanTwelveMetersVessel =
+    detail && selectedVesselIdentity && detail.vesselId === selectedVesselIdentity.vesselId
+      ? detail.isLessThanTwelveMetersVessel
+      : undefined
   const isNewPriorNotification = !detail
   const isInvalidated = !!detail?.logbookMessage?.message?.isInvalidated
   const isPendingSend =
@@ -164,7 +168,7 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
 
       <FrontendErrorBoundary>
         <CardHeader
-          detail={detail}
+          isLessThanTwelveMetersVessel={isLessThanTwelveMetersVessel}
           isNewPriorNotification={isNewPriorNotification}
           onClose={handleClose}
           selectedVesselIdentity={selectedVesselIdentity}
@@ -189,7 +193,6 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
           <hr />
 
           <Form
-            detail={detail}
             isNewPriorNotification={isNewPriorNotification}
             isReadOnly={isReadOnly}
             onVesselChange={setSelectedVesselIdentity}

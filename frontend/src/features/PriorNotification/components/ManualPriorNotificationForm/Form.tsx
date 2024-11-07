@@ -28,19 +28,12 @@ import type { ManualPriorNotificationFormValues } from './types'
 import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
 
 type FormProps = Readonly<{
-  detail: PriorNotification.Detail | undefined
   isNewPriorNotification: boolean
   isReadOnly: boolean
   onVesselChange: (nextVessel: VesselIdentity | undefined) => void
   selectedVesselIdentity: VesselIdentity | undefined
 }>
-export function Form({
-  detail,
-  isNewPriorNotification,
-  isReadOnly,
-  onVesselChange,
-  selectedVesselIdentity
-}: FormProps) {
+export function Form({ isNewPriorNotification, isReadOnly, onVesselChange, selectedVesselIdentity }: FormProps) {
   const { values } = useFormikContext<ManualPriorNotificationFormValues>()
 
   const dispatch = useMainAppDispatch()
@@ -69,7 +62,7 @@ export function Form({
       return
     }
 
-    dispatch(priorNotificationActions.setReportingListVesselIdentity(selectedVesselIdentity))
+    dispatch(priorNotificationActions.setOpenedReportingListVesselIdentity(selectedVesselIdentity))
   }
 
   const updateIsDirty = (isDirty: boolean) => {
@@ -81,7 +74,7 @@ export function Form({
   return (
     <>
       <FormikVesselSelect
-        initialVesselIdentity={detail?.vesselIdentity}
+        initialVesselIdentity={selectedVesselIdentity}
         onChange={handleVesselChange}
         readOnly={isReadOnly}
       />

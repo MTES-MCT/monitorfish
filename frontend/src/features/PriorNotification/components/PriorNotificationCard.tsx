@@ -91,7 +91,7 @@ export function PriorNotificationCard({
 
       <FrontendErrorBoundary>
         <CardHeader
-          detail={detail}
+          isLessThanTwelveMetersVessel={detail.isLessThanTwelveMetersVessel}
           onClose={close}
           selectedVesselIdentity={detail.vesselIdentity}
           withCloseButton

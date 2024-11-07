@@ -97,6 +97,7 @@ export function FormikVesselSelect({ initialVesselIdentity, onChange, readOnly }
         hasError={!!meta.error}
         isVesselIdRequiredFromResults
         onChange={handleVesselSearchChange}
+        shouldCloseOnClickOutside
         value={valueRef.current}
       />
 

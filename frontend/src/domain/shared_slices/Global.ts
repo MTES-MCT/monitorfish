@@ -18,6 +18,7 @@ export type GlobalState = {
   healthcheckTextWarning: string[]
   isBackoffice: boolean
   isUpdatingVessels: boolean
+  /** @deprecated Can be replaced by a non-Redux function once `@features/VesselSearch` is replaced with `@features/Vessel/components/VesselSearch`. */
   lastSearchedVessels: any[]
   leftMapBoxOpened: MapBox | undefined
   // TODO Rename this prop.
@@ -55,6 +56,8 @@ export const globalSlice = createSlice({
      * @memberOf GlobalReducer
      * @param {Object=} state
      * @param {{payload: VesselIdentity}} action - The last searched vessel
+     *
+     * @deprecated Can be replaced by a non-Redux function once `@features/VesselSearch` is replaced with `@features/Vessel/components/VesselSearch`.
      */
     addSearchedVessel(state, action) {
       const vesselIdentityToAdd = getOnlyVesselIdentityProperties(action.payload)

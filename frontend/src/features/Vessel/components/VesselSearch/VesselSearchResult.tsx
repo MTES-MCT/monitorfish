@@ -1,4 +1,5 @@
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { localStorageManager } from '@libs/LocalStorageManager'
+import { LocalStorageKey } from '@libs/LocalStorageManager/constants'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -11,54 +12,47 @@ type VesselSearchResultProps = Readonly<{
   foundVessels: VesselIdentity[]
   onSelect: (vessel: VesselIdentity) => void
   searchQuery: string | undefined
-  showLastSearchedVessels: boolean
+  withLastSearchResults: boolean
 }>
 export function VesselSearchResult({
   foundVessels,
   onSelect,
   searchQuery,
-  showLastSearchedVessels
+  withLastSearchResults
 }: VesselSearchResultProps) {
-  const lastSearchedVessels = useMainAppSelector(state => state.global.lastSearchedVessels)
   const baseUrl = useMemo(() => window.location.origin, [])
+
+  const lastSearchResults = localStorageManager.get<VesselIdentity[]>(LocalStorageKey.LastSearchVessels, [])
 
   return (
     <>
       {foundVessels.length > 0 && (
         <Results>
           <List>
-            {foundVessels.map(featureOrIdentity => {
-              const vesselCompositeIdentifier = `${featureOrIdentity.vesselId}/${getVesselCompositeIdentifier(featureOrIdentity)}`
-
-              return (
-                <VesselSearchResultItem
-                  key={vesselCompositeIdentifier}
-                  baseUrl={baseUrl}
-                  onClick={onSelect}
-                  searchQuery={searchQuery}
-                  vessel={featureOrIdentity}
-                />
-              )
-            })}
+            {foundVessels.map(featureOrIdentity => (
+              <VesselSearchResultItem
+                key={`${featureOrIdentity.vesselId}-${getVesselCompositeIdentifier(featureOrIdentity)}`}
+                baseUrl={baseUrl}
+                onClick={onSelect}
+                searchQuery={searchQuery}
+                vessel={featureOrIdentity}
+              />
+            ))}
           </List>
         </Results>
       )}
-      {!foundVessels.length && showLastSearchedVessels && (
+      {withLastSearchResults && !foundVessels.length && lastSearchResults?.length && (
         <Results>
           <List>
-            {lastSearchedVessels.map(vessel => {
-              const vesselCompositeIdentifier = `${vessel.vesselId}/${getVesselCompositeIdentifier(vessel)}`
-
-              return (
-                <VesselSearchResultItem
-                  key={vesselCompositeIdentifier}
-                  baseUrl={baseUrl}
-                  onClick={onSelect}
-                  searchQuery={searchQuery}
-                  vessel={vessel}
-                />
-              )
-            })}
+            {lastSearchResults.map(vessel => (
+              <VesselSearchResultItem
+                key={`${vessel.vesselId}-${getVesselCompositeIdentifier(vessel)}`}
+                baseUrl={baseUrl}
+                onClick={onSelect}
+                searchQuery={searchQuery}
+                vessel={vessel}
+              />
+            ))}
           </List>
         </Results>
       )}

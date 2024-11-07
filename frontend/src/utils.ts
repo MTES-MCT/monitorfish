@@ -110,6 +110,7 @@ export function getDateMonthsBefore(date, nofMonths) {
   return date
 }
 
+/** @deprecated Use `@libs/localStorageManager`. */
 export const getLocalStorageState = (defaultValue, key) => {
   const stickyValue = window.localStorage.getItem(key)
 

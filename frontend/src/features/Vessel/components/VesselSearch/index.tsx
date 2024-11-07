@@ -17,7 +17,6 @@ export type VesselSearchProps = Readonly<
   Omit<InputHTMLAttributes<HTMLInputElement>, 'defaultValue' | 'onChange' | 'value'> & {
     baseRef?: MutableRefObject<HTMLDivElement | undefined> | undefined
     hasError?: boolean | undefined
-    isLastSearchedVesselsShowed?: boolean
     isVesselIdRequiredFromResults?: boolean
     mapVesselIdentities?: VesselIdentity[]
     onBlur?: () => Promisable<void>
@@ -26,15 +25,15 @@ export type VesselSearchProps = Readonly<
     onVesselLinkClick?: (vessel: VesselIdentity) => Promisable<void>
     shouldCloseOnClickOutside?: boolean
     value?: VesselIdentity | undefined
+    withLastSearchResults?: boolean
   }
 >
 export function VesselSearch({
   baseRef,
   className,
   hasError,
-  isLastSearchedVesselsShowed = false,
   isVesselIdRequiredFromResults = false,
-  mapVesselIdentities: cachedVesselIdentities,
+  mapVesselIdentities,
   onBlur,
   onChange,
   onFocus,
@@ -42,6 +41,7 @@ export function VesselSearch({
   shouldCloseOnClickOutside,
   style,
   value,
+  withLastSearchResults = false,
   ...inputNativeProps
 }: VesselSearchProps) {
   const { controlledOnChange: handleOnChange, controlledValue: selectedVessel } = useFieldControl(value, onChange)
@@ -54,29 +54,28 @@ export function VesselSearch({
   const wrapperRef = useRef(null)
 
   const [foundVessels, setFoundVessels] = useState<VesselIdentity[]>([])
-  const [showLastSearchedVessels, setShowLastSearchedVessels] = useState(false)
   const [inputValue, setInputValue] = useState(selectedVessel?.vesselName ?? '')
+  const [isOpen, setIsOpen] = useState(false)
 
   const fuse = useMemo(
-    () => (cachedVesselIdentities ? new Fuse(cachedVesselIdentities, VESSEL_SEARCH_OPTIONS) : undefined),
-    [cachedVesselIdentities]
+    () => (mapVesselIdentities ? new Fuse(mapVesselIdentities, VESSEL_SEARCH_OPTIONS) : undefined),
+    [mapVesselIdentities]
   )
 
   const clean = useCallback(async () => {
-    setInputValue('')
     setFoundVessels([])
-    setShowLastSearchedVessels(false)
+    setInputValue('')
+    setIsOpen(false)
 
     handleOnChange(undefined)
   }, [handleOnChange])
 
   const selectVessel = useCallback(
-    vesselIdentity => {
+    (vesselIdentity: VesselIdentity) => {
       const vesselWithIdentifier = enrichWithVesselIdentifierIfNotFound(vesselIdentity)
 
       setInputValue(vesselWithIdentifier.vesselName ?? '')
-      setShowLastSearchedVessels(false)
-      setFoundVessels([])
+      setIsOpen(false)
 
       handleOnChange(vesselWithIdentifier)
     },
@@ -118,7 +117,6 @@ export function VesselSearch({
 
       const nextFoundVessels = await findVessels(searchQuery)
 
-      setShowLastSearchedVessels(false)
       setFoundVessels(nextFoundVessels)
     },
     [findVessels]
@@ -129,17 +127,16 @@ export function VesselSearch({
       return
     }
 
-    setFoundVessels([])
-    setShowLastSearchedVessels(false)
+    setIsOpen(false)
 
     onBlur?.()
   }, [onBlur, shouldCloseOnClickOutside])
 
-  const handleFocus = useCallback(() => {
-    setShowLastSearchedVessels(true)
+  const handleFocus = () => {
+    setIsOpen(true)
 
     onFocus?.()
-  }, [onFocus])
+  }
 
   const handleShowVessel = () => {
     if (!selectedVessel || !onVesselLinkClick) {
@@ -152,14 +149,6 @@ export function VesselSearch({
   useEffect(() => {
     setInputValue(selectedVessel?.vesselName ?? '')
   }, [selectedVessel])
-
-  useEffect(() => {
-    if (!isLastSearchedVesselsShowed) {
-      return
-    }
-
-    setShowLastSearchedVessels(isLastSearchedVesselsShowed)
-  }, [isLastSearchedVesselsShowed])
 
   useClickOutsideEffect(wrapperRef, handleClickOutside, baseRef?.current)
 
@@ -200,12 +189,14 @@ export function VesselSearch({
           />
         )}
       </InputWrapper>
-      <VesselSearchResult
-        foundVessels={foundVessels}
-        onSelect={selectVessel}
-        searchQuery={inputValue}
-        showLastSearchedVessels={showLastSearchedVessels}
-      />
+      {isOpen && (
+        <VesselSearchResult
+          foundVessels={foundVessels}
+          onSelect={selectVessel}
+          searchQuery={inputValue}
+          withLastSearchResults={withLastSearchResults}
+        />
+      )}
     </Wrapper>
   )
 }

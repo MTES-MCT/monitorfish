@@ -1,7 +1,5 @@
-import { useClickOutsideWhenOpenedWithinRef } from '@hooks/useClickOutsideWhenOpenedWithinRef'
-import { useEscapeFromKeyboard } from '@hooks/useEscapeFromKeyboard'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { Accent, Icon, IconButton, Link, useFieldControl } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, Link, useClickOutsideEffect, useFieldControl } from '@mtes-mct/monitor-ui'
 import Fuse from 'fuse.js'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -28,6 +26,7 @@ export type VesselSearchProps = Readonly<
     onChange: (nextVessel: VesselIdentity | undefined) => Promisable<void>
     onFocus?: () => Promisable<void>
     onVesselLinkClick?: (vessel: VesselIdentity) => Promisable<void>
+    shouldCloseOnClickOutside?: boolean
     value?: VesselIdentity | undefined
   }
 >
@@ -44,6 +43,7 @@ export function VesselSearch({
   onChange,
   onFocus,
   onVesselLinkClick,
+  shouldCloseOnClickOutside,
   style,
   value,
   ...inputNativeProps
@@ -128,13 +128,26 @@ export function VesselSearch({
     [findVessels]
   )
 
+  const handleClickOutside = useCallback(() => {
+    if (!shouldCloseOnClickOutside) {
+      return
+    }
+
+    setFoundVessels([])
+    setShowLastSearchedVessels(false)
+
+    if (onBlur) {
+      onBlur()
+    }
+  }, [onBlur, shouldCloseOnClickOutside])
+
   const handleFocus = useCallback(() => {
     setShowLastSearchedVessels(true)
 
     onFocus?.()
   }, [onFocus])
 
-  function handleShowVessel() {
+  const handleShowVessel = () => {
     if (!selectedVessel || !onVesselLinkClick) {
       return
     }
@@ -154,17 +167,7 @@ export function VesselSearch({
     setShowLastSearchedVessels(isLastSearchedVesselsShowed)
   }, [isLastSearchedVesselsShowed])
 
-  const escapeFromKeyboard = useEscapeFromKeyboard()
-  const clickedOutsideComponent = useClickOutsideWhenOpenedWithinRef(wrapperRef, isExtended, baseRef)
-
-  // TODO Replace with existing hooks.
-  useEffect(() => {
-    if (clickedOutsideComponent ?? escapeFromKeyboard) {
-      setShowLastSearchedVessels(false)
-
-      onBlur?.()
-    }
-  }, [clickedOutsideComponent, escapeFromKeyboard, onBlur])
+  useClickOutsideEffect(wrapperRef, handleClickOutside, baseRef?.current)
 
   return (
     <Wrapper

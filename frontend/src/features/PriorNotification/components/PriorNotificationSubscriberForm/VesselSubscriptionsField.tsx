@@ -59,7 +59,7 @@ export function VesselSubscriptionsField({
         />
       </DataTableWrapper>
 
-      <StyledVesselSearch key={key} disabled={isDisabled} onChange={add} />
+      <StyledVesselSearch key={key} disabled={isDisabled} onChange={add} shouldCloseOnClickOutside />
     </>
   )
 }

@@ -16,9 +16,7 @@ import type { Promisable } from 'type-fest'
 export type VesselSearchProps = Readonly<
   Omit<InputHTMLAttributes<HTMLInputElement>, 'defaultValue' | 'onChange' | 'value'> & {
     baseRef?: MutableRefObject<HTMLDivElement | undefined> | undefined
-    extendedWidth?: number | undefined
     hasError?: boolean | undefined
-    isExtended?: boolean | undefined
     isLastSearchedVesselsShowed?: boolean
     isVesselIdRequiredFromResults?: boolean
     mapVesselIdentities?: VesselIdentity[]
@@ -33,9 +31,7 @@ export type VesselSearchProps = Readonly<
 export function VesselSearch({
   baseRef,
   className,
-  extendedWidth,
   hasError,
-  isExtended = false,
   isLastSearchedVesselsShowed = false,
   isVesselIdRequiredFromResults = false,
   mapVesselIdentities: cachedVesselIdentities,
@@ -136,9 +132,7 @@ export function VesselSearch({
     setFoundVessels([])
     setShowLastSearchedVessels(false)
 
-    if (onBlur) {
-      onBlur()
-    }
+    onBlur?.()
   }, [onBlur, shouldCloseOnClickOutside])
 
   const handleFocus = useCallback(() => {
@@ -170,13 +164,7 @@ export function VesselSearch({
   useClickOutsideEffect(wrapperRef, handleClickOutside, baseRef?.current)
 
   return (
-    <Wrapper
-      ref={wrapperRef}
-      $extendedWidth={extendedWidth}
-      $isExtended={isExtended}
-      className={className}
-      style={style}
-    >
+    <Wrapper ref={wrapperRef} className={className} style={style}>
       <InputWrapper>
         <Input
           $baseUrl={baseUrl}
@@ -222,13 +210,10 @@ export function VesselSearch({
   )
 }
 
-const Wrapper = styled.div<{
-  $extendedWidth: number | undefined
-  $isExtended: boolean
-}>`
+const Wrapper = styled.div`
   box-sizing: border-box;
-  width: ${p => (p.$isExtended && p.$extendedWidth !== undefined ? p.$extendedWidth : 320)}px;
   transition: all 0.7s;
+  width: 320px;
 
   * {
     box-sizing: border-box;

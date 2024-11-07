@@ -2,13 +2,12 @@ import { CountryFlag } from '@components/CountryFlag'
 import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import styled, { keyframes } from 'styled-components'
 
-import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import type { VesselIdentity } from 'domain/entities/vessel/types'
 import type { ReactNode } from 'react'
 
 type CardHeaderProps = Readonly<{
   children?: ReactNode
-  detail: PriorNotification.Detail | undefined
+  isLessThanTwelveMetersVessel?: boolean | undefined
   isNewPriorNotification?: boolean
   onClose: () => void
   selectedVesselIdentity: VesselIdentity | undefined
@@ -17,7 +16,7 @@ type CardHeaderProps = Readonly<{
 }>
 export function CardHeader({
   children,
-  detail,
+  isLessThanTwelveMetersVessel,
   isNewPriorNotification = false,
   onClose,
   selectedVesselIdentity,
@@ -37,8 +36,8 @@ export function CardHeader({
             {!isNewPriorNotification && (
               <span>
                 PRÉAVIS NAVIRE
-                {selectedVesselIdentity && detail && selectedVesselIdentity.vesselId === detail.vesselId && (
-                  <>{detail.isLessThanTwelveMetersVessel ? ' < 12 M' : ' ≥ 12 M'}</>
+                {isLessThanTwelveMetersVessel !== undefined && (
+                  <>{isLessThanTwelveMetersVessel ? ' < 12 M' : ' ≥ 12 M'}</>
                 )}
               </span>
             )}

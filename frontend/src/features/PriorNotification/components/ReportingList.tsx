@@ -14,9 +14,6 @@ import { CardHeader } from './shared/CardHeader'
 
 export function ReportingList() {
   const dispatch = useMainAppDispatch()
-  const openedPriorNotificationDetail = useMainAppSelector(
-    store => store.priorNotification.openedPriorNotificationDetail
-  )
   const isPriorNotificationCardOpened = useMainAppSelector(
     store => !!store.priorNotification.openedPriorNotificationComponentType
   )
@@ -56,7 +53,6 @@ export function ReportingList() {
     <>
       <StyledCard $isSuperUser={isSuperUser} onBackgroundClick={handleClose}>
         <CardHeader
-          detail={openedPriorNotificationDetail}
           onClose={handleClose}
           selectedVesselIdentity={vesselIdentity}
           withCloseButton={!isPriorNotificationCardOpened}

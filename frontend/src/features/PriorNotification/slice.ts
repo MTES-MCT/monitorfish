@@ -106,7 +106,7 @@ const priorNotificationSlice = createSlice({
       state.openedPriorNotificationDetail = action.payload
     },
 
-    setReportingListVesselIdentity(state, action: PayloadAction<VesselIdentity>) {
+    setOpenedReportingListVesselIdentity(state, action: PayloadAction<VesselIdentity>) {
       state.openedReportingListVesselIdentity = action.payload
     },
 

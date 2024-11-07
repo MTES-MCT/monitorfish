@@ -7,5 +7,5 @@ export const openPriorNotificationReportingList =
   (vesselIdentity: VesselIdentity): MainAppThunk<Promise<void>> =>
   async dispatch => {
     dispatch(priorNotificationActions.closeReportingList())
-    dispatch(priorNotificationActions.setReportingListVesselIdentity(vesselIdentity))
+    dispatch(priorNotificationActions.setOpenedReportingListVesselIdentity(vesselIdentity))
   }

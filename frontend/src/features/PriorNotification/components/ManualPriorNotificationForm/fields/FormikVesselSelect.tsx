@@ -1,12 +1,9 @@
-import { VesselSearch } from '@features/Vessel/components/VesselSearch'
-import { vesselSelectors } from '@features/Vessel/slice'
+import { VesselSearchWithMapVessels } from '@features/Vessel/components/VesselSearch/VesselSearchWithMapVessels'
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Field, FieldError, logSoftError, useNewWindow } from '@mtes-mct/monitor-ui'
-import { getOnlyVesselIdentityProperties } from 'domain/entities/vessel/vessel'
 import { useField } from 'formik'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import type { VesselIdentity } from 'domain/entities/vessel/types'
@@ -22,17 +19,9 @@ export function FormikVesselSelect({ initialVesselIdentity, onChange, readOnly }
   const valueRef = useRef<VesselIdentity | undefined>(initialVesselIdentity)
 
   const dispatch = useMainAppDispatch()
-  const cachedVesselEnhancedLastPositionWebGLObjects = useMainAppSelector(state =>
-    vesselSelectors.selectAll(state.vessel.vessels)
-  )
   const { newWindowContainerRef } = useNewWindow()
 
   const [isLoading, setIsLoading] = useState(true)
-
-  const cachedVesselIdentities = useMemo(
-    () => cachedVesselEnhancedLastPositionWebGLObjects.map(getOnlyVesselIdentityProperties),
-    [cachedVesselEnhancedLastPositionWebGLObjects]
-  )
 
   const handleVesselSearchChange = async (nextVessel: VesselIdentity | undefined) => {
     if (!nextVessel) {
@@ -104,7 +93,6 @@ export function FormikVesselSelect({ initialVesselIdentity, onChange, readOnly }
     <Field>
       <StyledVesselSearch
         baseRef={newWindowContainerRef}
-        cachedVesselIdentities={cachedVesselIdentities}
         disabled={isLoading || readOnly}
         hasError={!!meta.error}
         isVesselIdRequiredFromResults
@@ -117,7 +105,7 @@ export function FormikVesselSelect({ initialVesselIdentity, onChange, readOnly }
   )
 }
 
-const StyledVesselSearch = styled(VesselSearch)`
+const StyledVesselSearch = styled(VesselSearchWithMapVessels)`
   position: relative;
   width: 100%;
 

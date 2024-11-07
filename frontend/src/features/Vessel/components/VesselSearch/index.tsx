@@ -15,15 +15,15 @@ import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
 import type { ChangeEvent, InputHTMLAttributes, MutableRefObject } from 'react'
 import type { Promisable } from 'type-fest'
 
-type VesselSearchProps = Readonly<
+export type VesselSearchProps = Readonly<
   Omit<InputHTMLAttributes<HTMLInputElement>, 'defaultValue' | 'onChange' | 'value'> & {
     baseRef?: MutableRefObject<HTMLDivElement | undefined> | undefined
-    cachedVesselIdentities?: VesselIdentity[]
     extendedWidth?: number | undefined
     hasError?: boolean | undefined
     isExtended?: boolean | undefined
     isLastSearchedVesselsShowed?: boolean
     isVesselIdRequiredFromResults?: boolean
+    mapVesselIdentities?: VesselIdentity[]
     onBlur?: () => Promisable<void>
     onChange: (nextVessel: VesselIdentity | undefined) => Promisable<void>
     onFocus?: () => Promisable<void>
@@ -33,13 +33,13 @@ type VesselSearchProps = Readonly<
 >
 export function VesselSearch({
   baseRef,
-  cachedVesselIdentities,
   className,
   extendedWidth,
   hasError,
   isExtended = false,
   isLastSearchedVesselsShowed = false,
   isVesselIdRequiredFromResults = false,
+  mapVesselIdentities: cachedVesselIdentities,
   onBlur,
   onChange,
   onFocus,

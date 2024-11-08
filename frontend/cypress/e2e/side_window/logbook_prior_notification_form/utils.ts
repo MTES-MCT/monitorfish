@@ -268,6 +268,7 @@ export function getPriorNotificationFakeResponse({
       internalReferenceNumber: 'CFR121',
       ircs: 'IRCS121',
       mmsi: 'MMSI121',
+      vesselId: null,
       vesselIdentifier: null,
       vesselName: null
     }

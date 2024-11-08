@@ -1,5 +1,6 @@
 import { BackOfficeSubtitle } from '@features/BackOffice/components/BackOfficeSubtitle'
 import { VesselSearch } from '@features/Vessel/components/VesselSearch'
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { DataTable, useKey } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
@@ -7,7 +8,7 @@ import { Info } from './shared/Info'
 import { getVesselSubscriptionTableColumns } from './utils'
 
 import type { PriorNotificationSubscriber } from '@features/PriorNotification/PriorNotificationSubscriber.types'
-import type { VesselIdentity } from 'domain/entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { Promisable } from 'type-fest'
 
 type VesselSubscriptionsFieldProps = Readonly<{
@@ -24,7 +25,7 @@ export function VesselSubscriptionsField({
 }: VesselSubscriptionsFieldProps) {
   const key = useKey([vesselSubscriptions])
 
-  const add = (newVesselIdentity: VesselIdentity | undefined) => {
+  const add = (newVesselIdentity: Vessel.VesselIdentity | undefined) => {
     if (!newVesselIdentity?.vesselId) {
       return
     }
@@ -59,7 +60,13 @@ export function VesselSubscriptionsField({
         />
       </DataTableWrapper>
 
-      <StyledVesselSearch key={key} disabled={isDisabled} onChange={add} shouldCloseOnClickOutside />
+      <StyledVesselSearch
+        key={key}
+        disabled={isDisabled}
+        displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR}
+        onChange={add}
+        shouldCloseOnClickOutside
+      />
     </>
   )
 }

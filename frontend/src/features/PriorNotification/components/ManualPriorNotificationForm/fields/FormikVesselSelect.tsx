@@ -1,29 +1,31 @@
 import { VesselSearchWithMapVessels } from '@features/Vessel/components/VesselSearch/VesselSearchWithMapVessels'
+import { getVesselIdentityFromVessel } from '@features/Vessel/utils'
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Field, FieldError, logSoftError, useNewWindow } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import type { VesselIdentity } from 'domain/entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 type FormikVesselSelectProps = Readonly<{
-  initialVesselIdentity: VesselIdentity | undefined
-  onChange: (nextVessel: VesselIdentity | undefined) => void
+  initialVesselIdentity: Vessel.VesselIdentity | undefined
+  onChange: (nextVessel: Vessel.VesselIdentity | undefined) => void
   readOnly?: boolean | undefined
 }>
 export function FormikVesselSelect({ initialVesselIdentity, onChange, readOnly }: FormikVesselSelectProps) {
   const [input, meta, helper] = useField<number | undefined>('vesselId')
 
-  const valueRef = useRef<VesselIdentity | undefined>(initialVesselIdentity)
+  const valueRef = useRef<Vessel.VesselIdentity | undefined>(initialVesselIdentity)
 
   const dispatch = useMainAppDispatch()
   const { newWindowContainerRef } = useNewWindow()
 
   const [isLoading, setIsLoading] = useState(true)
 
-  const handleVesselSearchChange = async (nextVessel: VesselIdentity | undefined) => {
+  const handleVesselSearchChange = async (nextVessel: Vessel.VesselIdentity | undefined) => {
     if (!nextVessel) {
       valueRef.current = undefined
 
@@ -45,8 +47,8 @@ export function FormikVesselSelect({ initialVesselIdentity, onChange, readOnly }
     }
 
     await setValue(nextVessel.vesselId)
-
     helper.setValue(nextVessel.vesselId)
+
     onChange(nextVessel)
   }
 
@@ -56,19 +58,13 @@ export function FormikVesselSelect({ initialVesselIdentity, onChange, readOnly }
 
       const vessel = await dispatch(vesselApi.endpoints.getVessel.initiate(vesselId)).unwrap()
 
-      const nextVessel: VesselIdentity = {
-        externalReferenceNumber: vessel.externalReferenceNumber ?? null,
-        flagState: vessel.flagState ?? null,
-        internalReferenceNumber: vessel.internalReferenceNumber ?? null,
-        ircs: vessel.ircs ?? null,
-        mmsi: vessel.mmsi ?? null,
-        vesselId: vessel.vesselId ?? null,
-        vesselName: vessel.vesselName ?? null
-      }
-      valueRef.current = nextVessel
-      onChange(nextVessel)
+      const nextVesselIdentity = getVesselIdentityFromVessel(vessel)
+
+      valueRef.current = nextVesselIdentity
 
       setIsLoading(false)
+
+      onChange(nextVesselIdentity)
     },
     [dispatch, onChange]
   )
@@ -94,6 +90,7 @@ export function FormikVesselSelect({ initialVesselIdentity, onChange, readOnly }
       <StyledVesselSearch
         baseRef={newWindowContainerRef}
         disabled={isLoading || readOnly}
+        displayedErrorKey={DisplayedErrorKey.BACK_OFFICE_PRIOR_NOTIFICATION_SUBSCRIBER_FORM_ERROR}
         hasError={!!meta.error}
         isVesselIdRequiredFromResults
         onChange={handleVesselSearchChange}

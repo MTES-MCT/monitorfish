@@ -3,13 +3,13 @@ import countries from 'i18n-iso-countries'
 import Highlighter from 'react-highlight-words'
 import styled from 'styled-components'
 
-import type { VesselIdentity } from 'domain/entities/vessel/types'
+import type { Vessel } from '../../Vessel.types'
 
 type VesselSearchResultItemProps = Readonly<{
   baseUrl: string
-  onClick: (vessel: VesselIdentity) => void
+  onClick: (vessel: Vessel.VesselIdentity) => void
   searchQuery: string | undefined
-  vessel: VesselIdentity
+  vessel: Vessel.VesselIdentity
 }>
 export function VesselSearchResultItem({ baseUrl, onClick, searchQuery, vessel }: VesselSearchResultItemProps) {
   const { flagState } = vessel
@@ -39,7 +39,7 @@ export function VesselSearchResultItem({ baseUrl, onClick, searchQuery, vessel }
   )
 }
 
-const showVesselIdentityData = (vessel: VesselIdentity, searchQuery: string | undefined) => {
+const showVesselIdentityData = (vessel: Vessel.VesselIdentity, searchQuery: string | undefined) => {
   const arrayOfInformation = [
     {
       name: 'CFR',

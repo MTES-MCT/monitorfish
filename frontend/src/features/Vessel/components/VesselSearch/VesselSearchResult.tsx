@@ -1,3 +1,4 @@
+import { getVesselIdentityFromLegacyVesselIdentity } from '@features/Vessel/utils'
 import { localStorageManager } from '@libs/LocalStorageManager'
 import { LocalStorageKey } from '@libs/LocalStorageManager/constants'
 import { useMemo } from 'react'
@@ -6,11 +7,12 @@ import styled from 'styled-components'
 import { VesselSearchResultItem } from './VesselSearchResultItem'
 import { getVesselCompositeIdentifier } from '../../../../domain/entities/vessel/vessel'
 
+import type { Vessel } from '../../Vessel.types'
 import type { VesselIdentity } from 'domain/entities/vessel/types'
 
 type VesselSearchResultProps = Readonly<{
-  foundVessels: VesselIdentity[]
-  onSelect: (vessel: VesselIdentity) => void
+  foundVessels: Vessel.VesselIdentity[]
+  onSelect: (vessel: Vessel.VesselIdentity) => void
   searchQuery: string | undefined
   withLastSearchResults: boolean
 }>
@@ -22,7 +24,9 @@ export function VesselSearchResult({
 }: VesselSearchResultProps) {
   const baseUrl = useMemo(() => window.location.origin, [])
 
-  const lastSearchResults = localStorageManager.get<VesselIdentity[]>(LocalStorageKey.LastSearchVessels, [])
+  const lastSearchResults = localStorageManager
+    .get<VesselIdentity[]>(LocalStorageKey.LastSearchVessels, [])
+    .map(getVesselIdentityFromLegacyVesselIdentity)
 
   return (
     <>
@@ -41,7 +45,7 @@ export function VesselSearchResult({
           </List>
         </Results>
       )}
-      {withLastSearchResults && !foundVessels.length && lastSearchResults?.length && (
+      {withLastSearchResults && !foundVessels.length && lastSearchResults.length > 0 && (
         <Results>
           <List>
             {lastSearchResults.map(vessel => (

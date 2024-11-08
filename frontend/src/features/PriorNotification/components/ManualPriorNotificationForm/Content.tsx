@@ -27,7 +27,7 @@ import { EditHistory } from '../shared/EditHistory'
 import { UploadFiles } from '../shared/UploadFiles'
 
 import type { ManualPriorNotificationFormValues } from './types'
-import type { VesselIdentity } from 'domain/entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { Promisable } from 'type-fest'
 
 type ContentProps = Readonly<{
@@ -47,7 +47,7 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
 
   const [isCancellationConfirmationModalOpen, setIsCancellationConfirmationModalOpen] = useState(false)
   const [isInvalidationConfirmationModalOpen, setIsInvalidationConfirmationModalOpen] = useState(false)
-  const [selectedVesselIdentity, setSelectedVesselIdentity] = useState<VesselIdentity | undefined>(
+  const [selectedVesselIdentity, setSelectedVesselIdentity] = useState<Vessel.VesselIdentity | undefined>(
     detail?.vesselIdentity
   )
 

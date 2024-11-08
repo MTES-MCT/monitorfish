@@ -2,7 +2,7 @@ import { Logbook } from '@features/Logbook/Logbook.types'
 import { getOptionsFromLabelledEnum } from '@mtes-mct/monitor-ui'
 
 import type { Seafront } from '@constants/seafront'
-import type { VesselIdentity } from 'domain/entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 export namespace PriorNotification {
   export interface PriorNotification {
@@ -60,7 +60,7 @@ export namespace PriorNotification {
     state: State | undefined
     updatedAt: string
     vesselId: number
-    vesselIdentity: VesselIdentity
+    vesselIdentity: Vessel.VesselIdentity
   } & (
     | {
         asLogbookForm: LogbookForm

@@ -2,7 +2,7 @@ import { CountryFlag } from '@components/CountryFlag'
 import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import styled, { keyframes } from 'styled-components'
 
-import type { VesselIdentity } from 'domain/entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { ReactNode } from 'react'
 
 type CardHeaderProps = Readonly<{
@@ -10,7 +10,7 @@ type CardHeaderProps = Readonly<{
   isLessThanTwelveMetersVessel?: boolean | undefined
   isNewPriorNotification?: boolean
   onClose: () => void
-  selectedVesselIdentity: VesselIdentity | undefined
+  selectedVesselIdentity: Vessel.VesselIdentity | undefined
   withCloseButton?: boolean
   withFirstTitleRow?: boolean
 }>

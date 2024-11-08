@@ -5,32 +5,35 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { VESSEL_SEARCH_OPTIONS } from './constants'
-import { enrichWithVesselIdentifierIfNotFound, removeDuplicatedFoundVessels } from './utils'
+import { enrichWithVesselIdentifierIfUndefined } from './utils'
 import { VesselSearchResult } from './VesselSearchResult'
-import { searchVessels as searchVesselsAction } from '../../../../domain/use_cases/vessel/searchVessels'
+import { searchVessel } from '../../useCases/searchVessels'
 
-import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
+import type { Vessel } from '../../Vessel.types'
+import type { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import type { ChangeEvent, InputHTMLAttributes, MutableRefObject } from 'react'
 import type { Promisable } from 'type-fest'
 
 export type VesselSearchProps = Readonly<
   Omit<InputHTMLAttributes<HTMLInputElement>, 'defaultValue' | 'onChange' | 'value'> & {
     baseRef?: MutableRefObject<HTMLDivElement | undefined> | undefined
+    displayedErrorKey: DisplayedErrorKey
     hasError?: boolean | undefined
     isVesselIdRequiredFromResults?: boolean
-    mapVesselIdentities?: VesselIdentity[]
+    mapVesselIdentities?: Vessel.VesselIdentity[]
     onBlur?: () => Promisable<void>
-    onChange: (nextVessel: VesselIdentity | undefined) => Promisable<void>
+    onChange: (nextVessel: Vessel.VesselIdentity | undefined) => Promisable<void>
     onFocus?: () => Promisable<void>
-    onVesselLinkClick?: (vessel: VesselIdentity) => Promisable<void>
+    onVesselLinkClick?: (vessel: Vessel.VesselIdentity) => Promisable<void>
     shouldCloseOnClickOutside?: boolean
-    value?: VesselIdentity | undefined
+    value?: Vessel.VesselIdentity | undefined
     withLastSearchResults?: boolean
   }
 >
 export function VesselSearch({
   baseRef,
   className,
+  displayedErrorKey,
   hasError,
   isVesselIdRequiredFromResults = false,
   mapVesselIdentities,
@@ -53,7 +56,7 @@ export function VesselSearch({
   const baseUrl = window.location.origin
   const wrapperRef = useRef(null)
 
-  const [foundVessels, setFoundVessels] = useState<VesselIdentity[]>([])
+  const [foundVessels, setFoundVessels] = useState<Vessel.VesselIdentity[]>([])
   const [inputValue, setInputValue] = useState(selectedVessel?.vesselName ?? '')
   const [isOpen, setIsOpen] = useState(false)
 
@@ -71,8 +74,8 @@ export function VesselSearch({
   }, [handleOnChange])
 
   const selectVessel = useCallback(
-    (vesselIdentity: VesselIdentity) => {
-      const vesselWithIdentifier = enrichWithVesselIdentifierIfNotFound(vesselIdentity)
+    (vesselIdentity: Vessel.VesselIdentity) => {
+      const vesselWithIdentifier = enrichWithVesselIdentifierIfUndefined(vesselIdentity)
 
       setInputValue(vesselWithIdentifier.vesselName ?? '')
       setIsOpen(false)
@@ -80,27 +83,6 @@ export function VesselSearch({
       handleOnChange(vesselWithIdentifier)
     },
     [handleOnChange]
-  )
-
-  const findVessels = useCallback(
-    async (searchQuery: string) => {
-      const foundVesselIdentitiesFromCache = fuse?.search(searchQuery).map(result => result.item) ?? []
-
-      const foundVesselsFromApi = await dispatch(searchVesselsAction(searchQuery.toUpperCase()))
-      if (!foundVesselsFromApi) {
-        return isVesselIdRequiredFromResults
-          ? foundVesselIdentitiesFromCache.filter(foundVesselIdentity => !!foundVesselIdentity.vesselId)
-          : foundVesselIdentitiesFromCache
-      }
-
-      const nextFoundVessels = removeDuplicatedFoundVessels(foundVesselsFromApi, foundVesselIdentitiesFromCache)
-      const filteredVessels = isVesselIdRequiredFromResults
-        ? nextFoundVessels.filter(_vessel => _vessel.vesselId)
-        : nextFoundVessels
-
-      return filteredVessels
-    },
-    [dispatch, isVesselIdRequiredFromResults, fuse]
   )
 
   const handleChange = useCallback(
@@ -115,11 +97,13 @@ export function VesselSearch({
         return
       }
 
-      const nextFoundVessels = await findVessels(searchQuery)
+      const nextFoundVessels = await dispatch(
+        searchVessel(searchQuery, isVesselIdRequiredFromResults, fuse, displayedErrorKey)
+      )
 
       setFoundVessels(nextFoundVessels)
     },
-    [findVessels]
+    [dispatch, displayedErrorKey, fuse, isVesselIdRequiredFromResults]
   )
 
   const handleClickOutside = useCallback(() => {

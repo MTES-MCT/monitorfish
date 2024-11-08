@@ -6,8 +6,8 @@ import { PriorNotification } from './PriorNotification.types'
 import type { ManualPriorNotificationFormValues } from './components/ManualPriorNotificationForm/types'
 import type { ListFilter } from './components/PriorNotificationList/types'
 import type { OpenedPriorNotificationType } from './constants'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { Undefine } from '@mtes-mct/monitor-ui'
-import type { VesselIdentity } from 'domain/entities/vessel/types'
 
 export interface PriorNotificationState {
   editedLogbookPriorNotificationFormValues: PriorNotification.LogbookForm | undefined
@@ -21,7 +21,7 @@ export interface PriorNotificationState {
   openedPriorNotificationComponentType: OpenedPriorNotificationType | undefined
   /** Used for prior notification forms, card and reporting list. */
   openedPriorNotificationDetail: PriorNotification.Detail | undefined
-  openedReportingListVesselIdentity: VesselIdentity | undefined
+  openedReportingListVesselIdentity: Vessel.VesselIdentity | undefined
 }
 const INITIAL_STATE: PriorNotificationState = {
   editedLogbookPriorNotificationFormValues: undefined,
@@ -106,7 +106,7 @@ const priorNotificationSlice = createSlice({
       state.openedPriorNotificationDetail = action.payload
     },
 
-    setOpenedReportingListVesselIdentity(state, action: PayloadAction<VesselIdentity>) {
+    setOpenedReportingListVesselIdentity(state, action: PayloadAction<Vessel.VesselIdentity>) {
       state.openedReportingListVesselIdentity = action.payload
     },
 

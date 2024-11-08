@@ -435,6 +435,9 @@ export namespace Logbook {
     name: string
   }
 
+  // ---------------------------------------------------------------------------
+  // API
+
   export type ApiListExtraData = {
     perSeafrontGroupCount: Record<SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup, number>
   }

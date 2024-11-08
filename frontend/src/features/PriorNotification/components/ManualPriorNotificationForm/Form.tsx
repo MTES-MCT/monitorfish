@@ -25,13 +25,13 @@ import { FormikFishingCatchesMultiSelect } from './fields/FormikFishingCatchesMu
 import { FormikVesselSelect } from './fields/FormikVesselSelect'
 
 import type { ManualPriorNotificationFormValues } from './types'
-import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 type FormProps = Readonly<{
   isNewPriorNotification: boolean
   isReadOnly: boolean
-  onVesselChange: (nextVessel: VesselIdentity | undefined) => void
-  selectedVesselIdentity: VesselIdentity | undefined
+  onVesselChange: (nextVessel: Vessel.VesselIdentity | undefined) => void
+  selectedVesselIdentity: Vessel.VesselIdentity | undefined
 }>
 export function Form({ isNewPriorNotification, isReadOnly, onVesselChange, selectedVesselIdentity }: FormProps) {
   const { values } = useFormikContext<ManualPriorNotificationFormValues>()
@@ -43,7 +43,7 @@ export function Form({ isNewPriorNotification, isReadOnly, onVesselChange, selec
   const isThirdPartyVessel = useRef<boolean>(false)
 
   const handleVesselChange = useCallback(
-    (nextVessel: VesselIdentity | undefined) => {
+    (nextVessel: Vessel.VesselIdentity | undefined) => {
       if (getHasAuthorizedLandingDownload(nextVessel?.flagState, nextVessel?.externalReferenceNumber)) {
         isThirdPartyVessel.current = true
 

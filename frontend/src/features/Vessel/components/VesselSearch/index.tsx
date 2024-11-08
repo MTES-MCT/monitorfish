@@ -20,13 +20,13 @@ export type VesselSearchProps = Readonly<
     displayedErrorKey: DisplayedErrorKey
     hasError?: boolean | undefined
     isVesselIdRequiredFromResults?: boolean
-    mapVesselIdentities?: Vessel.VesselIdentity[]
     onBlur?: () => Promisable<void>
     onChange: (nextVessel: Vessel.VesselIdentity | undefined) => Promisable<void>
     onFocus?: () => Promisable<void>
     onVesselLinkClick?: (vessel: Vessel.VesselIdentity) => Promisable<void>
     shouldCloseOnClickOutside?: boolean
     value?: Vessel.VesselIdentity | undefined
+    vesselIdentitiesFromLastPositions?: Vessel.VesselIdentity[]
     withLastSearchResults?: boolean
   }
 >
@@ -36,7 +36,6 @@ export function VesselSearch({
   displayedErrorKey,
   hasError,
   isVesselIdRequiredFromResults = false,
-  mapVesselIdentities,
   onBlur,
   onChange,
   onFocus,
@@ -44,6 +43,7 @@ export function VesselSearch({
   shouldCloseOnClickOutside,
   style,
   value,
+  vesselIdentitiesFromLastPositions,
   withLastSearchResults = false,
   ...inputNativeProps
 }: VesselSearchProps) {
@@ -61,8 +61,11 @@ export function VesselSearch({
   const [isOpen, setIsOpen] = useState(false)
 
   const fuse = useMemo(
-    () => (mapVesselIdentities ? new Fuse(mapVesselIdentities, VESSEL_SEARCH_OPTIONS) : undefined),
-    [mapVesselIdentities]
+    () =>
+      vesselIdentitiesFromLastPositions
+        ? new Fuse(vesselIdentitiesFromLastPositions, VESSEL_SEARCH_OPTIONS)
+        : undefined,
+    [vesselIdentitiesFromLastPositions]
   )
 
   const clean = useCallback(async () => {

@@ -68,7 +68,7 @@ export const vesselApi = monitorfishApi.injectEndpoints({
 
     searchVessels: builder.query<Vessel.VesselIdentity[], Vessel.ApiSearchFilter>({
       providesTags: () => [{ type: RtkCacheTagType.Vessel }],
-      query: filter => getUrlOrPathWithQueryParams('/search', filter),
+      query: filter => getUrlOrPathWithQueryParams('/vessels/search', filter),
       transformErrorResponse: response => new FrontendApiError(SEARCH_VESSELS_ERROR_MESSAGE, response)
     })
   })

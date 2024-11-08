@@ -98,7 +98,7 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
   }
 
   const updateComputedValues = useDebouncedCallback(
-    (nextComputationRequestData: PriorNotification.ManualComputeRequestData) => {
+    (nextComputationRequestData: PriorNotification.ApiManualComputeRequestData) => {
       dispatch(updateManualPriorNotificationComputedValues(nextComputationRequestData))
     },
     1000

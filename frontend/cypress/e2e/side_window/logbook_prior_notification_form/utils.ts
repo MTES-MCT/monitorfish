@@ -296,7 +296,19 @@ export function getPriorNotificationFakeResponse({
         purpose: PriorNotification.PurposeCode.LAN,
         sentAt: updatedAt,
         tripGearCodes: ['OTT'],
-        vesselId: 121
+        vesselIdentity: {
+          beaconNumber: null,
+          districtCode: null,
+          externalReferenceNumber: 'EXTIMM121',
+          flagState: 'FRA',
+          internalReferenceNumber: 'CFR121',
+          ircs: 'IRCS121',
+          mmsi: 'MMSI121',
+          vesselId: 121,
+          vesselIdentifier: null,
+          vesselLength: null,
+          vesselName: null
+        }
       },
       asManualForm: null,
       isManuallyCreated: false
@@ -324,7 +336,19 @@ export function getPriorNotificationFakeResponse({
       sentAt: createdAt,
       tripGearCodes: ['OTT'],
       updatedAt,
-      vesselId: 121
+      vesselIdentity: {
+        beaconNumber: null,
+        districtCode: null,
+        externalReferenceNumber: 'EXTIMM121',
+        flagState: 'FRA',
+        internalReferenceNumber: 'CFR121',
+        ircs: 'IRCS121',
+        mmsi: 'MMSI121',
+        vesselId: 121,
+        vesselIdentifier: null,
+        vesselLength: null,
+        vesselName: null
+      }
     },
     isManuallyCreated: true
   }

@@ -22,7 +22,7 @@ data class ManualPriorNotificationFormDataOutput(
     val purpose: LogbookMessagePurpose,
     val tripGearCodes: List<String>,
     val updatedAt: String,
-    val vesselId: Int,
+    val vesselIdentity: VesselIdentityDataOutput,
 ) {
     companion object {
         fun fromPriorNotification(priorNotification: PriorNotification): ManualPriorNotificationFormDataOutput {
@@ -55,10 +55,9 @@ data class ManualPriorNotificationFormDataOutput(
                 ) { "`priorNotification.updatedAt` is null." }.withZoneSameInstant(
                     ZoneOffset.UTC,
                 ).toString()
-            val vesselId =
-                requireNotNull(priorNotification.vessel) {
-                    "`priorNotification.vessel` is null."
-                }.id
+            requireNotNull(priorNotification.vessel) {
+                "`priorNotification.vessel` is null."
+            }.id
 
             val hasPortEntranceAuthorization = pnoValue.hasPortEntranceAuthorization ?: true
             val hasPortLandingAuthorization = pnoValue.hasPortLandingAuthorization ?: true
@@ -78,6 +77,12 @@ data class ManualPriorNotificationFormDataOutput(
                 pnoValue.catchOnboard.map {
                     ManualPriorNotificationFishingCatchDataOutput.fromLogbookFishingCatch(it, !hasGlobalFaoArea)
                 }
+            val vesselIdentity =
+                VesselIdentityDataOutput.fromVessel(
+                    requireNotNull(priorNotification.vessel) {
+                        "`priorNotification.vessel` is null."
+                    },
+                )
 
             return ManualPriorNotificationFormDataOutput(
                 reportId = reportId,
@@ -94,7 +99,7 @@ data class ManualPriorNotificationFormDataOutput(
                 purpose = purpose,
                 tripGearCodes = tripGearCodes,
                 updatedAt = updatedAt,
-                vesselId = vesselId,
+                vesselIdentity = vesselIdentity,
             )
         }
     }

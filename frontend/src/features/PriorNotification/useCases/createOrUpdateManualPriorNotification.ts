@@ -1,8 +1,10 @@
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { customDayjs } from '@mtes-mct/monitor-ui'
+import { assertNotNullish } from '@utils/assertNotNullish'
 import { handleThunkError } from '@utils/handleThunkError'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
+import { omit } from 'lodash'
 
 import { openManualPriorNotificationForm } from './openManualPriorNotificationForm'
 import { priorNotificationApi } from '../priorNotificationApi'
@@ -11,18 +13,26 @@ import type { PriorNotification } from '../PriorNotification.types'
 import type { MainAppThunk } from '@store'
 
 export const createOrUpdateManualPriorNotification =
-  (reportId: string | undefined, newOrNextData: PriorNotification.NewManualForm): MainAppThunk<Promise<void>> =>
+  (reportId: string | undefined, newOrNextManualForm: PriorNotification.ManualForm): MainAppThunk<Promise<void>> =>
   async dispatch => {
     try {
-      let updatedPriorNotificationData: PriorNotification.ManualForm
+      const { vesselId } = newOrNextManualForm.vesselIdentity
+      assertNotNullish(vesselId)
+
+      const requestData: PriorNotification.ApiManualCreateOrUpdateRequestData = {
+        ...omit(newOrNextManualForm, ['vesselIdentity']),
+        vesselId
+      }
+
+      let updatedPriorNotificationData: PriorNotification.ApiManualCreateOrUpdateResponseData
       if (!reportId) {
         updatedPriorNotificationData = await dispatch(
-          priorNotificationApi.endpoints.createPriorNotification.initiate(newOrNextData)
+          priorNotificationApi.endpoints.createPriorNotification.initiate(requestData)
         ).unwrap()
       } else {
         updatedPriorNotificationData = await dispatch(
           priorNotificationApi.endpoints.updateManualPriorNotification.initiate({
-            data: newOrNextData,
+            data: requestData,
             reportId
           })
         ).unwrap()

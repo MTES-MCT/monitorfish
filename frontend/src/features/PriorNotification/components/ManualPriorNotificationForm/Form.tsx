@@ -70,11 +70,7 @@ export function Form({ isNewPriorNotification, isReadOnly, onVesselChange, selec
 
   return (
     <>
-      <FormikVesselSelect
-        initialVesselIdentity={selectedVesselIdentity}
-        onChange={handleVesselChange}
-        readOnly={isReadOnly}
-      />
+      <FormikVesselSelect onChange={handleVesselChange} readOnly={isReadOnly} />
 
       <FormikSelect
         isCleanable={false}

@@ -267,10 +267,10 @@ export function getPriorNotificationFakeResponse({
       flagState: 'FRA',
       internalReferenceNumber: 'CFR121',
       ircs: 'IRCS121',
-      isLessThanTwelveMetersVessel: null,
       mmsi: 'MMSI121',
       vesselId: null,
       vesselIdentifier: null,
+      vesselLength: null,
       vesselName: null
     }
   }

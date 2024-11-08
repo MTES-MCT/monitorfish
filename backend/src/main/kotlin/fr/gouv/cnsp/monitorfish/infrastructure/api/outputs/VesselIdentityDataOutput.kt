@@ -12,9 +12,9 @@ data class VesselIdentityDataOutput(
     val imo: String? = null,
     val internalReferenceNumber: String? = null,
     val ircs: String? = null,
-    val isLessThanTwelveMetersVessel: Boolean? = null,
     val mmsi: String? = null,
     val vesselId: Int,
+    val vesselLength: Double? = null,
     val vesselName: String? = null,
 ) {
     companion object {
@@ -26,9 +26,9 @@ data class VesselIdentityDataOutput(
                 imo = vessel.imo,
                 internalReferenceNumber = vessel.internalReferenceNumber,
                 ircs = vessel.ircs,
-                isLessThanTwelveMetersVessel = vessel.length?.let { it < 12 },
                 mmsi = vessel.mmsi,
                 vesselId = vessel.id,
+                vesselLength = vessel.length,
                 vesselName = vessel.vesselName,
             )
         }
@@ -42,9 +42,9 @@ data class VesselIdentityDataOutput(
                 imo = vesselAndBeacon.vessel.imo,
                 internalReferenceNumber = vesselAndBeacon.vessel.internalReferenceNumber,
                 ircs = vesselAndBeacon.vessel.ircs,
-                isLessThanTwelveMetersVessel = vesselAndBeacon.vessel.length?.let { it < 12 },
                 mmsi = vesselAndBeacon.vessel.mmsi,
                 vesselId = vesselAndBeacon.vessel.id,
+                vesselLength = vesselAndBeacon.vessel.length,
                 vesselName = vesselAndBeacon.vessel.vesselName,
             )
         }

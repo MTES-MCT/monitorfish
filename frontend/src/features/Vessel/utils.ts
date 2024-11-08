@@ -67,10 +67,10 @@ export const extractVesselIdentityProps = (
   flagState: vessel.flagState,
   internalReferenceNumber: vessel.internalReferenceNumber ?? undefined,
   ircs: 'ircs' in vessel && !!vessel.ircs ? vessel.ircs : undefined,
-  isLessThanTwelveMetersVessel: undefined,
   mmsi: 'mmsi' in vessel && !!vessel.mmsi ? vessel.mmsi : undefined,
   vesselId: 'vesselId' in vessel && !!vessel.vesselId ? vessel.vesselId : undefined,
   vesselIdentifier: 'vesselIdentifier' in vessel && !!vessel.vesselIdentifier ? vessel.vesselIdentifier : undefined,
+  vesselLength: undefined,
   vesselName: vessel.vesselName ?? undefined
 })
 
@@ -110,10 +110,10 @@ export function getVesselIdentityFromLegacyVesselIdentity(legacyVesselIdentity: 
     flagState: legacyVesselIdentity.flagState,
     internalReferenceNumber: legacyVesselIdentity.internalReferenceNumber ?? undefined,
     ircs: legacyVesselIdentity.ircs ?? undefined,
-    isLessThanTwelveMetersVessel: legacyVesselIdentity.isLessThanTwelveMetersVessel ?? undefined,
     mmsi: legacyVesselIdentity.mmsi ?? undefined,
     vesselId: legacyVesselIdentity.vesselId ?? undefined,
     vesselIdentifier: legacyVesselIdentity.vesselIdentifier ?? undefined,
+    vesselLength: legacyVesselIdentity.vesselLength ?? undefined,
     vesselName: legacyVesselIdentity.vesselName ?? undefined
   }
 }
@@ -128,10 +128,10 @@ export function getVesselIdentityFromVessel(vessel: Vessel.Vessel): Vessel.Vesse
     flagState: vessel.flagState,
     internalReferenceNumber: vessel.internalReferenceNumber,
     ircs: vessel.ircs,
-    isLessThanTwelveMetersVessel: vessel.length !== undefined ? vessel.length < 12 : undefined,
     mmsi: vessel.mmsi,
     vesselId: vessel.vesselId,
     vesselIdentifier,
+    vesselLength: vessel.length,
     vesselName: vessel.vesselName
   }
 }

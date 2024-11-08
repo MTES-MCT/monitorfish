@@ -87,5 +87,5 @@ export function getHasAuthorizedLandingDownload(
   flagState: string | undefined,
   externalReferenceNumber: string | null | undefined
 ) {
-  return flagState !== 'FR' || externalReferenceNumber?.includes(DISTRICT_LOCODE_WITH_LANDING_REQUESTED)
+  return flagState !== 'FR' || !!externalReferenceNumber?.includes(DISTRICT_LOCODE_WITH_LANDING_REQUESTED)
 }

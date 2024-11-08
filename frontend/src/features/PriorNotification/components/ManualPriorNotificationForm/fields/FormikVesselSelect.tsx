@@ -5,7 +5,7 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Field, FieldError, logSoftError, useNewWindow } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import type { Vessel } from '@features/Vessel/Vessel.types'
@@ -16,14 +16,14 @@ type FormikVesselSelectProps = Readonly<{
   readOnly?: boolean | undefined
 }>
 export function FormikVesselSelect({ initialVesselIdentity, onChange, readOnly }: FormikVesselSelectProps) {
-  const [input, meta, helper] = useField<number | undefined>('vesselId')
+  const [, meta, helper] = useField<number | undefined>('vesselId')
 
   const valueRef = useRef<Vessel.VesselIdentity | undefined>(initialVesselIdentity)
 
   const dispatch = useMainAppDispatch()
   const { newWindowContainerRef } = useNewWindow()
 
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleVesselSearchChange = async (nextVessel: Vessel.VesselIdentity | undefined) => {
     if (!nextVessel) {
@@ -67,22 +67,6 @@ export function FormikVesselSelect({ initialVesselIdentity, onChange, readOnly }
       onChange(nextVesselIdentity)
     },
     [dispatch, onChange]
-  )
-
-  useEffect(
-    () => {
-      if (!input.value) {
-        setIsLoading(false)
-
-        return
-      }
-
-      setValue(input.value)
-    },
-
-    // Ignore `input.value` change since it should only be called on mount.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [setValue]
   )
 
   return (

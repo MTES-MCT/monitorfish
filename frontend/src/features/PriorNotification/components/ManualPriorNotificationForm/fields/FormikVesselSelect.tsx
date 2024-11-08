@@ -90,7 +90,7 @@ export function FormikVesselSelect({ initialVesselIdentity, onChange, readOnly }
       <StyledVesselSearch
         baseRef={newWindowContainerRef}
         disabled={isLoading || readOnly}
-        displayedErrorKey={DisplayedErrorKey.BACK_OFFICE_PRIOR_NOTIFICATION_SUBSCRIBER_FORM_ERROR}
+        displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR}
         hasError={!!meta.error}
         isVesselIdRequiredFromResults
         onChange={handleVesselSearchChange}

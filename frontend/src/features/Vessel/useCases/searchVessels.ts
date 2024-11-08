@@ -52,7 +52,7 @@ export const searchVessel =
  * - internalReferenceNumber (CFR) or
  * - vesselId (Vessel internal identifier)
  */
-export function removeDuplicatedFoundVessels(
+function removeDuplicatedFoundVessels(
   foundVesselsFromAPI: Vessel.VesselIdentity[],
   foundVesselsOnMap: Vessel.VesselIdentity[]
 ): Vessel.VesselIdentity[] {

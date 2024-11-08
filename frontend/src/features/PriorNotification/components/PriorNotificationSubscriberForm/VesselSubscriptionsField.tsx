@@ -63,7 +63,7 @@ export function VesselSubscriptionsField({
       <StyledVesselSearch
         key={key}
         disabled={isDisabled}
-        displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR}
+        displayedErrorKey={DisplayedErrorKey.BACK_OFFICE_PRIOR_NOTIFICATION_SUBSCRIBER_FORM_ERROR}
         onChange={add}
         shouldCloseOnClickOutside
       />

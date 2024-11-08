@@ -48,9 +48,12 @@ export function Row({ row }: RowProps) {
   }
 
   const openReportingList = () => {
-    const vesselIdentity = getVesselIdentityFromPriorNotification(row.original)
+    const vesselIdentityWithVesselLength = {
+      ...getVesselIdentityFromPriorNotification(row.original),
+      vesselLength: row.original.vesselLength
+    }
 
-    dispatch(openPriorNotificationReportingList(vesselIdentity))
+    dispatch(openPriorNotificationReportingList(vesselIdentityWithVesselLength))
   }
 
   return (

@@ -67,6 +67,7 @@ export type VesselIdentity = {
   flagState: string
   internalReferenceNumber: string | null | undefined
   ircs: string | null | undefined
+  isLessThanTwelveMetersVessel?: boolean | null | undefined
   mmsi?: string | null | undefined
   vesselId?: VesselId | null | undefined
   vesselIdentifier?: VesselIdentifier | null | undefined

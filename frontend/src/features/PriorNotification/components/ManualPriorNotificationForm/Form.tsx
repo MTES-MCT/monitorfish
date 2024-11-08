@@ -44,13 +44,10 @@ export function Form({ isNewPriorNotification, isReadOnly, onVesselChange, selec
 
   const handleVesselChange = useCallback(
     (nextVessel: Vessel.VesselIdentity | undefined) => {
-      if (getHasAuthorizedLandingDownload(nextVessel?.flagState, nextVessel?.externalReferenceNumber)) {
-        isThirdPartyVessel.current = true
-
-        return
-      }
-
-      isThirdPartyVessel.current = false
+      isThirdPartyVessel.current = getHasAuthorizedLandingDownload(
+        nextVessel?.flagState,
+        nextVessel?.externalReferenceNumber
+      )
 
       onVesselChange(nextVessel)
     },

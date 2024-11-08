@@ -5,16 +5,18 @@ import { useMemo } from 'react'
 import { VesselSearch, type VesselSearchProps } from '.'
 import { extractVesselIdentityProps } from '../../utils'
 
-export function VesselSearchWithMapVessels(props: Readonly<Omit<VesselSearchProps, 'mapVesselIdentities'>>) {
+export function VesselSearchWithMapVessels(
+  props: Readonly<Omit<VesselSearchProps, 'vesselIdentitiesFromLastPositions'>>
+) {
   const mapVesselsAsEnhancedLastPositionWebGLObjects = useMainAppSelector(state =>
     vesselSelectors.selectAll(state.vessel.vessels)
   )
 
-  const mapVesselIdentities = useMemo(
+  const vesselIdentitiesFromLastPositions = useMemo(
     () => mapVesselsAsEnhancedLastPositionWebGLObjects.map(extractVesselIdentityProps),
     [mapVesselsAsEnhancedLastPositionWebGLObjects]
   )
 
   /* eslint-disable react/jsx-props-no-spreading */
-  return <VesselSearch mapVesselIdentities={mapVesselIdentities} {...props} />
+  return <VesselSearch vesselIdentitiesFromLastPositions={vesselIdentitiesFromLastPositions} {...props} />
 }

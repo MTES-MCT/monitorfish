@@ -3,8 +3,7 @@ import { ObjectSchema, array, boolean, number, object, string, mixed } from 'yup
 import { PriorNotification } from '../../PriorNotification.types'
 
 import type { ManualPriorNotificationFormValues } from './types'
-
-import PurposeCode = PriorNotification.PurposeCode
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 const FISHING_CATCH_VALIDATION_SCHEMA: ObjectSchema<PriorNotification.FormDataFishingCatch> = object({
   faoArea: string().when('$hasGlobalFaoArea', {
@@ -16,6 +15,8 @@ const FISHING_CATCH_VALIDATION_SCHEMA: ObjectSchema<PriorNotification.FormDataFi
   specyName: string().required(),
   weight: number().required('Veuillez indiquer le poids pour chaque espèce.')
 })
+
+const VESSEL_IDENTITY_VALIDATION_SCHEMA: ObjectSchema<any> = object<any>({}) as ObjectSchema<Vessel.VesselIdentity>
 
 export const FORM_VALIDATION_SCHEMA: ObjectSchema<ManualPriorNotificationFormValues> = object({
   didNotFishAfterZeroNotice: boolean().required(),
@@ -39,12 +40,12 @@ export const FORM_VALIDATION_SCHEMA: ObjectSchema<ManualPriorNotificationFormVal
   isExpectedLandingDateSameAsExpectedArrivalDate: boolean().required(),
   note: string(),
   portLocode: string().required("Veuillez indiquer le port d'arrivée."),
-  purpose: mixed<PurposeCode>()
-    .oneOf(Object.values(PurposeCode) as PurposeCode[])
+  purpose: mixed<PriorNotification.PurposeCode>()
+    .oneOf(Object.values(PriorNotification.PurposeCode))
     .required('Veuillez indiquer la raison du préavis.'),
   sentAt: string().required('Veuillez indiquer la date de réception du préavis.'),
   tripGearCodes: array().of(string().required()).ensure().required().min(1, 'Veuillez sélectionner au moins un engin.'),
-  vesselId: number().required('Veuillez indiquer le navire concerné.')
+  vesselIdentity: VESSEL_IDENTITY_VALIDATION_SCHEMA.required('Veuillez indiquer le navire concerné.')
 })
 
 export const INITIAL_FORM_VALUES: ManualPriorNotificationFormValues = {
@@ -62,5 +63,5 @@ export const INITIAL_FORM_VALUES: ManualPriorNotificationFormValues = {
   purpose: PriorNotification.PurposeCode.LAN,
   sentAt: undefined,
   tripGearCodes: [],
-  vesselId: undefined
+  vesselIdentity: undefined
 }

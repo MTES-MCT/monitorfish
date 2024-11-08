@@ -108,7 +108,9 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         note: "Un point d'attention.",
         portLocode: 'FRVNE',
         tripGearCodes: ['OTP', 'PTB'],
-        vesselId: 119
+        vesselIdentity: {
+          vesselId: 119
+        }
       })
 
       // -----------------------------------------------------------------------
@@ -333,7 +335,9 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         note: null,
         portLocode: 'FRVNE',
         tripGearCodes: ['OTB'],
-        vesselId: 113
+        vesselIdentity: {
+          vesselId: 113
+        }
       })
 
       // -----------------------------------------------------------------------
@@ -541,7 +545,9 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         note: null,
         portLocode: 'FRMRS',
         tripGearCodes: ['OTP'],
-        vesselId: 127
+        vesselIdentity: {
+          vesselId: 127
+        }
       })
 
       // -----------------------------------------------------------------------
@@ -586,7 +592,9 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
           note: null,
           portLocode: 'FRMRS',
           tripGearCodes: ['OTP'],
-          vesselId: 127
+          vesselIdentity: {
+            vesselId: 127
+          }
         })
 
         // -----------------------------------------------------------------------
@@ -626,7 +634,9 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
             note: null,
             portLocode: 'FRMRS',
             tripGearCodes: ['OTP'],
-            vesselId: 127
+            vesselIdentity: {
+              vesselId: 127
+            }
           })
         })
       })

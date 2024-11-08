@@ -73,6 +73,7 @@ export namespace Vessel {
     flagState: string
     internalReferenceNumber: string | undefined
     ircs: string | undefined
+    isLessThanTwelveMetersVessel: boolean | undefined
     mmsi: string | undefined
     vesselId: VesselId | undefined
     vesselIdentifier: VesselIdentifier | undefined

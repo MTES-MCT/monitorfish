@@ -7,7 +7,6 @@ import type { ReactNode } from 'react'
 
 type CardHeaderProps = Readonly<{
   children?: ReactNode
-  isLessThanTwelveMetersVessel?: boolean | undefined
   isNewPriorNotification?: boolean
   onClose: () => void
   selectedVesselIdentity: Vessel.VesselIdentity | undefined
@@ -16,7 +15,6 @@ type CardHeaderProps = Readonly<{
 }>
 export function CardHeader({
   children,
-  isLessThanTwelveMetersVessel,
   isNewPriorNotification = false,
   onClose,
   selectedVesselIdentity,
@@ -36,8 +34,8 @@ export function CardHeader({
             {!isNewPriorNotification && (
               <span>
                 PRÉAVIS NAVIRE
-                {isLessThanTwelveMetersVessel !== undefined && (
-                  <>{isLessThanTwelveMetersVessel ? ' < 12 M' : ' ≥ 12 M'}</>
+                {selectedVesselIdentity?.isLessThanTwelveMetersVessel !== undefined && (
+                  <>{selectedVesselIdentity.isLessThanTwelveMetersVessel ? ' < 12 M' : ' ≥ 12 M'}</>
                 )}
               </span>
             )}

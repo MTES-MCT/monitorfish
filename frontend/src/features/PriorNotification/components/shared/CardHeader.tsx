@@ -34,8 +34,8 @@ export function CardHeader({
             {!isNewPriorNotification && (
               <span>
                 PRÉAVIS NAVIRE
-                {selectedVesselIdentity?.isLessThanTwelveMetersVessel !== undefined && (
-                  <>{selectedVesselIdentity.isLessThanTwelveMetersVessel ? ' < 12 M' : ' ≥ 12 M'}</>
+                {selectedVesselIdentity?.vesselLength !== undefined && (
+                  <>{selectedVesselIdentity.vesselLength < 12 ? ' < 12 M' : ' ≥ 12 M'}</>
                 )}
               </span>
             )}

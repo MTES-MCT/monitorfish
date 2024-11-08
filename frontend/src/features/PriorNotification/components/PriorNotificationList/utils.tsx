@@ -293,12 +293,12 @@ export function getVesselIdentityFromPriorNotification(
     flagState: priorNotification.vesselFlagCountryCode ?? UNKNOWN_COUNTRY_CODE,
     internalReferenceNumber: priorNotification.vesselInternalReferenceNumber,
     ircs: priorNotification.vesselIrcs,
-    isLessThanTwelveMetersVessel: priorNotification.vesselLength ? priorNotification.vesselLength < 12 : undefined,
     mmsi: priorNotification.vesselMmsi,
     vesselId: priorNotification.vesselId,
     // In practice, prior notifications always have a vessel CFR (`vesselInternalReferenceNumber`)
     // despite the `| undefined`
     vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+    vesselLength: priorNotification.vesselLength,
     vesselName: priorNotification.vesselName
   }
 }

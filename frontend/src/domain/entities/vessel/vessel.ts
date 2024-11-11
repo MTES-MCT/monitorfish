@@ -154,6 +154,7 @@ export class Vessel {
     selectedBaseLayer === BaseLayers.SATELLITE.code || selectedBaseLayer === BaseLayers.DARK.code
 }
 
+/** @deprecated Use `extractVesselIdentityProps()` from `@features/Vessel/utils`. */
 export const getOnlyVesselIdentityProperties = (
   vessel:
     | VesselTypes.VesselEnhancedObject

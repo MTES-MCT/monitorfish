@@ -81,7 +81,7 @@ export function ManualPriorNotificationForm() {
         ? priorNotificationData.expectedArrivalDate
         : priorNotificationData.expectedLandingDate,
       fishingCatches: getFormDataFishingCatchesFromFormValuesFishingCatches(fishingCatches)
-    } as PriorNotification.NewManualForm
+    } as PriorNotification.ManualForm
 
     await dispatch(
       createOrUpdateManualPriorNotification(openedPriorNotificationDetail?.reportId, newOrNextPriorNotificationData)

@@ -1,20 +1,21 @@
 import { RtkCacheTagType } from '@api/constants'
-import { getVesselIdentityAsEmptyStringWhenNull } from '@api/vessel'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { getUrlOrPathWithQueryParams } from '@utils/getUrlOrPathWithQueryParams'
 import { displayedErrorActions } from 'domain/shared_slices/DisplayedError'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
 
+import { getVesselIdentityPropsAsEmptyStringsWhenUndefined } from './utils'
 import { monitorfishApi } from '../../api/api'
 
 import type { Vessel } from './Vessel.types'
 import type { VesselReportings } from '@features/Reporting/types'
 import type { RiskFactor } from 'domain/entities/vessel/riskFactor/types'
-import type { VesselIdentity, VesselLastPosition } from 'domain/entities/vessel/types'
+import type { VesselLastPosition } from 'domain/entities/vessel/types'
 
 const GET_VESSEL_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations de ce navire."
 const GET_VESSEL_REPORTINGS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les signalements de ce navire."
+const SEARCH_VESSELS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les navires correspondants à cette recherche."
 
 export const vesselApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
@@ -31,7 +32,7 @@ export const vesselApi = monitorfishApi.injectEndpoints({
 
     getVesselReportingsByVesselIdentity: builder.query<
       VesselReportings,
-      { fromDate: string; vesselIdentity: VesselIdentity }
+      { fromDate: string; vesselIdentity: Vessel.VesselIdentity }
     >({
       // TODO Create a common generic handler since this pattern could be used with a few other RTK query hooks.
       onQueryStarted: async (_args, { dispatch, queryFulfilled }) => {
@@ -55,7 +56,7 @@ export const vesselApi = monitorfishApi.injectEndpoints({
       providesTags: () => [{ type: RtkCacheTagType.Reportings }],
       query: ({ fromDate, vesselIdentity }) =>
         getUrlOrPathWithQueryParams('/vessels/reportings', {
-          ...getVesselIdentityAsEmptyStringWhenNull(vesselIdentity),
+          ...getVesselIdentityPropsAsEmptyStringsWhenUndefined(vesselIdentity),
           fromDate
         }),
       transformErrorResponse: response => new FrontendApiError(GET_VESSEL_REPORTINGS_ERROR_MESSAGE, response)
@@ -63,6 +64,11 @@ export const vesselApi = monitorfishApi.injectEndpoints({
 
     getVesselsLastPositions: builder.query<VesselLastPosition[], void>({
       query: () => `/vessels`
+    }),
+
+    searchVessels: builder.query<Vessel.VesselIdentity[], Vessel.ApiSearchFilter>({
+      query: filter => getUrlOrPathWithQueryParams('/vessels/search', filter),
+      transformErrorResponse: response => new FrontendApiError(SEARCH_VESSELS_ERROR_MESSAGE, response)
     })
   })
 })

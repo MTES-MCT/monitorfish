@@ -1,51 +1,61 @@
 import { CountryFlag } from '@components/CountryFlag'
-import { useGetVesselQuery } from '@features/Vessel/vesselApi'
 import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
-import { skipToken } from '@reduxjs/toolkit/query'
 import styled, { keyframes } from 'styled-components'
 
-import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { ReactNode } from 'react'
 
 type CardHeaderProps = Readonly<{
   children?: ReactNode
-  detail: PriorNotification.Detail | undefined
+  isNewPriorNotification?: boolean
   onClose: () => void
-  vesselId: number | undefined
+  selectedVesselIdentity: Vessel.VesselIdentity | undefined
   withCloseButton?: boolean
+  withFirstTitleRow?: boolean
 }>
-export function CardHeader({ children, detail, onClose, vesselId, withCloseButton = false }: CardHeaderProps) {
-  const { data: vessel } = useGetVesselQuery(vesselId ?? skipToken)
-
-  const isNewPriorNotification = !detail
-
+export function CardHeader({
+  children,
+  isNewPriorNotification = false,
+  onClose,
+  selectedVesselIdentity,
+  withCloseButton = false,
+  withFirstTitleRow = false
+}: CardHeaderProps) {
   return (
     <Wrapper>
       <Title>
-        <TitleRow>
-          <TitleRowIconBox>
-            <Icon.Fishery />
-          </TitleRowIconBox>
+        {withFirstTitleRow && (
+          <TitleRow>
+            <TitleRowIconBox>
+              <Icon.Fishery />
+            </TitleRowIconBox>
 
-          {isNewPriorNotification && <span>AJOUTER UN NOUVEAU PRÉAVIS</span>}
-          {!isNewPriorNotification && (
-            <span>{`PRÉAVIS NAVIRE ${detail.isLessThanTwelveMetersVessel ? '< 12 M' : '≥ 12 M'}`}</span>
-          )}
-        </TitleRow>
+            {isNewPriorNotification && <span>AJOUTER UN NOUVEAU PRÉAVIS</span>}
+            {!isNewPriorNotification && (
+              <span>
+                PRÉAVIS NAVIRE
+                {selectedVesselIdentity?.vesselLength !== undefined && (
+                  <>{selectedVesselIdentity.vesselLength < 12 ? ' < 12 M' : ' ≥ 12 M'}</>
+                )}
+              </span>
+            )}
+          </TitleRow>
+        )}
 
         {!isNewPriorNotification && (
           <TitleRow>
             <TitleRowIconBox>
-              {vessel ? (
-                <CountryFlag countryCode={vessel.flagState} size={[24, 18]} />
+              {selectedVesselIdentity ? (
+                <CountryFlag countryCode={selectedVesselIdentity.flagState} size={[24, 18]} />
               ) : (
                 <Loader $height={18} $width={24} />
               )}
             </TitleRowIconBox>
 
-            {vessel ? (
+            {selectedVesselIdentity ? (
               <span>
-                <VesselName>{vessel.vesselName ?? '...'}</VesselName> ({vessel.internalReferenceNumber ?? '...'})
+                <VesselName>{selectedVesselIdentity.vesselName ?? '...'}</VesselName> (
+                {selectedVesselIdentity.internalReferenceNumber ?? '...'})
               </span>
             ) : (
               <Loader $height={22} />

@@ -1,5 +1,5 @@
 import type { RiskFactor } from 'domain/entities/vessel/riskFactor/types'
-import type { VesselLastPosition } from 'domain/entities/vessel/types'
+import type { VesselId, VesselIdentifier, VesselLastPosition } from 'domain/entities/vessel/types'
 
 export namespace Vessel {
   export type Beacon = {
@@ -64,5 +64,26 @@ export namespace Vessel {
   export type AugmentedSelectedVessel = SelectedVessel & {
     hasAlert: boolean
     hasInfractionSuspicion: boolean
+  }
+
+  export type VesselIdentity = {
+    beaconNumber: number | undefined
+    districtCode: string | undefined
+    externalReferenceNumber: string | undefined
+    flagState: string
+    internalReferenceNumber: string | undefined
+    ircs: string | undefined
+    mmsi: string | undefined
+    vesselId: VesselId | undefined
+    vesselIdentifier: VesselIdentifier | undefined
+    vesselLength: number | undefined
+    vesselName: string | undefined
+  }
+
+  // ---------------------------------------------------------------------------
+  // API
+
+  export type ApiSearchFilter = {
+    searched: string
   }
 }

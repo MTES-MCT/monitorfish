@@ -1,127 +1,98 @@
-import { useClickOutsideWhenOpenedWithinRef } from '@hooks/useClickOutsideWhenOpenedWithinRef'
-import { useEscapeFromKeyboard } from '@hooks/useEscapeFromKeyboard'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { Accent, Icon, IconButton, Link, useFieldControl, useKey } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, Link, useClickOutsideEffect, useFieldControl } from '@mtes-mct/monitor-ui'
 import Fuse from 'fuse.js'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { VESSEL_SEARCH_OPTIONS } from './constants'
-import { enrichWithVesselIdentifierIfNotFound, removeDuplicatedFoundVessels } from './utils'
+import { enrichWithVesselIdentifierIfUndefined } from './utils'
 import { VesselSearchResult } from './VesselSearchResult'
-import { searchVessels as searchVesselsAction } from '../../../../domain/use_cases/vessel/searchVessels'
-import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
+import { searchVessel } from '../../useCases/searchVessels'
 
-import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
+import type { Vessel } from '../../Vessel.types'
+import type { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import type { ChangeEvent, InputHTMLAttributes, MutableRefObject } from 'react'
 import type { Promisable } from 'type-fest'
 
-type VesselSearchProps = Readonly<
-  Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'> & {
+export type VesselSearchProps = Readonly<
+  Omit<InputHTMLAttributes<HTMLInputElement>, 'defaultValue' | 'onChange' | 'value'> & {
     baseRef?: MutableRefObject<HTMLDivElement | undefined> | undefined
-    cachedVesselIdentities?: VesselIdentity[]
-    extendedWidth?: number | undefined
+    displayedErrorKey: DisplayedErrorKey
     hasError?: boolean | undefined
-    isExtended?: boolean | undefined
-    isLastSearchedVesselsShowed?: boolean
-    isLinkToVesselSidebarDisplayed?: boolean
     isVesselIdRequiredFromResults?: boolean
-    onChange: (selectedVessel: VesselIdentity | undefined) => Promisable<void>
-    onClickOutsideOrEscape?: () => Promisable<void>
-    onInputClick?: () => Promisable<void>
-    value?: VesselIdentity | undefined
+    onBlur?: () => Promisable<void>
+    onChange: (nextVessel: Vessel.VesselIdentity | undefined) => Promisable<void>
+    onFocus?: () => Promisable<void>
+    onVesselLinkClick?: (vessel: Vessel.VesselIdentity) => Promisable<void>
+    shouldCloseOnClickOutside?: boolean
+    value?: Vessel.VesselIdentity | undefined
+    vesselIdentitiesFromLastPositions?: Vessel.VesselIdentity[]
+    withLastSearchResults?: boolean
   }
 >
 export function VesselSearch({
   baseRef,
-  cachedVesselIdentities,
   className,
-  extendedWidth,
+  displayedErrorKey,
   hasError,
-  isExtended = false,
-  isLastSearchedVesselsShowed = false,
-  isLinkToVesselSidebarDisplayed = false,
   isVesselIdRequiredFromResults = false,
+  onBlur,
   onChange,
-  onClickOutsideOrEscape,
-  onInputClick,
+  onFocus,
+  onVesselLinkClick,
+  shouldCloseOnClickOutside,
   style,
   value,
+  vesselIdentitiesFromLastPositions,
+  withLastSearchResults = false,
   ...inputNativeProps
 }: VesselSearchProps) {
-  const dispatch = useMainAppDispatch()
-  const baseUrl = window.location.origin
-  const searchQueryRef = useRef('')
-  const wrapperRef = useRef(null)
-
-  const [foundVessels, setFoundVessels] = useState<VesselIdentity[]>([])
-  const [showLastSearchedVessels, setShowLastSearchedVessels] = useState(false)
-
-  const escapeFromKeyboard = useEscapeFromKeyboard()
-  const clickedOutsideComponent = useClickOutsideWhenOpenedWithinRef(wrapperRef, isExtended, baseRef)
-
   const { controlledOnChange: handleOnChange, controlledValue: selectedVessel } = useFieldControl(value, onChange)
 
-  const key = useKey([selectedVessel])
   const flagState = selectedVessel?.flagState
   const vesselName = selectedVessel?.vesselName ?? undefined
 
-  const clean = useCallback(async () => {
-    searchQueryRef.current = ''
+  const dispatch = useMainAppDispatch()
+  const baseUrl = window.location.origin
+  const wrapperRef = useRef(null)
 
+  const [foundVessels, setFoundVessels] = useState<Vessel.VesselIdentity[]>([])
+  const [inputValue, setInputValue] = useState(selectedVessel?.vesselName ?? '')
+  const [isOpen, setIsOpen] = useState(false)
+
+  const fuse = useMemo(
+    () =>
+      vesselIdentitiesFromLastPositions
+        ? new Fuse(vesselIdentitiesFromLastPositions, VESSEL_SEARCH_OPTIONS)
+        : undefined,
+    [vesselIdentitiesFromLastPositions]
+  )
+
+  const clean = useCallback(async () => {
     setFoundVessels([])
-    setShowLastSearchedVessels(false)
+    setInputValue('')
+    setIsOpen(false)
 
     handleOnChange(undefined)
   }, [handleOnChange])
 
   const selectVessel = useCallback(
-    vesselIdentity => {
-      const vesselWithIdentifier = enrichWithVesselIdentifierIfNotFound(vesselIdentity)
+    (vesselIdentity: Vessel.VesselIdentity) => {
+      const vesselWithIdentifier = enrichWithVesselIdentifierIfUndefined(vesselIdentity)
 
-      setShowLastSearchedVessels(false)
-      setFoundVessels([])
+      setInputValue(vesselWithIdentifier.vesselName ?? '')
+      setIsOpen(false)
 
       handleOnChange(vesselWithIdentifier)
     },
     [handleOnChange]
   )
 
-  const onVesselInputClick = useCallback(() => {
-    setShowLastSearchedVessels(true)
-    onInputClick?.()
-  }, [onInputClick])
-
-  const fuse = useMemo(
-    () => (cachedVesselIdentities ? new Fuse(cachedVesselIdentities, VESSEL_SEARCH_OPTIONS) : undefined),
-    [cachedVesselIdentities]
-  )
-
-  const findVessels = useCallback(
-    async (searchQuery: string) => {
-      const foundVesselIdentitiesFromCache = fuse?.search(searchQuery).map(result => result.item) ?? []
-
-      const foundVesselsFromApi = await dispatch(searchVesselsAction(searchQuery.toUpperCase()))
-      if (!foundVesselsFromApi) {
-        return isVesselIdRequiredFromResults
-          ? foundVesselIdentitiesFromCache.filter(foundVesselIdentity => !!foundVesselIdentity.vesselId)
-          : foundVesselIdentitiesFromCache
-      }
-
-      const nextFoundVessels = removeDuplicatedFoundVessels(foundVesselsFromApi, foundVesselIdentitiesFromCache)
-      const filteredVessels = isVesselIdRequiredFromResults
-        ? nextFoundVessels.filter(_vessel => _vessel.vesselId)
-        : nextFoundVessels
-
-      return filteredVessels
-    },
-    [dispatch, isVesselIdRequiredFromResults, fuse]
-  )
-
   const handleChange = useCallback(
     async (event: ChangeEvent<HTMLInputElement>) => {
       const searchQuery = event.target.value
-      searchQueryRef.current = searchQuery
+
+      setInputValue(searchQuery)
 
       if (searchQuery.length <= 1) {
         setFoundVessels([])
@@ -129,62 +100,62 @@ export function VesselSearch({
         return
       }
 
-      const nextFoundVessels = await findVessels(searchQuery)
-      setShowLastSearchedVessels(false)
+      const nextFoundVessels = await dispatch(
+        searchVessel(searchQuery, isVesselIdRequiredFromResults, fuse, displayedErrorKey)
+      )
+
       setFoundVessels(nextFoundVessels)
     },
-    [findVessels]
+    [dispatch, displayedErrorKey, fuse, isVesselIdRequiredFromResults]
   )
 
-  useEffect(() => {
-    if (!isLastSearchedVesselsShowed) {
+  const handleClickOutside = useCallback(() => {
+    if (!shouldCloseOnClickOutside) {
       return
     }
 
-    setShowLastSearchedVessels(isLastSearchedVesselsShowed)
-  }, [isLastSearchedVesselsShowed])
+    setIsOpen(false)
 
-  // TODO Replace with existing hooks.
-  useEffect(() => {
-    if (clickedOutsideComponent ?? escapeFromKeyboard) {
-      setShowLastSearchedVessels(false)
+    onBlur?.()
+  }, [onBlur, shouldCloseOnClickOutside])
 
-      onClickOutsideOrEscape?.()
-    }
-  }, [clickedOutsideComponent, escapeFromKeyboard, onClickOutsideOrEscape])
+  const handleFocus = () => {
+    setIsOpen(true)
 
-  function handleShowVessel() {
-    if (!selectedVessel) {
-      return
-    }
-
-    dispatch(showVessel(selectedVessel, false, true))
+    onFocus?.()
   }
 
+  const handleShowVessel = () => {
+    if (!selectedVessel || !onVesselLinkClick) {
+      return
+    }
+
+    onVesselLinkClick(selectedVessel)
+  }
+
+  useEffect(() => {
+    setInputValue(selectedVessel?.vesselName ?? '')
+  }, [selectedVessel])
+
+  useClickOutsideEffect(wrapperRef, handleClickOutside, baseRef?.current)
+
   return (
-    <Wrapper
-      ref={wrapperRef}
-      $extendedWidth={extendedWidth}
-      $isExtended={isExtended}
-      className={className}
-      style={style}
-    >
+    <Wrapper ref={wrapperRef} className={className} style={style}>
       <InputWrapper>
         <Input
-          key={key}
           $baseUrl={baseUrl}
           $flagState={flagState}
           $hasError={hasError}
           data-cy="VesselSearch-input"
           onChange={handleChange}
-          onClick={onVesselInputClick}
+          onFocus={handleFocus}
           placeholder="Rechercher un navire..."
           type="text"
-          value={vesselName}
+          value={inputValue}
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...inputNativeProps}
         />
-        {vesselName && isLinkToVesselSidebarDisplayed && (
+        {selectedVessel && onVesselLinkClick && (
           <>
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <Link
@@ -205,23 +176,22 @@ export function VesselSearch({
           />
         )}
       </InputWrapper>
-      <VesselSearchResult
-        foundVessels={foundVessels}
-        searchQuery={searchQueryRef.current}
-        selectVessel={selectVessel}
-        showLastSearchedVessels={showLastSearchedVessels}
-      />
+      {isOpen && (
+        <VesselSearchResult
+          foundVessels={foundVessels}
+          onSelect={selectVessel}
+          searchQuery={inputValue}
+          withLastSearchResults={withLastSearchResults}
+        />
+      )}
     </Wrapper>
   )
 }
 
-const Wrapper = styled.div<{
-  $extendedWidth: number | undefined
-  $isExtended: boolean
-}>`
+const Wrapper = styled.div`
   box-sizing: border-box;
-  width: ${p => (p.$isExtended && p.$extendedWidth !== undefined ? p.$extendedWidth : 320)}px;
   transition: all 0.7s;
+  width: 320px;
 
   * {
     box-sizing: border-box;

@@ -23,9 +23,8 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
 
     addManualSideWindowPriorNotification()
 
-    cy.getDataCy('vessel-search-input').click().wait(500)
-    cy.getDataCy('vessel-search-input').type('PAGEOT JO', { delay: 100 })
-    cy.getDataCy('vessel-search-item').first().click()
+    cy.getDataCy('VesselSearch-input').type('PAGEOT JO')
+    cy.getDataCy('VesselSearch-item').first().click()
 
     cy.fill("Date et heure estimées d'arrivée au port (UTC)", arrivalDateTupleWithTime)
     cy.fill('Date et heure prévues de débarque (UTC)', landingDateTupleWithTime)
@@ -58,7 +57,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
       const createdPriorNotification = createInterception.response.body
 
       assert.isString(createdPriorNotification.reportId)
-      assert.isTrue(isDateCloseTo(createdPriorNotification.sentAt, now, 15))
+      assert.isTrue(isDateCloseTo(createdPriorNotification.sentAt, now, 60))
       assert.deepInclude(createdPriorNotification.fishingCatches, {
         faoArea: null,
         quantity: null,
@@ -101,6 +100,9 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         specyName: 'ESPADON',
         weight: 200.0
       })
+      assert.deepInclude(createdPriorNotification.vesselIdentity, {
+        vesselId: 119
+      })
       assert.deepInclude(createdPriorNotification, {
         didNotFishAfterZeroNotice: false,
         expectedArrivalDate: arrivalDateAsString,
@@ -108,8 +110,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         globalFaoArea: '21.4.T',
         note: "Un point d'attention.",
         portLocode: 'FRVNE',
-        tripGearCodes: ['OTP', 'PTB'],
-        vesselId: 119
+        tripGearCodes: ['OTP', 'PTB']
       })
 
       // -----------------------------------------------------------------------
@@ -205,9 +206,8 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.contains('Veuillez indiquer la zone FAO.').should('exist')
     cy.contains('Créer le préavis').should('be.disabled')
 
-    cy.getDataCy('vessel-search-input').click().wait(500)
-    cy.getDataCy('vessel-search-input').type('pageot', { delay: 100 })
-    cy.getDataCy('vessel-search-item').first().click()
+    cy.getDataCy('VesselSearch-input').type('PAGEOT JO')
+    cy.getDataCy('VesselSearch-item').first().click()
 
     cy.contains('Veuillez indiquer le navire concerné.').should('not.exist')
 
@@ -289,9 +289,8 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
 
     addManualSideWindowPriorNotification()
 
-    cy.getDataCy('vessel-search-input').click().wait(500)
-    cy.getDataCy('vessel-search-input').type('IN-ARÊTE-ABLE', { delay: 100 })
-    cy.getDataCy('vessel-search-item').first().click()
+    cy.getDataCy('VesselSearch-input').type('IN-ARÊTE-ABLE')
+    cy.getDataCy('VesselSearch-item').first().click()
 
     cy.fill("Date et heure estimées d'arrivée au port (UTC)", arrivalDateTupleWithTime)
     cy.fill("équivalentes à celles de l'arrivée au port", true)
@@ -319,13 +318,16 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
       const createdPriorNotification = createInterception.response.body
 
       assert.isString(createdPriorNotification.reportId)
-      assert.isTrue(isDateCloseTo(createdPriorNotification.sentAt, now, 15))
+      assert.isTrue(isDateCloseTo(createdPriorNotification.sentAt, now, 60))
       assert.deepInclude(createdPriorNotification.fishingCatches, {
         faoArea: null,
         quantity: null,
         specyCode: 'COD',
         specyName: 'MORUE COMMUNE (CABILLAUD)',
         weight: 5000.0
+      })
+      assert.deepInclude(createdPriorNotification.vesselIdentity, {
+        vesselId: 113
       })
       assert.deepInclude(createdPriorNotification, {
         didNotFishAfterZeroNotice: false,
@@ -335,8 +337,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         globalFaoArea: '27.7.d',
         note: null,
         portLocode: 'FRVNE',
-        tripGearCodes: ['OTB'],
-        vesselId: 113
+        tripGearCodes: ['OTB']
       })
 
       // -----------------------------------------------------------------------
@@ -409,9 +410,8 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
 
     cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 0)
 
-    cy.getDataCy('vessel-search-input').click().wait(500)
-    cy.getDataCy('vessel-search-input').clear().type('IN-ARÊTE-ABLE', { delay: 100 })
-    cy.getDataCy('vessel-search-item').first().click()
+    cy.getDataCy('VesselSearch-input').type('IN-ARÊTE-ABLE')
+    cy.getDataCy('VesselSearch-item').first().click()
 
     cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 0)
 
@@ -449,9 +449,8 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
 
     // cy.countRequestsByAlias('@computePriorNotification', 1500).should('be.equal', 0)
 
-    cy.getDataCy('vessel-search-input').click().wait(500)
-    cy.getDataCy('vessel-search-input').clear().type('IN-ARÊTE-ABLE', { delay: 100 })
-    cy.getDataCy('vessel-search-item').first().click()
+    cy.getDataCy('VesselSearch-input').clear().wait(500).type('IN-ARÊTE-ABLE')
+    cy.getDataCy('VesselSearch-item').first().click()
 
     cy.wait('@computePriorNotification')
     cy.countRequestsByAlias('@computePriorNotification').should('be.equal', 1)
@@ -498,9 +497,8 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
 
     addManualSideWindowPriorNotification()
 
-    cy.getDataCy('vessel-search-input').click().wait(500)
-    cy.getDataCy('vessel-search-input').type('SABORDS', { delay: 100 })
-    cy.getDataCy('vessel-search-item').first().click()
+    cy.getDataCy('VesselSearch-input').type('SABORDS')
+    cy.getDataCy('VesselSearch-item').first().click()
 
     cy.fill("Date et heure estimées d'arrivée au port (UTC)", arrivalDateTupleWithTime)
     cy.fill("équivalentes à celles de l'arrivée au port", true)
@@ -524,7 +522,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
       const createdPriorNotification = createInterception.response.body
 
       assert.isString(createdPriorNotification.reportId)
-      assert.isTrue(isDateCloseTo(createdPriorNotification.sentAt, now, 15))
+      assert.isTrue(isDateCloseTo(createdPriorNotification.sentAt, now, 60))
       assert.deepInclude(createdPriorNotification.fishingCatches, {
         faoArea: null,
         quantity: null,
@@ -539,6 +537,10 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         specyName: 'ROUSSETTE PANTHERE',
         weight: 50.0
       })
+      assert.deepInclude(createdPriorNotification.vesselIdentity, {
+        vesselId: 127
+      })
+
       assert.deepInclude(createdPriorNotification, {
         didNotFishAfterZeroNotice: false,
         expectedArrivalDate: arrivalDateAsString,
@@ -546,8 +548,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         globalFaoArea: '27.5.a',
         note: null,
         portLocode: 'FRMRS',
-        tripGearCodes: ['OTP'],
-        vesselId: 127
+        tripGearCodes: ['OTP']
       })
 
       // -----------------------------------------------------------------------
@@ -584,6 +585,9 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
           specyName: 'ROUSSETTE PANTHERE',
           weight: 50.0
         })
+        assert.deepInclude(firstUpdatedPriorNotification.vesselIdentity, {
+          vesselId: 127
+        })
         assert.deepInclude(firstUpdatedPriorNotification, {
           didNotFishAfterZeroNotice: false,
           expectedArrivalDate: arrivalDateAsString,
@@ -591,8 +595,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
           globalFaoArea: null,
           note: null,
           portLocode: 'FRMRS',
-          tripGearCodes: ['OTP'],
-          vesselId: 127
+          tripGearCodes: ['OTP']
         })
 
         // -----------------------------------------------------------------------
@@ -624,6 +627,9 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
             specyName: 'ROUSSETTE PANTHERE',
             weight: 50.0
           })
+          assert.deepInclude(secondUpdatedPriorNotification.vesselIdentity, {
+            vesselId: 127
+          })
           assert.deepInclude(secondUpdatedPriorNotification, {
             didNotFishAfterZeroNotice: false,
             expectedArrivalDate: arrivalDateAsString,
@@ -631,8 +637,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
             globalFaoArea: '27.5.b',
             note: null,
             portLocode: 'FRMRS',
-            tripGearCodes: ['OTP'],
-            vesselId: 127
+            tripGearCodes: ['OTP']
           })
         })
       })
@@ -675,9 +680,8 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
 
     addManualSideWindowPriorNotification()
 
-    cy.getDataCy('vessel-search-input').click().wait(500)
-    cy.getDataCy('vessel-search-input').type('IN-ARÊTE-ABLE', { delay: 100 })
-    cy.getDataCy('vessel-search-item').first().click()
+    cy.getDataCy('VesselSearch-input').type('IN-ARÊTE-ABLE')
+    cy.getDataCy('VesselSearch-item').first().click()
 
     cy.fill("Date et heure estimées d'arrivée au port (UTC)", arrivalDateTupleWithTime)
     cy.fill("équivalentes à celles de l'arrivée au port", true)

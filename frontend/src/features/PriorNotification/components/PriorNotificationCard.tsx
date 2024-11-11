@@ -16,12 +16,12 @@ import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import styled from 'styled-components'
 import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
 
-import { Header } from './Header'
-import { SideWindowCard } from '../../../../components/SideWindowCard'
-import { priorNotificationActions } from '../../slice'
-import { CardBanner } from '../shared/CardBanner'
-import { CardBodyHead } from '../shared/CardBodyHead'
-import { DownloadButton } from '../shared/DownloadButton'
+import { SideWindowCard } from '../../../components/SideWindowCard'
+import { priorNotificationActions } from '../slice'
+import { CardBanner } from './shared/CardBanner'
+import { CardBodyHead } from './shared/CardBodyHead'
+import { CardHeader } from './shared/CardHeader'
+import { DownloadButton } from './shared/DownloadButton'
 
 type PriorNotificationCardProps = Readonly<{
   bodyChildren?: React.ReactNode
@@ -90,7 +90,7 @@ export function PriorNotificationCard({
       )}
 
       <FrontendErrorBoundary>
-        <Header detail={detail} onClose={close} />
+        <CardHeader onClose={close} selectedVesselIdentity={detail.vesselIdentity} withCloseButton withFirstTitleRow />
 
         <Body>
           <CardBodyHead

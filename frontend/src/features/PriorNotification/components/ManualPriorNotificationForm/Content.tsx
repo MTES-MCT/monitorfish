@@ -94,7 +94,7 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
   }
 
   const updateComputedValues = useDebouncedCallback(
-    (nextComputationRequestData: PriorNotification.ManualComputeRequestData) => {
+    (nextComputationRequestData: PriorNotification.ApiManualComputeRequestData) => {
       dispatch(updateManualPriorNotificationComputedValues(nextComputationRequestData))
     },
     1000
@@ -159,7 +159,13 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
       )}
 
       <FrontendErrorBoundary>
-        <CardHeader detail={detail} onClose={handleClose} vesselId={values.vesselId} withCloseButton />
+        <CardHeader
+          isNewPriorNotification={isNewPriorNotification}
+          onClose={handleClose}
+          selectedVesselIdentity={values.vesselIdentity}
+          withCloseButton
+          withFirstTitleRow
+        />
 
         <Body data-cy="ManualPriorNotificationForm-Body">
           <CardBodyHead

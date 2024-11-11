@@ -7,13 +7,13 @@ import { skipToken } from '@reduxjs/toolkit/query'
 
 import { Content } from './Content'
 
-import type { VesselIdentity } from 'domain/entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 type CurrentReportingListProps = Readonly<{
   className?: string
   onIsDirty?: (isDirty: boolean) => void
   startDate?: Date
-  vesselIdentity: VesselIdentity | undefined
+  vesselIdentity: Vessel.VesselIdentity | undefined
   withOpenedNewReportingForm?: boolean
   withVesselSidebarHistoryLink?: boolean
 }>

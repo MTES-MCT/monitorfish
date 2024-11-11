@@ -2,7 +2,6 @@ import { Icon } from '@mtes-mct/monitor-ui'
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import ChevronIconSVG from '../../../../../../icons/Chevron_simple_gris.svg?react'
 import { WeightType } from '../../constants'
 
 import type { CatchWithProperties, ProtectedCatchWithProperties } from '../../../types'
@@ -38,17 +37,17 @@ export function SpecyCatch({
         <SpecyName title={specyFullName}>{specyFullName}</SpecyName>
         <SpecyWeight title={`${specyCatch.weight} kg (${weightType})`}>
           <SpecyWeightLabel>Poids total ({weightType})</SpecyWeightLabel>
-          <SpecyWeightValue data-cy="SpecyCatch-weight">
+          <SpecyWeightValue $width={58} data-cy="SpecyCatch-weight">
             {specyCatch.weight ? `${specyCatch.weight} kg` : <NoValue>-</NoValue>}
           </SpecyWeightValue>
         </SpecyWeight>
         {specyCatch.nbFish > 0 && (
           <SpecyWeight title={`${specyCatch.nbFish} pièces`}>
             <SpecyWeightLabel>Pc.</SpecyWeightLabel>
-            <SpecyWeightValue>{specyCatch.nbFish || <NoValue>-</NoValue>}</SpecyWeightValue>
+            <SpecyWeightValue $width={38}>{specyCatch.nbFish || <NoValue>-</NoValue>}</SpecyWeightValue>
           </SpecyWeight>
         )}
-        {isOpenable && <ChevronIcon $isOpen={isOpen} />}
+        {isOpenable && <ChevronIcon $isOpen={isOpen} size={17} />}
       </Title>
       <Content $isOpen={isOpen} $isProtectedSpecy={isProtectedSpecy} $length={specyCatch.properties.length || 1}>
         {specyCatch.properties.length > 1 && (
@@ -82,7 +81,6 @@ const Title = styled.div<{
   border-bottom: ${p => (p.$isOpen ? `1px solid ${p.theme.color.lightGray}` : 'unset')};
   cursor: ${p => (p.$isOpenable ? 'pointer' : 'unset')};
   display: flex;
-  flex-wrap: wrap;
   overflow: hidden;
   padding: 8px 0;
   user-select: none;
@@ -94,8 +92,9 @@ const SpecyName = styled.span<HTMLProps<HTMLDivElement>>`
   font-size: 13px;
   line-height: 18px;
   margin-left: 16px;
-  max-width: 180px;
-  min-width: 180px;
+  max-width: 168px;
+  min-width: 168px;
+  padding-right: 12px;
   overflow: hidden !important;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -106,23 +105,26 @@ const SpecyWeight = styled.span`
   flex-grow: 1;
   font-size: 13px;
   line-height: 18px;
-  margin-left: 12px;
+  padding-right: 12px;
+  white-space: nowrap;
 `
 
-const SpecyWeightLabel = styled.div`
+const SpecyWeightLabel = styled.span`
   color: ${p => p.theme.color.slateGray};
   display: inline-block;
   font-size: 13px;
 `
 
-const SpecyWeightValue = styled.span`
+const SpecyWeightValue = styled.span<{
+  $width: number
+}>`
   display: inline-block;
   height: 20px;
   margin-left: 8px;
   overflow: hidden;
   text-overflow: ellipsis;
   vertical-align: top;
-  width: 60px;
+  width: ${p => p.$width}px;
 `
 
 const Species = styled.li`
@@ -149,14 +151,12 @@ const Content = styled.div<{
   transition: 0.2s all;
 `
 
-const ChevronIcon = styled(ChevronIconSVG)<{
+const ChevronIcon = styled(Icon.Chevron)<{
   $isOpen: boolean
 }>`
-  float: right;
   margin-right: 12px;
   transform: rotate(${p => (p.$isOpen ? 0 : 180)}deg);
   transition: all 0.2s ease forwards;
-  width: 17px;
 `
 
 const NoValue = styled.span`

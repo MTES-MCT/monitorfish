@@ -4,12 +4,13 @@ import { CurrentReportingList } from '@features/Reporting/components/CurrentRepo
 import { ReportingListSummary } from '@features/Reporting/components/ReportingListSummary'
 import { getDefaultReportingsStartDate } from '@features/Reporting/utils'
 import { vesselActions } from '@features/Vessel/slice'
+import { getVesselIdentityFromLegacyVesselIdentity } from '@features/Vessel/utils'
 import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { customDayjs, THEME } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { VesselReportingListTab } from './constants'
@@ -17,12 +18,20 @@ import { ArchivedReportingList } from '../../../../Reporting/components/Archived
 
 export function ReportingList() {
   const dispatch = useMainAppDispatch()
-  const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
+  const selectedLegacyVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
   const selectedVesselSidebarReportingListTab = useMainAppSelector(
     state => state.vessel.selectedVesselSidebarReportingListTab
   )
 
   const [startDate, setStartDate] = useState(getDefaultReportingsStartDate())
+
+  const selectedVesselIdentity = useMemo(
+    () =>
+      selectedLegacyVesselIdentity
+        ? getVesselIdentityFromLegacyVesselIdentity(selectedLegacyVesselIdentity)
+        : undefined,
+    [selectedLegacyVesselIdentity]
+  )
 
   const { data: vesselReportings } = useGetVesselReportingsByVesselIdentityQuery(
     selectedVesselIdentity

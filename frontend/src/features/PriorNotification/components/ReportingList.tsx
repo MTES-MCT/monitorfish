@@ -4,6 +4,7 @@ import { CurrentReportingList } from '@features/Reporting/components/CurrentRepo
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon, LinkButton } from '@mtes-mct/monitor-ui'
+import { assertNotNullish } from '@utils/assertNotNullish'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import { useCallback, useState } from 'react'
 import styled from 'styled-components'
@@ -13,19 +14,18 @@ import { CardHeader } from './shared/CardHeader'
 
 export function ReportingList() {
   const dispatch = useMainAppDispatch()
-  const openedPriorNotificationDetail = useMainAppSelector(
-    store => store.priorNotification.openedPriorNotificationDetail
+  const isPriorNotificationCardOpened = useMainAppSelector(
+    store => !!store.priorNotification.openedPriorNotificationComponentType
   )
   const isReportingFormDirty = useMainAppSelector(store => store.priorNotification.isReportingFormDirty)
+  const vesselIdentity = useMainAppSelector(store => store.priorNotification.openedReportingListVesselIdentity)
+  assertNotNullish(vesselIdentity)
   const isSuperUser = useIsSuperUser()
 
   const [isCancellationConfirmationModalOpen, setIsCancellationConfirmationModalOpen] = useState(false)
 
-  const vesselId = openedPriorNotificationDetail?.vesselId
-  const vesselIdentity = openedPriorNotificationDetail?.vesselIdentity
-
   const close = () => {
-    dispatch(priorNotificationActions.setIsReportingListOpened(false))
+    dispatch(priorNotificationActions.closeReportingList())
   }
 
   const closeCancellationConfirmationModal = () => {
@@ -52,16 +52,23 @@ export function ReportingList() {
   return (
     <>
       <StyledCard $isSuperUser={isSuperUser} onBackgroundClick={handleClose}>
-        <CardHeader detail={openedPriorNotificationDetail} onClose={handleClose} vesselId={vesselId}>
-          <StyledLinkButton Icon={Icon.Chevron} onClick={handleClose}>
-            Retourner au préavis
-          </StyledLinkButton>
+        <CardHeader
+          onClose={handleClose}
+          selectedVesselIdentity={vesselIdentity}
+          withCloseButton={!isPriorNotificationCardOpened}
+          withFirstTitleRow={isPriorNotificationCardOpened}
+        >
+          {isPriorNotificationCardOpened && (
+            <StyledLinkButton Icon={Icon.Chevron} onClick={handleClose}>
+              Retourner au préavis
+            </StyledLinkButton>
+          )}
         </CardHeader>
 
         <StyledCurrentReportingList
           onIsDirty={handleIsDirty}
           vesselIdentity={vesselIdentity}
-          withOpenedNewReportingForm
+          withOpenedNewReportingForm={isPriorNotificationCardOpened}
           withVesselSidebarHistoryLink
         />
       </StyledCard>

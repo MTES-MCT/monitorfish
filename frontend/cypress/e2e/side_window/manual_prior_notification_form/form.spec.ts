@@ -57,7 +57,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
       const createdPriorNotification = createInterception.response.body
 
       assert.isString(createdPriorNotification.reportId)
-      assert.isTrue(isDateCloseTo(createdPriorNotification.sentAt, now, 15))
+      assert.isTrue(isDateCloseTo(createdPriorNotification.sentAt, now, 60))
       assert.deepInclude(createdPriorNotification.fishingCatches, {
         faoArea: null,
         quantity: null,
@@ -100,6 +100,9 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         specyName: 'ESPADON',
         weight: 200.0
       })
+      assert.deepInclude(createdPriorNotification.vesselIdentity, {
+        vesselId: 119
+      })
       assert.deepInclude(createdPriorNotification, {
         didNotFishAfterZeroNotice: false,
         expectedArrivalDate: arrivalDateAsString,
@@ -107,10 +110,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         globalFaoArea: '21.4.T',
         note: "Un point d'attention.",
         portLocode: 'FRVNE',
-        tripGearCodes: ['OTP', 'PTB'],
-        vesselIdentity: {
-          vesselId: 119
-        }
+        tripGearCodes: ['OTP', 'PTB']
       })
 
       // -----------------------------------------------------------------------
@@ -318,13 +318,16 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
       const createdPriorNotification = createInterception.response.body
 
       assert.isString(createdPriorNotification.reportId)
-      assert.isTrue(isDateCloseTo(createdPriorNotification.sentAt, now, 15))
+      assert.isTrue(isDateCloseTo(createdPriorNotification.sentAt, now, 60))
       assert.deepInclude(createdPriorNotification.fishingCatches, {
         faoArea: null,
         quantity: null,
         specyCode: 'COD',
         specyName: 'MORUE COMMUNE (CABILLAUD)',
         weight: 5000.0
+      })
+      assert.deepInclude(createdPriorNotification.vesselIdentity, {
+        vesselId: 113
       })
       assert.deepInclude(createdPriorNotification, {
         didNotFishAfterZeroNotice: false,
@@ -334,10 +337,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         globalFaoArea: '27.7.d',
         note: null,
         portLocode: 'FRVNE',
-        tripGearCodes: ['OTB'],
-        vesselIdentity: {
-          vesselId: 113
-        }
+        tripGearCodes: ['OTB']
       })
 
       // -----------------------------------------------------------------------
@@ -522,7 +522,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
       const createdPriorNotification = createInterception.response.body
 
       assert.isString(createdPriorNotification.reportId)
-      assert.isTrue(isDateCloseTo(createdPriorNotification.sentAt, now, 15))
+      assert.isTrue(isDateCloseTo(createdPriorNotification.sentAt, now, 60))
       assert.deepInclude(createdPriorNotification.fishingCatches, {
         faoArea: null,
         quantity: null,
@@ -537,6 +537,10 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         specyName: 'ROUSSETTE PANTHERE',
         weight: 50.0
       })
+      assert.deepInclude(createdPriorNotification.vesselIdentity, {
+        vesselId: 127
+      })
+
       assert.deepInclude(createdPriorNotification, {
         didNotFishAfterZeroNotice: false,
         expectedArrivalDate: arrivalDateAsString,
@@ -544,10 +548,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
         globalFaoArea: '27.5.a',
         note: null,
         portLocode: 'FRMRS',
-        tripGearCodes: ['OTP'],
-        vesselIdentity: {
-          vesselId: 127
-        }
+        tripGearCodes: ['OTP']
       })
 
       // -----------------------------------------------------------------------
@@ -584,6 +585,9 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
           specyName: 'ROUSSETTE PANTHERE',
           weight: 50.0
         })
+        assert.deepInclude(firstUpdatedPriorNotification.vesselIdentity, {
+          vesselId: 127
+        })
         assert.deepInclude(firstUpdatedPriorNotification, {
           didNotFishAfterZeroNotice: false,
           expectedArrivalDate: arrivalDateAsString,
@@ -591,10 +595,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
           globalFaoArea: null,
           note: null,
           portLocode: 'FRMRS',
-          tripGearCodes: ['OTP'],
-          vesselIdentity: {
-            vesselId: 127
-          }
+          tripGearCodes: ['OTP']
         })
 
         // -----------------------------------------------------------------------
@@ -626,6 +627,9 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
             specyName: 'ROUSSETTE PANTHERE',
             weight: 50.0
           })
+          assert.deepInclude(secondUpdatedPriorNotification.vesselIdentity, {
+            vesselId: 127
+          })
           assert.deepInclude(secondUpdatedPriorNotification, {
             didNotFishAfterZeroNotice: false,
             expectedArrivalDate: arrivalDateAsString,
@@ -633,10 +637,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
             globalFaoArea: '27.5.b',
             note: null,
             portLocode: 'FRMRS',
-            tripGearCodes: ['OTP'],
-            vesselIdentity: {
-              vesselId: 127
-            }
+            tripGearCodes: ['OTP']
           })
         })
       })

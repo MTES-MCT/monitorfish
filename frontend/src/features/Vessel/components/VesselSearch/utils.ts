@@ -1,35 +1,8 @@
 import { VesselIdentifier } from '../../../../domain/entities/vessel/types'
 
-import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 
-/**
- * Remove duplicated vessels : keep vessels from APIs when a duplicate is found on either
- * - internalReferenceNumber (CFR) or
- * - vesselId (Vessel internal identifier)
- */
-export function removeDuplicatedFoundVessels(
-  foundVesselsFromAPI: VesselIdentity[],
-  foundVesselsOnMap: VesselIdentity[]
-): VesselIdentity[] {
-  const filteredVesselsFromMap = foundVesselsOnMap.filter(vesselFromMap => {
-    if (!vesselFromMap.internalReferenceNumber) {
-      return true
-    }
-
-    return !foundVesselsFromAPI.some(
-      vesselFromApi =>
-        vesselFromApi.internalReferenceNumber === vesselFromMap.internalReferenceNumber ||
-        (vesselFromApi.vesselId && vesselFromApi.vesselId === vesselFromMap.vesselId)
-    )
-  })
-
-  return foundVesselsFromAPI.concat(filteredVesselsFromMap).slice(0, 50)
-}
-
-export function enrichWithVesselIdentifierIfNotFound(
-  identity: Vessel.VesselEnhancedObject | VesselIdentity
-): VesselIdentity {
+export function enrichWithVesselIdentifierIfUndefined(identity: Vessel.VesselIdentity): Vessel.VesselIdentity {
   if (identity.vesselIdentifier) {
     return identity
   }

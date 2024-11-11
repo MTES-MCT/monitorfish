@@ -15,7 +15,7 @@ export function Footer({ detail, onVerifyAndSend }: FooterProps) {
   return (
     <Button
       accent={Accent.PRIMARY}
-      disabled={isInvalidated || isPendingSend || isVerifiedAndSent}
+      disabled={!!isInvalidated || isPendingSend || isVerifiedAndSent}
       Icon={isVerifiedAndSent ? Icon.Check : Icon.Send}
       onClick={onVerifyAndSend}
       title={

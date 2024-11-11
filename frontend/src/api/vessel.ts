@@ -1,3 +1,7 @@
+import {
+  getVesselIdentityFromLegacyVesselIdentity,
+  getVesselIdentityPropsAsEmptyStringsWhenUndefined
+} from '@features/Vessel/utils'
 import { FrontendApiError } from '@libs/FrontendApiError'
 
 import { monitorfishApiKy } from './api'
@@ -8,24 +12,14 @@ import type { TrackRequest, VesselAndPositions, VesselIdentity, VesselPosition }
 const VESSEL_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations du navire"
 const VESSEL_SEARCH_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les navires dans notre base"
 
-export function getVesselIdentityAsEmptyStringWhenNull(identity: VesselIdentity) {
-  const vesselId = identity.vesselId ?? ''
-  const internalReferenceNumber = identity.internalReferenceNumber ?? ''
-  const externalReferenceNumber = identity.externalReferenceNumber ?? ''
-  const ircs = identity.ircs ?? ''
-  const vesselIdentifier = identity.vesselIdentifier ?? ''
-
-  return { externalReferenceNumber, internalReferenceNumber, ircs, vesselId, vesselIdentifier }
-}
-
 /**
  * Get vessel information and positions
  *
  * @throws {@link FrontendApiError}
  */
-async function getVesselFromAPI(identity: VesselIdentity, trackRequest: TrackRequest) {
+async function getVesselFromAPI(vesselIdentity: VesselIdentity, trackRequest: TrackRequest) {
   const { externalReferenceNumber, internalReferenceNumber, ircs, vesselId, vesselIdentifier } =
-    getVesselIdentityAsEmptyStringWhenNull(identity)
+    getVesselIdentityPropsAsEmptyStringsWhenUndefined(getVesselIdentityFromLegacyVesselIdentity(vesselIdentity))
   const trackDepth = trackRequest.trackDepth ?? ''
   const afterDateTime = trackRequest.afterDateTime?.toISOString() ?? ''
   const beforeDateTime = trackRequest.beforeDateTime?.toISOString() ?? ''
@@ -53,7 +47,7 @@ async function getVesselFromAPI(identity: VesselIdentity, trackRequest: TrackReq
  */
 async function getVesselPositionsFromAPI(identity: VesselIdentity, trackRequest: TrackRequest) {
   const { externalReferenceNumber, internalReferenceNumber, ircs, vesselIdentifier } =
-    getVesselIdentityAsEmptyStringWhenNull(identity)
+    getVesselIdentityPropsAsEmptyStringsWhenUndefined(getVesselIdentityFromLegacyVesselIdentity(identity))
   const trackDepth = trackRequest.trackDepth ?? ''
   const afterDateTime = trackRequest.afterDateTime?.toISOString() ?? ''
   const beforeDateTime = trackRequest.beforeDateTime?.toISOString() ?? ''
@@ -74,6 +68,7 @@ async function getVesselPositionsFromAPI(identity: VesselIdentity, trackRequest:
   }
 }
 
+/** @deprecated Use Redux RTK `searchVessels()` query. */
 async function searchVesselsFromAPI(searched: string) {
   const encodedSearched = encodeURI(searched) || ''
 

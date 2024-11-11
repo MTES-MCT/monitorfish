@@ -21,22 +21,23 @@ export enum ReportingType {
   OBSERVATION = 'OBSERVATION'
 }
 
+// TODO Remove `null` to only keep `| undefined`.
 export type BaseReporting = {
   creationDate: string
-  externalReferenceNumber: string | null
+  externalReferenceNumber: string | null | undefined
   flagState: string
   id: number
-  infraction: Infraction | null
-  internalReferenceNumber: string | null
-  ircs: string | null
+  infraction: Infraction | null | undefined
+  internalReferenceNumber: string | null | undefined
+  ircs: string | null | undefined
   isArchived: boolean
   isDeleted: boolean
   type: ReportingType.ALERT | ReportingType.OBSERVATION | ReportingType.INFRACTION_SUSPICION
-  underCharter: boolean | null
-  validationDate: string | null
-  vesselId: number | null
-  vesselIdentifier: VesselIdentifier | null
-  vesselName: string | null
+  underCharter: boolean | null | undefined
+  validationDate: string | null | undefined
+  vesselId: number | null | undefined
+  vesselIdentifier: VesselIdentifier | null | undefined
+  vesselName: string | null | undefined
 
   // TODO These 2 props shouldn't be there at all and should be treated in a separated redux state.
   // eslint-disable-next-line typescript-sort-keys/interface

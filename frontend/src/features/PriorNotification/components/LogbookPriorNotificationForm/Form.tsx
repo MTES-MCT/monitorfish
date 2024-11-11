@@ -1,8 +1,8 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { HALF_A_SECOND } from '@constants/index'
-import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { duplicateLogbookPriorNotification } from '@features/PriorNotification/useCases/duplicateLogbookPriorNotification'
 import { invalidatePriorNotification } from '@features/PriorNotification/useCases/invalidatePriorNotification'
+import { openPriorNotificationReportingList } from '@features/PriorNotification/useCases/openPriorNotificationReportingList'
 import { updateLogbookPriorNotification } from '@features/PriorNotification/useCases/updateLogbookPriorNotification'
 import { getPriorNotificationIdentifier } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -52,7 +52,7 @@ export function Form({ detail, initialFormValues }: FormProps) {
   }
 
   const openVesselReportingList = () => {
-    dispatch(priorNotificationActions.setIsReportingListOpened(true))
+    dispatch(openPriorNotificationReportingList(detail.vesselIdentity))
   }
 
   const updateFormCallback = useCallback(

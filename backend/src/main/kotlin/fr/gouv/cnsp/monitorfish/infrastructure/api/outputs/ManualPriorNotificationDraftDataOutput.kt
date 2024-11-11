@@ -19,7 +19,7 @@ data class ManualPriorNotificationDraftDataOutput(
     val sentAt: ZonedDateTime?,
     val purpose: LogbookMessagePurpose?,
     val tripGearCodes: List<String>,
-    val vesselId: Int?,
+    val vesselIdentity: VesselIdentityDataOutput,
 ) {
     companion object {
         /**
@@ -42,8 +42,8 @@ data class ManualPriorNotificationDraftDataOutput(
                             .map { tripGear -> requireNotNull(tripGear.gear) { "`it.gear` is null." } }
                     } ?: emptyList()
 
-            val hasPortEntranceAuthorization = pnoValue.hasPortEntranceAuthorization ?: true
-            val hasPortLandingAuthorization = pnoValue.hasPortLandingAuthorization ?: true
+            val hasPortEntranceAuthorization = pnoValue.hasPortEntranceAuthorization != false
+            val hasPortLandingAuthorization = pnoValue.hasPortLandingAuthorization != false
             // In Frontend form, manual prior notifications can:
             // - either have a single global FAO area field
             // - or have an FAO area field per fishing catch
@@ -65,6 +65,12 @@ data class ManualPriorNotificationDraftDataOutput(
                         !hasGlobalFaoArea,
                     )
                 }
+            val vesselIdentity =
+                VesselIdentityDataOutput.fromVessel(
+                    requireNotNull(priorNotification.vessel) {
+                        "`priorNotification.vessel` is null."
+                    },
+                )
 
             return ManualPriorNotificationDraftDataOutput(
                 authorTrigram = pnoValue.authorTrigram,
@@ -80,7 +86,7 @@ data class ManualPriorNotificationDraftDataOutput(
                 sentAt = priorNotification.sentAt,
                 purpose = pnoValue.purpose,
                 tripGearCodes = tripGearCodes,
-                vesselId = priorNotification.vessel?.id,
+                vesselIdentity = vesselIdentity,
             )
         }
     }

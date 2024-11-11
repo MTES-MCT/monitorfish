@@ -5,14 +5,25 @@ import {
   BLUEFIN_TUNA_SPECY_CODE,
   SWORDFISH_SPECY_CODE
 } from '@features/PriorNotification/constants'
-import { pick } from 'lodash'
 
 import { INITIAL_FORM_VALUES } from './constants'
 
 import type { ManualPriorNotificationFormValues, ManualPriorNotificationFormValuesFishingCatch } from './types'
 
-export function getPartialComputationRequestData(formValues: ManualPriorNotificationFormValues) {
-  return pick(formValues, ['fishingCatches', 'globalFaoArea', 'portLocode', 'tripGearCodes', 'vesselId'])
+export function getPartialComputationRequestData({
+  fishingCatches,
+  globalFaoArea,
+  portLocode,
+  tripGearCodes,
+  vesselIdentity
+}: ManualPriorNotificationFormValues) {
+  return {
+    fishingCatches,
+    globalFaoArea,
+    portLocode,
+    tripGearCodes,
+    vesselId: vesselIdentity?.vesselId
+  }
 }
 
 export function getFishingsCatchesInitialValues(

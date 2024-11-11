@@ -17,7 +17,7 @@ import {
   LinkButton
 } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
-import { useRef } from 'react'
+import { useCallback, useState } from 'react'
 import styled from 'styled-components'
 
 import { FormikFaoAreaSelect } from './fields/FormikFaoAreaSelect'
@@ -25,7 +25,7 @@ import { FormikFishingCatchesMultiSelect } from './fields/FormikFishingCatchesMu
 import { FormikVesselSelect } from './fields/FormikVesselSelect'
 
 import type { ManualPriorNotificationFormValues } from './types'
-import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 type FormProps = Readonly<{
   isNewPriorNotification: boolean
@@ -38,20 +38,23 @@ export function Form({ isNewPriorNotification, isReadOnly }: FormProps) {
   const { gearsAsOptions } = useGetGearsAsOptions()
   const { portsAsOptions } = useGetPortsAsOptions()
 
-  const isThirdPartyVessel = useRef<boolean>(false)
+  const [isThirdPartyVessel, setIsThirdPartyVessel] = useState(false)
 
-  const onChange = (nextVessel: VesselIdentity | undefined) => {
-    if (getHasAuthorizedLandingDownload(nextVessel?.flagState, nextVessel?.externalReferenceNumber)) {
-      isThirdPartyVessel.current = true
+  const updateIsThirdPartyVessel = useCallback((nextVessel: Vessel.VesselIdentity | undefined) => {
+    const nextIsThirdPartyVessel = getHasAuthorizedLandingDownload(
+      nextVessel?.flagState,
+      nextVessel?.externalReferenceNumber
+    )
 
+    setIsThirdPartyVessel(nextIsThirdPartyVessel)
+  }, [])
+
+  const openVesselReportingList = () => {
+    if (!values.vesselIdentity) {
       return
     }
 
-    isThirdPartyVessel.current = false
-  }
-
-  const openVesselReportingList = () => {
-    dispatch(priorNotificationActions.setIsReportingListOpened(true))
+    dispatch(priorNotificationActions.setOpenedReportingListVesselIdentity(values.vesselIdentity))
   }
 
   const updateIsDirty = (isDirty: boolean) => {
@@ -62,7 +65,7 @@ export function Form({ isNewPriorNotification, isReadOnly }: FormProps) {
 
   return (
     <>
-      <FormikVesselSelect onChange={onChange} readOnly={isReadOnly} />
+      <FormikVesselSelect onChange={updateIsThirdPartyVessel} readOnly={isReadOnly} />
 
       <FormikSelect
         isCleanable={false}
@@ -130,7 +133,7 @@ export function Form({ isNewPriorNotification, isReadOnly }: FormProps) {
 
       <hr />
 
-      {isThirdPartyVessel.current && (
+      {isThirdPartyVessel && (
         <>
           <StyledFormikMultiRadio
             isInline

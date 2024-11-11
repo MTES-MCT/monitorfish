@@ -2,7 +2,7 @@ import { Logbook } from '@features/Logbook/Logbook.types'
 import { getOptionsFromLabelledEnum } from '@mtes-mct/monitor-ui'
 
 import type { Seafront } from '@constants/seafront'
-import type { VesselIdentity } from 'domain/entities/vessel/types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 export namespace PriorNotification {
   export interface PriorNotification {
@@ -60,7 +60,7 @@ export namespace PriorNotification {
     state: State | undefined
     updatedAt: string
     vesselId: number
-    vesselIdentity: VesselIdentity
+    vesselIdentity: Vessel.VesselIdentity
   } & (
     | {
         asLogbookForm: LogbookForm
@@ -71,7 +71,7 @@ export namespace PriorNotification {
     | {
         asLogbookForm: undefined
         asManualDraft: undefined
-        asManualForm: ManualForm
+        asManualForm: ApiManualCreateOrUpdateResponseData
         isManuallyCreated: true
       }
   )
@@ -89,7 +89,7 @@ export namespace PriorNotification {
     purpose: PurposeCode | undefined
     sentAt: string | undefined
     tripGearCodes: string[]
-    vesselId: number | undefined
+    vesselIdentity: Vessel.VesselIdentity | undefined
   }
 
   export type LogbookForm = {
@@ -107,31 +107,19 @@ export namespace PriorNotification {
     note: string | undefined
     portLocode: string
     purpose: PurposeCode
-    reportId: string
     sentAt: string
     tripGearCodes: string[]
     updatedAt: string
-    vesselId: number
+    vesselIdentity: Vessel.VesselIdentity
   }
-  export type NewManualForm = Omit<ManualForm, 'reportId'>
 
-  export type LogbookComputeRequestData = {
-    isInVerificationScope: boolean
-    portLocode: string
-    segmentCodes: string[]
-    vesselId: number
-  }
-  /** Real-time computed values displayed within a prior notification form. */
+  /** Real-time computed values displayed within a logbook prior notification form. */
   export type LogbookComputedValues = {
     /** Next initial state of the prior notification once it will be created or updated. */
     nextState: State
   }
 
-  export type ManualComputeRequestData = Pick<
-    ManualForm,
-    'fishingCatches' | 'globalFaoArea' | 'portLocode' | 'tripGearCodes' | 'vesselId'
-  >
-  /** Real-time computed values displayed within a prior notification form. */
+  /** Real-time computed values displayed within a manual prior notification form. */
   export type ManualComputedValues = Pick<
     PriorNotification,
     'isVesselUnderCharter' | 'tripSegments' | 'types' | 'riskFactor'
@@ -242,4 +230,28 @@ export namespace PriorNotification {
     VERIFIED_AND_SENT: 'Vérifié et diffusé'
   }
   export const STATE_LABELS_AS_OPTIONS = getOptionsFromLabelledEnum(STATE_LABEL, true)
+
+  // ---------------------------------------------------------------------------
+  // API
+
+  export type ApiLogbookComputeRequestData = {
+    isInVerificationScope: boolean
+    portLocode: string
+    segmentCodes: string[]
+    vesselId: number
+  }
+
+  export type ApiManualComputeRequestData = Pick<
+    ManualForm,
+    'fishingCatches' | 'globalFaoArea' | 'portLocode' | 'tripGearCodes'
+  > & {
+    vesselId: number
+  }
+
+  export type ApiManualCreateOrUpdateRequestData = Omit<ManualForm, 'reportId' | 'vesselIdentity'> & {
+    vesselId: number
+  }
+  export type ApiManualCreateOrUpdateResponseData = ManualForm & {
+    reportId: string
+  }
 }

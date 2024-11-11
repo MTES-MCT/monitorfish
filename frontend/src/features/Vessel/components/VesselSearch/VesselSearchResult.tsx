@@ -1,51 +1,62 @@
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { getVesselIdentityFromLegacyVesselIdentity } from '@features/Vessel/utils'
+import { localStorageManager } from '@libs/LocalStorageManager'
+import { LocalStorageKey } from '@libs/LocalStorageManager/constants'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { VesselSearchResultItem } from './VesselSearchResultItem'
 import { getVesselCompositeIdentifier } from '../../../../domain/entities/vessel/vessel'
 
-export function VesselSearchResult({ foundVessels, searchQuery, selectVessel, showLastSearchedVessels }) {
-  const lastSearchedVessels = useMainAppSelector(state => state.global.lastSearchedVessels)
+import type { Vessel } from '../../Vessel.types'
+import type { VesselIdentity } from 'domain/entities/vessel/types'
+
+type VesselSearchResultProps = Readonly<{
+  foundVessels: Vessel.VesselIdentity[]
+  onSelect: (vessel: Vessel.VesselIdentity) => void
+  searchQuery: string | undefined
+  withLastSearchResults: boolean
+}>
+export function VesselSearchResult({
+  foundVessels,
+  onSelect,
+  searchQuery,
+  withLastSearchResults
+}: VesselSearchResultProps) {
   const baseUrl = useMemo(() => window.location.origin, [])
+
+  const lastSearchResults = localStorageManager
+    .get<VesselIdentity[]>(LocalStorageKey.LastSearchVessels, [])
+    .map(getVesselIdentityFromLegacyVesselIdentity)
 
   return (
     <>
-      {!!foundVessels?.length && (
+      {foundVessels.length > 0 && (
         <Results>
           <List>
-            {foundVessels.map(featureOrIdentity => {
-              const vesselCompositeIdentifier = `${featureOrIdentity.vesselId}/${getVesselCompositeIdentifier(featureOrIdentity)}`
-
-              return (
-                <VesselSearchResultItem
-                  key={vesselCompositeIdentifier}
-                  baseUrl={baseUrl}
-                  searchQuery={searchQuery}
-                  selectVessel={selectVessel}
-                  vessel={featureOrIdentity}
-                />
-              )
-            })}
+            {foundVessels.map(featureOrIdentity => (
+              <VesselSearchResultItem
+                key={`${featureOrIdentity.vesselId}-${getVesselCompositeIdentifier(featureOrIdentity)}`}
+                baseUrl={baseUrl}
+                onClick={onSelect}
+                searchQuery={searchQuery}
+                vessel={featureOrIdentity}
+              />
+            ))}
           </List>
         </Results>
       )}
-      {!foundVessels?.length && showLastSearchedVessels && (
+      {withLastSearchResults && !foundVessels.length && lastSearchResults.length > 0 && (
         <Results>
           <List>
-            {lastSearchedVessels.map(vessel => {
-              const vesselCompositeIdentifier = `${vessel.vesselId}/${getVesselCompositeIdentifier(vessel)}`
-
-              return (
-                <VesselSearchResultItem
-                  key={vesselCompositeIdentifier}
-                  baseUrl={baseUrl}
-                  searchQuery={searchQuery}
-                  selectVessel={() => selectVessel(vessel)}
-                  vessel={vessel}
-                />
-              )
-            })}
+            {lastSearchResults.map(vessel => (
+              <VesselSearchResultItem
+                key={`${vessel.vesselId}-${getVesselCompositeIdentifier(vessel)}`}
+                baseUrl={baseUrl}
+                onClick={onSelect}
+                searchQuery={searchQuery}
+                vessel={vessel}
+              />
+            ))}
           </List>
         </Results>
       )}

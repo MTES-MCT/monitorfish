@@ -1,103 +1,44 @@
-import { vesselApi } from '@features/Vessel/vesselApi'
-import { VesselSearch } from '@features/VesselSearch'
-import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { Field, FieldError, logSoftError, useKey, useNewWindow } from '@mtes-mct/monitor-ui'
+import { VesselSearchWithMapVessels } from '@features/Vessel/components/VesselSearch/VesselSearchWithMapVessels'
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
+import { Field, FieldError, useNewWindow } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback } from 'react'
 import styled from 'styled-components'
 
-import type { VesselIdentity } from 'domain/entities/vessel/types'
+import type { ManualPriorNotificationFormValues } from '../types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 
 type FormikVesselSelectProps = Readonly<{
-  onChange: (nextVessel: VesselIdentity | undefined) => void
+  onChange: (nextVessel: Vessel.VesselIdentity | undefined) => void
   readOnly?: boolean | undefined
 }>
 export function FormikVesselSelect({ onChange, readOnly }: FormikVesselSelectProps) {
-  const defaultValueRef = useRef<VesselIdentity | undefined>(undefined)
+  const [input, meta, helper] = useField<ManualPriorNotificationFormValues['vesselIdentity']>('vesselIdentity')
 
-  const dispatch = useMainAppDispatch()
-  const [input, meta, helper] = useField<number | undefined>('vesselId')
   const { newWindowContainerRef } = useNewWindow()
 
-  const [isLoading, setIsLoading] = useState(true)
-
-  const key = useKey([defaultValueRef.current, isLoading])
-
-  const handleVesselSearchChange = async (nextVessel: VesselIdentity | undefined) => {
-    if (!nextVessel) {
-      defaultValueRef.current = undefined
-
-      helper.setValue(undefined)
-      onChange(undefined)
-
-      return
-    }
-
-    // TODO Show an error in this case?
-    if (!nextVessel.vesselId) {
-      logSoftError({
-        isSideWindowError: true,
-        message: '`nextVessel.vesselId` is null or undefined.',
-        userMessage: 'Une erreur est survenue lors de la sélection du navire. Veuillez réessayer.'
-      })
-
-      return
-    }
-
-    await setDefaultValue(nextVessel.vesselId)
-
-    helper.setValue(nextVessel.vesselId)
-    onChange(nextVessel)
-  }
-
-  const setDefaultValue = useCallback(
-    async (vesselId: number) => {
-      setIsLoading(true)
-
-      const vessel = await dispatch(vesselApi.endpoints.getVessel.initiate(vesselId)).unwrap()
-
-      const nextVessel = {
-        externalReferenceNumber: vessel.externalReferenceNumber ?? null,
-        flagState: vessel.flagState ?? null,
-        internalReferenceNumber: null,
-        ircs: vessel.ircs ?? null,
-        vesselId: vessel.vesselId ?? null,
-        vesselName: vessel.vesselName ?? null
-      }
-      defaultValueRef.current = nextVessel
+  const handleVesselSearchChange = useCallback(
+    (nextVessel: Vessel.VesselIdentity | undefined) => {
+      helper.setValue(nextVessel)
       onChange(nextVessel)
-
-      setIsLoading(false)
-    },
-    [dispatch, onChange]
-  )
-
-  useEffect(
-    () => {
-      if (!input.value) {
-        setIsLoading(false)
-
-        return
-      }
-
-      setDefaultValue(input.value)
     },
 
-    // Ignore `input.value` change since it should only be called on mount.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [setDefaultValue]
+    /* eslint-disable react-hooks/exhaustive-deps */
+    // Skip `helper` dependency to avoid unecessary re-renders
+    [onChange]
   )
 
   return (
     <Field>
       <StyledVesselSearch
-        key={key}
         baseRef={newWindowContainerRef}
-        defaultValue={defaultValueRef.current}
-        disabled={isLoading || readOnly}
+        disabled={readOnly}
+        displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_PRIOR_NOTIFICATION_FORM_ERROR}
         hasError={!!meta.error}
         isVesselIdRequiredFromResults
         onChange={handleVesselSearchChange}
+        shouldCloseOnClickOutside
+        value={input.value}
       />
 
       {!!meta.error && <FieldError>{meta.error}</FieldError>}
@@ -105,7 +46,7 @@ export function FormikVesselSelect({ onChange, readOnly }: FormikVesselSelectPro
   )
 }
 
-const StyledVesselSearch = styled(VesselSearch)`
+const StyledVesselSearch = styled(VesselSearchWithMapVessels)`
   position: relative;
   width: 100%;
 

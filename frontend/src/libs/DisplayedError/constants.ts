@@ -1,4 +1,5 @@
 export enum DisplayedErrorKey {
+  BACK_OFFICE_PRIOR_NOTIFICATION_SUBSCRIBER_FORM_ERROR = 'backOfficePriorNotificationSubscriberFormError',
   MAIN_WINDOW_REPORTING_FORM_ERROR = 'mainWindowReportingFormError',
   MAIN_WINDOW_REPORTING_LIST_ERROR = 'mainWindowReportingListError',
   MISSION_FORM_ERROR = 'missionFormError',

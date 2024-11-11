@@ -55,17 +55,23 @@ export enum NetworkType {
   SATELLITE = 'SATELLITE'
 }
 
+/**
+ * @deprecated
+ * Use `Vessel.VesselIdentity` BUT BE CAREFUL: there are not exactly equal regarding nullish and optional props.
+ * There is a `getVesselIdentityFromLegacyVesselIdentity()` util to convert from one to another if needed.
+ */
 export type VesselIdentity = {
-  beaconNumber?: number | null
-  districtCode?: string | null
-  externalReferenceNumber: string | null
+  beaconNumber?: number | null | undefined
+  districtCode?: string | null | undefined
+  externalReferenceNumber: string | null | undefined
   flagState: string
-  internalReferenceNumber: string | null
-  ircs: string | null
-  mmsi?: string | null
-  vesselId?: VesselId | null
-  vesselIdentifier?: VesselIdentifier | null
-  vesselName?: string | null
+  internalReferenceNumber: string | null | undefined
+  ircs: string | null | undefined
+  mmsi?: string | null | undefined
+  vesselId?: VesselId | null | undefined
+  vesselIdentifier?: VesselIdentifier | null | undefined
+  vesselLength?: number | null | undefined
+  vesselName?: string | null | undefined
 }
 
 export type VesselAndPositions = {

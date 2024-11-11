@@ -13,7 +13,7 @@ import {
   BLUEFIN_TUNA_SPECY_CODE
 } from '@features/PriorNotification/constants'
 import { THEME, customDayjs, getMaybeBooleanFromRichBoolean, type DateAsStringRange } from '@mtes-mct/monitor-ui'
-import { VesselIdentifier, type VesselIdentity } from 'domain/entities/vessel/types'
+import { VesselIdentifier } from 'domain/entities/vessel/types'
 import { update } from 'lodash'
 import styled from 'styled-components'
 
@@ -30,6 +30,7 @@ import {
 import { PriorNotification } from '../../PriorNotification.types'
 
 import type { FilterStatus, ListFilter } from './types'
+import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { CSSProperties } from 'react'
 
 export function displayOnboardFishingSpecies(onBoardCatches: Logbook.Catch[]) {
@@ -284,20 +285,21 @@ export function getStatusTagLabel(status: FilterStatus): string {
 
 export function getVesselIdentityFromPriorNotification(
   priorNotification: PriorNotification.PriorNotification
-): VesselIdentity {
+): Vessel.VesselIdentity {
   return {
-    beaconNumber: null,
-    districtCode: null,
-    externalReferenceNumber: priorNotification.vesselExternalReferenceNumber ?? null,
+    beaconNumber: undefined,
+    districtCode: undefined,
+    externalReferenceNumber: priorNotification.vesselExternalReferenceNumber,
     flagState: priorNotification.vesselFlagCountryCode ?? UNKNOWN_COUNTRY_CODE,
-    internalReferenceNumber: priorNotification.vesselInternalReferenceNumber ?? null,
-    ircs: priorNotification.vesselIrcs ?? null,
-    mmsi: priorNotification.vesselMmsi ?? null,
+    internalReferenceNumber: priorNotification.vesselInternalReferenceNumber,
+    ircs: priorNotification.vesselIrcs,
+    mmsi: priorNotification.vesselMmsi,
     vesselId: priorNotification.vesselId,
     // In practice, prior notifications always have a vessel CFR (`vesselInternalReferenceNumber`)
     // despite the `| undefined`
     vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-    vesselName: priorNotification.vesselName ?? null
+    vesselLength: priorNotification.vesselLength,
+    vesselName: priorNotification.vesselName
   }
 }
 

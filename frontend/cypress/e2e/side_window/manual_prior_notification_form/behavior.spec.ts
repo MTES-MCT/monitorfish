@@ -23,9 +23,8 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
 
     addManualSideWindowPriorNotification()
 
-    cy.getDataCy('vessel-search-input').click().wait(500)
-    cy.getDataCy('vessel-search-input').type('PAGEOT JO', { delay: 100 })
-    cy.getDataCy('vessel-search-item').first().click()
+    cy.getDataCy('VesselSearch-input').type('PAGEOT JO')
+    cy.getDataCy('VesselSearch-item').first().click()
     cy.wait(500)
 
     cy.clickButton('Fermer')
@@ -50,7 +49,7 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
     cy.clickButton('Préavis de débarquement')
     cy.contains('Tous les préavis').should('be.visible')
     cy.contains('AJOUTER UN NOUVEAU PRÉAVIS').should('be.visible')
-    cy.getDataCy('vessel-search-input').should('have.value', 'PAGEOT JO')
+    cy.getDataCy('VesselSearch-input').should('have.value', 'PAGEOT JO')
 
     cy.clickButton('Fermer')
     cy.contains('Abandon de préavis').should('be.visible')
@@ -180,9 +179,8 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
 
     addManualSideWindowPriorNotification()
 
-    cy.getDataCy('vessel-search-input').click().wait(500)
-    cy.getDataCy('vessel-search-input').type('PHENO', { delay: 100 })
-    cy.getDataCy('vessel-search-item').first().click()
+    cy.getDataCy('VesselSearch-input').type('PHENOMENE')
+    cy.getDataCy('VesselSearch-item').first().click()
 
     cy.fill("Date et heure estimées d'arrivée au port (UTC)", arrivalDateTupleWithTime)
     cy.fill("équivalentes à celles de l'arrivée au port", true)
@@ -474,9 +472,8 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
 
     addManualSideWindowPriorNotification()
 
-    cy.getDataCy('vessel-search-input').click().wait(500)
-    cy.getDataCy('vessel-search-input').type('PHENO', { delay: 100 })
-    cy.getDataCy('vessel-search-item').first().click()
+    cy.getDataCy('VesselSearch-input').type('PHENOMENE')
+    cy.getDataCy('VesselSearch-item').first().click()
 
     cy.fill("Date et heure estimées d'arrivée au port (UTC)", arrivalDateTupleWithTime)
     cy.fill("équivalentes à celles de l'arrivée au port", true)

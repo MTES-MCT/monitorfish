@@ -110,7 +110,18 @@ class GetPriorNotificationSubscribers(
                     controlUnitNameMatches || administrationNameMatches || portNameMatches
                 } != false
 
-            administrationIdMatches && portLocodeMatches && searchQueryMatches
+            val withAtLeastOneSubscriptionMatches =
+                filter.withAtLeastOneSubscription.let { filter ->
+                    if (filter) {
+                        subscriber.fleetSegmentSubscriptions.isNotEmpty() ||
+                            subscriber.portSubscriptions.isNotEmpty() ||
+                            subscriber.vesselSubscriptions.isNotEmpty()
+                    } else {
+                        true
+                    }
+                }
+
+            administrationIdMatches && portLocodeMatches && searchQueryMatches && withAtLeastOneSubscriptionMatches
         }
     }
 

@@ -1,7 +1,7 @@
 import { Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import type { PriorNotificationSubscriber } from '@features/PriorNotification/PriorNotificationSubscriber.types'
+import type { PriorNotificationSubscriber } from '../../PriorNotificationSubscriber.types'
 import type { CellContext, ColumnDef } from '@tanstack/react-table'
 import type { Promisable } from 'type-fest'
 
@@ -107,17 +107,20 @@ export function getVesselSubscriptionTableColumns(
           <span>
             {vesselSubscription.vesselCfr && (
               <>
-                {vesselSubscription.vesselCfr} <VesselIdentifierLabel>(CFR)</VesselIdentifierLabel> -
+                {vesselSubscription.vesselCfr} <VesselIdentifierLabel>(CFR)</VesselIdentifierLabel>
+                {' - '}
               </>
             )}
             {vesselSubscription.vesselMmsi && (
               <>
-                {vesselSubscription.vesselMmsi} <VesselIdentifierLabel>(MMSI)</VesselIdentifierLabel> -
+                {vesselSubscription.vesselMmsi} <VesselIdentifierLabel>(MMSI)</VesselIdentifierLabel>
+                {' - '}
               </>
             )}
             {vesselSubscription.vesselExternalMarking && (
               <>
-                {vesselSubscription.vesselExternalMarking} <VesselIdentifierLabel>(Marq. ext.)</VesselIdentifierLabel> -
+                {vesselSubscription.vesselExternalMarking} <VesselIdentifierLabel>(Marq. ext.)</VesselIdentifierLabel>
+                {' - '}
               </>
             )}
             {vesselSubscription.vesselCallSign && (

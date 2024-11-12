@@ -25,13 +25,16 @@ class PriorNotificationSubscriberController(
     fun getAll(
         @Parameter(description = "Administration ID.")
         @RequestParam(name = "administrationId")
-        administrationId: Int? = null,
+        administrationId: Int?,
         @Parameter(description = "Port locode.")
         @RequestParam(name = "portLocode")
-        portLocode: String? = null,
+        portLocode: String?,
         @Parameter(description = "Search query (vessel name).")
         @RequestParam(name = "searchQuery")
-        searchQuery: String? = null,
+        searchQuery: String?,
+        @Parameter(description = "Filter by at least one subscription.")
+        @RequestParam(name = "withAtLeastOneSubscription")
+        withAtLeastOneSubscription: Boolean?,
         @Parameter(description = "Sort column.")
         @RequestParam(name = "sortColumn")
         sortColumn: PriorNotificationSubscribersSortColumn,
@@ -44,6 +47,7 @@ class PriorNotificationSubscriberController(
                 administrationId = administrationId,
                 portLocode = portLocode,
                 searchQuery = searchQuery,
+                withAtLeastOneSubscription = withAtLeastOneSubscription == true,
             )
 
         val priorNotificationSubscribers = getPriorNotificationSubscribers.execute(filter, sortColumn, sortDirection)

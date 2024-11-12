@@ -13,8 +13,8 @@ import { FilterBar } from './FilterBar'
 export function PriorNotificationSubscriberTable() {
   const tableFilterValues = useBackofficeAppSelector(store => store.priorNotification.tableFilterValues)
 
-  const apiSortingParams: BackendApi.RequestSortingParams<PriorNotificationSubscriber.ApiSortColumn> = {
-    sortColumn: PriorNotificationSubscriber.ApiSortColumn.CONTROL_UNIT_NAME,
+  const apiSortingParams: BackendApi.RequestSortingParams<PriorNotificationSubscriber.ApiListSortColumn> = {
+    sortColumn: PriorNotificationSubscriber.ApiListSortColumn.CONTROL_UNIT_NAME,
     sortDirection: BackendApi.SortDirection.ASC
   }
 

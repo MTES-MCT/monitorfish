@@ -6,14 +6,14 @@ import { ROUTER_PATHS } from 'paths'
 
 import { getSubscriberPortNames, getSubscriberPortNamesWithAllNotifications } from './utils'
 
-import type { TableFilter } from './types'
 import type { PriorNotificationSubscriber } from '@features/PriorNotification/PriorNotificationSubscriber.types'
 import type { ColumnDef } from '@tanstack/react-table'
 
-export const DEFAULT_TABLE_FILTER_VALUES: TableFilter = {
+export const DEFAULT_TABLE_FILTER_VALUES: PriorNotificationSubscriber.ApiListFilter = {
   administrationId: undefined,
   portLocode: undefined,
-  searchQuery: undefined
+  searchQuery: undefined,
+  withAtLeastOneSubscription: false
 }
 
 export const TABLE_COLUMNS: Array<ColumnDef<PriorNotificationSubscriber.Subscriber, any>> = [

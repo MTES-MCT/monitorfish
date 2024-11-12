@@ -50,7 +50,17 @@ export namespace PriorNotificationSubscriber {
     vesselIds: number[]
   }
 
-  export enum ApiSortColumn {
+  // ---------------------------------------------------------------------------
+  // API
+
+  export type ApiListFilter = {
+    administrationId: number | undefined
+    portLocode: string | undefined
+    searchQuery: string | undefined
+    withAtLeastOneSubscription: boolean | undefined
+  }
+
+  export enum ApiListSortColumn {
     CONTROL_UNIT_NAME = 'CONTROL_UNIT_NAME'
   }
 }

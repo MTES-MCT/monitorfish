@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.proxy
 
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -11,6 +12,7 @@ class ScriptProxyController(
     private val restTemplate: RestTemplate,
 ) {
     @GetMapping("/smallchat.js")
+    @Cacheable("smallchat_script")
     fun proxySmallChatScript(): ResponseEntity<String> {
         println("Proxying SmallChat script")
 

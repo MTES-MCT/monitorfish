@@ -329,7 +329,7 @@ class GetPriorNotificationSubscribersUTests {
         // Case 7: Filter by withAtLeastOneSubscription
         testCases = testCases +
             Triple(
-                PriorNotificatioxnSubscribersFilter(withAtLeastOneSubscription = true),
+                PriorNotificationSubscribersFilter(withAtLeastOneSubscription = true),
                 listOf(fakeFullControlUnit1, fakeFullControlUnit2, fakeFullControlUnit3),
                 "Filter by withAtLeastOneSubscription",
             )

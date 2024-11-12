@@ -1,3 +1,4 @@
+import { Ellipsised } from '@components/Ellipsised'
 import { isNotNullish } from '@utils/isNotNullish'
 
 import type { PriorNotificationSubscriber } from '@features/PriorNotification/PriorNotificationSubscriber.types'
@@ -16,7 +17,7 @@ export function getSubscriberPortNames(
     return <em>Aucun</em>
   }
 
-  return portNames.join(', ')
+  return <Ellipsised>{portNames.join(', ')}</Ellipsised>
 }
 
 export function getSubscriberPortNamesWithAllNotifications(
@@ -33,5 +34,5 @@ export function getSubscriberPortNamesWithAllNotifications(
     return <em>Aucun</em>
   }
 
-  return portNames.join(', ')
+  return <Ellipsised>{portNames.join(', ')}</Ellipsised>
 }

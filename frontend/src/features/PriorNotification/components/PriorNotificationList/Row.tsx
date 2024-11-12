@@ -62,7 +62,7 @@ export function Row({ row }: RowProps) {
             $hasRightBorder={['types', 'state'].includes(cell.column.id)}
             $isInvalidated={!!row.original.isInvalidated}
             onClick={() => row.toggleExpanded()}
-            style={getExpandableRowCellCustomStyle(cell.column.id)}
+            style={getExpandableRowCellCustomStyle(cell.column)}
           >
             {flexRender(cell.column.columnDef.cell, cell.getContext())}
           </ExpandableRowCell>

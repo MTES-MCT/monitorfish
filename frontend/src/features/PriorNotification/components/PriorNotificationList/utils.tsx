@@ -31,6 +31,7 @@ import { PriorNotification } from '../../PriorNotification.types'
 
 import type { FilterStatus, ListFilter } from './types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
+import type { Column } from '@tanstack/react-table'
 import type { CSSProperties } from 'react'
 
 export function displayOnboardFishingSpecies(onBoardCatches: Logbook.Catch[]) {
@@ -220,17 +221,23 @@ export function getColorsFromState(state: PriorNotification.State | undefined): 
   }
 }
 
-export function getExpandableRowCellCustomStyle(columnId: string): CSSProperties {
-  switch (columnId) {
+export function getExpandableRowCellCustomStyle(
+  column: Column<PriorNotification.PriorNotification, any>
+): CSSProperties {
+  const defaultStyle = {
+    maxWidth: column.getSize()
+  }
+
+  switch (column.id) {
     case Logbook.ApiSortColumn.VESSEL_RISK_FACTOR:
     case 'actions':
-      return { verticalAlign: 'bottom' }
+      return { ...defaultStyle, verticalAlign: 'bottom' }
 
     case 'state':
-      return { padding: '7px 14px', verticalAlign: 'bottom' }
+      return { ...defaultStyle, padding: '7px 14px', verticalAlign: 'bottom' }
 
     default:
-      return {}
+      return defaultStyle
   }
 }
 

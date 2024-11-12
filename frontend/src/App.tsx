@@ -1,6 +1,7 @@
 import { CustomGlobalStyle } from '@components/CustomGlobalStyle'
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { useMatomo } from '@hooks/useMatomo'
+import { useSmallChat } from '@hooks/useSmallChat'
 import { GlobalStyle, THEME, ThemeProvider } from '@mtes-mct/monitor-ui'
 import { UnsupportedBrowserPage } from '@pages/UnsupportedBrowserPage'
 import { isBrowserSupported } from '@utils/isBrowserSupported'
@@ -16,6 +17,7 @@ countries.registerLocale(COUNTRIES_FR)
 
 export function App() {
   useMatomo()
+  useSmallChat()
 
   if (!isBrowserSupported()) {
     return <UnsupportedBrowserPage />

@@ -41,6 +41,9 @@ export default defineConfig({
       },
       '/bff': {
         target: 'http://localhost:8880'
+      },
+      '/proxy': {
+        target: 'http://localhost:8880'
       }
     }
   }

@@ -41,4 +41,14 @@ context('BackOffice > Prior Notification Table > Filter Bar', () => {
 
     cy.wait('@getPriorNotificationSubscribers')
   })
+
+  it('Should filter subscribers with at least one subscription', () => {
+    cy.intercept('GET', '/bff/v1/prior_notification_subscribers?*&withAtLeastOneSubscription=true*').as(
+      'getPriorNotificationSubscribers'
+    )
+
+    cy.fill('Avec au moins une diffusion', true)
+
+    cy.wait('@getPriorNotificationSubscribers')
+  })
 })

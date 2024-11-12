@@ -6,8 +6,6 @@ import { getUrlOrPathWithQueryParams } from '@utils/getUrlOrPathWithQueryParams'
 
 import { PriorNotificationSubscriber } from './PriorNotificationSubscriber.types'
 
-import type { TableFilter } from './components/PriorNotificationSubscriberTable/types'
-
 const GET_PRIOR_NOTIFICATION_SUBSCRIBER_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les inscriptions de cette unité."
 const GET_PRIOR_NOTIFICATION_SUBSCRIBERS_ERROR_MESSAGE =
   "Nous n'avons pas pu récupérer la liste des inscrits aux préavis."
@@ -25,7 +23,8 @@ export const priorNotificationSubscriberApi = monitorfishApi.injectEndpoints({
 
     getPriorNotificationSubscribers: builder.query<
       PriorNotificationSubscriber.Subscriber[],
-      BackendApi.RequestSortingParams<PriorNotificationSubscriber.ApiSortColumn> & TableFilter
+      BackendApi.RequestSortingParams<PriorNotificationSubscriber.ApiListSortColumn> &
+        PriorNotificationSubscriber.ApiListFilter
     >({
       providesTags: () => [{ type: RtkCacheTagType.PriorNotificationSubscribers }],
       query: queryParams => getUrlOrPathWithQueryParams(`/prior_notification_subscribers`, queryParams),

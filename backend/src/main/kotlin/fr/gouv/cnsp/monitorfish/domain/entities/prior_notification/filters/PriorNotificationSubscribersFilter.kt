@@ -4,4 +4,5 @@ data class PriorNotificationSubscribersFilter(
     val administrationId: Int? = null,
     val portLocode: String? = null,
     val searchQuery: String? = null,
+    val withAtLeastOneSubscription: Boolean = false,
 )

@@ -221,6 +221,11 @@ class GetPriorNotificationSubscribersUTests {
                 name = "La Dernière Unité3",
                 administration = fakeAdministration1,
             )
+        FullControlUnitFaker.fakeFullControlUnit(
+            id = 103,
+            name = "Unité 4",
+            administration = fakeAdministration2,
+        )
 
         val fakePort1 = PortFaker.fakePort(locode = "ESXYZ", name = "Le Pôrt1 Très Äccentué")
         val fakePort2 = PortFaker.fakePort(locode = "FRABC", name = "Le Port2 Sans Accent")
@@ -316,9 +321,17 @@ class GetPriorNotificationSubscribersUTests {
         // Case 6: Filter by portLocode
         testCases = testCases +
             Triple(
-                PriorNotificationSubscribersFilter(portLocode = "FRABC"),
+                PriorNotificationSubscribersFilter(portLocode = "FRABC", withAtLeastOneSubscription = false),
                 listOf(fakeFullControlUnit2),
                 "Filter by portLocode",
+            )
+
+        // Case 7: Filter by withAtLeastOneSubscription
+        testCases = testCases +
+            Triple(
+                PriorNotificationSubscribersFilter(withAtLeastOneSubscription = true),
+                listOf(fakeFullControlUnit1, fakeFullControlUnit2, fakeFullControlUnit3),
+                "Filter by withAtLeastOneSubscription",
             )
 
         val useCase =

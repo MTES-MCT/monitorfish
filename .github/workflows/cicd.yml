@@ -90,6 +90,10 @@ jobs:
         run: npm run test:type
         working-directory: ./frontend
 
+      - name: Check Frontend circular dependencies
+        run: npm run test:deps
+        working-directory: ./frontend
+
       - name: Unit test
         run: npm run test:unit --coverage
         working-directory: ./frontend

@@ -44,40 +44,40 @@ class SecurityConfig(
 
                     authorize.requestMatchers(
                         "/",
-                        "/backoffice",
-                        "/side_window",
-                        "/login",
-                        "/register",
-                        "/backoffice/**",
-                        "/realms/**",
-                        "/resources/**",
-                        "/ext",
-                        "/light",
-                        "/load_light",
-                        "/index.html",
+                        "/*.jpg",
                         "/*.js",
                         "/*.png",
-                        "/*.jpg",
                         "/*.svg",
-                        "/static/**",
-                        "/assets/**",
-                        "/map-icons/**",
-                        "/flags/**",
-                        "/robots.txt",
-                        "/favicon-32.ico",
-                        "/favicon.ico",
+                        "/api/**",
                         "/asset-manifest.json",
-                        "/swagger-ui/**",
+                        "/assets/**",
+                        "/backoffice",
+                        "/backoffice/**",
                         // Used to redirect to the frontend SPA, see SpaController.kt
                         "/error",
-                        "/api/**",
+                        "/ext",
+                        "/favicon-32.ico",
+                        "/favicon.ico",
+                        "/flags/**",
+                        "/index.html",
+                        "/light",
+                        "/load_light",
+                        "/login",
+                        "/map-icons/**",
+                        "/proxy/**",
+                        "/realms/**",
+                        "/register",
+                        "/resources/**",
+                        "/robots.txt",
+                        "/side_window",
+                        "/static/**",
+                        "/swagger-ui/**",
                         "/version",
                     ).permitAll()
                         .anyRequest()
                         .authenticated()
                 }
-            }.oauth2ResourceServer {
-                    oauth2ResourceServer ->
+            }.oauth2ResourceServer { oauth2ResourceServer ->
                 oauth2ResourceServer
                     .jwt(Customizer.withDefaults())
                     .authenticationEntryPoint(authenticationEntryPoint)

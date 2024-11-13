@@ -5,6 +5,7 @@ import { FleetSegmentsBackoffice } from '@features/FleetSegment/components/Fleet
 import { MainWindow } from '@features/MainWindow'
 import { PriorNotificationSubscriberForm } from '@features/PriorNotification/components/PriorNotificationSubscriberForm'
 import { PriorNotificationSubscriberTable } from '@features/PriorNotification/components/PriorNotificationSubscriberTable'
+import { ProducerOrganizationMembershipTable } from '@features/ProducerOrganizationMembership/components/ProducerOrganizationMembershipTable'
 import { SideWindow } from '@features/SideWindow'
 import { BackofficePage } from '@pages/BackofficePage'
 import { HomePage } from '@pages/HomePage'
@@ -131,6 +132,14 @@ export const routes = [
         element: (
           <RequireAuth redirect requireSuperUser>
             <PriorNotificationSubscriberForm />
+          </RequireAuth>
+        )
+      },
+      {
+        path: ROUTER_PATHS.producerOrganizationMembership,
+        element: (
+          <RequireAuth redirect requireSuperUser>
+            <ProducerOrganizationMembershipTable />
           </RequireAuth>
         )
       }

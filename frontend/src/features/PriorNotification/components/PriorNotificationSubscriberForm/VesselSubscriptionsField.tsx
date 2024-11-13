@@ -1,7 +1,9 @@
+import { ConfirmationModal } from '@components/ConfirmationModal'
 import { BackOfficeSubtitle } from '@features/BackOffice/components/BackOfficeSubtitle'
 import { VesselSearch } from '@features/Vessel/components/VesselSearch'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { DataTable, useKey } from '@mtes-mct/monitor-ui'
+import { useState } from 'react'
 import styled from 'styled-components'
 
 import { EmptyDataLabel, Info } from './styles'
@@ -25,6 +27,10 @@ export function VesselSubscriptionsField({
 }: VesselSubscriptionsFieldProps) {
   const key = useKey([vesselSubscriptions])
 
+  const [unsubscriptionConfirmationModalVesselId, setUnsubscriptionConfirmationModalVesselId] = useState<
+    number | undefined
+  >(undefined)
+
   const add = (newVesselIdentity: Vessel.VesselIdentity | undefined) => {
     if (!newVesselIdentity?.vesselId) {
       return
@@ -33,11 +39,25 @@ export function VesselSubscriptionsField({
     onAdd(newVesselIdentity.vesselId)
   }
 
-  const remove = (vesselIdToRemove: number) => {
-    onRemove(vesselIdToRemove)
+  const askForRemovalConfirmation = (vesselIdToRemove: number) => {
+    setUnsubscriptionConfirmationModalVesselId(vesselIdToRemove)
   }
 
-  const columns = getVesselSubscriptionTableColumns(remove, isDisabled)
+  const closeRemovalConfirmationModal = () => {
+    setUnsubscriptionConfirmationModalVesselId(undefined)
+  }
+
+  const remove = () => {
+    if (!unsubscriptionConfirmationModalVesselId) {
+      return
+    }
+
+    closeRemovalConfirmationModal()
+
+    onRemove(unsubscriptionConfirmationModalVesselId)
+  }
+
+  const columns = getVesselSubscriptionTableColumns(askForRemovalConfirmation, isDisabled)
 
   return (
     <>
@@ -68,6 +88,23 @@ export function VesselSubscriptionsField({
         onChange={add}
         shouldCloseOnClickOutside
       />
+
+      {unsubscriptionConfirmationModalVesselId && (
+        <ConfirmationModal
+          confirmationButtonLabel="Confirmer la suppression"
+          message={
+            <>
+              <p>
+                <b>Êtes-vous sûr de vouloir supprimer ce navire des diffusions ?</b>
+              </p>
+              <p>L’unité ne recevra plus les préavis de ce navire qui sont hors de la diffusion de base.</p>
+            </>
+          }
+          onCancel={closeRemovalConfirmationModal}
+          onConfirm={remove}
+          title="Supprimer un navire des diffusions"
+        />
+      )}
     </>
   )
 }

@@ -58,7 +58,7 @@ export function SegmentSubscriptionsField({
   return (
     <>
       <BackOfficeSubtitle $withSmallBottomMargin>
-        Ajouter tous les préavis d’un segment à la diffusion
+        Diffuser des préavis supplémentaires par segment de flotte
       </BackOfficeSubtitle>
       <Info>
         Tous les préavis des navires appartenant à ces segments seront diffusés, sans faire partie du périmètre de
@@ -71,7 +71,7 @@ export function SegmentSubscriptionsField({
         emptyLabel={<EmptyDataLabel>Aucun segment ajouté.</EmptyDataLabel>}
         initialSorting={[{ desc: false, id: 'name' }]}
         tableOptions={{
-          getRowId: originalRow => `${originalRow.controlUnitId}-${originalRow.segmentCode}`
+          getRowId: originalRow => originalRow.segmentCode
         }}
         withoutHead
       />

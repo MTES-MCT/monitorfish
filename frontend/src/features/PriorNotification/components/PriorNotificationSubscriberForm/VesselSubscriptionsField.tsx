@@ -61,9 +61,7 @@ export function VesselSubscriptionsField({
 
   return (
     <>
-      <BackOfficeSubtitle $withSmallBottomMargin>
-        Ajouter tous les préavis d’un navire à la diffusion
-      </BackOfficeSubtitle>
+      <BackOfficeSubtitle $withSmallBottomMargin>Diffuser des préavis supplémentaires par navire</BackOfficeSubtitle>
       <Info>
         Tous les préavis de ces navires seront diffusés, sans faire partie du périmètre de vérification du CNSP.
       </Info>
@@ -75,7 +73,7 @@ export function VesselSubscriptionsField({
           emptyLabel={<EmptyDataLabel>Aucun navire ajouté.</EmptyDataLabel>}
           initialSorting={[{ desc: false, id: 'vesselName' }]}
           tableOptions={{
-            getRowId: originalRow => `${originalRow.controlUnitId}-${originalRow.vesselId}`
+            getRowId: originalRow => String(originalRow.vesselId)
           }}
           withoutHead
         />
@@ -118,10 +116,10 @@ const DataTableWrapper = styled.div`
 
 const StyledVesselSearch = styled(VesselSearch)`
   border: solid 1px ${p => p.theme.color.lightGray};
-  width: 400px;
+  width: 760px;
 
   > div:nth-child(2) {
     border: solid 1px ${p => p.theme.color.lightGray};
-    width: 400px;
+    width: 760px;
   }
 `

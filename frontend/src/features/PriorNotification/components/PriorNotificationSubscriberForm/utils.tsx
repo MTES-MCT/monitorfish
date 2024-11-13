@@ -1,4 +1,5 @@
-import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
+import { Ellipsised } from '@components/Ellipsised'
+import { Accent, Checkbox, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import type { PriorNotificationSubscriber } from '../../PriorNotificationSubscriber.types'
@@ -21,7 +22,8 @@ export function getFormDataFromSubscriber(
 
 export function getPortSubscriptionTableColumns(
   onRemove: (portLocodeToRemove: string) => Promisable<void>,
-  isFullPortSubscription: boolean,
+  onFullSubscriptionCheck: (portLocode: string) => Promisable<void>,
+  onFullSubscriptionUncheck: (portLocode: string) => Promisable<void>,
   isDisabled: boolean
 ): Array<ColumnDef<PriorNotificationSubscriber.PortSubscription, any>> {
   return [
@@ -31,6 +33,31 @@ export function getPortSubscriptionTableColumns(
       id: 'portName'
     },
     {
+      accessorFn: row => row,
+      cell: (
+        context: CellContext<PriorNotificationSubscriber.PortSubscription, PriorNotificationSubscriber.PortSubscription>
+      ) => {
+        const portSubscription = context.getValue()
+
+        return (
+          <StyledCheckbox
+            checked={portSubscription.hasSubscribedToAllPriorNotifications}
+            label="tous les préavis"
+            name="hasSubscribedToAllPriorNotifications"
+            onChange={
+              portSubscription.hasSubscribedToAllPriorNotifications
+                ? () => onFullSubscriptionUncheck(portSubscription.portLocode)
+                : () => onFullSubscriptionCheck(portSubscription.portLocode)
+            }
+          />
+        )
+      },
+      enableSorting: false,
+      header: () => '',
+      id: 'toggleFullSubscription',
+      size: 160
+    },
+    {
       accessorFn: row => row.portLocode,
       cell: (context: CellContext<PriorNotificationSubscriber.PortSubscription, string>) => (
         <IconButton
@@ -38,11 +65,7 @@ export function getPortSubscriptionTableColumns(
           disabled={isDisabled}
           Icon={Icon.Delete}
           onClick={() => onRemove(context.getValue())}
-          title={
-            isFullPortSubscription
-              ? "Désinscrire l'unité des préavis liés à ce port pour les navires dont la note de risque est supérieure à 2,3"
-              : "Désinscrire l'unité de tous les préavis liés à ce port"
-          }
+          title="Désinscrire l'unité de tous les préavis liés à ce port"
         />
       ),
       enableSorting: false,
@@ -89,9 +112,12 @@ export function getVesselSubscriptionTableColumns(
   return [
     {
       accessorFn: row => row.vesselName,
+      cell: (context: CellContext<PriorNotificationSubscriber.VesselSubscription, string>) => (
+        <Ellipsised>{context.getValue()}</Ellipsised>
+      ),
       header: () => 'Navire',
       id: 'vesselName',
-      size: 320
+      size: 140
     },
     {
       accessorFn: row => row,
@@ -152,6 +178,12 @@ export function getVesselSubscriptionTableColumns(
     }
   ]
 }
+
+const StyledCheckbox = styled(Checkbox)`
+  .rs-checkbox-checker {
+    line-height: 18px;
+  }
+`
 
 const VesselIdentifierLabel = styled.span`
   color: ${p => p.theme.color.slateGray};

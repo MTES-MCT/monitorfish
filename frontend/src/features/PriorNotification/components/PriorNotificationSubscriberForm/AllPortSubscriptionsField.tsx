@@ -1,6 +1,8 @@
+import { ConfirmationModal } from '@components/ConfirmationModal'
 import { BackOfficeSubtitle } from '@features/BackOffice/components/BackOfficeSubtitle'
 import { useGetPortsAsOptions } from '@hooks/useGetPortsAsOptions'
 import { DataTable, Select } from '@mtes-mct/monitor-ui'
+import { useState } from 'react'
 
 import { EmptyDataLabel, Info } from './styles'
 import { getPortSubscriptionTableColumns } from './utils'
@@ -10,31 +12,58 @@ import type { Promisable } from 'type-fest'
 
 type AllPortSubscriptionsFieldProps = Readonly<{
   isDisabled: boolean
-  onAdd: (newPortLocode: string, isFullPortSubscription: boolean) => Promisable<void>
-  onRemove: (portLocodeToRemove: string, isFullPortSubscription: boolean) => Promisable<void>
+  onAdd: (newPortLocode: string) => Promisable<void>
+  onFullSubscriptionCheck: (portLocode: string) => Promisable<void>
+  onFullSubscriptionUncheck: (portLocode: string) => Promisable<void>
+  onRemove: (portLocodeToRemove: string) => Promisable<void>
   portSubscriptions: PriorNotificationSubscriber.PortSubscription[]
 }>
 export function AllPortSubscriptionsField({
   isDisabled,
   onAdd,
+  onFullSubscriptionCheck,
+  onFullSubscriptionUncheck,
   onRemove,
   portSubscriptions
 }: AllPortSubscriptionsFieldProps) {
   const { portsAsOptions } = useGetPortsAsOptions()
+
+  const [unsubscriptionConfirmationModalPortLocode, setUnsubscriptionConfirmationModalPortLocode] = useState<
+    string | undefined
+  >(undefined)
 
   const add = (newPortLocode: string | undefined) => {
     if (!newPortLocode) {
       return
     }
 
-    onAdd(newPortLocode, false)
+    onAdd(newPortLocode)
   }
 
-  const remove = (portLocodeToRemove: string) => {
-    onRemove(portLocodeToRemove, false)
+  const askForRemovalConfirmation = (portLocodeToRemove: string) => {
+    setUnsubscriptionConfirmationModalPortLocode(portLocodeToRemove)
   }
 
-  const columns = getPortSubscriptionTableColumns(remove, false, isDisabled)
+  const closeRemovalConfirmationModal = () => {
+    setUnsubscriptionConfirmationModalPortLocode(undefined)
+  }
+
+  const remove = () => {
+    if (!unsubscriptionConfirmationModalPortLocode) {
+      return
+    }
+
+    closeRemovalConfirmationModal()
+
+    onRemove(unsubscriptionConfirmationModalPortLocode)
+  }
+
+  const columns = getPortSubscriptionTableColumns(
+    askForRemovalConfirmation,
+    onFullSubscriptionCheck,
+    onFullSubscriptionUncheck,
+    isDisabled
+  )
 
   return (
     <>
@@ -52,7 +81,7 @@ export function AllPortSubscriptionsField({
         emptyLabel={<EmptyDataLabel>Aucun port ajouté.</EmptyDataLabel>}
         initialSorting={[{ desc: false, id: 'portName' }]}
         tableOptions={{
-          getRowId: originalRow => `${originalRow.controlUnitId}-${originalRow.portLocode}`
+          getRowId: originalRow => originalRow.portLocode
         }}
         withoutHead
       />
@@ -65,6 +94,26 @@ export function AllPortSubscriptionsField({
         onChange={add}
         options={portsAsOptions ?? []}
       />
+
+      {unsubscriptionConfirmationModalPortLocode && (
+        <ConfirmationModal
+          confirmationButtonLabel="Confirmer la suppression"
+          message={
+            <>
+              <p>
+                <b>Êtes-vous sûr de vouloir supprimer ce port de diffusion ?</b>
+              </p>
+              <p>
+                L’unité ne recevra plus les préavis des navires ayant une note de risque supérieure à 2,3 lorsqu’ils
+                débarquent dans ce port.
+              </p>
+            </>
+          }
+          onCancel={closeRemovalConfirmationModal}
+          onConfirm={remove}
+          title="Supprimer un port de diffusion"
+        />
+      )}
     </>
   )
 }

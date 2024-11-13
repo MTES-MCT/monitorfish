@@ -83,6 +83,7 @@ export function SegmentSubscriptionsField({
         name="fleetSegmentSubscription"
         onChange={add}
         options={fleetSegmentsAsOptions ?? []}
+        searchable
       />
 
       {unsubscriptionConfirmationModalFleetSegmentCode && (

@@ -44,7 +44,7 @@ export function ProducerOrganizationMembershipTable() {
 
       <FilterBar />
 
-      <TableLegend>
+      <TableLegend data-cy="producer_organization_memberships_results">
         {filteredMemberships.length} {pluralize('résultat', filteredMemberships.length)}
       </TableLegend>
       <DataTable
@@ -53,9 +53,11 @@ export function ProducerOrganizationMembershipTable() {
         initialSorting={[{ desc: false, id: 'joiningDate' }]}
       />
 
-      <SeeMore accent={Accent.SECONDARY} onClick={() => setRowsDisplayed(previous => previous + 50)}>
-        Afficher plus
-      </SeeMore>
+      {filteredMemberships > displayedMemberships && (
+        <SeeMore accent={Accent.SECONDARY} onClick={() => setRowsDisplayed(previous => previous + 50)}>
+          Afficher plus
+        </SeeMore>
+      )}
     </BackOfficeBody>
   )
 }

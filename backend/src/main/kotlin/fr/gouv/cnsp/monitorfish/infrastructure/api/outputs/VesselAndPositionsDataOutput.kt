@@ -11,9 +11,10 @@ data class VesselAndPositionsDataOutput(
             return VesselAndPositionsDataOutput(
                 vessel =
                     VesselDataOutput.fromVesselAndRelatedDatas(
-                        vesselInformation.vessel,
-                        vesselInformation.beacon,
-                        vesselInformation.vesselRiskFactor,
+                        vessel = vesselInformation.vessel,
+                        beacon = vesselInformation.beacon,
+                        vesselRiskFactor = vesselInformation.vesselRiskFactor,
+                        producerOrganizationMembership = vesselInformation.producerOrganization
                     ),
                 positions =
                     vesselInformation.positions.map {

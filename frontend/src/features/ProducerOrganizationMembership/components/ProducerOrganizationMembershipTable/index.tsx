@@ -51,6 +51,9 @@ export function ProducerOrganizationMembershipTable() {
         columns={TABLE_COLUMNS}
         data={displayedMemberships}
         initialSorting={[{ desc: false, id: 'joiningDate' }]}
+        tableOptions={{
+          getRowId: row => row.internalReferenceNumber
+        }}
       />
 
       {filteredMemberships > displayedMemberships && (

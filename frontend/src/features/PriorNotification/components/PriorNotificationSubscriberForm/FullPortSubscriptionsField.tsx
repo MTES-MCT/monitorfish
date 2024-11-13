@@ -82,6 +82,7 @@ export function FullPortSubscriptionsField({
         name="fullPortSubscription"
         onChange={add}
         options={portsAsOptions ?? []}
+        searchable
       />
 
       {unsubscriptionConfirmationModalPortLocode && (

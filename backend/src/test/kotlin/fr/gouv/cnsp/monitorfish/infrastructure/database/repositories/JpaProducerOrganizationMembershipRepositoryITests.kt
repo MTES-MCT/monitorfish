@@ -19,7 +19,7 @@ class JpaProducerOrganizationMembershipRepositoryITests : AbstractDBTests() {
         // Then
         assertThat(memberships).hasSize(12)
         assertThat(memberships.first().internalReferenceNumber).isEqualTo("FAK000999999")
-        assertThat(memberships.first().startMembershipDate).isEqualTo("14/03/2015")
+        assertThat(memberships.first().joiningDate).isEqualTo("14/03/2015")
         assertThat(memberships.first().organizationName).isEqualTo("SA THO AN")
     }
 
@@ -46,7 +46,7 @@ class JpaProducerOrganizationMembershipRepositoryITests : AbstractDBTests() {
 
         // Then
         val membership = jpaProducerOrganizationMembership.findByInternalReferenceNumber("CFR10215")
-        assertThat(membership.startMembershipDate).isEqualTo("01/01/2024")
+        assertThat(membership.joiningDate).isEqualTo("01/01/2024")
         assertThat(membership.organizationName).isEqualTo("OP OK")
     }
 }

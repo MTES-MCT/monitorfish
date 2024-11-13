@@ -1,0 +1,67 @@
+import { producerOrganizationMembershipApi } from '@features/ProducerOrganizationMembership/apis'
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
+import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
+import { read, utils } from 'xlsx'
+
+import type { BackofficeAppThunk } from '@store'
+
+const EMPTY_CSV_ERROR = 'Le CSV ajouté est vide.'
+const EMPTY_FIELD_ERROR = 'Le CSV contient un champ vide'
+
+/**
+ * The exported CSV from SYSADH has columns (with bad UTF-8) :
+ * - N� CFR du navire   <- Used as `internalReferenceNumber`
+ * - N� immatriculation nationale du navire
+ * - navImoNo
+ * - Nom du navire
+ * - Cat�gorie du navire
+ * - Identifiant armateur
+ * - D�signation armateur
+ * - Adresse armateur
+ * - Date adh�sion      <- Used as `joiningDate`
+ * - Date sortie
+ * - Type d'adh�sion
+ * - Adh�sion           <- Used as `organizationName`
+ * - Esp�ce	Libell� esp�ce
+ *
+ * @param file
+ */
+export const updateProducerOrganizationMemberships =
+  (file: File): BackofficeAppThunk<Promise<void>> =>
+  async dispatch => {
+    try {
+      const arrayBuffer = await file.arrayBuffer()
+
+      const workbook = read(arrayBuffer, { FS: ';', raw: true, type: 'array' })
+      const sheetName = workbook.SheetNames[0]
+      if (!sheetName) {
+        throw new Error(EMPTY_CSV_ERROR)
+      }
+      const worksheet = workbook.Sheets[sheetName]
+      if (!worksheet) {
+        throw new Error(EMPTY_CSV_ERROR)
+      }
+
+      const rowsAsArray: string[][] = utils.sheet_to_json<string[]>(worksheet, { header: 1 }).slice(1)
+      const nextMemberships = rowsAsArray.map(row => ({
+        internalReferenceNumber: getFieldOrThrow(row, 0),
+        joiningDate: getFieldOrThrow(row, 8),
+        organizationName: getFieldOrThrow(row, 11)
+      }))
+
+      await dispatch(
+        producerOrganizationMembershipApi.endpoints.setProducerOrganizationMemberships.initiate(nextMemberships)
+      ).unwrap()
+    } catch (err) {
+      dispatch(displayOrLogError(err, undefined, true, DisplayedErrorKey.BACKOFFICE_PRODUCER_ORGANIZATION_ERROR))
+    }
+  }
+
+const getFieldOrThrow = (row: string[], columnIndex: number) => {
+  const value = row[columnIndex]
+  if (!value) {
+    throw new Error(EMPTY_FIELD_ERROR)
+  }
+
+  return value
+}

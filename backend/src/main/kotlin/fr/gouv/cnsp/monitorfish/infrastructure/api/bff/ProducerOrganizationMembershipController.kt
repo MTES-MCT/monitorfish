@@ -43,7 +43,7 @@ class ProducerOrganizationMembershipController(
         )
     }
 
-    @PostMapping("/")
+    @PostMapping(value = [""], consumes = ["application/json"])
     @Operation(summary = "Set all Producer Organization memberships")
     fun set(
         @RequestBody

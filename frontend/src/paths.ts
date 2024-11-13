@@ -14,6 +14,7 @@ export const ROUTER_PATHS = {
   login: '/login',
   newRegulation: BackOfficeMenuPath.NEW_REGULATION_FORM,
   priorNotificationSubscribers: BackOfficeMenuPath[BackOfficeMenuKey.PRIOR_NOTIFICATION_SUBSCRIBER_TABLE],
+  producerOrganizationMembership: BackOfficeMenuPath[BackOfficeMenuKey.PRODUCER_ORGANIZATION_TABLE],
   register: '/register',
   regulations: BackOfficeMenuPath[BackOfficeMenuKey.REGULATORY_ZONE_TABLE],
   sideWindow: '/side_window'

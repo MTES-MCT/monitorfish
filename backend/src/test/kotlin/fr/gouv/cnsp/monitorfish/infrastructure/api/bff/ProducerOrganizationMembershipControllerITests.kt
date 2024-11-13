@@ -60,10 +60,10 @@ class ProducerOrganizationMembershipControllerITests {
                 ProducerOrganizationMembership("123", "01/10/2024", "Example Name 1"),
                 ProducerOrganizationMembership("456", "01/10/2024", "Example Name 2"),
             )
-        
+
         // When Then
         mockMvc.perform(
-            post("/bff/v1/producer_organization_memberships/")
+            post("/bff/v1/producer_organization_memberships")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(memberships)),
         )

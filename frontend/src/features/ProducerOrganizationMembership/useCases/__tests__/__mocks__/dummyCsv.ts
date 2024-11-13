@@ -1,8 +1,8 @@
 import { jest } from '@jest/globals'
 
 export function getDummyCsv() {
-  const mockCsvContent = ' '
-  const file = new File([mockCsvContent], 'test.csv', { type: 'text/csv' })
+  const mockCsvContent = 'CFR; ; ; ; ; ; ; ;Date; ; ;Organization\n12345; ; ; ; ; ; ; ;01/10/2024; ; ;Organization 1'
+  const file = new File([mockCsvContent], 'export_adhesions.csv', { type: 'text/csv' })
 
   file.arrayBuffer = jest.fn(async () => {
     const buffer = new ArrayBuffer(mockCsvContent.length)

@@ -3,7 +3,6 @@ import { read, utils } from 'xlsx'
 import type { ProducerOrganizationMembership } from '@features/ProducerOrganizationMembership/types'
 
 const EMPTY_CSV_ERROR = 'Le CSV ajouté est vide.'
-const EMPTY_FIELD_ERROR = 'Le CSV contient un champ vide'
 
 /**
  * The exported CSV from SYSADH has columns (with bad UTF-8) :
@@ -48,7 +47,7 @@ export const getNextMembershipsFromFile = async (file: File): Promise<ProducerOr
 const getFieldOrThrow = (row: string[], columnIndex: number) => {
   const value = row[columnIndex]
   if (!value) {
-    throw new Error(EMPTY_FIELD_ERROR)
+    throw new Error(`Le CSV contient un champ vide à la colonne ${columnIndex}`)
   }
 
   return value

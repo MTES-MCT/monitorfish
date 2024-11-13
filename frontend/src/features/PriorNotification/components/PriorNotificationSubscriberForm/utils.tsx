@@ -1,4 +1,4 @@
-import { Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import type { PriorNotificationSubscriber } from '../../PriorNotificationSubscriber.types'
@@ -34,10 +34,10 @@ export function getPortSubscriptionTableColumns(
       accessorFn: row => row.portLocode,
       cell: (context: CellContext<PriorNotificationSubscriber.PortSubscription, string>) => (
         <IconButton
+          accent={Accent.TERTIARY}
           disabled={isDisabled}
           Icon={Icon.Delete}
           onClick={() => onRemove(context.getValue())}
-          size={Size.SMALL}
           title={
             isFullPortSubscription
               ? "Désinscrire l'unité des préavis liés à ce port pour les navires dont la note de risque est supérieure à 2,3"
@@ -67,10 +67,10 @@ export function getSegmentSubscriptionTableColumns(
       accessorFn: row => row.segmentCode,
       cell: (context: CellContext<PriorNotificationSubscriber.FleetSegmentSubscription, string>) => (
         <IconButton
+          accent={Accent.TERTIARY}
           disabled={isDisabled}
           Icon={Icon.Delete}
           onClick={() => onRemove(context.getValue())}
-          size={Size.SMALL}
           title="Désinscrire l'unité de tous les préavis liés à ce segment de flotte"
         />
       ),
@@ -138,10 +138,10 @@ export function getVesselSubscriptionTableColumns(
       accessorFn: row => row.vesselId,
       cell: (context: CellContext<PriorNotificationSubscriber.VesselSubscription, number>) => (
         <IconButton
+          accent={Accent.TERTIARY}
           disabled={isDisabled}
           Icon={Icon.Delete}
           onClick={() => onRemove(context.getValue())}
-          size={Size.SMALL}
           title="Désinscrire l'unité de tous les préavis liés à ce navire"
         />
       ),

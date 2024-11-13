@@ -159,9 +159,18 @@ const Wrapper = styled(BackOfficeBody)`
     margin: 32px 0;
   }
 
-  > .Table-SimpleTable {
+  .Table-SimpleTable {
     margin-bottom: 16px;
     width: 400px;
+
+    td {
+      vertical-align: middle;
+
+      > .Element-IconButton {
+        height: 20px;
+        margin-top: 5px;
+      }
+    }
   }
 
   > .Field-Select {

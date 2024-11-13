@@ -4,7 +4,7 @@ import { useGetPortsAsOptions } from '@hooks/useGetPortsAsOptions'
 import { DataTable, Select } from '@mtes-mct/monitor-ui'
 import { useState } from 'react'
 
-import { Info } from './shared/Info'
+import { Info } from './styles'
 import { getPortSubscriptionTableColumns } from './utils'
 
 import type { PriorNotificationSubscriber } from '@features/PriorNotification/PriorNotificationSubscriber.types'

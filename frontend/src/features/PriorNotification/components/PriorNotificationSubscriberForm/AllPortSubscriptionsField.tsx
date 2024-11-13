@@ -2,7 +2,7 @@ import { BackOfficeSubtitle } from '@features/BackOffice/components/BackOfficeSu
 import { useGetPortsAsOptions } from '@hooks/useGetPortsAsOptions'
 import { DataTable, Select } from '@mtes-mct/monitor-ui'
 
-import { Info } from './shared/Info'
+import { EmptyDataLabel, Info } from './styles'
 import { getPortSubscriptionTableColumns } from './utils'
 
 import type { PriorNotificationSubscriber } from '@features/PriorNotification/PriorNotificationSubscriber.types'
@@ -49,6 +49,7 @@ export function AllPortSubscriptionsField({
       <DataTable
         columns={columns}
         data={portSubscriptions}
+        emptyLabel={<EmptyDataLabel>Aucun port ajouté.</EmptyDataLabel>}
         initialSorting={[{ desc: false, id: 'portName' }]}
         tableOptions={{
           getRowId: originalRow => `${originalRow.controlUnitId}-${originalRow.portLocode}`

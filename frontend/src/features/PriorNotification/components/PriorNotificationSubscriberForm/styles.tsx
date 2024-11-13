@@ -6,3 +6,7 @@ export const Info = styled.p`
   line-height: 18px;
   margin-bottom: 16px;
 `
+
+export const EmptyDataLabel = styled(Info)`
+  margin-top: 0;
+`

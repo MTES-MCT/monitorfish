@@ -4,7 +4,7 @@ import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { DataTable, useKey } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import { Info } from './shared/Info'
+import { EmptyDataLabel, Info } from './styles'
 import { getVesselSubscriptionTableColumns } from './utils'
 
 import type { PriorNotificationSubscriber } from '@features/PriorNotification/PriorNotificationSubscriber.types'
@@ -52,6 +52,7 @@ export function VesselSubscriptionsField({
         <DataTable
           columns={columns}
           data={vesselSubscriptions}
+          emptyLabel={<EmptyDataLabel>Aucun navire ajouté.</EmptyDataLabel>}
           initialSorting={[{ desc: false, id: 'vesselName' }]}
           tableOptions={{
             getRowId: originalRow => `${originalRow.controlUnitId}-${originalRow.vesselId}`

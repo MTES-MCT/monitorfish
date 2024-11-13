@@ -1,3 +1,4 @@
+import type { ProducerOrganizationMembership } from '@features/ProducerOrganizationMembership/types'
 import type { RiskFactor } from 'domain/entities/vessel/riskFactor/types'
 import type { VesselId, VesselIdentifier, VesselLastPosition } from 'domain/entities/vessel/types'
 
@@ -48,6 +49,7 @@ export namespace Vessel {
     hasVisioCaptures: boolean | undefined
     logbookEquipmentStatus: string | undefined
     logbookSoftware: string | undefined
+    producerOrganization: ProducerOrganizationMembership | undefined
     riskFactor: RiskFactor | undefined
   }
 

@@ -184,6 +184,16 @@ export function Identity() {
               </Value>
             </Field>
             <Field>
+              <Key>Organisation de producteurs</Key>
+              <Value data-cy="vessel-identity-producerOrganization">
+                {selectedVessel?.producerOrganization ? (
+                  `${selectedVessel?.producerOrganization?.organizationName} (adhésion le ${selectedVessel?.producerOrganization?.joiningDate})`
+                ) : (
+                  <NoValue>-</NoValue>
+                )}
+              </Value>
+            </Field>
+            <Field>
               <Key>Coordonnées propriétaire</Key>
               <Value>
                 <PersonalData>

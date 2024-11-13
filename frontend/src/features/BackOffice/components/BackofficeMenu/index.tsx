@@ -28,6 +28,12 @@ export function BackOfficeMenu() {
         <Icon.Fishery />
         {BACK_OFFICE_MENU_LABEL[BackOfficeMenuKey.PRIOR_NOTIFICATION_SUBSCRIBER_TABLE]}
       </StyledNavLink>
+      <StyledNavLink
+        to={`${ROUTER_PATHS.backoffice}/${BackOfficeMenuPath[BackOfficeMenuKey.PRODUCER_ORGANIZATION_TABLE]}`}
+      >
+        <Icon.Account />
+        {BACK_OFFICE_MENU_LABEL[BackOfficeMenuKey.PRODUCER_ORGANIZATION_TABLE]}
+      </StyledNavLink>
     </Wrapper>
   )
 }
@@ -40,9 +46,9 @@ const Wrapper = styled.div`
   flex-direction: column;
   letter-spacing: 0.5px;
   line-height: 1;
-  min-width: 200px;
+  width: 180px;
   padding: 16px 24px;
-  width: 200px;
+  flex-shrink: 0;
 `
 
 const StyledNavLink = styled(NavLink)`

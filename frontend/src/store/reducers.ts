@@ -12,6 +12,7 @@ import { missionFormReducer } from '@features/Mission/components/MissionForm/sli
 import { missionListReducer, type MissionListState } from '@features/Mission/components/MissionList/slice'
 import { backofficePriorNotificationReducer } from '@features/PriorNotification/backoffice.slice'
 import { priorNotificationReducer, type PriorNotificationState } from '@features/PriorNotification/slice'
+import { backofficeProducerOrganizationMembershipReducer } from '@features/ProducerOrganizationMembership/backoffice.slice'
 import { regulatoryLayerSearchReducer } from '@features/Regulation/components/RegulationSearch/slice'
 import { regulatoryReducer } from '@features/Regulation/slice'
 import { reportingReducer } from '@features/Reporting/slice'
@@ -125,7 +126,9 @@ export const mainReducer = {
 
 export const backofficeReducer = {
   ...commonReducerList,
+  displayedError: displayedErrorReducer,
   layer: layer.backoffice.reducer,
   priorNotification: backofficePriorNotificationReducer,
+  producerOrganizationMembership: backofficeProducerOrganizationMembershipReducer,
   regulation: regulationReducer
 }

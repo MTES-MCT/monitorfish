@@ -20,6 +20,7 @@ class GetVessel(
     private val logbookReportRepository: LogbookReportRepository,
     private val riskFactorRepository: RiskFactorRepository,
     private val beaconRepository: BeaconRepository,
+    private val producerOrganizationMembershipRepository: ProducerOrganizationMembershipRepository,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(GetVessel::class.java)
 
@@ -57,9 +58,15 @@ class GetVessel(
                 async {
                     riskFactorRepository.findByInternalReferenceNumber(internalReferenceNumber)
                 }
+            val vesselProducerOrganization =
+                async {
+                    producerOrganizationMembershipRepository.findByInternalReferenceNumber(internalReferenceNumber)
+                }
 
             val vessel = vesselFuture.await()
-            val beacon = vessel?.id?.let { vesselId -> beaconRepository.findBeaconByVesselId(vesselId) }
+            val beacon = async {
+                vessel?.id?.let { vesselId -> beaconRepository.findBeaconByVesselId(vesselId) }
+            }
             val logbookSoftware =
                 vessel?.internalReferenceNumber?.let {
                     logbookReportRepository.findLastReportSoftware(
@@ -71,13 +78,14 @@ class GetVessel(
             Pair(
                 vesselTrackHasBeenModified,
                 VesselInformation(
-                    vessel?.copy(
+                    vessel = vessel?.copy(
                         hasVisioCaptures = hasVisioCaptures,
                         logbookSoftware = logbookSoftware,
                     ),
-                    beacon,
-                    positions.await(),
-                    vesselRiskFactorsFuture.await() ?: VesselRiskFactor(),
+                    beacon = beacon.await(),
+                    positions = positions.await(),
+                    vesselRiskFactor = vesselRiskFactorsFuture.await() ?: VesselRiskFactor(),
+                    producerOrganization = vesselProducerOrganization.await(),
                 ),
             )
         }

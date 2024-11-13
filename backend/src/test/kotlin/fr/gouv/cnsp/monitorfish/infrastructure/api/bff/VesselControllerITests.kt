@@ -16,6 +16,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infracti
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
+import fr.gouv.cnsp.monitorfish.domain.entities.producer_organization.ProducerOrganizationMembership
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.*
@@ -147,7 +148,7 @@ class VesselControllerITests {
     private infix fun <T> BDDMockito.BDDMyOngoingStubbing<T>.willReturn(block: () -> T) = willReturn(block())
 
     @Test
-    fun `Should get vessels with last positions and risk factor`() {
+    fun `Should get vessels with last positions and vessel data`() {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
         val firstPosition =
@@ -233,6 +234,11 @@ class VesselControllerITests {
                     beacon = null,
                     positions = listOf(firstPosition, secondPosition, thirdPosition),
                     vesselRiskFactor = VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
+                    producerOrganization = ProducerOrganizationMembership(
+                        internalReferenceNumber = "FR224226850",
+                        "01/10/2024",
+                        "OP"
+                    ),
                 ),
             )
         }
@@ -254,6 +260,7 @@ class VesselControllerITests {
             .andExpect(jsonPath("$.vessel.riskFactor.controlPriorityLevel", equalTo(1.0)))
             .andExpect(jsonPath("$.vessel.riskFactor.riskFactor", equalTo(3.2)))
             .andExpect(jsonPath("$.vessel.underCharter", equalTo(true)))
+            .andExpect(jsonPath("$.vessel.producerOrganization.organizationName", equalTo("OP")))
 
         runBlocking {
             Mockito.verify(getVessel).execute(
@@ -282,6 +289,7 @@ class VesselControllerITests {
                     beacon = null,
                     positions = listOf(),
                     vesselRiskFactor = VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
+                    producerOrganization = null,
                 ),
             )
         }
@@ -307,6 +315,7 @@ class VesselControllerITests {
                     beacon = null,
                     positions = listOf(),
                     vesselRiskFactor = VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
+                    producerOrganization = null,
                 ),
             )
         }

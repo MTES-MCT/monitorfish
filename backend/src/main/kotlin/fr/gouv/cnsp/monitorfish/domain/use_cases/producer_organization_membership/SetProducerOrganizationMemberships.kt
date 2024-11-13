@@ -10,9 +10,7 @@ class SetProducerOrganizationMemberships(
 ) {
     fun execute(
         producerOrganizationMemberships: List<ProducerOrganizationMembership>,
-    ): List<ProducerOrganizationMembership> {
+    ) {
         producerOrganizationMembershipRepository.saveAll(producerOrganizationMemberships)
-
-        return producerOrganizationMembershipRepository.findAll()
     }
 }

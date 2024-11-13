@@ -5,6 +5,7 @@ import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Beacon
 import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
+import fr.gouv.cnsp.monitorfish.domain.entities.producer_organization.ProducerOrganizationMembership
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
@@ -35,6 +36,9 @@ class GetVesselUTests {
 
     @MockBean
     private lateinit var beaconRepository: BeaconRepository
+
+    @MockBean
+    private lateinit var producerOrganizationMembershipRepository: ProducerOrganizationMembershipRepository
 
     @Test
     fun `execute Should return the vessel and an ordered list of last positions for a given vessel`() {
@@ -133,6 +137,9 @@ class GetVesselUTests {
             VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
         )
         given(beaconRepository.findBeaconByVesselId(eq(123))).willReturn(Beacon("A_BEACON_NUMBER", vesselId = 123))
+        given(producerOrganizationMembershipRepository.findByInternalReferenceNumber(any())).willReturn(
+            ProducerOrganizationMembership("FR224226850", "01/10/2024", "Example Name 1")
+        )
 
         // When
         val pair =
@@ -143,6 +150,7 @@ class GetVesselUTests {
                     logbookReportRepository,
                     riskFactorRepository,
                     beaconRepository,
+                    producerOrganizationMembershipRepository
                 )
                     .execute(
                         123,
@@ -165,6 +173,7 @@ class GetVesselUTests {
         assertThat(pair.second.positions.last().dateTime).isEqualTo(now.minusHours(1))
         assertThat(pair.second.vesselRiskFactor.impactRiskFactor).isEqualTo(2.3)
         assertThat(pair.second.vesselRiskFactor.riskFactor).isEqualTo(3.2)
+        assertThat(pair.second.producerOrganization?.organizationName).isEqualTo("Example Name 1")
     }
 
     @Test
@@ -185,6 +194,7 @@ class GetVesselUTests {
                     logbookReportRepository,
                     riskFactorRepository,
                     beaconRepository,
+                    producerOrganizationMembershipRepository
                 )
                     .execute(
                         123,
@@ -222,6 +232,7 @@ class GetVesselUTests {
                     logbookReportRepository,
                     riskFactorRepository,
                     beaconRepository,
+                    producerOrganizationMembershipRepository
                 )
                     .execute(
                         123,

@@ -202,6 +202,7 @@ class VesselLightControllerITests {
                     null,
                     listOf(firstPosition, secondPosition, thirdPosition),
                     VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
+                    producerOrganization = null,
                 ),
             )
         }

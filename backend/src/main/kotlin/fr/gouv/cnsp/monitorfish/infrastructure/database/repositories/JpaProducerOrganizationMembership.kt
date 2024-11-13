@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.ProducerOrganizationMembersh
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ProducerOrganizationMembershipEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBProducerOrganizationMembership
 import org.springframework.stereotype.Repository
+import kotlin.jvm.optionals.getOrNull
 
 @Repository
 class JpaProducerOrganizationMembership(
@@ -23,8 +24,8 @@ class JpaProducerOrganizationMembership(
         )
     }
 
-    override fun findByInternalReferenceNumber(internalReferenceNumber: String): ProducerOrganizationMembership {
-        return dbProducerOrganizationMembership.findById(internalReferenceNumber).get()
-            .toProducerOrganizationMembership()
+    override fun findByInternalReferenceNumber(internalReferenceNumber: String): ProducerOrganizationMembership? {
+        return dbProducerOrganizationMembership.findById(internalReferenceNumber).getOrNull()
+            ?.toProducerOrganizationMembership()
     }
 }

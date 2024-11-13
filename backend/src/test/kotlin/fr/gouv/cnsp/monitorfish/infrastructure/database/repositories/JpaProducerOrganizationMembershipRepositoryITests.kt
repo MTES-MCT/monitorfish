@@ -46,7 +46,7 @@ class JpaProducerOrganizationMembershipRepositoryITests : AbstractDBTests() {
 
         // Then
         val membership = jpaProducerOrganizationMembership.findByInternalReferenceNumber("CFR10215")
-        assertThat(membership.joiningDate).isEqualTo("01/01/2024")
-        assertThat(membership.organizationName).isEqualTo("OP OK")
+        assertThat(membership?.joiningDate).isEqualTo("01/01/2024")
+        assertThat(membership?.organizationName).isEqualTo("OP OK")
     }
 }

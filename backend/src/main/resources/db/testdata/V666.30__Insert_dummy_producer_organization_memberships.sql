@@ -1,6 +1,6 @@
 INSERT INTO public.producer_organization_memberships (
     internal_reference_number,
-    start_membership_date,
+    joining_date,
     organization_name
 ) VALUES
     ('FAK000999999',    '14/03/2015', 'SA THO AN'),

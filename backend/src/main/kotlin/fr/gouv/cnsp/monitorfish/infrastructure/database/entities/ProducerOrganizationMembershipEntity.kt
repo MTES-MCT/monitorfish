@@ -12,15 +12,15 @@ data class ProducerOrganizationMembershipEntity(
     @Id
     @Column(name = "internal_reference_number", nullable = false)
     val internalReferenceNumber: String,
-    @Column(name = "start_membership_date", nullable = false)
-    val startMembershipDate: String,
+    @Column(name = "joining_date", nullable = false)
+    val joiningDate: String,
     @Column(name = "organization_name", nullable = false)
     val organizationName: String,
 ) {
     fun toProducerOrganizationMembership(): ProducerOrganizationMembership {
         return ProducerOrganizationMembership(
             internalReferenceNumber = internalReferenceNumber,
-            startMembershipDate = startMembershipDate,
+            joiningDate = joiningDate,
             organizationName = organizationName,
         )
     }
@@ -29,7 +29,7 @@ data class ProducerOrganizationMembershipEntity(
         fun fromProducerOrganizationMembership(producerOrganizationMembership: ProducerOrganizationMembership) =
             ProducerOrganizationMembershipEntity(
                 internalReferenceNumber = producerOrganizationMembership.internalReferenceNumber,
-                startMembershipDate = producerOrganizationMembership.startMembershipDate,
+                joiningDate = producerOrganizationMembership.joiningDate,
                 organizationName = producerOrganizationMembership.organizationName,
             )
     }

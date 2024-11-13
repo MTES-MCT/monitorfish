@@ -5,13 +5,13 @@ import fr.gouv.cnsp.monitorfish.domain.entities.producer_organization.ProducerOr
 data class ProducerOrganizationMembershipDataInput(
     /** CFR (Common Fleet Register Number). */
     val internalReferenceNumber: String,
-    val startMembershipDate: String,
+    val joiningDate: String,
     val organizationName: String,
 ) {
     fun toProducerOrganizationMembership(): ProducerOrganizationMembership =
         ProducerOrganizationMembership(
             internalReferenceNumber = internalReferenceNumber,
-            startMembershipDate = startMembershipDate,
+            joiningDate = joiningDate,
             organizationName = organizationName,
         )
 }

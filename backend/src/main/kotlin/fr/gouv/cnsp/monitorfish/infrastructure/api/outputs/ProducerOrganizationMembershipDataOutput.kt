@@ -5,7 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.producer_organization.ProducerOr
 data class ProducerOrganizationMembershipDataOutput(
     /** CFR (Common Fleet Register Number). */
     val internalReferenceNumber: String,
-    val startMembershipDate: String,
+    val joiningDate: String,
     val organizationName: String,
 ) {
     companion object {
@@ -14,7 +14,7 @@ data class ProducerOrganizationMembershipDataOutput(
         ): ProducerOrganizationMembershipDataOutput {
             return ProducerOrganizationMembershipDataOutput(
                 internalReferenceNumber = producerOrganizationMembership.internalReferenceNumber,
-                startMembershipDate = producerOrganizationMembership.startMembershipDate,
+                joiningDate = producerOrganizationMembership.joiningDate,
                 organizationName = producerOrganizationMembership.organizationName,
             )
         }

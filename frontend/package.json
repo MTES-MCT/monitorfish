@@ -83,6 +83,7 @@
     "use-debounce": "10.0.4",
     "uuid": "10.0.0",
     "worker-loader": "3.0.8",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
     "yup": "1.4.0"
   },
   "devDependencies": {

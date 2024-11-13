@@ -2,7 +2,7 @@ import { BackOfficeSubtitle } from '@features/BackOffice/components/BackOfficeSu
 import { useGetFleetSegmentsAsOptions } from '@features/FleetSegment/hooks/useGetFleetSegmentsAsOptions'
 import { DataTable, Select } from '@mtes-mct/monitor-ui'
 
-import { Info } from './shared/Info'
+import { EmptyDataLabel, Info } from './styles'
 import { getSegmentSubscriptionTableColumns } from './utils'
 
 import type { PriorNotificationSubscriber } from '@features/PriorNotification/PriorNotificationSubscriber.types'
@@ -49,6 +49,7 @@ export function SegmentSubscriptionsField({
       <DataTable
         columns={columns}
         data={segmentSubscriptions}
+        emptyLabel={<EmptyDataLabel>Aucun segment ajouté.</EmptyDataLabel>}
         initialSorting={[{ desc: false, id: 'name' }]}
         tableOptions={{
           getRowId: originalRow => `${originalRow.controlUnitId}-${originalRow.segmentCode}`

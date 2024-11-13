@@ -159,11 +159,6 @@ const Wrapper = styled(BackOfficeBody)`
     margin: 32px 0;
   }
 
-  > p + p {
-    font-style: italic;
-    margin: 0 0 16px;
-  }
-
   > .Table-SimpleTable {
     margin-bottom: 16px;
     width: 400px;

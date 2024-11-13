@@ -131,10 +131,10 @@ export function PriorNotificationSubscriberForm() {
         portSubscriptions={fullPortSubscriptions}
       />
       <SegmentSubscriptionsField
+        fleetSegmentSubscriptions={subscriber.fleetSegmentSubscriptions}
         isDisabled={isFetching}
         onAdd={addSegmentSubscription}
         onRemove={removeSegementSubscription}
-        segmentSubscriptions={subscriber.fleetSegmentSubscriptions}
       />
       <VesselSubscriptionsField
         isDisabled={isFetching}

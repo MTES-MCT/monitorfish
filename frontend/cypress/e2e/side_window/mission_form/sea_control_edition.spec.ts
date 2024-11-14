@@ -453,7 +453,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
     cy.get('button:contains("Enregistrer")').should('not.be.disabled')
   })
 
-  it('Should delete an existing infraction', () => {
+  it('Should edit and delete an existing infraction', () => {
     // Given
     openSideWindowMissionList()
     cy.getDataCy(`side-window-sub-menu-${ALL_SEAFRONT_GROUP}`).click()
@@ -462,8 +462,17 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
     cy.get('*[data-cy="action-list-item"]').click()
     cy.wait(500)
     cy.contains('Autre infraction 2').should('exist')
+    cy.clickButton("Éditer l'infraction", { index: 4 })
 
-    // When
+    // When editing
+    cy.fill('Observations sur l’infraction', 'Un nouveau commentaire')
+    cy.clickButton('Valider l’infraction')
+
+    // Then
+    cy.contains('Autre infraction 2').should('exist')
+    cy.contains('Un nouveau commentaire').should('exist')
+
+    // When deleting
     cy.clickButton("Supprimer l'infraction", { index: 4 })
 
     // Then

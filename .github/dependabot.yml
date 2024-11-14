@@ -3,7 +3,6 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     assignees:
-      - "ivangabriele"
       - "louptheron"
     schedule:
       interval: "monthly"
@@ -33,7 +32,6 @@ updates:
   - package-ecosystem: "npm"
     directory: "/frontend"
     assignees:
-      - "ivangabriele"
       - "louptheron"
     schedule:
       interval: "monthly"

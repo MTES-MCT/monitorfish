@@ -1,7 +1,8 @@
-import { Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
+import { Ellipsised } from '@components/Ellipsised'
+import { Accent, Checkbox, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import type { PriorNotificationSubscriber } from '@features/PriorNotification/PriorNotificationSubscriber.types'
+import type { PriorNotificationSubscriber } from '../../PriorNotificationSubscriber.types'
 import type { CellContext, ColumnDef } from '@tanstack/react-table'
 import type { Promisable } from 'type-fest'
 
@@ -21,7 +22,8 @@ export function getFormDataFromSubscriber(
 
 export function getPortSubscriptionTableColumns(
   onRemove: (portLocodeToRemove: string) => Promisable<void>,
-  isFullPortSubscription: boolean,
+  onFullSubscriptionCheck: (portLocode: string) => Promisable<void>,
+  onFullSubscriptionUncheck: (portLocode: string) => Promisable<void>,
   isDisabled: boolean
 ): Array<ColumnDef<PriorNotificationSubscriber.PortSubscription, any>> {
   return [
@@ -31,18 +33,39 @@ export function getPortSubscriptionTableColumns(
       id: 'portName'
     },
     {
+      accessorFn: row => row,
+      cell: (
+        context: CellContext<PriorNotificationSubscriber.PortSubscription, PriorNotificationSubscriber.PortSubscription>
+      ) => {
+        const portSubscription = context.getValue()
+
+        return (
+          <StyledCheckbox
+            checked={portSubscription.hasSubscribedToAllPriorNotifications}
+            label="tous les préavis"
+            name="hasSubscribedToAllPriorNotifications"
+            onChange={
+              portSubscription.hasSubscribedToAllPriorNotifications
+                ? () => onFullSubscriptionUncheck(portSubscription.portLocode)
+                : () => onFullSubscriptionCheck(portSubscription.portLocode)
+            }
+          />
+        )
+      },
+      enableSorting: false,
+      header: () => '',
+      id: 'toggleFullSubscription',
+      size: 160
+    },
+    {
       accessorFn: row => row.portLocode,
       cell: (context: CellContext<PriorNotificationSubscriber.PortSubscription, string>) => (
         <IconButton
+          accent={Accent.TERTIARY}
           disabled={isDisabled}
           Icon={Icon.Delete}
           onClick={() => onRemove(context.getValue())}
-          size={Size.SMALL}
-          title={
-            isFullPortSubscription
-              ? "Désinscrire l'unité des préavis liés à ce port pour les navires dont la note de risque est supérieure à 2,3"
-              : "Désinscrire l'unité de tous les préavis liés à ce port"
-          }
+          title="Désinscrire l'unité de tous les préavis liés à ce port"
         />
       ),
       enableSorting: false,
@@ -67,10 +90,10 @@ export function getSegmentSubscriptionTableColumns(
       accessorFn: row => row.segmentCode,
       cell: (context: CellContext<PriorNotificationSubscriber.FleetSegmentSubscription, string>) => (
         <IconButton
+          accent={Accent.TERTIARY}
           disabled={isDisabled}
           Icon={Icon.Delete}
           onClick={() => onRemove(context.getValue())}
-          size={Size.SMALL}
           title="Désinscrire l'unité de tous les préavis liés à ce segment de flotte"
         />
       ),
@@ -89,9 +112,12 @@ export function getVesselSubscriptionTableColumns(
   return [
     {
       accessorFn: row => row.vesselName,
+      cell: (context: CellContext<PriorNotificationSubscriber.VesselSubscription, string>) => (
+        <Ellipsised>{context.getValue()}</Ellipsised>
+      ),
       header: () => 'Navire',
       id: 'vesselName',
-      size: 320
+      size: 140
     },
     {
       accessorFn: row => row,
@@ -107,17 +133,20 @@ export function getVesselSubscriptionTableColumns(
           <span>
             {vesselSubscription.vesselCfr && (
               <>
-                {vesselSubscription.vesselCfr} <VesselIdentifierLabel>(CFR)</VesselIdentifierLabel> -
+                {vesselSubscription.vesselCfr} <VesselIdentifierLabel>(CFR)</VesselIdentifierLabel>
+                {' - '}
               </>
             )}
             {vesselSubscription.vesselMmsi && (
               <>
-                {vesselSubscription.vesselMmsi} <VesselIdentifierLabel>(MMSI)</VesselIdentifierLabel> -
+                {vesselSubscription.vesselMmsi} <VesselIdentifierLabel>(MMSI)</VesselIdentifierLabel>
+                {' - '}
               </>
             )}
             {vesselSubscription.vesselExternalMarking && (
               <>
-                {vesselSubscription.vesselExternalMarking} <VesselIdentifierLabel>(Marq. ext.)</VesselIdentifierLabel> -
+                {vesselSubscription.vesselExternalMarking} <VesselIdentifierLabel>(Marq. ext.)</VesselIdentifierLabel>
+                {' - '}
               </>
             )}
             {vesselSubscription.vesselCallSign && (
@@ -135,10 +164,10 @@ export function getVesselSubscriptionTableColumns(
       accessorFn: row => row.vesselId,
       cell: (context: CellContext<PriorNotificationSubscriber.VesselSubscription, number>) => (
         <IconButton
+          accent={Accent.TERTIARY}
           disabled={isDisabled}
           Icon={Icon.Delete}
           onClick={() => onRemove(context.getValue())}
-          size={Size.SMALL}
           title="Désinscrire l'unité de tous les préavis liés à ce navire"
         />
       ),
@@ -149,6 +178,12 @@ export function getVesselSubscriptionTableColumns(
     }
   ]
 }
+
+const StyledCheckbox = styled(Checkbox)`
+  .rs-checkbox-checker {
+    line-height: 18px;
+  }
+`
 
 const VesselIdentifierLabel = styled.span`
   color: ${p => p.theme.color.slateGray};

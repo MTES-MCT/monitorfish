@@ -1,7 +1,6 @@
 import { isUnauthorizedOrForbidden } from '@api/utils'
 
 import { ROUTER_PATHS } from '../paths'
-import { router } from '../router'
 
 import type { CustomResponseError } from '@api/types'
 
@@ -13,5 +12,6 @@ export function redirectToLoginIfUnauthorized(error: CustomResponseError) {
     return
   }
 
-  router.navigate(ROUTER_PATHS.login, { replace: true })
+  // We don't use `router.navigate()` to avoid circular dependency issues
+  window.location.href = ROUTER_PATHS.login
 }

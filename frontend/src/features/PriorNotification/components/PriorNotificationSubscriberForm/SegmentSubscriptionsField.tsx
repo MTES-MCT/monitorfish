@@ -1,26 +1,31 @@
+import { ConfirmationModal } from '@components/ConfirmationModal'
 import { BackOfficeSubtitle } from '@features/BackOffice/components/BackOfficeSubtitle'
 import { useGetFleetSegmentsAsOptions } from '@features/FleetSegment/hooks/useGetFleetSegmentsAsOptions'
 import { DataTable, Select } from '@mtes-mct/monitor-ui'
+import { useState } from 'react'
 
-import { Info } from './shared/Info'
+import { EmptyDataLabel, Info } from './styles'
 import { getSegmentSubscriptionTableColumns } from './utils'
 
 import type { PriorNotificationSubscriber } from '@features/PriorNotification/PriorNotificationSubscriber.types'
 import type { Promisable } from 'type-fest'
 
 type SegmentSubscriptionsFieldProps = Readonly<{
+  fleetSegmentSubscriptions: PriorNotificationSubscriber.FleetSegmentSubscription[]
   isDisabled: boolean
   onAdd: (newSegmentCode: string) => Promisable<void>
   onRemove: (segmentCodeToRemove: string) => Promisable<void>
-  segmentSubscriptions: PriorNotificationSubscriber.FleetSegmentSubscription[]
 }>
 export function SegmentSubscriptionsField({
+  fleetSegmentSubscriptions,
   isDisabled,
   onAdd,
-  onRemove,
-  segmentSubscriptions
+  onRemove
 }: SegmentSubscriptionsFieldProps) {
   const { fleetSegmentsAsOptions } = useGetFleetSegmentsAsOptions()
+
+  const [unsubscriptionConfirmationModalFleetSegmentCode, setUnsubscriptionConfirmationModalFleetSegmentCode] =
+    useState<string | undefined>(undefined)
 
   const add = (newSegmentCode: string | undefined) => {
     if (!newSegmentCode) {
@@ -30,16 +35,30 @@ export function SegmentSubscriptionsField({
     onAdd(newSegmentCode)
   }
 
-  const remove = (segmentCodeToRemove: string) => {
-    onRemove(segmentCodeToRemove)
+  const askForRemovalConfirmation = (fleetSegmentCodeToRemove: string) => {
+    setUnsubscriptionConfirmationModalFleetSegmentCode(fleetSegmentCodeToRemove)
   }
 
-  const columns = getSegmentSubscriptionTableColumns(remove, isDisabled)
+  const closeRemovalConfirmationModal = () => {
+    setUnsubscriptionConfirmationModalFleetSegmentCode(undefined)
+  }
+
+  const remove = () => {
+    if (!unsubscriptionConfirmationModalFleetSegmentCode) {
+      return
+    }
+
+    closeRemovalConfirmationModal()
+
+    onRemove(unsubscriptionConfirmationModalFleetSegmentCode)
+  }
+
+  const columns = getSegmentSubscriptionTableColumns(askForRemovalConfirmation, isDisabled)
 
   return (
     <>
       <BackOfficeSubtitle $withSmallBottomMargin>
-        Ajouter tous les préavis d’un segment à la diffusion
+        Diffuser des préavis supplémentaires par segment de flotte
       </BackOfficeSubtitle>
       <Info>
         Tous les préavis des navires appartenant à ces segments seront diffusés, sans faire partie du périmètre de
@@ -48,10 +67,11 @@ export function SegmentSubscriptionsField({
 
       <DataTable
         columns={columns}
-        data={segmentSubscriptions}
+        data={fleetSegmentSubscriptions}
+        emptyLabel={<EmptyDataLabel>Aucun segment ajouté.</EmptyDataLabel>}
         initialSorting={[{ desc: false, id: 'name' }]}
         tableOptions={{
-          getRowId: originalRow => `${originalRow.controlUnitId}-${originalRow.segmentCode}`
+          getRowId: originalRow => originalRow.segmentCode
         }}
         withoutHead
       />
@@ -63,7 +83,25 @@ export function SegmentSubscriptionsField({
         name="fleetSegmentSubscription"
         onChange={add}
         options={fleetSegmentsAsOptions ?? []}
+        searchable
       />
+
+      {unsubscriptionConfirmationModalFleetSegmentCode && (
+        <ConfirmationModal
+          confirmationButtonLabel="Confirmer la suppression"
+          message={
+            <>
+              <p>
+                <b>Êtes-vous sûr de vouloir supprimer ce segment des diffusions ?</b>
+              </p>
+              <p>L’unité ne recevra plus les préavis de ce segment qui sont hors de la diffusion de base.</p>
+            </>
+          }
+          onCancel={closeRemovalConfirmationModal}
+          onConfirm={remove}
+          title="Supprimer un segment des diffusions"
+        />
+      )}
     </>
   )
 }

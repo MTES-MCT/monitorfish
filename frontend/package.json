@@ -114,7 +114,7 @@
     "codecov": "3.8.3",
     "cypress": "13.15.1",
     "cypress-mouse-position": "1.0.0",
-    "cypress-plugin-snapshots": "github:ivangabriele/cypress-plugin-snapshots",
+    "cypress-plugin-snapshots": "github:MTES-MCT/cypress-plugin-snapshots",
     "dotenv": "16.4.5",
     "esbuild": "0.24.0",
     "eslint": "8.57.1",

@@ -36,6 +36,7 @@ export function PriorNotificationSubscriberTable() {
       <DataTable
         columns={TABLE_COLUMNS}
         data={subscribers}
+        emptyLabel="Aucune unité de contrôle ne correspond à cette recherche."
         initialSorting={[{ desc: false, id: 'name' }]}
         tableOptions={{
           getRowId: subscriber => String(subscriber.controlUnit.id)

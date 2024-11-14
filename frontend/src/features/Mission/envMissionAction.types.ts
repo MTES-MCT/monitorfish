@@ -1,4 +1,4 @@
-import { Mission } from '@features/Mission/mission.types'
+import { Mission } from './mission.types'
 
 export namespace EnvMissionAction {
   export interface MissionAction {

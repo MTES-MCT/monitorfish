@@ -13,7 +13,6 @@ import styled from 'styled-components'
 import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
 
 import { AllPortSubscriptionsField } from './AllPortSubscriptionsField'
-import { FullPortSubscriptionsField } from './FullPortSubscriptionsField'
 import { SegmentSubscriptionsField } from './SegmentSubscriptionsField'
 import { getFormDataFromSubscriber } from './utils'
 import { VesselSubscriptionsField } from './VesselSubscriptionsField'
@@ -34,10 +33,6 @@ export function PriorNotificationSubscriberForm() {
   }
 
   const formData = getFormDataFromSubscriber(subscriber)
-  const limitedPortSubscriptions = subscriber.portSubscriptions
-  const fullPortSubscriptions = subscriber.portSubscriptions.filter(
-    portSubscription => portSubscription.hasSubscribedToAllPriorNotifications
-  )
 
   const goBackToList = () => {
     navigate(`${ROUTER_PATHS.backoffice}/${ROUTER_PATHS.priorNotificationSubscribers}`)
@@ -47,16 +42,12 @@ export function PriorNotificationSubscriberForm() {
     dispatch(priorNotificationSubscriberApi.endpoints.updatePriorNotificationSubscriber.initiate(nextFormData)).unwrap()
   }
 
-  const addPortSubscription = (newPortLocode: string, isFullPortSubscription: boolean) => {
+  const addPortSubscription = (newPortLocode: string) => {
     const nextPortLocodes = [...formData.portLocodes, newPortLocode]
-    const nextPortLocodesWithAllNotifications = isFullPortSubscription
-      ? [...formData.portLocodesWithFullSubscription, newPortLocode]
-      : formData.portLocodesWithFullSubscription
 
     update({
       ...formData,
-      portLocodes: nextPortLocodes,
-      portLocodesWithFullSubscription: nextPortLocodesWithAllNotifications
+      portLocodes: nextPortLocodes
     })
   }
 
@@ -78,10 +69,28 @@ export function PriorNotificationSubscriberForm() {
     })
   }
 
-  const removePortSubscription = (portLocodeToRemove: string, isFullPortSubscription: boolean) => {
-    const nextPortLocodes = isFullPortSubscription
-      ? formData.portLocodes
-      : formData.portLocodes.filter(portLocode => portLocode !== portLocodeToRemove)
+  const disableFullPortSubscription = (portLocode: string) => {
+    const nextPortLocodesWithAllNotifications = formData.portLocodesWithFullSubscription.filter(
+      portLocodeWithFullSubscription => portLocodeWithFullSubscription !== portLocode
+    )
+
+    update({
+      ...formData,
+      portLocodesWithFullSubscription: nextPortLocodesWithAllNotifications
+    })
+  }
+
+  const enableFullPortSubscription = (portLocode: string) => {
+    const nextPortLocodesWithAllNotifications = [...formData.portLocodesWithFullSubscription, portLocode]
+
+    update({
+      ...formData,
+      portLocodesWithFullSubscription: nextPortLocodesWithAllNotifications
+    })
+  }
+
+  const removePortSubscription = (portLocodeToRemove: string) => {
+    const nextPortLocodes = formData.portLocodes.filter(portLocode => portLocode !== portLocodeToRemove)
     const nextPortLocodesWithAllNotifications = formData.portLocodesWithFullSubscription.filter(
       portLocode => portLocode !== portLocodeToRemove
     )
@@ -118,23 +127,19 @@ export function PriorNotificationSubscriberForm() {
       <AllPortSubscriptionsField
         isDisabled={isFetching}
         onAdd={addPortSubscription}
+        onFullSubscriptionCheck={enableFullPortSubscription}
+        onFullSubscriptionUncheck={disableFullPortSubscription}
         onRemove={removePortSubscription}
-        portSubscriptions={limitedPortSubscriptions}
+        portSubscriptions={subscriber.portSubscriptions}
       />
 
       <hr />
 
-      <FullPortSubscriptionsField
-        isDisabled={isFetching}
-        onAdd={addPortSubscription}
-        onRemove={removePortSubscription}
-        portSubscriptions={fullPortSubscriptions}
-      />
       <SegmentSubscriptionsField
+        fleetSegmentSubscriptions={subscriber.fleetSegmentSubscriptions}
         isDisabled={isFetching}
         onAdd={addSegmentSubscription}
         onRemove={removeSegementSubscription}
-        segmentSubscriptions={subscriber.fleetSegmentSubscriptions}
       />
       <VesselSubscriptionsField
         isDisabled={isFetching}
@@ -159,17 +164,21 @@ const Wrapper = styled(BackOfficeBody)`
     margin: 32px 0;
   }
 
-  > p + p {
-    font-style: italic;
-    margin: 0 0 16px;
-  }
-
-  > .Table-SimpleTable {
+  .Table-SimpleTable {
     margin-bottom: 16px;
-    width: 400px;
+    width: 760px;
+
+    td {
+      vertical-align: middle;
+
+      > .Element-IconButton {
+        height: 20px;
+        margin-top: 5px;
+      }
+    }
   }
 
   > .Field-Select {
-    width: 400px;
+    width: 760px;
   }
 `

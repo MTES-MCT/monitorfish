@@ -1,10 +1,12 @@
+import { ConfirmationModal } from '@components/ConfirmationModal'
 import { BackOfficeSubtitle } from '@features/BackOffice/components/BackOfficeSubtitle'
 import { VesselSearch } from '@features/Vessel/components/VesselSearch'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { DataTable, useKey } from '@mtes-mct/monitor-ui'
+import { useState } from 'react'
 import styled from 'styled-components'
 
-import { Info } from './shared/Info'
+import { EmptyDataLabel, Info } from './styles'
 import { getVesselSubscriptionTableColumns } from './utils'
 
 import type { PriorNotificationSubscriber } from '@features/PriorNotification/PriorNotificationSubscriber.types'
@@ -25,6 +27,10 @@ export function VesselSubscriptionsField({
 }: VesselSubscriptionsFieldProps) {
   const key = useKey([vesselSubscriptions])
 
+  const [unsubscriptionConfirmationModalVesselId, setUnsubscriptionConfirmationModalVesselId] = useState<
+    number | undefined
+  >(undefined)
+
   const add = (newVesselIdentity: Vessel.VesselIdentity | undefined) => {
     if (!newVesselIdentity?.vesselId) {
       return
@@ -33,17 +39,29 @@ export function VesselSubscriptionsField({
     onAdd(newVesselIdentity.vesselId)
   }
 
-  const remove = (vesselIdToRemove: number) => {
-    onRemove(vesselIdToRemove)
+  const askForRemovalConfirmation = (vesselIdToRemove: number) => {
+    setUnsubscriptionConfirmationModalVesselId(vesselIdToRemove)
   }
 
-  const columns = getVesselSubscriptionTableColumns(remove, isDisabled)
+  const closeRemovalConfirmationModal = () => {
+    setUnsubscriptionConfirmationModalVesselId(undefined)
+  }
+
+  const remove = () => {
+    if (!unsubscriptionConfirmationModalVesselId) {
+      return
+    }
+
+    closeRemovalConfirmationModal()
+
+    onRemove(unsubscriptionConfirmationModalVesselId)
+  }
+
+  const columns = getVesselSubscriptionTableColumns(askForRemovalConfirmation, isDisabled)
 
   return (
     <>
-      <BackOfficeSubtitle $withSmallBottomMargin>
-        Ajouter tous les préavis d’un navire à la diffusion
-      </BackOfficeSubtitle>
+      <BackOfficeSubtitle $withSmallBottomMargin>Diffuser des préavis supplémentaires par navire</BackOfficeSubtitle>
       <Info>
         Tous les préavis de ces navires seront diffusés, sans faire partie du périmètre de vérification du CNSP.
       </Info>
@@ -52,9 +70,10 @@ export function VesselSubscriptionsField({
         <DataTable
           columns={columns}
           data={vesselSubscriptions}
+          emptyLabel={<EmptyDataLabel>Aucun navire ajouté.</EmptyDataLabel>}
           initialSorting={[{ desc: false, id: 'vesselName' }]}
           tableOptions={{
-            getRowId: originalRow => `${originalRow.controlUnitId}-${originalRow.vesselId}`
+            getRowId: originalRow => String(originalRow.vesselId)
           }}
           withoutHead
         />
@@ -67,6 +86,23 @@ export function VesselSubscriptionsField({
         onChange={add}
         shouldCloseOnClickOutside
       />
+
+      {unsubscriptionConfirmationModalVesselId && (
+        <ConfirmationModal
+          confirmationButtonLabel="Confirmer la suppression"
+          message={
+            <>
+              <p>
+                <b>Êtes-vous sûr de vouloir supprimer ce navire des diffusions ?</b>
+              </p>
+              <p>L’unité ne recevra plus les préavis de ce navire qui sont hors de la diffusion de base.</p>
+            </>
+          }
+          onCancel={closeRemovalConfirmationModal}
+          onConfirm={remove}
+          title="Supprimer un navire des diffusions"
+        />
+      )}
     </>
   )
 }
@@ -80,10 +116,10 @@ const DataTableWrapper = styled.div`
 
 const StyledVesselSearch = styled(VesselSearch)`
   border: solid 1px ${p => p.theme.color.lightGray};
-  width: 400px;
+  width: 760px;
 
   > div:nth-child(2) {
     border: solid 1px ${p => p.theme.color.lightGray};
-    width: 400px;
+    width: 760px;
   }
 `

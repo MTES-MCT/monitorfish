@@ -1,9 +1,9 @@
 import { Seafront } from '@constants/seafront'
-import { EnvMissionAction } from '@features/Mission/envMissionAction.types'
 
+import type { EnvMissionAction } from './envMissionAction.types'
+import type { MissionAction } from './missionAction.types'
 import type { GeoJSON } from '../../domain/types/GeoJSON'
 import type { LegacyControlUnit } from '../../domain/types/legacyControlUnit'
-import type { MissionAction } from '@features/Mission/missionAction.types'
 import type { Except } from 'type-fest'
 
 export namespace Mission {

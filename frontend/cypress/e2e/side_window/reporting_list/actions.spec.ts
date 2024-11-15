@@ -133,8 +133,8 @@ context('Side Window > Reporting List > Actions', () => {
     cy.wait(200)
 
     cy.getDataCy('ReportingList-reporting').should('have.length.greaterThan', 1)
-    cy.get('[data-cy="ReportingList-reporting"][data-id="6"]').contains('DML 56')
-    cy.get('[data-cy="ReportingList-reporting"][data-id="6"]').contains(23581)
+    cy.get('[data-cy="ReportingList-reporting"][data-id="7"]').contains('DML 56')
+    cy.get('[data-cy="ReportingList-reporting"][data-id="7"]').contains(23581)
   })
 
   it('A Reporting Should be edited with the reporting type modified ', () => {

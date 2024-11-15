@@ -1,16 +1,16 @@
+import { COLORS } from '@constants/constants'
+import { useClickOutsideWhenOpenedWithinRef } from '@hooks/useClickOutsideWhenOpenedWithinRef'
+import { useForceUpdate } from '@hooks/useForceUpdate'
 import { THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useRef } from 'react'
 import DatePicker from 'rsuite/DatePicker'
 import { beforeToday } from 'rsuite/esm/DateRangePicker/disabledDateUtils'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../../constants/constants'
-import { SilencedAlertPeriod } from '../../../../domain/entities/alerts/constants'
-import { useClickOutsideWhenOpenedWithinRef } from '../../../../hooks/useClickOutsideWhenOpenedWithinRef'
-import { useForceUpdate } from '../../../../hooks/useForceUpdate'
-import { DATE_RANGE_PICKER_LOCALE } from '../../../Vessel/components/VesselSidebar/actions/TrackRequest/DateRange'
+import { DATE_RANGE_PICKER_LOCALE } from '../../../../Vessel/components/VesselSidebar/actions/TrackRequest/DateRange'
+import { SilencedAlertPeriod } from '../../../constants'
 
-import type { SilencedAlertPeriodRequest } from '../../../../domain/entities/alerts/types'
+import type { SilencedAlertPeriodRequest } from '../../../types'
 import type { CSSProperties, MutableRefObject } from 'react'
 import type { Promisable } from 'type-fest'
 

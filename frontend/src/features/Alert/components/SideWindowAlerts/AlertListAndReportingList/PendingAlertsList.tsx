@@ -1,5 +1,8 @@
-import { SeafrontGroup } from '@constants/seafront'
+import { COLORS } from '@constants/constants'
+import { NO_SEAFRONT_GROUP, type NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 import { sortArrayByColumn, SortType } from '@features/Vessel/components/VesselList/tableSort'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { CustomSearch, ExclamationPoint, THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { FlexboxGrid, List } from 'rsuite'
@@ -8,22 +11,19 @@ import styled from 'styled-components'
 import { PendingAlertRow } from './PendingAlertRow'
 import { SilenceAlertMenu } from './SilenceAlertMenu'
 import { getAlertNameFromType } from './utils'
-import { COLORS } from '../../../../constants/constants'
-import { ALERTS_MENU_SEAFRONT_TO_SEAFRONTS } from '../../../../domain/entities/alerts/constants'
-import { silenceAlert } from '../../../../domain/use_cases/alert/silenceAlert'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import SearchIconSVG from '../../../icons/Loupe_dark.svg?react'
+import { silenceAlert } from '../../../../../domain/use_cases/alert/silenceAlert'
+import SearchIconSVG from '../../../../icons/Loupe_dark.svg?react'
+import { ALERTS_MENU_SEAFRONT_TO_SEAFRONTS } from '../../../constants'
 import { SUB_MENU_LABEL } from '../constants'
 import { resetFocusOnPendingAlert } from '../slice'
 
-import type { SilencedAlertPeriodRequest } from '../../../../domain/entities/alerts/types'
+import type { SilencedAlertPeriodRequest } from '../../../types'
 import type { CSSProperties, MutableRefObject, RefObject } from 'react'
 
 export type PendingAlertsListProps = Readonly<{
   baseRef: RefObject<HTMLDivElement>
   numberOfSilencedAlerts: number
-  selectedSeafrontGroup: SeafrontGroup
+  selectedSeafrontGroup: SeafrontGroup | NoSeafrontGroup
 }>
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
@@ -41,17 +41,17 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
   const sortColumn = 'creationDate'
   const sortType = SortType.DESC
 
-  const currentSeafrontAlerts = useMemo(
-    () =>
-      pendingAlerts.filter(
-        pendingAlert =>
-          pendingAlert.value.seaFront &&
-          (ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup].seafronts || []).includes(
-            pendingAlert.value.seaFront
-          )
-      ),
-    [pendingAlerts, selectedSeafrontGroup]
-  )
+  const currentSeafrontAlerts = useMemo(() => {
+    if (selectedSeafrontGroup === NO_SEAFRONT_GROUP) {
+      return pendingAlerts.filter(pendingAlert => !pendingAlert.value.seaFront)
+    }
+
+    return pendingAlerts.filter(
+      pendingAlert =>
+        pendingAlert.value.seaFront &&
+        (ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup].seafronts || []).includes(pendingAlert.value.seaFront)
+    )
+  }, [pendingAlerts, selectedSeafrontGroup])
   const numberOfAlertsMessage = useMemo(
     () =>
       `Suspension d’alerte sur ${numberOfSilencedAlerts} navire${numberOfSilencedAlerts > 1 ? 's' : ''} en ${

@@ -139,7 +139,13 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME','FR',  NOW(), '9463715
                                                                                                                   '"riskFactor": 1.5,' ||
                                                                                                                   '"type": "MISSING_FAR_48_HOURS_ALERT"' ||
                                                                                                                   '}')::jsonb, -10.569, 48.851),
-       ('GAGNER TAIRE REMPLIR', 'ABC000443712', 'HK279872', 'OF2978',
+       ('MAINTENANT RÉPONSE ANNÉE', 'ABC000823773', 'HG384751', 'NK2932',
+        'FR', (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '2 hours 13 minutes', null, 'INTERNAL_REFERENCE_NUMBER', ('{' ||
+                                                                                                                  '"seaFront": null,' ||
+                                                                                                                  '"riskFactor": 1.5,' ||
+                                                                                                                  '"type": "MISSING_FAR_48_HOURS_ALERT"' ||
+                                                                                                                  '}')::jsonb, -10.569, 48.851),
+        ('GAGNER TAIRE REMPLIR', 'ABC000443712', 'HK279872', 'OF2978',
        'FR', (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '1 hours 17 minutes', null, 'INTERNAL_REFERENCE_NUMBER', ('{' ||
                                                                                                                  '"seaFront": "NAMO",' ||
                                                                                                                  '"riskFactor": 1.5,' ||

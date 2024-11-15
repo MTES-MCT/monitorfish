@@ -7,8 +7,8 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { noop } from 'lodash'
 
-import { PendingAlertValueType } from '../../../../../domain/entities/alerts/types'
 import { VesselIdentifier } from '../../../../../domain/entities/vessel/types'
+import { PendingAlertValueType } from '../../../../Alert/types'
 
 import type { PendingAlertReporting } from '@features/Reporting/types'
 

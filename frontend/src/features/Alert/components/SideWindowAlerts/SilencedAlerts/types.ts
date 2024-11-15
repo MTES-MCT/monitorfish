@@ -1,4 +1,4 @@
-import type { SilencedAlertData } from '../../../../domain/entities/alerts/types'
+import type { SilencedAlertData } from '../../../types'
 
 export type SilencedAlertFormValues = Partial<SilencedAlertData>
 

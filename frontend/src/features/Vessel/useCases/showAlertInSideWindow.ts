@@ -1,4 +1,4 @@
-import { focusOnAlert } from '@features/SideWindow/Alert/slice'
+import { focusOnAlert } from '@features/Alert/components/SideWindowAlerts/slice'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { SideWindowMenuKey } from 'domain/entities/sideWindow/constants'
 

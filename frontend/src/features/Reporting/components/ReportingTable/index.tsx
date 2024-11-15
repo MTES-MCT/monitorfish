@@ -1,6 +1,7 @@
 import { WindowContext } from '@api/constants'
 import { ErrorWall } from '@components/ErrorWall'
-import { SeafrontGroup } from '@constants/seafront'
+import { NO_SEAFRONT_GROUP, type NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
+import { EditReporting } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/EditReporting'
 import { reportingActions } from '@features/Reporting/slice'
 import { ReportingType } from '@features/Reporting/types'
 import { isNotObservationReporting } from '@features/Reporting/utils'
@@ -20,7 +21,6 @@ import * as timeago from 'timeago.js'
 
 import { REPORTING_LIST_TABLE_OPTIONS } from './constants'
 import { getReportingOrigin, getReportingTitle } from './utils'
-import { ALERTS_MENU_SEAFRONT_TO_SEAFRONTS } from '../../../../domain/entities/alerts/constants'
 import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
 import { CardTable } from '../../../../ui/card-table/CardTable'
 import { CardTableBody } from '../../../../ui/card-table/CardTableBody'
@@ -28,7 +28,7 @@ import { CardTableFilters } from '../../../../ui/card-table/CardTableFilters'
 import { CardTableRow } from '../../../../ui/card-table/CardTableRow'
 import { EmptyCardTable } from '../../../../ui/card-table/EmptyCardTable'
 import { FilterTableInput } from '../../../../ui/card-table/FilterTableInput'
-import { EditReporting } from '../../../SideWindow/Alert/AlertListAndReportingList/EditReporting'
+import { ALERTS_MENU_SEAFRONT_TO_SEAFRONTS } from '../../../Alert/constants'
 import { archiveReportings } from '../../useCases/archiveReportings'
 import { deleteReportings } from '../../useCases/deleteReportings'
 
@@ -44,7 +44,7 @@ import type { CSSProperties, MutableRefObject } from 'react'
 type ReportingTableProps = Readonly<{
   currentReportings: Reporting.Reporting[]
   displayedError: DisplayedErrorStateValue | undefined
-  selectedSeafrontGroup: SeafrontGroup
+  selectedSeafrontGroup: SeafrontGroup | NoSeafrontGroup
 }>
 export function ReportingTable({ currentReportings, displayedError, selectedSeafrontGroup }: ReportingTableProps) {
   const dispatch = useMainAppDispatch()
@@ -54,18 +54,20 @@ export function ReportingTable({ currentReportings, displayedError, selectedSeaf
 
   const baseUrl = useMemo(() => window.location.origin, [])
 
-  const currentSeafrontReportings = useMemo(
-    () =>
-      currentReportings
-        .filter(isNotObservationReporting)
-        .filter(
-          reporting =>
-            ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup] &&
-            reporting.value.seaFront &&
-            ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup].seafronts.includes(reporting.value.seaFront)
-        ),
-    [currentReportings, selectedSeafrontGroup]
-  )
+  const currentSeafrontReportings = useMemo(() => {
+    if (selectedSeafrontGroup === NO_SEAFRONT_GROUP) {
+      return currentReportings.filter(isNotObservationReporting).filter(reporting => !reporting.value.seaFront)
+    }
+
+    return currentReportings
+      .filter(isNotObservationReporting)
+      .filter(
+        reporting =>
+          ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup] &&
+          reporting.value.seaFront &&
+          ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup].seafronts.includes(reporting.value.seaFront)
+      )
+  }, [currentReportings, selectedSeafrontGroup])
 
   const { getTableCheckedData, renderTableHead, tableCheckedIds, tableData, toggleTableCheckForId } = useTable<
     InfractionSuspicionReporting | PendingAlertReporting

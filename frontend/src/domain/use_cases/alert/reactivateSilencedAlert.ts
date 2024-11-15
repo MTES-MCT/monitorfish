@@ -1,11 +1,12 @@
+import { setSilencedAlerts } from '@features/Alert/components/SideWindowAlerts/slice'
+
 import { deleteSilencedAlertFromAPI } from '../../../api/alert'
-import { setSilencedAlerts } from '../../../features/SideWindow/Alert/slice'
 import { deleteListItems } from '../../../utils/deleteListItems'
 import { updateListItemsProp } from '../../../utils/updateListItemsProp'
 import { setError } from '../../shared_slices/Global'
 
 import type { MainAppThunk } from '../../../store'
-import type { LEGACY_SilencedAlert } from '../../entities/alerts/types'
+import type { LEGACY_SilencedAlert } from '@features/Alert/types'
 
 export const reactivateSilencedAlert =
   (id: string): MainAppThunk =>

@@ -21,6 +21,6 @@ context('Vessel sidebar identity tab', () => {
     // Then
     cy.get('*[data-cy^="vessel-identity-gears"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy^="vessel-identity-gears"]').contains('Sennes danoises (SDN)')
-    cy.get('*[data-cy^="vessel-identity-producerOrganization"]').contains('SA THO AN (adhésion le 14/03/2015)')
+    cy.get('*[data-cy^="vessel-identity-producerOrganization"]').contains('SA THO AN (depuis le 14/03/2015)')
   })
 })

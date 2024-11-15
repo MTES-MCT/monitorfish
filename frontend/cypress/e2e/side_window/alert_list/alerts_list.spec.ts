@@ -18,19 +18,32 @@ context('Side Window > Alert List', () => {
     cy.get('*[data-cy="side-window-alerts-list"]').children().eq(1).children().as('previousAlerts')
   })
 
-  it('Going to beacon malfunction then back in alerts Should not throw an exception', () => {
-    // Given
+  it('Ten alerts Should be shown When clicking on the NAMO menu', () => {
+    /**
+     * Going to beacon malfunction then back in alerts Should not throw an exception
+     */
     cy.get('[data-cy="side-window-sub-menu-NAMO"]').click()
-
-    // When
     cy.get('[data-cy="side-window-menu-beacon-malfunctions"]').click()
-
-    // Then
     cy.get('[data-cy="side-window-menu-alerts"]').click()
     cy.get('[data-cy="side-window-sub-menu-NAMO"]').should('have.css', 'background', 'rgb(204, 207, 214)')
-  })
 
-  it('Ten alerts Should be shown When clicking on the NAMO menu', () => {
+    /**
+     * Sub menu "Hors f." should be found
+     */
+    cy.get('[data-cy="side-window-sub-menu-NONE"]').click()
+    cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 1)
+
+    /**
+     * Alerts Should be filtered based on the search input
+     */
+    cy.get('*[data-cy="side-window-sub-menu-SA"]').click()
+    cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 3)
+    cy.get('*[data-cy^="side-window-alerts-search-vessel"]').type('ABC0003')
+    cy.get('*[data-cy^="side-window-alerts-list"]').children().should('have.length', 2)
+
+    /**
+     * Ten alerts Should be shown When clicking on the NAMO menu
+     */
     // When
     cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
 
@@ -53,18 +66,6 @@ context('Side Window > Alert List', () => {
     ).as('showVesselPositionsOnMap')
     cy.get('*[data-cy="side-window-alerts-show-vessel"]').first().forceClick()
     cy.wait('@showVesselPositionsOnMap').then(({ response }) => expect(response && response.statusCode).equal(200))
-  })
-
-  it('Alerts Should be filtered based on the search input', () => {
-    // Given
-    cy.get('*[data-cy="side-window-sub-menu-SA"]').click()
-    cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 3)
-
-    // When
-    cy.get('*[data-cy^="side-window-alerts-search-vessel"]').type('ABC0003')
-
-    // Then
-    cy.get('*[data-cy^="side-window-alerts-list"]').children().should('have.length', 2)
   })
 
   it('An alert Should be validated', function () {

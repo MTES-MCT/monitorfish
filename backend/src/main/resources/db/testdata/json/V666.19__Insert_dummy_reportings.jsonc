@@ -103,7 +103,7 @@
             },
 
             // - Vessel: HAÏR GAUCHE VIVRE
-            // - With 1 reporting
+            // - With 2 reportings
             {
                 "id": 5,
                 "archived": false,
@@ -129,10 +129,35 @@
                 "vessel_name": "HAÏR GAUCHE VIVRE"
             },
 
+            {
+                "id": 6,
+                "archived": false,
+                "creation_date:sql": "NOW() - INTERVAL '2 day'",
+                "deleted": false,
+                "external_reference_number": "HK498094",
+                "flag_state": "FR",
+                "internal_reference_number": "ABC000591595",
+                "ircs": "KF0313",
+                "latitude": null,
+                "longitude": null,
+                "type": "ALERT",
+                "validation_date:sql": "NOW() - INTERVAL '1 day'",
+                "value:jsonb": {
+                    "seaFront": null,
+                    "flagState": "FR",
+                    "riskFactor": 1.389,
+                    "type": "MISSING_FAR_ALERT",
+                    "natinfCode": 27689
+                },
+                "vessel_id": null,
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "vessel_name": "HAÏR GAUCHE VIVRE"
+            },
+
             // - Vessel: COURANT MAIN PROFESSEUR
             // - With 1 reporting
             {
-                "id": 6,
+                "id": 7,
                 "archived": false,
                 "creation_date:sql": "NOW() - INTERVAL '1 day'",
                 "deleted": false,
@@ -164,7 +189,7 @@
             // - Vessel: RENCONTRER VEILLER APPARTEMENT
             // - With 2 reportings
             {
-                "id": 7,
+                "id": 8,
                 "archived": false,
                 "creation_date:sql": "NOW() - INTERVAL '1 day 1 hour'",
                 "deleted": false,
@@ -193,7 +218,7 @@
                 "vessel_name": "RENCONTRER VEILLER APPARTEMENT"
             },
             {
-                "id": 8,
+                "id": 9,
                 "archived": false,
                 "creation_date:sql": "NOW() - INTERVAL '1 day 1 hour'",
                 "deleted": false,
@@ -223,7 +248,7 @@
             // - Vessel: VIVA ESPANA
             // - With 2 reportings
             {
-                "id": 9,
+                "id": 10,
                 "archived": false,
                 "creation_date:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '10 days'",
                 "deleted": false,
@@ -252,7 +277,7 @@
                 "vessel_name": "VIVA ESPANA"
             },
             {
-                "id": 10,
+                "id": 11,
                 "archived": false,
                 "creation_date:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 days'",
                 "deleted": false,
@@ -284,7 +309,7 @@
             // - Vessel: DOS FIN
             // - With 2 reportings
             {
-                "id": 11,
+                "id": 12,
                 "archived": false,
                 "creation_date:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '20 days'",
                 "deleted": false,
@@ -313,7 +338,7 @@
                 "vessel_name": "DOS FIN"
             },
             {
-                "id": 12,
+                "id": 13,
                 "archived": false,
                 "creation_date:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '25 days'",
                 "deleted": false,

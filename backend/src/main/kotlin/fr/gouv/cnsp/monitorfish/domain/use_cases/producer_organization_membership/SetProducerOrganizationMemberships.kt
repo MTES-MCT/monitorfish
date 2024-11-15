@@ -8,9 +8,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.ProducerOrganizationMembersh
 class SetProducerOrganizationMemberships(
     private val producerOrganizationMembershipRepository: ProducerOrganizationMembershipRepository,
 ) {
-    fun execute(
-        producerOrganizationMemberships: List<ProducerOrganizationMembership>,
-    ) {
+    fun execute(producerOrganizationMemberships: List<ProducerOrganizationMembership>) {
         producerOrganizationMembershipRepository.saveAll(producerOrganizationMemberships)
     }
 }

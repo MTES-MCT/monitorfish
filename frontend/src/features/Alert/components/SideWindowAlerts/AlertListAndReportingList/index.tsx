@@ -1,21 +1,21 @@
 import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
-import { SeafrontGroup } from '@constants/seafront'
+import { NO_SEAFRONT_GROUP, type NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
+import { ReportingTable } from '@features/Reporting/components/ReportingTable'
 import { useGetReportingsQuery } from '@features/Reporting/reportingApi'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { AlertAndReportingTab } from './constants'
 import { PendingAlertsList } from './PendingAlertsList'
-import { ALERTS_MENU_SEAFRONT_TO_SEAFRONTS } from '../../../../domain/entities/alerts/constants'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { ReportingTable } from '../../../Reporting/components/ReportingTable'
+import { ALERTS_MENU_SEAFRONT_TO_SEAFRONTS } from '../../../constants'
 
 import type { RefObject } from 'react'
 
 type AlertListAndReportingListProps = {
   baseRef: RefObject<HTMLDivElement>
-  selectedSeafrontGroup: SeafrontGroup
+  selectedSeafrontGroup: SeafrontGroup | NoSeafrontGroup
   selectedTab: any
   setSelectedTab: any
 }
@@ -32,17 +32,19 @@ export function AlertListAndReportingList({
 
   const { data: currentReportings } = useGetReportingsQuery(undefined, RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS)
 
-  const filteredSilencedAlerts = useMemo(
-    () =>
-      silencedAlerts.filter(silencedAlert => {
-        const seafronts = ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup]
-          ? ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup].seafronts
-          : []
+  const filteredSilencedAlerts = useMemo(() => {
+    if (selectedSeafrontGroup === NO_SEAFRONT_GROUP) {
+      return silencedAlerts.filter(silencedAlert => !silencedAlert.value.seaFront)
+    }
 
-        return silencedAlert.value.seaFront && seafronts.includes(silencedAlert.value.seaFront)
-      }),
-    [silencedAlerts, selectedSeafrontGroup]
-  )
+    return silencedAlerts.filter(silencedAlert => {
+      const seafronts = ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup]
+        ? ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup].seafronts
+        : []
+
+      return silencedAlert.value.seaFront && seafronts.includes(silencedAlert.value.seaFront)
+    })
+  }, [silencedAlerts, selectedSeafrontGroup])
 
   return (
     <Wrapper>
@@ -61,13 +63,11 @@ export function AlertListAndReportingList({
       </Title>
 
       {selectedTab === AlertAndReportingTab.ALERT && (
-        <>
-          <PendingAlertsList
-            baseRef={baseRef}
-            numberOfSilencedAlerts={filteredSilencedAlerts.length}
-            selectedSeafrontGroup={selectedSeafrontGroup}
-          />
-        </>
+        <PendingAlertsList
+          baseRef={baseRef}
+          numberOfSilencedAlerts={filteredSilencedAlerts.length}
+          selectedSeafrontGroup={selectedSeafrontGroup}
+        />
       )}
       {selectedTab === AlertAndReportingTab.REPORTING && (
         <ReportingTable

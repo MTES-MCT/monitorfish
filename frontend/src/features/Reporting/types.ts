@@ -4,9 +4,9 @@ import { Seafront } from '@constants/seafront'
 
 import { VesselIdentifier } from '../../domain/entities/vessel/types'
 
-import type { PendingAlertValue } from '../../domain/entities/alerts/types'
 import type { Infraction } from '../../domain/types/infraction'
-import type { LegacyControlUnit } from '../../domain/types/legacyControlUnit'
+import type { PendingAlertValue } from '../Alert/types'
+import type { LegacyControlUnit } from '../ControlUnit/legacyControlUnit'
 
 // TODO Move other types into new `Reporting` namespace.
 export namespace Reporting {

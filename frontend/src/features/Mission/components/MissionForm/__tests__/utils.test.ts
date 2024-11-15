@@ -1,13 +1,16 @@
+import { Mission } from '@features/Mission/mission.types'
 import { expect } from '@jest/globals'
 
 import { MissionAction } from '../../../missionAction.types'
-import { getMissionActionsToCreateUpdateOrDelete } from '../utils'
+import { getMissionActionsToCreateUpdateOrDelete, getMissionDataFromMissionFormValues } from '../utils'
 
 import MissionActionType = MissionAction.MissionActionType
 import CompletionStatus = MissionAction.CompletionStatus
+import MissionType = Mission.MissionType
+import MissionSource = Mission.MissionSource
 
-describe('features/Mission/components/MissionForm/utils.getMissionActionsDataFromMissionActionsFormValues()', () => {
-  it('Should delete a previous action delete from the list and create a new action', () => {
+describe('features/Mission/components/MissionForm/utils', () => {
+  it('getMissionActionsToCreateUpdateOrDelete() Should delete a previous action delete from the list and create a new action', () => {
     // Given
     const missionId = 123
     const actionsFormValues = [
@@ -187,7 +190,7 @@ describe('features/Mission/components/MissionForm/utils.getMissionActionsDataFro
     expect(createdOrUpdatedMissionActions[0]?.id).toEqual(undefined)
   })
 
-  it('Should get deleted actions When the action is no more in the action form list', () => {
+  it('getMissionActionsToCreateUpdateOrDelete() Should get deleted actions When the action is no more in the action form list', () => {
     // Given
     const missionId = 123
     const actionsFormValues = [
@@ -368,5 +371,60 @@ describe('features/Mission/components/MissionForm/utils.getMissionActionsDataFro
     expect(deletedMissionActionIds).toHaveLength(0)
     expect(createdOrUpdatedMissionActions).toHaveLength(1)
     expect(createdOrUpdatedMissionActions[0]?.id).toEqual(20)
+  })
+
+  it('getMissionDataFromMissionFormValues() should keep the existing missionSource if previously set', () => {
+    const missionForm = {
+      controlUnits: [
+        {
+          administration: 'DDTM',
+          contact: undefined,
+          id: 10499,
+          isArchived: false,
+          name: 'Cultures marines 56',
+          resources: [
+            {
+              id: 314,
+              name: 'Brezel - FAH 7185'
+            }
+          ]
+        }
+      ],
+      endDateTimeUtc: '2023-12-31T23:30:00.000000Z',
+      id: undefined,
+      isGeometryComputedFromControls: true,
+      isUnderJdp: true,
+      isValid: true,
+      missionSource: MissionSource.POSEIDON_CNSP,
+      missionTypes: [MissionType.SEA],
+      startDateTimeUtc: '2022-12-31T23:30:00.000000Z'
+    }
+
+    const result = getMissionDataFromMissionFormValues(missionForm)
+
+    expect(result).toStrictEqual({
+      controlUnits: [
+        {
+          administration: 'DDTM',
+          contact: undefined,
+          id: 10499,
+          isArchived: false,
+          name: 'Cultures marines 56',
+          resources: [
+            {
+              id: 314,
+              name: 'Brezel - FAH 7185'
+            }
+          ]
+        }
+      ],
+      endDateTimeUtc: '2023-12-31T23:30:00.000000Z',
+      id: undefined,
+      isGeometryComputedFromControls: true,
+      isUnderJdp: true,
+      missionSource: 'POSEIDON_CNSP',
+      missionTypes: ['SEA'],
+      startDateTimeUtc: '2022-12-31T23:30:00.000000Z'
+    })
   })
 })

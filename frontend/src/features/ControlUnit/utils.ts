@@ -1,9 +1,8 @@
 import { mapControlUnitsToUniqueSortedNamesAsOptions } from '@features/Mission/components/MissionForm/MainForm/FormikMultiControlUnitPicker/utils'
+import { getOptionsFromStrings } from '@utils/getOptionsFromStrings'
 import { uniq } from 'lodash'
 
-import { getOptionsFromStrings } from '../../../utils/getOptionsFromStrings'
-
-import type { LegacyControlUnit } from '../../types/legacyControlUnit'
+import type { LegacyControlUnit } from './legacyControlUnit'
 import type { Option } from '@mtes-mct/monitor-ui'
 
 export function getControlUnitsOptionsFromControlUnits(

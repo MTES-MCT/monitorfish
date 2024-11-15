@@ -1,25 +1,25 @@
 import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
-import { SEAFRONT_GROUP_SEAFRONTS, SeafrontGroup } from '@constants/seafront'
+import { NO_SEAFRONT_GROUP, SEAFRONT_GROUP_SEAFRONTS, SeafrontGroup } from '@constants/seafront'
+import { AlertAndReportingTab } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/constants'
 import { useGetReportingsQuery } from '@features/Reporting/reportingApi'
 import { isNotObservationReporting } from '@features/Reporting/utils'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useCallback, useState } from 'react'
 
 import { AlertListAndReportingList } from './AlertListAndReportingList'
-import { AlertAndReportingTab } from './AlertListAndReportingList/constants'
 import { AdditionalSubMenu, ALERT_SUB_MENU_OPTIONS } from './constants'
 import { SilencedAlerts } from './SilencedAlerts'
 import { setSubMenu } from './slice'
-import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { SubMenu } from '../SubMenu'
+import { SubMenu } from '../../../SideWindow/SubMenu'
 
 import type { AlertSubMenu } from './constants'
 import type { MutableRefObject, RefObject } from 'react'
 
-type AlertProps = Readonly<{
+type SideWindowAlertsProps = Readonly<{
   baseRef: RefObject<HTMLDivElement>
 }>
-export function Alert({ baseRef }: AlertProps) {
+export function SideWindowAlerts({ baseRef }: SideWindowAlertsProps) {
   const dispatch = useMainAppDispatch()
   const { pendingAlerts, subMenu } = useMainAppSelector(state => state.alert)
   const [selectedTab, setSelectedTab] = useState(AlertAndReportingTab.ALERT)
@@ -34,8 +34,16 @@ export function Alert({ baseRef }: AlertProps) {
   )
 
   const countAlertsOrReportingForSeafrontGroup = useCallback(
-    (seafront: string): number => {
-      const seafronts = SEAFRONT_GROUP_SEAFRONTS[seafront]
+    (seaFrontGroup: string): number => {
+      if (seaFrontGroup === NO_SEAFRONT_GROUP && selectedTab === AlertAndReportingTab.ALERT) {
+        return pendingAlerts.filter(pendingAlert => !pendingAlert.value.seaFront).length
+      }
+
+      if (seaFrontGroup === NO_SEAFRONT_GROUP && selectedTab === AlertAndReportingTab.REPORTING) {
+        return currentReportings?.filter(reporting => !reporting.value.seaFront)?.length ?? 0
+      }
+
+      const seafronts = SEAFRONT_GROUP_SEAFRONTS[seaFrontGroup]
       if (!seafronts) {
         return 0
       }
@@ -48,7 +56,7 @@ export function Alert({ baseRef }: AlertProps) {
         return (
           currentReportings?.filter(
             reporting => isNotObservationReporting(reporting) && seafronts.includes(reporting.value.seaFront)
-          ).length ?? 0
+          )?.length ?? 0
         )
       }
 
@@ -56,8 +64,6 @@ export function Alert({ baseRef }: AlertProps) {
     },
     [currentReportings, pendingAlerts, selectedTab]
   )
-
-  const isSeafrontGroupMenu = Object.values<string>(SeafrontGroup).includes(subMenu)
 
   return (
     <>
@@ -70,7 +76,7 @@ export function Alert({ baseRef }: AlertProps) {
       {subMenu !== AdditionalSubMenu.SUSPENDED_ALERTS && (
         <AlertListAndReportingList
           baseRef={baseRef as MutableRefObject<HTMLDivElement>}
-          selectedSeafrontGroup={isSeafrontGroupMenu ? (subMenu as SeafrontGroup) : SeafrontGroup.MEMN}
+          selectedSeafrontGroup={subMenu || SeafrontGroup.MEMN}
           selectedTab={selectedTab}
           setSelectedTab={setSelectedTab}
         />

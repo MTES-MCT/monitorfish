@@ -1,5 +1,8 @@
+import { getAlertNameFromType } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/utils'
 import { Flag } from '@features/Vessel/components/VesselList/tableCells'
 import { sortArrayByColumn, SortType } from '@features/Vessel/components/VesselList/tableSort'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Button, CustomSearch, Icon } from '@mtes-mct/monitor-ui'
 import countries from 'i18n-iso-countries'
 import { useCallback, useMemo, useState } from 'react'
@@ -8,16 +11,13 @@ import styled, { css } from 'styled-components'
 import * as timeago from 'timeago.js'
 
 import { AddSilencedAlertDialog } from './AddSilencedAlertDialog'
-import { addSilencedAlert } from '../../../../domain/use_cases/alert/addSilencedAlert'
-import { reactivateSilencedAlert } from '../../../../domain/use_cases/alert/reactivateSilencedAlert'
-import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { getDateTime } from '../../../../utils'
-import SearchIconSVG from '../../../icons/Loupe_dark.svg?react'
-import { getAlertNameFromType } from '../AlertListAndReportingList/utils'
+import { addSilencedAlert } from '../../../../../domain/use_cases/alert/addSilencedAlert'
+import { reactivateSilencedAlert } from '../../../../../domain/use_cases/alert/reactivateSilencedAlert'
+import { showVessel } from '../../../../../domain/use_cases/vessel/showVessel'
+import { getDateTime } from '../../../../../utils'
+import SearchIconSVG from '../../../../icons/Loupe_dark.svg?react'
 
-import type { SilencedAlertData } from '../../../../domain/entities/alerts/types'
+import type { SilencedAlertData } from '../../../types'
 
 export function SilencedAlerts() {
   const dispatch = useMainAppDispatch()

@@ -3,12 +3,12 @@ import { NewWindow } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect } from 'react'
 
 import { SideWindow } from '.'
-import { resetFocusOnPendingAlert } from './Alert/slice'
 import { sideWindowActions } from './slice'
 import { SideWindowStatus } from '../../domain/entities/sideWindow/constants'
 import { useForceUpdate } from '../../hooks/useForceUpdate'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
+import { resetFocusOnPendingAlert } from '../Alert/components/SideWindowAlerts/slice'
 
 export function SideWindowLauncher() {
   const hasUnsavedChanges = useMainAppSelector(

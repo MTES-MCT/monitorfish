@@ -32,21 +32,21 @@ with Flow("Suspicions of under-declaration", executor=LocalDaskExecutor()) as fl
 
         alerts = make_alerts(
             vessels_with_suspicions_of_under_declaration,
-            AlertType.SUSPICION_OF_UNDER_DECLARATION.value,
-            AlertType.SUSPICION_OF_UNDER_DECLARATION.value,
+            AlertType.SUSPICION_OF_UNDER_DECLARATION_ALERT.value,
+            AlertType.SUSPICION_OF_UNDER_DECLARATION_ALERT.value,
         )
         silenced_alerts = extract_silenced_alerts(
-            AlertType.SUSPICION_OF_UNDER_DECLARATION.value
+            AlertType.SUSPICION_OF_UNDER_DECLARATION_ALERT.value
         )
         active_reportings = extract_active_reportings(
-            AlertType.SUSPICION_OF_UNDER_DECLARATION.value
+            AlertType.SUSPICION_OF_UNDER_DECLARATION_ALERT.value
         )
         filtered_alerts = filter_alerts(alerts, silenced_alerts, active_reportings)
 
         # Load
         load_alerts(
             filtered_alerts,
-            alert_config_name=AlertType.SUSPICION_OF_UNDER_DECLARATION.value,
+            alert_config_name=AlertType.SUSPICION_OF_UNDER_DECLARATION_ALERT.value,
         )
 
 flow.file_name = Path(__file__).name

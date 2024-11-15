@@ -88,7 +88,7 @@ def test_extract_suspicions_of_under_declaration(
 
 
 def test_flow(reset_test_data_suspicions_of_under_declaration_alerts):
-    query = "SELECT * FROM pending_alerts WHERE alert_config_name = 'SUSPICION_OF_UNDER_DECLARATION'"
+    query = "SELECT * FROM pending_alerts WHERE alert_config_name = 'SUSPICION_OF_UNDER_DECLARATION_ALERT'"
 
     initial_pending_alerts = read_query(query, db="monitorfish_remote")
 
@@ -113,12 +113,12 @@ def test_flow(reset_test_data_suspicions_of_under_declaration_alerts):
         "trip_number": None,
         "value": {
             "dml": "DML 29",
-            "type": "SUSPICION_OF_UNDER_DECLARATION",
+            "type": "SUSPICION_OF_UNDER_DECLARATION_ALERT",
             "seaFront": "SA",
             "riskFactor": 2.58,
         },
         "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
-        "alert_config_name": "SUSPICION_OF_UNDER_DECLARATION",
+        "alert_config_name": "SUSPICION_OF_UNDER_DECLARATION_ALERT",
         "vessel_id": 1.0,
         "latitude": 49.606,
         "longitude": -0.736,

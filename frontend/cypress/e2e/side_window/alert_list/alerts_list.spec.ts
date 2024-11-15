@@ -40,6 +40,9 @@ context('Side Window > Alert List', () => {
     cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 3)
     cy.get('*[data-cy^="side-window-alerts-search-vessel"]').type('ABC0003')
     cy.get('*[data-cy^="side-window-alerts-list"]').children().should('have.length', 2)
+    cy.get('*[data-cy^="side-window-alerts-search-vessel"]').type(
+      '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}'
+    )
 
     /**
      * Ten alerts Should be shown When clicking on the NAMO menu

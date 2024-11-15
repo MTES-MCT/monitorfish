@@ -47,6 +47,7 @@ jobs:
     name: Run backend unit tests
     needs: version
     runs-on: ubuntu-22.04
+    timeout-minutes: 30
     env:
       ENV_PROFILE: ${{needs.version.outputs.ENV_PROFILE}}
       VERSION: ${{needs.version.outputs.VERSION}}
@@ -69,6 +70,7 @@ jobs:
     name: Run frontend unit tests
     needs: version
     runs-on: ubuntu-22.04
+    timeout-minutes: 30
     env:
       PUPPETEER_SKIP_DOWNLOAD: "true"
     steps:
@@ -113,6 +115,7 @@ jobs:
     name: Build and package
     needs: version
     runs-on: ubuntu-22.04
+    timeout-minutes: 30
     env:
       IS_RELEASE: ${{ needs.version.outputs.IS_RELEASE }}
       ENV_PROFILE: ${{needs.version.outputs.ENV_PROFILE}}
@@ -169,6 +172,7 @@ jobs:
     name: Run E2E tests
     needs: [version, build]
     runs-on: ubuntu-22.04
+    timeout-minutes: 30
     strategy:
       # when one test fails, DO NOT cancel the other
       # containers, because this will kill Cypress processes
@@ -239,6 +243,7 @@ jobs:
     needs: [version, build]
     if: contains(github.ref, 'dependabot') == false
     runs-on: ubuntu-22.04
+    timeout-minutes: 30
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
       ENV_PROFILE: ${{ needs.version.outputs.ENV_PROFILE }}
@@ -286,6 +291,7 @@ jobs:
     needs: [version, build, unit_test_backend, unit_test_frontend, e2e_test, e2e_multi_windows_test]
     if: needs.version.outputs.IS_RELEASE && !contains(github.ref, 'dependabot')
     runs-on: ubuntu-22.04
+    timeout-minutes: 30
     env:
       VERSION: ${{ needs.version.outputs.VERSION }}
       SENTRY_URL: ${{ secrets.SENTRY_URL }}

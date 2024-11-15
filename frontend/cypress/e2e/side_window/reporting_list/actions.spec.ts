@@ -107,7 +107,7 @@ context('Side Window > Reporting List > Actions', () => {
   })
 
   it('A Reporting Should be edited', () => {
-    cy.intercept('PUT', 'bff/v1/reportings/6').as('updateReporting')
+    cy.intercept('PUT', 'bff/v1/reportings/7').as('updateReporting')
 
     // Given
     cy.login('superuser')
@@ -118,7 +118,7 @@ context('Side Window > Reporting List > Actions', () => {
 
     // When
     cy.clickButton('Editer le signalement', {
-      withinSelector: '[data-cy="ReportingList-reporting"][data-id="6"]'
+      withinSelector: '[data-cy="ReportingList-reporting"][data-id="7"]'
     })
     cy.fill('Titre', 'Suspicion de chalutage dans les 3 km')
     cy.fill('Natinf', 'maille')
@@ -138,7 +138,7 @@ context('Side Window > Reporting List > Actions', () => {
   })
 
   it('A Reporting Should be edited with the reporting type modified ', () => {
-    cy.intercept('PUT', 'bff/v1/reportings/6').as('updateReporting')
+    cy.intercept('PUT', 'bff/v1/reportings/7').as('updateReporting')
 
     // Given
     cy.login('superuser')
@@ -151,7 +151,7 @@ context('Side Window > Reporting List > Actions', () => {
       const numberOfReportings = $reportingRows.length
 
       cy.clickButton('Editer le signalement', {
-        withinSelector: '[data-cy="ReportingList-reporting"][data-id="6"]'
+        withinSelector: '[data-cy="ReportingList-reporting"][data-id="7"]'
       })
 
       // When

@@ -63,7 +63,7 @@ def test_extract_positions(reset_test_data):
         "datetime_utc",
         "latitude",
         "longitude",
-        "is_at_port",
+        "is_on_land",
         "time_emitting_at_sea",
     ]
 

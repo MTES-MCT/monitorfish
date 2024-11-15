@@ -5,7 +5,7 @@ import sqlalchemy as sa
 db_env = {
     "ocan": {
         "client": "ORACLE_CLIENT",
-        "host": "ORACLE_HOST",
+        "host": "ORACLE_OCAN_HOST",
         "port": "ORACLE_PORT",
         "sid": "ORACLE_OCAN_SID",
         "usr": "ORACLE_OCAN_USER",
@@ -13,7 +13,7 @@ db_env = {
     },
     "fmc": {
         "client": "ORACLE_CLIENT",
-        "host": "ORACLE_HOST",
+        "host": "ORACLE_FMC_HOST",
         "port": "ORACLE_PORT",
         "sid": "ORACLE_FMC_SID",
         "usr": "ORACLE_FMC_USER",

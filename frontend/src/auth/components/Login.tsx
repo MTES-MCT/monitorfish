@@ -47,27 +47,25 @@ export function Login() {
 
   return (
     <LoginBackground>
-      {auth?.isLoading || isLoading ? (
+      {!!auth?.isLoading || isLoading ? (
         <LoadingSpinnerWall isVesselShowed />
       ) : (
         <div>
-          <Head>
-            <LogoMonitorFish alt="MonitorFish" src="/monitorfish.png" />
-            <Title>MonitorFish</Title>
-          </Head>
+          <Head>MonitorFish</Head>
 
           <Button onClick={() => auth?.signinRedirect()} title="Se connecter avec Cerbère">
             Se connecter avec Cerbère
           </Button>
           <Warning>
-            Vous accédez à une application réservée aux services de l&apos;Etat.
+            <WarningHeader>Vous accédez à une application réservée aux services de l&apos;Etat.</WarningHeader>
             <br />
             <br />
-            Rappels législatifs : Conformément à l&apos;art. L121-6 du Code de la fonction publique : &quot;l&apos;agent
-            public est tenu au secret professionnel dans le respect des articles 226-13 et 226-14 du code pénal&quot;.
-            Conformément à l&apos;article 226-13 du Code pénal : &quot;La révélation d&apos;une information à caractère
-            secret par une personne qui en est dépositaire est punie d&apos;un an d&apos;emprisonnement et de 15
-            000&euro; d&apos;amende&quot;.
+            Rappels législatifs : <br />
+            Conformément à l&apos;art. L121-6 du Code de la fonction publique : &quot;l&apos;agent public est tenu au
+            secret professionnel dans le respect des articles 226-13 et 226-14 du code pénal&quot;. Conformément à
+            l&apos;article 226-13 du Code pénal : &quot;La révélation d&apos;une information à caractère secret par une
+            personne qui en est dépositaire est punie d&apos;un an d&apos;emprisonnement et de 15 000&euro;
+            d&apos;amende&quot;.
           </Warning>
           <Footer>Centre National de Surveillance des Pêches (CNSP) – CROSS Etel</Footer>
         </div>
@@ -85,11 +83,20 @@ const Warning = styled.p`
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  font-weight: 500;
+  background-color: #8aa4bd;
+  padding: 32px;
+`
+
+const WarningHeader = styled.span`
+  font-weight: 900;
+  font-size: 16px;
 `
 
 const Head = styled.div`
   margin-bottom: 16px;
+  font-size: 32px;
+  font-weight: 800;
+  color: ${p => p.theme.color.gunMetal};
 `
 
 const Footer = styled.div`
@@ -97,19 +104,8 @@ const Footer = styled.div`
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-`
-
-const Title = styled.h1`
-  display: inline-block;
-  margin-left: 16px;
-  font-size: 24px;
-  color: ${p => p.theme.color.gunMetal};
-  vertical-align: middle;
-`
-
-const LogoMonitorFish = styled.img`
-  width: 40px;
-  height: 40px;
+  background-color: #8aa4bd;
+  padding: 8px;
 `
 
 export const LoginBackground = styled.div`

@@ -79,7 +79,7 @@ dependencies {
     api("io.sentry:sentry-log4j2:7.17.0")
     implementation("org.springframework.cloud:spring-cloud-gateway-mvc:4.1.5")
     runtimeOnly("org.postgresql:postgresql:42.7.4")
-    testImplementation("io.ktor:ktor-client-mock-jvm:2.3.12")
+    testImplementation("io.ktor:ktor-client-mock-jvm:3.0.1")
     testImplementation("org.assertj:assertj-core:3.26.3")
     testImplementation("org.testcontainers:postgresql:1.20.3")
     testImplementation("org.testcontainers:testcontainers:1.20.3")

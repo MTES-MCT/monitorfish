@@ -374,6 +374,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
   })
 
   it('getMissionDataFromMissionFormValues() should keep the existing missionSource if previously set', () => {
+    // Given
     const missionForm = {
       controlUnits: [
         {
@@ -400,31 +401,12 @@ describe('features/Mission/components/MissionForm/utils', () => {
       startDateTimeUtc: '2022-12-31T23:30:00.000000Z'
     }
 
+    // When
     const result = getMissionDataFromMissionFormValues(missionForm)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { isValid, ...missionFormWithoutIsValid } = missionForm
 
-    expect(result).toStrictEqual({
-      controlUnits: [
-        {
-          administration: 'DDTM',
-          contact: undefined,
-          id: 10499,
-          isArchived: false,
-          name: 'Cultures marines 56',
-          resources: [
-            {
-              id: 314,
-              name: 'Brezel - FAH 7185'
-            }
-          ]
-        }
-      ],
-      endDateTimeUtc: '2023-12-31T23:30:00.000000Z',
-      id: undefined,
-      isGeometryComputedFromControls: true,
-      isUnderJdp: true,
-      missionSource: 'POSEIDON_CNSP',
-      missionTypes: ['SEA'],
-      startDateTimeUtc: '2022-12-31T23:30:00.000000Z'
-    })
+    // Then
+    expect(result).toStrictEqual(missionFormWithoutIsValid)
   })
 })

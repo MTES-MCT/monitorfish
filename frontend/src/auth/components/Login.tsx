@@ -47,7 +47,7 @@ export function Login() {
 
   return (
     <LoginBackground>
-      {auth?.isLoading || isLoading ? (
+      {!!auth?.isLoading || isLoading ? (
         <LoadingSpinnerWall isVesselShowed />
       ) : (
         <div>

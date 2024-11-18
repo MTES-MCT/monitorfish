@@ -2,8 +2,8 @@ import { FieldError, Select } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
 import styled from 'styled-components'
 
-import { operationalAlertTypes } from '../../../../../domain/entities/alerts/constants'
-import { PendingAlertValueType } from '../../../../../domain/entities/alerts/types'
+import { operationalAlertTypes } from '../../../../constants'
+import { PendingAlertValueType } from '../../../../types'
 
 import type { SilencedAlertFormValues } from '../types'
 import type { Option } from '@mtes-mct/monitor-ui'

@@ -1,7 +1,7 @@
-import { FormError, FormErrorCode } from '../../../../libs/FormError'
+import { FormError, FormErrorCode } from '@libs/FormError'
 
 import type { SilencedAlertFormValues } from './types'
-import type { SilencedAlertData } from '../../../../domain/entities/alerts/types'
+import type { SilencedAlertData } from '../../../types'
 
 export function getSilencedAlertFromSilencedAlertFormValues(formValues: SilencedAlertFormValues): SilencedAlertData {
   if (!formValues.flagState) {

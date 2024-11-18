@@ -234,11 +234,12 @@ class VesselControllerITests {
                     beacon = null,
                     positions = listOf(firstPosition, secondPosition, thirdPosition),
                     vesselRiskFactor = VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
-                    producerOrganization = ProducerOrganizationMembership(
-                        internalReferenceNumber = "FR224226850",
-                        "01/10/2024",
-                        "OP"
-                    ),
+                    producerOrganization =
+                        ProducerOrganizationMembership(
+                            internalReferenceNumber = "FR224226850",
+                            "01/10/2024",
+                            "OP",
+                        ),
                 ),
             )
         }

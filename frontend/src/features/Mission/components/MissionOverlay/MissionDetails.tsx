@@ -13,7 +13,7 @@ import { Mission } from '../../mission.types'
 import { editMission } from '../../useCases/editMission'
 import { missionFormActions } from '../MissionForm/slice'
 
-import type { LegacyControlUnit } from '../../../../domain/types/legacyControlUnit'
+import type { LegacyControlUnit } from '../../../ControlUnit/legacyControlUnit'
 
 type MissionDetailsProps = Readonly<{
   isSelected: boolean

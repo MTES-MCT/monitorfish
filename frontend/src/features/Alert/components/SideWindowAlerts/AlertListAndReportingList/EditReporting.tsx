@@ -8,10 +8,10 @@ import { THEME } from '@mtes-mct/monitor-ui'
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
-import { getOnlyVesselIdentityProperties } from '../../../../domain/entities/vessel/vessel'
-import CloseIconSVG from '../../../icons/Croix_grise.svg?react'
-import AlertsSVG from '../../../icons/Icone_alertes_gris.svg?react'
-import { ReportingForm } from '../../../Reporting/components/ReportingForm'
+import { getOnlyVesselIdentityProperties } from '../../../../../domain/entities/vessel/vessel'
+import CloseIconSVG from '../../../../icons/Croix_grise.svg?react'
+import AlertsSVG from '../../../../icons/Icone_alertes_gris.svg?react'
+import { ReportingForm } from '../../../../Reporting/components/ReportingForm'
 
 export function EditReporting() {
   const dispatch = useMainAppDispatch()

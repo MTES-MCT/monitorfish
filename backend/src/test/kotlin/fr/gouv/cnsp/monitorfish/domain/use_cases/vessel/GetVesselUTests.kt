@@ -138,7 +138,7 @@ class GetVesselUTests {
         )
         given(beaconRepository.findBeaconByVesselId(eq(123))).willReturn(Beacon("A_BEACON_NUMBER", vesselId = 123))
         given(producerOrganizationMembershipRepository.findByInternalReferenceNumber(any())).willReturn(
-            ProducerOrganizationMembership("FR224226850", "01/10/2024", "Example Name 1")
+            ProducerOrganizationMembership("FR224226850", "01/10/2024", "Example Name 1"),
         )
 
         // When
@@ -150,7 +150,7 @@ class GetVesselUTests {
                     logbookReportRepository,
                     riskFactorRepository,
                     beaconRepository,
-                    producerOrganizationMembershipRepository
+                    producerOrganizationMembershipRepository,
                 )
                     .execute(
                         123,
@@ -194,7 +194,7 @@ class GetVesselUTests {
                     logbookReportRepository,
                     riskFactorRepository,
                     beaconRepository,
-                    producerOrganizationMembershipRepository
+                    producerOrganizationMembershipRepository,
                 )
                     .execute(
                         123,
@@ -232,7 +232,7 @@ class GetVesselUTests {
                     logbookReportRepository,
                     riskFactorRepository,
                     beaconRepository,
-                    producerOrganizationMembershipRepository
+                    producerOrganizationMembershipRepository,
                 )
                     .execute(
                         123,

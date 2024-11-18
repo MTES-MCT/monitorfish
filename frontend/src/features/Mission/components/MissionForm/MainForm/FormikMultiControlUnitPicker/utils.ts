@@ -2,8 +2,8 @@ import { getOptionsFromStrings } from '@utils/getOptionsFromStrings'
 import { isNotArchived } from '@utils/isNotArchived'
 import { sortBy, uniq } from 'lodash'
 
+import type { LegacyControlUnit } from '@features/ControlUnit/legacyControlUnit'
 import type { Option } from '@mtes-mct/monitor-ui'
-import type { LegacyControlUnit } from 'domain/types/legacyControlUnit'
 
 export function mapControlUnitsToUniqueSortedNamesAsOptions(
   controlUnits: LegacyControlUnit.LegacyControlUnit[]

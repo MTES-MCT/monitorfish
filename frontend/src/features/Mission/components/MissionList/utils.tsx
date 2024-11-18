@@ -1,6 +1,6 @@
 import { uniq } from 'lodash/fp'
 
-import type { LegacyControlUnit } from '../../../../domain/types/legacyControlUnit'
+import type { LegacyControlUnit } from '../../../ControlUnit/legacyControlUnit'
 
 export function getControlUnitsNamesFromAdministrations(
   controlUnits: LegacyControlUnit.LegacyControlUnit[],

@@ -1,13 +1,13 @@
+import { FormError, FormErrorCode } from '@libs/FormError'
 import { Legend, useNewWindow } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { UNKNOWN_VESSEL } from '../../../../../domain/entities/vessel/vessel'
-import { FormError, FormErrorCode } from '../../../../../libs/FormError'
-import { VesselSearch } from '../../../../VesselSearch'
+import { UNKNOWN_VESSEL } from '../../../../../../domain/entities/vessel/vessel'
+import { VesselSearch } from '../../../../../VesselSearch'
 
-import type { VesselIdentity } from '../../../../../domain/entities/vessel/types'
+import type { VesselIdentity } from '../../../../../../domain/entities/vessel/types'
 import type { SilencedAlertFormValues } from '../types'
 
 export function VesselField() {

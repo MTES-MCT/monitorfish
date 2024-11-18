@@ -1383,17 +1383,18 @@ tests = ["asttokens (>=2.1.0)", "coverage", "coverage-enable-subprocess", "ipyth
 
 [[package]]
 name = "faker"
-version = "25.9.2"
+version = "33.0.0"
 description = "Faker is a Python package that generates fake data for you."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "Faker-25.9.2-py3-none-any.whl", hash = "sha256:7f8cbd179a7351648bea31f53d021a2bdfdeb59e9b830e121a635916615e0ecd"},
-    {file = "Faker-25.9.2.tar.gz", hash = "sha256:ca94843600a4089a91394023fef014bb41fee509f8c4beef1530018373e770fb"},
+    {file = "Faker-33.0.0-py3-none-any.whl", hash = "sha256:68e5580cb6b4226710886e595eabc13127149d6e71e9d1db65506a7fbe2c7fce"},
+    {file = "faker-33.0.0.tar.gz", hash = "sha256:9b01019c1ddaf2253ca2308c0472116e993f4ad8fc9905f82fa965e0c6f932e9"},
 ]
 
 [package.dependencies]
 python-dateutil = ">=2.4"
+typing-extensions = "*"
 
 [[package]]
 name = "fastjsonschema"
@@ -3161,19 +3162,21 @@ traitlets = "*"
 
 [[package]]
 name = "matplotlib-venn"
-version = "0.11.10"
+version = "1.1.1"
 description = "Functions for plotting area-proportional two- and three-way Venn diagrams in matplotlib."
 optional = false
 python-versions = "*"
 files = [
-    {file = "matplotlib-venn-0.11.10.tar.gz", hash = "sha256:90d0cfb279c5dbbdf7dfd722c0e2515a37f535e949bcad174483bc777e372e65"},
-    {file = "matplotlib_venn-0.11.10-py3-none-any.whl", hash = "sha256:85650429baff7a812b2785540979e6bf0abcc747e7fe5ffd2a972cb917a826d6"},
+    {file = "matplotlib-venn-1.1.1.tar.gz", hash = "sha256:d885bc015f5091a4b8a8138ff20a7ed166c33b5c36dbc0489f95a5cbc76a2ae5"},
 ]
 
 [package.dependencies]
 matplotlib = "*"
 numpy = "*"
 scipy = "*"
+
+[package.extras]
+shapely = ["shapely"]
 
 [[package]]
 name = "mccabe"
@@ -6417,4 +6420,4 @@ test = ["pytest"]
 [metadata]
 lock-version = "2.0"
 python-versions = "3.11.6"
-content-hash = "129532cf55355003194a153dd5305851799fccd429644e9bdb856ebe9b7eee18"
+content-hash = "55df6faad3c0af875eb92c96ebeac22b1bb0c0c408e5c9357640cc100efb1a18"

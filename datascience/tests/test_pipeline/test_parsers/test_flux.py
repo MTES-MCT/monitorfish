@@ -767,7 +767,7 @@ def test_batch_parse():
                     "catchLanded": [
                         {
                             "species": "HAD",
-                            "weight": 100.0,
+                            "weight": 83.3,
                             "nbFish": None,
                             "economicZone": "ESP",
                             "faoZone": "27.9.b.2",

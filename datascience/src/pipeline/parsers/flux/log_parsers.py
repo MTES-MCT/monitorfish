@@ -250,7 +250,9 @@ def parse_lan(lan):
         zone_data = complete_ras(zone_data)
 
     if "SpecifiedFACatch" in children:
-        catches = [parse_spe(spe) for spe in children["SpecifiedFACatch"]]
+        catches = [
+            parse_spe(spe, weight_type="net") for spe in children["SpecifiedFACatch"]
+        ]
         if hasRelatedFLUXLocation:
             catches = [dict(item, **zone_data) for item in catches]
         value["catchLanded"] = catches

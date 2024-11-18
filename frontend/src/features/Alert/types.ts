@@ -1,6 +1,6 @@
 import { Seafront } from '@constants/seafront'
 
-import type { VesselIdentifier, VesselIdentity } from '../vessel/types'
+import type { VesselIdentifier, VesselIdentity } from '../../domain/entities/vessel/types'
 import type { MissionAction } from '@features/Mission/missionAction.types'
 import type { Except } from 'type-fest'
 

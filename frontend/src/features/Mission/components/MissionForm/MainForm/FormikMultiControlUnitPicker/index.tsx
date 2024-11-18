@@ -1,8 +1,8 @@
 import { useGetLegacyControlUnitsQuery } from '@api/legacyControlUnit'
+import { getControlUnitsOptionsFromControlUnits } from '@features/ControlUnit/utils'
 import { useForceUpdate } from '@hooks/useForceUpdate'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Button, usePrevious } from '@mtes-mct/monitor-ui'
-import { getControlUnitsOptionsFromControlUnits } from 'domain/entities/controlUnits/utils'
 import { useFormikContext } from 'formik'
 import { remove, update } from 'ramda'
 import { useCallback, useEffect, useMemo } from 'react'
@@ -13,7 +13,7 @@ import { INITIAL_MISSION_CONTROL_UNIT, PAMControlUnitIds } from '../../constants
 import { useGetMainFormFormikUsecases } from '../../hooks/useGetMainFormFormikUsecases'
 
 import type { MissionMainFormValues } from '../../types'
-import type { LegacyControlUnit } from 'domain/types/legacyControlUnit'
+import type { LegacyControlUnit } from '@features/ControlUnit/legacyControlUnit'
 
 type FormikMultiControlUnitPickerProps = Readonly<{
   missionId: number | undefined

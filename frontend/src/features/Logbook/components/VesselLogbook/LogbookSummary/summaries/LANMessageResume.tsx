@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { COMMON_ALERT_TYPE_OPTION } from '../../../../../../domain/entities/alerts/constants'
+import { COMMON_ALERT_TYPE_OPTION } from '../../../../../Alert/constants'
 import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../constants'
 import { getCodeWithNameOrDash, getDatetimeOrDash, getValueOrDash } from '../../LogbookMessages/messages/utils'
 import { LogbookMessageResumeHeader } from '../LogbookMessageResumeHeader'

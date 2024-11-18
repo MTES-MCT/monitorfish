@@ -94,7 +94,10 @@ data class VesselDataOutput(
                 logbookSoftware = vessel.logbookSoftware,
                 hasLogbookEsacapt = vessel.hasLogbookEsacapt,
                 hasVisioCaptures = vessel.hasVisioCaptures,
-                producerOrganization = producerOrganizationMembership?.let { ProducerOrganizationMembershipDataOutput.fromProducerOrganizationMembership(it) },
+                producerOrganization =
+                    producerOrganizationMembership?.let {
+                        ProducerOrganizationMembershipDataOutput.fromProducerOrganizationMembership(it)
+                    },
             )
         }
 

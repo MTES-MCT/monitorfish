@@ -1,19 +1,19 @@
-import { removeVesselAlertAndUpdateReporting } from '@features/Vessel/slice'
-import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
-
-import { silenceAlertFromAPI } from '../../../api/alert'
 import {
   addToPendingAlertsBeingSilenced,
   removeFromSilencedAlertsQueue,
   setPendingAlerts,
   setSilencedAlerts
-} from '../../../features/SideWindow/Alert/slice'
+} from '@features/Alert/components/SideWindowAlerts/slice'
+import { removeVesselAlertAndUpdateReporting } from '@features/Vessel/slice'
+import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
+
+import { silenceAlertFromAPI } from '../../../api/alert'
 import { deleteListItems } from '../../../utils/deleteListItems'
 import { Vessel } from '../../entities/vessel/vessel'
 import { setError } from '../../shared_slices/Global'
 
 import type { MainAppThunk } from '../../../store'
-import type { SilencedAlertPeriodRequest } from '../../entities/alerts/types'
+import type { SilencedAlertPeriodRequest } from '@features/Alert/types'
 
 /**
  * Silence an alert

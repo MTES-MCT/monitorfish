@@ -1,9 +1,9 @@
+import { getAlertNameFromType } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/utils'
 import { showAlertInSideWindow } from '@features/Vessel/useCases/showAlertInSideWindow'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import styled from 'styled-components'
 
 import AlertSVG from '../../../../icons/Icone_alertes.svg?react'
-import { getAlertNameFromType } from '../../../../SideWindow/Alert/AlertListAndReportingList/utils'
 
 import type { Vessel } from '@features/Vessel/Vessel.types'
 

@@ -2,7 +2,7 @@ import { logSoftError } from '@mtes-mct/monitor-ui'
 import { without } from 'lodash'
 import { addMethod, number, object, ObjectSchema, string } from 'yup'
 
-import type { SilencedAlertData } from '../../../../domain/entities/alerts/types'
+import type { SilencedAlertData } from '../../../types'
 
 /**
  * Require at least one of the specified fields to be present.

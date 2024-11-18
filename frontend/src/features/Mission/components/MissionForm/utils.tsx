@@ -7,8 +7,8 @@ import { Mission } from '../../mission.types'
 import { MissionAction } from '../../missionAction.types'
 
 import type { MissionActionFormValues, MissionMainFormValues } from './types'
+import type { LegacyControlUnit } from '@features/ControlUnit/legacyControlUnit'
 import type { Undefine } from '@mtes-mct/monitor-ui'
-import type { LegacyControlUnit } from 'domain/types/legacyControlUnit'
 
 import MissionActionType = MissionAction.MissionActionType
 
@@ -101,17 +101,6 @@ export function getUpdatedMissionFromMissionMainFormValues(
     id: missionId,
     ...missionData
   }
-}
-
-export function isValidControlUnit(
-  controlUnitFormValues: LegacyControlUnit.LegacyControlUnit | LegacyControlUnit.LegacyControlUnitDraft
-): controlUnitFormValues is LegacyControlUnit.LegacyControlUnit {
-  const [, error] = validateRequiredFormValues(
-    ['administration', 'id', 'isArchived', 'name', 'resources'],
-    controlUnitFormValues as LegacyControlUnit.LegacyControlUnit
-  )
-
-  return !error
 }
 
 export function getValidMissionActionData(

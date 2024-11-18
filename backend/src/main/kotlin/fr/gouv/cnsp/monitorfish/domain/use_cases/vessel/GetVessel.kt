@@ -64,9 +64,10 @@ class GetVessel(
                 }
 
             val vessel = vesselFuture.await()
-            val beacon = async {
-                vessel?.id?.let { vesselId -> beaconRepository.findBeaconByVesselId(vesselId) }
-            }
+            val beacon =
+                async {
+                    vessel?.id?.let { vesselId -> beaconRepository.findBeaconByVesselId(vesselId) }
+                }
             val logbookSoftware =
                 vessel?.internalReferenceNumber?.let {
                     logbookReportRepository.findLastReportSoftware(
@@ -78,10 +79,11 @@ class GetVessel(
             Pair(
                 vesselTrackHasBeenModified,
                 VesselInformation(
-                    vessel = vessel?.copy(
-                        hasVisioCaptures = hasVisioCaptures,
-                        logbookSoftware = logbookSoftware,
-                    ),
+                    vessel =
+                        vessel?.copy(
+                            hasVisioCaptures = hasVisioCaptures,
+                            logbookSoftware = logbookSoftware,
+                        ),
                     beacon = beacon.await(),
                     positions = positions.await(),
                     vesselRiskFactor = vesselRiskFactorsFuture.await() ?: VesselRiskFactor(),

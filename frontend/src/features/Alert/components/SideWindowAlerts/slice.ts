@@ -1,8 +1,7 @@
 import { SEAFRONT_GROUP_SEAFRONTS, SeafrontGroup } from '@constants/seafront'
 import { createSlice } from '@reduxjs/toolkit'
+import { deleteListItems } from '@utils/deleteListItems'
 import { propEq } from 'ramda'
-
-import { deleteListItems } from '../../../utils/deleteListItems'
 
 import type { AlertSubMenu } from './constants'
 import type {
@@ -10,7 +9,7 @@ import type {
   LEGACY_PendingAlert,
   LEGACY_SilencedAlert,
   SilenceAlertQueueItem
-} from '../../../domain/entities/alerts/types'
+} from '../../types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 export type AlertState = {

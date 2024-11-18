@@ -14,7 +14,7 @@ data class VesselAndPositionsDataOutput(
                         vessel = vesselInformation.vessel,
                         beacon = vesselInformation.beacon,
                         vesselRiskFactor = vesselInformation.vesselRiskFactor,
-                        producerOrganizationMembership = vesselInformation.producerOrganization
+                        producerOrganizationMembership = vesselInformation.producerOrganization,
                     ),
                 positions =
                     vesselInformation.positions.map {

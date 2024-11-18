@@ -10,7 +10,7 @@ import {
 
 import { PendingAlertValueType } from './types'
 
-import type { MenuItem } from '../../../types'
+import type { MenuItem } from '../../types'
 
 export const COMMON_ALERT_TYPE_OPTION: Record<
   PendingAlertValueType | 'PNO_LAN_WEIGHT_TOLERANCE_ALERT',

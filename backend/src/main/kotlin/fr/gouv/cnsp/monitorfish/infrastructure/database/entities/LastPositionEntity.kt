@@ -7,9 +7,11 @@ import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Species
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
+import io.hypersistence.utils.hibernate.type.interval.PostgreSQLIntervalType
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import jakarta.persistence.*
 import org.hibernate.annotations.Type
+import org.hibernate.dialect.PostgreSQLIntervalSecondJdbcType
 import java.io.Serializable
 import java.time.Duration
 import java.time.ZonedDateTime
@@ -50,6 +52,12 @@ data class LastPositionEntity(
     val course: Double? = null,
     @Column(name = "last_position_datetime_utc")
     val dateTime: ZonedDateTime,
+    /**
+     * TODO We should use the default `PostgreSQLIntervalSecondJdbcType`, but it require a migration
+     * from `instant` to `instant_seconds` data type.
+     * @see https://github.com/vladmihalcea/hypersistence-utils/issues/750
+     */
+    @Type(PostgreSQLIntervalType::class)
     @Column(name = "emission_period")
     val emissionPeriod: Duration? = null,
     @Column(name = "last_logbook_message_datetime_utc")

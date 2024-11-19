@@ -25,6 +25,7 @@ import { CardHeader } from '../shared/CardHeader'
 import { DownloadButton } from '../shared/DownloadButton'
 import { EditHistory } from '../shared/EditHistory'
 import { UploadFiles } from '../shared/UploadFiles'
+import { getSendButtonTitle } from '../shared/utils'
 
 import type { ManualPriorNotificationFormValues } from './types'
 import type { Promisable } from 'type-fest'
@@ -230,7 +231,7 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
 
           <Button
             accent={Accent.PRIMARY}
-            disabled={(isReadOnly && !isPriorNotificationFormDirty) || (isValidatingOnChange && !isValid)}
+            disabled={isReadOnly || !isPriorNotificationFormDirty || (isValidatingOnChange && !isValid)}
             onClick={handleSubmit}
             title={
               isInvalidated
@@ -244,14 +245,10 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
           {!isNewPriorNotification && (
             <Button
               accent={Accent.PRIMARY}
-              disabled={isReadOnly || isVerifiedAndSent}
+              disabled={isReadOnly || isVerifiedAndSent || isPriorNotificationFormDirty}
               Icon={isVerifiedAndSent ? Icon.Check : Icon.Send}
               onClick={onVerifyAndSend}
-              title={
-                isInvalidated
-                  ? "Le préavis est invalidé, il n'est plus possible de le modifier ni de le diffuser."
-                  : undefined
-              }
+              title={getSendButtonTitle({ isInvalidated, isPriorNotificationFormDirty })}
             >
               {isVerifiedAndSent ? 'Diffusé' : 'Diffuser'}
             </Button>

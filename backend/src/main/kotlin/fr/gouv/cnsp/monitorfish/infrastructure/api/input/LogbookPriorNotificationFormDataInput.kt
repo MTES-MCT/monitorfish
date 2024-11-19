@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class LogbookPriorNotificationFormDataInput(
-    val note: String?,
+    val note: String? = null,
 )

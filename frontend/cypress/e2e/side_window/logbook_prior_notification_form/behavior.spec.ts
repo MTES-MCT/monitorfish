@@ -11,7 +11,7 @@ import { openSideWindowPriorNotificationListAsSuperUser } from '../prior_notific
 
 context('Side Window > Logbook Prior Notification Form > Behavior', () => {
   it('Should ask for confirmation before closing form when manual prior notification form is dirty', () => {
-    const initialFakeParams = {
+    const fakeParams = {
       isManuallyCreated: false,
       state: PriorNotification.State.OUT_OF_VERIFICATION_SCOPE,
       updatedAt: dayjs().toISOString()
@@ -23,7 +23,7 @@ context('Side Window > Logbook Prior Notification Form > Behavior', () => {
         url: '/bff/v1/prior_notifications?*'
       },
       {
-        body: getPriorNotificationsFakeResponse(initialFakeParams)
+        body: getPriorNotificationsFakeResponse(fakeParams)
       }
     ).as('getFakePriorNotifications')
     cy.intercept(
@@ -32,7 +32,7 @@ context('Side Window > Logbook Prior Notification Form > Behavior', () => {
         url: '/bff/v1/prior_notifications/FAKE_OPERATION_000?*'
       },
       {
-        body: getPriorNotificationFakeResponse(initialFakeParams)
+        body: getPriorNotificationFakeResponse(fakeParams)
       }
     ).as('getFakePriorNotification')
     cy.intercept(
@@ -41,7 +41,7 @@ context('Side Window > Logbook Prior Notification Form > Behavior', () => {
         url: '/bff/v1/prior_notifications/logbook/FAKE_OPERATION_000?*'
       },
       {
-        body: getPriorNotificationFakeResponse(initialFakeParams)
+        body: getPriorNotificationFakeResponse(fakeParams)
       }
     ).as('updatePriorNotification')
 
@@ -49,8 +49,6 @@ context('Side Window > Logbook Prior Notification Form > Behavior', () => {
     cy.wait('@getFakePriorNotifications')
     cy.clickButton('Éditer le préavis')
     cy.wait('@getFakePriorNotification')
-
-    cy.log
 
     cy.log('Closing the form without any modification should not ask for confirmation')
 
@@ -90,6 +88,106 @@ context('Side Window > Logbook Prior Notification Form > Behavior', () => {
     })
   })
 
+  it('Should enable and disable the save and send buttons depending on the form dirtiness', () => {
+    const commonFakeParams = {
+      isManuallyCreated: false,
+      updatedAt: dayjs().toISOString()
+    }
+
+    cy.intercept(
+      {
+        method: 'GET',
+        times: 1,
+        url: '/bff/v1/prior_notifications?*'
+      },
+      {
+        body: getPriorNotificationsFakeResponse({
+          ...commonFakeParams,
+          state: PriorNotification.State.VERIFIED_AND_SENT
+        })
+      }
+    ).as('getFakePriorNotifications')
+    cy.intercept(
+      {
+        method: 'GET',
+        times: 1,
+        url: '/bff/v1/prior_notifications/FAKE_OPERATION_000?*'
+      },
+      {
+        body: getPriorNotificationFakeResponse({
+          ...commonFakeParams,
+          state: PriorNotification.State.VERIFIED_AND_SENT
+        })
+      }
+    ).as('getFakePriorNotification')
+
+    openSideWindowPriorNotificationListAsSuperUser()
+    cy.wait('@getFakePriorNotifications')
+    cy.clickButton('Éditer le préavis')
+    cy.wait('@getFakePriorNotification')
+
+    cy.get('button').contains('Enregistrer').parent().should('be.disabled')
+    cy.get('button').contains('Diffusé').parent().should('be.disabled')
+
+    cy.fill("Points d'attention identifiés par le CNSP", "Un point d'attention.")
+
+    cy.get('button').contains('Enregistrer').parent().should('be.enabled')
+    cy.get('button').contains('Diffusé').parent().should('be.disabled')
+
+    cy.intercept(
+      {
+        method: 'GET',
+        times: 1,
+        url: '/bff/v1/prior_notifications?*'
+      },
+      {
+        body: getPriorNotificationsFakeResponse({
+          ...commonFakeParams,
+          state: PriorNotification.State.OUT_OF_VERIFICATION_SCOPE
+        })
+      }
+    ).as('getFakePriorNotifications')
+    cy.intercept(
+      {
+        method: 'GET',
+        times: 2,
+        url: '/bff/v1/prior_notifications/FAKE_OPERATION_000?*'
+      },
+      {
+        body: getPriorNotificationFakeResponse({
+          ...commonFakeParams,
+          state: PriorNotification.State.OUT_OF_VERIFICATION_SCOPE
+        })
+      }
+    ).as('getFakePriorNotification')
+    cy.intercept(
+      {
+        method: 'PUT',
+        times: 1,
+        url: '/bff/v1/prior_notifications/logbook/FAKE_OPERATION_000?*'
+      },
+      {
+        body: getPriorNotificationFakeResponse({
+          ...commonFakeParams,
+          state: PriorNotification.State.OUT_OF_VERIFICATION_SCOPE
+        })
+      }
+    ).as('updatePriorNotification')
+
+    cy.clickButton('Enregistrer')
+    cy.wait('@updatePriorNotification')
+    cy.wait('@getFakePriorNotification')
+    cy.wait('@getFakePriorNotifications')
+
+    cy.get('button').contains('Enregistrer').parent().should('be.disabled')
+    cy.get('button').contains('Diffuser').parent().should('be.enabled')
+
+    cy.fill("Points d'attention identifiés par le CNSP", "Un nouveau point d'attention.")
+
+    cy.get('button').contains('Enregistrer').parent().should('be.enabled')
+    cy.get('button').contains('Diffuser').parent().should('be.disabled')
+  })
+
   it("Should show a banner, freeze the logbook prior notification form and button when it's in pending send", () => {
     editSideWindowPriorNotification(`LEVE NEDERLAND`, 'FAKE_OPERATION_105')
 
@@ -101,7 +199,7 @@ context('Side Window > Logbook Prior Notification Form > Behavior', () => {
     cy.contains('button', 'Diffuser').should('be.disabled')
   })
 
-  it('Should behave as expected when a logbook prior norification is sent, failed to be sent, resent and successfully sent', () => {
+  it('Should behave as expected when a logbook prior notification is sent, failed to be sent, resent and successfully sent', () => {
     // -------------------------------------------------------------------------
     // Superuser opens a prior notification in edit mode
 

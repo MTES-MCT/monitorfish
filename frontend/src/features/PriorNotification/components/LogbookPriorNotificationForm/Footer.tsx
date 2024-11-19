@@ -4,6 +4,8 @@ import { Accent, Button, Icon } from '@mtes-mct/monitor-ui'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import { useFormikContext } from 'formik'
 
+import { getSendButtonTitle } from '../shared/utils'
+
 type FooterProps = Readonly<{
   detail: PriorNotification.Detail
   onVerifyAndSend: () => void
@@ -39,14 +41,10 @@ export function Footer({ detail, onVerifyAndSend }: FooterProps) {
 
       <Button
         accent={Accent.PRIMARY}
-        disabled={!!isInvalidated || isPendingSend || isVerifiedAndSent}
+        disabled={!!isInvalidated || isPendingSend || isVerifiedAndSent || isPriorNotificationFormDirty}
         Icon={isVerifiedAndSent ? Icon.Check : Icon.Send}
         onClick={onVerifyAndSend}
-        title={
-          isInvalidated
-            ? "Le préavis est invalidé, il n'est plus possible de le modifier ni de le diffuser."
-            : undefined
-        }
+        title={getSendButtonTitle({ isInvalidated, isPriorNotificationFormDirty })}
       >
         {isVerifiedAndSent ? 'Diffusé' : 'Diffuser'}
       </Button>

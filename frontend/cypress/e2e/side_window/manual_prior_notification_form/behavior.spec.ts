@@ -114,6 +114,108 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
     })
   })
 
+  it('Should enable and disable manual prior notification save and send buttons depending on form dirtiness', () => {
+    const commonFakeParams = {
+      isManuallyCreated: true,
+      updatedAt: dayjs().toISOString()
+    }
+
+    cy.intercept(
+      {
+        method: 'GET',
+        times: 1,
+        url: '/bff/v1/prior_notifications?*'
+      },
+      {
+        body: getPriorNotificationsFakeResponse({
+          ...commonFakeParams,
+          state: PriorNotification.State.VERIFIED_AND_SENT
+        })
+      }
+    ).as('getFakePriorNotifications')
+    cy.intercept(
+      {
+        method: 'GET',
+        times: 1,
+        url: '/bff/v1/prior_notifications/00000000-0000-4000-0000-000000000000?*'
+      },
+      {
+        body: getPriorNotificationFakeResponse({
+          ...commonFakeParams,
+          state: PriorNotification.State.VERIFIED_AND_SENT
+        })
+      }
+    ).as('getFakePriorNotification')
+
+    openSideWindowPriorNotificationListAsSuperUser()
+    cy.wait('@getFakePriorNotifications')
+    cy.clickButton('Éditer le préavis')
+    cy.wait('@getFakePriorNotification')
+
+    cy.get('button').contains('Enregistrer').parent().should('be.disabled')
+    cy.get('button').contains('Diffusé').parent().should('be.disabled')
+
+    cy.fill("Points d'attention identifiés par le CNSP", "Un point d'attention.")
+
+    cy.get('button').contains('Enregistrer').parent().should('be.enabled')
+    cy.get('button').contains('Diffusé').parent().should('be.disabled')
+
+    cy.intercept(
+      {
+        method: 'GET',
+        times: 2,
+        url: '/bff/v1/prior_notifications?*'
+      },
+      {
+        body: getPriorNotificationsFakeResponse({
+          ...commonFakeParams,
+          state: PriorNotification.State.OUT_OF_VERIFICATION_SCOPE
+        })
+      }
+    ).as('getFakePriorNotifications')
+    cy.intercept(
+      {
+        method: 'GET',
+        times: 2,
+        url: '/bff/v1/prior_notifications/00000000-0000-4000-0000-000000000000?*'
+      },
+      {
+        body: getPriorNotificationFakeResponse({
+          ...commonFakeParams,
+          state: PriorNotification.State.OUT_OF_VERIFICATION_SCOPE
+        })
+      }
+    ).as('getFakePriorNotification')
+    cy.intercept(
+      {
+        method: 'PUT',
+        times: 1,
+        url: '/bff/v1/prior_notifications/manual/00000000-0000-4000-0000-000000000000'
+      },
+      {
+        body: getPriorNotificationFakeResponse({
+          ...commonFakeParams,
+          state: PriorNotification.State.OUT_OF_VERIFICATION_SCOPE
+        })
+      }
+    ).as('updatePriorNotification')
+
+    cy.clickButton('Enregistrer')
+    cy.wait('@updatePriorNotification')
+    cy.wait('@getFakePriorNotification')
+    // TODO Not sure why there are two requests here (1min polling?): investigate for potential performance issue.
+    cy.wait('@getFakePriorNotifications')
+    cy.wait('@getFakePriorNotifications')
+
+    cy.get('button').contains('Enregistrer').parent().should('be.disabled')
+    cy.get('button').contains('Diffuser').parent().should('be.enabled')
+
+    cy.fill("Points d'attention identifiés par le CNSP", "Un nouveau point d'attention.")
+
+    cy.get('button').contains('Enregistrer').parent().should('be.enabled')
+    cy.get('button').contains('Diffuser').parent().should('be.disabled')
+  })
+
   it("Should show a banner, freeze the manual prior notification form and button when it's in pending send", () => {
     editSideWindowPriorNotification(`VIVA L'ITALIA`, '00000000-0000-4000-0000-000000000005')
 

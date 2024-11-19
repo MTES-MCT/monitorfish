@@ -10,7 +10,7 @@ import {
 import { openSideWindowPriorNotificationListAsSuperUser } from '../prior_notification_list/utils'
 
 context('Side Window > Logbook Prior Notification Form > Behavior', () => {
-  it('Should ask for confirmation before closing form when manual prior notification form is dirty', () => {
+  it('Should ask for confirmation before closing form when logbook prior notification form is dirty', () => {
     const fakeParams = {
       isManuallyCreated: false,
       state: PriorNotification.State.OUT_OF_VERIFICATION_SCOPE,
@@ -88,7 +88,7 @@ context('Side Window > Logbook Prior Notification Form > Behavior', () => {
     })
   })
 
-  it('Should enable and disable the save and send buttons depending on the form dirtiness', () => {
+  it('Should enable and disable logbook prior notification save and send buttons depending on form dirtiness', () => {
     const commonFakeParams = {
       isManuallyCreated: false,
       updatedAt: dayjs().toISOString()

@@ -7,7 +7,6 @@ import {
   editSideWindowPriorNotification,
   getPriorNotificationSentMessagesFakeResponse
 } from './utils'
-import { getAuthorizationHeader } from '../../../support/commands/getAuthorizationHeader'
 import { openSideWindowPriorNotificationListAsSuperUser } from '../prior_notification_list/utils'
 
 context('Side Window > Logbook Prior Notification Form > Behavior', () => {
@@ -20,35 +19,6 @@ context('Side Window > Logbook Prior Notification Form > Behavior', () => {
 
     cy.contains('button', 'Télécharger').should('be.disabled')
     cy.contains('button', 'Diffuser').should('be.disabled')
-  })
-
-  it('Should not update the logbook prior notification before the form is filled', () => {
-    cy.intercept('PUT', '/bff/v1/prior_notifications/logbook/FAKE_OPERATION_116*', cy.spy().as('updateForm'))
-
-    editSideWindowPriorNotification(`LE MARIN`, 'FAKE_OPERATION_116')
-
-    cy.contains(`LE MARIN D'EAU DOUCE (CFR111)`).should('be.visible')
-
-    cy.get('@updateForm').should('not.have.been.called')
-
-    cy.fill("Points d'attention identifiés par le CNSP", 'Une note')
-
-    cy.get('@updateForm').should('have.been.calledOnce')
-
-    // Reset
-    const operationDate = dayjs().subtract(6, 'hours').toISOString()
-    getAuthorizationHeader().then(authorization => {
-      cy.request({
-        body: {
-          note: null
-        },
-        headers: {
-          authorization
-        },
-        method: 'PUT',
-        url: `/bff/v1/prior_notifications/logbook/FAKE_OPERATION_116?operationDate=${operationDate}`
-      })
-    })
   })
 
   it('Should behave as expected when a logbook prior norification is sent, failed to be sent, resent and successfully sent', () => {

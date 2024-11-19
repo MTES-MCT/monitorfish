@@ -10,6 +10,86 @@ import {
 import { openSideWindowPriorNotificationListAsSuperUser } from '../prior_notification_list/utils'
 
 context('Side Window > Logbook Prior Notification Form > Behavior', () => {
+  it('Should ask for confirmation before closing form when manual prior notification form is dirty', () => {
+    const initialFakeParams = {
+      isManuallyCreated: false,
+      state: PriorNotification.State.OUT_OF_VERIFICATION_SCOPE,
+      updatedAt: dayjs().toISOString()
+    }
+
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/bff/v1/prior_notifications?*'
+      },
+      {
+        body: getPriorNotificationsFakeResponse(initialFakeParams)
+      }
+    ).as('getFakePriorNotifications')
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/bff/v1/prior_notifications/FAKE_OPERATION_000?*'
+      },
+      {
+        body: getPriorNotificationFakeResponse(initialFakeParams)
+      }
+    ).as('getFakePriorNotification')
+    cy.intercept(
+      {
+        method: 'PUT',
+        url: '/bff/v1/prior_notifications/logbook/FAKE_OPERATION_000?*'
+      },
+      {
+        body: getPriorNotificationFakeResponse(initialFakeParams)
+      }
+    ).as('updatePriorNotification')
+
+    openSideWindowPriorNotificationListAsSuperUser()
+    cy.wait('@getFakePriorNotifications')
+    cy.clickButton('Éditer le préavis')
+    cy.wait('@getFakePriorNotification')
+
+    cy.log
+
+    cy.log('Closing the form without any modification should not ask for confirmation')
+
+    cy.clickButton('Fermer')
+    cy.get('.Component-Dialog').should('not.exist')
+    cy.getDataCy('SideWindowCard-overlay').should('not.exist')
+
+    cy.log('Closing the form with unsaved modifications should ask for confirmation')
+
+    cy.clickButton('Éditer le préavis')
+
+    cy.fill("Points d'attention identifiés par le CNSP", "Un point d'attention.")
+
+    cy.clickButton('Fermer')
+    cy.contains('Abandon de préavis').should('be.visible')
+    cy.clickButton('Annuler')
+
+    cy.log('Saving the form should reset the dirty state')
+
+    cy.clickButton('Enregistrer')
+
+    cy.wait('@updatePriorNotification').then(() => {
+      cy.log('Closing the form should not ask for confirmation')
+
+      cy.clickButton('Fermer')
+      cy.get('.Component-Dialog').should('not.exist')
+      cy.getDataCy('SideWindowCard-overlay').should('not.exist')
+
+      cy.log('Editing the form should make it dirty again and ask for confirmation')
+
+      cy.clickButton('Éditer le préavis')
+
+      cy.fill("Points d'attention identifiés par le CNSP", "Un nouveau point d'attention.")
+
+      cy.clickButton('Fermer')
+      cy.contains('Abandon de préavis').should('be.visible')
+    })
+  })
+
   it("Should show a banner, freeze the logbook prior notification form and button when it's in pending send", () => {
     editSideWindowPriorNotification(`LEVE NEDERLAND`, 'FAKE_OPERATION_105')
 

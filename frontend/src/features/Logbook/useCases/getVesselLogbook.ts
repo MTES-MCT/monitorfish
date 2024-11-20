@@ -8,7 +8,7 @@ import { removeError, setError } from '../../../domain/shared_slices/Global'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
 import { updateSelectedVesselTrackRequest } from '../../../domain/use_cases/vessel/updateSelectedVesselTrackRequest'
 import NoLogbookMessagesFoundError from '../../../errors/NoLogbookMessagesFoundError'
-import { logbookApi } from '../api'
+import { logbookApi, logbookLightApi } from '../api'
 import { NavigateTo } from '../constants'
 import { logbookActions } from '../slice'
 
@@ -49,14 +49,16 @@ export const getVesselLogbook =
     }
 
     try {
-      const voyage = await dispatch(
-        logbookApi.endpoints.getVesselLogbook.initiate({
-          isInLightMode,
-          tripNumber: nextTripNumber ?? tripNumber ?? undefined,
-          vesselIdentity,
-          voyageRequest: nextNavigateTo
-        })
-      ).unwrap()
+      const requestArgs = {
+        tripNumber: nextTripNumber ?? tripNumber ?? undefined,
+        vesselIdentity,
+        voyageRequest: nextNavigateTo
+      }
+      const initiateGetVesselLogbook = isInLightMode
+        ? logbookLightApi.endpoints.getVesselLogbook.initiate
+        : logbookApi.endpoints.getVesselLogbook.initiate
+
+      const voyage = await dispatch(initiateGetVesselLogbook(requestArgs)).unwrap()
       if (!voyage) {
         dispatch(logbookActions.init(vesselIdentity))
         dispatch(setError(new NoLogbookMessagesFoundError("Ce navire n'a pas envoyé de message JPE.")))

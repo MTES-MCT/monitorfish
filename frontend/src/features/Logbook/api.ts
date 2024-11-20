@@ -3,7 +3,7 @@ import { FrontendApiError } from '@libs/FrontendApiError'
 
 import { NavigateTo } from './constants'
 import { Logbook } from './Logbook.types'
-import { monitorfishApi } from '../../api/api'
+import { monitorfishApi, monitorfishLightApi } from '../../api/api'
 
 import type { VesselIdentity } from '../../domain/entities/vessel/types'
 
@@ -11,10 +11,30 @@ const LAST_LOGBOOK_TRIPS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les de
 const LOGBOOK_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les messages JPE de ce navire"
 
 export type GetVesselLogbookParams = {
-  isInLightMode: boolean
   tripNumber: string | number | undefined
   vesselIdentity: VesselIdentity
   voyageRequest: NavigateTo | undefined
+}
+
+const getVesselLogbookQueryArgs = {
+  query: params => {
+    const internalReferenceNumber = params.vesselIdentity.internalReferenceNumber ?? ''
+    const nextTripNumber = params.tripNumber ?? ''
+    const nextVoyageRequest = params.voyageRequest ?? ''
+
+    return `/vessels/logbook/find?internalReferenceNumber=${internalReferenceNumber}&voyageRequest=${nextVoyageRequest}&tripNumber=${nextTripNumber}`
+  },
+  transformErrorResponse: response => new FrontendApiError(LOGBOOK_ERROR_MESSAGE, response),
+  transformResponse: (response: BackendApi.ResponseBodyError | Logbook.VesselVoyage) => {
+    if (
+      !isVesselVoyage(response) &&
+      (response as BackendApi.ResponseBodyError).code === BackendApi.ErrorCode.NOT_FOUND_BUT_OK
+    ) {
+      return undefined
+    }
+
+    return response as Logbook.VesselVoyage
+  }
 }
 
 export const logbookApi = monitorfishApi.injectEndpoints({
@@ -24,28 +44,13 @@ export const logbookApi = monitorfishApi.injectEndpoints({
       query: internalReferenceNumber => `/vessels/logbook/last?internalReferenceNumber=${internalReferenceNumber}`,
       transformErrorResponse: response => new FrontendApiError(LAST_LOGBOOK_TRIPS_ERROR_MESSAGE, response)
     }),
-    getVesselLogbook: builder.query<Logbook.VesselVoyage | undefined, GetVesselLogbookParams>({
-      query: params => {
-        const internalReferenceNumber = params.vesselIdentity.internalReferenceNumber ?? ''
-        const nextTripNumber = params.tripNumber ?? ''
-        const nextVoyageRequest = params.voyageRequest ?? ''
+    getVesselLogbook: builder.query<Logbook.VesselVoyage | undefined, GetVesselLogbookParams>(getVesselLogbookQueryArgs)
+  })
+})
 
-        return `/${
-          params.isInLightMode ? 'light' : 'bff'
-        }/v1/vessels/logbook/find?internalReferenceNumber=${internalReferenceNumber}&voyageRequest=${nextVoyageRequest}&tripNumber=${nextTripNumber}`
-      },
-      transformErrorResponse: response => new FrontendApiError(LOGBOOK_ERROR_MESSAGE, response),
-      transformResponse: (response: BackendApi.ResponseBodyError | Logbook.VesselVoyage) => {
-        if (
-          !isVesselVoyage(response) &&
-          (response as BackendApi.ResponseBodyError).code === BackendApi.ErrorCode.NOT_FOUND_BUT_OK
-        ) {
-          return undefined
-        }
-
-        return response as Logbook.VesselVoyage
-      }
-    })
+export const logbookLightApi = monitorfishLightApi.injectEndpoints({
+  endpoints: builder => ({
+    getVesselLogbook: builder.query<Logbook.VesselVoyage | undefined, GetVesselLogbookParams>(getVesselLogbookQueryArgs)
   })
 })
 

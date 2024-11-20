@@ -53,7 +53,7 @@ def beacons(logging_datetime_utc) -> pd.DataFrame:
                 None,
             ],
             "satellite_operator_id": [1, 1, 2, 2, 3, None, None],
-            "logging_datetime_utc": [d, d, d, d, d, d, d],
+            "logging_datetime_utc": [d, d, d, d, d, d, None],
             "beacon_type": ["A1", "B", "A2", None, "A1", "B", "A2"],
             "is_coastal": [0, 1, 0, None, 0, 1, 0],
         }
@@ -77,7 +77,7 @@ def transformed_beacons(logging_datetime_utc) -> pd.DataFrame:
                 None,
             ],
             "satellite_operator_id": [1, 1, 2, 2, 3, None, None],
-            "logging_datetime_utc": [d, d, d, d, d, d, d],
+            "logging_datetime_utc": [d, d, d, d, d, d, None],
             "beacon_type": ["A1", "B", "A2", None, "A1", "B", "A2"],
             "is_coastal": [False, True, False, None, False, True, False],
         }
@@ -123,7 +123,6 @@ def test_transform_satellite_operators(
 
 
 def test_load_beacons(reset_test_data, transformed_beacons):
-
     load_beacons.run(transformed_beacons)
 
     loaded_beacons = read_query(

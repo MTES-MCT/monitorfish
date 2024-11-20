@@ -625,50 +625,49 @@ VALUES ('cc7ee632-e515-460f-a1c1-f82222a6d419', null, '2020-05-06 18:40:51', 'DA
         '2022-03-31 09:21:19.496049', 'SRC-TRP-TTT20200506194051795', 'FLUX');
 
 UPDATE logbook_reports
-SET value               = jsonb_set(value, '{predictedArrivalDatetimeUtc}', concat('"', to_char(
-        (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '24 hours 30 minutes', 'YYYY-MM-DD"T"HH24:MI:SSZ'),
-                                                                                   '"')::jsonb),
-    report_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '24 hours 30 minutes'
+SET value = jsonb_set(value, '{predictedArrivalDatetimeUtc}', concat('"', to_char(
+        (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '24 hours 30 minutes', 'YYYY-MM-DD"T"HH24:MI:SSZ'),'"')::jsonb),
+    report_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '24 hours 30 minutes',
+    activity_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '24 hours 30 minutes'
 WHERE operation_number = 'OOF20191011059902';
 
 UPDATE logbook_reports
 SET value = jsonb_set(
-    value,
-    '{tripStartDate}',
-    concat(
-        '"',
-        to_char((now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '72 hours', 'YYYY-MM-DDT00:00:00Z'),
-        '"'
-    )::jsonb
-)
+        value, '{tripStartDate}',
+        concat(
+            '"',
+            to_char((now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '72 hours', 'YYYY-MM-DDT00:00:00Z'),
+            '"'
+        )::jsonb),
+    activity_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '72 hours'
 WHERE operation_number = 'OOF20191011059902';
 
 UPDATE logbook_reports
-SET value               = jsonb_set(value, '{returnDatetimeUtc}', concat('"', to_char(
-        (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '22 hours 10 minutes', 'YYYY-MM-DD"T"HH24:MI:SSZ'),
-                                                                         '"')::jsonb),
-    report_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '22 hours 10 minutes'
+SET value = jsonb_set(value, '{returnDatetimeUtc}', concat('"', to_char(
+        (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '22 hours 10 minutes', 'YYYY-MM-DD"T"HH24:MI:SSZ'),'"')::jsonb),
+    report_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '22 hours 10 minutes',
+    activity_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '22 hours 10 minutes'
 WHERE operation_number = 'OOF20190830059906';
 
 UPDATE logbook_reports
 SET value               = jsonb_set(value, '{landingDatetimeUtc}', concat('"', to_char(
-        (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '11 hours 45 minutes', 'YYYY-MM-DD"T"HH24:MI:SSZ'),
-                                                                          '"')::jsonb),
-    report_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '11 hours 45 minutes'
+        (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '11 hours 45 minutes', 'YYYY-MM-DD"T"HH24:MI:SSZ'),'"')::jsonb),
+    report_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '11 hours 45 minutes',
+    activity_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '11 hours 45 minutes'
 WHERE operation_number = 'OOF20190627059908';
 
 UPDATE logbook_reports
 SET value               = jsonb_set(value, '{discardDatetimeUtc}', concat('"', to_char(
-        (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '15 hours 45 minutes', 'YYYY-MM-DD"T"HH24:MI:SSZ'),
-                                                                          '"')::jsonb),
-    report_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '15 hours 45 minutes'
+        (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '15 hours 45 minutes', 'YYYY-MM-DD"T"HH24:MI:SSZ'),'"')::jsonb),
+    report_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '15 hours 45 minutes',
+    activity_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '15 hours 45 minutes'
 WHERE operation_number = 'OOF20191030059909';
 
 UPDATE logbook_reports
 SET value               = jsonb_set("value", array ['hauls', '0', 'farDatetimeUtc'], concat('"', to_char(
-        (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '19 hours 45 minutes', 'YYYY-MM-DD"T"HH24:MI:SSZ'),
-                                                                                            '"')::jsonb),
-    report_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '19 hours 45 minutes'
+        (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '19 hours 45 minutes', 'YYYY-MM-DD"T"HH24:MI:SSZ'),'"')::jsonb),
+    report_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '19 hours 45 minutes',
+    activity_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '19 hours 45 minutes'
 WHERE operation_number = 'OOF20191030059903';
 
 -- Insert new logbook reports in order to find last trips

@@ -2,13 +2,11 @@ import { Logbook } from '@features/Logbook/Logbook.types'
 import { type Option } from '@mtes-mct/monitor-ui'
 import { ExportToCsv } from 'export-to-csv'
 
-import { DOWNLOAD_LOGBOOK_MESSAGES_COLUMNS, DOWNLOAD_LOGBOOK_MESSAGES_OPTIONS } from './constants'
+import { DOWNLOAD_LOGBOOK_MESSAGES_COLUMNS, DOWNLOAD_LOGBOOK_MESSAGES_OPTIONS, LogbookSortKey } from './constants'
 import { getDate } from '../../../../../utils'
 import { formatAsCSVColumns } from '../../../../../utils/formatAsCSVColumns'
 
-import type { LogbookMessage } from '@features/Logbook/LegacyLogbook.types'
-
-export const downloadMessages = (logbookMessages: LogbookMessage[], tripNumber: string | null) => {
+export const downloadMessages = (logbookMessages: Logbook.Message[], tripNumber: string | null) => {
   const csvExporter = new ExportToCsv(DOWNLOAD_LOGBOOK_MESSAGES_OPTIONS)
 
   const objectsToExports = logbookMessages.map(position =>
@@ -20,14 +18,21 @@ export const downloadMessages = (logbookMessages: LogbookMessage[], tripNumber: 
   csvExporter.generateCsv(objectsToExports)
 }
 
-export const filterBySelectedType = (logbookMessage: LogbookMessage, selectedMessagesTypes?: Option[]) => {
-  if (selectedMessagesTypes?.length) {
-    return selectedMessagesTypes.some(messageType => logbookMessage.messageType === messageType.value)
+export const filterBySelectedType = (logbookMessage: Logbook.Message, selectedMessagesType: string | undefined) => {
+  if (selectedMessagesType) {
+    return logbookMessage.messageType === selectedMessagesType
   }
 
   return true
 }
 
-export function isPnoMessage(logbookMessage: LogbookMessage | Logbook.Message): logbookMessage is Logbook.PnoMessage {
+export function isPnoMessage(logbookMessage: Logbook.Message): logbookMessage is Logbook.PnoMessage {
   return logbookMessage.messageType === Logbook.MessageType.PNO
+}
+
+export function getLogbookSortKeyOptions(): Option[] {
+  return Object.keys(LogbookSortKey).map(key => ({
+    label: LogbookSortKey[key],
+    value: key
+  }))
 }

@@ -32,3 +32,8 @@ export enum WeightType {
   LIVE = 'vif',
   NET = 'net'
 }
+
+export enum LogbookSortKey {
+  activityDateTime = "Date d'activité",
+  reportDateTime = "Date d'envoi"
+}

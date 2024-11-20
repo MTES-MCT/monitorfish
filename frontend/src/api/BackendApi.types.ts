@@ -57,6 +57,9 @@ export namespace BackendApi {
     /** Thrown when attempting to delete an entity which has  to non-archived children. */
     FOREIGN_KEY_CONSTRAINT = 'FOREIGN_KEY_CONSTRAINT',
 
+    /** Thrown when entity is not found, but it may happen */
+    NOT_FOUND_BUT_OK = 'NOT_FOUND_BUT_OK',
+
     /** Thrown when attempting to archive an entity linked to non-archived children. */
     UNARCHIVED_CHILD = 'UNARCHIVED_CHILD'
   }

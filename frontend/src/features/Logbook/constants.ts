@@ -1,4 +1,6 @@
-export const LogbookMessageType = {
+import { Logbook } from '@features/Logbook/Logbook.types'
+
+export const LogbookMessageType: Record<Logbook.MessageType, Record<string, any>> = {
   COE: {
     code: 'COE',
     displayCode: 'COE',

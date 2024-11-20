@@ -9,7 +9,6 @@ import styled from 'styled-components'
 import { LogbookMessages } from './LogbookMessages'
 import { LogbookSummary } from './LogbookSummary'
 import { FishingActivitiesTab, vesselsAreEquals } from '../../../../domain/entities/vessel/vessel'
-import { NavigateTo } from '../../constants'
 import { useGetLogbookUseCase } from '../../hooks/useGetLogbookUseCase'
 import { logbookActions } from '../../slice'
 
@@ -79,10 +78,6 @@ export function VesselLogbook() {
     dispatch(logbookActions.resetNextUpdate())
   }
 
-  const goToPreviousTrip = () => dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.PREVIOUS, true))
-  const goToNextTrip = () => dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.NEXT, true))
-  const goToLastTrip = () => dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.LAST, true))
-
   if (loadingFishingActivities) {
     return <FingerprintSpinner className="radar" color={THEME.color.charcoal} size={100} />
   }
@@ -101,25 +96,9 @@ export function VesselLogbook() {
           </UpdateFishingActivitiesButton>
         </>
       )}
-      {fishingActivitiesTab === FishingActivitiesTab.SUMMARY && (
-        <LogbookSummary
-          navigation={{
-            goToLastTrip,
-            goToNextTrip,
-            goToPreviousTrip
-          }}
-          showLogbookMessages={showMessages}
-        />
-      )}
+      {fishingActivitiesTab === FishingActivitiesTab.SUMMARY && <LogbookSummary showLogbookMessages={showMessages} />}
       {fishingActivitiesTab === FishingActivitiesTab.MESSAGES && (
-        <LogbookMessages
-          messageTypeFilter={messageTypeFilter}
-          navigation={{
-            goToLastTrip,
-            goToNextTrip,
-            goToPreviousTrip
-          }}
-        />
+        <LogbookMessages messageTypeFilter={messageTypeFilter} />
       )}
     </Wrapper>
   )

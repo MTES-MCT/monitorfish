@@ -51,7 +51,7 @@ export function DownloadButton({
     }
 
     return pnoLogbookMessage.tripGears.map(tripGear => {
-      const gearName = getGearsApiQuery.data?.find(gear => gear.code === tripGear.gear)?.name ?? null
+      const gearName = getGearsApiQuery.data?.find(gear => gear.code === tripGear.gear)?.name ?? undefined
 
       return { ...tripGear, gearName }
     })

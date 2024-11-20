@@ -1,9 +1,9 @@
-import { logbookMessagesWithCorrections } from '@features/Logbook/__tests__/__mocks__/logbookMessageWithCorrections'
+import { farMessagesWithCorrections } from '@features/Logbook/__tests__/__mocks__/logbookMessageWithCorrections'
 import { expect } from '@jest/globals'
 
 import {
   buildCatchArray,
-  getCPSDistinctSpecies,
+  getCPSNumberOfDistinctSpecies,
   getDEPMessage,
   getDISMessages,
   getFARMessages,
@@ -109,7 +109,7 @@ describe('Logbook/utils.tsx', () => {
 
   it('getTotalCPSDistinctSpecies Should get the total number of distinct CPS species', async () => {
     // When
-    const total = getCPSDistinctSpecies([dummyCpsMessage])
+    const total = getCPSNumberOfDistinctSpecies([dummyCpsMessage])
 
     // Then
     expect(total).toEqual(2)
@@ -186,7 +186,7 @@ describe('Logbook/utils.tsx', () => {
     const dummyTotalWeight = 6000000
 
     // When
-    const catches = getFARSpeciesInsightRecord(logbookMessagesWithCorrections, dummyTotalWeight)
+    const catches = getFARSpeciesInsightRecord(farMessagesWithCorrections, dummyTotalWeight)
     expect(catches).toBeDefined()
 
     // Then

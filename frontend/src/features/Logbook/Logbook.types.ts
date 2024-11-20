@@ -1,13 +1,25 @@
-import type { LogbookMessage } from './LegacyLogbook.types'
 import type { AllSeafrontGroup, NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import type { VesselIdentity } from 'domain/entities/vessel/types'
 
 export namespace Logbook {
-  export type Message = PnoMessage | RetOperationMessage
+  export type Message =
+    | PnoMessage
+    | FarMessage
+    | CoeMessage
+    | CoxMessage
+    | CpsMessage
+    | CroMessage
+    | DepMessage
+    | DisMessage
+    | EofMessage
+    | LanMessage
+    | RtpMessage
+    | EmptyMessage
 
   interface MessageBase {
     acknowledgment: Acknowledgment | undefined
+    activityDateTime: string | undefined
     externalReferenceNumber: string | undefined
     flagState: string | undefined
     imo: string | undefined
@@ -32,18 +44,76 @@ export namespace Logbook {
     vesselName: string
   }
 
+  export interface FarMessage extends MessageBase {
+    message: FarMessageValue
+    messageType: MessageType.FAR
+    operationType: OperationType.COR | OperationType.DAT
+  }
+
   export interface PnoMessage extends MessageBase {
-    acknowledgment: undefined
     message: PnoMessageValue
     messageType: MessageType.PNO
     operationType: OperationType.COR | OperationType.DAT
   }
 
-  export interface RetOperationMessage extends MessageBase {
-    acknowledgment: Acknowledgment
+  export interface CoeMessage extends MessageBase {
+    message: CoeMessageValue
+    messageType: MessageType.COE
+    operationType: OperationType.COR | OperationType.DAT
+  }
+
+  export interface CoxMessage extends MessageBase {
+    message: CoxMessageValue
+    messageType: MessageType.COX
+    operationType: OperationType.COR | OperationType.DAT
+  }
+
+  export interface CpsMessage extends MessageBase {
+    message: CpsMessageValue
+    messageType: MessageType.CPS
+    operationType: OperationType.COR | OperationType.DAT
+  }
+
+  export interface CroMessage extends MessageBase {
+    message: CroMessageValue
+    messageType: MessageType.CRO
+    operationType: OperationType.COR | OperationType.DAT
+  }
+
+  export interface DepMessage extends MessageBase {
+    message: DepMessageValue
+    messageType: MessageType.DEP
+    operationType: OperationType.COR | OperationType.DAT
+  }
+
+  export interface DisMessage extends MessageBase {
+    message: DisMessageValue
+    messageType: MessageType.DIS
+    operationType: OperationType.COR | OperationType.DAT
+  }
+
+  export interface EofMessage extends MessageBase {
+    message: EofMessageValue
+    messageType: MessageType.EOF
+    operationType: OperationType.COR | OperationType.DAT
+  }
+
+  export interface LanMessage extends MessageBase {
+    message: LanMessageValue
+    messageType: MessageType.LAN
+    operationType: OperationType.COR | OperationType.DAT
+  }
+
+  export interface RtpMessage extends MessageBase {
+    message: RtpMessageValue
+    messageType: MessageType.RTP
+    operationType: OperationType.COR | OperationType.DAT
+  }
+
+  export interface EmptyMessage extends MessageBase {
     message: undefined
-    messageType: MessageType
-    operationType: OperationType.RET
+    messageType: MessageType.INS
+    operationType: OperationType.COR | OperationType.DAT
   }
 
   export type Acknowledgment = {
@@ -69,15 +139,15 @@ export namespace Logbook {
     weight: number | undefined
   }
 
-  // TODO Replace `| null` by `| undefined` after deleting Gear in logbook.types.ts
   export type Gear = {
-    dimensions: string | null
-    gear: string | null
-    gearName: string | null
-    mesh: number | null
+    dimensions: string | undefined
+    gear: string | undefined
+    gearName: string | undefined
+    mesh: number | undefined
   }
 
   type MessageValue =
+    | FarMessageValue
     | CoeMessageValue
     | CoxMessageValue
     | CpsMessageValue
@@ -90,76 +160,101 @@ export namespace Logbook {
     | RtpMessageValue
 
   export interface CoeMessageValue {
-    economicZoneEntered: string
-    effortZoneEntryDatetimeUtc: string
-    faoZoneEntered: string
-    latitudeEntered: number
-    longitudeEntered: number
-    statisticalRectangleEntered: string
-    targetSpeciesNameOnEntry: string
-    targetSpeciesOnEntry: string
+    economicZoneEntered: string | undefined
+    effortZoneEntered: string | undefined
+    effortZoneEntryDatetimeUtc: string | undefined
+    faoZoneEntered: string | undefined
+    latitudeEntered: number | undefined
+    longitudeEntered: number | undefined
+    statisticalRectangleEntered: string | undefined
+    targetSpeciesNameOnEntry: string | undefined
+    targetSpeciesOnEntry: string | undefined
   }
 
   export interface CoxMessageValue {
-    economicZoneExited: string
-    effortZoneExitDatetimeUtc: string
-    faoZoneExited: string
-    latitudeExited: number
-    longitudeExited: number
-    statisticalRectangleExited: string
-    targetSpeciesNameOnExit: string
-    targetSpeciesOnExit: string
+    economicZoneExited: string | undefined
+    effortZoneExitDatetimeUtc: string | undefined
+    effortZoneExited: string | undefined
+    faoZoneExited: string | undefined
+    latitudeExited: number | undefined
+    longitudeExited: number | undefined
+    statisticalRectangleExited: string | undefined
+    targetSpeciesNameOnExit: string | undefined
+    targetSpeciesOnExit: string | undefined
   }
 
   export interface CpsMessageValue {
     catches: ProtectedSpeciesCatch[]
-    cpsDatetimeUtc?: string
-    dimensions?: string
-    gear?: string
-    gearName?: string
-    latitude?: number
-    longitude?: number
-    mesh?: number
+    cpsDatetimeUtc: string | undefined
+    dimensions: string | undefined
+    gear: string | undefined
+    gearName: string | undefined
+    latitude: number | undefined
+    longitude: number | undefined
+    mesh: number | undefined
   }
 
   export interface CroMessageValue {
-    effortZoneEntryDatetimeUtc: string
-    effortZoneExitDatetimeUtc: string
-    latitudeEntered: number
-    latitudeExited: number
-    longitudeEntered: number
-    longitudeExited: number
+    economicZoneEntered: string | undefined
+    economicZoneExited: string | undefined
+    effortZoneEntered: string | undefined
+    effortZoneEntryDatetimeUtc: string | undefined
+    effortZoneExitDatetimeUtc: string | undefined
+    effortZoneExited: string | undefined
+    faoZoneEntered: string | undefined
+    faoZoneExited: string | undefined
+    latitudeEntered: number | undefined
+    latitudeExited: number | undefined
+    longitudeEntered: number | undefined
+    longitudeExited: number | undefined
+    statisticalRectangleEntered: string | undefined
+    statisticalRectangleExited: string | undefined
+    targetSpeciesNameOnEntry: string | undefined
+    targetSpeciesNameOnExit: string | undefined
+    targetSpeciesOnEntry: string | undefined
+    targetSpeciesOnExit: string | undefined
   }
 
   export interface DepMessageValue {
-    anticipatedActivity: string
-    departureDatetimeUtc: string
-    departurePort: string
-    departurePortName: string
+    anticipatedActivity: string | undefined
+    departureDatetimeUtc: string | undefined
+    departurePort: string | undefined
+    departurePortName: string | undefined
     gearOnboard: Gear[]
-    speciesOnboard: {
-      species: string
-      speciesName: string
-      weight: number
-    }[]
+    speciesOnboard: Catch[]
+    tripStartDate: string | undefined
   }
 
   export interface DisMessageValue {
     catches: Catch[]
-    discardDatetimeUtc: string
-    latitude: number
-    longitude: number
+    discardDatetimeUtc: string | undefined
   }
 
   export interface EofMessageValue {
-    endOfFishingDatetimeUtc: string
+    endOfFishingDatetimeUtc: string | undefined
   }
+
+  export interface FarMessageValue {
+    hauls: Haul[]
+  }
+
+  export interface Haul {
+    catches: Catch[]
+    dimensions: string | undefined
+    farDatetimeUtc: string | undefined
+    gear: string | undefined
+    gearName: string | undefined
+    latitude: number | undefined
+    longitude: number | undefined
+    mesh: number | undefined
+  }
+
   export interface LanMessageValue {
     catchLanded: Catch[]
-    landingDatetimeUtc: string
-    port: string
-    portName?: string
-    sender?: string
+    landingDatetimeUtc: string | undefined
+    port: string | undefined
+    portName?: string | undefined
+    sender?: string | undefined
   }
 
   export interface PnoMessageValue {
@@ -170,8 +265,8 @@ export namespace Logbook {
      * It's now automated via `createdBy` and `updatedBy` fields.
      */
     authorTrigram: string | undefined
-    catchOnboard: Catch[] | undefined
-    catchToLand: Catch[] | undefined
+    catchOnboard: Catch[]
+    catchToLand: Catch[]
     createdBy: string | undefined
     economicZone: string | undefined
     effortZone: string | undefined
@@ -202,10 +297,10 @@ export namespace Logbook {
 
   export interface RtpMessageValue {
     gearOnboard: Gear[]
-    port: string
-    portName: string
-    reasonOfReturn: string
-    returnDatetimeUtc: string
+    port: string | undefined
+    portName: string | undefined
+    reasonOfReturn: string | undefined
+    returnDatetimeUtc: string | undefined
   }
 
   export type MessagePnoType = {
@@ -257,30 +352,30 @@ export namespace Logbook {
   }
 
   export type VesselVoyage = {
-    endDate: string | null
+    endDate: string | undefined
     isFirstVoyage: boolean
     isLastVoyage: boolean
     logbookMessagesAndAlerts: FishingActivities
-    startDate: string | null
+    startDate: string | undefined
     tripNumber: string
     vesselIdentity: VesselIdentity
   }
 
   export type FishingActivities = {
     alerts: PNOAndLANWeightToleranceAlert[]
-    logbookMessages: LogbookMessage[]
+    logbookMessages: Message[]
   }
 
   // ---------------------------------------------------------------------------
   // Constants
 
-  enum HealthState {
+  export enum HealthState {
     DEA,
     ALI,
     INJ
   }
 
-  enum Fate {
+  export enum Fate {
     DIS,
     HEC,
     DEA
@@ -332,6 +427,14 @@ export namespace Logbook {
      * Details of fish discarded during fishing operations.
      */
     DIS = 'DIS',
+
+    /**
+     * Rejets minimis.
+     *
+     * @description
+     * Rejets minimis, only used in France.
+     */
+    DIM = 'DIM',
 
     /**
      * End of fishing declaration.
@@ -408,7 +511,52 @@ export namespace Logbook {
      * @description
      * If carrying out Trans-zonal fishing.
      */
-    TRZ = 'TRZ'
+    TRZ = 'TRZ',
+
+    /**
+     * Sortie de l'eau d`engin
+     */
+    GEAR_RETRIEVAL = 'GEAR_RETRIEVAL',
+
+    /**
+     * Mise à l'eau d'engin
+     */
+    GEAR_SHOT = 'GEAR_SHOT',
+
+    /**
+     * Notification d'entrée dans une zone d'effort
+     */
+    NOT_COE = 'NOT_COE',
+
+    /**
+     * Notification de sortie d'une zone d'effort
+     */
+    NOT_COX = 'NOT_COX',
+
+    /**
+     * Notification de transbordement
+     */
+    NOT_TRA = 'NOT_TRA',
+
+    /**
+     * Pré-notification de transfert
+     */
+    PNT = 'PNT',
+
+    /**
+     * Opération de pêche conjointe
+     */
+    JFO = 'JFO',
+
+    /**
+     * Début d'activité de pêche
+     */
+    START_ACTIVITY = 'START_ACTIVITY',
+
+    /**
+     * Début de pêche
+     */
+    START_FISHING = 'START_FISHING'
   }
   /* eslint-enable typescript-sort-keys/string-enum */
 

@@ -1,45 +1,49 @@
-import { useEffect, useMemo, useState } from 'react'
-import Select from 'react-select'
-import makeAnimated from 'react-select/animated'
+import { useGetLastLogbookTripsQuery } from '@features/Logbook/api'
+import { LastTrip, NextTrip, PreviousTrip } from '@features/Logbook/components/VesselLogbook/LogbookSummary'
+import { NavigateTo } from '@features/Logbook/constants'
+import { useGetLogbookUseCase } from '@features/Logbook/hooks/useGetLogbookUseCase'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { Accent, Icon, IconButton, Select } from '@mtes-mct/monitor-ui'
+import { skipToken } from '@reduxjs/toolkit/query'
+import { sortBy } from 'lodash'
+import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { LogbookMessage } from './messages/LogbookMessage'
-import { FilterMessagesStyle } from './styles'
-import { downloadMessages, filterBySelectedType } from './utils'
+import { downloadMessages, filterBySelectedType, getLogbookSortKeyOptions } from './utils'
 import { FishingActivitiesTab } from '../../../../../domain/entities/vessel/vessel'
-import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
-import SortSVG from '../../../../icons/ascendant-descendant.svg?react'
-import DownloadMessagesSVG from '../../../../icons/Bouton_exporter_piste_navire_dark.svg?react'
-import ArrowLastTripSVG from '../../../../icons/Double_fleche_navigation_marees.svg?react'
-import ArrowTripSVG from '../../../../icons/Fleche_navigation_marees.svg?react'
-import ArrowSVG from '../../../../icons/Picto_fleche-pleine-droite.svg?react'
 import { logbookActions } from '../../../slice'
 import { CustomDatesShowedInfo } from '../CustomDatesShowedInfo'
 import { getLogbookMessagesTypeOptions } from '../utils'
 
-import type { Option } from '@mtes-mct/monitor-ui'
-import type { Promisable } from 'type-fest'
-
-const animatedComponents = makeAnimated()
-
 type LogbookMessagesProps = Readonly<{
   messageTypeFilter: string | undefined
-  navigation: {
-    goToLastTrip: () => Promisable<void>
-    goToNextTrip: () => Promisable<void>
-    goToPreviousTrip: () => Promisable<void>
-  }
 }>
-export function LogbookMessages({ messageTypeFilter, navigation }: LogbookMessagesProps) {
+export function LogbookMessages({ messageTypeFilter }: LogbookMessagesProps) {
   const dispatch = useMainAppDispatch()
+  const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
   const fishingActivities = useMainAppSelector(state => state.fishingActivities.fishingActivities)
   const isFirstVoyage = useMainAppSelector(state => state.fishingActivities.isFirstVoyage)
   const isLastVoyage = useMainAppSelector(state => state.fishingActivities.isLastVoyage)
   const tripNumber = useMainAppSelector(state => state.fishingActivities.tripNumber)
+  const { data: lastLogbookTrips } = useGetLastLogbookTripsQuery(
+    selectedVesselIdentity?.internalReferenceNumber ?? skipToken
+  )
+  const getVesselLogbook = useGetLogbookUseCase()
 
   const [isAscendingSort, setIsAscendingSort] = useState(true)
-  const [filteredMessagesTypes, setFilteredMessagesTypes] = useState<Option[] | undefined>(undefined)
+  const [filteredMessagesType, setFilteredMessagesType] = useState<string | undefined>(messageTypeFilter)
+  const [orderBy, setOrderBy] = useState<string>('reportDateTime')
+
+  const lastLogbookTripsOptions = useMemo(
+    () =>
+      lastLogbookTrips?.map(trip => ({
+        label: `Marée n°${trip}`,
+        value: trip
+      })) ?? [],
+    [lastLogbookTrips]
+  )
 
   const filteredAndSortedLogbookMessages = useMemo(() => {
     if (!fishingActivities?.logbookMessages) {
@@ -47,70 +51,103 @@ export function LogbookMessages({ messageTypeFilter, navigation }: LogbookMessag
     }
 
     const filteredLogbookMessages = fishingActivities.logbookMessages.filter(logbookMessage =>
-      filterBySelectedType(logbookMessage, filteredMessagesTypes)
+      filterBySelectedType(logbookMessage, filteredMessagesType)
     )
 
-    return [...filteredLogbookMessages].sort((a, b) => {
-      if (isAscendingSort) {
-        return a.reportDateTime && b.reportDateTime && a.reportDateTime > b.reportDateTime ? 1 : -1
-      }
+    const sorted = sortBy(filteredLogbookMessages, [orderBy])
 
-      return a.reportDateTime && b.reportDateTime && a.reportDateTime > b.reportDateTime ? -1 : 1
-    })
-  }, [fishingActivities?.logbookMessages, isAscendingSort, filteredMessagesTypes])
+    if (!isAscendingSort) {
+      return sorted.reverse()
+    }
 
-  useEffect(() => {
-    const messageTypes = getLogbookMessagesTypeOptions().filter(options => options.value === messageTypeFilter)
+    return sorted
+  }, [fishingActivities?.logbookMessages, orderBy, isAscendingSort, filteredMessagesType])
 
-    setFilteredMessagesTypes(messageTypes)
-  }, [messageTypeFilter])
-
+  const goToPreviousTrip = () => dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.PREVIOUS, true))
+  const goToNextTrip = () => dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.NEXT, true))
+  const goToLastTrip = () => dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.LAST, true))
+  const getLogbookTrip = (nextTripNumber: string | undefined) =>
+    dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.EQUALS, true, nextTripNumber))
   const showSummary = () => dispatch(logbookActions.setTab(FishingActivitiesTab.SUMMARY))
 
   return (
     <Wrapper>
-      <Arrow onClick={showSummary} />
+      <Arrow accent={Accent.TERTIARY} Icon={Icon.FilledArrow} iconSize={14} onClick={showSummary} />
       <Previous onClick={showSummary}>Revenir au résumé</Previous>
       <Filters>
-        <Select
-          className="available-width"
-          closeMenuOnSelect
-          components={animatedComponents}
-          defaultValue={filteredMessagesTypes}
-          isMulti
-          isSearchable={false}
-          menuPortalTarget={document.body}
-          onChange={setFilteredMessagesTypes as any}
+        <StyledSelect
+          isCleanable
+          isLabelHidden
+          isTransparent
+          label="Filtrer les messages"
+          name="Filtrer les messages"
+          onChange={nextValue => setFilteredMessagesType(nextValue)}
           options={getLogbookMessagesTypeOptions()}
           placeholder="Filtrer les messages"
-          styles={FilterMessagesStyle}
-          value={filteredMessagesTypes}
+          searchable
+          value={filteredMessagesType}
         />
-        <Navigation>
-          <PreviousTrip
-            data-cy="vessel-fishing-previous-trip"
-            disabled={!!isFirstVoyage}
-            onClick={!isFirstVoyage ? navigation.goToPreviousTrip : undefined}
-            title="Marée précédente"
-          />
-          {tripNumber ? `Marée n°${tripNumber}` : '-'}
-          <LastTrip
-            disabled={!!isLastVoyage}
-            onClick={!isLastVoyage ? navigation.goToNextTrip : undefined}
-            title="Dernière marée"
-          />
-          <NextTrip
-            disabled={!!isLastVoyage}
-            onClick={!isLastVoyage ? navigation.goToNextTrip : undefined}
-            title="Marée suivante"
-          />
-        </Navigation>
-        <DownloadMessages
+        <StyledSelect
+          isCleanable={false}
+          isLabelHidden
+          isTransparent
+          label="Trier les messages"
+          name="Trier les messages"
+          onChange={nextValue => setOrderBy(nextValue as string)}
+          options={getLogbookSortKeyOptions()}
+          placeholder="Trier les messages"
+          value={orderBy}
+        />
+        <IconButton
+          accent={Accent.SECONDARY}
+          Icon={Icon.Download}
+          iconSize={18}
           onClick={() => downloadMessages(filteredAndSortedLogbookMessages, tripNumber)}
           title="Télécharger tous les messages"
         />
+      </Filters>
+      <Filters>
+        <StyledPreviousTrip
+          $disabled={!!isFirstVoyage}
+          accent={Accent.SECONDARY}
+          data-cy="vessel-fishing-previous-trip"
+          Icon={Icon.Chevron}
+          iconSize={20}
+          onClick={!isFirstVoyage ? goToPreviousTrip : undefined}
+          title="Marée précédente"
+        />
+        <SelectTrip
+          isCleanable={false}
+          isLabelHidden
+          isTransparent
+          label="Numéro de marée"
+          name="tripNumber"
+          onChange={getLogbookTrip}
+          options={lastLogbookTripsOptions}
+          searchable
+          value={(tripNumber as string) ?? undefined}
+        />
+        <StyledNextTrip
+          $disabled={!!isLastVoyage}
+          accent={Accent.SECONDARY}
+          Icon={Icon.Chevron}
+          iconSize={20}
+          onClick={!isLastVoyage ? goToNextTrip : undefined}
+          title="Marée suivante"
+        />
+        <StyledLastTrip
+          $disabled={!!isLastVoyage}
+          accent={Accent.SECONDARY}
+          Icon={Icon.DoubleChevron}
+          iconSize={20}
+          onClick={!isLastVoyage ? goToLastTrip : undefined}
+          title="Dernière marée"
+        />
         <InverseDate
           $ascendingSort={isAscendingSort}
+          accent={Accent.SECONDARY}
+          Icon={Icon.SortSelectedDown}
+          iconSize={20}
           onClick={() => setIsAscendingSort(!isAscendingSort)}
           title="Trier par date de saisie"
         />
@@ -129,93 +166,56 @@ export function LogbookMessages({ messageTypeFilter, navigation }: LogbookMessag
   )
 }
 
+const StyledPreviousTrip = styled(PreviousTrip)`
+  margin-right: 8px;
+  height: 30px;
+  width: 30px;
+`
+
+const StyledNextTrip = styled(NextTrip)`
+  margin-left: 8px;
+  margin-right: 0px;
+  height: 30px;
+  width: 30px;
+`
+
+const StyledLastTrip = styled(LastTrip)`
+  margin-left: -1px;
+  height: 30px;
+  width: 30px;
+`
+
+const SelectTrip = styled(Select<string>)`
+  width: 375px;
+`
+
+const StyledSelect = styled(Select<string>)`
+  width: 217px;
+  margin-right: 8px;
+`
+
 const CustomDatesShowedInfoWithMargin = styled.div`
   margin-bottom: 8px;
 `
 
-const PreviousTrip = styled(ArrowTripSVG)<{
-  disabled: boolean
-}>`
-  cursor: ${p => (p.disabled ? 'not-allowed' : 'pointer')};
-  vertical-align: sub;
-  width: 14px;
-  margin-right: 10px;
-  transform: rotate(180deg);
-  float: left;
-  margin: 2px 0 0 5px;
-`
-
-const NextTrip = styled(ArrowTripSVG)<{
-  disabled: boolean
-}>`
-  cursor: ${p => (p.disabled ? 'not-allowed' : 'pointer')};
-  vertical-align: sub;
-  width: 14px;
-  margin-left: 10px;
-  float: right;
-  margin: 2px 5px 0 0;
-`
-
-const LastTrip = styled(ArrowLastTripSVG)<{
-  disabled: boolean
-}>`
-  cursor: ${p => (p.disabled ? 'not-allowed' : 'pointer')};
-  vertical-align: sub;
-  width: 14px;
-  margin-left: 5px;
-  float: right;
-  margin: 2px 5px 0 0;
-`
-
-const Navigation = styled.div`
-  width: -moz-available; /* For Mozilla */
-  width: -webkit-fill-available; /* For Chrome */
-  width: stretch;
-  padding: 0 0 0 10px;
-  text-align: center;
-  font-size: 13px;
-  color: ${p => p.theme.color.slateGray};
-  padding: 3px 2px 2px 2px;
-  max-width: 250px;
-  margin: 0 10px 0 10px;
-  border: 1px solid ${p => p.theme.color.lightGray};
-`
-
-const InverseDate = styled(SortSVG)<{
+const InverseDate = styled(IconButton)<{
   $ascendingSort: boolean
 }>`
-  border: 1px solid ${p => p.theme.color.lightGray};
-  width: 37px;
-  height: 14px;
-  padding: 6px;
-  margin-left: auto;
-  cursor: pointer;
-  ${p => (p.$ascendingSort ? 'transform: rotate(180deg);' : null)}
-`
-
-const DownloadMessages = styled(DownloadMessagesSVG)`
-  border: 1px solid ${p => p.theme.color.lightGray};
-  width: 66px;
-  height: 26px;
-  margin-left: auto;
-  margin-right: 10px;
-  cursor: pointer;
+  margin-left: 8px;
+  width: 30px;
+  height: 30px;
+  transform: rotate(${p => (p.$ascendingSort ? 0 : 180)}deg);
+  transition: transform 0.5s;
 `
 
 const Filters = styled.div`
   display: flex;
   margin-top: 8px;
   margin-bottom: 8px;
-
-  #react-select-3-input {
-    height: 26px;
-  }
 `
 
-const Arrow = styled(ArrowSVG)`
-  vertical-align: sub;
+const Arrow = styled(IconButton)`
   transform: rotate(180deg);
-  margin-right: 5px;
 `
 
 const NoMessage = styled.div`

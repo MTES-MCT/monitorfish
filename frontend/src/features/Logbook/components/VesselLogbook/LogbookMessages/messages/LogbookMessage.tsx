@@ -74,7 +74,7 @@ export function LogbookMessage({
   )
 
   return (
-    <Wrapper $isFirst={isFirst} id={logbookMessage.operationNumber}>
+    <Wrapper $isFirst={isFirst} data-cy="LogbookMessage" id={logbookMessage.operationNumber}>
       <Header>
         {!isManuallyCreated && <LogbookMessageTypeText>{getLogbookMessageType(logbookMessage)}</LogbookMessageTypeText>}
         <LogbookMessageHeaderText

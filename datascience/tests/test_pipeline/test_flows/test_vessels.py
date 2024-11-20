@@ -135,7 +135,9 @@ vessels_operators_data = {
 
 licences_data = {
     "id": [2],
+    "nav_licence_status": ["Prorogé"],
     "nav_licence_expiration_date": [datetime.datetime(2023, 5, 15)],
+    "nav_licence_extension_date": [datetime.datetime(2023, 6, 30)],
     "sailing_category": ["3ème"],
 }
 
@@ -195,9 +197,18 @@ concat_merged_data = {
     "operator_phone_3_pos": ["pos_02", None, None, None, None, None],
     "operator_mobile_phone_pos": ["pos_06", None, "pos_061", None, None, None],
     "operator_fax_pos": [None, None, "pos_fax3", None, None, None],
+    "nav_licence_status": [None, "Prorogé", None, None, None, None],
     "nav_licence_expiration_date": [
         None,
         datetime.datetime(2023, 5, 15),
+        None,
+        None,
+        None,
+        None,
+    ],
+    "nav_licence_extension_date": [
+        None,
+        datetime.datetime(2023, 6, 30),
         None,
         None,
         None,
@@ -223,6 +234,7 @@ concat_merged_dtype = {
     "vessel_email_2": "category",
     "vessel_type": "category",
     "registry_port": "category",
+    "nav_licence_status": "category",
     "sailing_category": "category",
     "sailing_type": "category",
     "logbook_equipment_status": "category",
@@ -278,9 +290,18 @@ cleaned_vessels_data = {
         ["LLS"],
         [],
     ],
+    "nav_licence_status": [None, "Prorogé", None, None, None, None],
     "nav_licence_expiration_date": [
         None,
         datetime.datetime(2023, 5, 15),
+        None,
+        None,
+        None,
+        None,
+    ],
+    "nav_licence_extension_date": [
+        None,
+        datetime.datetime(2023, 6, 30),
         None,
         None,
         None,
@@ -343,6 +364,7 @@ cleaned_vessels_dtype = {
     "vessel_telex": "category",
     "vessel_type": "category",
     "registry_port": "category",
+    "nav_licence_status": "category",
     "sailing_category": "category",
     "sailing_type": "category",
     "proprietor_name": "category",

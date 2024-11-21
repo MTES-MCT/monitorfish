@@ -1,6 +1,6 @@
 import { ErrorType } from '../domain/entities/errors'
 
-export default class NoControlsFoundError extends Error {
+export class NoControlsFoundError extends Error {
   name = 'NoControlsFoundError'
   type = ErrorType.INFO_AND_HIDDEN
   showEmptyComponentFields = true

@@ -1,6 +1,6 @@
 import { ErrorType } from '../domain/entities/errors'
 
-export default class NoPositionsFoundError extends Error {
+export class NoPositionsFoundError extends Error {
   name = 'NoPositionsFoundError'
   type = ErrorType.INFO
   showEmptyComponentFields = true

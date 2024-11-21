@@ -17,7 +17,7 @@ type CustomDatePickerProps = Readonly<{
   isRequired?: boolean
   oneTap: boolean
   placement: TypeAttributes.Placement
-  saveValue: (value: string) => void
+  saveValue: (value: Date) => void
   style?: React.CSSProperties
   type?: string
   value: string | Date | undefined

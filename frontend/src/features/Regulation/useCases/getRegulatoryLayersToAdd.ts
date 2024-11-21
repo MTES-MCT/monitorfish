@@ -1,25 +1,36 @@
-import { getVectorOLLayer } from './showRegulatoryZone'
+import { isNotNullish } from '@utils/isNotNullish'
+
+import { getVectorOLLayer } from './getVectorOLLayer'
 import { getLayerNameNormalized } from '../../../domain/entities/layers'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
 
-export const getRegulatoryLayersToAdd = (olLayers, showedLayers) => (dispatch, getState) => {
-  if (!showedLayers.length) {
-    return []
+import type { MainAppThunk } from '@store'
+import type { ShowedLayer } from 'domain/entities/layers/types'
+import type { Feature } from 'ol'
+import type { Geometry } from 'ol/geom'
+import type BaseLayer from 'ol/layer/Base'
+import type VectorImageLayer from 'ol/layer/VectorImage'
+
+export const getRegulatoryLayersToAdd =
+  (olLayers: BaseLayer[], showedLayers: ShowedLayer[]): MainAppThunk<Array<VectorImageLayer<Feature<Geometry>>>> =>
+  dispatch => {
+    if (!showedLayers.length) {
+      return []
+    }
+
+    const layersToInsert = showedLayers
+      .filter(layer => layersNotInCurrentOLMap(olLayers, layer))
+      .filter(layer => layersOfTypeRegulatoryLayer(layer))
+
+    return (
+      layersToInsert
+        // TODO Is it really necessary?
+        .filter(isNotNullish)
+        .map(layerToInsert => dispatch(getVectorOLLayer(layerToInsert)))
+        // TODO Is it really necessary?
+        .filter(isNotNullish)
+    )
   }
-
-  const layersToInsert = showedLayers
-    .filter(layer => layersNotInCurrentOLMap(olLayers, layer))
-    .filter(layer => layersOfTypeRegulatoryLayer(layer))
-
-  return layersToInsert
-    .filter(layerToInsert => layerToInsert)
-    .map(layerToInsert => {
-      const getVectorLayerClosure = getVectorOLLayer(dispatch, getState)
-
-      return getVectorLayerClosure(layerToInsert)
-    })
-    .filter(layer => layer)
-}
 
 function layersNotInCurrentOLMap(olLayers, layer) {
   return !olLayers.some(

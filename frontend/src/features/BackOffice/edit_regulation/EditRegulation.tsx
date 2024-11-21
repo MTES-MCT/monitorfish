@@ -10,67 +10,60 @@ import { RegulationTopicLine } from '@features/BackOffice/edit_regulation/identi
 import { RegulatoryTextSection } from '@features/BackOffice/edit_regulation/regulatory_text/RegulatoryTextSection'
 import { RemoveRegulationModal } from '@features/BackOffice/edit_regulation/regulatory_text/RemoveRegulationModal'
 import { formatDataForSelectPicker } from '@features/BackOffice/utils'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { batch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import styled from 'styled-components'
-
-import { ConfirmRegulationModal } from './ConfirmRegulationModal'
-import { SpeciesRegulation } from './species_regulation/SpeciesRegulation'
-import { LayerProperties } from '../../../domain/entities/layers/constants'
-import { setError } from '../../../domain/shared_slices/Global'
-import getAllSpecies from '../../../domain/use_cases/species/getAllSpecies'
-import { useBackofficeAppDispatch } from '../../../hooks/useBackofficeAppDispatch'
-import { useBackofficeAppSelector } from '../../../hooks/useBackofficeAppSelector'
-import { BaseLayer } from '../../BaseMap/layers/BaseLayer'
-import { Footer, FooterButton, OtherRemark, Section, Title } from '../../commonStyles/Backoffice.style'
-import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
-import { CustomInput, Label } from '../../commonStyles/Input.style'
-import ChevronIconSVG from '../../icons/Chevron_simple_gris.svg?react'
-import { BaseMap } from '../../map/BaseMap'
-import { RegulatoryPreviewLayer } from '../../Regulation/layers/RegulatoryPreviewLayer'
+import { BaseLayer } from '@features/BaseMap/layers/BaseLayer'
+import { RegulatoryPreviewLayer } from '@features/Regulation/layers/RegulatoryPreviewLayer'
 import {
   closeRegulatoryZoneMetadataPanel,
   resetRegulatoryGeometriesToPreview,
   setRegulatoryGeometriesToPreview,
   setRegulatoryTopics,
   setRegulatoryZoneMetadata
-} from '../../Regulation/slice'
-import { createOrUpdateRegulation } from '../../Regulation/useCases/createOrUpdateRegulation'
-import { getAllRegulatoryLayersByRegTerritory } from '../../Regulation/useCases/getAllRegulatoryLayersByRegTerritory'
-import { getGeometryWithoutRegulationReference } from '../../Regulation/useCases/getGeometryWithoutRegulationReference'
-import showRegulatoryZone from '../../Regulation/useCases/showRegulatoryZone'
-import { DEFAULT_REGULATION, FRANCE, LAWTYPES_TO_TERRITORY, REGULATORY_REFERENCE_KEYS } from '../../Regulation/utils'
-import { STATUS } from '../constants'
+} from '@features/Regulation/slice'
+import { createOrUpdateBackofficeRegulation } from '@features/Regulation/useCases/createOrUpdateRegulation'
+import { getAllRegulatoryLayersByRegTerritory } from '@features/Regulation/useCases/getAllRegulatoryLayersByRegTerritory'
+import { getGeometryWithoutRegulationReference } from '@features/Regulation/useCases/getGeometryWithoutRegulationReference'
+import { showBackofficeRegulatoryZone } from '@features/Regulation/useCases/showRegulatoryZone'
 import {
-  resetState,
-  setHasOneOrMoreValuesMissing,
-  setIsConfirmModalOpen,
-  setIsRemoveModalOpen,
-  setProcessingRegulation,
-  setRegulatoryTextCheckedMap,
-  setSaveOrUpdateRegulation,
-  setStatus,
-  updateProcessingRegulationByKey
-} from '../slice'
+  DEFAULT_REGULATION,
+  FRANCE,
+  LAWTYPES_TO_TERRITORY,
+  REGULATORY_REFERENCE_KEYS
+} from '@features/Regulation/utils'
+import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
+import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
+import { LayerProperties } from 'domain/entities/layers/constants'
+import { setError } from 'domain/shared_slices/Global'
+import { getAllSpecies } from 'domain/use_cases/species/getAllSpecies'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import styled from 'styled-components'
+
+import { ConfirmRegulationModal } from './ConfirmRegulationModal'
+import { SpeciesRegulation } from './species_regulation/SpeciesRegulation'
+import { Footer, FooterButton, OtherRemark, Section, Title } from '../../commonStyles/Backoffice.style'
+import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
+import { CustomInput, Label } from '../../commonStyles/Input.style'
+import ChevronIconSVG from '../../icons/Chevron_simple_gris.svg?react'
+import { BaseMap } from '../../map/BaseMap'
+import { backOfficeRegulationActions } from '../../Regulation/slice.backoffice'
+import { STATUS } from '../constants'
 
 import type { GeoJSON } from '../../../domain/types/GeoJSON'
+import type { BackofficeAppThunk } from '@store'
 
 export function EditRegulation({ isEdition, title }) {
   const dispatch = useBackofficeAppDispatch()
 
   const navigate = useNavigate()
 
-  const layersTopicsByRegTerritory = useBackofficeAppSelector(state => state.regulatory.layersTopicsByRegTerritory)
+  const layersTopicsByRegTerritory = useBackofficeAppSelector(state => state.regulation.layersTopicsByRegTerritory)
 
   const [geometryObjectList, setGeometryRecord] = useState<Record<string, GeoJSON.Geometry>>({})
   const [isRegulatoryPreviewDisplayed, setIsRegulatoryPreviewDisplayed] = useState(false)
-  /** @type {Number[]} geometryIdList */
   const geometryIdList = useMemo(
     () => (geometryObjectList ? formatDataForSelectPicker(Object.keys(geometryObjectList)) : []),
     [geometryObjectList]
   )
-  /** @type {boolean} saveIsForbidden */
   const [saveIsForbidden, setSaveIsForbidden] = useState(false)
 
   const {
@@ -86,23 +79,21 @@ export function EditRegulation({ isEdition, title }) {
     selectedRegulatoryZoneId
   } = useBackofficeAppSelector(state => state.regulation)
 
-  const { id, lawType, otherInfo, region, regulatoryReferences, topic, zone } = processingRegulation as any
+  const { lawType, otherInfo, region, regulatoryReferences, topic, zone } = processingRegulation
 
   useEffect(() => {
     ;(async () => {
       const geometryRecord = await dispatch(getGeometryWithoutRegulationReference())
       setGeometryRecord(geometryRecord)
 
-      await dispatch(getAllSpecies())
-
+      await dispatch(getAllSpecies<BackofficeAppThunk>())
       await dispatch(getAllRegulatoryLayersByRegTerritory())
-
       dispatch(closeRegulatoryZoneMetadataPanel())
     })()
 
     return () => {
-      dispatch(setStatus(STATUS.IDLE))
-      dispatch(setProcessingRegulation(DEFAULT_REGULATION))
+      dispatch(backOfficeRegulationActions.setStatus(STATUS.IDLE))
+      dispatch(backOfficeRegulationActions.setProcessingRegulation(DEFAULT_REGULATION))
       dispatch(setRegulatoryZoneMetadata(undefined))
       dispatch(resetRegulatoryGeometriesToPreview())
     }
@@ -112,11 +103,10 @@ export function EditRegulation({ isEdition, title }) {
     () => () => {
       if (isEdition && processingRegulation?.geometry) {
         dispatch(
-          showRegulatoryZone({
+          showBackofficeRegulatoryZone({
             type: LayerProperties.REGULATORY.code,
-            ...processingRegulation,
-            namespace: 'backoffice'
-          } as any)
+            ...processingRegulation
+          })
         )
       }
     },
@@ -124,7 +114,7 @@ export function EditRegulation({ isEdition, title }) {
   )
 
   const goBackofficeHome = useCallback(() => {
-    dispatch(resetState())
+    dispatch(backOfficeRegulationActions.resetState())
     navigate('/backoffice/regulation')
   }, [dispatch, navigate])
 
@@ -136,7 +126,7 @@ export function EditRegulation({ isEdition, title }) {
 
   const onGoBack = () => {
     if (regulationModified) {
-      dispatch(setIsConfirmModalOpen(true))
+      dispatch(backOfficeRegulationActions.setIsConfirmModalOpen(true))
     } else {
       goBackofficeHome()
     }
@@ -166,13 +156,13 @@ export function EditRegulation({ isEdition, title }) {
     willHaveOneOrMoreValuesMissing = willHaveOneOrMoreValuesMissing || valueIsMissing
 
     valueIsMissing =
-      lawType && lawType !== '' && LAWTYPES_TO_TERRITORY[lawType] === FRANCE && !(region && region.length !== 0)
+      !!lawType && lawType !== '' && LAWTYPES_TO_TERRITORY[lawType] === FRANCE && !(region && region.length !== 0)
     willHaveOneOrMoreValuesMissing = willHaveOneOrMoreValuesMissing || valueIsMissing
 
-    valueIsMissing = !(id && id !== '')
+    valueIsMissing = !(processingRegulation.id && processingRegulation.id !== '')
     willHaveOneOrMoreValuesMissing = willHaveOneOrMoreValuesMissing || valueIsMissing
-    dispatch(setHasOneOrMoreValuesMissing(willHaveOneOrMoreValuesMissing))
-  }, [lawType, topic, zone, region, id, dispatch])
+    dispatch(backOfficeRegulationActions.setHasOneOrMoreValuesMissing(willHaveOneOrMoreValuesMissing))
+  }, [lawType, topic, zone, region, processingRegulation.id, dispatch])
 
   useEffect(() => {
     if (saveOrUpdateRegulation && hasOneOrMoreValuesMissing === undefined) {
@@ -190,14 +180,12 @@ export function EditRegulation({ isEdition, title }) {
         const allRequiredValuesHaveBeenFilled = !regulatoryTextCheckList.includes(false) && !hasOneOrMoreValuesMissing
 
         if (allRequiredValuesHaveBeenFilled) {
-          dispatch(createOrUpdateRegulation(processingRegulation, id, selectedRegulatoryZoneId))
+          dispatch(createOrUpdateBackofficeRegulation(processingRegulation, selectedRegulatoryZoneId))
           setSaveIsForbidden(false)
         } else {
-          batch(() => {
-            dispatch(setRegulatoryTextCheckedMap({}))
-            dispatch(setSaveOrUpdateRegulation(false))
-            dispatch(setHasOneOrMoreValuesMissing(undefined))
-          })
+          dispatch(backOfficeRegulationActions.setRegulatoryTextCheckedMap({}))
+          dispatch(backOfficeRegulationActions.setSaveOrUpdateRegulation(false))
+          dispatch(backOfficeRegulationActions.setHasOneOrMoreValuesMissing(undefined))
           setSaveIsForbidden(true)
         }
       }
@@ -205,7 +193,6 @@ export function EditRegulation({ isEdition, title }) {
   }, [
     hasOneOrMoreValuesMissing,
     dispatch,
-    id,
     processingRegulation,
     regulatoryReferences?.length,
     regulatoryTextCheckedMap,
@@ -219,7 +206,8 @@ export function EditRegulation({ isEdition, title }) {
       return
     }
 
-    const geometryFromId = geometryObjectList && geometryObjectList[id]
+    const geometryFromId =
+      !!geometryObjectList && !!processingRegulation.id && geometryObjectList[processingRegulation.id]
     if (geometryFromId) {
       dispatch(setRegulatoryGeometriesToPreview([{ geometry: geometryFromId }]))
     } else if (isEdition && processingRegulation?.geometry) {
@@ -230,7 +218,6 @@ export function EditRegulation({ isEdition, title }) {
   }, [
     dispatch,
     geometryObjectList,
-    id,
     isEdition,
     processingRegulation,
     selectedRegulatoryZoneId,
@@ -239,7 +226,7 @@ export function EditRegulation({ isEdition, title }) {
 
   const setOtherInfo = value => {
     dispatch(
-      updateProcessingRegulationByKey({
+      backOfficeRegulationActions.updateProcessingRegulationByKey({
         key: REGULATORY_REFERENCE_KEYS.OTHER_INFO,
         value
       })
@@ -290,7 +277,7 @@ export function EditRegulation({ isEdition, title }) {
                   onChange={event => setOtherInfo(event.target.value)}
                   placeholder=""
                   rows={2}
-                  value={otherInfo || ''}
+                  value={otherInfo ?? ''}
                   width="500px"
                 />
               </OtherRemark>
@@ -311,7 +298,7 @@ export function EditRegulation({ isEdition, title }) {
                   isLast={false}
                   onClick={() => {
                     checkRequiredValues()
-                    dispatch(setSaveOrUpdateRegulation(true))
+                    dispatch(backOfficeRegulationActions.setSaveOrUpdateRegulation(true))
                   }}
                 >
                   {isEdition ? 'Enregister les modifications' : 'Créer la réglementation'}
@@ -322,7 +309,7 @@ export function EditRegulation({ isEdition, title }) {
                   disabled={false}
                   // @ts-ignore
                   isLast={false}
-                  onClick={() => dispatch(setIsRemoveModalOpen(true))}
+                  onClick={() => dispatch(backOfficeRegulationActions.setIsRemoveModalOpen(true))}
                 >
                   Supprimer la réglementation
                 </CancelButton>

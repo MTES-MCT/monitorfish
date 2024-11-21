@@ -1,7 +1,7 @@
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { getVesselControlsFromAPI } from '../../../api/missionAction'
-import NoControlsFoundError from '../../../errors/NoControlsFoundError'
+import { NoControlsFoundError } from '../../../errors/NoControlsFoundError'
 import {
   loadControls,
   resetLoadControls,

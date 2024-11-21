@@ -6,8 +6,9 @@ import { WEEKDAYS } from '../../../utils'
 import type { DateInterval, FishingPeriod } from '../../../types'
 import type { Dayjs } from 'dayjs'
 import type Feature from 'ol/Feature'
+import type { FeatureLike } from 'ol/Feature'
 
-export function isForbiddenPeriod(feature: Feature | undefined, currentDate: Dayjs) {
+export function isForbiddenPeriod(feature: Feature | FeatureLike | undefined, currentDate: Dayjs) {
   const currentWeekDayDigit = currentDate.day()
 
   const fishingPeriodValue = feature?.get('fishing_period') || feature?.get('fishingPeriod')

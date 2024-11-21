@@ -1,10 +1,19 @@
+/* eslint-disable @typescript-eslint/no-throw-literal */
+
+import GML from 'ol/format/GML'
+import WFS from 'ol/format/WFS'
+
+import { HttpStatusCode } from './constants'
 import { LayerProperties } from '../domain/entities/layers/constants'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map/constants'
-import WFS from 'ol/format/WFS'
-import GML from 'ol/format/GML'
-import { REGULATION_ACTION_TYPE } from '../features/Regulation/utils'
-import { HttpStatusCode } from './constants'
+import { RegulationActionType } from '../features/Regulation/utils'
 import { ApiError } from '../libs/ApiError'
+
+import type { Regulation } from '@features/Regulation/Regulation.types'
+import type { RegulatoryZone } from '@features/Regulation/types'
+import type { ShowedLayer } from 'domain/entities/layers/types'
+import type { Extent } from 'ol/extent'
+import type { GeoJSONFeatureCollection } from 'ol/format/GeoJSON'
 
 export const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la couche réglementaire"
 const REGULATORY_ZONES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les zones réglementaires"
@@ -29,7 +38,7 @@ export const GEOSERVER_BACKOFFICE_URL = import.meta.env.FRONTEND_GEOSERVER_LOCAL
 /**
  * @description This API isn't authenticated
  */
-function getAllRegulatoryLayersFromAPI(fromBackoffice) {
+function getAllRegulatoryLayersFromAPI(fromBackoffice): Promise<Regulation.RegulatoryZoneGeoJsonFeatureCollection> {
   const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
   return fetch(
@@ -39,12 +48,11 @@ function getAllRegulatoryLayersFromAPI(fromBackoffice) {
     .then(response => {
       if (response.status === HttpStatusCode.OK) {
         return response.json()
-      } else {
-        response.text().then(text => {
-          console.error(text)
-        })
-        throw Error(REGULATORY_ZONES_ERROR_MESSAGE)
       }
+      response.text().then(text => {
+        console.error(text)
+      })
+      throw Error(REGULATORY_ZONES_ERROR_MESSAGE)
     })
     .catch(error => {
       if (import.meta.env.DEV) {
@@ -73,18 +81,19 @@ function getAllGeometryWithoutProperty(fromBackoffice) {
     'regulatory_references IS NULL AND zone IS NULL AND region IS NULL AND law_type IS NULL AND topic IS NULL'
   const REQUEST =
     `${geoserverURL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
-    `${LayerProperties.REGULATORY.code}&outputFormat=application/json&propertyName=geometry,id&CQL_FILTER=` +
-    filter.replace(/'/g, '%27').replace(/ /g, '%20')
+    `${LayerProperties.REGULATORY.code}&outputFormat=application/json&propertyName=geometry,id&CQL_FILTER=${filter
+      .replace(/'/g, '%27')
+      .replace(/ /g, '%20')}`
+
   return fetch(REQUEST)
     .then(response => {
       if (response.status === HttpStatusCode.OK) {
         return response.json()
-      } else {
-        response.text().then(text => {
-          console.error(text)
-        })
-        throw Error(GEOMETRY_ERROR_MESSAGE)
       }
+      response.text().then(text => {
+        console.error(text)
+      })
+      throw Error(GEOMETRY_ERROR_MESSAGE)
     })
     .catch(error => {
       console.error(error)
@@ -103,7 +112,7 @@ function getAllGeometryWithoutProperty(fromBackoffice) {
  * @returns {Promise<GeoJSON>} The feature GeoJSON
  * @throws {Error}
  */
-function getAdministrativeZoneFromAPI(administrativeZone, extent, subZone, fromBackoffice) {
+export async function getAdministrativeZoneFromAPI(administrativeZone, extent, subZone, fromBackoffice) {
   const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
   return fetch(getAdministrativeZoneURL(administrativeZone, extent, subZone, geoserverURL))
@@ -111,17 +120,15 @@ function getAdministrativeZoneFromAPI(administrativeZone, extent, subZone, fromB
       if (response.status === HttpStatusCode.OK) {
         return response
           .json()
-          .then(response => {
-            return response
-          })
+          .then(body => body)
           .catch(e => {
             throwIrretrievableAdministrativeZoneError(e, administrativeZone)
           })
-      } else {
-        response.text().then(response => {
-          throwIrretrievableAdministrativeZoneError(response, administrativeZone)
-        })
       }
+
+      return response.text().then(bodyAsText => {
+        throwIrretrievableAdministrativeZoneError(bodyAsText, administrativeZone)
+      })
     })
     .catch(e => {
       throwIrretrievableAdministrativeZoneError(e, administrativeZone)
@@ -131,14 +138,9 @@ function getAdministrativeZoneFromAPI(administrativeZone, extent, subZone, fromB
 /**
  * Get the administrative zone Geoserver URL
  * @description This API isn't authenticated
- * @memberOf API
- * @param {string} type
- * @param {string[]|null} extent
- * @param {string|null} subZone
- * @param {string} geoserverURL
  * @returns {string} - the zone URL WFS request
  */
-function getAdministrativeZoneURL(type, extent, subZone, geoserverURL) {
+function getAdministrativeZoneURL(type: string, extent: Extent | null, subZone: string | null, geoserverURL: string) {
   let extentFilter = ''
   if (extent) {
     extentFilter = `&bbox=${extent.join(',')},${OPENLAYERS_PROJECTION}`
@@ -148,41 +150,41 @@ function getAdministrativeZoneURL(type, extent, subZone, geoserverURL) {
   if (subZone) {
     const filter = `${subZone.replace(/'/g, "''")}`
 
-    subZoneFilter = '&featureID=' + filter.replace(/'/g, '%27').replace(/ /g, '%20')
+    subZoneFilter = `&featureID=${filter.replace(/'/g, '%27').replace(/ /g, '%20')}`
   }
 
   return (
     `${geoserverURL}/geoserver/wfs?service=WFS&` +
     `version=1.1.0&request=GetFeature&typename=monitorfish:${type}&` +
-    `outputFormat=application/json&srsname=${WSG84_PROJECTION}` +
-    extentFilter +
-    subZoneFilter
+    `outputFormat=application/json&srsname=${WSG84_PROJECTION}${extentFilter}${subZoneFilter}`
   )
 }
 
 /**
  * @description This API isn't authenticated
  */
-function getRegulatoryZoneFromAPI(type, regulatoryZone, fromBackoffice) {
+export async function getRegulatoryZoneFromAPI(
+  type: string,
+  regulatoryZone: ShowedLayer,
+  fromBackoffice: boolean
+): Promise<Regulation.RegulatoryZoneGeoJsonFeature> {
   try {
     const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
-    return fetch(getRegulatoryZoneURL(type, regulatoryZone, geoserverURL))
+    return await fetch(getRegulatoryZoneURL(type, regulatoryZone, geoserverURL))
       .then(response => {
         if (response.status === HttpStatusCode.OK) {
           return response
             .json()
-            .then(response => {
-              return getFirstFeature(response)
-            })
+            .then(body => getFirstFeature(body))
             .catch(e => {
               throw getIrretrievableRegulatoryZoneError(e, regulatoryZone)
             })
-        } else {
-          response.text().then(response => {
-            throw getIrretrievableRegulatoryZoneError(response, regulatoryZone)
-          })
         }
+
+        return response.text().then(bodyAsText => {
+          throw getIrretrievableRegulatoryZoneError(bodyAsText, regulatoryZone)
+        })
       })
       .catch(e => {
         throw getIrretrievableRegulatoryZoneError(e, regulatoryZone)
@@ -195,7 +197,7 @@ function getRegulatoryZoneFromAPI(type, regulatoryZone, fromBackoffice) {
 /**
  * @description This API isn't authenticated
  */
-function getRegulatoryZoneURL(type, regulatoryZone, geoserverURL) {
+function getRegulatoryZoneURL(type: string, regulatoryZone: ShowedLayer, geoserverURL: string) {
   if (!regulatoryZone.topic) {
     throw new Error("Le nom de la couche n'est pas renseigné")
   }
@@ -207,24 +209,22 @@ function getRegulatoryZoneURL(type, regulatoryZone, geoserverURL) {
     /'/g,
     "''"
   )}' AND zone='${encodeURIComponent(regulatoryZone.zone).replace(/'/g, "''")}'`
+
   return (
     `${geoserverURL}/geoserver/wfs?service=WFS` +
     `&version=1.1.0&request=GetFeature&typename=monitorfish:${type}` +
-    '&outputFormat=application/json&CQL_FILTER=' +
-    filter.replace(/'/g, '%27').replace(/ /g, '%20')
+    `&outputFormat=application/json&CQL_FILTER=${filter.replace(/'/g, '%27').replace(/ /g, '%20')}`
   )
 }
 
 /**
  * Get the regulatory zones GeoJSON feature filtered with the OpenLayers extent (the BBOX)
  * @description This API isn't authenticated
- * @memberOf API
- * @param {number[]|null} extent
- * @param {boolean} fromBackoffice
- * @returns {Promise<GeoJSON>} The feature GeoJSON
- * @throws {Error}
  */
-export function getRegulatoryZonesInExtentFromAPI(extent, fromBackoffice) {
+export function getRegulatoryZonesInExtentFromAPI(
+  extent: Extent,
+  fromBackoffice: boolean
+): Promise<GeoJSONFeatureCollection> {
   try {
     const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
@@ -232,30 +232,27 @@ export function getRegulatoryZonesInExtentFromAPI(extent, fromBackoffice) {
       `${geoserverURL}/geoserver/wfs?service=WFS` +
         `&version=1.1.0&request=GetFeature&typename=monitorfish:${LayerProperties.REGULATORY.code}` +
         `&outputFormat=application/json&srsname=${WSG84_PROJECTION}` +
-        `&bbox=${extent.join(',')},${OPENLAYERS_PROJECTION}` +
-        '&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region'
+        `&bbox=${extent.join(',')},${OPENLAYERS_PROJECTION}${'&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region'
           .replace(/'/g, '%27')
           .replace(/\(/g, '%28')
           .replace(/\)/g, '%29')
-          .replace(/ /g, '%20')
+          .replace(/ /g, '%20')}`
     )
       .then(response => {
         if (response.status === HttpStatusCode.OK) {
           return response
             .json()
-            .then(response => {
-              return response
-            })
+            .then(body => body)
             .catch(error => {
               console.error(error)
               throw REGULATORY_ZONES_ZONE_SELECTION_ERROR_MESSAGE
             })
-        } else {
-          response.text().then(response => {
-            console.error(response)
-          })
-          throw REGULATORY_ZONES_ZONE_SELECTION_ERROR_MESSAGE
         }
+
+        return response.text().then(bodyAsText => {
+          console.error(bodyAsText)
+          throw REGULATORY_ZONES_ZONE_SELECTION_ERROR_MESSAGE
+        })
       })
       .catch(error => {
         console.error(error)
@@ -263,6 +260,7 @@ export function getRegulatoryZonesInExtentFromAPI(extent, fromBackoffice) {
       })
   } catch (error) {
     console.error(error)
+
     return Promise.reject(REGULATORY_ZONES_ZONE_SELECTION_ERROR_MESSAGE)
   }
 }
@@ -273,20 +271,22 @@ function getFirstFeature(response) {
 
   if (response.features.length === 1 && response.features[FIRST_FEATURE]) {
     return response.features[FIRST_FEATURE]
-  } else {
-    throw Error('We found multiple features for this zone')
   }
+  throw Error('We found multiple features for this zone')
 }
 
 /**
  * @description This API isn't authenticated
  */
-function getRegulatoryFeatureMetadataFromAPI(regulatorySubZone, fromBackoffice) {
+function getRegulatoryFeatureMetadataFromAPI(
+  partialRegulatoryZone: Pick<RegulatoryZone, 'topic' | 'zone'>,
+  fromBackoffice: boolean
+): Promise<Regulation.RegulatoryZoneGeoJsonFeature> {
   let url
   try {
     const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
-    url = getRegulatoryZoneURL(LayerProperties.REGULATORY.code, regulatorySubZone, geoserverURL)
+    url = getRegulatoryZoneURL(LayerProperties.REGULATORY.code, partialRegulatoryZone, geoserverURL)
   } catch (e) {
     return Promise.reject(e)
   }
@@ -294,15 +294,13 @@ function getRegulatoryFeatureMetadataFromAPI(regulatorySubZone, fromBackoffice) 
   return fetch(url)
     .then(response => {
       if (response.status === HttpStatusCode.OK) {
-        return response.json().then(response => {
-          return getFirstFeature(response)
-        })
-      } else {
-        response.text().then(text => {
-          console.error(text)
-        })
-        throw Error(REGULATORY_ZONE_METADATA_ERROR_MESSAGE)
+        return response.json().then(body => getFirstFeature(body))
       }
+
+      return response.text().then(bodyAsText => {
+        console.error(bodyAsText)
+        throw Error(REGULATORY_ZONE_METADATA_ERROR_MESSAGE)
+      })
     })
     .catch(error => {
       console.error(error)
@@ -313,7 +311,7 @@ function getRegulatoryFeatureMetadataFromAPI(regulatorySubZone, fromBackoffice) 
 /**
  * @description This API isn't authenticated
  */
-function getAdministrativeSubZonesFromAPI(type, fromBackoffice) {
+function getAdministrativeSubZonesFromAPI(type: string, fromBackoffice: boolean) {
   const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
   let query
@@ -323,8 +321,9 @@ function getAdministrativeSubZonesFromAPI(type, fromBackoffice) {
     query =
       `${geoserverURL}/geoserver/wfs?service=WFS&` +
       `version=1.1.0&request=GetFeature&typename=monitorfish:${type}&` +
-      `outputFormat=application/json&srsname=${WSG84_PROJECTION}&CQL_FILTER=` +
-      filter.replace(/'/g, '%27').replace(/ /g, '%20')
+      `outputFormat=application/json&srsname=${WSG84_PROJECTION}&CQL_FILTER=${filter
+        .replace(/'/g, '%27')
+        .replace(/ /g, '%20')}`
   } else {
     query =
       `${geoserverURL}/geoserver/wfs?service=WFS&` +
@@ -337,17 +336,15 @@ function getAdministrativeSubZonesFromAPI(type, fromBackoffice) {
       if (response.status === HttpStatusCode.OK) {
         return response
           .json()
-          .then(response => {
-            return response
-          })
+          .then(body => body)
           .catch(e => {
             throwIrretrievableAdministrativeZoneError(e, type)
           })
-      } else {
-        response.text().then(response => {
-          throwIrretrievableAdministrativeZoneError(response, type)
-        })
       }
+
+      return response.text().then(bodyAsText => {
+        throwIrretrievableAdministrativeZoneError(bodyAsText, type)
+      })
     })
     .catch(e => {
       if (import.meta.env.DEV) {
@@ -356,7 +353,7 @@ function getAdministrativeSubZonesFromAPI(type, fromBackoffice) {
         }
       }
 
-      throwIrretrievableAdministrativeZoneError(e, type)
+      return throwIrretrievableAdministrativeZoneError(e, type)
     })
 }
 
@@ -373,26 +370,30 @@ function sendRegulationTransaction(feature, actionType) {
 
   const xs = new XMLSerializer()
   let transaction
-  if (actionType === REGULATION_ACTION_TYPE.UPDATE) {
+  // TODO `null` doesn't seem to an expected parameter value for `writeTransaction` method.
+  if (actionType === RegulationActionType.Update) {
+    // @ts-ignore
     transaction = formatWFS.writeTransaction(null, [feature], null, formatGML)
-  } else if (actionType === REGULATION_ACTION_TYPE.INSERT) {
+  } else if (actionType === RegulationActionType.Insert) {
+    // @ts-ignore
     transaction = formatWFS.writeTransaction([feature], null, null, formatGML)
-  } else if (actionType === REGULATION_ACTION_TYPE.DELETE) {
+  } else if (actionType === RegulationActionType.Delete) {
+    // @ts-ignore
     transaction = formatWFS.writeTransaction(null, null, [feature], formatGML)
   }
   const payload = xs.serializeToString(transaction)
 
   return fetch(`${GEOSERVER_BACKOFFICE_URL}/geoserver/wfs`, {
+    body: payload.replace('feature:', ''),
+    headers: {
+      'Content-Type': 'text/xml',
+      'Data-Type': 'xml',
+      'Process-Data': 'false'
+    },
     method: 'POST',
-    mode: 'no-cors',
-    dataType: 'xml',
-    processData: false,
-    contentType: 'text/xml',
-    body: payload.replace('feature:', '')
+    mode: 'no-cors'
   })
-    .then(r => {
-      return r
-    })
+    .then(r => r)
     .catch(error => {
       console.error(error)
       throw Error(UPDATE_REGULATION_MESSAGE)
@@ -404,9 +405,7 @@ export {
   getAdministrativeSubZonesFromAPI,
   getRegulatoryFeatureMetadataFromAPI,
   getRegulatoryZoneURL,
-  getRegulatoryZoneFromAPI,
   getAdministrativeZoneURL,
-  getAdministrativeZoneFromAPI,
   getAllGeometryWithoutProperty,
   getAllRegulatoryLayersFromAPI
 }

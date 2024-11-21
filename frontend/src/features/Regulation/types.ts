@@ -1,5 +1,6 @@
 import type { GearMeshSizeEqualityComparator } from '../../domain/entities/backoffice'
 import type { GeoJSON } from '../../domain/types/GeoJSON'
+import type { UndefineExcept } from '@mtes-mct/monitor-ui'
 
 export type BaseRegulatoryZone = {
   topic: string
@@ -8,22 +9,27 @@ export type BaseRegulatoryZone = {
 
 export type RegulatoryZone = BaseRegulatoryZone & {
   color?: string
-  fishingPeriod: FishingPeriod
+  fishingPeriod: FishingPeriod<Date>
   gearRegulation: GearRegulation
-  geometry: GeoJSON.Geometry
-  id: number | string
+  geometry: GeoJSON.Geometry | undefined
+  id: number | string | undefined
   lawType: string
-  nextId: string
-  otherInfo: string
+  nextId: string | undefined
+  otherInfo: string | undefined
   region: string
   regulatoryReferences: RegulatoryText[] | undefined
   showed?: boolean
   speciesRegulation: SpeciesRegulation
 }
 
-export type EditedRegulatoryZone = RegulatoryZone & {
+export type EditedRegulatoryZone = Omit<RegulatoryZone, 'region'> & {
   region: string[] | undefined
 }
+
+export type RegulatoryZoneDraft = UndefineExcept<
+  EditedRegulatoryZone,
+  'fishingPeriod' | 'gearRegulation' | 'speciesRegulation'
+>
 
 export type RegulatoryText = {
   // TODO Use `Infinity`
@@ -49,13 +55,13 @@ export type TimeInterval = {
   to: Date | undefined
 }
 
-export type FishingPeriod = {
+// TODO It would be safer to use strict array types: `DateRange[]` and `DateAsStringRange[]`.
+export type FishingPeriod<DateType extends string | Date = string> = {
   always: boolean | undefined
   annualRecurrence: boolean | undefined
   authorized: boolean | undefined
   dateRanges: DateInterval[]
-  // ISO-8601 date
-  dates: string[]
+  dates: DateType[]
   daytime: boolean | undefined
   holidays: boolean | undefined
   otherInfo: string | undefined

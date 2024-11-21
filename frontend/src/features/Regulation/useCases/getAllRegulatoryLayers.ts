@@ -1,34 +1,31 @@
 import { getAllRegulatoryLayersFromAPI } from '@api/geoserver'
+import { layerActions } from '@features/BaseMap/slice'
 
 import { setError } from '../../../domain/shared_slices/Global'
-import layer from '../../../domain/shared_slices/Layer'
 import { MonitorFishWorker } from '../../../workers/MonitorFishWorker'
-import {
-  setLayersTopicsByRegTerritory,
-  setRegulatoryLayerLawTypes,
-  setRegulatoryZones,
-  setSelectedRegulatoryZone
-} from '../slice'
+import { regulationActions } from '../slice'
 
-export const getAllRegulatoryLayers = () => async (dispatch, getState) => {
+import type { MainAppThunk } from '@store'
+
+export const getAllRegulatoryLayers = (): MainAppThunk<Promise<void>> => async (dispatch, getState) => {
   const monitorFishWorker = await MonitorFishWorker
-  const { setShowedLayersWithLocalStorageValues } = layer.homepage.actions
   const { speciesByCode } = getState().species
 
   try {
     const features = await getAllRegulatoryLayersFromAPI(getState().global.isBackoffice)
 
-    monitorFishWorker.mapGeoserverToRegulatoryZones(features, speciesByCode).then(regulatoryZones => {
-      dispatch(setRegulatoryZones(regulatoryZones))
-    })
+    const regulatoryZones = await monitorFishWorker.mapGeoserverToRegulatoryZones(features, speciesByCode)
+    dispatch(regulationActions.setRegulatoryZones(regulatoryZones))
 
     const { layersTopicsByRegulatoryTerritory, layersWithoutGeometry } =
       await monitorFishWorker.convertGeoJSONFeaturesToStructuredRegulatoryObject(features, speciesByCode)
 
-    dispatch(setLayersTopicsByRegTerritory(layersTopicsByRegulatoryTerritory))
-    dispatch(setRegulatoryLayerLawTypes(layersTopicsByRegulatoryTerritory))
-    dispatch(setSelectedRegulatoryZone(layersWithoutGeometry))
-    dispatch(setShowedLayersWithLocalStorageValues?.({ namespace: 'homepage', regulatoryZones: layersWithoutGeometry }))
+    dispatch(regulationActions.setLayersTopicsByRegTerritory(layersTopicsByRegulatoryTerritory))
+    dispatch(regulationActions.setRegulatoryLayerLawTypes(layersTopicsByRegulatoryTerritory))
+    // TODO Fix this any.
+    dispatch(regulationActions.setSelectedRegulatoryZone(layersWithoutGeometry as any))
+    // TODO Fix this any.
+    dispatch(layerActions.setShowedLayersWithLocalStorageValues(layersWithoutGeometry as any))
   } catch (error) {
     console.error(error)
     dispatch(setError(error))

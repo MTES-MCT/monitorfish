@@ -3,7 +3,7 @@ import { Radio, RadioGroup } from 'rsuite'
 import styled, { css } from 'styled-components'
 
 import { useSetFishingPeriod } from '../../../hooks/fishingPeriod/useSetFishingPeriod'
-import { FISHING_PERIOD_KEYS } from '../../Regulation/utils'
+import { FishingPeriodKey } from '../../Regulation/utils'
 
 type AuthorizedRadioButtonGroupProps = Readonly<{
   title: string
@@ -11,7 +11,7 @@ type AuthorizedRadioButtonGroupProps = Readonly<{
 export function AuthorizedRadioButtonGroup({ title }: AuthorizedRadioButtonGroupProps) {
   // const { authorized } = useBackofficeAppSelector(state => state.regulation.processingRegulation.fishingPeriod)
   const processingRegulation = useBackofficeAppSelector(state => state.regulation.processingRegulation)
-  const setAuthorized = useSetFishingPeriod(FISHING_PERIOD_KEYS.AUTHORIZED)
+  const setAuthorized = useSetFishingPeriod(FishingPeriodKey.AUTHORIZED)
 
   return (
     // TODO Remove these any (migration to TS).

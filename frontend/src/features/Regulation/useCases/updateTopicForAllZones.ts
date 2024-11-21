@@ -3,41 +3,46 @@ import { Feature } from 'ol'
 import { sendRegulationTransaction } from '../../../api/geoserver'
 import { setError } from '../../../domain/shared_slices/Global'
 import { setLayersTopicsByRegTerritory, setRegulatoryLayerLawTypes } from '../slice'
-import { getRegulatoryFeatureId, mapToRegulatoryFeatureObject, REGULATION_ACTION_TYPE } from '../utils'
+import { getRegulatoryFeatureId, mapToRegulatoryFeatureObject, RegulationActionType } from '../utils'
+
+import type { BackofficeAppThunk } from '@store'
 
 const UPDATE_TOPIC_NAME_ERROR = 'Une erreur est survenue lors la mise à jour de la thématique'
 
-const updateTopicForAllZones = (territory, lawType, oldLayerName, newLayerName) => (dispatch, getState) => {
-  const { layersTopicsByRegTerritory } = getState().regulatory
-  if (
-    !layersTopicsByRegTerritory ||
-    !layersTopicsByRegTerritory[territory] ||
-    !layersTopicsByRegTerritory[territory][lawType]
-  ) {
-    console.error(`${UPDATE_TOPIC_NAME_ERROR}
+export const updateTopicForAllZones =
+  (territory: string, lawType: string, oldLayerName: string, newLayerName: string): BackofficeAppThunk<Promise<void>> =>
+  async (dispatch, getState) => {
+    const { layersTopicsByRegTerritory } = getState().regulation
+    if (
+      !layersTopicsByRegTerritory ||
+      !layersTopicsByRegTerritory[territory] ||
+      !layersTopicsByRegTerritory[territory][lawType]
+    ) {
+      console.error(`${UPDATE_TOPIC_NAME_ERROR}
       One value is undefined:
       layersTopicsByRegTerritory is ${layersTopicsByRegTerritory}
       territory is ${territory}
       lawType is ${lawType}`)
-    dispatch(setError(new Error(UPDATE_TOPIC_NAME_ERROR)))
+      dispatch(setError(new Error(UPDATE_TOPIC_NAME_ERROR)))
 
-    return
-  }
+      return
+    }
 
-  if (layersTopicsByRegTerritory[territory][lawType][oldLayerName]) {
-    const zoneListToUpdate = layersTopicsByRegTerritory[territory][lawType][oldLayerName]
-    const promiseList = zoneListToUpdate.map(zone => {
-      const feature = buildZoneFeature(zone, newLayerName)
+    if (layersTopicsByRegTerritory[territory][lawType][oldLayerName]) {
+      const zoneListToUpdate = layersTopicsByRegTerritory[territory][lawType][oldLayerName]
+      const promiseList = zoneListToUpdate.map(zone => {
+        const feature = buildZoneFeature(zone, newLayerName)
 
-      return new Promise((resolve, reject) => {
-        sendRegulationTransaction(feature, REGULATION_ACTION_TYPE.UPDATE)
-          .then(_ => resolve(true))
-          .catch(e => reject(e))
+        return new Promise((resolve, reject) => {
+          sendRegulationTransaction(feature, RegulationActionType.Update)
+            .then(_ => resolve(true))
+            .catch(e => reject(e))
+        })
       })
-    })
 
-    return Promise.all(promiseList)
-      .then(_ => {
+      try {
+        await Promise.all(promiseList)
+
         const newLayersTopicsByRegTerritory = mutateLayersTopicsWithNewTopic(
           layersTopicsByRegTerritory,
           territory,
@@ -47,15 +52,14 @@ const updateTopicForAllZones = (territory, lawType, oldLayerName, newLayerName) 
         )
         dispatch(setLayersTopicsByRegTerritory(newLayersTopicsByRegTerritory))
         dispatch(setRegulatoryLayerLawTypes(newLayersTopicsByRegTerritory))
-      })
-      .catch(e => {
-        console.error(e)
-        dispatch(setError(e))
-      })
+      } catch (err) {
+        console.error(err)
+        dispatch(setError(err))
+      }
+    }
   }
-}
 
-function buildZoneFeature(zone, newLayerName) {
+function buildZoneFeature(zone, newLayerName: string) {
   const featureObject = mapToRegulatoryFeatureObject({
     ...zone,
     topic: newLayerName
@@ -78,5 +82,3 @@ function mutateLayersTopicsWithNewTopic(layersTopicsByRegTerritory, territory, l
     [territory]: newTerritoryObject
   }
 }
-
-export default updateTopicForAllZones

@@ -1,4 +1,4 @@
-import { setSearchedRegulationZoneExtent } from '@features/Regulation/slice'
+import { regulationActions } from '@features/Regulation/slice'
 import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeatures'
 import { isNumeric } from '@utils/isNumeric'
 
@@ -30,7 +30,7 @@ export const previewVessels =
       const extent = getExtentFromGeoJSON(zonesSelected[0]?.feature)
       if (extent?.length && !isNumeric(extent[0]) && !isNumeric(extent[1])) {
         // TODO Migrate to `setSearchedRegulationZoneExtent(nextExtent: [...], withAnimation: true)`
-        dispatch(setSearchedRegulationZoneExtent(extent))
+        dispatch(regulationActions.setSearchedRegulationZoneExtent(extent))
         dispatch(animateToExtent())
       }
     }

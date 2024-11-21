@@ -6,11 +6,11 @@ import { useSetFishingPeriod } from '../../../../hooks/fishingPeriod/useSetFishi
 import { CustomCheckbox } from '../../../commonStyles/Backoffice.style'
 import { Row } from '../../../commonStyles/FishingPeriod.style'
 import { Label } from '../../../commonStyles/Input.style'
-import { FISHING_PERIOD_KEYS } from '../../../Regulation/utils'
+import { FishingPeriodKey } from '../../../Regulation/utils'
 
 export function Always({ authorized }) {
   const processingRegulation = useBackofficeAppSelector(state => state.regulation.processingRegulation)
-  const setAlways = useSetFishingPeriod(FISHING_PERIOD_KEYS.ALWAYS)
+  const setAlways = useSetFishingPeriod(FishingPeriodKey.ALWAYS)
   const onChange = useCallback(
     _ => setAlways(!processingRegulation.fishingPeriod?.always),
     [setAlways, processingRegulation.fishingPeriod?.always]

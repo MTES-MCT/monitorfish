@@ -1,3 +1,4 @@
+import { layerActions } from '@features/BaseMap/slice'
 import GeoJSON from 'ol/format/GeoJSON'
 import VectorImageLayer from 'ol/layer/VectorImage'
 import { all, bbox as bboxStrategy } from 'ol/loadingstrategy'
@@ -6,8 +7,6 @@ import VectorSource from 'ol/source/Vector'
 import { getLayerNameFromTypeAndZone } from './utils'
 import { getAdministrativeZoneFromAPI } from '../../../api/geoserver'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map/constants'
-import LayerSlice from '../../../domain/shared_slices/Layer'
-import { FrontendError } from '../../../libs/FrontendError'
 import { getAdministrativeLayerStyle } from '../layers/styles/administrativeLayer.style'
 
 import type { ShowedLayer } from '../../../domain/entities/layers/types'
@@ -15,18 +14,10 @@ import type { MainAppThunk } from '../../../store'
 import type Feature from 'ol/Feature'
 import type Geometry from 'ol/geom/Geometry'
 
-const DEFAULT_NAMESPACE = 'homepage'
-
 export const showAdministrativeZone =
-  (zoneRequest: Omit<ShowedLayer, 'id' | 'topic'>): MainAppThunk<void> =>
+  (zoneRequest: ShowedLayer): MainAppThunk<void> =>
   dispatch => {
-    const currentNamespace = zoneRequest.namespace || DEFAULT_NAMESPACE
-    const { addShowedLayer } = LayerSlice[currentNamespace].actions
-    if (!addShowedLayer) {
-      throw new FrontendError('`addShowedLayer` is undefined.')
-    }
-
-    dispatch(addShowedLayer(zoneRequest))
+    dispatch(layerActions.addShowedLayer(zoneRequest))
   }
 
 export const getVectorOLLayer = (

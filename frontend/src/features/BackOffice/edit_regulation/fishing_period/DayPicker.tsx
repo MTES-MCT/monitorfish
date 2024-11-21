@@ -3,14 +3,14 @@ import { useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 
 import { useSetFishingPeriod } from '../../../../hooks/fishingPeriod/useSetFishingPeriod'
-import { FISHING_PERIOD_KEYS, WEEKDAYS } from '../../../Regulation/utils'
+import { FishingPeriodKey, WEEKDAYS } from '../../../Regulation/utils'
 
 type DayPickerProps = Readonly<{
   disabled: boolean
 }>
 export function DayPicker({ disabled }: DayPickerProps) {
   const processingRegulation = useBackofficeAppSelector(state => state.regulation.processingRegulation)
-  const setWeekdays = useSetFishingPeriod(FISHING_PERIOD_KEYS.WEEKDAYS)
+  const setWeekdays = useSetFishingPeriod(FishingPeriodKey.WEEKDAYS)
 
   useEffect(() => {
     if (disabled) {

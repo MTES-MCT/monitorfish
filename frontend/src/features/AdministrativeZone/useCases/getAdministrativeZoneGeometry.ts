@@ -1,10 +1,12 @@
-import { getAdministrativeZoneFromAPI } from '../../../api/geoserver'
-import layer from '../../../domain/shared_slices/Layer'
+import { getAdministrativeZoneFromAPI } from '@api/geoserver'
+import { layerActions } from '@features/BaseMap/slice'
 import { addZoneSelected } from '@features/Vessel/components/VesselList/slice'
 
-const getAdministrativeZoneGeometry =
-  (administrativeZoneCode, subZoneCode, zoneName, namespace) => (dispatch, getState) => {
-    const { addAdministrativeZoneGeometryToCache } = layer[namespace].actions
+import type { MainAppThunk } from '@store'
+
+export const getAdministrativeZoneGeometry =
+  (administrativeZoneCode: string, subZoneCode: string | undefined, zoneName: string): MainAppThunk =>
+  (dispatch, getState) => {
     const geometryCache = getState().layer.administrativeZonesGeometryCache
     const foundCache = geometryCache.find(zone => zone.key === `${administrativeZoneCode}:${subZoneCode}:${zoneName}`)
     if (foundCache) {
@@ -16,7 +18,7 @@ const getAdministrativeZoneGeometry =
         if (administrativeZoneFeature.numberReturned === 1) {
           dispatchZoneSelected(administrativeZoneFeature)
           dispatch(
-            addAdministrativeZoneGeometryToCache({
+            layerActions.addAdministrativeZoneGeometryToCache({
               key: `${administrativeZoneCode}:${subZoneCode}:${zoneName}`,
               value: administrativeZoneFeature
             })
@@ -33,12 +35,10 @@ const getAdministrativeZoneGeometry =
     function dispatchZoneSelected(feature) {
       dispatch(
         addZoneSelected({
-          code: subZoneCode || administrativeZoneCode,
+          code: subZoneCode ?? administrativeZoneCode,
           feature,
           name: zoneName
         })
       )
     }
   }
-
-export default getAdministrativeZoneGeometry

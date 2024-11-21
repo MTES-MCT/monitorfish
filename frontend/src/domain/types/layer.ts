@@ -7,17 +7,15 @@ import type VectorLayer from 'ol/layer/Vector'
 import type WebGLPointsLayer from 'ol/layer/WebGLPoints'
 
 export type TopicContainingMultipleZones = {
-  namespace: string
   regulatoryZones: RegulatoryZone[]
   type: string
 }
 
 export type AdministrativeOrRegulatoryLayerIdentity = {
-  id: number | string
-  namespace: string
-  topic: string | null
+  id: string
+  topic: string | undefined
   type: string
-  zone: string | null
+  zone: string | undefined
 }
 
 export type LayerToFeatures = {

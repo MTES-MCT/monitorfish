@@ -11,14 +11,14 @@ import { CreateRegulationTopicForm } from './CreateRegulationTopicForm'
 import { ContentLine, InfoText, InfoTextWrapper } from '../../../commonStyles/Backoffice.style'
 import { SquareButton } from '../../../commonStyles/Buttons.style'
 import { Label } from '../../../commonStyles/Input.style'
+import { updateProcessingRegulationByKey } from '../../../Regulation/slice.backoffice'
 import { REGULATORY_REFERENCE_KEYS } from '../../../Regulation/utils'
-import { updateProcessingRegulationByKey } from '../../slice'
 
 import type { Option } from '@mtes-mct/monitor-ui'
 
 export function RegulationTopicLine({ isDisabled }) {
   const dispatch = useBackofficeAppDispatch()
-  const regulatoryTopics = useBackofficeAppSelector(state => state.regulatory.regulatoryTopics)
+  const regulatoryTopics = useBackofficeAppSelector(state => state.regulation.regulatoryTopics)
   const topic = useBackofficeAppSelector(state => state.regulation.processingRegulation?.topic)
 
   const [layerTypeList, setLayerTypeList] = useState<Option[]>([])

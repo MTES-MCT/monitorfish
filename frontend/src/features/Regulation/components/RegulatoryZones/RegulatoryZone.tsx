@@ -9,14 +9,13 @@ import styled from 'styled-components'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { EditIcon } from '../../../commonStyles/icons/EditIcon.style'
 import { hideLayer } from '../../../LayersSidebar/useCases/hideLayer'
-import zoomInLayer from '../../../LayersSidebar/useCases/zoomInLayer'
+import { zoomInLayer } from '../../../LayersSidebar/useCases/zoomInLayer'
 import { addRegulatoryTopicOpened, closeRegulatoryZoneMetadataPanel, removeRegulatoryTopicOpened } from '../../slice'
 import { closeRegulatoryZoneMetadata } from '../../useCases/closeRegulatoryZoneMetadata'
-import showRegulationToEdit from '../../useCases/showRegulationToEdit'
-import showRegulatoryZone from '../../useCases/showRegulatoryZone'
+import { showRegulationToEdit } from '../../useCases/showRegulationToEdit'
+import { showRegulatoryZone } from '../../useCases/showRegulatoryZone'
 import { showRegulatoryZoneMetadata } from '../../useCases/showRegulatoryZoneMetadata'
 
-import type { LayerSliceNamespace } from '../../../../domain/entities/layers/types'
 import type { RegulatoryZone as RegulatoryZoneType } from '../../types'
 import type { Promisable } from 'type-fest'
 
@@ -24,7 +23,6 @@ export type RegulatoryZoneProps = {
   allowRemoveZone: boolean
   isEditable: boolean
   isLast: boolean
-  namespace: LayerSliceNamespace
   onRemove?: ((id: number | string) => Promisable<void>) | undefined
   regulatoryTopic: string
   regulatoryZone: RegulatoryZoneType
@@ -33,7 +31,6 @@ function UnmemoizedRegulatoryZone({
   allowRemoveZone,
   isEditable,
   isLast,
-  namespace,
   onRemove,
   regulatoryTopic,
   regulatoryZone
@@ -64,8 +61,7 @@ function UnmemoizedRegulatoryZone({
       dispatch(
         showRegulatoryZone({
           type: LayerProperties.REGULATORY.code,
-          ...regulatoryZone,
-          namespace
+          ...regulatoryZone
         })
       )
 
@@ -75,8 +71,7 @@ function UnmemoizedRegulatoryZone({
     dispatch(
       hideLayer({
         type: LayerProperties.REGULATORY.code,
-        ...regulatoryZone,
-        namespace
+        ...regulatoryZone
       })
     )
   }
@@ -150,7 +145,7 @@ function UnmemoizedRegulatoryZone({
           <Icon.Close
             color={THEME.color.slateGray}
             onClick={() => {
-              if (onRemove) {
+              if (onRemove && regulatoryZone.id) {
                 onRemove(regulatoryZone.id)
               }
             }}

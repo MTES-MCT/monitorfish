@@ -1,14 +1,15 @@
 import { Style } from 'ol/style'
-import Stroke from 'ol/style/Stroke'
 import Fill from 'ol/style/Fill'
+import Stroke from 'ol/style/Stroke'
+
 import { COLORS } from '../../../../constants/constants'
 import { getColorWithAlpha } from '../../../map/layers/styles/utils'
 
 export const regulatoryPreviewStyle = new Style({
-  stroke: new Stroke({
-    color: getColorWithAlpha(COLORS.charcoal, 0.75)
-  }),
   fill: new Fill({
     color: getColorWithAlpha('#7B9FCC', 0.4)
+  }),
+  stroke: new Stroke({
+    color: getColorWithAlpha(COLORS.charcoal, 0.75)
   })
 })

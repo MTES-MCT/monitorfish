@@ -1,6 +1,6 @@
 import { ErrorType } from '../domain/entities/errors'
 
-export default class NoVesselsInFilterError extends Error {
+export class NoVesselsInFilterError extends Error {
   name = 'NoVesselsInFilterError'
   type = ErrorType.INFO
   showEmptyComponentFields = true

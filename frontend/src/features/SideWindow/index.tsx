@@ -28,8 +28,8 @@ import { SideWindowMenuKey } from '../../domain/entities/sideWindow/constants'
 import { closeBeaconMalfunctionInKanban } from '../../domain/shared_slices/BeaconMalfunction'
 import { getOperationalAlerts } from '../../domain/use_cases/alert/getOperationalAlerts'
 import { getSilencedAlerts } from '../../domain/use_cases/alert/getSilencedAlerts'
-import getAllBeaconMalfunctions from '../../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
-import getAllGearCodes from '../../domain/use_cases/gearCode/getAllGearCodes'
+import { getAllBeaconMalfunctions } from '../../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
+import { getAllGearCodes } from '../../domain/use_cases/gearCode/getAllGearCodes'
 import { getInfractions } from '../../domain/use_cases/infraction/getInfractions'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
@@ -37,6 +37,8 @@ import { SideWindowAlerts } from '../Alert/components/SideWindowAlerts'
 import { Loader as MissionFormLoader } from '../Mission/components/MissionForm/Loader'
 import { MissionList } from '../Mission/components/MissionList'
 import { PriorNotificationList } from '../PriorNotification/components/PriorNotificationList'
+
+import type { MainAppThunk } from '@store'
 
 export type SideWindowProps = HTMLAttributes<HTMLDivElement> & {
   isFromUrl: boolean
@@ -122,8 +124,8 @@ export function SideWindow({ isFromUrl }: SideWindowProps) {
     }
 
     dispatch(getInfractions())
-    dispatch(getAllGearCodes())
-  }, [dispatch, isFromUrl, isSuperUser])
+    dispatch(getAllGearCodes<MainAppThunk>())
+  }, [dispatch, isFromURL, isSuperUser])
 
   useEffect(() => {
     setIsFirstRender(false)

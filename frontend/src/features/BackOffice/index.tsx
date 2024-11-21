@@ -1,55 +1,52 @@
+import { AdministrativeLayers } from '@features/AdministrativeZone/layers/AdministrativeLayers'
+import { BaseLayer } from '@features/BaseMap/layers/BaseLayer'
+import { backOfficeLayerActions } from '@features/BaseMap/slice.backoffice'
+import { RegulatoryZoneMetadata } from '@features/Regulation/components/RegulatoryZoneMetadata'
+import { RegulatoryLayers } from '@features/Regulation/layers/RegulatoryLayers'
+import { RegulatoryPreviewLayer } from '@features/Regulation/layers/RegulatoryPreviewLayer'
+import { backOfficeRegulationActions } from '@features/Regulation/slice.backoffice'
+import { getAllRegulatoryLayersByRegTerritory } from '@features/Regulation/useCases/getAllRegulatoryLayersByRegTerritory'
+import { FRANCE, ORGP, UE, UK } from '@features/Regulation/utils'
+import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
+import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
+import { getAllGearCodes } from 'domain/use_cases/gearCode/getAllGearCodes'
+import { getAllSpecies } from 'domain/use_cases/species/getAllSpecies'
 import { isEmpty } from 'ramda'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { batch } from 'react-redux'
 import styled from 'styled-components'
 
 import { LawType } from './list_regulation/LawType'
 import { SearchRegulations } from './list_regulation/SearchRegulations'
-import { setProcessingRegulationSaved } from './slice'
-import layer from '../../domain/shared_slices/Layer'
-import getAllGearCodes from '../../domain/use_cases/gearCode/getAllGearCodes'
-import getAllSpecies from '../../domain/use_cases/species/getAllSpecies'
-import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../hooks/useMainAppSelector'
-import { AdministrativeLayers } from '../AdministrativeZone/layers/AdministrativeLayers'
-import { BaseLayer } from '../BaseMap/layers/BaseLayer'
 import { EmptyResult } from '../commonStyles/Text.style'
 import { BaseMap } from '../map/BaseMap'
-import { RegulatoryZoneMetadata } from '../Regulation/components/RegulatoryZoneMetadata'
-import { RegulatoryLayers } from '../Regulation/layers/RegulatoryLayers'
-import { RegulatoryPreviewLayer } from '../Regulation/layers/RegulatoryPreviewLayer'
-import { setRegulatoryZoneMetadata } from '../Regulation/slice'
-import { getAllRegulatoryLayersByRegTerritory } from '../Regulation/useCases/getAllRegulatoryLayersByRegTerritory'
-import { FRANCE, ORGP, UE, UK } from '../Regulation/utils'
+
+import type { BackofficeAppThunk } from '@store'
 
 export function Backoffice() {
   const [foundRegulatoryZonesByRegTerritory, setFoundRegulatoryZonesByRegTerritory] = useState({})
-  const dispatch = useMainAppDispatch()
+  const dispatch = useBackofficeAppDispatch()
   const [mapMovingAndZoomEvent, setMapMovingAndZoomEvent] = useState<{
     dummyUpdate: boolean
   } | null>(null)
-  const { resetShowedLayer } = layer.backoffice.actions
 
   const handleMovingAndZoom = () => {
     setMapMovingAndZoomEvent({ dummyUpdate: true })
   }
 
-  const layersTopicsByRegTerritory = useMainAppSelector(state => state.regulatory.layersTopicsByRegTerritory)
-  const regulatoryZoneMetadataPanelIsOpen = useMainAppSelector(
-    state => state.regulatory.regulatoryZoneMetadataPanelIsOpen
+  const layersTopicsByRegTerritory = useBackofficeAppSelector(state => state.regulation.layersTopicsByRegTerritory)
+  const regulatoryZoneMetadataPanelIsOpen = useBackofficeAppSelector(
+    state => state.regulation.regulatoryZoneMetadataPanelIsOpen
   )
 
   // TODO Scritly type this once the store is perfectly typed.
-  const regulationSaved = useMainAppSelector(state => (state as any).regulation.regulationSaved)
+  const regulationSaved = useBackofficeAppSelector(state => state.regulation.regulationSaved)
 
-  const initBackoffice = useCallback(() => {
-    batch(async () => {
-      await dispatch(getAllSpecies())
-      dispatch(getAllRegulatoryLayersByRegTerritory())
-      dispatch(getAllGearCodes())
-      dispatch(setProcessingRegulationSaved(false))
-      dispatch(setRegulatoryZoneMetadata(null))
-    })
+  const initBackoffice = useCallback(async () => {
+    await dispatch(getAllSpecies<BackofficeAppThunk>())
+    dispatch(getAllRegulatoryLayersByRegTerritory())
+    dispatch(getAllGearCodes<BackofficeAppThunk>())
+    dispatch(backOfficeRegulationActions.setProcessingRegulationSaved(false))
+    dispatch(backOfficeRegulationActions.setRegulatoryZoneMetadata(undefined))
   }, [dispatch])
 
   /**
@@ -59,14 +56,9 @@ export function Backoffice() {
     initBackoffice()
 
     return () => {
-      // TODO This shouldn't be required, there is something wrong with typings here.
-      if (!resetShowedLayer) {
-        return
-      }
-
-      dispatch(resetShowedLayer('backoffice'))
+      dispatch(backOfficeLayerActions.resetShowedLayer())
     }
-  }, [dispatch, initBackoffice, resetShowedLayer])
+  }, [dispatch, initBackoffice])
 
   /**
    * Refresh components data when a regulation is updated
@@ -159,6 +151,7 @@ export function Backoffice() {
           <RegulatoryPreviewLayer />
         </BaseMap>
       </BackofficeContainer>
+      {/* TODO Is it always `false`? */}
       {regulatoryZoneMetadataPanelIsOpen && (
         <MetadataWrapper regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}>
           <RegulatoryZoneMetadata />

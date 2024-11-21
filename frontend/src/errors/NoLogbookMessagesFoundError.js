@@ -1,6 +1,6 @@
 import { ErrorType } from '../domain/entities/errors'
 
-export default class NoLogbookMessagesFoundError extends Error {
+export class NoLogbookMessagesFoundError extends Error {
   name = 'NoLogbookMessagesFoundError'
   type = ErrorType.INFO_AND_HIDDEN
   showEmptyComponentFields = true

@@ -1,9 +1,11 @@
+import { isNotNullish } from '@utils/isNotNullish'
+
 import { LayerProperties } from '../../domain/entities/layers/constants'
 import { getTextForSearch } from '../../utils'
 import { formatDataForSelectPicker } from '../BackOffice/utils'
 
+import type { Regulation } from './Regulation.types'
 import type {
-  EditedRegulatoryZone,
   FishingPeriod,
   Gear,
   GearRegulation,
@@ -13,26 +15,37 @@ import type {
   RegulatoryZone,
   SpeciesRegulation,
   RegulatoryText,
-  DateInterval
+  DateInterval,
+  RegulatoryZoneDraft
 } from './types'
 import type { Specy } from '../../domain/types/specy'
 
-export const mapToRegulatoryZone = ({ geometry, id, properties }, speciesByCode): RegulatoryZone => ({
-  fishingPeriod: parseFishingPeriod(properties.fishing_period),
-  gearRegulation: parseGearRegulation(properties.gears),
-  geometry,
-  id: properties.id || id?.split('.')[1],
-  lawType: properties.law_type,
-  nextId: properties.next_id,
-  otherInfo: properties.other_info,
-  region: properties.region,
-  regulatoryReferences: parseRegulatoryReferences(properties.regulatory_references),
-  speciesRegulation: parseSpeciesRegulation(properties.species, speciesByCode),
-  topic: properties.topic,
-  zone: decodeURI(properties.zone)
-})
+// TODO Create a custom `GeoJSON.Feature` type to represent these properties.
+export const mapToRegulatoryZone = (
+  feature: Regulation.RegulatoryZoneGeoJsonFeature,
+  speciesByCode: Record<string, Specy>
+): RegulatoryZone | undefined => {
+  if (!feature.geometry || !feature.properties) {
+    return undefined
+  }
 
-export const mapToProcessingRegulation = persistProcessingRegulation => {
+  return {
+    fishingPeriod: parseFishingPeriod(feature.properties.fishing_period),
+    gearRegulation: parseGearRegulation(feature.properties.gears),
+    geometry: feature.geometry,
+    id: feature.properties.id ?? feature.id?.split('.')[1],
+    lawType: feature.properties.law_type,
+    nextId: feature.properties.next_id,
+    otherInfo: feature.properties.other_info,
+    region: feature.properties.region,
+    regulatoryReferences: parseRegulatoryReferences(feature.properties.regulatory_references),
+    speciesRegulation: parseSpeciesRegulation(feature.properties.species, speciesByCode),
+    topic: feature.properties.topic,
+    zone: decodeURI(feature.properties.zone)
+  }
+}
+
+export const mapToProcessingRegulation = (persistProcessingRegulation: RegulatoryZoneDraft) => {
   if (persistProcessingRegulation) {
     const fishingPeriod = mapToFishingPeriod(persistProcessingRegulation.fishingPeriod)
 
@@ -82,10 +95,11 @@ function parseGearRegulation(gears): GearRegulation {
 
 /**
  * Parse the JSON and adds the species name to the list of species
- * @param speciesRegulation
- * @param {Object<string, {name: string, code: string}>} speciesByCode
  */
-function parseSpeciesRegulation(speciesRegulation, speciesByCode): SpeciesRegulation {
+function parseSpeciesRegulation(
+  speciesRegulation: string | undefined,
+  speciesByCode: Record<string, Specy>
+): SpeciesRegulation {
   const nextSpeciesRegulation = speciesRegulation ? parseJSON(speciesRegulation) : DEFAULT_SPECIES_REGULATION
 
   if (nextSpeciesRegulation?.authorized?.species?.length) {
@@ -112,7 +126,7 @@ function addMissingSpeciesName(species: Specy[], speciesByCode: Record<string, S
   }))
 }
 
-const parseRegulatoryReferences = (regulatoryTextsString): RegulatoryText[] | undefined => {
+const parseRegulatoryReferences = (regulatoryTextsString: string | undefined): RegulatoryText[] | undefined => {
   if (!regulatoryTextsString) {
     return undefined
   }
@@ -131,15 +145,15 @@ const parseRegulatoryReferences = (regulatoryTextsString): RegulatoryText[] | un
 
 const parseJSON = text => (typeof text === 'string' ? JSON.parse(text) : text)
 
-export const parseFishingPeriod = fishingPeriod => {
-  if (fishingPeriod) {
-    return mapToFishingPeriod(JSON.parse(fishingPeriod))
+export const parseFishingPeriod = (fishingPeriodAsString: string | undefined) => {
+  if (fishingPeriodAsString) {
+    return mapToFishingPeriod(JSON.parse(fishingPeriodAsString) as FishingPeriod<string>)
   }
 
   return DEFAULT_FISHING_PERIOD_VALUES
 }
 
-const mapToFishingPeriod = (fishingPeriod): FishingPeriod => {
+const mapToFishingPeriod = (fishingPeriod: FishingPeriod<string | Date> | undefined): FishingPeriod<Date> => {
   if (fishingPeriod) {
     const { dateRanges, dates, timeIntervals } = fishingPeriod
     const newDateRanges = dateRanges?.map(({ endDate, startDate }) => ({
@@ -147,7 +161,7 @@ const mapToFishingPeriod = (fishingPeriod): FishingPeriod => {
       startDate: startDate ? new Date(startDate) : undefined
     }))
 
-    const newDates = dates?.map(date => (date ? new Date(date) : undefined))
+    const newDates = dates.map(date => (date ? new Date(date) : undefined)).filter(isNotNullish)
 
     const newTimeIntervals = timeIntervals?.map(({ from, to }) => ({
       from: from ? new Date(from) : undefined,
@@ -165,43 +179,51 @@ const mapToFishingPeriod = (fishingPeriod): FishingPeriod => {
   return DEFAULT_FISHING_PERIOD_VALUES
 }
 
-export const mapToRegulatoryFeatureObject = properties => {
-  const {
-    fishingPeriod,
-    gearRegulation,
-    lawType,
-    nextId,
-    otherInfo,
-    region,
-    regulatoryReferences,
-    speciesRegulation,
-    topic,
-    zone
-  } = properties
-
-  return {
-    fishing_period: JSON.stringify(fishingPeriod),
-    gears: JSON.stringify(gearRegulation),
-    law_type: lawType,
-    next_id: nextId,
-    other_info: otherInfo,
-    region,
-    regulatory_references: JSON.stringify(regulatoryReferences),
-    species: JSON.stringify(speciesRegulation),
-    topic,
-    zone
-  }
-}
+// TODO Type these `any`.
+export const mapToRegulatoryFeatureObject = ({
+  fishingPeriod,
+  gearRegulation,
+  lawType,
+  nextId,
+  otherInfo,
+  region,
+  regulatoryReferences,
+  speciesRegulation,
+  topic,
+  zone
+}: {
+  fishingPeriod: any
+  gearRegulation: any
+  lawType: string | undefined
+  nextId: string | undefined
+  otherInfo: string | undefined
+  region: string | undefined
+  regulatoryReferences: any
+  speciesRegulation: any
+  topic: string | undefined
+  zone: string | undefined
+}) => ({
+  fishing_period: JSON.stringify(fishingPeriod),
+  gears: JSON.stringify(gearRegulation),
+  law_type: lawType,
+  next_id: nextId,
+  other_info: otherInfo,
+  region,
+  regulatory_references: JSON.stringify(regulatoryReferences),
+  species: JSON.stringify(speciesRegulation),
+  topic,
+  zone
+})
 
 export const getRegulatoryFeatureId = id => `${LayerProperties.REGULATORY.code}_write.${id}`
 
-export const emptyRegulatoryFeatureObject = {
-  law_type: null,
-  next_id: null,
-  region: null,
-  regulatory_references: null,
-  topic: null,
-  zone: null
+export const emptyRegulatoryFeatureObject: Regulation.RegulatoryFeatureObject = {
+  law_type: undefined,
+  next_id: undefined,
+  region: undefined,
+  regulatory_references: undefined,
+  topic: undefined,
+  zone: undefined
 }
 
 export const FRANCE = 'Réglementation France'
@@ -210,6 +232,7 @@ export const UK = 'Réglementation UK'
 export const REG_LOCALE = 'Reg locale'
 export const ORGP = 'Réglementation ORGP'
 
+// TODO Convert this to an enum.
 const REG_RTC = 'Reg. RTC'
 const REG_UK = 'Reg. UK'
 const REG_MED = 'Reg. MED'
@@ -217,7 +240,12 @@ const REG_SA = 'Reg. SA'
 const REG_NAMO = 'Reg. NAMO'
 const REG_MEMN = 'Reg. MEMN'
 const REG_OUTRE_MER = 'Reg. Outre-mer'
-
+const REG_CCAMLR = 'Reg. CCAMLR'
+const REG_CTOI_IOTC = 'Reg. CTOI / IOTC'
+const REG_ICCAT_CICTA = 'Reg. ICCAT / CICTA'
+const REG_NEAFC_CPANE = 'Reg. NEAFC / CPANE'
+const REG_OPANO_NAFO = 'Reg. OPANO / NAFO'
+const REG_SIOFA_APSOI = 'Reg. SIOFA / APSOI'
 const RUE_2019 = 'R(UE) 2019/1241'
 const RUE_1380 = 'R(UE) 1380/2013'
 const RUE_2022 = 'R(UE) 2022/1614'
@@ -225,13 +253,7 @@ const RUE_2024 = 'R(UE) 2024/2594'
 const RUE_494 = 'R(CE) 494/2002'
 const RUE_2017 = 'R(CE) 2017/118'
 
-const REG_CCAMLR = 'Reg. CCAMLR'
-const REG_CTOI_IOTC = 'Reg. CTOI / IOTC'
-const REG_ICCAT_CICTA = 'Reg. ICCAT / CICTA'
-const REG_NEAFC_CPANE = 'Reg. NEAFC / CPANE'
-const REG_OPANO_NAFO = 'Reg. OPANO / NAFO'
-const REG_SIOFA_APSOI = 'Reg. SIOFA / APSOI'
-
+// TODO Convert this to an enum mapped type.
 export const LAWTYPES_TO_TERRITORY = {
   [REG_CCAMLR]: ORGP,
   [REG_CTOI_IOTC]: ORGP,
@@ -263,26 +285,20 @@ export enum RegulatorySearchProperty {
   ZONE = 'zone'
 }
 
-/**
- * @readonly
- * @enum {string}
- */
-export const REGULATION_ACTION_TYPE = {
-  DELETE: 'delete',
-  INSERT: 'insert',
-  UPDATE: 'update'
+// TODO Fix casing.
+export enum RegulationActionType {
+  Delete = 'delete',
+  Insert = 'insert',
+  Update = 'update'
 }
 
-/**
- * @enum {RegulatoryTextType}
- */
 export enum RegulatoryTextType {
-  CREATION = 'creation',
-  REGULATION = 'regulation'
+  Creation = 'creation',
+  Regulation = 'regulation'
 }
 
 const regulatoryZoneTextType = (type: RegulatoryTextType) =>
-  type === RegulatoryTextType.CREATION ? 'Création' : 'Réglementation'
+  type === RegulatoryTextType.Creation ? 'Création' : 'Réglementation'
 
 export const getRegulatoryZoneTextTypeAsText = textTypeList =>
   `${
@@ -304,7 +320,7 @@ export const DEFAULT_DATE_RANGE: DateInterval = {
   startDate: undefined
 }
 
-const DEFAULT_FISHING_PERIOD_VALUES: FishingPeriod = {
+const DEFAULT_FISHING_PERIOD_VALUES: FishingPeriod<Date> = {
   always: undefined,
   annualRecurrence: undefined,
   authorized: undefined,
@@ -365,6 +381,7 @@ export const DEFAULT_GEAR_REGULATION: GearRegulation = {
   unauthorized: DEFAULT_UNAUTHORIZED_REGULATED_GEARS
 }
 
+// TODO Get rid of that constant and use `keyof` instead where needed.
 export const REGULATORY_REFERENCE_KEYS = {
   FISHING_PERIOD: 'fishingPeriod',
   GEAR_REGULATION: 'gearRegulation',
@@ -378,13 +395,19 @@ export const REGULATORY_REFERENCE_KEYS = {
   ZONE: 'zone'
 }
 
-export const DEFAULT_REGULATION: Partial<EditedRegulatoryZone> = {
-  [REGULATORY_REFERENCE_KEYS.TOPIC]: undefined,
-  [REGULATORY_REFERENCE_KEYS.ZONE]: undefined,
-  [REGULATORY_REFERENCE_KEYS.FISHING_PERIOD]: DEFAULT_FISHING_PERIOD_VALUES,
-  [REGULATORY_REFERENCE_KEYS.SPECIES_REGULATION]: DEFAULT_SPECIES_REGULATION,
-  [REGULATORY_REFERENCE_KEYS.GEAR_REGULATION]: DEFAULT_GEAR_REGULATION,
-  [REGULATORY_REFERENCE_KEYS.OTHER_INFO]: null
+export const DEFAULT_REGULATION: RegulatoryZoneDraft = {
+  fishingPeriod: DEFAULT_FISHING_PERIOD_VALUES,
+  gearRegulation: DEFAULT_GEAR_REGULATION,
+  geometry: undefined,
+  id: undefined,
+  lawType: undefined,
+  nextId: undefined,
+  otherInfo: undefined,
+  region: undefined,
+  regulatoryReferences: undefined,
+  speciesRegulation: DEFAULT_SPECIES_REGULATION,
+  topic: undefined,
+  zone: undefined
 }
 
 export const GEARS_CATEGORIES_WITH_MESH = [
@@ -395,16 +418,16 @@ export const GEARS_CATEGORIES_WITH_MESH = [
   'Filets maillants et filets emmêlants'
 ]
 
-export const FISHING_PERIOD_KEYS = {
-  ALWAYS: 'always',
-  ANNUAL_RECURRENCE: 'annualRecurrence',
-  AUTHORIZED: 'authorized',
-  DATE_RANGES: 'dateRanges',
-  DATES: 'dates',
-  DAYTIME: 'daytime',
-  HOLIDAYS: 'holidays',
-  TIME_INTERVALS: 'timeIntervals',
-  WEEKDAYS: 'weekdays'
+export enum FishingPeriodKey {
+  ALWAYS = 'always',
+  ANNUAL_RECURRENCE = 'annualRecurrence',
+  AUTHORIZED = 'authorized',
+  DATES = 'dates',
+  DATE_RANGES = 'dateRanges',
+  DAYTIME = 'daytime',
+  HOLIDAYS = 'holidays',
+  TIME_INTERVALS = 'timeIntervals',
+  WEEKDAYS = 'weekdays'
 }
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */
@@ -616,9 +639,8 @@ export function getMergedRegulatoryLayers(previousFoundRegulatoryLayers, nextFou
 /**
  * Remove the Territory part of the regulatory layer object (see `setRegulatoryLayers` method within the `Regulatory` reducer)
  */
-// TODO Type these params with strict definitions and check `RegulatoryLawTypes` validity.
 export const getRegulatoryLayersWithoutTerritory = (
-  layersTopicsByRegTerritory: Record<string, any>
+  layersTopicsByRegTerritory: Record<string, Record<string, Record<string, RegulatoryZone[]>>>
 ): RegulatoryLawTypes => {
   let nextRegulatoryLayersWithoutTerritory = {}
 
@@ -637,19 +659,21 @@ export const getRegulatoryLayersWithoutTerritory = (
  * Each word or separated with a coma,
  * except the second last word is followed by 'et'
  * and the last word with nothing
- * @param {string[]} array
- * @returns {string}
  */
-export const toArrayString = array => {
+export const toArrayString = (array: string[]): string | null => {
   if (array?.length) {
     if (array.length === 1) {
-      return array[0]
+      return array[0] as string
     }
     if (array.length === 2) {
       return array.join(' et ')
     }
 
-    return array.slice(0, -1).join(', ').concat(' et ').concat(array.slice(-1))
+    return array
+      .slice(0, -1)
+      .join(', ')
+      .concat(' et ')
+      .concat(...array.slice(-1))
   }
 
   return null

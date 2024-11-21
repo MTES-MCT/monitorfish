@@ -1,6 +1,6 @@
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
-import openBeaconMalfunction from './openBeaconMalfunction'
+import { openBeaconMalfunction } from './openBeaconMalfunction'
 import { getVesselBeaconsMalfunctionsFromAPI } from '../../../api/beaconMalfunction'
 import { getOnlyVesselIdentityProperties } from '../../entities/vessel/vessel'
 import {

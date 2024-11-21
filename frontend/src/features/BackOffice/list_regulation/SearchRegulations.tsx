@@ -19,7 +19,7 @@ export function SearchRegulations({ regulatoryZoneListByRegTerritory, setFoundRe
   const searchInput = useRef<HTMLInputElement | null>(null)
   const [searchText, setSearchText] = useState('')
 
-  const regulatoryZoneMetadata = useBackofficeAppSelector(state => state.regulatory.regulatoryZoneMetadata)
+  const regulatoryZoneMetadata = useBackofficeAppSelector(state => state.regulation.regulatoryZoneMetadata)
 
   useEffect(() => {
     searchRegulatoryZone()

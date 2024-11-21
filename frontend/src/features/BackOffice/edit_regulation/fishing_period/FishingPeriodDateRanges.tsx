@@ -10,7 +10,9 @@ import { useUpdateArrayInFishingPeriod } from '../../../../hooks/fishingPeriod/u
 import { SquareButton } from '../../../commonStyles/Buttons.style'
 import { ContentWrapper, DateRanges, Row } from '../../../commonStyles/FishingPeriod.style'
 import { Label } from '../../../commonStyles/Input.style'
-import { DEFAULT_DATE_RANGE, FISHING_PERIOD_KEYS } from '../../../Regulation/utils'
+import { DEFAULT_DATE_RANGE, FishingPeriodKey } from '../../../Regulation/utils'
+
+import type { DateInterval } from '@features/Regulation/types'
 
 type FishingPeriodDateRangesProps = Readonly<{
   disabled: boolean
@@ -20,20 +22,20 @@ export function FishingPeriodDateRanges({ disabled }: FishingPeriodDateRangesPro
   // const { annualRecurrence, dateRanges } = useBackofficeAppSelector(
   //   state => state.regulation.processingRegulation.fishingPeriod
   // )
-  const updateDateRanges = useUpdateArrayInFishingPeriod(
-    FISHING_PERIOD_KEYS.DATE_RANGES,
+  const updateDateRanges = useUpdateArrayInFishingPeriod<DateInterval>(
+    FishingPeriodKey.DATE_RANGES,
     processingRegulation.fishingPeriod?.dateRanges
   )
   const addDateToDateRange = usePushArrayInFishingPeriod(
-    FISHING_PERIOD_KEYS.DATE_RANGES,
+    FishingPeriodKey.DATE_RANGES,
     processingRegulation.fishingPeriod?.dateRanges,
     DEFAULT_DATE_RANGE
   )
   const removeDateFromDateRange = usePopArrayInFishingPeriod(
-    FISHING_PERIOD_KEYS.DATE_RANGES,
+    FishingPeriodKey.DATE_RANGES,
     processingRegulation.fishingPeriod?.dateRanges
   )
-  const setDateRange = useSetFishingPeriod(FISHING_PERIOD_KEYS.DATE_RANGES)
+  const setDateRange = useSetFishingPeriod(FishingPeriodKey.DATE_RANGES)
 
   const { fishingPeriod } = processingRegulation
 

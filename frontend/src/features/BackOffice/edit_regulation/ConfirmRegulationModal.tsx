@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { FooterButton } from '../../commonStyles/Backoffice.style'
 import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
 import CloseIconSVG from '../../icons/Croix_grise_clair.svg?react'
-import { setIsConfirmModalOpen, setSaveOrUpdateRegulation } from '../slice'
+import { setIsConfirmModalOpen, setSaveOrUpdateRegulation } from '../../Regulation/slice.backoffice'
 
 export function ConfirmRegulationModal({ goBackofficeHome }) {
   const dispatch = useBackofficeAppDispatch()

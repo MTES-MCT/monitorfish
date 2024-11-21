@@ -7,23 +7,23 @@ import styled from 'styled-components'
 import { customDayjs } from '../../../../../cypress/e2e/utils/customDayjs'
 import { ContentLine, Delimiter } from '../../../commonStyles/Backoffice.style'
 import { Label } from '../../../commonStyles/Input.style'
+import { backOfficeRegulationActions } from '../../../Regulation/slice.backoffice'
 import { checkURL, RegulatoryTextType } from '../../../Regulation/utils'
 import { INFINITE } from '../../constants'
-import { addObjectToRegulatoryTextCheckedMap } from '../../slice'
 
 import type { RegulatoryText } from '@features/Regulation/types'
 
 type RegulatoryTextContentProps = Readonly<{
-  addOrRemoveRegulatoryTextInList: (id: number) => void
-  id: number
+  addOrRemoveRegulatoryTextInList: (index: number) => void
+  index: number
   listLength: number
   regulatoryText: RegulatoryText
   saveForm: boolean
-  setRegulatoryText: (id: number, regulatoryText: RegulatoryText) => void
+  setRegulatoryText: (index: number, regulatoryText: RegulatoryText) => void
 }>
 export function RegulatoryTextContent({
   addOrRemoveRegulatoryTextInList,
-  id,
+  index,
   listLength,
   regulatoryText,
   saveForm,
@@ -41,9 +41,9 @@ export function RegulatoryTextContent({
         ...regulatoryText,
         [key]: value
       }
-      setRegulatoryText(id, obj)
+      setRegulatoryText(index, obj)
     },
-    [id, regulatoryText, setRegulatoryText]
+    [index, regulatoryText, setRegulatoryText]
   )
 
   useEffect(() => {
@@ -52,13 +52,13 @@ export function RegulatoryTextContent({
       const hasOneOrMoreValuesMissing = checkOtherRequiredValues(startDate, endDate, textType) || nameOrUrlIsMissing
       const payload = {
         complete: !hasOneOrMoreValuesMissing,
-        id
+        index
       }
-      dispatch(addObjectToRegulatoryTextCheckedMap(payload))
+      dispatch(backOfficeRegulationActions.addObjectToRegulatoryTextCheckedMap(payload))
     }
     // TODO Refactor to avoid using a useEffect for an action
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [saveForm, id, dispatch])
+  }, [saveForm, index, dispatch])
 
   const cancelAddNewRegulatoryText = useCallback(() => {
     setIsEditing(true)
@@ -69,8 +69,8 @@ export function RegulatoryTextContent({
       url: ''
     }
 
-    setRegulatoryText(id, obj)
-  }, [regulatoryText, id, setRegulatoryText, setIsEditing])
+    setRegulatoryText(index, obj)
+  }, [regulatoryText, index, setRegulatoryText, setIsEditing])
 
   const onCloseIconClicked = () => {
     setIsEditing(true)
@@ -91,7 +91,7 @@ export function RegulatoryTextContent({
   return (
     <>
       <ContentLine>
-        <Label>{`Texte réglementaire ${regulatoryText && id ? id + 1 : 1}`}</Label>
+        <Label>{`Texte réglementaire ${regulatoryText && index ? index + 1 : 1}`}</Label>
         {isEditing && (
           <>
             <StyledTextInput
@@ -139,8 +139,8 @@ export function RegulatoryTextContent({
           name="textType"
           onChange={value => set('textType', value)}
           options={[
-            { label: 'création de la zone', value: RegulatoryTextType.CREATION },
-            { label: 'réglementation de la zone', value: RegulatoryTextType.REGULATION }
+            { label: 'création de la zone', value: RegulatoryTextType.Creation },
+            { label: 'réglementation de la zone', value: RegulatoryTextType.Regulation }
           ]}
           value={textType}
         />
@@ -187,7 +187,7 @@ export function RegulatoryTextContent({
         <Button
           accent={Accent.SECONDARY}
           disabled={removeTextIsDisabled()}
-          onClick={() => addOrRemoveRegulatoryTextInList(id)}
+          onClick={() => addOrRemoveRegulatoryTextInList(index)}
         >
           Supprimer le texte
         </Button>

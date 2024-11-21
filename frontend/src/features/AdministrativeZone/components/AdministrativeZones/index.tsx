@@ -1,4 +1,4 @@
-import { logSoftError } from '@mtes-mct/monitor-ui'
+import { layerActions } from '@features/BaseMap/slice'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -6,7 +6,6 @@ import { AdministrativeZone } from './AdministrativeZone'
 import { AdministrativeZonesGroup } from './AdministrativeZonesGroup'
 import { COLORS } from '../../../../constants/constants'
 import { LayerType } from '../../../../domain/entities/layers/constants'
-import LayerSlice from '../../../../domain/shared_slices/Layer'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { ChevronIcon } from '../../../commonStyles/icons/ChevronIcon.style'
@@ -15,16 +14,13 @@ import { closeRegulatoryZoneMetadata } from '../../../Regulation/useCases/closeR
 import { getAdministrativeZones } from '../../useCases/getAdministrativeZones'
 import { showAdministrativeZone } from '../../useCases/showAdministrativeZone'
 
-import type { LayerSliceNamespace, ShowableLayer } from '../../../../domain/entities/layers/types'
+import type { ShowableLayer } from '../../../../domain/entities/layers/types'
 import type { GroupedZonesAndZones } from '../../useCases/getAdministrativeZones'
 
 export type AdministrativeZonesProps = {
   hideLayersListWhenSearching?: boolean
-  namespace: LayerSliceNamespace
 }
-export function AdministrativeZones({ hideLayersListWhenSearching = false, namespace }: AdministrativeZonesProps) {
-  const { setLayersSideBarOpenedLayerType } = LayerSlice[namespace].actions
-
+export function AdministrativeZones({ hideLayersListWhenSearching = false }: AdministrativeZonesProps) {
   const dispatch = useMainAppDispatch()
   const showedLayers = useMainAppSelector(state => state.layer.showedLayers)
   const { layersSidebarOpenedLayerType } = useMainAppSelector(state => state.layer)
@@ -57,9 +53,10 @@ export function AdministrativeZones({ hideLayersListWhenSearching = false, names
       if (isShown) {
         dispatch(
           hideLayer({
-            namespace,
+            id: undefined,
+            topic: undefined,
             type: zone.hasFetchableZones ? zone.group?.code!! : zone.code,
-            zone: zone.hasFetchableZones ? zone.code : null
+            zone: zone.hasFetchableZones ? zone.code : undefined
           })
         )
 
@@ -68,28 +65,19 @@ export function AdministrativeZones({ hideLayersListWhenSearching = false, names
 
       dispatch(
         showAdministrativeZone({
-          namespace,
           type: zone.hasFetchableZones ? zone.group?.code!! : zone.code,
-          zone: zone.hasFetchableZones ? zone.code : null
+          zone: zone.hasFetchableZones ? zone.code : undefined
         })
       )
     },
-    [namespace, dispatch]
+    [dispatch]
   )
 
   const onSectionTitleClicked = () => {
-    if (!setLayersSideBarOpenedLayerType) {
-      logSoftError({
-        message: '`setLayersSideBarOpenedLayerType` is undefined.'
-      })
-
-      return
-    }
-
     if (isOpened) {
-      dispatch(setLayersSideBarOpenedLayerType(undefined))
+      dispatch(layerActions.setLayersSideBarOpenedLayerType(undefined))
     } else {
-      dispatch(setLayersSideBarOpenedLayerType(LayerType.ADMINISTRATIVE))
+      dispatch(layerActions.setLayersSideBarOpenedLayerType(LayerType.ADMINISTRATIVE))
       dispatch(closeRegulatoryZoneMetadata())
     }
   }

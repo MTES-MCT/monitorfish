@@ -8,7 +8,7 @@ import { EmptyResult } from '../../commonStyles/Text.style'
 import ChevronIconSVG from '../../icons/Chevron_simple_gris.svg?react'
 import { RegulatoryTopic } from '../../Regulation/components/RegulatoryZones/RegulatoryTopic'
 import { setLawTypeOpened, setRegulatoryTopicsOpened, closeRegulatoryZoneMetadataPanel } from '../../Regulation/slice'
-import updateTopicForAllZones from '../../Regulation/useCases/updateTopicForAllZones'
+import { updateTopicForAllZones } from '../../Regulation/useCases/updateTopicForAllZones'
 
 type LawTypeProps = Readonly<{
   isEditable: boolean
@@ -19,7 +19,7 @@ type LawTypeProps = Readonly<{
 export function LawType({ isEditable, lawType, regZoneByLawType, territory }: LawTypeProps) {
   const dispatch = useBackofficeAppDispatch()
   // const [numberOfZonesOpened, setNumberOfZonesOpened] = useState(0)
-  const lawTypeOpened = useBackofficeAppSelector(state => state.regulatory.lawTypeOpened)
+  const lawTypeOpened = useBackofficeAppSelector(state => state.regulation.lawTypeOpened)
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {

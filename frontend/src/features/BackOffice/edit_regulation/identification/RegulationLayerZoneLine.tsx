@@ -5,9 +5,9 @@ import styled from 'styled-components'
 
 import { ContentLine, InfoText, InfoTextWrapper } from '../../../commonStyles/Backoffice.style'
 import { Label } from '../../../commonStyles/Input.style'
+import { updateProcessingRegulationByKey } from '../../../Regulation/slice.backoffice'
 import { REGULATORY_REFERENCE_KEYS } from '../../../Regulation/utils'
 import { INFO_TEXT } from '../../constants'
-import { updateProcessingRegulationByKey } from '../../slice'
 import { InfoBox } from '../InfoBox'
 
 export function RegulationLayerZoneLine() {

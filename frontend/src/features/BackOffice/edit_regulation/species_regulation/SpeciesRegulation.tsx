@@ -7,13 +7,13 @@ import { RegulatedSpecies } from './RegulatedSpecies'
 import { SPECIES_REGULATION_KEYS } from '../../../../domain/entities/backoffice'
 import { OtherRemark, Section, VerticalLine } from '../../../commonStyles/Backoffice.style'
 import { CustomInput, Label } from '../../../commonStyles/Input.style'
+import { backOfficeRegulationActions } from '../../../Regulation/slice.backoffice'
 import {
   DEFAULT_AUTHORIZED_REGULATED_SPECIES,
   DEFAULT_UNAUTHORIZED_REGULATED_SPECIES,
   REGULATORY_REFERENCE_KEYS
 } from '../../../Regulation/utils'
 import { SectionTitle } from '../../SectionTitle'
-import { updateProcessingRegulationByKeyAndSubKey } from '../../slice'
 
 import type { Option } from '@mtes-mct/monitor-ui'
 
@@ -56,7 +56,7 @@ export function SpeciesRegulation() {
   // TODO Impossible to type and make this code safe as it is, should be refactored?
   const setSpeciesRegulation = (subKey: any, value: any) => {
     dispatch(
-      updateProcessingRegulationByKeyAndSubKey({
+      backOfficeRegulationActions.updateProcessingRegulationByKeyAndSubKey({
         key: REGULATORY_REFERENCE_KEYS.SPECIES_REGULATION as 'speciesRegulation',
         // @ts-ignore
         subKey,

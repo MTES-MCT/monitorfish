@@ -111,7 +111,7 @@ export function getDateMonthsBefore(date, nofMonths) {
 }
 
 /** @deprecated Use `@libs/localStorageManager`. */
-export const getLocalStorageState = (defaultValue, key) => {
+export const getLocalStorageState = <T>(defaultValue: T, key: string): T => {
   const stickyValue = window.localStorage.getItem(key)
 
   return stickyValue !== null ? JSON.parse(stickyValue) : defaultValue

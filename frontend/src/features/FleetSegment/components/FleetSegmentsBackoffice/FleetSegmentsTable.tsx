@@ -4,9 +4,11 @@ import { useWindowResize } from '@hooks/useWindowResize'
 import { useEffect } from 'react'
 import { Table } from 'rsuite'
 
-import getAllGearCodes from '../../../../domain/use_cases/gearCode/getAllGearCodes'
-import getAllSpecies from '../../../../domain/use_cases/species/getAllSpecies'
+import { getAllGearCodes } from '../../../../domain/use_cases/gearCode/getAllGearCodes'
+import { getAllSpecies } from '../../../../domain/use_cases/species/getAllSpecies'
 import { EditAndDeleteCell, TagsCell } from '../../../BackOffice/tableCells'
+
+import type { MainAppThunk } from '@store'
 
 const { Cell, Column, HeaderCell } = Table
 
@@ -17,8 +19,8 @@ export function FleetSegmentsTable({ faoAreas, fleetSegments, onDeleteFleetSegme
   const { height } = useWindowResize()
 
   useEffect(() => {
-    dispatch(getAllGearCodes())
-    dispatch(getAllSpecies())
+    dispatch(getAllGearCodes<MainAppThunk>())
+    dispatch(getAllSpecies<MainAppThunk>())
   }, [dispatch])
 
   return (

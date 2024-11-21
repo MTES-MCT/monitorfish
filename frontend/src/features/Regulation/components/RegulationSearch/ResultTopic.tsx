@@ -1,5 +1,5 @@
 import { hideLayer } from '@features/LayersSidebar/useCases/hideLayer'
-import { addRegulatoryZonesToMyLayers, regulatoryActions } from '@features/Regulation/slice'
+import { addRegulatoryZonesToMyLayers, regulationActions } from '@features/Regulation/slice'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Icon, IconButton, logSoftError, THEME } from '@mtes-mct/monitor-ui'
@@ -8,7 +8,6 @@ import styled from 'styled-components'
 
 import { ResultZones } from './ResultZones'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
-import { LayerSliceNamespace } from '../../../../domain/entities/layers/types'
 
 import type { RegulatoryZone } from '../../types'
 
@@ -86,12 +85,11 @@ function UnmemoizedRegulatoryLayerSearchResultTopic({
     if (areAllZonesAlreadySelected && regulatoryLayerTopic) {
       dispatch(
         hideLayer({
-          namespace: LayerSliceNamespace.homepage,
           topic: regulatoryLayerTopic,
           type: LayerProperties.REGULATORY.code
         })
       )
-      dispatch(regulatoryActions.removeSelectedZonesByTopic(regulatoryLayerTopic))
+      dispatch(regulationActions.removeSelectedZonesByTopic(regulatoryLayerTopic))
 
       return
     }

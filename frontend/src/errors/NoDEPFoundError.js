@@ -1,6 +1,6 @@
 import { ErrorType } from '../domain/entities/errors'
 
-export default class NoDEPFoundError extends Error {
+export class NoDEPFoundError extends Error {
   name = 'NoDEPFoundError'
   type = ErrorType.INFO
   showEmptyComponentFields = true

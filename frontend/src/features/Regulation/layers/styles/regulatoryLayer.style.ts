@@ -5,10 +5,14 @@ import { theme } from '../../../../ui/theme'
 import { getColorWithAlpha, getHashDigitsFromString, getStyle } from '../../../map/layers/styles/utils'
 
 import type { BaseRegulatoryZone } from '../../types'
-import type Feature from 'ol/Feature'
+import type { ShowedLayer } from 'domain/entities/layers/types'
+import type { FeatureLike } from 'ol/Feature'
 import type { Style } from 'ol/style'
 
-export function getRegulatoryLayerStyle(feature: Feature | undefined, regulation: BaseRegulatoryZone | null): Style {
+export function getRegulatoryLayerStyle(
+  feature: FeatureLike | undefined,
+  regulation: BaseRegulatoryZone | ShowedLayer | null
+): Style {
   const randomDigits = getHashDigitsFromString(`${regulation?.topic}:${regulation?.zone}`)
   const currentDate = customDayjs().utc()
   const isForbidden = isForbiddenPeriod(feature, currentDate)

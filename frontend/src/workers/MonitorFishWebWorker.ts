@@ -1,5 +1,4 @@
 import { logSoftError } from '@mtes-mct/monitor-ui'
-import { isNotNullish } from '@utils/isNotNullish'
 import * as Comlink from 'comlink'
 
 import { VesselLocation, vesselSize } from '../domain/entities/vessel/vessel'
@@ -10,10 +9,11 @@ import {
   mapToRegulatoryZone
 } from '../features/Regulation/utils'
 import { getDateMonthsBefore } from '../utils'
+import { isNotNullish } from '../utils/isNotNullish'
 
 import type { GeoJSON } from '../domain/types/GeoJSON'
-import type { Regulation } from '@features/Regulation/Regulation.types'
-import type { RegulatoryZone } from '@features/Regulation/types'
+import type { Regulation } from '../features/Regulation/Regulation.types'
+import type { RegulatoryZone } from '../features/Regulation/types'
 import type { Specy } from 'domain/types/specy'
 
 /**

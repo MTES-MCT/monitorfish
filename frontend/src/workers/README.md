@@ -30,11 +30,6 @@ The cache of the URLs included in `WHITELISTED_AND_READ_ONLY_PATHS` will be serv
 
 To update the cache, a `message` of type `UPDATE_CACHE` must be sent to the service worker.
 
-### Bundle
-
-The service worker is bundled with `npm run bundle-sw` and copied to the `public/` folder.
-> /!\ Take care of re-bundling it when doing modification to `serviceWorker.ts`. 
-
 ### Upgrade
 
 1. Do not modify the service worker filename (stored in `public/` as `service-worker.js`)

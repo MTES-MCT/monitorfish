@@ -1,5 +1,6 @@
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import FilterLayer from '@features/VesselFilter/layers/VesselFilterLayer'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Feature } from 'ol'
 import { useState } from 'react'
 
@@ -47,9 +48,18 @@ import { VesselsTracksLayerMemoized } from '../Vessel/layers/VesselsTracksLayer'
 
 export function Map() {
   const isSuperUser = useIsSuperUser()
+  const dispatch = useMainAppDispatch()
   const { areVesselsDisplayed, isMissionsLayerDisplayed, isStationLayerDisplayed } = useMainAppSelector(
     state => state.displayedComponent
   )
+  const zoneSelected = useMainAppSelector(state => state.regulatoryLayerSearch.zoneSelected)
+  const lastShowedFeatures = useMainAppSelector(state => state.layer.lastShowedFeatures)
+  const layersToFeatures = useMainAppSelector(state => state.layer.layersToFeatures)
+  const regulatoryZonesToPreview = useMainAppSelector(state => state.regulation.regulatoryZonesToPreview)
+  const regulatoryZoneMetadata = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
+  const showedLayers = useMainAppSelector(state => state.layer.showedLayers)
+  const simplifiedGeometries = useMainAppSelector(state => state.regulation.simplifiedGeometries)
+
   const [shouldUpdateView, setShouldUpdateView] = useState(true)
   const [historyMoveTrigger, setHistoryMoveTrigger] = useState({})
   const [hoveredFeature, setHoveredFeature] = useState<Feature | FeatureWithCodeAndEntityId | undefined>(undefined)
@@ -85,7 +95,15 @@ export function Map() {
       showCoordinates
     >
       <BaseLayer />
-      <RegulatoryLayers mapMovingAndZoomEvent={mapMovingAndZoomEvent} />
+      <RegulatoryLayers
+        dispatch={dispatch}
+        lastShowedFeatures={lastShowedFeatures}
+        layersToFeatures={layersToFeatures}
+        mapMovingAndZoomEvent={mapMovingAndZoomEvent}
+        regulatoryZoneMetadata={regulatoryZoneMetadata}
+        showedLayers={showedLayers}
+        simplifiedGeometries={simplifiedGeometries}
+      />
       <AdministrativeLayers />
       <MapVesselClickAndAnimationHandler />
       <MapHistory
@@ -138,7 +156,11 @@ export function Map() {
       <VesselTrackOverlay feature={hoveredFeature} />
       {hoveredFeature && <LayerDetailsBox feature={hoveredFeature} />}
       <InterestPointLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent} />
-      <RegulatoryPreviewLayer />
+      <RegulatoryPreviewLayer
+        dispatch={dispatch}
+        regulatoryZonesToPreview={regulatoryZonesToPreview}
+        zoneSelected={zoneSelected}
+      />
     </BaseMap>
   )
 }

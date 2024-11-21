@@ -4,7 +4,7 @@ import { backOfficeLayerActions } from '@features/BaseMap/slice.backoffice'
 import { RegulatoryZoneMetadata } from '@features/Regulation/components/RegulatoryZoneMetadata'
 import { RegulatoryLayers } from '@features/Regulation/layers/RegulatoryLayers'
 import { RegulatoryPreviewLayer } from '@features/Regulation/layers/RegulatoryPreviewLayer'
-import { backOfficeRegulationActions } from '@features/Regulation/slice.backoffice'
+import { regulationActions } from '@features/Regulation/slice'
 import { getAllRegulatoryLayersByRegTerritory } from '@features/Regulation/useCases/getAllRegulatoryLayersByRegTerritory'
 import { FRANCE, ORGP, UE, UK } from '@features/Regulation/utils'
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
@@ -33,20 +33,25 @@ export function Backoffice() {
     setMapMovingAndZoomEvent({ dummyUpdate: true })
   }
 
+  const lastShowedFeatures = useBackofficeAppSelector(state => state.layer.lastShowedFeatures)
+  const layersToFeatures = useBackofficeAppSelector(state => state.layer.layersToFeatures)
   const layersTopicsByRegTerritory = useBackofficeAppSelector(state => state.regulation.layersTopicsByRegTerritory)
   const regulatoryZoneMetadataPanelIsOpen = useBackofficeAppSelector(
     state => state.regulation.regulatoryZoneMetadataPanelIsOpen
   )
-
+  const regulatoryZonesToPreview = useBackofficeAppSelector(state => state.regulation.regulatoryZonesToPreview)
   // TODO Scritly type this once the store is perfectly typed.
   const regulationSaved = useBackofficeAppSelector(state => state.regulation.regulationSaved)
+  const regulatoryZoneMetadata = useBackofficeAppSelector(state => state.regulation.regulatoryZoneMetadata)
+  const showedLayers = useBackofficeAppSelector(state => state.layer.showedLayers)
+  const simplifiedGeometries = useBackofficeAppSelector(state => state.regulation.simplifiedGeometries)
 
   const initBackoffice = useCallback(async () => {
     await dispatch(getAllSpecies<BackofficeAppThunk>())
     dispatch(getAllRegulatoryLayersByRegTerritory())
     dispatch(getAllGearCodes<BackofficeAppThunk>())
-    dispatch(backOfficeRegulationActions.setProcessingRegulationSaved(false))
-    dispatch(backOfficeRegulationActions.setRegulatoryZoneMetadata(undefined))
+    dispatch(regulationActions.setProcessingRegulationSaved(false))
+    dispatch(regulationActions.setRegulatoryZoneMetadata(undefined))
   }, [dispatch])
 
   /**
@@ -146,9 +151,17 @@ export function Backoffice() {
         </RegulatoryZonePanel>
         <BaseMap handleMovingAndZoom={handleMovingAndZoom}>
           <BaseLayer />
-          <RegulatoryLayers mapMovingAndZoomEvent={mapMovingAndZoomEvent} />
+          <RegulatoryLayers
+            dispatch={dispatch}
+            lastShowedFeatures={lastShowedFeatures}
+            layersToFeatures={layersToFeatures}
+            mapMovingAndZoomEvent={mapMovingAndZoomEvent}
+            regulatoryZoneMetadata={regulatoryZoneMetadata}
+            showedLayers={showedLayers}
+            simplifiedGeometries={simplifiedGeometries}
+          />
           <AdministrativeLayers />
-          <RegulatoryPreviewLayer />
+          <RegulatoryPreviewLayer dispatch={dispatch} regulatoryZonesToPreview={regulatoryZonesToPreview} />
         </BaseMap>
       </BackofficeContainer>
       {/* TODO Is it always `false`? */}

@@ -3,7 +3,7 @@ import { getRegulatoryFeatureId, mapToRegulatoryFeatureObject, RegulationActionT
 import { setError } from 'domain/shared_slices/Global'
 import { Feature } from 'ol'
 
-import { backOfficeRegulationActions } from '../../Regulation/slice.backoffice'
+import { regulationActions } from '../../Regulation/slice'
 
 import type { BackofficeAppThunk } from '@store'
 
@@ -50,8 +50,8 @@ export const updateTopicForAllZones =
           newLayerName,
           oldLayerName
         )
-        dispatch(backOfficeRegulationActions.setLayersTopicsByRegTerritory(newLayersTopicsByRegTerritory))
-        dispatch(backOfficeRegulationActions.setRegulatoryLayerLawTypes(newLayersTopicsByRegTerritory))
+        dispatch(regulationActions.setLayersTopicsByRegTerritory(newLayersTopicsByRegTerritory))
+        dispatch(regulationActions.setRegulatoryLayerLawTypes(newLayersTopicsByRegTerritory))
       } catch (err) {
         console.error(err)
         dispatch(setError(err))

@@ -10,7 +10,7 @@ import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { FrontendError } from '../../../../libs/FrontendError'
 import { EditIcon } from '../../../commonStyles/icons/EditIcon.style'
 import { hideLayer } from '../../../LayersSidebar/useCases/hideLayer'
-import { addRegulatoryTopicOpened, closeRegulatoryZoneMetadataPanel, removeRegulatoryTopicOpened } from '../../slice'
+import { regulationActions } from '../../slice'
 import { showRegulatoryTopic } from '../../useCases/showRegulatoryTopic'
 
 import type { RegulatoryZone as RegulatoryZoneType } from '../../types'
@@ -45,11 +45,11 @@ function UnmemoizedRegulatoryTopic({
   const dispatch = useMainAppDispatch()
   const ref = useRef<HTMLLIElement | null>(null)
   const showedLayers = useMainAppSelector(state => state.layer.showedLayers)
-  const regulatoryTopicsOpened = useMainAppSelector(state => state.regulatory.regulatoryTopicsOpened)
-  const regulatoryZoneMetadata = useMainAppSelector(state => state.regulatory.regulatoryZoneMetadata)
+  const regulatoryTopicsOpened = useMainAppSelector(state => state.regulation.regulatoryTopicsOpened)
+  const regulatoryZoneMetadata = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
   const lawType = regulatoryZones[0]?.lawType
   const numberOfTotalZones = useMainAppSelector(state => {
-    const { regulatoryLayerLawTypes } = state.regulatory
+    const { regulatoryLayerLawTypes } = state.regulation
 
     if (regulatoryLayerLawTypes && lawType && regulatoryTopic && regulatoryLayerLawTypes[lawType]) {
       const regulatoryLayerLawType = regulatoryLayerLawTypes[lawType]
@@ -121,10 +121,10 @@ function UnmemoizedRegulatoryTopic({
 
   const onRegulatoryTopicClick = useCallback(() => {
     if (isOpen) {
-      dispatch(removeRegulatoryTopicOpened(regulatoryTopic))
-      dispatch(closeRegulatoryZoneMetadataPanel())
+      dispatch(regulationActions.removeRegulatoryTopicOpened(regulatoryTopic))
+      dispatch(regulationActions.closeRegulatoryZoneMetadataPanel())
     } else {
-      dispatch(addRegulatoryTopicOpened(regulatoryTopic))
+      dispatch(regulationActions.addRegulatoryTopicOpened(regulatoryTopic))
     }
   }, [dispatch, isOpen, regulatoryTopic])
 

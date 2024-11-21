@@ -2,15 +2,15 @@ import { RegulationActionType } from '@features/Regulation/utils'
 
 import { sendRegulationTransaction } from '../../../api/geoserver'
 import { setError } from '../../../domain/shared_slices/Global'
-import { backOfficeRegulationActions } from '../../Regulation/slice.backoffice'
+import { regulationActions } from '../../Regulation/slice'
 
 export const updateRegulation = (feature, type) => dispatch =>
   sendRegulationTransaction(feature, type)
     .then(_ => {
       if (type === RegulationActionType.Delete) {
-        dispatch(backOfficeRegulationActions.setProcessingRegulationDeleted(true))
+        dispatch(regulationActions.setProcessingRegulationDeleted(true))
       } else {
-        dispatch(backOfficeRegulationActions.setProcessingRegulationSaved(true))
+        dispatch(regulationActions.setProcessingRegulationSaved(true))
       }
     })
     .catch(e => {

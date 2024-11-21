@@ -19,7 +19,7 @@ import { closeRegulatoryZoneMetadata } from '../../Regulation/useCases/closeRegu
 export function LayersSidebar() {
   const dispatch = useMainAppDispatch()
   const regulatoryZoneMetadataPanelIsOpen = useMainAppSelector(
-    state => state.regulatory.regulatoryZoneMetadataPanelIsOpen
+    state => state.regulation.regulatoryZoneMetadataPanelIsOpen
   )
   const healthcheckTextWarning = useMainAppSelector(state => state.global.healthcheckTextWarning)
   const leftMapBoxOpened = useMainAppSelector(state => state.global.leftMapBoxOpened)

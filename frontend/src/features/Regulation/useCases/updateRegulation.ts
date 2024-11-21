@@ -1,6 +1,6 @@
 import { sendRegulationTransaction } from '../../../api/geoserver'
 import { setError } from '../../../domain/shared_slices/Global'
-import { backOfficeRegulationActions } from '../slice.backoffice'
+import { regulationActions } from '../slice'
 import { RegulationActionType } from '../utils'
 
 import type { BackofficeAppThunk } from '@store'
@@ -14,9 +14,9 @@ export const updateRegulation =
       await sendRegulationTransaction(feature, type)
 
       if (type === RegulationActionType.Delete) {
-        dispatch(backOfficeRegulationActions.setProcessingRegulationDeleted(true))
+        dispatch(regulationActions.setProcessingRegulationDeleted(true))
       } else {
-        dispatch(backOfficeRegulationActions.setProcessingRegulationSaved(true))
+        dispatch(regulationActions.setProcessingRegulationSaved(true))
       }
     } catch (err) {
       console.error(err)

@@ -12,13 +12,7 @@ import { RemoveRegulationModal } from '@features/BackOffice/edit_regulation/regu
 import { formatDataForSelectPicker } from '@features/BackOffice/utils'
 import { BaseLayer } from '@features/BaseMap/layers/BaseLayer'
 import { RegulatoryPreviewLayer } from '@features/Regulation/layers/RegulatoryPreviewLayer'
-import {
-  closeRegulatoryZoneMetadataPanel,
-  resetRegulatoryGeometriesToPreview,
-  setRegulatoryGeometriesToPreview,
-  setRegulatoryTopics,
-  setRegulatoryZoneMetadata
-} from '@features/Regulation/slice'
+import { regulationActions } from '@features/Regulation/slice'
 import { createOrUpdateBackofficeRegulation } from '@features/Regulation/useCases/createOrUpdateRegulation'
 import { getAllRegulatoryLayersByRegTerritory } from '@features/Regulation/useCases/getAllRegulatoryLayersByRegTerritory'
 import { getGeometryWithoutRegulationReference } from '@features/Regulation/useCases/getGeometryWithoutRegulationReference'
@@ -45,7 +39,6 @@ import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
 import { CustomInput, Label } from '../../commonStyles/Input.style'
 import ChevronIconSVG from '../../icons/Chevron_simple_gris.svg?react'
 import { BaseMap } from '../../map/BaseMap'
-import { backOfficeRegulationActions } from '../../Regulation/slice.backoffice'
 import { STATUS } from '../constants'
 
 import type { GeoJSON } from '../../../domain/types/GeoJSON'
@@ -75,6 +68,7 @@ export function EditRegulation({ isEdition, title }) {
     regulationModified,
     regulationSaved,
     regulatoryTextCheckedMap,
+    regulatoryZonesToPreview,
     saveOrUpdateRegulation,
     selectedRegulatoryZoneId
   } = useBackofficeAppSelector(state => state.regulation)
@@ -88,14 +82,14 @@ export function EditRegulation({ isEdition, title }) {
 
       await dispatch(getAllSpecies<BackofficeAppThunk>())
       await dispatch(getAllRegulatoryLayersByRegTerritory())
-      dispatch(closeRegulatoryZoneMetadataPanel())
+      dispatch(regulationActions.closeRegulatoryZoneMetadataPanel())
     })()
 
     return () => {
-      dispatch(backOfficeRegulationActions.setStatus(STATUS.IDLE))
-      dispatch(backOfficeRegulationActions.setProcessingRegulation(DEFAULT_REGULATION))
-      dispatch(setRegulatoryZoneMetadata(undefined))
-      dispatch(resetRegulatoryGeometriesToPreview())
+      dispatch(regulationActions.setStatus(STATUS.IDLE))
+      dispatch(regulationActions.setProcessingRegulation(DEFAULT_REGULATION))
+      dispatch(regulationActions.setRegulatoryZoneMetadata(undefined))
+      dispatch(regulationActions.resetRegulatoryGeometriesToPreview())
     }
   }, [dispatch])
 
@@ -114,7 +108,7 @@ export function EditRegulation({ isEdition, title }) {
   )
 
   const goBackofficeHome = useCallback(() => {
-    dispatch(backOfficeRegulationActions.resetState())
+    dispatch(regulationActions.resetState())
     navigate('/backoffice/regulation')
   }, [dispatch, navigate])
 
@@ -126,7 +120,7 @@ export function EditRegulation({ isEdition, title }) {
 
   const onGoBack = () => {
     if (regulationModified) {
-      dispatch(backOfficeRegulationActions.setIsConfirmModalOpen(true))
+      dispatch(regulationActions.setIsConfirmModalOpen(true))
     } else {
       goBackofficeHome()
     }
@@ -140,7 +134,7 @@ export function EditRegulation({ isEdition, title }) {
         const lawTypeObject = territory[lawType]
         regulatoryTopicList = lawTypeObject ? Object.keys(lawTypeObject) : []
       }
-      dispatch(setRegulatoryTopics(regulatoryTopicList))
+      dispatch(regulationActions.setRegulatoryTopics(regulatoryTopicList))
     }
   }, [lawType, layersTopicsByRegTerritory, dispatch])
 
@@ -161,7 +155,7 @@ export function EditRegulation({ isEdition, title }) {
 
     valueIsMissing = !(processingRegulation.id && processingRegulation.id !== '')
     willHaveOneOrMoreValuesMissing = willHaveOneOrMoreValuesMissing || valueIsMissing
-    dispatch(backOfficeRegulationActions.setHasOneOrMoreValuesMissing(willHaveOneOrMoreValuesMissing))
+    dispatch(regulationActions.setHasOneOrMoreValuesMissing(willHaveOneOrMoreValuesMissing))
   }, [lawType, topic, zone, region, processingRegulation.id, dispatch])
 
   useEffect(() => {
@@ -183,9 +177,9 @@ export function EditRegulation({ isEdition, title }) {
           dispatch(createOrUpdateBackofficeRegulation(processingRegulation, selectedRegulatoryZoneId))
           setSaveIsForbidden(false)
         } else {
-          dispatch(backOfficeRegulationActions.setRegulatoryTextCheckedMap({}))
-          dispatch(backOfficeRegulationActions.setSaveOrUpdateRegulation(false))
-          dispatch(backOfficeRegulationActions.setHasOneOrMoreValuesMissing(undefined))
+          dispatch(regulationActions.setRegulatoryTextCheckedMap({}))
+          dispatch(regulationActions.setSaveOrUpdateRegulation(false))
+          dispatch(regulationActions.setHasOneOrMoreValuesMissing(undefined))
           setSaveIsForbidden(true)
         }
       }
@@ -209,9 +203,11 @@ export function EditRegulation({ isEdition, title }) {
     const geometryFromId =
       !!geometryObjectList && !!processingRegulation.id && geometryObjectList[processingRegulation.id]
     if (geometryFromId) {
-      dispatch(setRegulatoryGeometriesToPreview([{ geometry: geometryFromId }]))
+      dispatch(regulationActions.setRegulatoryGeometriesToPreview([{ geometry: geometryFromId }]))
     } else if (isEdition && processingRegulation?.geometry) {
-      dispatch(setRegulatoryGeometriesToPreview([{ geometry: processingRegulation?.geometry }] as any))
+      dispatch(
+        regulationActions.setRegulatoryGeometriesToPreview([{ geometry: processingRegulation?.geometry }] as any)
+      )
     } else {
       dispatch(setError(new Error("Aucune géométrie n'a été trouvée pour cette identifiant.")))
     }
@@ -226,7 +222,7 @@ export function EditRegulation({ isEdition, title }) {
 
   const setOtherInfo = value => {
     dispatch(
-      backOfficeRegulationActions.updateProcessingRegulationByKey({
+      regulationActions.updateProcessingRegulationByKey({
         key: REGULATORY_REFERENCE_KEYS.OTHER_INFO,
         value
       })
@@ -298,7 +294,7 @@ export function EditRegulation({ isEdition, title }) {
                   isLast={false}
                   onClick={() => {
                     checkRequiredValues()
-                    dispatch(backOfficeRegulationActions.setSaveOrUpdateRegulation(true))
+                    dispatch(regulationActions.setSaveOrUpdateRegulation(true))
                   }}
                 >
                   {isEdition ? 'Enregister les modifications' : 'Créer la réglementation'}
@@ -309,7 +305,7 @@ export function EditRegulation({ isEdition, title }) {
                   disabled={false}
                   // @ts-ignore
                   isLast={false}
-                  onClick={() => dispatch(backOfficeRegulationActions.setIsRemoveModalOpen(true))}
+                  onClick={() => dispatch(regulationActions.setIsRemoveModalOpen(true))}
                 >
                   Supprimer la réglementation
                 </CancelButton>
@@ -320,7 +316,7 @@ export function EditRegulation({ isEdition, title }) {
         {isRegulatoryPreviewDisplayed && (
           <BaseMap>
             <BaseLayer />
-            <RegulatoryPreviewLayer />
+            <RegulatoryPreviewLayer dispatch={dispatch} regulatoryZonesToPreview={regulatoryZonesToPreview} />
           </BaseMap>
         )}
       </Wrapper>

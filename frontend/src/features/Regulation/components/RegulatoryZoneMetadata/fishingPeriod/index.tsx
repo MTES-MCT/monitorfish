@@ -7,8 +7,8 @@ import { Section, SectionTitle } from '../RegulatoryMetadata.style'
 
 export function FishingPeriodDisplayed() {
   const { fishingPeriod, fishingPeriodText } = useMainAppSelector(state => ({
-    fishingPeriod: state.regulatory.regulatoryZoneMetadata?.fishingPeriod,
-    fishingPeriodText: fishingPeriodToString(state.regulatory.regulatoryZoneMetadata?.fishingPeriod)
+    fishingPeriod: state.regulation.regulatoryZoneMetadata?.fishingPeriod,
+    fishingPeriodText: fishingPeriodToString(state.regulation.regulatoryZoneMetadata?.fishingPeriod)
   }))
 
   return !!fishingPeriod && fishingPeriod.authorized !== undefined && (fishingPeriodText ?? fishingPeriod.otherInfo) ? (

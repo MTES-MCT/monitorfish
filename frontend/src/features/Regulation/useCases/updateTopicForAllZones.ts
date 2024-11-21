@@ -2,7 +2,7 @@ import { Feature } from 'ol'
 
 import { sendRegulationTransaction } from '../../../api/geoserver'
 import { setError } from '../../../domain/shared_slices/Global'
-import { setLayersTopicsByRegTerritory, setRegulatoryLayerLawTypes } from '../slice'
+import { regulationActions } from '../slice'
 import { getRegulatoryFeatureId, mapToRegulatoryFeatureObject, RegulationActionType } from '../utils'
 
 import type { BackofficeAppThunk } from '@store'
@@ -50,8 +50,8 @@ export const updateTopicForAllZones =
           newLayerName,
           oldLayerName
         )
-        dispatch(setLayersTopicsByRegTerritory(newLayersTopicsByRegTerritory))
-        dispatch(setRegulatoryLayerLawTypes(newLayersTopicsByRegTerritory))
+        dispatch(regulationActions.setLayersTopicsByRegTerritory(newLayersTopicsByRegTerritory))
+        dispatch(regulationActions.setRegulatoryLayerLawTypes(newLayersTopicsByRegTerritory))
       } catch (err) {
         console.error(err)
         dispatch(setError(err))

@@ -10,7 +10,7 @@ import { useBackofficeAppDispatch } from '../../../hooks/useBackofficeAppDispatc
 import { useBackofficeAppSelector } from '../../../hooks/useBackofficeAppSelector'
 import { AddRegulationButton } from '../../commonStyles/Buttons.style'
 import SearchIconSVG from '../../icons/Loupe.svg?react'
-import { closeRegulatoryZoneMetadataPanel } from '../../Regulation/slice'
+import { regulationActions } from '../../Regulation/slice'
 import { searchByLawType, searchResultIncludeZone } from '../../Regulation/utils'
 
 export function SearchRegulations({ regulatoryZoneListByRegTerritory, setFoundRegulatoryZonesByRegTerritory }) {
@@ -41,7 +41,7 @@ export function SearchRegulations({ regulatoryZoneListByRegTerritory, setFoundRe
         })
         if (regulatoryZoneMetadata) {
           if (!searchResultIncludeZone(searchResult, regulatoryZoneMetadata as any)) {
-            dispatch(closeRegulatoryZoneMetadataPanel())
+            dispatch(regulationActions.closeRegulatoryZoneMetadataPanel())
           }
         }
         setFoundRegulatoryZonesByRegTerritory(searchResult)

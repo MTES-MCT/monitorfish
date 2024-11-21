@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { FooterButton } from '../../../commonStyles/Backoffice.style'
 import { ValidateButton, CancelButton } from '../../../commonStyles/Buttons.style'
 import CloseIconSVG from '../../../icons/Croix_grise_clair.svg?react'
-import { setIsRemoveModalOpen } from '../../../Regulation/slice.backoffice'
+import { regulationActions } from '../../../Regulation/slice'
 import { updateRegulation } from '../../../Regulation/useCases/updateRegulation'
 import { RegulationActionType, getRegulatoryFeatureId } from '../../../Regulation/utils'
 
@@ -26,7 +26,7 @@ export function RemoveRegulationModal() {
         <Body>
           <ModalTitle>
             Supprimer la réglementation
-            <CloseIcon onClick={() => dispatch(setIsRemoveModalOpen(false))} />
+            <CloseIcon onClick={() => dispatch(regulationActions.setIsRemoveModalOpen(false))} />
           </ModalTitle>
           <Section>
             {
@@ -39,7 +39,10 @@ export function RemoveRegulationModal() {
             <ValidateButton onClick={deleteRegulation} style={{ width: 120 }}>
               Oui
             </ValidateButton>
-            <CancelButton onClick={() => dispatch(setIsRemoveModalOpen(false))} style={{ width: 120 }}>
+            <CancelButton
+              onClick={() => dispatch(regulationActions.setIsRemoveModalOpen(false))}
+              style={{ width: 120 }}
+            >
               Annuler
             </CancelButton>
           </FooterButton>

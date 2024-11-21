@@ -21,7 +21,7 @@ export type FilterValues = {
 
 export type ZoneSelected = {
   code: string
-  feature: GeoJSON.Feature
+  feature: GeoJSON.Geometry
   name: string
 }
 

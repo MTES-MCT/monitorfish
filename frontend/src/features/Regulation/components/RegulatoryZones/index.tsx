@@ -18,7 +18,7 @@ import { hideRegulatoryZoneLayerById } from '../../useCases/hideRegulatoryZoneLa
 export function RegulatoryZones() {
   const dispatch = useMainAppDispatch()
 
-  const selectedRegulatoryLayers = useMainAppSelector(state => state.regulatory.selectedRegulatoryLayers)
+  const selectedRegulatoryLayers = useMainAppSelector(state => state.regulation.selectedRegulatoryLayers)
   const advancedSearchIsOpen = useMainAppSelector(state => state.regulatoryLayerSearch.advancedSearchIsOpen)
   const { layersSidebarOpenedLayerType } = useMainAppSelector(state => state.layer)
 

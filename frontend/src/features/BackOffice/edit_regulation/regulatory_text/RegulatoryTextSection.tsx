@@ -1,4 +1,4 @@
-import { backOfficeRegulationActions } from '@features/Regulation/slice.backoffice'
+import { regulationActions } from '@features/Regulation/slice'
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import styled from 'styled-components'
 
@@ -22,7 +22,7 @@ export function RegulatoryTextSection({ regulatoryTextList, saveForm }: Regulato
 
   const setRegulatoryTextList = texts =>
     dispatch(
-      backOfficeRegulationActions.updateProcessingRegulationByKey({
+      regulationActions.updateProcessingRegulationByKey({
         key: REGULATORY_REFERENCE_KEYS.REGULATORY_REFERENCES,
         value: texts
       })

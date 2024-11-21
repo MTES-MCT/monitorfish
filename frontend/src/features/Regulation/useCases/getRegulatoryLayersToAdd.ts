@@ -4,7 +4,7 @@ import { getVectorOLLayer } from './getVectorOLLayer'
 import { getLayerNameNormalized } from '../../../domain/entities/layers'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
 
-import type { MainAppThunk } from '@store'
+import type { HybridAppDispatch, HybridAppThunk } from '@store/types'
 import type { ShowedLayer } from 'domain/entities/layers/types'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
@@ -12,7 +12,11 @@ import type BaseLayer from 'ol/layer/Base'
 import type VectorImageLayer from 'ol/layer/VectorImage'
 
 export const getRegulatoryLayersToAdd =
-  (olLayers: BaseLayer[], showedLayers: ShowedLayer[]): MainAppThunk<Array<VectorImageLayer<Feature<Geometry>>>> =>
+  <T extends HybridAppDispatch>(
+    olLayers: BaseLayer[],
+    showedLayers: ShowedLayer[]
+  ): HybridAppThunk<T, Array<VectorImageLayer<Feature<Geometry>>>> =>
+  // @ts-ignore Required to avoid reducers typing conflicts. Not fancy but allows us to keep Thunk context type-checks.
   dispatch => {
     if (!showedLayers.length) {
       return []
@@ -26,18 +30,19 @@ export const getRegulatoryLayersToAdd =
       layersToInsert
         // TODO Is it really necessary?
         .filter(isNotNullish)
-        .map(layerToInsert => dispatch(getVectorOLLayer(layerToInsert)))
+        .map(layerToInsert => dispatch(getVectorOLLayer<T>(layerToInsert)))
         // TODO Is it really necessary?
         .filter(isNotNullish)
     )
   }
 
-function layersNotInCurrentOLMap(olLayers, layer) {
+function layersNotInCurrentOLMap(olLayers: BaseLayer[], layer: ShowedLayer) {
   return !olLayers.some(
-    olLayer => olLayer.name === getLayerNameNormalized({ type: LayerProperties.REGULATORY.code, ...layer })
+    // TODO Create a custom `BaseLayer`.
+    olLayer => (olLayer as any).name === getLayerNameNormalized({ type: LayerProperties.REGULATORY.code, ...layer })
   )
 }
 
-function layersOfTypeRegulatoryLayer(layer) {
+function layersOfTypeRegulatoryLayer(layer: ShowedLayer) {
   return layer.type === LayerProperties.REGULATORY.code
 }

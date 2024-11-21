@@ -2,6 +2,5 @@
 import { useSelector } from 'react-redux'
 
 import type { BackofficeRootState } from '../store'
-import type { TypedUseSelectorHook } from 'react-redux'
 
-export const useBackofficeAppSelector: TypedUseSelectorHook<BackofficeRootState> = useSelector
+export const useBackofficeAppSelector = useSelector.withTypes<BackofficeRootState>()

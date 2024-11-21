@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import { ResultList } from './ResultList'
 import { SearchInput } from './SearchInput'
 import { setRegulatoryLayersSearchResult } from './slice'
-import { closeRegulatoryZoneMetadataPanel, resetRegulatoryGeometriesToPreview } from '../../slice'
+import { regulationActions } from '../../slice'
 
 export function RegulationSearch() {
   const dispatch = useMainAppDispatch()
@@ -25,7 +25,7 @@ export function RegulationSearch() {
       return
     }
 
-    dispatch(resetRegulatoryGeometriesToPreview())
+    dispatch(regulationActions.resetRegulatoryGeometriesToPreview())
   }, [dispatch, layersSidebarOpenedLayerType])
 
   useEffect(() => {
@@ -33,9 +33,9 @@ export function RegulationSearch() {
       return
     }
 
-    dispatch(resetRegulatoryGeometriesToPreview())
+    dispatch(regulationActions.resetRegulatoryGeometriesToPreview())
     dispatch(setRegulatoryLayersSearchResult(undefined))
-    dispatch(closeRegulatoryZoneMetadataPanel())
+    dispatch(regulationActions.closeRegulatoryZoneMetadataPanel())
   }, [dispatch, escape])
 
   useEffect(() => {

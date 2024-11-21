@@ -7,7 +7,7 @@ import styled from 'styled-components'
 
 import { ContentLine } from '../../../commonStyles/Backoffice.style'
 import { Label } from '../../../commonStyles/Input.style'
-import { updateProcessingRegulationByKey } from '../../../Regulation/slice.backoffice'
+import { regulationActions } from '../../../Regulation/slice'
 import { REGULATORY_REFERENCE_KEYS } from '../../../Regulation/utils'
 import { FRENCH_REGION_LIST } from '../../constants'
 
@@ -24,11 +24,15 @@ export function RegulationRegionLine({ isDisabled }) {
     const newArray = [...regionList]
     newArray.splice(regionToRemoveIndex, 1)
 
-    await dispatch(updateProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.REGION, value: newArray }))
+    await dispatch(
+      regulationActions.updateProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.REGION, value: newArray })
+    )
   }
 
   const onChange = regions => {
-    dispatch(updateProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.REGION, value: regions }))
+    dispatch(
+      regulationActions.updateProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.REGION, value: regions })
+    )
   }
 
   return (

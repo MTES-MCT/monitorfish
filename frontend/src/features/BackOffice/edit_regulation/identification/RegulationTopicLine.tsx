@@ -11,7 +11,7 @@ import { CreateRegulationTopicForm } from './CreateRegulationTopicForm'
 import { ContentLine, InfoText, InfoTextWrapper } from '../../../commonStyles/Backoffice.style'
 import { SquareButton } from '../../../commonStyles/Buttons.style'
 import { Label } from '../../../commonStyles/Input.style'
-import { updateProcessingRegulationByKey } from '../../../Regulation/slice.backoffice'
+import { regulationActions } from '../../../Regulation/slice'
 import { REGULATORY_REFERENCE_KEYS } from '../../../Regulation/utils'
 
 import type { Option } from '@mtes-mct/monitor-ui'
@@ -32,7 +32,7 @@ export function RegulationTopicLine({ isDisabled }) {
   }, [regulatoryTopics])
 
   const updateTopic = async (value?) => {
-    await dispatch(updateProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.TOPIC, value }))
+    await dispatch(regulationActions.updateProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.TOPIC, value }))
   }
 
   return (

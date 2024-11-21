@@ -10,13 +10,14 @@ import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { EditIcon } from '../../../commonStyles/icons/EditIcon.style'
 import { hideLayer } from '../../../LayersSidebar/useCases/hideLayer'
 import { zoomInLayer } from '../../../LayersSidebar/useCases/zoomInLayer'
-import { addRegulatoryTopicOpened, closeRegulatoryZoneMetadataPanel, removeRegulatoryTopicOpened } from '../../slice'
+import { regulationActions } from '../../slice'
 import { closeRegulatoryZoneMetadata } from '../../useCases/closeRegulatoryZoneMetadata'
 import { showRegulationToEdit } from '../../useCases/showRegulationToEdit'
 import { showRegulatoryZone } from '../../useCases/showRegulatoryZone'
 import { showRegulatoryZoneMetadata } from '../../useCases/showRegulatoryZoneMetadata'
 
 import type { RegulatoryZone as RegulatoryZoneType } from '../../types'
+import type { MainAppThunk } from '@store'
 import type { Promisable } from 'type-fest'
 
 export type RegulatoryZoneProps = {
@@ -38,7 +39,7 @@ function UnmemoizedRegulatoryZone({
   const dispatch = useMainAppDispatch()
   const navigate = useNavigate()
 
-  const regulatoryZoneMetadata = useMainAppSelector(state => state.regulatory.regulatoryZoneMetadata)
+  const regulatoryZoneMetadata = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
   const isZoneShown = useMainAppSelector(state =>
     state.layer.showedLayers.some(layer => layer.id === regulatoryZone.id)
   )
@@ -78,9 +79,9 @@ function UnmemoizedRegulatoryZone({
 
   const onEditRegulationClick = () => {
     dispatch(showRegulationToEdit(regulatoryZone))
-    dispatch(removeRegulatoryTopicOpened(regulatoryTopic))
-    dispatch(addRegulatoryTopicOpened(regulatoryTopic))
-    dispatch(closeRegulatoryZoneMetadataPanel())
+    dispatch(regulationActions.removeRegulatoryTopicOpened(regulatoryTopic))
+    dispatch(regulationActions.addRegulatoryTopicOpened(regulatoryTopic))
+    dispatch(regulationActions.closeRegulatoryZoneMetadataPanel())
 
     navigate('/backoffice/regulation/edit')
   }
@@ -91,7 +92,7 @@ function UnmemoizedRegulatoryZone({
   return (
     <Zone $isLast={isLast} data-cy="regulatory-layer-zone" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       <StyledPreview
-        onClick={() => dispatch(zoomInLayer({ topicAndZone: regulatoryZone }))}
+        onClick={() => dispatch(zoomInLayer<MainAppThunk>({ topicAndZone: regulatoryZone }))}
         regulatoryZone={regulatoryZone}
       />
       <Name

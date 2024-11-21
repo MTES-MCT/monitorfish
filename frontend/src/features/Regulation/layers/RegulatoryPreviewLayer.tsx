@@ -4,29 +4,32 @@ import { memo, useCallback, useEffect, useRef } from 'react'
 
 import { getRegulatoryLayerStyle } from './styles/regulatoryLayer.style'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
-import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
+// import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+// import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { zoomInLayer } from '../../LayersSidebar/useCases/zoomInLayer'
 import { getFeaturesFromRegulatoryZones } from '../../map/layers/utils'
 import { monitorfishMap } from '../../map/monitorfishMap'
 
 import type { VectorLayerWithName } from '../../../domain/types/layer'
-import type { BaseRegulatoryZone } from '../types'
+import type { BaseRegulatoryZone, RegulatoryZone } from '../types'
+import type { ZoneSelected } from '@features/VesselFilter/types'
+import type { BackofficeAppDispatch, MainAppDispatch } from '@store'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
 import type { MutableRefObject } from 'react'
 
-function UnmemoizedRegulatoryPreviewLayer() {
-  const dispatch = useMainAppDispatch()
-  /**
-   * `useMainAppSelector` is typed as `MainApp` store but `useBackofficeAppSelector` also works as `state.regulatory`
-   * is used in both stores.
-   */
-  const regulatoryZonesToPreview = useMainAppSelector(state => state.regulatory.regulatoryZonesToPreview)
-  /**
-   * /!\ `regulatoryLayerSearch` will be null when using this component in <Backoffice/> page.
-   */
-  const zoneSelected = useMainAppSelector(state => state.regulatoryLayerSearch?.zoneSelected)
+type RegulatoryPreviewLayerProps<Dispatch> = Readonly<{
+  dispatch: Dispatch
+  regulatoryZonesToPreview: Array<Partial<RegulatoryZone>>
+  zoneSelected?: ZoneSelected | undefined
+}>
+function UnmemoizedRegulatoryPreviewLayer(props: RegulatoryPreviewLayerProps<BackofficeAppDispatch>): JSX.Element
+function UnmemoizedRegulatoryPreviewLayer(props: RegulatoryPreviewLayerProps<MainAppDispatch>): JSX.Element
+function UnmemoizedRegulatoryPreviewLayer({
+  dispatch,
+  regulatoryZonesToPreview,
+  zoneSelected
+}: RegulatoryPreviewLayerProps<BackofficeAppDispatch | MainAppDispatch>) {
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource>
   const layerRef = useRef() as MutableRefObject<VectorLayerWithName>
 
@@ -66,7 +69,7 @@ function UnmemoizedRegulatoryPreviewLayer() {
 
     // Do not zoom on regulation when a specific zone was drawed to search regulations
     if (!zoneSelected) {
-      dispatch(zoomInLayer({ feature: features[0] }))
+      dispatch(zoomInLayer<any>({ feature: features[0] }))
     }
   }, [dispatch, zoneSelected, regulatoryZonesToPreview])
 

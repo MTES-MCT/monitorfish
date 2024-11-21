@@ -5,7 +5,7 @@ import { useState, useCallback } from 'react'
 import { FishingPeriodForm } from './FishingPeriodForm'
 import { Section, OtherRemark } from '../../../commonStyles/Backoffice.style'
 import { Label, CustomInput } from '../../../commonStyles/Input.style'
-import { backOfficeRegulationActions } from '../../../Regulation/slice.backoffice'
+import { regulationActions } from '../../../Regulation/slice'
 import { SectionTitle } from '../../SectionTitle'
 
 export function FishingPeriodSection() {
@@ -14,10 +14,7 @@ export function FishingPeriodSection() {
 
   const [show, setShow] = useState(false)
 
-  const onChange = useCallback(
-    value => dispatch(backOfficeRegulationActions.setFishingPeriodOtherInfo(value)),
-    [dispatch]
-  )
+  const onChange = useCallback(value => dispatch(regulationActions.setFishingPeriodOtherInfo(value)), [dispatch])
 
   return (
     <Section show>

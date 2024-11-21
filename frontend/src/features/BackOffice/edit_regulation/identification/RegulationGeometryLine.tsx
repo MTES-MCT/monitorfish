@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { ContentLine } from '../../../commonStyles/Backoffice.style'
 import { Label } from '../../../commonStyles/Input.style'
-import { updateProcessingRegulationByKey } from '../../../Regulation/slice.backoffice'
+import { regulationActions } from '../../../Regulation/slice'
 import { DEFAULT_MENU_CLASSNAME, REGULATORY_REFERENCE_KEYS } from '../../../Regulation/utils'
 
 export function RegulationGeometryLine({
@@ -17,7 +17,9 @@ export function RegulationGeometryLine({
   const id = useBackofficeAppSelector(state => state.regulation.processingRegulation?.id)
 
   const onCloseIconClicked = async () => {
-    await dispatch(updateProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.ID, value: undefined }))
+    await dispatch(
+      regulationActions.updateProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.ID, value: undefined })
+    )
     setIsRegulatoryPreviewDisplayed(false)
   }
 
@@ -32,7 +34,7 @@ export function RegulationGeometryLine({
         menuClassName={DEFAULT_MENU_CLASSNAME}
         name="Choisir un tracé"
         onChange={value => {
-          dispatch(updateProcessingRegulationByKey({ key: 'id', value }))
+          dispatch(regulationActions.updateProcessingRegulationByKey({ key: 'id', value }))
         }}
         options={geometryIdList}
         placeholder="Choisir un tracé"

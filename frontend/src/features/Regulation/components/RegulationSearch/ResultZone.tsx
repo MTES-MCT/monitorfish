@@ -1,4 +1,4 @@
-import { addRegulatoryZonesToMyLayers, regulationActions } from '@features/Regulation/slice'
+import { regulationActions } from '@features/Regulation/slice'
 import { hideRegulatoryZoneLayerById } from '@features/Regulation/useCases/hideRegulatoryZoneLayerById'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -18,8 +18,8 @@ export type RegulatoryLayerSearchResultZoneProps = {
 }
 export function ResultZone({ isOpen, regulatoryZone }: RegulatoryLayerSearchResultZoneProps) {
   const dispatch = useMainAppDispatch()
-  const regulatoryZoneMetadata = useMainAppSelector(state => state.regulatory.regulatoryZoneMetadata)
-  const selectedRegulatoryLayers = useMainAppSelector(state => state.regulatory.selectedRegulatoryLayers)
+  const regulatoryZoneMetadata = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
+  const selectedRegulatoryLayers = useMainAppSelector(state => state.regulation.selectedRegulatoryLayers)
   const isMetadataShown = regulatoryZoneMetadata?.id === regulatoryZone.id
 
   const isZoneAlreadySelected = useMemo(() => {
@@ -51,7 +51,7 @@ export function ResultZone({ isOpen, regulatoryZone }: RegulatoryLayerSearchResu
       return
     }
 
-    dispatch(addRegulatoryZonesToMyLayers([regulatoryZone]))
+    dispatch(regulationActions.addRegulatoryZonesToMyLayers([regulatoryZone]))
   }
 
   return (

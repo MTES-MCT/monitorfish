@@ -1,5 +1,5 @@
 import { hideLayer } from '@features/LayersSidebar/useCases/hideLayer'
-import { addRegulatoryZonesToMyLayers, regulationActions } from '@features/Regulation/slice'
+import { regulationActions } from '@features/Regulation/slice'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Icon, IconButton, logSoftError, THEME } from '@mtes-mct/monitor-ui'
@@ -23,8 +23,8 @@ function UnmemoizedRegulatoryLayerSearchResultTopic({
 }: RegulatoryLayerSearchResultTopicProps) {
   const dispatch = useMainAppDispatch()
 
-  const regulatoryLayerLawTypes = useMainAppSelector(state => state.regulatory.regulatoryLayerLawTypes)
-  const selectedRegulatoryLayers = useMainAppSelector(state => state.regulatory.selectedRegulatoryLayers)
+  const regulatoryLayerLawTypes = useMainAppSelector(state => state.regulation.regulatoryLayerLawTypes)
+  const selectedRegulatoryLayers = useMainAppSelector(state => state.regulation.selectedRegulatoryLayers)
   const regulatoryLayersSearchResult = useMainAppSelector(
     state => state.regulatoryLayerSearch.regulatoryLayersSearchResult
   )
@@ -94,7 +94,7 @@ function UnmemoizedRegulatoryLayerSearchResultTopic({
       return
     }
 
-    dispatch(addRegulatoryZonesToMyLayers(searchResultZones))
+    dispatch(regulationActions.addRegulatoryZonesToMyLayers(searchResultZones))
   }
 
   return (

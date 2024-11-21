@@ -7,7 +7,7 @@ import { COLORS } from '../../../constants/constants'
 import { EmptyResult } from '../../commonStyles/Text.style'
 import ChevronIconSVG from '../../icons/Chevron_simple_gris.svg?react'
 import { RegulatoryTopic } from '../../Regulation/components/RegulatoryZones/RegulatoryTopic'
-import { setLawTypeOpened, setRegulatoryTopicsOpened, closeRegulatoryZoneMetadataPanel } from '../../Regulation/slice'
+import { regulationActions } from '../../Regulation/slice'
 import { updateTopicForAllZones } from '../../Regulation/useCases/updateTopicForAllZones'
 
 type LawTypeProps = Readonly<{
@@ -67,12 +67,12 @@ export function LawType({ isEditable, lawType, regZoneByLawType, territory }: La
 
   const openLawTypeList = () => {
     if (isOpen) {
-      dispatch(setLawTypeOpened(null))
-      dispatch(setRegulatoryTopicsOpened([]))
+      dispatch(regulationActions.setLawTypeOpened(null))
+      dispatch(regulationActions.setRegulatoryTopicsOpened([]))
     } else {
-      dispatch(setLawTypeOpened(lawType))
+      dispatch(regulationActions.setLawTypeOpened(lawType))
     }
-    dispatch(closeRegulatoryZoneMetadataPanel())
+    dispatch(regulationActions.closeRegulatoryZoneMetadataPanel())
     setIsOpen(!isOpen)
   }
 

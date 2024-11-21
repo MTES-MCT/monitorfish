@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { customDayjs } from '../../../../../cypress/e2e/utils/customDayjs'
 import { ContentLine, Delimiter } from '../../../commonStyles/Backoffice.style'
 import { Label } from '../../../commonStyles/Input.style'
-import { backOfficeRegulationActions } from '../../../Regulation/slice.backoffice'
+import { regulationActions } from '../../../Regulation/slice'
 import { checkURL, RegulatoryTextType } from '../../../Regulation/utils'
 import { INFINITE } from '../../constants'
 
@@ -54,7 +54,7 @@ export function RegulatoryTextContent({
         complete: !hasOneOrMoreValuesMissing,
         index
       }
-      dispatch(backOfficeRegulationActions.addObjectToRegulatoryTextCheckedMap(payload))
+      dispatch(regulationActions.addObjectToRegulatoryTextCheckedMap(payload))
     }
     // TODO Refactor to avoid using a useEffect for an action
     // eslint-disable-next-line react-hooks/exhaustive-deps

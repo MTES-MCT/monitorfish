@@ -1,4 +1,4 @@
-import { backOfficeRegulationActions } from '@features/Regulation/slice.backoffice'
+import { regulationActions } from '@features/Regulation/slice'
 import {
   DEFAULT_AUTHORIZED_REGULATED_GEARS,
   DEFAULT_UNAUTHORIZED_REGULATED_GEARS,
@@ -44,7 +44,7 @@ export function GearRegulation() {
   // TODO Impossible to type and make this code safe as it is, should be refactored?
   const setGearRegulation = (subKey: any, value: any) => {
     dispatch(
-      backOfficeRegulationActions.updateProcessingRegulationByKeyAndSubKey({
+      regulationActions.updateProcessingRegulationByKeyAndSubKey({
         key: REGULATORY_REFERENCE_KEYS.GEAR_REGULATION as 'gearRegulation',
         // @ts-ignore
         subKey,

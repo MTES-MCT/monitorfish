@@ -2,7 +2,7 @@ import { getRegulatoryZoneFromAPI, REGULATORY_ZONE_METADATA_ERROR_MESSAGE } from
 import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { setError } from '../../../domain/shared_slices/Global'
 import { STATUS } from '../../BackOffice/constants'
-import { setProcessingRegulation, setSelectedRegulatoryZoneId, setStatus } from '../slice.backoffice'
+import { regulationActions } from '../slice'
 import { mapToRegulatoryZone, DEFAULT_REGULATORY_TEXT } from '../utils'
 
 import type { MainAppThunk } from '@store'
@@ -12,7 +12,7 @@ export const showRegulationToEdit =
   (regulatoryZone: ShowedLayer): MainAppThunk<Promise<void>> =>
   async (dispatch, getState) => {
     const { speciesByCode } = getState().species
-    dispatch(setStatus(STATUS.LOADING))
+    dispatch(regulationActions.setStatus(STATUS.LOADING))
 
     try {
       const feature = await getRegulatoryZoneFromAPI(
@@ -41,7 +41,7 @@ export const showRegulationToEdit =
       } = regulatoryZoneMetadata
 
       dispatch(
-        setProcessingRegulation({
+        regulationActions.setProcessingRegulation({
           fishingPeriod,
           gearRegulation,
           geometry,
@@ -56,7 +56,7 @@ export const showRegulationToEdit =
           zone
         })
       )
-      dispatch(setSelectedRegulatoryZoneId(id))
+      dispatch(regulationActions.setSelectedRegulatoryZoneId(id))
     } catch (err) {
       console.error(err)
       dispatch(setError(new Error(REGULATORY_ZONE_METADATA_ERROR_MESSAGE)))

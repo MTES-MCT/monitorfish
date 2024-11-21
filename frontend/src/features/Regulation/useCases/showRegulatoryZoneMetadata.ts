@@ -1,13 +1,6 @@
 import { getRegulatoryFeatureMetadataFromAPI } from '../../../api/geoserver'
 import { setError } from '../../../domain/shared_slices/Global'
-import {
-  closeRegulatoryZoneMetadataPanel,
-  resetLoadingRegulatoryZoneMetadata,
-  resetRegulatoryGeometriesToPreview,
-  setLoadingRegulatoryZoneMetadata,
-  setRegulatoryGeometriesToPreview,
-  setRegulatoryZoneMetadata
-} from '../slice'
+import { regulationActions } from '../slice'
 import { mapToRegulatoryZone } from '../utils'
 
 import type { MainAppThunk } from '../../../store'
@@ -19,7 +12,7 @@ export const showRegulatoryZoneMetadata =
     isPreviewing: boolean = false
   ): MainAppThunk<Promise<void>> =>
   async (dispatch, getState) => {
-    dispatch(setLoadingRegulatoryZoneMetadata())
+    dispatch(regulationActions.setLoadingRegulatoryZoneMetadata())
     const { speciesByCode } = getState().species
 
     try {
@@ -30,15 +23,15 @@ export const showRegulatoryZoneMetadata =
         throw new Error('`parsedRegulatoryZone` is undefined.')
       }
 
-      dispatch(setRegulatoryZoneMetadata(parsedRegulatoryZone))
+      dispatch(regulationActions.setRegulatoryZoneMetadata(parsedRegulatoryZone))
 
       if (isPreviewing) {
-        dispatch(setRegulatoryGeometriesToPreview([parsedRegulatoryZone]))
+        dispatch(regulationActions.setRegulatoryGeometriesToPreview([parsedRegulatoryZone]))
       }
     } catch (err) {
-      dispatch(closeRegulatoryZoneMetadataPanel())
+      dispatch(regulationActions.closeRegulatoryZoneMetadataPanel())
       dispatch(setError(err))
-      dispatch(resetLoadingRegulatoryZoneMetadata())
-      dispatch(resetRegulatoryGeometriesToPreview())
+      dispatch(regulationActions.resetLoadingRegulatoryZoneMetadata())
+      dispatch(regulationActions.resetRegulatoryGeometriesToPreview())
     }
   }

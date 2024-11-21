@@ -17,7 +17,7 @@ import { backofficeReducer, mainReducer } from './reducers'
 import { monitorenvApi, monitorfishApi, monitorfishLightApi, monitorfishPublicApi } from '../api/api'
 import { mapToProcessingRegulation } from '../features/Regulation/utils'
 
-import type { BackOfficeRegulationState } from '../features/Regulation/slice.backoffice'
+import type { RegulationState } from '../features/Regulation/slice'
 import type { AnyAction } from '@reduxjs/toolkit'
 import type { PersistConfig } from 'redux-persist'
 import type { ThunkAction } from 'redux-thunk'
@@ -66,7 +66,7 @@ export type MainAppUseCase = () => MainAppThunk
 // Backoffice Store
 // https://redux-toolkit.js.org/usage/usage-guide#use-with-redux-persist
 
-const SetRegulationStateTransform = createTransform<BackOfficeRegulationState, BackOfficeRegulationState>(
+const SetRegulationStateTransform = createTransform<RegulationState, RegulationState>(
   // Transform state on its way to being serialized and persisted.
   inboundState => inboundState,
   // Transform state being rehydrated

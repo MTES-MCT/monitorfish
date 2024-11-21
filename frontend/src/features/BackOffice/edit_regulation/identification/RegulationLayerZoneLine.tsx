@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { ContentLine, InfoText, InfoTextWrapper } from '../../../commonStyles/Backoffice.style'
 import { Label } from '../../../commonStyles/Input.style'
-import { updateProcessingRegulationByKey } from '../../../Regulation/slice.backoffice'
+import { regulationActions } from '../../../Regulation/slice'
 import { REGULATORY_REFERENCE_KEYS } from '../../../Regulation/utils'
 import { INFO_TEXT } from '../../constants'
 import { InfoBox } from '../InfoBox'
@@ -16,7 +16,7 @@ export function RegulationLayerZoneLine() {
   const zone = useBackofficeAppSelector(state => state.regulation.processingRegulation?.zone)
 
   const setZoneName = value => {
-    dispatch(updateProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.ZONE, value }))
+    dispatch(regulationActions.updateProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.ZONE, value }))
   }
 
   return (

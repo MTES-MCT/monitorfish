@@ -13,7 +13,7 @@ import PolygonFilterSVG from '../../../icons/Filtre_zone_polygone.svg?react'
 import PolygonFilterSelectedSVG from '../../../icons/Filtre_zone_polygone_selected.svg?react'
 import BoxFilterSVG from '../../../icons/Filtre_zone_rectangle.svg?react'
 import BoxFilterSelectedSVG from '../../../icons/Filtre_zone_rectangle_selected.svg?react'
-import { closeRegulatoryZoneMetadataPanel } from '../../slice'
+import { regulationActions } from '../../slice'
 import { MINIMUM_SEARCH_CHARACTERS_NUMBER, searchRegulatoryLayers } from '../../useCases/searchRegulatoryLayers'
 
 export function SearchInput() {
@@ -27,7 +27,7 @@ export function SearchInput() {
 
   useEffect(() => {
     if (searchQuery === undefined) {
-      dispatch(closeRegulatoryZoneMetadataPanel())
+      dispatch(regulationActions.closeRegulatoryZoneMetadataPanel())
     }
   }, [dispatch, searchQuery])
 

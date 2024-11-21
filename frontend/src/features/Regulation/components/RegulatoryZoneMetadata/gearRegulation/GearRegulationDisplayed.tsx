@@ -8,9 +8,9 @@ import { DEFAULT_AUTHORIZED_REGULATED_GEARS, DEFAULT_UNAUTHORIZED_REGULATED_GEAR
 import { Section } from '../RegulatoryMetadata.style'
 
 export function GearRegulationDisplayed() {
-  const regulatory = useMainAppSelector(state => state.regulatory)
+  const regulatoryZoneMetadata = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
 
-  const { gearRegulation } = regulatory.regulatoryZoneMetadata ?? {}
+  const { gearRegulation } = regulatoryZoneMetadata ?? {}
   if (!gearRegulation) {
     throw new FrontendError('`gearRegulation` is undefined.')
   }

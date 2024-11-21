@@ -6,9 +6,10 @@ import { createSlice } from '@reduxjs/toolkit'
 import { isNotNullish } from '@utils/isNotNullish'
 import { fromPairs } from 'lodash/fp'
 
-import { getRegulatoryLayersWithoutTerritory } from './utils'
+import { DEFAULT_REGULATION, getRegulatoryLayersWithoutTerritory, REGULATORY_REFERENCE_KEYS } from './utils'
+import { STATUS } from '../BackOffice/constants'
 
-import type { EditedRegulatoryZone, RegulatoryLawTypes, RegulatoryZone } from './types'
+import type { EditedRegulatoryZone, RegulatoryLawTypes, RegulatoryZone, RegulatoryZoneDraft } from './types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import type { Extent } from 'ol/extent'
 
@@ -60,40 +61,70 @@ const updateSelectedRegulatoryLayers = (
 }
 
 export type RegulationState = {
+  hasOneOrMoreValuesMissing: boolean | undefined
+  isConfirmModalOpen: boolean
+  isRemoveModalOpen: boolean
   lawTypeOpened: string | undefined
   layersTopicsByRegTerritory: Record<string, Record<string, Record<string, RegulatoryZone[]>>>
   loadingRegulatoryZoneMetadata: boolean
+  processingRegulation: RegulatoryZoneDraft
+  regulationDeleted: boolean
+  regulationModified: boolean
+  regulationSaved: boolean
   regulationSearchedZoneExtent: Extent
   regulatoryLayerLawTypes: RegulatoryLawTypes | undefined
+  regulatoryTextCheckedMap: Record<number, boolean> | undefined
   regulatoryTopics: string[]
   regulatoryTopicsOpened: string[]
   regulatoryZoneMetadata: RegulatoryZone | undefined
   regulatoryZoneMetadataPanelIsOpen: boolean
   regulatoryZones: RegulatoryZone[]
   regulatoryZonesToPreview: Partial<RegulatoryZone>[]
+  saveOrUpdateRegulation: boolean
   selectedRegulatoryLayers: Record<string, RegulatoryZone[]> | null
+  selectedRegulatoryZoneId: string | undefined
   simplifiedGeometries: boolean
+  status: STATUS
 }
 const INITIAL_STATE: RegulationState = {
+  hasOneOrMoreValuesMissing: undefined,
+  isConfirmModalOpen: false,
+  isRemoveModalOpen: false,
   lawTypeOpened: undefined,
   layersTopicsByRegTerritory: {},
   loadingRegulatoryZoneMetadata: false,
+  processingRegulation: DEFAULT_REGULATION,
+  regulationDeleted: false,
+  regulationModified: false,
+  regulationSaved: false,
   regulationSearchedZoneExtent: [],
   regulatoryLayerLawTypes: undefined,
+  regulatoryTextCheckedMap: undefined,
+
   regulatoryTopics: [],
   regulatoryTopicsOpened: [],
   regulatoryZoneMetadata: undefined,
   regulatoryZoneMetadataPanelIsOpen: false,
   regulatoryZones: [],
   regulatoryZonesToPreview: [],
+  saveOrUpdateRegulation: false,
   selectedRegulatoryLayers: null,
-  simplifiedGeometries: true
+  selectedRegulatoryZoneId: undefined,
+  simplifiedGeometries: true,
+  status: STATUS.IDLE
 }
 
 const regulationSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'regulatory',
   reducers: {
+    addObjectToRegulatoryTextCheckedMap(state, action: PayloadAction<{ complete: boolean; index: number }>) {
+      state.regulatoryTextCheckedMap = {
+        ...(state.regulatoryTextCheckedMap ?? {}),
+        [action.payload.index]: action.payload.complete
+      }
+    },
+
     addRegulatoryTopicOpened(state, action: PayloadAction<string>) {
       state.regulatoryTopicsOpened = [...state.regulatoryTopicsOpened, action.payload]
     },
@@ -199,6 +230,36 @@ const regulationSlice = createSlice({
       state.regulatoryZonesToPreview = []
     },
 
+    resetState: () => INITIAL_STATE,
+
+    setFishingPeriod(state, { payload: { key, value } }) {
+      const nextFishingPeriod = {
+        ...state.processingRegulation.fishingPeriod,
+        [key]: value
+      }
+
+      state.processingRegulation = {
+        ...state.processingRegulation,
+        [REGULATORY_REFERENCE_KEYS.FISHING_PERIOD]: nextFishingPeriod
+      }
+    },
+
+    setFishingPeriodOtherInfo(state, action: PayloadAction<string>) {
+      state.processingRegulation[REGULATORY_REFERENCE_KEYS.FISHING_PERIOD].otherInfo = action.payload
+    },
+
+    setHasOneOrMoreValuesMissing(state, action: PayloadAction<boolean | undefined>) {
+      state.hasOneOrMoreValuesMissing = action.payload
+    },
+
+    setIsConfirmModalOpen(state, action: PayloadAction<boolean>) {
+      state.isConfirmModalOpen = action.payload
+    },
+
+    setIsRemoveModalOpen(state, action: PayloadAction<boolean>) {
+      state.isRemoveModalOpen = action.payload
+    },
+
     setLawTypeOpened(state, action) {
       state.lawTypeOpened = action.payload
     },
@@ -216,6 +277,23 @@ const regulationSlice = createSlice({
       state.regulatoryZoneMetadataPanelIsOpen = true
     },
 
+    setProcessingRegulation(state, action: PayloadAction<RegulatoryZoneDraft>) {
+      state.status = STATUS.READY
+      state.processingRegulation = action.payload
+    },
+
+    setProcessingRegulationDeleted(state, action) {
+      state.regulationDeleted = action.payload
+    },
+
+    setProcessingRegulationSaved(state, action: PayloadAction<boolean>) {
+      state.regulationSaved = action.payload
+    },
+
+    setRegulationModified(state, action: PayloadAction<boolean>) {
+      state.regulationModified = action.payload
+    },
+
     setRegulatoryGeometriesToPreview(state, action: PayloadAction<Partial<RegulatoryZone>[]>) {
       state.regulatoryZonesToPreview = action.payload
     },
@@ -225,6 +303,10 @@ const regulationSlice = createSlice({
       action: PayloadAction<Record<string, Record<string, Record<string, RegulatoryZone[]>>>>
     ) {
       state.regulatoryLayerLawTypes = action.payload ? getRegulatoryLayersWithoutTerritory(action.payload) : undefined
+    },
+
+    setRegulatoryTextCheckedMap(state, action: PayloadAction<Record<number, boolean>>) {
+      state.regulatoryTextCheckedMap = action.payload
     },
 
     setRegulatoryTopics(state, action) {
@@ -242,6 +324,10 @@ const regulationSlice = createSlice({
 
     setRegulatoryZones(state, action: PayloadAction<RegulatoryZone[]>) {
       state.regulatoryZones = action.payload
+    },
+
+    setSaveOrUpdateRegulation(state, action: PayloadAction<boolean>) {
+      state.saveOrUpdateRegulation = action.payload
     },
 
     /**
@@ -279,37 +365,61 @@ const regulationSlice = createSlice({
       localStorageManager.set(LocalStorageKey.SelectedRegulatoryZoneIds, nextSelectedRegulatoryLayerIds)
     },
 
+    setSelectedRegulatoryZoneId(state, action) {
+      state.selectedRegulatoryZoneId = action.payload
+    },
+
+    setStatus(state, action) {
+      state.status = action.payload
+    },
+
     showSimplifiedGeometries(state) {
       state.simplifiedGeometries = true
     },
 
     showWholeGeometries(state) {
       state.simplifiedGeometries = false
+    },
+
+    updateProcessingRegulationByKey(state, action: PayloadAction<{ key: string; value: any }>) {
+      if (state.status !== STATUS.READY && state.status !== STATUS.IDLE) {
+        return
+      }
+
+      state.processingRegulation[action.payload.key] = action.payload.value
+      if (!state.regulationModified) {
+        state.regulationModified = true
+      }
+    },
+
+    // TODO Fix these types and find a cleaner way to achieve that. Proposal: pass a partial `RegulatoryZoneDraft` as param and use a "deepMerge" function.
+    updateProcessingRegulationByKeyAndSubKey<
+      Key extends keyof RegulationState['processingRegulation'],
+      SubKey extends keyof RegulationState['processingRegulation'][Key],
+      Value extends RegulationState['processingRegulation'][Key][SubKey]
+    >(
+      state,
+      action: PayloadAction<{
+        key: Key
+        subKey: SubKey
+        value: Value
+      }>
+    ) {
+      const {
+        payload: { key, subKey, value }
+      } = action
+
+      if (state.status !== STATUS.READY && state.status !== STATUS.IDLE) {
+        return
+      }
+
+      ;(state as any).processingRegulation[key][subKey] = value
+      if (!state.regulationModified) {
+        state.regulationModified = true
+      }
     }
   }
 })
-
-export const {
-  addRegulatoryTopicOpened,
-  addRegulatoryZonesToMyLayers,
-  closeRegulatoryZoneMetadataPanel,
-  removeRegulatoryTopicOpened,
-  resetLoadingRegulatoryZoneMetadata,
-  resetRegulatoryGeometriesToPreview,
-  setLawTypeOpened,
-  setLayersTopicsByRegTerritory,
-  setLoadingRegulatoryZoneMetadata,
-  setRegulatoryGeometriesToPreview,
-  setRegulatoryLayerLawTypes,
-  setRegulatoryTopics,
-  setRegulatoryTopicsOpened,
-  setRegulatoryZoneMetadata,
-  setRegulatoryZones,
-  setSearchedRegulationZoneExtent,
-  setSelectedRegulatoryZone,
-  showSimplifiedGeometries,
-  showWholeGeometries
-} = regulationSlice.actions
 
 export const regulationActions = regulationSlice.actions
 export const regulationReducer = regulationSlice.reducer

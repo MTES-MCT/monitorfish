@@ -11,7 +11,7 @@ import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { LogbookMessage } from './messages/LogbookMessage'
-import { downloadMessages, filterBySelectedType, getLogbookSortKeyOptions } from './utils'
+import { downloadMessages, filterBySelectedType, getLastLogbookTripsOptions, getLogbookSortKeyOptions } from './utils'
 import { FishingActivitiesTab } from '../../../../../domain/entities/vessel/vessel'
 import { logbookActions } from '../../../slice'
 import { CustomDatesShowedInfo } from '../CustomDatesShowedInfo'
@@ -35,15 +35,7 @@ export function LogbookMessages({ messageTypeFilter }: LogbookMessagesProps) {
   const [isAscendingSort, setIsAscendingSort] = useState(true)
   const [filteredMessagesType, setFilteredMessagesType] = useState<string | undefined>(messageTypeFilter)
   const [orderBy, setOrderBy] = useState<string>('reportDateTime')
-
-  const lastLogbookTripsOptions = useMemo(
-    () =>
-      lastLogbookTrips?.map(trip => ({
-        label: `Marée n°${trip}`,
-        value: trip
-      })) ?? [],
-    [lastLogbookTrips]
-  )
+  const lastLogbookTripsOptions = getLastLogbookTripsOptions(lastLogbookTrips, tripNumber)
 
   const filteredAndSortedLogbookMessages = useMemo(() => {
     if (!fishingActivities?.logbookMessages) {

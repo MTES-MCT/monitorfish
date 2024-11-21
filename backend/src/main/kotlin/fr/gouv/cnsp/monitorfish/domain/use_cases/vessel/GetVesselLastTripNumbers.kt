@@ -11,6 +11,6 @@ class GetVesselLastTripNumbers(
     private val logger = LoggerFactory.getLogger(GetVesselLastTripNumbers::class.java)
 
     fun execute(internalReferenceNumber: String): List<String> {
-        return logbookReportRepository.findLastTwoYearsTripNumbers(internalReferenceNumber)
+        return logbookReportRepository.findLastThreeYearsTripNumbers(internalReferenceNumber)
     }
 }

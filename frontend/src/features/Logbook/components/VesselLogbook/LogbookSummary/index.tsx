@@ -1,4 +1,5 @@
 import { COMMON_ALERT_TYPE_OPTION } from '@features/Alert/constants'
+import { getLastLogbookTripsOptions } from '@features/Logbook/components/VesselLogbook/LogbookMessages/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Icon, IconButton, Select } from '@mtes-mct/monitor-ui'
@@ -40,14 +41,7 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
 
   const getVesselLogbook = useGetLogbookUseCase()
 
-  const lastLogbookTripsOptions = useMemo(
-    () =>
-      lastLogbookTrips?.map(trip => ({
-        label: `Marée n°${trip}`,
-        value: trip
-      })) ?? [],
-    [lastLogbookTrips]
-  )
+  const lastLogbookTripsOptions = getLastLogbookTripsOptions(lastLogbookTrips, tripNumber)
 
   const logbookTrip: LogbookTripSummary = useMemo(() => getLogbookTripSummary(fishingActivities), [fishingActivities])
 

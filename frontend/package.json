@@ -11,7 +11,7 @@
   },
   "scripts": {
     "build": "vite build && cp ./build/assets/MonitorFishWebWorker-*.js ./public/service-worker.js",
-    "clean": "rm -Rf ./node-modules/.vite ./build",
+    "clean": "rm -Rf ./node-modules/.cache ./node-modules/.vite ./build",
     "dev": "import-meta-env-prepare -x ./.env.local.defaults && vite --port 3000",
     "dev-monitorenv": "FRONTEND_MONITORENV_URL=//localhost:9880 import-meta-env-prepare -u -x ./.env.local.defaults && vite --port 3000",
     "dev-puppeteer": "FRONTEND_OIDC_ENABLED=false FRONTEND_MONITORENV_URL=//localhost:9880 import-meta-env-prepare -u -x ./.env.local.defaults && vite --port 3000",

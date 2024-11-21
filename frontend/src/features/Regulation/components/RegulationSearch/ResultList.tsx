@@ -1,20 +1,14 @@
+import { layerActions } from '@features/BaseMap/slice'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Button, logSoftError, Size } from '@mtes-mct/monitor-ui'
+import { Button, Size } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { ResultLawType } from './ResultLawType'
-import layer from '../../../../domain/shared_slices/Layer'
 
-import type { LayerSliceNamespace } from '../../../../domain/entities/layers/types'
-
-export type RegulatoryLayerSearchResultListProps = {
-  namespace: LayerSliceNamespace
-}
-export function ResultList({ namespace }: RegulatoryLayerSearchResultListProps) {
+export function ResultList() {
   const dispatch = useMainAppDispatch()
-  const { setLayersSideBarOpenedLayerType } = layer[namespace].actions
   const advancedSearchIsOpen = useMainAppSelector(state => state.regulatoryLayerSearch.advancedSearchIsOpen)
   const regulatoryLayersSearchResult = useMainAppSelector(
     state => state.regulatoryLayerSearch.regulatoryLayersSearchResult
@@ -32,15 +26,7 @@ export function ResultList({ namespace }: RegulatoryLayerSearchResultListProps) 
         <ShowResultButton
           isFullWidth
           onClick={() => {
-            if (!setLayersSideBarOpenedLayerType) {
-              logSoftError({
-                message: '`setLayersSideBarOpenedLayerType` is undefined.'
-              })
-
-              return
-            }
-
-            dispatch(setLayersSideBarOpenedLayerType(undefined))
+            dispatch(layerActions.setLayersSideBarOpenedLayerType(undefined))
           }}
           size={Size.LARGE}
         >

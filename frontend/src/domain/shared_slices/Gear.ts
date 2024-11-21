@@ -6,7 +6,7 @@ export type GearState = {
   categoriesToGears: Record<string, Gear[]> | undefined
   gears: Gear[]
   gearsByCode: Record<string, Gear> | undefined
-  groupsToCategories: Record<string, string> | undefined
+  groupsToCategories: Record<string, string[]> | undefined
 }
 const INITIAL_STATE: GearState = {
   categoriesToGears: undefined,
@@ -31,7 +31,7 @@ const gearSlice = createSlice({
       state.gearsByCode = action.payload
     },
 
-    setGroupsToCategories(state, action: PayloadAction<Record<string, string>>) {
+    setGroupsToCategories(state, action: PayloadAction<Record<string, string[]>>) {
       state.groupsToCategories = action.payload
     }
   }
@@ -39,4 +39,5 @@ const gearSlice = createSlice({
 
 export const { setCategoriesToGears, setGears, setGearsByCode, setGroupsToCategories } = gearSlice.actions
 
+export const gearActions = gearSlice.actions
 export const gearReducer = gearSlice.reducer

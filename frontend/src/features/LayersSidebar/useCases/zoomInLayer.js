@@ -13,7 +13,7 @@ import { isNumeric } from '../../../utils/isNumeric'
  *
  * @returns {any}
  */
-const zoomInLayer =
+export const zoomInLayer =
   ({ feature, topicAndZone }) =>
   (dispatch, getState) => {
     if (topicAndZone) {
@@ -38,5 +38,3 @@ const dispatchAnimateToRegulatoryLayer = (center, dispatch, name) => {
     )
   }
 }
-
-export default zoomInLayer

@@ -1,20 +1,22 @@
-import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
-import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
-import { useEffect, useState } from 'react'
-import styled from 'styled-components'
-
-import { RegulatedGears } from './RegulatedGears'
-import { GEAR_REGULATION_KEYS, prepareCategoriesAndGearsToDisplay } from '../../../../domain/entities/backoffice'
-import getAllGearCodes from '../../../../domain/use_cases/gearCode/getAllGearCodes'
-import { Section, OtherRemark, VerticalLine } from '../../../commonStyles/Backoffice.style'
-import { Label, CustomInput } from '../../../commonStyles/Input.style'
+import { backOfficeRegulationActions } from '@features/Regulation/slice.backoffice'
 import {
   DEFAULT_AUTHORIZED_REGULATED_GEARS,
   DEFAULT_UNAUTHORIZED_REGULATED_GEARS,
   REGULATORY_REFERENCE_KEYS
-} from '../../../Regulation/utils'
+} from '@features/Regulation/utils'
+import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
+import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
+import { GEAR_REGULATION_KEYS, prepareCategoriesAndGearsToDisplay } from 'domain/entities/backoffice'
+import { getAllGearCodes } from 'domain/use_cases/gearCode/getAllGearCodes'
+import { useEffect, useState } from 'react'
+import styled from 'styled-components'
+
+import { RegulatedGears } from './RegulatedGears'
+import { Section, OtherRemark, VerticalLine } from '../../../commonStyles/Backoffice.style'
+import { Label, CustomInput } from '../../../commonStyles/Input.style'
 import { SectionTitle } from '../../SectionTitle'
-import { updateProcessingRegulationByKeyAndSubKey } from '../../slice'
+
+import type { BackofficeAppThunk } from '@store'
 
 export function GearRegulation() {
   const dispatch = useBackofficeAppDispatch()
@@ -29,7 +31,7 @@ export function GearRegulation() {
 
   useEffect(() => {
     if (!categoriesToGears || !groupsToCategories || gearsByCode) {
-      dispatch(getAllGearCodes())
+      dispatch(getAllGearCodes<BackofficeAppThunk>())
     }
   }, [categoriesToGears, dispatch, gearsByCode, groupsToCategories])
 
@@ -42,7 +44,7 @@ export function GearRegulation() {
   // TODO Impossible to type and make this code safe as it is, should be refactored?
   const setGearRegulation = (subKey: any, value: any) => {
     dispatch(
-      updateProcessingRegulationByKeyAndSubKey({
+      backOfficeRegulationActions.updateProcessingRegulationByKeyAndSubKey({
         key: REGULATORY_REFERENCE_KEYS.GEAR_REGULATION as 'gearRegulation',
         // @ts-ignore
         subKey,

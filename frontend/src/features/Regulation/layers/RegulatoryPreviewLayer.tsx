@@ -6,7 +6,7 @@ import { getRegulatoryLayerStyle } from './styles/regulatoryLayer.style'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import zoomInLayer from '../../LayersSidebar/useCases/zoomInLayer'
+import { zoomInLayer } from '../../LayersSidebar/useCases/zoomInLayer'
 import { getFeaturesFromRegulatoryZones } from '../../map/layers/utils'
 import { monitorfishMap } from '../../map/monitorfishMap'
 
@@ -45,7 +45,7 @@ function UnmemoizedRegulatoryPreviewLayer() {
       layerRef.current = new Vector({
         renderBuffer: 4,
         source: getVectorSource(),
-        style: feature => [getRegulatoryLayerStyle(feature as Feature, feature.getProperties() as BaseRegulatoryZone)],
+        style: feature => [getRegulatoryLayerStyle(feature, feature.getProperties() as BaseRegulatoryZone)],
         updateWhileAnimating: true,
         updateWhileInteracting: true
       })

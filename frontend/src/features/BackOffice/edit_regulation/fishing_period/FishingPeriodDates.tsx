@@ -10,14 +10,14 @@ import { useSetFishingPeriod } from '../../../../hooks/fishingPeriod/useSetFishi
 import { SquareButton } from '../../../commonStyles/Buttons.style'
 import { ContentWrapper, Row } from '../../../commonStyles/FishingPeriod.style'
 import { Label } from '../../../commonStyles/Input.style'
-import { FISHING_PERIOD_KEYS } from '../../../Regulation/utils'
+import { FishingPeriodKey } from '../../../Regulation/utils'
 
 export function FishingPeriodDates({ disabled }) {
   const processingRegulation = useBackofficeAppSelector(state => state.regulation.processingRegulation)
 
-  const addDate = usePopArrayInFishingPeriod(FISHING_PERIOD_KEYS.DATES, processingRegulation.fishingPeriod?.dates)
-  const removeDate = usePushArrayInFishingPeriod(FISHING_PERIOD_KEYS.DATES, processingRegulation.fishingPeriod?.dates)
-  const setDates = useSetFishingPeriod(FISHING_PERIOD_KEYS.DATES)
+  const addDate = usePopArrayInFishingPeriod(FishingPeriodKey.DATES, processingRegulation.fishingPeriod?.dates)
+  const removeDate = usePushArrayInFishingPeriod(FishingPeriodKey.DATES, processingRegulation.fishingPeriod?.dates)
+  const setDates = useSetFishingPeriod(FishingPeriodKey.DATES)
 
   useEffect(() => {
     if (disabled) {
@@ -34,7 +34,7 @@ export function FishingPeriodDates({ disabled }) {
         {processingRegulation.fishingPeriod?.dates && processingRegulation.fishingPeriod?.dates?.length > 0 && (
           <>
             {processingRegulation.fishingPeriod?.dates.map((date, id) => (
-              <FishingPeriodDate key={date} date={date} disabled={disabled} id={id} />
+              <FishingPeriodDate key={String(date)} date={date} disabled={disabled} id={id} />
             ))}
             <FishingPeriodDate key={-1} date={undefined} disabled={disabled} id={-1} />
           </>

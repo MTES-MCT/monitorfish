@@ -1,39 +1,42 @@
+import { backOfficeRegulationActions } from '@features/Regulation/slice.backoffice'
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import styled from 'styled-components'
 
 import { RegulatoryTextContent } from './RegulatoryTextContent'
-import { COLORS } from '../../../../constants/constants'
 import { Section, Title } from '../../../commonStyles/Backoffice.style'
 import { ValidateButton } from '../../../commonStyles/Buttons.style'
 import { DEFAULT_REGULATORY_TEXT, REGULATORY_REFERENCE_KEYS } from '../../../Regulation/utils'
-import { updateProcessingRegulationByKey } from '../../slice'
 
 import type { RegulatoryText } from '@features/Regulation/types'
 
 type RegulatoryTextSectionProps = Readonly<{
-  regulatoryTextList: RegulatoryText[]
+  regulatoryTextList: RegulatoryText[] | undefined
   saveForm: boolean
 }>
 export function RegulatoryTextSection({ regulatoryTextList, saveForm }: RegulatoryTextSectionProps) {
   const dispatch = useBackofficeAppDispatch()
 
+  const regulotaryTextListWithInitialRegulatoryText = !regulatoryTextList?.length
+    ? [DEFAULT_REGULATORY_TEXT]
+    : regulatoryTextList
+
   const setRegulatoryTextList = texts =>
     dispatch(
-      updateProcessingRegulationByKey({
+      backOfficeRegulationActions.updateProcessingRegulationByKey({
         key: REGULATORY_REFERENCE_KEYS.REGULATORY_REFERENCES,
         value: texts
       })
     )
 
-  const addOrRemoveRegulatoryTextInList = (id?: number) => {
+  const addOrRemoveRegulatoryTextInList = (index?: number) => {
     let newRegulatoryTextList = regulatoryTextList ? [...regulatoryTextList] : []
 
-    if (id === undefined) {
+    if (index === undefined) {
       newRegulatoryTextList.push(DEFAULT_REGULATORY_TEXT)
-    } else if (regulatoryTextList.length === 1) {
+    } else if (regulatoryTextList?.length === 1) {
       newRegulatoryTextList = [DEFAULT_REGULATORY_TEXT]
     } else {
-      newRegulatoryTextList.splice(id, 1)
+      newRegulatoryTextList.splice(index, 1)
     }
 
     setRegulatoryTextList(newRegulatoryTextList)
@@ -43,38 +46,27 @@ export function RegulatoryTextSection({ regulatoryTextList, saveForm }: Regulato
     addOrRemoveRegulatoryTextInList()
   }
 
-  const setRegulatoryText = (id: number, regulatoryText: RegulatoryText) => {
+  const setRegulatoryText = (index: number, regulatoryText: RegulatoryText) => {
     const newRegulatoryTextList = regulatoryTextList ? [...regulatoryTextList] : []
-    newRegulatoryTextList[id] = regulatoryText
+    newRegulatoryTextList[index] = regulatoryText
     setRegulatoryTextList(newRegulatoryTextList)
   }
 
   return (
     <Section show>
       <Title>références réglementaires en vigueur</Title>
-      {regulatoryTextList && regulatoryTextList.length > 0 ? (
-        regulatoryTextList.map((regulatoryText, id) => (
-          <RegulatoryTextContent
-            key={JSON.stringify(regulatoryText)}
-            addOrRemoveRegulatoryTextInList={addOrRemoveRegulatoryTextInList}
-            id={id}
-            listLength={regulatoryTextList.length}
-            regulatoryText={regulatoryText}
-            saveForm={saveForm}
-            setRegulatoryText={setRegulatoryText}
-          />
-        ))
-      ) : (
+      {regulotaryTextListWithInitialRegulatoryText.map((regulatoryText, index) => (
         <RegulatoryTextContent
-          key={0}
+          // eslint-disable-next-line react/no-array-index-key
+          key={index}
           addOrRemoveRegulatoryTextInList={addOrRemoveRegulatoryTextInList}
-          id={0}
-          listLength={0}
-          regulatoryText={DEFAULT_REGULATORY_TEXT}
+          index={index}
+          listLength={regulotaryTextListWithInitialRegulatoryText.length}
+          regulatoryText={regulatoryText}
           saveForm={saveForm}
           setRegulatoryText={setRegulatoryText}
         />
-      )}
+      ))}
       <ButtonLine>
         <ValidateButton disabled={false} isLast={false} onClick={addRegRefInEffect}>
           Ajouter un autre texte en vigueur
@@ -87,5 +79,5 @@ export function RegulatoryTextSection({ regulatoryTextList, saveForm }: Regulato
 const ButtonLine = styled.div`
   display: flex;
   flex-direction: row;
-  background-color: ${COLORS.white};
+  background-color: ${p => p.theme.color.white};
 `

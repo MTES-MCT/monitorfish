@@ -5,11 +5,11 @@ import styled from 'styled-components'
 
 import { useSetFishingPeriod } from '../../../../hooks/fishingPeriod/useSetFishingPeriod'
 import { TimeRow } from '../../../commonStyles/FishingPeriod.style'
-import { FISHING_PERIOD_KEYS } from '../../../Regulation/utils'
+import { FishingPeriodKey } from '../../../Regulation/utils'
 
 export function DayTimeCheckbox({ disabled, timeIsDisabled }) {
   const daytime = useBackofficeAppSelector(state => state.regulation.processingRegulation.fishingPeriod?.daytime)
-  const setDaytime = useSetFishingPeriod(FISHING_PERIOD_KEYS.DAYTIME)
+  const setDaytime = useSetFishingPeriod(FishingPeriodKey.DAYTIME)
 
   useEffect(() => {
     if (disabled) {

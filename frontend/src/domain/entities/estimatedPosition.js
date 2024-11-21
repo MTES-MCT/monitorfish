@@ -28,8 +28,7 @@ class EstimatedPosition {
    * @returns [lineFeature, circleFeature] - array containing 2 features: one for the line, one for the point symbolising the last position
    */
   static getFeatures(vessel, options) {
-    const { dateTime, estimatedCurrentLatitude, estimatedCurrentLongitude, latitude, longitude } =
-      vessel
+    const { dateTime, estimatedCurrentLatitude, estimatedCurrentLongitude, latitude, longitude } = vessel
 
     if (!longitude || !latitude || !estimatedCurrentLongitude || !estimatedCurrentLatitude) {
       return null

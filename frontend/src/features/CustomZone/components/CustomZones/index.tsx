@@ -1,11 +1,10 @@
-import { logSoftError } from '@mtes-mct/monitor-ui'
+import { layerActions } from '@features/BaseMap/slice'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { CustomZone } from './CustomZone'
 import { COLORS } from '../../../../constants/constants'
 import { LayerType } from '../../../../domain/entities/layers/constants'
-import LayerSlice from '../../../../domain/shared_slices/Layer'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { ChevronIcon } from '../../../commonStyles/icons/ChevronIcon.style'
@@ -14,15 +13,10 @@ import { initLayer } from '../../useCases/initLayer'
 import { remove } from '../../useCases/remove'
 import { showOrHide } from '../../useCases/showOrHide'
 
-import type { LayerSliceNamespace } from '../../../../domain/entities/layers/types'
-
 export type CustomZonesProps = {
   hideLayersListWhenSearching?: boolean
-  namespace: LayerSliceNamespace
 }
-export function CustomZones({ hideLayersListWhenSearching = false, namespace }: CustomZonesProps) {
-  const { setLayersSideBarOpenedLayerType } = LayerSlice[namespace].actions
-
+export function CustomZones({ hideLayersListWhenSearching = false }: CustomZonesProps) {
   const dispatch = useMainAppDispatch()
 
   const { layersSidebarOpenedLayerType } = useMainAppSelector(state => state.layer)
@@ -62,18 +56,10 @@ export function CustomZones({ hideLayersListWhenSearching = false, namespace }: 
   )
 
   const onSectionTitleClicked = () => {
-    if (!setLayersSideBarOpenedLayerType) {
-      logSoftError({
-        message: '`setLayersSideBarOpenedLayerType` is undefined.'
-      })
-
-      return
-    }
-
     if (isOpened) {
-      dispatch(setLayersSideBarOpenedLayerType(undefined))
+      dispatch(layerActions.setLayersSideBarOpenedLayerType(undefined))
     } else {
-      dispatch(setLayersSideBarOpenedLayerType(LayerType.CUSTOM))
+      dispatch(layerActions.setLayersSideBarOpenedLayerType(LayerType.CUSTOM))
     }
   }
 

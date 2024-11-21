@@ -5,14 +5,14 @@ import styled from 'styled-components'
 
 import { useSetFishingPeriod } from '../../../../hooks/fishingPeriod/useSetFishingPeriod'
 import { Label } from '../../../commonStyles/Input.style'
-import { FISHING_PERIOD_KEYS } from '../../../Regulation/utils'
+import { FishingPeriodKey } from '../../../Regulation/utils'
 
 type FishingPeriodAnnualRecurrenceProps = Readonly<{
   disabled: boolean | undefined
 }>
 export function FishingPeriodAnnualRecurrence({ disabled = false }: FishingPeriodAnnualRecurrenceProps) {
   const processingRegulation = useBackofficeAppSelector(state => state.regulation.processingRegulation)
-  const onAnnualRecurrenceChange = useSetFishingPeriod(FISHING_PERIOD_KEYS.ANNUAL_RECURRENCE)
+  const onAnnualRecurrenceChange = useSetFishingPeriod(FishingPeriodKey.ANNUAL_RECURRENCE)
 
   useEffect(() => {
     if (disabled) {

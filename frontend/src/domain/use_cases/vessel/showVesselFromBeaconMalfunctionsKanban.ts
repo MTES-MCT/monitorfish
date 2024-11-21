@@ -1,9 +1,11 @@
-import { setSelectedVesselCustomTrackRequest, setSelectedVesselSidebarTab } from '@features/Vessel/slice.ts'
+import { vesselActions } from '@features/Vessel/slice'
+import { END_OF_MALFUNCTION_REASON_RECORD } from 'domain/entities/beaconMalfunction/constants'
+import { VesselSidebarTab } from 'domain/entities/vessel/vessel'
+import { VesselTrackDepth } from 'domain/entities/vesselTrackDepth'
 
 import { showVessel } from './showVessel'
-import { END_OF_MALFUNCTION_REASON_RECORD } from '../../entities/beaconMalfunction/constants'
-import { VesselSidebarTab } from '../../entities/vessel/vessel'
-import { VesselTrackDepth } from '../../entities/vesselTrackDepth'
+
+import type { TrackRequest } from 'domain/entities/vessel/types'
 
 /**
  * Show the selected vessel on map.
@@ -21,14 +23,14 @@ export const showVesselFromBeaconMalfunctionsKanban = (beaconMalfunction, openVM
       afterDateTime,
       beforeDateTime,
       trackDepth: VesselTrackDepth.CUSTOM
-    }
-    await dispatch(setSelectedVesselCustomTrackRequest(trackRequest))
+    } satisfies TrackRequest
+    await dispatch(vesselActions.setSelectedVesselCustomTrackRequest(trackRequest))
   }
 
   await dispatch(showVessel(beaconMalfunction, false, true))
 
   if (openVMRERSTab) {
-    dispatch(setSelectedVesselSidebarTab(VesselSidebarTab.ERSVMS))
+    dispatch(vesselActions.setSelectedVesselSidebarTab(VesselSidebarTab.ERSVMS))
   }
 }
 

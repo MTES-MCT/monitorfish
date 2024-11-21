@@ -17,7 +17,7 @@ import { setDisplayedComponents } from '../../../../domain/shared_slices/Display
 import { setBlockVesselsUpdate } from '../../../../domain/shared_slices/Global'
 import { MapComponent } from '../../../commonStyles/MapComponent'
 
-export function VesselList({ namespace }) {
+export function VesselList() {
   const dispatch = useMainAppDispatch()
   const { drawedGeometry } = useListenForDrawedGeometry(InteractionListener.VESSELS_LIST)
   const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
@@ -77,7 +77,7 @@ export function VesselList({ namespace }) {
           />
         </VesselListButton>
         <Modal backdrop="static" onClose={onClose} open={isVesselListModalDisplayed} size="full">
-          {isVesselListModalDisplayed && <VesselListModal namespace={namespace} onClose={onClose} />}
+          {isVesselListModalDisplayed && <VesselListModal onClose={onClose} />}
         </Modal>
       </Wrapper>
     </>

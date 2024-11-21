@@ -28,7 +28,7 @@ type CheckedVesselEnhancedLastPositionWebGLObject = VesselEnhancedLastPositionWe
   checked?: boolean
 }
 
-export function VesselListModal({ namespace, onClose }) {
+export function VesselListModal({ onClose }) {
   const dispatch = useMainAppDispatch()
   const vessels = useMainAppSelector(state => vesselSelectors.selectAll(state.vessel.vessels))
 
@@ -160,7 +160,7 @@ export function VesselListModal({ namespace, onClose }) {
       <Modal.Body>
         <LegacyRsuiteComponentsWrapper>
           <Title>FILTRER LA LISTE</Title>
-          <VesselListFilters namespace={namespace} seeMoreIsOpen={seeMoreIsOpen} setSeeMoreIsOpen={setSeeMoreIsOpen} />
+          <VesselListFilters seeMoreIsOpen={seeMoreIsOpen} setSeeMoreIsOpen={setSeeMoreIsOpen} />
           <VesselListTable
             allVesselsChecked={allVesselsChecked}
             filteredVessels={filteredVessels}

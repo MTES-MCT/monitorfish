@@ -1,3 +1,5 @@
 export enum LocalStorageKey {
-  LastSearchVessels = 'lastSearchedVessels'
+  LastSearchVessels = 'lastSearchedVessels',
+  SelectedRegulatoryZoneIds = 'selectedRegulatoryZoneIds',
+  SelectedRegulatoryZones = 'selectedRegulatoryZones'
 }

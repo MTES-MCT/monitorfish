@@ -9,7 +9,7 @@ import { useSetFishingPeriod } from '../../../../hooks/fishingPeriod/useSetFishi
 import { useUpdateArrayInFishingPeriod } from '../../../../hooks/fishingPeriod/useUpdateArrayInFishingPeriod'
 import { SquareButton } from '../../../commonStyles/Buttons.style'
 import { TimeRow, DateRanges, ContentWrapper } from '../../../commonStyles/FishingPeriod.style'
-import { FISHING_PERIOD_KEYS } from '../../../Regulation/utils'
+import { FishingPeriodKey } from '../../../Regulation/utils'
 
 type FishingPeriodTimeSectionProps = Readonly<{
   disabled: boolean
@@ -21,19 +21,19 @@ export function FishingPeriodTimeSection({ disabled, timeIsDisabled }: FishingPe
   // )
   const processingRegulation = useBackofficeAppSelector(state => state.regulation.processingRegulation)
   const onTimeIntervalChange = useUpdateArrayInFishingPeriod(
-    FISHING_PERIOD_KEYS.TIME_INTERVALS,
+    FishingPeriodKey.TIME_INTERVALS,
     processingRegulation.fishingPeriod?.timeIntervals
   )
   const addTimeToTimeInterval = usePushArrayInFishingPeriod(
-    FISHING_PERIOD_KEYS.TIME_INTERVALS,
+    FishingPeriodKey.TIME_INTERVALS,
     processingRegulation.fishingPeriod?.timeIntervals,
     {}
   )
   const removeTimeFromTimeInterval = usePopArrayInFishingPeriod(
-    FISHING_PERIOD_KEYS.TIME_INTERVALS,
+    FishingPeriodKey.TIME_INTERVALS,
     processingRegulation.fishingPeriod?.timeIntervals
   )
-  const setTimeInterval = useSetFishingPeriod(FISHING_PERIOD_KEYS.TIME_INTERVALS)
+  const setTimeInterval = useSetFishingPeriod(FishingPeriodKey.TIME_INTERVALS)
 
   useEffect(() => {
     if (disabled) {

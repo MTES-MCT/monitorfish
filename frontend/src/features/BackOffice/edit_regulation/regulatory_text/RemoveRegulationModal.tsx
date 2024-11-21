@@ -6,9 +6,9 @@ import styled from 'styled-components'
 import { FooterButton } from '../../../commonStyles/Backoffice.style'
 import { ValidateButton, CancelButton } from '../../../commonStyles/Buttons.style'
 import CloseIconSVG from '../../../icons/Croix_grise_clair.svg?react'
-import updateRegulation from '../../../Regulation/useCases/updateRegulation'
-import { REGULATION_ACTION_TYPE, getRegulatoryFeatureId } from '../../../Regulation/utils'
-import { setIsRemoveModalOpen } from '../../slice'
+import { setIsRemoveModalOpen } from '../../../Regulation/slice.backoffice'
+import { updateRegulation } from '../../../Regulation/useCases/updateRegulation'
+import { RegulationActionType, getRegulatoryFeatureId } from '../../../Regulation/utils'
 
 export function RemoveRegulationModal() {
   const dispatch = useBackofficeAppDispatch()
@@ -17,7 +17,7 @@ export function RemoveRegulationModal() {
   const deleteRegulation = () => {
     const feature = new Feature({})
     feature.setId(getRegulatoryFeatureId(processingRegulation.id))
-    dispatch(updateRegulation(feature, REGULATION_ACTION_TYPE.DELETE))
+    dispatch(updateRegulation(feature, RegulationActionType.Delete))
   }
 
   return (

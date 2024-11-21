@@ -8,7 +8,7 @@ import { setError } from '../../shared_slices/Global'
  * @param {BeaconMalfunctionResumeAndDetails} beaconMalfunction - the beacon malfunction to open
  * @param {boolean} isFromUserAction - if the use case is called from the API Worker
  */
-const openBeaconMalfunction = (beaconMalfunction, isFromUserAction) => (dispatch, getState) => {
+export const openBeaconMalfunction = (beaconMalfunction, isFromUserAction) => (dispatch, getState) => {
   const previousBeaconMalfunction = getState().beaconMalfunction.openedBeaconMalfunction
   dispatch(
     setOpenedBeaconMalfunction({
@@ -37,5 +37,3 @@ const openBeaconMalfunction = (beaconMalfunction, isFromUserAction) => (dispatch
       )
     })
 }
-
-export default openBeaconMalfunction

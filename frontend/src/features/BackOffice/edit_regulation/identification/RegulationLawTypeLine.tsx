@@ -5,8 +5,8 @@ import styled from 'styled-components'
 
 import { ContentLine } from '../../../commonStyles/Backoffice.style'
 import { Label } from '../../../commonStyles/Input.style'
+import { updateProcessingRegulationByKey } from '../../../Regulation/slice.backoffice'
 import { LAWTYPES_TO_TERRITORY, REGULATORY_REFERENCE_KEYS, UE } from '../../../Regulation/utils'
-import { updateProcessingRegulationByKey } from '../../slice'
 
 export function RegulationLawTypeLine({ selectData }) {
   const dispatch = useBackofficeAppDispatch()

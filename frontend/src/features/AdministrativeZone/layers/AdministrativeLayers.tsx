@@ -27,7 +27,7 @@ function UnmemoizedAdministrativeLayers() {
         .filter(layer => layersNotInCurrentOLMap(olLayers, layer))
 
       layersToInsert.forEach(layerToInsert => {
-        if (!layerToInsert) {
+        if (!layerToInsert || !layerToInsert.type || !layerToInsert.zone) {
           return
         }
 

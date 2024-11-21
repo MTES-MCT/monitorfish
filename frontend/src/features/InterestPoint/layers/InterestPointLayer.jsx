@@ -23,7 +23,7 @@ import {
   coordinatesOrTypeAreModified,
   InterestPointType
 } from '../utils'
-import saveInterestPointFeature from '../../../domain/use_cases/interestPoint/saveInterestPointFeature'
+import { saveInterestPointFeature } from '../../../domain/use_cases/interestPoint/saveInterestPointFeature'
 import GeoJSON from 'ol/format/GeoJSON'
 import LineString from 'ol/geom/LineString'
 import { InterestPointLine } from './interestPointLine'

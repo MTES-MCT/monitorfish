@@ -1,5 +1,8 @@
 import type { LayerType } from './constants'
+import type { GearRegulation } from '@features/Regulation/types'
 
+/** @deprecated Redux namespacing should not be stored in data. */
+// TODO Replace that with a cleaner mechanism.
 export enum LayerSliceNamespace {
   backoffice = 'backoffice',
   homepage = 'homepage'
@@ -83,10 +86,13 @@ export type ShowableLayer = {
   zoneNamePropertyKey?: string
 }
 
+// TODO Check and split this type.
+// TODO Strict-type all the constants/params using it. It's way too partial (TS migration) which complicates the type-checking/guarding.
 export type ShowedLayer = {
-  id: number | string
-  namespace: LayerSliceNamespace
-  topic: string
-  type: string
-  zone: string | null
+  gears?: GearRegulation
+  id?: number | string | undefined
+  layerName?: string
+  topic?: string | undefined
+  type?: string | undefined
+  zone?: string | undefined
 }

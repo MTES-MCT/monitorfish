@@ -1,4 +1,4 @@
-import { addRegulatoryZonesToMyLayers, regulatoryActions } from '@features/Regulation/slice'
+import { addRegulatoryZonesToMyLayers, regulationActions } from '@features/Regulation/slice'
 import { hideRegulatoryZoneLayerById } from '@features/Regulation/useCases/hideRegulatoryZoneLayerById'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -6,7 +6,6 @@ import { Accent, Icon, IconButton, THEME } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { LayerSliceNamespace } from '../../../../domain/entities/layers/types'
 import { closeRegulatoryZoneMetadata } from '../../useCases/closeRegulatoryZoneMetadata'
 import { showRegulatoryZoneMetadata } from '../../useCases/showRegulatoryZoneMetadata'
 import { ZonePreview } from '../ZonePreview'
@@ -45,9 +44,9 @@ export function ResultZone({ isOpen, regulatoryZone }: RegulatoryLayerSearchResu
   }
 
   function toggleCheckZone() {
-    if (isZoneAlreadySelected) {
-      dispatch(hideRegulatoryZoneLayerById(regulatoryZone.id, LayerSliceNamespace.homepage))
-      dispatch(regulatoryActions.removeSelectedZoneById(regulatoryZone.id))
+    if (isZoneAlreadySelected && regulatoryZone.id) {
+      dispatch(hideRegulatoryZoneLayerById(regulatoryZone.id))
+      dispatch(regulationActions.removeSelectedZoneById(regulatoryZone.id))
 
       return
     }

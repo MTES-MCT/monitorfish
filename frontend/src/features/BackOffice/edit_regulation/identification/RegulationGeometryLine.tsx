@@ -5,8 +5,8 @@ import styled from 'styled-components'
 
 import { ContentLine } from '../../../commonStyles/Backoffice.style'
 import { Label } from '../../../commonStyles/Input.style'
+import { updateProcessingRegulationByKey } from '../../../Regulation/slice.backoffice'
 import { DEFAULT_MENU_CLASSNAME, REGULATORY_REFERENCE_KEYS } from '../../../Regulation/utils'
-import { updateProcessingRegulationByKey } from '../../slice'
 
 export function RegulationGeometryLine({
   geometryIdList,

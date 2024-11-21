@@ -2,16 +2,29 @@ import { getRegulatoryZoneFromAPI, REGULATORY_ZONE_METADATA_ERROR_MESSAGE } from
 import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { setError } from '../../../domain/shared_slices/Global'
 import { STATUS } from '../../BackOffice/constants'
-import { setProcessingRegulation, setSelectedRegulatoryZoneId, setStatus } from '../../BackOffice/slice'
+import { setProcessingRegulation, setSelectedRegulatoryZoneId, setStatus } from '../slice.backoffice'
 import { mapToRegulatoryZone, DEFAULT_REGULATORY_TEXT } from '../utils'
 
-const showRegulationToEdit = regulatoryZone => async (dispatch, getState) => {
-  const { speciesByCode } = getState().species
-  dispatch(setStatus(STATUS.LOADING))
+import type { MainAppThunk } from '@store'
+import type { ShowedLayer } from 'domain/entities/layers/types'
 
-  return getRegulatoryZoneFromAPI(LayerProperties.REGULATORY.code, regulatoryZone, getState().global.isBackoffice)
-    .then(feature => {
+export const showRegulationToEdit =
+  (regulatoryZone: ShowedLayer): MainAppThunk<Promise<void>> =>
+  async (dispatch, getState) => {
+    const { speciesByCode } = getState().species
+    dispatch(setStatus(STATUS.LOADING))
+
+    try {
+      const feature = await getRegulatoryZoneFromAPI(
+        LayerProperties.REGULATORY.code,
+        regulatoryZone,
+        getState().global.isBackoffice
+      )
+
       const regulatoryZoneMetadata = mapToRegulatoryZone(feature, speciesByCode)
+      if (!regulatoryZoneMetadata) {
+        throw new Error('`regulatoryZoneMetadata` is undefined')
+      }
 
       const {
         fishingPeriod,
@@ -34,20 +47,18 @@ const showRegulationToEdit = regulatoryZone => async (dispatch, getState) => {
           geometry,
           id,
           lawType,
+          nextId: undefined,
           otherInfo,
           region: region ? region.split(', ') : [],
-          regulatoryReferences: regulatoryReferences?.length > 0 ? regulatoryReferences : [DEFAULT_REGULATORY_TEXT],
+          regulatoryReferences: regulatoryReferences?.length ? regulatoryReferences : [DEFAULT_REGULATORY_TEXT],
           speciesRegulation,
           topic,
           zone
         })
       )
       dispatch(setSelectedRegulatoryZoneId(id))
-    })
-    .catch(error => {
-      console.error(error)
+    } catch (err) {
+      console.error(err)
       dispatch(setError(new Error(REGULATORY_ZONE_METADATA_ERROR_MESSAGE)))
-    })
-}
-
-export default showRegulationToEdit
+    }
+  }

@@ -14,24 +14,31 @@ import type { MainAppThunk } from '../../../store'
 import type { RegulatoryZone } from '../types'
 
 export const showRegulatoryZoneMetadata =
-  (partialRegulatoryZone: Pick<RegulatoryZone, 'topic' | 'zone'>, isPreviewing: boolean = false): MainAppThunk =>
-  (dispatch, getState) => {
+  (
+    partialRegulatoryZone: Pick<RegulatoryZone, 'topic' | 'zone'>,
+    isPreviewing: boolean = false
+  ): MainAppThunk<Promise<void>> =>
+  async (dispatch, getState) => {
     dispatch(setLoadingRegulatoryZoneMetadata())
     const { speciesByCode } = getState().species
 
-    getRegulatoryFeatureMetadataFromAPI(partialRegulatoryZone, getState().global.isBackoffice)
-      .then(feature => {
-        const parsedRegulatoryZone = mapToRegulatoryZone(feature, speciesByCode)
-        dispatch(setRegulatoryZoneMetadata(parsedRegulatoryZone))
+    try {
+      const feature = await getRegulatoryFeatureMetadataFromAPI(partialRegulatoryZone, getState().global.isBackoffice)
 
-        if (isPreviewing) {
-          dispatch(setRegulatoryGeometriesToPreview([parsedRegulatoryZone]))
-        }
-      })
-      .catch(error => {
-        dispatch(closeRegulatoryZoneMetadataPanel())
-        dispatch(setError(error))
-        dispatch(resetLoadingRegulatoryZoneMetadata())
-        dispatch(resetRegulatoryGeometriesToPreview())
-      })
+      const parsedRegulatoryZone = mapToRegulatoryZone(feature, speciesByCode)
+      if (!parsedRegulatoryZone) {
+        throw new Error('`parsedRegulatoryZone` is undefined.')
+      }
+
+      dispatch(setRegulatoryZoneMetadata(parsedRegulatoryZone))
+
+      if (isPreviewing) {
+        dispatch(setRegulatoryGeometriesToPreview([parsedRegulatoryZone]))
+      }
+    } catch (err) {
+      dispatch(closeRegulatoryZoneMetadataPanel())
+      dispatch(setError(err))
+      dispatch(resetLoadingRegulatoryZoneMetadata())
+      dispatch(resetRegulatoryGeometriesToPreview())
+    }
   }

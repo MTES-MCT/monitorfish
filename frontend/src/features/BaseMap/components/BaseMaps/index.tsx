@@ -1,3 +1,4 @@
+import { layerActions } from '@features/BaseMap/slice'
 import { useIsInLightMode } from '@hooks/useIsInLightMode'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -8,17 +9,15 @@ import styled from 'styled-components'
 
 import { BaseMap } from './BaseMap'
 import { BaseLayers, LayerType } from '../../../../domain/entities/layers/constants'
-import LayerSlice from '../../../../domain/shared_slices/Layer'
 import { selectBaseLayer } from '../../../../domain/shared_slices/Map'
 import { ChevronIcon } from '../../../commonStyles/icons/ChevronIcon.style'
 import { closeRegulatoryZoneMetadata } from '../../../Regulation/useCases/closeRegulatoryZoneMetadata'
 
-export function BaseMaps({ namespace }) {
+export function BaseMaps() {
   const dispatch = useMainAppDispatch()
   const isInLightMode = useIsInLightMode()
   const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
   const layersSidebarOpenedLayerType = useMainAppSelector(state => state.layer.layersSidebarOpenedLayerType)
-  const { setLayersSideBarOpenedLayerType } = LayerSlice[namespace].actions
 
   const baseLayers = useMemo(() => {
     if (isInLightMode) {
@@ -35,13 +34,13 @@ export function BaseMaps({ namespace }) {
 
   const openOrCloseBaseLayers = useCallback(() => {
     if (isBaseLayersShowed) {
-      dispatch(setLayersSideBarOpenedLayerType(undefined))
+      dispatch(layerActions.setLayersSideBarOpenedLayerType(undefined))
     } else {
-      dispatch(setLayersSideBarOpenedLayerType(LayerType.BASE_LAYER))
+      dispatch(layerActions.setLayersSideBarOpenedLayerType(LayerType.BASE_LAYER))
       // @ts-ignore
       dispatch(closeRegulatoryZoneMetadata())
     }
-  }, [dispatch, isBaseLayersShowed, setLayersSideBarOpenedLayerType])
+  }, [dispatch, isBaseLayersShowed])
 
   const showLayer = useCallback(
     nextBaseLayer => {

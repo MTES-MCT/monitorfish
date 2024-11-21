@@ -7,9 +7,9 @@ import styled from 'styled-components'
 
 import { ContentLine } from '../../../commonStyles/Backoffice.style'
 import { Label } from '../../../commonStyles/Input.style'
+import { updateProcessingRegulationByKey } from '../../../Regulation/slice.backoffice'
 import { REGULATORY_REFERENCE_KEYS } from '../../../Regulation/utils'
 import { FRENCH_REGION_LIST } from '../../constants'
-import { updateProcessingRegulationByKey } from '../../slice'
 
 export function RegulationRegionLine({ isDisabled }) {
   const dispatch = useBackofficeAppDispatch()

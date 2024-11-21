@@ -1,23 +1,21 @@
+import { FishingPeriodKey } from '@features/Regulation/utils'
+import { useUpdateArrayInFishingPeriod } from '@hooks/fishingPeriod/useUpdateArrayInFishingPeriod'
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
 import { useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 
-import { useUpdateArrayInFishingPeriod } from '../../../../hooks/fishingPeriod/useUpdateArrayInFishingPeriod'
-import { FISHING_PERIOD_KEYS } from '../../../Regulation/utils'
 import { CustomDatePicker } from '../custom_form/CustomDatePicker'
 
 type FishingPeriodDateProps = Readonly<{
-  date: string | undefined
+  date: Date | undefined
   disabled: boolean
   id: number
 }>
 export function FishingPeriodDate({ date, disabled, id }: FishingPeriodDateProps) {
   const processingRegulation = useBackofficeAppSelector(state => state.regulation.processingRegulation)
-  const updateDates = useUpdateArrayInFishingPeriod(
-    FISHING_PERIOD_KEYS.DATES,
-    processingRegulation.fishingPeriod?.dates
-  )
-  const onDateChange = useCallback(_date => updateDates(id, _date), [id, updateDates])
+  // TODO Simplify this unnecessarily complex pattern: a callback "maker" result called withing another callback.
+  const updateDates = useUpdateArrayInFishingPeriod(FishingPeriodKey.DATES, processingRegulation.fishingPeriod?.dates)
+  const onDateChange = useCallback((nextDate: Date | undefined) => updateDates(id, nextDate), [id, updateDates])
 
   useEffect(() => {
     if (disabled) {
@@ -27,7 +25,7 @@ export function FishingPeriodDate({ date, disabled, id }: FishingPeriodDateProps
 
   return (
     <DateRow
-      key={date}
+      key={String(date)}
       $isLast={!!processingRegulation.fishingPeriod && id === processingRegulation.fishingPeriod.dates.length - 1}
     >
       <CustomDatePicker

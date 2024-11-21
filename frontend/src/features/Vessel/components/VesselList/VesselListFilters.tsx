@@ -1,5 +1,5 @@
 import { COUNTRIES_AS_ALPHA2_OPTIONS } from '@constants/index'
-import getAdministrativeZoneGeometry from '@features/AdministrativeZone/useCases/getAdministrativeZoneGeometry'
+import { getAdministrativeZoneGeometry } from '@features/AdministrativeZone/useCases/getAdministrativeZoneGeometry'
 import { useGetFleetSegmentsQuery } from '@features/FleetSegment/apis'
 import {
   removeZoneSelected,
@@ -44,11 +44,10 @@ function renderTagPickerValue(items) {
 const tagPickerStyle = { margin: '3px 10px 10px 0', verticalAlign: 'top', width: 150 }
 
 type VesselListFiltersProps = Readonly<{
-  namespace: string
   seeMoreIsOpen: any
   setSeeMoreIsOpen: any
 }>
-function UnmemoizedVesselListFilters({ namespace, seeMoreIsOpen, setSeeMoreIsOpen }: VesselListFiltersProps) {
+function UnmemoizedVesselListFilters({ seeMoreIsOpen, setSeeMoreIsOpen }: VesselListFiltersProps) {
   const dispatch = useMainAppDispatch()
   const {
     countriesFiltered,
@@ -187,13 +186,13 @@ function UnmemoizedVesselListFilters({ namespace, seeMoreIsOpen, setSeeMoreIsOpe
         }
 
         if (zoneToFetch.isSubZone) {
-          dispatch(getAdministrativeZoneGeometry(zoneToFetch.groupCode, zoneToFetch.code, zoneToFetch.name, namespace))
+          dispatch(getAdministrativeZoneGeometry(zoneToFetch.groupCode, zoneToFetch.code, zoneToFetch.name))
         } else {
-          dispatch(getAdministrativeZoneGeometry(zoneToFetch.code, null, zoneToFetch.name, namespace))
+          dispatch(getAdministrativeZoneGeometry(zoneToFetch.code, undefined, zoneToFetch.name))
         }
       })
     },
-    [dispatch, namespace, zonesFilter, zonesSelected]
+    [dispatch, zonesFilter, zonesSelected]
   )
 
   // TODO Export to a thunk use-case

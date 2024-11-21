@@ -6,14 +6,14 @@ import { useSetFishingPeriod } from '../../../../hooks/fishingPeriod/useSetFishi
 import { CustomCheckbox } from '../../../commonStyles/Backoffice.style'
 import { Row } from '../../../commonStyles/FishingPeriod.style'
 import { Label } from '../../../commonStyles/Input.style'
-import { FISHING_PERIOD_KEYS } from '../../../Regulation/utils'
+import { FishingPeriodKey } from '../../../Regulation/utils'
 
 type HolidayCheckboxProps = Readonly<{
   disabled: boolean
 }>
 export function HolidayCheckbox({ disabled }: HolidayCheckboxProps) {
   const processingRegulation = useBackofficeAppSelector(state => state.regulation.processingRegulation)
-  const setHolidays = useSetFishingPeriod(FISHING_PERIOD_KEYS.HOLIDAYS)
+  const setHolidays = useSetFishingPeriod(FishingPeriodKey.HOLIDAYS)
   const onChange = useCallback(
     _ => setHolidays(!processingRegulation.fishingPeriod?.holidays),
     [setHolidays, processingRegulation.fishingPeriod?.holidays]

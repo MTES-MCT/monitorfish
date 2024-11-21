@@ -260,12 +260,12 @@ context('Vessel sidebar logbook tab', () => {
     cy.fill('Trier les messages', "Date d'activité")
 
     cy.get('*[data-cy="LogbookMessage"]').eq(0).contains('Départ')
-    cy.clickButton('Trier par date antichronologique').click()
+    cy.clickButton('Trier par date antichronologique')
     cy.get('*[data-cy="LogbookMessage"]').eq(0).contains('Préavis')
-    cy.clickButton('Trier par date chronologique').click()
+    cy.clickButton('Trier par date chronologique')
     cy.get('*[data-cy="LogbookMessage"]').eq(0).contains('Départ')
 
-    cy.fill('Numéro de marée', 'Marée n°2023008')
+    cy.fill('Numéro de marée', '20230086')
     cy.get('*[data-cy="LogbookMessage"]').should('have.length', 1)
     cy.get('*[data-cy="LogbookMessage"]').eq(0).contains('Débarquement')
   })

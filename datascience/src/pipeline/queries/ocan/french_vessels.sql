@@ -119,7 +119,11 @@ ON nfp.id_nav_navire_francais = nf.id_nav_navire_francais
 WHERE
     -- Situations flotteur 'Français pêche', 'Pêche Communautaire', 'Pêche Non Communautaire',
     -- 'Navire Provisoire', 'Situation inconnue' et 'Fluvial Simba'
-    f.idc_situation IN (2, 4, 5, 7, 9, 10) AND
+    (
+        -- Exception to add a supply vessel
+        nf.modele = 'ASSISTANCE THONIER'
+        OR f.idc_situation IN (2, 4, 5, 7, 9, 10)
+    ) AND
     -- Exclusion du statut flotteur 'Hors service'
     f.idc_statut_flotteur != 3 AND
     (

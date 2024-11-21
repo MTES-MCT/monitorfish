@@ -1,7 +1,6 @@
-import { isNotNullish } from '@utils/isNotNullish'
-
 import { LayerProperties } from '../../domain/entities/layers/constants'
 import { getTextForSearch } from '../../utils'
+import { isNotNullish } from '../../utils/isNotNullish'
 import { formatDataForSelectPicker } from '../BackOffice/utils'
 
 import type { Regulation } from './Regulation.types'

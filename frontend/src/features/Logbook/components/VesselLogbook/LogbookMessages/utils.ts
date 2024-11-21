@@ -36,3 +36,21 @@ export function getLogbookSortKeyOptions(): Option[] {
     value: key
   }))
 }
+
+export function getLastLogbookTripsOptions(
+  lastLogbookTrips: string[] | undefined,
+  currentTripNumber: string | null
+): Option[] {
+  if (!currentTripNumber) {
+    return []
+  }
+
+  const logbookTrips = lastLogbookTrips?.includes(currentTripNumber)
+    ? lastLogbookTrips
+    : [...(lastLogbookTrips ?? []), currentTripNumber]
+
+  return logbookTrips.map(trip => ({
+    label: `Marée n°${trip}`,
+    value: trip
+  }))
+}

@@ -72,7 +72,7 @@ jobs:
         working-directory: ./frontend
 
       - name: Lint Frontend
-        run: npm run test:lint:partial
+        run: npm run test:lint
         working-directory: ./frontend
 
       - name: Check Frontend types

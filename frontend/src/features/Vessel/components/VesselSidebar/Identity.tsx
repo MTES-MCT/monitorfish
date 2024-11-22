@@ -1,8 +1,9 @@
 import { FingerprintSpinner } from '@components/FingerprintSpinner'
+import { FlatKeyValue } from '@features/Vessel/components/VesselSidebar/common/FlatKeyValue'
 import { FlatTwoColumnKeyValue } from '@features/Vessel/components/VesselSidebar/common/FlatTwoColumnKeyValue'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { THEME } from '@mtes-mct/monitor-ui'
+import { customDayjs, THEME } from '@mtes-mct/monitor-ui'
 import countries from 'i18n-iso-countries'
 import { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
@@ -25,8 +26,6 @@ export function Identity() {
 
     return selectedVesselPositions[selectedVesselPositions.length - 1]
   }, [selectedVesselPositions])
-
-  const showLicenceExpirationDate = licenceExpirationDate => getDate(licenceExpirationDate)
 
   const vesselGears = useMemo(() => {
     if (!gears || !selectedVessel?.declaredFishingGears) {
@@ -59,6 +58,15 @@ export function Identity() {
     }
 
     return undefined
+  }
+
+  const isNavigationLicenceExpired = () => {
+    if (!selectedVessel?.navigationLicenceExpirationDate) {
+      return undefined
+    }
+    const now = customDayjs()
+
+    return customDayjs(selectedVessel.navigationLicenceExpirationDate).isAfter(now)
   }
 
   return !loadingVessel ? (
@@ -121,182 +129,133 @@ export function Identity() {
           }
         ]}
       />
-      <Zone>
-        <Fields>
-          <TableBody>
-            <Field>
-              <Key>Type de navire</Key>
-              <Value>{selectedVessel?.vesselType ? selectedVessel?.vesselType : <NoValue>-</NoValue>}</Value>
-            </Field>
-            <Field>
-              <Key>Catégorie de navigation</Key>
-              <Value>{selectedVessel?.sailingCategory ? selectedVessel?.sailingCategory : <NoValue>-</NoValue>}</Value>
-            </Field>
-            <Field>
-              <Key>Genre de navigation</Key>
-              <Value>{selectedVessel?.sailingType ? selectedVessel?.sailingType : <NoValue>-</NoValue>}</Value>
-            </Field>
-            <Field>
-              <Key />
-            </Field>
-            <Field>
-              <Key>Engins de pêche déclarés (PME)</Key>
-              <Value data-cy="vessel-identity-gears">
-                {vesselGears ? (
-                  vesselGears.map(gear =>
-                    gear.name ? (
-                      <ValueWithLineBreak key={gear.code}>
-                        {gear.name} ({gear.code})
-                      </ValueWithLineBreak>
-                    ) : (
-                      <ValueWithLineBreak key={gear.code}>{gear.code}</ValueWithLineBreak>
-                    )
+      <StyledFlatKeyValue
+        column={[
+          {
+            key: 'Type de navire',
+            value: selectedVessel?.vesselType
+          },
+          {
+            key: 'Catégorie de navigation',
+            value: selectedVessel?.sailingCategory
+          },
+          {
+            key: 'Genre de navigation',
+            value: selectedVessel?.sailingType
+          },
+          {
+            key: 'Engins de pêche déclarés (PME)',
+            value: (
+              <>
+                {vesselGears?.map(gear =>
+                  gear.name ? (
+                    <ValueWithLineBreak key={gear.code}>
+                      {gear.name} ({gear.code})
+                    </ValueWithLineBreak>
+                  ) : (
+                    <ValueWithLineBreak key={gear.code}>{gear.code}</ValueWithLineBreak>
                   )
-                ) : (
-                  <NoValue>-</NoValue>
                 )}
-              </Value>
-            </Field>
-            <Field>
-              <Key />
-            </Field>
-          </TableBody>
-        </Fields>
-      </Zone>
-      <Zone>
-        <Fields>
-          <TableBody>
-            <Field>
-              <Key>Permis de navigation</Key>
-              <Value>
-                {selectedVessel?.navigationLicenceExpirationDate ? (
-                  <>
-                    Exp le {showLicenceExpirationDate(selectedVessel?.navigationLicenceExpirationDate)}
-                    {new Date(selectedVessel?.navigationLicenceExpirationDate).getTime() >= Date.now() ? (
-                      <LicenceActive />
-                    ) : (
-                      <LicenceExpired />
-                    )}
-                  </>
-                ) : (
-                  <NoValue>-</NoValue>
+              </>
+            )
+          }
+        ]}
+        keyWidth={200}
+      />
+      <StyledFlatKeyValue
+        column={[
+          {
+            key: 'Etat du permis de navigation',
+            value: selectedVessel?.navigationLicenceStatus
+          },
+          {
+            key: "Date d'expiration",
+            value: (
+              <>
+                {getDate(selectedVessel?.navigationLicenceExpirationDate)}{' '}
+                {isNavigationLicenceExpired() ? <LicenceExpired /> : <LicenceActive />}
+              </>
+            )
+          },
+          {
+            key: 'Date de prorogation',
+            value: getDate(selectedVessel?.navigationLicenceExtensionDate)
+          }
+        ]}
+        keyWidth={200}
+      />
+      <StyledFlatKeyValue
+        column={[
+          {
+            key: 'Organisation de producteurs',
+            value: selectedVessel?.producerOrganization
+              ? `${selectedVessel?.producerOrganization?.organizationName} (depuis le ${selectedVessel?.producerOrganization?.joiningDate})`
+              : undefined
+          },
+          {
+            key: 'Coordonnées propriétaire',
+            value: (
+              <>
+                <ValueWithLineBreak>{selectedVessel?.proprietorName}</ValueWithLineBreak>
+                {!!selectedVessel?.proprietorPhones && (
+                  <ValueWithLineBreak>{selectedVessel?.proprietorPhones.join(', ')}</ValueWithLineBreak>
                 )}
-              </Value>
-            </Field>
-            <Field>
-              <Key>Organisation de producteurs</Key>
-              <Value data-cy="vessel-identity-producerOrganization">
-                {selectedVessel?.producerOrganization ? (
-                  `${selectedVessel?.producerOrganization?.organizationName} (depuis le ${selectedVessel?.producerOrganization?.joiningDate})`
-                ) : (
-                  <NoValue>-</NoValue>
+                {!!selectedVessel?.proprietorEmails && (
+                  <ValueWithLineBreak>{selectedVessel?.proprietorEmails.join(', ')}</ValueWithLineBreak>
                 )}
-              </Value>
-            </Field>
-            <Field>
-              <Key>Coordonnées propriétaire</Key>
-              <Value>
-                <PersonalData>
-                  {selectedVessel?.proprietorName ? (
-                    <>
-                      {selectedVessel?.proprietorName}
-                      <span>
-                        {selectedVessel?.proprietorPhones ? (
-                          <>
-                            <br />
-                            {selectedVessel?.proprietorPhones.join(', ')}
-                          </>
-                        ) : (
-                          ''
-                        )}
-                      </span>
-                      {selectedVessel?.proprietorEmails ? (
-                        <>
-                          <br />
-                          {selectedVessel?.proprietorEmails.join(', ')}
-                        </>
-                      ) : (
-                        ''
-                      )}
-                    </>
-                  ) : (
-                    <NoPersonalData>-</NoPersonalData>
-                  )}
-                </PersonalData>
-              </Value>
-            </Field>
-            <Field>
-              <Key>Coordonnées armateur</Key>
-              <Value>
-                <PersonalData>
-                  {selectedVessel?.operatorName ? (
-                    <>
-                      {selectedVessel?.operatorName}
-                      <span>
-                        {selectedVessel?.operatorPhones ? (
-                          <>
-                            <br />
-                            {selectedVessel?.operatorPhones.join(', ')}
-                          </>
-                        ) : (
-                          ''
-                        )}
-                      </span>
-                      {selectedVessel?.operatorEmails ? (
-                        <>
-                          <br />
-                          {selectedVessel?.operatorEmails.join(', ')}
-                        </>
-                      ) : (
-                        ''
-                      )}
-                    </>
-                  ) : (
-                    <NoPersonalData>-</NoPersonalData>
-                  )}
-                </PersonalData>
-              </Value>
-            </Field>
-            <Field>
-              <Key>Contact navire</Key>
-              <Value>
-                <PersonalData>
-                  {(selectedVessel?.vesselPhones ?? selectedVessel?.vesselEmails) ? (
-                    <>
-                      {selectedVessel?.vesselPhones ? (
-                        <>
-                          {selectedVessel?.vesselPhones.join(', ')}
-                          <br />
-                        </>
-                      ) : (
-                        ''
-                      )}
-                      {selectedVessel?.vesselEmails ? <>{selectedVessel?.vesselEmails.join(', ')}</> : ''}
-                    </>
-                  ) : (
-                    <NoPersonalData>-</NoPersonalData>
-                  )}
-                </PersonalData>
-              </Value>
-            </Field>
-          </TableBody>
-        </Fields>
-      </Zone>
+              </>
+            )
+          },
+          {
+            key: 'Coordonnées armateur',
+            value: (
+              <>
+                <ValueWithLineBreak>{selectedVessel?.operatorName}</ValueWithLineBreak>
+                {!!selectedVessel?.operatorPhones && (
+                  <ValueWithLineBreak>{selectedVessel?.operatorPhones.join(', ')}</ValueWithLineBreak>
+                )}
+                {!!selectedVessel?.operatorEmails && (
+                  <ValueWithLineBreak>{selectedVessel?.operatorEmails.join(', ')}</ValueWithLineBreak>
+                )}
+              </>
+            )
+          },
+          {
+            hasMultipleLines: true,
+            key: 'Contact navire',
+            value: (
+              <>
+                {!!selectedVessel?.vesselPhones && (
+                  <ValueWithLineBreak>{selectedVessel?.vesselPhones.join(', ')}</ValueWithLineBreak>
+                )}
+                {!!selectedVessel?.vesselEmails && (
+                  <ValueWithLineBreak>{selectedVessel?.vesselEmails.join(', ')}</ValueWithLineBreak>
+                )}
+              </>
+            )
+          }
+        ]}
+        keyWidth={200}
+      />
     </Body>
   ) : (
     <FingerprintSpinner className="radar" color={THEME.color.charcoal} size={100} />
   )
 }
 
+const StyledFlatKeyValue = styled(FlatKeyValue)`
+  margin: 10px 5px 0;
+  width: 480px;
+`
+
 const ValueWithLineBreak = styled.div`
-  color: ${p => p.theme.color.gunMetal};
-  padding: 2px 5px 5px 0;
-  line-height: normal;
   font-size: 13px;
 `
 
 const Body = styled.div`
-  padding: 5px 5px 1px 5px;
+  padding: 5px 5px 10px 5px;
+  overflow-x: hidden;
+  max-height: 662px;
 `
 
 const LicenceActive = styled.span`
@@ -315,77 +274,4 @@ const LicenceExpired = styled.span`
   background-color: #e1000f;
   border-radius: 50%;
   display: inline-block;
-`
-
-const TableBody = styled.tbody``
-
-const Zone = styled.div`
-  background: ${p => p.theme.color.white};
-  display: flex;
-  flex-wrap: wrap;
-  margin: 5px 5px 10px;
-  padding: 10px 20px;
-  text-align: left;
-
-  > table:not(:first-child) {
-    margin-left: 25px;
-  }
-`
-
-const Fields = styled.table`
-  padding: 10px 5px 5px 20px;
-  width: inherit;
-  display: table;
-  margin: 0;
-  min-width: 40%;
-`
-
-const Field = styled.tr`
-  margin: 5px 5px 5px 0;
-  border: none;
-  background: none;
-  line-height: 0.5em;
-`
-
-const Key = styled.th`
-  color: ${p => p.theme.color.slateGray};
-  flex: initial;
-  display: inline-block;
-  border: none;
-  padding: 5px 5px 5px 0;
-  background: none;
-  width: max-content;
-  line-height: 0.5em;
-  height: 0.5em;
-  font-size: 13px;
-  font-weight: normal;
-`
-
-const Value = styled.td`
-  font-size: 13px;
-  color: ${p => p.theme.color.gunMetal};
-  margin: 0;
-  text-align: left;
-  padding: 1px 5px 5px 5px;
-  background: none;
-  border: none;
-  line-height: normal;
-  font-weight: 500;
-`
-
-const NoValue = styled.span`
-  color: ${p => p.theme.color.slateGray};
-  font-weight: 300;
-  line-height: normal;
-`
-
-const NoPersonalData = styled.div`
-  color: ${p => p.theme.color.slateGray};
-  font-weight: 300;
-`
-
-const PersonalData = styled.div`
-  line-height: inherit;
-  font-size: 13px !important;
-  margin-top: -5px;
 `

@@ -46,7 +46,7 @@ context('Offline management', () => {
     // When clicking on Logbook tab
     cy.intercept(
       'GET',
-      'bff/v1/vessels/logbook/find?internalReferenceNumber=FAK000999999&voyageRequest=LAST&tripNumber=',
+      'bff/v1/vessels/logbook/find?internalReferenceNumber=FAK000999999&voyageRequest=LAST',
       { statusCode: 400 }
     ).as('getLogbook')
     cy.get('*[data-cy="vessel-menu-fishing"').click()
@@ -120,7 +120,7 @@ context('Offline management', () => {
     cy.intercept(
       {
         method: 'GET',
-        path: '/bff/v1/vessels/logbook/find?internalReferenceNumber=FAK000999999&voyageRequest=LAST&tripNumber=',
+        path: '/bff/v1/vessels/logbook/find?internalReferenceNumber=FAK000999999&voyageRequest=LAST',
         times: 2
       },
       { statusCode: 400 }
@@ -128,7 +128,7 @@ context('Offline management', () => {
     cy.get('*[data-cy="vessel-menu-fishing"').click()
     cy.wait('@getLogbookStubbed')
     cy.get('*[data-cy="vessel-sidebar-error"]').contains("Nous n'avons pas pu récupérer les messages JPE de ce navire")
-    cy.intercept('bff/v1/vessels/logbook/find?internalReferenceNumber=FAK000999999&voyageRequest=LAST&tripNumber=').as(
+    cy.intercept('bff/v1/vessels/logbook/find?internalReferenceNumber=FAK000999999&voyageRequest=LAST').as(
       'getLogbook'
     )
     cy.clickButton('Réessayer')

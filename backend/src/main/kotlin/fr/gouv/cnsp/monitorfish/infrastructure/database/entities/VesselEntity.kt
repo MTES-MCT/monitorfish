@@ -110,6 +110,8 @@ data class VesselEntity(
             sailingCategory = sailingCategory,
             sailingType = sailingType,
             declaredFishingGears = declaredFishingGears,
+            navigationLicenceExtensionDate = navigationLicenceExtensionDate,
+            navigationLicenceStatus = navigationLicenceStatus,
             navigationLicenceExpirationDate = navigationLicenceExpirationDate,
             operatorName = operatorName,
             operatorPhones = operatorPhones,

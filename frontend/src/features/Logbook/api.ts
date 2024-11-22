@@ -1,5 +1,6 @@
 import { BackendApi } from '@api/BackendApi.types'
 import { FrontendApiError } from '@libs/FrontendApiError'
+import { getUrlOrPathWithQueryParams } from '@utils/getUrlOrPathWithQueryParams'
 
 import { NavigateTo } from './constants'
 import { Logbook } from './Logbook.types'
@@ -18,11 +19,15 @@ export type GetVesselLogbookParams = {
 
 const getVesselLogbookQueryArgs = {
   query: params => {
-    const internalReferenceNumber = params.vesselIdentity.internalReferenceNumber ?? ''
-    const nextTripNumber = params.tripNumber ?? ''
-    const nextVoyageRequest = params.voyageRequest ?? ''
+    const { internalReferenceNumber } = params.vesselIdentity
+    const { tripNumber } = params
+    const { voyageRequest } = params
 
-    return `/vessels/logbook/find?internalReferenceNumber=${internalReferenceNumber}&voyageRequest=${nextVoyageRequest}&tripNumber=${nextTripNumber}`
+    return getUrlOrPathWithQueryParams(`/vessels/logbook/find`, {
+      internalReferenceNumber,
+      tripNumber,
+      voyageRequest
+    })
   },
   transformErrorResponse: response => new FrontendApiError(LOGBOOK_ERROR_MESSAGE, response),
   transformResponse: (response: BackendApi.ResponseBodyError | Logbook.VesselVoyage) => {

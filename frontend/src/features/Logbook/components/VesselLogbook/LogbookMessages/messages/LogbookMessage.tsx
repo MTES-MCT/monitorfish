@@ -82,7 +82,7 @@ export function LogbookMessage({
             logbookMessage.isCorrectedByNewerMessage || logbookMessage.isDeleted || !!logbookMessage.referencedReportId
           }
           data-cy="vessel-fishing-message"
-          title={logbookHeaderTitle}
+          title={logbookHeaderTitle as string}
         >
           {logbookHeaderTitle}
         </LogbookMessageHeaderText>

@@ -1,8 +1,8 @@
 import { Logbook } from '@features/Logbook/Logbook.types'
-import { type Option } from '@mtes-mct/monitor-ui'
+import { getOptionsFromLabelledEnum, type Option } from '@mtes-mct/monitor-ui'
 import { ExportToCsv } from 'export-to-csv'
 
-import { DOWNLOAD_LOGBOOK_MESSAGES_COLUMNS, DOWNLOAD_LOGBOOK_MESSAGES_OPTIONS, LogbookSortKey } from './constants'
+import { DOWNLOAD_LOGBOOK_MESSAGES_COLUMNS, DOWNLOAD_LOGBOOK_MESSAGES_OPTIONS, LogbookSortKeyLabel } from './constants'
 import { getDate } from '../../../../../utils'
 import { formatAsCSVColumns } from '../../../../../utils/formatAsCSVColumns'
 
@@ -30,12 +30,7 @@ export function isPnoMessage(logbookMessage: Logbook.Message): logbookMessage is
   return logbookMessage.messageType === Logbook.MessageType.PNO
 }
 
-export function getLogbookSortKeyOptions(): Option[] {
-  return Object.keys(LogbookSortKey).map(key => ({
-    label: LogbookSortKey[key],
-    value: key
-  }))
-}
+export const LOGBOOK_SORT_LABELS_AS_OPTIONS = getOptionsFromLabelledEnum(LogbookSortKeyLabel)
 
 export function getLastLogbookTripsOptions(
   lastLogbookTrips: string[] | undefined,

@@ -34,6 +34,11 @@ export enum WeightType {
 }
 
 export enum LogbookSortKey {
+  activityDateTime = 'activityDateTime',
+  reportDateTime = 'activityDateTime'
+}
+
+export enum LogbookSortKeyLabel {
   activityDateTime = "Date d'activité",
   reportDateTime = "Date d'envoi"
 }

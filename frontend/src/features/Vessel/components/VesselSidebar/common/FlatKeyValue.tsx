@@ -1,30 +1,33 @@
 import styled from 'styled-components'
 
+import type { ReactElement } from 'react'
+
 type KeyValue = {
   hasMultipleLines?: boolean
   key: string
-  value: boolean | string | number | undefined
+  value: boolean | string | number | undefined | ReactElement
 }
 
 type KeyValueTableProps = {
   className?: string | undefined
   column: Array<KeyValue>
+  keyWidth?: number | undefined
   valueEllipsisedForWidth?: number | undefined
 }
-export function FlatKeyValue({ className, column, valueEllipsisedForWidth }: KeyValueTableProps) {
+export function FlatKeyValue({ className, column, keyWidth, valueEllipsisedForWidth }: KeyValueTableProps) {
   return (
     <Zone className={className}>
       <Fields>
         <TableBody>
           {column.map(({ hasMultipleLines, key, value }) => (
             <Field key={key}>
-              <Key>{key}</Key>
+              <Key $width={keyWidth}>{key}</Key>
               {value ? (
                 <Value
                   $hasMultipleLines={!!hasMultipleLines}
                   $valueEllipsisedForWidth={valueEllipsisedForWidth}
                   data-cy={key}
-                  title={value?.toString()}
+                  title={typeof value !== 'object' ? value?.toString() : undefined}
                 >
                   {value}
                 </Value>
@@ -62,14 +65,15 @@ const Field = styled.tr`
   line-height: 0.5em;
 `
 
-const Key = styled.th`
+const Key = styled.th<{
+  $width?: number | undefined
+}>`
   color: ${p => p.theme.color.slateGray};
-  flex: initial;
-  display: inline-block;
   padding: 1px 5px 5px 0;
-  width: max-content;
   line-height: 0.5em;
   font-weight: normal;
+  width: ${p => (p.$width ? `${p.$width}px` : 'max-content')};
+  text-align: left;
 `
 
 const Value = styled.td<{
@@ -96,7 +100,7 @@ const Value = styled.td<{
     )
   }}
   height: 19px;
-  font-weight: 400;
+  font-weight: 500;
 `
 
 const NoValue = styled.td`

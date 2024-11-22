@@ -62,6 +62,10 @@ data class VesselEntity(
     val declaredFishingGears: List<String>? = null,
     @Column(name = "nav_licence_expiration_date", columnDefinition = "date")
     val navigationLicenceExpirationDate: Date? = null,
+    @Column(name = "nav_licence_extension_date", columnDefinition = "date")
+    val navigationLicenceExtensionDate: Date? = null,
+    @Column(name = "nav_licence_status")
+    val navigationLicenceStatus: String? = null,
     @Column(name = "operator_name")
     val operatorName: String? = null,
     @Column(name = "operator_phones", columnDefinition = "varchar(100)[]")

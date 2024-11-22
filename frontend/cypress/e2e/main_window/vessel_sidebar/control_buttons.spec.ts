@@ -148,10 +148,9 @@ context('Vessel sidebar controls buttons', () => {
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 10000 })
     cy.fill('Afficher la piste VMS depuis', '3 jours')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 10000 })
-    cy.intercept(
-      'GET',
-      'bff/v1/vessels/logbook/find?internalReferenceNumber=FAK000999999&voyageRequest=LAST'
-    ).as('getLogbook')
+    cy.intercept('GET', 'bff/v1/vessels/logbook/find?internalReferenceNumber=FAK000999999&voyageRequest=LAST').as(
+      'getLogbook'
+    )
     cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 10000 })
     cy.wait('@getLogbook')
 

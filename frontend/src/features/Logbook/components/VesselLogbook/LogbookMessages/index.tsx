@@ -1,4 +1,5 @@
 import { useGetLastLogbookTripsQuery } from '@features/Logbook/api'
+import { LogbookSortKey } from '@features/Logbook/components/VesselLogbook/LogbookMessages/constants'
 import { LastTrip, NextTrip, PreviousTrip } from '@features/Logbook/components/VesselLogbook/LogbookSummary'
 import { NavigateTo } from '@features/Logbook/constants'
 import { useGetLogbookUseCase } from '@features/Logbook/hooks/useGetLogbookUseCase'
@@ -11,7 +12,12 @@ import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { LogbookMessage } from './messages/LogbookMessage'
-import { downloadMessages, filterBySelectedType, getLastLogbookTripsOptions, getLogbookSortKeyOptions } from './utils'
+import {
+  downloadMessages,
+  filterBySelectedType,
+  getLastLogbookTripsOptions,
+  LOGBOOK_SORT_LABELS_AS_OPTIONS
+} from './utils'
 import { FishingActivitiesTab } from '../../../../../domain/entities/vessel/vessel'
 import { logbookActions } from '../../../slice'
 import { CustomDatesShowedInfo } from '../CustomDatesShowedInfo'
@@ -34,7 +40,7 @@ export function LogbookMessages({ messageTypeFilter }: LogbookMessagesProps) {
 
   const [isAscendingSort, setIsAscendingSort] = useState(true)
   const [filteredMessagesType, setFilteredMessagesType] = useState<string | undefined>(messageTypeFilter)
-  const [orderBy, setOrderBy] = useState<string>('reportDateTime')
+  const [orderBy, setOrderBy] = useState<LogbookSortKey>(LogbookSortKey.reportDateTime)
   const lastLogbookTripsOptions = getLastLogbookTripsOptions(lastLogbookTrips, tripNumber)
 
   const filteredAndSortedLogbookMessages = useMemo(() => {
@@ -85,8 +91,8 @@ export function LogbookMessages({ messageTypeFilter }: LogbookMessagesProps) {
           isTransparent
           label="Trier les messages"
           name="Trier les messages"
-          onChange={nextValue => setOrderBy(nextValue as string)}
-          options={getLogbookSortKeyOptions()}
+          onChange={nextValue => setOrderBy(nextValue as LogbookSortKey)}
+          options={LOGBOOK_SORT_LABELS_AS_OPTIONS}
           placeholder="Trier les messages"
           value={orderBy}
         />

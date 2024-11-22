@@ -35,7 +35,7 @@ export enum WeightType {
 
 export enum LogbookSortKey {
   activityDateTime = 'activityDateTime',
-  reportDateTime = 'activityDateTime'
+  reportDateTime = 'reportDateTime'
 }
 
 export enum LogbookSortKeyLabel {

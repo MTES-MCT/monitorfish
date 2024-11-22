@@ -11,7 +11,6 @@ import io.hypersistence.utils.hibernate.type.interval.PostgreSQLIntervalType
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import jakarta.persistence.*
 import org.hibernate.annotations.Type
-import org.hibernate.dialect.PostgreSQLIntervalSecondJdbcType
 import java.io.Serializable
 import java.time.Duration
 import java.time.ZonedDateTime

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { getEffectiveDateTimeFromMessage, getLogbookMessageType } from './utils'
+import { getActivityDateTimeFromMessage, getLogbookMessageType } from './utils'
 import { FishingActivitiesTab } from '../../domain/entities/vessel/vessel'
 
 import type { Logbook } from './Logbook.types'
@@ -191,7 +191,7 @@ const logbookSlice = createSlice({
       state.fishingActivitiesShowedOnMap = state.fishingActivities.logbookMessages
         .filter(fishingActivity => !fishingActivity.isCorrectedByNewerMessage)
         .map(fishingActivity => ({
-          date: getEffectiveDateTimeFromMessage(fishingActivity),
+          date: getActivityDateTimeFromMessage(fishingActivity),
           id: fishingActivity.operationNumber,
           isDeleted: fishingActivity.isDeleted,
           isNotAcknowledged: !fishingActivity.acknowledgment?.isSuccess,
@@ -217,13 +217,12 @@ const logbookSlice = createSlice({
       }
 
       state.fishingActivitiesShowedOnMap = state.fishingActivitiesShowedOnMap.concat({
-        // TODO This date is not a Date but a string.
-        date: getEffectiveDateTimeFromMessage(fishingActivityToShow),
+        date: getActivityDateTimeFromMessage(fishingActivityToShow),
         id: fishingActivityToShow.operationNumber,
         isDeleted: fishingActivityToShow.isDeleted,
         isNotAcknowledged: !fishingActivityToShow.acknowledgment?.isSuccess,
         name: getLogbookMessageType(fishingActivityToShow)
-      })
+      } as FishingActivityShowedOnMap)
     },
 
     /**

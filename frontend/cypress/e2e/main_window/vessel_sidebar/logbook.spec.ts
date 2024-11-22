@@ -36,38 +36,27 @@ context('Vessel sidebar logbook tab', () => {
     cy.get('*[data-cy="fishing-resume-not-acknowledged-icon"]').should('have.length', 2)
   })
 
-  it('Fishing Should contain the vessel fishing resume', () => {
-    // Given
+  it('Fishing Should contain the vessel ERS logbook messages', () => {
+    cy.log('Fishing Should contain the vessel fishing resume')
+
     openVesselBySearch('Pheno')
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
-    // When
     cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 10000 })
     cy.get('*[data-cy^="vessel-menu-fishing"]', { timeout: 10000 }).should('be.visible')
 
-    // Then
     cy.get('*[data-cy^="vessel-fishing-gears"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy^="vessel-fishing-gears"]').contains('Trémails et filets maillants combinés (GTN)')
 
-    // CPS message resume
     cy.get('*[data-cy="vessel-fishing-resume-title"]').eq(2).click({ timeout: 10000 })
     cy.get('*[data-cy="cps-message-resume"]').contains('DAUPHIN COMMUN (DCO)')
     cy.get('*[data-cy^="vessel-fishing-resume-title"]').contains('1 message non acquitté')
 
     cy.get('*[data-cy^="vessel-fishing-resume-title"]').contains('1 message - 2256 kg pêchés au total')
-  })
 
-  it('Fishing Should contain the vessel ERS logbook messages', () => {
-    // Given
-    openVesselBySearch('Pheno')
-    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
-
-    // When
-    cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 10000 })
-    cy.get('*[data-cy^="vessel-fishing"]', { timeout: 10000 }).should('be.visible')
+    cy.log('See all messages')
     cy.get('*[data-cy^="vessel-fishing-see-all"]').click({ timeout: 10000 })
 
-    // Then
     cy.get('*[data-cy="vessel-fishing-message"]').should('have.length', 13)
 
     cy.get('*[data-cy="vessel-fishing-message"]').eq(0).contains("Capture d'espèces protégées")
@@ -247,7 +236,6 @@ context('Vessel sidebar logbook tab', () => {
   })
 
   it('Fishing trips Should be selected from the trips list', () => {
-    // Given
     cy.get('*[data-cy^="vessel-search-input"]').click()
     cy.get('*[data-cy^="vessel-search-input"]').type('FR263454484')
     cy.wait(50)
@@ -258,11 +246,27 @@ context('Vessel sidebar logbook tab', () => {
     cy.get('*[data-cy^="vessel-fishing"]').should('be.visible')
     cy.get('#tripNumber-describe').contains('Marée n°SRC-TRP-TTT20200506194051795')
 
-    // When
     cy.fill('Numéro de marée', 'Marée n°20230087')
 
-    // Then
     cy.get('#tripNumber-describe').contains('Marée n°20230087')
     cy.get('*[data-cy^="vessel-fishing-see-all"]').click()
+
+    cy.log('Also in all logbook messages')
+    cy.get('*[data-cy="LogbookMessage"]').should('have.length', 2)
+    cy.fill('Filtrer les messages', 'DEP')
+    cy.get('*[data-cy="LogbookMessage"]').should('have.length', 1)
+    cy.fill('Filtrer les messages', undefined)
+
+    cy.fill('Trier les messages', "Date d'activité")
+
+    cy.get('*[data-cy="LogbookMessage"]').eq(0).contains('Départ')
+    cy.clickButton('Trier par date antichronologique')
+    cy.get('*[data-cy="LogbookMessage"]').eq(0).contains('Préavis')
+    cy.clickButton('Trier par date chronologique')
+    cy.get('*[data-cy="LogbookMessage"]').eq(0).contains('Départ')
+
+    cy.fill('Numéro de marée', '20230086')
+    cy.get('*[data-cy="LogbookMessage"]').should('have.length', 1)
+    cy.get('*[data-cy="LogbookMessage"]').eq(0).contains('Débarquement')
   })
 })

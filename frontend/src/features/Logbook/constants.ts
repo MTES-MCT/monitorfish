@@ -1,172 +1,182 @@
-export const LogbookMessageType = {
+import { Logbook } from '@features/Logbook/Logbook.types'
+
+export type LogbookMessageTypeLabel = {
+  code: Logbook.MessageType
+  displayCode: string
+  fullName?: string
+  isFilterable: boolean
+  name: string
+}
+
+export const LogbookMessageType: Record<Logbook.MessageType, LogbookMessageTypeLabel> = {
   COE: {
-    code: 'COE',
+    code: Logbook.MessageType.COE,
     displayCode: 'COE',
     fullName: "Entrée dans une zone d'effort",
     isFilterable: true,
     name: "Entrée dans une zone d'effort"
   },
   COX: {
-    code: 'COX',
+    code: Logbook.MessageType.COX,
     displayCode: 'COX',
     fullName: "Sortie d'une zone d'effort",
     isFilterable: true,
     name: "Sortie d'une zone d'effort"
   },
   CPS: {
-    code: 'CPS',
+    code: Logbook.MessageType.CPS,
     displayCode: 'CPS',
     fullName: "Capture d'espèces protégées",
     isFilterable: true,
     name: "CAPTURES D'ESP. PROTÉGÉES"
   },
   CRO: {
-    code: 'CRO',
+    code: Logbook.MessageType.CRO,
     displayCode: 'CRO',
     fullName: "Traversée d'une zone d'effort",
     isFilterable: true,
     name: "Traversée d'une zone d'effort"
   },
   DEP: {
-    code: 'DEP',
+    code: Logbook.MessageType.DEP,
     displayCode: 'DEP',
     isFilterable: true,
     name: 'Départ'
   },
   DIM: {
-    code: 'DIM',
+    code: Logbook.MessageType.DIM,
     displayCode: 'DIM',
     isFilterable: false,
     name: 'Rejets minimis'
   },
   DIS: {
-    code: 'DIS',
+    code: Logbook.MessageType.DIS,
     displayCode: 'DIS',
     fullName: 'Déclaration de rejets',
     isFilterable: true,
     name: 'Rejets'
   },
   EOF: {
-    code: 'EOF',
+    code: Logbook.MessageType.EOF,
     displayCode: 'EOF',
     fullName: 'Fin de pêche',
     isFilterable: true,
     name: 'Fin de la marée'
   },
   FAR: {
-    code: 'FAR',
+    code: Logbook.MessageType.FAR,
     displayCode: 'FAR',
     fullName: 'Déclaration de capture',
     isFilterable: true,
     name: 'Captures'
   },
   GEAR_RETRIEVAL: {
-    code: 'GEAR_RETRIEVAL',
+    code: Logbook.MessageType.GEAR_RETRIEVAL,
     displayCode: 'RTV',
     fullName: "Sortie de l'eau d`engin",
     isFilterable: false,
     name: "Sortie de l'eau d`engin"
   },
   GEAR_SHOT: {
-    code: 'GEAR_SHOT',
+    code: Logbook.MessageType.GEAR_SHOT,
     displayCode: 'SHT',
     fullName: "Mise à l'eau d'engin",
     isFilterable: false,
     name: "Mise à l'eau d'engin"
   },
   INS: {
-    code: 'INS',
+    code: Logbook.MessageType.INS,
     displayCode: 'INS',
     fullName: "Déclaration d'inspection",
     isFilterable: true,
     name: 'Inspection'
   },
   JFO: {
-    code: 'JFO',
+    code: Logbook.MessageType.JFO,
     displayCode: 'JFO',
     fullName: 'Opération de pêche conjointe',
     isFilterable: false,
     name: 'Opération de pêche conjointe'
   },
   LAN: {
-    code: 'LAN',
+    code: Logbook.MessageType.LAN,
     displayCode: 'LAN',
     fullName: 'Débarquement',
     isFilterable: true,
     name: 'Débarquement'
   },
   NOT_COE: {
-    code: 'NOT_COE',
+    code: Logbook.MessageType.NOT_COE,
     displayCode: 'COE',
     fullName: "Notification d'entrée dans une zone d'effort",
     isFilterable: false,
     name: "Notification d'entrée dans une zone d'effort"
   },
   NOT_COX: {
-    code: 'NOT_COX',
+    code: Logbook.MessageType.NOT_COX,
     displayCode: 'COX',
     fullName: "Notification de sortie d'une zone d'effort",
     isFilterable: false,
     name: "Notification de sortie d'une zone d'effort"
   },
   NOT_TRA: {
-    code: 'NOT_TRA',
+    code: Logbook.MessageType.NOT_TRA,
     displayCode: 'TRA',
     fullName: 'Notification de transbordement',
     isFilterable: false,
     name: 'Notification de transbordement'
   },
   PNO: {
-    code: 'PNO',
+    code: Logbook.MessageType.PNO,
     displayCode: 'PNO',
     fullName: 'Préavis (notification de retour au port)',
     isFilterable: true,
     name: 'Préavis'
   },
   PNT: {
-    code: 'PNT',
+    code: Logbook.MessageType.PNT,
     displayCode: 'PNT',
     fullName: 'Pré-notification de transfert',
     isFilterable: true,
     name: 'Pré-notification de transfert'
   },
   RLC: {
-    code: 'RLC',
+    code: Logbook.MessageType.RLC,
     displayCode: 'RLC',
     fullName: 'Déclaration de transfert',
     isFilterable: true,
     name: 'Transfert'
   },
   RTP: {
-    code: 'RTP',
+    code: Logbook.MessageType.RTP,
     displayCode: 'RTP',
     fullName: 'Retour au port',
     isFilterable: true,
     name: 'Retour au port'
   },
   START_ACTIVITY: {
-    code: 'START_ACTIVITY',
+    code: Logbook.MessageType.START_ACTIVITY,
     displayCode: 'STA',
     fullName: "Début d'activité de pêche",
     isFilterable: false,
     name: "Début d'activité de pêche"
   },
   START_FISHING: {
-    code: 'START_FISHING',
+    code: Logbook.MessageType.START_FISHING,
     displayCode: 'STF',
     fullName: 'Début de pêche',
     isFilterable: false,
     name: 'Début de pêche'
   },
   TRA: {
-    code: 'TRA',
+    code: Logbook.MessageType.TRA,
     displayCode: 'TRA',
     fullName: 'Déclaration de transbordement',
     isFilterable: true,
     name: 'Transbordement'
   },
   TRZ: {
-    code: 'TRZ',
+    code: Logbook.MessageType.TRZ,
     displayCode: 'TRZ',
     fullName: 'Pêche trans-zone',
     isFilterable: true,

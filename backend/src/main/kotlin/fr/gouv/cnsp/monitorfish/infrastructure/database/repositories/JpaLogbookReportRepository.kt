@@ -332,8 +332,8 @@ class JpaLogbookReportRepository(
         }
     }
 
-    override fun findLastTwoYearsTripNumbers(internalReferenceNumber: String): List<String> {
-        return dbLogbookReportRepository.findLastTwoYearsTripNumbers(internalReferenceNumber)
+    override fun findLastThreeYearsTripNumbers(internalReferenceNumber: String): List<String> {
+        return dbLogbookReportRepository.findLastThreeYearsTripNumbers(internalReferenceNumber)
     }
 
     override fun findLastReportSoftware(internalReferenceNumber: String): String? {

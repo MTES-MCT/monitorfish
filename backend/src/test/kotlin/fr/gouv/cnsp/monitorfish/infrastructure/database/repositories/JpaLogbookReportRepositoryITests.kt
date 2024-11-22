@@ -486,7 +486,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     fun `findLastTwoYearsTripNumbers Should return an empty list When no trip is found`() {
         // When
         val trips =
-            jpaLogbookReportRepository.findLastTwoYearsTripNumbers(
+            jpaLogbookReportRepository.findLastThreeYearsTripNumbers(
                 "UNKNOWN_VESS",
             )
 
@@ -530,7 +530,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // When
         val trips =
-            jpaLogbookReportRepository.findLastTwoYearsTripNumbers(
+            jpaLogbookReportRepository.findLastThreeYearsTripNumbers(
                 "FAK000999999",
             )
 

@@ -106,6 +106,7 @@ class CreateOrUpdateManualPriorNotification(
                 tripNumber = null,
                 referencedReportId = null,
                 operationDateTime = ZonedDateTime.now(),
+                activityDateTime = expectedArrivalDate,
                 internalReferenceNumber = vessel?.internalReferenceNumber,
                 externalReferenceNumber = vessel?.externalReferenceNumber,
                 ircs = vessel?.ircs,

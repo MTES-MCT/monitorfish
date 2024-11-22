@@ -1,6 +1,10 @@
-import { Select } from '@mtes-mct/monitor-ui'
+import { COMMON_ALERT_TYPE_OPTION } from '@features/Alert/constants'
+import { getLastLogbookTripsOptions } from '@features/Logbook/components/VesselLogbook/LogbookMessages/utils'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { Accent, Icon, IconButton, Select } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { FleetSegments } from './FleetSegments'
@@ -11,11 +15,6 @@ import { EmptyResume } from './summaries/EmptyResume'
 import { FARMessageResume } from './summaries/FARMessageResume'
 import { LANMessageResume } from './summaries/LANMessageResume'
 import { PNOMessageResume } from './summaries/PNOMessageResume'
-import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
-import { COMMON_ALERT_TYPE_OPTION } from '../../../../Alert/constants'
-import ArrowLastTripSVG from '../../../../icons/Double_fleche_navigation_marees.svg?react'
-import ArrowTripSVG from '../../../../icons/Fleche_navigation_marees.svg?react'
 import ArrowSVG from '../../../../icons/Picto_fleche-pleine-droite.svg?react'
 import { useGetLastLogbookTripsQuery } from '../../../api'
 import { LogbookMessageType as LogbookMessageTypeEnum, LogbookOperationType, NavigateTo } from '../../../constants'
@@ -28,14 +27,9 @@ import type { LogbookTripSummary } from '../types'
 import type { Promisable } from 'type-fest'
 
 type LogbookSummaryProps = Readonly<{
-  navigation: {
-    goToLastTrip: () => Promisable<void>
-    goToNextTrip: () => Promisable<void>
-    goToPreviousTrip: () => Promisable<void>
-  }
   showLogbookMessages: (messageType?: string) => Promisable<void>
 }>
-export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSummaryProps) {
+export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
   const dispatch = useMainAppDispatch()
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
   const fishingActivities = useMainAppSelector(state => state.fishingActivities.fishingActivities)
@@ -47,21 +41,7 @@ export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSumma
 
   const getVesselLogbook = useGetLogbookUseCase()
 
-  const getLogbookTrip = useCallback(
-    (nextTripNumber: string | undefined) => {
-      dispatch(getVesselLogbook(selectedVessel, NavigateTo.EQUALS, true, nextTripNumber))
-    },
-    [dispatch, getVesselLogbook, selectedVessel]
-  )
-
-  const lastLogbookTripsOptions = useMemo(
-    () =>
-      lastLogbookTrips?.map(trip => ({
-        label: `Marée n°${trip}`,
-        value: trip
-      })) ?? [],
-    [lastLogbookTrips]
-  )
+  const lastLogbookTripsOptions = getLastLogbookTripsOptions(lastLogbookTrips, tripNumber)
 
   const logbookTrip: LogbookTripSummary = useMemo(() => getLogbookTripSummary(fishingActivities), [fishingActivities])
 
@@ -101,6 +81,12 @@ export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSumma
       )
     })
   }, [logbookTrip.dep?.log])
+
+  const goToPreviousTrip = () => dispatch(getVesselLogbook(selectedVessel, NavigateTo.PREVIOUS, true))
+  const goToNextTrip = () => dispatch(getVesselLogbook(selectedVessel, NavigateTo.NEXT, true))
+  const goToLastTrip = () => dispatch(getVesselLogbook(selectedVessel, NavigateTo.LAST, true))
+  const getLogbookTrip = (nextTripNumber: string | undefined) =>
+    dispatch(getVesselLogbook(selectedVessel, NavigateTo.EQUALS, true, nextTripNumber))
 
   return (
     <>
@@ -143,9 +129,12 @@ export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSumma
               <Text hasTwoLines>Résumé du JPE</Text>
               <TextValue data-cy="vessel-fishing-trip-number" hasTwoLines={false}>
                 <PreviousTrip
+                  $disabled={!!isFirstVoyage}
+                  accent={Accent.TERTIARY}
                   data-cy="vessel-fishing-previous-trip"
-                  disabled={!!isFirstVoyage}
-                  onClick={!isFirstVoyage ? navigation.goToPreviousTrip : undefined}
+                  Icon={Icon.Chevron}
+                  iconSize={20}
+                  onClick={!isFirstVoyage ? goToPreviousTrip : undefined}
                   title="Marée précédente"
                 />
                 <Select
@@ -159,15 +148,21 @@ export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSumma
                   value={tripNumber ?? undefined}
                 />
                 <NextTrip
+                  $disabled={!!isLastVoyage}
+                  accent={Accent.TERTIARY}
                   data-cy="vessel-fishing-next-trip"
-                  disabled={!!isLastVoyage}
-                  onClick={!isLastVoyage ? navigation.goToNextTrip : undefined}
+                  Icon={Icon.Chevron}
+                  iconSize={20}
+                  onClick={!isLastVoyage ? goToNextTrip : undefined}
                   title="Marée suivante"
                 />
                 <LastTrip
+                  $disabled={!!isLastVoyage}
+                  accent={Accent.TERTIARY}
                   data-cy="vessel-fishing-last-trip"
-                  disabled={!!isLastVoyage}
-                  onClick={!isLastVoyage ? navigation.goToLastTrip : undefined}
+                  Icon={Icon.DoubleChevron}
+                  iconSize={20}
+                  onClick={!isLastVoyage ? goToLastTrip : undefined}
                   title="Dernière marée"
                 />
               </TextValue>
@@ -282,32 +277,34 @@ export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSumma
   )
 }
 
-const PreviousTrip = styled(ArrowTripSVG)<{
-  disabled: boolean
+export const PreviousTrip = styled(IconButton)<{
+  $disabled: boolean
 }>`
-  cursor: ${p => (p.disabled ? 'not-allowed' : 'pointer')};
+  cursor: ${p => (p.$disabled ? 'not-allowed' : 'pointer')};
   vertical-align: middle;
-  width: 14px;
-  margin-right: 10px;
-  transform: rotate(180deg);
+  margin-right: 6px;
+  transform: rotate(90deg);
+  display: inline-block;
 `
 
-const NextTrip = styled(ArrowTripSVG)<{
-  disabled: boolean
+export const NextTrip = styled(IconButton)<{
+  $disabled: boolean
 }>`
-  cursor: ${p => (p.disabled ? 'not-allowed' : 'pointer')};
+  cursor: ${p => (p.$disabled ? 'not-allowed' : 'pointer')};
   vertical-align: middle;
-  width: 14px;
-  margin-left: 10px;
+  margin-left: 6px;
+  margin-right: 2px;
+  transform: rotate(-90deg);
+  display: inline-block;
 `
 
-const LastTrip = styled(ArrowLastTripSVG)<{
-  disabled: boolean
+export const LastTrip = styled(IconButton)<{
+  $disabled: boolean
 }>`
-  cursor: ${p => (p.disabled ? 'not-allowed' : 'pointer')};
+  cursor: ${p => (p.$disabled ? 'not-allowed' : 'pointer')};
   vertical-align: middle;
-  width: 14px;
-  margin-left: 5px;
+  transform: rotate(-90deg);
+  display: inline-block;
 `
 
 const NoMessage = styled.div`
@@ -363,7 +360,7 @@ const TextValue = styled.div<{
   color: ${p => p.theme.color.gunMetal};
   font-weight: 500;
   margin: 0;
-  padding-left: 20px;
+  padding-left: 12px;
   padding-top: ${p => (p.hasTwoLines ? '6px' : '0')};
 
   .Field-Select {

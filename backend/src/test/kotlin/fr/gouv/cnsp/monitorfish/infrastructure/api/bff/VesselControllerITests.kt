@@ -20,6 +20,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.producer_organization.ProducerOr
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.*
+import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
+import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetVesselReportings
@@ -535,6 +537,24 @@ class VesselControllerITests {
             )
 
         Mockito.verify(getVesselVoyage).execute("FR224226850", VoyageRequest.LAST, null)
+    }
+
+    @Test
+    fun `getVesselVoyage() Should return NOT_FOUND When not found`() {
+        // Given
+        given(
+            this.getVesselVoyage.execute(any(), any(), any()),
+        ).willThrow(BackendUsageException(BackendUsageErrorCode.NOT_FOUND_BUT_OK))
+
+        // When
+        api.perform(
+            get(
+                "/bff/v1/vessels/logbook/find?internalReferenceNumber=FR224226850&voyageRequest=PREVIOUS&tripNumber=12345",
+            ),
+        )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.code", equalTo("NOT_FOUND_BUT_OK")))
     }
 
     @Test

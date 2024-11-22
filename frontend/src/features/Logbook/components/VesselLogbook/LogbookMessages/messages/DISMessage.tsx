@@ -2,22 +2,10 @@ import { useMemo } from 'react'
 
 import { CatchDetails } from './common/CatchDetails'
 import { SpecyCatch } from './common/SpecyCatch'
-import { getLatitudeOrDash, getLongitudeOrDash } from './utils'
-import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
 import { getDateTime } from '../../../../../../utils'
 import { buildCatchArray } from '../../../../utils'
 import { WeightType } from '../constants'
-import {
-  FirstInlineKey,
-  SecondInlineKey,
-  SpeciesList,
-  Table,
-  TableBody,
-  TableKey,
-  TableRow,
-  TableValue,
-  Zone
-} from '../styles'
+import { SpeciesList, Table, TableBody, TableKey, TableRow, TableValue, Zone } from '../styles'
 
 import type { Logbook } from '@features/Logbook/Logbook.types'
 
@@ -25,8 +13,6 @@ type DISMessageProps = Readonly<{
   messageValue: Logbook.DisMessageValue
 }>
 export function DISMessage({ messageValue }: DISMessageProps) {
-  const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
-
   const catchesWithProperties = useMemo(() => {
     if (!messageValue?.catches) {
       return []
@@ -45,15 +31,6 @@ export function DISMessage({ messageValue }: DISMessageProps) {
                 <TableRow>
                   <TableKey>Date opération</TableKey>
                   <TableValue>{getDateTime(messageValue.discardDatetimeUtc)}</TableValue>
-                </TableRow>
-                <TableRow>
-                  <TableKey>Position opération</TableKey>
-                  <TableValue>
-                    <FirstInlineKey>Lat.</FirstInlineKey>{' '}
-                    {getLatitudeOrDash(coordinatesFormat, messageValue.latitude, messageValue.longitude)}
-                    <SecondInlineKey>Lon.</SecondInlineKey>{' '}
-                    {getLongitudeOrDash(coordinatesFormat, messageValue.latitude, messageValue.longitude)}
-                  </TableValue>
                 </TableRow>
               </TableBody>
             </Table>

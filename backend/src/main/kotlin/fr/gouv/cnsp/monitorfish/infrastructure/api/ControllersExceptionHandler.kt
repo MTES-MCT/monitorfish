@@ -37,10 +37,16 @@ class ControllersExceptionHandler(val sentryConfig: SentryConfig) {
     fun handleBackendUsageException(e: BackendUsageException): ResponseEntity<BackendUsageErrorDataOutput> {
         val responseBody = BackendUsageErrorDataOutput(code = e.code, data = e.data, message = null)
 
-        return if (e.code == BackendUsageErrorCode.NOT_FOUND) {
-            ResponseEntity(responseBody, HttpStatus.NOT_FOUND)
-        } else {
-            ResponseEntity(responseBody, HttpStatus.BAD_REQUEST)
+        return when (e.code) {
+            BackendUsageErrorCode.NOT_FOUND -> {
+                ResponseEntity(responseBody, HttpStatus.NOT_FOUND)
+            }
+            BackendUsageErrorCode.NOT_FOUND_BUT_OK -> {
+                ResponseEntity(responseBody, HttpStatus.OK)
+            }
+            else -> {
+                ResponseEntity(responseBody, HttpStatus.BAD_REQUEST)
+            }
         }
     }
 
@@ -55,14 +61,6 @@ class ControllersExceptionHandler(val sentryConfig: SentryConfig) {
         if (sentryConfig.enabled == true) {
             Sentry.captureException(e)
         }
-
-        return ApiError(e)
-    }
-
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(NoLogbookFishingTripFound::class)
-    fun handleNoLogbookLastDepartureDateFound(e: Exception): ApiError {
-        logger.warn(e.message, e.cause)
 
         return ApiError(e)
     }

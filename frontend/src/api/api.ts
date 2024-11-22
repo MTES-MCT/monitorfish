@@ -155,7 +155,21 @@ const monitorfishLightBaseQuery = retry(
 )
 
 export const monitorfishLightApi = createApi({
-  baseQuery: normalizeRtkBaseQuery(monitorfishLightBaseQuery),
+  baseQuery: async (args: RTKBaseQueryArgs, api, extraOptions) => {
+    const result = await normalizeRtkBaseQuery(monitorfishLightBaseQuery)(args, api, extraOptions)
+    if (result.error) {
+      const error: CustomResponseError = {
+        path: typeof args === 'string' ? args : args.url,
+        requestData: typeof args === 'string' ? undefined : args.body,
+        responseData: result.error.data as BackendApi.ResponseBodyError,
+        status: result.error.status
+      }
+
+      return { error }
+    }
+
+    return result
+  },
   endpoints: () => ({}),
   reducerPath: 'monitorfishLightApi',
   tagTypes: []

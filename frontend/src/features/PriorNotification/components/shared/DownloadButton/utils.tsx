@@ -10,7 +10,7 @@ import type { Logbook } from '@features/Logbook/Logbook.types'
 
 export function getHtmlContent(
   pno: Logbook.PnoMessage | undefined,
-  gearsWithName: Array<Logbook.Gear & { gearName: string | null }>
+  gearsWithName: Array<Logbook.Gear & { gearName: string | undefined }>
 ): string {
   if (!pno) {
     return ''

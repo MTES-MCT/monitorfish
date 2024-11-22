@@ -22,6 +22,8 @@ export namespace Vessel {
     length: number | undefined
     mmsi: string | undefined
     navigationLicenceExpirationDate: string | undefined
+    navigationLicenceExtensionDate: string | undefined
+    navigationLicenceStatus: string | undefined
     operatorEmails: string[] | undefined
     operatorName: string | undefined
     operatorPhones: string[] | undefined

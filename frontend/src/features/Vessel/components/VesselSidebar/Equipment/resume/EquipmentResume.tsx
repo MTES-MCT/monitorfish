@@ -83,6 +83,7 @@ export function EquipmentResume({ setIsCurrentBeaconMalfunctionDetails }: Beacon
                     getDateTime(selectedVessel.beacon.loggingDatetimeUtc)
                 }
               ]}
+              keyWidth={110}
               valueEllipsisedForWidth={110}
             />
             <StyledFlatKeyValue

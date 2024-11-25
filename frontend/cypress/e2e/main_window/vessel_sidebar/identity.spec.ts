@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 
+import { customDayjs } from '../../utils/customDayjs'
 import { openVesselBySearch } from '../utils'
-import {customDayjs} from "../../utils/customDayjs";
 
 context('Vessel sidebar identity tab', () => {
   beforeEach(() => {

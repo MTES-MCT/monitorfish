@@ -29,6 +29,8 @@ data class VesselDataOutput(
     val declaredFishingGears: List<String>? = null,
     val pinger: Boolean? = null,
     val navigationLicenceExpirationDate: Date? = null,
+    val navigationLicenceExtensionDate: Date? = null,
+    val navigationLicenceStatus: String? = null,
     val operatorName: String? = null,
     val operatorPhones: List<String>? = null,
     val operatorEmail: String? = null,
@@ -79,6 +81,8 @@ data class VesselDataOutput(
                 declaredFishingGears = vessel.declaredFishingGears,
                 pinger = vessel.pinger,
                 navigationLicenceExpirationDate = vessel.navigationLicenceExpirationDate,
+                navigationLicenceExtensionDate = vessel.navigationLicenceExtensionDate,
+                navigationLicenceStatus = vessel.navigationLicenceStatus,
                 operatorName = vessel.operatorName,
                 operatorPhones = vessel.operatorPhones,
                 operatorEmail = vessel.operatorEmail,
@@ -94,7 +98,10 @@ data class VesselDataOutput(
                 logbookSoftware = vessel.logbookSoftware,
                 hasLogbookEsacapt = vessel.hasLogbookEsacapt,
                 hasVisioCaptures = vessel.hasVisioCaptures,
-                producerOrganization = producerOrganizationMembership?.let { ProducerOrganizationMembershipDataOutput.fromProducerOrganizationMembership(it) },
+                producerOrganization =
+                    producerOrganizationMembership?.let {
+                        ProducerOrganizationMembershipDataOutput.fromProducerOrganizationMembership(it)
+                    },
             )
         }
 

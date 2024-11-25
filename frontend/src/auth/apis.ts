@@ -1,5 +1,6 @@
 import { monitorfishApi } from '@api/api'
 import { BackendApi, type Meta } from '@api/BackendApi.types'
+import { HttpStatusCode } from '@api/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
 
 import type { UserAuthorization } from './types'
@@ -26,7 +27,7 @@ export const authorizationAPI = monitorfishApi.injectEndpoints({
               data: { isSuperUser: false },
               type: ErrorCode.AUTHENTICATION_REQUIRED
             },
-            status: 403
+            status: HttpStatusCode.FORBIDDEN
           })
         }
         if (authenticateResponse?.includes('expired')) {
@@ -38,7 +39,7 @@ export const authorizationAPI = monitorfishApi.injectEndpoints({
               data: { isSuperUser: false },
               type: ErrorCode.AUTHENTICATION_REQUIRED
             },
-            status: 403
+            status: HttpStatusCode.FORBIDDEN
           })
         }
 
@@ -50,7 +51,7 @@ export const authorizationAPI = monitorfishApi.injectEndpoints({
             data: { isSuperUser: false },
             type: ErrorCode.AUTHENTICATION_REQUIRED
           },
-          status: 403
+          status: HttpStatusCode.FORBIDDEN
         })
       }
     })

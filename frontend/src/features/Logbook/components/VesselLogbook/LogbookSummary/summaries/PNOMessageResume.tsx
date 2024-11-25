@@ -1,3 +1,4 @@
+import { Logbook } from '@features/Logbook/Logbook.types'
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -15,20 +16,7 @@ type PNOMessageResumeProps = Readonly<{
   id: string
   isDeleted: boolean
   isNotAcknowledged: boolean
-  pnoMessage: {
-    message: {
-      catchOnboard: {
-        species: string
-        speciesName: string
-        weight: number
-      }[]
-      port: string
-      portName: string
-      predictedArrivalDatetimeUtc: string
-      purpose: string
-    }
-    reportDateTime: string
-  }
+  pnoMessage: Logbook.PnoMessage
   showLogbookMessages: (messageType: string) => void
   speciesToWeightOfFAR: SpeciesToSpeciesInsight | undefined
   speciesToWeightOfPNO: SpeciesToSpeciesInsight | undefined

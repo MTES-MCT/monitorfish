@@ -19,7 +19,6 @@ import {
 } from 'react'
 import styled, { createGlobalStyle, css, StyleSheetManager } from 'styled-components'
 
-import { Alert } from './Alert'
 import { BeaconMalfunctionBoard } from './BeaconMalfunctionBoard'
 import { BannerStack } from './components/BannerStack'
 import { Menu } from './Menu'
@@ -34,6 +33,7 @@ import getAllGearCodes from '../../domain/use_cases/gearCode/getAllGearCodes'
 import { getInfractions } from '../../domain/use_cases/infraction/getInfractions'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
+import { SideWindowAlerts } from '../Alert/components/SideWindowAlerts'
 import { Loader as MissionFormLoader } from '../Mission/components/MissionForm/Loader'
 import { MissionList } from '../Mission/components/MissionList'
 import { PriorNotificationList } from '../PriorNotification/components/PriorNotificationList'
@@ -157,7 +157,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
               {!isPreloading && (
                 <Content>
                   {selectedPath.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST && (
-                    <Alert baseRef={wrapperRef as MutableRefObject<HTMLDivElement>} />
+                    <SideWindowAlerts baseRef={wrapperRef as MutableRefObject<HTMLDivElement>} />
                   )}
                   {selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD && <BeaconMalfunctionBoard />}
                   {selectedPath.menu === SideWindowMenuKey.PRIOR_NOTIFICATION_LIST && (

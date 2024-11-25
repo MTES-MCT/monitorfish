@@ -3,7 +3,7 @@ import { isCypress } from '@utils/isCypress'
 import { MissionAction } from '../../missionAction.types'
 
 import type { MissionActionFormValues } from './types'
-import type { LegacyControlUnit } from '../../../../domain/types/legacyControlUnit'
+import type { LegacyControlUnit } from '../../../ControlUnit/legacyControlUnit'
 import type { Option, Undefine } from '@mtes-mct/monitor-ui'
 
 import CompletionStatus = MissionAction.CompletionStatus

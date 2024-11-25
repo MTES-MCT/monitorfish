@@ -1,4 +1,3 @@
-import type { LogbookMessage } from '../../LegacyLogbook.types'
 import type { SpeciesToSpeciesInsight, SpeciesToSpeciesInsightList } from '../../types'
 import type { Logbook } from '@features/Logbook/Logbook.types'
 
@@ -9,29 +8,29 @@ export type LogbookTripSummary = {
     numberOfSpecies: number
   }
   dep: {
-    log: LogbookMessage | undefined
+    log: Logbook.DepMessage | undefined
     totalWeight: number
   }
   dis: {
     areAllMessagesNotAcknowledged: boolean
-    logs: LogbookMessage[]
+    logs: Logbook.DisMessage[]
     speciesToWeight: SpeciesToSpeciesInsight | undefined
     totalWeight: number
   }
   far: {
     areAllMessagesNotAcknowledged: boolean
-    logs: LogbookMessage[]
+    logs: Logbook.FarMessage[]
     speciesAndPresentationToWeight: SpeciesToSpeciesInsightList | undefined
     speciesToWeight: SpeciesToSpeciesInsight | undefined
     totalWeight: number
   }
   lan: {
-    log: LogbookMessage | undefined
+    log: Logbook.LanMessage | undefined
     speciesToWeight: SpeciesToSpeciesInsight | undefined
     totalWeight: number
   }
   pno: {
-    log: LogbookMessage | undefined
+    log: Logbook.PnoMessage | undefined
     speciesToWeight: SpeciesToSpeciesInsight | undefined
     totalFARAndDEPWeight: number
     totalWeight: number

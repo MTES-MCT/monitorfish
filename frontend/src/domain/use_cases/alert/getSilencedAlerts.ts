@@ -1,5 +1,6 @@
+import { setSilencedAlerts } from '@features/Alert/components/SideWindowAlerts/slice'
+
 import { getSilencedAlertsFromAPI } from '../../../api/alert'
-import { setSilencedAlerts } from '../../../features/SideWindow/Alert/slice'
 import { setError } from '../../shared_slices/Global'
 
 export const getSilencedAlerts = () => dispatch => {

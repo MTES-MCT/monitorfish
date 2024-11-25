@@ -1,4 +1,5 @@
 import { monitorenvApi, monitorfishApi, monitorfishLightApi, monitorfishPublicApi } from '@api/api'
+import { alertReducer } from '@features/Alert/components/SideWindowAlerts/slice'
 import { regulationReducer } from '@features/BackOffice/slice'
 import { controlUnitDialogReducer } from '@features/ControlUnit/components/ControlUnitDialog/slice'
 import { controlUnitListDialogPersistedReducer } from '@features/ControlUnit/components/ControlUnitListDialog/slice'
@@ -16,7 +17,6 @@ import { backofficeProducerOrganizationMembershipReducer } from '@features/Produ
 import { regulatoryLayerSearchReducer } from '@features/Regulation/components/RegulationSearch/slice'
 import { regulatoryReducer } from '@features/Regulation/slice'
 import { reportingReducer } from '@features/Reporting/slice'
-import { alertReducer } from '@features/SideWindow/Alert/slice'
 import { sideWindowReducer } from '@features/SideWindow/slice'
 import { stationReducer } from '@features/Station/slice'
 import { vesselListReducer } from '@features/Vessel/components/VesselList/slice'

@@ -27,6 +27,8 @@ data class LogbookReportEntity(
     val operationCountry: String?,
     @Column(name = "operation_datetime_utc")
     val operationDateTime: Instant,
+    @Column(name = "activity_datetime_utc")
+    val activityDateTime: Instant?,
     @Column(name = "operation_type")
     @Enumerated(EnumType.STRING)
     val operationType: LogbookOperationType,
@@ -82,6 +84,7 @@ data class LogbookReportEntity(
             referencedReportId = logbookMessage.referencedReportId,
             externalReferenceNumber = logbookMessage.externalReferenceNumber,
             ircs = logbookMessage.ircs,
+            activityDateTime = logbookMessage.activityDateTime?.toInstant(),
             operationDateTime = logbookMessage.operationDateTime.toInstant(),
             reportDateTime = logbookMessage.reportDateTime?.toInstant(),
             integrationDateTime = logbookMessage.integrationDateTime.toInstant(),
@@ -115,6 +118,7 @@ data class LogbookReportEntity(
             externalReferenceNumber = externalReferenceNumber,
             ircs = ircs,
             operationDateTime = operationDateTime.atZone(UTC),
+            activityDateTime = activityDateTime?.atZone(UTC),
             reportDateTime = reportDateTime?.atZone(UTC),
             integrationDateTime = integrationDateTime.atZone(UTC),
             vesselName = vesselName,

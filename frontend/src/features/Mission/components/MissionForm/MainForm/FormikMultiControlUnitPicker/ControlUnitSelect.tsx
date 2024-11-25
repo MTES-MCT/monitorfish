@@ -17,8 +17,8 @@ import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'
 import { missionFormActions } from '../../slice'
 
 import type { MissionMainFormValues } from '../../types'
+import type { LegacyControlUnit } from '@features/ControlUnit/legacyControlUnit'
 import type { Option } from '@mtes-mct/monitor-ui'
-import type { LegacyControlUnit } from 'domain/types/legacyControlUnit'
 import type { Promisable } from 'type-fest'
 
 type ControlUnitSelectProps = Readonly<{

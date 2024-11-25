@@ -115,7 +115,30 @@ ON (
     )
 )
 LEFT JOIN vessels
-ON pos.internal_reference_number = vessels.cfr
+ON (
+        pos.internal_reference_number = vessels.cfr
+    OR (
+            (
+                pos.internal_reference_number IS NULL OR
+                vessels.cfr IS NULL
+            )
+        AND
+            pos.external_reference_number = vessels.external_immatriculation
+    )
+    OR (
+            (
+                pos.internal_reference_number IS NULL OR
+                vessels.cfr IS NULL
+            )
+        AND
+            (
+                pos.external_reference_number IS NULL OR
+                vessels.external_immatriculation IS NULL
+            )
+        AND
+            pos.ircs = vessels.ircs
+    )
+)
 LEFT JOIN land_areas_subdivided land
 ON ST_Intersects(
     ST_SetSRID(ST_MakePoint(pos.longitude, pos.latitude), 4326),

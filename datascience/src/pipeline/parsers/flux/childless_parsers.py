@@ -20,11 +20,14 @@ def parse_pro(pro):
         "freshness": get_text(pro, './/*[@listID="FISH_FRESHNESS"]'),
         "preservationState": get_text(pro, './/*[@listID="FISH_PRESERVATION"]'),
         "conversionFactor": try_float(get_text(pro, ".//ram:ConversionFactorNumeric")),
+        "processedWeight": try_float(
+            get_text(pro, "./ram:ResultAAPProduct/ram:WeightMeasure")
+        ),
     }
     return remove_none_values(data)
 
 
-def parse_spe(spe):
+def parse_spe(spe, weight_type="live"):
     data = {
         "species": get_text(spe, './/ram:SpeciesCode[@listID="FAO_SPECIES"]'),
         "weight": try_float(get_text(spe, './/ram:WeightMeasure[@unitCode="KGM"]')),
@@ -45,11 +48,13 @@ def parse_spe(spe):
             data = {**data, **pro_data}
         data = complete_pro(data)
 
+    net_weight = data.pop("processedWeight", None)
+    if weight_type == "net":
+        data["weight"] = net_weight
     return data
 
 
 def parse_gea(gea):
-
     data = {
         "gear": get_text(gea, './/ram:TypeCode[@listID="GEAR_TYPE"]'),
         "mesh": try_float(

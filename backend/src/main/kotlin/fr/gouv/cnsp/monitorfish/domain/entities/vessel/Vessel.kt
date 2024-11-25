@@ -35,6 +35,8 @@ data class Vessel(
     val declaredFishingGears: List<String>? = null,
     val pinger: Boolean? = null,
     val navigationLicenceExpirationDate: Date? = null,
+    val navigationLicenceExtensionDate: Date? = null,
+    val navigationLicenceStatus: String? = null,
     val operatorName: String? = null,
     val operatorPhones: List<String>? = null,
     val operatorEmail: String? = null,

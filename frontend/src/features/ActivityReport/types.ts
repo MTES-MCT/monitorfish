@@ -1,4 +1,4 @@
-import type { LegacyControlUnit } from '../../domain/types/legacyControlUnit'
+import type { LegacyControlUnit } from '../ControlUnit/legacyControlUnit'
 import type { MissionAction } from '../Mission/missionAction.types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 

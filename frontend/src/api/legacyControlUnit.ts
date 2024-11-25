@@ -1,7 +1,7 @@
 import { monitorenvApi } from './api'
 import { FrontendApiError } from '../libs/FrontendApiError'
 
-import type { LegacyControlUnit } from '../domain/types/legacyControlUnit'
+import type { LegacyControlUnit } from '@features/ControlUnit/legacyControlUnit'
 
 const GET_CONTROL_UNIT_RESOURCES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la liste des unités."
 

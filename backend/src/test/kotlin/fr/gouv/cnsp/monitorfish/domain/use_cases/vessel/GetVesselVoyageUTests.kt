@@ -70,7 +70,7 @@ class GetVesselVoyageUTests {
         // Then
         assertThat(throwable).isNotNull
         assertThat(throwable.message).isEqualTo(
-            "Could not fetch voyage for request \"PREVIOUS\": Current trip number parameter must be not null",
+            "Could not fetch voyage for request \"PREVIOUS\"",
         )
     }
 

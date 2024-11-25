@@ -46,7 +46,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         val reporting = jpaReportingRepository.findAll()
 
         // Then
-        assertThat(reporting).hasSize(13)
+        assertThat(reporting).hasSize(14)
         assertThat(reporting.last().internalReferenceNumber).isEqualTo("FRFGRGR")
         assertThat(reporting.last().externalReferenceNumber).isEqualTo("RGD")
         val alert = reporting.last().value as ThreeMilesTrawlingAlert
@@ -89,7 +89,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         val reportings = jpaReportingRepository.findAll()
 
         // Then
-        assertThat(reportings).hasSize(13)
+        assertThat(reportings).hasSize(14)
         assertThat(reportings.last().internalReferenceNumber).isEqualTo("FRFGRGR")
         assertThat(reportings.last().externalReferenceNumber).isEqualTo("RGD")
         assertThat(reportings.last().type).isEqualTo(ReportingType.INFRACTION_SUSPICION)
@@ -132,7 +132,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         val reportings = jpaReportingRepository.findAll()
 
         // Then
-        assertThat(reportings).hasSize(13)
+        assertThat(reportings).hasSize(14)
         assertThat(reportings.last().internalReferenceNumber).isEqualTo("FRFGRGR")
         assertThat(reportings.last().externalReferenceNumber).isEqualTo("RGD")
         assertThat(reportings.last().type).isEqualTo(ReportingType.INFRACTION_SUSPICION)
@@ -352,7 +352,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             )
 
         // When
-        val reporting = jpaReportingRepository.update(6, updatedReporting)
+        val reporting = jpaReportingRepository.update(7, updatedReporting)
 
         // Then
         assertThat(reporting.internalReferenceNumber).isEqualTo("ABC000042310")
@@ -409,7 +409,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             )
 
         // When
-        val reporting = jpaReportingRepository.update(6, updatedReporting)
+        val reporting = jpaReportingRepository.update(7, updatedReporting)
 
         // Then
         assertThat(reporting.internalReferenceNumber).isEqualTo("ABC000042310")

@@ -3,12 +3,11 @@ import { Feature } from 'ol'
 import Point from 'ol/geom/Point'
 
 import { LogbookMessageType } from './constants'
+import { Logbook } from './Logbook.types'
 import { LayerProperties } from '../../domain/entities/layers/constants'
 import { undefinedize } from '../../utils/undefinedize'
 
 import type { CatchProperty, CatchWithProperties, ProtectedCatchWithProperties } from './components/VesselLogbook/types'
-import type { LogbookCatch, LogbookMessage } from './LegacyLogbook.types'
-import type { Logbook, Logbook as LogbookMessageNamespace } from './Logbook.types'
 import type { SpeciesInsight, SpeciesToSpeciesInsight, SpeciesToSpeciesInsightList } from './types'
 import type { DeclaredLogbookSpecies, FishingActivityShowedOnMap } from '../../domain/entities/vessel/types'
 
@@ -86,48 +85,48 @@ export function buildProtectedCatchArray(catches: Logbook.ProtectedSpeciesCatch[
     .sort((catchA, catchB) => catchB.weight - catchA.weight)
 }
 
-export const getDEPMessage = (logbookMessages: LogbookMessage[]): LogbookMessage | undefined =>
-  logbookMessages.find(message => message.messageType === LogbookMessageType.DEP.code)
+export const getDEPMessage = (logbookMessages: Logbook.Message[]): Logbook.DepMessage | undefined =>
+  logbookMessages.find(message => message.messageType === Logbook.MessageType.DEP)
 
-export const getDISMessages = (logbookMessages: LogbookMessage[]): LogbookMessage[] =>
-  logbookMessages.filter(message => message.messageType === LogbookMessageType.DIS.code)
+export const getDISMessages = (logbookMessages: Logbook.Message[]): Logbook.DisMessage[] =>
+  logbookMessages.filter(message => message.messageType === Logbook.MessageType.DIS)
 
-export const getCPSMessages = (logbookMessages: LogbookMessage[]): LogbookMessage[] =>
-  logbookMessages.filter(message => message.messageType === LogbookMessageType.CPS.code)
+export const getCPSMessages = (logbookMessages: Logbook.Message[]): Logbook.CpsMessage[] =>
+  logbookMessages.filter(message => message.messageType === Logbook.MessageType.CPS)
 
 /**
  * Get the first valid PNO if found or return the first PNO
  */
-export const getPNOMessage = (logbookMessages: LogbookMessage[]): LogbookMessage | undefined => {
+export const getPNOMessage = (logbookMessages: Logbook.Message[]): Logbook.PnoMessage | undefined => {
   const validPNOs = logbookMessages.filter(
     message =>
-      message.messageType === LogbookMessageType.PNO.code && !message.isCorrectedByNewerMessage && !message.isDeleted
-  )
+      message.messageType === Logbook.MessageType.PNO && !message.isCorrectedByNewerMessage && !message.isDeleted
+  ) as Logbook.PnoMessage[]
 
   if (validPNOs.length === 1) {
     return validPNOs[0]
   }
 
-  return logbookMessages.find(message => message.messageType === LogbookMessageType.PNO.code)
+  return logbookMessages.find(message => message.messageType === Logbook.MessageType.PNO)
 }
 
-export const getFARMessages = (logbookMessages: LogbookMessage[]): LogbookMessage[] =>
-  logbookMessages.filter(message => message.messageType === LogbookMessageType.FAR.code)
+export const getFARMessages = (logbookMessages: Logbook.Message[]): Logbook.FarMessage[] =>
+  logbookMessages.filter(message => message.messageType === Logbook.MessageType.FAR)
 
 /**
  * Get the first valid LAN if found or return the first LAN
  */
-export const getLANMessage = (logbookMessages: LogbookMessage[]): LogbookMessage | undefined => {
+export const getLANMessage = (logbookMessages: Logbook.Message[]): Logbook.LanMessage | undefined => {
   const validLANs = logbookMessages.filter(
     message =>
-      message.messageType === LogbookMessageType.LAN.code && !message.isCorrectedByNewerMessage && !message.isDeleted
-  )
+      message.messageType === Logbook.MessageType.LAN && !message.isCorrectedByNewerMessage && !message.isDeleted
+  ) as Logbook.LanMessage[]
 
   if (validLANs.length === 1) {
     return validLANs[0]
   }
 
-  return logbookMessages.find(message => message.messageType === LogbookMessageType.LAN.code)
+  return logbookMessages.find(message => message.messageType === Logbook.MessageType.LAN)
 }
 
 function isValidMessage() {
@@ -139,7 +138,7 @@ function isValidMessage() {
  * - The DIS message weight are LIVE, so we must NOT apply the conversion factor
  * - Only uncorrected and undeleted messages are taken
  */
-export const getTotalDISWeight = (logbookMessages: LogbookMessage[]): number => {
+export const getTotalDISWeight = (logbookMessages: Logbook.DisMessage[]): number => {
   const weight = logbookMessages
     .filter(isValidMessage())
     .reduce((accumulator, logbookMessage) => {
@@ -156,7 +155,7 @@ export const getTotalDISWeight = (logbookMessages: LogbookMessage[]): number => 
  * Notes :
  * - Only uncorrected and undeleted messages are taken
  */
-export const getCPSDistinctSpecies = (logbookMessages: LogbookMessage[]): number => {
+export const getCPSNumberOfDistinctSpecies = (logbookMessages: Logbook.CpsMessage[]): number => {
   const species: string[] = logbookMessages
     .filter(isValidMessage())
     .reduce(
@@ -168,7 +167,7 @@ export const getCPSDistinctSpecies = (logbookMessages: LogbookMessage[]): number
   return Array.from(new Set(species)).length
 }
 
-export const areAllMessagesNotAcknowledged = (logbookMessages: LogbookMessage[]) =>
+export const areAllMessagesNotAcknowledged = (logbookMessages: Logbook.Message[]) =>
   logbookMessages.length === logbookMessages.filter(logbookMessage => !logbookMessage?.acknowledgment?.isSuccess).length
 
 /**
@@ -177,7 +176,7 @@ export const areAllMessagesNotAcknowledged = (logbookMessages: LogbookMessage[])
  * - Only uncorrected and undeleted messages are taken
  * - A FAR message contain an array of `Haul` which then contains an array of `Catch`
  */
-export const getTotalFARWeight = (logbookMessages: LogbookMessage[]): number => {
+export const getTotalFARWeight = (logbookMessages: Logbook.FarMessage[]): number => {
   if (!logbookMessages.length) {
     return 0
   }
@@ -200,13 +199,13 @@ export const getTotalFARWeight = (logbookMessages: LogbookMessage[]): number => 
 /**
  * The DEP message weight are LIVE, so we must NOT apply the conversion factor
  */
-export const getTotalDEPWeight = (logbookMessage: LogbookMessage | undefined): number =>
+export const getTotalDEPWeight = (logbookMessage: Logbook.DepMessage | undefined): number =>
   logbookMessage ? getSumOfCatches(logbookMessage.message.speciesOnboard, false) : 0
 
 /**
  * The LAN message weight are NET, so we must apply the conversion factor to get LIVE weights
  */
-export const getTotalLANWeight = (logbookMessage: LogbookMessage | undefined): number =>
+export const getTotalLANWeight = (logbookMessage: Logbook.LanMessage | undefined): number =>
   logbookMessage ? getSumOfCatches(logbookMessage.message.catchLanded, true) : 0
 
 /**
@@ -281,7 +280,7 @@ function getSpeciesInsight(speciesCatch): SpeciesInsight {
  */
 function getSpeciesAndPresentationToWeightObject(
   speciesToWeightObject: SpeciesToSpeciesInsightList,
-  speciesCatch: LogbookCatch
+  speciesCatch: Logbook.Catch
 ) {
   if (!speciesCatch.species) {
     return
@@ -319,7 +318,7 @@ function getSpeciesAndPresentationToWeightObject(
 }
 
 export const getFARSpeciesInsightRecord = (
-  messages: LogbookMessage[],
+  messages: Logbook.FarMessage[],
   totalWeight: number
 ): SpeciesToSpeciesInsight | undefined => {
   const speciesToWeightObject: SpeciesToSpeciesInsight = {}
@@ -336,7 +335,7 @@ export const getFARSpeciesInsightRecord = (
 }
 
 export const getDISSpeciesInsightRecord = (
-  messages: LogbookMessage[],
+  messages: Logbook.DisMessage[],
   totalWeight: number
 ): SpeciesToSpeciesInsight | undefined => {
   const speciesToWeightObject: SpeciesToSpeciesInsight = {}
@@ -351,7 +350,7 @@ export const getDISSpeciesInsightRecord = (
 }
 
 export const getFARSpeciesInsightListRecord = (
-  farMessages: LogbookMessage[]
+  farMessages: Logbook.FarMessage[]
 ): SpeciesToSpeciesInsightList | undefined => {
   if (!farMessages.length) {
     return undefined
@@ -371,7 +370,7 @@ export const getFARSpeciesInsightListRecord = (
 }
 
 export const getLANSpeciesInsightRecord = (
-  lanMessage: LogbookMessage | undefined
+  lanMessage: Logbook.LanMessage | undefined
 ): SpeciesToSpeciesInsight | undefined => {
   if (!lanMessage) {
     return undefined
@@ -387,7 +386,7 @@ export const getLANSpeciesInsightRecord = (
 }
 
 export const getPNOSpeciesInsightRecord = (
-  pnoMessage: LogbookMessage | undefined,
+  pnoMessage: Logbook.PnoMessage | undefined,
   totalFARAndDEPWeight
 ): SpeciesToSpeciesInsight | undefined => {
   if (!pnoMessage) {
@@ -396,20 +395,21 @@ export const getPNOSpeciesInsightRecord = (
 
   const speciesToWeightPNOObject = {}
 
-  pnoMessage.message.catchOnboard.forEach(speciesCatch => {
+  pnoMessage.message.catchOnboard?.forEach(speciesCatch => {
     setSpeciesToWeightObject(speciesToWeightPNOObject, speciesCatch, totalFARAndDEPWeight, false)
   })
 
   return speciesToWeightPNOObject
 }
 
-export const getFAOZonesFromFARMessages = (farMessages: LogbookMessage[]) =>
+export const getFAOZonesFromFARMessages = (farMessages: Logbook.FarMessage[]) =>
   farMessages
     .map(farMessage =>
       farMessage.message.hauls.map(haul => haul.catches.map(speciesCatch => speciesCatch.faoZone)).flat()
     )
     .flat()
-    .reduce((acc, faoZone) => {
+    .filter((faoZone): faoZone is string => faoZone !== undefined)
+    .reduce((acc: string[], faoZone) => {
       if (acc.indexOf(faoZone) < 0) {
         acc.push(faoZone)
       }
@@ -420,33 +420,17 @@ export const getFAOZonesFromFARMessages = (farMessages: LogbookMessage[]) =>
 /**
  * Get the effective datetime from logbook message
  */
-export const getEffectiveDateTimeFromMessage = (message: LogbookMessage): string => {
-  // All FAR catches have at least one haul, so we take the first one to show the catch on track
-  const FIRST_HAUL = 0
-
+export const getActivityDateTimeFromMessage = (message: Logbook.Message): string => {
   switch (message.messageType) {
-    case 'DEP':
-      return message.message.departureDatetimeUtc
-    case 'FAR':
-      return message.message.hauls[FIRST_HAUL].farDatetimeUtc
-    case 'DIS':
-      return message.message.discardDatetimeUtc
-    case 'COE':
-      return message.message.effortZoneEntryDatetimeUtc
-    case 'COX':
-      return message.message.effortZoneExitDatetimeUtc
-    case 'LAN':
-      return message.message.landingDatetimeUtc
-    case 'EOF':
-      return message.message.endOfFishingDatetimeUtc
-    case 'RTP':
-      return message.message.returnDatetimeUtc
-    case 'PNO':
-      return message.reportDateTime < message.message.predictedArrivalDatetimeUtc
-        ? message.reportDateTime
-        : message.message.predictedArrivalDatetimeUtc
-    default:
+    case 'PNO': {
+      if (message.activityDateTime) {
+        return message.reportDateTime < message.activityDateTime ? message.reportDateTime : message.activityDateTime
+      }
+
       return message.reportDateTime
+    }
+    default:
+      return message.activityDateTime ?? message.reportDateTime
   }
 }
 
@@ -481,12 +465,12 @@ export const getFishingActivityFeatureOnTrackLine = (
 /**
  * Get the logbook message type - used to handle the specific DIM message type case
  */
-export const getLogbookMessageType = (message: LogbookMessage | LogbookMessageNamespace.Message): string => {
+export const getLogbookMessageType = (message: Logbook.Message): string => {
   if (
-    message.messageType === LogbookMessageType.DIS.code &&
-    message.message.catches.some(aCatch => aCatch.presentation === LogbookMessageType.DIM.code)
+    message.messageType === Logbook.MessageType.DIS &&
+    message.message.catches.some(aCatch => aCatch.presentation === Logbook.MessageType.DIM)
   ) {
-    return LogbookMessageType.DIM.code
+    return Logbook.MessageType.DIM
   }
 
   return LogbookMessageType[message.messageType].displayCode

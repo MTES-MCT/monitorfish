@@ -4,12 +4,15 @@ import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagesAndAlerts
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Voyage
+import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
+import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PNOAndLANAlertRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
+import kotlin.jvm.Throws
 
 @UseCase
 class GetVesselVoyage(
@@ -19,6 +22,7 @@ class GetVesselVoyage(
 ) {
     private val logger = LoggerFactory.getLogger(GetVesselVoyage::class.java)
 
+    @Throws(BackendUsageException::class)
     fun execute(
         internalReferenceNumber: String,
         voyageRequest: VoyageRequest,
@@ -63,8 +67,9 @@ class GetVesselVoyage(
                     }
                 }
             } catch (e: IllegalArgumentException) {
-                throw NoLogbookFishingTripFound(
-                    "Could not fetch voyage for request \"${voyageRequest}\": ${e.message}",
+                throw BackendUsageException(
+                    BackendUsageErrorCode.NOT_FOUND_BUT_OK,
+                    "Could not fetch voyage for request \"${voyageRequest}\"",
                     e,
                 )
             }

@@ -49,7 +49,11 @@ export function PriorNotificationListButton() {
         $isActive={isActive}
         accent={Accent.PRIMARY}
         aria-label="Afficher la liste des préavis"
-        badgeNumber={data?.perSeafrontGroupCount && data?.perSeafrontGroupCount[ALL_SEAFRONT_GROUP]}
+        badgeNumber={
+          data?.perSeafrontGroupCount && data?.perSeafrontGroupCount[ALL_SEAFRONT_GROUP] > 0
+            ? data?.perSeafrontGroupCount[ALL_SEAFRONT_GROUP]
+            : undefined
+        }
         Icon={Icon.Fishery}
         onClick={toggleSideWindow}
         size={Size.LARGE}

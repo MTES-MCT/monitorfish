@@ -16,12 +16,10 @@ import { logbookActions } from '../../../../slice'
 import { getLogbookMessageType } from '../../../../utils'
 import { isPnoMessage } from '../utils'
 
-import type { LogbookMessage as LegacyLogbookMessage } from '../../../../LegacyLogbook.types'
-
 type LogbookMessageComponentProps = Readonly<{
   isFirst: boolean
   isManuallyCreated?: boolean
-  logbookMessage: LegacyLogbookMessage | Logbook.Message
+  logbookMessage: Logbook.Message
   withMapControls?: boolean
 }>
 export function LogbookMessage({
@@ -36,11 +34,13 @@ export function LogbookMessage({
   const logbookHeaderTitle = useMemo(() => {
     switch (logbookMessage.messageType) {
       case LogbookMessageTypeEnum.DEP.code.toString(): {
+        const depMessage = logbookMessage as Logbook.DepMessage
+
         return (
           <>
-            <LogbookMessageName>{LogbookMessageTypeEnum[logbookMessage.messageType].name}</LogbookMessageName>
-            {logbookMessage.message.departurePortName || logbookMessage.message.departurePort} le{' '}
-            {getDateTime(logbookMessage.message.departureDatetimeUtc, true)} <Gray>(UTC)</Gray>
+            <LogbookMessageName>{LogbookMessageTypeEnum[depMessage.messageType].name}</LogbookMessageName>
+            {depMessage.message.departurePortName || depMessage.message.departurePort} le{' '}
+            {getDateTime(depMessage.message.departureDatetimeUtc, true)} <Gray>(UTC)</Gray>
           </>
         )
       }
@@ -74,7 +74,7 @@ export function LogbookMessage({
   )
 
   return (
-    <Wrapper $isFirst={isFirst} id={logbookMessage.operationNumber}>
+    <Wrapper $isFirst={isFirst} data-cy="LogbookMessage" id={logbookMessage.operationNumber}>
       <Header>
         {!isManuallyCreated && <LogbookMessageTypeText>{getLogbookMessageType(logbookMessage)}</LogbookMessageTypeText>}
         <LogbookMessageHeaderText
@@ -82,7 +82,7 @@ export function LogbookMessage({
             logbookMessage.isCorrectedByNewerMessage || logbookMessage.isDeleted || !!logbookMessage.referencedReportId
           }
           data-cy="vessel-fishing-message"
-          title={logbookHeaderTitle}
+          title={logbookHeaderTitle as string}
         >
           {logbookHeaderTitle}
         </LogbookMessageHeaderText>

@@ -247,6 +247,7 @@ def render_sms(m: BeaconMalfunctionToNotify, templates: dict) -> str:
         ),
         last_position_latitude=latitude,
         last_position_longitude=longitude,
+        vessel_name=m.vessel_name,
     )
 
     return text

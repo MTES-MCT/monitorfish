@@ -1,7 +1,7 @@
 // TODO This should be moved to `entities/vessel/mission.types.ts`
 
-import type { PendingAlertValueType } from '../alerts/types'
 import type { VesselTrackDepth } from '../vesselTrackDepth'
+import type { PendingAlertValueType } from '@features/Alert/types'
 import type { ReportingType } from '@features/Reporting/types'
 import type { SelectableVesselTrackDepth } from '@features/Vessel/components/VesselSidebar/actions/TrackRequest/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'

@@ -1,4 +1,4 @@
-import type { LegacyControlUnit } from '../../domain/types/legacyControlUnit'
+import type { LegacyControlUnit } from '../ControlUnit/legacyControlUnit'
 
 export namespace MissionAction {
   export interface MissionAction {

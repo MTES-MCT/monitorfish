@@ -14,6 +14,7 @@ data class LogbookMessage(
     val tripNumber: String? = null,
     val referencedReportId: String? = null,
     val operationDateTime: ZonedDateTime,
+    val activityDateTime: ZonedDateTime? = null,
     val internalReferenceNumber: String? = null,
     val externalReferenceNumber: String? = null,
     val ircs: String? = null,

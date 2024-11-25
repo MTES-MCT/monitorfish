@@ -3,7 +3,7 @@ import { Seafront } from '@constants/seafront'
 import type { EnvMissionAction } from './envMissionAction.types'
 import type { MissionAction } from './missionAction.types'
 import type { GeoJSON } from '../../domain/types/GeoJSON'
-import type { LegacyControlUnit } from '../../domain/types/legacyControlUnit'
+import type { LegacyControlUnit } from '../ControlUnit/legacyControlUnit'
 import type { Except } from 'type-fest'
 
 export namespace Mission {

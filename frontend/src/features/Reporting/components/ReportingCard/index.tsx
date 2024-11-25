@@ -1,7 +1,7 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
+import { getAlertNameFromType } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/utils'
 import { deleteReporting } from '@features/Reporting/useCases/deleteReporting'
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
-import { getAlertNameFromType } from '@features/SideWindow/Alert/AlertListAndReportingList/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Icon, IconButton, THEME, Link } from '@mtes-mct/monitor-ui'
 import { useMemo, useState } from 'react'

@@ -83,6 +83,8 @@ data class ManualPriorNotificationEntity(
     fun toPriorNotification(): PriorNotification {
         try {
             val reportId = requireNotNull(reportId) { "`reportId` is null." }
+            val predictedArrivalDatetimeUtc =
+                requireNotNull(value.predictedArrivalDatetimeUtc) { "`predictedArrivalDatetimeUtc` is null." }
 
             val pnoLogbookMessage =
                 LogbookMessage(
@@ -97,6 +99,7 @@ data class ManualPriorNotificationEntity(
                     message = value,
                     messageType = LogbookMessageTypeMapping.PNO.name,
                     operationDateTime = createdAt,
+                    activityDateTime = predictedArrivalDatetimeUtc,
                     operationNumber = null,
                     operationType = LogbookOperationType.DAT,
                     reportDateTime = sentAt,

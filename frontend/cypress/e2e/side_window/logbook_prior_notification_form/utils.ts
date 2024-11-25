@@ -170,6 +170,7 @@ export function getPriorNotificationFakeResponse({
     isVesselUnderCharter: false,
     logbookMessage: {
       acknowledgment: null,
+      activityDateTime: null,
       externalReferenceNumber: null,
       flagState: 'FRA',
       imo: null,

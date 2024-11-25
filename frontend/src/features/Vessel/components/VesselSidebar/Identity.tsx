@@ -173,7 +173,8 @@ export function Identity() {
             value: (
               <>
                 {getDate(selectedVessel?.navigationLicenceExpirationDate)}{' '}
-                {isNavigationLicenceExpired() ? <LicenceExpired /> : <LicenceActive />}
+                {isNavigationLicenceExpired() === true && <LicenceExpired />}
+                {isNavigationLicenceExpired() === false && <LicenceActive />}
               </>
             )
           },

@@ -39,6 +39,7 @@ from src.pipeline.entities.control_units import ControlUnit
 from src.pipeline.entities.fleet_segments import FishingGear, FleetSegment
 from src.pipeline.entities.missions import Infraction
 from src.pipeline.entities.pnos import (
+    PnoAddressee,
     PnoCatch,
     PnoSource,
     PnoToRender,
@@ -121,6 +122,14 @@ def extract_facade_email_addresses() -> dict:
         query_filepath="monitorfish/facade_email_addresses.sql",
     )
     return df.set_index("facade").email_address.to_dict()
+
+
+@task(checkpoint=False)
+def extract_pno_extra_subscriptions() -> pd.DataFrame:
+    return extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/pno_extra_subscriptions.sql",
+    )
 
 
 @task(checkpoint=False)
@@ -519,6 +528,7 @@ def render_pno(
         is_verified=pno.is_verified,
         is_being_sent=pno.is_being_sent,
         trip_segments=pno.trip_segments,
+        pno_types=pno.pno_types,
         port_locode=pno.port_locode,
         facade=pno.facade,
         source=pno.source,
@@ -582,11 +592,13 @@ def attribute_addressees(
     pno_to_distribute: RenderedPno,
     units_targeting_vessels: pd.DataFrame,
     units_ports_and_segments_subscriptions: pd.DataFrame,
+    pno_extra_subscriptions: pd.DataFrame,
     control_units: List[ControlUnit],
 ) -> RenderedPno:
     """
-    Returns a copy of the input `RenderedPno`'s with its `control_units`,
-    attribute updated, representing control units that should receive the PNO.
+    Returns a copy of the input `RenderedPno`'s with its `control_units`, and
+    `addtionnal_addressees` attributes updated, representing control units and other
+    addressees that should receive the PNO.
     The control units attributed to the PNO are :
 
       - control units who target the vessel
@@ -598,6 +610,9 @@ def attribute_addressees(
         - control units who subscribed to the port AND to a segment of the PNO
           if the PNO is not in verification scope
 
+    The addtionnal addressees attributed to the PNO are those in
+    `pno_extra_subscriptions` who subscribed to the port and type of the PNO.
+
     Args:
         pno_to_distribute (RenderedPno): RenderedPno
         units_targeting_vessels (pd.DataFrame): DataFrame with columns
@@ -607,6 +622,9 @@ def attribute_addressees(
           `unit_subscribed_segments`
           facade email addresses as values. The email address of the corresponding
           facade will be added to addressees in PNO emails.
+        pno_extra_subscriptions (pd.DataFrame): DataFrame with columns
+          `pno_type_name`, `port_locode`, `recipient_name`, `recipient_organization`,
+          `communication_means` and `recipient_email_address_or_number`.
         control_units (List[ControlUnit]): List of all active `ControlUnits`
 
     Returns:
@@ -660,6 +678,21 @@ def attribute_addressees(
 
     control_unit_ids = units_subscribed_to_port.union(units_targeting_vessel)
 
+    additional_addressees = pno_extra_subscriptions.loc[
+        (pno_extra_subscriptions.port_locode == pno_to_distribute.port_locode)
+        & (pno_extra_subscriptions.pno_type_name.isin(pno_to_distribute.pno_types)),
+    ].drop_duplicates("recipient_email_address_or_number")
+
+    additional_addressees = [
+        PnoAddressee(
+            name=addressee.recipient_name,
+            organization=addressee.recipient_organization,
+            communication_means=CommunicationMeans[addressee.communication_means],
+            email_address_or_number=addressee.recipient_email_address_or_number,
+        )
+        for addressee in additional_addressees.itertuples()
+    ]
+
     return dataclasses.replace(
         pno_to_distribute,
         control_units=[
@@ -667,6 +700,7 @@ def attribute_addressees(
             for control_unit in control_units
             if control_unit.control_unit_id in control_unit_ids
         ],
+        additional_addressees=additional_addressees,
     )
 
 
@@ -1053,11 +1087,13 @@ with Flow("Distribute pnos", executor=LocalDaskExecutor()) as flow:
                 units_ports_and_segments_subscriptions = (
                     extract_pno_units_ports_and_segments_subscriptions()
                 )
+                extra_pno_subscriptions = extract_pno_extra_subscriptions()
 
                 pnos_with_addressees = attribute_addressees.map(
                     pnos_to_distribute,
                     unmapped(units_targeting_vessels),
                     unmapped(units_ports_and_segments_subscriptions),
+                    unmapped(extra_pno_subscriptions),
                     control_units=unmapped(control_units),
                 )
 

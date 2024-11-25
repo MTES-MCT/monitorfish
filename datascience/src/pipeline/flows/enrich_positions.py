@@ -50,7 +50,7 @@ def filter_already_enriched_vessels(positions: pd.DataFrame) -> pd.DataFrame:
     """
     Filters the input positions `DateFrame` by removing positions of vessels that have
     all their positions already enriched (which is detected by checking whether the
-    `is_at_port` column contains any null values).
+    `time_emitting_at_sea` column contains any null values).
 
     Args:
         positions (pd.DataFrame): vessels' positions. Must have columns:

@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 
 import { openVesselBySearch } from '../utils'
+import {customDayjs} from "../../utils/customDayjs";
 
 context('Vessel sidebar identity tab', () => {
   beforeEach(() => {
@@ -26,7 +27,8 @@ context('Vessel sidebar identity tab', () => {
     cy.get('*[data-cy="Engins de pêche déclarés (PME)"]').contains('Chaluts de fond à panneaux (OTB)')
     cy.get('*[data-cy="Engins de pêche déclarés (PME)"]').contains('Filets soulevés manœuvrés par bateau (LNB)')
 
-    cy.get('*[data-cy="Date d\'expiration"]').contains('22/11/2024')
+    const today = customDayjs().utc().format('DD/MM/YYYY')
+    cy.get('*[data-cy="Date d\'expiration"]').contains(today)
 
     cy.get('*[data-cy="Organisation de producteurs"]').contains('SA THO AN (depuis le 09/10/2017)')
     cy.get('*[data-cy="Coordonnées propriétaire"]').contains('DURAND')

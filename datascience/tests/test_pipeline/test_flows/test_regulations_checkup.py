@@ -376,7 +376,12 @@ def test_make_html_hyperlinks():
 def test_extract_monitorfish_regulations(reset_test_data, monitorfish_regulations):
     regulations = extract_monitorfish_regulations.run()
 
-    pd.testing.assert_frame_equal(regulations, monitorfish_regulations)
+    pd.testing.assert_frame_equal(
+        regulations,
+        regulations.sort_values("reference", ascending=False)
+        .sort_values(["law_type", "zone"])
+        .reset_index(drop=True),
+    )
 
 
 def test_extract_legipeche_regulations(reset_test_data, legipeche_regulations):

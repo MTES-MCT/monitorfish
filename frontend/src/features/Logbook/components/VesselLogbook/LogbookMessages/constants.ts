@@ -39,6 +39,6 @@ export enum LogbookSortKey {
 }
 
 export enum LogbookSortKeyLabel {
-  activityDateTime = "Date d'activité",
-  reportDateTime = "Date d'envoi"
+  activityDateTime = "Trier par date d'activité",
+  reportDateTime = "Trier par date d'envoi"
 }

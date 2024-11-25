@@ -147,7 +147,7 @@ export function LogbookMessages({ messageTypeFilter }: LogbookMessagesProps) {
           Icon={Icon.SortSelectedDown}
           iconSize={20}
           onClick={() => setIsAscendingSort(!isAscendingSort)}
-          title={`Trier par date ${isAscendingSort ? 'antichronologique' : 'chronologique'}`}
+          title={`Trier par date ${isAscendingSort ? 'antéchronologique' : 'chronologique'}`}
         />
       </Filters>
       <CustomDatesShowedInfoWithMargin>

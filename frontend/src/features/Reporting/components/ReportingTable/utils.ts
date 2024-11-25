@@ -1,4 +1,5 @@
-import { getAlertNameFromType } from '../../../SideWindow/Alert/AlertListAndReportingList/utils'
+import { getAlertNameFromType } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/utils'
+
 import { ReportingOriginActor, ReportingType } from '../../types'
 
 import type { Reporting } from '../../types'

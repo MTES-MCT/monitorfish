@@ -13,6 +13,7 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
     // Given
     const pno: Logbook.PnoMessage = {
       acknowledgment: undefined,
+      activityDateTime: '2024-06-14T06:52:22.978603Z',
       externalReferenceNumber: undefined,
       flagState: 'ESP',
       imo: undefined,

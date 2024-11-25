@@ -18,4 +18,7 @@ enum class BackendUsageErrorCode {
 
     /** Thrown when a resource is expected to exist but doesn't. */
     NOT_FOUND,
+
+    /** Thrown when a resource does not found, but it may happen. */
+    NOT_FOUND_BUT_OK,
 }

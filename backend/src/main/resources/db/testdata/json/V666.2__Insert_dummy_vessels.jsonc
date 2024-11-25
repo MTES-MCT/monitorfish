@@ -24,6 +24,8 @@
                 "sailing_type": "Pêche",
                 "declared_fishing_gears": ["SDN", "OTM"],
                 "nav_licence_expiration_date:sql": "CURRENT_DATE",
+                "nav_licence_extension_date:sql": "CURRENT_DATE + interval '1 year'",
+                "nav_licence_status": "Prorogé",
                 "operator_name": "LE PELETIER",
                 "operator_phones": ["+33 6 84 56 32 14"],
                 "operator_email": "lepeletier@gmail.com",

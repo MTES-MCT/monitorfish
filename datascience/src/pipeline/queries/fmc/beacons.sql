@@ -8,7 +8,9 @@ SELECT
     ctb.est_cotier AS is_coastal
 FROM FMC2.FMC_BALISE b
 LEFT JOIN FMC2.FMC_BALISE_NAVIRE bn
-ON b.id_fmc_balise = bn.id_fmc_balise
+ON
+    b.id_fmc_balise = bn.id_fmc_balise
+    AND bn.est_courant = 1
 LEFT JOIN FMC2.FMC_NAVIRE n
 ON n.id_fmc_navire = bn.id_fmc_navire
 LEFT JOIN FMC2.FMC_BALISE_STATUT st
@@ -17,4 +19,3 @@ LEFT JOIN FMC2.FMC_CODE_STATUT_BALISE cst
 ON cst.idc_fmc_statut_balise = st.idc_fmc_statut_balise
 LEFT JOIN FMC2.FMC_CODE_TYPE_BALISE ctb
 ON ctb.idc_fmc_type_balise = b.idc_fmc_type_balise
-WHERE bn.est_courant = 1

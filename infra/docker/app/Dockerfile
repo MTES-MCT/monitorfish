@@ -121,8 +121,10 @@ RUN chmod +rwx public/index.html
 
 USER monitorfish
 
-ENV VITE_GEOSERVER_LOCAL_URL=""
-
 ENTRYPOINT ["/home/monitorfish/env.sh"]
 
-CMD exec java -Dspring.config.additional-location="/home/monitorfish/configurations/" -jar "monitorfish-${VERSION}.jar"
+CMD exec java -Dhttp.proxyHost=${MONITORFISH_HTTP_PROXY_HOST} -Dhttp.proxyPort=${MONITORFISH_HTTP_PROXY_PORT} \
+              -Dhttps.proxyHost=${MONITORFISH_HTTP_PROXY_HOST} -Dhttps.proxyPort=${MONITORFISH_HTTP_PROXY_PORT} \
+              -Dhttp.nonProxyHosts=${MONITORFISH_HTTP_NON_PROXY_HOSTS} -Dhttps.nonProxyHosts=${MONITORFISH_HTTP_NON_PROXY_HOSTS} \
+              -Dspring.config.additional-location="/home/monitorfish/configurations/" \
+              -jar "monitorfish-${VERSION}.jar"

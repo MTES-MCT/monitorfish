@@ -53,7 +53,7 @@ interface LogbookReportRepository {
 
     fun findLastMessageDate(): ZonedDateTime
 
-    fun findLastTwoYearsTripNumbers(internalReferenceNumber: String): List<String>
+    fun findLastThreeYearsTripNumbers(internalReferenceNumber: String): List<String>
 
     fun findFirstAndLastOperationsDatesOfTrip(
         internalReferenceNumber: String,

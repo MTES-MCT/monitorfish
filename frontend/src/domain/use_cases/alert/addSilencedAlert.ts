@@ -1,9 +1,10 @@
+import { setSilencedAlerts } from '@features/Alert/components/SideWindowAlerts/slice'
+
 import { alertApi } from '../../../api/alert'
-import { setSilencedAlerts } from '../../../features/SideWindow/Alert/slice'
 import { setError } from '../../shared_slices/Global'
 
 import type { MainAppThunk } from '../../../store'
-import type { SilencedAlertData } from '../../entities/alerts/types'
+import type { SilencedAlertData } from '@features/Alert/types'
 
 /**
  * Add a new silenced alert

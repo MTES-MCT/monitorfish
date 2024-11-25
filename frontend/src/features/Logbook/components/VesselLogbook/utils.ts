@@ -2,7 +2,7 @@ import { getOptionsFromStrings } from '../../../../utils/getOptionsFromStrings'
 import { LogbookMessageType } from '../../constants'
 import {
   areAllMessagesNotAcknowledged,
-  getCPSDistinctSpecies,
+  getCPSNumberOfDistinctSpecies,
   getCPSMessages,
   getDEPMessage,
   getDISMessages,
@@ -22,8 +22,8 @@ import {
 } from '../../utils'
 
 import type { LogbookTripSummary } from './types'
-import type { Gear } from '../../LegacyLogbook.types'
 import type { Logbook } from '@features/Logbook/Logbook.types'
+import type { Option } from '@mtes-mct/monitor-ui'
 
 export const EMPTY_LOGBOOK_TRIP_SUMMARY = {
   cps: {
@@ -77,7 +77,7 @@ export function getLogbookTripSummary(fishingActivities: Logbook.FishingActiviti
   const totalDISWeight = getTotalDISWeight(disMessages)
 
   const cpsMessages = getCPSMessages(messages)
-  const numberOfSpecies = getCPSDistinctSpecies(cpsMessages)
+  const numberOfSpecies = getCPSNumberOfDistinctSpecies(cpsMessages)
 
   const farMessages = getFARMessages(messages)
   const totalFARWeight = getTotalFARWeight(farMessages)
@@ -122,9 +122,9 @@ export function getLogbookTripSummary(fishingActivities: Logbook.FishingActiviti
   }
 }
 
-export function getUniqueGears(gearOnboard: Gear[] | undefined): Gear[] {
+export function getUniqueGears(gearOnboard: Logbook.Gear[] | undefined): Logbook.Gear[] {
   return (
-    gearOnboard?.reduce((acc: Gear[], current) => {
+    gearOnboard?.reduce((acc: Logbook.Gear[], current) => {
       const found = acc.find(item => item.gear === current.gear && item.gearName === current.gearName)
 
       if (!found) {
@@ -136,7 +136,7 @@ export function getUniqueGears(gearOnboard: Gear[] | undefined): Gear[] {
   )
 }
 
-export function getLogbookMessagesTypeOptions() {
+export function getLogbookMessagesTypeOptions(): Option[] {
   const displayedMessages = Object.values(LogbookMessageType)
     .filter(message => message.isFilterable)
     .map(message => message.code)

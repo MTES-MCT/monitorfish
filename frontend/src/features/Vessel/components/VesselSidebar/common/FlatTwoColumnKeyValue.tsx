@@ -66,7 +66,7 @@ const Fields = styled.table<{
   padding: 10px 5px 5px 20px;
   margin: 10px ${p => (p.isSecondColumn ? 20 : 0)}px 10px ${p => (p.isSecondColumn ? 0 : 20)}px;
   display: table;
-  flex-basis: 205px;
+  flex-basis: 200px;
   flex-shrink: 0;
   flex-grow: 0;
 `

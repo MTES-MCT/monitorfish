@@ -170,13 +170,23 @@ export function Identity() {
           },
           {
             key: "Date d'expiration",
-            value: (
+            value: selectedVessel?.navigationLicenceExpirationDate ? (
               <>
-                {getDate(selectedVessel?.navigationLicenceExpirationDate)}{' '}
-                {isNavigationLicenceExpired() === true && <LicenceExpired />}
-                {isNavigationLicenceExpired() === false && <LicenceActive />}
+                {getDate(selectedVessel?.navigationLicenceExpirationDate)}
+                {isNavigationLicenceExpired() === true && (
+                  <>
+                    {' '}
+                    <LicenceExpired />
+                  </>
+                )}
+                {isNavigationLicenceExpired() === false && (
+                  <>
+                    {' '}
+                    <LicenceActive />
+                  </>
+                )}
               </>
-            )
+            ) : undefined
           },
           {
             key: 'Date de prorogation',

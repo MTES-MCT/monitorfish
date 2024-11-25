@@ -66,7 +66,7 @@ export function Identity() {
     }
     const now = customDayjs()
 
-    return customDayjs(selectedVessel.navigationLicenceExpirationDate).isAfter(now)
+    return customDayjs(selectedVessel.navigationLicenceExpirationDate).isBefore(now)
   }
 
   return !loadingVessel ? (

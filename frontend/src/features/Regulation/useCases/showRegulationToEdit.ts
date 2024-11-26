@@ -1,7 +1,7 @@
 import { getRegulatoryZoneFromAPI, REGULATORY_ZONE_METADATA_ERROR_MESSAGE } from '../../../api/geoserver'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { setError } from '../../../domain/shared_slices/Global'
-import { STATUS } from '../../BackOffice/constants'
+import { STATUS } from '../components/RegulationTables/constants'
 import { regulationActions } from '../slice'
 import { mapToRegulatoryZone, DEFAULT_REGULATORY_TEXT } from '../utils'
 

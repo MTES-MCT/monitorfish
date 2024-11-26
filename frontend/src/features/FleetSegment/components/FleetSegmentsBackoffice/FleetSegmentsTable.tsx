@@ -1,3 +1,4 @@
+import { EditAndDeleteCell, TagsCell } from '@features/Regulation/components/RegulationTables/tableCells'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useWindowResize } from '@hooks/useWindowResize'
@@ -6,7 +7,6 @@ import { Table } from 'rsuite'
 
 import { getAllGearCodes } from '../../../../domain/use_cases/gearCode/getAllGearCodes'
 import { getAllSpecies } from '../../../../domain/use_cases/species/getAllSpecies'
-import { EditAndDeleteCell, TagsCell } from '../../../BackOffice/tableCells'
 
 import type { MainAppThunk } from '@store'
 

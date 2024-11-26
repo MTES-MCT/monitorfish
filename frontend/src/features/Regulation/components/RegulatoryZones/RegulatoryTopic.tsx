@@ -1,4 +1,4 @@
-import { RegulatoryTopicInput } from '@features/BackOffice/list_regulation/RegulatoryTopicInput'
+import { RegulatoryTopicInput } from '@features/Regulation/components/RegulationTables/RegulatoryTopicInput'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'

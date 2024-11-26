@@ -1,11 +1,11 @@
-import { Backoffice } from '@features/BackOffice'
-import { EditRegulation } from '@features/BackOffice/edit_regulation/EditRegulation'
 import { ControlObjectiveTable } from '@features/ControlObjective/components/ControlObjectiveTable'
 import { FleetSegmentsBackoffice } from '@features/FleetSegment/components/FleetSegmentsBackoffice'
 import { MainWindow } from '@features/MainWindow'
 import { PriorNotificationSubscriberForm } from '@features/PriorNotification/components/PriorNotificationSubscriberForm'
 import { PriorNotificationSubscriberTable } from '@features/PriorNotification/components/PriorNotificationSubscriberTable'
 import { ProducerOrganizationMembershipTable } from '@features/ProducerOrganizationMembership/components/ProducerOrganizationMembershipTable'
+import { RegulationForm } from '@features/Regulation/components/RegulationForm'
+import { RegulationTables } from '@features/Regulation/components/RegulationTables'
 import { SideWindow } from '@features/SideWindow'
 import { BackofficePage } from '@pages/BackofficePage'
 import { HomePage } from '@pages/HomePage'
@@ -75,7 +75,7 @@ export const routes = [
         index: true,
         element: (
           <RequireAuth redirect requireSuperUser>
-            <Backoffice />
+            <RegulationTables />
           </RequireAuth>
         )
       },
@@ -83,7 +83,7 @@ export const routes = [
         path: ROUTER_PATHS.regulations,
         element: (
           <RequireAuth redirect requireSuperUser>
-            <Backoffice />
+            <RegulationTables />
           </RequireAuth>
         )
       },
@@ -91,7 +91,7 @@ export const routes = [
         path: ROUTER_PATHS.newRegulation,
         element: (
           <RequireAuth redirect requireSuperUser>
-            <EditRegulation isEdition={false} title="Saisir une nouvelle réglementation" />
+            <RegulationForm isEdition={false} title="Saisir une nouvelle réglementation" />
           </RequireAuth>
         )
       },
@@ -99,7 +99,7 @@ export const routes = [
         path: ROUTER_PATHS.editRegulation,
         element: (
           <RequireAuth redirect requireSuperUser>
-            <EditRegulation isEdition title="Modifier la réglementation de la zone" />
+            <RegulationForm isEdition title="Modifier la réglementation de la zone" />
           </RequireAuth>
         )
       },

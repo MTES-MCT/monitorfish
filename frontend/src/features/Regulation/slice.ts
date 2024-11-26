@@ -6,8 +6,8 @@ import { createSlice } from '@reduxjs/toolkit'
 import { isNotNullish } from '@utils/isNotNullish'
 import { fromPairs } from 'lodash/fp'
 
+import { STATUS } from './components/RegulationTables/constants'
 import { DEFAULT_REGULATION, getRegulatoryLayersWithoutTerritory, REGULATORY_REFERENCE_KEYS } from './utils'
-import { STATUS } from '../BackOffice/constants'
 
 import type { EditedRegulatoryZone, RegulatoryLawTypes, RegulatoryZone, RegulatoryZoneDraft } from './types'
 import type { PayloadAction } from '@reduxjs/toolkit'

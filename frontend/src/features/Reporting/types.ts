@@ -125,7 +125,7 @@ export type Observation = {
 type ReportingTypeCharacteristic = {
   // TODO It should be useless now that types are discriminated.
   code: ReportingType
-  inputName: string
+  displayName: string
   // TODO This should be named differently to avoid confusion with `ReportingType.INFRACTION_SUSPICION` type.
   isInfractionSuspicion: boolean
   name: string
@@ -134,19 +134,19 @@ type ReportingTypeCharacteristic = {
 export const ReportingTypeCharacteristics: Record<ReportingType, ReportingTypeCharacteristic> = {
   ALERT: {
     code: ReportingType.ALERT,
-    inputName: '',
+    displayName: '',
     isInfractionSuspicion: true,
     name: 'ALERTE'
   },
   INFRACTION_SUSPICION: {
     code: ReportingType.INFRACTION_SUSPICION,
-    inputName: 'Infraction (suspicion)',
+    displayName: 'Infraction (suspicion)',
     isInfractionSuspicion: true,
     name: "SUSPICION d'INFRACTION"
   },
   OBSERVATION: {
     code: ReportingType.OBSERVATION,
-    inputName: 'Observation',
+    displayName: 'Observation',
     isInfractionSuspicion: false,
     name: 'OBSERVATION'
   }

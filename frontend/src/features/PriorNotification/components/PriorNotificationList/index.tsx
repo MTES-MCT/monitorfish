@@ -20,7 +20,7 @@ import { skipToken } from '@reduxjs/toolkit/query'
 import { flexRender, getCoreRowModel, getExpandedRowModel, useReactTable } from '@tanstack/react-table'
 import { isLegacyFirefox } from '@utils/isLegacyFirefox'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import { getTableColumns } from './columns'
@@ -29,8 +29,8 @@ import { FilterBar } from './FilterBar'
 import { FilterTags } from './FilterTags'
 import { Row } from './Row'
 import { TableBodyEmptyData } from './TableBodyEmptyData'
-import { TableBodyLoader } from './TableBodyLoader'
 import { getTitle } from './utils'
+import { SkeletonRow } from '../../../../ui/Table/SkeletonRow'
 import { useGetPriorNotificationsQuery, useGetPriorNotificationsToVerifyQuery } from '../../priorNotificationApi'
 import { priorNotificationActions } from '../../slice'
 import { LogbookPriorNotificationForm } from '../LogbookPriorNotificationForm'
@@ -85,6 +85,7 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
     error,
     RtkCacheTagType.PriorNotifications
   )
+
   const { data: priorNotifications, extraData, totalLength } = data ?? {}
 
   const { data: priorNotificationToVerify } = useGetPriorNotificationsToVerifyQuery(
@@ -120,9 +121,22 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
     [priorNotificationToVerify]
   )
 
+  const columns = useMemo(
+    () =>
+      isBodyLoaderVisible
+        ? getTableColumns(isFromUrl).map(column => ({ ...column, cell: SkeletonRow }))
+        : getTableColumns(isFromUrl),
+    [isBodyLoaderVisible, isFromUrl]
+  )
+
+  const tableData = useMemo(
+    () => (isBodyLoaderVisible ? Array(5).fill({}) : (priorNotifications ?? [])),
+    [isBodyLoaderVisible, priorNotifications]
+  )
+
   const table = useReactTable({
-    columns: getTableColumns(isFromUrl),
-    data: priorNotifications ?? [],
+    columns,
+    data: tableData,
     enableRowSelection: true,
     enableSortingRemoval: false,
     getCoreRowModel: getCoreRowModel(),
@@ -229,7 +243,6 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
                     ))}
                   </TableWithSelectableRows.Head>
 
-                  {isBodyLoaderVisible && <TableBodyLoader isFromUrl={isFromUrl} />}
                   {isBodyEmptyDataVisible && <TableBodyEmptyData />}
                   {!isBodyLoaderVisible && !isBodyEmptyDataVisible && (
                     <tbody>

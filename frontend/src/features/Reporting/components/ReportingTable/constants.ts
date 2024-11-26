@@ -1,3 +1,5 @@
+import { ReportingTypeCharacteristics } from '@features/Reporting/types'
+
 import { getReportingOrigin, getReportingTitle } from './utils'
 
 import type { Reporting } from '@features/Reporting/types'
@@ -18,6 +20,13 @@ export const REPORTING_LIST_TABLE_OPTIONS: TableOptions<Reporting.Reporting> = {
       key: 'source',
       label: 'Origine',
       transform: getReportingOrigin
+    },
+    {
+      fixedWidth: 130,
+      isSortable: true,
+      key: 'type',
+      label: 'Type',
+      transform: item => ReportingTypeCharacteristics[item.type].name
     },
     {
       fixedWidth: 280,
@@ -59,7 +68,9 @@ export const REPORTING_LIST_TABLE_OPTIONS: TableOptions<Reporting.Reporting> = {
       key: '_edit'
     }
   ],
+  defaultSortedKey: 'validationDate',
   isCheckable: true,
+  isDefaultSortingDesc: true,
   searchableKeys: [
     'value.dml',
     'externalReferenceNumber',

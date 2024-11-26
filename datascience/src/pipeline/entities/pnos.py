@@ -1,4 +1,4 @@
-from dataclasses import InitVar, dataclass, field
+from dataclasses import dataclass, field
 from datetime import datetime
 from email.message import EmailMessage
 from enum import Enum
@@ -14,16 +14,16 @@ from src.pipeline.entities.missions import Infraction
 
 @dataclass(kw_only=True)
 class PnoCatch:
-    species_code: InitVar[str]
-    species_name: InitVar[str]
+    species_code: str
+    species_name: str
     species_name_code: str = field(init=False)
     weight: float
     number_of_fish: int
     fao_area: str
     statistical_rectangle: str
 
-    def __post_init__(self, species_code, species_name):
-        self.species_name_code = f"{species_name or '-'} ({species_code})"
+    def __post_init__(self):
+        self.species_name_code = f"{self.species_name or '-'} ({self.species_code})"
 
 
 class PnoSource(Enum):
@@ -113,6 +113,7 @@ class PreRenderedPno:
     flag_state: str
     purpose: str
     catch_onboard: pd.DataFrame
+    bft_summary: str
     port_locode: str
     port_name: str
     facade: str

@@ -4,6 +4,6 @@ PNO à {{ port_name }}
 - Note de risque {{ "{:.2f}".format(risk_factor) }}
 {{ "- Arrivée est. {}".format(predicted_arrival_datetime_utc) if predicted_arrival_datetime_utc else "" }}
 {{ "- Déb. prévue {}".format(predicted_landing_datetime_utc) if predicted_landing_datetime_utc else "" }}
-{% if note %}
+{{ "- {}".format(bft_summary) if bft_summary else "" }}{% if note %}
 
 [!] Points d'attention relevés par le CNSP, consultez le pdf.{% endif %}

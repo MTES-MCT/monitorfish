@@ -6,7 +6,6 @@ import { getPriorNotificationIdentifier } from '@features/PriorNotification/util
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useTracking } from '@hooks/useTracking'
-import { customSentry, CustomSentryMeasurementName } from '@libs/customSentry'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { assertNotNullish } from '@utils/assertNotNullish'
 
@@ -66,12 +65,6 @@ export function LogbookPriorNotificationForm() {
   if (!editedLogbookPriorNotificationFormValues || !openedPriorNotificationDetail) {
     return <PriorNotificationCard detail={undefined} isLoading />
   }
-
-  customSentry.endMeasurement(
-    CustomSentryMeasurementName.LOGBOOK_PRIOR_NOTIFICATION_FORM_LOADING,
-    openedPriorNotificationDetail.reportId,
-    2000
-  )
 
   trackPage(`/pnos/${openedPriorNotificationDetail.reportId}`)
 

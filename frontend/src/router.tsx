@@ -157,7 +157,7 @@ export const routes = [
         index: true,
         element: (
           <RequireAuth redirect>
-            <SideWindow isFromURL />
+            <SideWindow isFromUrl />
           </RequireAuth>
         )
       }

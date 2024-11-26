@@ -18,8 +18,9 @@ import type { MutableRefObject, RefObject } from 'react'
 
 type SideWindowAlertsProps = Readonly<{
   baseRef: RefObject<HTMLDivElement>
+  isFromUrl: boolean
 }>
-export function SideWindowAlerts({ baseRef }: SideWindowAlertsProps) {
+export function SideWindowAlerts({ baseRef, isFromUrl }: SideWindowAlertsProps) {
   const dispatch = useMainAppDispatch()
   const { pendingAlerts, subMenu } = useMainAppSelector(state => state.alert)
   const [selectedTab, setSelectedTab] = useState(AlertAndReportingTab.ALERT)
@@ -76,6 +77,7 @@ export function SideWindowAlerts({ baseRef }: SideWindowAlertsProps) {
       {subMenu !== AdditionalSubMenu.SUSPENDED_ALERTS && (
         <AlertListAndReportingList
           baseRef={baseRef as MutableRefObject<HTMLDivElement>}
+          isFromUrl={isFromUrl}
           selectedSeafrontGroup={subMenu || SeafrontGroup.MEMN}
           selectedTab={selectedTab}
           setSelectedTab={setSelectedTab}

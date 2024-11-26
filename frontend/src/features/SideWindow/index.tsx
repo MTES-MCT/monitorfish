@@ -39,9 +39,9 @@ import { MissionList } from '../Mission/components/MissionList'
 import { PriorNotificationList } from '../PriorNotification/components/PriorNotificationList'
 
 export type SideWindowProps = HTMLAttributes<HTMLDivElement> & {
-  isFromURL: boolean
+  isFromUrl: boolean
 }
-export function SideWindow({ isFromURL }: SideWindowProps) {
+export function SideWindow({ isFromUrl }: SideWindowProps) {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
   // eslint-disable-next-line no-null/no-null
@@ -110,7 +110,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
   }, [openedBeaconMalfunctionInKanban, editedReporting, selectedPath.menu])
 
   useEffect(() => {
-    if (!isFromURL) {
+    if (!isFromUrl) {
       return
     }
 
@@ -123,7 +123,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
 
     dispatch(getInfractions())
     dispatch(getAllGearCodes())
-  }, [dispatch, isFromURL, isSuperUser])
+  }, [dispatch, isFromUrl, isSuperUser])
 
   useEffect(() => {
     setIsFirstRender(false)
@@ -134,7 +134,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
       <Wrapper ref={wrapperRef}>
         {!isFirstRender && (
           <NewWindowContext.Provider value={newWindowContextProviderValue}>
-            <GlobalStyle $isFromURL={isFromURL} />
+            <GlobalStyle $isFromURL={isFromUrl} />
 
             <BannerStack />
 
@@ -157,11 +157,11 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
               {!isPreloading && (
                 <Content>
                   {selectedPath.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST && (
-                    <SideWindowAlerts baseRef={wrapperRef as MutableRefObject<HTMLDivElement>} />
+                    <SideWindowAlerts baseRef={wrapperRef as MutableRefObject<HTMLDivElement>} isFromUrl={isFromUrl} />
                   )}
                   {selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD && <BeaconMalfunctionBoard />}
                   {selectedPath.menu === SideWindowMenuKey.PRIOR_NOTIFICATION_LIST && (
-                    <PriorNotificationList isFromUrl={isFromURL} />
+                    <PriorNotificationList isFromUrl={isFromUrl} />
                   )}
                   {selectedPath.menu === SideWindowMenuKey.MISSION_LIST && <MissionList />}
 

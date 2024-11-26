@@ -10,6 +10,7 @@ import { getArrayPathFromStringPath, normalizeSearchQuery } from './utils'
 import type { FilterFunction, TableItem, TableOptions } from './types'
 import type { CollectionItem } from '../../types'
 
+/** @deprecated Use `useReactTable` from @tanstack/react-table instead. */
 export function useTable<T extends CollectionItem = CollectionItem>(
   maybeRawData: T[] | undefined,
   {

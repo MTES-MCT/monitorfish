@@ -10,7 +10,7 @@ export function useForceUpdate() {
   // eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
   const [_, forceUpdate] = useReducer(x => x + 1, 0)
 
-  const forceDebouncedUpdate = useMemo(() => throttle(forceUpdate, 500), [forceUpdate])
+  const forceDebouncedUpdate = useMemo(() => throttle(forceUpdate, 250), [forceUpdate])
 
   return { forceDebouncedUpdate, forceUpdate }
 }

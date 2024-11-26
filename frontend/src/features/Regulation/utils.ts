@@ -19,19 +19,18 @@ import type {
 } from './types'
 import type { Specy } from '../../domain/types/specy'
 
-// TODO Create a custom `GeoJSON.Feature` type to represent these properties.
 export const mapToRegulatoryZone = (
   feature: Regulation.RegulatoryZoneGeoJsonFeature,
   speciesByCode: Record<string, Specy>
 ): RegulatoryZone | undefined => {
-  if (!feature.geometry || !feature.properties) {
+  if (!feature.properties) {
     return undefined
   }
 
   return {
     fishingPeriod: parseFishingPeriod(feature.properties.fishing_period),
     gearRegulation: parseGearRegulation(feature.properties.gears),
-    geometry: feature.geometry,
+    geometry: feature.geometry ?? undefined,
     id: feature.properties.id ?? feature.id?.split('.')[1],
     lawType: feature.properties.law_type,
     nextId: feature.properties.next_id,

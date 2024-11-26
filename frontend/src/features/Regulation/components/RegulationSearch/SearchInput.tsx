@@ -2,7 +2,7 @@ import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Icon, IconButton, SingleTag, Size, TextInput, THEME } from '@mtes-mct/monitor-ui'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import { resetZoneSelected, setAdvancedSearchIsOpen, setRegulatoryLayersSearchResult, setZoneSelected } from './slice'
@@ -21,9 +21,26 @@ export function SearchInput() {
   const { advancedSearchIsOpen, zoneSelected } = useMainAppSelector(state => state.regulatoryLayerSearch)
 
   const { drawedGeometry, interactionType } = useListenForDrawedGeometry(InteractionListener.REGULATION)
-  const [searchQuery, setSearchQuery] = useState<string | undefined>('')
+  const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
   const selectedOrSelectingZoneIsSquare = zoneSelected?.name === InteractionType.SQUARE
   const selectedOrSelectingZoneIsPolygon = zoneSelected?.name === InteractionType.POLYGON
+
+  const search = useCallback(
+    async (nextSearchQuery: string | undefined) => {
+      setSearchQuery(nextSearchQuery)
+
+      if ((!nextSearchQuery || nextSearchQuery.length < MINIMUM_SEARCH_CHARACTERS_NUMBER) && !zoneSelected) {
+        dispatch(setRegulatoryLayersSearchResult({}))
+
+        return
+      }
+
+      const foundRegulatoryLayers = await dispatch(searchRegulatoryLayers(nextSearchQuery))
+
+      dispatch(setRegulatoryLayersSearchResult(foundRegulatoryLayers))
+    },
+    [dispatch, zoneSelected]
+  )
 
   useEffect(() => {
     if (searchQuery === undefined) {
@@ -43,18 +60,6 @@ export function SearchInput() {
     },
     [dispatch]
   )
-
-  useEffect(() => {
-    if ((!searchQuery || searchQuery?.length < MINIMUM_SEARCH_CHARACTERS_NUMBER) && !zoneSelected) {
-      dispatch(setRegulatoryLayersSearchResult({}))
-
-      return
-    }
-
-    dispatch(searchRegulatoryLayers(searchQuery)).then(foundRegulatoryLayers => {
-      dispatch(setRegulatoryLayersSearchResult(foundRegulatoryLayers))
-    })
-  }, [dispatch, searchQuery, zoneSelected])
 
   useEffect(() => {
     if (!drawedGeometry) {
@@ -102,7 +107,7 @@ export function SearchInput() {
           isSearchInput
           label="Rechercher une zone réglementaire"
           name="Rechercher une zone réglementaire"
-          onChange={searched => setSearchQuery(searched)}
+          onChange={search}
           placeholder="Rechercher une zone réglementaire"
           size={Size.LARGE}
           value={searchQuery}

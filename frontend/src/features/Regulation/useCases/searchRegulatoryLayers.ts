@@ -44,6 +44,7 @@ export const searchRegulatoryLayers =
       return Promise.resolve(undefined)
     }
 
+    // TODO Cache that somewhere rather than re-creating it every time.
     const fuse = new Fuse(regulatoryZones, REGULATION_SEARCH_OPTIONS)
     const items = fuse.search<RegulatoryZone>(searchQuery).map(result => result.item)
 

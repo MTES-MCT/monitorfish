@@ -16,6 +16,7 @@
         {
           "type": "Feature",
           "id": "regulations.598",
+          "geometry": null,
           "properties": {
             "fishing_period": "{\"dates\": [], \"holidays\": true, \"weekdays\": [\"vendredi\", \"samedi\", \"dimanche\"], \"otherInfo\": \"\", \"authorized\": false, \"dateRanges\": [], \"timeIntervals\": [], \"annualRecurrence\": true}",
             "species": "{\"authorized\": {\"species\": [{\"code\": \"URC\", \"name\": \"Oursins nca\", \"quantity\": \"500 kg\"}, {\"code\": \"URX\", \"quantity\": \"500 kg\"}], \"speciesGroups\": []}, \"unauthorized\": {\"species\": [], \"speciesGroups\": []}}",

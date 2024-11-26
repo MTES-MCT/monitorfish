@@ -203,6 +203,32 @@ def pre_render_pno(
         ]
 
         df = pd.DataFrame(catches_list)
+
+        bft_total = (
+            df[(df.species_code == "BFT") & (df.weight > 0)]
+            .groupby("species_code")[["weight", "number_of_fish"]]
+            .sum()
+            .reset_index()
+            .to_dict(orient="records")
+        )
+        bft_per_caliber = (
+            df[(df.species_code.isin(["BF1", "BF2", "BF3"])) & (df.weight > 0)]
+            .groupby("species_code")[["weight", "number_of_fish"]]
+            .sum()
+            .reset_index()
+            .to_dict(orient="records")
+        )
+
+        def summarize_bft(d: dict):
+            return (
+                f"{int(d.get('weight')) or '-'} kg pour "
+                f"{int(d.get('number_of_fish')) or '-'} {d.get('species_code')}"
+            )
+
+        bft_total_summary = ", ".join([summarize_bft(d) for d in bft_total])
+        bft_per_caliber_summary = ", ".join([summarize_bft(d) for d in bft_per_caliber])
+        bft_summary = bft_per_caliber_summary or bft_total_summary or None
+
         df["fao_area"] = df.fao_area.fillna("-")
         sum_by_area = (
             df.groupby(["species_name_code", "fao_area"], dropna=False)
@@ -252,6 +278,7 @@ def pre_render_pno(
         )
     else:
         sum_by_species = None
+        bft_summary = None
 
     try:
         purpose = ReturnToPortPurpose(pno.purpose).label()
@@ -290,6 +317,7 @@ def pre_render_pno(
         flag_state=pno.flag_state,
         purpose=purpose,
         catch_onboard=sum_by_species,
+        bft_summary=bft_summary,
         port_locode=pno.port_locode,
         port_name=pno.port_name,
         facade=pno.facade,
@@ -474,6 +502,7 @@ def render_pno(
         cfr=pno.cfr,
         trip_segments=", ".join([f"{s.code} - {s.name}" for s in pno.trip_segments]),
         risk_factor=pno.risk_factor,
+        bft_summary=pno.bft_summary,
         cnsp_crossa_cacem_logos_src=f"cid:{CNSP_CROSSA_CACEM_LOGOS_PATH.name}",
         liberte_egalite_fraternite_logo_src=f"cid:{LIBERTE_EGALITE_FRATERNITE_LOGO_PATH.name}",
         marianne_logo_src=f"cid:{MARIANNE_LOGO_PATH.name}",
@@ -496,6 +525,7 @@ def render_pno(
         cfr=pno.cfr,
         trip_segments=", ".join([f"{s.name} ({s.code})" for s in pno.trip_segments]),
         risk_factor=pno.risk_factor,
+        bft_summary=pno.bft_summary,
         predicted_landing_datetime_utc=format_nullable_datetime(
             pno.predicted_landing_datetime_utc, format=sms_date_format
         ),

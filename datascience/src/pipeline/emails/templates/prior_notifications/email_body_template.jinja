@@ -11,7 +11,8 @@
             <ul>
                 <li>Navire : <strong>{{ vessel_name }} - {{ cfr }}</strong></li>
                 <li>Segment(s) de flotte : <strong>{{ trip_segments or "-" }}</strong></li>
-                <li>Note de risque : <strong>{{ "{:.2f}".format(risk_factor) }}</strong></li>
+                <li>Note de risque : <strong>{{ "{:.2f}".format(risk_factor) }}</strong></li>{% if bft_summary %}
+                <li>Présence de thon rouge à bord : <strong>{{ bft_summary }}</strong></li>{% endif %}
             </ul>
             <p>Infos du préavis</p>
             <ul>

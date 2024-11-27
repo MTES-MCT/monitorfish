@@ -1,6 +1,6 @@
+import { MainMap } from '@features/MainMap/MainMap.types'
 import { logSoftError } from '@mtes-mct/monitor-ui'
 
-import { MonitorFishLayer } from '../../../domain/entities/layers/types'
 import { customZoneActions } from '../slice'
 import { getLayer } from '../utils/getLayer'
 
@@ -12,7 +12,7 @@ import type { MainAppThunk } from '../../../store'
 export const remove =
   (uuid: string): MainAppThunk =>
   dispatch => {
-    const layer = getLayer(MonitorFishLayer.CUSTOM)
+    const layer = getLayer(MainMap.MonitorFishLayer.CUSTOM)
     if (!layer) {
       logSoftError({
         isSideWindowError: false,

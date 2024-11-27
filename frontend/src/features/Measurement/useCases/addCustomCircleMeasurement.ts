@@ -4,7 +4,7 @@ import Feature from 'ol/Feature'
 import { circular } from 'ol/geom/Polygon'
 import { METERS_PER_UNIT, transform } from 'ol/proj'
 
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map/constants'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../MainMap/constants'
 
 import type { MeasurementInProgress } from '@features/Measurement/types'
 import type { Coordinate } from 'ol/coordinate'

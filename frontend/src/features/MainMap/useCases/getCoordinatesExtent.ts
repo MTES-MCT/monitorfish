@@ -2,7 +2,7 @@ import { WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
 import { boundingExtent, buffer } from 'ol/extent'
 import { transformExtent } from 'ol/proj'
 
-import { OPENLAYERS_PROJECTION } from '../../entities/map/constants'
+import { OPENLAYERS_PROJECTION } from '../constants'
 
 import type { Coordinate } from 'ol/coordinate'
 

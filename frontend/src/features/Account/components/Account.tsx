@@ -7,8 +7,8 @@ import { useContext } from 'react'
 import styled from 'styled-components'
 
 import { UserAccountContext } from '../../../context/UserAccountContext'
-import { MapBox } from '../../../domain/entities/map/constants'
 import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
+import { MapBox } from '../../MainMap/constants'
 
 const MARGIN_TOP = 428
 

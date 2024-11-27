@@ -1,4 +1,4 @@
-import { layerActions } from '@features/BaseMap/slice'
+import { mainMapActions } from '@features/MainMap/slice'
 import BaseEvent from 'ol/events/Event'
 import { getArea, getCenter } from 'ol/extent'
 import GeoJSON from 'ol/format/GeoJSON'
@@ -7,13 +7,12 @@ import VectorSource from 'ol/source/Vector'
 import simplify from 'simplify-geojson'
 
 import { getRegulatoryZoneFromAPI } from '../../../api/geoserver'
-import { LayerProperties } from '../../../domain/entities/layers/constants'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map/constants'
 import { animateToRegulatoryLayer } from '../../../domain/shared_slices/Map'
 import { isNumeric } from '../../../utils/isNumeric'
+import { LayerProperties, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../MainMap/constants'
 
+import type { MainMap } from '@features/MainMap/MainMap.types'
 import type { HybridAppDispatch, HybridAppThunk } from '@store/types'
-import type { ShowedLayer } from 'domain/entities/layers/types'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
 
@@ -33,7 +32,7 @@ const setIrretrievableFeaturesEvent = (error: any) => new CustomBaseEvent(IRRETR
 
 export const getRegulatoryVectorSource =
   <T extends HybridAppDispatch>(
-    regulatoryZoneProperties: ShowedLayer
+    regulatoryZoneProperties: MainMap.ShowedLayer
   ): HybridAppThunk<T, VectorSource<Feature<Geometry>>> =>
   // @ts-ignore Required to avoid reducers typing conflicts. Not fancy but allows us to keep Thunk context type-checks.
   (dispatch, getState) => {
@@ -78,7 +77,7 @@ export const getRegulatoryVectorSource =
           const centerHasValidCoordinates = center?.length && isNumeric(center[0]) && isNumeric(center[1])
 
           dispatch(
-            layerActions.pushLayerToFeatures({
+            mainMapActions.pushLayerToFeatures({
               area: getArea(vectorSource.getExtent()),
               center,
               features: regulatoryZone,
@@ -86,7 +85,7 @@ export const getRegulatoryVectorSource =
               simplifiedFeatures: simplifiedRegulatoryZone
             })
           )
-          dispatch(layerActions.setLastShowedFeatures(vectorSource.getFeatures()))
+          dispatch(mainMapActions.setLastShowedFeatures(vectorSource.getFeatures()))
 
           if (centerHasValidCoordinates) {
             dispatch(

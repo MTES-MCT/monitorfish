@@ -6,7 +6,6 @@ import styled from 'styled-components'
 
 import { SUPER_USER_VESSEL_LABEL_OPTION, VESSEL_LABEL_OPTIONS } from './constants'
 import { useIsSuperUser } from '../../../../../auth/hooks/useIsSuperUser'
-import { MapBox } from '../../../../../domain/entities/map/constants'
 import {
   setRiskFactorShowedOnMap,
   setVesselLabel,
@@ -15,6 +14,7 @@ import {
 import { MapPropertyTrigger } from '../../../../commonComponents/MapPropertyTrigger'
 import RiskFactorSVG from '../../../../icons/Bouton_afficher_note_de_risque.svg?react'
 import LabelSVG from '../../../../icons/Menu_etiquettes_navires.svg?react'
+import { MapBox } from '../../../../MainMap/constants'
 import { MapToolBox } from '../shared/MapToolBox'
 import { Content, Header } from '../shared/styles'
 

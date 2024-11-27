@@ -3,17 +3,16 @@ import { Geometry } from 'ol/geom'
 import { useEffect, useRef } from 'react'
 import { useStore } from 'react-redux'
 
-import { getLayerNameNormalized } from '../../../domain/entities/layers'
-import { LayerProperties } from '../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../MainMap/constants'
+import { getLayerNameNormalized } from '../../MainMap/utils'
 import { monitorfishMap } from '../../map/monitorfishMap'
 import { regulationActions } from '../slice'
 import { getRegulatoryLayersToAdd } from '../useCases/getRegulatoryLayersToAdd'
 
-import type { VectorLayerWithName } from '../../../domain/types/layer'
 import type { RegulatoryZone } from '../types'
+import type { MainMap } from '@features/MainMap/MainMap.types'
 import type { BackofficeAppDispatch, MainAppDispatch } from '@store'
 import type { HybridAppDispatch } from '@store/types'
-import type { ShowedLayer } from 'domain/entities/layers/types'
 import type VectorImageLayer from 'ol/layer/VectorImage'
 
 export const METADATA_IS_SHOWED = 'metadataIsShowed'
@@ -25,7 +24,7 @@ export type RegulatoryLayersProps<Dispatch extends HybridAppDispatch> = Readonly
   layersToFeatures: Record<string, any>[]
   mapMovingAndZoomEvent?: any
   regulatoryZoneMetadata: RegulatoryZone | undefined
-  showedLayers: ShowedLayer[]
+  showedLayers: MainMap.ShowedLayer[]
   simplifiedGeometries: boolean
 }>
 export function RegulatoryLayers(props: RegulatoryLayersProps<BackofficeAppDispatch>): JSX.Element
@@ -75,7 +74,7 @@ export function RegulatoryLayers<Dispatch extends HybridAppDispatch>({
       const regulatoryLayers = monitorfishMap
         .getLayers()
         .getArray()
-        .filter(layer => (layer as VectorLayerWithName)?.name?.includes(LayerProperties.REGULATORY.code))
+        .filter(layer => (layer as MainMap.VectorLayerWithName)?.name?.includes(LayerProperties.REGULATORY.code))
 
       if (!regulatoryZoneMetadata) {
         removeMetadataIsShowedProperty(regulatoryLayers)
@@ -85,7 +84,7 @@ export function RegulatoryLayers<Dispatch extends HybridAppDispatch>({
 
       const layerToAddProperty = regulatoryLayers.find(
         layer =>
-          (layer as VectorLayerWithName)?.name ===
+          (layer as MainMap.VectorLayerWithName)?.name ===
           `${LayerProperties.REGULATORY.code}:${regulatoryZoneMetadata.topic}:${regulatoryZoneMetadata.zone}`
       )
 
@@ -116,13 +115,13 @@ export function RegulatoryLayers<Dispatch extends HybridAppDispatch>({
         const regulatoryLayers = monitorfishMap
           .getLayers()
           .getArray()
-          .filter(layer => (layer as VectorLayerWithName)?.name?.includes(LayerProperties.REGULATORY.code))
+          .filter(layer => (layer as MainMap.VectorLayerWithName)?.name?.includes(LayerProperties.REGULATORY.code))
         regulatoryLayers.forEach(layer => {
-          const vectorSource = (layer as VectorLayerWithName).getSource()
+          const vectorSource = (layer as MainMap.VectorLayerWithName).getSource()
 
           if (vectorSource) {
             const layerToFeatures = layersToFeatures?.find(
-              layerToFeature => layerToFeature.name === (layer as VectorLayerWithName)?.name
+              layerToFeature => layerToFeature.name === (layer as MainMap.VectorLayerWithName)?.name
             )
             if (layerToFeatures) {
               const features = showSimplifiedFeatures

@@ -1,4 +1,4 @@
-import type { GeoJSON } from '../../../../types/GeoJSON'
+import type { GeoJSON } from '../../../../domain/types/GeoJSON'
 
 export const dummyMultiPolygonGeoJSON: GeoJSON.Geometry = {
   coordinates: [

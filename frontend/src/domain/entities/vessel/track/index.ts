@@ -8,9 +8,8 @@ import Point from 'ol/geom/Point'
 import { transform } from 'ol/proj'
 
 import { TRACK_TYPE_RECORD } from './constants'
+import { LayerProperties, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../../features/MainMap/constants'
 import { calculatePointsDistance, calculateSplitPointCoordinates } from '../../../../utils'
-import { LayerProperties } from '../../layers/constants'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../map/constants'
 
 import type {
   VesselArrowFeature,

@@ -1,4 +1,4 @@
-import { layerActions } from '@features/BaseMap/slice'
+import { mainMapActions } from '@features/MainMap/slice'
 import GeoJSON from 'ol/format/GeoJSON'
 import VectorImageLayer from 'ol/layer/VectorImage'
 import { all, bbox as bboxStrategy } from 'ol/loadingstrategy'
@@ -6,18 +6,18 @@ import VectorSource from 'ol/source/Vector'
 
 import { getLayerNameFromTypeAndZone } from './utils'
 import { getAdministrativeZoneFromAPI } from '../../../api/geoserver'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map/constants'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../MainMap/constants'
 import { getAdministrativeLayerStyle } from '../layers/styles/administrativeLayer.style'
 
-import type { ShowedLayer } from '../../../domain/entities/layers/types'
 import type { MainAppThunk } from '../../../store'
+import type { MainMap } from '@features/MainMap/MainMap.types'
 import type Feature from 'ol/Feature'
 import type Geometry from 'ol/geom/Geometry'
 
 export const showAdministrativeZone =
-  (zoneRequest: ShowedLayer): MainAppThunk<void> =>
+  (zoneRequest: MainMap.ShowedLayer): MainAppThunk<void> =>
   dispatch => {
-    dispatch(layerActions.addShowedLayer(zoneRequest))
+    dispatch(mainMapActions.addShowedLayer(zoneRequest))
   }
 
 export const getVectorOLLayer = (

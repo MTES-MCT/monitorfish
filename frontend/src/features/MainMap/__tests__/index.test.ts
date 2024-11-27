@@ -3,9 +3,9 @@ import Feature from 'ol/Feature'
 import { Geometry, Polygon } from 'ol/geom'
 
 import { dummyMultiPolygonGeoJSON } from './mocks'
-import { addGeometryToMultiPolygonGeoJSON, keepOnlyInitialGeometriesOfMultiPolygon } from '../index'
+import { addGeometryToMultiPolygonGeoJSON, keepOnlyInitialGeometriesOfMultiPolygon } from '../utils'
 
-describe('layers/index', () => {
+describe('@features/MainMap/utils.ts', () => {
   it('.addGeometryToMultiPolygonGeoJSON() Should add a geometry with OpenLayers projection to an existing MultiPolygon GeoJSON', () => {
     // Given
     const geometry = new Feature({

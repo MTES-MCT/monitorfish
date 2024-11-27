@@ -1,17 +1,17 @@
 import VectorImageLayer from 'ol/layer/VectorImage'
 
 import { getRegulatoryVectorSource } from './getRegulatoryVectorSource'
-import { LayerProperties } from '../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../MainMap/constants'
 import { getRegulatoryLayerStyle } from '../layers/styles/regulatoryLayer.style'
 
+import type { MainMap } from '@features/MainMap/MainMap.types'
 import type { HybridAppDispatch, HybridAppThunk } from '@store/types'
-import type { ShowedLayer } from 'domain/entities/layers/types'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
 
 export const getVectorOLLayer =
   <T extends HybridAppDispatch>(
-    nextVisibleLayer: ShowedLayer
+    nextVisibleLayer: MainMap.ShowedLayer
   ): HybridAppThunk<T, Array<VectorImageLayer<Feature<Geometry>>>> =>
   // @ts-ignore Required to avoid reducers typing conflicts. Not fancy but allows us to keep Thunk context type-checks.
   dispatch => {

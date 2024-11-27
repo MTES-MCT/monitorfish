@@ -1,11 +1,11 @@
 import { isNotNullish } from '@utils/isNotNullish'
 
 import { getVectorOLLayer } from './getVectorOLLayer'
-import { getLayerNameNormalized } from '../../../domain/entities/layers'
-import { LayerProperties } from '../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../MainMap/constants'
+import { getLayerNameNormalized } from '../../MainMap/utils'
 
+import type { MainMap } from '@features/MainMap/MainMap.types'
 import type { HybridAppDispatch, HybridAppThunk } from '@store/types'
-import type { ShowedLayer } from 'domain/entities/layers/types'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
 import type BaseLayer from 'ol/layer/Base'
@@ -14,7 +14,7 @@ import type VectorImageLayer from 'ol/layer/VectorImage'
 export const getRegulatoryLayersToAdd =
   <T extends HybridAppDispatch>(
     olLayers: BaseLayer[],
-    showedLayers: ShowedLayer[]
+    showedLayers: MainMap.ShowedLayer[]
   ): HybridAppThunk<T, Array<VectorImageLayer<Feature<Geometry>>>> =>
   // @ts-ignore Required to avoid reducers typing conflicts. Not fancy but allows us to keep Thunk context type-checks.
   dispatch => {
@@ -36,13 +36,13 @@ export const getRegulatoryLayersToAdd =
     )
   }
 
-function layersNotInCurrentOLMap(olLayers: BaseLayer[], layer: ShowedLayer) {
+function layersNotInCurrentOLMap(olLayers: BaseLayer[], layer: MainMap.ShowedLayer) {
   return !olLayers.some(
     // TODO Create a custom `BaseLayer`.
     olLayer => (olLayer as any).name === getLayerNameNormalized({ type: LayerProperties.REGULATORY.code, ...layer })
   )
 }
 
-function layersOfTypeRegulatoryLayer(layer: ShowedLayer) {
+function layersOfTypeRegulatoryLayer(layer: MainMap.ShowedLayer) {
   return layer.type === LayerProperties.REGULATORY.code
 }

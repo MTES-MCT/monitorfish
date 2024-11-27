@@ -1,12 +1,11 @@
+import { MainMap } from '@features/MainMap/MainMap.types'
 import countries from 'i18n-iso-countries'
 
 import { VesselLabel } from './label/types'
-import { BaseLayers } from '../layers/constants'
-import { MonitorFishLayer } from '../layers/types'
+import { BaseLayers } from '../../../features/MainMap/constants'
 
 import type { ShowedVesselTrack, VesselCompositeIdentifier, VesselIdentity } from './types'
 import type { PartialExcept } from '../../../types'
-import type { LastPositionVisibility } from '../../types/map'
 import type { Reporting } from '@features/Reporting/types'
 import type { Vessel as VesselTypes } from '@features/Vessel/Vessel.types'
 
@@ -22,7 +21,7 @@ export class Vessel {
   static vesselIsMovingSpeed = 0.1
 
   static getVesselFeatureId(vessel) {
-    return `${MonitorFishLayer.VESSELS}:${getVesselCompositeIdentifier(vessel)}`
+    return `${MainMap.MonitorFishLayer.VESSELS}:${getVesselCompositeIdentifier(vessel)}`
   }
 
   static getVesselOpacity(dateTime, vesselIsHidden, vesselIsOpacityReduced) {
@@ -66,7 +65,7 @@ export class Vessel {
       isRiskFactorShowed: boolean
       vesselLabel: string
       vesselLabelsShowedOnMap: boolean
-      vesselsLastPositionVisibility: LastPositionVisibility
+      vesselsLastPositionVisibility: MainMap.LastPositionVisibility
     }
   ): {
     labelText: string | null

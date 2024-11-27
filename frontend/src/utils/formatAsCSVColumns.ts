@@ -1,4 +1,4 @@
-import type { CodeAndName } from '../domain/entities/layers/types'
+import type { MainMap } from '@features/MainMap/MainMap.types'
 
 /**
  * Example:
@@ -9,7 +9,7 @@ import type { CodeAndName } from '../domain/entities/layers/types'
  *   }
  * }
  */
-export type CsvColumns = Record<string, CodeAndName>
+export type CsvColumns = Record<string, MainMap.CodeAndName>
 
 /**
  * Format object's data as specified in the CSV column

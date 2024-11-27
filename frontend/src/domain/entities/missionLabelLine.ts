@@ -1,7 +1,7 @@
 import Feature from 'ol/Feature'
 import LineString from 'ol/geom/LineString'
 
-import { LayerProperties } from './layers/constants'
+import { LayerProperties } from '../../features/MainMap/constants'
 
 export class MissionLabelLine {
   /**

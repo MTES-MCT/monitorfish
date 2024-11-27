@@ -1,29 +1,29 @@
-import { layerActions } from '@features/BaseMap/slice'
-import { backOfficeLayerActions } from '@features/BaseMap/slice.backoffice'
+import { mainMapActions } from '@features/MainMap/slice'
+import { backOfficeMainMapActions } from '@features/MainMap/slice.backoffice'
 
+import type { MainMap } from '@features/MainMap/MainMap.types'
 import type { BackofficeAppThunk, MainAppThunk } from '@store'
-import type { ShowedLayer } from 'domain/entities/layers/types'
 
-// TODO This `Partial<ShowedLayer>` is really vague and forces many type checks/assertions. It should be more specific.
+// TODO This `Partial<MainMap.ShowedLayer>` is really vague and forces many type checks/assertions. It should be more specific.
 export const showRegulatoryZone =
-  (zoneToShow: Partial<ShowedLayer>): MainAppThunk =>
+  (zoneToShow: Partial<MainMap.ShowedLayer>): MainAppThunk =>
   dispatch => {
     if (!zoneToShow.zone) {
       console.error('No regulatory layer to show.')
 
       return
     }
-    dispatch(layerActions.addShowedLayer(zoneToShow))
+    dispatch(mainMapActions.addShowedLayer(zoneToShow))
   }
 
-// TODO This `Partial<ShowedLayer>` is really vague and forces many type checks/assertions. It should be more specific.
+// TODO This `Partial<MainMap.ShowedLayer>` is really vague and forces many type checks/assertions. It should be more specific.
 export const showBackofficeRegulatoryZone =
-  (zoneToShow: Partial<ShowedLayer>): BackofficeAppThunk =>
+  (zoneToShow: Partial<MainMap.ShowedLayer>): BackofficeAppThunk =>
   dispatch => {
     if (!zoneToShow.zone) {
       console.error('No regulatory layer to show.')
 
       return
     }
-    dispatch(backOfficeLayerActions.addShowedLayer(zoneToShow))
+    dispatch(backOfficeMainMapActions.addShowedLayer(zoneToShow))
   }

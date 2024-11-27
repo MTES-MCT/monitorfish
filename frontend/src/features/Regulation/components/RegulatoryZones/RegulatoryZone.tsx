@@ -6,10 +6,10 @@ import { memo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { EditIcon } from '../../../commonStyles/icons/EditIcon.style'
 import { hideLayer } from '../../../LayersSidebar/useCases/hideLayer'
 import { zoomInLayer } from '../../../LayersSidebar/useCases/zoomInLayer'
+import { LayerProperties } from '../../../MainMap/constants'
 import { regulationActions } from '../../slice'
 import { closeRegulatoryZoneMetadata } from '../../useCases/closeRegulatoryZoneMetadata'
 import { showRegulationToEdit } from '../../useCases/showRegulationToEdit'
@@ -41,7 +41,7 @@ function UnmemoizedRegulatoryZone({
 
   const regulatoryZoneMetadata = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
   const isZoneShown = useMainAppSelector(state =>
-    state.layer.showedLayers.some(layer => layer.id === regulatoryZone.id)
+    state.mainMap.showedLayers.some(layer => layer.id === regulatoryZone.id)
   )
   const [isOver, setIsOver] = useState(false)
 

@@ -1,3 +1,4 @@
+import { MainMap } from '@features/MainMap/MainMap.types'
 import { NEW_MISSION_ID } from '@features/Mission/layers/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -6,13 +7,11 @@ import VectorSource from 'ol/source/Vector'
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { missionPointWebGLStyle } from './styles'
-import { LayerProperties } from '../../../../domain/entities/layers/constants'
-import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
+import { LayerProperties } from '../../../MainMap/constants'
 import { monitorfishMap } from '../../../map/monitorfishMap'
 import { useGetFilteredMissionsQuery } from '../../components/MissionList/hooks/useGetFilteredMissionsQuery'
 import { getMissionFeaturePoint } from '../../features'
 
-import type { WebGLPointsLayerWithName } from '../../../../domain/types/layer'
 import type { Feature } from 'ol'
 import type { Point } from 'ol/geom'
 
@@ -31,7 +30,7 @@ function UnmemoizedMissionLayer() {
   }, [draft?.mainFormValues, missionId])
 
   const vectorSourceRef = useRef<VectorSource<Feature<Point>>>()
-  const layerRef = useRef<WebGLPointsLayerWithName>()
+  const layerRef = useRef<MainMap.WebGLPointsLayerWithName>()
 
   function getVectorSource() {
     if (!vectorSourceRef.current) {
@@ -44,7 +43,7 @@ function UnmemoizedMissionLayer() {
   const getLayer = useCallback(() => {
     if (!layerRef.current) {
       layerRef.current = new WebGLPointsLayer({
-        className: MonitorFishLayer.MISSION_PIN_POINT,
+        className: MainMap.MonitorFishLayer.MISSION_PIN_POINT,
         source: getVectorSource() as any,
         style: missionPointWebGLStyle,
         zIndex: LayerProperties.MISSION_PIN_POINT.zIndex

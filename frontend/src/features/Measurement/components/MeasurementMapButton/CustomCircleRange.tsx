@@ -6,13 +6,8 @@ import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { coordinatesAreDistinct, getCoordinates } from '../../../../coordinates'
-import {
-  CoordinatesFormat,
-  MeasurementType,
-  OPENLAYERS_PROJECTION,
-  WSG84_PROJECTION
-} from '../../../../domain/entities/map/constants'
 import { setRightMapBoxOpened } from '../../../../domain/shared_slices/Global'
+import { CoordinatesFormat, MeasurementType, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../MainMap/constants'
 import { MapToolBox } from '../../../MainWindow/components/MapButtons/shared/MapToolBox'
 import {
   resetCircleMeasurementInDrawing,

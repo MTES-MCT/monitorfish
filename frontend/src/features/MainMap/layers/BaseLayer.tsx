@@ -1,13 +1,13 @@
 import { useIsInLightMode } from '@hooks/useIsInLightMode'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import TileLayer from 'ol/layer/Tile'
 import { OSM } from 'ol/source'
 import TileWMS from 'ol/source/TileWMS'
 import XYZ from 'ol/source/XYZ'
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 
-import { LayerProperties } from '../../../domain/entities/layers/constants'
-import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { monitorfishMap } from '../../map/monitorfishMap'
+import { LayerProperties } from '../constants'
 
 import type { ImageTile } from 'ol'
 import type Tile from 'ol/Tile'

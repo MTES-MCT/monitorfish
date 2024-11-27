@@ -1,6 +1,6 @@
 import { AdministrativeLayers } from '@features/AdministrativeZone/layers/AdministrativeLayers'
-import { BaseLayer } from '@features/BaseMap/layers/BaseLayer'
-import { backOfficeLayerActions } from '@features/BaseMap/slice.backoffice'
+import { BaseLayer } from '@features/MainMap/layers/BaseLayer'
+import { backOfficeMainMapActions } from '@features/MainMap/slice.backoffice'
 import { RegulatoryZoneMetadata } from '@features/Regulation/components/RegulatoryZoneMetadata'
 import { RegulatoryLayers } from '@features/Regulation/layers/RegulatoryLayers'
 import { RegulatoryPreviewLayer } from '@features/Regulation/layers/RegulatoryPreviewLayer'
@@ -33,8 +33,6 @@ export function RegulationTables() {
     setMapMovingAndZoomEvent({ dummyUpdate: true })
   }
 
-  const lastShowedFeatures = useBackofficeAppSelector(state => state.layer.lastShowedFeatures)
-  const layersToFeatures = useBackofficeAppSelector(state => state.layer.layersToFeatures)
   const layersTopicsByRegTerritory = useBackofficeAppSelector(state => state.regulation.layersTopicsByRegTerritory)
   const regulatoryZoneMetadataPanelIsOpen = useBackofficeAppSelector(
     state => state.regulation.regulatoryZoneMetadataPanelIsOpen
@@ -43,7 +41,7 @@ export function RegulationTables() {
   // TODO Scritly type this once the store is perfectly typed.
   const regulationSaved = useBackofficeAppSelector(state => state.regulation.regulationSaved)
   const regulatoryZoneMetadata = useBackofficeAppSelector(state => state.regulation.regulatoryZoneMetadata)
-  const showedLayers = useBackofficeAppSelector(state => state.layer.showedLayers)
+  const showedLayers = useBackofficeAppSelector(state => state.mainMap.showedLayers)
   const simplifiedGeometries = useBackofficeAppSelector(state => state.regulation.simplifiedGeometries)
 
   const initBackoffice = useCallback(async () => {
@@ -61,7 +59,7 @@ export function RegulationTables() {
     initBackoffice()
 
     return () => {
-      dispatch(backOfficeLayerActions.resetShowedLayer())
+      dispatch(backOfficeMainMapActions.resetShowedLayer())
     }
   }, [dispatch, initBackoffice])
 
@@ -153,8 +151,8 @@ export function RegulationTables() {
           <BaseLayer />
           <RegulatoryLayers
             dispatch={dispatch}
-            lastShowedFeatures={lastShowedFeatures}
-            layersToFeatures={layersToFeatures}
+            lastShowedFeatures={[]}
+            layersToFeatures={[]}
             mapMovingAndZoomEvent={mapMovingAndZoomEvent}
             regulatoryZoneMetadata={regulatoryZoneMetadata}
             showedLayers={showedLayers}

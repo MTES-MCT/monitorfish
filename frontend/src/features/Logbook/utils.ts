@@ -4,8 +4,8 @@ import Point from 'ol/geom/Point'
 
 import { LogbookMessageType } from './constants'
 import { Logbook } from './Logbook.types'
-import { LayerProperties } from '../../domain/entities/layers/constants'
 import { undefinedize } from '../../utils/undefinedize'
+import { LayerProperties } from '../MainMap/constants'
 
 import type { CatchProperty, CatchWithProperties, ProtectedCatchWithProperties } from './components/VesselLogbook/types'
 import type { SpeciesInsight, SpeciesToSpeciesInsight, SpeciesToSpeciesInsightList } from './types'

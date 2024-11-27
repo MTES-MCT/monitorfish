@@ -1,6 +1,6 @@
+import { MainMap } from '@features/MainMap/MainMap.types'
 import { logSoftError } from '@mtes-mct/monitor-ui'
 
-import { MonitorFishLayer } from '../../../domain/entities/layers/types'
 import { fitViewToFeatures } from '../utils/fitViewToFeatures'
 import { getLayer } from '../utils/getLayer'
 
@@ -8,7 +8,7 @@ import { getLayer } from '../utils/getLayer'
  * Fit Custom Zone to view
  */
 export const fitToView = (uuid: string) => {
-  const layer = getLayer(MonitorFishLayer.CUSTOM)
+  const layer = getLayer(MainMap.MonitorFishLayer.CUSTOM)
   if (!layer) {
     logSoftError({
       isSideWindowError: false,

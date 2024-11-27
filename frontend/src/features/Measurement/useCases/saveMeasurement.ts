@@ -4,8 +4,8 @@ import Circle from 'ol/geom/Circle'
 import { fromCircle } from 'ol/geom/Polygon'
 import { v4 as uuidv4 } from 'uuid'
 
-import { convertToGeoJSONGeometryObject } from '../../../domain/entities/layers'
 import { setRightMapBoxOpened } from '../../../domain/shared_slices/Global'
+import { convertToGeoJSONGeometryObject } from '../../MainMap/utils'
 
 import type { SimpleGeometry } from 'ol/geom'
 

@@ -1,13 +1,13 @@
 import { monitorenvApi, monitorfishApi, monitorfishLightApi, monitorfishPublicApi } from '@api/api'
 import { alertReducer } from '@features/Alert/components/SideWindowAlerts/slice'
-import { layerReducer } from '@features/BaseMap/slice'
-import { backOfficeLayerReducer } from '@features/BaseMap/slice.backoffice'
 import { controlUnitDialogReducer } from '@features/ControlUnit/components/ControlUnitDialog/slice'
 import { controlUnitListDialogPersistedReducer } from '@features/ControlUnit/components/ControlUnitListDialog/slice'
 import { customZoneReducer, type CustomZoneState } from '@features/CustomZone/slice'
 import { drawReducer } from '@features/Draw/slice'
 import { interestPointReducer } from '@features/InterestPoint/slice'
 import { logbookReducer } from '@features/Logbook/slice'
+import { mainMapReducer } from '@features/MainMap/slice'
+import { backOfficeMainMapReducer } from '@features/MainMap/slice.backoffice'
 import { mainWindowReducer } from '@features/MainWindow/slice'
 import { measurementReducer, type MeasurementState } from '@features/Measurement/slice'
 import { missionFormReducer } from '@features/Mission/components/MissionForm/slice'
@@ -74,8 +74,10 @@ export const mainReducer = {
 
   alert: alertReducer,
   beaconMalfunction: beaconMalfunctionReducer,
+
   //  TODO Pass that to singular.
   controls: controlReducer,
+
   controlUnitDialog: controlUnitDialogReducer,
   controlUnitListDialog: controlUnitListDialogPersistedReducer,
   customZone: persistReducerTyped(
@@ -97,7 +99,7 @@ export const mainReducer = {
   fishingActivities: logbookReducer,
   infraction: infractionReducer,
   interestPoint: interestPointReducer,
-  layer: layerReducer,
+  mainMap: mainMapReducer,
   mainWindow: mainWindowReducer,
   measurement: persistReducerTyped(
     { ...getCommonPersistReducerConfig<MeasurementState>('mainPersistorMeasurement', ['measurementsDrawed']) },
@@ -131,8 +133,7 @@ export const mainReducer = {
 export const backofficeReducer = {
   ...commonReducerList,
 
-  layer: backOfficeLayerReducer,
+  mainMap: backOfficeMainMapReducer,
   priorNotification: backofficePriorNotificationReducer,
   producerOrganizationMembership: backofficeProducerOrganizationMembershipReducer
-  // regulation: backOfficeRegulationReducer
 }

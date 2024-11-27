@@ -9,15 +9,15 @@ import { transform } from 'ol/proj'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
+import { SideWindowStatus } from '../../../domain/entities/sideWindow/constants'
+import { fitToExtent } from '../../../domain/shared_slices/Map'
 import {
   InteractionListener,
   InteractionType,
   OPENLAYERS_PROJECTION,
   OpenLayersGeometryType,
   WSG84_PROJECTION
-} from '../../../domain/entities/map/constants'
-import { SideWindowStatus } from '../../../domain/entities/sideWindow/constants'
-import { fitToExtent } from '../../../domain/shared_slices/Map'
+} from '../../MainMap/constants'
 import { setInteractionType } from '../slice'
 import { addFeatureToDrawedFeature } from '../useCases/addFeatureToDrawedFeature'
 import { closeDraw } from '../useCases/closeDraw'

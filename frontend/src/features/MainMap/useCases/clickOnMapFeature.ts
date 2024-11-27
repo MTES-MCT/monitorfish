@@ -1,26 +1,24 @@
+import { missionFormActions } from '@features/Mission/components/MissionForm/slice'
+import { showRegulatoryZoneMetadata } from '@features/Regulation/useCases/showRegulatoryZoneMetadata'
+import { stationActions } from '@features/Station/slice'
+import { FeatureWithCodeAndEntityId } from '@libs/FeatureWithCodeAndEntityId'
+import { isControl } from 'domain/entities/controls'
+import { showVessel } from 'domain/use_cases/vessel/showVessel'
+import { showVesselTrack } from 'domain/use_cases/vessel/showVesselTrack'
 import GeoJSON from 'ol/format/GeoJSON'
 
-import { missionFormActions } from '../../../features/Mission/components/MissionForm/slice'
-import { showRegulatoryZoneMetadata } from '../../../features/Regulation/useCases/showRegulatoryZoneMetadata'
-import { stationActions } from '../../../features/Station/slice'
-import { FeatureWithCodeAndEntityId } from '../../../libs/FeatureWithCodeAndEntityId'
-import { isControl } from '../../entities/controls'
-import { LayerProperties } from '../../entities/layers/constants'
-import { MonitorFishLayer } from '../../entities/layers/types'
-import { OPENLAYERS_PROJECTION } from '../../entities/map/constants'
-import { showVessel } from '../vessel/showVessel'
-import { showVesselTrack } from '../vessel/showVesselTrack'
+import { LayerProperties, OPENLAYERS_PROJECTION } from '../constants'
+import { MainMap } from '../MainMap.types'
 
-import type { MainAppThunk } from '../../../store'
-import type { VesselIdentity, VesselLastPositionFeature } from '../../entities/vessel/types'
-import type { MapClick } from '../../types/map'
+import type { MainAppThunk } from '@store'
+import type { VesselIdentity, VesselLastPositionFeature } from 'domain/entities/vessel/types'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
 
 const geoJSONParser = new GeoJSON()
 
 export const clickOnMapFeature =
-  (mapClick: MapClick): MainAppThunk =>
+  (mapClick: MainMap.MapClick): MainAppThunk =>
   (dispatch, getState) => {
     if (!mapClick.feature) {
       return
@@ -41,7 +39,7 @@ export const clickOnMapFeature =
       return
     }
 
-    if (clickedFeatureId.includes(MonitorFishLayer.MISSION_PIN_POINT)) {
+    if (clickedFeatureId.includes(MainMap.MonitorFishLayer.MISSION_PIN_POINT)) {
       const featureGeoJSON = geoJSONParser.writeFeatureObject(mapClick.feature as Feature<Geometry>, {
         featureProjection: OPENLAYERS_PROJECTION
       })
@@ -51,7 +49,7 @@ export const clickOnMapFeature =
     }
 
     if (
-      clickedFeatureId.includes(MonitorFishLayer.MISSION_ACTION_SELECTED) &&
+      clickedFeatureId.includes(MainMap.MonitorFishLayer.MISSION_ACTION_SELECTED) &&
       isControl(mapClick.feature.get('actionType'))
     ) {
       const featureGeoJSON = geoJSONParser.writeFeatureObject(mapClick.feature as Feature<Geometry>, {
@@ -62,7 +60,10 @@ export const clickOnMapFeature =
       return
     }
 
-    if (mapClick.feature instanceof FeatureWithCodeAndEntityId && mapClick.feature.code === MonitorFishLayer.STATION) {
+    if (
+      mapClick.feature instanceof FeatureWithCodeAndEntityId &&
+      mapClick.feature.code === MainMap.MonitorFishLayer.STATION
+    ) {
       dispatch(stationActions.selectStationId(mapClick.feature.entityId))
 
       return
@@ -72,7 +73,7 @@ export const clickOnMapFeature =
       return
     }
 
-    if (clickedFeatureId.includes(MonitorFishLayer.VESSELS)) {
+    if (clickedFeatureId.includes(MainMap.MonitorFishLayer.VESSELS)) {
       const clickedVessel = (mapClick.feature as VesselLastPositionFeature).getProperties() as VesselIdentity
 
       if (mapClick.ctrlKeyPressed) {

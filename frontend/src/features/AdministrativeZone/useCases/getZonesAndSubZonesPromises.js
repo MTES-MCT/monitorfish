@@ -1,5 +1,5 @@
 import { getAdministrativeSubZonesFromAPI } from '../../../api/geoserver'
-import { LayerProperties, LayerType } from '../../../domain/entities/layers/constants'
+import { LayerProperties, LayerType } from '../../MainMap/constants'
 
 export const getZonesAndSubZonesPromises = () => (dispatch, getState) =>
   Object.keys(LayerProperties)

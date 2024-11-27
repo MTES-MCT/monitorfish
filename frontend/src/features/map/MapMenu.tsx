@@ -1,3 +1,4 @@
+import { MainMap } from '@features/MainMap/MainMap.types'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Point } from 'ol/geom'
 import { useEffect, useRef, useState } from 'react'
@@ -5,8 +6,7 @@ import { useEffect, useRef, useState } from 'react'
 import { monitorfishMap } from './monitorfishMap'
 import MapMenuOverlay from './overlays/MapMenuOverlay'
 import { HIT_PIXEL_TO_TOLERANCE } from '../../constants/constants'
-import { LayerProperties } from '../../domain/entities/layers/constants'
-import { MonitorFishLayer } from '../../domain/entities/layers/types'
+import { LayerProperties } from '../MainMap/constants'
 import { vesselSelectors } from '../Vessel/slice'
 
 import type { VesselEnhancedLastPositionWebGLObject } from '../../domain/entities/vessel/types'
@@ -26,7 +26,7 @@ export function MapMenu() {
       })
       const clickedFeatureId = feature?.getId()
 
-      if (!clickedFeatureId?.toString()?.includes(LayerProperties[MonitorFishLayer.VESSELS].code)) {
+      if (!clickedFeatureId?.toString()?.includes(LayerProperties[MainMap.MonitorFishLayer.VESSELS].code)) {
         vessel.current = undefined
         setCoordinates([])
 

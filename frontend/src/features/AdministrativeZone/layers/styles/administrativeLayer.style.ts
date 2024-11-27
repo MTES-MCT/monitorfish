@@ -6,7 +6,7 @@ import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
 import Text from 'ol/style/Text'
 
-import { LayerProperties } from '../../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../MainMap/constants'
 import { getColorWithAlpha } from '../../../map/layers/styles/utils'
 
 import type Feature from 'ol/Feature'

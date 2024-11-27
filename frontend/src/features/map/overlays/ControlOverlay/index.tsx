@@ -1,3 +1,6 @@
+import { MainMap } from '@features/MainMap/MainMap.types'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { useMoveOverlayWhenDragging } from '@hooks/useMoveOverlayWhenDragging'
 import GeoJSON from 'ol/format/GeoJSON'
 import Overlay from 'ol/Overlay'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -5,10 +8,7 @@ import styled from 'styled-components'
 
 import { margins } from './constants'
 import { ControlDetails } from './ControlDetails'
-import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
-import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { useMoveOverlayWhenDragging } from '../../../../hooks/useMoveOverlayWhenDragging'
+import { OPENLAYERS_PROJECTION } from '../../../MainMap/constants'
 import { monitorfishMap } from '../../monitorfishMap'
 import { getMapResolution } from '../../utils'
 import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from '../Overlay'
@@ -92,7 +92,7 @@ export function ControlOverlay({ feature, isSelected = false }) {
       return
     }
 
-    if (!feature?.getId()?.toString()?.includes(MonitorFishLayer.MISSION_ACTION_SELECTED)) {
+    if (!feature?.getId()?.toString()?.includes(MainMap.MonitorFishLayer.MISSION_ACTION_SELECTED)) {
       overlayRef.current.style.display = 'none'
       setControlProperties(undefined)
 

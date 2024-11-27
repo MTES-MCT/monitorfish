@@ -10,9 +10,9 @@ import styled from 'styled-components'
 
 import { CSVOptions } from './dataFormatting'
 import { getCoordinates } from '../../../../coordinates'
-import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
 import { getDate } from '../../../../utils'
 import { StyledModalHeader } from '../../../commonComponents/StyledModalHeader'
+import { OPENLAYERS_PROJECTION } from '../../../MainMap/constants'
 
 const optionsCSV = {
   decimalSeparator: '.',

@@ -1,29 +1,29 @@
-import { layerActions } from '@features/BaseMap/slice'
+import { mainMapActions } from '@features/MainMap/slice'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { AdministrativeZone } from './AdministrativeZone'
 import { AdministrativeZonesGroup } from './AdministrativeZonesGroup'
 import { COLORS } from '../../../../constants/constants'
-import { LayerType } from '../../../../domain/entities/layers/constants'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { ChevronIcon } from '../../../commonStyles/icons/ChevronIcon.style'
 import { hideLayer } from '../../../LayersSidebar/useCases/hideLayer'
+import { LayerType } from '../../../MainMap/constants'
 import { closeRegulatoryZoneMetadata } from '../../../Regulation/useCases/closeRegulatoryZoneMetadata'
 import { getAdministrativeZones } from '../../useCases/getAdministrativeZones'
 import { showAdministrativeZone } from '../../useCases/showAdministrativeZone'
 
-import type { ShowableLayer } from '../../../../domain/entities/layers/types'
 import type { GroupedZonesAndZones } from '../../useCases/getAdministrativeZones'
+import type { MainMap } from '@features/MainMap/MainMap.types'
 
-export type AdministrativeZonesProps = {
+export type AdministrativeZonesProps = Readonly<{
   hideLayersListWhenSearching?: boolean
-}
+}>
 export function AdministrativeZones({ hideLayersListWhenSearching = false }: AdministrativeZonesProps) {
   const dispatch = useMainAppDispatch()
-  const showedLayers = useMainAppSelector(state => state.layer.showedLayers)
-  const { layersSidebarOpenedLayerType } = useMainAppSelector(state => state.layer)
+  const showedLayers = useMainAppSelector(state => state.mainMap.showedLayers)
+  const layersSidebarOpenedLayerType = useMainAppSelector(state => state.mainMap.layersSidebarOpenedLayerType)
 
   const [isOpened, setIsOpened] = useState(false)
   const [zones, setZones] = useState<GroupedZonesAndZones>({ groupedZones: [], zones: [] })
@@ -49,7 +49,7 @@ export function AdministrativeZones({ hideLayersListWhenSearching = false }: Adm
   }, [hideLayersListWhenSearching])
 
   const showOrHideZone = useCallback(
-    (zone: ShowableLayer) => (isShown: boolean) => {
+    (zone: MainMap.ShowableLayer) => (isShown: boolean) => {
       if (isShown) {
         dispatch(
           hideLayer({
@@ -75,9 +75,9 @@ export function AdministrativeZones({ hideLayersListWhenSearching = false }: Adm
 
   const onSectionTitleClicked = () => {
     if (isOpened) {
-      dispatch(layerActions.setLayersSideBarOpenedLayerType(undefined))
+      dispatch(mainMapActions.setLayersSideBarOpenedLayerType(undefined))
     } else {
-      dispatch(layerActions.setLayersSideBarOpenedLayerType(LayerType.ADMINISTRATIVE))
+      dispatch(mainMapActions.setLayersSideBarOpenedLayerType(LayerType.ADMINISTRATIVE))
       dispatch(closeRegulatoryZoneMetadata())
     }
   }

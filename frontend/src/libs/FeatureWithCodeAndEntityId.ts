@@ -1,16 +1,16 @@
 import { Feature } from 'ol'
 import { Geometry } from 'ol/geom'
 
-import type { MonitorFishLayer } from '../domain/entities/layers/types'
+import type { MainMap } from '@features/MainMap/MainMap.types'
 
 type Options<T extends Geometry> = {
-  code: MonitorFishLayer
+  code: MainMap.MonitorFishLayer
   entityId: number
   geometry: T
 }
 
 export class FeatureWithCodeAndEntityId<T extends Geometry = Geometry> extends Feature<T> {
-  public code: MonitorFishLayer
+  public code: MainMap.MonitorFishLayer
   public entityId: number
   public id: string
 

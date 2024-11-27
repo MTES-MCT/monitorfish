@@ -17,9 +17,9 @@ import { useIsSuperUser } from '../../auth/hooks/useIsSuperUser'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { FeatureWithCodeAndEntityId } from '../../libs/FeatureWithCodeAndEntityId'
 import { AdministrativeLayers } from '../AdministrativeZone/layers/AdministrativeLayers'
-import { BaseLayer } from '../BaseMap/layers/BaseLayer'
 import { DrawLayer } from '../Draw/layer'
 import InterestPointLayer from '../InterestPoint/layers/InterestPointLayer'
+import { BaseLayer } from '../MainMap/layers/BaseLayer'
 import { MeasurementLayer } from '../Measurement/layers/MeasurementLayer'
 import { MissionOverlay } from '../Mission/components/MissionOverlay'
 import { SelectedMissionOverlay } from '../Mission/components/SelectedMissionOverlay'
@@ -53,11 +53,11 @@ export function Map() {
     state => state.displayedComponent
   )
   const zoneSelected = useMainAppSelector(state => state.regulatoryLayerSearch.zoneSelected)
-  const lastShowedFeatures = useMainAppSelector(state => state.layer.lastShowedFeatures)
-  const layersToFeatures = useMainAppSelector(state => state.layer.layersToFeatures)
+  const lastShowedFeatures = useMainAppSelector(state => state.mainMap.lastShowedFeatures)
+  const layersToFeatures = useMainAppSelector(state => state.mainMap.layersToFeatures)
   const regulatoryZonesToPreview = useMainAppSelector(state => state.regulation.regulatoryZonesToPreview)
   const regulatoryZoneMetadata = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
-  const showedLayers = useMainAppSelector(state => state.layer.showedLayers)
+  const showedLayers = useMainAppSelector(state => state.mainMap.showedLayers)
   const simplifiedGeometries = useMainAppSelector(state => state.regulation.simplifiedGeometries)
 
   const [shouldUpdateView, setShouldUpdateView] = useState(true)

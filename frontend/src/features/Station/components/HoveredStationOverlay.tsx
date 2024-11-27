@@ -1,9 +1,9 @@
+import { MainMap } from '@features/MainMap/MainMap.types'
 import { useForceUpdate, type Coordinates } from '@mtes-mct/monitor-ui'
 import { useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
 import { StationCard } from './StationCard'
-import { MonitorFishLayer } from '../../../domain/entities/layers/types'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { getDialogWindowPositionFromFeature } from '../../../utils/getDialogWindowPositionFromFeature'
 import { FEATURE_MARGINS } from '../constants'
@@ -19,7 +19,7 @@ export function HoveredStationOverlay({ hoveredFeature }: HoveredStationOverlayP
 
   const selectedStationId = useMainAppSelector(state => state.station.selectedStationId)
   const hoveredStationId =
-    hoveredFeature?.code === MonitorFishLayer.STATION && hoveredFeature.entityId !== selectedStationId
+    hoveredFeature?.code === MainMap.MonitorFishLayer.STATION && hoveredFeature.entityId !== selectedStationId
       ? hoveredFeature.entityId
       : undefined
 

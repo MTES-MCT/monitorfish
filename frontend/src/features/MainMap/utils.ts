@@ -1,19 +1,37 @@
 import { GeoJSON } from 'ol/format'
 
-import { LayerProperties, LayerType } from './constants'
-import { OpenLayersGeometryType, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../map/constants'
+import {
+  LayerProperties,
+  LayerType,
+  OpenLayersGeometryType,
+  OPENLAYERS_PROJECTION,
+  WSG84_PROJECTION
+} from './constants'
 
-import type { ShowableLayer } from './types'
-import type { GeoJSON as GeoJSONType } from '../../types/GeoJSON'
+import type { GeoJSON as GeoJSONType } from '../../domain/types/GeoJSON'
+import type { MainMap } from '@features/MainMap/MainMap.types'
 import type { MultiPolygon, Polygon } from 'ol/geom'
 import type Geometry from 'ol/geom/Geometry'
 
+export function reOrderOldObjectHierarchyIfFound(zones: MainMap.ShowedLayer[]) {
+  return zones.map(zone => {
+    if (zone.layerName) {
+      return {
+        ...zone,
+        topic: zone.layerName
+      }
+    }
+
+    return zone
+  })
+}
+
 /**
  *
- * @param {Object} layer
- * @param { String } layer.type
- * @param { String | null } layer.topic
- * @param { String | null } layer.zone
+ * @param {Object} baseMap
+ * @param { String } baseMap.type
+ * @param { String | null } baseMap.topic
+ * @param { String | null } baseMap.zone
  * @returns String
  */
 export const getLayerNameNormalized = layer => [layer.type, layer.topic, layer.zone].filter(Boolean).join(':')
@@ -72,7 +90,7 @@ export function layersNotInCurrentOLMap(olLayers, layer) {
   return !olLayers.getArray().some(layer_ => layer_.name === getLayerNameNormalized(layer))
 }
 
-export function layerOfTypeAdministrativeLayer(administrativeLayers: ShowableLayer[], layer) {
+export function layerOfTypeAdministrativeLayer(administrativeLayers: MainMap.ShowableLayer[], layer) {
   return administrativeLayers.some(administrativeLayer => layer.type?.includes(administrativeLayer.code))
 }
 
@@ -86,17 +104,17 @@ export function layersNotInShowedLayers(_showedLayers, olLayer) {
 
 export const administrativeLayers = Object.keys(LayerProperties)
   .map(layer => LayerProperties[layer])
-  .filter((layer): layer is ShowableLayer => layer !== undefined)
+  .filter((layer): layer is MainMap.ShowableLayer => layer !== undefined)
   .filter(layer => layer.type === LayerType.ADMINISTRATIVE)
 
 export const hoverableLayerCodes = Object.keys(LayerProperties)
   .map(layer => LayerProperties[layer])
-  .filter((layer): layer is ShowableLayer => layer !== undefined)
+  .filter((layer): layer is MainMap.ShowableLayer => layer !== undefined)
   .filter(layer => layer.isHoverable)
   .map(layer => layer.code)
 
 export const clickableLayerCodes = Object.keys(LayerProperties)
   .map(layer => LayerProperties[layer])
-  .filter((layer): layer is ShowableLayer => layer !== undefined)
+  .filter((layer): layer is MainMap.ShowableLayer => layer !== undefined)
   .filter(layer => layer.isClickable)
   .map(layer => layer.code)

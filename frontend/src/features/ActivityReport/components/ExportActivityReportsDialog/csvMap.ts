@@ -2,7 +2,7 @@ import { customDayjs } from '@mtes-mct/monitor-ui'
 import { toAlpha3 } from 'i18n-iso-countries'
 
 import { getCoordinates } from '../../../../coordinates'
-import { CoordinatesFormat, WSG84_PROJECTION } from '../../../../domain/entities/map/constants'
+import { CoordinatesFormat, WSG84_PROJECTION } from '../../../MainMap/constants'
 import { formatDMDCoordinateForActivityReport, getPatrolType } from '../../utils'
 
 import type { ActivityReportWithId } from '../../types'

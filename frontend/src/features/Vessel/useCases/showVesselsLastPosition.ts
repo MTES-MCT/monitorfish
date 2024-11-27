@@ -4,11 +4,11 @@ import { renderVesselFeatures } from '@features/Vessel/useCases/renderVesselFeat
 import { transform } from 'ol/proj'
 
 import { applyFilterToVessels } from './applyFilterToVessels'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map/constants'
 import { Vessel } from '../../../domain/entities/vessel/vessel'
 import { resetIsUpdatingVessels } from '../../../domain/shared_slices/Global'
 import { getUniqueSpeciesAndDistricts } from '../../../domain/use_cases/species/getUniqueSpeciesAndDistricts'
 import { customHexToRGB } from '../../../utils'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../MainMap/constants'
 import { setVessels, setVesselsSpeciesAndDistricts } from '../slice'
 
 import type { VesselEnhancedLastPositionWebGLObject, VesselLastPosition } from '../../../domain/entities/vessel/types'

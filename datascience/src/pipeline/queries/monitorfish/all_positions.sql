@@ -11,7 +11,7 @@ SELECT
     -- already enriched in the previous run a minute earlier, returing NULL for already enriched positions
     -- saves a lot of useless computing.
     CASE
-        WHEN is_at_port IS NOT NULL THEN NULL
+        WHEN is_at_port IS NOT NULL THEN is_at_port
         ELSE (SELECT COUNT(*) > 0 FROM land_areas_subdivided WHERE ST_Intersects(p.geometry, land_areas_subdivided.geometry))
     END AS is_on_land,
     time_emitting_at_sea

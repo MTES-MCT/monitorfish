@@ -558,9 +558,9 @@ def test_extract_enrich_load(reset_test_data):
             ],
             [13634203, "RV348407", 1.107, True, timedelta(), True],
             [13634204, "RV348407", 1.107, True, timedelta(), True],
-            [13634205, "RV348407", 1.107, False, timedelta(), False],
-            [13637054, "RV348407", 0.355284, False, timedelta(hours=1), False],
-            [13639642, "RV348407", 0.286178, False, timedelta(hours=2), True],
+            [13634205, "RV348407", 1.107, True, timedelta(), False],
+            [13637054, "RV348407", 0.355284, False, timedelta(), False],
+            [13639642, "RV348407", 0.286178, False, timedelta(hours=1), False],
             [13786524, "RO237719", 2.690000, False, timedelta(days=1), True],
             [
                 13786525,

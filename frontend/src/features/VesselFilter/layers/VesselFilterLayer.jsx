@@ -6,8 +6,7 @@ import { Stroke, Style } from 'ol/style'
 import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 
-import { LayerProperties } from '../../MainMap/constants.js'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../MainMap/constants2.js'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION, LayerProperties } from '../../MainMap/constants.ts'
 import { monitorfishMap } from '../../map/monitorfishMap.ts'
 
 function VesselFilterLayer() {

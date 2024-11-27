@@ -1,13 +1,13 @@
-import { MainMap } from '@features/MainMap/MainMap.types'
 import countries from 'i18n-iso-countries'
 
 import { VesselLabel } from './label/types'
 import { BaseLayers } from '../../../features/MainMap/constants'
+import { MainMap } from '../../../features/MainMap/MainMap.types'
 
 import type { ShowedVesselTrack, VesselCompositeIdentifier, VesselIdentity } from './types'
+import type { Reporting } from '../../../features/Reporting/types'
+import type { Vessel as VesselTypes } from '../../../features/Vessel/Vessel.types'
 import type { PartialExcept } from '../../../types'
-import type { Reporting } from '@features/Reporting/types'
-import type { Vessel as VesselTypes } from '@features/Vessel/Vessel.types'
 
 export const VESSEL_ALERT_STYLE = 1
 export const VESSEL_INFRACTION_SUSPICION_STYLE = 1

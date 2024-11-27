@@ -2,28 +2,21 @@ import { mainMapActions } from '@features/MainMap/slice'
 import { backOfficeMainMapActions } from '@features/MainMap/slice.backoffice'
 
 import type { MainMap } from '@features/MainMap/MainMap.types'
-import type { BackofficeAppThunk, MainAppThunk } from '@store'
+import type { HybridAppDispatch, HybridAppThunk } from '@store/types'
 
 // TODO This `Partial<MainMap.ShowedLayer>` is really vague and forces many type checks/assertions. It should be more specific.
+
 export const showRegulatoryZone =
-  (zoneToShow: Partial<MainMap.ShowedLayer>): MainAppThunk =>
-  dispatch => {
+  <T extends HybridAppDispatch>(zoneToShow: Partial<MainMap.ShowedLayer>): HybridAppThunk<T> =>
+  // @ts-ignore Required to avoid reducers typing conflicts. Not fancy but allows us to keep Thunk context type-checks.
+  (dispatch, getState) => {
     if (!zoneToShow.zone) {
       console.error('No regulatory layer to show.')
 
       return
     }
-    dispatch(mainMapActions.addShowedLayer(zoneToShow))
-  }
 
-// TODO This `Partial<MainMap.ShowedLayer>` is really vague and forces many type checks/assertions. It should be more specific.
-export const showBackofficeRegulatoryZone =
-  (zoneToShow: Partial<MainMap.ShowedLayer>): BackofficeAppThunk =>
-  dispatch => {
-    if (!zoneToShow.zone) {
-      console.error('No regulatory layer to show.')
+    const actions = getState().global.isBackoffice ? backOfficeMainMapActions : mainMapActions
 
-      return
-    }
-    dispatch(backOfficeMainMapActions.addShowedLayer(zoneToShow))
+    dispatch(actions.addShowedLayer(zoneToShow))
   }

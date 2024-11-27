@@ -5,14 +5,7 @@ import { isNumeric } from '../../../utils/isNumeric'
 import { LayerProperties } from '../../MainMap/constants'
 
 import type { MainMap } from '@features/MainMap/MainMap.types'
-import type {
-  BackofficeAppDispatch,
-  BackofficeAppGetState,
-  BackofficeAppThunk,
-  MainAppDispatch,
-  MainAppGetState,
-  MainAppThunk
-} from '@store'
+import type { HybridAppDispatch, HybridAppThunk } from '@store/types'
 import type { Feature } from 'ol'
 import type { Coordinate } from 'ol/coordinate'
 
@@ -21,19 +14,16 @@ type Params = {
   topicAndZone?: MainMap.ShowedLayer
 }
 
-export function zoomInLayer<T extends BackofficeAppThunk | MainAppThunk>(layer: Params): T
-export function zoomInLayer(layer: Params): MainAppThunk | BackofficeAppThunk {
-  return (dispatch: BackofficeAppDispatch | MainAppDispatch, getState: BackofficeAppGetState | MainAppGetState) => {
+export const zoomInLayer =
+  <T extends HybridAppDispatch>(layer: Params): HybridAppThunk<T> =>
+  // @ts-ignore Required to avoid reducers typing conflicts. Not fancy but allows us to keep Thunk context type-checks.
+  (dispatch, getState) => {
     if (layer.topicAndZone) {
       const name = `${LayerProperties.REGULATORY.code}:${layer.topicAndZone.topic}:${layer.topicAndZone.zone}`
-      const mainMapSliceState = getState().mainMap
 
-      const layerToZoomIn =
-        'layersToFeatures' in mainMapSliceState
-          ? mainMapSliceState.layersToFeatures.find(layerFeature => layerFeature.name === name)
-          : undefined
+      const layerToZoomIn = getState().mainMap.layersToFeatures.find(layerFeature => layerFeature.name === name)
       if (layerToZoomIn) {
-        dispatchAnimateToRegulatoryLayer(dispatch, layerToZoomIn.center, name)
+        dispatch(animateToRegulatoryLayer(layerToZoomIn.center, name))
       }
     } else if (layer.feature) {
       const extent = layer.feature.getGeometry()?.getExtent()
@@ -42,22 +32,20 @@ export function zoomInLayer(layer: Params): MainAppThunk | BackofficeAppThunk {
       }
 
       const center = getCenter(extent)
-      dispatchAnimateToRegulatoryLayer(dispatch, center, LayerProperties.REGULATORY_PREVIEW)
+      dispatch(animateToRegulatoryLayer(center, LayerProperties.REGULATORY_PREVIEW))
     }
   }
-}
 
-const dispatchAnimateToRegulatoryLayer = (
-  dispatch: BackofficeAppDispatch | MainAppDispatch,
-  center: Coordinate,
-  name: string | MainMap.ShowableLayer
-) => {
-  if (center?.length && isNumeric(center[0]) && isNumeric(center[1])) {
-    dispatch(
-      mapActions.animateToRegulatoryLayer({
-        center,
-        name
-      })
-    )
+const animateToRegulatoryLayer =
+  <T extends HybridAppDispatch>(center: Coordinate, name: string | MainMap.ShowableLayer): HybridAppThunk<T> =>
+  // @ts-ignore Required to avoid reducers typing conflicts. Not fancy but allows us to keep Thunk context type-checks.
+  dispatch => {
+    if (center?.length && isNumeric(center[0]) && isNumeric(center[1])) {
+      dispatch(
+        mapActions.animateToRegulatoryLayer({
+          center,
+          name
+        })
+      )
+    }
   }
-}

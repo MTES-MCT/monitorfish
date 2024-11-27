@@ -11,6 +11,7 @@ import { showRegulatoryZoneMetadata } from '../../useCases/showRegulatoryZoneMet
 import { ZonePreview } from '../ZonePreview'
 
 import type { RegulatoryZone } from '../../types'
+import type { MainAppThunk } from '@store'
 
 export type RegulatoryLayerSearchResultZoneProps = {
   isOpen: boolean
@@ -37,7 +38,7 @@ export function ResultZone({ isOpen, regulatoryZone }: RegulatoryLayerSearchResu
 
   const showOrHideRegulatoryZoneMetadata = (partialRegulatoryZone: Pick<RegulatoryZone, 'topic' | 'zone'>) => {
     if (!isMetadataShown) {
-      dispatch(showRegulatoryZoneMetadata(partialRegulatoryZone, true))
+      dispatch(showRegulatoryZoneMetadata(partialRegulatoryZone, true) as unknown as MainAppThunk)
     } else {
       dispatch(closeRegulatoryZoneMetadata())
     }

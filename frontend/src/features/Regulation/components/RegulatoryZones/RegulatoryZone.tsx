@@ -1,5 +1,5 @@
 import { ZonePreview } from '@features/Regulation/components/ZonePreview'
-import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useHybridAppDispatch } from '@hooks/useHybridAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import { memo, useState } from 'react'
@@ -17,7 +17,7 @@ import { showRegulatoryZone } from '../../useCases/showRegulatoryZone'
 import { showRegulatoryZoneMetadata } from '../../useCases/showRegulatoryZoneMetadata'
 
 import type { RegulatoryZone as RegulatoryZoneType } from '../../types'
-import type { MainAppThunk } from '@store'
+import type { UnknownAction } from 'redux'
 import type { Promisable } from 'type-fest'
 
 export type RegulatoryZoneProps = {
@@ -36,7 +36,7 @@ function UnmemoizedRegulatoryZone({
   regulatoryTopic,
   regulatoryZone
 }: RegulatoryZoneProps) {
-  const dispatch = useMainAppDispatch()
+  const dispatch = useHybridAppDispatch()
   const navigate = useNavigate()
 
   const regulatoryZoneMetadata = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
@@ -49,11 +49,12 @@ function UnmemoizedRegulatoryZone({
 
   const toggleShowRegulatoryZoneMetadata = (zone: RegulatoryZoneType) => {
     if (!isMetadataShown) {
-      dispatch(showRegulatoryZoneMetadata(zone))
+      dispatch(showRegulatoryZoneMetadata(zone) as unknown as UnknownAction)
 
       return
     }
 
+    // @ts-ignore
     dispatch(closeRegulatoryZoneMetadata())
   }
 
@@ -63,7 +64,7 @@ function UnmemoizedRegulatoryZone({
         showRegulatoryZone({
           type: LayerProperties.REGULATORY.code,
           ...regulatoryZone
-        })
+        }) as unknown as UnknownAction
       )
 
       return
@@ -73,12 +74,12 @@ function UnmemoizedRegulatoryZone({
       hideLayer({
         type: LayerProperties.REGULATORY.code,
         ...regulatoryZone
-      })
+      }) as unknown as UnknownAction
     )
   }
 
   const onEditRegulationClick = () => {
-    dispatch(showRegulationToEdit(regulatoryZone))
+    dispatch(showRegulationToEdit(regulatoryZone) as unknown as UnknownAction)
     dispatch(regulationActions.removeRegulatoryTopicOpened(regulatoryTopic))
     dispatch(regulationActions.addRegulatoryTopicOpened(regulatoryTopic))
     dispatch(regulationActions.closeRegulatoryZoneMetadataPanel())
@@ -92,7 +93,7 @@ function UnmemoizedRegulatoryZone({
   return (
     <Zone $isLast={isLast} data-cy="regulatory-layer-zone" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       <StyledPreview
-        onClick={() => dispatch(zoomInLayer<MainAppThunk>({ topicAndZone: regulatoryZone }))}
+        onClick={() => dispatch(zoomInLayer({ topicAndZone: regulatoryZone }) as unknown as UnknownAction)}
         regulatoryZone={regulatoryZone}
       />
       <Name

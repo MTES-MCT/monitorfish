@@ -13,19 +13,6 @@ import type { MainMap } from '@features/MainMap/MainMap.types'
 import type { MultiPolygon, Polygon } from 'ol/geom'
 import type Geometry from 'ol/geom/Geometry'
 
-export function reOrderOldObjectHierarchyIfFound(zones: MainMap.ShowedLayer[]) {
-  return zones.map(zone => {
-    if (zone.layerName) {
-      return {
-        ...zone,
-        topic: zone.layerName
-      }
-    }
-
-    return zone
-  })
-}
-
 /**
  *
  * @param {Object} baseMap

@@ -1,4 +1,5 @@
 import { mainMapActions } from '@features/MainMap/slice'
+import { backOfficeMainMapActions } from '@features/MainMap/slice.backoffice'
 
 import { getLayerNameNormalized } from '../../MainMap/utils'
 
@@ -25,8 +26,10 @@ export const hideLayer =
       return getLayerNameNormalized(layerToRemove).includes(layerName)
     })
 
-    dispatch(mainMapActions.removeShowedLayer(layerToHide))
+    const actions = getState().global.isBackoffice ? backOfficeMainMapActions : mainMapActions
+
+    dispatch(actions.removeShowedLayer(layerToHide))
     layersToRemove.forEach(layerToRemove => {
-      dispatch(mainMapActions.removeLayerToFeatures(getLayerNameNormalized(layerToRemove)))
+      dispatch(actions.removeLayerToFeatures(getLayerNameNormalized(layerToRemove)))
     })
   }

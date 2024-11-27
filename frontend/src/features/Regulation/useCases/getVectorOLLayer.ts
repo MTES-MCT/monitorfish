@@ -1,7 +1,7 @@
+import { LayerProperties } from '@features/MainMap/constants'
 import VectorImageLayer from 'ol/layer/VectorImage'
 
 import { getRegulatoryVectorSource } from './getRegulatoryVectorSource'
-import { LayerProperties } from '../../MainMap/constants'
 import { getRegulatoryLayerStyle } from '../layers/styles/regulatoryLayer.style'
 
 import type { MainMap } from '@features/MainMap/MainMap.types'

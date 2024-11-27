@@ -19,7 +19,7 @@ import { regulationActions } from '@features/Regulation/slice'
 import { createOrUpdateBackofficeRegulation } from '@features/Regulation/useCases/createOrUpdateRegulation'
 import { getAllRegulatoryLayersByRegTerritory } from '@features/Regulation/useCases/getAllRegulatoryLayersByRegTerritory'
 import { getGeometryWithoutRegulationReference } from '@features/Regulation/useCases/getGeometryWithoutRegulationReference'
-import { showBackofficeRegulatoryZone } from '@features/Regulation/useCases/showRegulatoryZone'
+import { showRegulatoryZone } from '@features/Regulation/useCases/showRegulatoryZone'
 import {
   DEFAULT_REGULATION,
   FRANCE,
@@ -101,7 +101,7 @@ export function RegulationForm({ isEdition, title }: RegulationFormProps) {
     () => () => {
       if (isEdition && processingRegulation?.geometry) {
         dispatch(
-          showBackofficeRegulatoryZone({
+          showRegulatoryZone({
             type: LayerProperties.REGULATORY.code,
             ...processingRegulation
           })
@@ -320,7 +320,7 @@ export function RegulationForm({ isEdition, title }: RegulationFormProps) {
         {isRegulatoryPreviewDisplayed && (
           <BaseMap>
             <BaseLayer />
-            <RegulatoryPreviewLayer dispatch={dispatch} regulatoryZonesToPreview={regulatoryZonesToPreview} />
+            <RegulatoryPreviewLayer regulatoryZonesToPreview={regulatoryZonesToPreview} />
           </BaseMap>
         )}
       </Wrapper>

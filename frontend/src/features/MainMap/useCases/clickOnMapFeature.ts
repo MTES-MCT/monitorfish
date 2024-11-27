@@ -10,7 +10,8 @@ import GeoJSON from 'ol/format/GeoJSON'
 import { LayerProperties, OPENLAYERS_PROJECTION } from '../constants'
 import { MainMap } from '../MainMap.types'
 
-import type { MainAppThunk } from '@store'
+import type { MainAppDispatch } from '@store'
+import type { HybridAppDispatch, HybridAppThunk } from '@store/types'
 import type { VesselIdentity, VesselLastPositionFeature } from 'domain/entities/vessel/types'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
@@ -18,7 +19,8 @@ import type { Geometry } from 'ol/geom'
 const geoJSONParser = new GeoJSON()
 
 export const clickOnMapFeature =
-  (mapClick: MainMap.MapClick): MainAppThunk =>
+  <T extends HybridAppDispatch>(mapClick: MainMap.MapClick): HybridAppThunk<T> =>
+  // @ts-ignore Required to avoid reducers typing conflicts. Not fancy but allows us to keep Thunk context type-checks.
   (dispatch, getState) => {
     if (!mapClick.feature) {
       return
@@ -77,9 +79,10 @@ export const clickOnMapFeature =
       const clickedVessel = (mapClick.feature as VesselLastPositionFeature).getProperties() as VesselIdentity
 
       if (mapClick.ctrlKeyPressed) {
-        dispatch(showVesselTrack(clickedVessel, true, null))
+        // Vessel dispatches can only be called from the main app (FronteOffice)
+        ;(dispatch as MainAppDispatch)(showVesselTrack(clickedVessel, true, null))
       } else {
-        dispatch(showVessel(clickedVessel, false, true))
+        ;(dispatch as MainAppDispatch)(showVessel(clickedVessel, false, true))
       }
     }
   }

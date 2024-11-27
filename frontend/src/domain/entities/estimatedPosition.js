@@ -6,7 +6,7 @@ import { transform } from 'ol/proj'
 import { Vessel } from './vessel/vessel'
 import { COLORS } from '../../constants/constants'
 import { LayerProperties, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../features/MainMap/constants'
-import { MonitorFishLayer } from '../../features/MainMap/LegacyMainMap.types'
+import { MainMap } from '../../features/MainMap/MainMap.types'
 import { theme } from '../../ui/theme'
 
 class EstimatedPosition {
@@ -39,7 +39,7 @@ class EstimatedPosition {
       WSG84_PROJECTION,
       OPENLAYERS_PROJECTION
     )
-    const vesselCompositeIdentifier = vessel.vesselFeatureId.replace(`${MonitorFishLayer.VESSELS}:`, '')
+    const vesselCompositeIdentifier = vessel.vesselFeatureId.replace(`${MainMap.MonitorFishLayer.VESSELS}:`, '')
 
     const estimatedPositionObject = {
       dateTime,

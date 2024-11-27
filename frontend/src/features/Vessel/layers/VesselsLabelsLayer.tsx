@@ -200,7 +200,7 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
       .getLayers()
       .getArray()
       // @ts-ignore
-      ?.find(olLayer => olLayer.name === MonitorFishLayer.VESSELS)
+      ?.find(olLayer => olLayer.name === MainMap.MonitorFishLayer.VESSELS)
       // @ts-ignore
       ?.getSource()
     vesselsLayer?.current?.forEachFeatureInExtent(monitorfishMap.getView().calculateExtent(), vesselFeature => {
@@ -324,7 +324,7 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
         .getLayers()
         .getArray()
         // @ts-ignore
-        ?.find(olLayer => olLayer.name === MonitorFishLayer.VESSELS)
+        ?.find(olLayer => olLayer.name === MainMap.MonitorFishLayer.VESSELS)
         // @ts-ignore
         ?.getSource()
       const featuresInExtent = vesselsLayer?.getFeaturesInExtent(monitorfishMap.getView().calculateExtent()) || []

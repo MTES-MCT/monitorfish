@@ -393,16 +393,12 @@ const regulationSlice = createSlice({
     },
 
     // TODO Fix these types and find a cleaner way to achieve that. Proposal: pass a partial `RegulatoryZoneDraft` as param and use a "deepMerge" function.
-    updateProcessingRegulationByKeyAndSubKey<
-      Key extends keyof RegulationState['processingRegulation'],
-      SubKey extends keyof RegulationState['processingRegulation'][Key],
-      Value extends RegulationState['processingRegulation'][Key][SubKey]
-    >(
+    updateProcessingRegulationByKeyAndSubKey(
       state,
       action: PayloadAction<{
-        key: Key
-        subKey: SubKey
-        value: Value
+        key: string
+        subKey: string
+        value: any
       }>
     ) {
       const {
@@ -413,7 +409,7 @@ const regulationSlice = createSlice({
         return
       }
 
-      ;(state as any).processingRegulation[key][subKey] = value
+      state.processingRegulation[key][subKey] = value
       if (!state.regulationModified) {
         state.regulationModified = true
       }
